@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+targetNamespace="http://www.prosjektet.net"
+xmlns="http://www.prosjektet.net"
+elementFormDefault="qualified">
+
+  <xs:element name="radio">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="channel"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="channel">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="title"/>
+        <xs:element ref="logo"/>
+        <xs:element ref="stream" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="title" type="xs:string"/>
+  <xs:element name="logo" type="xs:string"/>
+  <xs:element name="stream">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="bitrate"/>
+        <xs:element ref="format"/>
+        <xs:element ref="link"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="bitrate" type="xs:integer"/>
+  <xs:element name="format" type="xs:string"/>
+  <xs:element name="link" type="xs:string"/>
+</xs:schema>

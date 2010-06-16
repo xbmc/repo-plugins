@@ -1,0 +1,78 @@
+<window>
+    <defaultcontrol>61</defaultcontrol>	
+	<controls>
+
+		<control type="image">
+			<description>Background Image</description>
+			<posx>0</posx>
+			<posy>88</posy>
+			<width>720</width>
+			<height>500</height>
+			<texture>background.png</texture>
+		</control>
+
+        
+		<control type="group">
+			<posx>0</posx>
+			<posy>90</posy>
+			<height>485</height>
+			<width>720</width>
+			<visible>true</visible>
+
+			<control type="textbox" id="5">
+				<description>textarea</description>
+				<posx>0</posx>
+				<posy>0</posy>
+				<width>705</width>
+				<height>485</height>
+				<label>-</label>
+				<font>font11</font>
+				<align>left</align>
+				<textcolor>0xFFFFFFFF</textcolor>
+				<pagecontrol>61</pagecontrol>
+			</control>
+            
+			<control type="button" id="62">
+				<posx>705</posx>
+				<posy>0</posy>
+				<width>15</width>
+				<height>15</height>
+				<texturefocus border="2">scrollbar_arrow_up_focus.png</texturefocus>
+				<texturenofocus border="2">scrollbar_arrow_up.png</texturenofocus>
+				<onclick>PageUp(5)</onclick>
+				<visible>Control.IsVisible(61)</visible>
+			</control>
+            
+			<control type="scrollbar" id="61">
+				<posx>705</posx>
+				<posy>15</posy>
+				<width>15</width>
+				<height>455</height>
+				<texturesliderbackground border="2,2,2,2">scrollbar_background.png</texturesliderbackground>
+				<texturesliderbar border="2,16,2,16">scrollbar_bar.png</texturesliderbar>
+				<texturesliderbarfocus border="2,16,2,16">scrollbar_bar_focus.png</texturesliderbarfocus>
+				<textureslidernib>scrollbar_nib.png</textureslidernib>
+				<textureslidernibfocus>scrollbar_nib.png</textureslidernibfocus>
+				<onleft></onleft>
+				<onright></onright>
+				<ondown>63</ondown>
+				<onup>62</onup>
+				<showonepage>false</showonepage>
+				<orientation>vertical</orientation>
+			</control>
+            
+			<control type="button" id="63">
+				<posx>705</posx>
+				<posy>470</posy>
+				<width>15</width>
+				<height>15</height>
+				<texturefocus border="2">scrollbar_arrow_down_focus.png</texturefocus>
+				<texturenofocus border="2">scrollbar_arrow_down.png</texturenofocus>
+				<visible>Control.IsVisible(61)</visible>
+				<onclick>PageDown(5)</onclick>
+			</control>
+  
+		</control>      
+
+	</controls>
+</window>

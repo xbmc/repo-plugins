@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+
+  <!-- Settings -->
+  <string id="30000">Use caching</string>
+  <string id="30001">Test image extensions</string>
+  <string id="30002">Fetch visual media path from website [Unstable]</string>
+  <string id="30003">Fetch and convert subtitles if found [WIP]</string>
+  <string id="30004">Use chapters/indexes for media if found [WIP]</string>
+  <string id="30005">Make folders with only one file transparent</string>
+  <string id="30007">Autoplay playlist when opened</string>
+  <string id="30008">Extended error messages</string>
+    
+  <!-- Settings :: connection -->
+  <string id="30010">Your connection speed</string>
+  
+  <string id="30011">Low (Less than 700 kbps)</string>
+  <string id="30012">Medium (Between 700 and 1200 kbps)</string>
+  <string id="30013">High (Over 1200 kbps)</string>
+  
+    
+  <!-- Settings :: cache time -->
+  <string id="30020">Time before updating the cache</string>
+  
+  <string id="30021">Never</string>
+  <string id="30022">1 hour</string>
+  <string id="30023">2 hours</string>
+  <string id="30024">12 hours</string>
+  <string id="30025">24 hours</string>
+  
+  <string id="30030">Download folder</string>
+  <string id="30031">Run once</string>
+  
+  <!-- Misc. -->  
+  <string id="30500">Input search string</string>
+  <string id="30501">Input number of days to search</string>
+  <string id="30502">Invalid search string</string>
+  
+  <!-- Themes -->
+  <string id="30101">Children</string>
+  <string id="30102">Nature</string>
+  <string id="30103">Drama</string>
+  <string id="30104">Sports</string>
+  <string id="30105">Facts</string>
+  <string id="30106">Life stance</string>
+  <string id="30107">Food</string>
+  <string id="30108">News</string>
+  <string id="30109">Sami</string>
+  <string id="30110">Teen</string>
+  <string id="30111">Sign language</string>
+  <string id="30112">Entertainment</string>
+  <string id="30113">Documentary</string>
+  <string id="30114">Culture</string>
+  <string id="30115">Region</string>
+
+  <!-- Regions -->
+  <string id="30150">Møre og Romsdal</string>
+  <string id="30151">Hordaland</string>
+  <string id="30152">Nord-Norge</string>
+  <string id="30153">Rogaland</string>
+  <string id="30154">Sogn og Fjordane</string>
+  <string id="30155">Sørlandet</string>
+  <string id="30156">Trøndelag</string>
+  <string id="30157">Østafjells</string>
+  <string id="30158">Østfold</string>
+  <string id="30159">Østlandssendingen</string>
+  <string id="30160">Hedmark og Oppland</string>
+  
+  <!-- other -->
+  <string id="30200">Archive</string>
+  <string id="30201">Relevant</string>
+  <string id="30202">Most popular total</string>
+  <string id="30203">Most popular this week</string>
+  <string id="30204">Most popular this month</string>
+  <string id="30205">Search</string>
+  <string id="30206">Show letter %s</string>
+  <string id="30207">Show all</string>
+  <string id="30208">Show alphabetically</string>
+  <string id="30209">Show list of subjects</string>
+  <string id="30210">Choose letterv</string>
+  <string id="30211">Choose subject</string>
+  <string id="30212">Choose all</string>
+  <string id="30213">This week</string>
+  <string id="30214">This month</string>
+  <string id="30215">Total</string>
+  <string id="30216">Last %d days</string>
+  <string id="30217">Recommended showsr</string>
+  <string id="30218">Most popular last X days</string>
+  <string id="30219">Articles</string>
+  
+  <!-- Root menu -->
+  <string id="30250">Programs</string>
+  <string id="30251">Live</string>
+  <string id="30252">Channels</string>
+  <string id="30253">Sport</string>
+  <string id="30254">News</string>
+  <string id="30255">Regional</string>
+  <string id="30256">Nature</string>
+  <string id="30257">NRKBeta</string>
+  <string id="30258">Internet radio</string>
+  <string id="30259">Sound podcast</string>
+  <string id="30260">Video podcast</string>
+  <string id="30261">Text-TV</string>
+  <string id="30262">Favourite shows</string>
+
+  <!-- Context Menu -->
+  <string id="30300">Update</string>
+  <string id="30301">Add to favourite shows</string>
+  <string id="30302">Download video</string>
+  <string id="30303">Remove</string>
+  <string id="30304">Rename</string>
+  
+  <!-- Categories -->
+  <string id="30350">Live shows</string>
+  
+  <!-- Favorite Programs -->
+  <string id="30400">Delete from favourites</string>
+  <string id="30401">Do you want to delete %s from favourites?</string>
+  <string id="30402">Added to favourites</string>
+  
+  <!-- compatible messages -->
+  <string id="30700">Version</string>
+  <string id="30701">This version of %s requires an</string>
+  <string id="30702">XBMC revision of %s or greater to run.</string>
+  <string id="30703">Please update your XBMC.</string>
+  
+  <!-- teletext -->
+  <string id="30800">Innenriks</string>
+  <string id="30801">Utenriks</string>
+  <string id="30802">Sport</string>
+  <string id="30803">Været</string>
+  <string id="30804">Sideoversikt</string>
+</strings>

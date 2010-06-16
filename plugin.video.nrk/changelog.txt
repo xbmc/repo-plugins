@@ -1,0 +1,38 @@
+
+ --- Changelog for NRK XBMC Mediacenter plugin ---
+
+ 
+ --> 2009-07-01  Victor Vikene - <z0py3r@hotmail.com>
+
+ * Completly rewritten the old plugin and made a new structure
+ 
+ * Created icons for all the different entries in themes
+   Found under resources/images
+
+ * Downloaded icons for all the regions, renamed them to match id, and
+   implemented them in the region listing
+   
+ * Added new graphics from Wikicommons for use in the main menu
+   More information can be found in the credits file in this level
+
+ --> 2009-07-10  Victor Vikene - <z0py3r@hotmail.com>
+ 
+ * Added method for fetching new url for mms stream as described by
+   spiff in http://xbmc.org/forum/showpost.php?p=365440&postcount=14
+   
+ --> 2009-07-25 Victor Vikene - <z0py3r@hotmail.com>
+ 
+ * Added a teletext parser that generates a image from NRK teletext 
+   web service
+   
+ --> 2009-08-10 Victor Vikene - <z0py3r@hotmail.com>
+ 
+ * Fixed search option in program section
+ 
+ * Fixed region listing in playlists
+ 
+ * Added watched/unwatched icon overlay in program section
+ 
+ * Added transparency to teletext 
+ 
+ * Fixed "remote" control bugs in teletext

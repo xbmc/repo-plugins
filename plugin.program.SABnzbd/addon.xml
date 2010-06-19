@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.SABnzbd"
+       name="SABnzbd"
+       version="2.0.0"
+       provider-name="kricker">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Plugin for managing SABnzbd</summary>
+    <description>Manage SABnzbd and search for files. For use with SABnzbd+ .5.1 or higher.
+
+Instructions:
+================
+1) Configure Plugin in System/Add-ons
+2) Enter your sabnzbd host, port, username, password &amp; API key
+3) Enter Newzbin username &amp; password
+4) Enter NZBS.org ID &amp; Hash (On NZBS.org click the RSS button to see these. ID is after &amp;i=, hash is after &amp;h=)
+5) If you want imdb info &amp; posters enable them
+6) If you want any extra RSS feeds, open settings.py and add any extra RSS feeds to the dictionary (note these will be replaced when upgrading versions, so make a copy)
+
+*note for the RSS feed to work, it requires the link to point directly to an nzb file, with no user/pass needed
+Supported sites can be found here: http://forums.sabnzbd.org/index.php?topic=1339.0</description>
+    <platform>all</platform>
+  </extension>
+</addon>

@@ -12,7 +12,9 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary>NRK</summary>
-    <description></description>
+    <summary lang="en">NRK</summary>
+    <summary lang="hu">NRK média kiegészítõ</summary> 
+    <description lang="en">Watch shows, documentaries, sports, liveTV and news from NRK.no</description>
+    <description lang="hu">A kiegészítõ célja, hogy média anyagot olvasson be a www.nrk.no wehelyrõl és virtuális könyvtárakat képezzen ezek segítségével.</description>
   </extension>
 </addon>

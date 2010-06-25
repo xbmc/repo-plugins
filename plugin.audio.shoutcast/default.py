@@ -45,11 +45,12 @@ def RESOLVE(id):
   for stat in node.getElementsByTagName('station'):
     name = unicodedata.normalize('NFKD',stat.attributes["name"].value).encode('ascii','ignore')
     url = "http://classic.shoutcast.com%s?id=%s" % (node.getElementsByTagName('tunein')[0].attributes["base"].value, stat.attributes["id"].value,)
-    addLink(name,url)
+    addLink(name,url,stat.attributes["br"].value)
 
-def addLink(name,url):
+def addLink(name,url,size):
   ok=True
   liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage="")
+  liz.setInfo( type="Video", infoLabels={ "Title": name ,"Size": int(size)} )
   liz.setProperty("IsPlayable","true");
   ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
   return ok
@@ -74,7 +75,6 @@ def get_params():
 def addDir(name):
   u = "%s?id=%s" % (sys.argv[0], name,)
   liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage="")
-  liz.setInfo( type="Music", infoLabels={ "Title": name } )
   ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
   return ok
 
@@ -89,7 +89,8 @@ if iid > 1 :
   RESOLVE(id)
 else:
   INDEX()
-  
-xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_NONE)
+
+xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_SIZE )
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

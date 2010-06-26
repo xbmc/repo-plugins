@@ -14,5 +14,6 @@
     <platform>all</platform>
     <summary>NRK</summary>
     <description></description>
+    <broken>test</broken>
   </extension>
 </addon>

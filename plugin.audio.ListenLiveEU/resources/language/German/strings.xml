@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- German strings.xml by bootsy (bootsycollins82@gmail.com) -->
+<strings>
+    <!-- Main -->
+    <string id="1010">Neu hinzugefügt</string>
+    <string id="1020">Nach Ländern sortieren</string>
+    <string id="1030">Nach Genre sortieren</string>
+
+    <!-- Settings -->    
+    <string id="30000"></string>
+    <string id="30001">Standort anzeigen</string>
+    <string id="30002">Genre / Kommentar anzeigen</string>
+    <string id="30003">Stream Rate anzeigen</string>
+    <string id="30004">Mindestqualität (Kbps)</string>
+</strings>

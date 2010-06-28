@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="list_loc" type="bool" label="30001" default="true" />
+    <setting id="list_genre" type="bool" label="30002" default="true" />
+    <setting id="list_rate" type="bool" label="30003" default="true" />
+    <setting type="sep" />
+    <setting id="min_rate" type="labelenum" lvalues="30005|30006|30007|30008|30009|30010|30011|30012|30013|30014|30015|30016" label="30004" default="16"/>
+</settings>

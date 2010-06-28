@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- English strings.xml by bootsy (bootsycollins82@gmail.com) -->
+<strings>
+    <!-- Main -->
+    <string id="1010">New additions</string>
+    <string id="1020">Browse by country</string>
+    <string id="1030">Browse by genre</string>
+
+    <!-- Settings -->    
+    <string id="30000"></string>
+    <string id="30001">Show location</string>
+    <string id="30002">Show genre / comment</string>
+    <string id="30003">Show stream rate</string>
+    <string id="30004">Minimum quality (Kbps)</string>
+    <string id="30005">16</string>
+    <string id="30006">24</string>
+    <string id="30007">32</string>
+    <string id="30008">48</string>
+    <string id="30009">56</string>
+    <string id="30010">64</string>
+    <string id="30011">96</string>
+    <string id="30012">112</string>
+    <string id="30013">128</string>
+    <string id="30014">160</string>
+    <string id="30015">196</string>
+    <string id="30016">256</string>
+</strings>

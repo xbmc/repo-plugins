@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--Language file translated with Team XBMC Translator-->
+<!--Translator: blittan-->
+<!--Email: blittan@xbmc.org-->
+<!--Date of translation: 04/16/2009-->
+<!--$Revision$-->
+<strings>
+  <string id="1010">Nya tillägg</string>
+  <string id="1020">Bläddra efter land</string>
+  <string id="1030">Bläddra efter genre</string>
+  <string id="30001">Visa plats</string>
+  <string id="30002">Visa genre / kommentar</string>
+  <string id="30003">Visa strömfart</string>
+  <string id="30004">Minimum kvalitet (Kbps)</string>
+  <string id="30005">16</string>
+  <string id="30006">24</string>
+  <string id="30007">32</string>
+  <string id="30008">48</string>
+  <string id="30009">56</string>
+  <string id="30010">64</string>
+  <string id="30011">96</string>
+  <string id="30012">112</string>
+  <string id="30013">128</string>
+  <string id="30014">160</string>
+  <string id="30015">192</string>
+  <string id="30016">256</string>
+</strings>

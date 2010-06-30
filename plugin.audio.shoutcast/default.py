@@ -89,8 +89,8 @@ if iid > 1 :
   RESOLVE(id)
 else:
   INDEX()
-
+xbmcplugin.setLabel2( handle=int( sys.argv[ 1 ] ), value="%X" )
 xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_SIZE )
+xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE )
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

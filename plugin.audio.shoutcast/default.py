@@ -44,14 +44,18 @@ def RESOLVE(id):
   node = minidom.parseString(link).firstChild
   for stat in node.getElementsByTagName('station'):
     name = unicodedata.normalize('NFKD',stat.attributes["name"].value).encode('ascii','ignore')
-    url = "http://classic.shoutcast.com%s?id=%s" % (node.getElementsByTagName('tunein')[0].attributes["base"].value, stat.attributes["id"].value,)
+    url = "%s?play=%s&tunein=%s" % (sys.argv[0], stat.attributes["id"].value,node.getElementsByTagName('tunein')[0].attributes["base"].value)
     addLink(name,url,stat.attributes["br"].value)
+
+def PLAY(st_id, tunein):
+  url = "http://classic.shoutcast.com%s?id=%s" %(tunein,st_id,)
+  xbmc.Player().play(url)
 
 def addLink(name,url,size):
   ok=True
   liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage="")
   liz.setInfo( type="Video", infoLabels={ "Title": name ,"Size": int(size)} )
-  liz.setProperty("IsPlayable","true");
+  liz.setProperty("IsPlayable","false");
   ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
   return ok
 
@@ -84,13 +88,26 @@ try:
 except:
   id = "0";
   pass
+try:
+  play = params["play"]
+except:
+  play = "0";
+  pass  
+
 iid = len(id);
+iplay = len(play)
+
 if iid > 1 :
   RESOLVE(id)
+  xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL, label2Mask="%X" )
+  xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE, label2Mask="%X" )
+  xbmcplugin.endOfDirectory(int(sys.argv[1]))
 else:
-  INDEX()
-xbmcplugin.setLabel2( handle=int( sys.argv[ 1 ] ), value="%X" )
-xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE )
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+  if iplay > 1:
+    PLAY(play,params["tunein"] )
+  else:  
+    INDEX()
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
 

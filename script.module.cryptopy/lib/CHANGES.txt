@@ -1,0 +1,35 @@
+
+
+CryptoPy Version 1.1.0 (2003-02-21)
+-------------------------------------
+
+First full published distribution since 1.0
+Added: full IEEE 802.11 suite of algorithms (WEP, TKIP)
+
+
+Version 1.0.2
+-------------------------------------
+
+ - added in binascii_plus.py (enhanced binascii for hex input and diplay)
+
+2002-07-29
+
+Version 1.0.0 (2002-07-29)
+------------------------
+- added a README and a few comments
+- release only includes the following algorithms
+  - rijndael
+  - aes
+  - ccm (only tested for AES)
+  - cbc
+  - aes_cbc
+- also inlcudes 802.11 specific:
+  _ ieee_802/ccm_examples.py
+
+Sat July 27, 2002
+
+Changes to version 0.9.1
+------------------------
+- added CCM algorithm
+- Distutils support added
+

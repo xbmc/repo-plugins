@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!-- General -->
+    <category label="30050">
+        <setting label="30100" type="lsep" />
+        <setting label="30110" type="bool" id="use_large_thumb" default="false" />
+    </category>
+
+    <!-- Skinning -->
+    <category label="30055">
+        <setting label="30500" type="lsep" />
+        <setting label="30510" type="enum" id="fanart_type" default="0" lvalues="30511|30512" />
+        <setting label="30520" type="folder" subsetting="true" id="fanart_path" default="" source="auto" visible="eq(-1,0)" />
+        <setting label="30525" type="image" subsetting="true" id="fanart_image" default="" source="auto" visible="eq(-2,1)" />
+    </category>
+
+    <!-- Maintenance -->
+    <!--category label="30056"> 
+        <setting type="sep" />
+        <setting label="[B]$ADDON[plugin.video.cnn.video 30750][/B]" type="text" default="nuka1195" enable="false" />
+        <setting label="[B]$ADDON[plugin.video.cnn.video 30751][/B]" type="text" default="2.0.0" enable="false" />
+        <setting label="[B]$ADDON[plugin.video.cnn.video 30752][/B]" type="text" default="http://code.google.com/p/xbmc-addons/" enable="false" />
+        <setting label="[B]$ADDON[plugin.video.cnn.video 30753][/B]" type="text" default="$ADDON[plugin.video.cnn.video 30002]" enable="false" />
+        <setting type="sep" />
+        <setting label="30600" type="lsep" />
+        <setting label="30610" type="action" default="" action="RunScript($ID,view=updates)" />
+        <setting label="30615" type="action" default="" action="RunScript($ID,view=changelog)" />
+        <setting label="30620" type="action" default="" action="RunScript($ID,view=readme)" />
+        <setting label="30625" type="action" default="" action="RunScript($ID,view=credits)" />
+    </category-->
+</settings>

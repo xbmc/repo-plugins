@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+
+    <!-- plugin title -->
+    <string id="30000">CNN Video</string>
+    <!-- language author (translators put your name here) -->
+    <string id="30002">nuka1195</string>
+
+    <!-- category separators -->
+    <string id="30050">General</string>
+    <string id="30051"></string>
+    <string id="30052"></string>
+    <string id="30053"></string>
+    <string id="30054"></string>
+    <string id="30055">Skinning</string>
+    <string id="30056">Maintenance</string>
+
+    <!-- General -->
+    <string id="30100">Preferences</string>
+    <!-- settings labels & options -->
+    <string id="30110">Use large thumbnails [I](if available)[/I]</string>
+
+    <!-- Skinning -->
+    <string id="30500">Fanart</string>
+    <string id="30501">Quick Links</string>
+    <!-- settings labels & options -->
+    <string id="30510">Fanart type</string>
+    <string id="30511">Category</string>
+    <string id="30512">Single image</string>
+    <string id="30520">Fanart path</string>
+    <string id="30525">Fanart image</string>
+
+    <!-- Maintenance -->
+    <string id="30600">Status</string>
+    <string id="30601">Source</string>
+    <!-- settings labels & options -->
+    <string id="30610">Check for updates</string>
+    <string id="30615">View changelog</string>
+    <string id="30620">View readme</string>
+    <string id="30625">View credits</string>
+    <string id="30660">Clear cache folder</string>
+
+    <!-- universal strings -->
+    <!-- compatible messages -->
+    <string id="30700">version</string>
+    <string id="30701">This version of %s requires an</string>
+    <string id="30702">XBMC revision of %s or greater to run.</string>
+    <string id="30703">Please update your XBMC.</string>
+    <string id="30704">Your version is up to date.</string>
+    <!-- messages -->
+    <string id="30710">Downloading: %s</string>
+    <string id="30711">Saving: %s</string>
+    <string id="30712">To: %s</string>
+    <string id="30713">Extracting: %s</string>
+    <string id="30714">B</string>
+    <string id="30715">KB</string>
+    <string id="30716">MB</string>
+    <string id="30717">of</string>
+    <string id="30718">at</string>
+    <string id="30719">ETA</string>
+    <string id="30720">'%s' successfully installed.</string>
+    <string id="30721">An error occurred extracting '%s'</string>
+    <string id="30722">An error occurred downloading '%s'</string>
+    <string id="30723">Installing '%s' cancelled!</string>
+    <string id="30728">Failed install</string>
+    <string id="30729">Installed</string>
+    <!-- search terms -->
+    <string id="30730">Search</string>
+    <string id="30731">Enter keywords/phrase to search for...</string>
+    <!-- credits titles -->
+    <string id="30750">Author</string>
+    <string id="30751">Version</string>
+    <string id="30752">Subversion Repo</string>
+    <string id="30753">Language Translation</string>
+    <string id="30758">Updated</string>
+    <string id="30759">current version</string>
+    <!-- viewer messages -->
+    <string id="30760">Fetching changelog, please wait...</string>
+    <string id="30761">Fetching readme, please wait...</string>
+    <string id="30762">Checking for updates, please wait...</string>
+    <string id="30763">Changelog</string>
+    <string id="30764">Readme</string>
+    <string id="30765">Updates</string>
+    <string id="30766">An error occurred fetching %s![CR][CR]%s</string>
+    <!-- addon manager strings -->
+    <string id="30770"></string>
+    <string id="30771"></string>
+    <string id="30772"></string>
+    <string id="30773"></string>
+    <string id="30774"></string>
+    <string id="30775"></string>
+
+    <!-- Category strings -->
+    <string id="30900">Main categories</string>
+    <string id="30901">iReports</string>
+    <string id="30902">On TV</string>
+    <string id="30903">Español</string>
+    <string id="30904">CNN Live</string>
+
+    <!-- Subcategory strings -->
+    <string id="30950">Most Popular</string>
+    <string id="30951">U.S.</string>
+    <string id="30952">World</string>
+    <string id="30953">Politics</string>
+    <string id="30954">Entertainment</string>
+    <string id="30955">Crime</string>
+    <string id="30956">Offbeat</string>
+    <string id="30957">Tech</string>
+    <string id="30958">Living</string>
+    <string id="30959">Health</string>
+    <string id="30960">Student News</string>
+    <string id="30961">Business</string>
+    <string id="30962">Sports</string>
+    <string id="30963">Weather</string>
+    <string id="30964">Latest</string>
+
+    <string id="30965">Newsiest Now</string>
+    <string id="30966">On CNN</string>
+    <string id="30967">Sound Off</string>
+    <string id="30968">Offbeat</string>
+    <string id="30969">CNN Show</string>
+
+    <string id="30970">Elecciones</string>
+    <string id="30971">Economía</string>
+    <string id="30972">Tu Dinero</string>
+    <string id="30973">Vida</string>
+    <string id="30974">Entretenimiento</string>
+    <string id="30975">Tecnología</string>
+    <string id="30976">Estados Unidos</string>
+    <string id="30977">América Latina</string>
+    <string id="30978">Mundo</string>
+
+    <string id="30980">American Morning</string>
+
+    <string id="30990">Stream #1</string>
+    <string id="30991">Stream #2</string>
+    <string id="30992">Stream #3</string>
+    <string id="30993">Stream #4</string>
+
+</strings>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin strings -->
+    <string id="30900">Save as preset</string>
+    <string id="30901">Would you like to save this query as a preset?</string>
+    <string id="30902">Save search failed!</string>
+    <string id="30903">Saving search file failed with error:</string>
+    <string id="30904">No description.</string>
+    <string id="30905">Preset name</string>
+    <string id="30906">Search keywords</string>
+    <string id="30907">Search username</string>
+    <string id="30908">Loading video...</string>
+    <string id="30909">Getting random music video...</string>
+    <string id="30910">Play by video id</string>
+    <string id="30911">Did you mean</string>
+    <string id="30912">Choose category</string>
+    <string id="30913">Search keywords - * for all videos</string>
+
+    <!-- Category strings -->
+    <string id="30950">All Videos</string>
+    <string id="30951">Most Viewed</string>
+    <string id="30952">Search Videos</string>
+    <string id="30953">Search People</string>
+    <string id="30954">Recently Featured</string>
+    <string id="30955">Search People...</string>
+    <string id="30956">Search Videos...</string>
+    <string id="30957">Top Rated</string>
+    <string id="30958">Watch on Mobile</string>
+    <string id="30959">Play Random Music Videos</string>
+    <string id="30960">Play Video by ID</string>
+    <string id="30961">My Uploads</string>
+    <string id="30962">My Favorites</string>
+    <string id="30963">Top Favorites</string>
+    <string id="30964">Most Discussed</string>
+    <string id="30965">Most Linked</string>
+    <string id="30966">Most Responded</string>
+    <string id="30967">Most Recent</string>
+    <string id="30968">Related Videos</string>
+    <string id="30969">Search Categories</string>
+    <string id="30970">Search Categories...</string>
+    <string id="30971">My Subscriptions</string>
+
+    <!-- Context menu strings -->
+    <string id="30500">Related videos</string>
+    <string id="30501">Download video</string>
+    <string id="30502">Video information</string>
+    <string id="30503">Add to My Favorites</string>
+    <string id="30504">Queue video</string>
+    <string id="30505">Now playing...</string>
+    <string id="30506">Delete from My Favorites</string>
+    <string id="30507">Videos by %s</string>
+    <string id="30508">Delete saved search</string>
+    <string id="30509">Queue folder</string>
+
+    <!-- messages -->
+    <string id="30600">Downloading: %s</string>
+    <string id="30601">Saving: %s</string>
+    <string id="30602">To: %s</string>
+    <string id="30603">Copying: %s</string>
+
+    <!-- compatible messages -->
+    <string id="30700">version</string>
+    <string id="30701">This version of %s requires an</string>
+    <string id="30702">XBMC revision of %s or greater to run.</string>
+    <string id="30703">Please update your XBMC.</string>
+
+    <!-- Plugin settings strings -->
+    <string id="30000">Username</string>
+    <string id="30005">Password</string>
+    <string id="30010">Feed period</string>
+    <string id="30011">All time</string>
+    <string id="30012">Today</string>
+    <string id="30013">This week</string>
+    <string id="30014">This month</string>
+    <string id="30020">Include explicit content</string>
+    <string id="30030">Number of videos per page</string>
+    <string id="30040">Player core</string>
+    <string id="30050">Play HD videos if available</string>
+    <string id="30060">Limit standard feeds videos to country region</string>
+    <string id="30061">All</string>
+    <string id="30062">Australia</string>
+    <string id="30063">Brazil</string>
+    <string id="30064">Canada</string>
+    <string id="30065">France</string>
+    <string id="30066">Germany</string>
+    <string id="30067">Great Britain</string>
+    <string id="30068">Holland</string>
+    <string id="30069">Hong Kong</string>
+    <string id="30070">Ireland</string>
+    <string id="30071">Italy</string>
+    <string id="30072">Japan</string>
+    <string id="30073">Mexico</string>
+    <string id="30074">New Zealand</string>
+    <string id="30075">Poland</string>
+    <string id="30076">Russia</string>
+    <string id="30077">South Korea</string>
+    <string id="30078">Spain</string>
+    <string id="30079">Taiwan</string>
+    <string id="30080">United States</string>
+    <string id="30090">Number of searches to save</string>
+    <string id="30100">Download mode</string>
+    <string id="30101">Temporary</string>
+    <string id="30102">Save</string>
+    <string id="30110">Download folder</string>
+    <string id="30120">- Use title for saved filename</string>
+    <string id="30130">Fanart image</string>
+</strings>

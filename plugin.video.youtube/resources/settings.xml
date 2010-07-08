@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="username" type="text" label="30000" default="" />
+    <setting id="user_password" type="text" option="hidden" label="30005" enable="!eq(-1,)" default="" />
+    <setting type="sep" />
+    <setting id="feed_time" type="enum" lvalues="30011|30012|30013|30014" label="30010" default="0" />
+    <setting id="include_racy" type="bool" label="30020" default="false" />
+    <setting id="perpage" type="enum" values="10|15|20|25|30|40|50" label="30030" default="3" />
+    <setting id="region_id" type="enum" lvalues="30061|30062|30063|30064|30065|30066|30067|30068|30069|30070|30071|30072|30073|30074|30075|30076|30077|30078|30079|30080" label="30060" default="0" />
+    <setting id="hd_videos" type="bool" label="30050" default="false" />
+    <setting type="sep" />
+    <setting id="saved_searches" type="enum" values="10|20|30|40" label="30090" default="0" />
+    <setting type="sep" />
+    <setting id="download_path" type="folder" source="video" option="writeable" label="30110" default="" />
+    <setting id="use_title" type="bool" enable="!eq(-1,)" label="30120" default="true" />
+    <setting type="sep" />
+    <setting id="fanart_image" type="pictures" label="30130" default="" />
+</settings>

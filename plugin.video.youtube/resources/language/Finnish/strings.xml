@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings> <!--  19.4.2009 Finnish   -->
+    <!-- Plugin strings -->
+    <string id="30900">Tallenna esiasetukseksi</string>
+    <string id="30901">Haluatko lisätä tämän haun esiasetukseksi?</string>
+    <string id="30902">Haun tallennus epäonnistui!</string>
+    <string id="30903">Haun tallennus epäonnistui virheeseen:</string>
+    <string id="30904">Ei kuvausta</string>
+    <string id="30905">Esiasetettu hakusana</string>
+    <string id="30906">Etsi sanalla</string>
+    <string id="30907">Etsi käyttäjänimeä</string>
+    <string id="30908">Ladataan videota...</string>
+    <string id="30909">Noudetaan satunnaista musiikkivideota...</string>
+    <string id="30910">Toista tunnisteen video</string>
+    <string id="30911">Tarkoititko</string>
+    <string id="30912">Valitse kategoria</string>
+    <string id="30913">Hae kaikki videot merkillä - *</string>
+
+
+    <!-- Category strings -->
+    <string id="30950">Kaikki videot</string>
+    <string id="30951">Katsotuimmat</string>
+    <string id="30952">Etsi videoita</string>
+    <string id="30953">Etsi käyttäjiä</string>
+    <string id="30954">Viimeksi esitellyt</string>
+    <string id="30955">Etsi käyttäjiä...</string>
+    <string id="30956">Etsi videoita...</string>
+    <string id="30957">Arvostetuimmat</string>
+    <string id="30958">Katso kannettavalla</string>
+    <string id="30959">Katso satunnaisia musiikkivideoita</string>
+    <string id="30960">Toista tunnisteen videoita</string>
+    <string id="30961">Omat videot</string>
+    <string id="30962">Omat suosikit</string>
+    <string id="30963">Suosituimmat</string>
+    <string id="30964">Keskusteluimmat</string>
+    <string id="30965">Linkitetyimmät</string>
+    <string id="30966">Vastatuimmat</string>
+    <string id="30967">Uusimmat</string>
+    <string id="30968">Samankaltaiset</string>
+    <string id="30969">Etsi kategorioista</string>
+    <string id="30970">Etsi kategorioista...</string>
+
+    <!-- Context menu strings -->
+    <string id="30500">Samankaltaiset videot</string>
+    <string id="30501">Lataa video</string>
+    <string id="30502">Videon tiedot</string>
+    <string id="30503">Lisää suosikkeihin</string>
+    <string id="30504">Lisää toistojonoon</string>
+    <string id="30505">Toistetaan...</string>
+    <string id="30506">Poista suosikeista</string>
+    <string id="30507">%s:n videot</string>
+    <string id="30508">Poista tallennetut haut</string>
+    <string id="30509">Jonotus kansio</string>
+
+    <!-- messages -->
+    <string id="30600">Ladataan: %s</string>
+    <string id="30601">Tallennetaan: %s</string>
+    <string id="30602">Kohteeseen: %s</string>
+    <string id="30603">Kopioidaan: %s</string>
+
+    <!-- compatible messages -->
+    <string id="30700">versio</string>
+    <string id="30701">Tämä %s:n versio vaatii toimiakseen</string>
+    <string id="30702">XBMC revision %s tai uudemman.</string>
+    <string id="30703">Päivitä XBMC uudempaan versioon.</string>
+
+    <!-- Plugin settings strings -->
+    <string id="30000">Käyttäjänimi</string>
+    <string id="30005">Salasana</string>
+    <string id="30010">Lisäyspäivä</string>
+    <string id="30011">Kaikki</string>
+    <string id="30012">Tänään</string>
+    <string id="30013">Tällä viikolla</string>
+    <string id="30014">Tässä kuussa</string>
+    <string id="30020">Sisällytä aikuis-sisältö</string>
+    <string id="30030">Videoiden määrä sivua kohti</string>
+    <string id="30040">Toistin</string>
+    <string id="30050">Toista teräväpiirto videot, mikäli saatavilla</string>
+    <string id="30060">Etsi videoita maasta</string>
+    <string id="30061">Kaikki</string>
+    <string id="30062">Australia</string>
+    <string id="30063">Brasilia</string>
+    <string id="30064">Kanada</string>
+    <string id="30065">Ranska</string>
+    <string id="30066">Saksa</string>
+    <string id="30067">Englanti</string>
+    <string id="30068">Alankomaat</string>
+    <string id="30069">Hong Kong</string>
+    <string id="30070">Irlanti</string>
+    <string id="30071">Italia</string>
+    <string id="30072">Japani</string>
+    <string id="30073">Meksiko</string>
+    <string id="30074">Uusi-Seelanti</string>
+    <string id="30075">Puola</string>
+    <string id="30076">Venäjä</string>
+    <string id="30077">Etelä-Korea</string>
+    <string id="30078">Espanja</string>
+    <string id="30079">Taiwan</string>
+    <string id="30080">Yhdysvallat</string>
+    <string id="30090">Talletettavien hakujen määrä</string>
+    <string id="30100">Lataustapa</string>
+    <string id="30101">Tilapäinen</string>
+    <string id="30102">Tallennus</string>
+    <string id="30110">Latauskansio</string>
+    <string id="30120">- Käytä videon otsikkoa tallennusnimenä</string>
+    <string id="30130">Fanitaide kuva</string>
+</strings>

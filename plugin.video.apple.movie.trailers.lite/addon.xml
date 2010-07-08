@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.apple.movie.trailers.lite" name="Apple Movie Trailers - Lite" version="2.0.0" provider-name="nuka1195">
+    <requires>
+        <import addon="xbmc.python" version="1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <minversion>31632</minversion>
+        <summary>Watch current movie trailers from apple.com.</summary>
+        <description>Watch current movie trailers from http://trailers.apple.com/.[CR][CR]Check movie showtimes for theaters in your area.</description>
+        <disclaimer>Only the most recent 100 or so trailers are listed.</disclaimer>
+    </extension>
+</addon>

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--Language file translated with Team XBMC Translator-->
+<!--Translator: blittan-->
+<!--Email: blittan@xbmc.org-->
+<!--Date of translation: 07/27/2009-->
+<!--$Revision$-->
+<strings>
+  <string id="30000">Trailer kvalitet</string>
+  <string id="30001">Standard</string>
+  <string id="30002">480p</string>
+  <string id="30003">720p</string>
+  <string id="30004">1080p</string>
+  <string id="30010">Använd stor poster</string>
+  <string id="30020">MPAA klassbegränsning för trailers</string>
+  <string id="30030">Nedladdningsläge</string>
+  <string id="30031">Temporär</string>
+  <string id="30032">Spara</string>
+  <string id="30033">Ladda ner &amp; spara</string>
+  <string id="30040">- Sparmapp</string>
+  <string id="30050">Postnr eller ort, delstat</string>
+  <string id="30060">Visningsskrapa</string>
+  <string id="30070">Dag att lista filmer för</string>
+  <string id="30071">Idag</string>
+  <string id="30072">Imorgon</string>
+  <string id="30073">Dag 3</string>
+  <string id="30074">Dag 4</string>
+  <string id="30075">Dag 5</string>
+  <string id="30076">Dag 6</string>
+  <string id="30077">Dag 7</string>
+  <string id="30078">Dag 8</string>
+  <string id="30080">- Använd filmtitel för sparat filnamn</string>
+  <string id="30090">Fanartbild</string>
+  <string id="30100">- Fanartfärg ett (AARRGGBB)</string>
+  <string id="30110">- Fanartfärg två (AARRGGBB)</string>
+  <string id="30120">- Fanartfärg tre (AARRGGBB)</string>
+  <string id="30130">- Spela alltid sparade trailers</string>
+  <string id="30140">- Lägg till '-trailer' till sparade trailers</string>
+  <string id="30201">Sök...</string>
+  <string id="30202">Inställningar</string>
+  <string id="30500">Laddar ner: %s</string>
+  <string id="30501">Sparar: %s</string>
+  <string id="30502">Till: %s</string>
+  <string id="30503">Kopierar: %s</string>
+  <string id="30600">Inga visningar hittades!</string>
+  <string id="30601">Letar visningar, var god vänta...</string>
+  <string id="30602">Datum</string>
+  <string id="30603">Plats</string>
+  <string id="30800">Standard filmer</string>
+  <string id="30801">480p filmer</string>
+  <string id="30802">720p filmer</string>
+  <string id="30803">1080p filmer</string>
+  <string id="30900">Biografvisningar</string>
+  <string id="30910">Ladda ner och spela trailer</string>
+  <string id="30920">Spela trailer</string>
+  <string id="30930">Filminformation</string>
+</strings>

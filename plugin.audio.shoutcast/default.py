@@ -24,7 +24,7 @@ from xml.dom import minidom
 from urllib import quote_plus
 import unicodedata
 
-BASE_URL = 'http://classic.shoutcast.com/sbin/newxml.phtml'
+BASE_URL = 'http://yp.shoutcast.com/sbin/newxml.phtml'
 
 def INDEX():
   req = urllib2.Request(BASE_URL)
@@ -48,7 +48,7 @@ def RESOLVE(id):
     addLink(name,url,stat.attributes["br"].value)
 
 def PLAY(st_id, tunein):
-  url = "http://classic.shoutcast.com%s?id=%s" %(tunein,st_id,)
+  url = "http://yp.shoutcast.com%s?id=%s" %(tunein,st_id,)
   xbmc.Player().play(url)
 
 def addLink(name,url,size):

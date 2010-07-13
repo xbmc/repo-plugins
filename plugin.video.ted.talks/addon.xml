@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.ted.talks"
        name="TED Talks"
-       version="2.1.5"
+       version="2.1.6"
        provider-name="rwparris2">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.simplejson" version="2.0.9"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">

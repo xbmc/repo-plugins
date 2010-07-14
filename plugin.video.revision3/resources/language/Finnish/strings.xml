@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>   <!--  24.12.2009 Finnish   -->
+    <string id="30000">Käytä DVD Player-soitinta</string>
+    <string id="30001">Lataa ja toista video</string>
+    <string id="30002">Latauspolku</string>
+    <string id="30003">Kysy latauksesta ennen toistoa</string>
+    <string id="30004">Videolaatu (Käynnistä lisäke uudelleen)</string>
+	<!--  Don't translate the quality, it breaks the plugin  -->
+    <string id="30005">quicktime-high-definition</string>
+    <string id="30006">quicktime-large</string>
+    <string id="30007">quicktime-small</string>
+    <string id="30008">wmv-large</string>
+    <string id="30009">wmv-small</string>
+    <string id="30010">xvid-large</string>
+    <string id="30011">xvid-small</string>
+    <string id="30012">Päivitykset ovat saatavilla</string>
+	<string id="30013">Nykyinen versio: </string>
+	<string id="30014">Päivitä versio: </string>
+	<string id="30015">Lataaminen</string>
+	<string id="30016">Tiedostonimi: </string>
+	<string id="30017">Lataa & Pelata</string>
+	<string id="30018">Virta</string>
+	<string id="30019">Poistua</string>
+	<string id="30020">Tarkista päivitykset</string>
+	<string id="30021">Näyttää siltä, ei ole jaksoja saatavilla</string>
+	<string id="30022"> muodossa. Muuta laatu asetuksia.</string>
+</strings>

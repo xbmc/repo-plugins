@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.revision3"
+       name="Revision3"
+       version="1.0.0"
+       provider-name="stacked">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Revision3: The Best TV Shows on the Internet</summary>
+    <description>Revision3 is the leading television network for the internet generation. We create and produce all-original episodic community driven programs watched by a super-committed and passionate fan base. Our hyper-connected audience gets the vast majority of its entertainment, information and social connections through the internet.</description>
+    <platform>all</platform>
+  </extension>
+</addon>

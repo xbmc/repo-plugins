@@ -1,0 +1,8 @@
+[B]Version 1.0.0[/B]
+
+- Converted plugin to the new add-on system
+- Cleaned up code
+- Updated Swedish and Finnish strings
+- Added check for updates setting
+- Cleaned up title and info labels
+- Added a notification dialog when no episodes are available in a certain quality/format.

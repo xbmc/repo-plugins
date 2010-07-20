@@ -10,7 +10,10 @@
         <platform>all</platform>
         <minversion>31632</minversion>
         <summary>Watch current movie trailers from apple.com.</summary>
+        <summary lang="hu">Mozifilmelőzetesek az apple.com-ról</summary>
         <description>Watch current movie trailers from http://trailers.apple.com/.[CR][CR]Check movie showtimes for theaters in your area.</description>
+        <description lang="hu">Az aktuális mozifilmek előzeteseinek megtekintése a http://trailers.apple.com-ról.[CR][CR]Filmvetítési időpontok megtekintáse a te körzetedben.</description>
         <disclaimer>Only the most recent 100 or so trailers are listed.</disclaimer>
+        <disclaimer lang="hu">Csak a legfrissebb 100 előzetes kerül listázásra.</disclaimer>
     </extension>
 </addon>

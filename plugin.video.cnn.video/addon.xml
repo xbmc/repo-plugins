@@ -10,8 +10,11 @@
         <platform>all</platform>
         <minversion>31632</minversion>
         <summary>View videos of the latest news from CNN.</summary>
+        <summary lang="hu">A legfrissebb hírek megtekintése a CNN-ről.</summary>
         <description>View videos of the latest news from CNN.</description>
+        <description lang="hu">Videó formátumban megnézhetők a CNN legfrissebb hírei.</description>
         <disclaimer>CNN slants their views liberally. (Obama media)</disclaimer>
+        <disclaimer lang="hu">A CNN liberális oldalról közelíti meg a híreket.</disclaimer>
         <supportedcontent>episodes</supportedcontent>
     </extension>
 </addon>

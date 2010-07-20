@@ -12,6 +12,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary>Plugin for managing SABnzbd</summary>
+    <summary lang="hu">SABnzbd hírcsoport olvasó kezelése</summary>
     <description>Manage SABnzbd and search for files. For use with SABnzbd+ .5.1 or higher.
 
 Instructions:
@@ -25,6 +26,19 @@ Instructions:
 
 *note for the RSS feed to work, it requires the link to point directly to an nzb file, with no user/pass needed
 Supported sites can be found here: http://forums.sabnzbd.org/index.php?topic=1339.0</description>
+    <description lang="hu">SABnzbd hírcsoport olvasó kezelése, fájlok keresése.[CR]SABnzbd+ .5.1 vagy magasabb verzióhoz.
+
+Használat:
+================
+1) Kiegészítő beállítások
+2) Add meg a sabnzbd hostnevet, portot, felhasználónevet, jelszót és API kulcsokat
+3) Add meg a Newzbin felhasználónevet és jelszót
+4) Add meg az NZBS.org ID-t és Kódot (Az NZBS.org-on nyomj az RSS gombra, hogy lásd ezeket. ID ez után: &amp;i=, kód ez után &amp;h=)
+5) Ha kell imdb info és poszterek engedélyezd őket
+6) Ha akarsz még más extra RSS forrást, nyisd meg a settings.py-t és add hozzá az extra RSS forrást a könyvtárhoz (vigyázz, mert verziófrissítésnél ezek felülírásra kerülnek)
+
+*ahhoz, hogy az RSS forrás működjön, arra van szükség, hogy a hivatkozás direkt egy jelszómentes nzb fájlra mutasson.[CR]
+A támogatott oldalak itt találhatók: http://forums.sabnzbd.org/index.php?topic=1339.0</description>
     <platform>all</platform>
   </extension>
 </addon>

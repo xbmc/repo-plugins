@@ -13,6 +13,8 @@
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <summary>You Tube</summary>
+    <summary lang="hu">You Tube lejátszó</summary>
     <description></description>
+    <description lang="hu">You Tube videók keresése, tallózása, lejátszása, esetleges letöltése.</description>
   </extension>
 </addon>

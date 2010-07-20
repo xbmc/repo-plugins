@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.audio.ListenLiveEU"
-  version="0.3.0"
+  version="0.3.1"
   name="ListenLiveEU"
   provider-name="bootsy [bootsy82@gmail.com]">
   <requires>
@@ -13,10 +13,10 @@
    <provides>audio</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>European radio stations streaming live on the internet</summary>
-    <summary lang="hu">Eur贸pai internetes r谩di贸k</summary>
-    <description>Welcome to listenlive.eu, a web radio directory showcasing over 4000 radio stations from across Europe streaming live on the internet.</description>
-    <description lang="hu">A listenlive.eu t枚bb mint 4000 茅l艖 r谩di贸ad谩st tartalmaz Eur贸p谩b贸l, melyeket az interneten kereszt眉l 茅rhetsz el.</description>
+    <summary lang="en">European radio stations streaming live on the internet</summary>
+    <summary lang="hu">Eur髉ai internetes r醖i髃</summary>
+    <description lang="en">Welcome to listenlive.eu, a web radio directory showcasing over 4000 radio stations from across Europe streaming live on the internet.</description>
+    <description lang="hu">A listenlive.eu t鯾b mint 4000 閘o r醖i骯d醩t tartalmaz Eur髉醔髄, melyeket az interneten kereszt黮 閞hetsz el.</description>
     <platform>all</platform>
   </extension>
 </addon>

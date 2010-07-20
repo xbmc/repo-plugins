@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.luisterpaal"
+       name="3voor12 Luisterpaal"
+       version="1.0.2"
+       provider-name="Mart">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">Luisterpaal</summary>
+    <description lang="en">Plugin for the VPRO 3voor12 luisterpaal</description>
+  </extension>
+</addon>

@@ -1,0 +1,12 @@
+[B]Version 0.3.1[/B]
+
+- Changed: svn url
+- Added: changelog.txt and license.txt
+- Added: hungarian summary & description
+- Changed: end line characters (thx spiff)
+
+
+[B]Version 0.3.0[/B]
+
+- Changed: plugin to work with the new add-on system
+- Updated: fixed utf-8 encoding problem for ubuntu/linux users (hopefully)

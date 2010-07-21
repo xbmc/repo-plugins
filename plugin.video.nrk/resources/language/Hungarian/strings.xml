@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+
+  <!-- Settings -->
+  <string id="30000">Gyorsítótárazás</string>
+  <string id="30001">Képfájlkiterjesztések tesztelése</string>
+  <string id="30002">Meédiaelérési utak keresése a weboldalon [instabil]</string>
+  <string id="30003">Feliratok letöltése, ha elérhető [WIP]</string>
+  <string id="30004">Fejezetek használata a médiához ha található [WIP]</string>
+  <string id="30005">Az egy fájlt tartalmazó mappák átlátszóvá tétele</string>
+  <string id="30007">Lejátszáslista autojátszása megnyitáskor</string>
+  <string id="30008">Részletes hibaüzenetek</string>
+
+  <!-- Settings :: connection -->
+  <string id="30010">Kapcsolódási sebesség</string>
+
+  <string id="30011">Alacsony (kisebb mint 700 kbps)</string>
+  <string id="30012">Közepes (700 és 1200 kbps között)</string>
+  <string id="30013">Magas (1200 kbps fölött)</string>
+
+
+  <!-- Settings :: cache time -->
+  <string id="30020">Idő mielőtt frissítem a gyorsítótárat</string>
+
+  <string id="30021">Soha</string>
+  <string id="30022">1 óra</string>
+  <string id="30023">2 óra</string>
+  <string id="30024">12 óra</string>
+  <string id="30025">24 óra</string>
+
+  <string id="30030">Letöltési mappa</string>
+  <string id="30031">Futtatás egyszer</string>
+
+  <!-- Misc. -->
+  <string id="30500">Add meg a keresési szöveget</string>
+  <string id="30501">Add meg hány napot akarsz keresni</string>
+  <string id="30502">Hibás keresési szöveg</string>
+
+  <!-- Themes -->
+  <string id="30101">Gyerek</string>
+  <string id="30102">Természet</string>
+  <string id="30103">Dráma</string>
+  <string id="30104">Sport</string>
+  <string id="30105">Tények</string>
+  <string id="30106">Életmód</string>
+  <string id="30107">Étel</string>
+  <string id="30108">Hírek</string>
+  <string id="30109">Sami</string>
+  <string id="30110">Tini</string>
+  <string id="30111">Aláírási nyelv</string>
+  <string id="30112">Szórakozás</string>
+  <string id="30113">Dokumentumok</string>
+  <string id="30114">Kúltúra</string>
+  <string id="30115">Regionális</string>
+
+  <!-- Regions -->
+  <string id="30150">Møre og Romsdal</string>
+  <string id="30151">Hordaland</string>
+  <string id="30152">Nord-Norge</string>
+  <string id="30153">Rogaland</string>
+  <string id="30154">Sogn og Fjordane</string>
+  <string id="30155">Sørlandet</string>
+  <string id="30156">Trøndelag</string>
+  <string id="30157">Østafjells</string>
+  <string id="30158">Østfold</string>
+  <string id="30159">Østlandssendingen</string>
+  <string id="30160">Hedmark og Oppland</string>
+
+  <!-- other -->
+  <string id="30200">Archivum</string>
+  <string id="30201">Kapcsolódó</string>
+  <string id="30202">A legnépszerűbb</string>
+  <string id="30203">A legnépszerűbb héten</string>
+  <string id="30204">A legnépszerűbb ebben a hónapban</string>
+  <string id="30205">Keresés</string>
+  <string id="30206">Betű mutatása %s</string>
+  <string id="30207">Mind mutatása</string>
+  <string id="30208">ABC sorrendben</string>
+  <string id="30209">Tárgyak listája</string>
+  <string id="30210">Betű választása</string>
+  <string id="30211">Tárgy mutatása</string>
+  <string id="30212">Mind mutatása</string>
+  <string id="30213">Ezen a héten</string>
+  <string id="30214">Ebben a hónapban</string>
+  <string id="30215">Összesen</string>
+  <string id="30216">Az utolsó %d nap</string>
+  <string id="30217">Ajánlott műsorok</string>
+  <string id="30218">Az utolsó X nap legnépszerűbbje</string>
+  <string id="30219">Cikkek</string>
+
+  <!-- Root menu -->
+  <string id="30250">Programok</string>
+  <string id="30251">Élő</string>
+  <string id="30252">Kapcsolatok</string>
+  <string id="30253">Sport</string>
+  <string id="30254">Hírek</string>
+  <string id="30255">Regionális</string>
+  <string id="30256">Természet</string>
+  <string id="30257">NRKBeta</string>
+  <string id="30258">Internetes rádio</string>
+  <string id="30259">Zene podcast</string>
+  <string id="30260">Videó podcast</string>
+  <string id="30261">Text-TV</string>
+  <string id="30262">Kedvenc műsorok</string>
+
+  <!-- Context Menu -->
+  <string id="30300">Frissítés</string>
+  <string id="30301">Hozzáadás a kedvenc műsorokhoz</string>
+  <string id="30302">Videó letöltése</string>
+  <string id="30303">Eltávolítás</string>
+  <string id="30304">Átnevezés</string>
+
+  <!-- Categories -->
+  <string id="30350">Élő műsorok</string>
+
+  <!-- Favorite Programs -->
+  <string id="30400">Eltávolítás a kedvencekből</string>
+  <string id="30401">Akarod a ezt eltávolítani a kedvencekből: %s?</string>
+  <string id="30402">Hozzáadva a kedvencekhez</string>
+
+  <!-- compatible messages -->
+  <string id="30700">verzió</string>
+  <string id="30701">Az %s ezen verziója a futáshoz megköveteli</string>
+  <string id="30702">a(z) %s vagy frissebb XBMC verziót.</string>
+  <string id="30703">Kérlek frissítsd az XBMC-t.</string>
+
+  <!-- teletext -->
+  <string id="30800">Innenriks</string>
+  <string id="30801">Utenriks</string>
+  <string id="30802">Sport</string>
+  <string id="30803">Været</string>
+  <string id="30804">Sideoversikt</string>
+</strings>

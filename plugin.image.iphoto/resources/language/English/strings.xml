@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin strings -->
+    <string id="30200">%d star</string>
+
+    <!-- Category strings -->
+    <string id="30100">Events</string>
+    <string id="30101">Albums</string>
+    <string id="30102">Ratings</string>
+    <string id="30103">&lt;&lt; Import iPhoto Library &gt;&gt;</string>
+
+    <!-- Plugin settings strings -->
+    <string id="30000">Path to AlbumData.xml</string>
+    <string id="30001">Ignore published (MobileMe) albums</string>
+    <string id="30002">Ignore 'Flagged' album</string>
+</strings>

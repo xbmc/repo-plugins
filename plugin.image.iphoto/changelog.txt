@@ -1,0 +1,12 @@
+0.9.2 - 20100721
+- Use pysqlite script module.
+
+0.9.1 - 20100720
+- Add README.txt
+
+0.9.0 - 20100711
+- Port to new XBMC Addons system
+- Make path to AlbumData.xml configurable
+
+0.1.0 - 2008
+- Initial version by Anoop Menon (d4rk@xbmc.org)

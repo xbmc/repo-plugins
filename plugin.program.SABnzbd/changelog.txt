@@ -1,3 +1,6 @@
+2.0.1
+-Added Hungarian translation
+
 2.0.0
 -Reconfigured for use with XBMC's addon system (Thanks to Amet)
 -Removed dead site TVNZB

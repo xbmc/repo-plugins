@@ -143,9 +143,9 @@ def import_library(filename):
     if (album_ign_flagged == "true"):
 	album_ign.append("Shelf")
 
-    iparser = IPhotoParser(db.AddAlbumNew, album_ign, db.AddRollNew, db.AddKeywordNew, db.AddMediaNew, progress_callback)
+    iparser = IPhotoParser(filename, db.AddAlbumNew, album_ign, db.AddRollNew, db.AddKeywordNew, db.AddMediaNew, progress_callback)
     try:
-	iparser.Parse(filename)
+	iparser.Parse()
 	db.UpdateLastImport()
     except:
 	print traceback.print_exc()

@@ -29,6 +29,7 @@ Known Issues
   erroneous and can be ignored, but there is no way to distinguish a real
   failure from the expected one at the moment.
 * You need to re-import the library every time you modify it with iPhoto.
+* As of 2010/07/21, it's untested under Windows.
 * Currently only has English strings.
 * It is unknown if this plugin will work with Apple's Aperature, because I
   don't own a copy.

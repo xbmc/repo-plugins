@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="0.9.3" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="0.9.4" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="1.0"/>
 	<import addon="script.module.pysqlite" version="2.5.6"/>
@@ -10,8 +10,11 @@
     <extension point="xbmc.addon.metadata">
 	<platform>all</platform>
 	<minversion>31632</minversion>
-	<summary>Imports iPhoto library into XBMC.</summary>
-	<description>Imports iPhoto library into Events, Albums, and Ratings categories.</description>
-	<disclaimer>You need to re-import if iPhoto library changes.[CR]Ignore erroneous script error on import.[CR][CR]Only English language is currently supported.[CR]Untested under Windows as of 2010/07/21.[CR]Nightlies as of r32049 might not include script.module.pysqlite (see http://trac.xbmc.org/ticket/9690).</disclaimer>
+	<summary lang="en">Imports iPhoto library into XBMC.</summary>
+	<summary lang="pt">Importa bibliotecas iPhoto para o XBMC.</summary>
+	<description lang="en">Imports iPhoto library into Events, Albums, and Ratings categories.</description>
+	<description lang="pt">Importa bibliotecas iPhoto para Eventos, Álbuns e Classificações.</description>
+	<disclaimer lang="en">You need to re-import if iPhoto library changes.[CR]Ignore erroneous script error on import.[CR][CR]Only English language is currently supported.</disclaimer>
+	<disclaimer lang="pt">É necessário reimportar se a biblioteca for alterada.[CR]Ignore o erro de script na importação.[CR][CR]Apenas Inglês é suportado de momento.[CR]Não testado em Windows neste momento (2010/07/21).[CR]As compilações nocturnas desde a revisão r32049 podem não incluir o script.module.pysqlite (ver http://trac.xbmc.org/ticket/9690).</disclaimer>
     </extension>
 </addon>

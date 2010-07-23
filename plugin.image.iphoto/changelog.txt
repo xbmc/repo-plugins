@@ -1,3 +1,6 @@
+0.9.4 - 20100723
+- Portuguese strings (thanks to hudo).
+
 0.9.3 - 20100722
 - Ignore Flagged and Published albums by default.
 - Use configured path for images.

@@ -19,59 +19,75 @@
 # *
 # */
 
-import urllib,urllib2,re,xbmcplugin,xbmcgui,httplib
+import urllib,urllib2,re,xbmcplugin,xbmcgui,httplib,htmllib
 
-#http://3voor12.vpro.nl/feeds/luisterpaal
-#http://download.omroep.nl/vpro/luisterpaal/albums/43708792/data01.swf
-#http://images.vpro.nl/images/43698537+s(200)
+TRACK_SEPERATOR     ='~'
+DEFAULT_LUISTERPAAL ='10617791'
+USER_AGENT          ='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
+URL_LUISTERPALEN    ='http://3voor12.vpro.nl/luisterpaal/'
+URL_ALBUM           ='http://3voor12.vpro.nl/feeds/luisterpaal/{0}'
+URL_TRACK           ='http://download.omroep.nl/vpro/luisterpaal/albums/{0}/data{1}.swf'
+URL_COVER           ="http://images.vpro.nl/images/{0}+s(200).jpg"
 
-TRACK_SEPERATOR="~"
-
-def INDEX():
-	url = 'http://3voor12.vpro.nl/feeds/luisterpaal'
-	req = urllib2.Request(url)
-	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+def LUISTERPALEN():
+	#Luisterpalen, exluding default luisterpaal
+	req = urllib2.Request(URL_LUISTERPALEN)
+	req.add_header('User-Agent', USER_AGENT)
 	response = urllib2.urlopen(req)
-	link=response.read()
+	link = response.read()
 	response.close()
-	matchAlbums=re.compile('<item>\s*?<title>(.*?)</title>\s*?<link>http://3voor12.vpro.nl/speler/luisterpaal/(\d*?)</link>\s*?<description>([\s\S]*?)</description>\s*?<enclosure length="\d*?" type="image/jpeg" url="http://images\.vpro\.nl/images/(\d*).*?"/>').findall(link)
-	for title,albumId,description,coverId in matchAlbums:
-		matchTracks=re.compile(r"\[(\d*)\] (.*?)&lt;br /&gt;").findall(description)
-		trackList = ""
-		for number,name in matchTracks:
-			trackList = trackList+TRACK_SEPERATOR+name
-		trackList = trackList.strip(TRACK_SEPERATOR)
-		addDir(title,albumId,coverId,trackList)
+	matchLuisterpalen = re.compile('<div class="list-text">\s*?<a href="/luisterpaal/(\d*?)">(.*?)</a>\s*?</div>').findall(link)
+	for luisterpaalId, name in matchLuisterpalen:
+		if luisterpaalId <> DEFAULT_LUISTERPAAL:
+			name = ireplace(name, 'luisterpaal', '') + ' ...'
+			addLuisterpaal(name, luisterpaalId)
+		
+def ALBUMS(luisterpaalId):
+	req = urllib2.Request(URL_ALBUM.replace('{0}', luisterpaalId))
+	req.add_header('User-Agent', USER_AGENT)
+	response = urllib2.urlopen(req)
+	link = response.read()
+	response.close()
+	matchAlbums = re.compile('<item>\s*?<title>(.*?)</title>\s*?<link>http://3voor12.vpro.nl/speler/luisterpaal/(\d*?)</link>\s*?<description>([\s\S]*?)</description>\s*?<enclosure length="\d*?" type="image/jpeg" url="http://images\.vpro\.nl/images/(\d*).*?"/>').findall(link)
+	for title, albumId, description, coverId in matchAlbums:
+		matchTracks = re.compile(r"\[\d*\] (.*?)&lt;br /&gt;").findall(description)
+		trackList = TRACK_SEPERATOR.join([name for name in matchTracks])
+		addAlbum(title, albumId, coverId, trackList)
 
-def VIDEOLINKS(name,albumId,coverId,tracks):
-	
+def TRACKS(name, albumId, coverId, tracks):
 	tracklist = tracks.split(TRACK_SEPERATOR)
 	nr = 0
 	for track in tracklist:
 		nr = nr + 1
-		if nr < 10:
-			nrstr = "0" + str(nr)
-		else:
-			nrstr = str(nr)
-		
-		url = 'http://download.omroep.nl/vpro/luisterpaal/albums/'+albumId+'/data'+nrstr+'.swf'
-		addLink(nrstr + '. ' + track,coverId,url)
+		addTrack(nr, track, albumId, coverId)
 
-def addDir(name,albumId,coverId,tracks):
-		u=sys.argv[0]+"?name="+urllib.quote_plus(name)+"&albumid="+albumId+"&coverid="+coverId+"&tracks="+urllib.quote_plus(tracks)
-		ok=True
-		cover="http://images.vpro.nl/images/"+coverId+"+s(200).jpg"
-		liz=xbmcgui.ListItem(name, iconImage=cover, thumbnailImage=cover)
-		liz.setInfo( type="Video", infoLabels={ "Title": name } )
-		ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+def addLuisterpaal(name,luisterpaalId):
+		u = sys.argv[0] + "?luisterpaalid=" + luisterpaalId
+		ok = True
+		liz = xbmcgui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
+		liz.setInfo(type="video", infoLabels={ "title": name } )
+		ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+		return ok
+		
+def addAlbum(name, albumId, coverId, tracks):
+		u = sys.argv[0] + "?name=" + urllib.quote_plus(name) + "&albumid=" + albumId + "&coverid=" + coverId + "&tracks=" + urllib.quote_plus(tracks)
+		cover = URL_COVER.replace('{0}', coverId)
+		ok = True
+		name = unescape(name)
+		liz = xbmcgui.ListItem(name, iconImage=cover, thumbnailImage=cover)
+		liz.setInfo(type="video", infoLabels={ "title": name } )
+		ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 		return ok
 
-def addLink(name,coverId,url):
-		ok=True
-		cover="http://images.vpro.nl/images/"+coverId+"+s(200).jpg"
-		liz=xbmcgui.ListItem(name, iconImage=cover, thumbnailImage=cover)
-		liz.setInfo( type="Video", infoLabels={ "Title": name } )
-		ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
+def addTrack(nr,name,albumId,coverId):
+		nrstr = str(nr).zfill(2)
+		u = URL_TRACK.replace('{0}', albumId).replace('{1}', nrstr)
+		cover = URL_COVER.replace('{0}', coverId)
+		ok = True
+		name = unescape(name)
+		liz = xbmcgui.ListItem(nrstr+'. '+name, iconImage=cover, thumbnailImage=cover)
+		liz.setInfo(type="video", infoLabels={ "title": name } )
+		ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
 		return ok
 
 def get_params():
@@ -91,34 +107,51 @@ def get_params():
 				param[splitparams[0]]=splitparams[1]
 
 	return param
+	
+def ireplace(str, old, new):
+	#case insensitive replace
+	return re.sub('(?i)' + old, new, str)
 
-params=get_params()
-name=None
-par=None
+def unescape(s):
+	#from http://wiki.python.org/moin/EscapingHtml
+	p = htmllib.HTMLParser(None)
+	p.save_bgn()
+	p.feed(s)
+	return p.save_end()
 
+params = get_params()
+luisterpaalid = None
+name = None
+albumid = None
+coverid = None
+tracks = None
 try:
-		name=urllib.unquote_plus(params["name"])
+		luisterpaalid = urllib.unquote_plus(params["luisterpaalid"])
 except:
 		pass
 try:
-		albumid=urllib.unquote_plus(params["albumid"])
+		name = urllib.unquote_plus(params["name"])
 except:
 		pass
 try:
-		coverid=urllib.unquote_plus(params["coverid"])
+		albumid = urllib.unquote_plus(params["albumid"])
 except:
 		pass
-
 try:
-		tracks=urllib.unquote_plus(params["tracks"])
+		coverid = urllib.unquote_plus(params["coverid"])
+except:
+		pass
+try:
+		tracks = urllib.unquote_plus(params["tracks"])
 except:
 		pass
 
-if name==None or len(name)<1:
-		INDEX()
-       
+if not luisterpaalid and not name and not albumid and not coverid and not tracks:
+		LUISTERPALEN()
+		ALBUMS(DEFAULT_LUISTERPAAL)
+elif luisterpaalid:
+		ALBUMS(luisterpaalid)
 else:
-		VIDEOLINKS(name,albumid,coverid,tracks)
+		TRACKS(name, albumid, coverid, tracks)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
-

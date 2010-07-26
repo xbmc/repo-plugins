@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+    <setting id="windowed" type="bool" label="30000" default="true" />
+    <setting id="idleoff" type="bool" label="30001" default="false" />
+</settings>

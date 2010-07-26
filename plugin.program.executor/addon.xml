@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.executor"
+    name="Executor" version="0.2.1" provider-name="kitlaan">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Plugin for executing external programs.</summary>
+    <description lang="en">Executor is a plugin to start user-specified programs.</description>
+    <platform>all</platform>
+  </extension>
+</addon>

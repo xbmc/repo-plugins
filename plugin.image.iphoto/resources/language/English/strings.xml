@@ -2,6 +2,8 @@
 <strings>
     <!-- Plugin strings -->
     <string id="30200">%d star</string>
+    <string id="30210">Importing iPhoto Library</string>
+    <string id="30211">Imported %d items</string>
 
     <!-- Category strings -->
     <string id="30100">Events</string>
@@ -13,4 +15,5 @@
     <string id="30000">Path to AlbumData.xml</string>
     <string id="30001">Ignore published (MobileMe) albums</string>
     <string id="30002">Ignore 'Flagged' album</string>
+    <string id="30003">Auto update library</string>
 </strings>

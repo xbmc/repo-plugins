@@ -23,13 +23,12 @@ It is currently hard-coded to ignore albums of type "Book" and
 
 Both of these album types are ignored by default.
 
+If you select "Auto update library", the plugin will compare the modification
+time of your AlbumData.xml with its current database and update the database
+automatically on start.  This is disabled by default.
+
 Known Issues
 ============
-* When importing the library, XBMC will say the script failed.  This is
-  erroneous and can be ignored, but there is no way to distinguish a real
-  failure from the expected one at the moment.
-* You need to re-import the library every time you modify it with iPhoto.
 * As of 2010/07/21, it's untested under Windows.
-* Currently only has English strings.
 * It is unknown if this plugin will work with Apple's Aperature, because I
   don't own a copy.

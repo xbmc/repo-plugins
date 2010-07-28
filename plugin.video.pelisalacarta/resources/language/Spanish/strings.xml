@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="30000">Nombre:</string>
+	<string id="30001">Version:</string>
+	<string id="30002">Autor:</string>
+	<string id="30003">Web:</string>
+
+	<string id="30007">Reproductor:</string>
+	<string id="30004">Auto</string>
+	<string id="30005">MPlayer</string>
+	<string id="30006">DVDPlayer</string>
+
+	<string id="30011">Accion al seleccionar vídeo:</string>
+	<string id="30008">Preguntar</string>
+	<string id="30009">Ver</string>
+	<string id="30010">Ver en calidad alta</string>
+    <string id="31010">Mandar a jdownloader</string>
+
+	<string id="30012">Logos de canales:</string>
+	<string id="30013">Poster (vertical)</string>
+	<string id="30014">Banner (horizontal)</string>
+
+	<string id="30100">Modo premium Megavideo:</string>
+	<string id="30101">Usuario Megavideo:</string>
+	<string id="30102">Password Megavideo:</string>
+	<string id="30103">Cookie Megavideo:</string>
+	<string id="30200">Comprobar actualizaciones:</string>
+	<string id="30202">Forzar modo de vista óptimo:</string>
+	<string id="30201">Directorio de descargas:</string>
+	<string id="30203">Directorio de lista descargas:</string>
+	<string id="30204">Activar modo adultos:</string>
+	<string id="30205">Elegir Calidad mas alta (Youtube)</string>
+	<string id="30206">Activar Subtitulo:</string>
+	<string id="30207">URL de JDownloader:</string>
+	<string id="30208">Generar log detallado:</string>
+	<string id="30209">Numero de busquedas a salvar:</string>
+
+	<!-- Context menu strings -->
+	<string id="30300">Eliminar esta busqueda</string>
+
+	<!-- LetMeWatchThis -->
+	<string id="40001">Películas - Novedades</string>
+	<string id="40002">Series - Novedades</string>
+	<string id="40003">!Página siguiente</string>
+
+</strings>

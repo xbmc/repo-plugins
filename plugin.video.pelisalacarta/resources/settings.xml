@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="player_type" type="enum" lvalues="30004|30005|30006" label="30007" default="2"/>
+    <setting id="default_action" type="enum" lvalues="30008|30009|30010|31010" label="30011" default="0"/>
+    <setting id="thumbnail_type" type="enum" lvalues="30013|30014" label="30012" default="0"/>
+    <setting type="sep" />
+    <setting id="megavideopremium" type="bool" label="30100" default="false"/>
+    <setting id="megavideouser" type="text" label="30101" default=""/>
+    <setting id="megavideopassword" type="text" label="30102" default=""/>
+    <!--setting id="megavideocookie" type="text" label="30103" default=""/-->
+    <setting id="updatecheck2" type="bool" label="30200" default="true"/>
+    <setting id="downloadpath" type="text" label="30201" default=""/>
+    <setting id="downloadlistpath" type="text" label="30203" default=""/>
+    <setting id="forceview" type="bool" label="30202" default="false"/>
+    <setting id="singlechannel" type="bool" label="30203" default="false" enable="false"/>
+    <setting id="enableadultmode" type="bool" label="30204" default="false"/>
+    <setting id="quality_youtube" type="enum" values="Low|Medium (3gp)|240p (FLV)|360P (FLV)|360p (MP4)|480p (FLV)|720p (HD)|1080p (HD)|Menu" label="30205" default="3" />
+    <setting id="subtitulo" type="bool" label="30206" default="false"/>	
+    <setting id="jdownloader" type="text" label="30207" default="http://127.0.0.1:10025"/>
+    <setting id="debug" type="bool" label="30208" default="false"/>
+    <setting id="limite_busquedas" type="enum" values="10|20|30|40" label="30209" default="0"/>
+</settings>

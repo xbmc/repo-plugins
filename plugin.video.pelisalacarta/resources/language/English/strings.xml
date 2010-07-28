@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="30000">Name:</string>
+	<string id="30001">Version:</string>
+	<string id="30002">Author:</string>
+	<string id="30003">Web:</string>
+
+	<string id="30007">Player type</string>
+	<string id="30004">Auto</string>
+	<string id="30005">MPlayer</string>
+	<string id="30006">DVDPlayer</string>
+
+	<string id="30011">Default action on play:</string>
+	<string id="30008">Ask</string>
+	<string id="30009">Watch</string>
+	<string id="30010">Watch in high quality</string>
+
+
+	<string id="30012">Channel logos:</string>
+	<string id="30013">Poster (vertical)</string>
+	<string id="30014">Banner (horizontal)</string>
+
+	<string id="30100">Megavideo premium mode:</string>
+	<string id="30101">Megavideo user:</string>
+	<string id="30102">Megavideo password:</string>
+	<string id="30103">Megavideo cookie:</string>
+	<string id="30200">Check for updates:</string>
+	<string id="30202">Force view mode:</string>
+	<string id="30201">Download path:</string>
+	<string id="30203">Download list path:</string>
+	<string id="30204">Enable adult mode:</string>
+	<string id="30205">Highest Quality (Youtube)</string>
+	<string id="30206">Enable Subtitle:</string>
+	<string id="30207">JDownloader URL:</string>
+	<string id="30208">Full detail log:</string>
+	<string id="30209">Number of searches to save:</string>
+
+	<!-- Context menu strings -->
+	<string id="30300">Delete saved search</string>
+
+	<!-- LetMeWatchThis -->
+	<string id="40001">Movies - Just added</string>
+	<string id="40002">TV Shows - Just added</string>
+	<string id="40003">!Next page</string>
+	
+</strings>

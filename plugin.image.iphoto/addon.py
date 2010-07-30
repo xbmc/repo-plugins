@@ -189,9 +189,9 @@ def import_library(xmlfile):
 	os.remove(db_file_tmp)
 	return
 
-    progress_dialog.update(0, addon.getLocalizedString(30211) % (0))
-
     iparser = IPhotoParser(xmlfile, db_tmp.AddAlbumNew, album_ign, db_tmp.AddRollNew, db_tmp.AddKeywordNew, db_tmp.AddMediaNew, progress_callback, progress_dialog)
+
+    progress_dialog.update(0, addon.getLocalizedString(30212))
     try:
 	iparser.Parse()
 	db_tmp.UpdateLastImport()

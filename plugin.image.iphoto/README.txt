@@ -27,6 +27,15 @@ If you select "Auto update library", the plugin will compare the modification
 time of your AlbumData.xml with its current database and update the database
 automatically on start.  This is disabled by default.
 
+Translations
+============
+If you'd like to help translate this plugin to another language, please send
+a patch to jingai at floatingpenguins dot com.
+
+If possible, patch against the most recent version at:
+
+  http://github.com/jingai/plugin.image.iphoto
+
 Known Issues
 ============
 * As of 2010/07/21, it's untested under Windows.

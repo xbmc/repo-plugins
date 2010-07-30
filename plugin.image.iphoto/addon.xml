@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="0.9.6" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="0.9.7" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="1.0"/>
 	<import addon="script.module.pysqlite" version="2.5.6"/>
@@ -11,10 +11,11 @@
 	<platform>all</platform>
 	<minversion>31632</minversion>
 	<summary lang="en">Imports iPhoto library into XBMC.</summary>
+	<summary lang="hu">iPhoto könyvtár importálása az XBMC-be</summary>
 	<summary lang="pt">Importa bibliotecas iPhoto para o XBMC.</summary>
 	<description lang="en">Imports iPhoto library into Events, Albums, and Ratings categories.</description>
+	<description lang="hu">iPhoto könyvtár importálása az Események, Albumok és Besorolás kategóriákba.</description>
 	<description lang="pt">Importa bibliotecas iPhoto para Eventos, Álbuns e Classificações.</description>
-	<disclaimer lang="en">Untested under Windows as of 2010/07/25.[CR]Nightlies as of r32150 might not include script.module.pysqlite (see http://trac.xbmc.org/ticket/9690).[CR]Import is slower than it should be (see http://trac.xbmc.org/ticket/9740).</disclaimer>
-	<disclaimer lang="pt">Não testado em Windows neste momento (2010/07/25).[CR]As compilações nocturnas desde a revisão r32150 podem não incluir o script.module.pysqlite (ver http://trac.xbmc.org/ticket/9690).</disclaimer>
+	<disclaimer lang="en">Untested under Windows.[CR]Nightlies as of r32150 might not include script.module.pysqlite (see http://trac.xbmc.org/ticket/9690).[CR]FIXED IN r32324: Import is slower than it should be (see http://trac.xbmc.org/ticket/9740).</disclaimer>
     </extension>
 </addon>

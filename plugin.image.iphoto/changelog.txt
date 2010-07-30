@@ -1,3 +1,8 @@
+0.9.7 - 20100729
+- Hungarian strings (thanks alanwww1).
+- New icon (thanks freezy).
+- Separate message for AlbumData.xml scan prior to library import.
+
 0.9.6 - 20100725
 - Update progress bar on import.
 

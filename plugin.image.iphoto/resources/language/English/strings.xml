@@ -4,6 +4,7 @@
     <string id="30200">%d star</string>
     <string id="30210">Importing iPhoto Library</string>
     <string id="30211">Imported %d items</string>
+    <string id="30212">Scanning AlbumData.xml...</string>
 
     <!-- Category strings -->
     <string id="30100">Events</string>

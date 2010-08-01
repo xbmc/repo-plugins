@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.fox.news"
        name="Fox News"
-       version="1.0.3"
+       version="1.0.4"
        provider-name="redeyed">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
@@ -12,7 +12,9 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary>Fox News</summary>
-        <description>This XBMC plugin enables viewing many of the online feeds Fox News has available</description>
+        <summary lang="en">Fox News</summary>
+        <summary lang="hu">Fox hírek</summary>
+        <description lang="en">This XBMC plugin enables viewing many of the online feeds Fox News has available</description>
+        <description lang="hu">Ezzel a kiegészítővel megtekinthető a Fox News által szolgáltatott gazdag online hírtartalom</description>
     </extension>
 </addon>

@@ -1,3 +1,7 @@
+2010-08-02 :: 0.2.2
+
+  * Added Hungarian translation
+
 2010-07-25 :: 0.2.1
 
   * Added icon

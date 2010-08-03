@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<strings>
+    <!-- Plugin settings -->
+    <string id="30000">Futtatás előtt helyezze az XBMC-t ablak-módba</string>
+    <string id="30001">Képernyő nyugalmi állapot vizsgáló kikapcsolása</string>
+    <!-- Context menu -->
+    <string id="30100">Kiegészítő beállítások</string>
+    <string id="30101">Új program hozzáadása</string>
+    <string id="30102">Program eltávolítása</string>
+    <!-- Dialogs -->
+    <string id="30200">Program eltávolítás megerősítése</string>
+    <string id="30201">Biztos, hogy eltávolítod ezt: '%s' ?</string>
+    <string id="30202">Válaszd ki az indítandó programot</string>
+    <string id="30203">A program címének megadása</string>
+    <string id="30204">Kiegészítő indítási argumentumok megadása</string>
+    <string id="30205">A program már létezik</string>
+    <string id="30206">Felül akarod írni ezt: '%s' ?</string>
+</strings>

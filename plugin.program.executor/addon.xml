@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.executor"
-    name="Executor" version="0.2.1" provider-name="kitlaan">
+    name="Executor" version="0.2.2" provider-name="kitlaan">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
   </requires>
@@ -9,7 +9,9 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Plugin for executing external programs.</summary>
+    <summary lang="hu">Külső programok indítása.</summary>
     <description lang="en">Executor is a plugin to start user-specified programs.</description>
+    <description lang="hu">Az Executor segítségével saját külső programokat tudsz elindítani.</description>
     <platform>all</platform>
   </extension>
 </addon>

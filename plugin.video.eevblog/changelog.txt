@@ -1,3 +1,9 @@
+[B]Version 0.1.1[/B]
+
+- Deleted languages that shouldn't have been in there from a different plugin
+- Added Hungarian translation, thanks alanwww1
+- Reordered my brain, and re-added correct German language files
+
 [B]Version 0.1.0[/B]
 
 - The beginning ...

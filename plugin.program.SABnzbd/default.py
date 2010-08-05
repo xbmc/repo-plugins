@@ -8,11 +8,11 @@ import xbmcaddon
 
 # plugin constants
 __plugin__ = "SABnzbd Plugin"
-__author__ = "switch"
+__author__ = "switch, Kricker, maruchan"
 __url__ = "http://sabnzbd.org"
 __svn_url__ = ""
 __credits__ = "Team SABnzbd & Team XBMC"
-__version__ = "1.5"
+__version__ = "2.1.2"
 
 __settings__ = xbmcaddon.Addon(id='plugin.program.SABnzbd')
 __language__ = __settings__.getLocalizedString

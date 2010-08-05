@@ -39,11 +39,11 @@ class _IMDbParser:
     pattern_release_date = re.compile( '<h5>Release Date:</h5>[^0-9]*([0-9]* [A-Za-z]* [0-9]*)' )
     pattern_genres = re.compile( '"/Sections/Genres/[^/]*/">([^<]*)</a>' )
     pattern_tagline = re.compile( '<h5>Tagline:</h5>([^<]*)' )
-    pattern_plot = re.compile( '<h5>Plot(| Outline| Summary):</h5>([^<]*)' )
+    pattern_plot = re.compile( 'Plot:</h5>(.*?)<a', re.IGNORECASE|re.DOTALL )
     pattern_awards = re.compile( '<h5>Awards:</h5>([^<]*)' )
     pattern_user_comments = re.compile( '<h5>User Comments:</h5>([^<]*)' )
     pattern_mpaa = re.compile( 'MPAA</a>:</h5>([^<]*)' )
-    pattern_duration = re.compile( '<h5>Runtime:</h5>[^0-9]*([^<]*)' )
+    pattern_duration = re.compile( '<h5>Runtime:</h5>[^0-9]+([^<]*)' )
     pattern_countries = re.compile( '<h5>Countr[ies|y]:</h5>[^>]*>([^<]*)' )
     pattern_language = re.compile( '<h5>Language:</h5>[^>]*>([^<]*)' )
     pattern_aspect_ratio = re.compile( '<h5>Aspect Ratio:</h5>([^<]*)' )
@@ -139,9 +139,10 @@ class _IMDbParser:
 
         # plot
         self.info.plot = ""
-        matches = self.pattern_plot.findall( htmlSource )
-        if ( matches ):
-            self.info.plot = self._clean_text( matches[ 0 ][ 1 ] )
+        matches = re.search( self.pattern_plot, htmlSource )
+        if matches:
+            self.info.plot = self._clean_text( matches.group(1) )
+            print self.info.plot
 
         # awards
         self.info.awards = ""
@@ -267,6 +268,9 @@ class _IMDbParser:
                 for actor, role in matches:
                     self.info.cast += [ ( self._clean_text( actor ), self._clean_text( role ), ) ]
 
+        #fanart - Nothing for IMDB
+        self.info.fanart = None
+
         # trailer url
         self.info.trailer = ""
         matches = self.pattern_trailer.findall( htmlSource )
@@ -279,7 +283,7 @@ class _IMDbParser:
         # remove html source
         text = re.sub( self.pattern_clean, '', text ).strip()
         # replace entities and return iso-8859-1 unicode
-        return unicode( text.replace( "&lt;", "<" ).replace( "&gt;", ">" ).replace( "&quot;", '"' ).replace( "&#38;", "&" ).replace( "&#39;", "'" ).replace( "&amp;", "&" ), "iso-8859-1" )
+        return unicode( text.replace( "&lt;", "<" ).replace( "&gt;", ">" ).replace( "&quot;", '"' ).replace( "&#38;", "&" ).replace( "&#39;", "'" ).replace( "|", "").replace( "&amp;", "&" ), "iso-8859-1" )
 
 
 class IMDbFetcher:
@@ -349,9 +353,9 @@ class IMDbFetcher:
         try:
             if ( url ):
                 # retrieve poster from IMDb if it is not cached
-                if ( not os.path.exists( file_path ) and url != "" ):
-                    urllib.urlretrieve( url, file_path )
-                self.parser.info.poster = file_path
+                #if ( not os.path.exists( file_path ) and url != "" ):
+                #    urllib.urlretrieve( url, file_path )
+                self.parser.info.poster = url
         except:
             urllib.urlcleanup()
             remove_tries = 3

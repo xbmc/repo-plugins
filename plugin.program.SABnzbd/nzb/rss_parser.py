@@ -20,6 +20,11 @@ class RSSParser:
         self.settings[ "cache_rss" ] = __settings__.getSetting( "cache_rss" ) == "true"
         self.settings['username_newzbin'] = __settings__.getSetting('username_newzbin')
         self.settings['password_newzbin'] = __settings__.getSetting('password_newzbin')
+        self.settings[ "imdb_info_fetch" ] = __settings__.getSetting( "imdb_info_fetch" ) == "true"
+        self.settings[ "imdb_poster_fetch" ] = __settings__.getSetting( "imdb_poster_fetch" ) == "true"
+        self.settings[ "tvdb_info_fetch" ] = __settings__.getSetting( "tvdb_info_fetch" ) == "true"
+        self.settings[ "tvdb_poster_fetch" ] = __settings__.getSetting( "tvdb_poster_fetch" ) == "true"
+        self.settings[ "tvdb_fanart_fetch" ] = __settings__.getSetting( "tvdb_fanart_fetch" ) == "true"
       
     def _parse(self, uri, cat='default'):
         d = self._parse_rss(uri)
@@ -40,16 +45,6 @@ class RSSParser:
             if not d:
                 print 'sabnzbd-xbmc parsing: %s' % uri
                 feedparser.USER_AGENT = "SABnzbdXBMCPlugin/%s +http://sabnzbd.org/" % __version__
-                if self.is_newzbin(uri):
-                    if self.settings['username_newzbin'] and self.settings['password_newzbin'] and 'fauth' not in uri:
-                        # Newzbin now seems to always require authentication, so add username and password if fauth not present
-                        uri = uri.replace('http://', 'http://%s:%s@' % (self.settings['username_newzbin'], self.settings['password_newzbin']))
-                        uri = uri.replace('https://', 'https://%s:%s@' % (self.settings['username_newzbin'], self.settings['password_newzbin']))
-                    elif 'fauth' not in uri:
-                        print 'sabnzbd-xbmc missing newzbin authentication:', uri
-                        msg = 'Missing newzbin user/pass, please enter in the plugin settings.'
-                        xbmcgui.Dialog().ok('SABnzbd-XBMC-Plugin', msg)
-                        return {}
                     
                 print 'sabnzbd-xbmc parsing uri'
                 d = feedparser.parse(uri)
@@ -84,40 +79,55 @@ class RSSParser:
             size = 0
             for entry in entries:
                 imdb = None
+                tvdb = None
                 link = self._get_link(uri, entry)
-                if self.is_newzbin(uri) and entry.description:
-                    mbre = re.compile(r'size:(.+)mb', re.I)
-                    match = re.search(mbre, entry.description.lower())
-                    if match:
-                        size = match.group(1)
-                        size_prefix = 'MB'
-                        size = float(size.replace(',',''))
-                        if (size >= 1000):
-                            size_prefix = 'GB'
-                            size = size/1000.0
-                        if size_prefix == 'GB':
-                            size = '%.1f%s' % (size, size_prefix)
-                        if size_prefix == 'MB':
-                            size = '%.0f%s' % (size, size_prefix)
-                    print 'looking for imdb link'
-                    imdb_match = re.compile(r'<a href="http://www.imdb.com/title/(.*)">More Info</a>', re.I)
-                    match = re.search(imdb_match, entry.description.lower())
-                    if match:
-                        imdb = match.group(1)
-                        imdb = imdb.strip('/')
-                        print 'found imdb link: %s' % imdb
-                item = {}
-                title = entry.title
 
-		if self.is_nzbs(uri) and entry.description:
-                   
-                    print 'looking for imdb link'
-                    imdb_match = re.compile(r'<a href="http://www.imdb.com/title/(.*)">[0123456789]{7}</a>', re.I)
-                    match = re.search(imdb_match, entry.description.lower())
-                    if match:
-                        imdb = match.group(1)
-                        imdb = imdb.strip('/')
-                        print 'found imdb link: %s' % imdb
+                if entry.description:
+
+                    mbre = re.compile(r'([0-9]+\.[0-9]+ [A-z]+)', re.I)
+                    mbmatch = re.search(mbre, entry.description.lower())
+                    if mbmatch:
+                        size = mbmatch.group(1)
+
+                        if cat == 'movies' and (self.settings['imdb_info_fetch'] or self.settings['imdb_poster_fetch']):
+                            print 'looking for imdb link'
+                            movie_title = unicode(entry.title.lower()).encode('utf-8')
+                            movie_title = re.sub(r'(?:\[.*\]|.1080p|.720p|.dd5\.1|.dts|.vc1|.wmv|.hddvd|.internal|.subbed|.bluray|.dvdrip|.brrip|.limited|.ws|.scr|.dvdscr|.unrated|.proper|.dvdr|.dvd5|.dvd9|ova.*|\ -.*|..complete.|.br25|.br50|.ntsc|.2disc|.xvid|.[0-9]{3}.*|.divx|.hdtv|.x264|.h264|([\-A-z0-9]*$))', "", movie_title)
+                            movie_title = movie_title.replace("."," ")
+                            query = urllib.urlencode({'q' : movie_title+' site:imdb.com'})
+                            url = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&%s' \
+                            % (query)
+                            #print 'search string: %s' % movie_title
+                            search_results = urllib.urlopen(url)
+                            json = simplejson.loads(search_results.read())
+                            results = json['responseData']['results']
+                            if results:
+                                imdb_url = results[0]['url']
+                                imdb_match = re.compile(r'(/tt.*/)', re.I)
+
+                                match = re.search(imdb_match, imdb_url)
+
+                                if match:
+                                    imdb = match.group(1)
+                                    imdb = imdb.strip('/')
+                                    print 'found imdb link: %s' % imdb
+
+                        elif cat == 'tv' and (self.settings['tvdb_info_fetch'] or self.settings['tvdb_poster_fetch'] or self.settings['tvdb_fanart_fetch']):
+                            show_title = entry.title.lower()
+                            show_title = re.sub(r'(s[0-9]+e?[0-9].*|\-.*|.?hdtv.*|.season.*|.?[0-9]{4}.*|.?[0-9]{4}.[0-9]{2}.[0-9]{2}.*|.?[0-9x]{4}.*|.hddvd.*|.internal.*|.subbed.*|.bluray.*|.dvdrip.*|.brrip.*|.dvdscr.*|.uncensored.*|.proper.*|.dvdr.*|.dvd5.*|.dvd9.*|.1080p.*|.720p.*|.mkv.*|.avi.*|.wmv.*|.mp4.*)', "", show_title)
+                            show_title = show_title.replace("."," ")
+                            
+                            tvdb = show_title
+
+                        elif cat == 'anime' and (self.settings['tvdb_info_fetch'] or self.settings['tvdb_poster_fetch'] or self.settings['tvdb_fanart_fetch']):
+                            anime_title = entry.title.lower()
+                            anime_title = re.sub(r'(s[0-9]+e?[0-9].*|.season.*|\-.*|\[.*\]|[0-9s]{3}.*|.?[0-9]{4}.[0-9]{2}.[0-9]{2}.*|.?[0-9x]{4}.*|.?\(.*\)|s[0-9\-]{1,5}.*|ep[0-9]{1,3}.*|.?ova..*|.hddvd.*|.internal.*|.subbed.*|.bluray.*|.dvdrip.*|.brrip.*|.dvdscr.*|.uncensored.*|.proper.*|.dvdr.*|.dvd5.*|.dvd9.*|.1080p.*|.720p.*|.mkv.*|.avi.*|.wmv.*|.mp4.*)', "", anime_title)
+                            anime_title = anime_title.replace("."," ")
+
+                            tvdb = anime_title
+                            #print 'tvdb: '+tvdb
+                                    
+
                 item = {}
                 title = entry.title
                 if size:
@@ -127,7 +137,10 @@ class RSSParser:
                 item['url'] = url
                 item['type'] = 'nzb_dl'
                 item['id'] = ''
-                item['imdb'] = imdb
+                if imdb:
+                    item['imdb'] = imdb
+                if tvdb:
+                	item['tvdb'] = tvdb
                 item['category'] = cat
                 items.append(item)
 
@@ -147,20 +160,8 @@ class RSSParser:
     def _get_link(self, uri, entry):
         """ Retrieve the post link from this entry """
         uri = uri.lower()
-        # Special handling for newzbin
-        if self.is_newzbin(uri):
-            try:
-                link = entry.link
-            except:
-                link = None
-            if not (link and '/post/' in link.lower()):
-                # Use alternative link
-                try:
-                    link = entry.links[0].href
-                except:
-                    link = None
         # Special handling for nzbindex.nl 
-        elif 'nzbindex.nl' in uri:
+        if 'nzbindex.nl' in uri:
             try:
                 link = entry.enclosures[0]['href']
             except:
@@ -176,12 +177,6 @@ class RSSParser:
         else:
             print 'sabnzbd-xbmc failed to find a link to an nzb'
             return None
-        
-    def is_newzbin(self, uri):
-        if 'newzbin' in uri or 'newzxxx' in uri:
-            return True
-        else:
-            return False
 
     def is_nzbs(self, uri):
         if 'nzbs' in uri or 'nzbsxxx' in uri:

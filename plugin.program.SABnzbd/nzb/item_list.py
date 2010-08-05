@@ -14,12 +14,14 @@ import os
 import xbmc
 import xbmcgui
 import xbmcplugin
-
-from settings import *
-
+import xbmcaddon
 import urllib
+import time
 
+from threading import Timer
+from settings import *
 from imdbAPI import IMDbClient
+from tvdbAPI import thetvdb
 from misc import _get_path, check_attribute, check_dict_key
 from cookie_fetcher import CookieFetcher
 from rss_parser import RSSParser
@@ -36,9 +38,12 @@ class _Info:
 
 
 class Main:
+
     def __init__( self ):
+
         # initiate imdb parser
         self.IMDbFetcher = IMDbClient.IMDbFetcher()
+        self.tvdbFetcher = thetvdb.tvdbFetcher()
         self.parser = RSSParser()
         self.sabnzbd = SABnzbdActions()
         
@@ -56,6 +61,22 @@ class Main:
             # get the list
             self.sabnzbd._sabnzbd_action(id)
         else:
+            '''title = self.args.rss_url.split('!?!')
+            trueFalse = __settings__.getSetting( "enableRefresh")
+
+            try:
+                if (title[1] != "SABnzbd - Queue"):
+                    print "YOU ARE _NOT_ IN THE QUEUE"
+                    __settings__.setSetting( "enableRefresh", "True" )
+                else:
+                    print "YOU _ARE_ IN THE QUEUE"
+                    if (not trueFalse or trueFalse == "True"):
+                        __settings__.setSetting( "enableRefresh", "False" )
+            except IndexError:
+                print "YOU ARE IN THE MAIN LISTING"
+                __settings__.setSetting( "enableRefresh", "True" )
+                print __settings__.getSetting( "enableRefresh" )'''
+
             ok = self._show_categories()
             # send notification we're finished, successfully or unsuccessfully
             xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=ok )
@@ -66,7 +87,9 @@ class Main:
         self.settings[ "imdb_info_fetch" ] = __settings__.getSetting( "imdb_info_fetch" ) == "true"
         self.settings[ "imdb_poster_fetch" ] = __settings__.getSetting( "imdb_poster_fetch" ) == "true"
         self.settings[ "poster_size" ] = ( "128", "256", "512", )[ int( __settings__.getSetting( "poster_size" ) ) ]
-
+        self.settings[ "tvdb_info_fetch" ] = __settings__.getSetting( "tvdb_info_fetch" ) == "true"
+        self.settings[ "tvdb_poster_fetch" ] = __settings__.getSetting( "tvdb_poster_fetch" ) == "true"
+        self.settings[ "tvdb_fanart_fetch" ] = __settings__.getSetting( "tvdb_fanart_fetch" ) == "true"
         
     def _parse_argv( self ):
         # call _Info() with our formatted argv to create the self.args object
@@ -94,6 +117,7 @@ class Main:
         '''
         try:
             ok = False
+            useFanart = False
             print 'sabnzbd-xbmc Filling the list'
             # enumerate through the list of categories and add the item to the media list
             print 'sabnzbd-xbmc total items found: %s' % len(items["assets"])
@@ -130,7 +154,17 @@ class Main:
                         
                     if self.settings[ "imdb_poster_fetch" ] and not self.settings[ "imdb_info_fetch" ]:
                         info = {}
-                        
+                      
+                elif item.has_key('tvdb') and item['tvdb'] and (self.settings['tvdb_info_fetch'] or self.settings['tvdb_poster_fetch'] or self.settings['tvdb_fanart_fetch']):
+                    info = self.tvdbFetcher.fetch_info(item['tvdb'])
+                    if info and info.poster and self.settings['tvdb_poster_fetch']:
+                        icon = thumbnail = info.poster
+                    else:
+                        print 'no poster, using sabc_64.png'
+                        icon = thumbnail = ''
+                    if info and info.fanart and self.settings["tvdb_fanart_fetch"]:
+                        useFanart == True
+
                 elif item["name"].lower().startswith('newzbin'):
                     icon = thumbnail = _get_path('newzbin.png')
                 elif isFolder == False:
@@ -150,7 +184,7 @@ class Main:
                 url = '%s?%s="""%s!?!%s!?!%s!?!%s""",cookie="""%s""",old_handle="%s"' % ( sys.argv[ 0 ], heading, item["url"], item["name"], item["id"], cat, cookie, sys.argv[ 1 ] )
                 # set the default icon
                 #icon = "DefaultFolder.png"
-                title = item['name'].replace("%20"," ").title()
+                title = item['name'].replace("%20"," ")
                 title = title.replace('\'S','\'s').replace('Iii','III').replace('Ii','II')
                 listitem = xbmcgui.ListItem( title, label2='hi', iconImage=icon, thumbnailImage=thumbnail )
                 if not info:
@@ -158,11 +192,10 @@ class Main:
                     listitem.setInfo( type="Video", infoLabels={ "Title": title} )
                 else:
                     #listitem.setThumbnailImage(info.poster)
-                    listitem.setInfo( type="Video", infoLabels={ "Title": title,"Overlay": xbmcgui.ICON_OVERLAY_HD,  "Plot": info.plot, "Duration": info.duration, "MPAA": info.mpaa, "Genre": info.genre, "Director": info.director, "Writer": info.writer, "Studio": info.studio, "Year": info.year, "Rating": info.user_rating, "Votes": info.user_votes, "Tagline": info.tagline, "Cast": info.cast } )
-                    listitem.setLabel2('hi')
-                    listitem.setProperty('label3','hi')
-                    print 'findme: %s' % listitem.getLabel2()
-                    xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
+                    listitem.setInfo( type="Video", infoLabels={ "Title": title,  "Plot": info.plot, "Rating": info.user_rating, "Duration": info.duration, "Genre": info.genre, "Year": info.year } )
+                    if info.fanart:
+                        print 'Setting property fanart_image to: '+info.fanart
+                        listitem.setProperty('fanart_image', info.fanart)
 
                 # add the item to the media list
                 ok = xbmcplugin.addDirectoryItem( handle=int( sys.argv[ 1 ] ), url=url, listitem=listitem, isFolder=isFolder, totalItems=len( items[ "assets" ] ) )
@@ -190,12 +223,23 @@ class Main:
                 return {}
 
             if title == 'SABnzbd - Queue':
+                '''queue_time = 2, 5, 10, 15, 30
+                queue_setting = __settings__.getSetting( "refresh_queue" )
+                print "QUEUE REFRESH: "+str(queue_time[int(queue_setting)])
+
+                def refresh():
+                    print "*** CURRENTLY SET TO: "+__settings__.getSetting( "enableRefresh" )
+                    if(__settings__.getSetting( "enableRefresh" ) == "False"):
+                        xbmc.executebuiltin("Container.Refresh")
+
+                t = Timer(queue_time[int(queue_setting)], refresh)
+                t.start()'''
+
                 return self.sabnzbd._sabnzbd_queue()
 
             #a "searching" rss feed will allow keyboard entry for a search term
             if '%s' in url:
                 url = self._show_search(url)
-            
             return self.parser._parse(url, cat)
         except:
             # oops print error message

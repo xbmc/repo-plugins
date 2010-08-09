@@ -25,9 +25,9 @@ TRACK_SEPERATOR     ='~'
 DEFAULT_LUISTERPAAL ='10617791'
 USER_AGENT          ='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 URL_LUISTERPALEN    ='http://3voor12.vpro.nl/luisterpaal/'
-URL_ALBUM           ='http://3voor12.vpro.nl/feeds/luisterpaal/{0}'
-URL_TRACK           ='http://download.omroep.nl/vpro/luisterpaal/albums/{0}/data{1}.swf'
-URL_COVER           ="http://images.vpro.nl/images/{0}+s(200).jpg"
+URL_ALBUM           ='http://3voor12.vpro.nl/feeds/luisterpaal/%s'
+URL_TRACK           ='http://download.omroep.nl/vpro/luisterpaal/albums/%s/data%s.swf'
+URL_COVER           ="http://images.vpro.nl/images/%s+s(200).jpg"
 
 def LUISTERPALEN():
 	#Luisterpalen, exluding default luisterpaal
@@ -43,7 +43,7 @@ def LUISTERPALEN():
 			addLuisterpaal(name, luisterpaalId)
 		
 def ALBUMS(luisterpaalId):
-	req = urllib2.Request(URL_ALBUM.replace('{0}', luisterpaalId))
+	req = urllib2.Request(URL_ALBUM % (luisterpaalId, ))
 	req.add_header('User-Agent', USER_AGENT)
 	response = urllib2.urlopen(req)
 	link = response.read()
@@ -51,6 +51,7 @@ def ALBUMS(luisterpaalId):
 	matchAlbums = re.compile('<item>\s*?<title>(.*?)</title>\s*?<link>http://3voor12.vpro.nl/speler/luisterpaal/(\d*?)</link>\s*?<description>([\s\S]*?)</description>\s*?<enclosure length="\d*?" type="image/jpeg" url="http://images\.vpro\.nl/images/(\d*).*?"/>').findall(link)
 	for title, albumId, description, coverId in matchAlbums:
 		matchTracks = re.compile(r"\[\d*\] (.*?)&lt;br /&gt;").findall(description)
+		matchTags = re.compile(r"&lt;br /&gt;Tags: (.*?)&lt;br /&gt;").findall(description)
 		trackList = TRACK_SEPERATOR.join([name for name in matchTracks])
 		addAlbum(title, albumId, coverId, trackList)
 
@@ -64,6 +65,7 @@ def TRACKS(name, albumId, coverId, tracks):
 def addLuisterpaal(name,luisterpaalId):
 		u = sys.argv[0] + "?luisterpaalid=" + luisterpaalId
 		ok = True
+		name = unescape(name)
 		liz = xbmcgui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
 		liz.setInfo(type="video", infoLabels={ "title": name } )
 		ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
@@ -71,7 +73,7 @@ def addLuisterpaal(name,luisterpaalId):
 		
 def addAlbum(name, albumId, coverId, tracks):
 		u = sys.argv[0] + "?name=" + urllib.quote_plus(name) + "&albumid=" + albumId + "&coverid=" + coverId + "&tracks=" + urllib.quote_plus(tracks)
-		cover = URL_COVER.replace('{0}', coverId)
+		cover = URL_COVER % (coverId, )
 		ok = True
 		name = unescape(name)
 		liz = xbmcgui.ListItem(name, iconImage=cover, thumbnailImage=cover)
@@ -81,8 +83,8 @@ def addAlbum(name, albumId, coverId, tracks):
 
 def addTrack(nr,name,albumId,coverId):
 		nrstr = str(nr).zfill(2)
-		u = URL_TRACK.replace('{0}', albumId).replace('{1}', nrstr)
-		cover = URL_COVER.replace('{0}', coverId)
+		u = URL_TRACK % (albumId, nrstr)
+		cover = URL_COVER % (coverId, )
 		ok = True
 		name = unescape(name)
 		liz = xbmcgui.ListItem(nrstr+'. '+name, iconImage=cover, thumbnailImage=cover)

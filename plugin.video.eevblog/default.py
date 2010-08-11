@@ -39,7 +39,7 @@ def build_main_directory():
 def build_episodes_directory():
   url = 'http://www.eevblog.com/episodes/'
   data = open_url(url)
-  match = re.compile('<ul class="items">(.+?)<div class="sociable">', re.DOTALL).findall(data)
+  match = re.compile('<div class="entry">(.+?)<div class="sociable">', re.DOTALL).findall(data)
   youtube_url_name = re.compile('<a href ="(.+?)" title="(.+?)">', re.DOTALL).findall(match[0])
   
   for ep_url, name in youtube_url_name:

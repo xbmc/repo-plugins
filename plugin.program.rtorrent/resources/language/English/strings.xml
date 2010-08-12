@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- Settings -->
-    <string id="30000">SCGI Port</string>
-
+	<string id="30000">Use SCGI Port or Domain Socket</string>
+	<string id="30001">Server Name</string>
+	<string id="30002">Server Port</string>
+	<string id="30003">Domain Socket</string>
+	
+	<!-- Settings -  Enum Choices -->
+	<string id="30050">SCGI Port</string>
+	<string id="30051">Domain Socket</string>
+	
+	<!-- Settings - Categories -->
+	<string id="30080">Connection</string>
+	
+	
 	<!-- Context Menus - Torrent Controls -->
 	<string id="30100">Start Download</string>
 	<string id="30101">Stop Download</string>
 	<string id="30102">Erase Download</string>
 	
 	<!-- Context Menus - Priorities -->
-	<string id="30120">Set Priority: High<string>
-	<string id="30121">Set Priority: Normal<string>
-	<string id="30122">Set Priority: Low<string>
-	<string id="30123">Set Priority: Idle<string>
+	<string id="30120">Set Priority: High</string>
+	<string id="30121">Set Priority: Normal</string>
+	<string id="30122">Set Priority: Low</string>
+	<string id="30123">Set Priority: Idle</string>
 	<string id="30124">Set Priority: Don't Download</string>
 	
 	<!-- Dialog Boxes -->
@@ -22,8 +33,6 @@
 	<string id="30153">Delete Download</string>
 	<string id="30154">Are you sure you want to delete this download?</string>
 	
-	
     <!-- Errors -->
     <string id="30900">Error!</string>
-
 </strings>

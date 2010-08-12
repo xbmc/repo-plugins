@@ -17,8 +17,11 @@ import xbmcplugin
 # Dld Stopped & File Don't Download: Red
 
 #Set plugin paths
+# Current Working Directory
 PATH_CWD = xbmc.translatePath(os.getcwd())
+# Directory containing extra libraries
 PATH_LIB = xbmc.translatePath(os.path.join(PATH_CWD, 'resources', 'lib'))
+# Directory containing status icons for torrents
 PATH_ICONS = xbmc.translatePath(os.path.join(PATH_CWD,'resources','icons'))
 
 print PATH_CWD
@@ -28,10 +31,6 @@ xbmcplugin.setPluginFanart(int(sys.argv[1]), PATH_CWD+'fanart.jpg')
 
 #adding plugin libary to python library path
 sys.path.append (PATH_LIB)
-
-# plugin dependant imports
-#custom xmlrpc2scgi script that loads the Python 2.6 module of xmlrpclib
-import xmlrpc2scgi
 
 # plugin constants
 __plugin__ = "RTorrent"
@@ -47,14 +46,16 @@ __date__ = "08/01/2010"
 
 __addon__ = xbmcaddon.Addon( __addonID__ )
 __settings__ = __addon__
-__language__ = xbmc.getLocalizedString
+__language__ = __addon__.getLocalizedString
 
-SCGI_PORT = _settings_.getSetting(int("scgi_port")
-SCGI_SERVER = 'scgi://localhost:'+str(SCGI_PORT)
 
-#establishing connection
-# TODO: Add checking to make sure it establishes correctly
-rtc = xmlrpc2scgi.RTorrentXMLRPCClient(SCGI_SERVER)
+	
+if int(__settings__.getSetting('use_socket')) == 1:
+	SCGI_CONNECTION = 'scgi://'+__settings__.getSetting('domain_socket')
+else:
+	SCGI_PORT = __settings__.getSetting('scgi_port')
+	SCGI_SERVER = __settings__.getSetting('scgi_server')
+	SCGI_CONNECTION = 'scgi://'+SCGI_SERVER+':'+str(SCGI_PORT)
 
 #logging with xbmc
 # xbmc.log("Loaded rTorrent Control plugin", xbmc.LOGNOTICE )
@@ -131,19 +132,20 @@ def main():
 		tbn=getIcon(dld_size_files,dld_is_active,dld_complete,dld_priority)		
 		
 		if dld_is_active==1:
-			cm_action = 'Stop Download',"xbmc.runPlugin(%s?mode=action&method=d.stop&arg1=%s)" % ( sys.argv[0], dld_hash)
+			cm_action = __language__(30101),"xbmc.runPlugin(%s?mode=action&method=d.stop&arg1=%s)" % ( sys.argv[0], dld_hash)
 		else:
-			cm_action = 'Start Download',"xbmc.runPlugin(%s?mode=action&method=d.start&arg1=%s)" % ( sys.argv[0], dld_hash)
+			cm_action = __language__(30100),"xbmc.runPlugin(%s?mode=action&method=d.start&arg1=%s)" % ( sys.argv[0], dld_hash)
 		if dld_percent_complete<100:
 			li_name = dld_name+' ('+str(dld_percent_complete)+'%)'
 		else:
 			li_name = dld_name	
 
-		cm = [cm_action,('Erase Download',"xbmc.runPlugin(%s?mode=action&method=d.erase&arg1=%s)" % ( sys.argv[0], dld_hash)), \
-			('Set Priority: High',"xbmc.runPlugin(%s?mode=action&method=d.set_priority&arg1=%s&arg2=3)" % ( sys.argv[0], dld_hash)), \
-			('Set Priority: Normal',"xbmc.runPlugin(%s?mode=action&method=d.set_priority&arg1=%s&arg2=2)" % ( sys.argv[0], dld_hash)), \
-			('Set Priority: Low',"xbmc.runPlugin(%s?mode=action&method=d.set_priority&arg1=%s&arg2=1)" % ( sys.argv[0], dld_hash)), \
-			('Set Priority: Idle',"xbmc.runPlugin(%s?mode=action&method=d.set_priority&arg1=%s&arg2=0)" % ( sys.argv[0], dld_hash))]	
+		cm = [cm_action, \
+			(__language__(30102),"xbmc.runPlugin(%s?mode=action&method=d.erase&arg1=%s)" % ( sys.argv[0], dld_hash)), \
+			(__language__(30120),"xbmc.runPlugin(%s?mode=action&method=d.set_priority&arg1=%s&arg2=3)" % ( sys.argv[0], dld_hash)), \
+			(__language__(30121),"xbmc.runPlugin(%s?mode=action&method=d.set_priority&arg1=%s&arg2=2)" % ( sys.argv[0], dld_hash)), \
+			(__language__(30122),"xbmc.runPlugin(%s?mode=action&method=d.set_priority&arg1=%s&arg2=1)" % ( sys.argv[0], dld_hash)), \
+			(__language__(30123),"xbmc.runPlugin(%s?mode=action&method=d.set_priority&arg1=%s&arg2=0)" % ( sys.argv[0], dld_hash))]	
 			
 		li = xbmcgui.ListItem( \
 			label=li_name, \
@@ -180,9 +182,9 @@ def files(hash,numfiles):
 		li = xbmcgui.ListItem( \
 			label=li_name, \
 			iconImage=tbn, thumbnailImage=tbn)
-		cm = [('Set Priority: High',"xbmc.runPlugin(%s?mode=action&method=f.set_priority&arg1=%s&arg2=%s&arg3=2)" % ( sys.argv[0], hash,i)), \
-			('Set Priority: Normal',"xbmc.runPlugin(%s?mode=action&method=f.set_priority&arg1=%s&arg2=%s&arg3=1)" % ( sys.argv[0], hash,i)), \
-			('Set Priority: Don\'t Download',"xbmc.runPlugin(%s?mode=action&method=f.set_priority&arg1=%s&arg2=%s&arg3=0)" % ( sys.argv[0], hash,i))]
+		cm = [(__language__(30120),"xbmc.runPlugin(%s?mode=action&method=f.set_priority&arg1=%s&arg2=%s&arg3=2)" % ( sys.argv[0], hash,i)), \
+			(__language__(30121),"xbmc.runPlugin(%s?mode=action&method=f.set_priority&arg1=%s&arg2=%s&arg3=1)" % ( sys.argv[0], hash,i)), \
+			(__language__(30124),"xbmc.runPlugin(%s?mode=action&method=f.set_priority&arg1=%s&arg2=%s&arg3=0)" % ( sys.argv[0], hash,i))]
 		li.addContextMenuItems(items=cm,replaceItems=True)
 		if not xbmcplugin.addDirectoryItem(int(sys.argv[1]), \
 			sys.argv[0]+"?mode=play&arg1="+str(f_complete)+"&url="+urllib.quote_plus(xbmc.translatePath(f_frozen_path)), \
@@ -191,10 +193,10 @@ def files(hash,numfiles):
 
 #XBMC file player code
 def play(url,arg1):
+	# Check to see if the file has completely downloaded.
 	if int(arg1)==0:
 		dialog = xbmcgui.Dialog()
-		#Need to make this text part of the language file
-		ret = dialog.yesno('Play File', 'This file has not downloaded completely.', 'Are you sure you want to play it?')
+		ret = dialog.yesno(__language__(30150), __language__(30151), __language__(30152))
 		if ret==True:
 			xbmc.Player().play(url);
 	else:
@@ -205,7 +207,7 @@ def action(method, arg1, arg2, arg3):
 	if method.find('erase')!=-1:
 		dialog = xbmcgui.Dialog()
 		#Need to make this text part of the language file
-		ret = dialog.yesno('Delete Download', 'Are you sure you want to delete this download?')
+		ret = dialog.yesno(__language__(30153), __language__(30154))
 		if ret==True:
 			allok = 1
 	else:
@@ -271,7 +273,16 @@ except:
 #print "Arg1: "+str(arg1)
 #print "Arg2: "+str(arg2)
 #print "URL: "+str(url)
-		
+
+if mode==None or mode=='files' or mode=='action':
+	# plugin dependant imports
+	#custom xmlrpc2scgi script that loads the Python 2.6 module of xmlrpclib
+	import xmlrpc2scgi
+
+	#establishing connection
+	# TODO: Add checking to make sure it establishes correctly
+	rtc = xmlrpc2scgi.RTorrentXMLRPCClient(SCGI_CONNECTION)
+
 if mode==None:
         main()
      

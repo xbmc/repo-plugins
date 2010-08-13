@@ -26,9 +26,10 @@
 
     <string id="30013">SABnzbd kategória megadása</string>
 
-    <string id="31000">Newzbin felhasználónév</string>
-    <string id="31001">Newzbin jelszó</string>
+    <string id="30020">Newzbin felhasználónév</string>
+    <string id="30021">Newzbin jelszó</string>
 
-    <string id="32000">NZBS.org ID</string>
-    <string id="32001">NZBS.org kód</string>
+    <string id="30022">NZBS.org ID</string>
+    <string id="30023">NZBS.org kód</string>
+    <string id="30026">Csak angol nyelvű</string>
 </strings>

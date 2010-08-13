@@ -2,10 +2,6 @@ import xbmcplugin
 import sys
 __settings__ = sys.modules[ "__main__" ].__settings__
 
-#Not used anymore - Enter your username and password in the plugin options
-#username_newzbin = ''
-#password_newzbin = ''
-
 category_list = ['default','Unknown', 'Anime', 'Apps', 'Books', 'Consoles', 'Emulation', 'Games',
         'Misc', 'Movies', 'Music', 'PDA', 'Resources', 'TV']
 
@@ -46,11 +42,11 @@ nzbsrus_rss = [
 ]
 
 nzbmatrix_rss = [
-{'name':'NZBMatrix - TV', 'url':'http://rss.nzbmatrix.com/rss.php?cat=TV', 'category':'tv'},
-{'name':'NZBMatrix - HDTV', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=41', 'category':'tv'},
-{'name':'NZBMatrix - Movies', 'url':'http://rss.nzbmatrix.com/rss.php?cat=Movies', 'category':'movies'},
-{'name':'NZBMatrix - HD Movies (x264)', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=42', 'category':'movies'},
-{'name':'NZBMatrix - HD Movies (Disc Image)', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=50', 'category':'movies'},
+{'name':'NZBMatrix - TV', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=6,41,7&english=' + __settings__.getSetting('nzbmatrix_english'), 'category':'tv'},
+{'name':'NZBMatrix - HDTV', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=41&english=' + __settings__.getSetting('nzbmatrix_english'), 'category':'tv'},
+{'name':'NZBMatrix - Movies', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=54,2,1,50,42,4,3,48&english=' + __settings__.getSetting('nzbmatrix_english'), 'category':'movies'},
+{'name':'NZBMatrix - HD Movies (x264)', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=42&english=' + __settings__.getSetting('nzbmatrix_english'), 'category':'movies'},
+{'name':'NZBMatrix - HD Movies (Disc Image)', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=50&english=' + __settings__.getSetting('nzbmatrix_english'), 'category':'movies'},
 {'name':'NZBMatrix - Anime', 'url':'http://rss.nzbmatrix.com/rss.php?cat=Anime', 'category':'anime'},
 {'name':'NZBMatrix - Music', 'url':'http://rss.nzbmatrix.com/rss.php?cat=Music', 'category':'music'},
 {'name':'NZBMatrix - Music', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=25', 'category':'musicvideos'},

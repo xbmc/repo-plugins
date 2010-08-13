@@ -27,9 +27,10 @@
 
     <string id="30013">Perguntar categoria SABnzbd</string>
 
-    <string id="31000">Utilizador Newzbin</string>
-    <string id="31001">Palavra-passe Newzbin</string>
+    <string id="30020">Utilizador Newzbin</string>
+    <string id="30021">Palavra-passe Newzbin</string>
 
-    <string id="32000">Identificação NZBS.org</string>
-    <string id="32001">Hash NZBS.org</string>
+    <string id="30022">Identificação NZBS.org</string>
+    <string id="30023">Hash NZBS.org</string>
+    <string id="30026">Apenas Inglês</string>
 </strings>

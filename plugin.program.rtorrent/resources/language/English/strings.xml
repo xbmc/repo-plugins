@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- Settings -->
-	<string id="30000">Use SCGI Port or Domain Socket</string>
+	<string id="30000">Connection Type</string>
 	<string id="30001">Server Name</string>
 	<string id="30002">Server Port</string>
 	<string id="30003">Domain Socket</string>

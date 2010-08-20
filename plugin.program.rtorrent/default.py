@@ -34,7 +34,7 @@ sys.path.append (PATH_LIB)
 
 # plugin constants
 __plugin__ = "RTorrent"
-__addonID__= "plugin.program.rTorrent"
+__addonID__= "plugin.program.rtorrent"
 __author__ = "Daniel Jolly"
 __url__ = "http://www.danieljolly.com"
 __credits__ = "Team XBMC for amazing XBMC! Jari \"Rakshasa\" Sundell, the developer of the fantastic rTorrent"

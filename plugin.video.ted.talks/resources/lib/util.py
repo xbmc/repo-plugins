@@ -3,11 +3,12 @@ import cookielib
 import os.path
 import re
 import sys
+import xbmc
 
 pluginName = sys.modules['__main__'].__plugin__
 
 
-def getHTML(url, cookiefile = 'special://temp/ted-cookies.lwp', headers = [('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')]):
+def getHTML(url, cookiefile = xbmc.translatePath('special://temp/ted-cookies.lwp'), headers = [('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')]):
     """Returns HTML from a given URL"""
     try:
         print '[%s] %s attempting to open %s with data' % (pluginName, __name__, url.get_full_url())

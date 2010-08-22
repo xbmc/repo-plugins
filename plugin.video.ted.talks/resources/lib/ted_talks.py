@@ -56,10 +56,14 @@ class UI:
         u = sys.argv[0]+\
             '?url='+urllib.quote_plus(info['url'])+\
             '&mode='+urllib.quote_plus(info['mode'])+\
-            '&name='+urllib.quote_plus(info['Title'])+\
-            '&icon='+urllib.quote_plus(info['Thumb'])
+            '&name='+urllib.quote_plus(info['Title'].encode('ascii','ignore'))+\
+            '&icon='+urllib.quote_plus(info['Thumb'])            
         #create list item
-        li=xbmcgui.ListItem(label = info['Title'], iconImage = info['Icon'], thumbnailImage = info['Thumb'])
+        if info['Title'].startswith(" "):
+          title = info['Title'][1:]
+        else:
+          title = info['Title']  
+        li=xbmcgui.ListItem(label = title, iconImage = info['Icon'], thumbnailImage = info['Thumb'])
         li.setInfo(type='Video', infoLabels=info)
         #for videos, replace context menu with queue and add to favorites
         if not isFolder:

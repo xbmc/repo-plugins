@@ -1,3 +1,9 @@
+[B]Version 2.2.0[/B]
+
+- use "xbmc.translatePath()" to handle cookie better
+- fix: error in listing speakers due to non ascii character
+  thanks to Colin Guthrie
+
 [B]Version 2.1.9[/B]
 
 - Updated Icon

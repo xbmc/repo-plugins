@@ -29,7 +29,7 @@ sys.path.append (LIB_DIR)
 
 import xbmcaddon
 
-__settings__ = xbmcaddon.Addon(id='plugin.pictures.icanhascheezburger.com')
+__settings__ = xbmcaddon.Addon(id='plugin.image.icanhascheezburger.com')
 __language__ = __settings__.getLocalizedString
 
 if ( "action=list" in sys.argv[ 2 ] ):

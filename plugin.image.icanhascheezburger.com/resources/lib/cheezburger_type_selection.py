@@ -6,7 +6,7 @@ import xbmcgui
 import xbmcplugin
 import xbmcaddon
 
-__settings__ = xbmcaddon.Addon(id='plugin.pictures.icanhascheezburger.com')
+__settings__ = xbmcaddon.Addon(id='plugin.image.icanhascheezburger.com')
 __language__ = __settings__.getLocalizedString
 
 #

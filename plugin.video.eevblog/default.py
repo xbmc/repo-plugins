@@ -3,7 +3,7 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 __plugin__ =  'EEVblog'
 __author__ = 'Clumsy <clumsy@xbmc.org>'
 __date__ = '08-02-2010'
-__version__ = '0.1.0'
+__version__ = '0.1.3'
 __settings__ = xbmcaddon.Addon(id='plugin.video.eevblog')
 
 # Thanks to some of the other plugin authors, where I borrowed some ideas from !
@@ -60,7 +60,7 @@ def play_video(ep_url):
   xbmc.executebuiltin('ActivateWindow(busydialog)')
   ep_data = open_url(ep_url)
   plot = re.compile('<div class="info">.+?<p>(.+?)</p>.', re.DOTALL).findall(ep_data)
-  youtube_video_id = re.compile('<param name="movie" value=".*?/v/(.+?)&.').findall(ep_data)
+  youtube_video_id = re.compile('<param name="movie" value=".*?/v/(.+?)[&\?].').findall(ep_data)
   
   quality = int(__settings__.getSetting('quality'))
   if quality == 0:

@@ -1,5 +1,10 @@
 ICanHasCheezburger.com Add-On For XBMC Changelog
 
+Version 0.5 (8/24/2010)
+========================================
+-Removed incorrect revision number from settings.xml
+-Removed unused revision number and other info from addon.py
+
 Version 0.4 (8/23/2010)
 ========================================
 -Added patch submitted by Cory Fields to fix incorrect path.

@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <setting id="entries_per_page"
-             type="enum"
-             label="30200"
-             default="1"
-             lvalues="30201|30202|30203" />
-    <setting id="home_page"
-             type="enum"
-             label="30210"
-             default="0"
-             lvalues="30211|30212|30213|30214|30215|30216|30217|30218|30219|30220|30221|30222|30223|30224|30225|30226|30227|30228" />
+    <setting id="author"           type="text" label="30101" default="Brian Millham"                    enable="false" />
+    <setting id="website"          type="text" label="30102" default="" enable="false" />    
+    <setting type="sep" />
+    <setting id="entries_per_page" type="enum" label="30200" default="1"  lvalues="30201|30202|30203" />
 </settings>

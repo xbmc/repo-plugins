@@ -1,9 +1,22 @@
 ICanHasCheezburger.com Add-On For XBMC Changelog
 
-Version 0.1: Initial version ported from the original plugin.
+Version 0.4 (8/23/2010)
+========================================
+-Added patch submitted by Cory Fields to fix incorrect path.
+-Fixed version order problem in changelog
 
--- 08/20/2010: Created Branch to start developing the ability to see current LOLs
+Version 0.3 (8/21/2010)
+========================================
+-Added license file.
 
-Version 0.2: (8/21/2010) Initial support of current LOLs (cats only)
-Version 0.3: (8/21/2010) Added license file. 
+Version 0.2 (8/21/2010)
+========================================
+-Initial support of current LOLs (cats only)
+
+Version 0.1:
+========================================
+-Initial version ported from the original plugin.
+
+
+
 

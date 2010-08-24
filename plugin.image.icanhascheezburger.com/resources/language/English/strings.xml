@@ -12,10 +12,29 @@
   <string id="30101">Author</string>
   <string id="30102">Website</string>
   
-  <string id="30200">Entries per page</string>
+  <string id="30200">Entries per page (for Random LOLs only)</string>
   <string id="30201">5</string>
   <string id="30202">10</string>
   <string id="30203">20</string>
+  <string id="30210">Default Start Page</string>
+  <string id="30211">Main Page</string>
+  <string id="30212">Current LOLs Selection Page</string>
+  <string id="30213">Random LOLs Selection Page</string>
+  <string id="30214">Current LOL Cats</string>
+  <string id="30215">Current LOL Dogs</string>
+  <string id="30216">Current LOL News</string>
+  <string id="30217">Current LOL Celebs</string>
+  <string id="30218">Current LOL Fail</string>
+  <string id="30219">Current LOL Engrish</string>
+  <string id="30220">Random LOL Cats</string>
+  <string id="30221">Random LOL Dogs</string>
+  <string id="30222">Random LOL Objects</string>
+  <string id="30223">Random LOL Other Animals</string>
+  <string id="30224">Random LOL News</string>
+  <string id="30225">Random LOL Celebs</string>
+  <string id="30226">Random LOL Fail</string>
+  <string id="30227">Random LOL Engrish</string>
+  <string id="30228">Random LOL Comix</string>
 
   <!--
    * Texts
@@ -26,6 +45,7 @@
   <string id="30404">Random LOL %s</string>
   <string id="30405">Current LOLs</string>
   <string id="30406">Random LOLs</string>
+  <string id="30407">Current LOL %s</string>
 
   <!-- LOL Titles -->
   <string id="30501">Cats</string>

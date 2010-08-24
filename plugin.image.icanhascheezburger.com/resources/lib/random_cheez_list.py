@@ -2,14 +2,11 @@
 # Imports
 #
 import os
-import re
 import sys
 import xbmc
 import xbmcgui
 import xbmcplugin
 import urllib
-from BeautifulSoup    import SoupStrainer
-from BeautifulSoup    import BeautifulSoup
 from BeautifulSoup    import BeautifulStoneSoup
 from xbmcplugin_utils import HTTPCommunicator
 

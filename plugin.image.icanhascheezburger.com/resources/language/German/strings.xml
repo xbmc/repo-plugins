@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!--
+   * Main
+   -->
+  <string id="30001">ICanHasCheezBurger.com</string>
+  
+  <!-- 
+   * Settings labels 
+   -->
+  <string id="30100">Version</string>
+  <string id="30101">Auhor</string>
+  <string id="30102">Webseite</string>
+  
+  <string id="30200">Einträge pro Seite</string>
+  <string id="30201">5</string>
+  <string id="30202">10</string>
+  <string id="30203">20</string>
+
+  <!--
+   * Texts
+   -->
+  <string id="30401">Nächste Seite</string>
+  <string id="30402">Seite %u</string>
+  <string id="30403">Nimm %u mehr %s</string>
+  <string id="30404">Zufällige LOL %s</string>
+  <string id="30405">Aktuelle LOLs</string>
+  <string id="30406">Zufällige LOLs</string>
+
+  <!-- LOL Titles -->
+  <string id="30501">Katzen</string>
+  <string id="30502">Hunde</string>
+  <string id="30503">Objekte</string>
+  <string id="30504">andere Tiere</string>
+  <string id="30505">Nachrichten</string>
+  <string id="30506">Stars</string>
+  <string id="30507">Fail</string>
+  <string id="30508">Engrish</string>
+  <string id="30509">Comix</string>
+
+</strings>

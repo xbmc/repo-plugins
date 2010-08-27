@@ -1,5 +1,9 @@
 ICanHasCheezburger.com Add-On For XBMC Changelog
 
+Version 0.6 (8/26/2010)
+========================================
+-Added German language support [Thank you Max!]
+
 Version 0.5 (8/24/2010)
 ========================================
 -Removed incorrect revision number from settings.xml

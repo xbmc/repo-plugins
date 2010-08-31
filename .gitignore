@@ -4,5 +4,8 @@ plugin.program.rtorrent/.git
 plugin.program.executor/.git
 plugin.video.academicearth/.git
 plugin.video.academicearth/.gitignore
+plugin.video.eevblog/.git
+plugin.video.eevblog/.project
+plugin.video.eevblog/.pydevproject
 plugin.image.icanhascheezburger.com/.git
 plugin.image.icanhascheezburger.com/.gitignore

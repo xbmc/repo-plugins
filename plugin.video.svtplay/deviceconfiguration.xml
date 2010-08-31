@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml xmlns:svtplay="http://xml.svtplay.se/ns/playopml" version="2.0">
+    <head>                                             
+        <dateCreated>Sat, 28 Aug 2010 17:36:52 GMT</dateCreated>
+        <dateModified>Sat, 28 Aug 2010 17:36:52 GMT</dateModified>
+        <ownerEmail>svtplay@svt.se</ownerEmail>
+        <ownerName>SVT Play</ownerName>
+        <title>SVTPlay Terminalkonfiguration</title>
+        <ownerId>http://svtplay.se/</ownerId>
+    </head>
+    <body>
+    <outline text="Karusellen" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102438"/>
+    <outline text="Programmeny Rekommenderat" type="menu">
+    	<outline text="Rekommenderat" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102445"/>
+        <outline text="Mest sedda program" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102446"/>
+        <outline text="Livesändningar" type="rss" xmlUrl="http://xml.svtplay.se/v1/video/list/96238?expression=nonstop&amp;orderBy=chronological"/>
+        </outline>
+    <outline text="Programmeny Senaste" type="menu">
+        <outline text="Senaste program" type="rss" xmlUrl="http://xml.svtplay.se/v1/video/list/96241,96242,96243,96245,96246,96247,96248?expression=full&amp;image=poster"/>
+        <outline text="Senaste nyhetsprogram" type="rss" xmlUrl="http://xml.svtplay.se/v1/video/list/96244?expression=full&amp;image=poster"/>
+        </outline>
+    <outline text="Klippmeny" type="menu">
+        <outline text="Senaste klipp" type="rss" xmlUrl="http://xml.svtplay.se/v1/video/list/96238?expression=sample"/>
+        <outline text="Mest sedda klipp" type="rss" xmlUrl="http://xml.svtplay.se/v1/video/list/96238?expression=sample&amp;orderBy=viewCount_day"/>
+        </outline>
+    <outline text="Hjälpmeny" type="menu">
+        <outline text="Om SVT Play" type="link" url="http://svt.se/hjalp/play/iphone/kostnadsinfo" />
+    </outline>
+    <outline text="Kategorier" type="menu">
+        <outline text="Barn" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/list/96251" svtplay:nodeId="96251" svtplay:contentNodeIds="96240" svtplay:listsNodeId="102427" svtplay:thumbnail="http://material.svtplay.se/content/1/c8/01/36/41/35/barn141.jpg">
+                <outline text="Programmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102453" svtplay:nodeId="102453" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Klippmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102454" svtplay:nodeId="102454" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Playkanaler" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102526" svtplay:nodeId="102526" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                </outline>
+        <outline text="Film och drama" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/list/96257" svtplay:nodeId="96257" svtplay:contentNodeIds="96242,96247" svtplay:listsNodeId="102430" svtplay:thumbnail="http://material.svtplay.se/content/1/c8/01/36/41/36/film141.jpg">
+                <outline text="Programmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102455" svtplay:nodeId="102455" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Klippmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102456" svtplay:nodeId="102456" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                </outline>
+        <outline text="Kultur och nöje" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/list/96256" svtplay:nodeId="96256" svtplay:contentNodeIds="96243,96245" svtplay:listsNodeId="102428" svtplay:thumbnail="http://material.svtplay.se/content/1/c8/01/36/41/37/kultur141.jpg">
+                <outline text="Programmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102457" svtplay:nodeId="102457" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Klippmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102458" svtplay:nodeId="102458" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                </outline>
+        <outline text="Nyheter" type="rss" xmlUrl="" svtplay:nodeId="96255" svtplay:contentNodeIds="96244" svtplay:listsNodeId="102521" svtplay:thumbnail="http://material.svtplay.se/content/1/c8/01/36/41/38/nyheter141.jpg">
+                <outline text="Programmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102524" svtplay:nodeId="102524" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Klippmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102525" svtplay:nodeId="102525" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Riksnyheter" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/list/96258" svtplay:nodeId="96258" svtplay:contentNodeIds="96249" svtplay:listsNodeId="102424">
+                        <outline text="Programmeny" type="rss"
+                                     xmlUrl="http://xml.svtplay.se/v1/teaser/list/102449" svtplay:nodeId="102449" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                        <outline text="Klippmeny" type="rss"
+                                     xmlUrl="http://xml.svtplay.se/v1/teaser/list/102450" svtplay:nodeId="102450" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                        <outline text="Riksnyhetsprogram" type="rss"
+                                     xmlUrl="http://xml.svtplay.se/v1/teaser/list/123524" svtplay:nodeId="123524" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                        </outline>
+                <outline text="Lokalnyheter" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/list/96259" svtplay:nodeId="96259" svtplay:contentNodeIds="96250" svtplay:listsNodeId="102425">
+                        <outline text="Programmeny" type="rss"
+                                     xmlUrl="http://xml.svtplay.se/v1/teaser/list/102451" svtplay:nodeId="102451" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                        <outline text="Klippmeny" type="rss"
+                                     xmlUrl="http://xml.svtplay.se/v1/teaser/list/102452" svtplay:nodeId="102452" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                        </outline>
+                </outline>
+        <outline text="Samhälle och fakta" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/list/96254" svtplay:nodeId="96254" svtplay:contentNodeIds="96246,96241" svtplay:listsNodeId="102429" svtplay:thumbnail="http://material.svtplay.se/content/1/c8/01/36/41/39/fakta141.jpg">
+                <outline text="Programmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102459" svtplay:nodeId="102459" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Klippmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102460" svtplay:nodeId="102460" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                </outline>
+        <outline text="Sport" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/list/96253" svtplay:nodeId="96253" svtplay:contentNodeIds="96248" svtplay:listsNodeId="102426" svtplay:thumbnail="http://material.svtplay.se/content/1/c8/01/36/41/40/sport141.jpg">
+                <outline text="Programmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102463" svtplay:nodeId="102463" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Klippmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102464" svtplay:nodeId="102464" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Aktuella sporter" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102461" svtplay:nodeId="102461" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Inaktuella sporter" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102462" svtplay:nodeId="102462" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Rekommenderade sporter" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/104608" svtplay:nodeId="104608" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                </outline>
+        <outline text="Öppet arkiv" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/list/96252" svtplay:nodeId="96252" svtplay:contentNodeIds="98382" svtplay:listsNodeId="102431" svtplay:thumbnail="http://material.svtplay.se/content/1/c8/01/36/41/41/oppetarkiv141.jpg">
+                <outline text="Programmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102465" svtplay:nodeId="102465" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                <outline text="Klippmeny" type="rss" xmlUrl="http://xml.svtplay.se/v1/teaser/list/102466" svtplay:nodeId="102466" svtplay:contentNodeIds="" svtplay:listsNodeId=""/>
+                </outline>
+        </outline>
+    <outline text="A-Ö" type="menu" xmlUrl="http://xml.svtplay.se/v1/title/list/96238"/>
+    <outline text="Sök" type="menu">
+        <outline text="Program" type="rss" xmlUrl="http://xml.svtplay.se/v1/title/search/96238"/>
+        <outline text="Sändningar" type="rss" xmlUrl="http://xml.svtplay.se/v1/video/search/96238&amp;expression=full"/>
+        <outline text="Klipp" type="rss"  xmlUrl="http://xml.svtplay.se/v1/video/search/96238&amp;expression=sample"/>
+    </outline>
+    <outline text="Video identifiers">
+        <outline text="3G">
+            <outline text="hts-a-v1" />
+        </outline>
+        <outline text="Wi-Fi">
+            <outline text="hts-a-v1" />
+        </outline>
+        <outline text="Encrypted">
+            <outline text="" />
+        </outline>
+        <outline text="Formats">
+            <outline text="m3u8" />
+        </outline>
+    </outline>
+    <outline text="displayLive">
+        <outline text="true" />
+    </outline>
+    <outline text="delayTime">
+        <outline text="900" />
+    </outline>
+    <outline text="nedstat">
+        <outline text="nedstaturl" type="link" url="http://ld.svt.se/svt/app/s?svt-iphone" />
+    </outline>
+    </body>
+</opml>

@@ -17,7 +17,7 @@ else:
     document = parse(open(os.getcwd() + "/deviceconfiguration.xml"))
 
 url    = sys.argv[0].split("/")
-target = "/".join(url[3:])
+target = unicode("/".join(url[3:]), "utf-8")
 
 def HasElement(root, name):
     for child in root.childNodes:

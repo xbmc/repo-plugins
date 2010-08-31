@@ -234,6 +234,8 @@ class Main:
                 return
 
         # Save to configuration
+        if ' ' in program:
+            program = u'"' + program + u'"'
         if arguments:
             program += u' ' + arguments
         print "%s: adding program '%s': %s" % (self._base, title, (program))

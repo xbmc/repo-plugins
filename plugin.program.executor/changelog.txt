@@ -1,3 +1,7 @@
+2010-08-30 :: 0.2.5
+
+  * Fix execution paths contining spaces (doh!)
+
 2010-08-20 :: 0.2.4
 
   * Allow setting of program icons

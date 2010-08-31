@@ -2,8 +2,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 
 __plugin__ =  'EEVblog'
 __author__ = 'Clumsy <clumsy@xbmc.org>'
-__date__ = '08-02-2010'
-__version__ = '0.1.3'
+__date__ = '08-27-2010'
+__version__ = '0.1.4'
 __settings__ = xbmcaddon.Addon(id='plugin.video.eevblog')
 
 # Thanks to some of the other plugin authors, where I borrowed some ideas from !
@@ -39,7 +39,7 @@ def build_main_directory():
 def build_episodes_directory():
   url = 'http://www.eevblog.com/episodes/'
   data = open_url(url)
-  match = re.compile('<div class="entry">(.+?)<div class="sociable">', re.DOTALL).findall(data)
+  match = re.compile('<body>(.+?)<div class="sociable">', re.DOTALL).findall(data)
   youtube_url_name = re.compile('<a href ="(.+?)" title="(.+?)">', re.DOTALL).findall(match[0])
   
   for ep_url, name in youtube_url_name:

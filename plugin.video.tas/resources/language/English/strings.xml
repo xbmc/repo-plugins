@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin strings -->
+    <string id="30900">Display Short Names</string>
+	<string id="30901">Icon Size</string>
+	<string id="30902">Feed Update Interval</string>
+	<string id="30903">Image Update Interval</string>
+	<string id="30904">Parsing Method</string>
+	<string id="30905">Stream Retrieval Method</string>
+	
+	 <!-- Image Selection -->
+	<string id="30950">Small</string>
+	<string id="30951">Medium</string>
+	<string id="30952">High</string>
+	
+	<!-- Feed Update Interval -->
+	<string id="31000">1 Hour</string>
+	<string id="31001">2 Hours</string>
+	<string id="31002">4 Hours</string>
+	<string id="31003">6 Hours</string>
+	<string id="31004">12 Hours</string>
+	<string id="31005">1 Day</string>
+	<string id="31006">Never</string>
+	
+	<!-- Image Update Interval -->
+	<string id="32000">1 Month</string>
+	<string id="32001">3 Months</string>
+	<string id="32002">6 Months</string>
+	<string id="32003">9 Months</string>
+	<string id="32004">1 Year</string>
+	<string id="32005">Never</string>
+	
+	<!-- Image Update Interval -->
+	<string id="32006">Fast (Inaccurate)</string>
+	<string id="32007">Normal</string>
+	<string id="32008">Strict (Slow)</string>
+
+	<!-- Image Update Interval -->
+	<string id="32010">Native URL</string>
+	<string id="32011">Tunneling (Slow)</string>
+</strings>

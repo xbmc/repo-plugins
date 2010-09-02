@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="snames" type="bool" label="30900" default="true" />
+	<setting id="icon_size" type="enum" lvalues="30950|30951|30952" label="30901" default="1" />
+	<setting id="smethod" type="enum" lvalues="32006|32007|32008" label="30904" default="1" />
+	<setting id="umethod" type="enum" lvalues="32010|32011" label="30905" default="1" />
+	<setting id="feed_update" type="enum" lvalues="31000|31001|31002|31003|31004|31005|31006" label="30902" default="3" />
+	<setting id="image_update" type="enum" lvalues="32000|32001|32002|32003|32004|32005" label="30903" default="5" />
+</settings>

@@ -1,19 +1,19 @@
-0.93
+0.94
+- Streamlined the representation of http://tasvideos.org/
+- Cleaned the Source
 
-- Changed Cache Directory 
+0.93
+- Changed Cache Directory to comply with XBMC's standard
 
 0.92
-
 - Enhanced Accuracy of Feed Parsing
 
 0.91
-
 - Fixed RSS Parsing Errors
+- Added 3 different Parsing Methods
 
 0.9 Beta 2
-
 - Fixed Image Downloading Crash
 
 0.9
-
 - First public release

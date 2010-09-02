@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.tas"
-       name="Tool Assisted Game Videos"
-       version="0.93"
-       provider-name="Insayne, HannaK">
+       name="Tool-assisted Speedruns"
+       version="0.94"
+       provider-name="Insayne, HannaK, Nach">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
   </requires>
@@ -12,7 +12,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary>TASVideos.org Streaming</summary>
+    <summary>http://tasvideos.org on your Media Center</summary>
     <description>If you’ve ever wanted to see how a superhuman would beat your favorite video games, you’ve come to the right place. We have videos of all the popular franchises from Super Mario Brothers and Sonic the Hedgehog down to Pokémon and Final Fantasy. No matter what genre of game you prefer, be it sports, puzzle, adventure, shooter, or popular game shows, we have it all.</description>
   </extension>
 </addon>

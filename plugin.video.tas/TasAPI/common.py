@@ -7,6 +7,7 @@ __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
 
 # Global Settings
 set_icon_size = __settings__.getSetting( "icon_size" )
+
 def get_image_path(path):
 	global set_icon_size
 	if set_icon_size=="0":
@@ -67,9 +68,6 @@ def get_category_fanthumb(name,catfa):
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "pcecd.png"))
 	elif name=="Virtual Boy":
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "vb.png"))
-		
-	# Here comes the Notables Block
-
 	elif name=="Recommended Movies":
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "rmovies.png"))
 	elif name=="Top Rated Movies":
@@ -99,21 +97,18 @@ def get_category_fanthumb(name,catfa):
 			thumbnail = ""
 	return thumbnail
 	
-# Here we remove ugly strings - so it looks nice (encoding ones)
 def cleanstring(strvar):
 	string = strvar
 	string = string.replace("&amp;", "&")
 	string = string.replace("&quot;", "\"")
 	return string
 
-# Here we remove ugly strings - so it looks nice (encoding ones)
 def fixtags(strvar):
 	string = strvar
 	string = string.replace('&lt;', '<')
 	string = string.replace('&gt;', '>')
 	return string
 
-# Here we remove ugly strings - so it looks nice (encoding ones)
 def cleanformatting(strvar):
 	string = strvar
 	string = string.replace('<p/>', '\n\n')
@@ -169,7 +164,6 @@ def getgenres(strvar):
 		genres = ""+genres+"/"+genre+""
 	return genres[1:]
 	
-# Utility - Removes links from a string
 def removelink(strvar):
 	string = strvar
 	match=re.search('<a href=.+?>(.+?)</a>', string)
@@ -210,11 +204,9 @@ def get_video(string):
 	match=re.compile('.+?<media:content url="http://.+?archive.org/(.+?)" type=".+?" medium="video" />.+?').findall(string)
 	for vid in match:
 		link = vid
-	
 	if link=="":
 		link = "None"
 	return link
-	
 	
 def get_prettyname(name):
 	name = "<start>"+name+""
@@ -227,7 +219,6 @@ def get_duration(name):
 	match=re.compile('.+? in (.+?) .+?').findall(name)
 	for duration in match:
 		timestring = duration
-
 	timecheck = timestring.count(":")
 	
 	if timecheck==1:
@@ -247,15 +238,6 @@ def get_duration(name):
 		duration = "00:00:00"
 		
 	return duration
-
-def context_remove_feed(url):
-	c_feed_file = xbmc.translatePath(os.path.join( os.getcwd(), 'TasAPI', 'test.py'))
-	tfn = url.rsplit('/',1)
-	tfn = tfn[-1]
-	c_feed_arg = xbmc.translatePath(os.path.join( os.getcwd(), 'resources', 'cache', 'feeds', tfn ))
-	c_feed = 'XBMC.RunScript(' + c_feed_file + ', category, removefeed, ' + c_feed_arg + ')'
-	contextmenu = [('Delete Cached Feed', c_feed,)]
-	return contextmenu
 
 def clean_from_genres(strvar):
 	string = strvar

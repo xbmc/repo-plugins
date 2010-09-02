@@ -6,12 +6,12 @@ from operator import itemgetter, attrgetter
 from TasAPI import common as common
 from TasAPI import cache as cache
 
-# plugin constants
-__plugin__ = "Tool Assisted Speedruns"
+# plugin Constants
+__plugin__ = "Tool-assisted Speedruns"
 __author__ = "Insayne (Code) & HannaK (Graphics)"
 __url__ = "http://code.google.com/p/xbmc-plugin-video-tas/"
 __svn_url__ = "https://xbmc-plugin-video-tas.googlecode.com/svn/trunk/plugin.videos.tas/"
-__version__ = "0.93"
+__version__ = "0.94"
 __svn_revision__ = "$Revision$"
 __XBMC_Revision__ = xbmc.getInfoLabel('System.BuildVersion')
 __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
@@ -63,15 +63,12 @@ def Get_RSS_Videos_fast(url):
 		year = common.get_year(pubdate)
 		date = common.get_date(pubdate)
 		duration = common.get_duration(name)
-
-		#Sorting
 		if sorting==1:
 			if not prev_letter==name[:1]:
 				prev_letter = name[:1]
 				sort_letter = prev_letter
 			else:
 				sort_letter = "None"
-			
 		fanart = ""+str(num)+".png"
 		fanart = xbmc.translatePath( os.path.join( os.getcwd(), 'Images', 'Fanart', 'Games', fanart ) )
 		year = int(year)
@@ -110,15 +107,12 @@ def Get_RSS_Videos_default(url):
 			year = common.get_year(pubdate)
 			date = common.get_date(pubdate)
 			duration = common.get_duration(name)
-	
-			#Sorting
 			if sorting==1:
 				if not prev_letter==name[:1]:
 					prev_letter = name[:1]
 					sort_letter = prev_letter
 				else:
 					sort_letter = "None"
-			
 			fanart = ""+str(num)+".png"
 			fanart = xbmc.translatePath( os.path.join( os.getcwd(), 'Images', 'Fanart', 'Games', fanart ) )
 			year = int(year)
@@ -136,14 +130,12 @@ def Get_RSS_Videos_default(url):
 				url = "http://www.insayne.net/xbmc/tas.php?url=http://www.archive.org/"+link+""
 			else:
 				url = "http://www.archive.org/" + link
-			
 			addLink(common.cleanstring(name),url,thumbnail,year,plot,rating,director,writer,genre,categories,fanart,num,totalitems,date,sort_letter,duration)
 		else:
 			totalitems = totalitems - 1
 	prev_letter = "Unset"
 	return
 
-	
 def Get_RSS_Videos_strict(url):
 	global prev_letter
 	global sorting
@@ -162,15 +154,12 @@ def Get_RSS_Videos_strict(url):
 				year = common.get_year(pubdate)
 				date = common.get_date(pubdate)
 				duration = common.get_duration(name)
-
-				#Sorting
 				if sorting==1:
 					if not prev_letter==name[:1]:
 						prev_letter = name[:1]
 						sort_letter = prev_letter
 					else:
 						sort_letter = "None"
-			
 				fanart = ""+str(num)+".png"
 				fanart = xbmc.translatePath( os.path.join( os.getcwd(), 'Images', 'Fanart', 'Games', fanart ) )
 				year = int(year)
@@ -194,19 +183,14 @@ def Get_RSS_Videos_strict(url):
 	prev_letter = "Unset"
 	return
 
-
-
 def addLink(name,url,iconimage,year,plot,rating,director,writer,genre,tagline,fanart,id,totalitems,date,sort_letter,duration):
 	global set_pnames
 	filecheck = os.path.isfile(fanart)
 	name = str(name)
-	
-	# Pretty name check
 	if set_snames=="false":
 		pname = name
 	else:
 		pname = common.get_prettyname(name)
-		
 	plot = common.clean_plot(plot)
 	path = url.replace('http://www.insayne.net/xbmc/tas.php?url=', "")
 	ok=True
@@ -219,7 +203,6 @@ def addLink(name,url,iconimage,year,plot,rating,director,writer,genre,tagline,fa
 		liz.setProperty("Fanart_image", iconimage)
 	if filecheck==True:
 		liz.setProperty("Fanart_image", fanart)
-
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,totalItems=totalitems)
 	return ok
 
@@ -230,10 +213,6 @@ def addDir(name,url,mode,iconimage,Fanart):
 	liz.setInfo( type="Video", infoLabels={ "Title": name } )
 	if not Fanart=="":
 		liz.setProperty("Fanart_image", Fanart)
-	
-	#contextmenu = common.context_remove_feed(url)
-	#liz.addContextMenuItems(contextmenu)	
-	
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 	return ok
 
@@ -273,10 +252,6 @@ try:
 except:
         pass
 
-#print "Mode: "+str(mode)
-#print "URL: "+str(url)
-#print "Name: "+str(name)
-
 if mode==None or url==None or len(url)<1:
 		Generate_Index()
        
@@ -292,7 +267,6 @@ elif mode==2:
 			Get_RSS_Videos_strict(url)
 		else:
 			Get_RSS_Videos_default(url)
-
 		
 if sorting==1:
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
@@ -301,14 +275,12 @@ if sorting==1:
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_RATING)
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
 elif sorting==2:
-	# Sorting for "Latest"
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_RUNTIME)
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_RATING)
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
 elif sorting==3:
-	# Sorting for "Notables"
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_RATING)
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)

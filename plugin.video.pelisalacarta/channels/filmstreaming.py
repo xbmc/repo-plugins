@@ -44,9 +44,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "peliculas" , category , "Telefilm" , "http://www.streaming-ital.com/telefilm/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "peliculas" , category , "Anime"    , "http://www.streaming-ital.com/anime/","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Cierra el directorio
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

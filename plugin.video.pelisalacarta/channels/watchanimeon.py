@@ -41,10 +41,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "alphaserieslist" , category , "Series por orden alfabético" ,"http://www.watchanimeon.com/anime-list/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "allmovieslist"   , category , "Todas las películas"         ,"http://www.watchanimeon.com/anime/anime-movies/","","")
 
-	# Si es un canal independiente, añade "Configuracion", "Descargas" y "Favoritos"
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Asigna el título, desactiva la ordenación, y cierra el directorio
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

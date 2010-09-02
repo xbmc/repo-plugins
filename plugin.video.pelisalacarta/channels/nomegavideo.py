@@ -48,9 +48,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( "cinegratis"    , "listvideos" , category , "Películas - Alojadas en Veoh [ES] [Cinegratis]"  ,"http://www.cinegratis.net/index.php?module=servers&varserver=veoh","","")
 	xbmctools.addnewfolder( "cine15"        , "listvideos" , category , "Películas - Novedades [ES] [Cine15]"             ,"http://www.cine15.com/","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Cierra el directorio
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

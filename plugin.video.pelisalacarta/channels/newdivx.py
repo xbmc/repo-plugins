@@ -42,9 +42,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "ListvideosMirror" , category , "Peliculas V.O.S.","http://www.newdivx.net/peliculas-online/peliculas-vos/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "search" , category , "Buscar","http://www.newdivx.net/index.php","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 

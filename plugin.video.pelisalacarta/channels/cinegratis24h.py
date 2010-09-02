@@ -41,9 +41,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "ListadoTotal" , category , "Listado Completo"        ,"http://www.cinegratis24h.com/","","")
 	#xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Buscar","http://www.cinegratis24h.net/index.php?module=documentales","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 

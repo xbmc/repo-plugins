@@ -42,11 +42,7 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "orden" , category, "Orden de emision" , "http://www.redes-tv.com/index.php?option=com_content&view=article&id=16&Itemid=30" , "" , "")
 	xbmctools.addnewfolder( CHANNELNAME , "search" , category, "Búsqueda" , "" , "" , "")
  
- 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
- 
-	# Label (top-right)...
+ 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
 	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )

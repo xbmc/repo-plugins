@@ -322,14 +322,17 @@ def downloadpageGzip(url):
 
 	data=handle.read()
 	handle.close()
-	# Descomprime el archivo de datos Gzip
-	compressedstream = StringIO.StringIO(data)
-	gzipper = gzip.GzipFile(fileobj=compressedstream)
-	data1 = gzipper.read()
-	gzipper.close()
 	
-	return data1
-
+	# Descomprime el archivo de datos Gzip
+	try:
+		compressedstream = StringIO.StringIO(data)
+		gzipper = gzip.GzipFile(fileobj=compressedstream)
+		data1 = gzipper.read()
+		gzipper.close()
+	
+		return data1
+	except:
+		return data
 
 def printMatches(matches):
 	i = 0

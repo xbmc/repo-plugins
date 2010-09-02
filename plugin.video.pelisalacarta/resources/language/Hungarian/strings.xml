@@ -7,35 +7,35 @@
 	<!-- ======================================= -->
 	
 	<!-- Commons -->
-	<string id="30000">Player type</string>
-	<string id="30001">Check for updates:</string>
-	<string id="30002">Enable adult mode:</string>
-	<string id="30003">Full detail log:</string>
+	<string id="30000">Lejátszó</string>
+	<string id="30001">Frissítések keresése</string>
+	<string id="30002">Felnőtt mód engedélyezése</string>
+	<string id="30003">Részletes napló</string>
 
 	<!-- Default action when you select a video -->
-	<string id="30005">Default action on play:</string>
-	<string id="30006">Ask</string>
-	<string id="30007">Watch</string>
-	<string id="30008">Watch in high quality</string>
-	<string id="30009">Send to jDownloader</string>
+	<string id="30005">Lejátszáskor:</string>
+	<string id="30006">Rákérdez</string>
+	<string id="30007">Megnéz</string>
+	<string id="30008">Megnéz jó minőségben</string>
+	<string id="30008">Send to jDownloader</string>
 
 	<!-- Logo visualization for channels -->
-	<string id="30010">Channel logos:</string>
-	<string id="30011">Poster (vertical)</string>
-	<string id="30012">Banner (horizontal)</string>
+	<string id="30010">Csatorna logók:</string>
+	<string id="30011">Poszter (függőleges)</string>
+	<string id="30012">Hírdetéssáv (vízszintes)</string>
 
 	<!-- Megavideo account -->
-	<string id="30013">Megavideo premium mode:</string>
-	<string id="30014">Megavideo user:</string>
-	<string id="30015">Megavideo password:</string>
+	<string id="30013">Megavideo prémium mód:</string>
+	<string id="30014">Megavideo felhasználó:</string>
+	<string id="30015">Megavideo jelszó:</string>
 
 	<!-- Other -->
-	<string id="30017">Download path:</string>
-	<string id="30018">Download list path:</string>
-	<string id="30020">Highest Quality (Youtube)</string>
-	<string id="30021">Enable Subtitle:</string>
-	<string id="30022">JDownloader URL:</string>
-	<string id="30024">Number of searches to save:</string>
+	<string id="30017">Letöltési hely:</string>
+	<string id="30018">Letöltési lista helye:</string>
+	<string id="30020">Legjobb minőség (Youtube)</string>
+	<string id="30021">Felirat engedélyezése</string>
+	<string id="30022">JDownloader cím:</string>
+	<string id="30024">Ennyi keresést mentsen</string>
 	
 	<!-- =============================================================== -->
 	<!-- 30050 to 30099: Info / error messages                           -->
@@ -68,7 +68,7 @@
 	<string id="30107">Moved again to download list</string> <!-- Ha pasado de nuevo a la lista de descargas -->
 	<string id="30108">added to favorites</string> <!-- se ha añadido a favoritos -->
 	<string id="30109">added to download list</string> <!-- se ha añadido a la lista de descargas -->
-	<string id="30110">Search trailer for</string>
+	<string id="30110">Trailer search for</string> <!-- Buscar trailer para -->
 	<string id="30111">Retry trailer search for</string><!-- Reintentar búsqueda de trailer para -->
 	<string id="30112">Enter title to search</string> <!-- Introduce el Titulo a buscar -->
 	<string id="30113">Modify actual title for refined search</string> <!-- Modifica el titulo para refinar la búsqueda -->
@@ -100,56 +100,11 @@
 	<!-- =============================================================== -->
 
 	<!-- Context menu strings -->
-	<string id="30300">Delete saved search</string>
+	<string id="30300">Mentett keresés törlése</string>
 
 	<!-- LetMeWatchThis -->
-	<string id="40001">Movies - Just added</string>
-	<string id="40002">TV Shows - Just added</string>
-	<string id="40003">!Next page</string>
-	
-	<!-- TVShack strings -->
-	<string id="30900">TVShack</string>
-	<string id="30901">Series TV (VO)</string>
-	<string id="30902">Películas (VO)</string>
-	<string id="30903">Documentales (VO)</string>
-	<string id="30904">Anime (VO)</string>
-	<string id="30905">Música</string>
-	<string id="30906">Busqueda Global en TVShack</string>
-	<string id="30907">No se produjeron resultados de búsqueda</string>
-	<string id="30908">Serie - %s (%s episodios)</string>
-	<string id="30909">Serie - </string>
-
-	<string id="30910">Cine - %s (%s)</string>
-	<string id="30911">"Música - "</string>
-	<string id="30912">Leyendo %s...</string>
-	<string id="30913">No se encontró nada que listar</string>
-	<string id="30914">episodio</string>
-	<string id="30915">episodios</string>
-	<string id="30916">canción</string>
-	<string id="30917">canciones</string>
-	<string id="30918"> (Nuevo)</string>
-	<string id="30919"> (Nuevos contenidos)</string>
-
-	<string id="30920">AÑADIR TODOS LOS EPISODIOS A LA BIBLIOTECA</string>
-	<string id="30921"></string>
-	<string id="30922"></string>
-	<string id="30923"></string>
-	<string id="30924"></string>
-	<string id="30925"></string>
-	<string id="30926"></string>
-	<string id="30927"></string>
-	<string id="30928"></string>
-	<string id="30929"></string>
-
-	<string id="30930"></string>
-	<string id="30931"></string>
-	<string id="30932"></string>
-	<string id="30933"></string>
-	<string id="30934"></string>
-	<string id="30935"></string>
-	<string id="30936"></string>
-	<string id="30937"></string>
-	<string id="30938"></string>
-	<string id="30939"></string>
+	<string id="40001">Filmek - most hozzáadva</string>
+	<string id="40002">TV műsorok - most hozzáadva</string>
+	<string id="40003">!Következő oldal</string>
 
 </strings>

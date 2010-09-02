@@ -39,9 +39,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "listcategorias" , "" , "Listado por categorías","http://yotix.tv/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "search"         , "" , "Buscador","http://yotix.tv/","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

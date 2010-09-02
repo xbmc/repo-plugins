@@ -38,9 +38,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "listalfabetico"   , category , "Listado alfabético","","","")
 	xbmctools.addnewfolder( CHANNELNAME , "allserieslist"    , category , "Listado completo","http://www.seriespepito.com/","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 		

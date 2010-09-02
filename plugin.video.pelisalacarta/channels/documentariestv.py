@@ -43,9 +43,6 @@ def mainlist(params,url,category):
         xbmctools.addnewfolder( CHANNELNAME , "documentaldeldia"     , category , "Featured documentary - Now Playing","http://www.documentariestv.net/index.html",os.path.join(IMAGES_PATH, 'deldia.png'),"")
 	xbmctools.addnewfolder( CHANNELNAME , "search"           , category , "Search",tecleadoultimo,os.path.join(IMAGES_PATH, 'search_icon.png'),"")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 		

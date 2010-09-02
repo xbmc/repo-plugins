@@ -19,6 +19,7 @@ except ImportError:
 PLUGIN_ID = "plugin.video.pelisalacarta"
 if DHARMA:
 	__settings__ = xbmcaddon.Addon(id=PLUGIN_ID)
+	__language__ = __settings__.getLocalizedString
 	DATA_PATH = xbmc.translatePath("special://profile/addon_data/%s" % PLUGIN_ID)
 else:
 	DATA_PATH = os.getcwd()
@@ -53,7 +54,6 @@ def setSetting(name,value):
 def getLocalizedString(code):
 	# Nuevo XBMC
 	if DHARMA:
-		__language__ = __settings__.getLocalizedString
 		return __language__(code)
 	# Antiguo XBMC
 	else:

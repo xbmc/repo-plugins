@@ -43,9 +43,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "ddcat"      , category , "Descarga directa - Categorías"         ,"http://www.mcanime.net/descarga_directa/anime","","")
 	xbmctools.addnewfolder( CHANNELNAME , "estrenos"   , category , "Enciclopedia - Estrenos"               ,"http://www.mcanime.net/enciclopedia/estrenos/anime","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Propiedades
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

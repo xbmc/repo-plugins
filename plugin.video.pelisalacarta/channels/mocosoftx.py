@@ -39,9 +39,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "Novedades" , category , "Novedades"            ,"http://mocosoftx.com/foro/index.php","","")
 	xbmctools.addnewfolder( CHANNELNAME , "FullList"   , category , "Listado Completo" ,"http://www.mocosoftx.com/foro/index.php?action=.xml;type=rss2;limit=500;board=14","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Propiedades
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
@@ -136,9 +133,6 @@ def FullList(params,url,category):
 		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , scrapedtitle , scrapedurl , scrapedthumbnail , scrapedplot)
 
    
-
-   if config.getSetting("singlechannel")=="true":
-      xbmctools.addSingleChannelOptions(params,url,category)
 
    # Label (top-right)...
    xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )

@@ -9,6 +9,7 @@ import xbmcplugin
 import scrapertools
 import config
 import logger
+import parametrizacion
 
 DEBUG = True
 
@@ -21,17 +22,6 @@ if config.getSetting("thumbnail_type")=="0":
 	WEB_PATH = "http://www.mimediacenter.info/xbmc/pelisalacarta/posters/"
 else:
 	WEB_PATH = "http://www.mimediacenter.info/xbmc/pelisalacarta/banners/"
-
-#57=DVD Thumbs
-#xbmc.executebuiltin("Container.SetViewMode(57)")
-#50=full list
-#xbmc.executebuiltin("Container.SetViewMode(50)")
-#51=list
-#xbmc.executebuiltin("Container.SetViewMode(51)")
-#53=icons
-#xbmc.executebuiltin("Container.SetViewMode(53)")
-#54=wide icons
-#xbmc.executebuiltin("Container.SetViewMode(54)")
 
 def listchannels(params,url,category):
 	logger.info("[channelselector.py] listchannels")
@@ -111,12 +101,14 @@ def listchannels(params,url,category):
 	addfolder("tu.tv","tutvsite","mainlist")
 	addfolder("Megavideo","megavideosite","mainlist")
 	addfolder("Megaupload","megauploadsite","mainlist")
-	addfolder("Configuracion","configuracion","mainlist")
-	addfolder("Descargas","descargados","mainlist")
-	addfolder("Favoritos","favoritos","mainlist")
-	addfolder("Buscador","buscador","mainlist")
-	addfolder("Ayuda","ayuda","mainlist")
 	
+	addfolder(config.getLocalizedString(30100),"configuracion","mainlist") # Configuracion
+	
+	if (parametrizacion.DOWNLOAD_ENABLED):
+		addfolder(config.getLocalizedString(30101),"descargados","mainlist")   # Descargas
+	addfolder(config.getLocalizedString(30102),"favoritos","mainlist")     # Favoritos
+	addfolder(config.getLocalizedString(30103),"buscador","mainlist")      # Buscador
+	addfolder(config.getLocalizedString(30104),"ayuda","mainlist")         # Ayuda
 
 	#addfolder("Kochikame","kochikame","mainlist")
 	#addfolder("PeliculasHD","peliculashd","mainlist")
@@ -125,11 +117,7 @@ def listchannels(params,url,category):
 
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category="Canales" )
-		
-	# Disable sorting...
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
-
-	# End of directory...
 	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
 def addfolder(nombre,channelname,accion,category="Varios"):
@@ -152,4 +140,3 @@ def addfolder(nombre,channelname,accion,category="Varios"):
 	listitem = xbmcgui.ListItem( nombre , iconImage="DefaultFolder.png", thumbnailImage=thumbnail)
 	itemurl = '%s?channel=%s&action=%s&category=%s' % ( sys.argv[ 0 ] , channelname , accion , urllib.quote_plus(category) )
 	xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ]), url = itemurl , listitem=listitem, isFolder=True)
-

@@ -35,9 +35,6 @@ def mainlist(params,url,category):
 	# Añade al listado de XBMC
 	xbmctools.addnewfolder( CHANNELNAME , "search" , CHANNELNAME , "Introduce el código del fichero de vídeo" , "" , "", "" )
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Cierra el directorio
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

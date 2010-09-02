@@ -37,9 +37,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "novedades"  , category , "Novedades"     ,"http://documentalesatonline.blogspot.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "categorias" , category , "Por categorias","http://documentalesatonline.blogspot.com/","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
@@ -122,9 +119,6 @@ def novedades(params,url,category):
 
 		# Añade al listado de XBMC
 		xbmctools.addnewfolder( CHANNELNAME , "novedades" , category , scrapedtitle , scrapedurl , scrapedthumbnail , scrapedplot)
-
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
 
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )

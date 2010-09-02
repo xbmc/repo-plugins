@@ -43,9 +43,6 @@ DEBUG = True
 def mainlist(params,url,category):
 	logger.info("[seriesyonkis.py] mainlist")
 
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(50)") #full list
-
 	xbmctools.addnewfolder( CHANNELNAME , "lastepisodeslist" , category , "Últimos capítulos","http://www.seriesyonkis.com/ultimos-capitulos.php","","")
 	xbmctools.addnewfolder( CHANNELNAME , "listalfabetico"   , category , "Listado alfabético","","","")
 	xbmctools.addnewfolder( CHANNELNAME , "alltvserieslist"  , category , "Listado completo de series","http://www.seriesyonkis.com/","","")
@@ -53,9 +50,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "allanimelist"     , category , "Listado completo de anime","http://www.seriesyonkis.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "allminilist"      , category , "Listado completo de miniseries","http://www.seriesyonkis.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "search"           , category , "Buscar","","","")
-
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
 
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
@@ -105,9 +99,6 @@ def searchresults(params,Url,category):
 	buscador.salvar_busquedas(params,Url,category)
 	url = "http://www.seriesyonkis.com/buscarSerie.php?s="+Url.replace(" ", "+")
 
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(53)")  #53=icons
-
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
@@ -151,9 +142,6 @@ def searchresults(params,Url,category):
 	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
 def listalfabetico(params, url, category):
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(50)")  #50=full list
-
 	xbmctools.addnewfolder(CHANNELNAME , "listseriesthumbnails" , category , "0-9","http://www.seriesyonkis.com/lista-series/listaSeriesNumeric.php","","")
 	xbmctools.addnewfolder(CHANNELNAME , "listseriesthumbnails" , category , "A","http://www.seriesyonkis.com/lista-series/listaSeriesA.php","","")
 	xbmctools.addnewfolder(CHANNELNAME , "listseriesthumbnails" , category , "B","http://www.seriesyonkis.com/lista-series/listaSeriesB.php","","")
@@ -193,8 +181,6 @@ def listalfabetico(params, url, category):
 
 def listseriesthumbnails(params,url,category):
 	logger.info("[seriesyonkis.py] listseriesthumbnails")
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(53)")  #53=icons
 
 	# Descarga la página
 	data = scrapertools.cachePage(url)
@@ -248,8 +234,6 @@ def listseriesthumbnails(params,url,category):
 
 def lastepisodeslist(params,url,category):
 	logger.info("[seriesyonkis.py] lastepisodeslist")
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(53)")  #53=icons
 
 	# Descarga la página
 	data = scrapertools.cachePage(url)
@@ -329,8 +313,6 @@ def allminilist(params,url,category):
 
 def allserieslist(params,url,category,clave):
 	logger.info("[seriesyonkis.py] allserieslist")
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(50)")  #50=full list
 
 	# Descarga la página
 	data = scrapertools.cachePage(url)
@@ -381,8 +363,6 @@ def allserieslist(params,url,category,clave):
 
 def list(params,url,category):
 	logger.info("[seriesyonkis.py] list")
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(50)")  #50=full list
 
 	# Descarga la página
 	data = scrapertools.cachePage(url)

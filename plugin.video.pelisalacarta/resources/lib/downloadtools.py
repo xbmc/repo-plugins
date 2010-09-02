@@ -590,7 +590,7 @@ def downloadfile(url,nombrefichero):
 							tiempofalta=falta/velocidad
 						else:
 							tiempofalta=0
-						xbmc.log(sec_to_hms(tiempofalta))
+						#xbmc.log(sec_to_hms(tiempofalta))
 						progreso.update( percent , "%.2fMB/%.2fMB (%d%%) %.2f Kb/s %s falta " % ( descargadosmb , totalmb , percent , velocidad/1024 , sec_to_hms(tiempofalta)))
 					break
 				except:

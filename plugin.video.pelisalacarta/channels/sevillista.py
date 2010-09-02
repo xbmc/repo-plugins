@@ -37,9 +37,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "categorias" , CHANNELNAME , "Películas - Por categoría" , "http://pelis-sevillista56.blogspot.com/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "novedades" , CHANNELNAME , "Series - Novedades" , "http://pelis-sevillista56.blogspot.com/search/label/Series" , "", "" )
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )

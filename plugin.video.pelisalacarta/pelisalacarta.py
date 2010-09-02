@@ -94,32 +94,12 @@ def run():
 		# Agarra los errores surgidos localmente enviados por las librerias internas
 		if hasattr(e, 'reason'):
 			logger.info("Razon del error, codigo: %d , Razon: %s" %(e.reason[0],e.reason[1]))
-			ok= ventana_error.ok ("pelisalacarta", "No se puede conectar con el servidor",'compruebe la direccion de la página',"o su conexión a internet")
+			texto = config.getLocalizedString(30050) # "No se puede conectar con el sitio web"
+			ok = ventana_error.ok ("pelisalacarta", texto)
 		# Agarra los errores con codigo de respuesta del servidor externo solicitado 	
 		elif hasattr(e,'code'):
 			logger.info("codigo de error HTTP : %d" %e.code)
-			ok= ventana_error.ok ("pelisalacarta", "El servidor solicitado no pudo realizar la peticion", texto_error(e.code),"codigo de error : %d " %e.code)	
+			texto = (config.getLocalizedString(30051) % e.code) # "El sitio web no funciona correctamente (error http %d)"
+			ok = ventana_error.ok ("pelisalacarta", texto)	
 		else:
-			pass	
-
-
-def texto_error(codigo):
-	texto = {"400":"Peticion incorrecta",
-			 "401":"No autorizado",
-			 "402":"Pago Requerido",
-			 "403":"Peticion Prohibida",
-			 "404":"Pagina no encontrada o no disponible",
-			 "405":"Metodo no Permitido",
-			 "406":"Formato de URL no Aceptable",
-			 "407":"Autentificacion de proxy requerida",
-			 "408":"Tiempo de espera de peticion terminada",
-			 "409":"Conflicto de peticion",
-			 "410":"La URL no existe o ha sido removida"
-			 }
-			 
-	if codigo in range(400,410):
-		codtext = texto[str(codigo)]
-		
-	else:
-		codtext = "Ocurrio un error con la URL"
-	return codtext
+			pass

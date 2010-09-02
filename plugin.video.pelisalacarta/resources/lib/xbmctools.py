@@ -12,12 +12,7 @@ import xbmcgui
 import xbmcplugin
 import sys
 import servertools
-import downloadtools
 import os
-import favoritos
-import library
-import descargadoslist
-import scrapertools
 import config
 import logger
 
@@ -36,7 +31,7 @@ LIBRARY_CATEGORIES = ['Series'] #Valor usuarios finales
 
 #IMAGES_PATH = xbmc.translatePath( os.path.join( os.getcwd(), 'resources' , 'images' ) )
 DEBUG = True
- 
+
 def get_system_platform():
 	""" fonction: pour recuperer la platform que xbmc tourne """
 	platform = "unknown"
@@ -135,59 +130,67 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 	logger.info("[xbmctools.py] playvideo category="+category)
 	logger.info("[xbmctools.py] playvideo serie="+Serie)
 	
+	# Parametrizacion especifica
+	import parametrizacion
+
 	# Abre el diálogo de selección
 	opciones = []
 	default_action = config.getSetting("default_action")
 	# Los vídeos de Megavídeo sólo se pueden ver en calidad alta con cuenta premium
 	# Los vídeos de Megaupload sólo se pueden ver con cuenta premium, en otro caso pide captcha
 	if (server=="Megavideo" or server=="Megaupload") and config.getSetting("megavideopremium")=="true":
-		opciones.append("Ver en calidad alta ["+server+"]")
+		opciones.append(config.getLocalizedString(30150)+" ["+server+"]") # "Ver en calidad alta"
 		# Si la accion por defecto es "Ver en calidad alta", la seleccion se hace ya
 		if default_action=="2":
 			seleccion = len(opciones)-1
 
 	# Los vídeos de Megavídeo o Megaupload se pueden ver en calidad baja sin cuenta premium, aunque con el límite
 	if (server=="Megavideo" or server=="Megaupload"):
-		opciones.append("Ver en calidad baja [Megavideo]")
+		opciones.append(config.getLocalizedString(30152)+" [Megavideo]") # "Ver en calidad baja"
 		# Si la accion por defecto es "Ver en calidad baja", la seleccion se hace ya
 		if default_action=="1":
 			seleccion = len(opciones)-1
 	else:
-		opciones.append("Ver ["+server+"]")
+		opciones.append(config.getLocalizedString(30151)+" ["+server+"]") # "Ver en calidad normal"
 		# Si la accion por defecto es "Ver en calidad baja", la seleccion se hace ya
 		if default_action<>"0":  #Si hay alguna calidad elegida (alta o baja) seleccionarmos esta para los no megavideo
 			seleccion = len(opciones)-1
 
-	opciones.append("Descargar")
+	if (parametrizacion.DOWNLOAD_ENABLED):
+		opciones.append(config.getLocalizedString(30153)) # "Descargar"
 
 	if desdefavoritos: 
-		opciones.append("Quitar de favoritos")
+		opciones.append(config.getLocalizedString(30154)) # "Quitar de favoritos"
 	else:
-		opciones.append("Añadir a favoritos")
+		opciones.append(config.getLocalizedString(30155)) # "Añadir a favoritos"
 
-	if desdedescargados:
-		opciones.append("Quitar de lista de descargas")
-	else:
-		opciones.append("Añadir a lista de descargas")
-	opciones.append("Enviar a JDownloader")
+	if (parametrizacion.DOWNLOAD_ENABLED):
+		if desdedescargados:
+			opciones.append(config.getLocalizedString(30156)) # "Quitar de lista de descargas"
+		else:
+			opciones.append(config.getLocalizedString(30157)) # "Añadir a lista de descargas"
+
+	opciones.append(config.getLocalizedString(30158)) # "Enviar a JDownloader"
 	if default_action=="3":
 		seleccion = len(opciones)-1
-	if desderrordescargas:
-		opciones.append("Borrar descarga definitivamente")
-		opciones.append("Pasar de nuevo a lista de descargas")
+
+	if (parametrizacion.DOWNLOAD_ENABLED):
+		if desderrordescargas:
+			opciones.append(config.getLocalizedString(30159)) # "Borrar descarga definitivamente"
+			opciones.append(config.getLocalizedString(30160)) # "Pasar de nuevo a lista de descargas"
 
 	if not strmfile:
 		if category in LIBRARY_CATEGORIES:
-			opciones.append("Añadir a Biblioteca")
+			opciones.append(config.getLocalizedString(30161)) # "Añadir a Biblioteca"
 
 	# Busqueda de trailers en youtube	
 	if not canal in ["Trailer","ecarteleratrailers"]:
-		opciones.append("Buscar Trailer")
+		opciones.append(config.getLocalizedString(30162)) # "Buscar Trailer"
 
 	# Si la accion por defecto es "Preguntar", pregunta
 	if default_action=="0":
 		dia = xbmcgui.Dialog()
-		seleccion = dia.select("Elige una opción", opciones)
+		seleccion = dia.select(config.getLocalizedString(30163), opciones) # "Elige una opción"
 		#dia.close()
 	logger.info("seleccion=%d" % seleccion)
 	logger.info("seleccion=%s" % opciones[seleccion])
@@ -201,38 +204,41 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 			config.setSetting("subtitulo", "false")
 		return
 
-	if opciones[seleccion].startswith("Enviar a JDownloader"):
+	if opciones[seleccion]==config.getLocalizedString(30158): # "Enviar a JDownloader"
 		if server=="Megaupload":
 			d = {"web": "http://www.megaupload.com/?d=" + url}
 		else:
 			d = {"web": "http://www.megavideo.com/?v=" + url}
-			
+		
+		import scrapertools
 		data = scrapertools.cachePage(config.getSetting("jdownloader")+"/action/add/links/grabber0/start1/"+urllib.urlencode(d)+ " " +thumbnail)
 		return
 
 	# Ver en calidad alta
-	if opciones[seleccion].startswith("Ver en calidad alta"):
+	if opciones[seleccion].startswith(config.getLocalizedString(30150)): # "Ver en calidad alta"
 		if server=="Megaupload":
 			mediaurl = servertools.getmegauploadhigh(url)
 		else:
 			mediaurl = servertools.getmegavideohigh(url)
+	
 	# Ver (calidad baja megavideo o resto servidores)
-	elif opciones[seleccion].startswith("Ver"):
+	elif opciones[seleccion].startswith(config.getLocalizedString(30151)) or opciones[seleccion].startswith(config.getLocalizedString(30152)): # Ver en calidad (normal o baja)
 		if server=="Megaupload":
 			mediaurl = servertools.getmegauploadlow(url)
 			if mediaurl == "":
 				alertanomegauploadlow(server)
 				return
 		elif server=="Megavideo":
+			# Advertencia límite 72 minutos megavideo
 			if config.getSetting("megavideopremium")=="false":
 				advertencia = xbmcgui.Dialog()
-				resultado = advertencia.ok('Megavideo tiene un límite de reproducción de 72 minutos' , 'Para evitar que los vídeos se corten pasado ese tiempo' , 'necesitas una cuenta Premium')			
+				resultado = advertencia.ok(config.getLocalizedString(30052) , config.getLocalizedString(30053) , config.getLocalizedString(30054))			
 			mediaurl = servertools.getmegavideolow(url)
 		else:
 			mediaurl = servertools.findurl(url,server)
 
 	# Descargar
-	elif opciones[seleccion]=="Descargar":
+	elif opciones[seleccion]==config.getLocalizedString(30153): # "Descargar"
 		if server=="Megaupload":
 			if config.getSetting("megavideopremium")=="false":
 				mediaurl = servertools.getmegauploadlow(url)
@@ -246,6 +252,7 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 		else:
 			mediaurl = servertools.findurl(url,server)
 
+		import downloadtools
 		keyboard = xbmc.Keyboard(downloadtools.limpia_nombre_excepto_1(title))
 		keyboard.doModal()
 		if (keyboard.isConfirmed()):
@@ -253,21 +260,25 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 			downloadtools.downloadtitle(mediaurl,title)
 		return
 
-	elif opciones[seleccion]=="Quitar de favoritos":
+	# TODO: Mover a modulo favoritos
+	elif opciones[seleccion]==config.getLocalizedString(30154): #"Quitar de favoritos"
 		# La categoría es el nombre del fichero en favoritos
 		os.remove(urllib.unquote_plus( category ))
 		advertencia = xbmcgui.Dialog()
-		resultado = advertencia.ok('Vídeo quitado de favoritos' , title , 'Se ha quitado de favoritos')
+		resultado = advertencia.ok(config.getLocalizedString(30102) , title , config.getLocalizedString(30105)) # 'Se ha quitado de favoritos'
 		return
 
-	elif opciones[seleccion]=="Borrar descarga definitivamente":
+	# TODO: Mover a modulo descargadoslist
+	elif opciones[seleccion]==config.getLocalizedString(30159): #"Borrar descarga definitivamente"
 		# La categoría es el nombre del fichero en favoritos
 		os.remove(urllib.unquote_plus( category ))
 		advertencia = xbmcgui.Dialog()
-		resultado = advertencia.ok('Vídeo quitado de la lista' , title , 'Se ha quitado de la lista')
+		resultado = advertencia.ok(config.getLocalizedString(30101) , title , config.getLocalizedString(30106)) # 'Se ha quitado de la lista'
 		return
 
-	elif opciones[seleccion]=="Pasar de nuevo a lista de descargas":
+	# TODO: Mover a modulo descargadoslist
+	elif opciones[seleccion]==config.getLocalizedString(30160): #"Pasar de nuevo a lista de descargas":
+		import descargadoslist
 		# La categoría es el nombre del fichero en favoritos, así que lee el fichero
 		titulo,thumbnail,plot,server,url = descargadoslist.readbookmarkfile(urllib.unquote_plus( category ),"")
 		# Lo añade a la lista de descargas
@@ -275,41 +286,49 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 		# Y lo borra de la lista de errores
 		os.remove(urllib.unquote_plus( category ))
 		advertencia = xbmcgui.Dialog()
-		resultado = advertencia.ok('Vídeo de nuevo para descargar' , title , 'Ha pasado de nuevo a la lista de descargas')
+		resultado = advertencia.ok(config.getLocalizedString(30101) , title , config.getLocalizedString(30107)) # 'Ha pasado de nuevo a la lista de descargas'
 		return
 
-	elif opciones[seleccion]=="Añadir a favoritos":
+	# TODO: Mover a modulo favoritos
+	elif opciones[seleccion]==config.getLocalizedString(30155): #"Añadir a favoritos":
+		import favoritos
+		import downloadtools
 		keyboard = xbmc.Keyboard(downloadtools.limpia_nombre_excepto_1(title))
 		keyboard.doModal()
 		if keyboard.isConfirmed():
 			title = keyboard.getText()
 			favoritos.savebookmark(title,url,thumbnail,server,plot)
 			advertencia = xbmcgui.Dialog()
-			resultado = advertencia.ok('Nuevo vídeo en favoritos' , title , 'se ha añadido a favoritos')
+			resultado = advertencia.ok(config.getLocalizedString(30102) , title , config.getLocalizedString(30108)) # 'se ha añadido a favoritos'
 		return
 
-	elif opciones[seleccion]=="Quitar de lista de descargas":
+	# TODO: Mover a modulo descargadoslist
+	elif opciones[seleccion]==config.getLocalizedString(30156): #"Quitar de lista de descargas":
 		# La categoría es el nombre del fichero en la lista de descargas
 		os.remove(urllib.unquote_plus( category ))
 		advertencia = xbmcgui.Dialog()
-		resultado = advertencia.ok('Vídeo quitado de lista de descargas' , title , 'Se ha quitado de lista de descargas')
+		resultado = advertencia.ok(config.getLocalizedString(30101) , title , config.getLocalizedString(30106)) # 'Se ha quitado de lista de descargas'
 		return
 
-	elif opciones[seleccion]=="Añadir a lista de descargas":
+	# TODO: Mover a modulo descargadoslist
+	elif opciones[seleccion]==config.getLocalizedString(30157): #"Añadir a lista de descargas":
+		import descargadoslist
+		import downloadtools
 		keyboard = xbmc.Keyboard(downloadtools.limpia_nombre_excepto_1(title))
 		keyboard.doModal()
 		if keyboard.isConfirmed():
 			title = keyboard.getText()
 			descargadoslist.savebookmark(title,url,thumbnail,server,plot)
 			advertencia = xbmcgui.Dialog()
-			resultado = advertencia.ok('Nuevo vídeo en lista de descargas' , title , 'se ha añadido a la lista de descargas')
+			resultado = advertencia.ok(config.getLocalizedString(30101) , title , config.getLocalizedString(30109)) # 'se ha añadido a la lista de descargas'
 		return
 
-	elif opciones[seleccion]=="Añadir a Biblioteca":  # Library
+	elif opciones[seleccion]==config.getLocalizedString(30161): #"Añadir a Biblioteca":  # Library
+		import library
 		library.savelibrary(title,url,thumbnail,server,plot,canal=canal,category=category,Serie=Serie)
 		return
 
-	elif opciones[seleccion]=="Buscar Trailer":
+	elif opciones[seleccion]==config.getLocalizedString(30162): #"Buscar Trailer":
 		config.setSetting("subtitulo", "false")
 		xbmc.executebuiltin("Container.Update(%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&server=%s)" % ( sys.argv[ 0 ] , "trailertools" , "buscartrailer" , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( "" ) , server ))
 		return
@@ -481,19 +500,27 @@ def logdebuginfo(DEBUG,scrapedtitle,scrapedurl,scrapedthumbnail,scrapedplot):
 
 def alertnodisponible():
 	advertencia = xbmcgui.Dialog()
-	resultado = advertencia.ok('Vídeo no disponible' , 'El vídeo ya no está disponible en la página,' , 'o no se ha podido localizar el enlace')
+	#'Vídeo no disponible'
+	#'No se han podido localizar videos en la página del canal'
+	resultado = advertencia.ok(config.getLocalizedString(30055) , config.getLocalizedString(30056))
 
 def alertnodisponibleserver(server):
 	advertencia = xbmcgui.Dialog()
-	resultado = advertencia.ok( 'No se ha podido acceder',' El Vídeo no está disponible en '+server,'o ha sido borrado ' , 'Prueba a reproducir otro distinto')
+	# 'El vídeo ya no está en %s' , 'Prueba en otro servidor o en otro canal'
+	resultado = advertencia.ok( config.getLocalizedString(30055),(config.getLocalizedString(30057)%server),config.getLocalizedString(30058))
 
 def alerterrorpagina():
 	advertencia = xbmcgui.Dialog()
-	resultado = advertencia.ok('Error en la página' , 'No se puede acceder' , 'por un error en la página')
+	#'Error en el sitio web'
+	#'No se puede acceder por un error en el sitio web'
+	resultado = advertencia.ok(config.getLocalizedString(30059) , config.getLocalizedString(30060))
 
 def alertanomegauploadlow(server):
 	advertencia = xbmcgui.Dialog()
-	resultado = advertencia.ok( 'Video no disponible' ,'La calidad elegida no esta disponible', 'o el video ha sido borrado','Prueba a reproducir en otra calidad')
+	#'La calidad elegida no esta disponible', 'o el video ha sido borrado',
+	#'Prueba a reproducir en otra calidad'
+	resultado = advertencia.ok( config.getLocalizedString(30055) , config.getLocalizedString(30061) , config.getLocalizedString(30062))
+
 def unseo(cadena):
 	if cadena.upper().startswith("VER GRATIS LA PELICULA "):
 		cadena = cadena[23:]
@@ -508,11 +535,6 @@ def unseo(cadena):
 	elif cadena.upper().startswith("DESCARGA DIRECTA "):
 		cadena = cadena[17:]
 	return cadena
-
-def addSingleChannelOptions(params,url,category):
-	addnewfolder( "configuracion" , "mainlist" , "configuracion" , "Configuracion" , "" , "" , "" )
-	addnewfolder( "descargados"   , "mainlist" , "descargados"   , "Descargas"     , "" , "" , "" )
-	addnewfolder( "favoritos"     , "mainlist" , "favoritos"     , "Favoritos"     , "" , "" , "" )
 
 # AÑADIDO POR JUR. SOPORTE DE FICHEROS STRM
 def playstrm(params,url,category):

@@ -167,7 +167,7 @@ def salvar_busquedas(params,url,category):
 		presets = url
 	config.setSetting("presets_buscados",presets)
     # refresh container so items is changed
-	xbmc.executebuiltin( "Container.Refresh" )
+	#xbmc.executebuiltin( "Container.Refresh" )
 		
 def listar_busquedas(params,url,category):
 	print "listar_busquedas()"
@@ -183,9 +183,9 @@ def listar_busquedas(params,url,category):
 		matches = ""
 		if "|" in presets:
 			matches = presets.split("|")
-			addfolder( "buscador"   , "Buscar..." , matches[0] , "por_teclado", channel2 )
+			addfolder( "buscador"   , config.getLocalizedString(30103)+"..." , matches[0] , "por_teclado", channel2 ) # Buscar
 		else:
-			addfolder( "buscador"   , "Buscar..." , "" , "por_teclado", channel2 )
+			addfolder( "buscador"   , config.getLocalizedString(30103)+"..." , "" , "por_teclado", channel2 )
 		if len(matches)>0:	
 			for match in matches:
 				
@@ -197,7 +197,7 @@ def listar_busquedas(params,url,category):
 			title = scrapedurl = presets
 			addfolder( channel_preset , title , scrapedurl , "searchresults" )
 	except:
-		addfolder( "buscador"   , "Buscar..." , "" , "por_teclado" , channel2 )
+		addfolder( "buscador"   , config.getLocalizedString(30103)+"..." , "" , "por_teclado" , channel2 )
 		
 	# Cierra el directorio
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )

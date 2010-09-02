@@ -38,10 +38,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "newlist" , CHANNELNAME , "Novedades" , "http://ver-anime.net/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "fulllist" , CHANNELNAME , "Listado completo" , "http://ver-anime.net/" , "", "" )
 
-	# Si es un canal independiente, añade "Configuracion", "Descargas" y "Favoritos"
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Asigna el título, desactiva la ordenación, y cierra el directorio
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )

@@ -45,11 +45,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries" , category , "Audio"        ,"http://www.pelisflv.net/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "search" , category , "Buscar","http://www.pelisflv.net/","","")
 	
-	
-
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 

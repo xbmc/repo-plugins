@@ -3,7 +3,7 @@
 # pelisalacarta - XBMC Plugin
 # Canal CastTV by Lily
 # http://www.mimediacenter.info/foro/viewtopic.php?f=14&t=401
-# Last Updated: 11/07/2010
+# Last Updated:27/08/2010
 #------------------------------------------------------------
 import urlparse,urllib2,urllib,re
 import os
@@ -12,16 +12,12 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 import scrapertools
-import megavideo
-import megaupload
 import servertools
-import binascii
 import xbmctools
 import downloadtools
 import animeforos
 import seriesyonkis
 import config
-import logger
 
 CHANNELNAME = "casttv"
 
@@ -31,14 +27,26 @@ try:
 except:
 	pluginhandle = ""
 
-# Traza el inicio del canal
-logger.info("[casttv.py] init")
+CTVURL = "http://www.casttv.com/shows"
+SYURL = "http://www.seriesyonkis.com/"
+FT_TSURL = "http://www.thefutoncritic.com/showatch"
+FT_MSURL = "http://www.thefutoncritic.com/moviewatch"
+SUBURL = "http://www.subtitulos.es"
+EZURL = "http://eztv.it/showlist/"
 
-DEBUG = True
+VISTO_PATH = xbmc.translatePath( os.path.join( config.DATA_PATH , 'bookmarks/vistos' ) )
+if not os.path.exists(VISTO_PATH):
+	try:
+		os.mkdir(VISTO_PATH)
+	except:
+		os.mkdir(os.path.join( config.DATA_PATH , 'bookmarks' ))
+		os.mkdir(VISTO_PATH)
 
-Generate = False # poner a true para generar listas de peliculas
+SUB_PATH = xbmc.translatePath( os.path.join( downloadtools.getDownloadPath() , 'Subtitulos' ) )
+if not os.path.exists(SUB_PATH):
+	os.mkdir(SUB_PATH)
 
-LoadThumbnails = True # indica si cargar los carteles
+SUBTEMP_PATH = xbmc.translatePath( os.path.join( config.DATA_PATH , 'subtitulo.srt' ) )
 
 STARORANGE_THUMB = xbmc.translatePath( os.path.join( os.getcwd(), 'resources' , 'images' , 'casttv','starorangesmall.png' ) )
 STARBLUE_THUMB = xbmc.translatePath( os.path.join( os.getcwd(), 'resources' , 'images' , 'casttv','starbluesmall.png' ) )
@@ -53,62 +61,41 @@ FOLDERBLUE_THUMB = xbmc.translatePath( os.path.join( os.getcwd(), 'resources' , 
 HELP_THUMB = xbmc.translatePath( os.path.join( os.getcwd(), 'resources' , 'images' , 'casttv','help.png' ) )
 DESCARGAS_THUMB = xbmc.translatePath( os.path.join( os.getcwd(), 'resources' , 'images' , 'casttv','descargados.png' ) )
 
-#JUR: Tralado esto al inicio del módulo para evitar hacerlo 4 veces dentro.
-#Esper que te parezca bien.
-BOOKMARK_PATH = os.path.join( config.DATA_PATH, 'bookmarks' )
-VISTO_PATH = os.path.join( BOOKMARK_PATH, 'vistos' )
-
-# Crea el directorio si no existe
-#try:
-#	os.mkdir(VISTO_PATH)
-#except:
-#	pass
-if not os.path.exists(BOOKMARK_PATH):
-	logger.info("[casttv.py] Path de bookmarks no existe, se crea: "+BOOKMARK_PATH)
-	os.mkdir(BOOKMARK_PATH)
-if not os.path.exists(VISTO_PATH):
-	logger.info("[casttv.py] Path de vistos no existe, se crea: "+VISTO_PATH)
-	os.mkdir(VISTO_PATH)
-
-
 def mainlist(params,url,category):
-	logger.info("[casttv.py] mainlist")
-
-	category = "CastTV - SeriesYonkis - Series VO"
-
-	addsimplefolder( CHANNELNAME , "listado" , "Series VO - Actualizadas" , "Series VO - Últimas Actualizaciones" , "http://www.casttv.com/shows/" , "http://www.casttv.com/misc/webapp/tn_shows/tn_casttv.jpg" )
-	addsimplefolder( CHANNELNAME , "listado" , category , "Series VO - Listado Completo" , "http://www.casttv.com/shows/" , "http://www.casttv.com/misc/webapp/tn_shows/tn_casttv.jpg" )
-	addsimplefolder( CHANNELNAME , "listado" , "Mis Favoritas" , "Series VO - Mis Favoritas","http://www.casttv.com/shows/",STARORANGE_THUMB )
-	addsimplefolder( CHANNELNAME , "search" , "Series VO - Buscar" , "Series VO - Buscar" , "http://www.casttv.com/shows/","http://www.mimediacenter.info/xbmc/pelisalacarta/posters/buscador.png" )
-	addsimplefolder( CHANNELNAME , "searchsub" , "Subtítulos.es" , "Subtítulos.es" , "" , "http://www.subtitulos.es/images/subslogo.png" )
-	addsimplefolder( CHANNELNAME , "listado" , "Todos Mis Favoritos" , "Todos Mis Favoritos","",STAR4COLORS_THUMB )
+	category = "Series VO : CastTV - SeriesYonkis"
+	addsimplefolder( CHANNELNAME , "searchfuton" , "The Futon Critic" , "The Futon Critic  -  Series VO" , "" , "http://www.thefutoncritic.com/images/logo.gif" )
+	addsimplefolder( CHANNELNAME , "searchsub" , "Subtítulos.es" , "Subtítulos.es  -  Series VO" , "" , "http://www.subtitulos.es/images/subslogo.png" )
+	addsimplefolder( CHANNELNAME , "listado" , "Series VO - Actualizadas" , "Series VO  -  CastTV - Últimas Actualizaciones" , "" , "http://www.casttv.com/misc/webapp/tn_shows/tn_casttv.jpg" )
+	addsimplefolder( CHANNELNAME , "listado" , "Series VO" , "Series VO  -  CastTV - Listado Completo" , "" , "http://www.casttv.com/misc/webapp/tn_shows/tn_casttv.jpg" )
+	addsimplefolder( CHANNELNAME , "search" , "Series VO - Buscar" , "Series VO  -  Buscar" , "" ,"http://www.mimediacenter.info/xbmc/pelisalacarta/posters/buscador.png" )
+	addsimplefolder( CHANNELNAME , "listado" , "Mis Favoritas" , "Series VO  -  Mis Favoritas" , "" , STARORANGE_THUMB )
+	addsimplefolder( CHANNELNAME , "searchvistos" , "Series VO - Vistas" , "Series VO  -  Vistas" , "" , "" )
+	addsimplefolder( CHANNELNAME , "listado" , "Todos Mis Favoritos" , "Todos Mis Favoritos", "" ,STAR4COLORS_THUMB )
 	addsimplefolder( CHANNELNAME , "ayuda" , "Series VO - Ayuda" , "Ayuda" , "" , HELP_THUMB )
 	# ------------------------------------------------------------------------------------
 	EndDirectory(category,"",False,True)
 	# ------------------------------------------------------------------------------------
 
 def listado(params,url,category):
-	logger.info("[casttv.py] listado")
-
 	title = urllib.unquote_plus( params.get("title") )
 	match = re.search('\s(\w+)$',title)
 	tipolist = match.group(1)
 
-	listadoupdate(tipolist,category,False)
+	listadoupdate(tipolist,"",category,False)
 
-def listadoupdate(tipolist,category,listupdate):
-	logger.info("[casttv.py] listadoupdate")
-
+def listadoupdate(tipolist,datafilter,category,listupdate):
 	listanime = []
 	todostitulo = ""
+	cachetodisc = True
 
 	if tipolist[0:3]=="Fav":
 		Dialogespera = xbmcgui.DialogProgress()
 		line1 = 'Buscando información de "'+category+'"...'
-  		resultado = Dialogespera.create('pelisalacarta' , line1 , '' )
+  		Dialogespera.create('pelisalacarta' , line1 , '' )
 		tipolist = "Favoritas"
+		cachetodisc = False
 
-	series,nuevos = findlistado(tipolist)
+	series,nuevos = findlistado(tipolist,datafilter)
 
 	if category=="Todos Mis Favoritos":
 		listanime,animenuevos = animeforos.findfavoritos("Mis Favoritos","[^<]+","Completo","")
@@ -125,7 +112,7 @@ def listadoupdate(tipolist,category,listupdate):
 	if len(nuevos)>0:
 		addsimplefolder( CHANNELNAME , "listadonuevos" , todostitulo+"Mis Favoritas - Nuevos Episodios" , "-*-"+todostitulo+"Nuevos Episodios (Posteriores a [LW])" , "" , STARGREEN2_THUMB )
 	for serie in series:
-		addseriefolder( CHANNELNAME , "listados" , serie[0] , serie[1] , serie[2] , serie[3] , serie[4] , serie[5] )
+		addseriefolder( CHANNELNAME , "listados" , serie[0] , serie[1] , serie[2] , serie[3] , "" , serie[4] , serie[5] , category+";"+serie[6] )
 
 	if category=="Todos Mis Favoritos" and len(listanime)>0:
 		additem( CHANNELNAME , category , "------------------------------------ ANIME - FOROS ------------------------------------" , "" , "" , "" )
@@ -134,38 +121,59 @@ def listadoupdate(tipolist,category,listupdate):
 		for anime in listanime:
 			animeforos.adderdmfolder( CHANNELNAME , "animeforos.listados" , anime[0] , anime[1] , anime[2] , anime[3] , anime[4] , anime[5] , anime[6] , anime[7] )
 	# ------------------------------------------------------------------------------------
-	EndDirectory(category,"",listupdate,False)
+	EndDirectory(category,"",listupdate,cachetodisc)
 	# ------------------------------------------------------------------------------------
 
-def findlistado(tipolist):
-	logger.info("[casttv.py] findlistado")
-
+def findlistado(tipolist,datafilter):
 	thumbnail=""
 	search = ""
+	iniciosearchT=""
 	listaseries = []
+	listforstatus = []
+	listactv = []
 	nuevos = []
 	series = []
 
 	listafav = readfav("","","",CHANNELNAME)
 
 	if tipolist <> "Favoritas":
-		listaseries = findcasttv(tipolist,"","","")
+		statustype,showtype,listaseries = casttvfilters(tipolist,"",datafilter)
 		if len(listaseries)==0:
+			alertnoresultadosearch()
 			return series,nuevos
-	else:	
+	else:
 		if len(listafav)==0:
 			alertnofav()
 			return series,nuevos
 		else:
-			listaseries=listafav
+			statustype = ""
+			showtype = ""	
 			for fav in listafav:
-				titulo=re.sub('[\\\\]?(?P<signo>[^\w\s\\\\])','\\\\\g<signo>',fav[0])
-				if search=="":
-					search=titulo
+				listaseries.append([ fav[0] , fav[1] , fav[2] , fav[3] , "" , "" ])
+				if "casttv" in fav[2]:
+					titulo=re.sub('[\\\\]?(?P<signo>[^\w\s\\\\])','\\\\\g<signo>',fav[0])
+					if search=="":
+						search=titulo
+					else:
+						search=search+"|"+titulo
 				else:
-					search=search+"|"+titulo
-			search="(?:"+search+")"
-			listactv = findcasttv("Completo",search,"","")
+					iniciosearch,titlesearch = findtsearch(fav[0],fav[2])
+					if iniciosearchT=="":
+						iniciosearchT=iniciosearch
+					elif iniciosearch not in iniciosearchT:
+						iniciosearchT=iniciosearchT+"|"+iniciosearch
+					n = listafav.index(fav)
+					listforstatus.append([ fav[0] , fav[1] , iniciosearchT , n , "" , titlesearch ])
+			if len(listforstatus)>0:
+				listforstatus=findfutonstatus(listforstatus,"noctv")
+				for status in listforstatus:
+					n = status[3]
+					listaseries[n][1]=status[1]
+					listaseries[n][4]=status[4]
+					listaseries[n][5]=status[5]
+			if search<>"":		
+				search="(?:"+search+")"
+				listactv = findcasttv("Completo",search,"","","")
 	
 	for serie in listaseries:
 		dataweb = ""
@@ -192,62 +200,70 @@ def findlistado(tipolist):
 			encontrado = "0"
 			if serie[3]=="1":
 				thumbnail=STARGREY_THUMB
-				for ctv in listactv:			
-					if serie[0]==ctv[0]:
-						encontrado = "-1"
-						# se actualizan los datos de status y url
-						serie[1] = ctv[1]
-						serie[2] = ctv[2]
-						if ctv[3]=="-1":
-							thumbnail=STARGREYBLUE_THUMB
-						break
+				if "casttv" in serie[2]:
+					for ctv in listactv:			
+						if serie[0]==ctv[0]:
+							encontrado = "-1"
+							# se actualiza: url, status, datafuton y titlesearch
+							serie[1] = ctv[1]
+							serie[2] = ctv[2]
+							serie[4] = ctv[4]
+							serie[5] = ctv[5]
+							if ctv[3]=="-1":
+								thumbnail=STARGREYBLUE_THUMB
+							break
+
 			else:
 				updated="0"
 				thumbnail=STARORANGE_THUMB
 				listanuevos = []
 				serievistos,dataweb,listanuevos=findnuevos(serie[0],serie[2],"0")
-				for ctv in listactv:			
-					if serie[0]==ctv[0]:
-						encontrado = "-1"
-						serie[1] = ctv[1]
-
-						serie[2] = ctv[2]
-						if ctv[3]=="-1":
-							updated="-1"
-							thumbnail=STARBLUE_THUMB
-							if len(listanuevos)>0:
-								thumbnail=STARGB_THUMB
-							break
+				if "casttv" in serie[2]:
+					for ctv in listactv:			
+						if serie[0]==ctv[0]:
+							encontrado = "-1"
+							serie[1] = ctv[1]
+							serie[2] = ctv[2]
+							serie[4] = ctv[4]
+							serie[5] = ctv[5]
+							if ctv[3]=="-1":
+								updated="-1"
+								thumbnail=STARBLUE_THUMB
+								if len(listanuevos)>0:
+									thumbnail=STARGB_THUMB
+								break
 				if len(listanuevos)>0:
 					if updated=="0":
 						thumbnail=STARGREEN_THUMB
-					if serie[3]=="-1":
+					if serie[3]=="-1" or serie[3]=="-2":
 						nuevos.extend(listanuevos)
 
 			# evita el status desactualizado de fav caso extremo de no encontrarse ya en CastTV
-			if encontrado=="0":
+			if "casttv" in serie[2] and encontrado=="0":
 				serie[1]=""
 		status=""
+		network=""
 		if serie[1]<>"":
 			status="  -  "+serie[1]
+		if serie[4]=="ended" or serie[4]=="bbc" or serie[4]=="varios":
+			if serie[4]=="bbc":
+				network=" (BBC)"
+			serie[4]=serie[4]+";"+serie[0]+";"+serie[2]+";"+serie[1]+";"+serie[5]
+		elif serie[4]<>"":
+			matchnet=re.match('^[^;]*;[^;]*;[^;]*;([^;]+);',serie[4])
+			if (matchnet):
+				network=" ("+matchnet.group(1)+")"
 
-		series.append( [ tipolist , serie[0]+status , serie[2] , thumbnail , serievistos , dataweb ] )
+		series.append( [ tipolist+";"+serie[0]+";"+serie[1]+";"+serie[4] , serie[0]+network+status , serie[2] , thumbnail , serievistos , dataweb ,  statustype+";"+showtype ] )
 
 	return series,nuevos
 
 def findnuevos(serie,url,todos):
-	logger.info("[casttv.py] findnuevos")
-	
 	listanuevos = []
 
 	serievistos,dataweb,listavistos = checkvistosfav(serie,url,"nuevos")
 
-	if len(listavistos)==0:
-		if todos=="0":
-			return serievistos,dataweb,listanuevos
-		else:
-			return serievistos,listanuevos
-	else:
+	if len(listavistos)>0:
 		listavistos.sort(key=lambda visto: visto[5])
 		if listavistos[0][5]=="4":
 			if todos=="0":
@@ -256,6 +272,14 @@ def findnuevos(serie,url,todos):
 				return serievistos,listanuevos
 
 	listaepisodios=findepisodios(url,serie,dataweb)
+
+	if len(listavistos)==0:
+		listanuevos.append(listaepisodios[-1])
+		if todos=="0":
+			return serievistos,dataweb,listanuevos
+		else:
+			return serievistos,listanuevos
+
 	#el listado está ordenado por fecha lo que simplifica la búsqueda
 	stop="0"
 	for episodio in listaepisodios:
@@ -263,7 +287,9 @@ def findnuevos(serie,url,todos):
 			continue
 		OK="-1"
 		for visto in listavistos:
-			if episodio[0]==visto[1] and episodio[5]==visto[3] and episodio[7]==int(visto[4]):
+			#check: audio en otra variable
+			eptitle = re.sub('\s\-\s(?:ES|LT)$','',episodio[0])
+			if eptitle==visto[1] and episodio[5]==visto[3] and episodio[7]==int(visto[4]):
 				if visto[5]=="1" or visto[5]=="2":		
 					stop="-1"
 				elif visto[5]=="4":
@@ -290,90 +316,26 @@ def findnuevos(serie,url,todos):
 		return serievistos,listanuevos
 
 def search(params,url,category):
-	logger.info("[casttv.py] search")
+	searchupdate(-2,"",category,"","",False)
 
-	searchupdate(-2,"",category,"",False)
-
-def searchupdate(seleccion,tecleado,category,web,listupdate):
-	logger.info("[casttv.py] searchupdate")
-
+def searchupdate(seleccion,tecleado,category,web,datafilter,listupdate):
+	search = ""
 	thumbnail = ""
+	statustype = ""
+	showtype = ""
 	letras = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	rtdos = 0
         
 	if seleccion == -2:
 		opciones = []
-		opciones.append('Mostrar Series con Episodios Vistos, Distintas de "Mis Favoritas"')
+		opciones.append("Mostrar Todo")
 		opciones.append('Teclado   (Busca en Título y Status)                         (ver "Ayuda")')
 		for letra in letras:
 			opciones.append(letra)
 		searchtype = xbmcgui.Dialog()
-		seleccion = searchtype.select("Búsqueda por Teclado o por Inicial del Título:", opciones)
+		seleccion = searchtype.select("Búsqueda por Listados, Título o Inicial:", opciones)
 	if seleccion == -1 :return
-	if seleccion == 0:
-		listaseries = []
-		listaseries2 = []
-		listavistos2 = []
-		listavistos = readvisto("","",CHANNELNAME)
-		if len(listavistos)==0:
-			alertnoresultadosearch()
-			if listupdate==True:
-				EndDirectory(category,"",listupdate,True)
-			return
-		listadoseries = findcasttv("","","","")
-		for visto in listavistos:
-			encontrado="0"
-			for serie in listadoseries:
-				if visto[0]==serie[0]:
-					encontrado="-1"
-					listaseries.append(serie)
-					break
-			if encontrado=="0":
-				listavistos2.append(visto)
-		if len(listavistos2)>0:
-			listavistos=[]
-			listadoseries = findseriesyonkis("","-1","")
-			for visto in listavistos2:
-		#		encontrado="0"
-				for serie in listadoseries:
-					if visto[0]==serie[0]:
-		#				encontrado="-1"
-						listaseries.append(serie)
-						break
-		#		if encontrado=="0":
-		#			listavistos.append(visto)
-		#if len(listavistos)>0:
-		#	listadoseries = findtv("","-1","")
-		#	for visto in listavistos:
-		#		for serie in listadoseries:
-		#			if visto[0]==serie[0]:
-		#				listaseries.append(serie)
-		#				break
-		if len(listaseries)==0:
-			alertnoresultadosearch()
-			if listupdate==True:
-				EndDirectory(category,"",listupdate,True)
-			return
-		for serie in listaseries:
-			encontrado="0"
-			listafav = readfav(serie[0],"","",CHANNELNAME)
-			if len(listafav)==0:
-				seriefav = checkvistosfav(serie[0],serie[2],"searchfav")
-				if seriefav<>"":
-					encontrado="-1"
-			else:
-				encontrado="-1"
-			if encontrado=="0" and listaseries2.count(serie)==0:
-				listaseries2.append(serie)
-		if len(listaseries2)==0:
-			alertnoresultadosearch()
-			if listupdate==True:
-				EndDirectory(category,"",listupdate,True)
-			return
-		listaseries = listaseries2
-		listaseries.sort()
-
-	elif seleccion == 1:
+	if seleccion == 1:
 		if len(tecleado)==0:
 			keyboard = xbmc.Keyboard('')
 			keyboard.doModal()
@@ -384,24 +346,17 @@ def searchupdate(seleccion,tecleado,category,web,listupdate):
 				return
 		if len(tecleado) == 1:
 			search = tecleado
-		else:
-			search = ""
-	else:
+	elif seleccion>1:
 		search = letras[seleccion-2]
 
-	if seleccion>0:
-		if web=="" or web=="ctv":
-			listaseries = findcasttv("",search,"","")
-			if len(listaseries)==0 and len(tecleado)<=1:
-				alertnoresultadosearch()
-				return
-	if seleccion==0:
-		listafav=[]
-		category=category+" Vistos"
+	if web=="" or web=="ctv":
+		statustype,showtype,listaseries = casttvfilters(category,search,datafilter)
+		if len(listaseries)==0 and len(tecleado)<=1:
+			alertnoresultadosearch()
+			return
 
-	else:
-		listafav = readfav("","","",CHANNELNAME)
-		category = "Series VO - Buscar - CastTV"
+	listafav = readfav("","","",CHANNELNAME)
+	category = "Series VO - Buscar - CastTV"
 
 	if web=="" or web=="ctv":
 		for serie in listaseries:
@@ -432,7 +387,19 @@ def searchupdate(seleccion,tecleado,category,web,listupdate):
 				else:
 					continue
 
-			addsimplefolder( CHANNELNAME , "listadossearch" , str(seleccion)+";"+tecleado+";ctv" , foldertitle , serie[2] , thumbnail )
+			network = ""
+			if serie[4]=="ended" or serie[4]=="bbc" or serie[4]=="varios":
+				if serie[4]=="bbc":
+					network=" (BBC)"
+				serie[4]=serie[4]+";"+serie[0]+";"+serie[2]+";"+serie[1]+";"+serie[5]
+			elif serie[4]<>"":
+				matchnet=re.match('^[^;]*;[^;]*;[^;]*;([^;]+);',serie[4])
+				if (matchnet):
+					network=" ("+matchnet.group(1)+")"
+			if network<>"":
+				foldertitle=re.sub('^'+serie[0],serie[0]+network,foldertitle)
+
+			addsimplefolder( CHANNELNAME , "listadossearch" , str(seleccion)+";"+tecleado+";ctv;"+statustype+";"+showtype+";"+serie[0]+";"+serie[1]+";"+serie[4] , foldertitle , serie[2] , thumbnail )
 
 	if len(tecleado) > 1 and rtdos==0:
 		#category = "Series VO - Buscar - TV"
@@ -440,7 +407,7 @@ def searchupdate(seleccion,tecleado,category,web,listupdate):
 		sy = "0"
 		listaseries = []
 		#if web=="" or web=="tv":
-		#	listaseries = findtv(tecleado,"-1S","")
+		#	listaseries = findtv(tecleado,"-1S","","")
 		#if len(listaseries)==0:
 		category = "Series VO - Buscar - SeriesYonkis"
 		tipo = "sy"
@@ -450,37 +417,271 @@ def searchupdate(seleccion,tecleado,category,web,listupdate):
 			listaseries = seriesyonkis.performsearch(httpsearch)
 		except:
 			sy = "0"
-			listaseries = findseriesyonkis(tecleado,"-1S","")
+			listaseries = findseriesyonkis(tecleado,"-1S","","")
 		if len(listaseries)==0:
 			alertnoresultadosearch()
 			return
+
+		listaseries2=[]
+		listaseriesst=[]
+		iniciosearchT=""
 		for serie in listaseries:
-			thumbnail=""
 			if sy=="0":
 				titlertdo=serie[0]
 				urlrtdo=serie[2]
+				thumbrtdo=""
 			else:
 				titlertdo=serie[3]
 				urlrtdo=serie[4]
+				thumbrtdo=serie[5]
+			iniciosearch,titlesearch = findtsearch(titlertdo,urlrtdo)
+			if iniciosearchT=="":
+				iniciosearchT=iniciosearch
+			elif iniciosearch not in iniciosearchT:
+				iniciosearchT=iniciosearchT+"|"+iniciosearch
+			n = listaseries.index(serie)
+			listaseriesst.append([ titlertdo , "" , iniciosearchT , n , "" , titlesearch ])
+			listaseries2.append([ titlertdo , "" , urlrtdo , thumbrtdo , "" , titlesearch ])
+
+		listaseries = listaseries2
+		listaseriesst=findfutonstatus(listaseriesst,"noctv")
+		for status in listaseriesst:
+			n = status[3]
+			listaseries[n][1]=status[1]
+			listaseries[n][4]=status[4]
+
+		for serie in listaseries:
+			status = ""
+			network = ""
+			thumbnail=""
 			if len(listafav)>0:
 				for fav in listafav:
-					if titlertdo==fav[0]:
+					if serie[0]==fav[0]:
 						if fav[3]=="1":
 							thumbnail=STARGREY_THUMB
 						else:
 							thumbnail=STARORANGE_THUMB
 						break
 			if sy=="-1" and thumbnail=="":
-				thumbnail=serie[5]
-			addsimplefolder( CHANNELNAME , "listadossearch" , str(seleccion)+";"+tecleado+";"+tipo , titlertdo , urlrtdo , thumbnail )
+				thumbnail=serie[3]
+			if serie[1]<>"":
+				status="  -  "+serie[1]
+			if serie[4]=="ended" or serie[4]=="bbc" or serie[4]=="varios":
+				if serie[4]=="bbc":
+					network=" (BBC)"
+				serie[4]=serie[4]+";"+serie[0]+";"+serie[2]+";"+serie[1]+";"+serie[5]
+			elif serie[4]<>"":
+				matchnet=re.match('^[^;]*;[^;]*;[^;]*;([^;]+);',serie[4])
+				if (matchnet):
+					network=" ("+matchnet.group(1)+")"
+
+			addsimplefolder( CHANNELNAME , "listadossearch" , str(seleccion)+";"+tecleado+";"+tipo+";"+statustype+";"+showtype+";"+serie[0]+";"+serie[1]+";"+serie[4] , serie[0]+network+status , serie[2] , thumbnail )
 	# ------------------------------------------------------------------------------------
 	EndDirectory(category,"",listupdate,True)
 	# ------------------------------------------------------------------------------------
 
-def findcasttv(tipolist,search,titlesearch,dataweb):
-	logger.info("[casttv.py] findcasttv")
+def searchvistos(params,url,category):
+	Dialogespera = xbmcgui.DialogProgress()
+	line1 = 'Buscando información de "'+category+'"...'
+  	Dialogespera.create('pelisalacarta' , line1 , '' )
+	search=""
+	listaseries = []
+	listaseries2 = []
+	listavistos2 = []
+	listavistos = readvisto("","",CHANNELNAME)
+	if len(listavistos)==0:
+		alertnoresultadosearch()
+		return
+	for visto in listavistos:
+		titulo=re.sub('[\\\\]?(?P<signo>[^\w\s\\\\])','\\\\\g<signo>',visto[0])
+		if search=="":
+			search=titulo
+		else:
+			search=search+"|"+titulo
+	search="(?:"+search+")"
+	listadoseries = findcasttv("Completo",search,"","","")
+	if len(listadoseries)>0:
+		for visto in listavistos:
+			encontrado="0"
+			for serie in listadoseries:
+				if visto[0]==serie[0]:
+					encontrado="-1"
+					listaseries.append(serie)
+					titulo=re.sub('[\\\\]?(?P<signo>[^\w\s\\\\])','\\\\\g<signo>',visto[0])
+					search = re.sub(titulo,'',search)
+					break
+			if encontrado=="0":
+				listavistos2.append(visto)
+	else:
+		listavistos2 = listavistos
 
-	url = "http://www.casttv.com/shows/"
+	search = re.sub('\|\|','|',search)
+	search = re.sub('\:\|',':',search)
+	search = re.sub('\|\)$',')',search)
+
+	if len(listavistos2)>0:
+	#	listavistos=[]
+		listaseriesnoctv=[]
+		listadoseries = findseriesyonkis(search,"Vistos","","")
+		for visto in listavistos2:
+	#		encontrado="0"
+			for serie in listadoseries:
+				if visto[0]==serie[0]:
+	#				encontrado="-1"
+					listaseriesnoctv.append(serie)
+					break
+	#		if encontrado=="0":
+	#			listavistos.append(visto)
+	#if len(listavistos)>0:
+	#	listadoseries = findtv("","-1","","")
+	#	for visto in listavistos:
+	#		for serie in listadoseries:
+	#			if visto[0]==serie[0]:
+	#				listaseriesnoctv.append(serie)
+	#				break
+	if len(listaseriesnoctv)>0:
+		listaseriesnoctvst=[]
+		listaseriesnoctv2=[]
+		iniciosearchT=""
+		for serienoctv in listaseriesnoctv:
+			iniciosearch,titlesearch = findtsearch(serienoctv[0],serienoctv[2])
+			if iniciosearchT=="":
+				iniciosearchT=iniciosearch
+			elif iniciosearch not in iniciosearchT:
+				iniciosearchT=iniciosearchT+"|"+iniciosearch
+			n = listaseriesnoctv.index(serienoctv)
+			listaseriesnoctvst.append([ serienoctv[0] , "" , iniciosearchT , n , "" , titlesearch ])
+			listaseriesnoctv2.append([ serienoctv[0] , "" , serienoctv[2] , "0" , "" , titlesearch ])
+
+		listaseriesnoctvst=findfutonstatus(listaseriesnoctvst,"noctv")
+		for status in listaseriesnoctvst:
+			n = status[3]
+			listaseriesnoctv2[n][1]=status[1]
+			listaseriesnoctv2[n][4]=status[4]
+		listaseries.extend(listaseriesnoctv2)
+
+	if len(listaseries)==0:
+		alertnoresultadosearch()
+		return
+	for serie in listaseries:
+		encontrado="0"
+		listafav = readfav(serie[0],"","",CHANNELNAME)
+		if len(listafav)==0:
+			seriefav = checkvistosfav(serie[0],serie[2],"searchfav")
+			if seriefav<>"":
+				encontrado="-1"
+		else:
+			encontrado="-1"
+		if encontrado=="0" and listaseries2.count(serie)==0:
+			listaseries2.append(serie)
+	if len(listaseries2)==0:
+		alertnoresultadosearch()
+		return
+	listaseries = listaseries2
+	listaseries.sort()
+
+	for serie in listaseries:
+		thumbnail=""
+		status=""
+		network=""
+		if serie[3]=="-1":
+			thumbnail=FOLDERBLUE_THUMB
+		if serie[1]<>"":
+			status="  -  "+serie[1]
+		if serie[4]=="ended" or serie[4]=="bbc" or serie[4]=="varios":
+			if serie[4]=="bbc":
+				network=" (BBC)"
+			serie[4]=serie[4]+";"+serie[0]+";"+serie[2]+";"+serie[1]+";"+serie[5]
+		elif serie[4]<>"":
+			matchnet=re.match('^[^;]*;[^;]*;[^;]*;([^;]+);',serie[4])
+			if (matchnet):
+				network=" ("+matchnet.group(1)+")"
+
+		addseriefolder( CHANNELNAME , "listados" , "Vistos;"+serie[0]+";"+serie[1]+";"+serie[4] , serie[0]+network+status , serie[2] , thumbnail , "" , "" , "" , "" )
+	# ------------------------------------------------------------------------------------
+	EndDirectory(category,"",False,False)
+	# ------------------------------------------------------------------------------------
+
+def casttvfilters(tipolist,search,datafilter):
+	listseries = []
+	listvalue = [ "" , "" ]
+	if datafilter<>"":
+		matchfilter = re.match('^([^;]*);([^;]*)$',datafilter)
+		listvalue[0] = matchfilter.group(1)
+		listvalue[1] = matchfilter.group(2)
+	try:
+		data = scrapertools.cachePage(CTVURL)
+	except:
+		alertservidor(CTVURL)
+		return listvalue[0],listvalue[1],listseries
+
+	pretitulo = ""
+	if tipolist=="Series VO - Buscar":
+		pretitulo = "CastTV - "
+
+	if datafilter=="":
+		listfilters = [ [ "un Tipo de Status" , "show_status_selection" ] , [ "un Tipo de Programa" , "show_type_selection" ] ]
+		n=0
+		if tipolist=="Actualizaciones":
+			listfilters.pop(0)
+			n=1
+		for filter in listfilters:
+			options,listoptions = casttvoptions(data,filter[1])
+			searchtype = xbmcgui.Dialog()
+			seleccion = searchtype.select(pretitulo+"Seleccione "+filter[0]+":", options)
+			if seleccion==-1:
+				value = ""
+			else:
+				value = listoptions[seleccion][1]
+			listvalue[n] = value
+			n = n+1
+
+		if tipolist=="Actualizaciones":
+			listvalue[0] = "Updated+(Within+Past+24+Hours)"
+
+	urlsearch = "http://www.casttv.com/shows?type="+listvalue[1]+"&status="+listvalue[0]
+	listseries = findcasttv(urlsearch,search,"","","")
+
+	return listvalue[0],listvalue[1],listseries
+
+def casttvoptions(data,filter):
+	options = []
+	listoptions = []
+	# ------------------------------------------------------
+	# Extrae el bloque de opciones
+	# ------------------------------------------------------
+	patronvideos = '<select id="'+filter+'"(.*?)</select>'
+	matches = re.compile(patronvideos,re.DOTALL).search(data)
+	if (matches):
+		data = matches.group(1)
+	else:
+		return options,listoptions
+	# ------------------------------------------------------
+	# Extrae las opciones
+	# ------------------------------------------------------
+	patronvideos = '<option>([^<]+)</option>'
+	matches = re.compile(patronvideos).findall(data)
+	for match in matches:
+		#option - value
+		option = value = match
+		value = value.replace(" ","+")
+
+		if option=="All":
+			value = ""
+			option = "All  (opción por defecto)"
+
+		options.append(option)
+		listoptions.append([ option , value ])
+
+	if filter=="show_status_selection":
+		options.insert(-2,options[-1])
+		options.pop(-1)
+		listoptions.insert(-2,listoptions[-1])
+		listoptions.pop(-1)
+
+	return options,listoptions
+
+def findcasttv(tipolist,search,titlesearch,tptitlesearch,dataweb):
 	serieslist = []
 	listepisodios = []
 	episodioscasttv = []
@@ -491,11 +692,14 @@ def findcasttv(tipolist,search,titlesearch,dataweb):
 	statusctv = ""
 	thumbnail = ""
 	plot = ""
+	urldef = CTVURL
 
+	if "casttv" in tipolist:
+		urldef = tipolist
 	try:
-		data = scrapertools.cachePage(url)
+		data = scrapertools.cachePage(urldef)
 	except:
-		alertservidor(url)
+		alertservidor(urldef)
 		if tipolist<>"listforsubs" and tipolist<>"S" and tipolist<>"CheckFav":
 			return serieslist
 		elif tipolist=="S":
@@ -505,19 +709,15 @@ def findcasttv(tipolist,search,titlesearch,dataweb):
 		else:
 			return miseriectv,urlctv,statusctv
 	
-	if tipolist == "Actualizaciones":
-		tipolists = '\n\s+&nbsp;<span class="label_updated">Updated!</span>\n\s+</div>'
-	else:
-		tipolists = '\n\s+(?:&nbsp;<span class="label_updated">Updated!</span>\n\s+|\n\s+)</div>'
-
 	if search == "#":
 		search = "[^a-zA-Z]"
 
 	if tipolist=="S" or tipolist=="listforsubs" or tipolist=="CheckFav":
 		search = "(?:The\s+)?[^\w]*(?:"+search+")"
 
-	patronvideos  = '<div class="gallery_listing_text">\n\s+<a href="(.*?)">('+search+'[^<]*)'
-	patronvideos += '</a>('+tipolists+')(\n\s+<div class="icon_current"></div>\n</li>|\n\s+\n</li>)'
+	tipoupdated = '\n\s+(?:&nbsp;<span class="label_updated">Updated!</span>\n\s+|\n\s+)</div>'
+	patronvideos  = '<div class="gallery_listing_text">\n\s+<a href="([^"]+)">('+search+'[^<]*)'
+	patronvideos += '</a>('+tipoupdated+')(\n\s+<div class="icon_current"></div>\n</li>|\n\s+\n</li>)'
 	matches = re.compile(patronvideos,re.IGNORECASE).findall(data)
 
 	for match in matches:
@@ -544,18 +744,21 @@ def findcasttv(tipolist,search,titlesearch,dataweb):
 		status0 = ""
 		match2 = re.search('icon_current',match[3],re.IGNORECASE)
 		if (match2):
-			status0 = "[Current tv show]"
+			status0 = "[Current]"
 		else:
 			status0 = "[Ended]"
 		
-		serieslist.append( [ titulo , status0 , url , updated , titlectvsearch ] )
+		serieslist.append( [ titulo , status0 , url , updated , "" , titlectvsearch ] )
 
-	if tipolist<>"listforsubs" and tipolist<>"S" and tipolist<>"CheckFav":
-		serieslist=findstatus(serieslist)
+	if tipolist<>"listforsubs" and tipolist<>"S" and tipolist<>"CheckFav" and tipolist<>"checksearch":
+		serieslist=findfutonstatus(serieslist,"current")
 		return serieslist
+	elif tipolist=="checksearch":
+		checksearchlist = runchecksearch(serieslist,titlesearch,"",tptitlesearch)
+		return checksearchlist
 	else:
 		if len(serieslist)>0:
-			itemencontrado = searchgate(serieslist,titlesearch,"")
+			itemencontrado = searchgate(serieslist,titlesearch,"",tptitlesearch)
 			if len(itemencontrado)==1:
 				miseriectv = itemencontrado[0][0]
 				urlctv = itemencontrado[0][2]
@@ -563,7 +766,6 @@ def findcasttv(tipolist,search,titlesearch,dataweb):
 				if tipolist=="S":
 					listepisodios,episodioscasttv,listseasepctv,seasonlist,thumbnail,plot = findcasttvep(urlctv,miseriectv,"S","0",0,dataweb)
 				elif tipolist=="listforsubs":
-					#itemencontrado = findstatus(itemencontrado)
 					statusctv = itemencontrado[0][1]
 		if tipolist=="S":
 			return miseriectv,urlctv,listepisodios,episodioscasttv,listseasepctv,seasonlist,thumbnail,plot
@@ -572,120 +774,75 @@ def findcasttv(tipolist,search,titlesearch,dataweb):
 		else:
 			return miseriectv,urlctv,statusctv
 
-def findstatus(serieslist):
-	logger.info("[casttv.py] findstatus")
-	
-	url = "http://eztv.it/showlist/"
-	try:
-		data2 = scrapertools.cachePage(url)
-	except:
-		return serieslist
-
-	patronvideos  = '<a href="[^"]+" class="thread_link">([^<]+)</a></td>\n\s+'
-	patronvideos += '<td class="forum_thread_post"><font class="[^"]+">(.*?)</font>'
-	matches = re.compile(patronvideos,re.DOTALL).findall(data2)
-
-	for match in matches:
-		
-		# Titulo
-		titulo2 = match[0]		
-		titulo2 = titulo2.replace('<b>' , '')
-		titulo2 = titulo2.replace('</b>' , '')
-		titulo2 = titulo2.replace('&amp;' , '&')
-		titulo2 = titulo2.replace('&quot;' , '"')
-		if titulo2 == "Melrose Place":
-			titulo2 = "Melrose Place (2009)"
-		if titulo2 == "CSI: Crime Scene Investigation":
-			titulo2 = "CSI"
-		if titulo2 == "Law and Order: Special Victims Unit":
-			titulo2 = "Law & Order: SVU"
-		match0 = re.match('.*?, The$',titulo2,re.IGNORECASE)
-		if (match0):
-			titulo2 = titulo2.replace(', The' , '')
-			titulo2 = "The "+titulo2
-		
-		# Status
-		status = match[1]
-		match1 = re.search('(\d{4})-(\d{2})-(\d{2})',status,re.IGNORECASE)
-		if (match1):
-			mydate = match1.group(3)+"-"+match1.group(2)+"-"+match1.group(1)
-			status = re.sub('\d{4}-\d{2}-\d{2}',mydate,status)
-		status = status.replace('<b>' , '')
-		status = status.replace('</b>' , '')
-		if status <> "Ended":
-			status = "Current tv show: "+status
-
-		for serie in serieslist:			
-			if serie[0].lower() == titulo2.lower():
-				serie[1] = "["+status+"]"
-			else:
-				match2 = re.match('(.*?) \(20\d\d\)$',serie[0],re.IGNORECASE)
-				if (match2):
-					if match2.group(1).lower() == titulo2.lower():
-						serie[1] = "["+status+"]"
-					
-				match3 = re.search('\s\&\s',serie[0],re.IGNORECASE)
-				if (match3):
-					if serie[0].replace('&' , 'and').lower() == titulo2.lower():
-						serie[1] = "["+status+"]"
-				
-				match4 = re.search('\'s',serie[0],re.IGNORECASE)
-				if (match4):
-					if serie[0].replace('\'s' , 's').lower() == titulo2.lower():
-						serie[1] = "["+status+"]"
-										
-	return serieslist
-
 def listados(params,url,category):
-	logger.info("[casttv.py] listados")
-
 	title = urllib.unquote_plus( params.get("title") )
-	miserievo = title
-	status = ""
-	match = re.match('^(.*?)\s+\-\s+(\[.*?\])$',title)
-	if (match):
-		miserievo = match.group(1)
-		status = match.group(2)
+	tipocontenido=""
+	datafuton = category
+	matchcat = re.match('^([^;]*);([^;]*);([^;]*);',datafuton)
+	category = matchcat.group(1)
+	miserievo = matchcat.group(2)
+	status = matchcat.group(3)
 
-	serievistos,dataweb,respuesta = serieupdate(miserievo,status,url,"",CHANNELNAME)
+	if "Futon" in category:
+		datafuton = ""
+	else:
+		datafuton = re.sub('^([^;]*);([^;]*);([^;]*);','',datafuton)
+	if datafuton=="":
+		tipocontenido="NoFuton"
+	if "Consulta" in category:
+		tipocontenido=tipocontenido+"Consulta"
 
-	if respuesta<>1 and respuesta<>2 and respuesta<>3:
-		if category=="Favoritas":
-			category="Mis Favoritas - "+miserievo
+	serievistos,dataweb,respuesta = serieupdate(miserievo,status,url,tipocontenido,CHANNELNAME)
+
+	if respuesta=="Futon":
+		listinfofuton(params,url,datafuton)
+	elif respuesta<>1 and respuesta<>2 and respuesta<>3 and respuesta<>4:
+		if "Consulta" in category:
+			category = "Series VO - Consulta - "+miserievo
+		elif "Favoritas" in category:
+			category = "Mis Favoritas - "+miserievo
+		elif "Vistos" in category:
+			category = "Series VO - Vistas - "+miserievo
 		else:
 			category = "Series VO - "+miserievo
 		if dataweb=="":
 			dataweb = urllib.unquote_plus( params.get("dataweb") )
 			serievistos = urllib.unquote_plus( params.get("serievistos") )
 		listadosupdate(miserievo,url,category,serievistos,dataweb,False)
+	elif category=="Actualizaciones" or category=="Completo":
+		databack = urllib.unquote_plus( params.get("databack") )
+		matchback = re.match('^([^;]*);(.*?)$',databack)
+		categoryback = matchback.group(1)
+		datafilter = matchback.group(2)
+		listadoupdate(category,datafilter,categoryback,True)
 
 def listadossearch(params,url,category):
-	logger.info("[casttv.py] listadossearch")
-
 	title = urllib.unquote_plus( params.get("title") )
-	miserievo = title
-	status = ""
-	match = re.match('^(.*?)\s+\-\s+(\[.*?\])$',title)
-	if (match):
-		miserievo = match.group(1)
-		status = match.group(2)
-	match1 = re.match('^(\d+);([^;]*);([^;]*)$',category)
+	tipocontenido=""
+	match1 = re.match('^(\d+);([^;]*);([^;]*);([^;]*;[^;]*);([^;]*);([^;]*);(.*?)$',category)
 	seleccion = int(match1.group(1))
 	tecleado = match1.group(2)
 	web = match1.group(3)
+	datafilter = match1.group(4)
+	miserievo = match1.group(5)
+	status = match1.group(6)
+	datafuton = match1.group(7)
 
-	serievistos,dataweb,respuesta = serieupdate(miserievo,status,url,"",CHANNELNAME)
+	if datafuton=="":
+		tipocontenido="NoFuton"
 
-	if respuesta==1 or respuesta==2 or respuesta==3:
+	serievistos,dataweb,respuesta = serieupdate(miserievo,status,url,tipocontenido,CHANNELNAME)
+
+	if respuesta=="Futon":
+		listinfofuton(params,url,datafuton)
+	elif respuesta==1 or respuesta==2 or respuesta==3 or respuesta==4:
 		category = "Series VO - Buscar"
-		searchupdate(seleccion,tecleado,category,web,True)
+		searchupdate(seleccion,tecleado,category,web,datafilter,True)
 	else:
 		category = "Series VO - Buscar - "+miserievo
 		listadosupdate(miserievo,url,category,serievistos,dataweb,False)
 			
 def listadosupdate(miserievo,url,category,serievistos,dataweb,listupdate):
-	logger.info("[casttv.py] listadosupdate")
-
 	if dataweb=="":
 		serievistos,dataweb,listavistos = checkvistosfav(miserievo,url,"listadosupdate")
 	else:
@@ -762,14 +919,12 @@ def listadosupdate(miserievo,url,category,serievistos,dataweb,listupdate):
 			addnewfolder( CHANNELNAME , "episodiomenu" , category , titulo , episodio[1] , episodio[9] , episodio[10] , episodio[2] , episodio[4] , episodio[5] , episodio[6] , serievistos , episodio[8] , episodio[7] , miserievo+";"+url , tipovisto )
 
 	# Sorting by date útil para invertir el listado (ep 1 1º...) por el momento descartado porque a igualdad de fecha(automáticos) no respeta el orden inicial...
-	# Revisar: probar a crear un índice o agregar fecha a los episodios añadidos "automáticamente"
+	# Revisar: probar a crear un índice
 	# ------------------------------------------------------------------------------------
 	EndDirectory(category,"",listupdate,True)
 	# ------------------------------------------------------------------------------------
 
 def checkvistosfav(miserievo,url,tipo):
-	logger.info("[casttv.py] checkvistosfav")
-
 	listseries = [ miserievo ]
 	listfav=[]
 	listavistos=[]
@@ -781,8 +936,8 @@ def checkvistosfav(miserievo,url,tipo):
 	if "casttv" in url:
 		miseriectv = miserievo
 		urlctv = url
-		#miserietv,urltv = findtv(iniciosearch,"CheckFav",titlesearch)
-		miseriesy,urlsy = findseriesyonkis(miserievo,"CheckFav",titlesearch)
+		#miserietv,urltv = findtv(iniciosearch,"CheckFav",titlesearch,"")
+		miseriesy,urlsy = findseriesyonkis("","CheckFav",titlesearch,"")
 		miserie1=miseriesy
 		url1=urlsy
 		#miserie2=miserietv
@@ -794,8 +949,8 @@ def checkvistosfav(miserievo,url,tipo):
 	elif "seriesyonkis" in url:
 		miseriesy = miserievo
 		urlsy = url
-		miseriectv,urlctv = findcasttv("CheckFav",iniciosearch,titlesearch,"")
-		#miserietv,urltv = findtv(iniciosearch,"CheckFav",titlesearch)
+		miseriectv,urlctv = findcasttv("CheckFav",iniciosearch,titlesearch,"","")
+		#miserietv,urltv = findtv(iniciosearch,"CheckFav",titlesearch,"")
 		miserie1=miseriectv
 		url1=urlctv
 		#miserie2=miserietv
@@ -807,8 +962,8 @@ def checkvistosfav(miserievo,url,tipo):
 	#elif "tv???" in url:
 	#	miserietv = miserievo
 	#	urltv = url
-	#	miseriectv,urlctv = findcasttv("CheckFav",iniciosearch,titlesearch,"")
-	#	miseriesy,urlsy = findseriesyonkis(miserievo,"CheckFav",titlesearch)
+	#	miseriectv,urlctv = findcasttv("CheckFav",iniciosearch,titlesearch,"","")
+	#	miseriesy,urlsy = findseriesyonkis("","CheckFav",titlesearch,"")
 	#	miserie1=miseriectv
 	#	url1=urlctv
 	#	miserie2=miseriesy
@@ -859,8 +1014,6 @@ def checkvistosfav(miserievo,url,tipo):
 			return seriefav
 
 def findtsearch(miserievo,url):
-	logger.info("[casttv.py] findtsearch")
-
 	matchini = re.match('^(?:The\s+)?(.)',miserievo.lower(),re.IGNORECASE)
 	iniciosearch = re.sub('(?P<signo>[^\w])','\\\\\g<signo>',matchini.group(1))
 
@@ -870,6 +1023,8 @@ def findtsearch(miserievo,url):
 		titlesearch = ftitlesysearch(miserievo)
 	elif "subtitulos" in url:
 		titlesearch = ftitlesubsearch(miserievo)
+	elif "thefutoncritic" in url:
+		titlesearch = ftitlefutonsearch(miserievo)
 	#elif "tv???" in url:
 	#	titlesearch = ftitletvsearch(miserievo)
 
@@ -890,8 +1045,6 @@ def findtsearch(miserievo,url):
 	return iniciosearch,titlesearch
 
 def findepisodios(url,miserievo,dataweb):
-	logger.info("[casttv.py] findepisodios")
-
 	episodioslist = []
 	miserie = ""
 	thumbnail = ""
@@ -934,8 +1087,8 @@ def findepisodios(url,miserievo,dataweb):
 		if "casttv" in url:
 			miseriectv = miserievo
 			urlctv = url
-			#miserietv,urltv,listseaseptv,listseasontv = findtv(iniciosearch,"S",titlesearch)
-			miseriesy,urlsy,listseasepsy,listseasonsy,listaudio,thumbnailsy,plotsy = findseriesyonkis(miserievo,"S",titlesearch)
+			#miserietv,urltv,listseaseptv,listseasontv = findtv(iniciosearch,"S",titlesearch,"")
+			miseriesy,urlsy,listseasepsy,listseasonsy,listaudio,thumbnailsy,plotsy = findseriesyonkis("","S",titlesearch,"")
 			#dataweb = iniciosearch+";"+titlesearch+";"+miserietv+";"+urltv+";"+miseriesy+";"+urlsy+";"+miseriectv+";"+urlctv
 			dataweb = iniciosearch+";"+titlesearch+";"+miseriesy+";"+urlsy+";"+miseriectv+";"+urlctv
 			episodioslist,episodioscasttv,listseasepctv,seasonlist,thumbnail,plot = findcasttvep(url,miserievo,"S","0",0,dataweb)
@@ -943,19 +1096,19 @@ def findepisodios(url,miserievo,dataweb):
 			miseriesy = miserievo
 			urlsy = url
 			listseasepsy,listseasonsy,listaudio,thumbnailsy,plotsy = findsyep(url,"S","0",0)
-			#miserietv,urltv,listseaseptv,listseasontv = findtv(iniciosearch,"S",titlesearch)
+			#miserietv,urltv,listseaseptv,listseasontv = findtv(iniciosearch,"S",titlesearch,"")
 			#dataweb0 = iniciosearch+";"+titlesearch+";"+miserietv+";"+urltv+";"+miseriesy+";"+urlsy
 			dataweb0 = iniciosearch+";"+titlesearch+";"+miseriesy+";"+urlsy
-			miseriectv,urlctv,episodioslist,episodioscasttv,listseasepctv,seasonlist,thumbnail,plot = findcasttv("S",iniciosearch,titlesearch,dataweb0)
+			miseriectv,urlctv,episodioslist,episodioscasttv,listseasepctv,seasonlist,thumbnail,plot = findcasttv("S",iniciosearch,titlesearch,"",dataweb0)
 			dataweb = dataweb0+";"+miseriectv+";"+urlctv
 		#elif "tv???" in url:
 		#	miserietv = miserievo
 		#	urltv = url
 		#	params = {'Serie': miserietv}
 		#	listseaseptv,listseasontv = findtvep(params,url,"","S","0",0)
-		#	miseriesy,urlsy,listseasepsy,listseasonsy,listaudio,thumbnailsy,plotsy = findseriesyonkis(miserievo,"S",titlesearch)
+		#	miseriesy,urlsy,listseasepsy,listseasonsy,listaudio,thumbnailsy,plotsy = findseriesyonkis("","S",titlesearch,"")
 		#	dataweb0 = iniciosearch+";"+titlesearch+";"+miserietv+";"+urltv+";"+miseriesy+";"+urlsy
-		#	miseriectv,urlctv,episodioslist,episodioscasttv,listseasepctv,seasonlist,thumbnail,plot = findcasttv("S",iniciosearch,titlesearch,dataweb0)
+		#	miseriectv,urlctv,episodioslist,episodioscasttv,listseasepctv,seasonlist,thumbnail,plot = findcasttv("S",iniciosearch,titlesearch,"",dataweb0)
 		#	dataweb = dataweb0+";"+miseriectv+";"+urlctv
 		else:
 			return episodioslist
@@ -1014,66 +1167,58 @@ def findepisodios(url,miserievo,dataweb):
 							episodioslist.insert(n+1,[ miserie+" - "+seasontvnew , "" , episodio[2] , episodio[3] , episodio[4] , episodio[5] , seasontvnew , capitvnew , episodio[8] , episodio[9] , episodio[10], episodio[11] , episodio[12] , episodio[13] ])
 
 	# Si faltan temporadas se añaden al listado que tenga fechas de emisión
-	OKseason="-1"
-	#arriesgado check (rapidez): muy poco probable que teniendo CTV las mismas o más temporadas se necesite completar
-	#if len(seasonlist)<len(listseasontv) or len(seasonlist)<len(listseasonsy):
-	if len(seasonlist)<=len(listseasonsy):
-		OKseason="0"
-	if OKseason=="0":
-		for seasonsy in listseasonsy:
-			if seasonlist.count(seasonsy)==0:
-				i = listseasonsy.index(seasonsy)
-				#arriesgado check: condición para evitar añadir temporadas por errores tipográficos
-				#si solo hay un episodio y es superior al tercero no se añade
-				if listseasepsy[i][6]==1 and listseasepsy[i][1]>3:
-					continue
-				listseasepctv.append(listseasepsy[i])
-				j=1
-				while int(seasonsy)-j>0:
-					seasonwhile = str(int(seasonsy)-j)
-					if seasonlist.count(seasonwhile)<>0:
-						k = seasonlist.index(seasonwhile)
-						listseasepctv[-1][2]=listseasepctv[k][2]
-						listseasepctv[-1][3]=listseasepctv[k][3]
-						listseasepctv[-1][4]=listseasepctv[k][4]
-						break
-					j=j+1
-			else:
-				i = seasonlist.index(seasonsy)
-				listseasepctv[i][5] = "ctv-sy"
+	for seasonsy in listseasonsy:
+		if seasonlist.count(seasonsy)==0:
+			i = listseasonsy.index(seasonsy)
+			#arriesgado check: condición para evitar añadir temporadas por errores tipográficos
+			#si solo hay un episodio y es superior al tercero no se añade
+			if listseasepsy[i][6]==1 and listseasepsy[i][1]>3:
+				continue
+			listseasepctv.append(listseasepsy[i])
+			j=1
+			while int(seasonsy)-j>0:
+				seasonwhile = str(int(seasonsy)-j)
+				if seasonlist.count(seasonwhile)<>0:
+					k = seasonlist.index(seasonwhile)
+					listseasepctv[-1][2]=listseasepctv[k][2]
+					listseasepctv[-1][3]=listseasepctv[k][3]
+					listseasepctv[-1][4]=listseasepctv[k][4]
+					break
+				j=j+1
+		else:
+			i = seasonlist.index(seasonsy)
+			listseasepctv[i][5] = "ctv-sy"
 
 	# Se agregan completas las temporadas de SeriesYonkis que faltan en CastTV
-	if OKseason=="0":
-		#totalseasons = len(listseasepctv)
-		for seasontv in listseasepctv:
-			#arriesgado check: temporada menor o igual al nº total condición para evitar añadir temporadas por errores tipográficos
-			#if seasonlist.count(seasontv[0])==0 and int(seasontv[0])<=totalseasons:
-			if seasonlist.count(seasontv[0])==0:
-				n=seasontv[1]
-				m=0
-			elif seasonlist.count(seasontv[0])<>0 and listseasonsy.count(seasontv[0])<>0:
-				s = listseasonsy.index(seasontv[0])
-				lastepsy = listseasepsy[s][1]
-				if lastepsy>seasontv[1]:
-					n=lastepsy
-					m=seasontv[1]
-				else:
-					continue
+	#totalseasons = len(listseasepctv)
+	for seasontv in listseasepctv:
+		if seasonlist.count(seasontv[0])==0:
+			n=seasontv[1]
+			m=0
+		elif seasonlist.count(seasontv[0])<>0 and listseasonsy.count(seasontv[0])<>0:
+			s = listseasonsy.index(seasontv[0])
+			lastepsy = listseasepsy[s][1]
+			if lastepsy>seasontv[1]:
+				n=lastepsy
+				m=seasontv[1]
 			else:
 				continue
+		else:
+			continue
 
-			if len(seasontv[0])==1:
-				seasonT = "S0"+seasontv[0]
+		if len(seasontv[0])==1:
+			seasonT = "S0"+seasontv[0]
+		else:
+			seasonT = "S"+seasontv[0]
+		date=str(seasontv[2])+"."+str(seasontv[3])+"."+str(seasontv[4])
+		while n>m:
+			if n<10:
+				epT = "E0"+str(n)
 			else:
-				seasonT = "S"+seasontv[0]
-			date=str(seasontv[2])+"."+str(seasontv[3])+"."+str(seasontv[4])
-			while n>m:
-				if n<10:
-					epT = "E0"+str(n)
-				else:
-					epT = "E"+str(n)
-				episodioslist.append([ miserie+" - "+seasonT+epT , "" , date , "0" , dataweb , seasontv[0] , seasonT+epT , n , seasontv[5] , thumbnail , plot , seasontv[2] , seasontv[3] , seasontv[4] ])
-				n=n-1
+				epT = "E"+str(n)
+			episodioslist.append([ miserie+" - "+seasonT+epT , "" , date , "0" , dataweb , seasontv[0] , seasonT+epT , n , seasontv[5] , thumbnail , plot , seasontv[2] , seasontv[3] , seasontv[4] ])
+			n=n-1
+
 	if len(listaudio)>0:
 		for episodio in episodioslist:
 			for audio in listaudio:
@@ -1090,15 +1235,12 @@ def findepisodios(url,miserievo,dataweb):
 	return episodioslist
 
 def findcasttvep(url,miserievo,todos,seasonsearch,episodiosearch,dataweb):
-	logger.info("[casttv.py] findcasttvep")
-
 	episodioslist = []
 	seasonlist = []
 	listseasepctv = []
 	episodioscasttv = []
 	thumbnail = ""
 	plot = ""
-
 	try:
 		data = scrapertools.cachePage(url)
 	except:
@@ -1217,17 +1359,33 @@ def findcasttvep(url,miserievo,todos,seasonsearch,episodiosearch,dataweb):
 				episodioslist.append( [ titulo , url , date , pago , dataweb , seasontvid , seasontv , episodiotv , "ctv" , thumbnail , plot , day , month , year ] )
 				break
 	if todos=="S":
+		if episodioslist[0][2]=="":
+			for episodio in episodioslist:
+				if episodio[2]<>"":
+					break
+				i = episodioslist.index(episodio)
+				j = i+1
+				while j<len(episodioslist):
+					if episodioslist[j][2]<>"":
+						episodio[2] = episodioslist[j][2]
+						episodio[11] = episodioslist[j][11]
+						episodio[12] = episodioslist[j][12]
+						episodio[13] = episodioslist[j][13]
+						n = seasonlist.index(episodio[5])
+						if listseasepctv[n][1]==episodio[7] and listseasepctv[n][2]==0:
+							listseasepctv[n][2]=episodio[11]
+							listseasepctv[n][3]=episodio[12]
+							listseasepctv[n][4]=episodio[13]
+						break
+					j = j+1
 		return episodioslist,episodioscasttv,listseasepctv,seasonlist,thumbnail,plot
 	elif todos=="0":
 		return episodioslist,thumbnail,plot
 
 def findtvep(params,url,category,todos,season,episodio):
-	logger.info("[casttv.py] findtvep")
-
 	listepisodios = []
 	listepisodio = []
 	listseason = []
-
 	try:	
 		listepisodios = []
 	except:
@@ -1279,15 +1437,12 @@ def findtvep(params,url,category,todos,season,episodio):
 		return listepisodio,listseason
 
 def findsyep(url,todos,season,episodio):
-	logger.info("[casttv.py] findsyep")
-
 	listepisodios = []
 	listepisodio = []
 	listseason = []
 	listaudio = []
 	thumbnail = ""
 	plot = ""
-
 	try:
 		data = scrapertools.cachePage(url)
 	except:
@@ -1359,8 +1514,6 @@ def findsyep(url,todos,season,episodio):
 		return listepisodio,listseason,listaudio,thumbnail,plot
 
 def findsubseries(title,todos,titlesearch,season,episodio):
-	logger.info("[casttv.py] findsubseries")
-
 	url = "http://www.subtitulos.es/series"
 	subserieslist=[]
 	seriesubencontrada=[]
@@ -1368,14 +1521,15 @@ def findsubseries(title,todos,titlesearch,season,episodio):
 	miep = ""
 	miseriesub = ""
 	urlsub = ""
-
 	try:
 		data = scrapertools.cachePage(url)
 	except:
 		alertservidor(url)
-		if todos=="-1":
+		if todos=="-1" or todos=="checksearch":
 			return subserieslist
-		elif todos=="0" or todos=="V":
+		elif todos=="0":
+			return miseriesub,urlsub
+		elif todos=="V":
 			return miseriesub,urlsub,miep,listsubs
 	
 	search = ""
@@ -1383,9 +1537,8 @@ def findsubseries(title,todos,titlesearch,season,episodio):
 		search = title
 		if search=="#":
 			search = "[^a-zA-Z]"
-	if todos=="V":
+	if todos=="V" or todos=="0":
 		search = "(?:The\s+)?[^\w]*(?:"+title+")"
-		todos = "0"
 	
 	# ------------------------------------------------------
 	# Extrae las Series
@@ -1403,7 +1556,8 @@ def findsubseries(title,todos,titlesearch,season,episodio):
 		# URL
 		url = urlparse.urljoin("http://www.subtitulos.es/show/",match[0])
 
-		subserieslist.append( [ titulosub , url , titlesubsearch ] )
+		# check
+		subserieslist.append( [ titulosub , "" , url , "" , "" , titlesubsearch ] )
 
 	if todos=="-1":
 		if len(subserieslist) > 0 and len(title) > 1:
@@ -1411,35 +1565,36 @@ def findsubseries(title,todos,titlesearch,season,episodio):
 				forsub = re.search(title,subserie[0],re.IGNORECASE)
 				if (forsub):
 					seriesubencontrada.append(subserie)
-			subserieslist = seriesubencontrada
-				
+			subserieslist = seriesubencontrada				
 		return subserieslist
-
-	elif todos=="0":
+	elif todos=="checksearch":
+		checksearchlist = runchecksearch(subserieslist,titlesearch,"subes","")
+		return checksearchlist
+	elif todos=="0" or todos=="V":
 		if len(subserieslist) > 0:
-			itemencontrado = searchgate(subserieslist,titlesearch,"")
+			itemencontrado = searchgate(subserieslist,titlesearch,"subes","")
 			if len(itemencontrado)==1:
 				miseriesub = itemencontrado[0][0]
-				urlsub = itemencontrado[0][1]
-				miep,listsubs = findsubsep(urlsub,"0",season,episodio)
+				urlsub = itemencontrado[0][2]
+				if todos=="V":
+					miep,listsubs = findsubsep(urlsub,"0",season,episodio)
+		if todos=="0":
+			return miseriesub,urlsub
+		elif todos=="V":
+			return miseriesub,urlsub,miep,listsubs
 
-		return miseriesub,urlsub,miep,listsubs
-
-def findtv(title,todos,titlesearch):
-	logger.info("[casttv.py] findtv")
-
+def findtv(title,todos,titlesearch,tptitlesearch):
 	url = ""
 	listseries = []
 	listepisodios = []
 	listseason = []
 	miserietv = ""
 	urltv = ""
-
 	try:
 		data = scrapertools.cachePage(url)
 	except:
 		alertservidor(url)
-		if todos=="-1" or todos=="-1S":
+		if todos=="-1" or todos=="-1S" or todos=="checksearch":
 			return listseries
 		elif todos=="S":
 			return miserietv,urltv,listepisodios,listseason
@@ -1466,13 +1621,16 @@ def findtv(title,todos,titlesearch):
 		#Url
 		url = match[0]
 
-    		listseries.append([ titulotv , "" , url , "0" , titletvsearch ])
+    		listseries.append([ titulotv , "" , url , "0" , "" , titletvsearch ])
 
 	if todos=="-1" or todos=="-1S":
 		return listseries
+	elif todos=="checksearch":
+		checksearchlist = runchecksearch(listseries,titlesearch,"",tptitlesearch)
+		return checksearchlist
 	else:
 		if len(listseries)>0:
-			itemencontrado = searchgate(listseries,titlesearch,"")
+			itemencontrado = searchgate(listseries,titlesearch,"",tptitlesearch)
 			if len(itemencontrado)==1:
 				miserietv = itemencontrado[0][0]
 				urltv = itemencontrado[0][2]
@@ -1484,10 +1642,7 @@ def findtv(title,todos,titlesearch):
 		elif todos=="CheckFav":
 			return miserietv,urltv
 
-def findseriesyonkis(title,todos,titlesearch):
-	logger.info("[casttv.py] findseriesyonkis")
-
-	url = "http://www.seriesyonkis.com/"
+def findseriesyonkis(title,todos,titlesearch,tptitlesearch):
 	listseries = []
 	listepisodios = []
 	listseason = []
@@ -1498,10 +1653,10 @@ def findseriesyonkis(title,todos,titlesearch):
 	plot = ""
 
 	try:
-		data = scrapertools.cachePage(url)
+		data = scrapertools.cachePage(SYURL)
 	except:
-		alertservidor(url)
-		if todos=="-1" or todos=="-1S":
+		alertservidor(SYURL)
+		if todos=="-1" or todos=="-1S" or todos=="checksearch" or todos=="Vistos":
 			return listseries
 		elif todos=="S":
 			return miseriesy,urlsy,listepisodios,listseason,listaudio,thumbnail,plot
@@ -1514,12 +1669,13 @@ def findseriesyonkis(title,todos,titlesearch):
 		#o quitar los acentos de los títulos y luego buscar...
 		search = re.sub('(?:a|e|i|o|u)','[^<]{1,2}',title)
 		search = "[^<]*"+search+"[^<]*"
+	elif todos=="Vistos":
+		search = title
 
 	# Extrae el bloque de las series
 	patronvideos = '<h4><a.*?id="series".*?<ul>(.*?)</ul>.*?<h4><a.*?id="miniseries".*?<ul>(.*?)</ul>'
 	matches = re.compile(patronvideos,re.DOTALL).search(data)
-	if (matches):
-
+	if (matches):
 		data = matches.group(1)+matches.group(2)
 
 	# Extrae las entradas (carpetas)
@@ -1536,13 +1692,17 @@ def findseriesyonkis(title,todos,titlesearch):
 		#Url
 		url = match[0]
 
-    		listseries.append([ titulosy , "" , url , "0" , titlesysearch ])
+    		listseries.append([ titulosy , "" , url , "0" , "" , titlesysearch ])
 
-	if todos=="-1" or todos=="-1S":
+	listseries.sort()
+	if todos=="-1" or todos=="-1S" or todos=="Vistos":
 		return listseries
+	elif todos=="checksearch":
+		checksearchlist = runchecksearch(listseries,titlesearch,"seriesyonkis",tptitlesearch)
+		return checksearchlist
 	else:
 		if len(listseries)>0:
-			itemencontrado = searchgate(listseries,titlesearch,"seriesyonkis")
+			itemencontrado = searchgate(listseries,titlesearch,"seriesyonkis",tptitlesearch)
 			if len(itemencontrado)==1:
 				miseriesy = itemencontrado[0][0]
 				urlsy = itemencontrado[0][2]
@@ -1553,14 +1713,16 @@ def findseriesyonkis(title,todos,titlesearch):
 		elif todos=="CheckFav":
 			return miseriesy,urlsy
 
-def searchgate(listforsearchin,titletosearch,tipo):
-	logger.info("[animeforos.py] searchgate")
+def searchgate(listforsearchin,titletosearch,tplistsearch,tptitlesearch):
 	# listforsearchin tiene que tener en la última columna [-1] el campo para búsquedas
-
 	itemencontrado = []
 	itemencontrado2 = []
+	group1search = ".*?"
+	forbacksearch = ".+"
+	reverse=True
+	topn=2
 	titletosearch2 = titletosearch
-	if tipo=="findinfo":
+	if tptitlesearch=="titleerdm":
 		titletosearch2 = re.sub('(?<=[a-z])\d+(?=[a-z])','\d*',titletosearch)
 	matchtitle = re.match('(.*?)\((.*?)\)$',titletosearch)
 	if (matchtitle):
@@ -1569,31 +1731,55 @@ def searchgate(listforsearchin,titletosearch,tipo):
 		option3 = matchtitle.group(2)
 		titletosearch2 = "(?:"+option1+"|"+option2+"|"+option3+")"
 	titletosearch = re.sub('(?:\(|\))','',titletosearch)
+
+	if tplistsearch=="futon" or tptitlesearch=="futon":
+		reverse=False
+		if tplistsearch=="futon":
+			matchbottom = re.search('[a-z]((?:1|2)\d{3}|us)$',titletosearch)
+			if (matchbottom):
+				reverse=True
+	if tptitlesearch=="varios":
+		topn=10
+	#check: SY porque los títulos entre paréntesis no siguen el orden alfabético y el error puede ser más grave
+	if tptitlesearch=="futon" or tplistsearch=="futon" or tplistsearch=="seriesyonkis" or tplistsearch=="subes" or len(titletosearch)<4:
+		group1search = "(?:\d{4}|usa?|uk|with.*?)?"
+	#check casos or check en(listfor[-1])>1 (1 para erdm y mayor resto...)?
+	if tptitlesearch<>"titleerdm" and reverse==True:
+		forbacksearch = "(?:\d{4}|usa?|uk|with.*?)"
 		
 	listforsearchin.sort(key=lambda listfor: listfor[-1])
+	n = 0
 	for listfor in listforsearchin:
-		if len(itemencontrado2)==2:
+		if n==topn:
+			break
+		elif topn==10 and len(itemencontrado)>0 and n==2:
+			break
+		elif topn==10 and len(itemencontrado2)>0 and len(itemencontrado2)<n:
 			break
 		titletosearchin = listfor[-1]
-		if tipo=="seriesyonkis":
+		if tplistsearch=="seriesyonkis":
 			titletosearchin = re.sub('(?:\(|\))','',titletosearchin)
-		forin = re.match(titletosearch2+'(.*?)$',titletosearchin,re.IGNORECASE)
+		forin = re.match(titletosearch2+'('+group1search+')$',titletosearchin,re.IGNORECASE)
 		if (forin):
 			if forin.group(1)=="":
 				itemencontrado.append(listfor)
-				break
-		if tipo=="seriesyonkis":
+				if tplistsearch=="futon":
+					n = n+1
+					continue
+				else:
+					break
+		if tplistsearch=="seriesyonkis":
 			forinsy0 = re.match('(.*?)\((.*?)\)$',listfor[-1])
 			if (forinsy0):
 				titletosearchinsy = forinsy0.group(2)
-				forinsy = re.match(titletosearch2+'(.*?)$',titletosearchinsy,re.IGNORECASE)
+				forinsy = re.match(titletosearch2+'('+group1search+')$',titletosearchinsy,re.IGNORECASE)
 				if (forinsy):
 					if forinsy.group(1)=="":
 						itemencontrado.append(listfor)
 						break
 				else:
 					titletosearchinsy = forinsy0.group(1)
-					forinsy2 = re.match(titletosearch2+'(.*?)$',titletosearchinsy,re.IGNORECASE)
+					forinsy2 = re.match(titletosearch2+'('+group1search+')$',titletosearchinsy,re.IGNORECASE)
 					if (forinsy2):
 						if forinsy2.group(1)=="":						
 							itemencontrado.append(listfor)
@@ -1602,45 +1788,59 @@ def searchgate(listforsearchin,titletosearch,tipo):
 		if (forin):
 			if forin.group(1)<>"":
 				itemencontrado2.append(listfor)
+				n = n+1
 				continue
-		if tipo=="seriesyonkis":
+		if tplistsearch=="seriesyonkis":
 			if (forinsy0):
 				if (forinsy):
 					if forinsy.group(1)<>"":
 						itemencontrado2.append(listfor)
+						n = n+1
 						continue
 				else:
 					if (forinsy2):
 						if forinsy2.group(1)<>"":						
 							itemencontrado2.append(listfor)
+							n = n+1
 							continue
+		if n>0:
+			n = n+1
 
-	if len(itemencontrado)==0 and len(itemencontrado2)==0:
+	if reverse==True and len(itemencontrado)==0 and len(itemencontrado2)==0:
+		n = 0
 		listforsearchin.reverse()
 		for listfor in listforsearchin:
+			if n==topn:
+				break
+			elif topn==10 and len(itemencontrado2)>0 and len(itemencontrado2)<n:
+				break
 			if len(listfor[-1])>1:
 				titletosearchin = listfor[-1]
-				if tipo=="findinfo":
+				if tptitlesearch=="titleerdm":
 					titletosearchin = re.sub('(?<=[a-z])\d+(?=[a-z])','\d*',titletosearchin)
-				elif tipo=="seriesyonkis":
+				elif tplistsearch=="seriesyonkis":
 					matchtitle = re.match('(.*?)\((.*?)\)$',titletosearchin)
 					if (matchtitle):
 						option1 = re.sub('(?:\(|\))','',titletosearchin)
 						option2 = matchtitle.group(1)
 						option3 = matchtitle.group(2)
 						titletosearchin = "(?:"+option1+"|"+option2+"|"+option3+")"
-				forback = re.match('^'+titletosearchin+'.+$',titletosearch,re.IGNORECASE)
+				forback = re.match('^'+titletosearchin+forbacksearch+'$',titletosearch,re.IGNORECASE)
 				if (forback):
 					itemencontrado2.append(listfor)
-					break											
+					if tptitlesearch=="titleerdm":
+						break
+					else:
+						n = n+1
+				elif n>0:
+					n = n+1
+											
 	if len(itemencontrado)==0:
 		itemencontrado = itemencontrado2
 	
 	return itemencontrado
 
 def listasubep(params,url,category):
-	logger.info("[casttv.py] listasubep")
-
 	miseriesub = urllib.unquote_plus( params.get("title") )
 	miseriesub = re.sub('\s+\-\s+\[Subtítulos\]','',miseriesub)
 	
@@ -1657,15 +1857,15 @@ def listasubep(params,url,category):
 	# ------------------------------------------------------------------------------------
 
 def listasubs(params,url,category):
-	logger.info("[casttv.py] listasubs")
-
 	miep = urllib.unquote_plus( params.get("title") )
 	miep = re.sub('\s+\-\s+\[Subtítulos\]','',miep)
 	#Buscando subs desde vídeos no se muestra el listado de vídeos
 	videos="-1"
-	match0 = re.match('Series VO',category)
-	if (match0):
+	updates="0"
+	if 'Series VO' in category:
 		videos="0"
+	elif 'Actualizaciones' in category:
+		updates="-1"
 	match = re.match('([^;]+);([^;]+)$',category)
 	if (match):
 		category = match.group(1)
@@ -1686,9 +1886,15 @@ def listasubs(params,url,category):
 	if len(listasubtitulos)==0:
 		alertnoepisodios(3)
 		return
+
+	iniciosearch,titlesearch = findtsearch(serie,url)
+	if updates=="-1":
+		miseriesub,urlsub = findsubseries(iniciosearch,"0",titlesearch,"0",0)
 	
 	#Encabezados
 	additem( CHANNELNAME , category , "SUBTITULOS - [Descargar] :" , "" , "" , "" )
+	if updates=="-1":
+		addsimplefolder( CHANNELNAME , "listasubep" , "Subtítulos.es - "+miseriesub , miseriesub+"  -  [Subtítulos]" , urlsub , "" )
 	additem( CHANNELNAME , category , miep , "" , "" , "" )
 
 	for subs in listasubtitulos:
@@ -1702,12 +1908,12 @@ def listasubs(params,url,category):
 		urlserie = ""
 		thumbnail=""
 		plot=""
+		network=""
 
-		iniciosearch,titlesearch = findtsearch(serie,url)
-		miseriectv,urlctv,statusctv = findcasttv("listforsubs",iniciosearch,titlesearch,"")
-		miseriesy,urlsy = findseriesyonkis(serie,"CheckFav",titlesearch)
-		#miserietv,urltv = findtv(iniciosearch,"CheckFav",titlesearch)
-		
+		miseriectv,urlctv,statusctv = findcasttv("listforsubs",iniciosearch,titlesearch,"","")
+		miseriesy,urlsy = findseriesyonkis("","CheckFav",titlesearch,"")
+		#miserietv,urltv = findtv(iniciosearch,"CheckFav",titlesearch,"")
+
 		if urlctv<>"":
 			episodioslist,thumbnail,plot = findcasttvep(urlctv,miseriectv,"0",seasonep,episodioep,"")
 			if len(episodioslist)==1:
@@ -1715,7 +1921,7 @@ def listasubs(params,url,category):
 				urlepctv = episodioslist[0][1]
 				listacasttv,listactmirrors = findvideoscasttv(urlepctv)
 			if tituloserie=="":
-				tituloserie = miseriectv+"  -  "+statusctv
+				tituloserie = miseriectv
 				urlserie = urlctv
 		if urlsy<>"":
 			listasy,thumbnailsy,plotsy = findsyep(urlsy,"0",seasonep,episodioep)
@@ -1732,11 +1938,29 @@ def listasubs(params,url,category):
 		#		tituloserie = miserietv
 		#		urlserie = urltv
 
+		subserielist = [ [ iniciosearch , statusctv , "" , "" , "" , titlesearch ] ]
+		subserielist = findfutonstatus(subserielist,"foritem")
+		statusfuton = subserielist[0][1]
+		datafuton = subserielist[0][4]
+		if datafuton=="ended" or datafuton=="bbc" or datafuton=="varios":
+			if datafuton=="bbc":
+				network=" (BBC)"
+			datafuton = datafuton+";"+tituloserie+";"+urlserie+";"+statusfuton+";"+subserielist[0][5]
+		elif datafuton<>"":
+			matchnet=re.match('^[^;]*;[^;]*;[^;]*;([^;]+);',datafuton)
+			if (matchnet):
+				network=" ("+matchnet.group(1)+")"
+			
 		additem( CHANNELNAME , category , "VIDEOS :" , "" , "" , "" )
 		if tituloserie<>"":
-			addseriefolder( CHANNELNAME , "listados" , category , tituloserie , urlserie , "" , "" , "" )
+			foldertitle = tituloserie+network+"  -  "+statusfuton
+			foldertitle = re.sub('\s+\-\s+$','',foldertitle)
+			addseriefolder( CHANNELNAME , "listados" , category+";"+tituloserie+";"+statusfuton+";"+datafuton , foldertitle , urlserie , "" , "" , "" , "" , "" )
+		elif datafuton<>"":
+			addsimplefolder( CHANNELNAME , "listinfofuton" , datafuton , serie+"  -  [The Futon Critic]" , "thefutoncritic" , "" )
 		else:
-			addsimplefolder( CHANNELNAME , "search" , category , "Buscar Serie" , "" , "" )
+			addsimplefolder( CHANNELNAME , "searchfuton" , "The Futon Critic" , "The Futon Critic" , "" , "http://www.thefutoncritic.com/images/logo.gif" )
+			addsimplefolder( CHANNELNAME , "search" , category , "Series VO - Buscar" , "" , "" )
 
 		if len(listacasttv)>0:
 			for video in listacasttv:
@@ -1760,8 +1984,6 @@ def listasubs(params,url,category):
 	# ------------------------------------------------------------------------------------
 
 def findsubsep(url,todos,seasonsearch0,episodiosearch):
-	logger.info("[casttv.py] findsubsep")
-
 	listseason = []
 	listepisodios = []
 	listsubtitulos = []
@@ -1850,16 +2072,11 @@ def findsubsep(url,todos,seasonsearch0,episodiosearch):
 		return miep,listsubtitulos
 
 def findsubupdates():
-	logger.info("[casttv.py] findsubupdates")
-
 	listsubupdates = []
-
-	url = "http://www.subtitulos.es"
-
 	try:
-		data = scrapertools.cachePage(url)
+		data = scrapertools.cachePage(SUBURL)
 	except:
-		alertservidor(url)
+		alertservidor(SUBURL)
 		return listsubupdates
 
 	# ------------------------------------------------------
@@ -1889,10 +2106,7 @@ def findsubupdates():
 	return listsubupdates
 
 def findsubs(miep,url):
-	logger.info("[casttv.py] findsubs")
-
 	listsubtitulos = []
-
 	try:
 		data = scrapertools.cachePage(url)
 	except:
@@ -1921,6 +2135,7 @@ def findsubs(miep,url):
 		# ------------------------------------------------------
 		patronvideos  = '<td width="21%" class="language">\n([^<]+)</td>\n\s+<td width="19%"><strong>\n([^<]*Completado)\s+</strong>'
 		patronvideos += '.*?<a href="([^"]+)"[^>]+>(?:descargar|<b>m&aacute;s actualizado</b>)</a>.*?&middot\s+(\d+)\s+descargas'
+		patronvideos +=	'.*?<a href="([^"]+)">ver y editar</a>'
 		subs = re.compile(patronvideos,re.DOTALL).findall(data1)
 
 		for sub in subs:
@@ -1953,8 +2168,10 @@ def findsubs(miep,url):
 
 			# URL
 			url = sub[2]
+			urlvye = sub[4]+"&start="
+			urlvye = re.sub("list","ajax_list",urlvye)		
 		
-			listsubtitulos.append([ idioma , status, version , url , miep+";"+idiomaf+versionf , descargas ])
+			listsubtitulos.append([ idioma , status, version , url , miep+";"+idiomaf+versionf+";"+urlvye  , descargas ])
 
 	if len(listsubtitulos)>1:
 		listsubtitulos.sort(key=lambda subs: int(subs[5]))
@@ -1962,8 +2179,6 @@ def findsubs(miep,url):
 	return listsubtitulos
 
 def searchsub(params,url,category):
-	logger.info("[casttv.py] searchsub")
-
 	listasubseries = []
 	listasubupdates = []
 	tecleado=""
@@ -2009,25 +2224,658 @@ def searchsub(params,url,category):
  
 	if len(listasubseries)>0:
 		for subserie in listasubseries:
-			addsimplefolder( CHANNELNAME , "listasubep" , category0+" - "+subserie[0] , subserie[0]+"  -  [Subtítulos]" , subserie[1] , "" )
+			addsimplefolder( CHANNELNAME , "listasubep" , category0+" - "+subserie[0] , subserie[0]+"  -  [Subtítulos]" , subserie[2] , "" )
 	else:
 		category=category+" - Últimas Actualizaciones"
 		listasubupdates.sort()
 		for subupdate in listasubupdates:
 			addsimplefolder( CHANNELNAME , "listasubs" , category+";"+subupdate[0], subupdate[2] , subupdate[1] , "" )
-
 	# ------------------------------------------------------------------------------------
 	EndDirectory(category,"",False,True)
 	# ------------------------------------------------------------------------------------
 
-def listadonuevos(params,url,category):
-	logger.info("[casttv.py] listadonuevos")
+def searchfuton(params,url,category):
+	listaseries = []
+	tecleado = ""
+	search = ""
+	tipostatus = ""
 
+	opciones = []
+	letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	
+	opciones.append("Mostrar Todo")
+	opciones.append("Mostrar Estrenos de los últimos tres meses")
+	opciones.append("Teclado")
+	for letra in letras:
+		opciones.append(letra)
+	searchtype = xbmcgui.Dialog()
+	seleccion = searchtype.select("Búsqueda por Listados, Título o Inicial en TheFutonCritic.com:", opciones)
+	if seleccion == -1 :return
+	if seleccion == 1:
+		premiermenu = [ "All: TV Series & Mini-Series  (opción por defecto)" , "Filter: TV Series" ]
+		searchtype = xbmcgui.Dialog()
+		seleccion = searchtype.select("Seleccione una Opción:", premiermenu)
+		if seleccion<=0:
+			tipostatus = "premiere+miniseries"
+		else:
+			tipostatus = "premiere"
+		category = category+" - Premieres"
+	elif seleccion == 2:
+		keyboard = xbmc.Keyboard('')
+		keyboard.doModal()
+		if (keyboard.isConfirmed()):
+			tecleado = keyboard.getText()
+			tecleado = re.sub('[\\\\]?(?P<signo>[^#\w\s\\\\])','\\\\\g<signo>',tecleado)
+			if len(tecleado)>0:
+				category = category+" - Buscar"				
+				search = tecleado			
+		if keyboard.isConfirmed() is None or len(tecleado)==0:
+			return
+
+	elif seleccion > 2:
+		search = letras[seleccion-3]
+		category = category+" - Buscar - "+search
+
+	if tipostatus=="premiere+miniseries":
+		listaseries = findfuton("",FT_TSURL+".aspx?series=",tipostatus)
+	else:
+		listaseries = futonfilters(search,tipostatus)
+
+	if len(listaseries)==0:
+		alertnoresultadosearch()
+		return
+	else:
+		searchfutonlist(category,listaseries)
+
+def searchfutonlist(category,listaseries):
+	listafav = readfav("","","",CHANNELNAME)
+
+	for serie in listaseries:
+		thumbnail=""
+		if len(listafav)>0:
+			for fav in listafav:
+				seriesearch=re.sub('^(.*?), the$',lambda ppal: 'the '+ppal.group(1),serie[0].lower())
+				if seriesearch==fav[0].lower():
+					if fav[3]=="1":
+						thumbnail=STARGREY_THUMB
+						break
+					thumbnail=STARORANGE_THUMB
+					break
+		if serie[8]<>"":
+			status = "  -  "+serie[8]
+
+		title = serie[0]+" ("+serie[3]+")"
+		plot = serie[0].upper()+": Network: "+serie[3]+". Broadcast History: "+serie[2]+". Status: "+serie[7]+". "+serie[5]+": "+serie[6]+". Time Slot: "+serie[4]
+
+		addfolder( CHANNELNAME , "listinfofuton" , serie[0]+";"+serie[1]+";"+serie[2]+";"+serie[3]+";"+serie[4]+";"+serie[5]+";"+serie[6]+";"+serie[7]+";"+serie[8] , title+status , serie[1] , thumbnail , plot )
+	# ------------------------------------------------------------------------------------
+	EndDirectory(category,"",False,True)
+	# ------------------------------------------------------------------------------------
+
+def futonoptions(data,filter):
+	options = []
+	listoptions = []
+	# ------------------------------------------------------
+	# Extrae el bloque de opciones
+	# ------------------------------------------------------
+	patronvideos = '<select name="'+filter+'">(.*?)</select>'
+	matches = re.compile(patronvideos,re.DOTALL).search(data)
+	if (matches):
+		data = matches.group(1)
+	else:
+		return options,listoptions
+	# ------------------------------------------------------
+	# Extrae las opciones
+	# ------------------------------------------------------
+	patronvideos = '<option value="([^"]*)">([^<]+)</option>'
+	matches = re.compile(patronvideos,re.IGNORECASE).findall(data)
+	for match in matches:
+		#option
+		option = match[1]
+		if "network" in filter and option<>"all":
+			option = option.upper()
+		elif "daycode" in filter or "genre" in filter:
+			option = option.capitalize()
+		elif "statuscode" in filter:
+			option = formattitle(option)
+		if option=="all" or option=="All":
+			option = "All  (opción por defecto)"
+
+		#value
+		value = match[0]
+		value = value.replace(" ","+")
+
+		options.append(option)
+		listoptions.append([ option , value ])
+
+	if filter=="statuscode" and "Mini-Series" not in options[1]:
+		options.insert(10,options[1])
+		options.insert(10,options[2])
+		options.pop(1)
+		options.pop(1)
+		listoptions.insert(10,listoptions[1])
+		listoptions.insert(10,listoptions[2])
+		listoptions.pop(1)
+		listoptions.pop(1)
+
+	return options,listoptions
+
+def futonfilters(search,tipostatus):
+	listseries = []
+	inicial = ""
+	url = FT_TSURL
+
+	if tipostatus<>"premiere":
+		futonmenu = [ "SHOWATCH: TV Series from Past to Present  (opción por defecto)" , "MOVIEWATCH: Mini-Series & TV Movies" ]
+		searchtype = xbmcgui.Dialog()
+		seleccion = searchtype.select("Seleccione un Apartado:", futonmenu)
+		if seleccion==1:
+			url = FT_MSURL
+			tipostatus = "moviewatch"
+
+	try:
+		data = scrapertools.cachePage(url+"/")
+	except:
+		alertservidor(url+"/")
+		return listseries
+
+	listvalue = [ "" , "" , "" , "" , "" ]
+
+	listfilters = [ [ "una Cadena de TV" , "network" ] , [ "un Horario" , "daycode" ] , [ "un Tipo de Status" , "statuscode" ] , [ "un Género" , "genre" ] , [ "un Estudio" , "studio" ] ]
+
+	if tipostatus=="premiere":
+		listfilters.pop(2)
+
+	n=0	
+	for filter in listfilters:
+		options,listoptions = futonoptions(data,filter[1])
+		searchtype = xbmcgui.Dialog()
+		seleccion = searchtype.select("Seleccione "+filter[0]+":", options)
+		if seleccion==-1:
+			value = ""
+		else:
+			value = listoptions[seleccion][1]
+		listvalue[n] = value
+		n = n+1
+
+	if len(search)==1:
+		inicial = search
+		search = ""
+	
+	urlsearch = url+".aspx?series="+inicial+"&network="+listvalue[0]+"&daycode="+listvalue[1]+"&statuscode="+listvalue[2]+"&genre="+listvalue[3]+"&studio="+listvalue[4]
+	listseries = findfuton(search,urlsearch,tipostatus)
+
+	return listseries
+
+def findfuton(search,url,tipostatus):
+	listseries = []
+	urlminiseries1 = "http://thefutoncritic.com/moviewatch.aspx?series=&network=&daycode=&statuscode=21&genre=mini-series&studio="
+	urlminiseries2 = "http://thefutoncritic.com/moviewatch.aspx?series=&network=&daycode=&statuscode=22&genre=mini-series&studio="
+	try:
+		data0 = scrapertools.cachePage(url)
+		data1 = ""
+		data2 = ""
+		if tipostatus<>"" and  tipostatus<>"premiere" and  tipostatus<>"moviewatch":
+			data1 = scrapertools.cachePage(urlminiseries1)
+			if tipostatus<>"premiere+miniseries":
+				data2 = scrapertools.cachePage(urlminiseries2)
+		data = data0+data1+data2
+	except:
+		return listseries
+
+	if tipostatus=="bbc":
+		search = search.upper()
+	elif tipostatus=="ended" or tipostatus=="foritem" or tipostatus=="noctv":
+		search = "(?:"+search.upper()+")[^<]*"
+	elif search<>"":
+		search = re.sub('^(?:The|the|THE)\s+(.+)$',lambda s: s.group(1),search)
+		search = "[^<]*"+search.upper()+"[^<]*"
+	else:
+		search = "[^<]+"
+
+	patronseries  = '<td><a href="([^"]+)">('+search+')</a></td>.?\s*'
+	patronseries += '<td>(.*?)</td>.?\s*'
+	patronseries += '<td>(.*?)</td>.?\s*'
+	patronseries += '<td>(.*?)</td>.?\s*'
+	patronseries += '<td>(.*?)</td>.?\s*'
+	patronseries += '<td>(.*?)</td>.?\s*</tr>'
+	matches = re.compile(patronseries,re.DOTALL).findall(data)
+	for match in matches:
+		if tipostatus=="current":
+ 			if "canceled" in match[6]:
+				continue
+			elif "mini-series" in match[6] and "not aired" not in match[5]:
+				continue
+		elif tipostatus=="ended" and "canceled" not in match[6] and "hiatus" not in match[6]:
+			if "mini-series" in match[6] and "not aired" not in match[5]:
+				pass
+			else:
+				continue
+		elif "premiere" in tipostatus and "airing" not in match[6]:
+			if "mini-series" in match[6] and "not aired" in match[5]:
+				pass
+			else:
+				continue
+
+		titulo = match[1]
+		titulo = formattitle(titulo)
+
+		url = "http://www.thefutoncritic.com"+match[0]
+
+		broadcast = match[2]
+		broadcast = re.sub('(?:\s+|<.*?>|\n)','',broadcast)
+		broadcast = re.sub(r"(\d+)/(\d+)/(\d+)",lambda date: date.group(2)+"/"+date.group(1)+"/"+date.group(3),broadcast)
+		broadcast = re.sub('-',' - ',broadcast)
+
+		updated = match[3]
+		matchup = re.match('(\d+)/(\d+)/(\d+)',updated)
+		if (matchup):
+			updated = matchup.group(2)+"/"+matchup.group(1)+"/"+matchup.group(3)
+
+		premiere = "0"
+		if "airing" in match[6]:
+			premiere = "1"
+ 		elif "not aired" in match[5] and "in the can" in match[6]:
+			premiere = "1"
+		if premiere == "1":
+			matchpre=re.match('^(\d+)/(\d+)/(\d+)',broadcast)
+			if (matchpre) and (matchup):
+				if matchpre.group(3)==matchup.group(3) and int(matchup.group(1))-int(matchpre.group(2))<=3:
+					premiere = "-1"
+				elif int(matchpre.group(3))==int(matchup.group(3))-1 and int(matchup.group(1))+12-int(matchpre.group(2))<=3:
+					premiere = "-1"
+			if "premiere" in tipostatus and premiere<>"-1":
+				continue
+
+		network = match[4]
+		network = re.sub('<.*?>','',network)
+		network = re.sub('\s+',' ',network)
+
+		timeslot = match[5]
+		timeslot = re.sub('(?:<.*?>|\n)','',timeslot)
+		timeslot = re.sub('\s+$','',timeslot)
+		timeslot = re.sub('\s+',' ',timeslot)
+		timeslot = re.sub(r"^[A-Za-z].*?$",lambda tslot: tslot.group(0)[0].upper()+tslot.group(0)[1:],timeslot)
+
+		status = match[6]
+		status = re.sub('<.*?>','',status)
+		status = re.sub('\s+',' ',status)
+
+		typeupdate = "Last Updated"
+		statusbroadcast=""
+		if "canceled" in status:
+			statusbroadcast="[Ended]"
+		elif "hiatus" in status:
+			statusbroadcast="[Current: Unknown at "+updated+"]"
+		elif "airing" in status:
+			if premiere=="-1":
+				airtxt = "Premiere"
+			else:
+				airtxt = "Current"
+			matchday = re.match('(?:Mondays|Tuesdays|Wednesdays|Thursdays|Fridays|Saturdays|Sundays)',timeslot)
+			if (matchday):
+				day=" "+matchday.group(0)
+			else:
+				day=""
+			statusbroadcast="["+airtxt+": Airing"+day+", next: "+updated+"]"
+			typeupdate = "Next Broadcast"
+		elif tipostatus=="moviewatch":
+			airtxt = timeslot
+			if premiere<>"0":
+				typeupdate = "Next Broadcast"
+			if premiere=="-1":
+				airtxt = "Premiere"
+				timeslot = timeslot+" (not completed)"
+			statusbroadcast="["+airtxt+": "+status+"]"
+		elif "mini-series" in status:
+			if premiere<>"0":
+				typeupdate = "Next Broadcast"
+			if "greenlighted" in status:
+				statusbroadcast="[Mini-Series: Aired/Airing, next US: "+updated+"]"
+			elif "Not aired" in timeslot:
+				airtxt = ""
+				if premiere=="-1":
+					airtxt = "Premiere, "
+					timeslot = timeslot+" (not completed)"
+				statusbroadcast="["+airtxt+"Mini-Series: Airing, next: "+updated+"]"
+			else:
+				statusbroadcast="[Mini-Series: Aired]"
+		else:
+			updated2=updated
+			if updated2=="???":
+				matchyear = re.search('\d{4}',status)
+				if (matchyear):
+					updated2=matchyear.group(0)+" or beyond"
+				else:
+					matchup = re.search('this\s[^\s]+',status)
+					if (matchup):
+						updated2=matchup.group(0).title()
+			if "new" in status:
+				statusbroadcast="[New: starts: "+updated2+"]"
+				typeupdate = "Starts"
+			elif "returning" in status:
+				statusbroadcast="[Current: On break, returns: "+updated2+"]"
+				typeupdate = "Returns"
+
+		status = formattitle(status)
+
+		titlefutonsearch = ftitlefuton(titulo,network)
+		titlefutonsearch = ftitlefutonsearch(titlefutonsearch)
+
+		listseries.append([ titulo , url , broadcast , network , timeslot , typeupdate , updated , status , statusbroadcast , titlefutonsearch ])
+
+	listseries.sort()
+	return listseries
+
+def findfutonstatus(serieslist,tipostatus):
+	search = ""
+	if tipostatus=="bbc" or tipostatus=="ended" or tipostatus=="foritem":
+		search=serieslist[0][0]
+	elif tipostatus=="noctv":
+		search=serieslist[-1][2]
+
+	statuslist = findfuton(search,FT_TSURL+".aspx?series=",tipostatus)
+	if len(statuslist)==0:
+		return serieslist
+
+	if tipostatus=="noctv" or  tipostatus=="foritem":
+		tipostatus="current"
+
+	tptitlesearch = ""
+	if tipostatus=="ended" or tipostatus=="varios":
+		tptitlesearch = "varios"
+
+	#check
+	titleeztvbbc = "Being Human|Doctor Who|Kitchen Nightmares|Primeval|Skins|Top Gear|Torchwood"
+	titlesearchbbc = "beinghumanuk|doctorwho2005|kitchennightmares|primeval|skins2008|topgear|torchwood|"
+
+	if tipostatus=="checksearch":
+		checksearchlist = runchecksearch(statuslist,serieslist,"futon",tptitlesearch)
+		return checksearchlist
+
+	OKBBC="0"
+	for serie in serieslist:
+		if serie[1]=="[Ended]" and tipostatus=="current":
+			serie[4] = "ended"
+			continue
+		elif serie[-1]+"|" in titlesearchbbc and tipostatus=="current":
+			if OKBBC=="0":
+				statusBBC = findeztvstatus(titleeztvbbc)
+				OKBBC="-1"
+			for status in statusBBC:
+				if serie[0]==status[0]:
+					serie[1] = status[1]
+					serie[4] = "bbc"
+					break
+			if serie[4]=="bbc":
+				continue
+		itemencontrado = searchgate(statuslist,serie[-1],"futon",tptitlesearch)
+		if len(itemencontrado)==1:
+			if "New" in itemencontrado[0][8] and tipostatus=="current":
+				serie[1] = re.sub('New','Current/New US',itemencontrado[0][8])
+			else:
+				serie[1] = itemencontrado[0][8]
+			serie[4] = itemencontrado[0][0]+";"+itemencontrado[0][1]+";"+itemencontrado[0][2]+";"+itemencontrado[0][3]+";"+itemencontrado[0][4]+";"+itemencontrado[0][5]+";"+itemencontrado[0][6]+";"+itemencontrado[0][7]+";"+serie[1]
+		elif len(itemencontrado)>1:
+			serie[4]="varios"
+
+	if tipostatus=="bbc" or tipostatus=="ended" or tipostatus=="varios":
+		if len(itemencontrado)>1:
+			serieslist = itemencontrado
+	return serieslist
+
+def findeztvstatus(search):
+	BBCstatus = []
+	try:
+		data = scrapertools.cachePage(EZURL)
+	except:
+		return BBCstatus
+
+	patronvideos  = '<a href="[^"]+" class="thread_link">('+search+')</a></td>\n\s+'
+	patronvideos += '<td class="forum_thread_post"><font class="[^"]+">(.*?)</font>'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+
+	for match in matches:		
+		# Titulo
+		titulo = match[0]		
+		# Status
+		status = match[1]
+		match1 = re.search('\d{2}(\d{2})-(\d{2})-(\d{2})',status,re.IGNORECASE)
+		if (match1):
+			day = int(match1.group(3))+1
+			month = int(match1.group(2))
+			year = int(match1.group(1))
+			if day>31:
+				day = 1
+				if month<12:
+					month = month+1
+				else:
+					month = 1
+					year = year+1
+			elif day>28 and month==2:
+				day = 1
+				month=3
+			elif day>30:
+				if month==4 or month==6 or month==9 or month==11:
+					day = 1
+					month = month+1				
+			mydate = str(day)+"/"+str(month)+"/"+str(year)
+			status = re.sub('\d{4}-\d{2}-\d{2}',mydate,status)
+		status = re.sub('(?:<b>|</b>)','',status)
+		if status=="Pending":
+			status = "On break, returns: ???"
+		if status<>"Ended":
+			status = "Current: "+status
+		status = "["+status+"]"
+
+		BBCstatus.append([ titulo , status ])
+
+	return BBCstatus
+
+def listinfofuton(params,url,category):
+	plot = ""
+	if params.has_key("plot"):
+		plot = urllib.unquote_plus( params.get("plot") )
+	datafuton = category
+	category = "The Futon Critic"
+	tituloserie = urlserie = ""
+	tipostatus = ""
+	statusS = ""
+	statustitle = ""
+	tipowatch = ""
+
+	matchinfo2=re.match('^([^;]*);([^;]*);([^;]*);([^;]*);([^;]*)$',datafuton)
+	if (matchinfo2):
+		tipostatus=matchinfo2.group(1)
+		titleS=matchinfo2.group(2)
+		urlS=matchinfo2.group(3)
+		statusS=matchinfo2.group(4)
+		titlesearch=matchinfo2.group(5)
+		if tipostatus=="bbc":
+			search = titleS
+			search = re.sub('[\\\\]?(?P<signo>[^\w\s\\\\])','\\\\\g<signo>',search)
+		else:
+			iniciosearch,titlesearch = findtsearch(titleS,urlS)
+			search = iniciosearch
+		serieslist=[ [ search , "" , "" , "" , "" , titlesearch ] ]
+		serieslist=findfutonstatus(serieslist,tipostatus)
+		i = len(serieslist)
+		if i>1:
+			alertvariossearch(i)
+			searchfutonlist(category,serieslist)
+			return
+		elif i==1 and serieslist[0][4]=="":
+			alertnoresultadosearch()
+			return
+		datafuton = serieslist[0][4]
+
+	matchinfo=re.match('^([^;]*);([^;]*);([^;]*);([^;]*);([^;]*);([^;]*);([^;]*);([^;]*);([^;]*)$',datafuton)
+	titulo=matchinfo.group(1)
+	urlf=matchinfo.group(2)
+	broadcast=matchinfo.group(3)
+	network=matchinfo.group(4)
+	timeslot=matchinfo.group(5)
+	typeupdate=matchinfo.group(6)
+	updated=matchinfo.group(7)
+	status=matchinfo.group(8)
+	statusbroadcast=matchinfo.group(9)
+
+	if "thefutoncritic" in url:
+		titulofuton = ftitlefuton(titulo,network)
+		iniciosearch,titlesearch = findtsearch(titulofuton,urlf)
+		titlesearchbbc = "beinghumanuk|doctorwho2005|kitchennightmares|primeval|skins2008|topgear|torchwood|"
+		if titlesearch+"|" in titlesearchbbc:
+			tipostatus = "bbc"
+			statusBBC = findeztvstatus(titulo)
+			if len(statusBBC)==1:
+				if "beyond" in status and "???" in statusBBC[0][1]:
+					pass
+				else:
+					statusS = statusBBC[0][1]
+		miseriectv,urlctv = findcasttv("CheckFav",iniciosearch,titlesearch,"futon","")
+		if urlctv<>"":
+			tituloserie = miseriectv
+			urlserie = urlctv
+		else:
+			miseriesy,urlsy = findseriesyonkis("","CheckFav",titlesearch,"futon")
+			if urlsy<>"":
+				tituloserie = miseriesy
+				urlserie = urlsy
+
+	if "Greenlighted" in status:
+		if tituloserie<>"" or "casttv" in url or "seriesyonkis" in url:
+			if "Not aired" in statusbroadcast:
+				statusbroadcast = re.sub('Not aired','Aired/Airing',statusbroadcast)
+			statustitle = "no US"
+			statusS = "Aired/Airing"
+
+	if "Current/New" in statusbroadcast:
+		statustitle="no US"
+		statusS = "Current"
+
+	if tipostatus=="bbc" and statusS<>"":
+		statustitle="BBC UK"
+
+	titulo = titulo.upper()
+	futoninfo = findfutoninfo(urlf)
+	if plot=="":
+		plot = titulo+": Network: "+network+". Broadcast History: "+broadcast+". Status: "+status+". "+typeupdate+": "+updated+". Time Slot: "+timeslot
+	plot = plot+futoninfo[6]
+
+	additem( CHANNELNAME , category , titulo , "" , "" , plot )
+	additem( CHANNELNAME , category , "Network: "+network , "" , "" , plot )
+	additem( CHANNELNAME , category , "Broadcast History (Date Start/End): "+broadcast , "" , "" , plot )
+	additem( CHANNELNAME , category , "Status: "+status , "" , "" , plot )
+	if statustitle<>"":
+		statusST = re.sub('(?:\[|\])','',statusS)
+		additem( CHANNELNAME , category , "Status "+statustitle+": "+statusST , "" , "" , plot )
+	additem( CHANNELNAME , category , typeupdate+": "+updated , "" , "" , plot )
+	additem( CHANNELNAME , category , "Time Slot: "+timeslot , "" , "" , plot )
+	if futoninfo[0]<>"":	
+		additem( CHANNELNAME , category , futoninfo[0]+": "+futoninfo[1] , "" , "" , plot )
+	if futoninfo[2]<>"":
+		additem( CHANNELNAME , category , "Additional Notes: "+futoninfo[2] , "" , "" , plot )
+	if futoninfo[4]<>"":
+		additem( CHANNELNAME , category , "Genre: "+futoninfo[4] , "" , "" , plot )
+	if futoninfo[5]<>"":
+		additem( CHANNELNAME , category , "Studio Information: "+futoninfo[5] , "" , "" , plot )
+	if futoninfo[3]<>"":
+		additem( CHANNELNAME , category , "Description: "+futoninfo[3] , "" , "" , plot )
+
+	if "Development" in status or "Telefilm" in status:
+		if "Mini-Series" not in futoninfo[4]:
+			tipowatch = "telefilm"
+	if tipowatch=="":
+		additem( CHANNELNAME , category , "Episodios:" , "" , "" , "" )
+
+	if "thefutoncritic" in url:
+		if tituloserie<>"":
+			if tipostatus=="bbc":
+				folderstatus = statusS
+			else:
+				folderstatus = statusbroadcast
+			foldertitle = tituloserie+"  -  "+folderstatus
+			addseriefolder( CHANNELNAME , "listados" , category+";"+tituloserie+";"+folderstatus+";"+datafuton , foldertitle , urlserie , "" , plot , "" , "" , "" )
+		elif tipowatch=="":
+			addsimplefolder( CHANNELNAME , "search" , category , "Buscar Serie" , "" , "" )
+	elif "casttv" in url or "seriesyonkis" in url:
+		title = urllib.unquote_plus( params.get("title") )
+		categoryback = urllib.unquote_plus( params.get("category") )
+		thumbnail = urllib.unquote_plus( params.get("thumbnail") )
+		if params.has_key("dataweb"):
+			serievistos = urllib.unquote_plus( params.get("serievistos") )
+			dataweb = urllib.unquote_plus( params.get("dataweb") )
+			categoryback = "Futon"+categoryback
+		else:
+			serievistos = ""
+			dataweb = ""
+			categoryback = re.sub('^\d+;[^;]*;[^;]*;[^;]*;[^;]*;','',categoryback)
+			categoryback = "Futon;"+categoryback
+		addseriefolder( CHANNELNAME , "listados" , categoryback , title , url , "" , plot , serievistos , dataweb , "" )
+	# ------------------------------------------------------------------------------------
+	EndDirectory(category,"",False,True)
+	# ------------------------------------------------------------------------------------
+
+def findfutoninfo(url):
+	try:
+		data = scrapertools.cachePage(url)
+	except:
+		info = [ "" , "" , "" , "" , "" , "" , "" ]
+		return info
+
+	tseasons = seasons = plotseasons = ""
+	match1 = re.search('<td>(CURRENT SEASON|SEASON\(S\)):<br>([^<]+)</td>',data,re.IGNORECASE)
+	if (match1):
+		seasons = match1.group(2)
+		tseasons = match1.group(1)
+		if tseasons=="CURRENT SEASON":
+			tseasons = tseasons.title()
+		else:
+			tseasons = tseasons.capitalize()
+		plotseasons = ". "+tseasons+": "+seasons
+
+	notes = plotnotes = ""
+	match2 = re.search('<td>ADDITIONAL NOTES:<br>([^<]+)</td>',data,re.IGNORECASE)
+	if (match2):
+		notes = match2.group(1)
+		notes = re.sub(r"(\d+)/(\d+)/(\d+)",lambda date: date.group(2)+"/"+date.group(1)+"/"+date.group(3),notes)
+		plotnotes = ". Additional Notes: "+notes
+
+	description = plotdesc = ""
+	match3 = re.search('<td>DESCRIPTION:<br>([^<]+)</td>',data,re.IGNORECASE)
+	if (match3):
+		description = match3.group(1)
+		plotdesc = ". Description: "+description
+
+	genre = plotgenre = ""
+	match4 = re.search('<td>GENRE\(S\):<br>(.*?)\s+</td>',data,re.DOTALL)
+	if (match4):
+		genre = match4.group(1)
+		genre = re.sub('\n','',genre)
+		genre = re.sub('&middot;','',genre)
+		genre = re.sub('<br>','.',genre)
+		genre = genre.title()
+		plotgenre = ". Genre: "+genre
+
+	studio = plotstudio = ""
+	match5 = re.search('<td>STUDIO INFORMATION:<br>(.*?)\s+</td>',data,re.DOTALL)
+	if (match5):
+		studio = match5.group(1)
+		studio = re.sub('\n','',studio)
+		studio = re.sub('&middot;','',studio)
+		studio = re.sub('<br>','.',studio)
+		plotstudio = ". Studio Information: "+studio+"."
+
+	plot = plotseasons+plotnotes+plotdesc+plotgenre+plotstudio
+
+	info = [ tseasons , seasons , notes , description , genre , studio , plot ]
+
+	return info
+
+def listadonuevos(params,url,category):
 	listadonvosupdate(category,False)
 
 def listadonvosupdate(category,listupdate):
-	logger.info("[casttv.py] listadonvosupdate")
-
 	animenuevos=[]
 	tipo = 2
 
@@ -2054,23 +2902,23 @@ def listadonvosupdate(category,listupdate):
 	# ------------------------------------------------------------------------------------
 
 def findlistadonvos():
-	logger.info("[casttv.py] findlistadonvos")
-
-	listafav = readfav("","","-1",CHANNELNAME)
+	listafav = readfav("","","-1|-2",CHANNELNAME)
 	nuevos = []
 
 	for serie in listafav:
 		serievistos,listanuevos=findnuevos(serie[0],serie[2],"-1")
 		if len(listanuevos)>0:
-			listanuevos.sort()
+			listanuevos.reverse()
+			n=0
 			for episodio in listanuevos:
 				if episodio[3] == "0":
 					nuevos.append([ episodio[0] , episodio[1] , episodio[9] , episodio[10] , episodio[2] , episodio[4] , episodio[5] , episodio[6] , serievistos , episodio[8] , episodio[7] ])
+					n=n+1
+					if serie[3]=="-2" and n==3:
+						break
 	return nuevos
 
 def detaildos(params,url,category):
-	logger.info("[casttv.py] detaildos")
-
 	title = urllib.unquote_plus( params.get("title") )
 	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
 	plot = urllib.unquote_plus( params.get("plot") )
@@ -2086,6 +2934,8 @@ def detaildos(params,url,category):
 	titlesearch=matchwebs.group(2)
 	miseriesy=matchwebs.group(3)
 	urlsy=matchwebs.group(4)
+	miseriectv=matchwebs.group(5)
+	urlctv=matchwebs.group(6)
 
 	titleshort = title
 	if date<>"":
@@ -2126,7 +2976,34 @@ def detaildos(params,url,category):
 	# Si el episodio tiene dato de temporada se busca en Subtítulos.es
 	if seasontvid<>"0":
 		miseriesub,urlsub,miep,listasubtitulos = findsubseries(iniciosearch,"V",titlesearch,seasontvid,episodiotv)
+
+	additem( CHANNELNAME , category , "VIDEOS :" , "" , "" , "" )
+	if "Nuevos" in category:
+		if urlctv<>"":
+			tituloserie = miseriectv
+			urlserie = urlctv
+		else:
+			tituloserie = miseriesy
+			urlserie = urlsy
+		#pasar a función = listasubs
+		serielist = [ [ iniciosearch , "" , "" , "" , "" , titlesearch ] ]
+		serielist = findfutonstatus(serielist,"foritem")
+		statusfuton = serielist[0][1]
+		datafuton = serielist[0][4]
+		network = ""
+		if datafuton=="ended" or datafuton=="bbc" or datafuton=="varios":
+			if datafuton=="bbc":
+				network=" (BBC)"
+			datafuton = datafuton+";"+tituloserie+";"+urlserie+";"+statusfuton+";"+serielist[0][5]
+		elif datafuton<>"":
+			matchnet=re.match('^[^;]*;[^;]*;[^;]*;([^;]+);',datafuton)
+			if (matchnet):
+				network=" ("+matchnet.group(1)+")"
+
+		foldertitle = tituloserie+network+"  -  "+statusfuton
+		foldertitle = re.sub('\s+\-\s+$','',foldertitle)
 			
+		addseriefolder( CHANNELNAME , "listados" , "Series VO - Consulta - ;"+tituloserie+";"+statusfuton+";"+datafuton , foldertitle , urlserie , "" , "" , "" , "" , "" )
 	# ------------------------------------------------------------------------------------
 	# Añade los enlaces a los videos
 	# ------------------------------------------------------------------------------------
@@ -2145,24 +3022,24 @@ def detaildos(params,url,category):
 	# Añade los enlaces a los Subtítulos
 	# ------------------------------------------------------------------------------------
 	if len(listasubtitulos)>0:
-		addsimplefolder( CHANNELNAME , "searchsub" , "Series VO - Subtítulos.es" , "SUBTITULOS - [Descargar] :" , "" , "" )
+		additem( CHANNELNAME , category , "SUBTITULOS - [Descargar] :" , "" , "" , "" )
+		addsimplefolder( CHANNELNAME , "listasubep" , "Series VO - Subtítulos.es - "+miseriesub , miseriesub+"  -  [Subtítulos]" , urlsub , "" )
 		additem( CHANNELNAME , category , miep , "" , "" , "" )
 		for subs in listasubtitulos:
 			addsimplefolder( CHANNELNAME , "subtitulo" , subs[4] , subs[0]+" ("+subs[1]+") - ["+subs[2]+"] ("+subs[5]+" descargas)" , subs[3] , DESCARGAS_THUMB )
 	else:
-		addsimplefolder( CHANNELNAME , "searchsub" , "Subtítulos.es" , "Buscar Subtitulos" , "" , "" )
 		if miseriesub<>"":
-			addsimplefolder( CHANNELNAME , "listasubep" , "Subtítulos.es - "+miseriesub , miseriesub+"  -  [Subtítulos]" , urlsub , "" )
+			addsimplefolder( CHANNELNAME , "searchsub" , "Series VO - Subtítulos.es" , "SUBTITULOS - [Descargar] :" , "" , "" )
+			addsimplefolder( CHANNELNAME , "listasubep" , "Series VO - Subtítulos.es - "+miseriesub , miseriesub+"  -  [Subtítulos]" , urlsub , "" )
+		else:
+			addsimplefolder( CHANNELNAME , "searchsub" , "Series VO - Subtítulos.es" , "Buscar Subtítulos" , "" , "" )
 	# ------------------------------------------------------------------------------------
 	EndDirectory(category,"",False,True)
 	# ------------------------------------------------------------------------------------
 
 def findvideoscasttv(url):
-	logger.info("[casttv.py] findvideoscasttv")
-
 	listacasttv = []
-	listactmirrors = []
-	
+	listactmirrors = []	
 	try:
 		data = scrapertools.cachePage(url)
 	except:
@@ -2191,26 +3068,13 @@ def findvideoscasttv(url):
 	return listacasttv,listactmirrors
 
 def play(params,url,category):
-	logger.info("[casttv.py] play")
-
 	title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
 	thumbnail = xbmc.getInfoImage( "ListItem.Thumb" )
 	plot = unicode( xbmc.getInfoLabel( "ListItem.Plot" ), "utf-8" )
-	server = params["server"]	
-	logger.info("[casttv.py] thumbnail="+thumbnail)
-	logger.info("[casttv.py] server="+server)
-
+	server = params["server"]
 	xbmctools.playvideo(CHANNELNAME,server,url,category,title,thumbnail,plot)
 
-	try:
-		if xbmcplugin.getSetting("subtitulo") == "true":
-			xbmcplugin.setSetting("subtitulo", "false")
-	except:
-		pass
-
 def serieupdate(miserievo,status,url,tipocontenido,channel):
-	logger.info("[casttv.py] serieupdate")
-
 	urlsearch0 = ""
 	if channel=="animeforos":
 		urlsearch0=url
@@ -2233,7 +3097,7 @@ def serieupdate(miserievo,status,url,tipocontenido,channel):
 	if len(listfav)==0:
 		respuesta = seriemenu("0","0",tipocontenido,seriefav,channel)
 		if respuesta==1:
-			upgradefav(miserievo,status,url,"-1","1",channel)
+			upgradefav(miserievo,status,url,"-2","1",channel)
 	else:
 		if listfav[0][3]=="-1":
 			respuesta = seriemenu("-1","-1",tipocontenido,seriefav,channel)
@@ -2241,26 +3105,34 @@ def serieupdate(miserievo,status,url,tipocontenido,channel):
 				upgradefav(miserievo,status,url,"1","1",channel)
 			elif respuesta==3:
 				upgradefav(miserievo,status,url,"0","1",channel)
+			elif respuesta==4:
+				upgradefav(miserievo,status,url,"-2","1",channel)
+		elif listfav[0][3]=="-2":
+			respuesta = seriemenu("-1","-2",tipocontenido,seriefav,channel)
+			if respuesta==2:
+				upgradefav(miserievo,status,url,"1","1",channel)
+			elif respuesta==3:
+				upgradefav(miserievo,status,url,"0","1",channel)
+			elif respuesta==4:
+				upgradefav(miserievo,status,url,"-1","1",channel)
 		elif listfav[0][3]=="0":
 			respuesta = seriemenu("-1","0",tipocontenido,seriefav,channel)
 			if respuesta==2:
 				upgradefav(miserievo,status,url,"1","1",channel)
 			elif respuesta==3:
-				upgradefav(miserievo,status,url,"-1","1",channel)
+				upgradefav(miserievo,status,url,"-2","1",channel)
 		elif listfav[0][3]=="1":
 			respuesta = seriemenu("-1","1",tipocontenido,seriefav,channel)
 			if respuesta==2:
-				upgradefav(miserievo,status,url,"-1","1",channel)
+				upgradefav(miserievo,status,url,"-2","1",channel)
 		if respuesta==1:
-				upgradefav(miserievo,status,url,"-1","0",channel)
+				upgradefav(miserievo,status,url,"","0",channel)
 	if channel=="casttv":
 		return serievistos,dataweb,respuesta
 	else:
 		return respuesta
 
 def seriemenu(tipofav,tiponuevos,tipocontenido,seriefav,channel):
-	logger.info("[casttv.py] seriemenu")
-
 	misfavtext="Mis Favoritas"
 	anexofavtext=""
 	if channel=="animeforos":
@@ -2268,16 +3140,21 @@ def seriemenu(tipofav,tiponuevos,tipocontenido,seriefav,channel):
 	if seriefav<>"":
 		anexofavtext="  ("+seriefav+")"
 
-	tipocontext=" Listado de Episodios "
-	if tipocontenido<>"" and tipocontenido.lower()<>"serie":
+	if tipocontenido=="" or tipocontenido.lower()=="serie" or tipocontenido=="NoFuton":
+		tipocontext=" Listado de Episodios "
+	elif "Consulta" in tipocontenido:
+		tipocontext=" Listado de Consulta de Episodios "
+	else:
 		tipocontext=""
 
 	seleccion = ""
 	opciones = []
 	opciones.append("Abrir"+tipocontext+" (opción por defecto)")
-	if tipofav=="0":
+	if channel=="casttv" and "NoFuton" not in tipocontenido:
+		opciones.append('Abrir Ficha en "The Futon Critic"')
+	if tipofav=="0" and "Consulta" not in tipocontenido:
 		opciones.append('Añadir a "'+misfavtext+'"'+anexofavtext)
-	elif tipofav=="-1":
+	elif tipofav=="-1" and "Consulta" not in tipocontenido:
 		opciones.append('Eliminar de "'+misfavtext+'"'+anexofavtext)
 		if tiponuevos=="1":
 			opciones.append('Activar en "'+misfavtext+'"'+anexofavtext)
@@ -2285,16 +3162,25 @@ def seriemenu(tipofav,tiponuevos,tipocontenido,seriefav,channel):
 			opciones.append('Desactivar en "'+misfavtext+'"'+anexofavtext)
 			if tiponuevos=="0":
 				opciones.append('Activar Seguimiento en "Nuevos Episodios"')
-			elif tiponuevos=="-1":
+			else:
 				opciones.append('Desactivar Seguimiento en "Nuevos Episodios"')
+				if tiponuevos=="-1":
+					opciones.append('Activar Límite de 3 episodios en "Nuevos Episodios"')
+				elif tiponuevos=="-2":
+					opciones.append('Desactivar Límite de 3 episodios en "Nuevos Episodios"')
+
 	searchtype = xbmcgui.Dialog()
 	seleccion = searchtype.select("Seleccione una opción:", opciones)
+
+	if channel=="casttv" and "NoFuton" not in tipocontenido:
+		if seleccion==1:
+			seleccion="Futon"
+		elif seleccion>1:
+			seleccion= seleccion-1
 
 	return seleccion
 
 def episodiomenu(params,url,category):
-	logger.info("[casttv.py] episodiomenu")
-
 	title = urllib.unquote_plus( params.get("title") )
 	tipovisto = urllib.unquote_plus( params.get("tipovisto") )
 	serievistos = urllib.unquote_plus( params.get("serievistos") )
@@ -2306,11 +3192,12 @@ def episodiomenu(params,url,category):
 	serieback= matchdataback.group(1)
 	urlback= matchdataback.group(2)
 
-	episodiomenugnral(params,title,url,category,serievistos,serieback,urlback,season,episodio,dataweb,tipovisto,CHANNELNAME,"-1")
+	if "Consulta" in category:
+		detaildos(params,url,category)
+	else:
+		episodiomenugnral(params,title,url,category,serievistos,serieback,urlback,season,episodio,dataweb,tipovisto,CHANNELNAME,"-1")
 
 def episodiomenugnral(params,title,url,category,serievistos,serieback,urlback,season,episodio,dataweb,tipovisto,channel,urlOK):
-	logger.info("[casttv.py] episodiomenugnral")
-
 	title0 = re.sub('\s+\-\s+\[U?L?N?W\]$','',title)
 	title0 = re.sub('\s\-\s(?:ES|LT)$','',title0)
 
@@ -2439,8 +3326,6 @@ def episodiomenugnral(params,title,url,category,serievistos,serieback,urlback,se
 		listadosupdate(serieback,urlback,category,serievistos,dataweb,True)
 
 def readfav(seriesearch0,urlsearch0,tiponuevos,channel):
-	logger.info("[casttv.py] readfav")
-
 	if seriesearch0<>"":	
 		seriesearch = re.sub('(?P<signo>\(|\)|\'|\"|\[|\]|\.|\?|\+)','\\\\\g<signo>',seriesearch0)
 	else:
@@ -2477,10 +3362,7 @@ def readfav(seriesearch0,urlsearch0,tiponuevos,channel):
 	return favlist
 
 def upgradefav(serie,status,url,seguirnuevos,tipo,channel):
-	logger.info("[casttv.py] upgradefav")
-
 	#el status se podría quitar, se guarda sólo por mantener el formato...
-
 	favlist = []
 	filename = channel+'fav.txt'
 	fullfilename = os.path.join(VISTO_PATH,filename)
@@ -2511,8 +3393,6 @@ def upgradefav(serie,status,url,seguirnuevos,tipo,channel):
 	favfile.close()
 
 def readvisto(serie,tipo,channel):
-	logger.info("[casttv.py] readvisto")
-
 	if serie<>"":	
 		seriesearch = re.sub('(?P<signo>\(|\)|\'|\"|\[|\]|\.|\?|\+)','\\\\\g<signo>',serie)
 	else:
@@ -2522,8 +3402,7 @@ def readvisto(serie,tipo,channel):
 		tipos="(?:1|2|4)"
 	else:
 		tipos="[^;]+"
-
-
+	
 	encontrado = "0"
 	vistolist = []
 	filename = channel+'.txt'
@@ -2551,11 +3430,8 @@ def readvisto(serie,tipo,channel):
 	return vistolist
 
 def upgradevisto(serie,titulo,url,season,episodio,tipo,channel,urlOK):
-	logger.info("[casttv.py] upgradevisto")
-
-	#urlOK añadido para Mcanime en Anime(Foros) por los enlaces que genéricos sin títulos...  
+	#urlOK añadido para Mcanime en Anime(Foros) por los enlaces genéricos sin títulos...  
 	#urlOK indica si se usa la url ("0") o no ("-1") para identificar los episodios vistos 
-
 	vistolist = []
 	encontrado = "0"
 	detener = "0"
@@ -2695,7 +3571,6 @@ def alertcontinuar(tipo,tipof):
 
 def alertcontinuarT():
 	advertencia = xbmcgui.Dialog()
-
 	linea1 = "Se desmarcarán todos los episodios."
 	linea2 = "¿Desea continuar?"
 	resultado = advertencia.yesno('pelisalacarta' , linea1 , linea2 )
@@ -2714,8 +3589,6 @@ def alertnocompletado(porcentaje):
 	return resultado
 
 def subtitulo(params,url,category):
-	logger.info("[casttv.py] subtitulo")
-
 	misub = urllib.unquote_plus( params.get("title") )
 	matchC = re.search('\(([^\)]+)Completado\)',misub)
 	if (matchC):
@@ -2725,20 +3598,11 @@ def subtitulo(params,url,category):
 		else:
 			return
 
-	titulosub = category
+	titulosub = re.sub(';[^;]*$','',category)
+	urlvye = re.sub('^[^;]*;[^;]*;','',category)
 
-	titulosub = re.sub('(?:\\\\|\/|\:|\*|\?|\"|\<|\>|\|)','',titulosub)
+	titulosub = re.sub('(?:\\\\|\/|\,|\.|\;\:|\?|\¿|\¡|\º|\ª|\"|\=|\<|\>|\*|\+|\Ç|\´|\¨|\|)','',titulosub)
 		
-	downloadpath = downloadtools.getDownloadPath()
-
-	SUB_PATH = xbmc.translatePath( os.path.join( downloadpath , 'Subtitulos' ) )
-
-	# Crea el directorio si no existe
-	try:
-		os.mkdir(SUB_PATH)
-	except:
-		pass
-
 	match = re.match('([^;]+);([^;]+)$',titulosub)
 	titulo1 = match.group(1)
 	titulo2 = match.group(2)
@@ -2748,7 +3612,7 @@ def subtitulo(params,url,category):
 
 	#OKuser = "0"
 	if os.path.exists(fullfilename):
-		#quito por ahora la posibilidad de sobreescribir, hay algún problema y no se puede aplicar???
+		#quito por ahora la posibilidad de sobreescribir
 		#respuesta = alerttituloarchivo(filename)
 		#if respuesta:
 		#	OKuser = "-1"
@@ -2780,22 +3644,58 @@ def subtitulo(params,url,category):
 	else:
 		return
 
-	downloadtools.downloadfileGzipped(url,fullfilename)
+	try:
+		downloadtools.downloadfileGzipped(url,fullfilename)
+	except:
+		try:
+			subtitulovye(urlvye,fullfilename)
+		except:
+			#una alerta aquí cuelga la xbox...
+			return
+
+	if not os.path.exists(fullfilename):
+		return
 
 	Dialogfin = xbmcgui.DialogProgress()
 	resultado = Dialogfin.create('pelisalacarta' , 'El Subtítulo descargado se activará' , 'automáticamente en la próxima reproducción' )
-	if os.path.exists(fullfilename): # Añadido por bandavi
-		from shutil import copy2
-		copy2(fullfilename,os.path.join( config.DATA_PATH, 'subtitulo.srt' ))
-		try:
-			xbmcplugin.setSetting("subtitulo", "true")
-		except:
-			try:
-				config.setSetting("subtitulo", "true")
-			except:
-				pass
-
+	#Añadido por bandavi
+	from shutil import copy2
+	copy2(fullfilename,SUBTEMP_PATH)
+	config.setSetting("subtitulo", "true")
 	Dialogfin.close()
+
+def subtitulovye(urlvye,fullfilename):
+	listainicios=[ "0" ]
+	sublist = []
+	try:
+		data = scrapertools.cachePage(urlvye+"0")
+	except:
+		return	
+	patronvideos = 'href=\"javascript\:list(?:\n\(|\()\'(\d+)\','
+	matches = re.compile(patronvideos,re.IGNORECASE).findall(data)
+	for match in matches:
+		listainicios.append(str(match))
+	for inicio in listainicios:
+		urlL = urlvye+inicio
+		dataL = scrapertools.cachePage(urlL)
+		patronvideos  = '<tr[^>]+><td><div[^>]+>(\d+)</div>'
+		patronvideos += '</td><td><div[^>]+>\d+</div></td><td><div[^>]+><img src="images/table_(?:save.png|row_insert.png)"[^>]*></div></td><td><div[^>]+><a href="[^"]+">[^<]+</a></div></td>'
+		patronvideos += '<td[^>]*>(\d+:\d+:\d+,\d+\s-->\s\d+:\d+:\d+,\d+)</td>'
+		patronvideos += '<td[^>]*>(.*?)</td></tr>'
+		matches = re.compile(patronvideos,re.DOTALL).findall(dataL)
+		for match in matches:
+			# Secuencia
+			secuencia = match[0]
+			# Tiempos
+			tiempos = match[1]
+			# Texto
+			text=re.sub('<.*?>','',match[2])
+			sublist.append([ secuencia , tiempos , text ])
+	subfile = open(fullfilename,"w")
+	for sub in sublist:
+		subfile.write(sub[0]+'\n'+sub[1]+'\n'+sub[2]+'\n\n')
+	subfile.close()
+	return
 
 def alertdescarga(filename):
 	advertencia = xbmcgui.Dialog()
@@ -2840,49 +3740,67 @@ def alertnoresultadosearch():
 	advertencia = xbmcgui.Dialog()
 	resultado = advertencia.ok('pelisalacarta' , 'La Búsqueda no ha obtenido Resultados.' , '')
 
+def alertvariossearch(nitems):
+	advertencia = xbmcgui.Dialog()
+	itemstxt=""
+	line2=""
+	if nitems==10:
+		itemstxt='al menos '
+		line2='(se muestran sólo los 10 primeros)'
+	resultado = advertencia.ok('pelisalacarta' , 'La Búsqueda ha obtenido '+itemstxt+str(nitems)+' Resultados.' , line2 )
+
 def alertnofav():
 	advertencia = xbmcgui.Dialog()
 	resultado = advertencia.ok('CastTV' , 'No se han añadido Series a "Mis Favoritas".' , '')
 
+def addfolder( canal , accion , category , title , url , thumbnail, plot ):
+	listitem = xbmcgui.ListItem( title, iconImage="DefaultFolder.png", thumbnailImage=thumbnail )
+	listitem.setInfo( "video", { "Title" : title, "Plot" : plot } )
+	itemurl = '%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s' % ( sys.argv[ 0 ] , canal , accion , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) )
+	xbmcplugin.addDirectoryItem( handle = pluginhandle, url = itemurl , listitem=listitem, isFolder=True)
+
 def addsimplefolder( canal , accion , category , title , url , thumbnail ):
-	logger.info("[casttv.py] addsimplefolder")
 	listitem = xbmcgui.ListItem( title, iconImage="DefaultFolder.png", thumbnailImage=thumbnail )
 	itemurl = '%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s' % ( sys.argv[ 0 ] , canal , accion , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) )
 	xbmcplugin.addDirectoryItem( handle = pluginhandle, url = itemurl , listitem=listitem, isFolder=True)
 
-def addseriefolder( canal , accion , category , title , url , thumbnail , serievistos , dataweb ):
-	logger.info("[casttv.py] addsimplefolder")
+def addseriefolder( canal , accion , category , title , url , thumbnail , plot , serievistos , dataweb , databack ):
 	listitem = xbmcgui.ListItem( title, iconImage="DefaultFolder.png", thumbnailImage=thumbnail )
-	itemurl = '%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&serievistos=%s&dataweb=%s' % ( sys.argv[ 0 ] , canal , accion , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( serievistos ) , urllib.quote_plus( dataweb ) )
+	listitem.setInfo( type="Video", infoLabels={ "Title" : title, "Plot" : plot } )
+	itemurl = '%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&serievistos=%s&dataweb=%s&databack=%s' % ( sys.argv[ 0 ] , canal , accion , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , urllib.quote_plus( serievistos ) , urllib.quote_plus( dataweb ) , urllib.quote_plus( databack ) )
 	xbmcplugin.addDirectoryItem( handle = pluginhandle, url = itemurl , listitem=listitem, isFolder=True)
 
 def addnewfolder( canal , accion , category , title , url , thumbnail , plot , date , dataweb , seasontvid , seasontv , serievistos , web , episodiotv , databack , tipovisto ):
-	logger.info("[casttv.py] addnewfolder")
 	listitem= xbmcgui.ListItem( title, iconImage="DefaultFolder.png", thumbnailImage=thumbnail )
 	listitem.setInfo( type="Video", infoLabels={ "Title" : title, "Plot" : plot, "Date" : date } )
 	itemurl = '%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&date=%s&dataweb=%s&seasontvid=%s&seasontv=%s&serievistos=%s&web=%s&episodiotv=%s&databack=%s&tipovisto=%s' % ( sys.argv[ 0 ] , canal , accion , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , urllib.quote_plus( date ) , urllib.quote_plus( dataweb ) , urllib.quote_plus( seasontvid ) , urllib.quote_plus( seasontv ) , urllib.quote_plus( serievistos ) , urllib.quote_plus( web ) , episodiotv , urllib.quote_plus( databack ) , urllib.quote_plus( tipovisto ) )
 	xbmcplugin.addDirectoryItem( handle = pluginhandle, url = itemurl , listitem=listitem, isFolder=True)
 
 def addnewvideo( canal , accion , category , server , title , url , thumbnail, plot ):
-	logger.info('[casttv.py] addnewvideo( "'+canal+'" , "'+accion+'" , "'+category+'" , "'+server+'" , "'+title+'" , "' + url + '" , "'+thumbnail+'" , "'+plot+'")"')
 	listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail )
 	listitem.setInfo( "video", { "Title" : title, "Plot" : plot } )
 	itemurl = '%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&server=%s' % ( sys.argv[ 0 ] , canal , accion , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , server )
 	xbmcplugin.addDirectoryItem( handle = pluginhandle, url=itemurl, listitem=listitem, isFolder=False)
 
 def additem( canal , category , title , url , thumbnail, plot ):
-	logger.info('[casttv.py] additem')
 	listitem = xbmcgui.ListItem( title, iconImage=HD_THUMB, thumbnailImage=thumbnail )
 	listitem.setInfo( "video", { "Title" : title, "Plot" : plot } )
 	itemurl = '%s?channel=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s' % ( sys.argv[ 0 ] , canal , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) )
 	xbmcplugin.addDirectoryItem( handle = pluginhandle, url=itemurl, listitem=listitem, isFolder=False)
 
 def ayuda(params,url,category):
-	logger.info("[casttv.py] ayuda")
-
-	additem( CHANNELNAME , category , "--------------------------------------------- Info ----------------------------------------------" , "" , HELP_THUMB , "" )
-	additem( CHANNELNAME , category , "Teclado: búsqueda alternativa en CastTV y SeriesYonkis (hasta encontrar resultados)" , "" , "http://www.mimediacenter.info/xbmc/pelisalacarta/posters/buscador.png" , "" )
-	additem( CHANNELNAME , category , "------------------------------------------ Leyenda ------------------------------------------" , "" , HELP_THUMB , "" )
+	info1 = "Canal [excepto Aptdo Mis Favoritas]: Para conocer el status de Favorita de una serie, compruebe el menú que se muestra al abrir la carpeta correspondiente. El icono de los listados puede no indicar el status correcto, porque se busca únicamente por el literal del título para no ralentizar. El menú de Serie si indicará el status real, conforme a las variantes de títulos recogidas, hasta el momento, en el canal."
+	info2 = "Series VO - Buscar - Teclado: búsqueda alternativa en CastTV y SeriesYonkis (hasta encontrar resultados)."
+	info3 = "Premiere: Estreno de los últimos tres meses"
+	info4 = "Series VO - Vistas: Distintas de Mis Favoritas"
+	info5 = 'Series VO - Mis Favoritas: El primer "episodio" de las Favoritas sin Vistos se trata como Nuevo Episodio (al igual que los Posteriores a [LW])'
+	additem( CHANNELNAME , category , "------------------------------------ Info: 27/08/2010 ------------------------------------" , "" , HELP_THUMB , "" )
+	additem( CHANNELNAME , category , info5 , "" , HD_THUMB , info5 )
+	additem( CHANNELNAME , category , info4 , "" , HD_THUMB , info4 )
+	additem( CHANNELNAME , category , info1 , "" , HD_THUMB , info1 )
+	additem( CHANNELNAME , category , info2 , "" , "http://www.mimediacenter.info/xbmc/pelisalacarta/posters/buscador.png" , info2 )
+	additem( CHANNELNAME , category , info3 , "" , HD_THUMB , info3 )
+	additem( CHANNELNAME , category , "------------------------------------------- Leyenda -------------------------------------------" , "" , HELP_THUMB , "" )
 	additem( CHANNELNAME , category , "[LW]: Último Episodio Visto [Last Watched]" , "" , HELP_THUMB , "" )
 	additem( CHANNELNAME , category , "[W]: Episodio Visto [Watched]" , "" , HELP_THUMB , "" )
 	additem( CHANNELNAME , category , "[UW]: Episodio No Visto [UnWatched]" , "" , HELP_THUMB , "" )
@@ -2898,24 +3816,65 @@ def ayuda(params,url,category):
 	additem( CHANNELNAME , category , "Nuevos Episodios (posteriores a [LW]) [Aptdo Mis Favoritas]" , "" , STARGREEN2_THUMB , "" )
 	additem( CHANNELNAME , category , "Subtítulo - [Descargar]" , "" , DESCARGAS_THUMB , "" )
 	additem( CHANNELNAME , category , "Mensaje o Encabezado (sin acción)" , "" , HD_THUMB , "" )
+	#additem( CHANNELNAME , category , "-------------------------------------------- Tools --------------------------------------------" , "" , HELP_THUMB , "" )
+	#addsimplefolder( CHANNELNAME , "checksearchgate" , "" , "Herramienta de Revisión de las búsquedas de Títulos" , "" , HELP_THUMB )
 	# ------------------------------------------------------------------------------------
 	EndDirectory(category,"",False,True)
 	# ------------------------------------------------------------------------------------
 
 def ftitlectvsearch(title):
-	title = re.sub('^All In$','(Korean) All In',title)
-	title = re.sub('^Crash$','Crash (US)',title)
-	title = re.sub('^Doctor Who$','Doctor Who 2005',title)
-	title = re.sub('^Hell\'s Kitchen$','Hells Kitchen (US)',title)
-	title = re.sub('^Heroes$','Heroes (USA)',title)
-	title = re.sub('^House$','House MD',title)
-	title = re.sub('^Life$','Life (USA)',title)
-	title = re.sub('^Life on Mars$','Life on Mars (USA)',title)
-	title = re.sub('^Lost$','Lost (2004)',title)
-	title = re.sub('^Survivor$','Survivor (Reality Show)',title)
-	title = re.sub('^The City','City (2008)',title)
-	title = re.sub('^The Office$','The Office (US)',title)
-	title = re.sub('^The Prisoner$','The Prisoner (1967)',title)
+	inicial = title[0:1]
+	if inicial=="A":
+		title = re.sub('^All In$','(Korean) All In',title)
+		title = re.sub('^Are You Smarter Than a Fifth Grader\?$','Are You Smarter Than a Fifth Grader\? (2007)',title)
+	elif inicial=="B":
+		title = re.sub('^Being Human$','Being Human (UK)',title)
+	elif inicial=="C":
+		title = re.sub('^Crash$','Crash (US)',title)
+		title = re.sub('^Cupid$','Cupid (2009)',title)
+	elif inicial=="D":
+		title = re.sub('^Deal or No Deal$','Deal or No Deal (2008)',title)
+		title = re.sub('^Doctor Who$','Doctor Who 2005',title)
+	elif inicial=="E":
+		title = re.sub('^Eleventh Hour$','Eleventh Hour (2008)',title)
+		title = re.sub('^Expedition Africa$','Expedition Africa: Stanley & Livingstone',title)
+	elif inicial=="H":
+		title = re.sub('^Hawaii Five.*?$','Hawaii Five0',title)
+		title = re.sub('^Hell\'s Kitchen$','Hells Kitchen (US)',title)
+		title = re.sub('^Heroes$','Heroes (USA)',title)
+		title = re.sub('^House$','House MD',title)
+	elif inicial=="K":
+		title = re.sub('^Kitchen Nightmares$','Kitchen Nightmares (US)',title)
+		title = re.sub('^Knight Rider$','Knight Rider (2008)',title)
+	elif inicial=="L":
+		title = re.sub('^Law \& Order$','Law & Order (1990)',title)
+		title = re.sub('^Life$','Life (USA)',title)
+		title = re.sub('^Life on Mars$','Life on Mars (USA)',title)
+		title = re.sub('^Lost$','Lost (2004)',title)
+	elif inicial=="M":
+		title = re.sub('^Meet the Browns$','Tyler Perrys Meet the Browns',title)
+		title = re.sub('^Melrose Place$','Melrose Place (1992)',title)
+	elif inicial=="P":
+		title = re.sub('^Pawn Star\$$','Pawn Stars',title)
+	elif inicial=="Q":
+		title = re.sub('^Queer as Folk$','Queer as Folk (US)',title)
+	elif inicial=="S":
+		title = re.sub('^Shameless$','Shameless (UK)',title)
+		title = re.sub('^Skins$','Skins (2008)',title)
+		title = re.sub('^Southern Belles$','Southern Belles: Louisville',title)
+		title = re.sub('^Spartacus$','Spartacus: Blood and Sand',title)
+		title = re.sub('^Survivor$','Survivor (Reality Show)',title)
+		title = re.sub('^Swords: Lives on the Line$','Swords: Life on the Line',title)
+	elif inicial=="T":
+		title = re.sub('^The Beast$','The Beast (2009)',title)
+		title = re.sub('^The City','City (2008)',title)
+		title = re.sub('^The Legend$','The Legend (MBC)',title)
+		title = re.sub('^The Office$','The Office (US)',title)
+		title = re.sub('^The Prisoner$','The Prisoner (1967)',title)
+		title = re.sub('^The Wanted$','The Wanted (2009)',title)
+		title = re.sub('^Top Gear$','Top Gear (UK)',title)
+	else:
+		title = re.sub('^18 Kids and Counting$','19 Kids and Counting',title)
 	title = title.lower()
 	title = re.sub('^the[^\w]+','',title)
 	title = re.sub('[^\w]+and[^\w]+','',title)
@@ -2923,19 +3882,55 @@ def ftitlectvsearch(title):
 	return title
 
 def ftitlesubsearch(title):
-	title = re.sub('^Alice$','Alice (BR)',title)
-	title = re.sub('^Crash$','Crash (US)',title)
-	title = re.sub('^Heroes$','Heroes (USA)',title)
-	title = re.sub('^Krod Mandoon$','Kröd Mändoon',title)
-	title = re.sub('^Life$','Life (USA)',title)
-	title = re.sub('^Life 2009$','Life (UK)',title)
-	title = re.sub('^Life on Mars$','Life on Mars (UK)',title)
-	title = re.sub('^Lost$','Lost (2004)',title)
-	title = re.sub('^Roomates$','Roommates',title)
-	title = re.sub('^Scrubs Interns$','Webisode Series Scrubs Interns',title)
-	title = re.sub('^Shippuden$','Shippuuden',title)
-	title = re.sub('^Survivor$','Survivor (Reality Show)',title)
-	title = re.sub('^The Office$','The Office (US)',title)
+	inicial = title[0:1]
+	if inicial=="A":
+		title = re.sub('^Alice$','Alice (BR)',title)
+	elif inicial=="B":
+		title = re.sub('^BBC The Cell$','The Cell (BBC)',title)
+		title = re.sub('^Being Human$','Being Human (UK)',title)
+	elif inicial=="C" or inicial=="c":
+		title = re.sub('^coupling$','Coupling (UK)',title)
+		title = re.sub('^Crash$','Crash (US)',title)
+		title = re.sub('^Cupid$','Cupid (2009)',title)
+	elif inicial=="D":
+		title = re.sub('^Dallas$','Dallas 1978',title)
+	elif inicial=="E":
+		title = re.sub('^Eleventh Hour$','Eleventh Hour (2008)',title)
+	elif inicial=="H":
+		title = re.sub('^Heroes$','Heroes (USA)',title)
+	elif inicial=="I":
+		title = re.sub('^Identity$','Identity (UK)',title)
+	elif inicial=="j":
+		title = re.sub('^jonas$','Jonas LA',title)
+	elif inicial=="K":
+		title = re.sub('^Knight Rider$','Knight Rider (2008)',title)
+		title = re.sub('^Krod Mandoon and the Flaming Sword of Fire$','Krd Mndoon and the flaming sword of fire',title)
+	elif inicial=="L":
+		title = re.sub('^Law and Order$','Law and Order (1990)',title)
+		title = re.sub('^Life$','Life (USA)',title)
+		title = re.sub('^Life 2009$','Life (UK)',title)
+		title = re.sub('^Life on Mars$','Life on Mars (UK)',title)
+		title = re.sub('^Lost$','Lost (2004)',title)
+	elif inicial=="M":
+		title = re.sub('^MTV The City','City (2008)',title)
+	elif inicial=="N":
+		title = re.sub('^Naruto Shippuden','Naruto Shippuuden',title)
+	elif inicial=="R":
+		title = re.sub('^Roomates$','Roommates',title)
+	elif inicial=="S":
+		title = re.sub('^Scrubs Interns$','Webisode Series Scrubs Interns',title)
+		title = re.sub('^Shameless$','Shameless (UK)',title)
+		title = re.sub('^Skins$','Skins (2008)',title)
+		title = re.sub('^Star Trek$','Star Trek: The Original Series',title)
+		title = re.sub('^Survivor$','Survivor (Reality Show)',title)
+	elif inicial=="T":
+		title = re.sub('^The Beast$','The Beast (2009)',title)
+		title = re.sub('^The Office$','The Office (US)',title)
+		title = re.sub('^The phantom MiniSerie$','The Phantom',title)
+		title = re.sub('^Top Gear$','Top Gear (UK)',title)
+		title = re.sub('^Trinity$','Trinity (UK)',title)
+	else:
+		title = re.sub('^8 Simple rules$','8 Simple Rules for Dating My Teenage Daughter',title)
 	title = title.lower()
 	title = re.sub('^the[^\w]+','',title)
 	title = re.sub('[^\w]+and[^\w]+','',title)
@@ -2944,24 +3939,140 @@ def ftitlesubsearch(title):
 
 def ftitletvsearch(title):
 	title = re.sub('^ALF$','ALF (Alien Life Form)',title)
+	title = re.sub('^Beast, The$','The Beast (2009)',title)
+	title = re.sub('^Being Human$','Being Human (UK)',title)
 	title = re.sub('^Crash$','Crash (US)',title)
 	title = re.sub('^CSI\: Crime Scene Investigation$','CSI',title)
 	title = re.sub('^Highlander\: The Raven$','The Raven Highlander',title)
 	title = re.sub('^Heroes$','Heroes (USA)',title)
 	title = re.sub('^House$','House MD',title)
-	title = re.sub('^Knight Rider \(2008\)$','Knight Rider',title)
 	title = re.sub('^Law \& Order\: Special Victims Unit$','Law & Order: SVU',title)
+	title = re.sub('^Law \& Order$','Law & Order (1990)',title)
 	title = re.sub('^Lost$','Lost (2004)',title)
 	title = re.sub('^Life$','Life (USA)',title)
 	title = re.sub('^Pok..mon$','Pokemon',title)
+	title = re.sub('^Skins$','Skins (2008)',title)
 	title = re.sub('^Survivor$','Survivor (Reality Show)',title)
 	title = re.sub('^Survivors$','Survivors 70s',title)
-	title = re.sub('^The Office$','The Office (US)',title)
+	title = re.sub('^Office, The$','The Office (US)',title)
 	title = title.lower()
 	title = re.sub('[^\w]+the$','',title)
 	title = re.sub('^the[^\w]+','',title)
 	title = re.sub('[^\w]+and[^\w]+','',title)
 	title = re.sub('[^\w]+','',title)
+	return title
+
+def ftitlefutonsearch(title):
+	title = title.lower()
+	inicial = title[0:1]
+	if inicial=="a":
+		title = re.sub('^america\'s most wanted\: america strikes back$','americas most wanted',title)
+	elif inicial=="c":
+		title = re.sub('^city, the','city (2008)',title)
+		title = re.sub('^crash$','crash (us)',title)
+		title = re.sub('^csi\: crime scene investigation$','csi',title)
+		title = re.sub('^csi\: new york$','csi ny',title)
+	elif inicial=="d":
+		title = re.sub('^doctor who$','doctor who 2005',title)
+	elif inicial=="e":
+		title = re.sub('^eight simple rules$','8 Simple Rules for Dating My Teenage Daughter',title)
+	elif inicial=="h":
+		title = re.sub('^hawaii five.*?$','hawaii five0',title)
+		title = re.sub('^heroes$','heroes (usa)',title)
+		title = re.sub('^hell\'s kitchen$','hells kitchen (us)',title)
+		title = re.sub('^house$','house md',title)
+	elif inicial=="k":
+		title = re.sub('^knight rider$','knight rider (2008)',title)
+		title = re.sub('^krod mandoon & the flaming sword of fire$','Krd Mndoon and the flaming sword of fire',title)
+	elif inicial=="l":
+		title = re.sub('^law \& order\: special victims unit$','law & order: svu',title)
+		title = re.sub('^law \& order$','law & order (1990)',title)
+		title = re.sub('^losing it with jillian$','losing it with jillian michaels',title)
+	elif inicial=="m":
+		title = re.sub('^melrose place$','melrose place (2009)',title)
+	elif inicial=="s":
+		title = re.sub('^seventh heaven$','7th heaven',title)
+		title = re.sub('^survivor$','survivor (reality show)',title)
+		title = re.sub('^survivors$','survivors 2008',title)
+	elif inicial=="o":
+		title = re.sub('^office, the$','the office (us)',title)
+	elif inicial=="q":
+		title = re.sub('^queer as folk$','queer as folk (us)',title)
+	elif inicial=="t":
+		title = re.sub('^third rock from the sun$','3rd rock from the sun',title)
+	elif inicial=="v":
+		title = re.sub('^v$','v (2009)',title)
+	else:
+		title = re.sub('^2m2mm$','2months2million',title)
+	title = re.sub('[^\w]+the$','',title)
+	title = re.sub('^the[^\w]+','',title)
+	#check: quitar los "the" intermedios en todas las webs
+	title = re.sub(', the:','',title)
+	title = re.sub('[^\w]+and[^\w]+','',title)
+	title = re.sub('[^\w]+','',title)
+	return title
+
+def ftitlefuton(title,network):
+	title = title.lower()
+	if network=="ABC":
+		title = re.sub('^cupid$','cupid (2009)',title)
+		title = re.sub('^life on mars$','life on mars (usa)',title)
+		title = re.sub('^lost$','lost (2004)',title)
+		title = re.sub('^beast, the$','beast (2001)',title)
+		title = re.sub('^who wants to be a millionaire\?$','who wants to be a millionaire? (1999)',title)
+	elif network=="ABC FAMILY":
+		title = re.sub('^beautiful people$','beautiful people (us)',title)
+	elif network=="AMC":
+		title = re.sub('^prisoner, the$','prisoner (2009)',title)
+	elif network=="A&E":
+		title = re.sub('^beast, the$','beast (2009)',title)
+	elif network=="BBC AMERICA":
+		title = re.sub('^being human$','being human (uk)',title)
+		title = re.sub('^eleventh hour\, the$','eleventh hour (2006)',title)
+		title = re.sub('^kitchen nightmares$','kitchen nightmares (uk)',title)
+		title = re.sub('^life on mars$','life on mars (uk)',title)
+		title = re.sub('^skins$','skins (2008)',title)
+		title = re.sub('^top gear$','top gear (uk)',title)
+	elif network=="CBS":
+		title = re.sub('^cupid$','cupid (2003)',title)
+		title = re.sub('^eleventh hour$','eleventh hour (2008)',title)
+	elif network=="DISCOVERY":
+		title = re.sub('^life$','life (uk)',title)
+	elif network=="FOX":
+		title = re.sub('^are you smarter than a fifth grader\?$','are you smarter than a fifth grader\? (2007)',title)
+		title = re.sub('^kitchen nightmares$','kitchen nightmares (us)',title)
+		title = re.sub('^skin$','skin (2003)',title)
+	elif network=="HISTORY":
+		title = re.sub('^top gear$','top gear (us)',title)
+	elif network=="LIFETIME":
+		title = re.sub('^missing$','missing (2003)',title)
+	elif network=="LOGO":
+		title = re.sub('^beautiful people$','beautiful people (uk)',title)
+	elif network=="MTV":
+		title = re.sub('^shameless$','shameless (mtv)',title)
+		title = re.sub('^skins$','skins (mtv)',title)
+	elif network=="NBC":
+		title = re.sub('^coupling$','coupling (us)',title)
+		title = re.sub('^deal or no deal$','deal or no deal (2005)',title)
+		title = re.sub('^identity$','identity (game show)',title)
+		title = re.sub('^life$','life (usa)',title)
+		title = re.sub('^lost$','lost (2001)',title)
+		title = re.sub('^wanted\, the$','wanted (2009)',title)
+	elif network=="SUNDANCE":
+		title = re.sub('^shameless$','shameless (uk)',title)
+	elif network=="SYNDICATION":
+		title = re.sub('^are you smarter than a fifth grader\?$','are you smarter than a fifth grader\? (2009)',title)
+		title = re.sub('^deal or no deal$','deal or no deal (2008)',title)
+		title = re.sub('^missing$','missing (us)',title)
+		title = re.sub('^who wants to be a millionaire$','who wants to be a millionaire (us)',title)
+	elif network=="SYFY":
+		title = re.sub('^alice$','alice (2009)',title)
+		title = re.sub('^being human$','being human (usa)',title)
+		title = re.sub('^five days to midnight$','5ive days to midnight',title)
+		title = re.sub('^frank herbert\'s children of dune$','children of dune',title)
+		title = re.sub('^steven spielberg presents\: taken$','taken',title)
+	elif network=="TNT":
+		title = re.sub('^wanted$','wanted (2005)',title)
 	return title
 
 def ftitlesysearch(title):
@@ -2971,8 +4082,9 @@ def ftitlesysearch(title):
 	#tres variantes: título completo sin paréntesis, fuera del paréntesis y dentro...
 	#Ej. "Crash (US)" correspondería a "Crash" y "Crash (UK)" hay que dejar "Crash US" o "CrashUS"
 	#si el título original tiene algún paréntesis para diferenciarlo de otra serie con un nombre parecido
-	#tb podría ser necesario quitarlo por lo mismo...
+	#tb podría ser necesario quitarlo por lo como V (2009)...
 	if inicial=="A":
+		title = re.sub('^A c..mara s..per lenta$','Time Warp',title)
 		title = re.sub('^A Dos Metros Bajo Tierra$','Six Feet Under',title)
 		title = re.sub('^A Trav..s Del Tiempo$','Quantum Leap',title)
 		title = re.sub('^Abducidos$','Taken',title)
@@ -2981,49 +4093,91 @@ def ftitlesysearch(title):
 		title = re.sub('^Almac..n 13$','Warehouse 13',title)
 		title = re.sub('^Alice \(2009\)$','Alice 2009',title)
 		title = re.sub('^Anatom..a de Grey$','Greys Anatomy',title)
+		title = re.sub('^Amazonas$','Amazon',title)
 		title = re.sub('^Apocalipsis de Stephen King$','The Stand',title)
-		title = re.sub('^Aquellos Maravillosos Años$','The Wonder Years',title)
+		title = re.sub('^Apartamento para tres$','Threes Company',title)
+		title = re.sub('^Aprendiendo a vivir$','Boy Meets World',title)
+		title = re.sub('^Aquellos Maravillosos A.+os$','The Wonder Years',title)
 		title = re.sub('^Aquellos Maravillosos 70$','That 70s Show',title)
+		title = re.sub('^Arriba y Abajo$','Upstairs Downstairs',title)
+		title = re.sub('^Autopista hacia el cielo$','Highway to Heaven',title)
+		title = re.sub('^Aventuras en el imperio$','The Roman Mysteries',title)
+		title = re.sub('^Ay..dame\, Ay..date$','Help Me Help You',title)
 		title = re.sub('^Asi somos$','As If',title)
 	elif inicial=="B":
+		title = re.sub('^Bandas criminales del mundo$','Ross Kemp on Gangs',title)
+		title = re.sub('^Batalla 360$','Battle 360',title)
 		title = re.sub('^Battlestar Galactica$','Battlestar Galactica 70s',title)
 		title = re.sub('^Battlestar Galactica 2003$','Battlestar Galactica',title)
-		title = re.sub('^Beverly Hills, 90210$','90210',title)
+		title = re.sub('^Beautiful people$','Beautiful people US',title)
+		title = re.sub('^Being Human$','Being Human UK',title)
+		title = re.sub('^Beverly Hills\, 90210$','90210',title)
+		title = re.sub('^Blade\, la serie$','Blade The Series',title)
+		title = re.sub('^\¡Buena Suerte\, Charlie\!$','Good Luck Charlie',title)
 		title = re.sub('^Buffy Cazavampiros$','Buffy the Vampire Slayer',title)
 	elif inicial=="C":
+		title = re.sub('^C..mara y acci..n$','Action',title)
+		title = re.sub('^Caminando con cavern..colas$','Walking with Cavemen',title)
 		title = re.sub('^Caminando entre dinosaurios$','Walking with Dinosaurs',title)
+		title = re.sub('^Caminando entre las bestias$','Walking with Beasts',title)
 		title = re.sub('^Caso Abierto$','Cold Case',title)
 		title = re.sub('^Caso cerrado$','Waking the Dead',title)
+		title = re.sub('^Cazadores De Mitos$','MythBusters',title)
+		title = re.sub('^Ciencia al desnudo$','Naked Science',title)
 		title = re.sub('^Cinco Hermanos$','Brothers & Sisters',title)
+		title = re.sub('^Cinco razones \(para no salir contigo\)$','Emilys Reasons Why Not',title)
 		title = re.sub('^Colgados en Filadelfia$','Its Always Sunny in Philadelphia',title)
+		title = re.sub('^Colombo$','Columbo',title)
 		title = re.sub('^C..mo Conoc.. A Vuestra Madre$','How I Met Your Mother',title)
 		title = re.sub('^Corrupci..n en Miami$','Miami Vice',title)
 		title = re.sub('^Cosas de casa$','Family Matters',title)
 		title = re.sub('^Cosas de Marcianos$','3rd Rock from the Sun',title)
+		title = re.sub('^Coupling$','Coupling UK',title)
 		title = re.sub('^Crash$','Crash US',title)
 		title = re.sub('^Crimenes Imperfectos$','Forensic Files',title)
+		title = re.sub('^Cr..menes imperfectos\: ricos y famosos$','Power, Privilege and Justice',title)
+		title = re.sub('^Cr..nicas marcianas$','The Martian Chronicles',title)
 		title = re.sub('^CSI Las Vegas$','CSI',title)
 		title = re.sub('^CSI New York$','CSI NY',title)
 		title = re.sub('^Cuentos Asombrosos$','Amazing Stories',title)
+		title = re.sub('^Cupid$','Cupid 2009',title)
+		title = re.sub('^Curb Your Enthusiasm \- Larry David$','Curb Your Enthusiasm',title)
 	elif inicial=="D":
+		title = re.sub('^Dawson Crece$','Dawsons Creek',title)
+		title = re.sub('^De cacharros a cochazos$','Ultimate Car Build Off',title)
+		title = re.sub('^De la Tierra a la Luna$','From The Earth to the Moon',title)
+		title = re.sub('^Deja la sangre correr$','Let the blood run free',title)
+		title = re.sub('^Dentro de\.\.\.$','Inside Narco Wars',title)
+		title = re.sub('^Diagn..stico Asesinato$','Diagnosis Murder',title)
+		title = re.sub('^Diario Adolescente$','Life As We Know It',title)
+		title = re.sub('^Diario de una Doctora$','Doctors Diary',title)
+		title = re.sub('^D..as que marcaron al mundo$','Days That Shook the World',title)
+		title = re.sub('^Dime que me quieres$','Tell Me You Love Me',title)
 		title = re.sub('^Dinast..a$','Dynasty',title)
 		title = re.sub('^Dinosaurios$','Dinosaurs',title)
 		title = re.sub('^Doble identidad$','Spooks',title)
 		title = re.sub('^Doctor En Alaska$','Northern Exposure',title)
 		title = re.sub('^Doctor Who$','Doctor Who 2005',title)
-		title = re.sub('^Doctoras de Filadelfia$','Strong Medicine',title)
+		title = re.sub('^Doctoras de\s+Filadelfia$','Strong Medicine',title)
+		title = re.sub('^Dogfights \- Combates A..reos$','Dogfights',title)
 	elif inicial=="E":
 		if inicial3=="El ":
 			title = re.sub('^El abogado$','The Practice',title)
 			title = re.sub('^El Ala Oeste de la Casa Blanca$','The West Wing',title)
+			title = re.sub('^El Cuentacuentos$','The StoryTeller',title)
 			title = re.sub('^El club contra el crimen$','Womens murder club',title)
 			title = re.sub('^El club de medianoche$','Are you afraid of the dark?',title)
+			title = re.sub('^El coche fantastico$','Knight Rider 1982',title)
 			title = re.sub('^El color de la Magia$','The Colour of Magic',title)
 			title = re.sub('^El d..cimo reino$','The 10th Kingdom',title)
+			title = re.sub('^El Diario de Anne Frank$','The Diary of Anne Frank',title)
 			title = re.sub('^El equipo A$','The A-Team',title)
+			title = re.sub('^El encantador de perros$','Cesars Way The Natural',title)
 			title = re.sub('^El fin del mundo$','The End of the World',title)
+			title = re.sub('^El Gran Chaparral$','The High Chaparral',title)
 			title = re.sub('^El Gran Heroe Americano$','The Greatest American Hero',title)
 			title = re.sub('^El Halc..n Callejero$','Street Hawk',title)
+			title = re.sub('^El hombre invisible$','The Invisible Man',title)
 			title = re.sub('^El Pr..ncipe De Bel Air$','The Fresh Prince of Bel-Air',title)
 			title = re.sub('^El misterio de Salem\'s Lot$','Salems Lot',title)
 			title = re.sub('^El t..nel del tiempo$','The Time Tunnel',title)
@@ -3032,50 +4186,85 @@ def ftitlesysearch(title):
 			title = re.sub('^El ..ltimo superviviente$','Man vs Wild',title)
 			title = re.sub('^El Universo$','The Universe',title)
 			title = re.sub('^El Universo Elegante \(la teor..a de las cuerdas\)$','The elegant Universe',title)
+			title = re.sub('^El Universo de Stephen Hawking$','Stephen Hawkings Universe',title)
 			title = re.sub('^El Valle secreto$','Secret Valley',title)
 		else:
 			title = re.sub('^Embrujada$','Bewitched ',title)
 			title = re.sub('^Embrujadas$','Charmed',title)
+			title = re.sub('^Enano Rojo$','Red Dwarf',title)
 			title = re.sub('^Entre Fantasmas$','Ghost Whisperer',title)
 			title = re.sub('^Espacio\: 1999$','Space: 1999',title)
-			title = re.sub('^Espartaco\: Sangre y arena$','Spartacus',title)
+			title = re.sub('^Espartaco\: Sangre y arena$','Spartacus: Blood and Sand',title)
+			title = re.sub('^Esta es mi banda$','Im in the Band',title)
 			title = re.sub('^Expediente X$','The X Files',title)
+	elif inicial=="F":
+		title = re.sub('^Fama$','Fame',title)
+		title = re.sub('^Fen..menos$','Miracles',title)
 	elif inicial=="G":
+		title = re.sub('^Gravedad cero$','Defying Gravity',title)
 		title = re.sub('^Guerra y Paz \(miniserie\)$','War and Peace',title)
 	elif inicial=="H":
+		title = re.sub('^H2O$','H2O Just Add Water',title)
 		title = re.sub('^Hasta que la muerte nos separe$','Til Death',title)
+		title = re.sub('^H..rcules\: Los viajes legendarios$','Hercules: The Legendary Journeys',title)
+		title = re.sub('^Hermanos De Sangre$','Band of Brothers',title)
 		title = re.sub('^Heroes$','Heroes USA',title)
+		title = re.sub('^Historias De La Cripta$','Tales of the Crypt',title)
 		title = re.sub('^Hombre rico, hombre pobre$','Rich Man, Poor Man',title)
-		title = re.sub('^Hospital Kingdom$','Kingdom Hospital',title)
+		title = re.sub('^Hospital Kingdom$','Stephen Kings Kingdom Hospital',title)
 		title = re.sub('^Hotel Dulce Hotel$','The Suite Life of Zack and Cody',title)
 		title = re.sub('^House$','House MD',title)
+		title = re.sub('^Hustle\, La Movida$','Hustle (The Con Is On)',title)
 	elif inicial=="I":
+		title = re.sub('^Identity$','Identity UK',title)
 		title = re.sub('^Infelices para siempre$','Unhappily Ever After',title)
 		title = re.sub('^Invasion Tierra$','Invasion Earth',title)	
 	elif inicial=="J":
+		title = re.sub('^JAG Alerta Roja$','JAG',title)
+		title = re.sub('^Jonas$','Jonas Brothers',title)
+		title = re.sub('^Joan De Arcadia$','Joan of Arcadia',title)
+		title = re.sub('^J..venes Rebeldes$','Young Americans',title)
 		title = re.sub('^Juzgado de Guardia$','Night Court',title)
+	elif inicial=="K":
+		title = re.sub('^Knight Rider \(El coche fantastico\) $','Knight Rider 2008 (El coche fantastico)',title)
+		title = re.sub('^Krod Mandoon and the flaming sword of fire$','Krd Mndoon and the flaming sword of fire',title)
 	elif inicial=="L":
 		if inicial3=="La ":
+			title = re.sub('^La amenaza de Andromeda$','The Andromeda strain',title)
+			title = re.sub('^La antigua Roma$','Ancient Rome: The Rise and Fall of an Empire',title)
+			title = re.sub('\(The cell\)$','(The Cell BBC)',title)
 			title = re.sub('^La Clave Da Vinci$','Da Vincis inquest',title)
+			title = re.sub('^La conquista del espacio$','Quest Mans Journey Into Space',title)
 			title = re.sub('^La dimensi..n desconocida$','The Twilight Zone',title)
 			title = re.sub('^La doctora Quinn$','Dr Quinn, Medicine Woman',title)
-			title = re.sub('^la enfermera jefe$','Hawthorne',title.lower())
+			title = re.sub('^La Familia Addams$','The Addams Family',title)
 			title = re.sub('^La Familia Monster$','The Munsters',title)
+			title = re.sub('^La familia salvaje$','Complete Savages',title)
 			title = re.sub('^La fuga de Logan$','Logans Run',title)
 			title = re.sub('^La Habitacion Perdida$','The Lost Room',title)
 			title = re.sub('^La Hora De Bill Cosby$','The Cosby Show',title)
+			title = re.sub('^La hora once \(Eleventh hour\)$','La hora once (Eleventh hour 2008)',title)
 			title = re.sub('^La inquilina de Wildfell Hall$','The Tenant of Wildfell Hall',title)
+			title = re.sub('^La isla de Gilligan$','Gilligans Island',title)
 			title = re.sub('^La guerra en casa$','The War at Home',title)
 			title = re.sub('^La joya de la Corona$','The Jewel in the Crown',title)
 			title = re.sub('^La juez Amy$','Judging Amy',title)
+			title = re.sub('^La lucha de los Dioses$','Clash of the Gods',title)
 			title = re.sub('^La Plantaci..n$','Cane',title)
+			title = re.sub('^La red$','The Net',title)
 			title = re.sub('^La t..a de Frankenstein$','Frankensteins tante',title)
+			title = re.sub('^La Vibora Negra$','Blackadder',title)
 			title = re.sub('^La Zona Muerta$','The Dead Zone',title)
 		else:
 			title = re.sub('^Ladr..n$','Thief',title)
+			title = re.sub('^Las aventuras de Brisco Country Jr$','The Adventures of Brisco County Jr',title)
+			title = re.sub('^Las aventuras de Christine$','The New Adventures of Old Christine',title)
 			title = re.sub('^Las aventuras de Sherlock Holmes \(Jeremy Brett\)$','The Adventures of Sherlock Holmes',title)
 			title = re.sub('^Las Aventuras del Joven Indiana Jones$','The Young Indiana Jones Chronicles',title)
 			title = re.sub('^Las chicas de oro$','The Golden Girls',title)
+			title = re.sub('^Las Hermanas McLeod$','McLeods Daughters',title)
+			title = re.sub('^Las pesadillas de Freddy$','Freddys Nightmares',title)
+			title = re.sub('^Ley y Orden: Acci..n Criminal$','Law & Order: Criminal Intent',title)
 			title = re.sub('^Ley y Orden U\.V\.E.$','Law & Order: SVU',title)
 			title = re.sub('^Lex$','Lex ES',title)
 			title = re.sub('^Life$','Life USA',title)
@@ -3085,70 +4274,133 @@ def ftitlesysearch(title):
 			title = re.sub('^Locos por la ciencia$','Wicked Science',title)
 			title = re.sub('^Londres\: Distrito criminal$','Law & Order: UK',title)
 			title = re.sub('^Los 4400$','4400',title)
-			title = re.sub('^Los Colby$','The Colby',title)
+			title = re.sub('^Los Colby$','The Colbys',title)
 			title = re.sub('^Los Hijos De Dune$','Children of Dune',title)
 			title = re.sub('^Los J..venes Jinetes$','The Young Riders',title)
 			title = re.sub('^Los Magos de Waverly Place$','Wizards of Waverly Place',title)
+			title = re.sub('^Los pilares de la tierra$','The Pillars of the Earth',title)
+			title = re.sub('^Los roper$','The Ropers',title)
 			title = re.sub('^Los Soprano$','Sopranos',title)
 			title = re.sub('^Lost \(Perdidos\)$','Lost 2004 (Perdidos)',title)
 	elif inicial=="M":
+		title = re.sub('^Macius\, el pequeño gran rey$','Der Kleine König Macius',title)
+		title = re.sub('^Maestros de la ciencia ficci..n$','Masters of Science Fiction',title)
+		title = re.sub('^Maestros del terror$','Masters of Horror',title)
+		title = re.sub('^Maravillas modernas$','Modern Marvels',title)
+		title = re.sub('^M..s all.. del futuro$','One Step Beyond',title)
 		title = re.sub('^Matrimonio Con Hijos \(USA\)$','Married with Children',title)
+		title = re.sub('^M..s all.. del l..mite$','The Outer Limits',title)
 		title = re.sub('^Me Llamo Earl$','My Name is Earl',title)
+		title = re.sub('^Megaestructuras$','Megastructures',title)
+		title = re.sub('^Melrose place$','Melrose Place 1992',title)
 		title = re.sub('^Melrose Place 2\.0$','Melrose Place 2009',title)
 		title = re.sub('^Mentes Criminales$','Criminal Minds',title)
+		title = re.sub('^Mis Chicos y Yo$','My Boys',title)
+		title = re.sub('^Missing$','Missing 2003',title)
+		title = re.sub('^Misterio para tres$','Friday the 13th',title)
+		title = re.sub('^Mujeres De Manhattan$','Lipstick Jungle',title)
 		title = re.sub('^Mujeres Desesperadas$','Desperate Housewives',title)
 	elif inicial=="N":
 		title = re.sub('^Napole..n$','Napoleon',title)
-		title = re.sub('^Navy\: investigacion criminal L\.A\.$','NCIS: Los Angeles',title)
 		title = re.sub('^Navy\: Investigaci..n Criminal$','NCIS',title)
+		title = re.sub('^NCIS Los ..ngeles$','NCIS Los Angeles',title)
+		title = re.sub('^Nikita$','La Femme Nikita',title)
+		title = re.sub('^No con mis hijas$','8 Simple Rules for Dating My Teenage Daughter',title)
+		title = re.sub('^Norte Y Sur$','North and South',title)
 	elif inicial=="O":
+		title = re.sub('^Operaci..n Threshold$','Threshold',title)
 		title = re.sub('^Orgullo y prejuicio$','Pride and Prejudice',title)
 	elif inicial=="P":
+		title = re.sub('^Pac..fico Sur$','South Pacific',title)
 		title = re.sub('^Padres Forzosos$','Full House',title)
+		title = re.sub('^Paton 360$','Patton 360',title)
+		title = re.sub('^Pesadilla en la Cocina$','Kitchen Nightmares US',title)
+		title = re.sub('^Pesadillas y Alucinaciones$','Nightmares & Dreamscapes',title)
+		title = re.sub('^Phil Del Futuro$','Phil of the future',title)
+		title = re.sub('^Pippi Calzaslargas$','Pippi Longstocking',title)
+		title = re.sub('^Planeta Tierra$','Planet Earth',title)
 		title = re.sub('^Policias de Nueva York$','NYPD Blue',title)
+		title = re.sub('^Popular$','Popular 1999',title)
 	elif inicial=="Q":
-		title = re.sub('^Quark, la escoba espacial$','Quark',title)
+		title = re.sub('^Quark\, la escoba espacial','Quark',title)
+		title = re.sub('^Queer as Folk \(UK\)$','Queer as Folk UK',title)
+		title = re.sub('^Queer as Folk$','Queer as Folk US',title)
 	elif inicial=="R":
 		title = re.sub('^Ra..ces$','Roots',title)
+		title = re.sub('^Reencarnaci..n$','Past Life',title)
 		title = re.sub('^Reglas de Compromiso$','Rules of Engagement',title)
+		title = re.sub('^Retorno a Brideshead$','Brideshead Revisited',title)
 		title = re.sub('^Retorno a Ed..n$','Return to Eden',title)
+		title = re.sub('^Robemos a\.\.\. Mick Jagger$' , 'The Knights of Prosperity',title)
 		title = re.sub('^Roma$' , 'Rome',title)
 	elif inicial=="S":
-		title = re.sub('^Sabrina\: La bruja adolescente$','Sabrina, the Teenage Witch 1996',title)
+		title = re.sub('^Sabrina\, cosas de bruja$','Sabrina, the Teenage Witch 1996',title)
 		title = re.sub('^Salvando a Grace$','Saving Grace',title)
-		title = re.sub('^Salvados por la Campana\: Años de universidad$','Saved by the Bell: The College Years',title)
-		title = re.sub('^Salvados por la Campana$','Saved by the Bell',title)
+		title = re.sub('^Salvados por la Campana\: A.+os de universidad$','Saved by the Bell: The College Years',title)
+		title = re.sub('^Salvados por la campana$','Saved by the Bell',title)
 		title = re.sub('^Se ha escrito un crimen$','Murder, She Wrote',title)
+		title = re.sub('^Sensaci..n de vivir$','Beverly Hills 90210',title)
+		title = re.sub('^Secuestrado$','Kidnapped',title)
 		title = re.sub('^Seis Grados$','Six degrees',title)
+		title = re.sub('^SeaQuest DSV\: Los vigilantes del fondo del mar$','SeaQuest DSV',title)
 		title = re.sub('^Sexo en Nueva York$','Sex and the City',title)
+		title = re.sub('^Siete en el paraiso$','7th Heaven',title)
 		title = re.sub('^Sin Rastro$','Without a Trace',title)
 		title = re.sub('^Sin identificar \(The forgotten\)$','The Forgotten 2009',title)
 		title = re.sub('^S.., Ministro$','Yes Minister',title)
+		title = re.sub('^Skins$','Skins 2008',title)
 		title = re.sub('^Star Trek\: La nueva Generacion$','Star Trek: The Next Generation',title)
+		title = re.sub('^Sue Thomas\, el ojo del FBI$','Sue Thomas: F.B.Eye',title)
+		title = re.sub('^Sunny Entre Estrellas$','Sonny With a Chance',title)
 		title = re.sub('^Superagente 86$','Get Smart',title)
+		title = re.sub('^Supernanny$','Supernanny ES',title)
 		title = re.sub('^Survivors$','Survivors 2008',title)
 	elif inicial=="T":
 		title = re.sub('^Tan muertos como yo$','Dead Like Me',title)
 		title = re.sub('^Todo El Mundo Odia A Chris$','Everybody Hates Chris',title)
 		title = re.sub('^Todo es relativo$','Its all relative',title)
 		title = re.sub('^Todos mis novios$','The Ex List',title)
-		title = re.sub('^Treinta y tantos$','Thirtysomething',title)
-		title = re.sub('^Triunfadores$','Big Shots',title)
-		title = re.sub('^Turno de Guardia$','Third Watch',title)
+		title = re.sub('^The Beast$','The Beast 2009',title)
+		title = re.sub('^The Nanny$','The Nanny US',title)
 		title = re.sub('^The Office$','The Office US',title)
 		title = re.sub('^The Office \(UK\)$','The Office UK',title)
+		title = re.sub('^The Prisoner$','The Prisoner 2009',title)
+		title = re.sub('^The Riches\: familia de impostores$','The Riches',title)
+		title = re.sub('^The Shield\: Al Margen de la Ley$','The Shield',title)
+		title = re.sub('^Tierra de gigantes$','Land of the Giants',title)
+		title = re.sub('^Toda la verdad sobre la comidas$','The Truth about Food',title)
+		title = re.sub('^Todos (?:q|Q)uieren a (?:r|R)aymond','Everybody Loves Raymond',title)
+		title = re.sub('^Top Gear$','Top Gear UK',title)
+		title = re.sub('^Traffic\: La miniserie$','Traffic (Traffic The miniseries)',title)
+		title = re.sub('^Treinta y tantos$','Thirtysomething',title)
+		title = re.sub('^Trinity$','Trinity UK',title)
+		title = re.sub('^Triunfadores$','Big Shots',title)
+		title = re.sub('^Tuneados urbanosa$','Street Customs',title)
+		title = re.sub('^Turno de Guardia$','Third Watch',title)
 	elif inicial=="U":
 		title = re.sub('^Un chapuzas en casa$','Home Improvement',title)
+		title = re.sub('^Un mundo en guerra$','The World at War',title)
+		title = re.sub('^Una vez m..s$','Once and Again',title)
+		title = re.sub('^Universo Mec..nico$','The Mechanical Universe',title)
 	elif inicial=="V":
+		title = re.sub('^V \(2009\)$','V 2009',title)
 		title = re.sub('^V Invasi..n Extraterrestre$','V 1983',title)
 		title = re.sub('^Viaje al fondo del mar$','Voyage to the Bottom of the Sea',title)
 		title = re.sub('^Vida secreta de una adolescente$','The Secret Life of the American Teenager',title)
 		title = re.sub('^Viviendo con Derek$','Life with Derek',title)
 		title = re.sub('^Vuelo 29\: Perdidos$','Flight 29 Down',title)
+	elif inicial=="W":
+		title = re.sub('^Walker Ranger de Texas','Walker Texas Ranger',title)
+	elif inicial=="X":
+		title = re.sub('^Xena\: La Princesa Guerrera$','Xena: Warrior Princess',title)
 	elif inicial=="Y":
 		title = re.sub('^Yo y el mundo$','Boy Meets World',title)
 		title = re.sub('^Yo, Claudio$',' I Claudius',title)
+	elif inicial=="Z":
+		title = re.sub('^Zack Y Cody Todos A Bordo$','The Suite Life on Deck',title)
 	else:
+		title = re.sub('ngeles en Am..rica$','Angels in America',title)
+		title = re.sub('^24 Horas$','24',title)
 		title = re.sub('^5 Dias para Morir$','5ive Days to Midnight',title)
 		title = re.sub('^7 d..as$','7 Days',title)
 		title = re.sub('^10 razones para odiarte$','10 Things I Hate About You',title)
@@ -3159,9 +4411,289 @@ def ftitlesysearch(title):
 	title = re.sub('[^\w\(\)]+','',title)
 	return title
 
+def formattitle(title):
+	title = re.sub(r"[A-Za-z]+('[A-Za-z]+)?",lambda misub: misub.group(0)[0].upper()+misub.group(0)[1:].lower(),title)
+	title = re.sub(r"\s\(?(?:At|And|A|By|In|Of|On|Or|That|These|The|This|Those|To)\s",lambda misub: misub.group(0).lower(),title)
+	return title
+
 def EndDirectory(category,sortmethod,listupdate,cachedisc):
 	if sortmethod=="":
 		sortmethod=xbmcplugin.SORT_METHOD_NONE
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=sortmethod)
 	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True , updateListing=listupdate , cacheToDisc=cachedisc  )
+
+def checksearchgate(params,url,category):
+	options = [ "Actualizar Todos los Archivos de Revisión Guardados" , "Obtener/Actualizar Archivos de Revisión" , "Ayuda (Leéme)" ]
+	searchtype = xbmcgui.Dialog()
+	seleccion = searchtype.select("Elija una opción:",options)
+	if seleccion==-1:
+		return
+	elif seleccion==0:
+		respuesta = alertactualizar()
+		if respuesta:
+			checksearchgate0(category)
+	elif seleccion==1:
+		checksearchgate1("Obtener","","")
+	elif seleccion==2:
+		advertencia = xbmcgui.Dialog()
+		advertencia.ok('Ayuda - ¿Para que sirve? - [1/6]' , 'Genera listados de resultados de búsqueda' , 'de Títulos entre Webs que se guardan en' , 'archivos de texto, para su Revisión' )
+		advertencia.ok('Ayuda - Cómo realizar la Revisión (1/4) - [2/6]' , 'Editando y reemplazando "No Revisado" por' , '"(Revisado)" tras confirmar que se trata' , 'del mismo título, proceso no trivial...' )
+		advertencia.ok('Ayuda - Cómo realizar la Revisión (2/4) - [3/6]' , 'Nuevos Títulos y/o revisiones de un' , 'archivo obligan a volver a buscar el' , 'archivo reverso. Hay 2 opciones: 1. Cambiar a...' )
+		advertencia.ok('Ayuda - Cómo realizar la Revisión (3/4) - [4/6]' , 'No revisado sólo los Títulos nuevos' , 'o modificados, 2. Obtener de nuevo' , 'el archivo reverso incluyendo lo revisado...' )
+		advertencia.ok('Ayuda - Cómo realizar la Revisión (4/4) - [5/6]' , 'en la búsqueda, teniendo en cuenta' , 'que la información de revisiones si' , 'los datos no han cambiando no se pierde' )
+		advertencia.ok('Ayuda - Títulos Revisados - [6/6]' , 'Seleccionable si se chequean de nuevo, y' , 'las búsquedas nuevas se actualizan con la' , 'info de "(Revisados)" existente (reverso tb)' )
+
+def checksearchgate0(category):
+	titulos = []
+	optionsweb = [ "CastTV" , "SeriesYonkis" , "Subtitulos.es" , "The Futon Critic" ]
+	Dialogespera = xbmcgui.DialogProgress()
+	for option in optionsweb:
+		line1 = 'Actualizando Archivo de Revisión de '+option
+		Dialogespera.create('pelisalacarta' , line1 , '' )
+		for optiond in optionsweb:
+			if optiond==option:
+				continue
+			Dialogespera.create('pelisalacarta' , line1 , 'en '+optiond )
+			checksearchlist = checksearchgate1("Actualizar",option,optiond)
+			if len(checksearchlist)>0:
+				titulos.append([ option+"-"+optiond , option[0:3]+"_"+optiond[0:3] ])
+
+	if len(titulos)==0:
+		line1 = 'No hay archivos que actualizar. Elija:'
+		line2 = '"Obtener/Actualizar Archivos de Revisión"'
+		Dialogespera.create('pelisalacarta' , line1 , line2 )
+		Dialogespera.close()
+		return
+
+	line1 = 'Obteniendo información de los Títulos No Revisados...'
+	Dialogespera.create('pelisalacarta' , line1 , '' )
+
+	for titulo in titulos:
+		listnorev = readlist(titulo[1],"No Revisado")
+		n = str(len(listnorev))
+		additem( CHANNELNAME , category , titulo[0]+" ("+titulo[1]+".txt): Títulos No Revisados="+n , "" , "" , "" )
+		for saved in listnorev:
+			rstdo = ""
+			if saved[2]=="OK" or saved[2]=="**Varios**":
+				rstdo = ": "+saved[4]
+			additem( CHANNELNAME , category , saved[0]+" ("+saved[1]+") -> "+saved[2]+rstdo , saved[5] , "" , "" )
+		additem( CHANNELNAME , category , "----------------------------------------------------------------------------------------------------" , "" , "" , "" )
+	# ------------------------------------------------------------------------------------
+	EndDirectory(category,"",False,True)
+	# ------------------------------------------------------------------------------------			
+
+def checksearchgate1(tipo,origen,destino):
+	Dialogespera = xbmcgui.DialogProgress()
+	checksearchlist = []
+	tptitlesearch = ""
+	Oksaved= "0"
+	Oksavedrev= "0"
+	optionsweb = [ "CastTV" , "SeriesYonkis" , "Subtitulos.es" , "The Futon Critic" ]
+	searchway = [ [ "Origen" , "" ] , [ "Destino" , "" ] ]
+
+	if tipo<>"Actualizar":
+		for way in searchway:
+			searchtype = xbmcgui.Dialog()
+			seleccion = searchtype.select("Seleccione "+way[0]+" de Búsqueda:",optionsweb)
+			if seleccion==-1:
+				return
+			way[1] = optionsweb[seleccion]
+			optionsweb.pop(seleccion)
+			if seleccion==3:
+				#tptitlesearch?
+				optionsweb.pop(2)
+		origen = searchway[0][1]
+		destino = searchway[1][1]
+		line1 = 'Extrayendo Títulos de '+origen+'...'
+  		Dialogespera.create('pelisalacarta' , line1 , '' )
+
+	titulo = origen[0:3]+"_"+destino[0:3]
+	listsaved = readlist(titulo,"")
+	if len(listsaved)==0 and tipo=="Actualizar":
+		return checksearchlist
+
+	if origen=="CastTV":
+		listaorigen = findcasttv("","","","","")
+	elif origen=="SeriesYonkis":
+		listaorigen = findseriesyonkis("","-1","","")
+	elif origen=="Subtitulos.es":
+		listaorigen = findsubseries("","-1","","0",0)
+	elif origen=="The Futon Critic":
+		listaorigen = findfuton("","http://www.thefutoncritic.com/showatch.aspx?series=","revision")
+		tptitlesearch = "futon"
+		for item in listaorigen:
+			item[2]=item[1]
+
+	if len(listaorigen)==0:
+		return checksearchlist
+
+	if len(listsaved)>0:
+		if tipo<>"Actualizar":
+			respuesta = alertrevisados()
+			if respuesta:
+				pass
+			else:
+				Oksaved= "-1"
+		else:
+			Oksaved= "-1"
+		if Oksaved=="-1":
+			for item in listaorigen:
+				for saved in listsaved:
+					if item[0]==saved[0] and item[2]==saved[5]:
+						if item[-1]==saved[1] and saved[3]=="(Revisado)":
+							item[1]= saved[2]
+							item[3]= saved[4]
+							item[4]= saved[3]
+						break
+				if item[4]<>"(Revisado)":
+					item[4]="No Revisado"
+
+	if tipo<>"Actualizar":
+		line1 = 'Extrayendo Títulos de '+destino+'...'
+		line2 = 'e iniciando búsqueda'
+  		Dialogespera.create('pelisalacarta' , line1 , line2 )
+
+	if destino=="CastTV":
+		checksearchlist = findcasttv("checksearch","",listaorigen,tptitlesearch,"")
+	elif destino=="SeriesYonkis":
+		checksearchlist = findseriesyonkis("","checksearch",listaorigen,tptitlesearch)
+	elif destino=="Subtitulos.es":
+		#tptitlesearch?
+		checksearchlist = findsubseries("","checksearch",listaorigen,"0",0)
+	elif destino=="The Futon Critic":
+		checksearchlist = findfutonstatus(listaorigen,"checksearch")
+
+	if len(checksearchlist)==0:
+		return checksearchlist
+
+	if tipo<>"Actualizar":
+		line1 = 'Actualizando datos de Revisión...'
+		line2 = origen+'-'+destino+' y/o'+destino+'-'+origen
+  		Dialogespera.create('pelisalacarta' , line1 , line2 )
+	else:
+		line1 = 'Actualizando Archivo de Revisión de '+origen
+		Dialogespera.create('pelisalacarta' , line1 , 'en '+destino )
+
+	titulorev = destino[0:3]+"_"+origen[0:3]
+	listsavedrev = readlist(titulorev,"")
+
+	for item in checksearchlist:
+		if len(listsaved)>0 and Oksaved=="0":
+			for saved in listsaved:
+				if item[0]==saved[0] and item[2]==saved[5]:
+					if item[-1]==saved[1] and item[3]==saved[4] and item[1]==saved[2] and saved[3]=="(Revisado)":
+						item[4]="(Revisado)"
+					break
+			if item[4]<>"(Revisado)":
+				item[4]="No Revisado"
+		if item[4]=="No Revisado" and len(listsavedrev)>0:
+			for saved in listsavedrev:
+				if saved[4]==item[0]+" ("+item[-1]+")" and item[3]==saved[0]+" ("+saved[1]+")":
+					if saved[3]=="(Revisado)":
+						item[4]= saved[3]
+					break
+
+	checksearchlist.sort(key=lambda item: item[4])
+	line1 = 'Guardando archivo '+origen+' - '+destino+'...'
+  	Dialogespera.create('pelisalacarta' , line1 , '' )
+	writelist(titulo,checksearchlist)
+	Dialogespera.close()
+	if tipo=="Actualizar":
+		return checksearchlist
+
+	category = origen+": Búsqueda en "+destino
+	options = [ "Listado Completo - No Revisados" , "Listado Completo" , "Listado No Encontrados y Varios -  No Revisados" , "Listado No Encontrados y Varios" , "Listado Varios" , "Listado No Encontrados" ]
+	searchtype = xbmcgui.Dialog()
+	seleccion = searchtype.select("Seleccione un Tipo de Listado:",options)
+	checksearchlist.sort(key=lambda item: item[0])
+	for item in checksearchlist:
+		if seleccion==0 and item[4]=="(Revisado)":
+			continue
+		elif seleccion==2 or seleccion==3:
+			if "Varios" not in item[1] and "No" not in item[1]:
+				continue
+			elif seleccion==2 and item[4]=="(Revisado)":
+				continue
+		elif seleccion==4 and "Varios" not in item[1]:
+			continue
+		elif seleccion==5 and "No" not in item[1]:
+			continue
+		rstdo = ""		
+		if item[1]=="OK" or item[1]=="**Varios**":
+			rstdo = ": "+item[3]
+		additem( CHANNELNAME , category , item[0]+" ("+item[-1]+") -> "+item[1]+"-"+item[4]+rstdo , item[2] , "" , "" )
+	# ------------------------------------------------------------------------------------
+	EndDirectory(category,"",False,True)
+	# ------------------------------------------------------------------------------------
+
+def alertrevisados():
+	advertencia = xbmcgui.Dialog()
+	resultado = advertencia.yesno('peliscalacarta' , '¿Desea incluir en la búsqueda los títulos' , 'revisados?' )
+	return resultado
+
+def alertactualizar():
+	advertencia = xbmcgui.Dialog()
+	resultado = advertencia.yesno('peliscalacarta' , 'Si no se han revisado los archivos en un' , 'alto porcentaje no es recomendable esta' , 'opción, ¿Desea Continuar?' )
+	return resultado
+
+def runchecksearch(serieslist,titlesearch,tplistsearch,tptitlesearch):
+	checksearchlist = []
+ 	Dialogespera = xbmcgui.DialogProgress()
+  	line1 = 'Searching... '
+	Dialogespera.create('pelisalacarta' , line1)
+  	Dialogespera.update(0, line1)
+  	n = int(len(titlesearch)/20)
+  	i = 0
+  	j = 0
+	for titles in titlesearch:
+		if i==n:
+			i=0
+			j=j+5
+		if titles[4]<>"(Revisado)":
+			Dialogespera.update(j, line1+titles[0])
+			itemencontrado = searchgate(serieslist,titles[-1],tplistsearch,tptitlesearch)
+			if len(itemencontrado)==1:
+				titles[1] = "OK"
+				titles[3] = itemencontrado[0][0]+" ("+itemencontrado[0][-1]+")"
+			elif len(itemencontrado)>1:
+				titles[1] = "**Varios**"
+				titles[3] = ""
+				for item in itemencontrado:
+					if titles[3]=="":
+						titles[3] = item[0]+" ("+item[-1]+")"
+					else:
+						titles[3] = titles[3]+" - "+item[0]+" ("+item[-1]+")"
+			elif len(itemencontrado)==0:
+				titles[1] = "**No encontrado**"
+				titles[3] = ""
+			titles[4]="No Revisado"
+		i = i + 1
+		checksearchlist.append(titles)
+
+  	Dialogespera.update(100, line1)
+  	Dialogespera.close()
+	return checksearchlist
+
+def writelist(titulo,list):
+	filename = titulo+'.txt'
+	fullfilename = os.path.join(VISTO_PATH,filename)
+	listfile = open(fullfilename,"w")
+	for item in list:
+		listfile.write(item[1]+': '+item[4]+"\n"+item[0]+';'+item[-1]+';'+item[1]+';'+item[4]+';'+item[3]+';'+item[2]+';\n\n')
+	listfile.close()
+
+def readlist(titulo,search):
+	list = []
+	if search=="":
+		search = "[^;]*"
+	filename = titulo+'.txt'
+	fullfilename = os.path.join(VISTO_PATH,filename)
+	if os.path.exists(fullfilename):
+		listfile = open(fullfilename)
+		for line in listfile:
+			match = re.match('([^;]*);([^;]*);([^;]*);('+search+');([^;]*);([^;]*);\n',line)
+			if (match):
+				list.append([ match.group(1) , match.group(2) , match.group(3) , match.group(4) , match.group(5) , match.group(6) ])
+		listfile.close()
+	return list

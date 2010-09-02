@@ -38,9 +38,6 @@ IMAGES_PATH = xbmc.translatePath( os.path.join( os.getcwd(), 'resources' , 'imag
 def mainlist(params,url,category):
 	logger.info("[dospuntocerovision.py] mainlist")
 
-	if config.getSetting("forceview")=="true":
-	   xbmc.executebuiltin("Container.SetViewMode(50)") #full list
-
 	# Añade al listado de XBMC
 	xbmctools.addnewfolder( CHANNELNAME , "listnovedades"  , category , "Últimas películas","http://www.dospuntocerovision.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "listcategorias" , category , "Listado por Genero","http://www.dospuntocerovision.com/2007/11/peliculas.html","","")
@@ -74,9 +71,6 @@ def search(params,url,category):
 
 def searchresults(params,url,category):
 	logger.info("[dospuntocerovision.py] searchresults")
-
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(53)")  #53=icons
 
 	patronvideos = 'post-title entry-title(.*?)post-footer'
 	# Descarga la página
@@ -113,9 +107,6 @@ def searchresults(params,url,category):
 
 def listalfabetica(params, url, category):
 
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(50)") #full list
-
 	patronvideos = "<div class='post-header-line-1(.*?)post-footer"
 	# Descarga la página
 	data = scrapertools.cachePage(url)
@@ -138,8 +129,6 @@ def listalfabetica(params, url, category):
 def listnovedades(params,url,category):
 	logger.info("[dospuntocerovision.py] listnovedades : " +url)
 
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(53)")  #53=icons
         if url=="http://www.dospuntocerovision.com/":
            opciones = []
 	   opciones.append("Listado Corto (6) detallado ")
@@ -283,7 +272,7 @@ def listarvideos(params,url,category,data):
     if DEBUG and ("+" == plot):
 		
 		detalle = "Esta opcion permite buscar el trailer en youtube para esta pelicula y muestra hasta seis titulos mas aproximados si los hay \n "
-		xbmctools.addnewfolder( "trailertools" , "buscartrailer" , category ,"Buscar trailer para : "+scrapedtitle  , titulo , os.path.join(IMAGES_PATH, 'trailertools.png'), detalle )
+		xbmctools.addnewfolder( "trailertools" , "buscartrailer" , category ,config.getLocalizedString(30110)+" "+scrapedtitle  , titulo , os.path.join(IMAGES_PATH, 'trailertools.png'), detalle ) #Buscar trailer para
 #-------------------------------------------------------------------------------    
        
     matchesmegavideo = re.compile(patronmegavideo,re.DOTALL).findall(data) # busca los links de megavideo
@@ -429,9 +418,6 @@ def listarvideos(params,url,category,data):
 	
 def listcategorias(params,url,category):
 	logger.info("[dospuntocerovision.py] listcategorias")
-
-	if config.getSetting("forceview")=="true":
-		xbmc.executebuiltin("Container.SetViewMode(50)") #full list
 
 	patronvideos = '<a onblur=.*?href="(.*?)"><img.*?src="(.*?)" alt='  
 	# Descarga la página
@@ -616,9 +602,6 @@ def buscaporletra(params,url,category,data):
 
 def videosprogtv(params,url,category):
 	logger.info("[dospuntocerovision.py] videosprogtv")
-
-	if config.getSetting("forceview")=="true":
-	   xbmc.executebuiltin("Container.SetViewMode(53)")  #53=icons
 
 	patronvideos = '<a onblur=.*?href="(.*?)"><img.*?src="(.*?)".*?alt='  
 	# Descarga la página

@@ -36,9 +36,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "novedades" , CHANNELNAME , "Novedades" , "http://dibujosanimadosgratis.net/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "categorias" , CHANNELNAME , "Por categorías" , "http://dibujosanimadosgratis.net/" , "", "" )
 	
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )

@@ -43,9 +43,6 @@ def mainlist(params,url,category):
 	if config.getSetting("enableadultmode") == "true":
 		xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Filmes Adulto (+18)","http://www.filmesonlinebr.com/category/filmes-porno-xxx/","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 

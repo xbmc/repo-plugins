@@ -43,9 +43,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "ListvideosMirror" , category , "Peliculas en HD","http://www.cine-adicto.com/category/categorias/peliculas-hd-categorias","","")
 	xbmctools.addnewfolder( CHANNELNAME , "search" , category , "Buscar","http://www.cine-adicto.com/","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 
@@ -314,16 +311,7 @@ def detail(params,url,category):
 	# ------------------------------------------------------------------------------------
 	# Busca los enlaces a los videos en los servidores habilitados
 	# ------------------------------------------------------------------------------------
-	'''
-	listavideos = servertools.findvideos(data)
 
-	for video in listavideos:
-		if "stagevu.com/embed" not in video[1]:
-			videotitle = video[0]
-			url = video[1]
-			server = video[2]
-			xbmctools.addnewvideo( CHANNELNAME , "play" , category , server , title.strip() + " - " + videotitle , url , thumbnail , plot )
-	'''
    
 			
 	## --------------------------------------------------------------------------------------##
@@ -374,14 +362,40 @@ def detail(params,url,category):
 					xbmctools.addnewvideo( CHANNELNAME , playWithSubt , category , "Directo" , scrapedtitle, scrapedurl , scrapedthumbnail, scrapedplot )
 				
 			else:
-				if match.endswith(".srt"):
+				c +=1
+				scrapedurl = match
+				if match.endswith(".srt") and not (((c / 2) * 2 - c) == 0) :
 					scrapedurl = scrapedurl + "|" + match 
 					xbmctools.addnewvideo( CHANNELNAME ,"play2"  , category , "Directo" , title + " (V.O.S) - "+subtitle, scrapedurl , thumbnail , plot )
-				if 	match.endswith(".xml"):
+				elif 	match.endswith(".xml") and not (((c / 2) * 2 - c) == 0):
 					sub = "[Subtitulo incompatible con xbmc]"
 					xbmctools.addnewvideo( CHANNELNAME ,"play"  , category , "Directo" , title + " (V.O) - %s %s" %(subtitle,sub), scrapedurl , thumbnail , plot )
-				scrapedurl = match
+				elif not match.endswith("srt" or "xml") :
+					xbmctools.addnewvideo( CHANNELNAME ,"play"  , category , "Directo" , title + " - [Directo]" , scrapedurl , thumbnail , plot )
+				
 				print scrapedurl
+	
+	try:
+		matches = url.split("/")
+		url2 = "http://www.cine-adicto.com/tab/"+matches[3]
+		data2 = scrapertools.cachePage(url2)
+	
+		
+		listavideos = servertools.findvideos(data2)
+		c = 0
+		for video in listavideos:
+			if "stagevu.com/embed" not in video[1]:
+				videotitle = video[0]
+				url = video[1]
+				server = video[2]
+				if "facebook" in url:
+					c += 1
+					xbmctools.addnewvideo( CHANNELNAME , "play" , category , server , title.strip() + " - Parte %d %s" %(c,videotitle) , url , thumbnail , plot )
+				else:
+					xbmctools.addnewvideo( CHANNELNAME , "play" , category , server , title.strip() + " - " + videotitle , url , thumbnail , plot )
+	except:
+		pass
+
 	
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )

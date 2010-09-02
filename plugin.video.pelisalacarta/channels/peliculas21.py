@@ -48,9 +48,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "buscaporletraActor" , category , "Actores - Busqueda Alfabética"  ,"http://www.peliculas21.com/actores/","","")	
 	xbmctools.addnewfolder( CHANNELNAME , "search"     , category , "Películas - Buscar"                           ,"","","")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 
@@ -404,7 +401,7 @@ def listvideos(params,url,category):
 	else:
 		import trailertools
 		# Añade al listado de XBMC
-		xbmctools.addnewfolder( "trailertools" , "buscartrailer" , category , "Buscar trailer para : "+title , url , os.path.join(IMAGES_PATH, 'trailertools.png'), plot )
+		xbmctools.addnewfolder( "trailertools" , "buscartrailer" , category , config.getLocalizedString(30110)+" "+title , url , os.path.join(IMAGES_PATH, 'trailertools.png'), plot ) # Buscar trailer para
 		
 		
 	matchesBK = matches[0]

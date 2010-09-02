@@ -40,9 +40,6 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "buscatags" , category, "Tags" , "http://www.gratisdocumentales.com/" , "" , "")
 	xbmctools.addnewfolder( CHANNELNAME , "search" , category, "Búsqueda" , "" , "" , "")
 
-	if config.getSetting("singlechannel")=="true":
-		xbmctools.addSingleChannelOptions(params,url,category)
-
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

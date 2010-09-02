@@ -1,0 +1,6 @@
+Version 2.0.0 (Aug 9 2010)
+ - Mostly rewritten for easier maintains and better stability
+ - Added search
+ - Added archived live stream from the Justin.tv channel
+ - Categories are now updated automatically (for correcting errors or updating)
+ 

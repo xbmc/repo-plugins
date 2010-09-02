@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="plugin.video.giantbomb"
+  version="2.0.0"
+  name="Giant Bomb"
+  provider-name="BuggeX">
+  <requires>
+   <import addon="xbmc.python" version="1.0"/>
+   <import addon="script.module.simplejson" version="2.0.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+  	library="addon.py">
+  	<provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Watch all videos from GiantBomb.com</summary>
+    <description>Features
+	 - Acess to all videos from GiantBomb.com
+	 - List all videos or choose a category (Quick looks, Endurence Runs, etc..)
+	 - Search for spesific videos
+	 - Choose between High (1500 kbit/s) or Low (700 kbit/s) video quality
+	 - Archived live streams from Justin.tv
+	</description>
+    <platform>all</platform>
+  </extension>
+</addon>
+

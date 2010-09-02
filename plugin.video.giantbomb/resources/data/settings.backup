@@ -1,0 +1,18 @@
+{
+    "categories":
+    [
+        { "name": "Latest", "filters": ["latest_cat"], "description": "List the 25 latest videos" },
+        { "name": "Search", "filters": ["search_cat"], "description": "Search results" },
+        { "name": "(Almost) Live!", "filters": ["live_cat"], "description": "Archived video from the GiantBomb Justin.tv channel" },
+        { "name": "All", "filters": [""], "description": "List all videos" },
+        { "name": "Endurance Run - Persona 4", "filters": ["Endurance Run: Persona 4"], "description": "Jeff and Vinny plays Persona 4 or vise versa" },
+        { "name": "Endurance Run - Deadly Premonition", "filters": ["Endurance Run: Deadly Premonition"], "description": "The creq plays Deadly Premonition" },
+        { "name": "I Love Mondays", "filters": ["I Love Mondays"], "description": "I Love mondays" },
+        { "name": "QOTW", "filters": ["QOTW"], "description": "Question of the week" },
+        { "name": "Quick Looks", "filters": ["Quick Look"], "description": "Quick Look videos" },
+        { "name": "Reviews", "filters": ["Review"], "description": "Video reviews" },
+        { "name": "TANG" , "filters": ["TANG:" , "No Game:" , "No Game -"], "description": "This Ain'T No Game - Ryan Davis review movies based on video games" },
+        { "name": "Trailers/Gameplay", "filters": ["Trailer", "Gameplay"], "description": "Trailer and Gameplay videos" },
+        { "name": "The Mailbag", "filters": ["Mailbag"], "description": "The Giant Bomb mailbag" }
+    ] 
+}

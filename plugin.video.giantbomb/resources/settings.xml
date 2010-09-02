@@ -1,0 +1,4 @@
+<settings>
+   <setting id="vquality" type="bool" label="30000" default="true"/>
+   <setting id="ucat" type="bool" label="30001" default="true"/>
+</settings>

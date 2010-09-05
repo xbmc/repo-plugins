@@ -1,0 +1,84 @@
+[B]Errata[/B]
+- [XBMC] Can't replay a video that has already been played, unless the folder is refreshed.
+- [XBMC] Thumbnails sometimes turns into folders.
+- Download of rtmpe streams not supported.
+- playback of rtmpe streams not supported in release (Request by Team XBMC due to DMCA restrictions imposed by US Law).
+
+[B]Version 1.8.0[/B]
+- Solved confusion cause by multiple licens files (removed GPL v2 license and renamed GPL v3 to LICENSE.txt)
+- Version bump to replace old YouTube plugin
+
+[B]Version 1.1.0[/B]
+- Version bump to Final Release
+
+[B]Version 0.9.9[/B]
+- Bugfixes
+- Cleanup
+- Errorhandling
+- Show/Hide folders
+- Fixed thumbnail bug
+- Added support for selection of download quality seperate from playback quality 
+- Added support thumbnail view on confluence
+- New download code supporting useragent.
+
+[B]Version 0.9.8[/B]
+- fix login message "bad username and password"
+- Always print reply from youtube on uncaught exceptions
+- Added steps to httpLogin to aid with debugging
+- Harden swfConfig
+- Only httpLogin when required
+- Minor fixes
+- Fix, download didn't work with & in the title
+- Loop httpLogin up to 10 times on connection failure.
+- Debug is no longer forced on.
+- Remove counter on login message
+
+[B]Version 0.9.7[/B]
+- Minor bugfixes
+- Improve messages
+- General cleanup
+- Hardening certain function.
+- Replaced some icons to fix license issues.
+- Add icon licenses file.
+- Tested against revision 33122 on linux(ubuntu and arch), Windows vista, and Snow Leopard.
+- Added login loop. Max 10 tries, 1 second delay.
+
+[B]Version 0.9.6[/B]
+- Fixed potential crash in Recommended core function
+- Fixed crash in Feeds when a video was marked private
+- Added more debug to rtmp calls
+- Added more debug to login
+- Added debug to uncaught exceptions through the entire core.
+- Fixed pageination in "Most Recent" and "Recently Featured"
+- Always have enabled debug.
+
+[B]Version 0.9.5[/B]
+- Added even more debug to login
+- Make login retry on IOERror failure
+- Removed some login headers.
+
+[B]Version 0.9.4[/B]
+- Added refinements of searches support
+- Added queue folder support
+- Fixed RTMP support
+- Implemented release disable support for RTMP
+- Added try/except to _extractVariables
+- Hopefully improved login debugging.
+
+[B]Version 0.9.3[/B]
+- Added better errorhandling of videos youtube deny access too
+- Actually enable debugging
+
+[B]Version 0.9.2[/B]
+- Added debug to login
+- Fixed playback of non playable item (settings)
+
+[B]Version 0.9.1[/B]
+- After showing the settings window on the first run it didn't log in.
+- Improved error messages related to login.
+- Added some more error handling.
+
+[B]Version 0.9[/B]
+- Cleanup of listFeedFolder
+- Cleanup of listUserFolder
+- Added Viewed and Downloaded overlay to video items.

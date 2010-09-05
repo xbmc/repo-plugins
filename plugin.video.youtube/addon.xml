@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.youtube"
        name="You Tube"
-       version="1.7.7"
-       provider-name="nuka1195">
+       version="1.8.0"
+       provider-name="TheCollective">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
   </requires>
@@ -13,8 +13,6 @@
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <summary>You Tube</summary>
-    <summary lang="hu">You Tube lejátszó</summary>
-    <description></description>
-    <description lang="hu">You Tube videók keresése, tallózása, lejátszása, esetleges letöltése.</description>
+    <description>Plugin that allows you to browse and view videos from everybodys favorite video site!</description>
   </extension>
 </addon>

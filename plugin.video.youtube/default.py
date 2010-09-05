@@ -1,44 +1,53 @@
+'''
+    YouTube plugin for XBMC
+    Copyright (C) 2010 Tobias Ussing And Henrik Mosgaard Jensen
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-# main imports
-import sys
-import xbmc
-import xbmcaddon
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
+import sys, xbmc, xbmcaddon
 
 # plugin constants
-__plugin__ = "YouTube"
-__author__ = "nuka1195"
-__url__ = ""
+__version__ = "1.8.0"
+__plugin__ = "YouTube-" + __version__
+__author__ = "TheCollective"
+__url__ = "www.xbmc.com"
 __svn_url__ = ""
-__version__ = "1.7.5"
 __svn_revision__ = "$Revision$"
-__XBMC_Revision__ = "19457"
-
+__XBMC_Revision__ = "33324"
 __settings__ = xbmcaddon.Addon(id='plugin.video.youtube')
 __language__ = __settings__.getLocalizedString
+__dbg__ = __settings__.getSetting( "debug" ) == "true"
 
-
-if ( __name__ == "__main__" ):
-    if ( not sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_categories as plugin
-    elif ( "category='presets_videos'" in sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_categories as plugin
-    elif ( "category='presets_users'" in sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_categories as plugin
-    elif ( "category='presets_categories'" in sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_categories as plugin
-    elif ( "category='my_subscriptions'" in sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_categories as plugin
-    elif ( "category='delete_preset'" in sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_categories as plugin
-    elif ( "category='play_video_by_id'" in sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_player_by_id as plugin
-    elif ( "category='play_video'" in sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_player as plugin
-    elif ( "category='download_video'" in sys.argv[ 2 ] ):
-        from YoutubeAPI import xbmcplugin_download as plugin
+if (__name__ == "__main__" ):
+    if __dbg__:
+        print __plugin__ + " ARGV: " + repr(sys.argv)
     else:
-        from YoutubeAPI import xbmcplugin_videos as plugin
-    try:
-        plugin.Main()
-    except:
-        pass
+        print __plugin__
+    import YouTubeNavigation as navigation
+    navigator = navigation.YouTubeNavigation()
+    
+    if ( not __settings__.getSetting( "firstrun" ) ):
+        navigator.login()
+        __settings__.setSetting( "firstrun", '1' )
+        
+    if (not sys.argv[2]):
+        navigator.listMenu()
+    else:
+        params = navigator.getParameters(sys.argv[2])
+        get = params.get
+        if (get("action")):
+            navigator.executeAction(params)
+        elif (get("path")):
+            navigator.listMenu(params)

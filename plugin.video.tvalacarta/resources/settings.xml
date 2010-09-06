@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="player_type" type="enum" values="Auto|MPlayer|DVDPlayer" label="30000" default="2"/>
+    <setting id="updatecheck2" type="bool" label="30001" default="true"/>
+    <setting id="enableadultmode" type="bool" label="30002" default="false"/>
+    <setting id="debug" type="bool" label="30003" default="false"/>
+    <setting id="default_action" type="enum" lvalues="30006|30007|30008|30009" label="30005" default="0"/>
+    <setting id="thumbnail_type" type="enum" lvalues="30011|30012" label="30010" default="0"/>
+    <setting type="sep" />
+    <setting id="megavideopremium" type="bool" label="30013" default="false"/>
+    <setting id="megavideouser" type="text" label="30014" default=""/>
+    <setting id="megavideopassword" type="text" label="30015" default=""/>
+    <setting type="sep" />
+    <setting id="downloadpath" type="text" label="30017" default=""/>
+    <setting id="downloadlistpath" type="text" label="30018" default=""/>
+    <setting id="quality_youtube" type="enum" values="Low|Medium (3gp)|240p (FLV)|360P (FLV)|360p (MP4)|480p (FLV)|720p (HD)|1080p (HD)|Menu" label="30020" default="3" />
+    <setting id="subtitulo" type="bool" label="30021" default="false"/>	
+    <setting id="jdownloader" type="text" label="30022" default="http://127.0.0.1:10025"/>
+    <setting id="limite_busquedas" type="enum" values="10|20|30|40" label="30024" default="0"/>
+</settings>

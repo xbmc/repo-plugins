@@ -1,0 +1,6 @@
+<settings>
+   <setting id="username" type="text" label="30000" default=""/>
+   <setting id="password" type="text" option="hidden" label="30001" default=""/>
+   <setting type="sep" />
+   <setting id="bitrate" type="enum" label="30003" values="300 kbps iTunes|1 Mbps Tvkaista|2 Mbps MPEG4|8 Mbps Pro" default="1 Mbps Tvkaista"/>
+</settings>

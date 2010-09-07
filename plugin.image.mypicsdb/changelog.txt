@@ -1,0 +1,9 @@
+2010/09/07
+  First beta dharma release as version 0.1.1
+
+2010/09/01
+  First attempt in porting the plugin to the new dharma addon system
+
+2010/07/29
+  Very first version just before xbmc dharma release : beta 1
+

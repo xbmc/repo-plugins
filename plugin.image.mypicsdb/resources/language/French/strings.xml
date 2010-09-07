@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">MyPicture Database</string>
+    <string id="30001">Base de donnée</string>
+
+    <string id="30020">Dossier images</string>
+    <string id="30021">Retirer de la base les images manquantes</string>
+    <string id="30022">Scan récursif (tous les sous dossiers sont scannés à la recherche d'images)</string>
+    <string id="30023">Dossier à scanner</string>
+    <string id="30024">Effectuer le scan maintenant !</string>
+    <string id="30025">Réinitialiser la base avant le scan</string>
+    
+</strings>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+    <setting type="lsep" label="30020" />
+    <!-- le dossier à scanner -->
+    <setting id="scanfolder" type="folder" label="30023" default="c:\" />
+    
+    <!-- est-ce que le scan doit être récursif -->
+    <setting id="recursive" type="bool" label="30022" default="true" />
+    
+    <!-- une action pour lancer un scan du dossier maintenant -->
+    <!-- ne fonctionne pas car un chemin qui vient d'être configuré n'est pas encore validé par les paramètres -->
+    <!-- <setting id="scan" type="action" label="30024" default="RunPlugin($CWD/?action='scan')" /> -->
+    
+    <!-- retirer de la base les images manquantes -->
+    <setting id="updateDB" type="bool" label="30021" default="false" />
+    
+    <setting type="lsep" label="30001" />
+    <!-- pour recréer la base lors du scan -->
+    <setting id="initDB" type="bool" label="30025" default="true" />
+
+</settings>

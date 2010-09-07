@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+  id="plugin.image.mypicsdb"
+  version="0.1.1"
+  name="My Pictures Database"
+  provider-name="alexsolex®">
+  <requires>
+        <import addon="xbmc.python" version="1.0"/>
+        <import addon="script.module.pysqlite" version="2.5.6"/>
+  </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>image</provides>
+    </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">Advanced Pictures manager</summary>
+    <summary lang="fr">Gestion avancée de votre photothèque</summary>
+    <description lang="en">Manage your pictures as you do for musics and videos[CR]Then you'll be able to sort your pictures by day/month/year, keywords and much more</description>
+    <description lang="fr">Gérez vos photos sous forme d'une base de donnée de la même manière que les médiathèques musique ou vidéos[CR]A vous le tri de vos photos par dates, par mots clés, et bien plus encore !!</description>
+    <disclaimer lang="en">This addon is not fully tested yet. Need more testers, so please feel free to contact me alexsolex@gmail.com to give me your feedbacks</disclaimer>
+    <disclaimer lang="fr">Cet addon n'a pas été testé pour toutes les plateformes. J'ai besoin de retours de testeurs, alors n'hésitez pas à me donner vos retours sur alexsolex@gmail.com</disclaimer>
+  </extension>
+</addon>

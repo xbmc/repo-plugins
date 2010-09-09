@@ -11,8 +11,8 @@ home = os.getcwd().replace(';','')
 #these few lines are taken from AppleMovieTrailers script
 # Shared resources
 BASE_RESOURCE_PATH = makepath( home, "resources" )
-DATA_PATH = xbmc.translatePath( "special://profile/addon_data/plugin.image.MyPictures/")
-
+DATA_PATH = xbmc.translatePath( "special://profile/addon_data/plugin.image.mypicsdb/")
+DB_PATH = xbmc.translatePath( "special://database/")
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 # append the proper platforms folder to our path, xbox is the same as win32
 env = ( os.environ.get( "OS", "win32" ), "win32", )[ os.environ.get( "OS", "win32" ) == "xbox" ]
@@ -31,7 +31,7 @@ if sys.modules.has_key("MypicsDB"):
 import MypicsDB as MPDB
     
 global pictureDB
-pictureDB = os.path.join(DATA_PATH,"MyPictures.db")
+pictureDB = os.path.join(DB_PATH,"MyPictures.db")
 ##else:
 ##    #on utilise pas la DB principale, alors quel est la base à utiliser ?
 ##    #   si choix d'une DB existante

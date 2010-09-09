@@ -1,3 +1,9 @@
+2010/09/08
+  -the uggly log system was missing a file preventing plugin to start.
+    (the log system is not used now, need to remove it later)
+  -the database is now stored in the XBMC\userdata\Database directory, just next to myvideos, mymusic, myprograms databases
+  -the userdata/addon_data was not setted correctly.
+  
 2010/09/07
   First beta dharma release as version 0.1.1
 

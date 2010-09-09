@@ -1,0 +1,60 @@
+Up to date Install / Configuration / Usage / Help can be found @
+
+http://forum.xbmc.org/showthread.php?t=78431
+
+1.0.4 - 1.0.7 (BETA) rc45
+- Added support for ALL OS's
+
+- Manual On-Demand Streaming of Audio and/or Video from client or master hosts.
+
+- Eliminated need for xdotool and wmctrl application making the plugin OS agnostic.
+
+- Added deletion, renaming of Source generated files when source is renamed or removed
+
+- Added generation of .PLS files for use as shortcuts in user defined folder location via Addon Settings (Misc Setting Section). 
+  With this feature, the user can define a folder which can then be added as a Music/Video source respively in the Music 
+  and/or Video sections of XBMC
+
+- Playing/Activating are now done via the generated PLS files located in the folder that you choose in the settings.  Once these are created
+  you can create a shortcut to the folder location in either the Music and/or Video sections of XBMC using the "add source" in those sections.
+  Note: As a result of this change/enhancement, the buttons for the AV sources in the MultiroomAV Plugin now only serve to De-Activate/Kill Streams (in or out)
+        when selected and for management purposes such as Renaming, Removing, Editing parameters specific to the source. 
+
+- Fixed path settings for new Dharma release
+
+- Added more functionality to Settings for flexibility and configuration
+
+- Fixed strings.xml for proper display of contexts
+
+- Fixed settings.xml to comply with new GUI standard code conventions
+
+- Corrected language subdirectory name from english to English
+
+- Cleaned up avsources.xml
+
+- Built initial framework for inner Master/Client signalling and communication over local netork and internal to localhost
+  that the plugin is running on.
+
+- Added Changelog.txt
+
+Known Issues's (v1.0.7):
+- Windows based systems can only be either a client or a master but not both
+- "Continuous play" / Streaming of media is currently only supported on Windows based systems. (XBMC Bug:#10106)
+
+
+
+
+1.0.2 - 1.0.4
+- found problem with file names(double quotes)
+- Cleaned up fixed paths
+- Added License file
+
+1.0.1
+- strings and list, function building
+- added more dynamic functionaly in GUI
+- added new default image and plugin icon.png
+
+0.1.0 - 1.0.1
+- Lets get started
+- change over to XBMC addons support for (XBMC Dharma) and above
+- changed revision # scheme (v1.x.x and above support only XBMC Dharma and above releases) 

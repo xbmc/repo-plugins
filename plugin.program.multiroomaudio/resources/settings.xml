@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="30039">
+    <setting type="lsep" label="30064"/>
+    <setting type="sep" />
+    <setting id="vlc_loc" type="file" label="30043" default="/usr/bin/vlc" enable=""/>
+    <setting type="sep" />
+    <setting id="pls_path" type="folder" label="30051" default="" source="auto" option="writeable" enable=""/>
+    <setting id="plshelp" type="text" label="30061" default="" enable="false"/>
+    <setting id="plshelp2" type="text" label="30062" default="" enable="false"/>
+    <setting id="plshelp3" type="text" label="30063" default="" enable="false"/>
+    <setting type="lsep" label="30040"/>
+    <setting type="sep" />
+    <setting id="streaming_ip" type="text" label="30041" default="224.1.1.152" enable=""/>
+    <setting id="streaming_port" type="number" label="30042" default="1152" enable=""/>
+    <setting id="sap_name" type="text" label="SAP Name" default="Master" enable=""/>
+    <setting id="dedicated" type="bool" label="30055" default="false"/>
+    <setting id="default_vp" type="labelenum" label="30052" default="DVDPlayer" values="DVDPlayer|MR-Video_Stream" enable="eq(-1,true)"/>
+    <setting id="default_ap" type="labelenum" label="30053" default="PAPlayer" values="PAPlayer|MR-Audio_Stream" enable="eq(-2,true)"/>
+    <setting type="lsep" label=""/>
+    <setting type="sep" />
+    <setting id="playlocal" type="bool" label="30059" default="false" enable="eq(-5,true)"/>
+    <setting id="plhelp" type="text" label="30060" default="" enable="false"/>
+  </category>
+  <category label="30044">
+    <setting type="lsep" label="30045"/>
+    <setting type="sep" />
+    <setting id="vstrm_type" type="labelenum" label="30054" default="udp" values="udp|http|mmsh" enable="false"/>
+    <setting id="vsout_lbl" type="bool" label="30046" default="false"/>
+    <setting id="video_sout" type="text" label="30058" default="" enable="eq(-1,true)"/>
+    <setting id="vshelp" type="text" label="30057" enable="false"/>
+    <setting type="sep" />
+    <setting id="video_fc" type="labelenum" label="30047" default="10" values="0|10|20|30|100|150|200" enable=""/>
+  </category>
+  <category label="30048">
+    <setting type="lsep" label="30049"/>
+    <setting type="sep" />
+    <setting id="astrm_type" type="labelenum" label="30054" default="udp" values="udp|http|mmsh" enable="false"/>
+    <setting id="asout_lbl" type="bool" label="30046" default="false"/>
+    <setting id="audio_sout" type="text" label="30058" default="" enable="eq(-1,true)"/>
+    <setting id="ashelp" type="text" label="30057" enable="false"/>
+    <setting type="sep" />
+    <setting id="audio_fc" type="labelenum" label="30047" default="10" values="0|10|20|30|100|150|200" enable=""/>
+  </category>
+  <category label="30050" enable="false">
+    <setting id="thumbs_path" type="folder" source="files" label="30001" default="special://profile/UserData/Thumbnails" enable="false"/>
+    <setting id="search_engine" type="fileenum" mask="/" values="resources\search_engines\" label="30002" default="Yahoo" enable="false"/>
+  </category>
+</settings>

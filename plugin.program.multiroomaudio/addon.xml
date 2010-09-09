@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.multiroomaudio"
+    name="MultiroomAudio" version="1.0.7(BETA)" provider-name="vortexrotor">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>executable</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Plugin for Multiroom Streaming Audio and Video</summary>
+    <description lang="en">Allow syncronized Streaming of Audio and Video from XBMC</description>
+    <platform>all</platform>
+  </extension>
+</addon>

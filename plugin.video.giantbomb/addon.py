@@ -171,10 +171,9 @@ class Main:
 		# Get video quality setting
 		cQuality = self.__settings__.getSetting('vquality')
 		if (cQuality == "true") :
-			endString = "_1500.flv"
+			endString = "_1500.mp4"
 		else:
-			endString = "_700.flv"
-		print endString
+			endString = "_700.mp4"
 	
 		# Read to the data file
 		try:
@@ -221,7 +220,7 @@ class Main:
 			
 			if (found is True):
 				video_count += 1
-				url = template_url%{ 'url': videos[i]["url"].replace(".flv",endString) }
+				url = template_url%{ 'url': videos[i]["url"].replace(".mp4",endString) }
 				image = videos[i]["image"]["super_url"]
 				date = videos[i]["publish_date"][8:10] + '-' + videos[i]["publish_date"][5:7] + '-' + videos[i]["publish_date"][0:4]
 				deck = videos[i]["deck"].encode('utf-8')
@@ -299,6 +298,11 @@ class Main:
 			
 			# Test file integrati
 			if offset != len(json.loads(file_content, object_hook=wm.E('videos').as_e)):
+				raise ValueError
+				
+			# Test video filename
+			if( file_content.find(".flv") != -1):
+				print "OLD FILENAMES"
 				raise ValueError
 			
 		except:

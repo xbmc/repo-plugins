@@ -1,3 +1,6 @@
+Version 2.0.1 (Sep 9 2010)
+ - Updated to match changes in the giantbomb api
+
 Version 2.0.0 (Aug 9 2010)
  - Mostly rewritten for easier maintains and better stability
  - Added search

@@ -49,7 +49,7 @@ nzbmatrix_rss = [
 {'name':'NZBMatrix - HD Movies (Disc Image)', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=50&english=' + __settings__.getSetting('nzbmatrix_english'), 'category':'movies'},
 {'name':'NZBMatrix - Anime', 'url':'http://rss.nzbmatrix.com/rss.php?cat=Anime', 'category':'anime'},
 {'name':'NZBMatrix - Music', 'url':'http://rss.nzbmatrix.com/rss.php?cat=Music', 'category':'music'},
-{'name':'NZBMatrix - Music', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=25', 'category':'musicvideos'},
+{'name':'NZBMatrix - Music Videos', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=25', 'category':'musicvideos'},
 ]
 
 nzbindex_rss = [

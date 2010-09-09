@@ -1,3 +1,6 @@
+2.1.4
+- Fixed NZBMatrix Music Video feed label
+
 2.1.3
 - Added "English Only" filter option to NZBMatrix feeds
 - Update All Language strings.xml

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.nrk"
        name="NRK"
-       version="0.9.7"
+       version="0.9.7" 
        provider-name="VictorV">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -15,6 +15,7 @@
     <summary lang="en">NRK</summary>
     <summary lang="hu">NRK média kiegészítõ</summary> 
     <description lang="en">Watch shows, documentaries, sports, liveTV and news from NRK.no</description>
-    <description lang="hu">A kiegészítõ célja, hogy médiaanyagot olvasson be a www.nrk.no wehelyrõl és virtuális könyvtárakat képezzen ezek segítségével.</description>
+	<description lang="hu">A kiegészítõ célja, hogy médiaanyagot olvasson be a www.nrk.no wehelyrõl és virtuális könyvtárakat képezzen ezek segítségével.</description>
+	<broken>Site changes</broken>
   </extension>
 </addon>

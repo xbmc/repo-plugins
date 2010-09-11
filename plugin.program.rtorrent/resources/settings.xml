@@ -6,4 +6,9 @@
 		<setting id="scgi_port" type="number" visible="eq(-2,0)" label="30002" default="5000" />
 		<setting id="domain_socket" type="file" visible="eq(-3,1)" source="\" label="30003" default="" />
 	</category>
+	<category label="30081">
+		<setting type="lsep" label="30040" />
+		<setting id="remote_folder_downloading" type="folder" label="30004" source="\" default="" />
+		<setting id="remote_folder_complete" type="folder" label="30005" source="\" default="" />
+	</category>
 </settings>

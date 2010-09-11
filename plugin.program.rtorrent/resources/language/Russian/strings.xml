@@ -1,10 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- Settings -->
 	<string id="30000">Тип соединения</string>
 	<string id="30001">Хост</string>
 	<string id="30002">Порт</string>
 	<string id="30003">Домен</string>
+	<string id="30004">Downloading</string>
+	<string id="30005">Complete</string>
+
+	<!-- Settings - Labels -->
+	<string id="30040">Remote Folders (If rTorrent is on a remote computer)</string>
 	
 	<!-- Settings -  Enum Choices -->
 	<string id="30050">SCGI порт</string>
@@ -12,8 +17,8 @@
 	
 	<!-- Settings - Categories -->
 	<string id="30080">Соединение</string>
-	
-	
+	<string id="30081">Remote</string>
+
 	<!-- Context Menus - Torrent Controls -->
 	<string id="30100">Начать загрузку</string>
 	<string id="30101">Остановить загрузку</string>

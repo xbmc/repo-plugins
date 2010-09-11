@@ -1,3 +1,13 @@
+0.10.1 - 2010/
+* More flexible file playback
+* Added support for playback from remote computers
+* Made sure all files are UTF-8 UNIX format
+
+0.10.0
+* Now supports all platforms!
+* Complete code redesign (more modular, easier to maintain and add features)
+* Checks to see if it can connect to rTorrent before it connects (no more errors if improperly configured) 
+
 0.9.3 - 2010/08/20
 * Added Russian translations thanks to runkov!
 * Made addonID info lowercase by request of the XBMC Team

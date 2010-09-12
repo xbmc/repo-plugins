@@ -2,14 +2,32 @@
 <!-- German strings.xml by bootsy (bootsycollins82@gmail.com) -->
 <strings>
     <!-- Main -->
-    <string id="1010">Neu hinzugefügt</string>
-    <string id="1020">Nach Ländern sortieren</string>
-    <string id="1030">Nach Genre sortieren</string>
+    <string id="30000">Neu hinzugefügt</string>
+    <string id="30001">Nach Ländern sortieren</string>
+    <string id="30002">Nach Genre sortieren</string>
+    <string id="30003">Nur Favoriten anzeigen</string>
+    
+    <!-- Context -->
+    <string id="30004">Favorit hinzufügen</string>
+    <string id="30005">Favorit löschen</string>
+    <string id="30006">Alle Favoriten löschen</string>
+    
+    <!-- Favorites -->
+    <string id="30007">Favorit hinzugefügt!</string>
+    <string id="30008">Favorit NICHT hinzugefügt!</string>
+    <string id="30009">Favorit löschen?</string>
+    <string id="30010">Favorit gelöscht!</string>
+    <string id="30011">Favorit NICHT gelöscht!</string>
+    <string id="30012">Alle Favoriten löschen?</string>
+    <string id="30013">Alle Favoriten gelöscht!</string>
+    <string id="30014">Favoriten NICHT gelöscht!</string>
+    <string id="30015">Favorit bereits vorhanden.</string>
+    <string id="30016">Keine weiteren Favoriten vorhanden.</string>
+    <string id="30017">Keine Favoriten vorhanden.</string>
 
-    <!-- Settings -->    
-    <string id="30000"></string>
-    <string id="30001">Standort anzeigen</string>
-    <string id="30002">Genre / Kommentar anzeigen</string>
-    <string id="30003">Stream Rate anzeigen</string>
-    <string id="30004">Mindestqualität (Kbps)</string>
+    <!-- Settings -->   
+    <string id="30020">Standort anzeigen</string>
+    <string id="30021">Genre / Kommentar anzeigen</string>
+    <string id="30022">Stream Rate anzeigen</string>
+    <string id="30023">Mindestqualität (Kbps)</string>
 </strings>

@@ -5,23 +5,23 @@
 <!--Date of translation: 04/16/2009-->
 <!--$Revision$-->
 <strings>
-  <string id="1010">Nya tillägg</string>
-  <string id="1020">Bläddra efter land</string>
-  <string id="1030">Bläddra efter genre</string>
-  <string id="30001">Visa plats</string>
-  <string id="30002">Visa genre / kommentar</string>
-  <string id="30003">Visa strömfart</string>
-  <string id="30004">Minimum kvalitet (Kbps)</string>
-  <string id="30005">16</string>
-  <string id="30006">24</string>
-  <string id="30007">32</string>
-  <string id="30008">48</string>
-  <string id="30009">56</string>
-  <string id="30010">64</string>
-  <string id="30011">96</string>
-  <string id="30012">112</string>
-  <string id="30013">128</string>
-  <string id="30014">160</string>
-  <string id="30015">192</string>
-  <string id="30016">256</string>
+  <string id="30000">Nya tillägg</string>
+  <string id="30001">Bläddra efter land</string>
+  <string id="30002">Bläddra efter genre</string>
+  <string id="30020">Visa plats</string>
+  <string id="30021">Visa genre / kommentar</string>
+  <string id="30022">Visa strömfart</string>
+  <string id="30023">Minimum kvalitet (Kbps)</string>
+  <string id="30024">16</string>
+  <string id="30025">24</string>
+  <string id="30026">32</string>
+  <string id="30027">48</string>
+  <string id="30028">56</string>
+  <string id="30029">64</string>
+  <string id="30030">96</string>
+  <string id="30031">112</string>
+  <string id="30032">128</string>
+  <string id="30033">160</string>
+  <string id="30034">196</string>
+  <string id="30035">256</string>
 </strings>

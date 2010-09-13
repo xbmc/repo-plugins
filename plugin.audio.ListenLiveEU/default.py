@@ -10,9 +10,9 @@ import traceback
 from pprint import pprint
 
 __plugin__ = "ListenLiveEU"
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 __author__ = 'bootsy [bootsy82@gmail.com]'
-__date__ = '12-09-2010'
+__date__ = '13-09-2010'
 __svn__ = 'http://xbmc-addons.googlecode.com/svn/addons/plugin.audio.ListenLiveEU/'
 
 BASE_URL = 'http://www.listenlive.eu'

@@ -5,25 +5,25 @@
     <string id="30000">New additions</string>
     <string id="30001">Browse by country</string>
     <string id="30002">Browse by genre</string>
-    <string id="30003">Browse by favorites</string>
+    <string id="30003">Browse by bookmarks</string>
     
     <!-- Context -->
-    <string id="30004">Add favorite</string>
-    <string id="30005">Delete favorite</string>
-    <string id="30006">Delete all favorites</string>
+    <string id="30004">Add bookmark</string>
+    <string id="30005">Delete bookmark</string>
+    <string id="30006">Delete all bookmarks</string>
     
     <!-- Favorites -->
-    <string id="30007">Favorite added!</string>
-    <string id="30008">Favorite NOT added!</string>
-    <string id="30009">Delete favorite?</string>
-    <string id="30010">Favorite deleted!</string>
-    <string id="30011">Favorite NOT deleted!</string>
-    <string id="30012">Delete all favorites?</string>
-    <string id="30013">All favorites deleted!</string>
-    <string id="30014">Favorites NOT deleted!</string>
-    <string id="30015">Favorite already exists.</string>
-    <string id="30016">No other favorites available.</string>
-    <string id="30017">No favorites available.</string>
+    <string id="30007">Bookmark added!</string>
+    <string id="30008">Bookmark NOT added!</string>
+    <string id="30009">Delete bookmark?</string>
+    <string id="30010">Bookmark deleted!</string>
+    <string id="30011">Bookmark NOT deleted!</string>
+    <string id="30012">Delete all bookmarks?</string>
+    <string id="30013">All bookmarks deleted!</string>
+    <string id="30014">Bookmarks NOT deleted!</string>
+    <string id="30015">Bookmark already exists.</string>
+    <string id="30016">No other bookmarks available.</string>
+    <string id="30017">No bookmarks available.</string>
 
     <!-- Settings -->
     <string id="30020">Show location</string>

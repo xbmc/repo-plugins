@@ -10,9 +10,9 @@ import traceback
 from pprint import pprint
 
 __plugin__ = "ListenLiveEU"
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 __author__ = 'bootsy [bootsy82@gmail.com]'
-__date__ = '13-09-2010'
+__date__ = '15-09-2010'
 __svn__ = 'http://xbmc-addons.googlecode.com/svn/addons/plugin.audio.ListenLiveEU/'
 
 BASE_URL = 'http://www.listenlive.eu'
@@ -21,8 +21,8 @@ URL_NEW = '/'.join( [BASE_URL, 'new.html'] )
 
 DIR_HOME = os.getcwd().replace(';','')
 FILE_INDEX_PAGE = os.path.join(DIR_HOME, 'index.html')
-FILE_STREAMS = os.path.join(DIR_HOME, 'streams.html')
-FILE_FAVS = os.path.join('special://home/userdata/addon_data/plugin.audio.ListenLiveEU', 'favorites.xml')
+DIR_SETTINGS = 'special://home/userdata/addon_data/plugin.audio.ListenLiveEU'
+FILE_FAVS = os.path.join(DIR_SETTINGS, 'favorites.xml')
 
 dialogProgress = xbmcgui.DialogProgress()
 dialog = xbmcgui.Dialog()
@@ -205,7 +205,7 @@ def getStreams(url):
 
 	#doc = open('/'.join( [DIR_HOME, 'top40.html'] ) ).read()
 	
-	doc = getURL(url, FILE_STREAMS)
+	doc = getURL(url)
 	if doc:
 		try:
 			log("parsing doc ...")
@@ -294,7 +294,7 @@ def getStreams(url):
 # fetch webpage or open filename if exists
 ######################################################################################################
 def getURL(url, fn=''):
-	""" read a doc from a url and save to file (if required) """
+	""" read a doc from an url and save to file (if required) """
 	
 	try:
 		doc = ''
@@ -357,13 +357,13 @@ def addDirectoryItem(name, url, mode, label2='', infoType="Music", infoLabels = 
 	
 	if mode==2:
 		try:
-			liz.addContextMenuItems([(__language__(30004), action1), (__language__(30006), action3)], replaceItems=True)
+			liz.addContextMenuItems([(__language__(30004), action1), (__language__(30006), action3)])
 		except:
 			errorOK("addDirectoryItem()")
 		
 	elif mode==3:
 		try:
-			liz.addContextMenuItems([(__language__(30005), action2), (__language__(30006), action3)], replaceItems=True)
+			liz.addContextMenuItems([(__language__(30005), action2), (__language__(30006), action3)])
 		except:
 			errorOK("addDirectoryItem()")
 
@@ -400,6 +400,8 @@ try:
 except:
 	errorOK()
 
+if not os.path.exists(DIR_SETTINGS):
+	os.mkdir(DIR_SETTINGS)
 if not os.path.exists(FILE_FAVS):
 	writeFavs()
 
@@ -432,7 +434,6 @@ if not "?add" in sys.argv[ 2 ] and not "?remfav" in sys.argv[ 2 ] and not "?remo
 	if not sys.argv[ 2 ] or not url:
 		# new start - cleanup old files
 		deleteFile(FILE_INDEX_PAGE)
-		deleteFile(FILE_STREAMS)
 
 		ok = getRootCats()
 	elif url == "new":

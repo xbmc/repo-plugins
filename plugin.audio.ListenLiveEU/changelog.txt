@@ -1,3 +1,11 @@
+[B]Version 0.4.2[/B]
+
+- Added: full context menu
+- Updated: renamed 'Favorites' to 'Bookmarks'
+- Fixed: create settings folder on startup (if not exists)
+- Fixed: load stream list properly (instead of an existing file)
+
+
 [B]Version 0.4.1[/B]
 
 - Updated: settings.xml (sorry, missed that file)

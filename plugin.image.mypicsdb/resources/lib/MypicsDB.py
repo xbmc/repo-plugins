@@ -58,50 +58,28 @@ sys_enc = sys.getfilesystemencoding()
 
 lists_separator = "||"
 
-def razlog():
-    logfile=os.path.join(DATA_PATH,"MPDB.txt")
-    bakfile=os.path.join(DATA_PATH,"MPDB.bak")
-    print logfile
-    print bakfile
-    if not os.path.isfile(logfile):
-        log=open(logfile,"w")
-        log.write("new log file for MyPictureDB plugin\n\n")
-        log.close()
-    else:
-        log=open(logfile,"r")
-        bak=open(bakfile,"w")
-        bak.write( log.read() )
-        bak.close()
-        log.close()
-        log=open(logfile,"w")
-        log.write("new log file for MyPictureDB plugin\n\n")
-        log.close()
 
     
 def log(msg):
-    print str("MyPicsDB >> %s"%msg)
-##    logcontent = open(os.path.join(DATA_PATH,"MPDB.txt")).read()
-##    log=open(os.path.join(DATA_PATH,"MPDB.txt"),"a")
-##    log.write(msg)
-##    log.close()
+    print str("MyPicsDB >> %s"%msg.__str__())
     
 def mount(mountpoint="z:",path="\\",login=None,password=""):
     import os
     if not os.path.exists(mountpoint):
-        print "Mounting %s as %s..."%(path,mountpoint)
+        log( "Mounting %s as %s..."%(path,mountpoint) )
         if login:
             os.system("net use %s %s %s /USER:%s"%(mountpoint,path,login,password))
         else:
             os.system("net use %s %s"%(mountpoint,path))
     else:
-        print "%s is already mounted !"%mountpoint
+        log( "%s is already mounted !"%mountpoint )
     return os.path.exists(mountpoint)
 
 def Make_new_base(DBpath,ecrase=True):
 ##    if not(os.path.isfile(DBpath)):
 ##        f=open("DBpath","w")
 ##        f.close()
-    print DBpath
+    log( "Creating a new picture database\n%s\n"%DBpath)
     conn = sqlite.connect(DBpath)
     cn=conn.cursor()
     if ecrase:
@@ -199,9 +177,6 @@ def getColumns(table):
     cn.close()
     return retour
 
-###ajout d'une entrée
-##cn.execute("""insert into iptc set strTest2='test 2', strTest1='test 1'"""
-##          )
 
 def DB_exists(picpath,picfile):
     """
@@ -263,6 +238,7 @@ def DB_file_insert(path,filename,dictionnary,update=False):
 
     except Exception,msg:
         log( ">>> DB_file_insert ..." )
+        log(filename)
         log( "%s - %s"%(Exception,msg) )
         log( """INSERT INTO files('%s') values (%s)""" % ( "','".join(dictionnary.keys()) , ",".join(["?"]*len(dictionnary.values())) ) )
         log( "" )
@@ -420,7 +396,25 @@ def browse_folder(dirname,parentfolderID=None,recursive=True,update=False,update
     global compte
     cpt=0
     #on liste les fichiers jpg du dossier
-    listfolderfiles = fnmatch.filter(listdir,"*.jpg")
+    listfolderfiles=[]
+##    import imghdr
+    for f in listdir:
+        if os.path.splitext(f)[1].upper() in [".JPG",".TIF",".PNG",".GIF",".BMP"]:
+            listfolderfiles.append(f)
+###other technic using imghdr but many jpg pictures are not handled..... why ??
+##        print ""
+##        print "** %s"%f
+##        try:
+##            if os.path.isfile(os.path.join(dirname,f)) and imghdr.what(os.path.join(dirname,f)) in ['jpeg','gif','tiff','bmp','png']:
+##                listfolderfiles.append(f)
+##                print imghdr.what(os.path.join(dirname,f))
+##            else:
+##                print imghdr.what(os.path.join(dirname,f))
+##        except:
+##            print "passing ...\n"
+##            pass
+    
+    #listfolderfiles = fnmatch.filter(listdir,"*.jpg")
     #on récupère la liste des fichiers entrées en BDD pour le dossier en cours
     listDBdir = DB_listdir(dirname)# --> une requête pour tout le dossier
     if listfolderfiles: i="1"
@@ -446,7 +440,7 @@ def browse_folder(dirname,parentfolderID=None,recursive=True,update=False,update
                 #préparation d'un dictionnaire pour les champs et les valeurs
                 # c'est ce dictionnaire qui servira à  remplir la table fichiers
                 ##picentry = { "strPath":dirname, "strFilename":picfile }
-                picentry = { "idFolder":PFid, "strPath":dirname,"strFilename":picfile,"UseIt":1 }
+                picentry = { "idFolder":PFid, "strPath":dirname.decode("utf8"),"strFilename":picfile.decode("utf8"),"UseIt":1 }
 
                 ###############################
                 # récupération des infos EXIF #
@@ -636,12 +630,19 @@ def get_iptc(path,filename):
                 #iptc[IPTC_FIELDS[k]] = info.data[k].__str__()
                 iptc[IPTC_FIELDS[k]] = lists_separator.join(info.data[k])
                 #print lists_separator.join(info.data[k])
+            elif isinstance(info.data[k],str):
+                iptc[IPTC_FIELDS[k]] = info.data[k].decode(sys_enc)
             else:
+                log( "%s,%s"%(path,filename) )
                 log( "WARNING : type returned by iptc field is not handled :" )
-                log( type(info.data[k]) )
+                log( repr(type(info.data[k])) )
                 log( "" )
         else:
-            log( "WARNING : '%s' is not a valid IPTC info (value : %s)"%(k,info.data[k][:80]) )
+            log("\nIPTC problem with file :")
+            try:
+                log( "WARNING : '%s' IPTC field is not handled (data for this field : \n%s)"%(k,info.data[k][:80]) )
+            except:
+                log( "WARNING : '%s' IPTC field is not handled (unreadable data for this field)"%k )
             log( "" )
     
     return iptc
@@ -675,7 +676,6 @@ def search_keyword(kw):
     else: #sinon, on retourne toutes les images qui ne sont pas associées à des mots clés
         return [row for row in Request( """SELECT p.FullPath,f.strFilename FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFile not in (SELECT idPic FROM keywords)""" )]
 
-
 def list_KW():
     """Retourne une liste de tous les mots clés de la base"""
     keywords=[]
@@ -688,6 +688,60 @@ def list_KW():
     retour = list(set(keywords))
     retour.sort()
     return retour
+
+def countKW(kw):
+    if kw is not None:
+        return Request("""SELECT count(*) FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFile in (SELECT idPic FROM keywords WHERE mot='%s')"""%kw.encode("utf8"))[0][0]
+    else:
+        
+        return Request("""SELECT count(*) FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFile not in (SELECT idPic FROM keywords)""" )[0][0]
+
+def countPicsFolder(folderid):
+    log("TEST : tous les enfants de %s"%folderid)
+    log(all_children(folderid))
+    log("fin du test")
+    cpt = Request("SELECT count(*) FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFolder='%s'"%folderid)[0][0]
+    for idchild in all_children(folderid):
+        cpt = cpt+Request("SELECT count(*) FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFolder='%s'"%idchild)[0][0]
+    return cpt#Request("SELECT count(*) FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFolder='%s'"%folderid)[0][0]
+
+def countPeriod(period,value):
+    print "countperiod(%s,%s)"%(period,value)
+    #   lister les images pour une date donnée
+    format = {"year":"%Y","month":"%Y-%m","date":"%Y-%m-%d","":"%Y"}[period]
+    if period=="year" or period=="":
+        if value:
+            filelist = search_between_dates( (value,format) , ( str( int(value) +1 ),format) )
+        else:
+            filelist = search_all_dates()
+            
+    elif period=="month":
+        a,m=value.split("-")
+        if m=="12":
+            aa=int(a)+1
+            mm=1
+        else:
+            aa=a
+            mm=int(m)+1
+        print mm,aa
+        print
+        filelist = search_between_dates( ("%s-%s"%(a,m),format) , ( "%s-%s"%(aa,mm),format) )
+        
+    elif period=="date":
+        #BUG CONNU : trouver un moyen de trouver le jour suivant en prenant en compte le nb de jours par mois
+        a,m,j=value.split("-")              
+        filelist = search_between_dates( ("%s-%s-%s"%(a,m,j),format) , ( "%s-%s-%s"%(a,m,int(j)+1),format) )
+        
+    else:
+        #pas de periode, alors toutes les photos du 01/01 de la plus petite année, au 31/12 de la plus grande année
+        listyears=get_years()
+        amini=min(listyears)
+        amaxi=max(listyears)
+        if amini and amaxi:
+            filelist = search_between_dates( ("%s"%(amini),format) , ( "%s"%(amaxi),format) )
+        else:
+            filelist = []
+    return len(filelist)
 
 def list_cam_models():
     """retourne la liste des modèles d'appareils photos"""

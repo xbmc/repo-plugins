@@ -10,4 +10,36 @@
     <string id="30024">Effectuer le scan maintenant !</string>
     <string id="30025">Réinitialiser la base avant le scan</string>
     
+    <string id="30050">images</string>
+    
+    <string id="30100">Toute la période %s (%s images)</string>
+    <string id="30101">Tri par Dates</string>
+    <string id="30102">Tri par Dossiers</string>
+    <string id="30103">Tri par Mots-clés</string>
+    <string id="30104">Images sans mots-clés</string>
+    <string id="30105"></string>
+    <string id="30106"></string>
+    <string id="30107"></string>
+    <string id="30108"></string>
+    <string id="30109"></string>
+    <string id="30110"></string>
+    <string id="30111"></string>
+    <string id="30112"></string>
+    <string id="30113"></string>
+    <string id="30114"></string>
+    <string id="30115"></string>
+    <string id="30116"></string>
+    
+    <string id="30201">Aucun dossier à scanner n'est configuré !</string>
+    <string id="30202">Veuillez éditer les paramètres du plugin pour configurer un chemin</string>
+    <string id="30203">Parcours du chemin :</string>
+    <string id="30204">Suppression des chemins inexistants</string>
+    <string id="30205">Ouverture de la base :</string>
+    <string id="30206"></string>
+    <string id="30207"></string>
+    <string id="30208"></string>
+    <string id="30209"></string>
+    <string id="30210"></string>
+    <string id="30211"></string>
+    <string id="30212"></string>
 </strings>

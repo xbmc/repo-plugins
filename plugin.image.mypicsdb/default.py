@@ -1,6 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
-
+"""
+TODO :
+  - upgrade iptcinfo library (need some unicode improvement)
+"""
 import os,sys
 try:
     import xbmc
@@ -21,9 +24,11 @@ sys.path.append( os.path.join( BASE_RESOURCE_PATH, "platform_libraries", env ) )
 
 import urllib
 import re
-import xbmcplugin,xbmcgui,xbmc
+import xbmcplugin,xbmcgui,xbmc,xbmcaddon
 import os.path
 
+Addon = xbmcaddon.Addon(id='plugin.image.mypicsdb')
+__language__ = Addon.getLocalizedString
 sys_enc = sys.getfilesystemencoding()
    
 if sys.modules.has_key("MypicsDB"):
@@ -32,27 +37,6 @@ import MypicsDB as MPDB
     
 global pictureDB
 pictureDB = os.path.join(DB_PATH,"MyPictures.db")
-##else:
-##    #on utilise pas la DB principale, alors quel est la base à utiliser ?
-##    #   si choix d'une DB existante
-##    if xbmcplugin.getSetting(int(sys.argv[1]),'whatDB')=="0":
-##        print "Il faut ouvrir une base existante"
-##        #A FAIRE : tester que la base est correcte ou alors le faire depuis les paramètres
-##        pictureDB = xbmcplugin.getSetting(int(sys.argv[1]),'selectDB')
-##    #   sinon création d'une nouvelle DB 
-##    elif xbmcplugin.getSetting(int(sys.argv[1]),'whatDB')=="1":
-##        print "Il faut créer une nouvelle base"
-##        #assurons nous que le chemin configuré existe
-##        if not os.path.exists( xbmc.translatePath ( xbmcplugin.getSetting(int(sys.argv[1]),'selectpath') ) ):
-##            print "le chemin de création de la base n'existe pas"
-##            dialog = xbmcgui.Dialog()
-##            ok = dialog.ok("MyPictureDB","Création d'une nouvelle base","Le chemin configuré n'existe pas !")
-##        else:
-##            pictureDB = "%s%s.db"%( xbmc.translatePath ( xbmcplugin.getSetting(int(sys.argv[1]),'selectpath') ) ,
-##                                   xbmcplugin.getSetting(int(sys.argv[1]),'nameDB')
-##                                   )
-##print "la base à utiliser est :"
-##print pictureDB
                                
         
 
@@ -158,11 +142,11 @@ class Main:
         
     def show_home(self):
         # par années
-        self.addDir(unescape("Sort by Date"),[("period","year"),("value","")],"showdate","")
+        self.addDir(unescape(__language__(30101)),[("period","year"),("value","")],"showdate","")
         # par dossiers
-        self.addDir(unescape("Sort by Folders"),[("method","folders"),("folderid",""),("onlypics","non")],"showfolder","")
+        self.addDir(unescape(__language__(30102)),[("method","folders"),("folderid",""),("onlypics","non")],"showfolder","")
         # par mots clés
-        self.addDir(unescape("Sort by Keywords"),[("kw",""),],"showkeywords","")
+        self.addDir(unescape(__language__(30103)),[("kw",""),],"showkeywords","")
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
         xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=urllib.unquote_plus("My Pictures Library".encode("utf-8")) )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -197,7 +181,7 @@ class Main:
             nextperiod=None
 
         if not None in listperiod:
-            self.addDir(name      = "All the period %s"%self.args.value, #libellé
+            self.addDir(name      = __language__(30100)%(self.args.value,MPDB.countPeriod(allperiod,self.args.value)), #libellé#"All the period %s (%s pics)"%(self.args.value,MPDB.countPeriod(allperiod,self.args.value)), #libellé
                         params    = [("method","date"),("period",allperiod),("value",self.args.value)],#paramètres
                         action    = "showpics",#action
                         iconimage = "",#icone
@@ -205,7 +189,7 @@ class Main:
             total=len(listperiod)
             for period in listperiod:
                 if period:
-                    self.addDir(name      = period, #libellé
+                    self.addDir(name      = "%s (%s %s)"%(period,MPDB.countPeriod(self.args.period,period),__language__(30050)), #libellé
                                 params    = [("method","date"),("period",nextperiod),("value",period)],#paramètres
                                 action    = action,#action
                                 iconimage = "",#icone
@@ -213,7 +197,7 @@ class Main:
                                 total = total)#nb total d'éléments
                 
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
-        xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category="Display by date : %s"%urllib.unquote_plus(self.args.value.encode("utf-8")) )
+        xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category="%s : %s"%(__language__(30101),urllib.unquote_plus(self.args.value.encode("utf-8"))) )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def show_folders(self):
@@ -233,7 +217,8 @@ class Main:
 
         #on ajoute les dossiers 
         for idchildren, childrenfolder in childrenfolders:
-            self.addDir(name      = childrenfolder, #libellé
+            #print "%s (%s pics)"%(childrenfolder,MPDB.countPicsFolder(idchildren))
+            self.addDir(name      = "%s (%s %s)"%(childrenfolder.decode("utf8"),MPDB.countPicsFolder(idchildren),__language__(30050)), #libellé
                         params    = [("method","folders"),("folderid",str(idchildren)),("onlypics","non")],#paramètres
                         action    = "showfolder",#action
                         iconimage = "",#icone
@@ -246,14 +231,14 @@ class Main:
             self.addPic(filename,path)
             
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
-        xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category="Display by folders : %s"%urllib.unquote_plus(self.args.folderid.encode("utf-8")) )
+        xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category="%s : %s"%(__language__(30102),urllib.unquote_plus(self.args.folderid.encode("utf-8"))) )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def show_keywords(self):
         # affiche les mots clés
         listkw = [u"%s"%k.decode("utf8")  for k in MPDB.list_KW()]
         if MPDB.search_keyword(None): #si il y a des photos sans mots clés
-            self.addDir(name      = "No keywords pictures", #libellé
+            self.addDir(name      = "%s (%s %s)"%(__language__(30104),MPDB.countKW(None),__language__(30050)), #libellé
                         params    = [("method","keyword"),("kw","")],#paramètres
                         action    = "showpics",#action
                         iconimage = "",#icone
@@ -261,14 +246,14 @@ class Main:
         total = len(listkw)
         for kw in listkw:
             #on alimente le plugin en mots clés
-            self.addDir(name      = kw, #libellé
+            self.addDir(name      = "%s (%s %s)"%(kw,MPDB.countKW(kw),__language__(30050)), #libellé
                         params    = [("method","keyword"),("kw",kw)],#paramètres
                         action    = "showpics",#action
                         iconimage = "",#icone
                         contextmenu   = None,#menucontextuel
                         total = total)#nb total d'éléments
         xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
-        xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category="Display by Keywords : %s"%urllib.unquote_plus(self.args.kw.encode("utf-8")) )
+        xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category="%s : %s"%(__language__(30103),urllib.unquote_plus(self.args.kw.encode("utf-8"))) )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
@@ -289,7 +274,7 @@ class Main:
             elif self.args.period=="month":
                 a,m=self.args.value.split("-")
                 if m=="12":
-                    aa=int(a)+1,
+                    aa=int(a)+1
                     mm=1
                 else:
                     aa=a
@@ -333,38 +318,9 @@ class Main:
         xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category="photos" )
         xbmcplugin.endOfDirectory(int(sys.argv[1]))           
             
-##    def show_videos(self):
-##        #on pourrait lancer directement la lecture des vidéos
-##        # étant donné que ca risque d'être long, envisager d'utiliser un script séparé
-##        # qui chargera les url et crééra une playliste, puis lancera le player
-##        # pendant ce temps les vidéos de la playliste s'afficheront
-##
-##        #Affichons maintenant les vidéos
-##        for video in getPlaylistContent(self.args.plsID):
-##            contextmenu = [ (
-##                            "Enregistrer",
-##                            'XBMC.RunScript(%s,%s,%s,%s,%s)'%(os.path.join(os.getcwd(),"VideoDownload.py").encode("utf8"),
-##                                                        video['user_uri'],
-##                                                        video["video_id"],
-##                                                        os.path.join(DOWNLOADDIR.encode("utf8"),xbmc.makeLegalFilename(video['video_title'].replace('\\',''))),
-##                                                        video['preview_uri']
-##                                                        ),
-##                                                    ),
-##                            ]
-##            self.addDir(video['video_title'].replace('\\','').decode("utf8"),
-##                        [("user_uri",video['user_uri']),("video_id",video["video_id"]),("title",video['video_title'].replace('\\','').decode("utf8"))],
-##                        "play",
-##                        video['preview_uri'],
-##                        contextmenu)
-##
-##        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
-##        xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=urllib.unquote_plus(self.args.title.encode("utf-8")) )
-##        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
 
-
-        
 global pDialog
 def pupdate(percent, line1="", line2="", line3=""):
     pDialog.update(percent, line1,line2,line3)
@@ -374,8 +330,7 @@ def scan_my_pics():
     #dialog = xbmcgui.Dialog()
     #ok = dialog.ok("scan","scan préalable")
     pDialog = xbmcgui.DialogProgress()
-    ret = pDialog.create('MyPicsDB', 'Database opening :',pictureDB)
-
+    ret = pDialog.create('MyPicsDB', __language__(30205),pictureDB)
 
     # initialisation de la base :
     MPDB.pictureDB = pictureDB
@@ -388,7 +343,7 @@ def scan_my_pics():
     else:
         # A FAIRE : voir ce qu'on peut prendre comme dossier si aucun n'est configuré
         dialog = xbmcgui.Dialog()
-        ok = dialog.ok("MyPicsDB","No folder to scan is set !","Please edit plugin parameters to set a folder to scan")
+        ok = dialog.ok("MyPicsDB",__language__(30201),__language__(30202))
         return False
         
     print "Scan folder :"
@@ -401,7 +356,7 @@ def scan_my_pics():
     total = 0
     n=0
     for chemin in picpath:
-        pDialog.update(n*100/len(picpath), 'Scan path :',chemin)
+        pDialog.update(n*100/len(picpath), __language__(30203),chemin)
         MPDB.compte = 0
         MPDB.browse_folder(chemin,parentfolderID=None,recursive=xbmcplugin.getSetting(int(sys.argv[1]),'recursive')=="true",update=False,updatefunc = pupdate)
         total = total + MPDB.compte
@@ -413,7 +368,7 @@ def scan_my_pics():
         i = 0
         for path in lp:#on parcours tous les dossiers distinct en base de donnée
             if not os.path.isdir(path): #si le chemin en base n'est pas réellement un dossier,...
-                pDialog.update(i*100/len(lp), 'Deleted folders update',path)
+                pDialog.update(i*100/len(lp), __language__(30204),path)
                 MPDB.DB_del_pic(path)#... on supprime toutes les entrées s'y rapportant
                 #print "%s n'est pas un chemin. Les entrées s'y rapportant dans la base sont supprimées."%path 
             i=i+1
@@ -424,8 +379,7 @@ if __name__=="__main__":
 
     m=Main()
     if not sys.argv[ 2 ]: #pas de paramètres : affichage du menu principal
-        #creation d'un log
-        MPDB.razlog()
+
         ok = scan_my_pics()#scan lorsque le plugin n'a pas de paramètres
         if not ok: #on peut traiter un retour erroné du scan
             print "erreur lors du scan"

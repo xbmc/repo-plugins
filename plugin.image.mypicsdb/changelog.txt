@@ -1,10 +1,32 @@
-2010/09/08
+2010/09/15 --> v 0.1.3
+  In the Sort by folder view, the count of the pictures was counting only the pics within the concerned folder, not all the pics from its subfolders
+  
+2010/09/14
+  Fixed an issue that appear when scanning non unicode IPTC metadatas
+  The strings are now localized ready. Please submit string.xml in your language
+    need a german update (maybe correct english lannguage too)
+  
+2010/09/13
+  Added German language for settings
+  fixed : unicode errors in the file path, filename
+  Setting to force reinit of the database on each plugin start is by default set to False.
+    Picture folder will be scanned only at the start of the plugin. Next start, only new pics will be added and pictures physically removed will be removed from the databasse too.
+    
+2010/09/10
+  Count how many pics for each filter
+  
+2010/09/09
+  New way to select pictures to add in the database.
+    Many file extension can be added (as for now are : ".JPG",".TIF",".PNG",".GIF",".BMP")
+    but only jpg will be scanned for EXIF and IPTC metadatas
+
+2010/09/08 --> v 0.1.2
   -the uggly log system was missing a file preventing plugin to start.
     (the log system is not used now, need to remove it later)
   -the database is now stored in the XBMC\userdata\Database directory, just next to myvideos, mymusic, myprograms databases
   -the userdata/addon_data was not setted correctly.
   
-2010/09/07
+2010/09/07 --> v 0.1.1
   First beta dharma release as version 0.1.1
 
 2010/09/01

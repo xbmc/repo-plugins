@@ -1,0 +1,19 @@
+Hello
+
+If you read this, it may be because you decided to translate the plugin for your
+language. If you do so, please contact me on the official forum :
+http://forum.xbmc.org/showthread.php?t=80845
+and send me your file to include in the plugin.
+
+Thank you
+
+----------
+Bonjour
+
+Si vous lisez ceci, c'est peut être parce que vous avez décidé de traduire le 
+plugin dans votre langue. Si vous le faites, merci de me contacter sur le forum officiel XBMC :
+http://forum.xbmc.org/showthread.php?t=80845
+et envoyez moi votre fichier pour l'inclure dans le plugin.
+
+Merci
+

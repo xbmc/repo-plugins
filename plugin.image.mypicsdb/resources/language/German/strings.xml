@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="30000">MyPicture Database</string>
-    <string id="30001">Database</string>
+    <string id="30001">Datenbank</string>
 
-    <string id="30020">Picture folder</string>
-    <string id="30021">Remove from database missing pictures</string>
-    <string id="30022">Recursive scan ( all sub-folders will be scanned for pictures )</string>
-    <string id="30023">Folder to scan</string>
-    <string id="30024">Perform a scan now !</string>
-    <string id="30025">Initialize the database before scanning</string>
+    <string id="30020">Bilder Verzeichnis</string>
+    <string id="30021">Entferne fehlende Bilder aus der Datenbank</string>
+    <string id="30022">Rekursives scannen ( Unterverzeichnisse werden ebenfalls durchsucht )</string>
+    <string id="30023">Verzeichnis zum Scan</string>
+    <string id="30024">Scanne jetzt!</string>
+    <string id="30025">Initialisiere Datenbank vor dem Scannen</string>
     
     <string id="30050">pics</string>
     

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon
   id="plugin.image.mypicsdb"
-  version="0.1.2"
+  version="0.1.3"
   name="My Pictures Database"
   provider-name="alexsolex®">
   <requires>
@@ -17,7 +17,9 @@
     <summary lang="fr">Gestion avancée de votre photothèque</summary>
     <description lang="en">Manage your pictures as you do for musics and videos[CR]Then you'll be able to sort your pictures by day/month/year, keywords and much more</description>
     <description lang="fr">Gérez vos photos sous forme d'une base de donnée de la même manière que les médiathèques musique ou vidéos[CR]A vous le tri de vos photos par dates, par mots clés, et bien plus encore !!</description>
+    <description lang="de">Manage deine Bilder, genau wie deine Musik oder Videos[CR] Dann lassen sich Bilder nach Tag/Monat/Jahr, Keywords und mehr sortieren</description>
     <disclaimer lang="en">This addon is not fully tested yet. Need more testers, so please feel free to contact me alexsolex@gmail.com to give me your feedbacks</disclaimer>
     <disclaimer lang="fr">Cet addon n'a pas été testé pour toutes les plateformes. J'ai besoin de retours de testeurs, alors n'hésitez pas à me donner vos retours sur alexsolex@gmail.com</disclaimer>
+    <disclaimer lang="de">Dieses Add-On ist noch nicht vollkommen getestet. Weitere Tester sind erwünscht. Für Fragen oder Anregungen schreibt eine Mail an alexsolex@gmail.com</disclaimer>
   </extension>
 </addon>

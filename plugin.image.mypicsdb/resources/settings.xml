@@ -17,6 +17,6 @@
     
     <setting type="lsep" label="30001" />
     <!-- pour recréer la base lors du scan -->
-    <setting id="initDB" type="bool" label="30025" default="true" />
+    <setting id="initDB" type="bool" label="30025" default="false" />
 
 </settings>

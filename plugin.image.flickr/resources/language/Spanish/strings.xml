@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30001">Flickr nombre de usuario</string>
+    <string id="30002">Pequeño tamaño por defecto</string>
+    <string id="30003">Tamaño de la pantalla por defecto</string>
+    <string id="30004">Número máximo de fotos por página</string>
+    
+    <!-- Image Sizes-->
+    <string id="30100">Cuadrado</string>
+    <string id="30101">Miniatura</string>
+    <string id="30102">Pequeño</string>
+    <string id="30103">Mediano500</string>
+    <string id="30104">Mediano640</string>
+    <string id="30105">Grande</string>
+    <string id="30106">Original</string>
+    
+    <!-- Settings Categories-->
+    <string id="30200">Mostrar</string>
+    
+    <!-- 'Your' Categories-->
+    <string id="30300">Galería</string>
+    <string id="30301">Colecciones</string>
+    <string id="30302">Álbumes</string>
+    <string id="30303">Expos</string>
+    <string id="30304">Etiquetas</string>
+    <string id="30305">Favoritas</string>
+    <string id="30306">Contactos</string>
+    <string id="30307">Places</string>
+    <string id="30308">Buscar Galería</string>
+    <string id="30309">Buscar flickr</string>
+    <string id="30310">Interesantes</string>
+    
+    <!-- General Strings -->
+    <string id="30500">En Mostrar Todas Las</string>
+</strings>

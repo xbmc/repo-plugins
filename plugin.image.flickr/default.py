@@ -8,9 +8,9 @@ from urllib2 import HTTPError, URLError
 
 __plugin__ =  'flickr'
 __author__ = 'ruuk'
-__url__ = 'http://2ndmind.com'
-__date__ = '09-8-2010'
-__version__ = '0.5.0'
+__url__ = 'http://code.google.com/p/flickrxbmc/'
+__date__ = '09-17-2010'
+__version__ = '0.9.2'
 __settings__ = xbmcaddon.Addon(id='plugin.image.flickr')
 __language__ = __settings__.getLocalizedString
 
@@ -207,7 +207,7 @@ class FlickrSession:
 			if s.get('label') == label:
 				return s.get('source')
 		
-	def addPhotos(self,method,mode,url='BLANK',page='1',**kwargs):
+	def addPhotos(self,method,mode,url='BLANK',page='1',mapOption=True,**kwargs):
 		page = int(page)
 		
 		#Add Previous Header if necessary
@@ -216,6 +216,7 @@ class FlickrSession:
 			else: self.addDir('<- Previous ' + str(self.max_per_page) + ' photos',url,mode,os.path.join(IMAGES_PATH,'previous.png'),page=str(page-1),userid=kwargs.get('userid',''))
 		info_list = []
 		extras = self.SIZE_KEYS[self.defaultThumbSize] + ',' + self.SIZE_KEYS[self.defaultDisplaySize]
+		if mapOption: extras += ',geo'
 		
 		#Walk photos
 		ct=1
@@ -224,7 +225,9 @@ class FlickrSession:
 			self.addPhoto(	photo.get('title'),
 							photo.get('id'),
 							photo.get(self.SIZE_KEYS[self.defaultThumbSize]),
-							photo.get(self.SIZE_KEYS[self.defaultDisplaySize]))
+							photo.get(self.SIZE_KEYS[self.defaultDisplaySize]),
+							lat=photo.get('latitude'),lon=photo.get('longitude'),
+							mapOption=mapOption)
 			
 		#Add Next Footer if necessary
 		#print "PAGES: " + str(page) + " " + str(self.flickr.TOTAL_PAGES) + " " + self.flickr.TOTAL_ON_LAST_PAGE
@@ -237,7 +240,7 @@ class FlickrSession:
 				next += 'Next ' + str(self.max_per_page)
 			if page < self.flickr.TOTAL_PAGES: self.addDir(next + ' photos ->',url,mode,os.path.join(IMAGES_PATH,'next.png'),page=str(page+1),userid=kwargs.get('userid',''))
 		
-	def addPhoto(self,title,pid,thumb,display):
+	def addPhoto(self,title,pid,thumb,display,mapOption=False,lat='',lon=''):
 		if not (thumb and display):
 			urls = self.getImageUrl(pid,label='all')
 			display = urls.get(self.defaultDisplaySize,urls.get('Original',''))
@@ -249,7 +252,11 @@ class FlickrSession:
 					if urls.get(s):
 						display = urls.get(s)
 						break
-		self.addLink(title,display,thumb,tot=self.flickr.TOTAL_ON_PAGE)
+		contextMenu = None
+		if mapOption:
+			if not lat+lon == '00':
+				contextMenu = [('Show Map','XBMC.RunScript(special://home/addons/plugin.image.flickr/default.py,map,'+lat+','+lon+')')]
+		self.addLink(title,display,thumb,tot=self.flickr.TOTAL_ON_PAGE,contextMenu=contextMenu)
 		
 	def CATEGORIES(self):
 		self.addDir(__language__(30300),'photostream',1,os.path.join(IMAGES_PATH,'photostream.png'))
@@ -291,6 +298,7 @@ class FlickrSession:
 			self.addDir(t,t,105,'',tot=len(tags),userid=userid)
 			
 	def PLACES(self,pid,woeid=None,name='',zoom='2'):
+		clearDirFiles(CACHE_PATH)
 		places = self.getPlacesInfoList(pid,woeid=woeid)
 		
 		#If there are no places in this place id level, show all the photos
@@ -303,7 +311,7 @@ class FlickrSession:
 		for p in places:
 			count = p.get('count','0')
 			#tn, x = urllib.urlretrieve("http://ojw.dev.openstreetmap.org/StaticMap/?lat="+p.get('lat','0')+"&lon="+p.get('lon','0')+"&z=2&w=256&h=256&show=1&fmt=png")
-			#tn,x  = urllib.urlretrieve("http://maps.google.com/maps/api/staticmap?center="+p.get('lat','0')+","+p.get('lon','0')+"&zoom="+zoom+"&size=256x256&sensor=false&maptype=hybrid&format=jpg",os.path.join(CACHE_PATH,str(idx)+'.jpg'))
+			#tn,x  = urllib.urlretrieve("http://maps.google.com/maps/api/staticmap?center="+p.get('lat','0')+","+p.get('lon','0')+"&zoom="+zoom+"&size=256x256&sensor=false&maptype=hybrid&format=jpg",ipath)
 			#BteTjhnV34E7M.r_gjDLCI33rmG0FL7TFPCMF7LHEleA_iKm6S_rEjpCmns-
 			#tn = "http://maps.google.com/maps/api/staticmap?center=40.714728,-73.998672&zoom=12&size=256x256&sensor=false&maptype=hybrid"
 			#xml = urllib.urlopen("http://local.yahooapis.com/MapsService/V1/mapImage?appid=BteTjhnV34E7M.r_gjDLCI33rmG0FL7TFPCMF7LHEleA_iKm6S_rEjpCmns-&latitude="+p.get('lat','0')+"&longitude="+p.get('lon','0')+"&image_height=256&image_width=256&zoom=10").read()
@@ -312,7 +320,8 @@ class FlickrSession:
 			#print "TEST: "+tn
 			#urllib.urlretrieve(tn,'test.png')
 			#tn="http://gws.maps.yahoo.com/mapimage?MAPDATA=B.KuOud6wXXC3vi5X0zQEdMkX1ubUTsq.MWWDhhCYyi9fXv5J1oRq1gn7GILfmqt93QGvUGHqQx0AOGf7YQW_P_iYvB8s_t1GQXG5dxj9TW76FE-&mvt=m&cltype=onnetwork&.intl=us&appid=BteTjhnV34E7M.r_gjDLCI33rmG0FL7TFPCMF7LHEleA_iKm6S_rEjpCmns-&oper=&_proxy=ydn,xml"
-			self.addDir(p.get('place','')+' ('+count+')',p.get('woeid'),1000 + pid,'',tot=len(places))
+			tn = getMap(p.get('lat','0'),p.get('lon','0'),zoom)
+			self.addDir(p.get('place','')+' ('+count+')',p.get('woeid'),1000 + pid,tn,tot=len(places))
 			idx+=1
 		
 	def FAVORITES(self,page,userid=None):
@@ -358,13 +367,14 @@ class FlickrSession:
 		self.addDir(__language__(30308),cid,709,os.path.join(IMAGES_PATH,'search_photostream.png'))
 		
 	def PLACE(self,woeid,page):
-		self.addPhotos(self.flickr.photos_search,1022,url=woeid,page=page,woe_id=woeid,user_id='me')
+		self.addPhotos(self.flickr.photos_search,1022,url=woeid,page=page,woe_id=woeid,user_id='me',mapOption=True)
 	
-	def addLink(self,name,url,iconimage,tot=0):
+	def addLink(self,name,url,iconimage,tot=0,contextMenu=None):
 		ok=True
 		#u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&name="+urllib.quote_plus(name)
 		liz=xbmcgui.ListItem(name, iconImage="DefaultImage.png", thumbnailImage=iconimage)
 		liz.setInfo( type="image", infoLabels={ "Title": name } )
+		if contextMenu: liz.addContextMenuItems(contextMenu)
 		ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False,totalItems=tot)
 		return ok
 
@@ -378,7 +388,36 @@ class FlickrSession:
 		ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=tot)
 		return ok
 
+class ImageShower(xbmcgui.Window):
+	def showImage(self,image):
+		self.addControl(xbmcgui.ControlImage(0,0,test.getWidth(),test.getHeight(), image, aspectRatio=2))
+		
+	def onAction(self,action):
+		if action == 10 or action == 9: self.close()
 
+def getMap(lat,lon,zoom,width=256,height=256,marker=False):
+	#640x360
+	lat = str(lat)
+	lon = str(lon)
+	zoom = str(zoom)
+	ipath = os.path.join(CACHE_PATH,lat+lon+zoom+'.jpg')
+	mark = ''
+	if marker: mark = '&markers=color:blue|' + lat + ',' + lon
+	fname,ignore  = urllib.urlretrieve("http://maps.google.com/maps/api/staticmap?center="+lat+","+lon+"&zoom="+zoom+"&size="+str(width)+"x"+str(height)+"&sensor=false&maptype=hybrid&format=jpg" + mark,ipath)
+	return fname
+		
+
+def clearDirFiles(filepath):
+	if not os.path.exists(filepath): return
+	for f in os.listdir(filepath):
+		f = os.path.join(filepath,f)
+		if os.path.isfile(f): os.remove(f)
+
+def doMap():
+	clearDirFiles(CACHE_PATH)
+	image = getMap(sys.argv[2],sys.argv[3],15,width=640,height=360,marker=True)
+	xbmc.executebuiltin('SlideShow('+CACHE_PATH+')')
+	
 ## XBMC Plugin stuff starts here --------------------------------------------------------            
 def get_params():
 	param=[]
@@ -398,117 +437,126 @@ def get_params():
 							
 	return param
         
-### GET THE PARAMS --------------------------------------------------------------------------
-params=get_params()
-url=None
-name=None
-mode=None
-page=1
-userid=''
+### Do plugin stuff --------------------------------------------------------------------------
+def doPlugin():
+	params=get_params()
+	url=None
+	name=None
+	mode=None
+	page=1
+	userid=''
 
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        page=int(params["page"])
-except:
-        pass
-try:
-        userid=urllib.unquote_plus(params["userid"])
-except:
-        pass
-try:
-        name=urllib.unquote_plus(params["name"])
-except:
-        pass
-try:
-        mode=int(params["mode"])
-except:
-        pass
+	try:
+			url=urllib.unquote_plus(params["url"])
+	except:
+			pass
+	try:
+			page=int(params["page"])
+	except:
+			pass
+	try:
+			userid=urllib.unquote_plus(params["userid"])
+	except:
+			pass
+	try:
+			name=urllib.unquote_plus(params["name"])
+	except:
+			pass
+	try:
+			mode=int(params["mode"])
+	except:
+			pass
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
-print "Page: "+str(page)
+	print "Mode: "+str(mode)
+	print "URL: "+str(url)
+	print "Name: "+str(name)
+	print "Page: "+str(page)
 
-update_dir = False
+	update_dir = False
+	success = True
 
-try:
-	fsession = FlickrSession()
-	fsession.authenticate()
+	try:
+		fsession = FlickrSession()
+		fsession.authenticate()
 
-	if page>1 or page<0: update_dir=True
-	page = abs(page)
+		if page>1 or page<0: update_dir=True
+		page = abs(page)
 
-	if mode==None or url==None or len(url)<1:
-		fsession.CATEGORIES()
-	elif mode==1:
-		fsession.PHOTOSTREAM(page)
-	elif mode==2:
-		fsession.COLLECTION(url,userid=userid)
-	elif mode==3:
-		fsession.SETS()
-	elif mode==4:
-		fsession.GALLERIES()
-	elif mode==5:
-		fsession.TAGS()
-	elif mode==6:
-		fsession.FAVORITES(page)
-	elif mode==7:
-		fsession.CONTACTS()
-	elif mode==8:
-		fsession.PLACES(12)
-	elif mode==9:
-		fsession.SEARCH_TAGS(url,page,mode=9,userid='me')
-	elif mode==10:
-		fsession.SEARCH_TAGS(url,page,mode=10)
-	elif mode==11:
-		fsession.INTERESTING(page)
-	elif mode==103:
-		fsession.SET(url,page)
-	elif mode==104:
-		fsession.GALLERY(url,page)
-	elif mode==105:
-		fsession.TAG(url,page,userid=userid)
-	elif mode==107:
-		fsession.CONTACT(url,name)
-	elif mode==701:
-		fsession.PHOTOSTREAM(page,mode=701,userid=url)
-	elif mode==702:
-		fsession.COLLECTION('collections',userid=url)
-	elif mode==703:
-		fsession.SETS(userid=url)
-	elif mode==704:
-		fsession.GALLERIES(userid=url)
-	elif mode==705:
-		fsession.TAGS(userid=url)
-	elif mode==706:
-		fsession.FAVORITES(page,userid=url)
-	elif mode==707:
-		fsession.CONTACTS(userid=url)
-	elif mode==709:
-		fsession.SEARCH_TAGS(url,page,mode=709,userid=url)
-	elif mode==1022:
-		fsession.PLACE(url,page)
-	elif mode==1007:
-		fsession.PLACES(22,woeid=url,name=name,zoom='10')
-	elif mode==1008:
-		fsession.PLACES(7,woeid=url,name=name,zoom='7')
-	elif mode==1012:
-		fsession.PLACES(8,woeid=url,name=name,zoom='4')
-except HTTPError,e:
-	if(e.reason[1] == 504):
-		dialog = xbmcgui.Dialog()
-		ok = dialog.ok('HTTP Timeout', 'Try again.')
-	else:
-		raise
-except URLError,e:
-	print e.reason
-	if(e.reason[0] == 110):
-		dialog = xbmcgui.Dialog()
-		ok = dialog.ok('Connection Timeout', 'Try again.')
-	else:
-		raise
-	
-xbmcplugin.endOfDirectory(int(sys.argv[1]),updateListing=update_dir)
+		if mode==None or url==None or len(url)<1:
+			fsession.CATEGORIES()
+		elif mode==1:
+			fsession.PHOTOSTREAM(page)
+		elif mode==2:
+			fsession.COLLECTION(url,userid=userid)
+		elif mode==3:
+			fsession.SETS()
+		elif mode==4:
+			fsession.GALLERIES()
+		elif mode==5:
+			fsession.TAGS()
+		elif mode==6:
+			fsession.FAVORITES(page)
+		elif mode==7:
+			fsession.CONTACTS()
+		elif mode==8:
+			fsession.PLACES(12)
+		elif mode==9:
+			fsession.SEARCH_TAGS(url,page,mode=9,userid='me')
+		elif mode==10:
+			fsession.SEARCH_TAGS(url,page,mode=10)
+		elif mode==11:
+			fsession.INTERESTING(page)
+		elif mode==103:
+			fsession.SET(url,page)
+		elif mode==104:
+			fsession.GALLERY(url,page)
+		elif mode==105:
+			fsession.TAG(url,page,userid=userid)
+		elif mode==107:
+			fsession.CONTACT(url,name)
+		elif mode==701:
+			fsession.PHOTOSTREAM(page,mode=701,userid=url)
+		elif mode==702:
+			fsession.COLLECTION('collections',userid=url)
+		elif mode==703:
+			fsession.SETS(userid=url)
+		elif mode==704:
+			fsession.GALLERIES(userid=url)
+		elif mode==705:
+			fsession.TAGS(userid=url)
+		elif mode==706:
+			fsession.FAVORITES(page,userid=url)
+		elif mode==707:
+			fsession.CONTACTS(userid=url)
+		elif mode==709:
+			fsession.SEARCH_TAGS(url,page,mode=709,userid=url)
+		elif mode==1022:
+			fsession.PLACE(url,page)
+		elif mode==1007:
+			fsession.PLACES(22,woeid=url,name=name,zoom='13')
+		elif mode==1008:
+			fsession.PLACES(7,woeid=url,name=name,zoom='9')
+		elif mode==1012:
+			fsession.PLACES(8,woeid=url,name=name,zoom='4')
+	except HTTPError,e:
+		if(e.reason[1] == 504):
+			dialog = xbmcgui.Dialog()
+			ok = dialog.ok('HTTP Timeout', 'Try again.')
+			success = False
+		else:
+			raise
+	except URLError,e:
+		print e.reason
+		if(e.reason[0] == 110):
+			dialog = xbmcgui.Dialog()
+			ok = dialog.ok('Connection Timeout', 'Try again.')
+			success = False
+		else:
+			raise
+		
+	xbmcplugin.endOfDirectory(int(sys.argv[1]),succeeded=success,updateListing=update_dir)
+
+if sys.argv[1] == 'map':
+	doMap()
+else:
+	doPlugin()

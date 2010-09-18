@@ -2,6 +2,50 @@ Up to date Install / Configuration / Usage / Help can be found @
 
 http://forum.xbmc.org/showthread.php?t=78431
 
+1.0.9
+VLC version 1.1.4 required (it's a better release anyhow!!! ;-) )
+- Added Option for Master Syncronization (Because of this it is necessary to upgrade to vlc 1.1.4 on linux based systems)
+
+- Added Stop Multiroom-AV to the list (this is a non editable item) It does what it says... it stops all streaming
+  (BTW... I add this to my 'favorites' along with my sources)  ;-)
+
+- Added Generate Files to the list for manually generating the scripts needed (this is a non editable item)
+  NOTE: You should only run this after you have made a change to the plugin via "addon settings" and requires a restart of XBMC
+        for the changes to go into effect.
+
+- Souces in the list now play their respective streams when selected.
+
+- Added Dynamic Playlist function when queuing songs (note: With Linux based xbmc's, that every song has to be individually selected)
+  this is due to the continuous play issue that was reported with Linux (XBMC Bug:#10106).
+
+- Fixed Loopback of audio/video when configured for Dedicated Master Streamer.
+
+- Play local i.e. Loopback is now on by default.
+
+- Fixed playercorefactory - set default hideconsole to "TRUE"
+
+- To lessen confusion, sources can be started from the MAV console now "again" - you should still remember to add the .pls locations via
+  appropriate Music / Video sections so you can access the source via a remote like "XBMC remote"
+  
+- Fixed no DVD playing (No DVD streaming at the moment)
+
+- Fixed DOS windows popping up "annoyance" when generating files
+
+- Added more context to the actual plugin (Dialogues, status, and messages) so you can see what is happeing
+
+- Cleaned up some more code.
+
+
+1.0.8
+- Fixed issue for Windows based systems being both client and master
+
+- Continuous "gappless" play added for streaming music/audio files for Windows
+
+- Loopback as Master of playing media added for Windows based systems
+
+- Notification added of starting Streaming Server when in Master mode and Start Streamer on Start is activated via the Addon Settings
+
+
 1.0.4 - 1.0.7 (BETA) rc45
 - Added support for ALL OS's
 
@@ -18,7 +62,7 @@ http://forum.xbmc.org/showthread.php?t=78431
 - Playing/Activating are now done via the generated PLS files located in the folder that you choose in the settings.  Once these are created
   you can create a shortcut to the folder location in either the Music and/or Video sections of XBMC using the "add source" in those sections.
   Note: As a result of this change/enhancement, the buttons for the AV sources in the MultiroomAV Plugin now only serve to De-Activate/Kill Streams (in or out)
-        when selected and for management purposes such as Renaming, Removing, Editing parameters specific to the source. 
+  when selected and for management purposes such as Renaming, Removing, Editing parameters specific to the source. 
 
 - Fixed path settings for new Dharma release
 

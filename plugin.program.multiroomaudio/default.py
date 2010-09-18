@@ -12,7 +12,7 @@ __author__ = "teshephe"
 __url__ = ""
 __svn_url__ = ""
 __credits__ = "VortexRotor, XBMC Team, VLC, Author of Launcher Plugin"
-__version__ = "1.0.7 (BETA) rc45"
+__version__ = "1.0.9"
 
 
 if ( __name__ == "__main__" ):

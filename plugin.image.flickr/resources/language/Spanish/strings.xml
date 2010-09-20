@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- NOTE The string @REPLACE@ must not be modified in a translation -->
 <strings>
     <string id="30001">Flickr nombre de usuario</string>
     <string id="30002">Pequeño tamaño por defecto</string>
     <string id="30003">Tamaño de la pantalla por defecto</string>
     <string id="30004">Número máximo de fotos por página</string>
+    <string id="30005">Default Map Source</string>
+    <string id="30006">Country Zoom</string>
+    <string id="30007">Region Zoom</string>
+    <string id="30008">Locality Zoom</string>
+    <string id="30009">Neighborhood Zoom</string>
+    <string id="30010">Photo Zoom</string>
+    <string id="30011">Enable Maps Thumbnails</string>
+    <string id="30012">Default Map Type</string>
     
     <!-- Image Sizes-->
     <string id="30100">Cuadrado</string>
@@ -16,6 +25,7 @@
     
     <!-- Settings Categories-->
     <string id="30200">Mostrar</string>
+    <string id="30201">Maps</string>
     
     <!-- 'Your' Categories-->
     <string id="30300">Galería</string>
@@ -31,5 +41,21 @@
     <string id="30310">Interesantes</string>
     
     <!-- General Strings -->
-    <string id="30500">En Mostrar Todas Las</string>
+    <string id="30500">Ver todo en @REPLACE@</string>
+    <string id="30501">Introduzca etiquetas de búsqueda</string>
+    <string id="30502">Tiempo de espera de HTTP</string>
+    <string id="30503">Tiempo de espera de conexión</string>
+    <string id="30504">Inténtalo de nuevo</string>
+    <string id="30505">Autorizar flickrXBMC</string>
+    <string id="30506">Ir a la @REPLACE@</string>
+    <string id="30507">siga las instrucciones, y luego haga clic en Aceptar</string>
+    <string id="30508">Introduzca la dirección de correo electrónico:</string>
+    <string id="30509">Introduzca el código:</string>
+    <string id="30510">Ver Mapa</string>
+    <string id="30511">Anterior @REPLACE@ fotos</string>
+    <string id="30512">Siguiente @REPLACE@ fotos</string>
+    <string id="30513">Last @REPLACE@ fotos</string>
+    <string id="30514">@REPLACE@ @NAMEREPLACE@</string><!--(Singular possesive) example: John's Photostream -->
+    <string id="30515">@REPLACE@ de @NAMEREPLACE@</string><!--(Plural posessive) example: John's Sets -->
+    <string id="30516">@NAMEREPLACE@ Galería De Búsqueda</string><!--Search John's Photostream -->
 </strings>

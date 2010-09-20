@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- NOTE The string @REPLACE@ must not be modified in a translation -->
 <strings>
     <string id="30001">Flickr User Name</string>
     <string id="30002">DStandard Thumbgröße</string>
     <string id="30003">Standard Anzeigegröße</string>
     <string id="30004">Maximale Anzahl an Fotos pro Seite</string>
+    <string id="30005">Default Map Source</string>
+    <string id="30006">Country Zoom</string>
+    <string id="30007">Region Zoom</string>
+    <string id="30008">Locality Zoom</string>
+    <string id="30009">Neighborhood Zoom</string>
+    <string id="30010">Photo Zoom</string>
+    <string id="30011">Enable Maps Thumbnails</string>
+    <string id="30012">Default Map Type</string>
     
     <!-- Image Sizes-->
     <string id="30100">Quadrat</string>
@@ -16,6 +25,7 @@
     
     <!-- Settings Categories-->
     <string id="30200">Display</string>
+    <string id="30201">Maps</string>
     
     <!-- 'Your' Categories-->
     <string id="30300">Fotostream</string>
@@ -31,5 +41,21 @@
     <string id="30310">Intressantes von heute</string>
     
     <!-- General Strings -->
-    <string id="30500">Zeige All In</string>
+    <string id="30500">Zeige All In @REPLACE@</string>
+    <string id="30501">Enter search tags</string>
+    <string id="30502">HTTP Timeout</string>
+    <string id="30503">Connection Timeout</string>
+    <string id="30504">Try again</string>
+    <string id="30505">Authorize flickrXBMC</string>
+    <string id="30506">Go to @REPLACE@</string>
+    <string id="30507">follow the instructions, then click OK</string>
+    <string id="30508">Enter the email address here:</string>
+    <string id="30509">Enter the code:</string>
+    <string id="30510">Show Map</string>
+    <string id="30511">Previous @REPLACE@ photos</string>
+    <string id="30512">Next @REPLACE@ photos</string>
+    <string id="30513">Last @REPLACE@ photos</string>
+    <string id="30514">@NAMEREPLACE@'s @REPLACE@</string><!--(Singular possesive) example: John's Photostream -->
+    <string id="30515">@NAMEREPLACE@'s @REPLACE@</string><!--(Plural posessive) example: John's Sets -->
+    <string id="30516">Suche @NAMEREPLACE@'s Fotostream</string><!--Search John's Photostream -->
 </strings>

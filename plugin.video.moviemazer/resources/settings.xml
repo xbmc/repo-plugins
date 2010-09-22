@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting label="30100" type="lsep" />
+      <setting label="30110" type="labelenum" id="cache_movies_list" values="0|1|8|24|48" default="8" />
+      <setting label="30120" type="labelenum" id="cache_movie_info" values="1|8|24|96" default="24" />
+    <setting label="30200" type="lsep" />
+      <setting label="30210" type="labelenum" id="trailer_xres" values="1920|1280|848|640|480|320|" default="848" />
+      <setting label="30220" type="labelenum" id="trailer_lang" values="de|en" default="de" />
+</settings>

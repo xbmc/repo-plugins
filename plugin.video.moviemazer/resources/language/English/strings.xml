@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Categories -->
+    <string id="30001">User Top10</string>
+    <string id="30002">Recent Updates</string>
+    <string id="30003">Current Trailers</string>
+    
+    <!-- Progress Bar -->
+    <string id="30020">Loading movieinfos</string>
+    <string id="30021">Movies have to be cached</string>
+    <string id="30022">Loading</string>    
+    
+    <!-- Movie infos -->
+    <string id="30030">Germany premiere date</string>
+
+    <!-- Trailer Popup -->
+    <string id="30010">Choose a trailer</string>
+    <string id="30011">Back</string>
+    <string id="30012">No Trailer found.</string>
+
+    <!-- settings -->
+    <string id="30100">Cache</string>
+    <string id="30110">Cache movielist (in h)</string>
+    <string id="30120">Cache movieinfos (in h)</string>
+    
+    <string id="30200">Trailer</string>
+    <string id="30210">Preferred Quality (X-Res.)</string>
+    <string id="30220">Preferred language for trailers</string>
+</strings>

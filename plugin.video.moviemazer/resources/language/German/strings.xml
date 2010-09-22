@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Categories -->
+    <string id="30001">User Top 10</string>
+    <string id="30002">Letzte Updates</string>
+    <string id="30003">Aktuelle Trailer</string>
+    
+    <!-- Progress Bar -->
+    <string id="30020">Lade Filmdaten</string>
+    <string id="30021">Filme müssen geladen werden</string>
+    <string id="30022">Lade</string>    
+    
+    <!-- Movie infos -->
+    <string id="30030">Datum Deutschlandpremiere</string>
+
+    <!-- Trailer Popup -->
+    <string id="30010">Wähle einen Trailer</string>
+    <string id="30011">Zurück</string>
+    
+    <string id="30012">Keinen Trailer gefunden.</string>
+
+    <!-- settings -->
+    <string id="30100">Cache</string>
+    <string id="30110">Filmliste Cache (in h)</string>
+    <string id="30120">Filmdaten Cache (in h)</string>
+    
+    <string id="30200">Trailer</string>
+    <string id="30210">Bevorzugte Qualität (Horiz. Auflösung)</string>
+    <string id="30220">Bevorzugte Sprache der Trailer</string>
+</strings>

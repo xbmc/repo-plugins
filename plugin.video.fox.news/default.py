@@ -1,200 +1,203 @@
-import urllib,urllib2,re,xbmcplugin,xbmcgui
+import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
 
 #Fox News Video- by Redeyed
 
+__settings__ = xbmcaddon.Addon(id='plugin.video.fox.news')
+__language__ = __settings__.getLocalizedString
+
                        
 def INDEX(url):
-        addDir('01. Latest Video','87249',20,'')
-        addDir('02. Hot Topics','http://video.foxnews.com/',2,'')
-        addDir('03. News','http://video.foxnews.com/',3,'')
-        addDir('04. Entertainment','http://video.foxnews.com/',4,'')
-        addDir('05. Business','http://video.foxnews.com/',5,'')
-        addDir('06. Health','http://video.foxnews.com/',6,'')
-        addDir('07. Shows','http://video.foxnews.com/',7,'')
-        addDir('08. Opinion','http://video.foxnews.com/',8,'')
-        addDir('09. Sports','http://video.foxnews.com/',9,'')
-        addDir('10. Leisure','http://video.foxnews.com/',10,'')
-        addDir('11. Howcast','http://video.foxnews.com/',11,'')
-        addDir('12. Strategy Room','http://video.foxnews.com/',12,'')
-        addDir('13. Web Originals','86994',20,'')
-        addDir('14. FNC iMag','http://video.foxnews.com/',13,'')
-        addDir('15. FOX News Radio','http://video.foxnews.com/',14,'')
-        addDir('16. FOX Fan','http://video.foxnews.com/',15,'')
+        addDir(__language__(30001),'87249',20,'')
+        addDir(__language__(30002),'http://video.foxnews.com/',2,'')
+        addDir(__language__(30003),'http://video.foxnews.com/',3,'')
+        addDir(__language__(30004),'http://video.foxnews.com/',4,'')
+        addDir(__language__(30005),'http://video.foxnews.com/',5,'')
+        addDir(__language__(30006),'http://video.foxnews.com/',6,'')
+        addDir(__language__(30007),'http://video.foxnews.com/',7,'')
+        addDir(__language__(30008),'http://video.foxnews.com/',8,'')
+        addDir(__language__(30009),'http://video.foxnews.com/',9,'')
+        addDir(__language__(30010),'http://video.foxnews.com/',10,'')
+        addDir(__language__(30011),'http://video.foxnews.com/',11,'')
+        addDir(__language__(30012),'http://video.foxnews.com/',12,'')
+        addDir(__language__(30013),'86994',20,'')
+        addDir(__language__(30014),'http://video.foxnews.com/',13,'')
+        addDir(__language__(30015),'http://video.foxnews.com/',14,'')
+        addDir(__language__(30016),'http://video.foxnews.com/',15,'')
                        
 #Hot Topics                                                     
 def INDEX2(url):
-        addDir('01. 2009 in Review','87281',20,'') 
-        addDir('02. On the Job Hunt','87282',20,'')
-        addDir('03. Afghanistan','87283',20,'')
-        addDir('04. Health Care','87284',20,'')
-        addDir('05. Global Warming','87285',20,'')
-        addDir('06. H1N1','87286',20,'')
-        addDir('07. Caught on Tape','87287',20,'')                                                     
+        addDir(__language__(30017),'87281',20,'') 
+        addDir(__language__(30018),'87282',20,'')
+        addDir(__language__(30019),'87283',20,'')
+        addDir(__language__(30020),'87284',20,'')
+        addDir(__language__(30021),'87285',20,'')
+        addDir(__language__(30022),'87286',20,'')
+        addDir(__language__(30023),'87287',20,'')                                                     
 
 #News
 def INDEX3(url):
-        addDir('01. US','86856',20,'')
-        addDir('02. World','86857',20,'')
-        addDir('03. Polotics','86858',20,'')
-        addDir('04. Health','86859',20,'')
-        addDir('05. Faith','86860',20,'')
-        addDir('06. SciTech','86861',20,'')
-        addDir('07. Law','86862',20,'')
-        addDir('08. Caught on Tape','86864',20,'')
-        addDir('09. FOX News Blast','86865',20,'')
-        addDir('10. FOX News Flash','86866',20,'')
-        addDir('11. Weather Flash','86867',20,'')
-        addDir('12. Mobile Video','86868',20,'')
-        addDir('13. FNCU','86870',20,'')
+        addDir(__language__(30024),'86856',20,'')
+        addDir(__language__(30025),'86857',20,'')
+        addDir(__language__(30026),'86858',20,'')
+        addDir(__language__(30027),'86859',20,'')
+        addDir(__language__(30028),'86860',20,'')
+        addDir(__language__(30029),'86861',20,'')
+        addDir(__language__(30030),'86862',20,'')
+        addDir(__language__(30031),'86864',20,'')
+        addDir(__language__(30032),'86865',20,'')
+        addDir(__language__(30033),'86866',20,'')
+        addDir(__language__(30034),'86867',20,'')
+        addDir(__language__(30035),'86868',20,'')
+        addDir(__language__(30036),'86870',20,'')
 
 #Entertainment
 def INDEX4(url):
-        addDir('01. Latest Video','86871',20,'')
-        addDir('02. Exclusive','86872',20,'')
-        addDir('03. Movies','86873',20,'')#
-        addDir('04. Music','86874',20,'')
-        addDir('05. TV','86875',20,'')
-        addDir('06. Gossip','86876',20,'')
-        addDir('07. Fox411','86877',20,'')
-        addDir('08. Hollywood Nation','86878',20,'')#
-        addDir('09. Movietone','86881',20,'')
+        addDir(__language__(30037),'86871',20,'')
+        addDir(__language__(30038),'86872',20,'')
+        addDir(__language__(30039),'86873',20,'')#
+        addDir(__language__(30040),'86874',20,'')
+        addDir(__language__(30041),'86875',20,'')
+        addDir(__language__(30042),'86876',20,'')
+        addDir(__language__(30043),'86877',20,'')
+        addDir(__language__(30044),'86878',20,'')#
+        addDir(__language__(30045),'86881',20,'')
 
 #Business
 def INDEX5(url):
-        addDir('01. News','86883',20,'')
-        addDir('02. FOX Biz Flash','86884',20,'')
-        addDir('03. Road to Retirement','86888',20,'')#
-        addDir('04. Small Biz Block','86889',20,'')
-        addDir('05. Small Biz Now','86890',20,'')
+        addDir(__language__(30046),'86883',20,'')
+        addDir(__language__(30047),'86884',20,'')
+        addDir(__language__(30048),'86888',20,'')#
+        addDir(__language__(30049),'86889',20,'')
+        addDir(__language__(30050),'86890',20,'')
 
 #Health
 def INDEX6(url):
-        addDir('01. Health News','86892',20,'')
-        addDir('02. Q&A with Dr. Manny','86893',20,'')
-        addDir('03. Health Talk','86894',20,'')
-        addDir('04. Sunday Housecall','86895',20,'')
-        addDir('05. Dr. Coomer','86897',20,'')
-        addDir("06. Dr. Siegel's Take",'86896',20,'')       
-        addDir('07. Health Storm Center','86898',20,'')
-        addDir('08. Medicine','86899',20,'')#
-        addDir('09. Surgery','86900',20,'')#
-        addDir('10. Sexual Health and Reproduction','86901',20,'')
-        addDir('11. Beauty & Skin','86902',20,'')#
-        addDir('12. Nutrition & Fitness','86903',20,'')#
-        addDir('13. Pediatrics','86904',20,'')#
-        addDir('14. Vision','86905',20,'')#
-        addDir("15. Men's Health",'86906',20,'')
-        addDir("16. Women's Health",'86907',20,'')
-        addDir('17. Ask Dr Manny Show','86908',20,'')#
+        addDir(__language__(30051),'86892',20,'')
+        addDir(__language__(30052),'86893',20,'')
+        addDir(__language__(30053),'86894',20,'')
+        addDir(__language__(30054),'86895',20,'')
+        addDir(__language__(30055),'86897',20,'')
+        addDir(__language__(30056),'86896',20,'')       
+        addDir(__language__(30057),'86898',20,'')
+        addDir(__language__(30058),'86899',20,'')#
+        addDir(__language__(30059),'86900',20,'')#
+        addDir(__language__(30060),'86901',20,'')
+        addDir(__language__(30061),'86902',20,'')#
+        addDir(__language__(30062),'86903',20,'')#
+        addDir(__language__(30063),'86904',20,'')#
+        addDir(__language__(30064),'86905',20,'')#
+        addDir(__language__(30065),'86906',20,'')
+        addDir(__language__(30066),'86907',20,'')
+        addDir(__language__(30067),'86908',20,'')#
 
 #Shows
 def INDEX7(url):
-        addDir("01. America's Newsroom",'86909',20,'')
-        addDir("02. America's New HQ",'86910',20,'')#
-        addDir('03. Cost of Freedom','86911',20,'')
-        addDir('04. FOX & Friends','86912',20,'')
-        addDir('05. FOX News Sunday','86913',20,'')
-        addDir('06. FOX News Watch','86914',20,'')
-        addDir('07. Fox Report','86915',20,'')
-        addDir('08. Geraldo at Large','86916',20,'')
-        addDir('09. Glenn Beck','86917',20,'')
-        addDir('10. Happening Now','86919',20,'')
-        addDir('11. Huckabee','86920',20,'')
-        addDir('12. Journal Editorial Report','86921',20,'')
-        addDir('13. Live Desk','86922',20,'')
-        addDir("14. O'Reilly Factor",'86923',20,'')
-        addDir('15. Hannity','86924',20,'')
-        addDir('16. On The Record','86925',20,'')
-        addDir('17. Red Eye','86926',20,'')
-        addDir('18. Special Report','86927',20,'')
-        addDir('19. Studio B','86928',20,'')
-        addDir('20. Your World','86929',20,'')
-        addDir('21. The Daily Shep','86930',20,'')
-        addDir('22. Behind the Scenes','86931',20,'')
+        addDir(__language__(30068),'86909',20,'')
+        addDir(__language__(30069),'86910',20,'')#
+        addDir(__language__(30070),'86911',20,'')
+        addDir(__language__(30071),'86912',20,'')
+        addDir(__language__(30072),'86913',20,'')
+        addDir(__language__(30073),'86914',20,'')
+        addDir(__language__(30074),'86915',20,'')
+        addDir(__language__(30075),'86916',20,'')
+        addDir(__language__(30076),'86917',20,'')
+        addDir(__language__(30077),'86919',20,'')
+        addDir(__language__(30078),'86920',20,'')
+        addDir(__language__(30079),'86921',20,'')
+        addDir(__language__(30080),'86922',20,'')
+        addDir(__language__(30081),'86923',20,'')
+        addDir(__language__(30082),'86924',20,'')
+        addDir(__language__(30083),'86925',20,'')
+        addDir(__language__(30084),'86926',20,'')
+        addDir(__language__(30085),'86927',20,'')
+        addDir(__language__(30086),'86928',20,'')
+        addDir(__language__(30087),'86929',20,'')
+        addDir(__language__(30088),'86930',20,'')
+        addDir(__language__(30089),'86931',20,'')
         
 #Opinion
 def INDEX8(url):
-        addDir('01. Neil Cavuto','86933',20,'')
-        addDir("02. Bill O'Reilly",'86934',20,'')
-        addDir('03. Sean Hannity','86935',20,'')        
-        addDir('04. Grapevine','86936',20,'')
-        addDir('05. Glenn Beck','86937',20,'')
-        addDir('06. Brian Kilmeade','86938',20,'')        
-        addDir('07. Greg Gutfeld','86939',20,'')
-        addDir('08. Dennis Miller','86940',20,'')
-        addDir('09. Mike Huckabee','86941',20,'')
-        addDir('10. Defcon 3 by KT','86942',20,'')
-        addDir('11. Napolitano','86943',20,'')#
+        addDir(__language__(30090),'86933',20,'')
+        addDir(__language__(30091),'86934',20,'')
+        addDir(__language__(30092),'86935',20,'')        
+        addDir(__language__(30093),'86936',20,'')
+        addDir(__language__(30094),'86937',20,'')
+        addDir(__language__(30095),'86938',20,'')        
+        addDir(__language__(30096),'86939',20,'')
+        addDir(__language__(30097),'86940',20,'')
+        addDir(__language__(30098),'86941',20,'')
+        addDir(__language__(30099),'86942',20,'')
+        addDir(__language__(30100),'86943',20,'')#
 
 #Sports
 def INDEX9(url):
-        addDir('01. Wide Write','86944',20,'')
-        addDir("01. Kilmeade's SportsBlog",'86945',20,'')#
-        addDir('01. Straka MMa','86946',20,'')
+        addDir(__language__(30101),'86944',20,'')
+        addDir(__language__(30102),'86945',20,'')#
+        addDir(__language__(30103),'86946',20,'')
 
 #Leisure
 def INDEX10(url):
-        addDir('01. FOX Car Report','86965',20,'')
-        addDir('02. Around the House','86967',20,'')
-        addDir('03. Travel','86968',20,'')
-        addDir('04. Food','86969',20,'')
+        addDir(__language__(30104),'86965',20,'')
+        addDir(__language__(30105),'86967',20,'')
+        addDir(__language__(30106),'86968',20,'')
+        addDir(__language__(30107),'86969',20,'')
 
 #Howcast
 def INDEX11(url):
-        addDir('01. Food and Drink','86970',20,'')
-        addDir('02. Fun and Games','86971',20,'')
-        addDir('03. Health and Beauty','86972',20,'')
-        addDir('04. Health and Family','86973',20,'')
-        addDir('05. Hot How To','86974',20,'')
-        addDir('06. Sex and Dating','86975',20,'')
-        addDir('07. Tech and Gadgets','86976',20,'')
+        addDir(__language__(30108),'86970',20,'')
+        addDir(__language__(30109),'86971',20,'')
+        addDir(__language__(30110),'86972',20,'')
+        addDir(__language__(30111),'86973',20,'')
+        addDir(__language__(30112),'86974',20,'')
+        addDir(__language__(30113),'86975',20,'')
+        addDir(__language__(30114),'86976',20,'')
 
 #Strategy Room
 def INDEX12(url):
-        addDir('01. Morning Click','86978',20,'')
-        addDir('02. Breaking News','86980',20,'')
-        addDir('03. Cops and Cases','86981',20,'')
-        addDir('04. Freedom Watch','86982',20,'')
-        addDir('05. FOX Entertainment Hour','86983',20,'')
-        addDir('06. Alan Colmes','86984',20,'')
-        addDir('07. Powers Hour','86985',20,'')
-        addDir('08. The Biz Hour','86986',20,'')
-        addDir('09. Last Call','86987',20,'')
-        addDir('10. Clubhouse Report','86988',20,'')
-        addDir('11. News With A View','86989',20,'')
-        addDir('12. Gadgets and Games','86990',20,'')               
-        addDir('13. Specials','86991',20,'')
-        addDir('14. Strategy Room Email','86992',20,'')
-        addDir('15. SR Best','86993',20,'')  
+        addDir(__language__(30115),'86978',20,'')
+        addDir(__language__(30116),'86980',20,'')
+        addDir(__language__(30117),'86981',20,'')
+        addDir(__language__(30118),'86982',20,'')
+        addDir(__language__(30119),'86983',20,'')
+        addDir(__language__(30120),'86984',20,'')
+        addDir(__language__(30121),'86985',20,'')
+        addDir(__language__(30122),'86986',20,'')
+        addDir(__language__(30123),'86987',20,'')
+        addDir(__language__(30124),'86988',20,'')
+        addDir(__language__(30125),'86989',20,'')
+        addDir(__language__(30126),'86990',20,'')               
+        addDir(__language__(30127),'86991',20,'')
+        addDir(__language__(30128),'86992',20,'')
+        addDir(__language__(30129),'86993',20,'')  
         
 #FNC iMag
 def INDEX13(url):
-        addDir('01. Love & Marrige','86947',20,'')#
-        addDir('02. The Style Guide','8694',20,'')#
-        addDir('03. Food','8694',20,'')
-        addDir('04. Fitness','86950',20,'')
-        addDir('05. Beauty','86951',20,'')
-        addDir('06. Career','86952',20,'')
-        addDir('07. At Home','86953',20,'')
-        addDir('08. The Guy Guide','86954',20,'')
-        addDir('09. Getaway Guide','86955',20,'')
-        addDir('10. Travel','86956',20,'')
-        addDir('11. Wellness','86957',20,'')              
-        addDir('12. Go Green','86958',20,'')       
-        addDir('13. Small Business','86961',20,'')
+        addDir(__language__(30130),'86947',20,'')#
+        addDir(__language__(30131),'8694',20,'')#
+        addDir(__language__(30132),'8694',20,'')
+        addDir(__language__(30133),'86950',20,'')
+        addDir(__language__(30134),'86951',20,'')
+        addDir(__language__(30135),'86952',20,'')
+        addDir(__language__(30136),'86953',20,'')
+        addDir(__language__(30137),'86954',20,'')
+        addDir(__language__(30138),'86955',20,'')
+        addDir(__language__(30139),'86956',20,'')
+        addDir(__language__(30140),'86957',20,'')              
+        addDir(__language__(30141),'86958',20,'')       
+        addDir(__language__(30142),'86961',20,'')
 
 #FOX News Radio
 def INDEX14(url):
-        addDir('01. Brian & Judge','86995',20,'')
-        addDir('02. Spencer Hughes','86996',20,'')
-        addDir('03. Tom Sullivan','86997',20,'')
-        addDir('04. John Gibson','86998',20,'')
-        addDir('05. Alan Colmes','86999',20,'')
-        addDir('06. All Radio','87000',20,'')
+        addDir(__language__(30143),'86995',20,'')
+        addDir(__language__(30144),'86996',20,'')
+        addDir(__language__(30145),'86997',20,'')
+        addDir(__language__(30146),'86998',20,'')
+        addDir(__language__(30147),'86999',20,'')
+        addDir(__language__(30148),'87000',20,'')
 
 #FOX Fan
 def INDEX15(url):
-        addDir('01. Exclusives','87001',20,'')
+        addDir(__language__(30149),'87001',20,'')
                                        
 def VIDEOLINKS(url,name):
         req = urllib2.Request('http://video.foxnews.com/v/feed/playlist/'+url+'.xml')
@@ -202,12 +205,8 @@ def VIDEOLINKS(url,name):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        clean=re.sub('&amp;','&',link)
-        clean1=re.sub('&apos;',"'",clean)
-        clean2=re.sub('&quot;','"',clean1)
-        clean3=re.sub('&#39;','',clean2)
-        a=re.compile('<title>(.+?)</title>\n.+?<media:content url="(.+?)">\n.+?<media:description>(.+?)</media:description>\n.+?<media:thumbnail>(.+?)</media:thumbnail>\n.+?\n.+?\n.+?\n.+?\n.+?\n.+?<mvn:airDate>(.+?)-(.+?)-(.+?)T.+?Z</mvn:airDate>')
-        match=a.findall(clean3)     
+        a=re.compile('<title>(.+?)</title>\n          <media:content url="(.+?)">\n            <media:player url=".+?" />\n            <media:description>(.+?)</media:description>\n            <media:thumbnail><!\[\CDATA\[(.+?)]\]\></media:thumbnail>\n            <media:keywords>.+?</media:keywords>\n            <media:credit role=".+?" scheme=".+?">.+?</media:credit>\n            <mvn:assetUUID>.+?</mvn:assetUUID>\n            <mvn:mavenId></mvn:mavenId>\n            <mvn:creationDate>.+?</mvn:creationDate>\n            <mvn:airDate>(.+?)-(.+?)-(.+?)T.+?</mvn:airDate>\n')
+        match=a.findall(link)     
         for name,url,desc,thumbnail,Year,Month,Day in match:
                 addLink(name,url,thumbnail,Month+'/'+Day+'/'+Year,desc)
         

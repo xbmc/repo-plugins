@@ -1,0 +1,13 @@
+﻿---
+2010-09-23 - Version 1.10.1
+   Initial code sync between forum-mods & google project by Zerqent
+   Version number changed to match launcherVER.xbmc-dharmaVER.launcherREV
+   Polish translations added thanks to Robert de Clair
+
+2010-09-00 - Version 1.6.0
+   Thanks to CinPoU for releasing a working version :)
+   which I used to get my modified version running with new XBMC again.
+   
+   And Zerqent found out how to fix the lockup after adding a new launcher.
+   
+

@@ -5,13 +5,14 @@ import xbmcplugin,xbmcgui,xbmcaddon
 from operator import itemgetter, attrgetter
 from TasAPI import common as common
 from TasAPI import cache as cache
+from TasAPI import utilities as util
 
 # plugin Constants
 __plugin__ = "Tool-assisted Speedruns"
 __author__ = "Insayne (Code) & HannaK (Graphics)"
 __url__ = "http://code.google.com/p/xbmc-plugin-video-tas/"
 __svn_url__ = "https://xbmc-plugin-video-tas.googlecode.com/svn/trunk/plugin.videos.tas/"
-__version__ = "0.94"
+__version__ = "1.0"
 __svn_revision__ = "$Revision$"
 __XBMC_Revision__ = xbmc.getInfoLabel('System.BuildVersion')
 __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
@@ -19,7 +20,7 @@ __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
 # Global Settings
 set_snames = __settings__.getSetting( "snames" )
 set_smethod = __settings__.getSetting( "smethod" )
-set_umethod = __settings__.getSetting( "umethod" )
+set_dpath = __settings__.getSetting( "download_path" )
 
 #Variables
 dimg = xbmc.translatePath( os.path.join( os.getcwd(), 'Images', 'Icons' ) )
@@ -30,15 +31,39 @@ UAS = str(UAS)
 prev_letter = "Unset"
 sorting = 0
 
+# Generates the main Index
 def Generate_Index():
 	dimg = common.get_image_path(xbmc.translatePath(os.path.join( os.getcwd(), 'resources', 'images', 'icons', 'default' )))
 	latest = xbmc.translatePath(os.path.join(dimg, "latest.png"))
 	notables = xbmc.translatePath(os.path.join(dimg, "not.png"))
 	bbs = xbmc.translatePath(os.path.join(dimg, "bbs.png"))
-	addDir('Latest Videos','http://tasvideos.org/publications.rss',2, latest, common.get_category_fanthumb("Latest Videos", "Fanart"))
-	addDir('Notables','http://tasvideos.org/notables.rss',1, notables, common.get_category_fanthumb("Notables", "Fanart"))
-	addDir('Browse by System','http://tasvideos.org/systems.rss',1, bbs, common.get_category_fanthumb("Browse by System", "Fanart"))
-	
+	tools = xbmc.translatePath(os.path.join(dimg, "tools.png"))
+	string_latest_videos = __settings__.getLocalizedString(30800)
+	string_notables = __settings__.getLocalizedString(30801)
+	string_bbs = __settings__.getLocalizedString(30802)
+	string_ad_util = __settings__.getLocalizedString(30803)
+	addDir(string_latest_videos,'http://tasvideos.org/publications.rss',2, latest, common.get_category_fanthumb("Latest Videos", "Fanart"))
+	addDir(string_notables,'http://tasvideos.org/notables.rss',1, notables, common.get_category_fanthumb("Notables", "Fanart"))
+	addDir(string_bbs,'http://tasvideos.org/systems.rss',1, bbs, common.get_category_fanthumb("Browse By System", "Fanart"))
+	addDir(string_ad_util,'none',3, tools, common.get_category_fanthumb("Addon Utilities", "Fanart"))	
+
+# Genereates the Tool-chain links
+def Get_Tools():
+	dimg = common.get_image_path(xbmc.translatePath(os.path.join( os.getcwd(), 'resources', 'images', 'icons', 'default' )))
+	clean_rss = xbmc.translatePath(os.path.join(dimg, "clear_rss.png"))
+	clean_ico = xbmc.translatePath(os.path.join(dimg, "clear_icons.png"))
+	clean_all = xbmc.translatePath(os.path.join(dimg, "clear_cache.png"))
+	dl = xbmc.translatePath(os.path.join(dimg, "dl_cache.png"))
+	string_crss = __settings__.getLocalizedString(30810)
+	string_cthumb = __settings__.getLocalizedString(30811)
+	string_cboth = __settings__.getLocalizedString(30812)
+	string_cdlimg = __settings__.getLocalizedString(30813)
+	addLinkTool(string_crss, 'plugin://plugin.video.tas?mode=4&url=clean_rss', clean_rss)
+	addLinkTool(string_cthumb, 'plugin://plugin.video.tas?mode=4&url=clean_ico', clean_ico)
+	addLinkTool(string_cboth, 'plugin://plugin.video.tas?mode=4&url=clean_all', clean_all)
+	addLinkTool(string_cdlimg, 'plugin://plugin.video.tas?mode=4&url=download_img', dl)
+
+# Generates the Categories
 def Get_Categories(url):
 	link = cache.getcontent(url,UAS)
 	link = link.replace("\r", "")
@@ -46,8 +71,12 @@ def Get_Categories(url):
 	match=re.compile('<item>.+?<title>(.+?)</title>.+?<link>(.+?)<\/link>').findall(link)
 	for name,link in match:
 		fanart = common.get_category_fanthumb(name, "Fanart")
+		print fanart
 		addDir(name,link,2,common.get_category_fanthumb(name, "Thumbnail"),fanart)
 
+# Get Videos from RSS Feed - Fast Method
+# This method relies on non-erroneous RSS entries (i.e, no empty Video Link)
+# It can bug quite badly but its here for the slow machines
 def Get_RSS_Videos_fast(url):
 	global prev_letter
 	global sorting
@@ -80,16 +109,13 @@ def Get_RSS_Videos_fast(url):
 		categories = common.get_categories(category)
 		writer = common.get_writer(name)
 		thumbnail = cache.img_getcontent(thumbnail,num,UAS)
-		if set_umethod=="0":
-			url = "http://www.archive.org/" + link
-		elif set_umethod=="1":
-			url = "http://www.insayne.net/xbmc/tas.php?url=http://www.archive.org/"+link+""
-		else:
-			url = "http://www.archive.org/" + link
+		url = "plugin://plugin.video.tas?mode=5&url=" + link
 		addLink(common.cleanstring(name),url,thumbnail,year,plot,rating,director,writer,genre,categories,fanart,num,totalitems,date,sort_letter,duration)
 	prev_letter = "Unset"
 	return
 
+# Get Videos from RSS Feed - Default Method
+# This method should be 99% Accurate if not 100% but faster than the strict method.
 def Get_RSS_Videos_default(url):
 	global prev_letter
 	global sorting
@@ -124,18 +150,16 @@ def Get_RSS_Videos_default(url):
 			categories = common.get_categories(category)
 			writer = common.get_writer(name)
 			thumbnail = cache.img_getcontent(thumbnail,num,UAS)
-			if set_umethod=="0":
-				url = "http://www.archive.org/" + link
-			elif set_umethod=="1":
-				url = "http://www.insayne.net/xbmc/tas.php?url=http://www.archive.org/"+link+""
-			else:
-				url = "http://www.archive.org/" + link
+			url = "plugin://plugin.video.tas?mode=5&url=" + link
 			addLink(common.cleanstring(name),url,thumbnail,year,plot,rating,director,writer,genre,categories,fanart,num,totalitems,date,sort_letter,duration)
 		else:
 			totalitems = totalitems - 1
 	prev_letter = "Unset"
 	return
 
+# Get Videos from RSS Content - Strict Mode
+# This employs a matching system with <item> </item>
+# It is slower than any other method but 100% accurate
 def Get_RSS_Videos_strict(url):
 	global prev_letter
 	global sorting
@@ -171,18 +195,15 @@ def Get_RSS_Videos_strict(url):
 				categories = common.get_categories(category)
 				writer = common.get_writer(name)
 				thumbnail = cache.img_getcontent(thumbnail,num,UAS)
-				if set_umethod=="0":
-					url = "http://www.archive.org/" + link
-				elif set_umethod=="1":
-					url = "http://www.insayne.net/xbmc/tas.php?url=http://www.archive.org/"+link+""
-				else:
-					url = "http://www.archive.org/" + link
+				url = "plugin://plugin.video.tas?mode=5&url=" + link
 				addLink(common.cleanstring(name),url,thumbnail,year,plot,rating,director,writer,genre,categories,fanart,num,totalitems,date,sort_letter,duration)
 			else:
 				totalitems = totalitems - 1
 	prev_letter = "Unset"
 	return
 
+# Add Link
+# This is to add a video link in our list. Quite extensive in information
 def addLink(name,url,iconimage,year,plot,rating,director,writer,genre,tagline,fanart,id,totalitems,date,sort_letter,duration):
 	global set_pnames
 	filecheck = os.path.isfile(fanart)
@@ -192,7 +213,7 @@ def addLink(name,url,iconimage,year,plot,rating,director,writer,genre,tagline,fa
 	else:
 		pname = common.get_prettyname(name)
 	plot = common.clean_plot(plot)
-	path = url.replace('http://www.insayne.net/xbmc/tas.php?url=', "")
+	path = url
 	ok=True
 	liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
 	if sort_letter=="None":
@@ -203,9 +224,42 @@ def addLink(name,url,iconimage,year,plot,rating,director,writer,genre,tagline,fa
 		liz.setProperty("Fanart_image", iconimage)
 	if filecheck==True:
 		liz.setProperty("Fanart_image", fanart)
-	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,totalItems=totalitems)
+	liz.setProperty("IsPlayable","true");
+	
+	dlpatherror = 0
+	
+	if not set_dpath=="":
+		if os.path.isdir(set_dpath)==True:
+			dl = xbmc.translatePath(os.path.join( os.getcwd() , 'TasAPI', 'download.py'))
+			turl = "http://www.archive.org/" + url.replace('plugin://plugin.video.tas?mode=5&url=', '')
+			cm = [('Download Video', 'XBMC.RunScript(' + dl + ', ' + turl + ', ' + set_dpath + ')',)]
+			liz.addContextMenuItems(cm)
+		else:
+			dlpatherror = 1
+	else:
+		dlpatherror = 1
+		
+	if dlpatherror==1:
+		dl = xbmc.translatePath(os.path.join( os.getcwd() , 'TasAPI', 'download.py'))
+		turl = "nofolder"
+		cm = [('Download Video', 'XBMC.RunScript(' + dl + ', ' + turl + ')',)]
+		liz.addContextMenuItems(cm)
+		
+	
+	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False,totalItems=totalitems)
 	return ok
 
+# Add Link Tool
+# This is the Add Link version to add tools - it requires much less parameters
+# as we do not need as many.
+def addLinkTool(name,url,iconimage):
+	ok=True
+	liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+	liz.setInfo( type="Video", infoLabels={ "Title": name } )
+	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
+	return ok
+
+# Add Directory
 def addDir(name,url,mode,iconimage,Fanart):
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
 	ok=True
@@ -253,11 +307,31 @@ except:
         pass
 
 if mode==None or url==None or len(url)<1:
-		Generate_Index()
-       
+	Generate_Index()
+	xbmcplugin.endOfDirectory(int(sys.argv[1]))
+	frf = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'startup.txt' ))
+	firstrun = os.path.isfile(frf)
+	if firstrun==False:
+		dia_title = __settings__.getLocalizedString(32000)
+		dia_l1 = __settings__.getLocalizedString(32001)
+		dia_l2 = __settings__.getLocalizedString(32002)
+		dia_l3 = __settings__.getLocalizedString(32003)
+		dialog = xbmcgui.Dialog()
+		ret = dialog.yesno(dia_title, dia_l1, dia_l2, dia_l3)
+		if ret==1:	
+			util.download_cache()
+		
+		file = open(frf, 'w')
+		file.write("Startup Completed")
+		file.close()
+	
+# Mode 1:
+# This Mode reads "Directories" or links to RSS Feeds and lists them
 elif mode==1:
 		Get_Categories(url)
 
+# Mode 2:
+# This Mode lists video content from an RSS Feed
 elif mode==2:
 		if set_smethod=="0":
 			Get_RSS_Videos_fast(url)
@@ -267,7 +341,38 @@ elif mode==2:
 			Get_RSS_Videos_strict(url)
 		else:
 			Get_RSS_Videos_default(url)
-		
+
+# Mode 3:
+# This Mode Lists the tool-chain of the Addon
+elif mode==3:
+	Get_Tools()
+
+# Mode 4:
+# This Mode gets a parameter as URL so we can do various tasks 
+# It is currently in use to run addon built-in functions
+elif mode==4:
+	if url=="clean_rss":
+		util.clean_rss()
+			
+	elif url=="clean_ico":
+		util.clean_ico()
+
+	elif url=="clean_all":
+		util.clean_all()
+
+	elif url=="download_img":
+		util.download_cache()
+
+# Mode 5:
+# This mode is to grab the actual URL and pass it to XBMC
+elif mode==5:
+	newurl = common.ResolveURL(url)
+	li=xbmcgui.ListItem(path = newurl)
+	xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
+
+# Sorting Methods:
+# Sorting order is added in different orders here dependant on the category, as it does defeine
+# the default sorting type if the User has not interacted with it.
 if sorting==1:
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
 	xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.tas"
        name="Tool-assisted Speedruns"
-       version="0.94"
+       version="1.0"
        provider-name="Insayne, HannaK, Nach">
   <requires>
     <import addon="xbmc.python" version="1.0"/>

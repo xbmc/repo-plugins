@@ -1,19 +1,86 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <!-- Plugin strings -->
+    <!-- Strings: Main Menu -->
+    <string id="30800">Latest Videos</string>
+	<string id="30801">Notables</string>
+	<string id="30802">Browse By System</string>
+	<string id="30803">Addon Utilities</string>
+
+    <!-- Strings: Addon Utilities -->
+    <string id="30810">Clean RSS Cache</string>
+	<string id="30811">Clean Thumbnail Cache</string>
+	<string id="30812">Clean RSS & Thumbnail Cache</string>
+	<string id="30813">Download Thumbnail Cache</string>
+	
+    <!-- Plugin  Settings -->
     <string id="30900">Display Short Names</string>
 	<string id="30901">Icon Size</string>
-	<string id="30902">Feed Update Interval</string>
-	<string id="30903">Image Update Interval</string>
-	<string id="30904">Parsing Method</string>
-	<string id="30905">Stream Retrieval Method</string>
+	<string id="30902">Fanart Size</string>
+	<string id="30903">Parsing Method</string>
+	<string id="30904">Feed Update Interval</string>
+	<string id="30905">Image Update Interval</string>
+	<string id="30906">Download Folder</string>
 	
-	 <!-- Image Selection -->
+	<string id="30907">No Download Folder has been set, do it now?</string>
+	<string id="30908">(Reload this folder for your settings to apply!)</string>
+
+    <!-- Dialog Title -->
+    <string id="32000">Tool-assisted Speedruns</string>
+
+	<!-- Dialog: First Startup -->
+	<string id="32001">This is the first time you are running this Addon</string>
+	<string id="32002">Would you like to download the Thumbnail Cache?</string>
+	<string id="32003">(This makes the addon much faster!)</string>
+	
+	<!-- Dialog: Video Download -->
+	<string id="32010">File</string>
+    <string id="32011">Download</string>
+    <string id="32012">Time</string>
+    <string id="32013">Remaining</string>
+    <string id="32014">Downloading Video</string>
+    <string id="32015">Aborted Video Download</string>
+	<string id="32016">Finished Video Download</string>
+	
+	<!-- Dialog: Clean RSS Cache -->
+	<string id="32020">!WARNING!: You can NOT undo this!</string>
+	<string id="32021">Are you sure you wish to clean the RSS Cache?</string>
+	<string id="32022">Cleaning RSS Cache...</string>
+	<string id="32023">Aborted cleaning RSS Cache</string>
+	<string id="32024">Finished cleaning RSS Cache</string>
+	<string id="32025">Removing</string>
+	
+	<!-- Dialog: Download Thumbnail Cache Download -->
+	<string id="32040">Aborted Thumbnail Cache Download</string>
+	<string id="32041">Finished Thumbnail Cache Download</string>
+	<string id="32042">Finished Downloading & Installing Cache</string>
+	<string id="32043">Enjoy your faster Experience!</string>
+
+	<!-- Dialog: Clean Cache -->
+	<string id="32100">Downloading Image Cache</string>
+	<string id="32101">Are you sure you wish to clean the Cache?</string>
+	<string id="32102">Aborted cleaning Cache</string>
+	
+	<!-- Dialog: Clean Thumbnail Cache -->
+	<string id="32030">Cleaning Thumbnail Cache...</string>
+	<string id="32031">Are you sure you wish to clean the Thumbnail Cache?</string>
+	<string id="32032">Aborted cleaning Thumbnail Cache</string>
+	<string id="32033">Finished cleaning Thumbnail Cache</string>
+	<string id="32034">Removing Thumbnail</string>
+	
+	<!-- Dialog: Download Thumbnail Cache: Unzip -->
+	<string id="32044">Extracting Thumbnail Cache</string>
+	<string id="32045">Extracting</string>
+	<string id="32046">Filename</string>
+	<string id="32047">File</string>
+	<string id="32048">of</string>
+	<string id="32049">Finished Cleaning Cache</string>
+
+	 <!-- Settings: Image Selection -->
 	<string id="30950">Small</string>
 	<string id="30951">Medium</string>
 	<string id="30952">High</string>
 	
-	<!-- Feed Update Interval -->
+	<!-- Settings: Feed Update Interval -->
 	<string id="31000">1 Hour</string>
 	<string id="31001">2 Hours</string>
 	<string id="31002">4 Hours</string>
@@ -22,20 +89,25 @@
 	<string id="31005">1 Day</string>
 	<string id="31006">Never</string>
 	
-	<!-- Image Update Interval -->
-	<string id="32000">1 Month</string>
-	<string id="32001">3 Months</string>
-	<string id="32002">6 Months</string>
-	<string id="32003">9 Months</string>
-	<string id="32004">1 Year</string>
-	<string id="32005">Never</string>
+	<!-- Settings: Image Update Interval -->
+	<string id="35000">1 Month</string>
+	<string id="35001">3 Months</string>
+	<string id="35002">6 Months</string>
+	<string id="35003">9 Months</string>
+	<string id="35004">1 Year</string>
+	<string id="35005">Never</string>
 	
-	<!-- Image Update Interval -->
+	<!-- Settings: RSS Parsing Method -->
 	<string id="32006">Fast (Inaccurate)</string>
 	<string id="32007">Normal</string>
 	<string id="32008">Strict (Slow)</string>
 
-	<!-- Image Update Interval -->
-	<string id="32010">Native URL</string>
-	<string id="32011">Tunneling (Slow)</string>
+	<!-- Settings: Fanart Image Size -->
+	<string id="34010">[16:9] Small</string>
+	<string id="34011">[16:9] Medium</string>
+	<string id="34012">[16:9] High</string>
+	<string id="34013">[4:3] Small</string>
+	<string id="34014">[4:3] Medium</string>
+	<string id="34015">[4:3] High</string>
+
 </strings>

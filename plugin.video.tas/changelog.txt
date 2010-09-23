@@ -1,12 +1,26 @@
+1.0
+- Fixed: Directory inconsistency for cached data
+- Fixed: URL Retrieval method (Tunneling no longer needed) and removed its Setting
+- Fixed: Retrieved URL is now always the first entry which should always be streamable.
+- Fixed: International locale (date) issue
+- Added: New Main Index Category: Addon Utilities
+- Added: Options to clean the local Cache (Images, Feeds or both) under Addon Utilities
+- Added: Option to Download Image/Thumbnail Cache from Google Code (Much faster Experience!) for an ~5 MB File Download.
+- Added: Option via Context Menu to download Videos directly to your harddisk drive.
+- Added: Source Code commented to keep sanity of code between a mess and a passable mess.
+- Added: First startup prompt to download the Thumbnail Cache to speed up the plugin flow.
+- Updated: Added better localisation options
+- Updated: Icons have been finalized
+
 0.94
 - Streamlined the representation of http://tasvideos.org/
-- Cleaned the Source
+- Cleaned the Source from all comments.
 
 0.93
 - Changed Cache Directory to comply with XBMC's standard
 
 0.92
-- Enhanced Accuracy of Feed Parsing
+- Enhanced Accuracy of default (normal) Feed Parsing
 
 0.91
 - Fixed RSS Parsing Errors

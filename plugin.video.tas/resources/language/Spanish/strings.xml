@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Strings -->
+    <string id="30800">Últimos videos</string>
+	<string id="30801">Notables</string>
+	<string id="30802">Navegar por sistemas</string>
+	<string id="30803">Utilidades de la aplicación</string>
+
+    <!-- Strings -->
+    <string id="30810">Limpiar caché del RSS</string>
+	<string id="30811">Limpiar caché de vistas en miniatura</string>
+	<string id="30812">Limpiar caché del RSS & de vistas en miniatura</string>
+	<string id="30813">Descargar caché de vistas en miniatura</string>
+	
+    <!-- Plugin  Settings -->
+    <string id="30900">Mostrar nombres cortos</string>
+	<string id="30901">Tamaño de iconos</string>
+	<string id="30902">Tamaño de fanart</string>
+	<string id="30903">Método de análisis</string>
+	<string id="30904">Intervalo de actualización del RSS</string>
+	<string id="30905">Intervalo de actualización de imágenes</string>
+	<string id="30906">Carpeta para descargas</string>
+	
+	<string id="30907">No se ha establecido una carpeta para descargas. ¿Lo desea hacer ahora?</string>
+	<string id="30908">(¡Vuelva a cargar esta carpeta para aplicar su configuración!)</string>
+
+    <!-- Dialog -->
+    <string id="32000">Recorridos rápidos asistidos por herramientas</string>
+
+	<!-- Dialog: First Startup -->
+	<string id="32001">Esta es la primera vez que ejecuta esta aplicación.</string>
+	<string id="32002">¿Desea descargar el caché de vistas en miniatura?</string>
+	<string id="32003">(¡Hará que la aplicación funcione mucho más rápido!)</string>
+	
+	<!-- Dialog: Video Download -->
+	<string id="32010">Archivo</string>
+    <string id="32011">Descargar</string>
+    <string id="32012">Tiempo</string>
+    <string id="32013">Restante</string>
+    <string id="32014">Descargando video</string>
+    <string id="32015">Descarga de video cancelada</string>
+	<string id="32016">Descarga de video acabada</string>
+	
+	<!-- Dialog: Clean RSS Cache -->
+	<string id="32020">!OJO!: NO puede deshacerse!</string>
+	<string id="32021">¿Seguro que desea limpiar el caché del RSS?</string>
+	<string id="32022">Limpiando el caché del RSS...</string>
+	<string id="32023">Limpieza del caché del RSS cancelada</string>
+	<string id="32024">Limpieza del caché del RSS acabada</string>
+	<string id="32025">Eliminando</string>
+	
+	<!-- Dialog: Download Thumbnail Cache Download -->
+	<string id="32040">Descarga del caché de vistas en miniatura cancelada</string>
+	<string id="32041">Descarga del caché de vistas en miniatura acabada</string>
+	<string id="32042">Descarga & instalación del caché acabadas</string>
+	<string id="32043">¡Disfrute de una experiencia más rápida!</string>
+
+	<!-- Dialog: Clean Cache -->
+	<string id="32100">Descargando caché de imágenes</string>
+	<string id="32101">¿Seguro que desea limpiar el caché?</string>
+	<string id="32102">Limpieza del caché cancelada</string>
+	
+	<!-- Dialog: Clean Thumbnail Cache -->
+	<string id="32030">Limpiando el caché de vistas en miniatura...</string>
+	<string id="32031">¿Seguro que desea limpiar el caché de vistas en miniatura?</string>
+	<string id="32032">Limpieza del caché de vistas en miniatura cancelada</string>
+	<string id="32033">Limpieza del caché de vistas en miniatura acabada</string>
+	<string id="32034">Eliminando vista en miniatura</string>
+	
+	<!-- Dialog: Download Thumbnail Cache: Unzip -->
+	<string id="32044">Extrayendo caché de vistas en miniatura</string>
+	<string id="32045">Extrayendo</string>
+	<string id="32046">Nombre del archivo</string>
+	<string id="32047">Archivo</string>
+	<string id="32048">de</string>
+	<string id="32049">Limpieza del caché acabada</string>
+
+	 <!-- Settings: Image Selection -->
+	<string id="30950">Pequeño</string>
+	<string id="30951">Mediano</string>
+	<string id="30952">Grande</string>
+	
+	<!-- Settings: Feed Update Interval -->
+	<string id="31000">1 hora</string>
+	<string id="31001">2 horas</string>
+	<string id="31002">4 horas</string>
+	<string id="31003">6 horas</string>
+	<string id="31004">12 horas</string>
+	<string id="31005">1 día</string>
+	<string id="31006">Nunca</string>
+	
+	<!-- Settings: Image Update Interval -->
+	<string id="35000">1 mes</string>
+	<string id="35001">3 meses</string>
+	<string id="35002">6 meses</string>
+	<string id="35003">9 meses</string>
+	<string id="35004">1 año</string>
+	<string id="35005">Nunca</string>
+	
+	<!-- Settings: RSS Parsing Method -->
+	<string id="32006">Rápido (inexacto)</string>
+	<string id="32007">Normal</string>
+	<string id="32008">Estricto (lento)</string>
+
+	<!-- Settings: Fanart Image Size -->
+	<string id="34010">[16:9] Pequeño</string>
+	<string id="34011">[16:9] Mediano</string>
+	<string id="34012">[16:9] Grande</string>
+	<string id="34013">[4:3] Pequeño</string>
+	<string id="34014">[4:3] Mediano</string>
+	<string id="34015">[4:3] Grande</string>
+
+</strings>

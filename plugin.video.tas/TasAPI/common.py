@@ -1,13 +1,51 @@
 #TAS Videos by Insayne
 import os, time
-import urllib,urllib2,re
+import urllib,urllib2,re,httplib
 import xbmc,xbmcaddon
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
 
 # Global Settings
 set_icon_size = __settings__.getSetting( "icon_size" )
+set_fanart_size = __settings__.getSetting( "fanart_size" )
 
+# This function Resolves the URL to the Final URL
+# Used in Mode 5 
+def ResolveURL(url):
+	nurl = '/' + url
+	domain = 'www.archive.org'
+	conn = httplib.HTTPConnection(domain)
+	conn.request("HEAD", nurl)
+	res = conn.getresponse()
+	if res.status==302:
+		url = res.getheader('Location')
+	else:
+		url = domain + url
+	conn.close()
+	return url
+
+# Get Fanart Image Path
+# Using the settings, we define the Path for Fanart images
+def get_fimage_path(path):
+	global set_fanart_size
+	if set_fanart_size=="0":
+		endpath = xbmc.translatePath(os.path.join(path, "16-9_small" ))
+	elif set_fanart_size=="1":
+		endpath = xbmc.translatePath(os.path.join(path, "16-9_medium" ))
+	elif set_fanart_size=="2":
+		endpath = xbmc.translatePath(os.path.join(path, "16-9_high" ))
+	elif set_fanart_size=="3":
+		endpath = xbmc.translatePath(os.path.join(path, "4-3_small" ))
+	elif set_fanart_size=="4":
+		endpath = xbmc.translatePath(os.path.join(path, "4-3_medium" ))
+	elif set_fanart_size=="5":
+		endpath = xbmc.translatePath(os.path.join(path, "4-3_high" ))
+	else:
+		endpath = xbmc.translatePath(os.path.join(path, "16-9_medium" ))
+	return endpath
+
+# Get Image Path
+# Using the settings, we define the Path for Thubmnail images
 def get_image_path(path):
 	global set_icon_size
 	if set_icon_size=="0":
@@ -20,13 +58,26 @@ def get_image_path(path):
 		endpath = xbmc.translatePath(os.path.join(path, "medium" ))
 	return endpath
 
+# Get Category Fanart or Thumbnail
+# Based on names, we will give it different images, respecting the Settings too
 def get_category_fanthumb(name,catfa):
 	if catfa=="Thumbnail":
 		dimg = get_image_path(xbmc.translatePath( os.path.join( os.getcwd(), 'resources', 'images', 'icons', 'categories' ) ))
 	else:
-		dimg = get_image_path(xbmc.translatePath( os.path.join( os.getcwd(), 'resources', 'images', 'icons', 'fanart' ) ))
+		dimg = get_fimage_path(xbmc.translatePath( os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'fanart', 'categories' ) ))
 	noimg = get_image_path(xbmc.translatePath( os.path.join( os.getcwd(), 'resources', 'images', 'icons', 'default' ) ))
-	if name=="Arcade":
+	# Main Categories
+	if name=="Browse By System":
+		thumbnail = xbmc.translatePath(os.path.join(dimg, "bbs.png"))
+	elif name=="Notables":
+		thumbnail = xbmc.translatePath(os.path.join(dimg, "not.png"))
+	elif name=="Latest Videos":
+		thumbnail = xbmc.translatePath(os.path.join(dimg, "latest.png"))
+	elif name=="Addon Utilities":
+		thumbnail = xbmc.translatePath(os.path.join(dimg, "tools.png"))
+
+	# Browse By System
+	elif name=="Arcade":
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "arcade.png"))
 	elif name=="DOS":
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "dos.png"))
@@ -68,12 +119,13 @@ def get_category_fanthumb(name,catfa):
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "pcecd.png"))
 	elif name=="Virtual Boy":
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "vb.png"))
+	
+	# Notables Subcategory
 	elif name=="Recommended Movies":
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "rmovies.png"))
 	elif name=="Top Rated Movies":
 		thumbnail = xbmc.translatePath(os.path.join(dimg, "pop.png"))
-	elif name=="Virtual Boy":
-		thumbnail = xbmc.translatePath(os.path.join(dimg, "vb.png"))
+	# Awards
 	elif not name.find("Award Winning Movies for")==-1:
 		fn = "aw_" + name[-4:] + ".png"
 		fn = xbmc.translatePath(os.path.join(dimg, fn))
@@ -96,7 +148,10 @@ def get_category_fanthumb(name,catfa):
 		else:
 			thumbnail = ""
 	return thumbnail
-	
+
+# Here comes a bunch of small functions to fix encoding issues of strings 
+# and generally clean formatting
+
 def cleanstring(strvar):
 	string = strvar
 	string = string.replace("&amp;", "&")
@@ -135,12 +190,40 @@ def get_year(strvar):
 		years = year
 	return int(years)
 	
+def get_month(abmon):
+	if (abmon=="Jan"):
+		return 1
+	elif (abmon=="Feb"):
+		return 2
+	elif (abmon=="Mar"):
+		return 3
+        elif (abmon=="Apr"):
+		return 4
+	elif (abmon=="May"):
+		return 5
+	elif (abmon=="Jun"):
+		return 6
+	elif (abmon=="Jul"):
+		return 7
+	elif (abmon=="Aug"):
+		return 8
+	elif (abmon=="Sep"):
+		return 9
+	elif (abmon=="Oct"):
+		return 10
+	elif (abmon=="Nov"):
+		return 11
+	elif (abmon=="Dec"):
+		return 12
+	raise ValueError("can't parse month abbreviation:  abmon=%s " % (monab))
+
+		
 def get_date(strvar):
 	match=re.compile('.+?, (.+?) (.+?) (.+?) .+?').findall(strvar)
-	for day,mon,year in match:
-		datestring = day + mon + year
-		date = time.strptime(datestring,"%d%b%Y")
-	return str(time.strftime("%d.%m.%Y",date))
+	for day,abmon,year in match:
+		datestring = day+"."+str(get_month(abmon))+"."+year
+	return datestring
+
 	
 def clean_director(strvar):
 	match=re.compile('.+? \((.+?)\)').findall(strvar)
@@ -200,13 +283,15 @@ def getsorting(url):
 	return sorting
 
 def get_video(string):
-	link=""
+	vid_list = []
 	match=re.compile('.+?<media:content url="http://.+?archive.org/(.+?)" type=".+?" medium="video" />.+?').findall(string)
 	for vid in match:
-		link = vid
-	if link=="":
-		link = "None"
-	return link
+		vid_list.append(vid)
+		
+	if len(vid_list)==0:
+		vid_list = ["None"]
+
+	return vid_list[0]
 	
 def get_prettyname(name):
 	name = "<start>"+name+""
@@ -249,3 +334,21 @@ def cleanlinks_leave_text(strvar):
 	string = re.sub('<a.+?href=.+?">', '', string)
 	string = re.sub('<\/a>', '', string)
 	return string
+
+def convert_bytes(bytes):
+    bytes = float(bytes)
+    if bytes >= 1099511627776:
+        terabytes = bytes / 1099511627776
+        size = '%.2fT' % terabytes
+    elif bytes >= 1073741824:
+        gigabytes = bytes / 1073741824
+        size = '%.2fG' % gigabytes
+    elif bytes >= 1048576:
+        megabytes = bytes / 1048576
+        size = '%.2fM' % megabytes
+    elif bytes >= 1024:
+        kilobytes = bytes / 1024
+        size = '%.2fK' % kilobytes
+    else:
+        size = '%.2fb' % bytes
+    return size

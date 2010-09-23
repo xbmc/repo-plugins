@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Strings -->
+    <string id="30800">Uusimmat videot</string>
+	<string id="30801">Merkittävät</string>
+	<string id="30802">Selaa järjestelmiä</string>
+	<string id="30803">Apuohjelmat</string>
+
+    <!-- Strings -->
+    <string id="30810">Tyhjennä RSS välimuisti</string>
+	<string id="30811">Tyhjennä esikatselukuvien välimuisti</string>
+	<string id="30812">Tyhjennä RSS & esikatselukuvien välimuisti</string>
+	<string id="30813">Lataa esikatselukuvien välimuisti</string>
+	
+    <!-- Plugin  Settings -->
+    <string id="30900">Näytä lyhyet nimet</string>
+	<string id="30901">Kuvakkeiden koko</string>
+	<string id="30902">Fanitaiteen koko</string>
+	<string id="30903">Jäsennysmenetelmä</string>
+	<string id="30904">Syötteen päivitysaikaväli</string>
+	<string id="30905">Kuvien päivitysaikaväli</string>
+	<string id="30906">Latauskansio</string>
+	
+	<string id="30907">Latauskansiota ei ole valittu. Tee se nyt?</string>
+	<string id="30908">(Lataa tämä kansio uudelleen, jotta asetuksesi sovelletaan!)</string>
+
+    <!-- Dialog -->
+    <string id="32000">Työkaluavusteisia nopeita läpiajoja</string>
+
+	<!-- Dialog: First Startup -->
+	<string id="32001">Käytät tätä lisäohjelmaa ensimmäistä kertaa.</string>
+	<string id="32002">Haluatko ladata esikatselukuvien välimuistin?</string>
+	<string id="32003">(Se tekee ohjelmasta paljon nopeamman!)</string>
+	
+	<!-- Dialog: Video Download -->
+	<string id="32010">Tiedosto</string>
+    <string id="32011">Lataa</string>
+    <string id="32012">Aika</string>
+    <string id="32013">Jäljellä</string>
+    <string id="32014">Videota ladataan</string>
+    <string id="32015">Videon lataus keskeytetty</string>
+	<string id="32016">Video ladattu</string>
+	
+	<!-- Dialog: Clean RSS Cache -->
+	<string id="32020">!VAROITUS!: ET voi peruuttaa toimenpidettä!</string>
+	<string id="32021">Oletko varma, että haluat tyhjentää RSS välimuistin?</string>
+	<string id="32022">Tyhjennetään RSS välimuistia...</string>
+	<string id="32023">RSS välimuistin tyhjennys keskeytetty</string>
+	<string id="32024">RSS välimuisti tyhjennetty</string>
+	<string id="32025">Poistetaan</string>
+	
+	<!-- Dialog: Download Thumbnail Cache Download -->
+	<string id="32040">Esikatselukuvien välimuistin lataaminen keskeytetty</string>
+	<string id="32041">Esikatselukuvien välimuisti ladattu</string>
+	<string id="32042">Välimuistin lataus & asennus valmis</string>
+	<string id="32043">Nauti nopeammasta toiminnasta!</string>
+
+	<!-- Dialog: Clean Cache -->
+	<string id="32100">Ladataan kuvien välimuistia</string>
+	<string id="32101">Oletko varma, että haluat tyhjentää välimuistin?</string>
+	<string id="32102">Välimuistin tyhjennys keskeytetty</string>
+	
+	<!-- Dialog: Clean Thumbnail Cache -->
+	<string id="32030">Tyhjennetään esikatselukuvien välimuistia...</string>
+	<string id="32031">Oletko varma, että haluat tyhjentää esikatselukuvien välimuistin?</string>
+	<string id="32032">Esikatselukuvien välimuistin tyhjennys keskeytetty</string>
+	<string id="32033">Esikatselukuvien välimuisti tyhjennetty</string>
+	<string id="32034">Poistetaan esikatselukuva</string>
+	
+	<!-- Dialog: Download Thumbnail Cache: Unzip -->
+	<string id="32044">Puretaan esikatselukuvien välimuistia</string>
+	<string id="32045">Puretaan</string>
+	<string id="32046">Tiedoston nimi</string>
+	<string id="32047">Tiedosto</string>
+	<string id="32048">/</string>
+	<string id="32049">Välimuisti tyhjennetty</string>
+
+	 <!-- Settings: Image Selection -->
+	<string id="30950">Pieni</string>
+	<string id="30951">Keskisuuri</string>
+	<string id="30952">Suuri</string>
+	
+	<!-- Settings: Feed Update Interval -->
+	<string id="31000">1 tunti</string>
+	<string id="31001">2 tuntia</string>
+	<string id="31002">4 tuntia</string>
+	<string id="31003">6 tuntia</string>
+	<string id="31004">12 tuntia</string>
+	<string id="31005">1 päivä</string>
+	<string id="31006">Ei koskaan</string>
+	
+	<!-- Settings: Image Update Interval -->
+	<string id="35000">1 kuukausi</string>
+	<string id="35001">3 kuukautta</string>
+	<string id="35002">6 kuukautta</string>
+	<string id="35003">9 kuukautta</string>
+	<string id="35004">1 vuosi</string>
+	<string id="35005">Ei koskaan</string>
+	
+	<!-- Settings: RSS Parsing Method -->
+	<string id="32006">Nopea (epätarkka)</string>
+	<string id="32007">Normaali</string>
+	<string id="32008">Tarkka (hidas)</string>
+
+	<!-- Settings: Fanart Image Size -->
+	<string id="34010">[16:9] Pieni</string>
+	<string id="34011">[16:9] Keskisuuri</string>
+	<string id="34012">[16:9] Suuri</string>
+	<string id="34013">[4:3] Pieni</string>
+	<string id="34014">[4:3] Keskisuuri</string>
+	<string id="34015">[4:3] Suuri</string>
+
+</strings>

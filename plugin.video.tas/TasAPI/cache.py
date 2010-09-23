@@ -8,6 +8,7 @@ __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
 set_rss_interval = __settings__.getSetting( "feed_update" )
 set_image_interval = __settings__.getSetting( "image_update" )
 
+# Function to get the RSS interval from settings
 def get_rss_interval():
 	global set_rss_interval
 	if set_rss_interval=="0":
@@ -28,6 +29,7 @@ def get_rss_interval():
 		rss_interval = 60
 	return rss_interval
 
+# Function to get the Image interval from settings
 def get_image_interval():
 	global set_image_interval
 	if set_image_interval=="0":
@@ -46,13 +48,16 @@ def get_image_interval():
 		image_interval = 30
 	return image_interval
 
+# ------------
 #  RSS Caching
+# ------------
 
 def check(fn):
     return ((time.time() - os.path.getmtime(fn))/60)
 
+# Verifies a Directory if it exists (Cache) If not, it creates it
 def vdir():
-    dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.videos.tas/', 'cache', 'feeds'))
+    dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'feeds'))
     if os.path.isdir(dir)==False:
             os.makedirs(dir)
     return True
@@ -72,7 +77,7 @@ def getcontent(link,UAS):
 	content = ""
 	tfn = link.rsplit('/',1)
 	tfnf = tfn[-1]
-	filename = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.videos.tas/', 'cache', 'feeds',  tfnf ))
+	filename = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'feeds',  tfnf ))
 	filecheck = os.path.isfile(filename)
 	if filecheck==False:
 		vdir()
@@ -93,17 +98,21 @@ def getcontent(link,UAS):
 		content=False
 	return content
 
+# -------------
 # Image Caching
+# -------------
 
 def img_check(fn):
     return (((time.time() - os.path.getmtime(fn))/60) / 24)
 
+# Verifies Image Path in cache, if not, it creates it
 def img_vdir():
-    dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.videos.tas/', 'cache', 'images'))
+    dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images'))
     if os.path.isdir(dir)==False:
             os.makedirs(dir)
     return True
 
+# Image Downloader
 def img_download(fname,url,id,UAS):
 	from urllib2 import Request, urlopen, URLError, HTTPError
 	req = Request(url)
@@ -119,6 +128,8 @@ def img_download(fname,url,id,UAS):
 		print "URL Error:",e.reason , url
 	return
 
+# Main Function to get the image
+# If the file doesnt exist, it will check the modified date, if the modified date is off, it will update
 def img_getcontent(link,id,UAS):
 	content = ""
 	tfn = link.rsplit('/',1)
@@ -126,7 +137,7 @@ def img_getcontent(link,id,UAS):
 	ext = ext.split(".", 1)
 	ext = ext[-1]
 	tfnf = ""+str(id)+"."+ext+""
-	filename = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.videos.tas/', 'cache', 'images', tfnf ))
+	filename = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images', tfnf ))
 	filecheck = os.path.isfile(filename)
 	if filecheck==False:
 		img_vdir()

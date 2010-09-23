@@ -105,7 +105,34 @@ def Make_new_base(DBpath,ecrase=True):
             log( "%s - %s"%(Exception,msg) )
             log( "~~~~" )
             log( "" )
-    
+        try:
+            cn.execute("""DROP TABLE KeywordsInFiles""")
+        except Exception,msg:
+            log( ">>> Make_new_base - DROP TABLE KeywordsInFiles" )
+            log( "%s - %s"%(Exception,msg) )
+            log( "~~~~" )
+            log( "" )
+        try:
+            cn.execute("""DROP TABLE Collections""")
+        except Exception,msg:
+            log( ">>> Make_new_base - DROP TABLE Collections" )
+            log( "%s - %s"%(Exception,msg) )
+            log( "~~~~" )
+            log( "" )
+        try:
+            cn.execute("""DROP TABLE FilesInCollections""")
+        except Exception,msg:
+            log( ">>> Make_new_base - DROP TABLE FilesInCollections" )
+            log( "%s - %s"%(Exception,msg) )
+            log( "~~~~" )
+            log( "" )
+        try:
+            cn.execute("""DROP TABLE Periodes""")
+        except Exception,msg:
+            log( ">>> Make_new_base - DROP TABLE Periodes" )
+            log( "%s - %s"%(Exception,msg) )
+            log( "~~~~" )
+            log( "" )
 
 
     #table 'files'
@@ -123,7 +150,7 @@ def Make_new_base(DBpath,ecrase=True):
             log( "" )
     #table 'keywords'
     try:
-        cn.execute("""CREATE TABLE "keywords" ("idPic" INTEGER, "mot" TEXT);""")
+        cn.execute("""CREATE TABLE "keywords" ("idKW" INTEGER primary key, "keyword" TEXT UNIQUE);""")
     except Exception,msg:
         if msg.args[0].startswith("table 'keywords' already exists"):
             #cette exception survient lorsque la table existe déjà.
@@ -131,6 +158,19 @@ def Make_new_base(DBpath,ecrase=True):
             pass
         else: #sinon on imprime l'exception levée pour la traiter
             log( ">>> Make_new_base - CREATE TABLE keywords ..." )
+            log( "%s - %s"%(Exception,msg) )
+            log( "~~~~" )
+            log( "" )
+    #table 'KeywordsInFiles'
+    try:
+        cn.execute("""CREATE TABLE "KeywordsInFiles" ("idKW" INTEGER NOT NULL, "idFile" INTEGER NOT NULL);""")
+    except Exception,msg:
+        if msg.args[0].startswith("table 'KeywordsInFiles' already exists"):
+            #cette exception survient lorsque la table existe déjà.
+            #   elle n'est pas une erreur, on la passe
+            pass
+        else: #sinon on imprime l'exception levée pour la traiter
+            log( ">>> Make_new_base - CREATE TABLE KeywordsInFiles ..." )
             log( "%s - %s"%(Exception,msg) )
             log( "~~~~" )
             log( "" )
@@ -144,6 +184,54 @@ def Make_new_base(DBpath,ecrase=True):
             pass
         else: #sinon on imprime l'exception levée pour la traiter
             log( ">>> Make_new_base - CREATE TABLE folders ..." )
+            log( "%s - %s"%(Exception,msg) )
+            log( "~~~~" )
+            log( "" )
+    #table 'Collections'
+    try:
+        cn.execute("""CREATE TABLE "Collections" ("idCol" INTEGER PRIMARY KEY, "CollectionName" TEXT UNIQUE);""")
+    except Exception,msg:
+        if msg.args[0].startswith("table 'Collections' already exists"):
+            #cette exception survient lorsque la table existe déjà.
+            #   elle n'est pas une erreur, on la passe
+            pass
+        else: #sinon on imprime l'exception levée pour la traiter
+            log( ">>> Make_new_base - CREATE TABLE Collections ..." )
+            log( "%s - %s"%(Exception,msg) )
+            log( "~~~~" )
+            log( "" )
+    #table 'FilesInCollections'
+    try:
+        cn.execute("""CREATE TABLE "FilesInCollections" ("idCol" INTEGER NOT NULL,
+                                   "idFile" INTEGER NOT NULL,
+                                   CONSTRAINT UNI_COLLECTION UNIQUE ("idCol","idFile")
+                                   );""")
+    except Exception,msg:
+        if msg.args[0].startswith("table 'FilesInCollections' already exists"):
+            #cette exception survient lorsque la table existe déjà.
+            #   elle n'est pas une erreur, on la passe
+            pass
+        else: #sinon on imprime l'exception levée pour la traiter
+            log( ">>> Make_new_base - CREATE TABLE FilesInCollections ..." )
+            log( "%s - %s"%(Exception,msg) )
+            log( "~~~~" )
+            log( "" )
+    #table 'c'
+    try:
+        cn.execute("""CREATE TABLE "periodes" 
+  ("idPeriode" INTEGER  PRIMARY KEY NOT NULL,
+   "PeriodeName" TEXT UNIQUE NOT NULL,
+   "DateStart" DATETIME NOT NULL,
+   "DateEnd" DATETIME NOT NULL,
+   CONSTRAINT UNI_PERIODE UNIQUE ("PeriodeName","DateStart","DateEnd")
+   )""")
+    except Exception,msg:
+        if msg.args[0].startswith("table 'Periodes' already exists"):
+            #cette exception survient lorsque la table existe déjà.
+            #   elle n'est pas une erreur, on la passe
+            pass
+        else: #sinon on imprime l'exception levée pour la traiter
+            log( ">>> Make_new_base - CREATE TABLE Periodes ..." )
             log( "%s - %s"%(Exception,msg) )
             log( "~~~~" )
             log( "" )
@@ -235,7 +323,6 @@ def DB_file_insert(path,filename,dictionnary,update=False):
         cn.execute( """INSERT INTO files('%s') values (%s)""" % ( "','".join(dictionnary.keys()), ",".join(["?"]*len(dictionnary.values())) ) ,
                                                                      dictionnary.values()
                     )
-
     except Exception,msg:
         log( ">>> DB_file_insert ..." )
         log(filename)
@@ -244,20 +331,29 @@ def DB_file_insert(path,filename,dictionnary,update=False):
         log( "" )
     # TRAITEMENT DES MOTS CLES (base keywords)
     if dictionnary.has_key("keywords"):
-        #exec("kwl="+ dictionnary["keywords"])
         kwl = dictionnary["keywords"].split(lists_separator)
         for mot in kwl:
-            #print "\t",mot
-            #ajoutons chaque mot dans la base
-            #"""INSERT INTO keywords(idPic,mot) SELECT IdFile FROM files WHERE strPath=? AND strFilename=?""",(path,filename)
             if mot: #on ajoute que les mots clés non vides
+                #First for keywords, create an entry for this keyword in keywords table
                 try:
-                    cn.execute("""INSERT INTO keywords(idPic,mot) SELECT IdFile,"%s" FROM files WHERE strPath=? AND strFilename=?"""%mot.encode("utf8","replace"),(path,filename,))
+                    cn.execute("""INSERT INTO keywords(keyword) VALUES("%s")"""%mot.encode("utf8","replace"))##
                 except Exception,msg:
-                    log( 'EXCEPTION >> keywords' )
-                    log( "\t%s - %s"%(Exception,msg) )
-                    log( "~~~~" )
-                    log( "" )
+                    if str(msg)=="column keyword is not unique":
+                        pass
+                    else:
+                        log( 'EXCEPTION >> keywords' )
+                        log( "\t%s - %s"%(Exception,msg) )
+                        log( "~~~~" )
+                        log( "" )
+                #Then, add the corresponding id of file and id of keyword inside the KeywordsInFiles database
+                try:
+                    print type(mot)
+                    cn.execute("""INSERT INTO KeywordsInFiles(idKW,idFile) SELECT k.idKW,f.idFile FROM keywords k, files f WHERE k.keyword=? AND f.strPath=? AND f.strFilename=?""",(mot.decode("utf8"),
+                                                                                                                                                                                     path.encode("utf8"),
+                                                                                                                                                                                     filename.encode("utf8")))
+                except Exception,msg:
+                    log("Error while adding KeywordsInFiles")
+                    print Exception,msg
 ##    # TRAITEMENT DES FOLDERS
 ##    try:
 ##        haspic = "1" if True else "0"
@@ -305,12 +401,8 @@ def get_children(folderid):
 
 def DB_del_pic(picpath,picfile=None):
     """Supprime le chemin/fichier de la base. Si aucun fichier n'est fourni, toutes les images du chemin sont supprimées de la base"""
-##    conn = sqlite.connect(pictureDB)
-##    conn.text_factory = str #sqlite.OptimizedUnicode
-##    cn=conn.cursor()
     if picfile:
         #on supprime le fichier de la base
-##        cn.execute( """DELETE FROM files WHERE idFolder = (SELECT idFolder FROM folders WHERE FullPath=?) AND strFilename=?""",(picpath,picfile,))
         Request("""DELETE FROM files WHERE idFolder = (SELECT idFolder FROM folders WHERE FullPath=%s) AND strFilename=%s"""%(picpath,picfile))
         #puis maintenant on vérifie que le chemin dossier est toujours utile ou alors on le supprime
         Request("""DELETE FROM folders 
@@ -321,18 +413,7 @@ def DB_del_pic(picpath,picfile=None):
                          )
       )
    or FullPath=%s""" %(picpath,picpath) )
-##        cn.execute( """DELETE FROM folders 
-##    WHERE 
-##      (SELECT DISTINCT idFolder FROM files 
-##          WHERE idFolder=(
-##              SELECT DISTINCT idFolder FROM folders WHERE FullPath=?
-##                         )
-##      )
-##   or FullPath=?""" ,(picpath,picpath,))
-##        conn.commit()
-##        cn.close()
     else:
-        #print "SELECT idFolder FROM folders WHERE FullPath='%s'"%picpath
         idpath = Request("SELECT idFolder FROM folders WHERE FullPath = '%s'"%picpath)[0][0]#le premier du tuple à un élément
         log( idpath )
         deletelist=[]#va lister les id des dossiers à supprimer
@@ -340,15 +421,7 @@ def DB_del_pic(picpath,picfile=None):
         deletelist.extend(get_children(str(idpath)))#on ajoute tous les enfants en sous enfants du dossier
         Request( "DELETE FROM files WHERE idFolder in ('%s')"%"','".join([str(i) for i in deletelist]) )
         Request( "DELETE FROM folders WHERE idFolder in ('%s')"%"','".join([str(i) for i in deletelist]) )
-##        #on efface tous les fichiers correspondant au dossier
-##        cn.execute( """DELETE FROM files WHERE idFolder = (SELECT idFolder FROM folders WHERE FullPath=?)""",(picpath,))
-##        #on efface le dossier de la table folder
-##        cn.execute( """delete from folders where FullPath=?""" ,(picpath,))
-##        #on modifie l'arborescence si le dossier supprimé est un père (qu'il a des sous dossiers)
-##        #sinon, il faut supprimer toute l'arborescence... A voir
-##        #TODO
-##        conn.commit()
-##        cn.close()
+
     return
 
 def DB_deltree(picpath):
@@ -366,10 +439,76 @@ UseIt = 1
 AND
 idFolder = 6"""
 
+###################################
+# Collection functions
+#####################################
+def ListCollections():
+    """List all available collections"""
+    return [row for row in Request( """SELECT CollectionName FROM Collections""")]
 
+def NewCollection(Colname):
+    """Add a new collection"""
+    if Colname :
+        Request( """INSERT INTO Collections(CollectionName) VALUES ("%s")"""%Colname )
+    else:
+        log( """NewCollection : User did not specify a name for the collection.""")
+def delCollection(Colname):
+    """delete a collection"""
+    if Colname:
+        Request( """DELETE FROM FilesInCollections WHERE idCol=(SELECT idCol FROM Collections WHERE CollectionName="%s");"""%Colname )
+        Request( """DELETE FROM Collections WHERE CollectionName="%s";"""%Colname )
+    else:
+        log( """delCollection : User did not specify a name for the collection""" )
+def getCollectionPics(Colname):
+    """List all pics associated to the Collection given as Colname"""
+    return [row for row in Request( """SELECT strPath,strFilename FROM Files WHERE idFile IN (SELECT idFile FROM FilesInCollections WHERE idCol IN (SELECT idCol FROM Collections WHERE CollectionName='%s'))"""%Colname)]
 
+def renCollection(Colname,newname):
+    """rename give collection"""
+    if Colname:
+        Request( """UPDATE Collections SET CollectionName = "%s" WHERE CollectionName="%s";"""%(newname,Colname) )
+    else:
+        log( """renCollection : User did not specify a name for the collection""")
+        
+def addPicToCollection(Colname,filepath,filename):
+    #cette requête ne vérifie pas si :
+    #   1- le nom de la collection existe dans la table Collections
+    #   2- si l'image est bien une image en base de donnée Files
+    #ces points sont solutionnés partiellement car les champs ne peuvent être NULL
+    #   3- l'association idCol et idFile peut apparaitre plusieurs fois...
+    print """(SELECT idFile FROM files WHERE strPath="%s" AND strFilename="%s")"""%(filepath,filename)
+    Request( """INSERT INTO FilesInCollections(idCol,idFile) VALUES ( (SELECT idCol FROM Collections WHERE CollectionName="%s") , (SELECT idFile FROM files WHERE strPath="%s" AND strFilename="%s") )"""%(Colname,filepath,filename) )
+
+def delPicFromCollection(Colname,filepath,filename):
+    Request( """DELETE FROM FilesInCollections WHERE idCol=(SELECT idCol FROM Collections WHERE CollectionName="%s") AND idFile=(SELECT idFile FROM files WHERE strPath="%s" AND strFilename="%s")"""%(Colname,filepath,filename) )
     
+####################
+# Periodes functions
+#####################
+def ListPeriodes():
+    """List all periodes"""
+    return [row for row in Request( """SELECT PeriodeName,DateStart,DateEnd FROM Periodes""")]
 
+def addPeriode(periodname,datestart,dateend):
+    #datestart et dateend doivent être au format string ex.: "datetime('2009-07-12')" ou "strftime('%Y',now)"
+    Request( """INSERT INTO Periodes(PeriodeName,DateStart,DateEnd) VALUES ('%s',%s,%s)"""%(periodname,datestart,dateend) )
+    return
+
+def delPeriode(periodname):
+    Request( """DELETE FROM Periodes WHERE PeriodeName="%s" """%periodname )
+    return
+
+def renPeriode(periodname,newname):
+    Request( """UPDATE Periodes SET PeriodeName = "%s" WHERE PeriodeName="%s" """%(newname,periodname) )
+    return
+
+def PicsForPeriode(periodname):
+    """Get pics for the given period name"""
+    period = Request( """SELECT DateStart,DateEnd FROM Periodes WHERE PeriodeName=%s"""%periodname )
+    return [row for row in Request( """SELECT strPath,strFilename FROM files WHERE datetime("EXIF DateTimeOriginal") BETWEEN %s AND %s ORDER BY "EXIF DateTimeOriginal" ASC"""%period )]
+
+###
+    
 def hook_directory ( filepath,filename,filecount, nbfiles ):
     import sys
     log( "%s/%s - %s"%(filecount,nbfiles,os.path.join(filepath,filename)) )
@@ -660,41 +799,30 @@ def Request(SQLrequest):
         conn.commit()
         retour = [row for row in cn]
     except Exception,msg:
+        log( "The request failed :" )
         log( "%s - %s"%(Exception,msg) )
+        log( "---" )     
         retour= []
     cn.close()
     return retour
 
-def search_keyword(kw):
-    """cherche dans les mots clefs le mot fourni et retourne la liste des photos"""
-##    print kw
-##    print type(kw)
-##    print kw.encode("utf8")
-##    print
+def search_keyword(kw=None):
+    """Look for given keyword and return the list of pictures.
+If keyword is not given, pictures with no keywords are returned"""
     if kw is not None: #si le mot clé est fourni
-        return [row for row in Request( """SELECT p.FullPath,f.strFilename FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFile in (SELECT idPic FROM keywords WHERE mot='%s')"""%kw)]
+        return [row for row in Request( """SELECT strPath,strFilename FROM files WHERE idFile in (SELECT idFile FROM KeywordsInFiles WHERE idKW =(SELECT idKW FROM keywords WHERE keyword="%s"))"""%kw.encode("utf8"))]
     else: #sinon, on retourne toutes les images qui ne sont pas associées à des mots clés
-        return [row for row in Request( """SELECT p.FullPath,f.strFilename FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFile not in (SELECT idPic FROM keywords)""" )]
+        return [row for row in Request( """SELECT strPath,strFilename FROM files WHERE idFile in (SELECT DISTINCT idFile FROM KeywordsInFiles)""" )]
 
 def list_KW():
-    """Retourne une liste de tous les mots clés de la base"""
-    keywords=[]
-    for kws in [row for (row,) in Request("SELECT keywords FROM files WHERE keywords NOT NULL")]:
-        if not kws: continue #permet de zapper un mot clé vide
-        try:
-            keywords = keywords+kws.split(lists_separator)
-        except:
-            pass
-    retour = list(set(keywords))
-    retour.sort()
-    return retour
+    """Return a list of all keywords in database"""
+    return [row for (row,) in Request( """SELECT keyword FROM keywords ORDER BY LOWER(keyword) ASC""" )]
 
 def countKW(kw):
     if kw is not None:
-        return Request("""SELECT count(*) FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFile in (SELECT idPic FROM keywords WHERE mot='%s')"""%kw.encode("utf8"))[0][0]
+        return Request("""SELECT count(*) FROM files WHERE idFile in (SELECT idFile FROM KeywordsInFiles WHERE idKW =(SELECT idKW FROM keywords WHERE keyword="%s"))"""%kw.encode("utf8"))[0][0]
     else:
-        
-        return Request("""SELECT count(*) FROM files f,folders p WHERE f.idFolder=p.idFolder AND f.idFile not in (SELECT idPic FROM keywords)""" )[0][0]
+        return Request("""SELECT count(*) FROM files WHERE idFile in (SELECT DISTINCT idFile FROM KeywordsInFiles)""" )[0][0]
 
 def countPicsFolder(folderid):
     log("TEST : tous les enfants de %s"%folderid)
@@ -796,13 +924,14 @@ def all_children(rootid):
 def search_year(year):
     """retourne les photos de l'année fournie"""
     #TODO : utiliser un format date pour la variable year, et tester sa validité
-    #SELECT DISTINCT mot FROM keywords
     retour = search_between_dates((year,"%Y"),(str(int(year)+1),"%Y"))
     return retour
 
 #def search_between_dates(datestart='2007-01-01 00:00:01',dateend='2008-01-01 00:00:01'):
 def search_between_dates(DateStart=("2007","%Y"),DateEnd=("2008","%Y")):
     """Cherche les photos qui ont été prises entre 'datestart' et 'dateend'."""
+    log(DateStart)
+    log(DateEnd)
     DS = time.strftime("%Y-%m-%d %H:%M:%S",time.strptime(DateStart[0],DateStart[1]))#time.mktime(time.strptime(DateStart[0],DateStart[1]))
     DE = time.strftime("%Y-%m-%d %H:%M:%S",time.strptime(DateEnd[0],DateEnd[1]))#time.mktime(time.strptime(DateEnd[0],DateEnd[1]))
     #SELECT strPath,strFilename FROM files WHERE strftime('%Y-%m-%d %H:%M:%S', "EXIF DateTimeOriginal") BETWEEN strftime('%Y-%m-%d %H:%M:%S','2007-01-01 00:00:01') AND strftime('%Y-%m-%d %H:%M:%S','2007-12-31 23:59:59') ORDER BY "EXIF DateTimeOriginal" ASC
@@ -820,7 +949,8 @@ def get_dates(year_month):
     return [t for (t,) in Request("""SELECT distinct strftime("%%Y-%%m-%%d","EXIF DateTimeOriginal") FROM files where strftime("%%Y-%%m","EXIF DateTimeOriginal") = '%s' ORDER BY "EXIF DateTimeOriginal" ASC"""%year_month)]
 def search_all_dates():
     return [t for t in Request("""SELECT strPath,strFilename FROM files ORDER BY "EXIF DateTimeOriginal" ASC""")]
-
+def get_pics_dates():
+    return [t for (t,) in Request("""SELECT distinct strftime("%Y-%m-%d","EXIF DateTimeOriginal") FROM files where "EXIF DateTimeOriginal"  not null ORDER BY "EXIF DateTimeOriginal" ASC""")]
 #Quelques requêtes SQLite
 #
 """

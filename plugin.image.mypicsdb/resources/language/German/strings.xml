@@ -13,10 +13,10 @@
     <string id="30050">pics</string>
     
     <string id="30100">All the period %s (%s pics)</string>
-    <string id="30101">Sort by Dates</string>
-    <string id="30102">Sort by Folders</string>
-    <string id="30103">Sort by keywords</string>
-    <string id="30104">No keyword pictures</string>
+    <string id="30101">Sortiere nach Datum</string>
+    <string id="30102">Sortiere nach Verzeichnis</string>
+    <string id="30103">Sortiere nach Keyword</string>
+    <string id="30104">Bilder ohne Keyword</string>
     <string id="30105"></string>
     <string id="30106"></string>
     <string id="30107"></string>
@@ -30,11 +30,11 @@
     <string id="30115"></string>
     <string id="30116"></string>
     
-    <string id="30201">No folders to scan is set !</string>
-    <string id="30202">Please edit plugin settings to set the picture path to scan</string>
-    <string id="30203">Path to scan :</string>
-    <string id="30204">Deleting missing folders...</string>
-    <string id="30205">Opening database :</string>
+    <string id="30201">Kein Verzeichnis zum Scannen gewählt !</string>
+    <string id="30202">Bitte Plugin-Einstellungen ändern um Verzeichnis zum Scannen zu wählen</string>
+    <string id="30203">Verzeichnis zum Scannen :</string>
+    <string id="30204">Lösche fehlende Verzeichnisse...</string>
+    <string id="30205">Öffne Datenbank :</string>
     <string id="30206"></string>
     <string id="30207"></string>
     <string id="30208"></string>

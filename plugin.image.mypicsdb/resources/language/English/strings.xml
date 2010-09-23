@@ -13,22 +13,34 @@
     <string id="30050">pics</string>
     
     <string id="30100">All the period %s (%s pics)</string>
-    <string id="30101">Sort by Dates</string>
-    <string id="30102">Sort by Folders</string>
-    <string id="30103">Sort by keywords</string>
+    <string id="30101">Browse by Dates</string>
+    <string id="30102">Browse by Folders</string>
+    <string id="30103">Browse by keywords</string>
     <string id="30104">No keyword pictures</string>
-    <string id="30105"></string>
-    <string id="30106"></string>
-    <string id="30107"></string>
-    <string id="30108"></string>
-    <string id="30109"></string>
-    <string id="30110"></string>
-    <string id="30111"></string>
-    <string id="30112"></string>
-    <string id="30113"></string>
+    <string id="30105">Periods</string>
+    <string id="30106">Add a new period</string>
+    <string id="30107">Choose the start date</string>
+    <string id="30108">Choose the end date</string>
+    <string id="30109">Pics from %s to %s</string>
+    <string id="30110">Input a title for this period :</string>
+    <string id="30111">Delete this period</string>
+    <string id="30112">Rename this period</string>
+    <string id="30113">From %s to %s</string>
     <string id="30114"></string>
     <string id="30115"></string>
     <string id="30116"></string>
+    
+    <string id="30150">Collections</string>
+    <string id="30151">Remove from the collection</string>
+    <string id="30152">Add to collection...</string>
+    <string id="30153">Input a new title</string>
+    <string id="30154">Picture added in</string>
+    <string id="30155">Input a title for the new collection</string>
+    <string id="30156">Choose a collection</string>
+    <string id="30157">New collection</string>
+    <string id="30158">Remove this collection</string>
+    <string id="30159">Rename this collection</string>
+    <string id="30160">Create a new collection</string>
     
     <string id="30201">No folders to scan is set !</string>
     <string id="30202">Please edit plugin settings to set the picture path to scan</string>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon
   id="plugin.image.mypicsdb"
-  version="0.1.3"
+  version="0.2"
   name="My Pictures Database"
   provider-name="alexsolex®">
   <requires>
@@ -15,11 +15,14 @@
     <platform>all</platform>
     <summary lang="en">Advanced Pictures manager</summary>
     <summary lang="fr">Gestion avancée de votre photothèque</summary>
+    <summary lang="nl">Advanced Pictures manager</summary>
     <description lang="en">Manage your pictures as you do for musics and videos[CR]Then you'll be able to sort your pictures by day/month/year, keywords and much more</description>
     <description lang="fr">Gérez vos photos sous forme d'une base de donnée de la même manière que les médiathèques musique ou vidéos[CR]A vous le tri de vos photos par dates, par mots clés, et bien plus encore !!</description>
     <description lang="de">Manage deine Bilder, genau wie deine Musik oder Videos[CR] Dann lassen sich Bilder nach Tag/Monat/Jahr, Keywords und mehr sortieren</description>
+    <description lang="nl">Beheer uw afbeeldingen zoals u doet voor muziek en videos.[CR]U bent zelf in staan om afbeeldingen te soteren op jaar/maand/dag of op trefwoorden.</description>
     <disclaimer lang="en">This addon is not fully tested yet. Need more testers, so please feel free to contact me alexsolex@gmail.com to give me your feedbacks</disclaimer>
     <disclaimer lang="fr">Cet addon n'a pas été testé pour toutes les plateformes. J'ai besoin de retours de testeurs, alors n'hésitez pas à me donner vos retours sur alexsolex@gmail.com</disclaimer>
     <disclaimer lang="de">Dieses Add-On ist noch nicht vollkommen getestet. Weitere Tester sind erwünscht. Für Fragen oder Anregungen schreibt eine Mail an alexsolex@gmail.com</disclaimer>
+    <disclaimer lang="nl">Deze addon is nog in beta-fase en nog niet geheel getest. We zoeken meer beta-testers, dus meldt u aan via alexsolex@gmail.com en signaleer fouten en mogelijke verbeteringen!x</disclaimer>
   </extension>
 </addon>

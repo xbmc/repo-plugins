@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">MyPicture Database</string>
+    <string id="30001">Database</string>
+
+    <string id="30020">Afbeeldingen locatie</string>
+    <string id="30021">Verwijderen ontbrekende afbeeldingen</string>
+    <string id="30022">Recursieve scan</string>
+    <string id="30023">Locatie</string>
+    <string id="30024">Uitvoeren scannen</string>
+    <string id="30025">Initialiseer database voor scannen</string>
+    
+    <string id="30050">afbeeldingen</string>
+    
+    <string id="30100">Volledige periode %s (%s pics)</string>
+    <string id="30101">Sorteer datums</string>
+    <string id="30102">Sorteer mappen</string>
+    <string id="30103">Sorteer trefwoorden</string>
+    <string id="30104">Geen trefwoorden</string>
+    <string id="30105"></string>
+    <string id="30106"></string>
+    <string id="30107"></string>
+    <string id="30108"></string>
+    <string id="30109"></string>
+    <string id="30110"></string>
+    <string id="30111"></string>
+    <string id="30112"></string>
+    <string id="30113"></string>
+    <string id="30114"></string>
+    <string id="30115"></string>
+    <string id="30116"></string>
+    
+    <string id="30201">Er is geen afbeeldingen locatie ingesteld</string>
+    <string id="30202">Gaarne plugin configueren (afbeeldingen locatie)</string>
+    <string id="30203">Locatie scannen</string>
+    <string id="30204">Verwijderen ontbrekende mappen</string>
+    <string id="30205">Openen database</string>
+    <string id="30206"></string>
+    <string id="30207"></string>
+    <string id="30208"></string>
+    <string id="30209"></string>
+    <string id="30210"></string>
+    <string id="30211"></string>
+    <string id="30212"></string>
+</strings>

@@ -13,22 +13,34 @@
     <string id="30050">images</string>
     
     <string id="30100">Toute la période %s (%s images)</string>
-    <string id="30101">Tri par Dates</string>
-    <string id="30102">Tri par Dossiers</string>
-    <string id="30103">Tri par Mots-clés</string>
+    <string id="30101">Parcourir par Dates</string>
+    <string id="30102">Parcourir par Dossiers</string>
+    <string id="30103">Parcourir par Mots-clés</string>
     <string id="30104">Images sans mots-clés</string>
-    <string id="30105"></string>
-    <string id="30106"></string>
-    <string id="30107"></string>
-    <string id="30108"></string>
-    <string id="30109"></string>
-    <string id="30110"></string>
-    <string id="30111"></string>
-    <string id="30112"></string>
-    <string id="30113"></string>
+    <string id="30105">Périodes</string>
+    <string id="30106">Ajouter une nouvelle période</string>
+    <string id="30107">Choix du début de la période</string>
+    <string id="30108">Choix de la fin de la période</string>
+    <string id="30109">Photos du %s au %s</string>
+    <string id="30110">Saisir un titre pour cette période :</string>
+    <string id="30111">Supprimer cette période</string>
+    <string id="30112">Renommer cette période</string>
+    <string id="30113">Du %s au %s</string>
     <string id="30114"></string>
     <string id="30115"></string>
     <string id="30116"></string>
+    
+    <string id="30150">Collections</string>
+    <string id="30151">Retirer de la collection</string>
+    <string id="30152">Ajouter à la collection...</string>
+    <string id="30153">Saisir un nouveau titre</string>
+    <string id="30154">Photo ajoutée dans</string>
+    <string id="30155">Saisir un titre pour la nouvelle collection</string>
+    <string id="30156">Choisir une collection</string>
+    <string id="30157">Nouvelle collection</string>
+    <string id="30158">Supprimer cette collection</string>
+    <string id="30159">Renommer cette collection</string>
+    <string id="30160">Créer une nouvelle collection</string>
     
     <string id="30201">Aucun dossier à scanner n'est configuré !</string>
     <string id="30202">Veuillez éditer les paramètres du plugin pour configurer un chemin</string>

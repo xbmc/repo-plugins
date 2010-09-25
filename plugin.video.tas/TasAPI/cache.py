@@ -56,11 +56,6 @@ def check(fn):
     return ((time.time() - os.path.getmtime(fn))/60)
 
 # Verifies a Directory if it exists (Cache) If not, it creates it
-def vdir():
-    dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'feeds'))
-    if os.path.isdir(dir)==False:
-            os.makedirs(dir)
-    return True
 
 def refresh(fn,url,UAS):
     req = urllib2.Request(url)
@@ -80,7 +75,6 @@ def getcontent(link,UAS):
 	filename = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'feeds',  tfnf ))
 	filecheck = os.path.isfile(filename)
 	if filecheck==False:
-		vdir()
 		refresh(filename,link,UAS)
 		content = open(filename, "r").read()
 	elif filecheck==True:
@@ -104,13 +98,6 @@ def getcontent(link,UAS):
 
 def img_check(fn):
     return (((time.time() - os.path.getmtime(fn))/60) / 24)
-
-# Verifies Image Path in cache, if not, it creates it
-def img_vdir():
-    dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images'))
-    if os.path.isdir(dir)==False:
-            os.makedirs(dir)
-    return True
 
 # Image Downloader
 def img_download(fname,url,id,UAS):
@@ -140,7 +127,6 @@ def img_getcontent(link,id,UAS):
 	filename = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images', tfnf ))
 	filecheck = os.path.isfile(filename)
 	if filecheck==False:
-		img_vdir()
 		img_download(filename,link,id,UAS)
 		content = filename
 	elif filecheck==True:

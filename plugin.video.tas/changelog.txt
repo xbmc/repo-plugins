@@ -1,3 +1,7 @@
+1.0.1
+- Fixed: Sorting by date was broken (Due to non-2digit format)
+- Fixed: Linux Compatibility of Addon - should no longer fail :)
+
 1.0
 - Fixed: Directory inconsistency for cached data
 - Fixed: URL Retrieval method (Tunneling no longer needed) and removed its Setting

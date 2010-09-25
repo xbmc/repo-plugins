@@ -8,7 +8,7 @@ __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
 # Global Settings
 set_icon_size = __settings__.getSetting( "icon_size" )
 set_fanart_size = __settings__.getSetting( "fanart_size" )
-
+	
 # This function Resolves the URL to the Final URL
 # Used in Mode 5 
 def ResolveURL(url):
@@ -197,7 +197,7 @@ def get_month(abmon):
 		return 2
 	elif (abmon=="Mar"):
 		return 3
-        elif (abmon=="Apr"):
+	elif (abmon=="Apr"):
 		return 4
 	elif (abmon=="May"):
 		return 5
@@ -221,7 +221,9 @@ def get_month(abmon):
 def get_date(strvar):
 	match=re.compile('.+?, (.+?) (.+?) (.+?) .+?').findall(strvar)
 	for day,abmon,year in match:
-		datestring = day+"."+str(get_month(abmon))+"."+year
+		day = "%02d" % int(day)
+		month = "%02d" % get_month(abmon)
+		datestring = str(day)+"."+str(month)+"."+year
 	return datestring
 
 	

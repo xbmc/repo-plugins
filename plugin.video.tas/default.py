@@ -12,7 +12,7 @@ __plugin__ = "Tool-assisted Speedruns"
 __author__ = "Insayne (Code) & HannaK (Graphics)"
 __url__ = "http://code.google.com/p/xbmc-plugin-video-tas/"
 __svn_url__ = "https://xbmc-plugin-video-tas.googlecode.com/svn/trunk/plugin.videos.tas/"
-__version__ = "1.0"
+__version__ = "1.0.1"
 __svn_revision__ = "$Revision$"
 __XBMC_Revision__ = xbmc.getInfoLabel('System.BuildVersion')
 __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
@@ -30,6 +30,32 @@ UAS = "XBMC/"+xbmcrev[0]+" (Revision: "+xbmcrev[1].replace("r","")+") TAS-Videos
 UAS = str(UAS)
 prev_letter = "Unset"
 sorting = 0
+
+def init_addon():
+	path = xbmc.translatePath(os.path.join('special://profile/addon_data/plugin.video.tas/' , 'cache', 'images'))
+	if os.path.isdir(path)==False:
+		os.makedirs(path)
+
+	path = xbmc.translatePath(os.path.join('special://profile/addon_data/plugin.video.tas/' , 'cache', 'feeds'))
+	if os.path.isdir(path)==False:
+		os.makedirs(path)
+		
+	frf = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'startup.txt' ))
+	firstrun = os.path.isfile(frf)
+	if firstrun==False:
+		dia_title = __settings__.getLocalizedString(32000)
+		dia_l1 = __settings__.getLocalizedString(32001)
+		dia_l2 = __settings__.getLocalizedString(32002)
+		dia_l3 = __settings__.getLocalizedString(32003)
+		dialog = xbmcgui.Dialog()
+		ret = dialog.yesno(dia_title, dia_l1, dia_l2, dia_l3)
+		if ret==1:	
+			util.download_cache()
+		
+		file = open(frf, 'w')
+		file.write("Startup Completed")
+		file.close()
+
 
 # Generates the main Index
 def Generate_Index():
@@ -309,21 +335,8 @@ except:
 if mode==None or url==None or len(url)<1:
 	Generate_Index()
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
-	frf = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'startup.txt' ))
-	firstrun = os.path.isfile(frf)
-	if firstrun==False:
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32001)
-		dia_l2 = __settings__.getLocalizedString(32002)
-		dia_l3 = __settings__.getLocalizedString(32003)
-		dialog = xbmcgui.Dialog()
-		ret = dialog.yesno(dia_title, dia_l1, dia_l2, dia_l3)
-		if ret==1:	
-			util.download_cache()
-		
-		file = open(frf, 'w')
-		file.write("Startup Completed")
-		file.close()
+	init_addon()
+
 	
 # Mode 1:
 # This Mode reads "Directories" or links to RSS Feeds and lists them

@@ -280,7 +280,11 @@ class Main:
                             cmd = "System.Exec"
                         xbmc.executebuiltin("%s(\\\"%s\\\" %s \\\"%s\\\")" % (cmd, launcher["application"], launcher["args"], rom["filename"]))
                     elif (sys.platform.startswith('linux')):
+                        #this minimizes xbmc some apps seems to need it
+                        xbmc.executehttpapi("Action(199)")		      
                         os.system("\"%s\" %s \"%s\"" % (launcher["application"], launcher["args"], rom["filename"]))
+                        #this brings xbmc back
+                        xbmc.executehttpapi("Action(199)")
                     elif (sys.platform.startswith('darwin')):
                         os.system("\"%s\" %s \"%s\"" % (launcher["application"], launcher["args"], rom["filename"]))
                     else:

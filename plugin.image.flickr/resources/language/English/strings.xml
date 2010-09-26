@@ -14,7 +14,6 @@
     <string id="30011">Enable Maps Thumbnails</string>
     <string id="30012">Default Map Type</string>
     
-    
     <!-- Image Sizes-->
     <string id="30100">Square</string>
     <string id="30101">Thumbnail</string>
@@ -25,8 +24,11 @@
     <string id="30106">Original</string>
     
     <!-- Settings Categories-->
-    <string id="30200">Display</string>
+    <string id="30200">Main</string>
     <string id="30201">Maps</string>
+    
+    <string id="30253">Images</string>
+    <string id="30254">Format</string>
     
     <!-- 'Your' Categories-->
     <string id="30300">Photostream</string>

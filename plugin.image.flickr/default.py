@@ -9,8 +9,8 @@ from urllib2 import HTTPError, URLError
 __plugin__ =  'flickr'
 __author__ = 'ruuk'
 __url__ = 'http://code.google.com/p/flickrxbmc/'
-__date__ = '09-17-2010'
-__version__ = '0.9.3'
+__date__ = '09-20-2010'
+__version__ = '0.9.4'
 __settings__ = xbmcaddon.Addon(id='plugin.image.flickr')
 __language__ = __settings__.getLocalizedString
 
@@ -133,7 +133,7 @@ class FlickrSession:
 		
 	def doTokenDialog(self,frob,perms):
 		dialog = xbmcgui.Dialog()
-		ok = dialog.ok(__language__(30505),__language__(30506).replace('@REPLACE@',': 2ndmind.com/flickrXBMC'), __language__(30507))
+		ok = dialog.ok(__language__(30505),__language__(30506).replace('@REPLACE@',': 2ndmind.com/flickrxbmc'), __language__(30507))
 		keyboard = xbmc.Keyboard('',__language__(30508))
 		keyboard.doModal()
 		if (keyboard.isConfirmed()):

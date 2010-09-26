@@ -1,6 +1,12 @@
 flickrXBMC Changelog
 
-Current Version : 0.9.3
+Current Version : 0.9.4
+
+** 0.9.4 ***
+
+Improved settings interface
+Fixed bug with authorization (works with all versions)
+Changed icon (thanks Jeroen) as suggested by freezy
 
 ** 0.9.3 ***
 

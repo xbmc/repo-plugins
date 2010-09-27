@@ -82,7 +82,7 @@ load-module module-native-protocol-unix
 #load-module module-rtp-send source=rtp.monitor
 
 ## For XBMC - MultiroomAV plugin 
-load-module module-null-sink sink_name=rtp format=s16be channels=2 rate=44100 description="RTP Multicast Sink"
+load-module module-null-sink sink_name=rtp format=s16be channels=2 rate=44100 description="MAV Streaming Sink"
 load-module module-rtp-send source=rtp.monitor destination=127.0.0.1 port=46998 loop=1
 
 ### Load additional modules from GConf settings. This can be configured with the paprefs tool.

@@ -1,4 +1,4 @@
-MultiroomAudio & Video Plugin v1.0.9
+MultiroomAudio & Video Plugin v1.1.0
 Author: VortexRotor (teshephe)
 Based off of the very fine work of the Launcher Plugin - leo212  (Thanks Lior!!)
 
@@ -10,30 +10,25 @@ than one XBMC box in your home.
 
 
 
-The release of Multiroom v1.0.9(BETA)r4 plugin includes these New Features: 
+The release of Multiroom v1.1.0 plugin includes these New Features: 
 
-- Full OS support (Linux, Windows, OSX)  --- BTW... I use Ubuntu Lucid --- It ROCKS!
-- Extended Plugin Settings Dialogue for Initial and Advanced setup of Streaming Server
-- Playing/Activating are now done via the generated PLS files located in the folder that you choose in the settings.  Once these are created
-  you can create a shortcut to the folder location in either the Music and/or Video sections of XBMC using the "add source" in those sections.
-
-
-
-Known Issues's:
-- FIXED:  Workaround- Please see changelog for more info 
-  Continuous play / Streaming of media is currently only supported on Window based systems. (XBMC Bug:#10106)
+- SQL Backend
+- Autoscan and configuration of Sources
+- Background Signalling between Clients and Master (started via autoexec.py)
+- Native XBMC Stop/Play/Pause work with plugin
+- Whats Playing Popup/Notification when listening to Master broadcast on Client
+- Source Auto-Play/Stop from Master of clients
+- Capability to Stream DVD's
+- RTP Streaming now added.
 
 
 
 
-All comments, suggestions, help are very welcome.
-
-FYI... at the moment the plugin requires that a master vlc streaming server be configured.  In my home I have the following:
-
+Conceptual Diagram:
                                ________________
                                |  Master XBMC  |<------------------> XMBC Remote (iPhone)  (You can use any app of your choice for control)
                                |  Srvr (main)  |
-                               |_______________|  <-------------------| There are no speakers on this machine - I created a virtual sound out and i pipe all audio out to vlc.
+                               |_______________|  <-------------------| I created a virtual sound out and i pipe all audio out to vlc.
                                        |                                VLC is configured to stream the virtual source to upd://224.0.0.122:1122  (Your choice but VLC is Key!)
                                        |
                                    LAN/Wifi
@@ -59,11 +54,6 @@ For Windows Based machines - some of the scripts utilize powershell v2 - (do: ht
 
 INSTALLATION:
 
-Now Available via XBMC Addons --> Programs Addon Section
-
-This release contains MAJOR changes and you should fully uninstall any prior versions prior to installing this plugin!!!!
-INCLUDING THE REMOVAL OF THE PLUGIN DATA IN YOUR USERDATA/addon_data directory.
-
 Basic Setup:
 1) Install the plugin via Add-ons directory
 
@@ -72,7 +62,7 @@ Basic Setup:
 3) Configure the path for the generated pls files (usually /home/<username> for linux users and C:\Documents and Settings\<username>\My
 Documents respectively for Windows users
 
-4) IP or Multicast Address - You can leave this at the default but if you plan on having the abilit of streaming at one point from any box make sure
+4) IP or Multicast Address - You can leave this at the default but if you plan on having the ability of streaming at one point from any box make sure
 that each box has a different Multicast IP and Port so that their is no overlap in the broadcast domain. Lets leave it for now at the default of
 224.1.1.152
 
@@ -82,11 +72,11 @@ With this setup you could define a source for each on every box and tune into wh
 
 6) SAP Name - Put a meaningful name with NO spaces for the SAP name
 
-7) if this is the MASTER, then check the Dedicated Streaming Server (you could have all of your boxes set as this) more on that later...
+7) if this is the MASTER, then check the Global Master and Dedicated Streaming Server.
 
-8) Leave Start Streamer on startup "off" for now (Note: You can manually start the Streamer in the plugin "Start Streamer"
+8) If this is the Global Master (Master) select this box.
 
-9) Again if this is a dedicated Master, then change the Default Video Player to MR-Video_Stream
+9) Again if this is a dedicated Master, then change the Default Video Player to MR-Video_Stream, leave the Default Audio Player as PAPlayer
 
 10) The defaults for the rest should be satifactory
 
@@ -94,20 +84,31 @@ With this setup you could define a source for each on every box and tune into wh
 
 12) Goto the plugin and select Generate Files
 
-13) Because this is the initial setup of the plugin a full Restart of your machine and XBMC is required.
-Note: from here on out, any changes made to the Addon Settings will require a restart of XBMC only so that new playercorefactory.xml file can
-be initialized.
+13) Goto System > System > Audio output > Audio output device and select MAV Streaming Sink (Linux Only) Audio will be produced via the Loopback
+
+14) Because this is the initial setup of the plugin a full Restart of your machine and XBMC is required.
+    Note: from here on out, any changes made to the Addon Settings will require a restart of XBMC only so that new playercorefactory.xml file can
+    be re-initialized. IT'S also a good idea to RE-GENERATE FILES everytime you make a change to the settings.
 
 Client Specific:
-1) After doing the above w/ exception to the Master specific settings... go to the plugin and lets Add a source, call it whatever you gave the above
-SAP name of the master like "Livingroom"
+1) Configure your paths.
 
-2) URL - Define the url of the stream, in this case udp://@224.1.1.152:1152
+2) Configure the SAP Name of the Client.
 
-3) IP address is optional, but put the host ip of the Master here.
+3) Goto Misc Settings and select Auto Start Playing Source if you want this Client to automatically start playing the Master Source when the master starts streaming.
+   NOTE: If you are already playing any media on the client the Master will not activate the source on the client.
 
-This is optional:
-Everytime you create a new source a .pls file is generated and stored in the Multiroom-AV folder. In that folder there are two subfolders name VIDEO and AUDIO. Now, what you should do is go into the Music and the Video sections of XBMC under "Files" and do "Add source" to add the VIDEO folder to the Video Section and AUDIO folder to Music. When you get to the point where you give the new item a name, for both instances call it Multiroom-AV and hit OK to save. So, What are we doing here...? Well, by doing this we will have the ability to access the sources via something like the XBMC Remote for iPhone or http.
+4) Select OK to save the Settings
+
+5) To add a source now is very easy, in the MultiroomAudio plugin via the Context menu select "Add New AV Source", a dialogue will popup and now select "Auto Scan". From here it
+   will automatically find the Master and any other possible MAV Clients on the network, provided they were initially configured and restarted.  ;-)
+
+6) Select Generate Files....  Requires a XBMC restart.
+
+7) Now that you restarted XBMC Everytime you create a new source a .pls file is generated and stored in the Multiroom-AV folder. In that folder there are two subfolders name VIDEO and AUDIO. Now, 
+   what you should do is go into the Music and the Video sections of XBMC under "Files" and do "Add source" to add the VIDEO folder to the Video Section and AUDIO folder 
+   to Music. When you get to the point where you give the new item a name, for both instances call it Multiroom-AV and hit OK to save. So, What are we doing here...? Well, 
+   by doing this we will have the ability to access the sources via something like the XBMC Remote for iPhone or http....
 
 
 

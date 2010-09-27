@@ -7,14 +7,16 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 # Author: VortexRotor (teshephe)
-# v.1.0.9 (BETA)r2
+# v.1.0.10r1
 
 """
     Plugin for True "Syncronized" Multiroom Streaming Audio/Video
 """
 
 # main imports
-import sys, os, time, re, urllib, shutil, subprocess
+from pysqlite2 import dbapi2 as sqlite3
+import sys, os, time, socket
+import re, urllib, shutil, subprocess
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 Addon   = xbmcaddon.Addon(id=os.path.basename(os.getcwd()))
@@ -23,7 +25,7 @@ pDialog.create( sys.modules[ "__main__" ].__plugin__ )
 
 # source path for multiroomaudio data
 BASE_CURRENT_SOURCE_PATH = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "avsources.xml" ) )
-SHORTCUT_FILE            = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "shortcut.cut" ) )
+AUTOEXEC                 = xbmc.translatePath( os.path.join( "special://profile", "autoexec.py" ) )
 PLAYERCORE               = xbmc.translatePath( os.path.join( "special://profile", "playercorefactory.xml" ) )
 STREAMER		 = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "strtstrmr_lin" ) )
 STRTSTRMR_FILE           = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "strtstrmr_win.ps1" ) )
@@ -31,10 +33,10 @@ STRTSTRMRBAT_FILE        = xbmc.translatePath( os.path.join( "special://profile/
 LOOPBACK_FILE            = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "loopback_win.ps1" ) )
 WINMAVlb_FILE            = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "winMavlb.bat" ) )
 WINMAV_FILE              = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "winMav.bat" ) )
-LINMAVlb_FILE            = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "linMavlb" ) )
 LINMAV_FILE              = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "linMav" ) )
 DEFAULT_IMG      	 = xbmc.translatePath(os.path.join( "special://home/", "addons", sys.modules[ "__main__" ].__plugin__, "icon.png" ) )
 MAVFOO			 = xbmc.translatePath(os.path.join( "special://home/", "addons", sys.modules[ "__main__" ].__plugin__, "resources", "" ) )
+mavdb                    = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "database", "mav.db" ) )
 # avsource - source script file generation operators for sources related file creation/maintenance respectfully
 ADDONDATA_PATH		 = xbmc.translatePath( os.path.join( "special://profile/addon_data", sys.modules[ "__main__" ].__plugin__, "" ) )
 SRCPLS_PATH              = xbmc.translatePath( os.path.join( Addon.getSetting( "pls_path" ), "Multiroom-AV", "" ) )
@@ -74,11 +76,7 @@ class Main:
 	self._firstime()
 	# now lets see what we have in the box...
         self._load_avsources(self.get_xml_source())
-
-        if (Addon.getSetting(id="dedicated" ) == "true"):
-	    if (Addon.getSetting( "strtstrm_strtup" ) == "true"):
-                self._startstrmr()
-
+	
         # if a commmand is passed as parameter
         param = sys.argv[ 2 ]
         if param:
@@ -90,33 +88,27 @@ class Main:
             # check the action needed
             if (dirname):
                 avsource = dirname
-                avclient = basename
-                if (avclient == REMOVE_COMMAND):
-                    # check if it is a single avclient or a avsource
+                avsrc = basename
+                if (avsrc == REMOVE_COMMAND):
+                    # check if it is a single avsrc or a avsource
                     if (not os.path.dirname(avsource)):
 			self._remove_avsource(avsource)
-                    else:
-                        self._remove_avclient(os.path.dirname(avsource), os.path.basename(avsource))
-                if (avclient == RENAME_COMMAND):
-                    # check if it is a single avclient or a avsource
+
+                if (avsrc == RENAME_COMMAND):
+                    # check if it is a single avsrc or a avsource
                     if (not os.path.dirname(avsource)):
                         self._rename_avsource(avsource)
-                    else:
-                        self._rename_avclient(os.path.dirname(avsource), os.path.basename(avsource))
-                if (avclient == EDIT_COMMAND):
-                    # check if it is a single avclient or a avsource
+
+                if (avsrc == EDIT_COMMAND):
+                    # check if it is a single avsrc or a avsource
                     if (not os.path.dirname(avsource)):
                         self._edit_avsource(avsource)
-                    else:
-                        self._edit_avclient(os.path.dirname(avsource), os.path.basename(avsource))
-                elif (avclient == EDITIP_COMMAND):
-                    # check if it is a single avclient or a avsource
+
+                elif (avsrc == EDITIP_COMMAND):
+                    # check if it is a single avsrc or a avsource
                     if (not os.path.dirname(avsource)):
                         self._editip_avsource(avsource)
-                    else:
-                        self._edit_avclient(os.path.dirname(avsource), os.path.basename(avsource))
-                else:
-                    self._run_avclient(avsource, avclient)
+
             else:
                 avsource = basename
                 # if it's an add command
@@ -132,15 +124,6 @@ class Main:
                     self._get_avsources()
                 else:
                     xbmcplugin.endOfDirectory( handle=int( self._handle ), succeeded=False , cacheToDisc=False)
-
-#############################################################################################################                    
-    def _remove_avclient(self, avsource, avclient):        
-        dialog = xbmcgui.Dialog()
-        ret = dialog.yesno(Addon.getLocalizedString( 30000 ), Addon.getLocalizedString( 30010 ) % avclient)
-        if (ret):
-            self.avsources[avsource]["avclients"].pop(avclient)
-            self._save_avsources()
-            xbmc.executebuiltin("Container.Refresh")
 
 #############################################################################################################            
     def _remove_avsource(self, avsourceName):
@@ -173,15 +156,6 @@ class Main:
 	    self._save_avsources()
             xbmc.executebuiltin("Container.Refresh")
 
-#############################################################################################################            
-    def _rename_avclient(self, avsource, avclient):        
-        keyboard = xbmc.Keyboard(self.avsources[avsource]["avclients"][avclient]["name"], Addon.getLocalizedString( 30018 ))
-        keyboard.doModal()
-        if (keyboard.isConfirmed()):
-            self.avsources[avsource]["avclients"][avclient]["name"] = keyboard.getText()
-            self._save_avsources()
-            xbmc.executebuiltin("Container.Refresh")
-
 #############################################################################################################        
     def _rename_avsource(self, avsourceName):
 	if (avsourceName == "Start Streamer"):
@@ -210,15 +184,6 @@ class Main:
 		    os.system("rm "+AUDIO_PATH+""+srcname+"*") 	 
 	    
             self.avsources[avsourceName]["name"] = keyboard.getText()
-            self._save_avsources()
-            xbmc.executebuiltin("Container.Refresh")
-
-#############################################################################################################
-    def _edit_avclient(self, avsource, avclient):        
-        keyboard = xbmc.Keyboard(self.avsources[avsource]["avclients"][avclient]["name"], Addon.getLocalizedString( 30036 ))
-        keyboard.doModal()
-        if (keyboard.isConfirmed()):
-            self.avsources[avsource]["avclients"][avclient]["name"] = keyboard.getText()
             self._save_avsources()
             xbmc.executebuiltin("Container.Refresh")
 
@@ -294,57 +259,33 @@ class Main:
 		else:
 		    xbmc.executebuiltin("Notification(Multiroom Audio,A source is already Active,5000,"+DEFAULT_IMG+")")
 	
-	    if "AV-Source" in avsourceName:
+	    if avsourceName.startswith('AV-Source-'):
 		if (Addon.getSetting( "clientrunningflag" ) == "false"):
 		    xbmc.executehttpapi("PlayFile("+VIDEO_PATH+""+avsource["name"]+".pls)")
 		    xbmc.executebuiltin("PlayerControl(RepeatOff)")
 		    Addon.setSetting(id="clientrunningflag", value="true")
+		    p1 = ""+avsource["name"]+""
+		    p2 = p1.lstrip('AV-Source-')
+		    Addon.setSetting(id="activesrcnm", value=""+p2+"")
+		    Addon.setSetting(id="activesrcip", value=""+avsource["srcA"]+"")
 		    xbmc.executebuiltin("Notification(Multiroom Audio,"+avsource["name"]+" Active,10000,"+DEFAULT_IMG+")")
 		else:
 		    xbmc.executebuiltin("Notification(Multiroom Audio,A source is already Active,5000,"+DEFAULT_IMG+")")
 
 #############################################################################################################
-    def _run_avclient(self, avsourceName, avclientName):
-        if (self.avsources.has_key(avsourceName)):
-            avsource = self.avsources[avsourceName]
-            if (avsource["avclients"].has_key(avclientName)):
-                avclient = self.avsources[avsourceName]["avclients"][avclientName]
-                if (os.environ.get( "OS", "xbox" ) == "xbox"):
-                    f=open(SHORTCUT_FILE, "wb")
-                    f.write("<shortcut>\n")
-                    f.write("    <path>" + avsource["application"] + "</path>\n")
-                    f.write("    <custom>\n")
-                    f.write("       <game>" + avclient["filename"] + "</game>\n")
-                    f.write("    </custom>\n")
-                    f.write("</shortcut>\n")
-                    f.close()
-                    xbmc.executebuiltin('XBMC.Runxbe(' + SHORTCUT_FILE + ')')                    
-                else:
-                    if (sys.platform == 'win32'):
-                        if (avsource["wait"] == "true"):
-                            cmd = "System.ExecWait"
-                        else:
-                            cmd = "System.Exec"
-                        xbmc.executebuiltin("%s(\"%s\" %s \"%s\")" % (cmd, avsource["application"], avsource["args"], avclient["filename"]))
-                    elif (sys.platform.startswith('linux')):
- 						os.system("\"%s\" %s \"%s\"" % (avsource["application"], avsource["args"], avclient["filename"]))
-                    elif (sys.platform.startswith('darwin')):
-                        os.system("\"%s\" %s \"%s\"" % (avsource["application"], avsource["args"], avclient["filename"]))
-                    else:
-                        pass;
-                        # unsupported platform
-
-#############################################################################################################
     def _startstrmr( self ):
         if (Addon.getSetting(id="dedicated" ) == "true"):
+
 	    if (Addon.getSetting( "mstrrunningflag" ) == "false"):
+
 	    	if (sys.platform == 'win32'):
- 		    subprocess.call("powershell -WindowStyle \"hidden\" \"& '"+STRTSTRMR_FILE+"\'\"")
+ 		    subprocess.call("powershell -WindowStyle \"hidden\" \"& '"+STRTSTRMR_FILE+"\'\"", shell=True)
+
 		    if (Addon.getSetting( "playlocal" ) == "true"):
- 		        subprocess.call("powershell -WindowStyle \"hidden\" \"& '"+LOOPBACK_FILE+"\'\"")
-## 		        os.system(""+STRTSTRMRBAT_FILE+"")
+ 		        subprocess.call("powershell -WindowStyle \"hidden\" \"& '"+LOOPBACK_FILE+"\'\"", shell=True)
 		    xbmc.executebuiltin("Notification(Multiroom Audio,Streamer Started,5000,"+DEFAULT_IMG+")")
 		    Addon.setSetting(id="mstrrunningflag", value="true")
+
 	    	else:
 		    if (sys.platform.startswith('linux')):
 		        os.system(""+ADDONDATA_PATH+"./strtstrmr_lin")
@@ -361,12 +302,14 @@ class Main:
     def _kill( self ):
 	Addon.setSetting(id="mstrrunningflag", value="false")
 	Addon.setSetting(id="clientrunningflag", value="false")
+	Addon.setSetting(id="activesrcnm", value="")
+	Addon.setSetting(id="activesrcip", value="")
 	xbmc.executehttpapi("Stop()")
 	xbmc.executebuiltin("playlist.clear()")
 	xbmc.executebuiltin("Notification(Multiroom Audio,All Streaming Stopped,7000,"+DEFAULT_IMG+")")
 	if (sys.platform == 'win32'):
-##	    os.spawnl(os.P_NWAIT,r"taskkill /IM vlc.exe")
-	    os.system("taskkill /F /IM vlc.exe")
+	    subprocess.Popen(r'C:\WINDOWS\system32\cmd.exe /c "taskkill /F /IM vlc.exe"',shell=True) 
+	    ##os.system("taskkill /F /IM vlc.exe")
 	else:
       	    if (sys.platform.startswith('linux')):
  		os.system("killall vlc | killall screen")
@@ -445,7 +388,7 @@ class Main:
 	    else:
 	        usock.write("\t\t<streamsrc>"+avsource["streamsrc"]+"</streamsrc>\n")
 
-            usock.write("\t\t<avclientpath>"+VIDEO_PATH+""+avsource["name"]+".pls</avclientpath>\n")
+            usock.write("\t\t<avsrcpath>"+VIDEO_PATH+""+avsource["name"]+".pls</avsrcpath>\n")
             usock.write("\t\t<asrcpath>"+AUDIO_PATH+""+avsource["name"]+".pls</asrcpath>\n")
 
 	    if (avsource == 'Loopback'):		
@@ -457,15 +400,15 @@ class Main:
             usock.write("\t\t<thumb>"+DEFAULT_IMG+"</thumb>\n")
 	    usock.write("\t\t<srctype>"+avsource["srctype"]+"</srctype>\n")
             usock.write("\t\t<wait>false</wait>\n")
-            usock.write("\t\t<avclients>\n")
-            for avclientIndex in avsource["avclients"]:
-                avclientdata = avsource["avclients"][avclientIndex]
-                usock.write("\t\t\t<avclient>\n")
-                usock.write("\t\t\t\t<name>"+avclientdata["name"]+"</name>\n")
-                usock.write("\t\t\t\t<filename>"+avclientdata["filename"]+"</filename>\n")
-                usock.write("\t\t\t\t<thumb>"+avclientdata["thumb"]+"</thumb>\n")
-                usock.write("\t\t\t</avclient>\n")
-            usock.write("\t\t</avclients>\n")
+            usock.write("\t\t<avsrcs>\n")
+            for avsrcIndex in avsource["avsrcs"]:
+                avsrcdata = avsource["avsrcs"][avsrcIndex]
+                usock.write("\t\t\t<avsrc>\n")
+                usock.write("\t\t\t\t<name>"+avsrcdata["name"]+"</name>\n")
+                usock.write("\t\t\t\t<filename>"+avsrcdata["filename"]+"</filename>\n")
+                usock.write("\t\t\t\t<thumb>"+avsrcdata["thumb"]+"</thumb>\n")
+                usock.write("\t\t\t</avsrc>\n")
+            usock.write("\t\t</avsrcs>\n")
             usock.write("\t</avsource>\n")            
         usock.write("</avsources>")
         usock.close()
@@ -492,9 +435,13 @@ class Main:
 	astrm_type     =  Addon.getSetting( "vstrm_type" )
 	audio_sout     =  Addon.getSetting( "video_sout" )
 	audio_fc       =  Addon.getSetting( "video_fc" )
+	dvd_loc        =  Addon.getSetting( "dvd_loc" )
         if (sys.platform == 'win32'):
 	    usock    = open( STRTSTRMR_FILE, "w" )
-            usock.write("[Diagnostics.Process]::Start(\'"+vlc_loc+"\',\" -I dummy --dummy-quiet dshow:// --dshow-vdev=none --dshow-adev=`\""+sound_dev+"`\" --dshow-caching=10 --sout=#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:"+astrm_type+"{dst="+streaming_ip+":"+streaming_port+"} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+"\")\n")
+	    if (Addon.getSetting( "vstrm_type" ) == "udp"):
+                usock.write("[Diagnostics.Process]::Start(\'"+vlc_loc+"\',\" -I dummy --dummy-quiet dshow:// --dshow-vdev=none --dshow-adev=`\""+sound_dev+"`\" --dshow-caching=10 --sout=#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:"+vstrm_type+"{dst="+streaming_ip+":"+streaming_port+"} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+"\")\n")
+	    if (Addon.getSetting( "vstrm_type" ) == "rtp"):
+                usock.write("[Diagnostics.Process]::Start(\'"+vlc_loc+"\',\" -I dummy --dummy-quiet dshow:// --dshow-vdev=none --dshow-adev=`\""+sound_dev+"`\" --dshow-caching=10 --sout=#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+"\")\n")
             usock.write("\n")
             usock.close()
 
@@ -512,7 +459,10 @@ class Main:
             usock.write("\n")
             usock.write("echo %1\n")
             usock.write("echo So far so good... now Lets Broadcast the stuff were play'n\n")
-	    usock.write("\""+vlc_loc+"\" -I dummy --dummy-quiet --started-from-file --playlist-enqueue \"%1\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout=\'#std{access="+vstrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching=300\n")
+	    if (Addon.getSetting( "vstrm_type" ) == "udp"):
+	        usock.write("\""+vlc_loc+"\" -I dummy --dummy-quiet --started-from-file --playlist-enqueue \"%1\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout=#"+vstrm_type+"{dst="+streaming_ip+":"+streaming_port+"} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching=300\n")
+	    if (Addon.getSetting( "vstrm_type" ) == "rtp"):
+	        usock.write("\""+vlc_loc+"\" -I dummy --dummy-quiet --started-from-file --playlist-enqueue \"%1\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout=#"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching=300\n")
             usock.write("\n")
 	    usock.write("taskkill /F /IM vlc.exe\n")
 	    if (Addon.getSetting( "default_vp" ) == "MR-Video_Stream"):
@@ -526,15 +476,18 @@ class Main:
                 usock = open( WINMAVlb_FILE, "w" )
                 usock.write("echo off\n")
                 usock.write("echo WINMAV w/ Loopback via WINMAVlb\n")
-                usock.write("\n")
+                usock.write("set mediatype=\"dvd:\\\\1\"\n")
+                usock.write("if %1.==%mediatype%. goto dvd\n")
                 usock.write("taskkill /F /IM vlc.exe\n")
-                usock.write("\n")
                 usock.write("echo Lets start the loopback session\n")
                 usock.write("powershell -WindowStyle \"hidden\" \"& \'"+LOOPBACK_FILE+"\'\"\n")
                 usock.write("\n")
                 usock.write("echo %1\n")
                 usock.write("echo So far so good... now Lets Broadcast the stuff were play'n\n")
-		usock.write("\""+vlc_loc+"\" -I dummy --dummy-quiet \"%1\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout=#std{access="+vstrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching=300\n")
+		if (Addon.getSetting( "vstrm_type" ) == "udp"):
+		    usock.write("\""+vlc_loc+"\" -I dummy --dummy-quiet \"%1\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout=#"+vstrm_type+"{dst="+streaming_ip+":"+streaming_port+"} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching=300\n")
+		if (Addon.getSetting( "vstrm_type" ) == "rtp"):
+		    usock.write("\""+vlc_loc+"\" -I dummy --dummy-quiet \"%1\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout=#"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching=300\n")
                 usock.write("\n")
 	        usock.write("taskkill /F /IM vlc.exe\n")
 	        if (Addon.getSetting( "default_vp" ) == "MR-Video_Stream"):
@@ -544,6 +497,32 @@ class Main:
                 usock.write("\n")
                 usock.write("echo Restarting the Loopback\n")
                 usock.write("powershell -WindowStyle \"hidden\" \"& \'"+LOOPBACK_FILE+"\'\"\n")
+                usock.write("goto end\n")
+                usock.write("\n")
+                usock.write(":dvd\n")
+                usock.write("taskkill /F /IM vlc.exe\n")
+                usock.write("echo Its a DVD\n")
+                usock.write("echo Lets start the loopback session\n")
+                usock.write("powershell -WindowStyle \"hidden\" \"& \'"+LOOPBACK_FILE+"\'\"\n")
+                usock.write("\n")
+                usock.write("echo %1\n")
+                usock.write("echo So far so good... now Lets Broadcast the stuff were play'n\n")
+		if (Addon.getSetting( "vstrm_type" ) == "udp"):
+		    usock.write("\""+vlc_loc+"\" -I dummy --dummy-quiet dvdsimple://"+dvd_loc+" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout=#"+vstrm_type+"{dst="+streaming_ip+":"+streaming_port+"} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching=300\n")
+		if (Addon.getSetting( "vstrm_type" ) == "rtp"):
+		    usock.write("\""+vlc_loc+"\" -I dummy --dummy-quiet dvdsimple://"+dvd_loc+" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout=#"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts} --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching=300\n")
+                usock.write("\n")
+	        usock.write("taskkill /F /IM vlc.exe\n")
+	        if (Addon.getSetting( "default_vp" ) == "MR-Video_Stream"):
+                    usock.write("\n")
+                    usock.write("echo Restarting Master Streamer\n")
+                    usock.write("powershell -WindowStyle \"hidden\" \"& \'"+STRTSTRMR_FILE+"\'\"\n")
+                usock.write("\n")
+                usock.write("echo Restarting the Loopback\n")
+                usock.write("powershell -WindowStyle \"hidden\" \"& \'"+LOOPBACK_FILE+"\'\"\n")
+                usock.write("\n")
+                usock.write(":end\n")
+                usock.write("\n")
                 usock.close()
 
 	else:
@@ -562,10 +541,49 @@ class Main:
                 usock.write("screen -d -m -S MAV-Streamer\n")
 		if (Addon.getSetting( "playlocal" ) == "true"):
                     usock.write("screen -S MAV-Loopback -p 0 -X exec "+vlc_loc+" --intf dummy --extraintf=http --http-host "+localhost+":8085 "+vstrm_type+"://@"+streaming_ip+":"+streaming_port+" --netsync-master-ip="+localhost+" --netsync-timeout=500 --fullscreen --file-caching="+audio_fc+"\n")
-                usock.write("screen -S MAV-Streamer -p 0 -X exec "+vlc_loc+" --intf dummy rtp://@127.0.0.1:46998 --rtp-caching=1000 --extraintf=http --http-host "+localhost+":8084 --sout=\'#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:"+vstrm_type+"{dst="+streaming_ip+":"+streaming_port+"}\' --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --sout-keep\n")
+                usock.write("screen -S MAV-Streamer -p 0 -X exec "+vlc_loc+" --intf dummy rtp://@127.0.0.1:46998 --rtp-caching=1000 --extraintf=http --http-host "+localhost+":8084 --sout=\'#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts}\' --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --sout-keep\n")
                 usock.write("fi\n")
                 usock.close()
 		os.system("chmod +x "+STREAMER+"") 
+
+	        usock    = open( LINMAV_FILE, "w" )
+                usock.write("#!/bin/bash\n")
+                usock.write("echo $1\n")
+                usock.write("\n")
+                usock.write("killall screen | killall vlc\n")
+                usock.write("\n")
+                usock.write("if [[ \"$1\" == dvd://* ]]; then\n")
+		if (Addon.getSetting( "playlocal" ) == "true"):
+                    usock.write("        screen -d -m -S MAV-Loopback\n")
+                    usock.write("        screen -S MAV-Loopback -p 0 -X exec "+vlc_loc+" --intf dummy --extraintf=http --http-host "+localhost+":8085 "+vstrm_type+"://@"+streaming_ip+":"+streaming_port+" --netsync-master-ip="+localhost+" --netsync-timeout=500 --fullscreen --file-caching="+audio_fc+"\n")
+                usock.write("	"+vlc_loc+" --intf dummy dvdsimple:// --dvdread-caching=1000 --start-time=5 --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout='#"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts}' --sout-rtp-sap --sout-rtp-name=TESLaptop --sout-standard-sap --sout-standard-name=xbmc_TESLaptop --sout-standard-group=Multiroom_AV && killall screen\n")
+                usock.write("\n")
+		if (Addon.getSetting( "playlocal" ) == "true"):
+                    usock.write("        screen -d -m -S MAV-Loopback\n")
+		if (Addon.getSetting( "dedicated" ) == "true"):
+                    usock.write("        screen -d -m -S MAV-Streamer\n")
+		if (Addon.getSetting( "playlocal" ) == "true"):
+                    usock.write("        screen -S MAV-Loopback -p 0 -X exec "+vlc_loc+" --intf dummy --extraintf=http --http-host "+localhost+":8085 "+vstrm_type+"://@"+streaming_ip+":"+streaming_port+" --netsync-master-ip="+localhost+" --netsync-timeout=500 --fullscreen --file-caching="+audio_fc+"\n")
+		if (Addon.getSetting( "dedicated" ) == "true"):
+                    usock.write("        screen -S MAV-Streamer -p 0 -X exec "+vlc_loc+" --intf dummy rtp://@127.0.0.1:46998 --rtp-caching=1000 --extraintf=http --http-host "+localhost+":8084 --sout=\'#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts}\' --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --sout-keep\n")
+                usock.write("else\n")
+		if (Addon.getSetting( "playlocal" ) == "true"):
+                    usock.write("        screen -d -m -S MAV-Loopback\n")
+                    usock.write("        screen -S MAV-Loopback -p 0 -X exec "+vlc_loc+" --intf dummy --extraintf=http --http-host "+localhost+":8085 "+vstrm_type+"://@"+streaming_ip+":"+streaming_port+" --netsync-master-ip="+localhost+" --netsync-timeout=500 --fullscreen --file-caching="+audio_fc+"\n")
+                usock.write("	/usr/bin/vlc --intf dummy \"$1\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 --sout='#"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts}' --sout-rtp-sap --sout-rtp-name=TESLaptop --sout-standard-sap --sout-standard-name=xbmc_TESLaptop --sout-standard-group=Multiroom_AV --sout-keep && killall screen\n")
+                usock.write("\n")
+		if (Addon.getSetting( "playlocal" ) == "true"):
+                    usock.write("        screen -d -m -S MAV-Loopback\n")
+		if (Addon.getSetting( "dedicated" ) == "true"):
+                    usock.write("        screen -d -m -S MAV-Streamer\n")
+		if (Addon.getSetting( "playlocal" ) == "true"):
+                    usock.write("        screen -S MAV-Loopback -p 0 -X exec "+vlc_loc+" --intf dummy --extraintf=http --http-host "+localhost+":8085 "+vstrm_type+"://@"+streaming_ip+":"+streaming_port+" --netsync-master-ip="+localhost+" --netsync-timeout=500 --fullscreen --file-caching="+audio_fc+"\n")
+		if (Addon.getSetting( "dedicated" ) == "true"):
+                    usock.write("        screen -S MAV-Streamer -p 0 -X exec "+vlc_loc+" --intf dummy rtp://@127.0.0.1:46998 --rtp-caching=1000 --extraintf=http --http-host "+localhost+":8084 --sout=\'#transcode{vcodec=none,acodec=mp3,ab=128,channels=2,samplerate=44100}:"+vstrm_type+"{dst="+streaming_ip+",port="+streaming_port+",mux=ts}\' --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --sout-keep\n")
+                    usock.write("\n")
+                usock.write("fi\n")
+                usock.close()
+		os.system("chmod +x "+LINMAV_FILE+"") 
 
 #############################################################################################################
     def _save_srcpls (self):
@@ -627,67 +645,6 @@ class Main:
 		    os.system("rm "+plsa1+"Gen*") 	 
 	    
 #############################################################################################################
-    def _save_serverXXfile (self):
-        # make settings directory if doesn't exists
-        if (not os.path.isdir(os.path.dirname(SRCPLS_PATH))):
-            os.makedirs(os.path.dirname(SRCPLS_PATH));
-            
-        for avsourceIndex in self.avsources:
-            avsource = self.avsources[avsourceIndex]
-	    vlc_loc  = xbmc.translatePath(Addon.getSetting( "vlc_loc" ))
-            usock    = open( SRCPLS_PATH, "w" )
-            usock.write("#!/bin/bash\n")
-            usock.write("\n")
-            usock.write("if pidof vlc | grep [0-9] > /dev/null\n")
-            usock.write("then\n")
-	    usock.write("WID=`xdotool search --class \"XBMC\"`;\n")
-	    usock.write("wmctrl -c \""+avsource["srctype"]+"B\"\n")
-	    usock.write("xdotool windowactivate $WID\n")
-	    usock.write("wget -q \"http://localhost:8081/xbmcCmds/xbmcHttp?command=ExecBuiltIn(Notification(Multiroom Audio,"+avsource["name"]+" - DeActivated,30000,"+ DEFAULT_IMG +"))\"\n")
-	    usock.write("else\n")
-            usock.write("xterm -display :0 -T "+avsource["srctype"]+"B -e "+SRCPLS_PATH+"./"+avsource["srcB"]+"\n")
-	    usock.write("\n")
-            usock.write("fi")
-            usock.close()
-
-            if (sys.platform == 'win32'):
-##		os.spawnl(r'copy '+SRCPLS_PATH+' '+SRCPLS_PATH+''+avsource["srcA"]+'')  
-                os.system('copy '+SRCPLS_PATH+' '+SRCPLS_PATH+''+avsource["srcA"]+'')
-            else:
-            	if (sys.platform.startswith('linux')):
- 		    os.system('cp '+SRCPLS_PATH+' '+SRCPLS_PATH+''+avsource["srcA"]+'')
-            	else: 
-                    os.system('cp '+SRCPLS_PATH+' '+SRCPLS_PATH+''+avsource["srcA"]+'')
-
-#############################################################################################################
-    def	_save_serverXXdatafile(self): 
-        # make settings directory if doesn't exists
-        if (not os.path.isdir(os.path.dirname(SRCPLS_PATH))):
-            os.makedirs(os.path.dirname(SRCPLS_PATH));
-	    
-        for avsourceIndex in self.avsources:
-            avsource = self.avsources[avsourceIndex]            
-	    vlc_loc  =  Addon.getSetting( "vlc_loc" )
-            usock    = open( SRCPLS_PATH, "w" )
-            usock.write("#!/bin/bash\n")
-            usock.write("\n")
-            usock.write("WID=`xdotool search --class \"XBMC\"`;\n")
-            usock.write("xdotool windowactivate $WID\n")
-            usock.write("wmctrl -c \""+avsource["srctype"]+"A\"\n")
-	    # (Additional options: --audio-visual visual --effect-list spectrometer)
-	    usock.write(""+vlc_loc+"vlc "+avsource["streamsrc"]+"\n")
-            usock.close()
-
-            if (sys.platform == 'win32'):
-##		os.spawnl(r'copy '+SRCPLS_PATH+' '+SRCPLS_PATH+''+avsource["srcB"]+'')  
-                os.system('copy '+SRCPLS_PATH+' '+SRCPLS_PATH+''+avsource["srcB"]+'')
-            else:
-            	if (sys.platform.startswith('linux')):
- 		    os.system('cp '+SRCPLS_PATH+' '+SRCPLS_PATH+''+avsource["srcB"]+'')
-            	else: 
-                    os.system('cp '+SRCPLS_PATH+' '+SRCPLS_PATH+''+avsource["srcB"]+'')
-	    
-#############################################################################################################
     def	_save_playercorefactoryfile( self ): 
 	    localhost      =  Addon.getSetting( "localhost" )
 	    streaming_ip   =  Addon.getSetting( "streaming_ip" )
@@ -726,27 +683,11 @@ class Main:
                     usock.write("      <args>\"{1}\"</args>\n")
             else:
             	if (sys.platform.startswith('linux')):
-		    if (Addon.getSetting( "dedicated" ) == "true"):
-                	usock.write("      <filename>"+vlc_loc+"</filename>\n")
- 		        usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+video_sout+" --sout=\'#std{access="+vstrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+video_fc+"</args>\n")
-		    else: 
-			if (Addon.getSetting( "playlocal" ) == "true"):
-                	    usock.write("      <filename>"+vlc_loc+"</filename>\n")
- 		            usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+video_sout+" --sout=\'#std{access="+vstrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+video_fc+" | "+vlc_loc+" --intf dummy "+vstrm_type+"://@"+streaming_ip+":"+streaming_port+" --file-caching=0 --fullscreen</args>\n")
-		        else:
-	                    usock.write("      <filename>"+vlc_loc+"</filename>\n")
-                    	    usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+video_sout+" --sout=\'#std{access="+vstrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+video_fc+"</args>\n")
+                    usock.write("      <filename>"+LINMAV_FILE+"</filename>\n")
+ 		    usock.write("      <args>\"{1}\"</args>\n")
 		else: 
-		    if (Addon.getSetting( "dedicated" ) == "true"):
-                	usock.write("      <filename>"+vlc_loc+"</filename>\n")
- 		        usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+video_sout+" --sout=\'#std{access="+vstrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+video_fc+"</args>\n")
-		    else: 
-			if (Addon.getSetting( "playlocal" ) == "true"):
-                	    usock.write("      <filename>"+vlc_loc+"</filename>\n")
- 		            usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+video_sout+" --sout=\'#std{access="+vstrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+video_fc+" | "+vlc_loc+" --intf dummy "+vstrm_type+"://@"+streaming_ip+":"+streaming_port+" --file-caching=0 --fullscreen</args>\n")
-		        else:
-	                    usock.write("      <filename>"+vlc_loc+"</filename>\n")
-                    	    usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+video_sout+" --sout=\'#std{access="+vstrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+video_fc+"</args>\n")
+                    usock.write("      <filename>"+LINMAV_FILE+"</filename>\n")
+ 		    usock.write("      <args>\"{1}\"</args>\n")
 
             usock.write("      <hidexbmc>false</hidexbmc>\n")
             usock.write("      <hideconsole>true</hideconsole>\n")
@@ -764,27 +705,11 @@ class Main:
                     usock.write("      <args>\"{1}\"</args>\n")
             else:
             	if (sys.platform.startswith('linux')):
-		    if (Addon.getSetting( "dedicated" ) == "true"):
-                	usock.write("      <filename>"+vlc_loc+"</filename>\n")
- 		        usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+audio_sout+" --sout=\'#std{access="+astrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+"</args>\n")
-		    else: 
-			if (Addon.getSetting( "playlocal" ) == "true"):
-                	    usock.write("      <filename>"+vlc_loc+"</filename>\n")
- 		            usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+audio_sout+" --sout=\'#std{access="+astrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+" | "+vlc_loc+" --intf dummy "+astrm_type+"://@"+streaming_ip+":"+streaming_port+" --file-caching=0 --fullscreen</args>\n")
-		    	else:
-	                    usock.write("      <filename>"+vlc_loc+"</filename>\n")
-                    	    usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+audio_sout+" --sout=\'#std{access="+astrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+"</args>\n")
+                    usock.write("      <filename>"+LINMAV_FILE+"</filename>\n")
+ 		    usock.write("      <args>\"{1}\"</args>\n")
 		else: 
-		    if (Addon.getSetting( "dedicated" ) == "true"):
-                	usock.write("      <filename>"+vlc_loc+"</filename>\n")
- 		        usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+audio_sout+" --sout=\'#std{access="+astrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+"</args>\n")
-		    else: 
-			if (Addon.getSetting( "playlocal" ) == "true"):
-                	    usock.write("      <filename>"+vlc_loc+"</filename>\n")
- 		            usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+audio_sout+" --sout=\'#std{access="+astrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+" | "+vlc_loc+" --intf dummy "+astrm_type+"://@"+streaming_ip+":"+streaming_port+" --file-caching=0 --fullscreen</args>\n")
-		    	else:
-	                    usock.write("      <filename>"+vlc_loc+"</filename>\n")
-                    	    usock.write("      <args>--started-from-file --playlist-enqueue \"{1}\" --play-and-exit --extraintf=http --http-host "+localhost+":8084 "+audio_sout+" --sout=\'#std{access="+astrm_type+",mux=ts,dst="+streaming_ip+":"+streaming_port+"}\' --netsync-master --sout-rtp-sap --sout-rtp-name="+sap_name+" --sout-standard-sap --sout-standard-name=xbmc_"+sap_name+" --sout-standard-group=Multiroom_AV --file-caching="+audio_fc+"</args>\n")
+                    usock.write("      <filename>"+LINMAV_FILE+"</filename>\n")
+ 		    usock.write("      <args>\"{1}\"</args>\n")
 
             usock.write("      <hidexbmc>false</hidexbmc>\n")
             usock.write("      <hideconsole>true</hideconsole>\n")
@@ -828,9 +753,14 @@ class Main:
             usock.write("  </players>\n")
             usock.write("    <rules action=\"overwrite\">\n")
             usock.write("      <!-- DVDs -->\n")
-            usock.write("      <rule name=\"dvd\" dvd=\"true\" player=\""+default_vp+"\" />\n")
-            usock.write("      <rule name=\"dvdfile\" dvdfile=\"true\" player=\""+default_vp+"\" />\n")
-            usock.write("      <rule name=\"dvdimage\" dvdimage=\"true\" player=\""+default_vp+"\" />\n")
+	    if (Addon.getSetting( "strm_dvd" ) == "true"):
+                usock.write("      <rule name=\"dvd\" dvd=\"true\" player=\""+default_vp+"\" />\n")
+                usock.write("      <rule name=\"dvdfile\" dvdfile=\"true\" player=\""+default_vp+"\" />\n")
+                usock.write("      <rule name=\"dvdimage\" dvdimage=\"true\" player=\""+default_vp+"\" />\n")
+	    else:
+                usock.write("      <rule name=\"dvd\" dvd=\"true\" player=\"DVDPlayer\" />\n")
+                usock.write("      <rule name=\"dvdfile\" dvdfile=\"true\" player=\"DVDPlayer\" />\n")
+                usock.write("      <rule name=\"dvdimage\" dvdimage=\"true\" player=\"DVDPlayer\" />\n")
             usock.write("\n")
             usock.write("      <!-- Multiroom AV Plugin will play the pls files -->\n")
             usock.write("      <rule name=\"rtv\" protocols=\"rtv\" player=\""+default_vp+"\" />\n")
@@ -859,7 +789,7 @@ class Main:
             usock.write("</playercorefactory>\n")
             usock.close()
 
-    ''' read the list of avsources and avclients from avsources.xml file '''
+    ''' read the list of avsources and avsrcs from avsources.xml file '''
 #############################################################################################################
     def _load_avsources( self , xmlSource):
         avsources = re.findall( "<avsource>(.*?)</avsource>", xmlSource )
@@ -869,14 +799,14 @@ class Main:
             application = re.findall( "<application>(.*?)</application>", avsource )
             args = re.findall( "<args>(.*?)</args>", avsource )
             streamsrc = re.findall( "<streamsrc>(.*?)</streamsrc>", avsource )
-            avclientpath = re.findall( "<avclientpath>(.*?)</avclientpath>", avsource )
+            avsrcpath = re.findall( "<avsrcpath>(.*?)</avsrcpath>", avsource )
             asrcpath = re.findall( "<asrcpath>(.*?)</asrcpath>", avsource )
             srcA = re.findall( "<srcA>(.*?)</srcA>", avsource )
             srcB = re.findall( "<srcB>(.*?)</srcB>", avsource )
             thumb = re.findall( "<thumb>(.*?)</thumb>", avsource )
 	    srctype = re.findall( "<srctype>(.*?)</srctype>", avsource )
             wait = re.findall( "<wait>(.*?)</wait>", avsource )
-            avclientsxml = re.findall( "<avclient>(.*?)</avclient>", avsource )
+            avsrcsxml = re.findall( "<avsrc>(.*?)</avsrc>", avsource )
 
             if len(name) > 0 : name = name[0]
             else: name = "unknown"
@@ -890,8 +820,8 @@ class Main:
 	    if len(streamsrc) > 0 : streamsrc = streamsrc[0]
 	    else: streamsrc = ""
 
-            if len(avclientpath) > 0 : avclientpath = avclientpath[0]
-            else: avclientpath = ""
+            if len(avsrcpath) > 0 : avsrcpath = avsrcpath[0]
+            else: avsrcpath = ""
 
             if len(asrcpath) > 0: asrcpath = asrcpath[0]
             else: asrcpath = ""
@@ -911,29 +841,29 @@ class Main:
             if len(wait) > 0: wait = wait[0]
             else: wait = ""
             
-            avclients = {}
-            for avclient in avclientsxml:
-                avclientname = re.findall( "<name>(.*?)</name>", avclient )
-                avclientfilename = re.findall( "<filename>(.*?)</filename>", avclient )
-                avclientthumb = re.findall( "<thumb>(.*?)</thumb>", avclient )
+            avsrcs = {}
+            for avsrc in avsrcsxml:
+                avsrcname = re.findall( "<name>(.*?)</name>", avsrc )
+                avsrcfilename = re.findall( "<filename>(.*?)</filename>", avsrc )
+                avsrcthumb = re.findall( "<thumb>(.*?)</thumb>", avsrc )
 
-                if len(avclientname) > 0 : avclientname = avclientname[0]
-                else: avclientname = "unknown"
+                if len(avsrcname) > 0 : avsrcname = avsrcname[0]
+                else: avsrcname = "unknown"
 
-                if len(avclientfilename) > 0 : avclientfilename = avclientfilename[0]
-                else: avclientfilename = ""
+                if len(avsrcfilename) > 0 : avsrcfilename = avsrcfilename[0]
+                else: avsrcfilename = ""
 
-                if len(avclientthumb) > 0 : avclientthumb = avclientthumb[0]
-                else: avclientthumb = ""
+                if len(avsrcthumb) > 0 : avsrcthumb = avsrcthumb[0]
+                else: avsrcthumb = ""
 
-                # prepare avclient object data
-                avclientdata = {}
-                avclientdata["name"] = avclientname
-                avclientdata["filename"] = avclientfilename
-                avclientdata["thumb"] = avclientthumb
+                # prepare avsrc object data
+                avsrcdata = {}
+                avsrcdata["name"] = avsrcname
+                avsrcdata["filename"] = avsrcfilename
+                avsrcdata["thumb"] = avsrcthumb
 
-                # add avclient to the avclients list (using name as index)
-                avclients[avclientname] = avclientdata
+                # add avsrc to the avsrcs list (using name as index)
+                avsrcs[avsrcname] = avsrcdata
 
             # prepare avsource object data
             avsourcedata = {}
@@ -941,17 +871,16 @@ class Main:
             avsourcedata["application"] = application
             avsourcedata["args"] = args
 	    avsourcedata["streamsrc"] = streamsrc
-            avsourcedata["avclientpath"] = avclientpath
+            avsourcedata["avsrcpath"] = avsrcpath
             avsourcedata["asrcpath"] = asrcpath
             avsourcedata["srcA"] = srcA
             avsourcedata["srcB"] = srcB
             avsourcedata["thumb"] = thumb
             avsourcedata["srctype"] = srctype
             avsourcedata["wait"] = wait
-            avsourcedata["avclients"] = avclients
+            avsourcedata["avsrcs"] = avsrcs
 
             # add avsource to the avsources list (using name as index)
-	    self._save_playercorefactoryfile()
             self.avsources[name] = avsourcedata
 
 #############################################################################################################    
@@ -959,110 +888,11 @@ class Main:
         if (len(self.avsources) > 0):
             for index in self.avsources:
                 avsource = self.avsources[index]
-                self._add_avsource(avsource["name"], avsource["application"], avsource["avclientpath"], avsource["asrcpath"], avsource["thumb"], avsource["wait"], avsource["avclients"], len(self.avsources))
+                self._add_avsource(avsource["name"], avsource["application"], avsource["avsrcpath"], avsource["asrcpath"], avsource["thumb"], avsource["wait"], avsource["avsrcs"], len(self.avsources))
             xbmcplugin.endOfDirectory( handle=int( self._handle ), succeeded=True, cacheToDisc=False )
             return True
         else:
             return False
-
-#############################################################################################################
-##    def _get_avclients( self, avsourceName ):
-##        if (self.avsources.has_key(avsourceName)):
-##            selectedAVsource = self.avsources[avsourceName]
-##            avclients = selectedAVsource["avclients"]
-##            print "AVsource: %s : found %d avclients " % (avsourceName, len(avclients))
-##            if (len(avclients) > 0) :
-##                for index in avclients :
-##                    avclient = avclients[index]
-##                    self._add_avclient(avsourceName, avclient["name"], avclient["filename"], avclient["thumb"], len(avclients))
-##            else:
-##                dialog = xbmcgui.Dialog()
-##                ret = dialog.yesno(Addon.getLocalizedString( 30000 ), Addon.getLocalizedString( 30013 ))
-##                if (ret):
-##                    self._import_avclients(avsourceName, addavclients = True)
-##            xbmcplugin.endOfDirectory( handle=int( self._handle ), succeeded=True, cacheToDisc=False )
-##            return True
-##        else:
-##            return False
-##
-#############################################################################################################
-    def _report_hook( self, count, blocksize, totalsize ):
-         percent = int( float( count * blocksize * 100) / totalsize )
-         msg1 = Addon.getLocalizedString( 30033 )  % ( os.path.split( self.url )[ 1 ], )
-         pDialog.update( percent, msg1 )
-         if ( pDialog.iscanceled() ): raise
-
-#############################################################################################################        
-    def _scan_avsource(self, avsourcename):
-        self._save_avsources()
-
-#############################################################################################################
-    def _import_avclients(self, avsourceName, addavclients = False):
-        dialog = xbmcgui.Dialog()
-        avclientsCount = 0
-        filesCount = 0
-        skipCount = 0
-        selectedAVsource = self.avsources[avsourceName]
-        pDialog = xbmcgui.DialogProgress()
-        path = selectedAVsource["avclientpath"]
-        exts = selectedAVsource["asrcpath"]
-        avclients = selectedAVsource["avclients"]
-        ret = pDialog.create(Addon.getLocalizedString( 30000 ), Addon.getLocalizedString( 30014 ) % (path));
-        
-        files = os.listdir(path)
-        for f in files:
-            pDialog.update(filesCount * 100 / len(files))
-            fullname = os.path.join(path, f)
-            for ext in exts.split("|"):
-                avclientadded = False
-                if f.upper().endswith("." + ext.upper()):
-                    avclientname =  f[:-len(ext)-1].capitalize()
-                    if (not avclients.has_key(avclientname)):
-                        # prepare avclient object data
-                        avclientdata = {}
-                        avclientname =  f[:-len(ext)-1].capitalize()
-                        avclientdata["name"] = avclientname
-                        avclientdata["filename"] = fullname 
-                        avclientdata["thumb"] = ""
-
-                        # add avclient to the avclients list (using name as index)
-                        avclients[avclientname] = avclientdata
-                        avclientsCount = avclientsCount + 1
-                        
-                        if (addavclients):
-                            self._add_avclient(avsourceName, avclientdata["name"], avclientdata["filename"], avclientdata["thumb"], len(files))
-                            avclientadded = True
-                if not avclientadded:
-                    skipCount = skipCount + 1
-               
-            filesCount = filesCount + 1    
-        pDialog.close()
-        self._save_avsources()
-        if (skipCount == 0):
-            xbmc.executebuiltin("XBMC.Notification(%s,%s, 6000)" % (Addon.getLocalizedString( 30000 ), Addon.getLocalizedString( 30015 ) % (avclientsCount) + " " + Addon.getLocalizedString( 30050 )))
-            #dialog.ok(Addon.getLocalizedString( 30000 ), (Addon.getLocalizedString( 30015 )+ "\n" + Addon.getLocalizedString( 30050 )) % (avclientsCount))
-        else:
-            xbmc.executebuiltin("XBMC.Notification(%s,%s, 12000)" % (Addon.getLocalizedString( 30000 ), Addon.getLocalizedString( 30016 ) % (avclientsCount, skipCount) + " " + Addon.getLocalizedString( 30050 )))
-            #dialog.ok(Addon.getLocalizedString( 30000 ), (Addon.getLocalizedString( 30016 )+ "\n" + Addon.getLocalizedString( 30050 )) % (avclientsCount, skipCount))
-
-#############################################################################################################
-    def _get_thumbnail( self, thumbnail_url ):
-        # make the proper cache filename and path so duplicate caching is unnecessary
-        if ( not thumbnail_url.startswith( "http://" ) ): return thumbnail_url
-        try:
-            filename = xbmc.getCacheThumbName( thumbnail_url )
-            filepath = xbmc.translatePath( os.path.join( self.BASE_CACHE_PATH, filename[ 0 ], filename ) )
-            # if the cached thumbnail does not exist fetch the thumbnail
-            if ( not os.path.isfile( filepath ) ):
-                # fetch thumbnail and save to filepath
-                info = urllib.urlretrieve( thumbnail_url, filepath )
-                # cleanup any remaining urllib cache
-                urllib.urlcleanup()
-            return filepath
-        except:
-            # return empty string if retrieval failed
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
-            return ""
 
 #############################################################################################################        
     def _get_thumb(self, displayName, fileName):
@@ -1076,11 +906,11 @@ class Main:
                 return thumbfilename            
 
 #############################################################################################################
-    def _add_avsource(self, name, cmd, path, ext, thumb, wait, avclients, total) :
+    def _add_avsource(self, name, cmd, path, ext, thumb, wait, avsrcs, total) :
         commands = []
         commands.append((Addon.getLocalizedString( 30101 ), "XBMC.RunPlugin(%s?%s)" % (self._path, ADD_COMMAND) , ))
         if (sys.platform == "win32"):
-##	    commands.append((Addon.getLocalizedString( 30103 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, WAIT_TOGGLE_COMMAND) , ))
+	##  commands.append((Addon.getLocalizedString( 30103 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, WAIT_TOGGLE_COMMAND) , ))
             commands.append((Addon.getLocalizedString( 30107 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, RENAME_COMMAND) , ))
             commands.append((Addon.getLocalizedString( 30104 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, REMOVE_COMMAND) , ))
             commands.append((Addon.getLocalizedString( 30108 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, EDIT_COMMAND) , ))
@@ -1103,12 +933,7 @@ class Main:
         else:
             folder = True
             icon = "DefaultFolder.png"
-##            commands.append((Addon.getLocalizedString( 30105 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, IMPORT_COMMAND) , ))
-##            commands.append((Addon.getLocalizedString( 30106 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, ADD_COMMAND) , ))            
-##            commands.append((Addon.getLocalizedString( 30107 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, RENAME_COMMAND) , ))
-##            commands.append((Addon.getLocalizedString( 30104 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, REMOVE_COMMAND) , ))
-##            commands.append((Addon.getLocalizedString( 30108 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, EDIT_COMMAND) , ))
-##            commands.append((Addon.getLocalizedString( 30110 ), "XBMC.RunPlugin(%s?%s/%s)" % (self._path, name, EDITIP_COMMAND) , ))
+
         if (thumb):
             thumbnail = thumb
         else:
@@ -1122,57 +947,9 @@ class Main:
         xbmcplugin.addDirectoryItem( handle=int( self._handle ), url="%s?%s"  % (self._path, name), listitem=listitem, isFolder=folder, totalItems=total)
 
 #############################################################################################################
-    def _add_avclient( self, avsource, name, cmd , thumb, total):
-        if (thumb):
-            thumbnail = thumb
-        else:
-            thumbnail = self._get_thumb(name, cmd)
-        icon = "DefaultProgram.png"
-        if (thumbnail):
-            listitem = xbmcgui.ListItem( name, iconImage=icon, thumbnailImage=thumbnail)
-        else:
-            listitem = xbmcgui.ListItem( name, iconImage=icon )
-        commands = []
-        commands.append(( Addon.getLocalizedString( 30107 ), "XBMC.RunPlugin(%s?%s/%s/%s)" % (self._path, avsource, name, RENAME_COMMAND) , ))
-        commands.append(( Addon.getLocalizedString( 30108 ), "XBMC.RunPlugin(%s?%s/%s/%s)" % (self._path, avsource, name, EDIT_COMMAND) , ))
-        commands.append(( Addon.getLocalizedString( 30110 ), "XBMC.RunPlugin(%s?%s/%s/%s)" % (self._path, avsource, name, EDITIP_COMMAND) , ))
-        commands.append(( Addon.getLocalizedString( 30104 ), "XBMC.RunPlugin(%s?%s/%s/%s)" % (self._path, avsource, name, REMOVE_COMMAND) , ))
-        listitem.addContextMenuItems( commands )
-        xbmcplugin.addDirectoryItem( handle=int( self._handle ), url="%s?%s/%s"  % (self._path, avsource, name), listitem=listitem, isFolder=False, totalItems=total)
-
-#############################################################################################################
-    def _add_new_avclient ( self , avsourceName) :
-        dialog = xbmcgui.Dialog()
-        avsource = self.avsources[avsourceName]
-        ext = avsource["asrcpath"]
-        avclients = avsource["avclients"]
-        avclientpath = avsource["avclientpath"]
-        
-        avclientfile = dialog.browse(1, Addon.getLocalizedString( 30017 ),"files", "."+ext, False, False, avclientpath)
-        if (avclientfile):
-            title=os.path.basename(avclientfile).split(".")[0].capitalize()
-            keyboard = xbmc.Keyboard(title, Addon.getLocalizedString( 30018 ))
-            keyboard.doModal()
-            if (keyboard.isConfirmed()):
-                title = keyboard.getText()
-
-                # prepare avclient object data
-                avclientdata = {}
-                avclientdata["name"] = title
-                avclientdata["filename"] = avclientfile
-                avclientdata["thumb"] = ""
-
-                # add avclient to the avclients list (using name as index)
-                avclients[title] = avclientdata
-
-                xbmc.executebuiltin("XBMC.Notification(%s,%s, 6000)" % (Addon.getLocalizedString( 30000 ), Addon.getLocalizedString( 30019 ) + " " + Addon.getLocalizedString( 30050 )))
-                #xbmcgui.Dialog().ok(Addon.getLocalizedString( 30000 ), Addon.getLocalizedString( 30019 )+ "\n" + Addon.getLocalizedString( 30050 ))
-        self._save_avsources()
-
-#############################################################################################################
     def _add_new_avsource ( self ) :
         dialog = xbmcgui.Dialog()
-        type = dialog.select(Addon.getLocalizedString( 30020 ), [Addon.getLocalizedString( 30021 )])
+        type = dialog.select(Addon.getLocalizedString( 30020 ), [Addon.getLocalizedString( 30022 ), Addon.getLocalizedString( 30021 )])
         if (os.environ.get( "OS", "xbox" ) == "xbox"):
             filter = ".xbe|.cut"
         else:
@@ -1180,8 +957,8 @@ class Main:
                 filter = ".bat|.exe"
             else:
                 filter = ""
-            
-        if (type == 0):
+        # Manaully Add Source
+        if (type == 1):
 	    srctype = "client"
 	    srcprfx = "AV-Source-"
 	    srcsufx = "NAME"
@@ -1206,15 +983,16 @@ class Main:
                     	avsourcedata["application"] = app
                     	avsourcedata["args"] = args
    		    	avsourcedata["streamsrc"] = streamsrc 
-                    	avsourcedata["avclientpath"] = ""
+                    	avsourcedata["avsrcpath"] = ""
                     	avsourcedata["asrcpath"] = ""
    		    	avsourcedata["srcA"] = sourceip
    		    	avsourcedata["srcB"] = ""
                     	avsourcedata["thumb"] = ""
                     	avsourcedata["srctype"] = srctype
                     	avsourcedata["wait"] = "true"
-                    	avsourcedata["avclients"] = {}
+                    	avsourcedata["avsrcs"] = {}
                      
+
                 # add avsource to the avsources list (using name as index)
                 self.avsources[title] = avsourcedata
                 self._save_avsources()
@@ -1222,65 +1000,44 @@ class Main:
                 xbmc.executebuiltin("Container.Refresh")
                 return True
 
-        elif (type == 1):
-            appkeyboard = xbmc.Keyboard("", Addon.getLocalizedString( 30038 ))
-            appkeyboard.doModal()
-            ### app = xbmcgui.Dialog().browse(1,Addon.getLocalizedString( 30023 ),"files",filter)
-            if (appkeyboard.isConfirmed()): ### (app):
-		srctype = "srvr" 
-                appvarA = "xterm -display :0 -T srvrA -e "
-                appvar1 = SRCPLS_PATH
-		appvar2 = "./"
-		appvar3 = "server"
-		appvar4 = "data"              
-		appvar5 = appkeyboard.getText();
-                app = appvarA+appvar1+appvar2+appvar3+appvar5 
-                argkeyboard = xbmc.Keyboard("", Addon.getLocalizedString( 30024 ))
-                argkeyboard.doModal()
-                if (argkeyboard.isConfirmed()):
-                    args = argkeyboard.getText();
-                    streamsrckeyboard = xbmc.Keyboard("", Addon.getLocalizedString( 30039 ))
-                    streamsrckeyboard.doModal()
-                    if (streamsrckeyboard.isConfirmed()):
-                        streamsrc = streamsrckeyboard.getText();
-			titleprefix = "Master Streamer - "
-                        titlesuffix = os.path.basename(app).split(".")[0].capitalize()
-			title = titleprefix+titlesuffix
-                        keyboard = xbmc.Keyboard(title, Addon.getLocalizedString( 30025 ))
-                        keyboard.doModal()
-                        if (keyboard.isConfirmed()):
-                            title = keyboard.getText()                    
-			    sourceipkeyboard = xbmc.Keyboard("", Addon.getLocalizedString( 30023 ))
-                            sourceipkeyboard.doModal()	
-			    if (sourceipkeyboard.isConfirmed()):
-				sourceip = sourceipkeyboard.getText()
-                            	# prepare avsource object data
-                            	avsourcedata = {}
-                            	avsourcedata["name"] = title
-                            	avsourcedata["application"] = app
-                            	avsourcedata["args"] = args
-   		      	    	avsourcedata["streamsrc"] = streamsrc 
-                            	avsourcedata["avclientpath"] = ""
-                            	avsourcedata["asrcpath"] = ""
-   		      	    	avsourcedata["srcA"] = sourceip
-   		      	    	avsourcedata["srcB"] = ""
-                            	avsourcedata["thumb"] = ""
-                            	avsourcedata["srctype"] = srctype
-                            	avsourcedata["wait"] = "true"
-                            	avsourcedata["avclients"] = {}
+        # Auto Scan to Add Found Source
+        elif (type == 0):
+            conn = sqlite3.connect(mavdb)
+            c = conn.cursor()
+            c.execute("""SELECT * FROM sources""")
+            db=c.fetchall()
+            for src in db:
+                # source = {}
+                src_name    = src[0]
+                src_hostip  = src[1]
+                src_url     = src[2]
+                src_type    = src[3]
+                src_pid     = src[4]
+                src_actflag = src[5]
+                # c.close
+                # prepare avsource object data
+                avsourcedata = {}
+                avsourcedata["name"] = src_name
+                avsourcedata["application"] = ""
+                avsourcedata["args"] = ""
+   		avsourcedata["streamsrc"] = src_url 
+                avsourcedata["avsrcpath"] = ""
+                avsourcedata["asrcpath"] = ""
+   		avsourcedata["srcA"] = src_hostip
+   		avsourcedata["srcB"] = ""
+                avsourcedata["thumb"] = ""
+                avsourcedata["srctype"] = src_type
+                avsourcedata["wait"] = "true"
+                avsourcedata["avsrcs"] = {}
                     
-                        # add avsource to the avsources list (using name as index)
-                        self.avsources[title] = avsourcedata
-                        self._save_avsources()
+                # add avsource to the avsources list (using name as index)
+                self.avsources[src_name] = avsourcedata
+                self._save_avsources()
 
-                        xbmc.executebuiltin("Container.Refresh")
-                        return True
+            xbmc.executebuiltin("Container.Refresh")
+            return True
+
         return False
-
-#############################################################################################################
-    def _get_search_engine( self ):
-        exec "import resources.search_engines.%s.search_engine as search_engine" % ( self.settings[ "search_engine" ], )
-        return search_engine.SearchEngine()
 
 #############################################################################################################                                
     def _get_settings( self ):
@@ -1330,7 +1087,7 @@ class Main:
 
 	    usock.write("\t\t<args></args>\n")
             usock.write("\t\t<streamsrc></streamsrc>\n")
-            usock.write("\t\t<avclientpath></avclientpath>\n")
+            usock.write("\t\t<avsrcpath></avsrcpath>\n")
             usock.write("\t\t<asrcpath></asrcpath>\n")
             usock.write("\t\t<srcA></srcA>\n")
             usock.write("\t\t<srcB></srcB>\n")
@@ -1343,7 +1100,7 @@ class Main:
 	    usock.write("\t\t<application></application>\n")
 	    usock.write("\t\t<args></args>\n")
             usock.write("\t\t<streamsrc></streamsrc>\n")
-            usock.write("\t\t<avclientpath></avclientpath>\n")
+            usock.write("\t\t<avsrcpath></avsrcpath>\n")
             usock.write("\t\t<asrcpath></asrcpath>\n")
             usock.write("\t\t<srcA></srcA>\n")
             usock.write("\t\t<srcB></srcB>\n")
@@ -1356,7 +1113,7 @@ class Main:
 	    usock.write("\t\t<application></application>\n")
 	    usock.write("\t\t<args></args>\n")
             usock.write("\t\t<streamsrc></streamsrc>\n")
-            usock.write("\t\t<avclientpath></avclientpath>\n")
+            usock.write("\t\t<avsrcpath></avsrcpath>\n")
             usock.write("\t\t<asrcpath></asrcpath>\n")
             usock.write("\t\t<srcA></srcA>\n")
             usock.write("\t\t<srcB></srcB>\n")
@@ -1369,7 +1126,7 @@ class Main:
 	    usock.write("\t\t<application></application>\n")
 	    usock.write("\t\t<args></args>\n")
             usock.write("\t\t<streamsrc>udp://@224.1.1.152:1152</streamsrc>\n")
-            usock.write("\t\t<avclientpath></avclientpath>\n")
+            usock.write("\t\t<avsrcpath></avsrcpath>\n")
             usock.write("\t\t<asrcpath></asrcpath>\n")
             usock.write("\t\t<srcA>"+hostip+"</srcA>\n")
             usock.write("\t\t<srcB></srcB>\n")
@@ -1383,15 +1140,23 @@ class Main:
 
 #############################################################################################################                                
     def _generate( self ):
-##      if (self.avsources.has_key(avsourceName)):
-##	if (avsourceName == "Generate Files"):
+	## if (self.avsources.has_key(avsourceName)):
+	## if (avsourceName == "Generate Files"):
 	pulseloc  =  xbmc.translatePath(Addon.getSetting( "pls_path" ))
-        if (sys.platform.startswith('linux')):
-	    os.system("cp "+MAVFOO+"default.pa "+PULSE+".pulse/default.pa")
-	else:
-	    os.system("cp "+MAVFOO+"default.pa "+PULSE+".pulse/default.pa") 	 
+        if (sys.platform == 'win32'):
+            subprocess.Popen([r"copy",r""+MAVFOO+"autoexec.py",r""+AUTOEXEC+""],shell=True)
+        else:
+            if (sys.platform.startswith('linux')):
+	        os.system("cp "+MAVFOO+"default.pa "+PULSE+".pulse/default.pa")
+	        os.system("cp "+MAVFOO+"autoexec.py "+AUTOEXEC+"")
+	    else:
+	        os.system("cp "+MAVFOO+"default.pa "+PULSE+".pulse/default.pa")
+	        os.system("cp "+MAVFOO+"autoexec.py "+AUTOEXEC+"")
+	 	 
 	self._save_srcpls()
 	self._save_Mavfiles()
 	self._save_playercorefactoryfile()
-	xbmc.executebuiltin("Notification(Multiroom Audio, Files Generated Successfully,10000,"+DEFAULT_IMG+")")
+	xbmc.executebuiltin("Notification(Multiroom Audio, Files Generated Successfully,1500,"+DEFAULT_IMG+")")
+	xbmc.executebuiltin("Notification(Multiroom Audio, XBMC Restart Required,15000,"+DEFAULT_IMG+")")
+	
 

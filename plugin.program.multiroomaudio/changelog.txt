@@ -2,6 +2,21 @@ Up to date Install / Configuration / Usage / Help can be found @
 
 http://forum.xbmc.org/showthread.php?t=78431
 
+1.1.0
+- Added DVD Streaming 
+
+- Support for RTP streaming
+
+- SQL Backend
+
+- Autoscan and configuration of Sources
+
+- Background Signalling between Clients and Master via UDP
+
+- Source Auto-Play
+
+- Capability to Stream DVD's
+
 1.0.9
 VLC version 1.1.4 required (it's a better release anyhow!!! ;-) )
 - Added Option for Master Syncronization (Because of this it is necessary to upgrade to vlc 1.1.4 on linux based systems)

@@ -1,3 +1,8 @@
+plugin.audio.soundcloud/.git
+plugin.audio.soundcloud/.project
+plugin.audio.soundcloud/.pydevproject
+plugin.image.icanhascheezburger.com/.git
+plugin.image.icanhascheezburger.com/.gitignore
 plugin.image.iphoto/.gitignore
 plugin.image.iphoto/.git
 plugin.program.rtorrent/.git
@@ -7,5 +12,3 @@ plugin.video.academicearth/.gitignore
 plugin.video.eevblog/.git
 plugin.video.eevblog/.project
 plugin.video.eevblog/.pydevproject
-plugin.image.icanhascheezburger.com/.git
-plugin.image.icanhascheezburger.com/.gitignore

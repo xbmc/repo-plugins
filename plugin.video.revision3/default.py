@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 __plugin__ =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '07-13-2010'
-__version__ = '1.0.0'
+__date__ = '09-26-2010'
+__version__ = '1.0.2'
 __settings__ = xbmcaddon.Addon(id='plugin.video.revision3')
 
 def open_url(url):
@@ -56,7 +56,7 @@ def build_sub_directory(url, name):
 		episode = int(number[count].rsplit('/', 2)[1].lstrip('0'))
 		url = link[count]
 		listitem = xbmcgui.ListItem(label = clean(match[count][1]), iconImage = image[count][1], thumbnailImage = image[count][1])
-		listitem.setInfo( type = "Video", infoLabels = { "Title": clean(match[count][1]), "Director": __plugin__, "Studio": __plugin__, "Genre": genre, "Plot": clean(plot[count]), "Episode": episode } )
+		listitem.setInfo( type = "Video", infoLabels = { "Title": clean(match[count][1]), "Director": __plugin__, "Studio": genre, "Plot": clean(plot[count]), "Episode": episode } )
 		u = sys.argv[0] + "?mode=2&name=" + urllib.quote_plus(clean(match[count][1])) + "&url=" + urllib.quote_plus(url) + "&plot=" + urllib.quote_plus(clean(plot[count])) + "&genre=" + urllib.quote_plus(genre) + "&episode=" + urllib.quote_plus(str(episode))
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
 		count += 1
@@ -106,7 +106,7 @@ def play_video(url, name, plot, genre, episode):
 		player_type = xbmc.PLAYER_CORE_MPLAYER
 	image = xbmc.getInfoImage( 'ListItem.Thumb' )
 	listitem = xbmcgui.ListItem(label = name , iconImage = 'DefaultVideo.png', thumbnailImage = image)
-	listitem.setInfo( type = "Video", infoLabels={ "Title": name, "Director": __plugin__, "Studio": __plugin__, "Genre": genre, "Plot": plot, "Episode": int(episode)  } )
+	listitem.setInfo( type = "Video", infoLabels={ "Title": name, "Director": __plugin__, "Studio": genre, "Plot": plot, "Episode": int(episode)  } )
 	if (filepath != None and os.path.isfile(filepath)):
 		xbmc.Player(player_type).play(str(filepath), listitem)
 	elif (stream == 'true'):

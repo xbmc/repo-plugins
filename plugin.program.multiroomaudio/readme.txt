@@ -1,4 +1,4 @@
-MultiroomAudio & Video Plugin v1.1.0
+MultiroomAudio & Video Plugin v1.1.1
 Author: VortexRotor (teshephe)
 Based off of the very fine work of the Launcher Plugin - leo212  (Thanks Lior!!)
 
@@ -10,7 +10,7 @@ than one XBMC box in your home.
 
 
 
-The release of Multiroom v1.1.0 plugin includes these New Features: 
+The release of Multiroom v1.1.1 plugin includes these New Features: 
 
 - SQL Backend
 - Autoscan and configuration of Sources

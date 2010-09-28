@@ -12,7 +12,7 @@
     <setting type="lsep" label="30040"/>
     <setting type="sep" />
     <setting id="localhost" type="text" label="30065" default="" enable="false"/>
-    <setting id="streaming_ip" type="number" label="30041" default="224.1.1.152" enable=""/>
+    <setting id="streaming_ip" type="text" label="30041" default="224.1.1.152" enable=""/>
     <setting id="streaming_port" type="number" label="30042" default="1152" enable=""/>
     <setting id="sap_name" type="text" label="30069" default="Master" enable=""/>
     <setting type="sep" />

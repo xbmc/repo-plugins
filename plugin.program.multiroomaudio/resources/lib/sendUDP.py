@@ -18,7 +18,7 @@ def log(msg):
 #################################################################################################################
 ##    def _bcasttoggle(self):
 localhost      = xbmc.getIPAddress()
-port_xbmc      = "8081"
+port_xbmc      = "8080"
 udp_xbmc       = "8278"
 xbmc_level     = "129"
 url = "http://" + str(localhost) + ":" + str(port_xbmc) + "/xbmcCmds/xbmcHttp?command=SetBroadcast(" + str(xbmc_level) + ";" + str(udp_xbmc) + ")"

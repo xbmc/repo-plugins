@@ -2,6 +2,12 @@ Up to date Install / Configuration / Usage / Help can be found @
 
 http://forum.xbmc.org/showthread.php?t=78431
 
+1.1.1
+- Streamer IP Input Dialogue - Now set to type "text"
+
+- Fixed default port number for http interface from 8081 to 8080.  The script would fail on intialization because it could not establish connection to 
+  XBMC http interface.
+
 1.1.0
 - Added DVD Streaming 
 

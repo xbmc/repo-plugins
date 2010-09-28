@@ -1,0 +1,8 @@
+version 0.1.1:
+	- added icon.png (thanks to freezy)
+	- cosmetic changes (thanks to Arne)
+
+version 0.1.0:
+	- initial version
+	- includes only most recent Tagesschau, Tagesschau in 100 Sekunden
+	  in low quality (fetched from podcast-RSS-feed of tagesschau.de)

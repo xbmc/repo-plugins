@@ -1,0 +1,4 @@
+[B]2.0.1[/B]
+- Icon updated, thanks to freezy at xboxmediacenter dot com
+[B]2.0.0[/B]
+- Initial version for XBMC 10.0 (Dharma)

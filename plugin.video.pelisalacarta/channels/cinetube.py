@@ -4,6 +4,7 @@
 # Canal para cinetube
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
+#Modificado
 import urlparse,urllib2,urllib,re
 import os
 import sys
@@ -18,6 +19,7 @@ import xbmctools
 import config
 from item import Item
 import logger
+import buscador
 
 CHANNELNAME = "cinetube"
 
@@ -57,25 +59,20 @@ def getmainlist(params,url,category):
 	addfolder("Anime - Series","http://www.cinetube.es/subindices/ianimeseries.html","list")
 	addfolder("Anime - Peliculas","http://www.cinetube.es/subindices/ianimepeliculas.html","list")
 	'''
-	
+
 	return itemlist
 
 def search(params,url,category):
 	logger.info("[cinetube.py] search")
 
-	keyboard = xbmc.Keyboard('')
-	keyboard.doModal()
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-			searchUrl = "http://www.cinetube.es/buscar/peliculas/?palabra="+tecleado+"&categoria=&valoracion="
-			searchresults(params,searchUrl,category)
+	buscador.listar_busquedas(params,url,category)
 
-def searchresults(params,url,category):
+def searchresults(params,tecleado,category):
 	logger.info("[cinetube.py] searchresults")
-
+	
+	buscador.salvar_busquedas(params,tecleado,category)
+	tecleado = tecleado.replace(" ", "+")
+	url = "http://www.cinetube.es/buscar/peliculas/?palabra="+tecleado+"&categoria=&valoracion="
 	itemlist = getsearchresults(params,url,category)
 	xbmctools.renderItems(itemlist, params, url, category)
 
@@ -693,11 +690,12 @@ def listmirrors(params,url,category):
 	</div>
 	</div>
 	'''
-	patronvideos  = '<div class="tit_opts"><a href="([^"]+)">[^<]+'
+	#patronvideos  = '<div class="tit_opts"><a href="([^"]+)">[^<]+'
+	patronvideos = '<div class="tit_opts"><a href="([^"]+)".*?>[^<]+'
 	patronvideos += '<p>([^<]+)</p>[^<]+'
 	patronvideos += '<p><span>([^<]+)</span>'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
-	
+
 	for match in matches:
 		logger.info("Encontrado iframe mirrors "+match[0])
 		# Lee el iframe

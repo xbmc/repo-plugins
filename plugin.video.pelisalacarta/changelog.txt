@@ -1,3 +1,11 @@
+2.18
+
+- Fixed bugs in channels
+- 5 new channels: programastvonline, cineblog01, peliculasonlineflv, pelis pekesdelatv series
+- Main menu now filter by type and language
+- 1 new server: vkontakte.ru
+- Favorites now can be stored on a samba folder
+
 2.17.1
 
 - Removed download option
@@ -7,6 +15,6 @@
 
 - First addon repository version (Dharma)
 
-For more history visit mimediacenter.info
+For more info visit http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta
 
 __________________

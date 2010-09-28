@@ -124,5 +124,11 @@ def getvideo(urlpagina):
     matches = re.compile(patronvideos,re.DOTALL).findall(data)
     if len(matches)== 0:
 		patronvideos  = '"file","([^"]+)"'
-		matches = re.compile(patronvideos,re.DOTALL).findall(data)	
+		matches = re.compile(patronvideos,re.DOTALL).findall(data)
+		if 	len(matches)== 0:
+			patronvideos  = '<embed src="([^"]+)"'
+			matches = re.compile(patronvideos,re.DOTALL).findall(data)
+			if len(matches)== 0:
+				return ""
+			
     return matches[0]

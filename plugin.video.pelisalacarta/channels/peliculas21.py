@@ -20,6 +20,7 @@ import youtube
 import config
 import config
 import logger
+import buscador
 
 CHANNELNAME = "peliculas21"
 
@@ -38,15 +39,22 @@ IMAGES_PATH = xbmc.translatePath( os.path.join( config.DATA_PATH, 'resources' , 
 def mainlist(params,url,category):
 	logger.info("[peliculas21.py] mainlist")
 
+	novedades = "http://www.peliculas21.com/ajaxs/ajax_periodos.php?valor=&periodo=0&idgenero=0&idactor=0&listado_style=2&pagina=&periodos_ajax=&valorperiodo=4"
+	MasVistos = "http://www.peliculas21.com/ajaxs/ajax_periodos.php?valor=hits&periodo=0&idgenero=0&idactor=0&listado_style=2&pagina=&periodos_ajax=&valorperiodo=4"
+	puntuacion = "http://www.peliculas21.com/ajaxs/ajax_periodos.php?valor=puntuacion&periodo=0&idgenero=0&idactor=0&listado_style=2&pagina=&periodos_ajax=&valorperiodo=4"
 	# Añade al listado de XBMC
-	xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , "Películas - Novedades"            ,"http://www.peliculas21.com","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , "Películas - Estrenos"             ,"http://www.peliculas21.com/estrenos/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , "Trailers - Próximos Estrenos","http://www.peliculas21.com/trailers/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "peliscat"   , category , "Películas - Lista por categorías" ,"http://www.peliculas21.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "pelisalfa"  , category , "Peliculas - Lista alfabética"     ,"","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listaActoresMasBuscados" , category , "Actores - Lista Los Más Buscados"     ,"http://www.peliculas21.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "buscaporletraActor" , category , "Actores - Busqueda Alfabética"  ,"http://www.peliculas21.com/actores/","","")	
-	xbmctools.addnewfolder( CHANNELNAME , "search"     , category , "Películas - Buscar"                           ,"","","")
+
+	xbmctools.addnewfolder( CHANNELNAME , "listsimpleMirror" , category , "Películas - Novedades"            ,novedades,"","")
+	xbmctools.addnewfolder( CHANNELNAME , "listsimpleMirror" , category , "Películas - Mas Vistos"           ,MasVistos,"","")
+	xbmctools.addnewfolder( CHANNELNAME , "listsimpleMirror" , category , "Películas - Mejor Puntuadas"      ,puntuacion,"","")
+	xbmctools.addnewfolder( CHANNELNAME , "buscaporanyo"     , category , "Películas - Busqueda por Año de Estreno"             ,"http://www.peliculas21.com/estrenos/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listsimple"       , category , "Trailers  - Próximos Estrenos"    ,"http://www.peliculas21.com/trailers/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "peliscat"         , category , "Películas - Lista por categorías" ,"http://www.peliculas21.com/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "pelisalfa"        , category , "Peliculas - Lista alfabética"     ,"","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listaActoresMasBuscados" , category , "Actores   - Lista Los Más Buscados"     ,"http://www.peliculas21.com/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "buscaporletraActor" , category , "Actores   - Lista Alfabética"     ,"http://www.peliculas21.com/actores/","","")	
+	xbmctools.addnewfolder( CHANNELNAME , "search"           , category , "Películas - Buscar"               ,"","","")
+
 
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
@@ -100,16 +108,16 @@ def pelisalfa(params, url, category):
 
 def search(params,url,category):
 	logger.info("[peliculas21.py] search")
+	buscador.listar_busquedas(params,url,category)
 
-	keyboard = xbmc.Keyboard('')
-	keyboard.doModal()
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-			searchUrl = "http://www.peliculas21.com/?palabra="+tecleado
-			listsimple(params,searchUrl,category)
+def searchresults(params,url,category):
+	logger.info("[peliculas21.py] searchresults")
+	
+	buscador.salvar_busquedas(params,url,category)
+	#convert to HTML
+	tecleado = url.replace(" ", "+")
+	searchUrl = "http://www.peliculas21.com/?palabra="+tecleado
+	listsimpleMirror(params,searchUrl,category)
 
 def performsearch(texto):
 	logger.info("[peliculas.py] performsearch")
@@ -120,13 +128,14 @@ def performsearch(texto):
 	data = scrapertools.cachePage(url)
 
 	# Extrae las entradas (carpetas)
-	patronvideos  = '<div class="filmgal"[^>]+><a href="([^"]+)"[^>]+' # url
-	patronvideos += '><img alt="([^"]+)" '                             # Titulo
-	patronvideos += 'src="([^"]+)"'                                    # Imagen
-	patronvideos += '.*?(Genero: </strong>.*?)</div>'                  # Genero
-	patronvideos += '.*?(Duracion: </strong>[^<]+)</div>'              # Duracion si hay
-	patronvideos += '.*?(<b>Doblaje:</b>[^<]+)</div>'                  # Doblaje para Peliculas
-	patronvideos += '.*?(Sinopsis:</strong>.*?)</div>'                 # Sinopsis
+
+	patronvideos  = '<div class="fichafilm"[^>]+>[^<]+<a href="([^"]+)"[^>]+>'     # url
+	patronvideos += '[^<]+<img alt="([^"]+)" '                                     # Titulo
+	patronvideos += 'src="([^"]+)"'                                                # Imagen
+	patronvideos += '.*?(Duraci&oacute;n:</b>[^<]+)<br />'                         # Duracion si hay
+	patronvideos += '.*?(G&eacute;nero:</b>.*?)</div>'                             # Genero
+	patronvideos += '.*?(Doblaje:</b>[^<]+)</div>'                                 # Doblaje para Peliculas
+	patronvideos += '.*?(Sinopsis:</b>[^<]+)</div>'                                # Sinopsis	
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 		
@@ -169,15 +178,20 @@ def peliscat(params,url,category):
 	data = scrapertools.cachePage(url)
 	
 	# Extrae los Géneros de las Peliculas
-	patronvideos = '<div class="generos">(.*?)<br class="corte" />'
+
+	patronvideos = '<div id="textidgenero">Género:</div>(.*?)</select>'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
-	patronvideos = '<a href="([^"]+)">([^<]+)</a>'
+
+	patronvideos = '<option value="([^"]+)"  >([^<]+)</option>'
 	matches1 = re.compile(patronvideos,re.DOTALL).findall(matches[0])
 	for match in matches1:
-		url	= urlparse.urljoin(url,match[0])
+	
+		#http://www.peliculas21.com/ajaxs/ajax_periodos.php?valor=&periodo=0&idgenero=5&idactor=0&listado_style=2&pagina=&periodos_ajax=&valorperiodo=4&num_ale=0.5685049552958528
+		url	= "http://www.peliculas21.com/ajaxs/ajax_periodos.php?valor=&periodo=0&idgenero=%s&idactor=0&listado_style=2&pagina=&periodos_ajax=&valorperiodo=4" %match[0]
 		genero = match[1]
 	
-		xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , genero ,url,"","")
+	
+		xbmctools.addnewfolder( CHANNELNAME , "listsimpleMirror" , category , genero ,url,"","")
 
 	
 	# Label (top-right)...
@@ -194,15 +208,37 @@ def listsimple(params,url,category):
 	url1 = "http://www.peliculas21.com"
 	# Descarga la página
 	data = scrapertools.cachePage(url)
-
+	'''
+	<div class="fichafilm" >
+        <a href="/el-hombre-lobo/"  target="_blank" class="titulo">
+            <img alt="El hombre lobo" src="/thumbs_95_140_85/t2_4859.jpg"  width="95" height="140" border="0" />El hombre lobo        </a> (2010)<br />
+        
+                    <b>Duraci&oacute;n:</b> 1h 34min<br />
+                <div><b>G&eacute;nero:</b>
+    Thriller y Miedo / Terror    </div>
+    <div><b>Doblaje:</b>
+     Espa&ntilde;ol    </div>
+    <div style="text-align:justify;">
+        <b>Sinopsis:</b>
+		Remake del clásico de terror de 1941, que desarrolla la historia de Lawrence, un joven que debe afrontar el abandono de su madre desde muy pequeño, y quién huye de su pueblo en busca de un mejor futuro que le permita olvidar momentos tan dolorosos de su niñez. Lawrence, se ve obligado a volver despu...    </div>
+    <div class="datos">
+            <div class="verde">+
+    613 puntos</div>
+        <div class="reproducciones">
+    122638 reproducciones</div>
+        <br class="corte"/></div></div>
+	'''
+	#|<div class="fichafilm" >.*?
 	# Extrae las entradas (carpetas)
-	patronvideos  = '<div[^c]+class="filmgal"[^>]+>.*?<a href="([^"]+)"[^>]+' # url
+	
+	patronvideos  = '<div.+?class="filmgal"[^>]+>.*?'
+	patronvideos += '<a href="([^"]+)"[^>]+'                                        # url
 	patronvideos += '>.*?<img alt="([^"]+)" '                                       # Titulo
-	patronvideos += 'src="([^"]+)"'                                            # Imagen
-	patronvideos += '.*?(Genero: </strong>.*?)</div>'                           # Genero
-	patronvideos += '.*?(Duracion: </strong>[^<]+)</div>'                       # Duracion si hay
-	patronvideos += '.*?(Doblaje:</b>[^<]+)</div>'                             # Doblaje para Peliculas
-	patronvideos += '.*?(Sinopsis:</strong>.*?)</div>'                             # Sinopsis	
+
+	patronvideos += 'src="([^"]+)"'                                                 # Imagen
+	patronvideos += '(.*?)reproducciones</div>'                        # Contenido
+	print patronvideos
+	print data
 	#logger.info("[ listsimple  patronvideos")
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
@@ -218,16 +254,37 @@ def listsimple(params,url,category):
 		
 		scrapedthumbnail = urlparse.urljoin(url1,match[2])
 		scrapedthumbnail = scrapedthumbnail.replace(" ","")
+		plot = re.sub("<[^>]+>","",match[3])
+		try    :Sinopsis = re.compile("Sinopsis:(.*?)</div>").findall(plot)[0]
+		except :Sinopsis="<>"
+		print Sinopsis
+		Sinopsis = " Sinopsis: " + Sinopsis.strip()
+			
+		try    :Genero = re.compile("G&eacute;nero:(.+?)</div>").findall(plot)[0]
+		except :Genero = ""
+		Genero = "Genero: " + Genero.strip()
 		
-		scrapedplot  = match[3].replace("\n"," ").replace("\t","")+"\n"
+
+		try    :Duracion = re.compile("Duraci&oacute;n:(.+?)</div>").findall(plot)[0]
+		except :Duracion = ""
+		Duracion = "Duracion: " + Duracion.strip()
 		
+		try    :Actores = re.compile("Actores:(.+?)</div>").findall(plot)[0]
+		except :Actores = ""
+		Actores = "Actores: " + Actores.strip()
+									
+		scrapedplot  = Genero + "\n" + Duracion + "\n" + Actores + "\n" + Sinopsis
 		
-		scrapedplot += match[4].replace("\n","")+"\n"	
+
 		
-		scrapedplot += match[5].replace("\n"," ")+"\n"
+
+		#scrapedplot += match[4].replace("\n","")+"\n"	
 		
-		scrapedplot += match[6]
-		scrapedplot  = re.sub("<[^>]+>","",scrapedplot)
+
+		#scrapedplot += match[5].replace("\n"," ")+"\n"
+		
+		#scrapedplot += ""
+		#scrapedplot  = re.sub("<[^>]+>","",scrapedplot)
 		scrapedplot  = scrapedplot.replace("&aacute;","á")
 		scrapedplot  = scrapedplot.replace("&iacute;","í")
 		scrapedplot  = scrapedplot.replace("&eacute;","é")
@@ -241,10 +298,9 @@ def listsimple(params,url,category):
 		xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
 		#<div class="pagination" align="center" ><p><span  class='current'>1</span><a  href='/estrenos/2/'>2</a><a  href='/estrenos/2/'>Siguiente &raquo;</a><a  href='/estrenos/2/'></a>
 	# Extrae la marca de siguiente página
-	if url == "http://www.peliculas21.com" or "http://www.peliculas21.com/nuevo" in url:
-		patronvideos = '</span><a href="(nuevo-[^\.]+\.html)"'
-	else:
-		patronvideos  = "</span><a  href='(/proximamente/[^\/]+\/)'>"
+
+	
+	patronvideos  = "<span  class='current'>[^<]+</span><a  href='([^']+)'>"
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 
@@ -270,13 +326,14 @@ def listsimpleMirror(params,url,category):
 	data = scrapertools.cachePage(url)
 
 	# Extrae las entradas (carpetas)
-	patronvideos  = '<div class="fichafilm"[^>]+><a href="([^"]+)"[^>]+'     # url
-	patronvideos += '><img alt="([^"]+)" '                                       # Titulo
-	patronvideos += 'src="([^"]+)"'                                            # Imagen
-	patronvideos += '.*?(Duraci&oacute;n:</b>[^<]+)<br />'                       # Duracion si hay
-	patronvideos += '.*?(G&eacute;nero:</b>.*?)</div>'                           # Genero
-	patronvideos += '.*?(Doblaje:</b>[^<]+)</div>'                             # Doblaje para Peliculas
-	patronvideos += '.*?(Sinopsis:</b>[^<]+)</div>'                             # Sinopsis	
+
+	patronvideos  = '<div class="fichafilm"[^>]+>[^<]+<a href="([^"]+)"[^>]+>'     # url
+	patronvideos += '[^<]+<img alt="([^"]+)" '                                     # Titulo
+	patronvideos += 'src="([^"]+)"'                                                # Imagen
+	patronvideos += '.*?(Duraci&oacute;n:</b>[^<]+)<br />'                         # Duracion si hay
+	patronvideos += '.*?(G&eacute;nero:</b>.*?)</div>'                             # Genero
+	patronvideos += '.*?(Doblaje:</b>[^<]+)</div>'                                 # Doblaje para Peliculas
+	patronvideos += '.*?(Sinopsis:</b>[^<]+)</div>'                                # Sinopsis	
 	#logger.info("[ listsimple  patronvideos")
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
@@ -316,16 +373,35 @@ def listsimpleMirror(params,url,category):
 		#<div class="pagination" align="center" ><p><span  class='current'>1</span><a  href='/estrenos/2/'>2</a><a  href='/estrenos/2/'>Siguiente &raquo;</a><a  href='/estrenos/2/'></a>
 	# Extrae la marca de siguiente página
 	
-	patronvideos  = "</span><a  href='(/[^\/]+/[^\/]+\/)'>"
+
+	patronvideos  = "<a  href=\"#periodoslist\" onclick=\"paginaperiodo\(([^\)]+)\);\">Siguiente &raquo;</a>"
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 
 	if len(matches)>0:
+		#http://www.peliculas21.com/ajaxs/ajax_periodos.php?valor=&periodo=0&idgenero=5&idactor=0&listado_style=2&pagina=&periodos_ajax=&valorperiodo=4
 		scrapedtitle = "Página siguiente"
-		scrapedurl = urlparse.urljoin(url1,matches[0])
+	
+		paramsurl = dict(part.split('=') for part in url.split('?')[1].split('&'))
+		print paramsurl
+		sigtepag = matches[0].replace("'","").split(',')
+		scrapedurl = "http://www.peliculas21.com/ajaxs/ajax_periodos.php?valor=%s&periodo=%s&idgenero=%s&idactor=%s&listado_style=%s&pagina=%s&periodos_ajax=%s&valorperiodo=%s" %(paramsurl["valor"],paramsurl["periodo"],paramsurl["idgenero"],paramsurl["idactor"],paramsurl["listado_style"],sigtepag[6],paramsurl["periodos_ajax"],paramsurl["valorperiodo"])
 		scrapedthumbnail = ""
 		scrapedplot = ""
 		xbmctools.addnewfolder( CHANNELNAME , "listsimpleMirror" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		
+	else:
+		
+		
+		patron = "<span  class='current'>[^<]+</span><a  href='([^']+)'>"
+		matches = re.compile(patron,re.DOTALL).findall(data)
+		if len(matches)>0:
+			scrapedtitle = "Página siguiente"
+			scrapedurl   = urlparse.urljoin(url1,matches[0])
+			scrapedthumbnail = ""
+			scrapedplot  = ""
+			xbmctools.addnewfolder( CHANNELNAME , "listsimpleMirror" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+			
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 
@@ -400,7 +476,10 @@ def listvideos(params,url,category):
 			xbmctools.addnewvideo( CHANNELNAME , "youtubeplay" , category ,"Directo", "Ver El Trailer de : "+title , match , thumbnail, plot )
 	else:
 		import trailertools
+		print title
+		s = unicode( title, "latin-1" )
 		# Añade al listado de XBMC
+
 		xbmctools.addnewfolder( "trailertools" , "buscartrailer" , category , config.getLocalizedString(30110)+" "+title , url , os.path.join(IMAGES_PATH, 'trailertools.png'), plot ) # Buscar trailer para
 		
 		
@@ -418,6 +497,7 @@ def listvideos(params,url,category):
 		
 			# Titulo
 			scrapedtitle = title + " -   [" +scrapertools.entityunescape(match[0])+ "]" + " (Megavideo)"
+
 			# URL
 			scrapedurl = match[1]
 			# Thumbnail
@@ -500,7 +580,8 @@ def youtubeplay(params,url,category):
 	server = "Directo"
 	id = youtube.Extract_id(url)
 	videourl = youtube.geturl(id)
-	if videourl == "":return
+
+	if videourl == ("" or "Esc"):return
 	logger.info("link directo de youtube : "+videourl)
 	xbmctools.playvideo("Trailer",server,videourl,category,title,thumbnail,plot)
  
@@ -555,73 +636,39 @@ def buscarelacionados(data):
 	
 def buscaporletraActor(params,url,category):
 	logger.info("[peliculas21.py] buscaporletra")
+	'''
 	data = scrapertools.cachePage(url)
 	patron  = '<div class="title">Listado de Actores</div><br/>(.*?)<div class="subtitulo">Abecedario</div>'
 	matches = re.compile(patron,re.DOTALL).findall(data)
 	patron  = '<a href="(.*?)">(.*?)</a>'
 	matches = re.compile(patron,re.DOTALL).findall(matches[0])
-        
+    '''    
 	letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         
 	opciones = []
-	opciones.append("Buscar por palabras (Teclado)")
+
+	#opciones.append("Buscar por palabras (Teclado)")
 	#opciones.append("0-9")
 	for letra in letras:
 		opciones.append(letra)
 	dia = xbmcgui.Dialog()
-	seleccion = dia.select("busqueda rapida, elige uno : ", opciones)
+	
+	seleccion = dia.select("Elige una letra : ", opciones)
 	logger.info("seleccion=%d" % seleccion)
 	if seleccion == -1 :return
-	if seleccion == 0:
-		keyboard = xbmc.Keyboard('')
-		keyboard.doModal()
-		if (keyboard.isConfirmed()):
-			tecleado = keyboard.getText()
-			if len(tecleado)>0:
-				logger.info("Nuevo string tecleado   "+tecleado)
-				for match in matches:
-					if (string.lower(tecleado)) in (string.lower(match[1])):
-						scrapedurl   = "http://www.peliculas21.com"+match[0]
-						scrapedtitle = match[1]
-						scrapedthumbnail = ""
-						scrapedplot = " "
-						if (DEBUG):
-							logger.info("scrapedtitle="+scrapedtitle)
-							logger.info("scrapedurl="+scrapedurl)
-							logger.info("scrapedthumbnail="+scrapedthumbnail)
-							#  Añade al listado de XBMC
-							xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , scrapedtitle , scrapedurl , scrapedthumbnail , scrapedplot )
-								
-	else:
-		for match in matches:
-			if match[1][0:1] == letras[seleccion-1]:
-				scrapedurl   = "http://www.peliculas21.com"+match[0]
-				scrapedtitle = match[1]
-				scrapedthumbnail = ""
-				scrapedplot = " "
-				if (DEBUG):
-					logger.info("scrapedtitle="+scrapedtitle)
-					logger.info("scrapedurl="+scrapedurl)
-					logger.info("scrapedthumbnail="+scrapedthumbnail)
-					#  Añade al listado de XBMC
-					xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , scrapedtitle , scrapedurl , scrapedthumbnail , scrapedplot )
+
+	
+	url   = "http://www.peliculas21.com/actores/%s/" %letras[seleccion]
+	listActoresAlfab(params,url,category)
 				
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
-		
-	# Disable sorting...
-	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
-
-	# End of directory...
-	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
-
+	
 def listaActoresMasBuscados(params,url,category):
 	logger.info("[peliculas21.py] listaActoresMasBuscados")
 	
 	url1 = "http://www.peliculas21.com"
 	# Descarga la página
 	data = scrapertools.cachePage(url)
-	patronvideos = 'Los m&aacute;s buscados:(.*?)M&aacute;s actores</a></div>'
+	patronvideos = 'Los más buscados:(.*?)Más actores</a></div>'
 	matches1 = re.compile(patronvideos,re.DOTALL).findall(data)
 	patronvideos = '<a href="([^"]+)">([^<]+)</a>'
 	matches =  re.compile(patronvideos,re.DOTALL).findall(matches1[0])
@@ -654,3 +701,87 @@ def listaActoresMasBuscados(params,url,category):
 
 	# End of directory...
 	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+
+
+def listActoresAlfab(params,url,category):
+	logger.info("[peliculas21.py] listaActoresAlfab")
+	
+
+	
+	# Descarga la página
+	data = scrapertools.cachePage(url)
+
+	patronvideos = '<div class="actores_2">(.*?)</div></div>'
+	matches1 = re.compile(patronvideos,re.DOTALL).findall(data)
+	patronvideos = '<a href="([^"]+)">([^<]+)</a>'
+	matches =  re.compile(patronvideos,re.DOTALL).findall(matches1[0])
+	scrapertools.printMatches(matches)
+	for match in matches:
+		# Titulo
+		scrapedtitle = match[1]
+		# URL
+	
+		scrapedurl = urlparse.urljoin(url,match[0])
+		# Thumbnail
+		scrapedthumbnail = ""
+        
+		# Argumento
+		scrapedplot = "Busca los Films existentes de este Actor ó Actriz"
+
+		# Depuracion
+		if (DEBUG):
+			logger.info("scrapedtitle="+scrapedtitle)
+			logger.info("scrapedurl="+scrapedurl)
+			logger.info("scrapedthumbnail="+scrapedthumbnail)
+
+		# Añade al listado de XBMC
+		xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		
+	# Label (top-right)...
+	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
+		
+	# Disable sorting...
+	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
+
+	# End of directory...
+	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+	
+def buscaporanyo(params,url,category):
+	logger.info("[peliculas21.py] buscaporanyo")
+	#url = "http://www.peliculas21.com/%s/%s/"
+	anho=2011
+	anyoactual = anho
+	anyoinic   = 1950
+	opciones = []
+	for i in range(anyoactual-anyoinic+1):
+		opciones.append(str(anyoactual))
+		anyoactual = anyoactual - 1           
+	dia = xbmcgui.Dialog()
+	seleccion = dia.select("Listar desde el Año: ", opciones)
+	logger.info("seleccion=%d" % seleccion)
+	if seleccion == -1 :return
+	if seleccion == 0:
+		url = "http://www.peliculas21.com/"+opciones[seleccion]+"/"+opciones[seleccion]+"/"
+		listsimple(params,url,category)
+		return
+	if seleccion>30:
+		anyoactual = anho + 30 - seleccion
+		rangonuevo = 31
+	else:
+		anyoactual = anho
+		rangonuevo = seleccion + 1
+	desde      = opciones[seleccion]
+	
+	opciones2 = []
+	for j in range(rangonuevo):
+		opciones2.append(str(anyoactual))
+		anyoactual = anyoactual - 1
+	dia2 = xbmcgui.Dialog()
+	seleccion2 = dia2.select("Listar hasta el año:",opciones2)
+	if seleccion == -1 :
+		url = "http://www.peliculas21.com/"+desde+"/"+desde+"/"
+		listsimple(params,url,category)
+		return
+	url = "http://www.peliculas21.com/"+desde+"/"+opciones2[seleccion2]+"/"
+	listsimple(params,url,category)
+	return	

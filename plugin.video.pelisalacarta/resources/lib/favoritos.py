@@ -4,20 +4,19 @@
 # Lista de vídeos favoritos
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
-import urlparse,urllib2,urllib,re
+import urllib
 import os
 import sys
-import xbmc
-import xbmcgui
-import xbmcplugin
-import scrapertools
-import megavideo
-import servertools
-import binascii
-import xbmctools
+try:
+	import xbmc
+	import xbmcgui
+	import xbmcplugin
+except:
+	pass
 import downloadtools
 import config
 import logger
+import samba
 
 CHANNELNAME = "favoritos"
 
@@ -29,17 +28,25 @@ except:
 
 DEBUG = True
 
-BOOKMARK_PATH = os.path.join( config.DATA_PATH, 'bookmarks'  )
-if not os.path.exists(BOOKMARK_PATH):
-	logger.debug("[favoritos.py] Path de bookmarks no existe, se crea: "+BOOKMARK_PATH)
-	os.mkdir(BOOKMARK_PATH)
+BOOKMARK_PATH = config.getSetting( "bookmarkpath" )
+
+usingsamba=BOOKMARK_PATH.upper().startswith("SMB://")
+
+if not usingsamba:	
+	if not os.path.exists(BOOKMARK_PATH):
+		logger.debug("[favoritos.py] Path de bookmarks no existe, se crea: "+BOOKMARK_PATH)
+		os.mkdir(BOOKMARK_PATH)
 
 def mainlist(params,url,category):
 	logger.info("[favoritos.py] mainlist")
 
+	import xbmctools
 
 	# Crea un listado con las entradas de favoritos
-	ficheros = os.listdir(BOOKMARK_PATH)
+	if usingsamba:
+		ficheros = samba.get_files(BOOKMARK_PATH)
+	else:
+		ficheros = os.listdir(BOOKMARK_PATH)
 	ficheros.sort()
 	for fichero in ficheros:
 
@@ -66,16 +73,20 @@ def play(params,url,category):
 	plot = unicode( xbmc.getInfoLabel( "ListItem.Plot" ), "utf-8" )
 	server = params["server"]
 	
+	import xbmctools
 	xbmctools.playvideo2(CHANNELNAME,server,url,category,title,thumbnail,plot)
 
 def readbookmark(filename):
 	logger.info("[favoritos.py] readbookmark")
 
-	filepath = os.path.join( BOOKMARK_PATH , filename )
+	if usingsamba:
+		bookmarkfile = samba.get_file_handle_for_reading(filename, BOOKMARK_PATH)
+	else:
+		filepath = os.path.join( BOOKMARK_PATH , filename )
 
-	# Lee el fichero de configuracion
-	logger.info("[favoritos.py] filepath="+filepath)
-	bookmarkfile = open(filepath)
+		# Lee el fichero de configuracion
+		logger.info("[favoritos.py] filepath="+filepath)
+		bookmarkfile = open(filepath)
 	lines = bookmarkfile.readlines()
 
 	try:
@@ -114,27 +125,50 @@ def savebookmark(titulo,url,thumbnail,server,plot):
 	#bookmarkfiledescriptor,bookmarkfilepath = tempfile.mkstemp(suffix=".txt",prefix="",dir=BOOKMARK_PATH)
 
 	# Crea el directorio de favoritos si no existe
-	try:
-		os.mkdir(BOOKMARK_PATH)
-	except:
-		pass
-	
-	filenumber=0
-	salir = False
-	while not salir:
-		filename = '%08d.txt' % filenumber
-		logger.info("[favoritos.py] savebookmark filename="+filename)
-		fullfilename = os.path.join(BOOKMARK_PATH,filename)
-		logger.info("[favoritos.py] savebookmark fullfilename="+fullfilename)
-		if not os.path.exists(fullfilename):
-			salir=True
-		filenumber = filenumber + 1
+	if not usingsamba:
+		try:
+			os.mkdir(BOOKMARK_PATH)
+		except:
+			pass
 
-	bookmarkfile = open(fullfilename,"w")
-	bookmarkfile.write(urllib.quote_plus(downloadtools.limpia_nombre_excepto_1(titulo))+'\n')
-	bookmarkfile.write(urllib.quote_plus(url)+'\n')
-	bookmarkfile.write(urllib.quote_plus(thumbnail)+'\n')
-	bookmarkfile.write(urllib.quote_plus(server)+'\n')
-	bookmarkfile.write(urllib.quote_plus(downloadtools.limpia_nombre_excepto_1(plot))+'\n')
-	bookmarkfile.flush();
-	bookmarkfile.close()
+	# Lee todos los ficheros
+	if usingsamba:
+		ficheros = samba.get_files(BOOKMARK_PATH)
+	else:
+		ficheros = os.listdir(BOOKMARK_PATH)
+	ficheros.sort()
+	
+	# Averigua el último número
+	filenumber = int( ficheros[len(ficheros)-1][0:-4] )+1
+
+	# Genera el contenido
+	filecontent = ""
+	filecontent = filecontent + urllib.quote_plus(downloadtools.limpia_nombre_excepto_1(titulo))+'\n'
+	filecontent = filecontent + urllib.quote_plus(url)+'\n'
+	filecontent = filecontent + urllib.quote_plus(thumbnail)+'\n'
+	filecontent = filecontent + urllib.quote_plus(server)+'\n'
+	filecontent = filecontent + urllib.quote_plus(downloadtools.limpia_nombre_excepto_1(plot))+'\n'
+
+	# Genera el nombre de fichero	
+	filename = '%08d.txt' % filenumber
+	logger.info("[favoritos.py] savebookmark filename="+filename)
+
+	# Graba el fichero
+	if not usingsamba:
+		fullfilename = os.path.join(BOOKMARK_PATH,filename)
+		bookmarkfile = open(fullfilename,"w")
+		bookmarkfile.write(filecontent)
+		bookmarkfile.flush();
+		bookmarkfile.close()
+	else:
+		samba.write_file(filename, filecontent, BOOKMARK_PATH)
+
+def deletebookmark(fullfilename):
+	
+	if not usingsamba:
+		os.remove(urllib.unquote_plus( fullfilename ))
+	else:
+		fullfilename = fullfilename.replace("\\","/")
+		partes = fullfilename.split("/")
+		filename = partes[len(partes)-1]
+		samba.remove_file(filename,BOOKMARK_PATH)

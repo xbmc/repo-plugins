@@ -67,10 +67,12 @@ def run():
 	#JUR - Gestión de Errores de Internet (Para que no casque el plugin 
 	#      si no hay internet (que queda feo)
 	try:
-	# Accion por defecto - elegir canal
+
+		# Accion por defecto - elegir canal
 		if ( action=="selectchannel" ):
 			import channelselector as plugin
-			plugin.listchannels(params, url, category)
+			plugin.mainlist(params, url, category)
+
 		# Actualizar version
 		elif ( action=="update" ):
 			try:
@@ -80,12 +82,16 @@ def run():
 				logger.info("[pelisalacarta.py] Actualizacion automática desactivada")
 				
 			import channelselector as plugin
-			plugin.listchannels(params, url, category)
-		# El resto de acciones vienen en el parámetro "action", y el canal en el parámetro "channel"
+			plugin.mainlist(params, url, category)
+
+		# Reproducir un STRM
 		elif (action=="strm"):
 			import xbmctools
 			xbmctools.playstrm(params, url, category)
+
+		# El resto de acciones vienen en el parámetro "action", y el canal en el parámetro "channel"
 		else:
+
 			exec "import "+params.get("channel")+" as plugin"
 			exec "plugin."+action+"(params, url, category)"
 	

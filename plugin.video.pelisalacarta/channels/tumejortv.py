@@ -17,6 +17,7 @@ import binascii
 import xbmctools
 import config
 import logger
+import buscador
 
 CHANNELNAME = "tumejortv"
 
@@ -49,15 +50,9 @@ def mainlist(params,url,category):
 def search(params,url,category):
 	logger.info("[tumejortv.py] search")
 
-	keyboard = xbmc.Keyboard('')
-	keyboard.doModal()
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-			searchresults(params,tecleado)
-
+	buscador.listar_busquedas(params,url,category)
+	
+	
 '''
 <h3>Pel&iacute;culas online</h3><ul class='alphaList'><li><div class="movieTitle">Avatar 3D [Spanish Line][2009]   - ...</div><div class="covershot"><a href="http://www.tumejortv.com/peliculas-online-es/accion/avatar-3d-spanish-line2009-dvd-rip-06-03-2010.html" title="Avatar 3D [Spanish Line][2009]   - DVD-RIP"><img src="http://imagenes.tumejortv.com/32888.jpg" alt="Avatar 3D [Spanish Line][2009]   - DVD-RIP"/></a></div></li>
 <li><div class="movieTitle">Avatar [2CDs][Spanish ...</div><div class="covershot"><a href="http://www.tumejortv.com/peliculas-online-es/accion/avatar-2cdsspanish-line2009proper-dvd-rip-07-02-2010.html" title="Avatar [2CDs][Spanish Line][2009][Proper] - DVD-RIP"><img src="http://imagenes.tumejortv.com/29890.jpg" alt="Avatar [2CDs][Spanish Line][2009][Proper] - DVD-RIP"/></a></div></li>
@@ -67,9 +62,10 @@ def search(params,url,category):
 '''
 
 # Listado de novedades de la pagina principal
-def searchresults(params,tecleado):
+def searchresults(params,tecleado,category):
 	logger.info("[tumejortv.py] searchresults")
-
+	
+	buscador.salvar_busquedas(params,tecleado,category)
 	resultados = performsearch(tecleado)
 
 	for match in resultados:
@@ -106,6 +102,7 @@ def performsearch(texto):
 	patron  = "<h3>Pel.iacute.culas online</h3><ul class='alphaList'>(.*?)</ul>"
 	matches = re.compile(patron,re.DOTALL).findall(data)
 	if DEBUG: scrapertools.printMatches(matches)
+	data2 = ""
 	if len(matches)>0:
 		data2 = matches[0]
 	

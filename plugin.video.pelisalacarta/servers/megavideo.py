@@ -236,6 +236,18 @@ def getlowurl(code):
 		req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')
 		req.add_header('Referer', 'http://www.megavideo.com/')
 		page = urllib2.urlopen(req);response=page.read();page.close()
+		'''
+		xbmc.output("response="+response)
+		hd = re.compile(' hd="(.+?)"').findall(response)
+		if len(hd)>0 and hd[0]=="1":
+			xbmc.output("hd="+hd[0])
+			movielink = re.compile(' hd_url="(.+?)"').findall(response)[0]
+			movielink = movielink.replace("%3A",":")
+			movielink = movielink.replace("%2F","/")
+			movielink = movielink + "?.flv"
+			xbmc.output("movielink="+movielink)
+		else:
+		'''
 		errort = re.compile(' errortext="(.+?)"').findall(response)
 		movielink = ""
 		if len(errort) <= 0:

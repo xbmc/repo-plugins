@@ -17,6 +17,7 @@ import binascii
 import xbmctools
 import config
 import logger
+import buscador
 
 CHANNELNAME = "cinegratis"
 
@@ -103,17 +104,16 @@ def deportes(params, url, category):
 	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
 def search(params,url,category):
+	
+	buscador.listar_busquedas(params,url,category)
+
+def searchresults(params,tecleado,category):
 	logger.info("[cinegratis.py] search")
 
-	keyboard = xbmc.Keyboard('')
-	keyboard.doModal()
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-			searchUrl = "http://www.cinegratis.net/index.php?module=search&title="+tecleado
-			listsimple(params,searchUrl,category)
+	buscador.salvar_busquedas(params,tecleado,category)
+	tecleado = tecleado.replace(" ", "+")
+	searchUrl = "http://www.cinegratis.net/index.php?module=search&title="+tecleado
+	listsimple(params,searchUrl,category)
 
 def performsearch(texto):
 	logger.info("[cinegratis.py] performsearch")

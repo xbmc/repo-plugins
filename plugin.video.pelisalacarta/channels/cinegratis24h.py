@@ -15,6 +15,7 @@ import megavideo
 import servertools
 import binascii
 import xbmctools
+import xmltoplaylist
 import config
 import logger
 
@@ -162,30 +163,30 @@ def detail(params,url,category):
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
-        patrondescrip = '<a onblur=.*?src="([^"]+)" border.*?</a><.*?><.*?>(Sinopsis:<br />.*?)</div>'
-        matches = re.compile(patrondescrip,re.DOTALL).findall(data)
-        if DEBUG:
-			if len(matches)>0:
-				for match in matches:
-					thumbnail = match[0]
-					descripcion = match[1]
-					descripcion = descripcion.replace('&#8220;','"')
-					descripcion = descripcion.replace('&#8221;','"')
-					descripcion = descripcion.replace('&#8230;','...')
-					descripcion = descripcion.replace("&nbsp;","")
-					descripcion = descripcion.replace("<br/>","")
-					descripcion = descripcion.replace("\r","")
-					descripcion = descripcion.replace("\n"," ")
-					descripcion = descripcion.replace("\t"," ")
-					descripcion = re.sub("<[^>]+>"," ",descripcion)
-					descripcion = acentos(descripcion)
-					try :
-						plot = unicode( descripcion, "utf-8" ).encode("iso-8859-1")
-					except:
-						plot = descripcion
-				                    
-                   
-          
+	patrondescrip = '<a onblur=.*?src="([^"]+)" border.*?</a><.*?><.*?>(Sinopsis:<br />.*?)</div>'
+	matches = re.compile(patrondescrip,re.DOTALL).findall(data)
+	if DEBUG:
+		if len(matches)>0:
+			for match in matches:
+				thumbnail = match[0]
+				descripcion = match[1]
+				descripcion = descripcion.replace('&#8220;','"')
+				descripcion = descripcion.replace('&#8221;','"')
+				descripcion = descripcion.replace('&#8230;','...')
+				descripcion = descripcion.replace("&nbsp;","")
+				descripcion = descripcion.replace("<br/>","")
+				descripcion = descripcion.replace("\r","")
+				descripcion = descripcion.replace("\n"," ")
+				descripcion = descripcion.replace("\t"," ")
+				descripcion = re.sub("<[^>]+>"," ",descripcion)
+				descripcion = acentos(descripcion)
+				try :
+					plot = unicode( descripcion, "utf-8" ).encode("iso-8859-1")
+				except:
+					plot = descripcion
+								
+			   
+	  
 	# ------------------------------------------------------------------------------------
 	# Busca los enlaces a los videos
 	# ------------------------------------------------------------------------------------
@@ -197,44 +198,50 @@ def detail(params,url,category):
 	#	server = video[2]
 	#	xbmctools.addnewvideo( CHANNELNAME , "play" , category , server , title.strip() + " - " + videotitle , url , thumbnail , plot )
 	# ------------------------------------------------------------------------------------
-        
-        #--- Busca los videos Directos
-        patronvideos = 'file=([^\&]+)\&'
-        matches = re.compile(patronvideos,re.DOTALL).findall(data)
-        
-        if len(matches)>0:
-          if ("xml" in matches[0]):  
-            #data = scrapertools.cachePage(matches[0])
-            req = urllib2.Request(matches[0])
-            try:
-		response = urllib2.urlopen(req)
-	    except:
-                xbmctools.alertnodisponible()
-                return
-            data=response.read()
-	    response.close()
-            #logger.info("archivo xml :"+data)
-            newpatron = '<title>([^<]+)</title>[^<]+<location>([^<]+)</location>'
-            newmatches = re.compile(newpatron,re.DOTALL).findall(data)
-            for match in newmatches:
-				logger.info(" videos = "+match)
-				if match[1].startwith("vid"):
-					subtitle = match[0] + " (rtmpe) no funciona en xbmc"
-				else:
-					subtitle = match[0]             
-                
-				xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+subtitle, match[1] , thumbnail , plot )
-                 
-          else:
-			parte = 0
-			tipo = " (FLV)"
-			for match in matches:
-				logger.info(" matches = "+match)
-				parte = parte + 1
-				if match.endswith('mp4'):
-					tipo = " (MP4)"
-				xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " (%d) %s" %(parte,tipo), match , thumbnail , plot )
-	
+		
+		#--- Busca los videos Directos
+		patronvideos = 'file=([^\&]+)\&'
+		matches = re.compile(patronvideos,re.DOTALL).findall(data)
+		
+		if len(matches)>0:
+			if ("xml" in matches[0]):
+				xbmctools.addnewvideo( CHANNELNAME , "play" , category , "xml" , "Reproducir todas las partes a la vez... ", matches[0] , thumbnail , plot )
+				#data = scrapertools.cachePage(matches[0])
+				req = urllib2.Request(matches[0])
+				try:
+					response = urllib2.urlopen(req)
+				except:
+					xbmctools.alertnodisponible()
+					return
+				data=response.read()
+				response.close()
+				#logger.info("archivo xml :"+data)
+				newpatron = '<title>([^<]+)</title>[^<]+<location>([^<]+)</location>'
+				newmatches = re.compile(newpatron,re.DOTALL).findall(data)
+				for match in newmatches:
+					logger.info(" videos = "+match)
+					if match[1].startwith("vid"):
+						subtitle = match[0] + " (rtmpe) no funciona en xbmc"
+					else:
+						subtitle = match[0]             
+				
+					xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+subtitle, match[1] , thumbnail , plot )
+				 
+			else:
+				parte = 0
+				tipo = " (FLV)"
+				listdata = []
+				for match in matches:
+					logger.info(" matches = "+match)
+					parte = parte + 1
+					if match.endswith('mp4'):
+						tipo = " (MP4)"
+					xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " (%d) %s" %(parte,tipo), match , thumbnail , plot )
+					listdata.append([title + " (%d) %s" %(parte,tipo),match])
+				scrapedurl = xmltoplaylist.MakePlaylistFromList(listdata)
+				if scrapedurl != "":
+					xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , "Reproducir todas las partes a la vez...", scrapedurl , thumbnail , plot )
+			
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 		

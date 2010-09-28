@@ -15,10 +15,15 @@ import megavideo
 import servertools
 import binascii
 import xbmctools
+import downloadtools
+import xmltoplaylist
 import config
 import logger
+from xml.dom import minidom
+from xml.dom import EMPTY_NAMESPACE
 
 CHANNELNAME = "peliculasid"
+
 
 # Esto permite su ejecución en modo emulado
 try:
@@ -153,60 +158,64 @@ def detail(params,url,category):
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
-        patrondescrip = '<strong>Sinopsis:</strong><br />(.*?)</p>'
-        matches = re.compile(patrondescrip,re.DOTALL).findall(data)
-        if DEBUG:
-          if len(matches)>0:
+	patrondescrip = '<strong>Sinopsis:</strong><br />(.*?)</p>'
+	matches = re.compile(patrondescrip,re.DOTALL).findall(data)
+	
+	if len(matches)>0:
 		descripcion = matches[0]
-                descripcion = descripcion.replace('&#8220;','"')
-                descripcion = descripcion.replace('&#8221;','"')
-                descripcion = descripcion.replace('&#8230;','...')
-                descripcion = descripcion.replace('&#8217;',"'")
-                descripcion = descripcion.replace("&nbsp;","")
+		descripcion = descripcion.replace('&#8220;','"')
+		descripcion = descripcion.replace('&#8221;','"')
+		descripcion = descripcion.replace('&#8230;','...')
+		descripcion = descripcion.replace('&#8217;',"'")
+		descripcion = descripcion.replace("&nbsp;","")
 		descripcion = descripcion.replace("<br/>","")
 		descripcion = descripcion.replace("\r","")
 		descripcion = descripcion.replace("\n"," ")
-                descripcion = descripcion.replace("\t"," ")
+		descripcion = descripcion.replace("\t"," ")
 		descripcion = re.sub("<[^>]+>"," ",descripcion)
-#                logger.info("descripcion="+descripcion)
-                descripcion = acentos(descripcion)
-#                logger.info("descripcion="+descripcion)
-                try :
-                    plot = unicode( descripcion, "utf-8" ).encode("iso-8859-1")
-                except:
-                    plot = descripcion
+		#logger.info("descripcion="+descripcion)
+		descripcion = acentos(descripcion)
+		#logger.info("descripcion="+descripcion)
+		try :
+			plot = unicode( descripcion, "utf-8" ).encode("iso-8859-1")
+		except:
+			plot = descripcion
 
-        #--- Busca los videos Directos
-        patronvideos = 'flashvars" value="file=([^\&]+)\&amp'
-        matches = re.compile(patronvideos,re.DOTALL).findall(data)
-        
-        if len(matches)>0:
-          if ("xml" in matches[0]):  
-            #data = scrapertools.cachePage(matches[0])
-            req = urllib2.Request(matches[0])
-            try:
-		response = urllib2.urlopen(req)
-	    except:
-                xbmctools.alertnodisponible()
-                return
-            data=response.read()
-	    response.close()
-            #logger.info("archivo xml :"+data)
-            newpatron = '<title>([^<]+)</title>[^<]+<location>([^<]+)</location>'
-            newmatches = re.compile(newpatron,re.DOTALL).findall(data)
-            
-            for match in newmatches:
-              logger.info(" videos = "+match[1])
-              if match[1].startswith("vid"):
-				subtitle = match[0] + " (rtmpe) no funciona en xbmc"
-              else:
-				subtitle = match[0]
+		#--- Busca los videos Directos
+		patronvideos = 'flashvars" value="file=([^\&]+)\&amp'
+		matches = re.compile(patronvideos,re.DOTALL).findall(data)
+		
+		if len(matches)>0:
+			
+			if ("xml" in matches[0]):  
+				xbmctools.addnewvideo( CHANNELNAME , "play" , category , "xml" , "Reproducir todas las partes a la vez" , matches[0] , thumbnail , plot )
+				#data = scrapertools.cachePage(matches[0])
+				req = urllib2.Request(matches[0])
+				try:
+					response = urllib2.urlopen(req)
+				except:
+					xbmctools.alertnodisponible()
+					return
+				data=response.read()
+				response.close()
 				
-              xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+subtitle, match[1] , thumbnail , plot )
-                 
-          else:
-                logger.info(" matches = "+matches[0])
-                xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title, matches[0] , thumbnail , plot )
+					
+			#logger.info("archivo xml :"+data)
+				newpatron = '<title>([^<]+)</title>[^<]+<location>([^<]+)</location>'
+				newmatches = re.compile(newpatron,re.DOTALL).findall(data)
+				if len(newmatches)>0:
+					for match in newmatches:
+						logger.info(" videos = "+match[1])
+						if match[1].startswith("vid"):
+							subtitle = match[0] + " (rtmpe) no funciona en xbmc"
+						else:
+							subtitle = match[0]
+				
+						xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+subtitle, match[1] , thumbnail , plot )
+				 
+			else:
+				logger.info(" matches = "+matches[0])
+				xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title, matches[0] , thumbnail , plot )
 
 
 	# Ahora usa servertools
@@ -223,11 +232,16 @@ def detail(params,url,category):
 	#patronvideos2 = 'file=([^\&]+)\&'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
+		urllists = ""
 		for match in matches:
+			if urllists == "":
+				urllists = match[0]
+			else:	
+				urllists = urllists + "|" + match[0] 
 			#data2 = scrapertools.cachePage(match[0])
 			#matches2 = re.compile(patronvideos2,re.DOTALL).findall(data2)
 			xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title+" - "+match[1], match[0] , thumbnail , plot )
-	
+		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , "Reproducir todas las partes a la vez...", urllists , thumbnail , plot )
 	## --------------------------------------------------------------------------------------##
 	#            Busca enlaces de videos para el servidor vkontakte.ru                        #
 	## --------------------------------------------------------------------------------------##
@@ -282,8 +296,20 @@ def play(params,url,category):
 	except:
 		plot = xbmc.getInfoLabel( "ListItem.Plot" )
 	server = params["server"]
-	
-	if "iframeplayer.php" in url:      #"http://peliculasid.com/iframeplayer.php?url=aHR0cDovL3ZpZGVvLmFrLmZhY2Vib29rLmNvbS9jZnMtYWstc25jNC80MjIxNi82MS8xMjgxMTI4ODgxOTUwXzM5NTAwLm1wNA=="
+	if "|" in url:
+		matches = url.split("|")
+		patronvideos = 'file=([^\&]+)\&'
+		c = 0
+		listdata = []
+		for match in matches:
+			c += 1
+			print match
+			data = scrapertools.cachePage(match)
+			matches2 = re.compile(patronvideos,re.DOTALL).findall(data)
+			listdata.append(["Parte %d" %c,matches2[0]])
+		
+		url = xmltoplaylist.MakePlaylistFromList(listdata)	
+	elif "iframeplayer.php" in url:      #"http://peliculasid.com/iframeplayer.php?url=aHR0cDovL3ZpZGVvLmFrLmZhY2Vib29rLmNvbS9jZnMtYWstc25jNC80MjIxNi82MS8xMjgxMTI4ODgxOTUwXzM5NTAwLm1wNA=="
 		data = scrapertools.cachePage(url)
 		patronvideos = 'file=([^\&]+)\&'
 		matches = re.compile(patronvideos,re.DOTALL).findall(data)
@@ -312,3 +338,59 @@ def acentos(title):
         title = title.replace("Ã±","ñ")
         title = title.replace("Ãƒâ€œ","Ó")
         return(title)
+
+def MakePlaylistFromXML(xmlurl,title="default"):
+	logger.info("[%s.py] MakePlaylistFromXML" %CHANNELNAME)
+	
+	if title== ("default" or ""):
+		nombrefichero = FULL_FILENAME_PATH_XML
+	else:
+		nombrefichero = os.path.join( downloadtools.getDownloadPath(),title + ".pls")
+	xmldata = scrapertools.cachePage(xmlurl)
+	patron = '<title>([^<]+)</title>.*?<location>([^<]+)</location>'
+	matches = re.compile(patron,re.DOTALL).findall(xmldata)
+	if len(matches)>0:
+		playlistFile = open(nombrefichero,"w")
+		playlistFile.write("[playlist]\n")
+		playlistFile.write("\n")
+		c = 0		
+		for match in matches:
+			c += 1
+			playlistFile.write("File%d=%s\n"  %(c,match[1]))
+			playlistFile.write("Title%d=%s\n" %(c,match[0]))
+			playlistFile.write("\n")
+			
+		playlistFile.write("NumberOfEntries=%d\n" %c)
+		playlistFile.write("Version=2\n")
+		playlistFile.flush();
+		playlistFile.close()	
+		return nombrefichero,c
+	else:
+		return ""
+
+def MakePlaylistFromList(Listdata,title="default"):
+	logger.info("[%s.py] MakePlaylistFromList" %CHANNELNAME)
+	
+	if title== ("default" or ""):
+		nombrefichero = FULL_FILENAME_PATH
+	else:
+		nombrefichero = os.path.join( downloadtools.getDownloadPath(),title + ".pls")
+
+	if len(Listdata)>0:
+		playlistFile = open(nombrefichero,"w")
+		playlistFile.write("[playlist]\n")
+		playlistFile.write("\n")
+		c = 0		
+		for match in Listdata:
+			c += 1
+			playlistFile.write("File%d=%s\n"  %(c,match[1]))
+			playlistFile.write("Title%d=%s\n" %(c,match[0]))
+			playlistFile.write("\n")
+			
+		playlistFile.write("NumberOfEntries=%d\n" %c)
+		playlistFile.write("Version=2\n")
+		playlistFile.flush();
+		playlistFile.close()	
+		return nombrefichero,c
+	else:
+		return ""

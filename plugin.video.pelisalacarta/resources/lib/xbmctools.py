@@ -15,6 +15,7 @@ import servertools
 import os
 import config
 import logger
+import scrapertools
 
 # Esto permite su ejecución en modo emulado
 try:
@@ -32,21 +33,8 @@ LIBRARY_CATEGORIES = ['Series'] #Valor usuarios finales
 #IMAGES_PATH = xbmc.translatePath( os.path.join( os.getcwd(), 'resources' , 'images' ) )
 DEBUG = True
 
-def get_system_platform():
-	""" fonction: pour recuperer la platform que xbmc tourne """
-	platform = "unknown"
-	if xbmc.getCondVisibility( "system.platform.linux" ):
-		platform = "linux"
-	elif xbmc.getCondVisibility( "system.platform.xbox" ):
-		platform = "xbox"
-	elif xbmc.getCondVisibility( "system.platform.windows" ):
-		platform = "windows"
-	elif xbmc.getCondVisibility( "system.platform.osx" ):
-		platform = "osx"
-	return platform
-
 def addnewfolder( canal , accion , category , title , url , thumbnail , plot , Serie="",totalItems=0):
-	addnewfolderextra( canal , accion , category , title , url , thumbnail , plot , "" ,Serie,totalItems)
+	addnewfolderextra( canal , accion , category , scrapertools.unescape(title) , url , thumbnail , plot , "" ,Serie,totalItems)
 
 def addnewfolderextra( canal , accion , category , title , url , thumbnail , plot , extradata ,Serie="",totalItems=0):
 	contextCommands = []
@@ -61,9 +49,11 @@ def addnewfolderextra( canal , accion , category , title , url , thumbnail , plo
 	#Realzamos un quote sencillo para evitar problemas con títulos unicode
 #	title = title.replace("&","%26").replace("+","%2B").replace("%","%25")
 	try:
-		title = title.encode ("utf-8") #This only aplies to unicode strings. The rest stay as they are.
+		title = title.encode ("utf-8")	 #This only aplies to unicode strings. The rest stay as they are.
+		plot  = plot.encode ("utf-8")
 	except:
 		pass
+	
 	itemurl = '%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&extradata=%s&Serie=%s' % ( sys.argv[ 0 ] , canal , accion , urllib.quote_plus( category ) , urllib.quote_plus(title) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , urllib.quote_plus( extradata ) , Serie)
 
 	if Serie != "": #Añadimos opción contextual para Añadir la serie completa a la biblioteca
@@ -86,6 +76,12 @@ def addnewvideo( canal , accion , category , server , title , url , thumbnail, p
 	listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail )
 	listitem.setInfo( "video", { "Title" : title, "Plot" : plot, "Studio" : canal } )
 	#listitem.setProperty('fanart_image',os.path.join(IMAGES_PATH, "cinetube.png"))
+	try:
+		title = title.encode ("utf-8")	 #This only aplies to unicode strings. The rest stay as they are.
+		plot  = plot.encode ("utf-8")
+	except:
+		pass
+	
 	itemurl = '%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&server=%s&Serie=%s' % ( sys.argv[ 0 ] , canal , accion , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , server , Serie)
 	#logger.info("[xbmctools.py] itemurl=%s" % itemurl)
 	xbmcplugin.addDirectoryItem( handle = pluginhandle, url=itemurl, listitem=listitem, isFolder=False)
@@ -132,10 +128,13 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 	
 	# Parametrizacion especifica
 	import parametrizacion
-
+	
 	# Abre el diálogo de selección
 	opciones = []
 	default_action = config.getSetting("default_action")
+	
+	if url.endswith(".pls"):
+		default_action = "1"
 	# Los vídeos de Megavídeo sólo se pueden ver en calidad alta con cuenta premium
 	# Los vídeos de Megaupload sólo se pueden ver con cuenta premium, en otro caso pide captcha
 	if (server=="Megavideo" or server=="Megaupload") and config.getSetting("megavideopremium")=="true":
@@ -260,12 +259,15 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 			downloadtools.downloadtitle(mediaurl,title)
 		return
 
-	# TODO: Mover a modulo favoritos
 	elif opciones[seleccion]==config.getLocalizedString(30154): #"Quitar de favoritos"
+		import favoritos
 		# La categoría es el nombre del fichero en favoritos
-		os.remove(urllib.unquote_plus( category ))
+		favoritos.deletebookmark(category)
+		
 		advertencia = xbmcgui.Dialog()
 		resultado = advertencia.ok(config.getLocalizedString(30102) , title , config.getLocalizedString(30105)) # 'Se ha quitado de favoritos'
+		
+		xbmc.executebuiltin( "Container.Refresh" )
 		return
 
 	# TODO: Mover a modulo descargadoslist
@@ -293,7 +295,7 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 	elif opciones[seleccion]==config.getLocalizedString(30155): #"Añadir a favoritos":
 		import favoritos
 		import downloadtools
-		keyboard = xbmc.Keyboard(downloadtools.limpia_nombre_excepto_1(title))
+		keyboard = xbmc.Keyboard(downloadtools.limpia_nombre_excepto_1(title)+" ["+canal+"]")
 		keyboard.doModal()
 		if keyboard.isConfirmed():
 			title = keyboard.getText()
@@ -330,7 +332,11 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 
 	elif opciones[seleccion]==config.getLocalizedString(30162): #"Buscar Trailer":
 		config.setSetting("subtitulo", "false")
-		xbmc.executebuiltin("Container.Update(%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&server=%s)" % ( sys.argv[ 0 ] , "trailertools" , "buscartrailer" , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( "" ) , server ))
+		try:
+			title2 = urllib.quote_plus( title )
+		except:
+			title2 = urllib.quote_plus( title.encode('utf-8'))
+		xbmc.executebuiltin("Container.Update(%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&server=%s)" % ( sys.argv[ 0 ] , "trailertools" , "buscartrailer" , urllib.quote_plus( category ) , title2 , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( "" ) , server ))
 		return
 
 	# Si no hay mediaurl es porque el vídeo no está :)
@@ -362,8 +368,8 @@ def playvideoEx(canal,server,url,category,title,thumbnail,plot,desdefavoritos,de
 	if (config.getSetting("subtitulo") == "true") and (opciones[seleccion].startswith("Ver")):
 		xbmc.Player().setSubtitles(os.path.join( config.DATA_PATH, 'subtitulo.srt' ) )
 		config.setSetting("subtitulo", "false")
-
-
+	
+	
 def getLibraryInfo (mediaurl):
 	'''Obtiene información de la Biblioteca si existe (ficheros strm) o de los parámetros
 	'''
@@ -490,7 +496,7 @@ def launchplayer(mediaurl, listitem):
 
 	xbmcPlayer = xbmc.Player( player_type )
 	xbmcPlayer.play(playlist)
-
+	
 def logdebuginfo(DEBUG,scrapedtitle,scrapedurl,scrapedthumbnail,scrapedplot):
 	if (DEBUG):
 		logger.info("[xmbctools.py] scrapedtitle="+scrapedtitle)

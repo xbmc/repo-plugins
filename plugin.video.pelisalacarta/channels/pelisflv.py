@@ -17,8 +17,16 @@ import binascii
 import xbmctools
 import config
 import logger
+import downloadtools
+import vk
+from xml.dom import minidom
+from xml.dom import EMPTY_NAMESPACE
 
 CHANNELNAME = "pelisflv"
+ATOM_NS = 'http://www.w3.org/2005/Atom'
+PLAYLIST_FILENAME_TEMP = "video_playlist.temp.pls"
+FULL_FILENAME_PATH = os.path.join( downloadtools.getDownloadPath(), PLAYLIST_FILENAME_TEMP )
+
 
 # Esto permite su ejecución en modo emulado
 try:
@@ -35,16 +43,20 @@ def mainlist(params,url,category):
 	logger.info("[pelisflv.py] mainlist")
 
 	# Añade al listado de XBMC
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Novedades"    ,"http://www.pelisflv.net","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Estrenos","http://www.pelisflv.net/search/label/Estrenos","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries" , category , "Series"        ,"http://www.pelisflv.net/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries" , category , "Series Animadas"        ,"http://www.pelisflv.net/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries" , category , "Anime"        ,"http://www.pelisflv.net/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries" , category , "Categorias"        ,"http://www.pelisflv.net/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries" , category , "Calidad"        ,"http://www.pelisflv.net/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries" , category , "Audio"        ,"http://www.pelisflv.net/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "search" , category , "Buscar","http://www.pelisflv.net/","","")
+
+	xbmctools.addnewfolder( CHANNELNAME , "listvideofeeds" , category , "Listar - Novedades"    ,"http://www.blogger.com/feeds/3207505541212690627/posts/default?start-index=1&max-results=25","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos"     , category , "Listar - Estrenos","http://www.pelisflv.net/search/label/Estrenos","","")
+	xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries"  , category , "Listar - Generos"        ,"http://www.pelisflv.net/","","")
+	#xbmctools.addnewfolder( CHANNELNAME , "ListadoSeries"  , category , "Listar - Series"        ,"http://www.pelisflv.net/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos"     , category , "Listar - Animacion"        ,"http://www.pelisflv.net/search/label/Animaci%C3%B3n","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos"     , category , "Listar - Videos no Megavideo (FLV)"        ,"http://www.pelisflv.net/search/label/Flv","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos"     , category , "Listar - Videos en Megavideo"        ,"http://www.pelisflv.net/search/label/Megavideo","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos"     , category , "Videos Audio Español"        ,"http://www.pelisflv.net/search/label/Espa%C3%B1ol","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos"     , category , "Videos Audio Latino"        ,"http://www.pelisflv.net/search/label/Latino","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos"     , category , "Videos Audio Original Sub Español"        ,"http://www.pelisflv.net/search/label/Sub%20Espa%C3%B1ol","","")
+	xbmctools.addnewfolder( CHANNELNAME , "search"         , category , "Buscar","http://www.pelisflv.net/","","")
 	
+
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
 
@@ -104,21 +116,74 @@ def searchresults(params,url,category):
 			
 
 
+def ListadoCapitulosSeries(params,url,category):
+	logger.info("[pelisflv.py] ListadoCapitulosSeries")
+	title = urllib.unquote_plus( params.get("title") )
+	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
+	
+	# Descarga la página
+	data = scrapertools.downloadpageGzip(url)
+	#logger.info(data)
+
+	# Patron de las entradas
+
+	patron = "<div class='post-body entry-content'>(.*?)<div class='post-footer'>"
+	matches = re.compile(patron,re.DOTALL).findall(data)
+	scrapertools.printMatches(matches)
+	
+
+	patron = '<a href="([^"]+)"[^>]+><[^>]+>(.*?)<'
+	matches = re.compile(patron,re.DOTALL).findall(matches[0])
+	scrapertools.printMatches(matches)
+	patron2 = '<iframe src="([^"]+)"'
+	
+	# Añade las entradas encontradas
+	for match in matches:
+		# Atributos
+		scrapedtitle = match[1]
+		data2 = scrapertools.downloadpageGzip(match[0])
+		matches2 = re.compile(patron2,re.DOTALL).findall(data2)
+		scrapertools.printMatches(matches2)	
+		scrapedurl = matches2[0]
+		scrapedthumbnail = thumbnail
+		scrapedplot = ""
+		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
+
+		# Añade al listado de XBMC
+		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+
+	# Asigna el título, desactiva la ordenación, y cierra el directorio
+	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
+	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
+	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+        
+
 def ListadoSeries(params,url,category):
-	logger.info("[peliculas24h.py] ListadoTotal")
+	logger.info("[pelisflv.py] ListadoSeries")
 	title = urllib.unquote_plus( params.get("title") )
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
 
 	# Patron de las entradas
-	patron = "<h2>"+title+"</h2>[^<]+<[^>]+>[^<]+<ul>(.*?)</ul>"
-	matches = re.compile(patron,re.DOTALL).findall(data)
-	scrapertools.printMatches(matches)
+	if "Series" in title:
+		patron = "<center><form>(.*?)</form></center>"
+		matches = re.compile(patron,re.DOTALL).findall(data)
+		scrapertools.printMatches(matches)
 	
-	patron = "<a dir='ltr' href='([^']+)'>(.*?)</a>"
-	matches = re.compile(patron,re.DOTALL).findall(matches[0])
-	scrapertools.printMatches(matches)
+		patron = '<option value="([^"]+)" />(.*?)\n'
+		matches = re.compile(patron,re.DOTALL).findall(matches[0])
+		scrapertools.printMatches(matches)
+	
+	elif "Generos" in title:
+		
+		patron = "<h2>Generos</h2>[^<]+<[^>]+>[^<]+<ul>(.*?)</ul>"
+		matches = re.compile(patron,re.DOTALL).findall(data)
+		scrapertools.printMatches(matches)
+	
+		patron = "<a dir='ltr' href='([^']+)'>(.*?)</a>"
+		matches = re.compile(patron,re.DOTALL).findall(matches[0])
+		scrapertools.printMatches(matches)
 
 	# Añade las entradas encontradas
 	for match in matches:
@@ -189,7 +254,8 @@ def listvideos(params,url,category):
 			xbmctools.addnewfolder( CHANNELNAME , "detail" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
 
 	# Extrae la marca de siguiente página
-	patronvideos  = "<a class='blog-pager-older-link' href='([^']+)'"
+
+	patronvideos  = "<div class='status-msg-hidden'>.*?<a href=\"([^\"]+)\""
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 
@@ -209,33 +275,114 @@ def listvideos(params,url,category):
 	# End of directory...
 	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
 
+def listvideofeeds(params,url,category):
+	logger.info("[pelisflv.py] listvideosfeeds")
+	data = None
+	thumbnail = ""
+	xmldata = urllib2.urlopen(url,data)
+	
+	xmldoc = minidom.parse(xmldata)
+	xmldoc.normalize()
+	#print xmldoc.toxml().encode('utf-8')
+	xmldata.close()
+	c = 0
+	for entry in xmldoc.getElementsByTagNameNS(ATOM_NS, u'entry'):
+	#First title element in doc order within the entry is the title
+		entrytitle = entry.getElementsByTagNameNS(ATOM_NS, u'title')[0]
+		entrylink = entry.getElementsByTagNameNS(ATOM_NS, u'link')[2]
+		entrythumbnail = entry.getElementsByTagNameNS(ATOM_NS, u'content')[0]
+		etitletext = get_text_from_construct(entrytitle)
+		elinktext = entrylink.getAttributeNS(EMPTY_NAMESPACE, u'href')
+		ethumbnailtext = get_text_from_construct(entrythumbnail)
+		regexp = re.compile(r'src="([^"]+)"')
+		match = regexp.search(ethumbnailtext)
+		if match is not None:
+			thumbnail = match.group(1)
+		regexp = re.compile(r'bold;">([^<]+)<')
+		match = regexp.search(ethumbnailtext)
+		if match is not None:
+			plot = match.group(1)
+		
+		# Depuracion
+		if (DEBUG):
+			logger.info("scrapedtitle="+etitletext)
+			logger.info("scrapedurl="+elinktext)
+			logger.info("scrapedthumbnail="+thumbnail)
+				
+		#print etitletext, '(', elinktext, thumbnail,plot, ')'
+		xbmctools.addnewfolder( CHANNELNAME , "detail" , category ,  etitletext,  elinktext, thumbnail, plot )
+		c +=1
+	
+	if c >= 25:
+		regexp = re.compile(r'start-index=([^\&]+)&')
+		match = regexp.search(url)
+		if match is not None:
+			start_index = int(match.group(1)) + 25
+		scrapedtitle = "Página siguiente"
+		scrapedurl =  "http://www.blogger.com/feeds/3207505541212690627/posts/default?start-index="+str(start_index)+"&max-results=25"
+		scrapedthumbnail = ""
+		scrapedplot = ""
+		xbmctools.addnewfolder( CHANNELNAME , "listvideofeeds" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+
+	# Cierra el directorio
+	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
+	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
+	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+	
+def get_text_from_construct(element):
+    '''
+    Return the content of an Atom element declared with the
+    atomTextConstruct pattern.  Handle both plain text and XHTML
+    forms.  Return a UTF-8 encoded string.
+    '''
+    if element.getAttributeNS(EMPTY_NAMESPACE, u'type') == u'xhtml':
+        #Grab the XML serialization of each child
+        childtext = [ c.toxml('utf-8') for c in element.childNodes ]
+        #And stitch it together
+        content = ''.join(childtext).strip()
+        return content
+    else:
+        return element.firstChild.data.encode('utf-8')
+
+
+	
 def detail(params,url,category):
 	logger.info("[pelisflv.py] detail")
 
 	title = urllib.unquote_plus( params.get("title") )
 	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
 	plot = urllib.unquote_plus( params.get("plot") )
+	accion = params.get("accion")
 
 	# Descarga la página
 	datafull = scrapertools.cachePage(url)
 	#logger.info(data)
 	patron = "google_ad_section_start(.*?)google_ad_section_end -->"
 	matches = re.compile(patron,re.DOTALL).findall(datafull)
-	data = matches[0]
-                   
+
+	if len(matches)>0:
+		data = matches[0]
+	else:
+		data = datafull
+	patron = '<iframe src="(http://pelisflv.net63.net/player/[^"]+)"'
+	matches = re.compile(patron,re.DOTALL).findall(data)
+	if len(matches)>0:
+		data = scrapertools.cachePage(matches[0])
+	ok = False               
           
 	# ------------------------------------------------------------------------------------
 	# Busca los enlaces a los videos
 	# ------------------------------------------------------------------------------------
-	'''
+	
 	listavideos = servertools.findvideos(data)
 
 	for video in listavideos:
 		videotitle = video[0]
 		url = video[1]
 		server = video[2]
+		
 		xbmctools.addnewvideo( CHANNELNAME , "play" , category , server , title.strip() + " - " + videotitle , url , thumbnail , plot )
-	'''
+	
 	# Busca enlaces en el servidor Stagevu - "el modulo servertools.findvideos() no los encuentra"
 	
 	patronvideos  = "'(http://stagevu.com[^']+)'"
@@ -243,6 +390,7 @@ def detail(params,url,category):
 	if len(matches)>0:
 		logger.info(" Servidor Stagevu")
 		for match in matches:
+			ok = True
 			scrapedurl = match.replace("&amp;","&")
 			xbmctools.addnewvideo( CHANNELNAME ,"play"  , category , "Stagevu" , title+" - [Stagevu]", scrapedurl , thumbnail , plot )
 
@@ -253,6 +401,7 @@ def detail(params,url,category):
 	if len(matches)>0:
 		logger.info(" Servidor Movshare")
 		for match in matches:
+			ok = True
 			scrapedurl = match.replace("&amp;","&")
 			xbmctools.addnewvideo( CHANNELNAME ,"play"  , category , "Movshare" , title+" - [Movshare]", scrapedurl , thumbnail , plot )
 
@@ -265,7 +414,8 @@ def detail(params,url,category):
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 	print "link directos encontrados :%s" %matches
-	print data
+
+	#print data
 	if len(matches)>0:
 		for match in matches:
 			subtitle = "[FLV-Directo]"
@@ -303,14 +453,16 @@ def detail(params,url,category):
 							
 					# Añade al listado de XBMC
 					xbmctools.addnewvideo( CHANNELNAME , playWithSubt , category , "Directo" , scrapedtitle, scrapedurl , scrapedthumbnail, scrapedplot )
-				
+					ok = True
 			else:
 				if match.endswith(".srt"):
 					scrapedurl = scrapedurl + "|" + match 
 					xbmctools.addnewvideo( CHANNELNAME ,"play2"  , category , "Directo" , title + " (V.O.S) - "+subtitle, scrapedurl , thumbnail , plot )
+					ok = True
 				if 	match.endswith(".xml"):
 					sub = "[Subtitulo incompatible con xbmc]"
 					xbmctools.addnewvideo( CHANNELNAME ,"play"  , category , "Directo" , title + " (V.O) - %s %s" %(subtitle,sub), scrapedurl , thumbnail , plot )
+					ok = True
 				scrapedurl = match
 				print scrapedurl
 	#src="http://pelisflv.net63.net/player/videos.php?x=http://pelisflv.net63.net/player/xmls/The-Lord-Of-The-Ring.xml"			
@@ -320,10 +472,14 @@ def detail(params,url,category):
 	#print data
 	
 	if len(matches)>0:
+		playlistFile = open(FULL_FILENAME_PATH,"w")
+		playlistFile.write("[playlist]\n")
+		playlistFile.write("\n")
 		for match in matches:
 			subtitle = "[FLV-Directo]"
 					
-			data2 = scrapertools.cachePage(match)
+
+			data2 = scrapertools.cachePage(match.replace(" ","%20"))
 			logger.info("data2="+data2)
 			patronvideos  = '<track>.*?'
 			patronvideos += '<title>([^<]+)</title>.*?'
@@ -332,7 +488,9 @@ def detail(params,url,category):
 			patronvideos += '|([^<]+))</track>'
 			matches2 = re.compile(patronvideos,re.DOTALL).findall(data2)
 			scrapertools.printMatches(matches)
+			c = 0
 			for match2 in matches2:
+				c +=1
 				sub = ""
 				playWithSubt = "play"
 				if match2[2].endswith(".xml"): # Subtitulos con formato xml son incompatibles con XBMC
@@ -354,7 +512,19 @@ def detail(params,url,category):
 						
 				# Añade al listado de XBMC
 				xbmctools.addnewvideo( CHANNELNAME , playWithSubt , category , "Directo" , scrapedtitle, scrapedurl , scrapedthumbnail, scrapedplot )					
-
+				ok =True
+				
+				playlistFile.write("File%d=%s\n"  %(c,match2[1]))
+				playlistFile.write("Title%d=%s\n" %(c,match2[0]))
+				playlistFile.write("\n")
+				
+			
+			playlistFile.write("NumberOfEntries=%d\n" %c)
+			playlistFile.write("Version=2\n")
+			playlistFile.flush();
+			playlistFile.close()
+			xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , "Reproducir Todo a la vez...", FULL_FILENAME_PATH , scrapedthumbnail, scrapedplot )
+	
 	# Busca enlaces en el servidor Videoweed - "el modulo servertools.findvideos() no los encuentra"
 	patronvideos = '(http\:\/\/[^\.]+\.videoweed.com\/[^"]+)"'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
@@ -362,6 +532,7 @@ def detail(params,url,category):
 	if len(matches)>0:
 		logger.info(" Servidor Videoweed")
 		for match in matches:
+			ok = True
 			scrapedurl = match.replace("&amp;","&")
 			xbmctools.addnewvideo( CHANNELNAME ,"play"  , category , "Videoweed" , title+" - [Videoweed]", scrapedurl , thumbnail , plot )		
 	
@@ -372,7 +543,7 @@ def detail(params,url,category):
 	if len(matches)>0:
 		logger.info(" Servidor Gigabyteupload")
 		for match in matches:
-			
+			ok = True
 			xbmctools.addnewvideo( CHANNELNAME ,"play"  , category , "Gigabyteupload" , title+" - [Gigabyteupload]",match  , thumbnail , plot )
 
 	## --------------------------------------------------------------------------------------##
@@ -387,12 +558,16 @@ def detail(params,url,category):
 	var video_title = 'newCine.NET+-+neWG.Es+%7C+Chicken+Little';
 
 	'''
-	patronvideos = '<iframe src="(http://vk.com/video_ext.php[^"]+)"'
+	patronvideos = '<iframe src="(http://[^\/]+\/video_ext.php[^"]+)"'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
+		ok = True
 		print " encontro VK.COM :%s" %matches[0]
- 		
-		data2 = scrapertools.downloadpageGzip(matches[0])
+
+ 		videourl = 	vk.geturl(matches[0])
+ 		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK]", videourl , thumbnail , plot )		
+ 	"""	
+		data2 = scrapertools.downloadpageGzip(matches[0].replace("amp;",""))
 		print data2
 		regexp =re.compile(r'vkid=([^\&]+)\&')
 		match = regexp.search(data2)
@@ -413,11 +588,20 @@ def detail(params,url,category):
 			for match in matches2:
 				if match[3].strip() == "0" and match[1] != "0":
 					tipo = "flv"
-					videourl = "%s/u%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
+
+					if "http://" in match[0]:
+						videourl = "%s/u%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
+					else:
+						videourl = "http://%s/u%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
 					xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK] [%s]" %tipo, videourl , thumbnail , plot )
-				elif match[1]== "0" and vkid != "":     #http://447.gt3.vkadre.ru/assets/videos/2638f17ddd39-75081019.vk.flv
+
+				elif match[1]== "0" and vkid != "":     #http://447.gt3.vkadre.ru/assets/videos/2638f17ddd39-75081019.vk.flv 
 					tipo = "flv"
-					videourl = "%s/assets/videos/%s%s.vk.%s" % (match[0],match[1],vkid,tipo)
+
+					if "http://" in match[0]:
+						videourl = "%s/assets/videos/%s%s.vk.%s" % (match[0],match[2],vkid,tipo)
+					else:
+						videourl = "http://%s/assets/videos/%s%s.vk.%s" % (match[0],match[2],vkid,tipo)
 					xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK] [%s]" %tipo, videourl , thumbnail , plot )
 				else:
 					tipo = "360.mp4"
@@ -427,8 +611,12 @@ def detail(params,url,category):
 					videourl = "%s/u%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
 					xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK] [%s]" %tipo, videourl , thumbnail , plot )
 		
-
-
+	"""
+	if not ok:
+		patron = "SeriesPage"
+		matches = re.compile(patron,re.DOTALL).findall(datafull)
+		if len(matches)>0:
+			ListadoCapitulosSeries(params,url,category)
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 		

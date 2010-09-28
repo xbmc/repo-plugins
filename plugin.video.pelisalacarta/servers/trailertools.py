@@ -313,7 +313,8 @@ def GetVideoFeed(titulo):
 	c = 0
 	yt = gdata.youtube.service.YouTubeService()
 	query = gdata.youtube.service.YouTubeVideoQuery()
-	query.vq = titulo+"trailer espanol"
+	query.vq = titulo+" trailer espanol"
+	print query.vq
 	query.orderby = 'viewCount'
 	query.racy = 'include'
 	#query.client = 'ytapi-youtube-search'
@@ -338,7 +339,7 @@ def GetVideoFeed(titulo):
 			if c > 10:
 				return (devuelve)
 	if c < 6:
-		query.vq =titulo+"trailer"
+		query.vq =titulo+" trailer"
 		feed = yt.YouTubeQuery(query)
 		for entry in feed.entry:
 			print 'Video title: %s' % entry.media.title.text
@@ -356,6 +357,28 @@ def GetVideoFeed(titulo):
 					c = c + 1
 				if c > 10:
 					return (devuelve)
+	if c < 6:
+		query.vq =titulo
+		feed = yt.YouTubeQuery(query)
+		for entry in feed.entry:
+			print 'Video title: %s' % entry.media.title.text
+			titulo2 = str(entry.media.title.text)
+			url = entry.media.player.url
+			duracion = int(entry.media.duration.seconds)
+			duracion = " (%02d:%02d)" % ( int( duracion / 60 ), duracion % 60, )
+			if titulo in (string.lower(LimpiarTitulo(titulo2))):
+				for thumbnail in entry.media.thumbnail:
+					url_thumb = thumbnail.url
+				
+				if url not in encontrados:
+					devuelve.append([url,titulo2+duracion,url_thumb])
+					encontrados.add(url)
+					c = c + 1
+				if c > 10:
+					return (devuelve)
+
+
+
 	print '%s Trailers encontrados en Modulo: GetVideoFeed()' % str(c)
 	return (devuelve)
 	

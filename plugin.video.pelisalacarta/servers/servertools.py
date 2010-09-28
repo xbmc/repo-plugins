@@ -25,6 +25,7 @@ import divxlink
 import videoweed
 import youtube
 import cinshare
+import xmltoplaylist
 import config
 import logger
 
@@ -34,6 +35,21 @@ def findvideos(data):
 	logger.info("[servertools.py] findvideos")
 	encontrados = set()
 	devuelve = []
+	
+	#Megavideo con partes para cinetube
+	logger.info ("0) Megavideo con partes para cinetube")
+	patronvideos = 'id.+?http://www.megavideo.com..v.(.+?)".+?(parte\d+)'
+	#id="http://www.megavideo.com/?v=CN7DWZ8S"><a href="#parte1">Parte 1 de 2</a></li>
+	matches = re.compile(patronvideos).findall(data)
+	for match in matches:
+		titulo = "[Megavideo " + match[1] + "]"
+		url = match[0]
+		if url not in encontrados:
+			logger.info(" url="+url)
+			devuelve.append( [ titulo , url , 'Megavideo' ] )
+			encontrados.add(url)
+		else:
+			logger.info(" url duplicada="+url)
 
 	# Megavideo - Vídeos con título
 	logger.info("1) Megavideo con titulo...")
@@ -660,6 +676,9 @@ def findurl(code,server):
 		
 	if server == "facebook":
 		mediaurl = code
+		
+	if server == "xml":
+		mediaurl = xmltoplaylist.geturl(code)
 		
 	return mediaurl
 

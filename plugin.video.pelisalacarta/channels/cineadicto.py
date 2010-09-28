@@ -17,6 +17,8 @@ import binascii
 import xbmctools
 import config
 import logger
+import vk
+import buscador
 
 CHANNELNAME = "cineadicto"
 
@@ -55,18 +57,19 @@ def mainlist(params,url,category):
 def search(params,url,category):
 	logger.info("[cineadicto.py] search")
 
-	keyboard = xbmc.Keyboard()
-	#keyboard.setDefault('')
-	keyboard.doModal()
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-			searchUrl = "http://www.cine-adicto.com/?s="+tecleado
-			searchresults(params,searchUrl,category)
+	buscador.listar_busquedas(params,url,category)
 
 def searchresults(params,url,category):
+	logger.info("[cineadicto.py] searchresults")
+
+	buscador.salvar_busquedas(params,url,category)
+
+	#convert to HTML
+	tecleado = url.replace(" ", "+")
+	searchUrl = "http://www.cine-adicto.com/?s="+tecleado
+	searchresults2(params,searchUrl,category)
+
+def searchresults2(params,url,category):
 	logger.info("[cineadicto.py] SearchResult")
 	
 	
@@ -396,6 +399,25 @@ def detail(params,url,category):
 	except:
 		pass
 
+
+	## --------------------------------------------------------------------------------------##
+	#            Busca enlaces de videos para el servidor vk.com                             #
+	## --------------------------------------------------------------------------------------##
+	'''
+	var video_host = '447.gt3.vkadre.ru';
+	var video_uid = '0';
+	var video_vtag = '2638f17ddd39-';
+	var video_no_flv = 0;
+	var video_max_hd = '0';
+	var video_title = 'newCine.NET+-+neWG.Es+%7C+Chicken+Little';
+
+	'''
+	patronvideos = '<iframe src="(http://[^\/]+\/video_ext.php[^"]+)"'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	if len(matches)>0:
+		print " encontro VK.COM :%s" %matches[0]
+ 		videourl = 	vk.geturl(matches[0])
+ 		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK]", videourl , thumbnail , plot )
 	
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )

@@ -291,7 +291,7 @@ def playdirecto(params,url,category):
 
 def detail2(params,url,category):
 	logger.info("[animeid.py] detail2")
-
+	
 	title = urllib.unquote_plus( params.get("title") )
 	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
 	plot =  xbmc.getInfoLabel( "ListItem.Plot" )
@@ -301,17 +301,39 @@ def detail2(params,url,category):
 	data = scrapertools.downloadpageGzip(url)
 	#logger.info(data)
 	
-	patronvideos = 'file=([^\&]+)\&'
+	patronvideos = '(?:file=|video_src=)([^\&]+)\&'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
+		import urlparse 
+		
 		c= 0
+		scrapedurl = ""
 		for match in matches:
-			c += 1
+			parsedurl = urlparse.urlparse(match)
+			parsedurl2 = parsedurl[1].split(".")
+			parsedurl3 = parsedurl2[len(parsedurl2)-2]
+			if parsedurl3 in scrapedurl:
+				c += 1
+			else:
+				c =1
 			scrapedurl = match
 			server = 'Directo'
 		
 			if (DEBUG): logger.info("title=["+title+"], url=["+scrapedurl+"], thumbnail=["+thumbnail+"]")
-			xbmctools.addnewvideo( CHANNELNAME , "play2" , category , server , title + " - parte %d [%s]" %(c,server) , scrapedurl , thumbnail, plot )
+			xbmctools.addnewvideo( CHANNELNAME , "play2" , category , server , title + " - parte %d [%s] [%s]" %(c,parsedurl[1],server) , scrapedurl , thumbnail, plot )
+	'''
+	patronvideos = '(http://www.facebook.com/v/[^"]+)"'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	if len(matches)>0:
+		c = 0 
+		for match in matches:
+			c +=1
+			scrapedurl = match
+			server = 'Directo'
+			if (DEBUG): logger.info("title=["+title+"], url=["+scrapedurl+"], thumbnail=["+thumbnail+"]")
+			xbmctools.addnewvideo( CHANNELNAME , "play2" , category , server , title + " - parte %d [FACEBOOK] [%s]" %(c,server) , scrapedurl , thumbnail, plot )			
+	'''
+	
 	patronvideos = 'http://[^\.]+.megavideo.com[^\?]+\?v=([A-Z0-9a-z]{8})'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:

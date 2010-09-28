@@ -5,33 +5,47 @@
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
 
-import xbmc
-import xbmcplugin
 import sys
 import os
 
+PLUGIN_ID = "plugin.video.pelisalacarta"
+
 try:
 	import xbmcaddon
+	import xbmc
 	DHARMA = True
-except ImportError:
-	DHARMA = False
-
-PLUGIN_ID = "plugin.video.pelisalacarta"
-if DHARMA:
 	__settings__ = xbmcaddon.Addon(id=PLUGIN_ID)
 	__language__ = __settings__.getLocalizedString
 	DATA_PATH = xbmc.translatePath("special://profile/addon_data/%s" % PLUGIN_ID)
-else:
+except ImportError:
+	DHARMA = False
 	DATA_PATH = os.getcwd()
+
+def get_system_platform():
+	""" fonction: pour recuperer la platform que xbmc tourne """
+	platform = "unknown"
+	if xbmc.getCondVisibility( "system.platform.linux" ):
+		platform = "linux"
+	elif xbmc.getCondVisibility( "system.platform.xbox" ):
+		platform = "xbox"
+	elif xbmc.getCondVisibility( "system.platform.windows" ):
+		platform = "windows"
+	elif xbmc.getCondVisibility( "system.platform.osx" ):
+		platform = "osx"
+	return platform
 	
 def openSettings():
-	
+
 	# Nuevo XBMC
 	if DHARMA:
 		__settings__.openSettings()
 	# Antiguo XBMC
 	else:
-		xbmcplugin.openSettings( sys.argv[ 0 ] )
+		try:
+			import xbmcplugin
+			xbmcplugin.openSettings( sys.argv[ 0 ] )
+		except:
+			pass
 
 def getSetting(name):
 	# Nuevo XBMC
@@ -39,8 +53,15 @@ def getSetting(name):
 		return __settings__.getSetting( name )
 	# Antiguo XBMC
 	else:
-		value = xbmcplugin.getSetting(name)
-		#xbmc.output("[config.py] antiguo getSetting(%s)=%s" % (name,value))
+		try:
+			import xbmcplugin
+			value = xbmcplugin.getSetting(name)
+			#xbmc.output("[config.py] antiguo getSetting(%s)=%s" % (name,value))
+		except:
+			if name=="debug":
+				value="true"
+			else:
+				value=""
 		return value
 
 def setSetting(name,value):
@@ -49,16 +70,30 @@ def setSetting(name,value):
 		__settings__.setSetting( name,value ) # this will return "foo" setting value
 	# Antiguo XBMC
 	else:
-		xbmcplugin.setSetting(name,value)
+		try:
+			import xbmcplugin
+			xbmcplugin.setSetting(name,value)
+		except:
+			pass
 
 def getLocalizedString(code):
 	# Nuevo XBMC
 	if DHARMA:
-		return __language__(code)
+		dev = __language__(code)
 	# Antiguo XBMC
 	else:
-		return xbmc.getLocalizedString( code )
-		
+		try:
+			import xbmc
+			dev = xbmc.getLocalizedString( code )
+		except:
+			dev = "No soportado"
+	
+	try:
+		dev = dev.encode ("utf-8") #This only aplies to unicode strings. The rest stay as they are.
+	except:
+		pass
+	
+	return dev
 	
 def getPluginId():
 	if DHARMA:
@@ -68,7 +103,12 @@ def getPluginId():
 	
 def getLibraryPath():
 	if DHARMA:
-		LIBRARY_PATH = xbmc.translatePath("special://profile/addon_data/%s/library" % getPluginId())
+		try:
+			import xbmc
+			LIBRARY_PATH = xbmc.translatePath("special://profile/addon_data/%s/library" % getPluginId())
+		except:
+			LIBRARY_PATH = os.path.join( os.getcwd(), 'library' )
+			
 	else:
 		#Este directorio no es el correcto. 
 		#Debería ser special://profile/addon_data/<plugin_id>
@@ -76,3 +116,12 @@ def getLibraryPath():
 		LIBRARY_PATH = os.path.join( os.getcwd(), 'library' )
 		
 	return LIBRARY_PATH
+
+def getTempFile(filename):
+	try:
+		import xbmc
+		dev = xbmc.translatePath( os.path.join( "special://temp/", filename ))
+	except:
+		dev = filename
+
+	return dev

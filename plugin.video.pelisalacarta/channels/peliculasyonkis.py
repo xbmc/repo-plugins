@@ -45,15 +45,8 @@ DEBUG = True
 def mainlist(params,url,category):
 	logger.info("[peliculasyonkis.py] mainlist")
 	
-	activar = config.getSetting("activar")
-	print "activado como :%s" %activar
-	if activar == "":
-		activar = "false"
-		config.setSetting("activar",activar)
-	if activar == "false":
-		flecha = "+"
-	else:
-		flecha = "-"
+
+
 	# Añade al listado de XBMC
 	
 	xbmctools.addnewfolder( CHANNELNAME , "listnovedades"  , category , "Estrenos de cartelera" ,"http://www.peliculasyonkis.com/ultimas-peliculas/cartelera/","","")

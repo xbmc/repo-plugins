@@ -9,6 +9,7 @@
 	<!-- Commons -->
 	<string id="30000">Lejátszó</string>
 	<string id="30001">Frissítések keresése</string>
+	<string id="30004">Automatic update channels:</string>
 	<string id="30002">Felnőtt mód engedélyezése</string>
 	<string id="30003">Részletes napló</string>
 
@@ -32,11 +33,20 @@
 	<!-- Other -->
 	<string id="30017">Letöltési hely:</string>
 	<string id="30018">Letöltési lista helye:</string>
+	<string id="30030">Favorites path:</string>
 	<string id="30020">Legjobb minőség (Youtube)</string>
 	<string id="30021">Felirat engedélyezése</string>
 	<string id="30022">JDownloader cím:</string>
 	<string id="30024">Ennyi keresést mentsen</string>
-	
+
+	<string id="30019">Filter channels by language:</string>
+
+	<string id="30025">All languages</string>
+	<string id="30026">Spanish</string>
+	<string id="30027">English</string>
+	<string id="30028">Italian</string>
+	<string id="30029">Portuguese</string>
+
 	<!-- =============================================================== -->
 	<!-- 30050 to 30099: Info / error messages                           -->
 	<!-- =============================================================== -->
@@ -53,6 +63,7 @@
 	<string id="30060">Loading canceled due to an error on website</string> <!-- No se puede acceder por un error en el sitio web -->
 	<string id="30061">Quality not available or video removed</string> <!-- La calidad elegida no esta disponible o el video ha sido borrado -->
 	<string id="30062">Try another quality</string> <!-- Prueba a reproducir en otra calidad -->
+	<string id="30063">This channel has been downloaded and updated!</string>
 
 	<!-- =============================================================== -->
 	<!-- 30100 to 30149: Generic channels (Search, downloads, etc.)      -->
@@ -76,6 +87,18 @@
 	<string id="30115">Trailer for %s</string> <!-- El Trailer para %s -->
 	<string id="30116">cannot be found.</string> <!-- no se ha podido localizar. -->
 	<string id="30117">Do you want to refine search with keyboard?</string> <!-- ¿Quieres refinar la búsqueda con el teclado? -->
+	
+	<string id="30118">Channels</string>
+	<string id="30119">Choose a Category</string>
+	<string id="30120">Choose a Language</string>
+	<string id="30121">All</string>
+	<string id="30122">Movies</string>
+	<string id="30123">TV Shows</string>
+	<string id="30124">Anime</string>
+	<string id="30125">Documentaries</string>
+	<string id="30126">Music</string>
+	<string id="30127">Servers</string>
+	<string id="30128">Search Trailers</string>
 
 	<!-- =============================================================== -->
 	<!-- 30150 to 30199: Action menu / contextual menu                   -->

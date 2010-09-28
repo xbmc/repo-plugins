@@ -17,6 +17,7 @@ import binascii
 import xbmctools
 import config
 import logger
+import buscador
 
 CHANNELNAME = "documaniatv"
 
@@ -40,7 +41,7 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "tagdocumentales"  , category , "Tag de Documentales","http://www.documaniatv.com/index.html",os.path.join(IMAGES_PATH, 'tag.png'),"")
 	xbmctools.addnewfolder( CHANNELNAME , "topdocumentales"  , category , "Top Documentales Online","http://www.documaniatv.com/topvideos.html",os.path.join(IMAGES_PATH, 'top.png'),"")
 	xbmctools.addnewfolder( CHANNELNAME , "listatipodocumental"     , category , "Documentales Siendo Vistos Ahora","http://www.documaniatv.com/index.html",os.path.join(IMAGES_PATH, 'viendose.png'),"")
-        xbmctools.addnewfolder( CHANNELNAME , "documentaldeldia"     , category , "Documental del dia","http://www.documaniatv.com/index.html",os.path.join(IMAGES_PATH, 'deldia.png'),"")
+	xbmctools.addnewfolder( CHANNELNAME , "documentaldeldia"     , category , "Documental del dia","http://www.documaniatv.com/index.html",os.path.join(IMAGES_PATH, 'deldia.png'),"")
 	xbmctools.addnewfolder( CHANNELNAME , "search"           , category , "Buscar",tecleadoultimo,os.path.join(IMAGES_PATH, 'search_icon.png'),"")
 
 	# Label (top-right)...
@@ -57,21 +58,17 @@ def mainlist(params,url,category):
 
 def search(params,url,category):
 	logger.info("[documaniatv.py] search")
-
-        
-	keyboard = xbmc.Keyboard()
-        keyboard.doModal()
-        
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-                        
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-                        
-                        
-			searchUrl = "http://www.documaniatv.com/search.php?keywords="+tecleado+"&btn=Buscar"
-			searchresults(params,searchUrl,category)
+	buscador.listar_busquedas(params,url,category)
+	
+def searchresults(params,url,category):
+	logger.info("[documaniatv.py] search")
+	        
+	buscador.salvar_busquedas(params,url,category)
+	
+	#convert to HTML
+	tecleado = url.replace(" ", "+")
+	searchUrl = "http://www.documaniatv.com/search.php?keywords="+tecleado+"&btn=Buscar"
+	searchresults2(params,searchUrl,category)
 
 
 
@@ -106,7 +103,7 @@ def performsearch(texto):
 		
 	return resultados
 
-def searchresults(params,url,category):
+def searchresults2(params,url,category):
 	logger.info("[documaniatv.py] searchresults")
 
 	# Descarga la página
@@ -684,7 +681,7 @@ def detail(params,url,category):
 
 	for video in listavideos:
                 videotitle = video[0]
-                url1 = video[1]
+                url1 = video[1].replace("&amp;","&")
                 logger.info("url   ="+url)
                 if  url.endswith(".jpg"):break
 		server = video[2]
@@ -735,10 +732,10 @@ def detail(params,url,category):
 			patron = "http://www.documaniatv.com.*?\_(.*?)\.html"
 			matches = re.compile(patron,re.DOTALL).findall(url)
 			url = "http://www.documaniatv.com/ajax.php?p=detail&do=show_more_best&vid="+matches[0]
-			titulo = "Ver Mas Videos Relacionados - MEJOR EN LA CATEGORIA"
+			titulo = "Ver Videos Relacionados - MEJOR EN LA CATEGORIA"
 			xbmctools.addnewfolder( CHANNELNAME , "Relacionados" , category , titulo , url , "" , "Lísta algunos Documentales relacionados con el mismo tema" )
 		
-			titulo = "Ver Mas Videos Relacionados - MISMO TEMA"
+			titulo = "Ver Videos Relacionados - MISMO TEMA"
 			url = "http://www.documaniatv.com/ajax.php?p=detail&do=show_more_artist&vid="+matches[0]
 			xbmctools.addnewfolder( CHANNELNAME , "Relacionados" , category , titulo , url , "" , "Lísta algunos Documentales relacionados con el mismo tema" )
         except:

@@ -3,7 +3,7 @@
 # pelisalacarta - XBMC Plugin
 # Canal "Anime (foros)" by Lily
 # http://www.mimediacenter.info/foro/viewtopic.php?f=14&t=401
-# Last Updated:27/08/2010
+# Last Updated:25/09/2010
 #------------------------------------------------------------
 import urlparse,urllib2,urllib,re
 import os
@@ -90,14 +90,14 @@ def favoritosupdate(category,tipocontenido,tipolist,idioma,listupdate):
 		if len(nuevos)>0 or len(seriesnuevos)>0:
 			addsimplefolder( CHANNELNAME , "listadonuevos" , "Todos Mis Favoritos - Nuevos Contenidos" , "-*-Todos Mis Favoritos - Nuevos Contenidos Posteriores a [LW]" , "" , STARGREEN2_THUMB , "" )
 		if len(listanime)>0:
-			additem( CHANNELNAME , category , "------------------------------------ ANIME - FOROS ------------------------------------" , "" , "" , "" )
+			additem( CHANNELNAME , category , "------------------------------------- ANIME - FOROS -------------------------------------" , "" , "" , "" )
 	if len(nuevos)>0:
 		addsimplefolder( CHANNELNAME , "listadonuevos" , todostitulo+"Mis Favoritos - Nuevos Contenidos" , "-*-"+todostitulo+"Nuevos Contenidos (Posteriores a [LW])" , "" , STARGREEN2_THUMB , "" )
 	for anime in listanime:
 		adderdmfolder( CHANNELNAME , "listados" , anime[0] , anime[1] , anime[2] , anime[3] , anime[4] , anime[5] , anime[6] , anime[7] )
 
 	if category=="Todos Mis Favoritos" and len(series)>0:
-		additem( CHANNELNAME , category , "----------------------------- CASTTV - SERIESYONKIS -----------------------------" , "" , "" , "" )
+		additem( CHANNELNAME , category , "--------------------- CASTTV - TVSHACK - SERIESYONKIS ---------------------" , "" , "" , "" )
 		if len(seriesnuevos)>0:
 			addsimplefolder( CHANNELNAME , "casttv.listadonuevos" , "Series VO - Mis Favoritas - Nuevos Episodios" , "-*-Series VO - Nuevos Episodios (Posteriores a [LW])" , "" , STARGREEN2_THUMB , "" )
 		for serie in series:
@@ -130,6 +130,9 @@ def findfavoritos(category,tipocontenido,tipolist,idioma):
 			else:
 				search=search+"|"+titulo
 	if search<>"":
+		search = re.sub('&','&(?:amp;)?',search)
+		search = re.sub('\\\\"','(?:\\\\"|&quot;)',search)
+		search = re.sub('\\\\!','(?:\\\\!|&#33;)',search)
 		search="(?:"+search+")"
 		listaerdm = finderdm(urleRdM,tipolist,tipocontenido,search,idioma)
 		if len(listaerdm)==0:
@@ -798,6 +801,9 @@ def searchvistos(params,url,category):
 		return
 
 	if searcherdm<>"":
+		searcherdm = re.sub('&','&(?:amp;)?',searcherdm)
+		searcherdm = re.sub('\\\\"','(?:\\\\"|&quot;)',searcherdm)
+		searcherdm = re.sub('\\\\!','(?:\\\\!|&#33;)',searcherdm)
 		searcherdm="(?:"+searcherdm+")"
 		listaerdm = finderdm(urleRdM,"Completo","[^<]+",searcherdm,"")
 		if len(listaerdm)==0:
@@ -1060,12 +1066,12 @@ def listadonvosupdate(category,listupdate):
 		casttv.alertnoepisodios(4)
 
 	if "Todos" in category and len(nuevos)>0:
-		additem( CHANNELNAME , category , "------------------------------------ ANIME - FOROS ------------------------------------" , "" , "" , "" )
+		additem( CHANNELNAME , category , "------------------------------------- ANIME - FOROS -------------------------------------" , "" , "" , "" )
 	for item in nuevos:
 		addvideofolder( CHANNELNAME , "episodiomenu" , item[0] , item[1] , item[2] , item[3] , "" , "" )
 
 	if len(seriesnuevos)>0:
-		additem( CHANNELNAME , category , "----------------------------- CASTTV - SERIESYONKIS -----------------------------" , "" , "" , "" )
+		additem( CHANNELNAME , category , "--------------------- CASTTV - TVSHACK - SERIESYONKIS ---------------------" , "" , "" , "" )
 		for item in seriesnuevos:
 			casttv.addnewfolder( CHANNELNAME , "casttv.episodiomenu" , category , item[0] , item[1] , item[2] , item[3] , item[4] , item[5] , item[6] , item[7] , item[8] , item[9] , item[10] , ";" , "New" )
 	# ------------------------------------------------------------------------------------
@@ -1794,7 +1800,7 @@ def ayuda(params,url,category):
 	additem( CHANNELNAME , category , "Mis Favoritos con Nuevos Episodios [Aptdo Mis Favoritos]" , "" , STARGREEN_THUMB , "" )
 	additem( CHANNELNAME , category , "Nuevos Episodios (posteriores a [LW]) [Aptdo Mis Favoritos]" , "" , STARGREEN2_THUMB , "" )
 	additem( CHANNELNAME , category , "Mensaje o Encabezado (sin acción)" , "" , HD_THUMB , "" )
-	additem( CHANNELNAME , category , "------------------------------------ Info: 27/08/2010 ------------------------------------" , "" , HELP_THUMB , "" )
+	additem( CHANNELNAME , category , "------------------------------------ Info: 25/09/2010 ------------------------------------" , "" , HELP_THUMB , "" )
 	additem( CHANNELNAME , category , info1 , "" , HD_THUMB , "" )
 	additem( CHANNELNAME , category , "Anime - Vistos: Distintos de Mis Favoritos" , "" , HD_THUMB , "" )
 	# ------------------------------------------------------------------------------------

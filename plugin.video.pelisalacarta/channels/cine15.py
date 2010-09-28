@@ -17,6 +17,7 @@ import binascii
 import xbmctools
 import config
 import logger
+import buscador
 
 CHANNELNAME = "cine15"
 
@@ -45,17 +46,15 @@ def mainlist(params,url,category):
 	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
 def search(params,url,category):
+	buscador.listar_busquedas(params,url,category)
+
+def searchresults(params,url,category):
 	logger.info("[cine15.py] search")
 
-	keyboard = xbmc.Keyboard('')
-	keyboard.doModal()
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-			searchUrl = "http://www.cine15.com/?s="+tecleado+"&x=0&y=0"
-			listvideos(params,searchUrl,category)
+	buscador.salvar_busquedas(params,url,category)
+	tecleado = url.replace(" ", "+")
+	searchUrl = "http://www.cine15.com/?s="+tecleado+"&x=0&y=0"
+	listvideos(params,searchUrl,category)
 
 def performsearch(texto):
 	logger.info("[cine15.py] performsearch")

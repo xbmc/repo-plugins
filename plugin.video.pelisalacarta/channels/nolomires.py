@@ -17,6 +17,8 @@ import binascii
 import xbmctools
 import config
 import logger
+import vk
+import buscador
 
 CHANNELNAME = "nolomires"
 
@@ -36,12 +38,12 @@ def mainlist(params,url,category):
 
 	# Añade al listado de XBMC
 	xbmctools.addnewfolder( CHANNELNAME , "search" , category , "Buscar","http://www.nolomires.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "LastSearch" , category , "Peliculas Buscadas Recientemente","http://www.nolomires.com/tag/estrenos-2010/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "LastSearch" , category , "Peliculas Buscadas Recientemente","http://www.nolomires.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "listvideosMirror" , category , "Ultimos Estrenos","http://www.nolomires.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "TagList"         , category , "Tag de Estrenos por año"    ,"http://www.nolomires.com/","","")
+	#xbmctools.addnewfolder( CHANNELNAME , "TagList"         , category , "Tag de Estrenos por año"    ,"http://www.nolomires.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "MostWatched" , category , "Peliculas Mas Vistas","http://www.nolomires.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "ListaCat"         , category , "Listado por Categorias"    ,"http://www.nolomires.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos"       , category , "Ultimas Películas Añadidas"    ,"http://www.nolomires.com/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos"       , category , "Ultimas Películas Añadidas"    ,"http://www.nolomires.com/category/peliculas-en-nolomires/","","")
 	
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
@@ -52,22 +54,19 @@ def mainlist(params,url,category):
 	# End of directory...
 	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
-def search(params,url,category):
+def searchresults(params,Url,category):
 	logger.info("[nolomires.py] search")
 
-	keyboard = xbmc.Keyboard()
-	#keyboard.setDefault('')
-	keyboard.doModal()
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-			searchUrl = "http://www.nolomires.com/?s="+tecleado+"&x=15&y=19"
-			listvideos(params,searchUrl,category)
+
+	buscador.salvar_busquedas(params,Url,category)		
+	Url = Url.replace(" ", "+")
+	searchUrl = "http://www.nolomires.com/?s="+Url+"&x=15&y=19"
+	listvideos(params,searchUrl,category)
 
 
-
+def search(params,Url,category):
+	
+	buscador.listar_busquedas(params,Url,category)
 
 def ListaCat(params,url,category):
 	logger.info("[nolomires.py] ListaCat")
@@ -183,7 +182,7 @@ def LastSearch(params,url,category):
 
 	# Patron de las entradas
 	patronvideos  = '<li><a href="([^"]+)" '      # URL
-	patronvideos += 'title="([^"]+)" >[^<]+'       # TITULO
+	patronvideos += 'title="([^"]+)">[^<]+'       # TITULO
 	patronvideos += '</a></li>'                    # Basura
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
@@ -437,6 +436,18 @@ def detail(params,url,category):
 					xbmctools.addnewvideo( CHANNELNAME ,"play"  , category , "Directo" , title + " (V.O) - %s %s" %(subtitle,sub), scrapedurl , thumbnail , plot )
 				scrapedurl = match
 				print scrapedurl
+
+	## --------------------------------------------------------------------------------------##
+	#            Busca enlaces de videos para el servidor vk.com                             #
+	## --------------------------------------------------------------------------------------##
+	#http://vkontakte.ru/video_ext.php?oid=93103247&id=149051583&hash=793cde84b05681fa&hd=1
+	
+	patronvideos = '<iframe src="(http://[^\/]+\/video_ext.php[^"]+)"'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	if len(matches)>0:
+		print " encontro VK.COM :%s" %matches[0]
+ 		videourl = 	vk.geturl(matches[0])
+ 		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK]", videourl , thumbnail , plot )
 	
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )

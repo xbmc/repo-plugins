@@ -22,7 +22,14 @@ import logger
 import buscador
 
 CHANNELNAME = "seriesyonkis"
-SERVER = {'pymeno2':'','pymeno3':'','pymeno4':'','pymeno5':'','pymeno6':'','svueno':'(Stagevu)'}
+SERVER = {'pymeno2'   :'Megavideo' ,'pymeno3':'Megavideo','pymeno4':'Megavideo','pymeno5':'Megavideo','pymeno6':'Megavideo',
+		  'svueno'    :'Stagevu'   ,
+		  'movshare'   :'Movshare'  ,
+		  'videoweed' :'Videoweed' ,
+		  'veoh2'     :'Veoh'      ,
+		  'megaupload':'Megaupload',
+		  'pfflano'   :'Directo'   ,
+		  }
 
 #xbmc.executebuiltin("Container.SetViewMode(57)")  #57=DVD Thumbs
 #xbmc.executebuiltin("Container.SetViewMode(50)")  #50=full list
@@ -449,14 +456,13 @@ def detail(params,url,category):
 	# ------------------------------------------------------------------------------------
 	# Busca los enlaces a los videos
 	# ------------------------------------------------------------------------------------
-	server = "Megavideo"
-	url = scrapvideoURL(url)
+	#server = "Megavideo"
+	server,url = scrapvideoURL(url)
 	if url == "":
 		
 		return
 	logger.info("[seriesyonkis - detail] url="+url)
-	if "stagevu" in url:
-		server = "Stagevu"
+	
 	xbmctools.playvideo(CHANNELNAME,server,url,category,title,thumbnail,plot,Serie=Serie)
 	# ------------------------------------------------------------------------------------
 
@@ -559,17 +565,16 @@ def strm_detail (params,url,category):
 	title = urllib.unquote_plus( params.get("title") )
 	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
 	plot = unicode( xbmc.getInfoLabel( "ListItem.Plot" ), "utf-8" )
-	server = "Megavideo"
+	#server = "Megavideo"
 	# ------------------------------------------------------------------------------------
 	# Busca los enlaces a los videos
 	# ------------------------------------------------------------------------------------
-	url = scrapvideoURL(url)
+	server,url = scrapvideoURL(url)
 	if url == "":
 		
 		return
 	logger.info("[seriesyonkis] strm_detail url="+url)
-	if "stagevu" in url:
-		server = "Stagevu"
+	
 	xbmctools.playvideo("STRM_Channel",server,url,category,title,thumbnail,plot,1)
 #<td><div align="center"><span style="font-size: 10px"><em><img src="http://simages.peliculasyonkis.com/images/tmegavideo.png" alt="Megavideo" style="vertical-align: middle;" /><img src='http://images.peliculasyonkis.com/images/tdescargar2.png' title='Tiene descarga directa' alt='Tiene descarga directa' style='vertical-align: middle;' /><a onmouseover="window.status=''; return true;" onmouseout="window.status=''; return true;" title="Seleccionar esta visualizacion" href="http://www.seriesyonkis.com/player/visor_pymeno4.php?d=1&embed=no&id=%CB%D8%DC%DD%C0%D3%E2%FC&al=%A6%B2%AC%B8%AC%A4%BD%A4" target="peli">SELECCIONAR ESTA</a> (flash desde megavideo)</em>		  </span></div></td>		  <td><div align="center"><img height="30" src="http://simages.seriesyonkis.com/images/f/spanish.png" alt="Audio Español" title="Audio Español" style="vertical-align: middle;" /></div></td>
 #		  <td><div align="center"><span style="font-size: 10px">Español (Spanish)</span></div></td>		  <td><div align="center"><span style="font-size: 10px">no</span></div></td>		  <td><div align="center"><span style="font-size: 10px">Formato AVI 270mb</span></div></td>		  <td><div align="center"><span style="font-size: 10px">MasGlo<br />masglo</span></div></td>		</tr><tr>
@@ -583,10 +588,12 @@ def scrapvideoURL(urlSY):
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 	id=""
+	
 	if len(matches)==0:
 		xbmctools.alertnodisponible()
-		return ""
+		return "",""
 	elif len(matches)==1:
+		server = SERVER[matches[0][0]]
 		#print matches[0][1]
 		if matches[0][0] == "svueno":
 			id = matches[0][1]
@@ -602,12 +609,13 @@ def scrapvideoURL(urlSY):
 			id = dec.decryptID_series(dec.unescape(id))
 		else:pass
 		print 'codigo :%s' %id
-		return id		
+		return server,id		
 	else:
-		id = choiceOne(matches)
-		if len(id)==0:return ""
+		
+		server,id = choiceOne(matches)
+		if len(id)==0:return "",""
 		print 'codigo :%s' %id
-		return id
+		return server,id
 		
 		
 def choiceOne(matches):
@@ -632,7 +640,7 @@ def choiceOne(matches):
 				duracion = match.group(1).replace(".",":")		
 			audio = audio.replace("Subt\xc3\xadtulos en Espa\xc3\xb1ol","Subtitulado") 
 			audio = audio.replace("Audio","").strip()
-			opciones.append("%02d) [%s] - (%s) - %s %s " % (Nro , audio,fmt,duracion,servidor))
+			opciones.append("%02d) [%s] - (%s) - %s  [%s] " % (Nro , audio,fmt,duracion,servidor))
 			IDlist.append(codigo)
 			servlist.append(server)
 		except:
@@ -640,7 +648,7 @@ def choiceOne(matches):
 	dia = xbmcgui.Dialog()
 	seleccion = dia.select("Nº)[AUDIO]-(CALIDAD)-DURACION", opciones)
 	logger.info("seleccion=%d" % seleccion)
-	if seleccion == -1 : return ""
+	if seleccion == -1 : return "",""
 	if servlist[seleccion]  in ["pymeno2","pymeno3","pymeno4","pymeno5","pymeno6"]:
 		cortar = IDlist[seleccion].split("&")
 		id = cortar[0]
@@ -652,7 +660,18 @@ def choiceOne(matches):
 		logger.info("[seriesyonkis.py]  id="+id)
 		dec = Yonkis.DecryptYonkis()
 		id = dec.decryptALT(dec.charting(dec.unescape(id)))
-		id = "http://stagevu.com/video/" + id		
+		id = "http://stagevu.com/video/" + id
+	elif servlist[seleccion] == "movshare":
+		id = IDlist[seleccion]
+		logger.info("[seriesyonkis.py]  id="+id)
+		dec = Yonkis.DecryptYonkis()
+		id = dec.decryptALT(dec.charting(dec.unescape(id)))
+	elif servlist[seleccion] == "videoweed":
+		id = IDlist[seleccion]
+		logger.info("[seriesyonkis.py]  id="+id)
+		dec = Yonkis.DecryptYonkis()
+		id = dec.decryptID(dec.charting(dec.unescape(id)))
+		id = "http://www.videoweed.com/file/%s" %id				
 	else:
 		pass
-	return id
+	return SERVER[servlist[seleccion]],id

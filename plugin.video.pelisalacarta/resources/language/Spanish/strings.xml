@@ -9,6 +9,7 @@
 	<!-- Comunes -->
 	<string id="30000">Reproductor:</string>
 	<string id="30001">Comprobar actualizaciones:</string>
+	<string id="30004">Actualizar automáticamente canales:</string>
 	<string id="30002">Activar modo adultos:</string>
 	<string id="30003">Generar log detallado:</string>
 
@@ -32,10 +33,19 @@
 	<!-- Otras -->
 	<string id="30017">Directorio de descargas:</string>
 	<string id="30018">Directorio de lista descargas:</string>
+	<string id="30030">Directorio de favoritos:</string>
 	<string id="30020">Elegir Calidad mas alta (Youtube)</string>
 	<string id="30021">Activar Subtitulo:</string>
 	<string id="30022">URL de JDownloader:</string>
 	<string id="30024">Numero de busquedas a salvar:</string>
+
+	<string id="30019">Filtrar canales por idioma:</string>
+
+	<string id="30025">Cualquier idioma</string>
+	<string id="30026">Español</string>
+	<string id="30027">Inglés</string>
+	<string id="30028">Italiano</string>
+	<string id="30029">Portugués</string>
 
 	<!-- =============================================================== -->
 	<!-- De 30050 a 30099: Mensajes informativos - error                 -->
@@ -53,6 +63,7 @@
 	<string id="30060">No se puede acceder por un error en el sitio web</string>
 	<string id="30061">La calidad elegida no esta disponible o el video ha sido borrado</string>
 	<string id="30062">Prueba a reproducir en otra calidad</string>
+	<string id="30063">¡Canal descargado y actualizado!</string>
 
 	<!-- =============================================================== -->
 	<!-- De 30100 a 30149: Canales genéricos (buscador, descargas, etc.) -->
@@ -76,6 +87,18 @@
 	<string id="30115">El Trailer para %s</string>
 	<string id="30116">no se ha podido localizar.</string>
 	<string id="30117">¿Quieres refinar la búsqueda con el teclado?</string>
+	
+	<string id="30118">Canales</string>
+	<string id="30119">Seleccione una Categoría</string>
+	<string id="30120">Seleccione un Idioma</string>
+	<string id="30121">Todos</string>
+	<string id="30122">Películas</string>
+	<string id="30123">Series</string>
+	<string id="30124">Anime</string>
+	<string id="30125">Documentales</string>
+	<string id="30126">Música</string>
+	<string id="30127">Servidores</string>
+	<string id="30128">Buscador de Trailers</string>
 
 	<!-- =============================================================== -->
 	<!-- De 30150 a 30199: Menú acción / contextual                      -->

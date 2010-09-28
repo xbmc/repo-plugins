@@ -13,6 +13,7 @@ import xbmc
 import config
 import logger
 import gzip,StringIO
+import re, htmlentitydefs
 
 cacheactiva = False
 
@@ -231,7 +232,8 @@ def downloadpageGzip(url):
 	#  Inicializa la librería de las cookies
 	ficherocookies = os.path.join( config.DATA_PATH, 'cookies.lwp' )
 	print "Cookiefile="+ficherocookies
-
+	inicio = time.clock()
+	
 	cj = None
 	ClientCookie = None
 	cookielib = None
@@ -312,7 +314,8 @@ def downloadpageGzip(url):
 	'Accept-Encoding':'gzip,deflate',
 	'Keep-Alive':'300',
 	'Connection':'keep-alive',
-	'Referer':parsedurl}
+	'Referer':parsedurl[0]+"://"+parsedurl[1]}
+	print txheaders
 
 	# fake a user agent, some websites (like google) don't like automated exploration
 
@@ -323,13 +326,18 @@ def downloadpageGzip(url):
 	data=handle.read()
 	handle.close()
 	
+	fin = time.clock()
+	logger.info("[scrapertools.py] Descargado 'Gzipped data' en %d segundos " % (fin-inicio+1))
+		
 	# Descomprime el archivo de datos Gzip
 	try:
+		fin = inicio
 		compressedstream = StringIO.StringIO(data)
 		gzipper = gzip.GzipFile(fileobj=compressedstream)
 		data1 = gzipper.read()
 		gzipper.close()
-	
+		fin = time.clock()
+		logger.info("[scrapertools.py] 'Gzipped data' descomprimido en %d segundos " % (fin-inicio+1))
 		return data1
 	except:
 		return data
@@ -365,6 +373,48 @@ def entityunescape(cadena):
 	cadena = cadena.replace('&Ccedil;','Ç')
 	cadena = cadena.replace('&ccedil;','ç')
 	return cadena
+
+def unescape(text):
+   """Removes HTML or XML character references 
+      and entities from a text string.
+      keep &amp;, &gt;, &lt; in the source code.
+   from Fredrik Lundh
+   http://effbot.org/zone/re-sub.htm#unescape-html
+   """
+   def fixup(m):
+      text = m.group(0)
+      if text[:2] == "&#":
+         # character reference
+         try:
+            if text[:3] == "&#x":
+               
+               return unichr(int(text[3:-1], 16)).encode("utf-8")
+            else:
+               
+               return unichr(int(text[2:-1])).encode("utf-8")
+               
+         except ValueError:
+            print "error de valor"
+            pass
+      else:
+         # named entity
+         try:
+            if text[1:-1] == "amp":
+               text = "&amp;amp;"
+            elif text[1:-1] == "gt":
+               text = "&amp;gt;"
+            elif text[1:-1] == "lt":
+               text = "&amp;lt;"
+            else:
+               print text[1:-1]
+               text = unichr(htmlentitydefs.name2codepoint[text[1:-1]]).encode("utf-8")
+         except KeyError:
+            print "keyerror"
+            pass
+      return text # leave as is
+   return re.sub("&#?\w+;", fixup, text)
+   
+   
 
 
 def htmlclean(cadena):

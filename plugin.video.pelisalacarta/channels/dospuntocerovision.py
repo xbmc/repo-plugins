@@ -20,6 +20,7 @@ import trailertools
 import youtube
 import config
 import logger
+import buscador
 
 CHANNELNAME = "dospuntocerovision"
 
@@ -54,23 +55,23 @@ def mainlist(params,url,category):
 
 	# End of directory...
 	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
-
+	
 def search(params,url,category):
-	logger.info("[dospuntocerovision.py] search")
-
-	keyboard = xbmc.Keyboard('default')
-	#keyboard.setDefault('')
-	keyboard.doModal()
-	if (keyboard.isConfirmed()):
-		tecleado = keyboard.getText()
-		if len(tecleado)>0:
-			#convert to HTML
-			tecleado = tecleado.replace(" ", "+")
-			searchUrl = "http://www.dospuntocerovision.com/search?q="+tecleado
-			searchresults(params,searchUrl,category)
+	buscador.listar_busquedas(params,url,category)
 
 def searchresults(params,url,category):
 	logger.info("[dospuntocerovision.py] searchresults")
+
+	#convert to HTML
+	tecleado = url.replace(" ", "+")
+	searchUrl = "http://www.dospuntocerovision.com/search?q="+tecleado
+	searchresults2(params,searchUrl,category)
+
+def searchresults2(params,url,category):
+	logger.info("[dospuntocerovision.py] searchresults")
+
+	if config.getSetting("forceview")=="true":
+		xbmc.executebuiltin("Container.SetViewMode(53)")  #53=icons
 
 	patronvideos = 'post-title entry-title(.*?)post-footer'
 	# Descarga la página

@@ -17,6 +17,7 @@ import binascii
 import xbmctools
 import config
 import logger
+import vk
 
 CHANNELNAME = "newdivx"
 
@@ -404,9 +405,12 @@ def detail(params,url,category):
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
 		print " encontro VK.COM :%s" %matches[0]
- 		
+ 		videourl = 	vk.geturl(matches[0])
+ 		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK]", videourl , thumbnail , plot )
+ 	"""	
 		data2 = scrapertools.cachePage(matches[0])
 		print data2
+		
 		patron  = "var video_host = '([^']+)'.*?"
 		patron += "var video_uid = '([^']+)'.*?"
 		patron += "var video_vtag = '([^']+)'.*?"
@@ -426,8 +430,8 @@ def detail(params,url,category):
 					tipo = "240.mp4"
 					videourl = "%s/u%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
 					xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK] [%s]" %tipo, videourl , thumbnail , plot )
-		
-		
+	"""	
+	
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 		

@@ -9,7 +9,7 @@
     <!-- Strings -->
     <string id="30810">Limpiar caché del RSS</string>
 	<string id="30811">Limpiar caché de vistas en miniatura</string>
-	<string id="30812">Limpiar caché del RSS & de vistas en miniatura</string>
+	<string id="30812">Limpiar caché del RSS y de vistas en miniatura</string>
 	<string id="30813">Descargar caché de vistas en miniatura</string>
 	
     <!-- Plugin  Settings -->
@@ -25,11 +25,11 @@
 	<string id="30908">(¡Vuelva a cargar esta carpeta para aplicar su configuración!)</string>
 
     <!-- Dialog -->
-    <string id="32000">Recorridos rápidos asistidos por herramientas</string>
+    <string id="32000">Tool-assisted Superplays</string>
 
 	<!-- Dialog: First Startup -->
 	<string id="32001">Esta es la primera vez que ejecuta esta aplicación.</string>
-	<string id="32002">¿Desea descargar el caché de vistas en miniatura?</string>
+	<string id="32002">¿Desea descargar la caché de vistas en miniatura?</string>
 	<string id="32003">(¡Hará que la aplicación funcione mucho más rápido!)</string>
 	
 	<!-- Dialog: Video Download -->
@@ -39,32 +39,32 @@
     <string id="32013">Restante</string>
     <string id="32014">Descargando video</string>
     <string id="32015">Descarga de video cancelada</string>
-	<string id="32016">Descarga de video acabada</string>
+	<string id="32016">Descarga de video finalizada</string>
 	
 	<!-- Dialog: Clean RSS Cache -->
-	<string id="32020">!OJO!: NO puede deshacerse!</string>
-	<string id="32021">¿Seguro que desea limpiar el caché del RSS?</string>
-	<string id="32022">Limpiando el caché del RSS...</string>
-	<string id="32023">Limpieza del caché del RSS cancelada</string>
-	<string id="32024">Limpieza del caché del RSS acabada</string>
+	<string id="32020">!OJO!: ¡NO puede deshacerse!</string>
+	<string id="32021">¿Seguro que desea limpiar la caché del RSS?</string>
+	<string id="32022">Limpiando la caché del RSS...</string>
+	<string id="32023">Limpieza de la caché del RSS cancelada</string>
+	<string id="32024">Limpieza de la caché del RSS finalizada</string>
 	<string id="32025">Eliminando</string>
 	
 	<!-- Dialog: Download Thumbnail Cache Download -->
-	<string id="32040">Descarga del caché de vistas en miniatura cancelada</string>
-	<string id="32041">Descarga del caché de vistas en miniatura acabada</string>
-	<string id="32042">Descarga & instalación del caché acabadas</string>
+	<string id="32040">Descarga de la caché de vistas en miniatura cancelada</string>
+	<string id="32041">Descarga de la caché de vistas en miniatura finalizada</string>
+	<string id="32042">Descarga e instalación de la caché finalizadas</string>
 	<string id="32043">¡Disfrute de una experiencia más rápida!</string>
 
 	<!-- Dialog: Clean Cache -->
 	<string id="32100">Descargando caché de imágenes</string>
-	<string id="32101">¿Seguro que desea limpiar el caché?</string>
-	<string id="32102">Limpieza del caché cancelada</string>
+	<string id="32101">¿Seguro que desea limpiar la caché?</string>
+	<string id="32102">Limpieza de la caché cancelada</string>
 	
 	<!-- Dialog: Clean Thumbnail Cache -->
-	<string id="32030">Limpiando el caché de vistas en miniatura...</string>
-	<string id="32031">¿Seguro que desea limpiar el caché de vistas en miniatura?</string>
-	<string id="32032">Limpieza del caché de vistas en miniatura cancelada</string>
-	<string id="32033">Limpieza del caché de vistas en miniatura acabada</string>
+	<string id="32030">Limpiando la caché de vistas en miniatura...</string>
+	<string id="32031">¿Seguro que desea limpiar la caché de vistas en miniatura?</string>
+	<string id="32032">Limpieza de la caché de vistas en miniatura cancelada</string>
+	<string id="32033">Limpieza de la caché de vistas en miniatura finalizada</string>
 	<string id="32034">Eliminando vista en miniatura</string>
 	
 	<!-- Dialog: Download Thumbnail Cache: Unzip -->
@@ -73,7 +73,7 @@
 	<string id="32046">Nombre del archivo</string>
 	<string id="32047">Archivo</string>
 	<string id="32048">de</string>
-	<string id="32049">Limpieza del caché acabada</string>
+	<string id="32049">Limpieza de la caché finalizada</string>
 
 	 <!-- Settings: Image Selection -->
 	<string id="30950">Pequeño</string>

@@ -1,3 +1,15 @@
+1.0.3
+- Updated: Changed name from Tool-assisted Speedruns to Tool-assisted Superplays (on behalf of http://tasvideos.org/'s request)
+
+1.0.2
+- Fixed: Crash on using any other language that was supported by the addon.
+- Added: German and French translation
+- Updated: Inner workings of language string retrieval
+- Updated: Cleaned up functions in common.py
+- Updated: Spanish Translation has been tweaked.
+- Updated: Changelog.txt now follows a standard.
+- Comment: This version is the spiritual "1.0" where everything works as intended :)
+
 1.0.1
 - Fixed: Sorting by date was broken (Due to non-2digit format)
 - Fixed: Linux Compatibility of Addon - should no longer fail :)
@@ -17,21 +29,21 @@
 - Updated: Icons have been finalized
 
 0.94
-- Streamlined the representation of http://tasvideos.org/
-- Cleaned the Source from all comments.
+- Updated: Streamlined the representation of http://tasvideos.org/
+- Updated: Cleaned the Source from all comments.
 
 0.93
-- Changed Cache Directory to comply with XBMC's standard
+- Fixed: Changed Cache Directory to comply with XBMC's standard
 
 0.92
-- Enhanced Accuracy of default (normal) Feed Parsing
+- Updated: Enhanced Accuracy of default (normal) Feed Parsing
 
 0.91
-- Fixed RSS Parsing Errors
-- Added 3 different Parsing Methods
+- Fixed: RSS Parsing Errors
+- Fixed: Added 3 different Parsing Methods
 
 0.9 Beta 2
-- Fixed Image Downloading Crash
+- Fixed: Image Downloading Crash
 
 0.9
-- First public release
+- Comment: First public release

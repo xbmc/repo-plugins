@@ -17,15 +17,15 @@
 	<string id="30901">Icon Size</string>
 	<string id="30902">Fanart Size</string>
 	<string id="30903">Parsing Method</string>
-	<string id="30904">Feed Update Interval</string>
-	<string id="30905">Image Update Interval</string>
+	<string id="30904">RSS Update Interval</string>
+	<string id="30905">Thumbnail Update Interval</string>
 	<string id="30906">Download Folder</string>
 	
 	<string id="30907">No Download Folder has been set, do it now?</string>
 	<string id="30908">(Reload this folder for your settings to apply!)</string>
 
     <!-- Dialog Title -->
-    <string id="32000">Tool-assisted Speedruns</string>
+    <string id="32000">Tool-assisted Superplays</string>
 
 	<!-- Dialog: First Startup -->
 	<string id="32001">This is the first time you are running this Addon</string>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- Strings -->
     <string id="30800">Uusimmat videot</string>
@@ -25,7 +25,7 @@
 	<string id="30908">(Lataa tämä kansio uudelleen, jotta asetuksesi sovelletaan!)</string>
 
     <!-- Dialog -->
-    <string id="32000">Työkaluavusteisia nopeita läpiajoja</string>
+    <string id="32000">Tool-assisted Superplays</string>
 
 	<!-- Dialog: First Startup -->
 	<string id="32001">Käytät tätä lisäohjelmaa ensimmäistä kertaa.</string>

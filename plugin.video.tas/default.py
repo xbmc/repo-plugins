@@ -1,4 +1,4 @@
-#TAS Videos by Insayne
+#TAS by Insayne
 import os,sys,time
 import urllib,urllib2,re
 import xbmcplugin,xbmcgui,xbmcaddon
@@ -8,11 +8,11 @@ from TasAPI import cache as cache
 from TasAPI import utilities as util
 
 # plugin Constants
-__plugin__ = "Tool-assisted Speedruns"
+__plugin__ = "Tool-assisted Superplays"
 __author__ = "Insayne (Code) & HannaK (Graphics)"
 __url__ = "http://code.google.com/p/xbmc-plugin-video-tas/"
 __svn_url__ = "https://xbmc-plugin-video-tas.googlecode.com/svn/trunk/plugin.videos.tas/"
-__version__ = "1.0.1"
+__version__ = "1.0.3"
 __svn_revision__ = "$Revision$"
 __XBMC_Revision__ = xbmc.getInfoLabel('System.BuildVersion')
 __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
@@ -43,10 +43,10 @@ def init_addon():
 	frf = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'startup.txt' ))
 	firstrun = os.path.isfile(frf)
 	if firstrun==False:
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32001)
-		dia_l2 = __settings__.getLocalizedString(32002)
-		dia_l3 = __settings__.getLocalizedString(32003)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32001)
+		dia_l2 = common.get_lstring(32002)
+		dia_l3 = common.get_lstring(32003)
 		dialog = xbmcgui.Dialog()
 		ret = dialog.yesno(dia_title, dia_l1, dia_l2, dia_l3)
 		if ret==1:	
@@ -64,10 +64,10 @@ def Generate_Index():
 	notables = xbmc.translatePath(os.path.join(dimg, "not.png"))
 	bbs = xbmc.translatePath(os.path.join(dimg, "bbs.png"))
 	tools = xbmc.translatePath(os.path.join(dimg, "tools.png"))
-	string_latest_videos = __settings__.getLocalizedString(30800)
-	string_notables = __settings__.getLocalizedString(30801)
-	string_bbs = __settings__.getLocalizedString(30802)
-	string_ad_util = __settings__.getLocalizedString(30803)
+	string_latest_videos = common.get_lstring(30800)
+	string_notables = common.get_lstring(30801)
+	string_bbs = common.get_lstring(30802)
+	string_ad_util = common.get_lstring(30803)
 	addDir(string_latest_videos,'http://tasvideos.org/publications.rss',2, latest, common.get_category_fanthumb("Latest Videos", "Fanart"))
 	addDir(string_notables,'http://tasvideos.org/notables.rss',1, notables, common.get_category_fanthumb("Notables", "Fanart"))
 	addDir(string_bbs,'http://tasvideos.org/systems.rss',1, bbs, common.get_category_fanthumb("Browse By System", "Fanart"))
@@ -80,10 +80,10 @@ def Get_Tools():
 	clean_ico = xbmc.translatePath(os.path.join(dimg, "clear_icons.png"))
 	clean_all = xbmc.translatePath(os.path.join(dimg, "clear_cache.png"))
 	dl = xbmc.translatePath(os.path.join(dimg, "dl_cache.png"))
-	string_crss = __settings__.getLocalizedString(30810)
-	string_cthumb = __settings__.getLocalizedString(30811)
-	string_cboth = __settings__.getLocalizedString(30812)
-	string_cdlimg = __settings__.getLocalizedString(30813)
+	string_crss = common.get_lstring(30810)
+	string_cthumb = common.get_lstring(30811)
+	string_cboth = common.get_lstring(30812)
+	string_cdlimg = common.get_lstring(30813)
 	addLinkTool(string_crss, 'plugin://plugin.video.tas?mode=4&url=clean_rss', clean_rss)
 	addLinkTool(string_cthumb, 'plugin://plugin.video.tas?mode=4&url=clean_ico', clean_ico)
 	addLinkTool(string_cboth, 'plugin://plugin.video.tas?mode=4&url=clean_all', clean_all)

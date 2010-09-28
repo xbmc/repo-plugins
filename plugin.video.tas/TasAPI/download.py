@@ -27,9 +27,9 @@ def download_cache_hook(count, blockSize, totalSize):
 			time_remaining = int(dl_left) / int(kbs)
 			time_total = time_remaining + time_elapsed
 			kbs = common.convert_bytes(kbs)
-			dia_l1 = __settings__.getLocalizedString(32010) + ": " + fn
-			dia_l2 = __settings__.getLocalizedString(32011) + ": " + str(common.convert_bytes(downloaded)) + "/" + str(common.convert_bytes(totalSize)) + " @ " + str(kbs) + "/s"
-			dia_l3 = __settings__.getLocalizedString(32012) + ": " + str(datetime.timedelta(seconds=int(time_elapsed))) + "/" + str(datetime.timedelta(seconds=int(time_total))) + " (" + __settings__.getLocalizedString(32013) + ": " + str(datetime.timedelta(seconds=int(time_remaining))) + ")"
+			dia_l1 = common.get_lstring(32010) + ": " + fn
+			dia_l2 = common.get_lstring(32011) + ": " + str(common.convert_bytes(downloaded)) + "/" + str(common.convert_bytes(totalSize)) + " @ " + str(kbs) + "/s"
+			dia_l3 = common.get_lstring(32012) + ": " + str(datetime.timedelta(seconds=int(time_elapsed))) + "/" + str(datetime.timedelta(seconds=int(time_total))) + " (" + common.get_lstring(32013) + ": " + str(datetime.timedelta(seconds=int(time_remaining))) + ")"
 			pDialog.update(percent, dia_l1, dia_l2, dia_l3)
 	else:
 		if not percent==100:
@@ -44,8 +44,8 @@ def download(url,dir):
 	downloaded = 0
 	start_time = time.time()
 	pDialog = xbmcgui.DialogProgress()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32014)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32014)
 	ret = pDialog.create(dia_title, dia_l1)
 	global fn
 	fn = url.rsplit("/")[-1]
@@ -57,14 +57,14 @@ def download(url,dir):
 	except:
 		error = 1
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32015)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32015)
 		ok = dialog.ok(dia_title, dia_l1)
 	
 	if not error==1:
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32016)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32016)
 		ok = dialog.ok(dia_title, dia_l1)
 	
 
@@ -73,9 +73,9 @@ if not sys.argv[1]=="":
 
 	if sys.argv[1]=="nofolder":
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(30907)
-		dia_l2 = __settings__.getLocalizedString(30908)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(30907)
+		dia_l2 = common.get_lstring(30908)
 		ret = dialog.yesno(dia_title, dia_l1, dia_l2)
 		if ret==1:
 			__settings__.openSettings(url=sys.argv[0])

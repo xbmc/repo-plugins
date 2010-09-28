@@ -4,21 +4,20 @@ from TasAPI import common as common
 # Settings (This is required for Language Support)
 __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
 
-
 # Clean RSS
 # This function cleans the cached RSS Feeds
 def clean_rss():
 	count = 1
 	dialog = xbmcgui.Dialog()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32020)
-	dia_l2 = __settings__.getLocalizedString(32021)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32020)
+	dia_l2 = common.get_lstring(32021)
 	ret = dialog.yesno(dia_title, dia_l1, dia_l2)
 	if ret==1:
 		dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'feeds'))
 		pDialog = xbmcgui.DialogProgress()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32022)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32022)
 		nret = pDialog.create(dia_title, dia_l1)
 		for subdir, dirs, files in os.walk(dir):
 			total = int(len(files))
@@ -27,25 +26,25 @@ def clean_rss():
 					percent = int(((float(count) / total) * 100))
 					count = count + 1
 					cfile = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'feeds', file))
-					dia_l1 = __settings__.getLocalizedString(32025) + ": "
+					dia_l1 = common.get_lstring(32025) + ": "
 					pDialog.update(percent, dia_l1, file)
 					os.remove(cfile)
 				else:
 					dialog = xbmcgui.Dialog()
-					dia_title = __settings__.getLocalizedString(32000)
-					dia_l1 = __settings__.getLocalizedString(32023)
+					dia_title = common.get_lstring(32000)
+					dia_l1 = common.get_lstring(32023)
 					ok = dialog.ok(dia_title, dia_l1)
 					return
 	else:
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32023)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32023)
 		ok = dialog.ok(dia_title, dia_l1)			
 		return
 
 	dialog = xbmcgui.Dialog()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32024)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32024)
 	ok = dialog.ok(dia_title, dia_l1)
 	return
 	
@@ -54,15 +53,15 @@ def clean_rss():
 def clean_ico():
 	count = 1
 	dialog = xbmcgui.Dialog()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32020)
-	dia_l2 = __settings__.getLocalizedString(32031)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32020)
+	dia_l2 = common.get_lstring(32031)
 	ret = dialog.yesno(dia_title, dia_l1, dia_l2)
 	if ret==1:
 		dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images'))
 		pDialog = xbmcgui.DialogProgress()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32030)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32030)
 	
 		nret = pDialog.create(dia_title , dia_l1 )
 		for subdir, dirs, files in os.walk(dir):
@@ -72,25 +71,25 @@ def clean_ico():
 					percent = int(((float(count) / total) * 100))
 					count = count + 1
 					cfile = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images', file))
-					dia_removing = __settings__.getLocalizedString(32025) + ":" 
+					dia_removing = common.get_lstring(32025) + ":" 
 					pDialog.update(percent, dia_removing, file)
 					os.remove(cfile)
 				else:
 					dialog = xbmcgui.Dialog()
-					dia_title = __settings__.getLocalizedString(32000)
-					dia_l1 = __settings__.getLocalizedString(32032)
+					dia_title = common.get_lstring(32000)
+					dia_l1 = common.get_lstring(32032)
 					ok = dialog.ok(dia_title, dia_l1)
 					return
 	else:
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32032)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32032)
 		ok = dialog.ok(dia_title, dia_l1)
 		return
 
 	dialog = xbmcgui.Dialog()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32033)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32033)
 	ok = dialog.ok(dia_title, dia_l1)
 	return
 
@@ -101,15 +100,15 @@ def clean_ico():
 def clean_rss_int():
 	count = 1
 	dialog = xbmcgui.Dialog()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32020)
-	dia_l2 = __settings__.getLocalizedString(32101)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32020)
+	dia_l2 = common.get_lstring(32101)
 	ret = dialog.yesno(dia_title, dia_l1, dia_l2)
 	if ret==1:
 		dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'feeds'))
 		pDialog = xbmcgui.DialogProgress()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32022)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32022)
 		nret = pDialog.create(dia_title, dia_l1)
 		for subdir, dirs, files in os.walk(dir):
 			total = int(len(files))
@@ -118,19 +117,19 @@ def clean_rss_int():
 					percent = int(((float(count) / total) * 100))
 					count = count + 1
 					cfile = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'feeds', file))
-					dia_removing = __settings__.getLocalizedString(32025) + ":" 
+					dia_removing = common.get_lstring(32025) + ":" 
 					pDialog.update(percent, dia_removing, file)
 					os.remove(cfile)
 				else:
 					dialog = xbmcgui.Dialog()
-					dia_title = __settings__.getLocalizedString(32000)
-					dia_l1 = __settings__.getLocalizedString(32102)
+					dia_title = common.get_lstring(32000)
+					dia_l1 = common.get_lstring(32102)
 					ok = dialog.ok(dia_title, dia_l1)
 					return "C"
 	else:
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32102)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32102)
 	
 		ok = dialog.ok(dia_title, dia_l1)
 		return "C"
@@ -148,8 +147,8 @@ def clean_ico_int():
 	if ret==1:
 		dir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images'))
 		pDialog = xbmcgui.DialogProgress()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32030)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32030)
 		nret = pDialog.create(dia_title, dia_l1)
 		for subdir, dirs, files in os.walk(dir):
 			total = int(len(files))
@@ -158,25 +157,25 @@ def clean_ico_int():
 					percent = int(((float(count) / total) * 100))
 					count = count + 1
 					cfile = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images', file))
-					dia_l1 = __settings__.getLocalizedString(32030) + ": " + file
+					dia_l1 = common.get_lstring(32030) + ": " + file
 					pDialog.update(percent, dia_l1)
 					os.remove(cfile)
 				else:
 					dialog = xbmcgui.Dialog()
-					dia_title = __settings__.getLocalizedString(32000)
-					dia_l1 = __settings__.getLocalizedString(32032)
+					dia_title = common.get_lstring(32000)
+					dia_l1 = common.get_lstring(32032)
 					ok = dialog.ok(dia_l1, dia_l1)
 					return "C"
 	else:
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32032)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32032)
 		ok = dialog.ok(dia_title, dia_l1)
 		return "C"
 
 	dialog = xbmcgui.Dialog()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32049)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32049)
 	ok = dialog.ok(dia_title, dia_l1)
 	return
 
@@ -208,9 +207,9 @@ def download_cache_hook(count, blockSize, totalSize):
 			time_remaining = int(dl_left) / int(kbs)
 			time_total = time_remaining + time_elapsed
 			kbs = common.convert_bytes(kbs)
-			dia_l1 = __settings__.getLocalizedString(32010) + ": " + fn
-			dia_l2 = __settings__.getLocalizedString(32011) + ": " + str(common.convert_bytes(downloaded)) + "/" + str(common.convert_bytes(totalSize)) + " @ " + str(kbs) + "/s"
-			dia_l3 = __settings__.getLocalizedString(32012) + ": " + str(datetime.timedelta(seconds=int(time_elapsed))) + "/" + str(datetime.timedelta(seconds=int(time_total))) + " (" + __settings__.getLocalizedString(32013) + ": " + str(datetime.timedelta(seconds=int(time_remaining))) + ")"
+			dia_l1 = common.get_lstring(32010) + ": " + fn
+			dia_l2 = common.get_lstring(32011) + ": " + str(common.convert_bytes(downloaded)) + "/" + str(common.convert_bytes(totalSize)) + " @ " + str(kbs) + "/s"
+			dia_l3 = common.get_lstring(32012) + ": " + str(datetime.timedelta(seconds=int(time_elapsed))) + "/" + str(datetime.timedelta(seconds=int(time_total))) + " (" + common.get_lstring(32013) + ": " + str(datetime.timedelta(seconds=int(time_remaining))) + ")"
 			pDialog.update(percent, dia_l1, dia_l2, dia_l3)
 	else:
 		if not percent==100:
@@ -226,8 +225,8 @@ def download_cache():
 	error = 0
 	start_time = time.time()
 	pDialog = xbmcgui.DialogProgress()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32100)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32100)
 	ret = pDialog.create(dia_title, dia_l1)
 	filename = 'images.zip'
 	archive = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', filename))
@@ -237,16 +236,16 @@ def download_cache():
 	except:
 		error = 1
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32040)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32040)
 		ok = dialog.ok(dia_title, dia_l1)
 	
 	if not error==1:
 		unzip_downloaded_cache()
 		dialog = xbmcgui.Dialog()
-		dia_title = __settings__.getLocalizedString(32000)
-		dia_l1 = __settings__.getLocalizedString(32042)
-		dia_l2 = __settings__.getLocalizedString(32043)
+		dia_title = common.get_lstring(32000)
+		dia_l1 = common.get_lstring(32042)
+		dia_l2 = common.get_lstring(32043)
 		ok = dialog.ok(dia_title, dia_l1, dia_l2)
 	return
 
@@ -256,8 +255,8 @@ def unzip_downloaded_cache():
 	archive = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', filename))
 	outdir = xbmc.translatePath(os.path.join( 'special://profile/addon_data/plugin.video.tas/', 'cache', 'images'))
 	pDialog = xbmcgui.DialogProgress()
-	dia_title = __settings__.getLocalizedString(32000)
-	dia_l1 = __settings__.getLocalizedString(32044)
+	dia_title = common.get_lstring(32000)
+	dia_l1 = common.get_lstring(32044)
 	ret = pDialog.create(dia_title, dia_l1)
 	count = 0
 	zfobj = zipfile.ZipFile(archive)
@@ -268,9 +267,9 @@ def unzip_downloaded_cache():
 		outfile = open(os.path.join(outdir, name), 'wb')
 		outfile.write(zfobj.read(name))
 		outfile.close()
-		dia_l1 = __settings__.getLocalizedString(32045) + ":"
-		dia_l2 = __settings__.getLocalizedString(32046) + ": " + str(name)
-		dia_l3 = __settings__.getLocalizedString(32047) + ": " + str(count) + " " + __settings__.getLocalizedString(32048) + " " + str(ico_total)
+		dia_l1 = common.get_lstring(32045) + ":"
+		dia_l2 = common.get_lstring(32046) + ": " + str(name)
+		dia_l3 = common.get_lstring(32047) + ": " + str(count) + " " + common.get_lstring(32048) + " " + str(ico_total)
 		pDialog.update(int(percent), dia_l1, dia_l2, dia_l3 )
 	zfobj.close()
 	os.remove(archive)

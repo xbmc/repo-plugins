@@ -8,7 +8,13 @@ __settings__ = xbmcaddon.Addon(id='plugin.video.tas')
 # Global Settings
 set_icon_size = __settings__.getSetting( "icon_size" )
 set_fanart_size = __settings__.getSetting( "fanart_size" )
+
+def get_lstring(id):
+	global __settings__
+	string = __settings__.getLocalizedString(id).encode("UTF-8")
+	return string
 	
+
 # This function Resolves the URL to the Final URL
 # Used in Mode 5 
 def ResolveURL(url):
@@ -152,35 +158,31 @@ def get_category_fanthumb(name,catfa):
 # Here comes a bunch of small functions to fix encoding issues of strings 
 # and generally clean formatting
 
-def cleanstring(strvar):
-	string = strvar
+def cleanstring(string):
 	string = string.replace("&amp;", "&")
 	string = string.replace("&quot;", "\"")
 	return string
 
-def fixtags(strvar):
-	string = strvar
+def fixtags(string):
 	string = string.replace('&lt;', '<')
 	string = string.replace('&gt;', '>')
 	return string
 
-def cleanformatting(strvar):
-	string = strvar
+def add_linebreaks(string):
 	string = string.replace('<p/>', '\n\n')
 	string = string.replace('<br/>', '\n\n')
 	string = remove_html_tags(string)
 	return string
 
-def remove_html_tags(strvar):
-	string = strvar
+def remove_html_tags(string):
 	string = re.sub('<.+?>', '', string)
 	return string
 	
-def clean_plot(strvar):
-	string = strvar
+def clean_plot(string):
 	string = fixtags(string)
 	string = cleanlinks_leave_text(string)
-	string = cleanformatting(string)
+	string = add_linebreaks(string)
+	string = remove_html_tags(string)
 	string = cleanstring(string)
 	return string
 	
@@ -241,16 +243,14 @@ def get_writer(strvar):
 		writers = ""+writers+""+writer+""
 	return cleanstring(writers)
 	
-def getgenres(strvar):
-	string = strvar
+def getgenres(string):
 	genres = ""
 	match=re.compile('<category>Genre: (.+?)<\/category>.+?').findall(string)
 	for genre in match:
 		genres = ""+genres+"/"+genre+""
 	return genres[1:]
 	
-def removelink(strvar):
-	string = strvar
+def removelink(string):
 	match=re.search('<a href=.+?>(.+?)</a>', string)
 	matchresult = str(match)
 	if matchresult=="None":
@@ -261,8 +261,8 @@ def removelink(strvar):
 			inby = ""+time+""+by+""
 	return inby
 
-def get_categories(strvar):
-	string = clean_from_genres(strvar)
+def get_categories(string):
+	string = clean_from_genres(string)
 	categories = ""
 	match=re.compile('<category>(.+?)<\/category>.+?').findall(string)
 	for category in match:
@@ -326,13 +326,11 @@ def get_duration(name):
 		
 	return duration
 
-def clean_from_genres(strvar):
-	string = strvar
+def clean_from_genres(string):
 	string = re.sub('<category>Genre:.+?</category>', '', string)
 	return string
 	
-def cleanlinks_leave_text(strvar):
-	string = strvar
+def cleanlinks_leave_text(string):
 	string = re.sub('<a.+?href=.+?">', '', string)
 	string = re.sub('<\/a>', '', string)
 	return string

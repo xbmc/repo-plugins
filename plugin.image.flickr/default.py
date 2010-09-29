@@ -9,8 +9,8 @@ from urllib2 import HTTPError, URLError
 __plugin__ =  'flickr'
 __author__ = 'ruuk'
 __url__ = 'http://code.google.com/p/flickrxbmc/'
-__date__ = '09-20-2010'
-__version__ = '0.9.4'
+__date__ = '09-25-2010'
+__version__ = '0.9.5'
 __settings__ = xbmcaddon.Addon(id='plugin.image.flickr')
 __language__ = __settings__.getLocalizedString
 
@@ -433,7 +433,7 @@ class FlickrSession:
 
 	def addDir(self,name,url,mode,iconimage,page=1,tot=0,userid=''):
 		if userid: userid = "&userid="+urllib.quote_plus(userid)
-		u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&page="+str(page)+userid+"&name="+urllib.quote_plus(name)
+		u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&page="+str(page)+userid+"&name="+urllib.quote_plus(name.encode('ascii','replace'))
 		ok=True
 		liz=xbmcgui.ListItem(name, 'test',iconImage="DefaultFolder.png", thumbnailImage=iconimage)
 		liz.setInfo( type="image", infoLabels={"Title": name} )

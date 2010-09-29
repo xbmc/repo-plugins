@@ -1,6 +1,10 @@
 flickrXBMC Changelog
 
-Current Version : 0.9.4
+Current Version : 0.9.5
+
+** 0.9.5 ***
+
+Fixed a bug with handling non-ascii characters
 
 ** 0.9.4 ***
 

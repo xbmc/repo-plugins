@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!--<setting id="advert" type="bool" label="Show Advert" default="true" />-->
+  <setting id="hq" type="bool" label="30000" default="true" />
+  <setting id="folders" type="bool" label="30001" default="true" />
+</settings>

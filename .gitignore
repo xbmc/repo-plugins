@@ -12,4 +12,5 @@ plugin.video.academicearth/.gitignore
 plugin.video.eevblog/.git
 plugin.video.eevblog/.project
 plugin.video.eevblog/.pydevproject
-plutin.video.tagesschau/.git
+plugin.video.tagesschau/.git
+plugin.video.tv3.ondemand/.git

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Higher Quality (700K) Stream</string>
+  <string id="30001">Override TV3 Folder Hierarchy</string>
+
+  <string id="30002">Categories</string>
+  <string id="30003">Channels</string>
+  <string id="30004">Genres</string>
+  <string id="30005">Shows</string>
+  <string id="30006">Latest</string>
+  <string id="30007">Most Watched</string>
+  <string id="30008">Expiring Soon</string>
+  <string id="30009">Comedy</string>
+  <string id="30010">Drama</string>
+  <string id="30011">News/Current Affairs</string>
+  <string id="30012">Reality</string>
+  <string id="30013">Sports</string>
+  <string id="30014">All</string>
+</strings>

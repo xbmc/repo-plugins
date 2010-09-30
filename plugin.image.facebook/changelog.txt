@@ -1,0 +1,7 @@
+facebookPhotos-XBMC Changelog
+
+Current Version : 0.9.0
+
+** 0.9.0 ***
+
+Initial Release

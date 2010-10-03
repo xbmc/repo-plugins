@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<strings>
+  <!-- strings 32000 thru 32999 reserved for scripts -->
+  <!--SETTINGS STRINGS -->
+  <string id="30001">IP Adress</string>
+  <string id="30002">Port</string>
+  <string id="30003"></string>
+  <string id="30004"></string>
+  <string id="30005"></string>
+  <string id="30006"></string>
+  <string id="30007"></string>
+  
+  <!--GENERAL STRINGS -->
+  <string id="30050">All Packages</string>
+  <string id="30051">Status</string>
+  <string id="30052">Speed</string>
+  <string id="30053">Downloads in progress</string>
+  <string id="30054">Choose Action</string>
+  <string id="30055">Limit</string>
+  <string id="30056">Finished Packages</string>
+  <string id="30057">Auto-Restart after Update?</string>
+  <string id="30058"></string>
+  <string id="30059"></string>
+  <string id="30060">Start</string>
+  <string id="30061">Stop</string>
+  <string id="30062">Pause</string>
+  <string id="30063">Toggle</string>
+  <string id="30064">Set Speed Limit</string>
+  <string id="30065">Set Max. Downloads</string>
+  <string id="30066">Update JDownloader</string>
+  <string id="30067">Restart JDownloader</string>
+  <string id="30068">Shutdown JDownloader</string>
+</strings>

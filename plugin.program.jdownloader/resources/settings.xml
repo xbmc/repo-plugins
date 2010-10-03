@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+   <setting id="ip_adress" type="ipaddress" label="30001" default="127.0.0.1"/>
+   <setting id="ip_port" type="number" label="30002" default="10025"/>
+</settings> 

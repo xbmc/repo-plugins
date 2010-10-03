@@ -1,6 +1,15 @@
 facebookPhotos-XBMC Changelog
 
-Current Version : 0.9.0
+Current Version : 0.9.1
+
+
+** 0.9.1 ***
+ 	
+Removed _beautifulsoup.py from Mechanize
+Added beautifulsoup module import to addon.xml
+Made adjustments for _form.py and _html.py
+Added German translation - thanks to Max Auer
+Added thumnails for categories Added language strings for dialogs 
 
 ** 0.9.0 ***
 

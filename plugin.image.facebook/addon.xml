@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.image.facebook"
        name="facebook"
-       version="0.9.0"
+       version="0.9.1"
        provider-name="Rick Phillips (ruuk)">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
     <import addon="script.module.simplejson" version="2.0.9"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8.1"/>
    </requires>
 
   <extension point="xbmc.python.pluginsource"
@@ -14,7 +15,8 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary>Plugin to browse facebook photos</summary>
-    <description>Browse your facebook albums, photos of you, your friends albums, and photos of your friends.</description>
+    <description lang="en">Browse your facebook albums, photos of you, your friends albums, and photos of your friends.</description>
+	<description lang="de">Browse deine Facebook Alben, deine Fotos, die Alben und Fotos deiner Freunde</description>
 	<platform>all</platform>
   </extension>
 </addon>

@@ -9,8 +9,8 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 __plugin__ =  'facebook'
 __author__ = 'ruuk'
 __url__ = 'http://code.google.com/p/facebookpicsxbmc/'
-__date__ = '09-25-2010'
-__version__ = '0.9.0'
+__date__ = '09-30-2010'
+__version__ = '0.9.1'
 __settings__ = xbmcaddon.Addon(id='plugin.image.facebook')
 __language__ = __settings__.getLocalizedString
 

@@ -70,7 +70,9 @@ import urllib
 import urlparse
 import warnings
 
-import _beautifulsoup
+#import _beautifulsoup
+#change for XBMC
+import BeautifulSoup as _beautifulsoup
 import _request
 
 # from Python itself, for backwards compatibility of raised exceptions

@@ -9,6 +9,10 @@
     <string id="30007">Photos Of @REPLACE@</string>
     <string id="30008">Fetch And Cache Friend Thumbnails</string>
     <string id="30009">Fetch And Cache Album Thumbnails</string>
+    <string id="30010">Videos</string>
+    <string id="30011">Videos Of Me</string>
+    <string id="30012">@REPLACE@'s Videos</string>
+    <string id="30013">Videos Of @REPLACE@</string>
     
     <!---Dialogs--->
     <string id="30101">Authorization</string>
@@ -22,5 +26,10 @@
     
     <string id="30108">Error</string>
     <string id="30109">Unable to get access token.</string>
-    <string id="30110">Did you authorize the plugin?</string>    
+    <string id="30110">Did you authorize the plugin?</string>
+    
+    <string id="30111">Authorization Error</string>
+    <string id="30112">Error authorizing with facebook.</string>
+    <string id="30113">Re-authorize at @REPLACE@</string>
+    <string id="30114">Then try again.</string>
 </strings>

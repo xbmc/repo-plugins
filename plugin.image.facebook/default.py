@@ -8,9 +8,9 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 __plugin__ =  'facebook'
 __author__ = 'ruuk'
-__url__ = 'http://code.google.com/p/facebookpicsxbmc/'
-__date__ = '09-30-2010'
-__version__ = '0.9.1'
+__url__ = 'http://code.google.com/p/facebookphotos-xbmc/'
+__date__ = '10-04-2010'
+__version__ = '0.9.2'
 __settings__ = xbmcaddon.Addon(id='plugin.image.facebook')
 __language__ = __settings__.getLocalizedString
 
@@ -21,6 +21,11 @@ if not os.path.exists(CACHE_PATH): os.makedirs(CACHE_PATH)
 
 TOKEN_PATH = xbmc.translatePath('special://profile/addon_data/plugin.image.facebook/token')
 
+class GraphWrapAuthError(Exception):
+    def __init__(self, type, message):
+        Exception.__init__(self, message)
+        self.type = type
+        
 class GraphWrap(facebook.GraphAPI):
 	def setLogin(self,email,passw):
 		self.login_email = email
@@ -31,17 +36,39 @@ class GraphWrap(facebook.GraphAPI):
 		self.redirect = redirect
 		self.scope = scope
 		
+	def checkHasPermission(self,permission):
+		import simplejson
+		url = 'https://api.facebook.com/method/users.hasAppPermission?format=json&ext_perm='+permission+'&access_token='+self.access_token
+		fobj = urllib.urlopen(url)
+		try:
+			response = simplejson.loads(fobj.read())
+		finally:
+			fobj.close()
+		return (response == 1)
+		
+	def checkIsAppUser(self):
+		import simplejson
+		url = 'https://api.facebook.com/method/users.isAppUser?format=json&access_token='+self.access_token
+		fobj = urllib.urlopen(url)
+		try:
+			response = simplejson.loads(fobj.read())
+		finally:
+			fobj.close()
+		return response
+		
 	def getConnections(self, id, connection_name, **args):
 		fail = False
 		try:
 			return self.get_connections(id, connection_name, **args)
 		except facebook.GraphAPIError,e:
 			print e.type
-			#OAuthException
+			if not e.type == 'OAuthException': raise
 			fail = True
 
 		if fail:
-			if not self.getNewToken(): return
+			if not self.getNewToken():
+				if self.access_token: raise GraphWrapAuthError('RENEW_TOKEN_FAILURE','Failed to get new token')
+				else: return None
 			return self.get_connections(id, connection_name, **args)
 			
 	def getObject(self, id, **args):
@@ -49,10 +76,13 @@ class GraphWrap(facebook.GraphAPI):
 		try:
 			return self.get_object(id, **args)
 		except GraphAPIError,e:
+			if not e.type == 'OAuthException': raise
 			fail = True
 			
 		if fail:
-			if not self.getNewToken(): return
+			if not self.getNewToken():
+				if self.access_token: raise GraphWrapAuthError('RENEW_TOKEN_FAILURE','Failed to get new token')
+				else: return None
 			return self.get_object(id, **args)
 			
 	def getNewToken(self):
@@ -104,7 +134,8 @@ class GraphWrap(facebook.GraphAPI):
 				#no token in the url, let's try to parse it from javascript on the page
 				html = res.read()
 				token = self.parseTokenFromScript(html)
-				
+		
+		if 'html' in token or len(token) > 100: raise GraphWrapAuthError('RENEW_TOKEN_FAILURE','Failed to get new token')
 		self.access_token = token
 		self.saveToken()
 		return True
@@ -163,11 +194,14 @@ class facebookSession:
 		
 	def CATEGORIES(self):
 		self.addDir(__language__(30004),'me',1,os.path.join(IMAGES_PATH,'albums.png'))
+		self.addDir(__language__(30010),'me',3,os.path.join(IMAGES_PATH,'videos.png'))
 		self.addDir(__language__(30005),'friends',2,os.path.join(IMAGES_PATH,'friends.png'))
 		self.addDir(__language__(30006),'me',101,os.path.join(IMAGES_PATH,'photosofme.png'))
+		self.addDir(__language__(30011),'me',102,os.path.join(IMAGES_PATH,'videosofme.png'))
 		
 	def ALBUMS(self,uid='me',name=''):
 		albums = self.graph.getConnections(uid,'albums')
+		tot = len(albums['data'])
 		for a in albums['data']:
 			aid = a.get('id','')
 			fn = os.path.join(CACHE_PATH,aid + '.jpg') #still works even if image is not jpg - doesn't work without the extension
@@ -175,8 +209,11 @@ class facebookSession:
 			if not os.path.exists(fn):
 				if self.get_album_photos: fn,ignore  = urllib.urlretrieve(tn,fn)
 				else: fn = ''
-			if not self.addDir(a.get('name',''),aid,101,fn): break
-		if uid != 'me': self.addDir(__language__(30007).replace('@REPLACE@',name),uid,101,os.path.join(IMAGES_PATH,'photosofme.png'))
+			if not self.addDir(a.get('name',''),aid,101,fn,tot=tot): break
+		if uid != 'me':
+			self.addDir(__language__(30012).replace('@REPLACE@',name),uid,3,os.path.join(IMAGES_PATH,'videos.png'))
+			self.addDir(__language__(30007).replace('@REPLACE@',name),uid,101,os.path.join(IMAGES_PATH,'photosofme.png'))
+			self.addDir(__language__(30013).replace('@REPLACE@',name),uid,102,os.path.join(IMAGES_PATH,'videosofme.png'))
 	
 	
 	def FRIENDS(self):
@@ -189,15 +226,16 @@ class facebookSession:
 			srt.append(s)
 			show[s] = f
 			srt.sort()
+		tot = len(srt)
 		for s in srt:
 			uid = show[s].get('id','')
 			fn = os.path.join(CACHE_PATH,uid + '.jpg') #still works even if image is not jpg - doesn't work without the extension
-			tn = "https://graph.facebook.com/"+uid+"/picture?access_token=" + self.graph.access_token
+			tn = "https://graph.facebook.com/"+uid+"/picture?type=large&access_token=" + self.graph.access_token
 			if not os.path.exists(fn):
 				if self.get_friends_photos: fn,ignore  = urllib.urlretrieve(tn,fn)
 				else: fn = ''
 			#fn = "https://graph.facebook.com/"+uid+"/picture?access_token=" + self.graph.access_token + "&nonsense=image.jpg" #<-- crashes XBMC
-			if not self.addDir(show[s].get('name',''),uid,1,fn): break
+			if not self.addDir(show[s].get('name',''),uid,1,fn,tot=tot): break
 	
 	def PHOTOS(self,aid):
 		photos = self.graph.getConnections(aid,'photos')
@@ -208,6 +246,14 @@ class facebookSession:
 			tn = re.sub('/hphotos-\w+-\w+/\w+\.\w+/','/hphotos-ak-snc1/hs255.snc1/',tn) # this seems to get better results then using the random server
 			#print "-AFTER: " + tn
 			if not self.addLink(p.get('name',p.get('id','None')),p.get('source',''),tn,tot): break
+			
+	def VIDEOS(self,uid,uploaded=False):
+		if uploaded: videos = self.graph.getConnections(uid,'videos/uploaded')
+		else: videos = self.graph.getConnections(uid,'videos')
+		tot = len(videos['data'])
+		for v in videos['data']:
+			tn = v.get('picture','') + '?fix=' + str(time.time()) #why does this work? I have no idea. Why did I try it. I have no idea :)
+			if not self.addLink(v.get('name',v.get('id','None')),v.get('source',''),tn,tot): break
 			
 	def removeCRLF(self,text):
 		return " ".join(text.split())
@@ -286,9 +332,15 @@ def doPlugin():
 		fb.ALBUMS(url,name)
 	elif mode==2:
 		fb.FRIENDS()
+	elif mode==3:
+		fb.VIDEOS(url,uploaded=True)
 	elif mode==101:
 		fb.PHOTOS(url)
+	elif mode==102:
+		fb.VIDEOS(url)
 		
 	xbmcplugin.endOfDirectory(int(sys.argv[1]),succeeded=success,updateListing=update_dir,cacheToDisc=cache)
-
-doPlugin()
+try:
+	doPlugin()
+except GraphWrapAuthError,e:
+	xbmcgui.Dialog().ok(__language__(30111),__language__(30112),__language__(30113).replace('@REPLACE@','http://2ndmind.com/facebookphotos'),__language__(30114))

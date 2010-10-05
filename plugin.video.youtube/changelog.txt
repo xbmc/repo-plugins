@@ -1,8 +1,11 @@
 [B]Errata[/B]
-- [XBMC] Can't replay a video that has already been played, unless the folder is refreshed.
 - [XBMC] Thumbnails sometimes turns into folders.
 - Download of rtmpe streams not supported.
-- playback of rtmpe streams not supported in release (Request by Team XBMC due to DMCA restrictions imposed by US Law).
+
+[B]Version 1.8.1[/B]
+- Enable RTMP support
+- Changed icon to conform to XBMC icon guidelines
+- Added disclaimer to addon xml (as requested by Team XBMC)
 
 [B]Version 1.8.0[/B]
 - Solved confusion cause by multiple licens files (removed GPL v2 license and renamed GPL v3 to LICENSE.txt)

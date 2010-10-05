@@ -752,9 +752,12 @@ class YouTubeCore(object):
 			if fmtSource:
 				stream_map = "False"
 			else:
-				if self.__dbg__:
-					print self.__plugin__ + " _extractVariables exited. RTMP disabled."
-				return ( self.__language__(30608), self.__language__(30608), 303 )
+				swfConfig = re.findall('var swfConfig = {"url": "(.*)", "min.*};', htmlSource)
+				if len(swfConfig) > 0:
+					swf_url = swfConfig[0].replace("\\", "")
+
+				fmtSource = re.findall('"fmt_stream_map": "([^"]+)"', htmlSource);
+				stream_map = 'True'
 
 			if self.__dbg__:
 				print self.__plugin__ + " extractVariables done"
@@ -768,9 +771,8 @@ class YouTubeCore(object):
 			if self.__dbg__:
 				print self.__plugin__ + " _extractVariables uncaught exception dumping htmlSource"
 				print self.__plugin__ + " _extractVariables result: " + repr(htmlSource)
-				print self.__plugin__ + ' _extractVariables ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				
+				print self.__plugin__ + ' _extractVariables ERROR: %s::%s (%d) - %s' % (self.__class__.__name__, sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
+			
 			return ( '', 500 )
 									
 		return (fmtSource, swf_url, stream_map)
@@ -1088,8 +1090,7 @@ class YouTubeCore(object):
 		except:
 			if self.__dbg__:
 				print self.__plugin__ + " _get_details uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
+				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__, sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
 				
 			return False
 		
@@ -1160,8 +1161,7 @@ class YouTubeCore(object):
 			# http://bytes.com/topic/python/answers/33770-error-codes-urlerror
 			if self.__dbg__:
 				print self.__plugin__ + " login failed, hit ioerror except2: : " + repr(e)
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
+				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__, sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
 				print self.interrogate(e)
 				
 				if error < 9:
@@ -1173,8 +1173,7 @@ class YouTubeCore(object):
 		except:
 			if self.__dbg__:
 				print self.__plugin__ + " _httpLogin: uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
+				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__, sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
 			return False
 
 	def _scrapeYouTubeData(self, feed, retry = True):

@@ -1,0 +1,9 @@
+Version 0.0.1
+inital
+
+Version 0.0.2
+updated icon.png
+
+Version 0.0.3
+added release date to title
+added subtitle as plot

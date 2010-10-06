@@ -5,7 +5,7 @@ __language__ = __settings__.getLocalizedString
 
 
 def CATEGORIES():
-		addLink(__language__(30017),'http://bglive-a.bitgravity.com/twit/live/high','http://twit.tv/sites/all/themes/twit/img/logo.gif')	
+		addLink(__language__(30017),'http://bglive-a.bitgravity.com/twit/live/high','','','http://twit.tv/sites/all/themes/twit/img/logo.gif')	
 		addDir(__language__(30000),'http://feeds.twit.tv/twit_video_large',1,'http://static.mediafly.com/publisher/images/ba85558acd844c7384921f9f96989a37/icon-600x600.png')
 		addDir(__language__(30001),'http://feeds.twit.tv/tnt_video_large',1,'http://static.mediafly.com/publisher/images/9ff0322cc0444e599a010cdb9005d90a/icon-600x600.png')
 		addDir(__language__(30002),'http://feeds.twit.tv/fc_video_large',1,'http://static.mediafly.com/publisher/images/f7f40bcf20c742cfb55cbccb56c2c68c/icon-600x600.png')
@@ -34,13 +34,15 @@ def INDEX(url):
         response.close()
         match=re.compile('url="(.+?)" fileSize=".+?" type="video/mp4" medium="video" bitrate="1000" framerate="29.97" samplingrate="48" channels="1" duration=".+?" width="864" height="480" mediafly:profile="H264b_864x480_1000" />\n').findall(link)
         name=re.compile('<title>(.+?)</title>\n').findall(link)
+        plot=re.compile('<itunes:subtitle>(.+?)</itunes:subtitle>\n').findall(link)
+        date=re.compile('<pubDate>(.+?)</pubDate>\n').findall(link)
 	icon=re.compile('<img src="(.+?)"').findall(link)	
-	del name[0];del name[0] # The first two strings do not apply.
+	del name[0];del name[0];del plot[0];del date[0] # The first two strings do not apply.
         for index in range(len(match)):
 		if len(match) == len(icon):
-                	addLink(name[index],match[index],icon[index])
+                	addLink(name[index],match[index],plot[index],date[index],icon[index])
     		else:
-			addLink(name[index],match[index],'') 
+			addLink(name[index],match[index],plot[index],date[index],'') 
 
                 
 def get_params():
@@ -64,10 +66,10 @@ def get_params():
 
 
 
-def addLink(name,url,iconimage):
+def addLink(name,url,plot,date,iconimage):
         ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz=xbmcgui.ListItem(name+'  '+date, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title":name,"Plot":plot } )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 

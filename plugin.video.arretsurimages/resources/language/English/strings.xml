@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Arrêt Sur Images</string>
+
+    <!--NavItems-->
+    <string id="30020"> Next</string>
+    <string id="30021"> Previous</string>
+
+    <!--Category Descriptions  30031-30033 from http://www.arretsurimages.net/emissions.php-->
+    <!--@rret sur images-->
+    <string id="30031">Émission de décryptage des médias, que vous regardiez peut-être déjà sur France 5 avant son éviction.</string>
+    <!--Ligne J@une-->
+    <string id="30032">Émission de débats, qui explore le décalage (parfois explosif) entre médias traditionnels et médias sur Internet.</string>
+    <!--d@ns le texte-->
+    <string id="30033">Émission littéraire qui se plonge dans les secrets de la production des écrivains.</string>
+
+    <!--Errors-->
+    <string id="30050">Logon Error</string>
+    <string id="30051">Enter your username and password</string>
+    <string id="30052">in the plugin settings</string>
+    <string id="30053">User could not be authenticated</string>
+
+    <!--Settings-->
+    <string id="30070">Login Information</string>
+    <string id="30071">username</string>
+    <string id="30072">password</string>
+    <string id="30080">Sort Method</string>
+    <string id="30081">Sort by</string>
+    <string id="30082">date</string>
+    <string id="30083">most seen</string>
+    <string id="30084">most commented</string>
+    <string id="30090">Downloading</string>
+    <string id="30091">Always Ask for Download Location</string>
+    <string id="30092">Download Folder</string>
+
+    <!--Context Menu-->
+    <string id="30100">Download Video</string>
+
+    <!--Download Menu-->
+    <string id="32023">Saving</string>
+    <string id="32024">as</string>
+</strings>

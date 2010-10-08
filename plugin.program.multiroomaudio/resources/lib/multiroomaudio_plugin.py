@@ -7,7 +7,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 # Author: VortexRotor (teshephe)
-# v.1.0.10r1
+# v.1.1.2
 
 """
     Plugin for True "Syncronized" Multiroom Streaming Audio/Video
@@ -751,7 +751,7 @@ class Main:
             usock.write("      <playonestackitem>false</playonestackitem>\n")
             usock.write("    </player>\n")
             usock.write("  </players>\n")
-            usock.write("    <rules action=\"overwrite\">\n")
+            usock.write("    <rules action=\"prepend\">\n")
             usock.write("      <!-- DVDs -->\n")
 	    if (Addon.getSetting( "strm_dvd" ) == "true"):
                 usock.write("      <rule name=\"dvd\" dvd=\"true\" player=\""+default_vp+"\" />\n")
@@ -763,28 +763,10 @@ class Main:
                 usock.write("      <rule name=\"dvdimage\" dvdimage=\"true\" player=\"DVDPlayer\" />\n")
             usock.write("\n")
             usock.write("      <!-- Multiroom AV Plugin will play the pls files -->\n")
-            usock.write("      <rule name=\"rtv\" protocols=\"rtv\" player=\""+default_vp+"\" />\n")
             usock.write("      <rule name=\"pls\" filetypes=\"pls\" player=\"MR-AV_VPlay\" />\n")
-            usock.write("      <rule name=\"pls/udp\" protocols=\"rtmp|mms|mmsh|udp|http|rtsp|rtp\" player=\"MR-AV_VPlay\" />\n")
-            usock.write("      <rule name=\"hdhomerun/myth/\" protocols=\"hdhomerun|myth|cmyth\" player=\""+default_vp+"\" />\n")
-            usock.write("      <rule name=\"lastfm/shout\" protocols=\"lastfm|shout\" player=\"PAPlayer\" />\n")
+            usock.write("      <rule name=\"pls/udp\" protocols=\"udp|rtp\" player=\"MR-AV_VPlay\" />\n")
             usock.write("      <rule video=\"true\" player=\""+default_vp+"\" />\n")
             usock.write("      <rule audio=\"true\" player=\""+default_ap+"\" />\n")
-            usock.write("\n")  
-            usock.write("      <!-- dvdplayer can play standard rtsp streams -->\n")
-            usock.write("      <rule name=\"rtsp\" protocols=\"rtsp\" filetypes=\"!(rm|ra)\"  player=\""+default_ap+"\" />\n")
-            usock.write("\n")  
-            usock.write("      <!-- Internet streams -->\n")
-            usock.write("      <rule name=\"streams\" internetstream=\"true\">\n")
-            usock.write("        <rule name=\"flv/aacp/sdp\" mimetypes=\"video/x-flv|video-flv|audio/aacp|application/sdp\" player=\""+default_vp+"\" />\n")
-            usock.write("        <rule name=\"mp2\" mimetypes=\"application/octet-stream\" filetypes=\"mp2\" player=\""+default_ap+"\" />\n")
-            usock.write("      </rule>\n")
-            usock.write("\n")  
-            usock.write("      <!-- Only dvdplayer can handle these normally -->\n")
-            usock.write("      <rule name=\"sdp/asf\" filetypes=\"sdp|asf\" player=\""+default_vp+"\" />\n")
-            usock.write("\n")  
-            usock.write("      <!-- Pass these to dvdplayer as we do not know if they are audio or video -->\n")
-            usock.write("      <rule name=\"nsv\" filetypes=\"nsv\" player=\""+default_vp+"\" />\n")
             usock.write("    </rules>\n")
             usock.write("</playercorefactory>\n")
             usock.close()

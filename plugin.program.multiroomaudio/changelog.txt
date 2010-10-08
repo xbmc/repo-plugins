@@ -2,6 +2,17 @@ Up to date Install / Configuration / Usage / Help can be found @
 
 http://forum.xbmc.org/showthread.php?t=78431
 
+1.1.2
+- Fixed issue with Shoutcast and other internet streams not playing with plugin activated
+
+- Fixed DVD not playing issue
+
+- Added Documentation to xbmc-multiroomaudio site. Located at the following links:
+  Linux:
+  http://xbmc-multiroom-audio-plugin.googlecode.com/files/MAV%20Plugin%20Installation%20for%20Linux_09302010_v1.1.1.pdf
+  Windows:
+  http://xbmc-multiroom-audio-plugin.googlecode.com/files/MAV%20Plugin%20Installation%20for%20Windows7-XP_09302010_v1.1.1.pdf
+
 1.1.1
 - Streamer IP Input Dialogue - Now set to type "text"
 

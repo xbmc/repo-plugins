@@ -32,7 +32,7 @@
   <category label="30044">
     <setting type="lsep" label="30045"/>
     <setting type="sep" />
-    <setting id="vstrm_type" type="labelenum" label="30054" default="udp" values="udp|rtp" enable=""/>
+    <setting id="vstrm_type" type="labelenum" label="30054" default="rtp" values="udp|rtp" enable=""/>
     <setting id="vsout_lbl" type="bool" label="30046" default="false"/>
     <setting id="video_sout" type="text" label="30058" default="" enable="eq(-1,true)"/>
     <setting id="vshelp" type="text" label="30057" enable="false"/>
@@ -42,7 +42,7 @@
   <category label="30048">
     <setting type="lsep" label="30049"/>
     <setting type="sep" />
-    <setting id="astrm_type" type="labelenum" label="30054" default="udp" values="udp|rtp" enable=""/>
+    <setting id="astrm_type" type="labelenum" label="30054" default="rtp" values="udp|rtp" enable=""/>
     <setting id="asout_lbl" type="bool" label="30046" default="false"/>
     <setting id="audio_sout" type="text" label="30058" default="" enable="eq(-1,true)"/>
     <setting id="ashelp" type="text" label="30057" enable="false"/>

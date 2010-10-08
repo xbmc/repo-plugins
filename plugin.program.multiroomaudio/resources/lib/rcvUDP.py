@@ -265,19 +265,24 @@ def _action(msg):
 	    #else:
 	        #xbmc.executebuiltin("Notification(Multiroom Audio,Event Action: QueuedNext ME,15000,"+DEFAULT_IMG+")")
 	# MediaChanged Audio eg: <b>MediaChanged:<li>AudioTitle:Wish You Were Here<li>AudioArtist:Pink Floyd;x.x.x.x;1</b>
+        # For Shoucast Streams   <b>MediaChanged:<li>AudioTitle:1060;x.x.x.x;1</b>
         if msg.startswith('<b>MediaChanged:<li>AudioTitle'):
 	    l = msg.lstrip('<b>MediaChanged:<li>AudioTitle:')
 	    r = l.rstrip('</b>')
-	    parts1 = r.split('<li>AudioArtist:')
-	    song = (parts1[0])
-	    m1 = (parts1[1])
-	    m2 = m1.split(';')
-	    artist = (m2[0])
-	    srcip = (m2[1])
-	    if (srcip == MSTR):
-		xbmc.executebuiltin("Notification(Now Playing on "+MSTRNM+", "+song+" By:"+artist+",15000,"+DEFAULT_IMG+")")
-	    #else:
-	        #xbmc.executebuiltin("Notification(Multiroom Audio,Event Action: Audio Playing ME,15000,"+DEFAULT_IMG+")")
+            if (r.find('<li>AudioArtist:') >= 0 ):
+	        parts = r.split('<li>AudioArtist:')
+	        song = (parts[0])
+	        m1 = (parts[1])
+	        m2 = m1.split(';')
+	        artist = (m2[0])
+	        srcip = (m2[1])
+	        if (srcip == MSTR):
+		    xbmc.executebuiltin("Notification(Now Playing on "+MSTRNM+", "+song+" By:"+artist+",15000,"+DEFAULT_IMG+")")
+	        #else:
+	            #xbmc.executebuiltin("Notification(Multiroom Audio,Event Action: Audio Playing ME,15000,"+DEFAULT_IMG+")")
+            #else:
+                #xbmc.executebuiltin("Notification(Multiroom Audio,Event Action: Shoutcast Playing,15000,"+DEFAULT_IMG+")")
+
 	# MediaChanged Movie eg: <b>MediaChanged:<li>MovieTitle:21;192.168.100.152;1</b>
         if msg.startswith('<b>MediaChanged:<li>MovieTitle'):
 	    l = msg.lstrip('<b>MediaChanged:<li>MovieTitle:')

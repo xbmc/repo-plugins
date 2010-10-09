@@ -13,6 +13,40 @@ from urllib import unquote
 import sys
 import os
 import os.path
+import locale
+
+def to_unicode(text):
+    if isinstance(text, unicode):
+	return text
+
+    if hasattr(text, '__unicode__'):
+	return text.__unicode__()
+
+    text = str(text)
+
+    try:
+	return unicode(text, 'utf-8')
+    except UnicodeError:
+	pass
+
+    try:
+	return unicode(text, locale.getpreferredencoding())
+    except UnicodeError:
+	pass
+
+    return unicode(text, 'latin1')
+
+def to_str(text):
+    if isinstance(text, str):
+	return text
+
+    if hasattr(text, '__unicode__'):
+	text = text.__unicode__()
+
+    if hasattr(text, '__str__'):
+	return text.__str__()
+
+    return text.encode('utf-8')
 
 class IPhotoDB:
     def __init__(self, dbfile):
@@ -34,7 +68,7 @@ class IPhotoDB:
 	    self.dbconn.execute("PRAGMA temp_store = MEMORY")
 	    self.dbconn.execute("PRAGMA encoding = \"UTF-8\"")
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    pass
 
 	try:
@@ -191,7 +225,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		rolls.append(tuple)
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    pass
 	return rolls
 
@@ -204,7 +238,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    pass
 	return media
 
@@ -217,7 +251,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    pass
 	return media
 
@@ -231,7 +265,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    pass
 	return media
 
@@ -243,7 +277,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		genres.append(tuple)
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    pass
 	return genres
 
@@ -270,7 +304,7 @@ class IPhotoDB:
 		return nextid # return new artist id
 	    return row[0] # return artist id
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    raise e
 
     def GetMediaTypeId(self, mediatype, autoadd=False):
@@ -280,7 +314,7 @@ class IPhotoDB:
 	try:
 	    self.dbconn.commit()
 	except Exception, e:
-	    print "Commit Error: " + str(e)
+	    print "Commit Error: " + to_str(e)
 	    pass
 
     def ResetDB(self):
@@ -288,12 +322,12 @@ class IPhotoDB:
 	    try:
 		self.dbconn.execute("DROP TABLE %s" % table)
 	    except Exception, e:
-		print str(e)
+		print to_str(e)
 		pass
 	try:
 	    self.InitDB()
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    raise e
 
     def AddAlbumNew(self, album, album_ign):
@@ -307,7 +341,7 @@ class IPhotoDB:
 	if albumtype in album_ign:
 	    return
 
-	#print "AddAlbumNew()", album
+	#print "AddAlbumNew()", to_str(album)
 
 	try:
 	    self.dbconn.execute("""
@@ -333,7 +367,7 @@ class IPhotoDB:
 	except:
 	    return
 
-	#print "AddRollNew()", roll
+	#print "AddRollNew()", to_str(roll)
 
 	try:
 	    self.dbconn.execute("""
@@ -360,7 +394,7 @@ class IPhotoDB:
 	except:
 	    return
 
-	#print "AddKeywordNew()", keyword
+	#print "AddKeywordNew()", to_str(keyword)
 
 	try:
 	    self.dbconn.execute("""
@@ -381,7 +415,7 @@ class IPhotoDB:
 	except Exception, e:
 	    return
 
-	#print "AddMediaNew()", media
+	#print "AddMediaNew()", to_str(media)
 
 	# rewrite paths to image files based on configured path.
 	# if the iPhoto library is mounted as a share, the paths in
@@ -547,7 +581,7 @@ class IPhotoParser:
 	except ParseCanceled:
 	    raise
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    raise e
 
     def Parse(self):
@@ -563,7 +597,7 @@ class IPhotoParser:
 	except ParseCanceled:
 	    return
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    raise e
 
 	try:
@@ -571,7 +605,7 @@ class IPhotoParser:
 	except ParseCanceled:
 	    return
 	except Exception, e:
-	    print str(e)
+	    print to_str(e)
 	    raise e
 
     def StartElement(self, name, attrs):
@@ -595,14 +629,14 @@ class IPhotoParser:
 
 	if name == "key":
 	    state.key = True
-	    #print "Got key type " + str(name)
+	    #print "Got key type " + to_str(name)
 	else:
 	    if state.key:
 		state.valueType = name
-		#print "Got value type " + str(name)
+		#print "Got value type " + to_str(name)
 	    else:
 		state.valueType = ""
-		#print "Got empty value type "
+		#print "Got empty value type"
 	    state.key = False
 
 	state.level += 1
@@ -614,8 +648,8 @@ class IPhotoParser:
 	if state.archivepath:
 	    if not state.key:
 		self.imagePath = state.value
-		print "Rewriting iPhoto archive path '%s'" % (self.imagePath)
-		print "as '%s'" % (os.path.dirname(self.xmlfile))
+		print "Rewriting iPhoto archive path '%s'" % (to_str(self.imagePath))
+		print "as '%s'" % (to_str(os.path.dirname(self.xmlfile)))
 		state.archivepath = False
 	    state.inarchivepath -= 1
 
@@ -624,7 +658,7 @@ class IPhotoParser:
 	    if state.inalbum == 3 and self.currentAlbum.has_key('AlbumId'):
 		self.currentAlbum['medialist'].append(state.value)
 	    elif state.inalbum == 2 and not state.key:
-		#print "Mapping %s => %s" % ( str(state.keyValue), str(state.value))
+		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
 		self.currentAlbum[state.keyValue] = state.value
 	    state.inalbum -= 1
 	    if state.inalbum == 0 and self.currentAlbum.has_key('AlbumId'):
@@ -637,7 +671,7 @@ class IPhotoParser:
 	    if state.inroll == 3 and self.currentRoll.has_key('RollID'):
 		self.currentRoll['medialist'].append(state.value)
 	    elif state.inroll == 2 and not state.key:
-		#print "Mapping %s => %s" % ( str(state.keyValue), str(state.value))
+		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
 		self.currentRoll[state.keyValue] = state.value
 	    state.inroll -= 1
 	    if state.inroll == 0 and self.currentRoll.has_key('RollID'):
@@ -648,7 +682,7 @@ class IPhotoParser:
 	# Keywords
 	elif state.keywords:
 	    if state.inkeyword == 1 and not state.key:
-		#print "Mapping %s => %s" % ( str(state.keyValue), str(state.value))
+		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
 		self.currentKeyword[state.keyValue] = state.value
 	    state.inkeyword -= 1
 	    if state.inkeyword == 0 and not state.key:
@@ -661,7 +695,7 @@ class IPhotoParser:
 	    if state.inmaster == 1 and state.key:
 		self.currentPhoto['MediaID'] = state.keyValue
 	    elif state.inmaster == 2 and not state.key:
-		#print "Mapping %s => %s" % ( str(state.keyValue), str(state.value))
+		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
 		self.currentPhoto[state.keyValue] = state.value
 	    state.inmaster -= 1
 	    if state.inmaster == 0 and self.currentPhoto.has_key('GUID') and self.currentPhoto['GUID']:

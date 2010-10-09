@@ -55,7 +55,7 @@ def list_events(params):
 	rollid = params['rollid']
 	return list_photos_in_event(params)
     except Exception, e:
-	print str(e)
+	print to_str(e)
 	pass
 
     rolls = db.GetRolls()
@@ -101,7 +101,7 @@ def list_albums(params):
 	albumid = params['albumid']
 	return list_photos_in_album(params)
     except Exception, e:
-	print str(e)
+	print to_str(e)
 	pass
 
     albums = db.GetAlbums()
@@ -133,7 +133,7 @@ def list_ratings(params):
 	rating = params['rating']
 	return list_photos_with_rating(params)
     except Exception, e:
-	print str(e)
+	print to_str(e)
 	pass
 
     n = 0
@@ -214,7 +214,8 @@ def import_library(xmlfile):
 
 def get_params(paramstring):
     params = {}
-    paramstring = str(paramstring).strip()
+    paramstring = to_unicode(paramstring)
+    paramstring = paramstring.strip()
     paramstring = paramstring.lstrip("?")
     if (not paramstring):
 	return params
@@ -222,7 +223,7 @@ def get_params(paramstring):
     for param in paramlist:
 	(k,v) = param.split("=")
 	params[k] = v
-    print params
+    print to_str(params)
     return params
 
 if (__name__ == "__main__"):
@@ -263,7 +264,7 @@ if (__name__ == "__main__"):
 		xml_mtime = os.path.getmtime(xmlfile)
 		db_mtime = os.path.getmtime(db_file)
 	    except Exception, e:
-		print str(e)
+		print to_str(e)
 		pass
 	    else:
 		if (xml_mtime > db_mtime):

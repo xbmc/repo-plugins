@@ -1,3 +1,6 @@
+0.9.8 - 20101008
+- Add unicode support.
+
 0.9.7 - 20100729
 - Hungarian strings (thanks alanwww1).
 - New icon (thanks freezy).

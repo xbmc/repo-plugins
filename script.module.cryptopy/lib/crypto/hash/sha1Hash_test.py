@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ sha1Hash_test.py
     Unit tests for sha1.py
 """

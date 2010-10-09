@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ binascii_plus
 
     Enhanced hex packet input and display

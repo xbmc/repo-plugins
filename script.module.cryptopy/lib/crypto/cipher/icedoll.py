@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.icedoll
 
     Modification of Rijndael to provide infinite error extension.

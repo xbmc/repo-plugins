@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.rijndael
 
     Rijndael encryption algorithm

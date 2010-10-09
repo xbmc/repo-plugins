@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.hash.sha1Hash
 
     Wrapper for python sha module to support crypo module standard interface

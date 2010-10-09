@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.rijndael_test
 
     Tests for the rijndael encryption algorithm

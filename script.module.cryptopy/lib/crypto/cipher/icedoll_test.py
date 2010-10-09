@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.icedoll_test
 
     Tests for icedoll encryption algorithm

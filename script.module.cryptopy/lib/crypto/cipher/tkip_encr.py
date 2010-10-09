@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.tkip_encr
 
     TKIP encryption from IEEE 802.11 TGi

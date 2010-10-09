@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.keyedHash.pbkdf2_test
 
     Unit tests for crypto.keyedHash.pbkdf2

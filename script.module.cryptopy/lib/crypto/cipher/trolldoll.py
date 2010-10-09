@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.trolldoll
 
     Modification to Icedoll to take advantage of the better error extension

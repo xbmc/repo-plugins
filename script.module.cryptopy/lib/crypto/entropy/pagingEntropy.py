@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.entropy.pagingEntropy
 
     Uses variations in disk access time to generator entropy.  A long string is

@@ -1,0 +1,2 @@
+1.2.6
+- Add file encoding declarations to make the module work with Python 2.5 and newer.

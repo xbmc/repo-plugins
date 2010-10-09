@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.keyedHash.michael_test
 
     Tests of the Michael Message Integrity Check Algorithm

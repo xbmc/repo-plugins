@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.tkip_encr_test
 
 	Tests for tkip encryption (mpdu only, no Michael)

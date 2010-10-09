@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.passwords.passwordfactory_test
 
     Test classes for password generation

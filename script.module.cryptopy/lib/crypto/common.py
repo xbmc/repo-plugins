@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.common
     Common utility routines for crypto modules
 

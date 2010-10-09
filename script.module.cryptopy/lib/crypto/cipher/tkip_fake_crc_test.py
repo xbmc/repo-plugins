@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.tkip_fake_crc_test
 
 	This module tests the creation of TKIP data that passes

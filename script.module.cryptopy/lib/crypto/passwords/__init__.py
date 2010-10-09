@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ CryptoPy - a pure python cryptographic libraries
 
     crypto.passwords package

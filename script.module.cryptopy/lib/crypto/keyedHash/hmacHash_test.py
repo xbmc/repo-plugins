@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ hmacHash_test.py
     Unit tests for hmacHash.py
 

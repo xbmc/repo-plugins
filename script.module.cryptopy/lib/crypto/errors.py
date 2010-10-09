@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ errors
     Error classes for cryptographic modules
 

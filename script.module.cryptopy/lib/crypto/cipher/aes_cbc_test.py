@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.cbc_test
 
     Tests for cbc encryption, uses AES for base algorithm

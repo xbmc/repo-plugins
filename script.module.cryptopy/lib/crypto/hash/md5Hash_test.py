@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ md5Hash_test.py
     Unit tests for md5Hash.py  (not the default python library!)
     MD5 defined in RFC 1321

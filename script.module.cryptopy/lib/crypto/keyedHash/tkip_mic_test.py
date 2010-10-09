@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ Testing of TKIP_MIC Class
 """
 from crypto.keyedHash.tkip_mic import TKIP_MIC

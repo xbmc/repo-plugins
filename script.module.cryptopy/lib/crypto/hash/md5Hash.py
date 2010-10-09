@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """   md5Hash.py
       Wrapper for python md5 module to support crypo module standard interface
 """

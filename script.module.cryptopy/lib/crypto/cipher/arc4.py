@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.arc4
 
     A Stream Cipher Encryption Algorithm 'Arcfour'

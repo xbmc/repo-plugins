@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.arc4_test
 
     Tests for arc4 encryption, uses AES for base algorithm

@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.keyedHash.tkip_key_mixing
     Tests for TKIP key mixing function
     Paul Lambert

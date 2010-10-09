@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """  crypto.keyedHash.prf_dot11_test
 	 Tests of the IEEE 802.11 PRF functions
 """

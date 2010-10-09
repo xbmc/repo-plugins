@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.entropy.prn_rijndael_test
 
     Unit test for prn_rijndael

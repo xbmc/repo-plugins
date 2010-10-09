@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.keyedHash.michael
 
     A reference implementation of the Michael Message Integrety Chek (MIC)

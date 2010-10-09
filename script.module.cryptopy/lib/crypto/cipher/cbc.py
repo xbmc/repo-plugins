@@ -1,3 +1,4 @@
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.cbc
 
     CBC mode of encryption for block ciphers.

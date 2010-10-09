@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# -*- coding: iso-8859-1 -*-
 """ crypto.cipher.ccm_test
 
     Tests for CCM encryption, uses AES for base algorithm

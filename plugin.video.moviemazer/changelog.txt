@@ -1,2 +1,14 @@
+0.2.0
+  Added possibility to choose where the plugin starts (skip the categories)
+  Added Icons for Categories
+  Added loading/saving of watched status (playcount)
+  Added TopTen Movies have now rank position in title
+  Added Recent Movies have now recent update date in title
+  Added possibility and setting for trailer-guess (based on favoured resolution and language)
+  Improved RegExp's
+
+0.1.1
+  Small Fixes
+  
 0.1.0
   Initial Release

@@ -8,7 +8,7 @@
     <!-- Progress Bar -->
     <string id="30020">Lade Filmdaten</string>
     <string id="30021">Filme müssen geladen werden</string>
-    <string id="30022">Lade</string>    
+    <string id="30022">Lade</string>
     
     <!-- Movie infos -->
     <string id="30030">Datum Deutschlandpremiere</string>
@@ -16,7 +16,6 @@
     <!-- Trailer Popup -->
     <string id="30010">Wähle einen Trailer</string>
     <string id="30011">Zurück</string>
-    
     <string id="30012">Keinen Trailer gefunden.</string>
 
     <!-- settings -->
@@ -25,6 +24,14 @@
     <string id="30120">Filmdaten Cache (in h)</string>
     
     <string id="30200">Trailer</string>
+    <string id="30230">Bevorzugter Modus</string>
+    <string id="30231">Spiele Bevorzugt</string>
+    <string id="30232">Zeige Trailerauswahl</string>
+
     <string id="30210">Bevorzugte Qualität (Horiz. Auflösung)</string>
     <string id="30220">Bevorzugte Sprache der Trailer</string>
+
+    <string id="30300">Hauptmenu</string>
+    <string id="30310">Starte mit</string>
+    <string id="30311">Kategorien</string>
 </strings>

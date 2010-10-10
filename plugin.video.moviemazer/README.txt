@@ -9,7 +9,8 @@ showTopTen  -> getTopTen  -> showMovies -> getMovieInfo -> addMovie -> XBMC_MOVI
 showRecent  -> getRecent  -> showMovies -> getMovieInfo -> addMovie -> XBMC_MOVIE
 
 -- User selects Movie --
-getTrailers -> askTrailers -> XBMC_PLAYLIST
+getTrailers -> guessPrefTrailer -> playTrailer -> XBMC_PLAY
+getTrailers -> askTrailers -> XBMC_DIALOG
 
 -- User selects Trailer --
-playTrailer -> XBMC_PLAY
+playTrailer -> playTrailer -> XBMC_PLAY

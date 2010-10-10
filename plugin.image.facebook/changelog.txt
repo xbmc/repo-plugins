@@ -1,6 +1,10 @@
 facebookPhotos-XBMC Changelog
 
-Current Version : 0.9.2
+Current Version : 0.9.3
+
+*** 0.9.3 ***
+
+Changed icon - freezy made me do it :)
 
 *** 0.9.2 ***
 

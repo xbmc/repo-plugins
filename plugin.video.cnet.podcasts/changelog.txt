@@ -4,3 +4,6 @@ initial
 version - 0.0.2
 added video descriptions
 added categories for SD and HD
+
+version - 0.0.3
+updated icon.png

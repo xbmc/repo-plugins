@@ -1,3 +1,6 @@
+0.9.9 - 20101012
+- Ignore unicode thumbnail paths if they fail to add (SVN < r34733).
+
 0.9.8 - 20101008
 - Add unicode support.
 

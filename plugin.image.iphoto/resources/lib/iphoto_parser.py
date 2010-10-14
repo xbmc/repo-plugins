@@ -301,8 +301,8 @@ class IPhotoDB:
 		    nextid += 1
 		cur.execute("INSERT INTO %s(id, %s) VALUES (?,?)" % (table, column),
 			    (nextid, value))
-		return nextid # return new artist id
-	    return row[0] # return artist id
+		return nextid # return new id
+	    return row[0] # return id
 	except Exception, e:
 	    print to_str(e)
 	    raise e

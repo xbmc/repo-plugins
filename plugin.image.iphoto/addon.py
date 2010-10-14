@@ -41,7 +41,13 @@ def list_photos_in_event(params):
 	    thumbpath = originalpath
 	if (not caption):
 	    caption = originalpath
-	item = gui.ListItem(caption, thumbnailImage=thumbpath)
+
+	# < r34717 doesn't support unicode thumbnail paths
+	try:
+	    item = gui.ListItem(caption, thumbnailImage=thumbpath)
+	except:
+	    item = gui.ListItem(caption)
+
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=mediapath, listitem = item, isFolder = False)
 	n += 1
 
@@ -63,9 +69,15 @@ def list_events(params):
 	return
 
     n = 0
-    for (rollid, name, thumb, rolldate, count) in rolls:
-	item = gui.ListItem(name, thumbnailImage=thumb)
+    for (rollid, name, thumbpath, rolldate, count) in rolls:
+	# < r34717 doesn't support unicode thumbnail paths
+	try:
+	    item = gui.ListItem(name, thumbnailImage=thumbpath)
+	except:
+	    item = gui.ListItem(name)
+
 	item.setInfo(type="pictures", infoLabels={ "count": count })
+
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=events&rollid=%s" % (rollid), listitem = item, isFolder = True)
 	n += 1
 
@@ -80,7 +92,13 @@ def render_media(media):
 	    thumbpath = originalpath
 	if (not caption):
 	    caption = originalpath
-	item = gui.ListItem(caption, thumbnailImage=thumbpath)
+
+	# < r34717 doesn't support unicode thumbnail paths
+	try:
+	    item = gui.ListItem(caption, thumbnailImage=thumbpath)
+	except:
+	    item = gui.ListItem(caption)
+
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=mediapath, listitem = item, isFolder = False)
 	n += 1
 

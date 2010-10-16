@@ -3,6 +3,7 @@
 <strings>
     <!-- Plugin strings -->
     <string id="30200">%d estrela(s)</string>
+    <string id="30213">Importar biblioteca iPhoto</string>
 
     <!-- Category strings -->
     <string id="30100">Eventos</string>

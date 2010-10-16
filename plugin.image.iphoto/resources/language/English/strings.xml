@@ -5,6 +5,7 @@
     <string id="30210">Importing iPhoto Library</string>
     <string id="30211">Imported %d items</string>
     <string id="30212">Scanning AlbumData.xml...</string>
+    <string id="30213">Import iPhoto Library</string>
 
     <!-- Category strings -->
     <string id="30100">Events</string>
@@ -17,4 +18,5 @@
     <string id="30001">Ignore published (MobileMe) albums</string>
     <string id="30002">Ignore 'Flagged' album</string>
     <string id="30003">Auto update library</string>
+    <string id="30004">Hide Import Library item in main menu</string>
 </strings>

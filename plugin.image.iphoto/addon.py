@@ -8,6 +8,7 @@ __credits__ = "Anoop Menon, Nuka1195, JMarshal, jingai"
 __url__ = "git://github.com/jingai/plugin.image.iphoto.git"
 
 import sys
+import time
 import os
 import os.path
 
@@ -28,30 +29,48 @@ from resources.lib.iphoto_parser import *
 db_file = xbmc.translatePath(os.path.join(addon.getAddonInfo("Profile"), "iphoto.db"))
 db = IPhotoDB(db_file)
 
+apple_epoch = 978307200
+
+def render_media(media):
+    sort_date = False
+    n = 0
+    for (caption, mediapath, thumbpath, originalpath, rating, mediadate, mediasize) in media:
+	if (not mediapath):
+	    mediapath = originalpath
+	if (not thumbpath):
+	    thumbpath = mediapath
+	if (not caption):
+	    caption = mediapath
+
+	if caption:
+	    # < r34717 doesn't support unicode thumbnail paths
+	    try:
+		item = gui.ListItem(caption, thumbnailImage=thumbpath)
+	    except:
+		item = gui.ListItem(caption)
+
+	    try:
+		item_date = time.strftime("%d.%m.%Y", time.localtime(apple_epoch + float(mediadate)))
+		#item.setInfo(type="pictures", infoLabels={ "size": mediasize, "date": item_date })
+		#sort_date = True
+	    except:
+		pass
+
+	    plugin.addDirectoryItem(handle = int(sys.argv[1]), url = mediapath, listitem = item, isFolder = False)
+	    n += 1
+
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+    if sort_date == True:
+	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
+    return n
+
 def list_photos_in_event(params):
     global db
 
     rollid = params['rollid']
     media = db.GetMediaInRoll(rollid)
-    n = 0
-    for (caption, mediapath, thumbpath, originalpath, rating) in media:
-	if (not mediapath):
-	    mediapath = originalpath
-	if (not thumbpath):
-	    thumbpath = originalpath
-	if (not caption):
-	    caption = originalpath
-
-	# < r34717 doesn't support unicode thumbnail paths
-	try:
-	    item = gui.ListItem(caption, thumbnailImage=thumbpath)
-	except:
-	    item = gui.ListItem(caption)
-
-	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=mediapath, listitem = item, isFolder = False)
-	n += 1
-
-    return n
+    return render_media(media)
 
 def list_events(params):
     global db,BASE_URL
@@ -68,6 +87,7 @@ def list_events(params):
     if (not rolls):
 	return
 
+    sort_date = False
     n = 0
     for (rollid, name, thumbpath, rolldate, count) in rolls:
 	# < r34717 doesn't support unicode thumbnail paths
@@ -76,32 +96,21 @@ def list_events(params):
 	except:
 	    item = gui.ListItem(name)
 
-	item.setInfo(type="pictures", infoLabels={ "count": count })
+	try:
+	    item_date = time.strftime("%d.%m.%Y", time.localtime(apple_epoch + float(rolldate)))
+	    item.setInfo(type="pictures", infoLabels={ "date": item_date })
+	    sort_date = True
+	except:
+	    pass
 
+	item.setInfo(type="pictures", infoLabels={ "count": count })
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=events&rollid=%s" % (rollid), listitem = item, isFolder = True)
 	n += 1
 
-    return n
-
-def render_media(media):
-    n = 0
-    for (caption, mediapath, thumbpath, originalpath, rating) in media:
-	if (not mediapath):
-	    mediapath = originalpath
-	if (not thumbpath):
-	    thumbpath = originalpath
-	if (not caption):
-	    caption = originalpath
-
-	# < r34717 doesn't support unicode thumbnail paths
-	try:
-	    item = gui.ListItem(caption, thumbnailImage=thumbpath)
-	except:
-	    item = gui.ListItem(caption)
-
-	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=mediapath, listitem = item, isFolder = False)
-	n += 1
-
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+    if sort_date == True:
+	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
     return n
 
 def list_photos_in_album(params):
@@ -127,13 +136,17 @@ def list_albums(params):
 	return
 
     n = 0
-    for (albumid, name) in albums:
+    for (albumid, name, count) in albums:
 	if name == "Photos":
 	    continue
+
 	item = gui.ListItem(name)
+	item.setInfo(type="pictures", infoLabels={ "count": count })
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=albums&albumid=%s" % (albumid), listitem = item, isFolder = True)
 	n += 1
 
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
     return n
 
 def list_photos_with_rating(params):
@@ -161,6 +174,8 @@ def list_ratings(params):
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=ratings&rating=%d" % (a), listitem = item, isFolder = True)
 	n += 1
 
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
     return n
 
 def progress_callback(progress_dialog, nphotos, ntotal):
@@ -175,16 +190,18 @@ def progress_callback(progress_dialog, nphotos, ntotal):
     return nphotos
 
 def import_library(xmlfile):
-    global db,db_file
+    global db_file
 
     db_tmp_file = db_file + ".tmp"
     db_tmp = IPhotoDB(db_tmp_file)
     db_tmp.ResetDB()
 
+    # always ignore Books and currently selected album
     album_ign = []
     album_ign.append("Book")
     album_ign.append("Selected Event Album")
 
+    # ignore albums published to MobileMe if configured to do so
     album_ign_publ = addon.getSetting('album_ignore_published')
     if (album_ign_publ == ""):
 	addon.setSetting('album_ignore_published', 'true')
@@ -192,6 +209,7 @@ def import_library(xmlfile):
     if (album_ign_publ == "true"):
 	album_ign.append("Published")
 
+    # ignore flagged albums if configured to do so
     album_ign_flagged = addon.getSetting('album_ignore_flagged')
     if (album_ign_flagged == ""):
 	addon.setSetting('album_ignore_flagged', 'true')
@@ -204,36 +222,48 @@ def import_library(xmlfile):
 	progress_dialog.create(addon.getLocalizedString(30210))
     except:
 	print traceback.print_exc()
-	os.remove(db_file_tmp)
-	return
-
-    iparser = IPhotoParser(xmlfile, db_tmp.AddAlbumNew, album_ign, db_tmp.AddRollNew, db_tmp.AddKeywordNew, db_tmp.AddMediaNew, progress_callback, progress_dialog)
-
-    progress_dialog.update(0, addon.getLocalizedString(30212))
-    try:
-	iparser.Parse()
-	db_tmp.UpdateLastImport()
-    except:
-	print traceback.print_exc()
     else:
-	if (not progress_dialog.iscanceled()):
-	    try:
-		os.rename(db_tmp_file, db_file)
-		db = db_tmp
-	    except:
-		print traceback.print_exc()
+	iparser = IPhotoParser(xmlfile, db_tmp.AddAlbumNew, album_ign, db_tmp.AddRollNew, db_tmp.AddKeywordNew, db_tmp.AddMediaNew, progress_callback, progress_dialog)
 
-    try:
-	os.remove(db_tmp_file)
-    except:
-	pass
+	progress_dialog.update(0, addon.getLocalizedString(30212))
+	try:
+	    iparser.Parse()
+	    db_tmp.UpdateLastImport()
+	except:
+	    print traceback.print_exc()
+	else:
+	    if (not progress_dialog.iscanceled()):
+		try:
+		    os.rename(db_tmp_file, db_file)
+		except:
+		    # windows doesn't allow in-place rename
+		    remove_tries = 3
+		    while remove_tries and os.path.isfile(db_file):
+			try:
+			    os.remove(db_file)
+			except:
+			    remove_tries -= 1
+			    xbmc.sleep(1000)
+
+		    try:
+			os.rename(db_tmp_file, db_file)
+		    except:
+			print traceback.print_exc()
 
     progress_dialog.close()
 
+    del db_tmp
+    remove_tries = 3
+    while remove_tries and os.path.isfile(db_tmp_file):
+	try:
+	    os.remove(db_tmp_file)
+	except:
+	    remove_tries -= 1
+	    xbmc.sleep(1000)
+
 def get_params(paramstring):
     params = {}
-    paramstring = to_unicode(paramstring)
-    paramstring = paramstring.strip()
+    paramstring = str(paramstring).strip()
     paramstring = paramstring.lstrip("?")
     if (not paramstring):
 	return params
@@ -241,8 +271,11 @@ def get_params(paramstring):
     for param in paramlist:
 	(k,v) = param.split("=")
 	params[k] = v
-    print to_str(params)
+    print params
     return params
+
+def add_import_lib_context_item(item):
+    item.addContextMenuItems([(addon.getLocalizedString(30213), "XBMC.RunPlugin(\""+BASE_URL+"?action=rescan\")",)])
 
 if (__name__ == "__main__"):
     xmlfile = addon.getSetting('albumdata_xml_path')
@@ -258,18 +291,30 @@ if (__name__ == "__main__"):
 	try:
 	    item = gui.ListItem(addon.getLocalizedString(30100), thumbnailImage=ICONS_PATH+"/events.png")
 	    item.setInfo("Picture", { "Title": "Events" })
+	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=events", item, True)
+
 	    item = gui.ListItem(addon.getLocalizedString(30101), thumbnailImage=ICONS_PATH+"/albums.png")
 	    item.setInfo("Picture", { "Title": "Albums" })
+	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=albums", item, True)
+
 	    item = gui.ListItem(addon.getLocalizedString(30102), thumbnailImage=ICONS_PATH+"/star.png")
 	    item.setInfo("Picture", { "Title": "Ratings" })
+	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=ratings", item, True)
-	    item = gui.ListItem(addon.getLocalizedString(30103), thumbnailImage=PLUGIN_PATH+"/icon.png")
-	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=rescan", item, False)
+
+	    hide_import_lib = addon.getSetting('hide_import_lib')
+	    if (hide_import_lib == ""):
+		addon.setSetting('hide_import_lib', 'false')
+		hide_import_lib = "false"
+	    if (hide_import_lib == "false"):
+		item = gui.ListItem(addon.getLocalizedString(30103), thumbnailImage=PLUGIN_PATH+"/icon.png")
+		plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=rescan", item, False)
 	except:
 	    plugin.endOfDirectory(int(sys.argv[1]), False)
 	else:
+	    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_NONE)
 	    plugin.endOfDirectory(int(sys.argv[1]), True)
 
 	# automatically update library if desired
@@ -295,6 +340,7 @@ if (__name__ == "__main__"):
 	elif (action == "ratings"):
 	    items = list_ratings(params)
 	elif (action == "rescan"):
+	    del db
 	    items = import_library(xmlfile)
 
 	if (items):

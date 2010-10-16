@@ -2,6 +2,7 @@
 <settings>   
     <setting id="albumdata_xml_path" type="file" label="30000" default=""/>
     <setting id="auto_update_lib" type="bool" label="30003" default="false"/>
+    <setting id="hide_import_lib" type="bool" label="30004" default="false"/>
     <setting id="album_ignore_published" type="bool" label="30001" default="true"/>
     <setting id="album_ignore_flagged" type="bool" label="30002" default="true"/>
 </settings>

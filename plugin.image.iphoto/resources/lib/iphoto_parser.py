@@ -93,6 +93,7 @@ class IPhotoDB:
 	       aspectratio number,
 	       rating integer,
 	       mediadate integer,
+	       mediasize integer,
 	       mediapath varchar,
 	       thumbpath varchar,
 	       originalpath varchar
@@ -209,7 +210,7 @@ class IPhotoDB:
 	albums = []
 	try:
 	    cur = self.dbconn.cursor()
-	    cur.execute("SELECT id,name FROM albums")
+	    cur.execute("SELECT id,name,photocount FROM albums")
 	    for tuple in cur:
 		albums.append(tuple)
 	except:
@@ -233,7 +234,7 @@ class IPhotoDB:
 	media = []
 	try:
 	    cur = self.dbconn.cursor()
-	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating
+	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM media M WHERE M.rollid = ?""", (rollid,))
 	    for tuple in cur:
 		media.append(tuple)
@@ -246,7 +247,7 @@ class IPhotoDB:
 	media = []
 	try:
 	    cur = self.dbconn.cursor()
-	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating
+	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM media M WHERE M.rating = ?""", (rating,))
 	    for tuple in cur:
 		media.append(tuple)
@@ -259,7 +260,7 @@ class IPhotoDB:
 	media = []
 	try:
 	    cur = self.dbconn.cursor()
-	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating
+	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM albummedia A LEFT JOIN media M ON A.mediaid=M.id
 			WHERE A.albumid = ?""", (albumid,))
 	    for tuple in cur:
@@ -429,12 +430,22 @@ class IPhotoDB:
 	    thumbpath = media['ThumbPath']
 	    originalpath = media['OriginalPath']
 
+	filepath = imagepath
+	if (not filepath):
+	    filepath = originalpath
+
+	try:
+	    mediasize = os.path.getsize(filepath)
+	except:
+	    mediasize = 0
+	    pass
+
 	try:
 	    self.dbconn.execute("""
 	    INSERT INTO media (id, mediatypeid, rollid, caption, guid,
-			      aspectratio, rating, mediadate, mediapath,
+			      aspectratio, rating, mediadate, mediasize, mediapath,
 			      thumbpath, originalpath)
-	    VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+	    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
 				(mediaid,
 				 self.GetMediaTypeId(media['MediaType'], True),
 				 media['Roll'],
@@ -443,6 +454,7 @@ class IPhotoDB:
 				 media['Aspect Ratio'],
 				 media['Rating'],
 				 int(float(media['DateAsTimerInterval'])),
+				 mediasize,
 				 imagepath,
 				 thumbpath,
 				 originalpath))

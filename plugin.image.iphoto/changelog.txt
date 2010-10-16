@@ -1,3 +1,10 @@
+1.0.0 - 20101015
+- Enable sort on title.
+- Fix library import on Windows.
+- Default to modified image if one exists.
+- Add option to hide Import Library in main menu.
+- Add context menu item for library update.
+
 0.9.9 - 20101012
 - Ignore unicode thumbnail paths if they fail to add (SVN < r34733).
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">General</string>
+    <string id="30001">Login Email</string>
+    <string id="30002">Login Password</string>
+    <string id="30003">Max Photos Per Page</string>
+    <string id="30004">Map Source</string>
+    <string id="30005">Map Type</string>
+    <string id="30006">Map Zoom</string>
+    
+    <string id="30100">Albums</string>
+    <string id="30101">Tags</string>
+    <string id="30102">Favorite Users</string>
+    <string id="30103">Search My Photos</string>
+    <string id="30104">Search Picasa</string>
+    
+    <string id="30200">@REPLACE@'s Albums</string>
+    <string id="30201">@REPLACE@'s Tags</string>
+    <string id="30202">@REPLACE@'s Favorite Users</string>
+    <string id="30203">Search @REPLACE@'s Photos</string>
+    
+    <string id="30300">Captcha Fail</string>
+    <string id="30301">Try again later or try here:</string>
+    <string id="30302">Bad Authorization</string>
+    <string id="30303">Check username and password</string>
+    <string id="30304">Enter Captch Text - Try #</string>
+    
+    <string id="30401">Previous @REPLACE@ photos</string><!--example: Previous 50 photos -->
+    <string id="30402">Next @REPLACE@ photos</string><!--example: Next 50 photos -->
+    <string id="30403">Last @REPLACE@ photos</string><!--example: Last 50 photos -->
+    
+    <string id="30404">Enter Search Terms</string>
+    <string id="30405">Show Map</string>
+</strings>

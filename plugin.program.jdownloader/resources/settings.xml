@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-   <setting id="ip_adress" type="ipaddress" label="30001" default="127.0.0.1"/>
-   <setting id="ip_port" type="number" label="30002" default="10025"/>
+  <!-- General -->
+  <category>
+    <setting id="ip_adress" type="ipaddress" label="30001" default="127.0.0.1"/>
+    <setting id="ip_port" type="number" label="30002" default="10025"/>
+  </category>
+  <!-- Interface -->
+  <category label="30007">
+    <setting id="add_use_grabber" type="enum" label="30003" lvalues="30005|30004" default="0"/>
+    <setting id="add_start" type="enum" label="30006" lvalues="30004|30005" default="1"/>
+  </category>
 </settings> 

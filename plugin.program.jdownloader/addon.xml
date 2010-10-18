@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.jdownloader"
        name="JDownloader"
-       version="1.0.0"
+       version="1.0.1"
        provider-name="pgoeri">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
              library="default.py">
-	  <provides>executable</provides>
+    <provides>executable</provides>
   </extension> 
   <extension point="xbmc.addon.metadata">
     <summary lang="en">A client for the popular JDownloader application</summary>

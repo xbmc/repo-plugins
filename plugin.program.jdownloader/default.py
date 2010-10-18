@@ -6,10 +6,10 @@ __url__			= "http://pgoeri-xbmc-plugins.googlecode.com"
 __svn_url__		= "http://pgoeri-xbmc-plugins.googlecode.com/svn/trunk/plugin.program.jdownloader/"
 __credits__		= "Team XBMC passion, http://passion-xbmc.org & pgoeri"
 __platform__		= "xbmc media center, [LINUX, OS X, WIN32, XBOX]"
-__date__			= "02-10-2010"
-__version__		= "1.0.0"
+__date__			= "18-10-2010"
+__version__		= "1.0.1"
 __svn_revision__	= "$Revision:  $".replace( "Revision", "" ).strip( "$: " )
-__XBMC_Revision__	= "34354" #XBMC Dharma branch
+__XBMC_Revision__	= "34782" #XBMC Dharma branch
 __useragent__		= "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1"
 
 from traceback import print_exc
@@ -28,6 +28,10 @@ import jdownloader
 
 __addon__ = xbmcaddon.Addon(__addonID__)
 __language__ = __addon__.getLocalizedString
+
+# shows a more userfriendly notification
+def showMessage(heading, message):
+	xbmc.executebuiltin('XBMC.Notification("%s", "%s")' % ( heading, message) )
 
 def addDir(name,url,mode,iconimage, c_items = None ):
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
@@ -62,7 +66,7 @@ def get_params():
 			splitparams={}
 			splitparams=pairsofparams[i].split('=')
 			if (len(splitparams))==2:
-				param[splitparams[0]]=splitparams[1]							
+				param[splitparams[0]]=splitparams[1]
 	return param
 	
 
@@ -74,25 +78,24 @@ try: url=urllib.unquote_plus(params["url"])
 except: pass
 try: mode=int(params["mode"])
 except: pass
+try:
+	if "action" in params: mode=3
+except: pass
 
 print "Mode: "+str(mode)
 print "URL: "+str(url)
-
-OK = True
 
 #check connection
 try:
 	jdownloader.get(jdownloader.GET_STATUS)
 except jdownloader.JDError, error:
-	d = xbmcgui.Dialog()
 	(type, e, traceback) = sys.exc_info()
-	d.ok(__language__(257), e.message)
+	showMessage(xbmc.getLocalizedString(257), e.message)
 	mode=-1
 	url="error"
-	#xbmc.executebuiltin("Action(ParentDir)")
 
 #main menu:
-if mode==None or url==None or len(url)<1:
+if mode==None or mode==0:
 	
 	#status color
 	status = jdownloader.get(jdownloader.GET_STATUS)
@@ -110,9 +113,10 @@ if mode==None or url==None or len(url)<1:
 		downloadspeed = downloadspeed.replace( downloadspeed , "[COLOR=ffFFFF00]%s[/COLOR]" % ( downloadspeed ))
 	
 	#add the three main list entrys
-	addDir( __language__(30051) + ": %s - %s: %s KB/s - %s %s" % (status , __language__(30052) , downloadspeed, jdownloader.get(jdownloader.GET_CURRENTFILECNT), __language__(30053)) , "" , 2 , "" )
+	addDir( __language__(30051) + ": %s - %s: %s KB/s - %s %s" % (status , __language__(30052) , downloadspeed, jdownloader.get(jdownloader.GET_CURRENTFILECNT), __language__(30053)) , "actions" , 2 , "" )
 	addDir( __language__(30050), "currentlist" , 1 , "" )
 	addDir( __language__(30056), "finishedlist" , 1 , "" )
+	end_of_directory( True )
 	
 #list of packages
 if mode==1: 
@@ -128,6 +132,7 @@ if mode==1:
 		if url == "finishedlist":
 			if not item["Percentage"] == "100,00" : add = False
 		if add: addLink( summary , "" , "" )
+	end_of_directory( True )
 
 #choose action
 if mode== 2:
@@ -146,9 +151,13 @@ if mode== 2:
 			result = jdownloader.action(actions[select],limit) 
 		else:
 			result = jdownloader.action(actions[select])
-		dialog.ok("JDownloader" , result )
-		time.sleep(1)
+		showMessage("JDownloader" , result )
+		time.sleep(3) # otherwise status is not correct after start/stop
 		xbmc.executebuiltin("XBMC.Container.Update")
-	OK = False
-	
-end_of_directory( OK )
+
+#interface for other addons
+if mode==3:
+	if (params["action"] == "addlink"):
+		jdownloader.action_addlink(url)
+	if (params["action"] == "addcontainer"):
+		jdownloader.action_addcontainer(url)

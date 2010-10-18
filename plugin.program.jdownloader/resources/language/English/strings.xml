@@ -4,11 +4,11 @@
   <!--SETTINGS STRINGS -->
   <string id="30001">IP Adress</string>
   <string id="30002">Port</string>
-  <string id="30003"></string>
-  <string id="30004"></string>
-  <string id="30005"></string>
-  <string id="30006"></string>
-  <string id="30007"></string>
+  <string id="30003">Add new links direct to downloads</string>
+  <string id="30004">No</string>
+  <string id="30005">Yes</string>
+  <string id="30006">Start downloading after adding new links</string>
+  <string id="30007">Interface</string>
   
   <!--GENERAL STRINGS -->
   <string id="30050">All Packages</string>

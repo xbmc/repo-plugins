@@ -173,9 +173,17 @@ def action( x , limit = "0" ):
 	result = _http_query(actionStr)
 	return result
 
-def action_addcontainer(grabber,start,link):
+def action_addcontainer(link):
+	# get settings
+	grabber = Addon.getSetting("add_use_grabber")
+	start = Addon.getSetting("add_start")
+	# add link
 	_http_query('/action/add/container/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
 
-# Links must be seperated by spaces
-def action_addlinks(grabber,start,link):
+# Links seperated by spaces, won't work, call this functions for each link seperatly
+def action_addlink(link):
+	# get settings
+	grabber = Addon.getSetting("add_use_grabber")
+	start = Addon.getSetting("add_start")
+	# add link
 	_http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))

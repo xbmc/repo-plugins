@@ -1,9 +1,14 @@
-Version 1.0.0
+[B]Version 1.0.1[/B]
+    * Changed license to GPL v3
+    * Uses notifications instead of dialogs for messages
+    * Improved interface for other addons
+
+[B]Version 1.0.0[/B]
     * Added German translation
     * Handle 'failed connection' error
 
-Version 0.1.1
+[B]Version 0.1.1[/B]
     * Fixed Bug: Only the first package was listed
 
-Version 0.1.0
+[B]Version 0.1.0[/B]
     * Initial release

@@ -1,0 +1,22 @@
+<!-- Keymap for the keyboard shortcuts configured by MSRemote.reg -->
+<!-- J. Rennie 23rd September 2010 -->
+<keymap>
+  <global>
+    <keyboard>
+      <!-- Windows button: mapped to ctrl-shift-W by MSRemote.reg -->
+      <w mod="ctrl,shift">Notification(Key, Windows button, 3)</w>
+
+      <!-- Some MS remotes have the four coloured buttons. These are mapped -->
+      <!-- to ctrl-alt-1 to 4 by MSRemote.reg. -->
+
+      <!-- Red button: ctrl-alt-1: this is a placeholder -->
+      <one mod="ctrl,alt">Notification(Key, Red button, 3)</one>
+      <!-- Green button: ctrl-alt-2: this is a placeholder -->
+      <two mod="ctrl,alt">Notification(Key, Green button, 3)</two>
+      <!-- Yellow button: ctrl-alt-3: this is a placeholder -->
+      <three mod="ctrl,alt">Notification(Key, Yellow button, 3)</three>
+      <!-- Blue button: ctrl-alt-4: this is a placeholder -->
+      <four mod="ctrl,alt">Notification(Key, Blue button, 3)</four>
+    </keyboard>
+  </global>
+</keymap>

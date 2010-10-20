@@ -5,8 +5,8 @@ from addon import AddonHelper
 __plugin__ =  'picasa'
 __author__ = 'ruuk'
 __url__ = 'http://code.google.com/p/picasaphotos-xbmc/'
-__date__ = '10-18-2010'
-__version__ = '0.8.0'
+__date__ = '10-19-2010'
+__version__ = '0.8.2'
 		
 class picasaPhotosSession(AddonHelper):
 	def __init__(self):
@@ -227,7 +227,10 @@ class picasaPhotosSession(AddonHelper):
 		for c in contacts.entry:
 			tn = self.dataPath('cache/' + c.user.text + '.jpg')
 			if not os.path.exists(tn):
-				tn = self.getFile(c.thumbnail.text,tn)
+				try:
+					tn = self.getFile(c.thumbnail.text,tn)
+				except:
+					tn = c.thumbnail.text
 			#tn = c.thumbnail.text
 			#tn = tn.replace('s64-c','s256-c').replace('?sz=64','?sz=256')
 			if not self.addDir(c.nickname.text,tn,tot,url=c.user.text,mode=103,name=c.nickname.text): break

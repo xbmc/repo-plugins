@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Algemeen</string>
+    <string id="30001">Login e-mail</string>
+    <string id="30002">Login wachtwoord</string>
+    <string id="30003">Aantal afbeeldingen per pagina</string>
+    <string id="30004">Kaart herkomst</string>
+    <string id="30005">Kaart type</string>
+    <string id="30006">Kaart schaal</string>
+    
+    <string id="30100">Albums</string>
+    <string id="30101">Tags</string>
+    <string id="30102">Contacten</string>
+    <string id="30103">Zoeken mijn afbeeldingen</string>
+    <string id="30104">Zoeken Picasa</string>
+    
+    <string id="30200">@REPLACE@'s Albums</string>
+    <string id="30201">@REPLACE@'s Tags</string>
+    <string id="30202">@REPLACE@'s Contacten</string>
+    <string id="30203">Zoeken @REPLACE@'s afbeeldingen</string>
+    
+    <string id="30300">Captcha fout</string>
+    <string id="30301">Probeer het later nog eens of probeeer dit</string>
+    <string id="30302">Autorisatie error!</string>
+    <string id="30303">Controleer login e-mail en wachtwoord</string>
+    <string id="30304">Invoeren Captcha tekst - poging #</string>
+    
+    <string id="30401">Vorige @REPLACE@ afbeeldingen</string><!--example: Previous 50 photos -->
+    <string id="30402">Volgende @REPLACE@ afbeeldingen</string><!--example: Next 50 photos -->
+    <string id="30403">Laatste @REPLACE@ afbeeldingen</string><!--example: Last 50 photos -->
+    
+    <string id="30404">Zoek argumenten</string>
+    <string id="30405">Toon kaart</string>
+</strings>

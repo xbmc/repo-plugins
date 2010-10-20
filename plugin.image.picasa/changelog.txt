@@ -1,6 +1,14 @@
 picasaPhotos Changelog
 
-Current Version : 0.8.0
+Current Version : 0.8.2
+
+*** 0.8.2 ***
+
+Fixed bug when fetching contacts images
+
+*** 0.8.1 ***
+
+Bug Fix: Added elementtree import to addon.xml
 
 *** 0.8.0 ***
 

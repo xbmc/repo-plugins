@@ -9,18 +9,18 @@ __language__ = __settings__.getLocalizedString
 def CATEGORIES():
         addDir(__language__(30000),'http://www.secsports.com/SECVIDEO/OnDemandVideos.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/icon.png')
         addDir(__language__(30001),'http://www.secsports.com/SECVIDEO/OnDemandVideos/TabId/862/CategoryId/124/FB-Current-Season.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/icon.png')
-        addDir(__language__(30002),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/70/Alabama.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/Alabama_Logo2.jpg')
-        addDir(__language__(30003),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/75/Kentucky.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/University-of-Kentucky.jpg')
-        addDir(__language__(30004),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/80/Tennessee.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/logo-university-of-tennessee.jpg')
-        addDir(__language__(30005),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/74/Georgia.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/University-of-Georgia.jpg')
-        addDir(__language__(30006),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/79/South-Carolina.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/south20carolina20logo.jpg')
-        addDir(__language__(30007),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/72/Auburn.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/auburn-university.jpg')
-        addDir(__language__(30008),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/78/Mississippi-State.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/MississippiStateBulldogs.gif')
-        addDir(__language__(30009),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/81/Vanderbilt.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/vanderbilt_universitypng.jpg')
-        addDir(__language__(30010),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/73/Florida.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/UF_Signature1.jpg')
-        addDir(__language__(30011),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/71/Arkansas.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/arkansasrazorback23.png')
-        addDir(__language__(30012),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/77/Ole-Miss.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/olemiss.jpg')
-        addDir(__language__(30013),'http://secsports.com'+'/VIDEO/OnDemandVideos/TabId/862/CategoryId/76/LSU.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/LSU.jpg')
+        addDir(__language__(30002),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/70/Alabama.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/Alabama_Logo2.jpg')
+        addDir(__language__(30003),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/75/Kentucky.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/University-of-Kentucky.jpg')
+        addDir(__language__(30004),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/80/Tennessee.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/logo-university-of-tennessee.jpg')
+        addDir(__language__(30005),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/74/Georgia.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/University-of-Georgia.jpg')
+        addDir(__language__(30006),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/79/South-Carolina.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/south20carolina20logo.jpg')
+        addDir(__language__(30007),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/72/Auburn.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/auburn-university.jpg')
+        addDir(__language__(30008),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/78/Mississippi-State.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/MississippiStateBulldogs.gif')
+        addDir(__language__(30009),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/81/Vanderbilt.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/vanderbilt_universitypng.jpg')
+        addDir(__language__(30010),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/73/Florida.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/UF_Signature1.jpg')
+        addDir(__language__(30011),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/71/Arkansas.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/arkansasrazorback23.png')
+        addDir(__language__(30012),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/77/Ole-Miss.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/olemiss.jpg')
+        addDir(__language__(30013),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/76/LSU.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/LSU.jpg')
         		
 def INDEX(url):
         req = urllib2.Request(url)
@@ -29,11 +29,12 @@ def INDEX(url):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        match=re.compile('<div class="video_element">\r\n\t<a href=\'.+?\' target="_parent"><img border=\'0\' src=\'(.+?)\'></a>\r\n\t<a href=\'.+?\' target="_parent">(.+?)</a><br />\r\n\t\r\n</div></td><td>\r\n').findall(link)
+        link=link.replace('\'','')
+        match=re.compile('<div class="video_element">\r\n\t<a href=.+?target="_parent"><img border=0 src=http://sec-cms.s3.amazonaws.com/(.+?)></a><br />\r\n\t.+?\r\n<div style="height:27px;overflow:hidden;"><a href=.+?target="_parent">(.+?)</a>').findall(link)
         for url,name in match:
-                thumbnail=url
+                thumbnail='http://sec-cms.s3.amazonaws.com/'+url
                 url = url.replace('_preview.jpg','_sec-cms-mp4-s3.flv')
-                addLink(name,url,thumbnail)
+                addLink(name,'http://sec-cms.s3.amazonaws.com/'+url,thumbnail)
 
        
 

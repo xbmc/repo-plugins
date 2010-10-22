@@ -42,7 +42,7 @@ def render_media(media):
 	if (not caption):
 	    caption = mediapath
 
-	if caption:
+	if (caption):
 	    # < r34717 doesn't support unicode thumbnail paths
 	    try:
 		item = gui.ListItem(caption, thumbnailImage=thumbpath)
@@ -65,6 +65,46 @@ def render_media(media):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
     return n
 
+def list_photos_in_album(params):
+    global db
+
+    albumid = params['albumid']
+    media = db.GetMediaInAlbum(albumid)
+    return render_media(media)
+
+def list_albums(params, ign_empty):
+    global db, BASE_URL
+
+    albumid = 0
+    try:
+	albumid = params['albumid']
+	return list_photos_in_album(params)
+    except Exception, e:
+	print to_str(e)
+	pass
+
+    albums = db.GetAlbums()
+    if (not albums):
+	return
+
+    n = 0
+    for (albumid, name, count) in albums:
+	if (name == "Photos"):
+	    continue
+
+	if (not count and ign_empty == "true"):
+	    continue
+
+	item = gui.ListItem(name)
+	if (count):
+	    item.setInfo(type="pictures", infoLabels={ "count": count })
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=albums&albumid=%s" % (albumid), listitem = item, isFolder = True)
+	n += 1
+
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
+    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+    return n
+
 def list_photos_in_event(params):
     global db
 
@@ -72,8 +112,8 @@ def list_photos_in_event(params):
     media = db.GetMediaInRoll(rollid)
     return render_media(media)
 
-def list_events(params):
-    global db,BASE_URL
+def list_events(params, ign_empty):
+    global db, BASE_URL
 
     rollid = 0
     try:
@@ -90,6 +130,9 @@ def list_events(params):
     sort_date = False
     n = 0
     for (rollid, name, thumbpath, rolldate, count) in rolls:
+	if (not count and ign_empty == "true"):
+	    continue
+
 	# < r34717 doesn't support unicode thumbnail paths
 	try:
 	    item = gui.ListItem(name, thumbnailImage=thumbpath)
@@ -103,50 +146,101 @@ def list_events(params):
 	except:
 	    pass
 
-	item.setInfo(type="pictures", infoLabels={ "count": count })
+	if (count):
+	    item.setInfo(type="pictures", infoLabels={ "count": count })
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=events&rollid=%s" % (rollid), listitem = item, isFolder = True)
 	n += 1
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
-    if sort_date == True:
+    if (sort_date == True):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
     return n
 
-def list_photos_in_album(params):
+def list_photos_with_face(params):
     global db
 
-    albumid = params['albumid']
-    media = db.GetMediaInAlbum(albumid)
+    faceid = params['faceid']
+    media = db.GetMediaWithFace(faceid)
     return render_media(media)
 
-def list_albums(params):
-    global db,BASE_URL
+def list_faces(params, ign_empty):
+    global db, BASE_URL
 
-    albumid = 0
+    faceid = 0
     try:
-	albumid = params['albumid']
-	return list_photos_in_album(params)
+	faceid = params['faceid']
+	return list_photos_with_face(params)
     except Exception, e:
 	print to_str(e)
 	pass
 
-    albums = db.GetAlbums()
-    if (not albums):
+    faces = db.GetFaces()
+    if (not faces):
 	return
 
     n = 0
-    for (albumid, name, count) in albums:
-	if name == "Photos":
+    for (faceid, name, thumbpath, count) in faces:
+	if (not count and ign_empty == "true"):
 	    continue
 
-	item = gui.ListItem(name)
-	item.setInfo(type="pictures", infoLabels={ "count": count })
-	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=albums&albumid=%s" % (albumid), listitem = item, isFolder = True)
+	# < r34717 doesn't support unicode thumbnail paths
+	try:
+	    item = gui.ListItem(name, thumbnailImage=thumbpath)
+	except:
+	    item = gui.ListItem(name)
+
+	if (count):
+	    item.setInfo(type="pictures", infoLabels={ "count": count })
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=faces&faceid=%s" % (faceid), listitem = item, isFolder = True)
 	n += 1
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+    return n
+
+def list_photos_with_keyword(params):
+    global db
+
+    keywordid = params['keywordid']
+    media = db.GetMediaWithKeyword(keywordid)
+    return render_media(media)
+
+def list_keywords(params, ign_empty):
+    global db, BASE_URL
+
+    keywordid = 0
+    try:
+	keywordid = params['keywordid']
+	return list_photos_with_keyword(params)
+    except Exception, e:
+	print to_str(e)
+	pass
+
+    keywords = db.GetKeywords()
+    if (not keywords):
+	return
+
+    hidden_keywords = addon.getSetting('hidden_keywords')
+
+    n = 0
+    for (keywordid, name, count) in keywords:
+	if (name in hidden_keywords):
+	    continue
+
+	if (not count and ign_empty == "true"):
+	    continue
+
+	item = gui.ListItem(name)
+	item.addContextMenuItems([(addon.getLocalizedString(30214), "XBMC.RunPlugin(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),)])
+	if (count):
+	    item.setInfo(type="pictures", infoLabels={ "count": count })
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=keywords&keywordid=%s" % (keywordid), listitem = item, isFolder = True)
+	n += 1
+
+    if (n > 0):
+	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
+	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
     return n
 
 def list_photos_with_rating(params):
@@ -157,7 +251,7 @@ def list_photos_with_rating(params):
     return render_media(media)
 
 def list_ratings(params):
-    global db,BASE_URL,ICONS_PATH
+    global db, BASE_URL, ICONS_PATH
 
     albumid = 0
     try:
@@ -190,11 +284,9 @@ def progress_callback(progress_dialog, nphotos, ntotal):
     return nphotos
 
 def import_library(xmlfile):
-    global db_file
+    global db
 
-    db_tmp_file = db_file + ".tmp"
-    db_tmp = IPhotoDB(db_tmp_file)
-    db_tmp.ResetDB()
+    db.ResetDB()
 
     # always ignore Books and currently selected album
     album_ign = []
@@ -223,43 +315,31 @@ def import_library(xmlfile):
     except:
 	print traceback.print_exc()
     else:
-	iparser = IPhotoParser(xmlfile, db_tmp.AddAlbumNew, album_ign, db_tmp.AddRollNew, db_tmp.AddKeywordNew, db_tmp.AddMediaNew, progress_callback, progress_dialog)
+	iparser = IPhotoParser(xmlfile, db.AddAlbumNew, album_ign, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, progress_callback, progress_dialog)
 
 	progress_dialog.update(0, addon.getLocalizedString(30212))
 	try:
 	    iparser.Parse()
-	    db_tmp.UpdateLastImport()
+	    db.UpdateLastImport()
 	except:
 	    print traceback.print_exc()
-	else:
-	    if (not progress_dialog.iscanceled()):
-		try:
-		    os.rename(db_tmp_file, db_file)
-		except:
-		    # windows doesn't allow in-place rename
-		    remove_tries = 3
-		    while remove_tries and os.path.isfile(db_file):
-			try:
-			    os.remove(db_file)
-			except:
-			    remove_tries -= 1
-			    xbmc.sleep(1000)
-
-		    try:
-			os.rename(db_tmp_file, db_file)
-		    except:
-			print traceback.print_exc()
 
     progress_dialog.close()
 
-    del db_tmp
-    remove_tries = 3
-    while remove_tries and os.path.isfile(db_tmp_file):
-	try:
-	    os.remove(db_tmp_file)
-	except:
-	    remove_tries -= 1
-	    xbmc.sleep(1000)
+def hide_keyword(params):
+    try:
+	keyword = params['keyword']
+	hidden_keywords = addon.getSetting('hidden_keywords')
+	if (hidden_keywords != ""):
+	    hidden_keywords += " "
+	hidden_keywords += keyword
+	addon.setSetting('hidden_keywords', hidden_keywords)
+	print "JSL: HIDDEN KEYWORDS '%s'" % (hidden_keywords)
+    except Exception, e:
+	print to_str(e)
+	pass
+
+    xbmc.executebuiltin("Container.Refresh")
 
 def get_params(paramstring):
     params = {}
@@ -299,6 +379,16 @@ if (__name__ == "__main__"):
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=albums", item, True)
 
+	    item = gui.ListItem(addon.getLocalizedString(30105), thumbnailImage=ICONS_PATH+"/faces.png")
+	    item.setInfo("Picture", { "Title": "Faces" })
+	    add_import_lib_context_item(item)
+	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=faces", item, True)
+
+	    item = gui.ListItem(addon.getLocalizedString(30104), thumbnailImage=ICONS_PATH+"/keywords.png")
+	    item.setInfo("Picture", { "Title": "Keywords" })
+	    add_import_lib_context_item(item)
+	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=keywords", item, True)
+
 	    item = gui.ListItem(addon.getLocalizedString(30102), thumbnailImage=ICONS_PATH+"/star.png")
 	    item.setInfo("Picture", { "Title": "Ratings" })
 	    add_import_lib_context_item(item)
@@ -333,15 +423,26 @@ if (__name__ == "__main__"):
 		if (xml_mtime > db_mtime):
 		    import_library(xmlfile)
     else:
+	# ignore empty albums if configured to do so
+	album_ign_empty = addon.getSetting('album_ignore_empty')
+	if (album_ign_empty == ""):
+	    addon.setSetting('album_ignore_empty', 'true')
+	    album_ign_empty = "true"
+
 	if (action == "events"):
-	    items = list_events(params)
+	    items = list_events(params, album_ign_empty)
 	elif (action == "albums"):
-	    items = list_albums(params)
+	    items = list_albums(params, album_ign_empty)
+	elif (action == "faces"):
+	    items = list_faces(params, album_ign_empty)
+	elif (action == "keywords"):
+	    items = list_keywords(params, album_ign_empty)
 	elif (action == "ratings"):
 	    items = list_ratings(params)
 	elif (action == "rescan"):
-	    del db
 	    items = import_library(xmlfile)
+	elif (action == "hidekeyword"):
+	    items = hide_keyword(params)
 
 	if (items):
 	    plugin.endOfDirectory(int(sys.argv[1]), True)

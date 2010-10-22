@@ -1,3 +1,14 @@
+1.2.0 - 20101021
+- Add Faces support.
+- Add context menu item to hide Keywords.
+- Add option to hide empty albums.
+
+1.1.0 - 20101021
+- Add Keywords support.
+
+1.0.1 - 20101019
+- Fix library import on Windows.. again.
+
 1.0.0 - 20101015
 - Enable sort on title.
 - Fix library import on Windows.

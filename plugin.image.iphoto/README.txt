@@ -1,10 +1,12 @@
 iPhoto plugin for XBMC
 ======================
 This plugin imports an iPhoto library into XBMC.  After importing, you will
-see three categories that correspond with their iPhoto counterparts:
+see categories that correspond with their iPhoto counterparts:
 
 * Events
 * Albums
+* Faces
+* Keywords
 * Ratings
 
 Configuration
@@ -40,4 +42,4 @@ Known Issues
 ============
 * Sorting by date is broken and therefore disabled for now.
   See http://trac.xbmc.org/ticket/10519
-* No support for Keywords and Faces (yet).
+* Need icons for Faces and Keywords.

@@ -19,6 +19,8 @@ from xml.sax.saxutils import unescape
 
 from util import get_filesystem, get_legal_filepath, test_quality
 from MediaWindow import MediaWindow, DirectoryItem
+
+__plugin__ = "plugin.video.previewnetworks"
    
 class _urlopener( urllib.FancyURLopener ):
     version = sys.modules[ "__main__" ].__useragent__
@@ -27,11 +29,8 @@ class _urlopener( urllib.FancyURLopener ):
 urllib._urlopener = _urlopener()
 
 class _Parser:
-    Addon = xbmcaddon.Addon( id=os.path.basename( os.getcwd() ) )
 
-    """
-        Parses an xml document for videos
-    """
+    Addon = xbmcaddon.Addon( id=__plugin__)
     
     def __init__( self, xmlSource, settings, MediaWindow ):
         self.success = True
@@ -231,7 +230,8 @@ class _Parser:
             dirItem.totalItems = total
             # set the default icon
             #icon = "DefaultVideo.png"
-            icon = os.path.join(os.getcwd(),'resource','images','list.png')
+            #icon = os.path.join(os.getcwd(),'resource','images','list.png')
+            icon = os.path.join(self.Addon.getAddonInfo('path'),'resource','images','list.png')
             overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ video["quality"] == "HD 480p" or video["quality"] == "HD 720p" or video["quality"] == "HD 1080p"]
 
 ##            if video["quality"] == "HD 480p":
@@ -289,15 +289,12 @@ class _Parser:
 
 
 class Main:
-    Addon = xbmcaddon.Addon( id=os.path.basename( os.getcwd() ) )
-
+    Addon = xbmcaddon.Addon( id=__plugin__)
     # base paths
     BASE_CURRENT_URL = ""
     ITEM_CURRENT_URL = ""
-    BASE_DATA_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "plugin_data", "video", os.path.basename( os.getcwd() ) )
-    BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "plugin_data", "video", os.path.basename( os.getcwd() ), "trailer_%s.xml" )
-##    BASE_CURRENT_SOURCE_PATH = xbmc.translatePath( Addon.getAddonInfo( "Profile" ) )
-    
+    BASE_DATA_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addon_data", os.path.basename( Addon.getAddonInfo('path') ), "cache" )   
+    BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addon_data", os.path.basename( Addon.getAddonInfo('path')),  "cache" , "trailer_%s.xml" )
     title_option = ""
     type_filter = ""
     quality_filter = ""

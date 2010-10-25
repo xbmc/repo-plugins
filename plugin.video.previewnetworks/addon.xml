@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.previewnetworks" name="PreviewNetworks Video Trailers" version="2.0.0" provider-name="nmazz64">
+<addon id="plugin.video.previewnetworks" name="PreviewNetworks Video Trailers" version="2.0.1" provider-name="nmazz64">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
     </requires>

@@ -7,6 +7,8 @@ import xbmc
 import xbmcaddon
 import os
 
+__plugin__ = "plugin.video.previewnetworks"
+
 # set our title
 g_title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
 # set our studio (only works if the user is using the video library)
@@ -54,8 +56,9 @@ class _Info:
 
 
 class Main:
-    Addon = xbmcaddon.Addon( id=os.path.basename( os.getcwd() ) )
-
+    #Addon = xbmcaddon.Addon( id=os.path.basename( os.getcwd() ) )
+    Addon = xbmcaddon.Addon( id=__plugin__)
+    
     def __init__( self ):
         # parse argv
         self._parse_argv()

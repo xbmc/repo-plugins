@@ -16,20 +16,20 @@ import socket
 import xbmcaddon
  
 # plugin constants
-__plugin__ = "Preview networks"
+__plugin__ = "plugin.video.previewnetworks"
 __author__ = "nmazz64"
 __url__ = "http://code.google.com/p/previewnetworks-xbmc-plugin"
-__svn_url__ = "http://previewnetworks-xbmc-plugin.googlecode.com/files"
+__svn_url__ = "http://previewnetworks-xbmc-plugin.googlecode.com/svn/trunk/plugin.video.previewnetworks/"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
-__version__ = "2.0.0"
-__svn_revision__ = "$Revision: 1$"
+__version__ = "2.0.1"
+__svn_revision__ = "$Revision: 3$"
 __XBMC_Revision__ = "31632"
 
 url_source=None
 
 def check_compatible():
     try:
-        xbmc.log( "[PLUGIN] '%s: Version - %s-r%s' initialized!" % ( __plugin__, __version__, __svn_revision__.replace( "$", "" ).replace( "Revision", "" ).replace( ":", "" ).strip() ), xbmc.LOGNOTICE )
+        # xbmc.log( "[PLUGIN] '%s: Version - %s-r%s' initialized!" % ( __plugin__, __version__, __svn_revision__.replace( "$", "" ).replace( "Revision", "" ).replace( ":", "" ).strip() ), xbmc.LOGNOTICE )
         # get xbmc revision
         xbmc_rev = int( xbmc.getInfoLabel( "System.BuildVersion" ).split( " r" )[ -1 ] )
         # compatible?
@@ -39,9 +39,6 @@ def check_compatible():
         xbmc_rev = 0
         ok = 2
     # spam revision info
-#    xbmc.log( "     ** Required XBMC Revision: r%s **" % ( __XBMC_Revision__, ), xbmc.LOGNOTICE )
-#    xbmc.log( "     ** Found XBMC Revision: r%d [%s] **" % ( xbmc_rev, ( "Not Compatible", "Compatible", "Unknown", )[ ok ], ), xbmc.LOGNOTICE )
-    # if not compatible, inform user
     if ( not ok ):
         import xbmcgui
         xbmcgui.Dialog().ok( "%s - %s: %s" % ( __plugin__, xbmc.getLocalizedString( 30700 ), __version__, ), xbmc.getLocalizedString( 30701 ) % ( __plugin__, ), xbmc.getLocalizedString( 30702 ) % ( __XBMC_Revision__, ), xbmc.getLocalizedString( 30703 ) )
@@ -49,12 +46,12 @@ def check_compatible():
     return ok
 
 def categories(root):
-    icona = os.path.join(os.getcwd(),'resources','images','list.png')
-    new_icon = os.path.join(os.getcwd(), 'resources','images', 'new.png')
-    now_icon = os.path.join(os.getcwd(), 'resources','images', 'now.png')
-    next_icon = os.path.join(os.getcwd(), 'resources','images', 'next.png')
-    genre_icon = os.path.join(os.getcwd(), 'resources','images', 'genre.png')
-    search_icon = os.path.join(os.getcwd(), 'resources','images', 'search.png')
+    icona = os.path.join(Addon.getAddonInfo('path'),'resources','images','list.png')
+    new_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'new.png')
+    now_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'now.png')
+    next_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'next.png')
+    genre_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'genre.png')
+    search_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'search.png')
     #baseurl="http://%s.feed.previewnetworks.com/v3.1/%s/"
     baseurl="http://%s.hdplus.previewnetworks.com/v3.1/%s/"
 
@@ -113,7 +110,7 @@ url_source=None
 name=None
 item=None
 
-Addon = xbmcaddon.Addon( id=os.path.basename( os.getcwd() ) )
+Addon = xbmcaddon.Addon( id=__plugin__)
 BASE_CURRENT_SOURCE_PATH = xbmc.translatePath( Addon.getAddonInfo( "Profile" ) )
 
 if sys.argv[ 2 ] == "":
@@ -138,11 +135,12 @@ elif ( __name__ == "__main__" ):
                 del plugin
     elif ( sys.argv[ 2 ].startswith( "?Fetch_Showtimes" ) ):
         import resources.lib.showtimes as showtimes
-        s = showtimes.GUI( "plugin-AMTII-showtimes.xml", os.getcwd(), "default" )
+        s = showtimes.GUI( "plugin-AMTII-showtimes.xml", Addon.getAddonInfo('path') , "default" )
         del s
     elif ( sys.argv[ 2 ].startswith( "?Download_Trailer" ) ):
         import resources.lib.download as download
         download.Main()
     elif ( sys.argv[ 2 ].startswith( "?OpenSettings" ) ):
-        xbmcaddon.Addon( id=os.path.basename( os.getcwd() ) ).openSettings()
+        #xbmcaddon.Addon( id=os.path.basename( Addon.getAddonInfo('path')  ) ).openSettings()
+        xbmcaddon.Addon( id=__plugin__).openSettings()
         xbmc.executebuiltin( "Container.Refresh" )

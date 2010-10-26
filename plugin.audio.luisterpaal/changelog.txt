@@ -1,3 +1,6 @@
+v1.1.2
+- Changed icon to meet new guidelines
+
 v1.1.1
 - Added/changed English/Dutch/Hungarian translation
 

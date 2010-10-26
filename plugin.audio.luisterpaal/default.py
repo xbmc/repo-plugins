@@ -21,6 +21,8 @@
 
 import urllib,urllib2,re,xbmcplugin,xbmcgui,httplib,htmllib
 
+PLUGIN              ='plugin.audio.luisterpaal'
+VERSION             ='1.1.2'
 TRACK_SEPERATOR     ='~'
 DEFAULT_LUISTERPAAL ='10617791'
 USER_AGENT          ='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'

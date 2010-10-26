@@ -7,6 +7,13 @@
     <string id="30004">Map Source</string>
     <string id="30005">Map Type</string>
     <string id="30006">Map Zoom</string>
+    <string id="30007">Show only as private as...</string>
+    
+    <string id="30008">Public</string>
+    <string id="30009">Anyone With Link</string>
+    <string id="30010">Private</string>
+    
+    <string id="30011">Use Login</string>
     
     <string id="30100">Albums</string>
     <string id="30101">Tags</string>
@@ -31,4 +38,8 @@
     
     <string id="30404">Enter Search Terms</string>
     <string id="30405">Show Map</string>
+    <string id="30406">Set view as default for %s</string><!-- %s must remain in translation but can be moved -->
+    <string id="30407">Photos</string>
+    <string id="30408">User</string>
+    
 </strings>

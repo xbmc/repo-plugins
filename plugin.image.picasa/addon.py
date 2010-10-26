@@ -42,6 +42,10 @@ class AddonHelper:
 		self._urllib2 = urllib2
 		return urllib2
 		
+	def setSetting(self,settingname,setting):
+		if not self.__settings__: self.__settings__ = self.xbmcaddon().Addon(id=self._pluginID)
+		self.__settings__.setSetting(settingname,setting)
+		
 	def getSetting(self,setting):
 		if self.__settings__: return self.__settings__.getSetting(setting)
 		self.__settings__ = self.xbmcaddon().Addon(id=self._pluginID)
@@ -105,10 +109,11 @@ class AddonHelper:
 		if contextMenu: liz.addContextMenuItems(contextMenu)
 		return self.xbmcplugin().addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False,totalItems=total)
 
-	def addDir(self,_name,_thumbnail='',_total=0,**kwargs):
+	def addDir(self,_name,_thumbnail='',_total=0,contextMenu=None,**kwargs):
 		u=sys.argv[0]+"?"+urllib.urlencode(kwargs)
 		liz=self.xbmcgui().ListItem(_name,'',iconImage="DefaultFolder.png", thumbnailImage=_thumbnail)
 		liz.setInfo(type="image", infoLabels={"Title": _name} )
+		if contextMenu: liz.addContextMenuItems(contextMenu)
 		return self.xbmcplugin().addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=_total)
 		
 	def endOfDirectory(self,succeeded=True,updateListing=False,cacheToDisc=True):

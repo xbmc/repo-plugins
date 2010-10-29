@@ -1,0 +1,6 @@
+2010-10-29 -> v1.0.1
+    Improved initial database creation process, now in three passes instead of four.
+    Fixed an issue where game config file wasn't successfully created.
+
+2010-10-28 -> v1.0.0
+    Initial public release

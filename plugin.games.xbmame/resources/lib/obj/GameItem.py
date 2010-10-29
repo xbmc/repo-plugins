@@ -108,7 +108,7 @@ class GameItem(object):
     def writeDB(self):
         if not self.id:
             romset_id = self._db.execute("INSERT INTO Games VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (self.romset, self.cloneof, self.romof, self.driver, self.gamename, self.gamecomment, self.manufacturer, self.year, self.isbios, self.hasdisk, self.isworking, self.emul, self.color, self.graphic, self.sound, self.hasdips, 0, 0, 1, 1, 1, 0, 0, 0))
+            (self.romset, self.cloneof, self.romof, self.driver, self.gamename, self.gamecomment, self.manufacturer, self.year, self.isbios, self.hasdisk, self.isworking, self.emul, self.color, self.graphic, self.sound, self.hasdips, 0, 0, 1, 1, 1, 0, self.have, 0))
             for dipswitch in self.dipswitches:
                 dipswitch.writeDB(romset_id)
         else:

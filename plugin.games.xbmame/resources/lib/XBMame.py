@@ -300,7 +300,7 @@ class XBMame:
                         except KeyError:
                             switch.value = switch.values_by_value["No"]
                     else:
-                        switch.value=switch.values_by_value[XMLHelper().value]
+                        switch.value=switch.values_by_value[XMLHelper().getAttribute(setting, "setting", "value")]
                     switch.writeDB()
                 game.writeDB()
                 self._db.commit()
@@ -404,6 +404,9 @@ class XBMame:
             xml = re.sub("\r|\t|\n|<rom.*?/>", "", xml)
             progress.update(75, __language__(30604), __language__(30605), __language__(30606))
         if not progress.iscanceled():
+            files = {}
+            tmpfiles = os.listdir(self._MAME_ROM_PATH)
+            for file in tmpfiles:files[file.replace(".zip", "").replace(".rar", "").replace(".7z","")] = 1
             items = re.findall("(<game.*?>.*?</game>)", xml, re.M)
             progress.close()
             progress.create(__language__(30607))
@@ -413,11 +416,15 @@ class XBMame:
                 if progress.iscanceled(): break
                 index += 1
                 game = GameItem(self._db, xml=item)
+                try:
+                    if files[str(game.romset)]:game.have = 1
+                except KeyError:
+                    game.have = 0
                 game.writeDB()
                 progress.update(int((float(index)/float(count)) * 100), __language__(30608), __language__(30609) % game.gamename, __language__(30610) % (index, count))
             self._db.commit()
         progress.close()
-        self._haveList()
+#        self._haveList()
         self._thumbNails()
 
     def _haveList(self):

@@ -26,6 +26,8 @@ import unicodedata
 
 BASE_URL = 'http://yp.shoutcast.com/sbin/newxml.phtml'
 
+__XBMC_Revision__ = xbmc.getInfoLabel('System.BuildVersion')
+
 def INDEX():
   req = urllib2.Request(BASE_URL)
   response = urllib2.urlopen(req)
@@ -48,7 +50,11 @@ def RESOLVE(id):
     addLink(name,url,stat.attributes["br"].value)
 
 def PLAY(st_id, tunein):
-  url = "http://yp.shoutcast.com%s?id=%s" %(tunein,st_id,)
+  if __XBMC_Revision__.startswith("10.0"):
+    url = "shout://yp.shoutcast.com%s?id=%s" %(tunein,st_id,)
+  else:
+    url = "http://yp.shoutcast.com%s?id=%s" %(tunein,st_id,)
+  print "#### plugin.audio.shoutcast #### URL: %s" % url    
   xbmc.Player().play(url)
 
 def addLink(name,url,size):

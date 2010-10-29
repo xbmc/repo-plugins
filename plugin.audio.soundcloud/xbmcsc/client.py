@@ -87,15 +87,18 @@ class SoundCloudClient(object):
 
     def get_track(self, permalink):
         ''' Return a track from SoundCloud based on the permalink. '''
-        url = self.build_track_query_url(permalink)
+        url = self.build_track_query_url(permalink, parameters={QUERY_CONSUMER_KEY: CONSUMER_KEY})
+        print 'track query url: ' + url
         h = httplib2.Http()
         resp, content = h.request(url, 'GET')
         json_content = json.loads(content)
+        print 'track query response JSON: ' + str(json_content)
         if TRACK_ARTWORK_URL in json_content and json_content[TRACK_ARTWORK_URL]:
                 thumbnail_url = json_content[TRACK_ARTWORK_URL]
         else:
                 thumbnail_url = json_content[TRACK_USER].get(USER_AVATAR_URL)
-        return { TRACK_STREAM_URL: json_content[TRACK_STREAM_URL], TRACK_TITLE: json_content[TRACK_TITLE], TRACK_ARTWORK_URL: thumbnail_url, TRACK_GENRE: json_content[TRACK_GENRE] }
+        track_stream_url_with_consumer_key = '%s?%s' % (json_content[TRACK_STREAM_URL], str(urllib.urlencode({QUERY_CONSUMER_KEY: CONSUMER_KEY})))
+        return { TRACK_STREAM_URL: track_stream_url_with_consumer_key, TRACK_TITLE: json_content[TRACK_TITLE], TRACK_ARTWORK_URL: thumbnail_url, TRACK_GENRE: json_content[TRACK_GENRE] }
 
     def get_group_tracks(self, offset, limit, mode, plugin_url, group_id):
         ''' Return a list of tracks belonging to the given group, based on the specified parameters. '''
@@ -143,8 +146,8 @@ class SoundCloudClient(object):
         url = '%s%s.%s?%s' % (base, resource_type, format, str(urllib.urlencode(parameters)))
         return url
 
-    def build_track_query_url(self, permalink, base="http://api.soundcloud.com/", format="json"):
-        url = '%stracks/%s.%s' % (base, permalink, format)
+    def build_track_query_url(self, permalink, parameters, base="http://api.soundcloud.com/", format="json"):
+        url = '%stracks/%s.%s?%s' % (base, permalink, format, str(urllib.urlencode(parameters)))
         return url
 
     def build_groups_query_url(self, group_id, resource_type, parameters, base="http://api.soundcloud.com/", format="json"):

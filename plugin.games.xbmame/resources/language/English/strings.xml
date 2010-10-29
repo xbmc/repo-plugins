@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin name -->
+    <string id="30000">XBMame</string> 
+
+    <!-- Home screen categories -->
+    <string id="30100">Games by year</string>
+    <string id="30101">Games by bios</string>
+    <string id="30102">Games by manufacturer</string>
+    <string id="30103">Games by name</string>
+    <string id="30104">Games with hard drive</string>
+    <string id="30105">All games</string>
+    <string id="30106">Search for games</string>
+    <string id="30107">%s games</string>
+
+    <!-- progress dialogs labels -->
+    <string id="30600">Creating game collection</string>
+    <string id="30601">Populating collection</string>
+    <string id="30602">Adding %s</string>
+    <string id="30603">Creating object %s of %s</string>
+    <string id="30604">Reading MAME XML List</string>
+    <string id="30605">Cleaning XML List</string>
+    <string id="30606">Parsing game collection</string>
+    <string id="30607">Creating game database</string>
+    <string id="30608">Populating game database</string>
+    <string id="30609">Adding %s</string>
+    <string id="30610">Creating object %s of %s</string>
+    <string id="30611">Updating have/miss list</string>
+    <string id="30612">Updating database</string>
+    <string id="30613">Found romset %s</string>
+    <string id="30614">Updating record %s of %s</string>
+    <string id="30615">XBMame - Updating thumbnails</string>
+    <string id="30616">Updating database</string>
+    <string id="30617">Setting thumbnail for %s</string>
+    <string id="30618">Updating record %s of %s</string>
+
+    <!-- dialog labels -->
+    <string id="30700">Not implemented yet.</string>
+    <string id="30701">Either you don't have this romset</string>
+    <string id="30702">or your game database is outdated.</string>
+    <string id="30703">Do you want to rebuild the database?</string>
+    <string id="30704">The application just installed its settings plugin</string>
+    <string id="30705">XBMC is going to restart now</string>
+
+    <!-- context menu -->
+    <string id="30800">Game settings</string>
+    <string id="30801">DIP Switches</string>
+
+    <!-- settings -->
+
+    <!-- settings : general settings -->
+    <string id="30900">General settings</string>
+    <string id="30901">Path to Mame exe</string>
+    <string id="30902">Path to Mame roms</string>
+    <string id="30903">Path to Mame samples</string>
+
+    <!-- settings : thumbnails -->
+    <string id="30904">Thumbnails</string>
+    <string id="30905">Path to Mame titles</string>
+    <string id="30906">Cache titles</string>
+    <string id="30907">Get titles from the web</string>
+    <string id="30908">Get hi-res titles</string>
+    <string id="30909">Only for roms I have</string>
+
+    <!-- settings : rom filters -->
+    <string id="30910">Rom filters</string>
+    <string id="30911">Hide clones</string>
+    <string id="30912">Hide games not working</string>
+    <string id="30913">Hide missing romsets</string>
+    <string id="30933">Hide games with incorrect emulation</string>
+    <string id="30934">Hide games with incorrect colors</string>
+    <string id="30935">Hide games with incorrect graphics</string>
+    <string id="30936">Hide games with incorrect sound</string>
+
+    <!-- settings : display settings -->
+    <string id="30914">Display settings</string>
+    <string id="30915">Screen rotation</string>
+    <string id="30916">None</string>
+    <string id="30917">90° Clockwise</string>
+    <string id="30918">180°</string>
+    <string id="30919">90° Counter clockwise</string>
+    <string id="30920">View</string>
+    <string id="30921">Color Overlay</string>
+    <string id="30922">Standard (4:3)</string>
+    <string id="30923">Pixel Aspect (65:56)</string>
+    <string id="30924">Cocktail</string>
+    <string id="30925">Show backdrops</string>
+    <string id="30926">Show overlays</string>
+    <string id="30927">Show bezels</string>
+    <string id="30928">Use picture cropping</string>
+
+    <string id="30929">Maintenance</string>
+    <string id="30930">Rebuild database</string>
+    <string id="30931">Rebuild have/miss list</string>
+    <string id="30932">Rebuild thumbnails</string>
+
+</strings>

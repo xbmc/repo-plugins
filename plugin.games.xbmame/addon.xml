@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.games.xbmame" name="XBMC MAME Frontend" version="1.0.0" provider-name="Akira76">
+    <requires>
+        <import addon="xbmc.python" version="1.0"/>
+        <import addon="script.module.pysqlite" version="2.5.6"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="xbmame.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.python.script" library="xbmame.py" />
+
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Allows to use XBMC as a frontend to mame</summary>
+        <description lang="en">First release :
+        - Supports listing by Year, Bios, Manufacturer, Game Name, Games with hard drive.
+        - Supports romset filtering on certain criteria.
+        - Supports Video and Dipswitch settings from XBMC.
+        - Includes a basic name search engine.
+        </description>
+    </extension>
+</addon>

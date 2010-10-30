@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.games.xbmame" name="XBMC MAME Frontend" version="1.0.1" provider-name="Akira76">
+<addon id="plugin.games.xbmame" name="XBMC MAME Frontend" version="1.1.2" provider-name="Akira76">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
         <import addon="script.module.pysqlite" version="2.5.6"/>
@@ -12,13 +12,15 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en">Allows to use XBMC as a frontend to mame</summary>
-        <description lang="en">First release :
-        - Supports listing by Year, Bios, Manufacturer, Game Name, Games with hard drive.
+        <description lang="en">XBMC MAME Frontend (XBMame) :
+        - Supports listing by Year, Bios, Manufacturer, Name, etc.
         - Supports romset filtering on certain criteria.
+        - Supports BIOS selection for some drivers.
         - Supports Video and Dipswitch settings from XBMC.
         - Includes a basic name search engine.
 
-        Please send comments and feature requests to xbmame@otaku-realm.net
+Support for OSX and Linux is work in progress.
+Please send comments and requests to xbmame@otaku-realm.net
         </description>
     </extension>
 </addon>

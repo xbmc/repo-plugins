@@ -29,6 +29,7 @@ from XMLHelper import XMLHelper
 from GameItem import GameItem
 from DIPSwitch import DIPSwitch
 from DBHelper import DBHelper
+from BiosSet import BiosSet
 
 FILTERS = {}
 
@@ -110,7 +111,7 @@ class XBMame:
             if __settings__.getSetting("hide_notworking")=="true":self._FILTERS += " AND isworking"
             if __settings__.getSetting("hide_impemul")=="true":self._FILTERS += " AND emul"
             if __settings__.getSetting("hide_impcolor")=="true":self._FILTERS += " AND color"
-            if __settings__.getSetting("hide_gfx")=="true":self._FILTERS += " AND graphic"
+            if __settings__.getSetting("hide_graphics")=="true":self._FILTERS += " AND graphic"
             if __settings__.getSetting("hide_impsound")=="true":self._FILTERS += " AND sound"
             self._db = DBHelper(self._MAME_DATABASE_PATH)
             if self._db.isEmpty():
@@ -170,7 +171,7 @@ class XBMame:
         if (bios):
             self._gameCollection(bios=bios)
         else:
-            sql = "select gamename, romset from games where isbios and romset in (select romof from games where romof<>'' %s group by romof)" % self._FILTERS
+            sql = "select gamename, romset from games where isbios and romset in (select romof from games where romof<>'' %s group by romof) ORDER BY gamename" % self._FILTERS
             bioses = self._db.getGames(sql, ())
             for bios in bioses:
                 listitem = xbmcgui.ListItem(bios[0], thumbnailImage=self._ICON_BIOS)
@@ -245,6 +246,17 @@ class XBMame:
         settings_xml +="<setting label=\"%s\" type=\"bool\" id=\"display_zoom\" default=\"%s\"/>" % (__language__(30928), bool_by_value[game.zoom])
         settings_xml +="</category>"
         switches = self._db.getList("Dipswitches", ["id"], {"romset_id=":romset_id})
+
+        if len(game.biossets):
+            values = ""
+            for biosset in game.biossets:
+                if game.biosset==biosset.name:default = biosset.description
+                values+="|%s" % biosset.description
+            settings_xml +="<category label=\"%s\">" % __language__(30937)
+            settings_xml +="<setting label=\"%s\" type=\"labelenum\" id=\"biosset\" values=\"%s\" default=\"%s\"/>" % \
+                (__language__(30938), values[1:], default)
+            settings_xml +="</category>"
+
         settings_xml +="<category label=\"%s\">" % __language__(30801)
         for switch in switches:
             switch = DIPSwitch(self._db, id=switch["id"])
@@ -273,19 +285,20 @@ class XBMame:
             xml = re.sub("\r|\t|\n", "", xml)
             settings = XMLHelper().getNodes(xml, "setting")
             for setting in settings:
-                if XMLHelper().getAttribute(setting, "setting", "id")[0:8]=="display_":
-                    if XMLHelper().getAttribute(setting, "setting", "id")=="display_view":
-                        game.view = view_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
-                    elif XMLHelper().getAttribute(setting, "setting", "id")=="display_rotate":
-                        game.rotate = rotate_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
-                    elif XMLHelper().getAttribute(setting, "setting", "id")=="display_backdrops":
-                        game.backdrops = bool_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
-                    elif XMLHelper().getAttribute(setting, "setting", "id")=="display_overlays":
-                        game.overlays = bool_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
-                    elif XMLHelper().getAttribute(setting, "setting", "id")=="display_bezels":
-                        game.bezels = bool_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
-                    elif XMLHelper().getAttribute(setting, "setting", "id")=="display_zoom":
-                        game.zoom = bool_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
+                if XMLHelper().getAttribute(setting, "setting", "id")=="display_view":
+                    game.view = view_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
+                elif XMLHelper().getAttribute(setting, "setting", "id")=="display_rotate":
+                    game.rotate = rotate_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
+                elif XMLHelper().getAttribute(setting, "setting", "id")=="display_backdrops":
+                    game.backdrops = bool_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
+                elif XMLHelper().getAttribute(setting, "setting", "id")=="display_overlays":
+                    game.overlays = bool_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
+                elif XMLHelper().getAttribute(setting, "setting", "id")=="display_bezels":
+                    game.bezels = bool_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
+                elif XMLHelper().getAttribute(setting, "setting", "id")=="display_zoom":
+                    game.zoom = bool_by_name[XMLHelper().getAttribute(setting, "setting", "value")]
+                elif XMLHelper().getAttribute(setting, "setting", "id")=="biosset":
+                    game.biosset = BiosSet(self._db).getByDescription(XMLHelper().getAttribute(setting, "setting", "value")).name
                 else:
                     switch = DIPSwitch(self._db, id=XMLHelper().getAttribute(setting, "setting", "id")[1:])
                     value = XMLHelper().getAttribute(setting, "setting", "value")
@@ -307,13 +320,35 @@ class XBMame:
             os.remove(SETTINGS_PLUGIN_XML_DOCUMENT)
         os.remove(SETTINGS_PLUGIN_XML_TEMPLATE)
          
+    def xpPath(self, path):
+        return "\"%s\"" % path.replace("\\", "/")
+
     def _runGame(self, romset):
         game = GameItem(self._db, id=romset)
         if game.have:
-            config_path = xbmc.translatePath(self._MAME_CONFIG_PATH).replace("\\", "/")
-            options = "-cfg_directory \\\"%s\\\" -rompath \\\"%s\\\" -video d3d -triplebuffer -filter -switchres -multithreading -waitvsync -aspect 16:9 -view 16:9 -skip_gameinfo" % (config_path, self._MAME_ROM_PATH)
+            config_path = self.xpPath(self._MAME_CONFIG_PATH)
+            media_path = self.xpPath(MEDIA_PATH)
+            rom_path = self.xpPath(self._MAME_ROM_PATH)
+            sample_path = self.xpPath(self._MAME_SAMPLES_PATH)
+            params = {}
+            params ["-cfg_directory"] = config_path
+            params ["-rompath"] = rom_path
+            params ["-artpath"] = media_path
+            params ["-samplepath"] = sample_path
+            params ["-cheat"] = ""
+            params ["-switchres"] = ""
+            params ["-video"] = "d3d"
+            params ["-d3dversion"] = "9"
+            params ["-filter"] = ""
+            params ["-multithreading"] = ""
+            params ["-waitvsync"] = ""
+            params ["-skip_gameinfo"] = ""
+#            params ["-resolution"] = "1280x800@60"
+            params ["-effect"] = "Scanlines75Dx4_j4"
             if self._MAME_SAMPLES_PATH:
-                options += " -samplepath \\\"%s\\\"" % self._MAME_SAMPLES_PATH
+                params ["-samplepath"] = sample_path
+            if game.biosset:
+                params ["-bios"] = game.biosset
             cfgxml = "<?xml version=\"1.0\"?><mameconfig version=\"10\"><system name=\"%s\"><input>" % game.romset
             for switch in game.dipswitches:
                 switch = DIPSwitch(self._db, switch[0])
@@ -321,10 +356,14 @@ class XBMame:
             cfgxml+="</input><video>"
             cfgxml+="<target index=\"0\" view=\"%s\" rotate=\"%s\" backdrops=\"%s\" overlays=\"%s\" bezels=\"%s\" zoom=\"%s\" />" % (game.view, game.rotate, game.backdrops, game.overlays, game.bezels, game.zoom)
             cfgxml+="</video></system></mameconfig>"
-            cfg = open(os.path.join(config_path, "%s.cfg" % game.romset), "w")
+            cfg = open(os.path.join(self._MAME_CONFIG_PATH, "%s.cfg" % game.romset), "w")
             cfg.write(cfgxml)
             cfg.close()
-            command = "System.Exec(\"\\\"%s\\\" %s %s\")" % (self._MAME_EXE_PATH, options, game.romset)
+            command = self._MAME_EXE_PATH
+            for key in params.keys():
+                command += " %s %s " % (key, params[key])
+            command+=game.romset
+            command = "System.Exec(\"%s\")" % command.replace("\"", "\\\"")
             xbmc.executebuiltin(command)
         else:
             if dialog.yesno(__language__(30701), __language__(30702), __language__(30703)):
@@ -388,11 +427,14 @@ class XBMame:
     def _gameDatabase(self):
         if len(self._db.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("Games",))):
             self._db.execute("DROP TABLE Games")
+        if len(self._db.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("BiosSets",))):
+            self._db.execute("DROP TABLE BiosSets")
         if len(self._db.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("Dipswitches",))):
             self._db.execute("DROP TABLE Dipswitches")
         if len(self._db.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("DipswitchesValues",))):
             self._db.execute("DROP TABLE DipswitchesValues")
-        self._db.execute("CREATE TABLE Games (id INTEGER PRIMARY KEY, romset TEXT, cloneof TEXT, romof TEXT, driver TEXT, gamename TEXT, gamecomment TEXT, manufacturer TEXT, year TEXT, isbios BOOLEAN, hasdisk BOOLEAN, isworking BOOLEAN, emul BOOLEAN, color BOOLEAN, graphic BOOLEAN, sound BOOLEAN, hasdips BOOLEAN, view INTEGER, rotate INTEGER, backdrops BOOLEAN, overlays BOOLEAN, bezels BOOLEAN, zoom BOOLEAN, have BOOLEAN, thumb BOOLEAN)")
+        self._db.execute("CREATE TABLE Games (id INTEGER PRIMARY KEY, romset TEXT, cloneof TEXT, romof TEXT, biosset TEXT, driver TEXT, gamename TEXT, gamecomment TEXT, manufacturer TEXT, year TEXT, isbios BOOLEAN, hasdisk BOOLEAN, isworking BOOLEAN, emul BOOLEAN, color BOOLEAN, graphic BOOLEAN, sound BOOLEAN, hasdips BOOLEAN, view INTEGER, rotate INTEGER, backdrops BOOLEAN, overlays BOOLEAN, bezels BOOLEAN, zoom BOOLEAN, have BOOLEAN, thumb BOOLEAN)")
+        self._db.execute("CREATE TABLE BiosSets (id INTEGER PRIMARY KEY, romset_id INTEGER, name TEXT, description TEXT)")
         self._db.execute("CREATE TABLE Dipswitches (id INTEGER PRIMARY KEY, romset_id integer, name TEXT, tag TEXT, mask INTEGER, defvalue INTEGER, value INTEGER)")
         self._db.execute("CREATE TABLE DipswitchesValues (id INTEGER PRIMARY KEY, dipswitch_id INTEGER, name TEXT, value TEXT)")
         self._db.commit()

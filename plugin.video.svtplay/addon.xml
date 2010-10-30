@@ -14,5 +14,6 @@
     <summary lang="en">Accesses content from the Swedish Broadcasting Network SVT Play site.</summary>
     <description lang="en">This plugin accesses content from the Swedish Broadcasting Network SVT Play site (svtplay.se).</description>
     <platform>all</platform>
+    <broken>Broken on dharma, working in trunk</broken>
   </extension>
 </addon>

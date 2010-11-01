@@ -2,22 +2,24 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.funny.or.die')
 __language__ = __settings__.getLocalizedString
+sort = __settings__.getSetting('sort_by')
 
+		
 def CATEGORIES():
-        addDir(__language__(30000),'http://www.funnyordie.com/browse/videos/all/exclusives',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30001),'http://www.funnyordie.com/browse/videos/all/immortal',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30002),'http://www.funnyordie.com/browse/videos/stand_up/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30003),'http://www.funnyordie.com/browse/videos/animation/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30004),'http://www.funnyordie.com/browse/videos/web_series/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30005),'http://www.funnyordie.com/browse/videos/nsfw/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30006),'http://www.funnyordie.com/browse/videos/sketch/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30007),'http://www.funnyordie.com/browse/videos/sports/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30008),'http://www.funnyordie.com/browse/videos/clean_comedy/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30009),'http://www.funnyordie.com/browse/videos/politics/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30010),'http://www.funnyordie.com/browse/videos/music/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30011),'http://www.funnyordie.com/browse/videos/parody/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30012),'http://www.funnyordie.com/browse/videos/real_life/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30013),'http://www.funnyordie.com/browse/videos/all/all',1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30000),'http://www.funnyordie.com/browse/videos/all/exclusives/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30001),'http://www.funnyordie.com/browse/videos/all/immortal/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30002),'http://www.funnyordie.com/browse/videos/stand_up/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30003),'http://www.funnyordie.com/browse/videos/animation/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30004),'http://www.funnyordie.com/browse/videos/web_series/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30005),'http://www.funnyordie.com/browse/videos/nsfw/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30006),'http://www.funnyordie.com/browse/videos/sketch/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30007),'http://www.funnyordie.com/browse/videos/sports/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30008),'http://www.funnyordie.com/browse/videos/clean_comedy/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30009),'http://www.funnyordie.com/browse/videos/politics/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30010),'http://www.funnyordie.com/browse/videos/music/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30011),'http://www.funnyordie.com/browse/videos/parody/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30012),'http://www.funnyordie.com/browse/videos/real_life/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        addDir(__language__(30013),'http://www.funnyordie.com/browse/videos/all/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
 
 		
 def INDEX(url):

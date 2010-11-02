@@ -1,15 +1,15 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- Settings -->
-	<string id="30000">Connection Type</string>
+	<string id="30000">Connection Typ</string>
 	<string id="30001">Server Name</string>
 	<string id="30002">Server Port</string>
 	<string id="30003">Domain Socket</string>
-	<string id="30004">Downloading</string>
-	<string id="30005">Complete</string>
+	<string id="30004">Downloade...</string>
+	<string id="30005">Abgeschlossen</string>
 
 	<!-- Settings - Labels -->
-	<string id="30040">Remote Folders (If rTorrent is on a remote computer)</string>
+	<string id="30040">Remote Verzeichnis (Falls rTorrent ist auf einem Remote-PC)</string>
 	
 	<!-- Settings -  Enum Choices -->
 	<string id="30050">SCGI Port</string>

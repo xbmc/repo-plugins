@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.rtorrent"
        name="rTorrent"
-       version="0.10.1"
+       version="0.10.2"
        provider-name="Daniel Jolly">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -11,9 +11,10 @@
   </extension> 
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary>rTorrent Control Plugin</summary>
+    <summary lang="en">rTorrent Control Plugin</summary>
 	<summary lang="de">rTorrent Plugin</summary>
-    <description>Manages your rTorrent queue from within XBMC!
+	<summary lang="nl">Controleplugin voor rTorrent</summary>
+    <description lang="en">Manages your rTorrent queue from within XBMC!
 
 Quickly and easily start, stop, erase, play and change priority of torrents managed in rTorrent.
 
@@ -35,6 +36,16 @@ Anleitung
 
 Bei Problemen, Fragen oder Anregungen, schaut bei:
 http://wiki.github.com/djcode/XBMC-rTorrent-Plugin/</description>
+	<description lang="nl">Beheer uw rTorrentsessie vanuit XBMC!
+
+Met deze plugin kunt u snel en makkelijk torrents starten, stoppen en verwijderen, en hun prioriteit wijzigen.
+
+Instructies
+============
+1. Zorg ervoor dat de SCGI-poort of domeinsocket in rTorrent werd ingesteld
+2. Configureer de plugin naar wens
+
+Indien u problemen, vragen of suggesties hebt, bezoek dan de site:
+http://wiki.github.com/djcode/XBMC-rTorrent-Plugin/</description>
   </extension>
-  
 </addon>

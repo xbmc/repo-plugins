@@ -3,7 +3,7 @@ import os
 import xbmcgui
 import xbmcplugin
 from functions import *
-g = __import__('global')
+import globals as g
 
 #Main program code	
 def main():
@@ -24,7 +24,7 @@ def main():
 		dld_complete = dld[7]
 		dld_priority = dld[8]
 		dld_is_multi_file = dld[9]
-		dld_get_size_bytes = dld[10]
+		dld_size_bytes = int(dld[10])
 		tbn=getIcon(dld_size_files,dld_is_active,dld_complete,dld_priority)		
 		
 		if dld_is_active==1:
@@ -46,7 +46,8 @@ def main():
 		li = xbmcgui.ListItem( \
 			label=li_name, \
 			iconImage=tbn, thumbnailImage=tbn)
-		li.addContextMenuItems(items=cm,replaceItems=True)		
+		li.addContextMenuItems(items=cm,replaceItems=True)
+		li.setInfo('video',{ 'title':li_name, 'size':dld_size_bytes})
 		if dld_size_files>1:
 			if not xbmcplugin.addDirectoryItem(int(sys.argv[1]), \
 				sys.argv[0]+"?mode=files&hash="+dld_hash+"&numfiles="+str(dld_size_files), \
@@ -55,4 +56,6 @@ def main():
 			if not xbmcplugin.addDirectoryItem(int(sys.argv[1]), \
 				sys.argv[0]+"?mode=play&arg1=0&hash="+dld_hash, \
 				li,totalItems=dlds_len): break
+	xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_TITLE )
+	xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_SIZE )
 	xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)

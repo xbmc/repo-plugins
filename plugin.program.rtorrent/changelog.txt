@@ -1,4 +1,11 @@
-0.10.1 - 2010/
+0.10.2 - 2010/11/01
+* New non-transparent icon
+* Changed any code from os.getcwd() to xbmcaddon.getAddonInfo('path')
+* Changed imports using "var = __import__('module')" to "import module as var"
+* Added Dutch translations. Thanks to Stijn Segers for the translations and the patience waiting for me to release this update!
+* Added size and sorting to files (total size of multi-file torrents does not show at the moment)
+
+0.10.1 - 2010/09/11
 * More flexible file playback
 * Added support for playback from remote computers
 * Made sure all files are UTF-8 UNIX format

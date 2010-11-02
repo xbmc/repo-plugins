@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Settings -->
+	<string id="30000">Verbindingstype</string>
+	<string id="30001">Servernaam</string>
+	<string id="30002">Serverpoort</string>
+	<string id="30003">Domainsocket</string>
+	<string id="30004">Bezig met downloaden</string>
+	<string id="30005">Voltooid</string>
+	
+	<!-- Settings - Labels -->
+	<string id="30040">Netwerkmappen (indien rTorrent op een andere computer actief is)</string>
+	
+	<!-- Settings -  Enum Choices -->
+	<string id="30050">SCGI-poort</string>
+	<string id="30051">Domeinsocket</string>
+	
+	<!-- Settings - Categories -->
+	<string id="30080">Verbinding</string>
+	<string id="30081">Op afstand</string>
+	
+	<!-- Context Menus - Torrent Controls -->
+	<string id="30100">Torrent starten</string>
+	<string id="30101">Torrent stoppen</string>
+	<string id="30102">Torrent verwijderen</string>
+	
+	<!-- Context Menus - Priorities -->
+	<string id="30120">Hoge prioriteit</string>
+	<string id="30121">Normale prioriteit</string>
+	<string id="30122">Lage prioriteit</string>
+	<string id="30123">Laagste prioriteit</string>
+	<string id="30124">Niet downloaden</string>
+	
+	<!-- Dialog Boxes -->
+	<string id="30150">Bestand afspelen</string>
+	<string id="30151">Dit bestand werd niet volledig gedownload.</string>
+	<string id="30152">Weet u zeker dat u het wilt afspelen?</string>
+	<string id="30153">Download verwijderen</string>
+	<string id="30154">Weet u zeker dat u deze download wilt verwijderen?</string>
+	
+    <!-- Errors -->
+    <string id="30900">Fout!</string>
+</strings>

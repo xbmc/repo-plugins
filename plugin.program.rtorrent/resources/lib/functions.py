@@ -1,9 +1,9 @@
 # Imports
 import os
 import sys
-g = __import__('global')
+import globals as g
 
-#Get parameters script from Voinage's tutorial
+# Get parameters script from Voinage's tutorial
 def get_params():
     param=[]
     paramstring=sys.argv[2]

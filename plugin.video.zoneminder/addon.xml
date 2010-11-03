@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.zoneminder"
-       version="1.1.0"
+       version="1.1.1"
        name="ZoneMinder"
        provider-name="Mark Honeychurch (markhoney)">
   <requires>

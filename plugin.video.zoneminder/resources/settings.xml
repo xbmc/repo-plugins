@@ -1,17 +1,19 @@
 <settings>
  <category label="30100">
-  <setting id="server"   type="text" label="30000" default="zoneminder"/>
-  <setting id="zmurl"    type="text" label="30001" default="zm"/>
-  <setting id="cgiurl"   type="text" label="30002" default="cgi-bin"/>
-  <setting id="bitrate"  type="enum" label="30003" default="10" values="0.1|0.5|1|2|5|10|50|100"/>
-  <setting id="fps"      type="enum" label="30004" default="25" values="1|2|5|10|15|20|25|30|50"/>
+  <setting id="server"   type="text"       label="30000" default="zoneminder"/>
+  <setting id="zmurl"    type="text"       label="30001" default="zm"/>
+  <setting id="cgiurl"   type="text"       label="30002" default="cgi-bin"/>
+  <setting id="bitrate"  type="labelenum"  label="30003" default="10" values="0.1|0.5|1|2|5|10|50|100"/>
+  <setting id="fps"      type="labelenum"  label="30004" default="25" values="1|2|5|10|15|20|25|30|50"/>
  </category>
  <category label="30101">
-  <setting id="auth"     type="bool" label="30005" default="false"/>
-  <setting id="username" type="text" label="30006" default="admin"                  enable="eq(-1,true)"/>
-  <setting id="password" type="text" label="30007" default="admin"                  enable="eq(-2,true)" option="hidden" />
-  <setting id="hash"     type="bool" label="30008" default="false"                  enable="eq(-3,true)"/>
-  <setting id="secret"   type="text" label="30009" default="This is my hash secret" enable="eq(-4,true) + eq(-1,true)"/>
-  <setting id="ip"       type="bool" label="30010" default="false"                  enable="eq(-5,true) + eq(-2,true)"/>
+  <setting id="auth"     type="bool"       label="30005" default="false"/>
+  <setting id="username" type="text"       label="30006" default="admin"                  enable="eq(-1,true)"/>
+  <setting id="password" type="text"       label="30007" default="admin"                  enable="eq(-2,true)" option="hidden" />
+  <setting id="hash"     type="bool"       label="30008" default="false"                  enable="eq(-3,true)"/>
+  <setting id="secret"   type="text"       label="30009" default="This is my hash secret" visible="eq(-4,true) + eq(-1,true)"/>
+  <setting id="ip"       type="bool"       label="30010" default="false"                  visible="eq(-5,true) + eq(-2,true)"/>
+  <setting id="thisip"   type="bool"       label="30011" default="true"                   visible="eq(-6,true) + eq(-3,true) + eq(-1,true)"/>
+  <setting id="otherip"  type="ipaddress"  label="30012" default=""                       visible="eq(-7,true) + eq(-4,true) + eq(-2,true) + eq(-1,false)"/>
  </category>
 </settings>

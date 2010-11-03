@@ -1,3 +1,7 @@
+1.1.1
+- Added option to manually enter IP address for hashed authentication
+- Better quality icon from Freezy
+
 1.1.0
 - Added authentication. Both plain and hashed are available
 

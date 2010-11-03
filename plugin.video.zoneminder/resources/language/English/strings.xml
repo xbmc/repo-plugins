@@ -10,6 +10,8 @@
  <string id="30008">Hashed Authentication</string>
  <string id="30009">Hash Secret</string>
  <string id="30010">Include IP in Hash</string>
+ <string id="30011">Use this machine's IP</string>
+ <string id="30012">Hash IP Address</string>
  <string id="30100">Connection</string>
  <string id="30101">Authentication</string>
  <string id="30200">Authentication Required</string>

@@ -58,14 +58,7 @@ def defaultinfo(folder = 0): #Set the default info for folders (1) and videos (0
   info["Icon"] = "DefaultFolder.png"
  else:
   info["Icon"] = "DefaultVideo.png"
-  #info["VideoCodec"] = "flv"
-  #info["VideoCodec"] = "avc1"
-  #info["VideoCodec"] = "h264"
-  #info["VideoResolution"] = "480" #actually 360 (640x360)
-  #info["VideoAspect"] = "1.78"
-  #info["AudioCodec"] = "aac"
-  #info["AudioChannels"] = "2"
-  #info["AudioLanguage"] = "eng"
+  info["VideoCodec"] = "mp4v"
  info["Thumb"] = ""
  return info
 
@@ -129,10 +122,14 @@ def createauthstring():
   if __addon__.getSetting('hash') == 'true':
    myIP = ""
    if __addon__.getSetting('ip') == 'true':
-    myIP = xbmc.getIPAddress()
+    if __addon__.getSetting('thisip') == 'true':
+     myIP = xbmc.getIPAddress()
+    else:
+     myIP = __addon__.getSetting('otherip')
    nowtime = time.localtime()
-   sys.stderr.write("Time: %s-%s-%s-%s" % (nowtime[3], nowtime[2], nowtime[1] - 1, nowtime[0] - 1900))
-   hashable = "%s%s%s%s%s%s%s%s" % (__addon__.getSetting('secret'), __addon__.getSetting('username'), mysql_password(__addon__.getSetting('password')), myIP, nowtime[3], nowtime[2], nowtime[1] - 1, nowtime[0] - 1900)
+   hashtime = "%s%s%s%s" % (nowtime[3], nowtime[2], nowtime[1] - 1, nowtime[0] - 1900)
+   sys.stderr.write("Time (for hash): %s" % hashtime)
+   hashable = "%s%s%s%s%s" % (__addon__.getSetting('secret'), __addon__.getSetting('username'), mysql_password(__addon__.getSetting('password')), myIP, hashtime)
    hash = md5.new(hashable).hexdigest()
    authurl = "&auth=%s" % (hash)
    videoauthurl = authurl
@@ -170,9 +167,7 @@ def listcameras():
    sys.stderr.write(localize(30202))
    message(localize(30202))
 
-params = cgi.parse_qs(urlparse.urlparse(sys.argv[2])[4])
 listcameras()
 xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_UNSORTED)
-#xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_PROGRAM_COUNT)
 xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_LABEL)
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

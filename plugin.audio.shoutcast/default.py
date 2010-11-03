@@ -19,14 +19,22 @@
 # *
 # */
 
-import urllib2,string,xbmc,xbmcgui,xbmcplugin
+import urllib2,string,xbmc,xbmcgui,xbmcplugin, xbmcaddon
 from xml.dom import minidom
 from urllib import quote_plus
 import unicodedata
 
+__XBMC_Revision__ = xbmc.getInfoLabel('System.BuildVersion')
+__settings__      = xbmcaddon.Addon(id='plugin.audio.shoutcast')
+__language__      = __settings__.getLocalizedString
+__version__       = __settings__.getAddonInfo('version')
+__cwd__           = __settings__.getAddonInfo('path')
+__addonname__    = "Shoutcast"
+__addonid__      = "plugin.audio.shoutcast"
+__author__        = "Team XBMC"
+
 BASE_URL = 'http://yp.shoutcast.com/sbin/newxml.phtml'
 
-__XBMC_Revision__ = xbmc.getInfoLabel('System.BuildVersion')
 
 def INDEX():
   req = urllib2.Request(BASE_URL)
@@ -39,6 +47,7 @@ def INDEX():
 
 def RESOLVE(id):
   url = "%s?genre=%s" % (BASE_URL, quote_plus(id),)
+  log("RESOLVE URL: %s" % url )
   req3 = urllib2.Request(url)
   response = urllib2.urlopen(req3)
   link = response.read()
@@ -47,20 +56,39 @@ def RESOLVE(id):
   for stat in node.getElementsByTagName('station'):
     name = unicodedata.normalize('NFKD',stat.attributes["name"].value).encode('ascii','ignore')
     url = "%s?play=%s&tunein=%s" % (sys.argv[0], stat.attributes["id"].value,node.getElementsByTagName('tunein')[0].attributes["base"].value)
-    addLink(name,url,stat.attributes["br"].value)
+    addLink(name,url,stat.attributes["br"].value, stat.attributes["lc"].value)
+
+def search():
+  kb = xbmc.Keyboard("", __language__(30092), False)
+  kb.doModal()
+  if (kb.isConfirmed() and len(kb.getText()) > 2):
+    url = "%s?search=%s" % (BASE_URL, quote_plus(kb.getText()),)
+    log("SEARCH URL: %s" % url )
+    req3 = urllib2.Request(url)
+    response = urllib2.urlopen(req3)
+    link = response.read()
+    response.close()
+    node = minidom.parseString(link).firstChild
+    for stat in node.getElementsByTagName('station'):
+      name = unicodedata.normalize('NFKD',stat.attributes["name"].value).encode('ascii','ignore')
+      url = "%s?play=%s&tunein=%s" % (sys.argv[0], stat.attributes["id"].value,node.getElementsByTagName('tunein')[0].attributes["base"].value)
+      addLink(name,url,stat.attributes["br"].value, stat.attributes["lc"].value)
 
 def PLAY(st_id, tunein):
   if __XBMC_Revision__.startswith("10.0"):
     url = "shout://yp.shoutcast.com%s?id=%s" %(tunein,st_id,)
   else:
     url = "http://yp.shoutcast.com%s?id=%s" %(tunein,st_id,)
-  print "#### plugin.audio.shoutcast #### URL: %s" % url    
+  log("PLAY URL: %s" % url )   
   xbmc.Player().play(url)
 
-def addLink(name,url,size):
+def addLink(name,url,size,rating):
   ok=True
   liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage="")
-  liz.setInfo( type="Video", infoLabels={ "Title": name ,"Size": int(size)} )
+  if __XBMC_Revision__.startswith("10.0"):
+    liz.setInfo( type="Music", infoLabels={ "Title": name ,"Size": int(size)} )
+  else:
+    liz.setInfo( type="Music", infoLabels={ "Title": name ,"Size": int(size), "Listeners": int(rating)} )
   liz.setProperty("IsPlayable","false");
   ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
   return ok
@@ -88,32 +116,61 @@ def addDir(name):
   ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
   return ok
 
+def log(msg):
+  xbmc.output("### [%s] - %s" % (__addonname__,msg,),level=xbmc.LOGDEBUG )
+  
 params=get_params()
 try:
   id = params["id"]
 except:
   id = "0";
-  pass
+try:
+  initial = params["initial"]
+except:
+  initial = "0";
 try:
   play = params["play"]
 except:
   play = "0";
-  pass  
+ 
 
-iid = len(id);
+iid = len(id)
 iplay = len(play)
+iinitial = len(initial)
 
 if iid > 1 :
   RESOLVE(id)
-  xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL, label2Mask="%X" )
   xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE, label2Mask="%X" )
+  xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL, label2Mask="%X" )
+  try:
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LISTENERS )
+  except: pass
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
-else:
-  if iplay > 1:
-    PLAY(play,params["tunein"] )
-  else:  
-    INDEX()
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+
+elif iinitial > 1:
+  if initial == "search":
+    search()
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE, label2Mask="%X" )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL, label2Mask="%X" )
+    try:
+      xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LISTENERS )
+    except: pass
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-
+  else:
+    INDEX()
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+    try:
+      xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LISTENERS )
+    except: pass
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))      
+elif iplay > 1:
+  PLAY(play,params["tunein"] )
+else:
+  u = "%s?initial=search" % (sys.argv[0],)
+  liz=xbmcgui.ListItem(__language__(30091), iconImage="DefaultFolder.png", thumbnailImage="")
+  ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+  u = "%s?initial=list" % (sys.argv[0],)
+  liz=xbmcgui.ListItem(__language__(30090), iconImage="DefaultFolder.png", thumbnailImage="")
+  ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+  xbmcplugin.endOfDirectory(int(sys.argv[1]))

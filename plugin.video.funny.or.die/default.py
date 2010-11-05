@@ -1,4 +1,5 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
+from BeautifulSoup import BeautifulSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.funny.or.die')
 __language__ = __settings__.getLocalizedString
@@ -29,10 +30,10 @@ def INDEX(url):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        link=link.replace('&quot;','"').replace('&amp;','&')
+        link=link.replace('&quot;','"').replace('&amp;','&').replace('medium_','fullsize_')
         match=re.compile('<a href="/videos/(.+?)/.+?" class=".+?" title=".+?"><img alt=".+?" class=".+?" height="90" src="(.+?)" title="(.+?)" width="124" />').findall(link)
         for url,thumbnail,name in match:
-                addLink(name,'http://videos0.ordienetworks.com/videos/'+url+'/sd.flv',thumbnail)
+                addDir(name, str(url), 2, thumbnail, False)
         page=re.compile('Previous</span>.+?<span class="current">.+?</span> <a href="(.+?)" rel="next">.+?</a>').findall(link)
         if len(page)<1:
 		    page=re.compile('Previous</a> <a href=".+?" rel="prev start">.+?</a> <span class="current">.+?</span> <a href="(.+?)" rel="next">.+?</a>').findall(link)
@@ -41,7 +42,31 @@ def INDEX(url):
         for url in page:
                 addDir('Next Page','http://www.funnyordie.com'+url,1,'')
 
-                
+def playVid(url):
+	name, url = get_smil(url)
+	info = xbmcgui.ListItem(name)
+	playlist = xbmc.PlayList(1)
+	playlist.clear()
+	playlist.add(url, info)
+	play=xbmc.Player().play(playlist)
+
+def get_smil(id):
+	req = urllib2.Request("http://www.funnyordie.com/player/"+id+"?v=3")
+	response = urllib2.urlopen(req)
+	smil = response.read()
+	response.close()
+	soup = BeautifulSoup(smil)
+	title = soup.find('title').string
+	stream_list = soup.findAll('stream')
+	if len(stream_list) < 1:
+		stream = soup.find('location').contents[0]
+		return title, stream
+	streams = []
+	for stream in stream_list:
+		streams.append(stream.file.contents[0])
+	#if xbmcplugin.getSetting("hi-def") == "true":
+	return title, streams[0]
+	      
 def get_params():
         param=[]
         paramstring=sys.argv[2]
@@ -60,21 +85,12 @@ def get_params():
                                 
         return param
 
-
-def addLink(name,url,iconimage):
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-        return ok
-
-
-def addDir(name,url,mode,iconimage):
+def addDir(name,url,mode,iconimage,isfolder=True):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isfolder)
         return ok
         
               
@@ -107,5 +123,9 @@ if mode==None or url==None or len(url)<1:
 elif mode==1:
         print ""+url
         INDEX(url)
+
+elif mode==2:
+        print "NEW LINK: "+url
+        playVid(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,0 +1,9 @@
+Version 0.0.1
+initial release
+
+Version 0.0.2
+added the ability to sort videos via settings - most favorited, most recent... ect.
+new icon. thanks freezy!
+
+Version 0.0.3
+now plays the hd version if avaliable. thanks to maruchan!

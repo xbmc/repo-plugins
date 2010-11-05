@@ -32,17 +32,18 @@ def INDEX(url):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
+        link=link.replace('&amp;','&')
         match=re.compile('url="(.+?)" fileSize=".+?" type="video/mp4" medium="video" bitrate="1000" framerate="29.97" samplingrate="48" channels="1" duration=".+?" width="864" height="480" mediafly:profile="H264b_864x480_1000" />\n').findall(link)
         name=re.compile('<title>(.+?)</title>\n').findall(link)
-        plot=re.compile('<itunes:subtitle>(.+?)</itunes:subtitle>\n').findall(link)
+        desc=re.compile('<itunes:subtitle>(.+?)</itunes:subtitle>\n').findall(link)
         date=re.compile('<pubDate>(.+?)</pubDate>\n').findall(link)
 	icon=re.compile('<img src="(.+?)"').findall(link)	
-	del name[0];del name[0];del plot[0];del date[0] # The first two strings do not apply.
+	del name[0];del name[0];del desc[0];del date[0] # The first two strings do not apply.
         for index in range(len(match)):
-		if len(match) == len(icon):
-                	addLink(name[index],match[index],plot[index],date[index],icon[index])
+		if len(match) == len(desc) == len(icon):
+                	addLink(name[index],match[index],desc[index],date[index],icon[index])
     		else:
-			addLink(name[index],match[index],plot[index],date[index],'') 
+			addLink(name[index],match[index],'',date[index],'') 
 
                 
 def get_params():
@@ -66,10 +67,11 @@ def get_params():
 
 
 
-def addLink(name,url,plot,date,iconimage):
+def addLink(name,url,desc,date,iconimage):
         ok=True
-        liz=xbmcgui.ListItem(name+'  '+date, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title":name,"Plot":plot } )
+        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        description = desc + "\n \n Published: " + date
+        liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description,"Date": date } )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 

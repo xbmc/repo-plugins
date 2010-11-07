@@ -30,12 +30,16 @@ from GameItem import GameItem
 from DIPSwitch import DIPSwitch
 from DBHelper import DBHelper
 from BiosSet import BiosSet
+from MameInfo import InfoFile
+from MameHistory import HistoryFile
+from InfoDialog import InfoDialog
 
 FILTERS = {}
 
 PLUGIN_ID = "plugin.games.xbmame"
 PLUGIN_PATH = xbmc.translatePath("special://home/addons/%s" % PLUGIN_ID)
 PLUGIN_DATA_PATH = xbmc.translatePath("special://profile/addon_data/%s" % PLUGIN_ID)
+PLUGIN_DATABASE_VERSION = "1.1"
 
 MEDIA_PATH = os.path.join(PLUGIN_PATH, "resources", "media")
 
@@ -62,10 +66,11 @@ class XBMame:
     _ICON_SEARCH=os.path.join(MEDIA_PATH, "zoom-original.png")
     _FILTERS = ""
 
-    HOME = 0
+# database actions
     REBUILD_DB = 1
     REBUILD_HAVEMISS = 2
     REBUILD_THUMBS = 3
+# Navigation actions
     BROWSE_TYPE_YEAR = 4
     BROWSE_TYPE_BIOS = 5
     BROWSE_TYPE_MANUFACTURER = 6
@@ -73,18 +78,24 @@ class XBMame:
     BROWSE_TYPE_HDD = 8
     BROWSE_TYPE_ALL = 9
     BROWSE_SEARCH = 10
-    GAME_SETTINGS = 11
-    ACTION_EXECUTE = 12
-
+# Game actions
+    GAME_RELATED = 11
+    GAME_SETTINGS = 12
+    GAME_INFO = 13
+    GAME_EXECUTE = 14
 
     def __init__( self ):
         print "Arguments: %s" % sys.argv
         self._path = sys.argv[0]
-        self._handle = sys.argv[1]
+        self._handle = int(sys.argv[1])
+        self._handle = 0
+        self._get = sys.argv[2]
         try:
-            self._params = dict([part.split('=') for part in sys.argv[ 2 ].replace("?", "").split('&')])
+            self._params = dict([part.split('=') for part in self._get.replace("?", "").split('&')])
         except ValueError:
             self._params = {}
+        if self._handle==-1:xbmc.executebuiltin("Container.Refresh")
+    # Drops the settings plugin if it doesn't exist
         if not os.path.exists(SETTINGS_PLUGIN_PATH):
             os.makedirs(os.path.join(SETTINGS_PLUGIN_PATH, "resources"))
             plugin = open(os.path.join(SETTINGS_PLUGIN_PATH, "addon.xml"), "w")
@@ -94,18 +105,30 @@ class XBMame:
             xbmc.executebuiltin("RestartApp")
         else:
             self._MAME_CONFIG_PATH = xbmc.translatePath(os.path.join(PLUGIN_DATA_PATH, "cfg"))
+            self._MAME_NVRAM_PATH = xbmc.translatePath(os.path.join(PLUGIN_DATA_PATH, "nvram"))
             if not os.path.exists(self._MAME_CONFIG_PATH): os.makedirs(self._MAME_CONFIG_PATH)
             self._MAME_CACHE_PATH = xbmc.translatePath(os.path.join(PLUGIN_DATA_PATH, "titles"))
             if not os.path.exists(self._MAME_CACHE_PATH): os.makedirs(self._MAME_CACHE_PATH)
             self._MAME_DATABASE_PATH = xbmc.translatePath(os.path.join(PLUGIN_DATA_PATH, "XBMame.db"))
+            self._MAME_PARAMS = {}
+
+    # Fetching settings
+
+        # General settings
             self._MAME_EXE_PATH = __settings__.getSetting("mame_exe_path").replace("\\", "/")
             self._MAME_ROM_PATH = __settings__.getSetting("mame_rom_path").replace("\\", "/")
             self._MAME_SAMPLES_PATH = __settings__.getSetting("mame_samples_path").replace("\\", "/")
+            self._USE_MAMEINFO = __settings__.getSetting("mame_mameinfo")=="true"
+            self._USE_HISTORY = __settings__.getSetting("mame_history")=="true"
+
+        # Thumbnails settings
             self._MAME_TITLES_PATH = __settings__.getSetting("mame_titles_path").replace("\\", "/")
             self._CACHE_TITLES = __settings__.getSetting("cache_titles")=="true"
             self._ONLINE_TITLES = __settings__.getSetting("online_titles")=="true"
             self._HIRES_TITLES = __settings__.getSetting("hires_titles")=="true"
             self._ROMSET_TITLES = __settings__.getSetting("romset_titles")=="true"
+
+        # ROM filters
             if __settings__.getSetting("hide_clones")=="true":self._FILTERS +=" AND cloneof=''"
             if __settings__.getSetting("hide_nothave")=="true":self._FILTERS += " AND have"
             if __settings__.getSetting("hide_notworking")=="true":self._FILTERS += " AND isworking"
@@ -113,7 +136,33 @@ class XBMame:
             if __settings__.getSetting("hide_impcolor")=="true":self._FILTERS += " AND color"
             if __settings__.getSetting("hide_graphics")=="true":self._FILTERS += " AND graphic"
             if __settings__.getSetting("hide_impsound")=="true":self._FILTERS += " AND sound"
+
+    # Emulator settings
+
+        # Video related
+            if __settings__.getSetting("mame_video")=="Direct3D":
+                self._MAME_PARAMS["-video"] = "d3d"
+                self._MAME_PARAMS["-d3dversion"] = __settings__.getSetting("mame_d3dversion")
+            if __settings__.getSetting("mame_video")=="DirectDraw":self._MAME_PARAMS["-video"] = "ddraw"
+            if __settings__.getSetting("mame_video")=="GDI":self._MAME_PARAMS["-video"] = "gdi"
+            if __settings__.getSetting("mame_switchres")=="true": self._MAME_PARAMS["-switchres"] = ""
+            if __settings__.getSetting("mame_filter")=="true": self._MAME_PARAMS["-filter"] = ""
+            if __settings__.getSetting("mame_scanlines")=="true": self._MAME_PARAMS["-effect"] = "scanlines.png"
+
+        # Other settings
+            if __settings__.getSetting("mame_multithread")=="true": self._MAME_PARAMS["-multithreading"] = ""
+            if __settings__.getSetting("mame_cheat")=="true": self._MAME_PARAMS["-waitvsync"] = ""
+            if __settings__.getSetting("mame_gameinfo")=="false": self._MAME_PARAMS["-skip_gameinfo"] = ""
+
             self._db = DBHelper(self._MAME_DATABASE_PATH)
+            if self._USE_MAMEINFO:
+                self._mameinfo_dat = InfoFile(self._db, os.path.dirname(self._MAME_EXE_PATH))
+            else:
+                self._mameinfo_dat = InfoFile(self._db)
+            if self._USE_HISTORY:
+                self._history_dat = HistoryFile(self._db, os.path.dirname(self._MAME_EXE_PATH))
+            else:
+                self._history_dat = HistoryFile(self._db)
             if self._db.isEmpty():
                 self._gameDatabase()
             self._main()
@@ -134,9 +183,17 @@ class XBMame:
         elif action==self.BROWSE_TYPE_ALL:           self._gameCollection()
         elif action==self.BROWSE_SEARCH:             self._browseSearch(item)
         elif action==self.GAME_SETTINGS:             self._gameSettings(item)
-        elif action==self.ACTION_EXECUTE:            self._runGame(item)
+        elif action==self.GAME_INFO:                 self._gameInfo(item)
+        elif action==self.GAME_RELATED:              self._bulkSearch(item)
+        elif action==self.GAME_EXECUTE:              self._runGame(item)
         else: self._browseHome()
-                
+
+        dbver = self._db.getSetting("database-version")
+        if dbver=="":dbver="1.0"
+        if dbver!= PLUGIN_DATABASE_VERSION:
+            dialog.ok(__language__(30600), __language__(30620), __language__(30621) % (dbver, PLUGIN_DATABASE_VERSION), __language__(30622))
+            xbmc.executebuiltin("XBMC.RunPlugin(plugin://plugin.games.xbmame?action=1)")
+
     def _browseHome(self):
         listitem = xbmcgui.ListItem(__language__(30100), thumbnailImage=self._ICON_YEAR)
         xbmcplugin.addDirectoryItem(handle=int(self._handle), url="%s?action=%s"  % (self._path, self.BROWSE_TYPE_YEAR), listitem=listitem, isFolder=True)
@@ -160,7 +217,7 @@ class XBMame:
             self._gameCollection(year=year)
         else:
             sql = "SELECT year FROM Games WHERE id>0 %s GROUP BY year ORDER BY year" % self._FILTERS
-            years = self._db.getGames(sql, ())
+            years = self._db.Query(sql, ())
             for year in years:
                 listitem = xbmcgui.ListItem(year[0], thumbnailImage=self._ICON_YEAR)
                 xbmcplugin.addDirectoryItem(handle=int(self._handle), url="%s?action=%s&item=%s"  % (self._path, self.BROWSE_TYPE_YEAR, urllib.quote(year[0])), listitem=listitem, isFolder=True)
@@ -171,8 +228,8 @@ class XBMame:
         if (bios):
             self._gameCollection(bios=bios)
         else:
-            sql = "select gamename, romset from games where isbios and romset in (select romof from games where romof<>'' %s group by romof) ORDER BY gamename" % self._FILTERS
-            bioses = self._db.getGames(sql, ())
+            sql = "SELECT gamename, romset FROM Games WHERE isbios AND romset IN (SELECT romof FROM Games WHERE romof<>'' %s GROUP BY romof) ORDER BY gamename" % self._FILTERS
+            bioses = self._db.Query(sql, ())
             for bios in bioses:
                 listitem = xbmcgui.ListItem(bios[0], thumbnailImage=self._ICON_BIOS)
                 xbmcplugin.addDirectoryItem(handle=int(self._handle), url="%s?action=%s&item=%s"  % (self._path, self.BROWSE_TYPE_BIOS, urllib.quote(bios[1])), listitem=listitem, isFolder=True)
@@ -184,7 +241,7 @@ class XBMame:
             self._gameCollection(manufacturer=manufacturer)
         else:
             sql = "SELECT manufacturer FROM Games WHERE id>0 %s GROUP BY manufacturer ORDER BY manufacturer" % self._FILTERS
-            manufacturers = self._db.getGames(sql, ())
+            manufacturers = self._db.Query(sql, ())
             for manufacturer in manufacturers:
                 listitem = xbmcgui.ListItem(manufacturer[0], thumbnailImage=self._ICON_MANUFACTURER)
                 xbmcplugin.addDirectoryItem(handle=int(self._handle), url="%s?action=%s&item=%s"  % (self._path, self.BROWSE_TYPE_MANUFACTURER, urllib.quote(manufacturer[0])), listitem=listitem, isFolder=True)
@@ -222,10 +279,18 @@ class XBMame:
                 self._gameCollection(search=item)
             else:
                 xbmcplugin.endOfDirectory( handle=int( self._handle ), succeeded=False , cacheToDisc=False)
-                
-    def _gameSettings(self, romset_id):
-        game = GameItem(self._db, id=romset_id)
 
+    def _bulkSearch(self, items):
+        list = ""
+        for item in items.split(","):
+            ids = self._db.Query("SELECT id FROM Games WHERE gamename=?" , (item,))
+            for id in ids:
+                list += "%s," % id[0]
+        self._gameCollection(list=list[0:len(list)-1])
+
+    def _gameSettings(self, romset_id):
+        
+        game = GameItem(self._db, id=romset_id)
         rotate_by_name = {__language__(30916):0,__language__(30917):90,__language__(30918):180,__language__(30919):270}
         rotate_by_value = {0:__language__(30916),90:__language__(30917),180:__language__(30918),720:__language__(30919)}
         view_by_name = {__language__(30921):0,__language__(30922):1,__language__(30923):2,__language__(30924):3}
@@ -320,35 +385,17 @@ class XBMame:
             os.remove(SETTINGS_PLUGIN_XML_DOCUMENT)
         os.remove(SETTINGS_PLUGIN_XML_TEMPLATE)
          
-    def xpPath(self, path):
-        return "\"%s\"" % path.replace("\\", "/")
-
     def _runGame(self, romset):
         game = GameItem(self._db, id=romset)
         if game.have:
-            config_path = self.xpPath(self._MAME_CONFIG_PATH)
-            media_path = self.xpPath(MEDIA_PATH)
-            rom_path = self.xpPath(self._MAME_ROM_PATH)
-            sample_path = self.xpPath(self._MAME_SAMPLES_PATH)
-            params = {}
-            params ["-cfg_directory"] = config_path
-            params ["-rompath"] = rom_path
-            params ["-artpath"] = media_path
-            params ["-samplepath"] = sample_path
-            params ["-cheat"] = ""
-            params ["-switchres"] = ""
-            params ["-video"] = "d3d"
-            params ["-d3dversion"] = "9"
-            params ["-filter"] = ""
-            params ["-multithreading"] = ""
-            params ["-waitvsync"] = ""
-            params ["-skip_gameinfo"] = ""
-#            params ["-resolution"] = "1280x800@60"
-            params ["-effect"] = "Scanlines75Dx4_j4"
+            self._MAME_PARAMS["-cfg_directory"] = "\"%s\"" % self._MAME_CONFIG_PATH.replace("\\", "/")
+            self._MAME_PARAMS["-nvram_directory"] = "\"%s\"" % self._MAME_NVRAM_PATH.replace("\\", "/")
+            self._MAME_PARAMS["-rompath"] = "\"%s\"" % self._MAME_ROM_PATH.replace("\\", "/")
+            self._MAME_PARAMS["-artpath"] = "\"%s\"" % MEDIA_PATH.replace("\\", "/")
             if self._MAME_SAMPLES_PATH:
-                params ["-samplepath"] = sample_path
+                self._MAME_PARAMS["-samplepath"] = "\"%s\"" % self._MAME_SAMPLES_PATH.replace("\\", "/")
             if game.biosset:
-                params ["-bios"] = game.biosset
+                self._MAME_PARAMS["-bios"] = game.biosset
             cfgxml = "<?xml version=\"1.0\"?><mameconfig version=\"10\"><system name=\"%s\"><input>" % game.romset
             for switch in game.dipswitches:
                 switch = DIPSwitch(self._db, switch[0])
@@ -360,8 +407,8 @@ class XBMame:
             cfg.write(cfgxml)
             cfg.close()
             command = self._MAME_EXE_PATH
-            for key in params.keys():
-                command += " %s %s " % (key, params[key])
+            for key in self._MAME_PARAMS.keys():
+                command += " %s %s " % (key, self._MAME_PARAMS[key])
             command+=game.romset
             command = "System.Exec(\"%s\")" % command.replace("\"", "\\\"")
             xbmc.executebuiltin(command)
@@ -375,8 +422,8 @@ class XBMame:
         except KeyError:
             return ""
 
-    def _gameCollection(self, year="", bios="", manufacturer="", letter="", search="", hasdisk=0):
-        progress.create(__language__(30600))
+    def _gameCollection(self, year="", bios="", manufacturer="", letter="", search="", hasdisk=0, list=""):
+#        progress.create(__language__(30600))
 
         sql = "SELECT id, gamename, gamecomment, thumb, romset, hasdips FROM Games WHERE NOT isbios %s %s ORDER BY gamename"
         
@@ -397,14 +444,17 @@ class XBMame:
         if letter:
             criteria="AND %s" % letter
             values = ()
+        if list:
+            criteria="AND id IN (%s)" % list
+            values = ()
         if search:
             criteria="AND gamename LIKE '%" + search + "%'"
             values = ()
 
-        sql =  "SELECT id, gamename, gamecomment, thumb, romset, hasdips FROM Games WHERE NOT isbios %s %s ORDER BY gamename" % (criteria, self._FILTERS)
-        games = self._db.getGames(sql, values)
-        count = len(games)
-        index = 0
+        sql =  "SELECT id, gamename, gamecomment, thumb, romset, hasdips, info, history FROM Games WHERE NOT isbios %s %s ORDER BY gamename" % (criteria, self._FILTERS)
+        games = self._db.Query(sql, values)
+#        count = len(games)
+#        index = 0
         for game in games:
             if game[3]:
                 if self._CACHE_TITLES or self._ONLINE_TITLES:thumb=os.path.join(self._MAME_CACHE_PATH, "%s.png" % game[4])
@@ -414,57 +464,80 @@ class XBMame:
                 label="%s (%s)" % (game[1], game[2])
             else:
                 label=game[1]
-            progress.update(int((float(index)/float(count)) * 100), __language__(30601), __language__(30602) % label, __language__(30603) % (index, count))
-            if progress.iscanceled(): break
-            index += 1
+#            progress.update(int((float(index)/float(count)) * 100), __language__(30601), __language__(30602) % label, __language__(30603) % (index, count))
+#            if progress.iscanceled(): break
+#            index += 1
             listitem = xbmcgui.ListItem(label=label, thumbnailImage=os.path.join(self._MAME_TITLES_PATH, thumb))
-            listitem.addContextMenuItems([(__language__( 30800 ), "XBMC.RunPlugin(%s?action=%s&item=%s)" % (self._path, self.GAME_SETTINGS, game[0]),)])
-            xbmcplugin.addDirectoryItem(handle=0, url="%s?action=%s&item=%s"  % (self._path, self.ACTION_EXECUTE, game[0]), listitem=listitem, isFolder=False)
-        progress.close()
-        xbmcplugin.endOfDirectory( handle=int( self._handle ), succeeded=True , cacheToDisc=False)
+            menu = [(__language__( 30800 ), "RunPlugin(\"%s?action=%s&item=%s\")" % (self._path, self.GAME_SETTINGS, game[0]),),
+                    (__language__( 30802 ), "RunPlugin(\"%s?action=%s&item=%s\")" % (self._path, self.GAME_INFO, game[0]),)]
+            listitem.addContextMenuItems(menu)
+            xbmcplugin.addDirectoryItem(handle=self._handle, url="%s?action=%s&item=%s"  % (self._path, self.GAME_EXECUTE, game[0]), listitem=listitem, isFolder=False)
+#        progress.close()
+        xbmcplugin.endOfDirectory(handle=self._handle, succeeded=True , cacheToDisc=False)
         xbmc.executebuiltin("Container.SetViewMode(500)")
 
     def _gameDatabase(self):
-        if len(self._db.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("Games",))):
-            self._db.execute("DROP TABLE Games")
-        if len(self._db.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("BiosSets",))):
-            self._db.execute("DROP TABLE BiosSets")
-        if len(self._db.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("Dipswitches",))):
-            self._db.execute("DROP TABLE Dipswitches")
-        if len(self._db.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("DipswitchesValues",))):
-            self._db.execute("DROP TABLE DipswitchesValues")
-        self._db.execute("CREATE TABLE Games (id INTEGER PRIMARY KEY, romset TEXT, cloneof TEXT, romof TEXT, biosset TEXT, driver TEXT, gamename TEXT, gamecomment TEXT, manufacturer TEXT, year TEXT, isbios BOOLEAN, hasdisk BOOLEAN, isworking BOOLEAN, emul BOOLEAN, color BOOLEAN, graphic BOOLEAN, sound BOOLEAN, hasdips BOOLEAN, view INTEGER, rotate INTEGER, backdrops BOOLEAN, overlays BOOLEAN, bezels BOOLEAN, zoom BOOLEAN, have BOOLEAN, thumb BOOLEAN)")
+        self._db.setSetting("database-version", PLUGIN_DATABASE_VERSION)
+        self._db.dropTable("Games")
+        self._db.dropTable("BiosSets")
+        self._db.dropTable("Dipswitches")
+        self._db.dropTable("DipswitchesValues")
+        self._db.execute("CREATE TABLE Games (id INTEGER PRIMARY KEY, romset TEXT, cloneof TEXT, romof TEXT, biosset TEXT, driver TEXT, gamename TEXT, gamecomment TEXT, manufacturer TEXT, year TEXT, isbios BOOLEAN, hasdisk BOOLEAN, isworking BOOLEAN, emul BOOLEAN, color BOOLEAN, graphic BOOLEAN, sound BOOLEAN, hasdips BOOLEAN, view INTEGER, rotate INTEGER, backdrops BOOLEAN, overlays BOOLEAN, bezels BOOLEAN, zoom BOOLEAN, have BOOLEAN, thumb BOOLEAN, history INTEGER, info INTEGER)")
         self._db.execute("CREATE TABLE BiosSets (id INTEGER PRIMARY KEY, romset_id INTEGER, name TEXT, description TEXT)")
         self._db.execute("CREATE TABLE Dipswitches (id INTEGER PRIMARY KEY, romset_id integer, name TEXT, tag TEXT, mask INTEGER, defvalue INTEGER, value INTEGER)")
         self._db.execute("CREATE TABLE DipswitchesValues (id INTEGER PRIMARY KEY, dipswitch_id INTEGER, name TEXT, value TEXT)")
         self._db.commit()
+
+        pstep = 0
+        psteps = 3
+        self._mameinfo_dat.dropTable()
+        self._history_dat.dropTable()
+        if self._mameinfo_dat.data:psteps+=1
+        if self._history_dat.data:psteps+=1
+
         progress.create(__language__(30000))
-        progress.update(0, __language__(30604))
+        pstep += 1
+        progress.update((pstep-1)*10, __language__(30604), __language__(30605) % (pstep, psteps),  __language__(30606))
         xml = os.popen("\"%s\" -listxml" % self._MAME_EXE_PATH).read()
-        progress.update(50, __language__(30604), __language__(30605))
+        pstep += 1
+        progress.update((pstep-1)*10, __language__(30604), __language__(30605) % (pstep, psteps),  __language__(30607))
         if not progress.iscanceled():
             xml = re.sub("\r|\t|\n|<rom.*?/>", "", xml)
-            progress.update(75, __language__(30604), __language__(30605), __language__(30606))
-        if not progress.iscanceled():
-            files = {}
-            tmpfiles = os.listdir(self._MAME_ROM_PATH)
-            for file in tmpfiles:files[file.replace(".zip", "").replace(".rar", "").replace(".7z","")] = 1
-            items = re.findall("(<game.*?>.*?</game>)", xml, re.M)
-            progress.close()
-            progress.create(__language__(30607))
-            count = len(items)
-            index = 0
-            for item in items:
-                if progress.iscanceled(): break
-                index += 1
-                game = GameItem(self._db, xml=item)
-                try:
-                    if files[str(game.romset)]:game.have = 1
-                except KeyError:
-                    game.have = 0
-                game.writeDB()
-                progress.update(int((float(index)/float(count)) * 100), __language__(30608), __language__(30609) % game.gamename, __language__(30610) % (index, count))
-            self._db.commit()
+            if not progress.iscanceled():
+                files = {}
+                tmpfiles = os.listdir(self._MAME_ROM_PATH)
+                for file in tmpfiles:files[file.replace(".zip", "").replace(".rar", "").replace(".7z","")] = 1
+                items = re.findall("(<game.*?>.*?</game>)", xml, re.M)
+                pstep += 1
+                count = len(items)
+                progress.update((pstep-1)*10, __language__(30604), __language__(30605) % (pstep, psteps),  __language__(30610) % (0, count))
+                step = 0
+                index = 0
+                for item in items:
+                    if progress.iscanceled(): break
+                    index += 1
+                    game = GameItem(self._db, xml=item)
+                    try:
+                        if files[str(game.romset)]:game.have = 1
+                    except KeyError:
+                        game.have = 0
+                    game.writeDB()
+                    if index==count/((11-psteps)*2):
+                        step+=1
+                        index=0
+                        self._db.commit()
+                        progress.update((pstep-1)*10+step*5, __language__(30604), __language__(30605) % (pstep, psteps), __language__(30610) % (step*count/((11-psteps)*2), count))
+                if self._mameinfo_dat.data:
+                    pstep += 1
+                    progress.update((pstep-2)*10+step*5, __language__(30604), __language__(30605) % (pstep, psteps),  __language__(30608))
+                    self._mameinfo_dat.parse()
+                    self._db.commit()
+                if self._history_dat.data:
+                    pstep += 1
+                    progress.update((pstep-2)*10+step*5, __language__(30604), __language__(30605) % (pstep, psteps),  __language__(30609))
+                    self._history_dat.parse()
+                    self._db.commit()
+        self._db.commit()
         progress.close()
 #        self._haveList()
         self._thumbNails()
@@ -515,3 +588,11 @@ class XBMame:
                 if os.path.exists(filename): self._db.execute("UPDATE Games SET thumb=1 WHERE romset=?", (romset,))
             self._db.commit()
             progress.close()
+
+    def _gameInfo(self, item):
+        game = GameItem(self._db, id=item)
+        ui = InfoDialog("InfoDialog.xml", PLUGIN_PATH, "Default", "720p", game=game, plugin_id=PLUGIN_ID)
+
+        xbmc.executebuiltin("Skin.Reset(animation)")
+        xbmc.executebuiltin(ui.command)
+        xbmc.executebuiltin("Skin.SetBool(animation)")

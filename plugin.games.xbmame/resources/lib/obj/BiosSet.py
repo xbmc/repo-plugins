@@ -36,7 +36,7 @@ class BiosSet(object):
 
     def getByName(self, name):
         try:
-            data = self._db.getGames("SELECT romset_id, name, description FROM BiosSets WHERE name=?", (name,))[0]
+            data = self._db.Query("SELECT romset_id, name, description FROM BiosSets WHERE name=?", (name,))[0]
             item = BiosSet(self._db, data[0], data[1], data[2])
         except KeyError:
             item = BiosSet(self._db)
@@ -44,7 +44,7 @@ class BiosSet(object):
 
     def getByDescription(self, description):
         try:
-            data = self._db.getGames("SELECT romset_id, name, description FROM BiosSets WHERE description=?", (description,))[0]
+            data = self._db.Query("SELECT romset_id, name, description FROM BiosSets WHERE description=?", (description,))[0]
             item = BiosSet(self._db, data[0], data[1], data[2])
         except KeyError:
             item = BiosSet(self._db)
@@ -52,7 +52,7 @@ class BiosSet(object):
 
     def getByRomsetID(self, romset_id):
         items = []
-        data = self._db.getGames("SELECT romset_id, name, description FROM BiosSets WHERE romset_id=?", (romset_id,))
+        data = self._db.Query("SELECT romset_id, name, description FROM BiosSets WHERE romset_id=?", (romset_id,))
         print "Biossets found:%s" % len(data)
         for dat in data:
             items.append(BiosSet(self._db, dat[0], dat[1], dat[2]))

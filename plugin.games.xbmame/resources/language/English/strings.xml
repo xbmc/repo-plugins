@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<!--
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 (the "License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+# License for the specific language governing rights and limitations
+# under the License.
+#
+# The Original Code is plugin.games.xbmame.
+#
+# The Initial Developer of the Original Code is Olivier LODY aka Akira76.
+# Portions created by the XBMC team are Copyright (C) 2003-2010 XBMC.
+# All Rights Reserved.
+-->
+
 <strings>
     <!-- Plugin name -->
-    <string id="30000">XBMame</string> 
+    <string id="30000">Mame Frontend</string>
 
     <!-- Home screen categories -->
     <string id="30100">Games by year</string>
@@ -10,21 +29,52 @@
     <string id="30103">Games by name</string>
     <string id="30104">Games with hard drive</string>
     <string id="30105">All games</string>
-    <string id="30106">Search for games</string>
+    <string id="30106">Search...</string>
     <string id="30107">%s games</string>
+
+    <!-- InfoDialog strings -->
+    <string id="30503">Run Game</string>
+    <string id="30504">Related Games</string>
+
+    <!-- ID Card related -->
+    <string id="30550">Game name</string>
+    <string id="30551">Manufacturer</string>
+    <string id="30552">Release year</string>
+    <string id="30553">Levels</string>
+    <string id="30554">Other emulators</string>
+    <string id="30555">ROMSet infos</string>
+    <string id="30556">Sources</string>
+
+    <!-- Other infos -->
+    <string id="30557">ID Card</string>
+    <string id="30558">Bio</string>
+    <string id="30559">Trivia</string>
+    <string id="30560">Technical infos</string>
+    <string id="30561">Scoring</string>
+    <string id="30562">Tips</string>
+    <string id="30563">Test Mode</string>
+    <string id="30564">Setup</string>
+    <string id="30565">Updates</string>
+    <string id="30566">WIP</string>
+    <string id="30567">TODO</string>
+    <string id="30568">Bugs</string>
+    <string id="30569">Note</string>
+    <string id="30570">Series</string>
+    <string id="30571">Staff</string>
+    <string id="30572">Ports</string>
 
     <!-- progress dialogs labels -->
     <string id="30600">Creating game collection</string>
     <string id="30601">Populating collection</string>
     <string id="30602">Adding %s</string>
     <string id="30603">Creating object %s of %s</string>
-    <string id="30604">Reading MAME XML List</string>
-    <string id="30605">Cleaning XML List</string>
-    <string id="30606">Parsing game collection</string>
-    <string id="30607">Creating game database</string>
-    <string id="30608">Populating game database</string>
-    <string id="30609">Adding %s</string>
-    <string id="30610">Creating object %s of %s</string>
+    <string id="30604">Creating game database</string>
+    <string id="30605">Step %s of %s</string>
+    <string id="30606">Reading MAME XML List</string>
+    <string id="30607">Cleaning XML List</string>
+    <string id="30608">Creating "mameinfo.dat" records</string>
+    <string id="30609">Creating "history.dat" records</string>
+    <string id="30610">Creating game records (%s of %s)</string>
     <string id="30611">Updating have/miss list</string>
     <string id="30612">Updating database</string>
     <string id="30613">Found romset %s</string>
@@ -33,6 +83,9 @@
     <string id="30616">Updating database</string>
     <string id="30617">Setting thumbnail for %s</string>
     <string id="30618">Updating record %s of %s</string>
+    <string id="30620">The database schema has been upgraded.</string>
+    <string id="30621">You are running v%s, current version is v%s</string>
+    <string id="30622">The database needs to be rebuilt now.</string>
 
     <!-- dialog labels -->
     <string id="30700">Not implemented yet.</string>
@@ -43,8 +96,8 @@
     <string id="30705">XBMC is going to restart now</string>
 
     <!-- context menu -->
-    <string id="30800">Game settings</string>
-    <string id="30801">DIP Switches</string>
+    <string id="30800">Game Settings</string>
+    <string id="30802">Game Infos</string>
 
     <!-- settings -->
 
@@ -53,6 +106,8 @@
     <string id="30901">Path to Mame exe</string>
     <string id="30902">Path to Mame roms</string>
     <string id="30903">Path to Mame samples</string>
+    <string id="30990">Import history.dat if it exists</string>
+    <string id="30991">Import mameinfo.dat if it exists</string>
 
     <!-- settings : thumbnails -->
     <string id="30904">Thumbnails</string>
@@ -95,4 +150,18 @@
     <string id="30932">Rebuild thumbnails</string>
     <string id="30937">BIOS Settings</string>
     <string id="30938">Use the following BIOS :</string>
+
+    <string id="30950">Emulator settings</string>
+    <string id="30951">Video related</string>
+    <string id="30952">Display type</string>
+    <string id="30953">DirectX version to use (if relevant)</string>
+    <string id="30954">Allow mame to change screen resolution</string>
+    <string id="30955">Enable video enhancements</string>
+    <string id="30957">Enable scanlines</string>
+    <string id="30956">Wait for VSync</string>
+    <string id="30958">Other</string>
+    <string id="30959">Enable multithreading</string>
+    <string id="30960">Enabe cheats if available</string>
+    <string id="30961">Show game infos on startup</string>
+
 </strings>

@@ -33,7 +33,7 @@ class DIPSwitch(object):
         if xml:self._fromXML(xml)
 
     def _fromDB(self, id):
-        data = self._db.getGames("SELECT id, romset_id, name, tag, mask, defvalue, value FROM Dipswitches WHERE id=?", (id,))[0]
+        data = self._db.Query("SELECT id, romset_id, name, tag, mask, defvalue, value FROM Dipswitches WHERE id=?", (id,))[0]
         self.id=data[0]
         self.romset_id=data[1]
         self.name=data[2]
@@ -41,7 +41,7 @@ class DIPSwitch(object):
         self.mask=data[4]
         self.defvalue=data[5]
         self.value=data[6]
-        for data in self._db.getGames("SELECT id, name, value FROM DipswitchesValues WHERE dipswitch_id=?", (self.id,)):
+        for data in self._db.Query("SELECT id, name, value FROM DipswitchesValues WHERE dipswitch_id=?", (self.id,)):
             self.values_by_name[data[1]] = data[2]
             self.values_by_value[data[2]] = data[1]
 

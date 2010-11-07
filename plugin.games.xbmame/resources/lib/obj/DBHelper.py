@@ -23,6 +23,10 @@ class DBHelper(object):
     def __init__(self, dbpath):
         self._db = sqlite.connect(dbpath)
         self._cursor = self._db.cursor()
+        if len(self.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("XBMame",)))==0:
+            self.execute("CREATE TABLE XBMame (id INTEGER PRIMARY KEY, setting TEXT, value TEXT)")
+        if len(self.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("GameSettings",)))==0:
+            self.execute("CREATE TABLE GameSettings (id INTEGER PRIMARY KEY, romset TEXT, view INTEGER, rotate INTEGER, backdrops BOOLEAN, overlays BOOLEAN, bezels BOOLEAN, zoom BOOLEAN, have BOOLEAN, thumb BOOLEAN)")
 
     def commit(self):
         self.db.commit()
@@ -33,8 +37,34 @@ class DBHelper(object):
         else:
             rows = 0
             for t in self._tables:
-                rows+=self.getCount(t)
+                try:
+                    if len(self.runQuery("SELECT * FROM sqlite_master WHERE name=?", ("DipswitchesValues",))):rows+=self.getCount(t)
+                except sqlite.OperationalError:
+                    pass
             return (rows==0)
+
+    def dropTable(self, table):
+        if self.tableExists(table):
+            self.execute("DROP TABLE %s" % table)
+            self.commit()
+
+    def tableExists(self, table):
+        return bool(len(self.runQuery("SELECT * FROM sqlite_master WHERE name=?", (table,))))
+
+    def getSetting(self, setting):
+        try:
+            return self.Query(
+                    "SELECT value FROM XBMame WHERE setting=?",
+                    (setting,)
+                )[0][0]
+        except IndexError:
+            return ""
+
+    def setSetting(self, setting, value):
+        if self.getSetting(setting)=="":
+            self.execute("INSERT INTO XBMame VALUES(null, ?, ?)", (setting, value,))
+        else:
+            self.execute("UPDATE XBMame SET value=? WHERE setting=?", (value, setting,))
 
     def execute(self, sql, values=""):
         if values:
@@ -50,10 +80,13 @@ class DBHelper(object):
     def commit(self):
         self._db.commit()
 
-    def getGames(self, sql, values):
-        self._cursor.execute(sql, values)
-        results = self._cursor.fetchall()
-        return results
+    def Query(self, sql, values):
+        try:
+            self._cursor.execute(sql, values)
+            results = self._cursor.fetchall()
+            return results
+        except sqlite.OperationalError:
+            return ""
 
     def getList(self, table, fields, criteria={}):
         filters=""

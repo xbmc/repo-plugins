@@ -1,10 +1,29 @@
+# The contents of this file are subject to the Mozilla Public License
+# Version 1.1 (the "License"); you may not use this file except in
+# compliance with the License. You may obtain a copy of the License at
+# http://www.mozilla.org/MPL/
+#
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+# License for the specific language governing rights and limitations
+# under the License.
+#
+# The Original Code is plugin.games.xbmame.
+#
+# The Initial Developer of the Original Code is Olivier LODY aka Akira76.
+# Portions created by the XBMC team are Copyright (C) 2003-2010 XBMC.
+# All Rights Reserved.
+
 import re
 
 from XMLHelper import XMLHelper
 from DIPSwitch import DIPSwitch
 from BiosSet import BiosSet
+from MameInfo import InfoItem
+from MameHistory import HistoryItem
 
 class GameItem(object):
+
 
     def __init__(self, db, id=0, romset="", xml=""):
         self._db=db
@@ -35,15 +54,17 @@ class GameItem(object):
         self.zoom=0
         self.have=0
         self.hasdips=False
+        self.history=None
+        self.info=None
         if id:self._fromDB(id=id)
         if romset:self._fromDB(romset=romset)
         if xml:self._fromXML(xml)
 
     def _fromDB(self, id=0, romset=""):
         if id:
-            data = self._db.getGames("SELECT id, romset, driver, cloneof, romof, biosset, gamename, gamecomment, manufacturer, year, isbios, hasdisk, isworking, emul, color, graphic, sound, view, rotate, backdrops, overlays, bezels, zoom, hasdips, have FROM Games WHERE id=?", (id,))[0]
+            data = self._db.Query("SELECT id, romset, driver, cloneof, romof, biosset, gamename, gamecomment, manufacturer, year, isbios, hasdisk, isworking, emul, color, graphic, sound, view, rotate, backdrops, overlays, bezels, zoom, hasdips, have, history, info FROM Games WHERE id=?", (id,))[0]
         else:
-            data = self._db.getGames("SELECT id, romset, driver, cloneof, romof, biosset, gamename, gamecomment, manufacturer, year, isbios, hasdisk, isworking, emul, color, graphic, sound, view, rotate, backdrops, overlays, bezels, zoom, hasdips, have FROM Games WHERE romset=?", (romset,))[0]
+            data = self._db.Query("SELECT id, romset, driver, cloneof, romof, biosset, gamename, gamecomment, manufacturer, year, isbios, hasdisk, isworking, emul, color, graphic, sound, view, rotate, backdrops, overlays, bezels, zoom, hasdips, have, history, info FROM Games WHERE romset=?", (romset,))[0]
         self.id=data[0]
         self.romset=data[1]
         self.driver=data[2]
@@ -59,7 +80,6 @@ class GameItem(object):
         self.year=data[9]
         self.isbios=data[10]
         if self.isbios:
-            print "looking for biossets for %s" % self.romset
             self.biossets=BiosSet(self._db).getByRomsetID(self.id)
         self.hasdisk=bool(data[11])
         self.isworking=bool(data[12])
@@ -75,7 +95,9 @@ class GameItem(object):
         self.zoom=data[22]
         self.hasdips=bool(data[23])
         self.have=bool(data[24])
-        self.dipswitches = self._db.getGames("SELECT id FROM Dipswitches WHERE romset_id=? ORDER BY tag, mask",  (self.id,))
+        self.history=HistoryItem(self._db, id=data[25])
+        self.info=InfoItem(self._db, id=data[26])
+        self.dipswitches = self._db.Query("SELECT id FROM Dipswitches WHERE romset_id=? ORDER BY tag, mask",  (self.id,))
 
     def _fromXML(self, xml):
         self.id = ""
@@ -113,8 +135,8 @@ class GameItem(object):
 
     def writeDB(self):
         if not self.id:
-            romset_id = self._db.execute("INSERT INTO Games VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-            (self.romset, self.cloneof, self.romof, self.biosset, self.driver, self.gamename, self.gamecomment, self.manufacturer, self.year, self.isbios, self.hasdisk, self.isworking, self.emul, self.color, self.graphic, self.sound, self.hasdips, 0, 0, 1, 1, 1, 0, self.have, 0))
+            romset_id = self._db.execute("INSERT INTO Games VALUES(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (self.romset, self.cloneof, self.romof, self.biosset, self.driver, self.gamename, self.gamecomment, self.manufacturer, self.year, self.isbios, self.hasdisk, self.isworking, self.emul, self.color, self.graphic, self.sound, self.hasdips, 0, 0, 1, 1, 1, 0, self.have, 0, 0, 0))
             for biosset in self.biossets:
                 biosset.setRomSetID(romset_id)
                 biosset.writeDB()

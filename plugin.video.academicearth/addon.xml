@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.academicearth" name="Academic Earth" version="1.0.2" provider-name="jbel">
-    <requires>
-        <import addon="xbmc.python" version="1.0"/>
-        <import addon="script.module.beautifulsoup" version="3.0.8"/>
-    </requires>
-    <extension point="xbmc.python.pluginsource" library="addon.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <summary>Academic Earth video plugin</summary>
-        <description>Watch online video lectures from leading universities.</description>
-        <disclaimer>Only free courses/lectures are listed.</disclaimer>
-    </extension>
+<addon id="plugin.video.academicearth" name="Academic Earth" version="1.0.3" provider-name="jbel">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>Academic Earth video plugin</summary>
+    <description>Watch online video lectures from leading universities.</description>
+    <disclaimer>Only free courses/lectures are listed.</disclaimer>
+  </extension>
 </addon>

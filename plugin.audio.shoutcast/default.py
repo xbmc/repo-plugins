@@ -58,21 +58,24 @@ def RESOLVE(id):
     url = "%s?play=%s&tunein=%s" % (sys.argv[0], stat.attributes["id"].value,node.getElementsByTagName('tunein')[0].attributes["base"].value)
     addLink(name,url,stat.attributes["br"].value, stat.attributes["lc"].value)
 
-def search():
+def keyboard():
   kb = xbmc.Keyboard("", __language__(30092), False)
   kb.doModal()
   if (kb.isConfirmed() and len(kb.getText()) > 2):
-    url = "%s?search=%s" % (BASE_URL, quote_plus(kb.getText()),)
-    log("SEARCH URL: %s" % url )
-    req3 = urllib2.Request(url)
-    response = urllib2.urlopen(req3)
-    link = response.read()
-    response.close()
-    node = minidom.parseString(link).firstChild
-    for stat in node.getElementsByTagName('station'):
-      name = unicodedata.normalize('NFKD',stat.attributes["name"].value).encode('ascii','ignore')
-      url = "%s?play=%s&tunein=%s" % (sys.argv[0], stat.attributes["id"].value,node.getElementsByTagName('tunein')[0].attributes["base"].value)
-      addLink(name,url,stat.attributes["br"].value, stat.attributes["lc"].value)
+    doSearch(kb.getText())
+
+def doSearch(search):
+  url = "%s?search=%s" % (BASE_URL, quote_plus(search),)
+  log("SEARCH URL: %s" % url )
+  req3 = urllib2.Request(url)
+  response = urllib2.urlopen(req3)
+  link = response.read()
+  response.close()
+  node = minidom.parseString(link).firstChild
+  for stat in node.getElementsByTagName('station'):
+    name = unicodedata.normalize('NFKD',stat.attributes["name"].value).encode('ascii','ignore')
+    url = "%s?play=%s&tunein=%s" % (sys.argv[0], stat.attributes["id"].value,node.getElementsByTagName('tunein')[0].attributes["base"].value)
+    addLink(name,url,stat.attributes["br"].value, stat.attributes["lc"].value)
 
 def PLAY(st_id, tunein):
   if __XBMC_Revision__.startswith("10.0"):
@@ -119,6 +122,21 @@ def addDir(name):
 def log(msg):
   xbmc.output("### [%s] - %s" % (__addonname__,msg,),level=xbmc.LOGDEBUG )
   
+def sort(dir = False):
+  if dir:
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+    try:
+      xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LISTENERS )
+    except: pass
+  else:
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE, label2Mask="%X" )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL, label2Mask="%X" )
+    try:
+      xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LISTENERS )
+    except: pass
+  xbmcplugin.endOfDirectory(int(sys.argv[1]))        
+  
 params=get_params()
 try:
   id = params["id"]
@@ -132,40 +150,35 @@ try:
   play = params["play"]
 except:
   play = "0";
- 
+try:
+  srch = params["search"]
+except:
+  srch = "0";
 
 iid = len(id)
 iplay = len(play)
 iinitial = len(initial)
+isearch=len(srch);
 
 if iid > 1 :
   RESOLVE(id)
-  xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE, label2Mask="%X" )
-  xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL, label2Mask="%X" )
-  try:
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LISTENERS )
-  except: pass
-  xbmcplugin.endOfDirectory(int(sys.argv[1]))
+  sort()
 
 elif iinitial > 1:
   if initial == "search":
-    search()
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE, label2Mask="%X" )
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL, label2Mask="%X" )
-    try:
-      xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LISTENERS )
-    except: pass
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    keyboard()
+    sort()
   else:
     INDEX()
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_BITRATE )
-    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-    try:
-      xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LISTENERS )
-    except: pass
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))      
+    sort(True)
+         
 elif iplay > 1:
   PLAY(play,params["tunein"] )
+  
+elif isearch > 1:
+  doSearch(srch)
+  sort()
+  
 else:
   u = "%s?initial=search" % (sys.argv[0],)
   liz=xbmcgui.ListItem(__language__(30091), iconImage="DefaultFolder.png", thumbnailImage="")

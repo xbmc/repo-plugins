@@ -97,6 +97,7 @@
 
     <!-- context menu -->
     <string id="30800">Game Settings</string>
+    <string id="30801">DIPSwitches</string>
     <string id="30802">Game Infos</string>
 
     <!-- settings -->

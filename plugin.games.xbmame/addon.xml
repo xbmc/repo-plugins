@@ -18,7 +18,7 @@
 # All Rights Reserved.
 -->
 
-<addon id="plugin.games.xbmame" name="MAME Frontend" version="1.2.1" provider-name="Akira76">
+<addon id="plugin.games.xbmame" name="MAME Frontend" version="1.2.2" provider-name="Akira76">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
         <import addon="script.module.pysqlite" version="2.5.6"/>

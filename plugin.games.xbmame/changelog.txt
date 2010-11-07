@@ -1,3 +1,6 @@
+2010-11-06 -> v1.2.2
+    Fixed a bug that prevented the dipswitch settings to display
+
 2010-11-06 -> v1.2.1
     New icon, thanks Freezy
     Changed the app name from "XBMC Mame Frontend" to "Mame Frontend",

@@ -1,3 +1,9 @@
+[B]Version 0.4.3[/B]
+
+- Replaced: os.getcwd() with addon.getAddonInfo('path')
+- Replaced: full setting path with addon.getAddonInfo('profile')
+
+
 [B]Version 0.4.2[/B]
 
 - Added: full context menu

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="708">Activar proxy HTTP para acceder a internet</string>
+    <string id="20191">Habilitar trazas de depuración</string>
+
+    <string id="30000">VideoMonkey</string>
+    <string id="30001">XBMC Media Center</string>
+
+    <string id="30002">Mostrar solo mis atajos</string>
+    <string id="30003">Tipo de reproductor</string>
+    <string id="30004">Auto</string>
+    <string id="30005">MPlayer</string>
+    <string id="30006">DVDPlayer</string>
+    <string id="30007">Guardar video</string>
+    <string id="30008">Ruta de descarga</string>
+    <string id="30009">Preguntar por descargar antes de reproducir el vídeo</string>
+    <string id="30010">Agregar atajo</string>
+    <string id="30011">Eliminar atajo</string>
+    <string id="30012">Calidad del vídeo (si hay varias disponibles)</string>
+    <string id="30013">Preguntarme</string>
+    <string id="30014">Baja</string>
+    <string id="30015">Normal</string>
+    <string id="30016">Alta</string>
+
+    <string id="30050">Descargando vídeo...</string>
+    <string id="30051">Por favor espere.</string>
+    <string id="30052">Desea descargar este vídeo?</string>
+    <string id="30053">Descarga de vídeo fallida. Trate de verlo en línea...</string>
+    <string id="30054">Realmente desea eliminar este atajo?</string>
+    <string id="30055">Varias calidades disponibles. Por favor elija una:</string>
+    <string id="30056">Calidad baja</string>
+    <string id="30057">Calidad normal</string>
+    <string id="30058">Calidad alta</string>
+    <string id="30059">Actualizar</string>
+    <string id="30060">VideoMonkey ha sido actualizado con éxito</string>
+
+    <string id="30100">Categorías</string>
+    <string id="30101">Subcategorías</string>
+    <string id="30102">Buscar</string>
+    <string id="30103">Página siguiente</string>
+    <string id="30104">Más</string>
+    <string id="30105">Género</string>
+    <string id="30106">Actual</string>
+    <string id="30107">Artista</string>
+    <string id="30108">Vídeos</string>
+    <string id="30109">Ordenar</string>
+    <string id="30110">Sugerencia</string>
+    <string id="30111">Afinar</string>
+    <string id="30112">Regional</string>
+    <string id="30113">Periodo de tiempo</string>
+    <string id="30114">Deportes</string>
+    <string id="30115">Infantil</string>
+    <string id="30116">Música</string>
+    <string id="30117">Vídeos similares</string>
+</strings>

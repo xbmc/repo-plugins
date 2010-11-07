@@ -1,0 +1,3 @@
+[B]Version 1.4.1[/B]
+
+- Changed: plugin to work with the new add-on system

@@ -1,118 +1,101 @@
-"""
-    Plugin for viewing content from nrk.no
-"""
+'''
+    NRK plugin for XBMC
+    Copyright (C) 2010 Thomas Amland
 
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-#main imports
-import os
-import sys
-import xbmc
-from NRK_API.utils import PluginError, PluginScriptError
-import xbmcaddon   
-   
-#plugin constants
-__plugin__         = "NRK"
-__author__         = "VictorV"
-__version__        = "0.9.7"
-__XBMC_Revision__  = "21735"
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.nrk')
-__language__ = __settings__.getLocalizedString
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
 
-def run_once():
-    import xbmcplugin
-    runonce = __settings__.getSetting('runonce') == 'true'
-    if runonce == True:
-        __settings__.openSettings(url=sys.argv[0])
-        __settings__.setSetting('runonce', 'True')
+import os, sys
+import xbmc, xbmcgui, xbmcaddon, xbmcplugin
+import data as Data
+from data import DataItem
+
+_ = xbmcaddon.Addon(id="plugin.video.nrk").getLocalizedString
+
+def nodes(baseUrl, handle):
+    xbmcplugin.addDirectoryItem(handle, baseUrl+"?node=live",    xbmcgui.ListItem(_(30101)), True);
+    xbmcplugin.addDirectoryItem(handle, baseUrl+"?node=latest",  xbmcgui.ListItem(_(30102)), True);
+    xbmcplugin.addDirectoryItem(handle, baseUrl+"?node=letters", xbmcgui.ListItem("A-Å"), True);
+    xbmcplugin.endOfDirectory(handle)
+
+def node_live(baseUrl, handle):
+    dataItems = Data.getLive()
+    create(baseUrl, handle, dataItems)
     
+def node_latest(baseUrl, handle):
+    dataItems = Data.getLatest()
+    create(baseUrl, handle, dataItems)
+
+def node_url(baseUrl, handle, url):
+    dataItems = Data.getByUrl(url)
+    create(baseUrl, handle, dataItems)
     
-def _check_compatible():
-    #spam plugin statistics to log
-    msg = "PLUGIN::INIT -> '%s: version %s'" % (__plugin__, __version__,)
-    xbmc.log(msg, xbmc.LOGNOTICE) 
+def node_letter(baseUrl, handle, letter):
+    dataItems = Data.getByLetter(letter)
+    create(baseUrl, handle, dataItems)
     
-    try:
-        xbmc_rev = int( xbmc.getInfoLabel( "System.BuildVersion" ).split( " r" )[ -1 ] )
-        #compatible?
-        ok = xbmc_rev >= int( __XBMC_Revision__ )  
-    except:
-        #error, so unknown, allow to run
-        xbmc_rev = 0
-        ok = 2
-        
-    #spam revision info
-    xbmc.log( "PLUGIN::COMPABILITY -> Required XBMC Revision: r%s" % (
-                 __XBMC_Revision__), 
-                 xbmc.LOGNOTICE )
-    xbmc.log( "PLUGIN::COMPABILITY -> Found XBMC Revision: r%d [%s]" % ( 
-                 xbmc_rev, ("Not Compatible", "Compatible", "Unknown")[ok]), 
-                 xbmc.LOGNOTICE )
-                 
-    #if not compatible, inform user
-    if ( not ok ):
-        import xbmcgui
-        xbmcgui.Dialog().ok( "%s - %s: %s" % (
-                 __plugin__, __language__( 30700 ), __version__), 
-                 __language__( 30701 ) % (__plugin__),
-                 __language__( 30702 ) % (__XBMC_Revision__),
-                 __language__( 30703 ) )
-                 
-    #return result
-    return ok
-
-
-
-if (__name__ == "__main__"):
-
-    if (not sys.argv[2]):
-        ok = _check_compatible()
-        run_once()
-        if (ok):
-            from NRK_API import xbmcplugin_rootmenu as plugin
-            
-    else:
-        if sys.argv[2][1:].startswith('program'):
-            from NRK_API import xbmcplugin_program as plugin
-            
-        elif sys.argv[2][1:].startswith('nrkbeta'):
-            from NRK_API import xbmcplugin_nrk_beta_feeds as plugin
-            
-        elif sys.argv[2][1:].startswith('webradio'):
-            from NRK_API import xbmcplugin_webradio as plugin
-            
-        elif sys.argv[2][1:].startswith('podcast'):
-            from NRK_API import xbmcplugin_podcast as plugin
-            
-        elif sys.argv[2][1:].startswith('text'):
-            from NRK_API import xbmcplugin_text as plugin
-            
-        elif sys.argv[2][1:].startswith('teletext'):
-            from NRK_API import xbmcplugin_teletext as plugin
-    
-        elif sys.argv[2][1:].startswith('kanalene'):
-            from NRK_API import chlive as plugin
-        
-        elif sys.argv[2][1:].startswith('favorites'):
-            from NRK_API import favorites as plugin
+def node_letters(baseUrl, handle):
+    #TODO: move this to data layer
+    letters = range(ord('a'), ord('z'))
+    letters.append(ord('1'))
+    letters.append(ord('2'))
+    letters.append(ord('3'))
+    letters.append(ord('7'))
+    letters.append(230) #æ
+    letters.append(216) #ø
+    letters.append(229) #å
       
-        elif sys.argv[2][1:].startswith('nogui'):
-            from NRK_API import nogui as plugin
-    try:
-        plugin.Main()
-    except PluginError:
-        print 'Plugin encountered a error retreiving virtual directory'
+    listItems = []
+    for l in letters:
+        ch = unichr(l)
+        url = baseUrl + "?letter=" + ch
+        listItems.append( (url, xbmcgui.ListItem(ch.upper()), True) )
     
-    #Use plugin error class for unknown errors
-    except:
-        #need a try/except clause to avoid xbmc error dialog
-        try:
-            raise PluginScriptError
-        except: 
-            print 'Plugin encountered a error retreiving virtual directory'
+    xbmcplugin.addDirectoryItems(handle=handle, items=listItems)
+    xbmcplugin.endOfDirectory(handle)
+    
+def create(baseUrl, handle, dataItems):
+    listItems = []
+    for e in dataItems:
+        l = xbmcgui.ListItem(e.title)
+        l.setInfo( type="Video", infoLabels={"title": e.title} )
+        l.setProperty("IsPlayable", str(e.isPlayable));
+        isdir = not(e.isPlayable)
+        if isdir: url = baseUrl + "?url=" + e.url
+        else: url = e.url
+        listItems.append( (url, l, isdir) )
+    xbmcplugin.addDirectoryItems(handle=handle, items=listItems)
+    xbmcplugin.endOfDirectory(handle)
+    
 
+if ( __name__ == "__main__" ):
+    arg = sys.argv[2].split('=', 1)
+
+    if (arg[0] == "?node"):
+        if(arg[1] == "live"):
+            node_live(sys.argv[0], int(sys.argv[1]))
+        elif(arg[1] == "letters"):
+            node_letters(sys.argv[0], int(sys.argv[1]))
+        elif(arg[1] == "latest"):
+            node_latest(sys.argv[0], int(sys.argv[1]))
+    
+    elif (arg[0] == "?letter"):
+        node_letter(sys.argv[0], int(sys.argv[1]), arg[1])
         
-        
-        
-        
-        
+    elif (arg[0] == "?url"):
+        node_url(sys.argv[0], int(sys.argv[1]), arg[1])
+    
+    else:
+        nodes(sys.argv[0], int(sys.argv[1]))
+    

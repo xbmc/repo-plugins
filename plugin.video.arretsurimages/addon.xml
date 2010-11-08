@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.arretsurimages"
        name="Arrêt Sur Images"
-       version="1.0.0"
+       version="1.0.1"
        provider-name="Beenje">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -15,6 +15,7 @@
     <summary lang="fr">Toutes les émissions d'@rrêt sur images, site de réflexion critique sur les médias</summary>
     <summary lang="en">Videos from arretsurimages.net</summary>
     <description lang="fr">Le site d’@rrêt sur images prolonge l’émission du même nom, émission de relecture des images télévisées, créée par la chaîne publique de télévision France 5 en 1995, et supprimée en 2007. L'unique ressource du site est constituée par ses abonnements.</description>
+    <description lang="en">arretsurimages.net (literally "freeze frame") is a site dedicated to critical reflection on media. It extends the TV program created in 1995 by France 5 and cancelled in 2007. The site's only resource is its subscriptions.</description>
     <disclaimer lang="fr">L'utilisation de cet add-on nécessite un abonnement au site arretsurimages.net</disclaimer>
     <disclaimer lang="en">This add-on requires a subscription to the french site arretsurimages.net</disclaimer>
     <platform>all</platform>

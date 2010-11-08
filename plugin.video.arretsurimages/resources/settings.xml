@@ -12,6 +12,6 @@
     <!--Download-->
     <category label="30090">
         <setting id="downloadMode" type="bool" default="true" label="30091" />
-        <setting id="downloadPath" type="folder" source="files" enable="eq(-1,false)" option="writeable" label="30092" />
+        <setting id="downloadPath" type="folder" source="auto" default="" enable="eq(-1,false)" option="writeable" label="30092" />
     </category>
 </settings>

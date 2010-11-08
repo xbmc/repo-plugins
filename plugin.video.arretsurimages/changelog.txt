@@ -1,3 +1,9 @@
+[B]Version 1.0.1[/B]
+
+- New icon with official logo
+- Localization updated
+- Download path source changed (allow network share)
+
 [B]Version 1.0.0[/B]
 
 - Initial release

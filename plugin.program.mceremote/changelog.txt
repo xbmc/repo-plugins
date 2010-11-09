@@ -1,2 +1,5 @@
+[B]Version 1.0.1 9th Nov 2010[/B]
+- Updated icon - no other changes.
+
 [B]Version 1.0.0 17th Oct 2010[/B]
 - First official release.

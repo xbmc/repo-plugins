@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <string id="30000">Latest Videos</string>
-  <string id="30001">Full Games</string>
+  <string id="30001">Football - Full Games</string>
   <string id="30002">University of Alabama</string>
   <string id="30003">University of Kentucky</string>
   <string id="30004">University of Tennessee</string>
@@ -14,4 +14,8 @@
   <string id="30011">University of Arkansas</string>
   <string id="30012">Ole Miss</string>
   <string id="30013">Louisiana State University</string>
+  <string id="30014">Mens-Basketball - Full Games</string>
+  <string id="30015">Womens-Basketball - Full Games</string>
+  <string id="30016">Volleyball - Full Games</string>
+  <string id="30017">Soccer - Full Games</string>
 </strings>

@@ -1,0 +1,3 @@
+Version 0.1.3
+url's changed from secsports.com to secdigitalnetwork.com
+added categories for volleyball, soccer, and basketball

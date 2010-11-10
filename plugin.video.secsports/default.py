@@ -7,24 +7,29 @@ __language__ = __settings__.getLocalizedString
 
 
 def CATEGORIES():
-        addDir(__language__(30000),'http://www.secsports.com/SECVIDEO/OnDemandVideos.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/icon.png')
-        addDir(__language__(30001),'http://www.secsports.com/SECVIDEO/OnDemandVideos/TabId/862/CategoryId/124/FB-Current-Season.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/icon.png')
-        addDir(__language__(30002),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/70/Alabama.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/Alabama_Logo2.jpg')
-        addDir(__language__(30003),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/75/Kentucky.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/University-of-Kentucky.jpg')
-        addDir(__language__(30004),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/80/Tennessee.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/logo-university-of-tennessee.jpg')
-        addDir(__language__(30005),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/74/Georgia.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/University-of-Georgia.jpg')
-        addDir(__language__(30006),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/79/South-Carolina.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/south20carolina20logo.jpg')
-        addDir(__language__(30007),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/72/Auburn.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/auburn-university.jpg')
-        addDir(__language__(30008),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/78/Mississippi-State.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/MississippiStateBulldogs.gif')
-        addDir(__language__(30009),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/81/Vanderbilt.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/vanderbilt_universitypng.jpg')
-        addDir(__language__(30010),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/73/Florida.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/UF_Signature1.jpg')
-        addDir(__language__(30011),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/71/Arkansas.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/arkansasrazorback23.png')
-        addDir(__language__(30012),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/77/Ole-Miss.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/olemiss.jpg')
-        addDir(__language__(30013),'http://secsports.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/76/LSU.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/LSU.jpg')
-        		
+        addDir(__language__(30000),'http://www.secdigitalnetwork.com/SECVIDEO/OnDemandVideos.aspx',1,'special://home/addons/plugin.video.secsports/icon.png')
+        addDir(__language__(30001),'http://www.secdigitalnetwork.com/SECVIDEO/OnDemandVideos/TabId/862/CategoryId/124/FB-Current-Season.aspx',1,'special://home/addons/plugin.video.secsports/icon.png')
+        addDir(__language__(30014),'http://www.secdigitalnetwork.com/SECVIDEO/OnDemandVideos/TabId/862/CategoryId/39/Mens-Basketball.aspx',1,'special://home/addons/plugin.video.secsports/icon.png')
+        addDir(__language__(30015),'http://www.secdigitalnetwork.com/SECVIDEO/OnDemandVideos/TabId/862/CategoryId/40/Womens-Basketball.aspx',1,'special://home/addons/plugin.video.secsports/icon.png')
+        addDir(__language__(30016),'http://www.secdigitalnetwork.com/SECVIDEO/OnDemandVideos/TabId/862/CategoryId/55/Volleyball.aspx',1,'special://home/addons/plugin.video.secsports/icon.png')
+        addDir(__language__(30017),'http://www.secdigitalnetwork.com/SECVIDEO/OnDemandVideos/TabId/862/CategoryId/89/Soccer.aspx',1,'special://home/addons/plugin.video.secsports/icon.png')
+        addDir(__language__(30002),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/70/Alabama.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/Alabama_Logo2.jpg')
+        addDir(__language__(30003),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/75/Kentucky.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/University-of-Kentucky.jpg')
+        addDir(__language__(30004),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/80/Tennessee.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/logo-university-of-tennessee.jpg')
+        addDir(__language__(30005),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/74/Georgia.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/University-of-Georgia.jpg')
+        addDir(__language__(30006),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/79/South-Carolina.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/south20carolina20logo.jpg')
+        addDir(__language__(30007),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/72/Auburn.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/auburn-university.jpg')
+        addDir(__language__(30008),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/78/Mississippi-State.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/MississippiStateBulldogs.jpg')
+        addDir(__language__(30009),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/81/Vanderbilt.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/vanderbilt_universitypng.jpg')
+        addDir(__language__(30010),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/73/Florida.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/UF_Signature1.jpg')
+        addDir(__language__(30011),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/71/Arkansas.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/arkansasrazorback23.png')
+        addDir(__language__(30012),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/77/Ole-Miss.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/olemiss.jpg')
+        addDir(__language__(30013),'http://www.secdigitalnetwork.com/VIDEO/OnDemandVideos/TabId/862/CategoryId/76/LSU.aspx',1,'http://i129.photobucket.com/albums/p223/racefan68/sec/LSU.jpg')
+        
+       		
 def INDEX(url):
         req = urllib2.Request(url)
-        req.addheaders = [('Referer', 'http://www.secsports.com'),
+        req.addheaders = [('Referer', 'http://www.secdigitalnetwork.com'),
                           ('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
         response = urllib2.urlopen(req)
         link=response.read()

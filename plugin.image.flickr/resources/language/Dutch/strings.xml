@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- NOTE The strings @REPLACE@ and @NAMEREPLACE@ must not be modified in a translation -->
+<!-- Vertaald door Michel de Bokx (20101019.3) -->
+<strings>
+    <string id="30001">Flickr gebruikersnaam</string>
+    <string id="30002">Standaard pictogram formaat</string>
+    <string id="30003">Standaard afbeelding formaat</string>
+    <string id="30004">Aantal afbeeldingen per pagina</string>
+    <string id="30005">Kaart herkomst</string>
+    <string id="30006">Land schaal</string>
+    <string id="30007">Regio schaal</string>
+    <string id="30008">Streek schaal</string>
+    <string id="30009">Wijk schaal</string>
+    <string id="30010">Afbeelding schaal</string>
+    <string id="30011">Inschakelen kaart pictogram</string>
+    <string id="30012">Kaart type</string>
+    
+    <!-- Image Sizes-->
+    <string id="30100">Vierkant</string>
+    <string id="30101">Pictogram</string>
+    <string id="30102">Klein</string>
+    <string id="30103">Middel 500</string>
+    <string id="30104">Middel 640</string>
+    <string id="30105">Groot</string>
+    <string id="30106">Origineel</string>
+    
+    <!-- Settings Categories-->
+    <string id="30200">Basis</string>
+    <string id="30201">Kaart</string>
+    
+    <string id="30253">Images</string>
+    <string id="30254">Format</string>
+    
+    <!-- 'Your' Categories-->
+    <string id="30300">Photostream</string>
+    <string id="30301">Collections</string>
+    <string id="30302">Sets</string>
+    <string id="30303">Galleries</string>
+    <string id="30304">Tags</string>
+    <string id="30305">Favorieten</string>
+    <string id="30306">Contacten</string>
+    <string id="30307">Plaatsen</string>
+    <string id="30308">Zoeken photostream</string>
+    <string id="30309">Zoeken Flickr</string>
+    <string id="30310">Tip van de dag</string>
+    
+    <!-- General Strings -->
+    <string id="30500">Toon alles in @REPLACE@</string><!--example: Show All In Canada -->
+    <string id="30501">Zoek argumenten</string>
+    <string id="30502">HTTP Timeout</string>
+    <string id="30503">Connection Timeout</string>
+    <string id="30504">Probeer opnieuw</string>
+    <string id="30505">Autoriseer add-on</string>
+    <string id="30506">Ga naar @REPLACE@</string><!--example: Go to http://google.com -->
+    <string id="30507">Druk op OK als autorisatie afgerond is.</string>
+    <string id="30508">Uw e-mail adres</string>
+    <string id="30509">Autorisatie code</string>
+    <string id="30510">Toon kaart</string>
+    <string id="30511">Vorige @REPLACE@ afbeeldingen</string><!--example: Previous 50 photos -->
+    <string id="30512">Volgende @REPLACE@ afbeeldingen</string><!--example: Next 50 photos -->
+    <string id="30513">Laatste @REPLACE@ afbeeldingen</string><!--example: Last 50 photos -->
+    <string id="30514">@NAMEREPLACE@'s @REPLACE@</string><!--(Singular possesive) example: John's Photostream -->
+    <string id="30515">@NAMEREPLACE@'s @REPLACE@</string><!--(Plural posessive) example: John's Sets -->
+    <string id="30516">Zoek @NAMEREPLACE@'s Photostream</string><!--Search John's Photostream -->
+</strings>

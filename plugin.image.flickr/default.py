@@ -6,11 +6,11 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 import sys, os, time
 from urllib2 import HTTPError, URLError
 
-__plugin__ =  'flickr'
+__plugin__ = 'flickr'
 __author__ = 'ruuk'
 __url__ = 'http://code.google.com/p/flickrxbmc/'
-__date__ = '09-25-2010'
-__version__ = '0.9.5'
+__date__ = '11-10-2010'
+__version__ = '0.9.8'
 __settings__ = xbmcaddon.Addon(id='plugin.image.flickr')
 __language__ = __settings__.getLocalizedString
 
@@ -283,12 +283,13 @@ class FlickrSession:
 		ct=1
 		for photo in self.flickr.walk_photos_by_page(method,page=page,per_page=self.max_per_page,extras=extras,**kwargs):
 			ct+=1
-			self.addPhoto(	photo.get('title'),
-							photo.get('id'),
-							photo.get(self.SIZE_KEYS[self.defaultThumbSize]),
-							photo.get(self.SIZE_KEYS[self.defaultDisplaySize]),
-							lat=photo.get('latitude'),lon=photo.get('longitude'),
-							mapOption=mapOption)
+			ok = self.addPhoto(	photo.get('title'),
+								photo.get('id'),
+								photo.get(self.SIZE_KEYS[self.defaultThumbSize]),
+								photo.get(self.SIZE_KEYS[self.defaultDisplaySize]),
+								lat=photo.get('latitude'),lon=photo.get('longitude'),
+								mapOption=mapOption)
+			if not ok: break
 			
 		#Add Next Footer if necessary
 		#print "PAGES: " + str(page) + " " + str(self.flickr.TOTAL_PAGES) + " " + self.flickr.TOTAL_ON_LAST_PAGE
@@ -320,7 +321,7 @@ class FlickrSession:
 		if mapOption:
 			if not lat+lon == '00':
 				contextMenu = [(__language__(30510),'XBMC.RunScript(special://home/addons/plugin.image.flickr/default.py,map,'+lat+','+lon+')')]
-		self.addLink(title,display,thumb,tot=self.flickr.TOTAL_ON_PAGE,contextMenu=contextMenu)
+		return self.addLink(title,display,thumb,tot=self.flickr.TOTAL_ON_PAGE,contextMenu=contextMenu)
 		
 	def CATEGORIES(self):
 		self.addDir(__language__(30300),'photostream',1,os.path.join(IMAGES_PATH,'photostream.png'))
@@ -343,23 +344,23 @@ class FlickrSession:
 		mode,cols = self.getCollectionsInfoList(cid=cid,userid=userid)
 		total = len(cols)
 		for c in cols:
-			self.addDir(c['title'],c['id'],mode,c['tn'],tot=total,userid=userid)
+			if not self.addDir(c['title'],c['id'],mode,c['tn'],tot=total,userid=userid): break
 			
 	def SETS(self,mode=103,userid=None):
 		sets = self.getSetsInfoList(userid=userid)
 		total = len(sets)
 		for s in sets:
-			self.addDir(s['title']+' ('+s['count']+')',s['id'],mode,s['tn'],tot=total)
+			if not self.addDir(s['title']+' ('+s['count']+')',s['id'],mode,s['tn'],tot=total): break
 	
 	def GALLERIES(self,userid=None):
 		galleries = self.getGalleriesInfoList(userid=userid)
 		for g in galleries:
-			self.addDir(g.get('title',''),g.get('id'),104,g.get('tn'),tot=len(galleries))
+			if not self.addDir(g.get('title',''),g.get('id'),104,g.get('tn'),tot=len(galleries)): break
 	
 	def TAGS(self,userid=''):
 		tags = self.getTagsList(userid=userid)
 		for t in tags:
-			self.addDir(t,t,105,'',tot=len(tags),userid=userid)
+			if not self.addDir(t,t,105,'',tot=len(tags),userid=userid): break
 			
 	def PLACES(self,pid,woeid=None,name='',zoom='2'):
 		places = self.getPlacesInfoList(pid,woeid=woeid)
@@ -375,7 +376,7 @@ class FlickrSession:
 			count = p.get('count','0')
 			tn = ''
 			if self.maps: tn = self.maps.getMap(p.get('lat','0'),p.get('lon','0'),zoom)
-			self.addDir(p.get('place','')+' ('+count+')',p.get('woeid'),1000 + pid,tn,tot=len(places))
+			if not self.addDir(p.get('place','')+' ('+count+')',p.get('woeid'),1000 + pid,tn,tot=len(places)): break
 			idx+=1
 		
 	def FAVORITES(self,page,userid=None):
@@ -385,7 +386,7 @@ class FlickrSession:
 		contacts = self.getContactsInfoList(userid=userid)
 		total = len(contacts)
 		for c in contacts:
-			self.addDir(c['username'],c['id'],107,c['tn'],tot=total)
+			if not self.addDir(c['username'],c['id'],107,c['tn'],tot=total): break
 			
 	def SEARCH_TAGS(self,tags,page,mode=9,userid=None):
 		if tags == '@@search@@' or tags == userid:
@@ -427,9 +428,7 @@ class FlickrSession:
 		liz=xbmcgui.ListItem(name, iconImage="DefaultImage.png", thumbnailImage=iconimage)
 		liz.setInfo( type="image", infoLabels={ "Title": name } )
 		if contextMenu: liz.addContextMenuItems(contextMenu)
-		ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False,totalItems=tot)
-		return ok
-
+		return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False,totalItems=tot)
 
 	def addDir(self,name,url,mode,iconimage,page=1,tot=0,userid=''):
 		if userid: userid = "&userid="+urllib.quote_plus(userid)
@@ -437,8 +436,7 @@ class FlickrSession:
 		ok=True
 		liz=xbmcgui.ListItem(name, 'test',iconImage="DefaultFolder.png", thumbnailImage=iconimage)
 		liz.setInfo( type="image", infoLabels={"Title": name} )
-		ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=tot)
-		return ok
+		return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=tot)
 
 class ImageShower(xbmcgui.Window):
 	def showImage(self,image):

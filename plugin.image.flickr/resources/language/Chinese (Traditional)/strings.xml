@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- NOTE The strings @REPLACE@ and @NAMEREPLACE@ must not be modified in a translation -->
+<strings>
+    <string id="30001">Flickr 暱稱</string>
+    <string id="30002">預設縮圖大小</string>
+    <string id="30003">預設顯示大小</string>
+    <string id="30004">每頁最多照片</string>
+    <string id="30005">預設地圖來源</string>
+    <string id="30006">國家縮放</string>
+    <string id="30007">區域縮放</string>
+    <string id="30008">地區縮放</string>
+    <string id="30009">鄰里縮放</string>
+    <string id="30010">照片縮放</string>
+    <string id="30011">啟用地圖縮圖</string>
+    <string id="30012">預設地圖類型</string>
+    
+    <!-- Image Sizes-->
+    <string id="30100">正方形</string>
+    <string id="30101">縮圖</string>
+    <string id="30102">小圖</string>
+    <string id="30103">中型 500</string>
+    <string id="30104">中型 640</string>
+    <string id="30105">大</string>
+    <string id="30106">原本大小</string>
+    
+    <!-- Settings Categories-->
+    <string id="30200">主要</string>
+    <string id="30201">地圖</string>
+    
+    <string id="30253">圖片</string>
+    <string id="30254">格式</string>
+    
+    <!-- 'Your' Categories-->
+    <string id="30300">所有內容</string>
+    <string id="30301">珍藏集</string>
+    <string id="30302">相片集</string>
+    <string id="30303">博覽館</string>
+    <string id="30304">標籤</string>
+    <string id="30305">最愛</string>
+    <string id="30306">自己人</string>
+    <string id="30307">地圖</string>
+    <string id="30308">搜尋所有內容</string>
+    <string id="30309">搜尋 flickr</string>
+    <string id="30310">今日有趣照片</string>
+    
+    <!-- General Strings -->
+    <string id="30500">顯示 @REPLACE@ 裡的所有內容</string><!--example: Show All In Canada -->
+    <string id="30501">輸入搜尋標籤</string>
+    <string id="30502">HTTP 逾時</string>
+    <string id="30503">連線逾時</string>
+    <string id="30504">重試</string>
+    <string id="30505">授權 flickrXBMC</string>
+    <string id="30506">到 @REPLACE@</string><!--example: Go to http://google.com -->
+    <string id="30507">照指示操作，然後按 OK</string>
+    <string id="30508">輸入電子郵件：</string>
+    <string id="30509">輸入代碼：</string>
+    <string id="30510">顯示地圖</string>
+    <string id="30511">上 @REPLACE@ 張照片</string><!--example: Previous 50 photos -->
+    <string id="30512">下 @REPLACE@ 張照片</string><!--example: Next 50 photos -->
+    <string id="30513">最後 @REPLACE@ 張照片</string><!--example: Last 50 photos -->
+    <string id="30514">@NAMEREPLACE@ 的@REPLACE@</string><!--(Singular possesive) example: John's Photostream -->
+    <string id="30515">@NAMEREPLACE@ 的@REPLACE@</string><!--(Plural posessive) example: John's Sets -->
+    <string id="30516">搜尋 @NAMEREPLACE@ 的所有內容</string><!--Search John's Photostream -->
+</strings>

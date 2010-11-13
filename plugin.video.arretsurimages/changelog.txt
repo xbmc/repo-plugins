@@ -1,3 +1,7 @@
+[B]Version 1.0.2[/B]
+
+- Use notification instead of dialog when downloading video
+
 [B]Version 1.0.1[/B]
 
 - New icon with official logo

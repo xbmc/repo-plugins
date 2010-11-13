@@ -6,7 +6,6 @@ import asi_scraper
 import xbmc
 import xbmcplugin
 import xbmcgui
-import xbmcaddon
 from videoDownloader import Download
 
 # Main URLs and sort method list
@@ -16,10 +15,10 @@ SORTMETHOD = ['date_publication', 'nb_vues', 'nb_comments']
 
 ASI = asi_scraper.ArretSurImages()
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.arretsurimages')
+__addon__ = sys.modules['__main__'].__addon__
 
 def getLS(i):
-    return __settings__.getLocalizedString(i).encode('utf-8')
+    return __addon__.getLocalizedString(i).encode('utf-8')
 
 class updateArgs:
 
@@ -154,19 +153,19 @@ class Main:
 
     def getSettings(self):
         self.settings = dict()
-        self.settings['username'] = __settings__.getSetting('username')
-        self.settings['password'] = __settings__.getSetting('password')
-        self.settings['sortMethod'] = int(__settings__.getSetting('sortMethod'))
-        self.settings['downloadMode'] = __settings__.getSetting('downloadMode')
-        self.settings['downloadPath'] = __settings__.getSetting('downloadPath')
+        self.settings['username'] = __addon__.getSetting('username')
+        self.settings['password'] = __addon__.getSetting('password')
+        self.settings['sortMethod'] = int(__addon__.getSetting('sortMethod'))
+        self.settings['downloadMode'] = __addon__.getSetting('downloadMode')
+        self.settings['downloadPath'] = __addon__.getSetting('downloadPath')
 
     def downloadVideo(self, url):
-        video = ASI.getVideoDownloadLink(url)
         if self.settings['downloadMode'] == 'true':
-            downloadPath = xbmcgui.Dialog().browse(3, getLS(30090), 'files')
+            downloadPath = xbmcgui.Dialog().browse(3, getLS(30090), 'video')
         else:
             downloadPath = self.settings['downloadPath']
         if downloadPath:
+            video = ASI.getVideoDownloadLink(url)
             Download(video['Title'], video['url'], downloadPath)
 
     def checkMode(self):

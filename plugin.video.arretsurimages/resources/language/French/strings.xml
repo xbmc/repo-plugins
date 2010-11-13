@@ -37,6 +37,10 @@
     <string id="30100">Télécharger la vidéo</string>
 
     <!--Download Menu-->
-    <string id="32023">Enregistre</string>
-    <string id="32024">sous</string>
+    <string id="30200">Téléchargement en cours</string>
+    <string id="30201">Téléchargement terminé</string>
+    <string id="30202">Erreur de téléchargement</string>
+    <string id="30203">Téléchargement annulé</string>
+    <string id="30204">existe</string>
+    <string id="30205">Pas de fichier à télécharger</string>
 </strings>

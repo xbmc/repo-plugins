@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="30000">Arrêt Sur Images</string>
 
@@ -37,6 +37,10 @@
     <string id="30100">Download Video</string>
 
     <!--Download Menu-->
-    <string id="32023">Saving</string>
-    <string id="32024">as</string>
+    <string id="30200">Download in progress</string>
+    <string id="30201">Download complete</string>
+    <string id="30202">Download failed</string>
+    <string id="30203">Download cancelled</string>
+    <string id="30204">exists</string>
+    <string id="30205">No file to download</string>
 </strings>

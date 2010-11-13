@@ -11,18 +11,19 @@ import urllib
 # plugin constants
 __author__ = "beenje"
 __url__ = "http://github.com/beenje/plugin.video.arretsurimages"
-__settings__ = xbmcaddon.Addon(id='plugin.video.arretsurimages')
-__plugin__ = __settings__.getAddonInfo('name')
-__version__ = __settings__.getAddonInfo('version')
+__addon__ = xbmcaddon.Addon(id='plugin.video.arretsurimages')
+# Force plugin name to avoid unicode problem
+__plugin__ = 'Arret Sur Images'
+__version__ = __addon__.getAddonInfo('version')
 
 print "[PLUGIN] '%s: version %s' initialized!" % (__plugin__, __version__)
 
 if __name__ == "__main__":
     import resources.lib.asi as asi
 
-    if not __settings__.getSetting('alreadyrun'):
-        __settings__.openSettings()
-        __settings__.setSetting('alreadyrun', '1')
+    if not __addon__.getSetting('alreadyrun'):
+        __addon__.openSettings()
+        __addon__.setSetting('alreadyrun', '1')
 
     if not sys.argv[2]:
         asi.Main()

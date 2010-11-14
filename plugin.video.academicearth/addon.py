@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
 from urllib import unquote_plus
-from beautifulsoup import BeautifulSoup as BS, SoupStrainer as SS
+from BeautifulSoup import BeautifulSoup as BS, SoupStrainer as SS
 from resources.lib.xbmcvideoplugin import (XBMCVideoPlugin, DialogProgress,
     urlread, async_urlread, parse_qs)
 

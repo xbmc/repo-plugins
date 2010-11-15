@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
     NRK plugin for XBMC
     Copyright (C) 2010 Thomas Amland
@@ -16,20 +17,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib, re, time
+import urllib, re
 from BeautifulSoup import BeautifulSoup
-import xbmcaddon
+from DataItem import DataItem
+from dataStatic import *
+from utils import *
 
-id = xbmcaddon.Addon(id="plugin.video.nrk").getSetting("quality")
-QUALITY = {'0' : '400', '1' : '800', '2' : '1200' }[id]
-QUALITY_STR = {'0' : 'l', '1' : 'm', '2' : 'h' }[id]
+
+global BITRATES, BITRATE_ID
+def setQuality(id):
+    global BITRATES, BITRATE_ID
+    BITRATE_ID = id
+    BITRATES = ['400', '800', '1200']
+
 
 def getLive():
-    items = []
-    items.append(DataItem(title="NRK 1", url="mms://straumv.nrk.no/nrk_tv_direkte_nrk1_"+QUALITY_STR+"?UseSilverlight=1", isPlayable=True))
-    items.append(DataItem(title="NRK 2", url="mms://straumv.nrk.no/nrk_tv_direkte_nrk2_"+QUALITY_STR+"?UseSilverlight=1", isPlayable=True))
-    items.append(DataItem(title="NRK 3", url="mms://straumv.nrk.no/nrk_tv_direkte_nrk3_"+QUALITY_STR+"?UseSilverlight=1", isPlayable=True))
-    return items
+    url = "mms://straumv.nrk.no/nrk_tv_direkte_nrk%s_%s?UseSilverlight=1"
+    quality = ['l', 'm', 'h' ][BITRATE_ID]
+    return [DataItem(title="NRK 1", url=url % (1,quality), thumb=os.path.join(R_PATH, "nrk1.jpg"), isPlayable=True),
+            DataItem(title="NRK 2", url=url % (2,quality), thumb=os.path.join(R_PATH, "nrk2.jpg"), isPlayable=True),
+            DataItem(title="NRK 3", url=url % (3,quality), thumb=os.path.join(R_PATH, "nrk3.jpg"), isPlayable=True)]
 
 
 def getLatest():
@@ -38,32 +45,50 @@ def getLatest():
     items = []
     for e in li:
         anc = e.find('a', attrs={'href' : re.compile('^/nett-tv/klipp/[0-9]+')})
-        items.append( _getVideoById(anc['href'].split('/').pop()) )
+        items.append( _getVideo(anc['href']) )
     return items
 
 
-def getByLetter(ch):
-    url = "http://www.nrk.no/nett-tv/bokstav/" + urllib.quote(ch)
-    soup = BeautifulSoup(urllib.urlopen(url))
-    
+def getSearchResults(query):
+    soup = BeautifulSoup(urllib.urlopen("http://www.nrk.no/nett-tv/sok/" + urllib.quote(query)))
+    li = soup.find('div', attrs={'id' : 'search-results'}).findAll('li')
     items = []
-    li = soup.find('div', attrs={'class' : 'nettv-category clearfix'}).findAll('li') 
     for e in li:
-        anc = e.find('a', attrs={'href' : re.compile('^/nett-tv/prosjekt/[0-9]+')})
-        title = anc['title']
-        url   = anc['href']
-        items.append( DataItem(title=title, url=url) )
+        url = e.find('em').string
+        if contains(url, "klipp"):
+            items.append( _getVideo(url) )
+        elif contains(url, "prosjekt"):
+            title = decodeHtml(e.find('a').string)
+            descr = decodeHtml(e.find('p').string)
+            items.append( DataItem(title=title, description=descr, url="/nett-tv/prosjekt/"+getId(url)) )
+    return items
+
+
+def getMostWatched(days):
+    url = "http://www.nrk.no/nett-tv/ml/topp12.aspx?dager=%s" % days
+    soup = BeautifulSoup(urllib.urlopen(url))
+    li = soup.findAll('li')
+    items = []
+    for e in li:
+        url = e.find('a')['href']
+        if contains(url, "klipp"):
+            items.append( _getVideo(url))
     return items
 
 
 def getByUrl(url):
-    if (url.startswith("/nett-tv/prosjekt")):
+    if (url.startswith("/nett-tv/tema") or url.startswith("/nett-tv/bokstav")):
+        url = "http://www.nrk.no" + url 
+        soup = BeautifulSoup(urllib.urlopen(url))
+        return _getAllProsjekt(soup)
+    
+    elif (url.startswith("/nett-tv/prosjekt")):
         url = "http://www.nrk.no" + url
-    elif url.startswith("/nett-tv/kategori"):
-        url = "http://www.nrk.no/nett-tv/menyfragment.aspx?type=category&id=" + url.split('/').pop()
+        
+    elif (url.startswith("/nett-tv/kategori")):
+        url = "http://www.nrk.no/nett-tv/menyfragment.aspx?type=category&id=" + getId(url)
     
     soup = BeautifulSoup(urllib.urlopen(url))
-        
     items = []
     items.extend(_getAllKlipp(soup))
     items.extend(_getAllKategori(soup))
@@ -71,71 +96,54 @@ def getByUrl(url):
 
 
 def _getAllKlipp(soup):
-    items = soup.findAll('a', attrs={'class':re.compile('icon-video-black.*'), 'href':re.compile('.*nett-tv/klipp/[0-9]+$')})
-    return [ _getVideoById(e['href'].split('/').pop()) for e in items ]
+    items = soup.findAll('a', attrs={'class':re.compile('icon-(video|sound)-black.*'), 'href':re.compile('.*nett-tv/klipp/[0-9]+$')})
+    return [ _getVideo(e['href']) for e in items ]
 
-    
+
 def _getAllKategori(soup):
     items = soup.findAll('a', attrs={'class':re.compile('icon-closed-black.*'), 'href':re.compile('^/nett-tv/kategori/[0-9]+')})
-    return [ DataItem(title=e['title'], url=e['href']) for e in items ]
+    return [ DataItem(title=decodeHtml(e['title']), url=e['href']) for e in items ]
 
 
-def _getVideoById(id):
-    url = "http://www.nrk.no/nett-tv/silverlight/getmediaxml.ashx?id=" + id + "&hastighet=" + QUALITY
-    soup = BeautifulSoup(urllib.urlopen(url))
-    title = soup.find('title').string
-    
-    url = soup.find('mediaurl').string
-    #some uri's contais illegal chars so need to fix this
-    url = url.split("mms://", 1)[1]
+def _getAllProsjekt(soup):
+    items = []
+    li = soup.find('div', attrs={'class' : 'nettv-category clearfix'}).findAll('li') 
+    for e in li:
+        anc = e.find('a', attrs={'href' : re.compile('^/nett-tv/prosjekt/[0-9]+')})
+        title = decodeHtml(anc['title'])
+        url   = anc['href']
+        img   = _getImg(e.find('img')['src'])
+        descr = decodeHtml(str(e.find('div', attrs={'class':'summary'}).find('p').string))
+        
+        items.append( DataItem(title=title, description=descr, thumb=img, url=url) )
+    return items
+
+
+def _getVideo(url):
+    id = getId(url)
+    (soup, url) = _findVideoUrl(id, BITRATE_ID)
+    url = url.split("mms://", 1)[1] #some uri's contais illegal chars so need to fix this
     url = url.encode('latin-1') #urllib cant unicode
     url = urllib.quote(url)
-    url = "mms://" + url + "?UseSilverlight=1"
+    url = "mms://%s?UseSilverlight=1" % url
     
-    return DataItem(title=title, url=url, isPlayable=True)
+    title = decodeHtml(soup.find('title').string)
+    descr = decodeHtml(str(soup.find('description').string))
+    img   = _getImg(soup.find('imageurl').string)
+    return DataItem(title=title, description=descr, thumb=img, url=url, isPlayable=True)
 
 
-class DataItem:
-    def __init__(self, title="", description="", date="", author="", category="", image="", url="", isPlayable=False):
-        self._title = title
-        self._description = description
-        self._date = date
-        self._author = author
-        self._category = category
-        self._image = image
-        self._url = url
-        self._isPlayable = isPlayable
-    
-    @property
-    def isPlayable(self):
-        return self._isPlayable
-    
-    @property
-    def title(self):
-        return self._title
-    
-    @property
-    def description(self):
-        return self._description
-    
-    @property
-    def date(self):
-        return self._date
-    
-    @property
-    def author(self):
-        return self._author
-    
-    @property
-    def category(self):
-        return self._category
-    
-    @property
-    def image(self):
-        return self._image
-    
-    @property
-    def url(self):
-        return self._url
+def _findVideoUrl(id, bitrate):
+    if bitrate >= len(BITRATES):
+        return (None, None)
+    url = "http://www.nrk.no/nett-tv/silverlight/getmediaxml.ashx?id=%s&hastighet=%s" % (id, BITRATES[bitrate])
+    soup = BeautifulSoup(urllib.urlopen(url))
+    url = soup.find('mediaurl').string
+    if not url:
+        return _findVideoUrl(id, bitrate+1)
+    return (soup, url)
+     
 
-    
+def _getImg(url):
+    return re.sub("^(.*cropid.*)w[0-9]+$", "\\1w650", url)
+

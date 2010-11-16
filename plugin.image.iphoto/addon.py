@@ -12,18 +12,18 @@ import time
 import os
 import os.path
 
-BASE_URL = "%s" % (sys.argv[0])
-PLUGIN_PATH = xbmc.translatePath(os.getcwd())
-RESOURCE_PATH = os.path.join(PLUGIN_PATH, "resources")
-ICONS_PATH = os.path.join(RESOURCE_PATH, "icons")
-LIB_PATH = os.path.join(RESOURCE_PATH, "lib")
-sys.path.append(LIB_PATH)
-
 import xbmc
 import xbmcgui as gui
 import xbmcplugin as plugin
 import xbmcaddon
-addon = xbmcaddon.Addon(id=os.path.basename(os.getcwd()))
+
+addon = xbmcaddon.Addon(id="plugin.image.iphoto")
+BASE_URL = "%s" % (sys.argv[0])
+PLUGIN_PATH = addon.getAddonInfo("path")
+RESOURCE_PATH = os.path.join(PLUGIN_PATH, "resources")
+ICONS_PATH = os.path.join(RESOURCE_PATH, "icons")
+LIB_PATH = os.path.join(RESOURCE_PATH, "lib")
+sys.path.append(LIB_PATH)
 
 from resources.lib.iphoto_parser import *
 db_file = xbmc.translatePath(os.path.join(addon.getAddonInfo("Profile"), "iphoto.db"))
@@ -360,8 +360,11 @@ def add_import_lib_context_item(item):
 if (__name__ == "__main__"):
     xmlfile = addon.getSetting('albumdata_xml_path')
     if (xmlfile == ""):
-	xmlfile = os.getenv("HOME") + "/Pictures/iPhoto Library/AlbumData.xml"
-	addon.setSetting('albumdata_xml_path', xmlfile)
+	try:
+	    xmlfile = os.getenv("HOME") + "/Pictures/iPhoto Library/AlbumData.xml"
+	    addon.setSetting('albumdata_xml_path', xmlfile)
+	except:
+	    pass
 
     try:
 	params = get_params(sys.argv[2])

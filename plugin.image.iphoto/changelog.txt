@@ -1,3 +1,8 @@
+1.2.1 - 20101116
+- Windows: Don't fail if script unconfigured.
+- Disclaimer: iPhoto 9.0+ does work.
+- Hardcode plugin ID.
+
 1.2.0 - 20101021
 - Add Faces support.
 - Add context menu item to hide Keywords.

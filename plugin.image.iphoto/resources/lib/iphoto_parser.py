@@ -50,8 +50,12 @@ def to_str(text):
 
 class IPhotoDB:
     def __init__(self, dbfile):
-	self.dbconn = sqlite.connect(dbfile)
-	self.InitDB()
+	try:
+	    self.dbconn = sqlite.connect(dbfile)
+	    self.InitDB()
+	except Exception, e:
+	    print to_str(e)
+	    pass
 	return
 
     def _cleanup_filename(self, filename):

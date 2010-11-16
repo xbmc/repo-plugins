@@ -53,4 +53,7 @@
     <setting id="button_yellow"     type="text" label="40093" default="ctrl-alt-3"    />
     <setting id="button_blue"       type="text" label="40094" default="ctrl-alt-4"    />
   </category>
+  <category label="49998">
+    <setting id="update_keyedit"    type="bool" label="41000" default="yes"             />
+  </category>
 </settings>

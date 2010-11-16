@@ -2,7 +2,7 @@
 ************************************************************************
 MCERemote Addon
 Author: John Rennie
-v1.0.0 17th Oct 2010
+v1.1.0 16th Nov 2010
 
 This addon allows you to configure a Microsoft MCE remote, or any
 compatible remote using the eHome driver.
@@ -454,9 +454,28 @@ def EditKeyboardDotXML():
         else:
             return
 
+# Check if we are updating KeyMapEdit.exe
+
+    doupdate = _settings.getSetting("update_keyedit")
+    if doupdate == "true":
+        if dialog.yesno("MCERemote", "Do you want to update the keymap editor", "from Sourceforge?"):
+            if GetKeyMapEdit():
+                _settings.setSetting("update_keyedit", "false")
+            else:
+                return
+
+# Select the keymap editor: if KeyMapEdit.exe exists use it, otherwise
+# use Notepad.
+
+    srcpath = xbmc.translatePath("special://home/") + "addons\\" + _thisPluginName + "\\resources\\data\\KeyMapEdit.exe"
+    if not os.path.isfile(srcpath):
+        srcpath = xbmc.translatePath("special://xbmc/") + "addons\\" + _thisPluginName + "\\resources\\data\\KeyMapEdit.exe"
+        if not os.path.isfile(srcpath):
+            srcpath = "notepad.exe"
+
 # Edit the keyboard.xml in Notepad
 
-    child = subprocess.Popen('notepad.exe "' + dstpath + '"')
+    child = subprocess.Popen(srcpath + ' "' + dstpath + '"')
     rc = child.wait()
     ourpath = xbmc.translatePath("special://xbmcbin/")
     child = subprocess.Popen(ourpath + "XBMC.exe")
@@ -527,6 +546,55 @@ def CreateKeyboardDotXML():
         rc = child.wait()
         ourpath = xbmc.translatePath("special://xbmcbin/")
         child = subprocess.Popen(ourpath + "XBMC.exe")
+
+
+# **********************************************************************
+# GetKeyMapEdit
+# -------------
+# Download the latest version of KeyMapEdit.exe from Sourceforge.
+# Return True or False to indicate whether the download succeeded.
+# **********************************************************************
+
+# _KEYMAPEDITURL = "http://sourceforge.net/projects/xbmcmce/files/KeyMapEdit.exe/download"
+_KEYMAPEDITURL = "http://swarchive.ratsauce.co.uk/XBMC/KeyMapEdit.exe"
+
+def GetKeyMapEdit():
+
+    import urllib
+
+    dialog = xbmcgui.Dialog()
+
+    dstpath = xbmc.translatePath("special://home/") + "addons\\" + _thisPluginName + "\\resources\\data\\KeyMapEdit.exe"
+
+    # Attempt to open KeymapEdit.exe from Sourceforge
+    try:
+        webFile = urllib.urlopen(_KEYMAPEDITURL)
+
+        # Attempt to open the local file
+        try:
+            localFile = open(dstpath, "wb")
+            localFile.write(webFile.read())
+            webFile.close()
+            localFile.close()
+
+        # Attempt to open KeyMapEdit.exe failed
+        except IOError, e:
+            dialog.ok("MCERemote", "Failed to open KeyMapEdit.exe:", str(e.args[1]))
+            return False
+        except:
+            dialog.ok("MCERemote", "Unidentified error downloading KeyMapEdit.exe")
+            return False
+
+    # Attempt to open Sourceforge failed
+    except IOError, e:
+        dialog.ok("MCERemote", "Failed to connect to Sourceforge:", str(e.args[1]))
+        return False
+    except:
+        dialog.ok("MCERemote", "Unidentified error connecting to Sourceforge")
+        return False
+
+    # Return indicating the file was successfully downloaded
+    return True
 
 
 # **********************************************************************

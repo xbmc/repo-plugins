@@ -117,4 +117,4 @@ create one. Answer yes to create a template keyboard.xml that you can
 modify to your requirements.
 
 John Rennie
-15th October 2010
+16th November 2010

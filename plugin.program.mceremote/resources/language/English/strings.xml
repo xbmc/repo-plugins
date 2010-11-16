@@ -53,4 +53,7 @@
     <string id="40092">Green button</string>
     <string id="40093">Yellow button</string>
     <string id="40094">Blue button</string>
+    <!-- Strings: Misc Menu -->
+    <string id="49998">Misc settings</string>
+    <string id="41000">Update/install keymap editor</string>
 </strings>

@@ -1,0 +1,9 @@
+Version 0.0.2
+initial
+
+Version 0.0.3
+new icon  thanks freezy!
+
+Version 0.0.4
+added sorting of videos with addon settings
+cleaned up names a bit

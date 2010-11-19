@@ -3,30 +3,68 @@ from BeautifulSoup import BeautifulSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.zapiks')
 __language__ = __settings__.getLocalizedString
+sort = __settings__.getSetting('sort_by')
+
 
 def CATEGORIES():
-        addDir(__language__(30000),'http://www.zapiks.fr/surf_1',1,'special://home/addons/plugin.video.zapiks/resources/images/surf.png')
-        addDir(__language__(30001),'http://www.zapiks.fr/snowboard_1',1,'special://home/addons/plugin.video.zapiks/resources/images/snowboard.png')
-        addDir(__language__(30002),'http://www.zapiks.fr/vtt_1',1,'special://home/addons/plugin.video.zapiks/resources/images/vtt.png')
-        addDir(__language__(30003),'http://www.zapiks.fr/bmx_1',1,'special://home/addons/plugin.video.zapiks/resources/images/bmx.png')
-        addDir(__language__(30004),'http://www.zapiks.fr/skate_1',1,'special://home/addons/plugin.video.zapiks/resources/images/skate.png')
-        addDir(__language__(30005),'http://www.zapiks.fr/ski_1',1,'special://home/addons/plugin.video.zapiks/resources/images/ski.png')
-                       
+        if sort==__language__(30010):
+		    u = '1'
+		    addDir(__language__(30000),'http://www.zapiks.fr/surf_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/surf.png')
+		    addDir(__language__(30001),'http://www.zapiks.fr/snowboard_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/snowboard.png')
+		    addDir(__language__(30002),'http://www.zapiks.fr/vtt_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/vtt.png')
+		    addDir(__language__(30003),'http://www.zapiks.fr/bmx_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/bmx.png')
+		    addDir(__language__(30004),'http://www.zapiks.fr/skate_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/skate.png')
+		    addDir(__language__(30005),'http://www.zapiks.fr/ski_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/ski.png')
+        elif sort==__language__(30011):
+		    u = '/popular_1.php'
+		    addDir(__language__(30000),'http://www.zapiks.fr/surf_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/surf.png')
+		    addDir(__language__(30001),'http://www.zapiks.fr/snowboard_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/snowboard.png')
+		    addDir(__language__(30002),'http://www.zapiks.fr/vtt_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/vtt.png')
+		    addDir(__language__(30003),'http://www.zapiks.fr/bmx_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/bmx.png')
+		    addDir(__language__(30004),'http://www.zapiks.fr/skate_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/skate.png')
+		    addDir(__language__(30005),'http://www.zapiks.fr/ski_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/ski.png')
+        elif sort==__language__(30012):
+		    u = '/alltimebuzzed_1.php'
+		    addDir(__language__(30000),'http://www.zapiks.fr/surf_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/surf.png')
+		    addDir(__language__(30001),'http://www.zapiks.fr/snowboard_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/snowboard.png')
+		    addDir(__language__(30002),'http://www.zapiks.fr/vtt_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/vtt.png')
+		    addDir(__language__(30003),'http://www.zapiks.fr/bmx_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/bmx.png')
+		    addDir(__language__(30004),'http://www.zapiks.fr/skate_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/skate.png')
+		    addDir(__language__(30005),'http://www.zapiks.fr/ski_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/ski.png')
+        elif sort==__language__(30013):
+		    u = '/premium_1.php'
+		    addDir(__language__(30000),'http://www.zapiks.fr/_surf_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/surf.png')
+		    addDir(__language__(30001),'http://www.zapiks.fr/_snowboard_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/snowboard.png')
+		    addDir(__language__(30002),'http://www.zapiks.fr/_vtt_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/vtt.png')
+		    addDir(__language__(30003),'http://www.zapiks.fr/_bmx_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/bmx.png')
+		    addDir(__language__(30004),'http://www.zapiks.fr/_skate_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/skate.png')
+		    addDir(__language__(30005),'http://www.zapiks.fr/_ski_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/ski.png')
+        else:
+		    u ='1'
+		    addDir(__language__(30000),'http://www.zapiks.fr/surf_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/surf.png')
+		    addDir(__language__(30001),'http://www.zapiks.fr/snowboard_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/snowboard.png')
+		    addDir(__language__(30002),'http://www.zapiks.fr/vtt_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/vtt.png')
+		    addDir(__language__(30003),'http://www.zapiks.fr/bmx_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/bmx.png')
+		    addDir(__language__(30004),'http://www.zapiks.fr/skate_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/skate.png')
+		    addDir(__language__(30005),'http://www.zapiks.fr/ski_'+u,1,'special://home/addons/plugin.video.zapiks/resources/images/ski.png')
+
+			
 def INDEX(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        link=link.replace('&rsquo;',"'").replace('&#039;',"'").replace('&egrave;','e').replace('&amp;','&').replace('&ecirc;','e').replace('&uuml;','u').replace('&eacute;','e')
+        link=link.replace('&rsquo;',"'").replace('&#039;',"'").replace('&egrave;','e').replace('&amp;',' & ').replace('&ecirc;','e').replace('&uuml;','u').replace('&eacute;','e').replace('&agrave;','a').replace('&Auml;','A').replace('&quot;','"').replace('&euml;','e').replace('&iuml;','i')
         match=re.compile('<div class="media_thumbnail medium">\n        \t\t\t\t<a href="(.+?)" title="(.+?)">\n        \t\t\t\t\t<img class="thumb" src="(.+?)" alt="video" /><br />\n        \t\t\t\t\t<span class="description">.+?</span>\n').findall(link)
         for url,name,thumbnail in match:
                 addLink(name,'http://www.zapiks.fr'+url,2,thumbnail)
-        page=re.compile('<h4 class="pagination"><span class="prev"></span><span class="next"><a href=".+?"><img src="/c/i/resultset_last.png" alt="&gt;|" title="&gt;|" height="16" width="16"></a><a href=".+?"><img src="(.+?)" alt="&gt;" title="&gt;" height="16" width="16"></a></span> <a href=".+?" class="current">.+?</a>  <a href="(.+?)" class="normal">.+?</a>').findall(link)
+        page=re.compile('<h4 class="pagination"><span class="prev"></span><span class="next"><a href=".+?"><img src="/c/i/resultset_last.png" alt="&gt;|" title="&gt;|" height="16" width="16"></a><a href=".+?"><img src=".+?" alt="&gt;" title="&gt;" height="16" width="16"></a></span> <a href=".+?" class="current">.+?</a>  <a href="(.+?)" class="normal">.+?</a>').findall(link)
         if len(page)>1:del page[0];del page[0]
-        for thumbnail,url in page:
+        for url in page:
                 addDir(__language__(30006),'http://www.zapiks.fr'+url,1,'special://home/addons/plugin.video.zapiks/resources/images/next.png')
 
+				
 def VIDEOLINKS(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -63,8 +101,6 @@ def get_params():
                                 param[splitparams[0]]=splitparams[1]
                                 
         return param
-
-
 
 
 def addLink(name,url,mode,iconimage):

@@ -7,3 +7,7 @@ new icon. thanks freezy!
 
 Version 0.0.3
 now plays the hd version if avaliable. thanks to maruchan!
+changed code to get better thumbnails
+
+Version 0.0.4
+added proper language strings to settings

@@ -7,20 +7,32 @@ sort = __settings__.getSetting('sort_by')
 
 		
 def CATEGORIES():
-        addDir(__language__(30000),'http://www.funnyordie.com/browse/videos/all/exclusives/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30001),'http://www.funnyordie.com/browse/videos/all/immortal/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30002),'http://www.funnyordie.com/browse/videos/stand_up/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30003),'http://www.funnyordie.com/browse/videos/animation/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30004),'http://www.funnyordie.com/browse/videos/web_series/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30005),'http://www.funnyordie.com/browse/videos/nsfw/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30006),'http://www.funnyordie.com/browse/videos/sketch/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30007),'http://www.funnyordie.com/browse/videos/sports/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30008),'http://www.funnyordie.com/browse/videos/clean_comedy/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30009),'http://www.funnyordie.com/browse/videos/politics/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30010),'http://www.funnyordie.com/browse/videos/music/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30011),'http://www.funnyordie.com/browse/videos/parody/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30012),'http://www.funnyordie.com/browse/videos/real_life/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
-        addDir(__language__(30013),'http://www.funnyordie.com/browse/videos/all/all/'+sort,1,'http://public0.ordienetworks.com/images/funny_or_die.gif?f85d7543')
+        if sort==__language__(30015):
+		    u = ''
+        elif sort==__language__(30016):
+		    u = 'most_recent'
+        elif sort==__language__(30017):
+		    u = 'most_viewed'
+        elif sort==__language__(30018):
+		    u = 'most_favorited'
+        elif sort==__language__(30019):
+		    u = 'highest_rated'
+        else:
+		    u = ''
+        addDir(__language__(30000),'http://www.funnyordie.com/browse/videos/all/exclusives/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30001),'http://www.funnyordie.com/browse/videos/all/immortal/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30002),'http://www.funnyordie.com/browse/videos/stand_up/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30003),'http://www.funnyordie.com/browse/videos/animation/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30004),'http://www.funnyordie.com/browse/videos/web_series/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30005),'http://www.funnyordie.com/browse/videos/nsfw/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30006),'http://www.funnyordie.com/browse/videos/sketch/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30007),'http://www.funnyordie.com/browse/videos/sports/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30008),'http://www.funnyordie.com/browse/videos/clean_comedy/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30009),'http://www.funnyordie.com/browse/videos/politics/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30010),'http://www.funnyordie.com/browse/videos/music/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30011),'http://www.funnyordie.com/browse/videos/parody/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30012),'http://www.funnyordie.com/browse/videos/real_life/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
+        addDir(__language__(30013),'http://www.funnyordie.com/browse/videos/all/all/'+u,1,'special://home/addons/plugin.video.funny.or.die/icon.png')
 
 		
 def INDEX(url):
@@ -41,6 +53,7 @@ def INDEX(url):
 		    page=re.compile('Previous</a>.+?<a href=".+?" rel="start">.+?</a> <a href=".+?" rel="prev">.+?</a> <span class="current">.+?</span> <a href="(.+?)"').findall(link)
         for url in page:
                 addDir('Next Page','http://www.funnyordie.com'+url,1,'')
+
 
 def playVid(url):
 	name, url = get_smil(url)

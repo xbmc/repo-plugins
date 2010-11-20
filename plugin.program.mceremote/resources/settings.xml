@@ -13,7 +13,7 @@
     <setting id="button_9"          type="text" label="40009" default="9"             />
     <setting id="button_clear"      type="text" label="40010" default="escape"        />
     <setting id="button_enter"      type="text" label="40011" default="return"        />
-    <setting id="button_power"      type="text" label="40012" default="mce"              />
+    <setting id="button_power"      type="text" label="40012" default="mce"           />
     <setting id="button_windows"    type="text" label="40013" default="ctrl-shift-w"  />
     <setting id="button_mute"       type="text" label="40014" default="f8"            />
     <setting id="button_info"       type="text" label="40015" default="ctrl-d"        />
@@ -54,6 +54,6 @@
     <setting id="button_blue"       type="text" label="40094" default="ctrl-alt-4"    />
   </category>
   <category label="49998">
-    <setting id="update_keyedit"    type="bool" label="41000" default="yes"             />
+    <setting id="update_keyedit"    type="bool" label="41000" default="yes" />
   </category>
 </settings>

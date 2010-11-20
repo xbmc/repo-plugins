@@ -2,7 +2,7 @@
 ************************************************************************
 MCERemote Addon
 Author: John Rennie
-v1.1.0 16th Nov 2010
+v1.1.15 16th Nov 2010
 
 This addon allows you to configure a Microsoft MCE remote, or any
 compatible remote using the eHome driver.
@@ -445,15 +445,6 @@ def EditKeyboardDotXML():
 
     dialog = xbmcgui.Dialog()
 
-# Check whether keyboard.xml exists
-
-    dstpath = xbmc.translatePath("special://home/") + "userdata\\keymaps\\keyboard.xml"
-    if not os.path.isfile(dstpath):
-        if dialog.yesno("MCERemote", "You don't currently have a keyboard.xml file.", "Do you want to create one?"):
-            CreateKeyboardDotXML()
-        else:
-            return
-
 # Check if we are updating KeyMapEdit.exe
 
     doupdate = _settings.getSetting("update_keyedit")
@@ -463,6 +454,15 @@ def EditKeyboardDotXML():
                 _settings.setSetting("update_keyedit", "false")
             else:
                 return
+
+# Check whether keyboard.xml exists
+
+    dstpath = xbmc.translatePath("special://home/") + "userdata\\keymaps\\keyboard.xml"
+    if not os.path.isfile(dstpath):
+        if dialog.yesno("MCERemote", "You don't currently have a keyboard.xml file.", "Do you want to create one?"):
+            CreateKeyboardDotXML()
+        else:
+            return
 
 # Select the keymap editor: if KeyMapEdit.exe exists use it, otherwise
 # use Notepad.
@@ -529,7 +529,7 @@ def CreateKeyboardDotXML():
         if not dialog.yesno("MCERemote", "A keyboard.xml already exists in:", dstpath, "Do you want to overwrite it?"):
             return
 
-    elif not dialog.yesno("MCERemote", "Create the template keybaord.xml in:", dstpath):
+    elif not dialog.yesno("MCERemote", "Create the template keyboard.xml in:", dstpath):
         return
 
 # Copy the template keyboard.xml
@@ -538,14 +538,6 @@ def CreateKeyboardDotXML():
         shutil.copyfile(srcpath, dstpath)
     except:
         dialog.ok("MCERemote", "Unexpected error copying the file")
-
-# Optionally the keyboard.xml in Notepad
-
-    if dialog.yesno("MCERemote", "Edit the keyboard.xml now?"):
-        child = subprocess.Popen('notepad.exe "' + dstpath + '"')
-        rc = child.wait()
-        ourpath = xbmc.translatePath("special://xbmcbin/")
-        child = subprocess.Popen(ourpath + "XBMC.exe")
 
 
 # **********************************************************************

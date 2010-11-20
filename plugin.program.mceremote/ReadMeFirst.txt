@@ -108,13 +108,25 @@ Edit keyboard.xml
 
 If you tweak the button settings you might want to write a keyboard.xml
 file to make XBMC take whatever action you want on your customised
-keypress. The sixth option "Edit keyboard.xml" will open your
-keyboard.xml in Notepad. One day someone will write a dedicated
-keyboard.xml editor, but for now Notepad is the best I can do!
+keypress. The sixth option "Edit keyboard.xml" will edit your
+keyboard.xml.
 
-If you don't already have a keyboard.xml you'll be asked if you want to
-create one. Answer yes to create a template keyboard.xml that you can
-modify to your requirements.
+As first installed, MCERemote will ask if you want to download a keymap
+editor applet. If you answer "No" it won't nag you again. If you
+subsequently want to download the keymap editor go into the addon
+settings, and under the Misc section enable "Update/install keymap
+editor". When you next select "Edit keyboard.xml" you'll be prompted to
+download the keymap editor.
+
+If you don't download the keymap editor your keyboard.xml will be
+opened in Notepad.
+
+NB if you don't already have a keyboard.xml you'll be asked if you want
+to create one. Answer yes to create a template keyboard.xml that you
+can modify to your requirements.
+
+There isn't a manual for the keymap editor since it hould be pretty
+obvious how to use it.
 
 John Rennie
-16th November 2010
+20th November 2010

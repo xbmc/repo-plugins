@@ -1,3 +1,0 @@
-version 0.1:
-	- first version :)
-	- includes the 20 latest videos from RSS-feed of kicker.de

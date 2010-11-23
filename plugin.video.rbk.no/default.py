@@ -37,7 +37,7 @@ def INDEX(start):
                 id = re.compile('TV2Player.insert\(([0-9]+)').findall(link)
 		for i in id:
                 	name = re.compile('<h1>(.*)</h1>').findall(link)
-			plot = re.compile('<p class="leadIn"><b><p>([^<]*)</p>',re.M).findall(link)
+			plot = re.compile('p class="leadIn"><b>(?:<p>)?([^<]*)(?:</p>)?</b>').findall(link)
 			date = re.compile('Publisert: ([^ ]+)').findall(link)
 			url = sys.argv[0]+"?id="+i
 			thumb = 'http://www.tv2.no/tvid/VMan-P'+i[:3]+'/VMan-P'+i+'.jpg'
@@ -51,7 +51,6 @@ def RESOLVE(id):
 	response.close()
 	url = re.compile('<REF HREF="(.*?)">').findall(link)
 	name = re.compile('<TITLE>(.+?)</TITLE>').findall(link)
-	print name
 	plot = re.compile('<ABSTRACT>(.+?)</ABSTRACT>').findall(link)
 	try:
 		plot = plot[1];

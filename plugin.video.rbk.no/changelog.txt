@@ -1,4 +1,4 @@
-[B]1.0.3:[/B]
+[B]1.0.4:[/B]
 Didn't parse all pages. Hand-written html is so cute
 
 [B]1.0.2:[/B]

@@ -59,7 +59,7 @@ def INDEX(url):
         match=re.compile('<div class="media_thumbnail medium">\n        \t\t\t\t<a href="(.+?)" title="(.+?)">\n        \t\t\t\t\t<img class="thumb" src="(.+?)" alt="video" /><br />\n        \t\t\t\t\t<span class="description">.+?</span>\n').findall(link)
         for url,name,thumbnail in match:
                 addLink(name,'http://www.zapiks.fr'+url,2,thumbnail)
-        page=re.compile('<h4 class="pagination"><span class="prev"></span><span class="next"><a href=".+?"><img src="/c/i/resultset_last.png" alt="&gt;|" title="&gt;|" height="16" width="16"></a><a href=".+?"><img src=".+?" alt="&gt;" title="&gt;" height="16" width="16"></a></span> <a href=".+?" class="current">.+?</a>  <a href="(.+?)" class="normal">.+?</a>').findall(link)
+        page=re.compile('<h4 class=".+?"><span class="prev"></span><span class="next"><a href=".+?"><img src=".+?" alt="&gt;|" title="&gt;|" height="16" width="16"></a><a href=".+?"><img src=".+?" alt="&gt;" title="&gt;" height="16" width="16"></a></span><span class="pages"> <a href=".+?" class="current">.+?</a>  <a href="(.+?)" class="normal">.+?</a>  <a href=".+?" class="normal">.+?</a>.+?<a href=".+?">.+?</a></span></h4>').findall(link)
         if len(page)>1:del page[0];del page[0]
         for url in page:
                 addDir(__language__(30006),'http://www.zapiks.fr'+url,1,'special://home/addons/plugin.video.zapiks/resources/images/next.png')

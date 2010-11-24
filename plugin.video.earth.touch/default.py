@@ -2,23 +2,31 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.earth.touch')
 __language__ = __settings__.getLocalizedString
+videoq = __settings__.getSetting('video_quality')
 
 def CATEGORIES():
-        addDir(__language__(30000),'http://feeds2.feedburner.com/earth-touch_featured_720p_commentary',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30001),'http://feeds2.feedburner.com/earth-touch_featured_480p_commentary',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')		
-        addDir(__language__(30002),'http://feeds2.feedburner.com/earth-touch_featured_720p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')		
-        addDir(__language__(30003),'http://feeds2.feedburner.com/earth-touch_featured_480p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30004),'http://feeds2.feedburner.com/WeeklyMarinePodcast-hd',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30005),'http://feeds2.feedburner.com/WeeklyMarinePodcast-ipod',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30006),'http://feeds2.feedburner.com/moremi_podcast_720',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30007),'http://feeds2.feedburner.com/moremi_podcast_ipod',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30008),'http://feeds2.feedburner.com/earth-touch_podcast_720p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30009),'http://feeds2.feedburner.com/earth-touch_podcast_480p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30010),'http://feeds2.feedburner.com/earth-touch_podcast_ipod',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30011),'http://feeds2.feedburner.com/kids-hd',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-        addDir(__language__(30012),'http://feeds2.feedburner.com/kids-ipod',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
-		
-		
+		if videoq==__language__(30011):
+			addDir(__language__(30000),'http://feeds2.feedburner.com/earth-touch_featured_720p_commentary',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30001),'http://feeds2.feedburner.com/earth-touch_featured_720p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30003),'http://feeds2.feedburner.com/WeeklyMarinePodcast-hd',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30004),'http://feeds2.feedburner.com/moremi_podcast_720',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30002),'http://feeds2.feedburner.com/earth-touch_podcast_720p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30005),'http://feeds2.feedburner.com/kids-hd',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+		elif videoq==__language__(30012):
+			addDir(__language__(30000),'http://feeds2.feedburner.com/earth-touch_featured_480p_commentary',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30001),'http://feeds2.feedburner.com/earth-touch_featured_480p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30003),'http://feeds2.feedburner.com/WeeklyMarinePodcast-ipod',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30002),'http://feeds2.feedburner.com/earth-touch_podcast_480p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30004),'http://feeds2.feedburner.com/moremi_podcast_ipod',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30005),'http://feeds2.feedburner.com/kids-ipod',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+		else:
+			addDir(__language__(30000),'http://feeds2.feedburner.com/earth-touch_featured_720p_commentary',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30001),'http://feeds2.feedburner.com/earth-touch_featured_720p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30003),'http://feeds2.feedburner.com/WeeklyMarinePodcast-hd',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30004),'http://feeds2.feedburner.com/moremi_podcast_720',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30002),'http://feeds2.feedburner.com/earth-touch_podcast_720p',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			addDir(__language__(30005),'http://feeds2.feedburner.com/kids-hd',1,'http://podcast.earth-touch.com/i/podcast/ET_IT3.jpg')
+			
 def INDEX(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -42,8 +50,7 @@ def INDEX(url):
         for index in range(len(match)):
                  	addLink(name[index],match[index],icon[index],plot[index],date[index])
     	 
-
-                
+       
 def get_params():
         param=[]
         paramstring=sys.argv[2]
@@ -112,5 +119,8 @@ elif mode==1:
         print ""+url
         INDEX(url)
         
-
+elif mode==2:
+        print ""+url
+        INDEXWEB(url)
+		
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

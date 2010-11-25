@@ -10,3 +10,7 @@ added subtitle as plot
 
 Version 0.0.4
 fixed an issue with TNT
+
+Version 0.0.5
+added five new shows
+added addon settings for video quality

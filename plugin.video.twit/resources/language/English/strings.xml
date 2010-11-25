@@ -18,4 +18,14 @@
   <string id="30015">This Week in Law</string>
   <string id="30016">TWiT Live Specials</string>
   <string id='30017'>Twit Live</string>
+  <string id='30018'>High          864x480 Bitrate 2000</string>
+  <string id='30019'>Medium          864x480 Bitrate 1000</string>
+  <string id='30020'>Low          640x368 Bitrate 256</string>
+  <string id='30021'>Video Quality</string>
+  <string id='30022'>Home Theater Geeks</string>
+  <string id='30023'>Frame Rate</string>
+  <string id='30024'>This Week In Computer Hardware</string>
+  <string id='30025'>Futures in Biotech</string>
+  <string id='30026'>this WEEK in FUN</string>
+  <string id='30027'>Current Geek Weekly</string>
 </strings>

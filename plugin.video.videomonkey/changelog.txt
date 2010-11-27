@@ -1,3 +1,8 @@
+[B]Version 1.4.2[/B]
+
+- Updated: videomonkey.py to check if settings folder exists
+
+
 [B]Version 1.4.1[/B]
 
 - Changed: plugin to work with the new add-on system

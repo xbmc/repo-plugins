@@ -14,8 +14,9 @@ rootDir = addon.getAddonInfo('path')
 if rootDir[-1] == ';':
     rootDir = rootDir[0:-1]
 rootDir = xbmc.translatePath(rootDir)
-cacheDir = os.path.join(addon.getAddonInfo('profile'), 'cache')
-cacheDir = xbmc.translatePath(cacheDir)
+settingsDir = addon.getAddonInfo('profile')
+settingsDir = xbmc.translatePath(settingsDir)
+cacheDir = os.path.join(settingsDir, 'cache')
 resDir = os.path.join(rootDir, 'resources')
 imgDir = os.path.join(resDir, 'images')
 #socket.setdefaulttimeout(20)
@@ -36,8 +37,8 @@ class MyHTTPRedirectHandler(urllib2.HTTPRedirectHandler):
         return infourl
 
 if cj != None:
-    if os.path.isfile(os.path.join(resDir, 'cookies.lwp')):
-        cj.load(os.path.join(resDir, 'cookies.lwp'))
+    if os.path.isfile(os.path.join(settingsDir, 'cookies.lwp')):
+        cj.load(os.path.join(settingsDir, 'cookies.lwp'))
     if proxy_handler:
         opener = urllib2.build_opener(MyHTTPRedirectHandler, urllib2.HTTPCookieProcessor(cj), proxy_handler)
     else:
@@ -600,7 +601,7 @@ class CCurrentList:
         return
 
     def saveList(self):
-        f = open(str(os.path.join(resDir, 'entry.list')), 'w')
+        f = open(str(os.path.join(settingsDir, 'entry.list')), 'w')
         f.write(smart_unicode('########################################################\n').encode('utf-8'))
         f.write(smart_unicode('#             Added sites and live streams             #\n').encode('utf-8'))
         f.write(smart_unicode('########################################################\n').encode('utf-8'))
@@ -736,38 +737,65 @@ class CCurrentList:
         if enable_debug:
             xbmc.output(str(filename))
         try:
-            f = open(str(os.path.join(resDir, filename)), 'r')
-            data = smart_unicode(f.read())
-            data = data.replace('\r\n', '\n')
-            data = data.split('\n')
-            f.close()
+	    if filename == 'entry.list':
+                f = open(str(os.path.join(settingsDir, filename)), 'r')
+	    else:
+		f = open(str(os.path.join(resDir, filename)), 'r')
+	    data = smart_unicode(f.read())
+	    data = data.replace('\r\n', '\n')
+	    data = data.split('\n')
+	    f.close()
             if enable_debug:
-                xbmc.output('Local file ' + str(os.path.join(resDir, filename)) + ' opened')
+	        if filename == 'entry.list':
+		    xbmc.output('Local file ' + str(os.path.join(settingsDir, filename)) + ' opened')
+		else:
+                    xbmc.output('Local file ' + str(os.path.join(resDir, filename)) + ' opened')
         except:
             if enable_debug:
-                xbmc.output('File: ' + str(os.path.join(resDir, filename)) + ' not found')
+	        if filename == 'entry.list':
+		    xbmc.output('File: ' + str(os.path.join(settingsDir, filename)) + ' opened')
+		else:
+                    xbmc.output('File: ' + str(os.path.join(resDir, filename)) + ' not found')
             try:
-                f = open(str(os.path.join(cacheDir, filename)), 'r')
+	        if filename == 'entry.list':
+                    f = open(str(os.path.join(settingsDir, filename)), 'r')
+	        else:
+                    f = open(str(os.path.join(cacheDir, filename)), 'r')
                 data = smart_unicode(f.read())
                 data = data.replace('\r\n', '\n')
                 data = data.split('\n')
                 f.close()
                 if enable_debug:
-                    xbmc.output('Local file ' + str(os.path.join(cacheDir, filename)) + ' opened')
+	            if filename == 'entry.list':
+		        xbmc.output('Local file ' + str(os.path.join(settingsDir, filename)) + ' opened')
+		    else:
+                        xbmc.output('Local file ' + str(os.path.join(cacheDir, filename)) + ' opened')
             except:
                 if enable_debug:
-                    xbmc.output('File: ' + str(os.path.join(cacheDir, filename)) + ' not found')
+	            if filename == 'entry.list':
+		        xbmc.output('File: ' + str(os.path.join(settingsDir, filename)) + ' opened')
+		    else:
+                        xbmc.output('File: ' + str(os.path.join(cacheDir, filename)) + ' not found')
                 try:
-                    f = open(str(filename), 'r')
+	            if filename == 'entry.list':
+                        f = open(str(os.path.join(settingsDir, filename)), 'r')
+	            else:
+                        f = open(str(filename), 'r')
                     data = smart_unicode(f.read())
                     data = data.replace('\r\n', '\n')
                     data = data.split('\n')
                     f.close()
                     if enable_debug:
-                        xbmc.output('Local file ' + str(filename) + ' opened')
+	                if filename == 'entry.list':
+		            xbmc.output('Local file ' + str(os.path.join(settingsDir, filename)) + ' opened')
+		        else:
+                            xbmc.output('Local file ' + str(filename) + ' opened')
                 except:
                     if enable_debug:
-                        xbmc.output('File: ' + str(filename) + ' not found')
+	                if filename == 'entry.list':
+		            xbmc.output('File: ' + str(os.path.join(settingsDir, filename)) + ' opened')
+		        else:
+                            xbmc.output('File: ' + str(filename) + ' not found')
                         traceback.print_exc(file = sys.stdout)
                     return -1
 
@@ -972,7 +1000,7 @@ class CCurrentList:
                 return
             data = handle.read()
             #cj.save(os.path.join(resDir, 'cookies.lwp'), ignore_discard=True)
-            cj.save(os.path.join(resDir, 'cookies.lwp'))
+            cj.save(os.path.join(settingsDir, 'cookies.lwp'))
             if enable_debug:
                 f.write(data)
                 f.close()
@@ -1623,12 +1651,14 @@ class Main:
             paramstring = sys.argv[2]
             if len(paramstring) <= 2:
                 if enable_debug:
+                    xbmc.output('Settings directory: ' + str(settingsDir))
                     xbmc.output('Cache directory: ' + str(cacheDir))
                     xbmc.output('Resource directory: ' + str(resDir))
                     xbmc.output('Image directory: ' + str(imgDir))
                 if not os.path.exists(cacheDir):
                     if enable_debug:
                         xbmc.output('Creating cache directory ' + str(cacheDir))
+                    os.mkdir(settingsDir)
                     os.mkdir(cacheDir)
                     if enable_debug:
                         xbmc.output('Cache directory created')

@@ -6,7 +6,7 @@ __plugin__ = 'VideoMonkey'
 __author__ = 'sfaxman'
 __svn_url__ = 'http://xbmc-addons.googlecode.com/svn/addons/plugin.video.VideoMonkey/'
 __credits__ = 'bootsy'
-__version__ = '1.4.1'
+__version__ = '1.4.2'
 
 addon = xbmcaddon.Addon(id='plugin.video.videomonkey')
 rootDir = addon.getAddonInfo('path')

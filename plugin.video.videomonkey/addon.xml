@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.videomonkey"
-  version="1.4.1"
+  version="1.4.2"
   name="VideoMonkey"
   provider-name="sfaxman / bootsy">
   <requires>
@@ -14,7 +14,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary>Stream videos from different sites</summary>
-    <description>Stream videos from YouTube, Clipfish, Kino.de, Computerclub², ARD / ZDF Mediathek, 3sat, Schweizer Fernsehen etc. Also live channels from different regions (DE, EN, FR, NL, SE, SP, THA, VN) and categories (kids, sports, music) are supported.</description>
+    <description>Stream videos from YouTube, Clipfish, Kino.de, Computerclub², ARD &amp; ZDF Mediathek, 3sat, Schweizer Fernsehen etc. Also live channels from different regions (DE, EN, FR, NL, SE, SP, THA, VN) and categories (kids, sports, music) are supported.</description>
     <platform>all</platform>
   </extension>
 </addon>

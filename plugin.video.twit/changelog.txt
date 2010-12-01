@@ -14,3 +14,6 @@ fixed an issue with TNT
 Version 0.0.5
 added five new shows
 added addon settings for video quality
+
+Version 0.0.6
+now if video isn't up on the web site, we get the latest episode from the rss: feed

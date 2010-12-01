@@ -1,8 +1,10 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
+from BeautifulSoup import BeautifulStoneSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.twit')
 __language__ = __settings__.getLocalizedString
-
+videoq = __settings__.getSetting('video_quality')
+		
 def CATEGORIES():
 	addLinkLive(__language__(30017),'http://bglive-a.bitgravity.com/twit/live/high','special://home/addons/plugin.video.twit/icon.png')	
 	addDir(__language__(30000),'http://twit.tv/twit',1,'http://static.mediafly.com/publisher/images/ba85558acd844c7384921f9f96989a37/icon-600x600.png')
@@ -56,13 +58,32 @@ def VIDEOLINKS(url):
 	link=link.replace(' ','')
 	match=re.compile('</div>\n<divclass="download"><ahref="(.+?)">DownloadVideo\(\High\)\</a>').findall(link)
 	for url in match:
-		videoq = __settings__.getSetting('video_quality')
 		if videoq==__language__(30018):
 			url=url.replace('_h264b_864x480_500.mp4','_h264b_864x480_2000.mp4')
 		elif videoq==__language__(30019):
 			url=url.replace('_h264b_864x480_500.mp4','_h264b_864x480_1000.mp4')		
 		elif videoq==__language__(30020):
 			url=url.replace('_h264b_864x480_500.mp4','_h264b_640x368_256.mp4')
+		else:
+			url=url
+		play=xbmc.Player().play(url)
+	if len(match)<1:
+		print 'Trying rss: feed for the latest episode'
+		url=url.replace('twit','feeds.twit').rstrip('0123456789')+'_video_large'
+		req = urllib2.Request(url)
+		req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
+		response = urllib2.urlopen(req)
+		link=response.read()
+		response.close()
+		soup = BeautifulStoneSoup(link)
+		Tag = soup.find('media:content')
+		url = Tag['url']
+		if videoq==__language__(30018):
+			url=url.replace('_h264b_640x368_500.mp4','_h264b_864x480_2000.mp4')
+		elif videoq==__language__(30019):
+			url=url.replace('_h264b_640x368_500.mp4','_h264b_864x480_1000.mp4')		
+		elif videoq==__language__(30020):
+			url=url.replace('_h264b_640x368_500.mp4','_h264b_640x368_256.mp4')
 		else:
 			url=url
 		play=xbmc.Player().play(url)

@@ -1,0 +1,4 @@
+CHANGELOG for XBMC NPR Plugin (xbmcnpr)
+
+1.0.0:  Initial release.  Tested on Dharma RC2
+1.1.0:  Cleaned up icon. Name change (NPR --> npr) to conform to XBMC add-on specs.  Added All Songs Considered 24 hour stream.

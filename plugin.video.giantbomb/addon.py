@@ -159,7 +159,10 @@ class Main:
 				video_count = 0
 				for i in range(0, len(j_list)):
 					video_count += 1
-					name = j_list[i]["title"]
+					try:
+					    name = j_list[i]["title"]
+					except:
+						name = "Archived video stream from " + j_list[i]["created_on"]
 					url = j_list[i]["video_file_url"]
 					image = j_list[i]["image_url_medium"]
 					date = j_list[i]["created_on"][8:10] + "-" + mon[j_list[i]["created_on"][4:7]] + "-" + j_list[i]["created_on"][24:28]

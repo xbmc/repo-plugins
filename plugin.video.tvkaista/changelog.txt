@@ -1,3 +1,7 @@
+[B]2.1.0[/B]
+- Add/remove playlist and seasonpasses from context menu. Thanks Markku Lamminluoto!
+[B]2.0.2[/B]
+- Removed "storage", Movies search to the main menu, removed now unnecessary subtitles support
 [B]2.0.1[/B]
 - Icon updated, thanks to freezy at xboxmediacenter dot com
 [B]2.0.0[/B]

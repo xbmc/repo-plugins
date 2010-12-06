@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tvkaista" name="TVKaista.fi for XBMC" version="2.0.1" provider-name="viljo viitanen">
+<addon id="plugin.video.tvkaista" name="TVKaista.fi" version="2.1.0" provider-name="Viljo Viitanen">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
     </requires>
@@ -9,8 +9,11 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <minversion>31632</minversion>
-        <summary>Watch TVKaista.fi with XBMC</summary>        
-        <description>Watch Finnish commercial TVKaista streaming services with XBMC. YLE DVB-subtitles are supported. Requires a TVKaista user account. See http://www.tvkaista.fi for more details.</description>
-        <disclaimer>Updated for XMBC Dharma beta 1 by stilester</disclaimer>
+        <summary lang="en">Watch TVKaista.fi with XBMC</summary>        
+        <summary lang="fi">Katso TVKaista.fi:tä XBMC:llä</summary>        
+        <description lang="en">Watch Finnish commercial TVKaista streaming services with XBMC. Requires a TVKaista user account. See http://www.tvkaista.fi for more details.</description>
+        <description lang="fi">Katso kaupallista TVKaista.fi -tv-tallenninta XBMC:llä. Tarvitsee TVKaista-käyttäjätunnuksen. Lisätietoja: http://www.tvkaista.fi</description>
+        <disclaimer lang="en">Updated for XBMC Dharma beta 1 by stilester</disclaimer>
+        <disclaimer lang="fi">Päivittänyt XBMC Dharma beta 1:lle stilester</disclaimer>
     </extension>
 </addon>

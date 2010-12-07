@@ -1,0 +1,85 @@
+# -*- coding: utf-8 -*-
+#-------------LicenseHeader--------------
+# plugin.audio.PodCatcher - A plugin to play Podcasts
+# Copyright (C) 2010  Raptor 2101 [raptor2101@gmx.de]
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+
+import re;
+from xml.dom import minidom
+from feedreader import *;
+findPicLink = re.compile("src=\".*?\"");
+
+
+class RssFeed (Feed):
+  def __init__(self, opmlNode, gui):
+    self.gui = gui;
+    self.loadOpmlNode(opmlNode);
+          
+  def updateFeed(self):
+    self.gui.log("Load: "+self.feedUrl);
+    xmlPage = self.loadPage(self.feedUrl);
+    xmlDocument = minidom.parseString(xmlPage);
+    counter = 0;
+    for itemNode in xmlDocument.getElementsByTagName("item"):
+      feedItem = FeedItem();
+      feedItem.guid = self.readText(itemNode,"guid");
+      feedItem.title = self.readText(itemNode,"title");
+      feedItem.subTitle = self.readText(itemNode,"itunes:subtitle");
+      
+      dateString = self.readText(itemNode,"pubDate");
+      feedItem.date = self.parseDate(dateString);
+      
+      if(not self.checkArticleAge(feedItem.date)):
+        break;
+      
+      eject = False;      
+      for i in range(counter,len(self.feedItems)):
+        storedItem = self.feedItems[i];
+        if(not storedItem.date < feedItem.date):
+          eject =True;
+          break;
+      
+      if(eject == True):
+        break;
+      
+      feedItem.author = self.readText(itemNode,"itunes:author");
+      feedItem.duration = self.readText(itemNode,"itunes:duration").replace("00:","");
+      
+      enclosureNode = itemNode.getElementsByTagName("enclosure")[0];
+      
+      feedItem.link = enclosureNode.getAttribute("url");
+      feedItem.size = int(enclosureNode.getAttribute("length"));
+      
+      descriptionNode = itemNode.getElementsByTagName("itunes:summary");
+      if(len(descriptionNode)>0):
+        descriptionNode = descriptionNode[0];
+      else:
+        descriptionNode = itemNode.getElementsByTagName("description")[0];
+      
+      feedItem.description = descriptionNode.firstChild.data;
+      
+      link = findPicLink.search(feedItem.description)
+      if(link is not None):
+        link = link.group().replace("src=","").replace("\"","");
+        feedItem.picture = link;
+      else:
+        feedItem.picture = "";
+
+      feedItem.readed = False;
+      self.insertFeedItem(feedItem);
+      counter += 1;
+      if(counter>self.maxArticleNumber):
+        break;
+    self.shrinkFeedItems();

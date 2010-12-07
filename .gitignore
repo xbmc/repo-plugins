@@ -21,3 +21,6 @@ plugin.video.nrk/.git
 plugin.video.nederland24/.git
 plugin.video.mediathek/.git
 plugin.video.mediathek/.gitignore
+plugin.audio.podcatcher/.git
+plugin.audio.podcatcher/.gitignore
+plugin.audio.podcatcher/icon.xcf

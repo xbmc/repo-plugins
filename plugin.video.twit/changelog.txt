@@ -1,19 +1,23 @@
-Version 0.0.1
-inital
+Version 0.0.7
+twit live no longer ask if you want to resume
+resume working again for most shows
 
-Version 0.0.2
-updated icon.png
-
-Version 0.0.3
-added release date to title
-added subtitle as plot
-
-Version 0.0.4
-fixed an issue with TNT
+Version 0.0.6
+now if video isn't up on the web site, we get the latest episode from the rss: feed
 
 Version 0.0.5
 added five new shows
 added addon settings for video quality
 
-Version 0.0.6
-now if video isn't up on the web site, we get the latest episode from the rss: feed
+Version 0.0.4
+fixed an issue with TNT
+
+Version 0.0.3
+added release date to title
+added subtitle as plot
+
+Version 0.0.2
+updated icon.png
+
+Version 0.0.1
+inital

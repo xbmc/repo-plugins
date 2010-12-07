@@ -1,0 +1,7 @@
+[B]Version 1.0.1[/B]
+- Processed some feedback
+
+[B]Version 1.0.0[/B]
+
+- Final version
+- Added icons

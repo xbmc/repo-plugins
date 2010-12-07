@@ -18,3 +18,6 @@ plugin.video.tv3.ondemand/.git
 plugin.video.tvnz.ondemand/.git
 plugin.video.zoneminder/.git
 plugin.video.nrk/.git
+plugin.video.nederland24/.git
+plugin.video.mediathek/.git
+plugin.video.mediathek/.gitignore

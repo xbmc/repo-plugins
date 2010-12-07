@@ -1,0 +1,5 @@
+0.1.4 - Some improvements for ARD
+0.1.3 - Adjust ARD Parsing - ard now works fine
+0.1.2 - Now RTMP playback is avaible under Windows !!!
+0.1.1 - added script to extract Media-Information, Added timeout while downloading something.
+0.1.0 - initial release

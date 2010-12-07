@@ -1,0 +1,138 @@
+# -*- coding: utf-8 -*- 
+#-------------LicenseHeader--------------
+# plugin.video.Mediathek - Gives acces to the most video-platforms from german public service broadcaster
+# Copyright (C) 2010  Raptor 2101 [raptor2101@gmx.de]
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+import re,time
+from mediathek import *
+from xml.dom import minidom;
+
+
+regex_dateString = re.compile("\\d{2} ((\\w{3})|(\\d{2})) \\d{4}");
+month_replacements = {
+    "Jan":"01",
+    "Feb":"02",
+    "Mar":"03",
+    "Apr":"04",
+    "May":"05",
+    "Jun":"06",
+    "Jul":"07",
+    "Aug":"08",
+    "Sep":"09",
+    "Oct":"10",
+    "Nov":"11",
+    "Dec":"12",
+    
+  };
+
+class DreiSatMediathek(Mediathek):
+  @classmethod
+  def name(self):
+    return "3Sat";
+  
+  def __init__(self, simpleXbmcGui):
+    self.gui = simpleXbmcGui;
+    
+    if(self.gui.preferedStreamTyp == 0):
+      self.baseType = "video/x-ms-asf";
+    elif (self.gui.preferedStreamTyp == 1):  
+      self.baseType = "video/x-ms-asf"
+    elif (self.gui.preferedStreamTyp == 2):
+      self.baseType ="video/x-ms-asf";
+    else:
+      self.baseType ="video/quicktime";
+    
+    self.menuTree = (
+      TreeNode("0","Bauerfeind","http://www.3sat.de/mediathek/rss/mediathek_bauerfeind.xml",True),
+      TreeNode("1","Bookmark","http://www.3sat.de/mediathek/rss/mediathek_bookmark.xml",True),
+      TreeNode("2",u"Börse","http://www.3sat.de/mediathek/rss/mediathek_boerse.xml",True),
+      TreeNode("3","Buchzeit","http://www.3sat.de/mediathek/rss/mediathek_buchzeit.xml",True),
+      TreeNode("4","daVinci","http://www.3sat.de/mediathek/rss/mediathek_davinci.xml",True),
+      TreeNode("5","delta","http://www.3sat.de/mediathek/rss/mediathek_delta.xml",True),
+      TreeNode("6","Film","http://www.3sat.de/mediathek/rss/mediathek_film.xml",True),
+      TreeNode("7","Gero von Boehm","http://www.3sat.de/mediathek/rss/mediathek_gero.xml",True),
+      TreeNode("8","hessenreporter","http://www.3sat.de/mediathek/rss/mediathek_hessenreporter.xml",True),
+      TreeNode("9","hitec","http://www.3sat.de/mediathek/rss/mediathek_hitec.xml",True),
+      TreeNode("10","Kabarett","http://www.3sat.de/mediathek/rss/mediathek_kabarett.xml",True),
+      TreeNode("11","Kinomagazin","http://www.3sat.de/mediathek/rss/mediathek_kinomag.xml",True),
+      TreeNode("12","Kulturzeit","http://www.3sat.de/mediathek/rss/mediathek_Kulturzeit.xml",True),
+      TreeNode("13","Musik","http://www.3sat.de/mediathek/rss/mediathek_musik.xml",True),
+      TreeNode("14","nano","http://www.3sat.de/mediathek/rss/mediathek_nano.xml",True),
+      TreeNode("15","neues","http://www.3sat.de/mediathek/rss/mediathek_neues.xml",True),
+      TreeNode("16",u"Peter Voß fragt","http://www.3sat.de/mediathek/rss/mediathek_begegnungen.xml",True),
+      TreeNode("17","Recht brisant","http://www.3sat.de/mediathek/rss/mediathek_Recht%20brisant.xml",True),
+      TreeNode("18","scobel","http://www.3sat.de/mediathek/rss/mediathek_kulturzeit.xml",True),
+      TreeNode("19","SCHWEIZWEIT","http://www.3sat.de/mediathek/rss/mediathek_schweizweit.xml",True),
+      TreeNode("20","Theater","http://www.3sat.de/mediathek/rss/mediathek_theater.xml",True),
+      TreeNode("21","vivo","http://www.3sat.de/mediathek/rss/mediathek_vivo.xml",True),
+      );
+
+  def buildPageMenu(self, link):
+    self.gui.log("buildPageMenu: "+link);
+    rssFeed = self.loadConfigXml(link);
+    self.extractVideoObjects(rssFeed);
+  
+  def readText(self,node,textNode):
+    try:
+      node = node.getElementsByTagName(textNode)[0].firstChild;
+      return unicode(node.data);
+    except:
+      return "";
+  
+  def loadConfigXml(self, link):
+    self.gui.log("load:"+link)
+    xmlPage = self.loadPage(link);
+    return minidom.parseString(xmlPage);  
+    
+  def extractVideoObjects(self, rssFeed):
+    videoIDs = [];
+    
+    for itemNode in rssFeed.getElementsByTagName("item"):
+      self.extractVideoInformation(itemNode);
+  
+  def parseDate(self,dateString):
+    dateString = regex_dateString.search(dateString).group();
+    for month in month_replacements.keys():
+      dateString = dateString.replace(month,month_replacements[month]);
+    return time.strptime(dateString,"%d %m %Y");
+    
+  def extractVideoInformation(self, itemNode):
+    title = self.readText(itemNode,"title");
+    
+    dateString = self.readText(itemNode,"pubDate");
+    pubDate = self.parseDate(dateString);
+    
+    descriptionNode = itemNode.getElementsByTagName("description")[0].firstChild.data;
+    description = unicode(descriptionNode);
+    
+    pictureNode = itemNode.getElementsByTagName("media:thumbnail")[0];
+    picture = pictureNode.getAttribute("url");
+    links = {};
+    for contentNode in itemNode.getElementsByTagName("media:content"):
+      mediaType = contentNode.getAttribute("type");
+      if(not self.baseType == mediaType):
+	continue;
+      
+      height = int(contentNode.getAttribute("height"));
+      url = contentNode.getAttribute("url");
+      size = int(contentNode.getAttribute("fileSize"));
+      if(height < 150):
+	links[0] = SimpleLink(url, size);
+      elif (height < 300):
+	links[1] = SimpleLink(url, size);
+      else:
+	links[2] = SimpleLink(url, size);
+    self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True, pubDate),self);
+      

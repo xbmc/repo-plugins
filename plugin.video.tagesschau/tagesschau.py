@@ -43,7 +43,7 @@ regexp['ts20h']['url'] = r'<enclosure url="(.*)"\slength.*'
 def get_video_ts100s():
     # config
     url = 'http://www.tagesschau.de/multimedia/video/ondemand100.html'
-    pattern = r'<a href="(.*\.webl\.h264\.mp4)">.*</a>'
+    pattern = r'<a href="(.*\.webl\.h264\.mp4)".*>'
     date_pattern = r'<span class="topline">(\S*)\s*(\S*)\s*Uhr</span>'
 
     # parse the website
@@ -60,7 +60,8 @@ def get_video_ts100s():
 def get_video_ts20h():
     # config
     url = 'http://www.tagesschau.de/multimedia/video/ondemandarchiv100.html'
-    pattern = r'<a href="(.*\.webl\.h264\.mp4)">.*</a>'
+    pattern = r'<a href="(.*\.webl\.h264\.mp4)".*>'
+
     date_pattern = r'TV-(\d\d\d\d)(\d\d)(\d\d)'
 
     # parse the website

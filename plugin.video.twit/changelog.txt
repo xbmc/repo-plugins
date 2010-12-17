@@ -1,3 +1,6 @@
+Version 0.0.8
+fixed an issue with TNT
+
 Version 0.0.7
 twit live no longer ask if you want to resume
 resume working again for most shows

@@ -61,8 +61,10 @@ def INDEX(url):
 		del pubdate[0]
 		date=re.compile('<pubdate>(.+?)</pubdate>').findall(str(pubdate))
 		for index in range (len(name)):
+			if len(name)==len(description):
 				addLink(name[index],url[index],description[index],date[index],'','special://home/addons/plugin.video.twit/icon.png')
-
+			else:
+				addLink(name[index],url[index],'',date[index],'','special://home/addons/plugin.video.twit/icon.png')
 
 def INDEXWebsite(url):
 		req = urllib2.Request(url)

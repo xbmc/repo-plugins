@@ -1,0 +1,3 @@
+[B]Version 1.1.1[/B]
+- Mark plugin as broken.
+  See here for details: http://www.shoutcastblog.com/2010/09/30/shoutcast-api-update/

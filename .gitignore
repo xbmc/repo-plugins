@@ -24,3 +24,4 @@ plugin.video.mediathek/.gitignore
 plugin.audio.podcatcher/.git
 plugin.audio.podcatcher/.gitignore
 plugin.audio.podcatcher/icon.xcf
+plugin.video.vega/.git

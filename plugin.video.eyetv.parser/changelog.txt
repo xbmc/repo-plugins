@@ -1,0 +1,6 @@
+[B]Version 1.0.0[/B]
+
+- Initial release
+- Icon by freezy (thanks!)
+- Display EyeTV Library by parsing "EyeTV Archive.xml"
+

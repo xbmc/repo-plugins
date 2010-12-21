@@ -26,3 +26,4 @@ plugin.audio.podcatcher/.gitignore
 plugin.audio.podcatcher/icon.xcf
 plugin.video.vega/.git
 plugin.video.eyetv.parser/.git
+plugin.video.xbmcflicks/.git

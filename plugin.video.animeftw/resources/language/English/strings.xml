@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Crunchyroll Login Info -->
+    <string id="20002">Username</string>
+    <string id="20003">Password</string>
+	<string id="20004">Fetch plot/poster from MyAnimeList.net</string>
+    
+	<!-- Interface Strings -->
+	<string id="50003">Latest Additions</string>
+	<string id="50000">Anime</string>
+	<string id="50001">OVAs</string>
+	<string id="50002">Movies</string>
+	
+	<string id="51000">All Series</string>
+	<string id="51001">Currently Airing</string>
+	<string id="51002">Completed Series</string>
+	<string id="51003">Most Popular</string>
+	<string id="51004">Browse by Genre</string>
+	
+	<string id="50005">Action</string>
+	<string id="50006">Adventure</string>
+	<string id="50007">Aliens</string>
+	<string id="50008">Angst</string>
+	<string id="50009">Bishounen</string>
+	<string id="50010">Bounty Hunters</string>
+	<string id="50011">Clubs</string>
+	<string id="50012">Comedy</string>
+	<string id="50013">Coming-of-Age</string>
+	<string id="50014">Conspiracy</string>
+	<string id="50015">Contemporary Fantasy</string>
+	<string id="50016">Cyberpunk</string>
+	<string id="50017">Daily Life</string>
+	<string id="50018">Demons</string>
+	<string id="50019">Detective</string>
+	<string id="50020">Dystopia</string>
+	<string id="50021">Ecchi</string>
+	<string id="50022">Elementary School</string>
+	<string id="50023">Elves</string>
+	<string id="50024">Fantasy</string>
+	<string id="50025">Female Students</string>
+	<string id="50026">Gunfights</string>
+	<string id="50027">Harem</string>
+	<string id="50028">High School</string>
+	<string id="50029">Historical</string>
+	<string id="50030">Horror</string>
+	<string id="50031">Humanoid</string>
+	<string id="50032">Idol</string>
+	<string id="50033">Love Polygon</string>
+	<string id="50034">Magical</string>
+	<string id="50035">Martial Arts</string>
+	<string id="50036">Mecha</string>
+	<string id="50037">Military</string>
+	<string id="50038">Music</string>
+	<string id="50039">Novel</string>
+	<string id="50040">Nudity</string>
+	<string id="50041">Parallel Universe</string>
+	<string id="50042">Parody</string>
+	<string id="50043">Piloted Robots</string>
+	<string id="50044">Post-apocalyptic</string>
+	<string id="50045">School Life</string>
+	<string id="50046">Sci-Fi</string>
+	<string id="50047">Seinen</string>
+	<string id="50048">Shoujo</string>
+	<string id="50049">Shounen</string>
+	<string id="50050">Slapstick</string>
+	<string id="50051">Space Travel</string>
+	<string id="50052">Special Squads</string>
+	<string id="50053">Sports</string>
+	<string id="50054">Sudden Girlfriend Appearance</string>
+	<string id="50055">Swordplay</string>
+	<string id="50056">Thriller</string>
+	<string id="50057">Tragedy</string>
+	<string id="50058">Underworld</string>
+	<string id="50059">Vampires</string>
+	<string id="50060">Virtual Reality</string>
+	<string id="50061">World War II</string>
+</strings>

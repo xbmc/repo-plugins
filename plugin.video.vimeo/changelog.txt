@@ -1,0 +1,24 @@
+[B]Errata[/B]
+- [XBMC] Thumbnails sometimes turns into folders.
+- XBMC has Excessive Memory use after running the plugin for prolonged periods of time
+
+[B]Version 1.0.0[/B]
+- Version bump to Final Release
+- Updated Changelog
+- Changed Name to remove beta tag 
+
+[B]Version 0.6.1[/B]
+- Fixed zip file to make install from zip possible again, and reduced install size by 50%
+
+[B]Version 0.6.0[/B]
+- Replaced xml mini dom with BeautifulStoneSoup 
+- Searches would sometimes fail due to vimeo not honoring the invalid xml chars part of the xml spec.
+- Cleaned up confusion over folder Settings, now every folder is default on.
+- Added support for Vimeo's "My Watch Later", including adding and removing items
+- Downloads folder now accessible from plugin.
+- Reworked view mode switch to correspond to youtube plugin.
+- File downloads are now renamed to incomplete
+- Fixed playback since it was broken by Vimeo
+
+[B]Version 0.5.0[/B]
+- Initial beta

@@ -3,6 +3,16 @@ Author: IconShock
 License: Free for commercial use
 http://www.iconfinder.com/icondetails/49221/256/youtube_icon
 
+download.png
+Author: Bobbyperux (MISTO icon pack)
+License: Freeware Non-commercial
+http://findicons.com/icon/85798/arrow_down?id=85798
+
+movies.png
+Author: Sebastiaan de With
+License: Freeware Non-commercial
+http://findicons.com/icon/35690/sidebar_movies_blue
+
 add_user.png
 Modified version of User icon by VisualPharm, modified by HenrikDK
 Author: VisualPharm
@@ -16,6 +26,10 @@ Author: Sean Poon - http://gakuseisean.deviantart.com
 License: Free for personal desktop use only.
 http://www.iconarchive.com/show/radium-icons-by-gakuseisean/Key-icon.html
 
+shows.png
+Author: DBGthekafu - "Black-white 2 Vista" icon theme
+License: Reuse of the file allowed under the GPL
+http://commons.wikimedia.org/wiki/File:Tv_bw.png
 
 playlists.png
 Author: IconShock
@@ -102,3 +116,17 @@ uploads.png
 Author: IconShock
 License: Linkware
 http://www.iconarchive.com/show/general-media-icons-by-iconshock/webcam-icon.html
+
+trailers.png
+Author: Svengraph
+License: CC Attribution 3.0 Unported 
+http://www.softicons.com/free-icons/internet-icons/i-love-icons-by-svengraph/cinema-icon
+
+discoball.png
+Author: HenrikDK
+License: Free for non-commercial use.
+
+explore.png
+Author: IconsLand
+License: Free for non-commercial use.
+http://www.veryicon.com/icons/system/vista-elements/binoculars-search.html

@@ -1,6 +1,6 @@
 '''
     YouTube plugin for XBMC
-    Copyright (C) 2010 Tobias Ussing And Henrik Mosgaard Jensen
+    Copyright (C) 2010 Tobias Ussing Senior And Henrik Mosgaard Jensen The Third
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,13 +19,13 @@
 import sys, xbmc, xbmcaddon
 
 # plugin constants
-__version__ = "1.8.1"
+__version__ = "2.0.0"
 __plugin__ = "YouTube-" + __version__
 __author__ = "TheCollective"
 __url__ = "www.xbmc.com"
 __svn_url__ = ""
 __svn_revision__ = "$Revision$"
-__XBMC_Revision__ = "33324"
+__XBMC_Revision__ = "34731"
 __settings__ = xbmcaddon.Addon(id='plugin.video.youtube')
 __language__ = __settings__.getLocalizedString
 __dbg__ = __settings__.getSetting( "debug" ) == "true"

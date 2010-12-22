@@ -1,6 +1,84 @@
 [B]Errata[/B]
-- [XBMC] Thumbnails sometimes turns into folders.
+- [XBMC] Thumbnails sometimes turns into black box or Folder (XBMC not detecting when thumbnail is set and defaulting to icon?)
+- [XBMC] When sorting items, it's impossible to get them to return to their original order.
+- [XBMC] has Excessive Memory use after running the plugin for prolonged periods of time 
+- [YOUTUBE] API doesnt allow proper sorting of playlists and subscriptions (Video order when listing a playlists is broken and orderby when listing all subscriptions just doesn't work)
+- [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
+
+[B]Version 2.0.0[/B]
+- Version bump to Final Release
+- Updated Changelog
+- Changed Name to remove beta tag 
+
+[B]Version 1.9.6[/B]
+- Fixed zip file to make install from zip possible again, and reduced install size by 50%
+
+[B]Version 1.9.5[/B]
+- Update icon and thumbnail licensing
+- Fixed folder visibility settings for Explore YouTube Category
+- Allow user to select view modes between "Video Thumbnails", "Thumbnails Everywhere" and "XBMC Default" for listings
+- Added Upload Date and view count to video info pane 
+- Added "Related videos" to context menu
+- Added option to access Download folder from within the plugin 
+- Added support for viewing Subscription Playlists
+- Added queue folder option to newsubscription videos
+- Fixed Disco search after batch query JSON experimentation broke it
+- Fixed some minor errors in show scraper
+
+[B]Version 1.9.4[/B]
+- Add to favorites works again.
+- Restructured main folder structure to seperate scraper functions and feeds from user specific functions 
+- Changed download function to use Temporary filename while downloading, marking download as incomplete ex. video-incomplete.mp4 -> video.mp4
+- Added Scraper for YouTube Movies
+- Added icon for YouTube Movies
+- Updated icon for YouTube Trailers
+- Fixed Browse YouTube scraper (broken due to bad regex)
+- Switched to Thumbnail mode for tv show icons, cause it looks better
+- Batch processing functions now running against the official youtube API
+- Fixed Disco search (again) as YouTube broke it (again)... x2
+
+[B]Version 1.9.3[/B]
+- Improved api login
+- Improved http login
+- Added YouTube Show Scraper
+- Fixed Disco Search (YouTube broke it)
+- Fixed missing context menu items from folders everywhere..
+- Hardened handling of age restricted videos
+- No longer try login when no credentials have been provided.
+
+[B]Version 1.9.2[/B]
+- Disable socket timeout since that makes login fail on windows.
+
+[B]Version 1.9.1[/B]
+- Loop on 500, don't know how i missed this.
+- Minor cleanup
+
+[B]Version 1.9.0[/B]
+- Plugin can now confirm that the user is above 18 ( will only try if safe_search is disabled )
+- Added support for trailer thumbnails.
+- Added timeout option in advanced settings
+- Added sorting options (title, upload date, rating, runtime)
+- Added Scraper for YouTube categories (1 level only)
+- Added Scraper for YouTube Trailers
+- Added Scraper for YouTube Disco music searches
+- Added "More videos by User" option as requested by spiff
+- Added edit search feature, pops up with search in question and allows you to change it..
+- Added "Set content to movies" for video lists as this will allow the user to use other skin view modes
+- Added advanced setting to enable users to select playback quality pr video item in the context menu as requested by Nektarios
+- Added Nicer default icons for video items
+- Added Nicer default icons for searches
+- Added useragent to requests send by XBMC.
+- Enabled RTMP support in release code.
+- Reversed the "folders" settings tab ie Show Feeds (Enabled) instead of "Hide Feeds" (Disabled)
+- Refactored core functions for stability and readability.
+- Loop all url requests upto 5 times, should increase stability.
+- Refactor of navigation layer, hopefully simplifying maintainance
+- Removed unnessecary remapping of variable names between core and navigation
+- Fixed "Unknown Uploader" for some folders"
+- Added dummy video items in batch requests for when youtube removed an item.
+- Loop on 503: Service Unavailable errors.
+- Updated Browse Youtube to use regex.
 
 [B]Version 1.8.1[/B]
 - Enable RTMP support
@@ -8,7 +86,7 @@
 - Added disclaimer to addon xml (as requested by Team XBMC)
 
 [B]Version 1.8.0[/B]
-- Solved confusion cause by multiple licens files (removed GPL v2 license and renamed GPL v3 to LICENSE.txt)
+- Solved confusion caused by multiple licens files (removed GPL v2 license and renamed GPL v3 to LICENSE.txt)
 - Version bump to replace old YouTube plugin
 
 [B]Version 1.1.0[/B]

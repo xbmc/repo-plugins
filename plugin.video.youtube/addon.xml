@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.youtube"
-       name="You Tube"
-       version="1.8.1"
+       name="YouTube"
+       version="2.0.0"
        provider-name="TheCollective">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
+	<import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
@@ -12,8 +13,8 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary>You Tube</summary>
-    <description>Plugin that allows you to browse and view videos from everybodys favorite video site!</description>
+    <summary>YouTube video plugin</summary>
+    <description>Plugin that let's you to browse and play videos from everybody's favorite video site!</description>
     <disclaimer>Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
   </extension>
 </addon>

@@ -1,0 +1,15 @@
+<settings>
+   <setting id="path" type="folder" label="30000" option="writeable" default=""/>
+   <setting id="0" type="enum" label="30001" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-1,)"/> 
+   <setting id="1" type="enum" label="30002" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-2,)"/> 
+   <setting id="2" type="enum" label="30003" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-3,)"/> 
+   <setting id="3" type="enum" label="30004" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-4,)"/> 
+   <setting id="4" type="enum" label="30005" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-5,)"/> 
+   <setting id="5" type="enum" label="30006" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-6,)"/> 
+   <setting id="6" type="enum" label="30007" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-7,)"/> 
+   <setting id="7" type="enum" label="30008" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-8,)"/> 
+   <setting id="8" type="enum" label="30009" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-9,)"/> 
+   <setting id="9" type="enum" label="30010" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-10,)"/> 
+   <setting id="10" type="enum" label="30011" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-11,)"/> 
+   <setting id="11" type="enum" label="30012" lvalues="30101|30102|30103|30104" default="1" enable="!eq(-12,)"/> 
+</settings>

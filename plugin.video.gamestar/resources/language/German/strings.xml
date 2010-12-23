@@ -1,0 +1,19 @@
+<strings>
+    <string id="30000">Cache folder</string>
+    <string id="30001">Neuste videos</string>
+    <string id="30002">Test-videos</string>
+    <string id="30003">Preview-videos</string>
+    <string id="30004">Video-specials</string>
+    <string id="30005">Quickplay</string>
+    <string id="30006">Multiplayer-duelle</string>
+    <string id="30007">Server down show</string>
+    <string id="30008">Public viewing</string>
+    <string id="30009">Technik-checks</string>
+    <string id="30010">Boxenstopp</string>
+    <string id="30011">Gamestar TV</string>
+    <string id="30012">Gamepro videos</string>
+    <string id="30101">Kein Cache</string>
+    <string id="30102">Cachen bei Bedarf</string>
+    <string id="30103">Cachen</string>
+    <string id="30104">Cachen erzwingen</string>
+</strings>

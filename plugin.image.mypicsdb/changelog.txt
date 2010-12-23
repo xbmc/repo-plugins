@@ -1,3 +1,19 @@
+2010/12/23 --> v 0.5 "christmas 2010 Edition"
+  Added : possibility to use remote shares (slow but functionnal)
+  Update : code cleanup, the whole addon is lot more speed
+  New : can now add many folders to scan
+  New : can exclude folders
+  New : show a [g] next to filename if picture is geotagged
+  New : show a map of the picture if it is geotagged (via the contextual menu)
+  New : show stars next to filename if the picture is rated. You can filter pics to show using a setting
+  New : picture extension is editable from the settings
+  New : ability to export in an archive some pictures, ability to copy pictures
+  Update : better use of dates
+  fixed many encoding errors (hopefully not or just few encoding errors still exists)
+  ...
+  and a lot more !
+  Have a nice Christmas !!
+  
 2010/09/23 --> v 0.2
   Added : Collections : You can save a set of pictures as a collection. Think about it like an album feature (but I didnt want to use this term)
   Added : Period sorting : You can sort a set of picture according of their date. The whole period you want from any date of your pictures

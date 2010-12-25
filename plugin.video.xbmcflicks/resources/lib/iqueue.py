@@ -83,8 +83,8 @@ def getAuth(netflix, verbose):
         #now save out the settings
         saveUserInfo()
         #exit script, user must restart
-        dialog.ok("Settings completed", "You must restart the xbmcflicks plugin")
-        print "Settings completed", "You must restart the xbmcflicks plugin"
+        dialog.ok("Settings completed", "You must restart XBMC")
+        print "Settings completed", "You must restart XBMC"
         exit
         sys.exit(1)
 
@@ -98,6 +98,31 @@ def saveUserInfo():
     f.close()
 
 # END AUTH
+def checkplayercore():
+    checkFile = XBMCPROFILE + 'playercorefactory.xml'
+    havefile = os.path.isfile(checkFile)
+    if(not havefile):
+        #copy file data from addon folder
+        fileWithData = ROOT_FOLDER + 'resources/playercorefactory.xml'
+        if not os.path.exists('C:\Program Files (x86)'):
+            fileWithData = ROOT_FOLDER + 'resources/playercorefactory32.xml'
+        if not os.path.exists('C:\Program Files'):
+            fileWithData = ROOT_FOLDER + 'resources/playercorefactoryOSX.xml'
+        data = open(str(fileWithData),'r').read()
+        f = open(checkFile,'r+')
+        f.write(data)
+        f.close()
+    
+def checkadvsettings():
+    checkFile = XBMCPROFILE + 'advancedsettings.xml'
+    havefile = os.path.isfile(checkFile)
+    if(not havefile):
+        #copy file from addon folder
+        fileWithData = ROOT_FOLDER + 'resources/advancedsettings.xml'
+        data = open(str(fileWithData),'r').read()
+        f = open(checkFile,'r+')
+        f.write(data)
+        f.close()
     
 def addLink(name,url,curX,rootID=None):
     ok=True
@@ -683,6 +708,7 @@ def initApp():
     global REAL_LINK_PATH
     global IMAGE_FOLDER
     global USERINFO_FOLDER
+    global XBMCPROFILE
     
     arg = int(sys.argv[1])
     APP_NAME = 'xbmcflix'
@@ -712,12 +738,17 @@ def initApp():
     LINKS_FOLDER = WORKING_FOLDER + 'links/'
     REAL_LINK_PATH = xbmc.translatePath(WORKING_FOLDER + 'links/')
     USERINFO_FOLDER = WORKING_FOLDER
+    XBMCPROFILE = xbmc.translatePath('special://profile')
+    if(DEBUG):
+        print "root folder: " + ROOT_FOLDER
+        print "working folder: " + WORKING_FOLDER
+        print "real link path: " + REAL_LINK_PATH
+        print "image folder: " + IMAGE_FOLDER
+        print "userinfo folder: " + USERINFO_FOLDER
 
-    print "root folder: " + ROOT_FOLDER
-    print "working folder: " + WORKING_FOLDER
-    print "real link path: " + REAL_LINK_PATH
-    print "image folder: " + IMAGE_FOLDER
-    print "userinfo folder: " + USERINFO_FOLDER
+    #check playercorefactory and advancedsettings, create if missing
+    checkplayercore()
+    checkadvsettings()
     
     reobj = re.compile(r"200(.{10}).*?644(.*?)4x2(.).*?5118")
     match = reobj.search(API_SECRET)

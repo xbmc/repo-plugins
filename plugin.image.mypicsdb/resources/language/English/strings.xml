@@ -8,8 +8,8 @@
     <string id="30004">%Y</string>            <!-- year format -->
     <string id="30005">Mo.|Tu.|We.|Th.|Fr.|Sa.|Su.</string>
     <string id="30006">Jan.|Feb.|Mar|Apr.|May|Jun.|Jul.|Aug.|Sep.|Oct.|Nov.|Dec.</string>
-    <string id="30007">Monday|Tuesday|Wednesday|Thursday[Friday|Saturday|Sunday</string>
-    <string id="30008">January|February|March|April|May|June|Jully|August|September|October|November|December</string>
+    <string id="30007">Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday</string>
+    <string id="30008">January|February|March|April|May|June|July|August|September|October|November|December</string>
     <string id="30009"></string>
 
     <string id="30020">Picture folder</string>

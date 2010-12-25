@@ -14,27 +14,29 @@ import os,sys
 from os.path import join,isfile,basename,dirname
 
 
-import xbmc
+import xbmc, xbmcaddon
 
+Addon = xbmcaddon.Addon(id='plugin.image.mypicsdb')
 
-home = os.getcwd().replace(';','')
+#home = os.getcwd().replace(';','')
+home = Addon.getAddonInfo('path')
 #these few lines are taken from AppleMovieTrailers script
 # Shared resources
 BASE_RESOURCE_PATH = join( home, "resources" )
-DATA_PATH = xbmc.translatePath( "special://profile/addon_data/plugin.image.mypicsdb/")
+#DATA_PATH = xbmc.translatePath( "special://profile/addon_data/plugin.image.mypicsdb/")
+DATA_PATH = Addon.getAddonInfo('profile')
 PIC_PATH = join( BASE_RESOURCE_PATH, "images")
 DB_PATH = xbmc.translatePath( "special://database/")
 sys.path.append( join( BASE_RESOURCE_PATH, "lib" ) )
 
 
 from urllib import quote_plus,unquote_plus
-import xbmcplugin,xbmcgui,xbmcaddon
+import xbmcplugin,xbmcgui
 
 from time import strftime,strptime
 
 from traceback import print_exc
 
-Addon = xbmcaddon.Addon(id='plugin.image.mypicsdb')
 __language__ = Addon.getLocalizedString
 sys_enc = sys.getfilesystemencoding()
    
@@ -519,17 +521,17 @@ class Main:
                 update = dialog.yesno(__language__(30000),__language__(30203)) and 1 or 0 # Remove files from database if pictures does not exists?
                 #ajoute le rootfolder dans la base
                 MPDB.AddRoot(newroot,recursive,update,0)#TODO : traiter le exclude (=0 pour le moment) pour gérer les chemins à exclure
-                xbmc.executebuiltin( "Notification(%s,%s,%s,%s)"%(__language__(30000).encode("utf8"),__language__(30204).encode("utf8"),3000,join(os.getcwd(),"icon.png") ) )
+                xbmc.executebuiltin( "Notification(%s,%s,%s,%s)"%(__language__(30000).encode("utf8"),__language__(30204).encode("utf8"),3000,join(home,"icon.png") ) )
                 if not(xbmc.getInfoLabel( "Window.Property(DialogAddonScan.IsAlive)" ) == "true"): #si dialogaddonscan n'est pas en cours d'utilisation...
                     if dialog.yesno(__language__(30000),__language__(30206)):#do a scan now ?
-                        xbmc.executebuiltin( "RunScript(%s,--rootpath=%s) "%( join( os.getcwd(), "scanpath.py"),
+                        xbmc.executebuiltin( "RunScript(%s,--rootpath=%s) "%( join( home, "scanpath.py"),
                                                                                   newroot
                                                                                 )
                                              )
                 else:
                     #dialogaddonscan était en cours d'utilisation, on return
                     return
-                #xbmc.executebuiltin( "Notification(My Pictures Database,Folder has been scanned,%s,%s)"%(3000,join(os.getcwd(),"icon.png")))
+                #xbmc.executebuiltin( "Notification(My Pictures Database,Folder has been scanned,%s,%s)"%(3000,join(home,"icon.png")))
         elif self.args.do=="addrootfolder":
             if str(self.args.exclude)=="1":
                 MPDB.AddRoot(unquote_plus(self.args.addpath),0,0,1)
@@ -540,12 +542,12 @@ class Main:
             except IndexError,msg:
                 print IndexError,msg
             #TODO : this notification does not work with é letters in the string....
-            xbmc.executebuiltin( "Notification(%s,%s,%s,%s)"%(__language__(30000).encode("utf8"),__language__(30205).encode("utf8"),3000,join(os.getcwd(),"icon.png")))#+":".encode("utf8")+unquote_plus(self.args.delpath)) )
+            xbmc.executebuiltin( "Notification(%s,%s,%s,%s)"%(__language__(30000).encode("utf8"),__language__(30205).encode("utf8"),3000,join(home,"icon.png")))#+":".encode("utf8")+unquote_plus(self.args.delpath)) )
         elif self.args.do=="rootclic":#clic sur un chemin (à exclure ou à scanner)
             if not(xbmc.getInfoLabel( "Window.Property(DialogAddonScan.IsAlive)" ) == "true"): #si dialogaddonscan n'est pas en cours d'utilisation...
                 if str(self.args.exclude)=="0":#le chemin choisi n'est pas un chemin à exclure...
                     path,recursive,update,exclude = MPDB.getRoot(unquote_plus(self.args.rootpath))
-                    xbmc.executebuiltin( "RunScript(%s,--rootpath=%s)"%( join( os.getcwd(), "scanpath.py"),
+                    xbmc.executebuiltin( "RunScript(%s,--rootpath=%s)"%( join( home, "scanpath.py"),
                                                                               quote_plus(path)
                                                                             )
                                          )
@@ -558,7 +560,7 @@ class Main:
             dialog = xbmcgui.Dialog()
             dialog.ok(__language__(30000),str(xbmc.getInfoLabel( "Window.Property(DialogAddonScan.IsAlive)" ) == "true"))
             if not(xbmc.getInfoLabel( "Window.Property(DialogAddonScan.IsAlive)" ) == "true"): #si dialogaddonscan n'est pas en cours d'utilisation...
-                xbmc.executebuiltin( "RunScript(%s,--database)"% join( os.getcwd(), "scanpath.py") )
+                xbmc.executebuiltin( "RunScript(%s,--database)"% join( home, "scanpath.py") )
                 return
             else:
                 #dialogaddonscan était en cours d'utilisation, on return
@@ -603,7 +605,7 @@ class Main:
                         iconimage = join(PIC_PATH,"settings.png"),#icone
                         fanart    = join(PIC_PATH,"fanart-setting.png"),
                         #menucontextuel
-                        contextmenu   = [( __language__(30206),"Notification(TODO : scan folder,scan this folder now !,3000,%s)"%join(os.getcwd(),"icon.png") ),
+                        contextmenu   = [( __language__(30206),"Notification(TODO : scan folder,scan this folder now !,3000,%s)"%join(home,"icon.png") ),
                                          ( __language__(30207),"Container.Update(\"%s?action='rootfolders'&do='delroot'&delpath='%s'&exclude='1'&viewmode='view'\",)"%(sys.argv[0],quote_plus(path)))
                                          ]
                         )
@@ -699,7 +701,7 @@ class Main:
         xbmc.executebuiltin( "Notification(%s,%s %s,%s,%s)"%(__language__(30000).encode("utf8"),
                                                        __language__(30154).encode("utf8"),
                                                        namecollection,
-                                                       3000,join(os.getcwd(),"icon.png"))
+                                                       3000,join(home,"icon.png"))
                              )
     def add_folder_to_collection(self):
         listcollection = ["[[%s]]"%__language__(30157)]+[col[0] for col in MPDB.ListCollections()]
@@ -727,7 +729,7 @@ class Main:
         xbmc.executebuiltin( "Notification(%s,%s %s,%s,%s)"%(__language__(30000).encode("utf8"),
                                                        __language__(30161).encode("utf8")%len(filelist),
                                                        namecollection,
-                                                       3000,join(os.getcwd(),"icon.png"))
+                                                       3000,join(home,"icon.png"))
                              )
         
     def remove_collection(self):
@@ -854,7 +856,7 @@ class Main:
                     #todo, ask for another name and if cancel, cancel the zip process as well
                     xbmc.executebuiltin( "Notification(%s,%s,%s,%s)"%(__language__(30000),
                                                                       __language__(30066),#Archiving pictures canceled
-                                                                      3000,join(os.getcwd(),"icon.png")) )
+                                                                      3000,join(home,"icon.png")) )
                     return
                 else:
                     pass #user is ok to overwrite, let's go on
@@ -887,7 +889,7 @@ class Main:
             if not msg:
                 if error: msg = __language__(30069)%(error,len(filelist))   #"%s Errors while zipping %s files"
                 else: msg = __language__(30070)%len(filelist)               #%s files successfully Zipped !!
-            xbmc.executebuiltin( "Notification(%s,%s,%s,%s)"%(__language__(30000),msg,3000,join(os.getcwd(),"icon.png")) )
+            xbmc.executebuiltin( "Notification(%s,%s,%s,%s)"%(__language__(30000),msg,3000,join(home,"icon.png")) )
             return
         
         if self.args.viewmode=="export":
@@ -920,7 +922,7 @@ class Main:
                             dialog.ok(__language__(30000),"Error#%s : %s"%msg.args)
                     else:
                         xbmc.executebuiltin( "Notification(%s,%s,%s,%s )"%(__language__(30000),__language__(30183),#Files copy canceled !
-                                                                           3000,join(os.getcwd(),"icon.png")) )
+                                                                           3000,join(home,"icon.png")) )
                         return
 
             
@@ -944,7 +946,7 @@ class Main:
             pDialog.update(100,__language__(30188),dstpath)#"Copying Finished !
             xbmc.sleep(1000)
             xbmc.executebuiltin( "Notification(%s,%s,%s,%s )"%(__language__(30000),__language__(30189)%(cpt,dstpath),#%s files copied to %s
-                                                               3000,join(os.getcwd(),"icon.png")) )
+                                                               3000,join(home,"icon.png")) )
             dialog.browse(2, __language__(30188),"files" ,"", True, False, dstpath)#show the folder which contain pictures exported
             return
         
@@ -1009,7 +1011,7 @@ if __name__=="__main__":
         if Addon.getSetting('bootscan')=='true':
             if not(xbmc.getInfoLabel( "Window.Property(DialogAddonScan.IsAlive)" ) == "true"):
                 #si un scan n'est pas en cours, on lance le scan
-                xbmc.executebuiltin( "RunScript(%s,--database) "%join( os.getcwd(), "scanpath.py") )
+                xbmc.executebuiltin( "RunScript(%s,--database) "%join( home, "scanpath.py") )
                 #puis on rafraichi le container sans remplacer le contenu, avec un paramètre pour dire d'afficher le menu
                 xbmc.executebuiltin( "Container.Update(\"%s?action='showhome'&viewmode='view'\" ,)"%(sys.argv[0]) , )
         else:

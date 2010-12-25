@@ -24,23 +24,26 @@ usage :
 """
 #import sys
 from sys import path as syspath,modules as sysmodules
-from os import getcwd,stat,listdir as oslistdir
+from os import stat,listdir as oslistdir
 from os.path import join,splitext,walk,basename,normpath,isdir,sep as separator,dirname as osdirname
 
-home = getcwd().replace(';','')
+import xbmc,xbmcgui,xbmcaddon
+Addon = xbmcaddon.Addon(id='plugin.image.mypicsdb')
+
+#home = getcwd().replace(';','')
+home = Addon.getAddonInfo('path')
 
 #these few lines are taken from AppleMovieTrailers script
 # Shared resources
 BASE_RESOURCE_PATH = join( home, "resources" )
-DATA_PATH = xbmc.translatePath( "special://profile/addon_data/plugin.image.mypicsdb/")
+#DATA_PATH = xbmc.translatePath( "special://profile/addon_data/plugin.image.mypicsdb/")
+DATA_PATH = Addon.getAddonInfo('profile')
 PIC_PATH = join( BASE_RESOURCE_PATH, "images")
 DB_PATH = xbmc.translatePath( "special://database/")
 syspath.append( join( BASE_RESOURCE_PATH, "lib" ) )
 
 
 
-import xbmc,xbmcgui,xbmcaddon
-Addon = xbmcaddon.Addon(id='plugin.image.mypicsdb')
 __language__ = Addon.getLocalizedString
 
 from urllib import unquote_plus

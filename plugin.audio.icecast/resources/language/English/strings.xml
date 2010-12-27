@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>	
+	<!--General-->
+	<string id="30090">List all stations</string>
+	<string id="30091">Search for station</string>
+    <string id="30092">Enter station name</string>
+</strings>

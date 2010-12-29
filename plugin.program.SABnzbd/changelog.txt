@@ -1,3 +1,9 @@
+2.1.5
+- Added NZBMatrix searching for TV, Movies and Music
+- NZBs.org Music searching
+- NZBindex.nl search settings adjusted
+- Newzbin fixes
+
 2.1.4
 - Fixed NZBMatrix Music Video feed label
 

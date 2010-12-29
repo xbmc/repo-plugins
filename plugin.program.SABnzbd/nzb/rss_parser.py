@@ -161,7 +161,7 @@ class RSSParser:
         """ Retrieve the post link from this entry """
         uri = uri.lower()
         # Special handling for nzbindex.nl 
-        if 'nzbindex.nl' in uri:
+        if 'nzbindex.nl' in uri or "newzbin" in uri:
             try:
                 link = entry.enclosures[0]['href']
             except:

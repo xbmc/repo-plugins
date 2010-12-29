@@ -1,4 +1,4 @@
-import xbmcplugin
+﻿import xbmcplugin
 import sys
 __settings__ = sys.modules[ "__main__" ].__settings__
 
@@ -11,12 +11,12 @@ The '#' character is a comment in python, delete it to use commented out feeds
 '''
 #if you use newzbin, add custom rss feeds here
 newzbin_rss = [
-{'name':'Newzbin - Search', 'url':'http://www.newzbin.com/search/query/?q=%s&area=-1&fpn=p&searchaction=Go&areadone=-1&feed=rss'},
-{'name':'Newzbin - TV', 'url':'http://www.newzbin.com/browse/category/p/tv/?feed=rss'}, 
-{'name':'Newzbin - Movies', 'url':'http://www.newzbin.com/browse/category/p/movies/?feed=rss'},
-{'name':'Newzbin - Music', 'url':'http://www.newzbin.com/browse/category/p/music/?feed=rss'},
-#{'name':'Newzbin - Games (Latest)', 'url':'http://www.newzbin.com/browse/category/p/games/?feed=rss'},
-#{'name':'Newzbin - Consoles (Latest)', 'url':'http://www.newzbin.com/browse/category/p/consoles/?feed=rss'},
+{'name':'Newzbin - Search', 'url':'http://' + __settings__.getSetting('username_newzbin') + ':'  + __settings__.getSetting('password_newzbin') + '@www.newzbin.com/search/query/?q=%s&area=-1&fpn=p&searchaction=Go&areadone=-1&feed=rss'},
+{'name':'Newzbin - TV', 'url':'http://' + __settings__.getSetting('username_newzbin') + ':'  + __settings__.getSetting('password_newzbin') + '@www.newzbin.com/browse/category/p/tv/?feed=rss', 'category':'tv'}, 
+{'name':'Newzbin - Movies', 'url':'http://' + __settings__.getSetting('username_newzbin') + ':'  + __settings__.getSetting('password_newzbin') + '@www.newzbin.com/browse/category/p/movies/?feed=rss', 'category':'movies'},
+{'name':'Newzbin - Music', 'url':'http://' + __settings__.getSetting('username_newzbin') + ':'  + __settings__.getSetting('password_newzbin') + '@www.newzbin.com/browse/category/p/music/?feed=rss', 'category':'music'},
+#{'name':'Newzbin - Games (Latest)', 'url':'http://' + __settings__.getSetting('username_newzbin') + ':'  + __settings__.getSetting('password_newzbin') + '@www.newzbin.com/browse/category/p/games/?feed=rss', 'category':'games'},
+#{'name':'Newzbin - Consoles (Latest)', 'url':'http://' + __settings__.getSetting('username_newzbin') + ':'  + __settings__.getSetting('password_newzbin') + '@www.newzbin.com/browse/category/p/consoles/?feed=rss', 'category':'consoles'},
 ]
 
 binsearch_rss = [{'name':'Binsearch - TV (Latest)', 'url':'http://rss.binsearch.net/rss.php?max=50&g=alt.binaries.multimedia', 'category':'tv'},
@@ -29,8 +29,10 @@ nzbs_rss = [
 {'name':'NZBs.org - Movies (XVID)', 'url':'http://nzbs.org/rss.php?catid=2&num=50&dl=1&i=' + __settings__.getSetting('nzbs_id') + '&h=' + __settings__.getSetting('nzbs_hash'), 'category':'movies'},
 {'name':'NZBs.org - Music', 'url':'http://nzbs.org/rss.php?catid=5&num=50&dl=1&i=' + __settings__.getSetting('nzbs_id') + '&h=' + __settings__.getSetting('nzbs_hash'), 'category':'music'},
 {'name':'NZBs.org - Music Videos', 'url':'http://nzbs.org/rss.php?catid=10&num=50&dl=1&i=' + __settings__.getSetting('nzbs_id') + '&h=' + __settings__.getSetting('nzbs_hash'), 'category':'musicvideos'},
-{'name':'NZBs.org - Movies Search', 'url':'http://nzbs.org/rss.php?q=%s&type=2&num=50&dl=1&i=' + __settings__.getSetting('nzbs_id') + '&h=' + __settings__.getSetting('nzbs_hash'), 'category':'movies'},
 {'name':'NZBs.org - TV Search', 'url':'http://nzbs.org/rss.php?q=%s&type=1&num=50&dl=1&i=' + __settings__.getSetting('nzbs_id') + '&h=' + __settings__.getSetting('nzbs_hash'), 'category':'tv'},
+{'name':'NZBs.org - Movies Search', 'url':'http://nzbs.org/rss.php?q=%s&type=2&num=50&dl=1&i=' + __settings__.getSetting('nzbs_id') + '&h=' + __settings__.getSetting('nzbs_hash'), 'category':'movies'},
+{'name':'NZBs.org - Music Search', 'url':'http://nzbs.org/rss.php?q=%s&catid=5&num=50&dl=1&i=' + __settings__.getSetting('nzbs_id') + '&h=' + __settings__.getSetting('nzbs_hash'), 'category':'music'},
+
 ]
 
 nzbsrus_rss = [
@@ -50,15 +52,19 @@ nzbmatrix_rss = [
 {'name':'NZBMatrix - Anime', 'url':'http://rss.nzbmatrix.com/rss.php?cat=Anime', 'category':'anime'},
 {'name':'NZBMatrix - Music', 'url':'http://rss.nzbmatrix.com/rss.php?cat=Music', 'category':'music'},
 {'name':'NZBMatrix - Music Videos', 'url':'http://rss.nzbmatrix.com/rss.php?subcat=25', 'category':'musicvideos'},
+{'name':'NZBMatrix - TV Search', 'url':'http://rss.nzbmatrix.com/rss.php?page=details&subcat=6,41,7&term=%s', 'category':'tv'},
+{'name':'NZBMatrix - Movies Search', 'url':'http://rss.nzbmatrix.com/rss.php?page=details&subcat=2,54,42&term=%s', 'category':'movies'},
+{'name':'NZBMatrix - Music Search', 'url':'http://rss.nzbmatrix.com/rss.php?page=details&cat=Music&term=%s', 'category':'music'},
 ]
 
 nzbindex_rss = [
-{'name':'NZBIndex - Search', 'url':'http://www.nzbindex.nl/rss/?searchitem=%s&x=0&y=0&age=30&group=&min_size=&max_size=&poster='},
+{'name':'NZBIndex - Search', 'url':'http://www.nzbindex.nl/rss/?searchitem=%s&x=0&y=0&age=&max=50&sort=agedesc&minsize=&maxsize=&dq=&poster=&nfo=&hidecross=1&hidespam=0&hidespam=1&more=1'},
 ]
 
 """ ADD CUSTOM RSS FEEDS HERE """
 #add other rss feeds here, just copy an existing one and change the name and url
-other_rss = []
+other_rss = [
+]
 
 sabnzbd_rss = [
 {'name':'SABnzbd - Queue', 'url':''}, #leave the url blank for this one

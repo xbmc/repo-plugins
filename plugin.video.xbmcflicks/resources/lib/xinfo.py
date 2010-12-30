@@ -26,4 +26,5 @@ class XInfo:
         self.IsInstantAvailable = False
         self.MaturityLevel = "0"
         self.AvailableUntil = "0"
+        self.WebURL = ""
 

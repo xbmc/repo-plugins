@@ -4,6 +4,8 @@ import urllib
 from iqueue import *
 
 # plugin modes
+MODE0iw = 0
+MODE0d = 1
 MODE1 = 10
 MODE1a = 11
 MODE1b = 12
@@ -46,17 +48,54 @@ MODE7r = 98
 MODE7s = 99
 MODE7t = 100
 
+MODED1 = 500
+MODED1m = 510
+MODED1t = 520
+
+MODED2 = 600
+MODED3 = 700
+
+MODED7 = 800
+MODED7a = 801
+MODED7b = 802
+MODED7c = 803
+MODED7d = 804
+MODED7e = 805
+MODED7f = 806
+MODED7g = 807
+MODED7h = 808
+MODED7i = 809
+MODED7j = 810
+MODED7k = 811
+MODED7l = 812
+MODED7m = 813
+MODED7n = 814
+MODED7o = 815
+MODED7p = 816
+MODED7q = 817
+MODED7r = 818
+MODED7s = 819
+MODED7t = 820
+
+MODER = 900
+MODER1 = 901
+MODER2 = 902
+MODER3 = 903
+
 # parameter keys
 PARAMETER_KEY_MODE = "mode"
 
 # menu item names
-SUBMENU1 = "My Instant Queue - ALL"
-SUBMENU1a = "My Instant Queue - Movies"
-SUBMENU1b = "My Instant Queue - TV Shows"
-SUBMENU2 = "Recommended (Filtered for Instant Watch)"
-SUBMENU3 = "All New Movies & Shows"
+SUBMENU0iw = "Instant Movies and Shows"
+SUBMENU0d = "Disc by Mail"
+
+SUBMENU1 = "Instant Queue: All"
+SUBMENU1a = "Instant Queue: Movies"
+SUBMENU1b = "Instant Queue: TV"
+SUBMENU2 = "Recommended"
+SUBMENU3 = "All New Arrivals"
 SUBMENU4 = "Search..."
-SUBMENU5 = "Top 25 New Movies & Shows"
+SUBMENU5 = "Top 25 New Arrivals"
 SUBMENU6 = "By Genre"
 SUBMENU6a = "Action & Adventure"
 SUBMENU6b = "Children & Family"
@@ -93,6 +132,43 @@ SUBMENU7r = "Sports & Fitness"
 SUBMENU7s = "Television"
 SUBMENU7t = "Thrillers"
 
+##DVD Queue
+SUBMENUD1 = "Disc Queue: All"
+SUBMENUD1m = "Disc Queue: Movies"
+SUBMENUD1t = "Disc Queue: TV"
+
+SUBMENUD2 = "Search..."
+SUBMENUD3 = "At Home"
+
+##Top 25 by Genre
+SUBMENUD7 = "Top 25's By Genre"
+SUBMENUD7a = "Action & Adventure"
+SUBMENUD7b = "Anime & Animation"
+SUBMENUD7c = "Blu-ray"
+SUBMENUD7d = "Children & Family"
+SUBMENUD7e = "Classics"
+SUBMENUD7f = "Comedy"
+SUBMENUD7g = "Documentary"
+SUBMENUD7h = "Drama"
+SUBMENUD7i = "Faith & Spirituality"
+SUBMENUD7j = "Foreign"
+SUBMENUD7k = "Gay & Lesbian"
+SUBMENUD7l = "Horror"
+SUBMENUD7m = "Independent"
+SUBMENUD7n = "Music & Musicals"
+SUBMENUD7o = "Romance"
+SUBMENUD7p = "Sci-Fi & Fantasy"
+SUBMENUD7q = "Special Interest"
+SUBMENUD7r = "Sports & Fitness"
+SUBMENUD7s = "Television"
+SUBMENUD7t = "Thrillers"
+
+## Rental History
+SUBMENUR = "Rental History"
+SUBMENUR1 = "Shipped"
+SUBMENUR2 = "Returned"
+SUBMENUR3 = "Watched"
+
 # plugin handle
 handle = int(sys.argv[1])
 
@@ -120,16 +196,38 @@ def addDirectoryItem(name, isFolder=True, parameters={}, thumbnail=None):
 
 # UI builder functions
 def show_root_menu():
-   ''' Show the plugin root menu. '''
-   addDirectoryItem(name=SUBMENU1, parameters={ PARAMETER_KEY_MODE:MODE1 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/images/iqueue_all.png")
-   addDirectoryItem(name=SUBMENU1a, parameters={ PARAMETER_KEY_MODE:MODE1a }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/images/iqueue_movies.png")
-   addDirectoryItem(name=SUBMENU1b, parameters={ PARAMETER_KEY_MODE:MODE1b }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/images/iqueue_tv.png")
+   addDirectoryItem(name=SUBMENU0iw, parameters={ PARAMETER_KEY_MODE:MODE0iw }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant.png")
+   addDirectoryItem(name=SUBMENU0d, parameters={ PARAMETER_KEY_MODE:MODE0d }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc.png")
+   addDirectoryItem(name=SUBMENUR, parameters={ PARAMETER_KEY_MODE:MODER }, isFolder=True)
+   xbmcplugin.endOfDirectory(handle=handle, succeeded=True)   
 
-   addDirectoryItem(name=SUBMENU2, parameters={ PARAMETER_KEY_MODE:MODE2 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/images/recog.png")
-   addDirectoryItem(name=SUBMENU5, parameters={ PARAMETER_KEY_MODE:MODE5 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/images/new_top25.png")
-   addDirectoryItem(name=SUBMENU3, parameters={ PARAMETER_KEY_MODE:MODE3 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/images/new_all.png")
-   addDirectoryItem(name=SUBMENU4, parameters={ PARAMETER_KEY_MODE:MODE4 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/images/search.png")
+def show_instant_menu():
+   addDirectoryItem(name=SUBMENU1, parameters={ PARAMETER_KEY_MODE:MODE1 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/iqueue_all.png")
+   addDirectoryItem(name=SUBMENU1a, parameters={ PARAMETER_KEY_MODE:MODE1a }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/iqueue_movies.png")
+   addDirectoryItem(name=SUBMENU1b, parameters={ PARAMETER_KEY_MODE:MODE1b }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/iqueue_tv.png")
+
+   addDirectoryItem(name=SUBMENU2, parameters={ PARAMETER_KEY_MODE:MODE2 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/recog.png")
+   addDirectoryItem(name=SUBMENU5, parameters={ PARAMETER_KEY_MODE:MODE5 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/new_top25.png")
+   addDirectoryItem(name=SUBMENU3, parameters={ PARAMETER_KEY_MODE:MODE3 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/new_all.png")
+   addDirectoryItem(name=SUBMENU4, parameters={ PARAMETER_KEY_MODE:MODE4 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/search.png")
    #addDirectoryItem(name=SUBMENU6, parameters={ PARAMETER_KEY_MODE:MODE6 }, isFolder=True)
+   xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+
+def show_disc_menu():
+   addDirectoryItem(name=SUBMENUD1, parameters={ PARAMETER_KEY_MODE:MODED1 }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD1m, parameters={ PARAMETER_KEY_MODE:MODED1m }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD1t, parameters={ PARAMETER_KEY_MODE:MODED1t }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7, parameters={ PARAMETER_KEY_MODE:MODED7 }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD2, parameters={ PARAMETER_KEY_MODE:MODED2 }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD3, parameters={ PARAMETER_KEY_MODE:MODED3 }, isFolder=True)
+   
+   xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+
+def show_rentalhistory_menu():
+   addDirectoryItem(name=SUBMENUR1, parameters={ PARAMETER_KEY_MODE:MODER1 }, isFolder=True)
+   addDirectoryItem(name=SUBMENUR2, parameters={ PARAMETER_KEY_MODE:MODER2 }, isFolder=True)
+   addDirectoryItem(name=SUBMENUR3, parameters={ PARAMETER_KEY_MODE:MODER3 }, isFolder=True)
+   
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_SUBMENU1():
@@ -148,30 +246,18 @@ def show_SUBMENU2():
 
 def show_SUBMENU6():
    #add in the genre folders
-   addDirectoryItem(name=SUBMENU6a, parameters={ PARAMETER_KEY_MODE:
-MODE6a }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6b, parameters={ PARAMETER_KEY_MODE:
-MODE6b }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6c, parameters={ PARAMETER_KEY_MODE:
-MODE6c }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6d, parameters={ PARAMETER_KEY_MODE:
-MODE6d }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6e, parameters={ PARAMETER_KEY_MODE:
-MODE6e }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6f, parameters={ PARAMETER_KEY_MODE:
-MODE6f }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6g, parameters={ PARAMETER_KEY_MODE:
-MODE6g }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6h, parameters={ PARAMETER_KEY_MODE:
-MODE6h }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6i, parameters={ PARAMETER_KEY_MODE:
-MODE6i }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6j, parameters={ PARAMETER_KEY_MODE:
-MODE6j }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6k, parameters={ PARAMETER_KEY_MODE:
-MODE6k }, isFolder=True)
-   addDirectoryItem(name=SUBMENU6l, parameters={ PARAMETER_KEY_MODE:
-MODE6l }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6a, parameters={ PARAMETER_KEY_MODE:MODE6a }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6b, parameters={ PARAMETER_KEY_MODE:MODE6b }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6c, parameters={ PARAMETER_KEY_MODE:MODE6c }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6d, parameters={ PARAMETER_KEY_MODE:MODE6d }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6e, parameters={ PARAMETER_KEY_MODE:MODE6e }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6f, parameters={ PARAMETER_KEY_MODE:MODE6f }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6g, parameters={ PARAMETER_KEY_MODE:MODE6g }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6h, parameters={ PARAMETER_KEY_MODE:MODE6h }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6i, parameters={ PARAMETER_KEY_MODE:MODE6i }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6j, parameters={ PARAMETER_KEY_MODE:MODE6j }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6k, parameters={ PARAMETER_KEY_MODE:MODE6k }, isFolder=True)
+   addDirectoryItem(name=SUBMENU6l, parameters={ PARAMETER_KEY_MODE:MODE6l }, isFolder=True)
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_SUBMENU7():
@@ -198,7 +284,29 @@ def show_SUBMENU7():
    addDirectoryItem(name=SUBMENU7t, parameters={ PARAMETER_KEY_MODE:MODE7t }, isFolder=True)
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
    
-
+def show_SUBMENUD7():
+   #add in the disc genre folders for the Top 25 items
+   addDirectoryItem(name=SUBMENUD7a, parameters={ PARAMETER_KEY_MODE:MODED7a }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7b, parameters={ PARAMETER_KEY_MODE:MODED7b }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7c, parameters={ PARAMETER_KEY_MODE:MODED7c }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7d, parameters={ PARAMETER_KEY_MODE:MODED7d }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7e, parameters={ PARAMETER_KEY_MODE:MODED7e }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7f, parameters={ PARAMETER_KEY_MODE:MODED7f }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7g, parameters={ PARAMETER_KEY_MODE:MODED7g }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7h, parameters={ PARAMETER_KEY_MODE:MODED7h }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7i, parameters={ PARAMETER_KEY_MODE:MODED7i }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7j, parameters={ PARAMETER_KEY_MODE:MODED7j }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7k, parameters={ PARAMETER_KEY_MODE:MODED7k }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7l, parameters={ PARAMETER_KEY_MODE:MODED7l }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7m, parameters={ PARAMETER_KEY_MODE:MODED7m }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7n, parameters={ PARAMETER_KEY_MODE:MODED7n }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7o, parameters={ PARAMETER_KEY_MODE:MODED7o }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7p, parameters={ PARAMETER_KEY_MODE:MODED7p }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7q, parameters={ PARAMETER_KEY_MODE:MODED7q }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7r, parameters={ PARAMETER_KEY_MODE:MODED7r }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7s, parameters={ PARAMETER_KEY_MODE:MODED7s }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD7t, parameters={ PARAMETER_KEY_MODE:MODED7t }, isFolder=True)
+   xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 # parameter values
 params = parameters_string_to_dict(sys.argv[2])
@@ -212,7 +320,11 @@ print "##########################################################"
 # Depending on the mode, call the appropriate function to build the UI.
 if not sys.argv[2]:
    # new start
-   ok = show_root_menu()
+   show_root_menu()
+elif mode == MODE0iw:
+   show_instant_menu()
+elif mode == MODE0d:
+   show_disc_menu()   
 elif mode == MODE1:
    getInstantQueue()
 elif mode == MODE1a:
@@ -229,7 +341,7 @@ elif mode == MODE4:
     if (keyboard.isConfirmed()):
       arg = keyboard.getText()
       #print "keyboard returned: " + keyboard.getText()
-      doSearch(arg)
+      doSearch(arg, "instant", True)
     else:
       print "user canceled"
 elif mode == MODE5:
@@ -264,42 +376,109 @@ elif mode == MODE6l:
 elif mode == MODE7:
    ok = show_SUBMENU7()
 elif mode == MODE7a:
-  getTop25Feed("296")
+   getTop25Feed("296")
 elif mode == MODE7b:
-  getTop25Feed("623")
+   getTop25Feed("623")
 elif mode == MODE7c:
-  getTop25Feed("2444")
+   getTop25Feed("2444")
 elif mode == MODE7d:
-  getTop25Feed("302")
+   getTop25Feed("302")
 elif mode == MODE7e:
-  getTop25Feed("306")
+   getTop25Feed("306")
 elif mode == MODE7f:
-  getTop25Feed("307")
+   getTop25Feed("307")
 elif mode == MODE7g:
-  getTop25Feed("864")
+   getTop25Feed("864")
 elif mode == MODE7h:
-  getTop25Feed("315")
+   getTop25Feed("315")
 elif mode == MODE7i:
-  getTop25Feed("2108")
+   getTop25Feed("2108")
 elif mode == MODE7j:
-  getTop25Feed("2514")
+   getTop25Feed("2514")
 elif mode == MODE7k:
-  getTop25Feed("330")
+   getTop25Feed("330")
 elif mode == MODE7l:
-  getTop25Feed("338")
+   getTop25Feed("338")
 elif mode == MODE7m:
-  getTop25Feed("343")
+   getTop25Feed("343")
 elif mode == MODE7n:
-  getTop25Feed("2310")
+   getTop25Feed("2310")
 elif mode == MODE7o:
-  getTop25Feed("371")
+   getTop25Feed("371")
 elif mode == MODE7p:
-  getTop25Feed("373")
+   getTop25Feed("373")
 elif mode == MODE7q:
-  getTop25Feed("2223")
+   getTop25Feed("2223")
 elif mode == MODE7r:
-  getTop25Feed("2190")
+   getTop25Feed("2190")
 elif mode == MODE7s:
-  getTop25Feed("2197")
+   getTop25Feed("2197")
 elif mode == MODE7t:
-  getTop25Feed("387")
+   getTop25Feed("387")
+elif mode == MODED1:
+   getDVDQueue(3)
+elif mode == MODED1m:
+   getDVDQueue(4)
+elif mode == MODED1t:
+   getDVDQueue(5)
+elif mode == MODED2:
+   keyboard = xbmc.Keyboard()
+   keyboard.doModal()
+   if (keyboard.isConfirmed()):
+      arg = keyboard.getText()
+      #print "keyboard returned: " + keyboard.getText()
+      doSearch(arg, "Disc")
+   else:
+      print "user canceled"
+elif mode == MODED3:
+   getHomeList()
+elif mode == MODED7:
+   ok = show_SUBMENUD7()
+elif mode == MODED7a:
+   getTop25FeedD("296")
+elif mode == MODED7b:
+   getTop25FeedD("623")
+elif mode == MODED7c:
+   getTop25FeedD("2444")
+elif mode == MODED7d:
+   getTop25FeedD("302")
+elif mode == MODED7e:
+   getTop25FeedD("306")
+elif mode == MODED7f:
+   getTop25FeedD("307")
+elif mode == MODED7g:
+   getTop25FeedD("864")
+elif mode == MODED7h:
+   getTop25FeedD("315")
+elif mode == MODED7i:
+   getTop25FeedD("2108")
+elif mode == MODED7j:
+   getTop25FeedD("2514")
+elif mode == MODED7k:
+   getTop25FeedD("330")
+elif mode == MODED7l:
+   getTop25FeedD("338")
+elif mode == MODED7m:
+   getTop25FeedD("343")
+elif mode == MODED7n:
+   getTop25FeedD("2310")
+elif mode == MODED7o:
+   getTop25FeedD("371")
+elif mode == MODED7p:
+   getTop25FeedD("373")
+elif mode == MODED7q:
+   getTop25FeedD("2223")
+elif mode == MODED7r:
+   getTop25FeedD("2190")
+elif mode == MODED7s:
+   getTop25FeedD("2197")
+elif mode == MODED7t:
+   getTop25FeedD("387")
+elif mode == MODER:
+   show_rentalhistory_menu()
+elif mode == MODER1:
+   rhShipped()
+elif mode == MODER2:
+   rhReturned()
+elif mode == MODER3:
+   rhWatched()

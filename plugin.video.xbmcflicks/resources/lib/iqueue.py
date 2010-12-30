@@ -144,19 +144,56 @@ def addLink(name,url,curX,rootID=None):
     runnerSearch = "XBMC.RunScript(special://home/addons/plugin.video.xbmcflicks/resources/lib/modQueue.py, " + argsSimilar + ")"
 
     if(not curX.TvEpisode):
-        commands.append(( 'Netflix: Add to Queue', runnerAdd, ))
-        commands.append(( 'Netflix: Remove From Queue', runnerRemove, ))
+        commands.append(( 'Netflix: Add to Instant Queue', runnerAdd, ))
+        commands.append(( 'Netflix: Remove From Instant Queue', runnerRemove, ))
         #commands.append(( 'Netflix: Find Similar', runnerSearch, ))
     else:
-        commands.append(( 'Netflix: Add Entire Season to Queue', runnerAdd, ))
-        commands.append(( 'Netflix: Remove Entire Season From Queue', runnerRemove, ))
+        commands.append(( 'Netflix: Add Entire Season to Instant Queue', runnerAdd, ))
+        commands.append(( 'Netflix: Remove Entire Season From Instant Queue', runnerRemove, ))
 
     liz.addContextMenuItems( commands )
     whichHandler = sys.argv[1]
     ok=xbmcplugin.addDirectoryItem(handle=int(whichHandler),url=url,listitem=liz, isFolder=False)
 
     return ok
+
+def addLinkDisc(name,url,curX,rootID=None):
+    ok=True
+    liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=curX.Poster)
+    #if(xSummary):
+    liz.setInfo( type="Video", infoLabels={ "Mpaa": curX.Mpaa, "TrackNumber": int(curX.Position), "Year": int(curX.Year), "OriginalTitle": curX.Title, "Title": curX.TitleShort, "Rating": float(curX.Rating)*2, "Duration": str(int(curX.Runtime)/60), "Director": curX.Directors, "Genre": curX.Genres, "CastAndRole": curX.Cast, "Plot": curX.Synop })
+
+    commands = []
+    url = REAL_LINK_PATH + curX.ID + '_disc.html'
+    argsRemove = str(curX.ID) + "discdelete"
+    argsAdd = str(curX.ID) + "discpost"
+    argsAddTop = str(curX.ID) + "disctoppost"
     
+    argsSimilar = str(curX.ID)
+    if rootID:
+        argsRemove = str(rootID) + "discdelete"
+        argsAdd = str(rootID) + "discpost"
+        argsSimilar = str(rootID)
+    runnerRemove = "XBMC.RunScript(special://home/addons/plugin.video.xbmcflicks/resources/lib/modQueue.py, " + argsRemove + ")"
+    runnerAdd = "XBMC.RunScript(special://home/addons/plugin.video.xbmcflicks/resources/lib/modQueue.py, " + argsAdd + ")"
+    runnerAddTop = "XBMC.RunScript(special://home/addons/plugin.video.xbmcflicks/resources/lib/modQueue.py, " + argsAddTop + ")"
+    runnerSearch = "XBMC.RunScript(special://home/addons/plugin.video.xbmcflicks/resources/lib/modQueue.py, " + argsSimilar + ")"
+
+    if(not curX.TvEpisode):
+        commands.append(( 'Netflix: Add to Disc Queue', runnerAdd, ))
+        commands.append(( 'Netflix: Remove From Disc Queue', runnerRemove, ))
+        commands.append(( 'Netflix: Add to Top of Disc Queue', runnerAddTop, ))
+    else:
+        commands.append(( 'Netflix: Add Season to Disc Queue', runnerAdd, ))
+        commands.append(( 'Netflix: Remove Season From Disc Queue', runnerRemove, ))
+        commands.append(( 'Netflix: Add to Top of Disc Queue', runnerAddTop, ))
+
+    liz.addContextMenuItems( commands )
+    whichHandler = sys.argv[1]
+    ok=xbmcplugin.addDirectoryItem(handle=int(whichHandler),url=url,listitem=liz, isFolder=False)
+
+    return ok
+
 def writeLinkFile(id, title):
     #check to see if we already have the file
     havefile = os.path.isfile(LINKS_FOLDER + id + '.html')
@@ -167,6 +204,20 @@ def writeLinkFile(id, title):
             player = "WiPlayer"
         redirect = "<!doctype html public \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Requesting Video: " + title + "</title><meta http-equiv=\"REFRESH\" content=\"0;url=http://www.netflix.com/" + player + "?lnkctr=apiwn&nbb=y&devKey=gnexy7jajjtmspegrux7c3dj&movieid=" + id + "\"></head><body bgcolor=\"#FF0000\"> <p>Redirecting to Netflix in a moment ...</p></body></html>"
         f = open(LINKS_FOLDER + id + '.html','r+')
+        f.write(redirect)
+        f.close()
+
+#writeDiscLinkFile
+def writeDiscLinkFile(id, title, webURL):
+    #check to see if we already have the file
+    havefile = os.path.isfile(LINKS_FOLDER + id + '_disc.html')
+    if(not havefile):
+        #create the file
+        player = "WiPlayerCommunityAPI"
+        if(useAltPlayer):
+            player = "WiPlayer"
+        redirect = "<!doctype html public \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Requesting Video: " + title + "</title><meta http-equiv=\"REFRESH\" content=\"0;url=" + webURL + "\"></head><body bgcolor=\"#0000cc\"> <p>Redirecting to Netflix in a moment ...</p></body></html>"
+        f = open(LINKS_FOLDER + id + '_disc.html','r+')
         f.write(redirect)
         f.close()
 
@@ -243,22 +294,43 @@ def availableTimeRemaining(expires):
         return ""
 
 def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, intDisplayWhat=None):
+    #if display what = 0, will only show instant queue items
     #if display what = 1, will only display movies
     #if display what = 2, will only display tv shows
-    #if the value is not set, everything is shown
+    #if display what = 3, working with Movies in Disc Queue
+    #if display what = 4, working with TvShows in Disc Queue
+    #if display what = 5, working with Everything in Disc Queue
+    #if the value is not set, everything is shown (instant queue items)
 
     showTvShow = True
     showMovies = True
-
+    discQueue = False
+    
     if intDisplayWhat:
+        if (int(intDisplayWhat) == 0):
+            discQueue = False
         if (int(intDisplayWhat) == 1):
             showTvShow = False
         if (int(intDisplayWhat) == 2):
             showMovies = False
-            
+        if (int(intDisplayWhat) == 3):
+            discQueue = True
+        if (int(intDisplayWhat) == 4):
+            showTvShow = False
+            discQueue = True
+        if (int(intDisplayWhat) == 5):
+            showMovies = False
+            discQueue = True
+
+    if(instantAvail):
+        discQueue = False
+    
     #if it's a tv show it should be a folder, not a listing
     if re.search(r"{(u'episode_short'.*?)}", curQueueItem, re.DOTALL | re.MULTILINE):
         curX.TvShow = True
+    if re.search(r"u'name': u'Television'", curQueueItem, re.IGNORECASE):
+        curX.TvShow = True
+    
     if (curX.TvShow):
         if(not showTvShow):
             return curX
@@ -311,12 +383,13 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
 
     #check rating against max rating
     if (not int(iRating) <= int(MAX_RATING)):
+        print "Item failed rating check, not adding.."
         return curX
     
     #genre
     matchGenre = re.search(r"genres': \[?{.*?u'name': u'(.*?)'}", curQueueItem, re.DOTALL | re.MULTILINE)
     if matchGenre:
-	curX.Genres = matchGenre.group(1).strip()
+        curX.Genres = matchGenre.group(1).strip()
 
     #year
     matchYear = re.search(r'[\'"]release_year[\'"]: u{0,1}[\'"](\d{4})[\'"]', curQueueItem)
@@ -350,6 +423,9 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
     if matchAvailUntil:
         curX.AvailableUntil = matchAvailUntil.group(1)
 
+    matchWebURL = re.search(r"u'web_page': u'(.*?)'", curQueueItem)
+    if matchWebURL:
+	curX.WebURL = matchWebURL.group(1)
                 
     #shorttitle
     matchTitleShort = re.search('[\'"]title[\'"]: {.*?[\'"](title_)?short[\'"]: u{0,1}[\'"](.*?)[\'"].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
@@ -461,6 +537,12 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
     if (VERBOSE_USER_LOG):
         print "curFullId: " + curX.FullId
 
+    if (discQueue):
+        addLinkDisc(curX.TitleShort,REAL_LINK_PATH + curX.TitleShortLink + '.html', curX)
+        #write the link file for Disc items that will link to the webpage
+        writeDiscLinkFile(curX.TitleShortLink, curX.Title, curX.WebURL)
+        return curX
+        
     if (instantAvail):
         #need to verify it's available for instant watching before adding
         matchIA = re.search(r"delivery_formats': {(.*?instant.*?)}", curQueueItem, re.DOTALL | re.MULTILINE)
@@ -559,6 +641,39 @@ def addDir(name,url,mode,iconimage,data):
     ok=xbmcplugin.addDirectoryItem(handle=int(whichHandler),url=u,listitem=liz,isFolder=True)
     return ok
 
+def getUserDiscQueue(netflix,user,displayWhat):
+    print "*** What's in the Disc Queue? ***"
+    feeds = netflix.user.getDiscQueue(None,None,500)
+    if (VERBOSE_USER_LOG):
+        print feeds
+  
+    counter = 0
+    reobj = re.compile(r"(?sm)(?P<main>('item': )((?!('item': )).)*)", re.DOTALL | re.MULTILINE)
+    #real processing begins here
+    for match in reobj.finditer(str(feeds)):
+        curX = XInfo()
+        curQueueItem = match.group(1)
+
+        #now parse out each item
+        curX = getMovieDataFromFeed(curX, curQueueItem, False, netflix, False,displayWhat)
+
+def getUserAtHomeItems(netflix,user):
+    print "*** What's Disc from the Queue are shipped or at the home? ***"
+    feeds = netflix.user.getAtHomeList(None,None,500)
+    if (VERBOSE_USER_LOG):
+        print feeds
+  
+    counter = 0
+    reobj = re.compile(r"(?sm)(?P<main>('item': )((?!('item': )).)*)", re.DOTALL | re.MULTILINE)
+    #real processing begins here
+    for match in reobj.finditer(str(feeds)):
+        curX = XInfo()
+        curQueueItem = match.group(1)
+
+        #now parse out each item
+        curX = getMovieDataFromFeed(curX, curQueueItem, False, netflix, False)
+
+
 def getUserInstantQueue(netflix,user, displayWhat):
     print "*** What's in the Instant Queue? ***"
     #get user setting for max number to download
@@ -635,6 +750,7 @@ def parseRSSFeedItem(curQueueItem, curX):
             curX.Title = match.group(1)
             curX.TitleShort = match.group(1)
             curX.Synop = match.group(3)
+            curX.WebURL = match.group(2)
             reobj = re.compile(r".*?/(\d{1,15})", re.DOTALL | re.MULTILINE)
             matchID = reobj.search(match.group(2))
             if matchID:
@@ -645,13 +761,13 @@ def parseRSSFeedItem(curQueueItem, curX):
         print "error parsing data from RSS feed Item"
     return curX
 
-def convertRSSFeed(tData, intLimit):
+def convertRSSFeed(tData, intLimit, DiscQueue=None):
     #parse feed to curX object
     curX = XInfo()
     intCount = 0
     for match in re.finditer(r"(?sm)<item>(.*?)</item>", tData):
         intCount = intCount + 1
-        print str(intCount)
+        #print str(intCount)
         if(intCount > int(intLimit)):
             return
             
@@ -663,10 +779,33 @@ def convertRSSFeed(tData, intLimit):
             exit
 
         #add the link to the UI
-        addLink(curX.TitleShort,REAL_LINK_PATH + curX.ID + '.html', curX)
+        if(DiscQueue):
+            addLinkDisc(curX.TitleShort,REAL_LINK_PATH + curX.ID + '_disc.html', curX)
+            writeDiscLinkFile(curX.ID, curX.Title, curX.WebURL)
+        else:
+            addLink(curX.TitleShort,REAL_LINK_PATH + curX.ID + '.html', curX)            
+            #write the link file
+            writeLinkFile(curX.ID, curX.Title)
 
-        #write the link file
-        writeLinkFile(curX.ID, curX.Title)
+def getUserRentalHistory(netflix, user, strHistoryType, displayWhat=None):
+    print "*** What's the rental history? ***"
+    feeds = ""
+    if(not strHistoryType):
+        feeds = netflix.user.getRentalHistory(None,None,500)
+    else:
+        feeds = netflix.user.getRentalHistory(strHistoryType,None,500)
+        
+    if (VERBOSE_USER_LOG):
+        print feeds
+  
+    counter = 0
+    reobj = re.compile(r"(?sm)(?P<main>('item': )((?!('item': )).)*)", re.DOTALL | re.MULTILINE)
+    #real processing begins here
+    for match in reobj.finditer(str(feeds)):
+        curX = XInfo()
+        curQueueItem = match.group(1)
+        #now parse out each item
+        curX = getMovieDataFromFeed(curX, curQueueItem, False, netflix, False, displayWhat)
 
 CUR_IMAGE_MIRROR_NUM = 0
 
@@ -778,11 +917,11 @@ def initApp():
         MY_USER['request']['key'] = match.group(1).strip()
         MY_USER['request']['secret'] = match.group(2).strip()
         MY_USER['access']['key'] = match.group(3).strip()
-	MY_USER['access']['secret'] = match.group(4).strip()
-	print "finished loading up user information from file"
+        MY_USER['access']['secret'] = match.group(4).strip()
+        print "finished loading up user information from file"
     else:
         #no match, need to fire off the user auth from the start
-	print "couldn't load user information from userinfo.properties file"
+        print "couldn't load user information from userinfo.properties file"
     #auth the user
     netflixClient = NetflixClient(APP_NAME, API_KEY, API_SECRET, CALLBACK, VERBOSE_USER_LOG)
     user = getAuth(netflixClient,VERBOSE_USER_LOG)
@@ -834,14 +973,30 @@ def getTop25Feed(strArg):
     time.sleep(1)
     xbmcplugin.setContent(int(sys.argv[1]),'Movies')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
-    
-def doSearch(strArg):
-    #title search
-    print "looking for instant view items that match %s" % strArg
+
+def getTop25FeedD(strArg):
     initApp()
+    curUrl = "http://rss.netflix.com/Top25RSS?gid=" + str(strArg)
+    convertRSSFeed(getUrlString(curUrl), 25, True)
+    time.sleep(1)
+    xbmcplugin.setContent(int(sys.argv[1]),'Movies')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def doSearch(strArg, strQueue, strInstantOnly=None):
+    instantOnly = False
+    strType = "3"
+    if(strInstantOnly):
+        instantOnly = True
+        strType = "5"
+    #title search
+    print "looking for items that match " + str(strArg ) + " in " + str(strQueue)  + " instant only is set to: " + str(instantOnly)
+    initApp()
+    print "Instant set to: " + str(instantOnly)
+    print "Queue set to: " + str(strQueue)
+    print "Search String is: " + str(strQueue)
     if(not user):
         exit    
-    feeds = netflixClient.user.searchTitles(strArg,0,100)
+    feeds = netflixClient.user.searchTitles(strArg,strQueue,0,100)
     if(DEBUG):
         print simplejson.dumps(feeds,indent=4)
     counter = 0
@@ -853,7 +1008,52 @@ def doSearch(strArg):
         if(DEBUG):
             print "current queue item from regex is: " + str(curQueueItem)
         #now parse out each item
-        curX = getMovieDataFromFeed(curX, curQueueItem, False, netflixClient, True)
+        curX = getMovieDataFromFeed(curX, curQueueItem, False, netflixClient, instantOnly, strType)
+    time.sleep(1)
+    xbmcplugin.setContent(int(sys.argv[1]),'Movies')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def getDVDQueue(displayWhat):
+    initApp()
+    getUserDiscQueue(netflixClient,user, displayWhat)
+    if(not user):
+        exit
+    time.sleep(1)
+    xbmcplugin.setContent(int(sys.argv[1]),'Movies')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def rhShipped():
+    initApp()
+    getUserRentalHistory(netflixClient,user, "shipped", "3")
+    if(not user):
+        exit
+    time.sleep(1)
+    xbmcplugin.setContent(int(sys.argv[1]),'Movies')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def rhReturned():
+    initApp()
+    getUserRentalHistory(netflixClient,user, "returned", "3")
+    if(not user):
+        exit
+    time.sleep(1)
+    xbmcplugin.setContent(int(sys.argv[1]),'Movies')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def rhWatched():
+    initApp()
+    getUserRentalHistory(netflixClient,user, "watched")
+    if(not user):
+        exit
+    time.sleep(1)
+    xbmcplugin.setContent(int(sys.argv[1]),'Movies')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def getHomeList():
+    initApp()
+    getUserAtHomeItems(netflixClient,user)
+    if(not user):
+        exit
     time.sleep(1)
     xbmcplugin.setContent(int(sys.argv[1]),'Movies')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))

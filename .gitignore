@@ -29,3 +29,4 @@ plugin.video.eyetv.parser/.git
 plugin.video.xbmcflicks/.git
 plugin.video.gamestar/.git
 plugin.video.gamestar/.gitignore
+plugin.video.escapistmagazine/images.raw*

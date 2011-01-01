@@ -1,0 +1,10 @@
+0.1.3 (2010-01-01) (8)
+	Added fanart.jpg and changed icon.png to conform to the XBMC plugin image guidelines
+	Added this changelog
+
+0.1.2 (2010-12-31) (4)
+	Added support for browsing past the first page of a show
+
+0.1.0 (2010-12-30) (N/A)
+	Initial release
+	Supports playing videos, but not browsing past the first page of a show

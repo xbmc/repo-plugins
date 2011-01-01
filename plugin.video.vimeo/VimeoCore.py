@@ -341,7 +341,7 @@ class VimeoCore(object):
 			
 		video = self._get_details(videoid)
 		
-		print "smomsomsos" + repr(video)
+		get = video.get
 		if not video:
 			# we need a scrape the homepage fallback when the api doesn't want to give us the URL
 			if self.__dbg__:
@@ -351,7 +351,7 @@ class VimeoCore(object):
 		quality = "sd"
 		hd_quality = int(self.__settings__.getSetting( "hd_videos" ))
 		
-		if (hd_quality):
+		if (hd_quality and get("isHD","0") == "1"):
 			quality = "hd"
 		
 		if ( 'apierror' not in video):
@@ -373,9 +373,8 @@ class VimeoCore(object):
 		
 	def search(self, query, page = "0"):
 		if self.__dbg__:
-			print self.__plugin__ + " search"
+			print self.__plugin__ + " search: " + repr(query)
 		
-		print self.__plugin__ + "search query: " + query
 		per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.__settings__.getSetting( "perpage" ) ) ]
 		
 		result = self.v.vimeo_videos_search(query=query, page=int(page) + 1, per_page=per_page, full_response="true")
@@ -499,12 +498,12 @@ class VimeoCore(object):
 	def _get_details(self, videoid):
 		if self.__dbg__:
 			print self.__plugin__ + " _get_details: " + repr(videoid)
-				
+			
 		url = urllib2.Request("http://www.vimeo.com/moogaloop/load/clip:%s/local/" % videoid);
 		url.add_header('User-Agent', self.USERAGENT);
 
 		con = urllib2.urlopen(url);
-		value = con.read()
+		value = con.read()	
 		con.close()
 
 		soup = BeautifulStoneSoup(value)
@@ -519,6 +518,7 @@ class VimeoCore(object):
 			video['Studio'] = soup.video.uploader_display_name.contents[0].encode( "utf-8" )
 			video['request_signature'] = soup.request_signature.contents[0]
 			video['request_signature_expires'] = soup.request_signature_expires.contents[0]
+			video['isHD'] = soup.video.ishd.contents[0]
 			result.append(video)
 			
 		if len(result) == 0:

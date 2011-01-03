@@ -18,6 +18,15 @@ def getUserSettingOSX(arg):
         v = False
     return v
 
+def getUserSettingCaUser(arg):
+    cau = xbmcplugin.getSetting(arg,'caUser')
+    v = False
+    if(cau == "0"):
+        v = True
+    if(cau == "1"):
+        v = False
+    return v
+
 def getUserSettingExpandEpisodes(arg):
     ee = xbmcplugin.getSetting(arg,'expandEpisodes')
     v = False

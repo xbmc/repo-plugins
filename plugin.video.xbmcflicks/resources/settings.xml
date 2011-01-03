@@ -7,6 +7,7 @@
     <setting id="appendYear" type="enum" lvalues="30016|30017" label="30018" default="0" />
     <setting id="expandEpisodes" type="enum" lvalues="30016|30017" label="30030" default="1" />
     <setting id="yearLimit" type="number" label="30221" default="1800" />
+    <setting id="caUser" type="enum" lvalues="30016|30017" label="30032" default="1" />
 </category>
 <category label="Parental Control's">
  <setting id="mrLimit" type="enum" lvalues="30201|30202|30203|30204|30205|30206|30207|30208|30209|30210|30211|30212|30213" label="30200" default="0"/>

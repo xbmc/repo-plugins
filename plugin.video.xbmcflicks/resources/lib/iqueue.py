@@ -643,7 +643,7 @@ def addDir(name,url,mode,iconimage,data):
 
 def getUserDiscQueue(netflix,user,displayWhat):
     print "*** What's in the Disc Queue? ***"
-    feeds = netflix.user.getDiscQueue(None,None,500)
+    feeds = netflix.user.getDiscQueue(None,None,500,None,IN_CANADA)
     if (VERBOSE_USER_LOG):
         print feeds
   
@@ -677,7 +677,9 @@ def getUserAtHomeItems(netflix,user):
 def getUserInstantQueue(netflix,user, displayWhat):
     print "*** What's in the Instant Queue? ***"
     #get user setting for max number to download
-    feeds = netflix.user.getInstantQueue(None,None,MAX_INSTANTQUEUE_RETREVE)
+    feeds = netflix.user.getInstantQueue(None,None,MAX_INSTANTQUEUE_RETREVE,None,IN_CANADA)
+    print "Max value: " + str(MAX_INSTANTQUEUE_RETREVE)
+    print "In CA: " + str(IN_CANADA)
     if (VERBOSE_USER_LOG):
         print feeds
     
@@ -717,7 +719,7 @@ def getUserInstantQueue(netflix,user, displayWhat):
 
 def getUserRecommendedQueue(netflix,user):
     initApp()
-    feeds = netflixClient.user.getRecommendedQueue(0,100)
+    feeds = netflixClient.user.getRecommendedQueue(0,100,None,IN_CANADA)
     if(DEBUG):
         print simplejson.dumps(feeds,indent=4)
     counter = 0
@@ -833,6 +835,7 @@ def initApp():
     global arg
     global netflixClient
     global pg
+    global IN_CANADA
     global APPEND_YEAR_TO_TITLE
     global POSTER_QUAL
     global MAX_INSTANTQUEUE_RETREVE
@@ -859,6 +862,7 @@ def initApp():
     DEBUG = getUserSettingDebug(arg)
     VERBOSE_USER_LOG = getUserSettingVerboseUserInfo(arg)
     OSX = getUserSettingOSX(arg)
+    IN_CANADA = getUserSettingCaUser(arg)
     AUTO_EXPAND_EPISODES = getUserSettingExpandEpisodes(arg)
     useAltPlayer = getUserSettingAltPlayer(arg)
     POSTER_QUAL = getUserSettingPosterQuality(arg)

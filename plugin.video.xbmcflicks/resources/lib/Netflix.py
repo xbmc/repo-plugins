@@ -202,8 +202,7 @@ class NetflixUser:
             
         return info
 
-    def getInstantQueue(self,historyType=None,startIndex=None,
-                                    maxResults=None,updatedMin=None):
+    def getInstantQueue(self,historyType=None,startIndex=None,maxResults=None,updatedMin=None,caUser=None):
         accessToken=self.accessToken
         parameters = {}
         if startIndex:
@@ -212,7 +211,10 @@ class NetflixUser:
             parameters['max_results'] = maxResults
         if updatedMin:
             parameters['updated_min'] = updatedMin
-
+        if caUser:
+            if (caUser == True):
+                parameters['country'] = "ca"
+        print "params: " + str(parameters)    
         parameters['v'] = str('2.0')
         parameters['filters'] = 'http://api.netflix.com/categories/title_formats/instant'
         parameters['expand'] = '@title,@synopsis,@directors,@formats,@episodes,@short_synopsis'
@@ -233,7 +235,7 @@ class NetflixUser:
             
         return info
 
-    def getDiscQueue(self,historyType=None,startIndex=None,maxResults=None,updatedMin=None):
+    def getDiscQueue(self,historyType=None,startIndex=None,maxResults=None,updatedMin=None,caUser=None):
         accessToken=self.accessToken
         parameters = {}
         if startIndex:
@@ -242,7 +244,10 @@ class NetflixUser:
             parameters['max_results'] = maxResults
         if updatedMin:
             parameters['updated_min'] = updatedMin
-
+        if caUser:
+            if (caUser == True):
+                parameters['country'] = "ca"
+            
         parameters['v'] = str('2.0')
         #parameters['filters'] = 'http://api.netflix.com/categories/title_formats/disc'
         parameters['expand'] = '@title,@synopsis,@directors,@formats,@episodes,@short_synopsis'
@@ -263,8 +268,7 @@ class NetflixUser:
             
         return info
 
-    def getAtHomeList(self,historyType=None,startIndex=None,
-                                    maxResults=None,updatedMin=None):
+    def getAtHomeList(self,historyType=None,startIndex=None,maxResults=None,updatedMin=None):
         accessToken=self.accessToken
         parameters = {}
         if startIndex:
@@ -296,7 +300,7 @@ class NetflixUser:
             
         return info
 
-    def getRecommendedQueue(self,startIndex=None,maxResults=None,updatedMin=None):
+    def getRecommendedQueue(self,startIndex=None,maxResults=None,updatedMin=None,caUser=None):
         accessToken=self.accessToken
         parameters = {}
         if startIndex:
@@ -305,6 +309,10 @@ class NetflixUser:
             parameters['max_results'] = maxResults
         if updatedMin:
             parameters['updated_min'] = updatedMin
+        if caUser:
+            if (caUser == True):
+                parameters['country'] = "ca"
+            
         parameters['v'] = str('2.0')
         parameters['filters'] = 'http://api.netflix.com/categories/title_formats/instant'
         parameters['expand'] = '@title,@cast,@synopsis,@directors,@formats,@episodes,@short_synopsis'
@@ -361,14 +369,17 @@ class NetflixUser:
             
         return info
 
-    def searchTitles(self, term, queue, startIndex=None,maxResults=None):
+    def searchTitles(self, term, queue, startIndex=None,maxResults=None,caUser=None):
         requestUrl = '/catalog/titles'
         parameters = {'term': term}
         if startIndex:
             parameters['start_index'] = startIndex
         if maxResults:
             parameters['max_results'] = maxResults
-
+        if caUser:
+            if (caUser == True):
+                parameters['country'] = "ca"
+            
         parameters['v'] = str('2.0')
         parameters['filters'] = 'http://api.netflix.com/categories/title_formats/' + queue
         parameters['expand'] = '@title,@synopsis,@directors,@formats,@episodes,@short_synopsis'

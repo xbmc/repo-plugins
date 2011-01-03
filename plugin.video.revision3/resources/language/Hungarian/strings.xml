@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="30000">A DVD Player használata a normál lejátszó helyett</string>
-    <string id="30001">Videó letöltése és lejátszása</string>
-    <string id="30002">Letöltési útvonal</string>
-    <string id="30003">Letöltés felajánlása lejátszás előtt</string>
-    <string id="30004">Minőség (újraindítás szükséges)</string>
-    <string id="30005">quicktime-HD</string>
-    <string id="30006">quicktime-nagy</string>
-    <string id="30007">quicktime-alacsony</string>
-    <string id="30008">wmv-nagy</string>
-    <string id="30009">wmv-alacsony</string>
-    <string id="30010">xvid-magas</string>
-    <string id="30011">xvid-alacsony</string>
-    <string id="30012">Frissítés elérhető itt:</string>
-    <string id="30013">Jelenlegi verzió: </string>
-    <string id="30014">Frissített verzió: </string>
-    <string id="30015">Letöltés</string>
-    <string id="30016">Fájlnév: </string>
-    <string id="30017">Letöltés &amp; Lejátszás</string>
-    <string id="30018">Adatfolyam</string>
-    <string id="30019">Kilépés</string>
-    <string id="30020">Frissítések keresése</string>
-    <string id="30021">Úgy tűnik nincs epizód ebben a formátumban.</string>
-    <string id="30022">Változtass a minőségi beállításokon.</string>
+    <string id="30000">Minőség (újraindítás szükséges)</string>
+    <string id="30001">Úgy tűnik nincs epizód ebben a formátumban.</string>
+    <string id="30002">Változtass a minőségi beállításokon.</string>
+    <string id="30003">quicktime-high-definition</string>
+    <string id="30004">quicktime-large</string>
+    <string id="30005">quicktime-small</string>
+    <string id="30006">wmv-large</string>
+    <string id="30007">wmv-small</string>
+    <string id="30008">xvid-large</string>
+    <string id="30009">xvid-small</string>
 </strings>

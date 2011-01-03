@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="30000">Use DVD Player instead of regular player</string>
-    <string id="30001">Download and Play video</string>
-    <string id="30002">Download path</string>
-    <string id="30003">Ask for download before playing video</string>
-    <string id="30004">Video quality (Restart plugin to enable)</string>
-    <string id="30005">quicktime-high-definition</string>
-    <string id="30006">quicktime-large</string>
-    <string id="30007">quicktime-small</string>
-    <string id="30008">wmv-large</string>
-    <string id="30009">wmv-small</string>
-    <string id="30010">xvid-large</string>
-    <string id="30011">xvid-small</string>
-    <string id="30012">Updates are available at</string>
-    <string id="30013">Current Version: </string>
-    <string id="30014">Update Version: </string>
-    <string id="30015">Downloading</string>
-    <string id="30016">Filename: </string>
-    <string id="30017">Download &amp; Play</string>
-    <string id="30018">Stream</string>
-    <string id="30019">Exit</string>
-    <string id="30020">Check for updates</string>
-    <string id="30021">It appears there are no episodes available in the</string>
-    <string id="30022"> format. Change the quality settings.</string>
+    <string id="30000">Video Quality (Restart Required)</string>
+    <string id="30001">It appears there are no episodes available in the</string>
+    <string id="30002"> format. Change the quality settings.</string>
+    <string id="30003">quicktime-high-definition</string>
+    <string id="30004">quicktime-large</string>
+    <string id="30005">quicktime-small</string>
+    <string id="30006">wmv-large</string>
+    <string id="30007">wmv-small</string>
+    <string id="30008">xvid-large</string>
+    <string id="30009">xvid-small</string>
 </strings>

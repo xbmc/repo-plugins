@@ -1,8 +1,3 @@
 <settings>
-   <setting id="update" type="bool" label="30020" default="true"/>
-   <setting id="dvdplayer" type="bool" label="30000" default="false"/>
-   <setting id="download" type="bool" label="30001" default="false"/>
-   <setting id="download_path" type="folder" enable="eq(-1,true)" source="files" label="30002"  option="writeable" default="E:\"/>
-   <setting id="download_ask" type="bool" enable="eq(-2,false)" label="30003" default="false"/>
-   <setting id="quality" type="enum" lvalues="30005|30006|30007|30008|30009|30010|30011" label="30004" default="5"/>
+   <setting id="quality" type="select" lvalues="30003|30004|30005|30006|30007|30008|30009" label="30000" default="quicktime-high-definition"/>
 </settings>

@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <string id="30000">Använd DVD-spelaren istället för den vanliga spelaren</string>
-    <string id="30001">Ladda ner och spela video</string>
-    <string id="30002">Nedladdningssökväg</string>
-    <string id="30003">Fråga om nedladdning innan uppspelning</string>
-    <string id="30004">Videokvalitet (omstart krävs)</string>
-    <!--  Don't translate the quality, it breaks the plugin  -->
-    <string id="30005">quicktime-high-definition</string>
-    <string id="30006">quicktime-large</string>
-    <string id="30007">quicktime-small</string>
-    <string id="30008">wmv-large</string>
-    <string id="30009">wmv-small</string>
-    <string id="30010">xvid-large</string>
-    <string id="30011">xvid-small</string>
-    <string id="30012">Uppdateringar finns på</string>
-    <string id="30013">Nuvarande version: </string>
-    <string id="30014">Uppdatera version: </string>
-    <string id="30015">Nedladdning</string>
-    <string id="30016">Filnamn: </string>
-    <string id="30017">Hämta &amp; Spela</string>
-    <string id="30018">Stream</string>
-    <string id="30019">Utgång</string>
-    <string id="30020">Söka efter uppdateringar</string>
-    <string id="30021">Det verkar inte finns några episoder finns i</string>
-    <string id="30022"> format. Ändra kvalitet inställningar.</string>
+    <string id="30000">Videokvalitet (omstart krävs)</string>
+    <string id="30001">Det verkar inte finns några episoder finns i</string>
+    <string id="30002"> format. Ändra kvalitet inställningar.</string>
+    <string id="30003">quicktime-high-definition</string>
+    <string id="30004">quicktime-large</string>
+    <string id="30005">quicktime-small</string>
+    <string id="30006">wmv-large</string>
+    <string id="30007">wmv-small</string>
+    <string id="30008">xvid-large</string>
+    <string id="30009">xvid-small</string>
 </strings>

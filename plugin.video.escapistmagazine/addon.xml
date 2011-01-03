@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon
 	id="plugin.video.escapistmagazine"
-	name="Escapist Magazine"
-	version="0.1.3"
+	name="The Escapist"
+	version="0.1.4"
 	provider-name="Mike Cronce"
 >
 	<requires>

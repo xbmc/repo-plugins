@@ -446,7 +446,7 @@ def detail(params,url,category):
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
 		print " encontro VK.COM :%s" %matches[0]
- 		videourl = 	vk.geturl(matches[0])
+ 		videourl = 	vk.geturl(scrapertools.unescape(matches[0]))
  		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK]", videourl , thumbnail , plot )
 	
 	# Label (top-right)...

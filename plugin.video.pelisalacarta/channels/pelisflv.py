@@ -215,7 +215,7 @@ def listvideos(params,url,category):
 
 
 	# Extrae las entradas (carpetas)
-	patronvideos  = "<h3 class='post-title entry-title'>[^<]+<a href='([^']+)'"  # URL
+	patronvideos  = "<h3 class='post-title entry-title'.+?>[^<]+<a href='([^']+)'"  # URL
 	patronvideos += ">([^<]+)</a>.*?"                                            # Titulo   
 	patronvideos += '<img style="[^"]+" src="([^"]+).*?'           # TUMBNAIL               
 	patronvideos += 'border=[^>]+>.*?<span[^>]+>(.*?)</span></div>'        # Argumento	
@@ -255,7 +255,7 @@ def listvideos(params,url,category):
 
 	# Extrae la marca de siguiente página
 
-	patronvideos  = "<div class='status-msg-hidden'>.*?<a href=\"([^\"]+)\""
+	patronvideos  = "<div class='status-msg-hidden'>.+?<a href=\"([^\"]+)\""
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 

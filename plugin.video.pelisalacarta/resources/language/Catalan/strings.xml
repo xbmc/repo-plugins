@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <strings>
 	<!-- Los id disponibles son de 30000 a 30999 -->
  
@@ -29,7 +29,13 @@
 	<string id="30013">Mode premium Megavideo:</string>
 	<string id="30014">Usuari Megavideo:</string>
 	<string id="30015">Password Megavideo:</string>
- 
+    <string id="30031">Calidad de videos (FLV)</string>
+    <string id="30032">Calidad Normal (SD)</string>
+    <string id="30033">Calidad Alta (HD)(si existe)</string>
+    
+    <string id="30034">Usuario páginas privadas:</string>
+    <string id="30035">Password páginas privadas:</string>
+    
 	<!-- Otras -->
 	<string id="30017">Directori de descarregues:</string>
 	<string id="30018">Directori de la llista de descarregues:</string>
@@ -124,6 +130,16 @@
  
 	<!-- Context menu strings -->
 	<string id="30300">Eliminar aquesta cerca</string>
+	<string id="30301">Add channel live to favorites</string>
+	<string id="30302">Remove from favorites channel live</string>
+	<string id="30303">Rename title channel live</string>
+ 
+ 	<!-- Megalive menu strings -->
+ 	<string id="30401">channels wall</string>
+	<string id="30402">Categories</string>
+	<string id="30403">Favorites channels </string>
+	<string id="30404">Play channel Live by ID</string>
+	<string id="30405">Input channel ID code</string>
  
 	<!-- LetMeWatchThis -->
 	<string id="40001">Pel·licules - Novetats</string>

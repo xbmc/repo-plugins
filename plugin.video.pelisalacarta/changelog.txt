@@ -1,3 +1,33 @@
+2.20
+
+- New channels:
+    tubehentai (@dreamlomax),
+    myhentaitube (@dreamlomax)
+    xhamster (@dreamlomax)
+    sonolatino (@bandavi)
+    megalive (@bandavi)
+    cuevana (@jesus)
+    somosmovies (@jesus)
+    peliculas-flv (@jesus)
+    seriematic (@jesus)
+	serieonline (@jesus)
+
+- New server connectors:
+    Yahoo (@bandavi)
+    Vimeo (@bandavi)
+    
+    
+2.19
+
+- New channels vagos (@truenon), documentalesatonline2 (@blablableble), descargapelis (@blablableble)
+- Megavideo fixed, now with hd support
+- Hidden password in settings
+- Removed ovasid channel
+- Login for private pages (vagos, mocosoftx)
+- Fanart added
+- And many fixes...
+
+
 2.18
 
 - Fixed bugs in channels

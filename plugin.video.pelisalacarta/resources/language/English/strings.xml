@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!-- Available id from 30000 to 30999 -->
 
@@ -29,7 +29,13 @@
 	<string id="30013">Megavideo premium mode:</string>
 	<string id="30014">Megavideo username:</string>
 	<string id="30015">Megavideo password:</string>
+    <string id="30031">Video Quality (FLV)</string>
+    <string id="30032">Standard Definition (SD)</string>
+    <string id="30033">High Definition (HD)(when available)</string>    
 
+    <string id="30034">Private pages login:</string>
+    <string id="30035">Private pages password:</string>
+    
 	<!-- Other -->
 	<string id="30017">Download path:</string>
 	<string id="30018">Download list path:</string>
@@ -124,6 +130,16 @@
 
 	<!-- Context menu strings -->
 	<string id="30300">Delete saved search</string>
+	<string id="30301">Add channel live to favorites</string>
+	<string id="30302">Remove from favorites channel live</string>
+	<string id="30303">Rename title channel live</string>
+
+	<!-- Megalive menu strings -->
+	<string id="30401">channels wall</string>
+	<string id="30402">Categories</string>
+	<string id="30403">Favorites channels </string>
+	<string id="30404">Play channel Live by ID</string>
+	<string id="30405">Input channel ID code</string>
 
 	<!-- LetMeWatchThis -->
 	<string id="40001">Movies - Just added</string>

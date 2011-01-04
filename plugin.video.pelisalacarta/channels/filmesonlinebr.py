@@ -202,21 +202,26 @@ def detail(params,url,category):
 		matches = megasearch(matchtype,data)
 		listar(title,thumbnail,plot,matches,category)
 	else:
-		patron = "<h2>(.*?)</h2>"
+		patron = "<h2(.*?)</h2>"
 		matchtemp = re.compile(patron,re.DOTALL).findall(data)
+		print matchtemp
 		if len(matchtemp)>0:
-			if "Temporada " in matchtemp[0]:
-				for match in matchtemp:
-					patron = "<h2><strong>%s</strong></h2>(.*?)<h2>" %match[0]
-					matchesdata = re.compile(patron,re.DOTALL).findall(data)
-					matches = megasearch(matchtype,matchesdata[0])
-					titulo = re.sub("<[^>]+>"," ",match)
-					listar(titulo,thumbnail,plot,matches,category)
-			
-		matches = megasearch(matchtype,data)
-		listar(title,thumbnail,plot,matches,category)
+			patron = "<h2(.*?)</h2>"
+			matchtemp = re.compile(patron,re.DOTALL).findall(matchtype[0])
+			try:		
+				if "Temporada " in matchtemp[0]:
+					for match in matchtemp:
+						patron = "<h2%s(.*?)</p>" %match[0]
+						matchesdata = re.compile(patron,re.DOTALL).findall(matchtype[0])
+						print matchesdata[0]
+						matches = megasearch(matchtype,matchesdata[0])
+						titulo = re.sub("<[^>]+>"," ",match).replace(">","")
+						listar(titulo,thumbnail,plot,matches,category)
+			except:
+				matches = megasearch(matchtype,data)
+				listar(title,thumbnail,plot,matches,category)
 		
-		
+	close_directory(params,url,category)	
 	# patron para: thumbnail , idioma , sinopsis y titulo
 
 	#patronIdioma   = '<p>(.*?)Sinopse:'
@@ -256,6 +261,8 @@ def listar(title,thumbnail,plot,matches,category):
 		
 			# Añade al listado de XBMC
 			xbmctools.addnewvideo( CHANNELNAME , "play" , category , match[2], scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+
+def close_directory(params,url,category):
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 
@@ -286,15 +293,18 @@ def acentos(title):
         return(title)
 def megasearch(matchtype,data):
 	
-	patron = 'http\:\/\/www.megavideo.com\/([\?v=|v/|\?d=]+)([A-Z0-9]{8}).*?'
+	if "Temporada" in matchtype[0]:
+		patron = 'http\:\/\/www.megavideo.com\/([\?v=|v/|\?d=]+)([A-Z0-9]{8})" target="_blank">([^<]+)<'
+	else:
+		patron = 'http\:\/\/www.megavideo.com\/([\?v=|v/|\?d=]+)([A-Z0-9]{8}).*?'
 	matches = re.compile(patron,re.DOTALL).findall(data)
 	devuelve = []
 	if len(matches)>0:
 		if len(matches)>1:
 			if ("s\xc3\xa9ries"or"serie"or"anime"or"desenhos"or"episÃ³dio") in string.lower(matchtype[0]):
-				cd = " - Episódio "
+				cd = " - Episódio %d "
 			else:
-				cd = " - Parte "
+				cd = " - (%d) "
 		else:
 			cd = ""
 		c = 0
@@ -305,10 +315,16 @@ def megasearch(matchtype,data):
 				server = "Megavideo"
 			elif "d" in match[0]:
 				server = "Megaupload"
-			if cd == "":
-				titulo = ""
+			if "Temporada" in matchtype[0]:
+				if "Assistir" == match[2].strip():
+					titulo = " - " +match[2] + cd %c
+				else:
+					titulo = " - " +match[2]
 			else:
-				titulo = "%s %d" %(cd,c) 
+				if cd == "":
+					titulo = ""
+				else:
+					titulo = cd %c 
 			devuelve.append( [ titulo , match[1] , server ] )
 	return devuelve
 

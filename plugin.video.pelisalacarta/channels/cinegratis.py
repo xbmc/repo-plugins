@@ -5,108 +5,81 @@
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
 import urlparse,urllib2,urllib,re
-import os
-import sys
-import xbmc
-import xbmcgui
-import xbmcplugin
+import os, sys
+
 import scrapertools
-import megavideo
 import servertools
-import binascii
-import xbmctools
-import config
 import logger
 import buscador
+from item import Item
 
 CHANNELNAME = "cinegratis"
-
-# Esto permite su ejecución en modo emulado
-try:
-	pluginhandle = int( sys.argv[ 1 ] )
-except:
-	pluginhandle = ""
-
-# Traza el inicio del canal
-logger.info("[cinegratis.py] init")
-
 DEBUG = True
 
-def mainlist(params,url,category):
+def isGeneric():
+	return True
+
+def mainlist(item):
 	logger.info("[cinegratis.py] mainlist")
 
-	# Añade al listado de XBMC
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Películas - Novedades"            ,"http://www.cinegratis.net/index.php?module=peliculas","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Películas - Estrenos"             ,"http://www.cinegratis.net/index.php?module=estrenos","","")
-	xbmctools.addnewfolder( CHANNELNAME , "peliscat"   , category , "Películas - Lista por categorías" ,"http://www.cinegratis.net/index.php?module=generos","","")
-	xbmctools.addnewfolder( CHANNELNAME , "pelisalfa"  , category , "Películas - Lista alfabética"     ,"","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Películas - Alojadas en Veoh"     ,"http://www.cinegratis.net/index.php?module=servers&varserver=veoh","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Películas - Alojadas en Megavideo","http://www.cinegratis.net/index.php?module=servers&varserver=megavideo","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listseries" , category , "Series - Novedades"               ,"http://www.cinegratis.net/index.php?module=series","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , "Series - Todas"                   ,"http://www.cinegratis.net/index.php?module=serieslist","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listseries" , category , "Dibujos - Novedades"              ,"http://www.cinegratis.net/index.php?module=anime","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , "Dibujos - Todos"                  ,"http://www.cinegratis.net/index.php?module=animelist","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Documentales - Novedades"         ,"http://www.cinegratis.net/index.php?module=documentales","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , "Documentales - Todos"             ,"http://www.cinegratis.net/index.php?module=documentaleslist","","")
-	#xbmctools.addnewfolder( CHANNELNAME , "deportes"   , category , "Deportes"                         ,"","","")
-	xbmctools.addnewfolder( CHANNELNAME , "search"     , category , "Buscar"                           ,"","","")
+	itemlist = []
+	itemlist.append( Item(channel=CHANNELNAME, action="listvideos" , title="Películas - Novedades"            , url="http://www.cinegratis.net/index.php?module=peliculas"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listvideos" , title="Películas - Estrenos"             , url="http://www.cinegratis.net/index.php?module=estrenos"))
+	itemlist.append( Item(channel=CHANNELNAME, action="peliscat"   , title="Películas - Lista por categorías" , url="http://www.cinegratis.net/index.php?module=generos"))
+	itemlist.append( Item(channel=CHANNELNAME, action="pelisalfa"  , title="Películas - Lista alfabética"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listvideos" , title="Películas - Alojadas en Veoh"     , url="http://www.cinegratis.net/index.php?module=servers&varserver=veoh"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listvideos" , title="Películas - Alojadas en Megavideo", url="http://www.cinegratis.net/index.php?module=servers&varserver=megavideo"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listseries" , title="Series - Novedades"               , url="http://www.cinegratis.net/index.php?module=series"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple" , title="Series - Todas"                   , url="http://www.cinegratis.net/index.php?module=serieslist"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listseries" , title="Dibujos - Novedades"              , url="http://www.cinegratis.net/index.php?module=anime"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple" , title="Dibujos - Todos"                  , url="http://www.cinegratis.net/index.php?module=animelist"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listvideos" , title="Documentales - Novedades"         , url="http://www.cinegratis.net/index.php?module=documentales"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple" , title="Documentales - Todos"             , url="http://www.cinegratis.net/index.php?module=documentaleslist"))
+	#itemlist.append( Item(channel=CHANNELNAME, action="search"     , title="Buscar"))
 
-	# Cierra el directorio
-	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
-	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
+	return itemlist
 
-def pelisalfa(params, url, category):
+def pelisalfa(item):
+	logger.info("[cinegratis.py] mainlist")
 
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "0-9","http://www.cinegratis.net/index.php?module=peliculaslist&init=","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "A","http://www.cinegratis.net/index.php?module=peliculaslist&init=a","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "B","http://www.cinegratis.net/index.php?module=peliculaslist&init=b","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "C","http://www.cinegratis.net/index.php?module=peliculaslist&init=c","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "D","http://www.cinegratis.net/index.php?module=peliculaslist&init=d","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "E","http://www.cinegratis.net/index.php?module=peliculaslist&init=e","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "F","http://www.cinegratis.net/index.php?module=peliculaslist&init=f","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "G","http://www.cinegratis.net/index.php?module=peliculaslist&init=g","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "H","http://www.cinegratis.net/index.php?module=peliculaslist&init=h","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "I","http://www.cinegratis.net/index.php?module=peliculaslist&init=i","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "J","http://www.cinegratis.net/index.php?module=peliculaslist&init=j","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "K","http://www.cinegratis.net/index.php?module=peliculaslist&init=k","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "L","http://www.cinegratis.net/index.php?module=peliculaslist&init=l","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "M","http://www.cinegratis.net/index.php?module=peliculaslist&init=m","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "N","http://www.cinegratis.net/index.php?module=peliculaslist&init=n","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "O","http://www.cinegratis.net/index.php?module=peliculaslist&init=o","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "P","http://www.cinegratis.net/index.php?module=peliculaslist&init=p","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "Q","http://www.cinegratis.net/index.php?module=peliculaslist&init=q","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "R","http://www.cinegratis.net/index.php?module=peliculaslist&init=r","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "S","http://www.cinegratis.net/index.php?module=peliculaslist&init=s","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "T","http://www.cinegratis.net/index.php?module=peliculaslist&init=t","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "U","http://www.cinegratis.net/index.php?module=peliculaslist&init=u","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "V","http://www.cinegratis.net/index.php?module=peliculaslist&init=v","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "W","http://www.cinegratis.net/index.php?module=peliculaslist&init=w","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "X","http://www.cinegratis.net/index.php?module=peliculaslist&init=x","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "Y","http://www.cinegratis.net/index.php?module=peliculaslist&init=y","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "Z","http://www.cinegratis.net/index.php?module=peliculaslist&init=z","","")
+	itemlist = []
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="0-9", url="http://www.cinegratis.net/index.php?module=peliculaslist&init="))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="A", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=a"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="B", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=b"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="C", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=c"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="D", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=d"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="E", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=e"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="F", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=f"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="G", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=g"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="H", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=h"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="I", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=i"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="J", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=j"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="K", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=k"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="L", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=l"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="M", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=m"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="N", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=n"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="O", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=o"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="P", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=p"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="Q", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=q"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="R", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=r"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="S", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=s"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="T", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=t"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="U", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=u"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="V", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=v"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="W", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=w"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="X", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=x"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="Y", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=y"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple", title="Z", url="http://www.cinegratis.net/index.php?module=peliculaslist&init=z"))
 
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
-	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
+	return itemlist
 
-def deportes(params, url, category):
-
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "Fórmula 1","http://www.cinegratis.net/index.php?module=deporte&cat=Formula-1","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "NBA","http://www.cinegratis.net/index.php?module=deporte&cat=NBA","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "Moto GP","http://www.cinegratis.net/deporte.php?cat=MotoGP","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"listsimple", category , "Fútbol","http://www.cinegratis.net/index.php?module=deporte&cat=Futbol","","")
-
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
-	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
-
+# TODO: La búsqueda no funciona en canales genéricos aún
 def search(params,url,category):
-	
+	logger.info("[cinegratis.py] search")
+
 	buscador.listar_busquedas(params,url,category)
 
+# TODO: La búsqueda no funciona en canales genéricos aún
 def searchresults(params,tecleado,category):
 	logger.info("[cinegratis.py] search")
 
@@ -115,6 +88,7 @@ def searchresults(params,tecleado,category):
 	searchUrl = "http://www.cinegratis.net/index.php?module=search&title="+tecleado
 	listsimple(params,searchUrl,category)
 
+# TODO: La búsqueda no funciona en canales genéricos aún
 def performsearch(texto):
 	logger.info("[cinegratis.py] performsearch")
 	url = "http://www.cinegratis.net/index.php?module=search&title="+texto
@@ -122,7 +96,7 @@ def performsearch(texto):
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 
-	# Extrae las entradas (carpetas)
+	# Extrae los items
 	patronvideos  = "<a href='(index.php\?module\=player[^']+)'[^>]*>(.*?)</a>"
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
@@ -141,20 +115,23 @@ def performsearch(texto):
 		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
 		# Añade al listado de XBMC
-		resultados.append( [CHANNELNAME , "detail" , "buscador" , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot ] )
+		resultados.append( [CHANNELNAME , "findvideos" , "buscador" , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot ] )
 		
 	return resultados
 
-def peliscat(params,url,category):
+def peliscat(item):
 	logger.info("[cinegratis.py] peliscat")
 
-	xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , "Versión original"     ,"http://www.cinegratis.net/index.php?module=search&title=subtitulado","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listsimple" , category , "Versión latina"       ,"http://www.cinegratis.net/index.php?module=search&title=latino","","")
+	url = item.url
+
+	itemlist = []
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple" , title="Versión original" , url="http://www.cinegratis.net/index.php?module=search&title=subtitulado"))
+	itemlist.append( Item(channel=CHANNELNAME, action="listsimple" , title="Versión latina"   , url="http://www.cinegratis.net/index.php?module=search&title=latino"))
 
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 
-	# Extrae las entradas (carpetas)
+	# Extrae los items
 	patronvideos  = "<td align='left'><a href='([^']+)'><img src='([^']+)' border='0'></a></td>"
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
@@ -169,28 +146,26 @@ def peliscat(params,url,category):
 		scrapedurl = urlparse.urljoin(url,match[0])
 		scrapedthumbnail = urlparse.urljoin(url,match[1])
 		scrapedplot = ""
-
 		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
-		# Añade al listado de XBMC
-		xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		itemlist.append( Item(channel=CHANNELNAME, action="listvideos" , title=scrapedtitle , url=scrapedurl, thumbnail=scrapedthumbnail, plot=scrapedplot))
 
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
-	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+	return itemlist
 
-def listsimple(params,url,category):
+def listsimple(item):
 	logger.info("[cinegratis.py] listsimple")
+
+	url = item.url
 
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 
-	# Extrae las entradas (carpetas)
+	# Extrae los items
 	patronvideos  = "<a href='(index.php\?module\=player[^']+)'[^>]*>(.*?)</a>"
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 
+	itemlist = []
 	for match in matches:
 		# Atributos
 		scrapedtitle = match[1]
@@ -199,28 +174,22 @@ def listsimple(params,url,category):
 		scrapedurl = urlparse.urljoin(url,match[0])
 		scrapedthumbnail = ""
 		scrapedplot = ""
-
 		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
-		# Añade al listado de XBMC
-		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		itemlist.append( Item(channel=CHANNELNAME, action="findvideos" , title=scrapedtitle , url=scrapedurl, thumbnail=scrapedthumbnail, plot=scrapedplot))
 
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
-	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+	return itemlist
 
-def listvideos(params,url,category):
+def listvideos(item):
 	logger.info("[cinegratis.py] listvideos")
 
-	if url=="":
-		url = "http://www.cinegratis.net/index.php?module=peliculas"
+	url = item.url
 
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
 
-	# Extrae las entradas (carpetas)
+	# Extrae los items
 	patronvideos  = "<table.*?<td.*?>([^<]+)<span class='style1'>\(Visto.*?"
 	patronvideos += "<div align='justify'>(.*?)</div>.*?"
 	patronvideos += "<a href='(.*?)'.*?"
@@ -228,26 +197,17 @@ def listvideos(params,url,category):
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 
+	itemlist = []
 	for match in matches:
-		# Titulo
 		scrapedtitle = match[0]
-		# URL
 		if url.startswith('http://www.cinegratis.net/genero'):
 			url="http://www.cinegratis.net/"
 		scrapedurl = urlparse.urljoin(url,match[2])
-		# Thumbnail
 		scrapedthumbnail = urlparse.urljoin(url,match[3])
-		# Argumento
 		scrapedplot = match[1]
+		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
-		# Depuracion
-		if (DEBUG):
-			logger.info("scrapedtitle="+scrapedtitle)
-			logger.info("scrapedurl="+scrapedurl)
-			logger.info("scrapedthumbnail="+scrapedthumbnail)
-
-		# Añade al listado de XBMC
-		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		itemlist.append( Item(channel=CHANNELNAME, action="findvideos" , title=scrapedtitle , url=scrapedurl, thumbnail=scrapedthumbnail, plot=scrapedplot))
 
 	# Extrae la marca de siguiente página
 	patronvideos  = "<a href='[^']+'><u>[^<]+</u></a> <a href='([^']+)'>"
@@ -259,24 +219,19 @@ def listvideos(params,url,category):
 		scrapedurl = urlparse.urljoin(url,matches[0])
 		scrapedthumbnail = ""
 		scrapedplot = ""
-		xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		itemlist.append( Item(channel=CHANNELNAME, action="listvideos" , title=scrapedtitle , url=scrapedurl, thumbnail=scrapedthumbnail, plot=scrapedplot))
 
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
-	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+	return itemlist
 
-def listseries(params,url,category):
+def listseries(item):
 	logger.info("[cinegratis.py] listvideos")
 
-	if url=="":
-		url = "http://www.cinegratis.net/index.php?module=peliculas"
-
+	url = item.url
+	
 	# Descarga la página
 	data = scrapertools.cachePage(url)
-	#logger.info(data)
 
-	# Extrae las entradas (carpetas)
+	# Extrae los items
 	patronvideos  = "<table width='785'[^>]+><tr><td[^>]+>([^<]+)<.*?"
 	patronvideos += "<div align='justify'>(.*?)</div>.*?"
 	patronvideos += "<a href='(.*?)'.*?"
@@ -284,24 +239,15 @@ def listseries(params,url,category):
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 
+	itemlist = []
 	for match in matches:
-		# Titulo
 		scrapedtitle = match[0]
-		# URL
 		scrapedurl = urlparse.urljoin(url,match[2])
-		# Thumbnail
 		scrapedthumbnail = urlparse.urljoin(url,match[3])
-		# Argumento
 		scrapedplot = match[1]
+		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
-		# Depuracion
-		if (DEBUG):
-			logger.info("scrapedtitle="+scrapedtitle)
-			logger.info("scrapedurl="+scrapedurl)
-			logger.info("scrapedthumbnail="+scrapedthumbnail)
-
-		# Añade al listado de XBMC
-		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		itemlist.append( Item(channel=CHANNELNAME, action="findvideos" , title=scrapedtitle , url=scrapedurl, thumbnail=scrapedthumbnail, plot=scrapedplot))
 
 	# Extrae la marca de siguiente página
 	patronvideos  = "<a href='[^']+'><u>[^<]+</u></a> <a href='([^']+)'>"
@@ -313,47 +259,6 @@ def listseries(params,url,category):
 		scrapedurl = urlparse.urljoin(url,matches[0])
 		scrapedthumbnail = ""
 		scrapedplot = ""
-		xbmctools.addnewfolder( CHANNELNAME , "listseries" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		itemlist.append( Item(channel=CHANNELNAME, action="listseries" , title=scrapedtitle , url=scrapedurl, thumbnail=scrapedthumbnail, plot=scrapedplot))
 
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
-	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
-
-def detail(params,url,category):
-	logger.info("[cinegratis.py] detail")
-
-	title = urllib.unquote_plus( params.get("title") )
-	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
-	plot = urllib.unquote_plus( params.get("plot") )
-
-	# Descarga la página
-	data = scrapertools.cachePage(url)
-	#logger.info(data)
-
-	# ------------------------------------------------------------------------------------
-	# Busca los enlaces a los videos
-	# ------------------------------------------------------------------------------------
-	listavideos = servertools.findvideos(data)
-
-	for video in listavideos:
-		videotitle = video[0]
-		url = video[1]
-		server = video[2]
-		xbmctools.addnewvideo( CHANNELNAME , "play" , category , server , title.strip() + " - " + videotitle , url , thumbnail , plot )
-	# ------------------------------------------------------------------------------------
-
-	# Cierra el directorio
-	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
-	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
-
-def play(params,url,category):
-	logger.info("[cinegratis.py] play")
-
-	title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
-	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
-	plot = unicode( xbmc.getInfoLabel( "ListItem.Plot" ), "utf-8" )
-	server = params["server"]
-	
-	xbmctools.playvideo(CHANNELNAME,server,url,category,title,thumbnail,plot)
+	return itemlist

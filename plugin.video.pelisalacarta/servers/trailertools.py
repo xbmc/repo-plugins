@@ -46,21 +46,27 @@ def mainlist(params,url,category):
 def buscartrailer(params,url,category):
 	print "[trailertools.py] Modulo: buscartrailer()"
 	thumbnail = ""
+	solo = "false"
 	videotitle = title = urllib.unquote_plus( params.get("title") ).strip()
-	if config.getLocalizedString(30110) in videotitle: #"Buscar tailer para"
+	if ":]" in videotitle:
+		solo = "true"
+		videotitle = re.sub("\[[^\]]+\]","",videotitle).strip()
+	if config.getLocalizedString(30110) in videotitle: #"Buscar trailer para"
 		videotitle = videotitle.replace(config.getLocalizedString(30110),"").strip()
 	if config.getLocalizedString(30111) in videotitle: #"Insatisfecho?, busca otra vez : "
 		videotitle = videotitle.replace(config.getLocalizedString(30111),"").strip()
 	
 		listavideos = GetTrailerbyKeyboard(videotitle.strip(),category)
 	else:
-		listavideos = gettrailer(videotitle.strip().strip(),category)
+		listavideos = gettrailer(videotitle.strip().strip(),category,solo)
+	
 	if len(listavideos)>0:
 		for video in listavideos:
 			titulo = video[1]
 			url        = video[0]
 			thumbnail  = video[2]
-			xbmctools.addnewvideo( "trailertools" , "youtubeplay" , category , "Directo" ,  titulo , url , thumbnail , "Ver Video" )
+			duracion = video[3]
+			xbmctools.addnewvideo( "trailertools" , "youtubeplay" , category , "Directo" ,  titulo , url , thumbnail , "Ver Video","",duracion )
 	
 	xbmctools.addnewfolder( CHANNELNAME , "buscartrailer" , category , config.getLocalizedString(30111)+" "+videotitle , url , os.path.join(IMAGES_PATH, 'trailertools.png'), "" ) #"Insatisfecho?, busca otra vez : "		
 	# Propiedades
@@ -100,7 +106,7 @@ def GetFrom_Trailersdepeliculas(titulovideo):
 				for match2 in matches2:
 					xbmc.output("link yt del Trailer encontrado :  "+match2)
 					c=c+1
-					devuelve.append( [match2, match[1] , thumbnail] )
+					devuelve.append( [match2, match[1] , thumbnail,""] )
 					#scrapedthumbnail = match[2]
 					#scrapedtitle     = match[1]
 					#scrapedurl       = match[0]
@@ -146,7 +152,7 @@ def GetFromYoutubePlaylist(titulovideo):
 						thumbnail = matches2[0]
 					c = c + 1
 					xbmc.output("Trailer elegido :  "+match[1])
-					devuelve.append( [scrapedurl, match[0] , thumbnail] )
+					devuelve.append( [scrapedurl, match[0] , thumbnail,""] )
 					#scrapedthumbnail = thumbnail
 					#scrapedtitle     = match[0]
 					#scrapedurl       = match[1]
@@ -156,37 +162,44 @@ def GetFromYoutubePlaylist(titulovideo):
 		if c == 6:break
 	print '%s Trailers encontrados en Modulo: GetFromYoutubePlaylist()' % str(c)
 	return devuelve
-def gettrailer(titulovideo,category):
+def gettrailer(titulovideo,category,solo="false"):
 	print "[trailertools.py] Modulo: gettrailer(titulo = %s , category = %s)"  % (titulovideo,category)
-	titulo = re.sub('\([^\)]+\)','',titulovideo)
-	titulo = title = re.sub('\[[^\]]+\]','',titulo)
+	if not solo=="true":
+		titulo = re.sub('\([^\)]+\)','',titulovideo)
+		titulo = title = re.sub('\[[^\]]+\]','',titulo)
 
-	sopa_palabras_invalidas = ("dvdrip" ,  "dvdscreener2" ,"tsscreener" , "latino" ,     # Esto es para peliculasyonkis o parecidos
-							   "dvdrip1",  "dvdscreener"  ,"tsscreener1", "latino1",
-							   "latino2",  "dvdscreener1" ,"screener"    ,
-							   "mirror" ,  "megavideo"    ,"vose"    	, "subtitulada"
-							   )
-							   
-	titulo = LimpiarTitulo(titulo)
-	print "el tituloooo es :%s" %titulo
-	trozeado = titulo.split()
-	for trozo in trozeado:
-		if trozo in sopa_palabras_invalidas:
-			titulo = titulo.replace(trozo ,"")
-	titulo = re.sub(' $','',titulo)
-	titulo = titulo.replace("ver pelicula online vos","").strip()
-	titulo = titulo.replace("ver pelicula online","").strip()
-	titulo = titulo.replace("mirror 1","").strip()
-	titulo = titulo.replace("parte 1","").strip()
-	titulo = titulo.replace("part 1","").strip()
-	titulo = titulo.replace("pt 1","").strip()		
-	titulo = titulo.replace("peliculas online","").strip()
-	encontrados = []
-	if len(titulo)==0:
-		titulo = "El_video_no_tiene_titulo"
+		sopa_palabras_invalidas = ("dvdrip" ,  "dvdscreener2" ,"tsscreener" , "latino" ,     # Esto es para peliculasyonkis o parecidos
+								   "dvdrip1",  "dvdscreener"  ,"tsscreener1", "latino1",
+								   "latino2",  "dvdscreener1" ,"screener"    ,
+								   "mirror" ,  "megavideo"    ,"vose"    	, "subtitulada"
+								   )
+								   
+		titulo = LimpiarTitulo(titulo)
+		print "el tituloooo es :%s" %titulo
+		trozeado = titulo.split()
+		for trozo in trozeado:
+			if trozo in sopa_palabras_invalidas:
+				titulo = titulo.replace(trozo ,"")
+		titulo = re.sub(' $','',titulo)
+		titulo = titulo.replace("ver pelicula online vos","").strip()
+		titulo = titulo.replace("ver pelicula online","").strip()
+		titulo = titulo.replace("mirror 1","").strip()
+		titulo = titulo.replace("parte 1","").strip()
+		titulo = titulo.replace("part 1","").strip()
+		titulo = titulo.replace("pt 1","").strip()		
+		titulo = titulo.replace("peliculas online","").strip()
+		encontrados = []
+		if len(titulo)==0:
+			titulo = "El_video_no_tiene_titulo"
 
-	encontrados = GetFrom_Trailersdepeliculas(titulo)      # Primero busca en www.trailerdepeliculas.org
-	encontrados  = encontrados + GetVideoFeed(titulo)      # luego busca con el API de youtube 
+		encontrados = GetFrom_Trailersdepeliculas(titulo)      # Primero busca en www.trailerdepeliculas.org
+		encontrados  = encontrados + GetVideoFeed(titulo)      # luego busca con el API de youtube 
+	else:
+		titulo = titulovideo
+		encontrados = []
+		if len(titulo)==0:
+			titulo = "El_video_no_tiene_titulo"
+		encontrados  = encontrados + GetVideoFeed(titulo,"true")
 	if len(encontrados)>0:						           # si encuentra algo, termina
 		return encontrados
 	else:
@@ -206,7 +219,7 @@ def gettrailer(titulovideo,category):
 				xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 	
 	return encontrados
-def GetTrailerbyKeyboard(titulo,category):
+def GetTrailerbyKeyboard(titulo,category,solo="false"):
 	print "[trailertools.py] Modulo: GetTrailerbyKeyboard(titulo = %s , category = %s)"  % (titulo,category)
 	devuelve = []
 	keyboard = xbmc.Keyboard('default','heading')
@@ -219,7 +232,7 @@ def GetTrailerbyKeyboard(titulo,category):
 	if (keyboard.isConfirmed()):
 		tecleado = keyboard.getText()
 		if len(tecleado)>0:
-			devuelve = gettrailer(tecleado,category)
+			devuelve = gettrailer(tecleado,category,solo)
 			return devuelve
 		else:return []
 	else:return []	
@@ -306,76 +319,97 @@ def getpost(url,values): # Descarga la pagina con envio de un Form
 # Buscador de Trailer : mediante el servicio de Apis de Google y Youtube                           #
 ####################################################################################################
 		
-def GetVideoFeed(titulo):
+def GetVideoFeed(titulo,solo="false"):
 	print "[trailertools.py] Modulo: GetVideoFeed(titulo = %s)"  % titulo
+	if solo=="true":
+		esp   = ""
+		noesp = ""
+	else:
+		esp   = " trailer espanol"
+		noesp = " trailer"
 	devuelve = []
 	encontrados = set()
 	c = 0
 	yt = gdata.youtube.service.YouTubeService()
 	query = gdata.youtube.service.YouTubeVideoQuery()
-	query.vq = titulo+" trailer espanol"
+	query.vq = titulo+esp
 	print query.vq
-	query.orderby = 'viewCount'
+	query.orderby = 'relevance' #'viewCount'
 	query.racy = 'include'
 	#query.client = 'ytapi-youtube-search'
 	#query.alt = 'rss'
 	#query.v = '2'
 	feed = yt.YouTubeQuery(query)
 	
-	
-	for entry in feed.entry:
-		print 'Video title: %s' % entry.media.title.text
-		titulo2 = str(entry.media.title.text)
-		url = entry.media.player.url
-		duracion = int(entry.media.duration.seconds)
-		duracion = " (%02d:%02d)" % ( int( duracion / 60 ), duracion % 60, )
-		if titulo in (string.lower(LimpiarTitulo(titulo2))): 
+	if solo=="true" :
+		for entry in feed.entry:
+			print 'Video title: %s' % entry.media.title.text
+			titulo2 = str(entry.media.title.text)
+			url = entry.media.player.url
+			duracion = int(entry.media.duration.seconds)
+			duracion = "%02d:%02d" % ( int( duracion / 60 ), duracion % 60, )
+			
 			for thumbnail in entry.media.thumbnail:
 				url_thumb = thumbnail.url
-			if url not in encontrados:
-				devuelve.append([url,titulo2+duracion,url_thumb])
-				encontrados.add(url)
-				c = c + 1
-			if c > 10:
-				return (devuelve)
-	if c < 6:
-		query.vq =titulo+" trailer"
-		feed = yt.YouTubeQuery(query)
+			
+			devuelve.append([url,titulo2,url_thumb,duracion])
+			
+			
+		return (devuelve)		
+	else:	
 		for entry in feed.entry:
 			print 'Video title: %s' % entry.media.title.text
 			titulo2 = str(entry.media.title.text)
 			url = entry.media.player.url
 			duracion = int(entry.media.duration.seconds)
-			duracion = " (%02d:%02d)" % ( int( duracion / 60 ), duracion % 60, )
-			if titulo in (string.lower(LimpiarTitulo(titulo2))):
+			duracion = "%02d:%02d" % ( int( duracion / 60 ), duracion % 60, )
+			if titulo in (string.lower(LimpiarTitulo(titulo2))): 
 				for thumbnail in entry.media.thumbnail:
 					url_thumb = thumbnail.url
-				
 				if url not in encontrados:
-					devuelve.append([url,titulo2+duracion,url_thumb])
+					devuelve.append([url,titulo2,url_thumb,duracion])
 					encontrados.add(url)
 					c = c + 1
 				if c > 10:
 					return (devuelve)
-	if c < 6:
-		query.vq =titulo
-		feed = yt.YouTubeQuery(query)
-		for entry in feed.entry:
-			print 'Video title: %s' % entry.media.title.text
-			titulo2 = str(entry.media.title.text)
-			url = entry.media.player.url
-			duracion = int(entry.media.duration.seconds)
-			duracion = " (%02d:%02d)" % ( int( duracion / 60 ), duracion % 60, )
-			if titulo in (string.lower(LimpiarTitulo(titulo2))):
-				for thumbnail in entry.media.thumbnail:
-					url_thumb = thumbnail.url
-				
-				if url not in encontrados:
-					devuelve.append([url,titulo2+duracion,url_thumb])
-					encontrados.add(url)
-					c = c + 1
-				if c > 10:
-					return (devuelve)
+		if c < 6:
+			query.vq =titulo+noesp
+			feed = yt.YouTubeQuery(query)
+			for entry in feed.entry:
+				print 'Video title: %s' % entry.media.title.text
+				titulo2 = str(entry.media.title.text)
+				url = entry.media.player.url
+				duracion = int(entry.media.duration.seconds)
+				duracion = "%02d:%02d" % ( int( duracion / 60 ), duracion % 60, )
+				if titulo in (string.lower(LimpiarTitulo(titulo2))):
+					for thumbnail in entry.media.thumbnail:
+						url_thumb = thumbnail.url
+					
+					if url not in encontrados:
+						devuelve.append([url,titulo2,url_thumb,duracion])
+						encontrados.add(url)
+						c = c + 1
+					if c > 10:
+						return (devuelve)
+		if c < 6:
+			query.vq =titulo
+			feed = yt.YouTubeQuery(query)
+			for entry in feed.entry:
+				print 'Video title: %s' % entry.media.title.text
+				titulo2 = str(entry.media.title.text)
+				url = entry.media.player.url
+				duracion = int(entry.media.duration.seconds)
+				duracion = " (%02d:%02d)" % ( int( duracion / 60 ), duracion % 60, )
+				if titulo in (string.lower(LimpiarTitulo(titulo2))):
+					for thumbnail in entry.media.thumbnail:
+						url_thumb = thumbnail.url
+					
+					if url not in encontrados:
+						devuelve.append([url,titulo2,url_thumb,duracion])
+						encontrados.add(url)
+						c = c + 1
+					if c > 10:
+						return (devuelve)
 
 
 
@@ -404,59 +438,6 @@ def alertaerror():
 	ventana = xbmcgui.Dialog()
 	ok= ventana.ok ("Plugin Pelisalacarta", "Uuppss...la calidad elegida en configuracion",'no esta disponible o es muy baja',"elijá otra calidad distinta y vuelva a probar")
 '''
-	# Abre el diálogo de selección
-	opciones = []
-	opciones.append("(FLV) Baja calidad")
-	opciones.append("(MP4) Alta calidad")
-	dia = xbmcgui.Dialog()
-	seleccion = dia.select("tiene 2 formatos elige uno", opciones)
-	xbmc.output("seleccion=%d" % seleccion)
-	if seleccion==-1:
-		return("")
-	if seleccion == 0:
-		videourl,videoinfo = youtube.GetYoutubeVideoInfo(id)
-	else:
-
-
-
-def youtubeplay(params,url,category):
-        xbmc.output("[trailertools.py] youtubeplay")
-
-	title = urllib.unquote_plus( params.get("title") )
-	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
-	plot = "Ver Video"
-	server = "Directo"
-	if "www.youtube" in url:
-		youtubeurlcatch  = 'http://www.flashvideodownloader.org/download.php?u='+url
-	else:
-		youtubeurlcatch  = 'http://www.flashvideodownloader.org/download.php?u=http://www.youtube.com'+url
-        data2 = scrapertools.cachePage(youtubeurlcatch)
-        patronlinkdirecto = '<div class="mod_download"><a href="([^"]+)"'
-        linkdirectoyoutube = re.compile(patronlinkdirecto,re.DOTALL).findall(data2)
-        if len(linkdirectoyoutube)>0:
-               xbmc.output(" link directos encontrados  "+str(len(linkdirectoyoutube)))
-               if len(linkdirectoyoutube)>1:
-
-                  # Abre el diálogo de selección
-                  opciones = []
-	          opciones.append("FLV")
-	          opciones.append("MP4")
-               
-	          dia = xbmcgui.Dialog()
-	          seleccion = dia.select("tiene 2 formatos elige uno", opciones)
-	          xbmc.output("seleccion=%d" % seleccion)        
-                  if seleccion==-1:
-	             return("")
-	       
-                  youtubeurl = linkdirectoyoutube[seleccion]
-               else:
-                  youtubeurl = linkdirectoyoutube[0]   
-            
-               xbmc.output("link directo de youtube : "+youtubeurl) 
-
-
-               xbmctools.playvideo("Trailer",server,youtubeurl,category,title,thumbnail,plot)
-               
 
 
   yt_service = gdata.youtube.service.YouTubeService()

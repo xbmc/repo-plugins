@@ -19,6 +19,7 @@ import string
 import youtube
 import config
 import logger
+import decrypt21
 
 CHANNELNAME = "series21"
 
@@ -214,24 +215,26 @@ def listsimple(params,url,category):
 	scrapedplot = ""
 	patronvideos = ""
 	if (title == "Series - Estrenos") or  url1+"/nuevo" in url:
-		patronvideos  = '<div class="film2"[^>]+><a href="[^"]+">' 
-		patronvideos += '<img src="([^"]+)".*?</a>[^<]+'                             # Imagen
+		patronvideos  = '<div class="film2"[^>]+>.*?' 
+		patronvideos += '<img src="([^"]+)".*?'                             # Imagen
 		patronvideos += '<a href="([^"]+)".*?'                                  # Url
-		patronvideos += '<b>([^<]+)</b></div>[^<]+?'                            # Nombre de la serie 
-		patronvideos += '<div style[^>]+>([^<]+)</div></a></div>'                     # Titulo del capitulo 
+		patronvideos += '<b>([^<]+)</b>.*?'                            # Nombre de la serie 
+		patronvideos += '<div style[^>]+>([^<]+)</div>'                     # Titulo del capitulo 
 		#patronvideos += '.*?<b>(Temporada:</b>.*?)<.*?</a>--><br/>'                        
 		#patronvideos += '.*?<div style=[^>]+>'                                            # Genero
 		#patronvideos += '.*?<b>(Doblaje:</b>.*?)<.*?-->'                                   # Idioma
 		
 	elif title in "0-9ABCDEFGHIJKLMNOPQRSTUVWXYZ" or extra=="actor":
-		patronvideos  = '<a href="([^"]+)"[^>]+'                                # url
-		patronvideos += '>.*?<img src="([^"]+)"'                              # Imagen
-		patronvideos += '[^>]+>([^<]+)</a>.*?'                               # Titulo
-		patronvideos += '<b>(Sinopsis: </b>.*?)<br /><br />'	                      # Sinopsis
-		
+		patronvideos  = '<a href="([^"]+)"'                                # url
+		patronvideos += '.*?<img src="([^"]+)".*?'                              # Imagen
+		patronvideos += 'class="titulo">([^<]+)</a>.*?'                               # Titulo
+		patronvideos += '<b>(Sinopsis: </b>.*?)</div>'	                      # Sinopsis
+	#<li style="margin:0px; padding:0px;  height:18px; margin-left:5px;">
+	#						<b>Dexter</b>: <a href="/dexter/5x10-in-the-beginning/">5x10 -  In the Beginning</a>  | Subtitulado	
 	elif title == "Series - Novedades":
-		patronvideos  = '<li style=.*?margin-left[^>]+><a style="[^"]+" href="([^"]+)"'
-		patronvideos += '>([^<]+)</a></li>'
+		patronvideos  = '<li style=.*?margin-left[^>]+>[^<]+'
+		patronvideos += '<b>([^<]+)</b>\: <a href="([^"]+)"'
+		patronvideos += '>([^<]+)</a>(.+?)</li>'
 		#patronvideos += '<br /><b>(.*?)</b><br />(.*?)</a></div>'
 	logger.info("[ listsimple  patronvideos: "+patronvideos)
 	#<li style="margin:0px; padding:0px;  height:18px; margin-left:5px;"><a style="text-decoration:none;" href="/bella-calamidades/1x124-capitulo-124/">Bella calamidades 1x124 - Capitulo - 124</a></li>
@@ -249,30 +252,36 @@ def listsimple(params,url,category):
 		scrapedthumbnail = urlparse.urljoin(url1,match[0])
 		scrapedthumbnail = scrapedthumbnail.replace(" ","")
 		if title in "0-9ABCDEFGHIJKLMNOPQRSTUVWXYZ" or extra=="actor":
-			scrapedtitle = match[2]
+			scrapedtitle = match[2].replace("\n\t","")
 			scrapedplot  = match[3].replace("\n"," ")+"\n"
 			scrapedurl = urlparse.urljoin(url1,match[0])
 			scrapedthumbnail = urlparse.urljoin(url1,match[1])
 			scrapedthumbnail = scrapedthumbnail.replace(" ","")			
 		if title == "Series - Novedades":
-			scrapedurl = urlparse.urljoin(url1,match[0])
+			scrapedurl = urlparse.urljoin(url1,match[1])
 			scrapedthumbnail = ""
 			#scrapedthumbnail = scrapedthumbnail.replace(" ","")
 			solo_capitulo = True
 			#scrapedplot  = "Serie:    "+match[2]+"\n"
 			#scrapedplot += "Capitulo: "+match[3]
-			scrapedtitle = match[1]
+			if "esp.gif" in match[3]:
+				idioma = "Español"
+			else:
+				idioma = match[3].replace("  | ","").replace("\t\t\t\t\t\t","")
+				
+			scrapedtitle = "%s - %s (%s)" %(match[0],match[2],idioma)
 		if (title == "Series - Estrenos")   or  url1+"/nuevo" in url:
 			scrapedtitle = match[2]
 			scrapedurl = urlparse.urljoin(url1,match[1])
 			scrapedthumbnail = urlparse.urljoin(url1,match[0])
 			scrapedthumbnail = scrapedthumbnail.replace(" ","")
 			solo_capitulo = True
-			scrapedtitle = scrapedtitle + " - " + match[3]
+			scrapedtitle = scrapedtitle + " - " + match[3].replace("\t\t","")
 			#scrapedplot = match[3].replace("\n","")+"\n"	
 			#scrapedplot  = scrapedplot.replace(":",":          ")
 			#scrapedplot += match[5].replace("\n"," ")+"\n"
 			#scrapedplot += match[6].replace(":",":      ")
+		#scrapedtitle = scrapedtitle.replace("\n\t"," ")	
 		scrapedplot  = re.sub("<[^>]+>"," ",scrapedplot)
 		scrapedplot  = scrapedplot.replace("&eacute;","é")
 		scrapedplot  = scrapedplot.replace("&oacute;","ó")
@@ -326,10 +335,10 @@ def listarTemporada(params,url,category):
 	actor=""
 	# Busca el area donde estan los videos y la descripcion
 	patronvideos   = '<h3>(.*?)</h3>'                                            # Temporada de la Serie
-	patronvideos  += '.*?<img src="([^"]+)"  width=.*?/>'                        # Thumbnail de la Serie
+	patronvideos  += '.*?<img.+?src="([^"]+)"  width=.*?/>'                        # Thumbnail de la Serie
 	patronvideos  += '.*?<ul(.*?)</ul>'                                          # Capitulos de la Serie  
 	matches        = re.compile(patronvideos,re.DOTALL).findall(data)
-	patroncapit    = '<li><a href="([^"]+)">(.*?)</a></li>'
+	patroncapit    = '<li><a href="([^"]+)".+?>(.+?)</a>(.+?)</li>'
 	
 		
 	patronplot     = '<div style="margin:0px; padding:0px; text-align:justify;">(.*?)</div>'
@@ -380,20 +389,27 @@ def listarTemporada(params,url,category):
 			thumbnail =  urlparse.urljoin(url1,match[1])
 			temporada = re.sub("<[^>]+>"," ",match[0]).replace("-","").replace(">","")
 			
-			temporada += "\n" +actor+"\n"+ "Sinopsis : " + str(sinopsis[0])
+			temporada += "\n" +actor+"\n"+ "Sinopsis : " + str(sinopsis[0].replace("\n\t\t\t\t\t",""))
 			matchescapit = re.compile(patroncapit,re.DOTALL).findall(match[2])
 			for match1 in matchescapit:
-				url    = match1[0]
-				titulo = titulo_serie + " - " + match1[1]
+				esp  = ""
+				subt = ""
+				url  = match1[0]
+				if "esp.gif" in match1[2]:
+					esp = " (Español)"
+				if "Subtitulado" in match1[2]:
+					subt = " (VOS)"
+					
+				titulo = titulo_serie+" - "+match1[1]+ esp + subt
 				xbmctools.addnewfolder( CHANNELNAME , "ListarVideos" , category , titulo , url , thumbnail, plot+temporada )
 				
 	else:
 		thumbnail = urlparse.urljoin(url1,matches[seleccion-1][1])
 		temporada = re.sub("<[^>]+>"," ",matches[seleccion-1][0]).replace("-","").replace(">","")
-		logger.info("matcheswwwwww "+matches[seleccion-1][2])
+		#logger.info("matches "+matches[seleccion-1][2])
 		matchescapit = re.compile(patroncapit,re.DOTALL).findall(matches[seleccion-1][2])
 		plot   += temporada + "\n"
-		plot   += actor+"\n"+"Sinopsis : " + str(sinopsis[0])
+		plot   += actor+"\n"+"Sinopsis : " + str(sinopsis[0].replace("\n\t\t\t\t\t",""))
 		if len(matchescapit)>0:
 			for match1 in matchescapit:
 				url    = match1[0]
@@ -475,6 +491,59 @@ def ListarVideos(params,url,category):
 			if scrapedurl.strip() not in encontrados:
 				encontrados.add(scrapedurl.strip())
 				xbmctools.addnewvideo( CHANNELNAME , "play" , category ,servidor, title+ " - %s" %titulo , scrapedurl , thumbnail, plot )
+	patronvideos = '<span class="bloque-doblaje">(.+?)</span>[^<]+'
+	patronvideos +='<span class="bloque-link">[^<]+<a href="javascript\:goTo\(\'([^\']+)\'\, \'([^\']+)\'\)"(.+?)</span>'
+	#patronvideos +='(?:\| <a href="javascript\:goTo\(\'([^\']+)\'\, \'([^\']+)\'\)".*?)</span>'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	scrapertools.printMatches(matches)
+	for match in matches:
+	
+		# URL
+		if "megavideo" in match[2]:
+			server = "Megavideo"
+		elif "megaupload" in match[2]:
+			server = "Megaupload"
+		if "esp.gif" in match[0]:
+			doblaje = "Español"
+			
+		else:
+			doblaje = match[0].strip()			
+		base64 = decrypt21.Base64()
+		try:
+			url2 = re.compile("javascript\:goTo\(\'([^\']+)\'\, \'([^\']+)\'\)").findall(match[3])[0]
+			scrapedurl2 = base64._extract_code(base64.decode(url2[0]))
+			scrapedurl = base64._extract_code(base64.decode(match[1]))
+			part1 = " Parte 1 "
+			part2 = " Parte 2 "
+			scrapedtitle2 = title + part2+ " -   [" +doblaje+ "]" + " ("+server+")"
+			#print match[3]
+		except:
+			scrapedurl = base64._extract_code(base64.decode(match[1]))
+			part1 = ""
+			part2 = ""			
+			
+		
+
+		scrapedtitle = title + part1+ " -   [" +doblaje+ "]" + " ("+server+")"
+
+
+		# Thumbnail
+		scrapedthumbnail = thumbnail
+		# Argumento
+		scrapedplot = plot
+
+		# Depuracion
+		if (DEBUG):
+			logger.info("scrapedtitle="+scrapedtitle)
+			logger.info("scrapedurl="+scrapedurl)
+			logger.info("scrapedthumbnail="+scrapedthumbnail)
+
+		# Añade al listado de XBMC
+		xbmctools.addnewvideo( CHANNELNAME , "play" , category ,server, scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		if part2:
+			xbmctools.addnewvideo( CHANNELNAME , "play" , category ,server, scrapedtitle2 , scrapedurl2 , scrapedthumbnail, scrapedplot )
+	
+	
 	# Extrae las entradas (videos) directos
 	patronvideos = 'flashvars="file=([^\&]+)\&amp;controlbar=over'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)

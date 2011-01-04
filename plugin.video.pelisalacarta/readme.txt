@@ -189,8 +189,9 @@ And finally thanks to Shaddow for giving us the first decryption routines of the
 Icons come from varios sources:
 
 - Some channel icons are mine, captured and edited using Gimp, of made by channel authors.
-- Some other channel icons are from narfss
+- Some other channel icons are from @narfss
 - Some icons are from Crystal Clear Collection
+- Most of the banner icons came from @Wolfk
 
 And finally thanks to all my blog readers, who give me lot of ideas and support.
 

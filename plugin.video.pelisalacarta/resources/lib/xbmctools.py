@@ -67,15 +67,29 @@ def addnewfolderextra( canal , accion , category , title , url , thumbnail , plo
 	else:
 		xbmcplugin.addDirectoryItem( handle = pluginhandle, url = itemurl , listitem=listitem, isFolder=True, totalItems=totalItems)
 
-def addnewvideo( canal , accion , category , server , title , url , thumbnail, plot ,Serie=""):
+def addnewvideo( canal , accion , category , server , title , url , thumbnail, plot ,Serie="",duration="",IsPlayable='false',context = 0):
+	contextCommands = []
 	if DEBUG:
 		try:
 			logger.info('[xbmctools.py] addnewvideo( "'+canal+'" , "'+accion+'" , "'+category+'" , "'+server+'" , "'+title+'" , "' + url + '" , "'+thumbnail+'" , "'+plot+'")" , "'+Serie+'")"')
 		except:
 			logger.info('[xbmctools.py] addnewvideo(<unicode>)')
 	listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail )
-	listitem.setInfo( "video", { "Title" : title, "Plot" : plot, "Studio" : canal } )
+	listitem.setInfo( "video", { "Title" : title, "Plot" : plot, "Duration" : duration, "Studio" : canal } )
+	if IsPlayable == 'true': #Esta opcion es para poder utilizar el xbmcplugin.setResolvedUrl()
+		listitem.setProperty('IsPlayable', 'true')
 	#listitem.setProperty('fanart_image',os.path.join(IMAGES_PATH, "cinetube.png"))
+	if context == 1: #El uno añade al menu contextual la opcion de guardar en megalive un canal a favoritos
+		addItemCommand = "XBMC.RunPlugin(%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&server=%s&Serie=%s)" % ( sys.argv[ 0 ] , canal , "saveChannelFavorites" , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , server , Serie)
+		contextCommands.append((config.getLocalizedString(30301),addItemCommand))
+		
+	if context == 2:#El dos añade al menu contextual la opciones de eliminar y/o renombrar un canal en favoritos 
+		addItemCommand = "XBMC.RunPlugin(%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&server=%s&Serie=%s)" % ( sys.argv[ 0 ] , canal , "deleteSavedChannel" , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , server , Serie)
+		contextCommands.append((config.getLocalizedString(30302),addItemCommand))
+		addItemCommand = "XBMC.RunPlugin(%s?channel=%s&action=%s&category=%s&title=%s&url=%s&thumbnail=%s&plot=%s&server=%s&Serie=%s)" % ( sys.argv[ 0 ] , canal , "renameChannelTitle" , urllib.quote_plus( category ) , urllib.quote_plus( title ) , urllib.quote_plus( url ) , urllib.quote_plus( thumbnail ) , urllib.quote_plus( plot ) , server , Serie)
+		contextCommands.append((config.getLocalizedString(30303),addItemCommand))	
+	if len (contextCommands) > 0:
+		listitem.addContextMenuItems ( contextCommands, replaceItems=False)
 	try:
 		title = title.encode ("utf-8")	 #This only aplies to unicode strings. The rest stay as they are.
 		plot  = plot.encode ("utf-8")
@@ -559,12 +573,18 @@ def playstrm(params,url,category):
 	
 	playvideo("Biblioteca pelisalacarta",server,url,category,title,thumbnail,plot,strmfile=True,Serie=serie)
 
-def renderItems(itemlist, params, url, category):
+def renderItems(itemlist, params, url, category,isPlayable='false'):
 	for item in itemlist:
 		if item.folder:
-			addnewfolder( item.channel , item.action , category , item.title , item.url , item.thumbnail , item.plot )
+			if len(item.extra)>0:
+				addnewfolderextra( item.channel , item.action , category , item.title , item.url , item.thumbnail , item.plot , item.extra )
+			else:
+				addnewfolder( item.channel , item.action , category , item.title , item.url , item.thumbnail , item.plot )
 		else:
-			addnewvideo( item.channel , item.action , category , item.server, item.title , item.url , item.thumbnail , item.plot )
+			if item.duration:
+				addnewvideo( item.channel , item.action , category , item.server, item.title , item.url , item.thumbnail , item.plot , "" , item.duration,IsPlayable=isPlayable,context = item.context )
+			else:	
+				addnewvideo( item.channel , item.action , category , item.server, item.title , item.url , item.thumbnail , item.plot,IsPlayable=isPlayable,context = item.context )
 
 	# Cierra el directorio
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )

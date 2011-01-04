@@ -18,6 +18,11 @@ import xbmctools
 import anotador
 import config
 import logger
+import base64
+import datetime
+import buscador
+
+
 
 CHANNELNAME = "divxonline"
 
@@ -30,6 +35,10 @@ except:
 # Traza el inicio del canal
 logger.info("[divxonline.py] init")
 
+j=0;
+i=0
+ct=''
+
 DEBUG = True
 Generate = False # poner a true para generar listas de peliculas
 Notas = False # indica si hay que añadir la nota a las películas
@@ -37,6 +46,7 @@ LoadThumbs = True # indica si deben cargarse los carteles de las películas; en M
 
 def mainlist(params,url,category):
 	logger.info("[divxonline.py] mainlist")
+	#logger.info(base64.b64decode('yFA/B6/fgVeTE6fmN4HsindoCQarfil2sajKotYmPdqOlDhSMgr1+zFsqAj/M+GWmLJccUk0PjwfCqUf4/PwFCJQ9Yk1LYFsN2NZmrvxnCF9aTYVs589hFAPqEGto0ZGacMpzG7UZUf62wvaFBRNw9aaL5X2b+adEc92Ll3NykrWJji3reBwIN7VQQPFKvOBsD+wGnerkyIMfXXBQXLbF8ZrITbJGMUVSv4s5P6KYcVLyAlZNQXH9TrcrpIKplSZyBtGsGbHNEBUJg2KcnNiw8NGzJhwmDkWcvhGOWGKIG8E2r0jS5JTbZuuFE97pBgbA9KRi0y/NtLcOPE0E/1TmQcbgzsIIsKt1ZgjhVppel2479YmLtbYA7zrSmuGaEjGGbpoarc6X29FS+VPN6CCFCuRlHf9M122xJh+fisWWEYaFaZvDsYmhPPnERx3CK4UrUPIKdJcqoA8jkxFLQFPwT8Z0BMZ2vH5VlNOCCOZRpoM+wiJx+VDo8E78czIJzdePljQ6/QqqaAp3GDnD0i/S8lV8WCMu3OLwGeNe0IVyUYksx9FvJhFSjk='));
 
 	xbmctools.addnewfolder( CHANNELNAME , "novedades" , CHANNELNAME , "Novedades" , "http://www.divxonline.info/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "megavideo" , CHANNELNAME , "Películas en Megavideo" , "" , "", "" )
@@ -44,11 +54,56 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "pelisconficha" , CHANNELNAME , "Estrenos" , "http://www.divxonline.info/peliculas-estreno/1.html" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "pelisporletra" , CHANNELNAME , "Películas de la A a la Z" , "" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "pelisporanio" , CHANNELNAME , "Películas por año de estreno" , "" , "", "" )
-
+	xbmctools.addnewfolder( CHANNELNAME , "busqueda"     , category , "Buscar"                           ,"","","")
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
 	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+
+
+
+def search(params,url,category):
+	
+	buscador.listar_busquedas(params,url,category)
+	
+	
+def searchresults(params,tecleado,category):
+	logger.info("[divxonline.py] search")
+
+	buscador.salvar_busquedas(params,tecleado,category)
+	tecleado = tecleado.replace(" ", "+")
+	#searchUrl = "http://documentalesatonline.loquenosecuenta.com/search/"+tecleado+"?feed=rss2&paged=1"
+	busqueda(CHANNELNAME,tecleado,category)
+
+def busqueda(params,url,category):
+	logger.info("busqueda")
+	tecleado = ""
+	keyboard = xbmc.Keyboard('')
+	keyboard.doModal()
+	if (keyboard.isConfirmed()):
+		tecleado = keyboard.getText()
+		if len(tecleado)<=0:
+			return
+	
+	tecleado = tecleado.replace(" ", "+")
+	data=scrapertools.cachePagePost("http://www.divxonline.info/buscador.html",'texto=' + tecleado + '&categoria=0&tipobusqueda=1&Buscador=Buscar')
+
+	#logger.info(data)
+	data=data[data.find('Se han encontrado un total de'):]
+	
+	#<li><a href="/pelicula/306/100-chicas-2000/">100 chicas (2000)</a></li>
+	patronvideos  = '<li><a href="(.+?)">(.+?)</a></li>'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	if DEBUG: 
+		scrapertools.printMatches(matches)
+	
+	for match in matches:
+		xbmctools.addnewfolder( CHANNELNAME , "listmirrors" , category , match[1] , 'http://www.divxonline.info' + match[0] , 'scrapedthumbnail', 'scrapedplot' )
+	
+	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
+	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
+	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
+
 
 def novedades(params,url,category):
 	logger.info("[divxonline.py] novedades")
@@ -80,6 +135,7 @@ def novedades(params,url,category):
 		# Titulo
 		scrapedtitle = match[2]
 		scrapedurl = urlparse.urljoin(url,match[0])
+		scrapedurl = scrapedurl.replace("pelicula","pelicula-divx") # url de la página de reproducción
 		scrapedthumbnail = "" # = match[1]
 		scrapedplot = match[3]
 		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
@@ -142,7 +198,7 @@ def veoh(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "movielist" , CHANNELNAME , "Anime" , "http://www.divxonline.info/peliculas/41/anime-veoh/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "movielist" , CHANNELNAME , "Aventura" , "http://www.divxonline.info/peliculas/32/aventura-veoh/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "movielist" , CHANNELNAME , "Bélicas" , "http://www.divxonline.info/peliculas/96/belicas-veoh/" , "", "" )
-	xbmctools.addnewfolder( CHANNELNAME , "movielist" , CHANNELNAME , "Ciencia Ficción" , "http://www.divxonline.info/peliculas/35/ciencia-ficcion-veoh/" , "", "" )
+	xbmctools.addnewfolder( CHANNELNAME , "movielist" , CHANNELNAME , "Ciencia Ficción" , "http://www.divxonline.info/peliculas/35/ciencia0-ficcion-veoh/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "movielist" , CHANNELNAME , "Cine Clásico" , "http://www.divxonline.info/peliculas/38/cine-clasico-veoh/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "movielist" , CHANNELNAME , "Cine Español" , "http://www.divxonline.info/peliculas/37/cine-español-veoh/" , "", "" )
 	xbmctools.addnewfolder( CHANNELNAME , "movielist" , CHANNELNAME , "Clásicos Disney" , "http://www.divxonline.info/peliculas/39/clasicos-disney-veoh/" , "", "" )
@@ -206,8 +262,9 @@ def pelisporletra(params,url,category):
 
 def pelisporanio(params,url,category):
 	logger.info("[divxonline.py] pelisporanio")
-
-	for anio in range(2009,1915,-1):
+	logger.info(datetime.datetime.today().year)
+	#for anio in range(2009,1915,-1):
+	for anio in range(datetime.datetime.today().year,1915,-1):
 		xbmctools.addnewfolder( CHANNELNAME , "pelisconficha" , CHANNELNAME , str(anio) , "http://www.divxonline.info/peliculas-anho/"+str(anio)+"/1.html" , "", "" )
 
 	# Label (top-right)...
@@ -223,7 +280,13 @@ def pelisconficha(params,url,category): # fichas en listados por año y en estren
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
-
+	if(data.find('Películas del  año') > 0):
+	
+	##data=data[data.find('<!-- MENU IZQUIERDO -->'):]
+		data=data[data.find('Películas del  año'):]
+	
+	logger.info(data.find('<!-- MENU IZQUIERDO -->'))
+	#logger.info(data)
 	# Extrae las entradas
 	patronvideos  = '<td class="contenido"><a href="(.*?)">' # link
 	patronvideos += '<img src="(.*?)"' # cartel
@@ -300,6 +363,9 @@ def pelisconfichaB(params,url,category): # fichas con formato en entradas alfabé
 	nexturl = match.group(1) + str(pag+N) + match.group(3)
 
 	# Extrae las entradas
+	data=data[data.find('Películas online por orden alfabético'):]
+	logger.info(data)
+	
 	patronvideos  = '<td class="contenido"><img src="(.*?)"' # cartel
 	patronvideos += '.*?alt="(.*?)"' # título
 	patronvideos += '.*?<b>Sinopsis.*?<a href="(.*?)"' # url
@@ -349,6 +415,11 @@ def pelisconfichaB(params,url,category): # fichas con formato en entradas alfabé
 	if DEBUG:
 		logger.info("Tiempo de ejecución = "+str(time.time()-t0))
 
+
+def remove_html_tags(data):
+    p = re.compile(r'<.*?>')
+    return p.sub('', data)
+
 def movielist(params,url,category): # pelis sin ficha (en listados por género)
 	logger.info("[divxonline.py] movielist")
 
@@ -359,7 +430,7 @@ def movielist(params,url,category): # pelis sin ficha (en listados por género)
 	data = stepinto(url,data,'Ver página:(.*?)</p>')
 
 	# Extrae las entradas (carpetas)
-	patronvideos  = '<li><a href="([^"]+)">(.*?)</a>'
+	patronvideos  = '<li><h2><a href="([^"]+?)">(.*?)</a>'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	#scrapertools.printMatches(matches)
 
@@ -368,9 +439,9 @@ def movielist(params,url,category): # pelis sin ficha (en listados por género)
 
 	for match in matches:
 		# Titulo
-		scrapedtitle = match[1]
+		scrapedtitle = remove_html_tags(match[1])
 		if (not Generate and Notas):
-			score = anotador.getscore(match[1])
+			score = anotador.getscore(remove_html_tags(match[1]))
 			if (score != ""):
 				scrapedtitle += " " + score
 
@@ -412,54 +483,62 @@ def movielist(params,url,category): # pelis sin ficha (en listados por género)
 
 def listmirrors(params,url,category):
 	logger.info("[divxonline.py] listmirrors")
+	logger.info(url)
+	#try:
+	#	title = urllib.unquote_plus( params.get("title") )
+	#	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
+	#	plot = urllib.unquote_plus( params.get("plot") )
+	#except:
+	#	pass
+	#data = scrapertools.cachePage(url) # descarga pagina de reproduccion
+	#'''
+	#<a style="color: #f2ac03; font-weight: bold; font-size: 12pt" href="/pelicula-divx/8853/Conexion-Tequila-1998/" target="_self" style="font-weight: bold; font-size: 11pt">
+	#<h2><align="center"><font size="4"><img src="http://webs.ono.com/mis-videos/imagenes/filmes.png" border="0">&nbsp;Ver Película Online: Conexión Tequila (1998)</font></h2></a>
+	#'''
+	#patronvideos  = '<a style="[^"]+" href="([^"]+)"[^<]+'
+	#patronvideos += '<h2><align[^>]+><font[^>]+><img[^>]+>.nbsp.Ver Pel'
+	#matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	#if DEBUG: scrapertools.printMatches(matches)
+#
+#	for match in matches:
+#		scrapedurl = urlparse.urljoin(url,match)
+#		if (DEBUG): logger.info("url=["+scrapedurl+"]")
 
-	title = urllib.unquote_plus( params.get("title") )
-	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
-	plot = urllib.unquote_plus( params.get("plot") )
+#		# Añade al listado de XBMC
+#		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , title + " [online]" , scrapedurl , thumbnail, plot )
 
-	data = scrapertools.cachePage(url) # descarga pagina de reproduccion
-	'''
-	<a style="color: #f2ac03; font-weight: bold; font-size: 12pt" href="/pelicula-divx/8853/Conexion-Tequila-1998/" target="_self" style="font-weight: bold; font-size: 11pt">
-	<h2><align="center"><font size="4"><img src="http://webs.ono.com/mis-videos/imagenes/filmes.png" border="0">&nbsp;Ver Película Online: Conexión Tequila (1998)</font></h2></a>
-	'''
-	patronvideos  = '<a style="[^"]+" href="([^"]+)"[^<]+'
-	patronvideos += '<h2><align[^>]+><font[^>]+><img[^>]+>.nbsp.Ver Pel'
-	matches = re.compile(patronvideos,re.DOTALL).findall(data)
-	if DEBUG: scrapertools.printMatches(matches)
-
-	for match in matches:
-		scrapedurl = urlparse.urljoin(url,match)
-		if (DEBUG): logger.info("url=["+scrapedurl+"]")
-
-		# Añade al listado de XBMC
-		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , title + " [online]" , scrapedurl , thumbnail, plot )
-
-	'''
-	<a href="/descarga-directa/8853/Conexion-Tequila-1998/" style="color: #f2ac03; font-weight: bold; font-size: 12pt;">Descarga Directa de: Conexión Tequila (1998)</a>
-	'''
-	patronvideos  = '<a href="([^"]+)"[^>]+>Descarga Directa'
-	matches = re.compile(patronvideos,re.DOTALL).findall(data)
-	if DEBUG: scrapertools.printMatches(matches)
-
-	for match in matches:
-		scrapedurl = urlparse.urljoin(url,match)
-		if (DEBUG): logger.info("url=["+scrapedurl+"]")
-
-		# Añade al listado de XBMC
-		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , title + " [descarga]" , scrapedurl , thumbnail, plot )
+#	'''
+#	<a href="/descarga-directa/8853/Conexion-Tequila-1998/" style="color: #f2ac03; font-weight: bold; font-size: 12pt;">Descarga Directa de: Conexión Tequila (1998)</a>
+#	'''
+#	patronvideos  = '<a href="([^"]+)"[^>]+>Descarga Directa'
+#	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+#	if DEBUG: scrapertools.printMatches(matches)
+#
+#	for match in matches:
+#		scrapedurl = urlparse.urljoin(url,match)
+#		if (DEBUG): logger.info("url=["+scrapedurl+"]")
+#
+#		# Añade al listado de XBMC
+#		xbmctools.addnewfolder( CHANNELNAME , "detail" , category , title + " [descarga]" , scrapedurl , thumbnail, plot )
 
 	# Label (top-right)...
+	detail(params,url,category)
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
 	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
 
 def detail(params,url,category):
 	logger.info("[divxonline.py] detail")
+	title=''
+	thumbnail=''
+	plot=''
 
-	title = urllib.unquote_plus( params.get("title") )
-	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
-	plot = urllib.unquote_plus( params.get("plot") )
-
+	try:
+		title = urllib.unquote_plus( params.get("title") )
+		thumbnail = urllib.unquote_plus( params.get("thumbnail") )
+		plot = urllib.unquote_plus( params.get("plot") )
+	except:
+		pass
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
@@ -467,6 +546,8 @@ def detail(params,url,category):
 	# ------------------------------------------------------------------------------------
 	# Busca los enlaces a los videos
 	# ------------------------------------------------------------------------------------
+	
+	data=decryptinks(data);
 	listavideos = servertools.findvideos(data)
 
 	for video in listavideos:
@@ -480,6 +561,42 @@ def detail(params,url,category):
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
 	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
+	
+def decryptinks(text):
+	patronvideos  = "decodeBase64\('(.+?)'\)"
+	matches = re.compile(patronvideos,re.DOTALL).findall(text)
+	#string='yFA/B6/fgVeTFPS4NIqijSVtVUemN39H+e6EuYNxcNiHnCsZeU3W0iY29Fbye4GjyIrqXD9RTiVAU/gI7Pq7Qi1vnoRkLooganMExe36ySUofSME6cF5zgQPoQvnsRNQbp0owGrUZ0fx0EuMWghIg8PeCbyzW46jM/czf0neyBePLXvg6u0tYdvCHF7JdLLGpH20CWO6mX8bc2rDAz+bUNshJS/eHNhLCblzvrKbJcddzQRfOkyriWOTusBm3wDZ1kZMs2fEckZRMBvUIiQljZ0L1IV3wDkVQ9cbdDqEIHlWi/xmHtVsb4G+SAMpsBNpXJzfzle4IZaHWdt+GOsI+y1DiHdRJ9mizN0+mEUsIhGqgJMiIMzeFeSmRQ21PxDVXP0yLKcsX3IPfPlcIOGcAGXcpXLgchisgZoyej4aEk0MTsRFGto4kvGzHBAyFrsf+UfKZf4ZqYQmx1pFMl8A0CQbhAoOgKioUFNOASCSTpvNqwiL1aRJuYQo/MzOLjhTcwrTua5Cg50513LwRkC7BJcIsHKCuWvU3CyKKV5Iz1M4qB5C4dBISifGiaisjwmprQk4VWeLVmyba+lzpfDa7PjGs3Hh54cE6BoN4aJVqaUpLvbxJfd2A4ODlTrOQZmFa32dfZYEIpB5EejTqY6TU4AW3p9G+Kd4TNAjTE2KVfUIW5bhXSvEE5Gs8JCp1xxgPcwrSTVdqe+VsjhqKjihnMouWiXn5pQzv2DlsGzDB1jShTmdWvo9gv4kya16ZzBUalTPTXVVPlapL4OMIJgwXzGPkO+2mwjgdjF8jzaUjn3bowuDdMaix5xpfJmI5IlHAJYKL4T0oVBE+gMFJsUa09IuBMi48ARSa8hXDmGf9nCpcAJ8jCrBdtj0Apm3CgaNWwdhxJhGb5RCLenTvOwB81N7sbyuWI2XzlKdRuUddJgD+3YDFxh1/gkTFgPWyq4xMuEoiZGcVKvfXpIeIZR6JN7cX3kL1HYfJYyZUs6IsYqQOaOy+gjVVw6GgE25oBD9geh8cS5mx94XxIXmi/1KUcYztxx/+zPSihLJ404sVnaxQ2LfpM7QtUUFZnyz4olTEfdQXxaQPUzIbuceyGqJig1djjiGw5qAHYcQQ45gJC3Gs+bzo4xiIJQHSTvi1SP7b9Ge9bV9SjOJ5kt1Z4CZoehu9VYKc+PcUFwWVeWN2Xf+Xp8xf5txn6upEc0tiUbSsQCRkZmJVVJntibWDnq4MjeczapU/sBgsULj5h7+llwmaKgdTCAfOLqWWX69z7ncwXbg+Aws/t6W75nHeAMVbK+Xt+3zNgCQE8M='
+	#logger.info(matches);
+	result=base64.b64decode(matches[0])
+	return(Procesa('cryptkey', result));
+
+def Procesa (key, pt):
+        s = [255] * 257
+
+        for i in range(0, 256):
+                s[i] = i;
+        global j
+        for i in range(0, 256):
+                global j
+                j= ( j + s[i] + ord(key[i%len(key)]))%256;
+                x = s[i];
+                s[i] = s[j];
+                s[j] = x;
+
+        i=0
+        j=0
+        for y in range(0, len(pt)):
+                i = (i + 1) % 256;
+                j = (j + s[i]) % 256;
+                x = s[i];
+                s[i] = s[j];
+                s[j] = x;
+                global ct
+                ct += chr(ord(pt[y]) ^ s[(s[i] + s[j]) % 256]);
+        return ct
+	
+	
+
 
 def play(params,url,category):
 	logger.info("[divxonline.py] play")

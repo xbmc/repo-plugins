@@ -7,12 +7,12 @@
 
 import sys
 import os
+import xbmc
 
 PLUGIN_ID = "plugin.video.pelisalacarta"
 
 try:
 	import xbmcaddon
-	import xbmc
 	DHARMA = True
 	__settings__ = xbmcaddon.Addon(id=PLUGIN_ID)
 	__language__ = __settings__.getLocalizedString

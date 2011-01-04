@@ -149,7 +149,10 @@ def geturl(urlvideo):
 				
 			else:                                   #http://cs12385.vkontakte.ru/u88260894/video/d09802a95b.360.mp4
 				tipo = "360.mp4"
-				videourl = "%s/u%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
+				if match[0].endswith("/"):
+					videourl = "%su%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
+				else:
+					videourl = "%s/u%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
 				
 				
 	return videourl

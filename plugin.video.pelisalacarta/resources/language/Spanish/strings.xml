@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <strings>
 	<!-- Los id disponibles son de 30000 a 30999 -->
 
@@ -29,6 +29,12 @@
 	<string id="30013">Modo premium Megavideo:</string>
 	<string id="30014">Usuario Megavideo:</string>
 	<string id="30015">Password Megavideo:</string>
+    <string id="30031">Calidad de videos (FLV)</string>
+    <string id="30032">Calidad Normal (SD)</string>
+    <string id="30033">Calidad Alta (HD)(si existe)</string>
+
+    <string id="30034">Usuario páginas privadas:</string>
+    <string id="30035">Password páginas privadas:</string>
 	
 	<!-- Otras -->
 	<string id="30017">Directorio de descargas:</string>
@@ -46,6 +52,16 @@
 	<string id="30027">Inglés</string>
 	<string id="30028">Italiano</string>
 	<string id="30029">Portugués</string>
+    <string id="30016">Catalán</string>
+    <string id="30023">Euskera</string>
+    <string id="30036">Gallego</string>
+    <string id="30037">Valenciano</string>
+
+    <string id="30038">Modo de cache:</string>
+    <string id="30039">Automático</string>
+    <string id="30040">Cachear todo</string>
+    <string id="30041">No cachear nada</string>
+    <string id="30042">Directorio de cache:</string>
 
 	<!-- =============================================================== -->
 	<!-- De 30050 a 30099: Mensajes informativos - error                 -->
@@ -117,6 +133,7 @@
 	<string id="30161">Añadir a tiblioteca</string>
 	<string id="30162">Buscar trailer</string>
 	<string id="30163">Elige una opción</string>
+	
 
 	<!-- =============================================================== -->
 	<!-- De 30100 a 30999: Canales individuales                          -->
@@ -124,6 +141,16 @@
 
 	<!-- Context menu strings -->
 	<string id="30300">Eliminar esta busqueda</string>
+	<string id="30301">Guardar este canal en favoritos</string>
+	<string id="30302">Eliminar este canal de favoritos</string>
+	<string id="30303">Renombrar el título de este canal</string>
+	
+	<!-- Megalive menu strings -->
+	<string id="30401">Muralla de canales</string>
+	<string id="30402">Categorias</string>
+	<string id="30403">Canales Favoritos</string>
+	<string id="30404">Ver Canal por Codigo(ID)</string>
+	<string id="30405">Introduce el còdigo del canal</string>
 
 	<!-- LetMeWatchThis -->
 	<string id="40001">Películas - Novedades</string>

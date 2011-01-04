@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-1 -*-
 #------------------------------------------------------------
 # pelisalacarta - XBMC Plugin
-# Canal para peliculasid
+# Canal para peliculasid - actual. automat. ver.1.0
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
 import urlparse,urllib2,urllib,re
@@ -40,11 +40,9 @@ def mainlist(params,url,category):
 	logger.info("[peliculasid.py] mainlist")
 
 	# Añade al listado de XBMC
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Ultimas Películas Subidas"    ,"http://www.peliculasid.com/","","")
-	#xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Estrenos","http://www.peliculasid.net/index.php?module=estrenos","","")
-	#xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Series","http://www.peliculasid.net/index.php?module=series","","")
-	xbmctools.addnewfolder( CHANNELNAME , "listcategorias" , category , "Categorias"        ,"http://www.peliculasid.com/","","")
-	#xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Buscar","http://www.peliculasid.net/index.php?module=documentales","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Ultimas Películas Subidas"    ,"http://www.peliculasid.net/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listcategorias" , category , "Categorias"        ,"http://www.peliculasid.net/","","")
+	
 
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
@@ -58,23 +56,23 @@ def mainlist(params,url,category):
 def listcategorias(params,url,category):
         logger.info("[peliculas.py] listcategorias")
 		
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "2008"    ,"http://peliculasid.com/2008-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "2009"    ,"http://peliculasid.com/2009-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "2010"    ,"http://peliculasid.com/2010-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Acción"    ,"http://www.peliculasid.com/accion-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Animación"    ,"http://www.peliculasid.com/animacion-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Aventura"    ,"http://www.peliculasid.com/aventura-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Ciencia Ficción"    ,"http://www.peliculasid.com/ciencia_ficcion-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Cine Indio"    ,"http://www.peliculasid.com/cine_indio-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Comedia"    ,"http://www.peliculasid.com/comedia-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Crimen"    ,"http://www.peliculasid.com/crimen-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Documentales y mas"    ,"http://www.peliculasid.com/documentales-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Drama"    ,"http://www.peliculasid.com/drama-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Fantasia"    ,"http://www.peliculasid.com/fantasia-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Horror"    ,"http://www.peliculasid.com/horror-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Misterio"    ,"http://www.peliculasid.com/misterio-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Romance"    ,"http://www.peliculasid.com/romance-1.html","","")
-        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Thriller"    ,"http://www.peliculasid.com/thriller-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "2008"    ,"http://peliculasid.net/2008-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "2009"    ,"http://peliculasid.net/2009-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "2010"    ,"http://peliculasid.net/2010-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Acción"    ,"http://www.peliculasid.net/accion-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Animación"    ,"http://www.peliculasid.net/animacion-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Aventura"    ,"http://www.peliculasid.net/aventura-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Ciencia Ficción"    ,"http://www.peliculasid.net/ciencia_ficcion-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Cine Indio"    ,"http://www.peliculasid.net/cine_indio-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Comedia"    ,"http://www.peliculasid.net/comedia-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Crimen"    ,"http://www.peliculasid.net/crimen-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Documentales y mas"    ,"http://www.peliculasid.net/documentales-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Drama"    ,"http://www.peliculasid.net/drama-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Fantasia"    ,"http://www.peliculasid.net/fantasia-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Horror"    ,"http://www.peliculasid.net/horror-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Misterio"    ,"http://www.peliculasid.net/misterio-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Romance"    ,"http://www.peliculasid.net/romance-1.html","","")
+        xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Thriller"    ,"http://www.peliculasid.net/thriller-1.html","","")
         
         # Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
@@ -90,7 +88,7 @@ def listvideos(params,url,category):
 	logger.info("[peliculasid.py] listvideos")
 
 	if url=="":
-		url = "http://www.peliculasid.com/"
+		url = "http://www.peliculasid.net/"
                 
 	# Descarga la página
 	data = scrapertools.cachePage(url)
@@ -163,11 +161,6 @@ def detail(params,url,category):
 	
 	if len(matches)>0:
 		descripcion = matches[0]
-		descripcion = descripcion.replace('&#8220;','"')
-		descripcion = descripcion.replace('&#8221;','"')
-		descripcion = descripcion.replace('&#8230;','...')
-		descripcion = descripcion.replace('&#8217;',"'")
-		descripcion = descripcion.replace("&nbsp;","")
 		descripcion = descripcion.replace("<br/>","")
 		descripcion = descripcion.replace("\r","")
 		descripcion = descripcion.replace("\n"," ")
@@ -180,7 +173,7 @@ def detail(params,url,category):
 			plot = unicode( descripcion, "utf-8" ).encode("iso-8859-1")
 		except:
 			plot = descripcion
-
+		plot = scrapertools.unescape(plot.strip())
 		#--- Busca los videos Directos
 		patronvideos = 'flashvars" value="file=([^\&]+)\&amp'
 		matches = re.compile(patronvideos,re.DOTALL).findall(data)
@@ -228,7 +221,7 @@ def detail(params,url,category):
 		server = video[2]
 		xbmctools.addnewvideo( CHANNELNAME , "play" , category , server , (title.strip() + " (%d) " + videotitle) % j , url , thumbnail , plot )
 		j=j+1
-	patronvideos = '<a href="(http://peliculasid.com/iframeplayer.php[^"]+)" target="[^"]+">([^<]+)</a>'
+	patronvideos = '<a href="(http://peliculasid.net/modulos/iframeplayer.php[^"]+)" target="[^"]+">([^<]+)</a>'
 	#patronvideos2 = 'file=([^\&]+)\&'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
@@ -241,7 +234,7 @@ def detail(params,url,category):
 			#data2 = scrapertools.cachePage(match[0])
 			#matches2 = re.compile(patronvideos2,re.DOTALL).findall(data2)
 			xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title+" - "+match[1], match[0] , thumbnail , plot )
-		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , "Reproducir todas las partes a la vez...", urllists , thumbnail , plot )
+		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , "(Reproducir todas las partes a la vez...)", urllists , thumbnail , plot )
 	## --------------------------------------------------------------------------------------##
 	#            Busca enlaces de videos para el servidor vkontakte.ru                        #
 	## --------------------------------------------------------------------------------------##
@@ -279,7 +272,18 @@ def detail(params,url,category):
 					tipo = "240.mp4"
 					videourl = "%s/u%s/video/%s.%s" % (match[0],match[1],match[2],tipo)
 					xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VKONTAKTE] [%s]" %tipo, videourl , thumbnail , plot )
-			
+	
+	patronvideos = '"(http://peliculasid.net/modulos/iframevk.php[^"]+)"'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	if len(matches)>0:
+		print " encontro VKontakte.ru :%s" %matches[0]	
+		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title+" - [VKserver]", matches[0] , thumbnail , plot )
+		
+	patronvideos = '"(http://peliculasid.net/modulos/iframemv.php[^"]+)"'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	if len(matches)>0:
+		print " encontro Megavideo :%s" %matches[0]	
+		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Megavideo" , title+" - [Megavideo]", matches[0] , thumbnail , plot )		
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 	xbmcplugin.addSortMethod( handle=pluginhandle, sortMethod=xbmcplugin.SORT_METHOD_NONE )
@@ -309,11 +313,27 @@ def play(params,url,category):
 			listdata.append(["Parte %d" %c,matches2[0]])
 		
 		url = xmltoplaylist.MakePlaylistFromList(listdata)	
-	elif "iframeplayer.php" in url:      #"http://peliculasid.com/iframeplayer.php?url=aHR0cDovL3ZpZGVvLmFrLmZhY2Vib29rLmNvbS9jZnMtYWstc25jNC80MjIxNi82MS8xMjgxMTI4ODgxOTUwXzM5NTAwLm1wNA=="
+	elif "iframeplayer.php" in url:      #"http://peliculasid.net/iframeplayer.php?url=aHR0cDovL3ZpZGVvLmFrLmZhY2Vib29rLmNvbS9jZnMtYWstc25jNC80MjIxNi82MS8xMjgxMTI4ODgxOTUwXzM5NTAwLm1wNA=="
 		data = scrapertools.cachePage(url)
 		patronvideos = 'file=([^\&]+)\&'
 		matches = re.compile(patronvideos,re.DOTALL).findall(data)
 		if len(matches)>0:
+			url = matches[0]
+			
+	elif "iframevk.php" in url:
+		data = scrapertools.cachePage(url)
+		patronvideos = '<iframe src="(http://vk[^/]+/video_ext.php[^"]+)"'
+		matches = re.compile(patronvideos,re.DOTALL).findall(data)
+		if len(matches)>0:
+			import vk
+			server = "Directo"
+			url = 	vk.geturl(matches[0])
+	elif "iframemv.php" in url:
+		data = scrapertools.cachePage(url)
+		patronvideos  = 'src="http://www.megavideo.com/mv_player.swf\?v\=([^"]+)"'
+		matches = re.compile(patronvideos,re.DOTALL).findall(data)	
+		if len(matches)>0:
+			server = "Megavideo"
 			url = matches[0]
 	
 	xbmctools.playvideo(CHANNELNAME,server,url,category,title,thumbnail,plot)

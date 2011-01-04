@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.pelisalacarta"
 	name="pelisalacarta"
-	version="2.18"
+	version="2.20"
 	provider-name="tvalacarta">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -12,11 +12,11 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="es">Películas y series a la carta</summary>
-    <description lang="es">Plugin en castellano para ver películas y series online, publicadas por más de 50 sitios en servidores de video online</description>
+    <description lang="es">Plugin en castellano para ver películas y series online, publicadas por más de 70 sitios en servidores de video online</description>
     <summary lang="en">Movies and TV Shows on demand (Spanish)</summary>
-    <description lang="en">Spanish plugin for watching Movies and TV Shows on demand. It uses more than 50 different source sites that provide streamed media contents. WARNING: Menus and options only in Spanish (for the moment)</description>
+    <description lang="en">Spanish plugin for watching Movies and TV Shows on demand. It uses more than 70 different source sites that provide streamed media contents</description>
     <summary lang="hu">Filmek és TV műsorok VoD (spanyol)</summary>
-    <description lang="hu">Spanyol kiegészítő melynek segítségével filmeket és TV műsorokat lehet nézni igény szerint választhatóan "on-demand", több mint 50 különböző forrásoldal használatával. Figyelem: a menük és beállítások jelenleg csak spanyolul érhetők el</description>
+    <description lang="hu">Spanyol kiegészítő melynek segítségével filmeket és TV műsorokat lehet nézni igény szerint választhatóan "on-demand", több mint 70 különböző forrásoldal használatával</description>
     <platform>all</platform>
   </extension>
 </addon>

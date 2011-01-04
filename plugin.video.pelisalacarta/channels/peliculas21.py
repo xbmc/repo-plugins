@@ -21,6 +21,7 @@ import config
 import config
 import logger
 import buscador
+import decrypt21
 
 CHANNELNAME = "peliculas21"
 
@@ -129,33 +130,63 @@ def performsearch(texto):
 
 	# Extrae las entradas (carpetas)
 
-	patronvideos  = '<div class="fichafilm"[^>]+>[^<]+<a href="([^"]+)"[^>]+>'     # url
-	patronvideos += '[^<]+<img alt="([^"]+)" '                                     # Titulo
-	patronvideos += 'src="([^"]+)"'                                                # Imagen
-	patronvideos += '.*?(Duraci&oacute;n:</b>[^<]+)<br />'                         # Duracion si hay
-	patronvideos += '.*?(G&eacute;nero:</b>.*?)</div>'                             # Genero
-	patronvideos += '.*?(Doblaje:</b>[^<]+)</div>'                                 # Doblaje para Peliculas
-	patronvideos += '.*?(Sinopsis:</b>[^<]+)</div>'                                # Sinopsis	
-	matches = re.compile(patronvideos,re.DOTALL).findall(data)
-	scrapertools.printMatches(matches)
-		
-	resultados = []
+	patronvideos  = '<div.+?class="filmgal"[^>]+>.*?'
+	patronvideos += '<a href="([^"]+)"[^>]+'                                        # url
+	patronvideos += '>.*?<img alt="([^"]+)" '                                       # Titulo
 
+	patronvideos += 'src="([^"]+)"'                                                 # Imagen
+	patronvideos += '(.*?)reproducciones'                        # Contenido
+
+	
+	resultados = []
 	for match in matches:
 		# Atributos
-		scrapedtitle = match[1]
+		scrapedplot = ""
+		scrapedthumbnail = ""
+		try:
+			scrapedtitle = re.compile('<span class\="titulotool">(.*?)</div>',re.DOTALL).findall(match[3])[0]
+			scrapedtitle = re.sub("<[^>]+>","",scrapedtitle).replace("\n\t\t","").strip()
+			#print scrapedtitle
+		except:
+			scrapedtitle = match[1]		
+		
 		#scrapedtitle = scrapedtitle.replace("<span class='style4'>","")
 		#scrapedtitle = scrapedtitle.replace("</span>","")
 		scrapedurl = urlparse.urljoin(url1,match[0])
+		
 		scrapedthumbnail = urlparse.urljoin(url1,match[2])
 		scrapedthumbnail = scrapedthumbnail.replace(" ","")
-		scrapedplot  = match[3].replace("\n"," ")+"\n"
+		plot = match[3]
+		print plot
+		try    :Sinopsis = re.compile("Sinopsis:(.*?)</div>").findall(plot)[0]
+		except :Sinopsis="<>"
+		print Sinopsis
+		Sinopsis = " Sinopsis: " + Sinopsis.strip()
+			
+		try    :Genero = re.compile("Género:(.+?)</div>").findall(plot)[0]
+		except :Genero = ""
+		Genero = "Genero: " + Genero.strip()
 		
+
+		try    :Duracion = re.compile("Duraci&oacute;n:(.+?)</div>").findall(plot)[0]
+		except :Duracion = ""
+		Duracion = "Duracion: " + Duracion.strip()
 		
-		scrapedplot += match[4][4:].replace("\n","")+"\n"	
+		try    :Actores = re.compile("Actores:(.+?)</div>").findall(plot)[0]
+		except :Actores = ""
+		Actores = "Actores: " + Actores.strip()
+									
+		scrapedplot  = Genero + "\n" + Duracion + "\n" + Actores + "\n" + Sinopsis
 		
-		scrapedplot += match[5].replace("\n"," ")+"\n"
-		scrapedplot += match[6]
+
+		
+
+		#scrapedplot += match[4].replace("\n","")+"\n"	
+		
+
+		#scrapedplot += match[5].replace("\n"," ")+"\n"
+		
+		#scrapedplot += ""
 		scrapedplot  = re.sub("<[^>]+>","",scrapedplot)
 		scrapedplot  = scrapedplot.replace("&aacute;","á")
 		scrapedplot  = scrapedplot.replace("&iacute;","í")
@@ -163,6 +194,7 @@ def performsearch(texto):
 		scrapedplot  = scrapedplot.replace("&oacute;","ó")
 		scrapedplot  = scrapedplot.replace("&uacute;","ú")
 		scrapedplot  = scrapedplot.replace("&ntilde;","ñ")
+		
 
 		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
@@ -231,7 +263,7 @@ def listsimple(params,url,category):
 	#|<div class="fichafilm" >.*?
 	# Extrae las entradas (carpetas)
 	
-	patronvideos  = '<div.+?class="filmgal"[^>]+>.*?'
+	patronvideos  = '<div.+?class="filmgal-trailer"[^>]+>.*?'
 	patronvideos += '<a href="([^"]+)"[^>]+'                                        # url
 	patronvideos += '>.*?<img alt="([^"]+)" '                                       # Titulo
 
@@ -247,20 +279,27 @@ def listsimple(params,url,category):
 		# Atributos
 		scrapedplot = ""
 		scrapedthumbnail = ""
-		scrapedtitle = match[1]
+		try:
+			scrapedtitle = re.compile('<span class\="titulotool">(.*?)</div>',re.DOTALL).findall(match[3])[0]
+			scrapedtitle = re.sub("<[^>]+>"," ",scrapedtitle).replace("  "," ").strip()
+			#print scrapedtitle
+		except:
+			scrapedtitle = match[1]		
+		
 		#scrapedtitle = scrapedtitle.replace("<span class='style4'>","")
 		#scrapedtitle = scrapedtitle.replace("</span>","")
 		scrapedurl = urlparse.urljoin(url1,match[0])
 		
 		scrapedthumbnail = urlparse.urljoin(url1,match[2])
 		scrapedthumbnail = scrapedthumbnail.replace(" ","")
-		plot = re.sub("<[^>]+>","",match[3])
+		plot = match[3]
+		print plot
 		try    :Sinopsis = re.compile("Sinopsis:(.*?)</div>").findall(plot)[0]
 		except :Sinopsis="<>"
 		print Sinopsis
 		Sinopsis = " Sinopsis: " + Sinopsis.strip()
 			
-		try    :Genero = re.compile("G&eacute;nero:(.+?)</div>").findall(plot)[0]
+		try    :Genero = re.compile("Género:(.+?)</div>").findall(plot)[0]
 		except :Genero = ""
 		Genero = "Genero: " + Genero.strip()
 		
@@ -284,7 +323,7 @@ def listsimple(params,url,category):
 		#scrapedplot += match[5].replace("\n"," ")+"\n"
 		
 		#scrapedplot += ""
-		#scrapedplot  = re.sub("<[^>]+>","",scrapedplot)
+		scrapedplot  = re.sub("<[^>]+>","",scrapedplot)
 		scrapedplot  = scrapedplot.replace("&aacute;","á")
 		scrapedplot  = scrapedplot.replace("&iacute;","í")
 		scrapedplot  = scrapedplot.replace("&eacute;","é")
@@ -327,13 +366,14 @@ def listsimpleMirror(params,url,category):
 
 	# Extrae las entradas (carpetas)
 
-	patronvideos  = '<div class="fichafilm"[^>]+>[^<]+<a href="([^"]+)"[^>]+>'     # url
-	patronvideos += '[^<]+<img alt="([^"]+)" '                                     # Titulo
-	patronvideos += 'src="([^"]+)"'                                                # Imagen
-	patronvideos += '.*?(Duraci&oacute;n:</b>[^<]+)<br />'                         # Duracion si hay
-	patronvideos += '.*?(G&eacute;nero:</b>.*?)</div>'                             # Genero
-	patronvideos += '.*?(Doblaje:</b>[^<]+)</div>'                                 # Doblaje para Peliculas
-	patronvideos += '.*?(Sinopsis:</b>[^<]+)</div>'                                # Sinopsis	
+	patronvideos  = '<div.+?class="filmgal"[^>]+>.*?'
+	patronvideos += '<a href="([^"]+)"[^>]+'                                        # url
+	patronvideos += '>.*?<img alt="([^"]+)" '                                       # Titulo
+
+	patronvideos += 'src="([^"]+)"'                                                 # Imagen
+	patronvideos += '(.*?)reproducciones'                        # Contenido
+	#print patronvideos
+	#print data
 	#logger.info("[ listsimple  patronvideos")
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
@@ -342,22 +382,51 @@ def listsimpleMirror(params,url,category):
 		# Atributos
 		scrapedplot = ""
 		scrapedthumbnail = ""
-		scrapedtitle = match[1]
+		#print match[3]
+		try:
+			scrapedtitle = re.compile('<span class\="titulotool">(.*?)</div>',re.DOTALL).findall(match[3])[0]
+			scrapedtitle = re.sub("<[^>]+>","",scrapedtitle).replace("\n\t\t","").strip()
+			#print scrapedtitle
+		except:
+			scrapedtitle = match[1]
+			
+		
 		#scrapedtitle = scrapedtitle.replace("<span class='style4'>","")
 		#scrapedtitle = scrapedtitle.replace("</span>","")
 		scrapedurl = urlparse.urljoin(url1,match[0])
 		
 		scrapedthumbnail = urlparse.urljoin(url1,match[2])
 		scrapedthumbnail = scrapedthumbnail.replace(" ","")
+		plot = match[3].replace("\n","")
+		try    :Sinopsis = re.compile("Sinopsis:(.*?)</div>").findall(plot)[0]
+		except :Sinopsis="<>"
+		print Sinopsis
+		Sinopsis = "Sinopsis: " + Sinopsis.strip()
+			
+		try	   :Genero = re.compile("G&eacute;nero:(.*?)</div>").findall(plot)[0]
+		except :Genero = ""
+		Genero = "Genero:  " + Genero.strip()
+		print Genero
+
+		try    :Duracion = re.compile("Duraci&oacute;n:(.*?)</div>").findall(plot)[0]
+		except :Duracion = ""
+		Duracion = "Duracion: " + Duracion.strip()
 		
-		scrapedplot  = match[3].replace("\n"," ")+"\n"
+		try    :Actores = re.compile("Actores:(.*?)</div>").findall(plot)[0]
+		except :Actores = ""
+		Actores = "Actores:  " + Actores.strip()
+		print Actores							
+		scrapedplot  = Genero + "\n" + Duracion + "\n" + Actores + "\n" + Sinopsis
 		
+
 		
-		scrapedplot += (match[4].replace("\n","")).replace(" \t","")+"\n"
+
+		#scrapedplot += match[4].replace("\n","")+"\n"	
 		
-		scrapedplot += match[5].replace("\n"," ")+"\n"
+
+		#scrapedplot += match[5].replace("\n"," ")+"\n"
 		
-		scrapedplot += match[6]
+		#scrapedplot += ""
 		scrapedplot  = re.sub("<[^>]+>","",scrapedplot)
 		scrapedplot  = scrapedplot.replace("&aacute;","á")
 		scrapedplot  = scrapedplot.replace("&iacute;","í")
@@ -365,6 +434,7 @@ def listsimpleMirror(params,url,category):
 		scrapedplot  = scrapedplot.replace("&oacute;","ó")
 		scrapedplot  = scrapedplot.replace("&uacute;","ú")
 		scrapedplot  = scrapedplot.replace("&ntilde;","ñ")
+		
 		
 		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
@@ -520,6 +590,62 @@ def listvideos(params,url,category):
 			if scrapedurl.strip() not in encontrados:
 				encontrados.add(scrapedurl.strip())
 				xbmctools.addnewvideo( CHANNELNAME , "play" , category ,servidor, title+ " - %s" % titulo  , scrapedurl , thumbnail, plot )		
+	'''
+	<span class="bloque-uploader">Anónimo</span>
+	<span class="bloque-doblaje"><img src="../images/esp.gif" class="bandera" /></span>
+	<span class="bloque-link">Opción 8: <a href="javascript:goTo('aHR0cDovL3d3dy5tZWdhdmlkZW8uY29tLz92PTVOM0JYOVMx', 'megavideo.com')" rel="nofollow">Ver película</a></span>
+	'''
+	patronvideos = '<span class="bloque-doblaje">(.+?)</span>[^<]+'
+	patronvideos +='<span class="bloque-link">[^<]+<a href="javascript\:goTo\(\'([^\']+)\'\, \'([^\']+)\'\)"(.+?)</span>'
+	#patronvideos +='(?:\| <a href="javascript\:goTo\(\'([^\']+)\'\, \'([^\']+)\'\)".*?)</span>'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	scrapertools.printMatches(matches)
+	for match in matches:
+	
+		# URL
+		if "megavideo" in match[2]:
+			server = "Megavideo"
+		elif "megaupload" in match[2]:
+			server = "Megaupload"
+		if "esp.gif" in match[0]:
+			doblaje = "Español"
+			
+		else:
+			doblaje = match[0].strip()			
+		base64 = decrypt21.Base64()
+		try:
+			url2 = re.compile("javascript\:goTo\(\'([^\']+)\'\, \'([^\']+)\'\)").findall(match[3])[0]
+			scrapedurl2 = base64._extract_code(base64.decode(url2[0]))
+			scrapedurl = base64._extract_code(base64.decode(match[1]))
+			part1 = " Parte 1 "
+			part2 = " Parte 2 "
+			scrapedtitle2 = title + part2+ " -   [" +doblaje+ "]" + " ("+server+")"
+			#print match[3]
+		except:
+			scrapedurl = base64._extract_code(base64.decode(match[1]))
+			part1 = ""
+			part2 = ""			
+			
+		
+
+		scrapedtitle = title + part1+ " -   [" +doblaje+ "]" + " ("+server+")"
+
+
+		# Thumbnail
+		scrapedthumbnail = thumbnail
+		# Argumento
+		scrapedplot = plot
+
+		# Depuracion
+		if (DEBUG):
+			logger.info("scrapedtitle="+scrapedtitle)
+			logger.info("scrapedurl="+scrapedurl)
+			logger.info("scrapedthumbnail="+scrapedthumbnail)
+
+		# Añade al listado de XBMC
+		xbmctools.addnewvideo( CHANNELNAME , "play" , category ,server, scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
+		if part2:
+			xbmctools.addnewvideo( CHANNELNAME , "play" , category ,server, scrapedtitle2 , scrapedurl2 , scrapedthumbnail, scrapedplot )
 	# Extrae las entradas (videos) directos
 	patronvideos = 'flashvars="file=([^\&]+)\&amp;controlbar=over'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)

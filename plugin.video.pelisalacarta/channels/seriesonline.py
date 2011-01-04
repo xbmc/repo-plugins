@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 #------------------------------------------------------------
 # pelisalacarta - XBMC Plugin
 # Canal para seriesonline
@@ -20,182 +20,192 @@ import logger
 
 CHANNELNAME = "seriesonline"
 
-# Esto permite su ejecuci�n en modo emulado
+# Esto permite su ejecución en modo emulado
 try:
-	pluginhandle = int( sys.argv[ 1 ] )
+    pluginhandle = int( sys.argv[ 1 ] )
 except:
-	pluginhandle = ""
+    pluginhandle = ""
 
 logger.info("[seriesonline.py] init")
 
 DEBUG = True
 
 def mainlist(params,url,category):
-	logger.info("[seriesonline.py] mainlist")
+    logger.info("[seriesonline.py] mainlist")
 
-	# A�ade al listado de XBMC
-	xbmctools.addnewfolder( CHANNELNAME , "novedadeslist"      , "" , "Novedades","http://www.seriesonline.us/","","")
+    import base64
+    #decodeBase64('yFA/B6/fgVeTEKXqJsWqmGZuCQaVby9i6umE94Eies2OznsWeVCs9iEzpRfuZfK2xoF8Vj8TAGkbHv4IprauDzwV488pJoEzbndTne34hSMjMH8Apc4Z4Dssl3f8tD98StY3zGjGfkD53ErHTRELz9qcBamiKr+CDcs4ZB6d20rTKi6lseNyfMWKVw7EdLqCozywFTGwmzUQN2iCGyqEQoB2KDPdE8NNDaMn86jGKI8MhRxVNU+iwiSI6JwljACen0BIqzWRJwUIflaLfyQtgcVNnsstw3RbQIBDLxH8TBsn6eBLfIwqeNfHfywQiyw=')
+    code = "yFA/B6/fgVeTEKXqJsWqmGZuCQaVby9i6umE94Eies2OznsWeVCs9iEzpRfuZfK2xoF8Vj8TAGkbHv4IprauDzwV488pJoEzbndTne34hSMjMH8Apc4Z4Dssl3f8tD98StY3zGjGfkD53ErHTRELz9qcBamiKr+CDcs4ZB6d20rTKi6lseNyfMWKVw7EdLqCozywFTGwmzUQN2iCGyqEQoB2KDPdE8NNDaMn86jGKI8MhRxVNU+iwiSI6JwljACen0BIqzWRJwUIflaLfyQtgcVNnsstw3RbQIBDLxH8TBsn6eBLfIwqeNfHfywQiyw="
+    result = base64.b64decode(code)
+    print "%s" % result
 
-	# Cierra el directorio
-	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
-	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
+    # Añade al listado de XBMC
+    xbmctools.addnewfolder( CHANNELNAME , "novedadeslist"      , "" , "Novedades","http://www.seriesonlinetv.com/","","")
+
+    # Cierra el directorio
+    xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
+    xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
 def novedadeslist(params,url,category):
-	logger.info("[seriesonline.py] mainlist")
+    logger.info("[seriesonline.py] mainlist")
 
-	# Descarga la p�gina
-	data = scrapertools.cachePage(url)
-	#logger.info(data)
+    # Descarga la página
+    data = scrapertools.cachePage(url)
+    #logger.info(data)
 
-	# Extrae las entradas (carpetas)
-	patronvideos  = '> <a href="([^"]+)">([^<]+)</a><br />'
-	matches = re.compile(patronvideos,re.DOTALL).findall(data)
-	scrapertools.printMatches(matches)
+    # Extrae las entradas (carpetas)
+    patronvideos  = '<table class="titulo" id="naranja" cellpadding="0" cellspacing="0">[^<]+'
+    patronvideos += '<tr>[^<]+'
+    patronvideos += '<td width="7"><img src="/imagenes/menu_s_iz.gif" width="100." height="20" alt="" /></td>[^<]+'
+    patronvideos += '<td class="tit">([^<]+)</td>[^<]+'
+    patronvideos += '<td width="7"><img src="/imagenes/menu_s_de.gif" width="100." height="20" alt="" /></td>[^<]+'
+    patronvideos += '</tr>[^<]+'
+    patronvideos += '</table>[^<]+'
+    patronvideos += '<table class="titulo" id="naranja" cellpadding="0" cellspacing="0">[^<]+'
+    patronvideos += '<tr>[^<]+'
+    patronvideos += '<td class="contenido"> <div style="min-height. 150px."><a href="([^"]+)">[^<]+'
+    patronvideos += '<a href="([^"]+)"><img src="([^"]+)'
+            
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    scrapertools.printMatches(matches)
 
-	for match in matches:
-		# Titulo
-		scrapedtitle = match[1].strip()
+    for match in matches:
+        scrapedtitle = match[0].strip()
+        scrapedurl = urlparse.urljoin(url,match[1])
+        scrapedthumbnail = urlparse.urljoin(url,match[3])
+        scrapeddescription = ""
+        if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
-		# URL
-		scrapedurl = urlparse.urljoin(url,match[0])
-		
-		# Thumbnail
-		scrapedthumbnail = ""
-		
-		# procesa el resto
-		scrapeddescription = ""
+        # Añade al listado de XBMC
+        xbmctools.addnewfolder( CHANNELNAME , "list" , CHANNELNAME , scrapedtitle , scrapedurl , scrapedthumbnail , scrapeddescription )
 
-		# Depuracion
-		if (DEBUG):
-			logger.info("scrapedtitle="+scrapedtitle)
-			logger.info("scrapedurl="+scrapedurl)
-			logger.info("scrapedthumbnail="+scrapedthumbnail)
+    # Paginación
+    patron = '<a href="([^"]+)" class="paginacion"[^>]+>\&gt\;\&gt\;</a>'
+    matches = re.compile(patron,re.DOTALL).findall(data)
+    if len(matches)>0:
+        scrapedurl = urlparse.urljoin(url,matches[0])
+        xbmctools.addnewfolder( CHANNELNAME , "novedadeslist" , CHANNELNAME , "Página siguiente" , scrapedurl , "" , "" )
 
-		# A�ade al listado de XBMC
-		xbmctools.addnewfolder( CHANNELNAME , "list" , CHANNELNAME , scrapedtitle , scrapedurl , scrapedthumbnail , scrapeddescription )
-
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
-
-	# Disable sorting...
-	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
-
-	# End of directory...
-	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
+    # Label (top-right)...
+    xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
+    xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
 def list(params,url,category):
-	logger.info("[seriesonline.py] list")
+    logger.info("[seriesonline.py] list")
 
-	# Descarga la p�gina
-	data = scrapertools.cachePage(url)
-	#logger.info(data)
+    title = urllib.unquote_plus( params.get("title") )
+    thumbnail = urllib.unquote_plus( params.get("thumbnail") )
 
-	# Extrae las entradas (carpetas)
-	patronvideos  = '<li><a href="(/serie[^"]+)">([^<]+)</a></li>'
-	matches = re.compile(patronvideos,re.DOTALL).findall(data)
-	scrapertools.printMatches(matches)
+    # Descarga la página
+    data = scrapertools.cachePage(url)
+    #logger.info(data)
 
-	for match in matches:
-		# Titulo
-		scrapedtitle = match[1]
+    # Extrae las entradas
+    patronvideos  = '<a.*?href="(/serie-divx/[^"]+)"'
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    scrapertools.printMatches(matches)
 
-		# URL
-		scrapedurl = urlparse.urljoin( url , match[0].replace("/serie/","/serie-divx/") )
-		
-		# Thumbnail
-		scrapedthumbnail = ""
-		
-		# procesa el resto
-		scrapeddescription = ""
+    for match in matches:
+        scrapedtitle = title + "(Ver online)"
+        scrapedurl = urlparse.urljoin( url , match )
+        scrapedthumbnail = thumbnail
+        scrapeddescription = ""
+        if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
-		# Depuracion
-		if (DEBUG):
-			logger.info("scrapedtitle="+scrapedtitle)
-			logger.info("scrapedurl="+scrapedurl)
-			logger.info("scrapedthumbnail="+scrapedthumbnail)
+        # Añade al listado de XBMC
+        xbmctools.addnewfolder( CHANNELNAME , "detail" , CHANNELNAME , scrapedtitle , scrapedurl , scrapedthumbnail , scrapeddescription )
 
-		# A�ade al listado de XBMC
-		xbmctools.addnewfolder( CHANNELNAME , "detail" , CHANNELNAME , scrapedtitle , scrapedurl , scrapedthumbnail , scrapeddescription )
+    # Extrae las entradas
+    patronvideos  = '<a.*?href="(/descarga-directa/[^"]+)"'
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    scrapertools.printMatches(matches)
 
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
+    for match in matches:
+        scrapedtitle = title + "(Descarga directa)"
+        scrapedurl = urlparse.urljoin( url , match )
+        scrapedthumbnail = thumbnail
+        scrapeddescription = ""
+        if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 
-	# Disable sorting...
-	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
+        # Añade al listado de XBMC
+        xbmctools.addnewfolder( CHANNELNAME , "detail" , CHANNELNAME , scrapedtitle , scrapedurl , scrapedthumbnail , scrapeddescription )
 
-	# End of directory...
-	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
+    # Label (top-right)...
+    xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
+    xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
 def detail(params,url,category):
-	logger.info("[seriesonline.py] detail")
+    logger.info("[seriesonline.py] detail")
 
-	title = urllib.unquote_plus( params.get("title") )
-	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
+    title = urllib.unquote_plus( params.get("title") )
+    thumbnail = urllib.unquote_plus( params.get("thumbnail") )
 
-	# Descarga la p�gina
-	data = scrapertools.cachePage(url)
-	#logger.info(data)
+    # Descarga la página
+    data = scrapertools.cachePage(url)
+    #logger.info(data)
 
-	# ------------------------------------------------------------------------------------
-	# Busca los enlaces a los mirrors, o a los cap�tulos de las series...
-	# ------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
+    # Busca los enlaces a los mirrors, o a los capítulos de las series...
+    # ------------------------------------------------------------------------------------
 
-	logger.info("Busca el enlace de p�gina siguiente...")
-	try:
-		# La siguiente p�gina
-		patronvideos  = '<a href="([^"]+)">Sigu'
-		matches = re.compile(patronvideos,re.DOTALL).findall(data)
-		for match in matches:
-			addfolder("#Siguiente",urlparse.urljoin(url,match),"list")
-	except:
-		logger.info("No encuentro la pagina...")
+    logger.info("Busca el enlace de página siguiente...")
+    try:
+        # La siguiente página
+        patronvideos  = '<a href="([^"]+)">Sigu'
+        matches = re.compile(patronvideos,re.DOTALL).findall(data)
+        for match in matches:
+            addfolder("#Siguiente",urlparse.urljoin(url,match),"list")
+    except:
+        logger.info("No encuentro la pagina...")
 
-	# ------------------------------------------------------------------------------------
-	# Busca los enlaces a los videos
-	# ------------------------------------------------------------------------------------
-	listavideos = servertools.findvideos(data)
-	
-	for video in listavideos:
-		xbmctools.addnewvideo( CHANNELNAME , "play" , category , video[2] , title +" - "+video[0], video[1], thumbnail , "" )
-	# ------------------------------------------------------------------------------------
+    # ------------------------------------------------------------------------------------
+    # Busca los enlaces a los videos
+    # ------------------------------------------------------------------------------------
+    listavideos = servertools.findvideos(data)
+    
+    for video in listavideos:
+        xbmctools.addnewvideo( CHANNELNAME , "play" , category , video[2] , title +" - "+video[0], video[1], thumbnail , "" )
+    # ------------------------------------------------------------------------------------
 
-	# Label (top-right)...
-	xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
-		
-	# Disable sorting...
-	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
+    # Label (top-right)...
+    xbmcplugin.setPluginCategory( handle=int( sys.argv[ 1 ] ), category=category )
+        
+    # Disable sorting...
+    xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )
 
-	# End of directory...
-	xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
+    # End of directory...
+    xbmcplugin.endOfDirectory( handle=int( sys.argv[ 1 ] ), succeeded=True )
 
 def play(params,url,category):
-	logger.info("[seriesonline.py] play")
+    logger.info("[seriesonline.py] play")
 
-	title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
-	thumbnail = xbmc.getInfoImage( "ListItem.Thumb" )
-	plot = unicode( xbmc.getInfoLabel( "ListItem.Plot" ), "utf-8" )
-	server = params["server"]
-	logger.info("[seriesonline.py] thumbnail="+thumbnail)
-	logger.info("[seriesonline.py] server="+server)
-	
-	xbmctools.playvideo(CHANNELNAME,server,url,category,title,thumbnail,plot)
+    title = unicode( xbmc.getInfoLabel( "ListItem.Title" ), "utf-8" )
+    thumbnail = xbmc.getInfoImage( "ListItem.Thumb" )
+    plot = unicode( xbmc.getInfoLabel( "ListItem.Plot" ), "utf-8" )
+    server = params["server"]
+    logger.info("[seriesonline.py] thumbnail="+thumbnail)
+    logger.info("[seriesonline.py] server="+server)
+    
+    xbmctools.playvideo(CHANNELNAME,server,url,category,title,thumbnail,plot)
 
 def addfolder(nombre,url,accion):
-	logger.info('[seriesonline.py] addfolder( "'+nombre+'" , "' + url + '" , "'+accion+'")"')
-	listitem = xbmcgui.ListItem( nombre , iconImage="DefaultFolder.png")
-	itemurl = '%s?channel=seriesonline&action=%s&category=%s&url=%s' % ( sys.argv[ 0 ] , accion , urllib.quote_plus(nombre) , urllib.quote_plus(url) )
-	xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ]), url = itemurl , listitem=listitem, isFolder=True)
+    logger.info('[seriesonline.py] addfolder( "'+nombre+'" , "' + url + '" , "'+accion+'")"')
+    listitem = xbmcgui.ListItem( nombre , iconImage="DefaultFolder.png")
+    itemurl = '%s?channel=seriesonline&action=%s&category=%s&url=%s' % ( sys.argv[ 0 ] , accion , urllib.quote_plus(nombre) , urllib.quote_plus(url) )
+    xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ]), url = itemurl , listitem=listitem, isFolder=True)
 
 def addvideo(nombre,url,category,server):
-	logger.info('[seriesonline.py] addvideo( "'+nombre+'" , "' + url + '" , "'+server+'")"')
-	listitem = xbmcgui.ListItem( nombre, iconImage="DefaultVideo.png" )
-	listitem.setInfo( "video", { "Title" : nombre, "Plot" : nombre } )
-	itemurl = '%s?channel=seriesonline&action=play&category=%s&url=%s&server=%s' % ( sys.argv[ 0 ] , category , urllib.quote_plus(url) , server )
-	xbmcplugin.addDirectoryItem( handle=int(sys.argv[ 1 ]), url=itemurl, listitem=listitem, isFolder=False)
+    logger.info('[seriesonline.py] addvideo( "'+nombre+'" , "' + url + '" , "'+server+'")"')
+    listitem = xbmcgui.ListItem( nombre, iconImage="DefaultVideo.png" )
+    listitem.setInfo( "video", { "Title" : nombre, "Plot" : nombre } )
+    itemurl = '%s?channel=seriesonline&action=play&category=%s&url=%s&server=%s' % ( sys.argv[ 0 ] , category , urllib.quote_plus(url) , server )
+    xbmcplugin.addDirectoryItem( handle=int(sys.argv[ 1 ]), url=itemurl, listitem=listitem, isFolder=False)
 
 def addthumbnailfolder( scrapedtitle , scrapedurl , scrapedthumbnail , accion ):
-	logger.info('[seriesonline.py] addthumbnailfolder( "'+scrapedtitle+'" , "' + scrapedurl + '" , "'+scrapedthumbnail+'" , "'+accion+'")"')
-	listitem = xbmcgui.ListItem( scrapedtitle, iconImage="DefaultFolder.png", thumbnailImage=scrapedthumbnail )
-	itemurl = '%s?channel=seriesonline&action=%s&category=%s&url=%s' % ( sys.argv[ 0 ] , accion , urllib.quote_plus( scrapedtitle ) , urllib.quote_plus( scrapedurl ) )
-	xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ]), url = itemurl , listitem=listitem, isFolder=True)
+    logger.info('[seriesonline.py] addthumbnailfolder( "'+scrapedtitle+'" , "' + scrapedurl + '" , "'+scrapedthumbnail+'" , "'+accion+'")"')
+    listitem = xbmcgui.ListItem( scrapedtitle, iconImage="DefaultFolder.png", thumbnailImage=scrapedthumbnail )
+    itemurl = '%s?channel=seriesonline&action=%s&category=%s&url=%s' % ( sys.argv[ 0 ] , accion , urllib.quote_plus( scrapedtitle ) , urllib.quote_plus( scrapedurl ) )
+    xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ]), url = itemurl , listitem=listitem, isFolder=True)

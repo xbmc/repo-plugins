@@ -37,7 +37,7 @@ def mainlist(params,url,category):
 
 	# Añade al listado de XBMC
 	xbmctools.addnewfolder( CHANNELNAME , "novedades" , category , "Novedades" ,"http://delatv.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "novedades" , category , "Estrenos" ,"http://delatv.com/taquilla/estrenos/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "novedades" , category , "Estrenos" ,"http://delatv.com/categoria/estrenos","","")
 	xbmctools.addnewfolder( CHANNELNAME , "CategoryList" , category , "Categorias" ,"http://delatv.com/","","")
 
 
@@ -60,18 +60,18 @@ def novedades(params,url,category):
 	# Extrae las películas
 	# ------------------------------------------------------
 	#patron  = '<div class="thumb">[^<]+<a href="([^"]+)"><img src="([^"]+)".*?alt="([^"]+)"/></a>'
-	patron  = '<div class="galleryitem">[^<]+'
-	patron += '<h1>[^<]+</h1>[^<]+'
-	patron += '<a href="([^"]+)"><img src="([^"]+)" '
-	patron += 'alt="([^"]+)"'
+	patron  = '<div class="imagen">'
+	patron += '<a title="([^"]+)"'
+	patron += ' href="([^"]+)"><img.+?src="([^"]+)" /></a>.*?'
+	patron += '<div class="sinopsis">[^<]+<p><p>(.+?)</p>'
 	matches = re.compile(patron,re.DOTALL).findall(data)
 	if DEBUG: scrapertools.printMatches(matches)
 
 	for match in matches:
-		scrapedtitle = match[2]
-		scrapedurl = match[0]
-		scrapedthumbnail = match[1].replace(" ","%20")
-		scrapedplot = ""
+		scrapedtitle = match[0]
+		scrapedurl = match[1]
+		scrapedthumbnail = match[2].replace(" ","%20")
+		scrapedplot = match[3]
 		if (DEBUG): logger.info("title=["+scrapedtitle+"], url=["+scrapedurl+"], thumbnail=["+scrapedthumbnail+"]")
 		try:
 			print scrapedtitle
@@ -87,7 +87,7 @@ def novedades(params,url,category):
 	# Extrae la página siguiente
 	# ------------------------------------------------------
 	#patron = '<a href="([^"]+)" >\&raquo\;</a>'
-	patron  = 'class="current">[^<]+</span><a href="([^"]+)"'
+	patron  = "<span class='current'>[^<]+</span><a href='([^']+)'"
 	matches = re.compile(patron,re.DOTALL).findall(data)
 	if DEBUG:
 		scrapertools.printMatches(matches)
@@ -114,13 +114,13 @@ def CategoryList(params,url,category):
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
 
-	patronvideos = '<div id="menucat">(.*?)<div class="menu-categorias-down"></div>'
+	patronvideos = '<div class="titulo">Generos</div>(.*?)</div>'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 		
 	# Patron de las entradas
 	patronvideos  = '<a href="([^"]+)"[^>]+'          # URL
-	patronvideos += " >(.+?)<"                                                         # TITULO
+	patronvideos += ">(.+?)<"                                                         # TITULO
 	  
 	matches = re.compile(patronvideos,re.DOTALL).findall(matches[0])
 	scrapertools.printMatches(matches)
@@ -148,6 +148,7 @@ def listmirrors(params,url,category):
 	logger.info("[delatv.py] listmirrors")
 
 	title = urllib.unquote_plus( params.get("title") )
+	title = title.replace("ñ","Ã±").decode("utf-8")
 	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
 	plot = unicode( xbmc.getInfoLabel( "ListItem.Plot" ), "utf-8" )
 
@@ -184,7 +185,7 @@ def listmirrors(params,url,category):
 	</div>
 	'''
 
-	patron = '<div class="servidores-titulo">Lista de servidores</div>(.*?)</div>'
+	patron = '<div class="titulo-servidores">Lista de Servidores</div>(.*?)</div>'
 	matches = re.compile(patron,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 	scrapedtitle = title
@@ -201,18 +202,18 @@ def listmirrors(params,url,category):
 			
 			
 			
-			if match[0].endswith(".html"):
+			if match[0].strip().endswith(".html"):
 				if "/vk/" in match[0]:  #http://delatv.com/vk/11223192/674072850/ml3mp2pm9v00nmp2/predators-online.html
-					patron = "http\:\/\/delatv.com\/vk\/([^\/]+)\/([^\/]+)\/([^\/]+)\/[^\.]+\.html"
-					matchesvk = re.compile(patron).findall(match[0])
-					scrapedurl = "http://delatv.com/modulos/embed/vkontakteX.php?oid=%s&id=%s&hash=%s" %(matchesvk[0][0],matchesvk[0][1],matchesvk[0][2])
+					#patron = "http\:\/\/delatv.com\/vk\/([^\/]+)\/([^\/]+)\/([^\/]+)\/[^\.]+\.html"
+					#matchesvk = re.compile(patron).findall(match[0].strip())
+					scrapedurl = match[0].strip() #"http://delatv.com/modulos/embed/vkontakteX.php?oid=%s&id=%s&hash=%s" %(matchesvk[0][0],matchesvk[0][1],matchesvk[0][2])
 					server = "Directo"
 					xbmctools.addnewvideo( CHANNELNAME , "play" , category ,server, scrapedtitle+" - %s [VK]" %match[1] , scrapedurl , scrapedthumbnail, scrapedplot )
 				  			
 			
 			
 				patron   = "http://delatv.com/([^/]+)/([^/]+)/[^\.]+.html"    #http://delatv.com/playlist/6917/el-equipo-a-online.html
-				matches2 = re.compile(patron,re.DOTALL).findall(match[0])
+				matches2 = re.compile(patron,re.DOTALL).findall(match[0].strip())
 								
 				if matches2[0][0] == "playlist":
 					xmlurl = "http://delatv.com/xml/%s.xml" %matches2[0][1]
@@ -235,10 +236,10 @@ def listmirrors(params,url,category):
 					scrapedtitle = scrapedtitle+" - %s" %match[1]
 					scrapedtitle = scrapedtitle.replace("&ntilde;","ñ")
 					xbmctools.addnewvideo( CHANNELNAME , "play" , category ,server, scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
-			elif "vk.php" in match[0]:
+			elif "vk.php" in match[0].strip():
 				scrapedurl = "http://delatv.com/modulos/embed/vkontakteX.php?%s" %match[0].split("?")[1]
 				server = "Directo"
-				xbmctools.addnewvideo( CHANNELNAME , "play" , category ,server, scrapedtitle+" - %s [VK]" %match[1] , scrapedurl , scrapedthumbnail, scrapedplot )
+				xbmctools.addnewvideo( CHANNELNAME , "play" , category ,server, scrapedtitle+" - %s [VK]" %match[1] , scrapedurl.strip() , scrapedthumbnail, scrapedplot )
 
 	# Cierra el directorio
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
@@ -270,7 +271,7 @@ def play(params,url,category):
 	#"http://vkontakte.ru/video_ext.php?oid=89710542&id=147003951&hash=28845bd3be717e11&hd=1
 	
 	
-	if "vkontakteX.php" in url:
+	if "vkontakteX.php" or "/vk/" in url:
 		data = scrapertools.cachePage(url)
 		server = "Directo"
 		'''

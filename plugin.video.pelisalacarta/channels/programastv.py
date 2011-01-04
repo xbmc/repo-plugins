@@ -305,7 +305,9 @@ def searchvideos(params, url, category):
         else:
             xbmc.output("hay mas de 1 video")
             for video in videos:
-                xbmc.output(video[2] + video[1])
+                if video[2].find("youtube")!=-1:
+                    continue   
+                #xbmc.output(video[2] + video[1] + " 2 + 1")
                 indexvideo=data.index(video[1])
                 #xbmc.output(str(indexvideo))
                 #if (video[2]=="Megaupload"):

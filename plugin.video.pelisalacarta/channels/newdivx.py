@@ -180,16 +180,17 @@ def listvideos(params,url,category):
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
 
+#<div class="news" title="Monsters (2010) [VOS]"><span class="title">&nbsp;&nbsp;&nbsp;<a href="http://www.newdivx.net/peliculas-online/terror/1589-monsters-2010-vos.html"></span title="3"><img src="http://www.newdivx.net/uploads/thumbs/1288901497_monsters-2010-poster-e1283548539539.jpg" style="border: medium none ;" width="184"; height="254" alt="" title=""><span class="title"></a></span>
 
 	# Extrae las entradas (carpetas)
-	patronvideos  = '<div class="news"[^>]+><span class="title">[^<]+<a href="([^"]+)"></span><img src="([^"]+)".*?alt="([^"]+)"'
+	patronvideos  = '<div class="news" title="([^"]+)"><span class="title">[^<]+<a href="([^"]+)">.*?<img src="([^"]+)"'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 
 	for match in matches:
-		scrapedtitle = match[2]
-		scrapedurl = match[0]
-		scrapedthumbnail = match[1]
+		scrapedtitle = match[0]
+		scrapedurl = match[1]
+		scrapedthumbnail = match[2]
 		scrapedplot = ""
 
 		# Depuracion
@@ -401,12 +402,12 @@ def detail(params,url,category):
 	var video_no_flv = 1;
 	var video_max_hd = '1'
 	'''
-	patronvideos = '<iframe src="(http://vk.com/video_ext.php[^"]+)"'
+	patronvideos = '<iframe src="(http:\/\/vk[^\/]+\/video_ext.php[^"]+)"'
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
-		print " encontro VK.COM :%s" %matches[0]
+		print " encontro VKServer :%s" %matches[0]
  		videourl = 	vk.geturl(matches[0])
- 		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK]", videourl , thumbnail , plot )
+ 		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VKServer]", videourl , thumbnail , plot )
  	"""	
 		data2 = scrapertools.cachePage(matches[0])
 		print data2

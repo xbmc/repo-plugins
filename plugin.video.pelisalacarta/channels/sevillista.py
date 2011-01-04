@@ -33,9 +33,9 @@ DEBUG = True
 
 def mainlist(params,url,category):
 	logger.info("[sevillista.py] mainlist")
-	xbmctools.addnewfolder( CHANNELNAME , "novedades" , CHANNELNAME , "Películas - Novedades" , "http://pelis-sevillista56.blogspot.com/" , "", "" )
-	xbmctools.addnewfolder( CHANNELNAME , "categorias" , CHANNELNAME , "Películas - Por categoría" , "http://pelis-sevillista56.blogspot.com/" , "", "" )
-	xbmctools.addnewfolder( CHANNELNAME , "novedades" , CHANNELNAME , "Series - Novedades" , "http://pelis-sevillista56.blogspot.com/search/label/Series" , "", "" )
+	xbmctools.addnewfolder( CHANNELNAME , "novedades" , CHANNELNAME , "Películas - Novedades" , "http://www.pelis-sevillista56.org/" , "", "" )
+	xbmctools.addnewfolder( CHANNELNAME , "categorias" , CHANNELNAME , "Películas - Por categoría" , "http://www.pelis-sevillista56.org/" , "", "" )
+	xbmctools.addnewfolder( CHANNELNAME , "novedades" , CHANNELNAME , "Series - Novedades" , "http://www.pelis-sevillista56.org/search/label/Series" , "", "" )
 
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )

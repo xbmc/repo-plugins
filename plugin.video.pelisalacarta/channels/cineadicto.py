@@ -40,9 +40,9 @@ def mainlist(params,url,category):
 	xbmctools.addnewfolder( CHANNELNAME , "listvideos"       , category , "Ultimas Películas Añadidas"    ,"http://www.cine-adicto.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "ListaCat"         , category , "Listado por Genero"    ,"http://www.cine-adicto.com/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "ListaAlfa"         , category , "Listado Alfanumerico"    ,"http://www.cine-adicto.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListvideosMirror" , category , "Estrenos","http://www.cine-adicto.com/category/categorias/estrenos","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListvideosMirror" , category , "Documentales","http://www.cine-adicto.com/category/categorias/documentales/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListvideosMirror" , category , "Peliculas en HD","http://www.cine-adicto.com/category/categorias/peliculas-hd-categorias","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Estrenos","http://www.cine-adicto.com/category/categorias/estrenos","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Documentales","http://www.cine-adicto.com/category/categorias/documentales/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Peliculas en HD","http://www.cine-adicto.com/category/categorias/peliculas-hd-categorias","","")
 	xbmctools.addnewfolder( CHANNELNAME , "search" , category , "Buscar","http://www.cine-adicto.com/","","")
 
 	# Label (top-right)...
@@ -106,21 +106,10 @@ def searchresults2(params,url,category):
 
 def ListaCat(params,url,category):
 	logger.info("[cineadicto.py] ListaCat")
-	import downloadtools
-	nombrefichero = ""
-	fullpath = os.path.join( downloadtools.getDownloadPath(),"subtitulos" , nombrefichero )
-	urlfile = "http://www.subtitulos.es/updated/5/10855/0"
-	fullnombrefichero = downloadtools.downloadfileGzipped(urlfile,fullpath)
-	print fullnombrefichero
-	fichero = os.path.basename(fullnombrefichero).encode('utf-8')
-	print fichero
-	fichero = u'%s' %fichero
-	print fichero
 	
 	
-	
-	xbmctools.addnewfolder( CHANNELNAME ,"ListvideosMirror", category , "Acción","http://www.cine-adicto.com/category/categorias/accion/","","")
-	xbmctools.addnewfolder( CHANNELNAME ,"ListvideosMirror", category , "Animado","http://www.cine-adicto.com/category/categorias/animado/","","")
+	xbmctools.addnewfolder( CHANNELNAME ,"listvideos", category , "Acción","http://www.cine-adicto.com/category/categorias/accion/","","")
+	xbmctools.addnewfolder( CHANNELNAME ,"listvideos", category , "Animado","http://www.cine-adicto.com/category/categorias/animado/","","")
 	xbmctools.addnewfolder( CHANNELNAME ,"ListvideosMirror", category , "Anime","http://www.cine-adicto.com/category/categorias/anime/","","")
 	xbmctools.addnewfolder( CHANNELNAME ,"ListvideosMirror", category , "Asiáticas","http://www.cine-adicto.com/category/categorias/asiaticas/","","")
 	xbmctools.addnewfolder( CHANNELNAME ,"ListvideosMirror", category , "Aventuras","http://www.cine-adicto.com/category/categorias/aventura/","","")
@@ -241,13 +230,15 @@ def listvideos(params,url,category):
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
 
+	#<div class="feature-image">
+	#<a href="http://www.cine-adicto.com/the-last-airbender.html" title="The Last Airbender"><img src="http://www.cine-adicto.com/wp-content/uploads/2010/07/airbenderposter.jpg" title="The Last Airbender" alt="The Last Airbender" width="12
 
 	# Extrae las entradas (carpetas)
-	patronvideos  =  '<div class="poster">[^<]+<a href="([^"]+)"'     # URL
-	patronvideos +=  '><img src="([^"]+)" '                             # TUMBNAIL
-	patronvideos +=  'width=.*?title="([^"]+)" /></a>'                  # TITULO 
-	#patronvideos += '</div>[^<]+<div class=[^>]+>.*?href="[^"]+"><img '                    
-	#patronvideos += 'style=.*?src="([^"]+)".*?alt=.*?bold.*?>(.*?)</div>'                  # IMAGEN , DESCRIPCION
+	patronvideos  =  '<div class="feature-image">[^<]+<a href="([^"]+)"'     # URL
+	patronvideos +=  ' title="([^"]+)"'                       	             # TITULO
+	patronvideos +=  '><img src="([^"]+)" '                                  # TUMBNAIL
+	patronvideos += '.*?<p><p>(.+?)</p>'                                     # DESCRIPCION
+	#patronvideos += 'style=.*?src="([^"]+)".*?alt=.*?bold.*?>(.*?)</div>'                  
 	#patronvideos += '.*?flashvars="file=(.*?flv)\&amp'                                      # VIDEO FLV 
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
@@ -255,13 +246,13 @@ def listvideos(params,url,category):
 	for match in matches:
 		# Titulo
 		
-		scrapedtitle = match[2]
+		scrapedtitle = match[1]
 		# URL
 		scrapedurl = match[0]
 		# Thumbnail
-		scrapedthumbnail = match[1]
+		scrapedthumbnail = match[2]
 		# Argumento
-		scrapedplot = ""
+		scrapedplot = match[3]
 		
 
 		# Depuracion
@@ -275,13 +266,13 @@ def listvideos(params,url,category):
 			xbmctools.addnewfolder( CHANNELNAME , "detail" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
 
 	#Extrae la marca de siguiente página
-	patronvideos  = '</span><a href="(http://www.cine-adicto.com/page/[^"]+)"'
+	patronvideos  = "<span class='current'>[^<]+</span><a href='([^']+)'" #"</span><a href='(http://www.cine-adicto.com/page/[^']+)'"
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	scrapertools.printMatches(matches)
 
 	if len(matches)>0:
 		scrapedtitle = "Página siguiente"
-		scrapedurl = matches[0]
+		scrapedurl = urlparse.urljoin(url,matches[0])#matches[0]
 		scrapedthumbnail = ""
 		scrapedplot = ""
 		xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , scrapedtitle , scrapedurl , scrapedthumbnail, scrapedplot )
@@ -295,16 +286,20 @@ def listvideos(params,url,category):
 	# End of directory...
 	xbmcplugin.endOfDirectory( handle=pluginhandle, succeeded=True )
 
-def detail(params,url,category):
+def detail(params,url,category,cLose="true"):
 	logger.info("[cineadicto.py] detail")
 
 	title = urllib.unquote_plus( params.get("title") )
 	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
-	plot = ""
+	plot = urllib.unquote_plus( params.get("plot") )
 	scrapedurl = ""
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
+	patronvideos = 'name="Pelicula" src="([^"]+)"'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	if len(matches)>0:
+		data = scrapertools.cachePage(matches[0])
     # Extrae el argumento
 	patronarg = '</p><p>.*?<strong>([^<]+</strong> <strong>.*?)<p></p>'
 	matches   = re.compile(patronarg,re.DOTALL).findall(data)
@@ -335,8 +330,8 @@ def detail(params,url,category):
 				patronvideos  = '<track>.*?'
 				patronvideos += '<title>([^<]+)</title>[^<]+'
 				patronvideos += '<location>([^<]+)</location>(?:[^<]+'
-				patronvideos += '<meta rel="type">video</meta>[^<]+|[^<]+)'
-				patronvideos += '<meta rel="captions">([^<]+)</meta>[^<]+'
+				patronvideos += '<meta rel="type">video</meta>[^<]+|[^<]+'
+				patronvideos += '<meta rel="captions">([^<]+)</meta>[^<]+)'
 				patronvideos += '</track>'
 				matches2 = re.compile(patronvideos,re.DOTALL).findall(data2)
 				scrapertools.printMatches(matches)
@@ -418,7 +413,16 @@ def detail(params,url,category):
 		print " encontro VK.COM :%s" %matches[0]
  		videourl = 	vk.geturl(matches[0])
  		xbmctools.addnewvideo( CHANNELNAME , "play" , category , "Directo" , title + " - "+"[VK]", videourl , thumbnail , plot )
-	
+ 		
+	'''
+	patronvideos = 'name="Pelicula" src="([^"]+)"'
+	matches = re.compile(patronvideos,re.DOTALL).findall(data)
+	scrapertools.printMatches(matches)
+	if cLose == "false":return
+	if len(matches)>0:
+		for match in matches:
+			detail(params,match,category,"false")
+	'''
 	# Label (top-right)...
 	xbmcplugin.setPluginCategory( handle=pluginhandle, category=category )
 		

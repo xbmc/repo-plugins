@@ -37,11 +37,11 @@ def mainlist(params,url,category):
 	logger.info("[peliculasonlineflv.py] mainlist")
 
 	# Añade al listado de XBMC
-	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Peliculas - Novedades"            ,"http://peliculasonlineflv.blogspot.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "ListCat"    , category , "Peliculas - Generos" ,"http://peliculasonlineflv.blogspot.com/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "listvideos" , category , "Peliculas - Novedades"            ,"http://peliculasonlineflv.org/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "ListCat"    , category , "Peliculas - Generos" ,"http://peliculasonlineflv.org/","","")
 	#xbmctools.addnewfolder( CHANNELNAME , "DocuSeries" , category , "Documentales - Series Disponibles" ,"http://peliculasonlineflv.wordpress.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "DocuTag"    , category , "Peliculas - Tag" ,"http://peliculasonlineflv.blogspot.com/","","")
-	xbmctools.addnewfolder( CHANNELNAME , "DocuARCHIVO", category , "Peliculas - Archivo" ,"http://peliculasonlineflv.blogspot.com/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "DocuTag"    , category , "Peliculas - Tag" ,"http://peliculasonlineflv.org/","","")
+	xbmctools.addnewfolder( CHANNELNAME , "DocuARCHIVO", category , "Peliculas - Archivo" ,"http://peliculasonlineflv.org/","","")
 	xbmctools.addnewfolder( CHANNELNAME , "search"     , category , "Buscar"                           ,"","","")
 
 	if config.getSetting("singlechannel")=="true":
@@ -62,7 +62,7 @@ def search(params,url,category):
 		if len(tecleado)>0:
 			#convert to HTML
 			tecleado = tecleado.replace(" ", "+")
-			searchUrl = "http://peliculasonlineflv.blogspot.com/index.php?s="+tecleado
+			searchUrl = "http://peliculasonlineflv.org/index.php?s="+tecleado
 			SearchResult(params,searchUrl,category)
 			
 def SearchResult(params,url,category):
@@ -252,7 +252,7 @@ def listvideos(params,url,category):
 	patronvideos  = "<h2 class='title'>Ultimas Peliculas Subidas</h2>(.*?)</div>"
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
-		patronvideos  = '<a target="_blank" href="([^"]+)"><img style=.*?'
+		patronvideos  = '<a.+?href="([^"]+)".+?><img.+?'
 		patronvideos += 'src="([^"]+)"'
 		matches = re.compile(patronvideos,re.DOTALL).findall(matches[0])
 	scrapertools.printMatches(matches)
@@ -306,8 +306,8 @@ def listvideosMirror(params,url,category):
 	# Extrae las entradas (carpetas)
 	patronvideos  = "<h3 class='post-title entry-title'>[^<]+"
 	patronvideos += "<a href='([^']+)'>([^<]+)</a>.*?"
-	patronvideos += "<img style=\"[^\"]+\" alt=\"\" src=\"([^\"]+)\".*?"
-	patronvideos += ">(?:SINOPSIS|Sinopsis)(.*?)<div style="
+	patronvideos += "<div id='[^']+'><img.+?alt=\"\".+?src=\"([^\"]+)\".*?"
+	patronvideos += ">((?:SINOPSIS|Sinopsis).*?)</div>"
 	matches = re.compile(patronvideos,re.DOTALL).findall(data)
 	if len(matches)>0:
 			scrapertools.printMatches(matches)
@@ -347,15 +347,21 @@ def listvideosMirror(params,url,category):
 def detail(params,url,category):
 	logger.info("[peliculasonlineflv.py] detail")
 
-	title = urllib.unquote_plus( params.get("title") )
+	
 	thumbnail = urllib.unquote_plus( params.get("thumbnail") )
 	plot = urllib.unquote_plus( params.get("plot") )
-
+	url1 = url
 	# Descarga la página
 	data = scrapertools.cachePage(url)
 	#logger.info(data)
-
-
+	patron = 'src="(http://peliculasonlineflvgratis.blogspot.com.+?)"'
+	matches = re.compile(patron,re.DOTALL).findall(data)
+	if len(matches)>0:
+		data = scrapertools.cachePage(matches[0])
+	try:
+		title = re.compile("<title>(.+?)</title>").findall(data)[0]
+	except:
+		title = urllib.unquote_plus( params.get("title") )
 	# ------------------------------------------------------------------------------------
 	# Busca los enlaces a los videos
 	# ------------------------------------------------------------------------------------

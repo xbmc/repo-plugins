@@ -23,63 +23,68 @@ findPicLink = re.compile("src=\".*?\"");
 
 
 class RssFeed (Feed):
-  def __init__(self, opmlNode, gui):
-    self.gui = gui;
-    self.loadOpmlNode(opmlNode);
-          
   def updateFeed(self):
-    self.gui.log("Load: "+self.feedUrl);
-    xmlPage = self.loadPage(self.feedUrl);
-    xmlDocument = minidom.parseString(xmlPage);
-    counter = 0;
-    for itemNode in xmlDocument.getElementsByTagName("item"):
-      feedItem = FeedItem();
-      feedItem.guid = self.readText(itemNode,"guid");
-      feedItem.title = self.readText(itemNode,"title");
-      feedItem.subTitle = self.readText(itemNode,"itunes:subtitle");
-      
-      dateString = self.readText(itemNode,"pubDate");
-      feedItem.date = self.parseDate(dateString);
-      
-      if(not self.checkArticleAge(feedItem.date)):
-        break;
-      
-      eject = False;      
-      for i in range(counter,len(self.feedItems)):
-        storedItem = self.feedItems[i];
-        if(not storedItem.date < feedItem.date):
-          eject =True;
-          break;
-      
-      if(eject == True):
-        break;
-      
-      feedItem.author = self.readText(itemNode,"itunes:author");
-      feedItem.duration = self.readText(itemNode,"itunes:duration").replace("00:","");
-      
-      enclosureNode = itemNode.getElementsByTagName("enclosure")[0];
-      
-      feedItem.link = enclosureNode.getAttribute("url");
-      feedItem.size = int(enclosureNode.getAttribute("length"));
-      
-      descriptionNode = itemNode.getElementsByTagName("itunes:summary");
-      if(len(descriptionNode)>0):
-        descriptionNode = descriptionNode[0];
-      else:
-        descriptionNode = itemNode.getElementsByTagName("description")[0];
-      
-      feedItem.description = descriptionNode.firstChild.data;
-      
-      link = findPicLink.search(feedItem.description)
-      if(link is not None):
-        link = link.group().replace("src=","").replace("\"","");
-        feedItem.picture = link;
-      else:
-        feedItem.picture = "";
+    try:    
+      xmlPage = self.loadPage(self.feedUrl);
+      xmlDocument = minidom.parseString(xmlPage);
+      counter = 0;
+      for itemNode in xmlDocument.getElementsByTagName("item"):
+        try:      
+          feedItem = FeedItem();
+          feedItem.guid = self.readText(itemNode,"guid");
+          feedItem.title = self.readText(itemNode,"title");
+          feedItem.subTitle = self.readText(itemNode,"itunes:subtitle");
+          
+          dateString = self.readText(itemNode,"pubDate");
+          feedItem.date = self.parseDate(dateString);
+          
+          if(not self.checkArticleAge(feedItem.date)):
+            break;
+          
+          eject = False;      
+          for i in range(counter,len(self.feedItems)):
+            storedItem = self.feedItems[i];
+            if(not storedItem.date < feedItem.date):
+              eject =True;
+              break;
+          
+          if(eject == True):
+            break;
+          
+          feedItem.author = self.readText(itemNode,"itunes:author");
+          feedItem.duration = self.readText(itemNode,"itunes:duration").replace("00:","");
+          enclosures = itemNode.getElementsByTagName("enclosure")
+          if(len(enclosures) > 0):
+            enclosureNode = itemNode.getElementsByTagName("enclosure")[0];
+          
+            feedItem.link = enclosureNode.getAttribute("url");
+            feedItem.size = int(enclosureNode.getAttribute("length"));
+          else:
+            feedItem.size = 0;
+            feedItem.link = self.parseIndirectItem(self.readText(itemNode,"link"));
+          
+          descriptionNode = itemNode.getElementsByTagName("itunes:summary");
+          if(len(descriptionNode)>0):
+            descriptionNode = descriptionNode[0];
+          else:
+            descriptionNode = itemNode.getElementsByTagName("description")[0];
+          
+          feedItem.description = descriptionNode.firstChild.data;
+          
+          link = findPicLink.search(feedItem.description)
+          if(link is not None):
+            link = link.group().replace("src=","").replace("\"","");
+            feedItem.picture = link;
+          else:
+            feedItem.picture = "";
 
-      feedItem.readed = False;
-      self.insertFeedItem(feedItem);
-      counter += 1;
-      if(counter>self.maxArticleNumber):
-        break;
+          feedItem.readed = False;
+          self.insertFeedItem(feedItem);
+          counter += 1;
+          if(counter>self.maxArticleNumber):
+            break;
+        except:
+          self.gui.log("Error while parsing item: %s"%itemNode.toxml());
+    except:
+      self.gui.log("Error while processing %s"%self.feedUrl)          
     self.shrinkFeedItems();

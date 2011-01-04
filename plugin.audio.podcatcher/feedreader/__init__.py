@@ -17,7 +17,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 import time,urllib,re;
 from archivefile import ArchiveFile
+regex_mediaLink = re.compile("(http|ftp)://.*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
 regex_dateString = re.compile("\\d{2} ((\\w{3})|(\\d{2})) \\d{4}");
+regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
+regex_replaceUnusableChar = re.compile("[:/ \\.]")
 month_replacements = {
     "Jan":"01",
     "Feb":"02",
@@ -49,8 +52,12 @@ class FeedItem(object):
     self.size = None;
     
 class Feed(object):
-  def loadOpmlNode(self,opmlNode):
+  def loadFromNode(self, opmlNode, gui):
+    self.gui = gui;
+    self.feedUrl = opmlNode.getAttribute("xmlUrl");
     self.objectId = opmlNode.getAttribute("id");
+    if(self.objectId == ""):
+      self.objectId = regex_replaceUnusableChar.sub("_",self.feedUrl);
     self.archiveFile=ArchiveFile(self.objectId);
     
     self.feedItems = self.archiveFile.feedItems;
@@ -58,15 +65,45 @@ class Feed(object):
       self.gui.log(feedItem.title);
     self.lastLoad = self.archiveFile.lastLoad;
     
-    self.feedUrl = opmlNode.getAttribute("xmlUrl");
-    self.fetchInterval = self.parseFetchInterval(opmlNode.getAttribute("fetchInterval"));
+    
+    
     self.title = opmlNode.getAttribute("text");
-    self.maxArticleAge = int(opmlNode.getAttribute("maxArticleAge"));
-    self.maxArticleNumber = int(opmlNode.getAttribute("maxArticleNumber"));
+    
+    try:
+      self.fetchInterval = self.parseFetchInterval(opmlNode.getAttribute("fetchInterval"));
+    except:
+      self.fetchInterval = 0;
+    
+    try:
+      self.maxArticleAge = int(opmlNode.getAttribute("maxArticleAge"));
+    except:
+      self.maxArticleAge = 99;
+    
+    try:
+      self.maxArticleNumber = int(opmlNode.getAttribute("maxArticleNumber"));
+    except:
+      self.maxArticleNumber = 99;
+    
+  def loadFromState(self, stateObject, gui):
+    self.gui = gui;
+    self.feedUrl = stateObject.feedUrl
+    self.objectId = stateObject.objectId
+    self.archiveFile=ArchiveFile(self.objectId);
+    
+    self.feedItems = self.archiveFile.feedItems;
+    for feedItem in self.feedItems:
+      self.gui.log(feedItem.title);
+    self.lastLoad = self.archiveFile.lastLoad;
     
     
-  
+    
+    self.title = stateObject.title
+    self.fetchInterval = stateObject.fetchInterval
+    self.maxArticleAge = stateObject.maxArticleAge
+    self.maxArticleNumber = stateObject.maxArticleNumber
+    
   def saveChanges(self):
+    self.gui.log(self.archiveFile.archiveFile);
     self.archiveFile.save();
   
   def hasUnreadItems(self):
@@ -118,7 +155,7 @@ class Feed(object):
       self.saveChanges();
     else:
       self.gui.play(self);
-      self.markRead();
+      #self.markRead();
     
       
   def markRead(self, path = []):
@@ -165,10 +202,18 @@ class Feed(object):
       return "";
   
   def parseDate(self,dateString):
-    dateString = regex_dateString.search(dateString).group();
-    for month in month_replacements.keys():
-      dateString = dateString.replace(month,month_replacements[month]);
-    return time.strptime(dateString,"%d %m %Y");
+    dateMatch = regex_dateString.search(dateString);
+    if(dateMatch is not None):
+      dateString = dateMatch.group();
+      for month in month_replacements.keys():
+        dateString = dateString.replace(month,month_replacements[month]);
+      return time.strptime(dateString,"%d %m %Y");
+    else: 
+     dateMatch = regex_shortdateString.search(dateString)
+     if(dateMatch is not None):
+       dateString = dateMatch.group();
+       return time.strptime(dateString,"%Y-%m-%d");
+    return 0;
     
   def writeDate(self, date):
     return time.strftime("%d %m %Y",date);
@@ -178,6 +223,14 @@ class Feed(object):
       return True;
     else:
       return False;
+  
+  def parseIndirectItem(self, targetUrl):
+    self.gui.log(targetUrl);
+    htmlPage = self.loadPage(targetUrl);
+    link = regex_mediaLink.search(htmlPage).group();
+    self.gui.log(link);
+    
+    return link;
   
   def writeBoolean(self, boolean):
     if(boolean):
@@ -201,5 +254,3 @@ class Feed(object):
         return ''
     except:
       return ''
-      
-    

@@ -15,27 +15,21 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-from rss import RssFeed;
-from atom import AtomFeed;
-class FeedFactory:
-  def getFeedFromNode(self, feedNode, gui):
-    feedVersion = feedNode.getAttribute("type")
-    if(feedVersion == "rss"):
-      feed = RssFeed();
-    if(feedVersion == "atom"):
-      feed = AtomFeed();
-    feed.loadFromNode(feedNode, gui);
-    feed.feedVersion = feedVersion
-    return feed;
-  getFeedFromNode = classmethod(getFeedFromNode)
-  
-  def getFeedFromState(self, feedState, gui):
-    feedVersion = feedState.feedVersion
-    if(feedVersion == "rss"):
-      feed = RssFeed();
-    if(feedVersion == "atom"):
-      feed = AtomFeed();
-    feed.loadFromState(feedState,gui);
-    feed.feedVersion = feedVersion
-    return feed;
-  getFeedFromState = classmethod(getFeedFromState)
+
+def transformHtmlCodes(string):
+  replacements = (
+    (u'Ä', u'&Auml;'),
+    (u'Ü', u'&Uuml;'),
+    (u'Ö', u'&Ouml;'),
+    (u'ä', u'&auml;'),
+    (u'ü', u'&uuml;'),
+    (u'ö', u'&ouml;'),
+    (u'ß', u'&szlig;'),
+    (u'\"',u'&#034;'),
+    (u'\"',u'&quot;'),
+    (u'\'',u'&#039;'),
+    (u'&', u'&amp;')
+  )
+  for replacement in replacements:
+    string = string.replace(replacement[1],replacement[0]);
+  return string;

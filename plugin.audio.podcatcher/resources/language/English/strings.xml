@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- English strings.xml by bootsy (bootsycollins82@gmail.com) -->
 <strings>
-    <!-- Main -->
+    <string id="1000">OPML-File</string>
     <string id="1010">Mark all as read</string>
     <string id="1011">Play all unreaded</string>
     <string id="1020">Mark as read</string>

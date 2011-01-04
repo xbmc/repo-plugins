@@ -18,12 +18,13 @@
 import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, urllib, urllib2, os,re,math,time
 __plugin__ = "PodCatcher"
 
+regex_decimal = re.compile("\\d+");
+regex_duration = re.compile("(\\d+:){0,2}\\d+");
+settings = xbmcaddon.Addon(id='plugin.audio.podcatcher')
+translation = settings.getLocalizedString
+
 class SimpleXbmcGui(object):
   def __init__(self,path):
-    self.regex_decimal = re.compile("\\d+");
-    self.regex_duration = re.compile("(\\d+:){0,2}\\d+");
-    self.settings = xbmcaddon.Addon(id='plugin.audio.podcatcher')
-    self.translation = self.settings.getLocalizedString
     self.path = path;
     
   def log(self, msg):
@@ -72,7 +73,7 @@ class SimpleXbmcGui(object):
       liz = self.buildMediaItem(menuElement,True);
       
       
-      liz.addContextMenuItems([(self.translation(1020),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path))],True)
+      liz.addContextMenuItems([(translation(1020),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path))],True)
       u = "%s?path=%s&action=play&guid=%s" % (sys.argv[0],path,menuElement.guid)
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
       
@@ -83,9 +84,9 @@ class SimpleXbmcGui(object):
         title = "%s"%(menuElement.title);
       liz=xbmcgui.ListItem(title, "")
       contextMenuEntries = [
-        (self.translation(1010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
-        (self.translation(1011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
-        (self.translation(1030),"XBMC.RunPlugin(%s?path=%s&action=reload)"%(sys.argv[0],path))
+        (translation(1010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
+        (translation(1011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
+        (translation(1030),"XBMC.RunPlugin(%s?path=%s&action=reload)"%(sys.argv[0],path))
         ]
       liz.addContextMenuItems(contextMenuEntries,True)
       u = "%s?path=%s&action=browse" % (sys.argv[0],path)
@@ -120,8 +121,8 @@ class SimpleXbmcGui(object):
     xbmc.executebuiltin("Container.Refresh")
     
   def durationStringToSec(self, durationString):
-    if(self.regex_duration.match(durationString) is not None):
-      decimalArray = self.regex_decimal.findall(durationString);
+    if(durationString is not None and regex_duration.match(durationString) is not None):
+      decimalArray = regex_decimal.findall(durationString);
       if(len(decimalArray)==3):
         return int(decimalArray[0])*3600 + int(decimalArray[1])*60 +int(decimalArray[2])
       elif(len(decimalArray)==2):

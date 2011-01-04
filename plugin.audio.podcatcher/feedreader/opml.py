@@ -16,26 +16,45 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
-import shutil,os,urllib2;
+import shutil,os,urllib2,pickle;
 from xml.dom import minidom;
 from xml.dom import Node;
 from feedfactory import FeedFactory;
-
+from html import transformHtmlCodes;
+from archivefile import OpmlArchiveFile;
     
 class OpmlFolder(object):
-  def __init__(self,rootNode, gui):
-    self.rootNode = rootNode;
+  def loadFromNode(self, rootNode, gui):
     self.gui = gui;
     self.elements = [];
-    self.title = rootNode.getAttribute('text');
+    self.title = transformHtmlCodes(rootNode.getAttribute('text'));
         
-    for node in self.rootNode.childNodes:
-      if node.hasChildNodes() and node.firstChild.tagName == "outline":
-        element = OpmlFolder(node, self.gui);
-      else:
-        element = FeedFactory.getFeed(node, self.gui)
-      self.elements.append(element);
-    
+    for node in rootNode.childNodes:
+      try:
+        if node.hasChildNodes() and node.firstChild.tagName == "outline":
+          element = OpmlFolder();
+          element.loadFromNode(node, self.gui);
+        else:
+          element = FeedFactory.getFeedFromNode(node, self.gui)
+        self.elements.append(element);
+      except:
+        self.gui.log("Something goes wrong while processing the node %s"%rootNode.getAttribute('text'));
+  
+  def loadFromState(self, stateObject, gui):
+    self.gui = gui;
+    self.elements = [];
+    self.title = stateObject.title;
+    for stateElement in stateObject.elements:
+      try:
+        if(type(stateElement).__name__ == "OpmlFolderState"):
+          element = OpmlFolder()
+          element.loadFromState(stateElement,self.gui);
+        else:
+          element = FeedFactory.getFeedFromState(stateElement, self.gui)
+        self.elements.append(element);
+      except:
+        self.gui.log("Something goes wrong while processing the node %s"%stateObject.title);
+      
   def displayMenu(self, path):
     if len(path) > 0:
       index = int(path.pop(0));
@@ -86,16 +105,22 @@ class OpmlFolder(object):
       element.getAllItems(items);
     
 class OpmlFile:
-  def __init__(self, path, gui):
-    self.path = path;
+  def __init__(self, opmlFile, archivePath, gui):
     self.gui = gui;
-    self.xmlDoc = minidom.parse(path)
-    
-    self.cleanupNodes(self.xmlDoc.documentElement);
-    self.xmlDoc.documentElement.normalize() 
-    
-    for bodyNode in  self.xmlDoc.getElementsByTagName('body'):
-      self.opmlFolder = OpmlFolder(bodyNode, self.gui )
+    self.opmlFolder = OpmlFolder();
+    archiveFile = os.path.join(archivePath,"opml.archive");
+    if(OpmlArchiveFile.updateNeeded(opmlFile, archiveFile)):
+      self.xmlDoc = minidom.parse(opmlFile)
+      self.cleanupNodes(self.xmlDoc.documentElement);
+      self.xmlDoc.documentElement.normalize() 
+      
+      for bodyNode in  self.xmlDoc.getElementsByTagName('body'):
+        self.opmlFolder.loadFromNode(bodyNode, self.gui )
+      
+      OpmlArchiveFile.save(self.opmlFolder, archiveFile);
+    else:
+      state = OpmlArchiveFile.load(archiveFile);
+      self.opmlFolder.loadFromState(state,self.gui);
   
   def cleanupNodes(self, rootNode):
     for node in rootNode.childNodes:

@@ -1,3 +1,7 @@
+version 0.1.0 - Bugfixing, Hardening and so on ...
+                opml-file to load is now changeable by addon-settings
+                additional caching to support large opml files
+Version 0.0.9 - Added experimental Atom - Reading
 Version 0.0.8 - Rewrite the Caching-Algorithm. Moving from XML files to "pickle"-Files. The opml-file won't be changed enymore.
                 If a publishing-date is given, it will be displayed in the menu
                 minor bugfixes

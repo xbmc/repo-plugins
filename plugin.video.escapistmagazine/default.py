@@ -47,7 +47,7 @@ def retrieveUrl(url, referer):
 
 def CATEGORIES():
 	html = retrieveUrl(seriesIndexUrl, "")
-	match = re.compile(
+	current = re.compile(
 		'<div class=\'gallery_title\'><a href=\'([^\']+)\'>([^><]+)</a></div>' +
 		'<a href=\'/rss/videos/list/[0-9]*\\.xml\' class=\'feedicon\' alt=\'\\2 : Latest Videos\' title=\'\\2 : Latest Videos\'>\\2 : Latest Videos</a>' +
 		'<div class=\'gallery_description\'>[^><]*</div>' +
@@ -55,8 +55,12 @@ def CATEGORIES():
 			'<img src=\'([^\']+)\' width=\'[0-9]+\' height=\'[0-9]+\'>'
 		'</a></div>'
 	).findall(html)
-	for url, name, thumbnail in match:
-		addDir(name, url, seriesIndexUrl, 1, thumbnail, len(match))
+	archive = re.compile('<a href=\'([^\']*)\' class=\'archive_container\'><img src=\'([^\']*)\'[^>]*>([^><]*)</a>').findall(html)
+	count = len(current) + len(archive)
+	for url, name, thumbnail in current:
+		addDir(name, url, seriesIndexUrl, 1, thumbnail, count)
+	for url, thumbnail, name in archive:
+		addDir(name, url, seriesIndexUrl, 1, thumbnail, count)
 
 def INDEX(indexName, indexUrl, referer):
 	i = indexUrl.find('?')

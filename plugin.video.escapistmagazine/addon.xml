@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.escapistmagazine"
 	name="The Escapist"
-	version="0.1.4"
+	version="0.1.5"
 	provider-name="Mike Cronce"
 >
 	<requires>

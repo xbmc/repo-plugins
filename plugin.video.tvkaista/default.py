@@ -1,6 +1,6 @@
 #xbmc tvkaista.fi plugin
 #
-#Copyright (C) 2009-2010  Viljo Viitanen <viljo.viitanen@iki.fi>
+#Copyright (C) 2009-2011  Viljo Viitanen <viljo.viitanen@iki.fi>
 #Copyright (C) 2010       stilester
 #Copyright (C) 2008-2009  J. Luukko
 #
@@ -28,6 +28,7 @@
 #7.9.2010 fiksauksia xbmc:n official repoa varten, linux-locale-ongelma fiksattu
 #5.12.2010 varasto pois, elokuva-haku etusivulle, alpha->www, tekstitys pois
 #5.12.2010 lisays ja poisto katselulistalta ja sarjoista - kiitos Markku Lamminluoto!
+#7.1.2011 tuki tvkaistan proxyille
 
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
@@ -50,6 +51,19 @@ def bitrate():
       return "ts"
     else:
       return "flv"
+
+#tvkaista webikayttoliittymasta asetukset-sivulta.
+def proxycookie():
+    if tvkaista_addon.getSetting("proxy") == "1":
+      return "721600"
+    elif tvkaista_addon.getSetting("proxy") == "2":
+      return "7064662+909967"
+    elif tvkaista_addon.getSetting("proxy") == "3":
+      return "7134762+5332710"
+    elif tvkaista_addon.getSetting("proxy") == "4":
+      return "8031916+6913675"
+    else:
+      return "-1"
 
 #varmistetaan asetukset
 def settings():
@@ -133,7 +147,7 @@ def listprograms(url):
                          tvkaista_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman))
   urllib2.install_opener(opener)
-  print "listprograms avataan: "+url+'/'+bitrate()+'.rss'
+  #print "listprograms avataan: "+url+'/'+bitrate()+'.rss'
   try:
       content = urllib2.urlopen(url+'/'+bitrate()+'.rss').read()
   except urllib2.HTTPError,e:
@@ -154,6 +168,9 @@ def listprograms(url):
 #  try:
   items = dom.getElementsByTagName('item')
   ret = []
+  mycookie=urllib.quote_plus(proxycookie())
+  myusername=urllib.quote(tvkaista_addon.getSetting("username"))
+  mypassword=urllib.quote(tvkaista_addon.getSetting("password"))
   for i in items:
     ptit=i.getElementsByTagName('title')[0].childNodes[0].nodeValue
 #    print "in "+ptit.encode("utf-8")
@@ -175,9 +192,8 @@ def listprograms(url):
     else:
       shortdes=pdes
     t=time.localtime(timediff+time.mktime(time.strptime(pdat,"%a, %d %b %Y %H:%M:%S +0000")))
-    urlii = 'http://%s:%s@%s' % (\
-            urllib.quote(tvkaista_addon.getSetting("username")), \
-            urllib.quote(tvkaista_addon.getSetting("password")), pat[0])
+    urlii = 'http://%s:%s@%s|Cookie=preferred_servers%%3D%s' % (\
+            myusername, mypassword, pat[0],mycookie)
     nimike = '%s | %s >>> %s (%s)' % (time.strftime("%H:%M",t),ptit,shortdes,pcha)
 
     listitem = xbmcgui.ListItem(label=nimike, iconImage="DefaultVideo.png")
@@ -185,8 +201,7 @@ def listprograms(url):
       if pat[0] != "":
         pid=re.compile(r"/([0-9]+)[.].+$", re.IGNORECASE).findall(pat[0])
         listitem.setThumbnailImage('http://%s:%s@www.tvkaista.fi/feed/thumbnails/%s.jpg' % (\
-            urllib.quote(tvkaista_addon.getSetting("username")), \
-            urllib.quote(tvkaista_addon.getSetting("password")), pid[0]))
+            myusername, mypassword, pid[0]))
         if url.find('/feed/playlist') > 0:
           label='Poista Listalta'
           mode=9

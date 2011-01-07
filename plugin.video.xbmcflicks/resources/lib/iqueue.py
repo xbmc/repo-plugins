@@ -68,12 +68,18 @@ def getAuth(netflix, verbose):
             startBrowser(url)
         else:
             webbrowser.open(url)
+            print "browser open has completed"
             
         #display click ok when finished adding xbmcflicks as authorized app for your netflix account
         dialog = xbmcgui.Dialog()
         ok = dialog.ok("After you have linked xbmcflick in netflix.", "Click OK after you finished the link in your browser window.")
+        print "The dialog was displayed, hopefully you read the text and waited until you authorized it before clicking ok."
         MY_USER['request']['key'] = tok.key
+        if(VERBOSE_USER_LOG):
+            print "user key set to: " + tok.key
         MY_USER['request']['secret'] = tok.secret
+        if(VERBOSE_USER_LOG):
+            print "user secret set to: " + tok.secret
         #now run the second part, getting the access token
         tok = netflix.user.getAccessToken( MY_USER['request'] )
         if(VERBOSE_USER_LOG):
@@ -425,7 +431,7 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
 
     matchWebURL = re.search(r"u'web_page': u'(.*?)'", curQueueItem)
     if matchWebURL:
-	curX.WebURL = matchWebURL.group(1)
+        curX.WebURL = matchWebURL.group(1)
                 
     #shorttitle
     matchTitleShort = re.search('[\'"]title[\'"]: {.*?[\'"](title_)?short[\'"]: u{0,1}[\'"](.*?)[\'"].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
@@ -763,16 +769,75 @@ def parseRSSFeedItem(curQueueItem, curX):
         print "error parsing data from RSS feed Item"
     return curX
 
-def convertRSSFeed(tData, intLimit, DiscQueue=None):
+
+def parseFeedburnerItem(curQueueItem, curX):
+    try:
+        reobjCurItem = re.compile(r'<strong>(?P<title>.*?)</strong><br/><a href="http://www\.netflix\.ca/[^"]*"><img src="(?P<posterPrefix>http://cdn-0\.nflximg\.com/en_CA/boxshots/)small/\d{2,14}\.jpg" /></a><br />(?P<summary>.*?)<a href="http://www\.netflix\.ca/[^"]*">More details</a> / <a href="http://www\.netflix\.ca/WiPlayer\?movieid=(?P<id>\d{2,14})">Watch now</a>', re.DOTALL | re.MULTILINE)
+        matchCurItem = reobjCurItem.search(curQueueItem)
+        if matchCurItem:
+            curX.Title = matchCurItem.group(1)
+            curX.TitleShort = matchCurItem.group(1)
+            curX.Synop = matchCurItem.group(3)
+            curX.WebURL = matchCurItem.group(4)
+            curX.ID = matchCurItem.group(5)
+            curX.Poster = matchCurItem.group(2) + POSTER_QUAL + "/" + curX.ID + ".jpg"
+    except:
+        print "error parsing data from Feedburner RSS feed Item"        
+    return curX
+
+def convertFeedburnerFeed(tData, intLimit, DiscQueue=None):
+    #parse feed to curX object
+    curX = XInfo()
+    intCount = 0
+    for match in re.finditer(r"(?sm)<li.*?>(.*?)</li>", tData):
+        for matchItem in re.finditer(r"(?sm)<p>(.*?)</p>", match.group(1)):
+            intCount = intCount + 1
+            if(intCount > int(intLimit)):
+                return
+            curQueueItem = match.group(1)
+            parseFeedburnerItem(curQueueItem, curX)
+            
+            if(curX.ID == ""):
+                print "fatal error: unable to parse ID in string " + curQueueItem
+            else:
+                #add the link to the UI
+                if(DiscQueue):
+                    addLinkDisc(curX.TitleShort,REAL_LINK_PATH + curX.ID + '_disc.html', curX)
+                    writeDiscLinkFile(curX.ID, curX.Title, curX.WebURL)
+                else:
+                    addLink(curX.TitleShort,REAL_LINK_PATH + curX.ID + '.html', curX)            
+                    #write the link file
+                    writeLinkFile(curX.ID, curX.Title) 
+
+def convertRSSFeed(tData, intLimit, DiscQueue=None, strArg=None):
+    #strArg (0 = all, 1 = movies, 2 = tv)
+    incMovie = False
+    incTV = False
+    
+    if(strArg):
+        if(str(strArg) == "0"):
+            incMovie = True
+            incTV = True
+            if(DEBUG):
+                print "No filter"
+        elif(str(strArg) == "1"):
+            incMovie = True
+            incTV = False
+            if(DEBUG):
+                print "Filtering for Movies"
+        elif(str(strArg) == "2"):
+            incMovie = False
+            incTV = True
+            if(DEBUG):
+                print "Filtering for TV"
+    else:
+        incMovie = True
+        incTV = True
+            
     #parse feed to curX object
     curX = XInfo()
     intCount = 0
     for match in re.finditer(r"(?sm)<item>(.*?)</item>", tData):
-        intCount = intCount + 1
-        #print str(intCount)
-        if(intCount > int(intLimit)):
-            return
-            
         curQueueItem = match.group(1)
         parseRSSFeedItem(curQueueItem, curX)
 
@@ -780,14 +845,38 @@ def convertRSSFeed(tData, intLimit, DiscQueue=None):
             print "fatal error: unable to parse ID in string " + curQueueItem
             exit
 
-        #add the link to the UI
-        if(DiscQueue):
-            addLinkDisc(curX.TitleShort,REAL_LINK_PATH + curX.ID + '_disc.html', curX)
-            writeDiscLinkFile(curX.ID, curX.Title, curX.WebURL)
+        isMovie = False
+        isTV = False
+        skip = True
+        if re.search(r"(Season|Vol\.|: Chapter)", curX.Title, re.DOTALL | re.MULTILINE):
+            isTV = True
         else:
-            addLink(curX.TitleShort,REAL_LINK_PATH + curX.ID + '.html', curX)            
-            #write the link file
-            writeLinkFile(curX.ID, curX.Title)
+            isMovie = True
+            
+        if (isMovie & incMovie):
+            intCount = intCount + 1
+            if (DEBUG):
+                print "triggered count on movies limiter:" + str(intCount) + " of " + str(intLimit)
+            skip = False
+        elif (isTV & incTV):
+            intCount = intCount + 1
+            if (DEBUG):
+                print "triggered count on tv limiter:" + str(intCount) + " of " + str(intLimit)
+            skip = False
+        #print str(intCount)
+        if(intCount > int(intLimit)):
+            return
+
+        if(not skip):
+        #add the link to the UI
+            if(DiscQueue):
+                addLinkDisc(curX.TitleShort,REAL_LINK_PATH + curX.ID + '_disc.html', curX)
+                writeDiscLinkFile(curX.ID, curX.Title, curX.WebURL)
+            else:
+                addLink(curX.TitleShort,REAL_LINK_PATH + curX.ID + '.html', curX)            
+                #write the link file
+                writeLinkFile(curX.ID, curX.Title)
+
 
 def getUserRentalHistory(netflix, user, strHistoryType, displayWhat=None):
     print "*** What's the rental history? ***"
@@ -950,22 +1039,42 @@ def getRecommendedQueue():
     xbmcplugin.setContent(int(sys.argv[1]),'Movies')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-def getNewToWatchInstant():
+def getNewToWatchInstantCA(strArg):
     initApp()
     if(not user):
         exit
-    curUrl = "http://www.netflix.com/NewWatchInstantlyRSS"
-    convertRSSFeed(getUrlString(curUrl), 500)
+    curUrl = "http://www.netflix.ca/NewWatchInstantlyRSS"
+    convertRSSFeed(getUrlString(curUrl), 500, None, strArg)
     time.sleep(1)
     xbmcplugin.setContent(int(sys.argv[1]),'Movies')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-def getNewToWatchInstantTopX():
+def getNewToWatchInstantCATopX(strArg):
+    initApp()
+    if(not user):
+        exit
+    curUrl = "http://www.netflix.ca/NewWatchInstantlyRSS"
+    convertRSSFeed(getUrlString(curUrl), 25, None, strArg)
+    time.sleep(1)
+    xbmcplugin.setContent(int(sys.argv[1]),'Movies')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def getNewToWatchInstant(strArg):
+    initApp()
+    if(not user):
+        exit
+    curUrl = "http://www.netflix.com/NewWatchInstantlyRSS"
+    convertRSSFeed(getUrlString(curUrl), 500, None, strArg)
+    time.sleep(1)
+    xbmcplugin.setContent(int(sys.argv[1]),'Movies')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+def getNewToWatchInstantTopX(strArg):
     initApp()
     if(not user):
         exit    
     curUrl = "http://www.netflix.com/NewWatchInstantlyRSS"
-    convertRSSFeed(getUrlString(curUrl), 25)
+    convertRSSFeed(getUrlString(curUrl), 25, None, strArg)
     time.sleep(1)
     xbmcplugin.setContent(int(sys.argv[1]),'Movies')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))

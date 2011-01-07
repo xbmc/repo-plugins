@@ -29,7 +29,7 @@ import random
 import urlparse
 import hmac
 import binascii
-
+import re
 
 VERSION = '1.0'
 HTTP_METHOD = 'GET'
@@ -138,6 +138,12 @@ class OAuthToken(object):
         """ Returns a token from something like:
         oauth_token_secret=xxx&oauth_token=xxx
         """
+        strResult = str(s)
+        if re.search(r"(invalid|error|date|time)", strResult, re.DOTALL | re.IGNORECASE | re.MULTILINE):
+            print "Token result was: " + str(strResult)
+            print "If the timestamp shows invalid, your computers date/time is off, sync it to an NTP server or fix it by setting the correct values"
+        else:
+            print "Token did not contain any errors"
         params = cgi.parse_qs(s, keep_blank_values=False)
         key = params['oauth_token'][0]
         secret = params['oauth_token_secret'][0]

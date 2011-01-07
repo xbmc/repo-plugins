@@ -11,8 +11,12 @@ MODE1a = 11
 MODE1b = 12
 MODE2 = 20
 MODE3 = 30
+MODE3a = 31
+MODE3b = 32
 MODE4 = 40
 MODE5 = 50
+MODE5a = 51
+MODE5b = 52
 MODE6 = 60
 MODE6a = 61
 MODE6b = 62
@@ -94,8 +98,12 @@ SUBMENU1a = "Instant Queue: Movies"
 SUBMENU1b = "Instant Queue: TV"
 SUBMENU2 = "Recommended"
 SUBMENU3 = "All New Arrivals"
+SUBMENU3a = "All New Arrivals: Movies"
+SUBMENU3b = "All New Arrivals: TV"
 SUBMENU4 = "Search..."
 SUBMENU5 = "Top 25 New Arrivals"
+SUBMENU5a = "Top 25 New Arrivals: Movies"
+SUBMENU5b = "Top 25 New Arrivals: TV"
 SUBMENU6 = "By Genre"
 SUBMENU6a = "Action & Adventure"
 SUBMENU6b = "Children & Family"
@@ -175,6 +183,48 @@ handle = int(sys.argv[1])
 # settings
 global IN_CANADA
 IN_CANADA = getUserSettingCaUser(handle)
+global SGACTION
+global SGANIME
+global SGBLURAY
+global SGCHILDREN
+global SGCLASSICS
+global SGCOMEDY
+global SGDOCUMENTARY
+global SGDRAMA
+global SGFAITH
+global SGFOREIGN
+global SGGAY
+global SGHORROR
+global SGINDIE
+global SGMUSIC
+global SGROMANCE
+global SGSCIFI
+global SGSPECIALINTEREST
+global SGSPORTS
+global SGTV
+global SGTHRILLERS
+
+SGACTION = getUserSettingGenreDisplay(handle, "sgAction")
+SGANIME = getUserSettingGenreDisplay(handle, "sgAnime")
+SGBLURAY = getUserSettingGenreDisplay(handle, "sgBluray")
+SGCHILDREN = getUserSettingGenreDisplay(handle, "sgChildren")
+SGCLASSICS = getUserSettingGenreDisplay(handle, "sgClassics")
+SGCOMEDY = getUserSettingGenreDisplay(handle, "sgComedy")
+SGDOCUMENTARY = getUserSettingGenreDisplay(handle, "sgDocumentary")
+SGDRAMA = getUserSettingGenreDisplay(handle, "sgDrama")
+SGFAITH = getUserSettingGenreDisplay(handle, "sgFaith")
+SGFOREIGN = getUserSettingGenreDisplay(handle, "sgForeign")
+SGGAY = getUserSettingGenreDisplay(handle, "sgGay")
+SGHORROR = getUserSettingGenreDisplay(handle, "sgHorror")
+SGINDIE = getUserSettingGenreDisplay(handle, "sgIndie")
+SGMUSIC = getUserSettingGenreDisplay(handle, "sgMusic")
+SGROMANCE = getUserSettingGenreDisplay(handle, "sgRomance")
+SGSCIFI = getUserSettingGenreDisplay(handle, "sgSciFi")
+SGSPECIALINTEREST = getUserSettingGenreDisplay(handle, "sgSpecialInterest")
+SGSPORTS = getUserSettingGenreDisplay(handle, "sgSports")
+SGTV = getUserSettingGenreDisplay(handle, "sgTV")
+SGTHRILLERS = getUserSettingGenreDisplay(handle, "sgThrillers")
+
 
 # utility functions
 def parameters_string_to_dict(parameters):
@@ -200,43 +250,49 @@ def addDirectoryItem(name, isFolder=True, parameters={}, thumbnail=None):
 
 # UI builder functions
 def show_root_menu():
-   addDirectoryItem(name=SUBMENU0iw, parameters={ PARAMETER_KEY_MODE:MODE0iw }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant.png")
-   addDirectoryItem(name=SUBMENU0d, parameters={ PARAMETER_KEY_MODE:MODE0d }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc.png")
-   addDirectoryItem(name=SUBMENUR, parameters={ PARAMETER_KEY_MODE:MODER }, isFolder=True)
+   addDirectoryItem(name=SUBMENU0iw, parameters={ PARAMETER_KEY_MODE:MODE0iw }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_watch_main.png")
+   if(not IN_CANADA):
+      addDirectoryItem(name=SUBMENU0d, parameters={ PARAMETER_KEY_MODE:MODE0d }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_by_mail.png")
+   addDirectoryItem(name=SUBMENUR, parameters={ PARAMETER_KEY_MODE:MODER }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/rental_history.png")
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)   
 
 def show_instant_menu():
-   addDirectoryItem(name=SUBMENU1, parameters={ PARAMETER_KEY_MODE:MODE1 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/iqueue_all.png")
-   addDirectoryItem(name=SUBMENU1a, parameters={ PARAMETER_KEY_MODE:MODE1a }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/iqueue_movies.png")
-   addDirectoryItem(name=SUBMENU1b, parameters={ PARAMETER_KEY_MODE:MODE1b }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/iqueue_tv.png")
-
-   addDirectoryItem(name=SUBMENU2, parameters={ PARAMETER_KEY_MODE:MODE2 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/recog.png")
-
    if(not IN_CANADA):
-      addDirectoryItem(name=SUBMENU5, parameters={ PARAMETER_KEY_MODE:MODE5 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/new_top25.png")
-      addDirectoryItem(name=SUBMENU3, parameters={ PARAMETER_KEY_MODE:MODE3 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/new_all.png")
+      addDirectoryItem(name=SUBMENU1, parameters={ PARAMETER_KEY_MODE:MODE1 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_queue_all.png")
+      addDirectoryItem(name=SUBMENU1a, parameters={ PARAMETER_KEY_MODE:MODE1a }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_queue_movies.png")
+      addDirectoryItem(name=SUBMENU1b, parameters={ PARAMETER_KEY_MODE:MODE1b }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_queue_tv.png")
 
-   addDirectoryItem(name=SUBMENU4, parameters={ PARAMETER_KEY_MODE:MODE4 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/search.png")
-   #addDirectoryItem(name=SUBMENU6, parameters={ PARAMETER_KEY_MODE:MODE6 }, isFolder=True)
+   addDirectoryItem(name=SUBMENU2, parameters={ PARAMETER_KEY_MODE:MODE2 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_watch_recommended.png")
+
+   addDirectoryItem(name=SUBMENU5, parameters={ PARAMETER_KEY_MODE:MODE5 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_new_top25.png")
+   addDirectoryItem(name=SUBMENU5a, parameters={ PARAMETER_KEY_MODE:MODE5a }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_new_top25_movies.png")
+   addDirectoryItem(name=SUBMENU5b, parameters={ PARAMETER_KEY_MODE:MODE5b }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_new_top25_tv.png")
+
+   addDirectoryItem(name=SUBMENU3, parameters={ PARAMETER_KEY_MODE:MODE3 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_new_all.png")
+   addDirectoryItem(name=SUBMENU3a, parameters={ PARAMETER_KEY_MODE:MODE3a }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_new_all_movies.png")
+   addDirectoryItem(name=SUBMENU3b, parameters={ PARAMETER_KEY_MODE:MODE3b }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_new_all_tv.png")
+      
+   addDirectoryItem(name=SUBMENU4, parameters={ PARAMETER_KEY_MODE:MODE4 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_search.png")
+   #addDirectoryItem(name=SUBMENU6, parameters={ PARAMETER_KEY_MODE:MODE6 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/instant_watch_top25s.png")
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_disc_menu():
-   addDirectoryItem(name=SUBMENUD1, parameters={ PARAMETER_KEY_MODE:MODED1 }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD1m, parameters={ PARAMETER_KEY_MODE:MODED1m }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD1t, parameters={ PARAMETER_KEY_MODE:MODED1t }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD1, parameters={ PARAMETER_KEY_MODE:MODED1 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_queue_all.png")
+   addDirectoryItem(name=SUBMENUD1m, parameters={ PARAMETER_KEY_MODE:MODED1m }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_queue_movies.png")
+   addDirectoryItem(name=SUBMENUD1t, parameters={ PARAMETER_KEY_MODE:MODED1t }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_queue_tv.png")
 
    if(not IN_CANADA):
-      addDirectoryItem(name=SUBMENUD7, parameters={ PARAMETER_KEY_MODE:MODED7 }, isFolder=True)
+      addDirectoryItem(name=SUBMENUD7, parameters={ PARAMETER_KEY_MODE:MODED7 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_bygenre.png")
 
-   addDirectoryItem(name=SUBMENUD2, parameters={ PARAMETER_KEY_MODE:MODED2 }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD3, parameters={ PARAMETER_KEY_MODE:MODED3 }, isFolder=True)
+   addDirectoryItem(name=SUBMENUD2, parameters={ PARAMETER_KEY_MODE:MODED2 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_search.png")
+   addDirectoryItem(name=SUBMENUD3, parameters={ PARAMETER_KEY_MODE:MODED3 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_queue_at_home.png")
    
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_rentalhistory_menu():
-   addDirectoryItem(name=SUBMENUR1, parameters={ PARAMETER_KEY_MODE:MODER1 }, isFolder=True)
-   addDirectoryItem(name=SUBMENUR2, parameters={ PARAMETER_KEY_MODE:MODER2 }, isFolder=True)
-   addDirectoryItem(name=SUBMENUR3, parameters={ PARAMETER_KEY_MODE:MODER3 }, isFolder=True)
+   addDirectoryItem(name=SUBMENUR1, parameters={ PARAMETER_KEY_MODE:MODER1 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/rental_history_shipped.png")
+   addDirectoryItem(name=SUBMENUR2, parameters={ PARAMETER_KEY_MODE:MODER2 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/rental_history_returned.png")
+   addDirectoryItem(name=SUBMENUR3, parameters={ PARAMETER_KEY_MODE:MODER3 }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/rental_history_watched.png")
    
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
@@ -296,26 +352,46 @@ def show_SUBMENU7():
    
 def show_SUBMENUD7():
    #add in the disc genre folders for the Top 25 items
-   addDirectoryItem(name=SUBMENUD7a, parameters={ PARAMETER_KEY_MODE:MODED7a }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7b, parameters={ PARAMETER_KEY_MODE:MODED7b }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7c, parameters={ PARAMETER_KEY_MODE:MODED7c }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7d, parameters={ PARAMETER_KEY_MODE:MODED7d }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7e, parameters={ PARAMETER_KEY_MODE:MODED7e }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7f, parameters={ PARAMETER_KEY_MODE:MODED7f }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7g, parameters={ PARAMETER_KEY_MODE:MODED7g }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7h, parameters={ PARAMETER_KEY_MODE:MODED7h }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7i, parameters={ PARAMETER_KEY_MODE:MODED7i }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7j, parameters={ PARAMETER_KEY_MODE:MODED7j }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7k, parameters={ PARAMETER_KEY_MODE:MODED7k }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7l, parameters={ PARAMETER_KEY_MODE:MODED7l }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7m, parameters={ PARAMETER_KEY_MODE:MODED7m }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7n, parameters={ PARAMETER_KEY_MODE:MODED7n }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7o, parameters={ PARAMETER_KEY_MODE:MODED7o }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7p, parameters={ PARAMETER_KEY_MODE:MODED7p }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7q, parameters={ PARAMETER_KEY_MODE:MODED7q }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7r, parameters={ PARAMETER_KEY_MODE:MODED7r }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7s, parameters={ PARAMETER_KEY_MODE:MODED7s }, isFolder=True)
-   addDirectoryItem(name=SUBMENUD7t, parameters={ PARAMETER_KEY_MODE:MODED7t }, isFolder=True)
+   if SGACTION:
+      addDirectoryItem(name=SUBMENUD7a, parameters={ PARAMETER_KEY_MODE:MODED7a }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_action2.png")
+   if SGANIME:
+      addDirectoryItem(name=SUBMENUD7b, parameters={ PARAMETER_KEY_MODE:MODED7b }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_anime2.png")
+   if SGBLURAY:
+      addDirectoryItem(name=SUBMENUD7c, parameters={ PARAMETER_KEY_MODE:MODED7c }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_bluray2.png")
+   if SGCHILDREN:
+      addDirectoryItem(name=SUBMENUD7d, parameters={ PARAMETER_KEY_MODE:MODED7d }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_children2.png")
+   if SGCLASSICS:
+      addDirectoryItem(name=SUBMENUD7e, parameters={ PARAMETER_KEY_MODE:MODED7e }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_classics2.png")
+   if SGCOMEDY:
+      addDirectoryItem(name=SUBMENUD7f, parameters={ PARAMETER_KEY_MODE:MODED7f }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_comedy2.png")
+   if SGDOCUMENTARY:
+      addDirectoryItem(name=SUBMENUD7g, parameters={ PARAMETER_KEY_MODE:MODED7g }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_documentary2.png")
+   if SGDRAMA:
+      addDirectoryItem(name=SUBMENUD7h, parameters={ PARAMETER_KEY_MODE:MODED7h }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_drama2.png")
+   if SGFAITH:
+      addDirectoryItem(name=SUBMENUD7i, parameters={ PARAMETER_KEY_MODE:MODED7i }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_faith2.png")
+   if SGFOREIGN:
+      addDirectoryItem(name=SUBMENUD7j, parameters={ PARAMETER_KEY_MODE:MODED7j }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_foreign2.png")
+   if SGGAY:
+      addDirectoryItem(name=SUBMENUD7k, parameters={ PARAMETER_KEY_MODE:MODED7k }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_lesbian2.png")
+   if SGHORROR:
+      addDirectoryItem(name=SUBMENUD7l, parameters={ PARAMETER_KEY_MODE:MODED7l }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_horror2.png")
+   if SGINDIE:
+      addDirectoryItem(name=SUBMENUD7m, parameters={ PARAMETER_KEY_MODE:MODED7m }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_independent2.png")
+   if SGMUSIC:
+      addDirectoryItem(name=SUBMENUD7n, parameters={ PARAMETER_KEY_MODE:MODED7n }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_music2.png")
+   if SGROMANCE:
+      addDirectoryItem(name=SUBMENUD7o, parameters={ PARAMETER_KEY_MODE:MODED7o }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_romance2.png")
+   if SGSCIFI:
+      addDirectoryItem(name=SUBMENUD7p, parameters={ PARAMETER_KEY_MODE:MODED7p }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_scifi2.png")
+   if SGSPECIALINTEREST:
+      addDirectoryItem(name=SUBMENUD7q, parameters={ PARAMETER_KEY_MODE:MODED7q }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_special_interest2.png")
+   if SGSPORTS:
+      addDirectoryItem(name=SUBMENUD7r, parameters={ PARAMETER_KEY_MODE:MODED7r }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_sports2.png")
+   if SGTV:
+      addDirectoryItem(name=SUBMENUD7s, parameters={ PARAMETER_KEY_MODE:MODED7s }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_television2.png")
+   if SGTHRILLERS:
+      addDirectoryItem(name=SUBMENUD7t, parameters={ PARAMETER_KEY_MODE:MODED7t }, isFolder=True, thumbnail="special://home/addons/plugin.video.xbmcflicks/resources/disc_top25_thrillers2.png")
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 # parameter values
@@ -342,9 +418,24 @@ elif mode == MODE1a:
 elif mode == MODE1b:
    getInstantQueue(2)
 elif mode == MODE2:
-    getRecommendedQueue()
+   getRecommendedQueue()
+
 elif mode == MODE3:
-    getNewToWatchInstant()
+   if(not IN_CANADA):
+      getNewToWatchInstant("0")
+   else:
+      getNewToWatchInstantCA("0")
+elif mode == MODE3a:
+   if(not IN_CANADA):
+      getNewToWatchInstant("1")
+   else:
+      getNewToWatchInstantCA("1")
+elif mode == MODE3b:
+   if(not IN_CANADA):
+      getNewToWatchInstant("2")
+   else:
+      getNewToWatchInstantCA("2")
+
 elif mode == MODE4:
     keyboard = xbmc.Keyboard()
     keyboard.doModal()
@@ -354,9 +445,23 @@ elif mode == MODE4:
       doSearch(arg, "instant", True)
     else:
       print "user canceled"
-elif mode == MODE5:
-   getNewToWatchInstantTopX()
 
+elif mode == MODE5:
+   if(not IN_CANADA):
+      getNewToWatchInstantTopX("0")
+   else:
+      getNewToWatchInstantCATopX("0")
+elif mode == MODE5a:
+   if(not IN_CANADA):
+      getNewToWatchInstantTopX("1")
+   else:
+      getNewToWatchInstantCATopX("1")
+elif mode == MODE5b:
+   if(not IN_CANADA):
+      getNewToWatchInstantTopX("2")
+   else:
+      getNewToWatchInstantCATopX("2")
+     
 elif mode == MODE6:
    ok = show_SUBMENU6()
 elif mode == MODE6a:

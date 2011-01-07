@@ -121,6 +121,15 @@ def getUserSettingRatingLimit(arg):
         v =  "10"
     return v
 
+def getUserSettingGenreDisplay(arg, sgGenre):
+    vui = xbmcplugin.getSetting(arg, str(sgGenre))
+    v = False
+    if(vui == "0"):
+        v = True
+    if(vui == "1"):
+        v = False
+    return v
+
 def getUserSettingMaxIQRetreve(arg):
     maxr = xbmcplugin.getSetting(arg,'maxIqR')
     v = ""

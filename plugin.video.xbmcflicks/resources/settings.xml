@@ -12,6 +12,26 @@
 <category label="Parental Control's">
  <setting id="mrLimit" type="enum" lvalues="30201|30202|30203|30204|30205|30206|30207|30208|30209|30210|30211|30212|30213" label="30200" default="0"/>
  <setting id="showRatingInTitle" type="enum" lvalues="30016|30017" label="30220" default="0"/>
+ <setting id="sgAction" type="enum" lvalues="30016|30017" label="30150" default="0"/>
+ <setting id="sgAnime" type="enum" lvalues="30016|30017" label="30151" default="0"/>
+ <setting id="sgBluray" type="enum" lvalues="30016|30017" label="30152" default="0"/>
+ <setting id="sgChildren" type="enum" lvalues="30016|30017" label="30153" default="0"/>
+ <setting id="sgClassics" type="enum" lvalues="30016|30017" label="30154" default="0"/>
+ <setting id="sgComedy" type="enum" lvalues="30016|30017" label="30155" default="0"/>
+ <setting id="sgDocumentary" type="enum" lvalues="30016|30017" label="30156" default="0"/>
+ <setting id="sgDrama" type="enum" lvalues="30016|30017" label="30157" default="0"/>
+ <setting id="sgFaith" type="enum" lvalues="30016|30017" label="30158" default="0"/>
+ <setting id="sgForeign" type="enum" lvalues="30016|30017" label="30159" default="0"/>
+ <setting id="sgGay" type="enum" lvalues="30016|30017" label="30160" default="1"/>
+ <setting id="sgHorror" type="enum" lvalues="30016|30017" label="30161" default="0"/>
+ <setting id="sgIndie" type="enum" lvalues="30016|30017" label="30162" default="0"/>
+ <setting id="sgMusic" type="enum" lvalues="30016|30017" label="30163" default="0"/>
+ <setting id="sgRomance" type="enum" lvalues="30016|30017" label="30164" default="0"/>
+ <setting id="sgSciFi" type="enum" lvalues="30016|30017" label="30165" default="0"/>
+ <setting id="sgSpecialInterest" type="enum" lvalues="30016|30017" label="30166" default="0"/>
+ <setting id="sgSports" type="enum" lvalues="30016|30017" label="30167" default="0"/>
+ <setting id="sgTV" type="enum" lvalues="30016|30017" label="30168" default="0"/>
+ <setting id="sgThrillers" type="enum" lvalues="30016|30017" label="30169" default="0"/>
 </category>
 <category label="Miscellaneous">
     <setting id="useAltPlayer" type="enum" lvalues="30017" label="30029" default="1"/>

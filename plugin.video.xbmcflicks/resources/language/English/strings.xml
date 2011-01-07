@@ -35,6 +35,29 @@
     <string id="30095">will output your user ID and Token in the log file</string>
     <string id="30099">Note: The options below will increase load time</string>
     <!--- Parental Control Options -->
+    <string id="30150">Show Genre: Action & Adventure</string>
+    <string id="30151">Show Genre: Anime & Animation</string>
+    <string id="30152">Show Genre: Blu-ray</string>
+    <string id="30153">Show Genre: Children & Family</string>
+    <string id="30154">Show Genre: Classics</string>
+    <string id="30155">Show Genre: Comedy</string>
+    <string id="30156">Show Genre: Documentary</string>
+    <string id="30157">Show Genre: Drama</string>
+    <string id="30158">Show Genre: Faith & Spirituality</string>
+    <string id="30159">Show Genre: Foreign</string>
+    <string id="30160">Show Genre: Gay & Lesbian</string>
+    <string id="30161">Show Genre: Horror</string>
+    <string id="30162">Show Genre: Independent</string>
+    <string id="30163">Show Genre: Music & Musicals</string>
+    <string id="30164">Show Genre: Romance</string>
+    <string id="30165">Show Genre: Sci-Fi & Fantasy</string>
+    <string id="30166">Show Genre: Special Interest</string>
+    <string id="30167">Show Genre: Sports & Fitness</string>
+    <string id="30168">Show Genre: Television</string>
+    <string id="30169">Show Genre: Thrillers</string>
+    <string id="30170">empty</string>
+    <string id="30171">empty</string>
+
     <string id="30200">Limit Rating to</string>
     <string id="30201">No Limit</string>
     <string id="30202">Unrated Mature</string>

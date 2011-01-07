@@ -21,10 +21,9 @@ from resources.lib import getter, printer
 
 # Plugin constants
 __plugin__ = 'VEGA Concerts'
-__author__ = 'Tenzer'
-__url__ = 'http://code.google.com/p/xbmc-addons/'
-__svn_url__ = 'http://xbmc-addons.googlecode.com/svn/trunk/plugins/video/VEGA%20Concerts'
-__version__ = '1.0.0'
+__author__ = 'Jeppe Toustrup'
+__url__ = 'http://github.com/Tenzer/plugin.video.vega/'
+__version__ = '1.0.1'
 
 
 if(sys.argv[2].startswith('?concert=')):

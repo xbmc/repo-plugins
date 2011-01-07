@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.vega"
-       version="1.0.0"
+       version="1.0.1"
        name="VEGA Concerts"
        provider-name="Jeppe Toustrup">
 	<requires/>
@@ -10,7 +10,7 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary>VEGA concert player</summary>
-		<description>Plays concerts from the music venue VEGA in Copenhagen, Denmark. Check www.vega.dk for concert listings.</description>
-		<platform>all</platform>
+		<description>Plays recorded concerts from the music venue VEGA in Copenhagen, Denmark. Check www.vega.dk for concert listings.</description>
+		<platform>osx linux</platform>
 	</extension>
 </addon>

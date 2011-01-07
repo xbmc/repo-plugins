@@ -113,7 +113,6 @@ class VimeoCore(object):
 			con.close()
 			
 			# part 2: now that we have a token we can do the login procedure while appending token to prove we're legit.
-			
 			start = page1.find('<input type="hidden" id="xsrft" class="xsrft" name="token" value="') + len('<input type="hidden" id="xsrft" class="xsrft" name="token" value="')
 			xsrft = page1[start:page1.find('"', start)]
 			
@@ -151,9 +150,19 @@ class VimeoCore(object):
 			#	<div class="inner">
 			#					The email address and password you entered do not match.			</div>
 			#</div>
-
-			start = page3.find("/user") + len("/user")
-			userid = page3[start:page3.find("/", start)]
+			if (self.__dbg__):
+				print "Cookie jar contents: " + repr(cj)
+			userid = ""
+			
+			for cookie in cj:
+				if cookie.name == "uid":
+					uid = urllib.unquote_plus(cookie.value)
+					userid = uid.split("|")[0]
+			
+			if not userid:
+				if self.__dbg__:
+					print self.__plugin__ + "login_get_verifier no userid in cookie jar login failed"
+				return ( self.__language__(30606), 303 )
 			
 			if (self.__dbg__):
 				print self.__plugin__ + " setting userid: " + repr(userid)
@@ -184,7 +193,7 @@ class VimeoCore(object):
 			if self.__settings__.getSetting("accept") != "0":
 				if self.__dbg__:
 					print self.__plugin__ + " login_get_verifier accept disabled"
-					return ( self.__language__(30606), 303 )
+				return ( self.__language__(30606), 303 )
 													
 			data = urllib.urlencode({'token': login_token,
 									 'oauth_token': login_oauth_token,

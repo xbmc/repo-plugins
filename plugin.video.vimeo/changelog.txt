@@ -2,6 +2,9 @@
 - [XBMC] Thumbnails sometimes turns into folders.
 - XBMC has Excessive Memory use after running the plugin for prolonged periods of time
 
+[B]Version 1.0.2[/B]
+- Fixed login issues for users with non numeric user id's
+
 [B]Version 1.0.1[/B]
 - Fixed broken playback of SD videos when HD was selected.
 

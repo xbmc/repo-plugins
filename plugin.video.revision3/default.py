@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 __plugin__ =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '12-21-2010'
-__version__ = '1.0.3'
+__date__ = '01-05-2011'
+__version__ = '1.0.4'
 __settings__ = xbmcaddon.Addon(id='plugin.video.revision3')
 
 def open_url(url):
@@ -16,7 +16,7 @@ def open_url(url):
 	return data
 
 def build_main_directory():
-	quality = __settings__.getSetting('quality')
+	quality = __settings__.getSetting('format')
 	url = 'http://revision3.com/shows/'
 	data = open_url(url)
 	match = re.compile('<ul id="shows">(.+?)<div id="footer" class="clear">', re.DOTALL).findall(data)

@@ -1,0 +1,5 @@
+﻿[B]1.0.1 (2011.1.8)[/B]
+fixed: rssfeeds cause error in updateList()
+
+[B]1.0.0 (2011.1.3)[/B]
+Initial import into addons repository

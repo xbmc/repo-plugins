@@ -2,12 +2,12 @@ from string import *
 import urllib, re
 
 '''
-    RaiClick for XBMC 1.1.0
+    RaiClick for XBMC 1.1.1
     Copyright (C) 2005-2011 Angelo Conforti <angeloxx@angeloxx.it>
     http://www.angeloxx.it
     
-    Lo script è un semplice browser del sito rai.tv, tutti i diritti
-    sono di proprietà della RAI    
+    Lo script e' un semplice browser del sito rai.tv, tutti i diritti
+    sono di proprieta' della RAI    
 '''
 
 urlBase = "http://www.rai.tv/%s"
@@ -81,3 +81,5 @@ def openMovie(url):
     data = urllib.urlopen(url).read()
     result = re.findall("videoURL = \"(.*?)\"", data, re.DOTALL)
     return result[0]
+
+

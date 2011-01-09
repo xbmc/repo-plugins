@@ -1,10 +1,10 @@
 '''
-    RaiClick for XBMC 1.1.0
+    RaiClick for XBMC 1.1.1
     Copyright (C) 2005-2011 Angelo Conforti <angeloxx@angeloxx.it>
     http://www.angeloxx.it
     
-    Lo script è un semplice browser del sito rai.tv, tutti i diritti
-    sono di proprietà della RAI
+    Lo script e' un semplice browser del sito rai.tv, tutti i diritti
+    sono di proprieta' della RAI
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -104,3 +104,4 @@ if (__name__ == "__main__"):
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 sys.modules.clear()
+

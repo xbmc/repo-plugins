@@ -1,3 +1,4 @@
+version 0.1.1 - Improved Icon from freezy
 version 0.1.0 - Bugfixing, Hardening and so on ...
                 opml-file to load is now changeable by addon-settings
                 additional caching to support large opml files

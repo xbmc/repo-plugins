@@ -1,6 +1,16 @@
 facebookPhotos-XBMC Changelog
 
-Current Version : 0.9.3
+Current Version : 0.9.4
+
+*** 0.9.4 ***
+
+Added Dutch language strings - thanks Michel de Bokx
+Fixed bug: Was rejecting auth tokens because of a bad length test
+Fixed bug: Log function was breaking on some characters on some os's
+Added paging so more than 25 photos can display ( Any empty next/previous is facebook's fault =] )
+Fixed a bug with multi-line descriptions
+Speed enhancements
+Authorization now handled in XBMC!
 
 *** 0.9.3 ***
 

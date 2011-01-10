@@ -13,12 +13,14 @@
     <string id="30011">Videos Of Me</string>
     <string id="30012">@REPLACE@'s Videos</string>
     <string id="30013">Videos Of @REPLACE@</string>
+    <string id="30014">Previous</string>
+    <string id="30015">Next</string>
     
-    <!---Dialogs--->
+    <!-- Dialogs -->
     <string id="30101">Authorization</string>
-    <string id="30102">Go to @REPLACE@</string>
-    <string id="30103">Authorize the plugin.</string>
-    <string id="30104">Click OK when done.</string>
+    <string id="30102">Please sign in and authorize the add-on,</string>
+    <string id="30103">then re-start the plugin.</string>
+    <string id="30104">Click OK to open the browser.</string>
     
     <string id="30105">Login</string>
     <string id="30106">Missing login info.</string>
@@ -30,6 +32,9 @@
     
     <string id="30111">Authorization Error</string>
     <string id="30112">Error authorizing with facebook.</string>
-    <string id="30113">Re-authorize at @REPLACE@</string>
-    <string id="30114">Then try again.</string>
+    <string id="30113">Click ok to open a browser.</string>
+    <string id="30114">Re-authorize, then try again.</string>
+    
+    <string id="30115">Login Failure</string>
+    <string id="30116">Facebook Message: </string>
 </strings>

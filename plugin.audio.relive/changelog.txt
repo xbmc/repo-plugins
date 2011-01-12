@@ -1,5 +1,9 @@
 Changes
 
+0.7
+
+  * localise strings
+
 0.6
 
   * xbmc dharma addon support added

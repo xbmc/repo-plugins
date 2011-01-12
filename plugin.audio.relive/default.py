@@ -6,9 +6,11 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 __plugin__     = "reLive"
 __author__     = 'BuZz [buzz@exotica.org.uk] / http://www.exotica.org.uk'
 __svn_url__    = "http://xbmc-addons.googlecode.com/svn/trunk/plugins/music/relive"
-__version__    = "0.6"
+__version__    = "0.7"
 
-__addon__ = xbmcaddon.Addon('plugin.audio.relive')
+__settings__ = xbmcaddon.Addon('plugin.audio.relive')
+__language__ = __settings__.getLocalizedString
+
 RELIVE_STATIONS = 'http://stations.re-live.se/getstations/'
 
 class AppURLopener(urllib.FancyURLopener):
@@ -26,9 +28,9 @@ def get_params(defaults):
   return new_params
 
 def show_stations():
-  livestreams = os.path.join(__addon__.getAddonInfo('path'), 'livestreams')
+  livestreams = os.path.join(__settings__.getAddonInfo('path'), 'livestreams')
 
-  li = xbmcgui.ListItem( 'Live Streams' )
+  li = xbmcgui.ListItem( __language__(30000) )
   ok = xbmcplugin.addDirectoryItem(handle, livestreams, listitem = li, isFolder = True)
 
   response = urllib.urlopen(RELIVE_STATIONS)

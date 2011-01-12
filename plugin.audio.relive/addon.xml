@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.audio.relive"
-  version="0.6"
+  version="0.7"
   name="reLive"
   provider-name="BuZz [buzz@exotica.org.uk]">
   <requires>

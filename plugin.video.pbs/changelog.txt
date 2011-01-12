@@ -1,0 +1,17 @@
+[B]Version 1.0.2[/B]
+
+- Fixed play back error
+- Updated addon icon
+- Added thumbnails to folders
+- Search menu now looks for videos and programs
+- Programs are now indexed from http://video.pbs.org/morevideos.html
+- Cleaned up code
+
+[B]Version 1.0.1[/B]
+
+- Fixed error in Austin City Limits.
+- Cleaned up labels.
+
+[B]Version 1.0.0[/B]
+
+- Converted plugin to the new add-on system.

@@ -1,0 +1,10 @@
+Changes
+
+0.6
+
+  * xbmc dharma addon support added
+  * new icon from freezy3k (thanks!)
+
+0.5
+
+  * earlier releases history on http://code.google.com/p/xbmc-addons

@@ -1,0 +1,17 @@
+#EXTM3U
+
+#EXTINF:-1,SLAY Radio - 24kbps, relay6 (Currently 0 listeners) [icecast]
+http://relay6.slayradio.org:8200/
+
+#EXTINF:-1,SLAY Radio - 24kbps, relay4 (Currently 1 listeners) [shoutcast]
+http://relay4.slayradio.org:8200/
+
+#EXTINF:-1,SLAY Radio - 24kbps, relay3 (Currently 1 listeners) [icecast]
+http://relay3.slayradio.org:8200/
+
+#EXTINF:-1,SLAY Radio - 24kbps, relay2 (Currently 1 listeners) [shoutcast]
+http://relay2.slayradio.org:8200/
+
+#EXTINF:-1,SLAY Radio - 24kbps, relay1 (Currently 4 listeners) [shoutcast]
+http://relay1.slayradio.org:8200/
+

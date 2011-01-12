@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="plugin.audio.relive"
+  version="0.6"
+  name="reLive"
+  provider-name="BuZz [buzz@exotica.org.uk]">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+     <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+      <summary lang="en">reLive</summary>
+      <description lang="en">
+        Listen to archives of demoscene related radio shows and podcasts - and primarily scenesat.com - an excellent demo scene orientated radio station - http://www.scenesat.com. It allows you to see all the tracks for a show and skip to a part of your choice. It also features some preset streams for the live broadcasts.
+      </description>
+  </extension>
+</addon>

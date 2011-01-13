@@ -1,6 +1,10 @@
 flickrXBMC Changelog
 
-Current Version : 0.9.8
+Current Version : 0.9.9
+
+** 0.9.9 ***
+
+Authorization now handled in XBMC with Web Viewer
 
 ** 0.9.8 ***
 

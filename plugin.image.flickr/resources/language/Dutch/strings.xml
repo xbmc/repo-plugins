@@ -50,11 +50,9 @@
     <string id="30502">HTTP Timeout</string>
     <string id="30503">Connection Timeout</string>
     <string id="30504">Probeer opnieuw</string>
-    <string id="30505">Autoriseer add-on</string>
-    <string id="30506">Ga naar @REPLACE@</string><!--example: Go to http://google.com -->
-    <string id="30507">Druk op OK als autorisatie afgerond is.</string>
-    <string id="30508">Uw e-mail adres</string>
-    <string id="30509">Autorisatie code</string>
+    <string id="30505">Authorization Complete</string><!--TODO: Needs translation -->
+    <string id="30506">Authorization Complete!</string><!--TODO: Needs translation -->
+    
     <string id="30510">Toon kaart</string>
     <string id="30511">Vorige @REPLACE@ afbeeldingen</string><!--example: Previous 50 photos -->
     <string id="30512">Volgende @REPLACE@ afbeeldingen</string><!--example: Next 50 photos -->

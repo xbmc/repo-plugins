@@ -49,11 +49,12 @@
     <string id="30502">HTTP Timeout</string>
     <string id="30503">Connection Timeout</string>
     <string id="30504">Try again</string>
-    <string id="30505">Authorize flickrXBMC</string>
-    <string id="30506">Go to @REPLACE@</string><!--example: Go to http://google.com -->
-    <string id="30507">follow the instructions, then click OK</string>
-    <string id="30508">Enter the email address here:</string>
-    <string id="30509">Enter the code:</string>
+    <string id="30505">Authorization Complete</string>
+    <string id="30506">Authorization Complete!</string>
+    <string id="30507">Authorization</string>
+    <string id="30508">Authorization needed,</string>
+    <string id="30509">click OK to continue</string>
+    
     <string id="30510">Show Map</string>
     <string id="30511">Previous @REPLACE@ photos</string><!--example: Previous 50 photos -->
     <string id="30512">Next @REPLACE@ photos</string><!--example: Next 50 photos -->
@@ -61,4 +62,9 @@
     <string id="30514">@NAMEREPLACE@'s @REPLACE@</string><!--(Singular possesive) example: John's Photostream -->
     <string id="30515">@NAMEREPLACE@'s @REPLACE@</string><!--(Plural posessive) example: John's Sets -->
     <string id="30516">Search @NAMEREPLACE@'s Photostream</string><!--Search John's Photostream -->
+    
+    <string id="30520">Failed</string>
+    <string id="30521">Authorization Failed.</string>
+    <string id="30522">Authorization Error</string>
+    <string id="30523">Error getting token.</string>
 </strings>

@@ -49,11 +49,9 @@
     <string id="30502">HTTP 逾時</string>
     <string id="30503">連線逾時</string>
     <string id="30504">重試</string>
-    <string id="30505">授權 flickrXBMC</string>
-    <string id="30506">到 @REPLACE@</string><!--example: Go to http://google.com -->
-    <string id="30507">照指示操作，然後按 OK</string>
-    <string id="30508">輸入電子郵件：</string>
-    <string id="30509">輸入代碼：</string>
+    <string id="30505">Authorization Complete</string><!--TODO: Needs translation -->
+    <string id="30506">Authorization Complete!</string><!--TODO: Needs translation -->
+    
     <string id="30510">顯示地圖</string>
     <string id="30511">上 @REPLACE@ 張照片</string><!--example: Previous 50 photos -->
     <string id="30512">下 @REPLACE@ 張照片</string><!--example: Next 50 photos -->

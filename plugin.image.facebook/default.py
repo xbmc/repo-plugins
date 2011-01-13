@@ -8,7 +8,7 @@ __plugin__ =  'facebook'
 __author__ = 'ruuk'
 __url__ = 'http://code.google.com/p/facebookphotos-xbmc/'
 __date__ = '10-10-2010'
-__version__ = '0.9.4'
+__version__ = '0.9.5'
 
 def LOG(msg):
 	try:

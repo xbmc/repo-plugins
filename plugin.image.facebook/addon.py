@@ -113,6 +113,9 @@ class AddonHelper:
 		return self.xbmcplugin().addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False,totalItems=total)
 
 	def addDir(self,_name,_thumbnail='',_total=0,contextMenu=None,**kwargs):
+		for k in kwargs.keys():
+			if not type(kwargs[k]) == type(0):
+				kwargs[k] = kwargs[k].encode('utf-8')
 		u=sys.argv[0]+"?"+urllib.urlencode(kwargs)
 		liz=self.xbmcgui().ListItem(_name,'',iconImage="DefaultFolder.png", thumbnailImage=_thumbnail)
 		liz.setInfo(type="image", infoLabels={"Title": _name} )

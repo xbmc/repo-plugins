@@ -1,7 +1,7 @@
 import urllib, sys, os, re, time
 import xbmcaddon, xbmcplugin, xbmcgui, xbmc
 
-# uTorrent Plugin v1.0.0
+# uTorrent Plugin v1.0.2
 
 # Plugin constants 
 __addonname__ = "uTorrent"
@@ -53,11 +53,11 @@ def getList():
     torrentList = []
     for line in data:
         if '\"rssfeeds\"' in line:
-            LOG( LOG_DEBUG, "%s %s::%s", __addonname__, 'getList', 'break with \"rssfeeds\"')
+            xbmc.log( "%s::getList - %s" % ( __addonname__, 'break with \"rssfeeds\"' ), xbmc.LOGDEBUG )
             break
         if len(line) > 80:
             torrentList.append(line)
-            LOG( LOG_DEBUG, "%s %s::%s", __addonname__, 'getList', line)
+            xbmc.log( "%s::getList - %d: %s" % ( __addonname__, len(torrentList), line ), xbmc.LOGDEBUG )
     return torrentList
 
 def updateList():
@@ -189,12 +189,12 @@ def addFiles():
         if '.torrent' in TorrentFile:
             ## Read file data..
             realfile = os.path.join(MyTorrents, TorrentFile)
-            LOG( LOG_DEBUG, "%s %s::%s", __addonname__, 'addFiles', realfile)
+            xbmc.log( "%s::addFiles - %s" % ( __addonname__, realfile ), xbmc.LOGDEBUG )
             f = open(realfile, 'rb')
             fdata = f.read()
             f.close()
             ## Create post data..
-            Contentx,Postx      =   MultiPart([],[['torrent_file',TorrentFile,fdata]],'torrent')
+            Contentx,Postx = MultiPart([],[['torrent_file',TorrentFile,fdata]],'torrent')
             if Contentx == None and Postx == None   :   raise Exception
 
             ## Now Action the command..?action=add-file
@@ -275,6 +275,6 @@ elif mode == 1005:
     addFiles()
 
 elif 0 < mode < 1000:
-    LOG( LOG_DEBUG, "%s %s::hashnum: %s", __addonname__, 'main', hashNum)
+    xbmc.log( "%s::main - hashNum: %s" % ( __addonname__, hashNum ), xbmc.LOGDEBUG )
     performAction(hashNum)
 

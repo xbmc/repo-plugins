@@ -2,8 +2,6 @@ import urllib, urllib2, cookielib, sys, os
 from base64 import b64encode
 import xbmc
 
-DEBUG_MODE = 3
-
 __addonname__ = sys.modules[ "__main__" ].__addonname__
 __addon__ = sys.modules[ "__main__" ].__addon__
 __language__ = sys.modules[ "__main__" ].__language__
@@ -13,18 +11,11 @@ BASE_DATA_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addo
 BASE_RESOURCE_PATH = sys.modules[ "__main__" ].BASE_RESOURCE_PATH
 COOKIEFILE = os.path.join( BASE_DATA_PATH, "uTorrent_cookies" )
 
-# Log status codes
-LOG_INFO, LOG_ERROR, LOG_NOTICE, LOG_DEBUG = range( 1, 5 )
-
 def _create_base_paths():
     """ creates the base folders """
     if ( not os.path.isdir( BASE_DATA_PATH ) ):
         os.makedirs( BASE_DATA_PATH )
 _create_base_paths()
-
-def LOG( status, format, *args ):
-    if ( DEBUG_MODE >= status ):
-        xbmc.output( "%s: %s\n" % ( ( "INFO", "ERROR", "NOTICE", "DEBUG", )[ status - 1 ], format % args, ) )
 
 def MultiPart(fields,files,ftype) :
     Boundary = '----------ThIs_Is_tHe_bouNdaRY_---$---'
@@ -76,7 +67,7 @@ class Client(object):
             urllib2.install_opener(opener)
 
     def HttpCmd(self, urldta, postdta=None, content=None):
-        LOG( LOG_DEBUG, "%s %s::url: %s", __addonname__, 'HttpCmd', urldta)
+        xbmc.log( "%s::HttpCmd - url: %s" % ( __addonname__, urldta ), xbmc.LOGDEBUG )
         ## Standard code
 
         req = urllib2.Request(urldta,postdta)
@@ -88,7 +79,7 @@ class Client(object):
 
         response = urllib2.urlopen(req)
         link=response.read()
-        LOG( LOG_DEBUG, "%s %s::data: %s", __addonname__, 'HttpCmd', str(link))
+        xbmc.log( "%s::HttpCmd - data: %s" % ( __addonname__, str(link) ), xbmc.LOGDEBUG )
         response.close()
         self.MyCookies.save(COOKIEFILE)
         return link

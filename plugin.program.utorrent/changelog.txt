@@ -1,5 +1,8 @@
-﻿[B]1.0.2 (2011.1.16)[/B]
-chaged: use xbmc.log to log debug message
+﻿[B]1.0.3 (2011.1.16)[/B]
+fixed: split torrent items wrong when commas in the torrent name
+
+[B]1.0.2 (2011.1.15)[/B]
+chaged: use xbmc.log() to log debug message
 
 [B]1.0.1 (2011.1.8)[/B]
 fixed: rssfeeds cause error in updateList()

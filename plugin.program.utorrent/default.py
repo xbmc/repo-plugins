@@ -1,7 +1,7 @@
 import urllib, sys, os, re, time
 import xbmcaddon, xbmcplugin, xbmcgui, xbmc
 
-# uTorrent Plugin v1.0.2
+# uTorrent Plugin v1.0.3
 
 # Plugin constants 
 __addonname__ = "uTorrent"
@@ -45,7 +45,7 @@ def getToken():
 
     return token
 
-def getList():
+def updateList():
     token = getToken()
     url = baseurl + token + '&list=1'
     data = myClient.HttpCmd(url)
@@ -53,42 +53,34 @@ def getList():
     torrentList = []
     for line in data:
         if '\"rssfeeds\"' in line:
-            xbmc.log( "%s::getList - %s" % ( __addonname__, 'break with \"rssfeeds\"' ), xbmc.LOGDEBUG )
+            xbmc.log( "%s::updateList - %s" % ( __addonname__, 'break with \"rssfeeds\"' ), xbmc.LOGDEBUG )
             break
         if len(line) > 80:
-            torrentList.append(line)
-            xbmc.log( "%s::getList - %d: %s" % ( __addonname__, len(torrentList), line ), xbmc.LOGDEBUG )
+            tor = re.findall('\"[^\"]*\"|[0-9\-]+', line)
+            xbmc.log( "%s::updateList - %d: %s" % ( __addonname__, len(torrentList), str(tor) ), xbmc.LOGDEBUG )
+            hashnum = tor[0][1:-1]
+            status = tor[1]
+            torname = tor[2]
+            complete = tor[4]
+            complete = int(complete)
+            complete = complete / 10.0
+            size = int(tor[3]) / (1024*1024)
+            if (size >= 1024.00):
+                size_str = str(round(size / 1024.00,2)) +"Gb"
+            else:
+                size_str = str(size) + "Mb"
+            up_rate = round(float(tor[8]) / (1024),2)
+            down_rate = round(float(tor[9]) / (1024),2)
+            remain = int(tor[10]) / 60
+            if (remain >=60):
+                remain_str = str(remain//60) + __language__(30006).encode('utf8') + str(remain%60) + __language__(30007).encode('utf8')
+            elif(remain == -1):
+                remain_str = __language__(30008).encode('utf8')
+            else:
+                remain_str = str(remain) + __language__(30007).encode('utf8')
+            tup = (hashnum, status, torname, complete, size_str, up_rate, down_rate,remain_str)
+            torrentList.append(tup)
     return torrentList
-
-def updateList():
-    torrentList = getList()
-    tupList = []
-    for line in torrentList:
-        tor = line.split(',')
-        hashnum = tor[0]
-        hashnum = hashnum[2:-1]
-        status = tor[1]
-        torname = tor[2]
-        complete = tor[4]
-        complete = int(complete)
-        complete = complete / 10.0
-        size = int(tor[3]) / (1024*1024)
-        if (size >= 1024.00):
-           size_str = str(round(size / 1024.00,2)) +"Gb"
-        else:
-           size_str = str(size) + "Mb"
-        up_rate = round(float(tor[8]) / (1024),2)
-        down_rate = round(float(tor[9]) / (1024),2)
-        remain = int(tor[10]) / 60
-        if (remain >=60):
-           remain_str = str(remain//60) + __language__(30006).encode('utf8') + str(remain%60) + __language__(30007).encode('utf8')
-        elif(remain == -1):
-           remain_str = __language__(30008).encode('utf8')
-        else:
-           remain_str = str(remain) + __language__(30007).encode('utf8')
-        tup = (hashnum, status, torname, complete, size_str, up_rate, down_rate,remain_str)
-        tupList.append(tup)
-    return tupList
 
 def listTorrents():
     tupList = updateList()

@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 __plugin__ =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '01-05-2011'
-__version__ = '1.0.4'
+__date__ = '01-17-2011'
+__version__ = '1.0.5'
 __settings__ = xbmcaddon.Addon(id='plugin.video.revision3')
 
 def open_url(url):
@@ -35,19 +35,20 @@ def build_sub_directory(url, name):
 	data = open_url(url)
 	plot = re.compile('<content:encoded>\n(.+?)\n      </content:encoded>', re.DOTALL).findall(data)
 	number = re.compile('<guid isPermaLink="false">(.+?)</guid>').findall(data)
-	match = re.compile('<item>(.+?)<title>(.+?) - ', re.DOTALL).findall(data)
+	match = re.compile('<item>(.+?)<title>(.+?)</title>', re.DOTALL).findall(data)
 	link = re.compile('<enclosure url="(.+?)"').findall(data)
 	image = re.compile('</media:description>\n        (<media:thumbnail url="(.+?)" width="100" height="100" />\n        )?<media:player url', re.DOTALL).findall(data)
 	count = 0
 	if len(match) == 0:
 		dialog = xbmcgui.Dialog()
-		ok = dialog.ok(__plugin__, __settings__.getLocalizedString(30001) + '\n' + __settings__.getSetting('quality') + __settings__.getLocalizedString(30002)) 
+		ok = dialog.ok(__plugin__, xbmc.getLocalizedString(30001) + '\n' + __settings__.getSetting('quality') + xbmc.getLocalizedString(30002)) 
 	for title in match:
 		episode = int(number[count].rsplit('/', 2)[1].lstrip('0'))
 		url = link[count]
-		listitem = xbmcgui.ListItem(label = clean(match[count][1]), iconImage = image[count][1], thumbnailImage = image[count][1])
-		listitem.setInfo( type = "Video", infoLabels = { "Title": clean(match[count][1]), "Director": __plugin__, "Studio": genre, "Plot": clean(plot[count]), "Episode": episode } )
-		u = sys.argv[0] + "?mode=2&name=" + urllib.quote_plus(clean(match[count][1])) + "&url=" + urllib.quote_plus(url) + "&plot=" + urllib.quote_plus(clean(plot[count])) + "&genre=" + urllib.quote_plus(genre) + "&episode=" + urllib.quote_plus(str(episode))
+		name = clean(match[count][1].rstrip(' - ' + match[count][1].rsplit(' - ')[-1:][0]))
+		listitem = xbmcgui.ListItem(label = name, iconImage = image[count][1], thumbnailImage = image[count][1])
+		listitem.setInfo( type = "Video", infoLabels = { "Title": name, "Director": __plugin__, "Studio": genre, "Plot": clean(plot[count]), "Episode": episode } )
+		u = sys.argv[0] + "?mode=2&name=" + urllib.quote_plus(name) + "&url=" + urllib.quote_plus(url) + "&plot=" + urllib.quote_plus(clean(plot[count])) + "&genre=" + urllib.quote_plus(genre) + "&episode=" + urllib.quote_plus(str(episode))
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
 		count += 1
 	xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_NONE )

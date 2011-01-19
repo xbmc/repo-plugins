@@ -13,6 +13,7 @@ class AddonHelper:
 		self._urllib2 = None
 		self._time = None
 		self._re = None
+		self._binascii = None
 		
 	def xbmc(self):
 		if self._xbmc: return self._xbmc
@@ -93,9 +94,9 @@ class AddonHelper:
 		if self._params == None: self._getParams()
 		try:
 			if no_unquote:
-				return self._params.get(key,default)
+				return self._params.get(key,default).decode('utf-8')
 			else:
-				return urllib.unquote_plus(self._params[key])
+				return urllib.unquote_plus(self._params.get(key,default)).decode('utf-8')
 		except:
 			return default
 
@@ -126,12 +127,21 @@ class AddonHelper:
 		self.xbmcplugin().endOfDirectory(int(sys.argv[1]),succeeded=succeeded,updateListing=updateListing,cacheToDisc=cacheToDisc)
 		
 	def getFile(self,url,target_file):
-		request = self.urllib2().urlopen(url)
-		f = open(target_file,"wb")    
+		try:
+			request = self.urllib2().urlopen(url)
+		except:
+			print 'ERROR: AddonHelper - urlopen() in getFile()'
+			self.genericError()
+			return ''
+		f = open(target_file,"wb")
 		f.write(request.read())
 		f.close()
 		return target_file
 	
+	def genericError(self):
+		print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
+								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
+		
 	def time(self):
 		if self._time: return self._time
 		import time
@@ -143,3 +153,9 @@ class AddonHelper:
 		import re
 		self._re = re
 		return re
+	
+	def binascii(self):
+		if self._binascii: return self._binascii
+		import binascii
+		self._binascii = binascii
+		return binascii

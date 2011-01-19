@@ -7,14 +7,20 @@ from addon import AddonHelper
 __plugin__ =  'facebook'
 __author__ = 'ruuk'
 __url__ = 'http://code.google.com/p/facebookphotos-xbmc/'
-__date__ = '10-10-2010'
-__version__ = '0.9.5'
+__date__ = '01-18-2011'
+__version__ = '0.9.7'
 
 def LOG(msg):
 	try:
 		print 'FACEBOOKPHOTOS: ' + msg.decode('utf-8','ignore').encode('ascii','replace')
 	except:
 		fb.xbmc().log('FACEBOOKPHOTOS: ' + msg.decode('utf-8','ignore').encode('ascii','replace'))
+		
+def ERROR(message):
+	errtext = sys.exc_info()[1]
+	message  = 'ERROR - %s::%s (%d) - %s' % (message,sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, errtext)
+	LOG(message)
+	return str(errtext)
 		
 class GraphWrapAuthError(Exception):
 	def __init__(self, type, message):
@@ -95,8 +101,8 @@ class GraphWrap(facebook.GraphAPI):
 			res = br.open(url)
 			html = res.read()
 		except:
-			self.genericError()
-			return False
+			print "ERROR: TOKEN PAGE INITIAL READ"
+			raise
 		
 		script = False
 		try:
@@ -120,10 +126,8 @@ class GraphWrap(facebook.GraphAPI):
 				url = res.geturl()
 				print "FORM"
 			except:
-				self.genericError()
-				#somethings wrong, abort
 				print "FORM ERROR"
-				return False
+				raise
 				
 			script = False
 			token = self.extractTokenFromURL(url)
@@ -233,7 +237,8 @@ class facebookSession(AddonHelper):
 		tot = len(albums['data'])
 		for a in albums['data']:
 			aid = a.get('id','')
-			fn = os.path.join(self.CACHE_PATH,aid + '.jpg') #still works even if image is not jpg - doesn't work without the extension
+			fbase = self.binascii().hexlify(aid.encode('utf-8'))
+			fn = os.path.join(self.CACHE_PATH,fbase + '.jpg') #still works even if image is not jpg - doesn't work without the extension
 			tn = "https://graph.facebook.com/"+aid+"/picture?access_token=" + self.graph.access_token
 			if not os.path.exists(fn):
 				if self.get_album_photos: fn = self.getFile(tn,fn)
@@ -261,7 +266,8 @@ class facebookSession(AddonHelper):
 		tot = len(srt)
 		for s in srt:
 			uid = show[s].get('id','')
-			fn = os.path.join(self.CACHE_PATH,uid + '.jpg') #still works even if image is not jpg - doesn't work without the extension
+			fbase = self.binascii().hexlify(uid.encode('utf-8'))
+			fn = os.path.join(self.CACHE_PATH,fbase + '.jpg') #still works even if image is not jpg - doesn't work without the extension
 			tn = "https://graph.facebook.com/"+uid+"/picture?type=large&access_token=" + self.graph.access_token
 			if not os.path.exists(fn):
 				if self.get_friends_photos:
@@ -432,3 +438,11 @@ except GraphWrapAuthError,e:
 		xbmcgui.Dialog().ok(__language__(30111),__language__(30112),__language__(30113),__language__(30114))
 		token = getAuth()
 		if not token: facebookSession().getToken()
+except:
+	import xbmcgui,xbmcaddon #@UnresolvedImport @Reimport
+	__addon__ = xbmcaddon.Addon(id='plugin.image.facebook')
+	__language__ = __addon__.getLocalizedString
+	
+	msg = ERROR('Unhandled')
+	xbmcgui.Dialog().ok(__language__(30108),__language__(30117),'',msg)
+	raise

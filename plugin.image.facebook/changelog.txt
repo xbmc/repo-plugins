@@ -1,6 +1,14 @@
 facebookPhotos-XBMC Changelog
 
-Current Version : 0.9.5
+Current Version : 0.9.7
+
+*** 0.9.7 ***
+
+Bug fix: Album/Friend thunbnail caching was causing errors
+
+*** 0.9.6 ***
+
+More fixing for unicode characters
 
 *** 0.9.5 ***
 

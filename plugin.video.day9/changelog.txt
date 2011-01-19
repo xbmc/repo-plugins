@@ -1,0 +1,8 @@
+v0.3
+- Deleting the "favourite" feature for now
+
+v0.2
+- The plugin "Starcraft 2" has been splitted into 2 plugins, "Day9" and "djWHEAT".
+
+v0.1 
+- The first realese of the plugin Starcraft2.

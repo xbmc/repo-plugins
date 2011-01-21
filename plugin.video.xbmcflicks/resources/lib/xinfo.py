@@ -20,6 +20,7 @@ class XInfo:
         self.TvShowSeasonID = ""
         self.TvShowSeriesID = ""
         self.TvEpisode = False
+        self.TvEpisodeList = []
         self.TvEpisodeNetflixID = ""
         self.TvEpisodeEpisodeNum = 0
         self.TvEpisodeEpisodeSeasonNum = 0
@@ -27,4 +28,18 @@ class XInfo:
         self.MaturityLevel = "0"
         self.AvailableUntil = "0"
         self.WebURL = ""
+        self.LinkName = ""
+        self.oData = False
+        self.iAvail = False
+        self.iAvailFrom = ""
+        self.iAvailTil = ""
+        self.dAvail = False
+        self.dAvailFrom = ""
+        self.dAvailTil = ""
+        self.bAvail = False
+        self.bAvailFrom = ""
+        self.bAvailTil = ""
+        self.nomenu = False
+        
+
 

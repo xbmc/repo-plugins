@@ -329,6 +329,7 @@ class NetflixUser:
             return {}
         return info
 
+
     #http://api.netflix.com/catalog/titles/series/60030529/seasons/60030679/episodes
     def getInstantQueueTvShowEpisodes(self, seriesId, seasonId):
         parameters = {}
@@ -369,7 +370,42 @@ class NetflixUser:
             
         return info
 
+    def getSeries(self, curTID, curSeasonID, queue, startIndex=None,maxResults=None,caUser=None):
+        accessToken=self.accessToken
+        parameters = {}
+        requestUrl1 = '/catalog/titles/series/'+curTID
+        requestUrl2 = '/seasons/'+curSeasonID
+        if(not curSeasonID == ""):
+            requestUrl = requestUrl1 + requestUrl2
+        else:
+            requestUrl = requestUrl1
+        if startIndex:
+            parameters['start_index'] = startIndex
+        if maxResults:
+            parameters['max_results'] = maxResults
+        if caUser:
+            if (caUser == True):
+                parameters['country'] = "ca"
+            
+        parameters['v'] = str('2.0')
+        parameters['filters'] = 'http://api.netflix.com/categories/title_formats/' + queue
+        parameters['expand'] = '@title,@synopsis,@directors,@formats,@episodes,@short_synopsis'
+        parameters['output'] = 'json'
+        if not isinstance(accessToken, oauth.OAuthToken):
+            accessToken = oauth.OAuthToken(accessToken['key'], accessToken['secret'] )
+        info = simplejson.loads( self.client._getResource(requestUrl, parameters=parameters, token=accessToken ))
+        if re.search(r"Invalid Series", str(info), re.DOTALL | re.IGNORECASE | re.MULTILINE):
+            #reset url to programs
+            requestUrl = '/catalog/titles/programs/'+curTID
+            info = simplejson.loads( self.client._getResource(requestUrl, parameters=parameters, token=accessToken ))
+        if re.search(r"Resource Not Found", str(info), re.DOTALL | re.IGNORECASE | re.MULTILINE):
+            #reset url to movies
+            requestUrl = '/catalog/titles/movies/'+curTID
+            info = simplejson.loads( self.client._getResource(requestUrl, parameters=parameters, token=accessToken ))
+        return info
+
     def searchTitles(self, term, queue, startIndex=None,maxResults=None,caUser=None):
+        accessToken=self.accessToken
         requestUrl = '/catalog/titles'
         parameters = {'term': term}
         if startIndex:
@@ -384,7 +420,9 @@ class NetflixUser:
         parameters['filters'] = 'http://api.netflix.com/categories/title_formats/' + queue
         parameters['expand'] = '@title,@synopsis,@directors,@formats,@episodes,@short_synopsis'
         parameters['output'] = 'json'
-        info = simplejson.loads( self.client._getResource(requestUrl, parameters=parameters))
+        if not isinstance(accessToken, oauth.OAuthToken):
+            accessToken = oauth.OAuthToken(accessToken['key'], accessToken['secret'] )
+        info = simplejson.loads( self.client._getResource(requestUrl, parameters=parameters, token=accessToken ))
         return info
 
     def modifyQueue(self, ID, method):

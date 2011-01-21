@@ -6,3 +6,5 @@
 1.0.10 - fixed missing xml tag that was stopping the addon from loading
 1.0.11 - added support for Netflix.ca - user must enable option in settings
 1.0.12 - added additional icons for menu items, added option to get new list with movie or just tv specified, added parental controls options for the Genre Browse, currently used for Disc's (later for Instant watch)
+1.0.13 - added browse by genre to instant watch items, tv shows now appear as a folder, when opened they display the episdoes
+1.0.14 - fixed pathing issues by calling actual paths instead of special:// pathing for addon launch loc

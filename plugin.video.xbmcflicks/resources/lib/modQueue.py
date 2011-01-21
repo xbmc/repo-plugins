@@ -77,7 +77,7 @@ def getAuth(netflix, verbose):
 
 def saveUserInfo():
     #create the file
-    f = open(USERINFO_FOLDER + 'userinfo.txt','r+')
+    f = open(os.path.join(str(USERINFO_FOLDER), 'userinfo.txt'),'r+')
     setting ='requestKey=' + MY_USER['request']['key'] + '\n' + 'requestSecret=' + MY_USER['request']['secret'] + '\n' +'accessKey=' + MY_USER['access']['key']+ '\n' + 'accessSecret=' + MY_USER['access']['secret']
     f.write(setting)
     f.close()
@@ -111,18 +111,14 @@ def initApp():
 
     #get addon info
     __settings__ = xbmcaddon.Addon(id='plugin.video.xbmcflicks')
-    ROOT_FOLDER = 'special://home/addons/plugin.video.xbmcflicks/'
-    IMAGE_FOLDER = ROOT_FOLDER + 'resources/'
-    WORKING_FOLDER = __settings__.getAddonInfo("profile")
-    LINKS_FOLDER = WORKING_FOLDER + 'links/'
-    REAL_LINK_PATH = xbmc.translatePath(WORKING_FOLDER + 'links/')
+    ROOT_FOLDER = __settings__.getAddonInfo('path')
+    RESOURCE_FOLDER = os.path.join(str(ROOT_FOLDER), 'resources')
+    LIB_FOLDER = os.path.join(str(RESOURCE_FOLDER), 'lib')
+    WORKING_FOLDER = xbmc.translatePath(__settings__.getAddonInfo("profile"))
+    LINKS_FOLDER = os.path.join(str(WORKING_FOLDER), 'links')
+    REAL_LINK_PATH = os.path.join(str(WORKING_FOLDER), 'links')
     USERINFO_FOLDER = WORKING_FOLDER
-
-    print "root folder: " + ROOT_FOLDER
-    print "working folder: " + WORKING_FOLDER
-    print "real link path: " + REAL_LINK_PATH
-    print "image folder: " + IMAGE_FOLDER
-    print "userinfo folder: " + USERINFO_FOLDER
+    XBMCPROFILE = xbmc.translatePath('special://profile')
     
     reobj = re.compile(r"200(.{10}).*?644(.*?)4x2(.).*?5118")
     match = reobj.search(API_SECRET)
@@ -135,7 +131,7 @@ def initApp():
         os.makedirs(LINKS_FOLDER)
     
     #get user info
-    userInfoFileLoc = USERINFO_FOLDER + 'userinfo.txt'
+    userInfoFileLoc = os.path.join(str(USERINFO_FOLDER), 'userinfo.txt')
     print "USER INFO FILE LOC: " + userInfoFileLoc
     havefile = os.path.isfile(userInfoFileLoc)
     if(not havefile):
@@ -156,7 +152,7 @@ def initApp():
         print "finished loading up user information from file"
     else:
         #no match, need to fire off the user auth from the start
-        print "couldn't load user information from userinfo.properties file"
+        print "couldn't load user information from userinfo.txt file"
     #auth the user
     netflixClient = NetflixClient(APP_NAME, API_KEY, API_SECRET, CALLBACK, VERBOSE_USER_LOG)
     user = getAuth(netflixClient,VERBOSE_USER_LOG)

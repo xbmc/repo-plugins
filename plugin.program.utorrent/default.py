@@ -1,7 +1,7 @@
 import urllib, sys, os, re, time
 import xbmcaddon, xbmcplugin, xbmcgui, xbmc
 
-# uTorrent Plugin v1.0.3
+# uTorrent Plugin v1.0.4
 
 # Plugin constants 
 __addonname__ = "uTorrent"
@@ -35,10 +35,14 @@ myClient = Client(**params)
 def getToken():
     tokenUrl = 'http://'+UT_ADDRESS+':'+UT_PORT+'/gui/token.html'
 
-    #try:
-    data = myClient.HttpCmd(tokenUrl)
-    #except:
-    #    sys.exit()
+    try:
+        data = myClient.HttpCmd(tokenUrl)
+    except:
+        dialog = xbmcgui.Dialog()
+        ret = dialog.yesno(__addonname__ + ' ' + __language__(32100).encode('utf8'), __language__(32101).encode('utf8'), __language__(32102).encode('utf8'))
+        if ret==True:
+            __addon__.openSettings()
+        sys.exit()
 
     match = re.compile("<div id='token' style='display:none;'>(.+?)</div>").findall(data)
     token = match[0]

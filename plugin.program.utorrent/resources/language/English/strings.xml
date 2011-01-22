@@ -34,4 +34,8 @@
 	<string id="32014">Start All</string>
 	<string id="32015">Limit Upload / Download Speeds</string>
 	<string id="32016">Add Files (from Torrents dir.)</string>
+	<!-- error -->
+	<string id="32100">Error!</string>
+	<string id="32101">Fail to connect to daemon.</string>
+	<string id="32102">Are you change settings now?</string>
 </strings>

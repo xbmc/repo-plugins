@@ -34,4 +34,8 @@
 	<string id="32014">开始所有</string>
 	<string id="32015">限制上传/下载速度</string>
 	<string id="32016">增加文件(从 Torrents 文件夹)</string>
+	<!-- error -->
+	<string id="32100">错误！</string>
+	<string id="32101">无法连接到守护进程。</string>
+	<string id="32102">你现在要修改设置吗？</string>
 </strings>

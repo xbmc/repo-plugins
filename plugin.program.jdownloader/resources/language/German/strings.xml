@@ -9,6 +9,10 @@
   <string id="30005">Ja</string>
   <string id="30006">Download danach starten</string>
   <string id="30007">Schnittstelle</string>
+  <string id="30020">Dateien</string>
+  <string id="30021">Default Pfad</string>
+  <string id="30022">Default TXT File</string>
+  <string id="30023">Default DLC File</string>
   
   <!--GENERAL STRINGS -->
   <string id="30050">Alle Pakete</string>
@@ -30,4 +34,7 @@
   <string id="30066">JDownloader aktualisieren</string>
   <string id="30067">JDownloader neustarten</string>
   <string id="30068">JDownloader beenden</string>
+  <string id="30069">Links aus Textdatei hinzufügen</string>
+  <string id="30070">Linkcontainer hinzufügen</string>
+  <string id="30071">Internetverbindung neu aufbauen</string>
 </strings>

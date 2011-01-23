@@ -10,4 +10,10 @@
     <setting id="add_use_grabber" type="enum" label="30003" lvalues="30005|30004" default="0"/>
     <setting id="add_start" type="enum" label="30006" lvalues="30004|30005" default="1"/>
   </category>
+  <!-- Files -->
+  <category label="30020">
+    <setting id="def_file_path" type="folder" label="30021" default="" source="files" />
+    <setting id="def_txt_file" type="file" label="30022" default="" source="files" mask="*.txt" />
+    <setting id="def_dlc_file" type="file" label="30023" default="" source="files" mask="*.dlc" />
+  </category>
 </settings> 

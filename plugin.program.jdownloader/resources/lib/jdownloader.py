@@ -14,35 +14,46 @@ GET_STATUS			= "status"
 GET_CURRENTFILECNT	= "currentfilecount"
 
 STATE_RUNNING		= "RUNNING"
-STATE_NOTRUNNING	= "NOT_RUNNING"
+STATE_NOTRUNNING		= "NOT_RUNNING"
 STATE_STOPPING		= "STOPPING"
 
-ACTION_START	= "1 start"
-ACTION_STOP		= "2 stop"
-ACTION_PAUSE	= "3 pause"
-ACTION_TOGGLE	= "4 toggle"
+ACTION_START			= "01 start"
+ACTION_STOP			= "02 stop"
+ACTION_PAUSE			= "03 pause"
+ACTION_TOGGLE		= "04 toggle"
 
-ACTION_SPEEDLIMIT	= "5 speed limit"
-ACTION_MAXDOWNLOADS	= "6 max downloads"
+ACTION_SPEEDLIMIT		= "05 speed limit"
+ACTION_MAXDOWNLOADS	= "06 max downloads"
 
-ACTION_JD_UPDATE	= "7 update JDownloader"
-ACTION_JD_RESTART	= "8 restart JDownloader"
-ACTION_JD_SHUTDOWN	= "9 shutdown JDownloader"
+ACTION_ADD_LINKS		= "07 add links"
+ACTION_ADD_DLC		= "08 add dlc"
+
+ACTION_RECONNECT		= "10 reconnect"
+
+ACTION_JD_UPDATE		= "20 update JDownloader"
+ACTION_JD_RESTART		= "21 restart JDownloader"
+ACTION_JD_SHUTDOWN	= "22 shutdown JDownloader"
 
 ALL_ACTIONS = {
-	ACTION_START:		30060,
-	ACTION_STOP:		30061,
-	ACTION_PAUSE:		30062,
-	ACTION_TOGGLE:		30063,
-	ACTION_SPEEDLIMIT:	30064,
-	ACTION_MAXDOWNLOADS:30065,
-	ACTION_JD_UPDATE:	30066,
-	ACTION_JD_RESTART:	30067,
-	ACTION_JD_SHUTDOWN:	30068
+	ACTION_START:				30060,
+	ACTION_STOP:				30061,
+	ACTION_PAUSE:			30062,
+	ACTION_TOGGLE:			30063,
+	ACTION_SPEEDLIMIT:			30064,
+	ACTION_MAXDOWNLOADS:	30065,
+	ACTION_ADD_LINKS:			30069,
+	ACTION_ADD_DLC:			30070,
+	ACTION_RECONNECT:		30071,
+	ACTION_JD_UPDATE:			30066,
+	ACTION_JD_RESTART:			30067,
+	ACTION_JD_SHUTDOWN:		30068
 }
 
 Addon =  xbmcaddon.Addon(id=__addonID__)
 BASE_RESOURCE_PATH = xbmc.translatePath( Addon.getAddonInfo( "Profile" ) )
+# make sure addon_data dir exists
+try: os.mkdir(BASE_RESOURCE_PATH)
+except: pass
 
 # load settings
 ip_adress = str(Addon.getSetting("ip_adress"))
@@ -163,6 +174,8 @@ def action( x , limit = "0" ):
 		actionStr = '/action/set/download/limit/' + str(limit)
 	if x == ACTION_MAXDOWNLOADS:
 		actionStr = '/action/set/download/max/' + str(limit)
+	if x == ACTION_RECONNECT:
+		actionStr = '/action/reconnect'
 	if x == ACTION_JD_UPDATE:
 		actionStr = '/action/update/force%s/' % str(limit)
 	if x == ACTION_JD_RESTART:
@@ -178,7 +191,10 @@ def action_addcontainer(link):
 	grabber = Addon.getSetting("add_use_grabber")
 	start = Addon.getSetting("add_start")
 	# add link
-	_http_query('/action/add/container/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
+	# Parameter 'start' is not supported with rc-version 9568!
+	#_http_query('/action/add/container/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
+	result = _http_query('/action/add/container/grabber' + str(grabber) + '/' + str(link))
+	return result
 
 # Links seperated by spaces, won't work, call this functions for each link seperatly
 def action_addlink(link):
@@ -186,4 +202,13 @@ def action_addlink(link):
 	grabber = Addon.getSetting("add_use_grabber")
 	start = Addon.getSetting("add_start")
 	# add link
-	_http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
+	result = _http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
+	return result
+
+def action_addlinks_from_file(filename):
+	txt_file = open(filename,'r')
+	lines= txt_file.readlines()
+	
+	for line in lines:
+		action_addlink(line)
+	return "%d link(s) added" % (len(lines), )

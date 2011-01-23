@@ -1,3 +1,7 @@
+[B]Version 1.0.2[/B]
+    * Added spanish translation (thanks to yowill)
+    * Added new actions: 'Add links from textfile', 'Add link container', 'Reconnect router'
+
 [B]Version 1.0.1[/B]
     * Changed license to GPL v3
     * Uses notifications instead of dialogs for messages

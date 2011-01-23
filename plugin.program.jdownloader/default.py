@@ -5,11 +5,11 @@ __author__		= "Ppic & pgoeri"
 __url__			= "http://pgoeri-xbmc-plugins.googlecode.com"
 __svn_url__		= "http://pgoeri-xbmc-plugins.googlecode.com/svn/trunk/plugin.program.jdownloader/"
 __credits__		= "Team XBMC passion, http://passion-xbmc.org & pgoeri"
-__platform__		= "xbmc media center, [LINUX, OS X, WIN32, XBOX]"
-__date__			= "18-10-2010"
-__version__		= "1.0.1"
+__platform__		= "xbmc media center, [LINUX, OS X, WIN32]"
+__date__			= "23-01-2011"
+__version__		= "1.0.2"
 __svn_revision__	= "$Revision:  $".replace( "Revision", "" ).strip( "$: " )
-__XBMC_Revision__	= "34782" #XBMC Dharma branch
+__XBMC_Revision__	= "ce6dff4f3480834cc1134072e45e5deb0c8557c4" # Trunk (15/01/11)
 __useragent__		= "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1"
 
 from traceback import print_exc
@@ -20,18 +20,23 @@ import xbmcaddon
 import os
 import urllib
 import time
-BASE_RESOURCE_PATH = os.path.join( os.getcwd(), "resources" )
+
+__addon__ = xbmcaddon.Addon(__addonID__)
+__language__ = __addon__.getLocalizedString
+
+BASE_RESOURCE_PATH = os.path.join( __addon__.getAddonInfo('path'), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
 dialog = xbmcgui.Dialog()
 
 import jdownloader
 
-__addon__ = xbmcaddon.Addon(__addonID__)
-__language__ = __addon__.getLocalizedString
 
 # shows a more userfriendly notification
 def showMessage(heading, message):
-	xbmc.executebuiltin('XBMC.Notification("%s", "%s")' % ( heading, message) )
+	xbmc.executebuiltin('XBMC.Notification("%s", "%s")' % ( heading, message, ) )
+	
+def showError(heading, message):
+	xbmc.executebuiltin('XBMC.Notification("%s", "%s", 1500, "DefaultIconError.png")' % ( heading, message, ) )
 
 def addDir(name,url,mode,iconimage, c_items = None ):
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
@@ -69,6 +74,32 @@ def get_params():
 				param[splitparams[0]]=splitparams[1]
 	return param
 	
+def get_filename( mode = 0):
+	if mode == 0:
+		# mode 0 --> TXT File
+		def_file_setting_id = "def_txt_file"
+		heading = __language__(30069)
+		mask = ".txt"
+	else:
+		# mode 1 --> DLC File
+		def_file_setting_id = "def_dlc_file"
+		heading = __language__(30070)
+		mask = ".dlc"
+	
+	# get settings
+	def_file_path = __addon__.getSetting("def_file_path")
+	def_file = __addon__.getSetting(def_file_setting_id)
+	
+	# try default file
+	if not def_file == "" and os.path.exists(def_file):
+		filename = def_file
+	else:
+		# show browse dialog
+		filename = dialog.browse( 1 , heading , "files", mask, False, False, def_file_path)
+		# verify selection
+		if not os.path.isfile(filename):
+			filename = ""
+	return filename
 
 params=get_params()
 url=None
@@ -90,7 +121,7 @@ try:
 	jdownloader.get(jdownloader.GET_STATUS)
 except jdownloader.JDError, error:
 	(type, e, traceback) = sys.exc_info()
-	showMessage(xbmc.getLocalizedString(257), e.message)
+	showError(xbmc.getLocalizedString(257), e.message)
 	mode=-1
 	url="error"
 
@@ -145,12 +176,25 @@ if mode== 2:
 	if not select == -1: 
 		if actions[select] in [jdownloader.ACTION_SPEEDLIMIT,jdownloader.ACTION_MAXDOWNLOADS]:
 			limit = dialog.numeric( 0 , __language__(30055) )
-			result = jdownloader.action(actions[select],limit) 
+			result = jdownloader.action(actions[select],limit)
 		elif actions[select] == jdownloader.ACTION_JD_UPDATE:
 			limit = dialog.yesno( "JDownloader" , __language__(30057) )
 			result = jdownloader.action(actions[select],limit) 
+		elif actions[select] == jdownloader.ACTION_ADD_LINKS:
+			filename = get_filename(0);
+			if not filename == "":
+				result = jdownloader.action_addlinks_from_file(filename)
+			else:
+				result = "No file selected"
+		elif actions[select] == jdownloader.ACTION_ADD_DLC:
+			filename = get_filename(1);
+			if not filename == "":
+				result = jdownloader.action_addcontainer(filename)
+			else:
+				result = "No file selected"
 		else:
 			result = jdownloader.action(actions[select])
+		
 		showMessage("JDownloader" , result )
 		time.sleep(3) # otherwise status is not correct after start/stop
 		xbmc.executebuiltin("XBMC.Container.Update")

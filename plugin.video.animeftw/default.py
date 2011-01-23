@@ -9,7 +9,7 @@ import xbmcaddon
 #plugin constants
 __plugin__ = "AnimeFTW"
 __author__ = "maruchan"
-__version__ = "1.5.0"
+__version__ = "1.5.5"
 __settings__ = xbmcaddon.Addon(id='plugin.video.animeftw')
 
 print "[PLUGIN] '%s: version %s' initialized!" % (__plugin__, __version__)

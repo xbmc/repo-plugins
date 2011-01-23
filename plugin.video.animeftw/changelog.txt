@@ -1,3 +1,7 @@
+[B]Version 1.5.5[/B]
+- Fixed compatibility with new site changes
+- Added disclaimer about new policy regarding free users
+
 [B]Version 1.5.0[/B]
 - Made compatible with the official XBMC repo specifications
 - Improved login handling when no username/password is set

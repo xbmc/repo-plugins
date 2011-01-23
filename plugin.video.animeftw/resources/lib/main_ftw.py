@@ -15,6 +15,7 @@ import simplejson as json
 from BeautifulSoup import BeautifulSoup
 
 __settings__ = sys.modules[ "__main__" ].__settings__
+USER_AGENT = 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13'
 
 class updateArgs:
 
@@ -33,7 +34,7 @@ class LoginFTW:
 		self.opener = None
 		self.settings = {}
 		self.addon = xbmcaddon.Addon(id='plugin.video.animeftw')
-		self.base_cache_path = xbmc.translatePath(self.addon.getAddonInfo('profile'))
+		self.base_cache_path = os.path.join( xbmc.translatePath( "special://masterprofile/" ), "addon_data", os.path.basename( self.addon.getAddonInfo('path') ) )
 		self.settings['username'] = __settings__.getSetting("crunchy_username")
 		self.settings['password'] = __settings__.getSetting("crunchy_password")
 		self.settings['prev_username'] = __settings__.getSetting("prev_username")
@@ -77,7 +78,7 @@ class LoginFTW:
 
 			self.opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 			self.referer = 'https://www.animeftw.tv/login'
-			self.opener.addheaders = [('Referer', self.referer),('User-Agent','Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')]
+			self.opener.addheaders = [('Referer', self.referer),('User-Agent',USER_AGENT)]
 
 			if not os.path.exists(COOKIEFILE):
 				print "FTW --> Cookie missing--attempting login!!!"
@@ -87,6 +88,7 @@ class LoginFTW:
 				try:
 					req = self.opener.open(url, data)
 					req.close()
+					print cj
 					cj.save(COOKIEFILE)
 					status = self.checkCookie(COOKIEFILE)
 					if status == True:
@@ -119,11 +121,12 @@ class grabFTW:
 		elif self.status is 'exit':
 			xbmc.executebuiltin('XBMC.Notification("Please Login:","A user account is required to view content.", 3000)')
 		self.addon = xbmcaddon.Addon(id='plugin.video.animeftw')
-		self.base_cache_path = xbmc.translatePath(self.addon.getAddonInfo('profile'))
+		self.base_cache_path = os.path.join( xbmc.translatePath( "special://masterprofile/" ), "addon_data", os.path.basename( self.addon.getAddonInfo('path') ) )
+		print self.base_cache_path
 		
 	def downloadHTML(self, url):
 		self.currenturl = url
-		self.opener.addheaders = [('Referer', self.referer),('User-Agent','Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')]
+		self.opener.addheaders = [('Referer', self.referer),('User-Agent',USER_AGENT)]
 		response = self.opener.open(self.currenturl)
 		html = response.read()
 		print "FTW --> GRABBING URL: "+self.currenturl
@@ -337,6 +340,7 @@ class grabFTW:
 			self.referer = referer
 			htmlSource = self.getHTML(url)
 			soup = BeautifulSoup(htmlSource)
+			print soup
 			content_table = soup.find('table', attrs={'width':'100%'})
 			content_tr = content_table.findAll('tr')
 			content_td = content_tr[int(len(content_tr))-1].findAll('td')
@@ -344,6 +348,10 @@ class grabFTW:
 			del soup
 			del content_tr
 			del content_td
+		 	if str(content[0].contents[0]) == '<a href="http://www.animeftw.tv/videos/">ERROR: Only advanced Members are allowed to view videos off animeFTW.tv. Become one today to gain all the benefits.</a>':
+				UI().addItem({'Title':'Only Advanced Members are allowed to view videos off animeFTW.tv.  Become one today to gain all of the benefits.','mode':'error', 'referer':self.referer, 'url':''}, None, True, len(content))
+				UI().endofdirectory('none')
+				
 			for i, item in enumerate(content):
 				itemname = str(item.contents[0]) + item.a.string.replace('`', '\'')
 				list_item = {'name':unicode(itemname).encode('utf-8'), 'url':item.a['href'], 'thumb':'None', 'plot':'None'}

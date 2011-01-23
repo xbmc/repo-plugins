@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.audio.modland"
-  version="0.10"
+  version="0.11"
   name="Modland"
   provider-name="BuZz [buzz@exotica.org.uk]">
   <requires>
@@ -14,7 +14,7 @@
     <platform>all</platform>
       <summary lang="en">Modland</summary>
       <description lang="en">
-        Search and listen to computer game and demoscene music from a variety of platforms. There are more than 200,000 tunes to listen to, rendered and streamed in realtime. See http://www.modland.com for more information.
+        Search, stream and download computer game and demoscene music from a variety of platforms. There are more than 200,000 tunes to listen to, all rendered and streamed in realtime. See http://www.modland.com for more information.
       </description>
   </extension>
 </addon>

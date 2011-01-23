@@ -6,7 +6,7 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 __plugin__     = "Modland"
 __author__     = "BuZz [buzz@exotica.org.uk] / http://www.exotica.org.uk"
 __svn_url__    = "http://xbmc-addons.googlecode.com/svn/trunk/plugins/music/modland"
-__version__    = "0.10"
+__version__    = "0.11"
 
 __settings__ = xbmcaddon.Addon('plugin.audio.modland')
 __language__ = __settings__.getLocalizedString
@@ -14,12 +14,12 @@ __language__ = __settings__.getLocalizedString
 MODLAND_URL = "http://www.exotica.org.uk/mediawiki/extensions/ExoticASearch/Modland_xbmc.php"
 #MODLAND_URL = 'http://exotica.travelmate/mediawiki/extensions/ExoticASearch/Modland_xbmc.php'
 
-# try and get xbmc revision
-rev_re = re.compile('r(\d+)')
-try:
-  xbmc_rev = int(rev_re.search(xbmc.getInfoLabel( 'System.BuildVersion' )).group(1))
-except:
-  xbmc_rev = 0
+try: __xbmc_version__ = xbmc.getInfoLabel('System.BuildVersion')
+except: __xbmc_version__ = 'Unknown'
+class AppURLopener(urllib.FancyURLopener):
+    version = 'XBMC/' + __xbmc_version__ + ' - Download and play (' + os.name + ')'
+
+urllib._urlopener = AppURLopener()
 
 PLUGIN_DATA = __settings__.getAddonInfo('profile')
 SEARCH_FILE = os.path.join(PLUGIN_DATA, "search.txt")
@@ -101,16 +101,12 @@ def get_results(search):
     li = xbmcgui.ListItem( label )
     li.setInfo( type = 'music', infoLabels = { 'title': label, 'genre': format, 'artist': artist, 'album': collect } )
     li.setProperty('mimetype', 'audio/ogg')
+    # download context menu
+    file = artist + ' - ' + title + '.ogg'
+    cmd = "XBMC.RunPlugin(%s?mode=download&url=%s&file=%s)" % (sys.argv[0], urllib.quote_plus(stream_url), urllib.quote_plus(file.encode('utf-8')) )
+    li.addContextMenuItems( [ (__language__(30003), cmd) ] )
 
-    # revision 26603 adds my patch with support for ogg mime types for paplayer so we can pass
-    # the url directly, otherwise we pass back to the plugin and force an alternative player
-    if xbmc_rev >= 26603:
-      url = stream_url
-    else:
-      url = sys.argv[0] + '?'
-      url += urllib.urlencode( { 'mode': 'play', 'title': title, 'artist': artist, 'genre': format, 'album': collect, 'url': stream_url } )
-
-    ok = xbmcplugin.addDirectoryItem(handle, url, listitem = li, isFolder = False, totalItems = count)
+    ok = xbmcplugin.addDirectoryItem(handle, stream_url, listitem = li, isFolder = False, totalItems = count)
 
   xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
   xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_ARTIST)
@@ -118,11 +114,19 @@ def get_results(search):
   xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_ALBUM)
   xbmcplugin.endOfDirectory(handle = handle, succeeded = True)
 
-def play_stream(url, title, info):
-  listitem = xbmcgui.ListItem(title)
-  listitem.setInfo ( 'music', info )
-  player = xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER)
-  player.play(url, listitem)
+def download_and_play(url, file):
+  while True:
+    path = __settings__.getSetting('download_path')
+    if path == '': __settings__.openSettings()
+    else: break
+
+  filepath = os.path.join(path, file)
+  file = file.replace(',','')
+  xbmc.executebuiltin('Notification(Modland - Downloading...,' + file + ', -1)')
+  urllib.urlretrieve (url, filepath)
+  xbmc.executebuiltin('Notification(Modland - Downloaded,' + file + ', 1)')
+  player = xbmc.Player(xbmc.PLAYER_CORE_PAPLAYER)
+  player.play(filepath)
 
 # load a list from a file, removing any duplicates and stripped wihtespace/linefeeds
 def load_list(file):
@@ -157,7 +161,6 @@ elif mode == 'deletesearch':
   xbmc.executebuiltin('Container.Refresh')
 
 elif mode == 'search':
-
   if search == None:
     search = get_search()
   else:
@@ -168,12 +171,7 @@ elif mode == 'search':
   else:
     show_options()
 
-elif mode == 'play':
-  title = urllib.unquote_plus(params['title'])
-  artist = urllib.unquote_plus(params['artist'])
-  genre = urllib.unquote_plus(params['genre'])
-  album = urllib.unquote_plus(params['album'])
-  url = urllib.unquote_plus(params['url'])
-
-  info = { 'title': title, 'artist': artist, 'genre': genre, 'album': album }
-  play_stream(url, title, info)
+elif mode == 'download':
+  url = params['url']
+  file = params['file']
+  download_and_play(url, file)

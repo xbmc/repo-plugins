@@ -1,2 +1,4 @@
+version 1.0.1:
+	- plugin scans subpages (1,2,3...) (thx adq)
 version 1.0:
 	- initial version

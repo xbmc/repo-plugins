@@ -16,6 +16,15 @@ def show_root_menu():
 
 def show_sites(site):
     content = getUrl(urllib.unquote(SITE + "/browse/" + site))
+    indexpages = re.compile('<a href="(index[0-9_]*\.html)">&nbsp;[0-9]+&nbsp;</a>', re.DOTALL).findall(content)
+    if len(indexpages) > 1:
+        content = ''
+        seen = {}
+        for ip in indexpages:
+            if ip in seen:
+                continue   
+	    content += getUrl(urllib.unquote(SITE + "/browse/" + site + "/" + ip))
+            seen[ip] = True
     match = re.compile('<div class="thumbnail">(.+?)<div class="icons">',re.DOTALL).findall(content)
     for m in match:
         cat = re.compile('<img src="(.+?)".+?title="(.+?)".+?href="(.+?)"',re.DOTALL).findall(m)

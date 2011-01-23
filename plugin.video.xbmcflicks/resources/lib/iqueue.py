@@ -180,11 +180,11 @@ def addDirectoryItem(curX, isFolder=True, parameters={}, thumbnail=None):
 
 def addLink(name,url,curX,rootID=None):
     ok=True
-    liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=curX.Poster)
-    liz.setInfo( type="Video", infoLabels={ "Mpaa": curX.Mpaa, "TrackNumber": int(curX.Position), "Year": int(curX.Year), "OriginalTitle": curX.Title, "Title": curX.TitleShort, "Rating": float(curX.Rating)*2, "Duration": str(int(curX.Runtime)/60), "Director": curX.Directors, "Genre": curX.Genres, "CastAndRole": curX.Cast, "Plot": curX.Synop })
-
+    rFolder = str(ROOT_FOLDER)
+    lFolder = str(LIB_FOLDER)
     commands = []
-    modScripLoc = os.path.join(str(LIB_FOLDER), 'modQueue.py')
+
+    modScripLoc = os.path.join(lFolder, 'modQueue.py')
     argsRemove = str(curX.ID) + "delete"
     argsAdd = str(curX.ID) + "post"
     argsSimilar = str(curX.ID)
@@ -203,17 +203,17 @@ def addLink(name,url,curX,rootID=None):
     else:
         commands.append(( 'Netflix: Add Entire Season to Instant Queue', runnerAdd, ))
         commands.append(( 'Netflix: Remove Entire Season From Instant Queue', runnerRemove, ))
-
+    liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=curX.Poster)
+    liz.setInfo( type="Video", infoLabels={ "Mpaa": str(curX.Mpaa), "TrackNumber": int(str(curX.Position)), "Year": int(str(curX.Year)), "OriginalTitle": str(curX.Title), "Title": str(curX.TitleShort), "Rating": float(curX.Rating)*2, "Duration": str(int(curX.Runtime)/60), "Director": str(curX.Directors), "Genre": str(curX.Genres), "CastAndRole": str(curX.Cast), "Plot": str(curX.Synop) })
     liz.addContextMenuItems( commands )
-    whichHandler = sys.argv[1]
-    ok=xbmcplugin.addDirectoryItem(handle=int(whichHandler),url=url,listitem=liz, isFolder=False)
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz, isFolder=False)
 
     return ok
 
 def addLinkDisc(name,url,curX,rootID=None):
     ok=True
     liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=curX.Poster)
-    liz.setInfo( type="Video", infoLabels={ "Mpaa": curX.Mpaa, "TrackNumber": int(curX.Position), "Year": int(curX.Year), "OriginalTitle": curX.Title, "Title": curX.TitleShort, "Rating": float(curX.Rating)*2, "Duration": str(int(curX.Runtime)/60), "Director": curX.Directors, "Genre": curX.Genres, "CastAndRole": curX.Cast, "Plot": curX.Synop })
+    liz.setInfo( type="Video", infoLabels={ "Mpaa": str(curX.Mpaa), "TrackNumber": int(str(curX.Position)), "Year": int(str(curX.Year)), "OriginalTitle": str(curX.Title), "Title": str(curX.TitleShort), "Rating": float(curX.Rating)*2, "Duration": str(int(curX.Runtime)/60), "Director": str(curX.Directors), "Genre": str(curX.Genres), "CastAndRole": str(curX.Cast), "Plot": str(curX.Synop) })
 
     commands = []
     filename = curX.ID + '_disc.html'
@@ -782,7 +782,10 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
                 return curX
 
     if(not curX.TvShow):
-        addLink(curX.TitleShort,os.path.join(str(REAL_LINK_PATH), str(curX.TitleShortLink + '.html')), curX)
+        ciName = str(curX.TitleShortLink + '.html')
+        ciPath = str(REAL_LINK_PATH)
+        ciFullPath = os.path.join(ciPath, ciName )
+        addLink(curX.TitleShort,ciFullPath, curX)
         #write the link file
         writeLinkFile(curX.TitleShortLink, curX.Title)
         return curX
@@ -807,8 +810,6 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
         data = matchAllEpData.group(1)
     else:
         data = ""
-    
-    #addDir(curX.TitleShort,'',999,curX.Poster,data)
 
     foundMatch = False
     #if still processing, we want to auto-expand the episode lets add the folder, and then parse the episodes into that folder
@@ -824,7 +825,7 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
             curXe.Rating = curX.Rating
             curXe.Runtime = "0"
             curXe.Genres = curX.Genres
-            curXe.Directors = curX
+            curXe.Directors = curX.Directors
             curXe.FullId = ""
             curXe.Poster = curX.Poster
             curXe.Cast = curX.Cast
@@ -862,16 +863,21 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
                 curXe.ID = matchAllEpisodesRealID.group("id").strip()
                 curXe.TitleShortLink = curXe.ID
                 curXe.TitleShortLink.strip()
-                
-                #add and write file
-                addLink(curXe.TitleShort,os.path.join(str(REAL_LINK_PATH), str(curXe.TitleShortLink + '.html')), curXe, curX.ID)
+                 #add and write file
+                ciName2 = str(curXe.TitleShortLink + '.html')
+                ciPath2 = str(REAL_LINK_PATH)
+                ciFullPath2 = os.path.join(ciPath2, ciName2 )
+                addLink(curXe.TitleShort, ciFullPath2, curXe, curX.ID)
                 writeLinkFile(curXe.TitleShortLink, curXe.Title)
             else:
                 #don't add it
                 print "not adding episode, couldn't parse id"
     if (not foundMatch):
         #this is to cover those tv shows that are just a single episode
-        addLink(curX.TitleShort,os.path.join(str(REAL_LINK_PATH), str(curX.TitleShortLink + '.html')), curX)
+        ciName = str(curX.TitleShortLink + '.html')
+        ciPath = str(REAL_LINK_PATH)
+        ciFullPath = os.path.join(ciPath, ciName )
+        addLink(curX.TitleShort,ciFullPath, curX)
         #write the link file
         writeLinkFile(curX.TitleShortLink, curX.Title)
     #xbmcplugin.endOfDirectory(int(sys.argv[1]))

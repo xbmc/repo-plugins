@@ -11,7 +11,9 @@
     
     <string id="30020">Bevorzugter Streamtyp</string>
     <string id="30021">HTTP</string>
-    <string id="30022">RTMS</string>
+    <string id="30022">RTMP</string>
     <string id="30023">MMS</string>
     <string id="30024">MOV</string>
+    
+    <string id="30100">Suchen</string>
 </strings>

@@ -41,7 +41,8 @@ class DreiSatMediathek(Mediathek):
   @classmethod
   def name(self):
     return "3Sat";
-  
+  def isSearchable(self):
+    return True;
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
     
@@ -78,12 +79,55 @@ class DreiSatMediathek(Mediathek):
       TreeNode("20","Theater","http://www.3sat.de/mediathek/rss/mediathek_theater.xml",True),
       TreeNode("21","vivo","http://www.3sat.de/mediathek/rss/mediathek_vivo.xml",True),
       );
-
+      
+    self.rootLink = "http://www.3sat.de"
+    self.searchLink = 'http://www.3sat.de/mediathek/mediathek';
+    link = "/mediathek/mediathek.php\\?obj=\\d+";
+    self.regex_searchResult = re.compile("href=\""+link+"\" class=\"media_result_thumb\"");
+    self.regex_searchResultLink = re.compile(link)
+    self.regex_searchLink = re.compile("http://wstreaming.zdf.de/.*?\\.asx")
+    self.regex_searchTitle = re.compile("<h2>.*</h2>");
+    self.regex_searchDetail = re.compile("<span class=\"text\">.*");
+    self.regex_searchDate = re.compile("\\d{2}.\\d{2}.\\d{4}");
+    self.regex_searchImage = re.compile("/dynamic/mediathek/stills/\\d*_big\\.jpg");
+    self.replace_html = re.compile("<.*?>");
+    
   def buildPageMenu(self, link):
     self.gui.log("buildPageMenu: "+link);
     rssFeed = self.loadConfigXml(link);
     self.extractVideoObjects(rssFeed);
-  
+  def searchVideo(self, searchText):
+    values ={'mode':'search',
+             'query':searchText,
+             'red': '',
+             'query_time': '',
+             'query_sort': '',
+             'query_order':''
+             }
+    mainPage = self.loadPage(self.searchLink,values);
+    for result in self.regex_searchResult.findall(mainPage):
+      objectLink = self.regex_searchResultLink.search(result).group();
+      infoLink = self.rootLink+objectLink
+      infoPage = self.loadPage(infoLink);
+      title = self.regex_searchTitle.search(infoPage).group();
+      detail = self.regex_searchDetail.search(infoPage).group();
+      
+      image = self.regex_searchImage.search(infoPage).group();
+      title = self.replace_html.sub("", title);
+      detail = self.replace_html.sub("", detail);
+      try:
+        dateString = self.regex_searchDate.search(infoPage).group();
+        pubDate = time.strptime(dateString,"%d.%m.%Y");
+      except:
+        pubDate = time.gmtime();
+      
+      videoLink = self.rootLink+objectLink+"&mode=play";
+      videoPage = self.loadPage(videoLink);
+      video = self.regex_searchLink.search(videoPage).group();
+      links = {}
+      links[2] = SimpleLink(video,0)
+      self.gui.buildVideoLink(DisplayObject(title,"",self.rootLink + image,detail,links,True, pubDate),self);
+      
   def readText(self,node,textNode):
     try:
       node = node.getElementsByTagName(textNode)[0].firstChild;
@@ -123,16 +167,16 @@ class DreiSatMediathek(Mediathek):
     for contentNode in itemNode.getElementsByTagName("media:content"):
       mediaType = contentNode.getAttribute("type");
       if(not self.baseType == mediaType):
-	continue;
+        continue;
       
       height = int(contentNode.getAttribute("height"));
       url = contentNode.getAttribute("url");
       size = int(contentNode.getAttribute("fileSize"));
       if(height < 150):
-	links[0] = SimpleLink(url, size);
+        links[0] = SimpleLink(url, size);
       elif (height < 300):
-	links[1] = SimpleLink(url, size);
+        links[1] = SimpleLink(url, size);
       else:
-	links[2] = SimpleLink(url, size);
+        links[2] = SimpleLink(url, size);
     self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True, pubDate),self);
       

@@ -50,39 +50,45 @@ class DisplayObject(object):
 
 class Mediathek(object):
   
-  def loadPage(self,url):
+  def loadPage(self,url, values = None):
     try:
       safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
       
-      req = urllib2.Request(safe_url)
+      if(values is not None): 
+        data = urllib.urlencode(values)
+        req = urllib2.Request(safe_url, data)
+      else:
+        req = urllib2.Request(safe_url)
       req.add_header('User-Agent', 'Mozilla/5.0')
       req.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
       req.add_header('Accept-Language', 'de-de,de;q=0.8,en-us;q=0.5,en;q=0.3')
       req.add_header('Accept-Charset', 'utf-8')
+      
       waittime = 0;
       doc = False;
       while not doc and waittime < 60:
-	try:
-	  if waittime > 0: 
-	    time.sleep(waittime);
-	  self.gui.log("download %s %d"%(safe_url,waittime));
-	  sock = urllib2.urlopen( req )
-	  doc = sock.read();
-	  sock.close()
-	except:
-	  if(waittime == 0):
-	    waittime = 1;
-	  else:
-	    waittime *= 2;
+        try:
+          if waittime > 0: 
+            time.sleep(waittime);
+          self.gui.log("download %s %d"%(safe_url,waittime));
+          sock = urllib2.urlopen( req )
+          doc = sock.read();
+          sock.close()
+        except:
+          if(waittime == 0):
+            waittime = 1;
+          else:
+            waittime *= 2;
+            
       if doc:
-	try:
-	  return doc.encode('utf-8');
-	except:
-	  return doc;
+        try:
+          return doc.encode('utf-8');
+        except:
+          return doc;
       else:
-	return ''
+        return ''
     except:
-      return ''  
+      return ''
     
     
       
@@ -93,18 +99,22 @@ class Mediathek(object):
       index = int(path.pop(0));
     
       if(treeNode == None):
-	treeNode = self.menuTree[index];
+        treeNode = self.menuTree[index];
       else:
-	treeNode = treeNode.childNodes[index];
+        treeNode = treeNode.childNodes[index];
       self.buildMenu(path,treeNode);
     else:
       if(treeNode == None):
-	treeNode = self.menuTree[0];
+        treeNode = self.menuTree[0];
       self.gui.log(treeNode.name);
       for childNode in treeNode.childNodes:
-	self.gui.buildMenuLink(childNode,self);
+        self.gui.buildMenuLink(childNode,self);
       if(treeNode.displayElements):
-	self.buildPageMenu(treeNode.link);
+        self.buildPageMenu(treeNode.link);
+        
   def displayCategories(self):
-    for treeNode in self.menuTree:
-      self.gui.buildMenuLink(treeNode,self) 
+    if(len(self.menuTree)>1):
+      for treeNode in self.menuTree:
+        self.gui.buildMenuLink(treeNode,self) 
+    else:
+      self.buildPageMenu(self.menuTree[0].link);

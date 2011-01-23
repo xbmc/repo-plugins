@@ -34,47 +34,47 @@ class ZDFMediathek(Mediathek):
     
     self.menuTree = (
       TreeNode("0","Startseite","http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite?flash=off",True,
-	(
-	  TreeNode("0.0","Tipps","http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/tipps?flash=off",True),
-	  TreeNode("0.1","Ganze Sendungen","http://www.zdf.de/ZDFmediathek/hauptnavigation/nachrichten/ganze-sendungen?flash=off",True),
-	  TreeNode("0.2","Meist Gesehen","http://www.zdf.de/ZDFmediathek/hauptnavigation/nachrichten/meist-gesehen?flash=off",True)
-	)
+        (
+          TreeNode("0.0","Tipps","http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/tipps?flash=off",True),
+          TreeNode("0.1","Ganze Sendungen","http://www.zdf.de/ZDFmediathek/hauptnavigation/nachrichten/ganze-sendungen?flash=off",True),
+          TreeNode("0.2","Meist Gesehen","http://www.zdf.de/ZDFmediathek/hauptnavigation/nachrichten/meist-gesehen?flash=off",True)
+        )
       ),
       TreeNode("1","Nachrichten","http://www.zdf.de/ZDFmediathek/hauptnavigation/nachrichten?flash=off",True),
       TreeNode("2","Sendung verpasst?","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst?flash=off",False,(
-	  TreeNode("2.0","Heute","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day0?flash=off",True),
-	  TreeNode("2.1","Gestern","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day1?flash=off",True),
-	  TreeNode("2.2","vor 2 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day2?flash=off",True),
-	  TreeNode("2.3","vor 3 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day3?flash=off",True),
-	  TreeNode("2.4","vor 4 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day4?flash=off",True),
-	  TreeNode("2.5","vor 5 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day5?flash=off",True),
-	  TreeNode("2.6","vor 6 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day6?flash=off",True),
-	  TreeNode("2.7","vor 7 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day7?flash=off",True),
-	)
+          TreeNode("2.0","Heute","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day0?flash=off",True),
+          TreeNode("2.1","Gestern","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day1?flash=off",True),
+          TreeNode("2.2","vor 2 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day2?flash=off",True),
+          TreeNode("2.3","vor 3 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day3?flash=off",True),
+          TreeNode("2.4","vor 4 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day4?flash=off",True),
+          TreeNode("2.5","vor 5 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day5?flash=off",True),
+          TreeNode("2.6","vor 6 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day6?flash=off",True),
+          TreeNode("2.7","vor 7 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-verpasst/day7?flash=off",True),
+        )
       ),
       TreeNode("3","LIVE","http://www.zdf.de/ZDFmediathek/hauptnavigation/live?flash=off",False,(
-	  TreeNode("3.0","Heute","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day0?flash=off",True),
-	  TreeNode("3.1","Gestern","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day1?flash=off",True),
-	  TreeNode("3.2","vor 2 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day2?flash=off",True),
-	  TreeNode("3.3","vor 3 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day3?flash=off",True),
-	  TreeNode("3.4","vor 4 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day4?flash=off",True),
-	  TreeNode("3.5","vor 5 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day5?flash=off",True),
-	  TreeNode("3.6","vor 6 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day6?flash=off",True),
-	  TreeNode("3.7","vor 7 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day7?flash=off",True),
-	)
+          TreeNode("3.0","Heute","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day0?flash=off",True),
+          TreeNode("3.1","Gestern","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day1?flash=off",True),
+          TreeNode("3.2","vor 2 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day2?flash=off",True),
+          TreeNode("3.3","vor 3 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day3?flash=off",True),
+          TreeNode("3.4","vor 4 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day4?flash=off",True),
+          TreeNode("3.5","vor 5 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day5?flash=off",True),
+          TreeNode("3.6","vor 6 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day6?flash=off",True),
+          TreeNode("3.7","vor 7 Tage","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day7?flash=off",True),
+        )
       ),
       TreeNode("4","Sendungen A-Z","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z?flash=off",False,
-	(
-	  TreeNode("4.0","ABC","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz0?flash=off",True),
-	  TreeNode("4.1","DEF","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz1?flash=off",True),
-	  TreeNode("4.2","GHI","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz2?flash=off",True),
-	  TreeNode("4.3","JKL","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz3?flash=off",True),
-	  TreeNode("4.4","MNO","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz4?flash=off",True),
-	  TreeNode("4.5","PQRS","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz5?flash=off",True),
-	  TreeNode("4.6","TUV","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz6?flash=off",True),
-	  TreeNode("4.7","WXYZ","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz7?flash=off",True),
-	  TreeNode("4.8","0-9","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz8?flash=off",True),
-	)
+        (
+          TreeNode("4.0","ABC","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz0?flash=off",True),
+          TreeNode("4.1","DEF","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz1?flash=off",True),
+          TreeNode("4.2","GHI","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz2?flash=off",True),
+          TreeNode("4.3","JKL","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz3?flash=off",True),
+          TreeNode("4.4","MNO","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz4?flash=off",True),
+          TreeNode("4.5","PQRS","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz5?flash=off",True),
+          TreeNode("4.6","TUV","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz6?flash=off",True),
+          TreeNode("4.7","WXYZ","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz7?flash=off",True),
+          TreeNode("4.8","0-9","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz8?flash=off",True),
+        )
       ),
       TreeNode("5","Rubriken","http://www.zdf.de/ZDFmediathek/hauptnavigation/rubriken?flash=off",True),
       TreeNode("6","Themen","http://www.zdf.de/ZDFmediathek/hauptnavigation/themen?flash=off",True),
@@ -98,11 +98,23 @@ class ZDFMediathek(Mediathek):
     self.replace_html = re.compile("<.*?>");
     
     self.rootLink = "http://www.zdf.de";
+    self.searchSite = "http://www.zdf.de/ZDFmediathek/suche?flash=off"
     self.xmlService = "http://www.zdf.de/ZDFmediathek/xmlservice/web/beitragsDetails?id=%s&ak=web";
   @classmethod
   def name(self):
     return "ZDF";
+    
+  def isSearchable(self):
+    return True;
   
+  def searchVideo(self, searchText):
+    self.gui.log("searchVideo: "+searchText);
+    values ={'sucheBtn.x':'25',
+             'sucheBtn.y':'8',
+             'sucheText': searchText}
+    mainPage = self.loadPage(self.searchSite,values);
+    self.extractVideoObjects(mainPage);
+    
   def buildPageMenu(self, link):
     self.gui.log("buildPageMenu: "+link);
     mainPage = self.loadPage(link);
@@ -192,7 +204,7 @@ class ZDFMediathek(Mediathek):
       traceback.print_exc();
       self.gui.log("Stacktrace: ");
       traceback.print_stack();
-      sys.exit();
+      #sys.exit();
   
   def getRtmpLinks(self, url, size):
     links = {};

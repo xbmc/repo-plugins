@@ -39,7 +39,8 @@ class ARTEMediathek(Mediathek):
   @classmethod
   def name(self):
     return "ARTE";
-  
+  def isSearchable(self):
+    return True;
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
     self.rootLink = "http://videos.arte.tv";
@@ -59,6 +60,7 @@ class ARTEMediathek(Mediathek):
     self.replace_html = re.compile("<.*?>");
     
     self.baseXmlLink = self.rootLink+"/de/do_delegate/videos/global-%s,view,asPlayerXml.xml"
+    self.searchLink = self.rootLink+"/de/do_search/videos/suche?q=";
     
   def buildPageMenu(self, link):
     self.gui.log("buildPageMenu: "+link);
@@ -66,6 +68,9 @@ class ARTEMediathek(Mediathek):
     self.extractTopicObjects(mainPage);
     self.extractVideoObjects(mainPage);
     
+  def searchVideo(self, searchText):
+    link = self.searchLink + searchText
+    self.buildPageMenu(link);
     
   def extractVideoObjects(self,mainPage):
     videoIDs = [];
@@ -127,7 +132,7 @@ class ARTEMediathek(Mediathek):
         self.gui.log(urlString);
         stringArray = urlString.split("MP4:");
         
-        links[quality] = SimpleLink("%s playpath=MP4:%s"%(stringArray[0],stringArray[1]),0);
+        links[quality] = SimpleLink("%s playpath=MP4:%s swfUrl=http://videos.arte.tv/blob/web/i18n/view/player_11-3188338-data-4836231.swf swfVfy=1"%(stringArray[0],stringArray[1]),0);
         if(len(links) > 0):
           self.gui.log("Picture: "+picture);
           self.gui.buildVideoLink(DisplayObject(title,"",picture,desc,links,True,date),self);
@@ -137,9 +142,7 @@ class ARTEMediathek(Mediathek):
       self.gui.log(xmlPage);
   
   def extractTopicObjects(self,mainPage):
-    for touple in self.regex_ExtractTopicPages.findall(mainPage):
-      print (touple[1]);
-      
+    for touple in self.regex_ExtractTopicPages.findall(mainPage):      
       try:
         title = touple[1].encode('UTF-8');
       except:

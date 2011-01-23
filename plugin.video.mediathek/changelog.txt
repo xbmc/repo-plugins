@@ -1,3 +1,7 @@
+0.1.6 - FIXES: Arty playback now functional, RTMP set as default, Sorting of Items in Bayrisches Fernsehen
+        ADD: Searching for  ARTE, ARD, ZDF, 3Sat
+0.1.5 - Bypassing Arte-FalshVersion check
+      - Adding Bayrisches Fernsehen (by Benedikt Elser)
 0.1.4 - Some improvements for ARD
 0.1.3 - Adjust ARD Parsing - ard now works fine
 0.1.2 - Now RTMP playback is avaible under Windows !!!

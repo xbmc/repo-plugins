@@ -20,6 +20,9 @@ from html import transformHtmlCodes
 
 __plugin__ = "Mediathek"
 
+settings = xbmcaddon.Addon(id='plugin.video.mediathek')
+translation = settings.getLocalizedString
+
 class SimpleXbmcGui(object):
   def __init__(self):
     self.settings = xbmcaddon.Addon(id='plugin.video.mediathek');
@@ -81,7 +84,7 @@ class SimpleXbmcGui(object):
     else:
       url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link))
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
-	
+      
   def buildMenuLink(self,menuObject,mediathek):
     title = menuObject.name;
     listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
@@ -93,7 +96,6 @@ class SimpleXbmcGui(object):
     rootPath = os.path.join(self.settings.getAddonInfo('path'),"resources/logos/");
     for name in mediathekNames:
       listItem=xbmcgui.ListItem(name, iconImage="DefaultFolder.png",thumbnailImage=os.path.join(rootPath,name+".jpg"))
-	    
       url = "%s?type=%s" % (sys.argv[0], name)
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
   
@@ -105,6 +107,23 @@ class SimpleXbmcGui(object):
   
   def getHomeDir(self):
     return self.settings.getAddonInfo("profile");
+  
+  def back(self):
+    xbmc.executebuiltin("Action(PreviousMenu)");
+    
+  def keyboardInput(self):
+    keyboard = xbmc.Keyboard("")
+    keyboard.doModal();
+    return keyboard;
+    
+  def addSearchButton(self,mediathek):
+    title = translation(30100);
+    listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
+    if(mediathek is not None):       
+      url = "%s?type=%s&action=search" % (sys.argv[0],mediathek.name())
+    else:
+      url = "%s?action=search" % (sys.argv[0])
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
     
   def errorOK(self,title="", msg=""):
     e = str( sys.exc_info()[ 1 ] )

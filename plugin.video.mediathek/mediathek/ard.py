@@ -83,6 +83,7 @@ class ARDMediathek(Mediathek):
     self.regex_ajaxLinkTag = re.compile("<a href=\""+ajaxDocumentLink+"\" title=\"\"><span>Neueste Clips</span></a>")
     self.regex_ajaxLink = re.compile(ajaxDocumentLink);
     self.regex_videoLinks = re.compile("<a href=\""+videoDocument_link_Regex+"\" class=\".*\" rel=\""+metaInfo_link_Regex+"\">");
+    self.regex_videoSeriesLinks = re.compile("<a id=\".*\" class=\".*\" rel=\""+metaInfo_link_Regex+"\" href=\""+videoDocument_link_Regex+"\">");
     self.regex_subLinks = re.compile("<a class=\"mt-box_preload mt-box-overflow\" href=\""+ajaxDocumentLink+"\">");
     self.regex_videoDocumentLink = re.compile(videoDocument_link_Regex);
     self.regex_MetaInfo = re.compile(metaInfo_link_Regex);
@@ -100,11 +101,46 @@ class ARDMediathek(Mediathek):
     #regex für das extrahieren des Medialinks
     self.regex_MediaCollection = re.compile("mediaCollection\\.addMediaStream\\(\\d*, \\d*, \".*\", \".*\"\\);");
     self.regex_findLinks = re.compile("\".*?\"");
+    self.searchLink = "http://www.ardmediathek.de/ard/servlet/content/3517006?detail=%d&s=%s"
     
   @classmethod
   def name(self):
     return "ARD";
+  def isSearchable(self):
+    return True;
+    
+  def searchVideo(self, searchText):
+    self.searchSendungen(searchText);
+    self.searchClips(searchText);
   
+  def searchSendungen(self, searchText):
+    searchLink = self.searchLink%(10,searchText);
+    self.gui.log(searchLink);   
+    resultPage = self.loadPage(searchLink);
+    for element in self.regex_videoLinks.finditer(resultPage):
+      element = element.group()
+      videoDocumentLink = self.regex_videoDocumentLink.search(element).group();
+      metaInfoLink = self.regex_MetaInfo.search(element).group();
+      displayObject = self.extractMetaInfo(self.rootLink+metaInfoLink);
+      displayObject.link = self.rootLink+videoDocumentLink;
+      displayObject.isPlayable = False;
+      
+      self.gui.buildVideoLink(displayObject,self);
+      
+  def searchClips(self, searchText):
+    searchLink = self.searchLink%(40,searchText);
+    self.gui.log(searchLink);   
+    resultPage = self.loadPage(searchLink);
+    for element in self.regex_videoLinks.finditer(resultPage):
+      element = element.group()
+      videoDocumentLink = self.regex_videoDocumentLink.search(element).group();
+      metaInfoLink = self.regex_MetaInfo.search(element).group();
+      
+      displayObject = self.extractMetaInfo(self.rootLink+metaInfoLink);
+      displayObject.link = self.getVideoLink(self.rootLink+videoDocumentLink);
+      
+      self.gui.buildVideoLink(displayObject,self);
+    
   def buildPageMenu(self, link, subLink = False):
     self.gui.log(link);    
     mainPage = self.loadPage(link);

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 
-import urllib
+import urllib,xbmc,os
 from simplexbmc import SimpleXbmcGui
 from mediathek.factory import MediathekFactory
 from simplexml import XmlReader;
@@ -31,9 +31,9 @@ def get_params():
     if sys.argv[2]:
       paramPairs=sys.argv[2][1:].split( "&" )
       for paramsPair in paramPairs:
-	paramSplits = paramsPair.split('=')
-	if (len(paramSplits))==2:
-	  paramDict[paramSplits[0]] = paramSplits[1]
+        paramSplits = paramsPair.split('=')
+        if (len(paramSplits))==2:
+          paramDict[paramSplits[0]] = paramSplits[1]
   except:
     errorOK()
   return paramDict
@@ -46,10 +46,29 @@ action=params.get("action", "")
 gui.log("DirectAccess: %s"%gui.directAccess);
 gui.log("Quality: %s"%gui.quality);
 
+
+
 gui.openMenuContext();
 factory = MediathekFactory();
+
+
+        
+        
 if(mediathekName == ""):
-  gui.listAvaibleMediathekes(factory.getAvaibleMediathekTypes());
+  if(action == ""):
+    gui.addSearchButton(None);
+    gui.listAvaibleMediathekes(factory.getAvaibleMediathekTypes());
+  else:
+    result = gui.keyboardInput();
+    if (result.isConfirmed()):
+      searchText = unicode(result.getText().decode('UTF-8'));
+      for name in factory.getAvaibleMediathekTypes():
+        mediathek = factory.getMediathek(name, gui);
+        if(mediathek.isSearchable()):
+          mediathek.searchVideo(searchText);
+    else:
+      gui.back();
+      
 else:
   cat=int(params.get("cat", 0))
   if(gui.directAccess):
@@ -64,6 +83,16 @@ else:
   elif(action == "openMenu"):
     path = params.get("path", "0");
     mediathek.buildMenu(path)
+  elif(action == "search"):
+    result = gui.keyboardInput();
+    if (result.isConfirmed()):
+      searchText = unicode(result.getText().decode('UTF-8'));
+      mediathek.searchVideo(searchText);
+    else:
+      gui.back();
   else:
+    if(mediathek.isSearchable()):
+      gui.addSearchButton(mediathek);
     mediathek.displayCategories();
 gui.closeMenuContext();
+

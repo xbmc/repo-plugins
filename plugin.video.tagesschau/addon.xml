@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.tagesschau"
-  version="0.1.3"
+  version="0.1.4"
   name="Tagesschau"
   provider-name="nevermore">
   <requires>
@@ -16,10 +16,10 @@
 	    <summary lang="de">Tagesschau</summary>
         <summary lang="en">Tagesschau</summary>
 	    <description lang="de">
-	  Die Tagesschau und die Tagesschau in 100 Sekunden
+	  Die ARD-Nachrichtenmagazine' Tagesschau', 'Tagesschau in 100 Sekunden' und 'Tagesthemen'.
 	    </description>
         <description lang="en">
-	  Watch 'Tagesschau' and 'Tagesschau in 100 Sekunden'
+	  Watch german news magazines 'Tagesschau', 'Tagesschau in 100 Sekunden' and 'Tagesthemen'.
 	    </description>
         <disclaimer lang="en">Videos from tagesschau.de</disclaimer>
     </extension>

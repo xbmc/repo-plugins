@@ -75,6 +75,24 @@ def get_video_ts20h():
     # return video+date
     return date, video
 
+def get_video_tt():
+    url = 'http://www.tagesschau.de/export/video-podcast/webl/tagesthemen/'
+    pattern = r'url="(.*\.webl\.h264\.mp4)"'
+
+    date_pattern = r'<title>tagesthemen (\S*)\s*Uhr,\s*(\S*)</title>'    
+     
+    # parse the website
+    s = urllib2.urlopen(url).read()
+    video = re.compile(pattern).findall(s)[0]
+    
+    # fetch the date from the video url
+    date = re.compile(date_pattern).findall(s)[0]
+    date = date[1]+', '+date[0]+' Uhr'
+    
+    # return video+date
+    return date, video
+
+
 def addLink(name,url,iconimage):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
@@ -89,5 +107,8 @@ addLink('Tagesschau ('+date+')', url, 'http://www.tagesschau.de/image/podcast/ts
 
 date, url = get_video_ts100s()
 addLink('Tagesschau in 100 Sekunden ('+date+')', url, 'http://www.tagesschau.de/image/podcast/ts100s-140.jpg')
+
+date, url = get_video_tt()
+addLink('Tagesthemen ('+date+')', url, 'http://www.tagesschau.de/image/podcast/tt-140.jpg')
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,4 +1,7 @@
-﻿[B]1.0.4 (2011.1.22)[/B]
+﻿[B]1.0.5 (2011.1.30)[/B]
+changed: icon
+
+[B]1.0.4 (2011.1.22)[/B]
 changed: handle fail to connect to daemon error
 
 [B]1.0.3 (2011.1.16)[/B]

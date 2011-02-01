@@ -1,3 +1,5 @@
+[B]Version 1.2.2[/B]
+-fix double link
 
 [B]Version 1.2.1[/B]
 -Branch to Origin

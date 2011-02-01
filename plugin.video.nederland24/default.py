@@ -59,23 +59,21 @@ def addLink(name,url,iconimage,description,channelId):
         retval = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return retval
 
-#Start laatste journaal ipad mp4
+#Start laatste journaal ipad mp4, single link
 if settings.getSetting( "Laatste Achtuurjournaal" )=='true':
     URL='http://nos.nl/'
     page=urllib2.urlopen(URL).read()
     time=re.findall(r'Achtuurjournaal</strong></a><span>([^*]*?)</span>',page)
-    URLlist=re.findall(r'/uitzending/[^a-z]*?-nos-journaal-2000-uur.html',page)
-    for URL in URLlist:
-        page=urllib2.urlopen(('http://nos.nl')+(URL)).read()
-        video=re.search(r'http://content.nos.nl/content/playlist/uitzending/fragment/(.*?)mp4',page).group()
-        time=re.search(r'(NOS Journaal [^*]*?)</title>',page).group(1).strip()
-    #title=(video)
-        title='Laatste Achtuurjournaal'
-        addLink(title,video,os.path.join(IMG_DIR, "laatstejournaal.png"), time, "29")
+    URLsingle=((re.search(r'/uitzending/[^a-z]*?-nos-journaal-2000-uur.html',page)).group()).strip()
+    page=urllib2.urlopen(('http://nos.nl')+(URLsingle)).read()
+    video=re.search(r'http://content.nos.nl/content/playlist/uitzending/fragment/(.*?)mp4',page).group()
+    time=re.search(r'(NOS Journaal [^*]*?)</title>',page).group(1).strip()
+    title='Laatste Achtuurjournaal'
+    addLink(title,video,os.path.join(IMG_DIR, "laatstejournaal.png"), time, "29")    
 else:
     print ""    
 
-BASE_URL                   = 'http://livestreams.omroep.nl'
+BASE_URL = 'http://livestreams.omroep.nl'
  
 if settings.getSetting( "smallband" )=='true':
     REZ = 'sb'

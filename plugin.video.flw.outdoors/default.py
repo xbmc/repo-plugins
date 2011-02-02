@@ -1,7 +1,6 @@
-import urllib,urllib2,re
+import urllib,urllib2,re,os
 import xbmcplugin,xbmcgui,xbmcaddon
 import simplejson as json
-import gzip,StringIO,os
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.flw.outdoors')
 __language__ = __settings__.getLocalizedString
@@ -25,17 +24,18 @@ def CATEGORIES():
 
 
 def INDEX(url):
-        url='http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign='+url+'&method=getVideosInChannel'
-        page=urllib2.urlopen(url)
-        gzip_filehandle=gzip.GzipFile(fileobj=StringIO.StringIO(page.read()))
-        data=json.loads(gzip_filehandle.read())
-        videos = data["CHANNEL"]["AFILE"]
-        for video in videos:
-                title = video["TITLE"]
-                path = video["PATH"]
-                thumbnail = video["THUMBNAIL"]
-                description = video["DESCRIPTION"]
-                addLink (title,path,description,thumbnail)
+		url='http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign='+url+'&method=getVideosInChannel'
+		req = urllib2.Request(url)
+		response = urllib2.urlopen(req)
+		link=response.read()
+		data=json.loads(link)
+		videos = data["CHANNEL"]["AFILE"]
+		for video in videos:
+				title = video["TITLE"]
+				path = video["PATH"]
+				thumbnail = video["THUMBNAIL"]
+				description = video["DESCRIPTION"]
+				addLink (title,path,description,thumbnail)
 
 
 def get_params():

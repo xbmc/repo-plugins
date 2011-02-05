@@ -1,3 +1,4 @@
+0.1.7 - Adding ORF
 0.1.6 - FIXES: Arty playback now functional, RTMP set as default, Sorting of Items in Bayrisches Fernsehen
         ADD: Searching for  ARTE, ARD, ZDF, 3Sat
 0.1.5 - Bypassing Arte-FalshVersion check

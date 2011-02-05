@@ -32,20 +32,20 @@ class XmlWriter(object):
     for node in xmlSettings.getElementsByTagName("setting"):
       id = node.getAttribute("id");
       if (id == "quality"):
-	self.quality = int(node.getAttribute("value"));
+        self.quality = int(node.getAttribute("value"));
       elif (id == "mode"):
-	self.directAccess = node.getAttribute("value");
+        self.directAccess = node.getAttribute("value");
       elif (id == "preferedStreamType"):
-	self.preferedStreamTyp = int(node.getAttribute("value"));
+        self.preferedStreamTyp = int(node.getAttribute("value"));
   
   def log(self, msg):
     if type(msg) not in (str, unicode):
       print(type(msg));
     else:
       try: 
-	print(msg.encode('utf8'));
+        print(msg.encode('utf8'));
       except:
-	print(msg);
+        print(msg);
   
   def createLinkNode(self, links):
     rootNode = self.xmlDocument.createElement('Link');
@@ -57,19 +57,18 @@ class XmlWriter(object):
       linkNode.setAttribute("quality",unicode(quality));
       
       if(type(link).__name__ == "ComplexLink"):
-	basePath = self.xmlDocument.createElement('BasePath');
-	value = self.xmlDocument.createTextNode(link.basePath);
-	basePath.appendChild(value);
-	playPath = self.xmlDocument.createElement('PlayPath');
-	value = self.xmlDocument.createTextNode(link.playPath);
-	playPath.appendChild(value);
-	
-	linkNode.appendChild(basePath);
-	linkNode.appendChild(playPath);
+        basePath = self.xmlDocument.createElement('BasePath');
+        value = self.xmlDocument.createTextNode(link.basePath);
+        basePath.appendChild(value);
+        playPath = self.xmlDocument.createElement('PlayPath');
+        value = self.xmlDocument.createTextNode(link.playPath);
+        playPath.appendChild(value);
+        
+        linkNode.appendChild(basePath);
+        linkNode.appendChild(playPath);
       else:
-	value = self.xmlDocument.createTextNode(link.basePath);
-	linkNode.appendChild(value);
-	
+        value = self.xmlDocument.createTextNode(link.basePath);
+        linkNode.appendChild(value);
       rootNode.appendChild(linkNode);
     return rootNode;
   
@@ -179,11 +178,11 @@ class XmlReader (object):
       isPlayable = menuNode.getElementsByTagName('IsPlayable')[0].childNodes[0].data;
       
       if(isPlayable=="True"):
-	link = self.readLinkNode(menuNode.getElementsByTagName('Link')[0]);
-	displayObject = DisplayObject(title,"",picture,"",link,True);
+        link = self.readLinkNode(menuNode.getElementsByTagName('Link')[0]);
+        displayObject = DisplayObject(title,"",picture,"",link,True);
       else:
-	link = menuNode.getElementsByTagName('Link')[0].childNodes[0].data;
-	displayObject = DisplayObject(title,"",picture,"",link,False);
+        link = menuNode.getElementsByTagName('Link')[0].childNodes[0].data;
+        displayObject = DisplayObject(title,"",picture,"",link,False);
       self.gui.buildVideoLink(displayObject, self.mediathek);
       
   def readLinkNode(self, rootNode):
@@ -191,12 +190,12 @@ class XmlReader (object):
     for linkNode in rootNode.childNodes:
       quality = int(linkNode.getAttribute("quality"));
       if(linkNode.tagName == "ComplexLink"):
-	basePath = linkNode.getElementsByTagName('BasePath')[0].childNodes[0].data
-	playPath = linkNode.getElementsByTagName('PlayPath')[0].childNodes[0].data
-	link = ComplexLink(basePath,playPath);
+        basePath = linkNode.getElementsByTagName('BasePath')[0].childNodes[0].data
+        playPath = linkNode.getElementsByTagName('PlayPath')[0].childNodes[0].data
+        link = ComplexLink(basePath,playPath);
       else:
-	basePath = linkNode.childNodes[0].data
-	link = SimpleLink(basePath);
+        basePath = linkNode.childNodes[0].data
+        link = SimpleLink(basePath);
       links[quality] = link;
     return links;
   def displayMenuNodes(self,rootNode):

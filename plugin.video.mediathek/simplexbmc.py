@@ -15,8 +15,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, urllib, os, time
+import xbmc, xbmcgui, xbmcplugin,xbmcaddon, sys, urllib, os, time, re 
 from html import transformHtmlCodes
+from xml.dom import minidom
+
+regex_findLink = re.compile("mms://.*wmv");
 
 __plugin__ = "Mediathek"
 
@@ -50,37 +53,47 @@ class SimpleXbmcGui(object):
     listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=displayObject.picture)
     
     if(displayObject.isPlayable):
-      self.log(displayObject.title);
-      listItem.setProperty('IsPlayable', 'true');
-      if(self.quality in displayObject.link):
-        link = displayObject.link[self.quality];
+      if(displayObject.isPlayable == "PlayList"):
+        link = displayObject.link[0]
+        
+        url = "%s?type=%s&action=openPlayList&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(link.basePath))
+        
+        self.log(url);
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
       else:
-        selectedKey = -1;
-        for key in displayObject.link.keys():
-          if(key < self.quality and key > selectedKey):
-            selectedKey = key;
-        if(selectedKey > -1):
-          link = displayObject.link[selectedKey];
+        self.log(displayObject.title);
+        if(self.quality in displayObject.link):
+          link = displayObject.link[self.quality];
         else:
-          selectedKey = displayObject.link.keys()[0];
+          selectedKey = -1;
           for key in displayObject.link.keys():
-            if(key < selectedKey):
+            if(key < self.quality and key > selectedKey):
               selectedKey = key;
-          link = displayObject.link[selectedKey];
-      
-      if(type(link).__name__ == "ComplexLink"):
-        self.log("PlayPath:"+ link.playPath);
-        listItem.setProperty("PlayPath", link.playPath);
+          if(selectedKey > -1):
+            link = displayObject.link[selectedKey];
+          else:
+            selectedKey = displayObject.link.keys()[0];
+            for key in displayObject.link.keys():
+              if(key < selectedKey):
+                selectedKey = key;
+            link = displayObject.link[selectedKey];
+        
+        if(type(link).__name__ == "ComplexLink"):
+          self.log("PlayPath:"+ link.playPath);
+          listItem.setProperty("PlayPath", link.playPath);
 
-      self.log("URL:"+ link.basePath);
-      listItem.setInfo("video",{
-        "size": link.size,
-        "date": time.strftime("%d.%m.%Y",displayObject.date),
-        "year": int(time.strftime("%Y",displayObject.date)),
-        "title": title,
-        "plot": transformHtmlCodes(displayObject.description)
-      });
-      xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=link.basePath,listitem=listItem,isFolder=False)
+        self.log("URL:"+ link.basePath);
+        listItem.setInfo("video",{
+          "size": link.size,
+          "date": time.strftime("%d.%m.%Y",displayObject.date),
+          "year": int(time.strftime("%Y",displayObject.date)),
+          "title": title,
+          "plot": transformHtmlCodes(displayObject.description)
+        });
+      
+      
+        listItem.setProperty('IsPlayable', 'true');
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=link.basePath,listitem=listItem,isFolder=False)
     else:
       url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link))
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
@@ -124,7 +137,27 @@ class SimpleXbmcGui(object):
     else:
       url = "%s?action=search" % (sys.argv[0])
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
+  
+  def readText(self,node,textNode):
+    try:
+      node = node.getElementsByTagName(textNode)[0].firstChild;
+      return unicode(node.data);
+    except:
+      return "";
+      
+  def playPlaylist(self, remotePlaylist):
+    playerItem = xbmcgui.ListItem("RemotePlayList")
+    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)    
     
+    for link in regex_findLink.findall(remotePlaylist):
+      print link;
+      listItem=xbmcgui.ListItem("NoOne");
+      listItem.setProperty("PlayPath", link);
+      
+      playlist.add(url=link, listitem=listItem);
+    xbmc.Player().play(playlist);
+    xbmc.executebuiltin("PreviousMenu");
+      
   def errorOK(self,title="", msg=""):
     e = str( sys.exc_info()[ 1 ] )
     self.log(e)

@@ -20,6 +20,7 @@ from mediathek.zdf import *
 from mediathek.arte import *
 from mediathek.dreisat import *
 from mediathek.bayerisches import *
+from mediathek.orf import *
 
 class MediathekFactory(object):
   def __init__(self):
@@ -29,6 +30,7 @@ class MediathekFactory(object):
        ARTEMediathek.name():ARTEMediathek,
        DreiSatMediathek.name():DreiSatMediathek,
        BayerischesFSMediathek.name():BayerischesFSMediathek,
+       ORFMediathek.name():ORFMediathek,
       }
   def getAvaibleMediathekTypes(self):
     return sorted(self.avaibleMediathekes.keys())

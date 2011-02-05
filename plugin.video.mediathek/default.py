@@ -45,9 +45,8 @@ action=params.get("action", "")
 
 gui.log("DirectAccess: %s"%gui.directAccess);
 gui.log("Quality: %s"%gui.quality);
-
-
-
+gui.log("argv[0]: %s"%sys.argv[0]);
+gui.log("argv[1]: %s"%sys.argv[0]);
 gui.openMenuContext();
 factory = MediathekFactory();
 
@@ -80,6 +79,12 @@ else:
     link = urllib.unquote_plus(params.get("link", ""))
     gui.log(link)
     mediathek.buildPageMenu(link);
+  elif(action == "openPlayList"):
+    
+    link = urllib.unquote_plus(params.get("link", ""))
+    gui.log(link)
+    remotePlaylist = mediathek.loadPage(link);
+    gui.playPlaylist(remotePlaylist);
   elif(action == "openMenu"):
     path = params.get("path", "0");
     mediathek.buildMenu(path)

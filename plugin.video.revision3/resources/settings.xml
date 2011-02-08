@@ -1,3 +1,3 @@
 <settings>
-   <setting id="format" type="select" lvalues="30003|30004|30005|30006|30007|30008|30009" label="30000" default="quicktime-high-definition"/>
+   <setting id="type" type="select" lvalues="30003|30004|30005|30006" label="30000" default="MP4-HD30"/>
 </settings>

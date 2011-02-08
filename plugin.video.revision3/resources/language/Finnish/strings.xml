@@ -3,11 +3,8 @@
     <string id="30000">Videolaatu (Käynnistä lisäke uudelleen)</string>
     <string id="30001">Näyttää siltä, ei ole jaksoja saatavilla</string>
     <string id="30002"> muodossa. Muuta laatu asetuksia.</string>
-    <string id="30003">quicktime-high-definition</string>
-    <string id="30004">quicktime-large</string>
-    <string id="30005">quicktime-small</string>
-    <string id="30006">wmv-large</string>
-    <string id="30007">wmv-small</string>
-    <string id="30008">xvid-large</string>
-    <string id="30009">xvid-small</string>
+    <string id="30003">MP4-HD30</string>
+    <string id="30004">MP4-Large</string>
+    <string id="30005">MP4-Small</string>
+    <string id="30006">WMV-Large</string>
 </strings>

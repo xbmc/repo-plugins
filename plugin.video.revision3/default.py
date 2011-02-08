@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 __plugin__ =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '01-17-2011'
-__version__ = '1.0.5'
+__date__ = '02-08-2011'
+__version__ = '1.0.6'
 __settings__ = xbmcaddon.Addon(id='plugin.video.revision3')
 
 def open_url(url):
@@ -16,7 +16,7 @@ def open_url(url):
 	return data
 
 def build_main_directory():
-	quality = __settings__.getSetting('format')
+	quality = __settings__.getSetting('type')
 	url = 'http://revision3.com/shows/'
 	data = open_url(url)
 	match = re.compile('<ul id="shows">(.+?)<div id="footer" class="clear">', re.DOTALL).findall(data)
@@ -29,6 +29,8 @@ def build_main_directory():
 		u = sys.argv[0] + "?mode=1&name=" + urllib.quote_plus(name) + "&url=" + urllib.quote_plus(url)
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = True)
 		count += 1
+	xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def build_sub_directory(url, name):
 	genre = name
@@ -52,6 +54,7 @@ def build_sub_directory(url, name):
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
 		count += 1
 	xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def clean(name):
 	remove = [('&amp;','&'), ('&quot;','"'), ('&#039;','\''), ('\r\n',''), ('&apos;','\'')]
@@ -122,6 +125,3 @@ elif mode == 1:
 	build_sub_directory(url, name)
 elif mode == 2:
 	play_video(url, name, plot, genre, episode)
-
-xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
-xbmcplugin.endOfDirectory(int(sys.argv[1]))

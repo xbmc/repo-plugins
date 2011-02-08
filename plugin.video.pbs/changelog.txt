@@ -1,3 +1,10 @@
+[B]Version 1.0.3[/B]
+
+- Added duration to the video listings
+- Fixed video summary issue under the search menu
+- Added support for HTTP 404 and HTTP 503 errors
+- Video clips now start at the appropriate time
+
 [B]Version 1.0.2[/B]
 
 - Fixed play back error

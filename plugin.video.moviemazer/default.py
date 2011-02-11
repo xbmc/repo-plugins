@@ -134,7 +134,7 @@ def GetMovieTrailers(movieid, urlend='movie.html'):
     fullurl = mainurl + '/media/trailer/' + movieid + ',15,' + urlend
     cachefile = 'id' + movieid + '.cache'
     link = getCachedURL(fullurl, cachefile, Setting('cache_movie_info'))
-    matchtrailerblock = re.compile('<table border=0 cellpadding=0 cellspacing=0 align=center width=100%><tr><td class="standard">.+?<b style="font-weight:bold;">(.+?)</b><br />\(([0-9:]+) Minuten\)(.+?</tr></table></td></tr></table><br /></td></tr></table><br />)', re.DOTALL).findall(link)
+    matchtrailerblock = re.compile('<table border=0 cellpadding=0 cellspacing=0 align=center width=100%><tr><td class="standard">.+?<b style="font-weight:bold;">(.+?)</b><br />\(([0-9:]+) Minuten\)(.+?</td></tr></table><br /></td></tr></table><br />)', re.DOTALL).findall(link)
     for trailername, duration, trailerblock in matchtrailerblock:
         matchlanguageblock = re.compile('alt="Sprache: (..)">(.+?)>([^<]+)</td></tr></table></td>', re.DOTALL).findall(trailerblock)
         for language, languageblock, date in matchlanguageblock:

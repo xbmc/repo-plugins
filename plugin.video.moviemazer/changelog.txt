@@ -1,3 +1,6 @@
+0.2.2
+  Fixed: For some Movies no trailer were available (bad regex)
+
 0.2.1
   New Icon (thanks freezy)
   Removed "os.getcwd()" as requested by spiff

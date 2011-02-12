@@ -2,7 +2,7 @@
 <addon
 	id="plugin.video.escapistmagazine"
 	name="The Escapist"
-	version="0.1.5"
+	version="0.1.6"
 	provider-name="Mike Cronce"
 >
 	<requires>
@@ -17,5 +17,6 @@
 		<summary>The Escapist video plugin</summary>
 		<description>Plugin that lets you browse and play videos from The Escapist website</description>
 		<disclaimer>Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+		<broken>The Escapist may have altered their browser detection - if this is the case, trying to use the plugin will result in being blocked from watching videos on The Escapist website.  Please be patient while we work on a fix.</broken>
 	</extension>
 </addon>

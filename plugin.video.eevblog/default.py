@@ -3,7 +3,7 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 __plugin__ =  'EEVblog'
 __author__ = 'Clumsy <clumsy@xbmc.org>'
 __date__ = '02-05-2010'
-__version__ = '0.1.6'
+__version__ = '0.1.7'
 __settings__ = xbmcaddon.Addon(id='plugin.video.eevblog')
 
 # Thanks to some of the other plugin authors, where I borrowed some ideas from !
@@ -61,11 +61,16 @@ def play_video(ep_url):
   ep_data = open_url(ep_url)
   plot = re.compile('<div class="info">.+?<p>(.+?)</p>.', re.DOTALL).findall(ep_data)
   youtube_video_id = re.compile('<param name="movie" value=".*?/v/(.+?)[&\?].').findall(ep_data)
-  
+    
   # Ugly hack for a change in the page src from videos 140 onwards. 
-  if not youtube_video_id or youtube_video_id[0].find("youtube") == -1:
-	youtube_video_id = re.compile('src="http://www.youtube.com/embed/(.*?)"').findall(ep_data)
+  if not youtube_video_id:
+    youtube_video_id = re.compile('src="http://www.youtube.com/embed/(.*?)"').findall(ep_data)
   
+  # Close the busy waiting dialog, if the youtube url wasn't parsed correctly.
+  if not youtube_video_id:
+    xbmc.executebuiltin('Dialog.Close(busydialog)')
+    return
+        
   quality = int(__settings__.getSetting('quality'))
   if quality == 0:
     quality=22 # 720

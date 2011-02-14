@@ -1,3 +1,8 @@
+[B]Version 0.1.7[/B]
+ 
+- fixed bug that broke old episodes
+- addon dialog now closes when an error occurs while parsing youtube urls
+
 [B]Version 0.1.6[/B]
  
 - regex update for episodes >140

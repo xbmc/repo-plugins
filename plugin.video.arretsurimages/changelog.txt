@@ -1,3 +1,7 @@
+[B]Version 1.0.3[/B]
+
+- Fix crash on atv2 due to cookie handling
+
 [B]Version 1.0.2[/B]
 
 - Use notification instead of dialog when downloading video

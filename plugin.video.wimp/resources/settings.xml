@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<setting id="video_type" type="enum" lvalues="40001|40002" label="40000" default="0" />
+</settings>

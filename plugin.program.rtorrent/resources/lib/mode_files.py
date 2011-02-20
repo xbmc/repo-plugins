@@ -8,10 +8,10 @@ import xbmc
 
 #Files inside a multi-file torrent code
 def main(hash,numfiles):
-	for i in range(0,numfiles):
-		f = []
-		f = g.rtc.f.multicall(hash,1,"f.get_path=","f.get_completed_chunks=","f.get_size_chunks=","f.get_priority=","f.get_size_bytes=")
-		f = f[i]
+	files = []
+	files = g.rtc.f.multicall(hash,1,"f.get_path=","f.get_completed_chunks=","f.get_size_chunks=","f.get_priority=","f.get_size_bytes=")
+	i=0
+	for f in files:	
 		f_name = f[0]
 		f_completed_chunks = int(f[1])
 		f_size_chunks = int(f[2])
@@ -38,6 +38,7 @@ def main(hash,numfiles):
 		if not xbmcplugin.addDirectoryItem(int(sys.argv[1]), \
 			sys.argv[0]+"?mode=play&arg1="+str(i)+"&hash="+hash, \
 			li,totalItems=numfiles): break
+		i=i+1
 	xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_TITLE )
 	xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod=xbmcplugin.SORT_METHOD_SIZE )
 	xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)

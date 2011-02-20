@@ -1,3 +1,12 @@
+Version 1.0.2
+-------------
+- Added subtitle support (by kokangit)
+- Added video descriptions (by kokangit)
+
+Version 1.0.1
+-------------
+- Added debug menu (by TsUPeR)
+
 Version 1.0.0
 -------------
 - Initial release

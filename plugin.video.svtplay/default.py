@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import time
 import urllib
 import urllib2
 import xbmcgui
@@ -17,6 +18,7 @@ SETTINGS_MAX_ITEMS_PER_PAGE = [20, 50, 100, 200][int(__settings__.getSetting("li
 SETTINGS_DEBUG = __settings__.getSetting("debug")
 SETTINGS_CONTEXT_MENU =__settings__.getSetting("context_menu")
 SETTINGS_COMMAND = __settings__.getSetting("command")
+SETTINGS_SUBTITLES = __settings__.getSetting("subtitles")
 
 TEXT_NEXT_PAGE = __language__(30200)
 
@@ -28,6 +30,7 @@ MODE_SEARCH_TITLE = "searchtitle"
 MODE_SEARCH_VIDEO = "searchfull"
 MODE_SEARCH_CLIP = "searchsample"
 MODE_DEBUG = "debug"
+MODE_PLAY = "play"
 
 BASE_URL_TEASER = "http://xml.svtplay.se/v1/teaser/list/"
 BASE_URL_TITLE = "http://xml.svtplay.se/v1/title/list/"
@@ -134,10 +137,20 @@ def video_list(ids="", url="", offset=1, list_size=0):
 		if list_size < SETTINGS_MAX_ITEMS_PER_PAGE:
 		
 			media = get_media_content(item)
+			subtitle = get_media_subtitle(item)
 			thumb = get_media_thumbnail(item)
 			title = get_node_value(media, "title", NS_MEDIA)
+			description = get_node_value(item, "description")
+			pubDate = get_node_value(item, "pubDate")
+			# TODO: parse date/time
+			# TODO: add label "date" (string (%d.%m.%Y / 01.01.2009) - file date)
+			# TODO: add label "premiered" (string (2005-03-04))
+			infoLabels = { "Title": title,
+				       "Plot": description }
 
-			params = { "url": media.getAttribute("url") }
+			params = { "url": media.getAttribute("url"),
+				   "subtitle": subtitle,
+				   "mode": MODE_PLAY }
 			
 			thumbnail = None
 			
@@ -148,12 +161,12 @@ def video_list(ids="", url="", offset=1, list_size=0):
 			offset += 1
 			#Check if live stream and if debug is enabled
 			if media.getAttribute("expression") == "nonstop":
-				params = { "url": media.getAttribute("url"), "live": "true"}
+				params["live"] = "true"
 			elif SETTINGS_DEBUG:
 				media_debug = get_media_content(item, SETTINGS_HIGHEST_BITRATE_DEBUG)
-				params = { "url": media.getAttribute("url"), "url_debug": media_debug.getAttribute("url")}
-
-			add_directory_item(title, params, thumbnail, False)
+				params["url_debug"] = media_debug.getAttribute("url")
+			add_directory_item(title, params, thumbnail, False,
+					   infoLabels)
 
 	pager(doc, ids, url, offset, list_size, MODE_VIDEO_LIST, video_list)
 
@@ -199,9 +212,14 @@ def get_child_outlines(node):
 
 def get_node_value(parent, name, ns=""):
 	if ns:
-		return parent.getElementsByTagNameNS(ns, name)[0].childNodes[0].data
+		if parent.getElementsByTagNameNS(ns, name) and \
+			    parent.getElementsByTagNameNS(ns, name)[0].childNodes:
+			return parent.getElementsByTagNameNS(ns, name)[0].childNodes[0].data
 	else:
-		return parent.getElementsByTagName(name)[0].childNodes[0].data
+		if parent.getElementsByTagName(name) and \
+			    parent.getElementsByTagName(name)[0].childNodes:
+			return parent.getElementsByTagName(name)[0].childNodes[0].data
+	return None
 
 def get_offset_url(url, offset):
 	if offset == 0:
@@ -272,18 +290,27 @@ def get_media_content(node, settings_bitrate = SETTINGS_HIGHEST_BITRATE):
 				
 	return content
 	
-def add_directory_item(name, params={}, thumbnail=None, isFolder=True):
+def get_media_subtitle(node):
+	subtitles = node.getElementsByTagNameNS(NS_MEDIA, "subTitle")
+	if subtitles:
+		return subtitles[0].getAttribute('href')
+	# Do not return None: urllib.urlencode() will translate to the string None
+	return ""
+
+def add_directory_item(name, params={}, thumbnail=None, isFolder=True,
+		       infoLabels=None):
 
 	li = xbmcgui.ListItem(name)
 
 	if not thumbnail is None:
 		li.setThumbnailImage(thumbnail)
 	
-	if isFolder == True:
-		url = sys.argv[0] + '?' + urllib.urlencode(params)
-	else:
-		url = params["url"]
-		li.setInfo(type="Video", infoLabels={ "Title": name })
+	url = sys.argv[0] + '?' + urllib.urlencode(params)
+	if isFolder == False:
+		li.setProperty('IsPlayable', 'true')
+		if not infoLabels:
+			infoLabels = { "Title": name }
+		li.setInfo(type="Video", infoLabels=infoLabels)
 		#Check if it's a live stream or if debug is enabled
 		if params.has_key('live'):
 			li.setProperty("IsLive", "true")
@@ -377,6 +404,22 @@ def load_xml(url):
 	except:
 		xbmc.log("unable to load url: " + url)
 
+def play(url, subtitle):
+	item = xbmcgui.ListItem(path=url)
+	xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+	if SETTINGS_SUBTITLES and (subtitle == None or len(subtitle) == 0):
+		xbmc.log("No subtitles for " + url)
+	elif SETTINGS_SUBTITLES:
+		# The player must be started to set subtitle, wait for player to start
+		tries = 20
+		while tries > 0:
+			tries -= 1
+			time.sleep(2)
+			if xbmc.Player().isPlayingVideo():
+				xbmc.Player().setSubtitles(subtitle)
+				return
+		xbmc.log("Failed to set subtitle", xbmc.LOGERROR)
+
 params = parameters_string_to_dict(sys.argv[2])
 
 mode = params.get("mode", None)
@@ -385,9 +428,12 @@ offset = int(params.get("offset",  "1"))
 path = urllib.unquote_plus(params.get("path", ""))
 url = urllib.unquote_plus(params.get("url",  ""))
 name = urllib.unquote_plus(params.get("name",  ""))
+subtitle = urllib.unquote_plus(params.get("subtitle", ""))
 
 if not sys.argv[2] or not mode:
 	deviceconfiguration()
+elif mode == MODE_PLAY:
+	play(url, subtitle)
 elif mode == MODE_DEVICECONFIG:
 	deviceconfiguration(None, path)
 elif mode == MODE_TEASER_LIST:
@@ -401,4 +447,5 @@ elif mode == MODE_SEARCH_TITLE or mode == MODE_SEARCH_VIDEO or mode == MODE_SEAR
 elif mode == MODE_DEBUG:
 	debug(url, name)
 
-xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=True, cacheToDisc=True)
+if mode != MODE_PLAY:
+	xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=True, cacheToDisc=True)

@@ -1,3 +1,7 @@
+Version 1.0.3
+-------------
+- Fixed settings boolean (by kokangit & nilzen)
+
 Version 1.0.2
 -------------
 - Added subtitle support (by kokangit)

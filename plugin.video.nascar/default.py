@@ -5,11 +5,9 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
 __settings__ = xbmcaddon.Addon(id='plugin.video.nascar')
 __language__ = __settings__.getLocalizedString
 
-def CATEGORIES():
-        addDir(__language__(30000),'http://i.cdn.turner.com/nascar/feeds/partners/embeded_player/latest.xml',1,'http://i129.photobucket.com/albums/p223/racefan68/nascar-chevy-racing.jpg')
-        addDir(__language__(30001),'http://i.cdn.turner.com/nascar/feeds/partners/embeded_player/mostPopular.xml',1,'http://i129.photobucket.com/albums/p223/racefan68/Nascar_pepsi_400.jpg')
-                       
+
 def INDEX(url):
+        url = 'http://i.cdn.turner.com/nascar/feeds/partners/embeded_player/latest.xml'
         req = urllib2.Request(url)
         req.addheaders = [('Referer', 'http://www.nascar.com/videos'),
                           ('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
@@ -18,11 +16,9 @@ def INDEX(url):
         response.close()
         match=re.compile('<CATEGORY>.+?</CATEGORY>\n<TITLE>(.+?)</TITLE>\n<DESCRIPTION>.+?</DESCRIPTION>\n<URL ID="(.+?)">\n<SITEURL>.+?</SITEURL>\n</URL>\n<IMAGE>(.+?)</IMAGE>').findall(link)
         for name,url,thumbnail in match:
-                addLink('http://i.cdn.turner.com/nascar/big/'+url+'.ws.flv'+"?.flv",name,thumbnail)
+                addLink('http://ht.cdn.turner.com/nascar/big/'+url+'.nascar_640x360.mp4',name,thumbnail)
 				
-  
 
-                
 def get_params():
         param=[]
         paramstring=sys.argv[2]
@@ -40,8 +36,6 @@ def get_params():
                                 param[splitparams[0]]=splitparams[1]
                                 
         return param
-
-
 
 
 def addLink(url,name,iconimage):
@@ -85,12 +79,6 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
         print ""
-        CATEGORIES()
-       
-elif mode==1:
-        print ""+url
         INDEX(url)
-
-
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import time
 import urllib
 import urllib2
 import xbmcgui
@@ -18,7 +17,6 @@ SETTINGS_MAX_ITEMS_PER_PAGE = [20, 50, 100, 200][int(__settings__.getSetting("li
 SETTINGS_DEBUG = (__settings__.getSetting("debug").lower() == "true")
 SETTINGS_CONTEXT_MENU =__settings__.getSetting("context_menu")
 SETTINGS_COMMAND = __settings__.getSetting("command")
-SETTINGS_SUBTITLES = (__settings__.getSetting("subtitles").lower() == "true")
 
 TEXT_NEXT_PAGE = __language__(30200)
 
@@ -30,7 +28,6 @@ MODE_SEARCH_TITLE = "searchtitle"
 MODE_SEARCH_VIDEO = "searchfull"
 MODE_SEARCH_CLIP = "searchsample"
 MODE_DEBUG = "debug"
-MODE_PLAY = "play"
 
 BASE_URL_TEASER = "http://xml.svtplay.se/v1/teaser/list/"
 BASE_URL_TITLE = "http://xml.svtplay.se/v1/title/list/"
@@ -135,7 +132,7 @@ def video_list(ids="", url="", offset=1, list_size=0):
 		
 		if list_size < SETTINGS_MAX_ITEMS_PER_PAGE:
 			media = get_media_content(item)
-			subtitle = get_media_subtitle(item)
+			subtitles = get_media_subtitles(item)
 			thumb = get_media_thumbnail(item)
 			title = get_node_value(media, "title", NS_MEDIA)
 			description = get_node_value(item, "description")
@@ -154,9 +151,7 @@ def video_list(ids="", url="", offset=1, list_size=0):
 			infoLabels = { "Title": title.encode('utf_8'),
 				       "Plot": description.encode('utf_8') }
 
-			params = { "url": media.getAttribute("url"),
-				   "subtitle": subtitle,
-				   "mode": MODE_PLAY }
+			params = { "url": media.getAttribute("url") }
 			
 			thumbnail = None
 			
@@ -172,7 +167,7 @@ def video_list(ids="", url="", offset=1, list_size=0):
 				media_debug = get_media_content(item, SETTINGS_HIGHEST_BITRATE_DEBUG)
 				params["url_debug"] = media_debug.getAttribute("url")
 			add_directory_item(title, params, thumbnail, False,
-					   infoLabels)
+					   infoLabels, subtitles)
 
 	pager(doc, ids, url, offset, list_size, MODE_VIDEO_LIST, video_list)
 
@@ -296,24 +291,22 @@ def get_media_content(node, settings_bitrate = SETTINGS_HIGHEST_BITRATE):
 				
 	return content
 	
-def get_media_subtitle(node):
-	subtitles = node.getElementsByTagNameNS(NS_MEDIA, "subTitle")
-	if subtitles:
-		return subtitles[0].getAttribute('href')
-	# Do not return None: urllib.urlencode() will translate to the string None
-	return ""
+def get_media_subtitles(node):
+	return [sub.getAttribute("href") for sub in \
+			node.getElementsByTagNameNS(NS_MEDIA, "subTitle")]
 
 def add_directory_item(name, params={}, thumbnail=None, isFolder=True,
-		       infoLabels=None):
+		       infoLabels=None, subtitles=None):
 
 	li = xbmcgui.ListItem(name)
 
 	if not thumbnail is None:
 		li.setThumbnailImage(thumbnail)
 	
-	url = sys.argv[0] + '?' + urllib.urlencode(params)
-	if isFolder == False:
-		li.setProperty('IsPlayable', 'true')
+	if isFolder == True:
+		url = sys.argv[0] + '?' + urllib.urlencode(params)
+	else:
+		url = params["url"]
 		if not infoLabels:
 			infoLabels = { "Title": name }
 		li.setInfo(type="Video", infoLabels=infoLabels)
@@ -325,8 +318,13 @@ def add_directory_item(name, params={}, thumbnail=None, isFolder=True,
 			cm_url = sys.argv[0] + '?' + "url=" + params["url_debug"] + "&mode=debug" + "&name=" + urllib.quote_plus(name.encode('utf_8'))
 			cm.append((SETTINGS_CONTEXT_MENU , "XBMC.RunPlugin(%s)" % (cm_url)))
 			li.addContextMenuItems( cm, replaceItems=False )
+		add_subtitles(li, subtitles)
 
 	return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=isFolder)
+
+def add_subtitles(listItem, subtitles):
+	for i in range(len(subtitles)):
+		listItem.setProperty("upnp:subtitle:" + str(i+1), subtitles[i])
 
 def parameters_string_to_dict(str):
 
@@ -410,22 +408,6 @@ def load_xml(url):
 	except:
 		xbmc.log("unable to load url: " + url)
 
-def play(url, subtitle):
-	item = xbmcgui.ListItem(path=url)
-	xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-	if SETTINGS_SUBTITLES and (subtitle == None or len(subtitle) == 0):
-		xbmc.log("No subtitles for " + url)
-	elif SETTINGS_SUBTITLES:
-		# The player must be started to set subtitle, wait for player to start
-		tries = 20
-		while tries > 0:
-			tries -= 1
-			time.sleep(2)
-			if xbmc.Player().isPlayingVideo():
-				xbmc.Player().setSubtitles(subtitle)
-				return
-		xbmc.log("Failed to set subtitle", xbmc.LOGERROR)
-
 params = parameters_string_to_dict(sys.argv[2])
 
 mode = params.get("mode", None)
@@ -434,12 +416,9 @@ offset = int(params.get("offset",  "1"))
 path = urllib.unquote_plus(params.get("path", ""))
 url = urllib.unquote_plus(params.get("url",  ""))
 name = urllib.unquote_plus(params.get("name",  ""))
-subtitle = urllib.unquote_plus(params.get("subtitle", ""))
 
 if not sys.argv[2] or not mode:
 	deviceconfiguration()
-elif mode == MODE_PLAY:
-	play(url, subtitle)
 elif mode == MODE_DEVICECONFIG:
 	deviceconfiguration(None, path)
 elif mode == MODE_TEASER_LIST:
@@ -453,5 +432,4 @@ elif mode == MODE_SEARCH_TITLE or mode == MODE_SEARCH_VIDEO or mode == MODE_SEAR
 elif mode == MODE_DEBUG:
 	debug(url, name)
 
-if mode != MODE_PLAY:
-	xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=True, cacheToDisc=True)
+xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=True, cacheToDisc=True)

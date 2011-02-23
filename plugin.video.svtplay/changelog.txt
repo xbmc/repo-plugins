@@ -1,3 +1,7 @@
+Version 1.0.4
+-------------
+- Improved handling of subtitles (by kokangit, thx to elupus)
+
 Version 1.0.3
 -------------
 - Fixed settings boolean (by kokangit & nilzen)

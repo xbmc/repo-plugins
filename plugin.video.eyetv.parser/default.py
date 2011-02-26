@@ -15,6 +15,13 @@ from elementtree import ElementTree as ET
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
+try:
+    import xbmcvfs
+except ImportError:
+    import shutil
+    copyfile =  shutil.copyfile
+else:
+    copyfile = xbmcvfs.copy
 
 
 # constants
@@ -74,9 +81,14 @@ class Eyetv:
         # Get settings
         self.archivePath = __addon__.getSetting('archivePath')
         sortMethod = int(__addon__.getSetting('sortMethod'))
-        # Parse the 'EyeTV Archive.xml' plist
+        # Parse the 'EyeTV Archive.xml' plist - copy it locally first
+        # (needed for external python when the file is on a smb share for example)
         archiveXml = os.path.join(self.archivePath, u'EyeTV Archive.xml')
-        plist = Plist().load(archiveXml)
+        localXml = xbmc.translatePath('special://temp/EyeTVArchive.xml')
+        copyfile(archiveXml, localXml)
+        plist = Plist().load(localXml)
+        # Remove temporary file
+        os.remove(localXml)
         # Get all recordings from the plist
         self.recordings = plist["Recordings"].values()
         # Sort the list of recordings

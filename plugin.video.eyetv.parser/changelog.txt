@@ -1,3 +1,7 @@
+[B]Version 1.0.1[/B]
+
+- Support for xbmcvfs (allow to parse EyeTV archive on network share with external python)
+
 [B]Version 1.0.0[/B]
 
 - Initial release

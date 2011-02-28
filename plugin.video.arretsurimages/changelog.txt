@@ -1,3 +1,9 @@
+[B]Version 1.1.0[/B]
+
+- Retrieve HTML5 video instead of iPhone links: full length video now available
+- Add video quality setting
+- Add setting to hide the different parts and directly play the main video
+
 [B]Version 1.0.3[/B]
 
 - Fix crash on atv2 due to cookie handling

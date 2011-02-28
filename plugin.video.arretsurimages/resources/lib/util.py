@@ -8,7 +8,7 @@ import xbmc
 pluginName = sys.modules['__main__'].__plugin__
 
 
-def getHTML(url, cookiefile = xbmc.translatePath('special://temp/asi-cookies.lwp'), headers = [('User-Agent', 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; fr-fr) AppleWebKit/531.22.7 (KHTML, like Gecko) Version/4.0.5 Safari/531.22.7')]):
+def getHTML(url, cookiefile = xbmc.translatePath('special://temp/asi-cookies.lwp'), headers = [('User-Agent', 'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.10')]):
     """Return HTML from a given URL"""
     try:
         print '[%s] %s attempting to open %s with data' % (pluginName, __name__, url.get_full_url())

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import sys
+import simplejson
 from ClientForm import ParseResponse
 from util import getHTML, getUrllib2ResponseObject, cleanHTML
 from BeautifulSoup import SoupStrainer, MinimalSoup as BeautifulSoup
@@ -10,6 +11,7 @@ URLASI = 'http://www.arretsurimages.net'
 URLLOGIN = 'http://www.arretsurimages.net/forum/login.php'
 URLMONCOMPTE = 'http://www.arretsurimages.net/forum/control.php?panel=summary'
 IPHONEVIDEO = 'http://iphone.dailymotion.com/video/'
+JSONREQUEST = 'http://www.dailymotion.com/json/video/%s?fields=title,thumbnail_url,stream_h264_hq_url,stream_h264_url'
 
 
 pluginName = sys.modules['__main__'].__plugin__
@@ -58,7 +60,7 @@ class ArretSurImages:
             print "bouton-telecharger.png not found"
         return {'Title':title, 'url':link}
 
-    def getVideoDetails(self, url):
+    def getIphoneVideoDetails(self, url):
         """Return the video title and link"""
         html = getHTML(url)
         soup = BeautifulSoup(html)
@@ -75,7 +77,7 @@ class ArretSurImages:
             link = 'None'
         return {'Title':title, 'url':link}
 
-    def getProgramParts(self, url, name):
+    def getIphoneProgramParts(self, url, name):
         """Return all parts of a program"""
         html = getHTML(url)
         soup = BeautifulSoup(html)
@@ -95,6 +97,58 @@ class ArretSurImages:
         # If there is only one part, we keep only one link
         if part == 1 and len(parts) == 2:
             parts.pop()
+        return parts
+
+    def getVideoDetails(self, url, quality):
+        """Return the video title and real link"""
+        # Follow the swf link and get the video id from the answer
+        # (this works due to the iPad user-agent)
+        html = getHTML(url)
+        match = re.search("DM_Widget_Video_PlayerV4Html5\('(\w*)',", html)
+        if match:
+            videoId = match.group(1)
+            # Run the json request with the video id
+            request = getHTML(JSONREQUEST % videoId)
+            result = simplejson.loads(request)
+            link = result[quality]
+            title = result["title"]
+        else:
+            print "No video id found parsing swf link answer"
+            link = 'None'
+            title = 'None'
+        return {'Title':title, 'url':link}
+
+    def getProgramParts(self, url, name, icon):
+        """Return all parts of a program (swf links)
+
+        swf links allow to get HTML5 links with iPad user-agent"""
+        html = getHTML(url)
+        # Filter to avoid wrap-porte (La chronique porte) defined at the beginning
+        # of the html page
+        blocContainers = SoupStrainer(attrs = {'class':'contenu-html bg-page-contenu'})
+        soup = BeautifulSoup(html, parseOnlyThese = blocContainers)
+        parts = []
+        part = 0
+        # Get all movie links
+        for param in soup.findAll('param', attrs = {'name':'movie'}):
+            link = param["value"]
+            if part == 0:
+                # First link is the full video, just use the icon from previous page
+                title = name
+                thumb = icon
+            else:
+                title = name + ' - Acte %d' % part
+                # Try to get the icon linked to the iPhone video on that page
+                # That's much faster than getting it from the json request (see getVideoDetails),
+                # which would require 2 extra HTML requests for each part
+                try:
+                    media = param.parent.parent.find(text=re.compile(u'img src='))
+                    match = re.search(u'img src="(.*?)"', media)
+                    thumb = URLASI + match.group(1)
+                except (TypeError, AttributeError):
+                    thumb = icon
+            parts.append({'url':link, 'Title':title, 'Thumb':thumb})
+            part += 1
         return parts
 
     def isLoggedIn(self, username):

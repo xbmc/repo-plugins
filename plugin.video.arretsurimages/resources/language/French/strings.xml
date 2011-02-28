@@ -32,9 +32,14 @@
     <string id="30090">Téléchargement</string>
     <string id="30091">Toujours demander le dossier de téléchargement</string>
     <string id="30092">Dossier de téléchargement</string>
+    <string id="30100">Vidéo</string>
+    <string id="30101">Qualité</string>
+    <string id="30102">haute</string>
+    <string id="30103">normale</string>
+    <string id="30105">Afficher les actes</string>
 
     <!--Context Menu-->
-    <string id="30100">Télécharger la vidéo</string>
+    <string id="30180">Télécharger la vidéo</string>
 
     <!--Download Menu-->
     <string id="30200">Téléchargement en cours</string>

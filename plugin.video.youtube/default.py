@@ -1,6 +1,6 @@
 '''
     YouTube plugin for XBMC
-    Copyright (C) 2010 Tobias Ussing Senior And Henrik Mosgaard Jensen The Third
+    Copyright (C) 2010 Tobias Ussing And Henrik Mosgaard Jensen
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 import sys, xbmc, xbmcaddon
 
 # plugin constants
-__version__ = "2.0.0"
+__version__ = "2.0.2"
 __plugin__ = "YouTube-" + __version__
 __author__ = "TheCollective"
 __url__ = "www.xbmc.com"

@@ -1,3 +1,21 @@
+'''
+   YouTube plugin for XBMC
+   Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
 import sys, urllib, urllib2, re
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 import YouTubeCore
@@ -442,7 +460,7 @@ class YouTubeScraperCore:
 					
 					yobjects.append(item)
 				
-				show = show.findNextSibling(name="div", attrs = { 'class':"show-cell *vl yt-uix-hovercard" })
+				show = show.findNextSibling(name="div", attrs = { 'class':re.compile("show-cell .") })
 			
 		if (not yobjects):
 			return (self.__language__(30601), 303)
@@ -466,11 +484,15 @@ class YouTubeScraperCore:
 		get = params.get
 		scraper_per_page = 0
 		result = []
-		
-		if (get("scraper") != "shows" and get("scraper") != "show" and get("scraper") != "categories" and (get("scraper") != "movies" or (get("scraper") == "movies" and get("category"))) and get("scraper") in self.urls):
-			scraper_per_page = 40
-		elif ( (get("scraper") == "shows" or get("scraper") == "categories" or get("scraper") == "shows") and get("category")):
+
+		if ( get("scraper") == "categories" and get("category")):
 			scraper_per_page = 23
+		elif ( get("scraper") == "shows" and get("category")):
+			scraper_per_page = 44
+		elif ( get("scraper") == "movies" and get("category")):
+			scraper_per_page = 60		
+		elif (get("scraper") != "shows" and get("scraper") != "show" and get("scraper") != "categories" and get("scraper") != "movies" and get("scraper") in self.urls):
+			scraper_per_page = 40
 		
 		if (self.__dbg__):
 			print self.__plugin__ + " scraper per page " + str(scraper_per_page) 
@@ -535,7 +557,11 @@ class YouTubeScraperCore:
 							print "Scraper pagination failed, requested more than 10 pages which should never happen."
 						return False
 				
+				if (next == "false" and len(result) > per_page):
+					next = "true"
+					
 				result = result[:per_page]
+				
 				result[len(result) - 1]["next"] = next
 				params["page"] = request_page
 				return (result, status)

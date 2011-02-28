@@ -6,6 +6,19 @@
 - [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
 
+[B]Version 2.0.2[/B]
+- Fixed problem with "Now Playing" context menu item showing the Music Playlist and not the Video Playlist
+- Fixed Issue preventing the plugin running on XBMC builds using external python (ie. v2.7)
+- Fixed Issue where the Trailers scraper wouldn't allow you to see the last videos on the last page. 
+- Fixed issue where Show and movie Scrapers would fail due to assumptions about the number of videos on a page
+- Fixed issue where Show Scraper would miss the 1st video in every row after the first row
+- Fixed Unicode problems reported by vikjon0
+- Added Spanish translations courtesy of Jurrabi
+- Updated Licensing information
+
+[B]Version 2.0.1[/B]
+- Removed some unnecessary print's statements that were sadly included in production code, slowing the plugin down
+
 [B]Version 2.0.0[/B]
 - Version bump to Final Release
 - Updated Changelog

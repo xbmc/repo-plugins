@@ -1,6 +1,6 @@
 '''
     YouTube plugin for XBMC
-    Copyright (C) 2010 Tobias Ussing Senior And Henrik Mosgaard Jensen The Third
+    Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys, urllib, urllib2, re, os, cookielib, string, socket
+import sys, urllib, urllib2, re, os, cookielib, string
 from xml.dom.minidom import parseString
 
 # ERRORCODES:
@@ -90,13 +90,13 @@ class YouTubeCore(object):
 		url = urllib2.Request("https://www.google.com/youtube/accounts/ClientLogin")
 
 		url.add_header('Content-Type', 'application/x-www-form-urlencoded')
-		url.add_header('GData-Version', 2)
+		url.add_header('GData-Version', '2')
 		
 		data = urllib.urlencode({'Email': uname, 'Passwd': passwd, 'service': 'youtube', 'source': 'YouTube plugin'})
 		
 		try:
 			con = urllib2.urlopen(url, data);
-				
+			
 			value = con.read()
 			con.close()
 		
@@ -110,8 +110,6 @@ class YouTubeCore(object):
 				if self.__dbg__:
 					print self.__plugin__ + " login done: " + nick
 				return ( self.__language__(30030), 200 )
-
-			print self.__plugin__ + " ABCD"
 					
 			return ( self.__language__(30609), 303 )
 			
@@ -344,7 +342,7 @@ class YouTubeCore(object):
 		playobjects = [];
 		for node in entries:
 			video = {};
-			video['Title'] = str(node.getElementsByTagName("title").item(0).firstChild.nodeValue.replace('Activity of : ', '').replace('Videos published by : ', '')).encode( "utf-8" );
+			video['Title'] = node.getElementsByTagName("title").item(0).firstChild.nodeValue.replace('Activity of : ', '').replace('Videos published by : ', '').encode( "utf-8" );
 			
 			video['published'] = self._getNodeValue(node, "published", "2008-07-05T19:56:35.000-07:00")
 			video['summary'] = self._getNodeValue(node, 'summary', 'Unknown')
@@ -419,7 +417,7 @@ class YouTubeCore(object):
 				print self.__plugin__ + " construct_video_url failed because of missing video from _get_details"
 			return ( "", 500 )
 		
-		if ( 'apierror' in video):
+		if ( 'apierror' in video ):
 			if self.__dbg__:
 				print self.__plugin__ + " construct_video_url, got apierror: " + video['apierror']
 			return (video['apierror'], 303)
@@ -631,7 +629,6 @@ class YouTubeCore(object):
 					
 		con = urllib2.urlopen(request)
 		result = con.read()
-		print self.__plugin__ + "_ JSON " + repr(result);
 				
 		(temp, status) = self._getVideoInfoBatch(result)
 		ytobjects += temp
@@ -655,7 +652,7 @@ class YouTubeCore(object):
 		request = urllib2.Request(link)
 
 		if api:
-			request.add_header('GData-Version', 2)
+			request.add_header('GData-Version', '2')
 		else:
 			request.add_header('User-Agent', self.USERAGENT)
 
@@ -788,7 +785,6 @@ class YouTubeCore(object):
 		if self.__dbg__:
 			print self.__plugin__ + " extractVariables : " + repr(videoid)
 
-		# Should hl=en_US be there?
 		( htmlSource, status ) = self._fetchPage('http://www.youtube.com/watch?v=' +videoid + "&safeSearch=none&hl=en_us")
 
 		if status != 200:
@@ -852,7 +848,7 @@ class YouTubeCore(object):
 			request.add_header('X-GData-Key', 'key=%s' % self.APIKEY)
 			request.add_header('Content-Type', 'application/atom+xml')
 			request.add_header('Content-Length', str(len(add_request)))
-			request.add_header('GData-Version', 2)
+			request.add_header('GData-Version', '2')
 			usock = urllib2.urlopen(request)
 		except urllib2.HTTPError, e:
 			error = str(e)
@@ -959,7 +955,7 @@ class YouTubeCore(object):
 	def _getVideoInfoBatch(self, value):
 		if self.__dbg__:
 			print self.__plugin__ + " _getvideoinfo: " + str(len(value))
-		print "xml: "  + value
+		
 		dom = parseString(value);
 		links = dom.getElementsByTagName("atom:link");
 		entries = dom.getElementsByTagName("atom:entry");

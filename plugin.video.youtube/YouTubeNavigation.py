@@ -1,6 +1,6 @@
 '''
    YouTube plugin for XBMC
-   Copyright (C) 2010 Tobias Ussing Senior And Henrik Mosgaard Jensen The Third
+   Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 import sys
 import os
 import xbmc
-import xbmcaddon
 import xbmcgui
 import xbmcplugin
 import urllib
@@ -1006,7 +1005,7 @@ class YouTubeNavigation:
 			
 			cm.append( ( self.__language__( 30514 ), "XBMC.Container.Update(%s?path=%s&action=search&search=%s)" % ( sys.argv[0],  get("path"), url_title ) ) )
 			cm.append( ( self.__language__( 30529 ), "XBMC.Container.Update(%s?path=%s&action=list_related&videoid=%s)" % ( sys.argv[0],  get("path"), item("videoid") ) ) )
-			cm.append( ( self.__language__( 30527 ), "XBMC.ActivateWindow(MusicPlaylist)"))
+			cm.append( ( self.__language__( 30527 ), "XBMC.ActivateWindow(VideoPlaylist)"))
 			cm.append( ( self.__language__( 30504 ), "XBMC.Action(Queue)", ) )
 			cm.append( ( self.__language__( 30502 ), "XBMC.Action(Info)", ) )
 		elif (item("next","false") == "false"):

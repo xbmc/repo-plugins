@@ -27,16 +27,26 @@ def addLink(name,url,iconimage,description,channelId):
 		nextTime=(re.search(r'<p id="nextTime">Aanvang:([^*]*?)</p>',HTML)).group(1).strip()
 		channelEPG =  "Nu: %s\n%s\n\nStraks: %s\n%s\n%s" % (nowTitle, nowPlot, nextTime, nextTitle, nextPlot)
 		
+		
+## quickfix - VPRO Website has changed - 	
+# 	elif channelId!="0" and channelId!="29":
+# 	    HTML=urllib2.urlopen("http://geschiedenis.vpro.nl/").read()
+# 	    nowTitle=((re.search(r'class="nu"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4>',HTML)).group(2)).strip()
+# 	    #nowTime=((re.search(r'class="nu"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4>',HTML)).group(1)).strip()
+# 	    nowPlot=((re.search(r'class="nu"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4><p class="text">([^*]*?)</p>',HTML)).group(3)).strip()
+# 	    nextTime=((re.search(r'straks" style="display: none;"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4><p class="text">([^*]*?)</p>',HTML)).group(1)).strip()
+# 	    nextTitle=((re.search(r'straks" style="display: none;"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4><p class="text">([^*]*?)</p>',HTML)).group(2)).strip()
+# 	    nextPlot=((re.search(r'straks" style="display: none;"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4><p class="text">([^*]*?)</p>',HTML)).group(3)).strip()
+# 	    channelEPG =  "Nu: %s\n%s\n\nStraks: %s\n%s\n%s" % (nowTitle, nowPlot, nextTime, nextTitle, nextPlot)
+	    
 	elif channelId!="0" and channelId!="29":
-	    HTML=urllib2.urlopen("http://geschiedenis.vpro.nl/").read()
-	    nowTitle=((re.search(r'class="nu"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4>',HTML)).group(2)).strip()
+	    nowTitle="Geschiedenis 24"
 	    #nowTime=((re.search(r'class="nu"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4>',HTML)).group(1)).strip()
-	    nowPlot=((re.search(r'class="nu"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4><p class="text">([^*]*?)</p>',HTML)).group(3)).strip()
-	    nextTime=((re.search(r'straks" style="display: none;"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4><p class="text">([^*]*?)</p>',HTML)).group(1)).strip()
-	    nextTitle=((re.search(r'straks" style="display: none;"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4><p class="text">([^*]*?)</p>',HTML)).group(2)).strip()
-	    nextPlot=((re.search(r'straks" style="display: none;"><p class="date">([^*]*?)</p><h4>([^*]*?)</h4><p class="text">([^*]*?)</p>',HTML)).group(3)).strip()
-	    channelEPG =  "Nu: %s\n%s\n\nStraks: %s\n%s\n%s" % (nowTitle, nowPlot, nextTime, nextTitle, nextPlot)
-
+	    nowPlot="Geschiedenis 24"
+	    nextTime="Geschiedenis 24"	    
+	    nextTitle="Geschiedenis 24"
+	    nextPlot="Geschiedenis 24"
+	    channelEPG =  "Geschiedenis 24 biedt een actuele, duidende en verdiepende blik op de historie, maar ook een historische blik op de actualiteit."
         
 	elif channelId!="0":
 		channelEPG = time

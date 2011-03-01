@@ -1,3 +1,6 @@
+[B]Version 1.2.3[/B]
+-quickfix website change
+
 [B]Version 1.2.2[/B]
 -fix double link
 

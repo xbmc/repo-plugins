@@ -37,3 +37,5 @@ plugin.audio.relive/.git
 plugin.audio.modland/.git
 plugin.video.svtplay/.git
 plugin.video.pbs/.git
+plugin.video.googletechtalks/.git
+plugin.video.googletechtalks/.gitignore

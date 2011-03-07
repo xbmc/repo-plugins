@@ -5,11 +5,14 @@
     <string id="30002">Letzte Updates</string>
     <string id="30003">Aktuelle Trailer</string>
     
-    <!-- Progress Bar -->
+    <!-- Progress Bars -->
     <string id="30020">Lade Filmdaten</string>
     <string id="30021">Filme müssen geladen werden</string>
     <string id="30022">Lade</string>
     
+    <string id="30025">Trailer download</string>
+    <string id="30026">Fortschritt: %s / %s MB</string>
+        
     <!-- Movie infos -->
     <string id="30030">Datum Deutschlandpremiere</string>
 
@@ -27,6 +30,7 @@
     <string id="30230">Bevorzugter Modus</string>
     <string id="30231">Spiele Bevorzugt</string>
     <string id="30232">Zeige Trailerauswahl</string>
+    <string id="30233">Film-Informationen</string>
 
     <string id="30210">Bevorzugte Qualität (Horiz. Auflösung)</string>
     <string id="30220">Bevorzugte Sprache der Trailer</string>
@@ -34,4 +38,11 @@
     <string id="30300">Hauptmenu</string>
     <string id="30310">Starte mit</string>
     <string id="30311">Kategorien</string>
+
+    <string id="30400">Wiedergabe</string>
+    <string id="30410">Modus</string>
+    <string id="30411">Download + Play</string>
+    <string id="30412">Stream</string>
+
+    <string id="30420">Speicherort</string>
 </strings>

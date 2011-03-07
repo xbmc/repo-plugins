@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
+    <setting label="30400" type="lsep" />
+      <setting label="30410" type="enum" id="play_mode" lvalues="30411|30412" default="0" />
+      <setting label="30420" type="folder" id="download_path" enable="eq(-1,0)" source="video" option="writeable" default=""/>
     <setting label="30300" type="lsep" />
       <setting label="30310" type="enum" id="start_with" lvalues="30311|30001|30002|30003" default="0" />
     <setting label="30100" type="lsep" />
@@ -7,6 +10,6 @@
       <setting label="30120" type="labelenum" id="cache_movie_info" values="1|8|24|48|96|120" default="48" />
     <setting label="30200" type="lsep" />
       <setting label="30230" type="enum" id="pref_mode" lvalues="30231|30232" default="0" />
-      <setting label="30210" type="enum" id="trailer_xres" values="1920|1280|848|720|640|480|320" default="4" />
+      <setting label="30210" type="enum" id="trailer_xres" values="1920|1280|848|720|640|480|320" default="2" />
       <setting label="30220" type="labelenum" id="trailer_lang" values="de|en" default="de" />
 </settings>

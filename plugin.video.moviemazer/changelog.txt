@@ -1,3 +1,14 @@
+0.3.1
+  Added new feature to first download and then play a trailer (this is now default!)
+  New Settings: Download+Play or Stream a trailer
+  New Settings: Download Location for Trailers
+  Increased the default trailer quality setting
+  Added possibility to cancel trailer downloading
+  Fixed deadlock after playback finished
+  Fixed recent Trailers with premiere month "März" (=march) now are recognized
+  Cosmetic: Changed "+" operators to "%s"
+  Fixed Trailers with only untypical resolutions caused a endless loop in guess-Mode
+
 0.2.2
   Fixed: For some Movies no trailer were available (bad regex)
 

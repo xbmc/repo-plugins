@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+ <!--<category label="30100">
+ </category>-->
+ <category label="30101">
+  <!--<setting id="tv3_showads" type="bool" label="30002" default="true" />-->
+  <!--<setting id="tv3_hq" type="bool" label="30000" default="true" />-->
+  <setting id="tv3_quality" type="enum" label="30010" values="Low|Medium|High" default="High"/>
+  <setting id="tv3_folders" type="bool" label="30001" default="true" />
+ </category>
+ <category label="30102">
+  <!--<setting id="tvnz_hq" type="bool" label="30000" default="true" />-->
+  <setting id="tvnz_quality" type="enum" label="30010" values="Low|Medium|High" default="High"/>
+  <setting id="tvnz_showads" type="bool" label="30002" default="true"/>
+ </category>
+ <!--<category label="30103">
+ </category>
+ <category label="30104">
+ </category>-->
+</settings>

@@ -1,0 +1,16 @@
+[B]1.2.0[/B]
+- Fixed issues with all three providers
+- Added stream quality setting for TV3 and TVNZ
+
+[B]1.1.0[/B]
+- Updated Ziln to reflect changes in website (site layout and feed URLs)
+- Added combined logo/fanart and separate logo/fanart for each source
+- Removed TV3 Shows view, until the plugin is updated to reflect changes on the website
+
+[B]1.0.0[/B]
+- Added Ziln as third source
+- Added settings for each source
+- Updated TVNZ to re-use some of the TV3 code
+
+[B]0.1[/B]
+- Merged TV3 and TVNZ plugins

@@ -1,0 +1,140 @@
+#/*
+# *   Copyright (C) 2010 Mark Honeychurch
+# *   based on the TVNZ Addon by JMarshall
+# *
+# *
+# * This Program is free software; you can redistribute it and/or modify
+# * it under the terms of the GNU General Public License as published by
+# * the Free Software Foundation; either version 2, or (at your option)
+# * any later version.
+# *
+# * This Program is distributed in the hope that it will be useful,
+# * but WITHOUT ANY WARRANTY; without even the implied warranty of
+# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# * GNU General Public License for more details.
+# *
+# * You should have received a copy of the GNU General Public License
+# * along with this program; see the file COPYING. If not, write to
+# * the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+# * http://www.gnu.org/copyleft/gpl.html
+# *
+# */
+
+#ToDo:
+# Fix sorting methods (they don't all seem to work properly)
+# Scan HTML data for broadcast dates (in AtoZ, table view, etc)
+# Find somewhere to add expiry dates?
+# Add an option to show an advert before the program (I can't find the URLs for adverts at the moment)
+
+#Useful list of categories
+# http://ondemand.tv3.co.nz/Host/SQL/tabid/21/ctl/Login/portalid/0/Default.aspx
+
+#XBMC Forum Thread
+# http://forum.xbmc.org/showthread.php?t=37014
+
+
+# Import external libraries
+
+import os, cgi, sys, tools, urlparse, urllib, xbmcaddon
+
+# Setup global variables
+
+addon = xbmcaddon.Addon(id = sys.argv[0][9:-1])
+localize = addon.getLocalizedString
+
+
+
+
+
+
+
+
+
+
+
+def INDEX():
+ channels = dict()
+ channels["0"] = "TV3"
+ channels["1"] = "TVNZ"
+ channels["2"] = "Ziln"
+ count = len(channels)
+ for index in channels:
+  info = tools.defaultinfo(1)
+  info["Title"] = channels[index]
+  addon = xbmcaddon.Addon(id = sys.argv[0][9:-1])
+  info["Thumb"] = os.path.join(addon.getAddonInfo('path'), "resources/images/%s.png" % channels[index])
+  info["Count"] = int(index)
+  info["FileName"] = "%s?ch=%s" % (sys.argv[0], channels[index])
+  tools.addlistitem(info, "resources/images/%s.jpg" % channels[index], 1, count)
+
+
+
+# Decide what to run based on the plugin URL
+
+params = cgi.parse_qs(urlparse.urlparse(sys.argv[2])[4])
+if params:
+ if params["ch"][0] == "TV3":
+  import tv3
+  if params.get("folder", "") <> "":
+   tv3.INDEX_FOLDER(params["folder"][0])
+   tools.addsorting(["unsorted", "label"])
+  elif params.get("cat", "") <> "":
+   if params["cat"][0] == "tv":
+    tv3.SHOW_EPISODES(params["catid"][0], "tv3")
+    tools.addsorting(["unsorted", "date", "label", "runtime", "episode"], "episodes")
+   elif params["cat"][0] == "atoz":
+    tv3.SHOW_ATOZ(params["catid"][0], "tv3")
+    tools.addsorting(["unsorted", "date", "label", "runtime", "episode"], "tvshows")
+   elif params["cat"][0] == "tv3":
+    tv3.SHOW_EPISODES(params["catid"][0], "tv3")
+    tools.addsorting(["unsorted", "date", "label", "runtime", "episode"], "episodes")
+   elif params["cat"][0] == "c4tv":
+    tv3.SHOW_EPISODES(params["catid"][0], "c4tv")
+    tools.addsorting(["unsorted", "date", "label", "runtime", "episode"], "episodes")
+   elif params["cat"][0] == "shows":
+    tv3.SHOW_SHOW(urllib.unquote(params["catid"][0]), urllib.unquote(params["title"][0]), "tv3")
+    tools.addsorting(["unsorted", "date", "label", "runtime", "episode"], "episodes")
+  elif params.get("id", "") <> "":
+   tv3.RESOLVE(params["id"][0], eval(urllib.unquote(params["info"][0])))
+  else:
+   if addon.getSetting('tv3_folders') == 'true':
+    tv3.INDEX_FOLDERS()
+   else:
+    tv3.INDEX("tv3")
+   tools.addsorting(["unsorted", "label"])
+ elif params["ch"][0] == "TVNZ":
+  import tvnz
+  if params.get("type", "") <> "":
+   if params["type"][0] == "shows":
+    tvnz.EPISODE_LIST(params["id"][0])
+    tools.addsorting(["label"], "episodes")
+   elif params["type"][0] == "singleshow":
+    tvnz.SHOW_EPISODES(params["id"][0])
+    tools.addsorting(["date"], "episodes")
+   elif params["type"][0] == "alphabetical":
+    tvnz.SHOW_LIST(params["id"][0])
+    tools.addsorting(["label"], "tvshows")
+   elif params["type"][0] == "distributor":
+    tvnz.SHOW_DISTRIBUTORS(params["id"][0])
+    tools.addsorting(["label"], "tvshows")
+   elif params["type"][0] == "video":
+    tvnz.RESOLVE(params["id"][0], eval(urllib.unquote(params["info"][0])))
+  else:
+   tvnz.INDEX()
+   tools.addsorting(["label"])
+ elif params["ch"][0] == "Ziln":
+  import ziln
+  if params.get("channel", "") <> "":
+   ziln.INDEX("video", params["channel"][0])
+   tools.addsorting(["label"])
+  elif params.get("video", "") <> "":
+   ziln.RESOLVE(params["video"][0]) #, eval(urllib.unquote(params["info"][0]))
+   tools.addsorting(["label"])
+  else:
+   ziln.INDEX("channel", "")
+   tools.addsorting(["label"])
+ else:
+  sys.stderr.write("Invalid Channel ID")
+else:
+ INDEX()
+ tools.addsorting(["unsorted", "label"])

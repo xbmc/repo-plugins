@@ -6,7 +6,7 @@
     <string id="30211">Imported %d items</string>
     <string id="30212">Scanning AlbumData.xml...</string>
     <string id="30213">Import iPhoto Library</string>
-    <string id="30214">Hide Keyword</string>
+    <string id="30214">Ignore Keyword</string>
 
     <!-- Category strings -->
     <string id="30100">Events</string>
@@ -23,5 +23,12 @@
     <string id="30003">Auto update library</string>
     <string id="30004">Hide Import Library item in main menu</string>
     <string id="30005">Ignore empty albums</string>
-    <string id="30006">Hidden keywords</string>
+    <string id="30006">Ignore keywords</string>
+    <string id="30007">View mode in Confluence</string>
+    <string id="30010">Default</string>
+    <string id="30011">Image Wrap</string>
+    <string id="30012">Pic Thumbs</string>
+    <string id="30050">General</string>
+    <string id="30051">View</string>
+    <string id="30059">Advanced</string>
 </strings>

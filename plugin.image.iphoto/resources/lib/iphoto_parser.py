@@ -8,8 +8,12 @@ __url__ = "git://github.com/jingai/plugin.image.iphoto.git"
 
 import traceback
 import xml.parsers.expat
-from pysqlite2 import dbapi2 as sqlite
 from urllib import unquote
+try:
+    from sqlite3 import dbapi2 as sqlite
+except:
+    from pysqlite2 import dbapi2 as sqlite
+
 import sys
 import os
 import os.path
@@ -512,7 +516,7 @@ class IPhotoDB:
 	except Exception, e:
 	    raise e
 
-    def AddMediaNew(self, media, archivePath, realPath):
+    def AddMediaNew(self, media, archivePath, libraryPath):
 	#print "AddMediaNew()", media
 
 	try:
@@ -525,10 +529,10 @@ class IPhotoDB:
 	# rewrite paths to image files based on configured path.
 	# if the iPhoto library is mounted as a share, the paths in
 	# AlbumData.xml probably won't be right.
-	if (archivePath and realPath):
-	    imagepath = media['ImagePath'].replace(archivePath, realPath)
-	    thumbpath = media['ThumbPath'].replace(archivePath, realPath)
-	    originalpath = media['OriginalPath'].replace(archivePath, realPath)
+	if (archivePath and libraryPath):
+	    imagepath = media['ImagePath'].replace(archivePath, libraryPath)
+	    thumbpath = media['ThumbPath'].replace(archivePath, libraryPath)
+	    originalpath = media['OriginalPath'].replace(archivePath, libraryPath)
 	else:
 	    imagepath = media['ImagePath']
 	    thumbpath = media['ThumbPath']
@@ -619,9 +623,10 @@ class IPhotoParserState:
 	self.valueType = ""
 
 class IPhotoParser:
-    def __init__(self, xmlfile="", album_callback=None, album_ign=[],
+    def __init__(self, library_path="", xmlfile="", album_callback=None, album_ign=[],
 		 roll_callback=None, face_callback=None, keyword_callback=None, photo_callback=None,
 		 progress_callback=None, progress_dialog=None):
+	self.libraryPath = library_path
 	self.xmlfile = xmlfile
 	self.imagePath = ""
 	self.parser = xml.parsers.expat.ParserCreate()
@@ -704,11 +709,6 @@ class IPhotoParser:
 	state.nphotostotal = len(self.albumList) + len(self.rollList) + len(self.faceList) + len(self.keywordList) + len(self.photoList)
 
 	try:
-	    realPath = os.path.dirname(self.xmlfile)
-	except:
-	    pass
-
-	try:
 	    if (self.AlbumCallback and len(self.albumList) > 0):
 		for a in self.albumList:
 		    self.AlbumCallback(a, self.albumIgn)
@@ -731,7 +731,7 @@ class IPhotoParser:
 
 	    if (self.PhotoCallback and len(self.photoList) > 0):
 		for a in self.photoList:
-		    self.PhotoCallback(a, self.imagePath, realPath)
+		    self.PhotoCallback(a, self.imagePath, self.libraryPath)
 		    self.updateProgress()
 	except ParseCanceled:
 	    raise
@@ -807,7 +807,7 @@ class IPhotoParser:
 	    if (not state.key):
 		self.imagePath = state.value
 		print "Rewriting iPhoto archive path '%s'" % (to_str(self.imagePath))
-		print "as '%s'" % (to_str(os.path.dirname(self.xmlfile)))
+		print "as '%s'" % (to_str(self.libraryPath))
 		state.archivepath = False
 	    state.inarchivepath -= 1
 
@@ -958,7 +958,7 @@ def main():
 
     db = IPhotoDB("iphoto.db")
     db.ResetDB()
-    iparser = IPhotoParser(xmlfile, db.AddAlbumNew, "", db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew)
+    iparser = IPhotoParser("", xmlfile, db.AddAlbumNew, "", db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew)
     try:
 	iparser.Parse()
     except:

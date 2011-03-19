@@ -86,14 +86,15 @@ class SimpleXbmcGui(object):
   
   def _pbhook(self, numblocks, blocksize, filesize, url=None,dp=None):
     try:
-	percent = min((numblocks*blocksize*100)/filesize, 100)
-	self.dp.update(percent)
+      percent = min((numblocks*blocksize*100)/filesize, 100)
+      self.dp.update(percent)
     except:
-	percent = 100
-	self.dp.update(percent)
-    if dp.iscanceled():
-	self.dp.close()
-	
+      percent = 100
+      self.dp.update(percent)
+      if dp.iscanceled():
+        self.dp.close()
+        sys.exit("Download aborted")
+        
   def refresh(self):
     xbmc.executebuiltin("Container.Refresh");
   

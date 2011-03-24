@@ -32,7 +32,7 @@ def __init__(self):
     self.data = []
 
 def startBrowser(url):
-	cmd="open -n '"+url+"'"
+	cmd="open /Applications/Firefox.app '"+url+"'"
 	print cmd
 	os.system(cmd)
 	
@@ -805,7 +805,7 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
             #writeLinkFile(curX.TitleShortLink, curX.Title)
             return curX
         
-    matchAllEpData = re.search(r"(?sm){(u'episode_short'.*?)}", curQueueItem, re.DOTALL | re.MULTILINE)
+    matchAllEpData = re.search(r'(?sm){(u{0,1}[\'"]episode_short[\'"].*?)}', curQueueItem, re.DOTALL | re.MULTILINE)
     if matchAllEpData:
         data = matchAllEpData.group(1)
     else:
@@ -813,65 +813,77 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
 
     foundMatch = False
     #if still processing, we want to auto-expand the episode lets add the folder, and then parse the episodes into that folder
-    for matchAllEp in re.finditer(r"(?sm){(u'episode_short'.*?)}", curQueueItem):
+    for matchAllEp in re.finditer('(?sm)(u{0,1}[\'"]episode_short[\'"].*?)}', curQueueItem):
         foundMatch = True
-        reobj = re.compile('u\'episode_short\': u[\'"](?P<shorttitle>.*?)[\'"], u\'sequence\': (?P<eNum>\\d{1,3}), u\'id\': u\'(?P<link>.*?)\', u\'title\': u\'(?P<title>.*)}', re.DOTALL)
-        matchAllEpisodes = reobj.search(matchAllEp.group())
-        if matchAllEpisodes:
-            curXe = XInfo()
-            curXe.Mpaa = curX.Mpaa
-            curXe.Position = curX.Position
-            curXe.Year = curX.Year
-            curXe.Rating = curX.Rating
-            curXe.Runtime = "0"
-            curXe.Genres = curX.Genres
-            curXe.Directors = curX.Directors
-            curXe.FullId = ""
-            curXe.Poster = curX.Poster
-            curXe.Cast = curX.Cast
+        curXe = XInfo()
+        curXe.Mpaa = curX.Mpaa
+        curXe.Position = curX.Position
+        curXe.Year = curX.Year
+        curXe.Rating = curX.Rating
+        curXe.Runtime = "0"
+        curXe.Genres = curX.Genres
+        curXe.Directors = curX.Directors
+        curXe.FullId = ""
+        curXe.Poster = curX.Poster
+        curXe.Cast = curX.Cast
 
-            curXe.Title = matchAllEpisodes.group("title")
-            curXe.Synop = curXe.Title + "\n\n" + curX.Synop
-            curXe.TvEpisodeEpisodeNum = matchAllEpisodes.group("eNum")
-            if re.search(r"Episode", curQueueItem, re.DOTALL | re.MULTILINE):
-                if(not forceExpand):
-                    curXe.TitleShort = curX.TitleShort + " " + matchAllEpisodes.group("shorttitle")
-                else:
-                    curXe.TitleShort = matchAllEpisodes.group("shorttitle")
-            else:
-                if(not forceExpand):
-                    curXe.TitleShort = curX.TitleShort + " " + "Episode: " + curXe.TvEpisodeEpisodeNum + " " + matchAllEpisodes.group("shorttitle")
-                else:
-                    curXe.TitleShort = "Episode: " + curXe.TvEpisodeEpisodeNum + " - " + matchAllEpisodes.group("shorttitle")
-
-            curXe.TvShow = True
-            curXe.TvShowLink = curX.TvShowLink
-            curXe.TvShowSeasonID = curX.TvShowSeasonID
-            curXe.TvShowSeriesID = curX.TvShowSeriesID
-            curXe.TvEpisode = True
-            curXe.TvEpisodeNetflixID = matchAllEpisodes.group("link")
+        matchTitle = re.search('(?sm)u{0,1}[\'"]title[\'"]: u{0,1}[\'"](?P<title>.*?)[\'"],', matchAllEp.group())
+        if matchTitle:
+            curXe.Title = str(matchTitle.group("title"))
+	
+        curXe.Synop = curXe.Title + "\n\n" + curX.Synop
+        
+        matchEpNum = re.search('(?sm)u{0,1}[\'"]sequence[\'"]: u{0,1}(?P<episodeNum>\\d{1,3})', matchAllEp.group())
+        if matchEpNum:
+            curXe.TvEpisodeEpisodeNum = str(matchEpNum.group("episodeNum"))
+        
+        matchShortTitle = re.search('(?sm)u{0,1}[\'"]episode_short[\'"]: u{0,1}[\'"](?P<shorttitle>.*?)[\'"],', matchAllEp.group())
+        if matchShortTitle:
+            shortTitleString = str(matchShortTitle.group("shorttitle"))
             
-            curXe.TvEpisodeEpisodeSeasonNum = 0
-            curXe.IsInstantAvailable = curX.IsInstantAvailable
-            curXe.MaturityLevel = curX.MaturityLevel
-            curXe.AvailableUntil = curX.AvailableUntil
-            curXe.TvEpisodeEpisodeNum = matchAllEpisodes.group("eNum")
-            curXe.TvEpisodeEpisodeSeasonNum = matchAllEpisodes.group("title")
-
-            matchAllEpisodesRealID = re.search(r"http://api.netflix.com/catalog/titles/programs/\d{1,15}/(?P<id>\d{1,15})", curXe.TvEpisodeNetflixID, re.DOTALL | re.MULTILINE)
-            if matchAllEpisodesRealID:
-                curXe.ID = matchAllEpisodesRealID.group("id").strip()
-                curXe.TitleShortLink = curXe.ID
-                curXe.TitleShortLink.strip()
-                 #add and write file
-                ciName2 = str(curXe.TitleShortLink + '.html')
-                ciPath2 = str(REAL_LINK_PATH)
-                ciFullPath2 = os.path.join(ciPath2, ciName2 )
-                addLink(curXe.TitleShort, ciFullPath2, curXe, curX.ID)
-                writeLinkFile(curXe.TitleShortLink, curXe.Title)
+        if re.search(r"Episode", curQueueItem, re.DOTALL | re.MULTILINE):
+            if(not forceExpand):
+                curXe.TitleShort = curX.TitleShort + " " + shortTitleString
             else:
-                #don't add it
-                print "not adding episode, couldn't parse id"
+                curXe.TitleShort = shortTitleString
+        else:
+            if(not forceExpand):
+                curXe.TitleShort = curX.TitleShort + " " + "Episode: " + curXe.TvEpisodeEpisodeNum + " " + shortTitleString
+            else:
+                curXe.TitleShort = "Episode: " + curXe.TvEpisodeEpisodeNum + " - " + shortTitleString
+
+        curXe.TvShow = True
+        curXe.TvShowLink = curX.TvShowLink
+        curXe.TvShowSeasonID = curX.TvShowSeasonID
+        curXe.TvShowSeriesID = curX.TvShowSeriesID
+        curXe.TvEpisode = True
+        
+        matchNetflixID = re.search('(?sm)u{0,1}[\'"]id[\'"]: u{0,1}[\'"](?P<mgid>.*?)[\'"],', matchAllEp.group())
+        if matchNetflixID:
+            curXe.TvEpisodeNetflixID = str(matchNetflixID.group("mgid"))
+            
+        curXe.TvEpisodeEpisodeSeasonNum = 0
+        curXe.IsInstantAvailable = curX.IsInstantAvailable
+        curXe.MaturityLevel = curX.MaturityLevel
+        curXe.AvailableUntil = curX.AvailableUntil
+        #curXe.TvEpisodeEpisodeNum = matchAllEpisodes.group("eNum")
+        #curXe.TvEpisodeEpisodeSeasonNum = matchAllEpisodes.group("title")
+
+        matchAllEpisodesRealID = re.search(r"http://api.netflix.com/catalog/titles/programs/\d{1,15}/(?P<id>\d{1,15})", curXe.TvEpisodeNetflixID, re.DOTALL | re.MULTILINE)
+        if matchAllEpisodesRealID:
+            curXe.ID = matchAllEpisodesRealID.group("id").strip()
+            curXe.TitleShortLink = curXe.ID
+            curXe.TitleShortLink.strip()
+            #add and write file
+            ciName2 = str(curXe.TitleShortLink + '.html')
+            ciPath2 = str(REAL_LINK_PATH)
+            ciFullPath2 = os.path.join(ciPath2, ciName2 )
+            addLink(curXe.TitleShort, ciFullPath2, curXe, curX.ID)
+            writeLinkFile(curXe.TitleShortLink, curXe.Title)
+        else:
+            #don't add it
+            print "not adding episode, couldn't parse id"
+    
     if (not foundMatch):
         #this is to cover those tv shows that are just a single episode
         ciName = str(curX.TitleShortLink + '.html')
@@ -880,7 +892,7 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
         addLink(curX.TitleShort,ciFullPath, curX)
         #write the link file
         writeLinkFile(curX.TitleShortLink, curX.Title)
-    #xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
     return curX
 
 def addDir(name,url,mode,iconimage,data):

@@ -37,7 +37,7 @@ class Day9:
 		info=re.compile('<a href="(.+?)" title="Watch (.+?)">\n\t\t\t\t\n\t\t\t\t  <img class="thumb" src="(.+?)"').findall(link)
 		duration=re.compile('<span class="EpisodeDuration">Duration: (.+?)</span>').findall(link)
 		for i in range(len(info)):
-			self.addDir(info[i][1],'http://day9tv.blip.tv'+info[i][0],3,info[i][2],duration[i])
+			self.addDir(info[i][1],info[i][0],3,info[i][2],duration[i])
 			
 	def videolinks(self,url,name,duration):
 		req = urllib2.Request(url)

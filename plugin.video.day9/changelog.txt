@@ -1,3 +1,6 @@
+v0.4.0
+- New icon added, edited some code in day9.py
+
 v0.3
 - Deleting the "favourite" feature for now
 

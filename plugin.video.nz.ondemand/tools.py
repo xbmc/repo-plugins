@@ -13,10 +13,14 @@ def message(message, title = "Warning"): #Show an on-screen message (useful for 
  else:
   dialog.ok("Message", "No message text")
 
-def gethtmlpage(url): #Grab an HTML page
+def gethtmlpage(url, useragent = "ie9"): #Grab an HTML page
  import urllib2
  sys.stderr.write("Requesting page: %s" % (url))
  req = urllib2.Request(url)
+ newheader = 'Mozilla/5.0 (Windows; U; MSIE 9.0; Windows NT 9.0; en-US)'
+ if useragent == "ps3":
+  newheader = 'Mozilla/5.0 (PLAYSTATION 3; 3.55)'
+ req.add_header('User-agent', newheader)
  response = urllib2.urlopen(req)
  doc = response.read()
  response.close()
@@ -82,7 +86,7 @@ def constructStackURL(playlist): #Build a URL stack from multiple URLs for the X
 
 # XBMC Manipulation
 
-def addlistitems(infoarray, fanart = "fanart.jpg", folder = 0, path = ""):
+def addlistitems(id, infoarray, fanart = "fanart.jpg", folder = 0, path = ""):
  total = len(infoarray)
  #total = len(infoarray.viewkeys())
  i = 0
@@ -90,48 +94,46 @@ def addlistitems(infoarray, fanart = "fanart.jpg", folder = 0, path = ""):
  for listkey, listitem in infoarray.items():
   #listitem["Count"] = i
   i += 1
-  addlistitem(listitem, fanart, folder, total, path)
+  addlistitem(id, listitem, fanart, folder, total, path)
 
-def addlistitem(info, fanart = "fanart.jpg", folder = 0, total = 0, path = ""): #Add a list item (media file or folder) to the XBMC page
+def addlistitem(id, info, fanart = "fanart.jpg", folder = 0, total = 0, path = ""): #Add a list item (media file or folder) to the XBMC page
  import xbmcgui, xbmcplugin, xbmcaddon, os
- #if checkdict(info, ("Title", "Icon", "Thumb", "FileName")):
- if 1 <> 0:
-  liz = xbmcgui.ListItem(info["Title"], iconImage = info["Icon"], thumbnailImage = info["Thumb"])
-  addon = xbmcaddon.Addon(id = sys.argv[0][9:-1])
-  liz.setProperty('fanart_image', os.path.join(addon.getAddonInfo('path'), fanart))
-  liz.setInfo(type = "Video", infoLabels = info)
-  if not folder:
-   liz.setProperty("IsPlayable", "true")
-  if path == "":
-   if xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = info["FileName"], listitem = liz, isFolder = folder, totalItems = total):
-    return 1
-   else:
-    return 0
+ liz = xbmcgui.ListItem(info["Title"], iconImage = info["Icon"], thumbnailImage = info["Thumb"])
+ addon = xbmcaddon.Addon(id = sys.argv[0][9:-1])
+ liz.setProperty('fanart_image', os.path.join(addon.getAddonInfo('path'), fanart))
+ liz.setInfo(type = "Video", infoLabels = info)
+ if not folder:
+  liz.setProperty("IsPlayable", "true")
+ if path == "":
+  if xbmcplugin.addDirectoryItem(handle = id, url = info["FileName"], listitem = liz, isFolder = folder, totalItems = total):
+   return 1
   else:
-   liz.setPath(path)
-   try:
-    xbmcplugin.setResolvedUrl(handle = int(sys.argv[1]), succeeded = True, listitem = liz)
-   except:
-    message("Boo, couldn't play.")
+   return 0
+ else:
+  liz.setPath(path)
+  try:
+   xbmcplugin.setResolvedUrl(handle = id, succeeded = True, listitem = liz)
+  except:
+   message("Boo, couldn't play.")
     
 
 
-def addsorting(methods, mediacontent = ""):
+def addsorting(id, methods, mediacontent = ""):
  import xbmcplugin
  for method in methods:
   if method == "unsorted":
-   xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_UNSORTED)
+   xbmcplugin.addSortMethod(handle = id, sortMethod = xbmcplugin.SORT_METHOD_UNSORTED)
   elif method == "count":
-   xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_PROGRAM_COUNT)
+   xbmcplugin.addSortMethod(handle = id, sortMethod = xbmcplugin.SORT_METHOD_PROGRAM_COUNT)
   elif method == "date":
-   xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_DATE)
+   xbmcplugin.addSortMethod(handle = id, sortMethod = xbmcplugin.SORT_METHOD_DATE)
   elif method == "label":
-   xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_LABEL)
+   xbmcplugin.addSortMethod(handle = id, sortMethod = xbmcplugin.SORT_METHOD_LABEL)
   elif method == "runtime":
-   xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_VIDEO_RUNTIME)
+   xbmcplugin.addSortMethod(handle = id, sortMethod = xbmcplugin.SORT_METHOD_VIDEO_RUNTIME)
   elif method == "episode":
-   xbmcplugin.addSortMethod(handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_EPISODE)
+   xbmcplugin.addSortMethod(handle = id, sortMethod = xbmcplugin.SORT_METHOD_EPISODE)
  if mediacontent <> "":
-  xbmcplugin.setContent(handle = int(sys.argv[1]), content = mediacontent)
- xbmcplugin.endOfDirectory(int(sys.argv[1]))
+  xbmcplugin.setContent(handle = id, content = mediacontent)
+ xbmcplugin.endOfDirectory(id)
 

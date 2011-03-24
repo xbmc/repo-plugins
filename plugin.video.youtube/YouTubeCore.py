@@ -355,10 +355,11 @@ class YouTubeCore(object):
 					if link.item(i).getAttribute('rel') == 'edit':
 						obj = link.item(i).getAttribute('href')
 						video['editid'] = obj[obj.rfind('/')+1:]
-										
-			video['next'] = next
-
+			
 			playobjects.append(video);
+			
+		if len(playobjects) > 0:
+			playobjects[len(playobjects) - 1]['next'] = next
 			
 		if self.__dbg__:
 			print self.__plugin__ + " playlist done"
@@ -466,6 +467,7 @@ class YouTubeCore(object):
 					if (len(fmt_url) > 7 and fmt_url.find(":\\/\\/") > 0):
 						if (fmt_url.rfind(',') > fmt_url.rfind('\/id\/')):
 							final_url = fmt_url[:fmt_url.rfind(',')]
+							final_url = final_url.replace('\u0026','&')
 							if (final_url.rfind('\/itag\/') > 0):
 								quality = final_url[final_url.rfind('\/itag\/') + 8:]
 							else :
@@ -473,6 +475,7 @@ class YouTubeCore(object):
 							links[int(quality)] = final_url.replace('\/','/')
 						else :
 							final_url = fmt_url
+							final_url = final_url.replace('\u0026','&')
 							if (final_url.rfind('\/itag\/') > 0):
 								quality = final_url[final_url.rfind('\/itag\/') + 8:]
 							else :
@@ -486,6 +489,7 @@ class YouTubeCore(object):
 					if (len(fmt_url) > 7):
 						if (fmt_url.rfind(',') > fmt_url.rfind('&id=')): 
 							final_url = fmt_url[:fmt_url.rfind(',')]
+							final_url = final_url.replace('\u0026','&')
 							if (final_url.rfind('itag=') > 0):
 								quality = final_url[final_url.rfind('itag=') + 5:]
 								quality = quality[:quality.find('&')]

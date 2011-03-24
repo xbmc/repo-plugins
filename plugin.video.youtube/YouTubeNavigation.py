@@ -266,12 +266,13 @@ class YouTubeNavigation:
 			item_add_user = {'Title':self.__language__( 30024 ), 'path':get("path"), 'login':"true", 'thumbnail':"add_user", 'action':"add_contact"}
 			self.addFolderListItem(params, item_add_user,  1)
 						
-		if ( get('feed') == 'subscriptions' ) :
-			item = {"Title":self.__language__( 30004 ), "path":"/root/subscriptions/new", "thumbnail":"newsubscriptions", "login":"true", "feed":"newsubscriptions"}
-			if (get("contact")):
-				item["contact"] = get("contact")
-			
-			self.addFolderListItem(params, item)
+		if ( get('feed') == 'subscriptions' ):
+			if (not get("page")):
+				item = {"Title":self.__language__( 30004 ), "path":"/root/subscriptions/new", "thumbnail":"newsubscriptions", "login":"true", "feed":"newsubscriptions"}
+				if (get("contact")):
+					item["contact"] = get("contact")
+				
+				self.addFolderListItem(params, item)
 							
 		self.parseFolderList(params, result)
 								
@@ -409,6 +410,7 @@ class YouTubeNavigation:
 	def playVideo(self, params = {}):
 		get = params.get
 		(video, status) = core.construct_video_url(params);
+
 		if status != 200:
 			self.errorHandling(self.__language__(30603), video, status)
 			return False
@@ -571,6 +573,7 @@ class YouTubeNavigation:
 	
 	def search(self, params = {}):
 		get = params.get
+				
 		if (get("search")):
 			query = get("search")
 			query = urllib.unquote_plus(query)
@@ -662,7 +665,6 @@ class YouTubeNavigation:
 				self.saveSearch(old_query, new_query, "stored_disco_searches")
 				
 			self.search(params)
-			
 
 	def refineSearch(self, params = {}):
 		get = params.get
@@ -754,7 +756,8 @@ class YouTubeNavigation:
 		url = self.buildItemUrl(item_params, url)
 		
 		if len(cm) > 0:
-			listitem.addContextMenuItems( cm, replaceItems=True )
+			listitem.addContextMenuItems( cm, replaceItems=False )
+		
 		listitem.setProperty( "Folder", "true" )
 		if (item("feed") == "downloads"):
 			url = self.__settings__.getSetting("downloadPath")
@@ -814,6 +817,8 @@ class YouTubeNavigation:
 			result = result_params.get
 			next = result("next") == "true"
 			
+			# Make sure folder items don't have next set otherwise they won't get context menu items attached
+			result_params["next"] = "false"
 			result_params["path"] = get("path")
 			result_params["login"] = "true"
 			

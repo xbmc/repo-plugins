@@ -6,6 +6,12 @@
 - [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
 
+[B]Version 2.0.3[/B]
+- Fixed Context menus were "suddenly" missing on a lot of folder items (probably since pre v.2)
+- Fixed "New Subscriptions Videos" feed would show up on every subscriptions page this has been corrected
+- Fixed YouTube changed character encoding of their webpage which messed up playback in the plugin.
+- Added Portuguese (Brazil) translation courtesy of fschnack
+
 [B]Version 2.0.2[/B]
 - Fixed problem with "Now Playing" context menu item showing the Music Playlist and not the Video Playlist
 - Fixed Issue preventing the plugin running on XBMC builds using external python (ie. v2.7)

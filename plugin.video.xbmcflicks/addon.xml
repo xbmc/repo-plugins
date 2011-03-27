@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.xbmcflicks"
        name="XBMC Flicks - Netflix for XBMC"
-       version="1.0.16"
+       version="1.0.17"
        provider-name="TeamUMX">
     <requires>
         <import addon="xbmc.python" version="1.0"/>

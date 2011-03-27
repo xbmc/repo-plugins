@@ -286,21 +286,21 @@ def show_instant_menu():
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_disc_menu():
-   addDirectoryItem(name=SUBMENUD1, parameters={ PARAMETER_KEY_MODE:MODED1 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_queue_all.png'))
-   addDirectoryItem(name=SUBMENUD1m, parameters={ PARAMETER_KEY_MODE:MODED1m }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_queue_movies.png'))
-   addDirectoryItem(name=SUBMENUD1t, parameters={ PARAMETER_KEY_MODE:MODED1t }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_queue_tv.png'))
-
    if(not IN_CANADA):
+      addDirectoryItem(name=SUBMENUD1, parameters={ PARAMETER_KEY_MODE:MODED1 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_queue_all.png'))
+      addDirectoryItem(name=SUBMENUD1m, parameters={ PARAMETER_KEY_MODE:MODED1m }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_queue_movies.png'))
+      addDirectoryItem(name=SUBMENUD1t, parameters={ PARAMETER_KEY_MODE:MODED1t }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_queue_tv.png'))
       addDirectoryItem(name=SUBMENUD7, parameters={ PARAMETER_KEY_MODE:MODED7 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_top25_bygenre.png'))
-
-   addDirectoryItem(name=SUBMENUD2, parameters={ PARAMETER_KEY_MODE:MODED2 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_search.png'))
-   addDirectoryItem(name=SUBMENUD3, parameters={ PARAMETER_KEY_MODE:MODED3 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_queue_at_home.png'))
+      addDirectoryItem(name=SUBMENUD2, parameters={ PARAMETER_KEY_MODE:MODED2 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_search.png'))
+      addDirectoryItem(name=SUBMENUD3, parameters={ PARAMETER_KEY_MODE:MODED3 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'disc_queue_at_home.png'))
    
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_rentalhistory_menu():
-   addDirectoryItem(name=SUBMENUR1, parameters={ PARAMETER_KEY_MODE:MODER1 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'rental_history_shipped.png'))
-   addDirectoryItem(name=SUBMENUR2, parameters={ PARAMETER_KEY_MODE:MODER2 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'rental_history_returned.png'))
+   if(not IN_CANADA):
+      addDirectoryItem(name=SUBMENUR1, parameters={ PARAMETER_KEY_MODE:MODER1 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'rental_history_shipped.png'))
+      addDirectoryItem(name=SUBMENUR2, parameters={ PARAMETER_KEY_MODE:MODER2 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'rental_history_returned.png'))
+
    addDirectoryItem(name=SUBMENUR3, parameters={ PARAMETER_KEY_MODE:MODER3 }, isFolder=True, thumbnail=os.path.join(resourcePath, 'rental_history_watched.png'))
    
    xbmcplugin.endOfDirectory(handle=handle, succeeded=True)

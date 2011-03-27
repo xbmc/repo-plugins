@@ -260,7 +260,10 @@ def writeLinkFile(id, title):
         player = "WiPlayerCommunityAPI"
         if(useAltPlayer):
             player = "WiPlayer"
-        redirect = "<!doctype html public \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Requesting Video: " + title + "</title><meta http-equiv=\"REFRESH\" content=\"0;url=http://www.netflix.com/" + player + "?lnkctr=apiwn&nbb=y&devKey=gnexy7jajjtmspegrux7c3dj&movieid=" + id + "\"></head><body bgcolor=\"#FF0000\"> <p>Redirecting to Netflix in a moment ...</p></body></html>"
+        if(not IN_CANADA):
+            redirect = "<!doctype html public \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Requesting Video: " + title + "</title><meta http-equiv=\"REFRESH\" content=\"0;url=http://www.netflix.com/" + player + "?lnkctr=apiwn&nbb=y&devKey=gnexy7jajjtmspegrux7c3dj&movieid=" + id + "\"></head><body bgcolor=\"#FF0000\"> <p>Redirecting to Netflix in a moment ...</p></body></html>"
+        else:
+            redirect = "<!doctype html public \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Requesting Video: " + title + "</title><meta http-equiv=\"REFRESH\" content=\"0;url=http://www.netflix.ca/" + player + "?lnkctr=apiwn&nbb=y&devKey=gnexy7jajjtmspegrux7c3dj&movieid=" + id + "\"></head><body bgcolor=\"#FF0000\"> <p>Redirecting to Netflix in a moment ...</p></body></html>"
         f = open(fileLoc,'r+')
         f.write(redirect)
         f.close()
@@ -848,9 +851,9 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
                 curXe.TitleShort = shortTitleString
         else:
             if(not forceExpand):
-                curXe.TitleShort = curX.TitleShort + " " + "Episode: " + curXe.TvEpisodeEpisodeNum + " " + shortTitleString
+                curXe.TitleShort = curX.TitleShort + " " + "Episode: " + str(curXe.TvEpisodeEpisodeNum) + " " + shortTitleString
             else:
-                curXe.TitleShort = "Episode: " + curXe.TvEpisodeEpisodeNum + " - " + shortTitleString
+                curXe.TitleShort = "Episode: " + str(curXe.TvEpisodeEpisodeNum) + " - " + shortTitleString
 
         curXe.TvShow = True
         curXe.TvShowLink = curX.TvShowLink

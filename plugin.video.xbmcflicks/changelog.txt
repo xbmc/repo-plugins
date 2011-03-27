@@ -10,3 +10,4 @@
 1.0.14 - fixed pathing issues by calling actual paths instead of special:// pathing for addon launch loc
 1.0.15 - fixed issue with tv episodes (when set to expand) would fail to display (invalid setting for director info)
 1.0.16 - fixed issue with tv episodes where some shows would no longer show any episodes (the format changed from netflix), fixed issue with OSX launching firefox for initial auth (requires firefox to be installed on your system to the apps folder)
+1.0.17 - fixed issue with episodes when pilot is listed, fixed .ca links for Canada Netflix, fixed menu items for Canada Users.. Thanks to qumip for code fixes

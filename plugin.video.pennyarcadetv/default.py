@@ -58,35 +58,42 @@ def listShowsAndLatest(showOnlyLatest):
   
     #Get a list of found shows and current episodes
     for div in infoDivs:
-        links = div.findAll("a")
-        
-        if links[0]["title"] == "Watch Now":
-            ep = {}
-            #Show title
-            ep["title"] = links[1]["title"]
+        try:
+            links = div.findAll("a")
+            
+            if links[0]["title"] == "Watch Now":
+                ep = {}
+                #Show title
+                ep["title"] = links[1]["title"]
 
-            #Episode title
-            match = titleRegex.match(links[2]["title"])
-            if(match == None):
-                match = onlyNumberRegex.match(links[2]["title"])
-            parts = match.groupdict()
-            ep["title"] += " - %sx%s" % (parts["s"], parts["ep"])
-            if "title" in parts:
-                ep["title"] += " - " + parts["title"]
+                #Episode title
+                titleParts = titleRegex.match(links[2]["title"]) or onlyNumberRegex.match(links[2]["title"])
+                if(titleParts is not None): 
+                    titleParts = titleParts.groupdict()
+                    ep["title"] += " - %sx%s" % (titleParts["s"], titleParts["ep"])
+                    if "title" in titleParts:
+                        ep["title"] += " - " + titleParts["title"]
+                else:
+                    #Fallback if title isn't an expected format...
+                    ep["title"] = links[2]["title"]
 
-            #Image and url
-            ep["imgurl"] = __baseURL__ + div.parent.img["src"]
-            ep["url"] = __baseURL__ + links[0]["href"]
+                #Image and url
+                ep["imgurl"] = __baseURL__ + div.parent.img["src"]
+                ep["url"] = __baseURL__ + links[0]["href"]
 
-            foundEps.append(ep)
-        else:
-            #Todo - Get show infos to add as some info label? Doesn"t seem to be a good view
-            #that shows the info without having other fields left empty..
-            show = {}
-            show["title"] = links[0]["title"]
-            show["imgurl"] = __baseURL__ + div.parent.a.img["src"]
-            show["url"] = __baseURL__ + links[0]["href"]
-            foundShows.append(show)
+                foundEps.append(ep)
+            else:
+                #Todo - Get show infos to add as some info label? Doesn"t seem to be a good view
+                #that shows the info without having other fields left empty..
+                show = {}
+                show["title"] = links[0]["title"]
+                show["imgurl"] = __baseURL__ + div.parent.a.img["src"]
+                show["url"] = __baseURL__ + links[0]["href"]
+                foundShows.append(show)
+        except:
+            log("Issue with parsing show or ep div.")
+            log(div)
+            continue
           
     #Add the found shows
     if not __latestInSub__ or (__latestInSub__ and not showOnlyLatest) :

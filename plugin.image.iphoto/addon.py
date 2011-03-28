@@ -10,7 +10,7 @@ __url__ = "git://github.com/jingai/plugin.image.iphoto.git"
 import sys
 import time
 import os
-import os.path
+import glob
 import shutil
 
 import xbmc
@@ -40,22 +40,35 @@ db = IPhotoDB(db_file)
 
 apple_epoch = 978307200
 
-# default view in Confluence
-view_mode = addon.getSetting('view_mode')
-if (view_mode == ""):
-    view_mode = "0"
-    addon.setSetting('view_mode', view_mode)
-view_mode = int(view_mode)
-
 # ignore empty albums if configured to do so
 album_ign_empty = addon.getSetting('album_ignore_empty')
 if (album_ign_empty == ""):
     album_ign_empty = "true"
     addon.setSetting('album_ignore_empty', album_ign_empty)
 
+# force configured sort method when set to "DEFAULT".
+# XBMC sorts by file date when user selects "DATE" as the sort method,
+# so we have no way to sort by the date stored in the XML or the EXIF
+# data without providing an override to "DEFAULT".
+# this works out well because I don't believe iPhoto stores the photos
+# in the XML in any meaningful order anyway.
+media_sort_col = addon.getSetting('default_sort_photo')
+if (media_sort_col == ""):
+    media_sort_col = "NULL"
+    addon.setSetting('default_sort_photo', '0')
+elif (media_sort_col == "1"):
+    media_sort_col = "mediadate"
+else:
+    media_sort_col = "NULL"
+
 
 def render_media(media):
-    global view_mode
+    # default view in Confluence
+    view_mode = addon.getSetting('view_mode')
+    if (view_mode == ""):
+	view_mode = "0"
+	addon.setSetting('view_mode', view_mode)
+    view_mode = int(view_mode)
 
     sort_date = False
     n = 0
@@ -68,15 +81,13 @@ def render_media(media):
 	    caption = mediapath
 
 	if (caption):
-	    # < r34717 doesn't support unicode thumbnail paths
-	    try:
-		item = gui.ListItem(caption, thumbnailImage=thumbpath)
-	    except:
-		item = gui.ListItem(caption)
+	    item = gui.ListItem(caption, thumbnailImage=thumbpath)
 
 	    try:
 		item_date = time.strftime("%d.%m.%Y", time.localtime(apple_epoch + float(mediadate)))
-		#item.setInfo(type="pictures", infoLabels={ "size": mediasize, "date": item_date })
+		#JSL: setting the date here to enable sorting prevents XBMC
+		#JSL: from scanning the EXIF/IPTC info
+		#item.setInfo(type="pictures", infoLabels={ "date": item_date })
 		#sort_date = True
 	    except:
 		pass
@@ -94,10 +105,10 @@ def render_media(media):
     return n
 
 def list_photos_in_album(params):
-    global db
+    global db, media_sort_col
 
     albumid = params['albumid']
-    media = db.GetMediaInAlbum(albumid)
+    media = db.GetMediaInAlbum(albumid, media_sort_col)
     return render_media(media)
 
 def list_albums(params):
@@ -134,10 +145,10 @@ def list_albums(params):
     return n
 
 def list_photos_in_event(params):
-    global db
+    global db, media_sort_col
 
     rollid = params['rollid']
-    media = db.GetMediaInRoll(rollid)
+    media = db.GetMediaInRoll(rollid, media_sort_col)
     return render_media(media)
 
 def list_events(params):
@@ -161,11 +172,7 @@ def list_events(params):
 	if (not count and album_ign_empty == "true"):
 	    continue
 
-	# < r34717 doesn't support unicode thumbnail paths
-	try:
-	    item = gui.ListItem(name, thumbnailImage=thumbpath)
-	except:
-	    item = gui.ListItem(name)
+	item = gui.ListItem(name, thumbnailImage=thumbpath)
 
 	try:
 	    item_date = time.strftime("%d.%m.%Y", time.localtime(apple_epoch + float(rolldate)))
@@ -186,10 +193,10 @@ def list_events(params):
     return n
 
 def list_photos_with_face(params):
-    global db
+    global db, media_sort_col
 
     faceid = params['faceid']
-    media = db.GetMediaWithFace(faceid)
+    media = db.GetMediaWithFace(faceid, media_sort_col)
     return render_media(media)
 
 def list_faces(params):
@@ -212,11 +219,7 @@ def list_faces(params):
 	if (not count and album_ign_empty == "true"):
 	    continue
 
-	# < r34717 doesn't support unicode thumbnail paths
-	try:
-	    item = gui.ListItem(name, thumbnailImage=thumbpath)
-	except:
-	    item = gui.ListItem(name)
+	item = gui.ListItem(name, thumbnailImage=thumbpath)
 
 	if (count):
 	    item.setInfo(type="pictures", infoLabels={ "count": count })
@@ -227,11 +230,79 @@ def list_faces(params):
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
     return n
 
+def list_photos_with_place(params):
+    global db, media_sort_col
+
+    placeid = params['placeid']
+    media = db.GetMediaWithPlace(placeid, media_sort_col)
+    return render_media(media)
+
+def list_places(params):
+    global db, BASE_URL, album_ign_empty
+
+    # how to display Places labels:
+    # 0 = Addresses
+    # 1 = Latitude/Longitude Pairs
+    places_labels = addon.getSetting('places_labels')
+    if (places_labels == ""):
+	places_labels = "0"
+	addon.setSetting('places_labels', places_labels)
+    places_labels = int(places_labels)
+
+    # show big map of Place as fanart for each item?
+    show_fanart = True
+    e = addon.getSetting('places_show_fanart')
+    if (e == ""):
+	addon.setSetting('places_show_fanart', "true")
+    elif (e == "false"):
+	show_fanart = False
+
+    placeid = 0
+    try:
+	placeid = params['placeid']
+	return list_photos_with_place(params)
+    except Exception, e:
+	print to_str(e)
+	pass
+
+    places = db.GetPlaces()
+    if (not places):
+	return
+
+    n = 0
+    for (placeid, latlon, address, thumbpath, fanartpath, count) in places:
+	if (not count and album_ign_empty == "true"):
+	    continue
+
+	latlon = latlon.replace("+", " ")
+
+	if (places_labels == 1):
+	    item = gui.ListItem(latlon, address)
+	else:
+	    item = gui.ListItem(address, latlon)
+
+	item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.PlayMedia(\""+BASE_URL+"?action=rm_caches\")",)])
+
+	if (thumbpath):
+	    item.setThumbnailImage(thumbpath)
+	if (show_fanart == True and fanartpath):
+	    item.setProperty("Fanart_Image", fanartpath)
+
+	if (count):
+	    item.setInfo(type="pictures", infoLabels={ "count": count })
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=places&placeid=%s" % (placeid), listitem = item, isFolder = True)
+	n += 1
+
+    if (n > 0):
+	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
+	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+    return n
+
 def list_photos_with_keyword(params):
-    global db
+    global db, media_sort_col
 
     keywordid = params['keywordid']
-    media = db.GetMediaWithKeyword(keywordid)
+    media = db.GetMediaWithKeyword(keywordid, media_sort_col)
     return render_media(media)
 
 def list_keywords(params):
@@ -260,7 +331,7 @@ def list_keywords(params):
 	    continue
 
 	item = gui.ListItem(name)
-	item.addContextMenuItems([(addon.getLocalizedString(30214), "XBMC.RunPlugin(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),)])
+	item.addContextMenuItems([(addon.getLocalizedString(30214), "XBMC.PlayMedia(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),)])
 	if (count):
 	    item.setInfo(type="pictures", infoLabels={ "count": count })
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=keywords&keywordid=%s" % (keywordid), listitem = item, isFolder = True)
@@ -272,10 +343,10 @@ def list_keywords(params):
     return n
 
 def list_photos_with_rating(params):
-    global db
+    global db, media_sort_col
 
     rating = params['rating']
-    media = db.GetMediaWithRating(rating)
+    media = db.GetMediaWithRating(rating, media_sort_col)
     return render_media(media)
 
 def list_ratings(params):
@@ -300,18 +371,17 @@ def list_ratings(params):
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
     return n
 
-def progress_callback(progress_dialog, nphotos, ntotal):
+def progress_callback(progress_dialog, altinfo, nphotos, ntotal):
     if (not progress_dialog):
 	return 0
     if (progress_dialog.iscanceled()):
 	return
 
-    nphotos += 1
     percent = int(float(nphotos * 100) / ntotal)
-    progress_dialog.update(percent, addon.getLocalizedString(30211) % (nphotos))
+    progress_dialog.update(percent, addon.getLocalizedString(30211) % (nphotos), altinfo)
     return nphotos
 
-def import_library(xmlpath, xmlfile):
+def import_library(xmlpath, xmlfile, enable_places):
     global db
 
     db.ResetDB()
@@ -337,13 +407,26 @@ def import_library(xmlpath, xmlfile):
     if (album_ign_flagged == "true"):
 	album_ign.append("Shelf")
 
+    # download maps from Google?
+    enable_maps = True
+    e = addon.getSetting('places_enable_maps')
+    if (e == ""):
+	addon.setSetting('places_enable_maps', "true")
+    elif (e == "false"):
+	enable_maps = False
+
     progress_dialog = gui.DialogProgress()
     try:
 	progress_dialog.create(addon.getLocalizedString(30210))
+	map_aspect = 0.0
+	if (enable_maps == True):
+	    res_x = float(xbmc.getInfoLabel("System.ScreenWidth"))
+	    res_y = float(xbmc.getInfoLabel("System.ScreenHeight"))
+	    map_aspect = res_x / res_y
     except:
 	print traceback.print_exc()
     else:
-	iparser = IPhotoParser(xmlpath, xmlfile, db.AddAlbumNew, album_ign, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, progress_callback, progress_dialog)
+	iparser = IPhotoParser(xmlpath, xmlfile, album_ign, enable_places, map_aspect, db.AddAlbumNew, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, progress_callback, progress_dialog)
 
 	progress_dialog.update(0, addon.getLocalizedString(30212))
 	try:
@@ -382,7 +465,7 @@ def get_params(paramstring):
     return params
 
 def add_import_lib_context_item(item):
-    item.addContextMenuItems([(addon.getLocalizedString(30213), "XBMC.RunPlugin(\""+BASE_URL+"?action=rescan\")",)])
+    item.addContextMenuItems([(addon.getLocalizedString(30213), "XBMC.PlayMedia(\""+BASE_URL+"?action=rescan\")",)])
 
 if (__name__ == "__main__"):
     xmlfile = addon.getSetting('albumdata_xml_path')
@@ -398,6 +481,13 @@ if (__name__ == "__main__"):
     shutil.copyfile(origxml, xmlfile)
     shutil.copystat(origxml, xmlfile)
 
+    enable_places = True
+    e = addon.getSetting('places_enable')
+    if (e == ""):
+	addon.setSetting('places_enable', "True")
+    elif (e == "false"):
+	enable_places = False
+
     try:
 	params = get_params(sys.argv[2])
 	action = params['action']
@@ -405,27 +495,33 @@ if (__name__ == "__main__"):
 	# main menu
 	try:
 	    item = gui.ListItem(addon.getLocalizedString(30100), thumbnailImage=ICONS_PATH+"/events.png")
-	    item.setInfo("Picture", { "Title": "Events" })
+	    item.setInfo(type="pictures", infoLabels={ "Title": "Events" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=events", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30101), thumbnailImage=ICONS_PATH+"/albums.png")
-	    item.setInfo("Picture", { "Title": "Albums" })
+	    item.setInfo(type="pictures", infoLabels={ "Title": "Albums" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=albums", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30105), thumbnailImage=ICONS_PATH+"/faces.png")
-	    item.setInfo("Picture", { "Title": "Faces" })
+	    item.setInfo(type="pictures", infoLabels={ "Title": "Faces" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=faces", item, True)
 
+	    item = gui.ListItem(addon.getLocalizedString(30106), thumbnailImage=ICONS_PATH+"/places.png")
+	    item.setInfo(type="pictures", infoLabels={ "Title": "Places" })
+	    add_import_lib_context_item(item)
+	    item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.PlayMedia(\""+BASE_URL+"?action=rm_caches\")",)])
+	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=places", item, True)
+
 	    item = gui.ListItem(addon.getLocalizedString(30104), thumbnailImage=ICONS_PATH+"/keywords.png")
-	    item.setInfo("Picture", { "Title": "Keywords" })
+	    item.setInfo(type="pictures", infoLabels={ "Title": "Keywords" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=keywords", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30102), thumbnailImage=ICONS_PATH+"/star.png")
-	    item.setInfo("Picture", { "Title": "Ratings" })
+	    item.setInfo(type="pictures", infoLabels={ "Title": "Ratings" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=ratings", item, True)
 
@@ -456,22 +552,36 @@ if (__name__ == "__main__"):
 		pass
 	    else:
 		if (xml_mtime > db_mtime):
-		    import_library(xmlpath, xmlfile)
+		    import_library(xmlpath, xmlfile, enable_places)
     else:
+	items = None
 	if (action == "events"):
 	    items = list_events(params)
 	elif (action == "albums"):
 	    items = list_albums(params)
 	elif (action == "faces"):
 	    items = list_faces(params)
+	elif (action == "places"):
+	    if (enable_places == True):
+		items = list_places(params)
+	    else:
+		dialog = gui.Dialog()
+		ret = dialog.yesno(addon.getLocalizedString(30220), addon.getLocalizedString(30221), addon.getLocalizedString(30222), addon.getLocalizedString(30223))
+		if (ret == True):
+		    enable_places = True
+		    addon.setSetting('places_enable', "true")
 	elif (action == "keywords"):
 	    items = list_keywords(params)
 	elif (action == "ratings"):
 	    items = list_ratings(params)
 	elif (action == "rescan"):
-	    items = import_library(xmlpath, xmlfile)
+	    import_library(xmlpath, xmlfile, enable_places)
 	elif (action == "hidekeyword"):
 	    items = hide_keyword(params)
+	elif (action == "rm_caches"):
+	    r = glob.glob(os.path.join(os.path.dirname(db_file), "map_*"))
+	    for f in r:
+		os.remove(f)
 
 	if (items):
 	    plugin.endOfDirectory(int(sys.argv[1]), True)

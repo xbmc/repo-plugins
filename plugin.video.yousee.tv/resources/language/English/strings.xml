@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string id="30001">Login missing</string>
+	<string id="30002">You must provide your YouSee username and password</string>
+    <string id="30003">to use this addon.</string>
+
+	<string id="30010">Login failed</string>
+	<string id="30011">Your login was rejected by YouSee. Verify your settings.</string>
+
+    <string id="30100">YouSee</string>
+    <string id="30101">Username</string>
+    <string id="30102">Password</string>
+    <string id="30103">Quality (kbit)</string>
+</strings>

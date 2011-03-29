@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">This channel is not available in %s quality.</string>
+  <string id="30002">Change the quality setting and try again.</string>
+  <string id="30100">General</string>
+  <string id="30101">Quality</string>
+</strings>

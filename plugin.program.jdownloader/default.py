@@ -1,13 +1,13 @@
 # script constants
-__plugin__		= "JDownloader"
-__addonID__		= "plugin.program.jdownloader"
-__author__		= "Ppic & pgoeri"
-__url__			= "http://pgoeri-xbmc-plugins.googlecode.com"
-__svn_url__		= "http://pgoeri-xbmc-plugins.googlecode.com/svn/trunk/plugin.program.jdownloader/"
-__credits__		= "Team XBMC passion, http://passion-xbmc.org & pgoeri"
+__plugin__			= "JDownloader"
+__addonID__			= "plugin.program.jdownloader"
+__author__			= "Ppic & pgoeri"
+__url__				= "http://pgoeri-xbmc-plugins.googlecode.com"
+__svn_url__			= "http://pgoeri-xbmc-plugins.googlecode.com/svn/trunk/plugin.program.jdownloader/"
+__credits__			= "Team XBMC passion, http://passion-xbmc.org & pgoeri"
 __platform__		= "xbmc media center, [LINUX, OS X, WIN32]"
-__date__			= "23-01-2011"
-__version__		= "1.0.2"
+__date__			= "28-03-2011"
+__version__			= "1.0.3"
 __svn_revision__	= "$Revision:  $".replace( "Revision", "" ).strip( "$: " )
 __XBMC_Revision__	= "ce6dff4f3480834cc1134072e45e5deb0c8557c4" # Trunk (15/01/11)
 __useragent__		= "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1"

@@ -1,7 +1,7 @@
 # script constants
 __addonID__			= "plugin.program.jdownloader"
 
-import socket,urllib2,httplib,os
+import socket,urllib,urllib2,httplib,os
 from xml.dom import minidom
 from traceback import print_exc
 import xbmc,xbmcaddon
@@ -193,7 +193,7 @@ def action_addcontainer(link):
 	# add link
 	# Parameter 'start' is not supported with rc-version 9568!
 	#_http_query('/action/add/container/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
-	result = _http_query('/action/add/container/grabber' + str(grabber) + '/' + str(link))
+	result = _http_query('/action/add/container/grabber' + str(grabber) + '/' + str(urllib.quote(link)))
 	return result
 
 # Links seperated by spaces, won't work, call this functions for each link seperatly
@@ -202,7 +202,7 @@ def action_addlink(link):
 	grabber = Addon.getSetting("add_use_grabber")
 	start = Addon.getSetting("add_start")
 	# add link
-	result = _http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
+	result = _http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(urllib.quote(link)))
 	return result
 
 def action_addlinks_from_file(filename):

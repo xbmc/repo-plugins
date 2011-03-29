@@ -1,3 +1,6 @@
+[B]Version 1.0.3[/B]
+    * Fixed problem with adding unquoted urls
+
 [B]Version 1.0.2[/B]
     * Added spanish translation (thanks to yowill)
     * Added new actions: 'Add links from textfile', 'Add link container', 'Reconnect router'

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.jdownloader"
        name="JDownloader"
-       version="1.0.2"
+       version="1.0.3"
        provider-name="pgoeri">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -17,7 +17,7 @@
 It is also possible to update, restart and shutdown the JDownloader application.</description>
     <description lang="de">Dieses Plugin zeigt den aktuellen JDownloader-Status an. Die folgenden Aktionen werden unterstützt: Start, Stop, Pause, Speedlimit festlegen, max. gleichzeitige Downloads festlegen.
 Es ist weiters möglich die JDownloader Anwendung zu aktualisieren, neu zu starten oder zu schließen.</description>
-    <disclaimer lang="en">Make sure to enable the 'Remote Control' extentension (default port 10025) in JDownloader!</disclaimer>
+    <disclaimer lang="en">Make sure to enable the 'Remote Control' extension (default port 10025) in JDownloader!</disclaimer>
     <disclaimer lang="de">Die 'Remote Control'-Erweiterung (Defaultport 10025) muss im JDownloader aktiviert sein!</disclaimer>
     <platform>all</platform>
   </extension>

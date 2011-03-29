@@ -151,6 +151,8 @@ def playVideo(params):
         url = urls.get(18)
     elif urls.get(5):
         url = urls.get(5)
+        
+    url = url.replace('\u0026', '&');
                 
     listitem=xbmcgui.ListItem(label=params.get('title'), iconImage=params.get('thumbnail'), thumbnailImage=params.get('thumbnail'), path=url);    
     ''' listitem.setInfo(type='Video', infoLabels=labels) '''

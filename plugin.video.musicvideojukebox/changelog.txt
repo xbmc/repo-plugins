@@ -1,3 +1,7 @@
+Version 1.0.1
+-------------
+- youtube changed something in the format of the response that provides the urls to the video's, the plugin now takes care of that new response.
+
 Version 1.0.0
 -------------
 - Initial release

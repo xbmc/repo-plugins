@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.bms"
+       name="Bluray Movie Streamer"
+       version="1.0.3"
+       provider-name="Team XBMC">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary lang="en">Bluray Movie Streamer</summary>
+<description lang="en">Stream Top10 Blu-Ray Movies directly to your XBMC. Every day, enjoy 10 new movies courtesy of TeamXBMC</description>
+  </extension>
+</addon>

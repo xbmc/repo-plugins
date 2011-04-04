@@ -4,7 +4,7 @@
     <string id="30200">%d star</string>
     <string id="30210">Importing iPhoto Library</string>
     <string id="30211">Imported %d items</string>
-    <string id="30212">Scanning AlbumData.xml...</string>
+    <string id="30212">Scanning iPhoto database...</string>
     <string id="30213">Update library</string>
     <string id="30214">Ignore Keyword</string>
     <string id="30215">Remove cached maps</string>
@@ -23,7 +23,7 @@
     <string id="30106">Places</string>
 
     <!-- Plugin settings strings -->
-    <string id="30000">Path to AlbumData.xml</string>
+    <string id="30000">Path to iPhoto Library</string>
     <string id="30001">Ignore published (MobileMe) albums</string>
     <string id="30002">Ignore 'Flagged' album</string>
     <string id="30003">Auto update library</string>

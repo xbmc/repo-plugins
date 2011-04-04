@@ -180,7 +180,9 @@ class IPhotoDB:
 	    CREATE TABLE faces (
 	       id integer primary key,
 	       name varchar,
+	       thumbpath varchar,
 	       keyphotoid integer,
+	       keyphotoidx integer,
 	       photocount integer,
 	       faceorder integer
 	    )""")
@@ -265,11 +267,9 @@ class IPhotoDB:
     def GetConfig(self, key):
 	try:
 	    cur = self.dbconn.cursor()
-	    cur.execute("""SELECT value
-			   FROM config
-			   WHERE key = ? LIMIT 1""",
-			(key,))
+	    cur.execute("""SELECT value FROM config WHERE key = ? LIMIT 1""", (key,))
 	    row = cur.fetchone()
+	    cur.close()
 	    if (row):
 		return row[0]
 	    return None
@@ -277,16 +277,10 @@ class IPhotoDB:
 	    return None
 
     def SetConfig(self, key, value):
-	cur = self.dbconn.cursor()
 	if (self.GetConfig(key) == None):
-	    cur.execute("""INSERT INTO config (key, value)
-			   VALUES (?, ?)""",
-			(key, value))
+	    self.dbconn.execute("""INSERT INTO config (key, value) VALUES (?, ?)""", (key, value))
 	else:
-	    cur.execute("""UPDATE config
-			   SET value = ?
-			   WHERE key = ?""",
-			(value, key))
+	    self.dbconn.execute("""UPDATE config SET value = ?  WHERE key = ?""", (value, key))
 	self.Commit()
 
     def UpdateLastImport(self):
@@ -318,7 +312,9 @@ class IPhotoDB:
 		    nextid += 1
 		cur.execute("INSERT INTO %s (id, %s) VALUES (?, ?)" % (table, column),
 			    (nextid, value))
+		cur.close()
 		return nextid # return new id
+	    cur.close()
 	    return row[0] # return id
 	except Exception, e:
 	    print to_str(e)
@@ -334,6 +330,7 @@ class IPhotoDB:
 	    cur.execute("SELECT id, name, photocount FROM albums")
 	    for tuple in cur:
 		albums.append(tuple)
+	    cur.close()
 	except:
 	    pass
 	return albums
@@ -349,6 +346,7 @@ class IPhotoDB:
 			WHERE A.albumid = ? ORDER BY %s ASC""" % (sort_col), (albumid,))
 	    for tuple in cur:
 		media.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -362,6 +360,7 @@ class IPhotoDB:
 			 FROM rolls R LEFT JOIN media M ON R.keyphotoid = M.id""")
 	    for tuple in cur:
 		rolls.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -377,6 +376,7 @@ class IPhotoDB:
 			FROM media M WHERE M.rollid = ? ORDER BY %s ASC""" % (sort_col), (rollid,))
 	    for tuple in cur:
 		media.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -386,11 +386,12 @@ class IPhotoDB:
 	faces = []
 	try:
 	    cur = self.dbconn.cursor()
-	    cur.execute("""SELECT F.id, F.name, M.thumbpath, F.photocount
+	    cur.execute("""SELECT F.id, F.name, F.thumbpath, F.photocount
 			 FROM faces F LEFT JOIN media M ON F.keyphotoid = M.id
 			 ORDER BY F.faceorder""")
 	    for tuple in cur:
 		faces.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -407,6 +408,7 @@ class IPhotoDB:
 			WHERE A.faceid = ? ORDER BY %s ASC""" % (sort_col), (faceid,))
 	    for tuple in cur:
 		media.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -419,6 +421,7 @@ class IPhotoDB:
 	    cur.execute("SELECT id, latlon, address, thumbpath, fanartpath, photocount FROM places")
 	    for tuple in cur:
 		places.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -435,6 +438,7 @@ class IPhotoDB:
 			WHERE A.placeid = ? ORDER BY %s ASC""" % (sort_col), (placeid,))
 	    for tuple in cur:
 		media.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -447,6 +451,7 @@ class IPhotoDB:
 	    cur.execute("SELECT id, name, photocount FROM keywords ORDER BY name")
 	    for tuple in cur:
 		keywords.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -463,6 +468,7 @@ class IPhotoDB:
 			WHERE A.keywordid = ? ORDER BY %s ASC""" % (sort_col), (keywordid,))
 	    for tuple in cur:
 		media.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -478,6 +484,7 @@ class IPhotoDB:
 			FROM media M WHERE M.rating = ? ORDER BY %s ASC""" % (sort_col), (rating,))
 	    for tuple in cur:
 		media.append(tuple)
+	    cur.close()
 	except Exception, e:
 	    print to_str(e)
 	    pass
@@ -550,11 +557,12 @@ class IPhotoDB:
 
 	try:
 	    self.dbconn.execute("""
-	    INSERT INTO faces (id, name, keyphotoid, photocount, faceorder)
-	    VALUES (?, ?, ?, ?, ?)""",
+	    INSERT INTO faces (id, name, keyphotoid, keyphotoidx, photocount, faceorder)
+	    VALUES (?, ?, ?, ?, ?, ?)""",
 				(faceid,
 				 face['name'],
 				 face['key image'],
+				 face['key image face index'],
 				 face['PhotoCount'],
 				 face['Order']))
 	except sqlite.IntegrityError:
@@ -615,7 +623,26 @@ class IPhotoDB:
 	    pass
 
 	try:
-	    self.dbconn.execute("""
+	    cur = self.dbconn.cursor()
+
+	    faces = []
+	    cur.execute("""SELECT id, keyphotoid, keyphotoidx FROM faces""")
+	    for tuple in cur:
+		faces.append(tuple)
+
+	    for faceid in media['facelist']:
+		cur.execute("""
+		INSERT INTO facesmedia (faceid, mediaid)
+		VALUES (?, ?)""", (faceid, mediaid))
+
+		for fid, fkey, fkeyidx in faces:
+		    if int(fkey) == int(mediaid):
+			fthumb = os.path.splitext(thumbpath)[0] + "_face%s.jpg" % (fkeyidx)
+			self.dbconn.execute("""
+			UPDATE faces SET thumbpath = ?
+			WHERE id = ?""", (fthumb, fid))
+
+	    cur.execute("""
 	    INSERT INTO media (id, mediatypeid, rollid, caption, guid, aspectratio, latitude, longitude, rating, mediadate, mediasize, mediapath, thumbpath, originalpath)
 	    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
 				(mediaid,
@@ -632,11 +659,6 @@ class IPhotoDB:
 				 imagepath,
 				 thumbpath,
 				 originalpath))
-
-	    for faceid in media['facelist']:
-		self.dbconn.execute("""
-		INSERT INTO facesmedia (faceid, mediaid)
-		VALUES (?, ?)""", (faceid, mediaid))
 
 	    if enablePlaces == True:
 		# convert lat/lon pair to an address
@@ -700,7 +722,7 @@ class IPhotoDB:
 
 			# add new Place
 			self.placeList[placeid].append(addr)
-			self.dbconn.execute("""
+			cur.execute("""
 			INSERT INTO places (id, latlon, address, thumbpath, fanartpath)
 			VALUES (?, ?, ?, ?, ?)""", (placeid, latlon, addr, thumbpath, fanartpath))
 
@@ -710,10 +732,9 @@ class IPhotoDB:
 			# than necessary.
 			self.placeList[placeid].append(latlon)
 
-		    self.dbconn.execute("""
+		    cur.execute("""
 		    INSERT INTO placesmedia (placeid, mediaid)
 		    VALUES (?, ?)""", (placeid, mediaid))
-		    cur = self.dbconn.cursor()
 		    cur.execute("""SELECT id, photocount
 				FROM places
 				WHERE id = ?""", (placeid,))
@@ -727,10 +748,9 @@ class IPhotoDB:
 			WHERE id = ?""", (photocount, placeid))
 
 	    for keywordid in media['keywordlist']:
-		self.dbconn.execute("""
+		cur.execute("""
 		INSERT INTO keywordmedia (keywordid, mediaid)
 		VALUES (?, ?)""", (keywordid, mediaid))
-		cur = self.dbconn.cursor()
 		cur.execute("""SELECT id, photocount
 			    FROM keywords
 			    WHERE id = ?""", (keywordid,))
@@ -742,6 +762,8 @@ class IPhotoDB:
 		    self.dbconn.execute("""
 		    UPDATE keywords SET photocount = ?
 		    WHERE id = ?""", (photocount, keywordid))
+
+	    cur.close()
 	except sqlite.IntegrityError:
 	    pass
 	except Exception, e:

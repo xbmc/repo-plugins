@@ -27,6 +27,7 @@ import xbmcaddon
 #    copyfile = xbmcvfs.copy
 
 addon = xbmcaddon.Addon(id="plugin.image.iphoto")
+ALBUM_DATA_XML = "AlbumData.xml"
 BASE_URL = "%s" % (sys.argv[0])
 PLUGIN_PATH = addon.getAddonInfo("path")
 RESOURCE_PATH = os.path.join(PLUGIN_PATH, "resources")
@@ -39,6 +40,8 @@ db_file = xbmc.translatePath(os.path.join(addon.getAddonInfo("Profile"), "iphoto
 db = IPhotoDB(db_file)
 
 apple_epoch = 978307200
+
+view_mode = 0
 
 # ignore empty albums if configured to do so
 album_ign_empty = addon.getSetting('album_ignore_empty')
@@ -63,6 +66,8 @@ else:
 
 
 def render_media(media):
+    global view_mode
+
     # default view in Confluence
     view_mode = addon.getSetting('view_mode')
     if (view_mode == ""):
@@ -100,8 +105,6 @@ def render_media(media):
     if sort_date == True:
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
 
-    if view_mode > 0:
-	xbmc.executebuiltin("Container.SetViewMode(%d)" % (view_mode + 509))
     return n
 
 def list_photos_in_album(params):
@@ -281,7 +284,7 @@ def list_places(params):
 	else:
 	    item = gui.ListItem(address, latlon)
 
-	item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.PlayMedia(\""+BASE_URL+"?action=rm_caches\")",)])
+	item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.RunPlugin(\""+BASE_URL+"?action=rm_caches\")",)])
 
 	if (thumbpath):
 	    item.setThumbnailImage(thumbpath)
@@ -331,7 +334,7 @@ def list_keywords(params):
 	    continue
 
 	item = gui.ListItem(name)
-	item.addContextMenuItems([(addon.getLocalizedString(30214), "XBMC.PlayMedia(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),)])
+	item.addContextMenuItems([(addon.getLocalizedString(30214), "XBMC.RunPlugin(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),)])
 	if (count):
 	    item.setInfo(type="pictures", infoLabels={ "count": count })
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=keywords&keywordid=%s" % (keywordid), listitem = item, isFolder = True)
@@ -465,18 +468,24 @@ def get_params(paramstring):
     return params
 
 def add_import_lib_context_item(item):
-    item.addContextMenuItems([(addon.getLocalizedString(30213), "XBMC.PlayMedia(\""+BASE_URL+"?action=rescan\")",)])
+    item.addContextMenuItems([(addon.getLocalizedString(30213), "XBMC.RunPlugin(\""+BASE_URL+"?action=rescan\")",)])
 
 if (__name__ == "__main__"):
-    xmlfile = addon.getSetting('albumdata_xml_path')
-    if (xmlfile == ""):
+    xmlpath = addon.getSetting('albumdata_xml_path')
+    if (xmlpath == ""):
 	try:
-	    xmlfile = os.getenv("HOME") + "/Pictures/iPhoto Library/AlbumData.xml"
-	    addon.setSetting('albumdata_xml_path', xmlfile)
+	    xmlpath = os.getenv("HOME") + "/Pictures/iPhoto Library/"
+	    addon.setSetting('albumdata_xml_path', xmlpath)
 	except:
 	    pass
-    xmlpath = os.path.dirname(xmlfile)
-    origxml = xmlfile
+
+    # we used to store the file path to the XML instead of the iPhoto Library
+    # directory.
+    if (os.path.basename(xmlpath) == ALBUM_DATA_XML):
+	xmlpath = os.path.dirname(xmlpath)
+	addon.setSetting('albumdata_xml_path', xmlpath)
+
+    origxml = os.path.join(xmlpath, ALBUM_DATA_XML)
     xmlfile = xbmc.translatePath(os.path.join(addon.getAddonInfo("Profile"), "iphoto.xml"))
     shutil.copyfile(origxml, xmlfile)
     shutil.copystat(origxml, xmlfile)
@@ -495,33 +504,33 @@ if (__name__ == "__main__"):
 	# main menu
 	try:
 	    item = gui.ListItem(addon.getLocalizedString(30100), thumbnailImage=ICONS_PATH+"/events.png")
-	    item.setInfo(type="pictures", infoLabels={ "Title": "Events" })
+	    item.setInfo(type="pictures", infoLabels={ "title": "Events" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=events", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30101), thumbnailImage=ICONS_PATH+"/albums.png")
-	    item.setInfo(type="pictures", infoLabels={ "Title": "Albums" })
+	    item.setInfo(type="pictures", infoLabels={ "title": "Albums" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=albums", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30105), thumbnailImage=ICONS_PATH+"/faces.png")
-	    item.setInfo(type="pictures", infoLabels={ "Title": "Faces" })
+	    item.setInfo(type="pictures", infoLabels={ "title": "Faces" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=faces", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30106), thumbnailImage=ICONS_PATH+"/places.png")
-	    item.setInfo(type="pictures", infoLabels={ "Title": "Places" })
+	    item.setInfo(type="pictures", infoLabels={ "title": "Places" })
 	    add_import_lib_context_item(item)
-	    item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.PlayMedia(\""+BASE_URL+"?action=rm_caches\")",)])
+	    item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.RunPlugin(\""+BASE_URL+"?action=rm_caches\")",)])
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=places", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30104), thumbnailImage=ICONS_PATH+"/keywords.png")
-	    item.setInfo(type="pictures", infoLabels={ "Title": "Keywords" })
+	    item.setInfo(type="pictures", infoLabels={ "title": "Keywords" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=keywords", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30102), thumbnailImage=ICONS_PATH+"/star.png")
-	    item.setInfo(type="pictures", infoLabels={ "Title": "Ratings" })
+	    item.setInfo(type="pictures", infoLabels={ "title": "Ratings" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=ratings", item, True)
 
@@ -585,3 +594,6 @@ if (__name__ == "__main__"):
 
 	if (items):
 	    plugin.endOfDirectory(int(sys.argv[1]), True)
+	    if view_mode > 0:
+		xbmc.sleep(300)
+		xbmc.executebuiltin("Container.SetViewMode(%d)" % (view_mode + 509))

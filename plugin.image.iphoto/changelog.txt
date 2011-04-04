@@ -1,3 +1,8 @@
+1.4.3 - 20110331
+- Faces: Use same thumbnails as iPhoto.
+- Add Spanish strings (thanks Oriol Gamero).
+- Don't set view mode for empty albums.
+
 1.4.2 - 20110327
 - Implement proper JSON parser for Google Maps geocoding.
 

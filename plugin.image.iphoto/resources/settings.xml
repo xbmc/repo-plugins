@@ -2,7 +2,7 @@
 <settings>   
     <!-- General -->
     <category label="30050">
-	<setting id="albumdata_xml_path" type="file" source="video" label="30000" default=""/>
+	<setting id="albumdata_xml_path" type="folder" source="video" label="30000" default=""/>
 	<setting id="places_enable" type="bool" label="30015" default="true"/>
 	<setting id="places_enable_maps" type="bool" label="30025" default="true" enable="eq(-1,true)"/>
 	<setting id="auto_update_lib" type="bool" label="30003" default="false"/>

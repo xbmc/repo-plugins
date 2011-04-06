@@ -1,3 +1,6 @@
+[B]Version 1.0.3[/B]
+- Fix encoding error with danish chars in .py file
+
 [B]Version 1.0.2[/B]
 - Prepare for official repository
 

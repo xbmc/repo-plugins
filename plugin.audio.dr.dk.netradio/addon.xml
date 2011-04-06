@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
         id="plugin.audio.dr.dk.netradio"
-        version="1.0.2"
+        version="1.0.3"
         name="DR.dk Netradio"
         provider-name="stemann [jesper@sait.dk], twinther [tommy@winther.nu]">
     <requires>

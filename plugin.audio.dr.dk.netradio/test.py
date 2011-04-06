@@ -14,10 +14,11 @@ import addon
 class TestDrDkNetradio(unittest.TestCase):
 
     def setUp(self):
-        danishaddons.init([os.getcwd(), '12345', ''])
+        danishaddons.init(['.', '12345', ''])
         xbmcplugin.items = list()
 
     def testShowChannelsHighQuality(self):
+        xbmcaddon.settings['format'] = 'WMA'
         xbmcaddon.settings['quality'] = 'High'
         addon.showChannels()
         self.assertNotEquals(0, len(xbmcplugin.items), msg = 'Expected at least one ListItem')
@@ -28,6 +29,7 @@ class TestDrDkNetradio(unittest.TestCase):
         self.assertNotEqual(-1, xbmcplugin.items[0].url.find('_128.asx'))
 
     def testShowChannelsMediumQuality(self):
+        xbmcaddon.settings['format'] = 'WMA'
         xbmcaddon.settings['quality'] = 'Medium'
         addon.showChannels()
         self.assertNotEquals(0, len(xbmcplugin.items), msg = 'Expected at least one ListItem')
@@ -38,6 +40,7 @@ class TestDrDkNetradio(unittest.TestCase):
         self.assertNotEqual(-1, xbmcplugin.items[0].url.find('_64.asx'))
 
     def testShowChannelsLowQuality(self):
+        xbmcaddon.settings['format'] = 'WMA'
         xbmcaddon.settings['quality'] = 'Low'
         addon.showChannels()
         self.assertNotEquals(0, len(xbmcplugin.items), msg = 'Expected at least one ListItem')
@@ -48,6 +51,7 @@ class TestDrDkNetradio(unittest.TestCase):
         self.assertNotEqual(-1, xbmcplugin.items[0].url.find('_32.asx'))
 
     def testPlayFirstStream(self):
+        xbmcaddon.settings['format'] = 'WMA'
         xbmcaddon.settings['quality'] = 'High'
         addon.showChannels()
 

@@ -18,7 +18,7 @@
 import re,math,traceback,time
 from mediathek import *
 from xml.dom import minidom
-
+from xml.dom import Node;
     
 class ZDFMediathek(Mediathek):
   def __init__(self, simpleXbmcGui):
@@ -182,7 +182,6 @@ class ZDFMediathek(Mediathek):
         links = {};
         for streamObject in configXml.getElementsByTagName("formitaet"):
           baseType = streamObject.getAttribute("basetype")
-          self.gui.log(baseType);
           if(baseType.find("asx_http")>-1):
             quality = streamObject.getElementsByTagName("quality")[0].childNodes[0].data;
             url = streamObject.getElementsByTagName("url")[0].childNodes[0].data;
@@ -208,16 +207,40 @@ class ZDFMediathek(Mediathek):
   
   def getRtmpLinks(self, url, size):
     links = {};
+    hostConfig = {};
     smilPage = self.loadPage(url);
     if(not smilPage.startswith("<?xml")):
       return None;
-      
+    
     xmlDocument = minidom.parseString(smilPage);
-    for ref in xmlDocument.getElementsByTagName("ref"):
-      quality = ref.getElementsByTagName("param")[0].getAttribute("value");
-      urlString = ref.getAttribute("src");
-      array = urlString.split("mp4:");
-      link = SimpleLink(array[0]+" playPath=mp4:/"+array[1],size);
+    
+    self.cleanupNodes(xmlDocument.documentElement);
+    xmlDocument.documentElement.normalize() 
+    
+    #extract hostData
+    for paramGroup in xmlDocument.getElementsByTagName("paramGroup"):
+      groupName = paramGroup.getAttribute("xml:id");
+      print paramGroup.toxml()
+      host = "";
+      app = ""
+      for param in paramGroup.childNodes:
+        
+        paramName = param.getAttribute("name");
+        if(paramName == "app"): app = param.getAttribute("value");
+        if(paramName == "host"): host = param.getAttribute("value");
+      hostConfig[groupName] = "rtmp://"+host+"/"+app+"/";
+      
+    
+    videoNodes = xmlDocument.getElementsByTagName("video");
+   
+    for videoNode in videoNodes:
+      quality = videoNode.getElementsByTagName("param")[0].getAttribute("value");
+      paramGroupName = videoNode.getAttribute("paramGroup");
+      
+      hostString = hostConfig[paramGroupName];
+      urlString = videoNode.getAttribute("src");
+      
+      link = SimpleLink(hostString+" playPath="+urlString,size);
       if(quality == "low"):
         links[0] = link
       elif(quality == "high"):
@@ -242,3 +265,10 @@ class ZDFMediathek(Mediathek):
       while len(titles) < 2:
         titles.append("");
       self.gui.buildVideoLink(DisplayObject(titles[0],titles[1],pictureLink,"",videoPageLink,False),self);
+  
+  def cleanupNodes(self, rootNode):
+    for node in rootNode.childNodes:
+      if node.nodeType == Node.TEXT_NODE:
+        node.data = node.data.strip()
+      else:
+        self.cleanupNodes(node);

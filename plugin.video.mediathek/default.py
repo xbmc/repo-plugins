@@ -76,13 +76,12 @@ else:
     mediathek = XmlReader(mediathekName,gui);
     
   if(action == "openTopicPage"):
-    link = urllib.unquote_plus(params.get("link", ""))
-    gui.log(link)
+    link = urllib.unquote_plus(params.get("link", ""));
+    gui.log(link);
     mediathek.buildPageMenu(link);
   elif(action == "openPlayList"):
-    
-    link = urllib.unquote_plus(params.get("link", ""))
-    gui.log(link)
+    link = urllib.unquote_plus(params.get("link", ""));
+    gui.log(link);
     remotePlaylist = mediathek.loadPage(link);
     gui.playPlaylist(remotePlaylist);
   elif(action == "openMenu"):

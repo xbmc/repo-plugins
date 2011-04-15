@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.techcrunch"
+       name="TechCrunch TV"
+       version="0.0.1"
+       provider-name="divingmule">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Videos From techcrunch.tv</summary>
+    <description>TechCrunch is a leading technology media property, dedicated to obsessively profiling startups, reviewing new Internet products, and breaking tech news.</description>
+    <platform>all</platform>
+  </extension>
+</addon>

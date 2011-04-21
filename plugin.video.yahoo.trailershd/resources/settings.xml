@@ -1,0 +1,4 @@
+<settings>
+   <setting id="res" type="labelenum" label="30000" values="720|1080|480" default="720"/>
+   <setting id="zip" type="text" label="30001" default="90210" />
+</settings>

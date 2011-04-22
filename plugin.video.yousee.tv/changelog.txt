@@ -1,3 +1,6 @@
+[B]Version 1.0.4[/B]
+- Fixed version for elementtree dependency
+
 [B]Version 1.0.3[/B]
 - Fixed playback when only one stream is available
 

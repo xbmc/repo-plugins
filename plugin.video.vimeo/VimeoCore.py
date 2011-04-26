@@ -1,3 +1,21 @@
+'''
+   Vimeo plugin for XBMC
+   Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
 import sys, urllib, urllib2, re, cookielib, string
 from xml.dom.minidom import parseString
 from BeautifulSoup import BeautifulStoneSoup
@@ -174,37 +192,6 @@ class VimeoCore(object):
 			value = con.read();
 			con.close()
 			
-			if value.find('<input type="hidden" name="oauth_token" value="') == -1:
-				if self.__dbg__:
-					print self.__plugin__ + " login_get_verifier no oauth_token: "
-				return ( self.__language__(30606), 303 )
-
-			start = value.find('<input type="hidden" name="oauth_token" value="') + len('<input type="hidden" name="oauth_token" value="')
-			login_oauth_token = value[start:value.find('"', start)]
-
-			start = value.find('<input type="hidden" id="xsrft" class="xsrft" name="token" value="') + len('<input type="hidden" id="xsrft" class="xsrft" name="token" value="')
-			login_token = value[start:value.find('"', start)]
-			
-			url = urllib2.Request("http://vimeo.com/oauth/authorize?permission=write")
-			url.add_header('User-Agent', self.USERAGENT)
-			
-			url.add_header('Content-Type', 'application/x-www-form-urlencoded')
-
-			if self.__settings__.getSetting("accept") != "0":
-				if self.__dbg__:
-					print self.__plugin__ + " login_get_verifier accept disabled"
-				return ( self.__language__(30606), 303 )
-													
-			data = urllib.urlencode({'token': login_token,
-									 'oauth_token': login_oauth_token,
-									 'permission': 'write',
-									 'accept': 'Yes, authorize Vimeo XBMC Plugin!'})
-			
-			con = urllib2.urlopen(url, data);
-			
-			value = con.read();
-			con.close()
-
 			if value.find('<span class="verifier">') == -1:
 				if self.__dbg__:
 					print self.__plugin__ + " login_get_verifier no login verifier "
@@ -226,8 +213,7 @@ class VimeoCore(object):
 		except:
 			if self.__dbg__:
 				print self.__plugin__ + " login_get_verifier failed uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-												   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
+				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__ , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
 			return ( self.__language__(30606), 303 )
 
 	def downloadVideo(self, video):
@@ -370,7 +356,7 @@ class VimeoCore(object):
 			con = urllib2.urlopen(url);
 			video['video_url'] = con.geturl()
 			con.close()
-
+			
 			if self.__dbg__:
 				print self.__plugin__ + " construct_video_url done"
 					
@@ -520,8 +506,17 @@ class VimeoCore(object):
 		result = []
 		if (len(soup.video) > 0):
 			video = {}
-			video['videoid'] = soup.embed_settings.clip_id.contents[0]
-			video['Title'] = soup.video.caption.contents[0].encode("utf-8")
+			video['videoid'] = videoid
+			title = soup.video.caption.contents[0].encode("utf-8")
+			if title:
+				title = title.replace("&amp;", "&")
+				title = title.replace("&quot;", '"')
+				title = title.replace("&hellip;", "...")
+				title = title.replace("&gt;",">")
+				title = title.replace("&lt;","<")
+			else: 
+				title = "Unknown"
+			video['Title'] = title
 			video['Duration'] = soup.video.duration.contents[0]
 			video['thumbnail'] = soup.video.thumbnail.contents[0]
 			video['Studio'] = soup.video.uploader_display_name.contents[0].encode( "utf-8" )
@@ -561,7 +556,8 @@ class VimeoCore(object):
 			title = title.replace("&amp;", "&")
 			title = title.replace("&quot;", '"')
 			title = title.replace("&hellip;", "...")
-			
+			title = title.replace("&gt;",">")
+			title = title.replace("&lt;","<")
 			group[tag] = item["id"]
 			group['Title'] = title
 			
@@ -569,7 +565,10 @@ class VimeoCore(object):
 				group['Description'] = item.description.contents[0]
 			
 			if (tag == "group"):
-				group["thumbnail"] = item.logo_url.contents[0]
+				if item.logo_url != None:
+					group["thumbnail"] = item.logo_url.contents[0]
+				else:
+					group["thumbnail"] = "default"
 			if (tag == "album"):
 				group["thumbnail"] = self.getThumbnail(item, "default") 
 			if (tag == "channel"):
@@ -651,6 +650,8 @@ class VimeoCore(object):
 			title = title.replace("&amp;", "&")
 			title = title.replace("&quot;", '"')
 			title = title.replace("&hellip;", "...")
+			title = title.replace("&gt;",">")
+			title = title.replace("&lt;","<")
 			video['Title'] = title
 			
 			video['Plot'] = entry.description.contents[0]

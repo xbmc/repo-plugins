@@ -41,3 +41,5 @@ plugin.video.googletechtalks/.git
 plugin.video.googletechtalks/.gitignore
 plugin.video.nz.ondemand/.git
 plugin.video.yahoo.trailershd/.git
+plugin.audio.abradio.cz/.git
+plugin.audio.abradio.cz/install.sh

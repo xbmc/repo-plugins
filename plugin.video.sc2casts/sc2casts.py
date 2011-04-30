@@ -32,23 +32,23 @@ class SC2Casts:
 	
 	# display the root menu
 	def root(self):
-		self.addCategory(self.__language__( 31000 ), 'http://www.sc2casts.com', 'showTitles')
+		self.addCategory(self.__language__( 31000 ), 'http://sc2casts.com/index.php', 'showTitles')
 		self.addCategory(self.__language__( 31001 ), '', 'rootTop')
 		self.addCategory(self.__language__( 31002 ), '', 'rootBrowse')
 		self.addCategory(self.__language__( 31003 ), '', 'showTitlesSearch')
 	
 	# display the top casts menu
 	def rootTop(self):
-		self.addCategory(self.__language__( 31004 ), 'http://www.sc2casts.com/top?all', 'showTitlesTop')
-		self.addCategory(self.__language__( 31005 ), 'http://www.sc2casts.com/top?month', 'showTitlesTop')
-		self.addCategory(self.__language__( 31006 ), 'http://sc2casts.com/top?week', 'showTitlesTop')
-		self.addCategory(self.__language__( 31007 ), 'http://sc2casts.com/top', 'showTitlesTop')
+		self.addCategory(self.__language__( 31004 ), 'http://sc2casts.com/top/index.php?all', 'showTitlesTop')
+		self.addCategory(self.__language__( 31005 ), 'http://sc2casts.com/top/index.php?month', 'showTitlesTop')
+		self.addCategory(self.__language__( 31006 ), 'http://sc2casts.com/top/index.php?week', 'showTitlesTop')
+		self.addCategory(self.__language__( 31007 ), 'http://sc2casts.com/top/index.php', 'showTitlesTop')
 	
 	# display the browse casts menu
 	def rootBrowse(self):
-		self.addCategory(self.__language__( 31008 ), 'http://www.sc2casts.com/browse', 'browseEvents')
+		self.addCategory(self.__language__( 31008 ), 'http://sc2casts.com/browse/index.php', 'browseEvents')
 		self.addCategory(self.__language__( 31009 ), '', 'browseMatchups')
-		self.addCategory(self.__language__( 31010 ), 'http://www.sc2casts.com/browse', 'browseCasters')
+		self.addCategory(self.__language__( 31010 ), 'http://sc2casts.com/browse/index.php', 'browseCasters')
 	
 	# display the browse events menu
 	def browseEvents(self, params = {}):
@@ -120,7 +120,7 @@ class SC2Casts:
 		# Get info to show
 		caster = re.compile('<a href="/.+?"><span class="caster_name">(.*?)</span></a>').findall(link)
 		matchup = re.compile('<span style="color:#cccccc">(.*?)</span>').findall(link)
-		round = re.compile('<span class="round_name">(.*?)</span>').findall(link)
+		roundname = re.compile('<span class="round_name">(.*?)</span>').findall(link)
 		checkSource = re.compile('<span class="source_name">(.*?)</span>').findall(link)
 		event = re.compile('<span class="event_name".*?>(.*?)</span>').findall(link)
 		
@@ -145,7 +145,7 @@ class SC2Casts:
 				if boolEvent == 'true':
 					url += event[i] + ' | '
 				if boolRound == 'true':
-					url += round[i] + ' | '
+					url += roundname[i] + ' | '
 				if boolCaster == 'true':
 					url += 'cast by: ' + caster[i]
 				

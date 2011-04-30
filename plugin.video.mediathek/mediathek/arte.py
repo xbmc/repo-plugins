@@ -62,23 +62,24 @@ class ARTEMediathek(Mediathek):
     self.baseXmlLink = self.rootLink+"/de/do_delegate/videos/global-%s,view,asPlayerXml.xml"
     self.searchLink = self.rootLink+"/de/do_search/videos/suche?q=";
     
-  def buildPageMenu(self, link):
+  def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
     mainPage = self.loadPage(link);
-    self.extractTopicObjects(mainPage);
-    self.extractVideoObjects(mainPage);
+    elementCount = self.extractTopicObjects(mainPage, initCount);
+    self.extractVideoObjects(mainPage, elementCount);
     
   def searchVideo(self, searchText):
     link = self.searchLink + searchText
-    self.buildPageMenu(link);
+    self.buildPageMenu(link,0);
     
-  def extractVideoObjects(self,mainPage):
+  def extractVideoObjects(self,mainPage, initCount):
     videoIDs = [];
     for videoID in self.regex_Clips.findall(mainPage):
       if videoID not in videoIDs:
         videoIDs.append(videoID);
+    elementCount = initCount+len(videoIDs);    
     for videoID in videoIDs:
-      self.extractVideoInformation(videoID);
+      self.extractVideoInformation(videoID,elementCount);
   
   def parseDate(self,dateString):
     self.gui.log(dateString);
@@ -87,7 +88,7 @@ class ARTEMediathek(Mediathek):
       dateString = dateString.replace(month,month_replacements[month]);
     return time.strptime(dateString,"%d %m %Y");
     
-  def extractVideoInformation(self, videoID):
+  def extractVideoInformation(self, videoID, elementCount):
     link = self.baseXmlLink%(videoID);
     xmlPage = self.loadPage(link);
     try:
@@ -135,19 +136,22 @@ class ARTEMediathek(Mediathek):
         links[quality] = SimpleLink("%s playpath=MP4:%s swfUrl=http://videos.arte.tv/blob/web/i18n/view/player_11-3188338-data-4836231.swf swfVfy=1"%(stringArray[0],stringArray[1]),0);
         if(len(links) > 0):
           self.gui.log("Picture: "+picture);
-          self.gui.buildVideoLink(DisplayObject(title,"",picture,desc,links,True,date),self);
+          self.gui.buildVideoLink(DisplayObject(title,"",picture,desc,links,True,date),self,elementCount);
       configXml.unlink();
     except:
       self.gui.log("something goes wrong while processing "+link);
       self.gui.log(xmlPage);
   
-  def extractTopicObjects(self,mainPage):
-    for touple in self.regex_ExtractTopicPages.findall(mainPage):      
+  def extractTopicObjects(self,mainPage,initCount):
+    touples = self.regex_ExtractTopicPages.findall(mainPage)
+    elementCount = len(touples) + initCount
+    for touple in touples:      
       try:
         title = touple[1].encode('UTF-8');
       except:
         title = touple[1].decode('UTF-8');
       numbers = touple[2];
       link = touple[0];
-      self.gui.buildVideoLink(DisplayObject(title,"","","",self.rootLink+link,False),self);
+      self.gui.buildVideoLink(DisplayObject(title,"","","",self.rootLink+link,False),self,elementCount);
+    return elementCount;
       

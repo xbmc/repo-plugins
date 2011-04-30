@@ -41,7 +41,7 @@ class SimpleXbmcGui(object):
     else:
       xbmc.output("[%s]: %s" % (__plugin__, msg.encode('utf8')))
       
-  def buildVideoLink(self, displayObject, mediathek):
+  def buildVideoLink(self, displayObject, mediathek, objectCount):
     if(displayObject.subTitle == "" or displayObject.subTitle == displayObject.title):
       title = transformHtmlCodes(displayObject.title);
     else:
@@ -59,7 +59,7 @@ class SimpleXbmcGui(object):
         url = "%s?type=%s&action=openPlayList&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(link.basePath))
         
         self.log(url);
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True,totalItems = objectCount)
       else:
         self.log(displayObject.title);
         if(self.quality in displayObject.link):
@@ -93,17 +93,17 @@ class SimpleXbmcGui(object):
       
       
         listItem.setProperty('IsPlayable', 'true');
-        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=link.basePath,listitem=listItem,isFolder=False)
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=link.basePath,listitem=listItem,isFolder=False,totalItems = objectCount)
     else:
       url = "%s?type=%s&action=openTopicPage&link=%s" % (sys.argv[0],mediathek.name(), urllib.quote_plus(displayObject.link))
-      xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
+      xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True,totalItems = objectCount)
       
-  def buildMenuLink(self,menuObject,mediathek):
+  def buildMenuLink(self,menuObject,mediathek,objectCount):
     title = menuObject.name;
     listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
            
     url = "%s?type=%s&action=openMenu&path=%s" % (sys.argv[0],mediathek.name(), menuObject.path)
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True)
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=listItem,isFolder=True,totalItems = objectCount)
 
   def listAvaibleMediathekes(self, mediathekNames):
     rootPath = os.path.join(self.settings.getAddonInfo('path'),"resources/logos/");
@@ -146,11 +146,11 @@ class SimpleXbmcGui(object):
       return "";
       
   def playPlaylist(self, remotePlaylist):
-    xbmc.executebuiltin("Playlist.Clear");
     player = xbmc.Player();
     
     playerItem = xbmcgui.ListItem(remotePlaylist);
-    playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
+    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO);
+    playlist.clear();
     print "playPlaylist";
     
     for link in regex_findLink.findall(remotePlaylist):

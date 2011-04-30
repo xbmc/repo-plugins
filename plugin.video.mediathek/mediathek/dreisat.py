@@ -92,10 +92,11 @@ class DreiSatMediathek(Mediathek):
     self.regex_searchImage = re.compile("/dynamic/mediathek/stills/\\d*_big\\.jpg");
     self.replace_html = re.compile("<.*?>");
     
-  def buildPageMenu(self, link):
+  def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
     rssFeed = self.loadConfigXml(link);
-    self.extractVideoObjects(rssFeed);
+    self.extractVideoObjects(rssFeed, initCount);
+    
   def searchVideo(self, searchText):
     values ={'mode':'search',
              'query':searchText,
@@ -105,7 +106,8 @@ class DreiSatMediathek(Mediathek):
              'query_order':''
              }
     mainPage = self.loadPage(self.searchLink,values);
-    for result in self.regex_searchResult.findall(mainPage):
+    results = self.regex_searchResult.findall(mainPage);
+    for result in results:
       objectLink = self.regex_searchResultLink.search(result).group();
       infoLink = self.rootLink+objectLink
       infoPage = self.loadPage(infoLink);
@@ -126,7 +128,7 @@ class DreiSatMediathek(Mediathek):
       video = self.regex_searchLink.search(videoPage).group();
       links = {}
       links[2] = SimpleLink(video,0)
-      self.gui.buildVideoLink(DisplayObject(title,"",self.rootLink + image,detail,links,True, pubDate),self);
+      self.gui.buildVideoLink(DisplayObject(title,"",self.rootLink + image,detail,links,True, pubDate),self,len(results));
       
   def readText(self,node,textNode):
     try:
@@ -140,11 +142,11 @@ class DreiSatMediathek(Mediathek):
     xmlPage = self.loadPage(link);
     return minidom.parseString(xmlPage);  
     
-  def extractVideoObjects(self, rssFeed):
-    videoIDs = [];
-    
-    for itemNode in rssFeed.getElementsByTagName("item"):
-      self.extractVideoInformation(itemNode);
+  def extractVideoObjects(self, rssFeed, initCount):
+    nodes = rssFeed.getElementsByTagName("item");
+    nodeCount = initCount + len(nodes)
+    for itemNode in nodes:
+      self.extractVideoInformation(itemNode,nodeCount);
   
   def parseDate(self,dateString):
     dateString = regex_dateString.search(dateString).group();
@@ -152,7 +154,7 @@ class DreiSatMediathek(Mediathek):
       dateString = dateString.replace(month,month_replacements[month]);
     return time.strptime(dateString,"%d %m %Y");
     
-  def extractVideoInformation(self, itemNode):
+  def extractVideoInformation(self, itemNode, nodeCount):
     title = self.readText(itemNode,"title");
     
     dateString = self.readText(itemNode,"pubDate");
@@ -178,5 +180,5 @@ class DreiSatMediathek(Mediathek):
         links[1] = SimpleLink(url, size);
       else:
         links[2] = SimpleLink(url, size);
-    self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True, pubDate),self);
+    self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True, pubDate),self,nodeCount);
       

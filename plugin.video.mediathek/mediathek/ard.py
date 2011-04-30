@@ -110,38 +110,44 @@ class ARDMediathek(Mediathek):
     return True;
     
   def searchVideo(self, searchText):
-    self.searchSendungen(searchText);
-    self.searchClips(searchText);
+    sendungen = self.searchSendungen(searchText);
+    clips = self.searchClips(searchText);
+    
+    elementCount = len(sendungen)+len(clips);
+    
+    for sendung in sendungen:
+      self.buildSearchResultLink(sendung, False, elementCount);
+    for clip in clips:
+      self.buildSearchResultLink(clip, True, elementCount);
   
   def searchSendungen(self, searchText):
     searchLink = self.searchLink%(10,searchText);
     self.gui.log(searchLink);   
     resultPage = self.loadPage(searchLink);
-    for element in self.regex_videoLinks.finditer(resultPage):
-      element = element.group()
-      videoDocumentLink = self.regex_videoDocumentLink.search(element).group();
-      metaInfoLink = self.regex_MetaInfo.search(element).group();
-      displayObject = self.extractMetaInfo(self.rootLink+metaInfoLink);
-      displayObject.link = self.rootLink+videoDocumentLink;
-      displayObject.isPlayable = False;
-      
-      self.gui.buildVideoLink(displayObject,self);
-      
+    return list(self.regex_videoLinks.finditer(resultPage));
+  
   def searchClips(self, searchText):
     searchLink = self.searchLink%(40,searchText);
     self.gui.log(searchLink);   
     resultPage = self.loadPage(searchLink);
-    for element in self.regex_videoLinks.finditer(resultPage):
-      element = element.group()
-      videoDocumentLink = self.regex_videoDocumentLink.search(element).group();
-      metaInfoLink = self.regex_MetaInfo.search(element).group();
-      
-      displayObject = self.extractMetaInfo(self.rootLink+metaInfoLink);
-      displayObject.link = self.getVideoLink(self.rootLink+videoDocumentLink);
-      
-      self.gui.buildVideoLink(displayObject,self);
+    return list(self.regex_videoLinks.finditer(resultPage));  
+  
+  def buildSearchResultLink(self, element, isPlayable, elementCount):
+    element = element.group()
+    videoDocumentLink = self.regex_videoDocumentLink.search(element).group();
+    metaInfoLink = self.regex_MetaInfo.search(element).group();
+    displayObject = self.extractMetaInfo(self.rootLink+metaInfoLink);
     
-  def buildPageMenu(self, link, subLink = False):
+    if(isPlayable):
+      displayObject.link = self.getVideoLink(self.rootLink+videoDocumentLink);
+    else:
+      displayObject.link = self.rootLink+videoDocumentLink;
+      displayObject.isPlayable = False;
+      
+    self.gui.buildVideoLink(displayObject, self, elementCount);
+    
+    
+  def buildPageMenu(self, link, initCount, subLink = False):
     self.gui.log(link);    
     mainPage = self.loadPage(link);
     
@@ -164,8 +170,8 @@ class ARDMediathek(Mediathek):
           link = link.group();
           link = self.regex_ajaxLink.search(link).group();
           self.gui.log("SubLink: "+link)
-          elementCount += self.buildPageMenu(self.rootLink+link,True);
-          if(elementCount > 20):
+          elementCount += self.buildPageMenu(self.rootLink+link, 0,True);
+          if(elementCount > 60):
             break;
       return elementCount;
           
@@ -173,8 +179,9 @@ class ARDMediathek(Mediathek):
       
       
   def extractCategorieObjects(self,mainPage):
-    counter = 0
-    for element in self.regex_videoLinks.finditer(mainPage):
+    elements = list(self.regex_videoLinks.finditer(mainPage));
+    counter = len(elements);
+    for element in elements:
       element = element.group()
       
       videoDocumentLink = self.regex_videoDocumentLink.search(element).group();
@@ -183,13 +190,13 @@ class ARDMediathek(Mediathek):
       displayObject = self.extractMetaInfo(self.rootLink+metaInfoLink);
       displayObject.link = self.rootLink+videoDocumentLink;
       displayObject.isPlayable = False;
-      self.gui.buildVideoLink(displayObject,self);
-      counter += 1;
+      self.gui.buildVideoLink(displayObject, self, counter);
     return counter;
   
   def extractVideoObjects(self,mainPage):
-    counter = 0;
-    for element in self.regex_videoLinks.finditer(mainPage):
+    elements = list(self.regex_videoLinks.finditer(mainPage));
+    counter = len(elements);
+    for element in elements:
       element = element.group()
       
       videoDocumentLink = self.regex_videoDocumentLink.search(element).group();
@@ -198,8 +205,7 @@ class ARDMediathek(Mediathek):
       displayObject = self.extractMetaInfo(self.rootLink+metaInfoLink);
       displayObject.link = self.getVideoLink(self.rootLink+videoDocumentLink);
       
-      self.gui.buildVideoLink(displayObject,self);
-      counter+=1;
+      self.gui.buildVideoLink(displayObject,self, counter);
     return counter;
       
   def extractMetaInfo(self, link):

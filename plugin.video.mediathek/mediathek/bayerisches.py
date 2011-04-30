@@ -45,7 +45,7 @@ class BayerischesFSMediathek(Mediathek):
       );
 
 
-  def buildPageMenu(self, link):
+  def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
 
     a=self.loadAndUnzip();
@@ -54,7 +54,7 @@ class BayerischesFSMediathek(Mediathek):
       self.xml_cont = minidom.parseString(a); 
     except:
       self.menuTree = (
-        TreeNode("0","Plugin Broken, Sry ;)","http://LoadAll",False),
+        TreeNode("0","Plugin Broken, Sry ;)","http://LoadAll",False,initCount),
       );
       return;
     displayItems=[];
@@ -62,8 +62,9 @@ class BayerischesFSMediathek(Mediathek):
       displayItem = self.extractVideoInformation(itemNode);
       if(displayItem is not None):
         displayItems.append(displayItem);
+    itemCount = len(displayItems) +initCount    
     for displayItem in sorted(displayItems, key = lambda item:item.date, reverse=True):
-      self.gui.buildVideoLink(displayItem,self);
+      self.gui.buildVideoLink(displayItem,self,itemCount);
   def readText(self,node,textNode):
     try:
       node = node.getElementsByTagName(textNode)[0].firstChild;

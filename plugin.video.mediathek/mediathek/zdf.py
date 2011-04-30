@@ -113,23 +113,45 @@ class ZDFMediathek(Mediathek):
              'sucheBtn.y':'8',
              'sucheText': searchText}
     mainPage = self.loadPage(self.searchSite,values);
-    self.extractVideoObjects(mainPage);
+    videoPageLinks = list(self._regex_extractVideoPageLink.finditer(mainPage));
     
-  def buildPageMenu(self, link):
+    self.initCount = 0;
+    self.countTopic = 0;
+    self.countVideo = len(videoPageLinks);
+    
+    self.extractVideoObjects(videoPageLinks);
+    
+  def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
     mainPage = self.loadPage(link);
-    self.extractTopicObjects(mainPage);
-    self.extractVideoObjects(mainPage);
     
-  def extractVideoObjects(self,mainPage):
+    topicPageLinks = list(self._regex_extractTopicObject.finditer(mainPage));
+    videoPageLinks = list(self._regex_extractVideoPageLink.finditer(mainPage));
+        
+    self.initCount = initCount;
+    self.countTopic = len(topicPageLinks);
+    self.countVideo = len(videoPageLinks);
+    
+    self.extractTopicObjects(topicPageLinks);
+    self.extractVideoObjects(videoPageLinks);
+  
+  def getItemCount(self):
+    return self.initCount + self.countTopic + self.countVideo;
+    
+  def extractVideoObjects(self,videoPageLinks):
     lastID = -1;
-    for pageLink in self._regex_extractVideoPageLink.finditer(mainPage):
+    videos = []
+    for pageLink in videoPageLinks:
       self.gui.log("pageLink: "+pageLink.group());
       videoID = self._regex_extractVideoID.search(pageLink.group()).group();
       videoID = videoID.replace("/","");
       if(not lastID == videoID):
-        self.loadConfigXml(videoID);
+        videos.append(videoID);
         lastID = videoID;
+    
+    self.countVideo = len(videos);
+    for videoID in videos:
+      self.loadConfigXml(videoID);
   
   def loadConfigXml(self, videoID):
     link = self.xmlService%(videoID);
@@ -195,7 +217,7 @@ class ZDFMediathek(Mediathek):
             break;
       configXml.unlink();
       if(len(links) > 0):
-        self.gui.buildVideoLink(DisplayObject(title,"",picture,detail,links,True, date),self);
+        self.gui.buildVideoLink(DisplayObject(title,"",picture,detail,links,True, date),self,self.getItemCount());
     except:
       self.gui.log("Error while processing the xml-file: %s"%link);
       self.gui.log(xmlPage);
@@ -251,8 +273,8 @@ class ZDFMediathek(Mediathek):
     return links;
     
     
-  def extractTopicObjects(self,mainPage):
-    for element in self._regex_extractTopicObject.finditer(mainPage):
+  def extractTopicObjects(self,pageLinks):
+    for element in pageLinks:
       element = element.group()
       pictureLink = self.rootLink + self._regex_extractPictureLink.search(element).group();
       videoPageLink = self.rootLink+self._regex_extractTopicPageLink.search(element).group();
@@ -264,7 +286,7 @@ class ZDFMediathek(Mediathek):
         titles.append(title);
       while len(titles) < 2:
         titles.append("");
-      self.gui.buildVideoLink(DisplayObject(titles[0],titles[1],pictureLink,"",videoPageLink,False),self);
+      self.gui.buildVideoLink(DisplayObject(titles[0],titles[1],pictureLink,"",videoPageLink,False),self,self.getItemCount());
   
   def cleanupNodes(self, rootNode):
     for node in rootNode.childNodes:

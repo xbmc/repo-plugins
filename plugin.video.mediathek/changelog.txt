@@ -1,3 +1,5 @@
+0.1.9 - FIX: ORF Playback
+        FIX: Progressbar is displayed corectly
 0.1.8 - ZDF Changes their Interface, reimplement it
 0.1.7 - Adding ORF
 0.1.6 - FIXES: Arty playback now functional, RTMP set as default, Sorting of Items in Bayrisches Fernsehen

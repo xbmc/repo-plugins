@@ -147,7 +147,7 @@ class ORFMediathek(Mediathek):
   def isSearchable(self):
     return True;
   
-  def createVideoLink(self,title,image,videoPageLink):
+  def createVideoLink(self,title,image,videoPageLink,elementCount):
     videoPage = self.loadPage(self.rootLink+videoPageLink);
     
     videoLink = self.regex_extractVideoLink.search(videoPage);
@@ -163,15 +163,16 @@ class ORFMediathek(Mediathek):
       counter+=1;
 
     if(counter == 1):
-      self.gui.buildVideoLink(DisplayObject(title,"",image,"",videoLink, True, time.gmtime()),self);
+      self.gui.buildVideoLink(DisplayObject(title,"",image,"",videoLink, True, time.gmtime()),self,elementCount);
     else:
-      self.gui.buildVideoLink(DisplayObject(title,"",image,"",videoLink, "PlayList", time.gmtime()),self);
+      self.gui.buildVideoLink(DisplayObject(title,"",image,"",videoLink, "PlayList", time.gmtime()),self,elementCount);
   
   def searchVideo(self, searchText):
     link = self.searchLink = "http://tvthek.orf.at/search?q="+searchText;
     mainPage = self.loadPage(link);
+    result = self.regex_extractSearchObject.findall(mainPage);
     
-    for searchObject in self.regex_extractSearchObject.findall(mainPage):
+    for searchObject in result:
       videoLink = self.regex_extractProgrammLink.search(searchObject).group().replace("\"","");
       title = self.regex_extractProgrammTitle.search(searchObject).group().replace("title=\"","").replace("\"","");
       title = title.decode("UTF-8");
@@ -179,12 +180,13 @@ class ORFMediathek(Mediathek):
       
       print videoLink;
       
-      self.createVideoLink(title,pictureLink,videoLink);
+      self.createVideoLink(title,pictureLink,videoLink, len(result));
     
-  def buildPageMenu(self, link):
+  def buildPageMenu(self, link, initCount):
     mainPage = self.loadPage(link);
-    
-    for linkObject in self.regex_extractVideoObject.findall(mainPage):
+    links = self.regex_extractVideoObject.findall(mainPage);
+    elementCount = initCount + len(links);
+    for linkObject in links:
       
       videoLink = self.regex_extractVideoPageLink.search(linkObject).group().replace("\"","");
       
@@ -194,5 +196,5 @@ class ORFMediathek(Mediathek):
       title = self.replace_html.sub("", title);
       title = title.replace(" <span","");
       
-      self.createVideoLink(title,image,videoLink);
+      self.createVideoLink(title,image,videoLink, elementCount);
 

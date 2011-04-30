@@ -108,13 +108,13 @@ class Mediathek(object):
         treeNode = self.menuTree[0];
       self.gui.log(treeNode.name);
       for childNode in treeNode.childNodes:
-        self.gui.buildMenuLink(childNode,self);
+        self.gui.buildMenuLink(childNode,self, len(treeNode.childNodes));
       if(treeNode.displayElements):
-        self.buildPageMenu(treeNode.link);
+        self.buildPageMenu(treeNode.link,len(treeNode.childNodes));
         
   def displayCategories(self):
     if(len(self.menuTree)>1):
       for treeNode in self.menuTree:
-        self.gui.buildMenuLink(treeNode,self) 
+        self.gui.buildMenuLink(treeNode,self,len(self.menuTree)) 
     else:
-      self.buildPageMenu(self.menuTree[0].link);
+      self.buildPageMenu(self.menuTree[0].link, 0);

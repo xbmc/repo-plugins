@@ -28,8 +28,10 @@ def getUserSettingCaUser(arg):
     return v
 
 def getUserSettingExpandEpisodes(arg):
+    #no longer used, return False
     ee = xbmcplugin.getSetting(arg,'expandEpisodes')
     v = False
+    return False
     if(ee == "0"):
         v = True
     if(ee == "1"):
@@ -79,7 +81,7 @@ def getUserSettingShowRatingInTitle(arg):
 
 def getUserSettingPosterQuality(arg):
     pqs = xbmcplugin.getSetting(arg,'pQuality')
-    v = ""
+    v = "ghd"
     if(pqs == "0"):
         v = "ghd"
     if(pqs == "1"):

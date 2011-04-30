@@ -99,7 +99,7 @@ def getAuth(netflix, verbose):
 
 def saveUserInfo():
     #create the file
-    f = open(os.path.join(str(USERINFO_FOLDER), 'userinfo.txt'),'r+')
+    f = open(os.path.join(str(USERINFO_FOLDER), 'userinfo.txt'),'w+')
     setting ='requestKey=' + MY_USER['request']['key'] + '\n' + 'requestSecret=' + MY_USER['request']['secret'] + '\n' +'accessKey=' + MY_USER['access']['key']+ '\n' + 'accessSecret=' + MY_USER['access']['secret']
     f.write(setting)
     f.close()
@@ -116,7 +116,7 @@ def checkplayercore():
         if not os.path.exists('C:\Program Files'):
             fileWithData = os.path.join(str(RESOURCE_FOLDER), 'playercorefactoryOSX.xml')
         data = open(str(fileWithData),'r').read()
-        f = open(checkFile,'r+')
+        f = open(checkFile,'w+')
         f.write(data)
         f.close()
     
@@ -127,7 +127,7 @@ def checkadvsettings():
         #copy file from addon folder
         fileWithData = os.path.join(str(RESOURCE_FOLDER), 'advancedsettings.xml')
         data = open(str(fileWithData),'r').read()
-        f = open(checkFile,'r+')
+        f = open(checkFile,'w+')
         f.write(data)
         f.close()
 
@@ -264,7 +264,7 @@ def writeLinkFile(id, title):
             redirect = "<!doctype html public \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Requesting Video: " + title + "</title><meta http-equiv=\"REFRESH\" content=\"0;url=http://www.netflix.com/" + player + "?lnkctr=apiwn&nbb=y&devKey=gnexy7jajjtmspegrux7c3dj&movieid=" + id + "\"></head><body bgcolor=\"#FF0000\"> <p>Redirecting to Netflix in a moment ...</p></body></html>"
         else:
             redirect = "<!doctype html public \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Requesting Video: " + title + "</title><meta http-equiv=\"REFRESH\" content=\"0;url=http://www.netflix.ca/" + player + "?lnkctr=apiwn&nbb=y&devKey=gnexy7jajjtmspegrux7c3dj&movieid=" + id + "\"></head><body bgcolor=\"#FF0000\"> <p>Redirecting to Netflix in a moment ...</p></body></html>"
-        f = open(fileLoc,'r+')
+        f = open(fileLoc,'w+')
         f.write(redirect)
         f.close()
 
@@ -280,7 +280,7 @@ def writeDiscLinkFile(id, title, webURL):
         if(useAltPlayer):
             player = "WiPlayer"
         redirect = "<!doctype html public \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head><title>Requesting Video: " + title + "</title><meta http-equiv=\"REFRESH\" content=\"0;url=" + webURL + "\"></head><body bgcolor=\"#0000cc\"> <p>Redirecting to Netflix in a moment ...</p></body></html>"
-        f = open(fileLoc,'r+')
+        f = open(fileLoc,'w+')
         f.write(redirect)
         f.close()
 
@@ -564,13 +564,19 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
 
     
     #title
-    matchTitle = re.search(r'[\'"]title[\'"]: {.*?[\'"]regular[\'"]: u{0,1}[\'"](.*?)[\'"].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
+    matchTitle = re.search(r'[\'"]title[\'"]: {.*?[\'"]regular[\'"]: u{0,1}[\'](.*?)[\'].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
     if matchTitle:
         curX.Title = matchTitle.group(1).strip()
     else:
-        matchTitle2 = re.search('"ShortName": "(.*?)"',curQueueItem, re.DOTALL | re.MULTILINE)
-        if matchTitle2:
-            curX.Title = matchTitle2.group(1).strip()
+        matchTitleQuoted = re.search(r'[\'"]title[\'"]: {.*?[\'"]regular[\'"]: u{0,1}[\'"](.*?)[\'"].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
+        if matchTitleQuoted:
+            curX.Title = matchTitleQuoted.group(1).strip()
+        else:
+            matchTitle3 = re.search('"ShortName": "(.*?)"',curQueueItem, re.DOTALL | re.MULTILINE)
+            if matchTitle3:
+                curX.Title = matchTitle3.group(1).strip()
+
+
     #position
     matchPosition = re.search(r'[\'"]position[\'"]: u{0,1}[\'"](\d{1,6})[\'"], ', curQueueItem, re.DOTALL | re.MULTILINE)
     if matchPosition:
@@ -607,15 +613,19 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
         curX.WebURL = matchWebURL.group(1)
                 
     #shorttitle
-    matchTitleShort = re.search('[\'"]title[\'"]: {.*?[\'"](title_)?short[\'"]: u{0,1}[\'"](.*?)[\'"].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
+    matchTitleShort = re.search('[\'"]title[\'"]: {.*?[\'"](title_)?short[\'"]: u{0,1}[\'](.*?)[\'].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
     if matchTitleShort:
         curX.TitleShort = matchTitleShort.group(2).strip()
     else:
-        matchTitleShort2 = re.search('"ShortName": "(.*?)"',curQueueItem, re.DOTALL | re.MULTILINE)
-        if matchTitleShort2:
-            curX.TitleShort = matchTitleShort2.group(1).strip()
+        matchTitleShortQuotes = re.search('[\'"]title[\'"]: {.*?[\'"](title_)?short[\'"]: u{0,1}[\'"](.*?)[\'"].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
+        if matchTitleShortQuotes:
+            curX.TitleShort = matchTitleShortQuotes.group(2).strip()
+        else:
+            matchTitleShort3 = re.search('"ShortName": "(.*?)"',curQueueItem, re.DOTALL | re.MULTILINE)
+            if matchTitleShort3:
+                curX.TitleShort = matchTitleShort3.group(1).strip()
+
     firstM = True
-    
     #director
     for matchDir in re.finditer(r"directors': \[(.*?)\]", curQueueItem):
         firstM = True
@@ -689,13 +699,18 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
         curX.TvShowSeasonID = matchShowData.group(2).strip()
 
     #synop
-    match = re.search(r"u'synopsis': {.*?u'regular': u'(.*?)}", curQueueItem, re.DOTALL | re.MULTILINE)
-    if match:
-        curX.Synop = match.group(1)
+    matchSynop = re.search(r"u'synopsis': {.*?u'regular': u'(.*?)}", curQueueItem, re.DOTALL | re.MULTILINE)
+    if matchSynop:
+        curX.Synop = matchSynop.group(1)
     else:
-        matchSynop = re.search(r'"Synopsis": "(.*?)", "AverageRating": (.{1,5}), "ReleaseYear": (\d{4}),', curQueueItem, re.DOTALL | re.IGNORECASE | re.MULTILINE)
-        if matchSynop:
-            curX.Synop = matchSynop.group(1)
+        matchSynop2 = re.search(r"u'synopsis': {.*?u'short_synopsis': u'(.*?)}", curQueueItem, re.DOTALL | re.MULTILINE)
+        if matchSynop2:
+            curX.Synop = matchSynop2.group(1)
+        else:
+            matchSynop3 = re.search(r'"Synopsis": "(.*?)", "AverageRating": (.{1,5}), "ReleaseYear": (\d{4}),', curQueueItem, re.DOTALL | re.IGNORECASE | re.MULTILINE)
+            if matchSynop3:
+                curX.Synop = matchSynop3.group(1)
+
     #cleanup synop
     try:
         strSynopsis = curX.Synop
@@ -723,7 +738,8 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
         print "No Synop Data available for " + curX.Title
 
     curX.Synop = "Available Until: " + availableTimeRemaining(curX.AvailableUntil) + "\n" + curX.Synop
-    
+
+    curX.TitleShortOriginal = curX.TitleShort
     #Appending MPAA Rating to Title
     if(SHOW_RATING_IN_TITLE):
         curX.TitleShort = curX.TitleShort + " [" + curX.Mpaa + "]"
@@ -839,8 +855,12 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
         matchEpNum = re.search('(?sm)u{0,1}[\'"]sequence[\'"]: u{0,1}(?P<episodeNum>\\d{1,3})', matchAllEp.group())
         if matchEpNum:
             curXe.TvEpisodeEpisodeNum = str(matchEpNum.group("episodeNum"))
-        
-        matchShortTitle = re.search('(?sm)u{0,1}[\'"]episode_short[\'"]: u{0,1}[\'"](?P<shorttitle>.*?)[\'"],', matchAllEp.group())
+
+        matchSeasonNum = re.search('(?sm)u{0,1}[\'"]season_number[\'"]: u{0,1}(?P<seasonNum>\\d{1,3})', matchAllEp.group())
+        if matchEpNum:
+            curXe.TvEpisodeEpisodeSeasonNum = str(matchSeasonNum.group("seasonNum"))
+
+        matchShortTitle = re.search('(?sm)u{0,1}[\'"]episode_short_raw[\'"]: u{0,1}[\'"](?P<shorttitle>.*?)[\'"]', matchAllEp.group())
         if matchShortTitle:
             shortTitleString = str(matchShortTitle.group("shorttitle"))
             
@@ -851,9 +871,9 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
                 curXe.TitleShort = shortTitleString
         else:
             if(not forceExpand):
-                curXe.TitleShort = curX.TitleShort + " " + "Episode: " + str(curXe.TvEpisodeEpisodeNum) + " " + shortTitleString
+                curXe.TitleShort = curX.TitleShortOriginal + " " + "Episode: " + str(curXe.TvEpisodeEpisodeNum) + " " + shortTitleString
             else:
-                curXe.TitleShort = "Episode: " + str(curXe.TvEpisodeEpisodeNum) + " - " + shortTitleString
+                curXe.TitleShort = "s" + str(curXe.TvEpisodeEpisodeSeasonNum) + "e" + str(curXe.TvEpisodeEpisodeNum) + " - " + shortTitleString
 
         curXe.TvShow = True
         curXe.TvShowLink = curX.TvShowLink
@@ -1012,21 +1032,26 @@ def getUrlString(url):
     response.close()
     return data 
 
+def cleanString(strToClean):
+    result = str(strToClean)
+    result = re.sub(r"&quot;", r'"', result)
+    result = re.sub(r"&amp;", r'&', result)
+    return result
+
 def parseRSSFeedItem(curQueueItem, curX):
     try:
         reobj = re.compile(r"<title>(.*?)</title>.*?<link>(.*?)</link>.*?<description>.*;{1}(.*?)</description>", re.DOTALL | re.MULTILINE)
         match = reobj.search(curQueueItem)
         if match:
-            curX.Title = match.group(1)
-            curX.TitleShort = match.group(1)
-            curX.Synop = match.group(3)
+            curX.Title = cleanString(match.group(1))
+            curX.TitleShort = cleanString(match.group(1))
+            curX.Synop = cleanString(match.group(3))
             curX.WebURL = match.group(2)
             reobj = re.compile(r".*?/(\d{1,15})", re.DOTALL | re.MULTILINE)
             matchID = reobj.search(match.group(2))
             if matchID:
                 curX.ID = matchID.group(1)
             curX.Poster = "http://cdn-8.nflximg.com/us/boxshots/" + str(POSTER_QUAL) + "/" + curX.ID + ".jpg"
-            
     except:
         print "error parsing data from RSS feed Item"
     return curX
@@ -1306,7 +1331,7 @@ def initApp():
     print "USER INFO FILE LOC: " + userInfoFileLoc
     havefile = os.path.isfile(userInfoFileLoc)
     if(not havefile):
-        f = open(userInfoFileLoc,'r+')
+        f = open(userInfoFileLoc,'w+')
         f.write("")
         f.close()
 

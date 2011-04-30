@@ -5,6 +5,7 @@ class XInfo:
         self.Year = "0000"
         self.Title = "Item Full Title Name"
         self.TitleShort = "Short Item Title"
+        self.TitleShortOriginal = "Original Short Item Title"
         self.TitleShortLink = "Short Item Title with no spaces"
         self.Rating = "0.0"
         self.Runtime = "0"

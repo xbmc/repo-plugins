@@ -77,7 +77,7 @@ def getAuth(netflix, verbose):
 
 def saveUserInfo():
     #create the file
-    f = open(os.path.join(str(USERINFO_FOLDER), 'userinfo.txt'),'r+')
+    f = open(os.path.join(str(USERINFO_FOLDER), 'userinfo.txt'),'w+')
     setting ='requestKey=' + MY_USER['request']['key'] + '\n' + 'requestSecret=' + MY_USER['request']['secret'] + '\n' +'accessKey=' + MY_USER['access']['key']+ '\n' + 'accessSecret=' + MY_USER['access']['secret']
     f.write(setting)
     f.close()
@@ -135,7 +135,7 @@ def initApp():
     print "USER INFO FILE LOC: " + userInfoFileLoc
     havefile = os.path.isfile(userInfoFileLoc)
     if(not havefile):
-        f = open(userInfoFileLoc,'r+')
+        f = open(userInfoFileLoc,'w+')
         f.write("")
         f.close()
 

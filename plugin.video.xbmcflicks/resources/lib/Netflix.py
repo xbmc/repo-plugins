@@ -224,9 +224,9 @@ class NetflixUser:
             accessToken = oauth.OAuthToken(accessToken['key'], accessToken['secret'] )
 
         if not historyType:
-            requestUrl = '/users/%s/queues/instant/available' % (accessToken.key)
+            requestUrl = '/users/%s/queues/instant' % (accessToken.key)
         else:
-            requestUrl = '/users/%s/queues/instant/available/%s' % (accessToken.key,historyType)
+            requestUrl = '/users/%s/queues/instant/%s' % (accessToken.key,historyType)
         
         try:
             info = simplejson.loads( self.client._getResource(requestUrl, parameters=parameters, token=accessToken ) )

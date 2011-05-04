@@ -1,3 +1,4 @@
+0.2.0 - FIX: Minor Bugfixes
 0.1.9 - FIX: ORF Playback
         FIX: Progressbar is displayed corectly
 0.1.8 - ZDF Changes their Interface, reimplement it

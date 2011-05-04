@@ -166,7 +166,6 @@ class ZDFMediathek(Mediathek):
       detail = configXml.getElementsByTagName("detail")[0].childNodes[0].data
       dateString = configXml.getElementsByTagName("airtime")[0].childNodes[0].data
       date = time.strptime(dateString,"%d.%m.%Y %H:%M");
-      self.gui.log("Seek");
       size = 0;
       picture = "";
       for picElement in configXml.getElementsByTagName("teaserimage"):
@@ -179,14 +178,17 @@ class ZDFMediathek(Mediathek):
           size = diag;
           self.gui.log("%d %s"%(diag,picElement.childNodes[0].data));
           picture = picElement.childNodes[0].data;
-      self.gui.log("Done");
       links = {};
       
       for streamObject in configXml.getElementsByTagName("formitaet"):
         baseType = streamObject.getAttribute("basetype")
         if(baseType.find(self.baseType)>-1):
+          
           url = streamObject.getElementsByTagName("url")[0].childNodes[0].data;
-          size = int(streamObject.getElementsByTagName("filesize")[0].childNodes[0].data);
+          try:
+            size = int(streamObject.getElementsByTagName("filesize")[0].childNodes[0].data);
+          except:
+            size = 0;
           if(self.baseType == "rtmp_smil_http"):
             links = self.getRtmpLinks(url, size);
             break;
@@ -220,7 +222,7 @@ class ZDFMediathek(Mediathek):
         self.gui.buildVideoLink(DisplayObject(title,"",picture,detail,links,True, date),self,self.getItemCount());
     except:
       self.gui.log("Error while processing the xml-file: %s"%link);
-      self.gui.log(xmlPage);
+      print xmlPage;
       self.gui.log("Exception: ");
       traceback.print_exc();
       self.gui.log("Stacktrace: ");

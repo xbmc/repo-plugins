@@ -78,7 +78,7 @@ else:
   if(action == "openTopicPage"):
     link = urllib.unquote_plus(params.get("link", ""));
     gui.log(link);
-    mediathek.buildPageMenu(link);
+    mediathek.buildPageMenu(link, 0);
   elif(action == "openPlayList"):
     link = urllib.unquote_plus(params.get("link", ""));
     gui.log(link);

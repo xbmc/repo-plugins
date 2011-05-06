@@ -1,3 +1,7 @@
+[B]Version 1.1.0[/B]
+- Dynamically load AAC channels, they are no longer hardcoded.
+- Removed support for old low quality WMA channels
+
 [B]Version 1.0.3[/B]
 - Fix encoding error with danish chars in .py file
 

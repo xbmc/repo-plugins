@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
         id="plugin.audio.dr.dk.netradio"
-        version="1.0.3"
+        version="1.1.0"
         name="DR.dk Netradio"
         provider-name="stemann [jesper@sait.dk], twinther [tommy@winther.nu]">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
-        <import addon="script.module.danishaddons" version="1.1.0"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>audio</provides>

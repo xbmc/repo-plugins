@@ -61,8 +61,6 @@ class Feed(object):
     self.archiveFile=ArchiveFile(self.objectId);
     
     self.feedItems = self.archiveFile.feedItems;
-    for feedItem in self.feedItems:
-      self.gui.log(feedItem.title);
     self.lastLoad = self.archiveFile.lastLoad;
     
     
@@ -91,8 +89,6 @@ class Feed(object):
     self.archiveFile=ArchiveFile(self.objectId);
     
     self.feedItems = self.archiveFile.feedItems;
-    for feedItem in self.feedItems:
-      self.gui.log(feedItem.title);
     self.lastLoad = self.archiveFile.lastLoad;
     
     
@@ -103,7 +99,6 @@ class Feed(object):
     self.maxArticleNumber = stateObject.maxArticleNumber
     
   def saveChanges(self):
-    self.gui.log(self.archiveFile.archiveFile);
     self.archiveFile.save();
   
   def hasUnreadItems(self):
@@ -125,7 +120,7 @@ class Feed(object):
   def displayMenu(self, path):
     self.loadFeed();
     for feedItem in self.feedItems:
-     self.gui.buildMenuEntry(feedItem);
+     self.gui.buildMenuEntry(feedItem,len(self.feedItems));
   
   def insertFeedItem(self,newItem):
     i = 0
@@ -155,7 +150,7 @@ class Feed(object):
       self.saveChanges();
     else:
       self.gui.play(self);
-      #self.markRead();
+      self.markRead();
     
       
   def markRead(self, path = []):
@@ -175,6 +170,7 @@ class Feed(object):
   def checkArticleAge(self, articleDate):
     articleAge = time.time() - time.mktime(articleDate);
     articleAge = articleAge / 86400 #to days;
+    
     return articleAge < self.maxArticleAge;
   
   def updatedNeeded(self):

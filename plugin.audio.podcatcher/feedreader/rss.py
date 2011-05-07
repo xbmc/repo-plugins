@@ -24,12 +24,13 @@ findPicLink = re.compile("src=\".*?\"");
 
 class RssFeed (Feed):
   def updateFeed(self):
+    feedItems = [];
     try:    
       xmlPage = self.loadPage(self.feedUrl);
       xmlDocument = minidom.parseString(xmlPage);
       counter = 0;
       for itemNode in xmlDocument.getElementsByTagName("item"):
-        try:      
+        try:
           feedItem = FeedItem();
           feedItem.guid = self.readText(itemNode,"guid");
           feedItem.title = self.readText(itemNode,"title");
@@ -37,19 +38,6 @@ class RssFeed (Feed):
           
           dateString = self.readText(itemNode,"pubDate");
           feedItem.date = self.parseDate(dateString);
-          
-          if(not self.checkArticleAge(feedItem.date)):
-            break;
-          
-          eject = False;      
-          for i in range(counter,len(self.feedItems)):
-            storedItem = self.feedItems[i];
-            if(not storedItem.date < feedItem.date):
-              eject =True;
-              break;
-          
-          if(eject == True):
-            break;
           
           feedItem.author = self.readText(itemNode,"itunes:author");
           feedItem.duration = self.readText(itemNode,"itunes:duration").replace("00:","");
@@ -79,12 +67,31 @@ class RssFeed (Feed):
             feedItem.picture = "";
 
           feedItem.readed = False;
-          self.insertFeedItem(feedItem);
-          counter += 1;
-          if(counter>self.maxArticleNumber):
-            break;
+          feedItems.append(feedItem);
         except:
           self.gui.log("Error while parsing item: %s"%itemNode.toxml());
+      
+      sortedList = sorted(feedItems, key = lambda item:item.date, reverse=True);  
+      
+      for feedItem in sortedList:
+        if(not self.checkArticleAge(feedItem.date)):
+          break;
+          
+        eject = False;      
+        for i in range(counter,len(self.feedItems)):
+          storedItem = self.feedItems[i];
+          if(not storedItem.date < feedItem.date):
+            eject =True;
+            break;
+          
+        if(eject == True):
+          break;
+            
+      
+        self.insertFeedItem(feedItem);
+        counter += 1;
+        if(counter>self.maxArticleNumber):
+          break;
     except:
       self.gui.log("Error while processing %s"%self.feedUrl)          
     self.shrinkFeedItems();

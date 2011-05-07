@@ -62,7 +62,7 @@ class OpmlFolder(object):
       element.displayMenu(path); 
     else:
       for element in self.elements:
-        self.gui.buildMenuEntry(element);
+        self.gui.buildMenuEntry(element,len(self.elements));
   
   def play(self, path):
     if len(path) > 0:
@@ -93,6 +93,13 @@ class OpmlFolder(object):
     else:
       for element in self.elements:
         element.reload();
+  
+  def load(self):
+    for element in self.elements:
+      if(type(element).__name__ == "OpmlFolder"):
+        element.load();
+      else:
+        element.loadFeed();
   
   def hasUnreadItems(self):
     for element in self.elements:
@@ -143,4 +150,7 @@ class OpmlFile:
   
   def reload(self, path):
     self.opmlFolder.reload(path);
+    
+  def load(self):
+    self.opmlFolder.load();  
     

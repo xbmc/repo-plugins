@@ -21,20 +21,13 @@ def getCategories():
 	addDir(__language__(30001),'getAudioBooks',5,'special://home/addons/plugin.audio.internet.archive/icon.png')
 	addDir(__language__(30024),'getRadioPrograms',9,'special://home/addons/plugin.audio.internet.archive/icon.png')
 	addDir(__language__(30006),'getMusicArts',10,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	url='http://www.archive.org/details/audio'
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	soup = BeautifulSoup(link)
-	categories = soup.find('div', attrs={'id' : 'subcollections'}).findAll('a')
-	cate=str(categories)
-	match=re.compile('<a href="(.+?)">(.+?)</a>').findall(cate)
-	del match[0];del match[3];del match[3];del match[7]
-	for url,name in match:
-		url=url.replace('/details/','/search.php?query=collection%3A')
-		addDir(name,'http://www.archive.org'+url+'&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+	addDir(__language__(30002),'http://www.archive.org/search.php?query=collection%3Aopensource_audio&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+	addDir(__language__(30004),'http://www.archive.org/search.php?query=collection%3Aaudio_tech&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+	addDir(__language__(30013),'http://www.archive.org/search.php?query=collection%3Anetlabels&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+	addDir(__language__(30014),'http://www.archive.org/search.php?query=collection%3Aaudio_news&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+	addDir(__language__(30015),'http://www.archive.org/search.php?query=collection%3Aaudio_foreign&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+	addDir(__language__(30017),'http://www.archive.org/search.php?query=collection%3Aaudio_religion&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+
 
 
 def getAudioBooks():

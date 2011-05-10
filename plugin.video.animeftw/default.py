@@ -9,13 +9,12 @@ import xbmcaddon
 #plugin constants
 __plugin__ = "AnimeFTW"
 __author__ = "maruchan"
-__version__ = "1.5.5"
 __settings__ = xbmcaddon.Addon(id='plugin.video.animeftw')
 
-print "[PLUGIN] '%s: version %s' initialized!" % (__plugin__, __version__)
+print "[PLUGIN] '%s: version initialized!" % (__plugin__)
 
 if __name__ == "__main__":
-    from resources.lib import main_ftw
-    main_ftw.Main()
+    from resources.lib import main_ftw2
+    main_ftw2.Main()
 
 sys.modules.clear()

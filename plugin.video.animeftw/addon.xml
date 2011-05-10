@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.animeftw"
        name="AnimeFTW.tv"
-       version="1.5.5"
+       version="1.6.7"
        provider-name="maruchan">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
-    <import addon="script.module.simplejson" version="2.0.10"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource"

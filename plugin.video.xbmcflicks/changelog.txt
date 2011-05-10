@@ -13,3 +13,4 @@
 1.0.17 - fixed issue with episodes when pilot is listed, fixed .ca links for Canada Netflix, fixed menu items for Canada Users.. Thanks to qumip for code fixes
 1.0.18 - fixed issue with not all instant queues showing up, fixed write issue with some os's (w+ used now), fixed issue with title's being cut off at the first quote, fixed synopsis not always being parsed if only a short synopsis is available, fixed &quot; and &amp; in title
 1.0.19 - fixed issue with single quote in title name, fixed script error with season number parsing
+1.0.20 - fixed issue with instant queue browse by genre

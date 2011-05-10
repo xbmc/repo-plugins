@@ -678,7 +678,7 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
                 curX.ID = matchIds2.group(2)
             else:
                 #print "didn't match matchIds2"
-                matchIds3 = re.search(r'"media_src": "http://.*?.nflximg.com/us/boxshots/(small|tiny|large|ghd|small_epx|ghd_epx|large_epx|88_epx|tiny_epx)/(\d{1,15}).jpg"', curQueueItem, re.DOTALL | re.IGNORECASE | re.MULTILINE)
+                matchIds3 = re.search(r'"media_src": "http://.*?.nflximg.com/[^/]*?/boxshots/(small|tiny|large|ghd|small_epx|ghd_epx|large_epx|88_epx|tiny_epx)/(\d{1,15}).jpg"', curQueueItem, re.DOTALL | re.IGNORECASE | re.MULTILINE)
                 if matchIds3:
                     #print "id regex: matched matchIds3"
                     curX.FullId = matchIds3.group(1)

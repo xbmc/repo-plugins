@@ -257,3 +257,5 @@ if (__name__ == "__main__"):
 	print map.fetch("map_", "")
     except:
 	print_exc()
+
+# vim: tabstop=8 softtabstop=4 shiftwidth=4 noexpandtab:

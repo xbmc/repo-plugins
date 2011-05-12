@@ -11,20 +11,24 @@ import sys
 import time
 import os
 import glob
-import shutil
 
 import xbmc
 import xbmcgui as gui
 import xbmcplugin as plugin
 import xbmcaddon
 
-#try:
-#    import xbmcvfs
-#except ImportError:
-#    import shutil
-#    copyfile = shutil.copyfile
-#else:
-#    copyfile = xbmcvfs.copy
+try:
+    import xbmcvfs
+except ImportError:
+    import shutil
+    copyfile = shutil.copyfile
+else:
+    copyfile = xbmcvfs.copy
+
+try:
+    from hashlib import md5
+except ImportError:
+    import md5
 
 addon = xbmcaddon.Addon(id="plugin.image.iphoto")
 ALBUM_DATA_XML = "AlbumData.xml"
@@ -64,6 +68,16 @@ elif (media_sort_col == "1"):
 else:
     media_sort_col = "NULL"
 
+
+def md5sum(filename):
+    try:
+	m = md5()
+    except:
+	m = md5.new()
+    with open(filename, 'rb') as f:
+	for chunk in iter(lambda: f.read(128 * m.block_size), ''):
+	    m.update(chunk)
+    return m.hexdigest()
 
 def render_media(media):
     global view_mode
@@ -479,16 +493,13 @@ if (__name__ == "__main__"):
 	except:
 	    pass
 
-    # we used to store the file path to the XML instead of the iPhoto Library
-    # directory.
+    # we used to store the file path to the XML instead of the iPhoto Library directory.
     if (os.path.basename(xmlpath) == ALBUM_DATA_XML):
 	xmlpath = os.path.dirname(xmlpath)
 	addon.setSetting('albumdata_xml_path', xmlpath)
 
     origxml = os.path.join(xmlpath, ALBUM_DATA_XML)
     xmlfile = xbmc.translatePath(os.path.join(addon.getAddonInfo("Profile"), "iphoto.xml"))
-    shutil.copyfile(origxml, xmlfile)
-    shutil.copystat(origxml, xmlfile)
 
     enable_places = True
     e = addon.getSetting('places_enable')
@@ -553,15 +564,13 @@ if (__name__ == "__main__"):
 	    auto_update_lib = "false"
 	    addon.setSetting('auto_update_lib', auto_update_lib)
 	if (auto_update_lib == "true"):
-	    try:
-		xml_mtime = os.path.getmtime(xmlfile)
-		db_mtime = os.path.getmtime(db_file)
-	    except Exception, e:
-		print to_str(e)
-		pass
+	    tmpfile = xmlfile + ".new"
+	    copyfile(origxml, tmpfile)
+	    if (os.path.isfile(xmlfile) and md5sum(tmpfile) == md5sum(xmlfile)):
+		os.remove(tmpfile)
 	    else:
-		if (xml_mtime > db_mtime):
-		    import_library(xmlpath, xmlfile, enable_places)
+		os.rename(tmpfile, xmlfile)
+		import_library(xmlpath, xmlfile, enable_places)
     else:
 	items = None
 	if (action == "events"):
@@ -584,6 +593,7 @@ if (__name__ == "__main__"):
 	elif (action == "ratings"):
 	    items = list_ratings(params)
 	elif (action == "rescan"):
+	    copyfile(origxml, xmlfile)
 	    import_library(xmlpath, xmlfile, enable_places)
 	elif (action == "hidekeyword"):
 	    items = hide_keyword(params)
@@ -597,3 +607,5 @@ if (__name__ == "__main__"):
 	    if view_mode > 0:
 		xbmc.sleep(300)
 		xbmc.executebuiltin("Container.SetViewMode(%d)" % (view_mode + 509))
+
+# vim: tabstop=8 softtabstop=4 shiftwidth=4 noexpandtab:

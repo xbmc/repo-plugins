@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="1.4.4" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="1.4.5" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="1.0"/>
 	<import addon="script.module.pysqlite" version="2.5.6"/>

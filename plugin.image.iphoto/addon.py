@@ -74,9 +74,15 @@ def md5sum(filename):
 	m = md5()
     except:
 	m = md5.new()
-    with open(filename, 'rb') as f:
-	for chunk in iter(lambda: f.read(128 * m.block_size), ''):
-	    m.update(chunk)
+
+    f = open(filename)
+    while True:
+	chunk = f.read(8192)
+	if not chunk:
+	    break
+	m.update(chunk)
+    f.close()
+
     return m.hexdigest()
 
 def render_media(media):

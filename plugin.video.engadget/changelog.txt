@@ -1,3 +1,6 @@
+Version 1.0.1
+added download to the context menu
+
 Version 0.0.2
 new icon, thanks freezy!
 

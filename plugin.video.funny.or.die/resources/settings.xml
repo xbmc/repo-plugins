@@ -1,0 +1,3 @@
+<settings>
+   <setting id="sort_by" type="select" lvalues="30015|30016|30017|30018|30019" label="30014" default=""/>
+</settings>

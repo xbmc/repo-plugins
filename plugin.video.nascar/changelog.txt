@@ -1,0 +1,6 @@
+Version 1.0.0
+initial for eden-pre
+
+Version 1.2
+fix - video url's changed
+removed the directorys as they were not needed

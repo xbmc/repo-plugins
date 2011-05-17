@@ -2,16 +2,16 @@ import pickle
 import os
 import sys
 
+import xbmc
 import xbmcgui
-
-import danishaddons
-import danishaddons.web
-import danishaddons.info
+import xbmcaddon
 
 import api
 import ui
 
 print "DRNU: %s" % sys.argv
+
+ADDON = xbmcaddon.Addon(id = 'plugin.video.drnu')
 
 def addFavorite(slug):
     if os.path.exists(FAVORITES_PATH):
@@ -23,7 +23,7 @@ def addFavorite(slug):
         favorites.append(slug)
     pickle.dump(favorites, open(FAVORITES_PATH, 'wb'))
 
-    xbmcgui.Dialog().ok(danishaddons.msg(30008), danishaddons.msg(30009))
+    xbmcgui.Dialog().ok(ADDON.getLocalizedString(30008), ADDON.getLocalizedString(30009))
 
 def delFavorite(slug):
     if os.path.exists(FAVORITES_PATH):
@@ -31,7 +31,7 @@ def delFavorite(slug):
         favorites.remove(slug)
         pickle.dump(favorites, open(FAVORITES_PATH, 'wb'))
 
-    xbmcgui.Dialog().ok(danishaddons.msg(30008), danishaddons.msg(30010))
+    xbmcgui.Dialog().ok(ADDON.getLocalizedString(30008), ADDON.getLocalizedString(30010))
 
 def updateRecentlyWatched(slug):
     if os.path.exists(RECENT_PATH):
@@ -46,48 +46,60 @@ def updateRecentlyWatched(slug):
     recent = recent[0:10] # Limit to ten items
     pickle.dump(recent, open(RECENT_PATH, 'wb'))
 
+def parseParams(input):
+    params = {}
+    for pair in input.split('&'):
+        if pair.find('=') >= 0:
+            keyvalue = pair.split('=', 1)
+            params[keyvalue[0]] = keyvalue[1]
+        else:
+            params[pair] = None
 
+    return params
+    
 
 if __name__ == '__main__':
-    danishaddons.init(sys.argv)
-    api = api.DRnuApi(60)
-    ui = ui.DRnuUI(api)
+    dataPath = xbmc.translatePath(ADDON.getAddonInfo("Profile"))
+    api = api.DrNuApi(dataPath, 60)
+    ui = ui.DRnuUI(api, int(sys.argv[1]), sys.argv[0])
 
-    FAVORITES_PATH = os.path.join(danishaddons.ADDON_DATA_PATH, 'favorites.pickle')
-    RECENT_PATH = os.path.join(danishaddons.ADDON_DATA_PATH, 'recent.pickle')
+    FAVORITES_PATH = os.path.join(dataPath, 'favorites.pickle')
+    RECENT_PATH = os.path.join(dataPath, 'recent.pickle')
+    
+    params = parseParams(sys.argv[2][1:])
 
-    if danishaddons.ADDON_PARAMS.has_key('slug'):
-        updateRecentlyWatched(danishaddons.ADDON_PARAMS['slug'])
-        ui.listVideos(api.getProgramSeriesVideos(danishaddons.ADDON_PARAMS['slug']), False)
+    if params.has_key('slug'):
+        updateRecentlyWatched(params['slug'])
+        ui.listVideos(api.getProgramSeriesVideos(params['slug']), False)
 
-    elif danishaddons.ADDON_PARAMS.has_key('newest'):
+    elif params.has_key('newest'):
         ui.listVideos(api.getNewestVideos(), False)
 
-    elif danishaddons.ADDON_PARAMS.has_key('spot'):
+    elif params.has_key('spot'):
         ui.listVideos(api.getSpotlightVideos(), True)
 
-    elif danishaddons.ADDON_PARAMS.has_key('search'):
+    elif params.has_key('search'):
         ui.searchVideos()
 
-    elif danishaddons.ADDON_PARAMS.has_key('id'):
-        ui.playVideo(danishaddons.ADDON_PARAMS['id'])
+    elif params.has_key('id'):
+        ui.playVideo(params['id'])
 
-    elif danishaddons.ADDON_PARAMS.has_key('all'):
+    elif params.has_key('all'):
         ui.getProgramSeries()
 
-    elif danishaddons.ADDON_PARAMS.has_key('addfavorite'):
-        addFavorite(danishaddons.ADDON_PARAMS['addfavorite'])
+    elif params.has_key('addfavorite'):
+        addFavorite(params['addfavorite'])
 
-    elif danishaddons.ADDON_PARAMS.has_key('delfavorite'):
-        delFavorite(danishaddons.ADDON_PARAMS['delfavorite'])
+    elif params.has_key('delfavorite'):
+        delFavorite(params['delfavorite'])
 
-    elif danishaddons.ADDON_PARAMS.has_key('favorites'):
+    elif params.has_key('favorites'):
         favorites = list()
         if os.path.exists(FAVORITES_PATH):
             favorites = pickle.load(open(FAVORITES_PATH, 'rb'))
         ui.getProgramSeries(favorites, False)
 
-    elif danishaddons.ADDON_PARAMS.has_key('recentlywatched'):
+    elif params.has_key('recentlywatched'):
         recent = list()
         if os.path.exists(RECENT_PATH):
             recent = pickle.load(open(RECENT_PATH, 'rb'))

@@ -1,20 +1,20 @@
 import os
-import simplejson as json
+import simplejson
+import time
+import urllib2
 
-import danishaddons
-import danishaddons.web
+class DrNuApi(object):
+    BASE_API_URL = 'http://www.dr.dk/NU/api/%s'
 
-BASE_API_URL = 'http://www.dr.dk/NU/api/%s'
+    def __init__(self, cachePath, cacheMinutes):
+        """
+        DR NU API specs is available at http://www.dr.dk/nu/api/
 
-class DRnuApi(object):
-    """
-    DR NU API specs is available at http://www.dr.dk/nu/api/
-
-	Keyword arguments:
-	cacheMinutes -- the contents will be retrieve from the cache if it's age is less than specified minutes
-
-    """
-    def __init__(self, cacheMinutes):
+        @param self:
+        @param cacheMinutes: the contents will be retrieve from the cache if it's age is less than specified minutes
+        @type cacheMinutes: int
+        """
+        self.cachePath = cachePath
         self.cacheMinutes = cacheMinutes
 
     def getProgramSeries(self):
@@ -33,21 +33,39 @@ class DRnuApi(object):
         return self._call_api('programseries/%s/videos' % programSeriesSlug, 'programseries-%s.json' % programSeriesSlug)
 
     def getVideoById(self, id):
-        video = danishaddons.web.downloadUrl(BASE_API_URL % ('videos/%s' % id))
-        return json.loads(video)
+        return self._call_api('videos/%s' % id, 'videos-%s.json' % id)
 
     def getProgramSeriesImageUrl(self, programSlug, width, height = None):
         if height is None:
             height = width
-        return BASE_API_URL % ('programseries/%s/images/%dx%d.jpg' % (programSlug, width, height))
+        return self.BASE_API_URL % ('programseries/%s/images/%dx%d.jpg' % (programSlug, width, height))
 
     def getVideoImageUrl(self, id, width, height = None):
         if height is None:
             height = width
-        return BASE_API_URL % ('videos/%s/images/%dx%d.jpg' % (id, width, height))
+        return self.BASE_API_URL % ('videos/%s/images/%dx%d.jpg' % (id, width, height))
 
     def _call_api(self, path, cacheFilename):
-        response = danishaddons.web.downloadAndCacheUrl(
-                BASE_API_URL % path,
-                os.path.join(danishaddons.ADDON_DATA_PATH, cacheFilename), self.cacheMinutes)
-        return json.loads(response)
+        cachePath = os.path.join(self.cachePath, cacheFilename)
+        try:
+            cachedOn = os.path.getmtime(cachePath)
+        except OSError: # File not found
+            cachedOn = 0
+
+        if time.time() - self.cacheMinutes * 60 >= cachedOn:
+            # Cache expired or miss
+            u = urllib2.urlopen(self.BASE_API_URL % path)
+            content = u.read()
+            u.close()
+
+            f = open(cachePath, 'w')
+            f.write(content)
+            f.close()
+
+        else:
+            f = open(cachePath)
+            content = f.read()
+            f.close()
+
+        return simplejson.loads(content)
+

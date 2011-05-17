@@ -1,0 +1,20 @@
+Version 1.0.0
+added to eden-pre
+
+Version 0.0.5
+added the ability to queue videos
+added "Play All" to the context menu for directories
+
+Version 0.0.4
+added proper language strings to settings
+
+Version 0.0.3
+now plays the hd version if available. thanks to maruchan!
+changed code to get better thumbnails
+
+Version 0.0.2
+added the ability to sort videos via settings - most favorited, most recent... ect.
+new icon. thanks freezy!
+
+Version 0.0.1
+initial release

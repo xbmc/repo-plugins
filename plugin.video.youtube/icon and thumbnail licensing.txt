@@ -1,0 +1,132 @@
+icon.png
+Author: IconShock
+License: Free for commercial use
+http://www.iconfinder.com/icondetails/49221/256/youtube_icon
+
+download.png
+Author: Bobbyperux (MISTO icon pack)
+License: Freeware Non-commercial
+http://findicons.com/icon/85798/arrow_down?id=85798
+
+movies.png
+Author: Sebastiaan de With
+License: Freeware Non-commercial
+http://findicons.com/icon/35690/sidebar_movies_blue
+
+add_user.png
+Modified version of User icon by VisualPharm, modified by HenrikDK
+Author: VisualPharm
+Vista icons by VisualPharm: http://www.visualpharm.com
+License: Linkware
+http://www.iconarchive.com/category/object/office-space-icons-by-visualpharm.html
+
+login.png
+Modified version of radium key icon
+Author: Sean Poon - http://gakuseisean.deviantart.com
+License: Free for personal desktop use only.
+http://www.iconarchive.com/show/radium-icons-by-gakuseisean/Key-icon.html
+
+shows.png
+Author: DBGthekafu - "Black-white 2 Vista" icon theme
+License: Reuse of the file allowed under the GPL
+http://commons.wikimedia.org/wiki/File:Tv_bw.png
+
+playlists.png
+Author: IconShock
+License: Free for commercial use
+http://www.iconarchive.com/show/cinema-icons-by-iconshock/directors-chair-icon.html
+
+settings.png
+Author: IconLab
+License: Free for non-commercial use
+http://www.iconeasy.com/icon/settings-1-icon/
+
+user.png
+Author: Aha-Soft
+License: Free for non-commercial use
+http://www.iconeasy.com/icon/user-4-icon/
+
+contacts.png
+Author: Aha-Soft
+License: Free for non-commercial use
+http://www.iconeasy.com/icon/user-group-icon/
+		
+most.png
+Author: IconLab
+License: Free for non-commercial use
+http://www.iconeasy.com/icon/settings-1-icon/
+
+favorites.png
+Modified version of DryIcons Heart icon
+Author: DryIcon
+License: Free
+http://dryicons.com/free-icons/preview/valentines-icons-set/
+
+newsubscriptions.png
+Author: unknown
+License: unknown but apparently free
+http://www.bestfreeicons.com/smimages/stars-icon.png
+
+previous.png
+Icon taken from nuka's original YouTube plugin, assumed to be ok license wise 
+
+subscriptions.png
+Author: "Fast Icon" 
+Icons by: FastIcon.com: http://www.fasticon.com
+http://www.iconarchive.com/show/web-2-icons-by-fasticon/Favorite-icon.html
+License: "Free for personal desktop use only."
+
+featured.png
+Author: Simiographics (Salvador Lopez)
+License: "Freeware"
+http://www.iconarchive.com/show/mixed-icons-by-simiographics/Bullhorn-icon.html
+
+next.png
+author: kyo-tux (Aeon Icon pack)
+License: "Free for non-commercial use
+http://kyo-tux.deviantart.com
+
+recommended.png		
+Author: Kyo Tux - Crysigns icons
+License: Free for commercial use
+http://www.iconfinder.com/icondetails/47037/256/smiley_icon
+
+top.png
+Author IconShock
+License: "Free"
+http://www.iconspedia.com/icon/faves-high-detail-15-55.html
+
+feeds.png
+Author: "Fast Icon" 
+Icons by: FastIcon.com: http://www.fasticon.com
+http://www.iconarchive.com/show/web-2-icons-by-fasticon/Favorite-icon.html
+License: "Freeware"
+
+playbyid.png
+Author: Iconsland
+License: Free for non-commercial use.
+http://www.iconspedia.com/icon/bulb-grey--622.html
+	
+search.png
+Author: Harwen
+License: Free for non-commercial use.
+http://www.iconarchive.com/show/simple-icons-by-harwen/Search-icon.html
+	
+uploads.png
+Author: IconShock
+License: Linkware
+http://www.iconarchive.com/show/general-media-icons-by-iconshock/webcam-icon.html
+
+trailers.png
+Author: Svengraph
+License: CC Attribution 3.0 Unported 
+http://www.softicons.com/free-icons/internet-icons/i-love-icons-by-svengraph/cinema-icon
+
+discoball.png
+Author: HenrikDK
+License: Free for non-commercial use.
+
+explore.png
+Author: IconsLand
+License: Free for non-commercial use.
+http://www.veryicon.com/icons/system/vista-elements/binoculars-search.html

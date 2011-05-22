@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+  <!-- General -->
+  <category label="30247">
+    <setting id="username" type="text" label="30200" default="" />
+    <setting id="user_password" type="text" option="hidden" label="30201" enable="!eq(-1,)" default="" />
+    <setting type="sep" />
+    <setting id="safe_search" type="enum" label="30209" lvalues="30218|30219|30220" default="1" />    
+    <setting id="feed_time" type="enum" label="30202" lvalues="30203|30204|30205|30206" default="2" />
+    <setting id="region_id" type="enum" label="30221" lvalues="30222|30223|30224|30225|30226|30227|30228|30229|30230|30231|30232|30233|30234|30235|30236|30237|30238|30239|30240|30241|30242|30243|30244|30245" default="0" />
+    <setting id="hd_videos" type="enum" label="30208" lvalues="30217|30216|30215" default="1" />
+    <setting type="sep" />
+    <setting id="downloadPath" type="folder" label="30207" default="" />
+    <setting type="sep" />
+    <setting id="perpage" type="enum" label="30210" values="10|15|20|25|30|40|50" default="3" />
+    <setting id="saved_searches" type="enum" label="30211" values="10|20|30|40" default="3" />
+    <setting id="notification_length" type="enum" label="30214" values="5|10|15|20|25|30" default="1" />
+    <setting type="sep" />
+  </category>
+
+  <!-- Folders -->
+  <category label="30248">
+	<setting id="explore" type="bool" label="30269" default="true" />
+    <setting id="recommended" type="bool" label="30250" default="true" />
+    <setting id="contacts" type="bool" label="30251" default="true" />
+    <setting id="favorites" type="bool" label="30252" default="true" />
+    <setting id="playlists" type="bool" label="30253" default="true" />
+    <setting id="subscriptions" type="bool" label="30254" default="true" />
+    <setting id="uploads" type="bool" label="30255" default="true" />
+    <setting id="downloads" type="bool" label="30274" default="true" />
+    <setting id="search" type="bool" label="30256" default="true" />
+    <setting id="playbyid" type="bool" label="30257" default="true" />
+  </category>
+
+  <!-- Explore YouTube -->
+  <category label="30270">
+    <setting id="categories" type="bool" label="30266" default="true" />
+    <setting id="feeds" type="bool" label="30249" default="true" />
+    <setting id="trailers" type="bool" label="30264" default="true" />
+    <setting id="shows" type="bool" label="30267" default="true" />
+    <setting id="movies" type="bool" label="30268" default="true" /> 
+    <setting id="disco" type="bool" label="30263" default="true" />
+  </category>
+  
+  <!-- Advanced -->
+  <category label="30259">
+    <setting id="list_view" type="enum" label="30258" lvalues="30271|30272|30273" default="0" />
+    <setting id="hd_videos_download" type="enum" label="30260" lvalues="30261|30217|30216|30215" default="0" />
+    <setting id="pr_video_quality" type="bool" label="30262" default="false" />
+    <setting id="timeout" type="enum" label="30265" values="1|2|3|4|5" default="4" />
+    <setting id="debug" type="bool" label="30246" default="false" />
+  </category>
+
+</settings>

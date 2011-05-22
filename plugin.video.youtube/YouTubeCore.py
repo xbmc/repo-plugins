@@ -75,7 +75,7 @@ class YouTubeCore(object):
 	def login(self, error = 0):
 		if self.__dbg__:
 			print self.__plugin__ + " login - errors: " + str(error)
-			
+		
 		uname = self.__settings__.getSetting( "username" )
 		passwd = self.__settings__.getSetting( "user_password" )
 		
@@ -382,6 +382,7 @@ class YouTubeCore(object):
 			con = urllib2.urlopen(url);
 			file.write(con.read())
 			con.close()
+			file.close()
 			
 			os.rename(filename_incomplete, filename_complete)
 			
@@ -669,7 +670,7 @@ class YouTubeCore(object):
 			if self.__dbg__:
 				print self.__plugin__ +  " _fetchPage adding cookie"
 			request.add_header('Cookie', 'LOGIN_INFO=' + self._httpLogin() )
-
+		
 		if auth:
 			authkey = self._getAuth()
 			if ( not authkey ):
@@ -684,55 +685,22 @@ class YouTubeCore(object):
 			result = con.read()
 			new_url = con.geturl()
 			con.close()
-
-			# Return result if it isn't age restricted
-			if ( result.find("verify-age-actions") == -1):
-				return ( result, 200 )
 			
-			# review this before 2.0 final
+			# Return result if it isn't age restricted
+			if ( result.find("verify-actions") == -1 and result.find("verify-age-actions") == -1):
+				return ( result, 200 )
 			elif ( error < 10 ):
-				
 				# We need login to verify age.	     
 				if not login:
 					if self.__dbg__:
 						print self.__plugin__ + " _fetchPage age verification required, retrying with login"
 					error = error + 0
 					return self._fetchPage(link, api, auth, login = True, error = error)
-
-				if self.__dbg__:
-					print self.__plugin__ + " _fetchPage Video age restricted, trying to verify for url: " + new_url
-
-				# Fallback for missing confirm form.
-				if result.find("confirm-age-form") == -1:
-					if self.__dbg__:
-						print self.__plugin__ + " _fetchPage: Sorry - you must be 18 or over to view this video or group"
-					return ( self.__language__( 30608 ) , 303 )
-								
-				request = urllib2.Request(new_url)
-				request.add_header('User-Agent', self.USERAGENT)
-				request.add_header('Cookie', 'LOGIN_INFO=' + self._httpLogin(True) )
-
-				# This really should be a regex, but the regex kept failing.
-				temp = result[result.find("verify-age-actions"):(result.find("verify-age-actions") + 600)]
-				next_url = temp[( temp.find('"next_url" value="') + len('"next_url" value="')):]
-				next_url = next_url[:next_url.find('"')] 
-					
-				if self.__settings__.getSetting( "safe_search" ) == "0":
-					confirmed = 1
-				else:
-					confirmed = 0
-			
-				values = { "next_url": next_url, "action_confirm": confirmed }
-
-				con = urllib2.urlopen(request, urllib.urlencode(values))
-				result = con.read()
-				con.close()
 				
 				if self.__dbg__:
-					print self.__plugin__ + " _fetchPage. Age should now be verified, calling _fetchPage again"
-					
-				return self._fetchPage(link, api, auth, login = True, error = error + 1)
-
+					print self.__plugin__ + " _fetchPage verifying age"
+				return self._verifyAge(result, new_url, link, api, auth, login, error) 
+			
 			if self.__dbg__:
 				print self.__plugin__ + " _fetchPage. Too many errors"
 			return ( "", 500 )
@@ -741,7 +709,7 @@ class YouTubeCore(object):
 			err = str(e)
 			if self.__dbg__:
 				print self.__plugin__ + " _fetchPage HTTPError : " + err
-
+			
 			# 400 (Bad request) - A 400 response code indicates that a request was poorly formed or contained invalid data. The API response content will explain the reason wny the API returned a 400 response code.
 			if ( err.find("400") > -1 ):
 				return ( err, 303 )
@@ -784,6 +752,68 @@ class YouTubeCore(object):
 												 , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
 				
 			return ( "", 500 )
+			
+	def _verifyAge(self, result, new_url, link, api = False, auth=False, login=False, error = 0):
+		login_info = self._httpLogin(True)
+		confirmed = "0"
+		if self.__settings__.getSetting( "safe_search" ) != "2":
+			confirmed = "1"
+		
+		request = urllib2.Request(new_url)
+		request.add_header('User-Agent', self.USERAGENT)
+		request.add_header('Cookie', 'LOGIN_INFO=' + login_info)
+		con = urllib2.urlopen(request)
+		result = con.read()
+		
+		# Fallback for missing confirm form.
+		if result.find("confirm-age-form") == -1:
+			if self.__dbg__ or True:
+				print self.__plugin__ + " Failed trying to verify-age could find confirm age form."
+				print self.__plugin__ + " html page given: " + repr(result)
+			return ( self.__language__( 30600 ) , 303 )
+						
+		# get next_url
+		next_url_start = result.find('"next_url" value="') + len('"next_url" value="')
+		next_url_stop = result.find('">',next_url_start)
+		next_url = result[next_url_start:next_url_stop]
+		
+		if self.__dbg__:
+			print self.__plugin__ + " next_url=" + next_url
+		
+		# get session token to get around the cross site scripting prevetion
+		session_token_start = result.find("'XSRF_TOKEN': '") + len("'XSRF_TOKEN': '")
+		session_token_stop = result.find("',",session_token_start) 
+		session_token = result[session_token_start:session_token_stop]
+		
+		if self.__dbg__:
+			print self.__plugin__ + " session_token=" + session_token
+		
+		# post collected information to age the verifiaction page
+		request = urllib2.Request(new_url)
+		request.add_header('User-Agent', self.USERAGENT)
+		request.add_header('Cookie', 'LOGIN_INFO=' + login_info )
+		request.add_header("Content-Type","application/x-www-form-urlencoded")
+		values = urllib.urlencode( { "next_url": next_url, "action_confirm": confirmed, "session_token":session_token })
+		
+		if self.__dbg__:
+			print self.__plugin__ + " post page content: " + values
+		
+		con = urllib2.urlopen(request, values)
+		new_url = con.geturl()
+		result = con.read()
+		con.close()
+		
+		#If verification is success full new url must look like: 'http://www.youtube.com/index?has_verified=1'
+		if new_url.find("has_verified=1") > 0:
+			if self.__dbg__:
+				print self.__plugin__ + " Age Verification sucessfull " + new_url
+			return self._fetchPage(link, api, auth, login = True, error = error + 1)
+		
+		# If verification failed we dump a shit load of info to the logs
+		print self.__plugin__ + " age verification failed with result: " + repr(result)
+		print self.__plugin__ + " result url: " + repr(new_url)
+		return (self.__language__(30600), 303)
+
 		
 	def _extractVariables(self, videoid):
 		if self.__dbg__:
@@ -1136,7 +1166,6 @@ class YouTubeCore(object):
 					infoString += "Date Uploaded: " + video['Date'][:video['Date'].find("T")] + ", "				
 				infoString += "View count: " + str(video['count'])
 				video['Plot'] = infoString + "\n" + video['Plot']
-				print "plot updated"
 				video['Genre'] = self._getNodeAttribute(node, "media:category", "label", "Unknown Genre").encode( "utf-8" )
 
 				if node.getElementsByTagName("link"):
@@ -1278,8 +1307,6 @@ class YouTubeCore(object):
 						   'continue': cont})
 
 			# Login to Google
-			#if self.__dbg__:
-			#	print self.__plugin__ + " _httpLogin: step 2"
 			url = urllib2.Request('https://www.google.com/accounts/ServiceLoginAuth?service=youtube', params)
 			url.add_header('User-Agent', self.USERAGENT)
 		
@@ -1289,10 +1316,6 @@ class YouTubeCore(object):
 			newurl = re.compile('<meta http-equiv="refresh" content="0; url=&#39;(.*)&#39;"></head>').findall(result)[0].replace("&amp;", "&")
 			url = urllib2.Request(newurl)
 			url.add_header('User-Agent', self.USERAGENT)
-			
-			# Login to youtube
-			#if self.__dbg__:
-			#	print self.__plugin__ + " _httpLogin: step 3"
 			con = urllib2.urlopen(newurl)
 			
 			# Save cookiefile in settings

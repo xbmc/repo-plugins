@@ -230,6 +230,7 @@ class YouTubeNavigation:
 				feed = feed % get("contact")
 			elif ( get("channel")):
 				feed = feed % get("channel")
+				print "found channel " + feed
 			elif ( get("playlist")):
 				feed = feed % get("playlist")
 			elif ( get("feed") == "uploads" or get("feed") == "favorites" or  get("feed") == "playlists" or get("feed") == "subscriptions" or get("feed") == "newsubscriptions"):
@@ -352,7 +353,13 @@ class YouTubeNavigation:
 		get = params.get
 
 		feed = self.feeds[get("feed")]
-									
+		
+		if (get("channel")):
+			feed = feed % get("channel")
+		
+		if (get("videoid")):
+			feed = feed % get("videoid")
+		
 		( result, status ) = core.feeds(feed, params)
 		if status != 200:
 			feed_label = ""
@@ -384,6 +391,7 @@ class YouTubeNavigation:
 			if (get("scraper") == "disco_top_artist" 
 				or get("scraper") == "shows"
 				or (get("scraper") == "movies" and not get("category"))
+				or (get("scraper") == "movies" and get("subcategory"))
 				or (get("scraper") == "categories" and not get("category"))
 				):
 				self.parseFolderList(params, results)
@@ -971,7 +979,7 @@ class YouTubeNavigation:
 	def buildItemUrl(self, item_params = {}, url = ""):
 		for k, v in item_params.items():
 			if (k != "path" and k != "thumbnail" and k!= "playlistId" and k!= "next" and k != "content" and k!= "editid"
-				and k!= "summary" and k!= "published" and k!="Title" and k!= "Title" ):
+				and k!= "summary" and k!= "published" and k!="Title"):
 				url += k + "=" + v + "&"
 		return url
 
@@ -1003,13 +1011,13 @@ class YouTubeNavigation:
 			url_studio = urllib.quote_plus(studio)
 			
 			if (get("feed") != "subscriptions_favorites" and get("feed") != "subscriptions_uploads" and get("feed") != "subscriptions_playlists"):
-				cm.append( ( self.__language__( 30516 ) % studio, "XBMC.Container.Update(%s?path=%s&login=true&feed=subscriptions_uploads&view_mode=subscriptions_uploads&channel=%s)" % ( sys.argv[0],  get("path"), url_studio ) ) )
+				cm.append( ( self.__language__( 30516 ) % studio, "XBMC.Container.Update(%s?path=%s&feed=subscriptions_uploads&view_mode=subscriptions_uploads&channel=%s)" % ( sys.argv[0],  get("path"), url_studio ) ) )
 			
 			if (get("action") == "search_disco"):
 				cm.append( ( self.__language__( 30523 ) % title, "XBMC.Container.Update(%s?path=%s&action=search_disco&search=%s)" % ( sys.argv[0],  get("path"), url_title ) ) )
 			
 			cm.append( ( self.__language__( 30514 ), "XBMC.Container.Update(%s?path=%s&action=search&search=%s)" % ( sys.argv[0],  get("path"), url_title ) ) )
-			cm.append( ( self.__language__( 30529 ), "XBMC.Container.Update(%s?path=%s&action=list_related&videoid=%s)" % ( sys.argv[0],  get("path"), item("videoid") ) ) )
+			cm.append( ( self.__language__( 30529 ), "XBMC.Container.Update(%s?path=%s&feed=list_related&videoid=%s)" % ( sys.argv[0],  get("path"), item("videoid") ) ) )
 			cm.append( ( self.__language__( 30527 ), "XBMC.ActivateWindow(VideoPlaylist)"))
 			cm.append( ( self.__language__( 30504 ), "XBMC.Action(Queue)", ) )
 			cm.append( ( self.__language__( 30502 ), "XBMC.Action(Info)", ) )

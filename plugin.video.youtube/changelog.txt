@@ -1,10 +1,26 @@
 [B]Errata[/B]
 - [XBMC] Thumbnails sometimes turns into black box or Folder (XBMC not detecting when thumbnail is set and defaulting to icon?)
 - [XBMC] When sorting items, it's impossible to get them to return to their original order.
-- [XBMC] has Excessive Memory use after running the plugin for prolonged periods of time 
-- [YOUTUBE] API doesnt allow proper sorting of playlists and subscriptions (Video order when listing a playlists is broken and orderby when listing all subscriptions just doesn't work)
+- [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time 
+- [XBMC] Playback of RTMPe streams (flash streaming) is currently broken as youtube updated to use a newer protocol than what XBMC supports
+- [XBMC] Theres an unknown issue with the version of urllib and openssl supplied by xbmc for python 2.4 on windows that causes severe login issues for windows users (ssl_ctx_new errors)
 - [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
+
+
+====================== DO NOT REMOVE THIS LINE UNTIL VERSION HAS BEEN UPDATE EVERY WHERE ===========================
+[B]Version 2.2.4[/B]
+- Verfied Compatibility with Eden - pre and submitted to repo.
+
+[B]Version 2.0.4[/B]
+- Fixed YouTube character encoding changes broke disco scraper.
+- Fixed YouTube character encoding changes broke show scraper
+- Fixed Site changes broke Disco top 25 scraper
+- Fixed YouTube design changes broken categories scraper
+- Fixed Movies Scraper (backport of fix from new beta by chocol)
+- Fixed problems when downloading a file to a network drives (thanks to ToCsIc)
+- Fixed Age verification was broken, back working again.
+- Changed more videos by user, and related videos so you no longer have to be logged in for them to work.
 
 [B]Version 2.0.3[/B]
 - Fixed Context menus were "suddenly" missing on a lot of folder items (probably since pre v.2)

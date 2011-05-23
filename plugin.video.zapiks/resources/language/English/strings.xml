@@ -2,7 +2,7 @@
 <strings>
   <string id="30000">Surf</string>
   <string id="30001">Snowboard</string>
-  <string id="30002">VTT</string>
+  <string id="30002">Mountain Biking</string>
   <string id="30003">BMX</string>
   <string id="30004">Skate</string>
   <string id="30005">Ski</string>
@@ -13,7 +13,7 @@
   <string id="30010">Most Recent</string>
   <string id="30011">Most Viewed</string>
   <string id="30012">Most Buzzed</string>
-  <string id="30013">Most Favorited</string>
+  <string id="30013">Staff Picks</string>
   <string id="30014">Sort Videos by</string>
   <string id="30015"></string>
   <string id="30016"></string>

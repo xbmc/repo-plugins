@@ -1,0 +1,17 @@
+v1.0.0
+- Initial eden-pre
+
+v0.5.0
+- Updated the code due to blip.tv changes on their website
+
+v0.4.0
+- New icon added, edited some code in day9.py
+
+v0.3
+- Deleting the "favourite" feature for now
+
+v0.2
+- The plugin "Starcraft 2" has been splitted into 2 plugins, "Day9" and "djWHEAT".
+
+v0.1 
+- The first realese of the plugin Starcraft2.

@@ -65,4 +65,4 @@ def cleanHTML(s, noBS=False):
 
 
 def resizeImage(imagePath):
-    return imagePath.replace('132x99', '291x218')
+    return imagePath.replace('132x99', '389x292').replace('113x85', '389x292')

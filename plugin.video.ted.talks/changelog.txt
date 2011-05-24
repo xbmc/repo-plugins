@@ -1,3 +1,7 @@
+[B]Version 2.2.1[/B]
+
+- fixed: thumbs size changed
+
 [B]Version 2.2.0[/B]
 
 - use "xbmc.translatePath()" to handle cookie better

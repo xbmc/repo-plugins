@@ -1,3 +1,6 @@
+v0.5.0
+- Updated the code due to blip.tv changes on their website
+
 v0.4.0
 - New icon added, edited some code in day9.py
 

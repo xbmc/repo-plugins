@@ -1,35 +1,21 @@
-import urllib,urllib2,re,xbmcplugin,xbmcgui,day9,sys,os,xbmc
+import sys, xbmc, xbmcplugin, xbmcaddon, day9
 
-Day = day9.Day9()
+__version__ = "0.5.0"
+__plugin__ = "Day9-" + __version__
+__author__ = "Kristoffer Petersson"
+__settings__ = xbmcaddon.Addon(id='plugin.video.day9')
+__language__ = __settings__.getLocalizedString
 
-params=Day.get_params()
-url=None
-mode=None
-Name=None
-duration=None
+Day9 = day9.Day9()
 
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        name=urllib.unquote_plus(params["name"])
-except:
-        pass
-try:
-        duration=urllib.unquote_plus(params["duration"])
-except:
-        pass
-try:
-        mode=int(params["mode"])
-except:
-        pass
+if (not sys.argv[2]):
+    Day9.root()
+else:
+	print __plugin__
 
-if mode==None or url==None or len(url)<1:
-    Day.categories() 
-if mode==2:
-    Day.index(url)  
-if mode==3:
-    Day.videolinks(url,name,duration) 	
-	
+	params = Day9.getParams(sys.argv[2])
+	get = params.get
+	if (get("action")):
+		Day9.action(params)
+		
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

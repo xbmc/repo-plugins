@@ -1,72 +1,101 @@
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,os,xbmc
+import urllib, urllib2, re, sys, os
+import xbmc, xbmcaddon, xbmcgui, xbmcplugin
 		
 ###################################
-#########  Class Day[9]  ##########
+##########  Class Day 9  ##########
 ###################################
 				
 class Day9:	
-		
-	def categories(self):
-		self.addDir('Top 10 Videos','http://day9tv.blip.tv/posts?keywords=&nsfw=dc&sort=popularity&pagelen=10',2,'','')
-		self.addDir('Latest Videos','http://day9tv.blip.tv/posts',2,'','')
-		self.addDir('Search Videos','http://day9tv.blip.tv/search?q=day9tv+',2,'','')
 
-	def addLink(self,name,url,iconimage,duration):
-		ok=True
-		liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-		liz.setInfo( type="Video", infoLabels={ "Title": name , "Duration": duration } )
+	USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
+	__settings__ = xbmcaddon.Addon(id='plugin.video.day9')
+	__language__ = __settings__.getLocalizedString
+	
+	def action(self, params):
+		get = params.get
+		if (get("action") == "showTitles"):
+			self.showTitles(params)
+		if (get("action") == "showGames"):
+			self.showGames(params)
+			
+	# ------------------------------------- Menu functions ------------------------------------- #
+	
+	# display the root menu
+	def root(self):
+		self.addCategory(self.__language__(31000), 'http://blip.tv/pr/show_get_full_episode_list?users_id=570336&lite=1', 'showTitles', 1)
+		
+		
+	# ------------------------------------- Add functions ------------------------------------- #
+
+	
+	def addCategory(self, title, url, action, page = 1):
+		url=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&title="+title+"&action="+urllib.quote_plus(action)+"&page="+str(page)
+		listitem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage="DefaultFolder.png")
+		listitem.setInfo( type="Video", infoLabels={ "Title": title } )
+		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=True)
+		
+	def addVideo(self,title,url):
+		liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage="DefaultVideo.png")
+		liz.setInfo( type="Video", infoLabels={ "Title": title } )
 		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
 		
-	def addDir(self,name,url,mode,iconimage,duration):
-		u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&duration="+urllib.quote_plus(duration)
-		ok=True
-		liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-		liz.setInfo( type="Video", infoLabels={ "Title": name , "Plot": duration} )
-		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+	# ------------------------------------- Show functions ------------------------------------- #
+	
+	
+	def showTitles(self, params = {}):
+		get = params.get
+		link = self.getRequest(get("url"))
+		result = re.compile('<h3 title=".*?"><a href="(.*?)">(.*?)</a></h3>').findall(link)
 		
-	def index(self,url):
-		if url=='http://day9tv.blip.tv/search?q=day9tv+' or url == 'http://djwheat.blip.tv/search?q=djwheat+':
-			keyboard = xbmc.Keyboard('')
-			keyboard.doModal()			
-			url+=keyboard.getText()+'&pagelen=500'
-		req = urllib2.Request(url)
-		req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-		response = urllib2.urlopen(req)
-		link=response.read()
-		response.close()
-		info=re.compile('<a href="(.+?)" title="Watch (.+?)">\n\t\t\t\t\n\t\t\t\t  <img class="thumb" src="(.+?)"').findall(link)
-		duration=re.compile('<span class="EpisodeDuration">Duration: (.+?)</span>').findall(link)
-		for i in range(len(info)):
-			self.addDir(info[i][1],info[i][0],3,info[i][2],duration[i])
+		for i in range(len(result)):
+			self.addCategory(result[i][1], 'http://blip.tv'+result[i][0], 'showGames', '')
 			
-	def videolinks(self,url,name,duration):
+		page = int(get("page"))+1
+		url = 'http://blip.tv/pr/show_get_full_episode_list?users_id=570336&lite=1&page='+str(page)
+		self.addCategory('more episodes...', url, 'showTitles', page)
+			
+	def showGames(self, params = {}):
+		get = params.get
+		url_map = urllib.unquote_plus(get('url')).split('-')
+			
+		link = self.getRequest('http://blip.tv/rss/view/'+url_map[-1])
+		result = re.findall('blip:role="(.*?)".+?isDefault=".*?" type=".*?" url="(.*?)"', link)
+		settingsHD = int(self.__settings__.getSetting( "hd_videos" ))
+		
+		if settingsHD > 0:
+			for i in range(len(result)):
+				if result[i][0] == 'Blip HD 720':
+					url = result[i][1]
+				else:
+					url = result[i][1]
+		else:
+			for i in range(len(result)):
+				if result[i][0] == 'Blip HD 720':
+					pass
+				else:
+					url = result[i][1]
+		self.addVideo(get("title"), url)
+		
+		
+	# ------------------------------------- Data functions ------------------------------------- #
+
+	
+	def getParams(self, paramList):	
+		splitParams = paramList[paramList.find('?')+1:].split('&')
+		paramsFinal = {}
+		for value in splitParams:
+			splitParams = value.split('=')
+			type = splitParams[0]
+			content = splitParams[1]
+			if type == 'url':
+				content = urllib.unquote_plus(content)
+			paramsFinal[type] = content
+		return paramsFinal
+		
+	def getRequest(self, url):
 		req = urllib2.Request(url)
-		req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+		req.add_header('User-Agent', self.USERAGENT)
 		response = urllib2.urlopen(req)
 		link=response.read()
 		response.close()
-		info=re.compile('<option value="/file/.+?filename=(.+?)(...)">(.+?) &mdash;').findall(link)
-		thumb=re.compile('<link rel="videothumbnail" href="(.+?)" />').findall(link)
-		for i in range(len(info)):
-			if info[i][2] == 'Blip SD' or info[i][1] == 'FLV' or info[i][1] == 'flv':
-				self.addLink('SD - '+name,'http://blip.tv/file/get/'+info[i][0]+info[i][1],thumb[0],duration)
-			if info[i][2] == 'Blip HD 720':
-				self.addLink('HD - '+name,'http://blip.tv/file/get/'+info[i][0]+info[i][1],thumb[0],duration)
-				
-	def get_params(self):
-			param=[]
-			paramstring=sys.argv[2]
-			if len(paramstring)>=2:
-					params=sys.argv[2]
-					cleanedparams=params.replace('?','')
-					if (params[len(params)-1]=='/'):
-							params=params[0:len(params)-2]
-					pairsofparams=cleanedparams.split('&')
-					param={}
-					for i in range(len(pairsofparams)):
-							splitparams={}
-							splitparams=pairsofparams[i].split('=')
-							if (len(splitparams))==2:
-									param[splitparams[0]]=splitparams[1]
-									
-			return param
+		return link

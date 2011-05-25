@@ -1,3 +1,8 @@
+[B]Version 1.1.1[/B]
+
+- If a stream is not available in the chosen quality, try another quality
+instead of failing
+
 [B]Version 1.1.0[/B]
 
 - Retrieve HTML5 video instead of iPhone links: full length video now available

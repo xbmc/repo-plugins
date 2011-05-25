@@ -6,13 +6,14 @@ import asi_scraper
 import xbmc
 import xbmcplugin
 import xbmcgui
+from collections import deque
 from videoDownloader import Download
 
 # Main URLs and sort method list
 URLEMISSION = 'http://www.arretsurimages.net/toutes-les-emissions.php'
 URLALLEMISSION = 'http://www.arretsurimages.net/emissions.php'
 SORTMETHOD = ['date_publication', 'nb_vues', 'nb_comments']
-QUALITY = ['stream_h264_hq_url', 'stream_h264_url']
+STREAMS = ['stream_h264_hq_url', 'stream_h264_url']
 
 ASI = asi_scraper.ArretSurImages()
 
@@ -85,9 +86,9 @@ class UI:
         # Add item to list
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=li, isFolder=isFolder)
 
-    def playVideo(self, quality):
+    def playVideo(self, streams):
         """Play the video"""
-        video = ASI.getVideoDetails(self.main.args.url, quality)
+        video = ASI.getVideoDetails(self.main.args.url, streams)
         li=xbmcgui.ListItem(video['Title'],
                             iconImage = self.main.args.icon,
                             thumbnailImage = self.main.args.icon,
@@ -95,10 +96,10 @@ class UI:
         li.setInfo(type='Video', infoLabels=video)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
 
-    def playMainVideo(self, quality):
+    def playMainVideo(self, streams):
         """Directly play the main video (don't display all the available parts)"""
         mainProgram = ASI.getProgramParts(self.main.args.url, self.main.args.name, self.main.args.icon)[0]
-        video = ASI.getVideoDetails(mainProgram['url'], quality)
+        video = ASI.getVideoDetails(mainProgram['url'], streams)
         li=xbmcgui.ListItem(video['Title'],
                             iconImage = mainProgram['Thumb'],
                             thumbnailImage = mainProgram['Thumb'],
@@ -182,7 +183,9 @@ class Main:
         self.sortMethod = SORTMETHOD[int(__addon__.getSetting('sortMethod'))]
         self.downloadMode = __addon__.getSetting('downloadMode')
         self.downloadPath = __addon__.getSetting('downloadPath')
-        self.quality = QUALITY[int(__addon__.getSetting('quality'))]
+        self.streams = deque(STREAMS)
+        # Order the streams depending on the quality chosen
+        self.streams.rotate(int(__addon__.getSetting('quality')) * -1)
         self.displayParts = (__addon__.getSetting('displayParts') == 'true')
 
     def downloadVideo(self, url):
@@ -220,7 +223,7 @@ class Main:
             if self.displayParts:
                 UI().programParts()
             else:
-                UI().playMainVideo(self.quality)
+                UI().playMainVideo(self.streams)
         elif mode == 'playVideo':
-            UI().playVideo(self.quality)
+            UI().playVideo(self.streams)
 

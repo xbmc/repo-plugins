@@ -85,6 +85,8 @@ class ZDFMediathek(Mediathek):
     self.regex_topicPageLink = "/ZDFmediathek/((kanaluebersicht/aktuellste/\\d+.*)|(hauptnavigation/nachrichten/ganze-sendungen.*))flash=off";
     
     self._regex_extractTopicObject = re.compile("<li.*\\s*<div class=\"image\">\\s*<a href=\""+self.regex_topicPageLink+"\">\\s*<img src=\""+regex_imageLink+"\" title=\".*\" alt=\".*\"/>\\s*</a>\\s*</div>\\s*<div class=\"text\">\\s*<p( class=\".*\"){0,1}>\\s*<a href=\""+self.regex_topicPageLink+"\"( class=\"orangeUpper\"){0,1}>.*</a>\\s*</p>\\s*<p>\\s*<b>\\s*<a href=\""+self.regex_topicPageLink+"\">\\s*.*</a>");
+    self._regex_extractPageNavigation = re.compile("<a href=\""+self.regex_topicPageLink+"\" .*>.*?</a>");
+    
     
     self._regex_extractPictureLink = re.compile(regex_imageLink);
     self._regex_extractPicSize = re.compile("\\d{2,4}x\\d{2,4}");
@@ -127,13 +129,27 @@ class ZDFMediathek(Mediathek):
     
     topicPageLinks = list(self._regex_extractTopicObject.finditer(mainPage));
     videoPageLinks = list(self._regex_extractVideoPageLink.finditer(mainPage));
+    pageNavigation = list(self._regex_extractPageNavigation.finditer(mainPage));
         
     self.initCount = initCount;
-    self.countTopic = len(topicPageLinks);
+    self.countTopic = len(topicPageLinks)+len(pageNavigation);
     self.countVideo = len(videoPageLinks);
     
     self.extractTopicObjects(topicPageLinks);
     self.extractVideoObjects(videoPageLinks);
+    self.extractPageNavigation(pageNavigation);
+  
+  def extractPageNavigation(self, links):
+    for element in links:
+      element = element.group()
+      
+      title = self._regex_extractTopicTitle.search(element).group();
+      title = unicode(title,'UTF-8');
+      title = self.replace_html.sub("", title); #outerhtml wegschneiden
+      title = title.replace("&nbsp;", ""); #sinnlose "steuerzeichen wegschneiden"
+      
+      videoPageLink = self.rootLink+self._regex_extractTopicPageLink.search(element).group();
+      self.gui.buildVideoLink(DisplayObject(title,"","","",videoPageLink,False),self,self.getItemCount());
   
   def getItemCount(self):
     return self.initCount + self.countTopic + self.countVideo;

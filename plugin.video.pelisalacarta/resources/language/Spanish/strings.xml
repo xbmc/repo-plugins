@@ -5,13 +5,14 @@
 	<!-- ======================================= -->
 	<!-- De 30000 a 30049: Configuración         -->
 	<!-- ======================================= -->
-	
-	<!-- Comunes -->
-	<string id="30000">Reproductor:</string>
-	<string id="30001">Comprobar actualizaciones:</string>
-	<string id="30004">Actualizar automáticamente canales:</string>
-	<string id="30002">Activar modo adultos:</string>
-	<string id="30003">Generar log detallado:</string>
+    
+    <!-- Comunes -->
+    <string id="30000">Reproductor:</string>
+    <string id="30001">Comprobar actualizaciones:</string>
+    <string id="30004">Actualizar automáticamente canales:</string>
+    <string id="30002">Activar modo adultos:</string>
+    <string id="30003">Generar log detallado:</string>
+    <string id="30043">Forzar el modo de vista:</string>
 
 	<!-- Acción por defecto cuando eliges un video -->
 	<string id="30005">Accion al seleccionar vídeo:</string>
@@ -29,29 +30,29 @@
 	<string id="30013">Modo premium Megavideo:</string>
 	<string id="30014">Usuario Megavideo:</string>
 	<string id="30015">Password Megavideo:</string>
-    <string id="30031">Calidad de videos (FLV)</string>
+	<string id="30031">Calidad de videos (FLV)</string>
     <string id="30032">Calidad Normal (SD)</string>
     <string id="30033">Calidad Alta (HD)(si existe)</string>
-
+	
     <string id="30034">Usuario páginas privadas:</string>
     <string id="30035">Password páginas privadas:</string>
-	
-	<!-- Otras -->
-	<string id="30017">Directorio de descargas:</string>
-	<string id="30018">Directorio de lista descargas:</string>
-	<string id="30030">Directorio de favoritos:</string>
-	<string id="30020">Elegir Calidad mas alta (Youtube)</string>
-	<string id="30021">Activar Subtitulo:</string>
-	<string id="30022">URL de JDownloader:</string>
-	<string id="30024">Numero de busquedas a salvar:</string>
+    
+    <!-- Otras -->
+    <string id="30017">Directorio de descargas:</string>
+    <string id="30018">Directorio de lista descargas:</string>
+    <string id="30030">Directorio de favoritos:</string>
+    <string id="30020">Elegir Calidad mas alta (Youtube)</string>
+    <string id="30021">Activar Subtitulo:</string>
+    <string id="30022">URL de JDownloader:</string>
+    <string id="30024">Numero de busquedas a salvar:</string>
 
-	<string id="30019">Filtrar canales por idioma:</string>
+    <string id="30019">Filtrar canales por idioma:</string>
 
-	<string id="30025">Cualquier idioma</string>
-	<string id="30026">Español</string>
-	<string id="30027">Inglés</string>
-	<string id="30028">Italiano</string>
-	<string id="30029">Portugués</string>
+    <string id="30025">Cualquier idioma</string>
+    <string id="30026">Español</string>
+    <string id="30027">Inglés</string>
+    <string id="30028">Italiano</string>
+    <string id="30029">Portugués</string>
     <string id="30016">Catalán</string>
     <string id="30023">Euskera</string>
     <string id="30036">Gallego</string>
@@ -79,7 +80,9 @@
 	<string id="30060">No se puede acceder por un error en el sitio web</string>
 	<string id="30061">La calidad elegida no esta disponible o el video ha sido borrado</string>
 	<string id="30062">Prueba a reproducir en otra calidad</string>
-	<string id="30063">¡Canal descargado y actualizado!</string>
+    <string id="30063">¡Canal descargado y actualizado!</string>
+    <string id="30064">¡Lista de canales actualizada!</string>
+    <string id="30065">Servidor no soportado</string>
 
 	<!-- =============================================================== -->
 	<!-- De 30100 a 30149: Canales genéricos (buscador, descargas, etc.) -->
@@ -103,24 +106,30 @@
 	<string id="30115">El Trailer para %s</string>
 	<string id="30116">no se ha podido localizar.</string>
 	<string id="30117">¿Quieres refinar la búsqueda con el teclado?</string>
-	
-	<string id="30118">Canales</string>
-	<string id="30119">Seleccione una Categoría</string>
-	<string id="30120">Seleccione un Idioma</string>
-	<string id="30121">Todos</string>
-	<string id="30122">Películas</string>
-	<string id="30123">Series</string>
-	<string id="30124">Anime</string>
-	<string id="30125">Documentales</string>
-	<string id="30126">Música</string>
-	<string id="30127">Servidores</string>
-	<string id="30128">Buscador de Trailers</string>
+
+    <string id="30118">Canales</string>
+    <string id="30119">Seleccione una Categoría</string>
+    <string id="30120">Seleccione un Idioma</string>
+    <string id="30121">Todos</string>
+    <string id="30122">Películas</string>
+    <string id="30123">Series</string>
+    <string id="30124">Anime</string>
+    <string id="30125">Documentales</string>
+    <string id="30126">Música</string>
+    <string id="30127">Servidores</string>
+    <string id="30128">Buscador de Trailers</string>
+    <string id="30129">Nacionales</string>
+    <string id="30130">Autonómicos</string>
+    <string id="30131">Locales</string>
+    <string id="30132">Temáticos</string>
+    <string id="30133">Internet</string>
+    <string id="30134">Los nuevos</string>
 
 	<!-- =============================================================== -->
 	<!-- De 30150 a 30199: Menú acción / contextual                      -->
 	<!-- =============================================================== -->
 	<string id="30150">Ver en calidad alta</string>
-	<string id="30151">Ver en calidad normal</string>
+	<string id="30151">Ver el vídeo</string>
 	<string id="30152">Ver en calidad baja</string>
 	<string id="30153">Descargar</string>
 	<string id="30154">Quitar de favoritos</string>
@@ -133,75 +142,51 @@
 	<string id="30161">Añadir a tiblioteca</string>
 	<string id="30162">Buscar trailer</string>
 	<string id="30163">Elige una opción</string>
-	
 
 	<!-- =============================================================== -->
 	<!-- De 30100 a 30999: Canales individuales                          -->
 	<!-- =============================================================== -->
 
-	<!-- Context menu strings -->
-	<string id="30300">Eliminar esta busqueda</string>
-	<string id="30301">Guardar este canal en favoritos</string>
-	<string id="30302">Eliminar este canal de favoritos</string>
-	<string id="30303">Renombrar el título de este canal</string>
-	
-	<!-- Megalive menu strings -->
-	<string id="30401">Muralla de canales</string>
-	<string id="30402">Categorias</string>
-	<string id="30403">Canales Favoritos</string>
-	<string id="30404">Ver Canal por Codigo(ID)</string>
-	<string id="30405">Introduce el còdigo del canal</string>
+    <!-- Context menu strings -->
+    <string id="30300">Eliminar esta busqueda</string>
+    <string id="30301">Guardar este canal en favoritos</string>
+    <string id="30302">Eliminar este canal de favoritos</string>
+    <string id="30303">Renombrar el título de este canal</string>
+    
+    <!-- Megalive menu strings -->
+    <string id="30401">Muralla de canales</string>
+    <string id="30402">Categorias</string>
+    <string id="30403">Canales Favoritos</string>
+    <string id="30404">Ver Canal por Codigo(ID)</string>
+    <string id="30405">Introduce el còdigo del canal</string>
 
-	<!-- LetMeWatchThis -->
-	<string id="40001">Películas - Novedades</string>
-	<string id="40002">Series - Novedades</string>
-	<string id="40003">!Página siguiente</string>
+    <!-- LetMeWatchThis -->
+    <string id="40001">Películas - Novedades</string>
+    <string id="40002">Series - Novedades</string>
+    <string id="40003">!Página siguiente</string>
 
-	<!-- TVShack strings -->
-	<string id="30900">TVShack</string>
-	<string id="30901">Series TV (VO)</string>
-	<string id="30902">Películas (VO)</string>
-	<string id="30903">Documentales (VO)</string>
-	<string id="30904">Anime (VO)</string>
-	<string id="30905">Música</string>
-	<string id="30906">Busqueda Global en TVShack</string>
-	<string id="30907">No se produjeron resultados de búsqueda</string>
-	<string id="30908">Serie - %s (%s episodios)</string>
-	<string id="30909">Serie - </string>
+    <!-- TVShack strings -->
+    <string id="30900">TVShack</string>
+    <string id="30901">Series TV (VO)</string>
+    <string id="30902">Películas (VO)</string>
+    <string id="30903">Documentales (VO)</string>
+    <string id="30904">Anime (VO)</string>
+    <string id="30905">Música</string>
+    <string id="30906">Busqueda Global en TVShack</string>
+    <string id="30907">No se produjeron resultados de búsqueda</string>
+    <string id="30908">Serie - %s (%s episodios)</string>
+    <string id="30909">Serie - </string>
 
-	<string id="30910">Cine - %s (%s)</string>
-	<string id="30911">"Música - "</string>
-	<string id="30912">Leyendo %s...</string>
-	<string id="30913">No se encontró nada que listar</string>
-	<string id="30914">episodio</string>
-	<string id="30915">episodios</string>
-	<string id="30916">canción</string>
-	<string id="30917">canciones</string>
-	<string id="30918"> (Nuevo)</string>
-	<string id="30919"> (Nuevos contenidos)</string>
+    <string id="30910">Cine - %s (%s)</string>
+    <string id="30911">"Música - "</string>
+    <string id="30912">Leyendo %s...</string>
+    <string id="30913">No se encontró nada que listar</string>
+    <string id="30914">episodio</string>
+    <string id="30915">episodios</string>
+    <string id="30916">canción</string>
+    <string id="30917">canciones</string>
+    <string id="30918"> (Nuevo)</string>
+    <string id="30919"> (Nuevos contenidos)</string>
 
-	<string id="30920">AÑADIR TODOS LOS EPISODIOS A LA BIBLIOTECA</string>
-	<string id="30921"></string>
-	<string id="30922"></string>
-	<string id="30923"></string>
-	<string id="30924"></string>
-	<string id="30925"></string>
-	<string id="30926"></string>
-	<string id="30927"></string>
-	<string id="30928"></string>
-	<string id="30929"></string>
-
-	<string id="30930"></string>
-	<string id="30931"></string>
-	<string id="30932"></string>
-	<string id="30933"></string>
-	<string id="30934"></string>
-	<string id="30935"></string>
-	<string id="30936"></string>
-	<string id="30937"></string>
-	<string id="30938"></string>
-	<string id="30939"></string>
-
-
-
+    <string id="30920">AÑADIR TODOS LOS EPISODIOS A LA BIBLIOTECA</string>
 </strings>

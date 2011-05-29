@@ -6,14 +6,20 @@
 #------------------------------------------------------------
 
 import urlparse,urllib2,urllib,re
-import os.path
-import sys
-import xbmc
-import config
 
-COOKIEFILE = os.path.join (config.DATA_PATH , "cookies.lwp")
+try:
+    from core import scrapertools
+    from core import logger
+    from core import config
+except:
+    from Code.core import scrapertools
+    from Code.core import logger
+    from Code.core import config
 
-def getvideo(urlpagina):
+import os
+COOKIEFILE = os.path.join(config.get_data_path() , "cookies.lwp")
+
+def geturl(urlpagina):
     # ---------------------------------------
     #  Inicializa la libreria de las cookies
     # ---------------------------------------
@@ -22,7 +28,7 @@ def getvideo(urlpagina):
         os.remove(ficherocookies)
     except:
         pass
-    xbmc.output("ficherocookies %s" % ficherocookies)
+    logger.info("ficherocookies %s" % ficherocookies)
     # the path and filename to save your cookies in
 
     cj = None
@@ -123,12 +129,12 @@ def getvideo(urlpagina):
 
     matches = re.compile(patronvideos,re.DOTALL).findall(data)
     if len(matches)== 0:
-		patronvideos  = '"file","([^"]+)"'
-		matches = re.compile(patronvideos,re.DOTALL).findall(data)
-		if 	len(matches)== 0:
-			patronvideos  = '<embed src="([^"]+)"'
-			matches = re.compile(patronvideos,re.DOTALL).findall(data)
-			if len(matches)== 0:
-				return ""
-			
+        patronvideos  = '"file","([^"]+)"'
+        matches = re.compile(patronvideos,re.DOTALL).findall(data)
+        if     len(matches)== 0:
+            patronvideos  = '<embed src="([^"]+)"'
+            matches = re.compile(patronvideos,re.DOTALL).findall(data)
+            if len(matches)== 0:
+                return ""
+            
     return matches[0]

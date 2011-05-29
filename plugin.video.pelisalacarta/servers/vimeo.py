@@ -6,16 +6,20 @@
 #------------------------------------------------------------
 
 import urlparse,urllib2,urllib,re
-import os.path
-import sys
-import xbmc
 import os
-import config
-import logger
 import socket
 from xml.dom.minidom import parseString
 
-COOKIEFILE = os.path.join (config.DATA_PATH , "cookies.lwp")
+try:
+	from core import scrapertools
+	from core import logger
+	from core import config
+except:
+	from Code.core import scrapertools
+	from Code.core import logger
+	from Code.core import config
+
+COOKIEFILE = os.path.join(config.get_data_path() , "cookies.lwp")
 
 def geturl(urlvideo):
 	videoid = urlvideo
@@ -28,7 +32,7 @@ def geturl(urlvideo):
 		os.remove(ficherocookies)
 	except:
 		pass
-	#xbmc.output("ficherocookies %s", ficherocookies)
+	#logger.info("ficherocookies %s", ficherocookies)
 	# the path and filename to save your cookies in
 
 	cj = None
@@ -111,7 +115,7 @@ def geturl(urlvideo):
 
 	req = Request(theurl, txdata, txheaders)
 	handle = urlopen(req)
-	#cj.save(ficherocookies)                     # save the cookies again    
+	#cj.save(ficherocookies)					 # save the cookies again	
 
 	data=handle.read()
 	handle.close()
@@ -134,16 +138,31 @@ def geturl(urlvideo):
 			logger.info("Error : Video borrado")
 			return ""
 	try:
-		quality =  ((config.getSetting("quality_flv") == "1" and "hd") or "sd")
+		quality =  ((config.get_setting("quality_flv") == "1" and "hd") or "sd")
 	except:
 		quality = "sd"
-	video_url = "http://www.vimeo.com/moogaloop/play/clip:%s/%s/%s/?q=%s" % ( videoid, request_signature, request_signature_expires , quality )
+	#http://player.vimeo.com/play_redirect?clip_id=19284716&sig=876501f707e219dc48ae78efc83329c3&time=1297504613&quality=hd&codecs=H264,VP8,VP6&type=moogaloop_local&embed_location=
+	video_url = "http://player.vimeo.com/play_redirect?clip_id=%s&sig=%s&time=%s&quality=%s&codecs=H264,VP8,VP6&type=moogaloop_local&embed_location=" % ( videoid, request_signature, request_signature_expires , quality )
 	print video_url
+	txheaders =  {'User-Agent':'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3',
+				  'Host':'player.vimeo.com'
+				  }
+	#buscamos la url real en el headers
+	req = urllib2.Request(video_url, txdata, txheaders)
+	
+	try:
+		opener = urllib2.build_opener(SmartRedirectHandler())
+		response = opener.open(req)
+	except ImportError, inst:
+		status,location=inst
+		logger.info(str(status) + " " + location)	
+		mediaurl = location	
+		
 	# Timeout del socket a 60 segundos
 	socket.setdefaulttimeout(10)
 
 	h=urllib2.HTTPHandler(debuglevel=0)
-	request = urllib2.Request(video_url)
+	request = urllib2.Request(mediaurl)
 
 	opener = urllib2.build_opener(h)
 	urllib2.install_opener(opener)
@@ -154,17 +173,14 @@ def geturl(urlvideo):
 		xbmc.output("[vimeo.py]  error %d (%s) al abrir la url %s" % (e.code,e.msg,video_url))
 		
 		print e.read()	
-	#buscamos la url real en el headers
-	#req = Request(theurl, txdata, txheaders)
-	#handle = urllib2.urlopen(req)
-	#video_url = handle.headers["Location"]
+
 
 
 	#print data	
 	if len(video_url) == 0:
 		logger.info(" vimeo.geturl(): result was empty")
 		return ""
-	else:                
+	else:				
 		logger.info (" vimeo.geturl(): done")
 		return video_url
 	'''	
@@ -177,8 +193,13 @@ def geturl(urlvideo):
 
 	return ""
 	'''
+class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
+	def http_error_302(self, req, fp, code, msg, headers):
+		raise ImportError(302,headers.getheader("Location"))
+		
 def getNodeValue(node, tag, default = ""):
-        if node.getElementsByTagName(tag).item(0):
-            if node.getElementsByTagName(tag).item(0).firstChild:
-                return node.getElementsByTagName(tag).item(0).firstChild.nodeValue
+		if node.getElementsByTagName(tag).item(0):
+			if node.getElementsByTagName(tag).item(0).firstChild:
+				return node.getElementsByTagName(tag).item(0).firstChild.nodeValue
+
 

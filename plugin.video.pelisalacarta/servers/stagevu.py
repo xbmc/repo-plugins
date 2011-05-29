@@ -6,9 +6,20 @@
 #------------------------------------------------------------
 
 import urlparse,urllib2,urllib,re
-import config
+import os
 
-def Stagevu(url):
+try:
+    from core import scrapertools
+    from core import logger
+    from core import config
+except:
+    from Code.core import scrapertools
+    from Code.core import logger
+    from Code.core import config
+
+COOKIEFILE = os.path.join(config.get_data_path() , "cookies.lwp")
+
+def geturl(url):
     #print "-------------------------------------------------------"
     #print url
     #print "-------------------------------------------------------"

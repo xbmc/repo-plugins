@@ -6,50 +6,60 @@
 #------------------------------------------------------------
 
 import urlparse,urllib2,urllib,re
-import xbmc
-import config
+import os
 
-def Tutv(url):
-	xbmc.output("[tutv.py] url="+url)
+try:
+    from core import scrapertools
+    from core import logger
+    from core import config
+except:
+    from Code.core import scrapertools
+    from Code.core import logger
+    from Code.core import config
 
-	if url.startswith("http://"):
-		patronvideos  = '"http://tu.tv.*?\&xtp\=([^"]+)"'
-		matches = re.compile(patronvideos,re.DOTALL).findall('"'+url+'"')
-		i = 0
+COOKIEFILE = os.path.join(config.get_data_path() , "cookies.lwp")
 
-		if len(matches)==0:
-			patronvideos  = '"http://www.tu.tv.*?\&xtp\=([^"]+)"'
-			matches = re.compile(patronvideos,re.DOTALL).findall('"'+url+'"')
+def geturl(url):
+    logger.info("[tutv.py] url="+url)
 
-		i = 0
-		codigo = matches[0]
-	else:
-		codigo = url
+    if url.startswith("http://"):
+        patronvideos  = '"http://tu.tv.*?\&xtp\=([^"]+)"'
+        matches = re.compile(patronvideos,re.DOTALL).findall('"'+url+'"')
+        i = 0
 
-	#for match in matches:
-	#    print "%d %s" % (i , match)
-	#    i = i + 1
+        if len(matches)==0:
+            patronvideos  = '"http://www.tu.tv.*?\&xtp\=([^"]+)"'
+            matches = re.compile(patronvideos,re.DOTALL).findall('"'+url+'"')
 
-	url = "http://tu.tv/visualizacionExterna2.php?web=undefined&codVideo="+codigo
-	#print "-------------------------------------------------------"
-	#print url
-	#print "-------------------------------------------------------"
+        i = 0
+        codigo = matches[0]
+    else:
+        codigo = url
 
-	req = urllib2.Request(url)
-	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-	response = urllib2.urlopen(req)
-	data=response.read()
-	response.close()
-	#print data
+    #for match in matches:
+    #    print "%d %s" % (i , match)
+    #    i = i + 1
 
-	patronvideos  = 'urlVideo0=([^\&]+)\&'
+    url = "http://tu.tv/visualizacionExterna2.php?web=undefined&codVideo="+codigo
+    #print "-------------------------------------------------------"
+    #print url
+    #print "-------------------------------------------------------"
 
-	matches = re.compile(patronvideos,re.DOTALL).findall(data)
-	i = 0
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+    response = urllib2.urlopen(req)
+    data=response.read()
+    response.close()
+    #print data
 
-	#for match in matches:
-	#    print "%d %s" % (i , match)
-	#    i = i + 1
-	url = urllib.unquote_plus( matches[0] )
+    patronvideos  = 'urlVideo0=([^\&]+)\&'
 
-	return url
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    i = 0
+
+    #for match in matches:
+    #    print "%d %s" % (i , match)
+    #    i = i + 1
+    url = urllib.unquote_plus( matches[0] )
+
+    return url

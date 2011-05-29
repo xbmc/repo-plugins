@@ -6,15 +6,20 @@
 #------------------------------------------------------------
 
 import urlparse,urllib2,urllib,re
-import os.path
-import sys
-import xbmc
 import os
-import config
 
-COOKIEFILE = os.path.join (config.DATA_PATH , "cookies.lwp")
+try:
+    from core import scrapertools
+    from core import logger
+    from core import config
+except:
+    from Code.core import scrapertools
+    from Code.core import logger
+    from Code.core import config
 
-def Vreel(urlvideo):
+COOKIEFILE = os.path.join(config.get_data_path() , "cookies.lwp")
+
+def geturl(urlvideo):
     # ---------------------------------------
     #  Inicializa la libreria de las cookies
     # ---------------------------------------
@@ -23,7 +28,7 @@ def Vreel(urlvideo):
         os.remove(ficherocookies)
     except:
         pass
-    xbmc.output("ficherocookies %s", ficherocookies)
+    logger.info("ficherocookies %s", ficherocookies)
     # the path and filename to save your cookies in
 
     cj = None

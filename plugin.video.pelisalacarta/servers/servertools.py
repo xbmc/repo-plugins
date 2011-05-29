@@ -5,11 +5,16 @@
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
 import re
-import scrapertools
-import config
-import logger
 
-logger.info("[servertools.py] init")
+try:
+    from core import scrapertools
+    from core import config
+    from core import logger
+except:
+    # En Plex Media server lo anterior no funciona...
+    from Code.core import logger
+    from Code.core import config
+    from Code.core import scrapertools
 
 def findvideos(data):
     logger.info("[servertools.py] findvideos")
@@ -117,7 +122,7 @@ def findvideos(data):
             logger.info("  url duplicada="+url)
     
     #2/12/2010 Megaupload
-    logger.info("1k) Megaupload...")
+    logger.info("1k) Megaupload (...")
     patronvideos  = 'http\://www.megaupload.com/(?:es/)?\?.*?d\=([A-Z0-9a-z]{8})(?:[^>]*>([^<]+)</a>)?'
     matches = re.compile(patronvideos).findall(data)
     for match in matches:
@@ -133,10 +138,45 @@ def findvideos(data):
             encontrados.add(url)
         else:
             logger.info("  url duplicada="+url)
+    
+    # Código especial cinetube
+    #xrxa("BLYT2ZC9=d?/moc.daolpuagem.www//:ptth")
+    logger.info("1k) Megaupload reverse")
+    patronvideos  = 'xrxa\("([A-Z0-9a-z]{8})=d\?/moc.daolpuagem.www//\:ptth"\)'
+    matches = re.compile(patronvideos).findall(data)
+    for match in matches:
+        titulo = "[Megaupload]"
+        url = match[::-1]
+        if url not in encontrados:
+            logger.info("  titulo="+titulo)
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'Megaupload' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
 
     # Megavideo - Vídeos sin título
     logger.info("2) Megavideo sin titulo...")
     patronvideos  = '<param name="movie" value="http://wwwstatic.megavideo.com/mv_player.swf\?v=([^"]+)">'
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+
+    for match in matches:
+        titulo = "[Megavideo]"
+        if "&" in match:
+            url = match.split("&")[0]
+        else:
+            url = match
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'Megavideo' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+
+
+    # Megavideo - Vídeos sin título
+    logger.info("3) Megavideo formato islapeliculas") #http://www.megavideo.com/mv_player.swf?image=imagenes/mBa.jpg&amp;v=RV4GBJYS
+    patronvideos  = "www.megavideo.com.*?mv_player.swf.*?v(?:=|%3D)(\w{8})"
     matches = re.compile(patronvideos,re.DOTALL).findall(data)
 
     for match in matches:
@@ -148,6 +188,7 @@ def findvideos(data):
             encontrados.add(url)
         else:
             logger.info("  url duplicada="+url)
+
 
     # Vreel - Vídeos con título
     logger.info( "3) Vreel con título...")
@@ -516,8 +557,39 @@ def findvideos(data):
         else:
             logger.info("  url duplicada="+url)
 
+    logger.info("1) Videoweed formato islapeliculas") #http://embed.videoweed.com/embed.php?v=h56ts9bh1vat8
+    patronvideos  = "(http://embed.videoweed.*?)&"
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+
+    for match in matches:
+        titulo = "[Videoweed]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'videoweed' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+
     logger.info("0) YouTube...")
-    patronvideos  = '"http://www.youtube.com/v/([^"]+)"'
+    patronvideos  = 'http://www.youtube(?:-nocookie)?\.com/(?:(?:(?:v/|embed/))|(?:(?:watch(?:_popup)?(?:\.php)?)?(?:\?|#!?)(?:.+&)?v=))?([0-9A-Za-z_-]{11})?'#'"http://www.youtube.com/v/([^"]+)"'
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+
+    for match in matches:
+        titulo = "[YouTube]"
+        url = match
+        
+        if url!='':
+            if url not in encontrados:
+                logger.info("  url="+url)
+                devuelve.append( [ titulo , url , 'youtube' ] )
+                encontrados.add(url)
+            else:
+                logger.info("  url duplicada="+url)
+    
+    logger.info(") YouTube formato buenaisla")  #www.youtube.com%2Fwatch%3Fv%3DKXpGe0ds5r4
+    patronvideos  = 'www.youtube.*?v(?:=|%3D)([0-9A-Za-z_-]{11})'
     matches = re.compile(patronvideos,re.DOTALL).findall(data)
 
     for match in matches:
@@ -542,10 +614,24 @@ def findvideos(data):
 
         if url not in encontrados:
             logger.info("  url="+url)
-            devuelve.append( [ titulo , url , 'facebook' ] )
+            devuelve.append( [ titulo , url , 'directo' ] )
             encontrados.add(url)
         else:
             logger.info("  url duplicada="+url)
+
+    logger.info("0) Facebook para buenaisla...") #http%3A%2F%2Fwww.facebook.com%2Fv%2F139377799432141_23545.mp4
+    patronvideos  = "www.facebook.com(?:/|%2F)v(?:/|%2F)(.*?)(?:&|%26)"
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+
+    for match in matches:
+        titulo = "[Facebook]"
+        url = "http://www.facebook.com/video/external_video.php?v="+match
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'facebook' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)		
 
     #http://www.4shared.com/embed/392975628/ff297d3f
     logger.info("0) 4shared...")
@@ -595,9 +681,164 @@ def findvideos(data):
             encontrados.add(url)
         else:
             logger.info("  url duplicada="+url)
-    
-    return devuelve
 
+    logger.info("videobb...")
+    patronvideos  = "(http\:\/\/videobb.com\/e\/[a-zA-Z0-9]+)"
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+
+    for match in matches:
+        titulo = "[videobb]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'videobb' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+
+    logger.info("videobb...")
+    patronvideos  = "(http\:\/\/(?:www\.)?videobb.com\/(?:(?:e/)|(?:(?:video/|f/)))?[a-zA-Z0-9]{12})"
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    #print data
+    for match in matches:
+        titulo = "[videobb]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'videobb' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+
+    logger.info("videozer...")
+    patronvideos  = "(http\:\/\/(?:www\.)?videozer.com\/(?:(?:e/|flash/)|(?:(?:video/|f/)))?[a-zA-Z0-9]{4,8})"
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    #print data
+    for match in matches:
+        titulo = "[videozer]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'videozer' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+    
+    logger.info ("vk...")
+    #vk tipo "http://vk.com/video_ext.php?oid=70712020&amp;id=159787030&amp;hash=88899d94685174af&amp;hd=3"
+    patronvideos = '<iframe src="(http://[^\/]+\/video_ext.php[^"]+)"'
+    matches = re.compile(patronvideos).findall(data)
+
+    for match in matches:
+        titulo = "[vk]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'vk' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+
+    logger.info("VKserver...")
+    patronvideos  = '(http\:\/\/vk.+?\/video_ext\.php[^"]+)"'
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    #print data
+    for match in matches:
+        titulo = "[VKserver]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'vk' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+            
+    logger.info ("0) Enlace estricto a userporn")
+    #userporn tipo "http://www.userporn.com/f/szIwlZD8ewaH.swf"
+    patronvideos = 'userporn.com\/f\/([A-Z0-9a-z]{12}).swf'
+    matches = re.compile(patronvideos).findall(data)
+
+    for match in matches:
+        titulo = "[userporn]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'userporn' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+           
+    logger.info ("1) Enlace estricto a userporn")
+    #userporn tipo "http://www.userporn.com/video/ZIeb370iuHE4"
+    patronvideos = 'userporn.com\/video\/([A-Z0-9a-z]{12})'
+    matches = re.compile(patronvideos).findall(data)
+
+    for match in matches:
+        titulo = "[userporn]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'userporn' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+           
+    logger.info ("2) Enlace estricto a userporn")
+    #userporn tipo "http://www.userporn.com/e/LLqVzhw5ft7T"
+    patronvideos = 'userporn.com\/e\/([A-Z0-9a-z]{12})'
+    matches = re.compile(patronvideos).findall(data)
+
+    for match in matches:
+        titulo = "[userporn]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'userporn' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+
+    logger.info("userporn...")
+    patronvideos  = "(http\:\/\/(?:www\.)?userporn.com\/(?:(?:e/|flash/)|(?:(?:video/|f/)))?[a-zA-Z0-9]{0,12})"
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    #print data
+    for match in matches:
+        titulo = "[Userporn]"
+        url = match
+
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'userporn' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)
+			
+    logger.info("0) Videos animeid...") #http%3A%2F%2Fmangaid.com%2Ff.php%3Fh3eqiGdkh3akY2GaZJ6KpqyDaWmJ%23.mp4
+    patronvideos  = "file=http.*?mangaid.com(.*?)&amp;backcolor="
+    matches = re.compile(patronvideos,re.DOTALL).findall(data)
+    cont = 0
+    for match in matches:
+        cont = cont + 1 
+        titulo = " Parte %s [Directo]" % (cont)
+        url = "http://mangaid.com"+match
+        url = url.replace('%2F','/').replace('%3F','?').replace('%23','#')
+        if url not in encontrados:
+            logger.info("  url="+url)
+            devuelve.append( [ titulo , url , 'directo' ] )
+            encontrados.add(url)
+        else:
+            logger.info("  url duplicada="+url)	
+            
+    return devuelve
+    
 def findurl(code,server):
     mediaurl = "ERROR"
     server = server.lower() #Para hacer el procedimiento case insensitive
@@ -606,90 +847,54 @@ def findurl(code,server):
         import megavideo
         mediaurl = megavideo.Megavideo(code)
 
-    if server == "megaupload":
+    elif server == "megaupload":
         import megaupload
-        mediaurl = megaupload.getvideo(code)
+        mediaurl = megaupload.gethighurl(code)
         
-    if server == "vreel":
-        import vreel
-        mediaurl = vreel.Vreel(code)
-
-    if server == "stagevu":
-        import stagevu
-        mediaurl = stagevu.Stagevu(code)
-    
-    if server == "tu.tv":
-        import tutv
-        mediaurl = tutv.Tutv(code)
-    
-    if server == "movshare":
-        import movshare
-        mediaurl = movshare.getvideo(code)
-    
-    if server == "veoh":
-        import veoh
-        mediaurl = veoh.getvideo(code)
-    
-    if server == "directo":
+    elif server == "directo":
         mediaurl = code
-        
-    if server == "metadivx":
-        import metadivx
-        mediaurl = metadivx.geturl(code)
 
-    if server == "divxden":
-        import divxden
-        mediaurl = divxden.geturl(code)
-
-    if server == "divxlink":
-        import divxlink
-        mediaurl = divxlink.geturl(code)
-
-    if server == "videoweed":
-        import videoweed
-        mediaurl = videoweed.geturl(code)
-    
-    if server == "youtube":
-        import youtube
-        mediaurl = youtube.geturl(code)
-    
-    if server == "zshare":
-        import zshare
-        mediaurl = zshare.geturl(code)
-
-    if server == "4shared":
+    elif server == "4shared":
         import fourshared
         mediaurl = fourshared.geturl(code)
-    
-    if server == "cinshare":
-        import cinshare
-        mediaurl = cinshare.geturl(code)
         
-    if server == "facebook":
-        mediaurl = code
-        
-    if server == "xml":
+    elif server == "xml":
         import xmltoplaylist
         mediaurl = xmltoplaylist.geturl(code)
 
-    if server == "vimeo":
-        import vimeo
-        mediaurl = vimeo.geturl(code)
+    else:
+        try:
+            exec "import "+server+" as serverconnector"
+            mediaurl = serverconnector.geturl(code)
+        except:
+            mediaurl = "ERROR"
+            import sys
+            for line in sys.exc_info():
+                logger.error( "%s" % line )
         
     return mediaurl
 
-def getmegavideolow(code):
+def getmegavideolow(code, password=None):
     import megavideo
-    return megavideo.getlowurl(code)
+    if password is not None:
+	    return megavideo.getlowurl(code,password)
+    else:
+        return megavideo.getlowurl(code,password)
 
 def getmegavideohigh(code):
     import megavideo
     return megavideo.gethighurl(code)
 
-def getmegauploadhigh(code):
+def getmegauploadhigh(code, password=None):
     import megaupload
-    return megaupload.gethighurl(code)
-
-def getmegauploadlow(code):
+    if password is not None:
+	    return megaupload.gethighurl(code,password)
+    else:
+        return megaupload.gethighurl(code)
+	
+def getmegauploadlow(code, password=None):
     import megaupload
-    return megaupload.getlowurl(code)
+    if password is not None:
+	    return megaupload.getlowurl(code,password)
+    else:
+        return megaupload.getlowurl(code)

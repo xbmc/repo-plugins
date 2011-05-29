@@ -5,14 +5,21 @@
 # http://blog.tvalacarta.info/plugin-xbmc/pelisalacarta/
 #------------------------------------------------------------
 
-import re, sys, os
+import re, os
 import urlparse, urllib, urllib2
-import os.path
-import sys
-import scrapertools
-import config
-import downloadtools
-import logger
+
+try:
+    from core import scrapertools
+    from core import logger
+    from core import config
+    from core import downloadtools
+except:
+    from Code.core import scrapertools
+    from Code.core import logger
+    from Code.core import config
+    from Code.core import downloadtools
+
+COOKIEFILE = os.path.join(config.get_data_path() , "cookies.lwp")
 
 DEBUG = True
 CHANNELNAME = "xmltoplaylist"
@@ -22,62 +29,62 @@ PLAYLIST_FILENAME_TEMP = "video_playlist.temp.pls"
 FULL_FILENAME_PATH = os.path.join( downloadtools.getDownloadPath(), PLAYLIST_FILENAME_TEMP )
 
 def geturl(xmlurl,title="default"):
-	logger.info("[xmltoplaylist.py] geturl")
-	
-	return MakePlaylistFromXML(xmlurl)
-	
+    logger.info("[xmltoplaylist.py] geturl")
+    
+    return MakePlaylistFromXML(xmlurl)
+    
 def MakePlaylistFromXML(xmlurl,title="default"):
-	logger.info("[%s.py] MakePlaylistFromXML" %CHANNELNAME)
-	
-	if title== ("default" or ""):
-		nombrefichero = FULL_FILENAME_PATH_XML
-	else:
-		nombrefichero = os.path.join( downloadtools.getDownloadPath(),title + ".pls")
-	xmldata = scrapertools.cachePage(xmlurl)
-	patron = '<title>([^<]+)</title>.*?<location>([^<]+)</location>'
-	matches = re.compile(patron,re.DOTALL).findall(xmldata)
-	if len(matches)>0:
-		playlistFile = open(nombrefichero,"w")
-		playlistFile.write("[playlist]\n")
-		playlistFile.write("\n")
-		c = 0		
-		for match in matches:
-			c += 1
-			playlistFile.write("File%d=%s\n"  %(c,match[1]))
-			playlistFile.write("Title%d=%s\n" %(c,match[0]))
-			playlistFile.write("\n")
-			
-		playlistFile.write("NumberOfEntries=%d\n" %c)
-		playlistFile.write("Version=2\n")
-		playlistFile.flush();
-		playlistFile.close()	
-		return nombrefichero
-	else:
-		return ""
+    logger.info("[%s.py] MakePlaylistFromXML" %CHANNELNAME)
+    
+    if title== ("default" or ""):
+        nombrefichero = FULL_FILENAME_PATH_XML
+    else:
+        nombrefichero = os.path.join( downloadtools.getDownloadPath(),title + ".pls")
+    xmldata = scrapertools.cachePage(xmlurl)
+    patron = '<title>([^<]+)</title>.*?<location>([^<]+)</location>'
+    matches = re.compile(patron,re.DOTALL).findall(xmldata)
+    if len(matches)>0:
+        playlistFile = open(nombrefichero,"w")
+        playlistFile.write("[playlist]\n")
+        playlistFile.write("\n")
+        c = 0        
+        for match in matches:
+            c += 1
+            playlistFile.write("File%d=%s\n"  %(c,match[1]))
+            playlistFile.write("Title%d=%s\n" %(c,match[0]))
+            playlistFile.write("\n")
+            
+        playlistFile.write("NumberOfEntries=%d\n" %c)
+        playlistFile.write("Version=2\n")
+        playlistFile.flush();
+        playlistFile.close()    
+        return nombrefichero
+    else:
+        return ""
 
 def MakePlaylistFromList(Listdata,title="default"):
-	logger.info("[%s.py] MakePlaylistFromList" %CHANNELNAME)
-	
-	if title== ("default" or ""):
-		nombrefichero = FULL_FILENAME_PATH
-	else:
-		nombrefichero = os.path.join( downloadtools.getDownloadPath(),title + ".pls")
-	
-	if len(Listdata)>0:
-		playlistFile = open(nombrefichero,"w")
-		playlistFile.write("[playlist]\n")
-		playlistFile.write("\n")
-		c = 0		
-		for match in Listdata:
-			c += 1
-			playlistFile.write("File%d=%s\n"  %(c,match[1]))
-			playlistFile.write("Title%d=%s\n" %(c,match[0]))
-			playlistFile.write("\n")
-			
-		playlistFile.write("NumberOfEntries=%d\n" %c)
-		playlistFile.write("Version=2\n")
-		playlistFile.flush();
-		playlistFile.close()	
-		return nombrefichero
-	else:
-		return ""
+    logger.info("[%s.py] MakePlaylistFromList" %CHANNELNAME)
+    
+    if title== ("default" or ""):
+        nombrefichero = FULL_FILENAME_PATH
+    else:
+        nombrefichero = os.path.join( downloadtools.getDownloadPath(),title + ".pls")
+    
+    if len(Listdata)>0:
+        playlistFile = open(nombrefichero,"w")
+        playlistFile.write("[playlist]\n")
+        playlistFile.write("\n")
+        c = 0        
+        for match in Listdata:
+            c += 1
+            playlistFile.write("File%d=%s\n"  %(c,match[1]))
+            playlistFile.write("Title%d=%s\n" %(c,match[0]))
+            playlistFile.write("\n")
+            
+        playlistFile.write("NumberOfEntries=%d\n" %c)
+        playlistFile.write("Version=2\n")
+        playlistFile.flush();
+        playlistFile.close()    
+        return nombrefichero
+    else:
+        return ""

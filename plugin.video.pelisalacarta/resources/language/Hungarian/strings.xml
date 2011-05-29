@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!-- Available id from 30000 to 30999 -->
 
@@ -9,49 +9,40 @@
 	<!-- Commons -->
 	<string id="30000">Lejátszó</string>
 	<string id="30001">Frissítések keresése</string>
-	<string id="30004">Automatic update channels:</string>
-	<string id="30002">Felnott mód engedélyezése</string>
+    <string id="30004">Automatic update channels:</string>
+	<string id="30002">Felnőtt mód engedélyezése</string>
 	<string id="30003">Részletes napló</string>
+    <string id="30043">Forzar el modo de vista:</string>
 
 	<!-- Default action when you select a video -->
 	<string id="30005">Lejátszáskor:</string>
 	<string id="30006">Rákérdez</string>
 	<string id="30007">Megnéz</string>
-	<string id="30008">Megnéz jó minoségben</string>
+	<string id="30008">Megnéz jó minőségben</string>
 	<string id="30008">Send to jDownloader</string>
 
 	<!-- Logo visualization for channels -->
 	<string id="30010">Csatorna logók:</string>
-	<string id="30011">Poszter (függoleges)</string>
+	<string id="30011">Poszter (függőleges)</string>
 	<string id="30012">Hírdetéssáv (vízszintes)</string>
 
 	<!-- Megavideo account -->
 	<string id="30013">Megavideo prémium mód:</string>
 	<string id="30014">Megavideo felhasználó:</string>
 	<string id="30015">Megavideo jelszó:</string>
-    <string id="30031">Video Quality (FLV)</string>
-    <string id="30032">Standard Definition (SD)</string>
-    <string id="30033">High Definition (HD)(when available)</string>    
 
-    <string id="30034">Private pages login:</string>
-    <string id="30035">Private pages password:</string>
-    
 	<!-- Other -->
 	<string id="30017">Letöltési hely:</string>
 	<string id="30018">Letöltési lista helye:</string>
-	<string id="30030">Favorites path:</string>
-	<string id="30020">Legjobb minoség (Youtube)</string>
+	<string id="30020">Legjobb minőség (Youtube)</string>
 	<string id="30021">Felirat engedélyezése</string>
 	<string id="30022">JDownloader cím:</string>
 	<string id="30024">Ennyi keresést mentsen</string>
-
-	<string id="30019">Filter channels by language:</string>
-
-	<string id="30025">All languages</string>
-	<string id="30026">Spanish</string>
-	<string id="30027">English</string>
-	<string id="30028">Italian</string>
-	<string id="30029">Portuguese</string>
+	<string id="30025">Cache mode:</string>
+	<string id="30026">Automatic</string>
+	<string id="30027">Cache all</string>
+	<string id="30028">Cache nothing</string>
+    <string id="30029">Cache path:</string>
 
 	<!-- =============================================================== -->
 	<!-- 30050 to 30099: Info / error messages                           -->
@@ -69,7 +60,8 @@
 	<string id="30060">Loading canceled due to an error on website</string> <!-- No se puede acceder por un error en el sitio web -->
 	<string id="30061">Quality not available or video removed</string> <!-- La calidad elegida no esta disponible o el video ha sido borrado -->
 	<string id="30062">Try another quality</string> <!-- Prueba a reproducir en otra calidad -->
-	<string id="30063">This channel has been downloaded and updated!</string>
+    <string id="30063">Channel downloaded and updated!</string>
+    <string id="30064">¡Channel list has been updated!</string>
 
 	<!-- =============================================================== -->
 	<!-- 30100 to 30149: Generic channels (Search, downloads, etc.)      -->
@@ -93,24 +85,12 @@
 	<string id="30115">Trailer for %s</string> <!-- El Trailer para %s -->
 	<string id="30116">cannot be found.</string> <!-- no se ha podido localizar. -->
 	<string id="30117">Do you want to refine search with keyboard?</string> <!-- ¿Quieres refinar la búsqueda con el teclado? -->
-	
-	<string id="30118">Channels</string>
-	<string id="30119">Choose a Category</string>
-	<string id="30120">Choose a Language</string>
-	<string id="30121">All</string>
-	<string id="30122">Movies</string>
-	<string id="30123">TV Shows</string>
-	<string id="30124">Anime</string>
-	<string id="30125">Documentaries</string>
-	<string id="30126">Music</string>
-	<string id="30127">Servers</string>
-	<string id="30128">Search Trailers</string>
 
 	<!-- =============================================================== -->
 	<!-- 30150 to 30199: Action menu / contextual menu                   -->
 	<!-- =============================================================== -->
 	<string id="30150">Watch in high quality</string> <!-- Ver en calidad alta -->
-	<string id="30151">Watch in normal quality</string> <!-- Ver en calidad normal -->
+	<string id="30151">Watch the video</string> <!-- Ver en calidad normal -->
 	<string id="30152">Watch in low quality</string> <!-- Ver en calidad baja -->
 	<string id="30153">Download</string> <!-- Descargar -->
 	<string id="30154">Remove from favorites</string> <!-- Quitar de favoritos -->
@@ -128,22 +108,22 @@
 	<!-- 30100 to 30999: Individual channels                             -->
 	<!-- =============================================================== -->
 
-	<!-- Context menu strings -->
-	<string id="30300">Mentett keresés törlése</string>
-	<string id="30301">Add channel live to favorites</string>
-	<string id="30302">Remove from favorites channel live</string>
-	<string id="30303">Rename title channel live</string>
+    <!-- Context menu strings -->
+    <string id="30300">Mentett keresés törlése</string>
+    <string id="30301">Add channel live to favorites</string>
+    <string id="30302">Remove from favorites channel live</string>
+    <string id="30303">Rename title channel live</string>
 
- 	<!-- Megalive menu strings -->
- 	<string id="30401">channels wall</string>
-	<string id="30402">Categories</string>
-	<string id="30403">Favorites channels </string>
-	<string id="30404">Play channel Live by ID</string>
-	<string id="30405">Input channel ID code</string>
- 
-	<!-- LetMeWatchThis -->
-	<string id="40001">Filmek - most hozzáadva</string>
-	<string id="40002">TV musorok - most hozzáadva</string>
-	<string id="40003">!Következo oldal</string>
+    <!-- Megalive menu strings -->
+    <string id="30401">channels wall</string>
+    <string id="30402">Categories</string>
+    <string id="30403">Favorites channels </string>
+    <string id="30404">Play channel Live by ID</string>
+    <string id="30405">Input channel ID code</string>
+
+    <!-- LetMeWatchThis -->
+    <string id="40001">Filmek - most hozzáadva</string>
+    <string id="40002">TV musorok - most hozzáadva</string>
+    <string id="40003">!Következo oldal</string>
 
 </strings>

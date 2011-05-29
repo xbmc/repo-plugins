@@ -11,7 +11,7 @@ import os
 import base64
 import datetime
 import re
-from elementtree import ElementTree as ET
+import xml.etree.ElementTree as ET
 import xbmcplugin
 import xbmcgui
 import xbmcaddon

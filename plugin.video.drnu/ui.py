@@ -17,23 +17,30 @@ class DRnuUI(object):
 
     def getMainMenu(self):
         iconImage = os.path.join(self.ADDON.getAddonInfo('path'), 'icon.png')
+        fanartImage = os.path.join(self.ADDON.getAddonInfo('path'), 'fanart.jpg')
         # All Program Series
         item = xbmcgui.ListItem(self.ADDON.getLocalizedString(30000), iconImage=iconImage)
+        item.setProperty('Fanart_Image', fanartImage)
         xbmcplugin.addDirectoryItem(self.addonHandle, self.addonPath + '?all', item, isFolder=True)
         # Latest
         item = xbmcgui.ListItem(self.ADDON.getLocalizedString(30001), iconImage=iconImage)
+        item.setProperty('Fanart_Image', fanartImage)
         xbmcplugin.addDirectoryItem(self.addonHandle, self.addonPath + '?newest', item, isFolder=True)
         # Spotlight
         item = xbmcgui.ListItem(self.ADDON.getLocalizedString(30002), iconImage=iconImage)
+        item.setProperty('Fanart_Image', fanartImage)
         xbmcplugin.addDirectoryItem(self.addonHandle, self.addonPath + '?spot', item, isFolder=True)
         # Search
         item = xbmcgui.ListItem(self.ADDON.getLocalizedString(30003), iconImage=iconImage)
+        item.setProperty('Fanart_Image', fanartImage)
         xbmcplugin.addDirectoryItem(self.addonHandle, self.addonPath + '?search', item, isFolder=True)
         # Recently watched Program Series
         item = xbmcgui.ListItem(self.ADDON.getLocalizedString(30007), iconImage=iconImage)
+        item.setProperty('Fanart_Image', fanartImage)
         xbmcplugin.addDirectoryItem(self.addonHandle, self.addonPath + '?recentlywatched', item, isFolder=True)
         # Favorite Program Series
         item = xbmcgui.ListItem(self.ADDON.getLocalizedString(30008), iconImage=iconImage)
+        item.setProperty('Fanart_Image', fanartImage)
         xbmcplugin.addDirectoryItem(self.addonHandle, self.addonPath + '?favorites', item, isFolder=True)
 
         xbmcplugin.endOfDirectory(self.addonHandle)

@@ -60,6 +60,9 @@ def parseParams(input):
 
 if __name__ == '__main__':
     dataPath = xbmc.translatePath(ADDON.getAddonInfo("Profile"))
+    if not os.path.exists(dataPath):
+        os.makedirs(dataPath)
+        
     api = api.DrNuApi(dataPath, 60)
     ui = ui.DRnuUI(api, int(sys.argv[1]), sys.argv[0])
 

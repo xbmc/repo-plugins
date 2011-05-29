@@ -1,3 +1,7 @@
+[B]Version 2.0.2[/B]
+
+- Fixed broken dependency in eden (use xml.etree.ElementTree available in python 2.5)
+
 [B]Version 2.0.1[/B]
 
 - Update to xbmc.python 2.0 for eden repository

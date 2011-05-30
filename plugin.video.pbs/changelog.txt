@@ -1,3 +1,9 @@
+[B]Version 1.0.4[/B]
+
+- Fixed script failed error when trying to play videos
+- Fixed errors when searching a term
+- Fixed error after HTTP 404 dialog
+
 [B]Version 1.0.3[/B]
 
 - Added duration to the video listings

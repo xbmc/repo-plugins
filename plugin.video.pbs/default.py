@@ -6,8 +6,8 @@ import datetime
 __plugin__ = "PBS"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '02-08-2011'
-__version__ = '1.0.3'
+__date__ = '04-25-2011'
+__version__ = '1.0.4'
 __settings__ = xbmcaddon.Addon( id = 'plugin.video.pbs' )
 
 programs_thumb = os.path.join( __settings__.getAddonInfo( 'path' ), 'resources', 'media', 'programs.png' )
@@ -17,6 +17,7 @@ search_thumb = os.path.join( __settings__.getAddonInfo( 'path' ), 'resources', '
 next_thumb = os.path.join( __settings__.getAddonInfo( 'path' ), 'resources', 'media', 'next.png' )
 				
 def open_url( url ):
+	print 'PBS - URL: ' + url
 	retries = 0
 	while retries < 4:
 		try:
@@ -31,7 +32,7 @@ def open_url( url ):
 				dialog = xbmcgui.Dialog()
 				ok = dialog.ok( __plugin__ , __settings__.getLocalizedString( 30006 ) + '\n' + __settings__.getLocalizedString( 30007 ) )
 				build_main_directory()
-				return "data"
+				return "404"
 			retries += 1
 			print 'PBS - Retries: ' + str( retries )
 			continue
@@ -43,7 +44,7 @@ def open_url( url ):
 		return "data"
 
 def clean( string ):
-	list = [( '&amp;', '&' ), ( '&quot;', '"' ), ( '&#39;', '\'' ), ( '\n',' ' ), ( '\r', ' '), ( '\t', ' '), ( '</p>', '' )]
+	list = [( '&amp;', '&' ), ( '&quot;', '"' ), ( '&#39;', '\'' ), ( '\n',' ' ), ( '\r', ' '), ( '\t', ' '), ( '</p>', '' ), ( '<br />', ' ' )]
 	for search, replace in list:
 		string = string.replace( search, replace )
 	return string
@@ -134,7 +135,7 @@ def build_search_directory( url, page ):
 		build_search_keyboard()
 		return
 	programs_id_title = re.compile( '<a href="http://(.+?)/program/(.+?)" class="program_title"><span class="program_name">(.+?)</span> <span class="visit_program">Visit Program Page</span></a>' ).findall( data )
-	programs_info = re.compile( '<div class="program_description"> <p>(.+?)</div>' ).findall( data )
+	programs_info = re.compile( '<div class="program_description"> <p>(.*?)\.<' ).findall( data )
 	video_count = re.compile( '<span class="resultnum">(.+?) Video Results</span>' ).findall( data )[0]
 	id_title = re.compile( '<p class="info">(.*?)<a href="http://video.pbs.org/video/(.+?)/(\?starttime=(.*?))?" class="title" title="(.+?)">(.+?)</a>', re.DOTALL ).findall( video_data )
 	info = re.compile( '<span class="list">(.*?)</span>', re.DOTALL ).findall( video_data )
@@ -145,7 +146,7 @@ def build_search_directory( url, page ):
 		for url, id, title in programs_id_title:
 			url = 'http://' +url + '/program/' + id + '/rss/'
 			listitem = xbmcgui.ListItem( label = '[Program] ' + clean( title ), iconImage = programs_thumb, thumbnailImage = programs_thumb )
-			listitem.setInfo( type="Video", infoLabels={ "Title": 'Program: ' + clean( title ) , "Director": "PBS", "Studio": clean( title ), "Plot": clean( programs_info[item_count] ) } )
+			listitem.setInfo( type="Video", infoLabels={ "Title": 'Program: ' + clean( title ) , "Director": "PBS", "Studio": clean( title ), "Plot": clean( programs_info[item_count] + '.' ) } )
 			u = sys.argv[0] + "?mode=0&url=" + urllib.quote_plus( url )
 			ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
 			item_count += 1	
@@ -185,6 +186,8 @@ def find_videos( url ):
 
 def play_video( name, url, thumb, plot, studio, starttime ):
 	data = open_url( url )
+	if data == '404':
+		return
 	id = re.compile( 'http%3A//release.theplatform.com/content.select%3Fpid%3D(.+?)%26UserName' ).findall( data )[0]
 	url = 'http://release.theplatform.com/content.select?pid=' + id + '&format=SMIL'
 	data = open_url( url )
@@ -192,11 +195,9 @@ def play_video( name, url, thumb, plot, studio, starttime ):
 	src = re.compile( '<ref src="(.+?)" title="(.+?)" author' ).findall( data )[0][0]
 	if base == 'http://ad.doubleclick.net/adx/':
 		src_data = src.split( "&lt;break&gt;" )
-		rtmp_url = src_data[0]
-		playpath = "mp4:" + src_data[1]
+		rtmp_url = src_data[0] + "mp4:" + src_data[1]
 	else:
-		rtmp_url = base + src
-		playpath = src
+		rtmp_url = base + "mp4:" + src
 	item = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = thumb )
 	item.setInfo( type="Video", infoLabels={ "Title": name , "Director": "PBS", "Studio": "PBS: " + studio, "Plot": plot } )
 	xbmc.Player( xbmc.PLAYER_CORE_DVDPLAYER ).play( clean( rtmp_url ), item )
@@ -268,6 +269,7 @@ except:
 	pass
 
 if mode == None:
+	print __plugin__ + ' ' + __version__ + ' ' + __date__
 	build_main_directory()
 elif mode == 0:
 	find_videos( url )

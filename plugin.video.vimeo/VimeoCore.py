@@ -82,7 +82,7 @@ class VimeoCore(object):
 			self.__settings__.setSetting("oauth_token", "")
 
 			self.v.get_request_token()
-			( result, status) = self.login_get_verifier(self.v.get_authorization_url("write") )
+			( result, status) = self.login_get_verifier(self.v.get_authorization_url("write"))
 
 			if status != 200:
 				return ( result, status)
@@ -96,8 +96,7 @@ class VimeoCore(object):
 			match = re.match('oauth_token_secret=(.*)&oauth_token=(.*)', token)
 
 			if not match:
-				if self.__dbg__:
-					print self.__plugin__ + " login failed"
+				print self.__plugin__ + " login failed"
 				return ( self.__language__(30609), 303)
 					
 			self.__settings__.setSetting("oauth_token_secret", match.group(1))
@@ -107,11 +106,10 @@ class VimeoCore(object):
 				print self.__plugin__ + " login done"
 			return ( self.__language__(30030), 200 )
 		except:
-			if self.__dbg__:
-				print self.__plugin__ + " login failed uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
+			print self.__plugin__ + " login failed uncaught exception"
+			print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
 												   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				return ( self.__language__(30609), 303)
+			return ( self.__language__(30609), 303)
 		
 	def login_get_verifier (self, auth_url):
 		if self.__dbg__:
@@ -145,7 +143,7 @@ class VimeoCore(object):
 			
 			com = urllib2.urlopen(login_url)
 			page2 = com.read()
-
+			
 			# part 3: visit main page while referring to login page to recieve valid uid cookie
 			third = urllib2.Request("http://www.vimeo.com/")
 			third.add_header("Referer", "http://www.vimeo.com/log_in")
@@ -162,12 +160,12 @@ class VimeoCore(object):
 					print self.__plugin__ + " login_get_verifier sanity check failed, bad username or password?"
 				return ( self.__language__(30621), 303)
 			
-			#				 We should check for this part on the web login to se if http failse and send the message back to the user
-			#<div id="message" style="display:block;">
+			# We should check for this part on the web login to se if http failse and send the message back to the user
+			# <div id="message" style="display:block;">
 			#
 			#	<div class="inner">
 			#					The email address and password you entered do not match.			</div>
-			#</div>
+			# </div>
 			if (self.__dbg__):
 				print "Cookie jar contents: " + repr(cj)
 			userid = ""
@@ -193,9 +191,42 @@ class VimeoCore(object):
 			con.close()
 			
 			if value.find('<span class="verifier">') == -1:
+			
+				if value.find('<input type="hidden" name="oauth_token" value="') == -1:
+					if self.__dbg__:
+						print self.__plugin__ + " login_get_verifier no oauth_token: " + repr(value)
+					return ( self.__language__(30606), 303 )
+
+				start = value.find('<input type="hidden" name="oauth_token" value="') + len('<input type="hidden" name="oauth_token" value="')
+				login_oauth_token = value[start:value.find('"', start)]
+	
+				start = value.find('<input type="hidden" id="xsrft" class="xsrft" name="token" value="') + len('<input type="hidden" id="xsrft" class="xsrft" name="token" value="')
+				login_token = value[start:value.find('"', start)]
+				
+				url = urllib2.Request("http://vimeo.com/oauth/authorize?permission=write")
+				url.add_header('User-Agent', self.USERAGENT)
+				
+				url.add_header('Content-Type', 'application/x-www-form-urlencoded')
+	
+				if self.__settings__.getSetting("accept") != "0":
+					if self.__dbg__:
+						print self.__plugin__ + " login_get_verifier accept disabled"
+					return ( self.__language__(30606), 303 )
+														
+				data = urllib.urlencode({'token': login_token,
+										 'oauth_token': login_oauth_token,
+										 'permission': 'write',
+										 'accept': 'Yes, authorize Vimeo XBMC Plugin!'})
+				
+				con = urllib2.urlopen(url, data);
+				
+				value = con.read();
+				con.close()
+			
+			if value.find('<span class="verifier">') == -1:
 				if self.__dbg__:
 					print self.__plugin__ + " login_get_verifier no login verifier "
-					print data
+					print repr(value)
 				return ( self.__language__(30606), 303 )
 			
 			start = value.find('<span class="verifier">') + len('<span class="verifier">')

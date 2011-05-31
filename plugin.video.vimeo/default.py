@@ -3,7 +3,7 @@ import sys, xbmc, xbmcaddon
 REMOTE_DBG = False
 
 # plugin constants
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 __plugin__ = "Vimeo-" + __version__
 __author__ = "TheCollective"
 __url__ = "www.xbmc.com"

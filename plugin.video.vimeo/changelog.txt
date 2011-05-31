@@ -1,6 +1,10 @@
 [B]Errata[/B]
 - [XBMC] Thumbnails sometimes turns into folders.
-- XBMC has Excessive Memory use after running the plugin for prolonged periods of time
+- [XBMC] has Excessive Memory use after running the plugin for prolonged periods of time
+- [Vimeo] Vimeo's implementation of Oauth 1 is time sensetive, meaning that an incorrectly set system clock will prevent the plugin from logging in
+
+[B]Version 1.0.4[/B]
+- Fixed login breakage cause by Vimeo site changes (Proper)
 
 [B]Version 1.0.3[/B]
 - Fixed issue where listing groups would fail if every group didnt have a logo

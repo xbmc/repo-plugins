@@ -1,12 +1,15 @@
-version - 0.0.1
-initial
+version 0.0.5
+added the crave podcast
+
+version - 0.0.4
+added addon settings for video quality instead of categories
+
+version - 0.0.3
+updated icon.png
 
 version - 0.0.2
 added video descriptions
 added categories for SD and HD
 
-version - 0.0.3
-updated icon.png
-
-version - 0.0.4
-added addon settings for video quality instead of categories
+version - 0.0.1
+initial

@@ -1,3 +1,3 @@
 <settings>
-   <setting id="video_quality" type="select" lvalues="30022|30023" label="30024" default=""/>
+   <setting id="video_quality" type="enum" lvalues="30022|30023" label="30024" default="0"/>
 </settings>

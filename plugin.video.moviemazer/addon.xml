@@ -18,5 +18,6 @@
     <disclaimer lang="de">Genres, Release Datum and Handlung gibt es nur auf deutsch</disclaimer>
     <disclaimer lang="en">Genres, release date and plot are german only</disclaimer>
     <platform>all</platform>
+    <broken>Web page redesign</broken>
   </extension>
 </addon>

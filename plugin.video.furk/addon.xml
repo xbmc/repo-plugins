@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.furk" version="1.0.4" name="Furk.net BitTorrent Proxy" provider-name="Furk.net">
+	<requires/>
+	<extension point="xbmc.python.pluginsource"
+	           library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>
+			Plays video torrents from 'My Files :: Finished'. Check www.furk.net/text/mc for more info.
+	   	</summary>
+		<description>
+			Furk.net is a free file hosting with one special feature - a BitTorrent proxy. 
+			It can act as a regular BitTorrent client and download torrents on your behalf. You provide .torrent files - you get direct http links.
+			For most torrents you get torrents faster then using a desktop BitTorrent client. 
+			Furk.net has developed extended content verification. For every video torrent you get 9 screenshots (thumbnails and full-size), 2 audio samples, detailed codec info and antivirus check (by Kaspersky). Fakes are contantly detected by various filters and either are removed or marked with a warning.
+		   	This plugin allows your to play instantly video torrents.
+		</description>
+		<platform>all</platform>
+		<minversion>29000</minversion>
+		<disclaimer>
+			You must have a premium account at www.furk.net for this addon to function.
+		</disclaimer>
+	</extension>
+</addon>
+

@@ -45,3 +45,5 @@ plugin.audio.abradio.cz/.git
 plugin.audio.abradio.cz/install.sh
 plugin.video.putio/.git
 plugin.video.putio/.gitignore
+plugin.video.drnu/.git
+plugin.video.drnu/.idea

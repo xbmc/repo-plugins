@@ -1,3 +1,9 @@
+[B]Version 1.4.0[/B]
+- Refactored API
+- New graphics
+- Added Programs by area
+- Changed recently watched so it contains videos instead of programs
+
 [B]Version 1.3.1[/B] - 2011-05-28
 - Fixed creation of cache folder
 - Updated fanart and icon

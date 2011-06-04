@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drnu" version="1.3.1" name="DR NU Player" provider-name="InKaKiLLeR, twinther [tommy@winther.nu]">
+<addon id="plugin.video.drnu" version="1.4.0" name="DR NU Player" provider-name="InKaKiLLeR, twinther [tommy@winther.nu]">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
     </requires>
-    <extension point="xbmc.python.pluginsource" library="drnu.py">
+    <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">DR NU Player</summary>
-        <summary lang="da">DR NU Player</summary>
+        <summary lang="en">DR NU</summary>
+        <summary lang="da">DR NU</summary>
         <description lang="en">Watch the latest shows from DR.dk/nu[BR][BR]
 All programs that DR has the rights to show on the internet is available in DR NU. The typically means DR's own programs, news, sports and magazine - but not movies and some international tv-shows.[BR][BR]
 You can added program series to favorites using the context menu.

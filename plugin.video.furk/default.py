@@ -23,7 +23,7 @@ import xbmc, xbmcaddon, xbmcgui
 __plugin__ = 'Furk.net'
 __author__ = 'Gpun Yog'
 __url__ = 'http://www.furk.net/t/xbmc'
-__version__ = '1.0.4'
+__version__ = '1.0.6'
 __settings__ = xbmcaddon.Addon(id='plugin.video.furk')
 
 print "[PLUGIN] '%s: version %s' initialized!" % (__plugin__, __version__)

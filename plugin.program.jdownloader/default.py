@@ -6,10 +6,10 @@ __url__				= "http://pgoeri-xbmc-plugins.googlecode.com"
 __svn_url__			= "http://pgoeri-xbmc-plugins.googlecode.com/svn/trunk/plugin.program.jdownloader/"
 __credits__			= "Team XBMC passion, http://passion-xbmc.org & pgoeri"
 __platform__		= "xbmc media center, [LINUX, OS X, WIN32]"
-__date__			= "28-03-2011"
-__version__			= "1.0.3"
+__date__			= "05-06-2011"
+__version__			= "1.0.4"
 __svn_revision__	= "$Revision:  $".replace( "Revision", "" ).strip( "$: " )
-__XBMC_Revision__	= "ce6dff4f3480834cc1134072e45e5deb0c8557c4" # Trunk (15/01/11)
+__XBMC_Revision__	= "4fbc70fda4f3706e4e90ff353acde49176c6a07c" # Trunk (01/06/11)
 __useragent__		= "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1"
 
 from traceback import print_exc
@@ -22,7 +22,9 @@ import urllib
 import time
 
 __addon__ = xbmcaddon.Addon(__addonID__)
-__language__ = __addon__.getLocalizedString
+__language__	= __addon__.getLocalizedString
+__dbg__			= __addon__.getSetting( "debug" ) == "true"
+__logprefix__	= "p.p.jd-"+__version__+": "
 
 BASE_RESOURCE_PATH = os.path.join( __addon__.getAddonInfo('path'), "resources" )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
@@ -113,8 +115,8 @@ try:
 	if "action" in params: mode=3
 except: pass
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
+if __dbg__:
+	print __logprefix__ + "MODE: " + str(mode) + " URL: " + str(url)
 
 #check connection
 try:

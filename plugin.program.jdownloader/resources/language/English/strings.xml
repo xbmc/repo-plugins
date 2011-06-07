@@ -2,6 +2,7 @@
 <strings>
   <!-- strings 32000 thru 32999 reserved for scripts -->
   <!--SETTINGS STRINGS -->
+  <string id="30000">Connection</string>
   <string id="30001">IP Adress</string>
   <string id="30002">Port</string>
   <string id="30003">Add new links direct to downloads</string>
@@ -9,11 +10,18 @@
   <string id="30005">Yes</string>
   <string id="30006">Start downloading after adding new links</string>
   <string id="30007">Interface</string>
+  <string id="30008">Use hostname</string>
+  <string id="30009">Hostname</string>
+  <string id="30010">Fall back connection</string>
+  <string id="30011">Enable fall back connection</string>
+  
   <string id="30020">Files</string>
   <string id="30021">Default Path</string>
   <string id="30022">Default TXT File</string>
   <string id="30023">Default DLC File</string>
   
+  <string id="30030">Advanced</string>
+  <string id="30031">Debug</string>
   
   <!--GENERAL STRINGS -->
   <string id="30050">All Packages</string>

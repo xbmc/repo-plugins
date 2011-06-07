@@ -7,6 +7,9 @@ from traceback import print_exc
 import xbmc,xbmcaddon
 import sys
 
+__dbg__				= sys.modules[ "__main__" ].__dbg__
+__logprefix__		= sys.modules[ "__main__" ].__logprefix__
+
 #defines
 GET_SPEED			= "downloadspeed"
 GET_SPEEDLIMIT		= "speedlimit"
@@ -14,38 +17,38 @@ GET_STATUS			= "status"
 GET_CURRENTFILECNT	= "currentfilecount"
 
 STATE_RUNNING		= "RUNNING"
-STATE_NOTRUNNING		= "NOT_RUNNING"
+STATE_NOTRUNNING	= "NOT_RUNNING"
 STATE_STOPPING		= "STOPPING"
 
 ACTION_START			= "01 start"
-ACTION_STOP			= "02 stop"
+ACTION_STOP				= "02 stop"
 ACTION_PAUSE			= "03 pause"
-ACTION_TOGGLE		= "04 toggle"
+ACTION_TOGGLE			= "04 toggle"
 
 ACTION_SPEEDLIMIT		= "05 speed limit"
-ACTION_MAXDOWNLOADS	= "06 max downloads"
+ACTION_MAXDOWNLOADS		= "06 max downloads"
 
 ACTION_ADD_LINKS		= "07 add links"
-ACTION_ADD_DLC		= "08 add dlc"
+ACTION_ADD_DLC			= "08 add dlc"
 
 ACTION_RECONNECT		= "10 reconnect"
 
 ACTION_JD_UPDATE		= "20 update JDownloader"
 ACTION_JD_RESTART		= "21 restart JDownloader"
-ACTION_JD_SHUTDOWN	= "22 shutdown JDownloader"
+ACTION_JD_SHUTDOWN		= "22 shutdown JDownloader"
 
 ALL_ACTIONS = {
-	ACTION_START:				30060,
-	ACTION_STOP:				30061,
+	ACTION_START:			30060,
+	ACTION_STOP:			30061,
 	ACTION_PAUSE:			30062,
 	ACTION_TOGGLE:			30063,
-	ACTION_SPEEDLIMIT:			30064,
+	ACTION_SPEEDLIMIT:		30064,
 	ACTION_MAXDOWNLOADS:	30065,
-	ACTION_ADD_LINKS:			30069,
+	ACTION_ADD_LINKS:		30069,
 	ACTION_ADD_DLC:			30070,
 	ACTION_RECONNECT:		30071,
-	ACTION_JD_UPDATE:			30066,
-	ACTION_JD_RESTART:			30067,
+	ACTION_JD_UPDATE:		30066,
+	ACTION_JD_RESTART:		30067,
 	ACTION_JD_SHUTDOWN:		30068
 }
 
@@ -54,12 +57,6 @@ BASE_RESOURCE_PATH = xbmc.translatePath( Addon.getAddonInfo( "Profile" ) )
 # make sure addon_data dir exists
 try: os.mkdir(BASE_RESOURCE_PATH)
 except: pass
-
-# load settings
-ip_adress = str(Addon.getSetting("ip_adress"))
-ip_port = str(Addon.getSetting("ip_port"))
-
-urlPrefix = 'http://' + ip_adress + ':' + ip_port
 
 class JDError(Exception):
 	 def __init__(self, message='', original=None):
@@ -74,8 +71,10 @@ class JDError(Exception):
 		  else:
 			return self.message
 
-def _http_query(query):
+def _http_query_with_urlprefix(query,urlPrefix):
 	request = urlPrefix+query
+	if __dbg__:
+		print __logprefix__ + "httpQuery: " + repr(request)
 	request_count = 0
 	while True:
 		error_data = ""
@@ -95,6 +94,32 @@ def _http_query(query):
 		request_count = request_count + 1
 	result = response.read()
 	response.close()
+	return result
+
+
+def _get_urlprefix(setting_suffix):
+	# load settings
+	ip_adress = str(Addon.getSetting("ip_adress"+setting_suffix))
+	ip_port = str(Addon.getSetting("ip_port"+setting_suffix))
+	use_hostname = Addon.getSetting("use_hostname"+setting_suffix) == "true"
+	hostname = str(Addon.getSetting("hostname"+setting_suffix))
+	
+	if (use_hostname):
+		urlPrefix = 'http://' + hostname + ':' + ip_port
+	else:
+		urlPrefix = 'http://' + ip_adress + ':' + ip_port
+	
+	return urlPrefix
+
+def _http_query(query):
+	try:
+		result = _http_query_with_urlprefix(query, _get_urlprefix(""))
+	except JDError, error:
+		use_conn2 = Addon.getSetting("use_conn2") == "true"
+		if (use_conn2):
+			result = _http_query_with_urlprefix(query, _get_urlprefix("2"))
+		else:
+			raise error
 	return result
 
 # Get Info #
@@ -193,7 +218,7 @@ def action_addcontainer(link):
 	# add link
 	# Parameter 'start' is not supported with rc-version 9568!
 	#_http_query('/action/add/container/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
-	result = _http_query('/action/add/container/grabber' + str(grabber) + '/' + str(urllib.quote(link)))
+	result = _http_query('/action/add/container/grabber' + str(grabber) + '/' + str(link))
 	return result
 
 # Links seperated by spaces, won't work, call this functions for each link seperatly
@@ -201,8 +226,12 @@ def action_addlink(link):
 	# get settings
 	grabber = Addon.getSetting("add_use_grabber")
 	start = Addon.getSetting("add_start")
+	# prepare link - quote special chars, e.g '?'
+	link = urllib.quote(link)
+	# restore double point (won't work atm)
+	link = link.replace( '%3A', ':' )
 	# add link
-	result = _http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(urllib.quote(link)))
+	result = _http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
 	return result
 
 def action_addlinks_from_file(filename):

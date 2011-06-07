@@ -2,6 +2,7 @@
 <strings>
   <!-- strings 32000 thru 32999 reserved for scripts -->
   <!--SETTINGS STRINGS -->
+  <string id="30000">Verbindung</string>
   <string id="30001">IP Adresse</string>
   <string id="30002">Port</string>
   <string id="30003">Neue Links sofort hinzufügen</string>
@@ -9,10 +10,18 @@
   <string id="30005">Ja</string>
   <string id="30006">Download danach starten</string>
   <string id="30007">Schnittstelle</string>
+  <string id="30008">Hostnamen benutzen</string>
+  <string id="30009">Hostname</string>
+  <string id="30010">Ausweichverbindung</string>
+  <string id="30011">Ausweichverbindung aktivieren</string>
+  
   <string id="30020">Dateien</string>
   <string id="30021">Default Pfad</string>
   <string id="30022">Default TXT File</string>
   <string id="30023">Default DLC File</string>
+  
+  <string id="30030">Erweitert</string>
+  <string id="30031">Debug</string>
   
   <!--GENERAL STRINGS -->
   <string id="30050">Alle Pakete</string>

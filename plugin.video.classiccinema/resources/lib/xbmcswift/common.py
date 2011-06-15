@@ -23,6 +23,13 @@ import asyncore, socket
 from urlparse import urlparse
 import pickle
 
+def download_page(url, data=None):
+    # Must check cache using httplib2 here!
+    u = urllib2.urlopen(url, data)
+    r = u.read()
+    u.close()
+    return r
+
 def parse_url_qs(url, pickled_fragment=False):
     '''Returns a dict of key/vals parsed from a query string.  If
     pickled_fragment=True, the method unpickles python objects stored in the

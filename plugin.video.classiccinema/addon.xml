@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.classiccinema" name="Classic Cinema" version="0.7.1" provider-name="jbel">
+<addon id="plugin.video.classiccinema" name="Classic Cinema" version="0.8" provider-name="jbel">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>
@@ -12,6 +12,5 @@
     <summary>Classic Cinema Video Addon</summary>
     <description>Watch online video movies found at http://www.classiccinemaonline.com.  The site aggregates old movies and tv shows found on google video and archive.org.</description>
     <disclaimer/>
-    <broken>Site changes</broken>
   </extension>
 </addon>

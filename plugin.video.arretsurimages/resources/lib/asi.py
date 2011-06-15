@@ -186,7 +186,8 @@ class Main:
         self.streams = deque(STREAMS)
         # Order the streams depending on the quality chosen
         self.streams.rotate(int(__addon__.getSetting('quality')) * -1)
-        self.displayParts = (__addon__.getSetting('displayParts') == 'true')
+        # displayParts settings removed - force to True
+        self.displayParts = True
 
     def downloadVideo(self, url):
         if self.downloadMode == 'true':

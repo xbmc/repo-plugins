@@ -1,3 +1,9 @@
+[B]Version 2.1.2[/B]
+
+- Fixed broken video link (redirection to HTML5 video using iPad
+user-agent doesn't work anymore)
+- "Display all parts" setting disabled (full length video not available anymore)
+
 [B]Version 2.1.1[/B]
 
 - Update to xbmc.python 2.0 for eden repository

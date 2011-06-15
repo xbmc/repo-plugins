@@ -100,63 +100,52 @@ class ArretSurImages:
         return parts
 
     def getVideoDetails(self, url, streams):
-        """Return the video title and real link"""
-        # Follow the swf link and get the video id from the answer
-        # (this works due to the iPad user-agent)
-        html = getHTML(url)
-        match = re.search("DM_Widget_Video_PlayerV4Html5\('(\w*)',", html)
-        if match:
-            videoId = match.group(1)
-            # Run the json request with the video id
-            request = getHTML(JSONREQUEST % videoId)
-            result = simplejson.loads(request)
-            # The stream quality chosen might not be available
-            # -> get the first video link available (following the streams quality order)
-            for stream in streams:
-                if result[stream]:
-                    print "Found %s link" % stream
-                    link = result[stream]
-                    break
-            else:
-                print "No video link found parsing swf link answer"
-                link = 'None'
-            title = result["title"]
+        """Return the video title and link"""
+        # Run the json request using the video id
+        # passed in url argument
+        request = getHTML(JSONREQUEST % url)
+        result = simplejson.loads(request)
+        # The stream quality chosen might not be available
+        # -> get the first video link available (following the streams quality order)
+        for stream in streams:
+            if result[stream]:
+                print "Found %s link" % stream
+                link = result[stream]
+                break
         else:
-            print "No video id found parsing swf link answer"
+            print "No video link found for this video id"
             link = 'None'
-            title = 'None'
+        title = result["title"]
         return {'Title':title, 'url':link}
 
     def getProgramParts(self, url, name, icon):
-        """Return all parts of a program (swf links)
+        """Return all parts of a program (video id)
 
-        swf links allow to get HTML5 links with iPad user-agent"""
+        video id allows to get video url with a json request"""
         html = getHTML(url)
         # Filter to avoid wrap-porte (La chronique porte) defined at the beginning
         # of the html page
         blocContainers = SoupStrainer(attrs = {'class':'contenu-html bg-page-contenu'})
         soup = BeautifulSoup(html, parseOnlyThese = blocContainers)
         parts = []
-        part = 0
-        # Get all movie links
+        part = 1
+        # Get all movie id
         for param in soup.findAll('param', attrs = {'name':'movie'}):
-            link = param["value"]
-            if part == 0:
-                # First link is the full video, just use the icon from previous page
-                title = name
+            try:
+                videoId = param.parent["id"]
+            except KeyError:
+                continue
+            title = name + ' - Acte %d' % part
+            # Try to get the icon linked to the iPhone video on that page
+            # That's faster than getting it from the json request (see getVideoDetails),
+            # which would require one extra HTML request for each part
+            try:
+                media = param.parent.parent.find(text=re.compile(u'img src='))
+                match = re.search(u'img src="(.*?)"', media)
+                thumb = URLASI + match.group(1)
+            except (TypeError, AttributeError):
                 thumb = icon
-            else:
-                title = name + ' - Acte %d' % part
-                # Try to get the icon linked to the iPhone video on that page
-                # That's much faster than getting it from the json request (see getVideoDetails),
-                # which would require 2 extra HTML requests for each part
-                try:
-                    media = param.parent.parent.find(text=re.compile(u'img src='))
-                    match = re.search(u'img src="(.*?)"', media)
-                    thumb = URLASI + match.group(1)
-                except (TypeError, AttributeError):
-                    thumb = icon
-            parts.append({'url':link, 'Title':title, 'Thumb':thumb})
+            parts.append({'url':videoId, 'Title':title, 'Thumb':thumb})
             part += 1
         return parts
 

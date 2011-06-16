@@ -48,3 +48,5 @@ plugin.video.putio/.gitignore
 plugin.video.drnu/.git
 plugin.video.drnu/.idea
 plugin.video.furk/.git
+plugin.video.aljazeera/.git
+plugin.video.aljazeera/.gitignore

@@ -1,3 +1,9 @@
+v1.0.2
+- AGAIN: Updated the code due to blip.tv changes on their website
+
+v1.0.1
+- Fixed some bugs
+
 v1.0.0
 - Initial eden-pre
 

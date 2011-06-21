@@ -1,3 +1,9 @@
+v0.5.2
+- Updated the code due to blip.tv changes on their website
+
+v0.5.1
+- Fixed some bugs
+
 v0.5.0
 - Updated the code due to blip.tv changes on their website
 

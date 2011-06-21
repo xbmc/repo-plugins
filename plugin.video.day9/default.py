@@ -1,6 +1,7 @@
-import sys, xbmc, xbmcplugin, xbmcaddon, day9
+import urllib, urllib2, re, sys, os, string, day9
+import xbmc, xbmcaddon, xbmcgui, xbmcplugin
 
-__version__ = "0.5.0"
+__version__ = "0.5.2"
 __plugin__ = "Day9-" + __version__
 __author__ = "Kristoffer Petersson"
 __settings__ = xbmcaddon.Addon(id='plugin.video.day9')

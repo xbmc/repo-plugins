@@ -22,7 +22,7 @@ class Day9:
 	
 	# display the root menu
 	def root(self):
-		self.addCategory(self.__language__(31000), 'http://blip.tv/pr/show_get_full_episode_list?users_id=570336&lite=1', 'showTitles', 1)
+		self.addCategory(self.__language__(31000), 'http://blip.tv/pr/show_get_full_episode_list?users_id=570336&lite=0&esi=1', 'showTitles', 1)
 		
 		
 	# ------------------------------------- Add functions ------------------------------------- #
@@ -45,13 +45,14 @@ class Day9:
 	def showTitles(self, params = {}):
 		get = params.get
 		link = self.getRequest(get("url"))
-		result = re.compile('<h3 title=".*?"><a href="(.*?)">(.*?)</a></h3>').findall(link)
+		title = re.compile('<span class="Title">\n\t\t\n\t\t\t(.*?)\n\t\t\n\t</span>').findall(link)
+		url = re.compile('<a class="ArchiveCard" href="(.*?)">').findall(link)
 		
-		for i in range(len(result)):
-			self.addCategory(result[i][1], 'http://blip.tv'+result[i][0], 'showGames', '')
+		for i in range(len(title)):
+			self.addCategory(title[i], 'http://blip.tv'+url[i], 'showGames', '')
 			
 		page = int(get("page"))+1
-		url = 'http://blip.tv/pr/show_get_full_episode_list?users_id=570336&lite=1&page='+str(page)
+		url = 'http://blip.tv/pr/show_get_full_episode_list?users_id=570336&lite=0&esi=1&page='+str(page)
 		self.addCategory('more episodes...', url, 'showTitles', page)
 			
 	def showGames(self, params = {}):

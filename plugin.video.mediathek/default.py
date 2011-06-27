@@ -19,7 +19,6 @@
 import urllib,xbmc,os
 from simplexbmc import SimpleXbmcGui
 from mediathek.factory import MediathekFactory
-from simplexml import XmlReader;
 __plugin__ = "mediathek"
 
 gui = SimpleXbmcGui();
@@ -43,7 +42,6 @@ params = get_params();
 mediathekName = params.get("type", "")
 action=params.get("action", "")
 
-gui.log("DirectAccess: %s"%gui.directAccess);
 gui.log("Quality: %s"%gui.quality);
 gui.log("argv[0]: %s"%sys.argv[0]);
 gui.log("argv[1]: %s"%sys.argv[0]);
@@ -70,10 +68,7 @@ if(mediathekName == ""):
       
 else:
   cat=int(params.get("cat", 0))
-  if(gui.directAccess):
-    mediathek = factory.getMediathek(mediathekName,gui);
-  else:
-    mediathek = XmlReader(mediathekName,gui);
+  mediathek = factory.getMediathek(mediathekName,gui);
     
   if(action == "openTopicPage"):
     link = urllib.unquote_plus(params.get("link", ""));

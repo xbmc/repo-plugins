@@ -15,6 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+from mediathek.wdr import *
 from mediathek.ard import *
 from mediathek.zdf import *
 from mediathek.arte import *
@@ -31,6 +32,7 @@ class MediathekFactory(object):
        DreiSatMediathek.name():DreiSatMediathek,
        BayerischesFSMediathek.name():BayerischesFSMediathek,
        ORFMediathek.name():ORFMediathek,
+       WDRMediathek.name():WDRMediathek,
       }
   def getAvaibleMediathekTypes(self):
     return sorted(self.avaibleMediathekes.keys())

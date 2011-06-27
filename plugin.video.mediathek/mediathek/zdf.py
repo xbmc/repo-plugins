@@ -212,6 +212,9 @@ class ZDFMediathek(Mediathek):
             quality = streamObject.getElementsByTagName("quality")[0].childNodes[0].data;
             url = streamObject.getElementsByTagName("url")[0].childNodes[0].data;
             
+            if url.find(".mp3") > -1:
+              continue;
+
             if(quality == "low"):
               links[0] = SimpleLink(url, size);
             elif(quality == "high"):

@@ -30,7 +30,6 @@ class SimpleXbmcGui(object):
   def __init__(self):
     self.settings = xbmcaddon.Addon(id='plugin.video.mediathek');
     self.quality = int(xbmcplugin.getSetting(int(sys.argv[1]), "quality" ));
-    self.directAccess = xbmcplugin.getSetting(int(sys.argv[1]), "mode" ) == "0";
     self.preferedStreamTyp = int(xbmcplugin.getSetting(int(sys.argv[1]), "preferedStreamType"));
     
     self.log("quality: %s"%(self.quality));

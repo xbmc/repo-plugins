@@ -242,7 +242,7 @@ def playMusic(url):
 	aTag = str(pTag[1]('a'))
 	apTag =str(pTag[0]('a'))
 	scrTag = soup.findAll('script', attrs={'type' : 'text/javascript'})
-	script = scrTag[6].string.replace("\'",'').replace('\n','').replace('\\/','/')
+	script = scrTag[7].string.replace("\'",'').replace('\n','').replace('\\/','/')
 	names=re.compile('names     :\[\"(.+?)"\]').findall(script)
 	mp3s=re.compile('mp3s      :\[\"(.+?)"\]').findall(script)
 	lengths=re.compile('lengths   :\[\"(.+?)"\],').findall(script)

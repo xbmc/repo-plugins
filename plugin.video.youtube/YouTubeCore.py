@@ -1317,15 +1317,27 @@ class YouTubeCore(object):
 			url = urllib2.Request(newurl)
 			url.add_header('User-Agent', self.USERAGENT)
 			con = urllib2.urlopen(newurl)
+			result = con.read()
+			con.close()
+			
+			newurl = re.compile('<meta http-equiv="refresh" content="0; url=&#39;(.*)&#39;"></head>').findall(result)[0].replace("&amp;", "&")
+			url = urllib2.Request(newurl)
+			url.add_header('User-Agent', self.USERAGENT)
+			con = urllib2.urlopen(newurl)
+			result = con.read()
+			con.close()
 			
 			# Save cookiefile in settings
 			cookies = repr(cj)
-			start = cookies.find("name='LOGIN_INFO', value='") + len("name='LOGIN_INFO', value='")
-			login_info = cookies[start:cookies.find("', port=None", start)]
+			login_info = ""
+			if cookies.find("name='LOGIN_INFO', value='") > 0:
+				start = cookies.find("name='LOGIN_INFO', value='") + len("name='LOGIN_INFO', value='")
+				login_info = cookies[start:cookies.find("', port=None", start)]
+
 			self.__settings__.setSetting( "login_info", login_info )
 			
 			if self.__dbg__:
-				print self.__plugin__ + " _httpLogin done"
+				print self.__plugin__ + " _httpLogin done: " + login_info
 
 			return self.__settings__.getSetting( "login_info" )
 		

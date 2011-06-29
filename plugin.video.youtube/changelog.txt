@@ -7,10 +7,14 @@
 - [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
 
-
-====================== DO NOT REMOVE THIS LINE UNTIL VERSION HAS BEEN UPDATE EVERY WHERE ===========================
 [B]Version 2.2.4[/B]
 - Verfied Compatibility with Eden - pre and submitted to repo.
+
+[B]Version 2.0.5[/B]
+- Fixed http login was broken, somtimes preventing video scrapeing
+- Fixed Show Scraper was broken due to recent YouTube site changes
+- Fixed Added dutch translations properly
+- Changed Name string from Holland to The Netherlands (thanks to Syrion for pointing it out)
 
 [B]Version 2.0.4[/B]
 - Fixed YouTube character encoding changes broke disco scraper.

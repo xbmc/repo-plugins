@@ -357,7 +357,7 @@ class IPhotoDB:
 	try:
 	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT R.id, R.name, M.thumbpath, R.rolldate, R.photocount 
-			 FROM rolls R LEFT JOIN media M ON R.keyphotoid = M.id""")
+			 FROM rolls R LEFT JOIN media M ON R.keyphotoid = M.id WHERE R.keyphotoid != 0""")
 	    for tuple in cur:
 		rolls.append(tuple)
 	    cur.close()

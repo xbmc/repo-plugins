@@ -151,10 +151,8 @@ def list_albums(params):
 	if (not count and album_ign_empty == "true"):
 	    continue
 
-	item = gui.ListItem(name)
-	if (count):
-	    item.setInfo(type="pictures", infoLabels={ "count": count })
-	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=albums&albumid=%s" % (albumid), listitem = item, isFolder = True)
+	item = gui.ListItem(name, thumbnailImage="DefaultFolder.png")
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=albums&albumid=%s" % (albumid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
@@ -198,9 +196,7 @@ def list_events(params):
 	except:
 	    pass
 
-	if (count):
-	    item.setInfo(type="pictures", infoLabels={ "count": count })
-	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=events&rollid=%s" % (rollid), listitem = item, isFolder = True)
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=events&rollid=%s" % (rollid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
@@ -238,9 +234,7 @@ def list_faces(params):
 
 	item = gui.ListItem(name, thumbnailImage=thumbpath)
 
-	if (count):
-	    item.setInfo(type="pictures", infoLabels={ "count": count })
-	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=faces&faceid=%s" % (faceid), listitem = item, isFolder = True)
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=faces&faceid=%s" % (faceid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
@@ -305,9 +299,7 @@ def list_places(params):
 	if (show_fanart == True and fanartpath):
 	    item.setProperty("Fanart_Image", fanartpath)
 
-	if (count):
-	    item.setInfo(type="pictures", infoLabels={ "count": count })
-	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=places&placeid=%s" % (placeid), listitem = item, isFolder = True)
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=places&placeid=%s" % (placeid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
     if (n > 0):
@@ -347,11 +339,9 @@ def list_keywords(params):
 	if (not count and album_ign_empty == "true"):
 	    continue
 
-	item = gui.ListItem(name)
+	item = gui.ListItem(name, thumbnailImage="DefaultFolder.png")
 	item.addContextMenuItems([(addon.getLocalizedString(30214), "XBMC.RunPlugin(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),)])
-	if (count):
-	    item.setInfo(type="pictures", infoLabels={ "count": count })
-	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=keywords&keywordid=%s" % (keywordid), listitem = item, isFolder = True)
+	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=keywords&keywordid=%s" % (keywordid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
     if (n > 0):
@@ -515,33 +505,27 @@ if (__name__ == "__main__"):
 	# main menu
 	try:
 	    item = gui.ListItem(addon.getLocalizedString(30100), thumbnailImage=ICONS_PATH+"/events.png")
-	    item.setInfo(type="pictures", infoLabels={ "title": "Events" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=events", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30101), thumbnailImage=ICONS_PATH+"/albums.png")
-	    item.setInfo(type="pictures", infoLabels={ "title": "Albums" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=albums", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30105), thumbnailImage=ICONS_PATH+"/faces.png")
-	    item.setInfo(type="pictures", infoLabels={ "title": "Faces" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=faces", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30106), thumbnailImage=ICONS_PATH+"/places.png")
-	    item.setInfo(type="pictures", infoLabels={ "title": "Places" })
 	    add_import_lib_context_item(item)
 	    item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.RunPlugin(\""+BASE_URL+"?action=rm_caches\")",)])
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=places", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30104), thumbnailImage=ICONS_PATH+"/keywords.png")
-	    item.setInfo(type="pictures", infoLabels={ "title": "Keywords" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=keywords", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30102), thumbnailImage=ICONS_PATH+"/star.png")
-	    item.setInfo(type="pictures", infoLabels={ "title": "Ratings" })
 	    add_import_lib_context_item(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=ratings", item, True)
 

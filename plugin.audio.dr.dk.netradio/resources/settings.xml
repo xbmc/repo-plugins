@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-	<category label="30000">
-        <setting id="format" label="30001" type="labelenum" default="AAC" values="AAC|WMA" />
-		<setting id="quality" label="30002" type="labelenum" default="High" values="High|Medium|Low" visible="eq(-1,1)"/>
-	</category>
-</settings>
-

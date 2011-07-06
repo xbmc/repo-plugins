@@ -21,7 +21,11 @@ def showChannels():
         item.setInfo(type = 'audio', infoLabels = {
                 'title' : channel['title']
         })
-        xbmcplugin.addDirectoryItem(HANDLE, channel['mediaFile'], item)
+
+        if type(channel['mediaFile']) is list:
+            xbmcplugin.addDirectoryItem(HANDLE, channel['mediaFile'][0], item)
+        else:
+            xbmcplugin.addDirectoryItem(HANDLE, channel['mediaFile'], item)
 
     xbmcplugin.endOfDirectory(HANDLE)
 

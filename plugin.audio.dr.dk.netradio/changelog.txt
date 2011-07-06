@@ -1,3 +1,6 @@
+[B]Version 1.1.1[/B]
+- Updated to match changes in RTMP links
+
 [B]Version 1.1.0[/B]
 - Dynamically load AAC channels, they are no longer hardcoded.
 - Removed support for old low quality WMA channels

@@ -1,5 +1,5 @@
 #/*
-# *      Copyright (C) 2010 Mart
+# *      Copyright (C) 2010 Mart, Raymond
 # *
 # *
 # *  This Program is free software; you can redistribute it and/or modify
@@ -19,16 +19,15 @@
 # *
 # */
 
-import urllib,urllib2,re,xbmcplugin,xbmcgui,httplib,htmllib
+import urllib,urllib2,re,xbmc,xbmcplugin,xbmcgui,httplib,htmllib,md5,time
 
 PLUGIN              ='plugin.audio.luisterpaal'
-VERSION             ='1.1.2'
+VERSION             ='1.1.3'
 TRACK_SEPERATOR     ='~'
 DEFAULT_LUISTERPAAL ='10617791'
 USER_AGENT          ='Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 URL_LUISTERPALEN    ='http://3voor12.vpro.nl/luisterpaal/'
 URL_ALBUM           ='http://3voor12.vpro.nl/feeds/luisterpaal/%s'
-URL_TRACK           ='http://download.omroep.nl/vpro/luisterpaal/albums/%s/data%s.swf'
 URL_COVER           ="http://images.vpro.nl/images/%s+s(200).jpg"
 
 def LUISTERPALEN():
@@ -43,6 +42,16 @@ def LUISTERPALEN():
 		if luisterpaalId <> DEFAULT_LUISTERPAAL:
 			name = ireplace(name, 'luisterpaal', '') + ' ...'
 			addLuisterpaal(name, luisterpaalId)
+
+def addLuisterpaal(name,luisterpaalId):
+		u = sys.argv[0] + "?luisterpaalid=" + luisterpaalId
+		ok = True
+		name = unescape(name)
+		liz = xbmcgui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
+		liz.setInfo(type="video", infoLabels={ "title": name } )
+		ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+		return ok
+
 		
 def ALBUMS(luisterpaalId):
 	req = urllib2.Request(URL_ALBUM % (luisterpaalId, ))
@@ -57,22 +66,6 @@ def ALBUMS(luisterpaalId):
 		trackList = TRACK_SEPERATOR.join([name for name in matchTracks])
 		addAlbum(title, albumId, coverId, trackList)
 
-def TRACKS(name, albumId, coverId, tracks):
-	tracklist = tracks.split(TRACK_SEPERATOR)
-	nr = 0
-	for track in tracklist:
-		nr = nr + 1
-		addTrack(nr, track, albumId, coverId)
-
-def addLuisterpaal(name,luisterpaalId):
-		u = sys.argv[0] + "?luisterpaalid=" + luisterpaalId
-		ok = True
-		name = unescape(name)
-		liz = xbmcgui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage='DefaultFolder.png')
-		liz.setInfo(type="video", infoLabels={ "title": name } )
-		ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-		return ok
-		
 def addAlbum(name, albumId, coverId, tracks):
 		u = sys.argv[0] + "?name=" + urllib.quote_plus(name) + "&albumid=" + albumId + "&coverid=" + coverId + "&tracks=" + urllib.quote_plus(tracks)
 		cover = URL_COVER % (coverId, )
@@ -83,17 +76,40 @@ def addAlbum(name, albumId, coverId, tracks):
 		ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 		return ok
 
+def TRACKS(name, albumId, coverId, tracks):
+	tracklist = tracks.split(TRACK_SEPERATOR)
+	nr = 0
+	for track in tracklist:
+		nr = nr + 1
+		addTrack(nr, track, albumId, coverId)
+
 def addTrack(nr,name,albumId,coverId):
 		nrstr = str(nr).zfill(2)
-		u = URL_TRACK % (albumId, nrstr)
+		u = t(albumId, nrstr)
 		cover = URL_COVER % (coverId, )
 		ok = True
 		name = unescape(name)
 		liz = xbmcgui.ListItem(nrstr+'. '+name, iconImage=cover, thumbnailImage=cover)
-		liz.setInfo(type="video", infoLabels={ "title": name } )
+		liz.setInfo(type="music", infoLabels={ "title": name } )
 		ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
 		return ok
 
+def t(t1,t2):
+	t3=[37226867320992396975461566531315574317608967475879418125453821259747188101936512193078231364454782224571989975483386379566565433493292521466557964159688068720865786131751038557861542124590128043512178306529896,25,66,78,83,0]
+	t4=time.time()
+	t5=(lambda t1,v:t1(v[t3[5]]))(v,t3)
+	t6,t7=(lambda t1,t2,t3:t1%(t2,t3))(t5[t3[1]:t3[2]],t1,t2),(lambda t3,t4:t3%(t4,))(t5[t3[3]:t3[4]],t4)
+	t8=md5.md5()
+	t8.update((lambda t3,t4,t6:t3+t4+t6)(t5[t3[4]:],t6,t7))
+	return (lambda t3,t4,t6,t7,t8:t3+t4+t6%(t7,t8))(t5[:t3[1]],t6,t5[t3[2]:t3[3]],t8.hexdigest(),t7)
+	
+def v(v1):
+	v2 = []
+	while v1:
+		v2.append(chr(v1 % 128))
+		v1 >>= 7
+	return ''.join(v2)
+	
 def get_params():
 	param=[]
 	paramstring=sys.argv[2]

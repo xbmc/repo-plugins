@@ -16,7 +16,10 @@ def main(hash,numfiles):
 		f_completed_chunks = int(f[1])
 		f_size_chunks = int(f[2])
 		f_size_bytes = int(f[4])
-		f_percent_complete = f_completed_chunks*100/f_size_chunks
+		if f_size_chunks<1:
+			f_percent_complete = 100
+		else:
+			f_percent_complete = f_completed_chunks*100/f_size_chunks
 		f_priority = f[3]
 		if f_percent_complete==100:
 			f_complete = 1

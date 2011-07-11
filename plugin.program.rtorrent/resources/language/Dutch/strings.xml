@@ -37,7 +37,9 @@
 	<string id="30152">Weet u zeker dat u het wilt afspelen?</string>
 	<string id="30153">Download verwijderen</string>
 	<string id="30154">Weet u zeker dat u deze download wilt verwijderen?</string>
-	
+	<string id="30155">Verbinding mislukt</string>
+	<string id="30156">Kan geen verbinding maken met rtorrent.</string>
+	<string id="30157">Wilt u uw instellingen te bevestigen?</string>
     <!-- Errors -->
     <string id="30900">Fout!</string>
 </strings>

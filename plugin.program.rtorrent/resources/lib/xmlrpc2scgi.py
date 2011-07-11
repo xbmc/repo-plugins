@@ -87,7 +87,7 @@ class SCGIRequest(object):
         if netloc:
             addrinfo = socket.getaddrinfo(host, port, socket.AF_INET, socket.SOCK_STREAM)
             
-            assert len(addrinfo) == 1, "There's more than one? %r"%addrinfo
+            #assert len(addrinfo) == 1, "There's more than one? %r"%addrinfo
             #~ print addrinfo
             
             sock = socket.socket(*addrinfo[0][:3])

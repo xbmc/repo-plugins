@@ -37,7 +37,9 @@
 	<string id="30152">Are you sure you want to play it?</string>
 	<string id="30153">Delete Download</string>
 	<string id="30154">Are you sure you want to delete this download?</string>
-	
+	<string id="30155">Connection Failed</string>
+	<string id="30156">Could not connect to rTorrent.</string>
+	<string id="30157">Would you like to check your settings?</string>
     <!-- Errors -->
     <string id="30900">Error!</string>
 </strings>

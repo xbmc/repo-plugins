@@ -37,7 +37,10 @@
 	<string id="30152">Soll diese Datei wiedergegeben werden?</string>
 	<string id="30153">Lösche Download</string>
 	<string id="30154">Soll dieser Download wirklich gelöscht werden?</string>
-	
-    <!-- Errors -->
+	<string id="30155">Verbindung fehlgeschlagen</string>
+	<string id="30156">konnte keine Verbindung zum rTorrent.</string>
+	<string id="30157">Möchten Sie Ihre Einstellungen zu überprüfen?</string>
+    
+	<!-- Errors -->
     <string id="30900">Fehler!</string>
 </strings>

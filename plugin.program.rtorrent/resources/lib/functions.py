@@ -33,28 +33,28 @@ def getIcon(isdir,active,complete,p):
 		p=p+3
 	if active==1:
 		if complete==1:
-			iconcol = "green"
+			iconcol = "9"
 		else:
 			if p==0: #Don't Download
-				iconcol = "red"
+				iconcol = "0"
 			elif p==1: #Normal
-				iconcol = "blue"
+				iconcol = "3"
 			elif p==2: #High
-				iconcol = "yellow"
+				iconcol = "4"
 			#Now for downloads, not files
 			elif p==3: #Idle
-				iconcol = "orange"
+				iconcol = "1"
 			elif p==4: #Low
-				iconcol = "purple"
+				iconcol = "2"
 			elif p==5: #Normal
-				iconcol = "blue"
+				iconcol = "3"
 			elif p==6: #High
-				iconcol = "yellow"
+				iconcol = "4"
 	else:
-		iconcol = "red"	
-	return os.path.join(g.__icondir__,icon+'_'+iconcol+'.png')
+		iconcol = "0"	
+	return os.path.join(g.__icondir__,icon+'_'+iconcol+'.jpg')
 
-# Colour scheme
+# Colour scheme - NO LONGER USED
 # Dld & File Completed: Green
 # Dld & File P: High  : Yellow
 # Dld & File P: Normal: Blue 

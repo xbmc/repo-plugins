@@ -38,26 +38,32 @@ class ArretSurImages:
         """Return the video title and download link"""
         title = None
         link = None
+        downloadPage = ''
         html = getHTML(url)
         soup = BeautifulSoup(html)
-        # Look for the download link image
-        img = soup.find('img', attrs = {'src':'http://www.arretsurimages.net/images/boutons/bouton-telecharger.png'})
-        if img:
-            downloadPage = img.findParent()['href']
-            print downloadPage
-            if downloadPage.endswith('.avi'):
-                title = downloadPage.split('/')[-1]
-                print title
-                html = getHTML(downloadPage)
-                soup = BeautifulSoup(html)
-                click = soup.find(text=re.compile('cliquer ici'))
-                if click:
-                    link = click.findParent()['href']
-                    print link
-                else:
-                    print "No \"cliquer ici\" found"
+        # Look for the "bouton-telecharger" class (new version)
+        telecharger = soup.find('a', attrs = {'class':'bouton-telecharger'})
+        if telecharger:
+            downloadPage = telecharger['href']
         else:
-            print "bouton-telecharger.png not found"
+            # Look for the "bouton-telecharger" image (old version)
+            img = soup.find('img', attrs = {'src':'http://www.arretsurimages.net/images/boutons/bouton-telecharger.png'})
+            if img:
+                downloadPage = img.findParent()['href']
+        if downloadPage.endswith('.avi'):
+            print downloadPage
+            title = downloadPage.split('/')[-1]
+            print title
+            html = getHTML(downloadPage)
+            soup = BeautifulSoup(html)
+            click = soup.find(text=re.compile('cliquer ici'))
+            if click:
+                link = click.findParent()['href']
+                print link
+            else:
+                print "No \"cliquer ici\" found"
+        else:
+            print "bouton-telecharger not found"
         return {'Title':title, 'url':link}
 
     def getIphoneVideoDetails(self, url):

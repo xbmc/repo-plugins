@@ -1,3 +1,6 @@
+Version 1.0.2
+fix for extra seasons
+
 Version 1.0.1
 fix for website changes
 added extra seasons where available

@@ -66,15 +66,23 @@ def INDEX(url):
         response.close()
         soup = BeautifulSoup(link)
         try:
-                if soup.find('ul', attrs={'class' : "channel-list"}):
-                        name = soup.find('ul', attrs={'class' : "channel-list"})('h4')[0]('em')[0].next
-                        url = soup.find('ul', attrs={'class' : "channel-list"})('a')[0]['href']
+            if soup.find('ul', attrs={'class' : "channel-list"}):
+                name = soup.find('ul', attrs={'class' : "channel-list"})('h4')[0]('em')[0].next
+                url = soup.find('ul', attrs={'class' : "channel-list"})('a')[0]['href']
+                addDir(name,url,1,'')
+                try:
+                    seasons = soup.findAll('li', attrs={'class' : 'switch'})
+                    for season in seasons:
+                        name = season('h4')[0]('em')[0].next
+                        url = season('a')[0]['href']
                         addDir(name,url,1,'')
+                except:
+                    pass
         except:
                 pass
         showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\\'.+?\\',\\'(.+?)\\', \\'\\'\);").findall(link)
         if len(showID)<1:
-                showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\'.+?','(.+?)', '.+?'\);").findall(link)
+            showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\'.+?','(.+?)', '.+?'\);").findall(link)
         print'--------> '+showID[0]
         url='http://www.hgtv.com/hgtv/channel/xml/0,,'+showID[0]+',00.xml'
         req = urllib2.Request(url)
@@ -86,31 +94,31 @@ def INDEX(url):
         soup = BeautifulSoup(link)
         videos = soup('video')
         for video in videos:
-                name = video('clipname')[0].string
-                length = video('length')[0].string
-                thumb = video('thumbnailurl')[0].string
-                description = video('abstract')[0].string
-                link = video('videourl')[0].string
-                playpath = link.replace('http://wms.scrippsnetworks.com','').replace('.wmv','')
-                url = 'rtmp://flash.scrippsnetworks.com:1935/ondemand?ovpfv=1.1 swfUrl="http://common.scrippsnetworks.com/common/snap/snap-3.0.3.swf" playpath='+playpath
-                addLink(name,url,description,length,thumb)
+            name = video('clipname')[0].string
+            length = video('length')[0].string
+            thumb = video('thumbnailurl')[0].string
+            description = video('abstract')[0].string
+            link = video('videourl')[0].string
+            playpath = link.replace('http://wms.scrippsnetworks.com','').replace('.wmv','')
+            url = 'rtmp://flash.scrippsnetworks.com:1935/ondemand?ovpfv=1.1 swfUrl="http://common.scrippsnetworks.com/common/snap/snap-3.0.3.swf" playpath='+playpath
+            addLink(name,url,description,length,thumb)
 
 
 def get_params():
         param=[]
         paramstring=sys.argv[2]
         if len(paramstring)>=2:
-                params=sys.argv[2]
-                cleanedparams=params.replace('?','')
-                if (params[len(params)-1]=='/'):
-                        params=params[0:len(params)-2]
-                pairsofparams=cleanedparams.split('&')
-                param={}
-                for i in range(len(pairsofparams)):
-                        splitparams={}
-                        splitparams=pairsofparams[i].split('=')
-                        if (len(splitparams))==2:
-                                param[splitparams[0]]=splitparams[1]
+            params=sys.argv[2]
+            cleanedparams=params.replace('?','')
+            if (params[len(params)-1]=='/'):
+                params=params[0:len(params)-2]
+            pairsofparams=cleanedparams.split('&')
+            param={}
+            for i in range(len(pairsofparams)):
+                splitparams={}
+                splitparams=pairsofparams[i].split('=')
+                if (len(splitparams))==2:
+                    param[splitparams[0]]=splitparams[1]
                                 
         return param
 
@@ -138,28 +146,28 @@ name=None
 mode=None
 
 try:
-        url=urllib.unquote_plus(params["url"])
+    url=urllib.unquote_plus(params["url"])
 except:
-        pass
+    pass
 try:
-        name=urllib.unquote_plus(params["name"])
+    name=urllib.unquote_plus(params["name"])
 except:
-        pass
+    pass
 try:
-        mode=int(params["mode"])
+    mode=int(params["mode"])
 except:
-        pass
+    pass
 
 print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
-        print ""
-        getShows()
+    print ""
+    getShows()
     
 elif mode==1:
-        print ""+url
-        INDEX(url)
+    print ""+url
+    INDEX(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,0 +1,5 @@
+Version 1.0.1
+fix for show clips
+
+Version 1.0.0
+initial

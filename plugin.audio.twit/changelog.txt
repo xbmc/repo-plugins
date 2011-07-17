@@ -1,2 +1,6 @@
+Version 0.0.2
+update the show listings
+general fixes
+
 Version 0.0.1
-inital
+initial

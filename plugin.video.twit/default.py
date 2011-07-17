@@ -11,7 +11,7 @@ home = __settings__.getAddonInfo('path')
 def CATEGORIES():
         addDir(__language__(30017),'addLiveLinks',4,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
         addDir(__language__(30000),'http://feeds.twit.tv/twit_video_large',1,'http://static.mediafly.com/publisher/images/ba85558acd844c7384921f9f96989a37/icon-600x600.png')
-        addDir(__language__(30001),'http://feeds.twit.tv/tnt_video_large',1,'http://static.mediafly.com/publisher/images/9ff0322cc0444e599a010cdb9005d90a/icon-600x600.png')
+        addDir(__language__(30001),'http://feeds.twit.tv/tnt_video_large',1,'http://static.mediafly.com/publisher/images/c21d95482417436ead61b0890a8fc282/icon-600x600.png')
         addDir(__language__(30002),'http://feeds.twit.tv/fc_video_large',1,'http://static.mediafly.com/publisher/images/f7f40bcf20c742cfb55cbccb56c2c68c/icon-600x600.png')
         addDir(__language__(30003),'http://feeds.twit.tv/ipad_video_large',1,'http://static.mediafly.com/publisher/images/201bc64beb6b4956971650fd1462a704/icon-600x600.png')
         addDir(__language__(30031),'http://feeds.twit.tv/aaa_video_large',1,'http://static.mediafly.com/publisher/images/7874016b2dd3490fa1e8b606dff4d2fa/icon-600x600.png')
@@ -20,7 +20,7 @@ def CATEGORIES():
         addDir(__language__(30006),'http://feeds.twit.tv/ww_video_large',1,'http://static.mediafly.com/publisher/images/ad659facf4cb4fe795b595d9b4275daf/icon-600x600.png')
         addDir(__language__(30007),'http://feeds.twit.tv/mbw_video_large',1,'http://static.mediafly.com/publisher/images/a24b7b336fb14a2ba3f1e31223f622ac/icon-600x600.png')
         addDir(__language__(30029),'http://feeds.twit.tv/tri_video_large',1,'http://static.mediafly.com/publisher/images/c60ef74e0a3545e490d7cefbc369d168/icon-600x600.png')
-        addDir(__language__(30030),'http://feeds.twit.tv/photo_video_large',1,'http://static.mediafly.com/publisher/images/dd28d32fd045471598a55c850cb53117/icon-600x600.png')		
+        addDir(__language__(30030),'http://feeds.twit.tv/photo_video_large',1,'http://static.mediafly.com/publisher/images/ca045f623e7d48509c8f4ff9a1ab7259/icon-600x600.png')		
         addDir(__language__(30008),'http://feeds.twit.tv/ttg_video_large',1,'http://static.mediafly.com/publisher/images/d51aaf03dcfe4502a49e885d4201c278/icon-600x600.png')
         addDir(__language__(30009),'http://feeds.twit.tv/sn_video_large',1,'http://static.mediafly.com/publisher/images/1ac666ad22d940239754fe953207fb42/icon-600x600.png')
         addDir(__language__(30010),'http://twit.tv/tsh',2,'http://twit.tv/files/imagecache/coverart/coverart/tsh600.jpg')
@@ -33,20 +33,19 @@ def CATEGORIES():
         addDir(__language__(30022),'http://feeds.twit.tv/htg_video_large',1,'http://static.mediafly.com/publisher/images/441a40308195459b8e24f341dc68885c/icon-600x600.png')
         addDir(__language__(30023),'http://feeds.twit.tv/fr_video_large',1,'http://static.mediafly.com/publisher/images/5a081f72180e41939e549ec7d12be24d/icon-600x600.png')
         addDir(__language__(30024),'http://feeds.twit.tv/twich_video_large',1,'http://static.mediafly.com/publisher/images/f76d60fdd2ea4822adbc50d2027839ce/icon-600x600.png')
-        addDir(__language__(30027),'http://feeds.twit.tv/cgw_video_large',1,'http://static.mediafly.com/publisher/images/e974ef72d2134d7b91c2908e8ceb5850/icon-600x600.png')
+        addDir(__language__(30027),'http://feeds.twit.tv/hn_video_large',1,'http://static.mediafly.com/publisher/images/7a948708b1a3462bab8721556dd26704/icon-600x600.png')
         addDir(__language__(30025),'http://twit.tv/FIB',2,'http://leoville.tv/podcasts/coverart/fib600audio.jpg')
-        addDir(__language__(30026),'http://twit.tv/twif',2,'http://leo.am/podcasts/coverart/twif600audio.jpg')
-        addDir(__language__(30035),'http://feeds.twit.tv/twirt_video_large',1,'http://static.mediafly.com/publisher/images/bdbcfb9db7274a9ba914300792c5f4ad/icon-600x600.png')
+        addDir(__language__(30026),'http://feeds.twit.tv/twirt_video_large',1,'http://static.mediafly.com/publisher/images/ab7b2412afa84674971e4c93665d0e06/icon-600x600.png')
 
 
-def INDEX(url):
+def INDEX(url,iconimage):
         req = urllib2.Request(url)
         req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         if videoq==__language__(30018):
-            link=link.replace('_h264b_640x368_500','_h264b_864x480_1500')
+            link=link.replace('_h264b_640x368_500','_h264b_864x480_2000')
         elif videoq==__language__(30019):
             link=link.replace('_h264b_640x368_500','_h264b_864x480_1000')		
         elif videoq==__language__(30020):
@@ -68,11 +67,11 @@ def INDEX(url):
         date=re.compile('<pubdate>(.+?)</pubdate>').findall(str(pubdate))
         for index in range (len(name)):
             if len(name)==len(description):
-                addLink(name[index],url[index],description[index],date[index],xbmc.translatePath( os.path.join( home, 'icon.png' ) ))
+                addLink(name[index],url[index],description[index],date[index],iconimage)
             else:
-                addLink(name[index],url[index],'',date[index],xbmc.translatePath( os.path.join( home, 'icon.png' ) ))
+                addLink(name[index],url[index],'',date[index],iconimage)
 
-def INDEXWebsite(url):
+def INDEXWebsite(url,iconimage):
         req = urllib2.Request(url)
         req.addheaders = [('Referer', 'http://twit.tv/'),
                 ('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
@@ -82,7 +81,7 @@ def INDEXWebsite(url):
         link=link.replace('&amp;','').replace('#039;',"'").replace('amp;','').replace('quot;','"')
         match=re.compile('<h3 class="podcast-date">(.+?)</h3>\n    <h2><a href="(.+?)" title="(.+?)" alt=".+?">.+?</a></h2>\n    <p>(.+?)</p>\n').findall(link)
         for date,url,name,description in match:		
-                addWebLink(name,'http://twit.tv'+url,description,date,3,xbmc.translatePath( os.path.join( home, 'icon.png' ) ))
+                addWebLink(name,'http://twit.tv'+url,description,date,3,iconimage)
         page=re.compile('<div class="episode-prevnext clearfix"><a href=".+?" class="episode-next pager-prev active"><span>Next</span></a><a href="(.+?)" class="episode-prev pager-next active"><span>Prev</span></a></div>').findall(link)
         if len(page)<1:
                 page=re.compile('<span>Next</span></span><a href="(.+?)" class="episode-prev pager-next active">').findall(link)
@@ -106,7 +105,7 @@ def VIDEOLINKS(url):
         for url in match:
                 aurl=url[0:-15]
                 if videoq==__language__(30018):
-                        url=aurl+('864x480_1500.mp4')
+                        url=aurl+('864x480_2000.mp4')
                 elif videoq==__language__(30019):
                         url=aurl+('864x480__1000.mp4')		
                 elif videoq==__language__(30020):
@@ -152,11 +151,12 @@ def addLink(name,url,description,date,iconimage):
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         description = description + "\n \n Published: " + date
         liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description,"Date": date } )
+        liz.setProperty( "Fanart_Image", iconimage )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
 def addWebLink(name,url,description,date,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
         ok=True
         description = description + "\n \n Published: " + date
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
@@ -166,7 +166,7 @@ def addWebLink(name,url,description,date,mode,iconimage):
         return ok
 
 def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
@@ -195,6 +195,10 @@ try:
 except:
     pass
 try:
+    iconimage=urllib.unquote_plus(params["iconimage"])
+except:
+    pass
+try:
     mode=int(params["mode"])
 except:
     pass
@@ -209,11 +213,11 @@ if mode==None or url==None or len(url)<1:
 
 elif mode==1:
     print ""+url
-    INDEX(url)
+    INDEX(url,iconimage)
         
 elif mode==2:
     print ""+url
-    INDEXWebsite(url)
+    INDEXWebsite(url,iconimage)
 
 elif mode==3:
     print ""+url

@@ -1,3 +1,6 @@
+[B]1.0.5:[/B]
+Decode html in video titles
+
 [B]1.0.4:[/B]
 Didn't parse all pages. Hand-written html is so cute
 

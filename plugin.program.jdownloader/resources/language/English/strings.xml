@@ -34,6 +34,7 @@
   <string id="30057">Auto-Restart after Update?</string>
   <string id="30058"></string>
   <string id="30059"></string>
+  
   <string id="30060">Start</string>
   <string id="30061">Stop</string>
   <string id="30062">Pause</string>
@@ -46,4 +47,8 @@
   <string id="30069">Add links from textfile</string>
   <string id="30070">Add link container</string>
   <string id="30071">Reconnect router</string>
+  <string id="30072">Enable 'reconnect'</string>
+  <string id="30073">Disable 'reconnect'</string>
+  <string id="30074">Enable 'premium'</string>
+  <string id="30075">Disable 'premium'</string>
 </strings>

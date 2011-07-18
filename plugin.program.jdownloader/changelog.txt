@@ -1,3 +1,7 @@
+[B]Version 1.2.5[/B]
+    * Added new actions to user interface: 'Enable/Disable reconnect', 'Enable/Disable premium'
+    * Added new action to plugin interface: 'Reconnect'
+
 [B]Version 1.2.4[/B]
     * Initial release for eden-pre
 

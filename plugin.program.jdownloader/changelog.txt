@@ -1,3 +1,7 @@
+[B]Version 1.0.5[/B]
+    * Added new actions to user interface: 'Enable/Disable reconnect', 'Enable/Disable premium'
+    * Added new action to plugin interface: 'Reconnect'
+
 [B]Version 1.0.4[/B]
     * Added new features: use hostname, use fall back connection
     * Fixed quoting problem

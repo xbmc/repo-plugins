@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <!-- strings 32000 thru 32999 reserved for scripts -->
   <!--SETTINGS STRINGS -->
@@ -34,6 +34,7 @@
   <string id="30057">JD nach Aktualisierung neustarten?</string>
   <string id="30058"></string>
   <string id="30059"></string>
+  
   <string id="30060">Start</string>
   <string id="30061">Stop</string>
   <string id="30062">Pause</string>
@@ -46,4 +47,8 @@
   <string id="30069">Links aus Textdatei hinzufügen</string>
   <string id="30070">Linkcontainer hinzufügen</string>
   <string id="30071">Internetverbindung neu aufbauen</string>
+  <string id="30072">'reconnect' aktivieren</string>
+  <string id="30073">'reconnect' deaktivieren</string>
+  <string id="30074">'premium' aktivieren</string>
+  <string id="30075">'premium' deaktivieren</string>
 </strings>

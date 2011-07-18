@@ -13,6 +13,7 @@ __logprefix__		= sys.modules[ "__main__" ].__logprefix__
 #defines
 GET_SPEED			= "downloadspeed"
 GET_SPEEDLIMIT		= "speedlimit"
+GET_ISRECONNECT		= "isreconnect"
 GET_STATUS			= "status"
 GET_CURRENTFILECNT	= "currentfilecount"
 
@@ -33,6 +34,11 @@ ACTION_ADD_DLC			= "08 add dlc"
 
 ACTION_RECONNECT		= "10 reconnect"
 
+ACTION_ENA_RECONNECT	= "11 enable reconnect"
+ACTION_DIS_RECONNECT	= "12 set reconnect"
+ACTION_ENA_PREMIUM		= "13 enable premium"
+ACTION_DIS_PREMIUM		= "14 disable premium"
+
 ACTION_JD_UPDATE		= "20 update JDownloader"
 ACTION_JD_RESTART		= "21 restart JDownloader"
 ACTION_JD_SHUTDOWN		= "22 shutdown JDownloader"
@@ -47,6 +53,10 @@ ALL_ACTIONS = {
 	ACTION_ADD_LINKS:		30069,
 	ACTION_ADD_DLC:			30070,
 	ACTION_RECONNECT:		30071,
+	ACTION_ENA_RECONNECT:	30072,
+	ACTION_DIS_RECONNECT:	30073,
+	ACTION_ENA_PREMIUM:		30074,
+	ACTION_DIS_PREMIUM:		30075,
 	ACTION_JD_UPDATE:		30066,
 	ACTION_JD_RESTART:		30067,
 	ACTION_JD_SHUTDOWN:		30068
@@ -159,6 +169,8 @@ def get(x):
 		getStr = '/get/speed'
 	if x == GET_SPEEDLIMIT:
 		getStr = '/get/speedlimit'
+	if x == GET_ISRECONNECT:
+		getStr = '/get/isreconnect'
 	if x == GET_STATUS:
 		getStr = '/get/downloadstatus'
 	if x == GET_CURRENTFILECNT:
@@ -184,6 +196,13 @@ def getAvailableActions():
 	elif STATE_STOPPING in status: # no status changes possible 
 		for i in [ACTION_START,ACTION_STOP,ACTION_PAUSE,ACTION_TOGGLE,ACTION_SPEEDLIMIT,ACTION_MAXDOWNLOADS]:
 			actions.remove(i)
+			
+	# handle reconnect action
+	if get(GET_ISRECONNECT) == "true":
+		actions.remove(ACTION_ENA_RECONNECT)
+	else:
+		actions.remove(ACTION_DIS_RECONNECT)
+	
 	return actions
 
 def action( x , limit = "0" ):
@@ -201,6 +220,14 @@ def action( x , limit = "0" ):
 		actionStr = '/action/set/download/max/' + str(limit)
 	if x == ACTION_RECONNECT:
 		actionStr = '/action/reconnect'
+	if x == ACTION_ENA_RECONNECT:
+		actionStr = '/action/set/reconnectenabled/false' # interface is wrong, expects the opposite values
+	if x == ACTION_DIS_RECONNECT:
+		actionStr = '/action/set/reconnectenabled/true' # interface is wrong, expects the opposite values
+	if x == ACTION_ENA_PREMIUM:
+		actionStr = '/action/set/premiumenabled/true'
+	if x == ACTION_DIS_PREMIUM:
+		actionStr = '/action/set/premiumenabled/false'
 	if x == ACTION_JD_UPDATE:
 		actionStr = '/action/update/force%s/' % str(limit)
 	if x == ACTION_JD_RESTART:

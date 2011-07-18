@@ -6,8 +6,8 @@ __url__				= "http://pgoeri-xbmc-plugins.googlecode.com"
 __svn_url__			= "http://pgoeri-xbmc-plugins.googlecode.com/svn/trunk/plugin.program.jdownloader/"
 __credits__			= "Team XBMC passion, http://passion-xbmc.org & pgoeri"
 __platform__		= "xbmc media center, [LINUX, OS X, WIN32]"
-__date__			= "05-06-2011"
-__version__			= "1.0.4"
+__date__			= "17-07-2011"
+__version__			= "1.0.5"
 __svn_revision__	= "$Revision:  $".replace( "Revision", "" ).strip( "$: " )
 __XBMC_Revision__	= "4fbc70fda4f3706e4e90ff353acde49176c6a07c" # Trunk (01/06/11)
 __useragent__		= "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1"
@@ -197,6 +197,12 @@ if mode== 2:
 		else:
 			result = jdownloader.action(actions[select])
 		
+		# correct result when changing reconnect setting
+		if actions[select] == jdownloader.ACTION_ENA_RECONNECT:
+			result = result.replace("reconnect=false","reconnect=true")
+		elif actions[select] == jdownloader.ACTION_DIS_RECONNECT:
+			result = result.replace("reconnect=true","reconnect=false")
+		
 		showMessage("JDownloader" , result )
 		time.sleep(3) # otherwise status is not correct after start/stop
 		xbmc.executebuiltin("XBMC.Container.Update")
@@ -207,3 +213,5 @@ if mode==3:
 		jdownloader.action_addlink(url)
 	if (params["action"] == "addcontainer"):
 		jdownloader.action_addcontainer(url)
+	if (params["action"] == "reconnect"):
+		jdownloader.action(jdownloader.ACTION_RECONNECT)

@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.rbk.no"
        name="RBK.no"
-       version="2.0.4"
+       version="2.0.5"
        provider-name="spiff">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
              provides="video"

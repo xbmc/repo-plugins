@@ -20,6 +20,7 @@
 # */
 
 import urllib2,re,xbmcaddon,string,xbmc,xbmcgui,xbmcplugin
+from BeautifulSoup import BeautifulSoup as BS
 
 def INDEX(start):
         req = urllib2.Request('http://www.rbk.no/index.jsp?stats=nyhetsarkiv&start='+start)
@@ -86,6 +87,8 @@ def get_params():
 
 def addLink(name,url,iconimage,plot,date):
         ok=True
+        name=str(BS(name,convertEntities=BS.HTML_ENTITIES))
+        plot=str(BS(plot,convertEntities=BS.HTML_ENTITIES))
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         liz.setInfo( type="Video", infoLabels={ "Plot": plot} )

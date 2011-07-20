@@ -1,5 +1,8 @@
+Version 1.0.1
+fix for website changes
+
 Version 1.0.0
-updated for eden-pre
+new for eden
 
 Version 0.0.2
 fix for website changes

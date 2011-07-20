@@ -1,6 +1,9 @@
 import urllib,urllib2,re,os
 import xbmcplugin,xbmcgui,xbmcaddon
-import simplejson as json
+try:
+    import json
+except:
+    import simplejson as json
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.flw.outdoors')
 __language__ = __settings__.getLocalizedString
@@ -9,50 +12,51 @@ icon = xbmc.translatePath( os.path.join( __home__, 'icon.png' ) )
 
 
 def CATEGORIES():
-        addDir(__language__(30000),'flwlatestvideos',1,icon)
-        addDir(__language__(30001),'flwtourtv',1,icon)
-        addDir(__language__(30002),'flwseriestv',1,icon)
-        addDir(__language__(30003),'collegefishingtv',1,icon)
-        addDir(__language__(30004),'forrestwoodcuptv',1,icon)
-        addDir(__language__(30005),'walleyetourtv',1,icon)
-        addDir(__language__(30006),'bfltv',1,icon)
-        addDir(__language__(30007),'tipsfromthepros',1,icon)
-        addDir(__language__(30008),'fantasyonflw',1,icon)		
-        addDir(__language__(30009),'flwpodcast',1,icon)
-        addDir(__language__(30010),'flwtour',1,icon)
-        addDir(__language__(30011),'collegeonflw',1,icon)
+        addDir(__language__(30000),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwlatestvideos&method=getVideosInChannel',1,icon)
+        addDir(__language__(30001),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwtv&method=getVideosInChannel',1,icon)
+        addDir(__language__(30002),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=tipsfromthepros&method=getVideosInChannel',1,icon)
+        addDir(__language__(30003),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwtour&method=getVideosInChannel',1,icon)
+        addDir(__language__(30004),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=fantasyonflw&method=getVideosInChannel',1,icon)
+        addDir(__language__(30005),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=collegeonflw&method=getVideosInChannel',1,icon)
+        addDir(__language__(30006),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwpodcast&method=getVideosInChannel',1,icon)
+        addDir(__language__(30007),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=ReelCast&method=getVideosInChannel',1,icon)
+        addDir(__language__(30008),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwmagpublic&method=getVideosInChannel',1,icon)
 
 
 def INDEX(url):
-		url='http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign='+url+'&method=getVideosInChannel'
-		req = urllib2.Request(url)
-		response = urllib2.urlopen(req)
-		link=response.read()
-		data=json.loads(link)
-		videos = data["CHANNEL"]["AFILE"]
-		for video in videos:
-				title = video["TITLE"]
-				path = video["PATH"]
-				thumbnail = video["THUMBNAIL"]
-				description = video["DESCRIPTION"]
-				addLink (title,path,description,thumbnail)
-
+        req = urllib2.Request(url)
+        req.addheaders = [('Referer', 'http://www.flwoutdoors.com/flwondemand.cfm?cs=flwtour'),
+                        ('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
+        response = urllib2.urlopen(req)
+        link=response.read()
+        data=json.loads(link)
+        videos = data["CHANNEL"]["AFILE"]
+        for video in videos:
+            title = video["TITLE"]
+            if not video["PATH"]=='':
+                path = video["PATH"]
+            else:
+                path = 'http://www.jidocs.com'+str(video["STREAMING_PATH"])[4:]
+            thumbnail = video["THUMBNAIL"]
+            description = video["DESCRIPTION"]
+            addLink (title,path,description,thumbnail)
+        
 
 def get_params():
         param=[]
         paramstring=sys.argv[2]
         if len(paramstring)>=2:
-                params=sys.argv[2]
-                cleanedparams=params.replace('?','')
-                if (params[len(params)-1]=='/'):
-                        params=params[0:len(params)-2]
-                pairsofparams=cleanedparams.split('&')
-                param={}
-                for i in range(len(pairsofparams)):
-                        splitparams={}
-                        splitparams=pairsofparams[i].split('=')
-                        if (len(splitparams))==2:
-                                param[splitparams[0]]=splitparams[1]
+            params=sys.argv[2]
+            cleanedparams=params.replace('?','')
+            if (params[len(params)-1]=='/'):
+                params=params[0:len(params)-2]
+            pairsofparams=cleanedparams.split('&')
+            param={}
+            for i in range(len(pairsofparams)):
+                splitparams={}
+                splitparams=pairsofparams[i].split('=')
+                if (len(splitparams))==2:
+                    param[splitparams[0]]=splitparams[1]
                                 
         return param
 
@@ -80,28 +84,29 @@ name=None
 mode=None
 
 try:
-        url=urllib.unquote_plus(params["url"])
+    url=urllib.unquote_plus(params["url"])
 except:
-        pass
+    pass
 try:
-        name=urllib.unquote_plus(params["name"])
+    name=urllib.unquote_plus(params["name"])
 except:
-        pass
+    pass
 try:
-        mode=int(params["mode"])
+    mode=int(params["mode"])
 except:
-        pass
+    pass
 
 print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
 
-if mode==None or url==None or len(url)<1:
-        print ""
-        CATEGORIES()
+if mode==None:
+    print ""
+    CATEGORIES()
        
 elif mode==1:
-        print ""+url
-        INDEX(url)
+    print ""+url
+    INDEX(url)
 
+        
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

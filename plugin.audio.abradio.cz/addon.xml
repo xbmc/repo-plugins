@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.abradio.cz"
        name="abradio.cz"
-       version="1.0.0"
+       version="1.0.1"
        provider-name="lzoubek">
   <requires>
     <import addon="xbmc.python" version="1.0"/>

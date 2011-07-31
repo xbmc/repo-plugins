@@ -1,3 +1,7 @@
+v0.4.3
+----------------------
+- Updated the code
+
 v0.4.2
 ----------------------
 - Updated URL:s in sc2casts.py

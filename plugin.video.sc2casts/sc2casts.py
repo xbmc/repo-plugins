@@ -153,7 +153,7 @@ class SC2Casts:
 			
 	def showGames(self, params = {}):
 		get = params.get
-		link = self.getRequest('http://sc2casts.com/'+get("url"))
+		link = self.getRequest('http://sc2casts.com'+get("url"))
 		matchCount = re.compile('<div id="g(.+?)"(.+?)</div></div>').findall(link)
 		
 		if len(matchCount) > 0:

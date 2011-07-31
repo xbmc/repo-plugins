@@ -1,0 +1,13 @@
+<settings>
+  <category label="MLB.TV">
+    <setting id="email" type="text" label="Email Address" default=""/>
+    <setting id="password" type="text" label="Password" default="" option="hidden"/>
+    <setting id="scenario" type="select" label="Live Playback Quality" values="FLASH_1800K_800X448|FLASH_1200K_800X448|FLASH_800K_400X448|FLASH_500K_400X224|FLASH_128K_256X144" default="FLASH_1800K_800X448"/>
+    <setting id="archive_scenario" type="select" label="Archive Playback Quality" values="FLASH_1200K_800X448|FLASH_800K_400X448|FLASH_500K_400X224|FLASH_128K_256X144" default="FLASH_1200K_800X448"/>
+  </category>
+  
+  <category label="Debug Mode">
+    <setting id="debug" type="bool" label="Enable debug logging" default="false"/>
+  </category>
+
+  </settings>

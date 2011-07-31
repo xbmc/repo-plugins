@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">MLB.TV</string>
+  <string id="30001">Play Latest Videos</string>
+  <string id="30002">Top Videos by Team</string>
+  <string id="30003">FastCast</string>
+  <string id="30004">Must C</string>
+  <string id="30005">Game Recaps</string>
+  <string id="30006">MLB Network</string>
+  <string id="30007">Top Plays</string>
+  <string id="30008">MLB.com Realtime Highlights</string>
+  <string id="30009">Baseball's Best Moments</string>
+  <string id="30010">Today's Games</string>
+  <string id="30011">Yesterday's Games</string>
+  <string id="30012">The day before Yesterday's Games</string>
+  <string id="30013">Tomorrow's Games</string>
+  <string id="30014">Enter a Date</string>
+  <string id="30015">MLBMC</string>
+  <string id="30016">This section requires at minimum a free mlb.com account. If you want to look around add anything in the email setting.</string>
+  <string id='30017'>Yesterday's MLB.com Realtime Highlights</string>
+  <string id='30018'>HTTP Error : </string>
+  <string id='30019'>This usually means the server doesn't exist, is down, or we don't have an internet connection.</string>
+  <string id='30020'>Log in Failed</string>
+  <string id='30021'>Sorry - We didn't recive the required cookies</string>
+  <string id='30022'>Status : </string>
+  <string id='30023'>Status : Media Off - Playing Preview</string>
+  <string id='30024'> - Playing Preview</string>
+  <string id='30025'>Status : Not Authorized - Playing Preview</string>
+  <string id='30026'>Status : Not Authorized</string>
+  <string id='30027'>The url was not returned</string>
+  <string id='30028'>Invalid Date</string>
+  <string id='30029'>Condensed Games</string>
+  <string id='30030'>No games for this date.</string>
+</strings>

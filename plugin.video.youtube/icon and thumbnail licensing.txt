@@ -91,6 +91,16 @@ Author: Kyo Tux - Crysigns icons
 License: Free for commercial use
 http://www.iconfinder.com/icondetails/47037/256/smiley_icon
 
+music.png		
+Author: Kyo Tux - Crysigns icons
+License: Free for commercial use
+http://www.iconfinder.com/icondetails/47031/256/music_icon
+
+like.png		
+Author: Kyo Tux - Crysigns icons
+License: Free for commercial use
+http://www.iconfinder.com/icondetails/47035/128/select_valid_icon
+
 top.png
 Author IconShock
 License: "Free"

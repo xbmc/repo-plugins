@@ -1,0 +1,57 @@
+<window>
+	<defaultcontrol>2006</defaultcontrol>
+	<controls>
+		<control type="label" id="1999">
+			<description>Dialog animations</description>
+			<visible>false</visible>
+			<label>
+				['WindowOpen', 'effect=fade start=0 end=100 time=200']
+				['WindowClose', 'effect=fade start=100 end=0 time=200']
+			</label>
+		</control>
+		<control type="group" id="2000">
+			<description>Coordinates</description>
+			<visible>false</visible>
+			<posx>860</posx>
+			<posy>630</posy>
+			<control type="image" id="2001">
+				<posx>0</posx>
+				<posy>0</posy>
+				<width>400</width>
+				<height>70</height>
+				<texture>OverlayDialogBackground.png</texture>
+			</control>
+			<control type="label" id="2002">
+				<description>heading</description>
+				<posx>25</posx>
+				<posy>10</posy>
+				<width>350</width>
+				<height>20</height>
+				<label>font=font12_title,textColor=FFFFFFFF,alignment=left+centery</label>
+				<textcolor>white</textcolor>
+			</control>
+			<control type="label" id="2003">
+				<description>label</description>
+				<posx>25</posx>
+				<posy>30</posy>
+				<width>350</width>
+				<height>20</height>
+				<label>font=font12_title,textColor=88FFFFFF,alignment=left+centery</label>
+				<textcolor>grey2</textcolor>
+			</control>
+			<control type="progress" id="2004">
+				<description>progress control</description>
+				<posx>25</posx>
+				<posy>55</posy>
+				<width>355</width>
+				<height>8</height>
+				<visible>false</visible>
+			</control>
+			<control type="label" id="2045">
+				<description>Infos Progress Images</description>
+				<label>texturebg=ProgressBack.png,texturemid=ProgressFront.png,textureleft=,textureright=,textureoverlay=</label>
+				<visible>false</visible>
+			</control>
+		</control>
+	</controls>
+</window>

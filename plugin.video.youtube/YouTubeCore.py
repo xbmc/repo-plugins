@@ -16,580 +16,478 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys, urllib, urllib2, re, os, cookielib, string
+import sys, urllib, urllib2, re, time, socket
 from xml.dom.minidom import parseString
 
 # ERRORCODES:
-# 0 = Ignore
 # 200 = OK
 # 303 = See other (returned an error message)
 # 500 = uncaught error
+
+class url2request(urllib2.Request):
+	"""Workaround for using DELETE with urllib2"""
+	def __init__(self, url, method, data=None, headers={},origin_req_host=None, unverifiable=False):
+		self._method = method
+		urllib2.Request.__init__(self, url, data, headers, origin_req_host, unverifiable)
+
+	def get_method(self):
+		if self._method:
+			return self._method
+		else:
+			return urllib2.Request.get_method(self) 
 
 class YouTubeCore(object):
 	__settings__ = sys.modules[ "__main__" ].__settings__
 	__language__ = sys.modules[ "__main__" ].__language__
 	__plugin__ = sys.modules[ "__main__" ].__plugin__
 	__dbg__ = sys.modules[ "__main__" ].__dbg__
-	__dbgv__ = False
 	
-	APIKEY = "AI39si6hWF7uOkKh4B9OEAX-gK337xbwR9Vax-cdeF9CF9iNAcQftT8NVhEXaORRLHAmHxj6GjM-Prw04odK4FxACFfKkiH9lg";
-	USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
+	__storage__ = sys.modules[ "__main__" ].__storage__
+	__utils__ = sys.modules[ "__main__" ].__utils__
+	__login__ = sys.modules[ "__main__" ].__login__
 
-	#===============================================================================
-	#
-	# External functions called by YouTubeNavigation.py
-	#
-	# return MUST be a tupple of ( result[string or dict], status[int] )
-	# 
-	#===============================================================================
+	APIKEY = "AI39si6hWF7uOkKh4B9OEAX-gK337xbwR9Vax-cdeF9CF9iNAcQftT8NVhEXaORRLHAmHxj6GjM-Prw04odK4FxACFfKkiH9lg";
 	
+	#===============================================================================
+	# The time parameter restricts the search to videos uploaded within the specified time. 
+	# Valid values for this parameter are today (1 day), this_week (7 days), this_month (1 month) and all_time. 
+	# The default value for this parameter is all_time.
+	# 
+	# This parameter is supported for search feeds as well as for the top_rated, top_favorites, most_viewed, 
+	# most_popular, most_discussed and most_responded standard feeds.
+	#===============================================================================
+
+	urls = {};
+	# YouTube General Feeds
+	urls['playlist'] = "http://gdata.youtube.com/feeds/api/playlists/%s"
+	urls['related'] = "http://gdata.youtube.com/feeds/api/videos/%s/related"
+	urls['search'] = "http://gdata.youtube.com/feeds/api/videos?q=%s&safeSearch=%s"
+	
+	# YouTube User specific Feeds
+	urls['uploads'] = "http://gdata.youtube.com/feeds/api/users/%s/uploads"
+	urls['favorites'] = "http://gdata.youtube.com/feeds/api/users/%s/favorites"
+	urls['playlists'] = "http://gdata.youtube.com/feeds/api/users/%s/playlists"
+	urls['contacts'] = "http://gdata.youtube.com/feeds/api/users/default/contacts"
+	urls['subscriptions'] = "http://gdata.youtube.com/feeds/api/users/%s/subscriptions"
+	urls['newsubscriptions'] = "http://gdata.youtube.com/feeds/api/users/%s/newsubscriptionvideos"
+	
+	# YouTube Standard feeds
+	urls['feed_rated'] = "http://gdata.youtube.com/feeds/api/standardfeeds/top_rated?time=%s"
+	urls['feed_favorites'] = "http://gdata.youtube.com/feeds/api/standardfeeds/top_favorites?time=%s"
+	urls['feed_viewed'] = "http://gdata.youtube.com/feeds/api/standardfeeds/most_viewed?time=%s"
+	urls['feed_linked'] = "http://gdata.youtube.com/feeds/api/standardfeeds/most_popular?time=%s" 
+	urls['feed_discussed'] = "http://gdata.youtube.com/feeds/api/standardfeeds/most_discussed?time=%s"
+	urls['feed_responded'] = "http://gdata.youtube.com/feeds/api/standardfeeds/most_responded?time=%s"
+	
+	# Wont work with time parameter
+	urls['feed_recent'] = "http://gdata.youtube.com/feeds/api/standardfeeds/most_recent" 
+	urls['feed_featured'] = "http://gdata.youtube.com/feeds/api/standardfeeds/recently_featured"
+	urls['feed_trending'] = "http://gdata.youtube.com/feeds/api/standardfeeds/on_the_web"
+	urls['feed_shared'] = "http://gdata.youtube.com/feeds/api/standardfeeds/most_shared"
+	
+	urls['remove_watch_later'] = "http://www.youtube.com/addto_ajax?action_delete_from_playlist=1"	
+
 	def __init__(self):
 		timeout = self.__settings__.getSetting( "timeout" )
 		if not timeout:
 			timeout = "5"
-		#socket.setdefaulttimeout(float(timeout))
+			socket.setdefaulttimeout(float(timeout))
 		return None
-		
-	def interrogate(self, item):
-		"""Print useful information about item."""
-		if hasattr(item, '__name__'):
-			print "NAME:    ", item.__name__
-		if hasattr(item, '__class__'):
-			print "CLASS:   ", item.__class__.__name__
-		print "ID:      ", id(item)
-		print "TYPE:    ", type(item)
-		print "VALUE:   ", repr(item)
-		print "CALLABLE:",
-		if callable(item):
-			print "Yes"
-		else:
-			print "No"
-		
-		if hasattr(item, '__doc__'):
-			doc = getattr(item, '__doc__')
-			if doc:
-				doc = doc.strip() # Remove leading/trailing whitespace.
-				firstline = doc.split('\n')[0]
-				print "DOC:     ", firstline
 
-	def login(self, error = 0):
-		if self.__dbg__:
-			print self.__plugin__ + " login - errors: " + str(error)
-		
-		uname = self.__settings__.getSetting( "username" )
-		passwd = self.__settings__.getSetting( "user_password" )
-		
-		self.__settings__.setSetting('auth', "")
-		self.__settings__.setSetting('nick', "")
-		
-		if ( uname == "" or passwd == "" ):
-			if self.__dbg__:
-				print self.__plugin__ + " login no username or password set "
-			return ( "", 0 )
-
-		url = urllib2.Request("https://www.google.com/youtube/accounts/ClientLogin")
-
-		url.add_header('Content-Type', 'application/x-www-form-urlencoded')
-		url.add_header('GData-Version', '2')
-		
-		data = urllib.urlencode({'Email': uname, 'Passwd': passwd, 'service': 'youtube', 'source': 'YouTube plugin'})
-		
-		try:
-			con = urllib2.urlopen(url, data);
-			
-			value = con.read()
-			con.close()
-		
-			result = re.compile('Auth=(.*)\nYouTubeUser=(.*)').findall(value)
-					
-			if len(result) > 0:
-				( auth, nick ) = result[0]
-				self.__settings__.setSetting('auth', auth)
-				self.__settings__.setSetting('nick', nick)
-
-				if self.__dbg__:
-					print self.__plugin__ + " login done: " + nick
-				return ( self.__language__(30030), 200 )
-					
-			return ( self.__language__(30609), 303 )
-			
-		except urllib2.HTTPError, e:
-			err = str(e)
-			if self.__dbg__:
-				print self.__plugin__ + " login failed, hit http except: " + err
-			if e.code == 403:
-				return ( self.__language__(30621), 303 )
-			return ( err, 303 )
-		
-		except ValueError, e:
-			err = repr(e)
-			if self.__dbg__:
-				print self.__plugin__ + " login failed, hit valueerror except: " + err
-			return ( err, 303 )
-		
-		except IOError, e:
-			# http://bytes.com/topic/python/answers/33770-error-codes-urlerror
-			if self.__dbg__:
-				print self.__plugin__ + " login failed, hit ioerror except2: : " + repr(e)
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				print self.interrogate(e)
-
-			if error < 9:
-				if self.__dbg__:
-					print self.__plugin__ + " login pre sleep"
-				# Check if there is a timeout here.
-				import time
-				time.sleep(3)
-				if self.__dbg__:
-					print self.__plugin__ + " login post sleep"
-				return self.login( error + 1 )
-			return ( self.__language__(30623), 303 )
-		
-		except urllib2.URLError, e:
-			err = repr(e)
-			if self.__dbg__:
-				print self.__plugin__ + " login failed, hit url except: " + err
-			return ( err, 303 )										
-		except:
-			if self.__dbg__:
-				print self.__plugin__ + " login failed uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-			return ( self.__language__(30609), 500 )
-	
-	def search(self, query, page = "0"):
-		if self.__dbg__:
-			print self.__plugin__ + " search: " + repr(query) + " - page: " + repr(page)
-		per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.__settings__.getSetting( "perpage" ) ) ]
-		safe_search = ("none", "moderate", "strict" ) [int( self.__settings__.getSetting( "safe_search" ) ) ]
-		start_index = per_page * int(page) + 1
-	
-
-		link = "http://gdata.youtube.com/feeds/api/videos?q=%s&safeSearch=%s&start-index=%s&max-results=%s" % ( urllib.quote_plus(query), safe_search, start_index, per_page)
-		authors = self.__settings__.getSetting("stored_searches_author")
-		
-		if len(authors) > 0:
-			try:
-				authors = eval(authors)
-				if query in authors:
-					link += "&" + urllib.urlencode({'author': authors[query]})
-			except:
-				print self.__plugin__ + " search - eval failed "
-				
-		( result, status ) = self._fetchPage(link, api = True)
-
-		if status != 200:
-			return ( result, status )
-
-		result = self._getvideoinfo(result)
-		
-		if len(result) > 0:
-			if self.__dbg__:
-				print self.__plugin__ + " search done :" + str(len(result))
-			return (result, 200)
-		else:
-			if self.__dbg__:
-				print self.__plugin__ + " search done with no results"
-			return (self.__language__(30601), 303)
-
-	def feeds(self, feed, params ={} ):
+	def createUrl(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " feeds : " + repr(feed) + " page: " + repr(get("page","0"))
-		result = ""
-		per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.__settings__.getSetting( "perpage" ) ) ]
+		time = ( "all_time", "today", "this_week", "this_month") [ int(self.__settings__.getSetting( "feed_time" ) ) ]
+		per_page = ( 10, 15, 20, 25, 30, 40, 50 )[ int( self.__settings__.getSetting( "perpage" ) ) ]
+		region = ('', 'AU', 'BR', 'CA', 'CZ', 'FR', 'DE', 'GB', 'NL', 'HK', 'IN', 'IE', 'IL', 'IT', 'JP', 'MX', 'NZ', 'PL', 'RU', 'KR', 'ES','SE', 'TW', 'US', 'ZA' )[ int( self.__settings__.getSetting( "region_id" ) ) ]
 		
-		if (feed.find("%s") > 0 ):
-			time = ( "all_time", "today", "this_week", "this_month") [ int(self.__settings__.getSetting( "feed_time" ) ) ]
-			feed = feed % time
-		
-		if ( feed.find("?") == -1 ):
-			feed += "?"
-		else:
-			feed += "&"
-			
-		feed += "start-index=" + str( per_page * int(get("page","0")) + 1) + "&max-results=" + repr(per_page)
-			
-		if (feed.find("standardfeeds") > 0):
-			region = ('', 'AU', 'BR', 'CA', 'CZ', 'FR', 'DE', 'GB', 'NL', 'HK', 'IN', 'IE', 'IL', 'IT', 'JP', 'MX', 'NZ', 'PL', 'RU', 'KR', 'ES','SE', 'TW', 'US', 'ZA' )[ int( self.__settings__.getSetting( "region_id" ) ) ]
-			if (region):
-				feed = feed.replace("/standardfeeds/", "/standardfeeds/"+ region + "/")
-
-		( result, status ) = self._fetchPage(feed, api = True)
-
-		if status != 200:
-			return ( result, status )
-
-		result = self._getvideoinfo(result)
-					
-		if len(result) > 0:
-			if self.__dbg__:
-				print self.__plugin__ + " feeds done : " + str(len(result))
-			return ( result, 200 )
-		else:
-			if self.__dbg__:
-				print self.__plugin__ + " feeds done with no results"
-			return (self.__language__(30602), 303)
-	
-	def list(self, feed, params ={}):
-		get = params.get
 		page = get("page","0")
-		if self.__dbg__:
-			print self.__plugin__ + " list: " + repr(feed) + " - page: " + repr(page)
-		result = ""
-		auth = self._getAuth()
-		if ( not auth ):
-			if self.__dbg__:
-				print self.__plugin__ + " playlists auth wasn't set "
-			return ( self.__language__(30609) , 303 )
+		start_index = per_page * int(page) + 1
+		url = ""
 		
-		per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.__settings__.getSetting( "perpage" ) ) ]
-	
-		if ( feed.find("?") == -1 ):
-			feed += "?"
+		if (get("feed")):
+			url = self.urls[get("feed")]
+		
+		if (get("user_feed")):
+			url = self.urls[get("user_feed")]
+		
+		if get("search"):
+			query = urllib.unquote_plus(get("search"))
+			safe_search = ("none", "moderate", "strict" ) [int( self.__settings__.getSetting( "safe_search" ) ) ]	
+			url = url % (query, safe_search)  
+			authors = self.__settings__.getSetting("stored_searches_author")
+			if len(authors) > 0:
+				try:
+					authors = eval(authors)
+					if query in authors:
+						url += "&" + urllib.urlencode({'author': authors[query]})
+				except:
+					print self.__plugin__ + " search - eval failed "	
+			
+		if (url.find("%s") > 0):
+			if ( get("contact") and not (get("external") and get("channel"))):
+				url = url % get("contact")
+			elif ( get("channel") ):
+				url = url % get("channel")
+			elif ( get("playlist") ):
+				url = url % get("playlist")
+			elif ( get("videoid") and not get("action") == "add_to_playlist"):
+				url = url % get("videoid")
+			elif (url.find("time=") > 0 ): 
+				url = url % time			
+			else: 
+				url = url % "default"
+		
+		if ( url.find("?") == -1 ):
+			url += "?"
 		else:
-			feed += "&"
-
-		feed += "start-index=" + str( per_page * int(page) + 1) + "&max-results=" + repr(per_page)
-		feed = feed.replace(" ", "+")
+			url += "&"
+			
+		if not get("playlist") and not get("folder") and not get("action") == "play_all" and not get("action") == "add_to_playlist":
+			url += "start-index=" + repr(start_index) + "&max-results=" + repr(per_page)
 		
-		( result, status ) = self._fetchPage(feed, auth = True)
-
-		if status != 200:
-			return ( result, status)
-
-		result = self._getvideoinfo(result)
-
-		if len(result) > 0:
-			if self.__dbg__:
-				print self.__plugin__ + " list done :" + str(len(result))
-			return (result, 200)
-		else:
-			if self.__dbg__:
-				print self.__plugin__ + " list done with no results"
-			return (self.__language__(30602), 303)
-
-	def delete_favorite(self, obj):
-		delete_url = "http://gdata.youtube.com/feeds/api/users/%s/favorites/%s" % ( self.__settings__.getSetting( "nick" ), obj )
-		return self._youTubeDel(delete_url)
+		if (url.find("standardfeeds") > 0 and region):
+			url = url.replace("/standardfeeds/", "/standardfeeds/"+ region + "/")
+						
+		url = url.replace(" ", "+")
+		return url
 	
-	def remove_contact(self, obj):
-		delete_url = "http://gdata.youtube.com/feeds/api/users/default/contacts/%s" % obj
-		return self._youTubeDel(delete_url)
-
-	def remove_subscription(self, obj):
-		delete_url = "http://gdata.youtube.com/feeds/api/users/%s/subscriptions/%s" % ( self.__settings__.getSetting( "nick" ), obj )
-		print self.__plugin__ + "remove : " + delete_url
-		return self._youTubeDel(delete_url)
-
-	def add_contact(self, contact_id):
-		url = "http://gdata.youtube.com/feeds/api/users/default/contacts"
-		add_request = '<?xml version="1.0" encoding="UTF-8"?> <entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007"><yt:username>%s</yt:username></entry>' % contact_id
-		return self._youTubeAdd(url, add_request)
-		
-	def add_favorite(self, video_id):
-		url = "http://gdata.youtube.com/feeds/api/users/default/favorites"
-		add_request = '<?xml version="1.0" encoding="UTF-8"?><entry xmlns="http://www.w3.org/2005/Atom"><id>%s</id></entry>' % (video_id)
-		return self._youTubeAdd(url, add_request)
-
-	def add_subscription(self, user_id):
-		url = "http://gdata.youtube.com/feeds/api/users/default/subscriptions"
-		add_request = '<?xml version="1.0" encoding="UTF-8"?><entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007"> <category scheme="http://gdata.youtube.com/schemas/2007/subscriptiontypes.cat" term="user"/><yt:username>%s</yt:username></entry>' % (user_id)
-		return self._youTubeAdd(url, add_request)
-
-	def playlists(self, link, params = {}):
+	def list(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " playlists " + repr(link) + " - page: " + repr(get("page","0"))
-		result = ""
-
-		auth = self._getAuth()
-		if ( not auth ):
-			if self.__dbg__:
-				print self.__plugin__ + " playlists auth wasn't set "
-			return ( self.__language__(30609) , 303 )
+		result = []
+		status = 303
 		
-		per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.__settings__.getSetting( "perpage" ) ) ]
-		if ( link.find("?") == -1 ):
-			link += "?"
-		else:
-			link += "&"
-		link += "start-index=" + str( per_page * int(get("page","0")) + 1) + "&max-results=" + repr(per_page)
+		if get("folder"):
+			return self.listFolder(params)
 		
-		if get("feed") == "playlists" or get("feed") == "subscriptions":
-			link += "&orderby=published"
+		if get("playlist"):
+			return self.listPlaylist(params)
+		
+		if get("login") == "true":
+			if ( not self._getAuth() ):
+				if self.__dbg__:
+					print self.__plugin__ + " login required but auth wasn't set!"
+				return ( self.__language__(30609) , 303 )
 
-
-		( result, status ) = self._fetchPage(link, auth = True)
-
+		url = self.createUrl(params)
+		
+		if url:
+			( response, status ) = self._fetchPage({"link": url, "auth": get("login"), "api": "true"})
+		
 		if status != 200:
 			return ( result, status )
 		
-		dom = parseString(result);
+		if not get("folder"):
+			result = self.getVideoInfo(response, params)
+		
+		if len(result) == 0:
+			return (result, 303)
+		
+		thumbnail = result[0].get('thumbnail', "")
+		
+		if thumbnail:
+			if get("channel"):
+				self.__settings__.setSetting("subscriptions_" + get("channel") + "_thumb", thumbnail)
+			if get("search"):
+				self.__settings__.setSetting("search_" + urllib.unquote_plus(get("search")) + "_thumb", thumbnail)
+			
+		return (result, 200)
+	
+	def listPlaylist(self, params = {}):
+		get = params.get
+		page = int(get("page", "0"))
+		per_page = ( 10, 15, 20, 25, 30, 40, 50 )[ int( self.__settings__.getSetting( "perpage" ) ) ]
+		
+		videoids = self.__storage__.retrieve(params)
+			
+		if page != 0 and videoids:
+			next = 'false'
+			if ( per_page * ( page + 1 ) < len(videoids) ):
+				next = 'true'
+			
+			videoids = videoids[(per_page * page):(per_page * (page + 1))]
+			
+			(result, status) = self.getBatchDetails(videoids, params)
+		else:
+			result = self.listAll(params)
+				
+			if len(result) == 0:
+				return (result, 303)
+			
+			videoids = []
+			for video in result:
+				vget = video.get
+				videoids.append(vget("videoid","false"))
+			
+			self.__storage__.store(params, videoids)
+			
+			thumbnail = result[0].get('thumbnail', "")
+			
+			if (thumbnail):					
+				self.__settings__.setSetting("playlists_" + get("playlist") + "_thumb", thumbnail)
+			
+			next = 'false'	
+			if (len(result) > 0):
+				if ( per_page * ( page + 1 ) < len(result) ):
+					next = 'true'
+		
+			result = result[(per_page * page):(per_page * (page + 1))]
+		
+		if next == "true":
+			self.__storage__.addNextFolder(result, params)
+		
+		return (result, 200)
+	
+	def listFolder(self, params = {}):
+		get = params.get
+		result = []
+		
+		if get("store"): 
+			if get("store") == "contact_options":
+				return self.__storage__.getUserOptionFolder(params)
+			else:
+				return self.__storage__.getStoredSearches(params)
+
+		page = int(get("page", "0"))
+		per_page = ( 10, 15, 20, 25, 30, 40, 50 )[ int( self.__settings__.getSetting( "perpage" ) ) ]
+		
+		store = self.__storage__.retrieve(params)
+		
+		if ( page != 0 and store != ""):
+			try:
+				result = eval(store)
+			except:
+				print self.__plugin__ + " folder - eval failed "	
+		
+		if not get("page"):
+			result = self.listAll(params)
+			
+			if len(result) == 0:
+				return (result, 303)
+			
+			self.__storage__.store(params, result)
+		
+		next = 'false'
+		if (len(result) > 0):
+			if ( per_page * ( page + 1 ) < len(result) ):
+				next = 'true'
+		
+		result = result[(per_page * page):(per_page * (page + 1))]
+		
+		if get("user_feed") == "subscriptions":
+			for item in result:
+				viewmode = ""
+				if (get("external")):
+					viewmode += "external_" + get("contact") + "_"
+					item["external"] = "true"
+					item["contact"] = get("contact")
+				viewmode += "view_mode_" + item["Title"]
+				
+				if (self.__settings__.getSetting(viewmode) == "favorites"):
+					item["user_feed"] = "favorites"
+					item["view_mode"] = "subscriptions_uploads"
+				elif(self.__settings__.getSetting(viewmode) == "playlists"):
+					item["user_feed"] = "playlists"
+					item["folder"] = "true"
+					item["view_mode"] = "subscriptions_playlists"
+				else:
+					item["user_feed"] = "uploads"  
+					item["view_mode"] = "subscriptions_favorites"
+		
+		if next == "true":
+			self.__storage__.addNextFolder(result, params)
+		
+		return (result,200)
+	
+	def listAll(self, params ={}):
+		get = params.get
+		result = ""
+		
+		if get("login") == "true":
+			if ( not self._getAuth() ):
+				if self.__dbg__:
+					print self.__plugin__ + " login required but auth wasn't set!"
+				return ( self.__language__(30609) , 303 )
+		
+		feed = self.createUrl(params)
+		index = 1
+		url = feed + "v=2&start-index=" + str(index) + "&max-results=" + repr(50)
+		url = url.replace(" ", "+")
+
+		ytobjects = []
+		
+		( result, status ) = self._fetchPage({"link":url, "auth":"true"})
+		
+		if status == 200:
+			if get("folder") == "true":
+				ytobjects = self.getFolderInfo(result, params)
+			else:
+				ytobjects = self.getVideoInfo(result, params)
+		
+		if len(ytobjects) == 0:
+			return ytobjects
+		
+		next = ytobjects[len(ytobjects)-1].get("next","false")
+		if next == "true": 
+			ytobjects = ytobjects[:len(ytobjects)-1]
+		
+		while next == "true":
+			index += 50
+			url = feed + "start-index=" + str(index) + "&max-results=" + repr(50)
+			url = url.replace(" ", "+")
+			(result, status) = self._fetchPage({"link": url, "auth":"true"})
+			
+			if status != 200:
+				break
+			temp_objects = []
+			if get("folder") == "true":
+				temp_objects = self.getFolderInfo(result, params)
+			else:
+				temp_objects = self.getVideoInfo(result, params)
+		
+			next = temp_objects[len(temp_objects)-1].get("next","false")
+			if next == "true":
+				temp_objects = temp_objects[:len(temp_objects)-1]
+			ytobjects += temp_objects
+		
+		if get("user_feed"):
+			if get("user_feed") != "playlist" and get("action") != "play_all":
+				ytobjects.sort(key=lambda item:item["Title"].lower(), reverse=False)
+			else:
+				if (self.__storage__.getReversePlaylistOrder(params)):
+					ytobjects.reverse()
+		
+		return ytobjects
+	
+	def delete_favorite(self, params = {}):
+		get = params.get
+		delete_url = self.urls["favorites"] % "default"
+		delete_url += "/" + get('editid') 
+		return self._fetchPage({"link": delete_url, "api": "true", "login": "true", "auth": "true", "method": "DELETE"})
+	
+	def remove_contact(self, params = {}):
+		get = params.get
+		delete_url = self.urls["contacts"] 
+		delete_url += "/" + get("contact")
+		return self._fetchPage({"link": delete_url, "api": "true", "login": "true", "auth": "true", "method": "DELETE"})
+
+	def remove_subscription(self, params = {}):
+		get = params.get
+		delete_url = self.urls["subscriptions"] % "default"
+		delete_url += "/" + get("editid")
+		return self._fetchPage({"link": delete_url, "api": "true", "login": "true", "auth": "true", "method": "DELETE"})
+			
+	def add_contact(self, params = {}):
+		get = params.get
+		url = self.urls["contacts"]
+		add_request = '<?xml version="1.0" encoding="UTF-8"?> <entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007"><yt:username>%s</yt:username></entry>' % get("contact")
+		return self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "request": add_request})
+		
+	def add_favorite(self, params = {}):
+		get = params.get 
+		url = self.urls["favorites"] % "default"
+		add_request = '<?xml version="1.0" encoding="UTF-8"?><entry xmlns="http://www.w3.org/2005/Atom"><id>%s</id></entry>' % get("videoid")
+		return self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "request": add_request})
+		
+	def add_subscription(self, params = {}):
+		get = params.get
+		url = self.urls["subscriptions"] % "default"
+		add_request = '<?xml version="1.0" encoding="UTF-8"?><entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007"> <category scheme="http://gdata.youtube.com/schemas/2007/subscriptiontypes.cat" term="user"/><yt:username>%s</yt:username></entry>' % get("channel")
+		return self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "request": add_request})
+	
+	def add_playlist(self, params = {}):
+		get = params.get
+		url = "http://gdata.youtube.com/feeds/api/users/default/playlists"
+		add_request = '<?xml version="1.0" encoding="UTF-8"?><entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007"><title type="text">%s</title><summary>%s</summary></entry>' % ( get("title"), get("summary") )
+		return self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "request": add_request})
+		
+	def del_playlist(self, params = {}):
+		get = params.get
+		url = "http://gdata.youtube.com/feeds/api/users/%s/playlists/%s" % (self.__settings__.getSetting("nick"), get("playlist"))
+		return self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "method": "DELETE"})
+
+	def add_to_playlist(self, params = {}):
+		get = params.get
+		url = "http://gdata.youtube.com/feeds/api/playlists/%s" % get("playlist")
+		add_request = '<?xml version="1.0" encoding="UTF-8"?><entry xmlns="http://www.w3.org/2005/Atom" xmlns:yt="http://gdata.youtube.com/schemas/2007"><id>%s</id></entry>' % get("videoid")
+		return self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "request": add_request})
+	
+	def remove_from_playlist(self, params = {}):
+		get = params.get
+		url = "http://gdata.youtube.com/feeds/api/playlists/%s/%s" % ( get("playlist"), get("playlist_entry_id") )
+		return self._fetchPage({"link": url, "api": "true", "auth": "true", "method": "DELETE"})
+	
+	def getFolderInfo(self, xml, params = {}):
+		get = params.get
+		result = ""
+		
+		dom = parseString(xml);
 		links = dom.getElementsByTagName("link");
 		entries = dom.getElementsByTagName("entry");
-		next = "false"
-
+		next = False
+		
 		#find out if there are more pages
 		if (len(links)):
 			for link in links:
 				lget = link.attributes.get
 				if (lget("rel").value == "next"):
-					next = "true"
+					next = True
 					break
 		
-		playobjects = [];
+		folders = [];
 		for node in entries:
-			video = {};
-			video['Title'] = node.getElementsByTagName("title").item(0).firstChild.nodeValue.replace('Activity of : ', '').replace('Videos published by : ', '').encode( "utf-8" );
+			folder = {};
 			
-			video['published'] = self._getNodeValue(node, "published", "2008-07-05T19:56:35.000-07:00")
-			video['summary'] = self._getNodeValue(node, 'summary', 'Unknown')
-			video['content'] = self._getNodeAttribute(node, 'content', 'src', 'FAIL')
-			video['playlistId'] = self._getNodeValue(node, 'yt:playlistId', '')
+			folder["login"] = "true"
+			folder['Title'] = node.getElementsByTagName("title").item(0).firstChild.nodeValue.replace('Activity of : ', '').replace('Videos published by : ', '').encode( "utf-8" );
+			folder['published'] = self._getNodeValue(node, "published", "2008-07-05T19:56:35.000-07:00")
+			
+			if node.getElementsByTagName("id"):
+				entryid = self._getNodeValue(node, "id","")
+				entryid = entryid[entryid.rfind(":")+1:]
+				folder["editid"] = entryid
+			
+			thumb = ""
+			if get("user_feed") == "contacts":
+				folder["thumbnail"] = "user"
+				folder["contact"] = folder["Title"]
+				folder["store"] = "contact_options"
+				folder["folder"] = "true"
+			
+			if get("user_feed") == "subscriptions":
+				thumb = self.__settings__.getSetting("subscriptions_" + folder["Title"] + "_thumb")
+				folder["channel"] = folder["Title"]
+			
+			if get("user_feed") == "playlists":
+				folder['playlist'] = self._getNodeValue(node, 'yt:playlistId', '')
+				thumb = self.__settings__.getSetting("playlists_" + folder['playlist'] + "_thumb")
+				folder["user_feed"] = "playlist"
+			
+			if thumb:
+				folder["thumbnail"] = thumb 
 			
 			if node.getElementsByTagName("link"):
 				link = node.getElementsByTagName("link")
 				for i in range(len(link)):
 					if link.item(i).getAttribute('rel') == 'edit':
 						obj = link.item(i).getAttribute('href')
-						video['editid'] = obj[obj.rfind('/')+1:]
+						folder['editid'] = obj[obj.rfind('/')+1:]
 			
-			playobjects.append(video);
-			
-		if len(playobjects) > 0:
-			playobjects[len(playobjects) - 1]['next'] = next
-			
-		if self.__dbg__:
-			print self.__plugin__ + " playlist done"
-				
-		return ( playobjects, 200 );
-	
-	def downloadVideo(self, video):
-		if self.__dbg__:
-			print self.__plugin__ + " downloadVideo : " + video['Title']
-			
-		path = self.__settings__.getSetting( "downloadPath" )
-		try:
-			url = urllib2.Request(video['video_url'])
-			url.add_header('User-Agent', self.USERAGENT);
-			valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-			
-			filename_incomplete = "%s/%s-incomplete.mp4" % ( path, ''.join(c for c in video['Title'] if c in valid_chars) )
-			filename_complete = "%s/%s.mp4" % ( path, ''.join(c for c in video['Title'] if c in valid_chars) )
-			file = open(filename_incomplete, "wb")
-			con = urllib2.urlopen(url);
-			file.write(con.read())
-			con.close()
-			file.close()
-			
-			os.rename(filename_incomplete, filename_complete)
-			
-			self.__settings__.setSetting( "vidstatus-" + video['videoid'], "1" )
-		except urllib2.HTTPError, e:
-			if self.__dbg__:
-				print self.__plugin__ + " downloadVideo except: " + str(e)
-			return ( str(e), 303 )
-		except:
-			if self.__dbg__:
-				print self.__plugin__ + " downloadVideo uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__, sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				
-			return (self.__language__(30606), 303)
-
-		if self.__dbg__:
-			print self.__plugin__ + " downloadVideo done"
-		return ( video, 200 )
-	
-	def construct_video_url(self, params, encoding = 'utf-8', download = False):
-		get = params.get
-		if ( not get("videoid") ):
-			return ( "", 200)
-
-		videoid = get("videoid")
+			folders.append(folder);
 		
-		if self.__dbg__:
-			print self.__plugin__ + " construct_video_url : " + repr(videoid)
-
-		video = self._get_details(videoid)
+		if next:
+			self.__storage__.addNextFolder(folders, params)
 		
-		if not video:
-			if self.__dbg__:
-				print self.__plugin__ + " construct_video_url failed because of missing video from _get_details"
-			return ( "", 500 )
-		
-		if ( 'apierror' in video ):
-			if self.__dbg__:
-				print self.__plugin__ + " construct_video_url, got apierror: " + video['apierror']
-			return (video['apierror'], 303)
+		return folders;
 
-		if download:
-			hd_quality = int(self.__settings__.getSetting( "hd_videos_download" ))
-			if ( hd_quality == 0 ):
-				hd_quality = int(self.__settings__.getSetting( "hd_videos" ))
-			else:
-				hd_quality -= 1
-		else:
-			if (not get("quality")):
-				hd_quality = int(self.__settings__.getSetting( "hd_videos" ))
-			else:
-				if (get("quality") == "1080p"):
-					hd_quality = 2
-				elif (get("quality") == "720p"):
-					hd_quality = 1
-				else: 
-					hd_quality = 0
-		
-		try:
-			(fmtSource, swfConfig, video['stream_map']) = self._extractVariables(videoid)
-			
-			if ( not fmtSource ):
-				if self.__dbg__:
-					print self.__plugin__ + " construct_video_url Hopefully this extra if check is now legacy THIS SHOULD NOT HAPPEN ANYMORE"
-				return ( "", 500 ) 
-			
-			if ( video['stream_map'] == 303 ):
-				return (fmtSource, 303)
-			
-			fmt_url_map = urllib.unquote_plus(fmtSource[0]).split('|')
-			links = {};
-			video_url = False
-
-			print self.__plugin__ + " construct_video_url: stream_map : " + video['stream_map']
-			if (video['stream_map'] == 'True'):
-				if self.__dbg__:
-					print self.__plugin__ + " construct_video_url: stream map"
-					
-				for fmt_url in fmt_url_map:
-					if self.__dbg__:
-						print self.__plugin__ + " construct_video_url: fmt_url : " + repr(fmt_url)
-						
-					if (len(fmt_url) > 7 and fmt_url.find(":\\/\\/") > 0):
-						if (fmt_url.rfind(',') > fmt_url.rfind('\/id\/')):
-							final_url = fmt_url[:fmt_url.rfind(',')]
-							final_url = final_url.replace('\u0026','&')
-							if (final_url.rfind('\/itag\/') > 0):
-								quality = final_url[final_url.rfind('\/itag\/') + 8:]
-							else :
-								quality = "5"
-							links[int(quality)] = final_url.replace('\/','/')
-						else :
-							final_url = fmt_url
-							final_url = final_url.replace('\u0026','&')
-							if (final_url.rfind('\/itag\/') > 0):
-								quality = final_url[final_url.rfind('\/itag\/') + 8:]
-							else :
-								quality = "5"
-							links[int(quality)] = final_url.replace('\/','/')
-			
-			else:
-				if self.__dbg__:
-					print self.__plugin__ + " construct_video_url: non stream map" 
-				for fmt_url in fmt_url_map:
-					if (len(fmt_url) > 7):
-						if (fmt_url.rfind(',') > fmt_url.rfind('&id=')): 
-							final_url = fmt_url[:fmt_url.rfind(',')]
-							final_url = final_url.replace('\u0026','&')
-							if (final_url.rfind('itag=') > 0):
-								quality = final_url[final_url.rfind('itag=') + 5:]
-								quality = quality[:quality.find('&')]
-							else:
-								quality = "5"
-							links[int(quality)] = final_url.replace('\/','/')
-						else :
-							final_url = fmt_url
-							if (final_url.rfind('itag=') > 0):
-								quality = final_url[final_url.rfind('itag=') + 5:]
-								quality = quality[:quality.find('&')]
-							else :
-								quality = "5"
-							links[int(quality)] = final_url.replace('\/','/')
-			
-			get = links.get
-			
-			# SD videos are default, but we go for the highest res
-			if (get(35)):
-				video_url = get(35)
-			elif (get(34)):
-				video_url = get(34)
-			elif (get(18)):
-				video_url = get(18)
-			elif (get(5)):
-				video_url = get(5)
-			
-			if (hd_quality > 0): #<-- 720p
-				if (get(22)):
-					video_url = get(22)
-			if (hd_quality > 1): #<-- 1080p
-				if (get(37)):
-					video_url = get(37)
-					
-			if ( not video_url ):
-				if self.__dbg__:
-					print self.__plugin__ + " construct_video_url failed, video_url not set"
-				return (self.__language__(30607), 303)
-			
-			if (video['stream_map'] == 'True'):
-				video['swf_config'] = swfConfig
-			
-			video['video_url'] = video_url;
-
-			if self.__dbg__:
-				print self.__plugin__ + " construct_video_url done"
-
-			return (video, 200);
-		except:
-			if self.__dbg__:
-				print self.__plugin__ + " construct_video_url uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__ , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-			return ( "", 500 )
-
-
-	def arrayToPipe(self, input):
-		pipedItems = ""
-		for item in input:
-			pipedItems += item + "|"
-		return pipedItems
-
-	def _get_batch_details_thumbnails(self, items):
-		request_start = "<feed xmlns='http://www.w3.org/2005/Atom'\n xmlns:media='http://search.yahoo.com/mrss/'\n xmlns:batch='http://schemas.google.com/gdata/batch'\n xmlns:yt='http://gdata.youtube.com/schemas/2007'>\n <batch:operation type='query'/> \n"
-		request_end = "</feed>"
-		
-		video_request = ""
-		
+	def getBatchDetailsThumbnails(self, items, params = {}):
 		ytobjects = []
-		i = 1
-		for (videoid, thumbs) in items:
-			if videoid:
-				video_request +=	"<entry> \n <id>http://gdata.youtube.com/feeds/api/videos/" + videoid+ "</id>\n</entry> \n"
-				if i == 50:
-					final_request = request_start + video_request + request_end
-					request = urllib2.Request("http://gdata.youtube.com/feeds/api/videos/batch")
-					request.add_data(final_request)
-					con = urllib2.urlopen(request)
-					result = con.read()
-					(temp, status) = self._getVideoInfoBatch(result)
-					ytobjects += temp
-					if status != 200:
-						return (ytobjects, status)
-					video_request = ""
-					i = 1
-				i+=1
+		videoids = []
 		
+		for (videoid, thumb) in items:
+			videoids.append(videoid)
 		
-		final_request = request_start + video_request + request_end
-		request = urllib2.Request("http://gdata.youtube.com/feeds/api/videos/batch")
-		request.add_data(final_request)
-					
-		con = urllib2.urlopen(request)
-		result = con.read()
-				
-		(temp, status) = self._getVideoInfoBatch(result)
-		ytobjects += temp
+		(tempobjects, status) = self.getBatchDetails(videoids, params = {})
 		
-		tempobjects = ytobjects
-		ytobjects = []
 		for i in range(0, len(items)):
 			( videoid, thumbnail ) = items[i]
 			for item in tempobjects:
@@ -602,7 +500,7 @@ class YouTubeCore(object):
 		
 		return ( ytobjects, 200)
 	
-	def _get_batch_details(self, items):
+	def getBatchDetails(self, items, params = {}):
 		request_start = "<feed xmlns='http://www.w3.org/2005/Atom'\n xmlns:media='http://search.yahoo.com/mrss/'\n xmlns:batch='http://schemas.google.com/gdata/batch'\n xmlns:yt='http://gdata.youtube.com/schemas/2007'>\n <batch:operation type='query'/> \n"
 		request_end = "</feed>"
 		
@@ -619,7 +517,7 @@ class YouTubeCore(object):
 					request.add_data(final_request)
 					con = urllib2.urlopen(request)
 					result = con.read()
-					(temp, status) = self._getVideoInfoBatch(result)
+					(temp, status) = self.getVideoInfoBatch(result, params)
 					ytobjects += temp
 					if status != 200:
 						return (ytobjects, status)
@@ -627,15 +525,13 @@ class YouTubeCore(object):
 					i = 1
 				i+=1
 		
-		
 		final_request = request_start + video_request + request_end
 		request = urllib2.Request("http://gdata.youtube.com/feeds/api/videos/batch")
 		request.add_data(final_request)
-					
 		con = urllib2.urlopen(request)
 		result = con.read()
 				
-		(temp, status) = self._getVideoInfoBatch(result)
+		(temp, status) = self.getVideoInfoBatch(result, params)
 		ytobjects += temp
 				
 		return ( ytobjects, 200)
@@ -650,37 +546,55 @@ class YouTubeCore(object):
 	#
 	#===============================================================================
 
-	def _fetchPage(self, link, api = False, auth=False, login=False, error = 0):
+	def _fetchPage(self, params = {}):
+		get = params.get
 		if self.__dbg__:
-			print self.__plugin__ + " fetching page : " + link
+			print self.__plugin__ + " _fetchPage called for : " + repr(params)
+		
+		if not get("link") or int(get("error", "0")) > 3 :
+			if self.__dbg__:
+				print self.__plugin__ + " fetching page giving up "
+			return ( "", 500 )
 
-		request = urllib2.Request(link)
-
-		if api:
-			request.add_header('GData-Version', '2')
+		if get("request", "false") == "false":
+			request = url2request(get("link"), get("method", "GET"));
 		else:
-			request.add_header('User-Agent', self.USERAGENT)
+			if self.__dbg__:
+				print self.__plugin__ + " got request"
+			request = urllib2.Request(get("link"), get("request"))
+			request.add_header('X-GData-Client', "")
+			request.add_header('Content-Type', 'application/atom+xml') 
+			request.add_header('Content-Length', str(len(get("request")))) 
 
-		if ( login ):
+		if get("api", "false") == "true":
+			if self.__dbg__:
+				print self.__plugin__ + " got api"
+			request.add_header('GData-Version', '2') #confirmed
+			request.add_header('X-GData-Key', 'key=' + self.APIKEY)
+		else:
+			request.add_header('User-Agent', self.__utils__.USERAGENT)
+		
+		if get("login", "false") == "true":
+			if self.__dbg__:
+				print self.__plugin__ + " got login"
 			if ( self.__settings__.getSetting( "username" ) == "" or self.__settings__.getSetting( "user_password" ) == "" ):
 				if self.__dbg__:
 					print self.__plugin__ + " _fetchPage, login required but no credentials provided"
-				return ( self.__language__( 30608 ) , 303 )
-
-			if self.__dbg__:
-				print self.__plugin__ +  " _fetchPage adding cookie"
-			request.add_header('Cookie', 'LOGIN_INFO=' + self._httpLogin() )
+				return ( self.__language__( 30622 ) , 303 )
+			
+			request.add_header('Cookie', 'LOGIN_INFO=' + self.__login__._httpLogin() )
 		
-		if auth:
-			authkey = self._getAuth()
-			if ( not authkey ):
-				if self.__dbg__:
-					print self.__plugin__ + " _fetchPage couldn't set auth "
-				
-			request.add_header('Authorization', 'GoogleLogin auth=' + authkey)
-			request.add_header('X-GData-Key', 'key=' + self.APIKEY)
+		if get("auth", "false") == "true":
+			if self.__dbg__:
+				print self.__plugin__ + " got auth"
+			if self._getAuth():
+				request.add_header('Authorization', 'GoogleLogin auth=' + self.__settings__.getSetting("auth"))
+			else:
+				print self.__plugin__ + " _fetchPage couldn't get login token"
 		
 		try:
+			if self.__dbg__:
+				print self.__plugin__ + " _fetchPage making request"
 			con = urllib2.urlopen(request)
 			result = con.read()
 			new_url = con.geturl()
@@ -689,78 +603,38 @@ class YouTubeCore(object):
 			# Return result if it isn't age restricted
 			if ( result.find("verify-actions") == -1 and result.find("verify-age-actions") == -1):
 				return ( result, 200 )
-			elif ( error < 10 ):
-				# We need login to verify age.	     
-				if not login:
-					if self.__dbg__:
-						print self.__plugin__ + " _fetchPage age verification required, retrying with login"
-					error = error + 0
-					return self._fetchPage(link, api, auth, login = True, error = error)
-				
-				if self.__dbg__:
-					print self.__plugin__ + " _fetchPage verifying age"
-				return self._verifyAge(result, new_url, link, api, auth, login, error) 
-			
-			if self.__dbg__:
-				print self.__plugin__ + " _fetchPage. Too many errors"
-			return ( "", 500 )
+			else:
+				print self.__plugin__ + " found verify age request: " + repr(params) 
+				# We need login to verify age
+				if not get("login"):
+					params["error"] = get("error", "0")
+					params["login"] = "true"
+					return self._fetchPage(params)
+				else:
+					return self._verifyAge(result, new_url, params)
 		
 		except urllib2.HTTPError, e:
 			err = str(e)
 			if self.__dbg__:
 				print self.__plugin__ + " _fetchPage HTTPError : " + err
 			
-			# 400 (Bad request) - A 400 response code indicates that a request was poorly formed or contained invalid data. The API response content will explain the reason wny the API returned a 400 response code.
-			if ( err.find("400") > -1 ):
-				return ( err, 303 )
-			# 401 (Not authorized) - A 401 response code indicates that a request did not contain an Authorization header, that the format of the Authorization header was invalid, or that the authentication token supplied in the header was invalid.
-			elif ( err.find("401") > -1 ):
-				# If login credentials are given, try again.
-				if ( self.__settings__.getSetting( "username" ) == "" or self.__settings__.getSetting( "user_password" ) == "" ):
-					if self.__dbg__:
-						print self.__plugin__ + " _fetchPage trying again with login "
-
-					self.login()
-					return self._fetchPage(link, api, auth, login, error +1)
-				else:
-					if self.__dbg__:
-						print self.__plugin__ + " _fetchPage 401 Not Authorized and no login credentials written in settings"
-					return ( self.__language__(30622), 303)
-			# 403 (Forbidden) - A 403 response code indicates that you have submitted a request that is not properly authenticated for the requested operation.
-			# Test all cases that cause 403 before 2.0, and verify the above statement.
-			elif ( err.find("403") > -1 ):
-				if self.__dbg__:
-					print self.__plugin__ + " _fetchPage got empty results back "
-				return (self.__language__(30601), 303)
-			# 501 (Not implemented) - A 501 response code indicates that you have tried to execute an unsupported operation.
-			elif ( err.find("501") > -1):
-				return ( err, 303 )
-			#500 (Internal error) - A 500 response code indicates that YouTube experienced an error handling a request. You could retry the request at a later time.
-			#503 (Service unavailable) - A 503 response code indicates that the YouTube Data API service can not be reached. You could retry your request at a later time.
-			elif ( err.find("500") > -1 or err.find("503") > -1 ):
-				if self.__dbg__:
-					print self.__plugin__ + " _fetchPage retry: " + error
-				return self._fetchPage(link, api, auth, login, error +1)
-			else:
-				if self.__dbg__:
-					print self.__plugin__ + " _fetchPage unknown error"
-				return ( err, 303 )
-							
-		except:
-			if self.__dbg__:
-				print self.__plugin__ + ' _fetchPage ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-												 , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				
-			return ( "", 500 )
+			if err.find("TokenExpired") > -1:
+				self.__login__._login()
 			
-	def _verifyAge(self, result, new_url, link, api = False, auth=False, login=False, error = 0):
-		login_info = self._httpLogin(True)
+			params["error"] = str(int(get("error", "0")) + 1)
+			return self._fetchPage(params)
+		
+		return ( "", 500 )
+		
+	def _verifyAge(self, result, new_url, params = {}):
+		get = params.get
+		login_info = self.__login__._httpLogin(True)
 		confirmed = "0"
 		if self.__settings__.getSetting( "safe_search" ) != "2":
 			confirmed = "1"
 		
 		request = urllib2.Request(new_url)
-		request.add_header('User-Agent', self.USERAGENT)
+		request.add_header('User-Agent', self.__utils__.USERAGENT)
 		request.add_header('Cookie', 'LOGIN_INFO=' + login_info)
 		con = urllib2.urlopen(request)
 		result = con.read()
@@ -770,7 +644,7 @@ class YouTubeCore(object):
 			if self.__dbg__ or True:
 				print self.__plugin__ + " Failed trying to verify-age could find confirm age form."
 				print self.__plugin__ + " html page given: " + repr(result)
-			return ( self.__language__( 30600 ) , 303 )
+			return ( self.__language__( 30606 ) , 303 )
 						
 		# get next_url
 		next_url_start = result.find('"next_url" value="') + len('"next_url" value="')
@@ -790,7 +664,7 @@ class YouTubeCore(object):
 		
 		# post collected information to age the verifiaction page
 		request = urllib2.Request(new_url)
-		request.add_header('User-Agent', self.USERAGENT)
+		request.add_header('User-Agent', self.__utils__.USERAGENT)
 		request.add_header('Cookie', 'LOGIN_INFO=' + login_info )
 		request.add_header("Content-Type","application/x-www-form-urlencoded")
 		values = urllib.urlencode( { "next_url": next_url, "action_confirm": confirmed, "session_token":session_token })
@@ -804,173 +678,32 @@ class YouTubeCore(object):
 		con.close()
 		
 		#If verification is success full new url must look like: 'http://www.youtube.com/index?has_verified=1'
-		if new_url.find("has_verified=1") > 0:
-			if self.__dbg__:
-				print self.__plugin__ + " Age Verification sucessfull " + new_url
-			return self._fetchPage(link, api, auth, login = True, error = error + 1)
+		if new_url.find("has_verified=1"):
+			params["error"] = str(int(get("error", "0")) + 1)
+			params["login"] = "true"
+			return self._fetchPage(params)
 		
 		# If verification failed we dump a shit load of info to the logs
+		if self.__dbg__:
+			print self.__plugin__ + " result url: " + repr(new_url)
+		
 		print self.__plugin__ + " age verification failed with result: " + repr(result)
-		print self.__plugin__ + " result url: " + repr(new_url)
-		return (self.__language__(30600), 303)
-
-		
-	def _extractVariables(self, videoid):
-		if self.__dbg__:
-			print self.__plugin__ + " extractVariables : " + repr(videoid)
-
-		( htmlSource, status ) = self._fetchPage('http://www.youtube.com/watch?v=' +videoid + "&safeSearch=none&hl=en_us")
-
-		if status != 200:
-			return ( htmlSource, status, status )
-		
-		if self.__dbgv__:
-			print self.__plugin__ + " _extractVariables result: " + repr(htmlSource)
-
-		swf_url = False
-		fmtSource = re.findall('"fmt_url_map": "([^"]+)"', htmlSource);
-		if fmtSource:
-			stream_map = "False"
-		else:
-			swfConfig = re.findall('var swfConfig = {"url": "(.*)", "min.*};', htmlSource)
-			if len(swfConfig) > 0:
-				swf_url = swfConfig[0].replace("\\", "")
-				
-			fmtSource = re.findall('"fmt_stream_map": "([^"]+)"', htmlSource);
-			stream_map = 'True'
-			
-		if self.__dbg__:
-			print self.__plugin__ + " extractVariables done"
-				
-		return (fmtSource, swf_url, stream_map)
-
+		return (self.__language__(30606), 303)
+	
 	def _getAuth(self):
 		if self.__dbg__:
 			print self.__plugin__ + " _getAuth"
 
 		auth = self.__settings__.getSetting( "auth" )
 
-		if ( auth ):
-			if self.__dbg__:
-				print self.__plugin__ + " _getAuth returning stored auth"
-			return auth
-		else:
-			(result, status ) =  self.login()
-			if status == 200:
-				if self.__dbg__:
-					print self.__plugin__ + " _getAuth returning new auth"
-					
-				return self.__settings__.getSetting( "auth" )
-			else:
+		if ( not auth ):
+			(result, status ) =  self.__login__._login()
+			if status != 200:
 				if self.__dbg__:
 					print self.__plugin__ + " _getAuth failed because login failed"
 				return False
+		return True
 	
-	def _youTubeAdd(self, url, add_request, retry = True):
-		if self.__dbg__:
-			print self.__plugin__ + " _youTubeAdd: " + repr(url) + " add_request " + repr(add_request)
-		auth = self._getAuth()
-		if ( not auth ):
-			if self.__dbg__:
-				print self.__plugin__ + " playlists auth wasn't set "
-			return ( self.__language__(30609) , 303 )
-		
-		try:
-			request = urllib2.Request(url, add_request)
-			request.add_header('Authorization', 'GoogleLogin auth=%s' % auth)
-			request.add_header('X-GData-Client', "")
-			request.add_header('X-GData-Key', 'key=%s' % self.APIKEY)
-			request.add_header('Content-Type', 'application/atom+xml')
-			request.add_header('Content-Length', str(len(add_request)))
-			request.add_header('GData-Version', '2')
-			usock = urllib2.urlopen(request)
-		except urllib2.HTTPError, e:
-			error = str(e)
-			if self.__dbg__:
-				print self.__plugin__ + " _youTubeAdd exception: " + error
-				
-			if ( error.find("201") > -1):
-				if self.__dbg__:
-					print self.__plugin__ + " _youTubeAdd: Done"
-				return ( "", 200)
-			elif (error.find("503") > -1):
-				if self.__dbg__:
-					print self.__plugin__ + " _youTubeAdd: " + self.__language__(30615)
-				return ( self.__language__(30615), 303 )
-			elif ( error.find("401") > -1 and retry):
-				# If login credentials are given, try again.
-				if ( self.__settings__.getSetting( "username" ) == "" or self.__settings__.getSetting( "user_password" ) == "" ):
-					if self.__dbg__:
-						print self.__plugin__ + " _youTubeAdd trying again with login "
-						
-					self.login()
-					#def _fetchPage(self, link, api = False, auth=False, login=False, error = 0):
-					return self._youTubeAdd(url, add_request, False)
-					#return self._fetchPage(link, api, auth, login, error + 1)
-				else:
-					if self.__dbg__:
-						print self.__plugin__ + " _youTubeAdd 401 Not Authorized and no login credentials written in settings"
-					return ( self.__language__(30622), 303)
-			else:
-				if self.__dbg__:
-					print self.__plugin__ + " _youTubeAdd error not caught " 
-				return ( error, 303 )
-	
-	def _youTubeDel(self, delete_url, retry = True):
-		if self.__dbg__:
-			print self.__plugin__ + " _youTubeDel: " + delete_url
-
-		auth = self._getAuth()
-		if ( not auth ):
-			if self.__dbg__:
-				print self.__plugin__ + " _youTubeDel auth wasn't set "
-			return ( self.__language__(30609) , 303 )
-
-		try:
-			headers = {}
-			headers['Authorization'] = 'GoogleLogin auth=%s' % (auth)
-			headers['X-GData-Client'] = ""
-			headers['X-GData-Key'] = 'key=%s' % self.APIKEY
-			headers['Content-Type'] = 'application/atom+xml'
-			headers['Host'] = 'gdata.youtube.com'
-			headers['GData-Version'] = '2'
-			import httplib
-			conn = httplib.HTTPConnection('gdata.youtube.com')
-			conn.request('DELETE', delete_url, headers=headers)
-			response = conn.getresponse()
-			if (response.status == 200):
-				if self.__dbg__:
-					print self.__plugin__ + " _youTubeDel: done"
-				return ( "", 200 )
-			elif (response.status == 401 and retry):
-				# If login credentials are given, try again.
-				if ( self.__settings__.getSetting( "username" ) == "" or self.__settings__.getSetting( "user_password" ) == "" ):
-					if self.__dbg__:
-						print self.__plugin__ + " _youTubeDel trying again with login "
-						
-					self.login()
-					return self._youTubeDel(delete_url, False);
-					#return self._fetchPage(link, api, auth, login, error +1)
-				else:
-					if self.__dbg__:
-						print self.__plugin__ + " _youTubeDel 401 Not Authorized and no login credentials written in settings"
-					return ( self.__language__(30622), 303)
-			else:
-				resp = str(response.read())
-				if self.__dbg__:
-					print self.__plugin__ + " _youTubeDel: [%s] %s" % ( response.status, resp )
-				return ( resp, 303 )
-		except urllib2.HTTPError, e:
-			if self.__dbg__:
-				print self.__plugin__ + " _youTubeDel except: " + str(e)
-			return ( str(e), 303 )
-		except:
-			if self.__dbg__:
-				print self.__plugin__ + " _youTubeDel uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				
-			return ( "", 500 )
 	
 	def _getNodeAttribute(self, node, tag, attribute, default = ""):
 		if node.getElementsByTagName(tag).item(0):
@@ -986,22 +719,11 @@ class YouTubeCore(object):
 		
 		return default;
 
-	def _getVideoInfoBatch(self, value):
-		if self.__dbg__:
-			print self.__plugin__ + " _getvideoinfo: " + str(len(value))
-		
-		dom = parseString(value);
-		links = dom.getElementsByTagName("atom:link");
+	def getVideoInfoBatch(self, xml, params = {}):
+		get = params.get
+		dom = parseString(xml)
 		entries = dom.getElementsByTagName("atom:entry");
-		next = "false"
-			
-		if (len(links)):
-			for link in links:
-				lget = link.attributes.get
-				if (lget("rel").value == "next"):
-					next = "true"
-					break
-
+		
 		ytobjects = [];
 		for node in entries:
 			video = {};
@@ -1017,28 +739,26 @@ class YouTubeCore(object):
 			if (videoid):
 				if (videoid.rfind("/") != -1):
 					video['videoid'] = videoid[videoid.rfind("/") + 1:]
+				
+				if node.getElementsByTagName("batch:status").item(0).hasAttribute('code'):
+					code = self._getNodeAttribute(node, "batch:status", 'code', 'unknown')
+					if code == "404":
+						video["videoid"] = "false"
 					
 				if node.getElementsByTagName("yt:state").item(0):
 					state = self._getNodeAttribute(node, "yt:state", 'name', 'Unknown Name')
-	
 					if ( state == 'deleted' or state == 'rejected'):
 						video['videoid'] = "false"
 						
 					# Get reason for why we can't playback the file.		
 					if node.getElementsByTagName("yt:state").item(0).hasAttribute('reasonCode'):
 						reason = self._getNodeAttribute(node, "yt:state", 'reasonCode', 'Unknown reasonCode')
-						value = self._getNodeValue(node, "yt:state", "Unknown reasonValue").encode('utf-8')
-						if reason == "private":
+						if reason == "private" or reason == 'requesterRegion':
 							video['videoid'] = "false"
-						elif reason == 'requesterRegion':
-							video['videoid'] = "false"
-						elif reason == 'limitedSyndication':
-							if self.__dbg__:
-								print "" #print self.__plugin__ + " _getvideoinfo hit limitedsyndication"
-						else:
+						elif reason != 'limitedSyndication':
 							video['videoid'] = "false";
 				
-				video['Title'] = self._getNodeValue(node, "media:title", "Unknown Title").encode('utf-8') # Convert from utf-16 to combat breakage
+				video['Title'] = self._getNodeValue(node, "media:title", "Unknown Title").encode('utf-8')
 				video['Plot'] = self._getNodeValue(node, "media:description", "Unknown Plot").encode( "utf-8" )
 				video['Date'] = self._getNodeValue(node, "atom:published", "Unknown Date").encode( "utf-8" )
 				video['user'] = self._getNodeValue(node, "atom:name", "Unknown Name").encode( "utf-8" )
@@ -1048,7 +768,6 @@ class YouTubeCore(object):
 				if video['Studio'] == "":
 					video['Studio'] = self._getNodeValue(node, "atom:name", "Unknown Uploader").encode( "utf-8" )
 					
-	
 				duration = int(self._getNodeAttribute(node, "yt:duration", 'seconds', '0'))
 				video['Duration'] = "%02d:%02d" % ( duration / 60, duration % 60 )
 				video['Rating'] = float(self._getNodeAttribute(node,"gd:rating", 'average', "0.0"))
@@ -1056,303 +775,131 @@ class YouTubeCore(object):
 				video['Genre'] = self._getNodeAttribute(node, "media:category", "label", "Unknown Genre").encode( "utf-8" )
 				infoString =""
 				if video['Date'] != "Unknown Date":
-					infoString += "Date Uploaded: " + video['Date'][:video['Date'].find("T")] + ", "				
+					c = time.strptime(video['Date'][:video['Date'].find(".000Z")], "%Y-%m-%dT%H:%M:%S")
+					video['Date'] = time.strftime("%d-%m-%Y",c)
+					infoString += "Date Uploaded: " + time.strftime("%Y-%m-%d %H:%M:%S",c) + ", "
 				infoString += "View count: " + str(video['count'])
-				
+				video['Plot'] = infoString + "\n" + video['Plot']
+
 				if node.getElementsByTagName("atom:link"):
 					link = node.getElementsByTagName("atom:link")
 					for i in range(len(link)):
 						if link.item(i).getAttribute('rel') == 'edit':
 							obj = link.item(i).getAttribute('href')
 							video['editid'] = obj[obj.rfind('/')+1:]
-	
+				
 				video['thumbnail'] = "http://i.ytimg.com/vi/" + video['videoid'] + "/0.jpg"
 				
-				overlay = self.__settings__.getSetting( "vidstatus-" + video['videoid'] )
-	
+				overlay = self.__storage__.retrieveValue("vidstatus-" + video['videoid'] )
 				if overlay:
 					video['Overlay'] = int(overlay)
 				
-				video['next'] = next
-				
 				ytobjects.append(video);
-					
+							
 		if (ytobjects):
 			return (ytobjects, 200);
 		
 		return ( "", 500 )
 	
-	def _getvideoinfo(self, value):
-		if self.__dbg__:
-			print self.__plugin__ + " _getvideoinfo: " + str(len(value))
-		try:
-			dom = parseString(value);
-			links = dom.getElementsByTagName("link");
-			entries = dom.getElementsByTagName("entry");
-			if (not entries):
-				entries = dom.getElementsByTagName("atom:entry");
-			next = "false"
+	def getVideoInfo(self, xml, params):
+		get = params.get
+		dom = parseString(xml);
+		links = dom.getElementsByTagName("link");
+		entries = dom.getElementsByTagName("entry");
+		if (not entries):
+			entries = dom.getElementsByTagName("atom:entry");
+		next = False
 
-			#find out if there are more pages
+		# find out if there are more pages
+		if (len(links)):
+			for link in links:
+				lget = link.attributes.get
+				if (lget("rel").value == "next"):
+					next = True
+					break
+
+		ytobjects = [];
+		for node in entries:
+			video = {};
+
+			video['videoid'] = self._getNodeValue(node, "yt:videoid", "missing")
 			
-			if (len(links)):
-				for link in links:
-					lget = link.attributes.get
-					if (lget("rel").value == "next"):
-						next = "true"
-						break
+			if node.getElementsByTagName("id"):
+				entryid = self._getNodeValue(node, "id","")
+				entryid = entryid[entryid.rfind(":")+1:]
+				video["playlist_entry_id"] = entryid
 
-			#construct list of video objects					
-			ytobjects = [];
-			for node in entries:
-				video = {};
+			if node.getElementsByTagName("yt:state").item(0):			
+				state = self._getNodeAttribute(node, "yt:state", 'name', 'Unknown Name')
 
-				video['videoid'] = self._getNodeValue(node, "yt:videoid", "missing")
-				
-				# http://code.google.com/intl/en/apis/youtube/2.0/reference.html#youtube_data_api_tag_yt:state <- more reason codes
-				# requesterRegion - This video is not available in your region. <- fails
-				# limitedSyndication - Syndication of this video was restricted by its owner. <- works
-
-				if node.getElementsByTagName("yt:state").item(0):
-				
-					state = self._getNodeAttribute(node, "yt:state", 'name', 'Unknown Name')
-
-					# Ignore unplayable items.
-					if ( state == 'deleted' or state == 'rejected'):
-						video['videoid'] = "false"
-					
-					# Get reason for why we can't playback the file.		
-					if node.getElementsByTagName("yt:state").item(0).hasAttribute('reasonCode'):
-						reason = self._getNodeAttribute(node, "yt:state", 'reasonCode', 'Unknown reasonCode')
-						value = self._getNodeValue(node, "yt:state", "Unknown reasonValue").encode('utf-8')
-						if reason == "private":
-							video['videoid'] = "false"
-						elif reason == 'requesterRegion':
-							video['videoid'] = "false"
-						elif reason == 'limitedSyndication':
-							if self.__dbg__:
-								print "" #print self.__plugin__ + " _getvideoinfo hit limitedsyndication"
-						else:
-							if self.__dbg__:
-								print self.__plugin__ + " _getvideoinfo hit else : %s - %s" % ( reason, value)
-							video['videoid'] = "false";
-							
-				if ( video['videoid'] == "missing" ):
-					video['videolink'] = node.getElementsByTagName("link").item(0).getAttribute('href')
-					match = re.match('.*?v=(.*)\&.*', video['videolink'])
-					if match:
-						video['videoid'] = match.group(1)
-					else:
-						video['videoid'] = "false"
-				
-				video['Title'] = self._getNodeValue(node, "media:title", "Unknown Title").encode('utf-8') # Convert from utf-16 to combat breakage
-				video['Plot'] = self._getNodeValue(node, "media:description", "Unknown Plot").encode( "utf-8" )
-				video['Date'] = self._getNodeValue(node, "published", "Unknown Date").encode( "utf-8" )
-				video['user'] = self._getNodeValue(node, "name", "Unknown Name").encode( "utf-8" )
-				
-				# media:credit is not set for favorites, playlists or inbox
-				video['Studio'] = self._getNodeValue(node, "media:credit", "").encode( "utf-8" )
-				if video['Studio'] == "":
-					video['Studio'] = self._getNodeValue(node, "name", "Unknown Uploader").encode( "utf-8" )
-					
-					
-
-				duration = int(self._getNodeAttribute(node, "yt:duration", 'seconds', '0'))
-				video['Duration'] = "%02d:%02d" % ( duration / 60, duration % 60 )
-				video['Rating'] = float(self._getNodeAttribute(node,"gd:rating", 'average', "0.0"))
-				video['count'] = int(self._getNodeAttribute(node, "yt:statistics", 'viewCount', "0"))
-				infoString =""
-				if video['Date'] != "Unknown Date":
-					infoString += "Date Uploaded: " + video['Date'][:video['Date'].find("T")] + ", "				
-				infoString += "View count: " + str(video['count'])
-				video['Plot'] = infoString + "\n" + video['Plot']
-				video['Genre'] = self._getNodeAttribute(node, "media:category", "label", "Unknown Genre").encode( "utf-8" )
-
-				if node.getElementsByTagName("link"):
-					link = node.getElementsByTagName("link")
-					for i in range(len(link)):
-						if link.item(i).getAttribute('rel') == 'edit':
-							obj = link.item(i).getAttribute('href')
-							video['editid'] = obj[obj.rfind('/')+1:]
-
-				video['thumbnail'] = "http://i.ytimg.com/vi/" + video['videoid'] + "/0.jpg"
-			
-				overlay = self.__settings__.getSetting( "vidstatus-" + video['videoid'] )
-
-				if overlay:
-					video['Overlay'] = int(overlay)
-				
-				video['next'] = next
-				
-				if video['videoid'] == "false":
-					if self.__dbg__:
-						print self.__plugin__ + " _getvideoinfo videoid set to false"
-														
-				
-				ytobjects.append(video);
-
-			if self.__dbg__:
-				print self.__plugin__ + " _getvideoinfo done : " + str(len(ytobjects))
-			return ytobjects;
-		except:
-			if self.__dbg__:
-				print self.__plugin__ + " _getvideoinfo uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				
-			return ( "", 500 )
-
-	def _getAlert(self, videoid):
-		if self.__dbg__:
-			print self.__plugin__ + " _getAlert"
-
-		http_result = self._fetchPage('http://www.youtube.com/watch?v=' +videoid + "&safeSearch=none", login = True)
-		
-		start = http_result.find('class="yt-alert-content">')
-		if start == -1:
-			return self.__language__(30622)
-		
-		start += len('class="yt-alert-content">')
-		result = http_result[start: http_result.find('</div>', start)].strip()
-
-		# Why doesn't this work?
-		#result = result.replace("\n", "")
-		#alert = re.compile('class="yt-alert-content">(.*)</div>', re.M).findall(result);
-
-		if self.__dbg__:
-			print self.__plugin__ + " _getAlert : " + repr(start)
-			print self.__plugin__ + " _getAlert done"
-
-		return result
-	
-	def _get_details(self, videoid):
-		if self.__dbg__:
-			print self.__plugin__ + " _get_details: " + repr(videoid)
-
-		( result, status ) = self._fetchPage("http://gdata.youtube.com/feeds/api/videos/" + videoid, api = True)
-
-		if status == 200:
-			result = self._getvideoinfo(result)
-		
-			if len(result) == 0:
-				if self.__dbg__:
-					print self.__plugin__ + " _get_details result was empty"
-				return False
-			else:
-				if self.__dbg__:
-					print self.__plugin__ + " _get_details done"
-				return result[0];
-		else:
-			if self.__dbg__:
-				print self.__plugin__ + " _get_details got bad status: " + str(status)
-			video = {}
-			video['Title'] = "Error"
-			video['videoid'] = videoid
-			video['thumbnail'] = "Error"
-			video['video_url'] = False
-
-			if (status == 403):
-				# Override the 403 passed from _fetchPage with error provided by youtube.
-				video['apierror'] = self._getAlert(videoid)
-				return video
-			elif (status == 503):
-				video['apierror'] = self.__language__(30605)
-				return video
-			else:
-				video['apierror'] = self.__language__(30606) + str(status)
-				return video
-		
-	def _httpLogin(self, new = False, error = 0):
-		if self.__dbg__:
-			print self.__plugin__ + " _httpLogin errors: " + str(error)
-
-		uname = self.__settings__.getSetting( "username" )
-		pword = self.__settings__.getSetting( "user_password" )
-		
-		if ( uname == "" and pword == "" ):
-			return ""
-
-		if ( new ):
-			if self.__dbg__:
-				print self.__plugin__ + " _httpLogin clearing login_info"
-			self.__settings__.setSetting( "login_info", "" )
-		elif ( self.__settings__.getSetting( "login_info" ) != "" ):
-			if self.__dbg__:
-				print self.__plugin__ + " _httpLogin returning stored login_info"
-				
-			return self.__settings__.getSetting( "login_info" )
+				# Ignore unplayable items.
+				if ( state == 'deleted' or state == 'rejected'):
+					video['videoid'] = "false"
 								
-		cj = cookielib.LWPCookieJar()
-		
-		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-		urllib2.install_opener(opener)
-
-		# Get GALX
-		url = urllib2.Request(urllib.unquote("https://www.google.com/accounts/ServiceLogin?service=youtube"))
-		url.add_header('User-Agent', self.USERAGENT)
-
-		try:
-			if self.__dbg__:
-				print self.__plugin__ + " _httpLogin: getting new login_info"
-			con = urllib2.urlopen(url)
-			header = con.info()
-			galx = re.compile('Set-Cookie: GALX=(.*);Path=/accounts;Secure').findall(str(header))[0]
-
-			cont = urllib.unquote("http%3A%2F%2Fwww.youtube.com%2Fsignin%3Faction_handle_signin%3Dtrue%26nomobiletemp%3D1%26hl%3Den_US%26next%3D%252Findex&hl=en_US&ltmpl=sso")
-
-			params = urllib.urlencode({'GALX': galx,
-						   'Email': uname,
-						   'Passwd': pword,
-						   'PersistentCookie': 'yes',
-						   'continue': cont})
-
-			# Login to Google
-			url = urllib2.Request('https://www.google.com/accounts/ServiceLoginAuth?service=youtube', params)
-			url.add_header('User-Agent', self.USERAGENT)
-		
-			con = urllib2.urlopen(url)
-			result = con.read()
-
-			newurl = re.compile('<meta http-equiv="refresh" content="0; url=&#39;(.*)&#39;"></head>').findall(result)[0].replace("&amp;", "&")
-			url = urllib2.Request(newurl)
-			url.add_header('User-Agent', self.USERAGENT)
-			con = urllib2.urlopen(newurl)
+				# Get reason for why we can't playback the file.		
+				if node.getElementsByTagName("yt:state").item(0).hasAttribute('reasonCode'):
+					reason = self._getNodeAttribute(node, "yt:state", 'reasonCode', 'Unknown reasonCode')
+					value = self._getNodeValue(node, "yt:state", "Unknown reasonValue").encode('utf-8')
+					if reason == "private":
+						video['videoid'] = "false"
+					elif reason == 'requesterRegion':
+						video['videoid'] = "false"
+					elif reason != 'limitedSyndication':
+						if self.__dbg__:
+							print self.__plugin__ + " _getvideoinfo removing video, reason: %s value: %s" % ( reason, value)
+						video['videoid'] = "false";
+						
+			if ( video['videoid'] == "missing" ):
+				video['videolink'] = node.getElementsByTagName("link").item(0).getAttribute('href')
+				match = re.match('.*?v=(.*)\&.*', video['videolink'])
+				if match:
+					video['videoid'] = match.group(1)
+				else:
+					video['videoid'] = "false"
 			
-			# Save cookiefile in settings
-			cookies = repr(cj)
-			start = cookies.find("name='LOGIN_INFO', value='") + len("name='LOGIN_INFO', value='")
-			login_info = cookies[start:cookies.find("', port=None", start)]
-			self.__settings__.setSetting( "login_info", login_info )
+			video['Title'] = self._getNodeValue(node, "media:title", "Unknown Title").encode('utf-8') # Convert from utf-16 to combat breakage
+			video['Plot'] = self._getNodeValue(node, "media:description", "Unknown Plot").encode( "utf-8" )
+			video['Date'] = self._getNodeValue(node, "published", "Unknown Date").encode( "utf-8" )
+			video['user'] = self._getNodeValue(node, "name", "Unknown Name").encode( "utf-8" )
 			
-			if self.__dbg__:
-				print self.__plugin__ + " _httpLogin done"
+			# media:credit is not set for favorites, playlists
+			video['Studio'] = self._getNodeValue(node, "media:credit", "").encode( "utf-8" )
+			if video['Studio'] == "":
+				video['Studio'] = self._getNodeValue(node, "name", "Unknown Uploader").encode( "utf-8" )
+			
+			duration = int(self._getNodeAttribute(node, "yt:duration", 'seconds', '0'))
+			video['Duration'] = "%02d:%02d" % ( duration / 60, duration % 60 )
+			video['Rating'] = float(self._getNodeAttribute(node,"gd:rating", 'average', "0.0"))
+			video['count'] = int(self._getNodeAttribute(node, "yt:statistics", 'viewCount', "0"))
+			infoString =""
+			if video['Date'] != "Unknown Date":
+				c = time.strptime(video['Date'][:video['Date'].find(".000Z")], "%Y-%m-%dT%H:%M:%S")
+				video['Date'] = time.strftime("%d-%m-%Y",c)
+				infoString += "Date Uploaded: " + time.strftime("%Y-%m-%d %H:%M:%S",c) + ", "
+			infoString += "View count: " + str(video['count'])
+			video['Plot'] = infoString + "\n" + video['Plot']
+			video['Genre'] = self._getNodeAttribute(node, "media:category", "label", "Unknown Genre").encode( "utf-8" )
 
-			return self.__settings__.getSetting( "login_info" )
-		
-		except IOError, e:
-			# http://bytes.com/topic/python/answers/33770-error-codes-urlerror
-			if self.__dbg__:
-				print self.__plugin__ + " login failed, hit ioerror except2: : " + repr(e)
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				print self.interrogate(e)
-				
-				if error < 9:
-					if self.__dbg__:
-						print self.__plugin__ + " login pre sleep"
-					# Check if there is a timeout here.
-					import time
-					time.sleep(3)
-					if self.__dbg__:
-						print self.__plugin__ + " login post sleep"
+			if node.getElementsByTagName("link"):
+				link = node.getElementsByTagName("link")
+				for i in range(len(link)):
+					if link.item(i).getAttribute('rel') == 'edit':
+						obj = link.item(i).getAttribute('href')
+						video['editid'] = obj[obj.rfind('/')+1:]
 
-					return self._httpLogin( new, error + 1 )
-				
-				return ""
-		except:
-			if self.__dbg__:
-				print self.__plugin__ + " _httpLogin: uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__
-								   , sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-			return ""
+			video['thumbnail'] = "http://i.ytimg.com/vi/" + video['videoid'] + "/0.jpg"
+			
+			overlay = self.__storage__.retrieveValue("vidstatus-" + video['videoid'] )
+			if overlay:
+				video['Overlay'] = int(overlay)
+			
+			if video['videoid'] == "false":
+				if self.__dbg__:
+					print self.__plugin__ + " _getvideoinfo videoid set to false"
+						
+			ytobjects.append(video);
 		
+		if next:
+			self.__storage__.addNextFolder(ytobjects,params)
+				
+		return ytobjects;

@@ -1,21 +1,74 @@
+[B]TODO:[/B]
+- Music scraper should remember previously listed artists
+- Music scraper should support PlayAll for artists
+- Rework caching of playlists, it need to support playlist entry id accross all pages
+- Implement new storage api where possible 
+- Go through every menu to check if things are still working
+- Context menu "more videos by user" shouldnt be visible when viewing a users upload
+- Check all context menu items again some seem to be broken <-- Henrik & Tobias
+
 [B]Errata[/B]
 - [XBMC] Thumbnails sometimes turns into black box or Folder (XBMC not detecting when thumbnail is set and defaulting to icon?)
-- [XBMC] When sorting items, it's impossible to get them to return to their original order.
-- [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time 
+- [XBMC] When sorting items, it's impossible to get them to return to their original order
+- [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time
 - [XBMC] Playback of RTMPe streams (flash streaming) is currently broken as youtube updated to use a newer protocol than what XBMC supports
 - [XBMC] Theres an unknown issue with the version of urllib and openssl supplied by xbmc for python 2.4 on windows that causes severe login issues for windows users (ssl_ctx_new errors)
-- [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
+
+[B]Version 2.5.0 (Beta)[B]
+- Added new option to select playback and download quality with dialogs
+- Added Caching and alphabetically sorting of My playlists, My contacts and My subscriptions 
+- Added "Play all" context menu on certain folders 
+- Added "Shuffle and Play All" Context menu on certain folders
+- Added "Play All from video position in certain folders (ie. playlists and other non-infinite folders)
+- Added Playback of YouTube Live streams 
+- Added Caching of playlist and option to reverse playlist order
+- Added playback of WebM streams if user enables it on his/her profile
+- Added Date for sorting
+- Added "Auto-magic" re-login on token verfication failure
+- Added 2 new feeds: "most shared" and "trending videos" that gives a better "pulse" of youtube videos.
+- Added YouTube live scraper under explore youtube
+- Added YouTube Top 100 music chart scraper
+- Added YouTube Music and Artist scraper
+- Added YouTube My Watch Later scraper
+- Added YouTube My liked Video scraper
+- Added socket timeout since that makes now appears to work on windows
+- Added New download dialog showing queue and progress completion.
+- Added support for xbmcvfs in downloads. (ie. download to temp folder then let xbmc move to final location)
+- Added support for using embedded link to get video information. Better playback stability
+- Changed Login to use new Client Login url
+- Changed Playback function now shows a more user friendly error message on failure
+- Changed Download function now shows a progress-bar (OSX and Linux only)
+- Changed Download function will now only download one file at a time and queues multiple files (OSX and Linux only).
+- Changed "Disco Top 25" to "Disco Top 50" scraper 
+- Changed plugin will now play a video from file-system if the file is still in the download folder (Partially working as this has revealed XBMC bug.)
+- Changed more videos by user, and related videos so you no longer have to be logged in for them to work.
+- Refactor: Simplify playback code
+- Refactor: Large scale refactor to make code more maintainable
+- Fixed Age Verification for 18+ content was broken by YouYube. 
+- Fixed notifications on empty folders
+- Fixed Playback of very low resolution videos
+- Fixed scraper pagination
+- Fixed Disco scraper it was broken again.
+- Fixed add remove favorites
+- Fixed add remove subscription
+- Fixed broken Movies Scraper (from patch by chocol...@cpan.org)
+- Fixed problems when downloading a file to a network drives (thanks to ToCsIc...@gmail.com)
+- Fixed download subtitles when download a video
+- Fixed XBMC not refreshing folder after download completes.
 
 [B]Version 2.2.4[/B]
 - Verfied Compatibility with Eden - pre and submitted to repo.
+
+[B]Version 2.0.5[/B]
+- Changed Name string from Holland to The Netherlands (thanks to Syrion for pointing it out)
 
 [B]Version 2.0.4[/B]
 - Fixed YouTube character encoding changes broke disco scraper.
 - Fixed YouTube character encoding changes broke show scraper
 - Fixed Site changes broke Disco top 25 scraper
 - Fixed YouTube design changes broken categories scraper
-- Fixed Broken Movies Scraper (backport of fix from new beta by chocol)
+- Fixed Movies Scraper (backport of fix from new beta by chocol)
 - Fixed problems when downloading a file to a network drives (thanks to ToCsIc)
 - Fixed Age verification was broken, back working again.
 - Changed more videos by user, and related videos so you no longer have to be logged in for them to work.
@@ -80,7 +133,7 @@
 - Hardened handling of age restricted videos
 - No longer try login when no credentials have been provided.
 
-[B]Version 1.9.2[/B]
+[B]Version 1.9.2[/B
 - Disable socket timeout since that makes login fail on windows.
 
 [B]Version 1.9.1[/B]

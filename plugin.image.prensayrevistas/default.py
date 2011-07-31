@@ -188,11 +188,11 @@ def content_youkioske(url):
 
 	itemlist = []
 	data = urllib.urlopen(url).read()
-	patron = '<div style="height:152px; overflow:hidden;"><a href=\'(.*?)\'.*?>.*?<img.*?title="(.*?)".*?src="(.*?)".*?>.*?</a>'
+	patron = '<div class="storycontent">.*?<a title="(.*?)".*?href="(.*?)".*?>.*?<img.*?src="(.*?)".*?>'
 	matches = re.compile(patron,re.DOTALL).findall(data)
 	for match in matches:
-		url = "http://www.youkioske.com"+match[0]
-		titulo = match[1]
+		url = "http://www.youkioske.com"+match[1]
+		titulo = match[0]
 		thumb = "http://www.youkioske.com"+match[2]
 		itemlist.append(addItem(titulo,url,21,thumb))
 	patron = '<span class="pagescurrent">.*?</span><a href="(.*?)">'
@@ -476,7 +476,7 @@ def results_scribd(url):
 	for match in matches:
 		url = match[0]
 		title = match[2]
-		thumb = match[1]
+		thumb = match[1]+'.jpg'
 		itemlist.append(addItem(title,url,45,thumb))
 	patron = '<a class="next" href="(.*?)".*?>'
 	matches = re.compile(patron,re.DOTALL).findall(data)
@@ -499,7 +499,7 @@ def content_scribd(url,name):
 		#Extraigo jpgs del pdf
 		download.extract_pdf(savename)
 		import glob
-		ficheros = glob.glob(CACHE_PATH+'*.jpg')
+		ficheros = glob.glob(CACHE_PATH+'/*.jpg')
 		count = 0
 		for file in ficheros:
 			count += 1

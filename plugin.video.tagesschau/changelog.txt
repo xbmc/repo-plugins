@@ -1,3 +1,8 @@
+version 0.2.0
+ * this release fixes the broken scraper
+ * using rss-feeds again (high quality version now available)
+ * Added support for many many many other media on tagesschau.de
+
 version 0.1.4
  * added support for 'tagesthemen' (thanks to Max)
 

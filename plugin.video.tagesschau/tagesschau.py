@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2010 Jörn Schumacher 
+# Copyright 2011 Jörn Schumacher 
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,100 +15,93 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import urllib2, re
+import urllib2, datetime
 
 import xbmcplugin, xbmcgui
 
-# urls
-# these urls refer to rss feeds
-urls = dict()
-urls['ts100s'] = 'http://www.tagesschau.de/export/video-podcast/tagesschau-in-100-sekunden/'
-urls['ts20h'] = 'http://www.tagesschau.de/export/video-podcast/webl/tagesschau/'
+import parserss
 
-# regular expressions
-# Since the urls refer to rss-feeds, it might be better to 
-# do some real xml-parsing, but it works for now.
-regexp = dict()
-regexp['ts100s'] = dict()
-regexp['ts100s']['date'] = r'<title>(.*) - .*</title>'
-regexp['ts100s']['url'] = r'<enclosure url="(.*)"\slength.*'
+# -- Podcast Configuration -----------------------------------
+podcast_config = {
+    "tagesschau": { "url": {"M": "http://www.tagesschau.de/export/video-podcast/webm/tagesschau",
+                            "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesschau" },
+                    "name": "Tagesschau"},
+    "tagesschau100": { "url": { "default": "http://www.tagesschau.de/export/video-podcast/tagesschau-in-100-sekunden" },
+                       "name": "Tagesschau in 100 Sekunden" },
+    "tagesthemen": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/tagesthemen",
+                            "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesthemen" },
+                     "name": "Tagesthemen" },
+    "nachtmagazin": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/nachtmagazin",
+                               "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesthemen" },
+                      "name": "Nachtmagazin" },
+    "berichtausberlin": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/bab",
+                                   "L": "http://www.tagesschau.de/export/video-podcast/webl/bab" },
+                          "name": "Bericht aus Berlin" },
+    "wochenspiegel": { "url": {"M": "http://www.tagesschau.de/export/video-podcast/webm/wochenspiegel",
+                               "L": "http://www.tagesschau.de/export/video-podcast/webl/wochenspiegel" },
+                       "name": "Wochenspiegel" },
+    "deppendorfswoche": { "url": { "default": "http://www.tagesschau.de/export/video-podcast/deppendorfswoche" },
+                          "name": "Deppendorfs Woche" },
+    "tagesschauvor20jahren": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/tagesschau-vor-20-jahren",
+                                        "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesschau-vor-20-jahren" },
+                               "name": "Tagesschau vor 20 Jahren" }
+    }
+# ------------------------------------------------------------
 
+# -- Settings -----------------------------------------------
+# TODO: This should be configurabe in a settings dialog
 
-regexp['ts20h'] = dict()
-regexp['ts20h']['date'] = r'<title>tagesschau (.*)</title>'
-regexp['ts20h']['url'] = r'<enclosure url="(.*)"\slength.*'
+# change order here or remove elements if you like
+podcasts = ("tagesschau", "tagesschau100", "tagesthemen", "nachtmagazin", 
+            "berichtausberlin", "wochenspiegel", "deppendorfswoche", "tagesschauvor20jahren")
 
+# Quality
+quality = "L"
 
+# Time format
+datetimeformat = "%a %d. %B %Y, %H:%M"
+dateformat = "%a %d. %B %Y"
+# ------------------------------------------------------------
 
-def get_video_ts100s():
-    # config
-    url = 'http://www.tagesschau.de/multimedia/video/ondemand100.html'
-    pattern = r'<a href="(.*\.webl\.h264\.mp4)".*>'
-    date_pattern = r'<span class="topline">(\S*)\s*(\S*)\s*Uhr</span>'
+def getUrl(podcast, quality):
+    """Returns podcast URL in the desired quality (if available)"""
+    config = podcast_config[podcast]["url"]
+    if quality in config.keys():
+        return config[quality]
 
-    # parse the website
-    s = urllib2.urlopen(url).read()
-    video = re.compile(pattern).findall(s)[0]
+    default_quality = config.keys()[0]
+    return config[default_quality]
 
-    # fetch the date from the website
-    date = re.compile(date_pattern).findall(s)[0]
-    date = date[0]+', '+date[1]+' Uhr'
+def getName(podcast, item):
+    """Returns a proper name for an item"""
+    if item["datetime"]:
+        name = podcast_config[podcast]["name"]
+        date, time = item["datetime"]
+        timestr = ""
 
-    # return video+date
-    return date, video
+        # special treatment for "Tagesschau vor 20 Jahren"
+        if podcast == "tagesschauvor20jahren":
+            date = datetime.date(date.year - 20, date.month, date.day)
 
-def get_video_ts20h():
-    # config
-    url = 'http://www.tagesschau.de/multimedia/video/ondemandarchiv100.html'
-    pattern = r'<a href="(.*\.webl\.h264\.mp4)".*>'
+        if date and time:
+            timestr = datetime.datetime.combine(date,time).strftime(datetimeformat)
+        else:
+            timestr = date.strftime(dateformat)
+        return name + " (" + timestr + ")"
 
-    date_pattern = r'TV-(\d\d\d\d)(\d\d)(\d\d)'
+    return item["title"]
 
-    # parse the website
-    s = urllib2.urlopen(url).read()
-    video = re.compile(pattern).findall(s)[0]
-
-    # fetch the date from the video url
-    date = re.compile(date_pattern).findall(video)[0]
-    date = '.'.join((date[2], date[1], date[0])) + ', 20:00 Uhr'
-
-    # return video+date
-    return date, video
-
-def get_video_tt():
-    url = 'http://www.tagesschau.de/export/video-podcast/webl/tagesthemen/'
-    pattern = r'url="(.*\.webl\.h264\.mp4)"'
-
-    date_pattern = r'<title>tagesthemen (\S*)\s*Uhr,\s*(\S*)</title>'    
-     
-    # parse the website
-    s = urllib2.urlopen(url).read()
-    video = re.compile(pattern).findall(s)[0]
-    
-    # fetch the date from the video url
-    date = re.compile(date_pattern).findall(s)[0]
-    date = date[1]+', '+date[0]+' Uhr'
-    
-    # return video+date
-    return date, video
-
-
-def addLink(name,url,iconimage):
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
+def addLink(name, url, iconimage):
+        ok = True
+        liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        liz.setInfo(type="Video", infoLabels={ "Title": name } )
+        ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=liz)
         return ok
 
-items = []
-
-date, url = get_video_ts20h()
-addLink('Tagesschau ('+date+')', url, 'http://www.tagesschau.de/image/podcast/ts-140.jpg')
-
-date, url = get_video_ts100s()
-addLink('Tagesschau in 100 Sekunden ('+date+')', url, 'http://www.tagesschau.de/image/podcast/ts100s-140.jpg')
-
-date, url = get_video_tt()
-addLink('Tagesthemen ('+date+')', url, 'http://www.tagesschau.de/image/podcast/tt-140.jpg')
+for podcast in podcasts:
+    feed = parserss.parserss(getUrl(podcast, quality))
+    if len(feed["items"]) > 0:
+        item = feed["items"][0]
+        addLink(getName(podcast, item), item["media"]["url"], feed["image"])
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

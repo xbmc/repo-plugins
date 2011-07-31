@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.jupiterbroadcasting"
        name="Jupiter Broadcasting"
-       version="1.0.0"
-       provider-name="Jupiter Broadcasting">
+       version="1.1.0"
+       provider-name="Rob Loach">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
   </requires>
@@ -11,7 +11,7 @@
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Jupiter Broadcasting</summary>
+    <summary>Jupiter Broadcasting video plugin</summary>
     <description>Videos from the Jupiter Broadcasting Network.</description>
     <platform>all</platform>
   </extension>

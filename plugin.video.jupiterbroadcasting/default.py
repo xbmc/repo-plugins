@@ -48,13 +48,31 @@ def CATEGORIES():
 		'plot': 'Bryan takes a peek into alien life.',
 		'genre': 'Technology'
 	}
+	plugins[__language__(30007)] = {
+		'feed': 'http://feeds.feedburner.com/MMOrgueLarge?format=xml',
+		'image': 'http://www.jupiterbroadcasting.com/images/MMOrgueBadgeHD144.jpg',
+		'plot': 'The MMOrgue is a show presented by Jeremy about Massively Multiplayer Online (MMO) games.',
+		'genre': 'Technology'
+	}
+	plugins[__language__(30008)] = {
+		'feed': 'http://feeds.feedburner.com/techsnaphd?format=xml',
+		'image': 'http://images4.wikia.nocookie.net/jupiterbroadcasting/images/9/93/Techsnap.jpg',
+		'plot': 'TechSNAP is a show about technology news hosted by Chris Fisher and Allan Jude which records live on Thursdays and is released on the following Monday.',
+		'genre': 'Technology'
+	}
+	plugins[__language__(30009)] = {
+		'feed': 'http://feeds.feedburner.com/scibytehd?format=xml',
+		'image': 'http://www.jupiterbroadcasting.com/images/SciByteBadgeHD.jpg',
+		'plot': 'SciByte is a show about science topics presented by Heather and Jeremy.',
+		'genre': 'Science'
+	}
 	x = 1
 	for name, data in plugins.iteritems():
 		data['count'] = x
 		x = x + 1
 		addDir(name, data['feed'], 1, data['image'], data)
-	#TODO: Add Jupiter Broadcasting Live via UStream?
-	#addLink(__language__(30007), 'http://www.ustream.tv/flash/viewer.swf?cid=208970&amp;v3=1&amp;bgcolor=000000&amp;campaignId=facebook', '', '', 'http://www.jupiterbroadcasting.com/wp-content/themes/ondemand/images/logo.jpg')
+	#TODO: Add Jupiter Broadcasting Live via Justin.tv?
+	#addLink(__language__(30007), 'http://www.justin.tv/widgets/live_embed_player.swf?channel=jupiterbroadcasting', '', '', 'http://www.jupiterbroadcasting.com/wp-content/themes/ondemand/images/logo.jpg')
 
 def INDEX(name, url):
 	import feedparser

@@ -1,2 +1,10 @@
-Version 1.0.0
-Initial release
+[B]Version 1.1.0[/B]
+- New show: The MMOrgue
+- New show: TechSNAP
+- New show: SciByte
+
+[B]Version 1.0.1[/B]
+- Updated icon from freezy. Thanks freezy!
+
+[B]Version 1.0.0[/B]
+- Initial release

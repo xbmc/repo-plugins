@@ -45,7 +45,7 @@ debug = __settings__.getSetting('debug')
 
 
 if debug == "true":
-    print '(((((((((( Version 0.0.2 ))))))))))'
+    print '(((((((((( Version dharma - 0.0.3, eden - 1.0.0 ))))))))))'
 
 SOAPCODES = {
     "1"    : "OK",
@@ -119,6 +119,7 @@ def mlbTV():
 def condensedGames():
             addGameDir(__language__(30011),'http://www.mlb.com/mediacenter/index.jsp?ymd='+dateStr.day[1].replace('year_','').replace('/month_','').replace('/day_',''),13,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
             addGameDir(__language__(30012),'http://www.mlb.com/mediacenter/index.jsp?ymd='+dateStr.day[3].replace('year_','').replace('/month_','').replace('/day_',''),13,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
+            addGameDir(__language__(30014),'',15,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
             
             
 def getTeams():
@@ -229,7 +230,7 @@ def playLatest(url):
 def getVideos(url):
         try:
             req = urllib2.Request(url)
-            req.addheaders = [('Referer', 'http://mlb.mlb.com/video/play.jsp?cid=mlb'),
+            req.addheaders = [('Referer', 'http://www.mlb.com/video/'),
                     ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
             response = urllib2.urlopen(req)
             link=response.read()
@@ -280,10 +281,23 @@ def getVideoURL(url):
 
 
 def getCondensedGames(url):
-        req = urllib2.Request(url)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
+        try:
+            req = urllib2.Request(url)
+            response = urllib2.urlopen(req)
+            link=response.read()
+            response.close()
+        except urllib2.URLError, e:
+            errorStr = str(e.read())
+            if debug == 'true':
+                print 'We failed to open "%s".' % url
+                if hasattr(e, 'reason'):
+                    print 'We failed to reach a server.'
+                    print 'Reason: ', e.reason
+                if hasattr(e, 'code'):
+                    print 'We failed with error code - %s.' % e.code
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
+            else:
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")        
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         videos = soup.findAll('tbody')[0]('tr')
         for video in videos:
@@ -298,14 +312,32 @@ def getCondensedGames(url):
         
 
 def getGames(url):
-        req = urllib2.Request(url)
-        req.addheaders = [('Referer', 'http://mlb.mlb.com/index.jsp'),
-                        ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
+        try:
+            req = urllib2.Request(url)
+            req.addheaders = [('Referer', 'http://mlb.mlb.com/index.jsp'),
+                            ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
+            response = urllib2.urlopen(req)
+            link=response.read()
+            response.close()
+        except urllib2.URLError, e:
+            errorStr = str(e.read())
+            if debug == 'true':
+                print 'We failed to open "%s".' % url
+                if hasattr(e, 'reason'):
+                    print 'We failed to reach a server.'
+                    print 'Reason: ', e.reason
+                if hasattr(e, 'code'):
+                    print 'We failed with error code - %s.' % e.code
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
+            else:
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
+        
         data = json.loads(link)
-        games = data['data']['games']['game']
+        try:
+            games = data['data']['games']['game']
+        except:
+            xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30030)+",10000,"+icon+")")
+            return
         for game in games:
             home_team = game['home_team_city']
             away_team = game['away_team_city']
@@ -439,7 +471,7 @@ def mlbGame(event_id,content_id):
             print "Logged in successfully!"
         except:
             xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30020)+",5000,"+icon+")")
-            pass
+            return
 
         # Begin MORSEL extraction
         ns_headers = response.headers.getheaders("Set-Cookie")
@@ -451,7 +483,6 @@ def mlbGame(event_id,content_id):
             name, value, standard, rest = tup
             cookies[name] = value
         print repr(cookies)
-
         # End MORSEL extraction
 
 
@@ -472,7 +503,8 @@ def mlbGame(event_id,content_id):
             cookies[name] = value
 
         try:
-            print "session-key = " + str(cookies['ftmu'])
+            if debug == "true":
+                print "session-key = " + str(cookies['ftmu'])
             session_key = urllib.unquote(cookies['ftmu'])
 
         except:
@@ -498,6 +530,7 @@ def mlbGame(event_id,content_id):
             }
         except:
             xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30021)+",10000,"+icon+")")
+            return
 
         theUrl = 'https://secure.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.1?' +\
             urllib.urlencode(values)
@@ -593,6 +626,7 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp):
             print response
         soup = BeautifulStoneSoup(response, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
         status = soup.find('status-code').string
+        name = TeamCodes[soup.find('domain-attribute', attrs={'name' : "away_team_id"}).string][0]+' @ '+TeamCodes[soup.find('domain-attribute', attrs={'name' : "home_team_id"}).string][0]+' '+str(dateStr.today)
 
         if status != "1":
             error_str = SOAPCODES[status]
@@ -665,7 +699,8 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp):
                     print '-----------------> divingmule needs to work on the soup!'
                     print soup
                 xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30027)+",5000,"+icon+")")
-
+                
+                
             if re.search('ondemand', game_url):
                 play_path_pat = re.compile(r'ondemand\/(.*)$')
                 play_path = re.search(play_path_pat,game_url).groups()[0]
@@ -683,10 +718,10 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp):
                 pageurl = ' pageUrl="http://mlb.mlb.com/flash/mediaplayer/v4.2/R6/MP4.jsp?calendar_event_id='+soup.find('event-id').string+'&content_id=&media_id=&view_key=&media_type=video&source=MLB&sponsor=MLB&clickOrigin=&affiliateId=&team=mlb&"'
                 swfurl = ' swfUrl="http://mlb.mlb.com/flash/mediaplayer/v4.2/R6/MediaPlayer4.swf?v=15'
                 url = rtmp[:-1]+swfurl+pageurl+play_path+' live=1'
-            if debug == "true":
-                print 'mlbGame URL----> '+url
-            item = xbmcgui.ListItem(path=url)
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+                if debug == "true":
+                    print 'mlbGame URL----> '+url
+                item = xbmcgui.ListItem(path=url)
+                xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 
 def getDate():
@@ -701,20 +736,7 @@ def getDate():
             return
         date = 'year_'+date.split('/')[0]+'/month_'+date.split('/')[1]+'/day_'+date.split('/')[2]
         url = 'http://mlb.mlb.com/gdcross/components/game/mlb/'+date+'/master_scoreboard.json'
-        try:
-            getGames(url)
-        except urllib2.URLError, e:
-            errorStr = str(e.read())
-            if debug == 'true':
-                print 'We failed to open "%s".' % url
-                if hasattr(e, 'reason'):
-                    print 'We failed to reach a server.'
-                    print 'Reason: ', e.reason
-                if hasattr(e, 'code'):
-                    print 'We failed with error code - %s.' % e.code
-                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
-            else:
-                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
+        return url
 
 
 class dateStr:
@@ -925,7 +947,8 @@ if mode==10:
 
 if mode==11:
         print""
-        getDate()
+        url = getDate()
+        getGames(url)
 
 if mode==12:
         print""
@@ -938,5 +961,10 @@ if mode==13:
 if mode==14:
         print""
         condensedGames()
+
+if mode==15:
+        print""
+        url = 'http://www.mlb.com/mediacenter/index.jsp?ymd='+getDate().split('/',7)[7].replace('/master_scoreboard.json','').replace('year_','').replace('/month_','').replace('/day_','')
+        getCondensedGames(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

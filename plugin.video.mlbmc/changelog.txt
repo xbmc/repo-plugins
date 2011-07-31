@@ -1,0 +1,3 @@
+Version 0.0.3
+added enter a date option for condensed games
+other minor fixes

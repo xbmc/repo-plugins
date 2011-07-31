@@ -50,8 +50,8 @@ class TedTalks:
         plot = soup.find('p', attrs={'id':'tagline'}).string
         #get url
         for link in soup.findAll('a'):
-            if re.match('Watch.*high-res' , str(link.string)):
-                url = URLTED+link['href']
+            if re.match('High-res video \(MP4\)' , str(link.string)):
+                url = link['href']
         #get id from url
         id = url.split('/')[-1]
         return {'Title':title, 'Director':speaker, 'Genre':'TED', 'Plot':plot, 'PlotOutline':plot, 'id':id, 'url':url}

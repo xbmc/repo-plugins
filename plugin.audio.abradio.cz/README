@@ -1,0 +1,8 @@
+Project home: http://github.com/lzoubek/xbmc-plugin-abradio.cz/wiki
+
+XBMC addon for listening on-line radios via abradio.cz.
+
+Installation
+
+If using linux, just clone sources na run ./install.sh otherwise copy sources to $HOME/.xbmc/addons/plugin.audio.abradio.cz
+ - 

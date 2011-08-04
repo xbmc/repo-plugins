@@ -10,6 +10,9 @@
 [B]Version 2.2.4[/B]
 - Verfied Compatibility with Eden - pre and submitted to repo.
 
+[B]Version 2.1.0[/B]
+- Fixed YouTube playback and downloading by backporting code from trunk 
+
 [B]Version 2.0.5[/B]
 - Fixed http login was broken, somtimes preventing video scrapeing
 - Fixed Show Scraper was broken due to recent YouTube site changes

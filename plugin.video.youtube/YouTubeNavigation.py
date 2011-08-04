@@ -23,11 +23,13 @@ import xbmcgui
 import xbmcplugin
 import urllib
 import YouTubeCore
+import YouTubePlayer
 import YouTubeScraperCore
 
-core = YouTubeCore.YouTubeCore();
-scraper = YouTubeScraperCore.YouTubeScraperCore();
-	
+core = YouTubeCore.YouTubeCore()
+scraper = YouTubeScraperCore.YouTubeScraperCore()
+player = YouTubePlayer.YouTubePlayer()
+
 class YouTubeNavigation:	 
 	__settings__ = sys.modules[ "__main__" ].__settings__
 	__language__ = sys.modules[ "__main__" ].__language__
@@ -198,7 +200,7 @@ class YouTubeNavigation:
 		if (get("action") == "list_related"):
 			self.listRelated(params)
 		if (get("action") == "play_video"):
-			self.playVideo(params)
+			player.playVideo(params)
 		if (get("action") == "change_subscription_view"):
 			self.changeSubscriptionView(params)
 
@@ -413,31 +415,7 @@ class YouTubeNavigation:
 		result = self.getUserInput(self.__language__(30518), '')
 		params["videoid"] = result 
 		if (result):
-			self.playVideo(params);
-		
-	def playVideo(self, params = {}):
-		get = params.get
-		(video, status) = core.construct_video_url(params);
-
-		if status != 200:
-			self.errorHandling(self.__language__(30603), video, status)
-			return False
-
-		if ( 'swf_config' in video ):
-			video['video_url'] += " swfurl=%s swfvfy=1" % video['swf_config']
-			
-		video['video_url'] += " | " + core.USERAGENT
-		
-		listitem=xbmcgui.ListItem(label=video['Title'], iconImage=video['thumbnail'], thumbnailImage=video['thumbnail'], path=video['video_url']);
-		
-		listitem.setInfo(type='Video', infoLabels=video)
-		
-		if self.__dbg__:
-			print self.__plugin__ + " - Playing video: " + video['Title'] + " - " + get('videoid') + " - " + video['video_url']
-
-		xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
-		
-		self.__settings__.setSetting( "vidstatus-" + video['videoid'], "7" )
+			player.playVideo(params);
 						
 	def downloadVideo(self, params = {}):
 		get = params.get
@@ -448,7 +426,7 @@ class YouTubeNavigation:
 				self.__settings__.openSettings()
 				path = self.__settings__.getSetting( "downloadPath" )
 
-			( video, status ) = core.construct_video_url(params)
+			( video, status ) = player.getVideoObject(params)
 				
 			if status != 200:
 				if self.__dbg__:

@@ -282,10 +282,12 @@ class YouTubeScraperCore:
 		list = SoupStrainer(name="div", attrs = {"class":"popular-message"})
 		popular = BeautifulSoup(page, parseOnlyThese=list)
 		items = []
+		
 		if (len(popular) > 0):
 			videos = self.urls["main"] + popular.a["onclick"]
-			if (videos.find("([") > 0):
-				videos = videos[videos.find("([") + 2:videos.rfind("])")]
+			videos = videos.replace("&quot;",'"')
+			if (videos.find('"') > 0):
+				videos = videos[videos.find('["')+2:videos.rfind("])")]
 				videos = videos.replace('"',"")
 				videos = videos.replace(" ","")
 				items = videos.split(",")

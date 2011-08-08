@@ -130,7 +130,7 @@ class YouTubeUtils:
 	
 	# generic function for building the item url filters out many item params to reduce unicode problems
 	def buildItemUrl(self, item_params = {}, url = ""):
-		blacklist = ("path","thumbnail", "Overlay", "icon", "next", "content" , "editid", "summary", "published","count","Rating","Plot","Title")
+		blacklist = ("path","thumbnail", "Overlay", "icon", "next", "content" , "editid", "summary", "published","count","Rating","Plot","Title","new_results_function")
 		for key, value in item_params.items():
 			if key not in blacklist:
 				url += key + "=" + value + "&"
@@ -157,6 +157,15 @@ class YouTubeUtils:
 				doc = doc.strip()
 				firstline = doc.split('\n')[0]
 				print "DOC:     ", firstline
-				
+	
+	# Adds a default next folder to a result set
+	def addNextFolder(self, items = [], params = {}):
+		get = params.get
+		item = {"Title":self.__language__( 30509 ), "thumbnail":"next", "next":"true", "page":str(int(get("page", "0")) + 1)} 
+		for k, v in params.items():
+			if (k != "thumbnail" and k != "Title" and k != "page" and k != "new_results_function"):
+				item[k] = v
+		items.append(item)
+	
 if __name__ == '__main__':	
-	sys.exit(0);
+	sys.exit(0)

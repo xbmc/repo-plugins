@@ -1,19 +1,40 @@
 [B]TODO:[/B]
-- Music scraper should remember previously listed artists
-- Music scraper should support PlayAll for artists
-- Rework caching of playlists, it need to support playlist entry id accross all pages
-- Implement new storage api where possible 
-- Go through every menu to check if things are still working
-- Context menu "more videos by user" shouldnt be visible when viewing a users upload
-- Check all context menu items again some seem to be broken <-- Henrik & Tobias
+- Proper resolutions for rtmp.
+- Scrape Education.
+- Search
+  - Sometimes a list will be returned with all items restricted. This causes a slight error. Safesearch : strict, serach query : "strip tease"
 
 [B]Errata[/B]
 - [XBMC] Thumbnails sometimes turns into black box or Folder (XBMC not detecting when thumbnail is set and defaulting to icon?)
 - [XBMC] When sorting items, it's impossible to get them to return to their original order
 - [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time
-- [XBMC] Playback of RTMPe streams (flash streaming) is currently broken as youtube updated to use a newer protocol than what XBMC supports
 - [XBMC] Theres an unknown issue with the version of urllib and openssl supplied by xbmc for python 2.4 on windows that causes severe login issues for windows users (ssl_ctx_new errors)
+- [XBMC] Subtitles and Annotations dont work the first time 90% of the time
 - Download of rtmpe streams not supported.
+
+[B]Version 2.6.0 (Beta)[B]
+- Added New playback function. Now uses unified code accross all pages(html scraping, embeded, flash fallback). Supports fallback server.
+- Added fallback for age restricted videos (Will fail if embedding is disabled)
+- Added support for locally stored artists in Youtube Music
+- Added support for play all on My Liked Videos
+- Added support for play all on YouTube suggests
+- Added support for play all on Music Artist
+- Added support for play all on My Watch Later
+- Added Support for Oauth2 authentication
+- Added Suppert for 2 factor authentication
+- Added Support OAuth2 token refresh when login token expires (reducing the need to re-login all the time) 
+- Added support for YouTube Annotations to subtitles
+- Added PlayAll support for artist listings
+- Added Support for enabling and disabling youtube caching servers (aka o-preffered-yourisp urls)
+- Changed YouTube live scraper to use API feed instead, this nearly doubled the amount of live events. 
+- Changed Plugin now honors YouTube rules for use of their batch api which sould prevent "Unkown Title" errors from batch queries 
+- Changed Subtitle format to SSA to support merging of annotations and subtitles
+- Changed Caching of playlists, to support playlist editid accross all pages
+- Changed Scraper to use custom dom parsing with regexe's as it greatly improves speed 
+- Changed Caching to a common storage system
+- Removed old outdated translations
+- Fixed playback after youtube changes
+- Fixed RTMPe support (we now provide playpath correctly) - NOTE: this requires and updated version of librtmp
 
 [B]Version 2.5.0 (Beta)[B]
 - Added new option to select playback and download quality with dialogs

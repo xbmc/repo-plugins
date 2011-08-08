@@ -19,7 +19,7 @@
 import sys, xbmcaddon
 
 # plugin constants
-__version__ = "2.5.0"
+__version__ = "2.6.0"
 __plugin__ = "YouTube" + __version__
 __author__ = "TheCollective"
 __url__ = "www.xbmc.com"
@@ -29,9 +29,8 @@ __settings__ = xbmcaddon.Addon(id='plugin.video.youtube')
 __language__ = __settings__.getLocalizedString
 __dbg__ = __settings__.getSetting("debug") == "true"
 
-# plugin structure
-__utils__ = "" 
-__core__ = ""
+# plugin structure 
+__feeds__ = ""
 __scraper__ = ""
 __playlist__ = ""
 __navigation__ = ""
@@ -41,20 +40,18 @@ __login__ = ""
 __player__ = ""
 
 if (__name__ == "__main__" ):
-	import YouTubeUtils as utils
-	__utils__ = utils.YouTubeUtils()
-	import YouTubeLogin as login
-	__login__ = login.YouTubeLogin()
 	import YouTubeStorage as storage
 	__storage__ = storage.YouTubeStorage()
-	import YouTubeCore as core
-	__core__ = core.YouTubeCore()
+	import YouTubeLogin as login
+	__login__ = login.YouTubeLogin()
+	import YouTubeFeeds as feeds
+	__feeds__ = feeds.YouTubeFeeds()
 	import YouTubePlayer as player
 	__player__ = player.YouTubePlayer()
 	import YouTubeDownloader as downloader
 	__downloader__ = downloader.YouTubeDownloader()
-	import YouTubeScraperCore as scraper
-	__scraper__ = scraper.YouTubeScraperCore()
+	import YouTubeScraper as scraper
+	__scraper__ = scraper.YouTubeScraper()
 	import YouTubePlaylistControl as playlist
 	__playlist__ = playlist.YouTubePlaylistControl()
 	import YouTubeNavigation as navigation
@@ -72,7 +69,7 @@ if (__name__ == "__main__" ):
 	if (not sys.argv[2]):
 		__navigation__.listMenu()
 	else:
-		params = __utils__.getParameters(sys.argv[2])
+		params = __navigation__.getParameters(sys.argv[2])
 		get = params.get
 		if (get("action")):
 			__navigation__.executeAction(params)

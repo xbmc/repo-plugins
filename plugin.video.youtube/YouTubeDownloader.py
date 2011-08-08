@@ -18,17 +18,17 @@
 
 import sys, urllib2, os
 from DialogDownloadProgress import DownloadProgress
+import YouTubeUtils
 import xbmc, xbmcvfs
 from filelock import FileLock
 
-class YouTubeDownloader:	 
+class YouTubeDownloader(YouTubeUtils.YouTubeUtils):
 	__settings__ = sys.modules[ "__main__" ].__settings__
 	__language__ = sys.modules[ "__main__" ].__language__
 	__plugin__ = sys.modules[ "__main__"].__plugin__	
 	__dbg__ = sys.modules[ "__main__" ].__dbg__
 	
 	__player__ = sys.modules["__main__" ].__player__
-	__utils__ = sys.modules[ "__main__" ].__utils__
 	__storage__ = sys.modules[ "__main__" ].__storage__
 	__lock__ = FileLock(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadProgress.lock"), 0)
 
@@ -39,8 +39,9 @@ class YouTubeDownloader:
 		
 		path = self.__settings__.getSetting( "downloadPath" )
 		if (not path):
-			self.__utils__.showMessage(self.__language__(30600), self.__language__(30611))
+			self.showMessage(self.__language__(30600), self.__language__(30611))
 			self.__settings__.openSettings()
+			self.__dbg__ = self.__settings__.getSetting("debug") == "true"
 			path = self.__settings__.getSetting( "downloadPath" )
 		
 		if sys.platform == "win32":
@@ -73,13 +74,13 @@ class YouTubeDownloader:
 				params["videoid"] = videoid
 				( video, status ) = self.__player__.getVideoObject(params)
 				if status != 200:
-					self.__utils__.showMessage(self.__language__(30625), video["apierror"])
+					self.showMessage(self.__language__(30625), video["apierror"])
 					self.__storage__.removeVideoFromDownloadQueue(videoid)
 					videoid = self.__storage__.getNextVideoFromDownloadQueue()
 					continue
 				item = video.get
 				if item("stream_map"):
-					self.__utils__.showMessage(self.__language__(30607), self.__language__("30619"))
+					self.showMessage(self.__language__(30607), self.__language__("30619"))
 					self.__storage__.removeVideoFromDownloadQueue(videoid)
 					videoid = self.__storage__.getNextVideoFromDownloadQueue()
 					continue
@@ -93,69 +94,21 @@ class YouTubeDownloader:
 			self.dialog = ""
 
 			self.__lock__.release()
-		
-	def downloadVideoURLNoQueue(self, params = {}):
-		get = params.get
-		( video, status ) = self.__player__.getVideoObject(params)
-		if self.__dbg__:
-			print self.__plugin__ + " downloadVideoNoQueue : " + video['Title']
-		status = 303
-		if video["video_url"].find("swfurl") > 0:
-			self.__utils__.showMessage(self.__language__( 30625 ), self.__language__(30619))
-			return ([], status)
 
-		video["downloadPath"] = self.__settings__.getSetting( "downloadPath" )
-		self.__utils__.showMessage(self.__language__(30626), self.__utils__.makeAscii(video['Title']))
-		
-		subtitle_path = self.__player__.downloadSubtitle(video)
-		url = urllib2.Request(video['video_url'])
-		url.add_header('User-Agent', self.__utils__.USERAGENT);
-		filename = "%s-[%s].mp4" % ( ''.join(c for c in video['Title'] if c in self.__utils__.VALID_CHARS), video["videoid"] )
-		filename_incomplete = os.path.join(xbmc.translatePath( "special://temp" ), filename )
-		filename_complete = os.path.join(self.__settings__.getSetting( "downloadPath" ), filename )
-
-		if xbmcvfs.exists(filename_complete):
-			xbmcvfs.delete(filename_complete)
-		
-		try:
-			file = open(filename_incomplete, "wb")
-			con = urllib2.urlopen(url);
-			file.write(con.read())
-			con.close()
-			file.close()
-			status = 200
-		except:
-			print self.__plugin__ + " download failed"
-			try:
-				con.close()
-				file.close()
-			except:
-				
-				print self.__plugin__ + " Failed to close download stream and file handle"
-
-		xbmcvfs.rename(filename_incomplete, filename_complete)
-		self.__settings__.setSetting( "vidstatus-" + video['videoid'], "1" )
-		
-		if status == 200:
-			self.__utils__.showMessage(self.__language__( 30604 ), self.__utils__.makeAscii(video['Title']))
-		else:
-			self.__utils__.showMessage(self.__language__(30625), self.__utils__.makeAscii(video['Title']))
-		
-		return ( video, status )
 			
 	def downloadVideoURL(self, video, params = {}):
 		if self.__dbg__:
 			print self.__plugin__ + " downloadVideo: " + video['Title']
 		
 		if video["video_url"].find("swfurl") > 0:
-			self.__utils__.showMessage(self.__language__( 30625 ), self.__language__(30619))
+			self.showMessage(self.__language__( 30625 ), self.__language__(30619))
 			return ([], 303)
 		
 		video["downloadPath"] = self.__settings__.getSetting( "downloadPath" )
-		subtitle_path = self.__player__.downloadSubtitle(video) 
+		self.__player__.downloadSubtitle(video) 
 		url = urllib2.Request(video['video_url'])
-		url.add_header('User-Agent', self.__utils__.USERAGENT);
-		filename = "%s-[%s].mp4" % ( ''.join(c for c in video['Title'] if c in self.__utils__.VALID_CHARS), video["videoid"] )
+		url.add_header('User-Agent', self.USERAGENT);
+		filename = "%s-[%s].mp4" % ( ''.join(c for c in video['Title'] if c in self.VALID_CHARS), video["videoid"] )
 		filename_incomplete = os.path.join(xbmc.translatePath( "special://temp" ), filename )
 		filename_complete = os.path.join(self.__settings__.getSetting( "downloadPath" ), filename )
 
@@ -206,9 +159,58 @@ class YouTubeDownloader:
 				con.close()
 				file.close()
 			except:
-				print self.__player__ + " Failed to close download stream and file handle"	
+				print self.__plugin__ + " downloadVideoURL - Failed to close download stream and file handle"	
 		
 		xbmcvfs.rename(filename_incomplete, filename_complete)
 		self.dialog.update(heading = self.__language__(30604), label=video["Title"])
 		self.__settings__.setSetting( "vidstatus-" + video['videoid'], "1" )
 		return ( video, 200 )
+
+	def downloadVideoURLNoQueue(self, params = {}):
+		get = params.get
+		( video, status ) = self.__player__.getVideoObject(params)
+		if self.__dbg__:
+			print self.__plugin__ + " downloadVideoNoQueue : " + video['Title']
+		status = 303
+		if video["video_url"].find("swfurl") > 0:
+			self.showMessage(self.__language__( 30625 ), self.__language__(30619))
+			return ([], status)
+
+		video["downloadPath"] = self.__settings__.getSetting( "downloadPath" )
+		self.showMessage(self.__language__(30626), self.makeAscii(video['Title']))
+		
+		self.__player__.downloadSubtitle(video)
+		url = urllib2.Request(video['video_url'])
+		url.add_header('User-Agent', self.USERAGENT);
+		filename = "%s-[%s].mp4" % ( ''.join(c for c in video['Title'] if c in self.VALID_CHARS), video["videoid"] )
+		filename_incomplete = os.path.join(xbmc.translatePath( "special://temp" ), filename )
+		filename_complete = os.path.join(self.__settings__.getSetting( "downloadPath" ), filename )
+
+		if xbmcvfs.exists(filename_complete):
+			xbmcvfs.delete(filename_complete)
+		
+		try:
+			file = open(filename_incomplete, "wb")
+			con = urllib2.urlopen(url);
+			file.write(con.read())
+			con.close()
+			file.close()
+			status = 200
+		except:
+			print self.__plugin__ + " download failed"
+			try:
+				con.close()
+				file.close()
+			except:
+				
+				print self.__plugin__ + " Failed to close download stream and file handle"
+
+		xbmcvfs.rename(filename_incomplete, filename_complete)
+		self.__settings__.setSetting( "vidstatus-" + video['videoid'], "1" )
+		
+		if status == 200:
+			self.showMessage(self.__language__( 30604 ), self.makeAscii(video['Title']))
+		else:
+			self.showMessage(self.__language__(30625), self.makeAscii(video['Title']))
+		
+		return ( video, status )

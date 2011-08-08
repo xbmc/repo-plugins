@@ -18,22 +18,22 @@
 
 import sys, urllib
 import xbmc, xbmcgui, xbmcplugin
+import YouTubeUtils
 	
-class YouTubeNavigation:	 
+class YouTubeNavigation(YouTubeUtils.YouTubeUtils): 
 	__settings__ = sys.modules[ "__main__" ].__settings__
 	__plugin__ = sys.modules[ "__main__"].__plugin__	
 	__language__ = sys.modules[ "__main__" ].__language__
 	__dbg__ = sys.modules[ "__main__" ].__dbg__
 	
-	__utils__ = sys.modules[ "__main__" ].__utils__
 	__playlist__ = sys.modules[ "__main__" ].__playlist__
-	__core__ = sys.modules[ "__main__" ].__core__
 	__login__ = sys.modules[ "__main__" ].__login__
+	__feeds__ = sys.modules[ "__main__" ].__feeds__
 	__player__ = sys.modules[ "__main__" ].__player__
 	__downloader__ = sys.modules[ "__main__" ].__downloader__
 	__storage__ = sys.modules[ "__main__" ].__storage__
 	__scraper__ = sys.modules[ "__main__" ].__scraper__
-		
+	
 	# This list contains the main menu structure the user first encounters when running the plugin
 	#			   label						  , path									        , thumbnail					  		,  login		  ,  feed / action
 	categories = (
@@ -41,7 +41,7 @@ class YouTubeNavigation:
 				  {'Title':__language__( 30041 )  ,'path':"/root/explore/categories"				, 'thumbnail':"explore"				, 'login':"false" , 'scraper':'categories', 'folder':'true'},
 				  {'Title':__language__( 30037 )  ,'path':"/root/explore/disco"						, 'thumbnail':"discoball"		 	, 'login':"false" , 'store':"disco_searches", 'folder':'true' },
 				  {'Title':__language__( 30040 )  ,'path':"/root/explore/disco/new"					, 'thumbnail':"search"		   		, 'login':"false" , 'scraper':"search_disco"},
-				  {'Title':__language__( 30038 )  ,'path':"/root/explore/disco/top_100"				, 'thumbnail':"discoball"		 	, 'login':"false" , 'scraper':"music_top100"},
+				  {'Title':__language__( 30055 )  ,'path':"/root/explore/disco/top100"				, 'thumbnail':"discoball"		 	, 'login':"false" , 'scraper':"music_top100"},
 				  {'Title':__language__( 30039 )  ,'path':"/root/explore/disco/popular"				, 'thumbnail':"discoball"		 	, 'login':"false" , 'scraper':"disco_top_artist", 'folder':'true'},
 				  {'Title':__language__( 30001 )  ,'path':"/root/explore/feeds"						, 'thumbnail':"feeds"			 	, 'login':"false" },
 				  {'Title':__language__( 30009 )  ,'path':"/root/explore/feeds/discussed"			, 'thumbnail':"most"			 	, 'login':"false" , 'feed':"feed_discussed" },
@@ -55,7 +55,7 @@ class YouTubeNavigation:
 				  {'Title':__language__( 30015 )  ,'path':"/root/explore/feeds/favorites"			, 'thumbnail':"top"					, 'login':"false" , 'feed':"feed_favorites" },
 				  {'Title':__language__( 30016 )  ,'path':"/root/explore/feeds/rated"				, 'thumbnail':"top"					, 'login':"false" , 'feed':"feed_rated" },
 				  {'Title':__language__( 30043 )  ,'path':"/root/explore/movies"					, 'thumbnail':"movies"				, 'login':"false" , 'scraper':'movies', 'folder':'true'},
-				  {'Title':__language__( 30052 )  ,'path':"/root/explore/music"						, 'thumbnail':"music"				, 'login':"false" },
+				  {'Title':__language__( 30052 )  ,'path':"/root/explore/music"						, 'thumbnail':"music"				, 'login':"false" , 'store':"artists", "folder":"true" },
 				  {'Title':__language__( 30053 )  ,'path':"/root/explore/music/hits"				, 'thumbnail':"music"				, 'login':"false" , 'scraper':'music_hits', "folder":"true"},
 				  {'Title':__language__( 30054 )  ,'path':"/root/explore/music/artists"				, 'thumbnail':"music"				, 'login':"false" , 'scraper':'music_artists', "folder":"true" },
 				  {'Title':__language__( 30055 )  ,'path':"/root/explore/music/top100"				, 'thumbnail':"music"				, 'login':"false" , 'scraper':'music_top100'},
@@ -68,7 +68,7 @@ class YouTubeNavigation:
 				  {'Title':__language__( 30047 )  ,'path':"/root/explore/trailers/latest_game"  	, 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"latest_game_trailers" },
 				  {'Title':__language__( 30048 )  ,'path':"/root/explore/trailers/upcoming_game"  	, 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"upcoming_game_trailers" },
 				  {'Title':__language__( 30046 )  ,'path':"/root/explore/trailers/popular_game"  	, 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"popular_game_trailers" },
-				  {'Title':__language__( 30051 )  ,'path':"/root/explore/live"  					, 'thumbnail':"live"				, 'login':"false" , 'scraper':"live" },
+				  {'Title':__language__( 30051 )  ,'path':"/root/explore/live"  					, 'thumbnail':"live"				, 'login':"false" , 'feed':"feed_live" },
 				  {'Title':__language__( 30019 )  ,'path':"/root/recommended"						, 'thumbnail':"recommended"			, 'login':"true"  , 'scraper':"recommended" },
 				  {'Title':__language__( 30008 )  ,'path':"/root/watch_later"						, 'thumbnail':"watch_later"			, 'login':"true"  , 'scraper':"watch_later" },
 				  {'Title':__language__( 30056 )  ,'path':"/root/liked"								, 'thumbnail':"liked"				, 'login':"true"  , 'scraper':"liked_videos" },
@@ -85,14 +85,14 @@ class YouTubeNavigation:
 				  {'Title':__language__( 30027 )  ,'path':"/root/login"			 					, 'thumbnail':"login"				, 'login':"false" , 'action':"settings" },
 				  {'Title':__language__( 30028 )  ,'path':"/root/settings"		  					, 'thumbnail':"settings"			, 'login':"true"  , 'action':"settings" }
 				  )
-
+	
 	#==================================== Main Entry Points===========================================
 	def listMenu(self, params = {}):
 		get = params.get
 		cache = True
 		
 		path = get("path", "/root")
-		if not get("feed") == "search" and not get("channel") and not get("contact") and not get("playlist") and get("page","0") == "0" and not get("scraper") == "search_disco":
+		if not get("feed") == "search" and not get("feed") == "related" and not get("channel") and not get("contact") and not get("playlist") and get("page","0") == "0" and not get("scraper") == "search_disco" and not get("scraper") == "music_artist":
 			for category in self.categories:
 				cat_get = category.get 
 				if (cat_get("path").find(path +"/") > -1 ):
@@ -121,19 +121,17 @@ class YouTubeNavigation:
 
 	def executeAction(self, params = {}):
 		get = params.get
-		if (get("action") == "refine_user"):
-			self.__storage__.refineStoredSearch(params)
-		if (get("action") == "delete_refinements"):
-			self.__storage__.deleteStoredSearchRefinement(params)
 		if (get("action") == "settings"):
 			self.__login__.login(params)
 		if (get("action") == "test"):
 			self.__downloader__.test(params)
-		if (get("action") == "delete_search" or get("action") == "delete_disco"):
+		if (get("action") in ["delete_search", "delete_disco"]):
 			self.__storage__.deleteStoredSearch(params)
-		if (get("action") == "edit_search" or get("action") == "edit_disco"):
+		if (get("action") in ["edit_search", "edit_disco"]):
 			self.__storage__.editStoredSearch(params)
 			self.listMenu(params)
+		if (get("action") == "delete_artist"):
+			self.__storage__.deleteStoredArtist(params)
 		if (get("action") == "remove_favorite"):
 			self.removeFromFavorites(params)
 		if (get("action") == "add_favorite"):
@@ -150,6 +148,8 @@ class YouTubeNavigation:
 			self.__downloader__.downloadVideo(params)
 		if (get("action") == "play_video"):
 			self.__player__.playVideo(params)
+		if (get("action") == "queue_video"):
+			self.__playlist__.queueVideo(params)
 		if (get("action") == "change_subscription_view"):
 			self.__storage__.changeSubscriptionView(params)
 			self.list(params)
@@ -170,17 +170,23 @@ class YouTubeNavigation:
 		results = []
 		if (get("feed") == "search" or get("scraper") == "search_disco"):
 			if not get("search"):
-				query = self.__utils__.getUserInput(self.__language__(30006), '')
+				query = self.getUserInput(self.__language__(30006), '')
 				if not query:
 					return False
 				params["search"] = query
-			
-			self.__storage__.saveSearch(params)
+			if get("scraper") == "search_disco":
+				params["store"] = "disco_searches"
+			self.__storage__.saveStoredSearch(params)
+			if get("scraper") == "search_disco":
+				del params["store"]
 		
 		if get("scraper"):
 			(results , status) = self.__scraper__.scrape(params)
+		elif get("store"):
+			(results , status) = self.__storage__.list(params)
+			print self.__plugin__ + " store returned " + repr(results)
 		else:
-			(results , status) = self.__core__.list(params)
+			(results , status) = self.__feeds__.list(params)
 		
 		if status == 200:
 			if get("folder"):
@@ -209,7 +215,7 @@ class YouTubeNavigation:
 			if get("playlist"):
 				label = self.__language__(30615)
 			if label:
-				self.__utils__.showMessage(label, self.__language__(30601))
+				self.showMessage(label, self.__language__(30601))
 		return False
 	
 	#================================== Plugin Actions =========================================
@@ -217,9 +223,9 @@ class YouTubeNavigation:
 	def addToFavorites(self, params = {}):
 		get = params.get
 		if (get("videoid")):
-			(message, status) = self.__core__.add_favorite(params)
+			(message, status) = self.__feeds__.add_favorite(params)
 			if status != 200:
-				self.__utils__.showErrorMessage(self.__language__(30020), message, status)
+				self.showErrorMessage(self.__language__(30020), message, status)
 				return False	
 		return True
 			
@@ -227,9 +233,9 @@ class YouTubeNavigation:
 		get = params.get
 		
 		if (get("editid")):
-			(message, status ) = self.__core__.delete_favorite(params)
+			(message, status ) = self.__feeds__.delete_favorite(params)
 			if status != 200:
-				self.__utils__.showErrorMessage(self.__language__(30020), message, status)
+				self.showErrorMessage(self.__language__(30020), message, status)
 				return False
 			xbmc.executebuiltin( "Container.Refresh" )
 		
@@ -239,15 +245,15 @@ class YouTubeNavigation:
 		get = params.get
 
 		if not get("contact"):
-			contact = self.__utils__.getUserInput(self.__language__(30519), '')
+			contact = self.getUserInput(self.__language__(30519), '')
 			params["contact"] = contact
 			
 		if (get("contact")):
-			(result, status) = self.__core__.add_contact(params)
+			(result, status) = self.__feeds__.add_contact(params)
 			if status != 200:
-				self.__utils__.showErrorMessage(self.__language__(30029), result, status)
+				self.showErrorMessage(self.__language__(30029), result, status)
 				return False
-			self.__utils__.showMessage(self.__language__(30613), contact)
+			self.showMessage(self.__language__(30613), contact)
 			xbmc.executebuiltin( "Container.Refresh" )
 
 		return True
@@ -256,21 +262,21 @@ class YouTubeNavigation:
 		get = params.get
 
 		if (get("contact")):
-			(result, status) = self.__core__.remove_contact(params)
+			(result, status) = self.__feeds__.remove_contact(params)
 			if status != 200:
-				self.__utils__.showErrorMessage(self.__language__(30029), result, status)
+				self.showErrorMessage(self.__language__(30029), result, status)
 				return False
 			
-			self.__utils__.showMessage(self.__language__(30614), get("contact"))
+			self.showMessage(self.__language__(30614), get("contact"))
 			xbmc.executebuiltin( "Container.Refresh" )
 		return True
 	
 	def addSubscription(self, params = {}):
 		get = params.get
 		if (get("channel")):
-			(message, status) = self.__core__.add_subscription(params)
+			(message, status) = self.__feeds__.add_subscription(params)
 			if status != 200:
-				self.__utils__.showErrorMessage(self.__language__(30021), message, status)
+				self.showErrorMessage(self.__language__(30021), message, status)
 				return False
 		
 		return True
@@ -278,9 +284,9 @@ class YouTubeNavigation:
 	def removeSubscription(self, params = {}):
 		get = params.get
 		if (get("editid")):
-			(message, status) = self.__core__.remove_subscription(params)
+			(message, status) = self.__feeds__.remove_subscription(params)
 			if status != 200:
-				self.__utils__.showErrorMessage(self.__language__(30021), message, status)
+				self.showErrorMessage(self.__language__(30021), message, status)
 				return False
 												
 			xbmc.executebuiltin( "Container.Refresh" )
@@ -296,11 +302,11 @@ class YouTubeNavigation:
 			if (item("login") == "false"):
 				self.addFolderListItem(params, item_params)				
 			else:
-				if (len(self.__settings__.getSetting( "auth" )) > 0):
+				if (len(self.__settings__.getSetting( "oauth2_access_token" )) > 0):
 					self.addFolderListItem(params, item_params)
 		else :
 			if (item("action") == "settings"):
-				if (len(self.__settings__.getSetting( "auth" )) > 0):
+				if (len(self.__settings__.getSetting( "oauth2_access_token" )) > 0):
 					if (item("login") == "true"):
 						self.addActionListItem(params, item_params)
 				else:
@@ -317,19 +323,19 @@ class YouTubeNavigation:
 		item = item_params.get
 		
 		icon = "DefaultFolder.png"
-		if get("icon"):
-			icon = get("icon")
+		if item("icon"):
+			icon = self.getThumbnail(item("icon"))
 				
 		thumbnail = item("thumbnail")
 		
 		cm = self.addFolderContextMenuItems(params, item_params)
 		
 		if (item("thumbnail", "DefaultFolder.png").find("http://") == -1):	
-			thumbnail = self.__utils__.getThumbnail(item("thumbnail"))
+			thumbnail = self.getThumbnail(item("thumbnail"))
 			
 		listitem=xbmcgui.ListItem( item("Title"), iconImage=icon, thumbnailImage=thumbnail )
 		url = '%s?path=%s&' % ( sys.argv[0], item("path") )
-		url = self.__utils__.buildItemUrl(item_params, url)
+		url = self.buildItemUrl(item_params, url)
 		
 		if len(cm) > 0:
 			listitem.addContextMenuItems( cm, replaceItems=False )
@@ -345,7 +351,7 @@ class YouTubeNavigation:
 		item = item_params.get
 		folder = True
 		icon = "DefaultFolder.png"
-		thumbnail = self.__utils__.getThumbnail(item("thumbnail"))
+		thumbnail = self.getThumbnail(item("thumbnail"))
 		listitem=xbmcgui.ListItem( item("Title"), iconImage=icon, thumbnailImage=thumbnail )
 		
 		if (item("action") == "playbyid"):
@@ -369,8 +375,10 @@ class YouTubeNavigation:
 			icon = "movies"
 		elif(get("scraper","").find("disco") > 0):
 			icon = "discoball"
+		elif(get("feed","").find("live") > 0):
+			icon = "live"
 		
-		icon = self.__utils__.getThumbnail(icon)
+		icon = self.getThumbnail(icon)
 		
 		listitem=xbmcgui.ListItem(item("Title"), iconImage=icon, thumbnailImage=item("thumbnail") )
 
@@ -445,9 +453,9 @@ class YouTubeNavigation:
 		get = params.get
 		item = item_params.get
 
-		title = self.__utils__.makeAscii(item("Title"))
+		title = self.makeAscii(item("Title"))
 		url_title = urllib.quote_plus(title)
-		studio = self.__utils__.makeAscii(item("Studio","Unknown Author"))
+		studio = self.makeAscii(item("Studio","Unknown Author"))
 		url_studio = urllib.quote_plus(studio)
 		
 		cm.append( ( self.__language__( 30504 ), "XBMC.Action(Queue)", ) )
@@ -463,19 +471,19 @@ class YouTubeNavigation:
 				
 		cm.append( ( self.__language__(30501), "XBMC.RunPlugin(%s?path=%s&action=download&videoid=%s)" % ( sys.argv[0],  item("path"), item("videoid") ) ) )
 
-		if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "auth" ) ):
+		if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "oauth2_access_token" ) ):
 			if ( get("user_feed") == "favorites" and not get("contact") ):
 				cm.append( ( self.__language__( 30506 ), 'XBMC.RunPlugin(%s?path=%s&action=remove_favorite&editid=%s&)' % ( sys.argv[0], item("path"), item("editid") ) ) )
 			else:
 				cm.append( ( self.__language__( 30503 ), 'XBMC.RunPlugin(%s?path=%s&action=add_favorite&videoid=%s&)' % ( sys.argv[0],  item("path"), item("videoid") ) ) )
-			if (get("external") == "true" or (get("feed") != "subscriptions_favorites" and get("feed") != "subscriptions_uploads" and get("feed") != "subscriptions_playlists")):
+			if (get("external") == "true" or (get("feed") != "subscriptions_favorites" and get("feed") != "subscriptions_uploads" and get("feed") != "subscriptions_playlists" and (get("user_feed") != "uploads" and not get("external")))):
 				cm.append( ( self.__language__( 30512 ) % item("Studio"), 'XBMC.RunPlugin(%s?path=%s&channel=%s&action=add_subscription)' % ( sys.argv[0], item("path"), item("Studio") ) ) )
 				
 			if (get("playlist") and item("playlist_entry_id")):
 				cm.append( (self.__language__(30530), "XBMC.RunPlugin(%s?path=%s&action=remove_from_playlist&playlist=%s&playlist_entry_id=%s&)" % ( sys.argv[0], item("path"), get("playlist"), item("playlist_entry_id") ) ) )
 			cm.append( (self.__language__(30528), "XBMC.RunPlugin(%s?path=%s&action=add_to_playlist&videoid=%s&)" % ( sys.argv[0], item("path"), item("videoid") ) ) )
 			
-		if (get("feed") != "uploads"):
+		if (get("feed") != "uploads" and get("user_feed") != "uploads" ):
 			cm.append( ( self.__language__( 30516 ) % studio, "XBMC.Container.Update(%s?path=%s&feed=uploads&channel=%s)" % ( sys.argv[0],  get("path"), url_studio ) ) )
 					
 		cm.append( ( self.__language__( 30514 ), "XBMC.Container.Update(%s?path=%s&feed=search&search=%s)" % ( sys.argv[0],  get("path"), url_title ) ) )
@@ -494,7 +502,11 @@ class YouTubeNavigation:
 			return cm
 		
 		if item("artist"):
-			cm.append ( (self.__language__(30507), "XBMC.Container.Update(%s?path=%s&scraper=similar_artist&artist=%s&folder=true&)" % ( sys.argv[0], item("path"), item("artist") ) ) )			
+			cm.append ( (self.__language__(30507), "XBMC.Container.Update(%s?path=%s&scraper=similar_artist&artist=%s&folder=true&)" % ( sys.argv[0], item("path"), item("artist") ) ) )
+			cm.append ( (self.__language__(30540), "XBMC.RunPlugin(%s?path=%s&action=delete_artist&store=artists&artist=%s&)" % ( sys.argv[0], item("path"), item("artist") ) ) )			
+			cm.append( (self.__language__( 30520 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=music_artists&artist=%s&)" % ( sys.argv[0], item("path"), item("artist") ) ) )
+			cm.append( (self.__language__( 30522 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&scraper=music_artists&artist=%s&)" % ( sys.argv[0], item("path"), item("artist") ) ) )
+
 			
 		if (item("user_feed") == "favorites" or item("user_feed") == "newsubscriptions"):
 			cm.append ( (self.__language__(30520), "XBMC.RunPlugin(%s?path=%s&action=play_all&user_feed=%s&contact=%s&)" % ( sys.argv[0], item("path"), item("user_feed"), "default" ) ) )
@@ -506,26 +518,29 @@ class YouTubeNavigation:
 			if not get("external"):
 				cm.append ( (self.__language__(30539), "XBMC.RunPlugin(%s?path=%s&action=delete_playlist&playlist=%s&)" % ( sys.argv[0], item("path"), item("playlist") ) ) )
 			
+		if item("scraper") == "watch_later":
+			cm.append( (self.__language__( 30520 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=watch_later&login=true&)" % ( sys.argv[0], item("path") ) ) )
+			cm.append( (self.__language__( 30522 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&scraper=watch_later&login=true&)" % ( sys.argv[0], item("path") ) ) )
+		
+		if item("scraper") == "recommended":
+			cm.append( (self.__language__( 30520 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=recommended&login=true&)" % ( sys.argv[0], item("path") ) ) )
+			cm.append( (self.__language__( 30522 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&scraper=recommended&login=true&)" % ( sys.argv[0], item("path") ) ) )
+				
+		if (item("scraper") == "liked_videos"):
+			cm.append( (self.__language__( 30520 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=liked_videos&login=true&)" % ( sys.argv[0], item("path") ) ) )
+			cm.append( (self.__language__( 30522 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&scraper=liked_videos&login=true&)" % ( sys.argv[0], item("path") ) ) )
+		
 		if (item("scraper") == "search_disco"):
 			cm.append( (self.__language__( 30520 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&search_disco=%s&)" % ( sys.argv[0], item("path"), item("search") ) ) )
 			cm.append( (self.__language__( 30522 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&search_disco=%s&)" % ( sys.argv[0], item("path"), item("search") ) ) )
-		
+			if not get("scraper") == "disco_top_artist":			
+				cm.append( ( self.__language__( 30524 ), 'XBMC.Container.Update(%s?path=%s&action=edit_disco&store=disco_searches&search=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )
+				cm.append( ( self.__language__( 30525 ), 'XBMC.RunPlugin(%s?path=%s&action=delete_disco&store=disco_searches&delete=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )								
+
 		if (item("feed") == "search"):
-			cm.append( ( self.__language__( 30515 ), 'XBMC.Container.Update(%s?path=%s&action=edit_search&search=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )
-			cm.append( ( self.__language__( 30505 ), 'XBMC.RunPlugin(%s?path=%s&action=refine_user&search=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )
-			cm.append( ( self.__language__( 30508 ), 'XBMC.RunPlugin(%s?path=%s&action=delete_search&delete=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )
-			try:
-				searches = eval(self.__settings__.getSetting("stored_searches_author"))
-			except :
-				searches = {}
-			
-			if item("Title") in searches:
-				cm.append( ( self.__language__( 30500 ), 'XBMC.RunPlugin(%s?path=%s&action=delete_refinements&search=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )
-		
-		if item("scraper") == "search_disco":			
-			cm.append( ( self.__language__( 30524 ), 'XBMC.Container.Update(%s?path=%s&action=edit_disco&search=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )
-			cm.append( ( self.__language__( 30525 ), 'XBMC.RunPlugin(%s?path=%s&action=delete_disco&delete=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )								
-		
+			cm.append( ( self.__language__( 30515 ), 'XBMC.Container.Update(%s?path=%s&action=edit_search&store=searches&search=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )
+			cm.append( ( self.__language__( 30508 ), 'XBMC.RunPlugin(%s?path=%s&action=delete_search&store=searches&delete=%s&)' % ( sys.argv[0], item("path"), item("search") ) ) )
+					
 		if (item("view_mode")):
 			cm_url = 'XBMC.Container.Update(%s?path=%s&channel=%s&action=change_subscription_view&view_mode=%s&' % ( sys.argv[0], item("path"), item("channel"), "%s")
 			if (item("external")):
@@ -543,7 +558,7 @@ class YouTubeNavigation:
 				cm.append( (self.__language__( 30526 ), cm_url % ("playlists&folder=true")))
 		
 		if (item("channel") or item("contact")):
-			if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "auth" ) ):
+			if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "oauth2_access_token" ) ):
 				if (get("external")):
 					channel = get("channel","")
 					if not channel:
@@ -553,8 +568,8 @@ class YouTubeNavigation:
 					if item("editid") and item("channel"):
 						cm.append( ( self.__language__( 30513 ) % item("channel"), 'XBMC.RunPlugin(%s?path=%s&editid=%s&action=remove_subscription)' % ( sys.argv[0], item("path"), item("editid") ) ) )
 		
-		if (item("contact")):
-			if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "auth" ) ):
+		if (item("contact") and not get("store")):
+			if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "oauth2_access_token" ) ):
 				if (item("external")):
 					cm.append( (self.__language__(30026), 'XBMC.RunPlugin(%s?path=%s&action=add_contact&)' % ( sys.argv[0], item("path") ) ) )
 				else:

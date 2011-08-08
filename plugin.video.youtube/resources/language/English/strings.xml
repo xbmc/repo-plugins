@@ -38,7 +38,7 @@
     <string id="30035">Latest</string>
     <string id="30036">Opening Soon</string>
     <string id="30037">YouTube Disco!</string>
-    <string id="30038">Top 100</string>
+    <string id="30038">Top 50</string>
     <string id="30039">Most popular artists</string>
     <string id="30040">Disco search...</string>
     <string id="30041">YouTube Categories</string>
@@ -62,7 +62,7 @@
     <!-- Plugin settings strings -->
     <string id="30200">Username</string>
     <string id="30201">Password</string>
-    <string id="30202">Feed period</string>
+    <string id="30202"></string>
     <string id="30203">All time</string>
     <string id="30204">Today</string>
     <string id="30205">This week</string>
@@ -109,7 +109,7 @@
     <string id="30246">Debug</string>
     <string id="30247">Folder</string>
     <string id="30248">Show Explore YouTube</string>    
-    <string id="30249">Show YouTube Suggests</string>
+    <string id="30249">Show Youtube Suggests</string>
     <string id="30250">Show Watch Later</string>
     <string id="30251">Show Liked Videos</string>
     <string id="30252">Show Contacts</string>
@@ -123,8 +123,8 @@
     <string id="30260">Advanced</string>
     <string id="30261">Max video quality (Downloading)</string>
     <string id="30262">Same as playback</string>
-    <string id="30263">Show YouTube Disco!</string>
-    <string id="30264">Show YouTube Trailers</string>
+    <string id="30263">Show Youtube Disco!</string>
+    <string id="30264">Show Youtube Trailers</string>
     <string id="30265">Timeout (in seconds)</string>
     <string id="30266">Show Browse YouTube</string>
     <string id="30267">Show YouTube Shows</string>
@@ -135,17 +135,17 @@
     <string id="30272">Thumbnails Everywhere</string>
     <string id="30273">XBMC Default</string>
     <string id="30274">Transcribe Audio</string>
-    <string id="30275">Subtitles</string>
+    <string id="30275"></string>
     <string id="30276">Subtitle Language</string>
     <string id="30277">Off</string>
-    <string id="30278">en</string>
-    <string id="30279">es</string>
-    <string id="30280">de</string>
-    <string id="30281">fr</string>
-    <string id="30282">it</string>
-    <string id="30283">ja</string>
-    <string id="30284">Show YouTube Music</string>
-    <string id="30285">Show YouTube Live</string>
+    <string id="30278">English</string>
+    <string id="30279">Spanish</string>
+    <string id="30280">German</string>
+    <string id="30281">French</string>
+    <string id="30282">Italian</string>
+    <string id="30283">Japanese</string>
+    <string id="30284">Enable annotations</string>
+    <string id="30285">Use YouTube cache servers</string>
 
     <!-- Menu strings -->
     <string id="30500">Clear refinements</string>
@@ -181,6 +181,7 @@
     <string id="30530">Remove from Playlist</string>
     <string id="30531">Reverse Playlist</string>
     <string id="30539">Delete Playlist</string>
+    <string id="30540">Delete artist</string>
 	
     <!-- messages -->
     <string id="30600">Error</string>
@@ -189,7 +190,7 @@
     <string id="30603">Playback failed</string>
     <string id="30604">Download complete</string>
     <string id="30605">Preparing download</string> 
-    <string id="30606">Couldn't verify age</string>
+    <string id="30606">Verify your age in a browser</string>
     <string id="30607">Skipping download</string>
     <string id="30608">YouTube doesn't seem to know this video id!</string>    
     <string id="30609">Login Failed</string>
@@ -209,7 +210,7 @@
     <string id="30623">Maximum login attempts tried.</string>
     <string id="30624">Downloading</string>
     <string id="30625">Download Failed</string>
-    <string id="30626">Starting download</string>
-    <string id="30627">RTMPe playback currently not supported</string> 
+    <string id="30626">RTMPe playback currently not supported</string> 
+    <string id="30627">Please provide 2-factor authentication PIN</string> 
 
 </strings>

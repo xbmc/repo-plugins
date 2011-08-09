@@ -12,6 +12,9 @@
 - [XBMC] Subtitles and Annotations dont work the first time 90% of the time
 - Download of rtmpe streams not supported.
 
+[B]Version 2.6.1 (Beta)[B]
+- Fixed login after youtube changed the procedure for oauth2 verification
+
 [B]Version 2.6.0 (Beta)[B]
 - Added New playback function. Now uses unified code accross all pages(html scraping, embeded, flash fallback). Supports fallback server.
 - Added fallback for age restricted videos (Will fail if embedding is disabled)

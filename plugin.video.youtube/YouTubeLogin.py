@@ -110,10 +110,10 @@ class YouTubeLogin(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 
 			newurl = re.compile('<form action="(.*?)" method="POST">').findall(ret["content"])
 			state_wrapper = re.compile('<input type="hidden" id="state_wrapper" name="state_wrapper" value="(.*?)">').findall(ret["content"])
-			submit_approve_access = re.compile('<input id="submit_approve_access" name="submit_approve_access" type="submit" tabindex="1" value="(.*?)" class="').findall(ret["content"])
-			if len(newurl) > 0 and len(state_wrapper) > 0 and len(submit_approve_access) > 0:
+			submit_access = "true"#re.compile('<button id="submit_approve_access" name="submit_approve_access" type="submit" tabindex="1" value="(.*?)" class="').findall(ret["content"])
+			if len(newurl) > 0 and len(state_wrapper) > 0 and len(submit_access) > 0:
 				url_data = { "state_wrapper": state_wrapper[0],
-					     "submit_approve_access": submit_approve_access[0]}
+					     "submit_access": submit_access}
 
 				fetch_options = { "link": newurl[0], "url_data": url_data, "no-language-cookie": "true" }
 				continue;

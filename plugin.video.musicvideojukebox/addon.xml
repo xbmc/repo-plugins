@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.musicvideojukebox"
        name="Music Video Jukebox"
-       version="1.0.1"
+       version="1.0.1" 
        provider-name="iZE">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -15,4 +15,5 @@
     <summary lang="en">Search for an artist and it will play up to 150 music videos of that artist.</summary>
     <description lang="en">This plugin uses Google Suggest API, Last.fm and YouTube to search for music videos of an artist, and plays up to 150 music videos of that artist.</description>
   </extension>
+  <broken>Reported broken by several forum users</broken>
 </addon>

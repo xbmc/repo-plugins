@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="30001">Denne kanal kan ikke afspilles i %s kvalitet.</string>
+    <string id="30002">Skift kvalitet i indstillingerne og prøv igen.</string>
+    <string id="30100">Generelt</string>
+    <string id="30101">Kvalitet</string>
+</strings>

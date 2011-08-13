@@ -1,3 +1,7 @@
+Version 1.0.2
+-------------
+- fixed problem with the plugin not being able to play the videos due to changes on the Youtube website
+
 Version 1.0.1
 -------------
 - youtube changed something in the format of the response that provides the urls to the video's, the plugin now takes care of that new response.

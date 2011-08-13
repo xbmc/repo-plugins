@@ -199,30 +199,20 @@ class SC2Casts:
 		return link
 	
 	def getVideoUrl(self, url):
+		print url
 		link = self.getRequest('http://www.youtube.com/watch?v='+url+'&safeSearch=none&hl=en_us')
-		fmtSource = re.findall('"fmt_url_map": "([^"]+)"', link)
-		fmt_url_map = urllib.unquote_plus(fmtSource[0]).split('|')
+		fmtSource = re.findall('"url_encoded_fmt_stream_map": "([^"]+)"', link)
+		fmt_url_map = urllib.unquote_plus(fmtSource[0]).split(',url=')
 		links = {}
 			
 		for fmt_url in fmt_url_map:
-			if (len(fmt_url) > 7):
-				if (fmt_url.rfind(',') > fmt_url.rfind('&id=')):
-					final_url = fmt_url[:fmt_url.rfind(',')]
-					final_url = final_url.replace('\u0026','&')
-					if (final_url.rfind('itag=') > 0):
-						quality = final_url[final_url.rfind('itag=') + 5:]
-						quality = quality[:quality.find('&')]
-					else:
-						quality = "5"
-					links[int(quality)] = final_url.replace('\/','/')
-				else :
-					final_url = fmt_url
-					if (final_url.rfind('itag=') > 0):
-						quality = final_url[final_url.rfind('itag=') + 5:]
-						quality = quality[:quality.find('&')]
-					else :
-						quality = "5"
-					links[int(quality)] = final_url.replace('\/','/')
+				url = fmt_url.replace('\u0026','&')
+				quality = url[url.rfind('&itag=')+6:]
+				if(url.find('&itag=')!=url.rfind('&itag=')):
+						url = url[:url.rfind('&itag=')]
+				if (url.rfind('; codecs')>0):
+						url = url[:url.rfind('; codecs')]
+				links[int(quality)] = url
 		
 		hd_quality = int(self.__settings__.getSetting( "hd_videos" ))
 		get = links.get

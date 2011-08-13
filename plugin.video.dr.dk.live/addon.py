@@ -1,10 +1,10 @@
 import sys
+import cgi as urlparse
 
 import xbmc
+import xbmcaddon
 import xbmcgui
 import xbmcplugin
-
-import danishaddons
 
 # High   : 1000 kb/s
 # Medium :  500 kb/s
@@ -48,31 +48,24 @@ CHANNELS = [
             'high' : 'mms://stream.nordjyske.dk/24nordjyske - Full Broadcast Quality',
             'medium' : 'mms://stream.nordjyske.dk/24nordjyske'
         }
-    },
-    # From: http://ft.arkena.tv/xml/core_player_clip_data_v2.php?wtve=187&wtvl=2&wtvk=012536940751284
-    {'name' : 'Folketinget', 'urls' : {
-            'high' : 'rtmp://chip.arkena.com/webtvftfl/hi1'
-        }
-    }
-]
+    }]
 
 def showChannels():
-
     for idx, c in enumerate(CHANNELS):
-        icon = danishaddons.ADDON_PATH + "/resources/logos/" + c['name'].replace(" ", "_") + ".png"
+        icon = ADDON.getAddonInfo('path') + "/resources/logos/" + c['name'].replace(" ", "_") + ".png"
 
         if c['urls'].has_key(getQuality()):
             item = xbmcgui.ListItem(c['name'], iconImage = icon)
-            url = danishaddons.ADDON_PATH + '?idx=' + str(idx)
-            xbmcplugin.addDirectoryItem(danishaddons.ADDON_HANDLE, url, item, True)
+            url = PATH + '?idx=' + str(idx)
+            xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
 
-    xbmcplugin.endOfDirectory(danishaddons.ADDON_HANDLE)
+    xbmcplugin.endOfDirectory(HANDLE)
 
 def playChannel(idx):
     c = CHANNELS[int(idx)]
     q = getQuality()
 
-    icon = danishaddons.ADDON_PATH + "/resources/logos/" + c['name'].replace(" ", "_") + ".png"
+    icon = ADDON.getAddonInfo('path') + "/resources/logos/" + c['name'].replace(" ", "_") + ".png"
 
     if c['urls'].has_key(q):
         item = xbmcgui.ListItem(c['name'], thumbnailImage = icon)
@@ -80,17 +73,20 @@ def playChannel(idx):
         xbmc.Player().play(c['urls'][q], item)
     else:
         d = xbmcgui.Dialog()
-        d.ok(c['name'], danishaddons.msg(30001) % q.capitalize(), danishaddons.msg(30002))
+        d.ok(c['name'], ADDON.getLocalizedString(30001) % q.capitalize(), ADDON.getLocalizedString(30002))
 
 def getQuality():
-    return danishaddons.ADDON.getSetting('quality').lower()
+    return ADDON.getSetting('quality').lower()
 
 
 if __name__ == '__main__':
-    danishaddons.init(sys.argv)
+    ADDON = xbmcaddon.Addon(id = 'plugin.video.dr.dk.live')
+    PATH = sys.argv[0]
+    HANDLE = int(sys.argv[1])
+    PARAMS = urlparse.parse_qs(sys.argv[2][1:])
 
-    if danishaddons.ADDON_PARAMS.has_key('idx'):
-        playChannel(danishaddons.ADDON_PARAMS['idx'])
+    if PARAMS.has_key('idx'):
+        playChannel(PARAMS['idx'][0])
     else:
         showChannels()
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.aljazeera" name="Al Jazeera" version="0.7.2" provider-name="Jonathan Beluch (jbel)">
+<addon id="plugin.video.aljazeera" name="Al Jazeera" version="0.8.1" provider-name="Jonathan Beluch (jbel)">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>
     <import addon="script.module.simplejson" version="2.0.10"/>
+    <import addon="script.module.xbmcswift" version="0.1.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>

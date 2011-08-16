@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 # Copyright 2011 Jonathan Beluch. 
 #
 # This program is free software: you can redistribute it and/or modify
@@ -13,10 +14,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-from resources.lib.xbmcswift.plugin import XBMCSwiftPlugin
-from resources.lib.xbmcswift.common import download_page
-from resources.lib.xbmcswift.getflashvideo import get_flashvideo_url, YouTube
+from xbmcswift import Plugin, download_page
+from xbmcswift.ext.playlist import playlist
+from resources.lib.getflashvideo import get_flashvideo_url, YouTube
 from BeautifulSoup import BeautifulSoup as BS, SoupStrainer as SS
 from urllib import urlencode
 from urlparse import urljoin
@@ -25,20 +25,25 @@ try:
     import json
 except ImportError:
     import simplejson as json
-import xbmc, xbmcgui
+from xbmcswift import xbmc, xbmcgui
 
 __plugin__ = 'AlJazeera'
 __plugin_id__ = 'plugin.video.aljazeera'
 
-plugin = XBMCSwiftPlugin(__plugin__, __plugin_id__)
+plugin = Plugin(__plugin__, __plugin_id__, __file__)
+
+plugin.register_module(playlist, url_prefix='/_playlist')
 
 BASE_URL = 'http://english.aljazeera.net'
 def full_url(path):
     return urljoin(BASE_URL, path)
 
 def parse_queryvideo_args(s):
-    '''Parses the string "QueryVideos(13,'africanews',1,1)" and returns
-    ('13', 'africanews', '1', '1')'''
+    '''Parses a QueryVideos javascript call (string) and returns a 4 tuple.
+
+    parse_queryvideo_args("QueryVideos(13,'africanews',1,1)")
+    >> ('13, 'africanews', '1', '1')
+    '''
     p = re.compile('QueryVideos\((.+?)\)')
     m = p.search(s)
     if not m:
@@ -173,6 +178,15 @@ def show_videos(list_id, start_index, count):
         'url': plugin.url_for('watch_video', videoid=video['videoid']),
         'is_folder': False,
         'is_playable': True,
+        'context_menu': [(
+            #'Add to Now Playing'
+            plugin.get_string(30300),
+            'XBMC.RunPlugin(%s)' % plugin.url_for(
+                'playlist.add_to_playlist',
+                url=plugin.url_for('watch_video', videoid=video['videoid']),
+                label=video['title']
+            )
+        )],
     } for video in videos]
 
     # MOAR VIDEOS
@@ -180,13 +194,13 @@ def show_videos(list_id, start_index, count):
     if int(start_index) + int(count) < int(total_results):
         items.insert(0, {
             # Older videos
-            'label': '> %s' % plugin.get_string(30200),
+            'label': u'%s »' % plugin.get_string(30200),
             'url': plugin.url_for('show_videos', count=count, list_id=list_id, start_index=str(int(start_index) + int(count))),
         })
     if int(start_index) > 1:
         items.insert(0, {
             # Newer videos
-            'label': '< %s' % plugin.get_string(30201),
+            'label': u'« %s' % plugin.get_string(30201),
             'url': plugin.url_for('show_videos', count=count, list_id=list_id, start_index=str(int(start_index) - int(count))),
         })
 
@@ -197,14 +211,6 @@ def watch_video(videoid):
     url = YouTube.get_flashvideo_url(videoid=videoid)
     return plugin.set_resolved_url(url)
 
+
 if __name__ == '__main__': 
     plugin.run()
-
-    # for testing
-    #plugin.interactive()
-    #plugin.crawl()
-
-
-
-
-

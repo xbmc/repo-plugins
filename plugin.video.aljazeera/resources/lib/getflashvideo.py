@@ -12,7 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from common import download_page, parse_qs, parse_url_qs, unhex
+from xbmcswift import download_page, parse_qs, parse_url_qs, unhex
 import urllib
 from BeautifulSoup import BeautifulSoup as BS, SoupStrainer as SS
 import urlparse
@@ -21,6 +21,7 @@ try:
     import json
 except ImportError:
     import simplejson as json
+import urllib2
 
 '''
 This module is meant to abstract the parsing of flash video URLs out of plugins.
@@ -54,8 +55,13 @@ class YouTube(object):
         if videoid:
             url = 'http://www.youtube.com/watch?v=%s' % videoid
             src = urllib.urlopen(url).read()
+            #req = urllib2.Request(url)
+            #useragent = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
+            #req.add_header('User-Agent', useragent)
+            #resp = urllib2.urlopen(req)
+            #src = resp.read()
+            #resp.close()
 
-        #p = r'<param name=\\"flashvars\\" value=\\"(.+?)\\"'
         p = r'flashvars="(.+?)"'
         m = re.search(p, src)
         if not m:
@@ -66,12 +72,17 @@ class YouTube(object):
         flashvars = flashvars.replace('&amp;', '&')
         params = parse_qs(flashvars)
 
-        urls = params['fmt_url_map'].split(',')
         fmts = params['fmt_list'].split(',')
+        urls = params['url_encoded_fmt_stream_map'].split(',')
+        urls = map(urllib.unquote_plus, urls)
+        urls = [url.split('=', 1)[1] for url in urls]
+        qss = [url.split('?', 1)[1] for url in urls]
+        argss = map(parse_qs, qss)
+        itags = [args['itag'] for args in argss]
+        urlmap = [(itag, url) for itag, url in zip(itags, urls)]
 
-        urls = [pair.split('|', 1) for pair in urls]
-        urldict = dict(urls)
 
+        urldict = dict(urlmap)
         fmts = [pair.split('/')[:2] for pair in fmts]
         fmtdict = dict(fmts)
 
@@ -79,9 +90,12 @@ class YouTube(object):
         hq_key, hq_size = fmts[0]
 
         flvs = dict(((fmtdict[key], urldict[key]) for key in urldict.keys()))
-
-        #return highquality
-        return flvs[hq_size]
+        
+        url = urllib.unquote_plus(flvs[hq_size])
+        pos = url.find('&type=video')
+        # Remove the last 2 querystring params type=video/flv&itag=5 or server returns an error
+        url = url[:pos]
+        return url
 
 class GoogleVideo(object):
     @staticmethod

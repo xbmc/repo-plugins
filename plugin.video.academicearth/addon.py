@@ -23,7 +23,7 @@ from resources.lib.favorites import favorites
 from xbmcswift import xbmcgui
 
 __plugin_name__ = 'New Academic Earth'
-__plugin_id__ = 'plugin.video.newacademicearth'
+__plugin_id__ = 'plugin.video.academicearth'
 
 plugin = Plugin(__plugin_name__, __plugin_id__, filepath=__file__)
 plugin.register_module(favorites, '/favorites')

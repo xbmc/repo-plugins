@@ -1,3 +1,6 @@
+Version 1.1.2
+* Fixed incorrect addon id causing plugin to fail.
+
 Version 1.1.1
 * Bumped required version of xbmcswift to 0.1.3
 

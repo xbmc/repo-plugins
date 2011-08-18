@@ -1,33 +1,42 @@
+import os
 import sys
+import simplejson
+import urllib2
 
+import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-import simplejson
-import danishaddons
-import danishaddons.web
 
 BASE_URL = 'http://tv.dmi.dk%s'
 JSON_URL = BASE_URL % '/js/photos?raw&'
 
 def showOverview():
-    json = danishaddons.web.downloadUrl(JSON_URL)
-    clips = simplejson.loads(json)
+    u = urllib2.urlopen(JSON_URL)
+    json = u.read()
+    u.close()
 
+    clips = simplejson.loads(json)
     for clip in clips['photos']:
-        print BASE_URL % clip['portrait_download']
-        item = xbmcgui.ListItem(clip['content_text'], iconImage = BASE_URL % clip['portrait_download'])
+        print os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
+
+        item = xbmcgui.ListItem(clip['content_text'], iconImage = BASE_URL % clip['portrait_download'] + '.jpg')
+        item.setProperty('Fanart_Image', os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg'))
         item.setInfo(type = 'video', infoLabels = {
             'title' : clip['content_text']
         })
         item.setProperty('Fanart_Image', BASE_URL % clip['large_download'])
 
         url = BASE_URL % clip['video_hd_download']
-        xbmcplugin.addDirectoryItem(danishaddons.ADDON_HANDLE, url, item)
+        xbmcplugin.addDirectoryItem(HANDLE, url, item)
 
-    xbmcplugin.endOfDirectory(danishaddons.ADDON_HANDLE)
+    xbmcplugin.endOfDirectory(HANDLE)
+
+
 
 if __name__ == '__main__':
-    danishaddons.init(sys.argv)
+    ADDON = xbmcaddon.Addon(id = 'plugin.video.dmi.dk')
+    PATH = sys.argv[0]
+    HANDLE = int(sys.argv[1])
 
     showOverview()

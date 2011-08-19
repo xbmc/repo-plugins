@@ -56,3 +56,5 @@ plugin.audio.dr.dk.netradio/.git
 plugin.video.dr.dk.live/.git
 plugin.video.dr.dk.live/.idea
 plugin.video.dmi.dk/.git
+plugin.video.khanacademy/.git
+plugin.video.khanacademy/.gitignore

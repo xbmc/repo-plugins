@@ -1,0 +1,6 @@
+Version 0.2
+* Added an icon.
+* Fixed typo in plugin_id.
+
+Version 0.1
+* Initial working version.

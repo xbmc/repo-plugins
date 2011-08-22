@@ -14,3 +14,5 @@ plugin.video.tagesschau/.git
 plugin.video.dr.dk.live/.git
 plugin.video.dr.dk.live/.idea
 plugin.video.dmi.dk/.git
+plugin.video.mediathek/.git
+plugin.video.mediathek/.gitignore

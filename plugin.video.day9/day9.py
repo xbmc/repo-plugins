@@ -45,7 +45,7 @@ class Day9:
 	def showTitles(self, params = {}):
 		get = params.get
 		link = self.getRequest(get("url"))
-		title = re.compile('<span class="Title">\n\t\t\n\t\t\t(.*?)\n\t\t\n\t</span>').findall(link)
+		title = re.compile('<span class="Title" title="\n\t\t\n\t\t\t(.*?)\n\t\t\n\t">').findall(link)
 		url = re.compile('<a class="ArchiveCard" href="(.*?)">').findall(link)
 		
 		for i in range(len(title)):

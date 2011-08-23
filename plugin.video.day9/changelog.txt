@@ -1,3 +1,6 @@
+v0.5.3
+- Updated the code on line 48 in day9.py
+
 v0.5.2
 - Updated the code due to blip.tv changes on their website
 

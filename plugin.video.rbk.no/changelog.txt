@@ -1,4 +1,9 @@
-[B]1.0.5:[/B]
+[B]1.0.6:[/B]
+Fix encoding of titles
+Add support for youtube hosted videos
+Kill tabs
+
+[B]2.0.5:[/B]
 Decode html in video titles
 
 [B]1.0.4:[/B]

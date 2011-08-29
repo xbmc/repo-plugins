@@ -27,45 +27,57 @@ def INDEX(start):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-	link = string.split(link,'<h1>Nyhetsarkiv</h1>')
-	link = string.split(link[1],'<a href="index.jsp?stats=nyhetsarkiv&start=')
+        link = string.split(link,'<h1>Nyhetsarkiv</h1>')
+        link = string.split(link[1],'<a href="index.jsp?stats=nyhetsarkiv&start=')
         match=re.compile('(http://www.rbk.no/incoming/article[0-9]+\.ece)').findall(link[0])
         for article in match:
                 req2 = urllib2.Request(article)
                 response = urllib2.urlopen(req2)
                 link = response.read()
-		response.close()
+                response.close()
+                name = re.compile('<h1>(.*)</h1>').findall(link)
+                plot = re.compile('p class="leadIn"><b>(?:<p>)?([^<]*)(?:</p>)?</b>').findall(link)
+                date = re.compile('Publisert: ([^ ]+)').findall(link)
                 id = re.compile('TV2Player.insert\(([0-9]+)').findall(link)
-		for i in id:
-                	name = re.compile('<h1>(.*)</h1>').findall(link)
-			plot = re.compile('p class="leadIn"><b>(?:<p>)?([^<]*)(?:</p>)?</b>').findall(link)
-			date = re.compile('Publisert: ([^ ]+)').findall(link)
-			url = sys.argv[0]+"?id="+i
-			thumb = 'http://www.tv2.no/tvid/VMan-P'+i[:3]+'/VMan-P'+i+'.jpg'
-                	addLink(name[0],url,thumb,plot[0],date[0])
+                if len(id) == 0:
+                        # utub it is then?
+                        id = re.compile('youtube.com/embed/([^?]+)\?').findall(link)
+                        for i in id:
+                                try:
+                                        thumb = re.compile('<div class="image">[^>]*src="([^"]*)"').findall(link)[0]
+                                except:
+                                        thumb=''
+                                        pass
+                                url = 'plugin://plugin.video.youtube/?action=play_video&videoid='+i
+                                addLink(name[0],url,thumb,plot[0],date[0])
+                else:
+                        for i in id:
+                                url = sys.argv[0]+"?id="+i
+                                thumb = 'http://www.tv2.no/tvid/VMan-P'+i[:3]+'/VMan-P'+i+'.jpg'
+                                addLink(name[0],url,thumb,plot[0],date[0])
 
 def RESOLVE(id):
-	url = 'http://webtv.tv2.no/embed/metafile.asx?p='+id+'&i=0&external=0&ads=true&bw=2000'
-	req3 = urllib2.Request(url)
-	response = urllib2.urlopen(req3)
-	link = response.read()
-	response.close()
-	url = re.compile('<REF HREF="(.*?)">').findall(link)
-	name = re.compile('<TITLE>(.+?)</TITLE>').findall(link)
-	plot = re.compile('<ABSTRACT>(.+?)</ABSTRACT>').findall(link)
-	try:
-		plot = plot[1];
-	except:
-		plot = "";
-		pass
-	try:
-		name = name[0];
-	except:
-		name = "";
-		pass
+        url = 'http://webtv.tv2.no/embed/metafile.asx?p='+id+'&i=0&external=0&ads=true&bw=2000'
+        req3 = urllib2.Request(url)
+        response = urllib2.urlopen(req3)
+        link = response.read()
+        response.close()
+        url = re.compile('<REF HREF="(.*?)">').findall(link)
+        name = re.compile('<TITLE>(.+?)</TITLE>').findall(link)
+        plot = re.compile('<ABSTRACT>(.+?)</ABSTRACT>').findall(link)
+        try:
+                plot = plot[1];
+        except:
+                plot = "";
+                pass
+        try:
+                name = name[0];
+        except:
+                name = "";
+                pass
 
-	thumb = 'http://www.tv2.no/tvid/VMan-P'+id[:3]+'/VMan-P'+id+'.jpg'
-	resolveLink(url[0],name,thumb,plot)
+        thumb = 'http://www.tv2.no/tvid/VMan-P'+id[:3]+'/VMan-P'+id+'.jpg'
+        resolveLink(url[0],name,thumb,plot)
                 
 def get_params():
         param=[]
@@ -87,20 +99,20 @@ def get_params():
 
 def addLink(name,url,iconimage,plot,date):
         ok=True
-        name=str(BS(name,convertEntities=BS.HTML_ENTITIES))
-        plot=str(BS(plot,convertEntities=BS.HTML_ENTITIES))
+        name=str(BS(name,convertEntities=BS.HTML_ENTITIES,fromEncoding='utf-8'))
+        plot=str(BS(plot,convertEntities=BS.HTML_ENTITIES,fromEncoding='utf-8'))
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         liz.setInfo( type="Video", infoLabels={ "Plot": plot} )
         liz.setInfo( type="Video", infoLabels={ "Date": date} )
-	liz.setProperty("IsPlayable","true");
+        liz.setProperty("IsPlayable","true");
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
         return ok
 
 def resolveLink(url,name,thumb,plot):
         li=xbmcgui.ListItem(name,
                             path = url,
-			    thumbnailImage=thumb)
+                            thumbnailImage=thumb)
         li.setInfo( type="Video", infoLabels={ "Title": name } )
         li.setInfo( type="Video", infoLabels={ "Plot": plot} )
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
@@ -135,25 +147,25 @@ __settings__ = xbmcaddon.Addon(id='plugin.video.rbk.no')
 __language__ = __settings__.getLocalizedString
 params=get_params()
 try:
-	start = params["start"]
+        start = params["start"]
 except:
-	start = "0";
-	pass
+        start = "0";
+        pass
 try:
-	id = params["id"]
+        id = params["id"]
 except:
-	id = "0";
-	pass
+        id = "0";
+        pass
 
 iid = int(id);
 if iid > 0:
-	RESOLVE(id)
+        RESOLVE(id)
 else:
-	INDEX(start)
-	istart = int(start);
-	if istart > 0:
-		addDir(__language__(30001),str(istart-25),'')
-	addDir(__language__(30000),str(istart+25),'')
-	xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_DATE)
-	xbmcplugin.endOfDirectory(int(sys.argv[1]))
+        INDEX(start)
+        istart = int(start);
+        if istart > 0:
+                addDir(__language__(30001),str(istart-25),'')
+        addDir(__language__(30000),str(istart+25),'')
+        xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_DATE)
+        xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

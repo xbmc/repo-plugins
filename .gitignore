@@ -16,3 +16,5 @@ plugin.video.dr.dk.live/.idea
 plugin.video.dmi.dk/.git
 plugin.video.mediathek/.git
 plugin.video.mediathek/.gitignore
+plugin.audio.podcatcher/.git
+plugin.audio.podcatcher/.gitignore

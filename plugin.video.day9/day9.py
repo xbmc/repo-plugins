@@ -46,7 +46,7 @@ class Day9:
 		get = params.get
 		link = self.getRequest(get("url"))
 		title = re.compile('<span class="Title" title="\n\t\t\n\t\t\t(.*?)\n\t\t\n\t">').findall(link)
-		url = re.compile('<a class="ArchiveCard" href="(.*?)">').findall(link)
+		url = re.compile('<a class="ArchiveCard"\s*?href="(.*?)"').findall(link)
 		
 		for i in range(len(title)):
 			self.addCategory(title[i], 'http://blip.tv'+url[i], 'showGames', '')

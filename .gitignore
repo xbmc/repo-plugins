@@ -18,3 +18,5 @@ plugin.video.mediathek/.git
 plugin.video.mediathek/.gitignore
 plugin.audio.podcatcher/.git
 plugin.audio.podcatcher/.gitignore
+plugin.video.tagesschau/.git
+plugin.video.tagesschau/.gitignore

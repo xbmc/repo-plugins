@@ -32,7 +32,7 @@ podcast_config = {
                             "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesthemen" },
                      "name": "Tagesthemen" },
     "nachtmagazin": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/nachtmagazin",
-                               "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesthemen" },
+                               "L": "http://www.tagesschau.de/export/video-podcast/webl/nachtmagazin" },
                       "name": "Nachtmagazin" },
     "berichtausberlin": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/bab",
                                    "L": "http://www.tagesschau.de/export/video-podcast/webl/bab" },

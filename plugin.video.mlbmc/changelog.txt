@@ -1,3 +1,8 @@
+Version 0.0.4
+added many new categories
+added search
+fixed an issue with request headers
+
 Version 0.0.3
 added enter a date option for condensed games
 other minor fixes

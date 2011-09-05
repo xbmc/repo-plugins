@@ -1,0 +1,7 @@
+Version 1.0.1
+added many new categories
+added search
+fixed an issue with request headers
+
+Version 1.0.0
+initial for eden

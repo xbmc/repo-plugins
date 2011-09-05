@@ -45,7 +45,7 @@ debug = __settings__.getSetting('debug')
 
 
 if debug == "true":
-    print '(((((((((( Version dharma - 0.0.3, eden - 1.0.0 ))))))))))'
+    print '(((((((((( Version dharma - 0.0.4, eden - 1.0.1 ))))))))))'
 
 SOAPCODES = {
     "1"    : "OK",
@@ -90,18 +90,24 @@ TeamCodes = {
     '120': ('Washington Nationals', 'was')
     }
 
+
 def categories():
         addDir(__language__(30000),'',3,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlb.tv.png')
         addDir(__language__(30029),'',14,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
         addPlaylist(__language__(30001),'http://mlb.mlb.com/video/play.jsp?tcid=mm_mlb_vid',12,'http://mlbmc-xbmc.googlecode.com/svn/icons/latestvid.png')
         addDir(__language__(30002),'',4,'http://mlbmc-xbmc.googlecode.com/svn/icons/tvideo.png')
-        addDir(__language__(30003),'http://mlb.mlb.com/ws/search/MediaSearchService?mlbtax_key=fastcast&sort=desc&sort_type=date&hitsPerPage=200&src=vpp',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/fc.png')
-        addDir(__language__(30004),'http://mlb.mlb.com/ws/search/MediaSearchService?mlbtax_key=must_c&sort=desc&sort_type=date&hitsPerPage=200&src=vpp',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mc.png')
-        addDir(__language__(30005),'http://mlb.mlb.com/ws/search/MediaSearchService?&sort=desc&sort_type=date&subject=MLBCOM_GAME_RECAP&hitsPerPage=60&src=vpp',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/gamere.png')
-        addDir(__language__(30006),'http://mlb.mlb.com/ws/search/MediaSearchService?mlbtax_key=mlb_network&sort=desc&sort_type=date&hitsPerPage=360&src=vpp',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
-        addDir(__language__(30007),'http://mlb.mlb.com/ws/search/MediaSearchService?&sort=desc&sort_type=date&subject=MLBCOM_TOP_PLAY&hitsPerPage=60&src=vpp',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/tp.png')
+        addDir(__language__(30003),'9674738',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/fc.png')
+        addDir(__language__(30004),'11493214',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mc.png')
+        addDir(__language__(30031),'17392054',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/dailydash.png')
+        addDir(__language__(30005),'8879974',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/gamere.png')
+        addDir(__language__(30032),'',17,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addDir(__language__(30006),'',18,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
+        addDir(__language__(30007),'16820808',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/pranking.png')
+        addDir(__language__(30033),'4709980',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/fantasy.png')
+        addDir(__language__(30009),'7759164',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/bball.png')
         addDir(__language__(30008),'http://gdx.mlb.com/components/game/mlb/'+dateStr.day[0]+'/media/highlights.xml',8,'http://mlbmc-xbmc.googlecode.com/svn/icons/realtime.png')
-        addDir(__language__(30009),'http://mlb.mlb.com/video/play.jsp?topic_id=7759164',10,'http://mlbmc-xbmc.googlecode.com/svn/icons/bball.png')
+        addDir(__language__(30034),'',16,'http://mlbmc-xbmc.googlecode.com/svn/icons/search.png')
+        addDir(__language__(30035),'',20,'http://mlbmc-xbmc.googlecode.com/svn/icons/more.png')
 
 
 def mlbTV():
@@ -117,11 +123,67 @@ def mlbTV():
 
 
 def condensedGames():
-            addGameDir(__language__(30011),'http://www.mlb.com/mediacenter/index.jsp?ymd='+dateStr.day[1].replace('year_','').replace('/month_','').replace('/day_',''),13,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
-            addGameDir(__language__(30012),'http://www.mlb.com/mediacenter/index.jsp?ymd='+dateStr.day[3].replace('year_','').replace('/month_','').replace('/day_',''),13,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
-            addGameDir(__language__(30014),'',15,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
-            
-            
+        addGameDir(__language__(30011),'http://www.mlb.com/mediacenter/index.jsp?ymd='+dateStr.day[1].replace('year_','').replace('/month_','').replace('/day_',''),13,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
+        addGameDir(__language__(30012),'http://www.mlb.com/mediacenter/index.jsp?ymd='+dateStr.day[3].replace('year_','').replace('/month_','').replace('/day_',''),13,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
+        addGameDir(__language__(30014),'',15,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
+
+
+def gameHighlights():
+        addGameDir(__language__(30036),'8879838',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addGameDir(__language__(30037),'9781914',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addGameDir(__language__(30038),'10025018',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addGameDir(__language__(30039),'10023406',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addGameDir(__language__(30040),'10025790',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addGameDir(__language__(30041),'10025796',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addGameDir(__language__(30042),'9782246',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addGameDir(__language__(30043),'10023906',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+        addGameDir(__language__(30044),'9780550',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png')
+
+
+def mlbNetwork():
+        addDir(__language__(30006),'7417714',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
+        addDir(__language__(30045),'8187248',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
+        addDir(__language__(30046),'12429102',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
+        addDir(__language__(30047),'9991168',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
+        addDir(__language__(30048),'20209194',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
+        addDir(__language__(30049),'4488754',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
+        addDir(__language__(30050),'18847480',1,'http://mlbmc-xbmc.googlecode.com/svn/icons/mlbnet.png')
+
+
+def allStarGame():
+        addDir(__language__(30051),'16609400',1,icon)
+        addDir(__language__(30052),'20159458',1,icon)
+        addDir(__language__(30053),'20159600',1,icon)
+        addDir(__language__(30054),'20159604',1,icon)
+        addDir(__language__(30055),'20158982',1,icon)
+        addDir(__language__(30056),'20523060',1,icon)
+        addDir(__language__(30057),'20156278',1,icon)
+
+
+def exploreMore():
+        addDir(__language__(30058),'17071012',1,icon)
+        addDir(__language__(30059),'17074640',1,icon)
+        addDir(__language__(30060),'17807232',1,icon)
+        addDir(__language__(30061),'18985532',1,icon)
+        addDir(__language__(30051),'',19,icon)
+        addDir(__language__(30062),'20812682',1,icon)
+        addDir(__language__(30063),'18236054',1,icon)
+        addDir(__language__(30064),'18674140',1,icon)
+        addDir(__language__(30065),'6003532',1,icon)
+        addDir(__language__(30066),'22055984',1,icon)
+        addDir(__language__(30067),'18881664',1,icon)
+        addDir(__language__(30068),'4737232',1,icon)
+        addDir(__language__(30069),'10122332',1,icon)
+        addDir(__language__(30070),'11837016',1,icon)
+        addDir(__language__(30071),'12678984',1,icon)
+        addDir(__language__(30072),'5247106',1,icon)
+        addDir(__language__(30073),'7271062',1,icon)
+        addDir(__language__(30074),'6609548',1,icon)
+        addDir(__language__(30075),'7961660',1,icon)
+        addDir(__language__(30076),'9612588',1,icon)
+        addDir(__language__(30077),'9583020',1,icon)
+
+
 def getTeams():
         teams = TeamCodes.values()
         for team in teams:
@@ -132,13 +194,13 @@ def getTeams():
 
 def getRealtimeVideo(url):
         try:
-            req = urllib2.Request(url)
-            req.addheaders = [('Referer', 'http://mlb.mlb.com/index.jsp'),
-                  ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
+            txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                         'Referer' : 'http://mlb.mlb.com'}
+            req = urllib2.Request(url,None,txheaders)
             response = urllib2.urlopen(req)
             link=response.read()
             response.close()
-            soup = BeautifulStoneSoup(link)
+            soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
 
             videos = soup.findAll('media')
             for video in videos:
@@ -154,10 +216,11 @@ def getRealtimeVideo(url):
 
 
 def getTeamVideo(url):
+        xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30079)+",5000,"+icon+")")
         url='http://mlb.mlb.com/gen/'+url+'/components/multimedia/topvideos.xml'
-        req = urllib2.Request(url)
-        req.addheaders = [('Referer', 'http://mlb.mlb.com'),
-                ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
+        txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                     'Referer' : 'http://mlb.mlb.com'}
+        req = urllib2.Request(url,None,txheaders)
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
@@ -182,10 +245,10 @@ def getTeamVideo(url):
 
 
 def scrapeWebsite(url):
-        req = urllib2.Request(url)
+        txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                     'Referer' : 'http://mlb.mlb.com'}
+        req = urllib2.Request(url,None,txheaders)
         response = urllib2.urlopen(req)
-        req.addheaders = [('Referer', 'http://mlb.mlb.com'),
-                ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
         link=response.read()
         response.close()
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
@@ -203,10 +266,11 @@ def scrapeWebsite(url):
 
 
 def playLatest(url):
-        req = urllib2.Request(url)
+        xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30079)+",5000,"+icon+")")
+        txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                     'Referer' : 'http://mlb.mlb.com/video/play.jsp?cid=mlb'}
+        req = urllib2.Request(url,None,txheaders)
         response = urllib2.urlopen(req)
-        req.addheaders = [('Referer', 'http://mlb.mlb.com'),
-                ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
         link=response.read()
         response.close()
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
@@ -228,10 +292,11 @@ def playLatest(url):
 
 
 def getVideos(url):
+        url = 'http://mlb.mlb.com/gen/multimedia/topic/'+url+'.xml'
         try:
-            req = urllib2.Request(url)
-            req.addheaders = [('Referer', 'http://www.mlb.com/video/'),
-                    ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
+            txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                         'Referer' : 'http://mlb.mlb.com/video/play.jsp?cid=mlb'}
+            req = urllib2.Request(url,None,txheaders)
             response = urllib2.urlopen(req)
             link=response.read()
             response.close()
@@ -247,42 +312,72 @@ def getVideos(url):
                 xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+",10000,"+icon+")")
             else:
                 xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+",10000,"+icon+")")
+        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+        part = soup.search_query.string
+        if part == None:
+            try:
+                vidList = soup.video_index['src']
+                getVideoListXml(vidList)
+            except:
+                pass
+            return
+        maxitems = soup.topic['maxitems']
+        if eval(maxitems) > 60:
+            items = '60'
+        else:
+            items = maxitems
+        url = 'http://mlb.mlb.com/ws/search/MediaSearchService?&'+part+'&hitsPerPage='+items+'&src=vpp'
+        txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                     'Referer' : 'http://mlb.mlb.com/'}
+        req = urllib2.Request(url,None,txheaders)
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
         data = json.loads(link)
         videos = data['mediaContent']
         for video in videos:
             name = video['blurb']
-            desc = video['bigBlurb']
+            duration = video['duration']
             url = video['url']
-            thumb = video['thumbnails'][2]['src']
-            addLink(name,url,'',2,thumb)
+            try:
+                thumb = video['thumbnails'][2]['src']
+            except:
+                thumb = video['thumbnails'][1]['src']
+            addLink(name,url,duration,2,thumb)
 
 
-def setVideoURL(url):
-        url = getVideoURL(url)
+def setVideoURL(link):
+        url = getVideoURL(link)
         item = xbmcgui.ListItem(path=url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 
 def getVideoURL(url):
-        req = urllib2.Request(url)
-        req.addheaders = [('Referer', 'http://mlb.mlb.com/video/play.jsp?cid=mlb'),
-                ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
+        txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                     'Referer' : 'http://mlb.mlb.com/video/play.jsp?cid=mlb'}
+        req = urllib2.Request(url,None,txheaders)
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        soup = BeautifulStoneSoup(link)
+        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
         if soup.find('url', attrs={'playback_scenario' : "FLASH_1200K_640X360"}):
             url = soup.find('url', attrs={'playback_scenario' : "FLASH_1200K_640X360"}).string
         elif soup.find('url', attrs={'playback_scenario' : "FLASH_1000K_640X360"}):
             url = soup.find('url', attrs={'playback_scenario' : "FLASH_1000K_640X360"}).string
         elif soup.find('url', attrs={'playback_scenario' : "FLASH_600K_400X224"}):
             url = soup.find('url', attrs={'playback_scenario' : "FLASH_600K_400X224"}).string
+        elif soup.find('url', attrs={'playback_scenario' : "MLB_FLASH_1000K_PROGDNLD"}):
+            url = soup.find('url', attrs={'playback_scenario' : "MLB_FLASH_1000K_PROGDNLD"}).string
+        elif soup.find('url', attrs={'playback_scenario' : "MLB_FLASH_800K_PROGDNLD"}):
+            url = soup.find('url', attrs={'playback_scenario' : "MLB_FLASH_800K_PROGDNLD"}).string
         return url
 
 
 def getCondensedGames(url):
         try:
-            req = urllib2.Request(url)
+            txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                         'Referer' : 'http://mlb.mlb.com'}
+            req = urllib2.Request(url,None,txheaders)
             response = urllib2.urlopen(req)
             link=response.read()
             response.close()
@@ -297,7 +392,7 @@ def getCondensedGames(url):
                     print 'We failed with error code - %s.' % e.code
                 xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
             else:
-                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")        
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         videos = soup.findAll('tbody')[0]('tr')
         for video in videos:
@@ -309,13 +404,80 @@ def getCondensedGames(url):
                 addLink(name,url,'',2,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
             except:
                 pass
-        
+
+
+def getVideoListXml(url):
+        url = 'http://mlb.mlb.com'+url
+        txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                     'Referer' : 'http://mlb.mlb.com/'}
+        req = urllib2.Request(url,None,txheaders)
+        response = urllib2.urlopen(req)
+        link=response.read()
+        print response.geturl()
+        print response.info()
+        response.close()
+        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+        items = soup('item')
+        for item in items:
+            name = item.blurb.string
+            vidId = item['content_id']
+            url = vidId[-3]+'/'+vidId[-2]+'/'+vidId[-1]+'/'+vidId
+            try:
+                thumb = item('image', attrs={'type' : "13"})[0].string
+            except:
+                thumb = item.image.string
+            duration = item.duration.string
+            addLink(name,'http://mlb.mlb.com/gen/multimedia/detail/'+url+'.xml',duration,2,thumb)
+
+
+def Search(url):
+        if url == '':
+            searchStr = ''
+            keyboard = xbmc.Keyboard(searchStr, 'MLB.com Video Search')
+            keyboard.doModal()
+            if (keyboard.isConfirmed() == False):
+                return
+            newStr = keyboard.getText()
+            if len(newStr) == 0:
+                return
+            searchStr = newStr.replace(' ','%20')
+            referStr = newStr.replace(' ','+')
+            url = 'http://mlb.mlb.com/ws/search/MediaSearchService?start=0&site=mlb&hitsPerPage=12&hitsPerSite=10&type=json&c_id=&src=vpp&sort=desc&sort_type=custom&query='+searchStr
+            txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                         'Referer' : 'http://mlb.mlb.com/search/media.jsp?query='+referStr+'&c_id=mlb'}
+        else:
+            txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                         'Referer' : 'http://mlb.mlb.com/search/media.jsp?query='+url.split('=')[-1]+'&c_id=mlb'}
+
+        req = urllib2.Request(url,None,txheaders)
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        data = json.loads(link)
+        if data['total'] == 0:
+            xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30078)+data['query']+"',5000,"+icon+")")
+            return
+        videos = data['mediaContent']
+        for video in videos:
+            name = video['blurb']
+            desc = video['bigBlurb']
+            link = video['url']
+            duration = video['duration']
+            try:
+                thumb = video['thumbnails'][1]['src']
+            except:
+                thumb = video['thumbnails'][0]['src']
+            addLink(name,link,duration,2,thumb)
+        if data['total'] > data['end']:
+            url = url.split('&',1)[0][:-1]+str(data['end']+1)+'&'+url.split('&',1)[1]
+            addDir('Next Page',url,16,'http://mlbmc-xbmc.googlecode.com/svn/icons/next.png')
+
 
 def getGames(url):
         try:
-            req = urllib2.Request(url)
-            req.addheaders = [('Referer', 'http://mlb.mlb.com/index.jsp'),
-                            ('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
+            txheaders = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                         'Referer' : 'http://mlb.mlb.com/index.jsp'}
+            req = urllib2.Request(url,None,txheaders)
             response = urllib2.urlopen(req)
             link=response.read()
             response.close()
@@ -329,9 +491,11 @@ def getGames(url):
                 if hasattr(e, 'code'):
                     print 'We failed with error code - %s.' % e.code
                 xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
+                return
             else:
                 xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30018)+errorStr+"',10000,"+icon+")")
-        
+                return
+
         data = json.loads(link)
         try:
             games = data['data']['games']['game']
@@ -454,8 +618,7 @@ def mlbGame(event_id,content_id):
 
         if debug == "true":
             print 'Here are the headers of the page :'
-            print response.info()                             # handle.read() returns the page, handle.geturl() returns the true url of the page fetched (in case urlopen has followed any redirects, which it sometimes does)
-
+            print response.info()
             if cj == None:
                 print "We don't have a cookie library available - sorry."
                 print "I can't show you any cookies."
@@ -699,8 +862,8 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp):
                     print '-----------------> divingmule needs to work on the soup!'
                     print soup
                 xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30027)+",5000,"+icon+")")
-                
-                
+
+
             if re.search('ondemand', game_url):
                 play_path_pat = re.compile(r'ondemand\/(.*)$')
                 play_path = re.search(play_path_pat,game_url).groups()[0]
@@ -953,11 +1116,11 @@ if mode==11:
 if mode==12:
         print""
         playLatest(url)
-        
+
 if mode==13:
         print""
         getCondensedGames(url)
-        
+
 if mode==14:
         print""
         condensedGames()
@@ -966,5 +1129,25 @@ if mode==15:
         print""
         url = 'http://www.mlb.com/mediacenter/index.jsp?ymd='+getDate().split('/',7)[7].replace('/master_scoreboard.json','').replace('year_','').replace('/month_','').replace('/day_','')
         getCondensedGames(url)
+
+if mode==16:
+        print""
+        Search(url)
+
+if mode==17:
+        print""
+        gameHighlights()
+
+if mode==18:
+        print""
+        mlbNetwork()
+
+if mode==19:
+        print""
+        allStarGame()
+
+if mode==20:
+        print""
+        exploreMore()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

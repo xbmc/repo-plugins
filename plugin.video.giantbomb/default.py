@@ -1,6 +1,7 @@
 import urllib
 import urllib2
 import simplejson
+import xbmcaddon
 import xbmcplugin
 import xbmcgui
 import shelve
@@ -8,22 +9,21 @@ import os
 
 API_PATH = 'http://api.giantbomb.com'
 API_KEY = 'fa96542d69b4af7f31c2049ace5d89e84e225bef' # Default API key
+my_addon = xbmcaddon.Addon('plugin.video.giantbomb')
 
 def CATEGORIES():
     account_linked = False
-    filename = os.path.abspath('user_data.db')
-    d = shelve.open(filename)
-    if d.has_key('api_key'):
-        response = urllib2.urlopen(API_PATH + '/chats/?api_key=' + d['api_key'] + '&format=json')
+    user_api_key = my_addon.getSetting('api_key')
+    if user_api_key:
+        response = urllib2.urlopen(API_PATH + '/chats/?api_key=' + user_api_key + '&format=json')
         data = simplejson.loads(response.read())
         if data['status_code'] == 100:
             # Revert to the default key
-            del d['api_key']
+            my_addon.setSetting('api_key', '')
         else:
             global API_KEY
-            API_KEY = d['api_key']
+            API_KEY = user_api_key
             account_linked = True
-    d.close()
 
     response = urllib2.urlopen(API_PATH + '/video_types/?api_key=' + API_KEY + '&format=json')
     category_data = simplejson.loads(response.read())['results']
@@ -57,11 +57,8 @@ def GET_API_KEY(link_code):
         try:
             response = urllib2.urlopen(API_PATH + '/validate?link_code=' + link_code + '&format=json')
             data = simplejson.loads(response.read())
-            api_key = data['api_key']
-            filename = os.path.abspath('user_data.db')
-            d = shelve.open(filename)
-            d['api_key'] = api_key
-            d.close()
+            new_api_key = data['api_key']
+            my_addon.setSetting('api_key', new_api_key)
             return True
         except:
             return False
@@ -69,11 +66,8 @@ def GET_API_KEY(link_code):
         return False
 
 def INDEX(url):
-    filename = os.path.abspath('user_data.db')
-    d = shelve.open(filename)
-    if d.has_key('api_key'):
-        API_KEY = d['api_key']
-    d.close()
+    if my_addon.getSetting('api_key'):
+        API_KEY = my_addon.getSetting('api_key')
 
     if url == 'search':
         keyboard = xbmc.Keyboard("", 'Search', False)
@@ -102,11 +96,8 @@ def INDEX(url):
         addDir('The Matrix Online: Not Like This', url + '&MO', 2, '')
 
 def VIDEOLINKS(url, name):
-    filename = os.path.abspath('user_data.db')
-    d = shelve.open(filename)
-    if d.has_key('api_key'):
-        API_KEY = d['api_key']
-    d.close()
+    if my_addon.getSetting('api_key'):
+        API_KEY = my_addon.getSetting('api_key')
 
     if url.endswith('&DP'):
         response = urllib2.urlopen(API_PATH + '/videos/?api_key=' + API_KEY + '&video_type=5&offset=161&format=json')

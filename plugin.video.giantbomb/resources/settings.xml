@@ -1,4 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-   <setting id="vquality" type="bool" label="30000" default="true"/>
-   <setting id="ucat" type="bool" label="30001" default="true"/>
+    <setting id="api_key" type="text" default="" />
 </settings>

@@ -50,7 +50,11 @@ def getLatest():
 
 
 def getSearchResults(query):
-    soup = BeautifulSoup(urllib.urlopen("http://www.nrk.no/nett-tv/sok/" + urllib.quote(query)))
+    url = "http://www.nrk.no/nett-tv/sok/" + urllib.quote(query)
+    return _getSearchResults(url)
+
+def _getSearchResults(url):
+    soup = BeautifulSoup(urllib.urlopen(url))
     li = soup.find('div', attrs={'id' : 'search-results'}).findAll('li')
     items = []
     for e in li:
@@ -61,6 +65,10 @@ def getSearchResults(query):
             title = decodeHtml(e.find('a').string)
             descr = decodeHtml(e.find('p').string)
             items.append( DataItem(title=title, description=descr, url="/nett-tv/prosjekt/"+getId(url)) )
+    #next page
+    url = soup.find('a', attrs={'id' : 'ctl00_contentPlaceHolder_ucSearch_nextLink'})['href']
+    if not (url.endswith('0') or url.endswith('1')):
+        items.append(DataItem(title="Neste »", url=url))
     return items
 
 
@@ -78,9 +86,13 @@ def getMostWatched(days):
 
 def getByUrl(url):
     if (url.startswith("/nett-tv/tema") or url.startswith("/nett-tv/bokstav")):
-        url = "http://www.nrk.no" + url 
+        url = "http://www.nrk.no" + url
         soup = BeautifulSoup(urllib.urlopen(url))
         return _getAllProsjekt(soup)
+    
+    elif (url.startswith("/nett-tv/sok")):
+        url = "http://www.nrk.no" + url
+        return _getSearchResults(url)
     
     elif (url.startswith("/nett-tv/prosjekt")):
         url = "http://www.nrk.no" + url

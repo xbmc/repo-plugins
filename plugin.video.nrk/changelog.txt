@@ -1,3 +1,6 @@
+[B]2.1.1[/B]
+- added: multi-page search result
+
 [B]2.1.0[/B]
 - added: search
 - added: description and larger thumbs

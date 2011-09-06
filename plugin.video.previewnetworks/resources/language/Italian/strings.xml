@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- settings labels -->
-    <string id="30000">Qualità trailer</string>
+    <string id="30000">Qualità massima dei trailers</string>
     <string id="30001">small</string>
     <string id="30002">medium</string>
     <string id="30003">large</string>
@@ -27,7 +27,7 @@
     <string id="30030">Modalità Play</string>
     <string id="30031">Stream</string>
     <string id="30032">Download</string>
-    <string id="30033">Download &amp; Save</string>
+    <string id="30033">Download &amp; Play</string>
     <string id="30040">- cartella download</string>
     <string id="30041">- usa titolo</string>
     <string id="30042">- aggiungi -trailer</string>

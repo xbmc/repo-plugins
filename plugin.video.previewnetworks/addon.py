@@ -14,15 +14,15 @@ import xbmcgui
 import cgi
 import socket
 import xbmcaddon
- 
+
 # plugin constants
 __plugin__ = "plugin.video.previewnetworks"
 __author__ = "nmazz64"
 __url__ = "http://code.google.com/p/previewnetworks-xbmc-plugin"
 __svn_url__ = "http://previewnetworks-xbmc-plugin.googlecode.com/svn/trunk/plugin.video.previewnetworks/"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
-__version__ = "2.0.1"
-__svn_revision__ = "$Revision: 3$"
+__version__ = "2.0.2"
+__svn_revision__ = "$Revision: 0$"
 __XBMC_Revision__ = "31632"
 
 url_source=None
@@ -60,7 +60,7 @@ def categories(root):
         addDir(Addon.getLocalizedString(30302),baseurl+'coming-90/%s',2,next_icon)
         addDir(Addon.getLocalizedString(30303),baseurl+'newest-90/%s',3,new_icon)
         addDir(Addon.getLocalizedString(30300),'genre:',0,genre_icon)
-        addDir(Addon.getLocalizedString(30340),baseurl+'search-20/%s/?search_field=product_title&search_query=%s',99,search_icon) 
+        addDir(Addon.getLocalizedString(30340),baseurl+'search-20/%s/?search_field=product_title&search_query=%s',99,search_icon)
     else:
         addDir(Addon.getLocalizedString(30304),baseurl+'CinemaAction/%s',10,icona)
         addDir(Addon.getLocalizedString(30305),baseurl+'CinemaAdventure/%s',11,icona)
@@ -96,11 +96,11 @@ def addDir(name,url,item,iconimage,parametri={},info={}):
     standardParams={'url':url,'item':item}
     parametri.update(standardParams)
     u=sys.argv[0]+"?"+urllib.urlencode(parametri)
-    ok=True 
+    ok=True
     info.update({ "Titolo": name })
-    liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage) 
-    liz.setInfo( type="Video", infoLabels=info ) 
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True) 
+    liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
+    liz.setInfo( type="Video", infoLabels=info )
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
     return ok
 
 def get(params,name):

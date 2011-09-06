@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- settings labels -->
-    <string id="30000">Trailer quality</string>
+    <string id="30000">Max trailer quality</string>
     <string id="30001">small</string>
     <string id="30002">medium</string>
     <string id="30003">large</string>
@@ -27,7 +27,7 @@
     <string id="30030">Play mode</string>
     <string id="30031">Stream</string>
     <string id="30032">Download</string>
-    <string id="30033">Download &amp; Save</string>
+    <string id="30033">Download &amp; Play</string>
     <string id="30040">- folder download</string>
     <string id="30041">- use title</string>
     <string id="30042">- Add '-trailer' to saved trailers</string>
@@ -104,7 +104,7 @@
 		
     <!-- context menu labels -->
     <string id="30900">Theater Showtimes</string>
-    <string id="30910">Download &amp; Play Trailer</string>
+    <string id="30910">Download &amp; Play</string>
     <string id="30920">Play Trailer</string>
     <string id="30930">Movie Information</string>
     

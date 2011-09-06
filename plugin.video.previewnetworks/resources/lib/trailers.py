@@ -21,7 +21,7 @@ from util import get_filesystem, get_legal_filepath, test_quality
 from MediaWindow import MediaWindow, DirectoryItem
 
 __plugin__ = "plugin.video.previewnetworks"
-   
+
 class _urlopener( urllib.FancyURLopener ):
     version = sys.modules[ "__main__" ].__useragent__
 
@@ -31,7 +31,7 @@ urllib._urlopener = _urlopener()
 class _Parser:
 
     Addon = xbmcaddon.Addon( id=__plugin__)
-    
+
     def __init__( self, xmlSource, settings, MediaWindow ):
         self.success = True
         self.settings = settings
@@ -40,12 +40,14 @@ class _Parser:
         self.date_format = xbmc.getRegion( "datelong" ).replace( "DDDD,", "" ).replace( "MMMM", "%B" ).replace( "D", "%d" ).replace( "YYYY", "%Y" ).strip()
         # get the list
         self.success = self._get_current_videos( xmlSource )
-       
+
     def _get_current_videos( self, xmlSource ):
         try:
             type_filter = ""
             quality_filter = ""
             title_option = ""
+            #quality_target = -1
+            quality_target = int(self.Addon.getSetting( "quality" ))
             # encoding
             encoding = re.findall( "<\?xml version=\"[^\"]*\" encoding=\"([^\"]*)\"\?>", xmlSource )[ 0 ]
             # gather all video records <movieinfo>
@@ -117,11 +119,11 @@ class _Parser:
                         locations[2] = posters_url[ind]
                     # gallery image
                     elif (posters_type[ind]=='7'):
-                        locations[3] = posters_url[ind]  
+                        locations[3] = posters_url[ind]
                     # video still
                     elif (posters_type[ind]=='11'):
                         locations[4] = posters_url[ind]
-                        
+
                 if (locations[self.settings[ "poster" ]]):
                     poster = locations[self.settings[ "poster" ]]
                 elif (self.settings["poster"] > 0):
@@ -161,10 +163,10 @@ class _Parser:
                             file_type = re.findall( "format=\"(.*?)\"", file_extract )[ 0 ]
                             file_size = re.findall( "size=\"(.*?)\"", file_extract ) [ 0 ]
                             quality_curr = test_quality(file_size)
+                            # seleziona solo i tipi opzionati
                             if ((self.settings[ "type" ] == "all" or self.settings[ "type" ] == file_type )
-                                and (self.settings[ "quality" ] == file_size or
-                                     (self.settings[ "quality" ] == "max" and quality_prev < quality_curr ))):
-                                quality_prev = quality_curr
+                                and quality_curr <= quality_target):
+                                #quality_prev = quality_curr
                                 quality = file_size
                                 # extract url
                                 trailers = re.findall( "<url>(.*?)</url>", file_extract )
@@ -193,10 +195,7 @@ class _Parser:
                                     title_option = ' (' + file_type + '/' + file_size + ')'
                                 else:
                                     title_option = ''
-                                #if ( titles ):
-                                #    title_trailer = unicode( unescape( titles [ 0 ]+' - '+ trailer_name[ 0 ] + title_option), encoding, "replace" )
-                                #else:
-                                #    title_trailer = trailer_name[ 0 ]
+                                #
                                 if (self.settings[ "originaltitle" ]==True):
                                     title_trailer = original_titles[ 0 ] + '   [' + trailer_name[ 0 ] + '] ' + title_option
                                 else:
@@ -206,12 +205,15 @@ class _Parser:
                                 title_trailer = re.sub("&quot;", '"', title_trailer)
                                 title_trailer = re.sub("&amp;", '&', title_trailer)
                                 #
-                                if self.settings[ "quality" ]<>'max':
+                                # print "quality curr %s, target %s, selected %s" % (quality_curr,quality_target, quality_curr-quality_target)
+                                if (quality_curr == quality_target):
+                                    quality_prev = quality_target
                                     ok = self._add_video( { "title": title_trailer, "runtime": runtime, "studio": studio, "postdate": postdate, "releasedate": releasedate, "copyright": copyright, "director": director, "plot": plot, "cast": actors, "genre": genre, "poster": poster, "trailer": trailer, "size": size, "fanart": fanart, "quality": quality }, 0 )
                                     # if user cancels, call raise to exit loop
                                     if ( not ok ): raise
                         # -- exit from loop
-                        if self.settings[ "quality" ]=='max' and title_trailer <> '':
+                        #if self.settings[ "quality" ]=='max' and title_trailer <> '' and quality_curr <> quality_target:
+                        if title_trailer <> '' and quality_prev <> quality_target:
                             ok = self._add_video( { "title": title_trailer, "runtime": runtime, "studio": studio, "postdate": postdate, "releasedate": releasedate, "copyright": copyright, "director": director, "plot": plot, "cast": actors, "genre": genre, "poster": poster, "trailer": trailer, "size": size, "fanart": fanart, "quality": quality }, 0 )
                             # if user cancels, call raise to exit loop
                             if ( not ok ): raise
@@ -293,12 +295,12 @@ class Main:
     # base paths
     BASE_CURRENT_URL = ""
     ITEM_CURRENT_URL = ""
-    BASE_DATA_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addon_data", os.path.basename( Addon.getAddonInfo('path') ), "cache" )   
+    BASE_DATA_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addon_data", os.path.basename( Addon.getAddonInfo('path') ), "cache" )
     BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addon_data", os.path.basename( Addon.getAddonInfo('path')),  "cache" , "trailer_%s.xml" )
     title_option = ""
     type_filter = ""
     quality_filter = ""
-    
+
     def __init__( self , url_source, item):
         # get users preference
         self.BASE_CURRENT_URL = url_source
@@ -334,7 +336,7 @@ class Main:
         self.settings[ "play_mode" ] = int( self.Addon.getSetting( "play_mode" ) )
         if ( self.settings[ "play_mode" ] == 2 and self.settings[ "download_path" ] == "" ):
             self.settings[ "play_mode" ] = 1
-        self.settings[ "use_title" ] = ( self.settings[ "download_path" ] != "" )
+        self.settings[ "use_title" ] = ( self.Addon.getSetting( "use_title" ) == "true")
         self.settings[ "use_trailer" ] = ( self.settings[ "download_path" ] != "" )
         self.settings[ "play_existing" ] = ( self.Addon.getSetting( "play_existing" ) == "true" and self.settings[ "download_path" ] != "" )
         self.settings[ "extra" ] = ( self.Addon.getSetting( "extra" ) == "true" )
@@ -350,7 +352,7 @@ class Main:
         kboard.doModal()
         if kboard.isConfirmed():
             return urllib.quote_plus(kboard.getText())
-        return ''    
+        return ''
 
     def get_videos( self ):
         ok = False
@@ -377,8 +379,7 @@ class Main:
                 base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "channel_id" ],search_phrase)
             else:
                 base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "channel_id" ])
-            
-            # print base_url
+            #
             # get the source files date if it exists
             try: date = os.path.getmtime( base_path )
             except: date = 0

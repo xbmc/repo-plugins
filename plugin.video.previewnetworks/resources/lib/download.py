@@ -58,7 +58,7 @@ class _Info:
 class Main:
     #Addon = xbmcaddon.Addon( id=os.path.basename( os.getcwd() ) )
     Addon = xbmcaddon.Addon( id=__plugin__)
-    
+
     def __init__( self ):
         # parse argv
         self._parse_argv()
@@ -79,10 +79,10 @@ class Main:
         self.settings = {}
         self.settings[ "download_path" ] = self.Addon.getSetting( "download_path" )
         self.settings[ "play_mode" ] = int( self.Addon.getSetting( "play_mode" ) )
-        if ( self.settings[ "play_mode" ] == 2 and self.settings[ "download_path" ] == "" ):
-            self.settings[ "play_mode" ] = 1
-        self.settings[ "use_title" ] = ( self.Addon.getSetting( "use_title" ) == "true" and self.settings[ "play_mode" ] == 2 )
-        self.settings[ "use_trailer" ] = ( self.Addon.getSetting( "use_trailer" ) == "true" and self.settings[ "use_title" ] == True and self.settings[ "play_mode" ] == 2 )
+        #if ( self.settings[ "play_mode" ] == 2 and self.settings[ "download_path" ] == "" ):
+        #    self.settings[ "play_mode" ] = 1
+        self.settings[ "use_title" ] = ( self.Addon.getSetting( "use_title" ) == "true"  )
+        self.settings[ "use_trailer" ] = False # ( self.Addon.getSetting( "use_trailer" ) == "true" and self.settings[ "use_title" ] == True and self.settings[ "play_mode" ] == 2 )
 
     def _download_video( self ):
         try:
@@ -120,17 +120,17 @@ class Main:
 
     def _report_hook( self, count, blocksize, totalsize ):
         percent = int( float( count * blocksize * 100) / totalsize )
-        msg1 = self.Addon.getLocalizedString( 30500 + ( self.settings[ "play_mode" ] == 2 ) ) % ( os.path.basename( self.filepath ), )
-        msg2 = ( "", self.Addon.getLocalizedString( 30502 ) % ( os.path.dirname( self.filepath ), ), )[ self.settings[ "play_mode" ] - 1 ]
+        msg1 = self.Addon.getLocalizedString( 30500 ) % ( os.path.basename( self.filepath ), )
+        msg2 = self.Addon.getLocalizedString( 30502 ) % ( os.path.dirname( self.filepath ), )
         pDialog.update( percent, msg1, msg2 )
         if ( pDialog.iscanceled() ): raise
-        
+
     def _finalize_download( self, tmp_path ):
         try:
             if ( tmp_path != self.filepath ):
                 # copy the trailer
-                msg1 = xbmc.getLocalizedString( 30503 ) % ( os.path.split( self.filepath )[ 1 ], )
-                msg2 = xbmc.getLocalizedString( 30502 ) % ( os.path.split( self.filepath )[ 0 ], )
+                msg1 = self.Addon.getLocalizedString( 30503 ) % ( os.path.split( self.filepath )[ 1 ], )
+                msg2 = self.Addon.getLocalizedString( 30502 ) % ( os.path.split( self.filepath )[ 0 ], )
                 pDialog.update( -1, msg1, msg2 )
                 # necessary for dialog to update
                 xbmc.sleep( 50 )
@@ -145,7 +145,7 @@ class Main:
                     f.close()
                 # copy the thumbnail
                 thumbpath = os.path.splitext( self.filepath )[ 0 ] + ".tbn"
-                msg1 = xbmc.getLocalizedString( 30503 ) % ( os.path.split( thumbpath )[ 1 ], )
+                msg1 = self.Addon.getLocalizedString( 30503 ) % ( os.path.split( thumbpath )[ 1 ], )
                 pDialog.update( -1, msg1, msg2 )
                 # necessary for dialog to update
                 xbmc.sleep( 50 )

@@ -3,7 +3,7 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,sys
 __scriptname__ = "GameTrailers_Bonus"
 __author__ = "AssChin79"
 __scriptid__ = "plugin.video.gametrailers.exclusives"
-__version__ = "1.0.0"
+__version__ = "1.0.2"
 
 def CATEGORIES():
 	# Uri Sources: http://www.gametrailers.com/podcasts.php
@@ -18,9 +18,9 @@ def CATEGORIES():
         addDir('Invisible Walls', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=iw',1,'http://gametrailers.mtvnimages.com/images/podcasts/IW.jpg')
         addDir('Pach Attack', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=pa',1,'http://gametrailers.mtvnimages.com/images/podcasts/PachAttack.jpg')
 	addDir('Spotlight: Microsoft XBOX360', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=xb360',1,'http://gametrailers.mtvnimages.com/images/podcasts/Xbox360.jpg')
-	addDir('Spotlight: Nintendo 3DS', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=pa',1,'http://gametrailers.mtvnimages.com/images/podcasts/600x600_PodCast_3DS.jpg')
-	addDir('Spotlight: Nintendo DS', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=3ds',1,'http://gametrailers.mtvnimages.com/images/podcasts/DS.jpg')
-	addDir('Spotlight: Nintendo Wii', 'feeds.gametrailers.com/rss_ipod_gen.php?source=wii',1,'http://gametrailers.mtvnimages.com/images/podcasts/PodCast_Wii.jpg')
+	addDir('Spotlight: Nintendo 3DS', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=3ds',1,'http://gametrailers.mtvnimages.com/images/podcasts/600x600_PodCast_3DS.jpg')
+	addDir('Spotlight: Nintendo DS', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=ds',1,'http://gametrailers.mtvnimages.com/images/podcasts/DS.jpg')
+	addDir('Spotlight: Nintendo Wii', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=wii',1,'http://gametrailers.mtvnimages.com/images/podcasts/PodCast_Wii.jpg')
 	addDir('Spotlight: Sony PS3', 'http://www.gametrailers.com/gtps3_podcast.xml',1,'http://gametrailers.mtvnimages.com/images/podcasts/SonyPS3.jpg')
 	addDir('Spotlight: Sony PSP', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=psp',1,'http://gametrailers.mtvnimages.com/images/podcasts/PSP.jpg')
                        

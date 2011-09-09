@@ -1,0 +1,5 @@
+Version 0.9.0
+* Updated required versions of xbmcswift and python for Eden.
+
+Version 0.8.1
+* Updated xbmcswift version

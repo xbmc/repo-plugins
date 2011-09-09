@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?> 
+<settings> 
+    <!--Login--> 
+    <category label="30100"> 
+        <setting id="username" type="text" label="30101" default="" /> 
+        <setting id="password" type="text" option="hidden" label="30102" default="" /> 
+    </category> 
+    <!--Download--> 
+    <!--<category label="30076"> -->
+        <!--<setting id="downloadMode" type="bool" default="true" label="30074" /> -->
+        <!--<setting id="downloadPath" type="folder" source="files" enable="eq(-1,false)" option="writeable" label="30073" /> -->
+    <!--</category>    -->
+</settings> 

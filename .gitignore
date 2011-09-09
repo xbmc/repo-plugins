@@ -21,3 +21,5 @@ plugin.audio.podcatcher/.gitignore
 plugin.video.tagesschau/.git
 plugin.video.tagesschau/.gitignore
 plugin.video.nrk/.git
+plugin.video.academicearth/.git
+plugin.video.academicearth/.gitignore

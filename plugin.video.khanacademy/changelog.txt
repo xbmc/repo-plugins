@@ -1,0 +1,9 @@
+Version 0.3
+* Updated required versions of xbmcswift and python for Eden.
+
+Version 0.2
+* Added an icon.
+* Fixed typo in plugin_id.
+
+Version 0.1
+* Initial working version.

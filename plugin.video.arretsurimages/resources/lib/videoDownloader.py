@@ -23,7 +23,7 @@ class Download:
             #unicode causes problems here, convert to standard str
             self.filename = self.getLegalFilename(self.title.title().replace(' ', ''))
             self.fullDownloadPath = os.path.join(downloadPath, self.filename)
-            print '[%s] %s : Attempting to download\n%s --> %s' % (pluginName, __name__, self.url, self.fullDownloadPath)
+            print '[%s] %s : Attempting to download\n%s --> %s' % (pluginName, __name__, self.url.encode('ascii', 'replace'), self.fullDownloadPath)
             if self.checkPath(downloadPath, self.filename):
                 self.showNotification(getLS(30200), self.filename)
                 try:

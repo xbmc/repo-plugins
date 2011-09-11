@@ -66,45 +66,6 @@ class ArretSurImages:
             print "bouton-telecharger not found"
         return {'Title':title, 'url':link}
 
-    def getIphoneVideoDetails(self, url):
-        """Return the video title and link"""
-        html = getHTML(url)
-        soup = BeautifulSoup(html)
-        # Get title and url
-        videoTitle = soup.find('a', attrs = {'class':'title'})
-        if videoTitle:
-            title = videoTitle.string
-        else:
-            title = 'ASI'
-        videoLink = soup.find(type="video/x-m4v")
-        if videoLink:
-            link = videoLink['href']
-        else:
-            link = 'None'
-        return {'Title':title, 'url':link}
-
-    def getIphoneProgramParts(self, url, name):
-        """Return all parts of a program"""
-        html = getHTML(url)
-        soup = BeautifulSoup(html)
-        parts = []
-        # Get the different parts
-        part = 0
-        for media in soup.findAll(text=re.compile(u'.*title="voir la vidéo".*')):
-            match = re.search(u'href="(.*?)"', media)
-            if match:
-                part += 1
-                partLink = match.group(1)
-                partTitle = name + ' - Acte %d' % (part)
-            match = re.search(u'img src="(.*?)"', media)
-            if match:
-                partThumb = URLASI + match.group(1)
-            parts.append({'url':partLink, 'Title':partTitle, 'Thumb':partThumb})
-        # If there is only one part, we keep only one link
-        if part == 1 and len(parts) == 2:
-            parts.pop()
-        return parts
-
     def getVideoDetails(self, url, streams):
         """Return the video title and link"""
         # Run the json request using the video id
@@ -129,10 +90,7 @@ class ArretSurImages:
 
         video id allows to get video url with a json request"""
         html = getHTML(url)
-        # Filter to avoid wrap-porte (La chronique porte) defined at the beginning
-        # of the html page
-        blocContainers = SoupStrainer(attrs = {'class':'contenu-html bg-page-contenu'})
-        soup = BeautifulSoup(html, parseOnlyThese = blocContainers)
+        soup = BeautifulSoup(html)
         parts = []
         part = 1
         # Get all movie id

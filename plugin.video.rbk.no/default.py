@@ -41,7 +41,7 @@ def INDEX(start):
                 id = re.compile('TV2Player.insert\(([0-9]+)').findall(link)
                 if len(id) == 0:
                         # utub it is then?
-                        id = re.compile('youtube.com/embed/([^?]+)\?').findall(link)
+                        id = re.compile('youtube.com/embed/([^?"]+)(?:\?|")').findall(link)
                         for i in id:
                                 try:
                                         thumb = re.compile('<div class="image">[^>]*src="([^"]*)"').findall(link)[0]

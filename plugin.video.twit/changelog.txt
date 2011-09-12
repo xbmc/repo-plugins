@@ -1,3 +1,6 @@
+Version 1.0.2
+added TWiT Live via Ustream - 1.5 Mbs
+
 Version 1.0.1
 show updates
 

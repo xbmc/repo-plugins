@@ -27,7 +27,7 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 	__dbg__ = sys.modules[ "__main__" ].__dbg__
 	
 	__feeds__ = sys.modules[ "__main__" ].__feeds__
-	__storage__ = sys.modules [ "__main__" ].__storage__
+	__storage__ = sys.modules[ "__main__" ].__storage__
 	
 	def __init__(self):
 		self.urls['categories'] = "http://www.youtube.com/videos"
@@ -67,12 +67,12 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		
 		#list = SoupStrainer(id="recent-trailers-container", name="div")
 		#trailers = BeautifulSoup(result["content"], parseOnlyThese=list)
-		trailers = self.parseDOM(result["content"], { "name": "div", "id": "id", "id-match": "recent-trailers-container"})
+		trailers = self.parseDOM(result["content"], "div", attrs = { "id": "recent-trailers-container"})
 		
 		if (len(trailers) > 0):
 			items = []
-			ahref = self.parseDOM(trailers, { "name": "a", "class": " yt-uix-hovercard-target", "return": "href"})
-			athumb = self.parseDOM(trailers, {"name": "img", "id": "alt", "id-match": "Thumbnail", "return": "src"})
+			ahref = self.parseDOM(trailers, "a", attrs = {"class": " yt-uix-hovercard-target", "id": ".*?" }, ret = "href")
+			athumb = self.parseDOM(trailers, "img", attrs = { "alt": "Thumbnail" }, ret = "src")
 			if len(ahref) == len(athumb):
 				for i in range(0, len(ahref)):
 					videoid = ahref[i]
@@ -102,32 +102,28 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		result = self._fetchPage({"link":url})
 
 		next = "false"
-		pagination = self.parseDOM(result["content"], { "name": "div", "class": " yt-uix-pager"})
+		pagination = self.parseDOM(result["content"], "div", attrs = { "class": "yt-uix-pager"})
 
 		if (len(pagination) > 0):
 			tmp = str(pagination)
 			if (tmp.find("Next") > 0):
 				next = "true"
 		
-		videos = self.parseDOM(result["content"], { "name": "div", "id": "id", "id-match": "browse-video-data"})
+		videos = self.parseDOM(result["content"], "div", { "id": "browse-video-data"})
+		if len(videos) == 0:
+			videos = self.parseDOM(result["content"], "div", attrs= { "class": "most-viewed-list paginated"})
 		
 		items = []
 		if (len(videos) > 0):
-			links = self.parseDOM(videos, { "name": "a", "return": "href"})
-			for link in links:
-				if (link.find("/watch?v=") != -1):
-					link = link[link.find("=") + 1:link.find("&")]
-					items.append(link)
-		else:
-			videos = self.parseDOM(result["content"], { "name": "div", "class": "most-viewed-list paginated"})
-			links = self.parseDOM(videos, { "name": "a", "return": "href"})
+			links = self.parseDOM(videos, "a", attrs = { "class": "ux-thumb-wrap " } , ret = "href")
+			if len(links) == 0:
+				links = self.parseDOM(videos, "a", ret = "href")
 			for link in links:
 				if (link.find("/watch?v=") != -1):
 					link = link[link.find("=") + 1:]
 				if (link.find("&") > 0):
 					link = link[:link.find("&")]
 				items.append(link)
-				
 		if self.__dbg__:
 			print self.__plugin__ + " scrapeCategoriesGrid done " 
 		return (items, result["status"])
@@ -144,9 +140,9 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		result = self._fetchPage({"link": url})
 		
 		if result["status"] == 200:
-			categories = self.parseDOM(result["content"], {"name": "div", "id": "id", "id-match": "browse-filter-menu"})
-			ahref = self.parseDOM(categories, {"name": "a", "return": "href"})
-			acontent = self.parseDOM(categories, {"name": "a", "content": "true"})
+			categories = self.parseDOM(result["content"], "div", attrs = { "id": "browse-filter-menu"})
+			ahref = self.parseDOM(categories, "a", ret= "href")
+			acontent = self.parseDOM(categories, "a")
 
 			if len(acontent) == len(ahref) and len(ahref) > 0:
 				for i in range(0 , len(ahref)):
@@ -165,7 +161,7 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 					items.append(item)
 
 		if self.__dbg__:
-			print self.__plugin__ + " scrapeMusicCategories done"
+			print self.__plugin__ + " scrapeMusicCategories done" 
 		return (items, result["status"]) 
 
 	
@@ -206,9 +202,9 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 			result = self._fetchPage({"link": url})
 			
 			if result["status"] == 200:
-				artists = self.parseDOM(result["content"], { "name": "div", "id": "id", "id-match": "similar-artists"});
-				ahref = self.parseDOM(artists, {"name": "a", "return": "href" })
-				atitle = self.parseDOM(artists, {"name": "a", "content": "true"})
+				artists = self.parseDOM(result["content"], "div", { "id": "similar-artists"});
+				ahref = self.parseDOM(artists, "a", ret = "href")
+				atitle = self.parseDOM(artists, "a")
 				if len(ahref) == len(atitle):
 					for i in range(0, len(ahref)):
 						item = {}
@@ -241,11 +237,11 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 			url = self.urls["music"] + category
 			result = self._fetchPage({"link":url})
 
-			artists = self.parseDOM(result["content"], {"name": "div", "class": "browse-item artist-item", "content": "true"})
+			artists = self.parseDOM(result["content"], "div",  { "id": "artist-recs-container"})
 			for artist in artists:
-				ahref = self.parseDOM(artist, {"name": "a", "return": "href", "id": "title"})
-				atitle = self.parseDOM(artist, {"name": "a", "return": "title"})
-				athumb = self.parseDOM(artist, {"name": "img", "return": "data-thumb"})
+				ahref = self.parseDOM(artist, "a", { "title": ".*?" }, ret = "href")
+				atitle = self.parseDOM(artist, "a", ret = "title")
+				athumb = self.parseDOM(artist, "img", ret = "data-thumb")
 				if len(atitle) == len(ahref) == len(athumb) and len(ahref) > 0:
 					for i in range(0 , len(ahref)):
 						item = {}
@@ -269,7 +265,7 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		get = params.get
 		if self.__dbg__:
 			print self.__plugin__ + " scrapeMusicCategoryHits"
-
+		
 		status = 200
 		items = []
 		params["batch"] = "true"
@@ -279,17 +275,18 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 			url = self.urls["music"] + category
 			result = self._fetchPage({"link":url})
 			
-			content = self.parseDOM(result["content"], { "name": "div", "class": "browse-item music-item ", "content": "true"})
+			content = self.parseDOM(result["content"], "li", { "class": "yt-uix-slider-slide-item "})
 			
-			for video in content: 
-				videoid = self.parseDOM(video, { "name": "a", "class": "ux-thumb-wrap " })
+			for video in content:
+				videoid = self.parseDOM(video, "a", attrs = {"class": "ux-thumb-wrap " }, ret = "href")
+				videoid = videoid[0]
 				videoid = videoid[videoid.find("?v=") + 3:videoid.find("&")]
 				items.append(videoid)
+		
 		if self.__dbg__:
 			print self.__plugin__ + " scrapeMusicCategoryHits done"		
 		return (items, status)
 	
-
 	def searchDisco(self, params = {}):
 		get = params.get
 		if self.__dbg__:
@@ -317,7 +314,7 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 			
 			#list = SoupStrainer(name="div", id ="playlist-bar")
 			#mix_list = BeautifulSoup(result["content"], parseOnlyThese=list)
-			mix_list = self.parseDOM(result["content"], { "name": "div", "id": "id", "id-match": "playlist-bar", "return": "data-video-ids"})
+			mix_list = self.parseDOM(result["content"], "div", { "id": "playlist-bar" }, ret = "data-video-ids")
 
 			if (len(mix_list) > 0):
 				items = mix_list[0].split(",")
@@ -334,7 +331,7 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		url = self.urls["disco_main"]
 		result = self._fetchPage({"link": url})
 		
-		popular = self.parseDOM(result["content"], { "name": "a", "id": "id", "id-match": "popular-tracks"})
+		popular = self.parseDOM(result["content"], "a", { "id": "popular-tracks"})
 
 		items = []		
 		if (len(popular) > 0):
@@ -360,10 +357,10 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		url = self.urls["disco_main"]
 		result = self._fetchPage({"link":url})
 		
-		popular = self.parseDOM(result["content"], { "name": "div", "class": "ytg-fl popular-artists"})
+		popular = self.parseDOM(result["content"], "div", { "class": "ytg-fl popular-artists"})
 		yobjects = []
 		if len(popular) > 0:
-			artists = self.parseDOM(popular, { "name": "li", "class": "popular-artist-row disco-search", "return": "data-artist-name"})
+			artists = self.parseDOM(popular, "li", attrs = { "class": "popular-artist-row disco-search" }, ret = "data-artist-name")
 			for artist in artists:
 				item = {}
 				title = self.makeAscii(artist)
@@ -395,16 +392,16 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		
 		result = self._fetchPage({"link": url})
 		
-		live = self.parseDOM(result["content"], { "name": "div", "id": "id", "id-match": "live-main"})
-		live = self.parseDOM(live, { "name": "div", "class": "browse-item ytg-box", "content": "true"})
+		live = self.parseDOM(result["content"], "div", { "id": "live-main"})
+		live = self.parseDOM(live, "div", { "class": "browse-item ytg-box"})
 		videos = []
 
 		if len(live) > 0:
 			live = "".join(live)
-			ahref = self.parseDOM(live, {"name": "a", "return": "href", "class": "live-video-title"})
-			atitle = self.parseDOM(live, {"name": "a", "class": "live-video-title", "content": "true"})
-			athumb = self.parseDOM(live, {"name": "img", "id": "alt", "id-match": "Thumbnail", "return": "src"})
-			astudio = self.parseDOM(live, {"name": "a", "id": "title", "return": "title"})
+			ahref = self.parseDOM(live, "a", attrs = {"class": "live-video-title"}, ret = "href" )
+			atitle = self.parseDOM(live, "a", attrs = {"class": "live-video-title"})
+			athumb = self.parseDOM(live, "img", attrs = { "alt": "Thumbnail" }, ret = "src")
+			astudio = self.parseDOM(live, "a", ret = "title")
 
 			#print self.__plugin__ + " BLA BLA BTEST2 " + str(len(ahref)) +  " - " + str(len(atitle))  + " - " + str(len(athumb)) + " - " + str(len(astudio)) #+  " - " + str(len(result["content"])) + " - " + str(len(live))
 			if len(ahref) == len(atitle) and len(ahref) == len(astudio) and len(ahref) == len(athumb):
@@ -480,12 +477,12 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		url = self.urls[get("scraper")]
 		
 		result = self._fetchPage({"link": url, "login": "true"})
-		liked = self.parseDOM(result["content"], { "name": "div", "id": "id", "id-match": "vm-video-list-container"})
+		liked = self.parseDOM(result["content"], "div", { "id": "vm-video-list-container"})
 
 		items = []
 		
 		if (len(liked) > 0):
-			vidlist = self.parseDOM(liked, { "name": "li", "class":" vm-video-item ", "return": "id"})
+			vidlist = self.parseDOM(liked, "li", { "class":" vm-video-item " }, ret = "id")
 			for videoid in vidlist:
 				videoid = videoid[videoid.rfind("video-") + 6:]
 				items.append(videoid)
@@ -506,8 +503,8 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		videos = re.compile('<a href="/watch\?v=(.*)&amp;feature=sh_e_sl&amp;list=SL"').findall(result["content"])
 			
 
-		nexturl = self.parseDOM(result["content"], { "name": "button", "id": "data-next-url", "return": "data-next-url"  })
-
+		nexturl = self.parseDOM(result["content"], "button", { "class": " yt-uix-button" }, ret = "data-next-url")
+		print "smoker "+ repr(nexturl)
 		if (len(nexturl) > 0):
 			nexturl = nexturl[0]
 		else:
@@ -569,12 +566,12 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		
 		yobjects = []
 
-		seasons = self.parseDOM(html, { "name": "div", "class": "seasons"})
+		seasons = self.parseDOM(html, "div", attrs = {"class": "seasons"})
 		if (len(seasons) > 0):
 			params["folder"] = "true"
 
-			season_list = self.parseDOM(seasons, { "name": "span", "class": "yt-uix-button-content", "content": "true"})
-			atitle = self.parseDOM(seasons, { "name": "button", "id": "type", "id-match": "button", "return": "title"})
+			season_list = self.parseDOM(seasons, "span", attrs = {"class": "yt-uix-button-content"})
+			atitle = self.parseDOM(seasons, "button", attrs = { "type": "button" }, ret = "title")
 
 			if len(season_list) == len(atitle) and len(atitle) > 0:
 				for i in range(0, len(atitle)):
@@ -616,20 +613,20 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 			url = self.createUrl(params)
 			result = self._fetchPage({"link":url})
 			
-			showcont = self.parseDOM(result["content"], { "name": "ul", "class": "browse-item-list"})
+			showcont = self.parseDOM(result["content"], "ul", { "class": "browse-item-list"})
 
 			if (len(showcont) > 0):
 				page += 1
 				next = "true"
 			showcont = "".join(showcont)
 
-			shows = self.parseDOM(showcont, { "name": "div", "class": "browse-item show-item yt-uix-hovercard ", "content": "true" })
+			shows = self.parseDOM(showcont, "div", { "class": "browse-item show-item yt-uix-hovercard " })
 
 			for show in shows:
-				ahref = self.parseDOM(show, { "name": "a", "id": "title", "return": "href" })
-				acont = self.parseDOM(show, { "name": "a", "id": "title", "return": "title" })
-				athumb = self.parseDOM(show, { "name": "img", "id": "alt", "id-match": "Thumbnail", "return": "src"})
-				acount = self.parseDOM(show, { "name": "span", "class": "show-video-counts", "content": "true" })
+				ahref = self.parseDOM(show, "a", attrs = { "title": ".*?" }, ret = "href" )
+				acont = self.parseDOM(show, "a", ret = "title" )
+				athumb = self.parseDOM(show, "img", attrs = { "alt": "Thumbnail" }, ret = "src")
+				acount = self.parseDOM(show, "span", { "class": "show-video-counts" })
 
 				#print self.__plugin__ + " XXX " + str(len(ahref)) + " - " +  str(len(acont)) + " - " + str(len(athumb)) + " - " + str(len(acount)) + repr(show)
 				if len(ahref) == len(acont) and len(ahref) == len(acount) and len(ahref) == len(athumb) and len(ahref) > 0:
@@ -697,10 +694,10 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		ytobjects = []
 
 
-		dom_pages = self.parseDOM(result["content"], {"name": "div", "class": "yt-uix-slider-title", "content": "true"})
+		dom_pages = self.parseDOM(result["content"], "div", { "class": "yt-uix-slider-title"})
 		for item in dom_pages:
-			ahref = self.parseDOM(item, { "name": "a", "return": "href" })
-			acont = self.parseDOM(item, { "name": "a", "content": "true" })
+			ahref = self.parseDOM(item, "a", ret = "href" )
+			acont = self.parseDOM(item, "a")
 			if len(ahref) == len(acont) and len(ahref) > 0:
 				item = {}
 				cat = ahref[0]
@@ -736,8 +733,8 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 			url = self.createUrl(params)
 			result = self._fetchPage({"link":url})
 			
-			dom_pages = self.parseDOM(result["content"], {"name": "div", "class": "yt-uix-pager"})
-			links = self.parseDOM(dom_pages, {"name": "a", "class": "yt-uix-pager-link", "return": "data-page"})
+			dom_pages = self.parseDOM(result["content"], "div", attrs = {"class": "yt-uix-pager"})
+			links = self.parseDOM("".join(dom_pages), "a", attrs = {"class": "yt-uix-pager-link" }, ret = "data-page")
 			print self.__plugin__ + " scrapeMoviesGrid " + str(len(dom_pages)) + " - " + str(len(links))
 			if len(links) > 0:
 				for link in links:
@@ -746,9 +743,9 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 							print self.__plugin__ + " scrapeMoviesGrid - next page ? link: " + str(link) + " > page: " + str(page + 1)
 						next = "true"
 
-			dom_list = self.parseDOM(result["content"], {"name": "ul", "class": "browse-item-list"})
-			vidids = self.parseDOM(dom_list, {"name": "span", "return": "data-video-ids"})
-			thumbs = self.parseDOM(dom_list, {"name": "img", "return": "data-thumb"})
+			dom_list = self.parseDOM(result["content"], "ul", { "class": "browse-item-list"})
+			vidids = self.parseDOM(dom_list, "span", ret = "data-video-ids")
+			thumbs = self.parseDOM(dom_list, "img", ret = "data-thumb")
 			
 			page += 1
 			if len(vidids) == len(thumbs) and len(vidids) > 0:
@@ -923,7 +920,7 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		result = self._fetchPage({"link":url})
 		
 		if result["status"] == 200:
-			pagination = self.parseDOM(result["content"], { "name": "div", "class": "yt-uix-pager"})
+			pagination = self.parseDOM(result["content"], "div", { "class": "yt-uix-pager"})
 	
 			if (len(pagination) > 0):
 				tmp = str(pagination)
@@ -931,32 +928,30 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 					next = "true"
 			
 			
-			trailers = self.parseDOM(result["content"], { "name": "div", "id": "id", "id-match": "popular-column" })
+			trailers = self.parseDOM(result["content"], "div", attrs = { "id": "popular-column" })
 			
-			if (len(trailers) > 0):
-				ahref = self.parseDOM(trailers, { "name": "a", "class": "ux-thumb-wrap ", "return": "href"})
+			if len(trailers) > 0:
+				ahref = self.parseDOM(result["content"], "a", attrs = { "class": "ux-thumb-wrap " }, ret = "href")
 				if len(ahref) == 0:
-					ahref = self.parseDOM(trailers, { "name": "a", "class": "ux-thumb-wrap contains-addto", "return": "href"})
+					ahref = self.parseDOM(trailers, "a", attrs = { "class": "ux-thumb-wrap contains-addto" }, ret = "href")
 				
-				athumbs = self.parseDOM(trailers, { "name": "a", "class": "ux-thumb-wrap ", "content": "true"})
+				athumbs = self.parseDOM(trailers, "a", attrs = { "class": "ux-thumb-wrap "})
 				if len(athumbs) == 0:
-					athumbs = self.parseDOM(trailers, { "name": "a", "class": "ux-thumb-wrap contains-addto", "content": "true"})
-				
-				if len(athumbs) == len(ahref) and len(ahref) > 0:
-					for i in range(0 , len(ahref)):
-						videoid = ahref[i]
+					athumbs = self.parseDOM(trailers, "a", attrs = { "class": "ux-thumb-wrap contains-addto"})
+				for i in range(0 , len(ahref)):
+					videoid = ahref[i] 
 						
-						if (videoid):
-							if (videoid.find("=") > -1):
-								videoid = videoid[videoid.find("=")+1:]
-						thumb = self.parseDOM(athumbs[i], { "name": "img", "return": "src"});
-						if len(thumb) > 0:
-							thumb = thumb[0]
-						items.append((videoid, thumb))
+					if (videoid):
+						if (videoid.find("=") > -1):
+							videoid = videoid[videoid.find("=")+1:]
+					thumb = self.parseDOM(athumbs[i], "img", attrs = { "alt": "Thumbnail"}, ret = "src")
+					if len(thumb) > 0:
+						thumb = thumb[0]
+					items.append((videoid, thumb))
 		
 		if self.__dbg__:
-			print self.__plugin__ + " scrapeGridFormat done"
-		return (items, result["status"])
+			print self.__plugin__ + " scrapeGridFormat done " 
+		return (items, result["status"]) 
 	
 	def scrapeCategoryList(self, params = {}):
 		get = params.get
@@ -975,45 +970,48 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		result = self._fetchPage({"link":url})
 		
 		if result["status"] == 200:
-			categories = self.parseDOM(result["content"], {"name": "div", "class": "yt-uix-expander-body.*"})
+			categories = self.parseDOM(result["content"], "div", attrs = {"class": "yt-uix-expander-body.*?"})
 			if len(categories) == 0:
-				categories = self.parseDOM(result["content"], {"name": "div", "class": "browse-filter-menu.*"})
+				categories = self.parseDOM(result["content"], "div", attrs = {"id": "browse-filter-menu"})
+
+			if len(categories) == 0: # <- is this needed. Anyways. it breaks. fix that..
+				categories = self.parseDOM(result["content"], "div", attrs = {"class": "browse-filter-menu.*?"})
 			
-			if (len(categories) > 0):
-				ahref = self.parseDOM(categories, {"name": "a", "return": "href"})
-				acontent = self.parseDOM(categories, {"name": "a", "content": "true"})
+			for cat in categories:
+				print self.__plugin__ + " scrapeCategoryList : " + cat[0:50]
+				ahref = self.parseDOM(cat, "a", ret = "href")
+				acontent = self.parseDOM(cat, "a")
+				for i in range(0 , len(ahref)):
+					item = {}
+					title = acontent[i]
+					title = title.replace("&amp;", "&")
+					if title == "All Categories" or title == "Education" or title == "":
+						continue
+					item['Title'] = title
 
-				if len(acontent) == len(ahref) and len(ahref) > 0:
-					for i in range(0 , len(ahref)):
-						item = {}
-						title = acontent[i]
-						title = title.replace("&amp;", "&")
-						if title == "All Categories" or title == "Education" or title == "":
+					cat = ahref[i].replace("/" + scraper + "/", "")
+
+					if get("scraper") == "categories":
+						if title == "Music":
 							continue
-						item['Title'] = title
-						cat = ahref[i].replace("/" + scraper + "/", "")
+						if cat.find("comedy") > 0:
+							cat = "?c=23"
+						if cat.find("gaming") > 0:
+							cat = "?c=20"
+						if cat.find("education") > 0:
+							item["subcategory"] = "true"
 
-						if get("scraper") == "categories":
-							if title == "Music":
-								continue
-							if cat.find("comedy") > 0:
-								cat = "?c=23"
-							if cat.find("gaming") > 0:
-								cat = "?c=20"
-							if cat.find("education") > 0:
-								item["subcategory"] = "true"
-
-						if get("scraper") == "movies":
-							if cat.find("pt=nr") > 0:
-								continue
-							elif cat.find("indian-cinema") > -1 or cat.find("foreign-film") > -1:
-								item["subcategory"] = "true"
-
-						cat = urllib.quote_plus(cat)
-						item['category'] = cat
-						item['scraper'] = scraper
-						item["thumbnail"] = thumbnail
-						yobjects.append(item)
+					if get("scraper") == "movies":
+						if cat.find("pt=nr") > 0:
+							continue
+						elif cat.find("indian-cinema") > -1 or cat.find("foreign-film") > -1:
+							item["subcategory"] = "true"	
+						
+					cat = urllib.quote_plus(cat)
+					item['category'] = cat
+					item['scraper'] = scraper
+					item["thumbnail"] = thumbnail
+					yobjects.append(item)
 		
 			if (not yobjects):
 				if self.__dbg__:
@@ -1036,9 +1034,9 @@ class YouTubeScraper(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 				
 		if not get("page"):
 			(result, status) = params["new_results_function"](params)
-
-			if self.__dbg__ and False:
-				print self.__plugin__ + " paginator new result " + repr(result)
+			
+			if self.__dbg__:
+				print self.__plugin__ + " paginator new result " + str(repr(result))[0:50]
 			
 			if len(result) == 0:
 				if get("scraper") not in ["music_top100"]:

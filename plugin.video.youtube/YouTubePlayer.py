@@ -460,7 +460,7 @@ class YouTubePlayer(YouTubeCore.YouTubeCore, YouTubeUtils.YouTubeUtils):
 		if hd_quality > 1: #<-- 720p
 			if (link(22)):
 				video_url = link(22)
-			if (link(45)):
+			elif (link(45)):
 				video_url = link(45)
 		if hd_quality > 2: #<-- 1080p
 			if (link(37)):

@@ -12,10 +12,18 @@
 - [XBMC] Subtitles and Annotations dont work the first time 90% of the time
 - Download of rtmpe streams not supported.
 
-[B]Version 2.6.1 (Beta)[B]
+[B]Version 2.6.3 (Beta)[/B]
+- Fixed plugin to prefer h264 for 720p again as this was causing problems for apple tv2 users
+- Fixed added dependency on simplejson since we're using that now and alot of nightly users we're having problems with the plugin.
+
+[B]Version 2.6.2 (Beta)[/B]
+- Added missing settings strings
+- Changed login code no longer prints username and password to log file when plugins debug mode is enabled (broken since 2.6)
+
+[B]Version 2.6.1 (Beta)[/B]
 - Fixed login after youtube changed the procedure for oauth2 verification
 
-[B]Version 2.6.0 (Beta)[B]
+[B]Version 2.6.0 (Beta)[/B]
 - Added New playback function. Now uses unified code accross all pages(html scraping, embeded, flash fallback). Supports fallback server.
 - Added fallback for age restricted videos (Will fail if embedding is disabled)
 - Added support for locally stored artists in Youtube Music
@@ -39,7 +47,7 @@
 - Fixed playback after youtube changes
 - Fixed RTMPe support (we now provide playpath correctly) - NOTE: this requires and updated version of librtmp
 
-[B]Version 2.5.0 (Beta)[B]
+[B]Version 2.5.0 (Beta)[/B]
 - Added new option to select playback and download quality with dialogs
 - Added Caching and alphabetically sorting of My playlists, My contacts and My subscriptions 
 - Added "Play all" context menu on certain folders 
@@ -157,7 +165,7 @@
 - Hardened handling of age restricted videos
 - No longer try login when no credentials have been provided.
 
-[B]Version 1.9.2[/B
+[B]Version 1.9.2[/B]
 - Disable socket timeout since that makes login fail on windows.
 
 [B]Version 1.9.1[/B]

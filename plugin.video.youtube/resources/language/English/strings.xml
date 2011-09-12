@@ -146,6 +146,8 @@
     <string id="30283">Japanese</string>
     <string id="30284">Enable annotations</string>
     <string id="30285">Use YouTube cache servers</string>
+    <string id="30286">Show YouTube Music</string>
+    <string id="30287">Show YouTube Live</string>
 
     <!-- Menu strings -->
     <string id="30500">Clear refinements</string>
@@ -212,5 +214,6 @@
     <string id="30625">Download Failed</string>
     <string id="30626">RTMPe playback currently not supported</string> 
     <string id="30627">Please provide 2-factor authentication PIN</string> 
+    <string id="30628">Please provide your password</string>
 
 </strings>

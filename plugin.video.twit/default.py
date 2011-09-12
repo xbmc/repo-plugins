@@ -117,11 +117,35 @@ def VIDEOLINKS(url):
 
 
 def addLiveLinks():
-        addLinkLive(__language__(30032),'http://bglive-a.bitgravity.com/twit/live/high',5,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
-        addLinkLive(__language__(30033),'http://bglive-a.bitgravity.com/twit/live/low',5,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
-        #addLink(__language__(30034),'rtmp://flash76.ustream.tv:1935/ustreamVideo/1524 playpath=streams/live app=ustreamVideo/1524 swfUrl="http://cdn1.ustream.tv/swf/4/viewer.rsl.558.swf" pageUrl="http://live.twit.tv/" live=true','','',xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
+        addLinkLive(__language__(30032),'http://bglive-a.bitgravity.com/twit/live/high?noprefix',5,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
+        addLinkLive(__language__(30033),'http://bglive-a.bitgravity.com/twit/live/low?noprefix',5,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
+        addLinkLive(__language__(30034),'http://cgw.ustream.tv/Viewer/getStream/1/1524.amf',6,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
+
+def getSwf():
+        url = 'http://www.ustream.tv/flash/viewer.swf'
+        req = urllib2.Request(url)
+        response = urllib2.urlopen(req)
+        swfUrl = response.geturl()
+        return swfUrl
 
 
+def getUstream(url):
+        headers = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'}
+        data = None
+        req = urllib2.Request(url,data,headers)
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        match = re.compile('.*(rtmp://.+?)\x00.*').findall(link)
+        rtmp = match[0]
+        sName = re.compile('.*streamName\W\W\W(.+?)[/]*\x00.*').findall(link)
+        playpath = ' playpath='+sName[0]
+        swf = ' swfUrl='+getSwf()
+        pageUrl = ' pageUrl=http://live.twit.tv'
+        url = rtmp + playpath + swf + pageUrl + ' swfVfy=1 live=true'
+        playLive(url)
+        
+        
 def playLive(url):
         item = xbmcgui.ListItem(path=url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
@@ -231,4 +255,8 @@ elif mode==5:
     print ""+url
     playLive(url)
 
+elif mode==6:
+    print ""+url
+    getUstream(url)
+    
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.screened"
+       name="Screened"
+       version="1.0"
+       provider-name="Whiskey Media">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>Screened video plugin</summary>
+    <description>Screened is a site about movies that doesn't take itself too seriously. Watch reviews, trailers and original videos about movies.</description>
+  </extension>
+</addon>

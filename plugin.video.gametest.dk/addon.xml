@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="plugin.video.gametest.dk"
-	version="1.0.3"
+	version="1.1.0"
 	name="Gametest"
 	provider-name="twinther [tommy@winther.nu]">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
-		<import addon="script.module.danishaddons" version="1.1.0"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>video</provides>

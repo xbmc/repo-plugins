@@ -8,12 +8,12 @@ def CATEGORIES():
 	plugins = {}
 	plugins[__language__(30006)] = {
 		'feed': 'http://feeds2.feedburner.com/AllJupiterVideos?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/jupiter.png',
+		'image': 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg',
 		'plot': 'All the latest videos from Jupiter Broadcasting.',
 		'genre': 'Technology'
 	}
 	plugins[__language__(30000)] = {
-		'feed': 'http://feeds.feedburner.com/linuxactionshowipodvid?format=xml',
+		'feed': 'http://feeds.feedburner.com/computeractionshowvideo?format=xml',
 		'image': 'http://www.jupiterbroadcasting.com/images/LAS-VIDEO.jpg',
 		'plot': 'The Linux Action Show covers the latest news in free and open source software, especially Linux.',
 		'genre': 'Technology'
@@ -25,7 +25,7 @@ def CATEGORIES():
 		'genre': 'Technology'
 	}
 	plugins[__language__(30002)] = {
-		'feed': 'http://feeds.feedburner.com/stokedipod?format=xml',
+		'feed': 'http://feeds.feedburner.com/stokedhd?format=xml',
 		'image': 'http://www.jupiterbroadcasting.com/images/STOked-BadgeHD.png',
 		'plot': 'All the news about Star Trek Online you would ever need.',
 		'genre': 'Technology'
@@ -37,7 +37,7 @@ def CATEGORIES():
 		'genre': 'Technology'
 	}
 	plugins[__language__(30004)] = {
-		'feed': 'http://feeds.feedburner.com/jupiterniteivid?format=xml',
+		'feed': 'http://feeds.feedburner.com/jupiternitehd?format=xml',
 		'image': 'http://www.jupiterbroadcasting.com/images/JANBADGE-LVID.jpg',
 		'plot': 'Jupiter Broadcasting hooliganisms covered in front of a live audience on the intertubes.',
 		'genre': 'Technology'
@@ -49,14 +49,14 @@ def CATEGORIES():
 		'genre': 'Technology'
 	}
 	plugins[__language__(30007)] = {
-		'feed': 'http://feeds.feedburner.com/MMOrgueLarge?format=xml',
+		'feed': 'http://feeds.feedburner.com/MMOrgueHD?format=xml',
 		'image': 'http://www.jupiterbroadcasting.com/images/MMOrgueBadgeHD144.jpg',
 		'plot': 'The MMOrgue is a show presented by Jeremy about Massively Multiplayer Online (MMO) games.',
 		'genre': 'Technology'
 	}
 	plugins[__language__(30008)] = {
 		'feed': 'http://feeds.feedburner.com/techsnaphd?format=xml',
-		'image': 'http://images4.wikia.nocookie.net/jupiterbroadcasting/images/9/93/Techsnap.jpg',
+		'image': 'http://images3.wikia.nocookie.net/jupiterbroadcasting/images/d/d6/Techsnapcenter.jpg',
 		'plot': 'TechSNAP is a show about technology news hosted by Chris Fisher and Allan Jude which records live on Thursdays and is released on the following Monday.',
 		'genre': 'Technology'
 	}
@@ -66,13 +66,20 @@ def CATEGORIES():
 		'plot': 'SciByte is a show about science topics presented by Heather and Jeremy.',
 		'genre': 'Science'
 	}
+	# TODO: Add FauxShow?
+	#plugins[__language__(30011)] = {
+	#	'feed': 'http://blip.tv/fauxshow/rss',
+	#	'image': 'http://images3.wikia.nocookie.net/__cb20110422002134/jupiterbroadcasting/images/0/0b/Fauxshow.jpg',
+	#	'plot': 'The FauxShow is not a real show, but a social experience. Unlike most of the shows on the network, the FauxShow has no defined subject and the topic varies week to week.',
+	#	'genre': 'Humour'
+	#}
 	x = 1
 	for name, data in plugins.iteritems():
 		data['count'] = x
 		x = x + 1
 		addDir(name, data['feed'], 1, data['image'], data)
 	#TODO: Add Jupiter Broadcasting Live via Justin.tv?
-	#addLink(__language__(30007), 'http://www.justin.tv/widgets/live_embed_player.swf?channel=jupiterbroadcasting', '', '', 'http://www.jupiterbroadcasting.com/wp-content/themes/ondemand/images/logo.jpg')
+	#addLink(__language__(30010), 'http://www.justin.tv/widgets/live_embed_player.swf?channel=jupiterbroadcasting', '', '', 'http://www.jupiterbroadcasting.com/wp-content/themes/ondemand/images/logo.jpg')
 
 def INDEX(name, url):
 	import feedparser
@@ -81,17 +88,19 @@ def INDEX(name, url):
 	for item in data.entries:
 		info = {}
 		# The title
-		title = info['Title'] = str(x) + '. ' + item.title
-		# Video URL
-		video = getattr(item.enclosures[0], 'href', 0);
-		if video == 0:
-			video = getattr(item.enclosures[0], 'url', '')
-		size = getattr(item.enclosures[0], 'length', 0)
-		info['size'] = int(size)
+		title = info['title'] = str(x) + '. ' + item.title
+		# Process the enclosures
+		if hasattr(item, 'enclosures'):
+			# Video URL
+			video = getattr(item.enclosures[0], 'href', 0);
+			if video == 0:
+				video = getattr(item.enclosures[0], 'url', '')
+			size = getattr(item.enclosures[0], 'length', 0)
+			info['size'] = int(size)
 		info['count'] = x
-		#Date
+		# Date
 		date = info['date'] = strftime("%d.%m.%Y", item.updated_parsed)
-		info['Plot'] = re.sub(r'<[^>]*?>', '', item.summary)
+		info['plot'] = re.sub(r'<[^>]*?>', '', item.summary)
 		info['plotoutline'] = item.subtitle
 		info['director'] = item.author
 		info['tvshowtitle'] = name
@@ -120,7 +129,7 @@ def get_params():
 def addLink(name, url, date, iconimage, info):
         ok=True
         liz=xbmcgui.ListItem(name, date, iconImage=iconimage, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels=info )
+        liz.setInfo( type="video", infoLabels=info )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
@@ -129,7 +138,7 @@ def addDir(name,url,mode,iconimage, info):
 	ok=True
 	info["Title"] = name
 	liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
-	liz.setInfo(type="Video", infoLabels=info)
+	liz.setInfo(type="video", infoLabels=info)
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 	return ok
 

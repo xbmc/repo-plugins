@@ -1,3 +1,8 @@
+[B]Version 0.1.8[/B]
+ 
+- fixes video links
+- thanks to the youtube plugin authors where I borrowed some code
+
 [B]Version 0.1.7[/B]
  
 - fixed bug that broke old episodes

@@ -3,7 +3,7 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 __plugin__ =  'EEVblog'
 __author__ = 'Clumsy <clumsy@xbmc.org>'
 __date__ = '02-05-2010'
-__version__ = '0.1.7'
+__version__ = '0.1.8'
 __settings__ = xbmcaddon.Addon(id='plugin.video.eevblog')
 
 # Thanks to some of the other plugin authors, where I borrowed some ideas from !
@@ -63,11 +63,11 @@ def play_video(ep_url):
   youtube_video_id = re.compile('<param name="movie" value=".*?/v/(.+?)[&\?].').findall(ep_data)
     
   # Ugly hack for a change in the page src from videos 140 onwards. 
-  if not youtube_video_id:
+  if len(youtube_video_id) == 0:
     youtube_video_id = re.compile('src="http://www.youtube.com/embed/(.*?)"').findall(ep_data)
   
   # Close the busy waiting dialog, if the youtube url wasn't parsed correctly.
-  if not youtube_video_id:
+  if len(youtube_video_id) == 0:
     xbmc.executebuiltin('Dialog.Close(busydialog)')
     return
         
@@ -79,15 +79,37 @@ def play_video(ep_url):
   
   video_info_html = open_url('http://www.youtube.com/get_video_info?video_id=' 
                              + youtube_video_id[0] +'&el=vevo')
-  fmt_url_map = urllib.unquote_plus(re.findall('&fmt_url_map=([^&]+)', video_info_html)[0]).split(',')
+  fmt_url_map = urllib.unquote_plus(re.findall('&url_encoded_fmt_stream_map=([^&]+)', video_info_html)[0]).split(',')
+    
   for url in fmt_url_map:
-    if (quality == 22) and url.startswith('22|'):
-      video_url = url.split('|')[1]
+    video_url = urllib.unquote_plus(url)
+    video_url = video_url.replace(" ", "%20").replace("url=", "")
+    if (quality == 22) and video_url.endswith('itag=22'):
       break
-    elif (url.startswith('35|')
-          or url.startswith('34|') or url.startswith('18|')):
-      video_url = url.split('|')[1]
+    elif (url.startswith('itag=35')
+          or url.endswith('itag=34') or url.endswith('itag=18')):
       break
+      
+  # The following is blatantly borrowed from the really nice youtube plugin. Thanks guys and boo youtube.
+  if (video_url.rfind(';') > 0):
+    video_url = video_url[:video_url.rfind(';')]
+  if (video_url.rfind(',') > video_url.rfind('&id=')): 
+    video_url = video_url[:video_url.rfind(',')]
+  elif (video_url.rfind(',') > video_url.rfind('/id/') and video_url.rfind('/id/') > 0):
+    video_url = video_url[:video_url.rfind('/')]
+  if video_url.find("&type") > 0:
+    video_url = video_url[:video_url.find("&type")]
+  pos = video_url.find("://")
+  fpos = video_url.find("fallback_host")
+  if pos > -1 and fpos > -1:
+    host = video_url[pos + 3:]
+    if host.find("/") > -1:
+      host = host[:host.find("/")]
+      fmt_fallback = video_url[fpos + 14:]
+    if fmt_fallback.find("&") > -1:
+      fmt_fallback = fmt_fallback[:fmt_fallback.find("&")]
+      video_url = video_url.replace(host, fmt_fallback)
+      video_url = video_url.replace("fallback_host=" + fmt_fallback, "fallback_host=" + host)
 
   listitem = xbmcgui.ListItem(label = name , iconImage = 'DefaultVideo.png', thumbnailImage = '')
   listitem.setInfo( type = "Video", infoLabels={ "Title": name, "Director": __plugin__, "Studio": __plugin__, "Genre": genre, "Plot": plot, "Episode": int(0)  } )

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
         id="plugin.video.onside.tv"
-        version="1.1.0"
+        version="1.1.1"
         name="Onside TV"
         provider-name="ariba [mail@nielsriber.dk], twinther [tommy@winther.nu]">
     <requires>

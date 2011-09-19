@@ -59,22 +59,28 @@ class DrNuApi(object):
 
 
     def getAllVideos(self):
-        return self._call_api('videos/all', 'all.json')
+        return self._call_api('videos/all', 'all.json') or list()
 
     def getNewestVideos(self):
-        return self._call_api('videos/newest', 'newest.json')
+        return self._call_api('videos/newest', 'newest.json') or list()
+
+    def getLastChanceVideos(self):
+        return self._call_api('videos/lastchance', 'lastchance.json') or list()
 
     def getMostViewedVideos(self):
-        return self._call_api('videos/mostviewed', 'mostviewed.json')
+        return self._call_api('videos/mostviewed', 'mostviewed.json') or list()
 
     def getSpotlightVideos(self):
-        return self._call_api('videos/spot', 'spot.json')
+        return self._call_api('videos/spot', 'spot.json') or list()
 
     def getProgramSeriesVideos(self, programSeriesSlug):
-        return self._call_api('programseries/%s/videos' % programSeriesSlug, 'programseries-%s.json' % programSeriesSlug)
+        return self._call_api('programseries/%s/videos' % programSeriesSlug, 'programseries-%s.json' % programSeriesSlug) or list()
 
     def getVideoById(self, id):
         return self._call_api('videos/%s' % id, 'videobyid-%s.json' % id)
+
+    def search(self, term):
+        return self._call_api('search/%s' % term) or list()
 
     def getProgramSeriesImageUrl(self, programSlug, width, height = None):
         if height is None:
@@ -91,39 +97,48 @@ class DrNuApi(object):
             height = width
         return API_URL % ('chapters/%s/images/%dx%d.jpg' % (id, width, height))
 
-
-    def _call_api(self, path, cacheFilename):
+    def _call_api(self, path, cacheFilename = None):
         print "Calling API: " + API_URL % path
 
-        cachePath = os.path.join(self.cachePath, cacheFilename)
-        try:
-            cachedOn = os.path.getmtime(cachePath)
-        except OSError: # File not found
-            cachedOn = 0
-
-        if time.time() - self.cacheMinutes * 60 >= cachedOn:
-            # Cache expired or miss
+        if cacheFilename:
+            cachePath = os.path.join(self.cachePath, cacheFilename)
             try:
-                u = urllib2.urlopen(API_URL % path)
-                content = u.read()
-                u.close()
+                cachedOn = os.path.getmtime(cachePath)
+            except OSError: # File not found
+                cachedOn = 0
 
-                f = open(cachePath, 'w')
-                f.write(content)
+            if time.time() - self.cacheMinutes * 60 >= cachedOn:
+                # Cache expired or miss
+                content = self._http_request(path)
+
+                if content:
+                    f = open(cachePath, 'w')
+                    f.write(content)
+                    f.close()
+
+            else:
+                f = open(cachePath)
+                content = f.read()
                 f.close()
-            except urllib2.HTTPError, ex:
-                print "HTTPError: " + str(ex.msg)
-                content = None
 
         else:
-            f = open(cachePath)
-            content = f.read()
-            f.close()
+            content = self._http_request(path)
 
         if content is not None:
             return simplejson.loads(content)
         else:
             return None
+
+    def _http_request(self, path):
+        try:
+            u = urllib2.urlopen(API_URL % path)
+            content = u.read()
+            u.close()
+        except urllib2.HTTPError, ex:
+            print "HTTPError: " + str(ex.msg)
+            content = None
+        return content
+
 
 if __name__ == '__main__':
     api = DrNuApi('/tmp', 0)

@@ -82,13 +82,16 @@ class SimpleXbmcGui(object):
           listItem.setProperty("PlayPath", link.playPath);
 
         self.log("URL:"+ link.basePath);
-        listItem.setInfo("video",{
-          "size": link.size,
-          "date": time.strftime("%d.%m.%Y",displayObject.date),
-          "year": int(time.strftime("%Y",displayObject.date)),
-          "title": title,
-          "plot": transformHtmlCodes(displayObject.description)
-        });
+        try:
+          listItem.setInfo("video",{
+            "size": link.size,
+            "date": time.strftime("%d.%m.%Y",displayObject.date),
+            "year": int(time.strftime("%Y",displayObject.date)),
+            "title": title,
+            "plot": transformHtmlCodes(displayObject.description)
+          }); 
+        except:
+          pass;
       
       
         listItem.setProperty('IsPlayable', 'true');

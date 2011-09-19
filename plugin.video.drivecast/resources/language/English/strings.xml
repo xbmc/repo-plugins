@@ -11,7 +11,8 @@
 	<string id="30007">Refreshing folder</string>
 	<string id="30008">Error</string>
 	<string id="30009">Empty playlist</string>
-	<string id="30010">Use QR code (click after pairing)...</string>
+	<string id="30010">Use QR code with code:</string>
+	<string id="30014">(click after pairing)...</string>
 	<string id="30011">Try DriveCast as guest user...</string>
 	<string id="30012">No pairing detected</string>
 	<string id="30013">Login...</string>

@@ -11,7 +11,8 @@
 	<string id="30007">Aggiornamento cartella</string>
 	<string id="30008">Errore</string>
 	<string id="30009">Playlist vuota</string>
-	<string id="30010">Usa il QR Code (clicca dopo il pairing)</string>
+	<string id="30010">Usa il QR Code con codice:</string>
+	<string id="30014">(clicca dopo il pairing)...</string>
 	<string id="30011">Utilizza DriveCast come utente di prova...</string>
 	<string id="30012">Nessun pairing rilevato...</string>
 	<string id="30013">Login...</string>

@@ -18,7 +18,8 @@
 
 # -*- coding: utf-8 -*-
 
-import sys, xbmc, xbmcaddon, xbmcplugin, xbmcgui, urllib, urllib2, unicodedata, httplib, threading
+import sys, xbmc, xbmcaddon, xbmcplugin, xbmcgui, urllib, urllib2, unicodedata, httplib, threading, os, stat
+from random import random
 from simplejson import load, loads
 from base64 import b64encode, b64decode
 from xml.dom.minidom import parseString
@@ -41,8 +42,7 @@ def log_menu():
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?guest",listitem=trying, isFolder=True)
 	log_form= xbmcgui.ListItem(__language__(30013),iconImage=__thumbnails__+"user.png", thumbnailImage=__thumbnails__+"user.png")
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?form",listitem=log_form,isFolder=True)
-	qr= qrcode_post()
-	qr_menu= xbmcgui.ListItem(__language__(30010), iconImage=qr, thumbnailImage=qr)
+	qr_menu= xbmcgui.ListItem(__language__(30010)+" [B]"+__settings__.getSetting("qr")+"[/B] "+__language__(30014), iconImage=__thumbnails__+"qr.png", thumbnailImage=__thumbnails__+"qr.png")
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=sys.argv[0]+"?qrcode",listitem=qr_menu, isFolder=True)
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -56,7 +56,6 @@ def qrcode_post():
 	data= loads(response.read())
 	conn.close()
 	__settings__.setSetting("qr",str(data["paircode"]))
-	return str(data["QRcode"])+".png"
 
 def qrcode_click():
 	qr= __settings__.getSetting("qr")
@@ -108,7 +107,7 @@ def playlists():
 		u=sys.argv[0]+"??"+pl["name"]
 		item= xbmcgui.ListItem(label=pl["name"], thumbnailImage=__thumbnails__+"playlist.png", path=u)
 		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=item, isFolder=True)
-	lo= xbmcgui.ListItem(label="Logout...", thumbnailImage=__thumbnails__+"user.png", path=sys.argv[0]+"?logout")
+	lo= xbmcgui.ListItem(label="[I]Logout[/I]...", thumbnailImage=__thumbnails__+"user.png", path=sys.argv[0]+"?logout")
 	xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=sys.argv[0]+"?logout", listitem=lo, isFolder=True)
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -116,9 +115,8 @@ def playlists():
 #	ELENCO ITEMS																<<<OK>>>>
 #========================================================================================
 def manage_RSS(playlist):
-	feed= read_RSS()
 	empty= True
-	for item in feed.getElementsByTagName('item'):
+	for item in __feed__.getElementsByTagName('item'):
 		playl=item.getElementsByTagName('carcast:playlists_string')
 		if playl:
 			pl= playl[0].firstChild.data.encode('utf-8')
@@ -210,6 +208,7 @@ mode= sys.argv[2][1:]
 
 if __rss__ == "":
 	if  mode=="":
+		qrcode_post()
 		log_menu()
 	elif mode=="guest":
 		guest()
@@ -218,6 +217,7 @@ if __rss__ == "":
 	elif mode=="qrcode":
 		qrcode_click()
 else:
+	__feed__= read_RSS()
 	if mode == "logout":
 		logout()
 	elif mode == "":

@@ -118,62 +118,13 @@ def playVideo(params):
     
     videoId = params.get("videoId")
     
-    response = getHttpResponse("http://www.youtube.com/watch?v=%s&safeSearch=none&hl=en_us" % videoId)
-    
-    ''' get urls from response '''
-    ''' fmturlmaps = re.findall('"fmt_url_map": "([^"]+)"', response); '''
-    fmturlmaps = re.findall('"url_encoded_fmt_stream_map": "([^"]+)"', response);
+    ''' call the youtube player '''
+    url = "plugin://plugin.video.youtube?path=/root&action=play_video&videoid=%s" % params.get( "videoId")
         
-    ''' we only need the first fmturlmaps '''
-    fmturlmaps = fmturlmaps[0].split(',')
-    
-    urls = {}    
-    for fmturlmap in fmturlmaps:
-        fmturlmap = fmturlmap.replace("url=", "");
-                
-        ''' itag= '''
-        itag = fmturlmap[fmturlmap.rfind("itag=") + 5:];
-        
-        ''' split by | '''
-        ''' fmtinfo = fmturlmap.split( '|' ) '''
-        ''' urls[int(fmtinfo[0])] = fmtinfo[1].replace('\/', '/') '''
-        
-        ''' cut last part '''
-        urlparts = fmturlmap.split('\u0026');
-        
-        urls[int(itag)] = urllib.unquote_plus(urlparts[0]);
-        
-        
-    
-    ''' get highest available format:
-        SD videos: 35, 34, 18, 5
-        HD videos: 22 (720p), 37 (1080p)
-    
-    '''    
-        
-    ''' get preferred format from settings '''
-    quality = int(__settings__.getSetting("quality"))
-    
-    if urls.get(37) and quality==2:
-        url = urls.get(37)
-    elif urls.get(22) and quality>=1:
-        url = urls.get(22)
-    elif urls.get(35):
-        url = urls.get(35)
-    elif urls.get(34):
-        url = urls.get(34)
-    elif urls.get(18):
-        url = urls.get(18)
-    elif urls.get(5):
-        url = urls.get(5)
-        
-    ''' url = url.replace('\u0026', '&'); '''
-                
-    listitem=xbmcgui.ListItem(label=params.get('title'), iconImage=params.get('thumbnail'), thumbnailImage=params.get('thumbnail'), path=url);    
-    ''' listitem.setInfo(type='Video', infoLabels=labels) '''
-
+    listitem=xbmcgui.ListItem(label=params.get('title'), iconImage=params.get('thumbnail'), thumbnailImage=params.get('thumbnail'), path=url)
     xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
     
+        
 def playAll(params):
     showMessage(__language__(30302), __language__(30301))
     

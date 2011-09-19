@@ -14,6 +14,9 @@
     <string id="30011">Most watched videos on DR.dk</string>
     <string id="30012">Programs by area</string>
     <string id="30013">The list is empty</string>
+    <string id="30014">Expires soon</string>
+    <string id="30015">Aired: %s</string>
+    <string id="30016">Expires on: %s</string>
 
 	<string id="30100">Video is not available</string>
 	<string id="30101">DR has deleted the video file you want to watch,</string>

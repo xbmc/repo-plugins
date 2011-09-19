@@ -23,6 +23,7 @@ def transformHtmlCodes(string):
     (u'Ö', u'&Ouml;'),
     (u'ä', u'&auml;'),
     (u'ü', u'&uuml;'),
+    (u'ü', u'&#252;'),
     (u'ö', u'&ouml;'),
     (u'ß', u'&szlig;'),
     (u'\"',u'&#034;'),

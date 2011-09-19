@@ -6,5 +6,15 @@
   - Added Spotlight categories
 
 1.0.2
-- Fixed bug with Spotlight: DS/3DS
-- Fixed bug with Spotlight: Wii
+  - Fixed bug with Spotlight: DS/3DS
+  - Fixed bug with Spotlight: Wii
+
+1.0.3
+  - Added support for user login / cookie handling
+  - Added new content: Top 100 Trailers of all time 
+  - Added new content: GT Countdown (requires GT account)
+  - Added new content: GT Retrospectives (requires GT account)
+  - Added new content: GT Top 20 Today (requires GT account)
+  - Added new content: Pop Fiction (requires GT account)
+  - Added new content: Science of Games (requires GT account)
+  - Added new content: ScrewAttack (requires GT account)

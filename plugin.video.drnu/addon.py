@@ -20,16 +20,23 @@ class NuAddon(object):
         # load favorites
         self.favorites = list()
         if os.path.exists(FAVORITES_PATH):
-            self.favorites = pickle.load(open(FAVORITES_PATH, 'rb'))
+            try:
+                self.favorites = pickle.load(open(FAVORITES_PATH, 'rb'))
+            except Exception:
+                pass
 
         # load recently watched
         self.recentlyWatched = list()
         if os.path.exists(RECENT_PATH):
-            self.recentlyWatched = pickle.load(open(RECENT_PATH, 'rb'))
+            try:
+                self.recentlyWatched = pickle.load(open(RECENT_PATH, 'rb'))
+            except Exception:
+                pass
 
 
     def _save(self):
         # save favorites
+        self.favorites.sort()
         pickle.dump(self.favorites, open(FAVORITES_PATH, 'wb'))
 
         self.recentlyWatched = self.recentlyWatched[0:10] # Limit to ten items
@@ -58,6 +65,10 @@ class NuAddon(object):
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30002), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'star.png'))
         item.setProperty('Fanart_Image', fanartImage)
         xbmcplugin.addDirectoryItem(HANDLE, PATH + '?show=spotlight', item, isFolder = True)
+        # Last chance
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30014), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'clock.png'))
+        item.setProperty('Fanart_Image', fanartImage)
+        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?show=lastChance', item, isFolder = True)
         # Search videos
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30003), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'search.png'))
         item.setProperty('Fanart_Image', fanartImage)
@@ -84,6 +95,9 @@ class NuAddon(object):
 
     def showMostViewedVideos(self):
         self.listVideos(self.api.getMostViewedVideos())
+
+    def showLastChanceVideos(self):
+        self.listVideos(self.api.getLastChanceVideos())
 
     def showFavorites(self):
         nuAddon.showProgramSeries(self.favorites, False)
@@ -168,18 +182,7 @@ class NuAddon(object):
         keyboard.doModal()
         if keyboard.isConfirmed():
             keyword = keyboard.getText()
-            if len(keyword) > 3:
-                videos = self.api.getAllVideos()
-                for idx in range(len(videos)-1, -1, -1):
-                    video = videos[idx]
-                    # simplistic search for title
-                    if video['title'].lower().find(keyword.lower()) == -1:
-                        del videos[idx]
-
-                if not len(videos):
-                    xbmcgui.Dialog().ok(ADDON.getLocalizedString(30003), ADDON.getLocalizedString(30005))
-                else:
-                    self.listVideos(videos)
+            self.listVideos(self.api.search(keyword))
 
 
     def listVideos(self, videos):
@@ -204,7 +207,7 @@ class NuAddon(object):
                 infoLabels['studio'] = video['broadcastChannel']
             if video.has_key('broadcastTime') and video['broadcastTime'] is not None:
                 broadcastTime = self.parseDate(video['broadcastTime'])
-                infoLabels['plotoutline'] = 'Sendt: %s' % broadcastTime.strftime('%d. %b %Y kl. %H:%M')
+                infoLabels['plotoutline'] = ADDON.getLocalizedString(30015) % broadcastTime.strftime('%d. %b %Y kl. %H:%M')
                 infoLabels['date'] = broadcastTime.strftime('%d.%m.%Y')
                 infoLabels['aired'] = broadcastTime.strftime('%Y-%m-%d')
                 infoLabels['year'] = int(broadcastTime.strftime('%Y'))
@@ -219,7 +222,9 @@ class NuAddon(object):
                         infoLabels['tvshowtitle'] = serie['title']
                     else:
                         tvShowTitles[video['programSerieSlug']] = None
-
+            if video.has_key('expireTime') and video['expireTime'] is not None:
+                expireTime = self.parseDate(video['expireTime'])
+                infoLabels['plot'] += '[CR][CR]' + ADDON.getLocalizedString(30016) % expireTime.strftime('%d. %b %Y kl. %H:%M')
 
             iconImage = self.api.getVideoImageUrl(str(video['id']), 256)
             thumbnailImage = self.api.getVideoImageUrl(str(video['id']), 512)
@@ -304,6 +309,8 @@ if __name__ == '__main__':
             nuAddon.showSpotlightVideos()
         elif PARAMS['show'][0] == 'mostViewed':
             nuAddon.showMostViewedVideos()
+        elif PARAMS['show'][0] == 'lastChance':
+            nuAddon.showLastChanceVideos()
         elif PARAMS['show'][0] == 'search':
             nuAddon.searchVideos()
         elif PARAMS['show'][0] == 'favorites':

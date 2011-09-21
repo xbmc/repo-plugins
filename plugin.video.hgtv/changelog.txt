@@ -1,3 +1,6 @@
+Version 0.0.6
+added new shows
+
 Version 0.0.5
 fix for extra seasons
 

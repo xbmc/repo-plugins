@@ -1,3 +1,6 @@
+[B]Version 1.4.2 - 2011-09-21[/B]
+- Fix script error on 32 bit OS when expire date of a clip is Jan, 1st 3000
+
 [B]Version 1.4.1 - 2011-09-19[/B]
 - Changed search to use new search API call
 - Added 'Last Chance' videos that will expire soon

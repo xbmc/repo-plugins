@@ -1,3 +1,4 @@
+0.2.4 - FIX: ARTE
 0.2.3 - ADD: BR-Alpha
 0.2.2 - ADD: WDR Mediathek
         FIX: ZDF Mediathek will now ignore mp3 files

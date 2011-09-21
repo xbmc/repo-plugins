@@ -129,10 +129,11 @@ class NuAddon(object):
 
                 if program['newestVideoPublishTime'] is not None:
                     publishTime = self.parseDate(program['newestVideoPublishTime'])
-                    infoLabels['plotoutline'] = ADDON.getLocalizedString(30004) % publishTime.strftime('%d. %b %Y kl. %H:%M')
-                    infoLabels['date'] = publishTime.strftime('%d.%m.%Y')
-                    infoLabels['year'] = int(publishTime.strftime('%Y'))
-                    infoLabels['aired'] = publishTime.strftime('%Y-%m-%d')
+                    if publishTime:
+                        infoLabels['plotoutline'] = ADDON.getLocalizedString(30004) % publishTime.strftime('%d. %b %Y kl. %H:%M')
+                        infoLabels['date'] = publishTime.strftime('%d.%m.%Y')
+                        infoLabels['year'] = int(publishTime.strftime('%Y'))
+                        infoLabels['aired'] = publishTime.strftime('%Y-%m-%d')
                     if len(program['labels']) > 0:
                         infoLabels['genre'] = program['labels'][0]
 
@@ -207,10 +208,11 @@ class NuAddon(object):
                 infoLabels['studio'] = video['broadcastChannel']
             if video.has_key('broadcastTime') and video['broadcastTime'] is not None:
                 broadcastTime = self.parseDate(video['broadcastTime'])
-                infoLabels['plotoutline'] = ADDON.getLocalizedString(30015) % broadcastTime.strftime('%d. %b %Y kl. %H:%M')
-                infoLabels['date'] = broadcastTime.strftime('%d.%m.%Y')
-                infoLabels['aired'] = broadcastTime.strftime('%Y-%m-%d')
-                infoLabels['year'] = int(broadcastTime.strftime('%Y'))
+                if broadcastTime:
+                    infoLabels['plotoutline'] = ADDON.getLocalizedString(30015) % broadcastTime.strftime('%d. %b %Y kl. %H:%M')
+                    infoLabels['date'] = broadcastTime.strftime('%d.%m.%Y')
+                    infoLabels['aired'] = broadcastTime.strftime('%Y-%m-%d')
+                    infoLabels['year'] = int(broadcastTime.strftime('%Y'))
                 infoLabels['season'] = infoLabels['year']
             if video.has_key('programSerieSlug') and video['programSerieSlug'] is not None:
                 if tvShowTitles.has_key(video['programSerieSlug']):
@@ -224,7 +226,8 @@ class NuAddon(object):
                         tvShowTitles[video['programSerieSlug']] = None
             if video.has_key('expireTime') and video['expireTime'] is not None:
                 expireTime = self.parseDate(video['expireTime'])
-                infoLabels['plot'] += '[CR][CR]' + ADDON.getLocalizedString(30016) % expireTime.strftime('%d. %b %Y kl. %H:%M')
+                if expireTime:
+                    infoLabels['plot'] += '[CR][CR]' + ADDON.getLocalizedString(30016) % expireTime.strftime('%d. %b %Y kl. %H:%M')
 
             iconImage = self.api.getVideoImageUrl(str(video['id']), 256)
             thumbnailImage = self.api.getVideoImageUrl(str(video['id']), 512)
@@ -259,9 +262,12 @@ class NuAddon(object):
             xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
     def parseDate(self, dateString):
-        m = re.search('/Date\(([0-9]+).*?\)/', dateString)
-        microseconds = long(m.group(1))
-        return datetime.datetime.fromtimestamp(microseconds / 1000)
+        try:
+            m = re.search('/Date\(([0-9]+).*?\)/', dateString)
+            microseconds = long(m.group(1))
+            return datetime.datetime.fromtimestamp(microseconds / 1000)
+        except ValueError:
+            return None
 
 
     def addFavorite(self, slug):

@@ -3,10 +3,11 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon,os,sys
 __scriptname__ = "GameTrailers_Bonus"
 __author__ = "AssChin79"
 __scriptid__ = "plugin.video.gametrailers.exclusives"
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 __cwd__ = os.getcwd()
 __cookies__ = os.path.join( __cwd__, 'resources', 'cookies' )
 __cookie__ = os.path.join( __cookies__, 'cookies.lwp' )
+
 
 doLogin = False
 
@@ -71,42 +72,47 @@ def URLENCODECOOKIE():
     
 
 def CATEGORIES():
+    gtfeeds = "http://feeds.gametrailers.com"
+    gtimages = "http://gametrailers.mtvnimages.com/images/podcasts"
+    mirror = "http://www.msoftinfosystems.com/news/mirror/rss/gt"
+
     # Uri Sources: http://www.gametrailers.com/podcasts.php
-    addDir('Bonus Round','http://feeds.gametrailers.com/rss_ipod_br_season3.php',1,'http://www.gametrailers.com/images/podcast_bonusround.jpg')
-    addDir('Electronic Entertainment Expo (E3)', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=e311ms',1,'http://gametrailers.mtvnimages.com/images/podcasts/GTE3_2011_big.jpg')
-    addDir('Epic Battle Axe', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=eba',1,'http://gametrailers.mtvnimages.com/images/podcasts/600x600_PodCast_EBA.jpg')
-    addDir('Game Interviews', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=interviews',1,'http://gametrailers.mtvnimages.com/images/podcasts/VideoInterviews.jpg')
-    addDir('Game of the Year Awards', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=gtgoty2010',1,'http://gametrailers.mtvnimages.com/images/podcasts/600x600_GT_GOTY.jpg')
-    addDir('Game Previews', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=previews',1,'http://gametrailers.mtvnimages.com/images/podcasts/VideoPreviews.jpg')
-    addDir('Game Reviews','http://feeds.gametrailers.com/rss_ipod_gen.php',1,'http://gametrailers.mtvnimages.com/images/podcasts/VideoReviews.jpg')
+    addDir('Bonus Round', gtfeeds + '/rss_ipod_br_season3.php',1,'http://www.gametrailers.com/images/podcast_bonusround.jpg')
+    addDir('Electronic Entertainment Expo (E3)', gtfeeds + '/rss_ipod_gen.php?source=e311ms', 1, gtimages + '/podcasts/GTE3_2011_big.jpg')
+    addDir('Epic Battle Axe', gtfeeds + '/rss_ipod_gen.php?source=eba', 1, gtimages + '/podcasts/600x600_PodCast_EBA.jpg')
+    addDir('Game Interviews', gtfeeds + '/rss_ipod_gen.php?source=interviews', 1, gtimages + '/podcasts/VideoInterviews.jpg')
+    addDir('Game of the Year Awards', gtfeeds + '/rss_ipod_gen.php?source=gtgoty2010', 1, gtimages + '/podcasts/600x600_GT_GOTY.jpg')
+    addDir('Game Previews', gtfeeds + '/rss_ipod_gen.php?source=previews', 1, gtimages + '/podcasts/VideoPreviews.jpg')
+    addDir('Game Reviews', gtfeeds + '/rss_ipod_gen.php', 1, gtimages + '/podcasts/VideoReviews.jpg')
     
     # Protected resource
     if (COOKIE_EXIST()) == True:
-        addDir('GT Countdown','http://www.msoftinfosystems.com/news/mirror/rss/gt/gt_countdown.xml',1,'http://www.msoftinfosystems.com/news/mirror/rss/gt/gt_countdown.jpg')    
+        addDir('GT Countdown', mirror + '/gt_countdown.xml', 1, mirror + '/gt_countdown.jpg')    
 
-    addDir('GT Motion', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=gtmotion',1,'http://gametrailers.mtvnimages.com/images/podcasts/GTMotion.jpg')
+    addDir('GT Motion', gtfeeds + '/rss_ipod_gen.php?source=gtmotion', 1, gtimages + '/podcasts/GTMotion.jpg')
     
     # Protected resource
     if (COOKIE_EXIST()) == True:
-        addDir('GT Retrospectives','http://www.msoftinfosystems.com/news/mirror/rss/gt/gt_retrospectives.xml',1,'http://www.msoftinfosystems.com/news/mirror/rss/gt/gt_retrospectives.jpg')
-        addDir('GT Top 20 Today','http://www.msoftinfosystems.com/news/mirror/rss/gt/gt_top20.xml',1,'http://www.msoftinfosystems.com/news/mirror/rss/gt/gt_top20.jpg')
+        addDir('GT Retrospectives', mirror + '/gt_retrospectives.xml', 1, mirror + '/gt_retrospectives.jpg')
+        addDir('GT Top 20 Today', mirror + '/gt_top20.xml', 1, mirror + '/gt_top20.jpg')
     
-    addDir('Invisible Walls', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=iw',1,'http://gametrailers.mtvnimages.com/images/podcasts/IW.jpg')
-    addDir('Pach Attack', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=pa',1,'http://gametrailers.mtvnimages.com/images/podcasts/PachAttack.jpg')
+    addDir('Invisible Walls', gtfeeds + '/rss_ipod_gen.php?source=iw', 1, gtimages + '/podcasts/IW.jpg')
+    addDir('Pach Attack', gtfeeds + '/rss_ipod_gen.php?source=pa', 1, gtimages + '/podcasts/PachAttack.jpg')
 
     # Protected resource
     if (COOKIE_EXIST()) == True:
-        addDir('Pop Fiction','http://www.msoftinfosystems.com/news/mirror/rss/gt/pop_fiction.xml',1,'http://www.msoftinfosystems.com/news/mirror/rss/gt/pop_fiction.jpg')
-        addDir('Science of Games','http://www.msoftinfosystems.com/news/mirror/rss/gt/science_of_games.xml',1,'http://www.msoftinfosystems.com/news/mirror/rss/gt/science_of_games.jpg')
-        addDir('ScrewAttack','http://www.msoftinfosystems.com/news/mirror/rss/gt/screwattack.xml',1,'http://www.msoftinfosystems.com/news/mirror/rss/gt/screwattack.jpg')
+        addDir('Pop Fiction',mirror + '/pop_fiction.xml', 1, mirror + '/pop_fiction.jpg')
+        addDir('Science of Games',mirror + '/science_of_games.xml', 1, mirror + '/science_of_games.jpg')
+        addDir('ScrewAttack',mirror + '/screwattack.xml', 1, mirror + '/screwattack.jpg')
 
-    addDir('Spotlight: Microsoft XBOX360', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=xb360',1,'http://gametrailers.mtvnimages.com/images/podcasts/Xbox360.jpg')
-    addDir('Spotlight: Nintendo 3DS', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=3ds',1,'http://gametrailers.mtvnimages.com/images/podcasts/600x600_PodCast_3DS.jpg')
-    addDir('Spotlight: Nintendo DS', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=ds',1,'http://gametrailers.mtvnimages.com/images/podcasts/DS.jpg')
-    addDir('Spotlight: Nintendo Wii', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=wii',1,'http://gametrailers.mtvnimages.com/images/podcasts/PodCast_Wii.jpg')
-    addDir('Spotlight: Sony PS3', 'http://www.gametrailers.com/gtps3_podcast.xml',1,'http://gametrailers.mtvnimages.com/images/podcasts/SonyPS3.jpg')
-    addDir('Spotlight: Sony PSP', 'http://feeds.gametrailers.com/rss_ipod_gen.php?source=psp',1,'http://gametrailers.mtvnimages.com/images/podcasts/PSP.jpg')
-    addDir('Top 100 Trailers of all Time','http://www.msoftinfosystems.com/news/mirror/rss/gt/top100trailers.xml',1,'http://gametrailers.mtvnimages.com/images//moses/xmassives/platform_images/88x69_Top100.jpg')
+    addDir('Spotlight: Microsoft XBOX360', gtfeeds + '/rss_ipod_gen.php?source=xb360', 1, gtimages + '/podcasts/Xbox360.jpg')
+    addDir('Spotlight: Nintendo 3DS', gtfeeds + '/rss_ipod_gen.php?source=3ds', 1, gtimages + '/podcasts/600x600_PodCast_3DS.jpg')
+    addDir('Spotlight: Nintendo DS', gtfeeds + '/rss_ipod_gen.php?source=ds', 1, gtimages + '/podcasts/DS.jpg')
+    addDir('Spotlight: Nintendo Wii', gtfeeds + '/rss_ipod_gen.php?source=wii', 1, gtimages + '/podcasts/PodCast_Wii.jpg')
+    addDir('Spotlight: Sony PS3', 'http://www.gametrailers.com/gtps3_podcast.xml', 1, gtimages + '/podcasts/SonyPS3.jpg')
+    addDir('Spotlight: Sony PSP', gtfeeds + '/rss_ipod_gen.php?source=psp', 1, gtimages + '/podcasts/PSP.jpg')
+    addDir('Top 100 Trailers of all Time', mirror + '/top100trailers.xml', 1, gtimages + '/moses/xmassives/platform_images/88x69_Top100.jpg')
+
                        
 def INDEX(url):
 	req = urllib2.Request(url)
@@ -121,7 +127,7 @@ def INDEX(url):
     	for match in nmatch.findall(oStream):
         	elems = re.compile('.+?<title>(.+?)<\/title>.+?<itunes(.+?)<\/itunes:summary>.+?<enclosure url="(.+?)".+? />.+?<guid(.+?)<\/guid>.+?<pubDate>(.+?)<\/pubDate>', re.S).findall(match)
         	for title, junk, url, guid, pubdate in elems:
-            		addLink(title, url, '')
+            		addLink(title, pubdate, url, '')
 
 
 def VIDEOLINKS(url,name):
@@ -133,7 +139,7 @@ def VIDEOLINKS(url,name):
         response.close()
         match=re.compile('').findall(link)
         for url in match:
-                addLink(name,url,'')
+                addLink(name,'',url,'')
         
 
                 
@@ -158,13 +164,13 @@ def get_params():
 
 
 
-def addLink(name,url,iconimage):
+def addLink(name,pDate,url,iconimage):
     if (COOKIE_EXIST()) == True:
         url = url + URLENCODECOOKIE()
-        
+
     ok=True
-    liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    liz=xbmcgui.ListItem(name, label2=pDate, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    liz.setInfo( type="Video", infoLabels={ "Title": name, "date": pDate } )
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
     return ok
 

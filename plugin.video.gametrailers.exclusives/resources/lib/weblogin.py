@@ -71,15 +71,18 @@ def wipeOldCookies(threshold,cookie_file):
 #<param name="cookiepath">The full path to the cookie file</param>
 #<param name="username">The user name</param>
 #<param name="password">The user's password</param>
-def doLogin(cookiepath, username, password):
+def doLogin(cookieFolder, username, password):
 
-    cookiepath = os.path.join(cookiepath,'cookies.lwp')
+    cookiepath = os.path.join(cookieFolder,'cookies.lwp')
     
     if os.path.exists(cookiepath) == True:
         # delete cookie older than 24 hours old
         if wipeOldCookies(86400, cookiepath) == False:
             # don't create a new cookie if a good one is lying around
             return True
+    else:
+	os.makedirs(cookieFolder)
+
 
     if username and password:
 

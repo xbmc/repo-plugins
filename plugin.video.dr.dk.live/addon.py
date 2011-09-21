@@ -11,7 +11,7 @@ import xbmcplugin
 # Low    :  300 kb/s
 
 CHANNELS = [
-    # From: http://dr.dk/TV/Live/UPlayer?banner=false&deepLinking=true&useStartControls=false&width=830&height=467&disableWmode=true
+    # From: http://dr.dk/nu/embed/live?height=467&width=830
     {'name' : 'DR1', 'urls' : {
             'high' : 'rtmp://rtmplive.dr.dk/live/livedr01astream3',
             'medium' : 'rtmp://rtmplive.dr.dk/live/livedr01astream2',
@@ -42,20 +42,28 @@ CHANNELS = [
             'low' : 'rtmp://rtmplive.dr.dk/live/livedr05astream1'
         }
     },
-
+    {'name' : 'DR HD', 'urls' : {
+            'high' : 'rtmp://livetv.gss.dr.dk/live/livedr06astream3',
+            'medium' : 'rtmp://livetv.gss.dr.dk/live/livedr06astream2',
+            'low' : 'rtmp://livetv.gss.dr.dk/live/livedr06astream1'
+        }
+    },
     # From: http://www.24nordjyske.dk/webtv_high.asp
     {'name' : '24 Nordjyske', 'urls' : {
             'high' : 'mms://stream.nordjyske.dk/24nordjyske - Full Broadcast Quality',
             'medium' : 'mms://stream.nordjyske.dk/24nordjyske'
         }
-    }]
+    }
+    ]
 
 def showChannels():
+    fanart = ADDON.getAddonInfo('path') + '/fanart.jpg'
     for idx, c in enumerate(CHANNELS):
         icon = ADDON.getAddonInfo('path') + "/resources/logos/" + c['name'].replace(" ", "_") + ".png"
 
         if c['urls'].has_key(getQuality()):
             item = xbmcgui.ListItem(c['name'], iconImage = icon)
+            item.setProperty('Fanart_Image', fanart)
             url = PATH + '?idx=' + str(idx)
             xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
 

@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-import re
+import re, traceback
 from mediathek import *
 from xml.dom import minidom
 regex_dateString = re.compile("\\d{1,2} ((\\w{3})|(\\d{2})) \\d{4}");
@@ -53,7 +53,7 @@ class ARTEMediathek(Mediathek):
     
     self.regex_Clips = re.compile("/de/videos/[^/]*-(\\d*).html")
     self.regex_ExtractVideoConfig = re.compile("http://videos\\.arte\\.tv/de/do_delegate/videos/.*-\\d*,view,asPlayerXml\\.xml");
-    self.regex_ExtractRtmpLink = re.compile("<url quality=\"(sd)\">(rtmp://.*MP4:.*)</url>")
+    self.regex_ExtractRtmpLink = re.compile("<url quality=\"(sd|hd)\">(rtmp://.*mp4:.*)</url>")
     self.regex_ExtractTopicPages = re.compile("<a href=\"([^\"]*)\"[^<]*>([^<]*)</a> \((\\d+)\)");
     self.regex_DescriptionLink = re.compile("http://videos\\.arte\\.tv/de/videos/.*?\\.html");
     self.regex_Description = re.compile("<div class=\"recentTracksCont\">\\s*<div>\\s*<p>.*?</p>");
@@ -131,16 +131,20 @@ class ARTEMediathek(Mediathek):
         
         urlString = touple[1];
         self.gui.log(urlString);
-        stringArray = urlString.split("MP4:");
+        stringArray = urlString.split("mp4:");
         
         links[quality] = SimpleLink("%s playpath=MP4:%s swfUrl=http://videos.arte.tv/blob/web/i18n/view/player_11-3188338-data-4836231.swf swfVfy=1"%(stringArray[0],stringArray[1]),0);
-        if(len(links) > 0):
-          self.gui.log("Picture: "+picture);
-          self.gui.buildVideoLink(DisplayObject(title,"",picture,desc,links,True,date),self,elementCount);
+      if(len(links) > 0):
+        self.gui.log("Picture: "+picture);
+        self.gui.buildVideoLink(DisplayObject(title,"",picture,desc,links,True,date),self,elementCount);
       configXml.unlink();
     except:
       self.gui.log("something goes wrong while processing "+link);
-      self.gui.log(xmlPage);
+      print xmlPage;
+      self.gui.log("Exception: ");
+      traceback.print_exc();
+      self.gui.log("Stacktrace: ");
+      traceback.print_stack();
   
   def extractTopicObjects(self,mainPage,initCount):
     touples = self.regex_ExtractTopicPages.findall(mainPage)

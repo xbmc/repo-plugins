@@ -36,9 +36,9 @@ class SimpleXbmcGui(object):
     
   def log(self, msg):
     if type(msg) not in (str, unicode):
-      xbmc.output("[%s]: %s" % (__plugin__, type(msg)))
+      xbmc.log("[%s]: %s" % (__plugin__, type(msg)))
     else:
-      xbmc.output("[%s]: %s" % (__plugin__, msg.encode('utf8')))
+      xbmc.log("[%s]: %s" % (__plugin__, msg.encode('utf8')))
       
   def buildVideoLink(self, displayObject, mediathek, objectCount):
     if(displayObject.subTitle == "" or displayObject.subTitle == displayObject.title):

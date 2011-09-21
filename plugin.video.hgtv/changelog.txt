@@ -1,3 +1,6 @@
+Version 1.0.3
+added some new shows
+
 Version 1.0.2
 fix for extra seasons
 

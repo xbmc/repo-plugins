@@ -1,3 +1,25 @@
+Version 2.0.1
+-------------
+- Major update: added more LastFM functionality
+- Updated: Genre browser
+- Updated: Top artists
+- Added: Top tracks
+- Added: Hyped artists
+- Added: Hyped tracks
+- Added: Loved tracks
+- Added: Genre menu;  show/play artists, albums and tracks
+- Added: Artist menu; show/play albums, tracks and similar artists
+- Added: Album menu; show/play tracks
+- Added: Tracks menu; show/play tracks
+- Localized strings
+- Cleaned up and sanitized code 
+
+Version 1.2.0
+-------------
+- Added: Top 50 artists
+- Added: Genre browser; will play music videos from a specific music genre
+- Added: Recent searches
+
 Version 1.1.0
 -------------
 - now uses the plugin.video.youtube plugin to play videos from youtube

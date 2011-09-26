@@ -9,7 +9,7 @@ __plugin__ = "Wimp.com"
 __author__ = "Insayne"
 __url__ = "http://code.google.com/p/insayne-projects/"
 __svn_url__ = "https://insayne-projects.googlecode.com/svn/trunk/XBMC/Video/plugin.video.wimp/"
-__version__ = "0.4"
+__version__ = "0.6"
 __svn_revision__ = "$Revision$"
 __XBMC_Revision__ = xbmc.getInfoLabel('System.BuildVersion')
 __settings__ = xbmcaddon.Addon(id='plugin.video.wimp')
@@ -36,16 +36,42 @@ def Generate_Index():
 		addVideo(title,link,1, thumb)
 
 	root_path = xbmc.translatePath(__settings__.getAddonInfo('path'))
-	thumb = xbmc.translatePath(os.path.join( root_path, 'resources', 'images', 'back.png'))
+	thumb = xbmc.translatePath(os.path.join( root_path, 'resources', 'images', 'archives.png'))
 	link = '1'
-	title = "<< Page (1)"
-	addDir(title,link,2, thumb)
-	
-def Generate_Page(pagenum):
-	next_page = pagenum + 1
-	
+	title = "[Archives]"
+	addDir(title,link,3, thumb)
+
+def get_archives():
 	# Request the Page
-	url = 'http://wimp.com/' + str(pagenum)
+	url = 'http://wimp.com/archives/'
+	req = urllib2.Request(url)
+	response = urllib2.urlopen(req)
+	html=response.read()
+	response.close()
+	html = html.replace("\n", "")
+	html = html.replace("\r", "")
+	thumb = ''
+	regex = '<a class="b" href="(.+?)">(.+?)</a><br/>'
+	videos = re.compile(regex).findall(html)
+	
+
+	
+	for link,title in videos:
+		link = 'http://wimp.com' + link
+		title = cleanstring(remove_spaces(title))
+		addDir(title,link,2, thumb)
+	
+	# Link back to Current Month
+	root_path = xbmc.translatePath(__settings__.getAddonInfo('path'))
+	thumb = xbmc.translatePath(os.path.join( root_path, 'resources', 'images', 'back.png'))
+	link = ""
+	title = "<< Back to Current Month"
+	addDir(title,link,4, thumb)
+
+
+def Generate_archive_page(link):
+	# Request the Page
+	url = str(link)
 	req = urllib2.Request(url)
 	response = urllib2.urlopen(req)
 	html=response.read()
@@ -62,10 +88,11 @@ def Generate_Page(pagenum):
 		addVideo(title,link,1, thumb)
 	
 	root_path = xbmc.translatePath(__settings__.getAddonInfo('path'))
-	thumb = xbmc.translatePath(os.path.join( root_path, 'resources', 'images', 'back.png'))
-	link = str(next_page)
-	title = "<< Page (" + str(next_page) + ")"
-	addDir(title,link,2, thumb)
+	thumb = xbmc.translatePath(os.path.join( root_path, 'resources', 'images', 'archives.png'))
+	link = ""
+	title = "<< Back to Archives Listing"
+	addDir(title,link,3, thumb)
+	
 	
 def Play_Video(url):
 	global set_video_type
@@ -193,9 +220,13 @@ elif mode==1:
 		xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
 
 elif mode==2:
-	page_number = int(url)
-	Generate_Page(page_number)
+	Generate_archive_page(url)
 
+elif mode==3:
+	get_archives()
 
+elif mode==4:
+	Generate_Index()
+	
 xbmcplugin.setContent(handle=int(sys.argv[1]), content="movies" )
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

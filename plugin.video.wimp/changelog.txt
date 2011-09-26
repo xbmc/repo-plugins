@@ -1,3 +1,7 @@
+0.6
+- Fixed: Navigation of addon (Adherred to the changes of wimp.com)
+- Added: Archive Browser
+
 0.5
 - Fixed: XBMC Compilance change: No longer using os.getcwd()
 

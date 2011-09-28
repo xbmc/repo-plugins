@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings>
 	<category label="30100">
-		<setting id="quality" label="30101" type="labelenum" default="High" values="High|Medium|Low" />
+		<setting id="quality" label="30101" type="enum" default="0" lvalues="30110|30111|30112|30113" />
 	</category>
 </settings>
 

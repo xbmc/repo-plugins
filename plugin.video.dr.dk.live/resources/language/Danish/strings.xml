@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-	<string id="30001">Denne kanal kan ikke afspilles i %s kvalitet.</string>
-    <string id="30002">Skift kvalitet i indstillingerne og prøv igen.</string>
     <string id="30100">Generelt</string>
     <string id="30101">Kvalitet</string>
+
+    <string id="30110">Bedste (op til 1.7 mbit/s)</string>
+    <string id="30111">Høj (1.0 mbit/s)</string>
+    <string id="30112">Medium (500 kbit/s)</string>
+    <string id="30113">Lav (250 kbit/s)</string>
+
 </strings>

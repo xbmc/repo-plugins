@@ -298,7 +298,7 @@ class ZDFMediathek(Mediathek):
     for element in pageLinks:
       element = element.group()
       pictureLink = self.rootLink + self._regex_extractPictureLink.search(element).group();
-      videoPageLink = self.rootLink+self._regex_extractTopicPageLink.search(element).group();
+      videoPageLink = self.rootLink + self._regex_extractTopicPageLink.search(element).group();
       titles = [];
       for title in self._regex_extractTopicTitle.findall(element):
         title = unicode(title,'UTF-8');

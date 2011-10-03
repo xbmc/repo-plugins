@@ -1,0 +1,6 @@
+0.2
+- Remove Shitty Website-style pagination and swapped it with loading entire month on the fly
+- Public Release! :P
+
+0.1
+- Created Addon

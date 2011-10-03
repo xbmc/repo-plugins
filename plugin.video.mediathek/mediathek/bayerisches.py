@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-import re,time
+import re,time,traceback
 import zipfile
 import StringIO
 from mediathek import *
@@ -38,8 +38,9 @@ class BayerischesFSMediathek(Mediathek):
     else:
       self.baseType = "rtsp_mov_http"
     
-    self.root_url="http://rd.gl-systemhaus.de/br/b7/archive/archive.xml.zip.adler32"
-
+    self.root_url="http://mediathek-video.br.de/js/config.js";
+    self.regexp_findArchive=re.compile("http://.*/archive/archive\.xml\.zip\.adler32");
+    
     self.menuTree = (
       TreeNode("0","Alle","http://LoadAll",True),
       );
@@ -49,7 +50,7 @@ class BayerischesFSMediathek(Mediathek):
     self.gui.log("buildPageMenu: "+link);
 
     a=self.loadAndUnzip();
-
+    print a
     try:
       self.xml_cont = minidom.parseString(a); 
     except:
@@ -73,8 +74,10 @@ class BayerischesFSMediathek(Mediathek):
       return "";
   
   def loadAndUnzip(self):
-
-    req = urllib2.Request(self.root_url)
+    configDoc = self.loadPage(self.root_url)
+    archiveLink = self.regexp_findArchive.search(configDoc).group();
+    
+    req = urllib2.Request(archiveLink);
     req.add_header('User-Agent', 'Mozilla/5.0')
     req.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
     req.add_header('Accept-Language', 'de-de,de;q=0.8,en-us;q=0.5,en;q=0.3')
@@ -82,7 +85,7 @@ class BayerischesFSMediathek(Mediathek):
     waittime = 2;
     doc = False;
     
-    self.gui.log("loadAndUnzip: download %s"%(self.root_url));
+    self.gui.log("loadAndUnzip: download %s"%(archiveLink));
     
     while not doc and waittime < 60:
       try:
@@ -103,8 +106,9 @@ class BayerischesFSMediathek(Mediathek):
     except:
       print("Error Downloading ZIP");
       return '';
-
-    return zipf.read("archive.xml");
+      
+    for fileName in zipf.infolist():
+      return zipf.read(fileName);
 
   def parseDate(self,dateString):
     return time.strptime(dateString,"%Y-%m-%dT%H:%M:%S");
@@ -138,6 +142,7 @@ class BayerischesFSMediathek(Mediathek):
     try:
       videos = itemNode.getElementsByTagName("videos")[0];
       if not videos.hasChildNodes():
+        print "no videos";
         return None;
 
       for videotag in videos.getElementsByTagName("video"):
@@ -152,6 +157,11 @@ class BayerischesFSMediathek(Mediathek):
         if (videotag.attributes["groesse"].value == "xlarge"):
             links[2] = SimpleLink(link+videotag.attributes["stream"].value, 0);
     except:
+      self.gui.log("Exception: ");
+      traceback.print_exc();
+      self.gui.log("Stacktrace: ");
+      traceback.print_stack();
+      
       return None;
     
     return DisplayObject(title,subtitle,picture,description,links,True, pubDate)

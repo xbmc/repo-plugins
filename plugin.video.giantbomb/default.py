@@ -4,7 +4,6 @@ import simplejson
 import xbmcaddon
 import xbmcplugin
 import xbmcgui
-import shelve
 import os
 
 API_PATH = 'http://api.giantbomb.com'
@@ -99,6 +98,13 @@ def VIDEOLINKS(url, name):
     if my_addon.getSetting('api_key'):
         API_KEY = my_addon.getSetting('api_key')
 
+    q_setting = int(my_addon.getSetting('quality'))
+    quality = None
+    if q_setting == 1:
+        quality = 'low_url'
+    elif q_setting == 2:
+        quality = 'high_url'
+
     if url.endswith('&DP'):
         response = urllib2.urlopen(API_PATH + '/videos/?api_key=' + API_KEY + '&video_type=5&offset=161&format=json')
         video_data = simplejson.loads(response.read())['results']
@@ -126,10 +132,13 @@ def VIDEOLINKS(url, name):
 
     for vid in video_data:
         name = vid['name']
-        if 'hd_url' in vid:
-            url = vid['hd_url'] + '&api_key=' + API_KEY
+        if not quality:
+            if 'hd_url' in vid:
+                url = vid['hd_url'] + '&api_key=' + API_KEY
+            else:
+                url = vid['high_url']
         else:
-            url = vid['high_url']
+            url = vid[quality]
         thumbnail = vid['image']['super_url']
         addLink(name,url,thumbnail)
 
@@ -155,6 +164,7 @@ def addLink(name, url, iconimage):
     ok=True
     liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    liz.setProperty("fanart_image", os.path.abspath("fanart.jpg"))
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
     return ok
 
@@ -163,6 +173,7 @@ def addDir(name, url, mode, iconimage):
     ok=True
     liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
+    liz.setProperty("fanart_image", os.path.abspath("fanart.jpg"))
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
     return ok
 

@@ -1,15 +1,11 @@
-Version 2.0.3 (April 25 2011)
- - New Icon, thanks to frezzy
+[B]2.3[/B]
+- Added option to choose video quality
 
-Version 2.0.2 (Dec 5 2010)
- - Fixed problem with the Justin.tv archived streams
+[B]2.2[/B]
+- Fixed various account linking issues
 
-Version 2.0.1 (Sep 9 2010)
- - Updated to match changes in the giantbomb api
+[B]2.1[/B]
+- Changed how add-on settings are stored
 
-Version 2.0.0 (Aug 9 2010)
- - Mostly rewritten for easier maintains and better stability
- - Added search
- - Added archived live stream from the Justin.tv channel
- - Categories are now updated automatically (for correcting errors or updating)
- 
+[B]2.0[/B]
+- Initial release as new maintainer

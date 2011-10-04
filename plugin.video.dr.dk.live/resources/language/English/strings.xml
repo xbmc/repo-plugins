@@ -3,8 +3,8 @@
     <string id="30100">General</string>
     <string id="30101">Quality</string>
 
-    <string id="30110">Best (up to 1.7 mbit/s)</string>
-    <string id="30111">High (1.0 mbit/s)</string>
+    <string id="30110">Best (up to 2 mbit/s)</string>
+    <string id="30111">High (1 mbit/s)</string>
     <string id="30112">Medium (500 kbit/s)</string>
     <string id="30113">Low (250 kibt/s)</string>
 </strings>

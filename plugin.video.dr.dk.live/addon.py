@@ -55,6 +55,18 @@ CHANNELS = [
             Q_HIGH : 'mms://stream.nordjyske.dk/24nordjyske - Full Broadcast Quality',
             Q_MEDIUM : 'mms://stream.nordjyske.dk/24nordjyske'
         }
+    },
+    {'name' : 'TV2 Nord', 'urls' : {
+            Q_BEST : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord_2000',
+            Q_HIGH : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord_1000',
+            Q_MEDIUM : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord_300'
+		}
+    },
+    {'name' : 'TV2 NordPlus', 'urls' : {
+            Q_BEST : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_2000',
+            Q_HIGH : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_1000',
+            Q_MEDIUM : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_300'
+        }
     }]
 
 class DanishLiveTV(object):
@@ -75,7 +87,10 @@ class DanishLiveTV(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def getUrl(self, urls):
-        quality = QUALITIES[int(ADDON.getSetting('quality'))]
+        try:
+            quality = QUALITIES[int(ADDON.getSetting('quality'))]
+        except ValueError:
+            quality = Q_BEST # fallback for old settings value
 
         if urls.has_key(quality):
             return urls[quality]

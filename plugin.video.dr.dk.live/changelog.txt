@@ -1,3 +1,8 @@
+[B]Version 2.0.3 - 2011-10-03[/B]
+- Fixed problem with old settings
+- Added TV2 Nord and TV2 NordPlus streams as a test,
+  they only work when they are broadcasting
+
 [B]Version 2.0.2 - 2011-09-27[/B]
 - Added [I]Best[/I] quality to play streams at best quality available
 - Changed [I]High[/I] quality to play streams at 1 mbit/s useful for ATV1 users, etc.

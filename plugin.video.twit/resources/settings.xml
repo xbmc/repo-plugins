@@ -1,3 +1,3 @@
 <settings>
-   <setting id="video_quality" type="select" lvalues="30018|30019|30020" label="30021" default=""/>
+   <setting id="video_quality" type="select" lvalues="30027|30028|30029|30030" label="30031" default=""/>
 </settings>

@@ -1,3 +1,8 @@
+Version 1.0.3
+updated shows
+new icon and fanart
+added TWiT Live via Justin.tv - 1 Mbs
+
 Version 1.0.2
 added TWiT Live via Ustream - 1.5 Mbs
 

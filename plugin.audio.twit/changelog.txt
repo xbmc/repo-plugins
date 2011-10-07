@@ -1,3 +1,7 @@
+Version 0.0.3
+update the show listings
+new icon and fanart
+
 Version 0.0.2
 update the show listings
 general fixes

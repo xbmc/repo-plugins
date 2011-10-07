@@ -1,2 +1,6 @@
+Version 1.0.1
+updated shows
+new icon and fanart
+
 Version 1.0.0
 initial for eden

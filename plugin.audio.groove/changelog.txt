@@ -1,3 +1,11 @@
+0.6.3
+
+Speed improvements.
+
+0.6.2
+
+Check item existence before adding to directory.
+
 0.6.1
 
 Some more changes for XBMC addon compliancy.

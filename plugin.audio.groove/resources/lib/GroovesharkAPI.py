@@ -38,18 +38,19 @@ class GrooveAPI:
 	_sessionID = ''
 	_userID = 0
 	_lastSessionTime = 0
-	_lastStreamKey = ''
-	_lastStreamServerID = ''
 	_key = md5.new(os.path.basename("GroovesharkAPI.py")).hexdigest()
+	_debugging = False
 
 	# Constructor
-	def __init__(self):
+	def __init__(self, debug):
 		
+		self._debugging = debug
 		self.simplejson = simplejson
 		self.cacheDir = os.path.join(tempfile.gettempdir(), 'groovesharkapi')
 		if os.path.isdir(self.cacheDir) == False:
 			os.makedirs(self.cacheDir)
-			print "Made " + self.cacheDir
+			if self._debugging:
+				print "Made " + self.cacheDir
 		self._getSavedSession()
 		# session ids last 2 weeks
 		if self._sessionID == '' or time.time()- self._lastSessionTime >= SESSION_EXPIRY:
@@ -57,7 +58,8 @@ class GrooveAPI:
 			if self._sessionID == '':
 				raise StandardError('Failed to get session id')
 			else:
-				print "New GrooveAPI session id: " + self._sessionID
+				if self._debugging:
+					print "New GrooveAPI session id: " + self._sessionID
 				self._ip = self._getIP()
 				self._country = self._getCountry()
 				self._setSavedSession()
@@ -75,8 +77,9 @@ class GrooveAPI:
 			req = urllib2.Request(url, postData)
 			response = urllib2.urlopen(req)
 			result = response.read()
-			print "Response..."
-			pprint.pprint(result)
+			if self._debugging:
+				print "Response..."
+				pprint.pprint(result)
 			response.close()
 			result = simplejson.loads(result)
 			return result
@@ -102,8 +105,9 @@ class GrooveAPI:
 		req = urllib2.Request(url)
 		response = urllib2.urlopen(req)
 		result = response.read()
-		print "Request..."
-		pprint.pprint(result)
+		if self._debugging:
+			print "Request..."
+			pprint.pprint(result)
 		response.close()
 		try:
 			result = simplejson.loads(result)
@@ -153,26 +157,14 @@ class GrooveAPI:
 		except:
 			print "An error occurred during save session"
 			pass
-
-	def _setParams(self, params):			
-		try:
-			# Create the directory if it doesn't exist.
-			if not os.path.exists(self.cacheDir):
-				os.makedirs(self.cacheDir)
-			path = os.path.join(self.cacheDir, 'params.dmp')
-			f = open(path, 'wb')
-			pickle.dump(params, f, protocol=pickle.HIGHEST_PROTOCOL)
-			f.close()
-		except:
-			print "An error occurred during save params"
-			pass
 	
 	# Get IP
 	def _getIP(self):
 		try:
 			myip = urllib2.urlopen('http://whatismyip.org').read()
 			if re.match("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", myip):
-				print "IP is " + myip
+				if self._debugging:
+					print "IP is " + myip
 				return myip
 		except:
 			return '0.0.0.0'
@@ -239,8 +231,6 @@ class GrooveAPI:
 		params = { "songID": songID, "country": self._country }
 		response = self._callRemote("getSubscriberStreamKey", params)
 		try: 
-			self._lastStreamKey = response["result"]["StreamKey"]
-			self._lastStreamServerID = response["result"]["StreamServerID"]
 			res = response["result"]
 			return res
 		except:
@@ -272,7 +262,7 @@ class GrooveAPI:
 		
 	# Get artists albums
 	def getArtistAlbums(self, artistID, limit=ALBUM_LIMIT):
-		result = self._callRemote('getArtistAlbums', {'artistID' : artistID})
+		result = self._callRemote('getArtistVerifiedAlbums', {'artistID' : artistID})
 		if 'result' in result:
 			return self._parseAlbums(result, limit)
 		else:
@@ -415,16 +405,37 @@ class GrooveAPI:
 		else:
 			return []		
 	
+	def getDoesArtistExist(self, artistId):
+		response = self._callRemote("getDoesArtistExist", {"artistID": artistId})
+		if 'result' in response and response['result'] == True:
+			return True
+		else:
+			return False
+
+	def getDoesAlbumExist(self, albumId):
+		response = self._callRemote("getDoesAlbumExist", {"albumID": albumId})
+		if 'result' in response and response['result'] == True:
+			return True
+		else:
+			return False
+
+	def getDoesSongExist(self, songId):
+		response = self._callRemote("getDoesSongExist", {"songID": songId})
+		if 'result' in response and response['result'] == True:
+			return True
+		else:
+			return False
+		
 	# After 30s play time
-	def markStreamKeyOver30Secs(self):
-		params = { "streamKey" : self._lastStreamKey, "streamServerID" : self._lastStreamServerID }
+	def markStreamKeyOver30Secs(self, streamKey, streamServerID):
+		params = { "streamKey" : streamKey, "streamServerID" : streamServerID }
 		self._callRemote("markStreamKeyOver30Secs", params)
 
 	# Song complete
-	def markSongComplete(self, songid):		
-		params = { "songID" : songid, "streamKey" : self._lastStreamKey, "streamServerID" : self._lastStreamServerID }
+	def markSongComplete(self, songid, streamKey, streamServerID):		
+		params = { "songID" : songid, "streamKey" : streamKey, "streamServerID" : streamServerID }
 		self._callRemote("markSongComplete", params)
-
+		
 	# Extract song data	
 	def _parseSongs(self, items, limit=0):
 		if 'result' in items:

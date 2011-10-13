@@ -16,10 +16,8 @@ cookiepath = __datapath__
 
 __plugin__ = "Hockeystreams"
 __author__ = "wotever"
-__version__ = "1.7.0"
-__url__ = "http://code.google.com/p/xbmc-hockeystreams/"
-__svn__ = "http://xbmc-hockeystreams.googlecode.com/svn/trunk/"
-__svn_revision__ = "$Revision$"
+__version__ = "1.7.1"
+__url__ = "https://github.com/jlongman/xbmc-hockeystreams-plugin/"
 __settings__ = xbmcaddon.Addon(id='plugin.video.hockeystreams')
 
 __dbg__ = __settings__.getSetting("debug") == "true"
@@ -246,9 +244,10 @@ def LIVE_GAMES(mode):
     if (__dbg__):
         print ("hockeystreams: enter live games")
     html = urllib.urlopen("http://www4.hockeystreams.com/rss/streams.php")
-    games = hs_rss.get_rss_streams(html, __dbg__)
+    games = hs_rss.get_rss_streams(html, _debug_ = __dbg__)
     for gameName, url, date, real_date in sorted(games, key = lambda game: game[3]):
-        gameName = gameName + " " + date.split(' - ', 1)[1]
+        if '-' in date:
+            gameName = gameName + " " + date.split(' - ', 1)[1]
         addDir(gameName, url, mode, '', 1, gamename = gameName, fullDate = real_date)
 
 def LAST_15_GAMES(mode):
@@ -256,7 +255,7 @@ def LAST_15_GAMES(mode):
     if (__dbg__):
         print ("hockeystreams: enter live games")
     html = urllib.urlopen("http://www6.hockeystreams.com/rss/archives.php")
-    games = hs_rss.get_archive_rss_streams(html, __dbg__)
+    games = hs_rss.get_archive_rss_streams(html, _debug_ = __dbg__)
     for gameName, url, date, real_date in sorted(games, key = lambda game: game[3], reverse=True):
         gameName = gameName + " " + date
         url = hockeystreams + url

@@ -1,0 +1,4 @@
+Version 1.7.1
+- FIX: hockeystreams.com changed the RSS format for 'Today's Streams'
+Version 1.7.0
+- initial release

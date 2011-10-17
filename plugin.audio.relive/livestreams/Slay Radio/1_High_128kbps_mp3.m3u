@@ -1,0 +1,14 @@
+#EXTM3U
+
+#EXTINF:-1,SLAY Radio - 128kbps, relay2 (Currently 48 listeners) [shoutcast]
+http://relay2.slayradio.org:8000/
+
+#EXTINF:-1,SLAY Radio - 128kbps, relay4 (Currently 54 listeners) [shoutcast]
+http://relay4.slayradio.org:8000/
+
+#EXTINF:-1,SLAY Radio - 128kbps, relay1 (Currently 55 listeners) [shoutcast]
+http://relay1.slayradio.org:8000/
+
+#EXTINF:-1,SLAY Radio - 128kbps, relay3 (Currently 64 listeners) [icecast]
+http://relay3.slayradio.org:8000/
+

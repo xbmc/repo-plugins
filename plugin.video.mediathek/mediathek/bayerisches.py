@@ -107,7 +107,7 @@ class BayerischesFSMediathek(Mediathek):
       print("Error Downloading ZIP");
       return '';
       
-    for fileName in zipf.infolist():
+    for fileName in zipf.namelist():
       return zipf.read(fileName);
 
   def parseDate(self,dateString):

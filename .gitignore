@@ -73,3 +73,5 @@ plugin.video.brt/.git
 plugin.video.4players/.git
 plugin.video.hockeystreams/.git
 plugin.video.hockeystreams/.idea
+plugin.video.photocasts/.git
+plugin.video.photocasts/.gitignore

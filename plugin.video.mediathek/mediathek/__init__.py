@@ -34,7 +34,7 @@ class TreeNode(object):
   def __init__(self,path,name,link,displayElements,childNodes = []):
      self.name = name;
      self.path = path;
-     self.link = urllib.unquote_plus(link);
+     self.link = link;
      self.displayElements = displayElements;
      self.childNodes = childNodes;
      

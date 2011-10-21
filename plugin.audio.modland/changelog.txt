@@ -1,5 +1,10 @@
 Changes
 
+0.13.1
+
+  * use 3 part version number
+  * fix path issue with eden
+
 0.13
 
   * Eden version

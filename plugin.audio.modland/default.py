@@ -6,7 +6,7 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 __plugin__     = "Modland"
 __author__     = "BuZz [buzz@exotica.org.uk] / http://www.exotica.org.uk"
 __svn_url__    = "http://xbmc-addons.googlecode.com/svn/trunk/plugins/music/modland"
-__version__    = "0.13"
+__version__    = "0.13.1"
 
 __settings__ = xbmcaddon.Addon('plugin.audio.modland')
 __language__ = __settings__.getLocalizedString
@@ -20,7 +20,7 @@ class AppURLopener(urllib.FancyURLopener):
 
 urllib._urlopener = AppURLopener()
 
-PLUGIN_DATA = __settings__.getAddonInfo('profile')
+PLUGIN_DATA = xbmc.translatePath(__settings__.getAddonInfo('profile'))
 SEARCH_FILE = os.path.join(PLUGIN_DATA, "search.txt")
 
 if not os.path.isdir(PLUGIN_DATA):

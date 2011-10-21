@@ -1,3 +1,7 @@
+Version 1.8.0
+- refactor in prep for Eden
+- remove bad i18n
+- remove cookies from logs
 Version 1.7.1
 - FIX: hockeystreams.com changed the RSS format for 'Today's Streams'
 Version 1.7.0

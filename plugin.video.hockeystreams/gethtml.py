@@ -47,7 +47,6 @@ def get(url,cookiepath=None, cj=None, debug = False):
         print 'processing url: '+url
     # use cookies if cookiepath is set and if the cookiepath exists.
     if cookiepath is not None or cj is not None:
-
         #only use cookies for urls specified
         if url_for_cookies(url):
             if cj is None:
@@ -65,9 +64,8 @@ def get(url,cookiepath=None, cj=None, debug = False):
                     return get(url, workaround_cookiepath, cj)
 
             if debug:
-                print "cookies " + str(cj._cookies)
+#                print "cookies " + str(cj._cookies)
                 print "cookies " + cj._cookies.keys()[0]
-
                 print "hockeystreams getlogin url " + url
             url2 = url.replace("www.hockeystreams.com", cj._cookies.keys()[0])
             if debug:

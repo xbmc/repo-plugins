@@ -21,7 +21,6 @@ import gethtml
 """
 
 import os
-import re
 import urllib,urllib2
 import cookielib
 
@@ -107,15 +106,15 @@ def doLogin(cookiepath, username, password, debug = False):
         response.close()
 
         cj.save(cookiepath)
-        if debug:
-            print "cookies!" + str(cj._cookies)
+#        if debug:
+#            print "cookies!" + str(cj._cookies)
         #check the received html for a string that will tell us if the user is logged in
         #pass the username, which can be used to do this.
         url = "http://www.hockeystreams.com"
         page = gethtml.get(url, cj = cj, debug = debug)
         if debug:
             print page
-            print "nidex + " + str(page.find('SIGN OUT')) + "/" + str(len(page))
+            print "index + " + str(page.find('SIGN OUT')) + "/" + str(len(page))
         login = check_login(page, username)
         #if login suceeded, save the cookiejar to disk
 #        if not login:

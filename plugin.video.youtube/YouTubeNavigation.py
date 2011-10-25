@@ -23,10 +23,12 @@ import xbmcgui
 import xbmcplugin
 import urllib
 import YouTubeCore
+import YouTubeLogin
 import YouTubePlayer
 import YouTubeScraperCore
 
 core = YouTubeCore.YouTubeCore()
+login = YouTubeLogin.YouTubeLogin()
 scraper = YouTubeScraperCore.YouTubeScraperCore()
 player = YouTubePlayer.YouTubePlayer()
 
@@ -76,8 +78,8 @@ class YouTubeNavigation:
 				  {'Title':__language__( 30041 )  ,'path':"/root/explore/categories"		, 'thumbnail':"explore"				, 'login':"false" , 'scraper':'categories'},
 				  {'Title':__language__( 30037 )  ,'path':"/root/explore/disco"				, 'thumbnail':"discoball"		 	, 'login':"false" , 'store':"disco_searches" },
 				  {'Title':__language__( 30040 )  ,'path':"/root/explore/disco/search"		, 'thumbnail':"search"		   		, 'login':"false" , 'action':"search_disco"},
-				  {'Title':__language__( 30038 )  ,'path':"/root/explore/disco/top_25"		, 'thumbnail':"discoball"		 	, 'login':"false" , 'scraper':"disco_top_25"},
-				  {'Title':__language__( 30039 )  ,'path':"/root/explore/disco/popular"		, 'thumbnail':"discoball"		 	, 'login':"false" , 'scraper':"disco_top_artist"},
+#				  {'Title':__language__( 30038 )  ,'path':"/root/explore/disco/top_25"		, 'thumbnail':"discoball"		 	, 'login':"false" , 'scraper':"disco_top_25"},
+#				  {'Title':__language__( 30039 )  ,'path':"/root/explore/disco/popular"		, 'thumbnail':"discoball"		 	, 'login':"false" , 'scraper':"disco_top_artist"},
 				  {'Title':__language__( 30001 )  ,'path':"/root/explore/feeds"				, 'thumbnail':"feeds"			 	, 'login':"false" },
 				  {'Title':__language__( 30009 )  ,'path':"/root/explore/feeds/discussed"	, 'thumbnail':"most"			 	, 'login':"false" , 'feed':"feed_discussed" },
 				  {'Title':__language__( 30010 )  ,'path':"/root/explore/feeds/linked"		, 'thumbnail':"most"			 	, 'login':"false" , 'feed':"feed_linked" },
@@ -87,13 +89,13 @@ class YouTubeNavigation:
 				  {'Title':__language__( 30014 )  ,'path':"/root/explore/feeds/featured"	, 'thumbnail':"featured"		 	, 'login':"false" , 'feed':"feed_featured" },
 				  {'Title':__language__( 30015 )  ,'path':"/root/explore/feeds/favorites"	, 'thumbnail':"top"					, 'login':"false" , 'feed':"feed_favorites" },
 				  {'Title':__language__( 30016 )  ,'path':"/root/explore/feeds/rated"		, 'thumbnail':"top"					, 'login':"false" , 'feed':"feed_rated" },
-				  {'Title':__language__( 30043 )  ,'path':"/root/explore/movies"			, 'thumbnail':"movies"				, 'login':"false" , 'scraper':'movies'},
-				  {'Title':__language__( 30042 )  ,'path':"/root/explore/shows"				, 'thumbnail':"shows"				, 'login':"false" , 'scraper':'shows'},
-				  {'Title':__language__( 30032 )  ,'path':"/root/explore/trailers"			, 'thumbnail':"trailers"			, 'login':"false" },
-				  {'Title':__language__( 30035 )  ,'path':"/root/explore/trailers/latest"   , 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"latest_trailers" },
-				  {'Title':__language__( 30034 )  ,'path':"/root/explore/trailers/current"  , 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"current_trailers" },
-				  {'Title':__language__( 30036 )  ,'path':"/root/explore/trailers/upcoming" , 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"upcoming_trailers" },
-				  {'Title':__language__( 30033 )  ,'path':"/root/explore/trailers/popular"  , 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"popular_trailers" },
+#				  {'Title':__language__( 30043 )  ,'path':"/root/explore/movies"			, 'thumbnail':"movies"				, 'login':"false" , 'scraper':'movies'},
+#				  {'Title':__language__( 30042 )  ,'path':"/root/explore/shows"				, 'thumbnail':"shows"				, 'login':"false" , 'scraper':'shows'},
+#				  {'Title':__language__( 30032 )  ,'path':"/root/explore/trailers"			, 'thumbnail':"trailers"			, 'login':"false" },
+#				  {'Title':__language__( 30035 )  ,'path':"/root/explore/trailers/latest"   , 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"latest_trailers" },
+#				  {'Title':__language__( 30034 )  ,'path':"/root/explore/trailers/current"  , 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"current_trailers" },
+#				  {'Title':__language__( 30036 )  ,'path':"/root/explore/trailers/upcoming" , 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"upcoming_trailers" },
+#				  {'Title':__language__( 30033 )  ,'path':"/root/explore/trailers/popular"  , 'thumbnail':"trailers"			, 'login':"false" , 'scraper':"popular_trailers" },
 				  {'Title':__language__( 30019 )  ,'path':"/root/recommended"				, 'thumbnail':"recommended"			, 'login':"true"  , 'scraper':"recommended" },
 				  {'Title':__language__( 30018 )  ,'path':"/root/contacts"		  			, 'thumbnail':"contacts"			, 'login':"true"  , 'feed':"contacts" },
 				  {'Title':__language__( 30002 )  ,'path':"/root/favorites"		 			, 'thumbnail':"favorites"			, 'login':"true"  , 'feed':"favorites" },
@@ -178,7 +180,7 @@ class YouTubeNavigation:
 		if (get("action") == "delete_refinements"):
 			self.deleteRefinements(params)
 		if (get("action") == "settings"):
-			self.login(params)
+			login.login(params)
 		if (get("action") == "delete_search" or get("action") == "delete_disco"):
 			self.deleteSearch(params)
 		if (get("action") == "edit_search" or get("action") == "edit_disco"):
@@ -207,10 +209,10 @@ class YouTubeNavigation:
 	def listOptionFolder(self, params = {}):
 		get = params.get
 		if ( get('login') and self.__settings__.getSetting( "username" ) != "" ):
-			auth = self.__settings__.getSetting( "auth" )
+			auth = self.__settings__.getSetting( "oauth2_access_token" )
 			if ( not auth ) :
-				self.login()
-				auth = self.__settings__.getSetting( "auth" )
+				login.login()
+				auth = self.__settings__.getSetting( "oauth2_access_token" )
 
 		item_favorites = {'Title':self.__language__( 30020 ), 'path':get("path"), 'external':"true", 'login':"true", 'thumbnail':"favorites", 'feed':"favorites", "contact":get("contact")}
 		self.addFolderListItem(params, item_favorites, 1)
@@ -242,10 +244,10 @@ class YouTubeNavigation:
 	def listUserFolder(self, params = {}):
 		get = params.get
 		if ( get('login') and self.__settings__.getSetting( "username" ) != "" ):
-			auth = self.__settings__.getSetting( "auth" )
+			auth = self.__settings__.getSetting( "oauth2_access_token" )
 			if ( not auth ) :
-				self.login()
-				auth = self.__settings__.getSetting( "auth" )
+				login.login()
+				auth = self.__settings__.getSetting( "oauth2_access_token" )
 				
 		feed = self.parseFeeds(params)
 		
@@ -282,10 +284,10 @@ class YouTubeNavigation:
 	def listUserFolderFeeds(self, params = {}):
 		get = params.get
 		if ( get('login') and self.__settings__.getSetting( "username" ) != "" ):
-			auth = self.__settings__.getSetting( "auth" )
+			auth = self.__settings__.getSetting( "oauth2_access_token" )
 			if ( not auth ) :
-				self.login()
-				auth = self.__settings__.getSetting( "auth" )
+				login.login()
+				auth = self.__settings__.getSetting( "oauth2_access_token" )
 			
 		feed = self.parseFeeds(params)
 		
@@ -316,9 +318,7 @@ class YouTubeNavigation:
 		self.parseVideoList(params, result);
 		
 	def login(self, params = {}):
-		self.__settings__.openSettings()
-						
-		(result, status) = core.login()
+		(result, status) = login.login()
 				
 		if status == 200:
 			self.errorHandling(self.__language__(30031), result, 303)
@@ -703,11 +703,11 @@ class YouTubeNavigation:
 			if (item("login") == "false"):
 				self.addFolderListItem(params, item_params)				
 			else:
-				if (len(self.__settings__.getSetting( "auth" )) > 0):
+				if (len(self.__settings__.getSetting( "oauth2_access_token" )) > 0):
 					self.addFolderListItem(params, item_params)
 		else :
 			if (item("action") == "settings"):
-				if (len(self.__settings__.getSetting( "auth" )) > 0):
+				if (len(self.__settings__.getSetting( "oauth2_access_token" )) > 0):
 					if (item("login") == "true"):
 						self.addActionListItem(params, item_params)
 				else:
@@ -788,7 +788,6 @@ class YouTubeNavigation:
 		listitem.setProperty( "Video", "true" )
 		listitem.setProperty( "IsPlayable", "true")
 		listitem.setInfo(type='Video', infoLabels=item_params)
-		xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content="movies" )
 		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=False, totalItems=listSize + 1)
 	
 	#==================================== Core Output Parsing Functions ===========================================
@@ -977,7 +976,7 @@ class YouTubeNavigation:
 			
 			cm.append( ( self.__language__(30501), "XBMC.RunPlugin(%s?path=%s&action=download&videoid=%s)" % ( sys.argv[0],  item("path"), item("videoid") ) ) )
 
-			if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "auth" ) ):
+			if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "oauth2_access_token" ) ):
 				if ( get("feed") == "favorites" and not get("contact") ):
 					cm.append( ( self.__language__( 30506 ), 'XBMC.RunPlugin(%s?path=%s&action=remove_favorite&editid=%s&)' % ( sys.argv[0], item("path"), item("editid") ) ) )
 				else:
@@ -1033,14 +1032,14 @@ class YouTubeNavigation:
 					cm.append( (self.__language__( 30528 ), cm_url % ("subscriptions_playlists")))
 
 			if (item("channel")):
-				if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "auth" ) ):
+				if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "oauth2_access_token" ) ):
 					if (get("external")):
 						cm.append( ( self.__language__( 30512 ) % item("channel"), 'XBMC.RunPlugin(%s?path=%s&channel=%s&action=add_subscription)' % ( sys.argv[0], item("path"), item("channel") ) ) )
 					else:
 						cm.append( ( self.__language__( 30513 ) % item("channel"), 'XBMC.RunPlugin(%s?path=%s&editid=%s&action=remove_subscription)' % ( sys.argv[0], item("path"), item("editid") ) ) )
 					
 			if (item("contact")):
-				if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "auth" ) ):
+				if ( self.__settings__.getSetting( "username" ) != "" and self.__settings__.getSetting( "oauth2_access_token" ) ):
 					if (item("external")):
 						cm.append( (self.__language__(30026), 'XBMC.RunPlugin(%s?path=%s&action=add_contact&)' % ( sys.argv[0], item("path") ) ) )
 					else:

@@ -72,22 +72,22 @@ class YouTubePlayer:
 			print self.__plugin__ + " getVideoUrlMap: " 
 		links = {}
 		video["url_map"] = "true"
-					
+		
 		html = ""
 		if pl_obj["args"].has_key("fmt_stream_map"):
 			html = pl_obj["args"]["fmt_stream_map"]
-
+		
 		if len(html) == 0 and pl_obj["args"].has_key("url_encoded_fmt_stream_map"):
 			html = urllib.unquote(pl_obj["args"]["url_encoded_fmt_stream_map"])
-
+		
 		if len(html) == 0 and pl_obj["args"].has_key("fmt_url_map"):
-			html = pl_obj["args"]["fmt_url_map"]
-
+			html = pl_obj["args"]["fmt_url_map"]	
+		
 		html = urllib.unquote_plus(html)
-
+		
 		if pl_obj["args"].has_key("liveplayback_module"):
 			video["live_play"] = "true"
-
+		
 		fmt_url_map = [html]
 		if html.find("|") > -1:
 			fmt_url_map = html.split('|')
@@ -101,6 +101,11 @@ class YouTubePlayer:
 		
 		if len(fmt_url_map) > 0:
 			for index, fmt_url in enumerate(fmt_url_map):
+				if fmt_url.find("&url") > -1:
+					fmt_url = fmt_url.split("&url")
+					fmt_url_map += [fmt_url[1]]
+					fmt_url = fmt_url[0]
+
 				if (len(fmt_url) > 7 and fmt_url.find("&") > 7):
 					quality = "5"
 					final_url = fmt_url.replace(" ", "%20").replace("url=", "")
@@ -124,7 +129,6 @@ class YouTubePlayer:
 					
 					if final_url.find("&type") > 0:
 						final_url = final_url[:final_url.find("&type")]
-					
 					if self.__settings__.getSetting("preferred") == "true":
 						pos = final_url.find("://")
 						fpos = final_url.find("fallback_host")
@@ -135,7 +139,6 @@ class YouTubePlayer:
 							fmt_fallback = final_url[fpos + 14:]
 							if fmt_fallback.find("&") > -1:
 								fmt_fallback = fmt_fallback[:fmt_fallback.find("&")]
-							#print self.__plugin__ + " Swapping cached host [%s] and fallback host [%s] " % ( host, fmt_fallback )
 							final_url = final_url.replace(host, fmt_fallback)
 							final_url = final_url.replace("fallback_host=" + fmt_fallback, "fallback_host=" + host)
 
@@ -268,14 +271,11 @@ class YouTubePlayer:
 		return (video, status)
 
 	def _convertFlashVars(self, html):
-		#print self.__plugin__ + " _convertFlashVars : " + repr(html)
 		obj = { "PLAYER_CONFIG": { "args": {} } }
 		temp = html.split("&")
-		print self.__plugin__ + " _convertFlashVars : " + str(len(temp))
 		for item in temp:
 			it = item.split("=")
 			obj["PLAYER_CONFIG"]["args"][it[0]] = urllib.unquote_plus(it[1])
-		#print self.__plugin__ + " _convertFlashVars done : " + repr(obj)
 		return obj
 
 	def _getVideoLinks(self, video, params):
@@ -293,7 +293,7 @@ class YouTubePlayer:
 			data = result.find("PLAYER_CONFIG")
 			if data > -1:
 				data = result.rfind("yt.setConfig", 0, data)
-				data = re.compile('yt.setConfig\((.*?PLAYER_CONFIG.*?)\)').findall(result[data:].replace("\n", ""))
+				data = re.compile('yt.setConfig\((.*?PLAYER_CONFIG.*?)\);').findall(result[data:].replace("\n", ""))
 				if len(data) > 0:
 					player_object = json.loads(data[0].replace('\'PLAYER_CONFIG\'', '"PLAYER_CONFIG"'))
 			else:

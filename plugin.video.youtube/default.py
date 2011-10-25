@@ -16,16 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys, xbmc, xbmcaddon
+import sys, xbmc, xbmcaddon, cookielib, urllib2
 
 # plugin constants
-__version__ = "2.0.5"
+__version__ = "2.1.2"
 __plugin__ = "YouTube-" + __version__
 __author__ = "TheCollective"
 __url__ = "www.xbmc.com"
 __settings__ = xbmcaddon.Addon(id='plugin.video.youtube')
 __language__ = __settings__.getLocalizedString
 __dbg__ = __settings__.getSetting( "debug" ) == "true"
+
+cookiejar = cookielib.LWPCookieJar()
+opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
+urllib2.install_opener(opener)
 
 if (__name__ == "__main__" ):
     if __dbg__:

@@ -518,7 +518,7 @@ class YouTubeScraperCore:
 				title = category.div.findNextSibling(name="div")
 				title = title.h2.contents[0].strip()
 				item['Title'] = title
-				cat = cat.replace("/movies/", "")												
+				cat = cat.replace("/movies/", "").replace("/movies", "")
 				cat = urllib.quote_plus(cat)
 				item['category'] = cat
 				item['scraper'] = "movies"

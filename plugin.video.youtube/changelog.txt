@@ -7,14 +7,17 @@
 - [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
 
-[B]Version 2.2.4[/B]
-- Verfied Compatibility with Eden - pre and submitted to repo.
+[B]Version 2.1.2[/B]
+- Fixed problem with playback caused by bad regex. 
+- Disabled most of the scrapers since they didn't work, working versions can be found in the current beta
+- Disabled plugin setting list content to movies 
+- Fixed login.
 
 [B]Version 2.1.0[/B]
-- Fixed YouTube playback and downloading by backporting code from trunk 
+- Fixed YouTube playback and downloading by back-porting code from trunk 
 
 [B]Version 2.0.5[/B]
-- Fixed http login was broken, somtimes preventing video scrapeing
+- Fixed http login was broken, sometimes preventing video scraping 
 - Fixed Show Scraper was broken due to recent YouTube site changes
 - Fixed Added dutch translations properly
 - Changed Name string from Holland to The Netherlands (thanks to Syrion for pointing it out)

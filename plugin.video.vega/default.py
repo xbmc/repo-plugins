@@ -23,7 +23,7 @@ from resources.lib import getter, printer
 __plugin__ = 'VEGA Concerts'
 __author__ = 'Jeppe Toustrup'
 __url__ = 'http://github.com/Tenzer/plugin.video.vega/'
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 
 if(sys.argv[2].startswith('?concert=')):

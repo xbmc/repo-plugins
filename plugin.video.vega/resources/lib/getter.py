@@ -21,7 +21,7 @@ import xbmc, xbmcplugin
 
 
 def getConcerts():
-	__listurl__ = 'http://www.vega-tdc-player.dk/concerts.jsp'
+	__listurl__ = 'http://www.vegaplayer.dk/concerts.jsp'
 	__listcache__ = xbmc.translatePath('special://temp/vega-list-cache.xml')
 
 	if(fileOutdated(__listcache__)):
@@ -36,7 +36,7 @@ def getConcerts():
 
 
 def getConcertInfo(concertid):
-	__concerturl__ = 'http://www.vega-tdc-player.dk/concert.jsp?id=' + concertid
+	__concerturl__ = 'http://www.vegaplayer.dk/concert.jsp?id=' + concertid
 	__concertcache__ = xbmc.translatePath('special://temp/vega-concert-') + concertid + '-cache.xml'
 
 	if(fileOutdated(__concertcache__)):

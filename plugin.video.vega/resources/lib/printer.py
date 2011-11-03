@@ -33,7 +33,7 @@ def printConcerts(concerts):
 		id = concert.getAttribute('id')
 		artist = concert.getElementsByTagName('name').item(0).firstChild.data
 		date = concert.getElementsByTagName('date').item(0).firstChild.data
-		thumbnail = 'http://www.vega-tdc-player.dk/' + concert.getElementsByTagName('teaserimage').item(0).firstChild.data
+		thumbnail = 'http://www.vegaplayer.dk/' + concert.getElementsByTagName('teaserimage').item(0).firstChild.data
 		url = sys.argv[0] + '?concert=' + id
 		
 		listitem = xbmcgui.ListItem()

@@ -1,13 +1,13 @@
 import os, sys, re
-import xbmc
-import xbmcgui
 from traceback import print_exc
 
-__settings__ = sys.modules[ "__main__" ].__settings__
-__addonDir__  = __settings__.getAddonInfo( "path" )
+xbmc = sys.modules[ "__main__" ].xbmc
+settings = sys.modules[ "__main__" ].settings
+xbmcgui = sys.modules[ "__main__" ].xbmcgui
+addonDir  = settings.getAddonInfo( "path" )
 
 XBMC_SKIN  = xbmc.getSkinDir()
-SKINS_PATH = os.path.join( __addonDir__, "resources", "skins" )
+SKINS_PATH = os.path.join( addonDir, "resources", "skins" )
 ADDON_SKIN = ( "default", XBMC_SKIN )[ os.path.exists( os.path.join( SKINS_PATH, XBMC_SKIN ) ) ]
 MEDIA_PATH = os.path.join( SKINS_PATH, ADDON_SKIN, "media" )
 
@@ -83,12 +83,6 @@ class Control:
 	def getCoords( self, default ):
 		x, y = self.controlXML.getPosition()
 		w, h = self.controlXML.getWidth(), self.controlXML.getHeight()
-		try:
-			if __settings__.getSetting( "custompos" ) == "true":
-				default = ( int( float( __settings__.getSetting( "customposx" ) ) ),
-							int( float( __settings__.getSetting( "customposy" ) ) ) )
-		except:
-			print_exc()
 		return ( default[ 0 ] + x, default[ 1 ] + y, w, h )
 
 	def getAlignment( self, alignment ):
@@ -105,7 +99,7 @@ class Control:
 		return align
 
 	def setAnimations( self ):
-		if self.anim and __settings__.getSetting( "animation" ) == "true":
+		if self.anim:
 			try: self.control.setAnimations( self.anim )
 			except: print_exc()
 
@@ -124,11 +118,9 @@ class DialogDownloadProgressXML( xbmcgui.WindowXMLDialog ):
 	def onInit( self ):
 		self.controls = {}
 		try:
-			xbmcgui.lock()
 			self.getControls()
 		except:
 			print_exc()
-		xbmcgui.unlock()
 		self.close()
 
 	def getControls( self ):
@@ -169,7 +161,7 @@ class Window:
 		if xbmc.getInfoLabel( "Window.Property(DialogDownloadProgress.IsAlive)" ) == "true":
 			raise xbmcguiWindowError( "DialogDownloadProgress IsAlive: Not possible to overscan!" )
 		
-		windowXml = DialogDownloadProgressXML( "DialogDownloadProgress.xml", __addonDir__, ADDON_SKIN )
+		windowXml = DialogDownloadProgressXML( "DialogDownloadProgress.xml", addonDir, ADDON_SKIN )
 		self.controls = windowXml.controls
 		del windowXml
 
@@ -181,35 +173,27 @@ class Window:
 		self.label	  = None
 		self.progress   = None
 
-	def setupWindow( self ):
+	def setupWindow( self):
 		error = 0
-		try: xbmcgui.lock()
-		except: pass
 		# get the id for the current 'active' window as an integer.
 		# http://wiki.xbmc.org/index.php?title=Window_IDs
-		try: currentWindowId = xbmcgui.getCurrentWindowId()
+		try: 	currentWindowId = xbmcgui.getCurrentWindowId()
 		except: currentWindowId = self.window
 
-		if hasattr( self.window, "setProperty" ):
-			self.window.setProperty( "DialogDownloadProgress.Hide", __settings__.getSetting( "hidedialog" ) )
-
-		#if self.window is None and hasattr( currentWindowId, "__int__" ):
-		#	self.window = xbmcgui.Window( currentWindowId )
 		if hasattr( currentWindowId, "__int__" ) and currentWindowId != self.windowId:
 			self.removeControls()
 			self.windowId = currentWindowId
 			self.window = xbmcgui.Window( self.windowId )
 			self.initialize()
 
+		print "XXXXXXXXXXX : " + repr(hasattr( self.window, "addControl" ))
 		if not self.window or not hasattr( self.window, "addControl" ):
 			self.removeControls()
 			error = 1
-		self.window.setProperty( "DialogDownloadProgress.Hide", __settings__.getSetting( "hidedialog" ) )
-		xbmcgui.unlock()
 		if error:
 			raise xbmcguiWindowError( "xbmcgui.Window(%s)" % repr( currentWindowId ) )
 		
-		self.window.setProperty( "DialogDownloadProgress.IsAlive", "true" )
+		#self.window.setProperty( "DialogDownloadProgress.IsAlive", "true" )
 
 	def initialize( self ):
 		try:
@@ -278,7 +262,9 @@ class DownloadProgress( Window ):
 		return self.canceled
 
 	def update( self, percent=0, heading="", label="" ):
+		player = xbmc.Player()
 		self.setupWindow()
+
 		if heading and hasattr( self.heading, "setLabel" ):
 			# set heading
 			try: self.heading.setLabel( heading )

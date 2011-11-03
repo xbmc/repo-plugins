@@ -16,26 +16,29 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys, urllib, os
-import xbmc
-import YouTubeUtils
-from filelock import FileLock
-	
-class YouTubeStorage(YouTubeUtils.YouTubeUtils):
-	__settings__ = sys.modules[ "__main__"].__settings__ 
-	__plugin__ = sys.modules[ "__main__"].__plugin__
-	__language__ = sys.modules[ "__main__" ].__language__
-	
-	__lock__ = FileLock(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadQueue.lock"), 10)
-	
-	# This list contains the list options a user sees when indexing a contact 
-	#				label					  , external		 , login		 ,	thumbnail					, feed
-	user_options = (
-				{'Title':__language__( 30020 ), 'external':"true", 'login':"true", 'thumbnail':"favorites", 	'user_feed':"favorites"},
-				{'Title':__language__( 30023 ), 'external':"true", 'login':"true", 'thumbnail':"playlists", 	'user_feed':"playlists", 'folder':"true"},
-				{'Title':__language__( 30021 ), 'external':"true", 'login':"true", 'thumbnail':"subscriptions", 'user_feed':"subscriptions", 'folder':"true"},
-				{'Title':__language__( 30022 ), 'external':"true", 'login':"true", 'thumbnail':"uploads", 		'user_feed':"uploads"},
-				)
+import sys, urllib, io
+
+class YouTubeStorage():
+
+	def __init__(self):
+		self.xbmc = sys.modules["__main__"].xbmc
+		self.settings = sys.modules[ "__main__" ].settings
+		self.language = sys.modules[ "__main__" ].language
+		self.plugin = sys.modules[ "__main__"].plugin
+		self.dbg = sys.modules[ "__main__" ].dbg
+
+		self.utils =  sys.modules[ "__main__" ].utils
+		self.common = sys.modules[ "__main__" ].common
+		self.cache = sys.modules[ "__main__" ].cache
+					
+		# This list contains the list options a user sees when indexing a contact 
+		#				label					  , external		 , login		 ,	thumbnail					, feed
+		self.user_options = (
+					{'Title':self.language( 30020 ), 'external':"true", 'login':"true", 'thumbnail':"favorites", 	'user_feed':"favorites"},
+					{'Title':self.language( 30023 ), 'external':"true", 'login':"true", 'thumbnail':"playlists", 	'user_feed':"playlists", 'folder':"true"},
+					{'Title':self.language( 30021 ), 'external':"true", 'login':"true", 'thumbnail':"subscriptions", 'user_feed':"subscriptions", 'folder':"true"},
+					{'Title':self.language( 30022 ), 'external':"true", 'login':"true", 'thumbnail':"uploads", 		'user_feed':"uploads"},
+					)
 	
 	def list(self, params = {}):
 		get = params.get
@@ -46,13 +49,18 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 		elif get("store"):
 			return self.getStoredSearches(params)
 	
+	def openFile(self, filepath, options = "w"):
+		try:
+			return io.open(filepath, options)
+		except:
+			return io.open(filepath, options + "b")
+	
 	def getStoredArtists(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " getStoredArtists"
+		self.common.log("")
 		
 		artists = self.retrieve(params)
-				
+		
 		result = []
 		for title, artist in artists:
 			item = {}
@@ -73,8 +81,7 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 	
 	def deleteStoredArtist(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " deleteStoredArtist"
+		self.common.log("")
 
 		artist = get("artist")
 		artists = self.retrieve(params)
@@ -86,26 +93,23 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 		
 		self.store(params, artists)
 		
-		xbmc.executebuiltin( "Container.Refresh" )
+		self.xbmc.executebuiltin( "Container.Refresh" )
 		
 	def saveStoredArtist(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " saveStoredArtist"
-
+		self.common.log("")
 		
 		if get("artist") and get("artist_name"):
 			params["store"] = "artists"
 			artists = self.retrieve(params)
-			searchCount = ( 10, 20, 30, 40, )[ int( self.__settings__.getSetting( "saved_searches" ) ) ]
+			searchCount = ( 10, 20, 30, 40, )[ int( self.settings.getSetting( "saved_searches" ) ) ] - 1
 			artists = [(get("artist_name"), get("artist"))] + artists[:searchCount]
 			self.store(params, artists)
 			del params["store"]
 		
 	def getStoredSearches(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " getStoredSearches"
+		self.common.log("")
 		
 		searches = self.retrieve(params)
 				
@@ -120,7 +124,7 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 				item["feed"] = "search"
 				item["icon"] = "search" 
 			elif get("store") == "disco_searches":
-				item["scraper"] = "search_disco"
+				item["scraper"] = "search_disco" 
 				item["icon"] = "discoball"
 			
 			thumbnail = self.retrieve(params, "thumbnail", item)
@@ -134,9 +138,7 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 			
 	def deleteStoredSearch(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " deleteStoredSearch"
-
+		self.common.log("")
 		
 		query = urllib.unquote_plus(get("delete"))		
 		searches = self.retrieve(params)
@@ -148,12 +150,11 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 		
 		self.store(params, searches)
 		
-		xbmc.executebuiltin( "Container.Refresh" )
+		self.xbmc.executebuiltin( "Container.Refresh" )
 	
 	def saveStoredSearch(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " saveStoredSearch"
+		self.common.log("")
 		
 		if get("search"):
 			searches = self.retrieve(params)
@@ -169,19 +170,18 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 					del(searches[count])
 					break
 			
-			searchCount = ( 10, 20, 30, 40, )[ int( self.__settings__.getSetting( "saved_searches" ) ) ]
+			searchCount = ( 10, 20, 30, 40, )[ int( self.settings.getSetting( "saved_searches" ) ) ] - 1
 			searches = [new_query] + searches[:searchCount]
 			self.store(params, searches)
 	
 	def editStoredSearch(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " editStoredSearch"
+		self.common.log("")
 
 
 		if (get("search")):
 			old_query = urllib.unquote_plus(get("search"))
-			new_query = self.getUserInput(self.__language__(30515), old_query)
+			new_query = self.utils.getUserInput(self.language(30515), old_query)
 			params["search"] = new_query
 			params["old_search"] = old_query
 			
@@ -197,14 +197,15 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 			params["search"] = urllib.quote_plus(new_query)
 			del params["old_search"]
 		
-		del params["action"]
-		del params["store"]
+		if get("action"):
+			del params["action"]
+		if get("store"):
+			del params["store"]
 		
 	def getUserOptionFolder(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " getUserOptionsFolder"
-
+		self.common.log("")
+		
 		result = []
 		for item in self.user_options:
 			item["path"] = get("path")
@@ -215,10 +216,8 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 	
 	def changeSubscriptionView(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " changeSubscriptionsView"
-
-		
+		self.common.log("")
+	
 		if (get("view_mode")):  
 			key = self.getStorageKey(params, "viewmode")
 			
@@ -226,27 +225,25 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 			
 			params['user_feed'] = get("view_mode")
 			if get("viewmode") == "playlists":
-				params["folder"] = "true"
+				params["folder"] = "true" # No result
 	
 	def reversePlaylistOrder(self, params = {}):
 		get = params.get
-		if self.__dbg__:
-			print self.__plugin__ + " reversePlaylistOrder"
+		self.common.log("")
 		
 		if (get("playlist")):			
 			value = "true"
 			existing = self.retrieve(params, "value")
 			if existing == "true":
-				value = "false"
+				value = "false" # No result
 			
 			self.store(params, value, "value")
 		
-		xbmc.executebuiltin( "Container.Refresh" )
+			self.xbmc.executebuiltin( "Container.Refresh" )
 		
 	def getReversePlaylistOrder(self, params = {}):
 		get = params.get 
-		if self.__dbg__:
-			print self.__plugin__ + " getReversePlaylistOrder"
+		self.common.log("")
 		
 		result = False
 		if (get("playlist")):
@@ -276,7 +273,7 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 		
 		if get("search") or iget("search"):
 			key = "disco_search_"
-			if get("feed"):
+			if get("feed") or iget("feed"):
 				key = "search_"
 			
 			if get("store") == "searches":
@@ -304,10 +301,10 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 				key = "subscriptions_" + get("channel")
 
 			if iget("channel"):
-				key += "_" + iget("channel")
+				key = "subscriptions_" + iget("channel")
 		
 			if get("playlist"):
-				key += "_" + get("playlist")
+				key = "playlist_" + get("playlist")
 			
 			if iget("playlist"):
 				key = "playlist_" + iget("playlist")
@@ -352,7 +349,7 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 			key += "view_mode_" + iget("channel")
 		
 		return key
-		
+	
 	def _getResultSetStorageKey(self, params = {}):
 		get = params.get
 		
@@ -360,10 +357,7 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 		
 		if get("scraper"):
 			key = "s_" + get("scraper")
-			
-			if get("scraper") == "music_hits" and get("category"):
-				key += "_" + get("category")
-			
+						
 			if get("scraper") == "music_artist" and get("artist"):
 				key += "_" + get("artist")
 			
@@ -374,6 +368,7 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 				key += "_category_" + get("category")
 			
 			if get("show"):
+				key += "_" + get("show")
 				key += "_season_" + get("season","0")
 		
 		if get("user_feed"):
@@ -400,39 +395,39 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 	def store(self, params = {}, results = [], type = "", item = {}):
 		key = self.getStorageKey(params, type, item)
 		
-		print self.__plugin__ + " Got key " + repr(key)
+		self.common.log("Got key " + repr(key))
 		
 		if type == "thumbnail" or type == "viewmode" or type == "value":
 			self.storeValue(key, results)
 		else:
 			self.storeResultSet(key, results)
-
+	
 	def storeValue(self, key, value):
 		if value:
-			self.__settings__.setSetting(key, value)
+			self.cache.set(key, value)
 
 	def storeResultSet(self, key, results = [], params = {}):
 		get = params.get
 		
 		if results:
 			if get("prepend"):
-				searchCount = ( 10, 20, 30, 40, )[ int( self.__settings__.getSetting( "saved_searches" ) ) ]
-				existing = self.retrieveResultSet(key)  
+				searchCount = ( 10, 20, 30, 40, )[ int( self.settings.getSetting( "saved_searches" ) ) ]
+				existing = self.retrieveResultSet(key)
 				existing = [results] + existing[:searchCount]
-				self.__settings__.setSetting(key, repr(existing))
+				self.cache.set(key, repr(existing))
 			elif get("append"):
 				existing = self.retrieveResultSet(key)  
-				existing = existing.append(results)
-				self.__settings__.setSetting(key, repr(existing))
+				existing.append(results)
+				self.cache.set(key, repr(existing))
 			else:
 				value = repr(results)
-				self.__settings__.setSetting(key,value)
+				self.cache.set(key,value)
 	
 	#============================= Retrieval Functions =================================
 	def retrieve(self, params = {}, type = "", item = {}):
 		key = self.getStorageKey(params, type, item)
 		
-		print self.__plugin__ + " Got key " + repr(key)
+		self.common.log("Got key " + repr(key))
 		
 		if type == "thumbnail" or type == "viewmode" or type == "value":
 			return self.retrieveValue(key)
@@ -442,14 +437,14 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 	def retrieveValue(self, key):
 		value = ""
 		if key:
-			value = self.__settings__.getSetting(key)
+			value = self.cache.get(key)
 		
 		return value
 	
 	def retrieveResultSet(self, key):
 		results = []
 		
-		value = self.__settings__.getSetting(key)		
+		value = self.cache.get(key)		
 		if value: 
 			try:
 				results = eval(value)
@@ -460,19 +455,12 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 		
 	#============================= Download Queue =================================
 	def getNextVideoFromDownloadQueue(self):
-		try:
-			print self.__plugin__ + " getNextVideoFromDownloadQueue trying to acquire"
-			self.__lock__.acquire()
-		except:
-			print self.__plugin__ + " getNextVideoFromDownloadQueue Exception "
-		else:
+		if self.cache.lock("YouTubeQueueLock"):
 			videos = []
 			
-			fd = os.open(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadQueue"), os.O_RDWR | os.O_CREAT)
-			queue = os.read(fd, 65535)
-			os.close(fd)
-			print self.__plugin__ + " qeueu loaded : " + repr(queue)
-
+			queue = self.cache.get("YouTubeDownloadQueue")
+			self.common.log("queue loaded : " + repr(queue))
+			
 			if queue:
 				try:
 					videos = eval(queue)
@@ -483,25 +471,20 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 			if videos:
 				videoid = videos[0]
 
-			self.__lock__.release()
-			print self.__plugin__ + " getNextVideoFromDownloadQueue released. returning : " + videoid
+			self.cache.unlock("YouTubeQueueLock")
+			self.common.log("getNextVideoFromDownloadQueue released. returning : " + videoid)
 			return videoid
-
-	def addVideoToDownloadQeueu(self, params = {}):
-		try:
-			print self.__plugin__ + " addVideoToDownloadQeueu trying to acquire"
-			self.__lock__.acquire()
-		except:
-			print self.__plugin__ + " addVideoToDownloadQeueu Exception "
 		else:
+			self.common.log("getNextVideoFromDownloadQueue Exception")
+
+	def addVideoToDownloadQueue(self, params = {}):
+		if self.cache.lock("YouTubeQueueLock"):
 			get = params.get
 
 			videos = []
 			if get("videoid"):
-				fd = os.open(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadQueue"), os.O_RDWR | os.O_CREAT)
-				queue = os.read(fd, 65535)	
-				os.close(fd)
-				print self.__plugin__ + " qeueu loaded : " + repr(queue)
+				queue = self.cache.get("YouTubeDownloadQueue")
+				self.common.log("queue loaded : " + repr(queue))
 
 				if queue:
 					try:
@@ -512,28 +495,20 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 				if get("videoid") not in videos:
 					videos.append(get("videoid"))
 					
-					os.unlink(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadQueue"))
-					fd = os.open(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadQueue"), os.O_RDWR | os.O_CREAT)
-					os.write(fd, repr(videos))
-					os.close(fd)
-					print self.__plugin__ + " Added: " + get("videoid") + " to: " + repr(videos)
+					self.cache.set("YouTubeDownloadQueue", repr(videos))
+					self.common.log("Added: " + get("videoid") + " to: " + repr(videos))
 
-			self.__lock__.release()
-			print self.__plugin__ + " addVideoToDownloadQeueu released"
+			self.cache.unlock("YouTubeQueueLock")
+			self.common.log("addVideoToDownloadQueue released")
+		else:
+			self.common.log("addVideoToDownloadQueue Exception")
 		
 	def removeVideoFromDownloadQueue(self, videoid):
-		try:
-			print self.__plugin__ + " removeVideoFromDownloadQueue trying to acquire"
-			self.__lock__.acquire()
-		except:
-			print self.__plugin__ + " removeVideoFromDownloadQueue Exception "
-		else:
+		if self.cache.lock("YouTubeQueueLock"):
 			videos = []
 			
-			fd = os.open(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadQueue"), os.O_RDWR | os.O_CREAT)
-			queue = os.read(fd, 65535)
-			os.close(fd)
-			print self.__plugin__ + " qeueu loaded : " + repr(queue)
+			queue = self.cache.get("YouTubeDownloadQueue")
+			self.common.log("queue loaded : " + repr(queue))
 			if queue:
 				try:
 					videos = eval(queue)
@@ -542,14 +517,13 @@ class YouTubeStorage(YouTubeUtils.YouTubeUtils):
 		
 			if videoid in videos:
 				videos.remove(videoid)
-				
-				os.unlink(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadQueue"))
-				fd = os.open(os.path.join( xbmc.translatePath( "special://temp" ), "YouTubeDownloadQueue"), os.O_RDWR | os.O_CREAT)
-				os.write(fd, repr(videos))
-				os.close(fd)
-				print self.__plugin__ + " Removed: " + videoid + " from: " + repr(videos)
-			else:
-				print self.__plugin__ + " Didn't remove: " + videoid + " from: " + repr(videos)
 
-			self.__lock__.release()
-			print self.__plugin__ + " removeVideoFromDownloadQueue released"
+				self.cache.set("YouTubeDownloadQueue", repr(videos))
+				self.common.log("Removed: " + videoid + " from: " + repr(videos))
+			else:
+				self.common.log("Didn't remove: " + videoid + " from: " + repr(videos))
+
+			self.cache.unlock("YouTubeQueueLock")
+			self.common.log("removeVideoFromDownloadQueue released")
+		else:
+			self.common.log("removeVideoFromDownloadQueue Exception")

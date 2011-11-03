@@ -1,8 +1,9 @@
 [B]TODO:[/B]
-- Proper resolutions for rtmp.
+- Fix RTMP'e seems refactor broke it, and make a unittest + integrations test that parsing works (playpath seems wrong)
+  - Make rtmp suck setup once Handshake 10 is supported.
+- Allow users to change sort on searches
 - Scrape Education.
-- Search
-  - Sometimes a list will be returned with all items restricted. This causes a slight error. Safesearch : strict, serach query : "strip tease"
+- Hook-in Caching the right places. And only the right places. (mostly scrapers)
 
 [B]Errata[/B]
 - [XBMC] Thumbnails sometimes turns into black box or Folder (XBMC not detecting when thumbnail is set and defaulting to icon?)
@@ -12,16 +13,22 @@
 - [XBMC] Subtitles and Annotations dont work the first time 90% of the time
 - Download of rtmpe streams not supported.
 
-[B]Version 2.6.3 (Beta)[/B]
-- Fixed plugin to prefer h264 for 720p again as this was causing problems for apple tv2 users
-- Fixed added dependency on simplejson since we're using that now and alot of nightly users we're having problems with the plugin.
-
-[B]Version 2.6.2 (Beta)[/B]
-- Added missing settings strings
-- Changed login code no longer prints username and password to log file when plugins debug mode is enabled (broken since 2.6)
-
-[B]Version 2.6.1 (Beta)[/B]
-- Fixed login after youtube changed the procedure for oauth2 verification
+[B]Version 2.7.0 (Beta)[/B]
+- Added new sqlite based caching system with script.common.plugin.cache
+- Added support for unlinked accounts
+- Added unit test suite of plugin
+- Added integration test suite of plugins main functions including full scraper coverage.
+- Added Caching module to reduce the trafic load on youtube.
+- Fixed Downloads messages.
+- Changed scrapers to use custom regex based parsing framework instead of BeautifullSoup since this greatly improved scraper speed.
+- Changed default video streams up to 720p to h264 since apple tv doesn't handle VP8 well.
+- Changed switched Watch Later to api feed removing a scraper
+- Changed switched YouTube Suggests to api feed removing a scraper
+- Changed Reworked Regex based scraper framework to be more reliable and easier to use
+- Changed Improved Dharma compatability by adding dummy xbmcvfs
+- Changed Download progress bar now auto hides when playing a videos.
+- Changed Remove legacy download and moved windows to new download system.
+- Changed moved from file based locking to new storage service based lock
 
 [B]Version 2.6.0 (Beta)[/B]
 - Added New playback function. Now uses unified code accross all pages(html scraping, embeded, flash fallback). Supports fallback server.

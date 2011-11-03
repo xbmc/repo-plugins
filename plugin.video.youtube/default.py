@@ -16,62 +16,90 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys, xbmcaddon
+import sys, xbmc, xbmcplugin, xbmcaddon, xbmcgui, urllib2, cookielib
+try: 
+	import xbmcvfs
+except ImportError: 
+	import xbmcvfsdummy as xbmcvfs
+
 
 # plugin constants
-__version__ = "2.6.3"
-__plugin__ = "YouTube" + __version__
-__author__ = "TheCollective"
-__url__ = "www.xbmc.com"
+version = "2.7.0"
+plugin = "YouTube-" + version
+author = "TheCollective"
+url = "www.xbmc.com"
 
 # xbmc hooks
-__settings__ = xbmcaddon.Addon(id='plugin.video.youtube')
-__language__ = __settings__.getLocalizedString
-__dbg__ = __settings__.getSetting("debug") == "true"
+settings = xbmcaddon.Addon(id='plugin.video.youtube')
+language = settings.getLocalizedString
+dbg = settings.getSetting("debug") == "true"
+dbglevel = 1
 
 # plugin structure 
-__feeds__ = ""
-__scraper__ = ""
-__playlist__ = ""
-__navigation__ = ""
-__downloader__ = ""
-__storage__ = ""
-__login__ = ""
-__player__ = ""
+feeds = ""
+scraper = ""
+playlist = ""
+navigation = ""
+downloader = ""
+storage = ""
+login = ""
+player = ""
+cache = ""
+
+cookiejar = cookielib.LWPCookieJar()
+opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookiejar))
+urllib2.install_opener(opener)
 
 if (__name__ == "__main__" ):
-	import YouTubeStorage as storage
-	__storage__ = storage.YouTubeStorage()
-	import YouTubeLogin as login
-	__login__ = login.YouTubeLogin()
-	import YouTubeFeeds as feeds
-	__feeds__ = feeds.YouTubeFeeds()
-	import YouTubePlayer as player
-	__player__ = player.YouTubePlayer()
-	import YouTubeDownloader as downloader
-	__downloader__ = downloader.YouTubeDownloader()
-	import YouTubeScraper as scraper
-	__scraper__ = scraper.YouTubeScraper()
-	import YouTubePlaylistControl as playlist
-	__playlist__ = playlist.YouTubePlaylistControl()
-	import YouTubeNavigation as navigation
-	__navigation__ = navigation.YouTubeNavigation()
-
-	if __dbg__:
-		print __plugin__ + " ARGV: " + repr(sys.argv)
+	if dbg:
+		print plugin + " ARGV: " + repr(sys.argv)
 	else:
-		print __plugin__
+		print plugin
 	
-	if ( not __settings__.getSetting( "firstrun" ) ):
-		__login__.login()
-		__settings__.setSetting( "firstrun", '1' )
+
+	try:
+		import StorageServer
+	except:
+		import storageserverdummy as StorageServer
+	cache = StorageServer.StorageServer()
+	cache.table_name = "YouTube"
+
+	import CommonFunctions
+	common = CommonFunctions.CommonFunctions() 
+	import YouTubeUtils
+	utils = YouTubeUtils.YouTubeUtils()
+	import YouTubeStorage
+	storage = YouTubeStorage.YouTubeStorage()
+	import YouTubeCore
+	core = YouTubeCore.YouTubeCore()
+	import YouTubeLogin
+	login = YouTubeLogin.YouTubeLogin()
+	import YouTubeFeeds
+	feeds = YouTubeFeeds.YouTubeFeeds()
+	import YouTubePlayer
+	player = YouTubePlayer.YouTubePlayer()
+	import YouTubeDownloader
+	downloader = YouTubeDownloader.YouTubeDownloader()
+	import YouTubeScraper
+	scraper = YouTubeScraper.YouTubeScraper()
+	import YouTubePlaylistControl
+	playlist = YouTubePlaylistControl.YouTubePlaylistControl()
+	import YouTubeNavigation
+	navigation = YouTubeNavigation.YouTubeNavigation()
+
+	if ( not settings.getSetting( "firstrun" ) ):
+		login.login()
+		settings.setSetting( "firstrun", '1' )
 	
 	if (not sys.argv[2]):
-		__navigation__.listMenu()
+		navigation.listMenu()
 	else:
-		params = __navigation__.getParameters(sys.argv[2])
+		params = utils.getParameters(sys.argv[2])
 		get = params.get
 		if (get("action")):
-			__navigation__.executeAction(params)
+			navigation.executeAction(params)
 		elif (get("path")):
-			__navigation__.listMenu(params)
+			navigation.listMenu(params)
+		else:
+			print plugin + " ARGV Nothing done.. verify params " + repr(params)
+	

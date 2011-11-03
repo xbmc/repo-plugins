@@ -53,11 +53,13 @@
     <string id="30050">Most Shared</string>
     <string id="30051">YouTube Live</string>
     <string id="30052">YouTube Music</string>
-    <string id="30053">Todays Hit's</string>
+    <string id="30053">Recommended Music</string>
     <string id="30054">Popular Artists</string>
     <string id="30055">YouTube Top 100 Music Chart</string>
     <string id="30056">My Liked Videos</string>
+    <string id="30057">YouTube Education</string>
     <string id="30058">Season %s</string>
+
     
     <!-- Plugin settings strings -->
     <string id="30200">Username</string>
@@ -214,6 +216,6 @@
     <string id="30625">Download Failed</string>
     <string id="30626">RTMPe playback currently not supported</string> 
     <string id="30627">Please provide 2-factor authentication PIN</string> 
-    <string id="30628">Please provide your password</string>
+    <string id="30628">Please provide your password</string> 
 
 </strings>

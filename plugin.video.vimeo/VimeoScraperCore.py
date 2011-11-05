@@ -1,15 +1,35 @@
-import sys, urllib2, string
-from BeautifulSoup import BeautifulSoup, SoupStrainer
+'''
+   Vimeo plugin for XBMC
+   Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
 
-class VimeoScraperCore(object):
-	__settings__ = sys.modules[ "__main__" ].__settings__
-	__language__ = sys.modules[ "__main__" ].__language__
-	__plugin__ = sys.modules[ "__main__" ].__plugin__
-	__dbg__ = sys.modules[ "__main__" ].__dbg__
-	hq_thumbs = __settings__.getSetting( "high_quality_thumbs" ) == "true"
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+   
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
+import sys, urllib2, string
+
+class VimeoScraperCore:
+	
+	def __init__(self):
+		self.soup = sys.modules["__main__"].soup
+		self.settings = sys.modules[ "__main__" ].settings
+		self.language = sys.modules[ "__main__" ].language
+		self.plugin = sys.modules[ "__main__" ].plugin
+		self.dbg = sys.modules[ "__main__" ].dbg
+		self.hq_thumbs = self.settings.getSetting( "high_quality_thumbs" ) == "true"
 		
-	USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
-	LOGINURL = "http://www.vimeo.com/log_in"
+		self.USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
+		self.LOGINURL = "http://www.vimeo.com/log_in"
 
 	def scrapeChannels(self, page, params = {}):
 		get = params.get
@@ -62,8 +82,8 @@ class VimeoScraperCore(object):
 		get = params.get
 		vobjects = []
 		
-		list = SoupStrainer(id="cloud", name="div")
-		cloud = BeautifulSoup(page, parseOnlyThese=list)
+		list = self.soup.SoupStrainer(id="cloud", name="div")
+		cloud = self.soup.BeautifulSoup(page, parseOnlyThese=list)
 		
 		if (len(cloud) > 0):
 			li = cloud.ul.li
@@ -93,14 +113,14 @@ class VimeoScraperCore(object):
 		get = params.get
 		vobjects = []
 		
-		list = SoupStrainer(name="div", attrs = {"class":"thumbnail_format"})
-		videos = BeautifulSoup(page, parseOnlyThese=list)
+		list = self.soup.SoupStrainer(name="div", attrs = {"class":"thumbnail_format"})
+		videos = self.soup.BeautifulSoup(page, parseOnlyThese=list)
 		
 		if (len(videos) > 0):
 			
 			next = "false"
-			limiter = SoupStrainer(name="div", attrs = {"class":"pagination"})
-			pagination = BeautifulSoup(page, parseOnlyThese=limiter)
+			limiter = self.soup.SoupStrainer(name="div", attrs = {"class":"pagination"})
+			pagination = self.soup.BeautifulSoup(page, parseOnlyThese=limiter)
 			if (len(pagination) > 0):
 				li = pagination.ul.li.findNextSibling(name="li", attrs = {"class":"arrow"})
 				if (li != None):
@@ -126,7 +146,7 @@ class VimeoScraperCore(object):
 								if thumbnail.rfind("_200"):
 									thumbnail = thumbnail.replace("_200", "_640")
 
-							overlay = self.__settings__.getSetting( "vidstatus-" + item['videoid'] )
+							overlay = self.settings.getSetting( "vidstatus-" + item['videoid'] )
 							
 							if overlay:
 								item['Overlay'] = int(overlay)
@@ -152,11 +172,11 @@ class VimeoScraperCore(object):
 	def _scrapeChannelBadgeFormat(self, page, params = {}):
 		get = params.get
 		vobjects = []
-		list = SoupStrainer(id ="featured", name="div")
-		featured = BeautifulSoup(page, parseOnlyThese=list)
+		list = self.soup.SoupStrainer(id ="featured", name="div")
+		featured = self.soup.BeautifulSoup(page, parseOnlyThese=list)
 		if (len(featured) > 0):
 			li = featured.ul.li
-	 
+			
 			while (li != None):
 				item = {}
 				item["Title"] =li.a['title'].strip()
@@ -177,8 +197,8 @@ class VimeoScraperCore(object):
 		get = params.get
 		vobjects = []
 		
-		list = SoupStrainer(id="cat_browse", name="div")
-		categories = BeautifulSoup(page, parseOnlyThese=list)
+		list = self.soup.SoupStrainer(id="cat_browse", name="div")
+		categories = self.soup.BeautifulSoup(page, parseOnlyThese=list)
 		if (len(categories) > 0):
 			li = categories.ul.li
 			
@@ -202,13 +222,13 @@ class VimeoScraperCore(object):
 		get = params.get
 		vobjects = []
 		
-		list = SoupStrainer(name="div", attrs={"class":"detail_format"})
-		details = BeautifulSoup(page, parseOnlyThese=list)
+		list = self.soup.SoupStrainer(name="div", attrs={"class":"detail_format"})
+		details = self.soup.BeautifulSoup(page, parseOnlyThese=list)
 		if (len(details) > 0):
 
 			next = "false"
-			limiter = SoupStrainer(name="div", attrs = {"class":"pagination"})
-			pagination = BeautifulSoup(page, parseOnlyThese=limiter)
+			limiter = self.soup.SoupStrainer(name="div", attrs = {"class":"pagination"})
+			pagination = self.soup.BeautifulSoup(page, parseOnlyThese=limiter)
 			if (len(pagination) > 0):
 				
 				li = pagination.ul.li.findNextSibling(name="li", attrs = {"class":"arrow"})
@@ -272,7 +292,7 @@ class VimeoScraperCore(object):
 			# begin dark magic
 			request_page = int(get("page", "0"))
 			page_count = request_page
-			per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.__settings__.getSetting( "perpage" ) ) ]
+			per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.settings.getSetting( "perpage" ) ) ]
 			xbmc_index = page_count * per_page 
 			
 			begin_page = (xbmc_index / scraper_per_page) + 1
@@ -282,8 +302,8 @@ class VimeoScraperCore(object):
 			
 			url = self.createUrl(feed,params)
 			
-			if (self.__dbg__):
-				print "requesting url " + url
+			if (self.dbg):
+				print self.plugin + " requesting url: " + url
 			html = self._fetchPage(url, params)
 			result = self.parsePage(html, params)
 			result = result[begin_index:]
@@ -293,8 +313,8 @@ class VimeoScraperCore(object):
 			i = 1
 			while (len(result) <  per_page):
 				url = self.createUrl(feed,params)
-				if (self.__dbg__):
-					print "requesting url " + url
+				if (self.dbg):
+					print self.plugin + " requesting url: " + url
 				html = self._fetchPage(url, params)
 				result = result + self.parsePage(html, params)
 				page_count = page_count + 1
@@ -302,8 +322,8 @@ class VimeoScraperCore(object):
 				
 				i = i+1
 				if (i > 9):
-					if (self.__dbg__):
-						print "Scraper pagination failed, requested more than 10 pages which should never happen."
+					if (self.dbg):
+						print self.plugin + " Scraper pagination failed, requested more than 10 pages which should never happen."
 					return False
 				
 			if (result):
@@ -353,7 +373,3 @@ class VimeoScraperCore(object):
 		
 		return feed
 
-if __name__ == '__main__':
-	core = VimeoScraperCore()
-	
-	sys.exit(0);

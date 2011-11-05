@@ -3,8 +3,12 @@
 - [XBMC] has Excessive Memory use after running the plugin for prolonged periods of time
 - [Vimeo] Vimeo's implementation of Oauth 1 is time sensetive, meaning that an incorrectly set system clock will prevent the plugin from logging in
 
+[B]Version 1.1.0[/B]
+- Fixed Login breakages cause by vimeo site changes
+- Fixed video listings would crash when given an empty list
+
 [B]Version 1.0.4[/B]
-- Fixed login breakage cause by Vimeo site changes (Proper)
+- Fixed login brekaged cause by Vimeo site changes (Annoying rollback of changes from v1.0.3) 
 
 [B]Version 1.0.3[/B]
 - Fixed issue where listing groups would fail if every group didnt have a logo

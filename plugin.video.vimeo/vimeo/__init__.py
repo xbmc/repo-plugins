@@ -380,7 +380,7 @@ class VimeoClient(object):
     # ---- 3-legged oAuth ----
     def _is_success(self, headers):
         if headers["status"] != "200":
-            raise VimeoError("Invalid response %s" (headers["status"]))
+            raise VimeoError("Invalid response %s" % (headers["status"]))
         return True
 
     def _get_new_token(self, request_url, *args, **kwargs):
@@ -389,6 +389,9 @@ class VimeoClient(object):
         to self.token on success.
         """
         resp, content = self.client.request(request_url, *args, **kwargs)
+
+        if resp["status"] != "200":
+            print "Vimeo token error: " + repr(resp) + " - " + repr(content)
 
         if self._is_success(resp):
             

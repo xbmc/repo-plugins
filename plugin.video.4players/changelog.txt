@@ -1,2 +1,5 @@
+1.1.1
+ Fixed Video Playback
+
 1.1.0
  First Version for Eden-pre xbmc.org addon-repository

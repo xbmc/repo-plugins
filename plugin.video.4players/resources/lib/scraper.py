@@ -112,7 +112,11 @@ def getVideoFile(page_url):
     video_page = URL_PREFIX + page_url + '.html'
     html = __getAjaxContent(video_page)
     tree = BeautifulSoup(html)
-    return tree.find('video')['src']
+    link = tree.find('script', text=re.compile('video src'))
+    r = '<video src="(?P<url>[^"]+)"'
+    m = re.search(r, unicode(link))
+    url = m.groupdict()['url']
+    return url
 
 
 def getCategories():

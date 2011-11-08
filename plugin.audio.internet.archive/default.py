@@ -1,404 +1,315 @@
-import urllib,urllib2,re,os,xbmcplugin,xbmcgui,xbmcaddon
-from BeautifulSoup import BeautifulSoup
+import urllib
+import urllib2
+import re
+import os
+import xbmcplugin
+import xbmcgui
+import xbmcaddon
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.audio.internet.archive')
 __language__ = __settings__.getLocalizedString
+home = __settings__.getAddonInfo('path')
+icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 sort = __settings__.getSetting('sort_by')
+if sort==__language__(30009):
+    set = 'publicdate'
+elif sort==__language__(30010):
+    set = 'date'
+elif sort==__language__(30011):
+    set = 'downloads'
+elif sort==__language__(30012):
+    set = 'avg_rating%3B-num_reviews'
+else:
+    set = 'publicdate'
+
+
+def getResponse(url):
+        try:
+            req = urllib2.Request(url)
+            req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
+            response = urllib2.urlopen(req)
+            link = response.read()
+            response.close()
+            return link
+        except urllib2.URLError, e:
+            errorStr = str(e.read())
+            print 'We failed to open "%s".' % url
+            if hasattr(e, 'reason'):
+                print 'We failed to reach a server.'
+                print 'Reason: ', e.reason
+            if hasattr(e, 'code'):
+                print 'We failed with error code - %s.' % e.code
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30028)+","+__language__(30029)+str(e.code)+",5000,"+icon+")")
+            return
 
 
 def getCategories():
-	if sort==__language__(30009):
-		set = 'publicdate'
-	elif sort==__language__(30010):
-		set = 'date'
-	elif sort==__language__(30011):
-		set = 'downloads'
-	elif sort==__language__(30012):
-		set = 'avg_rating%3B-num_reviews'
-	else:
-		set = 'publicdate'
-	addDir(__language__(30005),'getLiveArchive',4,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30001),'getAudioBooks',5,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30024),'getRadioPrograms',9,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30006),'getMusicArts',10,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30002),'http://www.archive.org/search.php?query=collection%3Aopensource_audio&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30004),'http://www.archive.org/search.php?query=collection%3Aaudio_tech&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30013),'http://www.archive.org/search.php?query=collection%3Anetlabels&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30014),'http://www.archive.org/search.php?query=collection%3Aaudio_news&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30015),'http://www.archive.org/search.php?query=collection%3Aaudio_foreign&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	addDir(__language__(30017),'http://www.archive.org/search.php?query=collection%3Aaudio_religion&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
-
-
-
-def getAudioBooks():
-	if sort==__language__(30009):
-		set = 'publicdate'
-	elif sort==__language__(30010):
-		set = 'date'
-	elif sort==__language__(30011):
-		set = 'downloads'
-	elif sort==__language__(30012):
-		set = 'avg_rating%3B-num_reviews'
-	else:
-		set = 'publicdate'
-	addDir(__language__(30020),'audio_bookspoetry',8,'special://home/addons/plugin.audio.internet.archive/resources/search.png')
-	addDir(__language__(30007),'audio_bookspoetry',6,'special://home/addons/plugin.audio.internet.archive/resources/search.png')
-	addDir(__language__(30018),'http://www.archive.org/details/audio_bookspoetry',7,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	aurl='http://www.archive.org/details/audio_bookspoetry'
-	req = urllib2.Request(aurl)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	alink=response.read()
-	response.close()
-	soup = BeautifulSoup(alink)
-	divTag = soup.findAll('div', attrs={'style' : "padding:10px;"})
-	cata=re.compile('<div style="padding:10px;"><b><a href="(.+?)">(.+?)</a></b><br />(.+?)</div>').findall(str(divTag))
-	del cata[1]
-	for url,name,desc in cata:
-		url=url.replace('/details/','/search.php?query=collection%3A')
-		addDir(name+' ) '+desc,'http://www.archive.org'+url+'&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')	
-	url='http://www.archive.org/search.php?query=collection%3Aaudio_bookspoetry&sort=-'+set
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	match=re.compile('<a class="titleLink" href="(.+?)">(.+?)</a>').findall(link)
-	for url,name in match:
-		addDir(name,'http://www.archive.org'+url,2,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	page=re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)
-	if len(page)>1:del page[0]
-	for url in page:
-		url=url.replace('&amp;','&')
-		addDir(__language__(30016),'http://www.archive.org'+url,1,'special://home/addons/plugin.audio.internet.archive/resources/next.png')
-
-
-def getRadioPrograms():
-	if sort==__language__(30009):
-		set = 'publicdate'
-	elif sort==__language__(30010):
-		set = 'date'
-	elif sort==__language__(30011):
-		set = 'downloads'
-	elif sort==__language__(30012):
-		set = 'avg_rating%3B-num_reviews'
-	else:
-		set = 'publicdate'
-	addDir(__language__(30020),'radioprograms',8,'special://home/addons/plugin.audio.internet.archive/resources/search.png')
-	addDir(__language__(30007),'radioprograms',6,'special://home/addons/plugin.audio.internet.archive/resources/search.png')
-	aurl='http://www.archive.org/details/radioprograms'
-	req = urllib2.Request(aurl)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	alink=response.read()
-	response.close()
-	soup = BeautifulSoup(alink)
-	divTag = soup.findAll('div', attrs={'style' : "padding:10px;"})
-	cata=re.compile('<div style="padding:10px;"><b><a href="(.+?)">(.+?)</a></b><br />(.+?)</div>').findall(str(divTag))
-	del cata[8]
-	for url,name,desc in cata:
-		url=url.replace('/details/','/search.php?query=collection%3A')
-		addDir(name+' ) '+desc,'http://www.archive.org'+url+'&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	url='http://www.archive.org/search.php?query=collection%3Aaudio_music&sort=-'+set
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	match=re.compile('<a class="titleLink" href="(.+?)">(.+?)</a>').findall(link)
-	for url,name in match:
-		addDir(name,'http://www.archive.org'+url,2,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	page=re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)
-	if len(page)>1:del page[0]
-	for url in page:
-		url=url.replace('&amp;','&')
-		addDir(__language__(30016),'http://www.archive.org'+url,1,'special://home/addons/plugin.audio.internet.archive/resources/next.png')
+        addDir(__language__(30005),'getLiveArchive',4,icon)
+        addDir(__language__(30001),'getAudioBooks',5,icon)
+        addDir(__language__(30024),'getRadioPrograms',9,icon)
+        addDir(__language__(30006),'getMusicArts',10,icon)
+        addDir(__language__(30025),'http://www.archive.org/search.php?query=collection%3AGratefulDead&sort=-'+set,1,icon)
+        addDir(__language__(30002),'http://www.archive.org/search.php?query=collection%3Aopensource_audio&sort=-'+set,1,icon)
+        addDir(__language__(30004),'http://www.archive.org/search.php?query=collection%3Aaudio_tech&sort=-'+set,1,icon)
+        addDir(__language__(30013),'http://www.archive.org/search.php?query=collection%3Anetlabels&sort=-'+set,1,icon)
+        addDir(__language__(30014),'http://www.archive.org/search.php?query=collection%3Aaudio_news&sort=-'+set,1,icon)
+        addDir(__language__(30015),'http://www.archive.org/search.php?query=collection%3Aaudio_foreign&sort=-'+set,1,icon)
+        addDir(__language__(30017),'http://www.archive.org/search.php?query=collection%3Aaudio_religion&sort=-'+set,1,icon)
 
 
 def getLiveArchive():
-	if sort==__language__(30009):
-		set = 'publicdate'
-	elif sort==__language__(30010):
-		set = 'date'
-	elif sort==__language__(30011):
-		set = 'downloads'
-	elif sort==__language__(30012):
-		set = 'avg_rating%3B-num_reviews'
-	else:
-		set = 'publicdate'
-	addDir(__language__(30020),'etree',8,'special://home/addons/plugin.audio.internet.archive/resources/search.png')
-	addDir(__language__(30000),'getArtist',3,'special://home/addons/plugin.audio.internet.archive/resources/search.png')
-	url='http://www.archive.org/search.php?query=%28%28collection%3Aetree%20OR%20mediatype%3Aetree%29%20AND%20NOT%20collection%3AGratefulDead%29%20AND%20-mediatype%3Acollection&sort=-'+set
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	match=re.compile('<a class="titleLink" href="(.+?)">(.+?)</a>').findall(link)
-	for url,name in match:
-		addDir(name,'http://www.archive.org'+url,2,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	page=re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)
-	if len(page)>1:del page[0]
-	for url in page:
-		url=url.replace('&amp;','&')
-		addDir(__language__(30016),'http://www.archive.org'+url,1,'special://home/addons/plugin.audio.internet.archive/resources/next.png')
+        addDir(__language__(30020),'etree',8,xbmc.translatePath(os.path.join(home, 'resources', 'search.png')))
+        addDir(__language__(30000),'getArtist',3,xbmc.translatePath(os.path.join(home, 'resources', 'search.png')))
+        url = 'http://www.archive.org/search.php?query=%28%28collection%3Aetree%20OR%20mediatype%3Aetree%29%20AND%20NOT%20collection%3AGratefulDead%29%20AND%20-mediatype%3Acollection&sort=-'+set
+        link = getResponse(url)
+        match = re.compile('<a class="titleLink" href="(.+?)">(.+?)</a>').findall(link)
+        for url,name in match:
+            addDir(name,'http://www.archive.org'+url,2,icon)
+        page=re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)[0].replace('&amp;','&')
+        addDir(__language__(30016),'http://www.archive.org'+page,1,xbmc.translatePath(os.path.join(home, 'resources', 'next.png')))
+
+
+def getAudioBooks():
+        addDir(__language__(30020),'audio_bookspoetry',8,xbmc.translatePath(os.path.join(home, 'resources', 'search.png')))
+        addDir(__language__(30007),'audio_bookspoetry',6,xbmc.translatePath(os.path.join(home, 'resources', 'search.png')))
+        addDir(__language__(30018),'http://www.archive.org/details/audio_bookspoetry',7,icon)
+        getSubCategories('http://www.archive.org/details/audio_bookspoetry')
+        url='http://www.archive.org/search.php?query=collection%3Aaudio_bookspoetry&sort=-'+set
+        getShows(url)
+
+
+def getRadioPrograms():
+        addDir(__language__(30020),'radioprograms',8,xbmc.translatePath(os.path.join(home, 'resources', 'search.png')))
+        addDir(__language__(30007),'radioprograms',6,xbmc.translatePath(os.path.join(home, 'resources', 'search.png')))
+        getSubCategories('http://www.archive.org/details/radioprograms')
+        url='http://www.archive.org/search.php?query=collection%3Aradioprograms&sort=-'+set
+        getShows(url)
 
 
 def getMusicArts():
-	if sort==__language__(30009):
-		set = 'publicdate'
-	elif sort==__language__(30010):
-		set = 'date'
-	elif sort==__language__(30011):
-		set = 'downloads'
-	elif sort==__language__(30012):
-		set = 'avg_rating%3B-num_reviews'
-	else:
-		set = 'publicdate'
-	addDir(__language__(30020),'audio_music',8,'special://home/addons/plugin.audio.internet.archive/resources/search.png')
-	addDir(__language__(30007),'audio_music',6,'special://home/addons/plugin.audio.internet.archive/resources/search.png')
-	aurl='http://www.archive.org/details/audio_music'
-	req = urllib2.Request(aurl)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	alink=response.read()
-	response.close()
-	soup = BeautifulSoup(alink)
-	divTag = soup.findAll('div', attrs={'style' : "padding:10px;"})
-	cata=re.compile('<div style="padding:10px;"><b><a href="(.+?)">(.+?)</a></b><br />(.+?)</div>').findall(str(divTag))
-	for url,name,desc in cata:
-		url=url.replace('/details/','/search.php?query=collection%3A')
-		addDir(name+' ) '+desc,'http://www.archive.org'+url+'&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	url='http://www.archive.org/search.php?query=collection%3Aaudio_music&sort=-'+set
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	match=re.compile('<a class="titleLink" href="(.+?)">(.+?)</a>').findall(link)
-	for url,name in match:
-		addDir(name,'http://www.archive.org'+url,2,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	page=re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)
-	if len(page)>1:del page[0]
-	for url in page:
-		url=url.replace('&amp;','&')
-		addDir(__language__(30016),'http://www.archive.org'+url,1,'special://home/addons/plugin.audio.internet.archive/resources/next.png')
+        addDir(__language__(30020),'audio_music',8,xbmc.translatePath(os.path.join(home, 'resources', 'search.png')))
+        addDir(__language__(30007),'audio_music',6,xbmc.translatePath(os.path.join(home, 'resources', 'search.png')))
+        getSubCategories('http://www.archive.org/details/audio_music')
+        url='http://www.archive.org/search.php?query=collection%3Aaudio_music&sort=-'+set
+        getShows(url)
+
+
+def getSubCategories(url):
+        soup = BeautifulSoup(getResponse(url))
+        items = soup.findAll('div', attrs={'style' : "padding:10px;"})
+        for i in items:
+            name = i.a.string
+            url = i.a['href']
+            desc = i.br.next
+            url = url.replace('/details/','/search.php?query=collection%3A')
+            if name.startswith('Gutenberg'):
+                url = '/search.php?query=%28format%3Amp3%20AND%20collection%3Agutenberg%29%20AND%20-mediatype%3Acollection'
+            addDir(name+' ) '+desc.encode('ascii', 'ignore'),'http://www.archive.org'+url+'&sort=-'+set,1,icon)
+
 
 # get by artist listings
 def getArtist():
-	if sort==__language__(30009):
-		set = 'publicdate'
-	elif sort==__language__(30010):
-		set = 'date'
-	elif sort==__language__(30011):
-		set = 'downloads'
-	elif sort==__language__(30012):
-		set = 'avg_rating%3B-num_reviews'
-	else:
-		set = 'publicdate'
-	url='http://www.archive.org/browse.php?collection=etree&field=%2Fmetadata%2Fcreator'
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	soup = BeautifulSoup(link)
-	aTag = soup.find('tr', attrs={'valign' : 'top'}).findAll('a')
-	tag = str(aTag)
-	match=re.compile('href="(.+?)">(.+?)</a>, <a href=".+?">(.+?)</a>').findall(tag)
-	for url,name,shows in match:
-		url=url.replace('/details/','/search.php?query=collection%3A')
-		addDir(name+'  | '+shows,'http://www.archive.org'+url+'&sort=-'+set,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+        url='http://www.archive.org/browse.php?collection=etree&field=%2Fmetadata%2Fcreator'
+        soup = BeautifulSoup(getResponse(url))
+        match=re.compile('href="(.+?)">(.+?)</a>, <a href=".+?">(.+?)</a>').findall(str(soup.find('tr', attrs={'valign' : 'top'}).findAll('a')))
+        for url,name,shows in match:
+            url=url.replace('/details/','/search.php?query=collection%3A')
+            addDir(name+'  | '+shows,'http://www.archive.org'+url+'&sort=-'+set,1,icon)
 
 
 # get the directories		
 def getShows(url):
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	match=re.compile('<a class="titleLink" href="(.+?)">(.+?)</a>.+?<br/>(.+?)</td>').findall(link)
-	for url,name,desc in match:
-		name=name.replace('<span class="searchTerm">','').replace('</span>','')
-		addDir(name,'http://www.archive.org'+url,2,'special://home/addons/plugin.audio.internet.archive/icon.png')
-	page=re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)
-	if len(page)>1:del page[0]
-	for url in page:
-		url=url.replace('&amp;','&')
-		addDir(__language__(30016),'http://www.archive.org'+url,1,'special://home/addons/plugin.audio.internet.archive/resources/next.png')
+        link = getResponse(url)
+        match=re.compile('<a class="titleLink" href="(.+?)">(.+?)</a>.+?<br/>(.+?)</td>').findall(link)
+        for url,name,desc in match:
+            name=name.replace('<span class="searchTerm">','').replace('</span>','').replace('&amp;','&')
+            addDir(name,'http://www.archive.org'+url,2,icon)
+        try:
+            page=re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)[0].replace('&amp;','&')
+            addDir(__language__(30016),'http://www.archive.org'+page,1,xbmc.translatePath(os.path.join(home, 'resources', 'next.png')))
+        except:
+            pass
 
 
 # gets names and urls	
-def playMusic(url):
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	soup = BeautifulSoup(link)
-	title = soup('h1')[2].contents[1]
-	pTag = soup.findAll('p', attrs={'class' : 'content'})
-	aTag = str(pTag[1]('a'))
-	apTag =str(pTag[0]('a'))
-	scrTag = soup.findAll('script', attrs={'type' : 'text/javascript'})
-	script = scrTag[7].string.replace("\'",'').replace('\n','').replace('\\/','/')
-	names=re.compile('names     :\[\"(.+?)"\]').findall(script)
-	mp3s=re.compile('mp3s      :\[\"(.+?)"\]').findall(script)
-	lengths=re.compile('lengths   :\[\"(.+?)"\],').findall(script)
-	mainDir=re.compile(' mainDir   :"(.+?)"').findall(script)
-	ident=re.compile('IAD.identifier  ="(.+?)"').findall(script)
-	iad=re.compile('IAD.identifier  =".+?";IAD.playlists = (.+?);').findall(script)
-	server = 'http://www.archive.org/download/'
-	ident = str(ident)[3:-2]
-	mp3 = str(mp3s)[3:-2].split('","')
-	name = str(names)[3:-2].split('","')
-	length = str(lengths)[3:-2].split('","')
-	conTent=re.compile('<a href=".+?">(.+?)</a>').findall(apTag)
-	content=re.compile('<a href=".+?">(.+?)</a>').findall(aTag)
-	if len(content)>1:
-		del content[0]
-	if iad==[u'false']:
-		print 'sorry no playlist'
-		dialog = xbmcgui.Dialog()
-		ok = dialog.ok('Internet Archive',__settings__.getLocalizedString(30021))
-		return
-	else:
-		if content==['64Kbps MP3 ZIP']:
-			addLink('Play All )  '+title,server+ident+'/'+ident+'_64kb.mp3.zip','','special://home/addons/plugin.audio.internet.archive/resources/play.png')
-			addDownload('Download  64Kbps MP3 ZIP)  '+title,server+ident+'/'+ident+'_64kb.mp3.zip',11,'special://home/addons/plugin.audio.internet.archive/resources/download.png')
-		if content==['VBR ZIP']:
-			addLink('Play All )  '+title,server+ident+'/'+ident+'_vbr_mp3.zip','','special://home/addons/plugin.audio.internet.archive/resources/play.png')
-			addDownload('Download  VBR MP3 ZIP)  '+title,server+ident+'/'+ident+'_vbr_mp3.zip',11,'special://home/addons/plugin.audio.internet.archive/resources/download.png')
-		if conTent==['Whole directory']:
-			addLink('Play All )  '+title,'http://www.archive.org/compress/'+ident,'','special://home/addons/plugin.audio.internet.archive/resources/play.png')
-			addDownload('Download  ZIP)  '+title,'http://www.archive.org/compress/'+ident,11,'special://home/addons/plugin.audio.internet.archive/resources/download.png')		
-		if content==['Whole directory']:
-			addLink('Play All )  '+title,'http://www.archive.org/compress/'+ident,'','special://home/addons/plugin.audio.internet.archive/resources/play.png')
-			addDownload('Download  ZIP)  '+title,'http://www.archive.org/compress/'+ident,11,'special://home/addons/plugin.audio.internet.archive/resources/download.png')
-		if len(name)==len(mp3)==len(length):
-			for index in range(len(name)):
-				addLink(length[index]+' '+name[index],server+ident+'/'+mp3[index],length[index],'special://home/addons/plugin.audio.internet.archive/icon.png')
-	
-	
-def DownloadFiles(name,url):
-	filename = name[19:]+'.zip'
-	def download(url, dest):
-		dialog = xbmcgui.DialogProgress()
-		dialog.create(__settings__.getLocalizedString(30022), __settings__.getLocalizedString(30023), filename)
-		urllib.urlretrieve(url, dest, lambda nb, bs, fs, url = url: _pbhook(nb, bs, fs, url, dialog))
-	def _pbhook(numblocks, blocksize, filesize, url = None,dialog = None):
-		try:
-			percent = min((numblocks * blocksize * 100) / filesize, 100)
-			dialog.update(percent)
-		except:
-			percent = 100
-			dialog.update(percent)
-		if dialog.iscanceled():
-			dialog.close()
-	if (__settings__.getSetting('download') == ''):
-		__settings__.openSettings('download')
-	filepath = xbmc.translatePath(os.path.join(__settings__.getSetting('download'),filename))
-	download(url, filepath)
+def playMusic(title, url):
+        link = getResponse(url)
+        try:
+            thumb = re.compile('<img title="\[item image\]" alt="\[item image\]" style="max-height:152px; max-width:165px; margin-bottom:0.5em; border:0px;" id="thumbnail" src="(.+?)"/>').findall(link)[0]
+        except:
+            try:
+                thumb = re.compile('<a href=".+?"><img title=".+?" alt=".+?" id=".+?" src="(.+?)"/></a>').findall(link)[0]
+            except:
+                thumb = icon
+        if thumb.startswith('/'):
+            thumb = 'http://www.archive.org'+thumb
+        try:
+            soupA = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
+            downloads = soupA('p', attrs={'id' : "dl"})[0]('a')
+            for i in downloads:
+                type = i.string
+                href = i['href']
+                try:
+                    size = i.fetchPrevious('span')[0].string
+                    if 'NEW' in size:
+                        size = ''
+                except:
+                    size = ''
+                if href[-3:] == 'zip':
+                    # add Download listitem
+                    u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.archive.org'+href)+"&mode=11&name="+urllib.quote_plus(__language__(30026)+type+' '+size)+"&title="+urllib.quote_plus(title.replace(' ','_'))
+                    ok=True
+                    liz=xbmcgui.ListItem(__language__(30026)+type+' '+size, iconImage="DefaultFolder.png", thumbnailImage=xbmc.translatePath(os.path.join(home, 'resources', 'download.png')))
+                    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
+        except:
+            pass
+
+        try:
+            match = re.compile("IAD.mrss = '(.+?)'").findall(link)[0]
+            soup = BeautifulStoneSoup(match, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+            if len(soup('item')) > 1:
+                #add Play All listitem
+                u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=12&name="+urllib.quote_plus(__language__(30027))
+                ok=True
+                liz=xbmcgui.ListItem(__language__(30027), iconImage="DefaultFolder.png", thumbnailImage=xbmc.translatePath(os.path.join(home, 'resources', 'play.png')))
+                ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
+
+            for i in soup('item'):
+                name = urllib.unquote_plus(i('media:title')[0].string.encode("utf-8", 'ignore'))
+                url = i ('media:content')[0]['url']
+                try:
+                    duration = i('media:content')[0]['duration']
+                except:
+                    duration = ''
+                addLink(name, 'http://www.archive.org'+url, duration, thumb)
+        except:
+            pass
+
+
+def getPlaylist(url):
+        link = getResponse(url)
+        try:
+            thumb = re.compile('<img title="\[item image\]" alt="\[item image\]" style="max-height:152px; max-width:165px; margin-bottom:0.5em; border:0px;" id="thumbnail" src="(.+?)"/>').findall(link)[0]
+        except:
+            try:
+                thumb = re.compile('<a href=".+?"><img title=".+?" alt=".+?" id=".+?" src="(.+?)"/></a>').findall(link)[0]
+            except:
+                thumb = icon
+        if thumb.startswith('/'):
+            thumb = 'http://www.archive.org'+thumb
+
+        player = xbmc.Player()
+        if player.isPlaying():
+            player.stop()
+        playlist = xbmc.PlayList(0)
+        playlist.clear()
+
+        match = re.compile("IAD.mrss = '(.+?)'").findall(link)[0]
+        soup = BeautifulStoneSoup(match, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+        for i in soup('item'):
+            name = urllib.unquote_plus(i('media:title')[0].string.encode("ascii", 'ignore'))
+            url = i ('media:content')[0]['url']
+            try:
+                duration = i('media:content')[0]['duration']
+            except:
+                duration = ''
+            liz=xbmcgui.ListItem(name, iconImage=thumb, thumbnailImage=thumb)
+            liz.setInfo( type="Video", infoLabels={ "Title": name, "Duration": duration } )
+            playlist.add(url='http://www.archive.org'+url, listitem=liz)
+        xbmc.executebuiltin('playlist.playoffset(music,0)')
+
+def DownloadFiles(title,url):
+        filename = title+'.zip'
+        def download(url, dest):
+            dialog = xbmcgui.DialogProgress()
+            dialog.create(__settings__.getLocalizedString(30022), __settings__.getLocalizedString(30023), filename)
+            urllib.urlretrieve(url, dest, lambda nb, bs, fs, url = url: _pbhook(nb, bs, fs, url, dialog))
+        def _pbhook(numblocks, blocksize, filesize, url = None,dialog = None):
+            try:
+                percent = min((numblocks * blocksize * 100) / filesize, 100)
+                dialog.update(percent)
+            except:
+                percent = 100
+                dialog.update(percent)
+            if dialog.iscanceled():
+                dialog.close()
+        if __settings__.getSetting('download') == '':
+            __settings__.openSettings('download')
+        filepath = xbmc.translatePath(os.path.join(__settings__.getSetting('download'),filename))
+        download(url, filepath)
 
 
 def Search(url):
-	if sort==__language__(30009):
-		set = 'publicdate'
-	elif sort==__language__(30010):
-		set = 'date'
-	elif sort==__language__(30011):
-		set = 'downloads'
-	elif sort==__language__(30012):
-		set = 'avg_rating%3B-num_reviews'
-	else:
-		set = 'publicdate'
-	searchStr = ''
-	keyboard = xbmc.Keyboard(searchStr, "Search")
-	keyboard.doModal()
-	if (keyboard.isConfirmed() == False):
-		return
-	searchstring = keyboard.getText()
-	newStr = searchstring.replace(' ','%20')
-	if len(newStr) == 0:
-		return
-	url = 'http://www.archive.org/search.php?query=' + newStr + '%20AND%20collection%3A'+url+'&sort=-'+set
-	getShows(url)
+        searchStr = ''
+        keyboard = xbmc.Keyboard(searchStr, "Search")
+        keyboard.doModal()
+        if (keyboard.isConfirmed() == False):
+            return
+        searchstring = keyboard.getText()
+        newStr = searchstring.replace(' ','%20')
+        if len(newStr) == 0:
+            return
+        url = 'http://www.archive.org/search.php?query='+newStr+'%20AND%20collection%3A'+url+'&sort=-'+set
+        getShows(url)
 
 
 def searchByTitle(url):
-	url='http://www.archive.org/details/'+url
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	soup = BeautifulSoup(link)
-	aTag = soup.findAll(id="browsetitle")
-	atag = str(aTag)
-	match=re.compile('<a href="(.+?)">(.+?)</a>').findall(atag)
-	for url,name in match:
-		url=url.replace('&amp;','&').replace(' ','%20')
-		addDir(name,'http://www.archive.org'+url,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+        url='http://www.archive.org/details/'+url
+        soup = BeautifulSoup(getResponse(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        items = soup('div', attrs={'id' : "browsetitle"})[0]('a')
+        for i in items:
+            href = i['href']
+            name = i.string
+            url = 'http://www.archive.org'+href.replace(' ','%20')
+            addDir(name,url,1,icon)
+
 
 # search audio books by author
 def searchByAuthor():
-	url='http://www.archive.org/details/audio_bookspoetry'
-	req = urllib2.Request(url)
-	req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-	response = urllib2.urlopen(req)
-	link=response.read()
-	response.close()
-	soup = BeautifulSoup(link)
-	aTag = soup.findAll(id="browsetitle")
-	atag = str(aTag)
-	match=re.compile('<a href="(.+?)">(.+?)</a>').findall(atag)
-	for url,name in match:
-		url=url.replace('&amp;','&').replace(' ','%20').replace('sort=title','sort=creator').replace('firstTitle','firstCreator')
-		addDir(name,'http://www.archive.org'+url,1,'special://home/addons/plugin.audio.internet.archive/icon.png')
+        url='http://www.archive.org/details/audio_bookspoetry'
+        soup = BeautifulSoup(getResponse(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        items = soup('div', attrs={'id' : "browsetitle"})[0]('a')
+        for i in items:
+            href = i['href']
+            name = i.string
+            url = 'http://www.archive.org'+href.replace(' ','%20').replace('sort=title','sort=creator').replace('firstTitle','firstCreator')
+            addDir(name,url,1,icon)
 
 
-def addLink(name,url,length,iconimage):
-	ok=True
-	liz=xbmcgui.ListItem(name, iconImage="DefaultAudio.png", thumbnailImage=iconimage)
-	liz.setInfo( type="Audio", infoLabels={ "Title": name, } )
-	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-	return ok
+def addLink(name,url,duration,iconimage):
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
+        liz.setInfo( type="video", infoLabels={ "Title": name, "Duration": duration } )
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
+        return ok
+
 
 def addDir(name,url,mode,iconimage):
-	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-	ok=True
-	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-	liz.setInfo( type="Audio", infoLabels={ "Title": name } )
-	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-	return ok
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        return ok
 
-def addDownload(name,url,mode,iconimage):
-	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-	ok=True
-	liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-	liz.setProperty("IsPlayable","false")
-	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False,totalItems=1)
-	return ok
-	
-	
+
 def get_params():
-	param=[]
-	paramstring=sys.argv[2]
-	if len(paramstring)>=2:
-		params=sys.argv[2]
-		cleanedparams=params.replace('?','')
-		if (params[len(params)-1]=='/'):
-			params=params[0:len(params)-2]
-		pairsofparams=cleanedparams.split('&')
-		param={}
-		for i in range(len(pairsofparams)):
-			splitparams={}
-			splitparams=pairsofparams[i].split('=')
-			if (len(splitparams))==2:
-				param[splitparams[0]]=splitparams[1]
-				
-	return param
+        param=[]
+        paramstring=sys.argv[2]
+        if len(paramstring)>=2:
+            params=sys.argv[2]
+            cleanedparams=params.replace('?','')
+            if (params[len(params)-1]=='/'):
+                params=params[0:len(params)-2]
+            pairsofparams=cleanedparams.split('&')
+            param={}
+            for i in range(len(pairsofparams)):
+                splitparams={}
+                splitparams=pairsofparams[i].split('=')
+                if (len(splitparams))==2:
+                    param[splitparams[0]]=splitparams[1]
+        return param
+
 
 params=get_params()
 url=None
@@ -406,68 +317,76 @@ name=None
 mode=None
 
 try:
-	url=urllib.unquote_plus(params["url"])
+    url=urllib.unquote_plus(params["url"])
 except:
-	pass
+    pass
 try:
-	name=urllib.unquote_plus(params["name"])
+    name=urllib.unquote_plus(params["name"])
 except:
-	pass
+    pass
 try:
-	mode=int(params["mode"])
+    title=urllib.unquote_plus(params["title"])
 except:
-	pass
+    pass
+try:
+    mode=int(params["mode"])
+except:
+    pass
 
 print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
-	print ""
-	getCategories()
+    print ""
+    getCategories()
 
 elif mode==1:
-	print ""+url
-	getShows(url)
-		
+    print ""
+    getShows(url)
+
 elif mode==2:
-	print ""+url
-	playMusic(url)
+    print ""
+    playMusic(name, url)
 
 elif mode==3:
-	print ""+url
-	getArtist()
+    print ""
+    getArtist()
 
 elif mode==4:
-	print ""+url
-	getLiveArchive()
+    print ""
+    getLiveArchive()
 
 elif mode==5:
-	print ""+url
-	getAudioBooks()
+    print ""
+    getAudioBooks()
 
 elif mode==6:
-	print ""+url
-	searchByTitle(url)
+    print ""
+    searchByTitle(url)
 
 elif mode==7:
-	print ""+url
-	searchByAuthor()
+    print ""
+    searchByAuthor()
 
 elif mode==8:
-	print ""+url
-	Search(url)	
+    print ""
+    Search(url)	
 
 elif mode==9:
-	print ""+url
-	getRadioPrograms()
+    print ""
+    getRadioPrograms()
 
 elif mode==10:
-	print ""+url
-	getMusicArts()
+    print ""
+    getMusicArts()
 
 elif mode==11:
-	print ""+url
-	DownloadFiles(name,url)
+    print ""
+    DownloadFiles(title,url)
+
+elif mode==12:
+    print ""
+    getPlaylist(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))	

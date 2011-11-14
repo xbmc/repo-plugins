@@ -29,11 +29,13 @@
 #5.12.2010 varasto pois, elokuva-haku etusivulle, alpha->www, tekstitys pois
 #5.12.2010 lisays ja poisto katselulistalta ja sarjoista - kiitos Markku Lamminluoto!
 #7.1.2011 tuki tvkaistan proxyille
+#11.8.2011 naytetaan aika aina Suomen ajassa
+#13.11.2011 proxytuki pois tarpeettomana, sarjojen sorttaus
 
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
 
-import xbmcgui, urllib, urllib2, cookielib , re, os, xbmcplugin, htmlentitydefs, time, xbmcaddon
+import xbmcgui, urllib, urllib2, cookielib , re, os, xbmcplugin, htmlentitydefs, time, xbmcaddon, calendar
 tvkaista_addon = xbmcaddon.Addon("plugin.video.tvkaista");
 
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( tvkaista_addon.getAddonInfo('path'), "resources" ) )
@@ -51,19 +53,6 @@ def bitrate():
       return "ts"
     else:
       return "flv"
-
-#tvkaista webikayttoliittymasta asetukset-sivulta.
-def proxycookie():
-    if tvkaista_addon.getSetting("proxy") == "1":
-      return "721600"
-    elif tvkaista_addon.getSetting("proxy") == "2":
-      return "7064662+909967"
-    elif tvkaista_addon.getSetting("proxy") == "3":
-      return "7134762+5332710"
-    elif tvkaista_addon.getSetting("proxy") == "4":
-      return "8031916+6913675"
-    else:
-      return "-1"
 
 #varmistetaan asetukset
 def settings():
@@ -140,6 +129,39 @@ def get_params():
           param[splitparams[0]]=splitparams[1]
   return param
 
+#onko gmt-aikaleima kesaajassa
+def isdst(tt):
+  dates = {
+    2011 : [27,30],
+    2012 : [25,28],
+    2013 : [31,27],
+    2014 : [30,26],
+    2015 : [29,25],
+    2016 : [27,30],
+    2017 : [26,29],
+    2018 : [25,28],
+    2019 : [31,27],
+  }
+  t=time.gmtime(tt)
+  if t[1] > 3 and t[1]<10:
+    return True
+  if t[1] < 3 or t[1]>10:
+    return False
+  if t[1] == 3:
+    if t[2] < dates[t[0]][0]:
+      return False
+    if t[2] == dates[t[0]][0]:
+      if t[3] == 0:
+        return False
+    return True
+  if t[1] == 10:
+    if t[2] < dates[t[0]][1]:
+      return True
+    if t[2] == dates[t[0]][1]:
+      if t[3] == 0:
+        return True
+    return False
+
 #Listaa feedin sisaltamat ohjelmat
 def listprograms(url):
   passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
@@ -158,17 +180,10 @@ def listprograms(url):
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
     return
   dom = minidom.parseString(content)
-  try:
-    #haetaan aikaero GMT->lokaaliaika. Oletetaan, etta xbmc:n/pythonin aika on oikea lokaaliaika...
-    otherdate=dom.getElementsByTagName('channel')[0].getElementsByTagName('lastBuildDate')[0].childNodes[0].nodeValue
-    timediff=time.time()-time.mktime(time.strptime(otherdate,"%a, %d %b %Y %H:%M:%S +0000"))
-  except:
-    timediff=0
 
 #  try:
   items = dom.getElementsByTagName('item')
   ret = []
-  mycookie=urllib.quote_plus(proxycookie())
   myusername=urllib.quote(tvkaista_addon.getSetting("username"))
   mypassword=urllib.quote(tvkaista_addon.getSetting("password"))
   for i in items:
@@ -191,9 +206,15 @@ def listprograms(url):
       shortdes=pdes[:80]+'...'
     else:
       shortdes=pdes
-    t=time.localtime(timediff+time.mktime(time.strptime(pdat,"%a, %d %b %Y %H:%M:%S +0000")))
-    urlii = 'http://%s:%s@%s|Cookie=preferred_servers%%3D%s' % (\
-            myusername, mypassword, pat[0],mycookie)
+    tt=calendar.timegm(time.strptime(pdat,"%a, %d %b %Y %H:%M:%S +0000"))
+    if (isdst(tt)):
+      timediff=10800
+    else:
+      timediff=7200
+    t=time.gmtime(tt+timediff)
+
+    urlii = 'http://%s:%s@%s' % (\
+            myusername, mypassword, pat[0])
     nimike = '%s | %s >>> %s (%s)' % (time.strftime("%H:%M",t),ptit,shortdes,pcha)
 
     listitem = xbmcgui.ListItem(label=nimike, iconImage="DefaultVideo.png")
@@ -243,7 +264,7 @@ def listdates(url):
                          tvkaista_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman))
   urllib2.install_opener(opener)
-  #print "listfeeds avataan: "+url
+  #print "listdates avataan: "+url
   try:
       content = urllib2.urlopen('http://www.tvkaista.fi/feed/channels/').read()
   except urllib2.HTTPError,e:
@@ -292,6 +313,8 @@ def listfeeds(url):
 #  try:
   dom = minidom.parseString(content)
   items = dom.getElementsByTagName('item')
+  if "/feed/seasonpasses" in url:
+    items.sort(key=lambda i: i.getElementsByTagName('title')[0].childNodes[0].nodeValue)
   ret = []
   for i in items:
     ptit=i.getElementsByTagName('title')[0].childNodes[0].nodeValue

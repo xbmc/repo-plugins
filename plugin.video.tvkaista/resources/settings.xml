@@ -3,6 +3,6 @@
    <setting id="password" type="text" option="hidden" label="30001" default=""/>
    <setting type="sep" />
    <setting id="bitrate" type="enum" label="30003" values="300 kbps iTunes|1 Mbps Flash|2 Mbps MPEG4|8 Mbps Pro" default="1 Mbps Flash"/>
-   <setting id="proxy" type="enum" label="30006" values="Vakioasetus|Ranska 1 Mbps|Yhdysvallat 300k,1M,2M,8M|Espanja 300k,1M,2M,8M|Saksa 300k,1M,2M,8M" default="Vakioasetus"/>
+   <setting type="lsep" label="30006" />
    <setting type="lsep" label="30007" />
 </settings>

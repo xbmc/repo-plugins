@@ -1,3 +1,6 @@
+[B]Version 2.2.3[/B]
+Ted talks moved most videos to youtube
+
 [B]Version 2.2.2[/B]
 
 - fixed: download link names (reqexp strings) changed

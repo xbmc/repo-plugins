@@ -41,6 +41,7 @@ class TedTalks:
         """self.videoDetails={Title, Director, Genre, Plot, id, url}"""
         #TODO: get 'related tags' and list them under genre
         html = getHTML(url)
+        url = ""
         soup = BeautifulSoup(html)
         #get title
         title = soup.find('span', attrs={'id':'altHeadline'}).string
@@ -52,6 +53,11 @@ class TedTalks:
         for link in soup.findAll('a'):
             if re.match('High-res video \(MP4\)' , str(link.string)):
                 url = link['href']
+        if url == "":
+          # look for utub link
+          utublinks = re.compile('http://(?:www.)?youtube.com/v/([^\&]*)\&').findall(html)
+          for link in utublinks:
+            url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %(link)
         #get id from url
         id = url.split('/')[-1]
         return {'Title':title, 'Director':speaker, 'Genre':'TED', 'Plot':plot, 'PlotOutline':plot, 'id':id, 'url':url}

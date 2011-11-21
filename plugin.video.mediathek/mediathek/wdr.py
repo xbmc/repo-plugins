@@ -27,72 +27,72 @@ class WDRMediathek(Mediathek):
                       TreeNode("0","Neuste Videos",self.rootLink+"/mediathek/rdf/regional/index.xml",True),
                       TreeNode("1","Sendungen von A-Z","",False,
                         (
-                          TreeNode("1.0","A40","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=A40",True),
-                          TreeNode("1.1","Aktuelle Stunde","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Aktuelle+Stunde",True),
-                          TreeNode("1.2","Am Sonntag","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Der+Sonntag",True),
+                          TreeNode("1.0",u"A40","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=A40",True),
+                          TreeNode("1.1",u"Aktuelle Stunde","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Aktuelle+Stunde",True),
+                          TreeNode("1.2",u"Am Sonntag","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Der+Sonntag",True),
                           
-                          TreeNode("1.3","Cosmo","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Funkhaus+Europa+-+Cosmo",True),
+                          TreeNode("1.3",u"Cosmo","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Funkhaus+Europa+-+Cosmo",True),
                           
                           TreeNode("1.4",u"daheim & unterwegs","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=daheim+%26+unterwegs",True),
-                          TreeNode("1.5","die story","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=die+story",True),
-                          TreeNode("1.6","Dittsche","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Dittsche",True),
+                          TreeNode("1.5",u"die story","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=die+story",True),
+                          TreeNode("1.6",u"Dittsche","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Dittsche",True),
                           
-                          TreeNode("1.7","eins zu eins","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=eins+zu+eins",True),
+                          TreeNode("1.7",u"eins zu eins","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=eins+zu+eins",True),
                           
-                          TreeNode("1.8","frauTV","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=frauTV",True),
+                          TreeNode("1.8",u"frauTV","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=frauTV",True),
                           
-                          TreeNode("1.9","hier und heute","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Hier+und+Heute",True),
-                          TreeNode("1.10","Kabarett","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Kabarett",True),
+                          TreeNode("1.9",u"hier und heute","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Hier+und+Heute",True),
+                          TreeNode("1.10",u"Kabarett","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Kabarett",True),
                           
-                          TreeNode("1.11","Lokalzeit aus Aachen","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+Aachen",True),
+                          TreeNode("1.11",u"Lokalzeit aus Aachen","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+Aachen",True),
                           TreeNode("1.12",u"Lokalzeit aus Düsseldorf","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+D%FCsseldorf",True),
-                          TreeNode("1.13","Lokalzeit OWL","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+OWL+aktuell",True),
-                          TreeNode("1.14","Lokalzeit aus Bonn","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+Bonn",True),
-                          TreeNode("1.15","Lokalzeit aus Köln","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+K%F6ln",True),
-                          TreeNode("1.16","Lokalzeit Ruhr","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+Ruhr",True),
-                          TreeNode("1.17","Lokalzeit aus Dortmund","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+Dortmund",True),
-                          TreeNode("1.18","Lokalzeit Bergisches Land","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+Bergisches+Land",True),
-                          TreeNode("1.19","Lokalzeit Südwestfalen","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+S%FCdwestfalen",True),
-                          TreeNode("1.20","Lokalzeit aus Duisburg","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+Duisburg",True),
-                          TreeNode("1.21","Lokalzeit Münsterland","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+M%FCnsterland",True),
+                          TreeNode("1.13",u"Lokalzeit OWL","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+OWL+aktuell",True),
+                          TreeNode("1.14",u"Lokalzeit aus Bonn","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+Bonn",True),
+                          TreeNode("1.15",u"Lokalzeit aus Köln","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+K%F6ln",True),
+                          TreeNode("1.16",u"Lokalzeit Ruhr","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+Ruhr",True),
+                          TreeNode("1.17",u"Lokalzeit aus Dortmund","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+Dortmund",True),
+                          TreeNode("1.18",u"Lokalzeit Bergisches Land","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+Bergisches+Land",True),
+                          TreeNode("1.19",u"Lokalzeit Südwestfalen","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+S%FCdwestfalen",True),
+                          TreeNode("1.20",u"Lokalzeit aus Duisburg","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+aus+Duisburg",True),
+                          TreeNode("1.21",u"Lokalzeit Münsterland","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Lokalzeit+M%FCnsterland",True),
                           
-                          TreeNode("1.22","markt","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=markt",True),
-                          TreeNode("1.23","Menschen hautnah","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Menschen+hautnah",True),
-                          TreeNode("1.24","Mittagsecho","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Mittagsecho",True),
-                          TreeNode("1.25","Mittagsmagazin","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Mittagsmagazin",True),
-                          TreeNode("1.26","mittwochs live","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=mittwochs+live",True),
-                          TreeNode("1.27","Morgenecho","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Morgenecho",True),
-                          TreeNode("1.28","Morgenmagazin","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Morgenmagazin",True),
-                          TreeNode("1.29","Mosaik","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+3+-+Mosaik",True),
+                          TreeNode("1.22",u"markt","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=markt",True),
+                          TreeNode("1.23",u"Menschen hautnah","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Menschen+hautnah",True),
+                          TreeNode("1.24",u"Mittagsecho","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Mittagsecho",True),
+                          TreeNode("1.25",u"Mittagsmagazin","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Mittagsmagazin",True),
+                          TreeNode("1.26",u"mittwochs live","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=mittwochs+live",True),
+                          TreeNode("1.27",u"Morgenecho","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Morgenecho",True),
+                          TreeNode("1.28",u"Morgenmagazin","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Morgenmagazin",True),
+                          TreeNode("1.29",u"Mosaik","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+3+-+Mosaik",True),
                           
-                          TreeNode("1.30","Piazza","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Funkhaus+Europa+-+Piazza",True),
-                          TreeNode("1.31","Platz der Republik","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Platz+der+Republik",True),
+                          TreeNode("1.30",u"Piazza","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Funkhaus+Europa+-+Piazza",True),
+                          TreeNode("1.31",u"Platz der Republik","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Platz+der+Republik",True),
                           
-                          TreeNode("1.32","Quarks & Co","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Quarks+%26+Co",True),
+                          TreeNode("1.32",u"Quarks & Co","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Quarks+%26+Co",True),
                           
-                          TreeNode("1.33","Resonanzen","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+3+-+Resonanzen",True),
+                          TreeNode("1.33",u"Resonanzen","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+3+-+Resonanzen",True),
                           
-                          TreeNode("1.34","Scala","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Scala",True),
-                          TreeNode("1.35","schön hier","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=sch%F6n+hier",True),
-                          TreeNode("1.36","Servicezeit","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Servicezeit",True),
-                          TreeNode("1.37","sport inside","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=sport+inside",True),
-                          TreeNode("1.38","Stichtag","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Stichtag",True),
-                          
-                          
-                          TreeNode("1.39","Thema NRW","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Thema+NRW",True),
+                          TreeNode("1.34",u"Scala","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Scala",True),
+                          TreeNode("1.35",u"schön hier","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=sch%F6n+hier",True),
+                          TreeNode("1.36",u"Servicezeit","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Servicezeit",True),
+                          TreeNode("1.37",u"sport inside","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=sport+inside",True),
+                          TreeNode("1.38",u"Stichtag","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Stichtag",True),
                           
                           
-                          TreeNode("1.40","WDR aktuell","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+aktuell",True),
-                          TreeNode("1.41","WDR sport aktuell","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+sport+aktuell",True),
-                          TreeNode("1.42","west.art","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=West.art",True),
-                          TreeNode("1.43","Westblick","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Westblick",True),
-                          TreeNode("1.44","WESTPOL","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WESTPOL",True),
-                          TreeNode("1.45","Westzeit","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Westzeit",True),
+                          TreeNode("1.39",u"Thema NRW","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Thema+NRW",True),
                           
-                          TreeNode("1.46","Zeiglers wunderbare Welt des Fußballs","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Zeiglers+wunderbare+Welt+des+Fu%DFballs",True),
-                          TreeNode("1.47","ZeitZeichen","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+3+%2F+WDR+5+-+ZeitZeichen",True),
-                          TreeNode("1.48","Zimmer Frei!","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Zimmer+Frei%21",True),
-                          TreeNode("1.49","Zwischen Rhein und Weser","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Zwischen+Rhein+und+Weser",True),
+                          
+                          TreeNode("1.40",u"WDR aktuell","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+aktuell",True),
+                          TreeNode("1.41",u"WDR sport aktuell","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+sport+aktuell",True),
+                          TreeNode("1.42",u"west.art","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=West.art",True),
+                          TreeNode("1.43",u"Westblick","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+5+-+Westblick",True),
+                          TreeNode("1.44",u"WESTPOL","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WESTPOL",True),
+                          TreeNode("1.45",u"Westzeit","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Westzeit",True),
+                          
+                          TreeNode("1.46",u"Zeiglers wunderbare Welt des Fußballs","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Zeiglers+wunderbare+Welt+des+Fu%DFballs",True),
+                          TreeNode("1.47",u"ZeitZeichen","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+3+%2F+WDR+5+-+ZeitZeichen",True),
+                          TreeNode("1.48",u"Zimmer Frei!","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=Zimmer+Frei%21",True),
+                          TreeNode("1.49",u"Zwischen Rhein und Weser","http://www.wdr.de/mediathek/html/regional/ergebnisse/sendung.xml?rankingtype=sendung&rankingvalue=WDR+2+-+Zwischen+Rhein+und+Weser",True),
                         )
                       ),
                       TreeNode("2","Themen","",False,
@@ -192,9 +192,10 @@ class WDRMediathek(Mediathek):
       linkString = linkString.group();
       if linkString.startswith("dslSrc="):
         linkString = linkString.replace("dslSrc=","");
+        links[1] = self.extractLink(linkString);
       else:
         linkString = linkString.replace("isdnSrc=","");
-      links[0] = self.extractLink(linkString);
+        links[0] = self.extractLink(linkString);
     
     if len(links) == 0:
       linkString = self._regex_extractAudioLink.search(mainPage).group();

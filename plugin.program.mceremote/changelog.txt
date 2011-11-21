@@ -1,3 +1,6 @@
+[B]Version 2.0.1 20th Nov 2011[/B]
+- Cosmetic change to the add-on description
+
 [B]Version 2.0.0 14th Nov 2011[/B]
 - New version for Eden
 - Add support for extra buttons on XBox universal, Mediagate and HP remotes

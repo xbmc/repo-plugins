@@ -75,6 +75,6 @@
 
   </category>
   <category label="49998">
-    <setting id="update_keyedit"    type="bool" label="41000" default="yes" />
+    <setting id="update_keyedit"    type="bool" label="41000" default="true" />
   </category>
 </settings>

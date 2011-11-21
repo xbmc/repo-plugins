@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-import re,time
+import re,time,urllib
+from xml.dom import Node;
+from xml.dom import minidom;
 from mediathek import *
 
 class ORFMediathek(Mediathek):
@@ -136,6 +138,11 @@ class ORFMediathek(Mediathek):
     self.regex_extractProgrammTitle = re.compile("title=\".*?\"");
     self.regex_extractProgrammPicture = re.compile("/binaries/asset/segments/\\d*/image1");
     
+    self.regex_extractFlashVars = re.compile("ORF.flashXML = '.*?'");
+    self.regex_extractHiddenDate = re.compile("\d{4}-\d{2}-\d{2}");
+    self.regex_extractXML = re.compile("%3C.*%3E");
+    self.regex_extractReferingSites = re.compile("<li><a href=\"/programs/\d+.*?/episodes/\d+.*?\"");
+    
     self.replace_html = re.compile("<.*?>");
     
     
@@ -181,11 +188,66 @@ class ORFMediathek(Mediathek):
       print videoLink;
       
       self.createVideoLink(title,pictureLink,videoLink, len(result));
+  
+  def extractLinksFromFlashXml(self, flashXml, date, elementCount):
+    print flashXml.toprettyxml().encode('UTF-8');
+    playlistNode = flashXml.getElementsByTagName("Playlist")[0];
+    linkNode=flashXml.getElementsByTagName("AsxUrl")[0];
+    link=linkNode.firstChild.data;
+    asxLink = SimpleLink(self.rootLink+link,0);
+    videoLink = {0:asxLink};
+    for videoItem in playlistNode.getElementsByTagName("Items")[0].childNodes:
+      if(videoItem.nodeType == Node.ELEMENT_NODE):
+        titleNode=videoItem.getElementsByTagName("Title")[0];
+        
+        descriptionNode=videoItem.getElementsByTagName("Description")[0];
+        title=titleNode.firstChild.data;
+                
+        stringArray = link.split("mp4:");
+        
+        try:
+          description=descriptionNode.firstChild.data;
+        except:
+          description="";
+        self.gui.buildVideoLink(DisplayObject(title,"","",description,videoLink, True, date),self,elementCount);
+        
+  def extractFlashLinks(self, flashVars,videoPageLinks,elementCount):
+    for flashVar in flashVars:
+      encodedXML = self.regex_extractXML.search(flashVar).group();
+      
+      dateString = self.regex_extractHiddenDate.search(flashVar).group();
+      date = time.strptime(dateString,"%Y-%m-%d");      
+      
+      parsedXML = minidom.parseString(urllib.unquote(encodedXML));  
+      self.extractLinksFromFlashXml(parsedXML, date,elementCount);
+    
+    
+    for videoPageLink in videoPageLinks:
+      videoPageLink = self.rootLink+videoPageLink.replace("<li><a href=\"","").replace("\"","");
+      print videoPageLink;
+      videoPage = self.loadPage(videoPageLink);
+      flashVars = self.regex_extractFlashVars.findall(videoPage);
+      for flashVar in flashVars:
+        encodedXML = self.regex_extractXML.search(flashVar).group();
+        
+        dateString = self.regex_extractHiddenDate.search(flashVar).group();
+        date = time.strptime(dateString,"%Y-%m-%d");
+        
+        parsedXML = minidom.parseString(urllib.unquote(encodedXML));  
+        self.extractLinksFromFlashXml(parsedXML,date,elementCount);
+    
+    
+    
     
   def buildPageMenu(self, link, initCount):
     mainPage = self.loadPage(link);
+    videoPageLinks = self.regex_extractReferingSites.findall(mainPage);
+    flashVars = self.regex_extractFlashVars.findall(mainPage);
     links = self.regex_extractVideoObject.findall(mainPage);
-    elementCount = initCount + len(links);
+    elementCount = initCount + len(links)+len(flashVars)+len(videoPageLinks);
+    
+    self.extractFlashLinks(flashVars,videoPageLinks,elementCount);
+    
     for linkObject in links:
       
       videoLink = self.regex_extractVideoPageLink.search(linkObject).group().replace("\"","");

@@ -221,6 +221,8 @@ class ZDFMediathek(Mediathek):
               links[1] = SimpleLink(url, size);
             elif(quality == "veryhigh"):
               links[2] = SimpleLink(url, size);
+            elif(quality == "hd"):
+              links[3] = SimpleLink(url, size);
       if(len(links) == 0):
         links = {};
         for streamObject in configXml.getElementsByTagName("formitaet"):
@@ -235,6 +237,8 @@ class ZDFMediathek(Mediathek):
               links[1] = SimpleLink(url, size);
             elif(quality == "veryhigh"):
               links[2] = SimpleLink(url, size);
+            elif(quality == "hd"):
+              links[3] = SimpleLink(url, size); 
             break;
       configXml.unlink();
       if(len(links) > 0):
@@ -290,6 +294,8 @@ class ZDFMediathek(Mediathek):
         links[1] = link
       elif(quality == "veryhigh"):
         links[2] = link
+      elif(quality == "hd"):
+        links[3] = SimpleLink(url, size);
     xmlDocument.unlink();
     return links;
     

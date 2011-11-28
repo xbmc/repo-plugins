@@ -1,3 +1,9 @@
+[B]Version 1.0.5[/B]
+
+- Updated addon to use PBS COVE API service
+- Updated search function
+- Miscellaneous changes
+
 [B]Version 1.0.4[/B]
 
 - Fixed script failed error when trying to play videos

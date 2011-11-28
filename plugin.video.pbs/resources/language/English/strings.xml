@@ -4,8 +4,12 @@
     <string id="30001">Topics</string>
     <string id="30002">Collections</string>
     <string id="30003">Search</string>
-    <string id="30004">No videos found. Please check your spelling,</string>
+    <string id="30004">No videos found. Please check your spelling</string>
     <string id="30005">or try again using different search words.</string>
 	<string id="30006">HTTP Error 404. Please report this problem to</string>
 	<string id="30007">stacked.xbmc@gmail.com with a debug log.</string>
+	<string id="30008">This video is currently not available.</string>
+	<string id="30009">This video is only available on the PBS website:</string>
+	<string id="30010">eGJtYy01ZGYyNjgwMC0zYTUzLTRlZjQtODQxNy1jODJkYTM2ZTVhYzQ=</string>
+	<string id="30011">ZjNlNzM0NzEtZWNkNC00MmI2LWJmNGUtZmJkNGQ4MzFmYjQx</string>
 </strings>

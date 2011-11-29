@@ -11,7 +11,7 @@ URLSPEAKERS = 'http://www.ted.com/speakers/atoz/page/'
 URLNEW = 'http://www.ted.com/talks/list/page/'
 URLSEARCH = 'http://www.ted.com/search?q=%s/page/'
 URLLOGIN = 'http://www.ted.com/users/signin/'
-URLPROFILE = 'http://www.ted.com/profiles/view/id/'
+URLPROFILE = 'http://www.ted.com/profiles/'
 URLFAVORITES = 'http://www.ted.com/profiles/favorites/id/'
 URLADDFAV ='http://www.ted.com/profiles/addfavorites?id=%s&modulename=talks'
 URLREMFAV ='http://www.ted.com/profiles/removefavorites?id=%s&modulename=talks'
@@ -26,12 +26,12 @@ class TedTalks:
         navItems = {'next':None, 'previous':None, 'selected':1}
         paginationContainer = SoupStrainer(attrs = {'class':re.compile('pagination')})
         for liTag in BeautifulSoup(html, parseOnlyThese = paginationContainer).findAll('li'):
-            if liTag.a.has_key('class'):
-                if liTag.a['class'] == 'next':
+            if liTag.has_key('class'):
+                if liTag['class'] == 'next':
                     navItems['next'] = URLTED+liTag.a['href']
-                elif liTag.a['class'] == 'previous':
+                elif liTag['class'] == 'prev':
                     navItems['previous'] = URLTED+liTag.a['href']
-                elif liTag.a['class'] == 'selected':
+                elif liTag['class'] == 'selected':
                     navItems['selected'] = int(liTag.a.string)
             else: #no class attrib found.
                 print '[%s] %s no pagination found.' % (pluginName, __name__)
@@ -94,7 +94,7 @@ class TedTalks:
             form = forms[1]
             form["users[username]"] = self.username
             form["users[password]"] = self.password
-            form["users[rememberme]"] = ['1']
+            form["users[rememberme]"] = ["on"]
             #click submit
             return getHTML(form.click())
 
@@ -195,7 +195,7 @@ class TedTalks:
                 html = getHTML(url+user.id)
                 talkContainer = SoupStrainer(attrs = {'class':re.compile('box clearfix')})
                 for talk in BeautifulSoup(html, parseOnlyThese = talkContainer):
-                    title = talk.h4.a.string
+                    title = talk.ul.a.string
                     link = URLTED+talk.dt.a['href']
                     pic = resizeImage(talk.find('img', attrs = {'src':re.compile('.+?\.jpg')})['src'])
                     yield {'url':link, 'Title':title, 'Thumb':pic}

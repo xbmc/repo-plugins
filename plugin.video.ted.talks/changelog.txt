@@ -1,3 +1,8 @@
+[B]Version 2.2.4[/B]
+Fixed newest talks - handle unicode characters (thanks to moreginger)
+Fixed newest talks - prev/next buttons not showing (thanks to helmut mikulcik)
+Fixed favorites - not working (thanks to jherrob a gmail com)
+
 [B]Version 2.2.3[/B]
 Ted talks moved most videos to youtube
 

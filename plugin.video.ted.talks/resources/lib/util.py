@@ -53,8 +53,8 @@ def cleanHTML(s, noBS=False):
     if not noBS:
         tmp = list()
         for ns in s:
-            tmp.append(str(ns))
-        s = ''.join(tmp)
+            tmp.append(unicode(ns))
+        s = u''.join(tmp)
     s = re.sub('\s+', ' ', s) #remove extra spaces
     s = re.sub('<.+?>|Image:.+?\r|\r', '', s) #remove htmltags, image captions, & newlines
     s = s.replace('&#39;', '\'') #replace html-encoded single-quotes

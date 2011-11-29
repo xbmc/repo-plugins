@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.giantbomb"
        name="Giant Bomb"
-       version="3.3"
+       version="3.5"
        provider-name="Whiskey Media">
   <requires>
     <import addon="xbmc.python" version="2.0"/>

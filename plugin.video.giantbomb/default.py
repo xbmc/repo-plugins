@@ -65,6 +65,7 @@ def GET_API_KEY(link_code):
 
 def INDEX(url):
     if my_addon.getSetting('api_key'):
+        global API_KEY
         API_KEY = my_addon.getSetting('api_key')
 
     if url == 'search':
@@ -89,12 +90,14 @@ def INDEX(url):
                 ok = dialog.ok("We're really sorry, but...", "We could not link your account.", "Make sure the code you entered is correct", "and try again.")
             CATEGORIES()
     else:
+        addDir('Chrono Trigger', url + '&CT', 2, '')
         addDir('Deadly Premonition', url + '&DP', 2, '')
         addDir('Persona 4', url + '&P4', 2, '')
         addDir('The Matrix Online: Not Like This', url + '&MO', 2, '')
 
 def VIDEOLINKS(url, name):
     if my_addon.getSetting('api_key'):
+        global API_KEY
         API_KEY = my_addon.getSetting('api_key')
 
     q_setting = int(my_addon.getSetting('quality'))
@@ -104,8 +107,12 @@ def VIDEOLINKS(url, name):
     elif q_setting == 2:
         quality = 'high_url'
 
-    if url.endswith('&DP'):
-        response = urllib2.urlopen(API_PATH + '/videos/?api_key=' + API_KEY + '&video_type=5&offset=161&format=json')
+    if url.endswith('&CT'):
+        response = urllib2.urlopen(API_PATH + '/videos/?api_key=' + API_KEY + '&video_type=5&offset=240&format=json')
+        video_data = simplejson.loads(response.read())['results']
+        response.close()
+    elif url.endswith('&DP'):
+        response = urllib2.urlopen(API_PATH + '/videos/?api_key=' + API_KEY + '&video_type=5&offset=161&limit=79&format=json')
         video_data = simplejson.loads(response.read())['results']
         response.close()
     elif url.endswith('&P4'):

@@ -1,0 +1,21 @@
+[B]Version 2.0.0 - 2011-12-01[/B]
+- Complete rewrite using official YouSee API
+- Login is no longer possible, so you need to be using your YouSee internet connection.
+- Improved graphics
+- Added YouSee Cinema navigation (disabled by default)
+  - Unfortunately it is not possible to rent movies yet, as YouSee are investigating the rights required.
+
+[B]Version 1.0.4[/B]
+- Fixed version for elementtree dependency
+
+[B]Version 1.0.3[/B]
+- Fixed playback when only one stream is available
+
+[B]Version 1.0.2[/B]
+- Improved login logic
+
+[B]Version 1.0.1[/B]
+- Updated to use new login system on yousee.tv
+
+[B]Version 1.0.0[/B]
+- Initial release.

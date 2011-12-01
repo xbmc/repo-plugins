@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+    <string id="30000">Live TV</string>
+    <string id="30001">Movies by genre</string>
+    <string id="30002">Movies by theme</string>
+    <string id="30003">Search movies</string>
+
+    <string id="30050">Oops, sorry about that...</string>
+    <string id="30051">The stream could not be started!</string>
+    <string id="30052">The error from the server is:</string>
+
+    <string id="30100">Features</string>
+    <string id="30101">Hide YouSee Cinema navigation</string>
+
+    <string id="39000">Please note!</string>
+    <string id="39001">Unfortunately it is not possible to rent movies via</string>
+    <string id="39002">YouSee Cinema at the moment. YouSee is working on</string>
+    <string id="39003">getting the rights in place.</string>
+</strings>

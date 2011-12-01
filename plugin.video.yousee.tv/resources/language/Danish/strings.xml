@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+    <string id="30000">Direkte TV</string>
+    <string id="30001">Film efter genre</string>
+    <string id="30002">Film efter tema</string>
+    <string id="30003">Søg i film</string>
+
+    <string id="30050">Ups, det er pinligt...</string>
+    <string id="30051">Streamen kunne ikke afspilles!</string>
+    <string id="30052">Fejlen fra serveren er:</string>
+
+    <string id="30100">Features</string>
+    <string id="30101">Skjul YouSee Cinema navigation</string>
+
+    <string id="39000">Bemærk venligst!</string>
+    <string id="39001">Det er desværre ikke muligt at leje film via YouSee</string>
+    <string id="39002">Cinema pt. YouSee arbejder på at få rettighederne</string>
+    <string id="39003">på plads.</string>
+</strings>

@@ -2,6 +2,7 @@
 <settings>
 	<category label="30100">
 		<setting id="quality" label="30101" type="enum" default="0" lvalues="30110|30111|30112|30113" />
+        <setting id="group.by.category" label="30102" type="bool" default="false" />
 	</category>
 </settings>
 

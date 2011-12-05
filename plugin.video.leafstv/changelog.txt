@@ -1,0 +1,7 @@
+[B]Version 0.0.2[/B]
+
+- localized team names and warning messages
+
+[B]Version 0.0.1[/B]
+
+- initial revision with streaming support for live and archived games.

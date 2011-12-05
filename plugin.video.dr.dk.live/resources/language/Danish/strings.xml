@@ -2,10 +2,51 @@
 <strings>
     <string id="30100">Generelt</string>
     <string id="30101">Kvalitet</string>
+    <string id="30102">Grupper kanalerne</string>
 
     <string id="30110">Bedste (op til 2 mbit/s)</string>
     <string id="30111">Høj (1 mbit/s)</string>
     <string id="30112">Medium (500 kbit/s)</string>
     <string id="30113">Lav (250 kbit/s)</string>
 
+    <string id="30201">Danmarks Radio</string>
+    <string id="30202">TV2/Regionerne</string>
+    <string id="30203">Blandet</string>
+
+    <string id="31001">DR1</string>
+    <string id="31002">DR2</string>
+    <string id="31003">DR Update</string>
+    <string id="31004">DR K</string>
+    <string id="31005">DR Ramasjang</string>
+    <string id="31006">DR HD</string>
+
+    <string id="31100">TV 2/FYN</string>
+    <string id="31101">TV2/Lorry</string>
+    <string id="31102">Lorry+</string>
+    <string id="31103">TV/MIDT-VEST</string>
+    <string id="31104">TV2 Nord</string>
+    <string id="31105">TV2 NordPlus</string>
+    <string id="31106">TV2 ØST</string>
+    <string id="31107">Kanal ØST</string>
+    <string id="31108">TV 2 | ØSTJYLLAND</string>
+
+    <string id="31200">24 Nordjyske</string>
+    <string id="31201">Folketinget TV</string>
+
+    <string id="32001">DR1 er den første tv-kanal i Danmark. Oprindelig hed kanalen Danmarks Radio eller DR efter mediehuset, der producerede den (går også under navnet 1'eren i daglig tale, efter TV 2 begyndte i 1988). Navnet blev ændret til DR1 efter lanceringen af DRs anden tv-kanal, DR2, i 1996.</string>
+    <string id="32002">DR2 er DR's anden licensfinansierede tv-kanal og søsterkanal til den bredere og mere folkelige DR1.</string>
+    <string id="32003">DR Update er DR's nyhedskanal, der gik i luften 7. juni 2007.</string>
+    <string id="32004">DR K er en dansk kultur- og historie-kanal og DRs femte licensfinansierede tv-kanal. Kanalen gik i luften den 1. november 2009 og sender fra klokken 16.00 til klokken 24.00 alle dage, året rundt.</string>
+    <string id="32005">DR Ramasjang er en dansk børnekanal og DRs fjerde licensfinansierede tv-kanal. DR Ramasjang gik i luften 1. november 2009 med Signe Lindkvist som chef.[CR][CR]DR Ramasjang sender mandag-torsdag 6.00-20.30, fredag 6.00-21.30, lørdag 6.00-21.00 og søndag 6.00-20.30.</string>
+    <string id="32006">DR HD er en dansk kanal og DR's sjette licensfinansierede tv-kanal. Kanalen gik i luften den 1. november 2009. Alle udsendelser på DR HD er i HD-kvalitet, aldrig opskaleret, men spillefilm produceret af Hollywood krypteres, så seerne kan se dem i HD-kvalitet men kun optage dem i standardkvaliteten SDTV. Det kræver Hollywood, eftersom kanalen er tilgængelig "Free-over-air." Kanalen sendes i det lille HD-format 1280x720p, hvilket betyder at man skal have et HD-ready TV for optimal billedkvalitet.</string>
+
+    <string id="32100">TV 2/FYN sender på hverdage: 11:00, 12:10, 16:05, 18:10 og 19:30.[CR]Mandag til torsdag: 22:20.[CR]Lørdag og søndag: 18:10 og 19:30.</string>
+    <string id="32101">TV2/Lorry er din regionale TV-station for Region Hovedstaden og den del af Region Sjælland, som tidligere var Roskilde Amt. Vi sender nyheds- og aktualitetsprogrammer hver dag kl. 12.10, 16.05, 18.10, 19.30 og 22.20.[CR][CR]Ydermere sender vi Lounge og Der var Engang på Lorry+, som man finder på Kanal Hovedstaden. </string>
+    <string id="32102">TV2/Lorry er din regionale TV-station for Region Hovedstaden og den del af Region Sjælland, som tidligere var Roskilde Amt. Vi sender nyheds- og aktualitetsprogrammer hver dag kl. 12.10, 16.05, 18.10, 19.30 og 22.20.[CR][CR]Ydermere sender vi Lounge og Der var Engang på Lorry+, som man finder på Kanal Hovedstaden. </string>
+    <string id="32103">TV/MIDT-VEST sender direkte på hverdage kl. 11.00-11.30, 12.10-12.30, kl. 19.30-20.00 og kl. 22.20-22.30.[CR][CR]I weekenden sender TV/MIDT-VEST kun direkte kl. 19.30-20.00</string>
+    <string id="32104">Se TV2/NORD live hver dag klokken 12.10, 16.05, 18.10, 19.30 og 22.20</string>
+    <string id="32105">Se TV2/NORD PLUS live hver dag klokken 20.00</string>
+    <string id="32108">Se alle TV 2 | ØSTJYLLANDs nyhedsudsendelser kl. 16.05, 18.10, 19.30 og 22.22</string>
+
+    <string id="32200">24NORDJYSKE giver dig væsentlige og gode historier fra Nordjylland. Du kan tænde, når det passer dig og få vigtige nyheder, gode oplevelser og serviceinformationer.[CR][CR]Hvert kvarter i morgen- og dagtimer og hvert tyvende minut begynder nyhedssløjfen -og kører dermed i ring. Nyhedssløjfen opdateres hver gang der sker noget nyt i Nordjylland.</string>
 </strings>

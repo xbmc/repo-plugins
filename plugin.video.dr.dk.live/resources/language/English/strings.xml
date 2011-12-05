@@ -7,4 +7,28 @@
     <string id="30111">High (1 mbit/s)</string>
     <string id="30112">Medium (500 kbit/s)</string>
     <string id="30113">Low (250 kibt/s)</string>
+
+    <string id="30201">Danish Broadcasting Corporation</string>
+    <string id="30202">TV2/Regions</string>
+    <string id="30203">Miscellaneous</string>
+
+    <string id="31001">DR1</string>
+    <string id="31002">DR2</string>
+    <string id="31003">DR Update</string>
+    <string id="31004">DR K</string>
+    <string id="31005">DR Ramasjang</string>
+    <string id="31006">DR HD</string>
+
+    <string id="31100">TV 2/FYN</string>
+    <string id="31101">TV2/Lorry</string>
+    <string id="31102">Lorry+</string>
+    <string id="31103">TV/MIDT-VEST</string>
+    <string id="31104">TV2 Nord</string>
+    <string id="31105">TV2 NordPlus</string>
+    <string id="31106">TV2 ØST</string>
+    <string id="31107">Kanal ØST</string>
+    <string id="31108">TV 2 | ØSTJYLLAND</string>
+
+    <string id="31200">24 Nordjyske</string>
+    <string id="31201">Folketinget TV</string>
 </strings>

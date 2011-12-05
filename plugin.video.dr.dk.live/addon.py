@@ -1,84 +1,43 @@
 import sys
 import os
+import cgi as urlparse
 
+import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
-Q_BEST = 0   # 1700 kb/s
-Q_HIGH = 1   # 1000 kb/s
-Q_MEDIUM = 2 # 500 kb/s
-Q_LOW = 3    # 250 kb/s
+from channels import CHANNELS, CATEGORIES, QUALITIES
 
-QUALITIES = [Q_BEST, Q_HIGH, Q_MEDIUM, Q_LOW]
-
-CHANNELS = [
-    # From: http://dr.dk/nu/embed/live?height=467&width=830
-    {'name' : 'DR1', 'urls' : {
-            Q_HIGH : 'rtmp://rtmplive.dr.dk/live/livedr01astream3',
-            Q_MEDIUM : 'rtmp://rtmplive.dr.dk/live/livedr01astream2',
-            Q_LOW : 'rtmp://rtmplive.dr.dk/live/livedr01astream1'
-        }
-    },
-    {'name' : 'DR2', 'urls' : {
-            Q_HIGH : 'rtmp://rtmplive.dr.dk/live/livedr02astream3',
-            Q_MEDIUM : 'rtmp://rtmplive.dr.dk/live/livedr02astream2',
-            Q_LOW : 'rtmp://rtmplive.dr.dk/live/livedr02astream1'
-        }
-    },
-    {'name' : 'DR Update', 'urls' : {
-            Q_HIGH : 'rtmp://rtmplive.dr.dk/live/livedr03astream3',
-            Q_MEDIUM : 'rtmp://rtmplive.dr.dk/live/livedr03astream2',
-            Q_LOW : 'rtmp://rtmplive.dr.dk/live/livedr03astream1'
-        }
-    },
-    {'name' : 'DR K', 'urls' : {
-            Q_HIGH : 'rtmp://rtmplive.dr.dk/live/livedr04astream3',
-            Q_MEDIUM : 'rtmp://rtmplive.dr.dk/live/livedr04astream2',
-            Q_LOW : 'rtmp://rtmplive.dr.dk/live/livedr04astream1'
-        }
-    },
-    {'name' : 'DR Ramasjang', 'urls' : {
-            Q_HIGH : 'rtmp://rtmplive.dr.dk/live/livedr05astream3',
-            Q_MEDIUM : 'rtmp://rtmplive.dr.dk/live/livedr05astream2',
-            Q_LOW : 'rtmp://rtmplive.dr.dk/live/livedr05astream1'
-        }
-    },
-    {'name' : 'DR HD', 'urls' : {
-            Q_BEST : 'rtmp://livetv.gss.dr.dk/live/livedr06astream3',
-            Q_HIGH : 'rtmp://livetv.gss.dr.dk/live/livedr06astream2',
-            Q_MEDIUM : 'rtmp://livetv.gss.dr.dk/live/livedr06astream1'
-        }
-    },
-    # From: http://www.24nordjyske.dk/webtv_high.asp
-    {'name' : '24 Nordjyske', 'urls' : {
-            Q_HIGH : 'mms://stream.nordjyske.dk/24nordjyske - Full Broadcast Quality',
-            Q_MEDIUM : 'mms://stream.nordjyske.dk/24nordjyske'
-        }
-    },
-    {'name' : 'TV2 Nord', 'urls' : {
-            Q_BEST : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord_2000',
-            Q_HIGH : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord_1000',
-            Q_MEDIUM : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord_300'
-		}
-    },
-    {'name' : 'TV2 NordPlus', 'urls' : {
-            Q_BEST : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_2000',
-            Q_HIGH : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_1000',
-            Q_MEDIUM : 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_300'
-        }
-    }]
+TITLE_OFFSET = 31000
+DESCRIPTION_OFFSET = 32000
 
 class DanishLiveTV(object):
-    def showChannels(self):
-        for c in CHANNELS:
-            icon = os.path.join(ADDON.getAddonInfo('path'), 'resources' ,'logos', c['name'].replace(' ', '_') + '.png')
+    def showChannels(self, category = None):
+        try:
+            quality = QUALITIES[int(ADDON.getSetting('quality'))]
+        except ValueError:
+            quality = QUALITIES[0] # fallback for old settings value
 
-            url = self.getUrl(c['urls'])
+        if category is not None:
+            channels = CATEGORIES[category]
+        else:
+            channels = CHANNELS
+
+        for channel in channels:
+            icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', '%d.png' % channel.get_id())
+            if not os.path.exists(icon):
+                icon = ICON
+
+            url = channel.get_url(quality)
             if url:
-                item = xbmcgui.ListItem(c['name'], iconImage = icon, thumbnailImage = icon)
-                item.setInfo('video', infoLabels = {
-                    'title' : c['name']
+                title = ADDON.getLocalizedString(TITLE_OFFSET + channel.get_id())
+                description = ADDON.getLocalizedString(DESCRIPTION_OFFSET + channel.get_id())
+                item = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
+                item.setInfo('video', infoLabels={
+                    'title': title,
+                    'plot' : description,
+                    'studio' : ADDON.getLocalizedString(channel.get_category())
                 })
                 item.setProperty('Fanart_Image', FANART)
                 item.setProperty('IsLive', 'true')
@@ -86,25 +45,53 @@ class DanishLiveTV(object):
 
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def getUrl(self, urls):
+    def showCategories(self):
+        for id in CATEGORIES:
+            title = ADDON.getLocalizedString(id)
+            item = xbmcgui.ListItem(title, iconImage=ICON, thumbnailImage=ICON)
+            item.setProperty('Fanart_Image', FANART)
+            url = PATH + '?category=%d' % id
+            xbmcplugin.addDirectoryItem(HANDLE, url, item, isFolder = True)
+
+        xbmcplugin.endOfDirectory(HANDLE)
+
+
+    def playChannel(self, name):
         try:
             quality = QUALITIES[int(ADDON.getSetting('quality'))]
         except ValueError:
-            quality = Q_BEST # fallback for old settings value
+            quality = QUALITIES[0] # fallback for old settings value
 
-        if urls.has_key(quality):
-            return urls[quality]
-        elif quality == Q_BEST and urls.has_key(Q_HIGH):
-            return urls[Q_HIGH]
-        else:
-            return None
+        for channel in CHANNELS:
+            if channel.get_name() == name:
+                url = channel.get_url(quality)
+                if url:
+                    icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', channel.get_logo())
+                    item = xbmcgui.ListItem(channel.get_name(), iconImage=icon, thumbnailImage=icon)
+                    item.setProperty('Fanart_Image', FANART)
+                    item.setProperty('IsLive', 'true')
+
+                    p = xbmc.Player()
+                    p.play(url, item)
+
 
 if __name__ == '__main__':
-    ADDON = xbmcaddon.Addon(id = 'plugin.video.dr.dk.live')
+    ADDON = xbmcaddon.Addon(id='plugin.video.dr.dk.live')
     PATH = sys.argv[0]
     HANDLE = int(sys.argv[1])
-    FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
+    PARAMS = urlparse.parse_qs(sys.argv[2][1:])
 
-    dktv = DanishLiveTV()
-    dktv.showChannels()
+    FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
+    ICON = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
+
+    danishTV = DanishLiveTV()
+    if PARAMS.has_key('playChannel'):
+        danishTV.playChannel(PARAMS['playChannel'][0])
+    elif PARAMS.has_key('category'):
+        danishTV.showChannels(int(PARAMS['category'][0]))
+    elif ADDON.getSetting('group.by.category') == 'true':
+        danishTV.showCategories()
+    else:
+        danishTV.showChannels()
+
 

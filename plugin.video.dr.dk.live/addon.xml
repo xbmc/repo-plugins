@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
-	id="plugin.video.dr.dk.live"
-	version="1.3.3"
-	name="Danish Live TV"
-	provider-name="twinther [tommy@winther.nu]">
+	id="plugin.video.dr.dk.live" version="1.3.4" name="Danish Live TV" provider-name="twinther [tommy@winther.nu]">
 	<requires>
 		<import addon="xbmc.python" version="1.0"/>
 	</requires>
@@ -13,8 +10,8 @@
 	<extension point="xbmc.addon.metadata">
 		<summary lang="en">Watch Danish Live TV</summary>
 		<summary lang="da">Se dansk Live TV</summary>
-		<description lang="en">Live steams for[CR]DR1[CR]DR2[CR]DR Update[CR]DR K[CR]DR Ramasjang[CR]DR HD[CR]24 Nordjyske</description>
-		<description lang="da">Live steams for[CR]DR1[CR]DR2[CR]DR Update[CR]DR K[CR]DR Ramasjang[CR]DR HD[CR]24 Nordjyske</description>
+		<description lang="en">Stream a selection of the Danish live channels, including all of DRs channel, some of the TV2/Regions channel, 24Nordjyske and Folketinget TV.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+		<description lang="da">Stream en række danske live kanaler, bl.a. alle DRs kanaler, en del af TV2/Regionernes kanaler samt 24Nordjyske og Folketingets kanal.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
         <disclaimer lang="da">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
 		<license>GPL 2.0</license>

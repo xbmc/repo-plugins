@@ -64,7 +64,6 @@
     <!-- Plugin settings strings -->
     <string id="30200">Username</string>
     <string id="30201">Password</string>
-    <string id="30202"></string>
     <string id="30203">All time</string>
     <string id="30204">Today</string>
     <string id="30205">This week</string>
@@ -75,8 +74,6 @@
     <string id="30210">Videos per page</string>
     <string id="30211">Searches to save</string>
     <string id="30212">Notification length in seconds</string>
-    <string id="30213">Ask</string>    
-    <string id="30214">Off</string>
     <string id="30215">SD only</string>
     <string id="30216">720p</string>
     <string id="30217">1080p</string>
@@ -137,7 +134,6 @@
     <string id="30272">Thumbnails Everywhere</string>
     <string id="30273">XBMC Default</string>
     <string id="30274">Transcribe Audio</string>
-    <string id="30275"></string>
     <string id="30276">Subtitle Language</string>
     <string id="30277">Off</string>
     <string id="30278">English</string>

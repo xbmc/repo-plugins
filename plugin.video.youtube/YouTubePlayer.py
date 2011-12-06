@@ -23,24 +23,30 @@ except ImportError: import json
 from xml.dom.minidom import parseString
 
 class YouTubePlayer():
-	
 	fmt_value = { 
-		35 : "480p h264 flv container",
-		59 : "480 for rtmpe",
-		44 : "480p vp8 webm container",
-		78 : "seems to be around 400 for rtmpe",
-		34 : "360p h264 flv container",
-		43 : "360p h264 flv container",
-		26 : "???",
-		18 : "360p h264 mp4 container | 270 for rtmpe?",
-		33 : "???",
 		5 : "240p h263 flv container",
+		18 : "360p h264 mp4 container | 270 for rtmpe?",
 		22 : "720p h264 mp4 container",
-		45 : "720p vp8 webm container",
+		26 : "???",
+		33 : "???",
+		34 : "360p h264 flv container",
+		35 : "480p h264 flv container",
 		37 : "1080p h264 mp4 container",
 		38 : "720p vp8 webm container",
+		43 : "360p h264 flv container",
+		44 : "480p vp8 webm container",
+		45 : "720p vp8 webm container",
+		46 : "520p vp8 webm stereo",
+		59 : "480 for rtmpe",
+		78 : "seems to be around 400 for rtmpe",
 		82 : "360p h264 stereo",
-		84 : "720p h264 stereo"}
+		83 : "240p h264 stereo",
+		84 : "720p h264 stereo",
+		85 : "520p h264 stereo",
+		100 : "360p vp8 webm stereo",
+		101 : "480p vp8 webm stereo",
+		102 : "720p vp8 webm stereo"
+		}
 	
 	# YouTube Playback Feeds
 	urls = {}
@@ -116,7 +122,7 @@ class YouTubePlayer():
 		url = ""
 		
 		xml = self.core._fetchPage({"link": self.urls["timed_text_index"] % get('videoid')})
-		
+
 		self.common.log("subtitle index: " + repr(xml["content"]))
 		
 		if xml["status"] == 200:
@@ -160,7 +166,7 @@ class YouTubePlayer():
 		filename = filename.encode("ascii", "ignore")
 		path = os.path.join( self.xbmc.translatePath( "special://temp" ).decode("utf-8"), filename )
 		w = self.storage.openFile(path, "wb")
-		w.write(result.encode("utf8", "ignore"))
+		w.write(result.encode("utf-8", "ignore"))
 		w.close()
 		
 		if video.has_key("downloadPath"):
@@ -189,7 +195,7 @@ class YouTubePlayer():
 			if node:
 				if node.firstChild:
 					if node.firstChild.nodeValue:
-						text = self.utils.replaceHtmlCodes(node.firstChild.nodeValue).replace("\n", "\\n")
+						text = self.common.replaceHtmlCodes(node.firstChild.nodeValue).replace("\n", "\\n")
 						start = ""
 						
 						if node.getAttribute("start"):
@@ -208,18 +214,19 @@ class YouTubePlayer():
 		
 		return result
 
-	def transformColor(self, color):
-		self.common.log("Color: %s - len: %s" % (color, len(color)), 5)
-		color = hex(int(color))
-		color = str(color)
-		color = color[2:]
-		self.common.log("Color: %s - len: %s" % (color, len(color)), 5)
-		if color == "0":
-			color = "000000"
-		if len(color) == 4:
-			color = "00" + color
-		if len(color) == 6:
-			color = color[4:6] + color[2:4] + color[0:2]
+	def transformColor(self, color):	
+		self.common.log("Color: %s - len: %s" % (color, len(color)), 3)
+		if color:
+			color = hex(int(color))
+			color = str(color)
+			color = color[2:]
+			self.common.log("Color: %s - len: %s" % (color, len(color)), 5)
+			if color == "0":
+				color = "000000"
+			if len(color) == 4:
+				color = "00" + color
+			if len(color) == 6:
+				color = color[4:6] + color[2:4] + color[0:2]
 
 		self.common.log("Returning color: %s - len: %s" % (color, len(color)), 5)
 		return color
@@ -262,7 +269,7 @@ class YouTubePlayer():
 					self.common.log("node.firstChild: %s - value : %s" % ( repr(node.firstChild), repr(self.core._getNodeValue(node, "TEXT", ""))), 5)
 					text = self.core._getNodeValue(node, "TEXT", "")
 					if text:
-						text = self.utils.replaceHtmlCodes(text)
+						text = self.common.replaceHtmlCodes(text)
 						start = ""
 						
 						if style == "popup":
@@ -295,9 +302,12 @@ class YouTubePlayer():
 							style = "annot" + str(styles_count)
 							styles_count += 1
 
+						start = False
+						end = False
 						if cnode:
 							if cnode.item(0):
 								start = cnode.item(0).getAttribute("t")
+
 							if cnode.item(1):
 								end = cnode.item(1).getAttribute("t")
 
@@ -348,9 +358,13 @@ class YouTubePlayer():
 		if self.xbmcvfs.exists(path) and not video.has_key("downloadPath") and set_subtitle:
 			player = self.xbmc.Player()
 			
+			i = 0
 			while not player.isPlaying():
+				i += 1
 				self.common.log("Waiting for playback to start ")
 				time.sleep(1)
+				if i > 10:
+					break
 
 			self.xbmc.Player().setSubtitles(path)
 			self.common.log("added subtitle %s to playback" % path)
@@ -358,7 +372,6 @@ class YouTubePlayer():
 	# ================================ Video Playback ====================================
 	
 	def playVideo(self, params = {}):
-		#params["proxy"] = "http://15aa51.info/browse.php?u="
 		self.common.log(repr(params), 3)
 		get = params.get
 		
@@ -369,15 +382,7 @@ class YouTubePlayer():
 			self.utils.showErrorMessage(self.language(30603), video["apierror"], status)
 			return False
 		
-		if get("proxy", "false") == "false":
-			listitem = self.xbmcgui.ListItem(label=video['Title'], iconImage=video['thumbnail'], thumbnailImage=video['thumbnail'], path=video['video_url'])
-		else:
-			proxy = get("proxy")
-			proxy = proxy[:proxy.rfind("/")]
-			print "XXXXXXXXXXXXXXXXX : " + repr(video)
-			video["video_url"] = get("proxy") + video['video_url'].replace("|", "|Referer=" + proxy + " | ")
-			print "XXXXXXXXXXXXXXXXX : " + repr(video)
-			listitem = self.xbmcgui.ListItem(label=video['Title'], iconImage=video['thumbnail'], thumbnailImage=video['thumbnail'], path=video['video_url'])
+		listitem = self.xbmcgui.ListItem(label=video['Title'], iconImage=video['thumbnail'], thumbnailImage=video['thumbnail'], path=video['video_url'])
 		
 		listitem.setInfo(type='Video', infoLabels=video)
 		
@@ -596,7 +601,11 @@ class YouTubePlayer():
 		if not len(video_url) > 0:
 			self.common.log("- construct_video_url failed, video_url not set")
 			return video_url
-		
+
+                if get("proxy"):
+			proxy = get("proxy")
+			video_url = proxy + urllib.quote(video_url) + " |Referer=" + proxy[:proxy.rfind("/")]
+
 		if get("action") != "download":
 			video_url += " | " + self.common.USERAGENT
 		
@@ -654,7 +663,6 @@ class YouTubePlayer():
 		get = params.get
 		video = {}
 		links = []
-				
 		(video, status) = self.getInfo(params)
 		
 		#Check if file has been downloaded locally and use that as a source instead
@@ -670,6 +678,10 @@ class YouTubePlayer():
 				self.common.log("attempt to locate local file failed with unknown error, trying youtube instead")
 
 		(links, video) = self._getVideoLinks(video, params)
+
+		if not links and self.settings.getSetting("proxy"):
+			params["proxy"] = self.settings.getSetting("proxy")
+			(links, video) = self._getVideoLinks(video, params)
 		
 		if links:
 			video["video_url"] = self.selectVideoQuality(links, params)
@@ -705,14 +717,15 @@ class YouTubePlayer():
 		vget = video.get
 		player_object = {}
 		links = []
+		fresult = False
+
 		self.common.log("trying website: " + repr(params))
 
-		if get("proxy", "false") != "false":
+		if get("proxy"):
 			result = self.core._fetchPage({"link": self.urls["video_stream"] % get("videoid"), "proxy": get("proxy")})
 		else:
 			result = self.core._fetchPage({"link": self.urls["video_stream"] % get("videoid")})
-		fresult = False
-		
+
 		if result["status"] == 200:
 			data = result["content"].find("PLAYER_CONFIG")
 			if data > -1:
@@ -732,11 +745,15 @@ class YouTubePlayer():
 					player_object = self._convertFlashVars(data)
 					if player_object.has_key("PLAYER_CONFIG"):
 						player_object["PLAYER_CONFIG"]["url"] = src[0]
+
 		elif get("no_embed", "false") == "false":
 			self.common.log("Falling back to embed")
 
-			fresult = self.core._fetchPage({"link": self.urls["embed_stream"] % get("videoid") })
-		
+			if get("proxy"):
+				fresult = self.core._fetchPage({"link": self.urls["embed_stream"] % get("videoid"), "proxy": get("proxy")})
+			else:
+				fresult = self.core._fetchPage({"link": self.urls["embed_stream"] % get("videoid") })
+
 			# Fallback error reporting
 			if fresult["content"].find("status=fail") > -1:
 				fresult["status"] = 303

@@ -24,7 +24,7 @@ except ImportError:
 
 
 # plugin constants
-version = "2.7.0"
+version = "2.8.0"
 plugin = "YouTube-" + version
 author = "TheCollective"
 url = "www.xbmc.com"
@@ -33,7 +33,7 @@ url = "www.xbmc.com"
 settings = xbmcaddon.Addon(id='plugin.video.youtube')
 language = settings.getLocalizedString
 dbg = settings.getSetting("debug") == "true"
-dbglevel = 1
+dbglevel = 3
 
 # plugin structure 
 feeds = ""
@@ -66,6 +66,7 @@ if (__name__ == "__main__" ):
 
 	import CommonFunctions
 	common = CommonFunctions.CommonFunctions() 
+	common.plugin = plugin
 	import YouTubeUtils
 	utils = YouTubeUtils.YouTubeUtils()
 	import YouTubeStorage
@@ -78,8 +79,8 @@ if (__name__ == "__main__" ):
 	feeds = YouTubeFeeds.YouTubeFeeds()
 	import YouTubePlayer
 	player = YouTubePlayer.YouTubePlayer()
-	import YouTubeDownloader
-	downloader = YouTubeDownloader.YouTubeDownloader()
+	import SimpleDownloader as downloader
+	downloader = downloader.SimpleDownloader()
 	import YouTubeScraper
 	scraper = YouTubeScraper.YouTubeScraper()
 	import YouTubePlaylistControl
@@ -94,7 +95,7 @@ if (__name__ == "__main__" ):
 	if (not sys.argv[2]):
 		navigation.listMenu()
 	else:
-		params = utils.getParameters(sys.argv[2])
+		params = common.getParameters(sys.argv[2])
 		get = params.get
 		if (get("action")):
 			navigation.executeAction(params)

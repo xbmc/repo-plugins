@@ -50,10 +50,16 @@ class YouTubeStorage():
 			return self.getStoredSearches(params)
 	
 	def openFile(self, filepath, options = "w"):
+		
+		if options.find("b") == -1: # Toggle binary mode on failure
+			alternate = options + "b"
+		else:
+			alternate = options.replace("b", "")
+
 		try:
 			return io.open(filepath, options)
 		except:
-			return io.open(filepath, options + "b")
+			return io.open(filepath, alternate)
 	
 	def getStoredArtists(self, params = {}):
 		get = params.get
@@ -181,7 +187,7 @@ class YouTubeStorage():
 
 		if (get("search")):
 			old_query = urllib.unquote_plus(get("search"))
-			new_query = self.utils.getUserInput(self.language(30515), old_query)
+			new_query = self.common.getUserInput(self.language(30515), old_query)
 			params["search"] = new_query
 			params["old_search"] = old_query
 			
@@ -452,78 +458,3 @@ class YouTubeStorage():
 				results = []
 		
 		return results
-		
-	#============================= Download Queue =================================
-	def getNextVideoFromDownloadQueue(self):
-		if self.cache.lock("YouTubeQueueLock"):
-			videos = []
-			
-			queue = self.cache.get("YouTubeDownloadQueue")
-			self.common.log("queue loaded : " + repr(queue))
-			
-			if queue:
-				try:
-					videos = eval(queue)
-				except: 
-					videos = []
-		
-			videoid = ""
-			if videos:
-				videoid = videos[0]
-
-			self.cache.unlock("YouTubeQueueLock")
-			self.common.log("getNextVideoFromDownloadQueue released. returning : " + videoid)
-			return videoid
-		else:
-			self.common.log("getNextVideoFromDownloadQueue Exception")
-
-	def addVideoToDownloadQueue(self, params = {}):
-		if self.cache.lock("YouTubeQueueLock"):
-			get = params.get
-
-			videos = []
-			if get("videoid"):
-				queue = self.cache.get("YouTubeDownloadQueue")
-				self.common.log("queue loaded : " + repr(queue))
-
-				if queue:
-					try:
-						videos = eval(queue)
-					except:
-						videos = []
-		
-				if get("videoid") not in videos:
-					videos.append(get("videoid"))
-					
-					self.cache.set("YouTubeDownloadQueue", repr(videos))
-					self.common.log("Added: " + get("videoid") + " to: " + repr(videos))
-
-			self.cache.unlock("YouTubeQueueLock")
-			self.common.log("addVideoToDownloadQueue released")
-		else:
-			self.common.log("addVideoToDownloadQueue Exception")
-		
-	def removeVideoFromDownloadQueue(self, videoid):
-		if self.cache.lock("YouTubeQueueLock"):
-			videos = []
-			
-			queue = self.cache.get("YouTubeDownloadQueue")
-			self.common.log("queue loaded : " + repr(queue))
-			if queue:
-				try:
-					videos = eval(queue)
-				except:
-					videos = []
-		
-			if videoid in videos:
-				videos.remove(videoid)
-
-				self.cache.set("YouTubeDownloadQueue", repr(videos))
-				self.common.log("Removed: " + videoid + " from: " + repr(videos))
-			else:
-				self.common.log("Didn't remove: " + videoid + " from: " + repr(videos))
-
-			self.cache.unlock("YouTubeQueueLock")
-			self.common.log("removeVideoFromDownloadQueue released")
-		else:
-			self.common.log("removeVideoFromDownloadQueue Exception")

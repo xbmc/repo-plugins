@@ -148,7 +148,7 @@ class YouTubeCore():
 	
 	def remove_from_playlist(self, params={}):
 		self.common.log("")
- 		get = params.get
+		get = params.get
 		url = "http://gdata.youtube.com/feeds/api/playlists/%s/%s" % (get("playlist"), get("playlist_entry_id"))
 		result = self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "method": "DELETE"})
 		return (result["content"], result["status"])
@@ -159,7 +159,33 @@ class YouTubeCore():
 		url = "https://gdata.youtube.com/feeds/api/users/default/watch_later/%s" % get("playlist_entry_id")
 		result = self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "method": "DELETE"})
 		return (result["content"], result["status"])		
+	
+	def getCategoriesFolderInfo(self, xml, params={}):
+		self.common.log("")
+		get = params.get
+		result = ""
 		
+		dom = minidom.parseString(xml);
+		entries = dom.getElementsByTagName("atom:category");
+		next = False
+		
+		folders = [];
+		for node in entries:
+			folder = {};
+
+			if node.getElementsByTagName("yt:deprecated"):
+				continue
+			folder['Title'] = node.getAttribute("label")
+			
+			folder['category'] = node.getAttribute("term")
+			folder["icon"] = "explore"
+			folder["thumbnail"] = "explore"
+			folder["feed"] = "feed_category"
+			
+			folders.append(folder);
+		
+		return folders;
+	
 	def getFolderInfo(self, xml, params={}):
 		get = params.get
 		result = ""
@@ -181,7 +207,8 @@ class YouTubeCore():
 		for node in entries:
 			folder = {};
 			
-			folder["login"] = "true"
+			if get("feed") != "feed_categories":
+				folder["login"] = "true"
 			folder['Title'] = node.getElementsByTagName("title").item(0).firstChild.nodeValue.replace('Activity of : ', '').replace('Videos published by : ', '').encode("utf-8");
 			folder['published'] = self._getNodeValue(node, "published", "2008-07-05T19:56:35.000-07:00")
 			
@@ -330,10 +357,13 @@ class YouTubeCore():
 	#===============================================================================
 
 	def _fetchPage(self, params={}): # This does not handle cookie timeout for _httpLogin
-		#params["proxy"] = "http://15aa51.info/browse.php?u="
+		if self.settings.getSetting("force_proxy") == "true" and self.settings.getSetting("proxy"):
+			params["proxy"] = self.settings.getSetting("proxy")
+
 		get = params.get
 		link = get("link")
 		ret_obj = { "status": 500, "content": ""}
+		cookie = ""
 
 		if (get("url_data") or get("request") or get("hidden")):
 			self.common.log("called for : " + repr(params['link']))
@@ -352,8 +382,8 @@ class YouTubeCore():
 			else:
 				self.common.log("couldn't get login token")
 
-		if not link or int(get("error", "0")) > 2 :
-			self.common.log("giving up ")
+		if not link or get("error", 0) > 2 :
+			self.common.log("giving up")
 			return ret_obj
 
 		if get("url_data"):
@@ -361,21 +391,25 @@ class YouTubeCore():
 			request.add_header('Content-Type', 'application/x-www-form-urlencoded')
 		elif get("request", "false") == "false":
 			if get("proxy"):
-				self.common.log("got proxy")
-				request = url2request(get("proxy") + link, get("method", "GET"));
 				proxy = get("proxy")
-				proxy = proxy[:proxy.rfind("/")]
-				request.add_header('Referer', proxy)
+				link = proxy + urllib.quote(link)
+				self.common.log("got proxy: %s" % link)
 			else:
-				self.common.log("got default")
-				request = url2request(link, get("method", "GET"));
+				self.common.log("got default: %s" % link)
 
+			request = url2request(link, get("method", "GET"));
 		else:
 			self.common.log("got request")
 			request = urllib2.Request(link, get("request"))
 			request.add_header('X-GData-Client', "")
 			request.add_header('Content-Type', 'application/atom+xml') 
 			request.add_header('Content-Length', str(len(get("request")))) 
+
+		if get("proxy") or link.find(self.settings.getSetting("proxy")) > -1:
+			proxy = self.settings.getSetting("proxy")
+			referer = proxy[:proxy.rfind("/")]
+			self.common.log("Added refer: %s" % referer)
+			request.add_header('Referer', referer)
 
 		if get("api", "false") == "true":
 			self.common.log("got api")
@@ -384,10 +418,12 @@ class YouTubeCore():
 
 		else:
 			request.add_header('User-Agent', self.common.USERAGENT)
+			#request.add_header('Cookie', 'VISITOR_INFO1_LIVE=ST1Ti53r4fU')
 
 			if get("no-language-cookie", "false") == "false":
+				cookie += "PREF=f1=50000000&hl=en;"
 				request.add_header('Cookie', 'PREF=f1=50000000&hl=en')
-		
+
 		if get("login", "false") == "true":
 			self.common.log("got login")
 			if (self.settings.getSetting("username") == "" or self.settings.getSetting("user_password") == ""):
@@ -395,6 +431,7 @@ class YouTubeCore():
 				ret_obj["status"] = 303
 				ret_obj["content"] = self.language(30622)
 				return ret_obj
+
 			# This should be a call to self.login._httpLogin()
 			if self.settings.getSetting("login_info") == "":
 				if isinstance(self.login, str):
@@ -402,28 +439,31 @@ class YouTubeCore():
 				self.login._httpLogin()
 
 			if self.settings.getSetting("login_info") != "":
-				self.common.log("returning existing login info: " + self.settings.getSetting("login_info"))
 				info = self.settings.getSetting("login_info")
-				request.add_header('Cookie', 'LOGIN_INFO=' + info)
+				SID = self.settings.getSetting("SID")
+				cookie += 'LOGIN_INFO=' + info +';SID=' + SID +';'
 		
-		if get("auth", "false") == "true":
-			self.common.log("got auth")
-			if self._getAuth():
-				request.add_header('Authorization', 'GoogleLogin auth=' + self.settings.getSetting("oauth2_access_token"))
-			else:
-				self.common.log("couldn't get login token")
-		
+		if get("referer"):
+			self.common.log("Added referer: %s" % get("referer"))
+			request.add_header('Referer', get("referer"))
+			
 		try:
-			self.common.log("connecting to server... ")
+			self.common.log("connecting to server... %s" % link )
 
+			if cookie:
+				self.common.log("Setting cookie: " + cookie)
+				request.add_header('Cookie', cookie)
+		
 			con = urllib2.urlopen(request)
 			
 			ret_obj["content"] = con.read()
+			ret_obj["location"] = link
 			ret_obj["new_url"] = con.geturl()
 			ret_obj["header"] = str(con.info())
 			con.close()
 
 			self.common.log("Result: %s " % repr(ret_obj), 9)
+
 			# Return result if it isn't age restricted
 			if (ret_obj["content"].find("verify-actions") == -1 and ret_obj["content"].find("verify-age-actions") == -1):
 				self.common.log("done")
@@ -433,7 +473,7 @@ class YouTubeCore():
 				self.common.log("found verify age request: " + repr(params))
 				# We need login to verify age
 				if not get("login"):
-					params["error"] = get("error", "0")
+					params["error"] = get("error", 0)
 					params["login"] = "true"
 					return self._fetchPage(params)
 				elif get("no_verify_age", "false") == "false":
@@ -454,7 +494,6 @@ class YouTubeCore():
 			if e.code == 400 or True:
 				self.common.log("Unhandled HTTPError : [%s] %s " % ( e.code, msg), 1)
 			
-
 			if msg.find("<?xml") > -1:
 				acted = False
 
@@ -465,8 +504,8 @@ class YouTubeCore():
 				for domain in domains:
 					self.common.log(repr(domain.firstChild.nodeValue),5)
 					if domain.firstChild.nodeValue == "yt:quota":
-						self.common.log("Hit quota... sleeping for 10 seconds")
-						time.sleep(10)
+						self.common.log("Hit quota... sleeping for 100 seconds")
+						time.sleep(100)
 						acted = True
 						
 				if not acted:
@@ -495,7 +534,7 @@ class YouTubeCore():
 						cont = e.fp.read()
 						self.common.log("HTTPError - Headers: " + str(e.headers) + " - Content: " + cont)
 
-			params["error"] = str(int(get("error", "0")) + 1)
+			params["error"] = get("error", 0) + 1
 			ret_obj = self._fetchPage(params)
 
 			if cont and ret_obj["content"] == "":
@@ -509,11 +548,15 @@ class YouTubeCore():
 			self.common.log("URLError : " + err)
 			
 			time.sleep(3)
-			params["error"] = str(int(get("error", "0")) + 1)
+			params["error"] = get("error", 0) + 1
 			ret_obj = self._fetchPage(params)
 			return ret_obj
+
+		except socket.timeout:
+			self.common.log("Socket timeout")
+			return ret_obj
 		
-	def _findErrors(self, ret):
+	def _findErrors(self, ret, silent = False):
 		self.common.log("")
 
 		## Couldn't find 2 factor or normal login
@@ -531,6 +574,14 @@ class YouTubeCore():
 			html = self.common.parseDOM(ret['content'], "error")
 			error = self.common.parseDOM(html, "code")
 
+		if len(error) == 0: # Bad password for _httpLogin.
+			error = self.common.parseDOM(ret['content'], "span", attrs={ "class": "errormsg" })
+
+			# Has a link. Lets remove that.
+			if len(error) == 1:
+				if error[0].find("<") > -1:
+					error[0] = error[0][0:error[0].find("<")]
+		
 		if len(error) > 0:
 			self.common.log("4")
 			error = error[0]
@@ -538,12 +589,13 @@ class YouTubeCore():
 			self.common.log("returning error : " + error.strip())
 			return error.strip()
 
-		self.common.log("couldn't find any errors: " + repr(ret))
+		if not silent:
+			self.common.log("couldn't find any errors: " + repr(ret))
 		return False
 
-	def _verifyAge(self, org_link, new_url, params={}):
-		self.common.log("org_link : " + org_link + " - new_url: " + new_url)
-		fetch_options = { "link": new_url, "no_verify_age": "true", "login": "true" }
+	def _verifyAge(self, org_link, next_url, params={}):
+		self.common.log("org_link : " + org_link + " - next_url: " + next_url)
+		fetch_options = { "link": next_url, "no_verify_age": "true", "login": "true" }
 		verified = False
 		step = 0
 		ret = {}
@@ -551,29 +603,59 @@ class YouTubeCore():
 			self.common.log("Step : " + str(step))
 			step += 1
 
-			if step == 17:
-				return ( self.core._findErrors(ret), 303)
+			if step == 5:
+				return { "content": self._findErrors(ret), "status": 303 }
 
 			ret = self._fetchPage(fetch_options)
 			fetch_options = False
+
+			# Check if we should login.
+			new_url = self.common.parseDOM(ret["content"].replace("\n", " "), "form", attrs = { "id": "gaia_loginform"}, ret = "action")
+
+			if len(new_url) == 1:
+				if isinstance(self.login, str):
+                                        self.login = sys.modules[ "__main__" ].login
+				self.login._httpLogin({ "page": ret })
+
 			new_url = self.common.parseDOM(ret["content"], "form", attrs = { "id": "confirm-age-form"}, ret ="action")
+
 			if len(new_url) > 0:
-				self.common.log("Part A")
+				self.common.log("Part A - Type 1")
+				self.common.log("BLA:" + repr(ret))
 				new_url = "http://www.youtube.com/" + new_url[0]
 				next_url = self.common.parseDOM(ret["content"], "input", attrs = { "name": "next_url" }, ret = "value")
 				set_racy = self.common.parseDOM(ret["content"], "input", attrs = { "name": "set_racy" }, ret = "value")
 				session_token_start = ret["content"].find("'XSRF_TOKEN': '") + len("'XSRF_TOKEN': '")
 				session_token_stop = ret["content"].find("',", session_token_start)
 				session_token = ret["content"][session_token_start:session_token_stop]
-
+					
 				fetch_options = { "link": new_url, "no_verify_age": "true", "login": "true", "url_data": { "next_url": next_url[0], "set_racy": set_racy[0], "session_token" : session_token} }
+				continue
+			else:
+				self.common.log("Part A - Type 2")
+				actions = self.common.parseDOM(ret["content"], "div", attrs = { "id": "verify-actions" })
+				if len(actions) > 0:
+					new_url = self.common.parseDOM(actions, "button", attrs = { "type": "button" }, ret = "href")
+					fetch_options = { "link": new_url[0].replace("&amp;", "&"), "no_verify_age": "true", "login": "true"}
+					continue
 
+			new_url = self.common.parseDOM(ret["content"], "button", attrs = { "href": "/verify.*?" }, ret = "href")
+			if len(new_url) > 0:
+                                target_url = ret["new_url"]
+                                if target_url.rfind("/") > 10:
+                                        target_url = target_url[:target_url.find("/", 10)]
+                                else:
+                                        target_url += "/"
+
+				fetch_options = { "link": target_url + new_url[0], "no_verify_age": "true", "login": "true" }
+				continue
+					
 			if ret["content"].find("PLAYER_CONFIG") > -1:
 				self.common.log("Found PLAYER_CONFIG. Verify successful")
 				return ret
 
 			if not fetch_options:
-				self.common.log("Nothign hit, assume we are logged in.")
+				self.common.log("Nothing hit, assume we are verified: " + repr(ret))
 				fetch_options = { "link": org_link, "no_verify_age": "true", "login": "true" }
 				return self._fetchPage(fetch_options)
 
@@ -663,7 +745,6 @@ class YouTubeCore():
 	
 	def getVideoInfo(self, xml, params={}):
 		get = params.get
-		print repr(xml)
 		dom = minidom.parseString(xml);
 		self.common.log(str(len(xml)))
 		links = dom.getElementsByTagName("link");

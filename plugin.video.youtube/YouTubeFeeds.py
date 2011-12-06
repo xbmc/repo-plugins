@@ -37,6 +37,8 @@ class YouTubeFeeds():
 	urls['watch_later'] = "https://gdata.youtube.com/feeds/api/users/default/watch_later?v=2.1"
 	
 	# YouTube Standard feeds
+	urls['feed_categories'] = "http://gdata.youtube.com/schemas/2007/categories.cat"
+	urls['feed_category'] = "http://gdata.youtube.com/feeds/api/standardfeeds/most_viewed_%s?v=2&time=%s"
 	urls['feed_rated'] = "http://gdata.youtube.com/feeds/api/standardfeeds/top_rated?time=%s"
 	urls['feed_favorites'] = "http://gdata.youtube.com/feeds/api/standardfeeds/top_favorites?time=%s"
 	urls['feed_viewed'] = "http://gdata.youtube.com/feeds/api/standardfeeds/most_viewed?time=%s"
@@ -101,9 +103,11 @@ class YouTubeFeeds():
 				url = url % get("playlist")
 			elif ( get("videoid") and not get("action") == "add_to_playlist"):
 				url = url % get("videoid")
+			elif ( get("category")):
+				url = url % ( get("category"), "today")
 			elif (url.find("time=") > 0 ): 
-				url = url % time			
-			else: 
+				url = url % time
+			else:
 				url = url % "default"
 		
 		if ( url.find("?") == -1 ):
@@ -222,7 +226,11 @@ class YouTubeFeeds():
 			result = self.storage.retrieve(params)
 		
 		elif not get("page"):
-			result = self.listAll(params)
+			if get("feed") == "feed_categories":
+				result = self.listCategories(params)
+			else:
+				result = self.listAll(params)
+			
 			if len(result) == 0:
 				return (result, 303)
 			
@@ -258,6 +266,24 @@ class YouTubeFeeds():
 			self.utils.addNextFolder(result, params)
 		
 		return (result, 200)
+	
+	def listCategories(self, params={}):
+		self.common.log("")
+		get = params.get
+		result = { "content": "", "status": 303 }
+				
+		url = self.createUrl(params)
+		ytobjects = []
+		
+		result = self.core._fetchPage({"link":url})
+		
+		if result["status"] == 200:
+			ytobjects = self.core.getCategoriesFolderInfo(result["content"], params)
+		
+		if len(ytobjects) == 0:
+			return ytobjects
+		
+		return ytobjects
 	
 	def listAll(self, params ={}):
 		self.common.log("")

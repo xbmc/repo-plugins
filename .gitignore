@@ -46,3 +46,6 @@ plugin.video.leafstv/.git
 plugin.video.bliptv/.hg
 plugin.video.bliptv/.project
 plugin.video.bliptv/.pydevproject
+plugin.video.vimeo/.hg
+plugin.video.vimeo/.project
+plugin.video.vimeo/.pydevproject

@@ -1,0 +1,4 @@
+<settings>
+   <setting id="username" type="text" label="User Name"/>
+   <setting id="password" type="text" label="Password"/>
+</settings>

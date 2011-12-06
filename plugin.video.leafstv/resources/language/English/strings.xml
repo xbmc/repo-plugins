@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- range of strings for plugins is 30000 to 30999 -->
+  <string id="30000">Empty User Name</string>
+  <string id="30001">Please add your user name to the settings</string>
+  <string id="30002">Empty Password</string>
+  <string id="30003">Please add your password to the settings</string>
+  <string id="30004">Authentication Error</string>
+  <string id="30005">Unable to authenticate with Leafs TV Interactive</string>
+  <string id="30006">Please contact the plugin author</string>
+  <string id="30007">Unable to get games list</string>
+  <string id="30008">Archive Error</string>
+  <string id="30009">Live Game Error</string>
+  <string id="30010">Unable to get game URI</string>
+  <string id="30011">No game ID specified</string>
+  <string id="30012">Unable to parse returned archive</string>
+  <string id="30013">at</string>
+  <string id="30014">Live</string>
+
+  <!-- Team Strings -->
+  <string id="30970">Anaheim Ducks</string>
+  <string id="30971">Boston Bruins </string>
+  <string id="30972">Buffalo Sabres</string>
+  <string id="30973">Calgary Flames</string>
+  <string id="30974">Carolina Hurricanes</string>
+  <string id="30975">Chicago Blackhawks</string>
+  <string id="30976">Columbus Blue Jackets</string>
+  <string id="30977">Colorado Avalanche</string>
+  <string id="30978">Dallas Stars</string>
+  <string id="30979">Detroit Red Wings</string>
+  <string id="30980">Edmonton Oilers</string>
+  <string id="30981">Florida Panthers</string>
+  <string id="30982">Los Angeles Kings</string>
+  <string id="30983">Minnesota Wild</string>
+  <string id="30984">Montréal Canadiens</string>
+  <string id="30985">New Jersey Devils</string>
+  <string id="30986">Nashville Predators</string>
+  <string id="30987">New York Islanders</string>
+  <string id="30988">New York Rangers</string>
+  <string id="30989">Ottawa Senators</string>
+  <string id="30990">Philadelphia Flyers</string>
+  <string id="30991">Phoenix Coyotes</string>
+  <string id="30992">Pittsburgh Penguins</string>
+  <string id="30993">San Jose Sharks</string>
+  <string id="30994">St Louis Blues</string>
+  <string id="30995">Tampa Bay Lightning</string>
+  <string id="30996">Toronto Maple Leafs</string>
+  <string id="30997">Vancouver Canucks</string>
+  <string id="30998">Winnipeg Jets</string>
+  <string id="30999">Washington Capitals</string>  
+</strings>

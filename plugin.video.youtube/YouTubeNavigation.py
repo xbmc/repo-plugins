@@ -47,7 +47,7 @@ class YouTubeNavigation():
 		#			   label						  , path									        , thumbnail					  		,  login		  ,  feed / action
 		self.categories = (
 					  {'Title':self.language( 30044 )  ,'path':"/root/explore"			 				, 'thumbnail':"explore"				, 'login':"false" },
-					  {'Title':self.language( 30041 )  ,'path':"/root/explore/categories"				, 'thumbnail':"explore"				, 'login':"false" , 'scraper':'categories', 'folder':'true'},
+					  {'Title':self.language( 30041 )  ,'path':"/root/explore/categories"				, 'thumbnail':"explore"				, 'login':"false" , 'feed':'feed_categories', 'folder':'true'},
 					  {'Title':self.language( 30037 )  ,'path':"/root/explore/disco"					, 'thumbnail':"discoball"		 	, 'login':"false" , 'store':"disco_searches", 'folder':'true' },
 					  {'Title':self.language( 30040 )  ,'path':"/root/explore/disco/new"				, 'thumbnail':"search"		   		, 'login':"false" , 'scraper':"search_disco"},
 					  {'Title':self.language( 30055 )  ,'path':"/root/explore/disco/top100"				, 'thumbnail':"discoball"		 	, 'login':"false" , 'scraper':"music_top100"},
@@ -154,7 +154,13 @@ class YouTubeNavigation():
 		if (get("action") == "add_subscription"):
 			self.addSubscription(params)
 		if (get("action") == "download"):
+                        (video, status) = self.player.getVideoObject(params)
+			params["video_url"] = video['video_url']
+                        params["Title"] = video['Title']
+			#params["callback_for_url"] = self.player.getVideoObject
 			self.downloader.downloadVideo(params)
+			self.player.downloadSubtitle(video)
+			# self.storage.storeValue( "vidstatus-" + video['videoid'], "1" )
 		if (get("action") == "play_video"):
 			self.player.playVideo(params)
 		if (get("action") == "queue_video"):
@@ -174,14 +180,14 @@ class YouTubeNavigation():
 			self.storage.reversePlaylistOrder(params)
 		if (get("action") == "create_playlist"):
 			self.playlist.createPlaylist(params)
-			
+
 	#==================================== Item Building and Listing ===========================================	
 	def list(self, params = {}):
 		get = params.get
 		results = []
 		if (get("feed") == "search" or get("scraper") == "search_disco"):
 			if not get("search"):
-				query = self.utils.getUserInput(self.language(30006), '')
+				query = self.common.getUserInput(self.language(30006), '')
 				if not query:
 					return False
 				params["search"] = query
@@ -260,7 +266,7 @@ class YouTubeNavigation():
 		get = params.get
 
 		if not get("contact"):
-			contact = self.utils.getUserInput(self.language(30519), '')
+			contact = self.common.getUserInput(self.language(30519), '')
 			params["contact"] = contact
 			
 		if (get("contact")):
@@ -398,8 +404,8 @@ class YouTubeNavigation():
 		icon = self.utils.getThumbnail(icon)
 		
 		listitem=self.xbmcgui.ListItem(item("Title"), iconImage=icon, thumbnailImage=item("thumbnail") )
-
-		url = '%s?path=%s&action=play_video&videoid=%s' % ( sys.argv[0], item("path"), item("videoid"));
+		
+		url = '%s?path=%s&action=play_video&videoid=%s' % ( sys.argv[0], "/root/video", item("videoid"));
 		
 		if get("user_feed") == "watch_later":
 			url+= "&watch_later=true&playlist_entry_id=%s&" % item("playlist_entry_id") 
@@ -469,9 +475,9 @@ class YouTubeNavigation():
 		get = params.get
 		item = item_params.get
 
-		title = self.utils.makeAscii(item("Title"))
+		title = self.common.makeAscii(item("Title"))
 		url_title = urllib.quote_plus(title)
-		studio = self.utils.makeAscii(item("Studio","Unknown Author"))
+		studio = self.common.makeAscii(item("Studio","Unknown Author"))
 		url_studio = urllib.quote_plus(studio)
 				
 		cm.append( ( self.language( 30504 ), "XBMC.Action(Queue)", ) )
@@ -538,7 +544,11 @@ class YouTubeNavigation():
 			cm.append ( (self.language(30522), "XBMC.RunPlugin(%s?path=%s&action=play_all&user_feed=playlist&shuffle=true&playlist=%s&)" % ( sys.argv[0], item("path"), item("playlist") ) ) )
 			if not get("external"):
 				cm.append ( (self.language(30539), "XBMC.RunPlugin(%s?path=%s&action=delete_playlist&playlist=%s&)" % ( sys.argv[0], item("path"), item("playlist") ) ) )
-							
+		
+		if (item("scraper") == "music_top100"):
+			cm.append( (self.language( 30520 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=music_top100&)" % ( sys.argv[0], item("path") ) ) )
+			cm.append( (self.language( 30522 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&scraper=music_top100&)" % ( sys.argv[0], item("path") ) ) )
+			
 		if (item("scraper") == "search_disco"):
 			cm.append( (self.language( 30520 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=search_disco&search=%s&)" % ( sys.argv[0], item("path"), item("search") ) ) )
 			cm.append( (self.language( 30522 ), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&scraper=search_disco&search=%s&)" % ( sys.argv[0], item("path"), item("search") ) ) )

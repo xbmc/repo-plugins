@@ -30,67 +30,6 @@ class YouTubeUtils:
 		self.PR_VIDEO_QUALITY = self.settings.getSetting("pr_video_quality") == "true"
 		self.INVALID_CHARS = "\\/:*?\"<>|"
 		self.THUMBNAIL_PATH = os.path.join( self.settings.getAddonInfo('path'), "thumbnails" )
-				
-	# This function raises a keyboard for user input
-	def getUserInput(self, title = "Input", default="", hidden=False):
-		result = None
-
-		# Fix for when this functions is called with default=None
-		if not default:
-			default = ""
-		
-		keyboard = self.xbmc.Keyboard(default, title)
-		keyboard.setHiddenInput(hidden)
-		keyboard.doModal()
-		
-		if keyboard.isConfirmed():
-			result = keyboard.getText()
-		
-		return result
-	
-	# Converts the request url passed on by xbmc to the plugin into a dict of key-value pairs  
-	def getParameters(self, parameterString):
-		commands = {}
-		splitCommands = parameterString[parameterString.find('?')+1:].split('&')
-		
-		for command in splitCommands: 
-			if (len(command) > 0):
-				splitCommand = command.split('=')
-				key = splitCommand[0]
-				value = splitCommand[1]
-				commands[key] = value
-		
-		return commands
-	
-	def replaceHtmlCodes(self, str):
-		
-		str = str.strip()
-		str = str.replace("&amp;", "&")
-		str = str.replace("&quot;", '"')
-		str = str.replace("&hellip;", "...")
-		str = str.replace("&gt;",">")
-		str = str.replace("&lt;","<")
-		str = str.replace("&#39;","'")
-
-		return str
-	
-	# This function implements a horrible hack related to python 2.4's terrible unicode handling
-	def makeAscii(self, str):
-		if sys.hexversion >= 0x02050000:
-			return str
-		try:
-			return str.encode('ascii')
-		except:
-			print self.plugin + " Hit except on : " + repr(str) 
-			s = ""
-			for i in str:
-				try:
-					i.encode("ascii")
-				except:
-					continue
-				else:
-					s += i
-			return s
 	
 	# Shows a more user-friendly notification
 	def showMessage(self, heading, message):
@@ -139,7 +78,6 @@ class YouTubeUtils:
 			if (k != "thumbnail" and k != "Title" and k != "page" and k != "new_results_function"):
 				item[k] = v
 		items.append(item)
-
 
 	def extractVID(self, items):
 		if isinstance(items, str):

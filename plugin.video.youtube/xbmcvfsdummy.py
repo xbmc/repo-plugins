@@ -12,7 +12,7 @@ def rename(origin, target):
     return os.rename(origin, target)
 
 def delete(target):
-    if os.path.isfile(target):
+    if os.path.isfile(target) and not os.path.isdir(target):
         return os.unlink(target)
     return False
         

@@ -127,7 +127,7 @@ class YouTubePlaylistControl():
 			listitem.setProperty('IsPlayable', 'true')
 			listitem.setInfo(type='Video', infoLabels=video)
 			playlist.add("%s?path=/root&action=play_video&videoid=%s" % (sys.argv[0], video["videoid"] ), listitem)
-			self.common.log("Queuing video: " + self.utils.makeAscii(video['Title']) + " - " + get('videoid') + " - " + video['video_url'])
+			self.common.log("Queuing video: " + self.common.makeAscii(video['Title']) + " - " + get('videoid') + " - " + video['video_url'])
 	
 	def getDiscoSearch(self, params = {}):
 		(result, status) = self.scraper.searchDisco(params)
@@ -222,7 +222,7 @@ class YouTubePlaylistControl():
 	def createPlaylist(self, params = {}):
 		get = params.get
 		
-		input = self.utils.getUserInput(self.language(30529))
+		input = self.common.getUserInput(self.language(30529))
 		if input:
 			params["title"] = input
 			self.core.add_playlist(params)

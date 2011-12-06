@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Category strings -->
+    <string id="30001">Browse shows</string>
+    <string id="30002">Staff picks</string>
+    <string id="30003">Audience favorites</string>
+    <string id="30007">New episodes</string>
+    <string id="30008">Popular episodes</string>
+    <string id="30009">Trending episodes</string>
+    <string id="30004">New Shows</string>
+    <string id="30005">Popular Shows</string>
+    <string id="30006">Trending Shows</string>
+    <string id="30010">My Favorite Shows</string>
+    <string id="30011">Search for shows...</string>
+    <string id="30012">My Downloads</string>
+    <string id="30013">Search</string>
+    <string id="30014">Search...</string>
+    <string id="30015">Change plugin settings</string>
+    <string id="30016">Explore Blip.tv</string>
+        
+    <!-- Plugin settings strings -->
+    <string id="30207">Download Location</string>
+    <string id="30208">Max video quality</string>
+    <string id="30210">Videos per page</string>
+    <string id="30211">Searches to save</string>
+    <string id="30212">Notification length in seconds</string>
+    <string id="30213">Ask</string>    
+    <string id="30214">Off</string>
+    <string id="30215">SD only</string>
+    <string id="30216">720p</string>
+    <string id="30217">1080p</string>
+    <string id="30246">Debug</string>
+    <string id="30259">View mode in Confluence</string>
+    <string id="30260">Advanced</string>
+    <string id="30261">Max video quality (Downloading)</string>
+    <string id="30262">Same as playback</string>
+    <string id="30265">Timeout (in seconds)</string>
+    <string id="30271">Video Thumbnails</string>
+    <string id="30272">Thumbnails Everywhere</string>
+    <string id="30273">XBMC Default</string>
+	
+    <!-- Menu strings -->
+    <string id="30501">Download video</string>
+    <string id="30502">Video information</string>
+    <string id="30503">Add to My Favorites</string>
+    <string id="30504">Queue video</string>
+    <string id="30506">Delete from My Favorites</string>
+    <string id="30507">Similar artists</string>
+    <string id="30508">Delete search</string>
+    <string id="30509">More results</string>
+    <string id="30515">Edit search</string>
+    <string id="30518">Select video quality</string>
+    <string id="30523">Now Playing...</string>        
+    
+    <!-- messages -->
+    <string id="30600">Error</string>
+    <string id="30601">No results!</string>
+    <string id="30602">No recent activity</string>
+    <string id="30603">Playback failed</string>
+    <string id="30604">Download complete</string>
+    <string id="30605">Preparing download</string> 
+    <string id="30607">Skipping download</string>
+    <string id="30608">Blip.tv doesn't seem to know this video id!</string>    
+    <string id="30609">Login Failed</string>
+    <string id="30611">Download folder not set</string>
+    <string id="30617">Unknown error</string>
+    <string id="30618">Couldn't locate video url</string>
+    <string id="30620">Stream type not supported</string>
+    <string id="30624">Downloading</string>
+    <string id="30625">Download Failed</string>
+</strings>

@@ -1,0 +1,17 @@
+[B]TODO:[/B]
+- Extract only first 50 items of list ( per page )
+- Maybe extract further in the background
+- Listing should cache intelligently and never fetch more than 50 items
+
+[B]Errata[/B]
+
+[B]Version 0.2.0[/B]
+- Added Searching for episodes
+- Added Locally Stored searches for episodes
+- Added Thumbnails on episode Searches
+- Added Searching for Shows
+- Added My Favorite Shows, as a locally stored list of users favorites plus options to add and remove shows from the list
+- Added Scraper for Popular Shows, Trending Shows, New Shows, Browsing of shows by category, Browsing of popular Episodes by Category etc etc.
+
+[B]Version 0.1.0[/B]
+- Initial POC.

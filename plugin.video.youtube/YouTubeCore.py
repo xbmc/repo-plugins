@@ -458,9 +458,10 @@ class YouTubeCore(object):
                                 self._httpLogin()
 
                         if self.__settings__.getSetting("login_info") != "":
-				print self.__plugin__ + "returning existing login info: " + self.__settings__.getSetting("login_info")
                                 info = self.__settings__.getSetting("login_info")
-                                request.add_header('Cookie', 'LOGIN_INFO=' + info)
+                                SID = self.__settings__.getSetting("SID")
+				print self.__plugin__ + "returning existing login info : " + info + " - " + SID
+                                request.add_header('Cookie', 'LOGIN_INFO=' + info + ";SID=" + SID)
 		
 		try:
 			con = urllib2.urlopen(request)

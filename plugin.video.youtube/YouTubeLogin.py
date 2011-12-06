@@ -176,6 +176,7 @@ class YouTubeLogin(object):
 
 		if get("new", "false") == "true":
 			self.__settings__.setSetting( "login_info", "" )
+                        self.__settings__.setSetting( "SID", "" )
 		elif self.__settings__.getSetting( "login_info" ) != "":
 			self.log("returning existing login info: " + self.__settings__.getSetting( "login_info" ))
 			return ( self.__settings__.getSetting( "login_info" ), 200)
@@ -196,6 +197,14 @@ class YouTubeLogin(object):
 				self.log("Captcha needs to be filled")
 				break;
 			fetch_options = False
+
+			# Check if we are logged in.
+                        nick = self.parseDOM(ret["content"], "span", attrs= { "class": "masthead-user-username"} )
+
+			if len(nick) > 0:
+				self.log("Logged in. Parsing data.")
+				status = self._getLoginInfo(ret["content"])
+                                return(ret, status)
 
 			# Click login link on youtube.com
 			newurl = self.parseDOM(ret["content"], "a", attrs = {"class": "end" }, ret = "href")
@@ -260,11 +269,6 @@ class YouTubeLogin(object):
 			## 2-factor login finish
 			
 			if not fetch_options:
-				# Check if we are logged in.
-				if ret["content"].find("USERNAME', ") > 0:
-					logged_in = True
-					self.log("Logged in. Parsing data.")
-					break;
 				# Look for errors and return error.
 				return ( self._findErrors(ret), 303)
 		
@@ -340,38 +344,54 @@ class YouTubeLogin(object):
 			return url_data
 		return {}
 
+        def _getCookieInfoAsHTML(self):
+		cookie = repr(cookiejar)
+                cookie = cookie.replace("<_LWPCookieJar.LWPCookieJar[", "")
+		cookie = cookie.replace("), Cookie(version=0,", "></cookie><cookie ")
+		cookie = cookie.replace(")]>", "></cookie>")
+		cookie = cookie.replace("Cookie(version=0,", "<cookie ")
+                cookie = cookie.replace(", ", " ")
+                return cookie
+
 	def _getLoginInfo(self, content):
 		nick = ""
 		status = 303
-		if content.find("USERNAME', ") > 0:
-			nick = content[content.find("USERNAME', ") + 12:]
-			nick = nick[:nick.find('")')]
-		
-		if nick:
-			self.__settings__.setSetting("nick", nick)
-		else:
-			self.log("Failed to get usename from youtube")
+		nick = self.parseDOM(content, "span", attrs= { "class": "masthead-user-username"} )
+
+		if len(nick) > 0 :
+                        self.__settings__.setSetting("nick", nick[0])
+                else:
+                        self.log("Failed to get usename from youtube")
 
 		# Save cookiefile in settings
 		self.log("Scanning cookies for login info")
 		
 		login_info = ""
-		cookies = repr(cookiejar)
-			
-		if cookies.find("name='LOGIN_INFO', value='") > 0:
-			start = cookies.find("name='LOGIN_INFO', value='") + len("name='LOGIN_INFO', value='")
-			login_info = cookies[start:cookies.find("', port=None", start)]
-		
-		if login_info:
-			self.__settings__.setSetting( "login_info", login_info )
+		SID = ""
+                cookies = self._getCookieInfoAsHTML()
+		login_info = self.parseDOM(cookies, "cookie", attrs = { "name": "LOGIN_INFO" }, ret = "value")
+                SID = self.parseDOM(cookies, "cookie", attrs = { "name": "SID", "domain": ".youtube.com"}, ret = "value")
+
+                if len(login_info) == 1:
+			self.log("LOGIN_INFO: " + repr(login_info))
+			self.__settings__.setSetting( "login_info", login_info[0])
+		else:
+                        self.log("Failed to get LOGIN_INFO from youtube")
+
+                if len(SID) == 1:
+			self.log("SID: " + repr(SID))
+                        self.__settings__.setSetting( "SID", SID[0])
+		else:
+                        self.log("Failed to get SID from youtube")
+
+		if len(SID) == 1 and len(login_info) == 1:
 			status = 200
 
-		self.log("Done : " + str(status) + " - " + login_info)
+		self.log("Done : " + str(status))
 		return status
 
 
 	def _fetchPage(self, params={}): # This does not handle cookie timeout for _httpLogin
-		#params["proxy"] = "http://15aa51.info/browse.php?u="
 		get = params.get
 		link = get("link")
 		ret_obj = { "status": 500, "content": ""}
@@ -401,15 +421,7 @@ class YouTubeLogin(object):
 			request = urllib2.Request(link, urllib.urlencode(get("url_data")))
 			request.add_header('Content-Type', 'application/x-www-form-urlencoded')
 		elif get("request", "false") == "false":
-			if get("proxy"):
-				self.log("got proxy")
-				request = url2request(get("proxy") + link, get("method", "GET"));
-				proxy = get("proxy")
-				proxy = proxy[:proxy.rfind("/")]
-				request.add_header('Referer', proxy)
-			else:
-				self.log("got default")
-				request = url2request(link, get("method", "GET"));
+			request = url2request(link, get("method", "GET"));
 
 		else:
 			self.log("got request")

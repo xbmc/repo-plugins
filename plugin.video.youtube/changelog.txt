@@ -7,6 +7,9 @@
 - [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
 
+[B]Version 2.1.3[/B]
+- Fixed login.
+
 [B]Version 2.1.2[/B]
 - Fixed problem with playback caused by bad regex. 
 - Disabled most of the scrapers since they didn't work, working versions can be found in the current beta

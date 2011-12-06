@@ -181,4 +181,6 @@
     <string id="30621">Bad username or password</string>
     <string id="30622">Playback failed, try logging in</string>
     <string id="30623">Maximum login attempts tried.</string>
+    <string id="30627">Please provide 2-factor authentication PIN</string>
+    <string id="30628">Please provide your password</string>
 </strings>

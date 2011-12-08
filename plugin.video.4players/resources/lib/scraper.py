@@ -8,23 +8,23 @@ IPAD_USERAGENT = (u'Mozilla/5.0 (iPad; U; CPU OS OS 3_2 like '
                   u'HTML, like Gecko) Version/4.0.4 Mobile/7B'
                   u'367 Safari/531.21.10')
 
-CATEGORIES = ('Alle', 'TopViews', 'TopRated', 'CDROM',
+CATEGORIES = ('Alle', 'TopViews', 'TopRated', 'PC-CDROM',
               'PlayStation2', 'PlayStation3', 'Wii', '360', 'NDS',
               'PSP', 'Video-Fazit')
 
-URL_PREFIX = 'http://www.4players.de/4players.php/tvplayer/4PlayersTV/'
+URL_PREFIX = 'http://www.4players.de/4players.php/tvplayer/'
 
 
 def getVideos(filter=None, page=1):
     if filter not in CATEGORIES:
         filter = CATEGORIES[0]
     post = {'currentpage': str(int(page) - 1),
-            'filter': filter,
+            'singlefilter': filter,
             'funcname': 'aktuellevideos',
             'numcols': 5,
-            'numshown': 20,
+            'numshown': 50,
             'refreshskims': 1}
-    url = 'http://www.4players.de/ajax/paginatecontent.php'
+    url = 'http://www.4players.de/paginatecontent.php'
     html = __getAjaxContent(url, post)
     tree = BeautifulSoup(html)
     # last_page_num
@@ -32,41 +32,42 @@ def getVideos(filter=None, page=1):
     last_page_num = max([page_num.contents[0] for page_num in page_links \
                         if page_num.contents[0].isdigit()])
     # videos
-    video_frames = tree.findAll('div', {'class':
-                                        re.compile('^videoitemframe')})
+    section = tree.find('div', {'class': re.compile('tv-weitere-container')})
+    video_frames = section.findAll('li')
     videos = list()
     for frame in video_frames:
-        video_item, video_info = frame.findAll('div', recursive=False)
-        link = video_info.find('div', {'class': re.compile('^title')}).a
+        link = frame.find('a', {'class': 'tv-weiter-link'})
         # title
-        title = link['title'].replace('[Video] ', '')
+        title = link['title']
         # url
         video_page = link['href']
         url = video_page.replace(URL_PREFIX, '').replace('.html', '')
         # rating
-        rating_div = video_info.find('div', {'class':
-                                             re.compile('^rating stars')})
-        if rating_div['class'][-1:] in str(range(1, 6)):
-            rating = int(rating_div['class'][-1:])
+        rating_div = frame.find('div', {'class':
+                                        re.compile('^tv-weitere-rating')})
+        if rating_div['class'][-7:-6] in str(range(1, 6)):
+            rating = int(rating_div['class'][-7:-6])
         else:
             rating = 0
         # views
+        views_div = frame.find('div', {'class':
+                                        re.compile('^tv-weitere-views')})
         r = 'Views: (?P<views>[0-9]+)'
-        m = re.search(r, unicode(rating_div))
+        m = re.search(r, unicode(views_div))
         if m:
             views = int(m.groupdict()['views'])
         else:
             views = 0
-         # image
-        r = 'skimimageurl="(?P<img_url>[^"]+)"'
-        m = re.search(r, unicode(video_item))
-        if m:
-            image = m.groupdict()['img_url']
-        else:
-            image = None
+        # image
+        skim_div = frame.find('div', {'class': 'skim'})
+        if skim_div:
+            image = skim_div['data-skimimageurl'].replace('skimimage', 'thumb160x90')
+            # try to guess the thumb
         # date
+        date_div = frame.find('div', {'class':
+                                      re.compile('^tv-weitere-datum')})
         r = '(?P<day>[0-9]+)\.(?P<month>[0-9]+)\.(?P<year>20[0-9]+)'
-        m = re.search(r, unicode(rating_div))
+        m = re.search(r, unicode(date_div))
         if m:
             date_dict = m.groupdict()
             date = '%s.%s.%s' % (date_dict['day'],
@@ -75,8 +76,10 @@ def getVideos(filter=None, page=1):
         else:
             date = ''
         # length
+        len_div = frame.find('div', {'class':
+                                     re.compile('^tv-weitere-laufzeit')})
         r = '(?P<min>[0-9]+):(?P<sec>[0-9]+) (Min\.|min|MIn\.)'
-        m = re.search(r, unicode(rating_div))
+        m = re.search(r, unicode(len_div))
         if m:
             length_dict = m.groupdict()
             length = '%s:%s' % (length_dict['min'], length_dict['sec'])
@@ -111,10 +114,10 @@ def __getAjaxContent(url, data_dict=None):
 def getVideoFile(page_url):
     video_page = URL_PREFIX + page_url + '.html'
     html = __getAjaxContent(video_page)
-    tree = BeautifulSoup(html)
-    link = tree.find('script', text=re.compile('video src'))
+    #tree = BeautifulSoup(html)
+    #link = tree.find('script', text=re.compile('video src'))
     r = '<video src="(?P<url>[^"]+)"'
-    m = re.search(r, unicode(link))
+    m = re.search(r,html)
     url = m.groupdict()['url']
     return url
 

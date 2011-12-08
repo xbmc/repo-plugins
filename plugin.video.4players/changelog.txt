@@ -1,3 +1,9 @@
+0.1.2
+ Fixed scraper (Website changes)
+ Now using 160x90px thumbnails
+ added sort methods (playlist, date and runtime)
+ added is_update function (pagination is better now)
+
 0.1.1
  Fixed Video Playback
 

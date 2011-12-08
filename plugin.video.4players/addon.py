@@ -1,7 +1,33 @@
 from xbmcswift import Plugin
 import resources.lib.scraper as scraper
 
-plugin = Plugin('4Players Videos', 'plugin.video.4players', __file__)
+class Plugin_adv(Plugin):
+
+    def add_items(self, iterable, view_mode=None, is_update=False,
+                  sort_method_ids=[]):
+        print is_update
+        items = []
+        urls = []
+        for i, li_info in enumerate(iterable):
+            items.append(self._make_listitem(**li_info))
+            if self._mode in ['crawl', 'interactive', 'test']:
+                print '[%d] %s%s%s (%s)' % (i + 1, '', li_info.get('label'),
+                                            '', li_info.get('url'))
+                urls.append(li_info.get('url'))
+        if self._mode is 'xbmc':
+            if view_mode:
+                import xbmc
+                xbmc.executebuiltin('Container.SetViewMode(%s)' % view_mode)
+            import xbmcplugin
+            xbmcplugin.addDirectoryItems(self.handle, items, len(items))
+            for id in sort_method_ids:
+                xbmcplugin.addSortMethod(self.handle, id)
+                print 'added: %d' % id
+            xbmcplugin.endOfDirectory(self.handle, updateListing=is_update)
+        return urls
+
+
+plugin = Plugin_adv('4Players Videos', 'plugin.video.4players', __file__)
 
 
 @plugin.route('/', default=True)
@@ -44,7 +70,10 @@ def show_videos(category, page):
                          'url': plugin.url_for('show_videos',
                                                category=category,
                                                page=prev_page)})
-    return plugin.add_items(items)
+    is_update = (int(page) != 1)  # only update the listing if page is not 1
+    sort_method_ids = (21, 3, 29)  # Playlist, date, runtime
+    return plugin.add_items(items, is_update=is_update, 
+                            sort_method_ids=sort_method_ids)
 
 
 @plugin.route('/watch/<url>/')

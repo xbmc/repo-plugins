@@ -1,0 +1,5 @@
+[B]Version 1.0.1 - 2011-12-18[/B]
+- Fixed icon dimensions
+
+[B]Version 1.0.0 - 2011-11-24[/B]
+- Initial release

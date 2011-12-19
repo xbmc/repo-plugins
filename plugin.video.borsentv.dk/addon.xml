@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.borsentv.dk" version="1.0.1" name="Børsen TV" provider-name="twinther [tommy@winther.nu]">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.elementtree" version="1.2.7"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Borsen TV</summary>
+        <description lang="en">Borsen TV is Dagbladet Borsens TV station on the internet, that focuses on business and finance, but also covers politics, culture among other things.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+        <summary lang="da">Børsen TV</summary>
+        <description lang="da">Børsen TV er Dagbladet Børsens TV kanal på nettet, som har fokus på erhvervs- og finansstof, men som også dækker politik, kultur og samfundsøkonomi.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+        <disclaimer lang="da">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <license>GPL 2.0</license>
+        <platform>all</platform>
+    </extension>
+</addon>

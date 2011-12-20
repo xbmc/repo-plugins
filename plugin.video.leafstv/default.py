@@ -36,7 +36,7 @@ team_images = {"ANA" : "http://1.cdn.nhle.com/ducks/images/logos/extralarge.png"
                "DET" : "http://1.cdn.nhle.com/redwings/images/logos/extralarge.png",
                "EDM" : "http://1.cdn.nhle.com/oilers/images/logos/extralarge.png",
                "FLA" : "http://1.cdn.nhle.com/panthers/images/logos/extralarge.png",
-               "LAK" : "http://1.cdn.nhle.com/kings/images/logos/extralarge.png",
+               "LOS" : "http://1.cdn.nhle.com/kings/images/logos/extralarge.png",
                "MIN" : "http://1.cdn.nhle.com/wild/images/logos/extralarge.png",
                "MTL" : "http://1.cdn.nhle.com/canadiens/images/logos/extralarge.png",
                "NJD" : "http://1.cdn.nhle.com/devils/images/logos/extralarge.png",
@@ -67,7 +67,7 @@ team_strings = {"ANA" : 30970,
                 "DET" : 30979,
                 "EDM" : 30980,
                 "FLA" : 30981,
-                "LAK" : 30982,
+                "LOS" : 30982,
                 "MIN" : 30983,
                 "MTL" : 30984,
                 "NJD" : 30985, 
@@ -256,7 +256,7 @@ def addLiveGame(game, ltv):
     # get the away team string
     away_team = __language__(team_strings[game['away_team']])
     home_team = __language__(team_strings[game['home_team']])
-    game_name = __language__(30014) + " " + away_team + " " + __language__(30013) + " " + home_team
+    game_name = away_team + " " + __language__(30013) + " " + home_team
         
     try:
         game_url = ltv.getLiveGame()

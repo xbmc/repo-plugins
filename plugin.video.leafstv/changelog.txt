@@ -1,3 +1,16 @@
+[B]Version 1.0.4[/B]
+
+- fix LA Kings team abbreviation
+
+[B]Version 1.0.3[/B]
+
+- remove "Live " from obviously live game (its under the "Live Games" menu).
+- remote "Live" string from the string table 
+
+[B]Version 1.0.2[/B]
+
+- bump for pre-eden branch 
+
 [B]Version 0.0.2[/B]
 
 - localized team names and warning messages

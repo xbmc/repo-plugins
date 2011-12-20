@@ -3,7 +3,7 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon,os,sys
 __scriptname__ = "GameTrailers_Bonus"
 __author__ = "AssChin79"
 __scriptid__ = "plugin.video.gametrailers.exclusives"
-__version__ = "1.0.4"
+__version__ = "1.0.6"
 __cwd__ = os.getcwd()
 __cookies__ = os.path.join( __cwd__, 'resources', 'cookies' )
 __cookie__ = os.path.join( __cookies__, 'cookies.lwp' )
@@ -81,7 +81,11 @@ def CATEGORIES():
     addDir('Electronic Entertainment Expo (E3)', gtfeeds + '/rss_ipod_gen.php?source=e311ms', 1, gtimages + '/podcasts/GTE3_2011_big.jpg')
     addDir('Epic Battle Axe', gtfeeds + '/rss_ipod_gen.php?source=eba', 1, gtimages + '/podcasts/600x600_PodCast_EBA.jpg')
     addDir('Game Interviews', gtfeeds + '/rss_ipod_gen.php?source=interviews', 1, gtimages + '/podcasts/VideoInterviews.jpg')
-    addDir('Game of the Year Awards', gtfeeds + '/rss_ipod_gen.php?source=gtgoty2010', 1, gtimages + '/podcasts/600x600_GT_GOTY.jpg')
+    
+    # Protected resource
+    #if (COOKIE_EXIST()) == True:
+    addDir('Game of the Year Awards', mirror + '/gt_goty.xml', 1, mirror + '/gt_goty.jpg')    
+
     addDir('Game Previews', gtfeeds + '/rss_ipod_gen.php?source=previews', 1, gtimages + '/podcasts/VideoPreviews.jpg')
     addDir('Game Reviews', gtfeeds + '/rss_ipod_gen.php', 1, gtimages + '/podcasts/VideoReviews.jpg')
     
@@ -94,7 +98,8 @@ def CATEGORIES():
     # Protected resource
     if (COOKIE_EXIST()) == True:
         addDir('GT Retrospectives', mirror + '/gt_retrospectives.xml', 1, mirror + '/gt_retrospectives.jpg')
-        addDir('GT Top 20 Today', mirror + '/gt_top20.xml', 1, mirror + '/gt_top20.jpg')
+        addDir('GT Most Popular Today', mirror + '/gt_top20.xml', 1, mirror + '/gt_top20.jpg')
+        addDir('GT Newest Videos', mirror + '/gt_newest20.xml', 1, mirror + '/gt_newest20.jpg')
     
     addDir('Invisible Walls', gtfeeds + '/rss_ipod_gen.php?source=iw', 1, gtimages + '/podcasts/IW.jpg')
     addDir('Pach Attack', gtfeeds + '/rss_ipod_gen.php?source=pa', 1, gtimages + '/podcasts/PachAttack.jpg')

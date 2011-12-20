@@ -21,3 +21,9 @@
 
 1.0.4
   - Fixed bug that caused script to fail if cookies folder was absent
+
+1.0.5
+  - Added new content: GT Newest Videos
+
+1.0.6
+  - Added new content: GT Game of the Year Awards 2011

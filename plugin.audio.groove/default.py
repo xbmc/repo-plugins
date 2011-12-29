@@ -104,7 +104,7 @@ try:
         raise StandardError(__language__(30007))
 except:
     dialog = xbmcgui.Dialog(__language__(30008),__language__(30009),__language__(30010))
-    dialog.ok()
+    dialog.ok(__language__(30008),__language__(30009))
     sys.exit(-1)
   
 # Mark song as playing or played

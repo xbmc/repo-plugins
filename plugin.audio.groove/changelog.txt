@@ -1,3 +1,11 @@
+1.0.2
+
+New icon for dark backgrounds. Socket timeout for Linux.
+
+1.0.1
+
+Bug fix.
+
 1.0.0
 
 Version bump for Eden.

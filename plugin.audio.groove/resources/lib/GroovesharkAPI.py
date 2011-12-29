@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with xbmc-groove.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib2, pprint, md5, os, pickle, tempfile, time, re, simplejson, base64
+import urllib2, pprint, md5, os, pickle, tempfile, time, re, simplejson, base64, sys, socket
 from blowfish import Blowfish
 
 SESSION_EXPIRY = 1209600 # 2 weeks
@@ -46,6 +46,9 @@ class GrooveAPI:
 		
 		self._debugging = debug
 		self.simplejson = simplejson
+		if "linux" in sys.platform.lower():
+			socket.setdefaulttimeout(30)
+			
 		self.cacheDir = os.path.join(tempfile.gettempdir(), 'groovesharkapi')
 		if os.path.isdir(self.cacheDir) == False:
 			os.makedirs(self.cacheDir)

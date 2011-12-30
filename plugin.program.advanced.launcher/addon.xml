@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.advanced.launcher" name="Advanced Launcher" version="1.7.1" provider-name="Angelscry">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.simplejson" version="2.0.9"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>executable</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <disclaimer>Only compatible with XBMC Eden version</disclaimer>
+        <summary lang="en">Runs applications from XBMC.</summary>
+        <summary lang="fr">Executer des applications depuis XBMC</summary>
+        <summary lang="es">Ejecuta Aplicaciones desde XBMC.</summary>
+        <description lang="en">The Advanced Launcher add-on is able to launch, from the XBMC GUI, any Linux and Windows applications that support command line instructions directly. This Add-on also provide the possibility, to download from several Internet databases and manage meta-data informations and images linked to these applications.</description>
+        <description lang="fr">L'Add-on Advanced Launcher est capable de lancer, depuis l'interface de XBMC, toutes les appplications Linux et Windows qui supportent les instructions en ligne de commande. Cet Add-on propose également la possibilité de télécharger depuis différentes base de données sur Internet et de gérer les information et les images en lien avec ces applications.</description>
+        <description lang="es">El add-on Advanced Launcher es capaz de ejecutar, desde el GUI del XBMC, cualquier aplicación de Linux o Windows que soporten instrucciones de comando de línea directamente. Este Add-on también provee la posibilidad de descargar y administrar desde varias Base de Datos de Internet  imágenes e información de meta datos ligadas a las aplicaciones.</description>
+    </extension>
+</addon>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+        id="plugin.audio.dr.dk.netradio"
+        version="2.0.0"
+        name="DR.dk Netradio"
+        provider-name="stemann [jesper@sait.dk], twinther [tommy@winther.nu]">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="da">DRs netradiokanaler</summary>
+        <summary lang="en">Danish Broadcasting Corporation (DR) Internet radio services</summary>
+        <description lang="da">Lyt til DRs radiokanaler via Internettet, inkl. P1, P2, P3 og alle DAB kanalerne.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+        <description lang="en">Listen to DR's radio channels via the Internet, including P1, P2, P3 and all the DAB channels.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+        <disclaimer lang="da">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <license>GPL 2.0</license>
+        <platform>all</platform>
+    </extension>
+</addon>

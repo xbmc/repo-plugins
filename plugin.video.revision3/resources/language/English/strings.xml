@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Video Quality</string>
+    <string id="30001">MP4:HD</string>
+    <string id="30002">MP4:Large</string>
+    <string id="30003">MP4:Phone</string>
+	<string id="30004">Enable Video Download</string>
+	<string id="30005">Download Location</string>
+	<string id="30006">Hide during playback</string>
+	<string id="30007">Notification length in seconds</string>
+	<string id="30008">Show Downloads Folder</string>
+    <string id="30009">No videos found. Please check your spelling</string>
+    <string id="30010">or try again using different search words.</string>
+</strings>

@@ -1,0 +1,43 @@
+[B]Version 2.0.0[/B]
+
+- Initial commit to Eden add-on system
+- Scaping content from Revision3.com instead of RSS feeds
+- Added option to download videos
+- Added directory for recently released, archived shows, and search
+- Added sort methods for date, episode number, show, and duration
+- Other minor changes
+
+[B]Version 1.0.6[/B]
+
+- Updated Video formats
+
+[B]Version 1.0.5[/B]
+
+- Cleaned up info labels
+
+[B]Version 1.0.4[/B]
+
+- Fixed settings error
+
+[B]Version 1.0.3[/B]
+
+- Changed the default video quality to Quicktime HD
+- Cleaned up code and settings
+
+[B]Version 1.0.2[/B]
+
+- Updated icon
+- Changed video info labels
+
+[B]Version 1.0.1[/B]
+
+- Added Hungarian translation
+
+[B]Version 1.0.0[/B]
+
+- Converted plugin to the new add-on system
+- Cleaned up code
+- Updated Swedish and Finnish strings
+- Added check for updates setting
+- Cleaned up title and info labels
+- Added a notification dialog when no episodes are available in a certain quality/format.

@@ -11,12 +11,17 @@
     <string id="30008">Favorite programs</string>
     <string id="30009">Program added</string>
     <string id="30010">Program removed</string>
-    <string id="30011">Most watched videos on DR.dk</string>
+    <string id="30011">Most watched videos on DR NU</string>
     <string id="30012">Programs by area</string>
-    <string id="30013">The list is empty</string>
+    <string id="30013">The list is empty.</string>
     <string id="30014">Expires soon</string>
     <string id="30015">Aired: %s</string>
     <string id="30016">Expires on: %s</string>
+    <string id="30017">Play from the start</string>
+    <string id="30018">You can added program series to favorites using</string>
+    <string id="30019">the context menu.</string>
+    <string id="30020">Your recently watched videos are automatically added.</string>
+    <string id="30021">Highlights</string>
 
 	<string id="30100">Video is not available</string>
 	<string id="30101">DR has deleted the video file you want to watch,</string>
@@ -24,4 +29,25 @@
 
     <string id="30200">Add to favorite program series</string>
     <string id="30201">Remove from favorite program series</string>
+
+    <string id="30500">General</string>
+    <string id="30501">Enable [I]chapter[/I] navigation</string>
+
+    <string id="30900">There was an error while communication with DR NU.</string>
+    <string id="30901">Please try again later. Error message is:</string>
+
+    <string id="99980">Game over, man! [I]Game over![/I]</string>
+    <string id="99981">You can't handle the truth!</string>
+    <string id="99982">Danger Will Robinson</string>
+    <string id="99983">Why does it cry, Sméagol?</string>
+    <string id="99984">Houston, we have a problem...</string>
+    <string id="99985">E.T. phone home</string>
+
+    <string id="99990">Unfortunately an error occurred in the addon.</string>
+    <string id="99991">You can help with fixing the problem by submitting</string>
+    <string id="99992">an error report. No personal information is sent.</string>
+    <string id="99993">Submit error report</string>
+    <string id="99994">Don't submit</string>
+    <string id="99995">Thank you!</string>
+
 </strings>

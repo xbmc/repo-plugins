@@ -1,6 +1,26 @@
+#
+#      Copyright (C) 2011 Tommy Winther
+#      http://tommy.winther.nu
+#
+#  This Program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This Program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with XBMC; see the file COPYING.  If not, write to
+#  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+#  http://www.gnu.org/copyleft/gpl.html
+#
 import os
 import simplejson
 import time
+import urllib
 import urllib2
 
 API_URL = 'http://www.dr.dk/NU/api/%s'
@@ -73,14 +93,23 @@ class DrNuApi(object):
     def getSpotlightVideos(self):
         return self._call_api('videos/spot', 'spot.json') or list()
 
+    def getHighlightVideos(self):
+        return self._call_api('videos/highlight', 'highlight.json') or list()
+
     def getProgramSeriesVideos(self, programSeriesSlug):
         return self._call_api('programseries/%s/videos' % programSeriesSlug, 'programseries-%s.json' % programSeriesSlug) or list()
 
     def getVideoById(self, id):
-        return self._call_api('videos/%s' % id, 'videobyid-%s.json' % id)
+        response = self._call_api('videos/%s' % id, 'videobyid-%s.json' % id)
+        if type(response) in [str, unicode]:
+            return None
+        else:
+            return response
 
     def search(self, term):
-        return self._call_api('search/%s' % term) or list()
+        if not term:
+            return list()
+        return self._call_api('search/%s' % urllib.quote(term)) or list()
 
     def getProgramSeriesImageUrl(self, programSlug, width, height = None):
         if height is None:
@@ -107,7 +136,7 @@ class DrNuApi(object):
             except OSError: # File not found
                 cachedOn = 0
 
-            if time.time() - self.cacheMinutes * 60 >= cachedOn:
+            if not os.path.exists(cachePath) or time.time() - self.cacheMinutes * 60 >= cachedOn:
                 # Cache expired or miss
                 content = self._http_request(path)
 
@@ -125,23 +154,29 @@ class DrNuApi(object):
             content = self._http_request(path)
 
         if content is not None:
-            return simplejson.loads(content)
+            try:
+                return simplejson.loads(content)
+            except Exception, ex:
+                raise DrNuException(ex)
         else:
-            return None
+            return []
 
     def _http_request(self, path):
         try:
             u = urllib2.urlopen(API_URL % path)
             content = u.read()
             u.close()
-        except urllib2.HTTPError, ex:
-            print "HTTPError: " + str(ex.msg)
-            content = None
+        except urllib2.URLError, ex:
+            raise DrNuException(ex)
         return content
 
 
+class DrNuException(Exception):
+    pass
+
 if __name__ == '__main__':
     api = DrNuApi('/tmp', 0)
-    json =  api.getProgramSeriesLabels()
+#    json =  api.getProgramSeriesVideos('paa-skinner')
+    json =  api.getVideoById(26877)
     s = simplejson.dumps(json, sort_keys=True, indent='    ')
     print '\n'.join([l.rstrip() for l in  s.splitlines()])

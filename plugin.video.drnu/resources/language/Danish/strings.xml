@@ -11,12 +11,17 @@
     <string id="30008">Foretrukne programmer</string>
     <string id="30009">Program tilføjet</string>
     <string id="30010">Program fjernet</string>
-    <string id="30011">Mest sete videoer på DR.dk</string>
+    <string id="30011">Mest sete videoer på DR NU</string>
     <string id="30012">Progammer efter område</string>
-    <string id="30013">Listen er tom</string>
+    <string id="30013">Listen er tom.</string>
     <string id="30014">Udløber snart</string>
     <string id="30015">Sendt: %s</string>
     <string id="30016">Udløber: %s</string>
+    <string id="30017">Afspil fra starten</string>
+    <string id="30018">Du kan tilføje programmer til foretrukne ved brug</string>
+    <string id="30019">af højreklik-menuen.</string>
+    <string id="30020">De videoer du sidst har set tilføjest automatisk.</string>
+    <string id="30021">Højdepunkter</string>
 
 	<string id="30100">Videoen er ikke tilgængelig</string>
 	<string id="30101">DR har slettet den videofil du forsøger at afspille,</string>
@@ -25,4 +30,23 @@
     <string id="30200">Tilføj til foretrukne programmer</string>
     <string id="30201">Fjern fra foretrukne programmer</string>
 
+    <string id="30500">Generelt</string>
+    <string id="30501">Aktiver [I]kapitel[/I] navigation</string>
+
+    <string id="30900">Der er sket en fejl i kommunikationen med DR NU.</string>
+    <string id="30901">Prøv igen senere. Fejlen er:</string>
+
+    <string id="99980">Game over, man! [I]Game over![/I]</string>
+    <string id="99981">You can't handle the truth!</string>
+    <string id="99982">Danger Will Robinson</string>
+    <string id="99983">Why does it cry, Sméagol?</string>
+    <string id="99984">Houston, we have a problem...</string>
+    <string id="99985">E.T. phone home</string>
+
+    <string id="99990">Der er desværre opstået en fejl i addon'en.</string>
+    <string id="99991">Du kan hjælpe med at løse fejlen ved at indsende en</string>
+    <string id="99992">fejlrapport. Der sendes ikke personlige oplysninger.</string>
+    <string id="99993">Indsend fejlrapport</string>
+    <string id="99994">Indsend ikke</string>
+    <string id="99995">Tak!</string>
 </strings>

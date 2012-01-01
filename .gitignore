@@ -60,3 +60,6 @@ plugin.video.borsentv.dk/.git/
 plugin.audio.dr.dk.netradio/.git
 plugin.audio.dr.dk.netradio/.idea
 plugin.video.revision3/.git/
+plugin.video.gametest.dk/.idea
+plugin.video.gametest.dk/.gitignore
+plugin.video.gametest.dk/.git

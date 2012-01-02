@@ -2,6 +2,7 @@
 <addon id="plugin.video.revision3"
        name="Revision3"
        version="2.0.0" 
+       version="2.0.1"
        provider-name="stacked">
   <requires>
     <import addon="xbmc.python" version="2.0"/>

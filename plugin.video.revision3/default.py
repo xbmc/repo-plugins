@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 plugin =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '12-31-2011'
-__version__ = '2.0.0'
+__date__ = '01-02-2012'
+__version__ = '2.0.1'
 settings = xbmcaddon.Addon(id='plugin.video.revision3')
 dbg = False
 dbglevel = 3

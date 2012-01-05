@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+  <!-- General -->
+  <setting id="info" type="text" label="30001" default="" enable="false"/>
+  <setting id="info2" type="text" label="30002" default="" enable="false"/>
+  <setting id="uid" type="text" label="30003" default="" />
+
+</settings>

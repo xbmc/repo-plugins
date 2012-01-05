@@ -1,0 +1,7 @@
+This is XBMC addon for watching videos managed by radbox.me. Currently only videos from Youtube, Vimeo and CollegeHumor are supported. To get started enter the last part of your Radbox Quick URL in add-on setting. You can find it in your Radbox account settings (http://radbox.me/account/settings).
+
+INSTALL
+
+The add-on is not yet available in the official XBMC repository.
+
+If you want to install manually, download the latest zip file from https://github.com/tarora/plugin.video.radbox/downloads and install via XBMC -> System -> Add-ons -> Install from zip file OR move the plugin.video.radbox directory into your addons directory. 

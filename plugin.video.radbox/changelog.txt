@@ -1,0 +1,7 @@
+[B]Version 0.0.3[/B]
+
+- Added support for CollgeHumor videos
+
+[B]Version 0.0.2[/B]
+
+- Inital version to play videos from Youtube and Vimeo in lazy mode you have added to your Radbox.me account.

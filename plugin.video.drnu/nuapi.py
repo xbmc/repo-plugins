@@ -102,6 +102,7 @@ class DrNuApi(object):
     def getVideoById(self, id):
         response = self._call_api('videos/%s' % id, 'videobyid-%s.json' % id)
         if type(response) in [str, unicode]:
+            print 'Video with ID %s not found' % id
             return None
         else:
             return response
@@ -177,6 +178,6 @@ class DrNuException(Exception):
 if __name__ == '__main__':
     api = DrNuApi('/tmp', 0)
 #    json =  api.getProgramSeriesVideos('paa-skinner')
-    json =  api.getVideoById(26877)
+    json =  api.getVideoById(16746)
     s = simplejson.dumps(json, sort_keys=True, indent='    ')
     print '\n'.join([l.rstrip() for l in  s.splitlines()])

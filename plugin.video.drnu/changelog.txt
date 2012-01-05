@@ -1,3 +1,9 @@
+[B]Version 2.1.1 - 2012-01-04[/B]
+- Fixed a couple of bugs reported by user using the improved error handling
+- Fixed error handling on Windows
+- Fixed broken icons
+- Avoid extra API calls to speed up loading on slower CPUs
+
 [B]Version 2.1.0 - 2011-12-30[/B]
 - Improved error handling with option for the user to submit exceptions/bugs
 - Added option to navigate chapters (can be enabled in settings)

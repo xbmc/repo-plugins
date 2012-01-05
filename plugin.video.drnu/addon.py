@@ -176,10 +176,8 @@ class NuAddon(object):
                 infoLabels['count'] = int(program['videoCount'])
 
                 iconImage = self.api.getProgramSeriesImageUrl(program['slug'], 256)
-                thumbnailImage = self.api.getProgramSeriesImageUrl(program['slug'], 512)
                 fanartImage = self.api.getProgramSeriesImageUrl(program['slug'], 1280, 720)
-
-                item = xbmcgui.ListItem(infoLabels['title'], iconImage=iconImage, thumbnailImage=thumbnailImage)
+                item = xbmcgui.ListItem(infoLabels['title'], iconImage=iconImage)
                 item.setInfo('video', infoLabels)
                 item.setProperty('Fanart_Image', fanartImage)
 
@@ -229,10 +227,8 @@ class NuAddon(object):
             infoLabels = self.createInfoLabels(video)
 
             iconImage = self.api.getVideoImageUrl(str(video['id']), 256)
-            thumbnailImage = self.api.getVideoImageUrl(str(video['id']), 512)
             fanartImage = self.api.getVideoImageUrl(str(video['id']), 1280, 720)
-
-            item = xbmcgui.ListItem(infoLabels['title'], iconImage=iconImage, thumbnailImage=thumbnailImage)
+            item = xbmcgui.ListItem(infoLabels['title'], iconImage=iconImage)
             item.setInfo('video', infoLabels)
             item.setProperty('Fanart_Image', fanartImage)
             url = PATH + '?videoId=' + str(video['id'])
@@ -250,6 +246,10 @@ class NuAddon(object):
 
     def listVideoChapters(self, videoId):
         video = self.api.getVideoById(videoId)
+        if not video:
+            xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
+            return
+
         items = list()
         startTimes = list()
 
@@ -259,9 +259,8 @@ class NuAddon(object):
 
         # 'Play from the start' item
         iconImage = self.api.getVideoImageUrl(str(video['id']), 256)
-        thumbnailImage = self.api.getVideoImageUrl(str(video['id']), 512)
         fanartImage = self.api.getVideoImageUrl(str(video['id']), 1280, 720)
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30017), iconImage=iconImage, thumbnailImage=thumbnailImage)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30017), iconImage=iconImage)
         item.setProperty('IsPlayable', 'true')
         item.setProperty('Fanart_Image', fanartImage)
         url = PATH + '?videoId=' + str(video['id'])
@@ -282,10 +281,8 @@ class NuAddon(object):
                 infoLabels['duration'] = str(duration.seconds)
 
             iconImage = self.api.getChapterImageUrl(str(chapter['id']), 256)
-            thumbnailImage = self.api.getChapterImageUrl(str(chapter['id']), 512)
             fanartImage = self.api.getChapterImageUrl(str(chapter['id']), 1280, 720)
-
-            item = xbmcgui.ListItem(chapter['title'], iconImage=iconImage, thumbnailImage=thumbnailImage)
+            item = xbmcgui.ListItem(chapter['title'], iconImage=iconImage)
             item.setInfo('video', infoLabels)
             item.setProperty('IsPlayable', 'true')
             item.setProperty('Fanart_Image', fanartImage)
@@ -301,10 +298,15 @@ class NuAddon(object):
     def playVideo(self, videoId, startTime = None):
         self._updateRecentlyWatched(videoId)
         video = self.api.getVideoById(videoId)
+        if not video:
+            raise nuapi.DrNuException('Video with ID %s not found!' % videoId)
 
-        u = urllib2.urlopen(video['videoManifestUrl'])
-        rtmpUrl = u.read()
-        u.close()
+        try:
+            u = urllib2.urlopen(video['videoManifestUrl'])
+            rtmpUrl = u.read()
+            u.close()
+        except Exception, ex:
+            raise nuapi.DrNuException(ex)
 
         if rtmpUrl[0:7] == '<script':
             d = xbmcgui.Dialog()
@@ -313,7 +315,8 @@ class NuAddon(object):
             rtmpUrl = rtmpUrl.replace('rtmp://vod.dr.dk/', 'rtmp://vod.dr.dk/cms/')
             if startTime:
                 rtmpUrl += ' start=' + startTime
-            item = xbmcgui.ListItem(path = rtmpUrl)
+            thumbnailImage = self.api.getVideoImageUrl(str(video['id']), 256)
+            item = xbmcgui.ListItem(path = rtmpUrl, thumbnailImage = thumbnailImage)
             xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
     def parseDate(self, dateString):
@@ -364,11 +367,6 @@ class NuAddon(object):
                 infoLabels['date'] = broadcastTime.strftime('%d.%m.%Y')
                 infoLabels['aired'] = broadcastTime.strftime('%Y-%m-%d')
                 infoLabels['year'] = int(broadcastTime.strftime('%Y'))
-            infoLabels['season'] = infoLabels['year']
-        if video.has_key('programSerieSlug') and video['programSerieSlug'] is not None:
-            serie = self.api.getProgramSeriesInfo(video['programSerieSlug'])
-            if serie:
-                infoLabels['tvshowtitle'] = serie['title']
         if video.has_key('expireTime') and video['expireTime'] is not None:
             expireTime = self.parseDate(video['expireTime'])
             if expireTime:
@@ -404,7 +402,7 @@ class NuAddon(object):
         xbmcgui.Dialog().ok(heading, line1, line2, message)
 
 if __name__ == '__main__':
-    ADDON = xbmcaddon.Addon(id = 'plugin.video.drnu')
+    ADDON = xbmcaddon.Addon()
     PATH = sys.argv[0]
     HANDLE = int(sys.argv[1])
     PARAMS = urlparse.parse_qs(sys.argv[2][1:])

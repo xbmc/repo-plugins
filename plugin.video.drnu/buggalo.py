@@ -18,7 +18,7 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 #
-#  Buggalo 1.0
+#  Buggalo 1.1 - 2012-01-04
 #  http://theinfosphere.org/Where_the_Buggalo_Roam
 #
 import os
@@ -28,6 +28,7 @@ import datetime
 import urllib2
 import simplejson
 import random
+import platform
 
 import xbmcgui
 import xbmcaddon
@@ -60,17 +61,26 @@ def onExceptionRaised():
         xbmcgui.Dialog().ok(heading, thanks)
 
 def _gatherData(addon, type, value, traceback):
-    (sysname, nodename, release, version, machine) = os.uname()
-
     data = dict()
     data['timestamp'] = datetime.datetime.now().isoformat()
 
     system = dict()
-    system['nodename'] = nodename
-    system['sysname'] = sysname
-    system['release'] = release
-    system['version'] = version
-    system['machine'] = machine
+    try:
+        if hasattr(os, 'uname'):
+            # Works on recent unix flavors
+            (sysname, nodename, release, version, machine) = os.uname()
+        else:
+            # Works on Windows (and others?)
+            (sysname, nodename, release, version, machine, processor) = platform.uname()
+
+        system['nodename'] = nodename
+        system['sysname'] = sysname
+        system['release'] = release
+        system['version'] = version
+        system['machine'] = machine
+    except Exception as ex:
+        system['sysname'] = sys.platform
+        system['exception'] = str(ex)
     data['system'] = system
 
     addonInfo = dict()
@@ -95,8 +105,13 @@ def _gatherData(addon, type, value, traceback):
     return simplejson.dumps(data)
 
 def _submitData(data):
-    req = urllib2.Request('http://tommy.winther.nu/exception/submit.php', data)
-    req.add_header('Content-Type', 'text/json')
-    u = urllib2.urlopen(req)
-    u.read()
-    u.close()
+    for attempt in range(0, 3):
+        try:
+            req = urllib2.Request('http://tommy.winther.nu/exception/submit.php', data)
+            req.add_header('Content-Type', 'text/json')
+            u = urllib2.urlopen(req)
+            u.read()
+            u.close()
+            break # success; no further attempts
+        except Exception:
+            pass # probably timeout; retry

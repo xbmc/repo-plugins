@@ -64,3 +64,8 @@ plugin.video.gametest.dk/.idea
 plugin.video.gametest.dk/.gitignore
 plugin.video.gametest.dk/.git
 plugin.video.radbox/.git
+plugin.audio.soundcloud/.git
+plugin.audio.soundcloud/.gitignore
+plugin.audio.soundcloud/.project
+plugin.audio.soundcloud/.pydevproject
+plugin.audio.soundcloud/.settings

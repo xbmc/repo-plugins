@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+<category label="SoundCloud">
+	<setting label="Login to SoundCloud" id="login_to_soundcloud" type="bool" default="false"/>
+	<setting label="Username" id="username" type="text" enable="eq(-1,true)"/>
+	<setting label="Password" id="password" option="hidden" type="text" enable="eq(-2,true)"/>
+</category>
+</settings>

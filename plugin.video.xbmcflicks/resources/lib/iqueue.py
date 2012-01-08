@@ -564,21 +564,18 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
 
     
     #title
-    matchTitle = re.search(r'[\'"]title[\'"]: {.*?[\'"]regular[\'"]: u{0,1}(\'|")(.*?)\1.*?},', curQueueItem, re.DOTALL | re.MULTILINE)
+    matchTitle = re.search(r'[\'"]title[\'"]: {.*?[\'"]regular[\'"]: u{0,1}[\'](.*?)[\'].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
     if matchTitle:
-        curX.Title = matchTitle.group(2).strip()
+        curX.Title = matchTitle.group(1).strip()
     else:
-        matchTitleSQuoted = re.search(r'[\'"]title[\'"]: {.*?[\'"]regular[\'"]: u{0,1}[\'](.*?)[\'].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
-        if matchTitleSQuoted:
-            curX.Title = matchTitleSQuoted.group(1).strip()
+        matchTitleQuoted = re.search(r'[\'"]title[\'"]: {.*?[\'"]regular[\'"]: u{0,1}[\'"](.*?)[\'"].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
+        if matchTitleQuoted:
+            curX.Title = matchTitleQuoted.group(1).strip()
         else:
-            matchTitleQuoted = re.search(r'[\'"]title[\'"]: {.*?[\'"]regular[\'"]: u{0,1}[\'"](.*?)[\'"].*?},', curQueueItem, re.DOTALL | re.MULTILINE)
-            if matchTitleQuoted:
-                curX.Title = matchTitleQuoted.group(1).strip()
-            else:
-                matchTitle3 = re.search('"ShortName": "(.*?)"',curQueueItem, re.DOTALL | re.MULTILINE)
-                if matchTitle3:
-                    curX.Title = matchTitle3.group(1).strip()
+            matchTitle3 = re.search('"ShortName": "(.*?)"',curQueueItem, re.DOTALL | re.MULTILINE)
+            if matchTitle3:
+                curX.Title = matchTitle3.group(1).strip()
+
 
     #position
     matchPosition = re.search(r'[\'"]position[\'"]: u{0,1}[\'"](\d{1,6})[\'"], ', curQueueItem, re.DOTALL | re.MULTILINE)
@@ -678,7 +675,7 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
                 curX.ID = matchIds2.group(2)
             else:
                 #print "didn't match matchIds2"
-                matchIds3 = re.search(r'"media_src": "http://.*?.nflximg.com/[^/]*?/boxshots/(small|tiny|large|ghd|small_epx|ghd_epx|large_epx|88_epx|tiny_epx)/(\d{1,15}).jpg"', curQueueItem, re.DOTALL | re.IGNORECASE | re.MULTILINE)
+                matchIds3 = re.search(r'"media_src": "http://.*?.nflximg.com/us/boxshots/(small|tiny|large|ghd|small_epx|ghd_epx|large_epx|88_epx|tiny_epx)/(\d{1,15}).jpg"', curQueueItem, re.DOTALL | re.IGNORECASE | re.MULTILINE)
                 if matchIds3:
                     #print "id regex: matched matchIds3"
                     curX.FullId = matchIds3.group(1)
@@ -860,7 +857,7 @@ def getMovieDataFromFeed(curX, curQueueItem, bIsEpisode, netflix, instantAvail, 
             curXe.TvEpisodeEpisodeNum = str(matchEpNum.group("episodeNum"))
 
         matchSeasonNum = re.search('(?sm)u{0,1}[\'"]season_number[\'"]: u{0,1}(?P<seasonNum>\\d{1,3})', matchAllEp.group())
-        if matchSeasonNum:
+        if matchEpNum:
             curXe.TvEpisodeEpisodeSeasonNum = str(matchSeasonNum.group("seasonNum"))
 
         matchShortTitle = re.search('(?sm)u{0,1}[\'"]episode_short_raw[\'"]: u{0,1}[\'"](?P<shorttitle>.*?)[\'"]', matchAllEp.group())

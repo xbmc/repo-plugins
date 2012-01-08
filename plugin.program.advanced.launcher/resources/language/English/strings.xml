@@ -6,7 +6,7 @@
     <string id="30010">Are you sure you want to remove "%s" ?</string>
     <string id="30014">Importing files from %s...</string>
     <string id="30015">%s files imported</string>
-    <string id="30016">%s files imported, %s skiped</string>
+    <string id="30016">%s files imported, %s skipped</string>
     <string id="30017">Select the file</string>
     <string id="30018">Set the title of the file</string>
     <string id="30019">The file has been added successfully</string>
@@ -16,7 +16,7 @@
     <string id="30023">Select the launcher application</string>
     <string id="30024">Application arguments</string>
     <string id="30025">Set the title of the launcher</string>
-    <string id="30028">Set the files extensions, use &quot;|&quot; as separtor. (e.g lnk|cbr)</string>
+    <string id="30028">Set files extensions, use &quot;|&quot; as separator. (e.g lnk|cbr)</string>
     <string id="30033">Downloading: %s</string>
     <string id="30034">Launching %s.</string>
     <string id="30035">Select Disc</string>
@@ -29,15 +29,9 @@
     <string id="30080">Select description file. (e.g txt|dat)</string>
     <string id="30041">Select thumbnail image</string>
     <string id="30042">Select fanart image</string>
-    <string id="30044">Edit title</string>
-    <string id="30045">Edit release year</string>
-    <string id="30046">Edit studio</string>
-    <string id="30047">Edit genre</string>
-    <string id="30048">Select thumbnail image</string>
-    <string id="30049">Select fanart image</string>
     <string id="30050">Re-Enter this directory to see the changes</string>
     <string id="30052">Edit application arguments</string>
-    <string id="30054">Edit files extensions, use &quot;|&quot; as separtor. (e.g lnk|cbr)</string>
+    <string id="30054">Edit files extensions, use &quot;|&quot; as separator. (e.g lnk|cbr)</string>
     <string id="30058">Select the Files path</string>
     <string id="30059">Select the Thumbnails path</string>
     <string id="30060">Select the Fanarts path</string>
@@ -118,19 +112,19 @@
     <string id="30167">NFO Files</string>
     <string id="30168">Scrapers</string>
     <string id="30170">Launchers Default Paths</string>
-    <string id="30171">Title Formating</string>
+    <string id="30171">Title Formatting</string>
     <string id="30172">Local Images</string>
     <string id="30173">Scraper settings</string>
     <string id="30174">Scan settings</string>
 
     <string id="30201">default</string>
-    <string id="30202">experimented users</string>
+    <string id="30202">experienced users</string>
     <string id="30203">Toggle XBMC Fullscreen</string>
     <string id="30204">On</string>
     <string id="30205">Off</string>
     <string id="30206">Shortcuts (.lnk) support</string>
 
-    <string id="30300">Select Action for Item</string>
+    <string id="30300">Select Action for %s</string>
     <string id="30301">Modify Datas/Infos</string>
     <string id="30302">Change Thumbnail Image</string>
     <string id="30303">Change Fanart Image</string>
@@ -146,7 +140,6 @@
     <string id="30333">Import Infos from .nfo file</string>
     <string id="30312">Import Image from %s</string>
     <string id="30313">Select Local Image (Link)</string>
-    <string id="30314">Select Action for Launcher</string>
     <string id="30315">Modify Arguments : %s</string>
     <string id="30316">Save Infos to .nfo file</string>
     <string id="30329">Toggle XBMC Fullscreen : %s</string>

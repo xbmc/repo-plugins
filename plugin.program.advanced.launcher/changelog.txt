@@ -1,4 +1,12 @@
-﻿[B]1.7.1[/B]
+﻿[B]1.7.2[/B]
+. Add Busy dialog box for "slow" scrapers.
+. Add filename and application indications.
+. Clean english string.xml file.
+. Update add-on englsih description.
+. Add finnish translation into summary.
+. Add French translation + summary.
+
+[B]1.7.1[/B]
 . Fix thumb and fanart scraper for launcher.
 . Fix and clean english strings.xml file.
 . Delete broken translations.

@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- settings labels -->
+    <string id="30100">Filmelőzetes minősége</string>
+    <string id="30101">Normál</string>
+    <string id="30102">480p</string>
+    <string id="30103">720p</string>
+    <string id="30104">1080p</string>
+    <string id="30110">Nagyméretű poszter használata</string>
+    <string id="30120">MPAA életkor besorolási korlátozás</string>
+    <string id="30130">Lejátszás módja</string>
+    <string id="30131">Adatfolyam (stream) mód</string>
+    <string id="30132">Letöltés</string>
+    <string id="30133">Letöltés &amp; Mentés</string>
+    <string id="30140">Mentés helye</string>
+    <string id="30150">Irányítószám vagy város, ország</string>
+    <string id="30160">Leolvasó</string>
+    <string id="30170">Erre a napra listázza a filmeket:</string>
+    <string id="30171">Ma</string>
+    <string id="30172">Holnap</string>
+    <string id="30173">3. nap</string>
+    <string id="30174">4. nap</string>
+    <string id="30175">5. nap</string>
+    <string id="30176">6. nap</string>
+    <string id="30177">7. nap</string>
+    <string id="30178">8. nap</string>
+    <string id="30180">Filmcím használata mentés fájlneveként</string>
+    <string id="30190">Fanartkép</string>
+    <string id="30200">Mentett filmelőzeteseket mindig játssza is le</string>
+    <string id="30210">A '-trailer' kiterjesztés hozzáadása mentéskor</string>
+    <string id="30220">NFO leíró fájl létrehozása a mentett előzetesekhez</string>
+    <string id="30230">Besorolás a besorolatlan előzetesekhez</string>
+    <string id="30240">Csak a 720/1080p felbontású előzetesek mutatása</string>
+    <string id="30250">A bélyegkép másolása a mentett filmelőzetessel</string>
+
+    <!-- couchpotato integration settings -->
+    <string id="30260">Enable Couch Potato integration</string>
+    <string id="30261">User name</string>
+    <string id="30262">Password</string>
+    <string id="30263">Server</string>
+    <string id="30264">Port</string>
+    <string id="30265">Use HTTPS</string>
+    <string id="30266">Couch Potato</string>
+    <string id="30267">Add to Couch Potato</string>
+
+    <!-- category & label separators -->
+    <string id="30300">Általános</string>
+    <string id="30301">Bemutatási időpontok</string>
+    <string id="30302">Arculat</string>
+
+    <string id="30320">Felbontás</string>
+    <string id="30321">Hely</string>
+    <string id="30322">Fanart preferencia</string>
+    <string id="30323">Besorolás korlát</string>
+    <string id="30324">Lejátszás</string>
+    <string id="30325">Leolvasó</string>
+
+    <!-- mpaa ratings -->
+    <string id="30400">G</string>
+    <string id="30401">PG</string>
+    <string id="30402">PG-13</string>
+    <string id="30403">R</string>
+    <string id="30404">NC-17</string>
+    <string id="30405">Nincs korlát</string>
+
+    <!-- messages -->
+    <string id="30500">Letöltés: %s</string>
+    <string id="30501">Mentés: %s</string>
+    <string id="30502">Ide: %s</string>
+    <string id="30503">Másolás: %s</string>
+
+    <!-- showtimes -->
+    <string id="30600">Bemutatási időpont nem található!</string>
+    <string id="30601">Bemutatási időpontok keresése, várj...</string>
+    <string id="30602">Dátum</string>
+    <string id="30603">Hely</string>
+    <string id="30604">Hiba: Mozilista nem található! [I](Talán a webhely megváltozott)[/I]</string>
+
+    <!-- PluginCategory infolabel -->
+    <string id="30800">Normál videók</string>
+    <string id="30801">480p videók</string>
+    <string id="30802">720p videók</string>
+    <string id="30803">1080p videók</string>
+
+    <!-- context menu labels -->
+    <string id="30900">Mozi bemutatási időpontok</string>
+    <string id="30910">Letöltés &amp; Lejátszás</string>
+    <string id="30920">Lejátszás</string>
+    <string id="30930">Film információ</string>
+
+</strings>

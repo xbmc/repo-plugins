@@ -1,0 +1,4 @@
+[B]0.1.0[/B]
+- Fixed: Now scrape latest movies again
+- Fixed: Download and save works again
+- Orginal plug-in by nuka1195

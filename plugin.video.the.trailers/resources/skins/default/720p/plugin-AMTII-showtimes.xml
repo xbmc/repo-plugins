@@ -1,0 +1,263 @@
+<window>
+	<defaultcontrol>100</defaultcontrol>
+	<coordinates>
+		<system>1</system>
+		<posx>240</posx>
+		<posy>50</posy>
+	</coordinates>
+    <animation effect="fade" time="250">WindowOpen</animation>
+    <animation effect="fade" time="250">WindowClose</animation>
+	<controls>
+		<control type="image">
+			<description>background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>800</width>
+			<height>620</height>
+			<texture border="40">Showtimes-DialogBack.png</texture>
+		</control>
+		<control type="image">
+			<description>BG</description>
+			<posx>25</posx>
+			<posy>25</posy>
+			<width>750</width>
+			<height>570</height>
+			<texture>Showtimes-Poster.png</texture>
+            <colordiffuse>20FFFFFF</colordiffuse>
+            <aspectratio>keep</aspectratio>
+		</control>
+		<control type="image">
+			<posx>20</posx>
+			<posy>10</posy>
+			<width>760</width>
+			<height>90</height>
+			<aspectratio>stretch</aspectratio>
+			<texture>Showtimes-GlassTitleBar.png</texture>
+		</control>
+		<control type="label">
+			<description>header label</description>
+			<posx>20</posx>
+			<posy>15</posy>
+			<width>760</width>
+			<height>30</height>
+			<font>font24_title</font>
+			<label>$INFO[Window.Property(Title)]</label>
+			<align>center</align>
+			<aligny>center</aligny>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+		</control>
+		<control type="image">
+			<description>poster</description>
+			<posx>20</posx>
+			<posy>55</posy>
+			<width>80</width>
+			<height>100</height>
+			<texture fallback="Showtimes-Poster.png" background="true">$INFO[Window.Property(Poster)]</texture>
+            <aspectratio>keep</aspectratio>
+            <visible>!IsEmpty(Window.Property(Poster))</visible>
+		</control>
+		<control type="label">
+			<description>Showtimes Info Label</description>
+			<posx>110</posx>
+			<posy>55</posy>
+			<width>670</width>
+			<align>left</align>
+            <aligny>top</aligny>
+			<font>font12_title</font>
+            <label>$INFO[Window.Property(Director),[COLOR=FF0084ff]Director:[/COLOR] ,]$INFO[Window.Property(Studio),  -  [COLOR=FF0084ff]Studio:[/COLOR] ,]</label>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+            <wrapmultiline>false</wrapmultiline>
+		</control>
+		<control type="label">
+			<description>Showtimes Info Label</description>
+			<posx>20</posx>
+			<posy>55</posy>
+			<width>760</width>
+			<align>center</align>
+            <aligny>top</aligny>
+			<font>font12_title</font>
+            <label>$INFO[Window.Property(Address)]</label>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+            <wrapmultiline>false</wrapmultiline>
+		</control>
+		<control type="label">
+			<description>Showtimes Info Label</description>
+			<posx>110</posx>
+			<posy>83</posy>
+			<width>670</width>
+			<align>left</align>
+            <aligny>top</aligny>
+			<font>font12_title</font>
+            <label>$INFO[Window.Property(Duration),[COLOR=FF0084ff]Info: [/COLOR], - ]$INFO[Window.Property(MPAA),, - ]$INFO[Window.Property(Genre)]</label>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+            <wrapmultiline>false</wrapmultiline>
+		</control>
+		<control type="label">
+			<description>Showtimes Info Label</description>
+			<posx>20</posx>
+			<posy>83</posy>
+			<width>760</width>
+			<align>center</align>
+            <aligny>top</aligny>
+			<font>font12_title</font>
+            <label>$INFO[Window.Property(Phone)]</label>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+            <wrapmultiline>false</wrapmultiline>
+		</control>
+		<control type="label">
+			<description>Showtimes Info Label</description>
+			<posx>110</posx>
+			<posy>111</posy>
+			<width>670</width>
+			<align>left</align>
+            <aligny>top</aligny>
+			<font>font12_title</font>
+            <label>$INFO[Window.Property(Cast),[COLOR=FF0084ff]Cast:[/COLOR] ,]</label>
+			<textcolor>FFFFFFFF</textcolor>
+			<shadowcolor>FF000000</shadowcolor>
+            <wrapmultiline>true</wrapmultiline>
+		</control>
+		<!-- ** Required ** Do not change <id> -->
+		<control type="list" id="100">
+			<description>Movie/Theater List</description>
+			<posx>20</posx>
+			<posy>160</posy>
+			<width>760</width>
+			<height>401</height>
+			<scrolltime>200</scrolltime>
+			<onup>100</onup>
+			<ondown>100</ondown>
+			<itemlayout height="100">
+				<control type="image">
+					<width>760</width>
+					<height>101</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<texture border="5">Showtimes-MenuItemNF.png</texture>
+				</control>
+				<control type="label">
+					<posx>10</posx>
+					<posy>10</posy>
+					<width>740</width>
+					<height>20</height>
+					<font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+					<aligny>center</aligny>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>750</posx>
+					<posy>10</posy>
+					<width>680</width>
+					<height>20</height>
+					<font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+					<aligny>center</aligny>
+					<align>right</align>
+					<info>ListItem.Property(Phone)</info>
+				</control>
+				<control type="label">
+					<posx>10</posx>
+					<posy>38</posy>
+					<width>760</width>
+					<height>20</height>
+					<font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+					<aligny>center</aligny>
+					<align>left</align>
+					<info>ListItem.Property(Address)</info>
+				</control>
+				<control type="label">
+					<posx>10</posx>
+					<posy>65</posy>
+					<width>760</width>
+					<height>20</height>
+					<font>font12</font>
+					<textcolor>FFb4b4b4</textcolor>
+					<aligny>center</aligny>
+					<align>left</align>
+					<info>ListItem.Property(ShowTimes)</info>
+				</control>
+			</itemlayout>
+			<focusedlayout height="100">
+				<control type="image">
+					<width>760</width>
+					<height>101</height>
+					<posx>0</posx>
+					<posy>0</posy>
+					<texture border="5">Showtimes-MenuItemFO.png</texture>
+				</control>
+				<control type="label">
+					<posx>10</posx>
+					<posy>10</posy>
+					<width>740</width>
+					<height>20</height>
+					<font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+					<aligny>center</aligny>
+					<align>left</align>
+					<info>ListItem.Label</info>
+				</control>
+				<control type="label">
+					<posx>750</posx>
+					<posy>10</posy>
+					<width>680</width>
+					<height>20</height>
+					<font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+					<aligny>center</aligny>
+					<align>right</align>
+					<info>ListItem.Property(Phone)</info>
+				</control>
+				<control type="label">
+					<posx>10</posx>
+					<posy>38</posy>
+					<width>760</width>
+					<height>20</height>
+					<font>font12</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+					<aligny>center</aligny>
+					<align>left</align>
+					<info>ListItem.Property(Address)</info>
+				</control>
+				<control type="label">
+					<posx>10</posx>
+					<posy>65</posy>
+					<width>760</width>
+					<height>20</height>
+					<font>font12</font>
+					<textcolor>FFb4b4b4</textcolor>
+                    <shadowcolor>FF000000</shadowcolor>
+					<aligny>center</aligny>
+					<align>left</align>
+					<info>ListItem.Property(ShowTimes)</info>
+				</control>
+			</focusedlayout>
+		</control>
+		<control type="label">
+			<description>Page label</description>
+			<posx>40</posx>
+			<posy>560</posy>
+			<width>720</width>
+			<height>30</height>
+			<align>center</align>
+			<aligny>center</aligny>
+			<textcolor>FFb4b4b4</textcolor>
+			<font>font12</font>
+			<label>([COLOR=FF0084ff]$INFO[Container(100).NumItems][/COLOR]) $LOCALIZE[31025] - $LOCALIZE[31024] ([COLOR=FF0084ff]$INFO[Container(100).CurrentPage]/$INFO[Container(100).NumPages][/COLOR])</label>
+			<visible>!Control.IsVisible(451)</visible>
+		</control>
+	</controls>
+</window>

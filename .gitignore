@@ -69,3 +69,5 @@ plugin.audio.soundcloud/.gitignore
 plugin.audio.soundcloud/.project
 plugin.audio.soundcloud/.pydevproject
 plugin.audio.soundcloud/.settings
+plugin.video.the.trailers/.git
+plugin.video.the.trailers/.gitignore

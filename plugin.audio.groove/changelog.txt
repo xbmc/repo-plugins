@@ -1,3 +1,7 @@
+1.0.3
+
+Fix bug in album song name.
+
 1.0.2
 
 New icon for dark backgrounds. Socket timeout for Linux.

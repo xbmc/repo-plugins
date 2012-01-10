@@ -484,7 +484,11 @@ class GrooveAPI:
 					coverart = THUMB_URL+s['CoverArtFilename'].encode('ascii', 'ignore')
 				else:
 					coverart = 'None'
-				list.append([s['SongName'].encode('ascii', 'ignore'),\
+				if 'Name' in s:
+					name = s['Name']
+				else:
+					name = s['SongName']
+				list.append([name.encode('ascii', 'ignore'),\
 				s['SongID'],\
 				s['AlbumName'].encode('ascii', 'ignore'),\
 				s['AlbumID'],\

@@ -66,20 +66,28 @@ def CATEGORIES():
 		'plot': 'SciByte is a show about science topics presented by Heather and Jeremy.',
 		'genre': 'Science'
 	}
-	# TODO: Add FauxShow?
+	# @TODO: Add FauxShow?
 	#plugins[__language__(30011)] = {
-	#	'feed': 'http://blip.tv/fauxshow/rss',
+	#	'feed': 'http://blip.tv/fauxshow/rss/itunes',
 	#	'image': 'http://images3.wikia.nocookie.net/__cb20110422002134/jupiterbroadcasting/images/0/0b/Fauxshow.jpg',
 	#	'plot': 'The FauxShow is not a real show, but a social experience. Unlike most of the shows on the network, the FauxShow has no defined subject and the topic varies week to week.',
 	#	'genre': 'Humour'
 	#}
-	x = 1
+
+	# Add Jupiter Broadcasting Live via Justin.tv?
+	info = {}
+	info['title'] = __language__(30010)
+	info['plot'] = __language__(30012)
+	info['genre'] = 'Technology'
+	info['count'] = 1
+	addLink(__language__(30010), 'rtsp://videocdn-us.geocdn.scaleengine.net/jblive/jblive.stream', '', 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg', info)
+
+  # Loop through each of the shows and add them as directories.
+	x = 2
 	for name, data in plugins.iteritems():
 		data['count'] = x
 		x = x + 1
 		addDir(name, data['feed'], 1, data['image'], data)
-	#TODO: Add Jupiter Broadcasting Live via Justin.tv?
-	#addLink(__language__(30010), 'http://www.justin.tv/widgets/live_embed_player.swf?channel=jupiterbroadcasting', '', '', 'http://www.jupiterbroadcasting.com/wp-content/themes/ondemand/images/logo.jpg')
 
 def INDEX(name, url):
 	import feedparser
@@ -104,6 +112,7 @@ def INDEX(name, url):
 		info['plotoutline'] = item.subtitle
 		info['director'] = item.author
 		info['tvshowtitle'] = name
+		# @TODO: Add the icon image screenshot from <media thumbnail>.
 		addLink(title, video, date, '', info)
 		x = x + 1
 
@@ -133,7 +142,7 @@ def addLink(name, url, date, iconimage, info):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
-def addDir(name,url,mode,iconimage, info):
+def addDir(name, url, mode, iconimage, info):
 	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
 	ok=True
 	info["Title"] = name

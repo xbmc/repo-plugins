@@ -13,37 +13,39 @@ icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 
 
 def getCategories():
-        addDir(__language__(30001),87485,2,icon)
-        addDir(__language__(30002),0,1,icon)
-        addDir(__language__(30003),1,1,icon)
-        addDir(__language__(30004),2,1,icon)
-        addDir(__language__(30005),3,1,icon)
-        addDir(__language__(30006),4,1,icon)
-        addDir(__language__(30007),5,1,icon)
-        addDir(__language__(30008),6,1,icon)
-        addDir(__language__(30009),7,1,icon)
-        addDir(__language__(30010),8,1,icon)
-        addDir(__language__(30011),9,1,icon)
-        addDir(__language__(30012),10,1,icon)
-        addDir(__language__(30013),11,1,icon)
-        addDir(__language__(30014),12,1,icon)
+        addDir(__language__(30001),0,1,icon)
+        addDir(__language__(30002),1,1,icon)
+        addDir(__language__(30003),2,1,icon)
+        addDir(__language__(30004),3,1,icon)
+        addDir(__language__(30005),4,1,icon)
+        addDir(__language__(30006),5,1,icon)
+        addDir(__language__(30007),6,1,icon)
+        addDir(__language__(30008),7,1,icon)
+        addDir(__language__(30009),8,1,icon)
+        addDir(__language__(30010),9,1,icon)
+        addDir(__language__(30011),10,1,icon)
+        addDir(__language__(30012),11,1,icon)
+        addDir(__language__(30013),12,1,icon)
+        addDir(__language__(30014),13,1,icon)
 
 
 def getSubcategories(url):
-        url = int(url)
-        req = urllib2.Request('http://video.foxnews.com')
-        req.addheaders = [('Referer', 'http://foxnews.com'),
-                ('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3')]
+        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1',
+                   'Referer' : 'http://foxnews.com'}
+        req = urllib2.Request('http://video.foxnews.com',None,headers)
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         data = soup.find('div', attrs={'class' : 'playlist-2'})('ul')
-        categories = data[url]
+        categories = data[int(url)]
         for item in categories('a'):
             name = item['title']
             url=item['href']
-            url = url.split('=')[1]
+            if url == '#':
+                url = '87485'
+            else:
+                url = url.split('-')[-1]
             u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=2&name="+urllib.quote_plus(name)
             ok=True
             liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=icon)
@@ -52,10 +54,9 @@ def getSubcategories(url):
 
 
 def getVideos(url):
-        url='http://video.foxnews.com/v/feed/playlist/'+url+'.js?'
-        req = urllib2.Request(url)
-        req.addheaders = [('Referer', 'http://video.foxnews.com'),
-                ('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3')]
+        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1',
+                   'Referer' : 'http://video.foxnews.com'}
+        req = urllib2.Request('http://video.foxnews.com/v/feed/playlist/'+url+'.js?',None,headers)
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
@@ -66,7 +67,7 @@ def getVideos(url):
             url = video['media-content']['mvn-fnc_mp4']
             thumb = video['media-content']['media-thumbnail']
             try:
-                desc = str(video['media-content']['media-description'])+' \n\n'+str(video['media-content']['mvn-airDate'])
+                desc = str(video['media-content']['media-description'])+' \n\n'+str(video['media-content']['mvn-airDate'].split('T')[0])
             except:
                 desc = ''
             name = name.replace('&amp;',' & ')
@@ -103,6 +104,9 @@ def get_params():
                     param[splitparams[0]]=splitparams[1]
 
         return param
+        
+        
+xbmcplugin.setContent(int(sys.argv[1]), 'movies')
 
 params=get_params()
 

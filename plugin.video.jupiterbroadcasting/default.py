@@ -1,120 +1,212 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
 from time import strftime
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.jupiterbroadcasting')
 __language__ = __settings__.getLocalizedString
 
 def CATEGORIES():
-	plugins = {}
-	plugins[__language__(30006)] = {
-		'feed': 'http://feeds2.feedburner.com/AllJupiterVideos?format=xml',
-		'image': 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg',
-		'plot': 'All the latest videos from Jupiter Broadcasting.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30000)] = {
-		'feed': 'http://feeds.feedburner.com/computeractionshowvideo?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/images/LAS-VIDEO.jpg',
-		'plot': 'The Linux Action Show covers the latest news in free and open source software, especially Linux.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30001)] = {
-		'feed': 'http://feeds2.feedburner.com/jupiterbeeristasty-hd?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/images/beeristasty/BeerisTasty-iTunesBadgeHD.png',
-		'plot': 'Finding interesting combinations of food and beer.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30002)] = {
-		'feed': 'http://feeds.feedburner.com/stokedhd?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/images/STOked-BadgeHD.png',
-		'plot': 'All the news about Star Trek Online you would ever need.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30003)] = {
-		'feed': 'http://feeds.feedburner.com/lotsovideo?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/images/LOTSOiTunesVideo144.jpg',
-		'plot': 'Video games, reviews and coverage.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30004)] = {
-		'feed': 'http://feeds.feedburner.com/jupiternitehd?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/images/JANBADGE-LVID.jpg',
-		'plot': 'Jupiter Broadcasting hooliganisms covered in front of a live audience on the intertubes.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30005)] = {
-		'feed': 'http://feeds.feedburner.com/ldf-video?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/images/LDF-FullStill144x139.jpg',
-		'plot': 'Bryan takes a peek into alien life.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30007)] = {
-		'feed': 'http://feeds.feedburner.com/MMOrgueHD?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/images/MMOrgueBadgeHD144.jpg',
-		'plot': 'The MMOrgue is a show presented by Jeremy about Massively Multiplayer Online (MMO) games.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30008)] = {
-		'feed': 'http://feeds.feedburner.com/techsnaphd?format=xml',
-		'image': 'http://images3.wikia.nocookie.net/jupiterbroadcasting/images/d/d6/Techsnapcenter.jpg',
-		'plot': 'TechSNAP is a show about technology news hosted by Chris Fisher and Allan Jude which records live on Thursdays and is released on the following Monday.',
-		'genre': 'Technology'
-	}
-	plugins[__language__(30009)] = {
-		'feed': 'http://feeds.feedburner.com/scibytehd?format=xml',
-		'image': 'http://www.jupiterbroadcasting.com/images/SciByteBadgeHD.jpg',
-		'plot': 'SciByte is a show about science topics presented by Heather and Jeremy.',
-		'genre': 'Science'
-	}
-	# @TODO: Add FauxShow?
-	#plugins[__language__(30011)] = {
-	#	'feed': 'http://blip.tv/fauxshow/rss/itunes',
-	#	'image': 'http://images3.wikia.nocookie.net/__cb20110422002134/jupiterbroadcasting/images/0/0b/Fauxshow.jpg',
-	#	'plot': 'The FauxShow is not a real show, but a social experience. Unlike most of the shows on the network, the FauxShow has no defined subject and the topic varies week to week.',
-	#	'genre': 'Humour'
-	#}
+    # List all the shows.
+    shows = {}
 
-	# Add Jupiter Broadcasting Live via Justin.tv?
-	info = {}
-	info['title'] = __language__(30010)
-	info['plot'] = __language__(30012)
-	info['genre'] = 'Technology'
-	info['count'] = 1
-	addLink(__language__(30010), 'rtsp://videocdn-us.geocdn.scaleengine.net/jblive/jblive.stream', '', 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg', info)
+    # All Shows 
+    shows[__language__(30006)] = {
+        'feed': 'http://feeds2.feedburner.com/AllJupiterVideos?format=xml',
+        'feed-low': 'http://feeds2.feedburner.com/AllJupiterVideos?format=xml',
+        'image': 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg',
+        'plot': __language__(30206),
+        'genre': 'Technology'
+    }
 
-  # Loop through each of the shows and add them as directories.
-	x = 2
-	for name, data in plugins.iteritems():
-		data['count'] = x
-		x = x + 1
-		addDir(name, data['feed'], 1, data['image'], data)
+    # Linux Action Show
+    shows[__language__(30000)] = {
+        'feed': 'http://feeds.feedburner.com/computeractionshowvideo?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/linuxactionshowipodvid?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/LAS-VIDEO.jpg',
+        'plot': __language__(30200),
+        'genre': 'Technology'
+    }
+
+    # STOked
+    shows[__language__(30002)] = {
+        'feed': 'http://feeds.feedburner.com/stokedhd?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/stokedipod?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/STOked-BadgeHD.png',
+        'plot': __language__(30202),
+        'genre': 'Technology'
+    }
+
+    # TechSnap
+    shows[__language__(30008)] = {
+        'feed': 'http://feeds.feedburner.com/techsnaphd?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/techsnapmobile?format=xml',
+        'image': 'http://images3.wikia.nocookie.net/jupiterbroadcasting/images/d/d6/Techsnapcenter.jpg',
+        'plot': __language__(30208),
+        'genre': 'Technology'
+    }
+
+    # SCIbyte
+    shows[__language__(30009)] = {
+        'feed': 'http://feeds.feedburner.com/scibytehd?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/scibytemobile?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/SciByteBadgeHD.jpg',
+        'plot': __language__(30209),
+        'genre': 'Science'
+    }
+
+    # In Depth Look
+    shows[__language__(30014)] = {
+        'feed': 'http://www.jupiterbroadcasting.com/feeds/indepthlookihd.xml',
+        'feed-low': 'http://www.jupiterbroadcasting.com/feeds/indepthlookmob.xml',
+        'image': 'http://images4.wikia.nocookie.net/jupiterbroadcasting/images/3/33/Indepthlook.jpg',
+        'plot': __language__(30214),
+        'genre': 'Technology'
+    }
+
+    # FauxShow
+    shows[__language__(30011)] = {
+        'feed': 'http://blip.tv/fauxshow/rss/itunes',
+        'feed-low': 'http://blip.tv/fauxshow/rss/itunes',
+        'image': 'http://a.images.blip.tv/FauxShow-300x300_show_image205.png',
+        'plot': __language__(30211),
+        'genre': 'Humour'
+    }
+
+    # Jupiter@Nite
+    shows[__language__(30004)] = {
+        'feed': 'http://feeds.feedburner.com/jupiternitehd?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/jupiternitehd?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/JANBADGE-LVID.jpg',
+        'plot': __language__(30204),
+        'genre': 'Technology'
+    }
+
+    # MMOrgue
+    shows[__language__(30007)] = {
+        'feed': 'http://feeds.feedburner.com/MMOrgueHD?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/MMOrgueHD?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/MMOrgueBadgeHD144.jpg',
+        'plot': __language__(30207),
+        'genre': 'Technology'
+    }
+
+    # LOTSO
+    shows[__language__(30003)] = {
+        'feed': 'http://feeds.feedburner.com/lotsovideo?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/lotsovideo?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/LOTSOiTunesVideo144.jpg',
+        'plot': __language__(30203),
+        'genre': 'Technology'
+    }
+
+    # Beer is Tasty
+    shows[__language__(30001)] = {
+        'feed': 'http://feeds2.feedburner.com/jupiterbeeristasty-hd?format=xml',
+        'feed-low': 'http://feeds2.feedburner.com/jupiterbeeristasty-hd?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/beeristasty/BeerisTasty-iTunesBadgeHD.png',
+        'plot': __language__(30201),
+        'genre': 'Technology'
+    }
+
+    # Jupiter Files
+    shows[__language__(30005)] = {
+        'feed': 'http://feeds.feedburner.com/ldf-video?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/ldf-video?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/LDF-FullStill144x139.jpg',
+        'plot': __language__(30205),
+        'genre': 'Technology'
+    }
+
+    # Jupiter Broadcasting Live via the RTMP stream
+    addLink(__language__(30010), 'rtsp://videocdn-us.geocdn.scaleengine.net/jblive/jblive.stream', '', 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg', {
+        'title': __language__(30010),
+        'plot': __language__(30210),
+        'genre': 'Technology',
+        'count': 1
+    })
+
+    # Loop through each of the shows and add them as directories.
+    x = 2
+    quality = int(__settings__.getSetting("video_quality"))
+    for name, data in shows.iteritems():
+        data['count'] = x
+        x = x + 1
+        # Check whether to use the high or low quality feed.
+        feed = data['feed'] # High by default.
+        if (quality == 1):
+            feed = data['feed-low']
+        addDir(name, feed, 1, data['image'], data)
 
 def INDEX(name, url):
-	import feedparser
-	data = feedparser.parse(url)
-	x = 1
-	for item in data.entries:
-		info = {}
-		# The title
-		title = info['title'] = str(x) + '. ' + item.title
-		# Process the enclosures
-		if hasattr(item, 'enclosures'):
-			# Video URL
-			video = getattr(item.enclosures[0], 'href', 0);
-			if video == 0:
-				video = getattr(item.enclosures[0], 'url', '')
-			size = getattr(item.enclosures[0], 'length', 0)
-			info['size'] = int(size)
-		info['count'] = x
-		# Date
-		date = info['date'] = strftime("%d.%m.%Y", item.updated_parsed)
-		info['plot'] = re.sub(r'<[^>]*?>', '', item.summary)
-		info['plotoutline'] = item.subtitle
-		info['director'] = item.author
-		info['tvshowtitle'] = name
-		# @TODO: Add the icon image screenshot from <media thumbnail>.
-		addLink(title, video, date, '', info)
-		x = x + 1
+    data = urllib2.urlopen(url)
+    soup = BeautifulStoneSoup(data, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+    count = 1
+    # Wrap in a try/catch to protect from borken RSS feeds.
+    try:
+        for item in soup.findAll('item'):
+            # Load up the initial episode information.
+            info = {}
+            title = item.find('title')
+            info['title'] = str(count) + '. '
+            if (title):
+                info['title'] += title.string
+            info['tvshowtitle'] = name
+            info['count'] = count
+            count += 1 # Increment the show count.
+
+            # Get the video enclosure.
+            video = ''
+            enclosure = item.find('enclosure')
+            if (enclosure != None):
+                video = enclosure.get('href')
+                if (video == None):
+                    video = enclosure.get('url')
+                if (video == None):
+                    video = ''
+                size = enclosure.get('length')
+                if (size != None):
+                    info['size'] = int(size)
+
+            # TODO: Parse the date correctly.
+            date = ''
+            pubdate = item.find('pubDate')
+            if (pubdate != None):
+                date = pubdate.string
+                # strftime("%d.%m.%Y", item.updated_parsed)
+
+            # Plot outline.
+            summary = item.find('itunes:summary')
+            if (summary != None):
+                info['plot'] = info['plotoutline'] = summary.string.strip()
+
+            # Plot.
+            description = item.find('description')
+            if (description != None):
+                # Attempt to strip the HTML tags.
+                try:
+                    info['plot'] = re.sub(r'<[^>]*?>', '', description.string)
+                except:
+                    info['plot'] = description.string
+
+            # Author/Director.
+            author = item.find('itunes:author')
+            if (author != None):
+                info['director'] = author.string
+
+            # TODO: Get the thumbnails to load correctly.
+            thumbnail = ''
+            mediathumbnail = item.findAll('media:thumbnail')
+            for thumb in mediathumbnail:
+                thumbnail = thumb.get('url')
+                if (thumbnail == None):
+                    thumbnail = ''
+                else:
+                    break
+
+            # Add the episode link.
+            addLink(info['title'], video, date, thumbnail, info)
+    except:
+       pass
 
 def get_params():
         param=[]
@@ -143,13 +235,13 @@ def addLink(name, url, date, iconimage, info):
         return ok
 
 def addDir(name, url, mode, iconimage, info):
-	u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-	ok=True
-	info["Title"] = name
-	liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
-	liz.setInfo(type="video", infoLabels=info)
-	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-	return ok
+    u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+    ok=True
+    info["Title"] = name
+    liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
+    liz.setInfo(type="video", infoLabels=info)
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+    return ok
 
 params=get_params()
 url=None
@@ -183,3 +275,4 @@ elif mode==1:
 
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
+

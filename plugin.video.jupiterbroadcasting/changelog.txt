@@ -1,3 +1,12 @@
+[B]Version 1.4.0[/B]
+- New show: FauxShow
+- New show: In Depth Look
+- Fan art
+- Configurable video quality
+- Thumbnail support once ChrisLAS adds them
+- Switched from FeedParser to BeautifulSoup for feed aggregation
+- Various small fixes
+
 [B]Version 1.3.0[/B]
 - Moved to GitHub for version control
 - New show: Live

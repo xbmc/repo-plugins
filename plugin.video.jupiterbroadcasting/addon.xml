@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.jupiterbroadcasting"
        name="Jupiter Broadcasting"
-       version="1.3.0"
+       version="1.4.0"
        provider-name="Rob Loach">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Jupiter Broadcasting video plugin</summary>
-    <description>Shows from the Jupiter Broadcasting Network including the Linux Action Show, STOked, TechSNAP and more.</description>
+    <summary>Jupiter Broadcasting video addon</summary>
+    <description>Watch shows from the Jupiter Broadcasting Network including the Linux Action Show, STOked, TechSNAP and more.</description>
     <platform>all</platform>
   </extension>
 </addon>

@@ -1,11 +1,32 @@
+#
+#      Copyright (C) 2012 Tommy Winther
+#      http://tommy.winther.nu
+#
+#  This Program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This Program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this Program; see the file LICENSE.txt.  If not, write to
+#  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+#  http://www.gnu.org/copyleft/gpl.html
+#
 import sys
 import os
-import cgi as urlparse
+import urlparse
+import urllib2
 
-import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
+
+import buggalo
 
 from channels import CHANNELS, CATEGORIES, QUALITIES
 
@@ -29,7 +50,11 @@ class DanishLiveTV(object):
             if not os.path.exists(icon):
                 icon = ICON
 
-            url = channel.get_url(quality)
+            idx = None
+            if channel.get_config_key():
+                idx = int(ADDON.getSetting(channel.get_config_key()))
+
+            url = channel.get_url(quality, idx)
             if url:
                 title = ADDON.getLocalizedString(TITLE_OFFSET + channel.get_id())
                 description = ADDON.getLocalizedString(DESCRIPTION_OFFSET + channel.get_id())
@@ -55,24 +80,48 @@ class DanishLiveTV(object):
 
         xbmcplugin.endOfDirectory(HANDLE)
 
-
-    def playChannel(self, name):
+    def playChannel(self, id):
         try:
             quality = QUALITIES[int(ADDON.getSetting('quality'))]
         except ValueError:
             quality = QUALITIES[0] # fallback for old settings value
 
         for channel in CHANNELS:
-            if channel.get_name() == name:
+            if str(channel.get_id()) == id:
                 url = channel.get_url(quality)
                 if url:
-                    icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', channel.get_logo())
-                    item = xbmcgui.ListItem(channel.get_name(), iconImage=icon, thumbnailImage=icon)
+                    icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', '%d.png' % channel.get_id())
+                    if not os.path.exists(icon):
+                        icon = ICON
+
+                    title = ADDON.getLocalizedString(TITLE_OFFSET + channel.get_id())
+                    item = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon, path=url)
                     item.setProperty('Fanart_Image', FANART)
                     item.setProperty('IsLive', 'true')
 
-                    p = xbmc.Player()
-                    p.play(url, item)
+                    xbmcplugin.setResolvedUrl(HANDLE, True, item)
+                    break
+
+    def imInDenmark(self):
+        try:
+            u = urllib2.urlopen('http://www.dr.dk/nu/api/estoyendinamarca.json')
+            response = u.read()
+            u.close()
+
+            imInDenmark = 'true' == response
+        except urllib2.URLError:
+            # If an error occurred assume we are not in Denmark
+            imInDenmark = False
+
+        if not imInDenmark and ADDON.getSetting('warn.if.not.in.denmark') == 'true':
+            heading = ADDON.getLocalizedString(99970)
+            line1 = ADDON.getLocalizedString(99971)
+            line2 = ADDON.getLocalizedString(99972)
+            line3 = ADDON.getLocalizedString(99973)
+            nolabel = ADDON.getLocalizedString(99974)
+            yeslabel = ADDON.getLocalizedString(99975)
+            if xbmcgui.Dialog().yesno(heading, line1, line2, line3, nolabel, yeslabel):
+                ADDON.setSetting('warn.if.not.in.denmark', 'false')
 
 
 if __name__ == '__main__':
@@ -84,14 +133,18 @@ if __name__ == '__main__':
     FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
     ICON = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
 
-    danishTV = DanishLiveTV()
-    if PARAMS.has_key('playChannel'):
-        danishTV.playChannel(PARAMS['playChannel'][0])
-    elif PARAMS.has_key('category'):
-        danishTV.showChannels(int(PARAMS['category'][0]))
-    elif ADDON.getSetting('group.by.category') == 'true':
-        danishTV.showCategories()
-    else:
-        danishTV.showChannels()
-
+    try:
+        danishTV = DanishLiveTV()
+        if PARAMS.has_key('playChannel'):
+            danishTV.playChannel(PARAMS['playChannel'][0])
+        elif PARAMS.has_key('category'):
+            danishTV.showChannels(int(PARAMS['category'][0]))
+        elif ADDON.getSetting('group.by.category') == 'true':
+            danishTV.imInDenmark()
+            danishTV.showCategories()
+        else:
+            danishTV.imInDenmark()
+            danishTV.showChannels()
+    except Exception:
+        buggalo.onExceptionRaised()
 

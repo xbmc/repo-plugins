@@ -1,6 +1,6 @@
 Khan Academey for XBMC
 =======================
-version 0.3
+version 1.4
 
 ### Summary
 

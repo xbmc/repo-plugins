@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tvkaista" name="TVKaista.fi" version="2.2.1" provider-name="Viljo Viitanen">
+<addon id="plugin.video.tvkaista" name="TVKaista.fi" version="2.2.2" provider-name="Viljo Viitanen">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
     </requires>

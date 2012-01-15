@@ -272,6 +272,7 @@ def listdates(url):
     listfolder = xbmcgui.ListItem('www-pyynto ei onnistunut '+str(e.code))
     listfolder.setInfo('video', {'Title': 'www-pyynto ei onnistunut '+str(e.code)})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
     return
 #  try:
   dom = minidom.parseString(content)
@@ -309,6 +310,7 @@ def listfeeds(url):
     listfolder = xbmcgui.ListItem('www-pyynto ei onnistunut '+str(e.code))
     listfolder.setInfo('video', {'Title': 'www-pyynto ei onnistunut '+str(e.code)})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
     return
 #  try:
   dom = minidom.parseString(content)

@@ -10,8 +10,8 @@ def api_url():
     '''Returns the API url with a timestamp url paremeter set to
     int(time.time() * 1000)
     '''
-    return 'http://www.khanacademy.org/api/v1/playlists/library/compact?v=%d' %
-    int(time.time() * 1000)
+    return ('http://www.khanacademy.org/api/v1/playlists/library/compact?v=%d' %
+            int(time.time() * 1000))
 
 
 API_URL = api_url()

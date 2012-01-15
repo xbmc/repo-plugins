@@ -1,3 +1,5 @@
+[B]3.0.2[/B]
+- Bugfix
 [B]3.0.1[/B]
 - Always show times in Finnish time, sort the series view, remove obsolete proxy setting. Set the proxy server from tvkaista website. Thanks again Markki Lamminluoto for helping with the proxies!
 [B]3.0.0[/B]

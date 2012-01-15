@@ -33,6 +33,6 @@
         <setting label="30264" type="text" id="cp_port" default="5000" enable="eq(-2,true)" />
         <setting label="30265" type="bool" id="cp_use_https" default="false" enable="eq(-3,true)" />
         <setting label="30261" type="text" id="cp_user" default="" enable="eq(-4,true)" />
-        <setting label="30262" type="text" id="cp_password" default="" enable="eq(-5,true) + !eq(-1,)" />
+        <setting label="30262" type="text" id="cp_password" default="" enable="eq(-5,true) + !eq(-1,)" option="hidden"/>
     </category>
 </settings>

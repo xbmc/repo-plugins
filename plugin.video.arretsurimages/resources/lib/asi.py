@@ -118,8 +118,9 @@ class UI:
         """Display the categories"""
         self.addItem({'Title':'Toutes les émissions', 'mode':'toutesLesEmissions'})
         self.addItem({'Title':'@rrêt sur images', 'mode':'arretSurImages', 'Plot':getLS(30031)})
-        self.addItem({'Title':'Ligne j@une', 'mode':'ligneJaune', 'Plot':getLS(30032)})
         self.addItem({'Title':'D@ns le texte', 'mode':'dansLeTexte', 'Plot':getLS(30033)})
+        self.addItem({'Title':'@ux sources', 'mode':'auxSources', 'Plot':getLS(30034)})
+        self.addItem({'Title':'Ligne j@une', 'mode':'ligneJaune', 'Plot':getLS(30032)})
         self.endofdirectory()
 
     def programs(self, defaultUrl=None, displayParts=True):
@@ -219,6 +220,9 @@ class Main:
             UI().programs(url, self.displayParts)
         elif mode == 'dansLeTexte':
             url = URLEMISSION + '?id=3' + '&orderby=' + self.sortMethod
+            UI().programs(url, self.displayParts)
+        elif mode == 'auxSources':
+            url = URLEMISSION + '?id=4' + '&orderby=' + self.sortMethod
             UI().programs(url, self.displayParts)
         elif mode == 'parts':
             if self.displayParts:

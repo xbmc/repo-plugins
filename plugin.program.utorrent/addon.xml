@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.program.utorrent"
+       name="uTorrent"
+       version="1.1.0"
+       provider-name="Taxigps">
+    <requires>
+        <import addon="xbmc.python" version="1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>executable</provides>
+    </extension> 
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">uTorrent Control Plugin</summary>
+        <summary lang="zh">uTorrent控制插件</summary>
+        <description lang="en">Manages your uTorrent queue from within XBMC![CR][CR]Install:[CR]1. Enable WebUI for uTorrent[CR]2. Enable Token Authentication for uTorrent[CR]3. Install the plug-in[CR]4. Enter username and password of uTorrent via 'Plug-in Settings'[CR]5. Enjoy!</description>
+        <description lang="zh">在XBMC中控制你的uTorrent下载队列。[CR][CR]安装说明：[CR]1. 起用uTorrent的WebUI[CR]2. 启用uTorrent的Token认证[CR]3. 安装本插件[CR]4. 在扩展功能设置界面输入uTorrent用户名和密码[CR]5. 祝你使用愉快！</description>
+    </extension>
+</addon>

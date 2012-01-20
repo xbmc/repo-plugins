@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf8" standalone="yes"?>
+<strings>
+	<!-- Labels -->
+	<string id="30001">完成：</string>
+	<string id="30002">大小：</string>
+	<string id="30003">下载：</string>
+	<string id="30004">上传：</string>
+	<string id="30005">剩余：</string>
+	<string id="30006">小时</string>
+	<string id="30007">分钟</string>
+	<string id="30008">∞分钟</string>
+	<!-- Settings labels -->
+	<string id="30100">IP地址：</string>
+	<string id="30101">端口号：</string>
+	<string id="30102">用户名：</string>
+	<string id="30103">密码：</string>
+	<string id="30104">种子文件夹：</string>
+	<!-- dialog.select -->
+	<string id="32001">提供功能:</string>
+	<string id="32002">暂停</string>
+	<string id="32003">恢复</string>
+	<string id="32004">开始</string>
+	<string id="32005">停止</string>
+	<string id="32006">强制开始</string>
+	<string id="32007">移出</string>
+	<string id="32008">移出并删除数据</string>
+	<!-- dialog.numeric -->
+	<string id="32009">输入最大上传速率:</string>
+	<string id="32010">输入最大下载速率:</string>
+	<!-- context.menu -->
+	<string id="32011">暂停所有</string>
+	<string id="32012">恢复所有</string>
+	<string id="32013">停止所有</string>
+	<string id="32014">开始所有</string>
+	<string id="32015">限制上传/下载速度</string>
+	<string id="32016">增加文件(从 Torrents 文件夹)</string>
+	<!-- error -->
+	<string id="32100">错误！</string>
+	<string id="32101">无法连接到守护进程。</string>
+	<string id="32102">你现在要修改设置吗？</string>
+</strings>

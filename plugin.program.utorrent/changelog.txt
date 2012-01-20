@@ -1,0 +1,20 @@
+﻿[B]1.1.0 (2012.1.21)[/B]
+initialized into eden
+
+[B]1.0.5 (2011.1.30)[/B]
+changed: icon
+
+[B]1.0.4 (2011.1.22)[/B]
+changed: handle fail to connect to daemon error
+
+[B]1.0.3 (2011.1.16)[/B]
+fixed: split torrent items wrong when commas in the torrent name
+
+[B]1.0.2 (2011.1.15)[/B]
+chaged: use xbmc.log() to log debug message
+
+[B]1.0.1 (2011.1.8)[/B]
+fixed: rssfeeds cause error in updateList()
+
+[B]1.0.0 (2011.1.3)[/B]
+Initial import into addons repository

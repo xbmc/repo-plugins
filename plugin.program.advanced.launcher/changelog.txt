@@ -1,4 +1,17 @@
-﻿[B]1.7.2[/B]
+﻿[B]1.7.4/B]
+. Fix Dharma compatibility problem under Windows
+. Replace "System Platform" string by simply "Platform"
+
+[B]1.7.3[/B]
+. Add full import option for items.
+. Add full import option for launchers.
+. Add item filename modification option.
+. Reorganization of launchers context menu
+. Reorganization of items context menu
+. Replacement of "Extra fanarts" path by "Custom" paths.
+. Add Finnish translation (thanks to Viljo).
+
+[B]1.7.2[/B]
 . Add Busy dialog box for "slow" scrapers.
 . Add filename and application indications.
 . Clean english string.xml file.

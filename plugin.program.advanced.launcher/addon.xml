@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.advanced.launcher" name="Advanced Launcher" version="1.7.2" provider-name="Angelscry">
+<addon id="plugin.program.advanced.launcher" name="Advanced Launcher" version="1.7.4" provider-name="Angelscry">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
         <import addon="script.module.simplejson" version="2.0.9"/>
@@ -9,7 +9,7 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <disclaimer>For XBMC Eden / Dharma</disclaimer>
+        <disclaimer>For XBMC Eden</disclaimer>
         <summary lang="en">Start any applications from XBMC.</summary>
         <summary lang="fr">Lancer n'importer quelle application depuis XBMC.</summary>
         <summary lang="fi">Käynnistää sovelluksia XBMC:stä</summary>

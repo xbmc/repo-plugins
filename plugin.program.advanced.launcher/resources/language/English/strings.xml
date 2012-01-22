@@ -32,9 +32,10 @@
     <string id="30050">Re-Enter this directory to see the changes</string>
     <string id="30052">Edit application arguments</string>
     <string id="30054">Edit files extensions, use &quot;|&quot; as separator. (e.g lnk|cbr)</string>
-    <string id="30058">Select the Files path</string>
-    <string id="30059">Select the Thumbnails path</string>
-    <string id="30060">Select the Fanarts path</string>
+    <string id="30058">Select Files path</string>
+    <string id="30059">Select Thumbnails path</string>
+    <string id="30060">Select Fanarts path</string>
+    <string id="30057">Select Custom path</string>
 
     <string id="30061">Importing %s info from %s</string>
     <string id="30062">Importing %s file from path</string>
@@ -50,7 +51,7 @@
     <string id="30074">Downloading fanart...</string>
     <string id="30075">Fanart has been updated</string>
     <string id="30076">No data found</string>
-    <string id="30077">Select the system platform</string>
+    <string id="30077">Select the platform</string>
     <string id="30078">Select a item from %s</string>
     <string id="30079">Enter the MAME item filename to search...</string>
     <string id="30082">%s not found</string>
@@ -131,7 +132,7 @@
     <string id="30304">Delete</string>
     <string id="30305">Modify Item Infos</string>
     <string id="30306">Modify Title : %s</string>
-    <string id="30307">Modify System Platform : %s</string>
+    <string id="30307">Modify Platform : %s</string>
     <string id="30308">Modify Release Date : %s</string>
     <string id="30309">Modify Studio : %s</string>
     <string id="30310">Modify Genre : %s</string>
@@ -155,20 +156,22 @@
     <string id="30326">Change Fanarts Path : %s</string>
     <string id="30327">Change Application : %s</string>
     <string id="30330">Shortcuts (.lnk) support : %s</string>
-    <string id="30331">Change Extra Fanarts Path : %s</string>
+    <string id="30331">Change Custom Path : %s</string>
     <string id="30332">Import Local Image (Copy and Rename)</string>
-    <string id="30334">Items List</string>
+    <string id="30334">Manage Items List</string>
     <string id="30335">Import items data from .nfo files</string>
     <string id="30336">Export items data to .nfo files</string>
+    <string id="30337">Change File : %s</string>
+    <string id="30338">Import Infos, Thumbnail &amp; Fanart</string>
     
     <string id="30400">Search items...</string>
     <string id="30401">By Title</string>
     <string id="30402">By Release Date</string>
-    <string id="30403">By System Platform</string>
+    <string id="30403">By Platform</string>
     <string id="30404">By Studio</string>
     <string id="30405">By Genre</string>
     <string id="30406">Select a Release date...</string>
-    <string id="30407">Select a System Platform...</string>
+    <string id="30407">Select a Platform...</string>
     <string id="30408">Select a Studio...</string>
     <string id="30409">Select a Genre...</string>
     <string id="30410">Not Set</string>

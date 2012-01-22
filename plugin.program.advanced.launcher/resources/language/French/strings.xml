@@ -35,6 +35,7 @@
     <string id="30058">Choisir le dossier des fichiers</string>
     <string id="30059">Choisir le dossier des vignettes</string>
     <string id="30060">Choisir le dossier des fanarts</string>
+    <string id="30057">Choisir le dossier personalisé</string>
 
     <string id="30061">Importation des informations de %s depuis %s</string>
     <string id="30062">Importation du fichier de %s depuis le dossier</string>
@@ -155,11 +156,13 @@
     <string id="30326">Choisir le dossier des fanarts : %s</string>
     <string id="30327">Choisir l'executable : %s</string>
     <string id="30330">Support des raccourcis (.lnk) : %s</string>
-    <string id="30331">Choisir le dossier des extra-fanarts : %s</string>
+    <string id="30331">Choisir le dossier personnalisé : %s</string>
     <string id="30332">Importer une image locale (copier et renomer)</string>
-    <string id="30334">Liste des objets</string>
+    <string id="30334">Gérer la liste des objets</string>
     <string id="30335">Importer les informations des objets (fichiers .nfo)</string>
     <string id="30336">Sauver les informations des objets (fichiers .nfo)</string>
+    <string id="30337">Choisir le fichier : %s</string>
+    <string id="30338">Importer informations, vignette et fanart</string>
     
     <string id="30400">Rechercher des objets...</string>
     <string id="30401">Par titre</string>

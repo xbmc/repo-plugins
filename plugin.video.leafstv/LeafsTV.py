@@ -14,7 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import urllib, urllib2, re, time, logging
+import urllib, urllib2, re, xml.dom.minidom, time, logging
 
 class LeafsTVError(Exception):
     def __init__(self, value):
@@ -217,19 +217,13 @@ class LeafsTV:
         except urllib2.HTTPError, he:
             logging.error("HTTP error trying to open game: %s" % he.read())
             raise LeafsTVError("HTTP error trying to open game")
-
-        # try to pull the program id
-        match = re.search('<programId>(.*?)</programId>', resp.read())
-        if match == None:
-            logging.error("Unable to find programId")
-            raise LeafsTVError("Unable to find programId")
-
-        # ensure a valid program id exists
-        try:
-            program_id = match.group(1)
-        except IndexError:
-            logging.error("Invalid program ID")
-            raise LeafsTVError("Invalid program ID")
+        
+        xml = resp.read()
+        program_id = self.parseLiveGameXML(xml)
+        
+        if program_id == None:
+            logging.error("ERROR: program ID is none")
+            raise LeafsTVError("Program ID is none")
         
         # by default use the 1600 bitrate... poor, I know, but that is the best
         full_id = program_id + "_1600"
@@ -241,6 +235,35 @@ class LeafsTV:
         return live_game
 
 
+    def parseLiveGameXML(self, xml_string):
+        """
+        Parse the XML for a live game.
+        """
+        dom = xml.dom.minidom.parseString(xml_string.lstrip())
+        for game in dom.getElementsByTagName('game'):
+            
+            # skip nodes that do not have an isLive tag
+            is_live_node = game.getElementsByTagName('isLive')
+            if is_live_node.length == 0:
+                continue
+
+            # skip any non live nodes            
+            is_live = is_live_node[0].firstChild.nodeValue
+            if is_live.lower() != "true":
+                continue
+            
+            # get the program id node
+            program_id_node = game.getElementsByTagName('programId')
+            if program_id_node.length == 0:
+                logging.error("ERROR: no programId tag in live game.")
+                continue
+            
+            program_id = program_id_node[0].firstChild.nodeValue
+            return program_id
+             
+        return None
+    
+    
     def getEncryptedLiveGame(self, path):
         
         values = {'isFlex' : "true",

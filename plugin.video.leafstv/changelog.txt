@@ -1,3 +1,8 @@
+[B]Version 1.0.5[/B]
+
+- Parse response from the game request as XML (instead of a regular expession).
+  This fixes responses that contain non-live and live games.
+
 [B]Version 1.0.4[/B]
 
 - fix LA Kings team abbreviation

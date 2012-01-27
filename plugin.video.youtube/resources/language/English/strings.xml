@@ -59,6 +59,7 @@
     <string id="30056">My Liked Videos</string>
     <string id="30057">YouTube Education</string>
     <string id="30058">Season %s</string>
+    <string id="30059">My History</string>
 
     
     <!-- Plugin settings strings -->
@@ -213,5 +214,6 @@
     <string id="30626">RTMPe playback currently not supported</string> 
     <string id="30627">Please provide 2-factor authentication PIN</string> 
     <string id="30628">Please provide your password</string> 
+    <string id="30629">SSL protocol not supported.</string>
 
 </strings>

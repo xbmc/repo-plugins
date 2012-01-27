@@ -1,3 +1,10 @@
+[B]Version 1.0.1[/B]
+
+- List support
+- a new setting Lazy mode to allow lazy playback
+- Optional installation of other plugins
+- Settings to allow user to choose services from which video to be played
+
 [B]Version 0.1.0[/B]
 
 - Updated to support Eden

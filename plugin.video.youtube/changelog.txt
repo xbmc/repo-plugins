@@ -7,6 +7,9 @@
 - [YOUTUBE] Can't delete favorites (YouTube gives video id, not favorite id).
 - Download of rtmpe streams not supported.
 
+[B]Version 2.1.4[/B]
+- Fix for broken playback
+
 [B]Version 2.1.3[/B]
 - Fixed login.
 

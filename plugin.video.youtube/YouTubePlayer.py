@@ -290,17 +290,20 @@ class YouTubePlayer:
 		(result, status) = core._fetchPage(link = self.urls["video_stream"] % get("videoid"))
 
 		if status == 200:
-			data = result.find("PLAYER_CONFIG")
-			if data > -1:
-				data = result.rfind("yt.setConfig", 0, data)
-				data = re.compile('yt.setConfig\((.*?PLAYER_CONFIG.*?)\);').findall(result[data:].replace("\n", ""))
+			start = result.find("yt.playerConfig = ")
+
+			if start > -1:
+				start = start + len("yt.playerConfig = ")
+				end = result.find("};", start) + 1
+				data = result[start: end]
 				if len(data) > 0:
-					player_object = json.loads(data[0].replace('\'PLAYER_CONFIG\'', '"PLAYER_CONFIG"'))
+					data = data.replace("\\/", "/")
+					player_object = json.loads('{ "PLAYER_CONFIG" : ' + data + "}" )
 			else:
-				data = result
-				data = data[data.find('flashvars'):].replace("\n", "").replace("&amp;", "&")
-				data = re.findall('="(ttsurl=.*?)"', data)
+				data = result[result.find('flashvars'):].replace("\n", "").replace("\u0026","&").replace("&amp;", "&").replace('\\"','"')
+				data = re.findall('flashvars="(.*?)"', data)
 				if len(data) > 0:
+					print repr(data[0])
 					player_object = self._convertFlashVars(data[0])
 
 		else:
@@ -365,3 +368,7 @@ class YouTubePlayer:
 			self.showMessage(title, result)
 		else :
 			self.showMessage(title, self.__language__(30617))
+
+	def showMessage(self, heading, message):
+		duration = ([5, 10, 15, 20, 25, 30][int(self.__settings__.getSetting( 'notification_length' ))]) * 1000
+		xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % ( heading, message, duration) )

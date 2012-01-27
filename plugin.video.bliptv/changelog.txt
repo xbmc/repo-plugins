@@ -5,6 +5,10 @@
 
 [B]Errata[/B]
 
+[B]Version 0.3.0[/B]
+- Updated dependencies on common cache and simple downloader
+- Fixed scraper for searching episodes
+
 [B]Version 0.2.0[/B]
 - Added Searching for episodes
 - Added Locally Stored searches for episodes

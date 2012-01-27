@@ -1,7 +1,7 @@
 '''
     BlipTV plugin for XBMC
     Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
-    
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -11,18 +11,23 @@
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys, xbmcaddon, xbmc, xbmcplugin, xbmcgui
+import sys
+import xbmcaddon
+import xbmc
+import xbmcplugin
+import xbmcgui
+
 try: import xbmcvfs
 except: import xbmcvfsdummy as xbmcvfs
 
 # plugin constants
-version = "0.2.0"
-plugin= "BlipTV-" + version
+version = "0.3.0"
+plugin = "BlipTV-" + version
 author = "TheCollective"
 url = "www.xbmc.com"
 
@@ -42,43 +47,42 @@ common = ""
 utils = ""
 
 if (__name__ == "__main__" ):
-	if dbg:
-		print plugin+ " ARGV: " + repr(sys.argv)
-	else:
-		print plugin
+    if dbg:
+        print plugin + " ARGV: " + repr(sys.argv)
+    else:
+        print plugin
 
-        try:
-                import StorageServer
-        except:
-                import storageserverdummy as StorageServer
-        cache = StorageServer.StorageServer()
-        cache.table_name = "BlipTV"
-	
-	import CommonFunctions as common
-	common = common.CommonFunctions()
-	common.plugin = plugin
-	import BlipTVUtils as utils
-	utils = utils.BlipTVUtils()
-	import BlipTVStorage as storage
-	storage = storage.BlipTVStorage()
-	import BlipTVPlayer as player
-	player = player.BlipTVPlayer()
-	import SimpleDownloader as downloader
-	downloader = downloader.SimpleDownloader()
-	import BlipTVScraper as scraper
-	scraper = scraper.BlipTVScraper()
-	import BlipTVNavigation as navigation
-	navigation = navigation.BlipTVNavigation()
+    try:
+        import StorageServer
+        cache = StorageServer.StorageServer("BlipTV")
+    except:
+        import storageserverdummy as StorageServer
+        cache = StorageServer.StorageServer("BlipTV")
 
-	if ( not settings.getSetting( "firstrun" ) ):
-		settings.setSetting( "firstrun", '1' )
-	
-	if (not sys.argv[2]):
-		navigation.listMenu()
-	else:
-		params = common.getParameters(sys.argv[2])
-		get = params.get
-		if (get("action")):
-			navigation.executeAction(params)
-		elif (get("path")):
-			navigation.listMenu(params)
+    import CommonFunctions as common
+    common.plugin = plugin
+    import BlipTVUtils as utils
+    utils = utils.BlipTVUtils()
+    import BlipTVStorage as storage
+    storage = storage.BlipTVStorage()
+    import BlipTVPlayer as player
+    player = player.BlipTVPlayer()
+    import SimpleDownloader as downloader
+    downloader = downloader.SimpleDownloader()
+    import BlipTVScraper as scraper
+    scraper = scraper.BlipTVScraper()
+    import BlipTVNavigation as navigation
+    navigation = navigation.BlipTVNavigation()
+
+    if (not settings.getSetting("firstrun")):
+        settings.setSetting("firstrun", "1")
+
+    if (not sys.argv[2]):
+        navigation.listMenu()
+    else:
+        params = common.getParameters(sys.argv[2])
+        get = params.get
+        if (get("action")):
+            navigation.executeAction(params)
+        elif (get("path")):
+            navigation.listMenu(params)

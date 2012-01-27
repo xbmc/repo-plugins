@@ -1,3 +1,9 @@
+[B]Version 0.1.1[/B]
+
+- List support
+- a new setting Lazy mode to allow lazy playback
+- Settings to allow user to choose services from which video to be played
+
 [B]Version 0.0.3[/B]
 
 - Added support for CollgeHumor videos

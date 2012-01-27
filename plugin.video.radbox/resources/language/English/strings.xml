@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+    <!-- categories -->
+    <string id="32001">General</string>
+    <string id="32002">Plugins</string>
+    
     <!-- Plugin settings strings -->
     <string id="30001">Enter the last part of your Radbox Quick URL.</string>
     <string id="30002">You can find it in your Radbox account settings.</string>
     <string id="30003">Quick url: http://rdbx.me/</string>
+    <string id="30004">Lazy mode</string>
+    
+    <string id="31001">Select services to watch videos.</string>
+    <string id="31002">YouTube</string>
+    <string id="31003">Vimeo</string>
+    <string id="31004">CollegeHumor</string>
+
+    <!-- Error messages -->
+    <string id="33001">Invalid value for user id.</string>
+    <string id="33002">Unable to fetch feeds.</string>
+
 </strings>

@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 
-  <!-- General -->
-  <setting id="info" type="text" label="30001" default="" enable="false"/>
-  <setting id="info2" type="text" label="30002" default="" enable="false"/>
-  <setting id="uid" type="text" label="30003" default="" />
+    <!-- General -->
+    <category label="32001">
+        <setting id="info" type="text" label="30001" default="" enable="false"/>
+        <setting id="info2" type="text" label="30002" default="" enable="false"/>
+        <setting id="uid" type="text" label="30003" default="" />
+
+        <setting id="autoplay" type="bool" default="false" label="30004" /> 
+    </category>
+    <category label="32002">
+      <!-- Plugin settings -->
+        <setting id="pluginfo" type="text" label="31001" default="" enable="false"/>
+        <setting id="youtube" type="bool" default="true" label="31002"/>
+        <setting id="vimeo" type="bool" default="true" label="31003"/>
+        <setting id="collegehumor" type="bool" default="true" label="31004"/>
+    </category>
 
 </settings>

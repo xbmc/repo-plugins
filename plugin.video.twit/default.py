@@ -1,6 +1,6 @@
 import urllib,urllib2,re,os
 import xbmcplugin,xbmcgui,xbmcaddon
-from BeautifulSoup import BeautifulSoup
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.twit')
 __language__ = __settings__.getLocalizedString
@@ -10,6 +10,7 @@ fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 
 
 def categories():
+        addDir(__language__(30038),'none',7,xbmc.translatePath( os.path.join( home, 'icon.png' ) ))
         addDir(__language__(30000),'addLiveLinks',3,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
         addDir(__language__(30001),'http://twit.tv/show/this-week-in-tech',1,'http://static.mediafly.com/publisher/images/ba85558acd844c7384921f9f96989a37/icon-600x600.png')
         addDir(__language__(30002),'http://twit.tv/show/tech-news-today',1,'http://static.mediafly.com/publisher/images/c21d95482417436ead61b0890a8fc282/icon-600x600.png')
@@ -37,6 +38,8 @@ def categories():
         addDir(__language__(30024),'http://twit.tv/show/ham-nation',1,'http://static.mediafly.com/publisher/images/7a948708b1a3462bab8721556dd26704/icon-600x600.png')
         addDir(__language__(30025),'http://twit.tv/show/futures-in-biotech',1,'http://leoville.tv/podcasts/coverart/fib600audio.jpg')
         addDir(__language__(30026),'http://twit.tv/show/this-week-in-radio-tech',1,'http://static.mediafly.com/publisher/images/ab7b2412afa84674971e4c93665d0e06/icon-600x600.png')
+        addDir(__language__(30036),'http://twit.tv/show/before-you-buy',1,'http://static.mediafly.com/publisher/images/dee7de4f87034d4d917ed446df3616e4/icon-600x600.png')
+        addDir(__language__(30037),'http://twit.tv/show/game-on',1,'http://static.mediafly.com/publisher/images/3f551d9b6ef9476fb76f92ccd4b37826/icon-600x600.png')
 
 
 def index(url,iconimage):
@@ -47,19 +50,44 @@ def index(url,iconimage):
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         items = soup.findAll('div', attrs={'class' : 'view-content'})[3]('div', attrs={'class' : 'field-content'})
         for i in items:
-            name = i.a.string
             url = i.a['href']
+            name = i.a.string
             try:
                 description = i.p.string
             except:
                 description = ''
             date = i.findPrevious('span').string
-            addLink(name,url,description,date,2,iconimage)
+            if not url.endswith('.mp3'):
+                addLink(name,url,description,date,2,iconimage)
         try:
             page = 'http://twit.tv'+soup('li', attrs={'class' : "pager-next"})[0].a['href']
             addDir('Next Page',page,1,iconimage)
         except:
             pass
+
+
+def indexTwitFeed():
+        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'}
+        url ='http://twit.tv/node/feed'
+        req = urllib2.Request(url,None,headers)
+        response = urllib2.urlopen(req)
+        link=response.read()
+        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+        for i in soup('item'):
+            title = i.title.string
+            # url = i.link
+            date = i.pubdate.string.rsplit(' ', 1)[0]
+            html = i.description.contents[0]
+            episode_name = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)('div', attrs={'class' : "field-item odd"})[0].string.replace('  ','').replace('\n','')
+            try:
+                thumb = re.compile('<img src="(.+?)"').findall(html)[0]
+            except:
+                thumb = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
+            try:
+                vid_url = re.compile('Video URL:&nbsp;</div>\n                    (.+?)        </div>').findall(html)[0]
+                addLink(title+' - '+episode_name, vid_url, '', date, 8, thumb)
+            except:
+                print '--- There was a problem adding episode %s ---' % title
 
 
 def getVideo(url):
@@ -69,6 +97,10 @@ def getVideo(url):
         link=response.read()
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         link = soup('span', attrs={'class' : "download"})[0]('a')[0]['href']
+        setUrl(link)
+
+
+def setUrl(link):
         if videoq == __language__(30027):
             link = link.replace('_h264b_864x480_500','_h264b_864x480_2000')
         elif videoq == __language__(30028):
@@ -86,15 +118,14 @@ def addLiveLinks():
         addLink(__language__(30035),'URL','','',6,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
 
 
-def getSwf():
-        url = 'http://www.ustream.tv/flash/viewer.swf'
-        req = urllib2.Request(url)
-        response = urllib2.urlopen(req)
-        swfUrl = response.geturl()
-        return swfUrl
-
-
 def getUstream(url):
+        def getSwf():
+                url = 'http://www.ustream.tv/flash/viewer.swf'
+                req = urllib2.Request(url)
+                response = urllib2.urlopen(req)
+                swfUrl = response.geturl()
+                return swfUrl
+
         headers = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'}
         data = None
         req = urllib2.Request(url,data,headers)
@@ -230,5 +261,13 @@ elif mode==5:
 elif mode==6:
     print ""
     getJtv()
+
+elif mode==7:
+    print ""
+    indexTwitFeed()
+
+elif mode==8:
+    print ""
+    setUrl(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

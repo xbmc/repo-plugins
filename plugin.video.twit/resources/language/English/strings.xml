@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id='30000'>Twit Live</string>
+  <string id='30000'>TWiT Live</string>
   <string id="30001">This WEEK in TECH</string>
   <string id="30002">Tech News Today</string>
   <string id="30003">FourCast</string>
@@ -36,4 +36,7 @@
   <string id='30033'>Bitgravity 400 kbps</string>
   <string id='30034'>Ustream 1.5 Mbps</string>
   <string id='30035'>Justin.TV 1 Mbps</string>
+  <string id='30036'>Before You Buy</string>
+  <string id='30037'>Game On</string>
+  <string id='30038'>Latest Episodes</string>
 </strings>

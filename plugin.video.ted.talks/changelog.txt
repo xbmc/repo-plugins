@@ -1,3 +1,6 @@
+[B]Version 2.2.5[/B]
+Fixed playback of certain videos would fail (thanks to moreginger)
+
 [B]Version 2.2.4[/B]
 Fixed newest talks - handle unicode characters (thanks to moreginger)
 Fixed newest talks - prev/next buttons not showing (thanks to helmut mikulcik)

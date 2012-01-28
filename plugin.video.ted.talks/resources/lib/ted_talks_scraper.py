@@ -50,9 +50,18 @@ class TedTalks:
         #get description:
         plot = soup.find('p', attrs={'id':'tagline'}).string
         #get url
+        #detectors for link to video in order of preference
+        linkDetectors = [
+            lambda l: re.compile('High-res video \(MP4\)').match(str(l.string)),
+            lambda l: re.compile('http://download.ted.com/talks/.+.mp4').match(str(l['href'])),
+        ]
         for link in soup.findAll('a'):
-            if re.match('High-res video \(MP4\)' , str(link.string)):
-                url = link['href']
+            for detector in linkDetectors:
+                if detector(link):
+                    url = link['href']
+                    linkDetectors = linkDetectors[:linkDetectors.index(detector)] # Only look for better matches than what we have
+                    break
+
         if url == "":
           # look for utub link
           utublinks = re.compile('http://(?:www.)?youtube.com/v/([^\&]*)\&').findall(html)

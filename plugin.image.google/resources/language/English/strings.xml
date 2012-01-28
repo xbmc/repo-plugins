@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Settings</string>
+    <string id="30001">Advanced Search</string>
+    <string id="30002">Safe</string>
+    <string id="30003">Size</string>
+    <string id="30004">Grayscale</string>
+    <string id="30005">Color</string>
+    <string id="30006">Type</string>
+    <string id="30007">File Type</string>
+    <string id="30008">Rights</string>
+    
+    <string id="30009">Save Path</string>
+    <string id="30010">Save Image</string>
+    <string id="30011">Max History</string>
+    
+    <string id="30012">Saved</string>
+    <string id="30013">Saved as: @REPLACE@</string>
+    <string id="30014">In: @REPLACE@</string>
+    
+    <string id="30015">Saving</string>
+    <string id="30016">Saving...</string>
+    
+    <string id="30017">Invalid Path</string>
+    <string id="30018">Please set save path in settings</string>
+    
+    <string id="30019">Fail</string>
+    <string id="30020">Failed to save image.</string>
+    
+    <string id="30101">Off</string>
+    <string id="30102">Moderate</string>
+    <string id="30103">Active</string>
+    
+    <string id="30111">Any</string>
+    <string id="30112">Icon</string>
+    <string id="30113">Small</string>
+    <string id="30114">Medium</string>
+    <string id="30115">Large</string>
+    <string id="30116">XLarge</string>
+    <string id="30117">XXLarge</string>
+    <string id="30118">Huge</string>
+    
+    <string id="30121">Any</string>
+    <string id="30122">Grayscale</string>
+    <string id="30123">Color</string>
+    
+    <string id="30130">Any</string>
+    <string id="30131">Black</string>
+    <string id="30132">Blue</string>
+    <string id="30133">Brown</string>
+    <string id="30134">Gray</string>
+    <string id="30135">Green</string>
+    <string id="30136">Orange</string>
+    <string id="30137">Pink</string>
+    <string id="30138">Purple</string>
+    <string id="30139">Red</string>
+    <string id="30140">Teal</string>
+    <string id="30141">White</string>
+    <string id="30142">Yellow</string>
+    
+    <string id="30151">Any</string>
+    <string id="30152">Face</string>
+    <string id="30153">Photo</string>
+    <string id="30154">Clip Art</string>
+    <string id="30155">Line Art</string>
+    
+    <string id="30161">Any</string>
+    <string id="30162">.jpg</string>
+    <string id="30163">.png</string>
+    <string id="30164">.gif</string>
+    <string id="30165">.bmp</string>
+    
+    <string id="30171">Any</string>
+    <string id="30172">Public Domain</string>
+    <string id="30173">Attribute</string>
+    <string id="30174">Sharealike</string>
+    <string id="30175">Non-Commercial</string>
+    <string id="30176">Non-Derived</string>
+    
+    <string id="30200">Search</string>
+    <string id="30201">Advanced Search</string>
+    <string id="30202">History</string>
+    <string id="30203">Saves</string>
+    
+    <string id="30300">Enter search terms:</string>
+</strings>

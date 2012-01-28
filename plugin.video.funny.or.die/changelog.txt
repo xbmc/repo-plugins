@@ -1,3 +1,9 @@
+Version 1.0.1
+fix pagenation
+added new categories
+added add-on setting video quality 
+added add-on setting sort time
+
 Version 1.0.0
 added to eden-pre
 

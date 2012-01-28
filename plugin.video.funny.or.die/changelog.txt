@@ -1,3 +1,9 @@
+Version 0.0.6
+fix pagenation
+added new categories
+added add-on setting video quality 
+added add-on setting sort time
+
 Version 0.0.5
 added the ability to queue videos
 added "Play All" to the context menu for directories

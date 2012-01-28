@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.sarpur"
+       name="Sarpur"
+       version="1.0"
+       provider-name="dagur">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>audio video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Play videos and radio recordings from the Icelandic National Radio's website</summary>
+    <description lang="en">An Iceland IP-Address is required to use this because ruv.is locks all other out</description>
+    <platform>all</platform>
+  </extension>
+</addon>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id='30000'>Twit Live</string>
+  <string id='30000'>TWiT Live</string>
   <string id="30001">This WEEK in TECH</string>
   <string id="30002">Tech News Today</string>
   <string id="30003">FourCast</string>
@@ -27,4 +27,16 @@
   <string id='30024'>Ham Nation</string>
   <string id='30025'>Futures in Biotech</string>
   <string id='30026'>This Week in Radio Tech</string>
+  <string id='30027'>864x480 Bitrate 2000</string>
+  <string id='30028'>864x480 Bitrate 1000</string>
+  <string id='30029'>864x480 Bitrate 500</string>
+  <string id='30030'>640x368 Bitrate 256</string>
+  <string id='30031'>Video Quality</string>
+  <string id='30032'>Bitgravity 1 Mbps</string>
+  <string id='30033'>Bitgravity 400 kbps</string>
+  <string id='30034'>Ustream 1.5 Mbps</string>
+  <string id='30035'>Justin.TV 1 Mbps</string>
+  <string id='30036'>Before You Buy</string>
+  <string id='30037'>Game On</string>
+  <string id='30038'>Latest Episodes</string>
 </strings>

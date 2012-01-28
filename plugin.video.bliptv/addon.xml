@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.bliptv' version='0.3.0' name='BlipTV' provider-name='TheCollective'>
+<addon id="plugin.video.bliptv" version="0.3.0" name="BlipTV" provider-name="TheCollective">
   <requires>
     <import addon='xbmc.python' version='2.0'/>
     <import addon='script.common.plugin.cache' version='0.9.1'/>

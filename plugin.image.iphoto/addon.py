@@ -41,7 +41,7 @@ sys.path.append(LIB_PATH)
 
 from resources.lib.iphoto_parser import *
 db_file = xbmc.translatePath(os.path.join(addon.getAddonInfo("Profile"), "iphoto.db"))
-db = IPhotoDB(db_file)
+db = None
 
 apple_epoch = 978307200
 
@@ -116,7 +116,7 @@ def render_media(media):
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
-    if sort_date == True:
+    if (sort_date == True):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
 
     return n
@@ -141,6 +141,8 @@ def list_albums(params):
 
     albums = db.GetAlbums()
     if (not albums):
+	dialog = gui.Dialog()
+	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     n = 0
@@ -179,6 +181,8 @@ def list_events(params):
 
     rolls = db.GetRolls()
     if (not rolls):
+	dialog = gui.Dialog()
+	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     sort_date = False
@@ -225,6 +229,8 @@ def list_faces(params):
 
     faces = db.GetFaces()
     if (not faces):
+	dialog = gui.Dialog()
+	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     n = 0
@@ -278,6 +284,8 @@ def list_places(params):
 
     places = db.GetPlaces()
     if (not places):
+	dialog = gui.Dialog()
+	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     n = 0
@@ -327,6 +335,8 @@ def list_keywords(params):
 
     keywords = db.GetKeywords()
     if (not keywords):
+	dialog = gui.Dialog()
+	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     hidden_keywords = addon.getSetting('hidden_keywords')
@@ -378,7 +388,7 @@ def list_ratings(params):
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
     return n
 
-def progress_callback(progress_dialog, altinfo, nphotos, ntotal):
+def import_progress_callback(progress_dialog, altinfo, nphotos, ntotal):
     if (not progress_dialog):
 	return 0
     if (progress_dialog.iscanceled()):
@@ -388,10 +398,8 @@ def progress_callback(progress_dialog, altinfo, nphotos, ntotal):
     progress_dialog.update(percent, addon.getLocalizedString(30211) % (nphotos), altinfo)
     return nphotos
 
-def import_library(xmlpath, xmlfile, enable_places):
+def import_library(xmlpath, xmlfile, masterspath, masters_realpath, enable_places):
     global db
-
-    db.ResetDB()
 
     # always ignore Books and currently selected album
     album_ign = []
@@ -422,27 +430,72 @@ def import_library(xmlpath, xmlfile, enable_places):
     elif (e == "false"):
 	enable_maps = False
 
+    db.ResetDB()
+
     progress_dialog = gui.DialogProgress()
     try:
 	progress_dialog.create(addon.getLocalizedString(30210))
+	progress_dialog.update(0, addon.getLocalizedString(30212))
+    except:
+	print traceback.print_exc()
+    else:
 	map_aspect = 0.0
 	if (enable_maps == True):
 	    res_x = float(xbmc.getInfoLabel("System.ScreenWidth"))
 	    res_y = float(xbmc.getInfoLabel("System.ScreenHeight"))
 	    map_aspect = res_x / res_y
-    except:
-	print traceback.print_exc()
-    else:
-	iparser = IPhotoParser(xmlpath, xmlfile, album_ign, enable_places, map_aspect, db.AddAlbumNew, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, progress_callback, progress_dialog)
 
-	progress_dialog.update(0, addon.getLocalizedString(30212))
+	iparser = IPhotoParser(xmlpath, xmlfile, masterspath, masters_realpath, album_ign, enable_places, map_aspect, db.AddAlbumNew, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, import_progress_callback, progress_dialog)
+
 	try:
 	    iparser.Parse()
-	    db.UpdateLastImport()
 	except:
 	    print traceback.print_exc()
+	    progress_dialog.close()
+	    xbmc.executebuiltin("XBMC.RunPlugin(%s?action=resetdb&corrupted=1)" % (BASE_URL))
+	else:
+	    print "iPhoto Library imported successfully."
 
-    progress_dialog.close()
+	    progress_dialog.close()
+
+	    xbmc.sleep(1000)
+	    try:
+		# this is non-critical
+		db.UpdateLastImport()
+	    except:
+		pass
+
+def reset_db(params):
+    try:
+	if (params['noconfirm']):
+	    confirm = False
+    except:
+	confirm = True
+
+    try:
+	if (params['corrupted']):
+	    corrupted = True
+    except:
+	corrupted = False
+
+    confirmed = True
+    if (confirm):
+	dialog = gui.Dialog()
+	if (corrupted):
+	    confirmed = dialog.yesno(addon.getLocalizedString(30230), addon.getLocalizedString(30231), addon.getLocalizedString(30232), addon.getLocalizedString(30233))
+	else:
+	    confirmed = dialog.yesno(addon.getLocalizedString(30230), addon.getLocalizedString(30232), addon.getLocalizedString(30233))
+
+    if (confirmed):
+	remove_tries = 3
+	while (remove_tries and os.path.isfile(db_file)):
+	    try:
+		os.remove(db_file)
+	    except:
+		remove_tries -= 1
+		xbmc.sleep(1000)
+	    else:
+		print "iPhoto addon database deleted."
 
 def hide_keyword(params):
     try:
@@ -471,8 +524,9 @@ def get_params(paramstring):
     print params
     return params
 
-def add_import_lib_context_item(item):
+def add_generic_context_menu_items(item):
     item.addContextMenuItems([(addon.getLocalizedString(30213), "XBMC.RunPlugin(\""+BASE_URL+"?action=rescan\")",)])
+    item.addContextMenuItems([(addon.getLocalizedString(30216), "XBMC.RunPlugin(\""+BASE_URL+"?action=resetdb\")",)])
 
 if (__name__ == "__main__"):
     xmlpath = addon.getSetting('albumdata_xml_path')
@@ -491,10 +545,28 @@ if (__name__ == "__main__"):
     origxml = os.path.join(xmlpath, ALBUM_DATA_XML)
     xmlfile = xbmc.translatePath(os.path.join(addon.getAddonInfo("Profile"), "iphoto.xml"))
 
+    enable_managed_lib = True
+    e = addon.getSetting('managed_lib_enable')
+    if (e == ""):
+	addon.setSetting('managed_lib_enable', "true")
+    elif (e == "false"):
+	enable_managed_lib = False
+
+    masterspath = ""
+    masters_realpath = ""
+    if (enable_managed_lib == False):
+	masterspath = addon.getSetting('masters_path')
+	masters_realpath = addon.getSetting('masters_real_path')
+	if (masterspath == "" or masters_realpath == ""):
+	    addon.setSetting('managed_lib_enable', "true")
+	    enable_managed_lib = True
+	    masterspath = ""
+	    masters_realpath = ""
+
     enable_places = True
     e = addon.getSetting('places_enable')
     if (e == ""):
-	addon.setSetting('places_enable', "True")
+	addon.setSetting('places_enable', "true")
     elif (e == "false"):
 	enable_places = False
 
@@ -505,28 +577,28 @@ if (__name__ == "__main__"):
 	# main menu
 	try:
 	    item = gui.ListItem(addon.getLocalizedString(30100), thumbnailImage=ICONS_PATH+"/events.png")
-	    add_import_lib_context_item(item)
+	    add_generic_context_menu_items(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=events", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30101), thumbnailImage=ICONS_PATH+"/albums.png")
-	    add_import_lib_context_item(item)
+	    add_generic_context_menu_items(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=albums", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30105), thumbnailImage=ICONS_PATH+"/faces.png")
-	    add_import_lib_context_item(item)
+	    add_generic_context_menu_items(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=faces", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30106), thumbnailImage=ICONS_PATH+"/places.png")
-	    add_import_lib_context_item(item)
+	    add_generic_context_menu_items(item)
 	    item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.RunPlugin(\""+BASE_URL+"?action=rm_caches\")",)])
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=places", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30104), thumbnailImage=ICONS_PATH+"/keywords.png")
-	    add_import_lib_context_item(item)
+	    add_generic_context_menu_items(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=keywords", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30102), thumbnailImage=ICONS_PATH+"/star.png")
-	    add_import_lib_context_item(item)
+	    add_generic_context_menu_items(item)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=ratings", item, True)
 
 	    hide_import_lib = addon.getSetting('hide_import_lib')
@@ -554,37 +626,75 @@ if (__name__ == "__main__"):
 		os.remove(tmpfile)
 	    else:
 		os.rename(tmpfile, xmlfile)
-		import_library(xmlpath, xmlfile, enable_places)
+		try:
+		    db = IPhotoDB(db_file)
+		except:
+		    dialog = gui.Dialog()
+		    dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
+		    xbmc.executebuiltin('XBMC.RunPlugin(%s?action=resetdb&noconfirm=1)' % BASE_URL)
+		else:
+		    import_library(xmlpath, xmlfile, masterspath, masters_realpath, enable_places)
     else:
 	items = None
-	if (action == "events"):
-	    items = list_events(params)
-	elif (action == "albums"):
-	    items = list_albums(params)
-	elif (action == "faces"):
-	    items = list_faces(params)
-	elif (action == "places"):
-	    if (enable_places == True):
-		items = list_places(params)
-	    else:
-		dialog = gui.Dialog()
-		ret = dialog.yesno(addon.getLocalizedString(30220), addon.getLocalizedString(30221), addon.getLocalizedString(30222), addon.getLocalizedString(30223))
-		if (ret == True):
-		    enable_places = True
-		    addon.setSetting('places_enable', "true")
-	elif (action == "keywords"):
-	    items = list_keywords(params)
-	elif (action == "ratings"):
-	    items = list_ratings(params)
-	elif (action == "rescan"):
-	    copyfile(origxml, xmlfile)
-	    import_library(xmlpath, xmlfile, enable_places)
+
+	# actions that don't require a database connection
+	if (action == "resetdb"):
+	    reset_db(params)
 	elif (action == "hidekeyword"):
 	    items = hide_keyword(params)
 	elif (action == "rm_caches"):
-	    r = glob.glob(os.path.join(os.path.dirname(db_file), "map_*"))
-	    for f in r:
-		os.remove(f)
+	    progress_dialog = gui.DialogProgress()
+	    try:
+		progress_dialog.create(addon.getLocalizedString(30250))
+		progress_dialog.update(0, addon.getLocalizedString(30252))
+	    except:
+		print traceback.print_exc()
+	    else:
+		r = glob.glob(os.path.join(os.path.dirname(db_file), "map_*"))
+		ntotal = len(r)
+		nfiles = 0
+		for f in r:
+		    if (progress_dialog.iscanceled()):
+			break
+		    nfiles += 1
+		    percent = int(float(nfiles * 100) / ntotal)
+		    progress_dialog.update(percent, addon.getLocalizedString(30251) % (nfiles), os.path.basename(f))
+		    os.remove(f)
+		progress_dialog.close()
+		dialog = gui.Dialog()
+		dialog.ok(addon.getLocalizedString(30250), addon.getLocalizedString(30251) % (nfiles))
+		print "iPhoto: deleted %d cached map image files." % (nfiles)
+	else:
+	    # actions that do require a database connection
+	    try:
+		db = IPhotoDB(db_file)
+	    except:
+		dialog = gui.Dialog()
+		dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
+		xbmc.executebuiltin('XBMC.RunPlugin(%s?action=resetdb&noconfirm=1)' % BASE_URL)
+	    else:
+		if (action == "rescan"):
+		    copyfile(origxml, xmlfile)
+		    import_library(xmlpath, xmlfile, masterspath, masters_realpath, enable_places)
+		elif (action == "events"):
+		    items = list_events(params)
+		elif (action == "albums"):
+		    items = list_albums(params)
+		elif (action == "faces"):
+		    items = list_faces(params)
+		elif (action == "places"):
+		    if (enable_places == True):
+			items = list_places(params)
+		    else:
+			dialog = gui.Dialog()
+			ret = dialog.yesno(addon.getLocalizedString(30220), addon.getLocalizedString(30221), addon.getLocalizedString(30222), addon.getLocalizedString(30223))
+			if (ret == True):
+			    enable_places = True
+			    addon.setSetting('places_enable', "true")
+		elif (action == "keywords"):
+		    items = list_keywords(params)
+		elif (action == "ratings"):
+		    items = list_ratings(params)
 
 	if (items):
 	    plugin.endOfDirectory(int(sys.argv[1]), True)

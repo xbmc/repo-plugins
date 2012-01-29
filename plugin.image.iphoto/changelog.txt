@@ -1,3 +1,9 @@
+1.7.0 - 20120128
+- Support for referenced masters.
+- Add context menu item to reset addon database.
+- Better database error handling and reporting.
+- Show progress dialog when removing cached maps.
+
 1.5.2 - 20110705
 - Don't show empty events.
 

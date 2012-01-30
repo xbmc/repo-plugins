@@ -34,10 +34,6 @@ import shutil
 from file_item import Thumbnails
 thumbnails = Thumbnails()
 
-# Code for XBMC Eden & Dharma
-#try: import hashlib
-#except: import md5
-# Code for XBMC Eden only
 import md5
 
 from xbmcaddon import Addon
@@ -53,6 +49,13 @@ BASE_PATH = xbmc.translatePath( os.path.join( "special://" , "profile" ) )
 BASE_CURRENT_SOURCE_PATH = os.path.join( PLUGIN_DATA_PATH , "launchers.xml" )
 TEMP_CURRENT_SOURCE_PATH = os.path.join( PLUGIN_DATA_PATH , "launchers.tmp" )
 SHORTCUT_FILE = os.path.join( PLUGIN_DATA_PATH , "shortcut.cut" )
+
+DEFAULT_THUMB_PATH = os.path.join( PLUGIN_DATA_PATH , "thumbs" )
+if not os.path.exists(DEFAULT_THUMB_PATH): os.makedirs(DEFAULT_THUMB_PATH)
+DEFAULT_FANART_PATH = os.path.join( PLUGIN_DATA_PATH , "fanarts" )
+if not os.path.exists(DEFAULT_FANART_PATH): os.makedirs(DEFAULT_FANART_PATH)
+DEFAULT_NFO_PATH = os.path.join( PLUGIN_DATA_PATH , "nfos" )
+if not os.path.exists(DEFAULT_NFO_PATH): os.makedirs(DEFAULT_NFO_PATH)
 
 REMOVE_COMMAND = "%%REMOVE%%"
 ADD_COMMAND = "%%ADD%%"
@@ -309,9 +312,9 @@ class Main:
                     if (os.path.isfile(image)):
                         filename = self.launchers[launcher]["roms"][rom]["filename"]
                         if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["fanartpath"] ):
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_thumb.jpg')))
+                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_thumb'+os.path.splitext(image)[-1])))
                         else:
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '.jpg')))
+                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], os.path.splitext(image)[-1])))
                         if ( image != file_path ):
                             shutil.copy2( image.decode(sys.getfilesystemencoding(),'ignore') , file_path.decode(sys.getfilesystemencoding(),'ignore') )
                             self.launchers[launcher]["roms"][rom]["thumb"] = file_path
@@ -348,9 +351,9 @@ class Main:
                     if (os.path.isfile(image)):
                         filename = self.launchers[launcher]["roms"][rom]["filename"]
                         if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["fanartpath"] ):
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_fanart.jpg')))
+                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_fanart'+os.path.splitext(image)[-1])))
                         else:
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '.jpg')))
+                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], os.path.splitext(image)[-1])))
                         if ( image != file_path ):
                             shutil.copy2( image.decode(sys.getfilesystemencoding(),'ignore') , file_path.decode(sys.getfilesystemencoding(),'ignore') )
                             self.launchers[launcher]["roms"][rom]["fanart"] = file_path
@@ -448,7 +451,13 @@ class Main:
                 if (not self.image_url == self.launchers[launcherID]["thumb"]):
                     img_url = self._get_thumbnail(self.image_url)
                     if ( img_url != '' ):
-                        file_path = os.path.join(self.launchers[launcherID]["thumbpath"],os.path.basename(self.launchers[launcherID]["application"])+'_thumb.jpg')
+                        filename = self.launchers[launcherID]["application"]
+                        if ( os.path.join(self.launchers[launcherID]["thumbpath"]) != "" ):
+                            file_path = os.path.join(self.launchers[launcherID]["thumbpath"],os.path.basename(self.launchers[launcherID]["application"])+'_thumb'+os.path.splitext(img_url)[-1])
+                        else:
+                            if (self.settings[ "launcher_thumb_path" ] == "" ):
+                                self.settings[ "launcher_thumb_path" ] = DEFAULT_THUMB_PATH;
+                            file_path = os.path.join(self.settings[ "launcher_thumb_path" ],os.path.basename(self.launchers[launcherID]["application"])+'_thumb'+os.path.splitext(img_url)[-1])
                         xbmc.executebuiltin("XBMC.Notification(%s,%s, 3000)" % (__language__( 30000 ), __language__( 30069 )))
                         h = urllib.urlretrieve(img_url,file_path)
                         self.launchers[launcherID]["thumb"] = file_path
@@ -525,7 +534,12 @@ class Main:
                     img_url = self._get_fanart(self.image_url)
                     if ( img_url != '' ):
                         filename = self.launchers[launcherID]["application"]
-                        file_path = os.path.join(self.launchers[launcherID]["fanartpath"],os.path.basename(self.launchers[launcherID]["application"])+'_fanart.jpg')
+                        if ( os.path.join(self.launchers[launcherID]["fanartpath"]) != "" ):
+                            file_path = os.path.join(self.launchers[launcherID]["fanartpath"],os.path.basename(self.launchers[launcherID]["application"])+'_fanart'+os.path.splitext(img_url)[-1])
+                        else:
+                            if (self.settings[ "launcher_fanart_path" ] == "" ):
+                                self.settings[ "launcher_fanart_path" ] = DEFAULT_FANART_PATH;
+                            file_path = os.path.join(self.settings[ "launcher_fanart_path" ],os.path.basename(self.launchers[launcherID]["application"])+'_fanart'+os.path.splitext(img_url)[-1])
                         xbmc.executebuiltin("XBMC.Notification(%s,%s, 3000)" % (__language__( 30000 ), __language__( 30074 )))
                         h = urllib.urlretrieve(img_url,file_path)
                         self.launchers[launcherID]["fanart"] = file_path
@@ -688,14 +702,11 @@ class Main:
         type_nb = type_nb+1
         if (type == type_nb ):
             dialog = xbmcgui.Dialog()
-            type2 = dialog.select(__language__( 30319 ), [__language__( 30311 ) % self.settings[ "datas_scraper" ],__language__( 30333 ),__language__( 30306 ) % self.launchers[launcherID]["name"],__language__( 30307 ) % self.launchers[launcherID]["gamesys"],__language__( 30308 ) % self.launchers[launcherID]["release"],__language__( 30309 ) % self.launchers[launcherID]["studio"],__language__( 30310 ) % self.launchers[launcherID]["genre"],__language__( 30328 ) % self.launchers[launcherID]["plot"][0:20],__language__( 30316 )])
+            type2 = dialog.select(__language__( 30319 ), [__language__( 30311 ) % self.settings[ "datas_scraper" ],__language__( 30306 ) % self.launchers[launcherID]["name"],__language__( 30307 ) % self.launchers[launcherID]["gamesys"],__language__( 30308 ) % self.launchers[launcherID]["release"],__language__( 30309 ) % self.launchers[launcherID]["studio"],__language__( 30310 ) % self.launchers[launcherID]["genre"],__language__( 30328 ) % self.launchers[launcherID]["plot"][0:20],__language__( 30333 ),__language__( 30316 )])
             if (type2 == 0 ):
                 # Edition of the launcher name
                 self._scrap_launcher(launcherID)
             if (type2 == 1 ):
-                # Edition of the launcher name
-                self._import_launcher_nfo(launcherID)
-            if (type2 == 2 ):
                 # Edition of the launcher name
                 keyboard = xbmc.Keyboard(self.launchers[launcherID]["name"], __language__( 30037 ))
                 keyboard.doModal()
@@ -705,7 +716,7 @@ class Main:
                         title = self.launchers[launcherID]["name"]
                     self.launchers[launcherID]["name"] = title.replace(",","‚").replace('"',"''").replace("/"," ⁄ ").rstrip()
                     self._save_launchers()
-            if (type2 == 3 ):
+            if (type2 == 2 ):
                 # Selection of the launcher game system
                 dialog = xbmcgui.Dialog()
                 platforms = _get_game_system_list()
@@ -713,28 +724,28 @@ class Main:
                 if (not gamesystem == -1 ):
                     self.launchers[launcherID]["gamesys"] = platforms[gamesystem]
                     self._save_launchers()
-            if (type2 == 4 ):
+            if (type2 == 3 ):
                 # Edition of the launcher release date
                 keyboard = xbmc.Keyboard(self.launchers[launcherID]["release"], __language__( 30038 ))
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.launchers[launcherID]["release"] = keyboard.getText()
                     self._save_launchers()
-            if (type2 == 5 ):
+            if (type2 == 4 ):
                 # Edition of the launcher studio name
                 keyboard = xbmc.Keyboard(self.launchers[launcherID]["studio"], __language__( 30039 ))
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.launchers[launcherID]["studio"] = keyboard.getText()
                     self._save_launchers()
-            if (type2 == 6 ):
+            if (type2 == 5 ):
                 # Edition of the launcher genre
                 keyboard = xbmc.Keyboard(self.launchers[launcherID]["genre"], __language__( 30040 ))
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.launchers[launcherID]["genre"] = keyboard.getText()
                     self._save_launchers()
-            if (type2 == 7 ):
+            if (type2 == 6 ):
                 # Import of the launcher plot
                 text_file = xbmcgui.Dialog().browse(1,__language__( 30080 ),"files",".txt|.dat", False, False, self.launchers[launcherID]["application"])
                 if ( os.path.isfile(text_file) == True ):
@@ -742,6 +753,9 @@ class Main:
                     self.launchers[launcherID]["plot"] = text_plot.read()
                     text_plot.close()
                     self._save_launchers()
+            if (type2 == 7 ):
+                # Edition of the launcher name
+                self._import_launcher_nfo(launcherID)
             if (type2 == 8 ):
                 # Edition of the launcher name
                 self._export_launcher_nfo(launcherID)
@@ -764,7 +778,12 @@ class Main:
                 if (image):
                     if (os.path.isfile(image)):
                         filename = self.launchers[launcherID]["application"]
-                        file_path = os.path.join(self.launchers[launcherID]["thumbpath"],os.path.basename(self.launchers[launcherID]["application"])+'_thumb.jpg')
+                        if ( os.path.join(self.launchers[launcherID]["thumbpath"]) != "" ):
+                            file_path = os.path.join(self.launchers[launcherID]["thumbpath"],os.path.basename(self.launchers[launcherID]["application"])+'_thumb'+os.path.splitext(image)[-1])
+                        else:
+                            if (self.settings[ "launcher_thumb_path" ] == "" ):
+                                self.settings[ "launcher_thumb_path" ] = DEFAULT_THUMB_PATH;
+                            file_path = os.path.join(self.settings[ "launcher_thumb_path" ],os.path.basename(self.launchers[launcherID]["application"])+'_thumb'+os.path.splitext(image)[-1])
                         if ( image != file_path ):
                             shutil.copy2( image.decode(sys.getfilesystemencoding(),'ignore') , file_path.decode(sys.getfilesystemencoding(),'ignore') )
                             self.launchers[launcherID]["thumb"] = file_path
@@ -802,7 +821,12 @@ class Main:
                 if (image):
                     if (os.path.isfile(image)):
                         filename = self.launchers[launcherID]["application"]
-                        file_path = os.path.join(self.launchers[launcherID]["fanartpath"],os.path.basename(self.launchers[launcherID]["application"])+'_fanart.jpg')
+                        if ( os.path.join(self.launchers[launcherID]["fanartpath"]) != "" ):
+                            file_path = os.path.join(self.launchers[launcherID]["fanartpath"],os.path.basename(self.launchers[launcherID]["application"])+'_fanart'+os.path.splitext(image)[-1])
+                        else:
+                            if (self.settings[ "launcher_fanart_path" ] == "" ):
+                                self.settings[ "launcher_fanart_path" ] = DEFAULT_FANART_PATH;
+                            file_path = os.path.join(self.settings[ "launcher_fanart_path" ],os.path.basename(self.launchers[launcherID]["application"])+'_fanart'+os.path.splitext(image)[-1])
                         if ( image != file_path ):
                             shutil.copy2( image.decode(sys.getfilesystemencoding(),'ignore') , file_path.decode(sys.getfilesystemencoding(),'ignore') )
                             self.launchers[launcherID]["fanart"] = file_path
@@ -1107,7 +1131,9 @@ class Main:
                                 info = 'None'
                             subprocess_hack.Popen(r'%s %s' % (launcher["application"], arguments), cwd=apppath, startupinfo=info)
                     elif (sys.platform.startswith('linux')):
+                        xbmc.executebuiltin('LIRC.stop')
                         os.system("\"%s\" %s " % (launcher["application"], arguments))
+                        xbmc.executebuiltin('LIRC.start')
                     elif (sys.platform.startswith('darwin')):
                         os.system("\"%s\" %s " % (launcher["application"], arguments))
                     else:
@@ -1265,7 +1291,9 @@ class Main:
                                     info = 'None'
                                 subprocess_hack.Popen(r'%s %s' % (launcher["application"], arguments), cwd=apppath, startupinfo=info)
                         elif (sys.platform.startswith('linux')):
+                            xbmc.executebuiltin('LIRC.stop')
                             os.system("\"%s\" %s " % (launcher["application"], arguments))
+                            xbmc.executebuiltin('LIRC.start')
                         elif (sys.platform.startswith('darwin')):
                             os.system("\"%s\" %s " % (launcher["application"], arguments))
                         else:
@@ -2238,10 +2266,6 @@ def clean_filename(title):
 def _get_SID():
     t1 = time.time()
     t2 = t1 + random.getrandbits(32)
-    # Code for XBMC Eden & Dharma
-    #try: base = hashlib.md5( str(t1 +t2) )
-    #except: base = md5.new( str(t1 +t2) )
-    # Code for XBMC Eden only
     base = md5.new( str(t1 +t2) )
     sid = base.hexdigest()
     return sid

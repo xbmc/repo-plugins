@@ -154,7 +154,7 @@ def search():
     keyboard = xbmc.Keyboard('', plugin.get_string(30201))
     keyboard.doModal()
     if keyboard.isConfirmed() and keyboard.getText():
-        search_string = keyboard.getText().decode('utf8')
+        search_string = keyboard.getText()
         __log('search gots a string: "%s"' % search_string)
         language = __get_language()
         stations = scraper.search_stations_by_string(language, search_string)

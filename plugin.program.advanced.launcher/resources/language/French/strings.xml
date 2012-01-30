@@ -137,12 +137,12 @@
     <string id="30309">Modifier le studio : %s</string>
     <string id="30310">Modifier le genre : %s</string>
     <string id="30328">Modifier la description : %s ...</string>
-    <string id="30311">Importer les informations depuis %s</string>
-    <string id="30333">Importer les informations depuis le fichier .nfo</string>
+    <string id="30311">Importer depuis %s</string>
+    <string id="30333">Importer depuis un fichier .nfo</string>
     <string id="30312">Importer l'image depuis %s</string>
     <string id="30313">Choisir une image locale (créer un lien)</string>
     <string id="30315">Modifier les arguments : %s</string>
-    <string id="30316">Sauver les informations dans le fichier .nfo</string>
+    <string id="30316">Sauver dans un fichier .nfo</string>
     <string id="30329">Basculer XBMC en plein écran : %s</string>
     <string id="30317">Modifier les extensions des objets : %s</string>
     <string id="30318">Vider la liste des objets</string>

@@ -1,4 +1,12 @@
-﻿[B]1.7.4/B]
+﻿[B]1.7.5/B]
+. Fix thumb/fanart local import for items (image extension bug).
+. Fix thumb/fanart local import for launcher (image extension bug).
+. Fix defaut thumb/fanart paths for launcher (set into addon userdata directory).
+. Auto disable/restore LIRC inputs for Linux system.
+. Modification of launchers and items modify info menu.
+. Clean menu text strings.
+
+[B]1.7.4/B]
 . Fix Dharma compatibility problem under Windows
 . Replace "System Platform" string by simply "Platform"
 

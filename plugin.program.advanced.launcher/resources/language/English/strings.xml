@@ -137,12 +137,12 @@
     <string id="30309">Modify Studio : %s</string>
     <string id="30310">Modify Genre : %s</string>
     <string id="30328">Modify Description : %s ...</string>
-    <string id="30311">Import Infos from %s</string>
-    <string id="30333">Import Infos from .nfo file</string>
+    <string id="30311">Import from %s</string>
+    <string id="30333">Import from .nfo file</string>
     <string id="30312">Import Image from %s</string>
     <string id="30313">Select Local Image (Link)</string>
     <string id="30315">Modify Arguments : %s</string>
-    <string id="30316">Save Infos to .nfo file</string>
+    <string id="30316">Save to .nfo file</string>
     <string id="30329">Toggle XBMC Fullscreen : %s</string>
     <string id="30317">Modify Items Extensions : %s</string>
     <string id="30318">Clear Items List</string>

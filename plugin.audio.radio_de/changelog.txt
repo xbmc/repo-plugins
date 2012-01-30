@@ -1,0 +1,5 @@
+0.0.2 (29.01.2012)
+    - Fix error with UTF-8 characters in search string
+
+0.0.1 (13.01.2012)
+    - Initial Release

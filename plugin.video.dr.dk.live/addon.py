@@ -31,7 +31,6 @@ import buggalo
 from channels import CHANNELS, CATEGORIES, QUALITIES
 
 TITLE_OFFSET = 31000
-DESCRIPTION_OFFSET = 32000
 
 class DanishLiveTV(object):
     def showChannels(self, category = None):
@@ -57,11 +56,9 @@ class DanishLiveTV(object):
             url = channel.get_url(quality, idx)
             if url:
                 title = ADDON.getLocalizedString(TITLE_OFFSET + channel.get_id())
-                description = ADDON.getLocalizedString(DESCRIPTION_OFFSET + channel.get_id())
                 item = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
                 item.setInfo('video', infoLabels={
                     'title': title,
-                    'plot' : description,
                     'studio' : ADDON.getLocalizedString(channel.get_category())
                 })
                 item.setProperty('Fanart_Image', FANART)
@@ -109,7 +106,7 @@ class DanishLiveTV(object):
             u.close()
 
             imInDenmark = 'true' == response
-        except urllib2.URLError:
+        except Exception:
             # If an error occurred assume we are not in Denmark
             imInDenmark = False
 

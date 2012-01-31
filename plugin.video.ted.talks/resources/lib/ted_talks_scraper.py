@@ -55,7 +55,7 @@ class TedTalks:
             lambda l: re.compile('High-res video \(MP4\)').match(str(l.string)),
             lambda l: re.compile('http://download.ted.com/talks/.+.mp4').match(str(l['href'])),
         ]
-        for link in soup.findAll('a'):
+        for link in soup.findAll('a', href=True):
             for detector in linkDetectors:
                 if detector(link):
                     url = link['href']

@@ -105,8 +105,8 @@ Channel(5, CATEGORY_DR, "drramasjang.stream").add_urls(
 # DR HD
 Channel(6, CATEGORY_DR, "drhd.stream").add_urls(
     best   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream3 live=1'],
-    medium = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
-    low    = ['rtmp://livetv.gss.dr.dk/live/livedr06astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream1 live=1'])
+    high = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
+    medium    = ['rtmp://livetv.gss.dr.dk/live/livedr06astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream1 live=1'])
 
 # TV2 Fyn
 Channel(100, CATEGORY_TV2_REG).add_urls(
@@ -125,8 +125,8 @@ Channel(102, CATEGORY_TV2_REG).add_urls(
     medium = 'rtmp://80.63.11.91:1935/live/_definst_/tvsyd_300 live=1'
 )
 # TV2 Midtvest
-#Channel(103, CATEGORY_TV2_REG).add_urls(
-#    high   = 'http://ms1.tvmidtvest.dk/frokosttv')
+Channel(103, CATEGORY_TV2_REG).add_urls(
+    high   = 'http://ms1.tvmidtvest.dk/live')
 # TV2 Nord
 Channel(105, CATEGORY_TV2_REG).add_urls(
     best   = 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_2000 live=1',
@@ -144,9 +144,9 @@ Channel(106, CATEGORY_TV2_REG).add_urls(
 #    medium = 'rtmp://80.63.11.91:1935/live/_definst_/tv2oj_300 live=1'
 # )
 # TV2 Bornholm
-#Channel(109, CATEGORY_TV2_REG).add_urls(
-#    best   = 'mms://itv02.digizuite.dk/tv2b'
-#)
+Channel(109, CATEGORY_TV2_REG).add_urls(
+    best   = 'mms://itv02.digizuite.dk/tv2b'
+)
 
 # http://www.24nordjyske.dk/webtv_high.asp
 # 24 Nordjyske

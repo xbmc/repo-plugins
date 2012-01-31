@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
-	id="plugin.video.dr.dk.live" version="2.1.0" name="Danish Live TV" provider-name="twinther [tommy@winther.nu]">
+	id="plugin.video.dr.dk.live" version="2.1.1" name="Danish Live TV" provider-name="twinther [tommy@winther.nu]">
 	<requires>
 		<import addon="xbmc.python" version="2.0"/>
 	</requires>

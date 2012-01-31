@@ -1,0 +1,13 @@
+[B]Version 1.0.1[/B]
+
+- Updated addon.xml to support Eden
+
+[B]Version 1.0.0[/B]
+
+- Completed Pakee XBMC functionality, testing on Eden Beta1,2. Plugin provides the ability to:
+-Browse TV channels, TV shows, movies, actors, fashion, photography, sports, YouTube channels from Pakistan 
+-Browse musicians' albums, songs, Facebook albums, news and YouTube channels 
+-Allows users to play video, music or image content individually or in "play all in list" mode 
+-Allows users to pull any YouTube users playlists, uploaded/favorite videos and playing in "play all in list" mode 
+-Supports sorting content by title, duration, uploaded date, view count 
+-More info available at http://code.google.com/p/pakee

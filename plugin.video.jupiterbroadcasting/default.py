@@ -20,7 +20,7 @@ def CATEGORIES():
 
     # Linux Action Show
     shows[__language__(30000)] = {
-        'feed': 'http://feeds.feedburner.com/computeractionshowvideo?format=xml',
+        'feed': 'http://feeds.feedburner.com/computeractionshowvideo',
         'feed-low': 'http://feeds.feedburner.com/linuxactionshowipodvid?format=xml',
         'image': 'http://www.jupiterbroadcasting.com/images/LAS-VIDEO.jpg',
         'plot': __language__(30200),
@@ -138,8 +138,11 @@ def CATEGORIES():
         addDir(name, feed, 1, data['image'], data)
 
 def INDEX(name, url):
+    # Load the XML feed.
     data = urllib2.urlopen(url)
-    soup = BeautifulStoneSoup(data, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+
+    # Parse the data with BeautifulStoneSoup, noting any self-closing tags.
+    soup = BeautifulStoneSoup(data, convertEntities=BeautifulStoneSoup.XML_ENTITIES, selfClosingTags=['media:thumbnail', 'enclosure', 'media:content'])
     count = 1
     # Wrap in a try/catch to protect from borken RSS feeds.
     try:
@@ -193,15 +196,11 @@ def INDEX(name, url):
             if (author != None):
                 info['director'] = author.string
 
-            # TODO: Get the thumbnails to load correctly.
+            # Load the self-closing media:thumbnail data.
             thumbnail = ''
             mediathumbnail = item.findAll('media:thumbnail')
-            for thumb in mediathumbnail:
-                thumbnail = thumb.get('url')
-                if (thumbnail == None):
-                    thumbnail = ''
-                else:
-                    break
+            if (mediathumbnail):
+                thumbnail = mediathumbnail[0]['url']
 
             # Add the episode link.
             addLink(info['title'], video, date, thumbnail, info)

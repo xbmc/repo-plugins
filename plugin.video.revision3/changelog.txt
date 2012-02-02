@@ -1,6 +1,10 @@
-[B]Version 2.0.1[/B]
+[B]Version 2.0.2[/B]
 
-- Added missing files
+- Fixed error on start up
+- Disabled Simple Downloader dependency until it's stable
+- Removed unneeded Common Cache dependency
+- Fixed fanart bug in "Recently Released"
+- Added English strings
 
 [B]Version 2.0.0[/B]
 

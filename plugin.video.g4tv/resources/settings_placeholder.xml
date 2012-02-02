@@ -1,0 +1,5 @@
+<settings>
+   <setting id="download" type="bool" label="30004" default="false"/>
+   <setting id="downloadPath" type="folder" enable="eq(-1,true)" label="30005" default="" /> 
+   <setting id="folder" type="bool" enable="eq(-2,true)" label="30008" default="true"/>
+</settings>

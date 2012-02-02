@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="30001">Search Videos...</string>
+    <string id="30002">No videos found. Please check your spelling</string>
+    <string id="30003">or try again using different search words.</string>
+	<string id="30004">Enable Video Download</string>
+	<string id="30005">Download Location</string>
+	<string id="30008">Show Downloads Folder</string>
+    <string id="30009">No videos found. Please check your spelling</string>
+    <string id="30010">or try again using different search words.</string>
+	<string id="30011">Most Recent</string>
+	<string id="30012">Search</string>
+	<string id="30013">Shows</string>
+	<string id="30014">Content Types</string>
+	<string id="30015">Events</string>
+	<string id="30016">Platforms</string>
+	<string id="30017">Genres</string>
+	<string id="30018">Downloads</string>
+	<string id="30019">Next Page</string>
+	<string id="30020">Please set a Download Location.</string>
+</strings>

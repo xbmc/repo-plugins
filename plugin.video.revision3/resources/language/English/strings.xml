@@ -6,9 +6,14 @@
     <string id="30003">MP4:Phone</string>
 	<string id="30004">Enable Video Download</string>
 	<string id="30005">Download Location</string>
-	<string id="30006">Hide during playback</string>
-	<string id="30007">Notification length in seconds</string>
 	<string id="30008">Show Downloads Folder</string>
     <string id="30009">No videos found. Please check your spelling</string>
     <string id="30010">or try again using different search words.</string>
+	<string id="30011">Please set a Download Location.</string>
+	<string id="30012">Downloads</string>
+	<string id="30013">Recently Released</string>
+	<string id="30014">Archived Shows</string>
+	<string id="30015">Search</string>
+	<string id="30016">Next Page</string>
+	<string id="30017">Video Type</string>
 </strings>

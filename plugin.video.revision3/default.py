@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 plugin =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '01-02-2012'
-__version__ = '2.0.1'
+__date__ = '02-01-2012'
+__version__ = '2.0.2'
 settings = xbmcaddon.Addon(id='plugin.video.revision3')
 dbg = False
 dbglevel = 3
@@ -17,11 +17,11 @@ current_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'med
 search_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'search.png' )
 
 import CommonFunctions
-common = CommonFunctions.CommonFunctions()
-common.plugin = plugin
+common = CommonFunctions
+common.plugin = plugin + ' ' + __version__
 
-import SimpleDownloader as downloader
-downloader = downloader.SimpleDownloader()
+#import SimpleDownloader as downloader
+#downloader = downloader.SimpleDownloader()
 
 def open_url(url):
 	req = urllib2.Request(url)
@@ -40,16 +40,16 @@ def build_main_directory(url):
 	plot = common.parseDOM(shows, "p", attrs = { "class": "description" })
 	if settings.getSetting('folder') == 'true' and settings.getSetting( 'downloadPath' ) and path == 'http://revision3.com/shows/':
 		url = settings.getSetting("downloadPath")
-		listitem = xbmcgui.ListItem( label = "[ Downloads ]" , iconImage = downloads_thumb, thumbnailImage = downloads_thumb )
+		listitem = xbmcgui.ListItem(label = '[ ' + settings.getLocalizedString( 30012 ) + ' ]', iconImage = downloads_thumb, thumbnailImage = downloads_thumb )
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = url, listitem = listitem, isFolder = True)
 	if path == 'http://revision3.com/shows/':
-		listitem = xbmcgui.ListItem(label = '[ Recently Released ]', iconImage = current_thumb, thumbnailImage = current_thumb)
-		u = sys.argv[0] + "?mode=1&name=" + urllib.quote_plus('Recently Released') + "&url=" + urllib.quote_plus('http://revision3.com/episodes/page?&hideArrows=1&type=recent&page=1')
+		listitem = xbmcgui.ListItem(label = '[ ' + settings.getLocalizedString( 30013 ) + ' ]', iconImage = current_thumb, thumbnailImage = current_thumb)
+		u = sys.argv[0] + "?mode=1&name=" + urllib.quote_plus(settings.getLocalizedString( 30013 )) + "&url=" + urllib.quote_plus('http://revision3.com/episodes/page?&hideArrows=1&type=recent&page=1')
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = True)
-		listitem = xbmcgui.ListItem(label = '[ Archived Shows ]', iconImage = old_thumb, thumbnailImage = old_thumb)
+		listitem = xbmcgui.ListItem(label = '[ ' + settings.getLocalizedString( 30014 ) + ' ]', iconImage = old_thumb, thumbnailImage = old_thumb)
 		u = sys.argv[0] + "?mode=3&url=" + urllib.quote_plus('http://revision3.com/shows/archive')
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = True)
-		listitem = xbmcgui.ListItem(label = '[ Search ]', iconImage = search_thumb, thumbnailImage = search_thumb)
+		listitem = xbmcgui.ListItem(label = '[ ' + settings.getLocalizedString( 30015 ) + ' ]', iconImage = search_thumb, thumbnailImage = search_thumb)
 		u = sys.argv[0] + "?mode=4&url=" + urllib.quote_plus('search')
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = True)
 	count = 0
@@ -58,7 +58,7 @@ def build_main_directory(url):
 		url = 'http://revision3.com' + url + '/episodes'
 		listitem = xbmcgui.ListItem(label = name, iconImage = image[count].replace('160x160','200x200'), thumbnailImage = image[count].replace('160x160','200x200'))
 		listitem.setProperty('fanart_image',settings.getSetting(fanart))
-		listitem.setInfo( type = "Video", infoLabels = { "Title": name, "Studio": 'Revision3', "Plot": plot[count] } )
+		listitem.setInfo( type = "Video", infoLabels = { "Title": name, "Studio": plugin, "Plot": plot[count] } )
 		u = sys.argv[0] + "?mode=1&name=" + urllib.quote_plus(name) + "&url=" + urllib.quote_plus(url)
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = True)
 		count += 1
@@ -68,6 +68,7 @@ def build_main_directory(url):
 def build_sub_directory(url, name):
 	saveurl = url
 	studio = name
+	savestudio = name
 	#html = common.fetchPage({"link": url})['content']
 	html = open_url(url)
 	ret = common.parseDOM(html, "div", attrs = { "id": "main-episodes" })
@@ -91,7 +92,7 @@ def build_sub_directory(url, name):
 		else:
 			fanart = data[0]
 		settings.setSetting(img.rsplit('/')[6], fanart)
-		if studio == 'Recently Released':
+		if studio == settings.getLocalizedString( 30013 ):
 			fanart = ''
 	except:
 		fanart = ''
@@ -140,9 +141,9 @@ def build_sub_directory(url, name):
 		u = sys.argv[0] + "?mode=2&name=" + urllib.quote_plus(plot) + "&url=" + urllib.quote_plus(url) + "&plot=" + urllib.quote_plus(plot) + "&studio=" + urllib.quote_plus(studio) + "&episode=" + urllib.quote_plus(episode) + "&thumb=" + urllib.quote_plus(thumb)
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
 	if next == True:
-		listitem = xbmcgui.ListItem( label = 'Next Page (' + str( int(current[0]) + 1 ) + ')' , iconImage = next_thumb, thumbnailImage = next_thumb )
+		listitem = xbmcgui.ListItem( label = settings.getLocalizedString( 30016 ) + ' (' + str( int(current[0]) + 1 ) + ')' , iconImage = next_thumb, thumbnailImage = next_thumb )
 		listitem.setProperty('fanart_image',fanart)
-		u = sys.argv[0] + "?mode=1&name=" + urllib.quote_plus(studio) + "&url=" + urllib.quote_plus(saveurl)
+		u = sys.argv[0] + "?mode=1&name=" + urllib.quote_plus(savestudio) + "&url=" + urllib.quote_plus(saveurl)
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = True)	
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_UNSORTED )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_DATE )
@@ -188,7 +189,7 @@ def build_search_directory(url):
 		u = sys.argv[0] + "?mode=2&name=" + urllib.quote_plus(title) + "&url=" + urllib.quote_plus(url) + "&plot=" + urllib.quote_plus(plot) + "&studio=" + urllib.quote_plus(studio) + "&episode=" + urllib.quote_plus('0') + "&thumb=" + urllib.quote_plus(thumb)
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
 	if next == True:
-		listitem = xbmcgui.ListItem( label = 'Next Page (' + str( int(current[0]) + 1 ) + ')' , iconImage = next_thumb, thumbnailImage = next_thumb )
+		listitem = xbmcgui.ListItem( label = settings.getLocalizedString( 30016 ) + ' (' + str( int(current[0]) + 1 ) + ')' , iconImage = next_thumb, thumbnailImage = next_thumb )
 		u = sys.argv[0] + "?mode=4&name=" + urllib.quote_plus(studio) + "&url=" + urllib.quote_plus(saveurl)
 		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = True)	
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_UNSORTED )
@@ -199,6 +200,12 @@ def clean(name):
 	for trash, crap in remove:
 		name = name.replace(trash,crap)
 	return name
+	
+def clean_file(name):
+    remove=[('\"',''),('\\',''),('/',''),(':',' - '),('|',''),('>',''),('<',''),('?',''),('*','')]
+    for old, new in remove:
+        name=name.replace(old,new)
+    return name
 
 def get_video(url, name, plot, studio, episode, thumb):
 	#result = common.fetchPage({"link": url})['content']
@@ -223,12 +230,16 @@ def get_video(url, name, plot, studio, episode, thumb):
 		ret = None
 	except:
 		dialog = xbmcgui.Dialog()
-		ret = dialog.select('Video Type', dictList)
+		ret = dialog.select(settings.getLocalizedString( 30017 ), dictList)
 		purl = durl[dictList[ret]]
 	if ret != -1:
 		if settings.getSetting('download') == 'true':
-			params = { "videoid": str(episode), "video_url": purl, "Title": name }
-			downloader.downloadVideo(params)
+			while not settings.getSetting('downloadPath'):
+				dialog = xbmcgui.Dialog()
+				ok = dialog.ok(plugin, settings.getLocalizedString( 30011 ))
+				settings.openSettings()
+			params = { "url": purl, "download_path": settings.getSetting('downloadPath'), "Title": name }
+			downloader.download(clean_file(name) + '.' + purl.split('/')[-1].split('.')[-1], params)
 		else:
 			#thumb = xbmc.getInfoImage( 'ListItem.Thumb' )
 			listitem = xbmcgui.ListItem(label = name , iconImage = 'DefaultVideo.png', thumbnailImage = thumb)

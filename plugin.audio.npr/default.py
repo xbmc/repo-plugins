@@ -129,7 +129,7 @@ def get_station_streams(tree):
   elist = tree.findall('station/url')
   for e in elist:
     url_id = e.get('typeId')
-    if  url_id == '10' or url_id == '15':
+    if url_id == '10':
       title = e.get('title')
       text = e.text
       streams[title] = text

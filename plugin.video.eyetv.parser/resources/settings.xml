@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <!--General-->
-    <category>
+    <!--Live TV-->
+    <category label="30020">
+        <setting id="server" type="ipaddress" default="127.0.0.1" label="30002" />
+        <setting id="bitrate" type="enum" lvalues="30015|30016|30017|30018|30019" default="4" label="30014" />
+        <setting id="passwdEnabled" type="bool" default="false" label="30003" />
+        <setting id="password" type="text" option="hidden" default="" enable="eq(-1,true)" label="30004" />
+    </category>
+    <category label="30021">
         <setting id="archivePath" type="folder" source="auto" default="" option="writeable" label="30001" />
         <setting id="sortMethod" type="enum" label="30010" default="0" lvalues="30011|30012|30013" />
     </category>

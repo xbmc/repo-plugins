@@ -4,7 +4,7 @@
 
 __plugin__ = "iPhoto"
 __author__ = "jingai <jingai@floatingpenguins.com>"
-__credits__ = "Anoop Menon, Nuka1195, JMarshal, jingai"
+__credits__ = "Anoop Menon, Nuka1195, JMarshal, jingai, brsev (http://brsev.com#licensing)"
 __url__ = "git://github.com/jingai/plugin.image.iphoto.git"
 
 import sys
@@ -35,7 +35,8 @@ ALBUM_DATA_XML = "AlbumData.xml"
 BASE_URL = "%s" % (sys.argv[0])
 PLUGIN_PATH = addon.getAddonInfo("path")
 RESOURCE_PATH = os.path.join(PLUGIN_PATH, "resources")
-ICONS_PATH = os.path.join(RESOURCE_PATH, "icons")
+ICONS_THEME = "token_light"
+ICONS_PATH = os.path.join(RESOURCE_PATH, "icons", ICONS_THEME)
 LIB_PATH = os.path.join(RESOURCE_PATH, "lib")
 sys.path.append(LIB_PATH)
 
@@ -129,7 +130,7 @@ def list_photos_in_album(params):
     return render_media(media)
 
 def list_albums(params):
-    global db, BASE_URL, album_ign_empty
+    global db, BASE_URL, ICONS_PATH, album_ign_empty
 
     albumid = 0
     try:
@@ -153,7 +154,7 @@ def list_albums(params):
 	if (not count and album_ign_empty == "true"):
 	    continue
 
-	item = gui.ListItem(name, thumbnailImage="DefaultFolder.png")
+	item = gui.ListItem(name, thumbnailImage=ICONS_PATH+"/folder.png")
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=albums&albumid=%s" % (albumid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
@@ -323,7 +324,7 @@ def list_photos_with_keyword(params):
     return render_media(media)
 
 def list_keywords(params):
-    global db, BASE_URL, album_ign_empty
+    global db, BASE_URL, ICONS_PATH, album_ign_empty
 
     keywordid = 0
     try:
@@ -349,7 +350,7 @@ def list_keywords(params):
 	if (not count and album_ign_empty == "true"):
 	    continue
 
-	item = gui.ListItem(name, thumbnailImage="DefaultFolder.png")
+	item = gui.ListItem(name, thumbnailImage=ICONS_PATH+"/folder.png")
 	item.addContextMenuItems([(addon.getLocalizedString(30214), "XBMC.RunPlugin(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),)])
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=keywords&keywordid=%s" % (keywordid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
@@ -606,7 +607,7 @@ if (__name__ == "__main__"):
 		hide_import_lib = "false"
 		addon.setSetting('hide_import_lib', hide_import_lib)
 	    if (hide_import_lib == "false"):
-		item = gui.ListItem(addon.getLocalizedString(30103), thumbnailImage=PLUGIN_PATH+"/icon.png")
+		item = gui.ListItem(addon.getLocalizedString(30103), thumbnailImage=ICONS_PATH+"/update.png")
 		plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=rescan", item, False)
 	except:
 	    plugin.endOfDirectory(int(sys.argv[1]), False)

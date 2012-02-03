@@ -70,4 +70,14 @@ Known Issues
 ============
 * Sorting by Date sorts on the file date, not the EXIF date.
   See http://trac.xbmc.org/ticket/10519
-* Need icons for Faces, Places, and Keywords.
+
+Credits
+=======
+jingai (jingai at floatingpenguins dot com)
+Original code:
+- Anoop Menon
+- Nuka1195
+- JMarshal
+Icons:
+- Firnsy
+- brsev (http://brsev.com#licensing)

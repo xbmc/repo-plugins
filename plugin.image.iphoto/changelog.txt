@@ -1,3 +1,6 @@
+1.7.1 - 20120202
+- New icons.
+
 1.7.0 - 20120128
 - Support for referenced masters.
 - Add context menu item to reset addon database.

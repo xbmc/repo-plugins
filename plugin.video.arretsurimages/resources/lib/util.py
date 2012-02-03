@@ -44,7 +44,7 @@ def cleanHTML(html):
     """Return a clean HTML to help beautifulsoup and the parsing"""
     # Remove the double double quotes in title
     # (otherwise beautifulsoup just get an empty string)
-    html = re.sub('title=""(.+)"">', 'title="\\1">', html)
+    html = re.sub('title=""(.+)">', 'title="\\1>', html)
     # Replace html-encoded nonbreaking space
     html = html.replace('&nbsp;', ' ')
     return html

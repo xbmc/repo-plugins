@@ -1,3 +1,11 @@
+[B]Version 2.1.1[/B]
+
+- Added birate setting for live TV
+
+[B]Version 2.1.0[/B]
+
+- Added live TV
+
 [B]Version 2.0.2[/B]
 
 - Fixed broken dependency in eden (use xml.etree.ElementTree available in python 2.5)

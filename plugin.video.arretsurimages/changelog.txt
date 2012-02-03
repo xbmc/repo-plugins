@@ -1,3 +1,7 @@
+[B]Version 1.1.6[/B]
+
+- Fixed title not displayed due to punctuation between double-quote
+
 [B]Version 1.1.5[/B]
 
 - New category "@ux sources" added

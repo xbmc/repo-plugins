@@ -3,6 +3,9 @@
     <!-- General -->
     <category label="30050">
 	<setting id="albumdata_xml_path" type="folder" source="video" label="30000" default=""/>
+	<setting id="managed_lib_enable" type="bool" label="30027" default="true"/>
+	<setting id="masters_path" type="text" label="30028" default="/Volumes/Pictures/" enable="eq(-1,false)"/>
+	<setting id="masters_real_path" type="folder" source="video" label="30029" default="" enable="eq(-2,false)"/>
 	<setting id="places_enable" type="bool" label="30015" default="true"/>
 	<setting id="places_enable_maps" type="bool" label="30025" default="true" enable="eq(-1,true)"/>
 	<setting id="auto_update_lib" type="bool" label="30003" default="false"/>

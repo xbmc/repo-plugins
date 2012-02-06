@@ -1,3 +1,5 @@
+0.3.8 - FIX: 3SAT Broken Link
+        ADD: NDR
 0.3.7 - FIX: ORF
 0.3.6 - FIX: WDR
 0.3.5 - FIX: BayernFS

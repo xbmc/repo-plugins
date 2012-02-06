@@ -184,7 +184,7 @@ def teaser_list(ids="", url="", offset=1, list_size=0):
 		
 			media = get_media_content(item)
 			thumb = get_media_thumbnail(item)
-			title = get_node_value(item, "title")
+			title = unicode(get_node_value(item, "title")).encode('utf-8')
 			id = get_node_value(item, "titleId", NS_PLAYRSS)
 
 			params = { "mode": MODE_VIDEO_LIST, "ids": id }
@@ -308,9 +308,15 @@ def add_directory_item(name, params={}, thumbnail=None, isFolder=True,
 		url = sys.argv[0] + '?' + urllib.urlencode(params)
 	else:
 		url = params["url"]
+
+		if url.find('rtmp') == 0:
+			url += " swfUrl=http://svtplay.se/flash/svtplayer-2011.18.swf swfVfy=1"
+		
 		if not infoLabels:
 			infoLabels = { "Title": name }
+		
 		li.setInfo(type="Video", infoLabels=infoLabels)
+		
 		#Check if it's a live stream or if debug is enabled
 		if params.has_key('live'):
 			li.setProperty("IsLive", "true")

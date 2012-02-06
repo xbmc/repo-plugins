@@ -1,4 +1,11 @@
-﻿[B]1.7.5/B]
+﻿[B]1.7.6/B]
+. Fix recursive thumb/fanart images scrap/save.
+. Fix recursive thumb/fanart images local import.
+. Fix bug when NFO file do not exist.
+. Create platform bonding between launcher and related items.
+. Remove modify platform option for items.
+
+[B]1.7.5/B]
 . Fix thumb/fanart local import for items (image extension bug).
 . Fix thumb/fanart local import for launcher (image extension bug).
 . Fix defaut thumb/fanart paths for launcher (set into addon userdata directory).

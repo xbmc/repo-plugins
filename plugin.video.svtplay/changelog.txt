@@ -1,3 +1,12 @@
+Version 2.0.1
+-------------
+- Added swf verification
+- Fixed unicode encoding
+
+Version 2.0.0
+-------------
+- Bumped versions for Eden
+
 Version 1.0.4
 -------------
 - Improved handling of subtitles (by kokangit, thx to elupus)

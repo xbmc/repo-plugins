@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- General -->
+  <category label="30000">
+    <setting id="use_login" type="bool" label="30011" default="false"/>
+    <setting id="login_email" type="text" label="30001"/>
+    <setting id="login_pass" type="text" option="hidden" label="30002" enable="eq(-2,true)"/>
+    <setting id="max_per_page" type="enum" label="30003" values="10|20|30|40|50|75|100|200|500|1000" default="6" />
+    <setting id="default_map_source" type="enum" label="30004" values="Google|Yahoo|Open Street Map" default="0" />
+    <setting id="default_map_type" type="enum" label="30005" values="Hybrid|Satellite|Terrain|Roadmap" default="0" />
+    <setting id="map_zoom" type="enum" label="30006" values="0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21" default="15" />
+    <setting id="privacy_filter" type="enum" label="30007" lvalues="30008|30009|30010" default="2" />
+  </category>
+</settings>

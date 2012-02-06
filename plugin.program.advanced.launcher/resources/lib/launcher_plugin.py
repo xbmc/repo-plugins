@@ -238,7 +238,7 @@ class Main:
         if (type == 1 ):
             dialog = xbmcgui.Dialog()
 
-            type2 = dialog.select(__language__( 30305 ), [__language__( 30311 ) % self.settings[ "datas_scraper" ],__language__( 30333 ),__language__( 30306 ) % self.launchers[launcher]["roms"][rom]["name"],__language__( 30307 ) % self.launchers[launcher]["roms"][rom]["gamesys"],__language__( 30308 ) % self.launchers[launcher]["roms"][rom]["release"],__language__( 30309 ) % self.launchers[launcher]["roms"][rom]["studio"],__language__( 30310 ) % self.launchers[launcher]["roms"][rom]["genre"],__language__( 30328 ) % self.launchers[launcher]["roms"][rom]["plot"][0:20],__language__( 30316 )])
+            type2 = dialog.select(__language__( 30305 ), [__language__( 30311 ) % self.settings[ "datas_scraper" ],__language__( 30333 ),__language__( 30306 ) % self.launchers[launcher]["roms"][rom]["name"],__language__( 30308 ) % self.launchers[launcher]["roms"][rom]["release"],__language__( 30309 ) % self.launchers[launcher]["roms"][rom]["studio"],__language__( 30310 ) % self.launchers[launcher]["roms"][rom]["genre"],__language__( 30328 ) % self.launchers[launcher]["roms"][rom]["plot"][0:20],__language__( 30316 )])
                 # Scrap rom Infos
             if (type2 == 0 ):
                 self._scrap_rom(launcher,rom)
@@ -255,35 +255,27 @@ class Main:
                     self.launchers[launcher]["roms"][rom]["name"] = title.replace(",","‚").replace('"',"''").replace("/"," ⁄ ").rstrip()
                     self._save_launchers()
             if (type2 == 3 ):
-                # Selection of the rom game system
-                dialog = xbmcgui.Dialog()
-                platforms = _get_game_system_list()
-                gamesystem = dialog.select(__language__( 30077 ), platforms)
-                if (not gamesystem == -1 ):
-                    self.launchers[launcher]["roms"][rom]["gamesys"] = platforms[gamesystem]
-                    self._save_launchers()
-            if (type2 == 4 ):
                 # Edition of the rom release date
                 keyboard = xbmc.Keyboard(self.launchers[launcher]["roms"][rom]["release"], __language__( 30038 ))
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.launchers[launcher]["roms"][rom]["release"] = keyboard.getText()
                     self._save_launchers()
-            if (type2 == 5 ):
+            if (type2 == 4 ):
                 # Edition of the rom studio name
                 keyboard = xbmc.Keyboard(self.launchers[launcher]["roms"][rom]["studio"], __language__( 30039 ))
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.launchers[launcher]["roms"][rom]["studio"] = keyboard.getText()
                     self._save_launchers()
-            if (type2 == 6 ):
+            if (type2 == 5 ):
                 # Edition of the rom game genre
                 keyboard = xbmc.Keyboard(self.launchers[launcher]["roms"][rom]["genre"], __language__( 30040 ))
                 keyboard.doModal()
                 if (keyboard.isConfirmed()):
                     self.launchers[launcher]["roms"][rom]["genre"] = keyboard.getText()
                     self._save_launchers()
-            if (type2 == 7 ):
+            if (type2 == 6 ):
                 # Import of the rom game plot
                 text_file = xbmcgui.Dialog().browse(1,__language__( 30080 ),"files",".txt|.dat", False, False)
                 if (os.path.isfile(text_file)):
@@ -292,7 +284,7 @@ class Main:
                     text_plot.close()
                     self.launchers[launcher]["roms"][rom]["plot"] = string_plot.replace('&quot;','"')
                     self._save_launchers()
-            if (type2 == 8 ):
+            if (type2 == 7 ):
                 self._export_rom_nfo(launcher,rom)
 
         if (type == 2 ):
@@ -312,9 +304,15 @@ class Main:
                     if (os.path.isfile(image)):
                         filename = self.launchers[launcher]["roms"][rom]["filename"]
                         if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["fanartpath"] ):
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_thumb'+os.path.splitext(image)[-1])))
+                            if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["rompath"] ):
+                                file_path = filename.replace("."+filename.split(".")[-1], '_thumb'+os.path.splitext(image)[-1])
+                            else:
+                                file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_thumb'+os.path.splitext(image)[-1])))
                         else:
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], os.path.splitext(image)[-1])))
+                            if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["rompath"] ):
+                                file_path = filename.replace("."+filename.split(".")[-1], os.path.splitext(image)[-1])
+                            else:
+                                file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], os.path.splitext(image)[-1])))
                         if ( image != file_path ):
                             shutil.copy2( image.decode(sys.getfilesystemencoding(),'ignore') , file_path.decode(sys.getfilesystemencoding(),'ignore') )
                             self.launchers[launcher]["roms"][rom]["thumb"] = file_path
@@ -351,9 +349,15 @@ class Main:
                     if (os.path.isfile(image)):
                         filename = self.launchers[launcher]["roms"][rom]["filename"]
                         if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["fanartpath"] ):
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_fanart'+os.path.splitext(image)[-1])))
+                            if (self.launchers[launcher]["fanartpath"] == self.launchers[launcher]["rompath"] ):
+                                file_path = filename.replace("."+filename.split(".")[-1], '_fanart'+os.path.splitext(image)[-1])
+                            else:
+                                file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_fanart'+os.path.splitext(image)[-1])))
                         else:
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], os.path.splitext(image)[-1])))
+                            if (self.launchers[launcher]["fanartpath"] == self.launchers[launcher]["rompath"] ):
+                                file_path = filename.replace("."+filename.split(".")[-1], os.path.splitext(image)[-1])
+                            else:
+                                file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], os.path.splitext(image)[-1])))
                         if ( image != file_path ):
                             shutil.copy2( image.decode(sys.getfilesystemencoding(),'ignore') , file_path.decode(sys.getfilesystemencoding(),'ignore') )
                             self.launchers[launcher]["roms"][rom]["fanart"] = file_path
@@ -411,9 +415,15 @@ class Main:
                     if ( img_url != '' ):
                         filename = self.launchers[launcher]["roms"][rom]["filename"]
                         if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["fanartpath"] ):
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_thumb.jpg')))
+                            if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["rompath"] ):
+                                file_path = filename.replace("."+filename.split(".")[-1], '_thumb.jpg')
+                            else:
+                                file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_thumb.jpg')))
                         else:
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '.jpg')))
+                            if (self.launchers[launcher]["thumbpath"] == self.launchers[launcher]["rompath"] ):
+                                file_path = filename.replace("."+filename.split(".")[-1], '.jpg')
+                            else:
+                                file_path = os.path.join(os.path.dirname(self.launchers[launcher]["thumbpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '.jpg')))
                         xbmc.executebuiltin("XBMC.Notification(%s,%s, 3000)" % (__language__( 30000 ), __language__( 30069 )))
                         h = urllib.urlretrieve(img_url,file_path)
                         self.launchers[launcher]["roms"][rom]["thumb"] = file_path
@@ -493,9 +503,15 @@ class Main:
                     if ( img_url != '' ):
                         filename = self.launchers[launcher]["roms"][rom]["filename"]
                         if (self.launchers[launcher]["fanartpath"] == self.launchers[launcher]["thumbpath"] ):
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_fanart.jpg')))
+                            if (self.launchers[launcher]["fanartpath"] == self.launchers[launcher]["rompath"] ):
+                                file_path = filename.replace("."+filename.split(".")[-1], '_fanart.jpg')
+                            else:
+                                file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '_fanart.jpg')))
                         else:
-                            file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '.jpg')))
+                            if (self.launchers[launcher]["fanartpath"] == self.launchers[launcher]["rompath"] ):
+                                file_path = filename.replace("."+filename.split(".")[-1], '.jpg')
+                            else:
+                                file_path = os.path.join(os.path.dirname(self.launchers[launcher]["fanartpath"]),os.path.basename(filename.replace("."+filename.split(".")[-1], '.jpg')))
                         xbmc.executebuiltin("XBMC.Notification(%s,%s, 3000)" % (__language__( 30000 ), __language__( 30074 )))
                         h = urllib.urlretrieve(img_url,file_path)
                         self.launchers[launcher]["roms"][rom]["fanart"] = file_path
@@ -1366,7 +1382,6 @@ class Main:
                 # replace low-9 quotation mark by comma
                 usock.write("\t\t\t\t<name>"+romdata["name"].replace("‚",",")+"</name>\n")
                 usock.write("\t\t\t\t<filename>"+romdata["filename"]+"</filename>\n")
-                usock.write("\t\t\t\t<platform>"+romdata["gamesys"]+"</platform>\n")
                 usock.write("\t\t\t\t<thumb>"+romdata["thumb"]+"</thumb>\n")
                 usock.write("\t\t\t\t<fanart>"+romdata["fanart"]+"</fanart>\n")
                 usock.write("\t\t\t\t<custom>"+romdata["custom"]+"</custom>\n")
@@ -1461,7 +1476,6 @@ class Main:
                 romid = re.findall( "<id>(.*?)</id>", rom )
                 romname = re.findall( "<name>(.*?)</name>", rom )
                 romfilename = re.findall( "<filename>(.*?)</filename>", rom )
-                romgamesys = re.findall( "<platform>(.*?)</platform>", rom )
                 romthumb = re.findall( "<thumb>(.*?)</thumb>", rom )
                 romfanart = re.findall( "<fanart>(.*?)</fanart>", rom )
                 romcustom = re.findall( "<custom>(.*?)</custom>", rom )
@@ -1469,6 +1483,7 @@ class Main:
                 romrelease = re.findall( "<release>(.*?)</release>", rom )
                 romstudio = re.findall( "<publisher>(.*?)</publisher>", rom )
                 romplot = re.findall( "<gameplot>(.*?)</gameplot>", rom )
+                romgamesys = gamesys
 
                 if len(romid) > 0 : romid = romid[0]
                 else:
@@ -1480,8 +1495,6 @@ class Main:
                 else: romname = "unknown"
                 if len(romfilename) > 0 : romfilename = romfilename[0]
                 else: romfilename = ""
-                if len(romgamesys) > 0 : romgamesys = romgamesys[0]
-                else: romgamesys = ""
                 if len(romthumb) > 0 : romthumb = romthumb[0]
                 else: romthumb = ""
                 if len(romfanart) > 0 : romfanart = romfanart[0]
@@ -1684,6 +1697,8 @@ class Main:
                                 if len(item_genre) > 0 : romdata["genre"] = item_genre[0]
                                 if len(item_plot) > 0 : romdata["plot"] = item_plot[0].replace('&quot;','"')
                                 ff.close()
+                            else:
+                                romdata["name"] = title_format(self,romname)
                         else:
                             if ( self.settings[ "datas_method" ] != "0" ):
 								romdata["name"] = clean_filename(romname)
@@ -1730,15 +1745,27 @@ class Main:
                         ext2s = ['png', 'jpg', 'gif', 'jpeg', 'bmp', 'PNG', 'JPG', 'GIF', 'JPEG', 'BMP']
                         for ext2 in ext2s:
                             if ( thumb_path == fanart_path ):
-                            	test_thumb = os.path.join(thumb_path, f.replace('.'+ext, '_thumb.'+ext2))
-                            	test_fanart = os.path.join(fanart_path, f.replace('.'+ext, '_fanart.'+ext2))
+                                if ( thumb_path == path ):
+                                	test_thumb = fullname.replace('.'+ext, '_thumb.'+ext2)
+                                else:
+                                    test_thumb = os.path.join(thumb_path, f.replace('.'+ext, '_thumb.'+ext2))
+                                if ( fanart_path == path ):
+                                	test_fanart = fullname.replace('.'+ext, '_fanart.'+ext2)
+                                else:
+                                    test_fanart = os.path.join(fanart_path, f.replace('.'+ext, '_fanart.'+ext2))
                                 if ( os.path.isfile(test_thumb) ):
                                     thumb = test_thumb
                                 if ( os.path.isfile(test_fanart) ):
                                     fanart = test_fanart
                             else:
-                            	test_thumb = os.path.join(thumb_path, f.replace('.'+ext, '.'+ext2))
-                            	test_fanart = os.path.join(fanart_path, f.replace('.'+ext, '.'+ext2))
+                                if ( thumb_path == path ):
+                                	test_thumb = fullname.replace('.'+ext, '.'+ext2)
+                                else:
+                                    test_thumb = os.path.join(thumb_path, f.replace('.'+ext, '.'+ext2))
+                                if ( fanart_path == path ):
+                                	test_fanart = fullname.replace('.'+ext, '.'+ext2)
+                                else:
+                                    test_fanart = os.path.join(fanart_path, f.replace('.'+ext, '.'+ext2))
                                 if ( os.path.isfile(test_thumb) ):
                                     thumb = test_thumb
                                 if ( os.path.isfile(test_fanart) ):
@@ -1751,10 +1778,16 @@ class Main:
                             if ( self.settings[ "overwrite_thumbs"] ) or ( thumb == "" ):
                                 pDialog.update(filesCount * 100 / len(files), __language__( 30065 ) % (f.replace("."+f.split(".")[-1],""),self.settings[ "thumbs_scraper" ].encode('utf-8','ignore')))
                                 img_url=""
-	                        if (thumb_path == fanart_path):
-                                    thumb = os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '_thumb.jpg'))
+                                if (thumb_path == fanart_path):
+                                    if (thumb_path == path):
+                                        thumb = fullname.replace("."+f.split(".")[-1], '_thumb.jpg')
+                                    else:
+                                        thumb = os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '_thumb.jpg'))
                                 else:
-                                    thumb = os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '.jpg'))
+                                    if (thumb_path == path):
+                                        thumb = fullname.replace("."+f.split(".")[-1], '.jpg')
+                                    else:
+                                        thumb = os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '.jpg'))
 	                        if ( app.lower().find('mame') > 0 ) or ( self.settings[ "thumbs_scraper" ] == 'MAMEWorld' ):
                                     covers = self._get_thumbnails_list(romdata["gamesys"],title,self.settings[ "game_region" ],self.settings[ "thumb_image_size" ])
                                 else:
@@ -1795,9 +1828,15 @@ class Main:
                                 pDialog.update(filesCount * 100 / len(files), __language__( 30071 ) % (f.replace("."+f.split(".")[-1],""),self.settings[ "fanarts_scraper" ].encode('utf-8','ignore')))
                                 img_url=""
                                 if (fanart_path == thumb_path):
-                                    fanart = os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '_fanart.jpg'))
+                                    if (fanart_path == path):
+                                        fanart = fullname.replace("."+f.split(".")[-1], '_fanart.jpg')
+                                    else:
+                                        fanart = os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '_fanart.jpg'))
                                 else:
-                                    fanart = os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '.jpg'))
+                                    if (fanart_path == path):
+                                        fanart = fullname.replace("."+f.split(".")[-1], '.jpg')
+                                    else:
+                                        fanart = os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '.jpg'))
 	                        if ( app.lower().find('mame') > 0 ) or ( self.settings[ "fanarts_scraper" ] == 'MAMEWorld' ):
                                     covers = self._get_fanarts_list(romdata["gamesys"],title,self.settings[ "fanart_image_size" ])
                                 else:
@@ -1934,23 +1973,40 @@ class Main:
                 f = os.path.basename(romfile)
                 for ext2 in ext2s:
                     if (thumb_path == fanart_path) :
-                        if (os.path.isfile(os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '_thumb.'+ext2)))):
-                            romdata["thumb"] = os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '_thumb.'+ext2))
+                        if (thumb_path == rompath) :
+                            if (os.path.isfile(os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '_thumb.'+ext2)))):
+                                romdata["thumb"] = os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '_thumb.'+ext2))
+                        else:
+                            if (os.path.isfile(os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '_thumb.'+ext2)))):
+                                romdata["thumb"] = os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '_thumb.'+ext2))
                     else:
                         if (thumb_path == "") :
                             romdata["thumb"] = os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '_thumb.jpg'))
                         else:
-                            if (os.path.isfile(os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '.'+ext2)))):
-                                romdata["thumb"] = os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '.'+ext2))
+                            if (thumb_path == rompath) :
+                                if (os.path.isfile(os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '.'+ext2)))):
+                                    romdata["thumb"] = os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '.'+ext2))
+                            else:
+                                if (os.path.isfile(os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '.'+ext2)))):
+                                    romdata["thumb"] = os.path.join(thumb_path, f.replace("."+f.split(".")[-1], '.'+ext2))
+
                     if (fanart_path == thumb_path) :
-                        if (os.path.isfile(os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '_fanart.'+ext2)))):
-                            romdata["fanart"] = os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '_fanart.'+ext2))
+                        if (fanart_path == rompath) :
+                            if (os.path.isfile(os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '_fanart.'+ext2)))):
+                                romdata["fanart"] = os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '_fanart.'+ext2))
+                        else:
+                            if (os.path.isfile(os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '_fanart.'+ext2)))):
+                                romdata["fanart"] = os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '_fanart.'+ext2))
                     else:
                         if (fanart_path == "") :
-                            romdata["fanart"] = os.path.join(os.path.dirname(rompath), f.replace("."+f.split(".")[-1], '_fanart.jpg'))
+                            romdata["fanart"] = os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '_fanart.jpg'))
                         else:
-                            if (os.path.isfile(os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '.'+ext2)))):
-                                romdata["fanart"] = os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '.'+ext2))
+                            if (fanart_path == rompath) :
+                                if (os.path.isfile(os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '.'+ext2)))):
+                                   romdata["fanart"] = os.path.join(os.path.dirname(romfile), f.replace("."+f.split(".")[-1], '.'+ext2))
+                            else:
+                                if (os.path.isfile(os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '.'+ext2)))):
+                                    romdata["fanart"] = os.path.join(fanart_path, f.replace("."+f.split(".")[-1], '.'+ext2))
                 romdata["custom"] = custom_path
                 romdata["genre"] = ""
                 romdata["release"] = ""

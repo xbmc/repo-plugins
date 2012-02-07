@@ -14,7 +14,7 @@ def forsida():
 	for tab in tabs:
 		title, url = tab
 		addDir(title.encode('utf-8'), 'nytt', url)
-	for i,stod in enumerate(showtree[:-1]):
+	for i,stod in enumerate(showtree):
 		title = u'%s \xfe\xe6ttir' % stod['name']
 		addDir(title.encode('utf-8'), 'stod', i)
 #	addDir(u'V\xf6ktun K\xf6tlu'.encode('utf-8'), 'eldfjall', 'katla')

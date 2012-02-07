@@ -1,0 +1,3 @@
+[B]Version 1.0.1[/B]
+Bugfixes:
+- Fixed the way data files are being created and dealt with them becoming corrupt

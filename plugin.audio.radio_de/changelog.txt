@@ -1,3 +1,7 @@
+0.0.3 (07.02.2012)
+    - added workaround for streams with .m3u and .pls files
+    - changed: show full context menu
+
 0.0.2 (29.01.2012)
     - Fix error with UTF-8 characters in search string
 

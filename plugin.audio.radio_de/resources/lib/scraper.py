@@ -2,7 +2,7 @@
 
 import simplejson as json
 from urllib import urlencode
-from urllib2 import urlopen, Request
+from urllib2 import urlopen, Request, HTTPError
 
 MAIN_URLS = {'english': 'http://rad.io/info',
              'german': 'http://radio.de/info',
@@ -109,6 +109,8 @@ def get_station_by_station_id(language, station_id):
         raise
     gets = {'broadcast': station_id}
     station = __get_json(path, gets, language)
+    if station['streamURL'].endswith(('m3u', 'pls')):
+        station['streamURL'] = __resolve_playlist(station['streamURL'])
     __log('get_station_by_station_id end')
     return station
 
@@ -130,6 +132,36 @@ def __get_json(path, gets, language):
     response = urlopen(req).read()
     __log('__get_json ended with %d bytes result' % len(response))
     return json.loads(response)
+
+
+def __resolve_playlist(playlist_url):
+    __log('__resolve_playlist started with playlist_url=%s' % playlist_url)
+    req = Request(playlist_url)
+    req.add_header('User-Agent', USER_AGENT)
+    __log('__resolve_playlist opening url=%s' % playlist_url)
+    try:
+        response = urlopen(req).read()
+    except HTTPError, error:
+        __log('__resolve_playlist ERROR: %s' % error)
+        return playlist_url
+    stream_url = None
+    if playlist_url.endswith('m3u'):
+        __log('__resolve_playlist found .m3u file')
+        for entry in response.splitlines():
+            if not entry.strip().startswith('#'):
+                stream_url = entry
+                break
+    elif playlist_url.endswith('pls'):
+        __log('__resolve_playlist found .pls file')
+        for line in response.splitlines():
+            if line.strip().startswith('File1'):
+                stream_url = line.split('=')[1]
+                break
+    if not stream_url:
+        __log('__resolve_playlist falling back to playlist')
+        stream_url = playlist_url
+    __log('__resolve_playlist result=%s' % stream_url)
+    return stream_url
 
 
 def __log(text):

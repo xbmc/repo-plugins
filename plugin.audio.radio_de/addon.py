@@ -35,7 +35,7 @@ class Plugin_mod(Plugin):
         if options.get('is_playable'):
             li.setProperty('IsPlayable', 'true')
         if options.get('context_menu'):
-            li.addContextMenuItems(options['context_menu'], replaceItems=True)
+            li.addContextMenuItems(options['context_menu'], replaceItems=False)
         return options['url'], li, options.get('is_folder', True)
 
 plugin = Plugin_mod(__addon_name__, __id__, __file__)
@@ -206,7 +206,7 @@ def get_stream(id):
     __log('get_stream started with id=%s' % id)
     language = __get_language()
     station = scraper.get_station_by_station_id(language, id)
-    stream_url = station['streamURL']  # fixme: need to resolve .pls at least
+    stream_url = station['streamURL']
     __log('get_stream end with stream_url=%s' % stream_url)
     return plugin.set_resolved_url(stream_url)
 

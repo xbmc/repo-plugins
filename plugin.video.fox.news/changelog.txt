@@ -1,0 +1,2 @@
+Version 1.0.8
+added a play mode for video directories

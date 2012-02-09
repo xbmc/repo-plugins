@@ -1,3 +1,6 @@
+Version 0.0.8
+minor fixes, code improvements
+
 Version 0.0.7
 we now scrape http://www.hgtv.com/full-episodes/package/index.html for the show list and hard-code other shows in the 'More' directory
 

@@ -10,6 +10,7 @@ from BeautifulSoup import BeautifulSoup
 __settings__ = xbmcaddon.Addon(id='plugin.video.hgtv')
 __language__ = __settings__.getLocalizedString
 home = __settings__.getAddonInfo('path')
+icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 
 
 def getRequest(url):
@@ -20,7 +21,7 @@ def getRequest(url):
         link=response.read()
         response.close()
         return link
-        
+
         
 def getShows():
         url = 'http://www.hgtv.com/full-episodes/package/index.html'
@@ -71,7 +72,7 @@ def getMoreShows():
         addDir(__language__(30026),'/hgtv-white-house-christmas/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/11/23/spShow_white-house-xmas-2011_s994x100.jpg') # White House Christmas 2011
 
 
-def INDEX(url, iconimage):
+def index(url, iconimage):
         if url.startswith('/'):
             url='http://www.hgtv.com'+url
         soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
@@ -96,11 +97,11 @@ def INDEX(url, iconimage):
         if len(showID)<1:
             try:
                 url = soup.find('ul', attrs={'class' : "button-nav"})('a')[1]['href']
-                INDEX(url, iconimage)
+                index(url, iconimage)
             except:
                 try:
                     url = soup.find('li', attrs={'class' : "tab-past-season"}).a['href']
-                    INDEX(url, iconimage)
+                    index(url, iconimage)
                 except: print 'Houston we have a problem!'
         else:
             url='http://www.hgtv.com/hgtv/channel/xml/0,,'+showID[0]+',00.xml'
@@ -186,10 +187,10 @@ if mode==None or url==None or len(url)<1:
 
 elif mode==1:
     print ""
-    INDEX(url, iconimage)
+    index(url, iconimage)
 
 elif mode==2:
     print ""
     getMoreShows()
-    
+
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

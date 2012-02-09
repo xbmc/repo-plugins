@@ -1,6 +1,7 @@
 import urllib
 import urllib2
 import re
+import os
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
@@ -9,17 +10,23 @@ from BeautifulSoup import BeautifulSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.hgtv')
 __language__ = __settings__.getLocalizedString
+home = __settings__.getAddonInfo('path')
+icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 cache = StorageServer.StorageServer("hgtv", 24)
 
-def shows_cache():
-        url = 'http://www.hgtv.com/full-episodes/package/index.html'
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+def getRequest(url):
+        headers = {'User-agent' : '	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0) Gecko/20100101 Firefox/10.0',
                    'Referer' : 'http://www.hgtv.com'}
         req = urllib2.Request(url,None,headers)
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        soup = BeautifulSoup(link)
+        return link
+        
+        
+def shows_cache():
+        url = 'http://www.hgtv.com/full-episodes/package/index.html'
+        soup = BeautifulSoup(getRequest(url))
         shows = soup.findAll('ol', attrs={'id' : "fe-list"})[1]('li')
         Shows_list=[]
         for i in shows:
@@ -37,7 +44,7 @@ def shows_cache():
 def getShows():
         for i in cache.cacheFunction(shows_cache)[0]:
             addDir(i[0], i[1], 1, i[2])
-        addDir(__language__(30027),'getMoreShows',2,'')
+        addDir(__language__(30027),'getMoreShows',2,icon)
 
 
 def getMoreShows():
@@ -70,50 +77,40 @@ def getMoreShows():
         addDir(__language__(30026),'/hgtv-white-house-christmas/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/11/23/spShow_white-house-xmas-2011_s994x100.jpg') # White House Christmas 2011
 
 
-def INDEX(url):
+def index(url, iconimage):
         if url.startswith('/'):
             url='http://www.hgtv.com'+url
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
-                   'Referer' : 'http://www.hgtv.com'}
-        req = urllib2.Request(url,None,headers)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         try:
             if soup.find('ul', attrs={'class' : "channel-list"}):
                 name = soup.find('ul', attrs={'class' : "channel-list"})('h4')[0]('em')[0].next
                 url = soup.find('ul', attrs={'class' : "channel-list"})('a')[0]['href']
-                addDir(name,url,1,'')
+                addDir(name,url,1,iconimage)
                 try:
                     seasons = soup.findAll('li', attrs={'class' : 'switch'})
                     for season in seasons:
                         name = season('h4')[0]('em')[0].next
                         url = season('a')[0]['href']
-                        addDir(name,url,1,'')
+                        addDir(name,url,1,iconimage)
                 except:
                     pass
         except:
                 pass
-        showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\\'.+?\\',\\'(.+?)\\', \\'\\'\);").findall(link)
+        showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\\'.+?\\',\\'(.+?)\\', \\'\\'\);").findall(str(soup))
         if len(showID)<1:
-            showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\'.+?','(.+?)', '.+?'\);").findall(link)
+            showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\'.+?','(.+?)', '.+?'\);").findall(str(soup))
         if len(showID)<1:
             try:
                 url = soup.find('ul', attrs={'class' : "button-nav"})('a')[1]['href']
-                INDEX(url)
+                index(url, iconimage)
             except:
                 try:
                     url = soup.find('li', attrs={'class' : "tab-past-season"}).a['href']
-                    INDEX(url)
+                    index(url, iconimage)
                 except: print 'Houston we have a problem!'
         else:
             url='http://www.hgtv.com/hgtv/channel/xml/0,,'+showID[0]+',00.xml'
-            req = urllib2.Request(url,None,headers)
-            response = urllib2.urlopen(req)
-            link=response.read()
-            response.close()
-            soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
+            soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
             videos = soup('video')
             for video in videos:
                 name = video('clipname')[0].string
@@ -155,7 +152,7 @@ def addLink(name,url,description,length,iconimage):
 
 
 def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
@@ -177,6 +174,10 @@ try:
 except:
     pass
 try:
+    iconimage=urllib.unquote_plus(params["iconimage"])
+except:
+    pass
+try:
     mode=int(params["mode"])
 except:
     pass
@@ -191,10 +192,10 @@ if mode==None or url==None or len(url)<1:
 
 elif mode==1:
     print ""
-    INDEX(url)
+    index(url, iconimage)
 
 elif mode==2:
     print ""
     getMoreShows()
-    
+
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

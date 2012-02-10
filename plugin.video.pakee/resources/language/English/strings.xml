@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
+    <string id="30001">View settings</string>
+    <string id="30002">Playlist settings</string>
     <string id="30020">Pakee</string>
-    <string id="30021">Play all</string>
+    <string id="30021">Media play mode</string>
+    <string id="30022">Single: Play selected video only</string>
+    <string id="30023">Playlist: Start playlist at selected video</string>
+
+    <string id="30100">Default sort order</string>
+    <string id="30101">Default</string>
+    <string id="30102">Title</string>
+
+    <string id="30200">Repeat playlist</string>
+    <string id="30201">Shuffle playlist</string>
+
+    <string id="30300">Default view</string>
+    <string id="30301">Thumbnail view</string>
+    <string id="30302">PosterWrap view</string>
+    <string id="30303">List view</string>
+    <string id="30304">Media Info view</string>
+    <string id="30305">Media Info 2 view</string>
+    <string id="30306">Fan art view</string>
+
+
 </strings>

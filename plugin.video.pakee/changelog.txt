@@ -1,10 +1,23 @@
+[B]Version 1.0.3[/B]
+
+- Created new playlist settings for plugin: 
+  To allow users to start playlist from selected listitem 
+  Toggle shuffle and repeat modes for playlist
+
+- Created new view settings for plugin: 
+  To allow users to set the default view (i.e. media info2, thumbnail etc)  
+
+[B]Version 1.0.2[/B]
+
+- Created new setting for plugin: allow user to change sort order to title across all views 
+
 [B]Version 1.0.1[/B]
 
 - Updated addon.xml to support Eden
 
 [B]Version 1.0.0[/B]
 
-- Completed Pakee XBMC functionality, testing on Eden Beta1,2. Plugin provides the ability to:
+-Completed Pakee XBMC functionality, testing on Eden Beta1,2. Plugin provides the ability to:
 -Browse TV channels, TV shows, movies, actors, fashion, photography, sports, YouTube channels from Pakistan 
 -Browse musicians' albums, songs, Facebook albums, news and YouTube channels 
 -Allows users to play video, music or image content individually or in "play all in list" mode 

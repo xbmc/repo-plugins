@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.pakee"
        name="Pakee"
-       version="1.0.1"
+       version="1.0.3"
        provider-name="pakee">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
@@ -16,8 +16,8 @@
     <description>
 -Browse TV channels, TV shows, movies, actors, fashion, photography, sports, YouTube channels from Pakistan 
 -Browse musicians' albums, songs, Facebook albums, news and YouTube channels 
--Allows users to play video, music or image content individually or in "play all in list" mode 
--Allows users to pull any YouTube users playlists, uploaded/favorite videos and playing in "play all in list" mode
+-Allows users to play video, music or image content in "play all" mode 
+-Allows users to pull any YouTube users playlists, uploaded/favorite videos and play in "play all" mode
 -More info available at http://code.google.com/p/pakee
 </description>
     <platform>all</platform>

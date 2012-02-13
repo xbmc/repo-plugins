@@ -63,17 +63,21 @@ class RssFeed (Feed):
             feedItem.size = 0;
             feedItem.link = self.parseIndirectItem(self.readText(itemNode,"link"));
           
-          descriptionNode = itemNode.getElementsByTagName("itunes:summary");
-          if(len(descriptionNode)>0):
-            descriptionNode = descriptionNode[0];
-          else:
-            descriptionNode = itemNode.getElementsByTagName("description")[0];
+          try:
+            descriptionNode = itemNode.getElementsByTagName("itunes:summary");
+            if(len(descriptionNode)>0):
+              descriptionNode = descriptionNode[0];
+            else:
+              descriptionNode = itemNode.getElementsByTagName("description")[0];
+            
           
-          if descriptionNode.firstChild is not None:
-            feedItem.description = descriptionNode.firstChild.data;
-          else:
+            if descriptionNode.firstChild is not None:
+              feedItem.description = descriptionNode.firstChild.data;
+            else:
+              feedItem.description = "";
+          except:
             feedItem.description = "";
-          
+  
           link = findPicLink.search(feedItem.description)
           if(link is not None):
             link = link.group().replace("src=","").replace("\"","");
@@ -85,6 +89,10 @@ class RssFeed (Feed):
           feedItems.append(feedItem);
         except:
           self.gui.log("Error while parsing item: %s"%itemNode.toxml());
+          self.gui.log("Exception: ");
+          traceback.print_exc();
+          self.gui.log("Stacktrace: ");
+          traceback.print_stack();
       
       sortedList = sorted(feedItems, key = lambda item:item.date, reverse=True);  
       

@@ -1,10 +1,15 @@
-import urllib,urllib2,re,os
-import xbmcplugin,xbmcgui,xbmcaddon
+import urllib
+import urllib2
+import re
+import os
+import xbmcplugin
+import xbmcgui
+import xbmcaddon
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.twit')
 __language__ = __settings__.getLocalizedString
-videoq = __settings__.getSetting('video_quality')
+playback = __settings__.getSetting('playback')
 home = __settings__.getAddonInfo('path')
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 
@@ -17,7 +22,7 @@ def categories():
         addDir(__language__(30003),'http://twit.tv/show/fourcast',1,'http://static.mediafly.com/publisher/images/f7f40bcf20c742cfb55cbccb56c2c68c/icon-600x600.png')
         addDir(__language__(30004),'http://twit.tv/show/ipad-today',1,'http://static.mediafly.com/publisher/images/201bc64beb6b4956971650fd1462a704/icon-600x600.png')
         addDir(__language__(30005),'http://twit.tv/show/all-about-android',1,'http://static.mediafly.com/publisher/images/7874016b2dd3490fa1e8b606dff4d2fa/icon-600x600.png')
-        addDir(__language__(30006),'http://twit.tv/show/tech-history-today',1,'http://static.mediafly.com/publisher/images/88fcc18ed4234a2e9f96a13f74afe7b9/icon-600x600.png')
+        # addDir(__language__(30006),'http://twit.tv/show/tech-history-today',1,'http://static.mediafly.com/publisher/images/88fcc18ed4234a2e9f96a13f74afe7b9/icon-600x600.png')
         addDir(__language__(30007),'http://twit.tv/show/this-week-in-google',1,'http://static.mediafly.com/publisher/images/8248233e64fc4c68b722be0ec75d637d/icon-600x600.png')
         addDir(__language__(30008),'http://twit.tv/show/windows-weekly',1,'http://static.mediafly.com/publisher/images/ad659facf4cb4fe795b595d9b4275daf/icon-600x600.png')
         addDir(__language__(30009),'http://twit.tv/show/macbreak-weekly',1,'http://static.mediafly.com/publisher/images/a24b7b336fb14a2ba3f1e31223f622ac/icon-600x600.png')
@@ -57,8 +62,7 @@ def index(url,iconimage):
             except:
                 description = ''
             date = i.findPrevious('span').string
-            if not url.endswith('.mp3'):
-                addLink(name,url,description,date,2,iconimage)
+            addLink(name,url,description,date,2,iconimage)
         try:
             page = 'http://twit.tv'+soup('li', attrs={'class' : "pager-next"})[0].a['href']
             addDir('Next Page',page,1,iconimage)
@@ -74,20 +78,58 @@ def indexTwitFeed():
         link=response.read()
         soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
         for i in soup('item'):
-            title = i.title.string
-            # url = i.link
-            date = i.pubdate.string.rsplit(' ', 1)[0]
-            html = i.description.contents[0]
-            episode_name = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)('div', attrs={'class' : "field-item odd"})[0].string.replace('  ','').replace('\n','')
             try:
-                thumb = re.compile('<img src="(.+?)"').findall(html)[0]
+                title = i.title.string
+                url = i.link
+                date = i.pubdate.string.rsplit(' ', 1)[0]
+                item_str = str(i).replace('  ','').replace('\n','')
             except:
-                thumb = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
+                continue
+            url_list = []
             try:
-                vid_url = re.compile('Video URL:&nbsp;</div>\n                    (.+?)        </div>').findall(html)[0]
-                addLink(title+' - '+episode_name, vid_url, '', date, 8, thumb)
+                vid_url_high = re.compile('HD Video URL:&nbsp;</div>(.+?)</div>').findall(item_str)[0]
             except:
-                print '--- There was a problem adding episode %s ---' % title
+                vid_url_high = 'no_url'
+            url_list.append(vid_url_high)
+            try:
+                vid_url = re.compile('Video URL:&nbsp;</div>(.+?)</div>').findall(item_str)[0]
+            except:
+                vid_url = 'no_url'
+            url_list.append(vid_url)
+            try:
+                vid_url_low = re.compile('Video URL \(mobile\):&nbsp;</div>(.+?)</div></div>').findall(item_str)[0]
+            except:
+                vid_url_low = 'no_url'
+            url_list.append(vid_url_low)
+            try:
+                aud_url = re.compile('MP3 feed URL:&nbsp;</div>(.+?)</div></div></div>').findall(item_str)[0]
+            except:
+                aud_url = 'no_url'
+            url_list.append(aud_url)
+
+            url = setUrl(url_list, False)
+            if not url == 'no_url':
+                try:
+                    episode_name = re.compile('<div class="field-item odd">(.+?)</div></div>').findall(item_str)[0]
+                    if episode_name.startswith('<img'):
+                        episode_name = re.compile('<div class="field-item odd"><p>(.+?)</p><p>').findall(item_str)[0]
+                except:
+                    episode_name = ''
+                try:
+                    thumb = re.compile('<img src="(.+?)" alt=').findall(item_str)[0]
+                except:
+                    thumb = ''
+                try:
+                    desc = re.compile('<div class="field-item odd"><p>(.+?)</p></div></div>').findall(item_str)[0]
+                    pattern = re.compile('<.+?>').findall(desc)
+                    for i in pattern:
+                        desc = desc.replace(i,'')
+                    description = desc.replace('&amp;', '&').replace('&quot;', '"').replace('&#039;', "'")
+                except:
+                    description = ''
+                name = title+' - '+episode_name.replace('&amp;', '&').replace('&quot;', '"').replace('&#039;', "'")
+                addLink(name, url, description, date, 4, thumb)
+            else: print '--- There was a problem adding episode %s ---' % title
 
 
 def getVideo(url):
@@ -96,26 +138,57 @@ def getVideo(url):
         response = urllib2.urlopen(req)
         link=response.read()
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        link = soup('span', attrs={'class' : "download"})[0]('a')[0]['href']
-        setUrl(link)
+        url_list = ['no_url', 'no_url', 'no_url', 'no_url']
+        for i in soup('span', attrs={'class' : "download"}):
+            name = i.a['class']
+            url = i.a['href']
+            if name == 'audio download':
+                url_list[3] = url
+            if name == 'sd-low download':
+                url_list[2] = url
+            if name == 'sd download':
+                url_list[1] = url
+            if name == 'hd download':
+                url_list[0] = url
+        setUrl(url_list)
 
 
-def setUrl(link):
-        if videoq == __language__(30027):
-            link = link.replace('_h264b_864x480_500','_h264b_864x480_2000')
-        elif videoq == __language__(30028):
-            link = link.replace('_h264b_864x480_500','_h264b_864x480_1000')		
-        elif videoq == __language__(30030):
-            link = link.replace('_h264b_864x480_500','_h264b_640x368_256')
-        item = xbmcgui.ListItem(path=link)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+def setUrl(url_list, set=True):
+        if playback == '3':
+            url = url_list[3]
+        if playback == '2':
+            url = url_list[2]
+            if url == 'no_url':
+                url = url_list[1]
+        if playback == '1':
+            url = url_list[1]
+            if url == 'no_url':
+                url = url_list[2]
+        if playback == '0':
+            url = url_list[0]
+            if url == 'no_url':
+                url = url_list[1]
+                if url == 'no_url':
+                    url = url_list[2]
+        if not set:
+            return url
+        else:
+            if url == 'no_url':
+                dialog = xbmcgui.Dialog()
+                ret = dialog.yesno(__language__(30040), __language__(30039))
+                if ret:
+                    url = url_list[3]
+                else: return
+            item = xbmcgui.ListItem(path=url)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 
 def addLiveLinks():
-        addLink(__language__(30032),'http://bglive-a.bitgravity.com/twit/live/high?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
-        addLink(__language__(30033),'http://bglive-a.bitgravity.com/twit/live/low?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
-        addLink(__language__(30034),'http://cgw.ustream.tv/Viewer/getStream/1/1524.amf','','',5,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
+        addLink(__language__(30032),'http://bglive-a.bitgravity.com/twit/live/high?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
+        addLink(__language__(30033),'http://bglive-a.bitgravity.com/twit/live/low?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
+        addLink(__language__(30034),'http://cgw.ustream.tv/Viewer/getStream/1/1524.amf','','',5,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
         addLink(__language__(30035),'URL','','',6,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
+        addLink(__language__(30041),'http://twit.am/listen','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
 
 
 def getUstream(url):
@@ -139,8 +212,7 @@ def getUstream(url):
         swf = ' swfUrl='+getSwf()
         pageUrl = ' pageUrl=http://live.twit.tv'
         url = rtmp + playpath + swf + pageUrl + ' swfVfy=1 live=true'
-        item = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        playLive(url)
 
 
 def getJtv():
@@ -156,8 +228,7 @@ def getJtv():
         Pageurl = ' Pageurl=http://www.justin.tv/twit'
         swf = ' swfUrl=http://www.justin.tv/widgets/live_embed_player.swf?channel=twit'
         url = rtmp+token+swf+Pageurl
-        item = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        playLive(url)
 
 
 def playLive(url):
@@ -185,12 +256,12 @@ def get_params():
 
 def addLink(name,url,description,date,mode,iconimage):
         try:
-            description = description + "\n \n Published: " + date
+            description += "\n \n Published: " + date
         except:
             description = "Published: " + date
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
         ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description } )
         liz.setProperty( "Fanart_Image", fanart )
         liz.setProperty('IsPlayable', 'true')
@@ -201,7 +272,7 @@ def addLink(name,url,description,date,mode,iconimage):
 def addDir(name,url,mode,iconimage):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
         ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         liz.setProperty( "Fanart_Image", fanart )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)

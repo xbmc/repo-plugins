@@ -27,11 +27,11 @@
   <string id='30024'>Ham Nation</string>
   <string id='30025'>Futures in Biotech</string>
   <string id='30026'>This Week in Radio Tech</string>
-  <string id='30027'>864x480 Bitrate 2000</string>
-  <string id='30028'>864x480 Bitrate 1000</string>
-  <string id='30029'>864x480 Bitrate 500</string>
-  <string id='30030'>640x368 Bitrate 256</string>
-  <string id='30031'>Video Quality</string>
+  <string id='30027'>Video (HD) 1280x720 Bitrate 2500</string>
+  <string id='30028'>Video (SD) 864x480 Bitrate 500</string>
+  <string id='30029'>Video (low/mobile) 640x368 Bitrate 256</string>
+  <string id='30030'>Audio</string>
+  <string id='30031'>Playback</string>
   <string id='30032'>Bitgravity 1 Mbps</string>
   <string id='30033'>Bitgravity 400 kbps</string>
   <string id='30034'>Ustream 1.5 Mbps</string>
@@ -39,4 +39,7 @@
   <string id='30036'>Before You Buy</string>
   <string id='30037'>Game On</string>
   <string id='30038'>Latest Episodes</string>
+  <string id='30039'>Seems the video is not up yet.  Play the audio?</string>
+  <string id='30040'>TWiT</string>
+  <string id='30041'>Audio TWiT.am/listen</string>
 </strings>

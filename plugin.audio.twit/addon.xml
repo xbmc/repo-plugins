@@ -16,4 +16,5 @@
     <description>Podcasts from the TWiT Network</description>
     <platform>all</platform>
   </extension>
+  <broken>Use the new combined add-on instead</broken>
 </addon>

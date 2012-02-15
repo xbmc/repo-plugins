@@ -9,9 +9,9 @@ __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.3'
+__version__ = '1.0.4'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
-__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-betaplus.xml'
+__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-xbmc.xml?a=9'
 __language__ = __settings__.getLocalizedString
 
 #plugin modes
@@ -25,6 +25,7 @@ PLUGIN_MODE_PLAY_AUDIO = 70
 PLUGIN_MODE_PLAY_PLAYLIST = 80
 PLUGIN_MODE_PLAY_SLIDESHOW = 90
 PLUGIN_MODE_OPEN_SETTINGS = 100
+PLUGIN_MODE_PLAY_STREAM = 110
 
 #view modes
 VIEW_THUMB = 500
@@ -65,7 +66,7 @@ def play_youtube_video(video_id, name):
 	xbmc.Player( xbmc.PLAYER_CORE_DVDPLAYER ).play( str(url), listitem)
 		
 #Play a single song	
-def play_audio(url, name):
+def play_stream(url, name):
 	print "playing audio file. name: " + name + " url: " + url
 	listitem = xbmcgui.ListItem( label = str(name), iconImage = "DefaultVideo.png", thumbnailImage = xbmc.getInfoImage( "ListItem.Thumb" ), path=url )
 	listitem.setInfo( type="video", infoLabels={ "Title": name, "Plot" : name } )
@@ -215,7 +216,7 @@ def build_show_directory(origurl):
 
 		#if weird characters found in label or description, instead of erroring out, empty their values (empty listitem will be shown)
 		try:
-			xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(url) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+			xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
 		except:
 			label = ''
 			description = ''
@@ -228,7 +229,7 @@ def build_show_directory(origurl):
 			#For feeds with videos as their first item, show <play all> listitem as first listitem			
 			if 'youtube.com' in url or '(Playlist: ' in label:
 				if itemCount == 0:
-					playAll = xbmcgui.ListItem( label = '<Play all>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 
@@ -249,7 +250,7 @@ def build_show_directory(origurl):
 			if url[-4:]=='.jpg' or url[-4:]=='.gif' or url[-4:]=='.png':
 				#For folders with videos, show play all option 			
 				if itemCount == 0:
-					playAll = xbmcgui.ListItem( label = '<Start slideshow>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30051) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_SLIDESHOW)+"&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 				isFolder = False
@@ -260,7 +261,7 @@ def build_show_directory(origurl):
 
 				#For feeds with mp3s as their first item, show <play all> listitem as first listitem			
 				if itemCount == 0:
-					playAll = xbmcgui.ListItem( label = '<Play all>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 				isFolder = False
@@ -274,6 +275,15 @@ def build_show_directory(origurl):
 					mode = PLUGIN_MODE_PLAY_PLAYLIST
 					url = origurl
 
+
+			if 'rtmp://' in url or 'mms://' in url:
+				isFolder = False
+				mode = PLUGIN_MODE_PLAY_STREAM
+
+				#For feeds with streams as their first item, show <play all> listitem as first listitem			
+				if itemCount == 0:
+					playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 
 
@@ -375,6 +385,9 @@ def getItemFieldsBS(item):
 
 	if item('media:thumbnail'):
         	thumb = item('media:thumbnail')[0]['url']
+	elif item.thumbnail:
+		thumb = item.thumbnail.string
+
 	if item('media:content'):
         	duration = item('media:content')[0]['duration']
 
@@ -474,6 +487,8 @@ def getItemFields(item):
 		description = ''
 	if item.getElementsByTagNameNS("http://search.yahoo.com/mrss/","thumbnail"):
 		thumb = item.getElementsByTagNameNS("http://search.yahoo.com/mrss/","thumbnail")[0].getAttribute('url')
+	elif item.getElementsByTagName("thumbnail"):
+		thumb = clean(getText(item.getElementsByTagName("thumbnail")[0].childNodes))
 	else:
 		thumb = pakee_thumb
 
@@ -640,11 +655,13 @@ elif mode == PLUGIN_MODE_BUILD_YT_FAV:
 	build_ytuser_favs_directory()
 elif mode == PLUGIN_MODE_PLAY_AUDIO:
 	#play_playlist(url, index)
-	play_audio(url, name)
+	play_stream(url, name)
 elif mode == PLUGIN_MODE_PLAY_PLAYLIST:
 	play_playlist(url, index)
 elif mode == PLUGIN_MODE_PLAY_SLIDESHOW:
 	play_picture_slideshow(url, name)
+elif mode == PLUGIN_MODE_PLAY_STREAM:
+	play_stream(url, name)
 elif mode == PLUGIN_MODE_OPEN_SETTINGS:
 	open_settings()
 

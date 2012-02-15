@@ -1,3 +1,7 @@
+[B]Version 1.0.4[/B]
+- Added live channel streams from LiveStream's plugins community-links repository
+- Set default sorting to be by title for drama episodes
+
 [B]Version 1.0.3[/B]
 
 - Created new playlist settings for plugin: 
@@ -10,6 +14,7 @@
 [B]Version 1.0.2[/B]
 
 - Created new setting for plugin: allow user to change sort order to title across all views 
+Note: Since XBMC caches the pages the user has browsed through, users may need to clear the viewmode caches to see the updated sort order on previously accessed pages (by rename files under %AppData%\xbmc\userdata\Database\ViewModes*.db)
 
 [B]Version 1.0.1[/B]
 

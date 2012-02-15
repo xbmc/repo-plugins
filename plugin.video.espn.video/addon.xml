@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.espn.video"
+       name="ESPN Video"
+       version="1.0.0"
+       provider-name="stacked">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+	<import addon="script.module.parsedom" version="0.9.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>ESPN: Watch Sports Videos and Highlights Online.</summary>
+    <description>ESPN.com is the leading provider of sports on the Internet. ESPN.com provides its users, the young, affluent, male sports fan, with late breaking news, statistics, schedules, and player updates, in addition to up-to-the minute sports scores from live events.</description>
+    <platform>all</platform>
+  </extension>
+</addon>

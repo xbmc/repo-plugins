@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">TV Shows</string>
+    <string id="30001">Original Digitals</string>
+    <string id="30002">Categories</string>
+    <string id="30003">Next Page</string>
+    <string id="30004">Sorry. This video is unavailable.</string>
+	<string id="30005">Search</string>
+	<string id="30006">History</string>
+	<string id="30007">Show search history folder</string>
+	<string id="30008">Edit search term</string>
+	<string id="30009">SportsCenter</string>
+	<string id="30010">First Take</string>
+	<string id="30011">Pardon the Interruption</string>
+	<string id="30012">Around the Horn</string>
+    <string id="30013">No videos found. Please check your spelling</string>
+    <string id="30014">or try again using different search words.</string>
+</strings>

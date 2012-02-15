@@ -1,0 +1,4 @@
+<settings>
+	<setting id="history" type="bool" label="30007" default="true"/>
+    <setting id="presets_search" value="" />
+</settings>

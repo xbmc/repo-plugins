@@ -4,11 +4,13 @@
     <string id="30200">%d star</string>
     <string id="30210">Importing iPhoto Library</string>
     <string id="30211">Imported %d items</string>
-    <string id="30212">Scanning iPhoto database...</string>
+    <string id="30212">Scanning iPhoto Library...</string>
     <string id="30213">Update library</string>
     <string id="30214">Ignore Keyword</string>
     <string id="30215">Remove cached maps</string>
     <string id="30216">Reset addon database</string>
+    <string id="30217">Addon documentation</string>
+    <string id="30219">Resetting addon database...</string>
     <string id="30220">Enable Support for Places?</string>
     <string id="30221">Places looks up addresses via Google.</string>
     <string id="30222">This can slow down the library import a bit.</string>
@@ -22,6 +24,8 @@
     <string id="30250">Deleting cached map images</string>
     <string id="30251">Deleted %d cached maps</string>
     <string id="30252">Scanning...</string>
+    <string id="30260">Library import in progress</string>
+    <string id="30261">Unable to reset database.</string>
 
     <!-- Category strings -->
     <string id="30100">Events</string>
@@ -31,6 +35,7 @@
     <string id="30104">Keywords</string>
     <string id="30105">Faces</string>
     <string id="30106">Places</string>
+    <string id="30107">&lt;&lt; View Documentation &gt;&gt;</string>
 
     <!-- Plugin settings strings -->
     <string id="30000">Path to iPhoto Library</string>
@@ -56,6 +61,7 @@
     <string id="30027">Managed Library (change requires rescan)</string>
     <string id="30028">Local root path to Masters</string>
     <string id="30029">Rewrite root path as</string>
+    <string id="30030">Hide View Documentation item in main menu</string>
 
     <!-- Plugin settings categories strings -->
     <string id="30050">General</string>

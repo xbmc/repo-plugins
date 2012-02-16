@@ -1,3 +1,11 @@
+1.9.0 - 20120216
+- Allow access to network browser from addon settings.
+- Online documentation.
+- Default view modes when using Confluence skin.
+- Clean up context menu items.
+- Pop up settings dialog on first run.
+- Locking to prevent multiple instances of import operation.
+
 1.7.1 - 20120202
 - New icons.
 

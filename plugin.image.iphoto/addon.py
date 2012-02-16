@@ -70,6 +70,37 @@ else:
     media_sort_col = "NULL"
 
 
+def generic_context_menu_items(commands=[]):
+    commands.append((addon.getLocalizedString(30217), "XBMC.RunPlugin(\""+BASE_URL+"?action=textview&file=README.txt\")",))
+    commands.append((xbmc.getLocalizedString(1045), "XBMC.RunPlugin(\""+BASE_URL+"?action=settings\")",))
+
+def maintenance_context_menu_items(commands=[]):
+    commands.append((addon.getLocalizedString(30213), "XBMC.RunPlugin(\""+BASE_URL+"?action=rescan\")",))
+    commands.append((addon.getLocalizedString(30216), "XBMC.RunPlugin(\""+BASE_URL+"?action=resetdb\")",))
+    commands.append((addon.getLocalizedString(30215), "XBMC.RunPlugin(\""+BASE_URL+"?action=rm_caches\")",))
+
+def textview(file):
+    WINDOW = 10147
+    CONTROL_LABEL = 1
+    CONTROL_TEXTBOX = 5
+
+    xbmc.executebuiltin("ActivateWindow(%d)" % (WINDOW))
+    retries = 5
+    while (gui.getCurrentWindowDialogId() != WINDOW and retries):
+	retries -= 1
+	xbmc.sleep(100)
+
+    window = gui.Window(WINDOW)
+
+    try:
+	heading = os.path.splitext(os.path.basename(file))[0]
+	text = open(os.path.join(PLUGIN_PATH, file)).read()
+    except:
+	print traceback.print_exc()
+    else:
+	window.getControl(CONTROL_LABEL).setLabel("%s - %s" % (heading, __plugin__))
+	window.getControl(CONTROL_TEXTBOX).setText(text)
+
 def md5sum(filename):
     try:
 	m = md5()
@@ -84,11 +115,17 @@ def render_media(media):
     global view_mode
 
     # default view in Confluence
-    view_mode = addon.getSetting('view_mode')
-    if (view_mode == ""):
-	view_mode = "0"
-	addon.setSetting('view_mode', view_mode)
-    view_mode = int(view_mode)
+    vm = addon.getSetting('view_mode')
+    if (vm == ""):
+	vm = "0"
+	addon.setSetting('view_mode', vm)
+    vm = int(vm)
+    if (vm == 1):
+	view_mode = 510
+    elif (vm == 2):
+	view_mode = 514
+    else:
+	view_mode = vm
 
     sort_date = False
     n = 0
@@ -130,7 +167,7 @@ def list_photos_in_album(params):
     return render_media(media)
 
 def list_albums(params):
-    global db, BASE_URL, ICONS_PATH, album_ign_empty
+    global db, BASE_URL, ICONS_PATH, album_ign_empty, view_mode
 
     albumid = 0
     try:
@@ -146,6 +183,9 @@ def list_albums(params):
 	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
+    commands = []
+    generic_context_menu_items(commands)
+
     n = 0
     for (albumid, name, count) in albums:
 	if (name == "Photos"):
@@ -155,11 +195,20 @@ def list_albums(params):
 	    continue
 
 	item = gui.ListItem(name, thumbnailImage=ICONS_PATH+"/folder.png")
+	item.addContextMenuItems(commands, True)
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=albums&albumid=%s" % (albumid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+
+    # default view in Confluence
+    vm = addon.getSetting('confluence_view_albums')
+    if (vm == ""):
+	vm = "0"
+    view_mode = int(vm)
+    addon.setSetting('confluence_view_albums', "0")
+
     return n
 
 def list_photos_in_event(params):
@@ -170,7 +219,7 @@ def list_photos_in_event(params):
     return render_media(media)
 
 def list_events(params):
-    global db, BASE_URL, album_ign_empty
+    global db, BASE_URL, album_ign_empty, view_mode
 
     rollid = 0
     try:
@@ -186,6 +235,9 @@ def list_events(params):
 	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
+    commands = []
+    generic_context_menu_items(commands)
+
     sort_date = False
     n = 0
     for (rollid, name, thumbpath, rolldate, count) in rolls:
@@ -193,6 +245,7 @@ def list_events(params):
 	    continue
 
 	item = gui.ListItem(name, thumbnailImage=thumbpath)
+	item.addContextMenuItems(commands, True)
 
 	try:
 	    item_date = time.strftime("%d.%m.%Y", time.localtime(apple_epoch + float(rolldate)))
@@ -208,6 +261,14 @@ def list_events(params):
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
     if (sort_date == True):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
+
+    # default view in Confluence
+    vm = addon.getSetting('confluence_view_events')
+    if (vm == ""):
+	vm = "0"
+    view_mode = int(vm)
+    addon.setSetting('confluence_view_events', "0")
+
     return n
 
 def list_photos_with_face(params):
@@ -218,7 +279,7 @@ def list_photos_with_face(params):
     return render_media(media)
 
 def list_faces(params):
-    global db, BASE_URL, album_ign_empty
+    global db, BASE_URL, album_ign_empty, view_mode
 
     faceid = 0
     try:
@@ -234,18 +295,29 @@ def list_faces(params):
 	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
+    commands = []
+    generic_context_menu_items(commands)
+
     n = 0
     for (faceid, name, thumbpath, count) in faces:
 	if (not count and album_ign_empty == "true"):
 	    continue
 
 	item = gui.ListItem(name, thumbnailImage=thumbpath)
-
+	item.addContextMenuItems(commands, True)
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=faces&faceid=%s" % (faceid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+
+    # default view in Confluence
+    vm = addon.getSetting('confluence_view_faces')
+    if (vm == ""):
+	vm = "0"
+    view_mode = int(vm)
+    addon.setSetting('confluence_view_faces', "0")
+
     return n
 
 def list_photos_with_place(params):
@@ -256,7 +328,7 @@ def list_photos_with_place(params):
     return render_media(media)
 
 def list_places(params):
-    global db, BASE_URL, album_ign_empty
+    global db, BASE_URL, album_ign_empty, view_mode
 
     # how to display Places labels:
     # 0 = Addresses
@@ -289,6 +361,9 @@ def list_places(params):
 	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
+    commands = []
+    generic_context_menu_items(commands)
+
     n = 0
     for (placeid, latlon, address, thumbpath, fanartpath, count) in places:
 	if (not count and album_ign_empty == "true"):
@@ -300,8 +375,7 @@ def list_places(params):
 	    item = gui.ListItem(latlon, address)
 	else:
 	    item = gui.ListItem(address, latlon)
-
-	item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.RunPlugin(\""+BASE_URL+"?action=rm_caches\")",)])
+	item.addContextMenuItems(commands, True)
 
 	if (thumbpath):
 	    item.setThumbnailImage(thumbpath)
@@ -314,6 +388,14 @@ def list_places(params):
     if (n > 0):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+
+    # default view in Confluence
+    vm = addon.getSetting('confluence_view_places')
+    if (vm == ""):
+	vm = "0"
+    view_mode = int(vm)
+    addon.setSetting('confluence_view_places', "0")
+
     return n
 
 def list_photos_with_keyword(params):
@@ -324,7 +406,7 @@ def list_photos_with_keyword(params):
     return render_media(media)
 
 def list_keywords(params):
-    global db, BASE_URL, ICONS_PATH, album_ign_empty
+    global db, BASE_URL, ICONS_PATH, album_ign_empty, view_mode
 
     keywordid = 0
     try:
@@ -342,6 +424,9 @@ def list_keywords(params):
 
     hidden_keywords = addon.getSetting('hidden_keywords')
 
+    commands = []
+    generic_context_menu_items(commands)
+
     n = 0
     for (keywordid, name, count) in keywords:
 	if (name in hidden_keywords):
@@ -351,13 +436,22 @@ def list_keywords(params):
 	    continue
 
 	item = gui.ListItem(name, thumbnailImage=ICONS_PATH+"/folder.png")
-	item.addContextMenuItems([(addon.getLocalizedString(30214), "XBMC.RunPlugin(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),)])
+	commands.append((addon.getLocalizedString(30214), "XBMC.RunPlugin(\""+BASE_URL+"?action=hidekeyword&keyword=%s\")" % (name),))
+	item.addContextMenuItems(commands, True)
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=keywords&keywordid=%s" % (keywordid), listitem = item, isFolder = True, totalItems = count)
 	n += 1
 
     if (n > 0):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+
+    # default view in Confluence
+    vm = addon.getSetting('confluence_view_keywords')
+    if (vm == ""):
+	vm = "0"
+    view_mode = int(vm)
+    addon.setSetting('confluence_view_keywords', "0")
+
     return n
 
 def list_photos_with_rating(params):
@@ -368,7 +462,7 @@ def list_photos_with_rating(params):
     return render_media(media)
 
 def list_ratings(params):
-    global db, BASE_URL, ICONS_PATH
+    global db, BASE_URL, ICONS_PATH, view_mode
 
     albumid = 0
     try:
@@ -378,15 +472,27 @@ def list_ratings(params):
 	print to_str(e)
 	pass
 
+    commands = []
+    generic_context_menu_items(commands)
+
     n = 0
     for a in range(1,6):
 	rating = addon.getLocalizedString(30200) % (a)
 	item = gui.ListItem(rating, thumbnailImage=ICONS_PATH+"/star%d.png" % (a))
+	item.addContextMenuItems(commands, True)
 	plugin.addDirectoryItem(handle = int(sys.argv[1]), url=BASE_URL+"?action=ratings&rating=%d" % (a), listitem = item, isFolder = True)
 	n += 1
 
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
+
+    # default view in Confluence
+    vm = addon.getSetting('confluence_view_ratings')
+    if (vm == ""):
+	vm = "0"
+    view_mode = int(vm)
+    addon.setSetting('confluence_view_ratings', "0")
+
     return n
 
 def import_progress_callback(progress_dialog, altinfo, nphotos, ntotal):
@@ -401,6 +507,13 @@ def import_progress_callback(progress_dialog, altinfo, nphotos, ntotal):
 
 def import_library(xmlpath, xmlfile, masterspath, masters_realpath, enable_places):
     global db
+
+    # crude locking to prevent multiple simultaneous library imports
+    if (xbmc.getInfoLabel("Window(10000).Property(iphoto_scanning)") == "True"):
+	print "iPhoto: Library import already in progress."
+	return
+    else:
+	gui.Window(10000).setProperty("iphoto_scanning", "True")
 
     # always ignore Books and currently selected album
     album_ign = []
@@ -430,36 +543,44 @@ def import_library(xmlpath, xmlfile, masterspath, masters_realpath, enable_place
 	addon.setSetting('places_enable_maps', "true")
     elif (e == "false"):
 	enable_maps = False
+    if (enable_maps == True):
+	res_x = float(xbmc.getInfoLabel("System.ScreenWidth"))
+	res_y = float(xbmc.getInfoLabel("System.ScreenHeight"))
+	map_aspect = res_x / res_y
+    else:
+	map_aspect = 0.0
 
-    db.ResetDB()
-
-    progress_dialog = gui.DialogProgress()
     try:
-	progress_dialog.create(addon.getLocalizedString(30210))
-	progress_dialog.update(0, addon.getLocalizedString(30212))
+	# try to get progress dialog actually on-screen before we do work
+	retries = 10
+	progress_dialog = None
+	while (gui.getCurrentWindowDialogId() != 10101 and retries):
+	    if (not progress_dialog):
+		progress_dialog = gui.DialogProgress()
+		progress_dialog.create(addon.getLocalizedString(30210))
+	    retries -= 1
+	    xbmc.sleep(100)
     except:
 	print traceback.print_exc()
     else:
-	map_aspect = 0.0
-	if (enable_maps == True):
-	    res_x = float(xbmc.getInfoLabel("System.ScreenWidth"))
-	    res_y = float(xbmc.getInfoLabel("System.ScreenHeight"))
-	    map_aspect = res_x / res_y
-
 	iparser = IPhotoParser(xmlpath, xmlfile, masterspath, masters_realpath, album_ign, enable_places, map_aspect, db.AddAlbumNew, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, import_progress_callback, progress_dialog)
 
 	try:
+	    progress_dialog.update(0, addon.getLocalizedString(30219))
+	    db.ResetDB()
+
+	    progress_dialog.update(0, addon.getLocalizedString(30212))
 	    iparser.Parse()
 	except:
 	    print traceback.print_exc()
+	    print "iPhoto: Library parse failed."
 	    progress_dialog.close()
+	    gui.Window(10000).setProperty("iphoto_scanning", "False")
 	    xbmc.executebuiltin("XBMC.RunPlugin(%s?action=resetdb&corrupted=1)" % (BASE_URL))
 	else:
-	    print "iPhoto Library imported successfully."
-
+	    print "iPhoto: Library imported successfully."
 	    progress_dialog.close()
-
-	    xbmc.sleep(1000)
+	    gui.Window(10000).setProperty("iphoto_scanning", "False")
 	    try:
 		# this is non-critical
 		db.UpdateLastImport()
@@ -488,6 +609,12 @@ def reset_db(params):
 	    confirmed = dialog.yesno(addon.getLocalizedString(30230), addon.getLocalizedString(30232), addon.getLocalizedString(30233))
 
     if (confirmed):
+	if (xbmc.getInfoLabel("Window(10000).Property(iphoto_scanning)") == "True"):
+	    dialog = gui.Dialog()
+	    dialog.ok(addon.getLocalizedString(30260), addon.getLocalizedString(30261))
+	    print "iPhoto: Library import in progress; not resetting database."
+	    return
+
 	remove_tries = 3
 	while (remove_tries and os.path.isfile(db_file)):
 	    try:
@@ -525,10 +652,6 @@ def get_params(paramstring):
     print params
     return params
 
-def add_generic_context_menu_items(item):
-    item.addContextMenuItems([(addon.getLocalizedString(30213), "XBMC.RunPlugin(\""+BASE_URL+"?action=rescan\")",)])
-    item.addContextMenuItems([(addon.getLocalizedString(30216), "XBMC.RunPlugin(\""+BASE_URL+"?action=resetdb\")",)])
-
 if (__name__ == "__main__"):
     xmlpath = addon.getSetting('albumdata_xml_path')
     if (xmlpath == ""):
@@ -537,6 +660,7 @@ if (__name__ == "__main__"):
 	    addon.setSetting('albumdata_xml_path', xmlpath)
 	except:
 	    pass
+	addon.openSettings(BASE_URL)
 
     # we used to store the file path to the XML instead of the iPhoto Library directory.
     if (os.path.basename(xmlpath) == ALBUM_DATA_XML):
@@ -577,38 +701,51 @@ if (__name__ == "__main__"):
     except:
 	# main menu
 	try:
+	    commands = []
+	    generic_context_menu_items(commands)
+	    maintenance_context_menu_items(commands)
+
 	    item = gui.ListItem(addon.getLocalizedString(30100), thumbnailImage=ICONS_PATH+"/events.png")
-	    add_generic_context_menu_items(item)
+	    item.addContextMenuItems(commands, True)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=events", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30101), thumbnailImage=ICONS_PATH+"/albums.png")
-	    add_generic_context_menu_items(item)
+	    item.addContextMenuItems(commands, True)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=albums", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30105), thumbnailImage=ICONS_PATH+"/faces.png")
-	    add_generic_context_menu_items(item)
+	    item.addContextMenuItems(commands, True)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=faces", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30106), thumbnailImage=ICONS_PATH+"/places.png")
-	    add_generic_context_menu_items(item)
-	    item.addContextMenuItems([(addon.getLocalizedString(30215), "XBMC.RunPlugin(\""+BASE_URL+"?action=rm_caches\")",)])
+	    item.addContextMenuItems(commands, True)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=places", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30104), thumbnailImage=ICONS_PATH+"/keywords.png")
-	    add_generic_context_menu_items(item)
+	    item.addContextMenuItems(commands, True)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=keywords", item, True)
 
 	    item = gui.ListItem(addon.getLocalizedString(30102), thumbnailImage=ICONS_PATH+"/star.png")
-	    add_generic_context_menu_items(item)
+	    item.addContextMenuItems(commands, True)
 	    plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=ratings", item, True)
 
-	    hide_import_lib = addon.getSetting('hide_import_lib')
-	    if (hide_import_lib == ""):
-		hide_import_lib = "false"
-		addon.setSetting('hide_import_lib', hide_import_lib)
-	    if (hide_import_lib == "false"):
+	    hide_item = addon.getSetting('hide_import_lib')
+	    if (hide_item == ""):
+		hide_item = "false"
+		addon.setSetting('hide_import_lib', hide_item)
+	    if (hide_item == "false"):
 		item = gui.ListItem(addon.getLocalizedString(30103), thumbnailImage=ICONS_PATH+"/update.png")
+		item.addContextMenuItems(commands, True)
 		plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=rescan", item, False)
+
+	    hide_item = addon.getSetting('hide_view_readme')
+	    if (hide_item == ""):
+		hide_item = "false"
+		addon.setSetting('hide_view_readme', hide_item)
+	    if (hide_item == "false"):
+		item = gui.ListItem(addon.getLocalizedString(30107), thumbnailImage=ICONS_PATH+"/help.png")
+		item.addContextMenuItems(commands, True)
+		plugin.addDirectoryItem(int(sys.argv[1]), BASE_URL+"?action=textview&file=README.txt", item, False)
 	except:
 	    plugin.endOfDirectory(int(sys.argv[1]), False)
 	else:
@@ -641,8 +778,6 @@ if (__name__ == "__main__"):
 	# actions that don't require a database connection
 	if (action == "resetdb"):
 	    reset_db(params)
-	elif (action == "hidekeyword"):
-	    items = hide_keyword(params)
 	elif (action == "rm_caches"):
 	    progress_dialog = gui.DialogProgress()
 	    try:
@@ -665,6 +800,17 @@ if (__name__ == "__main__"):
 		dialog = gui.Dialog()
 		dialog.ok(addon.getLocalizedString(30250), addon.getLocalizedString(30251) % (nfiles))
 		print "iPhoto: deleted %d cached map image files." % (nfiles)
+	elif (action == "textview"):
+	    try:
+		file = params['file']
+	    except Exception, e:
+		print to_str(e)
+	    else:
+		textview(file)
+	elif (action == "settings"):
+	    addon.openSettings(BASE_URL)
+	elif (action == "hidekeyword"):
+	    items = hide_keyword(params)
 	else:
 	    # actions that do require a database connection
 	    try:
@@ -699,11 +845,8 @@ if (__name__ == "__main__"):
 
 	if (items):
 	    plugin.endOfDirectory(int(sys.argv[1]), True)
-	    if (view_mode > 0):
+	    if (view_mode > 0 and xbmc.getSkinDir() == "skin.confluence"):
 		xbmc.sleep(300)
-		if (view_mode == 1):
-		    xbmc.executebuiltin("Container.SetViewMode(510)")
-		elif (view_mode == 2):
-		    xbmc.executebuiltin("Container.SetViewMode(514)")
+		xbmc.executebuiltin("Container.SetViewMode(%d)" % (view_mode))
 
 # vim: tabstop=8 softtabstop=4 shiftwidth=4 noexpandtab:

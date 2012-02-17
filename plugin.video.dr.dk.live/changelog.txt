@@ -1,3 +1,7 @@
+[B]Version 2.1.2 - 2011-02-05[/B]
+- Avoid problem with missing settings
+- Fixed use of secondary streams from external addons (fx TV Guide)
+
 [B]Version 2.1.1 - 2011-01-30[/B]
 - Fixed DR HD high-quality stream
 - Added TV2/Bornholm and TV/MIDT-VEST

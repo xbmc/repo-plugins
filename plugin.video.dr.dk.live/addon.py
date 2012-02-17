@@ -51,7 +51,10 @@ class DanishLiveTV(object):
 
             idx = None
             if channel.get_config_key():
-                idx = int(ADDON.getSetting(channel.get_config_key()))
+                try:
+                    idx = int(ADDON.getSetting(channel.get_config_key()))
+                except ValueError:
+                    idx = 0 # fallback for missing settings
 
             url = channel.get_url(quality, idx)
             if url:
@@ -85,7 +88,12 @@ class DanishLiveTV(object):
 
         for channel in CHANNELS:
             if str(channel.get_id()) == id:
-                url = channel.get_url(quality)
+                try:
+                    idx = int(ADDON.getSetting(channel.get_config_key()))
+                except ValueError:
+                    idx = 0 # fallback for missing settings
+
+                url = channel.get_url(quality, idx)
                 if url:
                     icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', '%d.png' % channel.get_id())
                     if not os.path.exists(icon):

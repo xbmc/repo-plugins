@@ -1,3 +1,4 @@
+0.3.9 - ADD: KIKA (Without Kikaninchen)
 0.3.8 - FIX: 3SAT Broken Link
         ADD: NDR
 0.3.7 - FIX: ORF

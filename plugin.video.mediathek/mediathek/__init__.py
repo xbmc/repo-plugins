@@ -50,7 +50,7 @@ class DisplayObject(object):
 
 class Mediathek(object):
   
-  def loadPage(self,url, values = None):
+  def loadPage(self,url, values = None, maxTimeout = None):
     try:
       safe_url = url.replace( " ", "%20" ).replace("&amp;","&")
       
@@ -64,9 +64,12 @@ class Mediathek(object):
       req.add_header('Accept-Language', 'de-de,de;q=0.8,en-us;q=0.5,en;q=0.3')
       req.add_header('Accept-Charset', 'utf-8')
       
+      if maxTimeout == None:
+        maxTimeout = 60;
+      
       waittime = 0;
       doc = False;
-      while not doc and waittime < 60:
+      while not doc and waittime < maxTimeout:
         try:
           if waittime > 0: 
             time.sleep(waittime);
@@ -113,7 +116,7 @@ class Mediathek(object):
         self.buildPageMenu(treeNode.link,len(treeNode.childNodes));
         
   def displayCategories(self):
-    if(len(self.menuTree)>1):
+    if(len(self.menuTree)>1 or not self.menuTree[0].displayElements):
       for treeNode in self.menuTree:
         self.gui.buildMenuLink(treeNode,self,len(self.menuTree)) 
     else:

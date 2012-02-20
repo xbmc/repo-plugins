@@ -24,6 +24,7 @@ from mediathek.bayerisches import *
 from mediathek.orf import *
 from mediathek.bralpha import *
 from mediathek.ndr import *
+from mediathek.kika import *
 
 class MediathekFactory(object):
   def __init__(self):
@@ -37,6 +38,7 @@ class MediathekFactory(object):
        WDRMediathek.name():WDRMediathek,
        BRAlphaMediathek.name():BRAlphaMediathek,
        NDRMediathek.name():NDRMediathek,
+       KIKAPlus.name():KIKAPlus
       }
   def getAvaibleMediathekTypes(self):
     return sorted(self.avaibleMediathekes.keys())

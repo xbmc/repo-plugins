@@ -19,30 +19,14 @@ import re,time
 from mediathek import *
 from xml.dom import minidom;
 
+regex_dateString = re.compile("\\d{4}-\\d{2}-\\d{2}");
 
-regex_dateString = re.compile("\\d{2} ((\\w{3})|(\\d{2})) \\d{4}");
-month_replacements = {
-    "Jan":"01",
-    "Feb":"02",
-    "Mar":"03",
-    "Apr":"04",
-    "May":"05",
-    "Jun":"06",
-    "Jul":"07",
-    "Aug":"08",
-    "Sep":"09",
-    "Oct":"10",
-    "Nov":"11",
-    "Dec":"12",
-    
-  };
-
-class DreiSatMediathek(Mediathek):
+class NDRMediathek(Mediathek):
   @classmethod
   def name(self):
-    return "3Sat";
+    return "NDR";
   def isSearchable(self):
-    return True;
+    return False;
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
     
@@ -56,31 +40,12 @@ class DreiSatMediathek(Mediathek):
       self.baseType ="video/quicktime";
     
     self.menuTree = (
-      TreeNode("0","Bauerfeind","http://www.3sat.de/mediathek/rss/mediathek_bauerfeind.xml",True),
-      TreeNode("1","Bookmark","http://www.3sat.de/mediathek/rss/mediathek_bookmark.xml",True),
-      TreeNode("2",u"Börse","http://www.3sat.de/mediathek/rss/mediathek_boerse.xml",True),
-      TreeNode("3","Buchzeit","http://www.3sat.de/mediathek/rss/mediathek_buchzeit.xml",True),
-      TreeNode("4","daVinci","http://www.3sat.de/mediathek/rss/mediathek_davinci.xml",True),
-      TreeNode("5","delta","http://www.3sat.de/mediathek/rss/mediathek_delta.xml",True),
-      TreeNode("6","Film","http://www.3sat.de/mediathek/rss/mediathek_film.xml",True),
-      TreeNode("7","Gero von Boehm","http://www.3sat.de/mediathek/rss/mediathek_gero.xml",True),
-      TreeNode("8","hessenreporter","http://www.3sat.de/mediathek/rss/mediathek_hessenreporter.xml",True),
-      TreeNode("9","hitec","http://www.3sat.de/mediathek/rss/mediathek_hitec.xml",True),
-      TreeNode("10","Kabarett","http://www.3sat.de/mediathek/rss/mediathek_kabarett.xml",True),
-      TreeNode("11","Kinomagazin","http://www.3sat.de/mediathek/rss/mediathek_kinomag.xml",True),
-      TreeNode("12","Kulturzeit","http://www.3sat.de/mediathek/rss/mediathek_Kulturzeit.xml",True),
-      TreeNode("13","Musik","http://www.3sat.de/mediathek/rss/mediathek_musik.xml",True),
-      TreeNode("14","nano","http://www.3sat.de/mediathek/rss/mediathek_nano.xml",True),
-      TreeNode("15","neues","http://www.3sat.de/mediathek/rss/mediathek_neues.xml",True),
-      TreeNode("16",u"Peter Voß fragt","http://www.3sat.de/mediathek/rss/mediathek_begegnungen.xml",True),
-      TreeNode("17","Recht brisant","http://www.3sat.de/mediathek/rss/mediathek_Recht%20brisant.xml",True),
-      TreeNode("18","scobel","http://www.3sat.de/mediathek/rss/mediathek_scobel.xml",True),
-      TreeNode("19","SCHWEIZWEIT","http://www.3sat.de/mediathek/rss/mediathek_schweizweit.xml",True),
-      TreeNode("20","Theater","http://www.3sat.de/mediathek/rss/mediathek_theater.xml",True),
-      TreeNode("21","vivo","http://www.3sat.de/mediathek/rss/mediathek_vivo.xml",True),
+      TreeNode("0","Die neuesten Videos","http://www.ndr.de/mediathek/videoliste100-rss.xml",True),
       );
+
+    self.regex_extractVideoLink = re.compile("mms://ndr\.wmod\.llnwd\.net/.*?\.wmv");
       
-    self.rootLink = "http://www.3sat.de"
+    self.rootLink = "http://www.ndr.de"
     self.searchLink = 'http://www.3sat.de/mediathek/mediathek';
     link = "/mediathek/mediathek.php\\?obj=\\d+";
     self.regex_searchResult = re.compile("href=\""+link+"\" class=\"media_result_thumb\"");
@@ -145,40 +110,42 @@ class DreiSatMediathek(Mediathek):
   def extractVideoObjects(self, rssFeed, initCount):
     nodes = rssFeed.getElementsByTagName("item");
     nodeCount = initCount + len(nodes)
+    displayObjects = [];
     for itemNode in nodes:
-      self.extractVideoInformation(itemNode,nodeCount);
-  
+      displayObjects.append(self.extractVideoInformation(itemNode,nodeCount));
+    sorted(displayObjects, key = lambda item:item.date, reverse=True);
+    for displayObject in displayObjects:  
+      self.gui.buildVideoLink(displayObject,self,nodeCount);
   def parseDate(self,dateString):
     dateString = regex_dateString.search(dateString).group();
-    for month in month_replacements.keys():
-      dateString = dateString.replace(month,month_replacements[month]);
-    return time.strptime(dateString,"%d %m %Y");
+    
+    return time.strptime(dateString,"%Y-%m-%d");
+  
+  def loadVideoLinks(self, link):
+    videoPage = self.loadPage(link);
+    links = {};
+    for link in self.regex_extractVideoLink.finditer(videoPage):
+      link = link.group();
+      if link.find("wm.lo"):
+        links[0] = SimpleLink(link, 0);
+      if link.find("wm.hi"):
+        links[1] = SimpleLink(link, 0);      
+      if link.find("wm.hq"):
+        links[2] = SimpleLink(link, 0);
+    return links;
     
   def extractVideoInformation(self, itemNode, nodeCount):
     title = self.readText(itemNode,"title");
-    
-    dateString = self.readText(itemNode,"pubDate");
+    dateString = self.readText(itemNode,"dc:date");
     pubDate = self.parseDate(dateString);
     
-    descriptionNode = itemNode.getElementsByTagName("description")[0].firstChild.data;
+    descriptionNode = self.readText(itemNode,"description");
     description = unicode(descriptionNode);
     
-    pictureNode = itemNode.getElementsByTagName("media:thumbnail")[0];
-    picture = pictureNode.getAttribute("url");
-    links = {};
-    for contentNode in itemNode.getElementsByTagName("media:content"):
-      mediaType = contentNode.getAttribute("type");
-      if(not self.baseType == mediaType):
-        continue;
-      
-      height = int(contentNode.getAttribute("height"));
-      url = contentNode.getAttribute("url");
-      size = int(contentNode.getAttribute("fileSize"));
-      if(height < 150):
-        links[0] = SimpleLink(url, size);
-      elif (height < 300):
-        links[1] = SimpleLink(url, size);
-      else:
-        links[2] = SimpleLink(url, size);
-    self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True, pubDate),self,nodeCount);
-      
+    picture = self.readText(itemNode,"mp:data");
+    videoPageLink = self.readText(itemNode,"link");
+    
+    links = self.loadVideoLinks(videoPageLink);
+    return DisplayObject(title,"",picture,description,links,True, None);
+    
+    

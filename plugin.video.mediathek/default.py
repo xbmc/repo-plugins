@@ -44,7 +44,7 @@ action=params.get("action", "")
 
 gui.log("Quality: %s"%gui.quality);
 gui.log("argv[0]: %s"%sys.argv[0]);
-gui.log("argv[1]: %s"%sys.argv[0]);
+gui.log("argv[1]: %s"%sys.argv[1]);
 gui.openMenuContext();
 factory = MediathekFactory();
 

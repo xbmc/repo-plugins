@@ -1,0 +1,11 @@
+1.0.0 (2012/02):
+- Eden version bump
+
+0.4.1 (2011/09):
+- add logo to video items
+- bugfix: title can be None
+
+0.4 (2011/09):
+- initial version
+
+  

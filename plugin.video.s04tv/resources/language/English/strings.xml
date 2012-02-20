@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="30000">Username</string>
+	<string id="30001">Password</string>
+	<string id="30002">Previous page</string>
+	<string id="30003">Next page</string>
+	<string id="30004">Play test video</string>
+	
+	<string id="30100">Login failed for user "%s".</string>	
+	<string id="30101">Please validate your credentials in plugin settings.</string>
+	<string id="30102">Username and password not set.</string>
+	<string id="30103">Please enter your credentials in plugin settings.</string>
+</strings>

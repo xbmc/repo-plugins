@@ -1,96 +1,105 @@
-import urllib,urllib2,re,os
-import xbmcplugin,xbmcgui,xbmcaddon
+import urllib
+import urllib2
+import re
+import os
+import xbmcplugin
+import xbmcgui
+import xbmcaddon
 from BeautifulSoup import BeautifulSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.zapiks')
 __language__ = __settings__.getLocalizedString
-sort = __settings__.getSetting('sort_by')
+sort = __settings__.getSetting('sort_method')
 home = __settings__.getAddonInfo('path')
+base = 'http://www.zapiks.com'
+icon_path = 'http://zapiks-xbmc.googlecode.com/svn/images/'
+fanart = icon_path+'fanart.jpg'
+
+def getRequest(url):
+        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0.2) Gecko/20100101 Firefox/10.0.2',
+                   'Referer' : base}
+        req = urllib2.Request(url,None,headers)
+        response = urllib2.urlopen(req)
+        data = response.read()
+        response.close()
+        return data
 
 
 def categories():
-    if sort==__language__(30013):
-        u = '/premium_1.php'
-        addDir(__language__(30000),'http://www.zapiks.com/_surf_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/surf.png' ) ))
-        addDir(__language__(30001),'http://www.zapiks.com/_snowboard_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/snowboard.png' ) ))
-        addDir(__language__(30002),'http://www.zapiks.com/_mountainbike_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/vtt.png' ) ))
-        addDir(__language__(30003),'http://www.zapiks.com/_bmx_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/bmx.png' ) ))
-        addDir(__language__(30004),'http://www.zapiks.com/_skate_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/skate.png' ) ))
-        addDir(__language__(30005),'http://www.zapiks.com/_ski_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/ski.png' ) ))
-    else:
-        if sort==__language__(30010):
-            u = '1'
-        if sort==__language__(30012):
-            u = '/alltimebuzzed_1.php'
-        if sort==__language__(30011):
-            u = '/popular_1.php'
-        addDir(__language__(30000),'http://www.zapiks.com/surf_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/surf.png' ) ))
-        addDir(__language__(30001),'http://www.zapiks.com/snowboard_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/snowboard.png' ) ))
-        addDir(__language__(30002),'http://www.zapiks.com/mountainbike_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/vtt.png' ) ))
-        addDir(__language__(30003),'http://www.zapiks.com/bmx_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/bmx.png' ) ))
-        addDir(__language__(30004),'http://www.zapiks.com/skate_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/skate.png' ) ))
-        addDir(__language__(30005),'http://www.zapiks.com/ski_'+u,1,xbmc.translatePath( os.path.join( home, 'resources/images/ski.png' ) ))
+        soup = BeautifulSoup(getRequest(base), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        items = soup('ul', attrs={'id' : "sports_navigation"})[0]('a')
+        for i in items:
+            href = i['href']
+            if not href == '#':
+                href = i['href'][:-1]
+                if sort == '0':
+                    href = href+'1'
+                if sort == '1':
+                    href = href+'/popular_1.php'
+                if sort == '2':
+                    href = href+'/alltimebuzzed_1.php'
+                if sort == '3':
+                    href = '/_'+href[1:]+'/premium_1.php'
+                title = i.string
+                thumb = icon_path+i.string+'.png'
+                addDir(title, base+href, 1, thumb)
+        addDir(__language__(30000), 'getPartners', 3, icon_path+'partner.png')
+
+
+def getPartners():
+        soup = BeautifulSoup(getRequest(base), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        partners_items = soup('div', attrs={'id' : "partners"})[0]('a')
+        pro_items = soup('div', attrs={'id' : "pro_all"})[0]('a')
+        for i in pro_items:
+            items = partners_items.append(i)
+        for i in partners_items:
+            href = i['href']
+            title = i['title']
+            thumb = i.img['src']
+            addDir(title, base+href, 1, thumb)
 
 
 def indexPage(url):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-    response = urllib2.urlopen(req)
-    link=response.read()
-    soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
-    videos = soup.findAll('div', attrs={'class' : "media_thumbnail medium"})
-    for video in videos:
+        soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        videos = soup.findAll('div', attrs={'class' : "media_thumbnail medium"})
+        for i in videos:
+            try:
+                url = i('a')[0]['href']
+                name = i('a')[0]['title']
+                thumb = i('img')[0]['src']
+                addLink(name, base+url, 2, thumb)
+            except:
+                continue
         try:
-            url = video('a')[0]['href']
-            name = video('a')[0]['title']
-            thumb = video('img')[0]['src']
-            addLink(name,'http://www.zapiks.com'+url,2,thumb)
+            nextPage = soup.find('span', attrs={'class' : "next"})('a')[1]['href']
+            addDir(__language__(30001), base+nextPage, 1, os.path.join(home, 'resources', 'images', 'next.png'))
         except:
             pass
-    try:
-        nextPage = soup.find('span', attrs={'class' : "next"})('a')[1]['href']
-        addDir(__language__(30006),'http://www.zapiks.com'+nextPage,1,'special://home/addons/plugin.video.zapiks/resources/images/next.png')
-    except:
-        pass
 
 
 def videoLinks(url):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-    response = urllib2.urlopen(req)
-    link=response.read()
-    response.close()
-    soup = BeautifulSoup(link)
-    vid = soup.find('link', attrs={'rel' : "video_src"})['href']
-    vidId = vid[-5:]
-    req = urllib2.Request('http://www.zapiks.com/view/index.php?file='+vidId+'&lang=fr')
-    req.addheaders = [('Referer', 'http://www.zapiks.com'),
-            ('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
-    response = urllib2.urlopen(req)
-    link=response.read()
-    response.close()
-    soup = BeautifulSoup(link)
-    url = soup.find('file').string
-    item = xbmcgui.ListItem(path=url)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-	
+        soup = BeautifulSoup(getRequest(url))
+        vid = soup.find('link', attrs={'rel' : "video_src"})['href']
+        new_soup = BeautifulSoup(getRequest('http://www.zapiks.com/view/index.php?file='+vid[-5:]+'&lang=fr'))
+        item = xbmcgui.ListItem(path = new_soup.file.string)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
 
 def get_params():
         param=[]
         paramstring=sys.argv[2]
         if len(paramstring)>=2:
-                params=sys.argv[2]
-                cleanedparams=params.replace('?','')
-                if (params[len(params)-1]=='/'):
-                        params=params[0:len(params)-2]
-                pairsofparams=cleanedparams.split('&')
-                param={}
-                for i in range(len(pairsofparams)):
-                        splitparams={}
-                        splitparams=pairsofparams[i].split('=')
-                        if (len(splitparams))==2:
-                                param[splitparams[0]]=splitparams[1]
-
+            params=sys.argv[2]
+            cleanedparams=params.replace('?','')
+            if (params[len(params)-1]=='/'):
+                params=params[0:len(params)-2]
+            pairsofparams=cleanedparams.split('&')
+            param={}
+            for i in range(len(pairsofparams)):
+                splitparams={}
+                splitparams=pairsofparams[i].split('=')
+                if (len(splitparams))==2:
+                    param[splitparams[0]]=splitparams[1]
         return param
 
 
@@ -100,6 +109,7 @@ def addLink(name,url,mode,iconimage):
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         liz.setProperty("IsPlayable","true")
+        liz.setProperty("Fanart_Image", fanart)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
         return ok
 
@@ -109,6 +119,7 @@ def addDir(name,url,mode,iconimage):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setProperty("Fanart_Image", fanart)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -119,32 +130,36 @@ name=None
 mode=None
 
 try:
-        url=urllib.unquote_plus(params["url"])
+    url=urllib.unquote_plus(params["url"])
 except:
-        pass
+    pass
 try:
-        name=urllib.unquote_plus(params["name"])
+    name=urllib.unquote_plus(params["name"])
 except:
-        pass
+    pass
 try:
-        mode=int(params["mode"])
+    mode=int(params["mode"])
 except:
-        pass
+    pass
 
 print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
-        print ""
-        categories()
+    print ""
+    categories()
 
 elif mode==1:
-        print ""+url
-        indexPage(url)
+    print ""
+    indexPage(url)
 
 elif mode==2:
-        print ""
-        videoLinks(url)
+    print ""
+    videoLinks(url)
+
+elif mode==3:
+    print ""
+    getPartners()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

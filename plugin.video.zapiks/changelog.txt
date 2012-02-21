@@ -1,3 +1,7 @@
+Version 1.0.1
+bug fixes
+added new categories
+
 Version 1.0.0
 new for eden-pre
 

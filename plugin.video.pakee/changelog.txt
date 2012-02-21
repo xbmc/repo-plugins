@@ -1,3 +1,8 @@
+[B]Version 1.0.5[/B]
+- Fixed issue where feeds with alternate pubDate format were failing
+- Fixed hardcoded prompt messsages
+
+
 [B]Version 1.0.4[/B]
 - Added live channel streams from LiveStream's plugins community-links repository
 - Set default sorting to be by title for drama episodes

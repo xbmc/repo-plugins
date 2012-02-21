@@ -9,9 +9,9 @@ __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
-__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-xbmc.xml?a=9'
+__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-xbmc.xml?a=3'
 __language__ = __settings__.getLocalizedString
 
 #plugin modes
@@ -50,7 +50,7 @@ def clean( name ):
 	list = [ ( '&amp;', '&' ), ( '&quot;', '"' ), ( '<em>', '' ), ( '</em>', '' ), ( '&#39;', '\'' ), ( '&#039;', '\'' ), ('&amp;#039;', '\'') ]
 	for search, replace in list:
 		name = name.replace( search, replace )	
-	#return unicode(name.encode("utf-8"))
+	#return unicode(name.encode('utf-8','ignore'))
 	return unicode(name)
 
 def open_settings():
@@ -176,9 +176,9 @@ def build_show_directory(origurl):
 
 
 	if 'Facebook' in origurl:
-		xbmc.executebuiltin("XBMC.Notification("+ __plugin__ +",Requesting photos from Facebook,100)")
+		xbmc.executebuiltin("XBMC.Notification("+ __plugin__ +","+__settings__.getLocalizedString(30052)+",100)")
 	elif 'queryyt' in origurl:
-		xbmc.executebuiltin("XBMC.Notification("+ __plugin__ +",Searching YouTube,100)")
+		xbmc.executebuiltin("XBMC.Notification("+ __plugin__ +","+__settings__.getLocalizedString(30053)+",100)")
 
 
 	#Read RSS items from origurl and store in items
@@ -216,12 +216,18 @@ def build_show_directory(origurl):
 
 		#if weird characters found in label or description, instead of erroring out, empty their values (empty listitem will be shown)
 		try:
-			xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+			#xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+			xbmc.log('found in show_dir(): ' + str(label).encode('utf-8','ignore') + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
 		except:
-			label = ''
-			description = ''
 
-			xbmc.log('found in show_dir(): ' + str(url) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount))	
+			try:
+				xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+				#xbmc.log('found in show_dir(): ' + str(label).encode('utf-8','ignore') + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+			except:
+				label = ''
+				description = ''
+
+				xbmc.log('found in show_dir(): ' + str(url) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount))	
 
 		if (url is not None and url != ''):
 
@@ -229,7 +235,8 @@ def build_show_directory(origurl):
 			#For feeds with videos as their first item, show <play all> listitem as first listitem			
 			if 'youtube.com' in url or '(Playlist: ' in label:
 				if itemCount == 0:
-					playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					resolvedlabel = '<' + str(__settings__.getLocalizedString(30050)) + '>'
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 
@@ -250,7 +257,8 @@ def build_show_directory(origurl):
 			if url[-4:]=='.jpg' or url[-4:]=='.gif' or url[-4:]=='.png':
 				#For folders with videos, show play all option 			
 				if itemCount == 0:
-					playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30051) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					resolvedlabel = '<' + str(__settings__.getLocalizedString(30051)) + '>'
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_SLIDESHOW)+"&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 				isFolder = False
@@ -261,7 +269,8 @@ def build_show_directory(origurl):
 
 				#For feeds with mp3s as their first item, show <play all> listitem as first listitem			
 				if itemCount == 0:
-					playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					resolvedlabel = '<' + str(__settings__.getLocalizedString(30050)) + '>'
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 				isFolder = False
@@ -281,9 +290,9 @@ def build_show_directory(origurl):
 				mode = PLUGIN_MODE_PLAY_STREAM
 
 				#For feeds with streams as their first item, show <play all> listitem as first listitem			
-				if itemCount == 0:
-					playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
-					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
+				#if itemCount == 0:
+				#	playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+				#	xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 
 
@@ -526,7 +535,11 @@ def getItemFields(item):
 		if pubDate == '':
 			pubDate = '01.01.1960'
 		else:
-			tpubDate = time.strptime(pubDate, '%Y-%m-%d')
+			try:
+				tpubDate = time.strptime(pubDate, '%Y-%m-%d')
+			except:
+				tpubDate = time.strptime(pubDate, '%a, %d %b %Y %H:%M:%S GMT')
+
 			pubDate = time.strftime("%d.%m.%Y", tpubDate)
 	else:
 		pubDate = '01.01.1960'

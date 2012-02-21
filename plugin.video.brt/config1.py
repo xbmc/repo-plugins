@@ -1,9 +1,8 @@
 import sys
 epgService      = '/ds/epg/service.asmx'
 server          = 'ivsmedia.iptv-distribution.net'
-MediaService    = '/MediaService.svc/soap'
 ContentService  = '/ContentService.svc/soap'
-ClientService   = '/ClientService.svc/soap'
+sid             = '/ClientService.svc/soap'
 siteId          = '2'
 appName         = 'XBMC Plugin (' + sys.platform + ')'
 streamService   = '/ds/cas/streams/generic/stream.asmx'

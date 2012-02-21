@@ -1,4 +1,3 @@
-
 #
 # <BestRussianTV plugin for XBMC>
 # Copyright (C) <2011>  <BestRussianTV>
@@ -19,7 +18,7 @@
 
 import httplib, urllib, urllib2, re
 import xml.parsers.expat
-import config
+import config1
 
 class GetRadioStationListByUser:
     req = \
@@ -40,13 +39,14 @@ class GetRadioStationListByUser:
     element = None
 
     def __init__(self, Username):
-        self.req = self.req.replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{AppName}', config1.appName) \
         .replace('{Username}', Username)
         #print self.req		
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.radioService, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.radioService, self.req, {
+            'Host': 'iptv-distribution.net',
             'SOAPAction': 'http://www.iptv-distribution.com/ucas/GetRadioStationListByUser',
             'Content-Type': 'text/xml; charset=utf-8'
         })

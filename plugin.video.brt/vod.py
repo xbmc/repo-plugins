@@ -1,4 +1,4 @@
-
+# coding=utf-8
 #
 # <BestRussianTV plugin for XBMC>
 # Copyright (C) <2011>  <BestRussianTV>
@@ -16,10 +16,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
 import httplib, urllib, urllib2, re
 import xml.parsers.expat
-import config
+import config1
 
 class GetVODAddedLastWeekByUser:
     req = \
@@ -42,13 +41,13 @@ class GetVODAddedLastWeekByUser:
     day = None
 
     def __init__(self, Username, Password, Day):
-        self.req = self.req.replace('{SiteId}', config.siteId).replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{SiteId}', config1.siteId).replace('{AppName}', config1.appName) \
         .replace('{Username}', Username).replace('{Password}', Password).replace('{Day}', Day)
         self.day = Day
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vodService, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.vodService, self.req, {
             'SOAPAction': 'http://www.iptv-distribution.com/ucas/GetVODAddedLastWeekByUser',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -66,12 +65,13 @@ class GetVODAddedLastWeekByUser:
     def start_element(self, name, attrs):
         if name == 'Series':
             self.id = attrs['ID']
-            self.name = attrs['Name'].encode('utf-8') + ' ' + attrs['RecPart'].encode('utf-8')
+            self.name = (attrs['Name'] + ' ' + attrs['RecPart']).encode('utf-8')
             self.description = attrs['description'].encode('utf-8')
         if name == 'Movies' and attrs.has_key('Image'):
             self.icon = attrs['Image']
     def end_element(self, name):
         if name == 'Series':
+            
             self.programs.append((self.name, self.id, self.description, self.icon))
             self.id = None
             self.name = None
@@ -95,12 +95,12 @@ class GetVODStreamURL:
     streamUrl = None
 
     def __init__(self, Username, Password, Id):
-        self.req = self.req.replace('{AppName}', config.appName).replace('{Protocol}', config.protocol) \
+        self.req = self.req.replace('{AppName}', config1.appName).replace('{Protocol}', config1.protocol) \
         .replace('{Username}', Username).replace('{Password}', Password).replace('{Id}', Id)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vodService, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.vodService, self.req, {
             'SOAPAction': 'http://www.iptv-distribution.com/ucas/GetVODStreamURL',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -140,12 +140,13 @@ class GetVODGenresByUser:
     name = None
 
     def __init__(self, Username):
-        self.req = self.req.replace('{SiteId}', config.siteId).replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{SiteId}', config1.siteId).replace('{AppName}', config1.appName) \
         .replace('{Username}', Username)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vodService, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.vodService, self.req, {
+            'Host': 'iptv-distribution.net',                                             
             'SOAPAction': 'http://www.iptv-distribution.com/ucas/GetVODGenresByUser',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -187,12 +188,12 @@ class GetVODSubGenres:
     description = None
 
     def __init__(self, Id):
-        self.req = self.req.replace('{SiteId}', config.siteId).replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{SiteId}', config1.siteId).replace('{AppName}', config1.appName) \
         .replace('{Id}', Id)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vodService, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.vodService, self.req, {
             'SOAPAction': 'http://www.iptv-distribution.com/ucas/GetVODSubGenres',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -241,15 +242,16 @@ class GetVODMoviesBySubGenreUser:
     parts = 1
     rating = 0
     length = 0
-
+    date = ""
     def __init__(self, Username, Password, Id):
-        self.req = self.req.replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{AppName}', config1.appName) \
         .replace('{Username}', Username).replace('{Password}', Password) \
         .replace('{Id}', Id)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vod2Service, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.vod2Service, self.req, {
+            'Host': 'iptv-distribution.net',                                                
             'SOAPAction': 'http://iptv-distribution.net/ds/vod/generic/GetVODMoviesBySubGenreUser',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -262,30 +264,44 @@ class GetVODMoviesBySubGenreUser:
         p.EndElementHandler = self.end_element
         
         p.Parse(str(data))
-        return self.programs
+        return sorted(self.programs, key=lambda date: date[6], reverse=True)
 
     def start_element(self, name, attrs):
         if name == 'Movie':
+            
             self.id = attrs['Vid']
-            self.name = (attrs['Name'] + ' ' + attrs['RecParts']).encode('utf-8')
+            if int(attrs['RecParts']) > 1: 
+                self.name = (attrs['Name'] + '. ' + attrs['RecParts']).encode('utf-8')
+            else:
+                self.name = attrs['Name'].encode('utf-8')
             if 'Description' in attrs:
-                self.description = attrs['Description']
+                self.description = attrs['Description'].encode('utf-8')
+            else:
+                self.description = ""    
             self.parts = int(attrs['RecParts'])
             if 'Rating' in attrs:
                 self.rating = float(attrs['Rating'])
+            else:
+                self.rating = float(0.1)    
+            if 'MovieDate' in attrs:
+                self.date = attrs['MovieDate']
+            else:
+                self.date = "2100-09-05T23:59:59"        
             if 'Length' in attrs:
                 l = int(attrs['Length'])
                 self.length = str(int(l/60)) + ':' + str(l%60)
-                print self.length
+            else:
+                self.length = "0:00"    
     def end_element(self, name):
         if name == 'Movie':
-            self.programs.append((self.name, self.id, self.description, self.parts, self.rating, self.length))
+            self.programs.append((self.name, self.id, self.description, self.parts, self.rating, self.length, self.date))
             self.id = None
             self.name = None
             self.description = None
             self.parts = 1
             self.rating = 0
             self.length = 0
+            self.date = ""
 
 class GetVODSeries:
     req = \
@@ -309,13 +325,13 @@ class GetVODSeries:
     parts = 1
 
     def __init__(self, Username, Password, Id):
-        self.req = self.req.replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{AppName}', config1.appName) \
         .replace('{Username}', Username).replace('{Password}', Password) \
         .replace('{Id}', Id)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vod2Service, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.vod2Service, self.req, {
             'SOAPAction': 'http://iptv-distribution.net/ds/vod/generic/GetVODSeries',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -334,7 +350,7 @@ class GetVODSeries:
         if name == 'Movie':
             self.id = attrs['Vid']
             if 'Description' in attrs:
-                self.description = attrs['Description']
+                self.description = attrs['Description'].encode('utf-8')
             else:
                 self.description = ''
             self.parts = int(attrs['RecParts'])
@@ -370,14 +386,15 @@ class GetVODMoviesNewInVODByUser:
     id = None
     name = None
     description = None
-
+    date = ""
     def __init__(self, Username, Password):
-        self.req = self.req.replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{AppName}', config1.appName) \
         .replace('{Username}', Username).replace('{Password}', Password)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vod2Service, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.vod2Service, self.req, {
+            'Host': 'iptv-distribution.net',                                                
             'SOAPAction': 'http://iptv-distribution.net/ds/vod/generic/GetVODMoviesNewInVODByUser',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -390,16 +407,20 @@ class GetVODMoviesNewInVODByUser:
         p.EndElementHandler = self.end_element
         
         p.Parse(str(data))
-        return sorted(self.programs, key=lambda prog: prog[0])
+        return sorted(self.programs, key=lambda prog: prog[3], reverse=True)
 
     def start_element(self, name, attrs):
         if name == 'Movie':
             self.id = attrs['Vid']
             self.name = attrs['Name'].encode('utf-8')
-            self.description = attrs['Description']
+            self.description = attrs['Description'].encode('utf-8')
+            if 'MovieDate' in attrs:
+                self.date = attrs['MovieDate']
+            else:
+                self.date = "2100-09-05T23:59:59"
     def end_element(self, name):
         if name == 'Movie':
-            self.programs.append((self.name, self.id, self.description))
+            self.programs.append((self.name, self.id, self.description, self.date))
             self.id = None
             self.name = None
             self.description = None
@@ -424,14 +445,14 @@ class GetVODMoviesTOP100ByUser:
     id = None
     name = None
     description = None
-
+    rating = 0
     def __init__(self, Username, Password):
-        self.req = self.req.replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{AppName}', config1.appName) \
         .replace('{Username}', Username).replace('{Password}', Password)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vod2Service, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.vod2Service, self.req, {
             'SOAPAction': 'http://iptv-distribution.net/ds/vod/generic/GetVODMoviesTOP100ByUser',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -444,16 +465,21 @@ class GetVODMoviesTOP100ByUser:
         p.EndElementHandler = self.end_element
         
         p.Parse(str(data))
-        return sorted(self.programs, key=lambda prog: prog[0])
+        return sorted(self.programs, key=lambda prog: prog[3], reverse=True)
 
     def start_element(self, name, attrs):
         if name == 'Movie':
             self.id = attrs['Vid']
             self.name = attrs['Name'].encode('utf-8')
-            self.description = attrs['Description']
+            self.description = attrs['Description'].encode('utf-8')
+            if 'Rating' in attrs:
+                self.rating = float(attrs['Rating'])
+            else:
+                self.rating = float(0.1)
     def end_element(self, name):
         if name == 'Movie':
-            self.programs.append((self.name, self.id, self.description))
+            self.programs.append((self.name, self.id, self.description, self.rating))
             self.id = None
             self.name = None
             self.description = None
+            self.rating

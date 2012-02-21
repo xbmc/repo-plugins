@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.brt"
-       version="1.0.1"
-       name="BestRussianTV.com"
+       version="1.2.5"
+       name="BestRussianTV"
        provider-name="BestRussianTV.com">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
+		<import addon="script.module.beautifulsoup" version="3.0.8"/>
+
     </requires>
-    <extension point="xbmc.python.pluginsource" library="brt.py">
+    <extension point="xbmc.python.pluginsource" library="brtv.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">

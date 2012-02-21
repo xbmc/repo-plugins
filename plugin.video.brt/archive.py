@@ -1,3 +1,4 @@
+# coding=utf-8
 #
 # <BestRussianTV plugin for XBMC>
 # Copyright (C) <2011>  <BestRussianTV>
@@ -15,11 +16,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
-
 import httplib, urllib, urllib2, re
 import xml.parsers.expat
-import config
+import config1
 
 class GetChannels:
     req = \
@@ -41,12 +40,13 @@ class GetChannels:
     element = None
 
     def __init__(self, Username, Password):
-        self.req = self.req.replace('{SiteId}', config.siteId).replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{SiteId}', config1.siteId).replace('{AppName}', config1.appName) \
         .replace('{Username}', Username).replace('{Password}', Password)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.epgService, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net')
+        conn.request('POST', config1.epgService, self.req, {
+                                                        
             'SOAPAction': 'http://iptv-distribution.net/ds/epg/GetPVRChannels',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -71,7 +71,9 @@ class GetChannels:
         self.element = name
     def end_element(self, name):
         if name == 'TVChannelData':
-            self.channels.append((str(len(self.channels) + 1).zfill(2) + '. ' + self.name, self.id, self.icon))
+            temp = str(len(self.channels) + 1).zfill(2) + '. ' + self.name
+            #temp = temp.encode('utf-8')
+            self.channels.append((temp, self.id, self.icon))
             self.id = None
             self.name = None
     def char_data(self, data):
@@ -109,19 +111,20 @@ class GetPVREPG:
     element = None
     
     def __init__(self, Username, Password, Channel, Date):
-        self.req = self.req.replace('{AppName}', config.appName) \
+        self.req = self.req.replace('{AppName}', config1.appName) \
         .replace('{Username}', Username).replace('{Password}', Password) \
         .replace('{Channel}', Channel).replace('{Date}', Date)				
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.epgService, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net', 80)
+        conn.request('POST', config1.epgService, self.req, {
+            'Host' : 'iptv-distribution.net',                                                
             'SOAPAction': 'http://iptv-distribution.net/ds/epg/GetPVREPG',
             'Content-Type': 'text/xml; charset=utf-8'
         })
         response = conn.getresponse()
         data = response.read()
-        print data
+        
 
         p = xml.parsers.expat.ParserCreate()
 
@@ -134,15 +137,17 @@ class GetPVREPG:
     def start_element(self, name, attrs):
         if name == 'TVProgramData':
             self.id = attrs['TvGuideID']
-            self.name = attrs['TvProgramName'].encode('utf-8')
+            self.name = attrs['TvProgramName']
             # description is not returned by the service
             self.description = ""
-            #self.description = attrs['Description'].encode('utf-8')
+            #self.description = attrs['Description']#.encode('utf-8')
             self.start = attrs['Date'][11:16].encode('utf-8')
             self.isWatchable = attrs['IsWatchable']
-    def end_element(self, name):
+    def end_element(self, name): 
         if name == 'TVProgramData' and self.isWatchable != 'false':
-            self.programs.append((self.start + ' ' + self.name, self.id, self.description))
+            test = self.start + ' ' + self.name
+            test = test.encode('utf-8')
+            self.programs.append((test, self.id, self.description))
             self.id = None
             self.start = None
             self.name = None
@@ -165,12 +170,13 @@ class GetArchStream:
     streamUrl = None
 
     def __init__(self, Username, Password, Program):
-        self.req = self.req.replace('{AppName}', config.appName).replace('{Protocol}', config.protocol) \
+        self.req = self.req.replace('{AppName}', config1.appName).replace('{Protocol}', config1.protocol) \
         .replace('{Username}', Username).replace('{Password}', Password).replace('{Program}', Program)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.vodService, self.req, {
+        conn = httplib.HTTPConnection('iptv-distribution.net', 80)
+        conn.request('POST', config1.vodService, self.req, {
+            'Host': 'iptv-distribution.net',
             'SOAPAction': 'http://www.iptv-distribution.com/ucas/GetPVRStreamURL',
             'Content-Type': 'text/xml; charset=utf-8'
         })
@@ -214,18 +220,18 @@ class GetPvrPlaylist:
     streamUrl = None
 
     def __init__(self, Username, Password, Program):
-        self.req = self.req.replace('{AppName}', config.appName).replace('{Protocol}', config.protocol) \
+        self.req = self.req.replace('{AppName}', config1.appName).replace('{Protocol}', config1.protocol) \
         .replace('{Username}', Username).replace('{Password}', Password).replace('{Program}', Program)
 
     def Request(self):
-        conn = httplib.HTTPConnection(config.server)
-        conn.request('POST', config.streamService, self.req, {
+        conn = httplib.HTTPConnection(config1.server)
+        conn.request('POST', config1.streamService, self.req, {
             'SOAPAction': 'http://iptv-distribution.net/ds/cas/streams/generic/GetPvrPlaylist',
             'Content-Type': 'text/xml; charset=utf-8'
         })
         response = conn.getresponse()
         data = response.read()
-        print data
+        
 
         p = xml.parsers.expat.ParserCreate()
 

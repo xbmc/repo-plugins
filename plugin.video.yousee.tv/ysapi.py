@@ -25,7 +25,6 @@ import urllib2
 import simplejson
 import os
 import re
-import uuid
 
 import xbmc
 
@@ -39,9 +38,13 @@ AREA_USERS = 'users'
 AREA_TVGUIDE = 'tvguide'
 AREA_SYSTEM = 'system'
 AREA_CONTENT = 'content'
+AREA_ARCHIVE = 'archive'
 
 METHOD_GET = 'get'
 METHOD_POST = 'post'
+
+class YouSeeApiException(Exception):
+    pass
 
 class YouSeeApi(object):
     COOKIE_JAR = cookielib.LWPCookieJar()
@@ -76,6 +79,8 @@ class YouSeeApi(object):
             self.COOKIE_JAR.save(self.cookieFile, ignore_discard=True, ignore_expires=True)
         except urllib2.HTTPError, error:
             json = error.read()
+        except Exception, ex:
+            raise YouSeeApiException(ex)
 
         try:
             return simplejson.loads(json)
@@ -100,11 +105,21 @@ class YouSeeLiveTVApi(YouSeeApi):
         """
         return self._invoke(AREA_LIVETV, 'popularchannels')
 
-    def allowedChannels(self):
+    def allowedChannels(self, branch = 'yousee'):
         """
         Returns list of channels the requesting IP is allowed to stream.
         """
-        return self._invoke(AREA_LIVETV, 'allowed_channels')
+        params = dict()
+        if branch == 'tdc':
+            params['branch'] = branch
+            try:
+                u = urllib2.urlopen('http://automation.whatismyip.com/n09230945.asp')
+                params['clientip'] = u.read()
+                u.close()
+            except urllib2.URLError:
+                pass
+
+        return self._invoke(AREA_LIVETV, 'allowed_channels', params)
 
     def suggestedChannels(self):
         """
@@ -194,50 +209,6 @@ class YouSeeMovieApi(YouSeeApi):
             'amount' : amount
         })
 
-    def order(self, movie_id, reference_id = None, client_ip = None):
-        """
-        Creates order in yousee.tv backend. This is first step in the two-step procedure for generating orders
-
-        @param movie_id: VodKa ID for movie (VODKxxxxx)
-        @param reference_id: Unique reference id for order. This has to be unique within your API-key
-        @param client_ip: Client ip-address
-        @return:
-        """
-        if reference_id is None:
-            reference_id = 'plugin.video.yousee.tv-%s' % uuid.uuid1().hex
-            xbmc.log("Generated reference_id: %s" % reference_id, xbmc.LOGDEBUG)
-
-        if client_ip is None:
-            client_ip = urllib2.urlopen('http://automation.whatismyip.com/n09230945.asp').read()
-            xbmc.log("Looked up client_ip: %s" % client_ip, xbmc.LOGDEBUG)
-
-        return self._invoke(AREA_MOVIE, 'order', {
-            'movie_id' : movie_id,
-            'reference_id' : reference_id,
-            'client_ip' : client_ip
-        }, METHOD_POST)
-
-    def order_confirm(self, order_id, transaction_id, giftcode, fee):
-        """
-        Confirms order in yousee.tv backend. This is the second step in the two-step procedure for generating orders.
-        A receipt is sent to the customer upon successful confirmation of order
-
-        @param order_id: Order id generated in order POST. This is returned as a POST variable from DIBS in callback request.
-        @param transaction_id: Transaction id returned from DIBS (POST variable name "transact") (optional if giftcode is set)
-        @param giftcode: 12-digit yousee giftcode (optional if transaction_id is set)
-        @param fee: fee amount in oere from DIBS (POST variable name "fee")
-        @return:
-        """
-        pass
-
-    def playerdata(self, movie_id):
-        """
-        Returns information needed for embedding player.
-
-        @param movie_id: VodKa ID for movie (VODKxxxxx)
-        @return:
-        """
-        pass
 
 class YouSeeTVGuideApi(YouSeeApi):
     def channels(self):
@@ -291,13 +262,58 @@ class YouSeeContentApi(YouSeeApi):
         """
         Returns editorial teasers from YouSee. (see yousee.tv/film for reference)
 
-        @param area: Teaser area (allowed areas: movie)
+        @param area: Teaser area (allowed area: movie)
         @return:
         """
         return self._invoke(AREA_CONTENT, 'teasers', {
             'area' : area
         })
 
+class YouSeeArchiveApi(YouSeeApi):
+    def genres(self):
+        return self._invoke(AREA_ARCHIVE, 'genres')
+
+    def programs(self, channel_id = None, genre_id = None, tvdate = None):
+        """
+        Returns program list
+        @param channel_id: (optional)
+        @param genre_id: Genre ID (optional)
+        @param tvdate: yyyy-mm-dd format (optional)
+        @return:
+        """
+        params = dict()
+        if channel_id:
+            params['channel_id'] = channel_id
+        if genre_id:
+            params['genre_id'] = genre_id
+        if tvdate:
+            params['tvdate'] = tvdate
+
+        return self._invoke(AREA_ARCHIVE, 'programs', params)
+
+    def allowed_channels(self):
+        return self._invoke(AREA_ARCHIVE, 'allowed_channels')
+
+    def search(self, query, offset = None, limit = None):
+        params = dict()
+        params['query'] = query
+        if offset:
+            params['offset'] = offset
+        if limit:
+            params['limit'] = limit
+        return self._invoke(AREA_ARCHIVE, 'search', params)
+
+    def streamurl(self, epg_id, client = 'xbmc'):
+        """
+
+        @param epg_id: program_id
+        @param client:
+        @return:
+        """
+        return self._invoke(AREA_ARCHIVE, 'streamurl', {
+            'epg_id' : epg_id,
+            'client' : client
+        })
 
 if __name__ == '__main__':
     api = YouSeeLiveTVApi('/tmp')

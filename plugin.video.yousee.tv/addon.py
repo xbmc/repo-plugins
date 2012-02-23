@@ -58,8 +58,6 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def showLiveTVChannels(self):
-        if not self._checkLogin():
-            return
         api = ysapi.YouSeeLiveTVApi(CACHE_PATH)
         channels = api.allowedChannels()
         if not channels:
@@ -85,9 +83,6 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE, succeeded = len(channels) > 0)
 
     def playLiveTVChannel(self, channelId):
-        if not self._checkLogin():
-            return
-
         api = ysapi.YouSeeLiveTVApi(CACHE_PATH)
         channel = api.channel(channelId)
         stream = api.streamUrl(channelId)
@@ -107,8 +102,6 @@ class YouSeeTv(object):
         xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
     def showMovieGenres(self):
-        if not self._checkLogin():
-            return
         api = ysapi.YouSeeMovieApi(CACHE_PATH)
         genres = api.genres()
         if not genres:
@@ -125,8 +118,6 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def showMoviesInGenre(self, genre):
-        if not self._checkLogin():
-            return
         api = ysapi.YouSeeMovieApi(CACHE_PATH)
         moviesInGenre = api.moviesInGenre(genre)
         if not moviesInGenre:
@@ -142,8 +133,6 @@ class YouSeeTv(object):
 
 
     def showMovieThemes(self):
-        if not self._checkLogin():
-            return
         api = ysapi.YouSeeMovieApi(CACHE_PATH)
         themes = api.themes()
         if not themes:
@@ -161,8 +150,6 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def showMoviesInTheme(self, theme):
-        if not self._checkLogin():
-            return
         api = ysapi.YouSeeMovieApi(CACHE_PATH)
         moviesInTheme= api.moviesInTheme(theme)
         if not moviesInTheme:
@@ -177,8 +164,6 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def searchMovies(self):
-        if not self._checkLogin():
-            return
         kbd = xbmc.Keyboard('', 'Search movies')
         kbd.doModal()
         if kbd.isConfirmed():
@@ -195,19 +180,6 @@ class YouSeeTv(object):
 
             xbmcplugin.setContent(HANDLE, 'movies')
             xbmcplugin.endOfDirectory(HANDLE)
-
-    def orderMovie(self, movie_id):
-        if not self._checkLogin():
-            return
-        api = ysapi.YouSeeMovieApi(CACHE_PATH)
-        json = api.order(movie_id)
-
-        if json and json.has_key('error'):
-            self._showError(json['error'])
-            return
-        else:
-            self._showError()
-            return
 
     def _addMovieDirectoryItem(self, movie):
         infoLabels = dict()
@@ -275,25 +247,14 @@ class YouSeeTv(object):
 
                 out.save(path)
 
-    def _checkLogin(self):
-        return True # Disable login for now
-
-        username = ADDON.getSetting('username')
-        password = ADDON.getSetting('password')
-
-        if username != '' and password != '':
-            xbmc.log('[plugin.video.yousee.tv] Logging in...')
-            api = ysapi.YouSeeUsersApi(CACHE_PATH)
-            resp = api.login(username, password)
-            if resp.has_key('error'):
-                self._showError(resp['error'])
-                return False
-
-        return True
-
     def isYouSeeIP(self):
         api = ysapi.YouSeeUsersApi(CACHE_PATH)
-        if not api.isYouSeeIP() and ADDON.getSetting('warn.if.not.yousee.ip') == 'true':
+        try:
+            isYouSeeIP = api.isYouSeeIP()
+        except Exception:
+            isYouSeeIP = False
+
+        if not isYouSeeIP and ADDON.getSetting('warn.if.not.yousee.ip') == 'true':
             heading = ADDON.getLocalizedString(99970)
             line1 = ADDON.getLocalizedString(99971)
             line2 = ADDON.getLocalizedString(99972)
@@ -331,8 +292,8 @@ if __name__ == '__main__':
     if not os.path.exists(CACHE_PATH):
         os.makedirs(CACHE_PATH)
 
+    ytv = YouSeeTv()
     try:
-        ytv = YouSeeTv()
         if PARAMS.has_key('area') and PARAMS['area'][0] == 'livetv':
             ytv.showLiveTVChannels()
         elif PARAMS.has_key('channel'):
@@ -351,9 +312,6 @@ if __name__ == '__main__':
         elif PARAMS.has_key('area') and PARAMS['area'][0] == 'movie-search':
             ytv.searchMovies()
 
-#        elif PARAMS.has_key('orderMovie'):
-#            ytv.orderMovie(PARAMS['orderMovie'][0])
-
         elif ADDON.getSetting('hide.movie.area') == 'true':
             ytv.isYouSeeIP()
             ytv.showLiveTVChannels()
@@ -362,6 +320,9 @@ if __name__ == '__main__':
             ytv._showWarning()
             ytv.isYouSeeIP()
             ytv.showOverview()
+
+    except ysapi.YouSeeApiException, ex:
+        ytv._showError(str(ex))
 
     except Exception:
         buggalo.onExceptionRaised()

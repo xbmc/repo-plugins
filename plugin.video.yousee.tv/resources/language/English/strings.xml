@@ -6,7 +6,7 @@
     <string id="30003">Search movies</string>
 
     <string id="30050">Oops, sorry about that...</string>
-    <string id="30051">The stream could not be started!</string>
+    <string id="30051">There was an error while communication with YouSee.</string>
     <string id="30052">The error from the server is:</string>
     <string id="30053">Unknown error</string>
 

@@ -51,7 +51,7 @@ class DrNuApi(object):
         if label is not None:
             seriesWithLabel = list()
             for serie in series:
-                if label in serie['labels']:
+                if label.decode('utf-8', 'ignore') in serie['labels']:
                     seriesWithLabel.append(serie)
 
             series = seriesWithLabel
@@ -142,9 +142,12 @@ class DrNuApi(object):
                 content = self._http_request(path)
 
                 if content:
-                    f = open(cachePath, 'w')
-                    f.write(content)
-                    f.close()
+                    try:
+                        f = open(cachePath, 'w')
+                        f.write(content)
+                        f.close()
+                    except Exception:
+                        pass # just too bad if file system is read-only
 
             else:
                 f = open(cachePath)
@@ -167,7 +170,7 @@ class DrNuApi(object):
             u = urllib2.urlopen(API_URL % path)
             content = u.read()
             u.close()
-        except urllib2.URLError, ex:
+        except Exception as ex:
             raise DrNuException(ex)
         return content
 

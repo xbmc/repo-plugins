@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2011 Tommy Winther
+#      Copyright (C) 2012 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -13,7 +13,7 @@
 #  GNU General Public License for more details.
 #
 #  You should have received a copy of the GNU General Public License
-#  along with XBMC; see the file COPYING.  If not, write to
+#  along with this Program; see the file LICENSE.txt.  If not, write to
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
@@ -24,7 +24,6 @@ import urlparse
 import urllib2
 import re
 import datetime
-import random
 
 import xbmc
 import xbmcgui
@@ -384,7 +383,8 @@ class NuAddon(object):
         xbmcgui.Dialog().ok(ADDON.getLocalizedString(30008), ADDON.getLocalizedString(30009))
 
     def delFavorite(self, slug):
-        self.favorites.remove(slug)
+        if self.favorites.count(slug):
+            self.favorites.remove(slug)
         self._save()
         xbmcgui.Dialog().ok(ADDON.getLocalizedString(30008), ADDON.getLocalizedString(30010))
 
@@ -396,7 +396,7 @@ class NuAddon(object):
         self._save()
 
     def displayError(self, message = 'n/a'):
-        heading = ADDON.getLocalizedString(random.randint(99980, 99985))
+        heading = buggalo.getRandomHeading()
         line1 = ADDON.getLocalizedString(30900)
         line2 = ADDON.getLocalizedString(30901)
         xbmcgui.Dialog().ok(heading, line1, line2, message)
@@ -414,6 +414,7 @@ if __name__ == '__main__':
     FAVORITES_PATH = os.path.join(CACHE_PATH, 'favorites.pickle')
     RECENT_PATH = os.path.join(CACHE_PATH, 'recent.pickle')
 
+    buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     nuAddon = NuAddon()
     try:
         if PARAMS.has_key('show'):

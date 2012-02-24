@@ -1,3 +1,17 @@
+[B]Version 2.3.1[/B]
+Works on Dharma again
+Newest Talks now work on Eden+Win32
+Remove duplicates of some themes
+
+[B]Version 2.3.0[/B]
+Get new talks from RSS feeds
+Update themes scraper to cope with website changes
+Icons for themes
+Log correct version number for plugin on startup
+
+[B]Version 2.2.6[/B]
+Fix for problem introduced in 2.2.5 where certain talks could not be played.
+
 [B]Version 2.2.5[/B]
 Fixed playback of certain videos would fail (thanks to moreginger)
 

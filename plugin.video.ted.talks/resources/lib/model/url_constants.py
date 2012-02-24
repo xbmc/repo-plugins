@@ -1,0 +1,5 @@
+URLTED = 'http://www.ted.com'
+URLPROFILES = URLTED + '/profiles'
+URLFAVORITES = URLPROFILES + '/favorites/id/'
+URLADDFAV = URLPROFILES + '/addfavorites?id=%s&modulename=talks'
+URLREMFAV = URLPROFILES + '/removefavorites?id=%s&modulename=talks'

@@ -38,12 +38,12 @@
     <string id="30074">Always Ask for Download Location</string>
     
     <!--Context Menu-->
-    <!--<string id="13347">Queue item</string>from system-->
     <string id="30090">Add to TED.com favorites</string>
     <string id="30091">Add to favorites successful</string>
     <string id="30092">Add to favorites failed</string>
     <string id="30093">Remove from TED.com favorites</string>
     <string id="30094">Remove from favorites successful</string>
     <string id="30095">Remove from favorites failed</string>
-    <string id="30096">Download Video</string>
+    <string id="30096">Download video</string>
+    <string id="30097">Queue</string><!-- Was 13347 from system, but no longer available. -->
 </strings>

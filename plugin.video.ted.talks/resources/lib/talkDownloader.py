@@ -1,15 +1,14 @@
 import urllib
 import os.path
-import sys
 import xbmc
 import xbmcgui
 
 #enable localization
 import xbmcaddon
+import plugin
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.ted.talks')
 getLS = __settings__.getLocalizedString
-pluginName = sys.modules['__main__'].__plugin__
 
 
 class Download:
@@ -24,12 +23,12 @@ class Download:
         #unicode causes problems here, convert to standard str
         self.filename = self.getLegalFilename(self.title.title().replace(' ', '') + '.mp4')
         self.fullDownloadPath = os.path.join(downloadPath, self.filename)
-        print '[%s] %s : Attempting to download\n%s --> %s' % (pluginName, __name__, self.url, self.fullDownloadPath)
+        print '[%s] %s : Attempting to download\n%s --> %s' % (plugin.__plugin__, __name__, self.url, self.fullDownloadPath)
 
         if self.checkPath(downloadPath, self.filename):
             try:
                 re = urllib.urlretrieve(self.url, self.fullDownloadPath, reporthook = self.showdlProgress)
-                print '[%s] Download Success!' % (pluginName)
+                print '[%s] Download Success!' % (plugin.__plugin__)
             except IOError, e:
                 print e
                 self.pDialog.close()

@@ -76,3 +76,5 @@ plugin.video.jupiterbroadcasting/.git
 plugin.video.news.tv2.dk/.git
 plugin.video.g4tv/.git
 plugin.audio.npr/.git
+plugin.video.ted.talks/.git
+plugin.video.ted.talks/.gitignore

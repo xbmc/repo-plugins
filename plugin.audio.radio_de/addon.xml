@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.radio_de" name="Radio" version="0.0.4" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.audio.radio_de" name="Radio" version="0.0.5" provider-name="Tristan Fischer (sphere@dersphere.de)">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
     <import addon="script.module.simplejson" version="2.0.10"/>

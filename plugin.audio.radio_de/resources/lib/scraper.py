@@ -148,8 +148,8 @@ def __resolve_playlist(playlist_url):
     if playlist_url.endswith('m3u'):
         __log('__resolve_playlist found .m3u file')
         for entry in response.splitlines():
-            if not entry.strip().startswith('#'):
-                stream_url = entry
+            if entry and not entry.strip().startswith('#'):
+                stream_url = entry.strip()
                 break
     elif playlist_url.endswith('pls'):
         __log('__resolve_playlist found .pls file')

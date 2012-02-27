@@ -206,7 +206,7 @@ def get_stream(id):
     __log('get_stream started with id=%s' % id)
     language = __get_language()
     station = scraper.get_station_by_station_id(language, id)
-    stream_url = station['streamURL']
+    stream_url = station['streamURL'].strip()
     __log('get_stream end with stream_url=%s' % stream_url)
     return plugin.set_resolved_url(stream_url)
 

@@ -18,9 +18,22 @@
 import time,urllib,re;
 from archivefile import ArchiveFile
 regex_mediaLink = re.compile("(http|ftp)://.*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
-regex_dateString = re.compile("\\d{2} ((\\w{3})|(\\d{2})) \\d{4}");
+regex_dateString = re.compile("\\d{2} ((\\w{3,})|(\\d{2})) \\d{4}");
 regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
-regex_replaceUnusableChar = re.compile("[:/ \\.]")
+regex_replaceUnusableChar = re.compile("[:/ \\.\?\\\\]")
+month_replacements_long = {
+    "January":"01",
+    "February":"02",
+    "March":"03",
+    "April":"04",
+    "June":"06",    
+    "July":"07",
+    "August":"08",
+    "September":"09",
+    "October":"10",
+    "November":"11",
+    "December":"12"
+    };
 month_replacements = {
     "Jan":"01",
     "Feb":"02",
@@ -203,6 +216,8 @@ class Feed(object):
     dateMatch = regex_dateString.search(dateString);
     if(dateMatch is not None):
       dateString = dateMatch.group();
+      for month in month_replacements_long.keys():
+        dateString = dateString.replace(month,month_replacements_long[month]);
       for month in month_replacements.keys():
         dateString = dateString.replace(month,month_replacements[month]);
       return time.strptime(dateString,"%d %m %Y");

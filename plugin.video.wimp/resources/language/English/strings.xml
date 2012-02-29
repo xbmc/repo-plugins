@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Current Videos</string>
+    <string id="30001">Random Video</string>
+    <string id="30002">Archive</string>
+    <string id="30003">Search</string>
+    <!-- Settings -->
+    <string id="30010">Preferred Video</string>
+    <string id="30011">Flash</string>
+    <string id="30012">Mobile</string>
+</strings>

@@ -126,4 +126,5 @@ if ( __name__ == "__main__" ):
         node_url(sys.argv[0], int(sys.argv[1]), arg[1])
     
     else:
+        xbmcplugin.setContent(int(sys.argv[1]), "files")
         nodes(sys.argv[0], int(sys.argv[1]))

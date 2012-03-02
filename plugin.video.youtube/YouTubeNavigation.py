@@ -243,11 +243,19 @@ class YouTubeNavigation():
     #================================== Plugin Actions =========================================
     def downloadVideo(self, params):
         get = params.get
+        self.common.log(repr(params))
+        if not self.settings.getSetting("download_path"):
+            self.common.log("Download path missing. Opening settings")
+            self.utils.showMessage(self.language(30600), self.language(30611))
+            self.settings.openSettings()
+
+        download_path = self.settings.getSetting("download_path")
+        self.common.log("path: " + repr(download_path))
         (video, status) = self.player.getVideoObject(params)
-        if "video_url" in video:
+        if "video_url" in video and download_path:
             params["Title"] = video['Title']
             params["url"] = video['video_url']
-            params["download_path"] = self.settings.getSetting("downloadPath")
+            params["download_path"] = download_path
             filename = "%s-[%s].mp4" % (''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS), video["videoid"])
             self.player.downloadSubtitle(video)
             if get("async"):

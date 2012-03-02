@@ -492,6 +492,7 @@ class YouTubePlayer():
                             final_url = final_url.replace(host, fmt_fallback)
                             final_url = final_url.replace("fallback_host=" + fmt_fallback, "fallback_host=" + host)
 
+                    # Extract RTMP variables
                     if final_url.find("rtmp") > -1 and index > 0:
                         if "url" in pl_obj:
                             final_url += " swfurl=" + pl_obj["url"] + " swfvfy=1"
@@ -532,6 +533,7 @@ class YouTubePlayer():
                 return (video, 303)
         else:
             self.common.log("- Got API Error from YouTube!")
+            video = {}
             video["apierror"] = result["content"]
 
             return (video, 303)
@@ -630,7 +632,7 @@ class YouTubePlayer():
         return video_url
 
     def userSelectsVideoQuality(self, params, links):
-        #get = params.get
+        get = params.get
         link = links.get
         quality_list = []
         choices = []
@@ -676,24 +678,35 @@ class YouTubePlayer():
 
         return ""
 
-    def getVideoObject(self, params):
-        self.common.log(repr(params))
-        get = params.get
-        video = {}
-        links = []
-        (video, status) = self.getInfo(params)
-
-        #Check if file has been downloaded locally and use that as a source instead
-        if (status == 200 and get("action", "") != "download"):
+    def checkLocalFileSource(self, get, status, video):
+        result = ""
+        if (get("action", "") != "download"):
             path = self.settings.getSetting("downloadPath")
             filename = ''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS) + "-[" + get('videoid') + "]" + ".mp4"
             path = os.path.join(path.decode("utf-8"), filename)
             try:
                 if self.xbmcvfs.exists(path):
-                    video['video_url'] = path
-                    return (video, 200)
+                    result = path
             except:
                 self.common.log("attempt to locate local file failed with unknown error, trying youtube instead")
+        return result
+
+    def getVideoObject(self, params):
+        self.common.log(repr(params))
+        get = params.get
+
+        links = []
+        (video, status) = self.getInfo(params)
+
+        if status != 200:
+            video['apierror'] = self.language(30618)
+            return (video, 303)
+
+        #Check if file has been downloaded locally and use that as a source instead
+        video_url = self.checkLocalFileSource(get, status, video)
+        if video_url:
+            video['video_url'] = video_url
+            return (video, 200)
 
         (links, video) = self._getVideoLinks(video, params)
 

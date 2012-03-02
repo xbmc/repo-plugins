@@ -29,7 +29,7 @@ except ImportError:
     import xbmcvfsdummy as xbmcvfs
 
 # plugin constants
-version = "2.9.0"
+version = "2.9.1"
 plugin = "YouTube-" + version
 author = "TheCollective"
 url = "www.xbmc.com"

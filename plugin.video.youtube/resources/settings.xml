@@ -9,7 +9,7 @@
     <setting id="safe_search" type="enum" label="30209" lvalues="30214|30219|30220" default="1" />    
     <setting id="hd_videos" type="enum" label="30208" lvalues="30213|30215|30216|30217" default="2" />
     <setting type="sep" />
-    <setting id="downloadPath" type="folder" label="30207" default="" />
+    <setting id="download_path" type="folder" label="30207" default="" />
     <setting type="sep" />
     <setting id="lang_code" type="enum" label="30276" lvalues="30277|30278|30279|30280|30281|30282|30283" default="0" />
     <setting id="transcode" type="bool" label="30274" enable="!eq(-1,0)" default="false" />

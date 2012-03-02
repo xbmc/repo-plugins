@@ -343,16 +343,15 @@ class YouTubeFeeds():
                 next = temp_objects[len(temp_objects) - 1].get("next", "false")
                 if next == "true":
                     temp_objects = temp_objects[:len(temp_objects) - 1]
-                    ytobjects += temp_objects
+                ytobjects += temp_objects
             else:
                 self.common.log("Didn't get any temp_objects. This should NOT happen")
 
         if get("user_feed"):
             if get("user_feed") != "playlist" and get("action") != "play_all":
                 ytobjects.sort(key=lambda item: item["Title"].lower(), reverse=False)
-            else:
-                if (self.storage.getReversePlaylistOrder(params)):
-                    ytobjects.reverse()
+            elif (self.storage.getReversePlaylistOrder(params)):
+                ytobjects.reverse()
 
         self.common.log(repr(ytobjects), 4)
         return ytobjects

@@ -1,6 +1,6 @@
 '''
    Vimeo plugin for XBMC
-   Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+   Copyright (C) 2010-2012 Tobias Ussing And Henrik Mosgaard Jensen
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -11,513 +11,356 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU General Public License for more details.
-   
+
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
+import sys, urllib
+import xml.dom.minidom as minidom
 
-import sys, urllib2, string
 
 class VimeoCore(object):
-	
-	def __init__(self):
-		self.v = sys.modules["__main__"].client
-		self.soup = sys.modules["__main__"].soup
-		self.settings = sys.modules[ "__main__" ].settings
-		self.language = sys.modules[ "__main__" ].language
-		self.plugin = sys.modules[ "__main__" ].plugin	
-		self.dbg = sys.modules[ "__main__" ].dbg
-		self.utils = sys.modules[ "__main__" ].utils
-		self.login = sys.modules[ "__main__" ].login	
 
-		self.oauth_secret = False
-		self.oauth_token_secret = False
-	
-		self.hq_thumbs = self.settings.getSetting( "high_quality_thumbs" ) == "true"
-	
-		self.USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
+    def __init__(self):
+        self.v = sys.modules["__main__"].client
+        self.settings = sys.modules["__main__"].settings
+        self.language = sys.modules["__main__"].language
+        self.plugin = sys.modules["__main__"].plugin
+        self.dbg = sys.modules["__main__"].dbg
+        self.utils = sys.modules["__main__"].utils
+        self.login = sys.modules["__main__"].login
+        self.common = sys.modules["__main__"].common
 
-	#===============================================================================
-	#
-	# External functions called by YouTubeNavigation.py
-	#
-	# return MUST be a tupple of ( result[string or dict], status[int] )
-	#
-	#===============================================================================
-	
-	def init(self):
-		if self.dbg:
-			print self.plugin + " init " 
-		
-		self.oauth_token = self.settings.getSetting("oauth_token")
-		self.oauth_token_secret = self.settings.getSetting("oauth_token_secret")
-		
-		if ( self.oauth_token and self.oauth_token_secret ):
-			self.v.init(token = self.oauth_token, token_secret = self.oauth_token_secret)
+        self.hq_thumbs = self.settings.getSetting("high_quality_thumbs") == "true"
 
-	def downloadVideo(self, video):
-		if self.dbg:
-			print self.plugin + " downloadVideo : " + video['Title']
-		
-		path = self.settings.getSetting( "downloadPath" )
-		try:
-			url = urllib2.Request(video['video_url'])
-			url.add_header('User-Agent', self.USERAGENT);
-			valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-			
-			filename = "%s/%s.mp4" % ( path, ''.join(c for c in video['Title'] if c in valid_chars) )
-			file = open(filename, "wb")
-			con = urllib2.urlopen(url);
-			file.write(con.read())
-			con.close()
-				
-			self.settings.setSetting( "vidstatus-" + video['videoid'], "1" )
-		except urllib2.HTTPError, e:
-			if self.dbg:
-				print self.plugin + " downloadVideo except: " + str(e)
-			return ( str(e), 303 )
-		except:
-			if self.dbg:
-				print self.plugin + " downloadVideo uncaught exception"
-				print 'ERROR: %s::%s (%d) - %s' % (self.__class__.__name__, sys.exc_info()[2].tb_frame.f_code.co_name, sys.exc_info()[2].tb_lineno, sys.exc_info()[1])
-				
-			return (self.language(30606), 303)
+        if len(self.settings.getSetting("oauth_token")) > 0:
+            self.oauth_token = self.settings.getSetting("oauth_token")
 
-		if self.dbg:
-			print self.plugin + " downloadVideo done"
-		return ( video, 200 )
-	
-	def setLike(self, params):
-		if self.dbg:
-			print self.plugin + " setLike "
-			
-		get = params.get
-		
-		if (get("action") == "add_favorite"): 
-			result = self.v.vimeo_videos_setLike(like = "true", video_id=get("videoid"), oauth_token=self.oauth_token)
-		else:
-			result = self.v.vimeo_videos_setLike(like = "false", video_id=get("videoid"), oauth_token=self.oauth_token)
+    def setLike(self, params):
+        self.common.log("")
 
-		if self.dbg:
-			print self.plugin + " setLike done"
-				
-		return self._get_return_status(result)
-	
-	def updateContact(self, params):
-		if self.dbg:
-			print self.plugin + " updateContact"
+        get = params.get
 
-		get = params.get
-		
-		if (get("action") == "add_contact"): 
-			result = self.v.vimeo_people_addContact(user_id=get("contact"), oauth_token=self.oauth_token)
-		else:
-			result = self.v.vimeo_people_removeContact(user_id=get("contact"), oauth_token=self.oauth_token)
+        if (get("action") == "add_favorite"):
+            result = self.v.vimeo_videos_setLike(like="true", video_id=get("videoid"), oauth_token=self.oauth_token)
+        else:
+            result = self.v.vimeo_videos_setLike(like="false", video_id=get("videoid"), oauth_token=self.oauth_token)
 
-		if self.dbg:
-			print self.plugin + " updateContact done"
-				
-		return self._get_return_status(result)
+        self.common.log("Done")
 
-	def addToWatchLater(self, params):
-		if self.dbg:
-			print self.plugin + " addToWatchLater"
-		get = params.get
-		
-		result = self.v.vimeo_albums_addToWatchLater(video_id = get("videoid") )
-		
-		return self._get_return_status(result)
-		
-	def removeWatchLater(self, params):
-		if self.dbg:
-			print self.plugin + " removeFromWatchLater"
-		get = params.get
-		
-		result = self.v.vimeo_albums_removeFromWatchLater(video_id = get("videoid"))
-		
-		return self._get_return_status(result) 
-		
-	def updateGroup(self, params):
-		if self.dbg:
-			print self.plugin + " updateGroup"
+        return self._get_return_status(result)
 
-		get = params.get
-		
-		if (get("action") == "join_group"): 
-			result = self.v.vimeo_groups_join(group_id=get("group"), oauth_token=self.oauth_token)
-		else:
-			result = self.v.vimeo_groups_leave(group_id=get("group"), oauth_token=self.oauth_token)
+    def updateContact(self, params):
+        self.common.log("")
 
-		if self.dbg:
-			print self.plugin + " updateGroup done"
-				
-		return self._get_return_status(result)
+        get = params.get
 
-	def updateSubscription(self, params):
-		if self.dbg:
-			print self.plugin + " updateSubscription"
-				
-		get = params.get
+        if (get("action") == "add_contact"):
+            result = self.v.vimeo_people_addContact(user_id=get("contact"), oauth_token=self.oauth_token)
+        else:
+            result = self.v.vimeo_people_removeContact(user_id=get("contact"), oauth_token=self.oauth_token)
 
-		if (get("action") == "add_subscription"): 
-			result = self.v.vimeo_channels_subscribe(channel_id=get("channel"), oauth_token=self.oauth_token)
-		else:
-			result = self.v.vimeo_channels_unsubscribe(channel_id=get("channel"), oauth_token=self.oauth_token)
+        self.common.log("Done")
 
-		if self.dbg:
-			print self.plugin + " updateSubscription done"
-				
-		return self._get_return_status(result)
-	
-	def construct_video_url(self, videoid, encoding = 'utf-8'):
-		if self.dbg:
-			print self.plugin + " construct_video_url : " + repr(videoid)
-			
-		video = self._get_details(videoid)
-		
-		get = video.get
-		if not video:
-			# we need a scrape the homepage fallback when the api doesn't want to give us the URL
-			if self.dbg:
-				print self.plugin + " construct_video_url failed because of missing video from _get_details"
-			return ("", 500)
-		
-		quality = "sd"
-		hd_quality = int(self.settings.getSetting( "hd_videos" ))
-		
-		if (hd_quality and get("isHD","0") == "1"):
-			quality = "hd"
-		
-		if ( 'apierror' not in video):
-			video_url = "http://player.vimeo.com/play_redirect?clip_id=%s&sig=%s&time=%s&quality=%s&codecs=H264,VP8,VP6&type=moogaloop_local&embed_location=" % ( videoid, video['request_signature'], video['request_signature_expires'], quality )
-			url = urllib2.Request(video_url)
-			url.add_header('User-Agent', self.USERAGENT);
-			con = urllib2.urlopen(url);
-			video['video_url'] = con.geturl()
-			con.close()
-			
-			if self.dbg:
-				print self.plugin + " construct_video_url done"
-					
-			return ( video, 200 )
-		else:
-			if self.dbg:
-				print self.plugin + " construct_video_url, got apierror: " + video['apierror']
-			return (video['apierror'], 303)
-		
-	def search(self, query, page = "0"):
-		if self.dbg:
-			print self.plugin + " search: " + repr(query)
-		
-		per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.settings.getSetting( "perpage" ) ) ]
-		
-		result = self.v.vimeo_videos_search(query=query, page=int(page) + 1, per_page=per_page, full_response="true")
-		result = self._getvideoinfo(result);
-		
-		if result:
-			if self.dbg:
-				print self.plugin + " search done :" + str(len(result))
-			return (result, 200)
-		else:
-			if self.dbg:
-				print self.plugin + " search done with no results"
-			return (self.language(30601), 303)
+        return self._get_return_status(result)
 
-	def listVideoFeed(self, params):
-		if self.dbg:
-			print self.plugin + " listVideoFeed"
-				
-		get = params.get
-		
-		page = int(get("page","0")) + 1
-		per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.settings.getSetting( "perpage" ) ) ]
+    def addToAlbum(self, params):
+        self.common.log("")
+        get = params.get
 
-		if (get("channel")):
-			result = self.v.vimeo_channels_getVideos(channel_id=get("channel"), page=page, per_page=per_page, full_response="true")
-		elif (get("album")):
-			result = self.v.vimeo_albums_getVideos(album_id=get("album"), page=page, per_page=per_page, full_response="true")
-		elif (get("group")):		
-			result = self.v.vimeo_groups_getVideos(group_id=get("group"), page=page, per_page=per_page, full_response="true")
+        result = self.v.vimeo_albums_addVideo(album_id=get("album"), video_id=get("videoid"), oauth_token=self.oauth_token)
 
-		if (not result):
-			if self.dbg:
-				print self.plugin + " listVideoFeed result was empty"
-			return (result, 303)
-		else:
-			result = self._getvideoinfo(result);
+        self.common.log("Done")
+        return self._get_return_status(result)
 
-		if self.dbg:
-			print self.plugin + " listVideoFeed done"
-				
-		return ( result, 200 )
-	
-	def getUserData(self, params):
-		if self.dbg:
-			print self.plugin + " getUserData"
+    def removeFromAlbum(self, params):
+        self.common.log("")
+        get = params.get
 
-		get = params.get
+        result = self.v.vimeo_albums_removeVideo(album_id=get("album"), video_id=get("videoid"), oauth_token=self.oauth_token)
 
-		page = int(get("page", "0")) + 1
-		per_page = ( 10, 15, 20, 25, 30, 40, 50, )[ int( self.settings.getSetting( "perpage" ) ) ]
-		
-		user_id = self.settings.getSetting("userid")
+        self.common.log("Done")
+        return self._get_return_status(result)
 
-		if (get("external")):
-			user_id = get("contact")
-		
-		if self.dbg:
-			print self.plugin + " calling vimeo api for " + get("api") + " with user_id: " + repr(user_id) + " page: " + repr(page) + " per_page: " + repr(per_page)
-		
-		if (get("api") == "my_videos"):
-			result = self.v.vimeo_videos_getAll(user_id=user_id, per_page=per_page, page=page, full_response="true")
-			result = self._getvideoinfo(result)  
-		elif (get("api") == "my_likes"):
-			result = self.v.vimeo_videos_getLikes(user_id=user_id, per_page=per_page, page=page, full_response="true")
-			result = self._getvideoinfo(result)
-		elif (get("api") == "my_watch_later" and not get("external")):
-			result = self.v.vimeo_albums_getWatchLater(per_page=per_page, page=page, full_response="true")
-			result = self._getvideoinfo(result)
-		elif (get("api") == "my_newsubscriptions"):
-			result = self.v.vimeo_videos_getSubscriptions(user_id=user_id, per_page=per_page, page=page, full_response="true", sort="newest")
-			result = self._getvideoinfo(result)
-		elif (get("api") == "my_albums"):	 
-			result = self.v.vimeo_albums_getAll(user_id =user_id, per_page=per_page, page=page, full_response="true")
-			result = self._get_list('album', result)
-		elif (get("api") == "my_groups"):
-			result = self.v.vimeo_groups_getAll(user_id = user_id, per_page=per_page, page=page, full_response="true")
-			result = self._get_list('group', result)
-		elif (get("api") == "my_channels"):
-			result = self.v.vimeo_channels_getAll(user_id = user_id, per_page=per_page, page=page, full_response="true")
-			result = self._get_list('channel', result)
-		elif (get("api") == "my_contacts"):
-			result = self.v.vimeo_contacts_getAll(user_id = user_id, per_page=per_page, page=page, full_response="true")
-			result = self._get_contacts(result)
-			
-		if (not result):
-			if self.dbg:
-				print self.plugin + " getUserData result was empty"
-					
-			return (self.language(30602), 303)
+    def deleteAlbum(self, params):
+        self.common.log("")
+        get = params.get
 
-		if self.dbg:
-			print self.plugin + " getUserData done"
-				
-		return (result, 200) 
+        result = self.v.vimeo_albums_delete(album_id=get("album"), oauth_token=self.oauth_token)
 
-	def _get_return_status(self, result):
-		if self.dbg:
-			print self.plugin + " _get_return_status "
-		
-		xml = self.soup.BeautifulStoneSoup(result)
-		
-		result = [];
-		if (len(xml) > 0):
-			stat = xml.rsp["stat"]
-			if stat == "ok":
-				return ( result, 200 )
-			elif stat == "fail":
-				message = xml.rsp.err["message"]
-				if self.dbg:
-					print self.plugin + " _get_return_status fail: " + repr(message)
-						
-				return ( message, 303 )
-			else:
-				return ( "", 500 )
-		else:
-			if self.dbg:
-				print self.plugin + " _get_return_status invalid response xml from vimeo api"
-		
-		return ( "No response from Vimeo API", 303 )
-																
-	def _get_details(self, videoid):
-		if self.dbg:
-			print self.plugin + " _get_details: " + repr(videoid)
-			
-		url = urllib2.Request("http://www.vimeo.com/moogaloop/load/clip:%s/local/" % videoid);
-		url.add_header('User-Agent', self.USERAGENT);
+        self.common.log("Done")
+        return self._get_return_status(result)
 
-		con = urllib2.urlopen(url);
-		value = con.read()	
-		con.close()
+    def createAlbum(self, params):
+        self.common.log("")
+        get = params.get
 
-		soup = self.soup.BeautifulStoneSoup(value)
-		
-		result = []
-		if (len(soup.video) > 0):
-			video = {}
-			video['videoid'] = videoid
-			title = soup.video.caption.contents[0].encode("utf-8")
-			if title:
-				title = title.replace("&amp;", "&")
-				title = title.replace("&quot;", '"')
-				title = title.replace("&hellip;", "...")
-				title = title.replace("&gt;",">")
-				title = title.replace("&lt;","<")
-			else: 
-				title = "Unknown"
-			video['Title'] = title
-			video['Duration'] = soup.video.duration.contents[0]
-			video['thumbnail'] = soup.video.thumbnail.contents[0]
-			video['Studio'] = soup.video.uploader_display_name.contents[0].encode( "utf-8" )
-			video['request_signature'] = soup.request_signature.contents[0]
-			video['request_signature_expires'] = soup.request_signature_expires.contents[0]
-			video['isHD'] = soup.video.ishd.contents[0]
-			result.append(video)
-			
-		if len(result) == 0:
-			if self.dbg:
-				print self.plugin + " _get_details result was empty"
-			return False
-		else:				
-			if self.dbg:
-				print self.plugin + " _get_details done"
-			return result[0];
-		
-	def _get_list(self, tag, result):
-		if self.dbg:
-			print self.plugin + " _get_list: "
-		
-		xml = self.soup.BeautifulStoneSoup(result)
-		item = xml.find(name=tag)
-		next = "false"
-		
-		result = [];
+        result = self.v.vimeo_albums_create(title=get("title"), video_id=get("videoid"), oauth_token=self.oauth_token)
 
-		while item != None:
-			group = {}
-			title = ""
-			if (item.find(name="name") != None):
-				ti = item.find(name="name")
-				title = ti.contents[0]
-			else:
-				title = item.title.contents[0]
-			
-			title = self.utils.replaceHtmlCodes(title)
-			group[tag] = item["id"]
-			group['Title'] = title
-			
-			if (item.description != None):
-				group['Description'] = item.description.contents[0]
-			
-			if (tag == "group"):
-				if item.logo_url != None:
-					group["thumbnail"] = item.logo_url.contents[0]
-				else:
-					group["thumbnail"] = "default"
-			if (tag == "album"):
-				group["thumbnail"] = self.getThumbnail(item, "default") 
-			if (tag == "channel"):
-				thumbnail = ""
-				if (item.badge_url != None and item.badge_url.contents[0].rfind("default") == -1):
-					thumbnail = item.badge_url.contents[0]
-				
-				if (not thumbnail):
-					if (item.logo_url != None and item.logo_url.contents[0].rfind("default") == -1):
-						thumbnail = item.logo_url.contents[0]
-					else:
-						thumbnail = "default"
-				group["thumbnail"] = thumbnail
+        self.common.log("Done")
+        return self._get_return_status(result)
 
-			result.append(group)
-			
-			item = item.findNextSibling(name=tag)
-					
-		if len(result) == 0:
-			if self.dbg:
-				print self.plugin + " _get_list result was empty"
-			return False
-		else:				
-			if self.dbg:
-				print self.plugin + " _get_list done"
-			return result;
-	
-	def _get_contacts(self, result):
-		if self.dbg:
-			print self.plugin + " _get_contacts: " + result
-			
-		xml = self.soup.BeautifulStoneSoup(result)
-		contact = xml.contacts.contact
-		next = "false"
-		
-		result = [];
-		
-		while contact != None:
-			group = {}
-			group['contact'] = contact["id"]
-			group['Title'] = contact['display_name']
-			
-			portrait = contact.portraits.portrait
-			while (portrait != None):
-				
-				width = portrait["width"]
-				if (int(width) <= 300):
-					group['thumbnail'] = portrait.contents[0]
-				
-				portrait = portrait.findNextSibling(name="portrait")
-			result.append(group)
-			contact = contact.findNextSibling(name="contact")
-					
-		if len(result) == 0:
-			if self.dbg:
-				print self.plugin + " _get_contacts result was empty"
-			return False
-		else:				
-			if self.dbg:
-				print self.plugin + " _get_contacts done"
-			return result;
+    def addToWatchLater(self, params):
+        self.common.log("")
+        get = params.get
 
-	def _getvideoinfo(self, value):
-		if self.dbg:
-			print self.plugin + " _getvideoinfo: " + str(len(value))
-		next = "false"
-		vobjects = [];
-		
-		soup = self.soup.BeautifulStoneSoup(value)
-		if not soup.videos:
-			return vobjects
-		
-		if (soup.videos["perpage"] == soup.videos["on_this_page"]):
-			next = "true"
-	
-		entry = soup.videos.video
-		
-		while (entry != None):
-			video = {}
-			video['videoid'] = entry["id"]			
-			video['Title'] = self.utils.replaceHtmlCodes(entry.title.contents[0])
-			
-			video['Plot'] = entry.description.contents[0]
-			video['Studio'] = entry.owner["display_name"]
-			video['contact'] = entry.owner["id"]
-			video['thumbnail'] = self.getThumbnail(entry, "default")
-			
-			duration = int(entry.duration.contents[0])
-			video['Duration'] = "%02d:%02d" % ( duration / 60, duration % 60 )
-			video["next"] = next
-			overlay = self.settings.getSetting( "vidstatus-" + video['videoid'] )
-			
-			if overlay:
-				video['Overlay'] = int(overlay)
+        result = self.v.vimeo_albums_addToWatchLater(video_id=get("videoid"), oauth_token=self.oauth_token)
 
-			vobjects.append(video)
-			entry = entry.findNextSibling(name="video")
+        self.common.log("Done")
+        return self._get_return_status(result)
 
-		if self.dbg:
-			print self.plugin + " _get_videoinfo done"
-			
-		return vobjects
-	
-	def getThumbnail(self, item, default = "default"):
-		thumb = item.thumbnails.thumbnail
-		while thumb != None:
-			width = thumb["width"]
-			if (width):
-				if (self.hq_thumbs):
-					if (int(width) <= 640 and thumb.contents[0].rfind("default") == -1):
-						default = thumb.contents[0]
-				else:
-					if (int(width) <= 200 and thumb.contents[0].rfind("default") == -1):
-						default = thumb.contents[0]
-			thumb = thumb.findNextSibling(name="thumbnail")
-		
-		return default
+    def removeWatchLater(self, params):
+        self.common.log("")
+        get = params.get
+
+        result = self.v.vimeo_albums_removeFromWatchLater(video_id=get("videoid"), oauth_token=self.oauth_token)
+
+        self.common.log("Done")
+        return self._get_return_status(result)
+
+    def updateGroup(self, params):
+        self.common.log("")
+        get = params.get
+
+        if (get("action") == "join_group"):
+            result = self.v.vimeo_groups_join(group_id=get("group"), oauth_token=self.oauth_token)
+        else:
+            result = self.v.vimeo_groups_leave(group_id=get("group"), oauth_token=self.oauth_token)
+
+        self.common.log("Done")
+        return self._get_return_status(result)
+
+    def updateSubscription(self, params):
+        self.common.log("")
+        get = params.get
+
+        if (get("action") == "add_subscription"):
+            result = self.v.vimeo_channels_subscribe(channel_id=get("channel"), oauth_token=self.oauth_token)
+        else:
+            result = self.v.vimeo_channels_unsubscribe(channel_id=get("channel"), oauth_token=self.oauth_token)
+
+        self.common.log("Done")
+        return self._get_return_status(result)
+
+    def list(self, params):
+        self.common.log("")
+        get = params.get
+
+        user_id = self.settings.getSetting("userid")
+        if (get("external")):
+            user_id = get("contact")
+
+        page = int(get("page", "0")) + 1
+        per_page = (10, 15, 20, 25, 30, 40, 50,)[int(self.settings.getSetting("perpage"))]
+        
+        self.common.log("calling vimeo api for " + get("api","None") + " with user_id: " + repr(user_id) + " page: " + repr(page) + " per_page: " + repr(per_page), 4)
+
+        if (get("channel")):
+            result = self.v.vimeo_channels_getVideos(channel_id=get("channel"), page=page, per_page=per_page, full_response="true")
+        elif (get("album")):
+            result = self.v.vimeo_albums_getVideos(album_id=get("album"), page=page, per_page=per_page, full_response="true")
+        elif (get("group")):
+            result = self.v.vimeo_groups_getVideos(group_id=get("group"), page=page, per_page=per_page, full_response="true")
+        elif (get("api") == "my_videos"):
+            result = self.v.vimeo_videos_getAll(user_id=user_id, per_page=per_page, page=page, full_response="true")
+        elif(get("api") == "search"):
+            query = urllib.unquote_plus(get("search"))
+            result = self.v.vimeo_videos_search(query=query, page=page, per_page=per_page, full_response="true")
+        elif (get("api") == "my_likes"):
+            result = self.v.vimeo_videos_getLikes(user_id=user_id, per_page=per_page, page=page, full_response="true")
+        elif (get("api") == "my_watch_later" and not get("external")):
+            result = self.v.vimeo_albums_getWatchLater(per_page=per_page, page=page, full_response="true")
+        elif (get("api") == "my_newsubscriptions"):
+            result = self.v.vimeo_videos_getSubscriptions(user_id=user_id, per_page=per_page, page=page, full_response="true", sort="newest")
+        elif (get("api") == "my_albums"):
+            result = self.v.vimeo_albums_getAll(user_id=user_id, per_page=per_page, page=page, full_response="true")
+        elif (get("api") == "my_groups"):
+            result = self.v.vimeo_groups_getAll(user_id=user_id, per_page=per_page, page=page, full_response="true")
+        elif (get("api") == "my_channels"):
+            result = self.v.vimeo_channels_getAll(user_id=user_id, per_page=per_page, page=page, full_response="true")
+        elif (get("api") == "my_contacts"):
+            result = self.v.vimeo_contacts_getAll(user_id=user_id, per_page=per_page, page=page, full_response="true")
+
+        if (not result):
+            self.common.log("result was empty")
+            return (result, 303)
+        
+        if get("folder") == "contact":
+            result = self._get_contacts(result)
+        elif get("folder"):
+            result = self._get_list(get("folder"), result)
+        else:
+            result = self._getvideoinfo(result, params)
+
+        self.common.log("Done")
+
+        return (result, 200)
+
+    def _get_return_status(self, result):
+        self.common.log("")
+        
+        stat = self.common.parseDOM(result, "rsp", ret="stat")
+        result = []
+        if (len(stat) > 0):
+            if stat[0] == "ok":
+                return (result, 200)
+            else:
+                self.common.log("Got fail status from vimeo api: " + repr(result))
+                return ("", 303)
+        else:
+            self.common.log("No response from vimeo api :" + repr(result))
+        
+        return ("No response from Vimeo API", 303)
+    
+    def _get_list(self, tag, result):
+        self.common.log("")
+
+        item = self.common.parseDOM(result, tag)
+        item_id = self.common.parseDOM(result, tag, ret="id")
+
+        result = []
+
+        for i in range(0, len(item)):
+            group = {}
+            title = self.common.parseDOM(item[i], "title")
+            if len(title) == 0:
+                title = self.common.parseDOM(item[i], "name")
+
+            group['Title'] = self.common.replaceHTMLCodes(title[0])
+
+            group[tag] = item_id[i]
+
+            description = self.common.parseDOM(item[i], "description")
+            if len(description) > 0:
+                group['Description'] = description[0]
+
+            if (tag == "group"):
+                logo_url = self.common.parseDOM(item[i], "logo_url")
+                if len(logo_url) > 0:
+                    group["thumbnail"] = logo_url[0]
+                else:
+                    group["thumbnail"] = "default"
+
+            if (tag == "album"):
+                group["thumbnail"] = self.getThumbnail(item[i], "default")
+
+            if (tag == "channel"):
+                thumbnail = ""
+                badge_url = self.common.parseDOM(item[i], "badge_url")
+                if len(badge_url) > 0:
+                    if badge_url[0].rfind("default") == -1:
+                        thumbnail = badge_url[0]
+
+                if not thumbnail:
+                    logo_url = self.common.parseDOM(item[i], "logo_url")
+                    if len(logo_url) > 0:
+                        if logo_url[0].rfind("default") == -1:
+                            thumbnail = logo_url[0]
+                if not thumbnail:
+                    thumbnail = "default"
+
+                group["thumbnail"] = thumbnail
+
+            result.append(group)
+
+        if len(result) == 0:
+            self.common.log("Result was empty")
+
+        self.common.log("Done")
+        return result
+
+    def _get_contacts(self, result):
+        self.common.log("")
+
+        ids = self.common.parseDOM(result, "contact", ret="id")
+        titles = self.common.parseDOM(result, "contact", ret="display_name")
+        portraits = self.common.parseDOM(result, "portraits")
+
+        result = []
+
+        for i in range(0, len(ids)):
+            group = {}
+            group['contact'] = ids[i]
+            group['Title'] = titles[i]
+
+            thumbs_width = self.common.parseDOM(portraits, "portrait", ret="width")
+            thumbs_url = self.common.parseDOM(portraits, "portrait")
+            for j in range(0, len(thumbs_width)):
+                if int(thumbs_width[j]) <= 300:
+                    group['thumbnail'] = thumbs_url[j]
+
+            result.append(group)
+
+        if len(result) == 0:
+            self.common.log("Result was empty")
+            return False
+
+        self.common.log("Done")
+        return result
+
+    def checkIfMorePagesExist(self, value):
+        next = True
+        on_this_page = self.common.parseDOM(value, "videos", ret="on_this_page")
+        total = self.common.parseDOM(value, "videos", ret="total")
+        per_page = self.common.parseDOM(value, "videos", ret="perpage")
+        page = self.common.parseDOM(value, "videos", ret="page")
+
+        if int(on_this_page[0]) < int(per_page[0]):
+            next = False
+        elif int(on_this_page[0]) == int(per_page[0]) and int(per_page[0]) * int(page[0]) == int(total[0]):
+            next = False
+
+        return next
+
+    def _getvideoinfo(self, value, params):
+        self.common.log("")
+
+        vobjects = []
+
+        next = self.checkIfMorePagesExist(value)
+
+        video_list = self.common.parseDOM(value, "video", ret=True)
+        for entry in video_list:
+            video = {}
+            video['videoid'] = self.common.parseDOM(entry, "video",ret="id")[0]
+            video['Title'] = self.common.replaceHTMLCodes(self.common.parseDOM(entry, "title")[0])
+            video['Plot'] = self.common.replaceHTMLCodes(self.common.parseDOM(entry, "description")[0])
+            video['Studio'] = self.common.parseDOM(entry, "owner", ret="display_name")[0]
+            video['contact'] = self.common.parseDOM(entry, "owner", ret="id")[0]
+            video['thumbnail'] = self.getThumbnail(entry, "default")
+
+            duration = self.common.parseDOM(entry, "video", ret="duration")
+
+            if len(duration) > 0:
+                duration = int(duration[0])
+                video['Duration'] = "%02d:%02d" % (duration / 60, duration % 60)
+
+            overlay = self.settings.getSetting("vidstatus-" + video['videoid'])
+
+            if overlay:
+                video['Overlay'] = int(overlay)
+
+            vobjects.append(video)
+
+        if next:
+            self.utils.addNextFolder(vobjects, params)
+
+        self.common.log("Done")
+        return vobjects
+    
+    def getThumbnail(self, item, default="default"):
+        self.common.log("", 1)
+        thumbs_width = self.common.parseDOM(item, "thumbnail", ret="width")
+        thumbs_url = self.common.parseDOM(item, "thumbnail")
+        
+        for i in range(0, len(thumbs_width)):
+            if (self.hq_thumbs):
+
+                if (int(thumbs_width[i]) <= 640 and thumbs_url[i].rfind("default") == -1):
+                    default = thumbs_url[i]
+            else:
+                if (int(thumbs_width[i]) <= 200 and thumbs_url[i].rfind("default") == -1):
+                    default = thumbs_url[i]
+
+        self.common.log("Done",4)
+        return default

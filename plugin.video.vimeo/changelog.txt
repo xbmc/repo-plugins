@@ -3,6 +3,29 @@
 - [XBMC] has Excessive Memory use after running the plugin for prolonged periods of time
 - [Vimeo] Vimeo's implementation of Oauth 1 is time sensetive, meaning that an incorrectly set system clock will prevent the plugin from logging in
 
+[B]Todo 2.0.0[/B] 
+- Implement cache service
+- scraper of vimeo's video school if possible
+- Finish refactor
+- Integration tests
+- Unit tests
+
+[B]Version 2.0.0[/B]
+- Added playlist control module to queue videos
+- Changed parseDOM replaces BeautifulSoup in Scraper
+- Added Integration with common downloader 
+- Added ability of plugin to playback previously downloaded videos
+- Added Caching of video info speeding up playback
+- Added Ability for users to select video playback before playing a video 
+- Added Support for caching service 
+- Refactored code to support future extension
+- Added Integration test suite that verifies plugin functions every night (non user orriented feature)
+
+[B]Version 1.3.0[/B]
+- Converted BeautifulSoup to parseDOM
+- Integrated Simple Downloader
+- Converted urllib2 calls to fetchPage calls.
+
 [B]Version 1.2.0[/B]
 - Eden version
 

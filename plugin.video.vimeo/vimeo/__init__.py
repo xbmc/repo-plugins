@@ -14,6 +14,8 @@ import oauth2
 
 VIMEO_KEY = "ccf9729955366537c81517aeb047aea1"
 VIMEO_SECRET = "701c5bb7fe9dfad7"
+VIMEO_CALLBACK_URL = "http://www.xbmc.org"
+#VIMEO_CALLBACK_URL = "oob"
 
 # oAuth URLs
 REQUEST_TOKEN_URL = "http://vimeo.com/oauth/request_token"
@@ -244,16 +246,16 @@ class VimeoClient(object):
                    "PHP" : PHPProcessor(),
                    "XML" : XMLProcessor()}
 
-    def __init__(self, key=VIMEO_KEY, secret=VIMEO_SECRET, format="xml",
-                 token=None, token_secret=None, verifier=None,
-                 cache_timeout=120):
+    def __init__(self, key=VIMEO_KEY, secret=VIMEO_SECRET,
+                 callback=VIMEO_CALLBACK_URL, format="xml",
+                 token=None, token_secret=None,cache_timeout=120):
 
         # memoizing
         self._cache = {}
         self._timeouts = {}
         self.cache_timeout = cache_timeout
         self.default_response_format = format
-
+        self.callback = callback
         self.key = key
         self.secret = secret
         self.consumer = oauth2.Consumer(self.key, self.secret)
@@ -388,7 +390,8 @@ class VimeoClient(object):
         Internal method that gets a new token from the request_url and sets it
         to self.token on success.
         """
-        resp, content = self.client.request(request_url, *args, **kwargs)
+        resp, content = self.client.request(request_url, "POST", body=urlencode({'oauth_callback': self.callback}))
+        #resp, content = self.client.request(request_url, *args, **kwargs)
 
         if resp["status"] != "200":
             print "Vimeo token error: " + repr(resp) + " - " + repr(content)

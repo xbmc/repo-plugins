@@ -1,3 +1,13 @@
+[B]Version 2.1.1 - 2012-02-23[/B]
+- Fixed minor problems with parsing data from Bonanza
+
+[B]Version 2.1.0 - 2012-02-15[/B]
+- Introduced usage of script.module.buggalo for improved error handling
+  with option for the user to submit exceptions/bugs
+- Added support for some radio content
+- Added support for Recently added
+- Fixed problem with missing Editors favourites (once again)
+
 [B]Version 2.0.0 - 2011-07-28[/B]
 - Removed support for Dharma
 - Otherwise same changes as 1.1.0

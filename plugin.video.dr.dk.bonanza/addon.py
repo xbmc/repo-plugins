@@ -1,10 +1,30 @@
+#
+#      Copyright (C) 2012 Tommy Winther
+#      http://tommy.winther.nu
+#
+#  This Program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This Program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this Program; see the file LICENSE.txt.  If not, write to
+#  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+#  http://www.gnu.org/copyleft/gpl.html
+#
 import os
 import re
 import sys
 import simplejson
-import cgi as urlparse
+import urlparse
 import urllib2
 from htmlentitydefs import name2codepoint
+import buggalo
 
 import xbmc
 import xbmcgui
@@ -12,6 +32,10 @@ import xbmcplugin
 import xbmcaddon
 
 BASE_URL = 'http://www.dr.dk/Bonanza/'
+TOTAL_PLAYS_URL = 'http://www.dr.dk/bonanzapp/Service.svc/getTotalPlays'
+
+class BonanzaException(Exception):
+    pass
 
 class Bonanza(object):
     def search(self):
@@ -24,7 +48,19 @@ class Bonanza(object):
 
 
     def showCategories(self):
+        items = list()
         html = self._downloadUrl(BASE_URL)
+
+        try:
+            u = urllib2.urlopen(TOTAL_PLAYS_URL)
+            playCount = int(u.read()[65:-6])
+            u.close()
+
+            item = xbmcgui.ListItem(ADDON.getLocalizedString(30003) % playCount, iconImage = ICON)
+            item.setProperty('Fanart_Image', FANART)
+            xbmcplugin.addDirectoryItem(HANDLE, '', item)
+        except Exception:
+            pass # ignore
 
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30001), iconImage = ICON)
         item.setProperty('Fanart_Image', FANART)
@@ -32,6 +68,9 @@ class Bonanza(object):
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30002), iconImage = ICON)
         item.setProperty('Fanart_Image', FANART)
         xbmcplugin.addDirectoryItem(HANDLE, PATH + '?mode=recommend', item, True)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30004), iconImage = ICON)
+        item.setProperty('Fanart_Image', FANART)
+        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?mode=latest', item, True)
 
         for m in re.finditer('<a href="(/Bonanza/kategori/.*\.htm)">(.*)</a>', html):
             path = m.group(1)
@@ -43,29 +82,32 @@ class Bonanza(object):
                 'title' : title
             })
             url = PATH + '?mode=subcat&url=http://www.dr.dk' + path
-            xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
+            items.append((url, item, True))
 
+        xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
 
 
     def showRecommendations(self):
         html = self._downloadUrl(BASE_URL)
+        tab = self._getTab(html, 'redaktionens favoritter')
+        self.addSubCategories(tab)
+        xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
+        xbmcplugin.endOfDirectory(HANDLE)
 
-        # remove anything but 'Redaktionens favoritter'
-        html = html[html.find('<span class="tabTitle">Redaktionens Favoritter</span>'):]
-        self.addSubCategories(html)
+    def showLatest(self):
+        html = self._downloadUrl(BASE_URL)
+        tab = self._getTab(html, 'senest tilf.*?bonanza')
+        self.addSubCategories(tab)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
 
 
     def showSubCategories(self, url):
         html = self._downloadUrl(url.replace(' ', '+'))
-
-        # remove 'Redaktionens favoritter' as they are located on every page
-        html = html[:html.find('<span class="tabTitle">Redaktionens Favoritter</span>')]
-
-        self.addSubCategories(html)
+        tab = self._getTab(html, '') # will return first tab found
+        self.addSubCategories(tab)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
 
@@ -93,6 +135,7 @@ class Bonanza(object):
 
 
     def addContent(self, html):
+        items = list()
         for m in re.finditer('newPlaylist\(([^"]+)"', html):
             raw = m.group(1)[:-2].replace('&quot;', '"')
             json = simplejson.loads(raw)
@@ -112,21 +155,34 @@ class Bonanza(object):
                 infoLabels['year'] = int(json['FirstPublished'][:4])
             if json.has_key('Duration') and json['Duration'] is not None:
                 infoLabels['duration'] = self._secondsToDuration(int(json['Duration']) / 1000)
+            infoLabels['studio'] = ADDON.getAddonInfo('name')
 
-            item = xbmcgui.ListItem(infoLabels['title'], iconImage = self.findFileLocation(json, 'Thumb'))
+            thumb = self.findFileLocation(json, 'Thumb')
+            if thumb is None:
+                thumb = ICON
+            item = xbmcgui.ListItem(infoLabels['title'], iconImage=thumb, thumbnailImage=thumb)
             item.setProperty('Fanart_Image', FANART)
             item.setInfo('video', infoLabels)
 
-            rtmp_url = self.findFileLocation(json, 'VideoHigh')
-            if rtmp_url is None:
-                rtmp_url = self.findFileLocation(json, 'VideoMid')
-            if rtmp_url is None:
-                rtmp_url = self.findFileLocation(json, 'VideoLow')
+            url = self.findFileLocation(json, 'VideoHigh')
+            if url is None:
+                url = self.findFileLocation(json, 'VideoMid')
+            if url is None:
+                url = self.findFileLocation(json, 'VideoLow')
+            # Also check for audio
+            if url is None:
+                url = self.findFileLocation(json, 'Audio')
 
-            # patch rtmp_url to work with mplayer
-            m = re.match('(rtmp://.*?)/(.*)', rtmp_url)
-            rtmp_url = '%s/bonanza/%s' % (m.group(1), m.group(2))
-            xbmcplugin.addDirectoryItem(HANDLE, rtmp_url, item, False)
+            if url is None:
+                continue
+
+            if url[0:4] == 'rtmp':
+                # patch url to work with mplayer
+                m = re.match('(rtmp://.*?)/(.*)', url)
+                url = '%s/bonanza/%s' % (m.group(1), m.group(2))
+
+            items.append((url, item, False))
+        xbmcplugin.addDirectoryItems(HANDLE, items)
 
     def findFileLocation(self, json, type):
         for file in json['Files']:
@@ -135,10 +191,13 @@ class Bonanza(object):
         return None
     
     def _downloadUrl(self, url):
-        u = urllib2.urlopen(url)
-        data = u.read()
-        u.close()
-        return data
+        try:
+            u = urllib2.urlopen(url)
+            data = u.read()
+            u.close()
+            return data
+        except Exception, ex:
+            raise BonanzaException(ex)
 
     def _decodeHtmlEntities(self, string):
         """Decodes the HTML entities found in the string and returns the modified string.
@@ -150,6 +209,9 @@ class Bonanza(object):
         string -- the string with HTML entities
 
         """
+        if type(string) not in [str, unicode]:
+            return string
+
         def substituteEntity(match):
             ent = match.group(3)
             if match.group(1) == "#":
@@ -185,6 +247,16 @@ class Bonanza(object):
         return "%02d:%02d:%02d" % (hours, minutes, seconds)
 
 
+    def _getTab(self, html, tabLabel):
+        m = re.search('(<div id="tabWrapper" class="tabWrapper"><span class="tabTitle">' + tabLabel + '.*?</div>)', html, re.DOTALL + re.IGNORECASE)
+        return m.group(1)
+
+    def showError(self, message):
+        heading = buggalo.getRandomHeading()
+        line1 = ADDON.getLocalizedString(30900)
+        line2 = ADDON.getLocalizedString(30901)
+        xbmcgui.Dialog().ok(heading, line1, line2, message)
+
 if __name__ == '__main__':
     ADDON = xbmcaddon.Addon(id = 'plugin.video.dr.dk.bonanza')
     PATH = sys.argv[0]
@@ -194,15 +266,26 @@ if __name__ == '__main__':
     ICON = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
     FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
 
+    buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     b = Bonanza()
-    if PARAMS.has_key('mode') and PARAMS['mode'][0] == 'subcat':
-        b.showSubCategories(PARAMS['url'][0])
-    elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'content':
-        b.showContent(PARAMS['url'][0])
-    elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'search':
-        b.search()
-    elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'recommend':
-        b.showRecommendations()
-    else:
-        b.showCategories()
+    try:
+        if PARAMS.has_key('mode') and PARAMS['mode'][0] == 'subcat':
+            b.showSubCategories(PARAMS['url'][0])
+        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'content':
+            b.showContent(PARAMS['url'][0])
+        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'search':
+            b.search()
+        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'recommend':
+            b.showRecommendations()
+        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'latest':
+            b.showLatest()
+        else:
+            b.showCategories()
+
+    except BonanzaException, ex:
+        b.showError(str(ex))
+
+    except Exception:
+        buggalo.onExceptionRaised()
+
 

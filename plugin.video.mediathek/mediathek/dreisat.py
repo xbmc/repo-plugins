@@ -85,11 +85,11 @@ class DreiSatMediathek(Mediathek):
     link = "/mediathek/mediathek.php\\?obj=\\d+";
     self.regex_searchResult = re.compile("href=\""+link+"\" class=\"media_result_thumb\"");
     self.regex_searchResultLink = re.compile(link)
-    self.regex_searchLink = re.compile("http://wstreaming.zdf.de/.*?\\.asx")
+    self.regex_searchLink = re.compile("http://(w|f)streaming.zdf.de/.*?(\\.asx|\\.smil)")
     self.regex_searchTitle = re.compile("<h2>.*</h2>");
     self.regex_searchDetail = re.compile("<span class=\"text\">.*");
     self.regex_searchDate = re.compile("\\d{2}.\\d{2}.\\d{4}");
-    self.regex_searchImage = re.compile("/dynamic/mediathek/stills/\\d*_big\\.jpg");
+    self.regex_searchImage = re.compile("(/dynamic/mediathek/stills/|/mediaplayer/stills/)\\d*_big\\.jpg");
     self.replace_html = re.compile("<.*?>");
     
   def buildPageMenu(self, link, initCount):
@@ -126,6 +126,7 @@ class DreiSatMediathek(Mediathek):
       videoLink = self.rootLink+objectLink+"&mode=play";
       videoPage = self.loadPage(videoLink);
       video = self.regex_searchLink.search(videoPage).group();
+      video = video.replace("fstreaming","wstreaming").replace(".smil",".asx");
       links = {}
       links[2] = SimpleLink(video,0)
       self.gui.buildVideoLink(DisplayObject(title,"",self.rootLink + image,detail,links,True, pubDate),self,len(results));
@@ -180,5 +181,6 @@ class DreiSatMediathek(Mediathek):
         links[1] = SimpleLink(url, size);
       else:
         links[2] = SimpleLink(url, size);
-    self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True, pubDate),self,nodeCount);
+    if links:
+      self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True, pubDate),self,nodeCount);
       

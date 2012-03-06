@@ -1,3 +1,7 @@
+Version 2.0.2
+-------------
+- Updated SWF-player URL
+
 Version 2.0.1
 -------------
 - Added swf verification

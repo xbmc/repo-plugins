@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 import urllib
 import urllib2
+import xbmc
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
 
-from xml.dom.minidom import parse, parseString
+from xml.dom.minidom import parseString
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.svtplay')
 __language__ = __settings__.getLocalizedString
@@ -55,11 +57,11 @@ def deviceconfiguration(node=None, target="", path=""):
 		
 		if target == path:
 
-			type = outline.getAttribute("type")
+			outline_type = outline.getAttribute("type")
 
 			if path + title == "Karusellen" \
 			or path + title == "Hjälpmeny" \
-			or not (type == "rss" or type == "menu"):
+			or not (outline_type == "rss" or outline_type == "menu"):
 				continue
 
 			thumbnail = outline.getAttributeNS(NS_PLAYOPML, "thumbnail")
@@ -111,9 +113,9 @@ def title_list(ids="", url="", offset=1, list_size=0):
 			if thumbnail_nodes:
 				thumb = thumbnail_nodes[0].getAttribute("url")
 		
-			id = get_node_value(item, "titleId", NS_PLAYRSS)
+			title_id = get_node_value(item, "titleId", NS_PLAYRSS)
 
-			params = { "mode": MODE_VIDEO_LIST, "ids": id }
+			params = { "mode": MODE_VIDEO_LIST, "ids": title_id }
 		
 			list_size += 1
 			offset += 1
@@ -136,7 +138,6 @@ def video_list(ids="", url="", offset=1, list_size=0):
 			thumb = get_media_thumbnail(item)
 			title = get_node_value(media, "title", NS_MEDIA)
 			description = get_node_value(item, "description")
-			pubDate = get_node_value(item, "pubDate")
 
 			# TODO: parse date/time
 			# TODO: add label "date" (string (%d.%m.%Y / 01.01.2009) - file date)
@@ -182,12 +183,10 @@ def teaser_list(ids="", url="", offset=1, list_size=0):
 		
 		if list_size < SETTINGS_MAX_ITEMS_PER_PAGE:
 		
-			media = get_media_content(item)
-			thumb = get_media_thumbnail(item)
 			title = unicode(get_node_value(item, "title")).encode('utf-8')
-			id = get_node_value(item, "titleId", NS_PLAYRSS)
+			title_id = get_node_value(item, "titleId", NS_PLAYRSS)
 
-			params = { "mode": MODE_VIDEO_LIST, "ids": id }
+			params = { "mode": MODE_VIDEO_LIST, "ids": title_id }
 			
 			list_size += 1
 			offset += 1
@@ -242,25 +241,25 @@ def get_media_thumbnail(node):
 	return None
 	
 def get_media_content(node, settings_bitrate = SETTINGS_HIGHEST_BITRATE):
- 
+
 	group = node.getElementsByTagNameNS(NS_MEDIA, "group")
 	
 	if group:
 		content_list = group[0].getElementsByTagNameNS(NS_MEDIA, "content");
 	else:
 		content_list = node.getElementsByTagNameNS(NS_MEDIA, "content");
- 
+
 	content = None
- 
+
 	for c in content_list:
 	
 		if not c.getAttribute("bitrate"):
 			continue
 	
 		bitrate = float(c.getAttribute("bitrate"))
-		type = c.getAttribute("type")
+		mime_type = c.getAttribute("type")
 
-		if type == 'application/vnd.apple.mpegurl':
+		if mime_type == 'application/vnd.apple.mpegurl':
 			continue
 		
 		if (not content and bitrate <= settings_bitrate) or (content and bitrate > float(content.getAttribute("bitrate")) and bitrate <= settings_bitrate):
@@ -275,9 +274,9 @@ def get_media_content(node, settings_bitrate = SETTINGS_HIGHEST_BITRATE):
 				continue
 		
 			framerate = float(c.getAttribute("framerate"))
-			type = c.getAttribute("type")
+			mime_type = c.getAttribute("type")
 
-			if type == 'application/vnd.apple.mpegurl':
+			if mime_type == 'application/vnd.apple.mpegurl':
 				continue
 			
 			if not content or framerate > float(content.getAttribute("framerate")):
@@ -310,7 +309,7 @@ def add_directory_item(name, params={}, thumbnail=None, isFolder=True,
 		url = params["url"]
 
 		if url.find('rtmp') == 0:
-			url += " swfUrl=http://svtplay.se/flash/svtplayer-2011.18.swf swfVfy=1"
+			url += " swfUrl=http://svtplay.se/flash/svtplayer-2012.1.swf swfVfy=1"
 		
 		if not infoLabels:
 			infoLabels = { "Title": name }
@@ -335,13 +334,13 @@ def add_subtitles(listItem, subtitles):
 	for i in range(len(subtitles)):
 		listItem.setProperty("upnp:subtitle:" + str(i+1), subtitles[i])
 
-def parameters_string_to_dict(str):
+def parameters_string_to_dict(param_string):
 
 	params = {}
 
-	if str:
+	if param_string:
 
-		pairs = str[1:].split("&")
+		pairs = param_string[1:].split("&")
 
 		for pair in pairs:
 
@@ -357,7 +356,6 @@ def search(mode,url):
 	if searchString == "":
 		xbmcgui.Dialog().ok( __language__( 30301 ), __language__( 30302 ) )
 	elif searchString:
-		latestSearch = __settings__.setSetting( "latestSearch", searchString )
 		dialogProgress = xbmcgui.DialogProgress()
 		dialogProgress.create( "", __language__( 30303 ) , searchString)
 		#The XBMC onscreen keyboard outputs utf-8 and this need to be encoded to unicode

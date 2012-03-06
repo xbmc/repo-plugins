@@ -2,7 +2,7 @@
 
 import simplejson as json
 from urllib import urlencode
-from urllib2 import urlopen, Request, HTTPError
+from urllib2 import urlopen, Request, HTTPError, URLError
 
 MAIN_URLS = {'english': 'http://rad.io/info',
              'german': 'http://radio.de/info',
@@ -105,14 +105,13 @@ def get_station_by_station_id(language, station_id):
     __log('get_station_by_station_id started with language=%s, station_id=%s'
           % (language, station_id))
     path = 'broadcast/getbroadcastembedded'
-    if not station_id:
-        raise
     gets = {'broadcast': station_id}
     station = __get_json(path, gets, language)
-    if station['streamURL'][-3:] in ('m3u', 'pls'):
-        station['streamURL'] = __resolve_playlist(station['streamURL'])
-    __log('get_station_by_station_id end')
-    return station
+    if 'streamURL' in station:
+        if station['streamURL'][-3:] in ('m3u', 'pls'):
+            station['streamURL'] = __resolve_playlist(station['streamURL'])
+        __log('get_station_by_station_id end')
+        return station
 
 
 def __get_json(path, gets, language):
@@ -126,24 +125,17 @@ def __get_json(path, gets, language):
         full_url = '%s/%s?%s' % (MAIN_URL, path, urlencode(gets))
     else:
         full_url = '%s/%s' % (MAIN_URL, path)
-    req = Request(full_url)
-    req.add_header('User-Agent', USER_AGENT)
-    __log('__get_json opening url=%s' % full_url)
-    response = urlopen(req).read()
-    __log('__get_json ended with %d bytes result' % len(response))
-    return json.loads(response)
+    response = __urlopen(full_url)
+    try:
+        json_data = json.loads(response)
+    except TypeError:
+        json_data = None
+    return json_data
 
 
 def __resolve_playlist(playlist_url):
     __log('__resolve_playlist started with playlist_url=%s' % playlist_url)
-    req = Request(playlist_url)
-    req.add_header('User-Agent', USER_AGENT)
-    __log('__resolve_playlist opening url=%s' % playlist_url)
-    try:
-        response = urlopen(req).read()
-    except HTTPError, error:
-        __log('__resolve_playlist ERROR: %s' % error)
-        return playlist_url
+    response = __urlopen(playlist_url)
     stream_url = None
     if playlist_url.endswith('m3u'):
         __log('__resolve_playlist found .m3u file')
@@ -162,6 +154,22 @@ def __resolve_playlist(playlist_url):
         stream_url = playlist_url
     __log('__resolve_playlist result=%s' % stream_url)
     return stream_url
+
+
+def __urlopen(url):
+    __log('__urlopen opening url=%s' % url)
+    req = Request(url)
+    req.add_header('User-Agent', USER_AGENT)
+    try:
+        response = urlopen(req).read()
+    except HTTPError, error:
+        __log('__urlopen HTTPError: %s' % error)
+        return
+    except URLError, error:
+        __log('__urlopen URLError: %s' % error)
+        return
+    __log('__urlopen ended with %d bytes result' % len(response))
+    return response
 
 
 def __log(text):

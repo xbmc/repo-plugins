@@ -1,3 +1,8 @@
+1.0.6 (05.03.2012)
+    - Fixed: error if a station was added to the list of mystations but has become unavailable
+    - Improved error catching
+    - Improved: Show bitrate in "kbit/s", not "B"
+
 1.0.5 (26.02.2012)
     - Fixed .m3u playlists with empty lines (thx to Malte_Schroeder)
 

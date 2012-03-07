@@ -1,6 +1,9 @@
-0.6
-- Fixed: Navigation of addon (Adherred to the changes of wimp.com)
-- Added: Archive Browser
+0.7.0
+- Code-rewrite by sphere
+- Changed: Now using XBMC-InfoLabel for date
+- Added: Random Video
+- Added: Search for Videos by title
+- Added: German Translation
 
 0.5
 - Fixed: XBMC Compilance change: No longer using os.getcwd()

@@ -26,75 +26,66 @@ class NDRMediathek(Mediathek):
   def name(self):
     return "NDR";
   def isSearchable(self):
-    return False;
+    return True;
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
     
-    if(self.gui.preferedStreamTyp == 0):
-      self.baseType = "video/x-ms-asf";
-    elif (self.gui.preferedStreamTyp == 1):  
-      self.baseType = "video/x-ms-asf"
-    elif (self.gui.preferedStreamTyp == 2):
-      self.baseType ="video/x-ms-asf";
+    if(self.gui.preferedStreamTyp == 0): #http
+      self.baseType = "http";
+    elif (self.gui.preferedStreamTyp == 1):  #rtmp
+      self.baseType = "rtmp"
+    elif (self.gui.preferedStreamTyp == 2): #mms
+      self.baseType ="mms";
+#    elif (self.gui.preferedStreamTyp == 3): #mov
+#      self.baseType ="mov";
     else:
-      self.baseType ="video/quicktime";
-    
-    self.menuTree = (
-      TreeNode("0","Die neuesten Videos","http://www.ndr.de/mediathek/videoliste100-rss.xml",True),
-      );
+      self.baseType ="rtmp";
 
-    self.regex_extractVideoLink = re.compile("mms://ndr\.wmod\.llnwd\.net/.*?\.wmv");
-      
+    self.pageSize = "30";
+     
     self.rootLink = "http://www.ndr.de"
-    self.searchLink = 'http://www.3sat.de/mediathek/mediathek';
-    link = "/mediathek/mediathek.php\\?obj=\\d+";
-    self.regex_searchResult = re.compile("href=\""+link+"\" class=\"media_result_thumb\"");
-    self.regex_searchResultLink = re.compile(link)
-    self.regex_searchLink = re.compile("http://wstreaming.zdf.de/.*?\\.asx")
-    self.regex_searchTitle = re.compile("<h2>.*</h2>");
-    self.regex_searchDetail = re.compile("<span class=\"text\">.*");
-    self.regex_searchDate = re.compile("\\d{2}.\\d{2}.\\d{4}");
-    self.regex_searchImage = re.compile("/dynamic/mediathek/stills/\\d*_big\\.jpg");
-    self.replace_html = re.compile("<.*?>");
+    self.menuLink = self.rootLink+"/mediathek/mediathek100-mediathek_medium-tv_searchtype-"
+    self.searchLink = self.menuLink+"fulltext_pageSize-"+self.pageSize+".xml?";
+    
+    self.regex_extractVideoLink = re.compile("rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/(.*\\.)(hi.mp4|lo.flv)");  
+    
+    self.rtmpBaseLink = "rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/";
+    self.mmsBaseLink = "mms://ndr.wmod.llnwd.net/a3715/d1/msmedia/";
+    self.httpBaseLink = "http://media.ndr.de/progressive/";
+    
+    self.menuTree = [
+      TreeNode("0","Die neuesten Videos",self.menuLink+"teasershow_pageSize-"+self.pageSize+".xml",True),
+      ];
+    
+    broadcastsLink = self.menuLink+"broadcasts.xml"
+    broadcastsLinkPage = self.loadConfigXml(broadcastsLink);
+    
+    menuNodes = broadcastsLinkPage.getElementsByTagName("broadcast");
+    displayObjects = [];
+    x = 1
+    for menuNode in menuNodes:
+        menuId = menuNode.getAttribute('id')
+        menuItem = unicode(menuNode.firstChild.data)
+        menuLink = self.rootLink+"/mediathek/mediathek100-mediathek_medium-tv_broadcast-"+menuId+"_pageSize-"+self.pageSize+".xml"
+        self.menuTree.append(TreeNode(str(x),menuItem,menuLink,True));
+        x = x+1
     
   def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
+    
     rssFeed = self.loadConfigXml(link);
     self.extractVideoObjects(rssFeed, initCount);
     
   def searchVideo(self, searchText):
-    values ={'mode':'search',
-             'query':searchText,
-             'red': '',
-             'query_time': '',
-             'query_sort': '',
-             'query_order':''
-             }
-    mainPage = self.loadPage(self.searchLink,values);
-    results = self.regex_searchResult.findall(mainPage);
-    for result in results:
-      objectLink = self.regex_searchResultLink.search(result).group();
-      infoLink = self.rootLink+objectLink
-      infoPage = self.loadPage(infoLink);
-      title = self.regex_searchTitle.search(infoPage).group();
-      detail = self.regex_searchDetail.search(infoPage).group();
-      
-      image = self.regex_searchImage.search(infoPage).group();
-      title = self.replace_html.sub("", title);
-      detail = self.replace_html.sub("", detail);
-      try:
-        dateString = self.regex_searchDate.search(infoPage).group();
-        pubDate = time.strptime(dateString,"%d.%m.%Y");
-      except:
-        pubDate = time.gmtime();
-      
-      videoLink = self.rootLink+objectLink+"&mode=play";
-      videoPage = self.loadPage(videoLink);
-      video = self.regex_searchLink.search(videoPage).group();
-      links = {}
-      links[2] = SimpleLink(video,0)
-      self.gui.buildVideoLink(DisplayObject(title,"",self.rootLink + image,detail,links,True, pubDate),self,len(results));
-      
+    searchText = searchText.replace( u'\xf6',"oe")
+    searchText = searchText.replace( u'\xe4',"ae")
+    searchText = searchText.replace( u'\xfc',"ue")
+    searchText = searchText.replace( u'\xdf',"ss")
+    searchText = searchText.encode("latin1")
+    searchText = urllib.urlencode({"searchtext" : searchText})
+    self.buildPageMenu(self.searchLink+searchText,0);
+    print searchText   
+        
   def readText(self,node,textNode):
     try:
       node = node.getElementsByTagName(textNode)[0].firstChild;
@@ -105,47 +96,74 @@ class NDRMediathek(Mediathek):
   def loadConfigXml(self, link):
     self.gui.log("load:"+link)
     xmlPage = self.loadPage(link);
-    return minidom.parseString(xmlPage);  
+    try:
+        xmlDom = minidom.parseString(xmlPage);
+    except:
+        xmlDom = False
+    return xmlDom;  
     
   def extractVideoObjects(self, rssFeed, initCount):
-    nodes = rssFeed.getElementsByTagName("item");
+    nodes = rssFeed.getElementsByTagName("mediaItem");
     nodeCount = initCount + len(nodes)
-    displayObjects = [];
     for itemNode in nodes:
-      displayObjects.append(self.extractVideoInformation(itemNode,nodeCount));
-    sorted(displayObjects, key = lambda item:item.date, reverse=True);
-    for displayObject in displayObjects:  
-      self.gui.buildVideoLink(displayObject,self,nodeCount);
+      self.extractVideoInformation(itemNode,nodeCount);
+      
   def parseDate(self,dateString):
     dateString = regex_dateString.search(dateString).group();
     
     return time.strptime(dateString,"%Y-%m-%d");
   
-  def loadVideoLinks(self, link):
-    videoPage = self.loadPage(link);
+  def loadVideoLinks(self, videoNode):
+    videoSources = videoNode.getElementsByTagName("sources")[0]
+    videoSource = self.readText(videoSources, "source")
+        
+    videoInfo = self.regex_extractVideoLink.match(videoSource).group(1)
+    
+    link = {}
+    if self.baseType == "http":
+        link[0] = self.httpBaseLink+videoInfo+"lo.mp4";
+        link[1] = self.httpBaseLink+videoInfo+"hi.mp4";
+        link[2] = self.httpBaseLink+videoInfo+"hq.mp4";
+    elif self.baseType == "mms":
+        link[0] = self.mmsBaseLink+videoInfo+"wm.lo.wmv";
+        link[1] = self.mmsBaseLink+videoInfo+"wm.hi.wmv";
+        link[2] = self.mmsBaseLink+videoInfo+"wm.hq.wmv";
+    else:
+        link[0] = self.rtmpBaseLink+videoInfo+"lo.mp4";
+        link[1] = self.rtmpBaseLink+videoInfo+"hi.mp4";
+        link[2] = self.rtmpBaseLink+videoInfo+"hq.mp4"; 
+    
     links = {};
-    for link in self.regex_extractVideoLink.finditer(videoPage):
-      link = link.group();
-      if link.find("wm.lo"):
-        links[0] = SimpleLink(link, 0);
-      if link.find("wm.hi"):
-        links[1] = SimpleLink(link, 0);      
-      if link.find("wm.hq"):
-        links[2] = SimpleLink(link, 0);
+    links[0] = SimpleLink(link[0], 0);
+    links[1] = SimpleLink(link[1], 0);
+    links[2] = SimpleLink(link[2], 0);
+    
     return links;
     
   def extractVideoInformation(self, itemNode, nodeCount):
-    title = self.readText(itemNode,"title");
-    dateString = self.readText(itemNode,"dc:date");
+    videoId = itemNode.getAttribute("id")
+    
+    dateString = self.readText(itemNode,"date");
     pubDate = self.parseDate(dateString);
+        
+    videoPage = self.rootLink+"/fernsehen/sendungen/media/"+videoId+"-avmeta.xml"
+    videoNode = self.loadConfigXml(videoPage)
+
+    if videoNode:
+        videoNode = videoNode.getElementsByTagName("video")[0]
+        title = self.readText(videoNode,"headline");
+        description = self.readText(videoNode,"teaser");
+        duration = self.readText(videoNode,"duration");
+        
+        imageNode = videoNode.getElementsByTagName("images")[0].getElementsByTagName("image")
+        if len(imageNode):
+            imageNode =imageNode[0]
+            imageNode = imageNode.getElementsByTagName("urls")[0]
+            picture = self.readText(imageNode, "url")
+        else:
+            picture = None
     
-    descriptionNode = self.readText(itemNode,"description");
-    description = unicode(descriptionNode);
-    
-    picture = self.readText(itemNode,"mp:data");
-    videoPageLink = self.readText(itemNode,"link");
-    
-    links = self.loadVideoLinks(videoPageLink);
-    return DisplayObject(title,"",picture,description,links,True, None);
-    
-    
+        links = self.loadVideoLinks(videoNode)
+
+        self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True,pubDate,duration),self,nodeCount);
+   

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.spiegelonline" name="Spiegel Online" version="1.1" provider-name="mad-max (credits to peterpanzki for Dharma Version">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Spiegel Online</summary>
+        <summary lang="en">Spiegel Online</summary>
+        <description lang="de">Spiegel Online - Videos vom Spiegel Online Portal inkl. Spiegel TV Magazin</description>
+        <description lang="en">Spiegel Online</description>
+    </extension>
+</addon>

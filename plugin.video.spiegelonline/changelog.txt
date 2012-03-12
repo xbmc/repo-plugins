@@ -1,0 +1,8 @@
+[B]Version 1.1[/B]
+
+- updated python dependencies to make it Eden compatible
+- fixed parsing errors for "SpiegelTV Magazin"
+
+[B]Version 1.[/B]
+
+- initial release by peterpanzki

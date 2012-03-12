@@ -88,7 +88,8 @@ class SimpleXbmcGui(object):
             "date": time.strftime("%d.%m.%Y",displayObject.date),
             "year": int(time.strftime("%Y",displayObject.date)),
             "title": title,
-            "plot": transformHtmlCodes(displayObject.description)
+            "plot": transformHtmlCodes(displayObject.description),
+            "duration": displayObject.duration
           }); 
         except:
           pass;

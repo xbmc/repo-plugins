@@ -39,7 +39,7 @@ class TreeNode(object):
      self.childNodes = childNodes;
      
 class DisplayObject(object):
-  def __init__(self,title,subTitle,picture,description,link=[],isPlayable = True, date = None):
+  def __init__(self,title,subTitle,picture,description,link=[],isPlayable = True, date = None, duration = None):
     self.title = title
     self.subTitle = subTitle
     self.link = link
@@ -47,6 +47,7 @@ class DisplayObject(object):
     self.isPlayable = isPlayable
     self.description = description
     self.date = date;
+    self.duration = duration;
 
 class Mediathek(object):
   

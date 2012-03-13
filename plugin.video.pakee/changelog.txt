@@ -1,10 +1,16 @@
+[B]Version 1.0.6[/B]
+- Added cricket streams under "Live TV Channels" category
+- Added support for rtsp streams
+- Fixed Dunya news live stream
+
 [B]Version 1.0.5[/B]
+- Added support for browsing espncricinfo.com
 - Fixed issue where feeds with alternate pubDate format were failing
 - Fixed hardcoded prompt messsages
 
 
 [B]Version 1.0.4[/B]
-- Added live channel streams from LiveStream's plugins community-links repository
+- Added live channel streams (courtesy of yacir Thanks!)
 - Set default sorting to be by title for drama episodes
 
 [B]Version 1.0.3[/B]

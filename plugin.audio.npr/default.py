@@ -1,19 +1,21 @@
-# *
-# *  This Program is free software; you can redistribute it and/or modify
-# *  it under the terms of the GNU General Public License as published by
-# *  the Free Software Foundation; either version 2, or (at your option)
-# *  any later version.
-# *
-# *  This Program is distributed in the hope that it will be useful,
-# *  but WITHOUT ANY WARRANTY; without even the implied warranty of
-# *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# *  GNU General Public License for more details.
-# *
-# *  You should have received a copy of the GNU General Public License
-# *  along with this program; see the file COPYING.  If not, write to
-# *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
-# *  http://www.gnu.org/copyleft/gpl.html
-# *
+#
+#  Copyright 2012 (stieg)
+#
+#  This Program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This Program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; see the file COPYING.  If not, write to
+#  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+#  http://www.gnu.org/copyleft/gpl.html
+#
 
 
 import xbmc,xbmcaddon,xbmcplugin,xbmcgui
@@ -106,6 +108,15 @@ def read_in_station_data(path):
 
     return data
 
+def url_xml_to_etree(url):
+  '''
+  Given an URL, fetch the data and return an ElementTree object.
+  '''
+  data = urllib.urlopen(url)
+  tree = ElementTree()
+  tree.parse(data)
+
+  return tree
 
 def get_station_data(sid = 0):
   ''' Acquire station data for the provided station ID '''
@@ -116,26 +127,55 @@ def get_station_data(sid = 0):
     }
 
   params = urllib.urlencode(query)
-  data = urllib.urlopen(url + "?" + params)
+  url += '?' + params
+  return url_xml_to_etree(url)
 
-  tree = ElementTree()
-  tree.parse(data)
+def strip_unsupported_podcast_urls(streams):
+  '''
+  Podcasts use a different XML schema.  In fact, NPR seems to have
+  done a bad job of herding the cats into use of a common podcast data
+  format.  Hence I am only supporting podcast data from
+  http://www.npr.org/templates/rss/podcast.php.
+  '''
+  url = 'http://www.npr.org/templates/rss/podcast.php'
+  keys = streams.keys()
+  for k in keys:
+    if streams[k].find(url) == -1:
+      del streams[k]
 
-  return tree
+def get_podcast_streams(tree):
+  '''
+  Gets the avalible podcasts from data read from
+  http://www.npr.org/templates/rss/podcast.php.
+  '''
+  streams = {}
 
-def get_station_streams(tree):
-  ''' Extract all station streams from etree of NPR station data '''
+  elist = tree.findall('channel/item')
+  for e in elist:
+    title = e.find('title').text
+    stream = e.find('guid').text
+    streams[title] = stream
+
+  return streams
+
+def get_station_streams(tree, type_id):
+  '''
+  Extract all streams from etree of NPR station data based on the given type_id
+  9  - Podcasts
+  10 - Live Streams
+  15 - Newscasts (doesn't seem to be working).
+  '''
   streams = {}
   elist = tree.findall('station/url')
+  type_id = str(type_id)
   for e in elist:
     url_id = e.get('typeId')
-    if url_id == '10':
+    if  url_id == type_id:
       title = e.get('title')
       text = e.text
       streams[title] = text
 
   return streams
-
 
 def get_station_info(tree):
   ''' Extract general station info from etree of NPR station data '''
@@ -158,7 +198,6 @@ def get_station_info(tree):
 
     return data
 
-
 def url_query_to_dict(url):
   ''' Returns the URL query args parsed into a dictionary '''
   param = {}
@@ -170,7 +209,6 @@ def url_query_to_dict(url):
 
   return param
 
-
 def get_states_with_stations(stations):
   ''' Returns a dict of all available states '''
   states = {}
@@ -179,11 +217,10 @@ def get_states_with_stations(stations):
     if state:
       state_full = __STATES.get(state)
       if not state_full:
-	state_full = 'Unknown'
+        state_full = 'Unknown'
       states[state_full] = state
 
   return states
-
 
 def get_stations_in_state(stations, state):
   ''' Returns a dictionary of stations in the given state '''
@@ -195,48 +232,76 @@ def get_stations_in_state(stations, state):
       city = v.get('city')
       tag = v.get('tagline')
       if city is None:
-	city = 'Unknown'
+        city = 'Unknown'
       if tag is None or tag == 'None':
-	tag = ''
+        tag = ''
       else:
-	tag = ' - ' + tag
+        tag = ' - ' + tag
       name = "%s - %s%s" % (city, v.get('name'), tag)
       state_st[name] = int(sid)
 
   return state_st
 
+def list_streams(streams, url_id, title_prefix='', is_folder=False):
+    '''
+    Lists all streams in streams with the url_id as the key for the
+    handle.  If title_prefix is defined, then prefix the entry string
+    with the provided prefix.  If the entries need to be treated as a
+    folder, then set is_folder to True.
+    '''
+    keys = streams.keys()
+    keys.sort()
+    for k in keys:
+      stream = streams[k]
+      u = sys.argv[0] + '?' + urllib.urlencode({url_id:stream})
+      name = title_prefix + k
+      liz = xbmcgui.ListItem(name)
+      xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]),
+                                  url = u, listitem = liz,
+                                  isFolder = is_folder)
 
 def main():
-  stations = read_in_station_data(os.path.join(__home__, 'npr_stations.csv'))
   params = url_query_to_dict(sys.argv[2])
+  podcast = params.get('podcast')
   state = params.get('state')
   stream = params.get('stream')
   sid = params.get('id')
 
   if stream:
     # Play it.
+    stream = urllib.url2pathname(stream)
     print ("Playing stream %s" % stream)
     xbmc.Player().play(stream)
+
+  elif podcast:
+    # Show the avaialble Podcasts
+    podcast = urllib.url2pathname(podcast)
+    print("Podcast %s selected" % podcast)
+    tree = url_xml_to_etree(podcast)
+    pc_streams = get_podcast_streams(tree)
+    list_streams(pc_streams, 'stream', '', False)
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
   elif sid:
     # Display all streams for the station
     print("Station #%s selected" % sid)
     sd = get_station_data(sid)
-    streams = get_station_streams(sd)
-    keys = streams.keys()
-    keys.sort()
-    for k in keys:
-      stream = streams[k]
-      u = sys.argv[0] + "?stream=" + stream
-      name = "Live Stream - %s" % k
-      liz = xbmcgui.ListItem(name)
-      xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]),
-                                  url = u, listitem = liz,
-                                  isFolder = False)
+
+    # First show the live streams
+    streams = get_station_streams(sd, 10)
+    list_streams(streams, 'stream', 'Stream - ', False)
+
+    # Next show the Podcasts
+    podcasts = get_station_streams(sd, 9)
+    strip_unsupported_podcast_urls(podcasts)
+    list_streams(podcasts, 'podcast', 'Podcast - ', True)
+
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
   elif state:
     # Display all stations in the state
     print("State of %s selected" % state)
+    stations = read_in_station_data(os.path.join(__home__, 'npr_stations.csv'))
     state_st = get_stations_in_state(stations, state)
     keys = state_st.keys()
     keys.sort()
@@ -249,8 +314,10 @@ def main():
                                   url = u, listitem = liz,
                                   isFolder = True)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
   else:
     print("No state selected.")
+    stations = read_in_station_data(os.path.join(__home__, 'npr_stations.csv'))
     states = get_states_with_stations(stations)
     keys = states.keys()
     keys.sort()

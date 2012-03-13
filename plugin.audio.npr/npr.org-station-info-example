@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<stations version="0.94">
+  <message id="205" level="warning">
+    <text>Your request contained no valid query parameters and no results were returned.</text>
+    <timestamp>1331507292.72</timestamp>
+  </message>
+  <message id="401" level="warning">
+    <text>There were no results that matched your query criteria.</text>
+    <timestamp>1331507292.73</timestamp>
+  </message>
+  <station/>
+</stations>

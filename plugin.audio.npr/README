@@ -15,19 +15,6 @@ generate a new csv file if necessary.
 
 = Installation =
 
-== Using the Zip Archive ==
-
-1.  Download the "npr.zip" file.  Remember where you downloaded
-    it too.
-
-2.  Navigate to: Settings --> Add-ons --> Install from Zip File
-
-3.  Using the file chooser, navigate to where you downloaded
-    the file and select "npr.zip".  If all goes well a pop-up
-    will inform you that the addon is installed and ready.
-
-== Using code from the Git Archive ==
-
 1. Install Git on your local machine.  See http://git-scm.com/ for
    git installers and tutorials on how to use Git.
 
@@ -60,4 +47,3 @@ generate a new csv file if necessary.
 
 This repo is originally a fork of the code from
 http://xbmcnpr.googlecode.com/svn/trunk
-

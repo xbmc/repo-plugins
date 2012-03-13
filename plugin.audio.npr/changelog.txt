@@ -4,3 +4,4 @@ CHANGELOG for XBMC NPR Plugin (xbmcnpr)
 1.1.0:  Cleaned up icon. Name change (NPR --> npr) to conform to XBMC add-on specs.  Added All Songs Considered 24 hour stream.
 1.2.0:  Added KQED stream.  Cleaned up some of the parsing code in default.py.
 2.0.0:  Added support for NPR API.  Added all available NPR stations that stream.  Broke layout down by /state/station/stream.  Added support for station logo fetching.
+2.1.0:  Addes support for basic NPR podcast streaming.  Should cover the majority of pod casts.  Also updated stations cache and removed support for "Newscasts" as these do not seem to be working just yet.

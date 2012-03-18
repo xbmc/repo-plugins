@@ -1,3 +1,5 @@
+0.4.2 - FIX: WDR add search function, add stream duration, add "pageSize" optioni (Soern)
+        FIX: bayrisches FS podcasts eingefügt, Auswahl nach Sendungen, Suche (Soern)
 0.4.1 - FIX: Soern completed the NDR implementation
 0.4.0 - FIX: Commit FIX from soern 
 0.3.9 - ADD: KIKA (Without Kikaninchen)

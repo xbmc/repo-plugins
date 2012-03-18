@@ -14,6 +14,12 @@ BASE_URL = "http://sr.se"
 
 __settings__ = xbmcaddon.Addon(id='plugin.audio.sverigesradio')
 
+QUALITIES = ["low", "normal", "high"]
+PROTOCOLS = ["http", "rtsp"]
+
+SET_QUALITY = QUALITIES[int(__settings__.getSetting("quality"))]
+SET_PROTOCOL = PROTOCOLS[int(__settings__.getSetting("protocol"))]
+
 def list_channels():
     doc, state = load_xml(CHANNEL_URL)
     if doc and not state:
@@ -34,11 +40,11 @@ def list_channels():
                 quality = url.getAttribute("quality")
                 playlist = url.getAttribute("playlist")
                 stream = url.childNodes[0].data
-                if type == "m4a" and quality == "high":
+                if type == "m4a" and quality == SET_QUALITY:
                     if logo:
-                        add_posts(title, stream, description, logo, album = originaltitle, artist = 'Sveriges Radio')
+                        add_posts(title, stream, description, logo, isLive = 'true', album = originaltitle, artist = 'Sveriges Radio')
                     else:
-                        add_posts(title, stream, description, album = originaltitle, artist = 'Sveriges Radio')
+                        add_posts(title, stream, description, isLive = 'true', album = originaltitle, artist = 'Sveriges Radio')
     else:
         if state == "site":
             xbmc.executebuiltin('Notification("Sveriges Radio","Site down")')
@@ -76,7 +82,7 @@ def list_program(unitid):
             type = url.getAttribute("type")
             protocol = url.getAttribute("protocol")
             quality = url.getAttribute("quality")
-            if type == "m4a" and protocol == "http" and quality == "high":
+            if type == "m4a" and protocol == SET_PROTOCOL and quality == SET_QUALITY:
                 base = url.childNodes[0].data
         if base == "":
             base = "http://sverigesradio.se/topsy/ljudfil/utan/statistik/[broadcastid].m4a"
@@ -102,8 +108,9 @@ def list_program(unitid):
                     thumb = ''
                 for broadcast in ondemand.getElementsByTagName("broadcastfilename"):
                     broadcastid = broadcast.getAttribute("broadcastid").encode('utf_8')                               
-                    # broadcastname = broadcast.childNodes[0].data.encode('utf_8')
+                    broadcastname = broadcast.childNodes[0].data.encode('utf_8')
                     url = base.replace("[broadcastid]", broadcastid)
+                    url = url.replace("[broadcastfilename]", broadcastname)
                     add_posts(title, url, description, thumb, artist='Sveriges Radio', album=originaltitle)
     else:
         if state == "site":
@@ -113,7 +120,7 @@ def list_program(unitid):
     xbmcplugin.endOfDirectory(HANDLE)
 
 
-def add_posts(title, url, description='', thumb='', isPlayable='true', isLive='true', isFolder=False, artist='',\
+def add_posts(title, url, description='', thumb='', isPlayable='true', isLive='false', isFolder=False, artist='',\
               album=''):
     title = title.replace("\n", " ")
     listitem=xbmcgui.ListItem(title, iconImage=thumb)

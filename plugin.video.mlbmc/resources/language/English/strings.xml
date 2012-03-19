@@ -19,7 +19,7 @@
   <string id="30016">This section requires at minimum a free mlb.com account. If you want to look around add anything in the email setting.</string>
   <string id='30017'>Yesterday's MLB.com Realtime Highlights</string>
   <string id='30018'>HTTP Error : </string>
-  <string id='30019'>This usually means the server doesn't exist, is down, or we don't have an internet connection.</string>
+  <string id='30019'>HTTP Error : check xbmc.log </string>
   <string id='30020'>Log in Failed</string>
   <string id='30021'>Sorry - We didn't receive the required cookies</string>
   <string id='30022'>Status : </string>
@@ -51,13 +51,13 @@
   <string id='30048'>Prime 9</string>
   <string id='30049'>This Week in Baseball</string>
   <string id='30050'>RBI: Reviving Baseball In Inner Cities</string>
-  <string id='30051'>2011 All-Star Game</string>
-  <string id='30052'>2011 Home Run Derby</string>
-  <string id='30053'>2011 Futures Game</string>
-  <string id='30054'>2011 All-Star Softball Game</string>
-  <string id='30055'>2011 All-Star Fanfest</string>
-  <string id='30056'>2011 All-Star Final Vote</string>
-  <string id='30057'>Midsummer Classic Moments</string>
+  <string id='30051'>2012 Spring Training</string>
+  <string id='30052'>2012 Spring Training Report</string>
+  <string id='30053'>World Series: Rangers vs. Cardinals</string>
+  <string id='30054'>NLCS: Cardinals vs. Brewers</string>
+  <string id='30055'>ALCS: Tigers vs. Rangers</string>
+  <string id='30056'>Postseason Legends</string>
+  <string id='30057'>Baseballs Best | October Moments</string>
   <string id='30058'>Good Decisions of the Game</string>
   <string id='30059'>Grass Clippings | presented by Scotts</string>
   <string id='30060'>Moment of Glory | presented by Klondike</string>
@@ -80,5 +80,21 @@
   <string id='30077'>Weplay</string>
   <string id='30078'>No Results for: </string>
   <string id='30079'>Loading Playlist</string>
-  
+  <string id='30080'>2011 Postseason</string>
+  <string id='30081'>  Archived</string>
+  <string id='30082'>  Free Game</string>
+  <string id='30083'>Blackout</string>
+  <string id='30084'>Preview Video - </string>
+  <string id='30085'>Email Address</string>
+  <string id='30086'>Password</string>
+  <string id='30087'>Playback Quality</string>
+  <string id='30088'>2011 Archive Playback Quality</string>
+  <string id='30089'>Enable debug logging</string>
+  <string id='30090'>MLB.com Podcasts</string>
+  <string id='30091'>Fantasy 411 (video)</string>
+  <string id='30092'>Fantasy 411 (audio)</string>
+  <string id='30093'>The Pine (audio)</string>
+  <string id='30094'>Around the Minors (video)</string>
+  <string id='30095'>MLB.com's The Vault (audio)</string>
+  <string id='30096'>Intentional Talk (video)</string>
 </strings>

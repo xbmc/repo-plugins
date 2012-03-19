@@ -1,3 +1,7 @@
+Version 0.0.7
+fixes and updates for the start of 2012 season
+added initial support for Gameday Audio
+
 Version 0.0.4
 added many new categories
 added search

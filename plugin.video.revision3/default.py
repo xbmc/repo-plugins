@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 plugin =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '02-01-2012'
-__version__ = '2.0.2'
+__date__ = '03-19-2012'
+__version__ = '2.0.3'
 settings = xbmcaddon.Addon(id='plugin.video.revision3')
 dbg = False
 dbglevel = 3
@@ -20,8 +20,8 @@ import CommonFunctions
 common = CommonFunctions
 common.plugin = plugin + ' ' + __version__
 
-#import SimpleDownloader as downloader
-#downloader = downloader.SimpleDownloader()
+import SimpleDownloader as downloader
+downloader = downloader.SimpleDownloader()
 
 def open_url(url):
 	req = urllib2.Request(url)
@@ -196,7 +196,7 @@ def build_search_directory(url):
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def clean(name):
-	remove = [('&amp;','&'), ('&quot;','"'), ('&#039;','\''), ('\r\n',''), ('&apos;','\''), ('&#150;','-'), ('%3A',':'), ('%2F','/')]
+	remove = [('&amp;','&'), ('&quot;','"'), ('&#039;','\''), ('\r\n',''), ('&apos;','\''), ('&#150;','-'), ('%3A',':'), ('%2F','/'), ('<link>',''), ('</link>','')]
 	for trash, crap in remove:
 		name = name.replace(trash,crap)
 	return name
@@ -210,8 +210,15 @@ def clean_file(name):
 def get_video(url, name, plot, studio, episode, thumb):
 	#result = common.fetchPage({"link": url})['content']
 	result = open_url(url)
-	list = ['MP4','Quicktime','Xvid','WMV']
+	video_id = common.parseDOM(result, "meta", attrs = { "property": "og:video" }, ret="content")[0].replace('http://revision3.com/player-v','')
+	api = open_url('http://revision3.com/api/flash?video_id=' + video_id)
+	videos_api = common.parseDOM(api, "media", ret = "type")
+	videos_api[:] = (value for value in videos_api if value != 'thumbnail')
 	durl = {}
+	for type_api in videos_api:
+		content_api = clean(common.parseDOM(api, "media", attrs = { "type": type_api })[0])
+		durl[type_api] = content_api
+	list = ['MP4','Quicktime','Xvid','WMV']
 	for type in list:
 		content = common.parseDOM(result, "div", attrs = { "id": "action-panels-download-" + type })
 		videos = common.parseDOM(content, "a", attrs = { "class": "sizename" })
@@ -226,7 +233,22 @@ def get_video(url, name, plot, studio, episode, thumb):
 		dictList.append(key)
 	quality = settings.getSetting('type')
 	try:
-		purl = durl[quality]
+		try:
+			purl = durl[quality]
+		except:
+			if quality == 'MP4:HD':
+				if 'Quicktime:HD' in durl:
+					quality_api = 'Quicktime:HD'
+				else:
+					quality_api = 'hd'
+			if quality == 'MP4:Large':
+				if 'Quicktime:Large' in durl:
+					quality_api = 'Quicktime:Large'
+				else:
+					quality_api = 'high'
+			if quality == 'MP4:Phone':
+				quality_api = 'low'
+			purl = durl[quality_api]
 		ret = None
 	except:
 		dialog = xbmcgui.Dialog()

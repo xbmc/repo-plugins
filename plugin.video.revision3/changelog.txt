@@ -1,3 +1,8 @@
+[B]Version 2.0.3[/B]
+
+- Fixed error when trying to play new shows
+- Restored downloading feature
+
 [B]Version 2.0.2[/B]
 
 - Fixed error on start up

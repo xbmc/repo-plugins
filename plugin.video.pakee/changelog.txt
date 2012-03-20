@@ -1,3 +1,7 @@
+[B]Version 1.0.10[/B]
+- MOving live channels into categories (by language)
+
+
 [B]Version 1.0.9[/B]
 - Added support for http:// live streams from desistreams.xml (fixes Apna, Qtv)
 

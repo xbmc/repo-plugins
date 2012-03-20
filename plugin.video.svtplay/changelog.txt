@@ -1,6 +1,10 @@
+Version 2.0.3
+-------------
+- Better exception handling and removed unplausible todo (by arvidericsson)
+
 Version 2.0.2
 -------------
-- Updated SWF-player URL
+- Updated SWF-player URL (by arvidericsson)
 
 Version 2.0.1
 -------------

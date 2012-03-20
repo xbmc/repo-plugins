@@ -4,6 +4,7 @@ plugin.video.drnu/.git
 plugin.video.drnu/.idea
 plugin.video.nederland24/.git
 plugin.video.svtplay/.git
+plugin.video.svtplay/.gitignore
 plugin.video.dr.dk.podcast/.git
 plugin.video.dr.dk.podcast/.idea
 plugin.program.rtorrent/.git

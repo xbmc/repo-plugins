@@ -19,4 +19,6 @@
 	<string id="30501">Context menu label</string>
 	<string id="30502">URL video quality</string>
 	<string id="30503">Command</string>
+	
+	<string id="30600">Address or network problem. It might get better by itself, if you wait for a bit.</string>
 </strings>

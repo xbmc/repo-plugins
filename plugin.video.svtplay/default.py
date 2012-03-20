@@ -9,6 +9,7 @@ import xbmcplugin
 import xbmcaddon
 
 from xml.dom.minidom import parseString
+from datetime import datetime
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.svtplay')
 __language__ = __settings__.getLocalizedString
@@ -36,6 +37,7 @@ BASE_URL_TITLE = "http://xml.svtplay.se/v1/title/list/"
 BASE_URL_VIDEO = "http://xml.svtplay.se/v1/video/list/"
 BASE_URL_SEARCH_TITLE = "http://xml.svtplay.se/v1/title/search/"
 BASE_URL_SEARCH_VIDEO = "http://xml.svtplay.se/v1/video/search/"
+SWF_PLAYER_URL = "http://svtplay.se/flash/svtplayer-2012.1.swf"
 
 END_URL_SEARCH_VIDEO = "expression=full"
 END_URL_SEARCH_CLIP = "expression=sample"
@@ -138,11 +140,8 @@ def video_list(ids="", url="", offset=1, list_size=0):
 			thumb = get_media_thumbnail(item)
 			title = get_node_value(media, "title", NS_MEDIA)
 			description = get_node_value(item, "description")
+			date = parse_svt_date( get_node_value(item, "pubDate"), "%d.%m.%Y" )
 
-			# TODO: parse date/time
-			# TODO: add label "date" (string (%d.%m.%Y / 01.01.2009) - file date)
-			# TODO: add label "premiered" (string (2005-03-04))
-			
 			if title is None:
 				title = "";
 
@@ -150,7 +149,8 @@ def video_list(ids="", url="", offset=1, list_size=0):
 				description = "";
 			
 			infoLabels = { "Title": title.encode('utf_8'),
-				       "Plot": description.encode('utf_8') }
+				       "Plot": description.encode('utf_8'),
+				       "date": date }
 
 			params = { "url": media.getAttribute("url") }
 			
@@ -309,7 +309,7 @@ def add_directory_item(name, params={}, thumbnail=None, isFolder=True,
 		url = params["url"]
 
 		if url.find('rtmp') == 0:
-			url += " swfUrl=http://svtplay.se/flash/svtplayer-2012.1.swf swfVfy=1"
+			url += " swfUrl=%s swfVfy=1" % SWF_PLAYER_URL
 		
 		if not infoLabels:
 			infoLabels = { "Title": name }
@@ -351,6 +351,22 @@ def parameters_string_to_dict(param_string):
 	
 	return params
 
+def parse_svt_date(date_string, date_format):
+	"""
+	@param date_string    A string on the format "Sun, 04 Mar 2012 18:35:31 GMT"
+	@return:              A string on the format "2012-03-04"
+	"""
+	
+	try:
+		day_month_year = date_string[5:16]
+		datetime_object = datetime.strptime(day_month_year, "%d %b %Y")
+		return datetime_object.strftime(date_format)
+	
+	except Exception as ex:
+		xbmc.log( "Exception in parse_svt_date(): " + str(ex) )
+		return ""
+
+
 def search(mode,url):
 	searchString = unikeyboard(__settings__.getSetting( "latestSearch" ), "" )
 	if searchString == "":
@@ -389,10 +405,9 @@ def debug(url, name):
 				os.system("%s" % (command))
 			elif (sys.platform.startswith('darwin')):
 				os.system("\"%s\"" % (command))
-			else:
-				pass;
-		except:
-			pass
+
+		except Exception as ex:
+			xbmc.log( str(ex) )
 
 	return None
 
@@ -412,8 +427,15 @@ def load_xml(url):
 		response.close()
 	
 		return parseString(xml)
-	except:
-		xbmc.log("unable to load url: " + url)
+
+	except (urllib2.HTTPError, urllib2.URLError) as ex:
+		xbmcgui.Dialog().ok( __language__(30301), __language__(30600))
+		raise ex
+		
+	except Exception as ex:
+		xbmc.log( "An unhandled exception was triggered in the SVT Play adddon." )
+		raise ex
+		
 
 params = parameters_string_to_dict(sys.argv[2])
 

@@ -19,4 +19,6 @@
 	<string id="30501">Snabbmenytext</string>
 	<string id="30502">URL videokvalitet</string>
 	<string id="30503">Kommando</string>
+	
+	<string id="30600">Adress eller nätverksproblem. Det kan eventuellt gå bättre om du provar igen.</string>
 </strings>

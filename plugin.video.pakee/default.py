@@ -9,10 +9,10 @@ __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.9'
+__version__ = '1.0.10'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
 __rooturl__ = 'http://pakee.hopto.org/pakee/pakee.php?id=xbmc&z=9'
-#__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?a=5'
+#__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?ss=5'
 __language__ = __settings__.getLocalizedString
 
 #plugin modes
@@ -191,34 +191,6 @@ def build_show_directory(origurl):
 
 	itemCount=0
 
-	#for testing mast.tv streams (doesn't work as the stream uses .wsx)
-	if origurl == __rooturl__ and 'pakee-test.xml' in __rooturl__:
-		html = open_url("http://www.mast.tv/embed.php?stream=humtv&location=france")
-		match=re.compile('<param name="URL" value="(.+?)">').findall(html)
-		isFolder = False
-		mode = PLUGIN_MODE_PLAY_STREAM
-
-		for streamurl in match:			
-			streamurl = streamurl.replace("http","mms")
-			streamurl = streamurl.replace(" ","%20")
-			xbmc.log("Found url: " + str(streamurl))
-			listitem = xbmcgui.ListItem( label = 'Hum', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
-			u = sys.argv[0] + "?mode=" + str(PLUGIN_MODE_PLAY_STREAM) + "&name=" + urllib.quote_plus( "Hum" ) + "&url=" + urllib.quote_plus( streamurl ) + "&index=" + str(itemCount)
-			xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = isFolder )
-			
-
-		#shows = common.parseDOM(html, "ul", attrs = { "id": "shows" })[0]
-		#url_name = re.compile('<h3><a href="(.+?)">(.+?)</a></h3>').findall(shows)
-		#image = re.compile('class="thumbnail"><img src="(.+?)" /></a>').findall(shows)
-		#plot = common.parseDOM(shows, "p", attrs = { "class": "description" })
-
-	#On live streams page, add the Geo News youtube live feed
-	if 'desistreams.googlecode.com' in origurl:
-		isFolder = False
-		geoguid = 'sOg5KS7M13s'
-		listitem = xbmcgui.ListItem( label = 'Geo News', iconImage = 'http://images.wikia.com/logopedia/images/e/e9/Geo_News.png', thumbnailImage = 'http://images.wikia.com/logopedia/images/e/e9/Geo_News.png' )
-		u = sys.argv[0] + "?mode=" + str(PLUGIN_MODE_PLAY_YT_VIDEO) + "&name=" + urllib.quote_plus( "Geo News" ) + "&url=" + urllib.quote_plus( geoguid ) + "&index=" + str(itemCount)
-		xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = isFolder )
 
 
 
@@ -318,7 +290,7 @@ def build_show_directory(origurl):
 					url = origurl
 
 
-			if 'rtmp://' in url or 'mms://' in url or 'rtsp://' in url or 'desistreams.xml' in origurl:
+			if 'fetchLiveFeeds.php' not in url and ('rtmp://' in url or 'mms://' in url or 'rtsp://' in url or 'desistreams.xml' in origurl or 'LiveTV.xml' in origurl):
 				isFolder = False
 				mode = PLUGIN_MODE_PLAY_STREAM
 

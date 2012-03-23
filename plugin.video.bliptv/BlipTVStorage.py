@@ -28,9 +28,6 @@ class BlipTVStorage():
         self.utils = sys.modules["__main__"].utils
         self.xbmc = sys.modules["__main__"].xbmc
 
-    # This list contains the list options a user sees when indexing a contact
-    #                                label                                          , external                 , login                 ,        thumbnail                                        , feed
-
     def list(self, params={}):
         self.common.log("")
         get = params.get
@@ -42,8 +39,8 @@ class BlipTVStorage():
     def deleteFromMyFavoriteShows(self, params):
         self.common.log("")
         get = params.get
-        params["store"] = "favorites"
 
+        params["store"] = "favorites"
         favorites = self.retrieve(params)
 
         for count, favorite in enumerate(favorites):
@@ -57,9 +54,10 @@ class BlipTVStorage():
 
     def addToMyFavoritesShow(self, params={}, item={}):
         self.common.log("")
-        params["store"] = "favorites"
 
+        params["store"] = "favorites"
         favorites = self.retrieve(params)
+
         favorites.append(item)
         favorites = sorted(favorites, key=lambda k: k['Title'])
 
@@ -69,22 +67,8 @@ class BlipTVStorage():
     def getStoredSearches(self, params={}):
         self.common.log(repr(params))
         get = params.get
-        key = self.getStorageKey(params)
-        author_key = self.getStorageKey({"store": "searches_author"})
-        searches = []
-        authors = {}
 
-        try:
-            searches = eval(self.retrieveValue(key))
-        except:
-            searches = self.retrieveValue(key)
-            self.common.log("failed to retrieve stored searches1: " + repr(searches))
-            searches = []
-
-        try:
-            authors = eval(self.retrieveValue(author_key))
-        except:
-            self.common.log("failed to retrieve stored searches2: " + repr(searches))
+        searches = self.retrieve(params)
 
         result = []
         for search in searches:
@@ -97,16 +81,16 @@ class BlipTVStorage():
                 item["feed"] = "search"
                 item["icon"] = "search"
                 item["scraper"] = "search"
-                if search in authors:
-                    item["refined"] = "true"
 
-            params["thumb"] = "true"
+            thumbnail = self.retrieve(params, "thumbnail", item)
+            if thumbnail:
+                item["thumbnail"] = thumbnail
+            else:
+                item["thumbnail"] = item["icon"]
 
-            item["thumbnail"] = self.retrieve(params, "thumbnail", item)
             result.append(item)
 
-        self.common.log("failed to retrieve stored searches3 : " + repr(result))
-
+        self.common.log("Done: " + repr(result), 5)
         return result
 
     def deleteStoredSearch(self, params={}):
@@ -114,21 +98,16 @@ class BlipTVStorage():
         get = params.get
         params["store"] = "searches"
 
-        key = self.getStorageKey(params)
         query = urllib.unquote_plus(get("delete"))
 
-        searches = []
-        try:
-            searches = eval(self.retrieveValue(key))
-        except:
-            self.common.log("failed to retrieve stored searches")
+        searches = self.retrieve(params)
 
         for count, search in enumerate(searches):
             if (search.lower() == query.lower()):
                 del(searches[count])
                 break
 
-        self.storeValue(key, repr(searches))
+        self.store(params, searches)
 
         self.xbmc.executebuiltin("Container.Refresh")
 
@@ -136,32 +115,26 @@ class BlipTVStorage():
         self.common.log("")
         get = params.get
 
-        searches = []
-
-        if get("search"):
+        if get("search") and get("scraper") == "search":
             params["store"] = "searches"
 
-            key = self.getStorageKey(params)
+            searches = self.retrieve(params)
 
             new_query = urllib.unquote_plus(get("search"))
             old_query = new_query
 
             if get("old_search"):
                 old_query = urllib.unquote_plus(get("old_search"))
-            try:
-                searches = eval(self.retrieveValue(key))
-            except:
-                self.common.log("failed to retrieve stored searches")
 
             for count, search in enumerate(searches):
                 if (search.lower() == old_query.lower()):
                     del(searches[count])
                     break
 
-            del params["store"]
-            searchCount = (10, 20, 30, 40)[int(self.settings.getSetting("saved_searches" ))]
+            searchCount = (10, 20, 30, 40)[int(self.settings.getSetting("saved_searches"))]
             searches = [new_query] + searches[:searchCount]
-            self.storeValue(key, repr(searches))
+            self.store(params, searches)
+            del params["store"]
 
     def editStoredSearch(self, params={}):
         self.common.log("")
@@ -189,38 +162,12 @@ class BlipTVStorage():
         if "action" in params:
             del params["action"]
 
-    def refineStoredSearch(self, params={}):
-        self.common.log("")
-        get = params.get
-        params["store"] = "searches_author"
-        key = self.getStorageKey(params)
-        query = urllib.unquote_plus(get("search"))
-
-        try:
-            searches = eval(self.retrieveValue(key))
-        except:
-            searches = {}
-
-        if query in searches:
-            author = self.common.getUserInput(self.language(30517), searches[query])
-        else:
-            author = self.common.getUserInput(self.language(30517), '')
-
-        if author:
-            searches[query] = author
-
-            self.storeValue(key, repr(searches))
-            self.utils.showMessage(self.language(30006), self.language(30616))
-            self.xbmc.executebuiltin("Container.Refresh")
-
     #=================================== Storage Key ========================================
     def getStorageKey(self, params={}, storage_type="", item={}):
         self.common.log("")
 
         if storage_type == "value":
             return self._getValueStorageKey(params, item)
-        elif storage_type == "viewmode":
-            return self._getViewModeStorageKey(params, item)
         elif storage_type == "thumbnail":
             return self._getThumbnailStorageKey(params, item)
 
@@ -257,24 +204,6 @@ class BlipTVStorage():
             self.common.log(key)
             if (get("external")):
                 key += "_external_" + get("contact")
-
-        return key
-
-    def _getViewModeStorageKey(self, params={}, item={}):
-        self.common.log("")
-        get = params.get
-        iget = item.get
-        key = ""
-
-        if (get("external")):
-            key = "external_" + get("contact") + "_"
-        elif (iget("external")):
-            key = "external_" + iget("contact") + "_"
-
-        if get("channel"):
-            key += "view_mode_" + get("channel")
-        elif (iget("channel")):
-            key += "view_mode_" + iget("channel")
 
         return key
 
@@ -315,25 +244,20 @@ class BlipTVStorage():
             self.settings.setSetting(key, value)
 
     def storeResultSet(self, key, results=[], params={}):
-        self.common.log("")
+        self.common.log("" + repr(params))
         get = params.get
 
         if results:
             if get("prepend"):
-                self.common.log("prepend")
                 searchCount = (10, 20, 30, 40)[int(self.settings.getSetting("saved_searches"))]
                 existing = self.retrieveResultSet(key)
                 existing = results + existing[:searchCount]
                 self.settings.setSetting(key, repr(existing))
             elif get("append"):
-                self.common.log("append")
                 existing = self.retrieveResultSet(key)
-                self.common.log(repr(existing) + " - " + repr(results))
                 existing = existing + results
-                self.common.log(repr(existing))
                 self.settings.setSetting(key, repr(existing))
             else:
-                self.common.log("set")
                 value = repr(results)
                 self.settings.setSetting(key, value)
 

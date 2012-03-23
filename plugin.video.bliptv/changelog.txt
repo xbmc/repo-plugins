@@ -5,6 +5,11 @@
 
 [B]Errata[/B]
 
+[B]Version 0.4.0[/B]
+- Blip.tv changed their html and broke the show scraper.
+- Listing of locally stored folder lists was broken
+- Cleanup of unused code from template
+
 [B]Version 0.3.0[/B]
 - Updated dependencies on common cache and simple downloader
 - Fixed scraper for searching episodes

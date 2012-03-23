@@ -68,15 +68,12 @@ class BlipTVScraper:
 
             dom_pages = self.common.parseDOM(result["content"], "div", {"class": "ShowFlipcard"})
 
-            self.common.log("found items " + repr(dom_pages))
+            self.common.log("found items " + repr(dom_pages), 4)
             for item in dom_pages:
-                thumbnail = self.common.parseDOM(item, "img", attrs={"class": "ShowPoster"}, ret="src")
-                name = self.common.parseDOM(item, "a", attrs={"class": "Name"})
-                link = self.common.parseDOM(item, "a", attrs={"class": "Name"}, ret="href")
-                print repr(link)
-                link = link[0]
-                print repr(link)
-                tmp.append({"path": get("path"), "show": link, "scraper": "show", "Title": self.common.replaceHTMLCodes(name[0].strip()), "thumbnail": thumbnail[0]})
+                thumbnail = self.common.parseDOM(item, "img", attrs={"class": "ShowPoster"}, ret="src")[0]
+                name = self.common.parseDOM(item, "a", attrs={"class": "Name"})[0]
+                link = self.common.parseDOM(item, "a", attrs={"class": "Name"}, ret="href")[0]
+                tmp.append({"path": get("path"), "show": link, "scraper": "show", "Title": self.common.replaceHTMLCodes(name.strip()), "thumbnail": thumbnail})
 
             if len(tmp) > 0 and page < 50:
                 items += tmp
@@ -341,6 +338,8 @@ class BlipTVScraper:
                 continue
 
             for episode in lst:
+                episode = episode.replace("\t","")
+
                 id = self.common.parseDOM(episode, "a", attrs={"class": "ArchiveCard"}, ret="href")
                 image = self.common.parseDOM(episode, "img", ret="src")
                 title = self.common.parseDOM(episode, "span", attrs={"class": "Title"}, ret="title")

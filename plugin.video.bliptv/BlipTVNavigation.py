@@ -40,22 +40,22 @@ class BlipTVNavigation:
         # This list contains the main menu structure the user first encounters when running the plugin
         #                           label                                                  , path                                                                                , thumbnail                                        ,  scraper / action
         self. categories = (
-            {'Title':self.language(30016)  ,'path':"/root/explore"                                                         , 'thumbnail':"explore"                },
-            {'Title':self.language(30001)  ,'path':"/root/explore/browse"                                        , 'thumbnail':"explore"                , 'scraper': 'browse_shows' },
-            {'Title':self.language(30002)  ,'path':"/root/explore/staffpicks"                                , 'thumbnail':"explore"                , 'scraper': 'staff_picks' },
-            {'Title':self.language(30003)  ,'path':"/root/explore/favorites"                                , 'thumbnail':"explore"                , 'scraper': 'favorites' },
-            {'Title':self.language(30004)  ,'path':"/root/explore/newshows"                                        , 'thumbnail':"explore"                , 'scraper': 'new_shows' },
-            {'Title':self.language(30005)  ,'path':"/root/explore/popularshows"                                , 'thumbnail':"explore"                , 'scraper': 'popular_shows' },
-            {'Title':self.language(30006)  ,'path':"/root/explore/trendingshow"                                , 'thumbnail':"explore"                , 'scraper': 'trending_shows' },
-            {'Title':self.language(30007)  ,'path':"/root/explore/newepisodes"                                , 'thumbnail':"explore"                , 'scraper': 'new_episodes' },
-            {'Title':self.language(30008)  ,'path':"/root/explore/popularepisodes"                        , 'thumbnail':"explore"                , 'scraper': 'popular_episodes' },
-            {'Title':self.language(30009)  ,'path':"/root/explore/trendingepisodes"                        , 'thumbnail':"explore"                , 'scraper': 'trending_episodes' },
-            {'Title':self.language(30010)  ,'path':"/root/my_favorites"                                                , 'thumbnail':"explore"                , 'store':   'favorites', 'folder':"true" },
-            {'Title':self.language(30011)  ,'path':"/root/my_favorites/search"                                , 'thumbnail':"search"                , 'scraper': 'show_search', 'folder':"true" },
-            {'Title':self.language(30012)  ,'path':"/root/downloads"                                                , 'thumbnail':"downloads"        , 'feed':    'downloads' },
-            {'Title':self.language(30013)  ,'path':"/root/search"                                                        , 'thumbnail':"search"                , 'store':"searches", 'folder':'true' },
-            {'Title':self.language(30014)  ,'path':"/root/search/new"                                                , 'thumbnail':"search"                , 'scraper': 'search'},                                  
-            {'Title':self.language(30015)  ,'path':"/root/settings"                                                          , 'thumbnail':"settings"        , 'action':"settings" }
+            {'Title':self.language(30016)  ,'path':"/root/explore"                         , 'thumbnail':"explore"                },
+            {'Title':self.language(30001)  ,'path':"/root/explore/browse"                  , 'thumbnail':"explore"                , 'scraper': 'browse_shows' },
+            {'Title':self.language(30002)  ,'path':"/root/explore/staffpicks"              , 'thumbnail':"explore"                , 'scraper': 'staff_picks' },
+            {'Title':self.language(30003)  ,'path':"/root/explore/favorites"               , 'thumbnail':"explore"                , 'scraper': 'favorites' },
+            {'Title':self.language(30004)  ,'path':"/root/explore/newshows"                , 'thumbnail':"explore"                , 'scraper': 'new_shows' },
+            {'Title':self.language(30005)  ,'path':"/root/explore/popularshows"            , 'thumbnail':"explore"                , 'scraper': 'popular_shows' },
+            {'Title':self.language(30006)  ,'path':"/root/explore/trendingshow"            , 'thumbnail':"explore"                , 'scraper': 'trending_shows' },
+            {'Title':self.language(30007)  ,'path':"/root/explore/newepisodes"             , 'thumbnail':"explore"                , 'scraper': 'new_episodes' },
+            {'Title':self.language(30008)  ,'path':"/root/explore/popularepisodes"         , 'thumbnail':"explore"                , 'scraper': 'popular_episodes' },
+            {'Title':self.language(30009)  ,'path':"/root/explore/trendingepisodes"        , 'thumbnail':"explore"                , 'scraper': 'trending_episodes' },
+            {'Title':self.language(30010)  ,'path':"/root/my_favorites"                    , 'thumbnail':"explore"                , 'store': 'favorites', 'folder':"true" },
+            {'Title':self.language(30011)  ,'path':"/root/my_favorites/search"             , 'thumbnail':"search"                 , 'scraper': 'show_search', 'folder':"true" },
+            {'Title':self.language(30012)  ,'path':"/root/downloads"                       , 'thumbnail':"downloads"              , 'feed': 'downloads' },
+            {'Title':self.language(30013)  ,'path':"/root/search"                          , 'thumbnail':"search"                 , 'store':"searches", 'folder':'true' },
+            {'Title':self.language(30014)  ,'path':"/root/search/new"                      , 'thumbnail':"search"                 , 'scraper': 'search'},
+            {'Title':self.language(30015)  ,'path':"/root/settings"                        , 'thumbnail':"settings"               , 'action':"settings" }
                                  )
 
     #==================================== Main Entry Points===========================================
@@ -132,15 +132,15 @@ class BlipTVNavigation:
                         return False
                 params["search"] = query
 
-                self.storage.saveSearch(params)
+            self.storage.saveSearch(params)
 
         if get("scraper"):
             results = self.scraper.scrape(params)
         elif get("store"):
             results = self.storage.list(params)
 
-        if len(results) > 0:
-            if get("folder"):
+        if len(results) > 0 or (get("store") and not get("scraper")):
+            if get("folder", "false") != "false":
                 self.common.log("found folder list")
                 self.parseFolderList(params, results)
             else:
@@ -148,24 +148,28 @@ class BlipTVNavigation:
                 self.parseVideoList(params, results)
             return True
         else:
-            label = ""
+            self.showListingError(params)
 
-            for category in self.categories:
-                cat_get = category.get
-                if (
-                    (get("feed") and cat_get("feed") == get("feed")) or
-                    (get("scraper") and cat_get("scraper") == get("scraper"))
-                    ):
-                    label = cat_get("Title")
-
-                if label:
-                    self.utils.showMessage(label, self.language(30601))
         return False
+
+    def showListingError(self, params):
+        get = params.get
+        label = ""
+        for category in self.categories:
+            cat_get = category.get
+            if (
+                (get("feed") and cat_get("feed") == get("feed")) or
+                (get("scraper") and cat_get("scraper") == get("scraper"))
+                ):
+                label = cat_get("Title")
+
+            if label:
+                self.utils.showMessage(label, self.language(30601))
+
     #================================== List Item manipulation =========================================
     # is only used by List Menu
     def addListItem(self, params={}, item_params={}):
         self.common.log("")
-        # get = params.get
         item = item_params.get
 
         if item("action") == "play_video":
@@ -177,8 +181,7 @@ class BlipTVNavigation:
 
     # common function for adding folder items
     def addFolderListItem(self, params={}, item_params={}, size=0):
-        # self.common.log("")
-        # get = params.get
+        self.common.log("")
         item = item_params.get
 
         icon = "DefaultFolder.png"
@@ -299,8 +302,6 @@ class BlipTVNavigation:
 
         title = self.common.makeAscii(item("Title", "Unknown Title"))
         url_title = urllib.quote_plus(title)
-        # studio = self.common.makeAscii(item("Studio", "Unknown Author"))
-        # url_studio = urllib.quote_plus(studio)
 
         cm.append((self.language(30504), "XBMC.Action(Queue)",))
 

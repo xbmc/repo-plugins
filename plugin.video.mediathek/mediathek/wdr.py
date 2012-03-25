@@ -22,6 +22,7 @@ regex_dateString = re.compile("\\d{4}-\\d{2}-\\d{2}");
 class WDRMediathek(Mediathek):
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
+    self.pageSize = 20; #max 49;
     self.rootLink = "http://www.wdr.de"
     self.menuTree = (
                       TreeNode("0","Neuste Videos",self.rootLink+"/mediathek/rdf/regional/index.xml",True),
@@ -109,10 +110,11 @@ class WDRMediathek(Mediathek):
                     )
                     
                     
-    self._regex_extractTitle = re.compile("<title>.*?</title>");                
+    self._regex_extractTitle = re.compile("<h1>.*?<span class=\"inv\">");                
     self._regex_extractDescription = re.compile("<meta name=\"description\" content=\"(.|\\s)*?\" />");
     self._regex_extractPicture = re.compile("<link rel=\"image_src\" href=\".*?\" />");
     self._regex_extractDate = re.compile("<meta name=\"DC.Date\" content=\".*?\" />");
+    self._regex_extractDuration = re.compile("\\((.*)\\)<span class=\"inv\">");
     
     self._regex_extractVideoPage = re.compile("<a href=\"/mediathek/html/.*?\\.xml\" title=\".*?\".*?>");
     self._regex_extractLink = re.compile("/mediathek/html/.*?\\.xml");
@@ -124,6 +126,7 @@ class WDRMediathek(Mediathek):
     self.replace_html = re.compile("<.*?>");
     self.replace_tag = re.compile("(<meta name=\".*?\" content=\"|<link rel=\"image_src\" href=\"|\" />)");
     
+    self.searchLink = "http://www.wdr.de/mediathek/html/regional/suche/index.xml?wsSucheAusgabe=liste&wsSucheSuchart=volltext&wsSucheMedium=av&suche_submit=Suche+starten&wsSucheBegriff="
     
     
     
@@ -131,14 +134,16 @@ class WDRMediathek(Mediathek):
   def name(self):
     return "WDR";
   def isSearchable(self):
-    return False;
+    return True;
     
   def searchVideo(self, searchText):
-    pass;
+    link = self.searchLink+searchText;
+    self.buildPageMenu(link, 0, False)
   
     
     
   def buildPageMenu(self, link, initCount, subLink = False):
+    link = link+"&rankingcount="+str(self.pageSize); 
     self.gui.log("MenuLink: %s"%link);
     mainPage = self.loadPage(link);
     
@@ -181,6 +186,7 @@ class WDRMediathek(Mediathek):
     description = unicode(self._regex_extractDescription.search(mainPage).group(),'ISO-8859-1');
     picture = unicode(self._regex_extractPicture.search(mainPage).group(),'ISO-8859-1');
     date = self._regex_extractDate.search(mainPage).group();
+    duration =  self._regex_extractDuration.search(mainPage).group(1);
 
     title =  self.replace_html.sub("", title);
     description = self.replace_tag.sub("",description);
@@ -201,7 +207,7 @@ class WDRMediathek(Mediathek):
       linkString = self._regex_extractAudioLink.search(mainPage).group();
       links[0] = self.extractLink(linkString);
      
-    return DisplayObject(title,"",picture,description,links,True, date)
+    return DisplayObject(title,"",picture,description,links,True, date, duration)
    
   def extractLink(self, linkString):
     if(linkString.find("mediartmp://")>-1):

@@ -1,3 +1,4 @@
+0.2.9 - ADD: Apply patches from soern to Dharma/XBox version
 0.2.8 - ADD: KIKA (Without Kikaninchen)
         FIX: 3SAT Broken Link
         ADD: NDR

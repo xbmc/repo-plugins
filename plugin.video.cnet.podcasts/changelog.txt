@@ -1,3 +1,7 @@
+version 0.0.6
+fix for feed changes
+new playback setting
+
 version 0.0.5
 added the crave podcast
 

@@ -6,54 +6,33 @@ __settings__ = xbmcaddon.Addon(id='plugin.video.cnet.podcasts')
 __language__ = __settings__.getLocalizedString
 home = __settings__.getAddonInfo('path')
 icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-if __settings__.getSetting('video_quality') != "0":
-    if __settings__.getSetting('video_quality') != "1":
-        __settings__.setSetting('video_quality', "0")
 
 
 def CATEGORIES():
-        if __settings__.getSetting('video_quality')=="0":
-            addDir(__language__(30000),'http://feeds2.feedburner.com/cnet/allhdpodcast',3,'http://www.cnet.com/i/pod/images/allCNETvideo_600x600.jpg')
-            addDir(__language__(30001),'http://feeds.feedburner.com/cnet/buzzreporthd',3,'http://www.cnet.com/i/pod/images/podcastsHD_buzzreport_600x600.jpg')
-            addDir(__language__(30002),'http://feeds.feedburner.com/cnet/cnetnewshd',3,'http://www.cnet.com/i/pod/images/podcastsHD_news_600x600.jpg')
-            addDir(__language__(30003),'http://feeds2.feedburner.com/cnet/cartechvideohd',3,'http://www.cnet.com/i/pod/images/podcastsHD_cartech_600x600.jpg')
-            addDir(__language__(30004),'http://feeds.feedburner.com/cnet/applebytehd',3,'http://www.cnet.com//i/pod/images/podcastsHD_applebyte_600x600.jpg')
-            addDir(__language__(30005),'http://feeds.feedburner.com/cnet/conversationshd',3,'http://www.cnet.com/i/pod/images/podcastsHD_conversations_600x600.jpg')
-            addDir(__language__(30006),'http://feeds2.feedburner.com/cnet/loadedhd',3,'http://www.cnet.com/i/pod/images/podcastsHD_loaded_600x600.jpg')
-            addDir(__language__(30007),'http://feeds2.feedburner.com/cnet/top5hd',3,'http://www.cnet.com/i/pod/images/podcastsHD_top5_600x600.jpg')
-            addDir(__language__(30009),'http://feeds2.feedburner.com/cnet/firstlookhd',3,'http://www.cnet.com/i/pod/images/podcastsHD_firstlook_600x600.jpg')
-            addDir(__language__(30010),'http://feeds2.feedburner.com/cnet/techreviewhd',3,'http://www.cnet.com/i/pod/images/cnetTechReviewHD_600x600.jpg')
-            addDir(__language__(30011),'http://feeds2.feedburner.com/cnet/howtohd',3,'http://www.cnet.com/i/pod/images/podcastsHD_howto_600x600.jpg')
-            addDir(__language__(30012),'http://feeds2.feedburner.com/cnet/greenshowhd',3,'http://www.cnet.com/i/pod/images/podcastsHD_greenshow_600x600.jpg')
-            addDir(__language__(30013),'http://feeds2.feedburner.com/cnet/prizefighthd',3,'http://www.cnet.com/i/pod/images/podcastsHD_prizefight_600x600.jpg')
-            addDir(__language__(30014),'http://feeds2.feedburner.com/cnet/tapthatapphd',3,'http://www.cnet.com/i/pod/images/tapThatAppHD_600x600.jpg')
-            addDir(__language__(30018),'http://feeds.feedburner.com/cnet/bolhqvideo',3,'http://www.cnet.com/i/pod/images/bol_600x600.jpg')
-            addDir(__language__(30016),'http://feeds.feedburner.com/cnet/the404hqvideo',3,'http://www.cnet.com/i/pod/images/the404_600x600.jpg')
-            addDir(__language__(30017),'http://feeds.feedburner.com/cnet/pregamehq',3,'http://www.cnet.com/i/pod/images/pregame_d_600x600.jpg')
-            addDir(__language__(30015),'http://feeds.feedburner.com/cnet/roundtablehqvideo',3,'http://www.cnet.com/i/pod/images/reporters_roundtable_600x600.jpg')
-            addDir(__language__(30019),'http://feeds.feedburner.com/cnet/cravehq',3,'http://www.cnet.com/i/pod/images/crave600x600.jpg')
-        
-        elif __settings__.getSetting('video_quality')=="1":
-            addDir(__language__(30000),'http://feeds2.feedburner.com/allcnetvideopodcasts',3,'http://www.cnet.com/i/pod/images/allCNETvideo_300x300.jpg')
-            addDir(__language__(30001),'http://feeds.feedburner.com/cnet/buzzreport',3,'http://www.cnet.com/i/pod/images/buzzreport_600x600.jpg')
-            #addDir(__language__(30002),'http://feeds.feedburner.com/cnet/cnetnews',3,'http://www.cnet.com/i/pod/images/podcasts_news_600x600.jpg')
-            addDir(__language__(30003),'http://feeds.feedburner.com/cnet/cartechvideo?format=xml',3,'http://www.cnet.com/i/pod/images/cartech_600x600.jpg')
-            addDir(__language__(30004),'http://feeds.feedburner.com/cnet/applebyte',3,'http://www.cnet.com//i/pod/images/applebyte_600x600.jpg')
-            addDir(__language__(30005),'http://feeds.feedburner.com/cnet/conversations',3,'http://www.cnet.com/i/pod/images/cnetconversations_600x600.jpg')
-            addDir(__language__(30006),'http://feeds2.feedburner.com/cnet/loaded',3,'http://www.cnet.com/i/pod/images/loaded_600x600.jpg')
-            addDir(__language__(30007),'http://feeds2.feedburner.com/cnet/top5',3,'http://www.cnet.com/i/pod/images/top5_600x600.jpg')
-            addDir(__language__(30008),'http://feeds2.feedburner.com/cnet/dialedinvideo',3,'http://www.cnet.com/i/pod/images/dialedin_600x600.jpg')
-            addDir(__language__(30009),'http://feeds2.feedburner.com/cnet/firstlook',3,'http://www.cnet.com/i/pod/images/firstlook_600x600.jpg')
-            addDir(__language__(30010),'http://feeds2.feedburner.com/cnet/techreview',3,'http://www.cnet.com/i/pod/images/cnetTechReview_600x600.jpg')
-            addDir(__language__(30011),'http://feeds2.feedburner.com/cnet/howto',3,'http://www.cnet.com/i/pod/images/HowTo_300x300.jpg')
-            addDir(__language__(30012),'http://feeds2.feedburner.com/cnet/greenshow',3,'http://www.cnet.com/i/pod/images/greenshow_300x300.jpg')
-            addDir(__language__(30013),'http://feeds2.feedburner.com/cnet/prizefight',3,'http://www.cnet.com/i/pod/images/prizefight_300x300.jpg')
-            addDir(__language__(30014),'http://feeds2.feedburner.com/cnet/tapthatapp',3,'http://www.cnet.com/i/pod/images/tapThatApp_600x600.jpg')
-            addDir(__language__(30015),'http://feeds.feedburner.com/cnet/roundtablevideo',3,'http://www.cnet.com/i/pod/images/reporters_roundtable_600x600.jpg')
-            addDir(__language__(30016),'http://feeds.feedburner.com/cnet/the404video',3,'http://www.cnet.com/i/pod/images/the404_600x600.jpg')
-            addDir(__language__(30017),'http://feeds.feedburner.com/cnet/pregame',3,'http://www.cnet.com/i/pod/images/pregame_d_600x600.jpg')
-            addDir(__language__(30018),'http://feeds.feedburner.com/cnet/bolvideo',3,'http://www.cnet.com/i/pod/images/bol_600x600.jpg')
-            addDir(__language__(30019),'http://feeds.feedburner.com/cnet/crave',3,'http://www.cnet.com/i/pod/images/crave600x600.jpg')
+        addDir(__language__(30000), 'allcnetvideopodcasts', 'allhdpodcast', 'http://audiopodcasts.cnet.com/', 3, 'allCNETvideo_600x600.jpg')
+        addDir(__language__(30001), 'buzzreport', 'buzzreporthd', '',3,'podcastsHD_buzzreport_600x600.jpg')
+        addDir(__language__(30002), 'news', 'cnetnewshd', '',3,'podcastsHD_news_600x600.jpg')
+        addDir(__language__(30003), 'cartechvideo', 'cartechvideohd', '',3,'podcastsHD_cartech_600x600.jpg')
+        addDir(__language__(30012), 'cartechpodcastvideo', '', 'cartech',3,'cnet_cartech_600.jpg')
+        addDir(__language__(30004), 'applebyte', 'applebytehd', '',3,'podcastsHD_applebyte_600x600.jpg')
+        addDir(__language__(30005), 'conversations', 'conversationshd', '',3,'podcastsHD_conversations_600x600.jpg')
+        addDir(__language__(30006), 'loaded', 'loadedhd', '', 3, 'podcastsHD_loaded_600x600.jpg')
+        addDir(__language__(30007), 'top5', 'top5hd', '',3,'podcastsHD_top5_600x600.jpg')
+        addDir(__language__(30009), 'firstlook', 'firstlookhd', '', 3, 'podcastsHD_firstlook_600x600.jpg')
+        addDir(__language__(30010), 'techreview', 'techreviewhd', '', 3, 'cnetTechReviewHD_600x600.jpg')
+        addDir(__language__(30011), 'howto', 'howtohd', '', 3, 'podcastsHD_howto_600x600.jpg')
+        addDir(__language__(30013), 'prizefight', 'prizefighthd', '', 3, 'podcastsHD_prizefight_600x600.jpg')
+        addDir(__language__(30014), 'tapthatapp', 'tapthatapphd', '', 3, 'tapThatAppHD_600x600.jpg')
+        addDir(__language__(30015), 'roundtablevideo', 'roundtablehqvideo', 'roundtablepodcast',3,'reporters_roundtable_600x600.jpg')
+        addDir(__language__(30018), 'bolvideo', 'bolhqvideo', '', 3, 'bol_600x600.jpg')
+        addDir(__language__(30016), 'the404video', 'the404hqvideo', 'The404', 3, 'the404_600x600.jpg')
+        addDir(__language__(30017), 'pregame', 'pregamehq', '', 3, 'pregame_d_600x600.jpg')
+        addDir(__language__(30018), 'bolvideo', 'bolhqvideo', '', 3, 'bol_600x600.jpg')
+        addDir(__language__(30019), 'crave', 'cravehq', '', 3, 'crave600x600.jpg')
+        addDir(__language__(30020), 'androidatlassd', 'androidatlashq', '', 3, 'androidatlas_600x600_jh.jpg')
+        addDir(__language__(30025), 'rumorhasitsd', 'rumorhasithq', '', 3, 'rumorHasIt_300x300.jpg')
+        addDir(__language__(30026), 'dialedinvideo', '', 'dialedin', 3, 'http://i.i.com.com/cnwk.1d/i/tim/2012/01/23/DialedIn_600x600_600x600.jpg')
+        addDir(__language__(30027), 'deviceconquersd', 'deviceconquerhd', '', 3, 'http://www.cnet.com/i/pod/cast/Device&Conquer300x300.jpg')
 
 
 def GetInHMS(seconds):
@@ -64,32 +43,55 @@ def GetInHMS(seconds):
     if hours == 0:
         return "%02d:%02d" % (minutes, seconds)
     return "%02d:%02d:%02d" % (hours, minutes, seconds)
-    
-		
-def INDEX(url,iconimage):
-        req = urllib2.Request(url)
+
+
+def INDEX(url,hd_url,audio_url,iconimage):
+        playback = __settings__.getSetting('playback')
+        if playback == '0':
+            link = audio_url
+        elif playback == '1':
+            link = hd_url
+        else:
+            link = url
+        if link == '':
+            link = url
+        if not link.startswith('http'):
+            link = 'http://feeds.feedburner.com/cnet/'+link+'?format=xml'
+            replace_list = ['rumorhasit', 'deviceconque']
+            for i in replace_list:
+                if i in link:
+                    link = link.replace('cnet/','')
+        req = urllib2.Request(link)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-        videos = soup('item')
-        for item in videos:
+        for i in soup('item'):
+            name = i('title')[0].string
             try:
-                name = item('title')[0].string
-                desc = item('itunes:summary')[0].string
-                url = item('media:content')[0]['url']
-                link = item('link')[0].string
-                date = item('pubdate')[0].string
-                seconds = item('itunes:duration')[0].string
-                duration = str(GetInHMS(int(seconds)))
-                description = desc+' \n\n'+date
-                liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-                liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description, "Duration":duration } )
-                liz.setProperty( "Fanart_Image", iconimage )
-                ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=link,listitem=liz)
+                url = i('media:content')[0]['url']
             except:
-                pass
+                print ' --- No media:content url for "%s" --- ' %name
+                continue
+            try:
+                desc = i('itunes:summary')[0].string
+            except:
+                desc = ''
+            try:
+                date = i('pubdate')[0].string
+            except:
+                date = ''
+            try:
+                seconds = i('itunes:duration')[0].string
+                duration = str(GetInHMS(int(seconds)))
+            except:
+                duration = ''
+            description = desc+' \n\n'+date
+            liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
+            liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description, "Duration":duration } )
+            liz.setProperty( "Fanart_Image", iconimage )
+            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
 
 
 def get_params():
@@ -107,12 +109,17 @@ def get_params():
                 splitparams=pairsofparams[i].split('=')
                 if (len(splitparams))==2:
                     param[splitparams[0]]=splitparams[1]
-
         return param
 
 
-def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+str(iconimage)
+def addDir(name,url,hd_url,audio_url,mode,iconimage):
+        if not iconimage.startswith('http'):
+            iconimage = 'http://www.cnet.com/i/pod/images/'+iconimage
+        if __settings__.getSetting('playback') == '0':
+            if not audio_url == '':
+                name = name + __language__(30028)
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&hd_url="+urllib.quote_plus(hd_url)+"&audio_url="+\
+        urllib.quote_plus(audio_url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+str(iconimage)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
@@ -128,6 +135,14 @@ mode=None
 
 try:
     url=urllib.unquote_plus(params["url"])
+except:
+    pass
+try:
+    hd_url=urllib.unquote_plus(params["hd_url"])
+except:
+    pass
+try:
+    audio_url=urllib.unquote_plus(params["audio_url"])
 except:
     pass
 try:
@@ -148,11 +163,9 @@ print "URL: "+str(url)
 print "Name: "+str(name)
 
 if mode==None:
-    print ""
     CATEGORIES()
 
 elif mode==3:
-    print ""+url
-    INDEX(url,iconimage)
-		
+    INDEX(url,hd_url,audio_url,iconimage)
+
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

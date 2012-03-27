@@ -1,0 +1,4 @@
+Version 1.0.0:
+	
+	Inital release.
+	Limitations in this version:  Live broadcasts from Stod2 are not supported yet.  The plugin does not support paging - it only loads the first 18 videos in each category.

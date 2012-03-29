@@ -126,7 +126,8 @@ def show_favorites(url):
         ],
     } for item in videos]
 
-    xbmcgui.Dialog().ok(favorites._plugin.get_string(30000), favorites._plugin.get_string(30404))
+    if not items:
+        xbmcgui.Dialog().ok(favorites._plugin.get_string(30000), favorites._plugin.get_string(30404))
 
     return favorites.add_items(items)
 

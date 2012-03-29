@@ -25,6 +25,7 @@ from BeautifulSoup import BeautifulSoup as BS
 from resources.lib.khan import KhanData, download_playlists_json
 from resources.lib.cache import get_cached_data, put_cached_data
 
+
 __plugin_name__ = 'Khan Academy'
 __plugin_id__ = 'plugin.video.khanacademy'
 plugin = Plugin(__plugin_name__, __plugin_id__, __file__)
@@ -37,6 +38,7 @@ BASE_URL = 'http://www.khanacademy.org'
 def make_cache_dirs():
     '''Make plugin_id and .cache dirs for the current plugin.'''
     def make_if_not_exist(path):
+        print path
         if not os.path.exists(path):
             os.mkdir(path)
     cache_root = xbmc.translatePath('special://profile/addon_data')

@@ -6,15 +6,9 @@ import time
 import urllib
 
 
-def api_url():
-    '''Returns the API url with a timestamp url paremeter set to
-    int(time.time() * 1000)
-    '''
-    return ('http://www.khanacademy.org/api/v1/playlists/library/compact?v=%d' %
-            int(time.time() * 1000))
-
-
-API_URL = api_url()
+# Hierarchical list
+API_URL = 'http://www.khanacademy.org/api/v1/playlists/library'
+YOUTUBE_PLUGIN_PTN = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s'
 
 
 def download_playlists_json():
@@ -27,28 +21,53 @@ def download_playlists_json():
     return resp
 
 
+def _try_parse(_json, *args):
+    '''Returns the parsed value or None if doesn't exist. The provided args
+    correspond to dictionary keys.
+
+    >>> _json = {'foo': {'bar': 'baz'}}
+    >>> _try_parse(_json, 'foo', 'bar')
+    baz
+    >>> _try_parse(_json, 'foo', 'missingkey')
+    None
+    '''
+    try:
+        for key in args:
+            _json = _json[key]
+        return _json
+    except TypeError:
+        return None
+
+
 class Video(object):
 
     def __init__(self, _json):
-        self.key_id = _json['key_id']
+        #self.key_id = _json['key_id']
         self.title = _json['title']
         self.readable_id = _json['readable_id']
+        self.youtube_url = YOUTUBE_PLUGIN_PTN % _json['youtube_id']
+        self.mp4_url = _try_parse(_json, 'download_urls', 'mp4')
+        self.thumbnail = _try_parse(_json, 'download_urls', 'png')
+
 
     def to_listitem(self, plugin):
         '''Returns a dict suitable for passing to xbmcswift.plugin.add_items'''
-        return {
+        item = {
             'label': self.title,
-            'url': plugin.url_for('play_video', video_slug=self.readable_id),
+            'url': self.mp4_url or self.youtube_url,
             'is_playable': True,
             'is_folder': False,
         }
+        if self.thumbnail:
+            item['thumbnail'] = self.thumbnail
+        return item
 
 
 class Playlist(object):
 
     def __init__(self, _json):
-        self.slugged_title = _json['slugged_title']
         self.title = _json['title']
+        self.description = _json['description']
         self.videos = [Video(item) for item in _json['videos']]
 
     def __iter__(self):
@@ -59,6 +78,7 @@ class Playlist(object):
         return {
             'label': self.title,
             'url': plugin.url_for('show_category', category=self.title),
+            'info': {'plot': self.description},
         }
 
 

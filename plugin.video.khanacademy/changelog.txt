@@ -1,3 +1,7 @@
+Version 0.4.2
+* Update plugin to reflect Khan API changes
+* Use youtube for playback when an mp4 isn't available
+
 Version 0.4.1
 * Fix syntax error
 

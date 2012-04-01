@@ -9,7 +9,7 @@ __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.10'
+__version__ = '1.0.13'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
 __rooturl__ = 'http://pakee.hopto.org/pakee/pakee.php?id=xbmc&z=9'
 #__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?ss=5'
@@ -27,6 +27,7 @@ PLUGIN_MODE_PLAY_PLAYLIST = 80
 PLUGIN_MODE_PLAY_SLIDESHOW = 90
 PLUGIN_MODE_OPEN_SETTINGS = 100
 PLUGIN_MODE_PLAY_STREAM = 110
+
 
 #view modes
 VIEW_THUMB = 500
@@ -65,6 +66,8 @@ def play_youtube_video(video_id, name):
 	infolabels = { "title": name, "plot": name}
 	listitem.setInfo( type="Video", infoLabels=infolabels)
 	xbmc.Player( xbmc.PLAYER_CORE_DVDPLAYER ).play( str(url), listitem)
+
+
 		
 #Play a single song	
 def play_stream(url, name):
@@ -125,14 +128,20 @@ def play_playlist(origurl, index):
 	for item in items:
 		label, url, description, pubDate, guid, thumb, duration, rating, viewcount = getItemFields(item)
 
+		playlisturl = None
 		if guid is not None and guid != '':
 			print "Found item: " + label + " guid: " + guid 
 			playlisturl = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % (guid)
 
+
+		elif 'plugin://plugin.video.jtv.archives' in url and 'play=True' in url:	
+			playlisturl = url.replace('play=True','play=False')
+
+
 		elif url is not None and url != '':
 			#print "Found item: " + label + " url: " + url 
 			playlisturl = url
-
+		
 		if playlisturl is not None and playlisturl !='' and itemCount >= index - 1:
 			listitem = xbmcgui.ListItem( label = label,  thumbnailImage = thumb, path=playlisturl )
 			listitem.setInfo( type="video", infoLabels={ "Title": label, "Plot" : description } )
@@ -258,6 +267,11 @@ def build_show_directory(origurl):
 					url = origurl
 
 
+
+			if 'plugin://plugin.video.jtv.archives' in url and 'play=True' in url:				
+				url = url.replace('play=True','play=False')
+
+
 			#For feeds with pictures as their first item, show <start slideshow> as first listitem
 			if url[-4:]=='.jpg' or url[-4:]=='.gif' or url[-4:]=='.png':
 				#For folders with videos, show play all option 			
@@ -292,12 +306,15 @@ def build_show_directory(origurl):
 
 			if 'fetchLiveFeeds.php' not in url and ('rtmp://' in url or 'mms://' in url or 'rtsp://' in url or 'desistreams.xml' in origurl or 'LiveTV.xml' in origurl):
 				isFolder = False
-				mode = PLUGIN_MODE_PLAY_STREAM
+				#mode = PLUGIN_MODE_PLAY_STREAM
+				mode = PLUGIN_MODE_PLAY_PLAYLIST
+				url = origurl
 
 				#For feeds with streams as their first item, show <play all> listitem as first listitem			
 				#if itemCount == 0:
 				#	playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
 				#	xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
+
 
 
 
@@ -682,5 +699,6 @@ elif mode == PLUGIN_MODE_PLAY_STREAM:
 	play_stream(url, name)
 elif mode == PLUGIN_MODE_OPEN_SETTINGS:
 	open_settings()
+
 
 

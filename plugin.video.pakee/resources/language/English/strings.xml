@@ -16,8 +16,9 @@
     <string id="30101">Default</string>
     <string id="30102">Title</string>
 
-    <string id="30200">Repeat playlist</string>
-    <string id="30201">Shuffle playlist</string>
+
+    <string id="30200">Shuffle playlist</string>
+    <string id="30201">Repeat playlist</string>
 
     <string id="30300">Default view</string>
     <string id="30301">Thumbnail view</string>

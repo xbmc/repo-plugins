@@ -1,3 +1,13 @@
+[B]Version 1.0.13[/B]
+- Fixing bug while playing justin.tv 
+
+[B]Version 1.0.12[/B]
+- Added ability to play justin.tv channels
+
+[B]Version 1.0.11[/B]
+- Added ability for live streams to be changed via next/previous controls
+
+
 [B]Version 1.0.10[/B]
 - MOving live channels into categories (by language)
 

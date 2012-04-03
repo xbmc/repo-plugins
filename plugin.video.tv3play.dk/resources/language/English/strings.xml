@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+    <string id="100">Commercial</string>
+    <string id="101">General</string>
+    <string id="102">Region</string>
+    <string id="103">Clips</string>
+
+    <string id="150">Choose region</string>
+
+    <string id="200">There was an error while communication with TV3 Play.</string>
+    <string id="201">The error message is:</string>
+</strings>

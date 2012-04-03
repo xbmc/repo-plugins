@@ -1,0 +1,13 @@
+[B]Version 1.0.0 - 2012-04-02[/B]
+- Cleanup for first repo release
+- Added fanart
+
+[B]Version 0.0.3 - 2012-03-18[/B]
+- Fixed problem with some videos not playing
+- Added clips ('Klipliste') content as well
+
+[B]Version 0.0.2 - 2012-03-04[/B]
+- Fixed compatibility with Python 2.6.x
+
+[B]Version 0.0.1 - 2012-03-03[/B]
+- Proof of concept test release

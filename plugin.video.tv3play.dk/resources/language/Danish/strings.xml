@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string id="100">Reklame</string>
+    <string id="101">Generelt</string>
+    <string id="102">Region</string>
+    <string id="103">Klipliste</string>
+
+    <string id="150">Vælg region</string>
+
+    <string id="200">Der er sket en fejl i kommunikationen med TV3 Play.</string>
+    <string id="201">Fejlbeskeden er:</string>
+</strings>

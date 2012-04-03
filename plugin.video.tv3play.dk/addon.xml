@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.tv3play.dk" version="1.0.0" name="TV3 Play" provider-name="twinther [tommy@winther.nu]">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.buggalo" version="1.0.1"/>
+        <import addon="script.module.elementtree" version="1.2.7"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Watch the latest shows from TV3 Play</summary>
+        <summary lang="da">Se de seneste udsendelser fra TV3 Play</summary>
+        <description lang="en">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+        <description lang="da">På TV3 Play kan du se alle TV3's egne programmer og nogle udenlandske serier. Der er også ekstramateriale til flere af programmerne.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+        <disclaimer lang="da">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <license>GPLv2</license>
+        <platform>all</platform>
+    </extension>
+</addon>

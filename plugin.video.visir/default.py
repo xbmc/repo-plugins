@@ -25,16 +25,20 @@ name = None
 
 def showCategories():
 	categories = getRootCategories()
+	
+	if isLiveStreamPlaying():
+		addMenuItem(__language__(32200).encode('utf8'), 'livestream', '')
+		
 	for category in categories:
 		addMenuItem(category["name"], 'category', category["id"])
 
 def showCategory(category):
 	categories = getSubCategories(category)
 	if not categories:
-		showVideos(category+',,')
+		showVideos(category+',,,1')
 			
 	for category in categories:
-		addMenuItem(category["name"], 'videos', category["id"] + ',' + category["subid"] + ',' + category["type"])
+		addMenuItem(category["name"], 'videos', category["id"] + ',' + category["subid"] + ',' + category["type"] + ',1')
 
 def showVideos(category):
 	videos = getVideos(category)
@@ -43,10 +47,20 @@ def showVideos(category):
 
 	for video in videos:
 		addMenuItem(video["name"], 'play', video["fileid"], video["thumbnail"])
+		
+	cat = category.split(',')[0]
+	subcat = category.split(',')[1]
+	type = category.split(',')[2]
+	pageno = category.split(',')[3]		
+		
+	addMenuItem(__language__(32300).encode('utf8'), 'videos', cat + ',' + subcat + ',' + type + ',' + str(int(pageno)+1))
 
 def play(file):
 	file = getVideoUrl(file)
 	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(file)
+
+def playLiveStream():	
+	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play('http://utsending.visir.is:1935/live/vlc.sdp/playlist.m3u8')
 
 def getVideoUrl(fileid):
 	html = fetchPage("http://m3.visir.is/sjonvarp/myndband/bara-slod?itemid=" + fileid)
@@ -72,7 +86,7 @@ def get_params():
 
 def addMenuItem(name, action_key, action_value, iconimage='DefaultFolder.png'):
 	is_folder = True
-	if action_key == 'play':
+	if action_key == 'play' or action_key == 'livestream':
 		is_folder = False
 	u=sys.argv[0]+"?action_key="+urllib.quote_plus(action_key)+"&action_value="+str(action_value)+"&name="+urllib.quote_plus(name)
 	liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage='')
@@ -99,5 +113,7 @@ elif action_key == 'videos':
 	showVideos(action_value)
 elif action_key == 'play':
 	play(action_value)
+elif action_key == 'livestream':
+	playLiveStream()
         
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

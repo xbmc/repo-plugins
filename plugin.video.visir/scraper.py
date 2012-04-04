@@ -15,6 +15,10 @@ def fetchPage(url):
 	response.close()
 	return html
 
+def isLiveStreamPlaying():
+	html = fetchPage("http://www.visir.is/section/MEDIA")
+	return html.find("vlc.sdp") > -1
+
 def getRootCategories():
 	categories = []
 	html = fetchPage("http://www.visir.is/section/MEDIA")
@@ -44,8 +48,9 @@ def getVideos(category):
 	cat = category.split(',')[0]
 	subcat = category.split(',')[1]
 	type = category.split(',')[2]
+	pageno = category.split(',')[3]
 
-	html = fetchPage("http://www.visir.is/section/MEDIA01&template=mlist&pageNo=1&kat=" + cat +"&subkat=" + subcat + "&type=" + type)
+	html = fetchPage("http://www.visir.is/section/MEDIA01&template=mlist&pageNo=" + pageno + "&kat=" + cat +"&subkat=" + subcat + "&type=" + type)
 	jsonData = json.JSONDecoder('latin1').decode(html)
 	for video in jsonData['items']:
 		fileid = video["url"].split('=')[-1].replace('CLP','').replace('SRC','').replace('VTV','')

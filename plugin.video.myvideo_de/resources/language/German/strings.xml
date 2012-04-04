@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- General entries -->
+    <string id="30000">Seite</string>
+    <string id="30001">Suche</string>
+    <!-- Settings -->
+    <string id="30010">ViewMode auf Thumbnail setzen</string>
+    <string id="30011">Container updaten beim Seitenwechsel</string>
+</strings>

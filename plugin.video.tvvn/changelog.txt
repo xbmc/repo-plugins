@@ -1,0 +1,16 @@
+version 0.5.1 (05/04/2012):
+ * move to official repository
+ * new logo
+
+version 0.5 (25/03/2012):
+ * improve & add artwork
+ * add more channels from tv24.com.vn
+ * repository created
+
+version 0.3 (02/12/2011):
+ * new artwork
+ * source fix-up
+ * new method of getting streams
+
+version 0.1 (12/11/2010):
+ * initial release

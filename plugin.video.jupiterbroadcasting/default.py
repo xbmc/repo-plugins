@@ -117,6 +117,15 @@ def CATEGORIES():
         'genre': 'Technology'
     }
 
+    # TORked
+    shows[__language__(30015)] = {
+        'feed': 'http://feeds.feedburner.com/TorkedHd?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/TorkedMobile?format=xml',
+        'image': 'http://images3.wikia.nocookie.net/jupiterbroadcasting/images/e/ea/Torked.jpg',
+        'plot': __language__(30215),
+        'genre': 'Technology'
+    }
+
     # Jupiter Broadcasting Live via the RTMP stream
     addLink(__language__(30010), 'rtsp://videocdn-us.geocdn.scaleengine.net/jblive/jblive.stream', '', 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg', {
         'title': __language__(30010),

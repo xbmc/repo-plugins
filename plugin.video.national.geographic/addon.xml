@@ -15,5 +15,6 @@
     <summary>National Geographic: Inspiring people to care about the planet.</summary>
     <description>View full episodes and video clips from the National Geographic Channel and Nat Geo Wild.</description>
     <platform>all</platform>
+    <broken>Site changes</broken>
   </extension>
 </addon>

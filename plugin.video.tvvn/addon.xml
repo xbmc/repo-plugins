@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="plugin.video.tvvn"
+  version="0.5.1"
+  name="TV Viet Nam"
+  provider-name="Binh Nguyen">
+  <requires>
+    <import addon="xbmc.python" version="1.0"/>
+  </requires>
+    <extension point="xbmc.python.pluginsource" library="tvvn.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">TV Viet Nam</summary>
+        <summary lang="vi">TV Việt Nam</summary>
+        <description lang="en">Xem trực tiếp các kênh truyền hình từ Việt Nam</description>
+        <description lang="vi">Xem trực tiếp các kênh truyền hình từ Việt Nam</description>
+        <disclaimer lang="en">all live streams are from vtc.com.vn and tv24.com.vn</disclaimer>
+        <disclaimer lang="vi">tất cả các live streams được pull từ vtc.com.vn và tv24.com.vn</disclaimer>
+    </extension>
+</addon>

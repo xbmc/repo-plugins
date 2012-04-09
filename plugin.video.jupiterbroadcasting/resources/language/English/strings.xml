@@ -19,8 +19,8 @@
   <string id="30005">Jupiter Files</string>
   <string id="30205">Bryan takes a peek into alien life.</string>
 
-  <string id="30006">All Shows</string>
-  <string id="30206">All the latest videos from Jupiter Broadcasting.</string>
+  <string id="30006">[ Most Recent ]</string>
+  <string id="30206">Lists all the latest shows from the Jupiter Broading network.</string>
 
   <string id="30007">The MMOrgue</string>
   <string id="30207">The MMOrgue is a show presented by Jeremy about Massively Multiplayer Online (MMO) games.</string>
@@ -31,14 +31,17 @@
   <string id="30009">SciByte</string>
   <string id="30209">SciByte is a show about science topics presented by Heather and Jeremy.</string>
 
-  <string id="30010">Live Show</string>
-  <string id="30210">Watch Jupiter Broadcasting live!</string>
+  <string id="30010">[ Live Show ]</string>
+  <string id="30210">Watch the Jupiter Broadcasting live feed.</string>
 
   <string id="30011">FauxShow</string>
   <string id="30211">The FauxShow is not a real show, but a social experience. Unlike most of the shows on the network, the FauxShow has no defined subject and the topic varies week to week.</string>
 
   <string id="30014">In Depth Look</string>
   <string id="30214">Total focus on great topics, one episode at a time. Each week Chris present another topic, from extreme hardware builds to beginner video guides.</string>
+
+  <string id="30015">TORked</string>
+  <string id="30215">Star Wars: The Old Republic podcast that goes in-depth into TOR updates and features on a weekly basis.</string>
 
   <!-- Settings -->
   <string id="30100">General</string>	

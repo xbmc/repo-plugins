@@ -1,3 +1,7 @@
+[B]Version 2.6.0: April 4th, 2012[/B]
+- New show: TORked
+- Highlighting the most recent and live show titles
+
 [B]Version 2.5.0: January 31th, 2012[/B]
 - Initial XBMC Eden release
 

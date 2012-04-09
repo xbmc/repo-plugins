@@ -1,3 +1,6 @@
+Version 1.0.6
+fix for condensed games
+
 Version 1.0.5
 fixes and updates for the start of 2012 season
 added initial support for Gameday Audio

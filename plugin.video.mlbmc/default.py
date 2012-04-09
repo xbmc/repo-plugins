@@ -102,7 +102,7 @@ TeamCodes = {
 
 
 def addon_log(string):
-    xbmc.log( "[addon.mlbmc.1.0.5]: %s" %string )
+    xbmc.log( "[addon.mlbmc.1.0.6]: %s" %string )
 
 
 def categories():
@@ -141,11 +141,11 @@ def mlbTV():
 
 
 def condensedGames():
-        base = 'http://www.mlb.com/mediacenter/index.jsp?ymd='
+        base = 'http://www.mlb.com/gdcross/components/game/mlb/'
         thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png'
-        addGameDir(__language__(30010),base+str(dateStr.today).replace('-',''),13,thumb)
-        addGameDir(__language__(30011),base+str(dateStr.yesterday).replace('-',''),13,thumb)
-        addGameDir(__language__(30012),base+str(dateStr.byesterday).replace('-',''),13,thumb)
+        addGameDir(__language__(30010),base+dateStr.day[0]+'/grid.json',13,thumb)
+        addGameDir(__language__(30011),base+dateStr.day[1]+'/grid.json',13,thumb)
+        addGameDir(__language__(30012),base+dateStr.day[3]+'/grid.json',13,thumb)
         addGameDir(__language__(30014),'',15,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
 
 
@@ -388,17 +388,18 @@ def getVideoURL(url):
 
 
 def getCondensedGames(url):
-        soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-        videos = soup.findAll('tbody')[0]('tr')
-        for video in videos:
+        data = json.loads(getRequest(url))
+        items = data['data']['games']['game']
+        for i in items:
             try:
-                name = video('td', attrs={'class' : "mmg_matchup"})[0].string
-                content = video('td', attrs={'class' : "mmg_condensed"})[0]('a')[0]['href'][-8:]
-                content_id = content[-3]+'/'+content[-2]+'/'+content[-1]+'/'+content
-                url = 'http://mlb.mlb.com/gen/multimedia/detail/'+content_id+'.xml'
-                addLink(name,url,'',2,'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
+                if i['game_media']['newsroom']['media']['type'] == 'condensed_video':
+                    content = i['game_media']['newsroom']['media']['id']
+                    content_id = content[-3]+'/'+content[-2]+'/'+content[-1]+'/'+content
+                    url = 'http://mlb.mlb.com/gen/multimedia/detail/'+content_id+'.xml'
+                    name = TeamCodes[i['away_team_id']][0] + ' @ ' + TeamCodes[i['home_team_id']][0]
+                    addLink(name, url, '', 2, 'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
             except:
-                pass
+                continue
 
 
 def getVideoListXml(url):
@@ -1077,8 +1078,8 @@ if mode==14:
     condensedGames()
 
 if mode==15:
-    url = 'http://www.mlb.com/mediacenter/index.jsp?ymd='+\
-    getDate().split('/',7)[7].replace('/master_scoreboard.json','').replace('year_','').replace('/month_','').replace('/day_','')
+    url = 'http://www.mlb.com/gdcross/components/game/mlb/'+\
+    getDate().split('/',7)[7].replace('/master_scoreboard.json','/grid.json')
     getCondensedGames(url)
 
 if mode==16:

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.fernsehkritik_tv" name="Fernsehkritik.tv" version="1.0.1" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Fernsehkritik.tv</summary>
+        <summary lang="de">Fernsehkritik.tv</summary>
+        <description lang="en">The satirical-crucial TV magazin</description>
+        <description lang="de">Das satirisch-kritische TV Magazin</description>
+    <platform>all</platform>
+    </extension>
+</addon>

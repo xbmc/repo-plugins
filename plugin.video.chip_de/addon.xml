@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.chip_de" name="Chip.de" version="1.0.1" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Chip.de</summary>
+        <summary lang="en">Chip.de</summary>
+        <description lang="de">Computer und Technik Videos</description>
+        <description lang="en">Computing and Technology Videos</description>
+    <platform>all</platform>
+    </extension>
+</addon>

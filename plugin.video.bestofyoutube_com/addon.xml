@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.bestofyoutube_com" name="BestOfYoutube.com" version="1.0.2" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="plugin.video.youtube" version="2.9.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">BestOfYoutube.com</summary>
+        <summary lang="de">BestOfYoutube.com</summary>
+        <description lang="en">Only the best Youtube clips</description>
+        <description lang="de">Nur die besten Youtube Videos</description>
+    <platform>all</platform>
+    </extension>
+</addon>

@@ -1,3 +1,7 @@
+version 0.5.2 (09/04/2012):
+ * minor changes to conform with eden's requirement
+ * minor improvements to artwork
+
 version 0.5.1 (05/04/2012):
  * move to official repository
  * new logo

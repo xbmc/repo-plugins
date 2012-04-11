@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.lachschon_de" name="Lachschon.de" version="1.0.2" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="plugin.video.youtube" version="2.9.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Lachschon.de</summary>
+        <summary lang="en">Lachschon.de</summary>
+        <description lang="de">Nur die lustigsten Youtube Videos</description>
+        <description lang="en">Only the funniest Youtube clips</description>
+    <platform>all</platform>
+    </extension>
+</addon>

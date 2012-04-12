@@ -1,0 +1,6 @@
+0.0.4 - Using youtube and blip.tv plugins for playback
+        Updated icon.png
+        Preparing for adding to official Repo
+0.0.3 - Updating spike.com and blip.tv
+0.0.2 - Added spike.com videos
+0.0.1 - Initial release

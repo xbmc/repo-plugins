@@ -119,7 +119,7 @@ class UI:
 
     def speakers(self):
         newMode = 'speakerVids'
-        speakers = self.ted_talks.Speakers(self.get_HTML, self.args.get('url'))
+        speakers = ted_talks_scraper.Speakers(self.get_HTML, self.args.get('url'))
         #add speakers to the list
         for speaker in speakers.getAllSpeakers():
             speaker['mode'] = newMode
@@ -131,7 +131,7 @@ class UI:
 
     def speakerVids(self):
         newMode = 'playVideo'
-        speakers = self.ted_talks.Speakers(self.get_HTML, self.args.get('url'))
+        speakers = ted_talks_scraper.Speakers(self.get_HTML, self.args.get('url'))
         for talk in speakers.getTalks():
             talk['mode'] = newMode
             self.addItem(talk, isFolder = False)

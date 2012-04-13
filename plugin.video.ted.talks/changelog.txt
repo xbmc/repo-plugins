@@ -1,3 +1,6 @@
+[B]Version 3.0.1[/B]
+Full speaker list restored (https://github.com/moreginger/xbmc-plugin.video.ted.talks/issues/14)
+
 [B]Version 3.0.0[/B]
 Bump major version for Eden repository
 

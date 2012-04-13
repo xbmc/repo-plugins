@@ -36,18 +36,15 @@ class TestTedTalks(unittest.TestCase):
         self.ted_talks.getVideoDetails("http://www.ted.com/talks/bjarke_ingels_hedonistic_sustainability.html")
 
 
-class TestNewTalks(unittest.TestCase):
-
+class TestSpeakers(unittest.TestCase):
+    
     def setUp(self):
-        self.new_talks = ted_talks_scraper.NewTalks(getHTML, lambda code: "%s" % code)
-
+        self.speakers = ted_talks_scraper.Speakers(getHTML, None)
+    
     def test_smoke(self):
-        new_talks_page_1 = list(self.new_talks.getNewTalks())
-        self.assertEqual((True, {'Title':'30020', 'mode':'newTalks', 'url':u'http://www.ted.com/talks/list?page=2'}), new_talks_page_1[0])
-        assertTalk(self, new_talks_page_1[1])
-        
-        new_talks_page_2 = list(self.new_talks.getNewTalks(new_talks_page_1[0][1]['url']))
-        self.assertEqual((True, {'Title':'30020', 'mode':'newTalks', 'url':u'http://www.ted.com/talks/list?page=3'}), new_talks_page_2[0])
-        self.assertEqual((True, {'Title':'30021', 'mode':'newTalks', 'url':u'http://www.ted.com/talks/list?page=1'}), new_talks_page_2[1])
-        assertTalk(self, new_talks_page_2[2])
-        
+        speakers = list(self.speakers.getAllSpeakers())
+        # 1027 at time of writing, feel free to update
+        self.assertTrue(len(speakers) >= 1027)
+        # See https://github.com/moreginger/xbmc-plugin.video.ted.talks/issues/14 for the chosen speaker :)
+        self.assertTrue('Clifford Stoll' in [s['Title'] for s in speakers])
+

@@ -8,55 +8,55 @@ URLTHEMES = 'http://www.ted.com/themes/atoz/page/'
 URLSPEAKERS = 'http://www.ted.com/speakers/atoz/page/'
 URLSEARCH = 'http://www.ted.com/search?q=%s/page/'
 
+
 def getNavItems(html):
     """self.navItems={'next':url, 'previous':url, 'selected':pagenumberasaninteger}"""
     navItems = {'next':None, 'previous':None, 'selected':1}
     paginationContainer = SoupStrainer(attrs = {'class':re.compile('pagination')})
-    for liTag in BeautifulSoup(html, parseOnlyThese = paginationContainer).findAll('li'):
-        if liTag.has_key('class'):
-            if liTag['class'] == 'next':
-                navItems['next'] = URLTED+liTag.a['href']
-            elif liTag['class'] == 'prev':
-                navItems['previous'] = URLTED+liTag.a['href']
-            elif liTag['class'] == 'selected':
-                navItems['selected'] = int(liTag.a.string)
+    for aTag in BeautifulSoup(html, parseOnlyThese = paginationContainer).findAll('a'):
+        if aTag.has_key('class'):
+            if aTag['class'] == 'next':
+                navItems['next'] = URLTED+aTag['href']
+            elif aTag['class'] == 'prev':
+                navItems['previous'] = URLTED+aTag['href']
+            elif aTag['class'] == 'selected':
+                navItems['selected'] = int(aTag.string)
     return navItems
 
 
-class NewTalks:
-    """
-    Fetches new talks!
-    """
-    
-    def __init__(self, getHTML, getLS):
-        """
-        getHTML method to getHTML from a URL
-        getLS method to get localized string from an integer code
-        """
-        self.getHTML = getHTML
-        self.getLS = getLS
- 
-    def getNewTalks(self, url = None):
-        """
-        Returns 2-tuples, first value is whether this is a folder, second is attributes dict
-        """
-        if url == None:
-            url = 'http://www.ted.com/talks/list/page/'
-        html = self.getHTML(url)
+class Speakers:
 
-        # Forward/backwards        
-        navItems = getNavItems(html)
-        if navItems['next']:
-            yield True, {'mode':'newTalks', 'Title': self.getLS(30020), 'url':navItems['next']}
-        if navItems['previous']:
-            yield True, {'mode':'newTalks', 'Title': self.getLS(30021), 'url':navItems['previous']}
-        
-        talkContainers = SoupStrainer(attrs = {'class':re.compile('talkMedallion')})
-        for talk in BeautifulSoup(html, parseOnlyThese = talkContainers):
+    def __init__(self, get_HTML, url):
+        # adding 9999 to the url takes the script to the very last page of the list, providing the total # of pages.
+        if url is None:
+            url = URLSPEAKERS + '9999'
+        self.get_HTML = get_HTML
+        self.html = self.get_HTML(url)
+        # only bother with navItems where they have a chance to appear.
+        if URLSPEAKERS in url:
+            self.navItems = getNavItems(self.html)
+
+    def getAllSpeakers(self):
+        speakerContainers = SoupStrainer(attrs = {'href':re.compile('/speakers/\S.+?.html')})
+        pages_count = self.navItems['selected']
+        for i in range(pages_count):
+            # don't parse the last page twice.
+            if i is not pages_count:
+                html = self.get_HTML(URLSPEAKERS+str(i+1))
+            else:
+                html = self.html
+            for speaker in BeautifulSoup(html, parseOnlyThese = speakerContainers):
+                title = speaker.string
+                link = URLTED+speaker['href']
+                yield {'url':link, 'Title':title}
+
+    def getTalks(self):
+        talkContainer = SoupStrainer(attrs = {'class':re.compile('box clearfix')})
+        for talk in BeautifulSoup(self.html, parseOnlyThese = talkContainer):
+            title = talk.h4.a.string
             link = URLTED+talk.dt.a['href']
-            title = cleanHTML(talk.dt.a['title'])
             pic = resizeImage(talk.find('img', attrs = {'src':re.compile('.+?\.jpg')})['src'])
-            yield False, {'mode':'playVideo', 'url':link, 'Title':title, 'Thumb':pic}
+            yield {'url':link, 'Title':title, 'Thumb':pic}
 
 
 class TedTalks:
@@ -98,47 +98,6 @@ class TedTalks:
         id = url.split('/')[-1]
         return {'Title':title, 'Director':speaker, 'Genre':'TED', 'Plot':plot, 'PlotOutline':plot, 'id':id, 'url':url}
 
-
-    class Speakers:
-
-        def __init__(self, get_HTML, url):
-            # adding 9999 to the url takes the script to the very last page of the list, providing the total # of pages.
-            if url is None:
-                url = URLSPEAKERS + '9999'
-            self.get_HTML = get_HTML
-            self.html = self.get_HTML(url)
-            # only bother with navItems where they have a chance to appear.
-            if URLSPEAKERS in url:
-                self.navItems = getNavItems(self.html)
-
-        def getSpeakers(self):
-            # use getAllSpeakers instead... just leaving this function here for educational purposes.
-            speakerContainers = SoupStrainer(attrs = {'href':re.compile('/speakers/\S.+?.html')})
-            for speaker in BeautifulSoup(self.html, parseOnlyThese = speakerContainers):
-                title = speaker.string
-                link = URLTED+speaker['href']
-                yield {'url':link, 'Title':title, 'label':title}
-
-        def getAllSpeakers(self):
-            speakerContainers = SoupStrainer(attrs = {'href':re.compile('/speakers/\S.+?.html')})
-            for i in range(self.navItems['selected']):
-                # don't parse the last page twice.
-                if i is not 8:
-                    html = self.get_HTML(URLSPEAKERS+str(i+1))
-                else:
-                    html = self.html
-                for speaker in BeautifulSoup(html, parseOnlyThese = speakerContainers):
-                    title = speaker.string
-                    link = URLTED+speaker['href']
-                    yield {'url':link, 'Title':title}
-
-        def getTalks(self):
-            talkContainer = SoupStrainer(attrs = {'class':re.compile('box clearfix')})
-            for talk in BeautifulSoup(self.html, parseOnlyThese = talkContainer):
-                title = talk.h4.a.string
-                link = URLTED+talk.dt.a['href']
-                pic = resizeImage(talk.find('img', attrs = {'src':re.compile('.+?\.jpg')})['src'])
-                yield {'url':link, 'Title':title, 'Thumb':pic}
 
     class Themes:
 

@@ -21,7 +21,7 @@ import os
 import sys, datetime, time, calendar, thread, threading
 import xbmc, xbmcgui, xbmcplugin, urllib
 import ClientService, ContentService, MediaService, Content, GetBest, RusKeyboard, ArcSearch, VodSearch
-import archive, vod, asx, radio
+import archive, vod, asx, radio, livetv
 from BeautifulSoup import BeautifulSoup
 
 try:
@@ -217,27 +217,21 @@ try:
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
     
     
- elif mode == "setting":
+ elif mode == "setting": 
     addon.openSettings()
+    ClientService.SetSett(SessionID())
     xbmc.executebuiltin('XBMC.Resolution(' + addon.getSetting('resolution') + ')')
 
- elif mode == 'LiveTV':
-    datnow = ContentService.GetUTC()
-    channels = Content.Channels()
-    sessID = SessionID()
-    channels.Invoke(ContentService.GetClientChannel(sessID, type = 'LiveTV', pagItems = '13', pagNum = page))
-    for channel in channels.items:
-        playnow  = ContentService.NowPlay(sessID, channel.id, datnow)
+ elif mode == 'LiveTV': 
+    #datnow = ContentService.GetUTC()
+    #channels = Content.Channels()
+    #sessID = SessionID()
+    #channels.Invoke(ContentService.GetClientChannel(sessID, type = 'LiveTV', pagItems = '13', pagNum = page))
+    channels = livetv.LoadTV(SessionID())
+    for channel in channels:
         icon = getImage(channel.id, '4')
-        name = channel.name + ' - ' + playnow.time + ' ' + playnow.name
-        
-        addItem(name, 'LiveStream', False, channel.id, playnow.description, icon)
-    if int(channels.TPage) > int(page):
-        p = int(page) + 1
-        print channels.TPage + ' - ' + page
-        addItem("...Следующая страница...","LiveTV",True, icon=os.path.join(iconpath, 'icon_tv_live.png'), page=str(p))
-    if int(channels.TPage) == int(page) or int(channels.TPage) > int(page):
-        addItem("На главную", "", True, "0")    
+        name = channel.name + '  ' + channel.times + '  ' + channel.descr
+        addItem(name, 'LiveStream', False, channel.id, channel.descr, icon)   
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
     
  elif mode == 'LiveStream':    

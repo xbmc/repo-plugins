@@ -71,6 +71,8 @@ plugin.video.nos/.git
 plugin.audio.groove/description.xml
 plugin.video.brt/.git
 plugin.video.brt/.project
+plugin.video.brt/.pydevproject
+plugin.video.brt/.settings
 plugin.video.4players/.git
 plugin.video.hockeystreams/.git
 plugin.video.hockeystreams/.idea

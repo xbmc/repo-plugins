@@ -19,7 +19,35 @@
 
 import httplib, urllib, urllib2, re
 import xml.parsers.expat
-import config
+import config1
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
+
+class Channel:
+    def __init__(self, id, name, descr, times):
+        self.id = id
+        self.name = name
+        self.descr = descr
+        self.times = times
+        
+def LoadTV(sess):
+    url = '/handlers/boxee/channelhandler.ashx?sid=' + sess
+    conn = httplib.HTTPConnection('ivsmedia.iptv-distribution.net')
+    conn.request('GET', url)
+    response = conn.getresponse()
+    data = response.read()
+    soup = BeautifulStoneSoup(data)
+    items = soup.findAll("item")
+    #items = soup("item")
+    #items = soup.findAll('item')
+    channels = []
+    for item in items:
+            sup = BeautifulSoup(item.prettify())
+            name = sup('title')[0].text.encode('utf-8')
+            id = item.find('link').string.strip()
+            descr = sup('description')[0].text.encode('utf-8')#item.find('description').string.strip()
+            times = sup('media:category')[0].text.encode('utf-8')#item.find('media:category').string.strip()
+            channels.append(Channel(str(id), str(name), str(descr), str(times)))
+    return channels
 
 class GetChannels:
     req = \

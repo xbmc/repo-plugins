@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon id="plugin.video.brt"
-       version="1.2.5"
+       version="1.2.6"
        name="BestRussianTV"
        provider-name="BestRussianTV.com">
     <requires>

@@ -1,8 +1,16 @@
-[B]Version 2.1.2 - 2011-02-05[/B]
+[B]Version 2.1.4 - 2012-04-12[/B]
+- Added Kanal Sport
+- Use script.module.buggalo for error reporting
+
+[B]Version 2.1.3 - 2012-03-16[/B]
+- Updated DR's streaming urls
+- Removed 24Nordjyske (they switched to Silverlight Smooth Streaming)
+
+[B]Version 2.1.2 - 2012-02-05[/B]
 - Avoid problem with missing settings
 - Fixed use of secondary streams from external addons (fx TV Guide)
 
-[B]Version 2.1.1 - 2011-01-30[/B]
+[B]Version 2.1.1 - 2012-01-30[/B]
 - Fixed DR HD high-quality stream
 - Added TV2/Bornholm and TV/MIDT-VEST
 

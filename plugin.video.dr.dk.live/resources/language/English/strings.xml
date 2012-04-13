@@ -39,6 +39,7 @@
     <string id="31200">24 Nordjyske</string>
     <string id="31201">Folketinget TV</string>
     <string id="31202">danskespil.dk Lotto</string>
+    <string id="31203">Kanal Sport</string>
 
     <string id="99970">Warning!</string>
     <string id="99971">It looks like you are not in Denmark.</string>
@@ -46,18 +47,4 @@
     <string id="99973">or other unexpected errors may occur.</string>
     <string id="99974">OK</string>
     <string id="99975">Don't show again</string>
-
-    <string id="99980">Game over, man! [I]Game over![/I]</string>
-    <string id="99981">You can't handle the truth!</string>
-    <string id="99982">Danger Will Robinson</string>
-    <string id="99983">Why does it cry, Sméagol?</string>
-    <string id="99984">Houston, we have a problem...</string>
-    <string id="99985">E.T. phone home</string>
-
-    <string id="99990">Unfortunately an error occurred in the addon.</string>
-    <string id="99991">You can help with fixing the problem by submitting</string>
-    <string id="99992">an error report. No personal information is sent.</string>
-    <string id="99993">Submit error report</string>
-    <string id="99994">Don't submit</string>
-    <string id="99995">Thank you!</string>
 </strings>

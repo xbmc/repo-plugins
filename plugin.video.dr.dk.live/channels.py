@@ -79,19 +79,19 @@ class Channel(object):
 # http://dr.dk/nu/embed/live?height=467&width=830
 # DR1
 Channel(1, CATEGORY_DR, "dr1.stream").add_urls(
-    high   = ['rtmp://rtmplive.dr.dk/live/livedr01astream3 live=1', 'rtmp://rtmplive.dr.dk/live/livedr01bstream3 live=1'],
-    medium = ['rtmp://rtmplive.dr.dk/live/livedr01astream2 live=1', 'rtmp://rtmplive.dr.dk/live/livedr01bstream2 live=1'],
-    low    = ['rtmp://rtmplive.dr.dk/live/livedr01astream1 live=1', 'rtmp://rtmplive.dr.dk/live/livedr01bstream1 live=1'])
+    high   = ['rtmp://livetv.gss.dr.dk/live/livedr01astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr01bstream3 live=1'],
+    medium = ['rtmp://livetv.gss.dr.dk/live/livedr01astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr01bstream2 live=1'],
+    low    = ['rtmp://livetv.gss.dr.dk/live/livedr01astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr01bstream1 live=1'])
 # DR2
 Channel(2, CATEGORY_DR, "dr2.stream").add_urls(
     high   = ['rtmp://rtmplive.dr.dk/live/livedr02astream3 live=1', 'rtmp://rtmplive.dr.dk/live/livedr02bstream3 live=1'],
     medium = ['rtmp://rtmplive.dr.dk/live/livedr02astream2 live=1', 'rtmp://rtmplive.dr.dk/live/livedr02bstream2 live=1'],
     low    = ['rtmp://rtmplive.dr.dk/live/livedr02astream1 live=1', 'rtmp://rtmplive.dr.dk/live/livedr02bstream1 live=1'])
 # DR Update
-Channel(3, CATEGORY_DR, "drupdate.stream").add_urls(
-    high   = ['rtmp://rtmplive.dr.dk/live/livedr03astream3 live=1', 'rtmp://rtmplive.dr.dk/live/livedr03bstream3 live=1'],
-    medium = ['rtmp://rtmplive.dr.dk/live/livedr03astream2 live=1', 'rtmp://rtmplive.dr.dk/live/livedr03bstream2 live=1'],
-    low    = ['rtmp://rtmplive.dr.dk/live/livedr03astream1 live=1', 'rtmp://rtmplive.dr.dk/live/livedr03bstream1 live=1'])
+Channel(3, CATEGORY_DR).add_urls(#, "drupdate.stream").add_urls(
+    high   = 'rtmp://livetv.gss.dr.dk/live/livedr03astream3 live=1',
+    medium = 'rtmp://livetv.gss.dr.dk/live/livedr03astream2 live=1',
+    low    = 'rtmp://livetv.gss.dr.dk/live/livedr03astream1 live=1')
 # DR K
 Channel(4, CATEGORY_DR, "drk.stream").add_urls(
     high   = ['rtmp://rtmplive.dr.dk/live/livedr04astream3 live=1', 'rtmp://rtmplive.dr.dk/live/livedr04bstream3 live=1'],
@@ -105,8 +105,8 @@ Channel(5, CATEGORY_DR, "drramasjang.stream").add_urls(
 # DR HD
 Channel(6, CATEGORY_DR, "drhd.stream").add_urls(
     best   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream3 live=1'],
-    high = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
-    medium    = ['rtmp://livetv.gss.dr.dk/live/livedr06astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream1 live=1'])
+    high   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
+    medium = ['rtmp://livetv.gss.dr.dk/live/livedr06astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream1 live=1'])
 
 # TV2 Fyn
 Channel(100, CATEGORY_TV2_REG).add_urls(
@@ -145,14 +145,8 @@ Channel(106, CATEGORY_TV2_REG).add_urls(
 # )
 # TV2 Bornholm
 Channel(109, CATEGORY_TV2_REG).add_urls(
-    best   = 'mms://itv02.digizuite.dk/tv2b'
+    best   = 'rtsp://itv02.digizuite.dk/tv2b live=1'
 )
-
-# http://www.24nordjyske.dk/webtv_high.asp
-# 24 Nordjyske
-Channel(200, CATEGORY_MISC).add_urls(
-    high   = 'mms://stream.nordjyske.dk/24nordjyske - Full Broadcast Quality',
-    medium = 'mms://stream.nordjyske.dk/24nordjyske')
 
 # http://ft.arkena.tv/xml/core_player_clip_data_v2_REAL.php?wtve=187&wtvl=2&wtvk=012536940751284&as=1
 # Folketinget
@@ -161,4 +155,8 @@ Channel(201, CATEGORY_MISC).add_urls(
 # danskespil lotto
 Channel(202, CATEGORY_MISC).add_urls(
     best   = 'rtmp://lvs.wowza.jay.net/webstream/lotto live=1'
+)
+# kanalsport.dk
+Channel(203, CATEGORY_MISC).add_urls(
+    best   = 'http://lswb-de-08.servers.octoshape.net:1935/live/kanalsport/500k/playlist.m3u8'
 )

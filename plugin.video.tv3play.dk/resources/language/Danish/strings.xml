@@ -9,4 +9,7 @@
 
     <string id="200">Der er sket en fejl i kommunikationen med TV3 Play.</string>
     <string id="201">Fejlbeskeden er:</string>
+    <string id="202">Afspilnings-URL'en blev ikke fundet</string>
+    <string id="203">Ingen sæsoner fundet</string>
+    <string id="204">Programlisten kunne ikke indlæses</string>
 </strings>

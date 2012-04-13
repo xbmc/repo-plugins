@@ -39,6 +39,9 @@ class TV3PlayException(Exception):
 class TV3PlayAddon(object):
     def listPrograms(self):
         html = self.downloadUrl(self.getBaseUrl() + '/program')
+        if not html:
+            raise TV3PlayException(ADDON.getLocalizedString(204))
+
         items = list()
         for m in re.finditer('<a href="/program/([^"]+)">([^<]+)</a>', html):
             slug = m.group(1)
@@ -46,8 +49,6 @@ class TV3PlayAddon(object):
             fanart = self.downloadAndCacheFanart(slug, None)
 
             item = xbmcgui.ListItem(title, iconImage=ICON)
-            if not fanart:
-                fanart = FANART
             item.setIconImage(fanart)
             item.setProperty('Fanart_Image', fanart)
             items.append((PATH + '?program=%s' % slug, item, True))
@@ -57,9 +58,14 @@ class TV3PlayAddon(object):
 
     def listSeasons(self, slug):
         html = self.downloadUrl(self.getBaseUrl() + '/program/%s' % slug)
+        if not html:
+            raise TV3PlayException(ADDON.getLocalizedString(203))
+
         fanart = self.downloadAndCacheFanart(slug, html)
 
         m = re.search('Table body(.*?)</tbody>.*?Table body(.*?)</tbody>', html, re.DOTALL)
+        if not m:
+            raise TV3PlayException(ADDON.getLocalizedString(203))
         episodesHtml = m.group(1)
         clipsHtml = m.group(2)
 
@@ -82,8 +88,6 @@ class TV3PlayAddon(object):
             videoCount = seasonHtml.count('href="/play/')
             if videoCount > 0:
                 item = xbmcgui.ListItem('%s (%s)' % (season.decode('utf8', 'ignore'), ADDON.getLocalizedString(103)), iconImage = ICON)
-                if not fanart:
-                    fanart = FANART
                 item.setIconImage(fanart)
                 item.setProperty('Fanart_Image', fanart)
                 xbmcplugin.addDirectoryItem(HANDLE, PATH + '?program=%s&season=%s&clips=true' % (slug, season), item, True, videoCount)
@@ -133,8 +137,6 @@ class TV3PlayAddon(object):
             item = xbmcgui.ListItem(title, iconImage = ICON)
             item.setInfo('video', infoLabels)
             item.setProperty('IsPlayable', 'true')
-            if not fanart:
-                fanart = FANART
             item.setIconImage(fanart)
             item.setProperty('Fanart_Image', fanart)
             items.append((PATH + '?playVideo=%s' % videoId, item))
@@ -148,26 +150,33 @@ class TV3PlayAddon(object):
 
     def playVideo(self, videoId):
         doc = self.getPlayProductXml(videoId)
-        rtmpUrl = self.getRtmpUrl(doc.findtext('Product/Videos/Video/Url')) + ' swfUrl=http://flvplayer.viastream.viasat.tv/play/swf/player111227.swf swfVfy=true'
+        url = doc.findtext('Product/Videos/Video/Url')
+        if not url:
+            raise TV3PlayException(ADDON.getLocalizedString(202))
+        rtmpUrl = self.getRtmpUrl(url) + ' swfUrl=http://flvplayer.viastream.viasat.tv/play/swf/player111227.swf swfVfy=true'
 
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
 
         # Preroll
-        url = doc.find('Product/AdCalls/preroll').get('url')
-        node = self.getXml(url).find('Ad')
-        if node is not None:
-            flvUrl = node.findtext('InLine/Creatives/Creative/Linear/MediaFiles/MediaFile')
-            item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
-            playlist.add(flvUrl, item)
+        prerollNode = doc.find('Product/AdCalls/preroll')
+        if prerollNode is not None:
+            url = prerollNode.get('url')
+            node = self.getXml(url).find('Ad')
+            if node is not None:
+                flvUrl = node.findtext('InLine/Creatives/Creative/Linear/MediaFiles/MediaFile')
+                item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
+                playlist.add(flvUrl, item)
 
-        adNodes = None
         start = 0
         for idx, node in enumerate(doc.findall('Product/AdCalls/midroll')):
-            if adNodes is None:
-                adXml = self.downloadUrl(node.get('url'))
-                adDoc = ElementTree.fromstring(adXml.decode('utf8', 'ignore'))
-                adNodes = adDoc.findall('Ad')
+            adXml = self.downloadUrl(node.get('url'))
+            if not adXml:
+                continue
+            adDoc = ElementTree.fromstring(adXml.decode('utf8', 'ignore'))
+            adUrl = adDoc.findtext('Ad/InLine/Creatives/Creative/Linear/MediaFiles/MediaFile')
+            if not adUrl:
+                continue
 
             stop = int(node.get('time'))
             itemUrl = rtmpUrl + ' start=%d stop=%d' % (start * 1000, stop * 1000)
@@ -175,21 +184,22 @@ class TV3PlayAddon(object):
             playlist.add(itemUrl, featureItem)
             start = stop
 
-            if len(adNodes) > idx:
-                item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
-                playlist.add(adNodes[idx].findtext('InLine/Creatives/Creative/Linear/MediaFiles/MediaFile'), item)
+            item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
+            playlist.add(adUrl, item)
 
         itemUrl = rtmpUrl + ' start=%d' % (start * 1000)
         featureItem = xbmcgui.ListItem(doc.findtext('Product/Title'), thumbnailImage=doc.findtext('Product/Images/ImageMedia/Url'), path = itemUrl)
         playlist.add(itemUrl, featureItem)
 
         # Postroll
-        url = doc.find('Product/AdCalls/postroll').get('url')
-        node = self.getXml(url).find('Ad')
-        if node is not None:
-            flvUrl = node.findtext('InLine/Creatives/Creative/Linear/MediaFiles/MediaFile')
-            item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
-            playlist.add(flvUrl, item)
+        postrollNode = doc.find('Product/AdCalls/postroll')
+        if postrollNode is not None:
+            url = postrollNode.get('url')
+            node = self.getXml(url).find('Ad')
+            if node is not None:
+                flvUrl = node.findtext('InLine/Creatives/Creative/Linear/MediaFiles/MediaFile')
+                item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
+                playlist.add(flvUrl, item)
 
         xbmcplugin.setResolvedUrl(HANDLE, True, playlist[0])
 
@@ -203,6 +213,8 @@ class TV3PlayAddon(object):
             return videoUrl.replace(' ', '%20')
 
         xml = self.downloadUrl(videoUrl)
+        if not xml:
+            raise TV3PlayException(ADDON.getLocalizedString(202))
         doc = ElementTree.fromstring(xml)
 
         if doc.findtext('Success') == 'true':
@@ -212,12 +224,17 @@ class TV3PlayAddon(object):
 
     def getXml(self, url):
         xml = self.downloadUrl(url)
-        return ElementTree.fromstring(xml.decode('utf8', 'ignore'))
+        if xml:
+            return ElementTree.fromstring(xml.decode('utf8', 'ignore'))
+        else:
+            return None
 
     def downloadAndCacheFanart(self, slug, html):
         fanartPath = os.path.join(CACHE_PATH, '%s.jpg' % slug.encode('iso-8859-1', 'replace'))
         if not os.path.exists(fanartPath) and html:
             m = re.search('/play/([0-9]+)/', html)
+            if not m:
+                return FANART
             xml = self.getPlayProductXml(m.group(1))
 
             fanartUrl = None
@@ -238,7 +255,7 @@ class TV3PlayAddon(object):
         elif os.path.exists(fanartPath):
             return fanartPath
 
-        return None
+        return FANART
 
     def getBaseUrl(self):
         if ADDON.getSetting('region.url') == '':
@@ -256,8 +273,6 @@ class TV3PlayAddon(object):
                 contents = u.read()
                 u.close()
                 return contents
-            except urllib2.URLError:
-                return None
             except Exception, ex:
                 if retries > 5:
                     raise TV3PlayException(ex)
@@ -283,6 +298,7 @@ if __name__ == '__main__':
         os.makedirs(CACHE_PATH)
 
     buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
+    buggalo.addExtraData('region', ADDON.getSetting('region.url'))
     tv3PlayAddon = TV3PlayAddon()
     try:
         if PARAMS.has_key('playVideo'):

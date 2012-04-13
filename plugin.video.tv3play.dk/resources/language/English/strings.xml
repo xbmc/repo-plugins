@@ -7,6 +7,9 @@
 
     <string id="150">Choose region</string>
 
-    <string id="200">There was an error while communication with TV3 Play.</string>
+    <string id="200">An error occurred while communication with TV3 Play.</string>
     <string id="201">The error message is:</string>
+    <string id="202">Unable to find the playback URL</string>
+    <string id="203">No seasons available</string>
+    <string id="204">Unable to retrieve list of programs</string>
 </strings>

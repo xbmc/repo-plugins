@@ -88,10 +88,12 @@ class DanishLiveTV(object):
 
         for channel in CHANNELS:
             if str(channel.get_id()) == id:
-                try:
-                    idx = int(ADDON.getSetting(channel.get_config_key()))
-                except ValueError:
-                    idx = 0 # fallback for missing settings
+                idx = None
+                if channel.get_config_key():
+                    try:
+                        idx = int(ADDON.getSetting(channel.get_config_key()))
+                    except ValueError:
+                        idx = 0 # fallback for missing settings
 
                 url = channel.get_url(quality, idx)
                 if url:
@@ -138,6 +140,7 @@ if __name__ == '__main__':
     FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
     ICON = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
 
+    buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     try:
         danishTV = DanishLiveTV()
         if PARAMS.has_key('playChannel'):

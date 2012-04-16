@@ -13,6 +13,7 @@
         <description lang="de">N24 Mediathek und Livestream</description>
         <description lang="en">N24 Media Library and Livestream</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

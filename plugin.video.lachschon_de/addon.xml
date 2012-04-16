@@ -13,6 +13,7 @@
         <summary lang="en">Lachschon.de</summary>
         <description lang="de">Nur die lustigsten Youtube Videos</description>
         <description lang="en">Only the funniest Youtube clips</description>
+        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

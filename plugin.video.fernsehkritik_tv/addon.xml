@@ -12,6 +12,7 @@
         <summary lang="de">Fernsehkritik.tv</summary>
         <description lang="en">The satirical-crucial TV magazin</description>
         <description lang="de">Das satirisch-kritische TV Magazin</description>
+        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

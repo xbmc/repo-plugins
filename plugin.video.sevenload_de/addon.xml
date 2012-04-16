@@ -12,6 +12,7 @@
         <summary lang="en">SevenLoad.de</summary>
         <description lang="de">Sendungen und Userclips des deutschen Videoportals SevenLoad.de</description>
         <description lang="en">Shows and Userclips from german media library SevenLoad.de</description>
+        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

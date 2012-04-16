@@ -12,6 +12,7 @@
         <summary lang="en">filmstarts.de</summary>
         <description lang="de">Deutsche Trailer und Filmnews</description>
         <description lang="en">German Trailer and Movienews</description>
+        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

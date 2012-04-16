@@ -13,6 +13,7 @@
         <summary lang="de">BestOfYoutube.com</summary>
         <description lang="en">Only the best Youtube clips</description>
         <description lang="de">Nur die besten Youtube Videos</description>
+        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

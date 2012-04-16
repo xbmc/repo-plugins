@@ -12,6 +12,7 @@
         <summary lang="en">Chip.de</summary>
         <description lang="de">Computer und Technik Videos</description>
         <description lang="en">Computing and Technology Videos</description>
+        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

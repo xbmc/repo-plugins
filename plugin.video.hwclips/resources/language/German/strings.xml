@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Root menu entries -->
+    <string id="30000">Alle Videos</string>
+    <string id="30001">Video Gruppen</string>
+    <string id="30002">Video Kategorien</string>
+
+    <!-- Video sort methods -->
+    <string id="30010">Neusten</string>
+    <string id="30011">Beliebtesten</string>
+    <string id="30012">Meistgesehenen</string>
+
+    <!-- General Strings -->
+    <string id="30020">Seite</string>
+
+    <!-- Settings -->
+    <string id="30200">Anzahl Videos in Verzeichnissnamen zeigen</string>
+    <string id="30201">Video Sprache in Videotiteln zeigen</string>
+    <string id="30202">Video-View auf "Media Info" setzen</string>
+</strings>

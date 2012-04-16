@@ -12,6 +12,7 @@
         <summary lang="en">DrDish-TV.de</summary>
         <description lang="de">Der Multimedia-Kanal</description>
         <description lang="en">The Multimedia Channel</description>
+        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

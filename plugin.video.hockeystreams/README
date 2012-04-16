@@ -1,0 +1,16 @@
+This is an XBMC Plugin that lets you browse and play videos from Hockeystreams website - http://hockeystreams.com.
+Hockeystreams requires registration and payment to access most features.
+
+This plugin wraps access to the live and archived feeds, and provides as much access as possible via XBMC.  The plugin
+settings are used to enter the username and password, which is required to watch videos.
+
+It is based on the voinage tutorial as well as the previous hockeystream plugin available here:
+ http://code.google.com/p/hockeystreams/.
+
+I would like to license this with the BSD license, but given that the code has some vague links to the voinage tutorial
+and the googlecode-based plugin, which is licensed GPLv2, and IANAL, until I hear from the original authors, I will say
+this is licensed under GPLv2 - a license I am not a fan of.
+
+The fanart.jpg and icon.png are currently used without permission and may be removed.
+
+The "initial" support is for Dharma - XBMC 10.

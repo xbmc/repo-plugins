@@ -1,3 +1,7 @@
+Version 1.2.0:
+	
+	Some flash based streams where not working (for example sports/EPL).  Needed to add special handling for those to work.
+
 Version 1.1.0:
 
 	Support for live broadcasts (when airing)

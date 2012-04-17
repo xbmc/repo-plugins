@@ -57,3 +57,17 @@ def getVideos(category):
 		videos.append({"name":video["text"].encode('utf-8'), "fileid":fileid, "thumbnail":video["image"]})
 
 	return videos
+	
+def getVideoData(fileid):	
+	# In the case of EPL videos, those are .flv files which need special handling :-(
+	if fileid.find("EPL") > -1:
+		html = fetchPage("http://www.visir.is/section/MEDIA99&fileid=" + fileid);
+		playpath = html[html.find('displayFlash(')+15:]
+		playpath = playpath[:playpath.find('\'')]
+		return { "rtmpurl":"rtmp://klippur.visir.is/vod/_definst_/", "playpath":playpath, "swfplayer":"http://www.visir.is/jwplayer/player59.swf" }
+	else:
+		# Other cases, simply fetch the video URL based on the file Id
+		path = fetchPage("http://m3.visir.is/sjonvarp/myndband/bara-slod?itemid=" + fileid)
+		return { "rtmpurl":path, "playpath":"", "swfplayer":"" }
+	
+	

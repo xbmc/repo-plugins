@@ -131,8 +131,9 @@ def get_path(path):
 
 def get_video(video_id, console_debug=False):
     __log('get_video started with video_id: %s' % video_id)
-    r_adv = re.compile('p.addVariable\(\'(.+?)\', ?\'(.+?)\'\)')
-    r_swf = re.compile('new SWFObject\(\'(.+?)\'')
+    r_adv = re.compile('var flashvars={(.+?)}')
+    r_adv_p = re.compile('(.+?):\'(.+?)\',?')
+    r_swf = re.compile('swfobject.embedSWF\(\'(.+?)\'')
     r_rtmpurl = re.compile('connectionurl=\'(.*?)\'')
     r_playpath = re.compile('source=\'(.*?)\'')
     r_path = re.compile('path=\'(.*?)\'')
@@ -141,7 +142,8 @@ def get_video(video_id, console_debug=False):
     encxml = ''
     videopage_url = MAIN_URL + 'watch/%s/' % video_id
     html = __get_url(videopage_url, MAIN_URL)
-    for (a, b) in re.findall(r_adv, html):
+    sec = re.search(r_adv, html).group(1)
+    for (a, b) in re.findall(r_adv_p, sec):
         if not a == '_encxml':
             params[a] = b
         else:

@@ -4,10 +4,6 @@
 # Vísir - VefTV
 # Author:  Haukur H. Þórsson (haukurhaf.net)
 # Play videos from the video section at Visir.is - a local media company in Iceland.
-# Inspired by the Sarpur video plugin by Dagur.
-# Limitations in this version:
-# - Live broadcasts from Stod2 are not supported yet.
-# - The plugin does not support paging - it only loads the first 18 videos in each category.
 
 import urllib, urllib2, re, xbmcaddon, xbmcplugin, xbmcgui, xbmc
 from datetime import datetime, timedelta
@@ -56,15 +52,22 @@ def showVideos(category):
 	addMenuItem(__language__(32300).encode('utf8'), 'videos', cat + ',' + subcat + ',' + type + ',' + str(int(pageno)+1))
 
 def play(file):
-	file = getVideoUrl(file)
-	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(file)
+	data = getVideoData(file)
+	
+	rtmpurl = data["rtmpurl"]
+	swfplayer = data["swfplayer"]
+	playpath = data["playpath"]
+	
+	if (len(swfplayer) > 0):
+		item = xbmcgui.ListItem("Flash stream")
+		item.setProperty("PlayPath", playpath)
+		item.setProperty("SWFPlayer", swfplayer)
+		xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(rtmpurl, item)	
+	else:	
+		xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(rtmpurl)
 
 def playLiveStream():	
 	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play('http://utsending.visir.is:1935/live/vlc.sdp/playlist.m3u8')
-
-def getVideoUrl(fileid):
-	html = fetchPage("http://m3.visir.is/sjonvarp/myndband/bara-slod?itemid=" + fileid)
-	return html
 
 def get_params():
 	param=[]

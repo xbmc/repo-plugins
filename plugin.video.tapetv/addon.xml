@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tapetv" name="tape.tv" version="0.0.4" provider-name="dethfeet">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+    <import addon="xbmc.gui" version="2.11"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<platform>all</platform>
+    <summary lang="en">tape.tv video plugin</summary>
+	<summary lang="de">tape.tv video plugin</summary>
+    <description lang="en">tape.tv german music video online channel</description>
+	<description lang="de">tape.tv ist Dein persönliches Musikfernsehen. Wir liefern Dir 24/7 die neuesten und besten Musikvideos - kostenlos und in Top-Qualität.</description>
+    <disclaimer>Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+  </extension>
+</addon>

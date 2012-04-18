@@ -32,11 +32,27 @@ def setQuality(id):
 
 
 def getLive():
-    url = "mms://straumv.nrk.no/nrk_tv_direkte_nrk%s_%s?UseSilverlight=1"
-    quality = ['l', 'm', 'h' ][BITRATE_ID]
-    return [DataItem(title="NRK 1", url=url % (1,quality), thumb=os.path.join(R_PATH, "nrk1.jpg"), isPlayable=True),
-            DataItem(title="NRK 2", url=url % (2,quality), thumb=os.path.join(R_PATH, "nrk2.jpg"), isPlayable=True),
-            DataItem(title="NRK 3", url=url % (3,quality), thumb=os.path.join(R_PATH, "nrk3.jpg"), isPlayable=True)]
+    url_1 = [
+        'mms://a897.l11601532896.c116015.g.lm.akamaistream.net/D/897/116015/v0001/reflector:32896',
+        'mms://a48.l11601648047.c116016.g.lm.akamaistream.net/D/48/116016/v0001/reflector:48047',
+        'mms://a1377.l11673952706.c116739.g.lm.akamaistream.net/D/1377/116739/v0001/reflector:52706'
+        ][BITRATE_ID]
+    
+    url_2 = [
+        'mms://a1562.l11601643115.c116016.g.lm.akamaistream.net/D/1562/116016/v0001/reflector:43115',
+        'mms://a1382.l11674038974.c116740.g.lm.akamaistream.net/D/1382/116740/v0001/reflector:38974',
+        'mms://a746.l11674151924.c116741.g.lm.akamaistream.net/D/746/116741/v0001/reflector:51924'
+        ][BITRATE_ID]
+    
+    url_3 = [
+        'mms://a397.l11601753777.c116017.g.lm.akamaistream.net/D/397/116017/v0001/reflector:53777',
+        'mms://a805.l11674254919.c116742.g.lm.akamaistream.net/D/805/116742/v0001/reflector:54919',
+        'mms://a1372.l11674333102.c116743.g.lm.akamaistream.net/D/1372/116743/v0001/reflector:33102'
+        ][BITRATE_ID]
+    
+    return [DataItem(title="NRK 1", url=url_1, thumb=os.path.join(R_PATH, "nrk1.jpg"), isPlayable=True),
+            DataItem(title="NRK 2", url=url_2, thumb=os.path.join(R_PATH, "nrk2.jpg"), isPlayable=True),
+            DataItem(title="NRK 3", url=url_3, thumb=os.path.join(R_PATH, "nrk3.jpg"), isPlayable=True)]
 
 
 def getLatest():

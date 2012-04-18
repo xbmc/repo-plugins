@@ -29,6 +29,7 @@ import re
 import os
 import cookielib
 import datetime
+import time
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
@@ -102,13 +103,14 @@ TeamCodes = {
 
 
 def addon_log(string):
-    xbmc.log( "[addon.mlbmc.1.0.6]: %s" %string )
+    xbmc.log( "[addon.mlbmc.1.0.7]: %s" %string )
 
 
 def categories():
         thumb_path = 'http://mlbmc-xbmc.googlecode.com/svn/icons/'
         addDir(__language__(30000),'',3,thumb_path+'mlb.tv.png')
         addDir(__language__(30029),'',14,thumb_path+'condensed.png')
+        addDir(__language__(30097),'',23,thumb_path+'fullcount.png')
         addPlaylist(__language__(30001),'http://mlb.mlb.com/video/play.jsp?tcid=mm_mlb_vid',12,thumb_path+'latestvid.png')
         addDir(__language__(30002),'',4,thumb_path+'tvideo.png')
         addDir(__language__(30003),'9674738',1,thumb_path+'fc.png')
@@ -430,8 +432,8 @@ def Search(url):
                 return
             searchStr = newStr.replace(' ','%20')
             referStr = newStr.replace(' ','+')
-            url = 'http://mlb.mlb.com/ws/search/MediaSearchService?start=0&site=mlb&hitsPerPage=12&hitsPerSite=10&'+\
-            'type=json&c_id=&src=vpp&sort=desc&sort_type=custom&query='+searchStr
+            url = ('http://mlb.mlb.com/ws/search/MediaSearchService?start=0&site=mlb&hitsPerPage=12&hitsPerSite=10&'+
+                   'type=json&c_id=&src=vpp&sort=desc&sort_type=custom&query='+searchStr)
             headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
                        'Referer' : 'http://mlb.mlb.com/search/media.jsp?query='+referStr+'&c_id=mlb'}
         else:
@@ -455,6 +457,36 @@ def Search(url):
         if data['total'] > data['end']:
             url = url.split('&',1)[0][:-1]+str(data['end']+1)+'&'+url.split('&',1)[1]
             addDir('Next Page',url,16,'http://mlbmc-xbmc.googlecode.com/svn/icons/next.png')
+
+
+def getFullCount():
+        url = 'http://mlb.mlb.com/gen/multimedia/fullcount.xml'
+        thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/fullcount.png'
+        soup = BeautifulStoneSoup(getRequest(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+        for i in soup('stream'):
+            event_date = i.event_date.string
+            event_id = i['calendar_event_id']
+            if i.media_state.string == 'MEDIA_ON':
+                name = __language__(30097)+' - Live'
+                mode = '25'
+                is_playable = True
+            else:
+                mode = '24'
+                is_playable = False
+                try:
+                    dt = time.strptime(event_date[:-5], "%Y-%m-%dT%H:%M:%S")
+                    name = time.strftime( "%A, %B %d @ %I:%M%p ET", dt)
+                except:
+                    name = event_date
+            u=sys.argv[0]+"?mode="+mode+"&name="+urllib.quote_plus(name)+"&event="+urllib.quote_plus(event_id)
+            if is_playable:
+                liz=xbmcgui.ListItem(coloring( name,"cyan",name ), iconImage="DefaultVideo.png", thumbnailImage=thumb)
+                liz.setProperty('IsPlayable', 'true')
+                liz.setInfo( type="Video", infoLabels={ "Title": name } )
+            else:
+                liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=thumb)
+            liz.setProperty( "Fanart_Image", fanart1 )
+            xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
 
 
 def getGames(url):
@@ -485,39 +517,58 @@ def getGames(url):
                 try:
                     thumb = game['game_media']['media']['thumbnail']
                 except:
-                    thumb = ''
+                    try:
+                        thumb = game['game_media']['media'][0]['thumbnail']
+                    except:
+                        thumb = ''
 
             try:
                 media_state = game['game_media']['media']['media_state']
             except:
-                addon_log( name+'media_state exception' )
-                media_state = ''
+                try:
+                    media_state = game['game_media']['media'][0]['media_state']
+                except:
+                    addon_log( name+'media_state exception' )
+                    media_state = ''
 
             if status == 'In Progress':
                 try:
                     name += str(game['status']['inning_state'])+' '+str(game['status']['inning'])
                 except:
                     name += status
-            if status == 'ind' or status == 'Preview':
+            elif not status == 'Final':
                 try:
-                    name += str(game['time']) + ' ' + str(game['time_zone'])
+                    name += str(game['time']) + ' ' + str(game['time_zone']) + ' '
+                    if not status == 'Preview':
+                        name += status
                 except:
                     pass
+
             archive = False
             if status == 'Final':
                 if media_state == 'media_archive':
                     try:
-                        if game['game_media']['media']['has_mlbtv'] == 'true':
-                            name += __language__(30081)
-                            archive = True
+                        mlbtv = game['game_media']['media']['has_mlbtv']
                     except:
+                        try:
+                            mlbtv = game['game_media']['media'][0]['has_mlbtv']
+                        except:
+                            mlbtv = ''
+                    if mlbtv == 'true':
+                        name += __language__(30081)
+                        archive = True
+                    else:
                         name += status
 
             try:
-                if game['game_media']['media']['free'] == 'ALL':
-                    name += __language__(30082)
+                free = game['game_media']['media']['free']
             except:
-                pass
+                try:
+                    free = game['game_media']['media'][0]['free']
+                except:
+                    free = ''
+            if free == 'ALL':
+                name += __language__(30082)
 
             name = name.replace('.','').rstrip(' ')
 
@@ -533,95 +584,106 @@ def getGames(url):
             xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 
 
-def mlbGame(event_id):
+def mlbGame(event_id, full_count=False):
         # Get the cookie first
-        url = 'https://secure.mlb.com/enterworkflow.do?flowId=registration.wizard&c_id=mlb'
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'}
-        Data = getRequest(url,None,headers)
-        if debug == "true":
-            addon_log( 'These are the cookies we have received so far :' )
-            for index, cookie in enumerate(cj):
-                addon_log( str(index)+'  :  '+str(cookie) )
-
-        # now authenticate
-        url = 'https://secure.mlb.com/authenticate.do'
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
-                   'Referer' : 'https://secure.mlb.com/enterworkflow.do?flowId=registration.wizard&c_id=mlb'}
-        values = {'uri' : '/account/login_register.jsp',
-                  'registrationAction' : 'identify',
-                  'emailAddress' : __settings__.getSetting('email'),
-                  'password' : __settings__.getSetting('password')}
-        Data = getRequest(url,urllib.urlencode(values),headers,True)
-        if debug == "true":
-            addon_log( 'These are the cookies we have received so far :' )
-            for index, cookie in enumerate(cj):
-                addon_log( str(index)+'  :  '+str(cookie) )
-        pattern = re.compile(r'Welcome to your personal (MLB|mlb).com account.')
-        try:
-            loggedin = re.search(pattern, Data[0]).groups()
-            addon_log( "Logged in successfully!" )
-        except:
+        if not full_count:
+            url = 'https://secure.mlb.com/enterworkflow.do?flowId=registration.wizard&c_id=mlb'
+            headers = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'}
+            Data = getRequest(url,None,headers)
             if debug == "true":
-                addon_log( "Login Failed!" )
-                addon_log( Data[0] )
-            xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30020)+",5000,"+icon+")")
-            return
+                addon_log( 'These are the cookies we have received so far :' )
+                for index, cookie in enumerate(cj):
+                    addon_log( str(index)+'  :  '+str(cookie) )
 
-        # Begin MORSEL extraction
-        ns_headers = Data[1]
-        attrs_set = cookielib.parse_ns_headers(ns_headers)
-        cookie_tuples = cookielib.CookieJar()._normalized_cookie_tuples(attrs_set)
-        if debug == "true":
-            addon_log( repr(cookie_tuples) )
-        cookies = {}
-        for tup in cookie_tuples:
-            name, value, standard, rest = tup
-            cookies[name] = value
-        if debug == "true":
-            addon_log( repr(cookies) )
-
-        # pick up the session key morsel
-        url = 'http://mlb.mlb.com/enterworkflow.do?flowId=media.media'
-        Data = getRequest(url,None,None,True)
-
-        # Begin MORSEL extraction
-        ns_headers = Data[1]
-        attrs_set = cookielib.parse_ns_headers(ns_headers)
-        cookie_tuples = cookielib.CookieJar()._normalized_cookie_tuples(attrs_set)
-        if debug == "true":
-            addon_log( repr(cookie_tuples) )
-        for tup in cookie_tuples:
-            name, value, standard, rest = tup
-            cookies[name] = value
-
-        try:
+            email =  __settings__.getSetting('email')
+            password =__settings__.getSetting('password')
+            # now authenticate
+            url = 'https://secure.mlb.com/authenticate.do'
+            headers = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13',
+                       'Referer' : 'https://secure.mlb.com/enterworkflow.do?flowId=registration.wizard&c_id=mlb'}
+            values = {'uri' : '/account/login_register.jsp',
+                      'registrationAction' : 'identify',
+                      'emailAddress' : email,
+                      'password' : password}
+            Data = getRequest(url,urllib.urlencode(values),headers,True)
             if debug == "true":
-                addon_log( "session-key = " + str(cookies['ftmu']) )
-            session_key = urllib.unquote(cookies['ftmu'])
-        except:
-            session_key = None
-            logout_url = 'https://secure.mlb.com/enterworkflow.do?flowId=registration.logout&c_id=mlb'
-            Data = getRequest(logout_url)
-            if debug == "true":
-                addon_log( "No session key, so logged out." )
+                addon_log( 'These are the cookies we have received so far :' )
+                for index, cookie in enumerate(cj):
+                    addon_log( str(index)+'  :  '+str(cookie) )
 
-        try:
+            pattern = re.compile(r'Welcome to your personal (MLB|mlb).com account.')
+            try:
+                loggedin = re.search(pattern, Data[0]).groups()
+                addon_log( "Logged in successfully!" )
+            except:
+                if debug == "true":
+                    addon_log( "Login Failed!" )
+                    addon_log( Data[0] )
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30020)+",5000,"+icon+")")
+                return
+
+            # Begin MORSEL extraction
+            ns_headers = Data[1]
+            attrs_set = cookielib.parse_ns_headers(ns_headers)
+            cookie_tuples = cookielib.CookieJar()._normalized_cookie_tuples(attrs_set)
+            if debug == "true":
+                addon_log( repr(cookie_tuples) )
+            cookies = {}
+            for tup in cookie_tuples:
+                name, value, standard, rest = tup
+                cookies[name] = value
+            if debug == "true":
+                addon_log( repr(cookies) )
+
+            # pick up the session key morsel
+            url = 'http://mlb.mlb.com/enterworkflow.do?flowId=media.media'
+            Data = getRequest(url,None,None,True)
+
+            # Begin MORSEL extraction
+            ns_headers = Data[1]
+            attrs_set = cookielib.parse_ns_headers(ns_headers)
+            cookie_tuples = cookielib.CookieJar()._normalized_cookie_tuples(attrs_set)
+            if debug == "true":
+                addon_log( repr(cookie_tuples) )
+            for tup in cookie_tuples:
+                name, value, standard, rest = tup
+                cookies[name] = value
+            if debug == "true":
+                addon_log( repr(cookies) )
+
+            try:
+                if debug == "true":
+                    addon_log( "session-key = " + str(cookies['ftmu']) )
+                session_key = urllib.unquote(cookies['ftmu'])
+            except:
+                session_key = None
+                logout_url = 'https://secure.mlb.com/enterworkflow.do?flowId=registration.logout&c_id=mlb'
+                Data = getRequest(logout_url)
+                if debug == "true":
+                    addon_log( "No session key, so logged out." )
+            try:
+                values = {
+                    'eventId': event_id,
+                    'sessionKey': session_key,
+                    'fingerprint': urllib.unquote(cookies['fprt']),
+                    'identityPointId': cookies['ipid'],
+                    'subject':'LIVE_EVENT_COVERAGE',
+                    'platform':'WEB_MEDIAPLAYER'
+                }
+            except:
+                addon_log( "Seems to ba a cookie problem" )
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30021)+",10000,"+icon+")")
+                return
+
+        else:
             values = {
-                'eventId': event_id,
-                'sessionKey': session_key,
-                'fingerprint': urllib.unquote(cookies['fprt']),
-                'identityPointId': cookies['ipid'],
-                'subject':'LIVE_EVENT_COVERAGE',
-                'platform':'WEB_MEDIAPLAYER'
-            }
-        except:
-            addon_log( "Seems to ba a cookie problem" )
-            xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30021)+",10000,"+icon+")")
-            return
-
+                'platform':'WEB_MEDIAPLAYER',
+                'eventId':event_id,
+                'subject':'MLB_FULLCOUNT'
+                }
+        url = 'https://mlb-ws.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3?'
         headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0.2) Gecko/20100101 Firefox/10.0.2',
                    'Referer' : 'http://mlb.mlb.com/shared/flash/mediaplayer/v4.3/R1/MediaPlayer4.swf?v=14'}
-        url = 'https://mlb-ws.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3?'
         Data = getRequest(url,urllib.urlencode(values),headers)
         if debug == "true":
             addon_log( Data )
@@ -633,6 +695,7 @@ def mlbGame(event_id):
             return
 
         items = soup.findAll('user-verified-content')
+
         try:
             session = soup.find('session-key').string
         except:
@@ -649,71 +712,82 @@ def mlbGame(event_id):
                 scenario = 'FMS_CLOUD'
                 live = True
             content_id = item('content-id')[0].string
-            blackout_status = item('blackout-status')[0]
-            try:
-                blackout = item('blackout')[0].string.replace('_',' ')
-            except:
-                blackout = __language__(30083)
-
-            try:
-                call_letters = item('domain-attribute', attrs={'name' : "call_letters"})[0].string
-            except:
-                call_letters = ''
-
-            if item('domain-attribute', attrs={'name' : "home_team_id"})[0].string == item('domain-attribute', attrs={'name' : "coverage_association"})[0].string:
-                coverage = TeamCodes[item('domain-attribute', attrs={'name' : "home_team_id"})[0].string][0]+' Coverage'
-            elif item('domain-attribute', attrs={'name' : "away_team_id"})[0].string == item('domain-attribute', attrs={'name' : "coverage_association"})[0].string:
-                coverage = TeamCodes[item('domain-attribute', attrs={'name' : "away_team_id"})[0].string][0]+' Coverage'
-            else:
-                coverage = ''
-
-            if 'successstatus' in str(blackout_status):
-                name = coverage+' - '+call_letters
-            else:
-                name = coverage+' '+call_letters+' '+blackout
-
-            if item.type.string == 'audio':
-                name += ' Gameday Audio'
-                scenario = 'AUDIO_FMS_32K'
-
-            name = name.replace('.','').rstrip(' ')
-
-            if item.state.string == 'MEDIA_OFF':
+            if not full_count:
+                blackout_status = item('blackout-status')[0]
                 try:
-                    preview = soup.find('preview-url').contents[0]
-                    if re.search('innings-index',str(preview)):
-                        if debug == "true":
-                            addon_log( 'No preview' )
-                        raise Exception
-                    else:
-                        name = __language__(30084)+name
-                        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png")
-                        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-                        liz.setProperty( "Fanart_Image", fanart1 )
-                        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=preview,listitem=liz)
+                    blackout = item('blackout')[0].string.replace('_',' ')
                 except:
-                    pass
+                    blackout = __language__(30083)
 
-            else:
-                u=sys.argv[0]+"?url=&mode=9&name="+urllib.quote_plus(name)+"&event="+urllib.quote_plus(event_id)+"&content="+\
-                urllib.quote_plus(content_id)+"&session="+urllib.quote_plus(session)+"&cookieIp="+urllib.quote_plus(cookies['ipid'])+\
-                "&cookieFp="+urllib.quote_plus(cookies['fprt'])+"&scenario="+urllib.quote_plus(scenario)+"&live="+str(live)
+                try:
+                    call_letters = item('domain-attribute', attrs={'name' : "call_letters"})[0].string
+                except:
+                    call_letters = ''
+
+                if item('domain-attribute', attrs={'name' : "home_team_id"})[0].string == item('domain-attribute', attrs={'name' : "coverage_association"})[0].string:
+                    coverage = TeamCodes[item('domain-attribute', attrs={'name' : "home_team_id"})[0].string][0]+' Coverage'
+                elif item('domain-attribute', attrs={'name' : "away_team_id"})[0].string == item('domain-attribute', attrs={'name' : "coverage_association"})[0].string:
+                    coverage = TeamCodes[item('domain-attribute', attrs={'name' : "away_team_id"})[0].string][0]+' Coverage'
+                else:
+                    coverage = ''
+
                 if 'successstatus' in str(blackout_status):
-                    liz=xbmcgui.ListItem( coloring( name,"cyan",name ), iconImage=icon, thumbnailImage=icon)
+                    name = coverage+' - '+call_letters
                 else:
-                    liz=xbmcgui.ListItem(name, iconImage=icon)
+                    name = coverage+' '+call_letters+' '+blackout
+
                 if item.type.string == 'audio':
-                    liz.setInfo( type="Music", infoLabels={ "Title": name } )
+                    name += ' Gameday Audio'
+                    scenario = 'AUDIO_FMS_32K'
+
+                name = name.replace('.','').rstrip(' ')
+
+                if item.state.string == 'MEDIA_OFF':
+                    try:
+                        preview = soup.find('preview-url').contents[0]
+                        if re.search('innings-index',str(preview)):
+                            if debug == "true":
+                                addon_log( 'No preview' )
+                            raise Exception
+                        else:
+                            name = __language__(30084)+name
+                            liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png")
+                            liz.setInfo( type="Video", infoLabels={ "Title": name } )
+                            liz.setProperty( "Fanart_Image", fanart1 )
+                            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=preview,listitem=liz)
+                    except:
+                        xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30023)+",5000,"+icon+")")
+                        return
+
                 else:
-                    liz.setInfo( type="Video", infoLabels={ "Title": name } )
-                liz.setProperty( "Fanart_Image", fanart1 )
-                liz.setProperty('IsPlayable', 'true')
-                xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
+                    u=(sys.argv[0]+"?url=&mode=9&name="+urllib.quote_plus(name)+"&event="+urllib.quote_plus(event_id)+"&content="+
+                       urllib.quote_plus(content_id)+"&session="+urllib.quote_plus(session)+"&cookieIp="+urllib.quote_plus(cookies['ipid'])+
+                       "&cookieFp="+urllib.quote_plus(cookies['fprt'])+"&scenario="+urllib.quote_plus(scenario)+"&live="+str(live))
+                    if 'successstatus' in str(blackout_status):
+                        liz=xbmcgui.ListItem( coloring( name,"cyan",name ), iconImage=icon, thumbnailImage=icon)
+                    else:
+                        liz=xbmcgui.ListItem(name, iconImage=icon)
+                    if item.type.string == 'audio':
+                        liz.setInfo( type="Music", infoLabels={ "Title": name } )
+                    else:
+                        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+                    liz.setProperty( "Fanart_Image", fanart1 )
+                    liz.setProperty('IsPlayable', 'true')
+                    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
+            else:
+                name = 'full_count'
+                getGameURL(name,event_id,content_id,session,None,None,scenario,True)
 
 
-def getGameURL(name,event,content,session,cookieIp,cookieFp,live):
+def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
+        if name == 'full_count':
+            subject = 'MLB_FULLCOUNT'
+            url = 'https://mlb-ws.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3?'
+        else:
+            subject = 'LIVE_EVENT_COVERAGE'
+            url = 'https://secure.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.1?'
         values = {
-            'subject':'LIVE_EVENT_COVERAGE',
+            'subject': subject,
             'sessionKey': session,
             'identityPointId': cookieIp,
             'contentId': content,
@@ -722,7 +796,7 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,live):
             'fingerprint': cookieFp,
             'platform':'WEB_MEDIAPLAYER'
         }
-        url = 'https://secure.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.1?'
+
         Data = getRequest(url,urllib.urlencode(values),None)
         if debug == "true":
             addon_log( Data )
@@ -810,20 +884,32 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,live):
                 smil = get_smil(game_url.split('?')[0])
                 rtmp = smil[0]
                 playpath = ' Playpath='+smil[1]+'?'+game_url.split('?')[1]
-            if 'mp3:' in game_url:
-                pageurl = ' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.3/R1/MP4.jsp?calendar_event_id='+soup.find('event-id').string+\
-                '&content_id='+content+'&media_id=&view_key=&media_type=audio&source=MLB&sponsor=MLB&clickOrigin=Media+Grid&affiliateId=Media+Grid&feed_code=h&team=mlb'
+
+
+            if name == 'full_count':
+                pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.3/R3/MP4.jsp?calendar_event_id=%s'
+                           '&content_id=&media_id=&view_key=&media_type=&source=FULLCOUNT&sponsor=FULLCOUNT&clickOrigin=&affiliateId='
+                           % soup.find('event-id').string)
+            elif 'mp3:' in game_url:
+                pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.3/R1/MP4.jsp?calendar_event_id='
+                           '%s&content_id=%s&media_id=&view_key=&media_type=audio&source=MLB&sponsor=MLB&'
+                           'clickOrigin=Media+Grid&affiliateId=Media+Grid&feed_code=h&team=mlb'
+                           %(soup.find('event-id').string, content))
             else:
-                pageurl = ' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.3/R1/MP4.jsp?calendar_event_id='+soup.find('event-id').string+\
-                '&content_id=&media_id=&view_key=&media_type=video&source=MLB&sponsor=MLB&clickOrigin=MSB&affiliateId=MSB&team=mlb'
+                pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.3/R1/MP4.jsp?calendar_event_id=%s'
+                           '&content_id=&media_id=&view_key=&media_type=video&source=MLB&sponsor=MLB&clickOrigin=MSB&affiliateId=MSB&team=mlb'
+                           % soup.find('event-id').string)
             swfurl = ' swfUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.3/R1/MediaPlayer4.swf?v=14 swfVfy=1'
             if live:
                 swfurl += ' live=1'
             final_url = rtmp+playpath+pageurl+swfurl
             if debug == "true":
+                addon_log( 'Name: '+name )
                 addon_log( 'final url: '+final_url )
             item = xbmcgui.ListItem(path=final_url)
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+
 
 
 def get_smil(url):
@@ -853,33 +939,18 @@ def getDate():
 
 
 class dateStr:
-        today = datetime.date.today()
-        ty = 'year_'+str(today).split()[0].split('-')[0]
-        tm = '/month_'+str(today).split()[0].split('-')[1]
-        tday = '/day_'+str(today).split()[0].split('-')[2]
-        t = ty+tm+tday
-
+        format = "year_%Y/month_%m/day_%d"
+        t = datetime.datetime.today()
+        t_delay = t - datetime.timedelta(hours=3)
+        today = t_delay.strftime(format)
         one_day = datetime.timedelta(days=1)
-
-        yesterday = today - one_day
-        yy = 'year_'+str(yesterday).split()[0].split('-')[0]
-        ym = '/month_'+str(yesterday).split()[0].split('-')[1]
-        yday = '/day_'+str(yesterday).split()[0].split('-')[2]
-        y = yy+ym+yday
-
-        tomorrow = today + one_day
-        toy = 'year_'+str(tomorrow).split()[0].split('-')[0]
-        tom = '/month_'+str(tomorrow).split()[0].split('-')[1]
-        tod = '/day_'+str(tomorrow).split()[0].split('-')[2]
-        to = toy+tom+tod
-
-        byesterday = yesterday - one_day
-        byy = 'year_'+str(byesterday).split()[0].split('-')[0]
-        bym = '/month_'+str(byesterday).split()[0].split('-')[1]
-        byday = '/day_'+str(byesterday).split()[0].split('-')[2]
-        by = byy+bym+byday
-
-        day = (t,y,to,by)
+        y = t - one_day
+        yesterday = y.strftime(format)
+        to = t + one_day
+        tomorrow = to.strftime(format)
+        by = t - (one_day*2)
+        byesterday = by.strftime(format)
+        day = (today,yesterday,tomorrow,byesterday)
 
 
 def get_params():
@@ -1018,7 +1089,6 @@ try:
     cookieFp=urllib.unquote_plus(params["cookieFp"])
 except:
     pass
-
 try:
     scenario=urllib.unquote_plus(params["scenario"])
 except:
@@ -1059,7 +1129,7 @@ if mode==8:
     getRealtimeVideo(url)
 
 if mode==9:
-    getGameURL(name,event,content,session,cookieIp,cookieFp,live)
+    getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live)
 
 if mode==10:
     get_podcasts(url)
@@ -1078,8 +1148,8 @@ if mode==14:
     condensedGames()
 
 if mode==15:
-    url = 'http://www.mlb.com/gdcross/components/game/mlb/'+\
-    getDate().split('/',7)[7].replace('/master_scoreboard.json','/grid.json')
+    url = ('http://www.mlb.com/gdcross/components/game/mlb/'+
+            getDate().split('/',7)[7].replace('/master_scoreboard.json','/grid.json'))
     getCondensedGames(url)
 
 if mode==16:
@@ -1102,5 +1172,14 @@ if mode==21:
 
 if mode==22:
     mlb_podcasts()
+
+if mode==23:
+    getFullCount()
+
+if mode==24:
+    pass
+
+if mode==25:
+    mlbGame(event, True)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

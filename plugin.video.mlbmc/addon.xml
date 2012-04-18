@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mlbmc"
        name="MLBMC"
-       version="1.0.6"
+       version="1.0.7"
        provider-name="divingmule">
   <requires>
     <import addon="xbmc.python" version="2.0"/>

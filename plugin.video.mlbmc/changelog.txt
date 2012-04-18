@@ -1,3 +1,8 @@
+Version 1.0.7
+added Full Count, a daily live show
+added a time delay for todays games
+fixed some bugs in MLB.tv game list
+
 Version 1.0.6
 fix for condensed games
 

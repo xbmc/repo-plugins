@@ -1,3 +1,8 @@
+Version 0.0.9
+added Full Count, a daily live show
+added a time delay for todays games
+fixed some bugs in MLB.tv game list
+
 Version 0.0.8
 fix for condensed games
 

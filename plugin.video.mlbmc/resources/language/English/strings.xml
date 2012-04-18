@@ -23,7 +23,7 @@
   <string id='30020'>Log in Failed</string>
   <string id='30021'>Sorry - We didn't receive the required cookies</string>
   <string id='30022'>Status : </string>
-  <string id='30023'>Status : Media Off - Playing Preview</string>
+  <string id='30023'>Status : Media Off</string>
   <string id='30024'> - Playing Preview</string>
   <string id='30025'>Status : Not Authorized - Playing Preview</string>
   <string id='30026'>Status : Not Authorized</string>
@@ -82,7 +82,7 @@
   <string id='30079'>Loading Playlist</string>
   <string id='30080'>2011 Postseason</string>
   <string id='30081'>  Archived</string>
-  <string id='30082'>  Free Game</string>
+  <string id='30082'>  Free Game OF The Day</string>
   <string id='30083'>Blackout</string>
   <string id='30084'>Preview Video - </string>
   <string id='30085'>Email Address</string>
@@ -97,4 +97,5 @@
   <string id='30094'>Around the Minors (video)</string>
   <string id='30095'>MLB.com's The Vault (audio)</string>
   <string id='30096'>Intentional Talk (video)</string>
+  <string id='30097'>Full Count</string>
 </strings>

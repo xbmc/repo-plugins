@@ -68,7 +68,8 @@ def get_videos(url):
   videos = SoupStrainer('li', {'class': 'video-item'})
   soup = BeautifulSoup(urllib2.urlopen(url).read(), parseOnlyThese=videos)
   for link in soup.findAll('a'):
-    results.append({"name": link.find('span', {'class': 'title'}).text, "location": base_url+link['href']})
+    if not link.find('span', {'class': 'video-payment-noprice-button'}):
+      results.append({"name": link.find('span', {'class': 'title'}).text, "location": base_url+link['href']})
   return results
   
 def get_bitrates(url):

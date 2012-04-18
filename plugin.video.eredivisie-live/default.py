@@ -23,10 +23,18 @@ import xbmcplugin
 import xbmcgui
 import sys
 import urllib2
-from BeautifulSoup import BeautifulSoup, SoupStrainer
 import re
 
+link_re = re.compile(r'<a.*?/a>', re.S)
+href_re = re.compile(r'href="(.*?)"')
+title_re = re.compile(r'title="(.*?)"')
+name_re = re.compile(r'<span class="name">(.*?)</span>')
+bandwidth_re = re.compile(r'BANDWIDTH=([0-9]+)')
+playlist_re = re.compile(r'id="video-smil" value="(.*?)"')
+
 base_url = 'http://eredivisielive.nl'
+
+number_of_items = 100
 
 def get_params():
   param={}
@@ -51,11 +59,12 @@ def addFilterDir(name, filterString):
 
 def get_filter_list(filter_string):
   results = []
-  filter_options = SoupStrainer('div', {'id': "filter-"+filter_string+"-options"})
-  soup = BeautifulSoup(urllib2.urlopen(base_url+'/video').read(), parseOnlyThese=filter_options)
-  for tag in soup.findAll("a"):
-    if tag['href'] != '/video/overzicht/':
-      results.append({"name": tag.find("span", {"class": "name"}).text, "location": base_url+tag['href']})
+  filter_re = re.compile(r'<div id="filter-'+filter_string+'-options".*?</div>', re.S)
+  links = link_re.findall(filter_re.search(urllib2.urlopen(base_url+'/video').read()).group(0))
+  for link in links:
+    location = href_re.search(link).group(1)
+    if location != '/video/overzicht/':
+      results.append({"name": name_re.search(link).group(1), "location": base_url+location})
   return results
 
 def addListingDir(item):
@@ -63,20 +72,13 @@ def addListingDir(item):
   liz=xbmcgui.ListItem(item['name'])
   xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 
-def get_videos(url):
-  results = []
-  videos = SoupStrainer('li', {'class': 'video-item'})
-  soup = BeautifulSoup(urllib2.urlopen(url).read(), parseOnlyThese=videos)
-  for link in soup.findAll('a'):
-    if not link.find('span', {'class': 'video-payment-noprice-button'}):
-      results.append({"name": link.find('span', {'class': 'title'}).text, "location": base_url+link['href']})
-  return results
+def get_videos(links):
+  results = [{"name": title_re.search(string).group(1), "location": base_url+href_re.search(string).group(1)} for string in links if 'video-play-button' in string]
+  return results 
   
 def get_bitrates(url):
   results = []
-  bandwidth_re = re.compile(r'BANDWIDTH=([0-9]+)')
-  playlist = SoupStrainer('input', {'id':"video-smil"})
-  playlist_url = BeautifulSoup(urllib2.urlopen(url).read(), parseOnlyThese=playlist).input['value']
+  playlist_url = playlist_re.search(urllib2.urlopen(url).read()).group(1)
   playlist = urllib2.urlopen(playlist_url).readlines()
   bandwidth_found = False
   for line in playlist:
@@ -97,7 +99,25 @@ def addVideoLink(item):
   u=item['location']
   liz=xbmcgui.ListItem(item['name'], thumbnailImage=None)
   xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=False)
-  
+
+def get_next_page(links):
+  result = {"name": "Next page"}
+  for string in links:
+    if 'class="forward active"' in string:
+      result['location'] = base_url+href_re.search(string).group(1)
+      return result
+
+def listVideoItems(url):
+  next_page={'location': url}
+  items=[]
+  while next_page and len(items)<number_of_items:
+    links = link_re.findall(urllib2.urlopen(next_page['location']).read())
+    items += get_videos(links)
+    next_page = get_next_page(links)
+  for item in items:
+    addVideoItem(item)
+  addListingDir(next_page)
+
 ## Begin of main script
 params=get_params() # First, get the parameters
 
@@ -107,14 +127,10 @@ if 'filter' in params: # Filter chosen, load items
     for item in items:
       addListingDir(item)
   else:
-    items = get_videos(base_url+'/video')
-    for item in items:
-      addVideoItem(item)
+    listVideoItems(base_url+'/video')
 
 elif 'listing' in params: # Listing mode
-  items = get_videos(params['listing'])
-  for item in items:
-    addVideoItem(item)
+  listVideoItems(params['listing'])
 
 elif 'item' in params: # Item selected, show bitrate options
   items = get_bitrates(params['item'])

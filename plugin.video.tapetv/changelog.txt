@@ -1,0 +1,4 @@
+0.0.4 - addon.xml update
+0.0.3 - Preparing for adding to official Repo
+0.0.2 - Detect geoip
+0.0.1 - Initial release

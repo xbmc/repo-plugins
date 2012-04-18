@@ -1,3 +1,7 @@
+0.2.6
+- Translations 
+- Own Tracks MenuItem
+
 0.2.5
 - remove parseDOM lib (create new branch for parseDOM tests)
 - revert to httplib2 for all network actions

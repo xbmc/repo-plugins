@@ -6,3 +6,6 @@ Version bump for eden, nothing changed
 
 [B]2.0.1:[/B]
 Filter paywall items from listing
+
+[B]2.0.2:[/B]
+Improve speed, add next page button

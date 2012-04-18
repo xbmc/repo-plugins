@@ -1,11 +1,10 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.eredivisie-live"
        name="Eredivisie Live"
-       version="2.0.1"
+       version="2.0.2"
        provider-name="ErwinJunge">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
-    <import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
              provides="video"

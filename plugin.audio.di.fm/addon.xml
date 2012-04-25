@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.di.fm"
+       name="Digitally Imported"
+       version="1.1.1"
+       provider-name="qualisoft.dk - Tim C. Steinmetz">
+	<requires>
+		<import addon="xbmc.python" version="2.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<license>GPL 2.0</license>
+   		<summary lang="en">Digitally Imported</summary>
+		<description lang="en">
+			Digitally Imported is an Internet radio broadcaster playing various types of electronic dance music such as trance, progressive techno, eurodance and house and more across 35 separate streaming channels.
+		</description>
+	</extension>
+</addon>

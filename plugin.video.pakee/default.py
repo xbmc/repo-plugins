@@ -1,5 +1,6 @@
-	
-import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, unicodedata, mechanize, cookielib
 import xml.dom.minidom
 import time
 import threading
@@ -9,10 +10,10 @@ __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.13'
+__version__ = '1.0.16'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
-__rooturl__ = 'http://pakee.hopto.org/pakee/pakee.php?id=xbmc&z=9'
-#__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?ss=5'
+__rooturl__ = 'http://pakee.hopto.org/pakee/pakee.php?id=xbmc&zaz=9'
+#__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?poos=5'
 __language__ = __settings__.getLocalizedString
 
 #plugin modes
@@ -22,7 +23,6 @@ PLUGIN_MODE_QUERY_DB = 30
 PLUGIN_MODE_QUERY_YT = 40
 PLUGIN_MODE_BUILD_YT_USER = 50
 PLUGIN_MODE_BUILD_YT_FAV = 60
-PLUGIN_MODE_PLAY_AUDIO = 70
 PLUGIN_MODE_PLAY_PLAYLIST = 80
 PLUGIN_MODE_PLAY_SLIDESHOW = 90
 PLUGIN_MODE_OPEN_SETTINGS = 100
@@ -53,7 +53,8 @@ def clean( name ):
 	for search, replace in list:
 		name = name.replace( search, replace )	
 	#return unicode(name.encode('utf-8','ignore'))
-	return unicode(name)
+	#return unicode(name)
+	return  name.encode('utf-8','ignore')
 
 def open_settings():
 	__settings__.openSettings()
@@ -130,7 +131,7 @@ def play_playlist(origurl, index):
 
 		playlisturl = None
 		if guid is not None and guid != '':
-			print "Found item: " + label + " guid: " + guid 
+			#print "Found item: " + label + " guid: " + guid 
 			playlisturl = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % (guid)
 
 
@@ -224,8 +225,6 @@ def build_show_directory(origurl):
 
 		mode = PLUGIN_MODE_BUILD_DIR
 		isFolder = True
-	
-
 
 
 		#if weird characters found in label or description, instead of erroring out, empty their values (empty listitem will be shown)
@@ -238,13 +237,13 @@ def build_show_directory(origurl):
 				xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
 				#xbmc.log('found in show_dir(): ' + str(label).encode('utf-8','ignore') + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
 			except:
-				label = ''
-				description = ''
-
-				xbmc.log('found in show_dir(): ' + str(url) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount))	
+				#label = ''
+				#description = ''
+				#xbmc.log('found in show_dir() exception: ' + str(label) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+				#xbmc.log('found in show_dir() with empty label/desc: ' + str(url) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount))	
+				xbmc.log('bad string')	
 
 		if (url is not None and url != ''):
-
 
 			#For feeds with videos as their first item, show <play all> listitem as first listitem			
 			if 'youtube.com' in url or '(Playlist: ' in label:
@@ -284,7 +283,7 @@ def build_show_directory(origurl):
 				mode = PLUGIN_MODE_PLAY_SLIDESHOW
 
 			#audio track found, check whether in single or playlist mode and set the mode/url accordingly	
-			if '.mp3' in url or '.wma' in url or 'http://bit.ly' in url or '/getSharedFile/' in url:
+			if '.mp3' in url or '.wma' in url or 'http://bit.ly' in url or '/getSharedFile/' in url or '.mp4' in url:
 
 				#For feeds with mp3s as their first item, show <play all> listitem as first listitem			
 				if itemCount == 0:
@@ -296,7 +295,7 @@ def build_show_directory(origurl):
 
 				#play single video
 				if setting_playmode == 0:
-					mode = PLUGIN_MODE_PLAY_AUDIO
+					mode = PLUGIN_MODE_PLAY_STREAM
 
 				#play video playlist
 				else:
@@ -306,14 +305,15 @@ def build_show_directory(origurl):
 
 			if 'fetchLiveFeeds.php' not in url and ('rtmp://' in url or 'mms://' in url or 'rtsp://' in url or 'desistreams.xml' in origurl or 'LiveTV.xml' in origurl):
 				isFolder = False
-				#mode = PLUGIN_MODE_PLAY_STREAM
-				mode = PLUGIN_MODE_PLAY_PLAYLIST
-				url = origurl
 
-				#For feeds with streams as their first item, show <play all> listitem as first listitem			
-				#if itemCount == 0:
-				#	playAll = xbmcgui.ListItem( label = '<' + __settings__.getLocalizedString(30050) + '>', iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
-				#	xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
+				#play single video
+				if setting_playmode == 0:
+					mode = PLUGIN_MODE_PLAY_STREAM
+
+				#play video playlist
+				else:
+					mode = PLUGIN_MODE_PLAY_PLAYLIST
+					url = origurl
 
 
 
@@ -477,7 +477,7 @@ def getItemsFromUrl(url):
 		#data = file.read()
 		#file.close()
 
-		file = urllib2.urlopen(url)
+		file = urllib2.urlopen(url, timeout=3600)
 		data = file.read()
 		file.close()
 	except:
@@ -556,11 +556,15 @@ def getItemFields(item):
 		pubDate = getText(item.getElementsByTagName("pubDate")[0].childNodes)
 		if pubDate == '':
 			pubDate = '01.01.1960'
+		elif '+' in pubDate:
+			tpubDate = time.strptime(pubDate, '%a, %d %b %Y %H:%M:%S +0000')
+			pubDate = time.strftime("%d.%m.%Y", tpubDate)
 		else:
 			try:
 				tpubDate = time.strptime(pubDate, '%Y-%m-%d')
 			except:
 				tpubDate = time.strptime(pubDate, '%a, %d %b %Y %H:%M:%S GMT')
+
 
 			pubDate = time.strftime("%d.%m.%Y", tpubDate)
 	else:
@@ -688,9 +692,6 @@ elif mode == PLUGIN_MODE_BUILD_YT_USER:
 	build_ytuser_directory()
 elif mode == PLUGIN_MODE_BUILD_YT_FAV:
 	build_ytuser_favs_directory()
-elif mode == PLUGIN_MODE_PLAY_AUDIO:
-	#play_playlist(url, index)
-	play_stream(url, name)
 elif mode == PLUGIN_MODE_PLAY_PLAYLIST:
 	play_playlist(url, index)
 elif mode == PLUGIN_MODE_PLAY_SLIDESHOW:

@@ -1,3 +1,12 @@
+[B]Version 1.0.16[/B]
+- Bug fix
+
+
+[B]Version 1.0.14[/B]
+- Stream section now respects playlist setting (on or off)
+- unicode support
+- increased timeout during rss reads
+
 [B]Version 1.0.13[/B]
 - Fixing bug while playing justin.tv 
 

@@ -1,0 +1,43 @@
++ New feature
+* Fixed/improved feature
+- Removed feature
+
+
+25 Apr 2012 v1.1.1
+* Changed cache path from using xbmc.getaddoninfo('path') to xbmc.getaddoninfo('profile')
+* Renamed resource/language/english to resource/language/English
+* Localized on-screen strings (used in dialogboxes)
+
+
+22 Apr 2012 v1.1.0
++ The addon is now GPL2
++ Added AAC+ streams - 1/2 bandwidth for the same quali
++ Channelart will automatically be downloaded - for when new channels are added
++ Notification when new channels are added
++ New channels (when new channelart is found) are highlighted in orange - remains hightlighted till the cache is refreshed
++ Added optional stats system - results of this will be visible at http://stats.qualisoft.dk
+* Rewrote about 80% of the plugin - removed lots of duplicate/redundant code = ~150 lines lighter code
+* Filesystem paths are resolved using getAddonInfo('path') instead of os.getcwd()
+* All log output to switched from using the print function to xbmc.log
+- Removed MP3 stream support
+
+
+4 Jan 2012 v1.0
++ Added channelgraphics for 3 new channels
++ Now supports DI Premium - highquality 256k streams
++ DI Premium members can choose between 256k and 128k streams
++ Premium members can use their 'My Favorites' playlist
+* Changed cache expiration from 1 hour to 6 hours
+* Updated so it supports the new sitedesign, introduced new years eve
+* Removed the "Digitally Imported - " substring that had been added to streamnames
+
+
+25 Jul 2011 v0.71
+* Fixed a bug when setting "Stream cache expiration" to 0 - it actually works now
+
+
+23 Jul 2011 v0.7
++ Initial stable release
++ Only supports public streams
++ Sort channels by A-Z or list them in the order they are shown on di.fm
++ Fallback to addon icon, if no channelart found - for when new channels are added

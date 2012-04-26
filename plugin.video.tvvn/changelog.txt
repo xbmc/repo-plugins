@@ -1,3 +1,10 @@
+version 0.7 (26/04/2012):
+ * users can now show/hide channels descriptions via "Add-on Settings"
+ * more channels (ANTV and 11 local channels)
+ * change play_video method to work around for tv24.vn
+ * fix playback issue with Windows builds
+ * code clean up
+
 version 0.5.2 (09/04/2012):
  * minor changes to conform with eden's requirement
  * minor improvements to artwork

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="plugin.video.tvvn"
-	version="0.5.2"
+	version="0.7"
 	name="TV Viet Nam"
 	provider-name="Binh Nguyen">
 	<requires>
@@ -14,8 +14,8 @@
 		<platform>all</platform>
 		<summary lang="en">TV Viet Nam</summary>
 		<summary lang="vi">TV Việt Nam</summary>
-		<description lang="en">This plugin allows you to watch live TV channels or listen to radio stations in Viet Nam.</description>
-		<description lang="vi">Xem trực tiếp các kênh truyền hình và các đài phát thanh từ Việt Nam</description>
+		<description lang="en">This plugin allows you to watch live TV channels or listen to radio stations in Viet Nam. Report bugs at: zecoj.com</description>
+		<description lang="vi">Xem trực tiếp các kênh truyền hình và các đài phát thanh từ Việt Nam. Vui lòng báo lỗi nếu gặp tại: zecoj.com</description>
 		<disclaimer lang="en">all live streams are pulled from vtc.com.vn and tv24.com.vn</disclaimer>
 		<disclaimer lang="vi">tất cả các live streams được lấy từ vtc.com.vn và tv24.com.vn</disclaimer>
 	</extension>

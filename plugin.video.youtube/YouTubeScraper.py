@@ -41,7 +41,7 @@ class YouTubeScraper():
     urls['watched_history'] = "http://www.youtube.com/my_history"
     urls['liked_videos'] = "http://www.youtube.com/my_liked_videos"
     urls['music'] = "http://www.youtube.com/music"
-    urls['artist'] = "http://www.youtube.com/artist?a=%s&feature=artist"
+    urls['artist'] = "http://www.youtube.com/artist?a=%s&feature=music"
     urls['education'] = "http://www.youtube.com/education"
     urls['education_category'] = "http://www.youtube.com/education?category=%s"
     urls['playlist'] = "http://www.youtube.com/view_play_list?p=%s"
@@ -204,7 +204,7 @@ class YouTubeScraper():
                         item["Title"] = title
                         item["artist_name"] = urllib.quote_plus(title)
                         link = ahref[i]
-                        link = link[link.find("?a=") + 3:link.find("&")]
+                        link = link[link.rfind("/") + 1:link.rfind("?")]
                         item["artist"] = link
                         item["icon"] = "music"
                         item["scraper"] = "music_artist"
@@ -230,7 +230,10 @@ class YouTubeScraper():
 
             for artist in artists:
                 div = self.common.parseDOM(artist, "div", attrs={"class": "browse-item-content"})
-                ahref = self.common.parseDOM(div, "a", ret="href")[0]
+
+                id = self.common.parseDOM(div, "a", ret="href")[0]
+                id = id[id.rfind("/") + 1:id.rfind("?")]
+
                 atitle = self.common.parseDOM(div, "a", ret="title")[0]
                 athumb = self.common.parseDOM(artist, "img", ret="data-thumb")[0]
 
@@ -240,9 +243,7 @@ class YouTubeScraper():
                 item["Title"] = title
                 item["scraper"] = "music_artist"
                 item["artist_name"] = urllib.quote_plus(title)
-                link = ahref
-                link = link[link.find("?a=") + 3:link.find("&")]
-                item["artist"] = link
+                item["artist"] = id
                 item["icon"] = "music"
                 item["thumbnail"] = athumb
                 items.append(item)

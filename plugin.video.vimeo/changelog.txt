@@ -3,12 +3,13 @@
 - [XBMC] has Excessive Memory use after running the plugin for prolonged periods of time
 - [Vimeo] Vimeo's implementation of Oauth 1 is time sensetive, meaning that an incorrectly set system clock will prevent the plugin from logging in
 
-[B]Todo 2.0.0[/B] 
+[B]Todo[/B]
 - Implement cache service
 - scraper of vimeo's video school if possible
-- Finish refactor
-- Integration tests
-- Unit tests
+- More context menu items to take advantage of new core
+
+[B]Version 2.1.0[/B]
+- Fixed login, after vimeo site changes
 
 [B]Version 2.0.0[/B]
 - Added playlist control module to queue videos

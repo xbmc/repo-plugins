@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--Translator: NEOhidra-->
+<!--Email: neohidra@gmail.com-->
+<!--Date of translation: 01/14/2012-->
+<strings>
+    <string id="30000">Vimeo</string>
+
+    <!-- Category strings -->
+    <string id="30001">Explore Vimeo</string>
+    <string id="30002">Любимите ви</string>
+    <string id="30003">Моите абонаменти</string>
+    <string id="30004">Нови видеа от абонаментите</string>
+    <string id="30005">Моите видеа</string>
+    <string id="30006">Търси</string>
+    <string id="30007">Търсене...</string>
+    <string id="30008">Препоръчани канали</string>
+    <string id="30009">Моите албуми</string>
+    <string id="30010">Моите групи</string>
+    <string id="30011">Моите канали</string>
+    <string id="30012">Моите канали</string>
+    <string id="30013">Канали</string>
+    <string id="30014">Групи</string>
+    <string id="30015">Категории</string>
+    <string id="30016">HD видеа</string>
+    <string id="30017">Избрани от персонала</string>
+    <string id="30018">Албуми</string>
+    <string id="30019">Групи</string>
+    <string id="30020">Харесвания</string>
+    <string id="30021">Абонаменти</string>
+    <string id="30022">Видеа</string>
+    <string id="30023">Свалени</string>
+    <string id="30024">Добавяне на контакт...</string>
+    <string id="30025">Премахни контакта</string>
+    <string id="30026">Добави контакт</string>
+    <string id="30027">Вписване..</string>
+    <string id="30028">Променете настройките на добавката</string>
+    <string id="30029">Login</string>
+    <string id="30030">Вписани сте</string>
+    <string id="30031">За гледане по-късно</string>
+    <string id="30032">Свалени</string>
+    
+    <!-- Plugin settings strings -->
+    <string id="30200">Ел. поща</string>
+    <string id="30201">Парола</string>
+    <string id="30207">Място за сваляне</string>
+    <string id="30208">Макс качество на видеото (ако е налично)</string> 
+    <string id="30210">Видеа на страница</string>
+    <string id="30211">Запазвай последните (търсения)</string>
+    <string id="30213">Стандартния видео вид</string>
+    <string id="30214">Времетраене на известията (сек)</string>
+    <string id="30216">720p</string>
+    <string id="30217">само SD</string>
+    <string id="30218">Дебъг</string>
+    <string id="30219">Допълнителни</string>
+    <string id="30220">General</string>
+    <string id="30221">Вид в Confluence</string>
+    <string id="30222">Макс качество при сваляне (ако е налично)</string>
+    <string id="30223">= на гледаното видео</string>
+    <string id="30224">Да, оторизирай добавката Vimeo XBMC!</string>
+    <string id="30225">Не</string>
+    <string id="30226">Ползвай висококачествени миниатюри (по-бавно)</string>
+    <string id="30227">Папки</string>
+    <string id="30228">Допълнителни</string>
+    <string id="30229">Видео миниатюри</string>
+    <string id="30230">Миниатюри навсякъде</string>
+    <string id="30231">Стандартния за XBMC</string>
+    
+    <!-- Menu strings -->
+    <string id="30500">Свали видеото</string>
+    <string id="30501">Информация за видеото</string>
+    <string id="30502">Сложи на опашката</string>
+    <string id="30503">Like: %s</string>
+    <string id="30504">Unlike: %s</string>
+	<string id="30505">Добавяне на контакт...</string>
+    <string id="30506">Редактирай търсенето</string>
+    <string id="30507">Намери подобни</string>
+    <string id="30508">Изтрий записаното търсене</string>
+    <string id="30509">Още резултати</string>
+    <string id="30510">Join %s</string>
+    <string id="30511">Leave %s</string>
+    <string id="30512">Абониране за %s</string>
+    <string id="30513">Отписване от %s</string>
+    <string id="30514">Сложи папката на опашката</string>
+    <string id="30515">Refine to user</string>
+    <string id="30516">Refine to category</string>
+    <string id="30517">Sort most played</string>
+    <string id="30518">Sort relevant</string>
+    <string id="30519">Sort most commented</string>
+    <string id="30520">Sort most liked</string>
+    <string id="30521">Sort alphabetical</string>
+    <string id="30522">Sort oldest</string>
+    <string id="30523">Sort newest</string>
+    <string id="30524">Sort featured</string>
+    <string id="30525">Sort most videos</string>
+    <string id="30526">Sort most recently updated</string>
+    <string id="30527">Sort most members</string>
+    <string id="30528">Sort most subscribed</string>
+    <string id="30529">Премахни от "За гледане по-късно"</string>
+    <string id="30530">Добави в "За гледане по-късно"</string>
+
+    <!-- messages -->
+    <string id="30600">Грешка</string>
+    <string id="30601">Няма резултати!</string>
+    <string id="30602">Няма скорошна активност</string> 
+    <string id="30603">Възпроизвеждането се провали</string> 
+    <string id="30604">Свалянето завърши</string> 
+    <string id="30606">Uncaught error</string>
+    <string id="30607">Не е намерена подходяща резолюция</string>
+    <string id="30608">Непознат видео идентификатор?</string>
+    <string id="30609">Вписването се провали</string>
+    <string id="30610">Нов опит?</string>
+    <string id="30611">Не сте задали папка за свалянеt</string>
+    <string id="30612">Начало на сваляне</string>
+    <string id="30613">Добавен е контакт</string>
+    <string id="30614">Премахнат е контакт</string>
+    <string id="30615">Не намерено</string>
+    <string id="30616"></string>
+    <string id="30617">Непозната грешка</string>
+    <string id="30618">url адресът на видеото не може да бъде извлечен</string>
+    <string id="30619">Couldn't scrape YouTube</string>
+    <string id="30620">Типът на потока не се поддържа</string>
+    <string id="30621">Грешно потребителско име или парола</string>
+    <string id="30622">Възпроизвеждането се провали, пробвайте да се впишете</string>
+    <string id="30623">Refinement added</string>
+    <string id="30624">Refinement cleared</string>
+    <string id="30625">Поддръжката на RTMP е изключена</string>
+</strings>

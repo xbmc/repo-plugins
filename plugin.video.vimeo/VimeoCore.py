@@ -305,9 +305,12 @@ class VimeoCore(object):
         per_page = self.common.parseDOM(value, "videos", ret="perpage")
         page = self.common.parseDOM(value, "videos", ret="page")
 
-        if int(on_this_page[0]) < int(per_page[0]):
-            next = False
-        elif int(on_this_page[0]) == int(per_page[0]) and int(per_page[0]) * int(page[0]) == int(total[0]):
+        if (len(on_this_page) > 0 and len(per_page) > 0):
+            if int(on_this_page[0]) < int(per_page[0]):
+                next = False
+            elif int(on_this_page[0]) == int(per_page[0]) and int(per_page[0]) * int(page[0]) == int(total[0]):
+                next = False
+        else:
             next = False
 
         return next

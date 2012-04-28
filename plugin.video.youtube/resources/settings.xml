@@ -6,7 +6,7 @@
     <setting id="username" type="text" label="30200" default="" />
     <setting id="user_password" type="text" option="hidden" label="30201" enable="!eq(-1,)" default="" />
     <setting type="sep" />
-    <setting id="safe_search" type="enum" label="30209" lvalues="30214|30219|30220" default="1" />    
+    <setting id="safe_search" type="enum" label="30209" lvalues="30277|30219|30220" default="1" />    
     <setting id="hd_videos" type="enum" label="30208" lvalues="30213|30215|30216|30217" default="2" />
     <setting type="sep" />
     <setting id="download_path" type="folder" label="30207" default="" />

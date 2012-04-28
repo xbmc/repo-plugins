@@ -8,7 +8,7 @@
 - [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time
 - [RTMPDUMP] Doesn't support handshake type 10 which is required by youtube.
 
-[B]TODO 2.9.2[/B]
+[B]TODO 2.9.1[/B]
 - Unit test coverage of Core above 90% im looking at you "Fetch page"
 - Unit test new functions in storage...
 - Allow users to change sort on searches
@@ -18,6 +18,10 @@
 - Replace scraper with feeds for: Trailers, shows, music, education, disco.
 - If not replaceable refactor show scraper at least.
 - Integration tests on all user actions.
+
+[B]Version 2.9.2[/B]
+- Listing of folders with more than 50 items was broken
+- Listing subscriptions was broken by youtubes sudden api changes.
 
 [B]Version 2.9.1[/B]
 - Fixed indentation error that broke pagination of long playlists and subscription lists, basically any folder list with more than 50 elemtents was broken.

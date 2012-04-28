@@ -50,7 +50,9 @@ class YouTubePlayer():
         85: "520p h264 stereo",
         100: "360p vp8 webm stereo",
         101: "480p vp8 webm stereo",
-        102: "720p vp8 webm stereo"
+        102: "720p vp8 webm stereo",
+        120: "hd720",
+        121: "hd1080"
         }
 
     # YouTube Playback Feeds
@@ -592,9 +594,13 @@ class YouTubePlayer():
                 video_url = link(22)
             elif (link(45)):
                 video_url = link(45)
+            elif link(120):
+                video_url = link(120)
         if hd_quality > 2:
             if (link(37)):
                 video_url = link(37)
+            elif link(121):
+                video_url = link(121)
 
         if link(38) and False:
             video_url = link(38)
@@ -639,11 +645,15 @@ class YouTubePlayer():
 
         if link(37):
             quality_list.append((37, "1080p"))
+        elif link(121):
+            quality_list.append((121, "1080p"))
 
         if link(22):
             quality_list.append((22, "720p"))
         elif link(45):
             quality_list.append((45, "720p"))
+        elif link(120):
+            quality_list.append((120, "720p"))
 
         if link(35):
             quality_list.append((35, "480p"))

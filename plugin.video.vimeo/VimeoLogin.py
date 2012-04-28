@@ -19,8 +19,10 @@
 import sys
 import urllib
 import re
+import cookielib
 try: import simplejson as json
 except ImportError: import json
+import urllib2
 
 # ERRORCODES:
 # 0 = Ignore
@@ -85,6 +87,7 @@ class VimeoLogin():
             uid = urllib.unquote_plus(cookies[0])
             userid = uid.split("|")[0]
 
+        self.common.log("Done: " + repr(userid))
         return userid
 
     def extractCrossSiteScriptingToken(self):
@@ -92,9 +95,37 @@ class VimeoLogin():
         result = self.common.fetchPage({"link": "http://vimeo.com/log_in"})
 
         xsrft = self.common.parseDOM(result["content"], "input",
-                                     attrs={"type": "hidden", "id": "xsrft", "name": "token"},
+                                     attrs={"id": "xsrft", "name": "token"},
                                      ret="value")
+
+        if len(xsrft) == 0 and result["content"].find("xsrft:") > 0:
+            xsrft = self.ExtractVersion6CrossSiteScriptingToken(result["content"])
+
+        if len(xsrft) == 0:
+            self.common.log("Failed to find cross site scripting token: " + repr(result))
+        else:
+            ck = cookielib.Cookie(version=0, name='xsrft', value=xsrft[0], port=None, port_specified=False, domain='.vimeo.com', domain_specified=True, domain_initial_dot=True, path='/', path_specified=True, secure=False, expires=None, discard=False, comment=None, comment_url=None, rest={}, rfc2109=False)
+            sys.modules["__main__"].cookiejar.set_cookie(ck)
+
+        self.common.log("Done: " + repr(xsrft))
         return xsrft
+
+    def ExtractVersion6CrossSiteScriptingToken(self, html):
+        self.common.log("")
+
+        if html.find("xsrft:'") > 0:
+            xsrft = html[html.find("xsrft:'") + len("xsrft:'"):]
+            xsrft = xsrft[:xsrft.find("'")]
+            xsrft = [xsrft]
+            return xsrft
+
+        if html.find("xsrft: '") > 0:
+            xsrft = html[html.find("xsrft: '") + len("xsrft: '"):]
+            xsrft = xsrft[:xsrft.find("'")]
+            xsrft = [xsrft]
+            return xsrft
+
+        return []
 
     def performHttpLogin(self, xsrft):
         self.common.log("")
@@ -103,8 +134,7 @@ class VimeoLogin():
                    'token': xsrft}
 
         self.common.fetchPage({"link": "http://vimeo.com/log_in", "post_data": request,
-                                "refering": "http://www.vimeo.com/log_in",
-                                "cookie": "xsrft=" + xsrft})
+                                "refering": "http://www.vimeo.com/log_in"})
         self.common.log("Done")
 
     def checkIfHttpLoginFailed(self):
@@ -125,10 +155,10 @@ class VimeoLogin():
     def extractLoginTokens(self, auth_url):
         self.common.log("")
         result = self.common.fetchPage({"link": auth_url})
-
         login_oauth_token = self.common.parseDOM(result["content"], "input", attrs={"type": "hidden", "name": "oauth_token"} , ret="value")
-        login_token = self.common.parseDOM(result["content"], "input",  attrs={"type": "hidden", "id": "xsrft", "name": "token"}, ret="value")
+        login_token = self.common.parseDOM(result["content"], "input",  attrs={"type": "hidden", "id": "token", "name": "token"}, ret="value")
 
+        self.common.log("Done: " + repr((login_oauth_token, login_token)))
         return login_oauth_token, login_token
 
     def authorizeAndExtractVerifier(self, login_token, login_oauth_token):
@@ -138,9 +168,7 @@ class VimeoLogin():
                 'permission': 'write',
                 'accept': 'Allow'}
 
-        result = self.common.fetchPage({"link": "http://vimeo.com/oauth/confirmed", "post_data": data})
-
-
+        result = self.common.fetchPage({"link": "https://vimeo.com/oauth/confirmed", "post_data": data})
         verifier = self.common.getParameters(result["new_url"])
         return verifier["oauth_verifier"]
 
@@ -168,7 +196,6 @@ class VimeoLogin():
 
         # part 2 request user specific authorization token
         login_oauth_token, login_token = self.extractLoginTokens(auth_url)
-
         if len(login_oauth_token) == 0 or len(login_token) == 0:
             self.common.log("unable to find oauth tokens: login seems to have failed")
             return (self.language(30606), 303)
@@ -181,20 +208,20 @@ class VimeoLogin():
 
         self.common.log("setting userid: " + repr(userid), 3)
         self.settings.setSetting("userid", userid)
-        
+
         self.common.log("Login success, got verifier: " + verifier, 3)
 
         return (verifier, 200)
 
     def _getAuth(self):
         auth = self.settings.getSetting("oauth_token")
-        self.common.log("authentication token: " + repr(auth), 5)
+        self.common.log("authentication token: " + repr(auth), 1)
 
         if (auth):
             self.common.log("returning stored authentication token")
             return auth
         else:
-
+            self.common.log("no authentication token found, requesting new token")
             (result, status) = self._login()
 
             if status == 200:

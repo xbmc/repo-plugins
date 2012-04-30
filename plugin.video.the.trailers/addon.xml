@@ -2,7 +2,7 @@
 <addon 
     id="plugin.video.the.trailers"
     name="The Trailers"
-    version="0.1.1"
+    version="0.1.2"
     provider-name="Martijn (orginal: nuka1195)">
     <!-- Code taken from AMT-L and original creator ="nuka1195" -->
     <requires>

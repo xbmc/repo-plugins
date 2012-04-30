@@ -233,8 +233,6 @@ class _Parser:
             # set the key information
             # "VideoCodec": "ac3", "AudioCodec": "h264", "VideoResolution": "1080", 
             dirItem.listitem.setInfo( "video", { "Title": video[ "title" ], "Overlay": overlay, "Size": video[ "size" ], "Year": year, "Plot": video[ "plot" ], "PlotOutline": video[ "plot" ], "MPAA": video[ "mpaa" ], "Genre": video[ "genre" ], "Studio": video[ "studio" ], "Director": video[ "director" ], "Duration": video[ "duration" ], "Cast": video[ "cast" ], "Date": "%s-%s-%s" % ( video[ "postdate" ][ 8 : ], video[ "postdate" ][ 5 : 7 ], video[ "postdate" ][ : 4 ], ) } )
-            print video[ "studio" ]
-            print video[ "resolution" ]
             # set release date property
             dirItem.listitem.setProperty( "releasedate", release_date )
             # get filepath and tmp_filepath

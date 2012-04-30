@@ -1,3 +1,9 @@
+version 0.7.1 (28/04/2012):
+ * make use of tv24.vn mp4 streams over http -> faster buffering
+ * make use of "SD" streams from tv24.vn -> better quality
+ * VTV1-3 channels will now use streams from tv24.vn
+ * clean up channels descriptions
+
 version 0.7 (26/04/2012):
  * users can now show/hide channels descriptions via "Add-on Settings"
  * more channels (ANTV and 11 local channels)

@@ -45,15 +45,16 @@ src_vtc =  [VTCURL,
 			'http://vtc.com.vn/#']
 
 # tv24.vn
-TV24URLList=['rtmp://112.197.2.16/live',
-			 'rtmp://112.197.2.11/live']
+TV24URLList=['rtmp://112.197.2.16:1935/live',
+			'rtmp://112.197.2.11:1935/live']
 TV24URL=choice(TV24URLList)
+
 src_tv24=  [TV24URL,
 			'http://tv24.vn/jwplayer/player.swf',
 			'http://www.tv24.vn']
 
 # xunghe.vn
-src_trt  =  ['rtmp://118.69.176.149/live/',
+src_trt  =  ['rtmp://118.69.176.149/live',
 			'http://tv.xunghe.vn/player.swf',
 			'http://tv.xunghe.vn/?tab=Truyen-Hinh&xem=trt1-hue']
 
@@ -121,60 +122,66 @@ def add_directory_link(name, lmode, iconimage,desc):
 	return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)
 
 def show_menu_sctv():
-	add_link('SCTV1', 'src_tv24',  'sctv1.stream',  '',   'sctv.png', 'Hài')
-	add_link('SCTV2', 'src_tv24',  'sctv2.stream',  '',   'sctv.png', 'Yan TV: Âm nhạc Quốc tế')
-	add_link('SCTV3', 'src_tv24',  'sctv3.stream',  '',   'sctv.png', 'Sao TV: Thiếu nhi')
-	add_link('SCTV4', 'src_tv24',  'sctv4.stream',  '',   'sctv.png', 'Giải trí Tổng hợp')
-	add_link('SCTV5', 'src_tv24',  'sctv5.stream',  '',   'sctv.png', 'Shopping TV: Mua sắm SCJ ')
-	add_link('SCTV6', 'src_tv24',  'sctv6.stream',  '',   'sctv.png', 'Sóng nhạc')
-	add_link('SCTV7', 'src_tv24',  'sctv7.stream',  '',   'sctv.png', 'Sân khấu, Văn nghệ Tổng hợp')
-	add_link('SCTV8', 'src_tv24',  'sctv8.stream',  '',   'sctv.png', 'Thông tin Kinh tế - Thị trường')
-	add_link('SCTV9', 'src_tv24',  'sctv9.stream',  '',   'sctv.png', 'Phim châu Á')
-	add_link('SCTV10', 'src_tv24',  'sctv10.stream',  '',   'sctv.png', 'Home Shopping Network: Mua sắm')
-	add_link('SCTV11', 'src_tv24',  'sctv11.stream',  '',   'sctv.png', 'Hát trên truyền hình')
-	add_link('SCTV12', 'src_tv24',  'sctv12.stream',  '',   'sctv.png', 'Du lịch - Khám phá')
-	add_link('SCTV13', 'src_tv24',  'sctv13.stream',  '',   'sctv.png', 'Phụ nữ và Gia đình')
-	add_link('SCTV14', 'src_tv24',  'sctv14.stream',  '',   'sctv.png', 'Phim Việt')
-	add_link('SCTV15', 'src_tv24',  'sctv15.stream',  '',   'sctv.png', 'Thể thao')
-	add_link('SCTV16', 'src_tv24',  'sctv16.stream',  '',   'sctv.png', 'Phim truyện Nước ngoài')
-	add_link('SCTV17', 'src_tv24',  'sctv17.stream',  '',   'sctv.png', 'Phim tổng hợp')
-	add_link('SCTVHD', 'src_tv24',  'sctv18.stream',  '',   'sctv.png', 'Thể thao')
+	add_link('SCTV1', 'src_tv24',  'SDsctv1.stream',  '',   'sctv.png', 'Hài')
+	add_link('SCTV2', 'src_tv24',  'SDsctv2.stream',  '',   'sctv.png', 'Yan TV: Âm nhạc quốc tế')
+	add_link('SCTV3', 'src_tv24',  'SDsctv3.stream',  '',   'sctv.png', 'Sao TV: Thiếu nhi')
+	add_link('SCTV4', 'src_tv24',  'SDsctv4.stream',  '',   'sctv.png', 'Giải trí tổng hợp')
+	add_link('SCTV5', 'src_tv24',  'SDsctv5.stream',  '',   'sctv.png', 'Shopping TV: Mua sắm SCJ ')
+	add_link('SCTV6', 'src_tv24',  'SDsctv6.stream',  '',   'sctv.png', 'Sóng nhạc')
+	add_link('SCTV7', 'src_tv24',  'SDsctv7.stream',  '',   'sctv.png', 'Sân khấu, Văn nghệ tổng hợp')
+	add_link('SCTV8', 'src_tv24',  'SDsctv8.stream',  '',   'sctv.png', 'Thông tin Kinh tế, Thị trường')
+	add_link('SCTV9', 'src_tv24',  'SDsctv9.stream',  '',   'sctv.png', 'Phim châu Á')
+	add_link('SCTV10', 'src_tv24',  'SDsctv10.stream',  '',   'sctv.png', 'Home Shopping Network: Mua sắm')
+	add_link('SCTV11', 'src_tv24',  'SDsctv11.stream',  '',   'sctv.png', 'Hát trên truyền hình')
+	add_link('SCTV12', 'src_tv24',  'SDsctv12.stream',  '',   'sctv.png', 'Du lịch, Khám phá')
+	add_link('SCTV13', 'src_tv24',  'SDsctv13.stream',  '',   'sctv.png', 'Phụ nữ và Gia đình')
+	add_link('SCTV14', 'src_tv24',  'SDsctv14.stream',  '',   'sctv.png', 'Phim Việt')
+	add_link('SCTV15', 'src_tv24',  'SDsctv15.stream',  '',   'sctv.png', 'Thể thao')
+	add_link('SCTV16', 'src_tv24',  'SDsctv16.stream',  '',   'sctv.png', 'Phim truyện nước ngoài')
+	add_link('SCTV17', 'src_tv24',  'SDsctv17.stream',  '',   'sctv.png', 'Phim tổng hợp')
+	add_link('SCTVHD', 'src_tv24',  'SDsctv18.stream',  '',   'sctv.png', 'Thể thao')
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def show_menu_local():
-	add_link('HN1', 'src_tv24',  'hn1.stream',  '',   '.png', 'Hà Nội 1')
-	add_link('TRT1', 'src_trt',  'trt',  '',   '.png', 'Thừa Thiên Huế')
-	add_link('LA34', 'src_tv24',  'la34.stream',  '',   '.png', 'Long An')
-	add_link('THVL1', 'src_tv24',  'thvl1.stream',  '',   '.png', 'Vĩnh Long')
-	add_link('ĐN1', 'src_tv24',  'dn1.stream',  '',   '.png', 'Đồng Nai 1')
-	add_link('HGV', 'src_tv24',  'thhg.stream',  '',   '.png', 'Hậu Giang')
-	add_link('STV', 'src_tv24',  'thst.stream',  '',   '.png', 'Sóc Trăng')
-	add_link('THTG', 'src_tv24',  'thtg.stream',  '',   '.png', 'Tiền Giang')
-	add_link('QRT', 'src_tv24',  'qrt.stream',  '',   '.png', 'Quảng Nam')
-	add_link('BTV', 'src_tv24',  'bthtv.stream',  '',   '.png', 'Bình Thuận')
-	add_link('THĐT', 'src_tv24',  'thdt.stream',  '',   '.png', 'Đồng Tháp')
+	add_link('HN1', 'src_tv24',  'hn1.stream',  '',   '', 'Hà Nội 1')
+	add_link('TRT1', 'src_trt',  'trt',  '',   '', 'Thừa Thiên Huế')
+	add_link('LA34', 'src_tv24',  'la34.stream',  '',   '', 'Long An')
+	add_link('THVL1', 'src_tv24',  'thvl1.stream',  '',   '', 'Vĩnh Long')
+	add_link('ĐN1', 'src_tv24',  'dn1.stream',  '',   '', 'Đồng Nai 1')
+	add_link('HGV', 'src_tv24',  'thhg.stream',  '',   '', 'Hậu Giang')
+	add_link('STV', 'src_tv24',  'thst.stream',  '',   '', 'Sóc Trăng')
+	add_link('THTG', 'src_tv24',  'thtg.stream',  '',   '', 'Tiền Giang')
+	add_link('QRT', 'src_tv24',  'qrt.stream',  '',   '', 'Quảng Nam')
+	add_link('BTV', 'src_tv24',  'bthtv.stream',  '',   '', 'Bình Thuận')
+	add_link('THĐT', 'src_tv24',  'thdt.stream',  '',   '', 'Đồng Tháp')
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def show_menu_vov():
-	add_link('VOV1', 'src_vtc',  'vov1',   'VOV1/29',  'vov1.png', 'Thời sự - Chính trị - Tổng hợp')
-	add_link('VOV2', 'src_vtc',  'vov2',   'VOV2/28',  'vov2.png', 'Văn hóa - Đời sống - Khoa giáo')
-	add_link('VOV3', 'src_vtc',  'vov3',   'VOV3/27',  'vov3.png', 'Âm nhạc & Giải trí')
-	add_link('VOV5', 'src_vtc',  'vov5',   'VOV5/25',  'vov5.png', 'Phát thanh Đối ngoại')
+	add_link('VOV1', 'src_vtc',  'vov1',   'VOV1/29',  'vov1.png', 'Thời sự, Chính trị, Tổng hợp')
+	add_link('VOV2', 'src_vtc',  'vov2',   'VOV2/28',  'vov2.png', 'Văn hóa, Đời sống, Khoa giáo')
+	add_link('VOV3', 'src_vtc',  'vov3',   'VOV3/27',  'vov3.png', 'Âm nhạc, Giải trí')
+	add_link('VOV5', 'src_vtc',  'vov5',   'VOV5/25',  'vov5.png', 'Phát thanh đối ngoại')
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def Init():
-	add_link('VTV1', 'src_vtc',  'vtv11',  'VTV1/15',  'vtv1.png', 'Thông tin Tổng hợp')
-	add_link('VTV2', 'src_vtc',  'vtv2',   'VTV2/23',  'vtv2.png', 'Khoa học & Giáo dục')
-	add_link('VTV3', 'src_vtc',  'vtv31',  'VTV3/3',   'vtv3.png', 'Thể thao, Giải trí & Thông tin Kinh tế')
-	add_link('VTV4', 'src_vtc',  'vtv4',   'VTV4/2',   'vtv4.png', 'Kênh cho người Việt Nam ở Nước ngoài')
-	add_link('VTV6', 'src_tv24',  'vtv6.stream',   '',   'vtv6.png', 'Kênh cho Thanh, Thiếu niên')
-	add_link('VTV9', 'src_tv24',  'vtv9.stream',   '',   'vtv9.png', 'Kênh cho Khán giả Miền Nam')
-	add_link('ANTV',  'src_tv24',  'antv.stream',   'antv.html',   'antv.png', 'An Ninh TV')
-	add_link('VTC1', 'src_vtc',  'vtc11',  'VTC1/10',  'vtc1.png', 'Thời sự Tổng hợp')
-	add_link('VTC2', 'src_vtc',  'vtc21',  'VTC2/11',  'vtc2.png', 'Khoa học Kông nghệ')
+	#add_link('VTV1', 'src_vtc',  'vtv11',  'VTV1/15',  'vtv1.png', 'Thông tin tổng hợp')
+	#add_link('VTV2', 'src_vtc',  'vtv2',   'VTV2/23',  'vtv2.png', 'Khoa học & Giáo dục')
+	#add_link('VTV3', 'src_vtc',  'vtv31',  'VTV3/3',   'vtv3.png', 'Thể thao, Giải trí & Thông tin kinh tế')
+	#add_link('VTV4', 'src_vtc',  'vtv4',   'VTV4/2',   'vtv4.png', 'Kênh cho người Việt Nam ở nước ngoài')
+	#add_link('HTV7', 'src_vtc',  'htv7',   '',  'htv7.png', 'Thông tin - Giải trí - Thể thao')
+	#add_link('HTV9', 'src_vtc',  'htv91',  '',   'htv9.png', 'Chính trị - Xã hội - Văn hóa')
+	add_link('VTV1', 'src_tv24',  'vtv1.stream',  '',  'vtv1.png', 'Thông tin tổng hợp')
+	add_link('VTV2', 'src_tv24',  'vtv2.stream',  '',  'vtv2.png', 'Khoa học, Giáo dục')
+	add_link('VTV3', 'src_tv24',  'vtv3.stream',  '',  'vtv3.png', 'Thể thao, Giải trí, Thông tin Kinh tế')
+	add_link('VTV4', 'src_tv24',  'vtv4.stream',  '',  'vtv4.png', 'Kênh cho người Việt Nam ở nước ngoài')
+	add_link('VTV6', 'src_tv24',  'vtv6.stream',  '',  'vtv6.png', 'Kênh cho Thanh, thiếu niên')
+	add_link('VTV9', 'src_tv24',  'vtv9.stream',  '',  'vtv9.png', 'Kênh cho Khán giả miền Nam')
+	add_link('ANTV', 'src_tv24',  'antv.stream',  '',  'antv.png', 'An ninh TV')
+	add_link('HTV7', 'src_tv24',  'htv7.stream',  '',  'htv7.png', 'Thông tin, Giải trí, Thể thao')
+	add_link('HTV9', 'src_tv24',  'htv9.stream',  '',  'htv9.png', 'Chính trị, Xã hội, Văn hóa')
+	add_link('VTC1', 'src_vtc',  'vtc11',  'VTC1/10',  'vtc1.png', 'Thời sự tổng hợp')
+	add_link('VTC2', 'src_vtc',  'vtc21',  'VTC2/11',  'vtc2.png', 'Khoa học, Công nghệ')
 	add_link('VTC10', 'src_vtc', 'vtc101', 'VTC10/22', 'vtc10.png', 'Kênh Văn hóa Việt')
-	add_link('HTV7', 'src_vtc',  'htv7',   '',  'htv7.png', 'Thông tin - Giải trí - Thể thao')
-	add_link('HTV9', 'src_vtc',  'htv91',  '',   'htv9.png', 'Chính trị - Xã hội - Văn hóa')
 	add_directory_link('SCTV Channels', '10', 'sctv.png', 'SCTV hợp tác và sản xuất')
 	add_directory_link('Local Stations', '12', 'vov.png', 'Truyền hình Địa phương')
 	add_directory_link('VOV Radio', '11', 'vov.png', 'Đài Tiếng nói Việt Nam')
@@ -182,7 +189,7 @@ def Init():
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def play_video(src, stream_name, ref):
-	prov=globals()[src]
+	prov = globals()[src]
 	item = xbmcgui.ListItem("TVVN")
 
 	pageUrl=prov[2]+"/"+ref
@@ -191,6 +198,8 @@ def play_video(src, stream_name, ref):
 	flashVer='LNX_11,2,202,233'
 
 	fullURL=videoUrl+' swfVfy=1 live=1 playpath='+stream_name+' flashVer='+flashVer+' app=live pageUrl='+pageUrl+'/ tcUrl='+videoUrl+' swfUrl='+swfUrl 
+	if src == "src_tv24":
+		fullURL=prov[0].replace("rtmp://","http://")+"/"+stream_name+"/playlist.m3u8"
 	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(fullURL, item)
 
 if mode==None:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, unicodedata, mechanize, cookielib
+import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, unicodedata
 import xml.dom.minidom
 import time
 import threading
@@ -10,7 +10,7 @@ __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.16'
+__version__ = '1.0.18'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
 __rooturl__ = 'http://pakee.hopto.org/pakee/pakee.php?id=xbmc&zaz=9'
 #__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?poos=5'

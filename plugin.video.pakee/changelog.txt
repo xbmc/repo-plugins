@@ -1,3 +1,10 @@
+[B]Version 1.0.18[/B]
+-removing mac generated files from zip
+
+
+[B]Version 1.0.16[/B]
+- Removing references to mechanize as it seems to require separate install
+
 [B]Version 1.0.16[/B]
 - Bug fix
 

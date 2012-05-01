@@ -17,6 +17,7 @@
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
+import urllib2
 
 Q_BEST = 0   # 1700 kb/s
 Q_HIGH = 1   # 1000 kb/s
@@ -76,6 +77,18 @@ class Channel(object):
     def get_config_key(self):
         return self.config_key
 
+class TV2RChannel(Channel):
+    def get_url(self, quality, idx = 0):
+        url = super(TV2RChannel, self).get_url(quality, idx)
+        return url.replace('<HOST>', self.get_host_ip())
+
+    def get_host_ip(self):
+        u = urllib2.urlopen('http://livestream.fynskemedier.dk/loadbalancer')
+        s = u.read()
+        u.close()
+
+        return s[9:]
+
 # http://dr.dk/nu/embed/live?height=467&width=830
 # DR1
 Channel(1, CATEGORY_DR, "dr1.stream").add_urls(
@@ -109,43 +122,43 @@ Channel(6, CATEGORY_DR, "drhd.stream").add_urls(
     medium = ['rtmp://livetv.gss.dr.dk/live/livedr06astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream1 live=1'])
 
 # TV2 Fyn
-Channel(100, CATEGORY_TV2_REG).add_urls(
-    high   = 'rtmp://80.63.11.91:1935/live/_definst_/tv2fyn_1000 live=1'
+TV2RChannel(100, CATEGORY_TV2_REG).add_urls(
+    high   = 'rtmp://<HOST>:1935/live/_definst_/tv2fyn_1000 live=1'
 )
 # TV2 Lorry
-Channel(101, CATEGORY_TV2_REG).add_urls(
-    best   = 'rtmp://80.63.11.91:1935/live/_definst_/tv2lorry_2000 live=1',
-    high   = 'rtmp://80.63.11.91:1935/live/_definst_/tv2lorry_1000 live=1',
-    medium = 'rtmp://80.63.11.91:1935/live/_definst_/tv2lorry_300 live=1'
+TV2RChannel(101, CATEGORY_TV2_REG).add_urls(
+    best   = 'rtmp://<HOST>:1935/live/_definst_/tv2lorry_2000 live=1',
+    high   = 'rtmp://<HOST>:1935/live/_definst_/tv2lorry_1000 live=1',
+    medium = 'rtmp://<HOST>:1935/live/_definst_/tv2lorry_300 live=1'
 )
 # TV2 Syd
-Channel(102, CATEGORY_TV2_REG).add_urls(
-    best   = 'rtmp://80.63.11.91:1935/live/_definst_/tvsyd_2000 live=1',
-    high   = 'rtmp://80.63.11.91:1935/live/_definst_/tvsyd_1000 live=1',
-    medium = 'rtmp://80.63.11.91:1935/live/_definst_/tvsyd_300 live=1'
+TV2RChannel(102, CATEGORY_TV2_REG).add_urls(
+    best   = 'rtmp://<HOST>:1935/live/_definst_/tvsyd_2000 live=1',
+    high   = 'rtmp://<HOST>:1935/live/_definst_/tvsyd_1000 live=1',
+    medium = 'rtmp://<HOST>:1935/live/_definst_/tvsyd_300 live=1'
 )
 # TV2 Midtvest
 Channel(103, CATEGORY_TV2_REG).add_urls(
     high   = 'http://ms1.tvmidtvest.dk/live')
 # TV2 Nord
-Channel(105, CATEGORY_TV2_REG).add_urls(
-    best   = 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_2000 live=1',
-    high   = 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_1000 live=1',
-    medium = 'rtmp://80.63.11.91:1935/live/_definst_/tv2nord-plus_300 live=1'
+TV2RChannel(105, CATEGORY_TV2_REG).add_urls(
+    best   = 'rtmp://<HOST>:1935/live/_definst_/tv2nord-plus_2000 live=1',
+    high   = 'rtmp://<HOST>:1935/live/_definst_/tv2nord-plus_1000 live=1',
+    medium = 'rtmp://<HOST>:1935/live/_definst_/tv2nord-plus_300 live=1'
 )
 # TV2 East
 Channel(106, CATEGORY_TV2_REG).add_urls(
     best   = 'rtmp://tv2regup1.webhotel.net/videostreaming/ playpath=tv2east live=1'
 )
 # TV2 OJ
-#Channel(108, CATEGORY_TV2_REG).add_urls(
-#    best   = 'rtmp://80.63.11.91:1935/live/_definst_/tv2oj_2000 live=1',
-#    high   = 'rtmp://80.63.11.91:1935/live/_definst_/tv2oj_1000 live=1',
-#    medium = 'rtmp://80.63.11.91:1935/live/_definst_/tv2oj_300 live=1'
-# )
+TV2RChannel(108, CATEGORY_TV2_REG).add_urls(
+    best   = 'rtmp://<HOST>:1935/live/_definst_/tv2oj_2000 live=1',
+    high   = 'rtmp://<HOST>:1935/live/_definst_/tv2oj_1000 live=1',
+    medium = 'rtmp://<HOST>:1935/live/_definst_/tv2oj_300 live=1'
+)
 # TV2 Bornholm
 Channel(109, CATEGORY_TV2_REG).add_urls(
-    best   = 'rtsp://itv02.digizuite.dk/tv2b live=1'
+    best   = 'mms://itv02.digizuite.dk/tv2b'
 )
 
 # http://ft.arkena.tv/xml/core_player_clip_data_v2_REAL.php?wtve=187&wtvl=2&wtvk=012536940751284&as=1

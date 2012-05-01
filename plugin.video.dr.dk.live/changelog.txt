@@ -1,3 +1,9 @@
+[B]Version 2.1.6 - 2012-04-25[/B]
+- Updated URLs for some TV2/Regions (by request from Fynske Medier)
+
+[B]Version 2.1.5 - 2012-04-13[/B]
+- Always play channels via playChannel(..)
+
 [B]Version 2.1.4 - 2012-04-12[/B]
 - Added Kanal Sport
 - Use script.module.buggalo for error reporting

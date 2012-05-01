@@ -56,8 +56,7 @@ class DanishLiveTV(object):
                 except ValueError:
                     idx = 0 # fallback for missing settings
 
-            url = channel.get_url(quality, idx)
-            if url:
+            if channel.get_url(quality, idx):
                 title = ADDON.getLocalizedString(TITLE_OFFSET + channel.get_id())
                 item = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
                 item.setInfo('video', infoLabels={
@@ -65,8 +64,8 @@ class DanishLiveTV(object):
                     'studio' : ADDON.getLocalizedString(channel.get_category())
                 })
                 item.setProperty('Fanart_Image', FANART)
-                item.setProperty('IsLive', 'true')
-                xbmcplugin.addDirectoryItem(HANDLE, url, item)
+                item.setProperty('IsPlayable', 'true')
+                xbmcplugin.addDirectoryItem(HANDLE, PATH + '?playChannel=%d' % channel.id, item)
 
         xbmcplugin.endOfDirectory(HANDLE)
 

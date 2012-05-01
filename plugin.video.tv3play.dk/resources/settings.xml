@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-    <category label="101">
-        <setting id="region.url" label="102" type="labelenum" values="tv3play.dk|tv3play.se|tv3play.no|tv3play.lt|tv3play.lv|tv3play.ee" />
-    </category>
-</settings>

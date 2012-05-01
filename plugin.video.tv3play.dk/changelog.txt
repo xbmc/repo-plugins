@@ -1,3 +1,8 @@
+[B]Version 1.0.2 - 2012-04-29[/B]
+- Added region selection as first screen
+- Added support viasat4play.no
+- Added support for latest, most viewed and most rated
+
 [B]Version 1.0.1 - 2012-04-10[/B]
 - Better error handling for exceptional cases
 

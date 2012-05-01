@@ -31,33 +31,53 @@ import xbmcplugin
 
 import buggalo
 
-REGIONS = ['tv3play.dk', 'tv3play.se', 'tv3play.no', 'tv3play.lt', 'tv3play.lv', 'tv3play.ee']
+REGIONS = ['tv3play.dk', 'tv3play.se', 'tv3play.no', 'tv3play.lt', 'tv3play.lv', 'tv3play.ee', 'viasat4play.no']
+RSS = { 301 : 'recent', 302 : 'mostviewed', 303 : 'highestrated', 304 : 'recent?type=clip' }
 
 class TV3PlayException(Exception):
     pass
 
 class TV3PlayAddon(object):
-    def listPrograms(self):
-        html = self.downloadUrl(self.getBaseUrl() + '/program')
+    def listRegions(self):
+        items = list()
+        for region in REGIONS:
+            item = xbmcgui.ListItem(region, iconImage=ICON)
+            item.setProperty('Fanart_Image', FANART)
+            items.append((PATH + '?region=%s' % region, item, True))
+
+        xbmcplugin.addDirectoryItems(HANDLE, items)
+        xbmcplugin.endOfDirectory(HANDLE)
+
+
+    def listPrograms(self, region):
+        url = 'http://www.%s/program' % region
+        buggalo.addExtraData('url', url)
+        html = self.downloadUrl(url)
         if not html:
             raise TV3PlayException(ADDON.getLocalizedString(204))
 
         items = list()
+        for stringId in sorted(RSS.keys()):
+            item = xbmcgui.ListItem(ADDON.getLocalizedString(stringId), iconImage=ICON)
+            item.setProperty('Fanart_Image', FANART)
+            items.append((PATH + '?region=%s&rss=%s' % (region, stringId), item, True))
+
         for m in re.finditer('<a href="/program/([^"]+)">([^<]+)</a>', html):
             slug = m.group(1)
             title = m.group(2)
             fanart = self.downloadAndCacheFanart(slug, None)
 
-            item = xbmcgui.ListItem(title, iconImage=ICON)
-            item.setIconImage(fanart)
+            item = xbmcgui.ListItem(title, iconImage=fanart)
             item.setProperty('Fanart_Image', fanart)
-            items.append((PATH + '?program=%s' % slug, item, True))
+            items.append((PATH + '?region=%s&program=%s' % (region, slug), item, True))
 
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def listSeasons(self, slug):
-        html = self.downloadUrl(self.getBaseUrl() + '/program/%s' % slug)
+    def listSeasons(self, region, slug):
+        url = 'http://www.%s/program/%s' % (region, slug)
+        buggalo.addExtraData('url', url)
+        html = self.downloadUrl(url)
         if not html:
             raise TV3PlayException(ADDON.getLocalizedString(203))
 
@@ -79,7 +99,7 @@ class TV3PlayAddon(object):
                 if fanart:
                     item.setIconImage(fanart)
                     item.setProperty('Fanart_Image', fanart)
-                xbmcplugin.addDirectoryItem(HANDLE, PATH + '?program=%s&season=%s' % (slug, season), item, True, videoCount)
+                xbmcplugin.addDirectoryItem(HANDLE, PATH + '?region=%s&program=%s&season=%s' % (region, slug, season), item, True, videoCount)
 
         seasons = clipsHtml.split('class="season-head')
         for seasonHtml in seasons:
@@ -87,17 +107,18 @@ class TV3PlayAddon(object):
             season = m.group(1)
             videoCount = seasonHtml.count('href="/play/')
             if videoCount > 0:
-                item = xbmcgui.ListItem('%s (%s)' % (season.decode('utf8', 'ignore'), ADDON.getLocalizedString(103)), iconImage = ICON)
-                item.setIconImage(fanart)
+                item = xbmcgui.ListItem('%s (%s)' % (season.decode('utf8', 'ignore'), ADDON.getLocalizedString(103)), iconImage = fanart)
                 item.setProperty('Fanart_Image', fanart)
-                xbmcplugin.addDirectoryItem(HANDLE, PATH + '?program=%s&season=%s&clips=true' % (slug, season), item, True, videoCount)
+                xbmcplugin.addDirectoryItem(HANDLE, PATH + '?region=%s&program=%s&season=%s&clips=true' % (region, slug, season), item, True, videoCount)
 
 
         xbmcplugin.endOfDirectory(HANDLE)
 
 
-    def listVideos(self, slug, season, clips = False):
-        html = self.downloadUrl(self.getBaseUrl() + '/program/%s' % slug)
+    def listVideos(self, region, slug, season, clips = False):
+        url = 'http://www.%s/program/%s' % (region, slug)
+        buggalo.addExtraData('url', url)
+        html = self.downloadUrl(url)
         fanart = self.downloadAndCacheFanart(slug, html)
 
         m = re.search('Table body(.*?)</tbody>.*?Table body(.*?)</tbody>', html, re.DOTALL)
@@ -134,10 +155,9 @@ class TV3PlayAddon(object):
             if episode:
                 infoLabels['episode'] = int(episode)
 
-            item = xbmcgui.ListItem(title, iconImage = ICON)
+            item = xbmcgui.ListItem(title, iconImage = fanart)
             item.setInfo('video', infoLabels)
             item.setProperty('IsPlayable', 'true')
-            item.setIconImage(fanart)
             item.setProperty('Fanart_Image', fanart)
             items.append((PATH + '?playVideo=%s' % videoId, item))
 
@@ -147,6 +167,38 @@ class TV3PlayAddon(object):
             xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_DATE)
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.endOfDirectory(HANDLE)
+
+    def listRss(self, region, id):
+        url = 'http://www.%s/rss/%s' % (region, RSS[int(id)])
+        buggalo.addExtraData('url', url)
+        xml = self.downloadUrl(url)
+        doc = ElementTree.fromstring(xml.replace('&', '&amp;'))
+
+        items = list()
+        for node in doc.findall('channel/item'):
+            videoId = node.findtext('id')
+            title = node.findtext('title')
+            description = node.findtext('description')
+            icon = node.findtext('thumbnailImage')
+            infoLabels = {
+                'title' : title,
+                'plot' : description
+            }
+            pubDate = node.findtext('pubDate')
+            if pubDate:
+                infoLabels['year'] = int(pubDate[0:4])
+                infoLabels['aired'] = pubDate[0:10]
+                infoLabels['date'] = '%s.%s.%s' % (pubDate[8:10], pubDate[5:7], pubDate[0:4])
+
+            item = xbmcgui.ListItem(title, iconImage = icon)
+            item.setInfo('video', infoLabels)
+            item.setProperty('IsPlayable', 'true')
+            item.setProperty('Fanart_Image', FANART)
+            items.append((PATH + '?playVideo=%s' % videoId, item))
+
+        xbmcplugin.addDirectoryItems(HANDLE, items)
+        xbmcplugin.endOfDirectory(HANDLE)
+
 
     def playVideo(self, videoId):
         doc = self.getPlayProductXml(videoId)
@@ -204,7 +256,9 @@ class TV3PlayAddon(object):
         xbmcplugin.setResolvedUrl(HANDLE, True, playlist[0])
 
     def getPlayProductXml(self, videoId):
-        xml = self.downloadUrl('http://viastream.viasat.tv/PlayProduct/%s' % videoId)
+        url = 'http://viastream.viasat.tv/PlayProduct/%s' % videoId
+        buggalo.addExtraData('playProductXml', url)
+        xml = self.downloadUrl(url)
         xml = re.sub('&[^a]', '&amp;', xml)
         return ElementTree.fromstring(xml)
 
@@ -257,13 +311,6 @@ class TV3PlayAddon(object):
 
         return FANART
 
-    def getBaseUrl(self):
-        if ADDON.getSetting('region.url') == '':
-            idx = xbmcgui.Dialog().select(ADDON.getLocalizedString(150), REGIONS)
-            ADDON.setSetting('region.url', REGIONS[idx])
-
-        return 'http://www.%s' % ADDON.getSetting('region.url')
-
     def downloadUrl(self, url):
         for retries in range(0, 5):
             try:
@@ -298,18 +345,20 @@ if __name__ == '__main__':
         os.makedirs(CACHE_PATH)
 
     buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
-    buggalo.addExtraData('region', ADDON.getSetting('region.url'))
     tv3PlayAddon = TV3PlayAddon()
     try:
         if PARAMS.has_key('playVideo'):
             tv3PlayAddon.playVideo(PARAMS['playVideo'][0])
         elif PARAMS.has_key('program') and PARAMS.has_key('season'):
-            tv3PlayAddon.listVideos(PARAMS['program'][0], PARAMS['season'][0], PARAMS.has_key('clips'))
+            tv3PlayAddon.listVideos(PARAMS['region'][0], PARAMS['program'][0], PARAMS['season'][0], PARAMS.has_key('clips'))
         elif PARAMS.has_key('program'):
-            tv3PlayAddon.listSeasons(PARAMS['program'][0])
-
+            tv3PlayAddon.listSeasons(PARAMS['region'][0], PARAMS['program'][0])
+        elif PARAMS.has_key('rss'):
+            tv3PlayAddon.listRss(PARAMS['region'][0], PARAMS['rss'][0])
+        elif PARAMS.has_key('region'):
+            tv3PlayAddon.listPrograms(PARAMS['region'][0])
         else:
-            tv3PlayAddon.listPrograms()
+            tv3PlayAddon.listRegions()
 
     except TV3PlayException, ex:
         tv3PlayAddon.displayError(str(ex))

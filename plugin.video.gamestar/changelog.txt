@@ -1,3 +1,4 @@
+0.1.3 - Adopt change from gamestar.de
 0.1.2 - Rewrite the Gamepro part
 0.1.1 - change to eden-pre interface
 0.0.9 - chang from background-config to xbmc-supported config

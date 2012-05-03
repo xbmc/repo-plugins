@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.gamestar"
-  version="0.1.2"
+  version="0.1.3"
   name="GamestarVideo"
   provider-name="Raptor 2101 [raptor2101@gmx.de]">
   <requires>
@@ -17,7 +17,7 @@
     <summary lang="de">Alle Videos von Gamestar.de und Gamepro.de and Gamepro.de durchsuchen und anschauen.</summary>
     <description lang="en">This plugin gives access to the Videos from gamestar.de and gamepro.de.
     If there are problems while playing the videos (stoping - caching - playing) this plugin offer some caching options:
-    Don't Cache - don't cache at all.
+    Don't Chache - don't cache at all.
     Cache if Needed - if you start a video who isn't cached, it will be cached and then be played.
     Cache - all files of the given category will be cached.
     Forced caching - all files of the given category will be cached plus, if some file isn't cached it will be downloaded before playing.
@@ -34,5 +34,6 @@
     Die beiden letzten Optionen brauchen ein Background-Script das vom Taskplanner oder (ana)cron angestoßen wird. Es ist im Addon-Verzeichniss zu finden: fetchOfflineData.py Pfad-Zur-Config.xml BandbreitenBegrenzung(in kbs)
     </description>
     <platform>all</platform>
+    <language>de</language>
   </extension>
 </addon>

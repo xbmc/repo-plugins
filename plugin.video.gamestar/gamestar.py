@@ -28,7 +28,7 @@ class GamestarWeb(object):
     self.imageRegex = "<img src=\".*\" width=\"\\d*\" height=\"\\d*\" alt=\".*\" title=\".*\" />"
     self.linkRegex =  "/index.cfm\\?pid=\\d*?(&amp;|&)pk=\\d*?"
     self.simpleLinkRegex = "<a href=\""+self.linkRegex+"\" .+?>.+?</a>";
-    self.hrefRegex = "<a href=\""+self.linkRegex+"\">"
+    self.hrefRegex = "<a.*? href=\""+self.linkRegex+"\">"
     self.headerRegex ="<strong>.+</strong>\\s*.*\\s*</a>"
     self.titleRegex = "<a.*?>(.*?)</a>"
 

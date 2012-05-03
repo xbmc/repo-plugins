@@ -92,6 +92,11 @@ class ArretSurImages:
         html = getHTML(url)
         soup = BeautifulSoup(html)
         parts = []
+        # Check if the xvid video exists
+        fullvideo = self.getVideoDownloadLink(url)
+        if fullvideo['url']:
+            # Add the full length video
+            parts.append({'url':fullvideo['url'], 'Title':fullvideo['Title'], 'Thumb':icon})
         part = 1
         # Get all movie id
         for param in soup.findAll('param', attrs = {'name':'movie'}):
@@ -111,17 +116,22 @@ class ArretSurImages:
                 thumb = icon
             parts.append({'url':videoId, 'Title':title, 'Thumb':thumb})
             part += 1
-        if u'ux sources' in soup.title.string and part == 3:
+        if u'ux sources' in soup.title.string.lower() and part == 3:
+            if len(parts) == 3:
+                # parts[0] is the full length video
+                idx = 1
+            else:
+                idx = 0
             # '@ux sources' is not cut in parts but getting the title is not
             # easy as it's not in a field linked to the video
             # Use a hack: since 20111110, "version intégrale" is first
             if re.search('Voici la version int&eacute;grale', html):
-                parts[0]['Title'] = name + u' - intégrale'.encode('utf-8')
-                parts[1]['Title'] = name + u' - aperçu'.encode('utf-8')
+                parts[idx]['Title'] = name + u' - intégrale'.encode('utf-8')
+                parts[idx+1]['Title'] = name + u' - aperçu'.encode('utf-8')
             else:
                 # Before 20111104, the short video (version montée) was first
-                parts[0]['Title'] = name + u' - montée'.encode('utf-8')
-                parts[1]['Title'] = name + u' - intégrale'.encode('utf-8')
+                parts[idx]['Title'] = name + u' - montée'.encode('utf-8')
+                parts[idx+1]['Title'] = name + u' - intégrale'.encode('utf-8')
         return parts
 
     def isLoggedIn(self, username):

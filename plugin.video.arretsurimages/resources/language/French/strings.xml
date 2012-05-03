@@ -21,6 +21,8 @@
     <string id="30051">Saisissez votre nom d'utilisateur et mot de passe</string>
     <string id="30052">dans les paramètres de l'add-on</string>
     <string id="30053">Utilisateur / mot de passe incorrect</string>
+    <string id="30054">Vidéo principale non trouvée</string>
+    <string id="30055">Activer "Afficher les actes"</string>
 
     <!--Settings-->
     <string id="30070">Compte</string>

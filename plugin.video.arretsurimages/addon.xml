@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.arretsurimages"
        name="Arrêt Sur Images"
-       version="2.1.6"
+       version="2.1.7"
        provider-name="beenje">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
@@ -20,5 +20,6 @@
     <disclaimer lang="fr">L'utilisation de cet add-on nécessite un abonnement au site arretsurimages.net</disclaimer>
     <disclaimer lang="en">This add-on requires a subscription to the french site arretsurimages.net</disclaimer>
     <platform>all</platform>
+    <language>fr</language>
   </extension>
 </addon>

@@ -88,7 +88,11 @@ class UI:
 
     def playVideo(self, streams):
         """Play the video"""
-        video = ASI.getVideoDetails(self.main.args.url, streams)
+        if self.main.args.url.startswith('http://'):
+            # This is already a valid url (full length xvid video)
+            video = {'url':self.main.args.url, 'Title':self.main.args.name}
+        else:
+            video = ASI.getVideoDetails(self.main.args.url, streams)
         li=xbmcgui.ListItem(video['Title'],
                             iconImage = self.main.args.icon,
                             thumbnailImage = self.main.args.icon,
@@ -98,14 +102,14 @@ class UI:
 
     def playMainVideo(self, streams):
         """Directly play the main video (don't display all the available parts)"""
-        mainProgram = ASI.getProgramParts(self.main.args.url, self.main.args.name, self.main.args.icon)[0]
-        video = ASI.getVideoDetails(mainProgram['url'], streams)
-        li=xbmcgui.ListItem(video['Title'],
-                            iconImage = mainProgram['Thumb'],
-                            thumbnailImage = mainProgram['Thumb'],
-                            path = video['url'])
-        li.setInfo(type='Video', infoLabels=video)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
+        video = ASI.getVideoDownloadLink(self.main.args.url)
+        if video['url']:
+            li=xbmcgui.ListItem(video['Title'],
+                                path = video['url'])
+            li.setInfo(type='Video', infoLabels=video)
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
+        else:
+            xbmcgui.Dialog().ok(getLS(30054), getLS(30055), getLS(30052))
 
     def navItems(self, navItems, mode):
         """Display navigation items"""
@@ -187,8 +191,7 @@ class Main:
         self.streams = deque(STREAMS)
         # Order the streams depending on the quality chosen
         self.streams.rotate(int(__addon__.getSetting('quality')) * -1)
-        # displayParts settings removed - force to True
-        self.displayParts = True
+        self.displayParts = (__addon__.getSetting('displayParts') == 'true')
 
     def downloadVideo(self, url):
         if self.downloadMode == 'true':

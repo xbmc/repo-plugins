@@ -32,7 +32,6 @@ import xbmcplugin
 import xbmcaddon
 
 BASE_URL = 'http://www.dr.dk/Bonanza/'
-TOTAL_PLAYS_URL = 'http://www.dr.dk/bonanzapp/Service.svc/getTotalPlays'
 
 class BonanzaException(Exception):
     pass
@@ -50,17 +49,6 @@ class Bonanza(object):
     def showCategories(self):
         items = list()
         html = self._downloadUrl(BASE_URL)
-
-        try:
-            u = urllib2.urlopen(TOTAL_PLAYS_URL)
-            playCount = int(u.read()[65:-6])
-            u.close()
-
-            item = xbmcgui.ListItem(ADDON.getLocalizedString(30003) % playCount, iconImage = ICON)
-            item.setProperty('Fanart_Image', FANART)
-            xbmcplugin.addDirectoryItem(HANDLE, '', item)
-        except Exception:
-            pass # ignore
 
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30001), iconImage = ICON)
         item.setProperty('Fanart_Image', FANART)
@@ -162,27 +150,28 @@ class Bonanza(object):
                 thumb = ICON
             item = xbmcgui.ListItem(infoLabels['title'], iconImage=thumb, thumbnailImage=thumb)
             item.setProperty('Fanart_Image', FANART)
+            item.setProperty('IsPlayable', 'true')
             item.setInfo('video', infoLabels)
 
-            url = self.findFileLocation(json, 'VideoHigh')
-            if url is None:
-                url = self.findFileLocation(json, 'VideoMid')
-            if url is None:
-                url = self.findFileLocation(json, 'VideoLow')
+
+            url = self.findFileLocation(json, 'VideoMid')
             # Also check for audio
             if url is None:
                 url = self.findFileLocation(json, 'Audio')
-
             if url is None:
                 continue
 
-            if url[0:4] == 'rtmp':
-                # patch url to work with mplayer
-                m = re.match('(rtmp://.*?)/(.*)', url)
-                url = '%s/bonanza/%s' % (m.group(1), m.group(2))
-
-            items.append((url, item, False))
+            items.append((PATH + '?mode=play&playlist=' + url, item, False))
         xbmcplugin.addDirectoryItems(HANDLE, items)
+
+    def playContent(self, url):
+        if url[0:4] == 'rtmp':
+            # patch videoUrl to work with xbmc
+            m = re.match('(rtmp://.*?)/(.*)', url)
+            url = '%s/bonanza/%s' % (m.group(1), m.group(2))
+
+        item = xbmcgui.ListItem(path=url)
+        xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
     def findFileLocation(self, json, type):
         for file in json['Files']:
@@ -279,6 +268,8 @@ if __name__ == '__main__':
             b.showRecommendations()
         elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'latest':
             b.showLatest()
+        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'play':
+            b.playContent(PARAMS['playlist'][0])
         else:
             b.showCategories()
 

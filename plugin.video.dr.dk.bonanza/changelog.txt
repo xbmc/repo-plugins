@@ -1,3 +1,7 @@
+[B]Version 2.1.2 - 2012-04-18[/B]
+- Fixed playback problem with many videos
+- Allow XBMC to track 'Watched' status
+
 [B]Version 2.1.1 - 2012-02-23[/B]
 - Fixed minor problems with parsing data from Bonanza
 

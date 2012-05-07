@@ -1,3 +1,12 @@
+version 0.7.2 (07/05/2012):
+ * show channel's name on "Information screen" during playback
+ * the following options are now available under "Add-on settings"
+   - user can now move the channels' descriptions to the left of channels'
+     names (this makes skins with right-aligned lists looks nicer)
+   - user can now have the option of using tv24.vn's RTMP streams instead
+     of the HTTP streams (seems like OSX users have some playback issues
+     with the HTTP streams)
+
 version 0.7.1 (28/04/2012):
  * make use of tv24.vn mp4 streams over http -> faster buffering
  * make use of "SD" streams from tv24.vn -> better quality

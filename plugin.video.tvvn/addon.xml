@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="plugin.video.tvvn"
-	version="0.7.1"
+	version="0.7.2"
 	name="TV Viet Nam"
 	provider-name="Binh Nguyen">
 	<requires>
@@ -12,6 +12,7 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<platform>all</platform>
+		<language>en vi</language>
 		<summary lang="en">TV Viet Nam</summary>
 		<summary lang="vi">TV Việt Nam</summary>
 		<description lang="en">This plugin allows you to watch live TV channels or listen to radio stations in Viet Nam. Report bugs at: zecoj.com</description>

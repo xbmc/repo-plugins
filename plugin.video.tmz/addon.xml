@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.tmz"
        name="TMZ"
-       version="2.0.0"
+       version="2.0.1"
        provider-name="stacked">
   <requires>
 	<import addon="xbmc.python" version="2.0"/>
@@ -11,8 +11,9 @@
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Celebrity Gossip | Entertainment News | Celebrity News | TMZ.com</summary>
-    <description>Celebrity Gossip and Entertainment News, Covering Celebrity News and Hollywood Rumors. Get All The Latest Gossip at TMZ - Thirty Mile Zone.</description>
+    <summary lang="en">Celebrity Gossip | Entertainment News | Celebrity News | TMZ.com</summary>
+    <description lang="en">Celebrity Gossip and Entertainment News, Covering Celebrity News and Hollywood Rumors. Get All The Latest Gossip at TMZ - Thirty Mile Zone.</description>
     <platform>all</platform>
+	<language>en</language>
   </extension>
 </addon>

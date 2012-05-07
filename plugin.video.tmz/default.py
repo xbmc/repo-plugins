@@ -4,13 +4,14 @@ import xbmc, xbmcaddon, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, o
 __plugin__ = 'TMZ'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '12-05-2011'
-__version__ = '2.0.0'
+__date__ = '05-05-2012'
+__version__ = '2.0.1'
 __settings__ = xbmcaddon.Addon( id = 'plugin.video.tmz' )
 
-def open_url( url ):
-	req = urllib2.Request( url )
-	content = urllib2.urlopen( req )
+def open_url(url):
+	req = urllib2.Request(url)
+	req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0')
+	content = urllib2.urlopen(req)
 	data = content.read()
 	content.close()
 	return data
@@ -23,28 +24,28 @@ def clean( name ):
 	
 def build_main_directory():
 	main=[
-		( __settings__.getLocalizedString( 30000 ), 'raw_thumb', 'raw_and_uncut' ),
-		( __settings__.getLocalizedString( 30001 ), 'tv_thumb', 'tmz_tv' ),
-		( __settings__.getLocalizedString( 30002 ), 'live_thumb', 'tmz_live' ),
-		( __settings__.getLocalizedString( 30003 ), 'full_thumb', 'tmz_tv_full_episodes' )
+		( __settings__.getLocalizedString( 30000 ) ),
+		( __settings__.getLocalizedString( 30001 ) ),
+		( __settings__.getLocalizedString( 30002 ) ),
+		( __settings__.getLocalizedString( 30003 ) )
 		]
-	for name, thumbnailImage, url in main:
-		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = thumbnailImage )
-		u = sys.argv[0] + "?mode=0&name=" + urllib.quote_plus( name ) + "&url=" + urllib.quote_plus( url )
+	for name in main:
+		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = "thumbnailImage" )
+		u = sys.argv[0] + "?mode=0&name=" + urllib.quote_plus( name )
 		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
-def build_video_directory( name, url ):
+def build_video_directory( name ):
 	data = open_url( 'http://www.tmz.com/videos/' )
-	content = re.compile('playlistsData\.most_recent\.' + url + ' = \[(.+?)\];', re.DOTALL).findall( data )
+	content = re.compile('carouselGroups\["Most Recent"\]\[\"' + name.upper() + '\"\](.+?)];\n', re.DOTALL).findall( data )
 	match = re.compile('\n{\n  (.+?)\n}', re.DOTALL).findall( content[0] )
 	for videos in match:
-		epsdata = re.compile('title: "(.+?)",\n  duration: parseInt\("(.+?)", 10\),\n  url: "(.+?)",\n  videoUrl: "(.+?)",\n  manualThumbnailUrl: "(.+?)",\n  thumbnailUrl: "(.+?)",\n  kalturaId: "(.+?)"', re.DOTALL).findall(videos)
+		epsdata = re.compile('title": "(.+?)",\n  "duration": parseInt\("(.+?)", 10\),\n  "url": "(.+?)",\n  "videoUrl": "(.+?)",\n  "manualThumbnailUrl": "(.+?)",\n  "thumbnailUrl": "(.+?)",\n  "kalturaId": "(.+?)"', re.DOTALL).findall(videos)
 		title = clean(epsdata[0][0].replace("\\", ""))
 		duration = epsdata[0][1].replace("\\", "")
 		url = epsdata[0][3].replace("\\", "")
-		thumb = epsdata[0][5].replace("\\", "")
+		thumb = epsdata[0][5].replace("\\", "") + '/width/490/height/266/type/3'
 		if url.find('http://cdnbakmi.kaltura.com') == -1:
 			listitem = xbmcgui.ListItem( label = title, iconImage = thumb, thumbnailImage = thumb )
 			listitem.setInfo( type="Video", infoLabels={ "Title": title, "Director": "TMZ", "Studio": name, "Duration": str(datetime.timedelta(seconds=int(duration))) } )
@@ -106,7 +107,7 @@ except:
 if mode == None:
 	build_main_directory()
 elif mode == 0:
-	build_video_directory( name, url )
+	build_video_directory( name )
 elif mode == 1:
 	play_video( name, url, thumb, studio )
 	

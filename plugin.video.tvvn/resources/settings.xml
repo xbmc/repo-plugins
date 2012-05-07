@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<setting id="descriptions" type="bool" label="30001" default="true"/>
+	<category label="30000">
+		<setting id="descriptions" type="bool" label="30001" default="true"/>
+		<setting id="descriptions_on_right" type="bool" label="30002" default="true"/>
+	</category>
+	<category label="30100">
+		<setting id="tv24_http" type="bool" label="30101" default="true"/>
+	</category>
 </settings>

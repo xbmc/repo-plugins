@@ -1,3 +1,9 @@
 1.0.0 - First Try
 1.0.1 - Added Category: Latest Music Clips
 1.0.2 - Added <disclaimer> Tag to addon.xml
+1.0.3 - Changed Timeout
+2.0.0 - Changed search & added playlists, collections and favorites
+2.0.1 - Fixed some videos that where not playing
+2.0.2 - Fixed problems in playlist.py on non win os
+2.0.3 - Various fixes and optical optimizations
+2.0.4 - Added 720p support & Fixed some Videos that where not playing

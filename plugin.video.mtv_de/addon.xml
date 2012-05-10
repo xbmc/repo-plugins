@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.mtv_de" name="MTV.de" version="1.0.2" provider-name="AddonScriptorDE">
+<addon id="plugin.video.mtv_de" name="MTV.de" version="2.0.4" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
     </requires>
@@ -8,12 +8,12 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="de">MTV.de</summary>
-        <summary lang="en">MTV.de</summary>
-        <description lang="de">Deutsche Charts und Musikvideo Suche</description>
-        <description lang="en">German charts und music clip search</description>
+        <summary lang="de">Deutsche Charts, Videosuche, Playlisten, ...</summary>
+        <summary lang="en">German charts, clip search, playlists, ...</summary>
+        <language>de</language>
+        <description lang="de">Deutsche Charts, Videosuche, Playlisten, ...</description>
+        <description lang="en">German charts, clip search, playlists, ...</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
-        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

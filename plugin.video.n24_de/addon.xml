@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.n24_de" name="N24.de" version="1.0.2" provider-name="AddonScriptorDE">
+<addon id="plugin.video.n24_de" name="N24.de" version="1.0.6" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
     </requires>
@@ -8,12 +8,12 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="de">N24.de</summary>
-        <summary lang="en">N24.de</summary>
+        <summary lang="de">N24 Mediathek und Livestream</summary>
+        <summary lang="en">N24 Media Library and Livestream</summary>
+        <language>de</language>
         <description lang="de">N24 Mediathek und Livestream</description>
         <description lang="en">N24 Media Library and Livestream</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
-        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

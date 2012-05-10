@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon
 
 pluginhandle = int(sys.argv[1])
+settings = xbmcaddon.Addon(id='plugin.video.n24_de')
+translation = settings.getLocalizedString
 
 def index():
-        addDir("Meistgesehen","most_clicked",1,"")
+        addDir(translation(30001),"most_clicked",1,"")
         addDir("Dokumentationen","doku",1,"")
         addDir("Reportagen","reportage",1,"")
         addDir("Magazine","magazin",1,"")
@@ -18,10 +20,9 @@ def index():
         addDir("Spezial","spezial",1,"")
         addDir("Auto","auto",1,"")
         addDir("Talks","talk",1,"")
-        addDir("N24 Videosuche","search",8,"")
+        addDir("N24 "+str(translation(30002)),"search",8,"")
         addLink("N24 Live Stream","live",9,"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(50)')
 
 def catToUrl(cat):
         listVideos("http://www.n24.de/mediathek/api/box_renderer/GenerateExtendedBox?dataset_name="+cat+"&page=1&limit=40")
@@ -38,7 +39,6 @@ def listVideos(url1):
           urlNew=url1[:url1.find("&page=")]+"&page="+str(currentPage+1)+"&limit=40"
           addDir("Next Page",urlNew,7,'')
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def search():
         keyboard = xbmc.Keyboard('', 'Video Suche')
@@ -48,6 +48,18 @@ def search():
           listVideos("http://www.n24.de/mediathek/api/box_renderer/GenerateSearchResultsBox?search_string="+search_string+"&page=1&limit=40")
 
 def liveStream():
+        try:
+          playLiveStream()
+        except:
+          try:
+            playLiveStream()
+          except:
+            try:
+              playLiveStream()
+            except:
+              xbmc.executebuiltin('XBMC.Notification(Info,'+str(translation(30001))+',5000)')
+
+def playLiveStream():
         content = getUrl("http://www.n24.de/mediathek/n24-livestream/stream.html")
         match=re.compile('filename&quot;:&quot;(.+?)&quot;', re.DOTALL).findall(content)
         filename=match[0]
@@ -60,11 +72,11 @@ def playVideo(url):
         filename=match[0]
         listitem = xbmcgui.ListItem(path="rtmp://pssimn24livefs.fplive.net/pssimn24/"+filename)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
-        
+
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req)
+        response = urllib2.urlopen(req,timeout=30)
         link=response.read()
         response.close()
         return link

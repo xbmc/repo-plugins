@@ -1,0 +1,5 @@
+1.0.0 - First Try
+1.0.1 - Fixed small bug & added channel logos
+1.0.2 - Changed Timeout
+1.0.3 - Added News
+1.0.4 - Various fixes and optical optimizations

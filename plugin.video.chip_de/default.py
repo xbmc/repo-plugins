@@ -8,7 +8,7 @@ settings = xbmcaddon.Addon(id='plugin.video.chip_de')
 translation = settings.getLocalizedString
 
 def index():
-        addDir(translation(30001),"http://www.chip.de/Video_17367032.html?tid1=30593&tid2=0&of=0",1,"")
+        addDir(string.upper(translation(30001)),"http://www.chip.de/Video_17367032.html?tid1=30593&tid2=0&of=0",1,"")
         content=getUrl("http://www.chip.de/Video_17367032.html")
         content=content[content.find('<table width="468" border="0" cellspacing="0" cellpadding="0">'):]
         content=content[:content.find('</table><br><br>')]
@@ -23,7 +23,6 @@ def index():
             title=match[0]
             addDir(string.upper(title),url+"&of=0",1,thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def listVideos(url):
         content = getUrl(url)
@@ -42,7 +41,6 @@ def listVideos(url):
             url=match[0]
             addDir("Next Page",url,1,"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def playVideo(url):
         content = getUrl(url)
@@ -54,7 +52,7 @@ def playVideo(url):
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req)
+        response = urllib2.urlopen(req,timeout=30)
         link=response.read()
         response.close()
         return link

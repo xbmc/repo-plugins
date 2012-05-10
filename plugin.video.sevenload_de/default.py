@@ -1,19 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon
 
 pluginhandle = int(sys.argv[1])
+settings = xbmcaddon.Addon(id='plugin.video.sevenload_de')
+translation = settings.getLocalizedString
 
 def index():
         content = getUrl("http://de.sevenload.com/")
         match=re.compile('<a href="/kanaele/(.+?)" class="clearfix"><em>(.+?)</em><span>(.+?)</span>', re.DOTALL).findall(content)
-        addDir("Alle Sendungen","http://de.sevenload.com/sendungen/all",9,'')
+        addDir(translation(30001),"http://de.sevenload.com/sendungen/all",9,'')
         for url,temp,title in match:
-                addDir("  "+title,"http://de.sevenload.com/kanaele/"+url,1,'')#
-        addDir("Sendungen durchsuchen","___NEW___1",8,"")
-        addDir("Uservideos durchsuchen","___NEW___2",8,"")
+          addDir("  "+title,"http://de.sevenload.com/kanaele/"+url,1,'')
+        addDir(translation(30002),"___NEW___1",8,"")
+        addDir(translation(30003),"___NEW___2",8,"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(50)')
 
 def search(url):
         content = getUrl(url)
@@ -26,7 +27,6 @@ def search(url):
           url="http://de.sevenload.com"+match[0][1]
           addDir("Next Page",url,8,'')
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def searchHelper(url):
         if url.find("___NEW___")==0:
@@ -52,7 +52,6 @@ def mainChannel(url):
         for url,title in match:
                 addDir("  "+title,"http://de.sevenload.com/kanaele/"+url,2,'')
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(50)')
 
 def channel(url):
         if url.find("filter=name")==-1:
@@ -81,7 +80,6 @@ def channel(url):
           url=url.replace("&amp;","&")
           addDir("Next Page",url,2,'')
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def allShows(url):
         content = getUrl(url)
@@ -89,7 +87,6 @@ def allShows(url):
         for url,title in match:
                 addDir(title.replace('<span class="new">Neues Video</span>','').strip(),"http://de.sevenload.com/sendungen/"+url,3,'')
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(50)')
 
 def show(url):
         content = getUrl(url+"/folgen")
@@ -104,7 +101,6 @@ def show(url):
                   title=match2[0]
                 addDir(title,"http://de.sevenload.com/sendungen/"+sendungTitle+"/alben/"+id+"?pageLength=50&orderBy=latest&page=1",4,'')
           xbmcplugin.endOfDirectory(pluginhandle)
-          if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(50)')
         elif len(match)==1:
           id=match[0][2]
           content = getUrl("http://de.sevenload.com/sendungen/"+sendungTitle+"/alben/"+id+"?pageLength=50&orderBy=latest&page=1")
@@ -118,7 +114,6 @@ def show(url):
             url=url.replace("&amp;","&")
             addDir("Next Page",url,4,'')
           xbmcplugin.endOfDirectory(pluginhandle)
-          if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def album(url):
         content = getUrl(url)
@@ -132,7 +127,6 @@ def album(url):
           url=url.replace("&amp;","&")
           addDir("Next Page",url,4,'')
         xbmcplugin.endOfDirectory(pluginhandle)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def playVideo(url):
         if url.find("/folgen/")>=0:
@@ -154,9 +148,8 @@ def playVideo(url):
         
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req)
+        response = urllib2.urlopen(req,timeout=30)
         link=response.read()
         response.close()
         return link

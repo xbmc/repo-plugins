@@ -1,3 +1,6 @@
 1.0.0 - First Try
 1.0.1 - Changed addon.xml
-1.0.2 - Fixxed TV-Magazin Episode 1-66
+1.0.2 - Fixed TV-Magazin Episode 1-66
+1.0.3 - Changed Timeout
+1.0.4 - Fixed newest TV-Magazin Episode
+1.0.5 - Various fixes and optical optimizations

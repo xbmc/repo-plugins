@@ -21,9 +21,24 @@ def index():
         addDir(str(translation(30001))+": Schlechte Filme TV","http://fernsehkritik.tv/extras/sftv/",1,"")
         addDir(str(translation(30001))+": Pantoffelkino-TV Pannen","http://fernsehkritik.tv/extras/pktv/",1,"")
         xbmcplugin.endOfDirectory(thisPlugin)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(50)')
 
 def listVideos(url):
+        titleEntrys=[]
+        if url=="http://fernsehkritik.tv/tv-magazin/komplett/":
+          content = getUrl("http://fernsehkritik.tv/tv-magazin/")
+          spl=content.split('<div class="lclmo" id=')
+          for i in range(1,3,1):
+            entry=spl[i]
+            match=re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
+            urlEntryOne=match[0][0]
+            title=match[0][1].replace("&quot;","")
+            titleEntrys.append(title)
+            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            thumb=match[0]
+            urlEntryOne=urlEntryOne.replace("../","/")
+            thumb=thumb.replace("../","/")
+            newUrl="http://fernsehkritik.tv"+urlEntryOne
+            addLink(title,newUrl,2,"http://fernsehkritik.tv"+thumb)
         content = getUrl(url)
         spl=content.split('<div class="lclmo" id=')
         for i in range(1,len(spl),1):
@@ -41,9 +56,9 @@ def listVideos(url):
               newUrl=url[7:]
             else:
               newUrl="http://fernsehkritik.tv"+url
-            addLink(title,newUrl,2,"http://fernsehkritik.tv"+thumb)
+            if not title in titleEntrys:
+              addLink(title,newUrl,2,"http://fernsehkritik.tv"+thumb)
         xbmcplugin.endOfDirectory(thisPlugin)
-        if (xbmc.getSkinDir() == "skin.confluence" or xbmc.getSkinDir() == "skin.touched"): xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def playVideo(urlOne):
         if urlOne.find("http://")==0:
@@ -88,7 +103,7 @@ def playVideo(urlOne):
 def getUrl(url):
     req = urllib2.Request(url)
     req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-    response = urllib2.urlopen(req)
+    response = urllib2.urlopen(req,timeout=30)
     link=response.read()
     response.close()
     return link

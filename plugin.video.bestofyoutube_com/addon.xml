@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.bestofyoutube_com" name="BestOfYoutube.com" version="1.0.2" provider-name="AddonScriptorDE">
+<addon id="plugin.video.bestofyoutube_com" name="BestOfYoutube.com" version="1.0.5" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
         <import addon="plugin.video.youtube" version="2.9.1"/>
@@ -9,11 +9,11 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="en">BestOfYoutube.com</summary>
-        <summary lang="de">BestOfYoutube.com</summary>
+        <summary lang="en">Only the best Youtube clips</summary>
+        <summary lang="de">Nur die besten Youtube Videos</summary>
+        <language>en</language>
         <description lang="en">Only the best Youtube clips</description>
         <description lang="de">Nur die besten Youtube Videos</description>
-        <broken>Author request: get from XBMCNerds instead</broken>
     <platform>all</platform>
     </extension>
 </addon>

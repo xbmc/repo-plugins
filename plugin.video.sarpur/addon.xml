@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.sarpur"
        name="Sarpur"
-       version="1.0.1"
-       provider-name="dagur">
+       version="1.1.1"
+       provider-name="Dagur">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>

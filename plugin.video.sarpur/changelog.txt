@@ -1,3 +1,15 @@
+[B]Version 1.1.1[/B]
+New:
+- Live stream should work at least for a while
+- Categories working again
+- Submitting to Eden
+
+[B]Version 1.1.0[/B]
+New:
+- Podcasts
+- Eden support
+
+
 [B]Version 1.0.1[/B]
 Bugfixes:
 - Fixed the way data files are being created and dealt with them becoming corrupt

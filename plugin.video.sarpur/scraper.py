@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-import urllib2, re, os
+import urllib2, re, os, xbmcaddon
 from BeautifulSoup import BeautifulSoup
 from datetime import datetime
 import simplejson as json
 
+addon = xbmcaddon.Addon(id='plugin.video.sarpur')
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
-data_path = os.path.join(os.getcwd(), 'resources','data')
+data_path = os.path.join(addon.getAddonInfo('path'), 'resources','data')
 showtreefile_location = os.path.join(data_path,'showtree.dat')
 tabfile_location = os.path.join(data_path,'tabs.dat')
 showtree = [] #All the shows under the thaettir menu
@@ -47,9 +48,6 @@ def parse_show_index(html):
                     for show in flokkur.findAll("div"):
                         showtree[i]["categories"][-1]['shows'].append((show.a.contents[0], show.a['href']))
     
-    
-
-    
 def get_episodes(url):
     "Find playable files on a shows page"
     episodes = []
@@ -79,8 +77,8 @@ def get_latest_episodes(url):
     soup = BeautifulSoup(html)
 
     spilari = soup.find("div", attrs={'class':'kubbur sarpefst'})
-    dags = re.search(r'\d{1,2}\. \w{3} \d{4} \| \d\d:\d\d',repr(spilari)).group()
-    featured = "%s %s" % (spilari.h1.contents[0], dags)
+    #dags = re.search(r'\d{1,2}\. \w{3} \d{4} \| \d\d:\d\d',repr(spilari), re.UNICODE).group()
+    featured = spilari.h1.contents[0]
 
     episodes = [(featured, url)]
 
@@ -90,8 +88,6 @@ def get_latest_episodes(url):
         episodes.append((title , pageurl))
 
     return episodes
-
-
 
 def get_stream_info(page_url):
     "Get a page url and finds the url of the rtmp stream"
@@ -116,6 +112,33 @@ def update_index():
     json.dump(showtree, file(showtreefile_location,'wb'))
     get_tabs()
     json.dump(tabs, file(tabfile_location,'wb'))
+
+def get_podcast_shows():
+    """Gets the names and rss urls of all the Podcasts"""
+    html = fetch_page("http://www.ruv.is/podcast")
+    soup = BeautifulSoup(html)
+    
+    shows = []
+    
+    for ul in soup.findAll("ul", attrs={'class':'hladvarp-info'}):
+        title = ul('li')[1].h4.contents[0]
+        pageurl = ul('li')[4].a['href']
+        shows.append((title , pageurl))
+        
+    return shows
+    
+def get_podcast_recordings(url):
+    """Gets the dates and mp3 urls of all the Podcast recordings"""
+    html = fetch_page(url)
+    soup = BeautifulSoup(html)
+    recordings = []
+    
+    for item in soup.findAll('item'):
+        date = item.pubdate.contents[0]
+        url = item.guid.contents[0]
+        recordings.append((date,url))
+    
+    return recordings
 
 ## init
 try:

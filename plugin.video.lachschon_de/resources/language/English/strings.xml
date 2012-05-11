@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <string id="30001">Newest Videos</string>
-  <string id="30002">Most Voted</string>
-  <string id="30003">Best Voted</string>
+  <string id="30002">Best Voted</string>
+  <string id="30003">Random Videos</string>
+  <string id="30004">Video Search</string>
 </strings>

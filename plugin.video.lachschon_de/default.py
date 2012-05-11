@@ -9,9 +9,17 @@ translation = settings.getLocalizedString
 
 def index():
         addDir(translation(30001),"http://www.lachschon.de/gallery/trend/?set_gallery_type=video&set_image_type=small&page=1",1,"")
-        addDir(translation(30002),"http://www.lachschon.de/gallery/mostvoted/?set_gallery_type=video&set_image_type=small&page=1",1,"")
-        addDir(translation(30003),"http://www.lachschon.de/gallery/top/?set_gallery_type=video&set_image_type=small&page=1",1,"")
+        addDir(translation(30002),"http://www.lachschon.de/gallery/top/?set_gallery_type=video&set_image_type=small&page=1",1,"")
+        addDir(translation(30003),"http://www.lachschon.de/gallery/random/?set_gallery_type=video&set_image_type=small&page=1",1,"")
+        addDir(translation(30004),"SEARCH",3,"")
         xbmcplugin.endOfDirectory(pluginhandle)
+
+def search():
+        keyboard = xbmc.Keyboard('', str(translation(30004)))
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+          search_string = keyboard.getText().replace(" ","+")
+          listVideos("http://www.lachschon.de/gallery/search_item/?set_gallery_type=video&set_image_type=small&q="+search_string)
 
 def listVideos(url):
         content = getUrl(url)
@@ -30,6 +38,7 @@ def listVideos(url):
             thumb=match[0]
             match=re.compile('<span class="subtitle">(.+?)</span>', re.DOTALL).findall(entry)
             title=match[0]
+            title=cleanTitle(title)
             addLink(title,"http://www.lachschon.de"+url,2,thumb)
         if urlNextPage!="":
           addDir("Next Page",urlNextPage,1,'')
@@ -42,6 +51,12 @@ def playVideo(url):
         fullData = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + id
         listitem = xbmcgui.ListItem(path=fullData)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+
+def cleanTitle(title):
+        title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&#39;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
+        title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
+        title=title.strip()
+        return title
 
 def getUrl(url):
         req = urllib2.Request(url)
@@ -100,3 +115,5 @@ elif mode==1:
         listVideos(url)
 elif mode==2:
         playVideo(url)
+elif mode==3:
+        search()

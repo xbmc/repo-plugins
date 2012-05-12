@@ -96,10 +96,11 @@ def __get_videos(tree):
         year = filter(lambda s: s.isdigit(), page_title)
     if not year:
         year = datetime.now().year
-    for video in tree.findAll('div', {'class': 'video-item'}):
-        title = video.find('a').string.strip()
-        video_id = video.find('a')['href'].replace(MAIN_URL, '').strip('/')
-        date_str = video.find('span', {'class': 'video_date'}).string
+    for video in tree.findAll('span', {'class': 'video_date'}):
+        link = video.nextSibling.nextSibling
+        title = link.string.strip()
+        video_id = link['href'].replace(MAIN_URL, '').strip('/')
+        date_str = video.string
         month_str, day_str = date_str.split()
         month = MONTHS.get(month_str)
         date = '%02i.%02i.%s' % (int(day_str), month, year)

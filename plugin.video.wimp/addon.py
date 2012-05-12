@@ -1,3 +1,4 @@
+import os
 from xbmcswift import Plugin, xbmcplugin, xbmcgui
 import resources.lib.scraper as scraper
 
@@ -31,7 +32,7 @@ class Plugin_adv(Plugin):
             return []
 
 
-plugin = Plugin_adv('wimp.com', 'plugin.video.wimp', __file__)
+plugin = Plugin_adv('Wimp.com', 'plugin.video.wimp', __file__)
 
 
 @plugin.route('/', default=True)
@@ -107,7 +108,10 @@ def search():
 
 
 def __add_videos(videos):
+    p = plugin._plugin.getAddonInfo('path').decode('utf-8')
+    icon = os.path.join(xbmc.translatePath(p), 'icon.png')
     items = [{'label': video['title'],
+              'thumbnail': icon,
               'url': plugin.url_for('watch_video',
                                     video_id=video['video_id']),
               'info': {'date': video['date']},

@@ -1,6 +1,7 @@
 import unittest
 from rss_scraper import NewTalksRss
 from datetime import datetime
+import sys
 try:    
     from elementtree.ElementTree import fromstring
 except ImportError:
@@ -15,20 +16,20 @@ minimal_item = """
   <guid isPermaLink="false">eng.video.talk.ted.com:830</guid>
   <pubDate>Sat, 04 Feb 2012 08:14:00 +0000</pubDate>
   <media:thumbnail url="invalid://nowhere/nothing.jpg" width="42" height="42" />
-  <enclosure url="invalid://nowhere/nothing.mp4" length="42" type="video/mp4" />
+  <link>invalid://nowhere/nothing.html</link>
 </item>"""
 
 class TestNewTalksRss(unittest.TestCase):
     
     def setUp(self):
-        self.talks = NewTalksRss(lambda x: x)
+        self.talks = NewTalksRss(lambda x: sys.stdout.write(x))
 
     def test_get_talk_details_minimal(self):
         details = self.talks.get_talk_details(fromstring(minimal_item))
         expected_details = {
             'author':'Dovahkiin',
             'date':'04.02.2012',
-            'link':'invalid://nowhere/nothing.mp4',
+            'link':'invalid://nowhere/nothing.html',
             'thumb':'invalid://nowhere/nothing.jpg',
             'title':'fus ro dah',
             'plot':'Unrelenting Force',

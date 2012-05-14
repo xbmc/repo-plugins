@@ -8,7 +8,7 @@ class Fetcher:
         self.logger = logger
         self.getTranslatedPath = getTranslatedPath
 
-    def getHTML(self, url, headers = [('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14')]):
+    def getHTML(self, url, data=None):
         """
         url Might be a real URL object or a String-like thing.
         """
@@ -18,6 +18,12 @@ class Fetcher:
             url_string = url
         self.logger('%s attempting to open %s with data' % (__name__, url_string))
 
+        headers = [
+            ('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14'),
+        ]
+        if data:
+            headers = headers + [('Content-type', 'application/x-www-form-urlencoded')]
+
         #create cookiejar
         cj = cookielib.LWPCookieJar()
         cookiefile = self.getTranslatedPath('special://temp/ted-cookies.lwp')
@@ -26,13 +32,13 @@ class Fetcher:
             cj.load(cookiefile)
             #log what cookies were loaded
             for index, cookie in enumerate(cj):
-                self.logger('loaded cookie : %s\nfrom %s' % (cookie, cookiefile))
+                self.logger('loaded cookie : %s from %s' % (cookie, cookiefile))
 
         #build opener with automagic cookie handling abilities.
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         opener.addheaders = headers
         try:
-            usock = opener.open(url)
+            usock = opener.open(url, data)
             response = usock.read()
             usock.close()
             cj.save(cookiefile)

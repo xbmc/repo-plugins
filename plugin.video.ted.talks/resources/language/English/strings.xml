@@ -2,9 +2,10 @@
 <strings>
     <string id="30000">TED Talks</string>
     
-    <!--Categories-->
+    <!--Categories and sub-folders -->
     <string id="30001">Newest Talks</string>
     <string id="30002">Speakers</string>
+    <string id="30006">Last Name: </string>
     <string id="30003">Themes</string>
     <string id="30004">Search</string>
     <string id="30005">Favorites</string>
@@ -30,7 +31,10 @@
     <string id="30051">User could not be authenticated</string>
     
     <!--Settings-->
-    <string id="30075">Login Information</string>
+    <string id="30110">Subtitles</string>
+    <string id="30111">Enable subtitles</string>
+    <string id="30113">Custom language codes (optional)</string>
+    <string id="30075">Login</string>
     <string id="30070">username</string>
     <string id="30071">password</string>
     <string id="30076">Downloading</string>

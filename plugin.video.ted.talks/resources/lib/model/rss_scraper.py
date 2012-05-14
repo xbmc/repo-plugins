@@ -6,15 +6,6 @@ so keep it for now.
 
 import urllib2
 import time
-# multiprocessing module isn't working on Win32: http://forum.xbmc.org/showthread.php?p=1023960
-#try:
-#    # >=Eden
-#    from multiprocessing import Pool
-#    do_multi_threading = True
-#except ImportError:
-#    # < Eden
-#    do_multi_threading = False
-
 try:    
     from elementtree.ElementTree import fromstring
 except ImportError:
@@ -48,7 +39,7 @@ class NewTalksRss:
         pic = item.find('./{http://search.yahoo.com/mrss/}thumbnail').get('url')
         duration = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}duration').text
         plot = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}summary').text
-        link = item.find('./enclosure').get('url')
+        link = item.find('./link').text
         talkID = item.find('./guid').text.split(':')[-1]
         
         # Get date as XBMC wants it
@@ -73,15 +64,6 @@ class NewTalksRss:
         rss_urls = [sd_rss_url, hd_rss_url] # Prefer HD, but get SD if that's all there is (my friends)
         
         document_fetchers = []
-#        if do_multi_threading:
-#            pool = Pool(processes=1) # Maybe it would be better to fetch them simultaneously?
-#            for url in rss_urls:
-#                result = pool.apply_async(get_document, [url])
-#                document_fetchers.append(lambda x: result.get(30))
-#        else:
-#            for url in rss_urls:
-#                document_fetchers.append(lambda x: get_document(url))
-        
         for url in rss_urls:
             document_fetchers.append(lambda x: get_document(url))
            
@@ -91,16 +73,6 @@ class NewTalksRss:
             for item in fromstring(rss).findall('channel/item'):
                 talk = self.get_talk_details(item)
                 talksByTitle[talk['title']] = talk
-        
-#        if do_multi_threading:
-#            # pool.close()
-#            # pool.join()
-#            # If I close Pool using close/join, then it logs 
-#            # ERROR: Error Type: <type 'exceptions.OSError'>
-#            # ERROR: Error Contents: [Errno 3] No such process
-#            # when the app exits (i.e. finalization occurs).
-#            # Whereas this seems to be OK.
-#            pool._terminate()
         
         return talksByTitle.itervalues()
 

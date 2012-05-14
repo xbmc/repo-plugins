@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.ted.talks"
-       name="TED Talks"
-       version="3.0.1"
-       provider-name="rwparris2, moreginger">
+<addon id="plugin.video.ted.talks" name="TED Talks" version="3.1.0" provider-name="rwparris2, moreginger">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
     <import addon="script.module.simplejson" version="2.0.10"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>
     <import addon="script.module.elementtree" version="1.2.7"/>
   </requires>
-  <extension point="xbmc.python.pluginsource"
-            library="default.py">
-        <provides>video</provides>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <!-- There are subtitles on TED in many languages,
+    and this plugin is (partially) internationalized in several,
+    but it seems better to claim the one we are sure of for now. -->
+    <language>en</language>
     <summary lang="en">Watch talks from TED.com, a site dedicated to 'Ideas Worth Spreading'</summary>
     <summary lang="hu">Beszédek megtekintése a TED.com-ról</summary>
     <summary lang="pt">Veja debates de TED.com, um site dedicado a 'Ideias com Valor'</summary>

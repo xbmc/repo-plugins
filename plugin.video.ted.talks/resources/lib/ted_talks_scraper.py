@@ -2,6 +2,7 @@ import re
 from model.util import cleanHTML, resizeImage
 from BeautifulSoup import SoupStrainer, MinimalSoup as BeautifulSoup
 from model.url_constants import URLTED
+import model.subtitles_scraper as subtitles_scraper
 
 #MAIN URLS
 URLTHEMES = 'http://www.ted.com/themes/atoz/page/'
@@ -12,13 +13,13 @@ URLSEARCH = 'http://www.ted.com/search?q=%s/page/'
 def getNavItems(html):
     """self.navItems={'next':url, 'previous':url, 'selected':pagenumberasaninteger}"""
     navItems = {'next':None, 'previous':None, 'selected':1}
-    paginationContainer = SoupStrainer(attrs = {'class':re.compile('pagination')})
-    for aTag in BeautifulSoup(html, parseOnlyThese = paginationContainer).findAll('a'):
+    paginationContainer = SoupStrainer(attrs={'class':re.compile('pagination')})
+    for aTag in BeautifulSoup(html, parseOnlyThese=paginationContainer).findAll('a'):
         if aTag.has_key('class'):
             if aTag['class'] == 'next':
-                navItems['next'] = URLTED+aTag['href']
+                navItems['next'] = URLTED + aTag['href']
             elif aTag['class'] == 'prev':
-                navItems['previous'] = URLTED+aTag['href']
+                navItems['previous'] = URLTED + aTag['href']
             elif aTag['class'] == 'selected':
                 navItems['selected'] = int(aTag.string)
     return navItems
@@ -26,45 +27,26 @@ def getNavItems(html):
 
 class Speakers:
 
-    def __init__(self, get_HTML, url):
-        # adding 9999 to the url takes the script to the very last page of the list, providing the total # of pages.
-        if url is None:
-            url = URLSPEAKERS + '9999'
+    def __init__(self, get_HTML):
         self.get_HTML = get_HTML
-        self.html = self.get_HTML(url)
-        # only bother with navItems where they have a chance to appear.
-        if URLSPEAKERS in url:
-            self.navItems = getNavItems(self.html)
 
-    def getAllSpeakers(self):
-        speakerContainers = SoupStrainer(attrs = {'href':re.compile('/speakers/\S.+?.html')})
-        pages_count = self.navItems['selected']
-        for i in range(pages_count):
-            # don't parse the last page twice.
-            if i is not pages_count:
-                html = self.get_HTML(URLSPEAKERS+str(i+1))
-            else:
-                html = self.html
-            for speaker in BeautifulSoup(html, parseOnlyThese = speakerContainers):
-                title = speaker.string
-                link = URLTED+speaker['href']
-                yield {'url':link, 'Title':title}
-
-    def getTalks(self):
-        talkContainer = SoupStrainer(attrs = {'class':re.compile('box clearfix')})
-        for talk in BeautifulSoup(self.html, parseOnlyThese = talkContainer):
+    def getTalks(self, url):
+        html = self.get_HTML(url)
+        talkContainer = SoupStrainer(attrs={'class':re.compile('box clearfix')})
+        for talk in BeautifulSoup(html, parseOnlyThese=talkContainer):
             title = talk.h4.a.string
-            link = URLTED+talk.dt.a['href']
-            pic = resizeImage(talk.find('img', attrs = {'src':re.compile('.+?\.jpg')})['src'])
-            yield {'url':link, 'Title':title, 'Thumb':pic}
+            link = URLTED + talk.dt.a['href']
+            pic = resizeImage(talk.find('img', attrs={'src':re.compile('.+?\.jpg')})['src'])
+            yield title, link, pic
 
 
 class TedTalks:
 
-    def __init__(self, getHTML):
+    def __init__(self, getHTML, logger):
         self.getHTML = getHTML
+        self.logger = logger
 
-    def getVideoDetails(self, url):
+    def getVideoDetails(self, url, subs_language=None):
         """self.videoDetails={Title, Director, Genre, Plot, id, url}"""
         #TODO: get 'related tags' and list them under genre
         html = self.getHTML(url)
@@ -93,15 +75,18 @@ class TedTalks:
             # look for utub link
             utublinks = re.compile('http://(?:www.)?youtube.com/v/([^\&]*)\&').findall(html)
             for link in utublinks:
-                url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %(link)
-        #get id from url
-        id = url.split('/')[-1]
-        return {'Title':title, 'Director':speaker, 'Genre':'TED', 'Plot':plot, 'PlotOutline':plot, 'id':id, 'url':url}
+                url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % (link)
+
+        subs = None
+        if subs_language:
+            subs = subtitles_scraper.get_subtitles_for_talk(soup, subs_language, self.logger)
+
+        return title, url, subs, {'Director':speaker, 'Genre':'TED', 'Plot':plot, 'PlotOutline':plot}
 
 
     class Themes:
 
-        def __init__(self, get_HTML, url=None):
+        def __init__(self, get_HTML, url):
             if url == None:
                 url = URLTHEMES
             self.get_HTML = get_HTML
@@ -110,31 +95,31 @@ class TedTalks:
             # self.navItems = TedTalks().getNavItems(html)
 
         def getThemes(self):
-            themeContainers = SoupStrainer(name = 'a', attrs = {'href':re.compile('/themes/\S.+?.html')})
+            themeContainers = SoupStrainer(name='a', attrs={'href':re.compile('/themes/\S.+?.html')})
             seen_titles = set()
-            for theme in BeautifulSoup(self.html, parseOnlyThese = themeContainers):
+            for theme in BeautifulSoup(self.html, parseOnlyThese=themeContainers):
                 if theme.img:
                     title = theme['title']
                     if title not in seen_titles:
                         seen_titles.add(title)
                         link = URLTED + theme['href']
                         thumb = theme.img['src']
-                        yield {'url':link, 'Title':title, 'Thumb':thumb}
+                        yield title, link, thumb
 
         def getTalks(self):
             # themes loaded with a json call. Why are they not more consistant?
             from simplejson import loads
             # search HTML for the link to tedtalk's "api".  It is easier to use regex here than BS.
-            jsonUrl = URLTED+re.findall('DataSource\("(.+?)"', self.html)[0]
+            jsonUrl = URLTED + re.findall('DataSource\("(.+?)"', self.html)[0]
             # make a dict from the json formatted string from above url
             talksMarkup = loads(self.get_HTML(jsonUrl))
             # parse through said dict for all the metadata
             for markup in talksMarkup['resultSet']['result']:
                 talk = BeautifulSoup(markup['markup'])
-                link = URLTED+talk.dt.a['href']
+                link = URLTED + talk.dt.a['href']
                 title = cleanHTML(talk.dt.a['title'])
-                pic = resizeImage(talk.find('img', attrs = {'src':re.compile('.+?\.jpg')})['src'])
-                yield {'url':link, 'Title':title, 'Thumb':pic}
+                pic = resizeImage(talk.find('img', attrs={'src':re.compile('.+?\.jpg')})['src'])
+                yield title, link, pic
 
 
     class Search:

@@ -28,9 +28,8 @@ class TestUser(unittest.TestCase):
             os.remove(cookieFile)
 
     def test_login_failure(self):
-        cookieFile = tempfile.mkstemp()[1]
+        cookieFile = tempfile.mktemp()[1]
         try:
-            os.remove(cookieFile)
             get_HTML = fetcher.Fetcher(lambda x: sys.stdout.write(x + '\n'), lambda x: cookieFile).getHTML
             user = User(get_HTML)
             userID, real_name = user.login(self.username, self.password + "not")

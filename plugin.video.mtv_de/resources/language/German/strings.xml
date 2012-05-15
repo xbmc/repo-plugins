@@ -7,7 +7,7 @@
   <string id="30005">Suche: Interpret</string>
   <string id="30006">Suche: Titel</string>
   <string id="30007">Neueste Musikvideos</string>
-  <string id="30008">Interpreten-Sammlung</string>
+  <string id="30008">Interpreten A-Z</string>
   <string id="30009">Interpreten-Favoriten</string>
   <string id="30010">Titel-Sammlung</string>
   <string id="30011">Playlisten</string>
@@ -21,5 +21,13 @@
   <string id="30107">Playlist 08</string>
   <string id="30108">Playlist 09</string>
   <string id="30109">Playlist 10</string>
-  <string id="30201">Filter "All Eyes On" and "Interviews"</string>
+  <string id="30201">Filter "All Eyes On" und "Interviews"</string>
+  <string id="30202">Zu Playlist hinzufügen</string>
+  <string id="30203">Aus Playlist entfernen</string>
+  <string id="30204">Zu Blacklist hinzufügen</string>
+  <string id="30205">Zu Artist Favs hinzufügen</string>
+  <string id="30206">Aus Artist Favs entfernen</string>
+  <string id="30207">Titel-Sammlung löschen</string>
+  <string id="30208">Alle Titel aus Titel-Sammlung löschen?</string>
+  <string id="30209">Video ist nicht verfügbar!</string>
 </strings>

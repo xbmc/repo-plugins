@@ -6,20 +6,15 @@ pluginhandle = int(sys.argv[1])
 
 addonID = "plugin.video.mtv_de"
 playlistFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".playlists")
-artistsListFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".artists")
 artistsFavsFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".artistsFavs")
 titlesListFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".titles")
+blacklistFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".blacklist")
 settings = xbmcaddon.Addon(id=addonID)
 translation = settings.getLocalizedString
 
 filterVids=settings.getSetting("filterVids")
 
 def index():
-        artistsCount=0
-        if os.path.exists(artistsListFile):
-          fh = open(artistsListFile, 'r')
-          artistsCount = len(fh.readlines())
-          fh.close()
         artistsFavsCount=0
         if os.path.exists(artistsFavsFile):
           fh = open(artistsFavsFile, 'r')
@@ -42,9 +37,9 @@ def index():
         addDir(translation(30002),"http://www.mtv.de/charts/7-deutsche-black-charts",'listVideos',"")
         addDir(translation(30003),"http://www.mtv.de/charts/6-dance-charts",'listVideos',"")
         addDir(translation(30004),"http://www.mtv.de/musikvideos/11-mtv-de-videocharts/playlist",'listVideos',"")
-        addDir(str(translation(30008))+" ("+str(artistsCount)+")","ARTISTS",'artists',"")
         addDir(str(translation(30009))+" ("+str(artistsFavsCount)+")","ARTISTSFAVS",'artistsFavs',"")
-        addDir(str(translation(30010))+" ("+str(titlesCount)+")","ARTISTS",'titles',"")
+        addTCDir(str(translation(30010))+" ("+str(titlesCount)+")","ARTISTS",'titles',"")
+        addDir(translation(30008),"ARTISTS_AZ",'artists',"")
         addDir(translation(30005),"SEARCH_ARTIST",'search',"")
         addDir(translation(30006),"SEARCH_SPECIAL",'search',"")
         addDir(translation(30011),"PLAYLISTMAIN",'playlistMain',"")
@@ -98,16 +93,52 @@ def playlist(playlist):
         xbmcplugin.endOfDirectory(pluginhandle)
 
 def artists():
-        xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
-        if os.path.exists(artistsListFile):
-          fh = open(artistsListFile, 'r')
-          for line in fh:
-            url=line[line.find("###URL###=")+10:]
-            url=url[:url.find("###TITLE###")]
-            title=line[line.find("###TITLE###=")+12:]
-            title=title[:title.find("!!!END!!!")]
-            addArtistDir(title,url,'listVideos',"")
-          fh.close()
+        addDir("A","a",'artistsAZ',"")
+        addDir("B","b",'artistsAZ',"")
+        addDir("C","c",'artistsAZ',"")
+        addDir("D","d",'artistsAZ',"")
+        addDir("E","e",'artistsAZ',"")
+        addDir("F","f",'artistsAZ',"")
+        addDir("G","g",'artistsAZ',"")
+        addDir("H","h",'artistsAZ',"")
+        addDir("I","i",'artistsAZ',"")
+        addDir("J","j",'artistsAZ',"")
+        addDir("K","k",'artistsAZ',"")
+        addDir("L","l",'artistsAZ',"")
+        addDir("M","m",'artistsAZ',"")
+        addDir("N","n",'artistsAZ',"")
+        addDir("O","o",'artistsAZ',"")
+        addDir("P","p",'artistsAZ',"")
+        addDir("Q","q",'artistsAZ',"")
+        addDir("R","r",'artistsAZ',"")
+        addDir("S","s",'artistsAZ',"")
+        addDir("T","t",'artistsAZ',"")
+        addDir("U","u",'artistsAZ',"")
+        addDir("V","v",'artistsAZ',"")
+        addDir("W","w",'artistsAZ',"")
+        addDir("X","x",'artistsAZ',"")
+        addDir("Y","y",'artistsAZ',"")
+        addDir("Z","z",'artistsAZ',"")
+        xbmcplugin.endOfDirectory(pluginhandle)
+
+def artistsAZ(url):
+        content = getUrl("http://www.mtv.de/artists?letter="+url)
+        content = content[content.find("<div class='teaser_collection small artist_list'>"):]
+        content = content[:content.find("</ul>")]
+        spl=content.split('<li>')
+        for i in range(1,len(spl),1):
+            entry=spl[i]
+            match=re.compile('<a href="(.+?)">', re.DOTALL).findall(entry)
+            url="http://www.mtv.de"+match[0]
+            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            thumb=match[0]
+            if thumb=="http://images.mtvnn.com/2edca9f206f1010355e380e7793b93d4/96x54_":
+              thumb=""
+            match=re.compile("<h3 title=(.+?)>", re.DOTALL).findall(entry)
+            title=match[0]
+            title=title[1:len(title)-1]
+            title=cleanTitle(title)
+            addArtistDir(title,url,'listVideos',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
 
 def artistsFavs():
@@ -130,6 +161,11 @@ def listVideosFromFavs(url):
 def titles():
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_PRODUCTIONCODE)
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
+        contentBlacklist=""
+        if os.path.exists(blacklistFile):
+          fh = open(blacklistFile, 'r')
+          contentBlacklist=fh.read()
+          fh.close()
         numTitles=-1
         if os.path.exists(titlesListFile):
           fh = open(titlesListFile, 'r')
@@ -142,11 +178,12 @@ def titles():
             url=url[:url.find("###TITLE###")]
             title=line[line.find("###TITLE###=")+12:]
             title=title[:title.find("!!!END!!!")]
-            if filterVids=="true":
-              if title.lower().find("all eyes on")==-1 and title.lower().find("interview")==-1:
+            if contentBlacklist.find(title)==-1:
+              if filterVids=="true":
+                if title.lower().find("all eyes on")==-1 and title.lower().find("interview")==-1:
+                  addLink(title,url,'playVideo',"",(rndNumbers[i]+1))
+              else:
                 addLink(title,url,'playVideo',"",(rndNumbers[i]+1))
-            else:
-              addLink(title,url,'playVideo',"",(rndNumbers[i]+1))
             i=i+1
           fh.close()
         xbmcplugin.endOfDirectory(pluginhandle)
@@ -161,30 +198,19 @@ def playVideoFromPlaylist(url):
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def listVideos(url):
-        contentArtists=""
-        if os.path.exists(artistsListFile):
-          fh = open(artistsListFile, 'r')
-          contentArtists=fh.read()
-          fh.close()
         contentTitles=""
         if os.path.exists(titlesListFile):
           fh = open(titlesListFile, 'r')
           contentTitles=fh.read()
           fh.close()
+        contentBlacklist=""
+        if os.path.exists(blacklistFile):
+          fh = open(blacklistFile, 'r')
+          contentBlacklist=fh.read()
+          fh.close()
         content = getUrl(url)
         spl=content.split('<a href="/musikvideos_artist/')
-        newArtists=""
         newTitles=""
-        for i in range(1,len(spl),1):
-          entry=spl[i]
-          url="http://www.mtv.de/musikvideos_artist/"+entry[:entry.find('"')]
-          title=entry[entry.find('>')+1:]
-          title=title[:title.find('<')]
-          title=cleanTitle(title)
-          artistInfos="###URL###="+url+"###TITLE###="+title+"!!!END!!!"
-          if contentArtists.find(artistInfos)==-1 and newArtists.find(artistInfos)==-1:
-            newArtists = newArtists + artistInfos
-        xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/artists.py,'+urllib.quote_plus(newArtists)+')')
         content = content[content.find("<div class='current_season'>"):]
         content = content[:content.find("</ul>")]
         spl=content.split('<li')
@@ -200,19 +226,26 @@ def listVideos(url):
               title=cleanTitle(title)
               titleInfos="###URL###="+url+"###TITLE###="+title+"!!!END!!!"
               match=re.compile("<span class='chart_position'>(.+?)</span>", re.DOTALL).findall(entry)
+              titleRaw=title
               if len(match)==1:
                 title=match[0]+". "+title
               if contentTitles.find(titleInfos)==-1 and newTitles.find(titleInfos)==-1:
                 newTitles = newTitles + titleInfos
-              if filterVids=="true":
-                if title.lower().find("all eyes on")==-1 and title.lower().find("interview")==-1:
+              if contentBlacklist.find(titleRaw)==-1:
+                if filterVids=="true":
+                  if title.lower().find("all eyes on")==-1 and title.lower().find("interview")==-1:
+                    addLink(title,url,'playVideo',thumb)
+                else:
                   addLink(title,url,'playVideo',thumb)
-              else:
-                addLink(title,url,'playVideo',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
         xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/titles.py,'+urllib.quote_plus(newTitles)+')')
 
 def listVideosLatest(url):
+        contentBlacklist=""
+        if os.path.exists(blacklistFile):
+          fh = open(blacklistFile, 'r')
+          contentBlacklist=fh.read()
+          fh.close()
         contentTitles=""
         newTitles=""
         if os.path.exists(titlesListFile):
@@ -239,7 +272,8 @@ def listVideosLatest(url):
           titleInfos="###URL###="+url+"###TITLE###="+titleNew+"!!!END!!!"
           if contentTitles.find(titleInfos)==-1 and newTitles.find(titleInfos)==-1:
             newTitles = newTitles + titleInfos
-          addLink(titleNew,url,'playVideo',thumb)
+          if contentBlacklist.find(titleNew)==-1:
+            addLink(titleNew,url,'playVideo',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
         xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/titles.py,'+urllib.quote_plus(newTitles)+')')
 
@@ -269,12 +303,9 @@ def playVideo(url):
           content=content[content.find('type="video/mp4" bitrate="400">'):]
         elif content.find('type="video/x-flv" bitrate="250">')>=0:
           content=content[content.find('type="video/x-flv" bitrate="250">'):]
-        elif content.find("/www/custom/intl/errorslates/video_error.flv")>=0:
+        elif content.find("/www/custom/intl/errorslates/video_error.flv")>=0 or content.find("/www/custom/intl/errorslates/copyright_error.flv")>=0:
           content=""
-          xbmc.executebuiltin('XBMC.Notification(Error!,Video is not available,5000)')
-        elif content.find("/www/custom/intl/errorslates/copyright_error.flv")>=0:
-          content=""
-          xbmc.executebuiltin('XBMC.Notification(Error!,Video is not available (copyright issues),5000)')
+          xbmc.executebuiltin('XBMC.Notification(Info:,'+str(translation(30209))+',5000)')
         if content!="":
           url=content[content.find("<src>")+5:content.find("</src>")]
           if url.find("http://")==0:
@@ -287,11 +318,6 @@ def search(SEARCHTYPE):
         keyboard = xbmc.Keyboard('', 'Video Suche')
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
-          contentArtists=""
-          if os.path.exists(artistsListFile):
-            fh = open(artistsListFile, 'r')
-            contentArtists=fh.read()
-            fh.close()
           search_string = keyboard.getText().replace(" ","%20")
           if SEARCHTYPE=="SEARCH_ARTIST":
             url="http://www.google.de/search?q=site:http://www.mtv.de/musikvideos_artist/%20"+search_string+"&ie=UTF-8"
@@ -305,12 +331,8 @@ def search(SEARCHTYPE):
               title=title[:title.find('-')]
               title=title.replace("<em>","").replace("</em>","")
               title=cleanTitle(title)
-              artistInfos="###URL###="+url+"###TITLE###="+title+"!!!END!!!"
-              if contentArtists.find(artistInfos)==-1:
-                newArtists = newArtists + artistInfos
               addArtistDir(title,url,'listVideos',"")
             xbmcplugin.endOfDirectory(pluginhandle)
-            xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/artists.py,'+urllib.quote_plus(newArtists)+')')
           else:
             url="http://www.google.de/search?q=site:http://www.mtv.de/musikvideos/%20"+search_string+"&ie=UTF-8"
             content=getUrl(url)
@@ -366,7 +388,7 @@ def addLink(name,url,mode,iconimage,rndPos=""):
         if name.find(". ")==2:
           nameNew=name[4:]
         playListInfos="###MODE###=ADD###URL###="+u+"###TITLE###="+nameNew+"###THUMB###="+iconimage+"###END###"
-        liz.addContextMenuItems([('Add to Addon Playlist', 'XBMC.RunScript(special://home/addons/'+addonID+'/playlist.py,'+urllib.quote_plus(playListInfos)+')',)])
+        liz.addContextMenuItems([(translation(30202), 'XBMC.RunScript(special://home/addons/'+addonID+'/playlist.py,'+urllib.quote_plus(playListInfos)+')',),(translation(30204), 'XBMC.RunScript(special://home/addons/'+addonID+'/blacklist.py,'+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
         return ok
 
@@ -376,7 +398,7 @@ def addPlaylistLink(name,url,mode,iconimage,rndPos,playlist):
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Code": str(rndPos) } )
         liz.setProperty('IsPlayable', 'true')
         playListInfos="###MODE###=REMOVE###REFRESH###=TRUE###URL###="+urllib.unquote_plus(url)+"###TITLE###="+name+"###THUMB###="+iconimage+"###END###PLAYLIST###="+playlist+"###PLEND###"
-        liz.addContextMenuItems([('Remove from Playlist', 'XBMC.RunScript(special://home/addons/'+addonID+'/playlist.py,'+urllib.quote_plus(playListInfos)+')',)])
+        liz.addContextMenuItems([(translation(30203), 'XBMC.RunScript(special://home/addons/'+addonID+'/playlist.py,'+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=urllib.unquote_plus(url),listitem=liz)
         return ok
 
@@ -388,13 +410,22 @@ def addDir(name,url,mode,iconimage):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
+def addTCDir(name,url,mode,iconimage):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.addContextMenuItems([(translation(30207), 'XBMC.RunScript(special://home/addons/'+addonID+'/deleteTitles.py)',)])
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        return ok
+
 def addArtistDir(name,url,mode,iconimage):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         playListInfos="###MODE###=ADD###URL###="+url+"###TITLE###="+name+"###END###"
-        liz.addContextMenuItems([('Add to Artist Favs', 'XBMC.RunScript(special://home/addons/'+addonID+'/artistsFavs.py,'+urllib.quote_plus(playListInfos)+')',)])
+        liz.addContextMenuItems([(translation(30205), 'XBMC.RunScript(special://home/addons/'+addonID+'/artistsFavs.py,'+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -404,7 +435,7 @@ def addArtistFavDir(name,url,mode,iconimage):
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         playListInfos="###MODE###=REMOVE###REFRESH###=TRUE###URL###="+urllib.unquote_plus(url)+"###TITLE###="+name+"###END###"
-        liz.addContextMenuItems([('Remove from Artist Favs', 'XBMC.RunScript(special://home/addons/'+addonID+'/artistsFavs.py,'+urllib.quote_plus(playListInfos)+')',)])
+        liz.addContextMenuItems([(translation(30206), 'XBMC.RunScript(special://home/addons/'+addonID+'/artistsFavs.py,'+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -430,6 +461,8 @@ elif mode == 'titles':
     titles()
 elif mode == 'artists':
     artists()
+elif mode == 'artistsAZ':
+    artistsAZ(url)
 elif mode == 'artistsFavs':
     artistsFavs()
 elif mode == 'playlist':

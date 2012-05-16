@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">ARTE+7</string>
+  <string id="30002">All Videos</string>
+  <string id="30003">Shows A-Z</string>
+  <string id="30004">Events</string>
+  <string id="30005">Search</string>
+  <string id="30006">by Title</string>
+  <string id="30007">by Date</string>
+  <string id="30008">by Votes</string>
+  <string id="30009">by Hits</string>
+  <string id="30010">Next Page</string>
+  <string id="30101">Language (Videos)</string>
+  <string id="30102">Videos per Page</string>
+</strings>

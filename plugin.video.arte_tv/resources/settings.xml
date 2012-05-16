@@ -1,0 +1,4 @@
+<settings>
+   <setting id="language" type="enum" label="30101" values="DE|FR"/>
+   <setting id="itemsPerPage" type="enum" label="30102" values="10|25|50|100" default="1"/>
+</settings>

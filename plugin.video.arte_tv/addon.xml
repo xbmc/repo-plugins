@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.arte_tv" name="Arte.tv" version="1.0.0" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">ARTE Mediathek (DE/FR)</summary>
+        <summary lang="en">ARTE Media Library (DE/FR)</summary>
+        <summary lang="fr">ARTE médiathèque (DE/FR)</summary>
+        <language>de fr</language>
+        <description lang="de">ARTE Mediathek (DE/FR)</description>
+        <description lang="en">ARTE Media Library (DE/FR)</description>
+        <description lang="fr">ARTE médiathèque (DE/FR)</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+    <platform>all</platform>
+    </extension>
+</addon>

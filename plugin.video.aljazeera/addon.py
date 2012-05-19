@@ -14,10 +14,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from xbmcswift import Plugin, download_page
+from xbmcswift import Plugin, download_page, xbmc, xbmcgui
 from xbmcswift.ext.playlist import playlist
-from resources.lib.getflashvideo import get_flashvideo_url, YouTube
-from BeautifulSoup import BeautifulSoup as BS, SoupStrainer as SS
+from BeautifulSoup import BeautifulSoup as BS
 from urllib import urlencode
 from urlparse import urljoin
 import re
@@ -25,18 +24,25 @@ try:
     import json
 except ImportError:
     import simplejson as json
-from xbmcswift import xbmc, xbmcgui
 
-__plugin__ = 'AlJazeera'
-__plugin_id__ = 'plugin.video.aljazeera'
 
-plugin = Plugin(__plugin__, __plugin_id__, __file__)
+PLUGIN_NAME = 'AlJazeera'
+PLUGIN_ID = 'plugin.video.aljazeera'
 
+
+plugin = Plugin(PLUGIN_NAME, PLUGIN_ID, __file__)
 plugin.register_module(playlist, url_prefix='/_playlist')
+
 
 BASE_URL = 'http://english.aljazeera.net'
 def full_url(path):
     return urljoin(BASE_URL, path)
+
+
+YOUTUBE_PTN = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s'
+def youtube_url(videoid):
+    return YOUTUBE_PTN % (videoid)
+
 
 def parse_queryvideo_args(s):
     '''Parses a QueryVideos javascript call (string) and returns a 4 tuple.
@@ -50,6 +56,7 @@ def parse_queryvideo_args(s):
         return None
     count, list_id, start_index, method = m.group(1).split(',')
     return count, list_id.strip("'"), start_index, method
+
 
 def parse_video(video):
     '''Returns a dict of information for a given json video object.'''
@@ -68,6 +75,7 @@ def parse_video(video):
     # Make a datetime
     #info['published'] = video['published']['$t']
     return info
+
 
 def get_videos(count, list_id, start_index):
     '''Returns a tuple of (videos, total_videos) where videos is a list of 
@@ -96,39 +104,48 @@ def get_videos(count, list_id, start_index):
     return video_infos, total_results
 
 
-#### Plugin Views ####
-
-# Default View
 @plugin.route('/', default=True)
 def show_homepage():
     items = [
         # Watch Live
-        {'label': plugin.get_string(30100), 'url': plugin.url_for('watch_live')},
+        {'label': plugin.get_string(30100),
+         'url': plugin.url_for('watch_live')},
         # News Clips
-        {'label': plugin.get_string(30101), 'url': plugin.url_for('show_clip_categories')},
+        {'label': plugin.get_string(30101),
+         'url': plugin.url_for('show_clip_categories')},
         # Programs
-        {'label': plugin.get_string(30102), 'url': plugin.url_for('show_program_categories')},
+        {'label': plugin.get_string(30102),
+         'url': plugin.url_for('show_program_categories')},
     ]
     return plugin.add_items(items)
+
 
 @plugin.route('/live/')
 def watch_live():
     rtmpurl = 'rtmp://aljazeeraflashlivefs.fplive.net:1935/aljazeeraflashlive-live/aljazeera_english_1 live=true'
     li = xbmcgui.ListItem('AlJazeera Live')
     xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(rtmpurl, li)
-    # Return an empty list so we can test with plugin.crawl() and plugin.interactive()
+    # Return an empty list so we can test with plugin.crawl() and
+    # plugin.interactive()
     return []
+
 
 def only_clip_categories(s):
     return s.find("SelectProgInfo('Selected');") > -1
 
+
 def only_program_categories(s):
     return not only_clip_categories(s)
 
-@plugin.route('/categories/clips/', onclick_func=only_clip_categories, name='show_clip_categories', clips=True)
-@plugin.route('/categories/programs/', name='show_program_categories', onclick_func=only_program_categories)
+
+@plugin.route('/categories/clips/', onclick_func=only_clip_categories,
+              name='show_clip_categories', clips=True)
+@plugin.route('/categories/programs/', name='show_program_categories',
+              onclick_func=only_program_categories)
 def show_categories3(onclick_func, clips=False):
-    '''Shows categories available for either Clips or Programs on the aljazeera video page.'''
+    '''Shows categories available for either Clips or Programs on the aljazeera
+    video page.
+    '''
     url = full_url('video')
     src = download_page(url)
     # Fix shitty HTML so BeautifulSoup doesn't break
@@ -142,7 +159,8 @@ def show_categories3(onclick_func, clips=False):
 
     items = []
 
-    # The first link for the 'Clips' section links directly to a video so we must handle it differently.
+    # The first link for the 'Clips' section links directly to a video so we
+    # must handle it differently.
     if clips:
         videos, total_results = get_videos('1', 'vod', '1')
         video = videos[0]
@@ -150,7 +168,7 @@ def show_categories3(onclick_func, clips=False):
             'label': video['title'],
             'thumbnail': video['thumbnail'],
             'info': {'plot': video['summary'], },
-            'url': plugin.url_for('watch_video', videoid=video['videoid']),
+            'url': youtube_url(video['videoid']),
             'is_folder': False,
             'is_playable': True,
         })
@@ -160,22 +178,25 @@ def show_categories3(onclick_func, clips=False):
         count, list_id, start_index, method = parse_queryvideo_args(td['onclick'])
         items.append({
             'label': td.string,
-            'url': plugin.url_for('show_videos', count=count, list_id=list_id, start_index=start_index),
+            'url': plugin.url_for('show_videos', count=count, list_id=list_id,
+                                  start_index=start_index),
         })
 
     return plugin.add_items(items)
 
+
 @plugin.route('/videos/<list_id>/<start_index>/<count>/')
 def show_videos(list_id, start_index, count):
-    '''List videos available for a given category. Only 13 videos are displayed at a time.
-    If there are older or newwer videos, appropriate list items will be placed at the top of
-    the list.'''
+    '''List videos available for a given category. Only 13 videos are displayed
+    at a time. If there are older or newwer videos, appropriate list items will
+    be placed at the top of the list.
+    '''
     videos, total_results = get_videos(count, list_id, start_index)
     items = [{
         'label': video['title'],
         'thumbnail': video['thumbnail'],
         'info': {'plot': video['summary'], },
-        'url': plugin.url_for('watch_video', videoid=video['videoid']),
+        'url': youtube_url(video['videoid']),
         'is_folder': False,
         'is_playable': True,
         'context_menu': [(
@@ -183,33 +204,30 @@ def show_videos(list_id, start_index, count):
             plugin.get_string(30300),
             'XBMC.RunPlugin(%s)' % plugin.url_for(
                 'playlist.add_to_playlist',
-                url=plugin.url_for('watch_video', videoid=video['videoid']),
+                url=youtube_url(video['videoid']),
                 label=video['title']
             )
         )],
     } for video in videos]
 
-    # MOAR VIDEOS
-    # Add '> Older' and '< Newer' list items if the list spans more than 1 page (e.g. > 13 videos)
+    # Add '> Older' and '< Newer' list items if the list spans more than 1 page
+    # (e.g. > 13 videos)
     if int(start_index) + int(count) < int(total_results):
         items.insert(0, {
             # Older videos
             'label': u'%s »' % plugin.get_string(30200),
-            'url': plugin.url_for('show_videos', count=count, list_id=list_id, start_index=str(int(start_index) + int(count))),
+            'url': plugin.url_for('show_videos', count=count, list_id=list_id,
+                                  start_index=str(int(start_index) + int(count))),
         })
     if int(start_index) > 1:
         items.insert(0, {
             # Newer videos
             'label': u'« %s' % plugin.get_string(30201),
-            'url': plugin.url_for('show_videos', count=count, list_id=list_id, start_index=str(int(start_index) - int(count))),
+            'url': plugin.url_for('show_videos', count=count, list_id=list_id,
+                                  start_index=str(int(start_index) - int(count))),
         })
 
     return plugin.add_items(items)
-
-@plugin.route('/watch/<videoid>/')
-def watch_video(videoid):
-    url = YouTube.get_flashvideo_url(videoid=videoid)
-    return plugin.set_resolved_url(url)
 
 
 if __name__ == '__main__': 

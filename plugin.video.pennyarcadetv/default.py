@@ -78,8 +78,8 @@ def listShowsAndLatest(showOnlyLatest):
                     ep["title"] = links[2]["title"]
 
                 #Image and url
-                ep["imgurl"] = __baseURL__ + div.parent.img["src"]
-                ep["url"] = __baseURL__ + links[0]["href"]
+                ep["imgurl"] = div.parent.img["src"]
+                ep["url"] = links[0]["href"]
 
                 foundEps.append(ep)
             else:
@@ -87,8 +87,8 @@ def listShowsAndLatest(showOnlyLatest):
                 #that shows the info without having other fields left empty..
                 show = {}
                 show["title"] = links[0]["title"]
-                show["imgurl"] = __baseURL__ + div.parent.a.img["src"]
-                show["url"] = __baseURL__ + links[0]["href"]
+                show["imgurl"] = div.parent.a.img["src"]
+                show["url"] = links[0]["href"]
                 foundShows.append(show)
         except:
             log("Issue with parsing show or ep div.")
@@ -139,7 +139,7 @@ def listShowEpisodes(url):
     #TODO - not sure if using set content is worth the effort since there isn"t much 
     #metadata available for these episodes other than title and image
     #xbmcplugin.setContent(pluginHandle, "episodes")
-    urlRegex = re.compile("/.*/.*/(.*?)/")
+    urlRegex = re.compile(".*/(.*?)/")
     episodesPage = BeautifulSoup(getHTML(forURL=url), convertEntities=BeautifulSoup.HTML_ENTITIES)
 
     epLists = episodesPage.findAll(attrs={"class" : "episodes"})
@@ -151,8 +151,8 @@ def listShowEpisodes(url):
     for epList in epLists:
         for ep in epList.findAll("li"):
             aTags = ep.findAll("a")
-            img = __baseURL__ + ep.img["src"]
-            url = __baseURL__ + aTags[0]["href"]
+            img = ep.img["src"]
+            url = aTags[0]["href"]
             name = formatEpName(aTags[0]["href"], aTags[1].contents[2], urlRegex, seasonCounter)
             addEpisodeItem(name, url, img)
         seasonCounter -= 1
@@ -185,12 +185,12 @@ def playVideo(url):
     #Get the embed tag on the video page as the first step to get the final url
     videoPage = BeautifulSoup(getHTML(forURL=url))
     #Assuming a single embed tag works for now
-    embedUrl = videoPage("embed")[0]["src"]
+    embedUrl = videoPage("iframe")[0]["src"]
 
     #embedUrl redirects to another Url that has a QS param for a Url to the rss file for this specific video
     #4 is to get the query portion of the final url, not sure why the named attribute doesn"t work..
     redirectUrl = urlparse.urlparse(getRedirectURL(forURL=embedUrl))
-    redirectQS = parse_qs(redirectUrl[4])
+    redirectQS = parse_qs(redirectUrl[5])
     rssFileUrl = redirectQS["file"][0]
     rssFile = BeautifulStoneSoup(getHTML(forURL=rssFileUrl))
 

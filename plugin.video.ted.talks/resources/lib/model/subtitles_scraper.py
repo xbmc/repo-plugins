@@ -29,7 +29,7 @@ def get_languages(languages):
     '''
     languages Escaped languages param from flashVars
     '''
-    language_code_re = re.compile('"LanguageCode":"(\w+)"')
+    language_code_re = re.compile('"LanguageCode":"([a-zA-Z-]+)"')
     matches = filter(None, [language_code_re.search(param) for param in urllib.unquote(languages).split(',')])
     return [m.group(1) for m in matches]
 
@@ -74,27 +74,27 @@ def get_subtitles_for_talk(talk_soup, accepted_languages, logger):
         logger('Could not display subtitles: %s' % (e), __friendly_message__)
         return None
 
-    if 'languages' in flashvars:
-        languages = get_languages(flashvars['languages'])
-        if len(languages) == 0:
-            msg = 'No subtitles found'
-            logger(msg, msg)
-            return None
-        matches = [l for l in languages if l in accepted_languages]
-        if not matches:
-            msg = 'No subtitles in: %s' % (",".join(accepted_languages))
-            logger(msg, msg)
-            return None
-    else:
-        # If we don't find 'languages' in flashvars, may as well take a punt anyway.
-        logger('Could not find languages in flashvars.')
-        matches = accepted_languages
-
+    if 'languages' not in flashvars:
+        # Some talks really don't.
+        # See https://github.com/moreginger/xbmc-plugin.video.ted.talks/issues/20
+        logger('No languages in flashvars.', 'No subtitles found')
+        return None
     if 'ti' not in flashvars:
         logger('Could not determine talk ID for subtitles.', __friendly_message__)
         return None
     if 'introDuration' not in flashvars:
         logger('Could not determine intro duration for subtitles.', __friendly_message__)
+        return None
+
+    languages = get_languages(flashvars['languages'])
+    if len(languages) == 0:
+        msg = 'No subtitles found'
+        logger(msg, msg)
+        return None
+    matches = [l for l in languages if l in accepted_languages]
+    if not matches:
+        msg = 'No subtitles in: %s' % (",".join(accepted_languages))
+        logger(msg, msg)
         return None
 
     raw_subtitles = get_subtitles(flashvars['ti'], matches[0])

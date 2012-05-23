@@ -58,7 +58,10 @@ class RssFeed (Feed):
             enclosureNode = itemNode.getElementsByTagName("enclosure")[0];
           
             feedItem.link = enclosureNode.getAttribute("url");
-            feedItem.size = int(enclosureNode.getAttribute("length"));
+            try:
+              feedItem.size = int(enclosureNode.getAttribute("length"));
+            except:
+              feedItem.size = 0;
           else:
             feedItem.size = 0;
             feedItem.link = self.parseIndirectItem(self.readText(itemNode,"link"));

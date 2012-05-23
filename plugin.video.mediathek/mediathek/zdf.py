@@ -162,11 +162,14 @@ class ZDFMediathek(Mediathek):
       videoID = self._regex_extractVideoID.search(pageLink.group()).group();
       videoID = videoID.replace("/","");
       if(not lastID == videoID):
+        self.gui.log("append VideoID: %s len: %d"%(videoID,len(videos)));
         videos.append(videoID);
         lastID = videoID;
     
     self.countVideo = len(videos);
+    self.gui.log("len %d"%(len(videos)));
     for videoID in videos:
+      self.gui.log("decode VideoID: %s"%(videoID));
       self.loadConfigXml(videoID);
   
   def loadConfigXml(self, videoID):

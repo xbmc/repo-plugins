@@ -18,6 +18,7 @@
 import time,urllib,re;
 from archivefile import ArchiveFile
 regex_mediaLink = re.compile("(http|ftp)://.*?\\.(mp3|mpeg|asx|wmv|ogg|mov)");
+regex_dateStringShortYear = re.compile("\\d{2} ((\\w{3,})|(\\d{2})) \\d{2}");
 regex_dateString = re.compile("\\d{2} ((\\w{3,})|(\\d{2})) \\d{4}");
 regex_shortdateString = re.compile("\\d{4}-(\\d{2})-\\d{2}");
 regex_replaceUnusableChar = re.compile("[:/ \\.\?\\\\]")
@@ -226,7 +227,17 @@ class Feed(object):
      if(dateMatch is not None):
        dateString = dateMatch.group();
        return time.strptime(dateString,"%Y-%m-%d");
-    return 0;
+     else:
+       dateMatch = regex_dateStringShortYear.search(dateString)
+       if(dateMatch is not None):
+         dateString = dateMatch.group();
+         for month in month_replacements_long.keys():
+           dateString = dateString.replace(month,month_replacements_long[month]);
+         for month in month_replacements.keys():
+           dateString = dateString.replace(month,month_replacements[month]);
+         return time.strptime(dateString,"%d %m %y");
+         
+    return time.localtime();
     
   def writeDate(self, date):
     return time.strftime("%d %m %Y",date);

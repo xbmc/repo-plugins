@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.mediathek"
-  version="0.4.2"
+  version="0.4.3"
   name="Mediathek"
   provider-name="Raptor 2101 [raptor2101@gmx.de]">
   <requires>
@@ -23,6 +23,7 @@ Aktuell implementiert sind:
 Currently implemented:
   3Sat, ARD, ZDF, ARTE, Bayrisches Fernsehen, ORF, WDR, NDR, KiKa (without Kikaninchen)
 </description>
+    <language>de</language>
     <platform>all</platform>
   </extension>
 </addon>

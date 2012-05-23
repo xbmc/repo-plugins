@@ -49,8 +49,10 @@ class NDRMediathek(Mediathek):
     
     self.regex_extractVideoLink = re.compile("rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/(.*\\.)(hi.mp4|lo.flv)");  
     
-    self.rtmpBaseLink = "rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/";
-    self.mmsBaseLink = "mms://ndr.wmod.llnwd.net/a3715/d1/msmedia/";
+    #self.rtmpBaseLink = "rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/";
+    self.rtmpBaseLink = "rtmp://cp160844.edgefcs.net/ondemand/flashmedia/streams/ndr/";
+    #self.mmsBaseLink = "mms://ndr.wmod.llnwd.net/a3715/d1/msmedia/";
+    self.mmsBaseLink = "mms://a874.v1608102.c160810.g.vm.akamaistream.net/7/874/160810/v0001/wm.origin.ndr.gl-systemhaus.de/msmedia/";
     self.httpBaseLink = "http://media.ndr.de/progressive/";
     
     self.menuTree = [

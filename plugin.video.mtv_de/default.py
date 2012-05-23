@@ -303,7 +303,7 @@ def playVideo(url):
           content=content[content.find('type="video/mp4" bitrate="400">'):]
         elif content.find('type="video/x-flv" bitrate="250">')>=0:
           content=content[content.find('type="video/x-flv" bitrate="250">'):]
-        elif content.find("/www/custom/intl/errorslates/video_error.flv")>=0 or content.find("/www/custom/intl/errorslates/copyright_error.flv")>=0:
+        elif content.find("/www/custom/intl/errorslates/video_error.flv")>=0 or content.find("/www/custom/intl/errorslates/copyright_error.flv")>=0 or content.find('<error message="uri not found" />')>=0:
           content=""
           xbmc.executebuiltin('XBMC.Notification(Info:,'+str(translation(30209))+',5000)')
         if content!="":

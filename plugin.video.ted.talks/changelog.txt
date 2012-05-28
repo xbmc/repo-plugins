@@ -1,3 +1,6 @@
+[B]Version 3.1.2[/B]
+Fix themes (issue#22)
+
 [B]Version 3.1.1[/B]
 Support subtitles with language subcodes, such as pt-br (issue#10)
 

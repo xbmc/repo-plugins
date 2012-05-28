@@ -1,11 +1,10 @@
 import re
-from model.util import cleanHTML, resizeImage
+from model.util import resizeImage
 from BeautifulSoup import SoupStrainer, MinimalSoup as BeautifulSoup
 from model.url_constants import URLTED
 import model.subtitles_scraper as subtitles_scraper
 
 #MAIN URLS
-URLTHEMES = 'http://www.ted.com/themes/atoz/page/'
 URLSPEAKERS = 'http://www.ted.com/speakers/atoz/page/'
 URLSEARCH = 'http://www.ted.com/search?q=%s/page/'
 
@@ -83,45 +82,3 @@ class TedTalks:
 
         return title, url, subs, {'Director':speaker, 'Genre':'TED', 'Plot':plot, 'PlotOutline':plot}
 
-
-    class Themes:
-
-        def __init__(self, get_HTML, url):
-            if url == None:
-                url = URLTHEMES
-            self.get_HTML = get_HTML
-            self.html = self.get_HTML(url)
-            # a-z themes don't yet have navItems, so the check can be skipped for now.
-            # self.navItems = TedTalks().getNavItems(html)
-
-        def getThemes(self):
-            themeContainers = SoupStrainer(name='a', attrs={'href':re.compile('/themes/\S.+?.html')})
-            seen_titles = set()
-            for theme in BeautifulSoup(self.html, parseOnlyThese=themeContainers):
-                if theme.img:
-                    title = theme['title']
-                    if title not in seen_titles:
-                        seen_titles.add(title)
-                        link = URLTED + theme['href']
-                        thumb = theme.img['src']
-                        yield title, link, thumb
-
-        def getTalks(self):
-            # themes loaded with a json call. Why are they not more consistant?
-            from simplejson import loads
-            # search HTML for the link to tedtalk's "api".  It is easier to use regex here than BS.
-            jsonUrl = URLTED + re.findall('DataSource\("(.+?)"', self.html)[0]
-            # make a dict from the json formatted string from above url
-            talksMarkup = loads(self.get_HTML(jsonUrl))
-            # parse through said dict for all the metadata
-            for markup in talksMarkup['resultSet']['result']:
-                talk = BeautifulSoup(markup['markup'])
-                link = URLTED + talk.dt.a['href']
-                title = cleanHTML(talk.dt.a['title'])
-                pic = resizeImage(talk.find('img', attrs={'src':re.compile('.+?\.jpg')})['src'])
-                yield title, link, pic
-
-
-    class Search:
-        pass
-        #TODO: SEARCH

@@ -9,6 +9,7 @@ from model.user import User
 from model.rss_scraper import NewTalksRss
 from model.favorites_scraper import Favorites
 from model.speakers_scraper import Speakers
+from model.themes_scraper import Themes
 import menu_util
 import os
 import time
@@ -134,16 +135,14 @@ class UI:
         self.endofdirectory()
 
     def themes(self):
-        themes = self.ted_talks.Themes(self.get_HTML, None)
-        #add themes to the list
-        for title, link, img in themes.getThemes():
+        themes = Themes(self.get_HTML)
+        for title, link, img in themes.get_themes():
             self.addItem(title, 'themeVids', link, img, isFolder=True)
-        #end the list
         self.endofdirectory()
 
     def themeVids(self, url):
-        themes = self.ted_talks.Themes(self.get_HTML, url)
-        for title, link, img in themes.getTalks():
+        themes = Themes(self.get_HTML)
+        for title, link, img in themes.get_talks(url):
             self.addItem(title, 'playVideo', link, img, isFolder=False)
         self.endofdirectory()
 

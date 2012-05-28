@@ -10,9 +10,9 @@ class TestSpeakersScraper(unittest.TestCase):
 
     def test_get_speakers(self):
         speakers_generator = Speakers(get_HTML).get_speakers_for_letter('E')
+        # First value returned is number of speakers, for progress.
         self.assertTrue(itertools.islice(speakers_generator, 1).next() > 0)
         e_speakers = list(speakers_generator)
-        print e_speakers
         self.assertTrue(len(e_speakers) > 0)
         sample_speaker = [s for s in e_speakers if s[0] == 'Kenichi Ebina'][0]
         self.assertEqual('http://www.ted.com/speakers/kenichi_ebina.html', sample_speaker[1])

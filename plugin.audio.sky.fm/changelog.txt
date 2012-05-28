@@ -1,0 +1,9 @@
++ New feature
+* Fixed/improved feature
+- Removed feature
+
+27 May 2012 v1.0.0
++ Initial release
++ Support for public/free streams
++ Added a testStream method to HTTPComm, to check if a url is streaming
+- No premium support yet, theres some logic that I have to sort out first, regarding different stream formats (Flash/AAC/MP3)

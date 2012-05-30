@@ -1,3 +1,7 @@
+Version 1.0.6
+fix for UnicodeDecodeError
+added Trey's Variety Hour
+
 Version  1.0.5
 fix for site changes
 new playback settings

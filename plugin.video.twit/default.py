@@ -45,6 +45,7 @@ def categories():
         addDir(__language__(30026),'http://twit.tv/show/this-week-in-radio-tech',1,'http://static.mediafly.com/publisher/images/ab7b2412afa84674971e4c93665d0e06/icon-600x600.png')
         addDir(__language__(30036),'http://twit.tv/show/before-you-buy',1,'http://static.mediafly.com/publisher/images/dee7de4f87034d4d917ed446df3616e4/icon-600x600.png')
         addDir(__language__(30037),'http://twit.tv/show/game-on',1,'http://static.mediafly.com/publisher/images/3f551d9b6ef9476fb76f92ccd4b37826/icon-600x600.png')
+        addDir(__language__(30042),'http://twit.tv/show/treys-variety-hour',1,'http://leoville.tv/podcasts/coverart/tvh300video.jpg')
 
 
 def index(url,iconimage):
@@ -56,7 +57,7 @@ def index(url,iconimage):
         items = soup.findAll('div', attrs={'class' : 'view-content'})[3]('div', attrs={'class' : 'field-content'})
         for i in items:
             url = i.a['href']
-            name = i.a.string
+            name = i.a.string.encode('ascii', 'ignore')
             try:
                 description = i.p.string
             except:
@@ -113,6 +114,7 @@ def indexTwitFeed():
                     episode_name = re.compile('<div class="field-item odd">(.+?)</div></div>').findall(item_str)[0]
                     if episode_name.startswith('<img'):
                         episode_name = re.compile('<div class="field-item odd"><p>(.+?)</p><p>').findall(item_str)[0]
+                    episode_name = episode_name.replace('&amp;', '&').replace('&quot;', '"').replace('&#039;', "'").encode('ascii', 'ignore')
                 except:
                     episode_name = ''
                 try:
@@ -127,7 +129,7 @@ def indexTwitFeed():
                     description = desc.replace('&amp;', '&').replace('&quot;', '"').replace('&#039;', "'")
                 except:
                     description = ''
-                name = title+' - '+episode_name.replace('&amp;', '&').replace('&quot;', '"').replace('&#039;', "'")
+                name = title+' - '+episode_name
                 addLink(name, url, description, date, 4, thumb)
             else: print '--- There was a problem adding episode %s ---' % title
 

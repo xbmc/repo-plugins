@@ -1,0 +1,12 @@
+<settings>
+   <setting id="pl0" type="text" label="30100" default="Series" />
+   <setting id="pl1" type="text" label="30101" default="Movies" />
+   <setting id="pl2" type="text" label="30102" default="Docus" />
+   <setting id="pl3" type="text" label="30103" default="" />
+   <setting id="pl4" type="text" label="30104" default="" />
+   <setting id="pl5" type="text" label="30105" default="Interesting" />
+   <setting id="pl6" type="text" label="30106" default="" />
+   <setting id="pl7" type="text" label="30107" default="" />
+   <setting id="pl8" type="text" label="30108" default="" />
+   <setting id="pl9" type="text" label="30109" default="" />
+</settings>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.watch.it.later"
+       name="WatchItLater"
+       version="1.0.0"
+       provider-name="AddonScriptorDE">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+      <summary lang="en">Add local files and online streams to playlists and watch them later</summary>
+      <summary lang="de">Lokale Dateien und Online Streams zu Playlisten hinzufügen und später schauen</summary>
+      <language></language>
+      <description lang="en">Add local files and online streams to playlists and watch them later</description>
+      <description lang="de">Lokale Dateien und Online Streams zu Playlisten hinzufügen und später schauen</description>
+    <platform>all</platform>
+  </extension>
+</addon>

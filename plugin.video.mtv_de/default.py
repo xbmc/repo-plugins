@@ -32,6 +32,7 @@ def index():
           else:
             titlesCount = len(fh.readlines())
           fh.close()
+        addDir("TV-Shows","http://www.mtv.de/shows/alle",'listShows',"")
         addDir(translation(30007),"http://www.mtv.de/musikvideos",'listVideosLatest',"")
         addDir(translation(30001),"http://www.mtv.de/charts/5-hitlist-germany-top-100",'listVideos',"")
         addDir(translation(30002),"http://www.mtv.de/charts/7-deutsche-black-charts",'listVideos',"")
@@ -197,6 +198,61 @@ def playVideoFromPlaylist(url):
         listitem = xbmcgui.ListItem(path=urllib.unquote_plus(url))
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
+def listShows(url):
+        content = getUrl(url)
+        content = content[content.find("<div class='teaser_collection'>"):]
+        content = content[:content.find("</section>")]
+        spl=content.split("<li class='teaser_franchise'")
+        for i in range(1,len(spl),1):
+            entry=spl[i]
+            match=re.compile('<a href="(.+?)" title="(.+?)">', re.DOTALL).findall(entry)
+            url="http://www.mtv.de"+match[0][0]
+            title=match[0][1]
+            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            thumb=match[0]
+            addDir(title,url,'listShow',thumb)
+        xbmcplugin.endOfDirectory(pluginhandle)
+
+def listShow(url):
+        content = getUrl(url)
+        if content.find("<ul class='related_seasons'>")>=0:
+          content = content[content.find("<ul class='related_seasons'>"):]
+          content = content[:content.find("</ul>")]
+          spl=content.split("<li")
+          for i in range(1,len(spl),1):
+              entry=spl[i]
+              match=re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
+              url="http://www.mtv.de"+match[0][0]
+              title=match[0][1]
+              addDir(title,url,'listEpisodes',"")
+          xbmcplugin.endOfDirectory(pluginhandle)
+        elif content.find("<div class='related_episodes'>")>=0:
+          listEpisodesMain(content)
+        else:
+          xbmcplugin.endOfDirectory(pluginhandle)
+
+def listEpisodes(url):
+        content = getUrl(url)
+        listEpisodesMain(content)
+
+def listEpisodesMain(content):
+        content = content[content.find("<div class='related_episodes'>"):]
+        content = content[:content.find("</div>")]
+        spl=content.split("<li")
+        for i in range(1,len(spl),1):
+            entry=spl[i]
+            match=re.compile("data-playlist-id='(.+?)'", re.DOTALL).findall(entry)
+            id=match[0]
+            match=re.compile('title="(.+?)"><span class=\'episode_number\'>(.+?)</span>', re.DOTALL).findall(entry)
+            title=match[0][0]
+            nr=match[0][1]
+            if nr=="+":
+              nr="Special"
+            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            thumb=match[0]
+            addShowLink(nr+" - "+title,id,'playShow',thumb)
+        xbmcplugin.endOfDirectory(pluginhandle)
+
 def listVideos(url):
         contentTitles=""
         if os.path.exists(titlesListFile):
@@ -277,6 +333,11 @@ def listVideosLatest(url):
         xbmcplugin.endOfDirectory(pluginhandle)
         xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/titles.py,'+urllib.quote_plus(newTitles)+')')
 
+def playShow(id):
+        content = getUrl("http://api.mtvnn.com/v2/mrss.xml?uri=mgid:sensei:video:mtvnn.com:local_playlist-"+id+"-DE")
+        match=re.compile("<media:content duration='(.+?)' isDefault='true' type='text/xml' url='(.+?)'></media:content>", re.DOTALL).findall(content)
+        playVideoMain(match[0][1])
+
 def playVideo(url):
         if url.find("http://")==0:
           content = getUrl(url)
@@ -284,34 +345,43 @@ def playVideo(url):
           url=match[0]
         content = getUrl("http://api.mtvnn.com/v2/mrss.xml?uri=mgid:sensei:video:mtvnn.com:music_video-"+url+"-DE")
         match=re.compile("<media:content duration='0' isDefault='true' type='text/xml' url='(.+?)'></media:content>", re.DOTALL).findall(content)
-        content = getUrl(match[0])
-        if content.find('type="video/mp4" bitrate="3500">')>=0:
-          content=content[content.find('type="video/mp4" bitrate="3500">'):]
-        elif content.find('type="video/mp4" bitrate="2200">')>=0:
-          content=content[content.find('type="video/mp4" bitrate="2200">'):]
-        elif content.find('type="video/mp4" bitrate="1700">')>=0:
-          content=content[content.find('type="video/mp4" bitrate="1700">'):]
-        elif content.find('type="video/mp4" bitrate="1200">')>=0:
-          content=content[content.find('type="video/mp4" bitrate="1200">'):]
-        elif content.find('type="video/mp4" bitrate="750">')>=0:
-          content=content[content.find('type="video/mp4" bitrate="750">'):]
-        elif content.find('type="video/x-flv" bitrate="800">')>=0:
-          content=content[content.find('type="video/x-flv" bitrate="800">'):]
-        elif content.find('type="video/x-flv" bitrate="600">')>=0:
-          content=content[content.find('type="video/x-flv" bitrate="600">'):]
-        elif content.find('type="video/mp4" bitrate="400">')>=0:
-          content=content[content.find('type="video/mp4" bitrate="400">'):]
-        elif content.find('type="video/x-flv" bitrate="250">')>=0:
-          content=content[content.find('type="video/x-flv" bitrate="250">'):]
+        playVideoMain(match[0])
+
+def playVideoMain(url):
+        content = getUrl(url)
+        match=re.compile('type="video/mp4" bitrate="(.+?)">\n<src>(.+?)</src>', re.DOTALL).findall(content)
+        match2=re.compile('type="video/mp4" bitrate="(.+?)">\n        <src>(.+?)</src>', re.DOTALL).findall(content)
+        match3=re.compile('type="video/x-flv" bitrate="(.+?)">\n<src>(.+?)</src>', re.DOTALL).findall(content)
+        match4=re.compile('type="video/x-flv" bitrate="(.+?)">\n        <src>(.+?)</src>', re.DOTALL).findall(content)
+        urlNew=""
+        bitrate=0
+        if len(match)>0:
+          for br,url in match:
+            if int(br)>bitrate:
+              bitrate=int(br)
+              urlNew=url
+        elif len(match2)>0:
+          for br,url in match2:
+            if int(br)>bitrate:
+              bitrate=int(br)
+              urlNew=url
+        elif len(match3)>0:
+          for br,url in match3:
+            if int(br)>bitrate:
+              bitrate=int(br)
+              urlNew=url
+        elif len(match4)>0:
+          for br,url in match4:
+            if int(br)>bitrate:
+              bitrate=int(br)
+              urlNew=url
         elif content.find("/www/custom/intl/errorslates/video_error.flv")>=0 or content.find("/www/custom/intl/errorslates/copyright_error.flv")>=0 or content.find('<error message="uri not found" />')>=0:
-          content=""
           xbmc.executebuiltin('XBMC.Notification(Info:,'+str(translation(30209))+',5000)')
-        if content!="":
-          url=content[content.find("<src>")+5:content.find("</src>")]
-          if url.find("http://")==0:
-            listitem = xbmcgui.ListItem(path=url)
-          elif url.find("rtmp://")==0 or url.find("rtmpe://")==0:
-            listitem = xbmcgui.ListItem(path=url+" swfVfy=1 swfUrl=http://media.mtvnservices.com/player/prime/mediaplayerprime.1.9.1.swf")
+        if urlNew!="":
+          if urlNew.find("http://")==0:
+            listitem = xbmcgui.ListItem(path=urlNew)
+          elif urlNew.find("rtmp://")==0 or urlNew.find("rtmpe://")==0:
+            listitem = xbmcgui.ListItem(path=urlNew+" swfVfy=1 swfUrl=http://media.mtvnservices.com/player/prime/mediaplayerprime.1.9.1.swf")
           return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def search(SEARCHTYPE):
@@ -410,6 +480,15 @@ def addDir(name,url,mode,iconimage):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
+def addShowLink(name,url,mode,iconimage):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setProperty('IsPlayable', 'true')
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
+        return ok
+
 def addTCDir(name,url,mode,iconimage):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
         ok=True
@@ -451,8 +530,16 @@ elif mode == 'listVideosLatest':
     listVideosLatest(url)
 elif mode == 'listVideosFromFavs':
     listVideosFromFavs(url)
+elif mode == 'listShows':
+    listShows(url)
+elif mode == 'listShow':
+    listShow(url)
+elif mode == 'listEpisodes':
+    listEpisodes(url)
 elif mode == 'playVideo':
     playVideo(url)
+elif mode == 'playShow':
+    playShow(url)
 elif mode == 'playVideoFromPlaylist':
     playVideoFromPlaylist(url)
 elif mode == 'search':

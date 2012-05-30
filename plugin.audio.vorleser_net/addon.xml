@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.vorleser_net" name="Vorleser.net" version="1.0.0" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Mehr als 500 kostenlose Mp3-Hörbücher</summary>
+        <summary lang="en">More than 500 free Mp3 audio books</summary>
+        <language>de</language>
+        <description lang="de">Mehr als 500 kostenlose Mp3-Hörbücher</description>
+        <description lang="en">More than 500 free Mp3 audio books</description>
+    <platform>all</platform>
+    </extension>
+</addon>

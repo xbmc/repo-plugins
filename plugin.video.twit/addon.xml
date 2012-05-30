@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.twit"
        name="TWiT"
-       version="1.0.5"
+       version="1.0.6"
        provider-name="divingmule,thanks to Adam B.">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
@@ -15,5 +15,6 @@
     <summary>TWiT</summary>
     <description>Videos from the TWiT Network</description>
     <platform>all</platform>
+    <language>en</language>
   </extension>
 </addon>

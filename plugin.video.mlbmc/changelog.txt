@@ -1,3 +1,6 @@
+Version 0.1.0
+added game highlights patch from bunglebungle - http://forum.xbmc.org/showthread.php?tid=104391&pid=1109006#pid1109006
+
 Version 0.0.9
 added Full Count, a daily live show
 added a time delay for todays games

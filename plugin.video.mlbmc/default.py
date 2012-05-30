@@ -21,6 +21,7 @@
 # *  Everyone from the fourm - http://fourm.xbmc.org
 # *    giftie - for the colored text code :) thanks.
 # *    theophile and the others from - http://forum.xbmc.org/showthread.php?t=97251
+# *    bunglebungle for game highlights patch - http://forum.xbmc.org/showthread.php?tid=104391&pid=1109006#pid1109006
 
 
 import urllib
@@ -103,7 +104,7 @@ TeamCodes = {
 
 
 def addon_log(string):
-    xbmc.log( "[addon.mlbmc.0.0.9]: %s" %string )
+    xbmc.log( "[addon.mlbmc.0.1.0]: %s" %string )
 
 
 def categories():
@@ -153,6 +154,9 @@ def condensedGames():
 
 def gameHighlights():
         thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png'
+        addGameDir(__language__(30010),dateStr.day[0],26,thumb)
+        addGameDir(__language__(30011),dateStr.day[1],26,thumb)
+        addGameDir(__language__(30012),dateStr.day[3],26,thumb)
         addGameDir(__language__(30036),'8879838',1,thumb)
         addGameDir(__language__(30037),'9781914',1,thumb)
         addGameDir(__language__(30038),'10025018',1,thumb)
@@ -249,8 +253,11 @@ def getRequest(url, data=None, headers=None, cookies=False):
                 return
             elif hasattr(e, 'code'):
                 addon_log( 'We failed with error code - %s.' % e.code )
-                xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30019)+str(e.code)+",10000,"+icon+")")
-                return
+                if 'highlights.xml' in url:
+                    return
+                else:
+                    xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30019)+str(e.code)+",10000,"+icon+")")
+                    return
 
 
 def get_podcasts(url):
@@ -274,7 +281,7 @@ def getTeams():
             addPlaylist(name,url,5,'http://mlbmc-xbmc.googlecode.com/svn/icons/tvideo.png')
 
 
-def getRealtimeVideo(url):
+def getRealtimeVideo(url, addYes=True):
         try:
             soup = BeautifulStoneSoup(getRequest(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
             videos = soup.findAll('media')
@@ -287,7 +294,8 @@ def getRealtimeVideo(url):
                 addLink(name,'http://mlb.mlb.com/gen/multimedia/detail/'+url+'.xml',duration,2,thumb)
         except:
             pass
-        addDir(__language__(30017),'http://gdx.mlb.com/components/game/mlb/'+dateStr.day[1]+'/media/highlights.xml',8,icon)
+        if addYes:
+            addDir(__language__(30017),'http://gdx.mlb.com/components/game/mlb/'+dateStr.day[1]+'/media/highlights.xml',8,icon)
 
 
 def getTeamVideo(url):
@@ -402,7 +410,28 @@ def getCondensedGames(url):
                     addLink(name, url, '', 2, 'http://mlbmc-xbmc.googlecode.com/svn/icons/condensed.png')
             except:
                 continue
+                
 
+def getGameSpecificHighlights(dstr):
+        base = 'http://www.mlb.com/gdcross/components/game/mlb/'
+        thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png'
+        try:
+       	    data = json.loads(getRequest(base + dstr +'/grid.json'))
+            items = data['data']['games']['game']
+            for i in items:
+                try:
+                    gameId = i['id']
+                    gid = gameId.replace('/','_')
+                    gid = gid.replace('-','_')
+                    glbl = TeamCodes[i['away_team_id']][0] + ' @ ' + TeamCodes[i['home_team_id']][0]
+                    gurl = 'http://gdx.mlb.com/components/game/mlb/' + dstr + '/gid_' + gid + '/media/highlights.xml'
+                    addon_log( "gsh item: " + str(gid) + ', lbl: ' + glbl + ', url:' + gurl )
+                    addDir(glbl, gurl, 27, thumb)
+                except:
+                    continue
+        except:
+            return
+            
 
 def getVideoListXml(url):
         url = 'http://mlb.mlb.com'+url
@@ -910,8 +939,6 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 
-
-
 def get_smil(url):
         soup = BeautifulStoneSoup(getRequest(url))
         base = soup.meta['base']
@@ -1181,5 +1208,11 @@ if mode==24:
 
 if mode==25:
     mlbGame(event, True)
+
+if mode==26:
+    getGameSpecificHighlights(url)
+
+if mode==27:
+    getRealtimeVideo(url, False)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

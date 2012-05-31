@@ -94,6 +94,9 @@ class Main:
                                                           self.settings[ "download_path" ],
                                                           self.settings[ "use_title" ],
                                                           self.settings[ "use_trailer" ] )
+        #
+            tmp_path = filepath   # usato per escludere l'uso di executehttpapi
+        #
             # only download if the trailer doesn't exist
             if ( not os.path.isfile( self.filepath.encode( "utf-8" ) ) ):
                 # only need to retrieve video if not in tmp path
@@ -122,6 +125,7 @@ class Main:
         percent = int( float( count * blocksize * 100) / totalsize )
         msg1 = self.Addon.getLocalizedString( 30500 ) % ( os.path.basename( self.filepath ), )
         msg2 = self.Addon.getLocalizedString( 30502 ) % ( os.path.dirname( self.filepath ), )
+        #msg2 = self.Addon.getLocalizedString( 30502 ) % ( os.path.dirname( sel.tmp_path ), )
         pDialog.update( percent, msg1, msg2 )
         if ( pDialog.iscanceled() ): raise
 

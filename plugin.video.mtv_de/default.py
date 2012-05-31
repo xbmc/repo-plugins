@@ -317,7 +317,9 @@ def listVideosLatest(url):
           match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
           thumb=match[0]
           match=re.compile('<p>(.+?)</p>', re.DOTALL).findall(entry)
-          artist=match[0]
+          artist=""
+          if len(match)==1:
+            artist=match[0]
           match=re.compile('<h3>(.+?)</h3>', re.DOTALL).findall(entry)
           title=match[0]
           if title.find(artist)>=0:

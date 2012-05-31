@@ -1,3 +1,6 @@
+[B]2.2[/B]
+- Solved the Download&View option
+
 [B]2.1[/B]
 - Version bump and minor compatibility changes for Eden branch
 

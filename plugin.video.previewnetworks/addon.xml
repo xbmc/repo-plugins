@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.previewnetworks" 
 	name="Preview Networks" 
-	version="2.1" 
+	version="2.2" 
 	provider-name="nmazz64">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
@@ -11,11 +11,12 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
+        <language></language>
         <summary lang="en">Watch current movie trailers from PreviewNetworks.</summary>
-        <summary lang="it">Visualizza anteprime films da PreviewNetworks</summary>
         <description lang="en">Watch movie trailers from http://www.previewnetworks.com/.[CR][CR] Set your country in "option" for select your area.</description>
-        <description lang="it">Visualizza le anteprime video fornite da PreviewNetworks - http://www.previewnetworks.com/.[CR][CR] Scegli nelle "impostazioni" la "nazione" per una selezione territoriale dei video.</description>
         <disclaimer lang="en">You can list newest, now, coming and also select trailers from title and genre.</disclaimer>
+        <summary lang="it">Visualizza anteprime films da PreviewNetworks</summary>
+        <description lang="it">Visualizza le anteprime video fornite da PreviewNetworks - http://www.previewnetworks.com/.[CR][CR] Scegli nelle "impostazioni" la "nazione" per una selezione territoriale dei video.</description>
         <disclaimer lang="it">E' possibile elencare le anteprime più recenti, quelle in arrivo, selezionarle per genere o ricercarle per titolo.</disclaimer>
     </extension>
 </addon>

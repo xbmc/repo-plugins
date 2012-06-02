@@ -4,6 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 import urllib
 import urllib2
 import re
+
+xbmc.log("plugin.video.nederland24:: Starting Addon")
  
 # plugin handle
 
@@ -47,20 +49,22 @@ def addLink(name,url,iconimage,description,channelId):
         retval = xbmcplugin.addDirectoryItem(handle,url=url,listitem=liz)
         return retval
 
-## Laatste achtuurjournaal ipad mp4, single link
-if settings.getSetting( "Laatste Achtuurjournaal" )=='true':
-    URL='http://nos.nl/'
-    page=urllib2.urlopen(URL).read()
-    time=re.findall(r'Achtuurjournaal</strong></a><span>([^*]*?)</span>',page)
-    URLsingle=((re.search(r'/uitzending/[^a-z]*?-nos-journaal-2000-uur.html',page)).group()).strip()
-    page=urllib2.urlopen(('http://nos.nl')+(URLsingle)).read()
-    video=re.search(r'http://content.nos.nl/content/playlist/uitzending/fragment/(.*?)mp4',page).group()
-    time=re.search(r'(NOS Journaal [^*]*?)</title>',page).group(1).strip()
-    title='Laatste Achtuurjournaal'
-    addLink(title,video,os.path.join(IMG_DIR, "laatstejournaal.png"), time, "29")    
-else:
-    print ""
-
+####Disabled website has changed
+# ## Laatste achtuurjournaal ipad mp4, single link
+# if settings.getSetting( "Laatste Achtuurjournaal" )=='true':
+#     URL='http://nos.nl/'
+#     page=urllib2.urlopen(URL).read()
+#     time=re.findall(r'Achtuurjournaal</strong></a><span>([^*]*?)</span>',page)
+#     ##URLsingle=((re.findall(r'/uitzending/[^a-z]*?-nos-journaal-2000-uur.html',page))#.group()).strip()
+#     URLsingle=((re.search(r'<a href="(.+?)" title="Laatste Journaal">',page)).group()).strip()
+#     #URLsingle=re.search(r'<a href="/uitzendingen/(.+?)" title="Laatste Journaal">').findall(page)
+#     page=urllib2.urlopen(('http://nos.nl')+(URLsingle)).read()
+#     video=re.search(r'http://content.nos.nl/content/playlist/uitzending/fragment/(.*?)mp4',page).group()
+#     time=re.search(r'(NOS Journaal [^*]*?)</title>',page).group(1).strip()
+#     title='Laatste Achtuurjournaal'
+#     addLink(title,video,os.path.join(IMG_DIR, "laatstejournaal.png"), time, "29")
+#     #<a href="/uitzendingen/[^a-z]*?" title="Laatste Achtuurjournaal">
+    
 ## Journaal 24 ipad mp4, stream  
 if  settings.getSetting ( "Journaal 24" )=='true':
     URL='http://player.omroep.nl/?zenid=230'
@@ -75,7 +79,8 @@ if  settings.getSetting ( "Journaal 24" )=='true':
     video='http://download.omroep.nl/nos/iphone-live-streaming/j24/j24_ipad.m3u8'
     title='Journaal 24'
     addLink(title,video,os.path.join(IMG_DIR, "journaal24.png"), time, "29")
-
+     	
+     		   
 ## Politiek ipad mp4, stream 
 if  settings.getSetting ( "Politiek 24" )=='true':
     URL='http://nos.nl/nieuws/live/politiek24/'

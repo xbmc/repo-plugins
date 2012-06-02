@@ -13,7 +13,7 @@
         <setting id="Politiek 24" label="30110" type="bool" default="true" />
         <setting id="Spirit 24" label="30111" type="bool" default="false" />
         <setting id="Sterren 24" label="30112" type="bool" default="true" />
-        <setting id="Laatste Achtuurjournaal" label="30113" type="bool" default="true" />
+<!--        <setting id="Laatste Achtuurjournaal" label="30113" type="bool" default="true" />-->
         <setting id="Journaal 24 alternative" label="30114" type="bool" default="false" />
         <setting id="Politiek 24 alternative" label="30115" type="bool" default="false" />
     </category>

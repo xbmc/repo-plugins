@@ -95,7 +95,7 @@ class Main:
                                                           self.settings[ "use_title" ],
                                                           self.settings[ "use_trailer" ] )
         #
-            tmp_path = filepath   # usato per escludere l'uso di executehttpapi
+            tmp_path = self.filepath  # usato per escludere l'uso di executehttpapi
         #
             # only download if the trailer doesn't exist
             if ( not os.path.isfile( self.filepath.encode( "utf-8" ) ) ):

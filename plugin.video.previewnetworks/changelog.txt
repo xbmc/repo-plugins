@@ -1,4 +1,5 @@
-[B]2.2[/B]
+[B]2.2.1[/B]
+- Same bugfix[B]2.2[/B]
 - Solved the Download&View option
 
 [B]2.1[/B]

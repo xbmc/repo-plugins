@@ -54,16 +54,20 @@ def index(url,iconimage):
         response = urllib2.urlopen(req)
         link=response.read()
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        items = soup.findAll('div', attrs={'class' : 'view-content'})[3]('div', attrs={'class' : 'field-content'})
+        items = soup.findAll('div', attrs={'id' : "primary"})[0]('div', attrs={'class' : 'field-content'})
         for i in items:
-            url = i.a['href']
             name = i.a.string.encode('ascii', 'ignore')
-            try:
-                description = i.p.string
-            except:
-                description = ''
-            date = i.findPrevious('span').string
-            addLink(name,url,description,date,2,iconimage)
+            if name.startswith('#'):
+                url = i.a['href']
+                try:
+                    description = i.p.string
+                except:
+                    description = ''
+                try:
+                    date = i.findPrevious('span').string
+                except:
+                    date = ''
+                addLink(name,url,description,date,2,iconimage)
         try:
             page = 'http://twit.tv'+soup('li', attrs={'class' : "pager-next"})[0].a['href']
             addDir('Next Page',page,1,iconimage)
@@ -260,7 +264,7 @@ def addLink(name,url,description,date,mode,iconimage):
         try:
             description += "\n \n Published: " + date
         except:
-            description = "Published: " + date
+            pass
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)

@@ -101,9 +101,17 @@ def video_search():
     if keyboard.isConfirmed() and keyboard.getText():
         search_string = keyboard.getText()
         __log('search gots a string: "%s"' % search_string)
-        entries = scraper.get_search_result(search_string)
-        __log('search end')
-        return __add_items(entries)
+        url = plugin.url_for('video_search_result',
+                             search_string=search_string)
+        plugin.redirect(url)
+
+
+@plugin.route('/search/<search_string>/')
+def video_search_result(search_string):
+    __log('video_search_result started with string=%s' % search_string)
+    entries = scraper.get_search_result(search_string)
+    __log('search end')
+    return __add_items(entries)
 
 
 @plugin.route('/category/<path>/')

@@ -67,7 +67,7 @@ def get_categories():
 def get_sub_categories(path):
     __log('get_sub_categories started with path: %s' % path)
     tree = __get_tree(MAIN_URL)
-    section = tree.find('table', {'class': 'body topNavFW heightMin'})
+    section = tree.find('div', {'class': 'body topNavFW'})
     sub_cats = []
     link = section.find('a', {'href': '/%s' % path})
     if link:
@@ -232,7 +232,7 @@ def __parse_video_charts(tree, path):
 def __parse_video_default(tree, path):
     __log('__parse_video_default started with path: %s' % path)
     subtree = tree.find('div', {'class': 'lContent'})
-    r_td = re.compile('body sTLeft')
+    r_td = re.compile('hslice.*?video_list')
     items = []
     pagination = subtree.find('div', {'class': 'pView'})
     if pagination:
@@ -246,7 +246,7 @@ def __parse_video_default(tree, path):
             items.append({'title': next_link['title'],
                           'pagenination': 'NEXT',
                           'path': next_link['href']})
-    sections = subtree.findAll('td', {'class': r_td})
+    sections = subtree.findAll('div', {'class': r_td})
     for sec in sections:
         link = sec.find('a', {'class': 'vLink'})
         if not link:
@@ -279,9 +279,9 @@ def __parse_video_default(tree, path):
 
 def __parse_music(tree, path):
     __log('__parse_music started with path: %s' % path)
-    r_td = re.compile('body sTLeft')
+    r_td = re.compile('floatLeft fRand')
     subtree = tree.find('div', {'class': 'lContent'})
-    sections = subtree.findAll('td', {'class': r_td})
+    sections = subtree.findAll('div', {'class': r_td})
     items = []
     for sec in sections:
         div = sec.find('div', {'class': 'vThumb chThumb'})

@@ -1,3 +1,7 @@
+0.1.6
+ - fix websites changes
+ - add xbmc language tag
+ - add search result page (for external access)
 0.1.5
  - fix websites changes
 0.1.4

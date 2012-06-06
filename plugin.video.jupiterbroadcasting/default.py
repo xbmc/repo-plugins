@@ -63,6 +63,15 @@ def CATEGORIES():
         'genre': 'Technology'
     }
 
+    # Unfilter
+    shows[__language__(30016)] = {
+        'feed': 'http://www.jupiterbroadcasting.com/feeds/unfilterHD.xml',
+        'feed-low': 'http://www.jupiterbroadcasting.com/feeds/unfilterMob.xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/itunes-badge.jpg',
+        'plot': __language__(30216),
+        'genre': 'Technology'
+    }
+
     # FauxShow
     shows[__language__(30011)] = {
         'feed': 'http://blip.tv/fauxshow/rss/itunes',
@@ -127,7 +136,7 @@ def CATEGORIES():
     }
 
     # Jupiter Broadcasting Live via the RTMP stream
-    addLink(__language__(30010), 'rtsp://videocdn-us.geocdn.scaleengine.net/jblive/jblive.stream', '', 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg', {
+    addLink(__language__(30010), 'http://videocdn-us.geocdn.scaleengine.net/jblive-iphone/live/jblive.stream/playlist.m3u8', '', 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg', {
         'title': __language__(30010),
         'plot': __language__(30210),
         'genre': 'Technology',

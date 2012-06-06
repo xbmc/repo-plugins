@@ -1,3 +1,7 @@
+[B]Version 2.7.1: June 5th, 2012[/B]
+- New show: Unfilter
+- Switched to the faster HLS live stream
+
 [B]Version 2.6.0: April 4th, 2012[/B]
 - New show: TORked
 - Highlighting the most recent and live show titles

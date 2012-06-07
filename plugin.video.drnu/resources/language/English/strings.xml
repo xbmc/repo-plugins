@@ -22,8 +22,11 @@
     <string id="30019">the context menu.</string>
     <string id="30020">Your recently watched videos are automatically added.</string>
     <string id="30021">Highlights</string>
+    <string id="30022">All programs</string>
+    <string id="30023">Choose custom icon</string>
+    <string id="30024">Remove custom icon</string>
 
-	<string id="30100">Video is not available</string>
+    <string id="30100">Video is not available</string>
 	<string id="30101">DR has deleted the video file you want to watch,</string>
 	<string id="30102">because it has not been viewed recently.</string>
 
@@ -35,4 +38,7 @@
 
     <string id="30900">There was an error while communication with DR NU.</string>
     <string id="30901">Please try again later. Error message is:</string>
+
+    <string id="30902">There was an error while writing temporary data</string>
+    <string id="30903">to the local disk. The error message is:</string>
 </strings>

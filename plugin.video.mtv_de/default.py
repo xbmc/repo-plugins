@@ -346,8 +346,8 @@ def playVideo(url):
           match=re.compile('music_video-(.+?)-DE', re.DOTALL).findall(content)
           url=match[0]
         content = getUrl("http://api.mtvnn.com/v2/mrss.xml?uri=mgid:sensei:video:mtvnn.com:music_video-"+url+"-DE")
-        match=re.compile("<media:content duration='0' isDefault='true' type='text/xml' url='(.+?)'></media:content>", re.DOTALL).findall(content)
-        playVideoMain(match[0])
+        match=re.compile("<media:content duration='(.+?)' isDefault='true' type='text/xml' url='(.+?)'></media:content>", re.DOTALL).findall(content)
+        playVideoMain(match[0][1])
 
 def playVideoMain(url):
         content = getUrl(url)

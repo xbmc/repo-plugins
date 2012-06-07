@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
         id="plugin.video.onside.tv"
-        version="2.0.0"
+        version="2.0.2"
         name="Onside TV"
         provider-name="ariba [mail@nielsriber.dk], twinther [tommy@winther.nu]">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
-        <import addon="script.module.buggalo" version="1.0.0"/>
+        <import addon="script.module.buggalo" version="1.0.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -18,5 +18,6 @@
         <description lang="da">Se de bedste mål og interviews fra Onside TV[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
         <license>GPL 2.0</license>
         <platform>all</platform>
+        <language>da</language>
     </extension>
 </addon>

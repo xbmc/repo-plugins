@@ -82,7 +82,11 @@ class OnsideTV(object):
         html = self.downloadUrl(url)
         m = re.search('id="onside_video_player" href="(.*?)"', html)
 
-        item = xbmcgui.ListItem(path = m.group(1))
+        videoUrl = m.group(1)
+        if videoUrl[0:7] != 'http://':
+            videoUrl = BASE_URL + videoUrl
+
+        item = xbmcgui.ListItem(path = videoUrl)
         xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
     def downloadUrl(self, url):

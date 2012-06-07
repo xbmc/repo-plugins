@@ -22,8 +22,11 @@
     <string id="30019">af højreklik-menuen.</string>
     <string id="30020">De videoer du sidst har set tilføjest automatisk.</string>
     <string id="30021">Højdepunkter</string>
+    <string id="30022">Alle programmer</string>
+    <string id="30023">Tildel brugerdefineret ikon</string>
+    <string id="30024">Fjern brugerdefineret ikon</string>
 
-	<string id="30100">Videoen er ikke tilgængelig</string>
+    <string id="30100">Videoen er ikke tilgængelig</string>
 	<string id="30101">DR har slettet den videofil du forsøger at afspille,</string>
 	<string id="30102">da det er lang tid siden, den er blevet afspillet sidst.</string>
 
@@ -35,4 +38,7 @@
 
     <string id="30900">Der er sket en fejl i kommunikationen med DR NU.</string>
     <string id="30901">Prøv igen senere. Fejlen er:</string>
+
+    <string id="30902">Det var ikke muligt at gemme midlertidige data</string>
+    <string id="30903">lokalt på disken. Fejlen er:</string>
 </strings>

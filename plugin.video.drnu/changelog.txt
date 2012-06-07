@@ -1,3 +1,8 @@
+[B]Version 2.1.4 - 2012-06-03[/B]
+- Split up Programs A-Z menu into individual letters
+- Handle errors when local filesystem is readonly or out of disk space
+- Added option to define custom icons from program series
+
 [B]Version 2.1.3 - 2012-02-15[/B]
 - Fixed problem with the 'børn' area due to the Danish character
 

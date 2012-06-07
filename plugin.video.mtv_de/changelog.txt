@@ -11,3 +11,4 @@
 2.0.6 - Fixed some problems with unavailable videos & new Error message on mtv.de
 2.0.7 - Added Category: TV-Shows
 2.0.8 - Fixed Script-Error in latest music clips (Modifications on mtv.de)
+2.0.9 - Fixed site changes for older videos

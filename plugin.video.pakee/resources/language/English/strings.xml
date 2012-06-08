@@ -20,6 +20,11 @@
     <string id="30200">Shuffle playlist</string>
     <string id="30201">Repeat playlist</string>
 
+    <string id="30210">Timeout for rtmp/rtmpe streams (seconds)</string>
+    <string id="30211">15</string>
+    <string id="30212">30</string>
+    <string id="30213">45</string>
+
     <string id="30300">Default view</string>
     <string id="30301">Thumbnail view</string>
     <string id="30302">PosterWrap view</string>

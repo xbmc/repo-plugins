@@ -1,3 +1,14 @@
+[B]Version 1.0.20[/B]
+-Added setting for rtmp/rtmpe stream timeout parameter
+-Completed support for streams from http://sawlive.tv
+
+
+[B]Version 1.0.19[/B]
+-Added support for playing media from 4shared.com
+-Added support for rtmpe streams
+-Added support for streams from http://sawlive.tv
+
+
 [B]Version 1.0.18[/B]
 -removing mac generated files from zip
 

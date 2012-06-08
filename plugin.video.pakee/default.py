@@ -1,19 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, unicodedata
+import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, unicodedata, cookielib
 import xml.dom.minidom
 import time
-import threading
-from BeautifulSoup import BeautifulStoneSoup, BeautifulSoup
+
+
 
 __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.18'
+__version__ = '1.0.20'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
-__rooturl__ = 'http://pakee.hopto.org/pakee/pakee.php?id=xbmc&zaz=9'
-#__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?poos=5'
+__profilepath__    = xbmc.translatePath( __settings__.getAddonInfo('profile') )
+__rooturl__ = 'http://pakee.hopto.org/pakee/pakee.php?id=xbmc&qqp=7'
+#__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?qo=2'
+#__rooturl__ = 'http://pakee.hopto.org/mediarss/makeuphairv2.xml?as=5'
 __language__ = __settings__.getLocalizedString
 
 #plugin modes
@@ -27,6 +29,7 @@ PLUGIN_MODE_PLAY_PLAYLIST = 80
 PLUGIN_MODE_PLAY_SLIDESHOW = 90
 PLUGIN_MODE_OPEN_SETTINGS = 100
 PLUGIN_MODE_PLAY_STREAM = 110
+PLUGIN_MODE_PLAY_4SHARED = 120
 
 
 #view modes
@@ -38,7 +41,7 @@ VIEW_MEDIAINFO = 504
 VIEW_FANART = 508
 
 pakee_thumb = os.path.join( __settings__.getAddonInfo( 'path' ), 'resources', 'media', 'pakee.png' )
-
+media_id = 0
 
 
 def open_url( url ):
@@ -72,9 +75,14 @@ def play_youtube_video(video_id, name):
 		
 #Play a single song	
 def play_stream(url, name):
-	print "playing video stream name: " + str(name) + " url: " + str(url)
+
 	listitem = xbmcgui.ListItem( label = str(name), iconImage = "DefaultVideo.png", thumbnailImage = xbmc.getInfoImage( "ListItem.Thumb" ), path=url )
-	listitem.setInfo( type="video", infoLabels={ "Title": name, "Plot" : name } )
+	if isMusicFile(url):
+		print "playing music file: " + str(name) + " url: " + str(url)
+		listitem.setInfo( type="Music", infoLabels={ "Title": name } )
+	else:
+		print "playing stream name: " + str(name) + " url: " + str(url)
+		listitem.setInfo( type="video", infoLabels={ "Title": name, "Plot" : name } )
 	xbmc.Player( xbmc.PLAYER_CORE_DVDPLAYER ).play( str(url), listitem)
 
 
@@ -83,7 +91,7 @@ def play_picture_slideshow(origurl, name):
 	print "Starting play_picture_slideshow(): " + str(origurl)
 
 	#user clicked on a picture
-	if origurl[-4:]=='.jpg' or origurl[-4:]=='.gif' or origurl[-4:]=='.png':
+	if origurl[-4:].lower()=='.jpg' or origurl[-4:].lower()=='.gif' or origurl[-4:].lower()=='.png':
 		print "Single picture mode"		
 		origurl = origurl.replace( ' ', '%20' )
 		xbmc.log("adding to picture slideshow: " + str(origurl))
@@ -130,23 +138,52 @@ def play_playlist(origurl, index):
 		label, url, description, pubDate, guid, thumb, duration, rating, viewcount = getItemFields(item)
 
 		playlisturl = None
+
+		#youtube video
 		if guid is not None and guid != '':
 			#print "Found item: " + label + " guid: " + guid 
 			playlisturl = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % (guid)
 
-
-		elif 'plugin://plugin.video.jtv.archives' in url and 'play=True' in url:	
+		#jtv video
+		elif url.startswith('plugin://plugin.video.jtv.archives') and 'play=True' in url:	
 			playlisturl = url.replace('play=True','play=False')
 
+		#4shared link
+		elif '.4shared.com' in url and 'preview' in url:
+			playlisturl = 'plugin://plugin.video.pakee/?mode=%d&name=%s&url=%s' % (PLUGIN_MODE_PLAY_4SHARED, urllib.quote_plus(label), urllib.quote_plus(url))
 
+
+		#for rtmp/rtmpe streams if no timeout is specified, add the timeout specifed by user
+		elif 'timeout=' not in url and (url.startswith('rtmpe://') or url.startswith('rtmp://')):				
+			setting_streamtimeout = (__settings__.getLocalizedString(30211), __settings__.getLocalizedString(30212), __settings__.getLocalizedString(30213))[int(__settings__.getSetting('streamtimeout')) ]
+			playlisturl = url + ' timeout=%s' % setting_streamtimeout
+
+		#for sawlive.tv streams
+		elif url.startswith('http://sawlive.tv/embed') or url.startswith('http://www.sawlive.tv/embed'):
+			xbmc.log('Found sawlive.tv url..needs resolving: ' + url)
+
+			if len(url) > 100:
+				playlisturl = find_stream(url,name)
+			else:
+				playlisturl = find_sawlive_url(url,name)
+
+
+		#anything else
 		elif url is not None and url != '':
 			#print "Found item: " + label + " url: " + url 
 			playlisturl = url
 		
 		if playlisturl is not None and playlisturl !='' and itemCount >= index - 1:
 			listitem = xbmcgui.ListItem( label = label,  thumbnailImage = thumb, path=playlisturl )
-			listitem.setInfo( type="video", infoLabels={ "Title": label, "Plot" : description } )
-			#xbmc.log("adding to playlist " + str(label))
+			#listitem.setInfo( type="Video", infoLabels={ "Title": label } )
+
+			if isMusicFile(playlisturl):
+				#xbmc.log("adding audio file to playlist %s %s" % (label,playlisturl))
+				listitem.setInfo( type="Music", infoLabels={ "Title": label } )
+				listitem.setProperty('mimetype','audio/mpeg')
+			else:
+				listitem.setInfo( type="video", infoLabels={ "Title": label, "Plot" : description } )
+				xbmc.log("adding video file to playlist %s %s" % (label,playlisturl))
 			playlist.add(url=playlisturl, listitem=listitem)
 
 		itemCount=itemCount+1	
@@ -169,11 +206,98 @@ def play_playlist(origurl, index):
 	#xbmc.executebuiltin('playlist.playoffset(video, index)')
 
 
+def play_fourshared(url, name):
+	global media_id
+	xbmc.log("starting 4shared method with: %s and %s" % (name, url))
+	username = 'pakeeapp'
+	password = 'xbmctesting'
+	cookie_file = os.path.join(__profilepath__, 'pktemp.cookies')
+	media_file = os.path.join(__profilepath__, ("pktemp%d.mp3" % (media_id)))
+	cj = cookielib.LWPCookieJar()
+	media_id = media_id + 1
+
+	opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+	loginurl = 'https://www.4shared.com/login?login=%s&password=%s' % (username, password)
+	xbmc.log("logging in to 4shared: " + loginurl)
+	resp = opener.open(loginurl)
+
+	cj.save(cookie_file, ignore_discard=True)
+	cj.load(cookie_file, ignore_discard=True)
+
+	opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+	urllib2.install_opener(opener)
+
+	usock = opener.open(url)
+	data = usock.read()
+	#media_file = usock.geturl()
+	usock.close()
+
+	fp = open(media_file, 'wb')
+	fp.write(data)
+	fp.close()
+
+	#play_stream(media_file, name)
+	print "playing stream name: " + str(name) + " url: " + str(media_file)
+	listitem = xbmcgui.ListItem( label = str(name), iconImage = "DefaultVideo.png", thumbnailImage = xbmc.getInfoImage( "ListItem.Thumb" ), path=media_file )
+	listitem.setInfo( type="Music", infoLabels={ "Title": name } )
+	xbmc.Player( xbmc.PLAYER_CORE_DVDPLAYER ).play( str(media_file), listitem)
+
+#saw embed (long url) received in form of http://xxxxxxxxx&streamer=xxxxx
+def find_stream(url, name):
+	xbmc.log("Starting find_stream with url: " + str(url))
+	pageUrl = url.split("&streamer=")[0]
+	streamer = url.split("&streamer=")[1]
+	print ('Opening ' + pageUrl)
+	res = open_url(pageUrl)
+	#print (res)
+	playpath = ''
+	swfUrl = ''
+
+	for line in res.split("\n"):
+		#print ("line:" + line)
+		matches = re.search(r'file.*\'(.+)\'', line)
+		if matches:
+			playpath = matches.group(1)
+			print ("Found playpath:" + playpath)
+
+		matches = re.search(r'(http.+\.swf)', line)
+		if matches:
+			swfUrl = matches.group(1)
+			print ("Found swfUrl:" + swfUrl)
+
+	streamurl = "%s playpath=%s swfUrl=%s pageurl=%s swfVfy=true live=true" % (streamer, playpath, swfUrl, pageUrl)
+	xbmc.log ("streamurl: " + streamurl)
+	return (streamurl)
+
+
+#saw embed (short url) received in form of http://xxxxxxxxx&streamer=xxxxx
+def find_sawlive_url(url, name):
+	xbmc.log("Starting find_sawlive_url with url: " + str(url))
+	pageUrl = url.split("&streamer=")[0]
+	streamer = url.split("&streamer=")[1]
+
+	res = open_url(pageUrl)
+	#print (res)
+	playpath = ''
+	swfUrl = ''
+
+	for line in res.split("\n"):
+		#print ("line:" + line)
+		matches = re.search(r'src=[\"\']([^\"\']+)/[\"\']', line)
+		if matches:
+			playpath = matches.group(1)
+			playpath = playpath.replace( '/view/', '/watch/' )
+			print ("Found sawurl:" + playpath)
+
+
+
+	url = "%s&streamer=%s" % (playpath, streamer)
+	xbmc.log ("url: " + url)
+	return (find_stream(url, name))
 
 
 def build_show_directory(origurl):
 
-	#from threading import Timer
 	if origurl:
 		xbmc.log('Starting build_show_directory() with url: ' + origurl)
 	else:
@@ -191,10 +315,8 @@ def build_show_directory(origurl):
 	elif 'queryyt' in origurl:
 		xbmc.executebuiltin("XBMC.Notification("+ __plugin__ +","+__settings__.getLocalizedString(30053)+",100)")
 
-
 	#Read RSS items from origurl and store in items
 	items = getItemsFromUrl(origurl)
-	#items = getItemsFromUrlBS(origurl)
 
 	if items is None:
 		return
@@ -202,14 +324,11 @@ def build_show_directory(origurl):
 	itemCount=0
 
 
-
-
 	for item in items:
 
 
 		#extract fields from each RSS item
 		label, url, description, pubDate, guid, thumb, duration, rating, viewcount = getItemFields(item)
-		#label, url, description, pubDate, guid, thumb, duration, rating, viewcount = getItemFieldsBS(item)
 
 		descprefix = ''
 		#if duration != 0:
@@ -272,7 +391,7 @@ def build_show_directory(origurl):
 
 
 			#For feeds with pictures as their first item, show <start slideshow> as first listitem
-			if url[-4:]=='.jpg' or url[-4:]=='.gif' or url[-4:]=='.png':
+			if url[-4:].lower()=='.jpg' or url[-4:].lower()=='.gif' or url[-4:].lower()=='.png':
 				#For folders with videos, show play all option 			
 				if itemCount == 0:
 					resolvedlabel = '<' + str(__settings__.getLocalizedString(30051)) + '>'
@@ -283,7 +402,7 @@ def build_show_directory(origurl):
 				mode = PLUGIN_MODE_PLAY_SLIDESHOW
 
 			#audio track found, check whether in single or playlist mode and set the mode/url accordingly	
-			if '.mp3' in url or '.wma' in url or 'http://bit.ly' in url or '/getSharedFile/' in url or '.mp4' in url:
+			if isMusicFile(url):
 
 				#For feeds with mp3s as their first item, show <play all> listitem as first listitem			
 				if itemCount == 0:
@@ -291,6 +410,7 @@ def build_show_directory(origurl):
 					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
+
 				isFolder = False
 
 				#play single video
@@ -302,9 +422,18 @@ def build_show_directory(origurl):
 					mode = PLUGIN_MODE_PLAY_PLAYLIST
 					url = origurl
 
+				if '.4shared.com' in url and 'preview' in url:
+					mode = PLUGIN_MODE_PLAY_4SHARED
 
-			if 'fetchLiveFeeds.php' not in url and ('rtmp://' in url or 'mms://' in url or 'rtsp://' in url or 'desistreams.xml' in origurl or 'LiveTV.xml' in origurl):
+
+			#video stream found
+			if 'fetchLiveFeeds.php' not in url and (url.startswith('rtmpe://') or url.startswith('rtmp://') or url.startswith('mms://') or url.startswith('rtsp://')  or '.wsx' in url  or 'desistreams.xml' in origurl or 'LiveTV.xml' in origurl):
 				isFolder = False
+
+				#for rtmp/rtmpe streams if no timeout is specified, pick the timeout specifed by user
+				if 'timeout=' not in url and (url.startswith('rtmpe://') or url.startswith('rtmp://')):				
+					setting_streamtimeout = (__settings__.getLocalizedString(30211), __settings__.getLocalizedString(30212), __settings__.getLocalizedString(30213))[int(__settings__.getSetting('streamtimeout')) ]
+					url = url + ' timeout=%s' % setting_streamtimeout
 
 				#play single video
 				if setting_playmode == 0:
@@ -315,6 +444,22 @@ def build_show_directory(origurl):
 					mode = PLUGIN_MODE_PLAY_PLAYLIST
 					url = origurl
 
+			#sawlive.tv embed url found from which we need to extract stream
+			if url.startswith('http://sawlive.tv/embed') or url.startswith('http://www.sawlive.tv/embed'):
+				xbmc.log('Found sawlive.tv url..needs resolving: ' + url)
+
+				#play single video
+				if setting_playmode == 0:
+					mode = PLUGIN_MODE_PLAY_STREAM
+					if len(url) > 100:
+						url = find_stream(url,name)
+					else:
+						url = find_sawlive_url(url,name)
+
+				#play video playlist
+				else:
+					mode = PLUGIN_MODE_PLAY_PLAYLIST
+					url = origurl
 
 
 
@@ -374,112 +519,22 @@ def build_show_directory(origurl):
 
 
 
+def isMusicFile(url):
 
-#extract fields from each RSS item read via BeautifulSoup
-def getItemFieldsBS(item):
-
-	label=''
-	url = ''
-	thumb = ''
-	guid = ''
-	description = ''
-	pubDate = '01.01.1960'
-	rating = 0.0
-	duration = 0
-	viewcount = '0'
-
-
-	if item.title:
-		label = clean(item.title.string)
-	if item.link:
-		url = item.link.string
+	if '.mp3' in url or '.wma' in url or 'http://bit.ly' in url or '/getSharedFile/' in url or '.mp4' in url:
+		return True
 	else:
-		url = ''
-
-	if item.enclosure:
-		url = item('enclosure')[0]['url']
-
-	if item.description:
-		description = item.description.string
-
-	if item('boxee:release-date'):
-		pubDate = item('boxee:release-date')[0].string
-		#xbmc.log('pubdate: x' + str(pubDate) + 'x')
-		if pubDate is None or pubDate=='':
-			pubDate = '01.01.1960'
-		else:
-			tpubDate = time.strptime(pubDate, '%Y-%m-%d')
-			pubDate = time.strftime("%d.%m.%Y", tpubDate)
-
-	if item.guid:
-		guid = item.guid.string
-
-	if item('media:thumbnail'):
-        	thumb = item('media:thumbnail')[0]['url']
-	elif item.thumbnail:
-		thumb = item.thumbnail.string
-
-	if item('media:content'):
-        	duration = item('media:content')[0]['duration']
-
-		if duration is None or duration == '':
-			duration = 0
-		else:	
-			duration = string.atoi(duration)
-			#duration = int(duration)			
-		duration = time.strftime('%H:%M:%S', time.gmtime(duration))
-
-	if item('media:starrating'):
-		print item('media:starrating')[0]['average'] + ' '  + item('media:starrating')[0]['viewcount']
-		if item('media:starrating')[0]['average']:
-			rating = item('media:starrating')[0]['average']
-		else:
-			rating = '0.0'
-		rating = string.atof(rating)
-
-		if item('media:starrating')[0]['viewcount']:
-			viewcount = item('media:starrating')[0]['viewcount']
-		else:
-			viewcount = '0'
-		viewcount = string.atoi(viewcount)
-
-	if url:
-		url = url.replace( ' ', '%20' )
-
-	#return {'label': label, 'url':url, 'description': description, 'pubDate': pubDate, 'guid': guid, 'thumb': thumb, 'duration': duration, 'rating': rating, 'viewcount': viewcount}
-	return label, url, description, pubDate, guid, thumb, duration, rating, viewcount
-
-
-#open url and parse XML using BeautifulSoup
-def getItemsFromUrlBS(url):
-	try:
-		file = urllib2.urlopen(url)
-		t = threading.Timer(100000.0, file.close)
-		t.start()
-		link = file.read()
-		file.close()
-	except:
-		xbmcgui.Dialog().ok('Pakee','Request timed out. Please try again')
-		return
-
-        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-        items = soup('item')
-	return items
+		return False
 
 #open url and parse XML using dom
 def getItemsFromUrl(url):
 
 	try:
 
-		#file = urllib2.urlopen(url)
-		#t = threading.Timer(100000, file.close)
-		#t.start()
-		#data = file.read()
-		#file.close()
-
 		file = urllib2.urlopen(url, timeout=3600)
 		data = file.read()
 		file.close()
+
 	except:
 		xbmcgui.Dialog().ok('Pakee','Request timed out. Please try again')
 		return
@@ -700,6 +755,7 @@ elif mode == PLUGIN_MODE_PLAY_STREAM:
 	play_stream(url, name)
 elif mode == PLUGIN_MODE_OPEN_SETTINGS:
 	open_settings()
-
+elif mode == PLUGIN_MODE_PLAY_4SHARED:
+	play_fourshared(url,name)
 
 

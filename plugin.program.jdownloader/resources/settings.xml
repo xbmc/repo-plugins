@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
+  <!-- General -->
+  <category>
+    <setting id="auto_refresh" type="bool" label="30012" default="true"/>
+    <setting id="refresh_interval" type="number" label="30013" default="3" enable="eq(-1,true)" />
+  </category>
   <!-- Connection -->
   <category label="30000">
     <setting id="use_hostname" type="bool" label="30008" default="false" />
@@ -28,6 +33,7 @@
   
   <!-- Advanced -->
   <category label="30030">
+    <setting id="list_view" type="bool" label="30032" default="true" />
     <setting id="debug" type="bool" label="30031" default="false" />
   </category>
   

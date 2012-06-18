@@ -1,12 +1,10 @@
-# script constants
-__addonID__			= "plugin.program.jdownloader"
-
 import socket,urllib,urllib2,httplib,os
 from xml.dom import minidom
 from traceback import print_exc
 import xbmc,xbmcaddon
-import sys
+import sys,time
 
+__addon__			= sys.modules[ "__main__" ].__addon__
 __dbg__				= sys.modules[ "__main__" ].__dbg__
 __logprefix__		= sys.modules[ "__main__" ].__logprefix__
 
@@ -62,11 +60,6 @@ ALL_ACTIONS = {
 	ACTION_JD_SHUTDOWN:		30068
 }
 
-Addon =  xbmcaddon.Addon(id=__addonID__)
-BASE_RESOURCE_PATH = xbmc.translatePath( Addon.getAddonInfo( "Profile" ) )
-# make sure addon_data dir exists
-try: os.mkdir(BASE_RESOURCE_PATH)
-except: pass
 
 class JDError(Exception):
 	 def __init__(self, message='', original=None):
@@ -109,10 +102,10 @@ def _http_query_with_urlprefix(query,urlPrefix):
 
 def _get_urlprefix(setting_suffix):
 	# load settings
-	ip_adress = str(Addon.getSetting("ip_adress"+setting_suffix))
-	ip_port = str(Addon.getSetting("ip_port"+setting_suffix))
-	use_hostname = Addon.getSetting("use_hostname"+setting_suffix) == "true"
-	hostname = str(Addon.getSetting("hostname"+setting_suffix))
+	ip_adress = str(__addon__.getSetting("ip_adress"+setting_suffix))
+	ip_port = str(__addon__.getSetting("ip_port"+setting_suffix))
+	use_hostname = __addon__.getSetting("use_hostname"+setting_suffix) == "true"
+	hostname = str(__addon__.getSetting("hostname"+setting_suffix))
 	
 	if (use_hostname):
 		urlPrefix = 'http://' + hostname + ':' + ip_port
@@ -125,44 +118,85 @@ def _http_query(query):
 	try:
 		result = _http_query_with_urlprefix(query, _get_urlprefix(""))
 	except JDError, error:
-		use_conn2 = Addon.getSetting("use_conn2") == "true"
+		use_conn2 = __addon__.getSetting("use_conn2") == "true"
 		if (use_conn2):
 			result = _http_query_with_urlprefix(query, _get_urlprefix("2"))
 		else:
 			raise error
 	return result
 
+# determine the current remote control api version (nightly or stable)
+nightly = False
+try:
+	if (int(_http_query("/get/rcversion")) > 9568 ):
+		nightly = True
+except: pass
+
 # Get Info #
 
-# As long as only the package info gets parsed, it doesn't matter which list gets loaded (currentlist,alllist,finishedlist)
-# These three only differ in means of listed files, the package information is always the same.
-# Due to that, the smallest will be used: currentlist
-def get_downloadlist(x):
-	xmlfile = os.path.join( BASE_RESOURCE_PATH , "dlist.xml" )
-	try:
-		#result = _http_query('/get/downloads/%s' % x)
-		result = _http_query('/get/downloads/currentlist')
-		
-		fileObj = open(xmlfile,"w")
-		fileObj.write(result)
-		fileObj.close()
-		
-		xmldoc = minidom.parseString(result)
-		itemlist = xmldoc.getElementsByTagName('package')
-		filelist = []
-		for s in itemlist :
-			package = {}
-			package["Name"] = s.attributes['package_name'].value + " "
-			package["Eta"] = s.attributes['package_ETA'].value+ " "
-			package["Size"] = s.attributes['package_size'].value+ " "
-			package["Percentage"] = s.attributes['package_percent'].value
-			filelist.append(package)
-		return filelist
-		#return(packageName, packageEta, packageSize, packagePercentage) debug	
-	except IOError:
-		print_exc()
-		return 'error'
+def load_pkglist(which):
+	if (nightly):
+		if (which == "finishedlist"):
+			getStr = "finished/list"
+		else:
+			getStr = "all/list"
+	else:
+		getStr = which
+	
+	result = _http_query('/get/downloads/%s' % getStr)
+	
+	return result
 
+def get_pkglist(which):
+	pkgxml = load_pkglist(which)
+	
+	xmldoc = minidom.parseString(pkgxml)
+	if (nightly):
+		itemlist = xmldoc.getElementsByTagName('packages')
+	else:
+		itemlist = xmldoc.getElementsByTagName('package')
+	pkglist = []
+	for item in itemlist :
+		package = {}
+		package["name"] = item.attributes['package_name'].value
+		package["eta"] = item.attributes['package_ETA'].value
+		package["size"] = item.attributes['package_size'].value
+		package["percent"] = item.attributes['package_percent'].value
+			
+		# HACK: try to improve packagename
+		package["display"] = package["name"]
+		if (package["name"].startswith("Added ")):
+			files = item.getElementsByTagName('file')
+			if (len(files)>0):
+				filename = files[0].attributes['file_name'].value
+				if (".part" in filename):
+					package["display"] = filename.split(".part")[0]
+				else:
+					package["display"] = filename
+			
+		pkglist.append(package)
+	return pkglist
+
+def get_filelist(which):
+	pkgxml = load_pkglist("alllist")
+	
+	xmldoc = minidom.parseString(pkgxml)
+	if (nightly):
+		packages = xmldoc.getElementsByTagName('packages')
+	else:
+		packages = xmldoc.getElementsByTagName('package')
+	filelist = []
+	for pkgitem in packages:
+		if (pkgitem.attributes['package_name'].value == which):
+			files = pkgitem.getElementsByTagName('file')
+			for fileitem in files:
+				file = {}
+				file["name"] =		fileitem.attributes['file_name'].value
+				file["percent"] =	fileitem.attributes['file_percent'].value
+				file["speed"] =		fileitem.attributes['file_speed'].value
+				file["status"] =	fileitem.attributes['file_status'].value
+				filelist.append(file)
+	return filelist
 
 def get(x):
 	if x == GET_SPEED:
@@ -174,20 +208,21 @@ def get(x):
 	if x == GET_STATUS:
 		getStr = '/get/downloadstatus'
 	if x == GET_CURRENTFILECNT:
-		getStr = '/get/downloads/currentcount'
+		if (nightly):
+			getStr = '/get/downloads/current/count'
+		else:
+			getStr = '/get/downloads/currentcount'
 	
 	result = _http_query(getStr)
 	if result.startswith("0"): result = 'none'
 	return result
 
 # Actions #
-
-def getAvailableActions():
+def getAvailableActions(status):
 	actions = ALL_ACTIONS.keys();
 	
 	actions.sort();
 	
-	status = get(GET_STATUS)
 	if STATE_NOTRUNNING in status: 
 		for i in [ACTION_STOP,ACTION_PAUSE,ACTION_SPEEDLIMIT,ACTION_MAXDOWNLOADS]:
 			actions.remove(i)
@@ -214,51 +249,108 @@ def action( x , limit = "0" ):
 		actionStr = '/action/pause'
 	if x == ACTION_TOGGLE:
 		actionStr = '/action/toggle'
-	if x == ACTION_SPEEDLIMIT:
-		actionStr = '/action/set/download/limit/' + str(limit)
-	if x == ACTION_MAXDOWNLOADS:
-		actionStr = '/action/set/download/max/' + str(limit)
 	if x == ACTION_RECONNECT:
 		actionStr = '/action/reconnect'
-	if x == ACTION_ENA_RECONNECT:
-		actionStr = '/action/set/reconnectenabled/false' # interface is wrong, expects the opposite values
-	if x == ACTION_DIS_RECONNECT:
-		actionStr = '/action/set/reconnectenabled/true' # interface is wrong, expects the opposite values
-	if x == ACTION_ENA_PREMIUM:
-		actionStr = '/action/set/premiumenabled/true'
-	if x == ACTION_DIS_PREMIUM:
-		actionStr = '/action/set/premiumenabled/false'
-	if x == ACTION_JD_UPDATE:
-		actionStr = '/action/update/force%s/' % str(limit)
+	if (nightly):
+		if x == ACTION_SPEEDLIMIT:
+			actionStr = '/set/download/limit/' + str(limit)
+		if x == ACTION_MAXDOWNLOADS:
+			actionStr = '/set/download/max/' + str(limit)
+		if x == ACTION_ENA_RECONNECT:
+			actionStr = '/set/reconnect/true'
+		if x == ACTION_DIS_RECONNECT:
+			actionStr = '/set/reconnect/false' 
+		if x == ACTION_ENA_PREMIUM:
+			actionStr = '/set/premium/true'
+		if x == ACTION_DIS_PREMIUM:
+			actionStr = '/set/premium/false'
+		if x == ACTION_JD_UPDATE:
+			if (limit==1):
+				actionStr = '/action/forceupdate'
+			else:
+				actionStr = '/action/update'
+	else:
+		if x == ACTION_SPEEDLIMIT:
+			actionStr = '/action/set/download/limit/' + str(limit)
+		if x == ACTION_MAXDOWNLOADS:
+			actionStr = '/action/set/download/max/' + str(limit)
+		if x == ACTION_ENA_RECONNECT:
+			actionStr = '/action/set/reconnectenabled/false' # interface is wrong, expects the opposite values
+		if x == ACTION_DIS_RECONNECT:
+			actionStr = '/action/set/reconnectenabled/true' # interface is wrong, expects the opposite values
+		if x == ACTION_ENA_PREMIUM:
+			actionStr = '/action/set/premiumenabled/true'
+		if x == ACTION_DIS_PREMIUM:
+			actionStr = '/action/set/premiumenabled/false'
+		if x == ACTION_JD_UPDATE:
+			actionStr = '/action/update/force%s/' % str(limit)
+			
 	if x == ACTION_JD_RESTART:
 		actionStr = '/action/restart'
 	if x == ACTION_JD_SHUTDOWN:
 		actionStr = '/action/shutdown'
 
 	result = _http_query(actionStr)
+	
 	return result
 
 def action_addcontainer(link):
 	# get settings
-	grabber = Addon.getSetting("add_use_grabber")
-	start = Addon.getSetting("add_start")
+	grabber = __addon__.getSetting("add_use_grabber")
+	start = __addon__.getSetting("add_start")
 	# add link
 	# Parameter 'start' is not supported with rc-version 9568!
 	#_http_query('/action/add/container/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
 	result = _http_query('/action/add/container/grabber' + str(grabber) + '/' + str(link))
+	
+	force_start()
+	
 	return result
 
-# Links seperated by spaces, won't work, call this functions for each link seperatly
+# Links separated by spaces, won't work, call this functions for each link separately
 def action_addlink(link):
 	# get settings
-	grabber = Addon.getSetting("add_use_grabber")
-	start = Addon.getSetting("add_start")
+	grabber = __addon__.getSetting("add_use_grabber")
+	start = __addon__.getSetting("add_start")
 	# prepare link - quote special chars, e.g '?'
 	link = urllib.quote(link)
 	# restore double point (won't work atm)
 	link = link.replace( '%3A', ':' )
 	# add link
 	result = _http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(link))
+	
+	force_start()
+	
+	return result
+
+# Links separated by spaces, won't work, but as parameters (&l1=<link1>&l2=<link2>&...) it works (in r9568)
+# expects multiple links separated by '|'
+def action_addlinklist(linklist):
+	# get settings
+	grabber = __addon__.getSetting("add_use_grabber")
+	start = __addon__.getSetting("add_start")
+	
+	links = ""
+	first = True
+	idx=0
+	for link in linklist.split(" "):
+		# prepare link - quote special chars, e.g '?'
+		link = urllib.quote(link)
+		# restore double point (won't work atm)
+		link = link.replace( '%3A', ':' )
+		# add link
+		if (first):
+			links = "?l"
+			first = False
+		else:
+			links += "&l"
+		links += str(idx) + "=" + link
+		idx += 1
+	
+	result = _http_query('/action/add/links/grabber' + str(grabber) + '/start' + str(start) + '/' + str(links))
+	
+	force_start()
+	
 	return result
 
 def action_addlinks_from_file(filename):
@@ -268,3 +360,11 @@ def action_addlinks_from_file(filename):
 	for line in lines:
 		action_addlink(line)
 	return "%d link(s) added" % (len(lines), )
+
+# HACK: fixes problem, that jd already stopped again before the links are added to the dl list (decrypting takes a few seconds) 
+def force_start():
+	if (__addon__.getSetting("add_start") == "1"):
+		now = time.time();
+		while ((get(GET_STATUS) != STATE_RUNNING or get(GET_SPEED) == "none") and now + 20.0 > time.time()): # try for a maximum of 20 seconds to start jd
+			action(ACTION_START)
+			time.sleep(4.0)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.program.jdownloader"
        name="JDownloader"
-       version="1.2.5"
+       version="1.3.0"
        provider-name="pgoeri">
   <requires>
     <import addon="xbmc.python" version="2.0"/>

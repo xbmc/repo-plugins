@@ -17,5 +17,6 @@
       <description lang="en">Add local files and online streams to playlists and watch them later</description>
       <description lang="de">Lokale Dateien und Online Streams zu Playlisten hinzufügen und später schauen</description>
     <platform>all</platform>
+      <broken>Use the 'SimplePlaylists' add-on instead</broken>
   </extension>
 </addon>

@@ -1,3 +1,6 @@
+Version 1.0.8
+fix show listings for "The Tech Guy" and "Before You Buy"
+
 Version 1.0.7
 fix for website changes
 

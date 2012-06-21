@@ -43,7 +43,7 @@ def categories():
         addDir(__language__(30024),'http://twit.tv/show/ham-nation',1,'http://static.mediafly.com/publisher/images/7a948708b1a3462bab8721556dd26704/icon-600x600.png')
         addDir(__language__(30025),'http://twit.tv/show/futures-in-biotech',1,'http://leoville.tv/podcasts/coverart/fib600audio.jpg')
         addDir(__language__(30026),'http://twit.tv/show/this-week-in-radio-tech',1,'http://static.mediafly.com/publisher/images/ab7b2412afa84674971e4c93665d0e06/icon-600x600.png')
-        addDir(__language__(30036),'http://twit.tv/show/before-you-buy',1,'http://static.mediafly.com/publisher/images/dee7de4f87034d4d917ed446df3616e4/icon-600x600.png')
+        addDir(__language__(30036),'http://twit.tv/show/you-buy',1,'http://static.mediafly.com/publisher/images/dee7de4f87034d4d917ed446df3616e4/icon-600x600.png')
         addDir(__language__(30037),'http://twit.tv/show/game-on',1,'http://static.mediafly.com/publisher/images/3f551d9b6ef9476fb76f92ccd4b37826/icon-600x600.png')
         addDir(__language__(30042),'http://twit.tv/show/treys-variety-hour',1,'http://leoville.tv/podcasts/coverart/tvh300video.jpg')
 
@@ -56,9 +56,9 @@ def index(url,iconimage):
         soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         items = soup.findAll('div', attrs={'id' : "primary"})[0]('div', attrs={'class' : 'field-content'})
         for i in items:
-            name = i.a.string.encode('ascii', 'ignore')
-            if name.startswith('#'):
-                url = i.a['href']
+            url = i.a['href']
+            if url.startswith('http://twit.tv/show/'):
+                name = i.a.string.encode('ascii', 'ignore')
                 try:
                     description = i.p.string
                 except:

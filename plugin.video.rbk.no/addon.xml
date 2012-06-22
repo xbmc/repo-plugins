@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.rbk.no"
        name="RBK.no"
-       version="2.0.7"
+       version="2.0.8"
        provider-name="spiff">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
@@ -21,5 +21,6 @@
     <description lang="hu">Videók lejátszása az RBK.no webhelyről. Ez a Rosenborg futball klub honlapja.</description>
     <description lang="pt">Veja vídeos disponíveis em RBK.no, casa do clube de futebol Rosenborg.</description>
     <platform>all</platform>
+    <language>no</language>
   </extension>
 </addon>

@@ -75,6 +75,10 @@ class NuAddon(object):
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30012), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'tag.png'))
         item.setProperty('Fanart_Image', fanartImage)
         items.append((PATH + '?show=programSeriesLabels', item, True))
+        # Premiere
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30025), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'new.png'))
+        item.setProperty('Fanart_Image', fanartImage)
+        items.append((PATH + '?show=premiere', item, True))
         # Latest
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30001), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'new.png'))
         item.setProperty('Fanart_Image', fanartImage)
@@ -128,6 +132,9 @@ class NuAddon(object):
 
     def showLastChanceVideos(self):
         self.listVideos(self.api.getLastChanceVideos())
+
+    def showPremiereVideos(self):
+        self.listVideos(self.api.getPremiereVideos())
 
     def showFavorites(self):
         self.showProgramSeries(self.favorites, False)
@@ -503,6 +510,8 @@ if __name__ == '__main__':
                 nuAddon.showHighlightVideos()
             elif PARAMS['show'][0] == 'mostViewed':
                 nuAddon.showMostViewedVideos()
+            elif PARAMS['show'][0] == 'premiere':
+                nuAddon.showPremiereVideos()
             elif PARAMS['show'][0] == 'lastChance':
                 nuAddon.showLastChanceVideos()
             elif PARAMS['show'][0] == 'search':

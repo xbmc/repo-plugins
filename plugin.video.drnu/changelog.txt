@@ -1,3 +1,7 @@
+[B]Version 2.1.5 - 2012-06-22[/B]
+- Changed search results limit to 100 items
+- Added Premiere videos
+
 [B]Version 2.1.4 - 2012-06-03[/B]
 - Split up Programs A-Z menu into individual letters
 - Handle errors when local filesystem is readonly or out of disk space

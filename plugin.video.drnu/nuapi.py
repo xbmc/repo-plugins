@@ -96,6 +96,9 @@ class DrNuApi(object):
     def getHighlightVideos(self):
         return self._call_api('videos/highlight', 'highlight.json') or list()
 
+    def getPremiereVideos(self):
+        return self._call_api('videos/premiere', 'premiere.json') or list()
+
     def getProgramSeriesVideos(self, programSeriesSlug):
         return self._call_api('programseries/%s/videos' % programSeriesSlug, 'programseries-%s.json' % programSeriesSlug) or list()
 
@@ -107,10 +110,10 @@ class DrNuApi(object):
         else:
             return response
 
-    def search(self, term):
+    def search(self, term, limit = 100):
         if not term:
             return list()
-        return self._call_api('search/%s' % urllib.quote(term)) or list()
+        return self._call_api('search/%s?limit=%d' % (urllib.quote(term), limit)) or list()
 
     def getProgramSeriesImageUrl(self, programSlug, width, height = None):
         if height is None:

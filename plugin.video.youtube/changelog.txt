@@ -1,6 +1,15 @@
 [B]TODO:[/B]
 - Fix RTMP support.
 - Purchasable movies.
+- Unit test coverage of Core above 90% I'm looking at you "Fetch page"
+- Unit test new functions in storage...
+- Allow users to change sort on searches
+- Hook-in Caching the right places. And only the right places. (mostly scrapers)
+- Scrape Education. Search for feeds.
+- Check live feed vs scrape
+- Replace scraper with feeds for: shows, music, education, disco.
+- If not replaceable refactor show scraper at least.
+- Integration tests on all user actions.
 
 [B]Errata[/B]
 - [XBMC] Thumbnails sometimes turns into black box or Folder (XBMC not detecting when thumbnail is set and defaulting to icon?)
@@ -8,23 +17,18 @@
 - [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time
 - [RTMPDUMP] Doesn't support handshake type 10 which is required by youtube.
 
-[B]TODO 2.9.1[/B]
-- Unit test coverage of Core above 90% im looking at you "Fetch page"
-- Unit test new functions in storage...
-- Allow users to change sort on searches
-- Hook-in Caching the right places. And only the right places. (mostly scrapers)
-- Scrape Education. Search for feeds.
-- Check live feed vs scrape
-- Replace scraper with feeds for: Trailers, shows, music, education, disco.
-- If not replaceable refactor show scraper at least.
-- Integration tests on all user actions.
+[B]Version 3.0.0[/B]
+- Fixed show scraper since it was broken in a recent redesign
+- Disabled trailers scraper since functionality is gone from YouTubes site
+- Fixed Login code broken by YouTube redesign.
+- Change from minidom to parsedom(Should speedup raspberry PI)
 
 [B]Version 2.9.2[/B]
 - Listing of folders with more than 50 items was broken
-- Listing subscriptions was broken by youtubes sudden api changes.
+- Listing subscriptions was broken by YouTube's sudden api changes.
 
 [B]Version 2.9.1[/B]
-- Fixed indentation error that broke pagination of long playlists and subscription lists, basically any folder list with more than 50 elemtents was broken.
+- Fixed indentation error that broke pagination of long playlists and subscription lists, basically any folder list with more than 50 elements was broken.
 
 [B]Version 2.9.0[/B]
 - Sanity check feeds -> listAll temp_objects, since it (randomly?) fails
@@ -36,20 +40,20 @@
 - Fixed page 2 on subscriptions.
 
 [B]Version 2.8.0[/B]
-- Changed All videos now have a unique path from xbmc's perspective eventhough they're present in different folders.
+- Changed All videos now have a unique path from xbmc's perspective even though they're present in different folders.
 - Changed Replaced the categories scraper with api calls
 - Moved some functions from youtube utils to common so they can be shared between different plugins
 - Fixed music artist and top hit's scraper
 - Added play all option to youtube top 100
 - Added setting to control playback of 3d anaglyph streams 
-- Changed downloader into a seperate service.
+- Changed downloader into a separate service.
 
 [B]Version 2.7.0 (Beta)[/B]
 - Added new sqlite based caching system with script.common.plugin.cache
 - Added support for unlinked accounts
 - Added unit test suite of plugin
 - Added integration test suite of plugins main functions including full scraper coverage.
-- Added Caching module to reduce the trafic load on youtube.
+- Added Caching module to reduce the traffic load on youtube.
 - Fixed Downloads messages.
 - Changed scrapers to use custom regex based parsing framework instead of BeautifullSoup since this greatly improved scraper speed.
 - Changed default video streams up to 720p to h264 since apple tv doesn't handle VP8 well.

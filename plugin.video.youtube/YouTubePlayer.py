@@ -20,9 +20,7 @@ import sys
 import urllib
 import re
 import os.path
-import datetime
 import time
-from xml.dom.minidom import parseString
 try: import simplejson as json
 except ImportError: import json
 
@@ -132,29 +130,29 @@ class YouTubePlayer():
         self.common.log("subtitle index: " + repr(xml["content"]))
 
         if xml["status"] == 200:
-            try:
-                dom = parseString(xml["content"])
-            except:
-                return ""
-            entries = dom.getElementsByTagName("track")
-
             subtitle = ""
             code = ""
-            if len(entries) > 0:
+            codelist = self.common.parseDOM(xml["content"], "track", ret="lang_code")
+            sublist = self.common.parseDOM(xml["content"], "track", ret="name")
+            if len(sublist) != len(codelist):
+                self.common.log("Code list and sublist length mismatch: " + repr(codelist) + " - " + repr(sublist))
+                return ""
+
+            if len(codelist) > 0:
                 # Fallback to first in list.
-                subtitle = entries[0].getAttribute("name").replace(" ", "%20")
-                code = entries[0].getAttribute("lang_code")
+                subtitle = sublist[0].replace(" ", "%20")
+                code = codelist[0]
 
             lang_code = ["off", "en", "es", "de", "fr", "it", "ja"][int(self.settings.getSetting("lang_code"))]
-            for node in entries:
-                if node.getAttribute("lang_code") == lang_code:
-                    subtitle = node.getAttribute("name").replace(" ", "%20")
-                    code = lang_code
+            for i in range(0, len(codelist)):
+                if codelist[i] == lang_code:
+                    subtitle = sublist[i].replace(" ", "%20")
+                    code = codelist[0]
                     self.common.log("found subtitle specified: " + subtitle + " - " + code)
                     break
 
-                if node.getAttribute("lang_code") == "en":
-                    subtitle = node.getAttribute("name").replace(" ", "%20")
+                if codelist[i] == "en":
+                    subtitle = sublist[i].replace(" ", "%20")
                     code = "en"
                     self.common.log("found subtitle default: " + subtitle + " - " + code)
 
@@ -175,7 +173,7 @@ class YouTubePlayer():
         path = os.path.join(self.xbmc.translatePath(self.settings.getAddonInfo("profile")).decode("utf-8"), filename)
 
         w = self.storage.openFile(path, "wb")
-        w.write(result.encode("utf-8", "ignore"))
+        w.write(result)
         w.close()
 
         if "downloadPath" in video:
@@ -203,33 +201,37 @@ class YouTubePlayer():
         str = str.replace("&#39;", "'")
         return str
 
+    def convertSecondsToTimestamp(self, seconds):
+        self.common.log("")
+        hours = str(int(seconds / 3600))
+        seconds = seconds % 3600
+
+        minutes = str(int(seconds/60))
+        if len(minutes) == 1:
+            minutes = "0" + minutes
+
+        seconds = str(seconds % 60)
+        if len(seconds) == 1:
+            seconds = "0" + seconds
+
+        self.common.log("Done")
+        return "%s:%s:%s" % (hours, minutes, seconds)
+
     def transformSubtitleXMLtoSRT(self, xml):
         self.common.log("")
-        dom = parseString(xml)
-        entries = dom.getElementsByTagName("text")
 
         result = ""
+        for node in self.common.parseDOM(xml, "text", ret=True):
+            text = self.common.parseDOM(node, "text")[0]
+            text = self.simpleReplaceHTMLCodes(text).replace("\n", "\\n")
+            start = float(self.common.parseDOM(node, "text", ret="start")[0])
+            end = start + float(self.common.parseDOM(node, "text", ret="dur")[0])
 
-        for node in entries:
-            if node:
-                if node.firstChild:
-                    if node.firstChild.nodeValue:
-                        text = self.simpleReplaceHTMLCodes(node.firstChild.nodeValue).replace("\n", "\\n")
-                        start = ""
+            start = self.convertSecondsToTimestamp(start)
+            end = self.convertSecondsToTimestamp(end)
 
-                        if node.getAttribute("start"):
-                            start = str(datetime.timedelta(seconds=float(node.getAttribute("start")))).replace("000", "")
-                            if (start.find(".") == -1):
-                                start += ".000"
-
-                        dur = ""
-                        if node.getAttribute("dur"):
-                            dur = str(datetime.timedelta(seconds=float(node.getAttribute("start")) + float(node.getAttribute("dur")))).replace("000", "")
-                            if (dur.find(".") == -1):
-                                dur += ".000"
-
-                        if start and dur:
-                            result += "Dialogue: Marked=%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\r\n" % ("0", start, dur, "Default", "Name", "0000", "0000", "0000", "", text)
+            if start and end:
+                result += "Dialogue: Marked=%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\r\n" % ("0", start, end, "Default", "Name", "0000", "0000", "0000", "", text)
 
         return result
 
@@ -265,86 +267,88 @@ class YouTubePlayer():
 
     def transformAnnotationToSSA(self, xml):
         self.common.log("")
-        dom = parseString(xml)
-        entries = dom.getElementsByTagName("annotation")
         result = ""
         ssa_fixes = []
         style_template = "Style: annot%s,Arial,%s,&H%s&,&H%s&,&H%s&,&H%s&,0,0,3,3,0,1,0,0,0,0,0\r\n"
         styles_count = 0
         append_style = ""
+        entries = self.common.parseDOM(xml, "annotation", ret=True)
         for node in entries:
             if node:
-                stype = node.getAttribute("type")
-                style = node.getAttribute("style")
+                stype = "".join(self.common.parseDOM(node, "annotation", ret="type"))
+                style = "".join(self.common.parseDOM(node, "annotation", ret="style"))
                 self.common.log("stype : " + stype, 5)
                 self.common.log("style : " + style, 5)
 
                 if stype == "highlight":
-                    linkt = self.core._getNodeAttribute(node, "url", "type", "")
-                    linkv = self.core._getNodeAttribute(node, "url", "value", "")
+                    linkt = "".join(self.common.parseDOM(node, "url", ret="type"))
+                    linkv = "".join(self.common.parseDOM(node, "url", ret="value"))
                     if linkt == "video":
                         self.common.log("Reference to video : " + linkv)
-                elif node.firstChild:
-                    self.common.log("node.firstChild: %s - value : %s" % (repr(node.firstChild), repr(self.core._getNodeValue(node, "TEXT", ""))), 5)
-                    text = self.core._getNodeValue(node, "TEXT", "")
-                    if text:
-                        text = self.common.replaceHTMLCodes(text)
+                elif node.find("TEXT") > -1:
+                    text = self.common.parseDOM(node, "TEXT")
+                    if len(text):
+                        text = self.common.replaceHTMLCodes(text[0])
                         start = ""
 
+                        ns_fsize = 60
+                        start = False
+                        end = False
+
                         if style == "popup":
-                            cnode = node.getElementsByTagName("rectRegion")
+                            cnode = self.common.parseDOM(node, "rectRegion", ret="t")
+                            start = cnode[0]
+                            end = cnode[1]
+                            tmp_y = self.common.parseDOM(node, "rectRegion", ret="y")
+                            tmp_h = self.common.parseDOM(node, "rectRegion", ret="h")
+                            tmp_x = self.common.parseDOM(node, "rectRegion", ret="x")
+                            tmp_w = self.common.parseDOM(node, "rectRegion", ret="w")
                         elif style == "speech":
-                            cnode = node.getElementsByTagName("anchoredRegion")
+                            cnode = self.common.parseDOM(node, "anchoredRegion", ret="t")
+                            start = cnode[0]
+                            end = cnode[1]
+                            tmp_y = self.common.parseDOM(node, "anchoredRegion", ret="y")
+                            tmp_h = self.common.parseDOM(node, "anchoredRegion", ret="h")
+                            tmp_x = self.common.parseDOM(node, "anchoredRegion", ret="x")
+                            tmp_w = self.common.parseDOM(node, "anchoredRegion", ret="w")
                         elif style == "higlightText":
                             cnode = False
                         else:
                             cnode = False
 
-                        snode = node.getElementsByTagName("appearance")
-                        ns_fsize = 60
-                        self.common.log("snode: %s" % snode, 5)
-                        if snode:
-                            if snode.item(0).hasAttribute("textSize"):
-                                ns_fsize = int(1.2 * (1280 * float(snode.item(0).getAttribute("textSize")) / 100))
+                        for snode in self.common.parseDOM(node, "appearance", attrs={"fgColor": ".*?"}, ret=True):
+                            ns_fsize = self.common.parseDOM(snode, "appearance", ret="textSize")
+                            if len(ns_fsize):
+                                ns_fsize = int(1.2 * (1280 * float(ns_fsize[0]) / 100))
                             else:
                                 ns_fsize = 60
-                            ns_fcolor = snode.item(0).getAttribute("fgColor")
-                            ns_fcolor = self.transformColor(ns_fcolor)
+                            ns_fcolor = self.common.parseDOM(snode, "appearance", ret="fgColor")
+                            ns_fcolor = self.transformColor(ns_fcolor[0])
 
-                            ns_bcolor = snode.item(0).getAttribute("bgColor")
-                            ns_bcolor = self.transformColor(ns_bcolor)
+                            ns_bcolor = self.common.parseDOM(snode, "appearance", ret="bgColor")
+                            ns_bcolor = self.transformColor(ns_bcolor[0])
 
-                            ns_alpha = snode.item(0).getAttribute("bgAlpha")
-                            ns_alpha = self.transformAlpha(ns_alpha)
+                            ns_alpha = self.common.parseDOM(snode, "appearance", ret="bgAlpha")
+                            ns_alpha = self.transformAlpha(ns_alpha[0])
 
                             append_style += style_template % (styles_count, ns_fsize, ns_fcolor, ns_fcolor, ns_fcolor, ns_alpha + ns_bcolor)
                             style = "annot" + str(styles_count)
                             styles_count += 1
 
-                        start = False
-                        end = False
-                        if cnode:
-                            if cnode.item(0):
-                                start = cnode.item(0).getAttribute("t")
-
-                            if cnode.item(1):
-                                end = cnode.item(1).getAttribute("t")
-
                         self.common.log("start: %s - end: %s - style: %s" % (start, end, style), 5)
                         if start and end and style != "highlightText":
-                            marginV = 1280 * float(cnode.item(0).getAttribute("y")) / 100
-                            marginV += 1280 * float(cnode.item(0).getAttribute("h")) / 100
+                            marginV = 1280 * float(tmp_y[0]) / 100
+                            marginV += 1280 * float(tmp_h[0]) / 100
                             marginV = 1280 - int(marginV)
                             marginV += 5
-                            marginL = int((800 * float(cnode.item(0).getAttribute("x")) / 100))
+                            marginL = int((800 * float(tmp_x[0]) / 100))
                             marginL += 5
-                            marginR = 800 - marginL - int((800 * float(cnode.item(0).getAttribute("w")) / 100)) - 15
+                            marginR = 800 - marginL - int((800 * float(tmp_w[0]) / 100)) - 15
                             if marginR < 0:
                                 marginR = 0
                             result += "Dialogue: Marked=%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\r\n" % ("0", start, end, style, "Name", marginL, marginR, marginV, "", text)
                             ssa_fixes.append([start, end])
-                else:
-                    self.common.log("wrong type")
+
         # Fix errors in the SSA specs.
         if len(ssa_fixes) > 0:
             for a_start, a_end in ssa_fixes:
@@ -352,7 +356,7 @@ class YouTubePlayer():
                     if time.strptime(a_end[0:a_end.rfind(".")], "%H:%M:%S") < time.strptime(b_start[0:b_start.rfind(".")], "%H:%M:%S"):
                         result += "Dialogue: Marked=0,%s,%s,Default,Name,0000,0000,0000,,\r\n" % (a_end, b_start)
 
-        self.common.log("Done : " + repr((result, append_style)), 5)
+        self.common.log("Done : " + repr((result, append_style)),5)
         return (result, append_style)
 
     def addSubtitles(self, video={}):
@@ -692,7 +696,9 @@ class YouTubePlayer():
         result = ""
         if (get("action", "") != "download"):
             path = self.settings.getSetting("downloadPath")
-            filename = ''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS) + "-[" + get('videoid') + "]" + ".mp4"
+            bla = self.common.makeUTF8(video['Title'])
+            print repr(bla)
+            filename = ''.join(c for c in self.common.makeUTF8(video['Title']) if c not in self.utils.INVALID_CHARS) + "-[" + get('videoid') + "]" + ".mp4"
             path = os.path.join(path.decode("utf-8"), filename)
             try:
                 if self.xbmcvfs.exists(path):

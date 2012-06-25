@@ -1,9 +1,15 @@
 [B]TODO:[/B]
 - Extract only first 50 items of list ( per page )
 - Maybe extract further in the background
+- download shouldnt be possible if folder isnt set
+- plugin should pop download settings on first run
 - Listing should cache intelligently and never fetch more than 50 items
 
 [B]Errata[/B]
+
+[B]Version 0.5.0[/B]
+- Blip.tv changed the layout of their site and broke a coupe of feeds
+- Blip.tv changed the way they serve up files killing the downloader
 
 [B]Version 0.4.0[/B]
 - Blip.tv changed their html and broke the show scraper.

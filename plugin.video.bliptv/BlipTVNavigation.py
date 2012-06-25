@@ -105,6 +105,7 @@ class BlipTVNavigation:
             if "video_url" in video:
                 params["url"] = video['video_url']
                 params["download_path"] = self.settings.getSetting("downloadPath")
+                params["useragent"] = "curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3"
                 filename = "%s-[%s].mp4" % (''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS), video["videoid"])
                 self.downloader.download(filename, params)
             else:

@@ -47,6 +47,15 @@ class BlipTVScraper:
         self.urls['home_trending'] = "http://blip.tv/pr/home_get_growing_shows?page=%s&no_wrap=1"
         self.urls['home_new'] = "http://blip.tv/pr/home_get_new_shows?page=%s&no_wrap=1"
 
+    def extractAndResizeThumbnail(self, item):
+        thumbnail = self.common.parseDOM(item, "div", attrs={"class": "PosterCard"}, ret="style")[0]
+        if thumbnail.find(":url("):
+            thumbnail = thumbnail[thumbnail.find(":url(") + 5:]
+            thumbnail = thumbnail[:thumbnail.find(");")]
+            thumbnail = thumbnail.replace("&w=220", "&w=440")
+            thumbnail = thumbnail.replace("&h=325", "&h=650")
+        return thumbnail
+
     def searchShow(self, params={}):
         self.common.log("")
         get = params.get
@@ -66,13 +75,14 @@ class BlipTVScraper:
 
             self.common.log("result " + repr(result["content"]))
 
-            dom_pages = self.common.parseDOM(result["content"], "div", {"class": "ShowFlipcard"})
+            dom_pages = self.common.parseDOM(result["content"], "div", {"class": "PosterCardWrap"})
 
             self.common.log("found items " + repr(dom_pages), 4)
             for item in dom_pages:
-                thumbnail = self.common.parseDOM(item, "img", attrs={"class": "ShowPoster"}, ret="src")[0]
-                name = self.common.parseDOM(item, "a", attrs={"class": "Name"})[0]
-                link = self.common.parseDOM(item, "a", attrs={"class": "Name"}, ret="href")[0]
+                thumbnail = self.extractAndResizeThumbnail(item)
+                title = self.common.parseDOM(item, "h1", attrs={"class": "ShowTitle"})[0]
+                name = self.common.parseDOM(title, "a")[0]
+                link = self.common.parseDOM(title, "a", ret="href")[0]
                 tmp.append({"path": get("path"), "show": link, "scraper": "show", "Title": self.common.replaceHTMLCodes(name.strip()), "thumbnail": thumbnail})
 
             if len(tmp) > 0 and page < 50:
@@ -197,22 +207,23 @@ class BlipTVScraper:
             url = self.createUrl(params, page)
             result = self.common.fetchPage({"link": url})
 
-            show_list = self.common.parseDOM(result["content"], "div", attrs={"class": "ShowFlipcard"})
+            show_list = self.common.parseDOM(result["content"], "div", attrs={"class": "PosterCardWrap"})
 
             if not show_list:
                 tester = False
                 continue
 
             for show in show_list:
-                title = self.common.parseDOM(show, "a", attrs={"class": "Name"})
-                link = self.common.parseDOM(show, "a", attrs={"class": "Name"}, ret="href")
-                image = self.common.parseDOM(show, "img", attrs={"class": "ShowPoster"}, ret="src")
+                thumbnail = self.extractAndResizeThumbnail(show)
+                title = self.common.parseDOM(show, "h1", attrs={"class": "ShowTitle"})[0]
+                name = self.common.parseDOM(title, "a")[0]
+                link = self.common.parseDOM(title, "a", ret="href")[0]
 
                 item = {}
-                item["show"] = link[0]
+                item["show"] = link
                 item["scraper"] = "show"
-                item["thumbnail"] = image[0]
-                item["Title"] = self.common.replaceHTMLCodes(title[0])
+                item["thumbnail"] = thumbnail
+                item["Title"] = self.common.replaceHTMLCodes(name)
 
                 shows.append(item)
 

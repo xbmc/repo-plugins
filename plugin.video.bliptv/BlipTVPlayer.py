@@ -184,6 +184,9 @@ class BlipTVPlayer:
             dom = minidom.parseString(result["content"])
             entries = dom.getElementsByTagName("media:content")
             for node in entries:
+                type = node.getAttribute("type")
+                if type.find("video") < 0:
+                    continue
                 quality = "SD"
                 url = node.getAttribute("url")
                 height = int(node.getAttribute("height"))

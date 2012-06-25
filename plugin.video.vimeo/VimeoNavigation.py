@@ -23,7 +23,6 @@ import os
 
 class VimeoNavigation():
     def __init__(self):
-        self.scraper = sys.modules["__main__"].scraper
         self.utils = sys.modules["__main__"].utils
         self.player = sys.modules["__main__"].player
         self.feeds = sys.modules["__main__"].feeds
@@ -47,10 +46,9 @@ class VimeoNavigation():
         #         Title                        , path                                           , thumbnail                         ,  login          ,  source / action
         self.categories = (
                 {'Title':self.language(30001)  ,'path':"/root/explore"							, 'thumbnail':"explore"        		, 'login':"false" },
-                {'Title':self.language(30013)  ,'path':"/root/explore/channels"					, 'thumbnail':"explore"             , 'login':"false" , 'scraper':"channels" , 'folder':'channel'},
-                {'Title':self.language(30008)  ,'path':"/root/explore/channels/featured"		, 'thumbnail':"featured"            , 'login':"false" , 'scraper':"channels" , 'folder':'channel', 'featured':'true'}, 
-            	{'Title':self.language(30014)  ,'path':"/root/explore/groups"					, 'thumbnail':"explore"             , 'login':"false" , 'scraper':"groups" , 'folder':'group'},
-                {'Title':self.language(30015)  ,'path':"/root/explore/categories"				, 'thumbnail':"explore"             , 'login':"false" , 'scraper':"categories" , 'folder':'category'},
+                {'Title':self.language(30013)  ,'path':"/root/explore/channels"					, 'thumbnail':"explore"             , 'login':"false" , 'api':"channels" , 'folder':'category'},
+            	{'Title':self.language(30014)  ,'path':"/root/explore/groups"					, 'thumbnail':"explore"             , 'login':"false" , 'api':"groups" , 'folder':'category'},
+                {'Title':self.language(30015)  ,'path':"/root/explore/categories"				, 'thumbnail':"explore"             , 'login':"false" , 'api':"categories" , 'folder':'category'},
                 {'Title':self.language(30016)  ,'path':"/root/explore/hd"						, 'thumbnail':"explore"             , 'login':"false" , 'channel':"hd"},
                 {'Title':self.language(30017)  ,'path':"/root/explore/staffpicks"               , 'thumbnail':"explore"             , 'login':"false" , 'channel':"staffpicks"},
                 {'Title':self.language(30002)  ,'path':"/root/my_likes"                			, 'thumbnail':"favorites"           , 'login':"true"  , 'api':"my_likes"},
@@ -396,7 +394,7 @@ class VimeoNavigation():
             if result("videoid") == "false":
                 continue
 
-            if get("scraper") == "watch_later":
+            if get("api") == "my_watch_later":
                 result_params["index"] = str(results.index(result_params) + 1)
 
             if result("next") == "true":
@@ -460,16 +458,16 @@ class VimeoNavigation():
         title = self.common.makeAscii(title)
 
         if (item("channel") and self.settings.getSetting("userid")):
-            if (get("external") or get("scraper")):
+            if (get("external") or get("api") != "my_channels"):
                 cm.append((self.language(30512) % title, 'XBMC.RunPlugin(%s?path=%s&channel=%s&action=add_subscription)' % (sys.argv[0], get("path"), item("channel"))))
             else:
                 cm.append((self.language(30513) % title, 'XBMC.RunPlugin(%s?path=%s&channel=%s&action=remove_subscription)' % (sys.argv[0], get("path"), item("channel"))))
 
         if (item("group") and self.settings.getSetting("userid")):
-            if (item("external") or get("scraper")):
-                cm.append((self.language(30509) % title, 'XBMC.RunPlugin(%s?path=%s&group=%s&action=join_group)' % (sys.argv[0], get("path"), item("group"))))
+            if (item("external") or get("api") != "my_groups"):
+                cm.append((self.language(30510) % title, 'XBMC.RunPlugin(%s?path=%s&group=%s&action=join_group)' % (sys.argv[0], get("path"), item("group"))))
             else:
-                cm.append((self.language(30510) % title, 'XBMC.RunPlugin(%s?path=%s&group=%s&action=leave_group)' % (sys.argv[0], get("path"), item("group"))))
+                cm.append((self.language(30511) % title, 'XBMC.RunPlugin(%s?path=%s&group=%s&action=leave_group)' % (sys.argv[0], get("path"), item("group"))))
 
         if (item("api") == "my_likes"  or item("album") or item("api") == "my_videos"):
             cm.append((self.language(30514), "XBMC.Action(Queue)"))

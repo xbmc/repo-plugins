@@ -161,6 +161,14 @@ class VimeoCore(object):
             result = self.v.vimeo_albums_getVideos(album_id=get("album"), page=page, per_page=per_page, full_response="true")
         elif (get("group")):
             result = self.v.vimeo_groups_getVideos(group_id=get("group"), page=page, per_page=per_page, full_response="true")
+        elif (get("api") in ["channels", "groups", "categories"] and not get("category")):
+            result = self.v.vimeo_categories_getAll(page=page, per_page=per_page)
+        elif (get("api") == "channels" and get("category")):
+            result = self.v.vimeo_categories_getRelatedChannels(category=get("category"), per_page=per_page, page=page)
+        elif (get("api") == "groups" and get("category")):
+            result = self.v.vimeo_categories_getRelatedGroups(category=get("category"), per_page=per_page, page=page)
+        elif (get("api") == "categories" and get("category")):
+            result = self.v.vimeo_categories_getRelatedVideos(category=get("category"), page=page, per_page=per_page, full_response="true")
         elif (get("api") == "my_videos"):
             result = self.v.vimeo_videos_getAll(user_id=user_id, per_page=per_page, page=page, full_response="true")
         elif(get("api") == "search"):
@@ -187,6 +195,8 @@ class VimeoCore(object):
         
         if get("folder") == "contact":
             result = self._get_contacts(result)
+        elif get("folder") == "category":
+            result = self._get_categories(result, params)
         elif get("folder"):
             result = self._get_list(get("folder"), result)
         else:
@@ -297,6 +307,37 @@ class VimeoCore(object):
 
         self.common.log("Done")
         return result
+
+    def _get_categories(self, result, params = {}):
+        self.common.log("")
+        get = params.get
+        objects = []
+
+        categories = self.common.parseDOM(result, "category", ret=True)
+
+        for category in categories:
+            id = self.common.parseDOM(category, "category", ret="word")[0]
+            title = self.common.parseDOM(category, "name")[0]
+            title = self.common.replaceHTMLCodes(title)
+            item = {}
+            item["category"] = id
+            item["api"] = get("api")
+            item["Title"] = title
+
+            if get("api") == "channels":
+                item["folder"] = "channel"
+            elif get("api") == "groups":
+                item["folder"] = "group"
+
+            item["thumbnail"] = "explore"
+            objects.append(item)
+
+        if len(result) == 0:
+            self.common.log("Result was empty")
+            return False
+
+        self.common.log("Done")
+        return objects
 
     def checkIfMorePagesExist(self, value):
         next = True

@@ -8,7 +8,7 @@ import urllib2
 import cookielib
 
 # plugin constants
-version = "2.1.0"
+version = "2.2.0"
 plugin = "Vimeo-" + version
 author = "TheCollective"
 url = "www.xbmc.com"
@@ -76,9 +76,6 @@ if (__name__ == "__main__" ):
 
     import VimeoPlayer
     player = VimeoPlayer.VimeoPlayer()
-
-    import VimeoScraper
-    scraper = VimeoScraper.VimeoScraper()
 
     import VimeoFeeds
     feeds = VimeoFeeds.VimeoFeeds()

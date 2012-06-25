@@ -45,12 +45,15 @@ class VimeoLogin():
         self.utils = sys.modules["__main__"].utils
 
     def login(self, params={}):
+        self.common.log("")
         self.settings.openSettings()
         (result, status) = self._login()
         self.utils.showMessage(self.language(30029), result)
         self.xbmc.executebuiltin("Container.Refresh")
+        self.common.log("Done")
 
     def _login(self):
+        self.common.log("")
         self.settings.setSetting("userid", "")
         self.settings.setSetting("oauth_token_secret", "")
         self.settings.setSetting("oauth_token", "")
@@ -75,17 +78,18 @@ class VimeoLogin():
         self.settings.setSetting("oauth_token_secret", match.group(1))
         self.settings.setSetting("oauth_token", match.group(2))
 
-        self.common.log("login done")
+        self.common.log("Done")
         return (self.language(30030), 200)
 
-    def extractUserIdFromCookieJar(self):
+    def extractUserId(self, page):
         self.common.log("")
-        cookies = self.common.getCookieInfoAsHTML()
         userid = ""
-        cookies = self.common.parseDOM(cookies, "cookie", attrs={"name": "uid"}, ret="value")
-        if len(cookies) > 0:
-            uid = urllib.unquote_plus(cookies[0])
-            userid = uid.split("|")[0]
+        uid = self.common.parseDOM(page["content"], "li", attrs={"class": "me subnav"})
+        if len(uid) > 0:
+            uid = self.common.parseDOM(uid, "a", ret="href")
+            userid = uid[0]
+            userid = userid.replace("/user","")
+            userid = userid.replace("/","")
 
         self.common.log("Done: " + repr(userid))
         return userid
@@ -125,31 +129,34 @@ class VimeoLogin():
             xsrft = [xsrft]
             return xsrft
 
+        self.common.log("Done")
         return []
 
     def performHttpLogin(self, xsrft):
         self.common.log("")
-        request = {'sign_in[email]': self.settings.getSetting("user_email"),
-                   'sign_in[password]': self.settings.getSetting("user_password"),
+        request = {'email': self.settings.getSetting("user_email"),
+                   'password': self.settings.getSetting("user_password"),
                    'token': xsrft}
 
         self.common.fetchPage({"link": "http://vimeo.com/log_in", "post_data": request,
                                 "refering": "http://www.vimeo.com/log_in"})
-        self.common.log("Done")
 
-    def checkIfHttpLoginFailed(self):
-        self.common.log("")
         result = self.common.fetchPage({"link": "http://vimeo.com/", "refering": "http://vimeo.com/log_in"})
 
-        login_failed = result['content'].find("joinimage loggedout") > 0
+        self.common.log("Done")
+        return result
 
-        # We should check for this part on the web login to se if http fails and send the message back to the user
-        # <div id="message" style="display:block;">
-        #
-        #    <div class="inner">
-        #                    The email address and password you entered do not match.            </div>
-        # </div>
+    def checkIfHttpLoginFailed(self, page):
+        self.common.log("")
+        failure = self.common.parseDOM(page["content"], "body",  attrs={"class": "logged_out"})
 
+        login_failed = ""
+        if len(failure) > 0:
+            login_failed = self.common.parseDOM(page["content"], "div",  attrs={"class": "validation-advice"})
+            if len(login_failed) == 0:
+                login_failed = "true"
+
+        self.common.log("Done")
         return login_failed
 
     def extractLoginTokens(self, auth_url):
@@ -170,6 +177,7 @@ class VimeoLogin():
 
         result = self.common.fetchPage({"link": "https://vimeo.com/oauth/confirmed", "post_data": data})
         verifier = self.common.getParameters(result["new_url"])
+        self.common.log("Done")
         return verifier["oauth_verifier"]
 
     def login_get_verifier(self, auth_url):
@@ -179,28 +187,33 @@ class VimeoLogin():
             self.common.log("login failed accept disabled") # this is fucking retarded
             return (self.language(30606), 303)
 
-        # part 1 httpLogin
+        self.common.log("Part 1 httpLogin", 3)
         token = self.extractCrossSiteScriptingToken()
-        self.performHttpLogin(token[0])
-        login_failed = self.checkIfHttpLoginFailed()
+        login_page = self.performHttpLogin(token[0])
+        login_failed = self.checkIfHttpLoginFailed(login_page)
 
-        if (login_failed):
+        if len(login_failed) > 0:
+            login_error = self.language(30621)
+            if login_failed != "true":
+                login_error = login_failed
+                self.common.log("login failed - vimeo returned: " + repr(login_failed))
+
             self.common.log("login_get_verifier sanity check failed, bad username or password?")
-            return (self.language(30621), 303)
+            return (login_error, 303)
 
-        userid = self.extractUserIdFromCookieJar()
+        userid = self.extractUserId(login_page)
 
         if not userid:
             self.common.log("login_get_verifier no userid in cookie jar login failed")
             return (self.language(30606), 303)
 
-        # part 2 request user specific authorization token
+        self.common.log("Part 2 request user specific authorization token", 3)
         login_oauth_token, login_token = self.extractLoginTokens(auth_url)
         if len(login_oauth_token) == 0 or len(login_token) == 0:
             self.common.log("unable to find oauth tokens: login seems to have failed")
             return (self.language(30606), 303)
 
-        #part 3 authorized the plugin and extract the verifier
+        self.common.log("Part 3 authorized the plugin and extract the verifier", 3)
         verifier = self.authorizeAndExtractVerifier(login_token[0], login_oauth_token[0])
         if len(verifier) == 0:
             self.common.log("failed to authorize plugin, unable to extract verifier: " + repr(verifier))
@@ -210,10 +223,10 @@ class VimeoLogin():
         self.settings.setSetting("userid", userid)
 
         self.common.log("Login success, got verifier: " + verifier, 3)
-
         return (verifier, 200)
 
     def _getAuth(self):
+        self.common.log("")
         auth = self.settings.getSetting("oauth_token")
         self.common.log("authentication token: " + repr(auth), 1)
 

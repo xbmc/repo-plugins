@@ -34,7 +34,6 @@ class VimeoPlaylistControl():
         self.core = sys.modules["__main__"].core
 
         self.feeds = sys.modules["__main__"].feeds
-        self.scraper = sys.modules["__main__"].scraper
         self.player = sys.modules["__main__"].player
 
     def playAll(self, params={}):

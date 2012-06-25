@@ -8,6 +8,10 @@
 - scraper of vimeo's video school if possible
 - More context menu items to take advantage of new core
 
+[B]Version 2.2.0[/B]
+- Removed Scraper and replaced it with API hooks
+- Fixed login code to handle vimeo's new design
+
 [B]Version 2.1.0[/B]
 - Fixed login, after vimeo site changes
 

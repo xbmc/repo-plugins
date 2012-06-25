@@ -111,7 +111,7 @@ class YouTubeLogin():
                 self.common.log("Part B")
                 continue
 
-            code = self.common.parseDOM(ret["content"], "textarea", attrs={"id": "code"})
+            code = self.common.parseDOM(ret["content"], "input", attrs={"id": "code"}, ret="value")
             if len(code) > 0:
                 url = "https://accounts.google.com/o/oauth2/token"
                 url_data = {"client_id": "208795275779.apps.googleusercontent.com",

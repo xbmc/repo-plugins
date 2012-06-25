@@ -49,7 +49,6 @@ class YouTubeNavigation():
         self.categories = (
             {'Title':self.language(30044)  ,'path':"/root/explore"                         , 'thumbnail':"explore"           , 'login':"false" },
             {'Title':self.language(30041)  ,'path':"/root/explore/categories"              , 'thumbnail':"explore"           , 'login':"false" , 'feed':'feed_categories', 'folder':'true'},
-            {'Title':self.language(30057)  ,'path':"/root/explore/education"               , 'thumbnail':"feeds"             , 'login':"false" , 'scraper':"education", 'folder':'true'},
             {'Title':self.language(30001)  ,'path':"/root/explore/feeds"                   , 'thumbnail':"feeds"             , 'login':"false" },
             {'Title':self.language(30009)  ,'path':"/root/explore/feeds/discussed"         , 'thumbnail':"most"              , 'login':"false" , 'feed':"feed_discussed" },
             {'Title':self.language(30010)  ,'path':"/root/explore/feeds/linked"            , 'thumbnail':"most"              , 'login':"false" , 'feed':"feed_linked" },
@@ -62,21 +61,10 @@ class YouTubeNavigation():
             {'Title':self.language(30015)  ,'path':"/root/explore/feeds/favorites"         , 'thumbnail':"top"               , 'login':"false" , 'feed':"feed_favorites" },
             {'Title':self.language(30016)  ,'path':"/root/explore/feeds/rated"             , 'thumbnail':"top"               , 'login':"false" , 'feed':"feed_rated" },
             {'Title':self.language(30043)  ,'path':"/root/explore/movies"                  , 'thumbnail':"movies"            , 'login':"false" , 'scraper':'movies', 'folder':'true'},
-            {'Title':self.language(30052)  ,'path':"/root/explore/music"                   , 'thumbnail':"music"             , 'login':"false" , 'store':"artists", "folder":"true" },
-            {'Title':self.language(30037)  ,'path':"/root/explore/music/disco"             , 'thumbnail':"discoball"         , 'login':"false" , 'store':"disco_searches", 'folder':'true' },
-            {'Title':self.language(30040)  ,'path':"/root/explore/music/disco/new"         , 'thumbnail':"search"            , 'login':"false" , 'scraper':"search_disco"},
-            {'Title':self.language(30054)  ,'path':"/root/explore/music/artists"           , 'thumbnail':"music"             , 'login':"false" , 'scraper':'music_artists', "folder":"true" },
-            {'Title':self.language(30053)  ,'path':"/root/explore/music/hits"              , 'thumbnail':"music"             , 'login':"false" , 'scraper':'music_hits', "folder":"true"},
+            {'Title':self.language(30052)  ,'path':"/root/explore/music"                   , 'thumbnail':"music"             , 'login':"false" , 'store':"disco_searches", "folder":"true" },
+            {'Title':self.language(30040)  ,'path':"/root/explore/music/new"               , 'thumbnail':"search"            , 'login':"false" , 'scraper':"search_disco"},
             {'Title':self.language(30055)  ,'path':"/root/explore/music/top100"            , 'thumbnail':"music"             , 'login':"false" , 'scraper':'music_top100'},
             {'Title':self.language(30042)  ,'path':"/root/explore/shows"                   , 'thumbnail':"shows"             , 'login':"false" , 'scraper':'shows', 'folder':'true'},
-            {'Title':self.language(30032)  ,'path':"/root/explore/trailers"                , 'thumbnail':"trailers"          , 'login':"false" },
-            {'Title':self.language(30035)  ,'path':"/root/explore/trailers/latest"         , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':"latest_trailers" },
-            {'Title':self.language(30034)  ,'path':"/root/explore/trailers/current"        , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':"current_trailers" },
-            {'Title':self.language(30036)  ,'path':"/root/explore/trailers/upcoming"       , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':"upcoming_trailers" },
-            {'Title':self.language(30033)  ,'path':"/root/explore/trailers/popular"        , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':"popular_trailers" },
-            {'Title':self.language(30047)  ,'path':"/root/explore/trailers/latest_game"    , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':"latest_game_trailers" },
-            {'Title':self.language(30048)  ,'path':"/root/explore/trailers/upcoming_game"  , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':"upcoming_game_trailers" },
-            {'Title':self.language(30046)  ,'path':"/root/explore/trailers/popular_game"   , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':"popular_game_trailers" },
             {'Title':self.language(30051)  ,'path':"/root/explore/live"                    , 'thumbnail':"live"              , 'login':"false" , 'feed':"feed_live" },
             {'Title':self.language(30019)  ,'path':"/root/recommended"                     , 'thumbnail':"recommended"       , 'login':"true"  , 'user_feed':"recommended" },
             {'Title':self.language(30008)  ,'path':"/root/watch_later"                     , 'thumbnail':"watch_later"       , 'login':"true"  , 'user_feed':"watch_later" },
@@ -573,12 +561,6 @@ class YouTubeNavigation():
 
         if (item("next", "false") == "true"):
             return cm
-
-        if item("artist"):
-            cm.append((self.language(30507), "XBMC.Container.Update(%s?path=%s&scraper=similar_artist&artist=%s&folder=true&)" % (sys.argv[0], item("path"), item("artist"))))
-            cm.append((self.language(30540), "XBMC.RunPlugin(%s?path=%s&action=delete_artist&store=artists&artist=%s&)" % (sys.argv[0], item("path"), item("artist"))))
-            cm.append((self.language(30520), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=music_artist&artist=%s&)" % (sys.argv[0], item("path"), item("artist"))))
-            cm.append((self.language(30522), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&scraper=music_artist&artist=%s&)" % (sys.argv[0], item("path"), item("artist"))))
 
         if (item("user_feed") in ["favorites", "newsubscriptions", "watch_later", "recommended"]):
             cm.append((self.language(30520), "XBMC.RunPlugin(%s?path=%s&action=play_all&user_feed=%s&contact=%s&login=true&)" % (sys.argv[0], item("path"), item("user_feed"), "default")))

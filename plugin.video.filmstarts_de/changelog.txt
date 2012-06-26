@@ -1,4 +1,12 @@
-1.0.0 - First Try
-1.0.1 - Changed addon.xml & Fixed small bug
-1.0.2 - Changed Timeout
-1.0.3 - Various fixes and optical optimizations
+1.0.0 
+- First Try
+1.0.1 
+- Changed addon.xml 
+- Fixed small bug
+1.0.2 
+- Changed Timeout
+1.0.3 
+- Various fixes and optical optimizations
+1.0.4 
+- Added sort selection for trailers
+- Various fixes

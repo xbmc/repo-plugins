@@ -2,4 +2,9 @@
 <strings>
   <string id="30001">Aktuell im Kino</string>
   <string id="30002">Demnächst im Kino</string>
+  <string id="30003">nach Aufrufen</string>
+  <string id="30004">nach Starttermin</string>
+  <string id="30005">nach Filmtitel</string>
+  <string id="30006">hinzugefügt am</string>
+  <string id="30007">Nächste Seite</string>
 </strings>

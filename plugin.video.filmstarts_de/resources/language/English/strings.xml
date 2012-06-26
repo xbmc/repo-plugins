@@ -2,4 +2,9 @@
 <strings>
   <string id="30001">In theaters now</string>
   <string id="30002">In theaters soon</string>
+  <string id="30003">by hits</string>
+  <string id="30004">by release date</string>
+  <string id="30005">by title</string>
+  <string id="30006">by adding date</string>
+  <string id="30007">Next Page</string>
 </strings>

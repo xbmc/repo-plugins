@@ -14,7 +14,7 @@ settings = xbmcaddon.Addon(id='plugin.video.fernsehkritik_tv')
 translation = settings.getLocalizedString
 
 def index():
-        addDir("TV-Magazin","http://fernsehkritik.tv/tv-magazin/komplett/",1,"")
+        addDir("TV-Magazin","http://fernsehkritik.tv/tv-magazin/",1,"")
         addDir("Pantoffelkino-TV","http://fernsehkritik.tv/pktv/",1,"")
         addDir(str(translation(30001))+": "+str(translation(30002)),"http://fernsehkritik.tv/extras/",1,"")
         addDir(str(translation(30001))+": Aktuell im Gespräch","http://fernsehkritik.tv/extras/aktuell/",1,"")
@@ -23,40 +23,38 @@ def index():
         xbmcplugin.endOfDirectory(thisPlugin)
 
 def listVideos(url):
-        titleEntrys=[]
-        if url=="http://fernsehkritik.tv/tv-magazin/komplett/":
-          content = getUrl("http://fernsehkritik.tv/tv-magazin/")
-          spl=content.split('<div class="lclmo" id=')
-          for i in range(1,3,1):
-            entry=spl[i]
-            match=re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
-            urlEntryOne=match[0][0]
-            title=match[0][1].replace("&quot;","")
-            titleEntrys.append(title)
-            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-            thumb=match[0]
-            urlEntryOne=urlEntryOne.replace("../","/")
-            thumb=thumb.replace("../","/")
-            newUrl="http://fernsehkritik.tv"+urlEntryOne
-            addLink(title,newUrl,2,"http://fernsehkritik.tv"+thumb)
+        urlEntrys=[]
         content = getUrl(url)
-        spl=content.split('<div class="lclmo" id=')
-        for i in range(1,len(spl),1):
-            entry=spl[i]
-            match=re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
-            url=match[0][0]
-            title=match[0][1].replace("&quot;","")
-            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-            thumb=match[0]
-            thumb=thumb.replace("../","/")
-            newUrl=""
-            if url.find("/pktv/")==0:
-              newUrl="http://fernsehkritik.tv"+url
-            elif url.find("#extra-")==0:
-              newUrl=url[7:]
-            else:
-              newUrl="http://fernsehkritik.tv"+url
-            if not title in titleEntrys:
+        if url=="http://fernsehkritik.tv/tv-magazin/":
+          match=re.compile('vom (.+?)</a>', re.DOTALL).findall(content)
+          firstDate=match[0]
+          match=re.compile('href="../folge-(.+?)/"', re.DOTALL).findall(content)
+          for nr in match:
+            newUrl="http://fernsehkritik.tv/folge-"+nr+"/"
+            if nr.find(">")==-1:
+              if newUrl not in urlEntrys:
+                urlEntrys.append(newUrl)
+                title="Folge "+nr
+                if len(urlEntrys)==1:
+                  title+=" ("+firstDate+")"
+                addLink(title,newUrl,2,"")
+        else:
+          spl=content.split('<div class="lclmo" id=')
+          for i in range(1,len(spl),1):
+              entry=spl[i]
+              match=re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
+              url=match[0][0]
+              title=match[0][1].replace("&quot;","")
+              match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+              thumb=match[0]
+              thumb=thumb.replace("../","/")
+              newUrl=""
+              if url.find("/pktv/")==0:
+                newUrl="http://fernsehkritik.tv"+url
+              elif url.find("#extra-")==0:
+                newUrl=url[7:]
+              else:
+                newUrl="http://fernsehkritik.tv"+url
               addLink(title,newUrl,2,"http://fernsehkritik.tv"+thumb)
         xbmcplugin.endOfDirectory(thisPlugin)
 

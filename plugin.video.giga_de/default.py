@@ -46,9 +46,9 @@ def listVideos(url):
             thumb=match[0]
           title=cleanTitle(title)
           addLink(title,url,'playVideo',thumb)
-        match=re.compile('<li class="next-page"><a href="(.+?)"', re.DOTALL).findall(content)
+        match=re.compile('<li class="notcurrent   "><a href="(.+?)"', re.DOTALL).findall(content)
         if len(match)>0:
-          addDir("Next Page",match[0],'listVideos',"")
+          addDir(translation(30002),match[0],'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
 
 def playVideo(url):
@@ -73,7 +73,7 @@ def playVideo(url):
           return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
-        return title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#038;","&").replace("&#039;","\\").replace("&#8211;","-").replace("&#8217;","'").replace("&quot;","\"").strip()
+        return title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#038;","&").replace("&#039;","\\").replace("&#8211;","-").replace("&#8220;","-").replace("&#8221;","-").replace("&#8217;","'").replace("&quot;","\"").strip()
 
 def getUrl(url):
         req = urllib2.Request(url)

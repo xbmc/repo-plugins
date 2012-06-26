@@ -7,14 +7,21 @@ settings = xbmcaddon.Addon(id='plugin.video.filmstarts_de')
 translation = settings.getLocalizedString
 
 def index():
-        addDir('Trailer: '+translation(30001),'http://www.filmstarts.de/trailer/aktuell_im_kino.html?version=1',1,'')
-        addDir('Trailer: '+translation(30002),'http://www.filmstarts.de/trailer/bald_im_kino.html?version=1',1,'')
-        addDir('Trailer: Archiv','http://www.filmstarts.de/trailer/archiv.html?version=1',1,'')
-        addDir('Filmstarts: Fünf Sterne','http://www.filmstarts.de/videos/shows/funf-sterne',3,'')
-        addDir('Filmstarts: Fehlerteufel','http://www.filmstarts.de/videos/shows/filmstarts-fehlerteufel',3,'')
-        addDir('Meine Lieblings-Filmszene','http://www.filmstarts.de/videos/shows/meine-lieblings-filmszene',3,'')
-        addDir('Video-Interviews','http://www.filmstarts.de/trailer/interviews/',4,'')
-        addDir('Serien-Trailer','http://www.filmstarts.de/trailer/serien/',5,'')
+        addDir('Trailer: '+translation(30001),'http://www.filmstarts.de/trailer/aktuell_im_kino.html?version=1',"showSortDirection",'')
+        addDir('Trailer: '+translation(30002),'http://www.filmstarts.de/trailer/bald_im_kino.html?version=1',"showSortDirection",'')
+        addDir('Trailer: Archiv','http://www.filmstarts.de/trailer/archiv.html?version=1',"showSortDirection",'')
+        addDir('Filmstarts: Fünf Sterne','http://www.filmstarts.de/videos/shows/funf-sterne',"listVideosMagazin",'')
+        addDir('Filmstarts: Fehlerteufel','http://www.filmstarts.de/videos/shows/filmstarts-fehlerteufel',"listVideosMagazin",'')
+        addDir('Meine Lieblings-Filmszene','http://www.filmstarts.de/videos/shows/meine-lieblings-filmszene',"listVideosMagazin",'')
+        addDir('Video-Interviews','http://www.filmstarts.de/trailer/interviews/',"listVideosInterview",'')
+        addDir('Serien-Trailer','http://www.filmstarts.de/trailer/serien/',"listVideosTV",'')
+        xbmcplugin.endOfDirectory(pluginhandle)
+
+def showSortDirection(url):
+        addDir(translation(30003),url.replace("?version=1","?sort_order=0&version=1"),"listVideosTrailer",'')
+        addDir(translation(30004),url.replace("?version=1","?sort_order=1&version=1"),"listVideosTrailer",'')
+        addDir(translation(30005),url.replace("?version=1","?sort_order=3&version=1"),"listVideosTrailer",'')
+        addDir(translation(30006),url.replace("?version=1","?sort_order=2&version=1"),"listVideosTrailer",'')
         xbmcplugin.endOfDirectory(pluginhandle)
 
 def listVideos(urlFull):
@@ -32,23 +39,23 @@ def listVideos(urlFull):
             maxPage=int(match[0][2])
           except:
             pass
-        if mode==1:
+        if mode=="listVideosTrailer":
           match=re.compile('<img src=\'(.+?)\' alt="(.+?)" title="(.+?)" />\n</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a class="link" href="(.+?)">\n<span class=\'bold\'>(.+?)</span>', re.DOTALL).findall(content)
           for thumb,temp1,temp2,url,title in match:
-                addLink(title,'http://www.filmstarts.de' + url,2,thumb)
-        elif mode==3:
+                addLink(title,'http://www.filmstarts.de' + url,"playVideo",thumb)
+        elif mode=="listVideosMagazin":
           if currentPage==1:
             match=re.compile('<a href="(.+?)">\n<img src="(.+?)" alt="" />\n</a>\n</div>\n<div style="(.+?)">\n<h2 class="(.+?)" style="(.+?)"><b>(.+?)</b> (.+?)</h2><br />\n<span style="(.+?)" class="purehtml fs11">\n(.+?)<a class="btn" href="(.+?)"', re.DOTALL).findall(content)
             for temp0,thumb,temp1,temp2,temp3,temp4,title,temp5,temp6,url in match:
-                  addLink(title,'http://www.filmstarts.de' + url,2,thumb)
+                  addLink(title,'http://www.filmstarts.de' + url,"playVideo",thumb)
           match=re.compile('<img src=\'(.+?)\' alt="(.+?)" title="(.+?)" />\n</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a href=\'(.+?)\' class="link">\n<span class=\'bold\'><b>(.+?)</b> (.+?)</span>', re.DOTALL).findall(content)
           for thumb,temp1,temp2,url,temp3,title in match:
-                addLink(title,'http://www.filmstarts.de' + url,2,thumb)
-        elif mode==4:
+                addLink(title,'http://www.filmstarts.de' + url,"playVideo",thumb)
+        elif mode=="listVideosInterview":
           match=re.compile('<img src=\'(.+?)\'(.+?)</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a(.+?)href=\'(.+?)\'>\n<span class=\'bold\'>\n(.+?)\n</span>(.+?)\n</a>', re.DOTALL).findall(content)
           for thumb,temp1,temp2,url,title1,title2 in match:
-                addLink(title1+title2,'http://www.filmstarts.de' + url,2,thumb)
-        elif mode==5:
+                addLink(title1+title2,'http://www.filmstarts.de' + url,"playVideo",thumb)
+        elif mode=="listVideosTV":
           spl=content.split('<div class="datablock vpadding10b">')
           for i in range(1,len(spl),1):
             entry=spl[i]
@@ -62,20 +69,19 @@ def listVideos(urlFull):
             else:
               match=re.compile("<a href='(.+?)'>\n(.+?)<br />", re.DOTALL).findall(entry)
               title=match[0][1]
-            addLink(title,'http://www.filmstarts.de' + url,2,thumb)
+            addLink(title,'http://www.filmstarts.de' + url,"playVideo",thumb)
         if currentPage<maxPage:
           urlNew=""
-          if urlFull.find('?page=')>=0 and mode==1:
-            match=re.compile('http://www.filmstarts.de/(.+?)?page=(.+?)&version=1', re.DOTALL).findall(urlFull)
-            urlNew='http://www.filmstarts.de/'+match[0][0]+'page='+str(currentPage+1)+'&version=1'
-          elif urlFull.find('?page=')>=-1 and mode==1:
-            urlNew=urlFull.replace("?version=1","?page="+str(currentPage+1))+"&version=1"
-          elif urlFull.find('?page=')>=0 and (mode==3 or mode==4 or mode==5):
+          if mode=="listVideosTrailer":
+            sortNr=urlFull[urlFull.find('sort_order=')+11:]
+            sortNr=sortNr[:sortNr.find('&')]
+            urlNew=urlFull[:urlFull.find('?')]+"?page="+str(currentPage+1)+"&sort_order="+sortNr+"&version=1"
+          elif urlFull.find('?page=')>=0 and (mode=="listVideosMagazin" or mode=="listVideosInterview" or mode=="listVideosTV"):
             match=re.compile('http://www.filmstarts.de/(.+?)?page=(.+?)', re.DOTALL).findall(urlFull)
             urlNew='http://www.filmstarts.de/'+match[0][0]+'page='+str(currentPage+1)
-          elif urlFull.find('?page=')>=-1 and (mode==3 or mode==4 or mode==5):
+          elif urlFull.find('?page=')==-1 and (mode=="listVideosMagazin" or mode=="listVideosInterview" or mode=="listVideosTV"):
             urlNew=urlFull + "?page="+str(currentPage+1)
-          addDir('Next Page',urlNew,mode,'')
+          addDir(translation(30007)+" ("+str(currentPage+1)+")",urlNew,mode,'')
         xbmcplugin.endOfDirectory(pluginhandle)
 
 def playVideo(url):
@@ -99,7 +105,7 @@ def playVideo(url):
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req,timeout=30)
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link
@@ -133,23 +139,16 @@ def addDir(name,url,mode,iconimage):
         return ok
          
 params=parameters_string_to_dict(sys.argv[2])
-url=None
-mode=None
+mode=params.get('mode')
+url=params.get('url')
+if type(url)==type(str()):
+  url=urllib.unquote_plus(url)
 
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        mode=int(params["mode"])
-except:
-        pass
-
-
-if mode==None or url==None or len(url)<1:
-        index()
-       
-elif mode==2:
-        playVideo(url)
+if mode=="playVideo":
+    playVideo(url)
+elif mode=="showSortDirection":
+    showSortDirection(url)
+elif mode=="listVideosMagazin" or mode=="listVideosInterview" or mode=="listVideosTV" or mode=="listVideosTrailer":
+    listVideos(url)
 else:
-        listVideos(url)
+    index()

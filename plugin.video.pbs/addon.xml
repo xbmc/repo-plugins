@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.pbs"
        name="PBS"
-       version="2.0.0"
+       version="2.0.1"
        provider-name="stacked">
   <requires>
 	<import addon="xbmc.python" version="2.0"/>
@@ -15,6 +15,7 @@
     <summary>PBS: Discover award-winning programming – right at your fingertips.</summary>
     <description>Watch award-winning national programming and locally produced shows. Catch up on the episodes you may have missed and watch your favorite, full-length shows free and on-demand.</description>
     <platform>all</platform>
-	<disclaimer>Some videos may not play. Please record any videos not playing, save the xbmc debug log, and email stacked.xbmc@gmail.com.</disclaimer>
+	<language>en</language>
+	<disclaimer>Please report any issues with this addon to stacked.xbmc@gmail.com</disclaimer>
   </extension>
 </addon>

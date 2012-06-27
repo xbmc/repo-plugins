@@ -1,3 +1,11 @@
+[B]Version 2.0.1[/B]
+
+- Added more programs including PBS KIDS
+- Fixed errors when playing videos
+- Replaced icons and added fanart
+- Added an option to allow other addons to play PBS videos 
+  plugin://plugin.video.pbs?play=<video_id>
+
 [B]Version 2.0.0[/B]
 
 - Version bump for eden, 1.0.5 to 2.0.0

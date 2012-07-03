@@ -133,6 +133,7 @@ class Main:
         postdata = urllib.urlencode( values )
         cp_search_url = self.cp_url + "search/"
         request = urllib2.Request( cp_search_url, postdata )
+        self.movies = ''
         try:
             response = urllib2.urlopen( request )
             parser=self._cp_search_result_parser()

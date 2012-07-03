@@ -2,17 +2,19 @@
 <addon 
     id="plugin.video.the.trailers"
     name="The Trailers"
-    version="0.1.2"
-    provider-name="Martijn (orginal: nuka1195)">
-    <!-- Code taken from AMT-L and original creator ="nuka1195" -->
+    version="0.9.0"
+    provider-name="Martijn, Sphere">
     <requires>
-        <import addon="xbmc.python"                 version="2.0"/>
-        <import addon="script.module.elementtree"   version="1.2.7"/>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.xbmcswift" version="0.2.0"/>
+        <import addon="script.module.beautifulsoup" version="3.0.8"/>
+        <import addon="script.module.simple.downloader" version="0.9.2"/>
     </requires>
-    <extension point="xbmc.python.pluginsource"     library="addon.py">
+    <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+        <language></language>
         <platform>all</platform>
         <summary lang="en">Watch movie trailers</summary>
         <description lang="en">Watch current movie trailers from[CR]- http://trailers.apple.com[CR]</description>

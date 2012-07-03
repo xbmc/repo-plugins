@@ -1,11 +1,12 @@
 
 import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, xbmcvfs
+from urllib2 import Request, urlopen, URLError, HTTPError
 
 plugin = "ESPN Video"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '02-14-2012'
-__version__ = '1.0.0'
+__date__ = '07-02-2012'
+__version__ = '1.0.1'
 settings = xbmcaddon.Addon(id='plugin.video.espn.video')
 dbg = False
 dbglevel = 3
@@ -23,7 +24,7 @@ common.plugin = plugin + ' ' + __version__
 def build_main_directory():
 	main=[
 		( settings.getLocalizedString( 30000 ), tvshows_thumb, 'menu2949050', '1' ),
-		( settings.getLocalizedString( 30001 ), original_thumb, 'menu3385449', '1' ),
+		#( settings.getLocalizedString( 30001 ), original_thumb, 'menu3385449', '1' ),
 		( settings.getLocalizedString( 30002 ), categories_thumb, 'menu2949049', '1' ),
 		( settings.getLocalizedString( 30005 ), search_thumb, 'search', '2' )
 		]
@@ -79,7 +80,10 @@ def build_video_directory(url, name, type):
 			if presets == '':
 				save_str = newStr
 			else:
-				save_str = presets + ' | ' + newStr
+				if presets.find(newStr + ' |') == -1:
+					save_str = presets + ' | ' + newStr
+				else:
+					save_str = presets
 			settings.setSetting("presets_search", save_str)
 		else:
 			newStr = common.getParameters(url)["searchString"]
@@ -87,8 +91,9 @@ def build_video_directory(url, name, type):
 		nexturl = url
 		html = common.fetchPage({"link": url})["content"]
 		results = common.parseDOM(html, "li", attrs = { "class": "result video-result" })
-		title = common.parseDOM(results, "a", attrs = { "class": "launchVideoOverlay" })
-		img = common.parseDOM(results, "a", attrs = { "class": "list-thumb launchVideoOverlay" })
+		titledata = common.parseDOM(results, "h3")
+		title = common.parseDOM(titledata, "a", attrs = { "rel": "nofollow" })
+		img = common.parseDOM(results, "a", attrs = { "class": "list-thumb" })
 		desc = common.parseDOM(results, "p")
 		thumb = common.parseDOM(img, "img", ret = "src" )
 		pagenum = common.parseDOM(html, "div", attrs = { "class": "page-numbers" })[0]
@@ -179,19 +184,20 @@ def edit_menu(name, url):
 	xbmc.executebuiltin( "Container.Refresh" )
 
 def play_video(url, name, thumb, plot):
-	result = common.fetchPage({"link": "http://vod.espn.go.com/motion/" + url + ".smil?FLVPlaybackVersion=2.1"})
-	if result["status"] != 200:
-		dialog = xbmcgui.Dialog()
-		ok = dialog.ok( plugin , settings.getLocalizedString( 30004 ) + ' (' + str(result["status"]) + ')' )
-		return
 	if plot.find('http://') != -1:
 		html = common.fetchPage({"link": plot})["content"]
 		plot = common.parseDOM(html, "meta", attrs = { "name": "description" }, ret = "content")[0].replace('ESPN Video: ', '')
 	listitem = xbmcgui.ListItem(label = name , iconImage = thumb, thumbnailImage = thumb)
 	listitem.setInfo( type = "Video", infoLabels={ "Title": name, "Studio": plugin, "Plot": plot } )
-	playpath = "mp4:" + url + "_720p30_2896k.mp4"
-	listitem.setProperty("PlayPath", playpath)
-	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play('rtmp://svod.espn.go.com/motion/', listitem)
+	result = common.fetchPage({"link": "http://vod.espn.go.com/motion/" + url + ".smil?FLVPlaybackVersion=2.1"})
+	if result["status"] != 200:
+		dialog = xbmcgui.Dialog()
+		ok = dialog.ok( plugin , settings.getLocalizedString( 30004 ) + ' (' + str(result["status"]) + ')' )
+		return
+	else:
+		playpath = "mp4:" + url + "_" + settings.getSetting("quality") + ".mp4"
+		listitem.setProperty("PlayPath", playpath)
+		xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play('rtmp://svod.espn.go.com/motion/', listitem)
 
 params = common.getParameters(sys.argv[2])
 mode = None

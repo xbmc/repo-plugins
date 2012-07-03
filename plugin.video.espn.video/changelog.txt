@@ -1,3 +1,10 @@
+[B]Version 1.0.1[/B]
+
+- Removed Original Digitals
+- Fixed issue with search results
+- Fixed issue with duplicate history items
+- Added option to choose the video quality
+
 [B]Version 1.0.0[/B]
 
 - Initial commit to Eden add-on system

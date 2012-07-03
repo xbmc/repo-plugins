@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="30300" id="section_general">
-        <setting label="30320" type="lsep" />
-        <setting label="30100" type="enum" id="trailer_quality" default="0" lvalues="30101|30102|30103|30104" />
-        <setting label="30240" type="bool" id="trailer_hd_only" default="false" enable="gt(-1,1)" subsetting="true"/>
-        <setting label="30323" type="lsep" />
-        <setting label="30120" type="enum" id="rating" default="5" lvalues="30400|30401|30402|30403|30404|30405" subsetting="true"/>
-        <setting label="30230" type="enum" id="not_rated_rating" default="2" lvalues="30400|30401|30402|30403|30404" enable="!eq(-1,5)" subsetting="true"/>
-        <setting label="30190" type="image" id="fanart_image" default="" source="auto" visible="false"/>
+    <category label="30012" id="section_general">
+        <setting id="force_viewmode" type="bool" label="30020" default="false"/>
     </category>
-    <category label="30324" id="section_playback">
-        <setting label="30130" type="enum" id="play_mode" default="0" lvalues="30131|30132|30133" />
-        <setting label="30140" type="folder" id="download_path" default="" source="auto" option="writeable" enable="eq(-1,2)" subsetting="true"/>
-        <setting label="30180" type="bool" id="use_title" default="true" enable="eq(-2,2) + !eq(-1,)" subsetting="true"/>
-        <setting label="30210" type="bool" id="use_trailer" default="true" enable="eq(-3,2) + !eq(-2,)" subsetting="true"/>
-        <setting label="30220" type="bool" id="create_nfo" default="true" enable="eq(-4,2) + !eq(-3,)" subsetting="true"/>
-        <setting label="30250" type="bool" id="copy_thumb" default="true" enable="eq(-5,2) + !eq(-4,)" subsetting="true"/>
-        <setting label="30200" type="bool" id="play_existing" default="true" enable="eq(-6,2) + !eq(-5,)" subsetting="true"/>
+    <category label="30016" id="playback">
+        <setting id="ask_trailer" type="bool" label="30011" default="true"/>
+        <setting id="ask_quality" type="bool" label="30010" default="false"/>
+        <setting id="trailer_quality" type="enum" label="30030" enable="!eq(-1,true)" default="1" lvalues="30031|30035|30036|30037"/>
+        <setting type="lsep" />
+        <setting id="playback_mode" type="enum" label="30013" default="0" lvalues="30014|30015"/>
+        <setting id="trailer_download_path" type="folder" label="30050" source="auto" option="writeable" visible="eq(-1,1)" subsetting="true"/>
+        <setting type="lsep" label="30018" subsetting="true" visible="eq(-2,1)"/>
     </category>
-    <!--
-    <category label="30301" id="section_showtimes">
-        <setting label="30321" type="lsep" />
-        <setting label="30150" type="text" id="local" default="90210" />
-        <setting label="30325" type="lsep" />
-        <setting label="30160" type="fileenum" id="scraper" default="Google" mask="/" values="/resources/scrapers/" enable="!eq(-2,)" />
-        <setting label="30170" type="enum" id="day" default="0" lvalues="30171|30172|30173|30174|30175|30176|30177|30178" enable="!eq(-3,)" />
+    <category label="30017" id="download">
+        <setting id="trailer_quality_download" type="enum" label="30040" default="3" lvalues="30031|30035|30036|30037"/>
+        <setting id="trailer_download_path" type="folder" label="30050" source="auto" option="writeable"/>
     </category>
-    -->
     <category label="30266" id="section_couchpotato">
         <setting label="30260" type="bool" id="cp_enable" default="false" />
-        <setting label="30263" type="text" id="cp_server" default="localhost" enable="eq(-1,true)" />
-        <setting label="30264" type="text" id="cp_port" default="5000" enable="eq(-2,true)" />
-        <setting label="30265" type="bool" id="cp_use_https" default="false" enable="eq(-3,true)" />
-        <setting label="30261" type="text" id="cp_user" default="" enable="eq(-4,true)" />
-        <setting label="30262" type="text" id="cp_password" default="" enable="eq(-5,true) + !eq(-1,)" option="hidden"/>
+        <setting label="30263" type="text" id="cp_server" default="localhost" visible="eq(-1,true)"/>
+        <setting label="30264" type="text" id="cp_port" default="5000" visible="eq(-2,true)"/>
+        <setting label="30265" type="bool" id="cp_use_https" default="false" visible="eq(-3,true)"/>
+        <setting label="30261" type="text" id="cp_user" default="" visible="eq(-4,true)"/>
+        <setting label="30262" type="text" id="cp_password" default="" enable="!eq(-1,)" visible="eq(-5,true)" option="hidden"/>
     </category>
 </settings>

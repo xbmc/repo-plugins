@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-    <!-- settings labels -->
-    <string id="30100">Preferred trailer resolution</string>
-    <string id="30101">Standard</string>
-    <string id="30102">480p</string>
-    <string id="30103">720p</string>
-    <string id="30104">1080p</string>
-    <string id="30110">Use large poster</string>
-    <string id="30120">MPAA rating limit for trailers</string>
-    <string id="30130">Play mode</string>
-    <string id="30131">Stream</string>
-    <string id="30132">Download</string>
-    <string id="30133">Download &amp; Save</string>
-    <string id="30140">Save folder</string>
-    <string id="30150">Zip/Post Code or City, State</string>
-    <string id="30160">Scraper</string>
-    <string id="30170">Day to list movies for</string>
-    <string id="30171">Today</string>
-    <string id="30172">Tomorrow</string>
-    <string id="30173">Day 3</string>
-    <string id="30174">Day 4</string>
-    <string id="30175">Day 5</string>
-    <string id="30176">Day 6</string>
-    <string id="30177">Day 7</string>
-    <string id="30178">Day 8</string>
-    <string id="30180">Use trailer title for filename</string>
-    <string id="30190">Fanart image</string>
-    <string id="30200">Always play saved trailers</string>
-    <string id="30210">Add '-trailer' to filename</string>
-    <string id="30220">Create NFO files for saved trailers</string>
-    <string id="30230">MPAA rating for unrated trailers</string>
-    <string id="30240">Only 720p/1080p trailers</string>
-    <string id="30250">Copy thumb with saved trailer</string>
-    
-    <!-- couchpotato integration settings -->
+    <!-- Context menu entries -->
+    <string id="30000">Show Movie Info</string>
+    <string id="30001">Add-on settings</string>
+    <string id="30002">Browse by %s</string>
+    <string id="30003">genre</string>
+    <string id="30004">Download</string>
+    <string id="30006">Show Downloads</string>
+    <string id="30007">Add to CouchPotato</string>
+    <!-- Settings -->
+    <string id="30010">Ask for trailer quality (stream)</string>
+    <string id="30011">Ask for trailer type (Trailer, Teaser, Clip)</string>
+    <string id="30012">General</string>
+    <string id="30013">Playback Mode</string>
+    <string id="30014">Stream</string>
+    <string id="30015">Download & Play</string>
+    <string id="30016">Playback</string>
+    <string id="30017">Download</string>
+    <string id="30018">Download & Play uses stream quality</string>
+    <string id="30020">Force ViewMode to Thumbnail</string>
+    <string id="30030">Trailer quality (stream)</string>
+    <string id="30031">iPod</string>
+    <string id="30035">HD480p</string>
+    <string id="30036">HD720p</string>
+    <string id="30037">HD1080p</string>
+    <string id="30040">Trailer quality (download)</string>
+    <string id="30050">Trailer download path</string>
+    <!-- Message Dialogs -->
+    <string id="30061">Downloading Trailer</string>
+    <!-- Network Error -->
+    <string id="30100">Network Error</string>
+    <string id="30101">Please check your internet connection</string>
+    <string id="30102">and proxy Settings</string>
+    <!-- Select Dialogs -->
+    <string id="30120">Choose Trailer Type</string>
+    <string id="30121">Choose Trailer Quality</string>
+    <!-- OK Dialogs -->
+    <string id="30130">No download path</string>
+    <string id="30131">Please set download path</string>
+    <!-- Couch Potato -->
     <string id="30260">Enable Couch Potato integration</string>
     <string id="30261">User name</string>
     <string id="30262">Password</string>
@@ -41,51 +46,4 @@
     <string id="30264">Port</string>
     <string id="30265">Use HTTPS</string>
     <string id="30266">Couch Potato</string>
-    <string id="30267">Add to Couch Potato</string>
-   
-    <!-- category & label separators -->
-    <string id="30300">General</string>
-    <string id="30301">Showtimes</string>
-    <string id="30302">Skinning</string>
-    
-    <string id="30320">Resolution</string>
-    <string id="30321">Location</string>
-    <string id="30322">Fanart Preferences</string>
-    <string id="30323">Rating Limit</string>
-    <string id="30324">Playback</string>
-    <string id="30325">Scraper</string>
-
-    <!-- mpaa ratings -->
-    <string id="30400">G</string>
-    <string id="30401">PG</string>
-    <string id="30402">PG-13</string>
-    <string id="30403">R</string>
-    <string id="30404">NC-17</string>
-    <string id="30405">No Limit</string>
-
-    <!-- messages -->
-    <string id="30500">Downloading: %s</string>
-    <string id="30501">Saving: %s</string>
-    <string id="30502">To: %s</string>
-    <string id="30503">Copying: %s</string>
-
-    <!-- showtimes -->
-    <string id="30600">No showtimes found!</string>
-    <string id="30601">Finding showtimes, please wait...</string>
-    <string id="30602">Date</string>
-    <string id="30603">Location</string>
-    <string id="30604">ERROR: No theater list found! [I](Possible site changes)[/I]</string>
-
-    <!-- PluginCategory infolabel -->
-    <string id="30800">Standard videos</string>
-    <string id="30801">480p videos</string>
-    <string id="30802">720p videos</string>
-    <string id="30803">1080p videos</string>
-
-    <!-- context menu labels -->
-    <string id="30900">Theater Showtimes</string>
-    <string id="30910">Download &amp; Play Trailer</string>
-    <string id="30920">Play Trailer</string>
-    <string id="30930">Movie Information</string>
-
 </strings>

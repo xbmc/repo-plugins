@@ -1,0 +1,3 @@
+0.0.3 - fix addDirectoryItem for linux
+0.0.2 - Fix nickjr
+0.0.1 - Initial release

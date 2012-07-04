@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- General -->
+  <category label="Account">
+    <setting id="username" type="text" label="Username" default="" />
+  </category>
+</settings>

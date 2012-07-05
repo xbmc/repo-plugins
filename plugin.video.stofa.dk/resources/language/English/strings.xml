@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+    <string id="100">Login</string>
+    <string id="101">Username</string>
+    <string id="102">Password</string>
+
+    <string id="200">Your login is invalid.</string>
+    <string id="201">Verify your settings and try again.</string>
+
+    <string id="210">You have been blocked by Stofa web-tv by Stofa.</string>
+</strings>

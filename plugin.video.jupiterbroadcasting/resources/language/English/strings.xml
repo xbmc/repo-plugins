@@ -46,6 +46,9 @@
   <string id="30016">Unfilter</string>
   <string id="30216">We're living in historic times. Don't waste it on TV. Unplug from the distractions and propaganda, and unfilter your life!</string>
 
+  <string id="30017">Coder Radio</string>
+  <string id="30217">A weekly talk show taking a pragmatic look at the art and business of Software Development and related technologies.</string>
+
   <!-- Settings -->
   <string id="30100">General</string>	
 	<string id="30101">Video Quality</string>

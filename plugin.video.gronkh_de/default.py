@@ -1,21 +1,25 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import xbmcaddon
-import xbmcplugin
-import xbmcgui
-import sys
-import urllib, urllib2
-import re
+import xbmcaddon,xbmcplugin,xbmcgui,sys,urllib,urllib2,re,socket
 
 pluginhandle = int(sys.argv[1])
-
+xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.video.gronkh_de')
 translation = settings.getLocalizedString
+
+forceViewMode=settings.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(settings.getSetting("viewMode"))
 
 def index():
         addDir(translation(30001),"http://gronkh.de/","listVideos","")
         addDir(translation(30002),"http://gronkh.de/lets-play","listGames","")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
         content = getUrl(url)
@@ -25,7 +29,8 @@ def listVideos(url):
           match=re.compile('<a class="thumb" href="(.+?)" title=""><img src="(.+?)"', re.DOTALL).findall(entry)
           url=match[0][0]
           thumb=match[0][1]
-          match=re.compile('<strong>(.+?)</strong>', re.DOTALL).findall(entry)
+          temp=entry[entry.find('<div class="text">'):]
+          match=re.compile('title="(.+?)"', re.DOTALL).findall(temp)
           title=match[0]
           match=re.compile('<h2><a href="(.+?)" title="(.+?)">(.+?)</a></h2>', re.DOTALL).findall(entry)
           title2=match[0][2]
@@ -36,6 +41,8 @@ def listVideos(url):
           if len(match)>0:
             addDir(translation(30003),match[0],"listVideos","")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listGames():
         content = getUrl("http://gronkh.de/lets-play")
@@ -53,19 +60,28 @@ def listGames():
           title=cleanTitle(title)
           addDir(title,url,'listVideos',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
         content = getUrl(url)
         match=re.compile('src="http://www.youtube.com/embed/(.+?)\\?', re.DOTALL).findall(content)
         youtubeID=match[0]
-        fullData = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + youtubeID
+        if xbox==True:
+          fullData = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + youtubeID
+        else:
+          fullData = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + youtubeID
         listitem = xbmcgui.ListItem(path=fullData)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req)
+        if xbox==True:
+          socket.setdefaulttimeout(30)
+          response = urllib2.urlopen(req)
+        else:
+          response = urllib2.urlopen(req,timeout=30)
         link=response.read()
         response.close()
         return link

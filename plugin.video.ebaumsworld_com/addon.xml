@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.ebaumsworld_com" name="eBaumsWorld.com" version="1.0.1" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Watch videos from eBaum's World</summary>
+        <language>en</language>
+        <description lang="en">Watch videos from eBaum's World</description>
+    <platform>all</platform>
+    </extension>
+</addon>

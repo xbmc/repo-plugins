@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Neuste: Alle</string>
+  <string id="30002">Neuste: Top</string>
+  <string id="30003">Beliebt: Woche</string>
+  <string id="30004">Beliebt: Monat</string>
+  <string id="30005">Beliebt: Gesamt</string>
+  <string id="30006">Suche</string>
+  <string id="30007">Nächste Seite</string>
+  <string id="30101">ViewMode erzwingen</string>
+</strings>

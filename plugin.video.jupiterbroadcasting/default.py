@@ -135,6 +135,15 @@ def CATEGORIES():
         'genre': 'Technology'
     }
 
+    # Coder Radio
+    shows[__language__(30017)] = {
+        'feed': 'http://feeds.feedburner.com/coderradiovideo?format=xml',
+        'feed-low': 'http://www.jupiterbroadcasting.com/feeds/coderradioogg.xml?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/CR-rssBadge.jpg',
+        'plot': __language__(30217),
+        'genre': 'Technology'
+    }
+
     # Jupiter Broadcasting Live via the RTMP stream
     addLink(__language__(30010), 'http://videocdn-us.geocdn.scaleengine.net/jblive-iphone/live/jblive.stream/playlist.m3u8', '', 'http://images2.wikia.nocookie.net/__cb20110118004527/jupiterbroadcasting/images/2/24/JupiterBadgeGeneric.jpg', {
         'title': __language__(30010),

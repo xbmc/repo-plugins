@@ -1,3 +1,6 @@
+[B]Version 2.8.0: July 7th, 2012[/B]
+- New show: Coder Radio
+
 [B]Version 2.7.1: June 5th, 2012[/B]
 - New show: Unfilter
 - Switched to the faster HLS live stream

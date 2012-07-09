@@ -15,6 +15,8 @@ Shows
 * Jupiter@Nite
 * The MMOrgue
 * LOTSO
+* Unfiltered
+* Coder Radio
 * Beer Is Tasty
 * Jupiter Files
 

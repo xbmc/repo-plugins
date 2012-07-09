@@ -63,6 +63,15 @@ def CATEGORIES():
         'genre': 'Technology'
     }
 
+    # Unfilter
+    shows[__language__(30016)] = {
+        'feed': 'http://www.jupiterbroadcasting.com/feeds/unfilterHD.xml',
+        'feed-low': 'http://www.jupiterbroadcasting.com/feeds/unfilterMob.xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/itunes-badge.jpg',
+        'plot': __language__(30216),
+        'genre': 'Technology'
+    }
+
     # FauxShow
     shows[__language__(30011)] = {
         'feed': 'http://blip.tv/fauxshow/rss/itunes',
@@ -123,6 +132,15 @@ def CATEGORIES():
         'feed-low': 'http://feeds.feedburner.com/TorkedMobile?format=xml',
         'image': 'http://images3.wikia.nocookie.net/jupiterbroadcasting/images/e/ea/Torked.jpg',
         'plot': __language__(30215),
+        'genre': 'Technology'
+    }
+
+    # Coder Radio
+    shows[__language__(30017)] = {
+        'feed': 'http://feeds.feedburner.com/coderradiovideo?format=xml',
+        'feed-low': 'http://www.jupiterbroadcasting.com/feeds/coderradioogg.xml?format=xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/CR-rssBadge.jpg',
+        'plot': __language__(30217),
         'genre': 'Technology'
     }
 

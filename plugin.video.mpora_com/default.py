@@ -51,6 +51,7 @@ def sortDirection(url):
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
+        addLink(translation(30021),url,'playAll',"")
         content = getUrl(url)
         matchPage=re.compile('<a class="next_page" rel="next" href="(.+?)">', re.DOTALL).findall(content)
         content = content[content.find('<ul class="video-list">'):]
@@ -73,6 +74,31 @@ def listVideos(url):
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
+def playAll(url):
+        content = getUrl(url)
+        matchPage=re.compile('<a class="next_page" rel="next" href="(.+?)">', re.DOTALL).findall(content)
+        content = content[content.find('<ul class="video-list">'):]
+        content = content[:content.find('</ul>')]
+        spl=content.split('<li')
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+        i=1
+        for i in range(1,len(spl),1):
+            entry=spl[i]
+            match=re.compile('<h6>(.+?)</h6>', re.DOTALL).findall(entry)
+            title=match[0]
+            title=cleanTitle(title)
+            match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
+            url="http://mpora.com"+match[0]
+            if xbox==True:
+              url="plugin://video/Mpora.com/?url="+urllib.quote_plus(url)+"&mode=playVideo"
+            else:
+              url="plugin://plugin.video.mpora_com/?url="+urllib.quote_plus(url)+"&mode=playVideo"
+            listitem = xbmcgui.ListItem(title)
+            i=i+1
+            playlist.add(url,listitem)
+        xbmc.executebuiltin('XBMC.Playlist.PlayOffset(-1)')
+
 def search():
         keyboard = xbmc.Keyboard('', translation(30020))
         keyboard.doModal()
@@ -82,15 +108,11 @@ def search():
 
 def playVideo(url):
         content = getUrl(url)
-        match=re.compile('<video controls="controls" height="(.+?)" id="(.+?)" preload="(.+?)" src="(.+?)" width="(.+?)"></video>', re.DOTALL).findall(content)
-        url=match[0][3]
-        if maxVideoQuality=="720p" and url.find("_640"):
-          req = urllib2.Request(url.replace("_640","_1280"))
-          try:
-            urllib2.urlopen(req)
-            url=url.replace("_640","_1280")
-          except:
-            pass
+        matchSD=re.compile('"sd":{"src":"(.+?)"', re.DOTALL).findall(content)
+        matchHD=re.compile('"hd":{"src":"(.+?)"', re.DOTALL).findall(content)
+        url=matchSD[0]
+        if maxVideoQuality=="720p" and len(matchHD)>0:
+          url=matchHD[0]
         listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
@@ -152,6 +174,8 @@ elif mode == 'sortDirection':
     sortDirection(url)
 elif mode == 'playVideo':
     playVideo(url)
+elif mode == 'playAll':
+    playAll(url)
 elif mode == 'search':
     search()
 else:

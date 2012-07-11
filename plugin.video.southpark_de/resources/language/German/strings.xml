@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Staffel</string>
+  <string id="30002">Folge</string>
+  <string id="30003">Zufällig</string>
+  <string id="30004">Folge ist nicht verfuegbar</string>
+  <string id="30101">Sprache</string>
+  <string id="30102">ViewMode erzwingen</string>
+</strings>

@@ -54,11 +54,11 @@ if 'module' in params: # Module chosen, load and execute module
   current_module.run(params)
 else: # No module chosen, list modules
   addDir('Laatste Journaals', 'laatste_journaals')
-  addDir('Journaal Video\'s', 'journaal_videos')
+  #addDir('Journaal Video\'s', 'journaal_videos') #Disabled for now, broken
   addDir('Jeugdjournaal', 'jeugdjournaal')
   addDir('Journaal op 3', 'journaal_op_3')
-  addDir('Nieuws in 60 seconden', 'nieuws_in_60_seconden')
-  addDir('Schaatsen Video\'s', 'schaatsen_videos')
-  addDir('Studio Sport Video\'s', 'studio_sport_videos')
+  #addDir('Nieuws in 60 seconden', 'nieuws_in_60_seconden') #Disabled for now, broken
+  #addDir('Schaatsen Video\'s', 'schaatsen_videos') #Disabled for now, broken
+  #addDir('Studio Sport Video\'s', 'studio_sport_videos') #Disabled for now, broken
   # Add extra modules here, using addDir(name, module)
   xbmcplugin.endOfDirectory(int(sys.argv[1]))

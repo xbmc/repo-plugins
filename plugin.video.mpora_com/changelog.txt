@@ -1,6 +1,9 @@
 1.0.0
 - First Try
 1.0.1
-- Added option for maximum video quality
+- Added setting for maximum video quality
 1.0.2
-- Added option for forcing the view mode
+- Added setting to force view mode
+1.0.3
+- Fixed site changes for video playback
+- Added "Play all videos" mode

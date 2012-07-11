@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Season</string>
+  <string id="30002">Episode</string>
+  <string id="30003">Random</string>
+  <string id="30004">Episode is not available</string>
+  <string id="30101">Language</string>
+  <string id="30102">Force ViewMode</string>
+  <string id="30103">ViewMode</string>
+</strings>

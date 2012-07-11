@@ -10,3 +10,8 @@
 1.0.4 
 - Added sort selection for trailers
 - Various fixes
+1.0.5
+- Added trailer search
+- Removed trailer archiv
+- Added setting to show all trailers
+- Added setting to force view mode

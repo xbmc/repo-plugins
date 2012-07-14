@@ -136,6 +136,9 @@ def __get_json(path, gets, language):
 def __resolve_playlist(playlist_url):
     __log('__resolve_playlist started with playlist_url=%s' % playlist_url)
     response = __urlopen(playlist_url)
+    if not response:
+        __log('__resolve_playlist failed')
+        return playlist_url
     stream_url = None
     if playlist_url.endswith('m3u'):
         __log('__resolve_playlist found .m3u file')

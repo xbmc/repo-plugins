@@ -1,3 +1,6 @@
+import os
+import simplejson as json
+
 from xbmcswift import Plugin, xbmc, xbmcplugin, xbmcgui, clean_dict
 import resources.lib.scraper as scraper
 
@@ -115,7 +118,7 @@ def show_top_stations():
     return plugin.add_items(items)
 
 
-@plugin.route('/stations_by_category/<category_type>')
+@plugin.route('/stations_by_category/<category_type>/')
 def show_station_categories(category_type):
     __log('show_station_categories started with category_type=%s'
           % category_type)
@@ -167,14 +170,8 @@ def search():
 @plugin.route('/my_stations/')
 def show_mystations():
     __log('show_mystations start')
-    my_station_ids = __get_my_stations()
-    language = __get_language()
-    stations = []
-    for station_id in my_station_ids:
-        station = scraper.get_station_by_station_id(language, station_id)
-        if station:
-            stations.append(station)
-    items = __format_stations(stations)
+    my_stations = __get_my_stations()
+    items = __format_stations([s['data'] for s in my_stations])
     __log('show_mystations end')
     return plugin.add_items(items)
 
@@ -183,24 +180,23 @@ def show_mystations():
 def add_station_mystations(station_id):
     __log('add_station_mystations started with station_id=%s' % station_id)
     my_stations = __get_my_stations()
-    if not station_id in my_stations:
-        my_stations.append(station_id)
-        my_stations_string = ','.join(my_stations)
-        plugin.set_setting('my_stations', my_stations_string)
-    __log('add_station_mystations ended with %d items: %s' % (len(my_stations),
-                                                              my_stations))
+    if not station_id in [s['station_id'] for s in my_stations]:
+        language = __get_language()
+        station = scraper.get_station_by_station_id(language, station_id)
+        my_stations.append({'station_id': station_id,
+                            'data': station})
+        __set_my_stations(my_stations)
+    __log('add_station_mystations ended with %d items' % len(my_stations))
 
 
 @plugin.route('/my_stations/del/<station_id>/')
 def del_station_mystations(station_id):
     __log('del_station_mystations started with station_id=%s' % station_id)
     my_stations = __get_my_stations()
-    if station_id in my_stations:
-        my_stations.remove(station_id)
-        my_stations_string = ','.join(my_stations)
-        plugin.set_setting('my_stations', my_stations_string)
-    __log('del_station_mystations ended with %d items: %s' % (len(my_stations),
-                                                              my_stations))
+    if station_id in [s['station_id'] for s in my_stations]:
+        my_stations = [s for s in my_stations if s['station_id'] != station_id]
+        __set_my_stations(my_stations)
+    __log('del_station_mystations ended with %d items' % len(my_stations))
 
 
 @plugin.route('/station/<id>/')
@@ -216,7 +212,8 @@ def get_stream(id):
 def __format_stations(stations):
     __log('__format_stations start')
     items = []
-    my_station_ids = __get_my_stations()
+    my_stations = __get_my_stations()
+    my_station_ids = [s['station_id'] for s in my_stations]
     for station in stations:
         if station['picture1Name']:
             thumbnail = station['pictureBaseURL'] + station['picture1Name']
@@ -254,31 +251,59 @@ def __format_stations(stations):
 
 def __get_my_stations():
     __log('__get_my_stations start')
+    __migrate_my_stations()
     my_stations = []
-    my_stations_string = plugin.get_setting('my_stations')
-    if my_stations_string:
-        my_stations = my_stations_string.split(',')
-    __log('__get_my_stations ended with %d items: %s' % (len(my_stations),
-                                                         my_stations))
+    profile_path = xbmc.translatePath(plugin._plugin.getAddonInfo('profile'))
+    ms_file = os.path.join(profile_path, 'mystations.json')
+    if os.path.isfile(ms_file):
+        my_stations = json.load(open(ms_file, 'r'))
+    __log('__get_my_stations ended with %d items' % len(my_stations))
     return my_stations
+
+
+def __set_my_stations(stations):
+    __log('__set_my_stations start')
+    profile_path = xbmc.translatePath(plugin._plugin.getAddonInfo('profile'))
+    if not os.path.isdir(profile_path):
+        os.makedirs(profile_path)
+    ms_file = os.path.join(profile_path, 'mystations.json')
+    json.dump(stations, open(ms_file, 'w'), indent=1)
 
 
 def __get_language():
     if not plugin.get_setting('not_first_run'):
-        xbmc_language = xbmc.getLanguage()
+        xbmc_language = xbmc.getLanguage().lower()
         __log('__get_language has first run with xbmc_language=%s'
               % xbmc_language)
-        if xbmc_language == 'English':
+        if xbmc_language.startswith('english'):
             plugin.set_setting('language', '0')
-        elif xbmc_language == 'German':
+        elif xbmc_language.startswith('german'):
             plugin.set_setting('language', '1')
-        elif xbmc_language == 'French':
+        elif xbmc_language.startswith('french'):
             plugin.set_setting('language', '2')
         else:
             plugin.open_settings()
         plugin.set_setting('not_first_run', '1')
     lang_id = plugin.get_setting('language')
     return ('english', 'german', 'french')[int(lang_id)]
+
+
+def __migrate_my_stations():
+    if not plugin.get_setting('my_stations'):
+        __log('__migrate_my_stations nothing to migrate')
+        return
+    my_stations = plugin.get_setting('my_stations').split(',')
+    __log('__migrate_my_stations start migration mystations: %s' % my_stations)
+    language = __get_language()
+    stations = []
+    for station_id in my_stations:
+        station = scraper.get_station_by_station_id(language, station_id)
+        if station:
+            stations.append({'station_id': station_id,
+                             'data': station})
+    __set_my_stations(stations)
+    plugin.set_setting('my_stations', '')
+    __log('__migrate_my_stations migration done')
 
 
 def __log(text):

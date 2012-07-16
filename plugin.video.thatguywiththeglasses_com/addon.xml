@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.thatguywiththeglasses_com" name="ThatGuyWithTheGlasses.com" version="1.0.1" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="plugin.video.bliptv" version="0.5.0"/>
+        <import addon="plugin.video.youtube" version="3.0.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">ThatGuyWithTheGlasses and much more...</summary>
+        <language>en</language>
+        <description lang="en">ThatGuyWithTheGlasses and much more...</description>
+    <platform>all</platform>
+    </extension>
+</addon>

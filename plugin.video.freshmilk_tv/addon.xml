@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.freshmilk_tv" name="FreshMilk.tv" version="1.0.0" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.pyamf" version="0.6.1"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">FreshMilk.tv, BerlinIsMusic.tv und FashionDaily.tv</summary>
+        <summary lang="en">FreshMilk.tv, BerlinIsMusic.tv and FashionDaily.tv</summary>
+        <language>de</language>
+        <description lang="de">FreshMilk.tv, BerlinIsMusic.tv und FashionDaily.tv</description>
+        <description lang="en">FreshMilk.tv, BerlinIsMusic.tv and FashionDaily.tv</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+    <platform>all</platform>
+    </extension>
+</addon>

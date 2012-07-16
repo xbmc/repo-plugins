@@ -3,8 +3,16 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64
 
 pluginhandle = int(sys.argv[1])
+xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.audio.einslive_de')
 translation = settings.getLocalizedString
+
+forceViewMode=settings.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(settings.getSetting("viewMode"))
 
 def index():
         addDir("O-Ton-Charts","http://www.einslive.de/comedy/o_ton_charts/",'oTonCharts',"")
@@ -27,6 +35,8 @@ def index():
         addLink("Rocker - "+str(translation(30001)),"http://www.wdr.de/wdrlive/media/1live_rocker.m3u",'playAudio',"")
         addLink("1LIVE - Livestream","http://www.wdr.de/wdrlive/media/einslive.m3u",'playAudio',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def oTonCharts(url):
         content = getUrl(url)
@@ -40,6 +50,8 @@ def oTonCharts(url):
             url=match[0]
             addLink(title,url,'playAudio',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def oTonChartsTop100(url):
         urlMain=url
@@ -47,9 +59,9 @@ def oTonChartsTop100(url):
         spl=content.split('audioLink">')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('</span>\n          (.+?)\n', re.DOTALL).findall(entry)
+            match=re.compile('</span>(.+?)\\]', re.DOTALL).findall(entry)
             title=match[0]
-            title=cleanTitle(title)
+            title=cleanTitle(title)+"]"
             match=re.compile('dslSrc=(.+?)&', re.DOTALL).findall(entry)
             url="rtmp://gffstream.fcod.llnwd.net/a792/e2/mediendb/1live"+match[0]
             addLink(title,url,'playAudio',"")
@@ -60,6 +72,8 @@ def oTonChartsTop100(url):
         elif urlMain.find('41_bis_70.jsp')>=0:
           addDir(translation(30005)+" 71 "+str(translation(30006))+" 100","http://www.einslive.de/comedy/o_ton_charts/top_100/120409_otc_top100_71_bis_100.jsp",'oTonChartsTop100',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listRSS(url):
         content = getUrl(url)
@@ -73,6 +87,8 @@ def listRSS(url):
             url=match[0]
             addLink(title,url,'playAudio',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playAudio(url):
         if url.find(".m3u")>=0:
@@ -90,7 +106,11 @@ def cleanTitle(title):
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req,timeout=30)
+        if xbox==True:
+          socket.setdefaulttimeout(30)
+          response = urllib2.urlopen(req)
+        else:
+          response = urllib2.urlopen(req,timeout=30)
         link=response.read()
         response.close()
         return link

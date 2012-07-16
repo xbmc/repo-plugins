@@ -4,4 +4,6 @@
 - Fixed small bug with wrong labels
 1.0.2
 - Added <disclaimer> tag to addon.xml
-- Added option for forcing the view mode
+- Added setting to force view mode
+1.0.3
+- Added live events

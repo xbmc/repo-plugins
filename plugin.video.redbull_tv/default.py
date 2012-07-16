@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,httplib,socket
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,httplib,socket,time
 from pyamf import remoting
 
 pluginhandle = int(sys.argv[1])
@@ -8,7 +8,7 @@ xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.video.redbull_tv')
 translation = settings.getLocalizedString
 
-maxVideoQuality=settings.getSetting("maxVideoQuality")
+maxBitRate=settings.getSetting("maxBitRate")
 forceViewMode=settings.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
@@ -16,13 +16,79 @@ else:
   forceViewMode=False
 viewMode=str(settings.getSetting("viewMode"))
 
-qual=[1080,720,540,360]
-maxVideoQuality=qual[int(maxVideoQuality)]
+qual=[512000,1024000,2048000,3072000,4096000,5120000]
+maxBitRate=qual[int(maxBitRate)]
 
 def index():
+        addDir(translation(30005),"live",'listEvents',"")
+        addDir(translation(30006),"latest",'listEvents',"")
         addDir(translation(30002),"http://www.redbull.tv/Redbulltv",'latestVideos',"")
         addDir(translation(30003),"http://www.redbull.tv/cs/Satellite?_=1341624385783&pagename=RBWebTV%2FRBTV_P%2FRBWTVShowContainer&orderby=latest&p=%3C%25%3Dics.GetVar(%22p%22)%25%3E&start=1",'listShows',"")
         addDir(translation(30004),"",'search',"")
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def listEvents(url):
+        matchPage=""
+        if url.find("http://")==0:
+          content = getUrl(url)
+          matchPage=re.compile('<a href="/includes/fragments/schedule_list.php\\?pg=(.+?)" class="(.+?)">', re.DOTALL).findall(content)
+          spl=content.split('<td class="status"><span class="prev">Past</span></td>')
+        else:
+          content = getUrl("http://live.redbull.tv/includes/fragments/schedule_list.php?pg=1")
+          if url=="live":
+            if content.find('<span class="live">Live</span>')>0:
+              match=re.compile('<td class="description">(.+?)</td>', re.DOTALL).findall(content)
+              desc=match[0]
+              match=re.compile('<a href="(.+?)">(.+?)<span>(.+?)</span>', re.DOTALL).findall(content)
+              url="http://live.redbull.tv"+match[0][0]
+              title=match[0][1]
+              subTitle=match[0][2]
+              title="NOW LIVE: "+title
+              title=cleanTitle(title)
+              addLink(title,url,'playEvent',"",subTitle+"\n"+desc)
+            spl=content.split('<td class="status"><span>Upcoming</span></td>')
+          elif url=="latest":
+            matchPage=re.compile('<a href="/includes/fragments/schedule_list.php\\?pg=(.+?)" class="(.+?)">', re.DOTALL).findall(content)
+            spl=content.split('<td class="status"><span class="prev">Past</span></td>')
+        for i in range(1,len(spl),1):
+            entry=spl[i]
+            match=re.compile('<span class="localtime-date-only-med">(.+?)</span>', re.DOTALL).findall(entry)
+            date=match[0]
+            spl2=date.split("-")
+            day=spl2[2]
+            month=spl2[1]
+            if len(day)==1:
+              day="0"+day
+            if len(month)==1:
+              month="0"+month
+            date=day+"."+month
+            match=re.compile('<span class="localtime-time-only">(.+?)</span>', re.DOTALL).findall(entry)
+            timeFrom=match[0]
+            spl2=timeFrom.split("-")
+            timeFrom=spl2[3]+":"+spl2[4]
+            if len(timeFrom)==4:
+              timeFrom="0"+timeFrom
+            match=re.compile('<span class="localtime-time-only tz-abbr">(.+?)</span>', re.DOTALL).findall(entry)
+            timeTo=match[0]
+            spl2=timeTo.split("-")
+            timeTo=spl2[3]+":"+spl2[4]
+            if len(timeTo)==4:
+              timeTo="0"+timeTo
+            match=re.compile('<td class="description">(.+?)</td>', re.DOTALL).findall(entry)
+            desc=match[0]
+            match=re.compile('<a href="(.+?)">(.+?)<span>(.+?)</span>', re.DOTALL).findall(entry)
+            url="http://live.redbull.tv"+match[0][0]
+            title=match[0][1]
+            subTitle=match[0][2]
+            title=date+" "+timeFrom+" (GMT) - "+title
+            title=cleanTitle(title)
+            addLink(title,url,'playEvent',"",date+" "+timeFrom+"-"+timeTo+" (GMT): "+subTitle+"\n"+desc)
+        if len(matchPage)>0:
+          for pageNr, title in matchPage:
+            if title=="next":
+              addDir(translation(30001),"http://live.redbull.tv/includes/fragments/schedule_list.php?pg="+pageNr,'listEvents',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -53,7 +119,6 @@ def latestVideos(url):
 def listShows(url):
         urlMain = url
         content = getUrl(url)
-        matchPage=re.compile('<a class="next_page" rel="next" href="(.+?)">', re.DOTALL).findall(content)
         content = content[content.find('<div class="carousel-container"'):]
         spl=content.split('<div data-id=')
         for i in range(1,len(spl),1):
@@ -96,7 +161,7 @@ def listVideos(url):
             title=match[1][1]
             length=match[2][1]
             if length.find("</a>")==-1:
-              length = " ("+length+")"
+              length = " ("+length+" min)"
             else:
               length = ""
             addLink("S"+season+"E"+episode+" - "+title+length,url,'playVideo',"")
@@ -130,6 +195,18 @@ def playVideo(url):
         match=re.compile("episode_video_id = '(.+?)'", re.DOTALL).findall(content)
         playBrightCoveStream(match[0])
 
+def playEvent(url):
+        content = getUrl(url)
+        match=re.compile('<span class="player-id"><span class="(.+?)"></span></span>', re.DOTALL).findall(content)
+        if len(match)>0:
+          playBrightCoveStream(match[0])
+        else:
+          match=re.compile('<span class="ts-utc">(.+?)</span>', re.DOTALL).findall(content)
+          if len(match)>0:
+            xbmc.executebuiltin('XBMC.Notification('+str(translation(30105))+':,'+time.strftime("%d.%m.%y %H:%M",time.localtime(int(match[0]))) +' ('+str(translation(30106))+'),5000)')
+          else:
+            xbmc.executebuiltin('XBMC.Notification(Info:,'+str(translation(30104))+'!,5000)')
+        
 def playBrightCoveStream(bc_videoID):
         bc_playerID = 761157706001
         bc_publisherID = 710858724001
@@ -141,17 +218,16 @@ def playBrightCoveStream(bc_videoID):
         response = conn.getresponse().read()
         response = remoting.decode(response).bodies[0][1].body
         streamUrl = ""
-        maxEncodingRate = 0
-        for item in sorted(response['renditions'], key=lambda item:item['frameHeight'], reverse=False):
-          streamHeight = item['frameHeight']
+        for item in sorted(response['renditions'], key=lambda item:item['encodingRate'], reverse=False):
           encRate = item['encodingRate']
-          if streamHeight <= maxVideoQuality:
-            if encRate > maxEncodingRate:
-              maxEncodingRate = encRate
-              streamUrl = item['defaultURL']
-        rtmp = streamUrl[0:streamUrl.find("&")]
-        playpath = streamUrl[streamUrl.find("&")+1:]
-        listItem = xbmcgui.ListItem(path=rtmp+' playpath='+playpath)
+          if encRate < maxBitRate:
+            streamUrl = item['defaultURL']
+        if streamUrl.find("http://")==0:
+          listItem = xbmcgui.ListItem(path=streamUrl+"?videoId="+bc_videoID+"&lineUpId=&pubId="+str(bc_publisherID)+"&playerId="+str(bc_playerID)+"&affiliateId=&v=&fp=&r=&g=")
+        else:
+          url = streamUrl[0:streamUrl.find("&")]
+          playpath = streamUrl[streamUrl.find("&")+1:]
+          listItem = xbmcgui.ListItem(path=url+' playpath='+playpath)
         xbmcplugin.setResolvedUrl(pluginhandle,True,listItem)
 
 def cleanTitle(title):
@@ -183,11 +259,11 @@ def parameters_string_to_dict(parameters):
                     paramDict[paramSplits[0]] = paramSplits[1]
         return paramDict
 
-def addLink(name,url,mode,iconimage):
+def addLink(name,url,mode,iconimage,desc=""):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setInfo( type="Video", infoLabels={ "Title": name , "Plot": desc } )
         liz.setProperty('IsPlayable', 'true')
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
         return ok
@@ -212,6 +288,10 @@ elif mode == 'latestVideos':
     latestVideos(url)
 elif mode == 'listShows':
     listShows(url)
+elif mode == 'listEvents':
+    listEvents(url)
+elif mode == 'playEvent':
+    playEvent(url)
 elif mode == 'playVideo':
     playVideo(url)
 elif mode == 'search':

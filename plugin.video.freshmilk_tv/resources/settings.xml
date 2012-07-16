@@ -1,0 +1,5 @@
+<settings>
+   <setting id="maxBitRate" type="enum" label="30101" values="500kb|1000kb|2000kb|3000kb|4000kb|5000kb" default="5"/>
+   <setting id="forceViewMode" type="bool" label="30102" default="false"/>
+   <setting id="viewMode" type="number" label="30103" default="500"/>
+</settings>

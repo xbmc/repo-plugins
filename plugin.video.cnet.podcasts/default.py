@@ -1,5 +1,10 @@
-import urllib,urllib2,re,os
-import xbmcplugin,xbmcgui,xbmcaddon
+import urllib
+import urllib2
+import re
+import os
+import xbmcplugin
+import xbmcgui
+import xbmcaddon
 from BeautifulSoup import BeautifulStoneSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.cnet.podcasts')
@@ -10,29 +15,20 @@ icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 
 def CATEGORIES():
         addDir(__language__(30000), 'allcnetvideopodcasts', 'allhdpodcast', 'http://audiopodcasts.cnet.com/', 3, 'allCNETvideo_600x600.jpg')
-        addDir(__language__(30001), 'buzzreport', 'buzzreporthd', '',3,'podcastsHD_buzzreport_600x600.jpg')
-        addDir(__language__(30002), 'news', 'cnetnewshd', '',3,'podcastsHD_news_600x600.jpg')
+        addDir(__language__(30029), 'AlwaysOnsd', 'AlwaysOnhd', '',3,'http://i.d.com.com/i/tron/cnettv/podcast/AlwaysOn_600x600.jpg')
+        addDir(__language__(30004), 'applebyte', 'applebytehd', '',3,'podcastsHD_applebyte_600x600.jpg')
         addDir(__language__(30003), 'cartechvideo', 'cartechvideohd', '',3,'podcastsHD_cartech_600x600.jpg')
         addDir(__language__(30012), 'cartechpodcastvideo', '', 'cartech',3,'cnet_cartech_600.jpg')
-        addDir(__language__(30004), 'applebyte', 'applebytehd', '',3,'podcastsHD_applebyte_600x600.jpg')
+        addDir(__language__(30002), 'news', 'cnetnewshd', '',3,'podcastsHD_news_600x600.jpg')
         addDir(__language__(30005), 'conversations', 'conversationshd', '',3,'podcastsHD_conversations_600x600.jpg')
-        addDir(__language__(30006), 'loaded', 'loadedhd', '', 3, 'podcastsHD_loaded_600x600.jpg')
         addDir(__language__(30007), 'top5', 'top5hd', '',3,'podcastsHD_top5_600x600.jpg')
-        addDir(__language__(30009), 'firstlook', 'firstlookhd', '', 3, 'podcastsHD_firstlook_600x600.jpg')
-        addDir(__language__(30010), 'techreview', 'techreviewhd', '', 3, 'cnetTechReviewHD_600x600.jpg')
-        addDir(__language__(30011), 'howto', 'howtohd', '', 3, 'podcastsHD_howto_600x600.jpg')
-        addDir(__language__(30013), 'prizefight', 'prizefighthd', '', 3, 'podcastsHD_prizefight_600x600.jpg')
-        addDir(__language__(30014), 'tapthatapp', 'tapthatapphd', '', 3, 'tapThatAppHD_600x600.jpg')
-        addDir(__language__(30015), 'roundtablevideo', 'roundtablehqvideo', 'roundtablepodcast',3,'reporters_roundtable_600x600.jpg')
-        addDir(__language__(30018), 'bolvideo', 'bolhqvideo', '', 3, 'bol_600x600.jpg')
-        addDir(__language__(30016), 'the404video', 'the404hqvideo', 'The404', 3, 'the404_600x600.jpg')
-        addDir(__language__(30017), 'pregame', 'pregamehq', '', 3, 'pregame_d_600x600.jpg')
-        addDir(__language__(30018), 'bolvideo', 'bolhqvideo', '', 3, 'bol_600x600.jpg')
-        addDir(__language__(30019), 'crave', 'cravehq', '', 3, 'crave600x600.jpg')
-        addDir(__language__(30020), 'androidatlassd', 'androidatlashq', '', 3, 'androidatlas_600x600_jh.jpg')
-        addDir(__language__(30025), 'rumorhasitsd', 'rumorhasithq', '', 3, 'rumorHasIt_300x300.jpg')
-        addDir(__language__(30026), 'dialedinvideo', '', 'dialedin', 3, 'http://i.i.com.com/cnwk.1d/i/tim/2012/01/23/DialedIn_600x600_600x600.jpg')
+        addDir(__language__(30030), 'CNETUpdateSD', 'CNETUpdateHD', '',3,'http://i.i.com.com/cnwk.1d/i/tim/2012/04/25/CNET_update_iTunes_600x600_300x300.jpg')
         addDir(__language__(30027), 'deviceconquersd', 'deviceconquerhd', '', 3, 'http://www.cnet.com/i/pod/cast/Device&Conquer300x300.jpg')
+        addDir(__language__(30013), 'prizefight', 'prizefighthd', '', 3, 'podcastsHD_prizefight_600x600.jpg')
+        addDir(__language__(30015), 'roundtablevideo', 'roundtablehqvideo', 'roundtablepodcast',3,'reporters_roundtable_600x600.jpg')
+        addDir(__language__(30025), 'rumorhasitsd', 'rumorhasithq', '', 3, 'rumorHasIt_300x300.jpg')
+        addDir(__language__(30014), 'tapthatapp', 'tapthatapphd', '', 3, 'tapThatAppHD_600x600.jpg')
+        addDir(__language__(30016), 'the404video', 'the404hqvideo', 'The404', 3, 'the404_600x600.jpg')
 
 
 def GetInHMS(seconds):
@@ -57,7 +53,7 @@ def INDEX(url,hd_url,audio_url,iconimage):
             link = url
         if not link.startswith('http'):
             link = 'http://feeds.feedburner.com/cnet/'+link+'?format=xml'
-            replace_list = ['rumorhasit', 'deviceconque']
+            replace_list = ['rumorhasit', 'deviceconque', 'alwayson', 'cnetupdate']
             for i in replace_list:
                 if i in link:
                     link = link.replace('cnet/','')

@@ -1,0 +1,5 @@
+<settings>
+   <setting id="maxVideoQuality" type="enum" label="30101" values="500kb|1000kb|2500kb|3000kb" default="3"/>
+   <setting id="forceViewMode" type="bool" label="30102" default="false"/>
+   <setting id="viewMode" type="number" label="30103" default="500"/>
+</settings>

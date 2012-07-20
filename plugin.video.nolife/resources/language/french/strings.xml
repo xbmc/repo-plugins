@@ -1,0 +1,11 @@
+<strings>
+    <string id="32001">Authentification</string>
+    <string id="32011">Nom d'utilisateur</string>
+    <string id="32012">Mot de passe</string>
+    <string id="33001">Apparence</string>
+    <string id="33011">Classement</string>
+    <string id="33012">Afficher toutes les émissions</string>
+    <string id="33013">Nombre d'émissions à afficher</string>
+    <string id="33014">Qualité vidéo</string>
+    <string id="33014">Afficher les émissions déjà vues</string>
+</strings>

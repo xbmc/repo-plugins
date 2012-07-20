@@ -3,15 +3,37 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon
 
 pluginhandle = int(sys.argv[1])
-
+xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.video.giga_de')
 translation = settings.getLocalizedString
 
+forceViewMode=settings.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(settings.getSetting("viewMode"))
+
+maxVideoQuality=settings.getSetting("maxVideoQuality")
+qual=["360p","720p"]
+maxVideoQuality=qual[int(maxVideoQuality)]
+
 def index():
-        addDir("Top Videos","http://www.giga.de/tv/",'listVideosTop',"")
         addDir(translation(30001),"http://www.giga.de/tv/alle-videos/",'listVideos',"")
-        addDir("Giga Live","http://www.giga.de/giga-tv/archiv/",'listVideos',"")
+        addDir("Top Videos","http://www.giga.de/tv/",'listVideosTop',"")
+        addDir("Giga Live","http://www.giga.de/giga-tv/videos/giga-live/",'listVideos',"")
+        addDir("Gameplay","http://www.giga.de/giga-tv/videos/giga-gameplay/",'listVideos',"")
+        addDir("Specials","http://www.giga.de/giga-tv/videos/specials/",'listVideos',"")
+        addDir("Monatsvorschau","http://www.giga.de/giga-tv/giga-monatsvorschau/",'listVideos',"")
+        addDir("Nostalgiga","http://www.giga.de/giga-tv/videos/nostalgiga/",'listVideos',"")
+        addDir("Radio Giga","http://www.giga.de/giga-tv/videos/radio-giga/",'listVideos',"")
+        addDir("Top100 Movies","http://www.giga.de/giga-tv/videos/top-100-filme/",'listVideos',"")
+        addDir("Top100 Games","http://www.giga.de/giga-tv/videos/top-100-games/",'listVideos',"")
+        addDir("Tobis tolle Taktikanalyse","http://www.giga.de/giga-tv/videos/tobis-tolle-taktikanalyse/",'listVideos',"")
+        addDir("Jonas liest","http://www.giga.de/giga-tv/videos/jonas-liest/",'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideosTop(url):
         content = getUrl(url)
@@ -27,8 +49,11 @@ def listVideosTop(url):
             title=cleanTitle(title)
             addLink(title,url,'playVideo',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
+        mainUrl=url
         content = getUrl(url)
         spl=content.split('<div class="meta-posttype">')
         for i in range(1,len(spl),1):
@@ -46,10 +71,21 @@ def listVideos(url):
             thumb=match[0]
           title=cleanTitle(title)
           addLink(title,url,'playVideo',thumb)
-        match=re.compile('<li class="notcurrent   "><a href="(.+?)"', re.DOTALL).findall(content)
-        if len(match)>0:
-          addDir(translation(30002),match[0],'listVideos',"")
+        if mainUrl.find("/page/")>=0:
+          match=re.compile('/page/(.+?)/', re.DOTALL).findall(mainUrl)
+          nr=str(int(match[0])+1)
+          newUrl=mainUrl[:-2]+nr+"/"
+        else:
+          nr="2"
+          newUrl=mainUrl+"page/2/"
+        fh = open("d:\\html.txt", 'w')
+        fh.write(newUrl)
+        fh.close()
+        if content.find("/page/"+nr+"/")>=0:
+            addDir(translation(30002)+" ("+nr+")",newUrl,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
         if url.find("http://")>=0:
@@ -65,7 +101,7 @@ def playVideo(url):
           match1=re.compile('<high width="1280" height="720">(.+?)<filename>(.+?)</filename>', re.DOTALL).findall(content)
           match2=re.compile('<medium width="640" height="360">(.+?)<filename>(.+?)</filename>', re.DOTALL).findall(content)
           url=""
-          if len(match1)==1:
+          if len(match1)==1 and maxVideoQuality=="720p":
             url=match1[0][1]
           elif len(match2)==1:
             url=match2[0][1]
@@ -78,7 +114,11 @@ def cleanTitle(title):
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req,timeout=30)
+        if xbox==True:
+          socket.setdefaulttimeout(30)
+          response = urllib2.urlopen(req)
+        else:
+          response = urllib2.urlopen(req,timeout=30)
         link=response.read()
         response.close()
         return link

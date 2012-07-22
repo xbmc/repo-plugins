@@ -12,5 +12,6 @@
     <description lang="en">Ziggo internet connection required! Watch these Ziggo TV streams: Nederland 1, Nederand 2, Nederland 3, RTL 4, RTL 5, RTL 7, RTL 8, Net 5, SBS 6, Veronica, Disney XD, National Geographic, Eurosport</description>
     <summary lang="nl">Bekijk de Ziggo TV streams m.b.v. een Ziggo internet verbinding</summary>
     <description lang="nl">Een Ziggo internet connectie is noodzakelijk! Bekijk deze Ziggo TV streams: Nederland 1, Nederand 2, Nederland 3, RTL 4, RTL 5, RTL 7, RTL 8, Net 5, SBS 6, Veronica, Disney XD, National Geographic, Eurosport</description>
+    <broken>Broken due to Ziggo changing the streaming protocol</broken>
   </extension>
 </addon>

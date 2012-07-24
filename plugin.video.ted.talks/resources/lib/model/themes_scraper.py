@@ -1,6 +1,6 @@
 from url_constants import URLTED, URLTHEMES
 from util import resizeImage
-from BeautifulSoup import MinimalSoup, SoupStrainer
+from BeautifulSoup import BeautifulSoup, SoupStrainer
 import re
 
 class Themes:
@@ -10,17 +10,19 @@ class Themes:
 
     def get_themes(self):
         html = self.get_HTML(URLTHEMES)
-        themeContainers = SoupStrainer(name='a', attrs={'href':re.compile('/themes/\S.+?.html')})
+        all_themes = SoupStrainer('div', {'class':re.compile('box themes')})
         # Duplicates due to themes scroll/banner at top
         seen_titles = set()
-        for theme in MinimalSoup(html, parseOnlyThese=themeContainers):
-            if theme.img:
-                title = theme['title']
-                if title not in seen_titles:
-                    seen_titles.add(title)
-                    link = URLTED + theme['href']
-                    thumb = theme.img['src']
-                    yield title, link, thumb
+        themes_div = BeautifulSoup(html, parseOnlyThese=all_themes).find('div')
+        for theme_li in themes_div.findAll('li'):
+            theme_a = theme_li.div.a
+            title = theme_a['title']
+            if title not in seen_titles:
+                seen_titles.add(title)
+                link = URLTED + theme_a['href']
+                thumb = theme_a.img['src']
+                count = int(theme_li.p.span.string.strip())
+                yield title, link, thumb, count
 
     def get_talks(self, url):
         url = url + "?page=%s"
@@ -35,7 +37,7 @@ class Themes:
             containers = SoupStrainer('dl', {'class':re.compile('talkMedallion')})
             found_on_this_page = 0
 
-            for talk in MinimalSoup(html, parseOnlyThese=containers):
+            for talk in BeautifulSoup(html, parseOnlyThese=containers):
                 a_tag = talk.dt.a
                 title = a_tag['title'].strip()
                 if title not in found_titles:

@@ -13,6 +13,7 @@ class TestThemesScraper(unittest.TestCase):
         sample_theme = [t for t in e_themes if t[0] == 'A Greener Future?'][0]
         self.assertEqual('http://www.ted.com/themes/a_greener_future.html', sample_theme[1])
         self.assertEqual('http://images.ted.com/images/ted/1616_132x99.jpg', sample_theme[2])
+        self.assertTrue(isinstance(sample_theme[3], int))
 
     def test_get_talks(self):
         e_talks = list(Themes(get_HTML).get_talks('http://www.ted.com/themes/a_greener_future.html'))

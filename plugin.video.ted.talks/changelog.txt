@@ -1,3 +1,6 @@
+[B]Version 3.1.3[/B]
+Fix subtitles (issue#25)
+
 [B]Version 3.1.2[/B]
 Fix themes (issue#22)
 

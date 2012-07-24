@@ -25,13 +25,15 @@ def format_subtitles(subtitles, introDuration):
         result += '%d\n%s --> %s\n%s\n\n' % (idx + 1, format_time(start), format_time(end), sub['content'])
     return result
 
-def get_languages(languages):
+def get_languages(soup):
     '''
-    languages Escaped languages param from flashVars
+    Get languages for a talk, or empty array if we fail.
     '''
-    language_code_re = re.compile('"LanguageCode":"([a-zA-Z-]+)"')
-    matches = filter(None, [language_code_re.search(param) for param in urllib.unquote(languages).split(',')])
-    return [m.group(1) for m in matches]
+    select_tag = soup.find('select', id='languageCode')
+    if not select_tag:
+        return []
+    options = select_tag.findAll('option')
+    return [v for v in [o['value'].encode('ascii') for o in options] if v]
 
 def get_flashvars(soup):
     '''
@@ -39,14 +41,19 @@ def get_flashvars(soup):
     Blow up if we can't find it or if we fail to parse.
     returns dict of values, no guarantees are made about which values are present.
     '''
-    flashvars_re = re.compile('flashVars = {([^}]+)}')
-    flash_script = soup.find('script', text=flashvars_re)
-    if not flash_script:
+    input_tag = soup.find('input', id='embedthisvideo')
+    if not input_tag:
         raise Exception('Could not find flashVars')
-    flashvars = flashvars_re.search(flash_script.string).group(1)
-    flashvar_re = re.compile('^\s*(\w+):"?(.+?)"?,?$')
-    matches = filter(None, [flashvar_re.match(l) for l in flashvars.split('\n')])
-    return dict([(m.group(1).encode('ascii'), m.group(2).encode('ascii')) for m in matches])
+    value = urllib.unquote(input_tag['value'])
+    # Appears to be XML with tags escaped, but can't parse because
+    # has text content which is single-escaped and then won't parse. Weird.
+    flashvar_re = re.compile('^<param name="flashvars" value="(.+)" />$', re.MULTILINE)
+    flashvar_match = flashvar_re.search(value)
+    if not flashvar_match:
+        raise Exception('Could not find flashVars')
+    flashvars = urllib.unquote(flashvar_match.group(1)).encode('ascii').split('&')
+
+    return dict([(v[0], v[1]) for v in [v.split('=') for v in flashvars]])
 
 def get_subtitles(talk_id, language):
     url = 'http://www.ted.com/talks/subtitles/id/%s/lang/%s' % (talk_id, language)
@@ -74,11 +81,6 @@ def get_subtitles_for_talk(talk_soup, accepted_languages, logger):
         logger('Could not display subtitles: %s' % (e), __friendly_message__)
         return None
 
-    if 'languages' not in flashvars:
-        # Some talks really don't.
-        # See https://github.com/moreginger/xbmc-plugin.video.ted.talks/issues/20
-        logger('No languages in flashvars.', 'No subtitles found')
-        return None
     if 'ti' not in flashvars:
         logger('Could not determine talk ID for subtitles.', __friendly_message__)
         return None
@@ -86,7 +88,11 @@ def get_subtitles_for_talk(talk_soup, accepted_languages, logger):
         logger('Could not determine intro duration for subtitles.', __friendly_message__)
         return None
 
-    languages = get_languages(flashvars['languages'])
+    try:
+        languages = get_languages(talk_soup)
+    except Exception, e:
+        logger('Could not display subtitles: %s' % (e), __friendly_message__)
+        return None
     if len(languages) == 0:
         msg = 'No subtitles found'
         logger(msg, msg)

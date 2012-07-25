@@ -1,3 +1,9 @@
+version 0.8 (25/07/2012):
+ * adding more oversea channels
+ * update disclaimer
+ * improvements and bug fixes
+ * code clean up
+
 version 0.7.2 (07/05/2012):
  * show channel's name on "Information screen" during playback
  * the following options are now available under "Add-on settings"

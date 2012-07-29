@@ -5,8 +5,8 @@ from urllib2 import Request, urlopen, URLError, HTTPError
 plugin = "ESPN Video"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '07-02-2012'
-__version__ = '1.0.1'
+__date__ = '07-26-2012'
+__version__ = '1.0.2'
 settings = xbmcaddon.Addon(id='plugin.video.espn.video')
 dbg = False
 dbglevel = 3
@@ -116,8 +116,8 @@ def build_video_directory(url, name, type):
 	item_count = 0
 	for name in title:
 		plot = desc[item_count]
-		data = thumb[item_count].replace('_thumdnail_wbig.jpg','').replace('.jpg','').rsplit('/')[-3:]
-		url = data[0] + '/' + data[1] + '/' + data[2]
+		data = thumb[item_count].replace('_thumdnail_wbig.jpg','').replace('.jpg','').rsplit('/')[-4:]
+		url = data[0] + '/' + data[1] + '/' + data[2] + '/' + data[3]
 		thumbnailImage = thumb[item_count].replace('_thumdnail_wbig','')
 		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultFolder.png", thumbnailImage = thumbnailImage )
 		u = sys.argv[0] + "?mode=3" + "&name=" + urllib.quote_plus( name ) + "&url=" + urllib.quote_plus( url ) + "&thumb=" + urllib.quote_plus( thumbnailImage ) + "&plot=" + urllib.quote_plus( plot )

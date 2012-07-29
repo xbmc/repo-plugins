@@ -8,7 +8,7 @@ import urllib2
 import cookielib
 
 # plugin constants
-version = "2.2.0"
+version = "2.3.0"
 plugin = "Vimeo-" + version
 author = "TheCollective"
 url = "www.xbmc.com"

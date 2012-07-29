@@ -104,8 +104,8 @@ class VimeoPlayer():
             video['request_signature_expires'] = collection["config"]["request"]["timestamp"]
 
             isHD = collection["config"]["video"]["hd"]
-            if isHD == "1":
-                video['isHD'] = isHD
+            if str(isHD) == "1":
+                video['isHD'] = "1"
 
 
         if len(video) == 0:
@@ -141,11 +141,12 @@ class VimeoPlayer():
             self.common.log("getVideoObject failed because of missing video from getVideoInfo")
             return ("", 500)
 
-        quality = self.selectVideoQuality(params) 
+        quality = self.selectVideoQuality(params, video)
         
         if ('apierror' not in video):
             video_url =  self.urls['embed_stream'] % (get("videoid"), video['request_signature'], video['request_signature_expires'], quality)
             result = self.common.fetchPage({"link": video_url, "no-content": "true"})
+            print repr(result)
             video['video_url'] = result["new_url"]
 
             self.common.log("Done")
@@ -154,8 +155,10 @@ class VimeoPlayer():
             self.common.log("Got apierror: " + video['apierror'])
             return (video['apierror'], 303)
 
-    def selectVideoQuality(self, params):
+    def selectVideoQuality(self, params, video):
+        self.common.log("" + repr(params) + " - " + repr(video))
         get = params.get
+        vget = video.get
 
         quality = "sd"
         hd_quality = 0
@@ -164,7 +167,6 @@ class VimeoPlayer():
             hd_quality = int(self.settings.getSetting("hd_videos_download"))
             if (hd_quality == 0):
                 hd_quality = int(self.settings.getSetting("hd_videos"))
-
         else:
             if (not get("quality")):
                 hd_quality = int(self.settings.getSetting("hd_videos"))
@@ -173,11 +175,11 @@ class VimeoPlayer():
                     hd_quality = 2
                 else:
                     hd_quality = 1
-        
-        if (hd_quality > 1 and get("isHD", "0") == "1"):
+
+        if (hd_quality > 1 and vget("isHD", "0") == "1"):
             quality = "hd"
         
-        if hd_quality == 0 and not get("quality") and get("isHD", "0") == "1":
+        if hd_quality == 0 and not get("quality") and vget("isHD", "0") == "1":
             return self.userSelectsVideoQuality(params)
 
         self.common.log("Done")

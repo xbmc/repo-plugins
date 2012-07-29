@@ -4,9 +4,12 @@
 - [Vimeo] Vimeo's implementation of Oauth 1 is time sensetive, meaning that an incorrectly set system clock will prevent the plugin from logging in
 
 [B]Todo[/B]
-- Implement cache service
-- scraper of vimeo's video school if possible
 - More context menu items to take advantage of new core
+
+[B]Version 2.3.0[/B]
+- Playback was broken, and only allowed playback of SD videos, this bug fix might require the user to reset their video quality settings.
+- It is no longer possible to start a download if the download folder isn't set
+- Plugin will no longer attempt a login if username isn't set.
 
 [B]Version 2.2.0[/B]
 - Removed Scraper and replaced it with API hooks

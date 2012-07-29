@@ -200,21 +200,29 @@ class VimeoNavigation():
     def downloadVideo(self, params):
         self.common.log("")
         get = params.get
-        video, status = self.player.getVideoObject(params)
-        if "video_url" in video:
-            params["url"] = video['video_url']
+
+        if not self.settings.getSetting("downloadPath"):
+            self.common.log("Download path missing. Opening settings")
+            self.utils.showMessage(self.language(30600), self.language(30611))
+            self.settings.openSettings()
+
+        download_path = self.settings.getSetting("downloadPath")
+        self.common.log("path: " + repr(download_path))
+        (video, status) = self.player.getVideoObject(params)
+        if "video_url" in video and download_path:
             params["Title"] = video['Title']
-            params["download_path"] = self.settings.getSetting("downloadPath")
+            params["url"] = video['video_url']
+            params["download_path"] = download_path
             filename = "%s-[%s].mp4" % (''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS), video["videoid"])
             if get("async"):
                 self.downloader.download(filename, params, async=False)
             else:
                 self.downloader.download(filename, params)
-
         elif "apierror" in video:
             self.utils.showMessage(self.language(30625), video["apierror"])
         else:
             self.utils.showMessage(self.language(30625), "ERROR")
+
         self.common.log("Done")
 
     def updateContact(self, params={}):

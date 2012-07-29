@@ -1,3 +1,7 @@
+0.1.8
+ - fix white images
+0.1.7
+ - fix websites changes
 0.1.6
  - fix websites changes
  - add xbmc language tag

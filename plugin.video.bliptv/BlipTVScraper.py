@@ -137,7 +137,7 @@ class BlipTVScraper:
         url = self.createUrl(params)
         result = self.common.fetchPage({"link": url})
 
-        lst = self.common.parseDOM(result["content"], "div", attrs={"class": "Browse HoverDropDown"})
+        lst = self.common.parseDOM(result["content"], "div", attrs={"class": "Categories HoverDropDown"})
         ul_lst = self.common.parseDOM(lst, "ul", attrs={"class": "List"})
         names = self.common.parseDOM(ul_lst, "a")
         ids = self.common.parseDOM(ul_lst, "a", ret="href")
@@ -311,18 +311,22 @@ class BlipTVScraper:
 
         url = self.createUrl(params)
         result = self.common.fetchPage({"link": url})
+        result["content"] = result["content"].replace("\t"," ")
         user_id = self.common.parseDOM(result["content"], "div", attrs={"id": "PageInfo"}, ret="data-users-id")
-
         if user_id:
             self.common.log("found user_id " + repr(user_id))
             params["user_id"] = user_id[0]
 
+        self.common.log("" + repr(params))
+
     def scrapeShowVideos(self, params={}):
         self.common.log("")
         get = params.get
+        episodes = []
 
         self.scrapeUserId(params)
-        episodes = []
+        if not get("user_id",""):
+            return episodes
 
         original_page = int(get("page", "0"))
         per_page = (10, 15, 20, 25, 30, 40, 50)[int(self.settings.getSetting("perpage"))]
@@ -353,7 +357,7 @@ class BlipTVScraper:
 
                 id = self.common.parseDOM(episode, "a", attrs={"class": "ArchiveCard"}, ret="href")
                 image = self.common.parseDOM(episode, "img", ret="src")
-                title = self.common.parseDOM(episode, "span", attrs={"class": "Title"}, ret="title")
+                title = self.common.parseDOM(episode, "span", attrs={"class": "Title"})
 
                 item = {}
                 item["videoid"] = id[0][id[0].rfind("-") + 1:]

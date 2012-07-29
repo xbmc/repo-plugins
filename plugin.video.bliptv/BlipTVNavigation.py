@@ -56,7 +56,7 @@ class BlipTVNavigation:
             {'Title':self.language(30013)  ,'path':"/root/search"                          , 'thumbnail':"search"                 , 'store':"searches", 'folder':'true' },
             {'Title':self.language(30014)  ,'path':"/root/search/new"                      , 'thumbnail':"search"                 , 'scraper': 'search'},
             {'Title':self.language(30015)  ,'path':"/root/settings"                        , 'thumbnail':"settings"               , 'action':"settings" }
-                                 )
+            )
 
     #==================================== Main Entry Points===========================================
     def listMenu(self, params={}):
@@ -86,6 +86,29 @@ class BlipTVNavigation:
 
         self.xbmcplugin.endOfDirectory(handle=int(sys.argv[1]), succeeded=True, cacheToDisc=cache)
 
+    def downloadVideo(self, params):
+
+        if not self.settings.getSetting("downloadPath"):
+            self.common.log("Download path missing. Opening settings")
+            self.utils.showMessage(self.language(30600), self.language(30611))
+            self.settings.openSettings()
+
+        video = self.player.getVideoObject(params)
+        download_path = self.settings.getSetting("downloadPath")
+        if "video_url" in video and download_path:
+            params["url"] = video['video_url']
+            params["download_path"] = download_path
+            params[
+            "useragent"] = "curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3"
+            filename = "%s-[%s].mp4" % (
+                ''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS), video["videoid"])
+            self.downloader.download(filename, params)
+        else:
+            if "apierror" in video:
+                self.utils.showMessage(self.language(30625), video["apierror"])
+            else:
+                self.utils.showMessage(self.language(30625), "ERROR")
+
     def executeAction(self, params={}):
         self.common.log("")
         get = params.get
@@ -101,18 +124,7 @@ class BlipTVNavigation:
         if (get("action") == "delete_favorite"):
             self.storage.deleteFromMyFavoriteShows(params)
         if (get("action") == "download"):
-            video = self.player.getVideoObject(params)
-            if "video_url" in video:
-                params["url"] = video['video_url']
-                params["download_path"] = self.settings.getSetting("downloadPath")
-                params["useragent"] = "curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3"
-                filename = "%s-[%s].mp4" % (''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS), video["videoid"])
-                self.downloader.download(filename, params)
-            else:
-                if "apierror" in video:
-                    self.utils.showMessage(self.language(30625), video["apierror"])
-                else:
-                    self.utils.showMessage(self.language(30625), "ERROR")
+            self.downloadVideo(params)
 
         if (get("action") == "play_video"):
             self.player.playVideo(params)

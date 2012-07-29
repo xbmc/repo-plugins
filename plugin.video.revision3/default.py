@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 plugin =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '03-19-2012'
-__version__ = '2.0.3'
+__date__ = '07-27-2012'
+__version__ = '2.0.4'
 settings = xbmcaddon.Addon(id='plugin.video.revision3')
 dbg = False
 dbglevel = 3
@@ -210,7 +210,7 @@ def clean_file(name):
 def get_video(url, name, plot, studio, episode, thumb):
 	#result = common.fetchPage({"link": url})['content']
 	result = open_url(url)
-	video_id = common.parseDOM(result, "meta", attrs = { "property": "og:video" }, ret="content")[0].replace('http://revision3.com/player-v','')
+	video_id = re.compile('player\.loadRevision3Item\(\'video_id\',(.+?)\);').findall(result)[0].replace(' ','')
 	api = open_url('http://revision3.com/api/flash?video_id=' + video_id)
 	videos_api = common.parseDOM(api, "media", ret = "type")
 	videos_api[:] = (value for value in videos_api if value != 'thumbnail')

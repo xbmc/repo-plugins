@@ -571,7 +571,8 @@ class YouTubeScraper():
                 for i in range(0, len(ahref)):
                     item = {}
                     title = acontent[i]
-                    title = title.replace("&amp;", "&")
+                    title = self.common.replaceHTMLCodes(title)
+
                     if title == "All Categories" or title == "Education" or title == "":
                         continue
                     item['Title'] = title

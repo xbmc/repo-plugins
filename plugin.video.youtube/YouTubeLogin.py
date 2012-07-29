@@ -46,39 +46,43 @@ class YouTubeLogin():
     def login(self, params={}):
         get = params.get
         self.common.log("")
+
         ouname = self.settings.getSetting("username")
         opass = self.settings.getSetting("user_password")
         self.settings.openSettings()
         uname = self.settings.getSetting("username")
+
         self.dbg = self.settings.getSetting("debug") == "true"
         result = ""
         status = 500
 
-        if uname != "":
-            refreshed = False
-            if get("new", "false") == "false" and self.settings.getSetting("oauth2_refresh_token") and ouname == uname and opass == self.settings.getSetting("user_password"):
-                self.common.log("refreshing token: " + str(refreshed))
-                refreshed = self.core._oRefreshToken()
+        if uname == "":
+            return ("",200)
 
-            if not refreshed:
-                self.common.log("token not refresh, or new uname or password")
+        refreshed = False
+        if get("new", "false") == "false" and self.settings.getSetting("oauth2_refresh_token") and ouname == uname and opass == self.settings.getSetting("user_password"):
+            self.common.log("refreshing token: " + str(refreshed))
+            refreshed = self.core._oRefreshToken()
 
-                self.settings.setSetting("oauth2_access_token", "")
-                self.settings.setSetting("oauth2_refresh_token", "")
-                self.settings.setSetting("oauth2_expires_at", "")
-                self.settings.setSetting("nick", "")
-                (result, status) = self._httpLogin({"new": "true"})
-
-                if status == 200:
-                    (result, status) = self._apiLogin()
-
-                if status == 200:
-                    self.utils.showErrorMessage(self.language(30031), result, 303)
-                else:
-                    self.utils.showErrorMessage(self.language(30609), result, status)
+        if not refreshed:
+            result, status = self._login()
 
         self.xbmc.executebuiltin("Container.Refresh")
         return (result, status)
+
+    def _login(self):
+        self.common.log("token not refresh, or new uname or password")
+        self.settings.setSetting("oauth2_access_token", "")
+        self.settings.setSetting("oauth2_refresh_token", "")
+        self.settings.setSetting("oauth2_expires_at", "")
+        (result, status) = self._httpLogin({"new": "true"})
+        if status == 200:
+            (result, status) = self._apiLogin()
+        if status == 200:
+            self.utils.showErrorMessage(self.language(30031), result, 303)
+        else:
+            self.utils.showErrorMessage(self.language(30609), result, status)
+        return result, status
 
     def _apiLogin(self, error=0):
         self.common.log("errors: " + str(error))
@@ -176,9 +180,7 @@ class YouTubeLogin():
             fetch_options = False
 
             # Check if we are logged in.
-            nick = self.common.parseDOM(ret["content"], "span", attrs={"class": "masthead-user-username"})
-            if len(nick) == 0:
-                nick = self.common.parseDOM(ret["content"], "p", attrs={"id": "masthead-expanded-menu-email"})
+            nick = self.common.parseDOM(ret["content"], "p", attrs={"class": "masthead-expanded-acct-sw-id2"})
 
             # Check if there are any errors to report
             errors = self.core._findErrors(ret, silent=True)
@@ -187,13 +189,13 @@ class YouTubeLogin():
                     self.common.log("Returning error: " + repr(errors))
                     return (errors, 303)
 
-            if len(nick) > 0:
-                self.common.log("Logged in. Parsing data.")
-                status = self._getLoginInfo(ret["content"])
+            if len(nick) > 0 and nick[0] != "Sign In":
+                self.common.log("Logged in. Parsing data: " + repr(nick))
+                status = self._getLoginInfo(nick)
                 return(ret, status)
 
             # Click login link on youtube.com
-            newurl = self.common.parseDOM(ret["content"], "a", attrs={"class": "end"}, ret="href")
+            newurl = self.common.parseDOM(ret["content"], "button", attrs={"id": "masthead-user-button"}, ret="href")
             if len(newurl) > 0:
                 # Start login procedure
                 if newurl[0] != "#":
@@ -312,37 +314,12 @@ class YouTubeLogin():
             self.common.log("Replace this with a message telling users that they didn't enter a pin")
             return {}
 
-    def _getCookieInfoAsHTML(self):
-        cookie = repr(sys.modules["__main__"].cookiejar)
-        self.common.log("Cookiejar: " + cookie)
-        if cookie == '<_LWPCookieJar.LWPCookieJar[]>':
-            return ""
-
-        cookie = cookie.replace("<_LWPCookieJar.LWPCookieJar[", "")
-        cookie = cookie.replace("), Cookie(version=0,", "></cookie><cookie ")
-        cookie = cookie.replace(")]>", "></cookie>")
-        cookie = cookie.replace("Cookie(version=0,", "<cookie ")
-        cookie = cookie.replace(", ", " ")
-        return cookie
-
-    def _getLoginInfo(self, content):
-        self.common.log("")
-        nick = ""
+    def _getLoginInfo(self, nick):
+        self.common.log(nick)
         status = 303
-        nick = self.common.parseDOM(content, "span", attrs={"class": "masthead-user-username"})
-        if len(nick) == 0:
-            nick = self.common.parseDOM(content, "p", attrs={"id": "masthead-expanded-menu-email"})
-
-        if len(nick) > 0:
-            self.settings.setSetting("nick", nick[0])
-        else:
-            self.common.log("Failed to get usename from youtube")
 
         # Save cookiefile in settings
-
-        login_info = ""
-        SID = ""
-        cookies = self._getCookieInfoAsHTML()
+        cookies = self.common.getCookieInfoAsHTML()
         login_info = self.common.parseDOM(cookies, "cookie", attrs={"name": "LOGIN_INFO"}, ret="value")
         SID = self.common.parseDOM(cookies, "cookie", attrs={"name": "SID", "domain": ".youtube.com"}, ret="value")
 
@@ -350,13 +327,13 @@ class YouTubeLogin():
             self.common.log("LOGIN_INFO: " + repr(login_info))
             self.settings.setSetting("login_info", login_info[0])
         else:
-            self.common.log("Failed to get LOGIN_INFO from youtube")
+            self.common.log("Failed to get LOGIN_INFO from youtube: " + repr(login_info))
 
         if len(SID) == 1:
             self.common.log("SID: " + repr(SID))
             self.settings.setSetting("SID", SID[0])
         else:
-            self.common.log("Failed to get SID from youtube")
+            self.common.log("Failed to get SID from youtube: " + repr(SID))
 
         if len(SID) == 1 and len(login_info) == 1:
             status = 200

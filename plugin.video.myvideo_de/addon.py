@@ -167,7 +167,6 @@ def __add_items(entries):
         else:
             items.append({'label': e['title'],
                           'iconImage': e.get('thumb', 'DefaultVideo.png'),
-                          'thumbnail': e.get('thumb', 'DefaultVideo.png'),
                           'info': {'duration': e.get('length', '0:00'),
                                    'plot': e.get('description', ''),
                                    'studio': e.get('username', ''),

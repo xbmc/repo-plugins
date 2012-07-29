@@ -47,9 +47,15 @@ class VimeoLogin():
     def login(self, params={}):
         self.common.log("")
         self.settings.openSettings()
+
+        uname = self.settings.getSetting("user_email")
+        if uname == "":
+            return
+
         (result, status) = self._login()
-        self.utils.showMessage(self.language(30029), result)
-        self.xbmc.executebuiltin("Container.Refresh")
+        if (status == 200):
+            self.utils.showMessage(self.language(30029), result)
+            self.xbmc.executebuiltin("Container.Refresh")
         self.common.log("Done")
 
     def _login(self):

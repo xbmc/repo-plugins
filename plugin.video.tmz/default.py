@@ -4,8 +4,8 @@ import xbmc, xbmcaddon, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, o
 __plugin__ = 'TMZ'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '05-05-2012'
-__version__ = '2.0.1'
+__date__ = '07-26-2012'
+__version__ = '2.0.2'
 __settings__ = xbmcaddon.Addon( id = 'plugin.video.tmz' )
 
 def open_url(url):
@@ -30,7 +30,7 @@ def build_main_directory():
 		( __settings__.getLocalizedString( 30003 ) )
 		]
 	for name in main:
-		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = "thumbnailImage" )
+		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultFolder.png", thumbnailImage = "thumbnailImage" )
 		u = sys.argv[0] + "?mode=0&name=" + urllib.quote_plus( name )
 		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
@@ -38,7 +38,7 @@ def build_main_directory():
 
 def build_video_directory( name ):
 	data = open_url( 'http://www.tmz.com/videos/' )
-	content = re.compile('carouselGroups\["Most Recent"\]\[\"' + name.upper() + '\"\](.+?)];\n', re.DOTALL).findall( data )
+	content = re.compile('carouselJsons\["Most Recent"\]\[\"' + name.upper() + '\"\](.+?)];\n', re.DOTALL).findall( data )
 	match = re.compile('\n{\n  (.+?)\n}', re.DOTALL).findall( content[0] )
 	for videos in match:
 		epsdata = re.compile('title": "(.+?)",\n  "duration": parseInt\("(.+?)", 10\),\n  "url": "(.+?)",\n  "videoUrl": "(.+?)",\n  "manualThumbnailUrl": "(.+?)",\n  "thumbnailUrl": "(.+?)",\n  "kalturaId": "(.+?)"', re.DOTALL).findall(videos)

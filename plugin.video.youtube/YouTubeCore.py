@@ -182,7 +182,10 @@ class YouTubeCore():
 
             if len(self.common.parseDOM(node, "yt:deprecated")):
                 continue
-            folder['Title'] = self.common.parseDOM(node, "atom:category", ret="label")[0]
+            title = self.common.parseDOM(node, "atom:category", ret="label")[0]
+
+            if title:
+                folder['Title'] = self.common.replaceHTMLCodes(title)
 
             folder['category'] = self.common.parseDOM(node, "atom:category", ret="term")[0]
             folder["icon"] = "explore"
@@ -215,6 +218,8 @@ class YouTubeCore():
             title = self.common.parseDOM(node, "title")[0]
             if title.find(": ") > 0:
                 title = title[title.find(": ") + 2:]
+                title = self.common.replaceHTMLCodes(title)
+                
             folder['Title'] = title
             for tmp in self.common.parseDOM(node, "published"):
                 folder['published'] = tmp
@@ -777,15 +782,19 @@ class YouTubeCore():
             if (state == 'deleted' or state == 'rejected'):
                 result = True
 
-                # Get reason for why we can't playback the file.
+            # Get reason for why we can't playback the file.
             reason = self.common.parseDOM(node, "yt:state", ret="reasonCode")
             value = self.common.parseDOM(node, "yt:state")
+
+            if not reason:
+                return result
+
             if reason[0] == "private":
                 result = True
             elif reason[0] == 'requesterRegion':
                 result = True
             elif reason[0] != 'limitedSyndication':
-                self.common.log("removing video, reason: %s value: %s" % (reason[0], value[0].encode('utf-8')))
+                self.common.log("removing video, reason: %s value: %s" % (reason[0], value[0]))
                 result = True
 
         return result
@@ -807,16 +816,34 @@ class YouTubeCore():
         if show_next:
             self.utils.addNextFolder(ytobjects, params)
 
-    def updateVideoIDCache(self, ytobjects):
+    def setYTCache(self, pre_id, ytobjects):
+        self.common.log(pre_id)
         save_data = {}
         for item in ytobjects:
             if "videoid" in item:
                 save_data[item["videoid"]] = repr(item)
 
-        self.cache.setMulti("videoidcache", save_data)
+        self.cache.setMulti(pre_id, save_data)
+
+    def getYTCache(self, pre_id, ytobjects, key):
+        self.common.log(pre_id)
+        load_data = []
+        for item in ytobjects:
+            if "videoid" in item:
+                load_data.append(item["videoid"])
+
+        res = self.cache.getMulti(pre_id, load_data)
+        if len(res) != len(load_data):
+            self.common.log("Length mismatch:" + repr(res) + " -" + repr(load_data))
+        i = 0
+        for item in ytobjects:
+            if "videoid" in item:
+                if res[i]:
+                    item["Overlay"] = res[i]
+                i += 1 # This can NOT be enumerated because there might be missing videoids
+        return ytobjects
 
     def getVideoEntries(self, xml):
-
         entries = self.common.parseDOM(xml, "entry")
         if not entries:
             entries = self.common.parseDOM(xml, "atom:entry")
@@ -927,15 +954,12 @@ class YouTubeCore():
 
             video['thumbnail'] = self.urls["thumbnail"] % video['videoid']
 
-            overlay = self.storage.retrieveValue("vidstatus-" + video['videoid'])
-            if overlay:
-                video['Overlay'] = int(overlay)
-
             ytobjects.append(video)
 
         self.addNextPageLinkIfNecessary(params, xml, ytobjects)
 
-        self.updateVideoIDCache(ytobjects)
+        self.setYTCache("videoidcache", ytobjects)
+        self.getYTCache("vidstatus-", ytobjects, "Overlay")
 
         self.common.log("Done: " + str(len(ytobjects)),3)
         return ytobjects

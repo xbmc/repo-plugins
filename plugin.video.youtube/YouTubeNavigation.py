@@ -238,8 +238,12 @@ class YouTubeNavigation():
             self.settings.openSettings()
 
         download_path = self.settings.getSetting("download_path")
+        if not download_path:
+            return
+
         self.common.log("path: " + repr(download_path))
         (video, status) = self.player.getVideoObject(params)
+
         if "video_url" in video and download_path:
             params["Title"] = video['Title']
             params["url"] = video['video_url']
@@ -610,14 +614,14 @@ class YouTubeNavigation():
 
         if (item("channel") or item("contact")):
             if (self.settings.getSetting("username") != "" and self.settings.getSetting("oauth2_access_token")):
+                title = self.common.makeAscii(item("channel", ""))
                 if (get("external")):
                     channel = get("channel", "")
                     if not channel:
                         channel = get("contact")
-                    cm.append((self.language(30512) % item("channel"), 'XBMC.RunPlugin(%s?path=%s&channel=%s&action=add_subscription)' % (sys.argv[0], item("path"), channel)))
-                else:
-                    if item("editid") and item("channel"):
-                        cm.append((self.language(30513) % item("channel"), 'XBMC.RunPlugin(%s?path=%s&editid=%s&action=remove_subscription)' % (sys.argv[0], item("path"), item("editid"))))
+                    cm.append((self.language(30512) % title, 'XBMC.RunPlugin(%s?path=%s&channel=%s&action=add_subscription)' % (sys.argv[0], item("path"), channel)))
+                elif item("editid"):
+                    cm.append((self.language(30513) % title, 'XBMC.RunPlugin(%s?path=%s&editid=%s&action=remove_subscription)' % (sys.argv[0], item("path"), item("editid"))))
 
         if (item("contact") and not get("store")):
             if (self.settings.getSetting("username") != "" and self.settings.getSetting("oauth2_access_token")):

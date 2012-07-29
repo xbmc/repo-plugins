@@ -45,6 +45,7 @@
     <setting id="uploads" type="bool" label="30256" default="true" />
     <setting id="downloads" type="bool" label="30257" default="true" />
     <setting id="search" type="bool" label="30258" default="true" />
+    <setting id="history" type="bool" label="30288" default="true" />
   </category>
 
   <!-- Explore YouTube -->

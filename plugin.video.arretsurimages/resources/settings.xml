@@ -8,6 +8,7 @@
     <!--SortMethod-->
     <category label="30080">
         <setting id="sortMethod" type="enum" label="30081" default="0" lvalues="30082|30083|30084" />
+        <setting id="bestOfSortMethod" type="enum" label="30085" default="0" lvalues="30082|30083|30084|30086" />
     </category>
     <!--Download-->
     <category label="30090">

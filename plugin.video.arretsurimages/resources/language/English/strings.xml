@@ -2,6 +2,11 @@
 <strings>
     <string id="30000">Arrêt Sur Images</string>
 
+    <!--MainCategory-->
+    <string id="30010">Programs (subscribers)</string>
+    <string id="30011">BestOf</string>
+    <string id="30012">Settings</string>
+
     <!--NavItems-->
     <string id="30020"> Next</string>
     <string id="30021"> Previous</string>
@@ -29,10 +34,12 @@
     <string id="30071">username</string>
     <string id="30072">password</string>
     <string id="30080">Sort Method</string>
-    <string id="30081">Sort by</string>
+    <string id="30081">Sort programs by</string>
     <string id="30082">date</string>
     <string id="30083">most seen</string>
     <string id="30084">most commented</string>
+    <string id="30085">Sort best of videos by</string>
+    <string id="30086">best rated</string>
     <string id="30090">Downloading</string>
     <string id="30091">Always Ask for Download Location</string>
     <string id="30092">Download Folder</string>

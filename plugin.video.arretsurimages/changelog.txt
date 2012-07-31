@@ -1,7 +1,13 @@
+[B]Version 2.2.0[/B]
+
+- Rewritten almost from scratch using xbmcswift, requests and SimpleDownloader
+- Added BestOf category (no subscription required).
+Thanks to Francois Rose for the suggestion!
+
 [B]Version 2.1.7[/B]
 
 - Use xvid video (file to download) as main streaming video
-  (thanks to Francois Rose for the suggestion!)
+(thanks to Francois Rose for the suggestion!)
 - "Display all parts" setting enabled again (set to false by default)
 - Fixed "@ux sources" detection
 

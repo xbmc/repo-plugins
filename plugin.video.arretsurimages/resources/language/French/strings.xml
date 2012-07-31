@@ -2,6 +2,11 @@
 <strings>
     <string id="30000">Arrêt Sur Images</string>
 
+    <!--MainCategory-->
+    <string id="30010">Emissions (abonnés)</string>
+    <string id="30011">BestOf</string>
+    <string id="30012">Paramètres</string>
+
     <!--NavItems-->
     <string id="30020"> Suivant</string>
     <string id="30021"> Précédent</string>
@@ -29,10 +34,12 @@
     <string id="30071">utilisateur</string>
     <string id="30072">mot de passe</string>
     <string id="30080">Affichage</string>
-    <string id="30081">Afficher</string>
+    <string id="30081">Afficher les émissions</string>
     <string id="30082">par date de publication</string>
     <string id="30083">les plus lues</string>
     <string id="30084">les plus discutées</string>
+    <string id="30085">Afficher les vidéos du best of</string>
+    <string id="30086">les mieux classées</string>
     <string id="30090">Téléchargement</string>
     <string id="30091">Toujours demander le dossier de téléchargement</string>
     <string id="30092">Dossier de téléchargement</string>

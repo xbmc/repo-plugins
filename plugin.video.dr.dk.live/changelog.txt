@@ -1,3 +1,9 @@
+[B]Version 2.1.7 - 2012-08-01[/B]
+- Fixed Kanal Sport, TV/Midt-Vest, TV2/Øst
+- Added retries and error handling to resolve TV2/Regions stream host
+- Increased timeout to Danish IP check
+  If you get the error incorrectly just disable the check and it will be skipped completely.
+
 [B]Version 2.1.6 - 2012-04-25[/B]
 - Updated URLs for some TV2/Regions (by request from Fynske Medier)
 

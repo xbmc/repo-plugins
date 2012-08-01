@@ -4,12 +4,10 @@
     <string id="30100">Alle</string>
     <string id="30101">Am meisten gesehen</string>
     <string id="30102">Am besten bewertet</string>
-    <string id="30103">PC</string>
-    <string id="30104">PlayStation 2</string>
+    <string id="30103">Video-Fazit</string>
+    <string id="30104">PC</string>
     <string id="30105">PlayStation 3</string>
-    <string id="30106">Wii</string>
-    <string id="30107">Xbox 360</string>
-    <string id="30108">Nintendo DS</string>
-    <string id="30109">PlayStation Portable</string>
-    <string id="30110">Video-Fazit</string>
+    <string id="30106">Xbox 360</string>
+    <string id="30107">Wii</string>
+    <string id="30108">Handhelds</string>
 </strings>

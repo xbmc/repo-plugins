@@ -3,14 +3,10 @@ import re
 from BeautifulSoup import BeautifulSoup
 from urllib import urlencode
 
-IPAD_USERAGENT = (u'Mozilla/5.0 (iPad; U; CPU OS OS 3_2 like '
-                  u'Mac OS X; en-us) AppleWebKit/531.21.10 (K'
-                  u'HTML, like Gecko) Version/4.0.4 Mobile/7B'
-                  u'367 Safari/531.21.10')
+USER_AGENT = 'XBMC addon plugin.video.4players'
 
-CATEGORIES = ('Alle', 'TopViews', 'TopRated', 'PC-CDROM',
-              'PlayStation2', 'PlayStation3', 'Wii', '360', 'NDS',
-              'PSP', 'Video-Fazit')
+CATEGORIES = ('Alle', 'TopRated', 'TopViews', 'Video-Fazit', 'PC-CDROM',
+              'PlayStation3', '360', 'Wii', 'Handhelds')
 
 URL_PREFIX = 'http://www.4players.de/4players.php/tvplayer/'
 
@@ -22,7 +18,7 @@ def getVideos(filter=None, page=1):
             'singlefilter': filter,
             'funcname': 'aktuellevideos',
             'numcols': 5,
-            'numshown': 50,
+            'numshown': 20,
             'refreshskims': 1}
     url = 'http://www.4players.de/paginatecontent.php'
     html = __getAjaxContent(url, post)
@@ -36,7 +32,6 @@ def getVideos(filter=None, page=1):
     video_frames = section.findAll('li')
     videos = list()
     for frame in video_frames:
-        print frame
         link = frame.find('a', {'class': re.compile('tv-weiter-link')})
         # title
         title = link['title']
@@ -103,7 +98,7 @@ def __getAjaxContent(url, data_dict=None):
     else:
         post_data = ' '
     req = urllib2.Request(url, post_data)
-    req.add_header('User-Agent', IPAD_USERAGENT)
+    req.add_header('User-Agent', USER_AGENT)
     req.add_header('Accept', 'text/javascript, */*')
     req.add_header('Content-Type',
                    'application/x-www-form-urlencoded; charset=UTF-8')
@@ -115,10 +110,8 @@ def __getAjaxContent(url, data_dict=None):
 def getVideoFile(page_url):
     video_page = URL_PREFIX + page_url + '.html'
     html = __getAjaxContent(video_page)
-    #tree = BeautifulSoup(html)
-    #link = tree.find('script', text=re.compile('video src'))
     r = '<video src="(?P<url>[^"]+)"'
-    m = re.search(r,html)
+    m = re.search(r, html)
     url = m.groupdict()['url']
     return url
 

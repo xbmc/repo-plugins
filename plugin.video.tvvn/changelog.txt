@@ -1,6 +1,9 @@
-version 0.8 (25/07/2012):
- * adding more oversea channels
- * update disclaimer
+version 0.8.1 (27/07/2012):
+ * adds LifeTV and VpopTV (thanks to bolex17)
+
+version 0.8.0 (25/07/2012):
+ * adds more oversea channels
+ * updates disclaimer
  * improvements and bug fixes
  * code clean up
 
@@ -19,7 +22,7 @@ version 0.7.1 (28/04/2012):
  * VTV1-3 channels will now use streams from tv24.vn
  * clean up channels descriptions
 
-version 0.7 (26/04/2012):
+version 0.7.0 (26/04/2012):
  * users can now show/hide channels descriptions via "Add-on Settings"
  * more channels (ANTV and 11 local channels)
  * change play_video method to work around for tv24.vn
@@ -34,15 +37,15 @@ version 0.5.1 (05/04/2012):
  * move to official repository
  * new logo
 
-version 0.5 (25/03/2012):
+version 0.5.0 (25/03/2012):
  * improve & add artwork
  * add more channels from tv24.com.vn
  * repository created
 
-version 0.3 (02/12/2011):
+version 0.3.0 (02/12/2011):
  * new artwork
  * source fix-up
  * new method of getting streams
 
-version 0.1 (12/11/2010):
+version 0.1.0 (12/11/2010):
  * initial release

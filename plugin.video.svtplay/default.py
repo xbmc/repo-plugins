@@ -37,7 +37,7 @@ BASE_URL_TITLE = "http://xml.svtplay.se/v1/title/list/"
 BASE_URL_VIDEO = "http://xml.svtplay.se/v1/video/list/"
 BASE_URL_SEARCH_TITLE = "http://xml.svtplay.se/v1/title/search/"
 BASE_URL_SEARCH_VIDEO = "http://xml.svtplay.se/v1/video/search/"
-SWF_PLAYER_URL = "http://svtplay.se/flash/svtplayer-2012.1.swf"
+SWF_PLAYER_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2012.28.swf"
 
 END_URL_SEARCH_VIDEO = "expression=full"
 END_URL_SEARCH_CLIP = "expression=sample"

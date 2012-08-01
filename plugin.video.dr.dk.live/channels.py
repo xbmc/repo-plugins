@@ -80,14 +80,21 @@ class Channel(object):
 class TV2RChannel(Channel):
     def get_url(self, quality, idx = 0):
         url = super(TV2RChannel, self).get_url(quality, idx)
-        return url.replace('<HOST>', self.get_host_ip())
+        if url is not None:
+            return url.replace('<HOST>', self.get_host_ip())
+        else:
+            return None
 
     def get_host_ip(self):
-        u = urllib2.urlopen('http://livestream.fynskemedier.dk/loadbalancer')
-        s = u.read()
-        u.close()
-
-        return s[9:]
+        for attempt in range(0, 2):
+            try:
+                u = urllib2.urlopen('http://livestream.fynskemedier.dk/loadbalancer')
+                s = u.read()
+                u.close()
+                return s[9:]
+            except Exception:
+                pass # probably timeout; retry
+        return 'unable.to.get.host.from.loadbalancer'
 
 # http://dr.dk/nu/embed/live?height=467&width=830
 # DR1
@@ -139,7 +146,7 @@ TV2RChannel(102, CATEGORY_TV2_REG).add_urls(
 )
 # TV2 Midtvest
 Channel(103, CATEGORY_TV2_REG).add_urls(
-    high   = 'http://ms1.tvmidtvest.dk/live')
+    high   = 'rtmp://live.tvmidtvest.dk/tvmv/live live=1')
 # TV2 Nord
 TV2RChannel(105, CATEGORY_TV2_REG).add_urls(
     best   = 'rtmp://<HOST>:1935/live/_definst_/tv2nord-plus_2000 live=1',
@@ -148,7 +155,7 @@ TV2RChannel(105, CATEGORY_TV2_REG).add_urls(
 )
 # TV2 East
 Channel(106, CATEGORY_TV2_REG).add_urls(
-    best   = 'rtmp://tv2regup1.webhotel.net/videostreaming/ playpath=tv2east live=1'
+    best   = 'http://tv2east.live-s.cdn.bitgravity.com/cdn-live-c1/_definst_/tv2east/live/feed01/playlist.m3u8'
 )
 # TV2 OJ
 TV2RChannel(108, CATEGORY_TV2_REG).add_urls(
@@ -171,5 +178,10 @@ Channel(202, CATEGORY_MISC).add_urls(
 )
 # kanalsport.dk
 Channel(203, CATEGORY_MISC).add_urls(
-    best   = 'http://lswb-de-08.servers.octoshape.net:1935/live/kanalsport/500k/playlist.m3u8'
+    best   = 'http://lswb-de-08.servers.octoshape.net:1935/live/kanalsport/1000k/playlist.m3u8'
 )
+
+# tv aarhus
+#Channel(204, CATEGORY_MISC).add_urls(
+#    best   = 'http://flash.digicast.dk/clients_live/digicast/live/playlist.m3u8'
+#)

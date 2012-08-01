@@ -109,17 +109,19 @@ class DanishLiveTV(object):
                     break
 
     def imInDenmark(self):
+        if ADDON.getSetting('warn.if.not.in.denmark') != 'true':
+            return # Don't bother checking
+
         try:
-            u = urllib2.urlopen('http://www.dr.dk/nu/api/estoyendinamarca.json')
+            u = urllib2.urlopen('http://www.dr.dk/nu/api/estoyendinamarca.json', timeout = 30)
             response = u.read()
             u.close()
-
             imInDenmark = 'true' == response
         except Exception:
             # If an error occurred assume we are not in Denmark
             imInDenmark = False
 
-        if not imInDenmark and ADDON.getSetting('warn.if.not.in.denmark') == 'true':
+        if not imInDenmark:
             heading = ADDON.getLocalizedString(99970)
             line1 = ADDON.getLocalizedString(99971)
             line2 = ADDON.getLocalizedString(99972)

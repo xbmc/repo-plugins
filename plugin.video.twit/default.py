@@ -6,54 +6,133 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
+try:
+    import json
+except:
+    import simplejson as json
+try:
+    import StorageServer
+except:
+    import storageserverdummy as StorageServer
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.twit')
 __language__ = __settings__.getLocalizedString
 playback = __settings__.getSetting('playback')
 home = __settings__.getAddonInfo('path')
-fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
+fanart = xbmc.translatePath( os.path.join(home, 'fanart.jpg'))
+icon = xbmc.translatePath( os.path.join(home, 'icon.png'))
+cache = StorageServer.StorageServer("twit", 24)
+
+thumbs = {
+          'All About Android' : 'http://leo.am/podcasts/coverart/aaa600video.jpg',
+          'Before You Buy' : 'http://leoville.tv/podcasts/coverart/byb600video.jpg',
+          'FLOSS Weekly' : 'http://leoville.tv/podcasts/coverart/floss600video.jpg',
+          'Frame Rate' : 'http://leoville.tv/podcasts/coverart/fr600video.jpg',
+          'Ham Nation' : 'http://leoville.tv/podcasts/coverart/hn144video.jpg',
+          'Home Theater Geeks' : 'http://leoville.tv/podcasts/coverart/htg144video.jpg',
+          'iFive for the iPhone' : 'http://feeds.twit.tv/podcasts/coverart/ifive600video.jpg',
+          'iPad Today' : 'http://leoville.tv/podcasts/coverart/ipad600video.jpg',
+          'Know How...' : 'http://feeds.twit.tv/podcasts/coverart/kh600video.jpg',
+          'MacBreak Weekly' : 'http://leoville.tv/podcasts/coverart/mbw144video.jpg',
+          'NSFW' : 'http://leoville.tv/podcasts/coverart/nsfw144video.jpg',
+          'Radio Leo' : 'http://twit.tv/files/imagecache/coverart-small/coverart/aaa600.jpg',
+          'Security Now' : 'http://leoville.tv/podcasts/coverart/sn600video.jpg',
+          'Tech News Today' : 'http://leoville.tv/podcasts/coverart/tnt144video.jpg',
+          'The Giz Wiz' : 'http://static.mediafly.com/publisher/images/72acf86f350b40c5b5fd132dcacc78be/icon-600x600.png',
+          'The Social Hour' : 'http://leoville.tv/podcasts/coverart/tsh600video.jpg',
+          'The Tech Guy' : 'http://leoville.tv/podcasts/coverart/ttg144video.jpg',
+          'This Week In Computer Hardware' : 'http://static.mediafly.com/publisher/images/f76d60fdd2ea4822adbc50d2027839ce/icon-600x600.png',
+          'This Week in Enterprise Tech' : 'http://feeds.twit.tv/podcasts/coverart/twiet600video.jpg',
+          'This Week in Google' : 'http://leoville.tv/podcasts/coverart/twig600video.jpg',
+          'this WEEK in LAW' : 'http://static.mediafly.com/publisher/images/b2911bcc34174461ba970d2e38507340/icon-600x600.png',
+          'this WEEK in TECH' : 'http://leoville.tv/podcasts/coverart/twit144video.jpg',
+          'Triangulation' : 'http://static.mediafly.com/publisher/images/c60ef74e0a3545e490d7cefbc369d168/icon-600x600.png',
+          'TWiT Live Specials' : 'http://leoville.tv/podcasts/coverart/specials144video.jpg',
+          'Windows Weekly' : 'http://leoville.tv/podcasts/coverart/ww600video.jpg',
+          }
 
 
-def categories():
-        addDir(__language__(30038),'none',7,xbmc.translatePath( os.path.join( home, 'icon.png' ) ))
-        addDir(__language__(30000),'addLiveLinks',3,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
-        addDir(__language__(30001),'http://twit.tv/show/this-week-in-tech',1,'http://static.mediafly.com/publisher/images/ba85558acd844c7384921f9f96989a37/icon-600x600.png')
-        addDir(__language__(30002),'http://twit.tv/show/tech-news-today',1,'http://static.mediafly.com/publisher/images/c21d95482417436ead61b0890a8fc282/icon-600x600.png')
-        addDir(__language__(30003),'http://twit.tv/show/fourcast',1,'http://static.mediafly.com/publisher/images/f7f40bcf20c742cfb55cbccb56c2c68c/icon-600x600.png')
-        addDir(__language__(30004),'http://twit.tv/show/ipad-today',1,'http://static.mediafly.com/publisher/images/201bc64beb6b4956971650fd1462a704/icon-600x600.png')
-        addDir(__language__(30005),'http://twit.tv/show/all-about-android',1,'http://static.mediafly.com/publisher/images/7874016b2dd3490fa1e8b606dff4d2fa/icon-600x600.png')
-        # addDir(__language__(30006),'http://twit.tv/show/tech-history-today',1,'http://static.mediafly.com/publisher/images/88fcc18ed4234a2e9f96a13f74afe7b9/icon-600x600.png')
-        addDir(__language__(30007),'http://twit.tv/show/this-week-in-google',1,'http://static.mediafly.com/publisher/images/8248233e64fc4c68b722be0ec75d637d/icon-600x600.png')
-        addDir(__language__(30008),'http://twit.tv/show/windows-weekly',1,'http://static.mediafly.com/publisher/images/ad659facf4cb4fe795b595d9b4275daf/icon-600x600.png')
-        addDir(__language__(30009),'http://twit.tv/show/macbreak-weekly',1,'http://static.mediafly.com/publisher/images/a24b7b336fb14a2ba3f1e31223f622ac/icon-600x600.png')
-        addDir(__language__(30010),'http://twit.tv/show/triangulation',1,'http://static.mediafly.com/publisher/images/c60ef74e0a3545e490d7cefbc369d168/icon-600x600.png')
-        addDir(__language__(30011),'http://twit.tv/show/twit-photo',1,'http://static.mediafly.com/publisher/images/ca045f623e7d48509c8f4ff9a1ab7259/icon-600x600.png')
-        addDir(__language__(30012),'http://twit.tv/show/the-tech-guy',1,'http://static.mediafly.com/publisher/images/d51aaf03dcfe4502a49e885d4201c278/icon-600x600.png')
-        addDir(__language__(30013),'http://twit.tv/show/security-now',1,'http://static.mediafly.com/publisher/images/1ac666ad22d940239754fe953207fb42/icon-600x600.png')
-        addDir(__language__(30014),'http://twit.tv/show/the-social-hour',1,'http://twit.tv/files/imagecache/coverart/coverart/tsh600.jpg')
-        addDir(__language__(30015),'http://twit.tv/show/weekly-daily-giz-wiz',1,'http://static.mediafly.com/publisher/images/72acf86f350b40c5b5fd132dcacc78be/icon-600x600.png')
-        addDir(__language__(30016),'http://twit.tv/show/nsfw',1,'http://static.mediafly.com/publisher/images/54f4a471ae6c418d89647968a2ea9c91/icon-600x600.png')
-        addDir(__language__(30017),'http://twit.tv/show/dr-kikis-science-hour',1,'http://static.mediafly.com/publisher/images/c9ed18a67b134406a4d5fd357db8b0c9/icon-600x600.png')
-        addDir(__language__(30018),'http://twit.tv/show/floss-weekly',1,'http://static.mediafly.com/publisher/images/06cecab60c784f9d9866f5dcb73227c3/icon-600x600.png')
-        addDir(__language__(30019),'http://twit.tv/show/this-week-in-law',1,'http://static.mediafly.com/publisher/images/b2911bcc34174461ba970d2e38507340/icon-600x600.png')
-        addDir(__language__(30020),'http://twit.tv/show/twit-live-specials',1,'http://static.mediafly.com/publisher/images/eed22d09b9524474ac49bc022b556b2b/icon-600x600.png')
-        addDir(__language__(30021),'http://twit.tv/show/home-theater-geeks',1,'http://static.mediafly.com/publisher/images/441a40308195459b8e24f341dc68885c/icon-600x600.png')
-        addDir(__language__(30022),'http://twit.tv/show/frame-rate',1,'http://static.mediafly.com/publisher/images/5a081f72180e41939e549ec7d12be24d/icon-600x600.png')
-        addDir(__language__(30023),'http://twit.tv/show/this-week-in-computer-hardware',1,'http://static.mediafly.com/publisher/images/f76d60fdd2ea4822adbc50d2027839ce/icon-600x600.png')
-        addDir(__language__(30024),'http://twit.tv/show/ham-nation',1,'http://static.mediafly.com/publisher/images/7a948708b1a3462bab8721556dd26704/icon-600x600.png')
-        addDir(__language__(30025),'http://twit.tv/show/futures-in-biotech',1,'http://leoville.tv/podcasts/coverart/fib600audio.jpg')
-        addDir(__language__(30026),'http://twit.tv/show/this-week-in-radio-tech',1,'http://static.mediafly.com/publisher/images/ab7b2412afa84674971e4c93665d0e06/icon-600x600.png')
-        addDir(__language__(30036),'http://twit.tv/show/you-buy',1,'http://static.mediafly.com/publisher/images/dee7de4f87034d4d917ed446df3616e4/icon-600x600.png')
-        addDir(__language__(30037),'http://twit.tv/show/game-on',1,'http://static.mediafly.com/publisher/images/3f551d9b6ef9476fb76f92ccd4b37826/icon-600x600.png')
-        addDir(__language__(30042),'http://twit.tv/show/treys-variety-hour',1,'http://leoville.tv/podcasts/coverart/tvh300video.jpg')
+def make_request(url):
+        try:
+            headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
+                       'Referer' : 'http://twit.tv'}
+            req = urllib2.Request(url,None,headers)
+            response = urllib2.urlopen(req)
+            data = response.read()
+            response.close()
+            return data
+        except urllib2.URLError, e:
+            print 'We failed to open "%s".' % url
+            if hasattr(e, 'reason'):
+                print 'We failed to reach a server.'
+                print 'Reason: ', e.reason
+            if hasattr(e, 'code'):
+                print 'We failed with error code - %s.' % e.code
+
+
+def get_thumb(url):
+        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        items = soup('div', attrs={'class' : "dropdown"})[1]('option')
+        for i in items:
+            if i.string == 'RSS':
+                feed_url = i['value']
+                break
+        try:
+            thumb = re.compile('<itunes:image href="(.+?)"/>').findall(make_request(feed_url))[0].split(' ')[0].strip()
+        except:
+            try:
+                thumb = soup('span', attrs={'class' : "field-content"})[0].img['src']
+            except:
+                thumb = icon
+        return thumb
+
+
+def show_check():
+        try:
+            show_list = json.loads(cache.get("show_list"))
+        except:
+            show_list = []
+        url = 'http://twit.tv/shows'
+        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        shows = soup.findAll('div', attrs={'class' : 'item-list'})[2]('li')
+        for i in shows:
+            name = str(i('a')[-1].string)
+            if not name in show_list:
+                cache_shows(shows)
+                break
+        return(json.loads(cache.get("show_list")))
+
+
+def cache_shows(shows):
+        show_list = []
+        for i in shows:
+            name = str(i('a')[-1].string)
+            url = ('http://twit.tv/show/'+name.replace("'",'').replace('.','').replace(' ','-').lower()
+                   .replace('-for-the','').replace('the-giz-wiz','weekly-daily-giz-wiz'))
+            try:
+                thumb = thumbs[name]
+            except:
+                print '--- NO Thumb in Thumbs ---'
+                try:
+                    thumb = get_thumb(url)
+                except:
+                    thumb = icon
+                    print '--- get_thumb FAILED: %s - %s ---' %(name, url)
+            show_list.append((name, url, thumb))
+        cache.set("show_list", json.dumps(show_list))
+
+
+def get_shows():
+        addDir(__language__(30038),'none',7,xbmc.translatePath(os.path.join(home, 'icon.png')))
+        addDir(__language__(30000),'addLiveLinks',3,xbmc.translatePath(os.path.join(home, 'resources', 'live.png')))
+        shows = cache.cacheFunction(show_check)
+        for i in shows:
+            if i[0] == 'Radio Leo': continue
+            addDir(i[0], i[1], 1, i[2])
 
 
 def index(url,iconimage):
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'}
-        req = urllib2.Request(url,None,headers)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         items = soup.findAll('div', attrs={'id' : "primary"})[0]('div', attrs={'class' : 'field-content'})
         for i in items:
             url = i.a['href']
@@ -76,12 +155,8 @@ def index(url,iconimage):
 
 
 def indexTwitFeed():
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'}
         url ='http://twit.tv/node/feed'
-        req = urllib2.Request(url,None,headers)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+        soup = BeautifulStoneSoup(make_request(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
         for i in soup('item'):
             try:
                 title = i.title.string
@@ -139,11 +214,7 @@ def indexTwitFeed():
 
 
 def getVideo(url):
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'}
-        req = urllib2.Request(url,None,headers)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         url_list = ['no_url', 'no_url', 'no_url', 'no_url']
         for i in soup('span', attrs={'class' : "download"}):
             name = i.a['class']
@@ -204,16 +275,10 @@ def getUstream(url):
                 response = urllib2.urlopen(req)
                 swfUrl = response.geturl()
                 return swfUrl
-
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'}
-        data = None
-        req = urllib2.Request(url,data,headers)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        match = re.compile('.*(rtmp://.+?)\x00.*').findall(link)
+        data = make_request(url)
+        match = re.compile('.*(rtmp://.+?)\x00.*').findall(data)
         rtmp = match[0]
-        sName = re.compile('.*streamName\W\W\W(.+?)[/]*\x00.*').findall(link)
+        sName = re.compile('.*streamName\W\W\W(.+?)[/]*\x00.*').findall(data)
         playpath = ' playpath='+sName[0]
         swf = ' swfUrl='+getSwf()
         pageUrl = ' pageUrl=http://live.twit.tv'
@@ -222,13 +287,7 @@ def getUstream(url):
 
 
 def getJtv():
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
-                   'Referer' : 'http://www.justin.tv/twit'}
-        req = urllib2.Request('http://usher.justin.tv/find/twit.xml?type=live',None,headers)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        soup = BeautifulSoup(link)
+        soup = BeautifulSoup(make_request('http://usher.justin.tv/find/twit.xml?type=live'))
         token = ' jtv='+soup.token.string.replace('\\','\\5c').replace(' ','\\20').replace('"','\\22')
         rtmp = soup.connect.string+'/'+soup.play.string
         Pageurl = ' Pageurl=http://www.justin.tv/twit'
@@ -313,7 +372,7 @@ print "Name: "+str(name)
 
 if mode==None or url==None or len(url)<1:
     print ""
-    categories()
+    get_shows()
 
 elif mode==1:
     print ""

@@ -2,3 +2,5 @@
 - First Try
 1.0.1
 - Fixed small bug
+1.0.2
+- Added some shows

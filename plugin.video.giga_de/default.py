@@ -78,9 +78,6 @@ def listVideos(url):
         else:
           nr="2"
           newUrl=mainUrl+"page/2/"
-        fh = open("d:\\html.txt", 'w')
-        fh.write(newUrl)
-        fh.close()
         if content.find("/page/"+nr+"/")>=0:
             addDir(translation(30002)+" ("+nr+")",newUrl,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)

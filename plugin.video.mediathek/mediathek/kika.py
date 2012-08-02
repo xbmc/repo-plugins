@@ -82,7 +82,7 @@ class KIKAPlus(Mediathek):
         )
       )
     
-    self.regex_videoPages=re.compile("<a style=\".*?\" href=\"(\?id=.*?)\" alt=\"Video abspielen\">\s*?<span.*?>\s*?<img src=\"../(mediathek/previewpic/.*?\.jpg)\".*?title=\"<label>(.+?)</label><br />(.*?)<br /><br />Sendedatum: (\d{2}.\d{2}.\d{4})<br />");
+    self.regex_videoPages=re.compile("<a style=\".*?\" href=\"(\?id=.*?)\"( alt=\"Video abspielen\")*>\s*?<span.*?>\s*?<img.*? src=\"../(mediathek/previewpic/.*?\.jpg)\".*?title=\"<label>(.+?)</label><br />(.*?)<br /><br />Sendedatum: (\d{2}.\d{2}.\d{4})<br />");
     
 
     self.regex_videoLink=re.compile("rtmp://.*?\.mp4");
@@ -102,11 +102,11 @@ class KIKAPlus(Mediathek):
     print len(videoPages);
     for match in videoPages:
       videoLink=match.group(1);
-      imageLink=match.group(2).replace(" ","%20");
+      imageLink=match.group(3).replace(" ","%20");
       
-      title = unicode(match.group(3),"UTF-8");
-      subTitle = unicode(match.group(4),"UTF-8");
-      dateString = unicode(match.group(5),"UTF-8");
+      title = unicode(match.group(4),"UTF-8");
+      subTitle = unicode(match.group(5),"UTF-8");
+      dateString = unicode(match.group(6),"UTF-8");
       
       date = time.strptime(dateString,"%d.%m.%Y");
       

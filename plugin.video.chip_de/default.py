@@ -1,14 +1,21 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,string,xbmcaddon
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,string,xbmcaddon,socket
 
 pluginhandle = int(sys.argv[1])
-
+xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.video.chip_de')
 translation = settings.getLocalizedString
 
+forceViewMode=settings.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(settings.getSetting("viewMode"))
+
 def index():
-        addDir(string.upper(translation(30001)),"http://www.chip.de/Video_17367032.html?tid1=30593&tid2=0&of=0",1,"")
+        addDir(string.upper(translation(30001)),"http://www.chip.de/Video_17367032.html?tid1=30593&tid2=0&of=0","listVideos","")
         content=getUrl("http://www.chip.de/Video_17367032.html")
         content=content[content.find('<table width="468" border="0" cellspacing="0" cellpadding="0">'):]
         content=content[:content.find('</table><br><br>')]
@@ -21,8 +28,10 @@ def index():
             thumb=match[0]
             match=re.compile('name="(.+?)"', re.DOTALL).findall(entry)
             title=match[0]
-            addDir(string.upper(title),url+"&of=0",1,thumb)
+            addDir(string.upper(title),url+"&of=0","listVideos",thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
         content = getUrl(url)
@@ -31,20 +40,22 @@ def listVideos(url):
             entry=spl[i]
             match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
             url=match[0]
-            match=re.compile('title="(.+?)"', re.DOTALL).findall(entry)
+            match=re.compile('<span class="bl-b">(.+?)</span>', re.DOTALL).findall(entry)
             title=match[0]
             match=re.compile('<img src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
-            addLink(title,url,2,"http://www.chip.de"+thumb)
+            addLink(title,url,"playVideo","http://www.chip.de"+thumb)
         match=re.compile('</a>\n        \n    \n\n    \n\n\n\n    <a href="(.+?)"><span> &gt; </span></a>', re.DOTALL).findall(entry)
         if len(match)>0:
             url=match[0]
-            addDir("Next Page",url,1,"")
+            addDir(translation(30002),url,"listVideos","")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
         content = getUrl(url)
-        match=re.compile('<a id="player" href="(.+?)"></a>', re.DOTALL).findall(content)
+        match=re.compile('data-mp4="(.+?)"', re.DOTALL).findall(content)
         url=match[0]
         listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -52,7 +63,11 @@ def playVideo(url):
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req,timeout=30)
+        if xbox==True:
+          socket.setdefaulttimeout(30)
+          response = urllib2.urlopen(req)
+        else:
+          response = urllib2.urlopen(req,timeout=30)
         link=response.read()
         response.close()
         return link
@@ -86,23 +101,14 @@ def addDir(name,url,mode,iconimage):
         return ok
          
 params=parameters_string_to_dict(sys.argv[2])
-url=None
-mode=None
+mode=params.get('mode')
+url=params.get('url')
+if type(url)==type(str()):
+  url=urllib.unquote_plus(url)
 
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        mode=int(params["mode"])
-except:
-        pass
-
-
-if mode==None or url==None or len(url)<1:
-        index()
-       
-elif mode==1:
-        listVideos(url)
-elif mode==2:
-        playVideo(url)
+if mode == 'listVideos':
+    listVideos(url)
+elif mode == 'playVideo':
+    playVideo(url)
+else:
+    index()

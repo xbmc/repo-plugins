@@ -37,6 +37,8 @@ def index():
               pageType="1611"
             url="http://www.cbsnews.com/"+pageType+"-"+noteId+"_162-1.html?nomesh"
             addDir(title,url+"#"+nextUrl,'listLatest',"")
+        addDir("CBS Sunday Morning","http://www.cbsnews.com/2076-3445_162-0.html",'listVideos',"")
+        addDir("Up To The Minute","http://www.cbsnews.com/2076-3455_162-0.html",'listVideos',"")
         addDir(translation(30002),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:

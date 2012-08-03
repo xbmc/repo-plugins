@@ -170,7 +170,7 @@ class DrNuApi(object):
 
     def _http_request(self, path):
         try:
-            u = urllib2.urlopen(API_URL % path)
+            u = urllib2.urlopen(API_URL % path, timeout = 30)
             content = u.read()
             u.close()
         except Exception as ex:

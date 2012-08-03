@@ -376,11 +376,26 @@ class NuAddon(object):
             xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
     def parseDate(self, dateString):
-        try:
-            m = re.search('/Date\(([0-9]+).*?\)/', dateString)
-            microseconds = long(m.group(1))
-            return datetime.datetime.fromtimestamp(microseconds / 1000)
-        except ValueError:
+        if 'Date(' in dateString:
+            try:
+                m = re.search('/Date\(([0-9]+).*?\)/', dateString)
+                microseconds = long(m.group(1))
+                return datetime.datetime.fromtimestamp(microseconds / 1000)
+            except ValueError:
+                return None
+        elif dateString is not None:
+            try:
+                m = re.search('(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)', dateString)
+                year = int(m.group(1))
+                month = int(m.group(2))
+                day = int(m.group(3))
+                hours = int(m.group(4))
+                minutes = int(m.group(5))
+                seconds = int(m.group(6))
+                return datetime.datetime(year, month, day, hours, minutes, seconds)
+            except ValueError:
+                return None
+        else:
             return None
 
     def parseTime(self, timeString):

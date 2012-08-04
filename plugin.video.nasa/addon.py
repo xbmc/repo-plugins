@@ -158,12 +158,13 @@ def search():
     keyboard.doModal()
     if keyboard.isConfirmed() and keyboard.getText():
         query = keyboard.getText()
-        log('search gots a string: "%s"' % query)
-        Scraper = videos_scraper.Scraper()
-        videos, count = Scraper.search_videos(query)
-        items = __format_videos(videos)
-        log('search end')
-        return plugin.add_items(items)
+        if len(query) > 3:
+            log('search gots a string: "%s"' % query)
+            Scraper = videos_scraper.Scraper()
+            videos, count = Scraper.search_videos(query)
+            items = __format_videos(videos)
+            log('search end')
+            return plugin.add_items(items)
 
 
 def __format_videos(videos):

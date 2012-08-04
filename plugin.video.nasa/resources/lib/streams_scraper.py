@@ -42,15 +42,14 @@ def __generate_rtmp(id):
     response = urlopen(amf_url).read()
     tc_url = re.search('rtmp://(.+?)\x00', response).group(1)
     page_url = re.search('url\W\W\W(.+?)\x00', response).group(1)
+    playpath = re.search('streamName(?:\W+)([^\x00]+)', response).group(1)
     if tc_url.count('/') > 1:
         log('__generate_rtmp guessing rtmp without verification')
-        playpath = 'streams/live'
         app = tc_url.split('/', 1)[1]
-        url = ('rtmp://%s playpath=%s pageUrl=%s app=%s live=1'
+        url = ('rtmp://%s playpath=%s swfUrl=http://www.ustream.tv/flash/viewer.swf pageUrl=%s app=%s live=1'
                % (tc_url, playpath, page_url, app))
     else:
         log('__generate_rtmp guessing rtmp with verification')
-        playpath = re.search('streamName\W\W\W(.+?)\x00', response).group(1)
         swf_url = urlopen('http://www.ustream.tv/flash/viewer.swf').geturl()
         url = ('rtmp://%s playpath=%s swfUrl=%s pageUrl=%s swfVfy=1 live=1'
                % (tc_url, playpath, swf_url, page_url))

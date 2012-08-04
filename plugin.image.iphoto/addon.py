@@ -40,13 +40,21 @@ ICONS_PATH = os.path.join(RESOURCE_PATH, "icons", ICONS_THEME)
 LIB_PATH = os.path.join(RESOURCE_PATH, "lib")
 sys.path.append(LIB_PATH)
 
+# we do special things for these skins
+SKIN_DIR = xbmc.getSkinDir()
+if (SKIN_DIR == "skin.confluence"):
+    SKIN_NAME = "confluence"
+elif (SKIN_DIR == "skin.metropolis"):
+    SKIN_NAME = "metropolis"
+else:
+    SKIN_NAME = ""
+view_mode = 0
+
 from resources.lib.iphoto_parser import *
 db_file = xbmc.translatePath(os.path.join(addon.getAddonInfo("Profile"), "iphoto.db"))
 db = None
 
 apple_epoch = 978307200
-
-view_mode = 0
 
 # ignore empty albums if configured to do so
 album_ign_empty = addon.getSetting('album_ignore_empty')
@@ -98,7 +106,10 @@ def textview(file):
     except:
 	print traceback.print_exc()
     else:
-	window.getControl(CONTROL_LABEL).setLabel("%s - %s" % (heading, __plugin__))
+	try:
+	    window.getControl(CONTROL_LABEL).setLabel("%s - %s" % (heading, __plugin__))
+	except:
+	    pass
 	window.getControl(CONTROL_TEXTBOX).setText(text)
 
 def md5sum(filename):
@@ -114,19 +125,23 @@ def md5sum(filename):
 def render_media(media):
     global view_mode
 
-    # default view in Confluence
-    vm = addon.getSetting('view_mode')
-    if (vm == ""):
-	vm = "0"
-	addon.setSetting('view_mode', vm)
-    vm = int(vm)
-    if (vm == 1):
-	view_mode = 510
-    elif (vm == 2):
-	view_mode = 514
-    else:
-	view_mode = vm
-
+    # default view for select skins
+    if (SKIN_NAME != ""):
+	vm = addon.getSetting(SKIN_NAME + '_view_default')
+	if (vm == ""):
+	    addon.setSetting(SKIN_NAME + '_view_default', "0")
+	else:
+	    vm = int(vm)
+	    if (SKIN_NAME == "confluence"):
+		if (vm == 1):
+		    view_mode = 514	    # Pic Thumbs
+		elif (vm == 2):
+		    view_mode = 510	    # Image Wrap
+	    if (SKIN_NAME == "metropolis"):
+		if (vm == 1):
+		    view_mode = 500	    # Picture Grid
+		elif (vm == 2):
+		    view_mode = 59	    # Galary Fanart
     sort_date = False
     n = 0
     for (caption, mediapath, thumbpath, originalpath, rating, mediadate, mediasize) in media:
@@ -202,12 +217,14 @@ def list_albums(params):
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
 
-    # default view in Confluence
-    vm = addon.getSetting('confluence_view_albums')
-    if (vm == ""):
-	vm = "0"
-    view_mode = int(vm)
-    addon.setSetting('confluence_view_albums', "0")
+    # default view for select skins
+    if (SKIN_NAME != ""):
+	if (addon.getSetting(SKIN_NAME + '_view_albums') == ""):
+	    if (SKIN_NAME == "confluence"):
+		view_mode = 51			# Big List
+	    elif (SKIN_NAME == "metropolis"):
+		view_mode = 0
+	    addon.setSetting(SKIN_NAME + '_view_albums', str(view_mode))
 
     return n
 
@@ -262,12 +279,14 @@ def list_events(params):
     if (sort_date == True):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
 
-    # default view in Confluence
-    vm = addon.getSetting('confluence_view_events')
-    if (vm == ""):
-	vm = "0"
-    view_mode = int(vm)
-    addon.setSetting('confluence_view_events', "0")
+    # default view for select skins
+    if (SKIN_NAME != ""):
+	if (addon.getSetting(SKIN_NAME + '_view_events') == ""):
+	    if (SKIN_NAME == "confluence"):
+		view_mode = 0
+	    elif (SKIN_NAME == "metropolis"):
+		view_mode = 0
+	    addon.setSetting(SKIN_NAME + '_view_events', str(view_mode))
 
     return n
 
@@ -311,12 +330,14 @@ def list_faces(params):
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
 
-    # default view in Confluence
-    vm = addon.getSetting('confluence_view_faces')
-    if (vm == ""):
-	vm = "0"
-    view_mode = int(vm)
-    addon.setSetting('confluence_view_faces', "0")
+    # default view for select skins
+    if (SKIN_NAME != ""):
+	if (addon.getSetting(SKIN_NAME + '_view_faces') == ""):
+	    if (SKIN_NAME == "confluence"):
+		view_mode = 500			# Thumbnails
+	    elif (SKIN_NAME == "metropolis"):
+		view_mode = 59			# Gallary Fanart
+	    addon.setSetting(SKIN_NAME + '_view_faces', str(view_mode))
 
     return n
 
@@ -389,12 +410,14 @@ def list_places(params):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
 
-    # default view in Confluence
-    vm = addon.getSetting('confluence_view_places')
-    if (vm == ""):
-	vm = "0"
-    view_mode = int(vm)
-    addon.setSetting('confluence_view_places', "0")
+    # default view for select skins
+    if (SKIN_NAME != ""):
+	if (addon.getSetting(SKIN_NAME + '_view_places') == ""):
+	    if (SKIN_NAME == "confluence"):
+		view_mode = 500			# Thumbnails
+	    elif (SKIN_NAME == "metropolis"):
+		view_mode = 59			# Gallary Fanart
+	    addon.setSetting(SKIN_NAME + '_view_places', str(view_mode))
 
     return n
 
@@ -445,12 +468,14 @@ def list_keywords(params):
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
 
-    # default view in Confluence
-    vm = addon.getSetting('confluence_view_keywords')
-    if (vm == ""):
-	vm = "0"
-    view_mode = int(vm)
-    addon.setSetting('confluence_view_keywords', "0")
+    # default view for select skins
+    if (SKIN_NAME != ""):
+	if (addon.getSetting(SKIN_NAME + '_view_keywords') == ""):
+	    if (SKIN_NAME == "confluence"):
+		view_mode = 51			# Big List
+	    elif (SKIN_NAME == "metropolis"):
+		view_mode = 0
+	    addon.setSetting(SKIN_NAME + '_view_keywords', str(view_mode))
 
     return n
 
@@ -486,12 +511,14 @@ def list_ratings(params):
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
     plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
 
-    # default view in Confluence
-    vm = addon.getSetting('confluence_view_ratings')
-    if (vm == ""):
-	vm = "0"
-    view_mode = int(vm)
-    addon.setSetting('confluence_view_ratings', "0")
+    # default view for select skins
+    if (SKIN_NAME != ""):
+	if (addon.getSetting(SKIN_NAME + '_view_ratings') == ""):
+	    if (SKIN_NAME == "confluence"):
+		view_mode = 51			# Big List
+	    elif (SKIN_NAME == "metropolis"):
+		view_mode = 0
+	    addon.setSetting(SKIN_NAME + '_view_ratings', str(view_mode))
 
     return n
 
@@ -845,7 +872,7 @@ if (__name__ == "__main__"):
 
 	if (items):
 	    plugin.endOfDirectory(int(sys.argv[1]), True)
-	    if (view_mode > 0 and xbmc.getSkinDir() == "skin.confluence"):
+	    if (view_mode):
 		xbmc.sleep(300)
 		xbmc.executebuiltin("Container.SetViewMode(%d)" % (view_mode))
 

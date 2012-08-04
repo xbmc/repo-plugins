@@ -13,6 +13,7 @@
     <string id="30222">Esto puede relentizar un poco la importación de la biblioteca.</string>
     <string id="30223">También tandrás que volver a importar la biblioteca.</string>
 
+
     <!-- Category strings -->
     <string id="30100">Eventos</string>
     <string id="30101">Álbumes</string>
@@ -22,6 +23,7 @@
     <string id="30105">Caras</string>
     <string id="30106">Lugares</string>
 
+
     <!-- Plugin settings strings -->
     <string id="30000">Ruta a AlbumData.xml</string>
     <string id="30001">Ignorar Álbumes publicados (MobileMe)</string>
@@ -30,10 +32,6 @@
     <string id="30004">Ocultar Actualizar biblioteca en el menú principal</string>
     <string id="30005">Ignorar Álbumes vacios</string>
     <string id="30006">Ignorar Palabras Clave</string>
-    <string id="30007">Modo de Vista en Confluence</string>
-    <string id="30008">Por defecto</string>
-    <string id="30009">Image Wrap</string>
-    <string id="30010">Pic Thumbs</string>
     <string id="30015">Habilitar Soporte para Lugares</string>
     <string id="30016">Mostrar Lugares como</string>
     <string id="30017">Direcciones</string>
@@ -44,8 +42,21 @@
     <string id="30025">Descargar mapa desde Google</string>
     <string id="30026">Mostrar mapa como fanart</string>
 
-    <!-- Plugin settings categories strings -->
-    <string id="30050">General</string>
-    <string id="30051">Vista</string>
-    <string id="30059">Avanzado</string>
+
+    <!-- Plugin settings Skin strings -->
+    <string id="30060">Modo de Vista en Confluence</string>
+    <string id="30061">Por defecto</string>
+    <string id="30062">Pic Thumbs</string>
+    <string id="30063">Image Wrap</string>
+
+    <string id="30066">Modo de Vista en Metropolis</string>
+    <string id="30067">Por defecto</string>
+    <string id="30068">Picture Grid</string>
+    <string id="30069">Galary Fanart</string>
+
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">General</string>
+    <string id="30091">Vista</string>
+    <string id="30099">Avanzado</string>
 </strings>

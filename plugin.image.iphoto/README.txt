@@ -37,11 +37,12 @@ time of your AlbumData.xml with its current database and update the database
 automatically on start.  This is disabled by default, but is probably what
 you want after testing the plugin.
 
-You can also choose the view style for albums if you're using the Confluence
-skin.  You may set this to "Image Wrap," "Pic Thumbs," or "Default".  If you
-choose "Default," it will preserve whatever view mode you have chosen in XBMC
-for each album; otherwise, it will force the view style to the one selected
-here.
+You can also choose the view style for albums if you're using select skins.
+In Confluence, you may set this to "Image Wrap" or "Pic Thumbs".
+In Metropolis, you may set this to "Galary Fanart" or "Picture Grid".
+In all skins, if you choose "Default," it will preserve whatever view mode you
+have chosen in XBMC for each album; otherwise, it will force the view style to
+the one selected here.
 
 
 Referenced and Managed Libraries
@@ -101,7 +102,7 @@ Known Issues
   See http://trac.xbmc.org/ticket/11826
 * Sorting by Date sorts on the file date, not the EXIF date.
   See http://trac.xbmc.org/ticket/10519
-* Can only set default view mode in Confluence skin
+* Can only set default view mode in select skins
   See http://trac.xbmc.org/ticket/9952
 
 
@@ -116,6 +117,22 @@ When asking for help or reporting a potential bug, please be prepared to post
 your debug log from XBMC and, if you don't mind, your AlbumData.xml from your
 iPhoto library.  Remember to remove any private information from both files
 before posting them.
+
+For iOS platforms (AppleTV2, iPhone, iPad, etc) please read:
+
+  http://forum.xbmc.org/showthread.php?t=92480
+
+For Mac:
+
+  http://forum.xbmc.org/showthread.php?t=47124
+
+For Linux:
+
+  http://forum.xbmc.org/showthread.php?t=34655
+
+For Windows:
+
+  http://forum.xbmc.org/showthread.php?t=42708
 
 
 Credits

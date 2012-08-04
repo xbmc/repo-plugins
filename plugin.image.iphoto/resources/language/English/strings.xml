@@ -27,6 +27,7 @@
     <string id="30260">Library import in progress</string>
     <string id="30261">Unable to reset database.</string>
 
+
     <!-- Category strings -->
     <string id="30100">Events</string>
     <string id="30101">Albums</string>
@@ -37,6 +38,7 @@
     <string id="30106">Places</string>
     <string id="30107">&lt;&lt; View Documentation &gt;&gt;</string>
 
+
     <!-- Plugin settings strings -->
     <string id="30000">Path to iPhoto Library</string>
     <string id="30001">Ignore published (MobileMe) albums</string>
@@ -45,10 +47,6 @@
     <string id="30004">Hide Update Library item in main menu</string>
     <string id="30005">Ignore empty albums</string>
     <string id="30006">Ignore keywords</string>
-    <string id="30007">View mode in Confluence</string>
-    <string id="30008">Default</string>
-    <string id="30009">Image Wrap</string>
-    <string id="30010">Pic Thumbs</string>
     <string id="30015">Enable Places support</string>
     <string id="30016">Show Places as</string>
     <string id="30017">Addresses</string>
@@ -63,8 +61,22 @@
     <string id="30029">Rewrite root path as</string>
     <string id="30030">Hide View Documentation item in main menu</string>
 
-    <!-- Plugin settings categories strings -->
-    <string id="30050">General</string>
-    <string id="30051">View</string>
-    <string id="30059">Advanced</string>
+
+    <!-- Plugin settings Skin strings -->
+    <string id="30060">View mode in Confluence</string>
+    <string id="30061">Default</string>
+    <string id="30062">Pic Thumbs</string>
+    <string id="30063">Image Wrap</string>
+
+    <string id="30066">View mode in Metropolis</string>
+    <string id="30067">Default</string>
+    <string id="30068">Picture Grid</string>
+    <string id="30069">Galary Fanart</string>
+
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">General</string>
+    <string id="30091">View</string>
+    <string id="30092">Skin</string>
+    <string id="30099">Advanced</string>
 </strings>

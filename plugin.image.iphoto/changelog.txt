@@ -1,3 +1,6 @@
+1.9.1 - 20120803
+- Support for Metropolis skin.
+
 1.9.0 - 20120216
 - Allow access to network browser from addon settings.
 - Online documentation.

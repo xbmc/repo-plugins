@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nasa" name="Nasa Videos, TV and Vodcasts" version="1.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.nasa" name="Nasa Videos, TV and Vodcasts" version="1.0.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
     <import addon="script.module.xbmcswift" version="0.2.0"/>
@@ -10,6 +10,7 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <language>en</language>
     <platform>all</platform>
     <summary lang="en">Video plugin to access content from nasa.gov</summary>
     <description lang="en">This video plugin provides access to more than 1800 videos, 8 vodcasts and 4 nasa-tv livestreams[CR]All content is dynamic and should be always up to date.</description>

@@ -1,1 +1,5 @@
-unreleased
+1.0.2
+  fix all live streams
+
+1.0.1
+  initial release

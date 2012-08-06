@@ -1,10 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-settings = xbmcaddon.Addon(id='plugin.video.zdf_de_lite')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.zdf_de_lite')
+translation = addon.getLocalizedString
+
+forceViewMode=addon.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(addon.getSetting("viewMode"))
 
 def index():
         addDir("ZDF","zdf",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209114/tImg/4009328")
@@ -12,11 +20,14 @@ def index():
         addDir("ZDFkultur","zdfkultur",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1317640/tImg/5960283")
         addDir("ZDFinfo","zdfinfo",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209120/tImg/5880352")
         addDir("3sat","dreisat",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209116/tImg/5784929")
+        addDir("LIVE","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day0",'listVideos',"")
         addDir(str(translation(30001))+": A-Z","",'listAZ',"")
         addDir(str(translation(30001))+": Thema","http://www.zdf.de/ZDFmediathek/hauptnavigation/themen",'listThemen',"")
         addDir(str(translation(30001))+": "+str(translation(30002)),"",'search',"")
         addDir(translation(30003),"http://www.zdf.de/ZDFmediathek/hauptnavigation/nachrichten/ganze-sendungen",'listShows',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listChannel(url):
         if url=="zdf":
@@ -41,9 +52,10 @@ def listChannel(url):
           addDir("Das Aktuellste","http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209116",'listVideos',"")
           addDir("Sendungen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209116",'listShows',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listShows(url,bigThumb):
-        #xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
         content = getUrl(url)
         spl=content.split('<div class="image">')
         for i in range(1,len(spl),1):
@@ -57,11 +69,14 @@ def listShows(url,bigThumb):
             match=re.compile('<p><b><a href="(.+?)">(.+?)<br />', re.DOTALL).findall(entry)
             title=match[0][1]
             title=cleanTitle(title)
-            if url.find("?bc=nrt;nrg&amp;gs=446")==-1 and url.find("?bc=nrt;nrg&amp;gs=1456548")==-1:
+            if url.find("?bc=nrt;nrg&amp;gs=446")==-1 and url.find("?bc=nrt;nrg&amp;gs=1456548")==-1 and url.find("?bc=nrt;nrg&amp;gs=1384544")==-1 and url.find("?bc=nrt;nrg&amp;gs=1650526")==-1 and url.find("?bc=nrt;nrg&amp;gs=1650818")==-1:
               addDir(title,"http://www.zdf.de"+url,'listVideos',"http://www.zdf.de"+thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
+        urlMain=url
         if url.find("/nachrichten/ganze-sendungen")==-1:
           if url.find("?bc=")>=0:
             url=url[:url.find("?bc=")]
@@ -73,45 +88,69 @@ def listVideos(url):
         spl=content.split('<div class="image">')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            if entry.find("BILDER</a></p>")==-1 and entry.find(">INTERAKTIV</a></p>")==-1 and entry.find(">LIVE</a></p>")==-1:
-              match=re.compile('/video/(.+?)/', re.DOTALL).findall(entry)
-              if len(match)>=1:
-                url=match[0]
-                match=re.compile('<p class="grey"><a href="(.+?), (.+?)</a></p>', re.DOTALL).findall(entry)
+            if entry.find("BILDER</a></p>")==-1 and entry.find(">INTERAKTIV</a></p>")==-1 and entry.find("BEITR&Auml;GE")==-1:
+              match1=re.compile('/video/(.+?)/', re.DOTALL).findall(entry)
+              match2=re.compile('/live/(.+?)/', re.DOTALL).findall(entry)
+              if len(match1)>=1:
+                url=match1[0]
+              elif len(match2)>=1:
+                url=match2[0]
+              match=re.compile('<p class="grey"><a href="(.+?)">(.+?)</a></p>', re.DOTALL).findall(entry)
+              date=""
+              if len(match)>0:
                 date=match[0][1]
-                match=re.compile('>VIDEO, (.+?)<', re.DOTALL).findall(entry)
+              date=date.replace('<span class="orange">','').replace('</span>','')
+              match=re.compile('>VIDEO, (.+?)<', re.DOTALL).findall(entry)
+              length=""
+              if len(match)>0:
                 length=match[0]
-                match=re.compile('<img src="(.+?)"', re.DOTALL).findall(entry)
-                thumb=match[0]
-                thumb=thumb.replace("/timg94x65blob","/timg485x273blob")
-                if thumb.find("http://www.zdf.de/")==-1:
-                  thumb="http://www.zdf.de"+thumb
-                match=re.compile('<p><b><a href="(.+?)">(.+?)<br />', re.DOTALL).findall(entry)
-                title=match[0][1]
-                title=cleanTitle(title)
-                if length.find(":")>=0:
-                  length=length+" min"
-                if date.find(", ")>=0:
-                  date=date[date.find(", ")+2:]
-                if date.find(".20")>=0:
-                  date=date[:date.find(".20")]
-                title=date+" - "+title+" ("+length+")"
-                addLink(title,url,'playVideo',thumb)
+              match=re.compile('<img src="(.+?)"', re.DOTALL).findall(entry)
+              thumb=match[0]
+              thumb=thumb.replace("/timg94x65blob","/timg485x273blob")
+              if thumb.find("http://www.zdf.de/")==-1:
+                thumb="http://www.zdf.de"+thumb
+              match=re.compile('<p><b><a href="(.+?)">(.+?)<br />', re.DOTALL).findall(entry)
+              title=match[0][1]
+              title=cleanTitle(title)
+              date=cleanTitle(date)
+              if date.find(".20")>=0:
+                date=date[:date.find(".20")]
+              title=date+" - "+title
+              if urlMain.find("/live/day0")>0 and entry.find(">LIVE</a></p>")>=0:
+                addLink(title,url,'playVideo',thumb,length)
+              elif urlMain.find("/live/day0")==-1 and entry.find(">LIVE</a></p>")==-1:
+                addLink(title,url,'playVideo',thumb,length)
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
         content = getUrl("http://www.zdf.de/ZDFmediathek/xmlservice/web/beitragsDetails?id="+url+"&ak=web")
         match1=re.compile('<formitaet basetype="h264_aac_mp4_rtmp_zdfmeta_http" isDownload="false">\n                <quality>veryhigh</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
         match2=re.compile('<formitaet basetype="h264_aac_mp4_rtmp_zdfmeta_http" isDownload="false">\n                <quality>high</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
+        match3=re.compile('<formitaet basetype="h264_aac_na_rtsp_mov_http" isDownload="false">\n                <quality>veryhigh</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
         url=""
-        if len(match1)>=1:
-          url=match1[0]
-        elif len(match2)>=1:
-          url=match2[1]
-        content = getUrl(url)
-        match=re.compile('<default-stream-url>(.+?)</default-stream-url>', re.DOTALL).findall(content)
-        listitem = xbmcgui.ListItem(path=match[0])
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        finalUrl=""
+        if content.find("<type>livevideo</type>")>=0:
+          if len(match3)>=1:
+            url=match3[0]
+            content = getUrl(url)
+            match=re.compile('RTSPtext\n(.+?)\n', re.DOTALL).findall(content)
+            finalUrl=match[0]
+        elif content.find("<type>video</type>")>=0:
+          if len(match1)>=1:
+            url=match1[0]
+            content = getUrl(url)
+            match=re.compile('<default-stream-url>(.+?)</default-stream-url>', re.DOTALL).findall(content)
+            finalUrl=match[0]
+          elif len(match2)>=1:
+            url=match2[1]
+            content = getUrl(url)
+            match=re.compile('<default-stream-url>(.+?)</default-stream-url>', re.DOTALL).findall(content)
+            finalUrl=match[0]
+        if finalUrl!="":
+          listitem = xbmcgui.ListItem(path=finalUrl)
+          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def search():
         keyboard = xbmc.Keyboard('', 'Video Suche')
@@ -131,17 +170,19 @@ def listAZ():
         addDir("WXYZ","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz7",'listShows',"")
         addDir("0-9","http://www.zdf.de/ZDFmediathek/hauptnavigation/sendung-a-bis-z/saz8",'listShows',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
-        title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
+        title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö").replace("&eacute;","é").replace("&egrave;","è")
         title=title.strip()
         return title
 
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req,timeout=30)
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link
@@ -157,11 +198,11 @@ def parameters_string_to_dict(parameters):
                     paramDict[paramSplits[0]] = paramSplits[1]
         return paramDict
 
-def addLink(name,url,mode,iconimage):
+def addLink(name,url,mode,iconimage,duration=""):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Duration": duration } )
         liz.setProperty('IsPlayable', 'true')
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
         return ok

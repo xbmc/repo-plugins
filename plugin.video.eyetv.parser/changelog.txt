@@ -1,3 +1,10 @@
+[B]Version 2.1.2[/B]
+
+- Changed server setting type from ipaddress to text
+- Added language tag
+- Added cleaning of xml file (to remove illegal characters)
+- Remove "writeable" option on archive path
+
 [B]Version 2.1.1[/B]
 
 - Added birate setting for live TV

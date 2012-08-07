@@ -81,6 +81,8 @@ class EyetvLive:
             data = gzipper.read()
         else:
             data = f.read()
+        xbmc.log(full_url, xbmc.LOGDEBUG)
+        xbmc.log(str(data), xbmc.LOGDEBUG)
         if f.headers.get('Content-Type') == 'application/json':
             return json.loads(data)
         else:

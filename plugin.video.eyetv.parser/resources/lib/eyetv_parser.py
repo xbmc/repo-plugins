@@ -39,6 +39,15 @@ SORTKEYS = ('Date Recorded', 'Date Recorded', 'Display Title')
 # 2 : title
 
 
+def clean_xml(filename):
+    """Remove illegal characters from XML file"""
+    illegal_re = re.compile('\x00')
+    xml = open(filename).read()
+    clean = illegal_re.sub('', xml)
+    f = open(filename, 'wt')
+    f.write(clean)
+    f.close()
+
 class Plist:
     """Simple class to read Apple's plist format
 
@@ -85,6 +94,7 @@ class Eyetv:
         archiveXml = os.path.join(self.archivePath, u'EyeTV Archive.xml')
         localXml = xbmc.translatePath('special://temp/EyeTVArchive.xml')
         copyfile(archiveXml, localXml)
+        clean_xml(localXml)
         plist = Plist().load(localXml)
         # Remove temporary file
         os.remove(localXml)

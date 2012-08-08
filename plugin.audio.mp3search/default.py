@@ -10,7 +10,7 @@ downloader = downloader.SimpleDownloader()
 __plugin__ = "mp3search"
 __author__ = "ghua@seznam.cz"
 __url__ = ""
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 

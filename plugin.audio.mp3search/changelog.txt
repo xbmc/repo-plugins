@@ -1,4 +1,4 @@
-[B]0.2.1:[/B]
+[B]0.2.2:[/B]
 Updated due to site changes (grrrr...)
 
 - different access to site

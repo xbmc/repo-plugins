@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.mp3search"
        name="MP3 Search"
-       version="0.1.0"
+       version="0.2.1"
        provider-name="ghua@seznam.cz">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
+    <import addon="script.module.simple.downloader.beta" version="0.9.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
              provides="audio"
@@ -13,8 +14,8 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <language></language>
-    <summary lang="en">Search and play mp3's </summary>
-    <description lang="en">Search and play mp3's</description>
+    <summary lang="en">Search,play and download mp3's </summary>
+    <description lang="en">With this addon you can search for mp3's, listen and download them.</description>
     <disclaimer></disclaimer>
     <platform>all</platform>
   </extension>

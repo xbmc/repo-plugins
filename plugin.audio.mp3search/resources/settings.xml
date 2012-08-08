@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+   <setting id="download_path" type="folder" source="audio" label="30008" option="writeable" default=""/>
+</settings>

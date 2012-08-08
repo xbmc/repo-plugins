@@ -1,2 +1,16 @@
+[B]0.2.1:[/B]
+Updated due to site changes (grrrr...)
+
+- different access to site
+- searched (and found) songs are now 'playable'
+- mined song name, artist, album and some other atributes
+- items can be downloaded (via context menu) - still experimental
+  Thanx to simple.downloader plugin !
+  Dont forget to setup download path in plugin settings
+
+
 [B]0.1.0:[/B]
 First version - please report bugs to ghua@seznam.cz
+
+  
+

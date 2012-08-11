@@ -1,3 +1,7 @@
+[B]Version 1.1.5[/B]
+- Show more recent videos (by dethfeet)
+- Fix user submissions (by dethfeet)
+
 [B]Version 1.1.4[/B]
 - Localized show names (by dethfeet)
 

@@ -18,7 +18,7 @@ unwanteds = ['podcast', 'retrobeat']
 thisPlugin = int(sys.argv[1])
 
 def mainPage():
-    addDirectoryItem(addon.getLocalizedString(30000),{'action':"listLatest","link":"http://retrowaretv.com/"})
+    addDirectoryItem(addon.getLocalizedString(30000),{'action':"listVideos","link":baseLink+"/category/shows/"})
     addDirectoryItem(addon.getLocalizedString(30001),{'action':"listShows"})
     addDirectoryItem(addon.getLocalizedString(30002),{'action':"listUserContent",'link' : "http://retrowaretv.com/user-blogs/"})
     addDirectoryItem(addon.getLocalizedString(30003),{'action':"listArchive"})
@@ -49,32 +49,7 @@ def ListArchive():
 
 def listUserContent():
     addDirectoryItem(addon.getLocalizedString(30301),{'action':"listVideos",'link' : baseLink+"/category/user-submissions/rdubspotlight/"},"")
-    addDirectoryItem(addon.getLocalizedString(30302),{'action':"listVideos",'link' : baseLink+"/category/user-submissions/userblogs/"},"")
-
-def ListLatest(url):
-    link = LoadPage(url)
-    _regex_extractLatest = re.compile("<div id=\"featured\">(.*?)</div>",re.DOTALL)
-    _regex_extractLatestEpisode = re.compile("<a href=\"([^\"]*?)\".*?src=\"([^\"]*?)\".*?alt=\"([^\"]*?)\"",re.DOTALL)
-
-    latestDiv = _regex_extractLatest.search(link)
-    if latestDiv is not None:
-        x = 0
-        for latestItem in _regex_extractLatestEpisode.finditer(latestDiv.group(1)):
-            _regex_extractLatestEpisodeName = re.compile("<span class=\"orbit-caption\" id=\"slider-"+str(x)+"\">(.*?)</span>")
-            url = latestItem.group(1).strip()
-            name = _regex_extractLatestEpisodeName.search(link).group(1)
-            thumbnail = latestItem.group(2).strip()
-            embed = True
-            for unwanted in unwanteds:
-                if url.find(unwanted) is not -1:
-                    embed = False
-                    
-            if embed:
-                name = remove_html_special_chars(name)
-                url = url.replace("../","http://retrowaretv.com/")
-                thumbnail = thumbnail.replace("../","http://retrowaretv.com/")
-                addDirectoryItem(name,{'action':"playEpisode",'link':url},thumbnail,False)
-            x = x+1
+    addDirectoryItem(addon.getLocalizedString(30302),{'action':"listVideos",'link' : baseLink+"/category/user-submissions/"},"")
 
 def listVideos(url):
 	link = LoadPage(url)

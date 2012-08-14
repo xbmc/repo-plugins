@@ -110,7 +110,7 @@ def __getAjaxContent(url, data_dict=None):
 def getVideoFile(page_url):
     video_page = URL_PREFIX + page_url + '.html'
     html = __getAjaxContent(video_page)
-    r = '<video src="(?P<url>[^"]+)"'
+    r = 'https://login.4players.de/flash/jw5/player.swf\?file=(?P<url>.+?)&amp;'
     m = re.search(r, html)
     url = m.groupdict()['url']
     return url

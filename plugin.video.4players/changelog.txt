@@ -1,3 +1,6 @@
+1.1.5
+ Fixed Playback (website changes)
+
 1.1.4
  Fixed Categories
  Removed deprecated Categories

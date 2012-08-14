@@ -70,15 +70,6 @@ def getStreamsFromPlayList(playlist):
 def loginAndParse():
 	url = 'http://' + domain + '/live'
 	
-	if not cj:
-		resp = opener.open(url)
-		html_data = resp.read()
-	
-		parsedJS = re.findall(r"setCookie\('(.*?)'\s*,\s*'(.*?)'\s*,\s*(.*?)\);", html_data)
-
-		ck = cookielib.Cookie(version=0, name=parsedJS[0][0], value=parsedJS[0][1], port=None, port_specified=False, domain=domain, domain_specified=False, domain_initial_dot=False, path='/', path_specified=True, secure=False, expires=None, discard=True, comment=None, comment_url=None, rest={'HttpOnly': None}, rfc2109=False)
-		cj.set_cookie(ck)
-
 	resp = opener.open(url)
 	html_data = resp.read()
 

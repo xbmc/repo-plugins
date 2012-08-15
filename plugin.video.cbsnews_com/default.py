@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,httplib,socket,time
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.video.cbsnews_com')
 translation = settings.getLocalizedString
 
@@ -13,6 +13,10 @@ if forceViewMode=="true":
 else:
   forceViewMode=False
 viewMode=str(settings.getSetting("viewMode"))
+
+maxBitRate=settings.getSetting("maxBitRate")
+qual=[500,1000,1500,2000,3000]
+maxBitRate=qual[int(maxBitRate)]
 
 def index():
         content = getUrl("http://www.cbsnews.com/video/")
@@ -174,20 +178,22 @@ def playVideo(url):
           id=match[0]
         elif len(match2)>0:
           id=match2[0]
-        content = getUrl("http://api.cnet.com/rest/v1.0/video?videoId="+id+"&iod=images,videoMedia,relatedLink,breadcrumb,relatedAssets,broadcast,lowcache&partTag=cntv")
+        content = getUrl("http://api.cnet.com/rest/v1.0/video?videoId="+id+"&iod=videoMedia&players=Download,Streaming")
         spl=content.split('<VideoMedia id=')
-        maxBitrate=0
+        maxBitrateTemp=0
+        finalUrl=""
         for i in range(1,len(spl),1):
             entry=spl[i]
-            if entry.find("<Player>Streaming</Player>")>=0:
+            if entry.find("<DeliveryUrl>")>=0:
               match=re.compile('<BitRate>(.+?)</BitRate>', re.DOTALL).findall(entry)
               bitrate=int(match[0])
-              if bitrate>maxBitrate:
-                maxBitrate=bitrate
+              if bitrate>maxBitrateTemp and bitrate<=maxBitRate:
+                maxBitrateTemp=bitrate
                 match=re.compile('DeliveryUrl><!\\[CDATA\\[(.+?)\\]\\]></DeliveryUrl>', re.DOTALL).findall(entry)
                 finalUrl=match[0]
-        listitem = xbmcgui.ListItem(path=finalUrl)
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        if finalUrl!="":
+          listitem = xbmcgui.ListItem(path=finalUrl)
+          xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","'").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
@@ -197,12 +203,8 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/14.0')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30001">Newest 100</string>
-  <string id="30002">Best of: Week</string>
-  <string id="30003">Best of: Month</string>
-  <string id="30004">Best of: Year</string>
-  <string id="30005">Best of: All Time</string>
-  <string id="30006">Random Videos</string>
-  <string id="30007">Video Search</string>
+  <string id="30001">Newest</string>
+  <string id="30002">Week</string>
+  <string id="30003">Month</string>
+  <string id="30004">Year</string>
+  <string id="30005">All Time</string>
+  <string id="30006">Random</string>
+  <string id="30007">Search</string>
+  <string id="30008">Best of</string>
+  <string id="30009">Next Page</string>
+  <string id="30101">Force View</string>
+  <string id="30102">ViewID</string>
 </strings>

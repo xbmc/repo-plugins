@@ -1,71 +1,74 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import xbmcaddon
-import xbmcplugin
-import xbmcgui
-import sys
-import urllib, urllib2
-import re
+import xbmcaddon,xbmcplugin,xbmcgui,sys,urllib,urllib2,re,socket
 
-thisPlugin = int(sys.argv[1])
+socket.setdefaulttimeout(30)
+pluginhandle = int(sys.argv[1])
+xbox = xbmc.getCondVisibility("System.Platform.xbox")
+addon = xbmcaddon.Addon(id='plugin.video.bestofyoutube_com')
+translation = addon.getLocalizedString
 
-settings = xbmcaddon.Addon(id='plugin.video.bestofyoutube_com')
-translation = settings.getLocalizedString
-
-def cleanTitle(title):
-        title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
-        title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
-        title=title.strip()
-        return title
+forceViewMode=addon.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(addon.getSetting("viewMode"))
 
 def index():
-        addDir(translation(30001),"NEW",1,"")
-        addDir(translation(30002),"http://www.bestofyoutube.com/index.php?show=week",3,"")
-        addDir(translation(30003),"http://www.bestofyoutube.com/index.php?show=month",3,"")
-        addDir(translation(30004),"http://www.bestofyoutube.com/index.php?show=year",3,"")
-        addDir(translation(30005),"http://www.bestofyoutube.com/index.php?show=alltime",3,"")
-        addDir(translation(30006),"http://www.bestofyoutube.com/index.php?show=random",3,"")
-        addDir(translation(30007),"SEARCH",4,"")
-        xbmcplugin.endOfDirectory(thisPlugin)
+        addDir(translation(30001),"http://www.bestofyoutube.com","listVideos","")
+        addDir(translation(30008),"","bestOf","")
+        addDir(translation(30006),"http://www.bestofyoutube.com/index.php?show=random","listVideos","")
+        addDir(translation(30007),"","search","")
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
-def showContentLatest():
-        content = getUrl("http://feeds.feedburner.com/bestofyoutubedotcom")
-        match=re.compile('<item><title>(.+?)</title><description>(.+?)a href="(.+?)"(.+?)img src="(.+?)"', re.DOTALL).findall(content)
-        for title,desc,url,temp,thumb in match:
-                title=cleanTitle(title)
-                addLink(title,url,2,thumb)
-        xbmcplugin.endOfDirectory(thisPlugin)
+def bestOf():
+        addDir(translation(30002),"http://www.bestofyoutube.com/index.php?show=week","listVideos","")
+        addDir(translation(30003),"http://www.bestofyoutube.com/index.php?show=month","listVideos","")
+        addDir(translation(30004),"http://www.bestofyoutube.com/index.php?show=year","listVideos","")
+        addDir(translation(30005),"http://www.bestofyoutube.com/index.php?show=alltime","listVideos","")
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def search():
-        keyboard = xbmc.Keyboard('', str(translation(30007)))
+        keyboard = xbmc.Keyboard('', translation(30007))
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
           search_string = keyboard.getText().replace(" ","+")
-          showContent("http://www.bestofyoutube.com/search.php?q="+search_string)
+          listVideos("http://www.bestofyoutube.com/search.php?q="+search_string)
 
-def playVideo(url):
-        if url.find("http://")==0:
-          content = getUrl(url)
-          match=re.compile('<param name="movie" value="http://www.youtube.com/v/(.+?)&amp;', re.DOTALL).findall(content)
-          youtubeID=match[0]
+def playVideo(id):
+        if xbox==True:
+          url = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + id
         else:
-          youtubeID=url
-        fullData = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + youtubeID
-        listitem = xbmcgui.ListItem(path=fullData)
-        return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
+          url = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + id
+        listitem = xbmcgui.ListItem(path=url)
+        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
-def showContent(url):
+def listVideos(url):
         content = getUrl(url)
-        spl=content.split("<div class='videoarea'>")
+        spl=content.split("<div class='main'>")
         for i in range(1,len(spl),1):
             entry=spl[i]
             match=re.compile('value="http://www.youtube.com/v/(.+?)&amp;', re.DOTALL).findall(entry)
-            url=match[0]
-            thumb="http://img.youtube.com/vi/"+url+"/0.jpg"
+            id=match[0]
+            match=re.compile("name='up'>(.+?)<", re.DOTALL).findall(entry)
+            up=float(match[0])
+            match=re.compile("name='down'>(.+?)<", re.DOTALL).findall(entry)
+            down=float(match[0])
+            thumb="http://img.youtube.com/vi/"+id+"/0.jpg"
             match=re.compile("<div class='title'><a href='/(.+?)'>(.+?)</a>", re.DOTALL).findall(entry)
             title=match[0][1]
             title=cleanTitle(title)
-            addLink(title,url,2,thumb)
+            if (up+down)>0:
+              percentage=int((up/(up+down))*100)
+            else:
+              percentage=100
+            title=title+" ("+str(percentage)+"%)"
+            addLink(title,id,"playVideo",thumb)
         content=content[content.find('<div class="pagination">'):]
         content=content[:content.find('</div>')]
         spl=content.split("<a href=\"")
@@ -73,16 +76,24 @@ def showContent(url):
           entry=spl[i][:spl[i].find('</a>')]
           url="http://www.bestofyoutube.com/"+entry[:entry.find('"')]
           if entry.find('next &#187;')>=0:
-            addDir("Next Page",url,3,'')
-        xbmcplugin.endOfDirectory(thisPlugin)
+            addDir(translation(30009),url,"listVideos",'')
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def getUrl(url):
-    req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-    response = urllib2.urlopen(req,timeout=30)
-    link=response.read()
-    response.close()
-    return link
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:14.0) Gecko/20100101 Firefox/14.0')
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        return link
+
+def cleanTitle(title):
+        title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","'").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
+        title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
+        title=title.strip()
+        return title
 
 def addLink(name,url,mode,iconimage):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
@@ -112,28 +123,19 @@ def parameters_string_to_dict(parameters):
                 paramDict[paramSplits[0]] = paramSplits[1]
     return paramDict
 
-params = parameters_string_to_dict(sys.argv[2])
-url=None
-mode=None
+params=parameters_string_to_dict(sys.argv[2])
+mode=params.get('mode')
+url=params.get('url')
+if type(url)==type(str()):
+  url=urllib.unquote_plus(url)
 
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        mode=int(params["mode"])
-except:
-        pass
-
-
-if mode==None or url==None or len(url)<1:
-        index()
-       
-elif mode==1:
-        showContentLatest()
-elif mode==2:
-        playVideo(url)
-elif mode==3:
-        showContent(url)
-elif mode==4:
-        search()
+if mode == 'listVideos':
+    listVideos(url)
+elif mode == 'playVideo':
+    playVideo(url)
+elif mode == 'bestOf':
+    bestOf()
+elif mode == 'search':
+    search()
+else:
+    index()

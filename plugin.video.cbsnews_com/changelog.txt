@@ -4,3 +4,7 @@
 - Fixed small bug
 1.0.2
 - Added some shows
+1.0.3
+- Fixed playback for older videos
+1.0.4
+- Added setting for maximum bitrate

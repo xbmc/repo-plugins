@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Next Page</string>
+  <string id="30002">More results</string>
+  <string id="30003">Search</string>
+  <string id="30004">Top Playlists</string>
+  <string id="30005">Latest Videos</string>
+  <string id="30006">All Videos</string>
+  <string id="30007">max</string>
+  <string id="30101">Force View</string>
+  <string id="30102">ViewID</string>
+  <string id="30103">Autoplay after sec (0=OFF)</string>
+</strings>

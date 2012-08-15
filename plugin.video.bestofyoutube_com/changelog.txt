@@ -1,6 +1,14 @@
-1.0.0 - First Try
-1.0.1 - Changed addon.xml
-1.0.2 - Added string localization
-1.0.3 - Changed Timeout
-1.0.4 - Various fixes and optical optimizations
-1.0.5 - Added Random Videos & Search
+1.0.0
+- First Try
+1.0.1
+- Changed addon.xml
+1.0.2
+- Added string localization
+1.0.3
+- Changed Timeout
+1.0.4
+- Various fixes and optical optimizations
+1.0.5
+- Added Random Videos & Search
+1.0.6
+- Fixed site changes for latest videos

@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.video.mpora_com')
 translation = settings.getLocalizedString
 
-maxVideoQuality=settings.getSetting("maxVideoQuality")
 forceViewMode=settings.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
@@ -15,6 +14,7 @@ else:
   forceViewMode=False
 viewMode=str(settings.getSetting("viewMode"))
 
+maxVideoQuality=settings.getSetting("maxVideoQuality")
 qual=["720p","540p"]
 maxVideoQuality=qual[int(maxVideoQuality)]
 
@@ -51,7 +51,6 @@ def sortDirection(url):
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
-        addLink(translation(30021),url,'playAll',"")
         content = getUrl(url)
         matchPage=re.compile('<a class="next_page" rel="next" href="(.+?)">', re.DOTALL).findall(content)
         content = content[content.find('<ul class="video-list">'):]
@@ -74,31 +73,6 @@ def listVideos(url):
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
-def playAll(url):
-        content = getUrl(url)
-        matchPage=re.compile('<a class="next_page" rel="next" href="(.+?)">', re.DOTALL).findall(content)
-        content = content[content.find('<ul class="video-list">'):]
-        content = content[:content.find('</ul>')]
-        spl=content.split('<li')
-        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        playlist.clear()
-        i=1
-        for i in range(1,len(spl),1):
-            entry=spl[i]
-            match=re.compile('<h6>(.+?)</h6>', re.DOTALL).findall(entry)
-            title=match[0]
-            title=cleanTitle(title)
-            match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
-            url="http://mpora.com"+match[0]
-            if xbox==True:
-              url="plugin://video/Mpora.com/?url="+urllib.quote_plus(url)+"&mode=playVideo"
-            else:
-              url="plugin://plugin.video.mpora_com/?url="+urllib.quote_plus(url)+"&mode=playVideo"
-            listitem = xbmcgui.ListItem(title)
-            i=i+1
-            playlist.add(url,listitem)
-        xbmc.executebuiltin('XBMC.Playlist.PlayOffset(-1)')
-
 def search():
         keyboard = xbmc.Keyboard('', translation(30020))
         keyboard.doModal()
@@ -108,13 +82,16 @@ def search():
 
 def playVideo(url):
         content = getUrl(url)
-        matchSD=re.compile('"sd":{"src":"(.+?)"', re.DOTALL).findall(content)
-        matchHD=re.compile('"hd":{"src":"(.+?)"', re.DOTALL).findall(content)
-        url=matchSD[0]
-        if maxVideoQuality=="720p" and len(matchHD)>0:
-          url=matchHD[0]
-        listitem = xbmcgui.ListItem(path=url)
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        matchSD=re.compile('"sd":{"sources":\\[{"type":"video/mp4","src":"(.+?)"}', re.DOTALL).findall(content)
+        matchHD=re.compile('"hd":{"sources":\\[{"type":"video/mp4","src":"(.+?)"}', re.DOTALL).findall(content)
+        finalUrl=""
+        if len(matchSD)>0:
+          finalUrl=matchSD[0]
+          if maxVideoQuality=="720p" and len(matchHD)>0:
+            finalUrl=matchHD[0]
+        if finalUrl!="":
+          listitem = xbmcgui.ListItem(path=finalUrl)
+          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
@@ -124,12 +101,8 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:14.0) Gecko/20100101 Firefox/14.0.1')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

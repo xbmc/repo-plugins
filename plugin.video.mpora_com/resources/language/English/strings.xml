@@ -22,6 +22,6 @@
   <string id="30020">Search</string>
   <string id="30021">Play all videos</string>
   <string id="30101">Maximum video quality</string>
-  <string id="30102">Force ViewMode</string>
-  <string id="30103">ViewMode</string>
+  <string id="30102">Force View</string>
+  <string id="30103">ViewID</string>
 </strings>

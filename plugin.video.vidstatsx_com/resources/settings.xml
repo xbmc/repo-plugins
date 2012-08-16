@@ -1,0 +1,6 @@
+<settings>
+   <setting id="videoChartsSortType" type="enum" label="30103" lvalues="30105|30010|30013|30011|30015|30016" default="0"/>
+   <setting id="videoChartsSortTime" type="enum" label="30104" lvalues="30105|30017|30018|30019" default="0"/>
+   <setting id="forceViewMode" type="bool" label="30101" default="false"/>
+   <setting id="viewMode" type="number" label="30102" default="500"/>
+</settings>

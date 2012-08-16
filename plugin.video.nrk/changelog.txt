@@ -1,23 +1,3 @@
-[B]3.1.4[/B]
-- fixed: live streams due to site changes
+[B]4.0.0[/B]
+- Ny versjon basert på NRKs nye nett-TV
 
-[B]3.1.3[/B]
-- fixed: live streams due to site changes
-
-[B]3.1.2[/B]
-- fixed: missing labels with certain skins
-
-[B]3.1.1[/B]
-- eden
-
-[B]2.1.1[/B]
-- added: multi-page search result
-
-[B]2.1.0[/B]
-- added: search
-- added: description and larger thumbs
-- added: most watched and genres view
-- fixed: various missing videos
-
-[B]2.0.0[/B]
-- rewrite

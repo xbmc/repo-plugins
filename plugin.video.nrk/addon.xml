@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.nrk"
-       name="NRK"
-       version="3.1.4"
+       name="NRK Nett-TV"
+       version="4.0.0"
        provider-name="takoi">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
     <import addon="script.module.beautifulsoup"/>
+    <import addon="script.module.parsedom" version="0.9.2"/>
+    <import addon="script.module.requests" version="0.13.2"/>
+    <import addon="script.module.xbmcswift" version="0.2.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -13,9 +16,9 @@
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <language>no</language>
-    <summary lang="en">Norwegian Broadcasting Corporation</summary>
-    <summary lang="no">Norsk rikskringkasting</summary>
-    <description lang="en">NRK's Web TV gives you the opportunity to watch live TV as well as recordings of many shows.</description>
-    <description lang="no">NRKs Nett-TV gir deg muligheten til å se mange NRK-programmer både direkte og i opptak.</description>
+    <summary lang="en">Watch NRK Web TV</summary>
+    <summary lang="no">Se NRK Nett-TV</summary>
+    <description lang="en">NRK Web TV gives you the opportunity to watch live TV as well as recordings of many shows.</description>
+    <description lang="no">NRK Nett-TV gir deg muligheten til å se mange av NRKs programmer både direkte og i opptak.</description>
   </extension>
 </addon>

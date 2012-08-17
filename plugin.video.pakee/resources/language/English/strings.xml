@@ -2,7 +2,8 @@
 <strings>
     <string id="30001">View settings</string>
     <string id="30002">Playlist settings</string>
-    <string id="30020">Pakee</string>
+    <string id="30003">Login settings</string>
+
     <string id="30021">Media play mode</string>
     <string id="30022">Single: Play selected video only</string>
     <string id="30023">Playlist: Start playlist at selected video</string>
@@ -34,4 +35,12 @@
     <string id="30306">Fan art view</string>
 
 
+    <string id="30400">Username</string>
+    <string id="30401">Password</string>
+
+    <string id="30500">Sastatv.com</string>
+    <string id="30501">No sastatv.com username or password specified.\nPlease sign up and enter login info before re-trying</string>
+    <string id="30502">Invalid sastatv.com username/password combo.\nPlease make sure they are correctly entered</string>
+    <string id="30503">No content found in this section.\nPlease retry or go back and try a different section</string>
+    <string id="30504">Unable to access sastatv.com server. It may be\ndown for maintenance. Please check back later.</string>
 </strings>

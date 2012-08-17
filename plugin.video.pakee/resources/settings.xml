@@ -1,5 +1,10 @@
 <settings>
 
+  <category label="30003">
+    <setting id="username" type="text" label="30400" />
+    <setting id="password" type="text" label="30401" option="hidden" />
+  </category>
+
   <!-- view -->
   <category label="30001">
     <setting id="viewsortorder" type="enum" label="30100" lvalues="30101|30102" default="0" />

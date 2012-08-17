@@ -1,22 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, unicodedata, cookielib
-import xml.dom.minidom
+import xml.dom.minidom, base64
 import time
-
 
 
 __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.20'
+__version__ = '1.0.21'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
 __profilepath__    = xbmc.translatePath( __settings__.getAddonInfo('profile') )
-__rooturl__ = 'http://pakee.hopto.org/pakee/pakee.php?id=xbmc&qqp=7'
-#__rooturl__ = 'http://pakee.hopto.org/pakee/pakee-test.xml?qo=2'
-#__rooturl__ = 'http://pakee.hopto.org/mediarss/makeuphairv2.xml?as=5'
+__baseurl__ = 'http://sastatv.com'
+__rooturl__ = __baseurl__ + '/secure/xml/root.xml'
 __language__ = __settings__.getLocalizedString
+
 
 #plugin modes
 PLUGIN_MODE_BUILD_DIR = 10
@@ -40,7 +39,7 @@ VIEW_MEDIAINFO2 = 503
 VIEW_MEDIAINFO = 504
 VIEW_FANART = 508
 
-pakee_thumb = os.path.join( __settings__.getAddonInfo( 'path' ), 'resources', 'media', 'pakee.png' )
+main_thumb = os.path.join( __settings__.getAddonInfo( 'path' ), 'resources', 'media', 'pakee.png' )
 media_id = 0
 
 
@@ -64,10 +63,10 @@ def open_settings():
 
 #Play a single youtube video
 def play_youtube_video(video_id, name):
-	print ("Playing video " + name + " id: " + video_id)
+	print ("Playing video id: " + video_id + " name: " + name)
 	url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % (video_id)
 	listitem = xbmcgui.ListItem( label = str(name), iconImage = "DefaultVideo.png", thumbnailImage = xbmc.getInfoImage( "ListItem.Thumb" ), path=url )
-	infolabels = { "title": name, "plot": name}
+	infolabels = { "title": name, "plot": name, "TVShowTitle": name}
 	listitem.setInfo( type="Video", infoLabels=infolabels)
 	xbmc.Player( xbmc.PLAYER_CORE_DVDPLAYER ).play( str(url), listitem)
 
@@ -81,8 +80,8 @@ def play_stream(url, name):
 		print "playing music file: " + str(name) + " url: " + str(url)
 		listitem.setInfo( type="Music", infoLabels={ "Title": name } )
 	else:
-		print "playing stream name: " + str(name) + " url: " + str(url)
-		listitem.setInfo( type="video", infoLabels={ "Title": name, "Plot" : name } )
+		print "playing stream name: " + str(name)
+		listitem.setInfo( type="video", infoLabels={ "Title": name, "Plot" : name, "TVShowTitle": name } )
 	xbmc.Player( xbmc.PLAYER_CORE_DVDPLAYER ).play( str(url), listitem)
 
 
@@ -140,7 +139,7 @@ def play_playlist(origurl, index):
 		playlisturl = None
 
 		#youtube video
-		if guid is not None and guid != '':
+		if 'youtube.com' in url and guid is not None and guid != '':
 			#print "Found item: " + label + " guid: " + guid 
 			playlisturl = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % (guid)
 
@@ -168,6 +167,18 @@ def play_playlist(origurl, index):
 				playlisturl = find_sawlive_url(url,name)
 
 
+		#for dailymotion video
+		elif url.startswith('http://www.dailymotion.com/embed/video/') and guid is not None and guid != '':
+				xbmc.log('Found dailymotion url..needs resolving: ' + url)
+				playlisturl = resolve_dailymotion(url,guid)
+
+		#for nova video
+		elif url.startswith('http://embed.novamov.com') and guid is not None and guid != '':
+				xbmc.log('Found nova url..needs resolving: ' + url)
+				playlisturl = resolve_novamov(url,guid)
+
+
+
 		#anything else
 		elif url is not None and url != '':
 			#print "Found item: " + label + " url: " + url 
@@ -178,11 +189,11 @@ def play_playlist(origurl, index):
 			#listitem.setInfo( type="Video", infoLabels={ "Title": label } )
 
 			if isMusicFile(playlisturl):
-				#xbmc.log("adding audio file to playlist %s %s" % (label,playlisturl))
+				xbmc.log("adding audio file to playlist %s %s" % (label,playlisturl))
 				listitem.setInfo( type="Music", infoLabels={ "Title": label } )
 				listitem.setProperty('mimetype','audio/mpeg')
 			else:
-				listitem.setInfo( type="video", infoLabels={ "Title": label, "Plot" : description } )
+				listitem.setInfo( type="video", infoLabels={ "Title": label, "Plot" : description, "TVShowTitle": label } )
 				xbmc.log("adding video file to playlist %s %s" % (label,playlisturl))
 			playlist.add(url=playlisturl, listitem=listitem)
 
@@ -290,20 +301,84 @@ def find_sawlive_url(url, name):
 			print ("Found sawurl:" + playpath)
 
 
-
 	url = "%s&streamer=%s" % (playpath, streamer)
 	xbmc.log ("url: " + url)
 	return (find_stream(url, name))
 
+#dailymotion url received in form of 'http://embed.novamov.com/embed.php?v=xxxxx'
+def resolve_novamov(url, guid):
+	xbmc.log("Starting resolve_novamov with url: " + str(url) + " and guid: " + str(guid))
+	req = urllib2.Request(url)
+	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+	response = urllib2.urlopen(req)
+	link=response.read()
+	response.close()
+
+	match1=re.compile('flashvars.file="(.+?)"').findall(link)
+	for file in match1:
+		file = file
+
+	match2=re.compile('flashvars.filekey="(.+?)"').findall(link)
+	for filekey in match2:
+		filekey = filekey
+
+	if not match1 or not match2:
+		return 'CONTENTREMOVED'
+
+	novaurl = 'http://www.novamov.com/api/player.api.php?user=undefined&key=' + filekey + '&codes=undefined&pass=undefined&file=' + file 
+
+	req = urllib2.Request(novaurl)
+	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+	response = urllib2.urlopen(req)
+	link=response.read()
+	response.close()
+
+	match3=re.compile('url=(.+?\.flv)').findall(link)
+	for link in match3:
+		link = link
+
+
+	print ('auth url is ' + str(link))
+	return link
+
+
+#dailymotion url received in form of 'http://www.dailymotion.com/embed/video/xxxxx'
+def resolve_dailymotion(url, guid):
+	xbmc.log("Starting resolve_dailymotion with url: " + str(url) + " and guid: " + str(guid))
+	req = urllib2.Request(url)
+	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+	response = urllib2.urlopen(req)
+	link=response.read()
+	response.close()
+
+	#match=re.compile('auth=(.+?)","stream').findall(link); 
+	match=re.compile('\/([a-zA-Z0-9-_]+?)\.mp4\?auth=(.+?)","stream').findall(link)
+	for guid, url in match:
+	    match = 'http://www.dailymotion.com/cdn/H264-512x384/video/'+guid+'.mp4?auth='+url 
+	    #match = 'http://www.dailymotion.com/cdn/H264-512x384/video/'+guid+'.mp4?auth='+url+'&redirect=0' 
+
+	if not match:
+		match = 'CONTENTREMOVED'
+	print ('auth url is ' + str(match))
+	return match
+
+	#try:
+	#	req = urllib2.Request(match)
+	#	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+	#	response = urllib2.urlopen(req)
+	#	link=response.read()
+	#	response.close()
+	#	print ('dailmotion link is ' + str(link))
+	#	return link
+	#except:
+	#	return 'VIDEOREMOVED'
 
 def build_show_directory(origurl):
 
 	if origurl:
 		xbmc.log('Starting build_show_directory() with url: ' + origurl)
 	else:
-		xbmc.executehttpapi("sendkey(I)")
 		xbmc.log('Starting build_show_directory() with no url. Showing info')
-
 		return
 
 	setting_playmode = int(__settings__.getSetting('playmode')) 
@@ -348,19 +423,14 @@ def build_show_directory(origurl):
 
 		#if weird characters found in label or description, instead of erroring out, empty their values (empty listitem will be shown)
 		try:
-			#xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
-			xbmc.log('found in show_dir(): ' + str(label).encode('utf-8','ignore') + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+			xbmc.log('found in show_dir(): ' + str(label).encode('utf-8','ignore') + ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
 		except:
 
 			try:
-				xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
-				#xbmc.log('found in show_dir(): ' + str(label).encode('utf-8','ignore') + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+				xbmc.log('found in show_dir(): ' + clean(str(label)) + ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
+
 			except:
-				#label = ''
-				#description = ''
-				#xbmc.log('found in show_dir() exception: ' + str(label) + ' ' + str(url) +  ' ' + str(thumb) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount)) 
-				#xbmc.log('found in show_dir() with empty label/desc: ' + str(url) + ' ' + str(rating) + ' ' + str(pubDate) + ' ' + str(duration) + ' ' + str(viewcount))	
-				xbmc.log('bad string')	
+				xbmc.log('bad label name for entry')	
 
 		if (url is not None and url != ''):
 
@@ -368,7 +438,7 @@ def build_show_directory(origurl):
 			if 'youtube.com' in url or '(Playlist: ' in label:
 				if itemCount == 0:
 					resolvedlabel = '<' + str(__settings__.getLocalizedString(30050)) + '>'
-					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = main_thumb, thumbnailImage = main_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 
@@ -395,11 +465,12 @@ def build_show_directory(origurl):
 				#For folders with videos, show play all option 			
 				if itemCount == 0:
 					resolvedlabel = '<' + str(__settings__.getLocalizedString(30051)) + '>'
-					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = main_thumb, thumbnailImage = main_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_SLIDESHOW)+"&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 				isFolder = False
 				mode = PLUGIN_MODE_PLAY_SLIDESHOW
+
 
 			#audio track found, check whether in single or playlist mode and set the mode/url accordingly	
 			if isMusicFile(url):
@@ -407,7 +478,7 @@ def build_show_directory(origurl):
 				#For feeds with mp3s as their first item, show <play all> listitem as first listitem			
 				if itemCount == 0:
 					resolvedlabel = '<' + str(__settings__.getLocalizedString(30050)) + '>'
-					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = pakee_thumb, thumbnailImage = pakee_thumb )
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = main_thumb, thumbnailImage = main_thumb )
 					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
 
 
@@ -425,9 +496,52 @@ def build_show_directory(origurl):
 				if '.4shared.com' in url and 'preview' in url:
 					mode = PLUGIN_MODE_PLAY_4SHARED
 
+			if url.startswith('http://www.dailymotion.com/embed/video/'):
+				xbmc.log('Found dailymotion url..needs resolving: ' + url)
+				if itemCount == 0:
+					resolvedlabel = '<' + str(__settings__.getLocalizedString(30050)) + '>'
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = main_thumb, thumbnailImage = main_thumb )
+					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
+
+
+				#play single video
+				if setting_playmode == 0:
+					mode = PLUGIN_MODE_PLAY_STREAM
+					url = resolve_dailymotion(url,guid)
+					if url == 'CONTENTREMOVED':
+						label = 'Content Removed'
+
+
+				#play video playlist
+				else:
+					mode = PLUGIN_MODE_PLAY_PLAYLIST
+					url = origurl
+
+			if url.startswith('http://embed.novamov.com'):
+				xbmc.log('Found novamov url..needs resolving: ' + url)
+				if itemCount == 0:
+					resolvedlabel = '<' + str(__settings__.getLocalizedString(30050)) + '>'
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = main_thumb, thumbnailImage = main_thumb )
+					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
+
+
+				#play single video
+				if setting_playmode == 0:
+					mode = PLUGIN_MODE_PLAY_STREAM
+					url = resolve_novamov(url,guid)
+					if url == 'CONTENTREMOVED':
+						label = 'Content Removed'
+
+
+				#play video playlist
+				else:
+					mode = PLUGIN_MODE_PLAY_PLAYLIST
+					url = origurl
+
+
 
 			#video stream found
-			if 'fetchLiveFeeds.php' not in url and (url.startswith('rtmpe://') or url.startswith('rtmp://') or url.startswith('mms://') or url.startswith('rtsp://')  or '.wsx' in url  or 'desistreams.xml' in origurl or 'LiveTV.xml' in origurl):
+			if 'fetchLiveFeeds.php' not in url and (url.startswith('rtmpe://') or url.startswith('rtmp://') or url.startswith('mms://') or url.startswith('rtsp://') or '.avi' in url or '.wmv' in url or '.m3u8' in url or '.flv' in url or '.wsx' in url or 'desistreams.xml' in origurl or 'LiveTV.xml' in origurl):
 				isFolder = False
 
 				#for rtmp/rtmpe streams if no timeout is specified, pick the timeout specifed by user
@@ -443,6 +557,9 @@ def build_show_directory(origurl):
 				else:
 					mode = PLUGIN_MODE_PLAY_PLAYLIST
 					url = origurl
+
+
+
 
 			#sawlive.tv embed url found from which we need to extract stream
 			if url.startswith('http://sawlive.tv/embed') or url.startswith('http://www.sawlive.tv/embed'):
@@ -466,8 +583,9 @@ def build_show_directory(origurl):
 		itemCount=itemCount+1		
 		xbmcplugin.setContent( handle=int( sys.argv[ 1 ] ), content='movies' )
 		listitem = xbmcgui.ListItem( label = label, iconImage = thumb, thumbnailImage = thumb, path = url)
-		infolabels = { "title": label, "plot": description, "plotoutline": description, "date": pubDate, "duration": duration, "rating": rating, "votes": viewcount, "tvshowtitle": label, "originaltitle": label, "count": viewcount}
+		infolabels = { "title": label, "plot": description, "plotoutline": description, "date": pubDate, "duration": duration, "rating": rating, "votes": viewcount, "tvshowtitle": label, "originaltitle": label, "count": viewcount, "TVShowTitle": label}
 		listitem.setInfo( type="video", infoLabels=infolabels )
+
 
 		if url:
 			u = sys.argv[0] + "?mode=" + str(mode) + "&name=" + urllib.quote_plus( str(label) ) + "&url=" + urllib.quote_plus( url ) + "&index=" + str(itemCount)
@@ -476,10 +594,20 @@ def build_show_directory(origurl):
 	
 		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = isFolder )
 
+
+	#if only one audio/video file found, play it (rather than showing a new page with one item)
+	#if itemCount == 1 and (mode == PLUGIN_MODE_PLAY_YT_VIDEO or mode == PLUGIN_MODE_PLAY_STREAM):
+	if itemCount == 1:
+		if mode == PLUGIN_MODE_PLAY_STREAM:
+			xbmc.Player( xbmc.PLAYER_CORE_DVDPLAYER ).play( str(url), listitem)
+			return
+		elif mode == PLUGIN_MODE_PLAY_YT_VIDEO:
+			play_youtube_video(guid, label)
+
+
+
 	#show search options on only the main page
 	if origurl == __rooturl__:
-		searchPakee = xbmcgui.ListItem( label = 'Search Pakee...', iconImage = thumb, thumbnailImage = thumb )
-		xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_QUERY_DB)+"&name=Search Pakee...", listitem = searchPakee, isFolder = True )
 
 		searchYT = xbmcgui.ListItem( label = 'Search YouTube...', iconImage = thumb, thumbnailImage = thumb )
 		xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_QUERY_YT)+"&name=Search YouTube...", listitem = searchYT, isFolder = True )
@@ -521,7 +649,9 @@ def build_show_directory(origurl):
 
 def isMusicFile(url):
 
-	if '.mp3' in url or '.wma' in url or 'http://bit.ly' in url or '/getSharedFile/' in url or '.mp4' in url:
+	if 'dailymotion.com' in url:
+		return False
+	if '.mp3' in url or '.wma' in url or '.m4a' in url or 'http://bit.ly' in url or '/getSharedFile/' in url or '.mp4' in url or 'kiwi6.com' in url:
 		return True
 	else:
 		return False
@@ -529,14 +659,52 @@ def isMusicFile(url):
 #open url and parse XML using dom
 def getItemsFromUrl(url):
 
+	username = __settings__.getSetting('username')
+	password = __settings__.getSetting('password')
+
+	#if no credentials entered
+	if username == '' or password == '':
+		print __settings__.getLocalizedString(30501).replace('\\n','\n')
+		xbmcgui.Dialog().ok(__settings__.getLocalizedString(30500),__settings__.getLocalizedString(30501).replace('\\n','\n'))
+		open_settings()
+		return
+
 	try:
+		passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+
+		# this creates a password manager
+		passman.add_password(None, url, username, password)
+
+		authhandler = urllib2.HTTPBasicAuthHandler(passman)
+
+		opener = urllib2.build_opener(authhandler)
+		urllib2.install_opener(opener)
 
 		file = urllib2.urlopen(url, timeout=3600)
 		data = file.read()
 		file.close()
 
-	except:
-		xbmcgui.Dialog().ok('Pakee','Request timed out. Please try again')
+	except urllib2.HTTPError, e:
+		errorMsg = str(e)
+
+		#invalid credentials passed
+		if 'HTTP Error 401' in errorMsg:
+			print __settings__.getLocalizedString(30502)
+			print errorMsg
+			xbmcgui.Dialog().ok(__settings__.getLocalizedString(30500),__settings__.getLocalizedString(30502).replace('\\n','\n'))
+			open_settings()
+
+		#url not found at start (root url not found). server down ask user to check later
+		elif url == __rooturl__:
+			print __settings__.getLocalizedString(30504)
+			print errorMsg
+			xbmcgui.Dialog().ok(__settings__.getLocalizedString(30500),__settings__.getLocalizedString(30504).replace('\\n','\n'))
+
+		#url not found during navigation within addon, ask user to try another link
+		else:
+			print __settings__.getLocalizedString(30503)
+			print errorMsg
+			xbmcgui.Dialog().ok(__settings__.getLocalizedString(30500),__settings__.getLocalizedString(30503).replace('\\n','\n'))
 		return
 
 	dom =  xml.dom.minidom.parseString(data)
@@ -561,22 +729,28 @@ def getItemFields(item):
 		label = clean(getText(item.getElementsByTagName("title")[0].childNodes))
 	else:
 		label = 'No title'
-	if item.getElementsByTagName("link"):
-		url = getText(item.getElementsByTagName("link")[0].childNodes)
-	elif item.getElementsByTagName("enclosure"):
+	if item.getElementsByTagName("enclosure"):
 		url = item.getElementsByTagName("enclosure")[0].getAttribute('url')
+		print ('Found enclosure link: ' + url)
+	elif item.getElementsByTagName("link"):
+		url = getText(item.getElementsByTagName("link")[0].childNodes)
+
 	else:
 		url = ''
-	if item.getElementsByTagName("description"):
+
+	if item.getElementsByTagNameNS("http://www.itunes.com/dtds/podcast-1.0.dtd","summary"):
+		description = clean(getText(item.getElementsByTagNameNS("http://www.itunes.com/dtds/podcast-1.0.dtd","summary")[0].childNodes))
+	elif item.getElementsByTagName("description"):
 		description = clean(getText(item.getElementsByTagName("description")[0].childNodes))
 	else:
 		description = ''
+
 	if item.getElementsByTagNameNS("http://search.yahoo.com/mrss/","thumbnail"):
 		thumb = item.getElementsByTagNameNS("http://search.yahoo.com/mrss/","thumbnail")[0].getAttribute('url')
 	elif item.getElementsByTagName("thumbnail"):
 		thumb = clean(getText(item.getElementsByTagName("thumbnail")[0].childNodes))
 	else:
-		thumb = pakee_thumb
+		thumb = main_thumb
 
 	if item.getElementsByTagNameNS("http://search.yahoo.com/mrss/","content"):
 		duration = item.getElementsByTagNameNS("http://search.yahoo.com/mrss/","content")[0].getAttribute('duration')
@@ -643,7 +817,7 @@ def getText(nodelist):
 	
 def build_search_directory(paramName):
 	if paramName == 'querydb':
-		title = 'Search Pakee'
+		title = 'Search DB'
 	else:
 		title = 'Search YouTube'
 
@@ -655,7 +829,7 @@ def build_search_directory(paramName):
 	if len( search_string ) == 0:
 		return
 
-	build_show_directory('http://pakee.hopto.org/pakee/getYoutubePlaylistQuick.php?' + paramName + '=' + search_string)
+	build_show_directory('http://sastatv.com/secure/php/getYoutubePlaylistQuick.php?' + paramName + '=' + search_string)
 
 
 def build_ytuser_directory():
@@ -667,7 +841,7 @@ def build_ytuser_directory():
 	if len( search_string ) == 0:
 		return
 
-	build_show_directory('http://pakee.hopto.org/pakee/getYoutubePlaylistQuick.php?id=' + search_string)
+	build_show_directory('http://sastatv.com/secure/php/getYoutubePlaylistQuick.php?id=' + search_string)
 
 def build_ytuser_favs_directory():
 	keyboard = xbmc.Keyboard( '', 'Enter YouTube userid' )
@@ -678,7 +852,7 @@ def build_ytuser_favs_directory():
 	if len( search_string ) == 0:
 		return
 
-	build_show_directory('http://pakee.hopto.org/pakee/getYoutubePlaylistQuick.php?favorites=1&id=' + search_string)
+	build_show_directory('http://sastatv.com/secure/php/getYoutubePlaylistQuick.php?favorites=1&id=' + search_string)
 
 	
 
@@ -698,6 +872,7 @@ def get_params():
 			if ( len( splitparams ) ) == 2:
 				param[splitparams[0]] = splitparams[1]					
 	return param
+
 
 params = get_params()
 url = None
@@ -729,11 +904,12 @@ try:
 except:
         pass
 
-print ("pakee started with mode: " + str(mode))
+print ("addon started with mode: " + str(mode))
 
 
 if mode == None:
 	build_show_directory(__rooturl__)
+
 elif mode == PLUGIN_MODE_BUILD_DIR:
 	build_show_directory(url)
 elif mode == PLUGIN_MODE_PLAY_YT_VIDEO:

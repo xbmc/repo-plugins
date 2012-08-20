@@ -1,3 +1,19 @@
+[B]Version 2.0.7[/B]
+- Fixed infoLabels for "Other Episodes"
+
+[B]Version 2.0.6[/B]
+
+- Added default view for Confluence skin
+- Fixed playlist error when download is enabled
+- Added fanart
+- Other minor changes
+
+[B]Version 2.0.5[/B]
+
+- Switched from DVDPLAYER to setResolvedUrl/IsPlayable method for video playback
+- Added Buggalo Exception Collector
+- Other minor changes
+
 [B]Version 2.0.4[/B]
 
 - Updated addon to support recent website changes.

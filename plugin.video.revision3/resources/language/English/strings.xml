@@ -11,9 +11,14 @@
     <string id="30010">or try again using different search words.</string>
 	<string id="30011">Please set a Download Location.</string>
 	<string id="30012">Downloads</string>
-	<string id="30013">Recently Released</string>
+	<string id="30013">Just Released</string>
 	<string id="30014">Archived Shows</string>
 	<string id="30015">Search</string>
 	<string id="30016">Next Page</string>
 	<string id="30017">Video Type</string>
+	<string id="30018">Just released Revision3 shows.</string>
+	<string id="30019">Take a step back into the past of Revision3. Watch some of the shows that are no longer in production.</string>
+	<string id="30020">Enter search term.</string>
+	<string id="30021">Enable default view for Confluence skin</string>
+	<string id="30022">Play downloaded shows.</string>
 </strings>

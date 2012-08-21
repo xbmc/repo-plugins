@@ -9,23 +9,41 @@ icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 nexticon = xbmc.translatePath( os.path.join( home, 'resources/next.png' ) )
 videoq = __settings__.getSetting('video_quality')
 
-
+def make_request(url, headers=None):
+        try:
+            if headers is None:
+                headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1',
+                           'Referer' : 'http://www.engadget.com/'}
+            req = urllib2.Request(url,None,headers)
+            response = urllib2.urlopen(req)
+            data = response.read()
+            response.close()
+            return data
+        except urllib2.URLError, e:
+            print 'We failed to open "%s".' % url
+            if hasattr(e, 'reason'):
+                print 'We failed to reach a server.'
+                print 'Reason: ', e.reason
+            if hasattr(e, 'code'):
+                print 'We failed with error code - %s.' % e.code
+                xbmc.executebuiltin("XBMC.Notification(Engadget,HTTP ERROR: "+str(e.code)+",5000,"+icon+")")
+                
+                
 def Categories():
         addDir(__language__(30000),'http://www.engadget.com/engadgetshow.xml',1,'http://www.blogcdn.com/www.engadget.com/media/2011/07/engadget-show-logo-1310764107.jpg')
         addDir(__language__(30001),'http://api.viddler.com/api/v2/viddler.videos.getByUser.xml?key=tg50w8nr11q8176liowh&user=engadget',2,icon)
 
 
 def getEngadgetVideos(url):
-        req = urllib2.Request(url)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+        soup = BeautifulStoneSoup(make_request(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
         videos = soup('video_list')[0]('video')
         page = int(soup('list_result')[0]('page')[0].string)+1
         for video in videos:
             name = video('title')[0].string
             link = video('html5_video_source')[0].string
+            # link += '&ec_rate=406&ec_prebuf=10'
+            link += '|User-Agent='
+            link += urllib.quote_plus('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1')
             thumb = video('thumbnail_url')[0].string
             length = video('length')[0].string
             addLink(name,link,length,thumb)
@@ -34,11 +52,7 @@ def getEngadgetVideos(url):
 
 def getEngadgetShow(url):
         url = 'http://www.engadget.com/engadgetshow.xml'
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-        response = urllib2.urlopen(req)
-        link=response.read()
-        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+        soup = BeautifulStoneSoup(make_request(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
         episodes = soup('item')
         for episode in episodes:
             try:

@@ -556,6 +556,6 @@ class GrooveAPI:
 
 		while (i < len(playlists)):
 			s = playlists[i]
-			list.append([str(s['PlaylistName']).encode('ascii', 'ignore'), s['PlaylistID']])
+			list.append([str(s['PlaylistName']).encode('utf-8'), s['PlaylistID']])
 			i = i + 1
 		return list

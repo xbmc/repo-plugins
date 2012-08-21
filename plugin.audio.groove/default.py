@@ -482,59 +482,75 @@ class Grooveshark:
         global player
         player.stop()
         if item != None:
+            # Get stream as it could have expired
+            item.select(True)
             url = ''
             songid = item.getProperty('songid')
-            duration = int(self._getSongDuration(songid))
             stream = groovesharkApi.getSubscriberStreamKey(songid)
             if stream != False:
                 url = stream['url']
                 key = stream['StreamKey']
                 server = stream['StreamServerID']
-                duration = self._setDuration(stream['uSecs'])
-            if url != '':
-                item.setPath(url)
-                xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=item)
-                if __debugging__ :
-                    xbmc.log("Grooveshark playing: " + url)
-                # Wait for play then start timer
-                seconds = 0
-                while seconds < STREAM_TIMEOUT:
-                    try:
-                        if player.isPlayingAudio() == True:
-                            if playTimer != None:
-                                playTimer.cancel()
-                                songMarkTime = 0
-                            playTimer = PlayTimer(1, markSong, duration, [songid, duration, key, server])
-                            playTimer.start()
-                            break
-                    except: pass
-                    time.sleep(1)
-                    seconds = seconds + 1
+                duration = int(self._setDuration(stream['uSecs']))
+                stream = [songid, duration, url, key, server]
+                self._setSongStream(stream)
+                if url != '':
+                    item.setPath(url)
+                    xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=item)
+                    if __debugging__ :
+                        xbmc.log("Grooveshark playing: " + url)
+                    # Wait for play then start timer
+                    seconds = 0
+                    while seconds < STREAM_TIMEOUT:
+                        try:
+                            if player.isPlayingAudio() == True:
+                                if playTimer != None:
+                                    playTimer.cancel()
+                                    songMarkTime = 0
+                                playTimer = PlayTimer(1, markSong, self._setDuration(duration), [songid, duration, key, server])
+                                playTimer.start()
+                                break
+                        except: pass
+                        time.sleep(1)
+                        seconds = seconds + 1
+                else:
+                    xbmc.log("No song URL")
             else:
-                xbmc.log("No song URL")
+                xbmc.log("No song stream")
         else:
             xbmc.executebuiltin('XBMC.Notification(' + __language__(30008) + ', ' + __language__(30044) + ', 1000, ' + thumbDef + ')')
         
     # Make a song directory item
-    def songItem(self, songid, name, album, artist, coverart, trackLabelFormat=ARTIST_ALBUM_NAME_LABEL):
-        songImg = self._get_icon(coverart, 'song-' + str(songid) + "-image")
-        if int(trackLabelFormat) == NAME_ALBUM_ARTIST_LABEL:
-            trackLabel = name + " - " + album + " - " + artist
-        else:
-            trackLabel = artist + " - " + album + " - " + name
-        duration = self._getSongDuration(songid)
-        item = xbmcgui.ListItem(label = trackLabel, thumbnailImage=songImg, iconImage=songImg)
-        item.setInfo( type="music", infoLabels={ "title": name, "album": album, "artist": artist, "duration": duration} )
-        item.setProperty('mimetype', 'audio/mpeg')
-        item.setProperty("IsPlayable", "true")
-        item.setProperty('songid', str(songid))
-        item.setProperty('coverart', songImg)
-        item.setProperty('title', name)
-        item.setProperty('album', album)
-        item.setProperty('artist', artist)
-        item.setProperty('duration', str(duration))
+    def songItem(self, songid, name, album, artist, coverart, trackLabelFormat=ARTIST_ALBUM_NAME_LABEL, tracknumber=1):
         
-        return item
+        stream = self._getSongStream(songid)
+        if stream != False:
+            duration = stream[1]
+            url = stream[2]
+            key = stream[3]
+            server = stream[4]
+            songImg = self._get_icon(coverart, 'song-' + str(songid) + "-image")
+            if int(trackLabelFormat) == NAME_ALBUM_ARTIST_LABEL:
+                trackLabel = name + " - " + album + " - " + artist
+            else:
+                trackLabel = artist + " - " + album + " - " + name
+            item = xbmcgui.ListItem(label = trackLabel, thumbnailImage=songImg, iconImage=songImg)
+            item.setPath(url)
+            item.setInfo( type="music", infoLabels={ "title": name, "album": album, "artist": artist, "duration": duration, "tracknumber" : tracknumber} )
+            item.setProperty('mimetype', 'audio/mpeg')
+            item.setProperty("IsPlayable", "true")
+            item.setProperty('songid', str(songid))
+            item.setProperty('coverart', songImg)
+            item.setProperty('title', name)
+            item.setProperty('album', album)
+            item.setProperty('artist', artist)
+            item.setProperty('duration', str(duration))
+            item.setProperty('key', str(key))
+            item.setProperty('server', str(server))
+            return item
+        else:
+            xbmc.log("No song URL")
+            return None
     
     # Next page of songs
     def songPage(self, offset, trackLabelFormat, playlistid = 0, playlistname = ''):
@@ -701,15 +717,6 @@ class Grooveshark:
                 dialog.ok(__language__(30008), __language__(30069), __language__(30070))
                 return 0
     
-    # Get a song directory item
-    def _get_song_item(self, song, trackLabelFormat):
-        name = song[0]
-        songid = song[1]
-        album = song[2]
-        artist = song[4]
-        coverart = song[6]
-        return self.songItem(songid, name, album, artist, coverart, trackLabelFormat)            
-        
     # File download            
     def _get_icon(self, url, songid):
         if url != 'None':
@@ -754,10 +761,13 @@ class Grooveshark:
         items = end - start
         while n < end:
             song = songs[n]
+            name = song[0]
             songid = song[1]
-            duration = self._getSongDuration(songid)
-            if duration != -1:   
-                item = self._get_song_item(song, trackLabelFormat)
+            album = song[2]
+            artist = song[4]
+            coverart = song[6]
+            item = self.songItem(songid, name, album, artist, coverart, trackLabelFormat, (n+1))
+            if item != None:   
                 coverart = item.getProperty('coverart')
                 songname = song[0]
                 songalbum = song[2]
@@ -906,51 +916,92 @@ class Grooveshark:
             xbmc.log("An error occurred saving songs")
             pass
 
-    def _getSongDuration(self, songid):
+    # Duration to seconds
+    def _setDuration(self, usecs):
+        if usecs < 60000000:
+            usecs = usecs * 10 # Some durations are 10x to small
+        return int(usecs / 1000000)
+    
+    def _getSongStream(self, songid):
         id = int(songid)
-        duration = -1
-        durations = []
-        path = os.path.join(cacheDir, 'duration.dmp')
+        stream = None
+        streams = []
+        path = os.path.join(cacheDir, 'streams.dmp')
         try:
             f = open(path, 'rb')
-            durations = pickle.load(f)
-            for song in durations:
+            streams = pickle.load(f)
+            for song in streams:
                 if song[0] == id:
                     duration = song[1]
+                    url = song[2]
+                    key = song[3]
+                    server = song[4]
+                    stream = [id, duration, url, key, server]
+                    if __debugging__ :
+                        xbmc.log("Found " + str(id) + " in stream cache")
                     break;
             f.close()
         except:
             pass
 
         # Not in cache
-        if duration < 0:
+        if stream == None:
             stream = groovesharkApi.getSubscriberStreamKey(songid)
             if stream != False and stream['url'] != '':
                 duration = self._setDuration(stream['uSecs'])
-                song = [id, duration]
-                self._setSongDuration(song, durations)
+                url = stream['url']
+                key = stream['StreamKey']
+                server = stream['StreamServerID']
+                stream = [id, duration, url, key, server]
+                self._addSongStream(stream)
 
-        return duration
+        return stream
         
-    def _setSongDuration(self, song, durations):            
+    def _addSongStream(self, stream):
+        streams = self._getStreams()           
+        streams.append(stream)                
+        path = os.path.join(cacheDir, 'streams.dmp')
         try:
-            durations.append(song)                
-            # Create the cache directory if it doesn't exist.
-            if not os.path.exists(cacheDir):
-                os.makedirs(cacheDir)
-            path = os.path.join(cacheDir, 'duration.dmp')
             f = open(path, 'wb')
-            pickle.dump(durations, f, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(streams, f, protocol=pickle.HIGHEST_PROTOCOL)
+            f.close()
+            if __debugging__ :
+                xbmc.log("Added " + str(stream[0]) + " to stream cache")
+        except:
+            xbmc.log("An error occurred adding to stream")
+    
+    def _setSongStream(self, stream):
+        id = int(stream[0])
+        stream[1] = self._setDuration(stream[1])
+        streams = self._getStreams()
+        path = os.path.join(cacheDir, 'streams.dmp')
+        i = 0
+
+        for song in streams:
+            if song[0] == id:
+                streams[i] = stream
+                try:
+                    f = open(path, 'wb')
+                    pickle.dump(streams, f, protocol=pickle.HIGHEST_PROTOCOL)
+                    f.close()
+                    if __debugging__ :
+                        xbmc.log("Updated " + str(id) + " in stream cache")
+                    break;
+                except:
+                    xbmc.log("An error occurred setting stream")                    
+            i = i + 1
+    
+    def _getStreams(self):
+        path = os.path.join(cacheDir, 'streams.dmp')
+        try:
+            f = open(path, 'rb')
+            streams = pickle.load(f)
             f.close()
         except:
-            xbmc.log("An error occurred saving duration")
+            streams = []
             pass
+        return streams
 
-    # Duration to seconds
-    def _setDuration(self, usecs):
-        if usecs < 60000000:
-            usecs = usecs * 10 # Some durations are 10x to small
-        return usecs / 1000000
     
 # Parse URL parameters
 def get_params():

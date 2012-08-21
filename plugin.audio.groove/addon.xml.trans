@@ -14,6 +14,10 @@
 		<description lang="en">
 			Grooveshark addon for XBMC. You should enter your Grooveshark Anywhere username and password in the addon settings.
 		</description>
+		<summary lang="bg">Grooveshark добавка за XBMC.</summary>
+		<description lang="bg">
+			Трябва да въведете потребителското си име и парола от Grooveshark в настройките на добавката. За да ползвате добавката е необходимо да сте заплатили "Premium Subscriptions" тип "Grooveshark Anywhere".
+		</description>
 	</extension>
 </addon>
 

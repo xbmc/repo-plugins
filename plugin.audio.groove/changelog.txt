@@ -1,3 +1,15 @@
+1.0.6
+
+Fix play next issue.
+
+1.0.5
+
+Fix IP address.
+
+1.0.4
+
+Fix playlist name encoding bug.
+
 1.0.3
 
 Fix bug in album song name.

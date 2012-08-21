@@ -1,3 +1,6 @@
+Version 0.0.5
+fix for engadget videos
+
 Version 0.0.4
 fix for changes in rss feed
 

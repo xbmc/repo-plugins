@@ -2,17 +2,18 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
-settings = xbmcaddon.Addon(id='plugin.video.thatguywiththeglasses_com')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.thatguywiththeglasses_com')
+translation = addon.getLocalizedString
 
-forceViewMode=settings.getSetting("forceViewMode")
+forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
 else:
   forceViewMode=False
-viewMode=str(settings.getSetting("viewMode"))
+viewMode=str(addon.getSetting("viewMode"))
 
 def index():
         addDir(translation(30001),"http://thatguywiththeglasses.com/videolinks",'listLatest',"")
@@ -104,6 +105,7 @@ def playVideo(url):
             url = listParts(match1)
           else:
             url="http://blip.tv/play/"+match1[0]
+            url=url.replace(".x?p=1","")
           content = urllib.unquote_plus(getRedirectedUrl(url))
           match=re.compile('/rss/flash/(.+?)&', re.DOTALL).findall(content)
           if len(match)>0:
@@ -146,12 +148,8 @@ def cleanTitle(title):
 
 def getRedirectedUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:14.0) Gecko/20100101 Firefox/14.0.1')
+        response = urllib2.urlopen(req)
         response.close()
         return str(response.geturl())
 
@@ -161,12 +159,8 @@ def getUrl(url,data=None):
           req.add_header('Content-Type', 'application/x-www-form-urlencoded')
         else:
           req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:14.0) Gecko/20100101 Firefox/14.0.1')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

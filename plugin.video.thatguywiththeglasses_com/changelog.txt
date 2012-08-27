@@ -5,3 +5,5 @@
 - Added support for more videotypes
 - Fixed multi part handling
 - Changed icon
+1.0.2
+- Fixed site changes for newest vids

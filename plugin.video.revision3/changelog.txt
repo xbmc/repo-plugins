@@ -1,3 +1,9 @@
+[B]Version 2.0.8[/B]
+- Added support for connection timeout errors
+- Fixed loop when switching between download settings
+- Fixed 'img' referenced before assignment error
+- Fixed error when a "Unknown File Type" is played
+
 [B]Version 2.0.7[/B]
 - Fixed infoLabels for "Other Episodes"
 

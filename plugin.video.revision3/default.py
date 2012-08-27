@@ -1,11 +1,11 @@
 
-import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, buggalo
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, time, buggalo
 
 plugin =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '08-19-2012'
-__version__ = '2.0.7'
+__date__ = '08-26-2012'
+__version__ = '2.0.8'
 settings = xbmcaddon.Addon(id='plugin.video.revision3')
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -45,10 +45,27 @@ def ListItem(label, image, url, mode, isFolder, infoLabels = False, fanart = Fal
 		u = url
 	ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = isFolder)
 	return ok
+	
+def open_url(url):
+	retries = 0
+	while retries < 3:
+		try:
+			data = common.fetchPage({"link": url})
+			if len(data['content']) > 0 and data['status'] == 200:
+				return data
+			else:
+				retries += 1
+		except:
+			retries += 1
+			time.sleep(3)
+	buggalo.addExtraData('url', url)
+	dialog = xbmcgui.Dialog()
+	ok = dialog.ok(plugin, settings.getLocalizedString( 30023 ) + '\n' + settings.getLocalizedString( 30024 ))
 
 def build_main_directory(url):
 	path = url
-	html = common.fetchPage({"link": url})['content']
+	#html = common.fetchPage({"link": url})['content']
+	html = open_url(url)['content']
 	shows = common.parseDOM(html, "ul", attrs = { "id": "shows" })[0]
 	url_name = re.compile('<h3><a href="(.+?)">(.+?)</a></h3>').findall(shows)
 	image = re.compile('class="thumbnail"><img src="(.+?)" /></a>').findall(shows)
@@ -83,7 +100,8 @@ def build_sub_directory(url, name):
 	saveurl = url
 	studio = name
 	savestudio = name
-	html = common.fetchPage({"link": url})['content']
+	#html = common.fetchPage({"link": url})['content']
+	html = open_url(url)['content']
 	ret = common.parseDOM(html, "div", attrs = { "id": "main-episodes" })
 	pageLoad = common.parseDOM(ret, "a", ret = "onclick")
 	if len(ret) == 0:
@@ -94,11 +112,14 @@ def build_sub_directory(url, name):
 		pageLoad = common.parseDOM(html, "a", ret = "onclick")
 	current = common.parseDOM(html, "span", attrs = { "class": "active" })
 	episodes = common.parseDOM(ret, "li", attrs = { "class": "episode item" })
+	img = common.parseDOM(episodes[0], "img", ret = "src")[0]
 	if not '[ ' + settings.getLocalizedString( 30013 ) + ' ]' == name:
 		try:
-			img = common.parseDOM(episodes[0], "img", ret = "src")[0]
 			downloads = 'http://revision3.com/' + img.rsplit('/')[6] + '/' + img.rsplit('/')[6] + '_downloads'
-			fresult = common.fetchPage({"link": downloads})['content']
+			if common.fetchPage({"link": downloads})['status'] != 200:
+				raise Exception("HTTP ERROR")
+			# fresult = common.fetchPage({"link": downloads})['content']
+			fresult = open_url(downloads)['content']
 			data = re.compile( '<a href="(.+?)" target="_blank">1920x1200</a>' ).findall(fresult)
 			if len(data) > 1:
 				fanart = data[1]
@@ -173,7 +194,8 @@ def build_search_directory(url):
 			url = 'http://revision3.com/search/page?type=video&q=' + search + '&limit=10&page=1'
 		except:
 			return
-	html = common.fetchPage({"link": url})['content']
+	#html = common.fetchPage({"link": url})['content']
+	html = open_url(url)['content']
 	current = common.parseDOM(html, "span", attrs = { "class": "active" })
 	pageLoad = common.parseDOM(html, "a", ret = "onclick")
 	try:
@@ -228,23 +250,28 @@ def clean_file(name):
     return name
 
 def get_video(url, name, plot, studio, episode, thumb, date):
-	result = common.fetchPage({"link": url})['content']
+	#result = common.fetchPage({"link": url})['content']
+	result = open_url(url)['content']
 	video_id = re.compile('player\.loadRevision3Item\(\'video_id\',(.+?)\);').findall(result)[0].replace(' ','')
-	api = common.fetchPage({"link": 'http://revision3.com/api/flash?video_id=' + video_id})['content']
+	#api = common.fetchPage({"link": 'http://revision3.com/api/flash?video_id=' + video_id})['content']
+	api = open_url('http://revision3.com/api/flash?video_id=' + video_id)['content']
 	videos_api = common.parseDOM(api, "media", ret = "type")
 	videos_api[:] = (value for value in videos_api if value != 'thumbnail')
 	durl = {}
 	for type_api in videos_api:
 		content_api = clean(common.parseDOM(api, "media", attrs = { "type": type_api })[0])
 		durl[type_api] = content_api
-	list = ['MP4','Quicktime','Xvid','WMV']
+	list = ['MP4','Quicktime','Xvid','WMV','Unknown File Type']
 	for type in list:
 		content = common.parseDOM(result, "div", attrs = { "id": "action-panels-download-" + type })
 		videos = common.parseDOM(content, "a", attrs = { "class": "sizename" })
 		links = common.parseDOM(content, "a", attrs = { "class": "sizename" }, ret="href")
 		count = 0
 		for add in videos:
-			code = type + ':' + add
+			if type == 'Unknown File Type':
+				code = type
+			else:
+				code = type + ':' + add
 			durl[code] = links[count]
 			count += 1
 	dictList = [] 
@@ -276,6 +303,9 @@ def get_video(url, name, plot, studio, episode, thumb, date):
 	if ret != -1:
 		if settings.getSetting('download') == 'true':
 			while not settings.getSetting('downloadPath'):
+				if settings.getSetting('download') == 'false':
+					xbmc.executebuiltin("Container.Refresh")
+					return
 				dialog = xbmcgui.Dialog()
 				ok = dialog.ok(plugin, settings.getLocalizedString( 30011 ))
 				settings.openSettings()

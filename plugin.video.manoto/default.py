@@ -88,13 +88,15 @@ def loginAndParse():
 	stream = soup.find('source', type='video/mp4');	
 	
 	if stream is None or stream['src'] is None:
+                xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
 		return False
 	
 	streams = getStreamsFromPlayList(stream['src'])
 	
  	if streams == None:
+		xbmc.executebuiltin("XBMC.Notification(" + __settings__.getAddonInfo('name') + "," + __language__(30002) + ",30000,"+icon+")")
  		xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
-		return False
+		return True
     
     	bitrates = []
     	for k in streams.keys():
@@ -118,5 +120,5 @@ def loginAndParse():
 	return True
 
 while not loginAndParse():
-       	xbmc.executebuiltin("XBMC.Notification(" + __settings__.getAddonInfo('name') + "," + __language__(30001) + ",10000,"+icon+")")
-       	__settings__.openSettings()
+	xbmc.executebuiltin("XBMC.Notification(" + __settings__.getAddonInfo('name') + "," + __language__(30001) + ",10000,"+icon+")")
+	__settings__.openSettings()

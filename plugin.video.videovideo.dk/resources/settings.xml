@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<settings>
+	<category label="30000">
+        <setting id="show.teasers" label="30001" type="bool" default="true" />
+	</category>
+</settings>
+

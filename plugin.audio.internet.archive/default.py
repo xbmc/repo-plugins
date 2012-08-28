@@ -2,10 +2,12 @@ import urllib
 import urllib2
 import re
 import os
+import ast
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
-from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
+import SimpleDownloader as downloader
+from BeautifulSoup import BeautifulSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.audio.internet.archive')
 __language__ = __settings__.getLocalizedString
@@ -13,6 +15,9 @@ home = __settings__.getAddonInfo('path')
 icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 sort = __settings__.getSetting('sort_by')
+base_url = 'http://www.archive.org'
+downloader = downloader.SimpleDownloader()
+
 if sort=="":
     sort = __language__(30011)
     set = 'downloads'
@@ -28,8 +33,8 @@ elif sort==__language__(30012):
 
 def getResponse(url):
         try:
-            req = urllib2.Request(url)
-            req.addheaders = [('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
+            headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0.2) Gecko/20100101 Firefox/10.0.2'}
+            req = urllib2.Request(url,None,headers)
             response = urllib2.urlopen(req)
             link = response.read()
             response.close()
@@ -46,25 +51,9 @@ def getResponse(url):
 
 def getCategories(url, iconimage):
         soup = BeautifulSoup(getResponse(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-        try:
-            thumb = soup('td', attrs={'style' : "width:80px; height:72px; vertical-align:middle; text-align:right"})[0].img['src']
-            if thumb.startswith('/'):
-                thumb = 'http://www.archive.org'+thumb
-            if 'animationandcartoons/animation-header.gif' in thumb:
-                thumb = iconimage
-            if 'newsandpublicaffairs/news-header.gif' in thumb:
-                thumb = iconimage
-            if 'artsandmusicvideos/artsmusic-header.gif' in thumb:
-                thumb = iconimage
-            if 'vlogs/vlogs-header.gif' in thumb:
-                thumb = iconimage
-            if 'youth_media/flip-youthmedia-icon.gif' in thumb:
-                thumb = iconimage
-            if 'gamevideos/videogames-header.gif' in thumb:
-                thumb = iconimage
-            if 'ephemera/flip-ephemera-header.gif' in thumb:
-                thumb = iconimage
-        except:
+        if 'etree' in url:
+            thumb = 'http://ia600202.us.archive.org/17/items/etree/lma.jpg'
+        else:
             thumb = iconimage
         try:
             try:
@@ -73,9 +62,8 @@ def getCategories(url, iconimage):
                 try:
                     spotlight_url = soup('div', attrs={'id' : "spotlight"})[0]('a')[0]['href']
                 except:
-                    print '#spotlight_url not found#'
+                    print '--- spotlight_url not found ---'
                     raise
-
             try:
                 spotlight_name = soup('div', attrs={'id' : "spotlight"})[0]('a')[1].string.encode('utf-8')
             except:
@@ -83,18 +71,16 @@ def getCategories(url, iconimage):
                     spotlight_name = soup('div', attrs={'id' : "spotlight"})[0]('a')[0].string.encode('utf-8')
                 except:
                     spotlight_name = 'Unknown'
-
             try:
                 spotlight_thumb = soup('div', attrs={'id' : "spotlight"})[0].img['src']
             except:
-                spotlight_thumb = iconimage
-
+                spotlight_thumb = thumb
             try:
                 spotlight_desc = soup('div', attrs={'id' : "spotlight"})[0].br.next.string.encode('utf-8')
             except:
                 spotlight_desc = 'no desc'
-
-            addDir(coloring( 'Spotlight Item',"cyan",'Spotlight Item' )+' - '+spotlight_name, 'http://www.archive.org'+spotlight_url, 3, spotlight_desc, spotlight_thumb.split('?')[0])
+            addDir(coloring( 'Spotlight Item',"cyan",'Spotlight Item' )+' - '+spotlight_name,
+                   base_url+spotlight_url, 3, spotlight_desc, spotlight_thumb.split('?')[0])
         except:
             pass
 
@@ -102,28 +88,25 @@ def getCategories(url, iconimage):
         for i in items:
             name = i.string
             if name == 'All items (most recently added first)':
-                addDir(name,'http://www.archive.org'+i['href'],2,'',thumb)
+                addDir(name,base_url+i['href'],2,'',thumb)
                 name = name.replace('most recently added first','By Addon Setting: '+sort)
                 href = i['href'].replace('publicdate',set)
-                addDir(name,'http://www.archive.org'+href,2,'',thumb)
+                addDir(name,base_url+href,2,'',thumb)
             if name == 'Browse Collection':
-                addDir(name+' by average rating / number of reviews','http://www.archive.org'+i['href'],2,'',thumb)
+                addDir(name+' by average rating / number of reviews',base_url+i['href'],2,'',thumb)
             if name == 'Browse by Subject / Keywords':
-                addDir(name,'http://www.archive.org'+i['href'],7,'',thumb)
+                addDir(name,base_url+i['href'],7,'',thumb)
             if name == 'Browse by Language':
-                addDir(name,'http://www.archive.org'+i['href'],8,'',thumb)
+                addDir(name,base_url+i['href'],8,'',thumb)
             if name == 'Browse All Artists with Recordings in the Live Music Archive':
                 addDir(name,i['href'],11,'',thumb)
             if name == 'Grateful Dead':
                 addDir(name,i['href'],1,'',thumb)
-
         if soup('div', attrs={'id' : "browseauthor"}):
             addDir(__language__(30002),url,4,'',thumb)
         if soup('div', attrs={'id' : "browsetitle"}):
             addDir(__language__(30003),url,5,'',thumb)
-
         addDir(__language__(30004),url.split('/')[-1],6,'',thumb)
-
         try:
             categories = soup('div', attrs={'id' : 'subcollections'})[0]('tr')
             for i in categories:
@@ -135,15 +118,17 @@ def getCategories(url, iconimage):
                             name = i('a')[0].string.encode('utf-8')
                         except:
                             name = 'Unknown'
-                    url = 'http://www.archive.org'+i.a['href']
+                    url = base_url+i.a['href']
                     try:
-                        thumb = 'http://www.archive.org'+i.img['src']
+                        thumb = base_url+i.img['src']
                     except:
                         pass
                     desc = i.br.next.encode('utf-8', 'ignore')
                     addDir(name+' ('+i.nobr.string+')',url,1,desc,thumb)
+                else:
+                    print '-- No Categories --'
         except:
-            print 'No Categories'
+            print '--- exception: categories ---'
 
 	
 def getShowList(url, iconimage):
@@ -159,14 +144,19 @@ def getShowList(url, iconimage):
         except:
             print 'SOUP ERROR'
             soup = BeautifulSoup(link)
-
-        items = soup('table', attrs={'class' : "resultsTable"})[0]('tr')
+        try:
+            items = soup('table', attrs={'class' : "resultsTable"})[0]('tr')
+        except IndexError:
+            pattern = re.compile('<b>Search engine returned invalid information or was unresponsive</b>')
+            if pattern.search(link):
+                xbmc.executebuiltin("XBMC.Notification("+__language__(30000)+","+__language__(30020)+",10000,"+icon+")")
+            return
         for i in items:
             try:
                 href = i.a['href']
             except:
                 print 'No URL'
-                pass
+                continue
             try:
                 if len(i.a.contents)>1:
                     name_list=[]
@@ -185,141 +175,191 @@ def getShowList(url, iconimage):
             except:
                 name = 'Unknown'
 
+            desc = ''
             try:
                 desc = i.br.next
             except:
-                desc = ''
-            try:
-                if 'class="searchTerm"' in str(desc):
-                    desc = i.span.next.next
-                if 'Keywords:</span>' in str(desc):
-                    desc = "No Description"
-            except:
-                desc = 'Description Error'
-            try:
-                addDir(name,'http://www.archive.org'+href,3,desc,iconimage)
-            except:
+                print '--- exception: description ---'
+            if desc != '':
                 try:
-                    desc = desc.encode('utf-8', 'ignore')
-                except:
-                    desc = 'Description Error 2'
-                try:
-                    addDir(name.encode('utf-8', 'ignore'),'http://www.archive.org'+href,3,desc,iconimage)
-                except:
-                    print 'There was an error adding show Directory'
-                    try:
-                        print 'NAME: '+name
-                    except:
-                        print 'NAME ERROR'
-                        pass
-                    try:
-                        print 'URL: '+href
-                    except:
-                        print 'URL ERROR'
-                        pass
-                    try:
-                        print 'DESC: '+desc
-                    except:
-                        print 'DESC ERROR'
-                        pass
-
-        try:
-            page = re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)[0]
-            url = 'http://www.archive.org'+page.replace('&amp;','&')
-            addDir(__language__(30007),url,2,'',iconimage)
-        except:
-            pass
-
-
-def getMedia(url, desc, iconimage):
-        link = getResponse(url)
-        soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
-
-        try:
-            thumb = soup('div', attrs={'id' : "col1"})[0]('img')[0]['src']
-            if thumb == '/images/glogo.png?cnt=0':
-                raise
-        except:
-            try:
-                thumb = 'http://www.archive.org'+soup('table', attrs={'id' : "ff4"})[0]('a')[0]['href']
-                if not thumb.find('.jpg'):
-                    if not thumb.find('.gif'):
-                        thumb = 'http://www.archive.org'+soup('table', attrs={'id' : "ff4"})[0]('a')[1]['href']
-                        if not thumb.find('.jpg'):
-                            if not thumb.find('.gif'):
-                                raise
-            except:
-                try:
-                    thumb = re.compile('<a href=".+?"><img title=".+?" alt=".+?" id=".+?" src="(.+?)?cnt=0"/></a>').findall(link)[0]
-                except:
-                    try:
-                        thumb = re.compile('<img id="thumbnail" src="(.+?)" style=".+?" alt=".+?" title=".+?">').findall(link)[0]
-                    except:
-                        thumb = iconimage
-        if thumb.startswith('/'):
-            thumb = 'http://www.archive.org'+thumb
-
-        try:
-            match = re.compile("IAD.mrss = '(.+?)'").findall(link)[0]
-            soupRss = BeautifulStoneSoup(match, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-            if len(soupRss('item')) > 1:
-                # add Play All listitem
-                u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=10"+"&iconimage="+urllib.quote_plus(thumb)
-                ok=True
-                liz=xbmcgui.ListItem(coloring( __language__(30005), "cyan", __language__(30005)), iconImage=xbmc.translatePath(os.path.join(home, 'resources', 'play.png')), thumbnailImage=xbmc.translatePath(os.path.join(home, 'resources', 'play.png')))
-                liz.setProperty( "Fanart_Image", fanart )
-                ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
-
-            for i in soupRss('item'):
-                name = urllib.unquote_plus(i('media:title')[0].string.encode("utf-8", 'ignore'))
-                url = i ('media:content')[0]['url']
-                try:
-                    duration = i('media:content')[0]['duration']
-                except:
-                    duration = ''
-                try:
-                    img = 'http://www.archive.org'+i('media:thumbnail')[0]['url']
-                    if img == 'http://www.archive.org/images/glogo.png':
+                    if 'class="searchTerm"' in str(desc):
+                        desc = i.span.next.next
+                    if 'Keywords:</span>' in str(desc):
                         raise
                 except:
-                    img = thumb
-                addLink(name, 'http://www.archive.org'+url, desc, duration, img)
-        except:
-            pass
-
-        try:
-            items = soup('p', attrs={'id' : "dl"})[0]('a')
-            for i in items:
-                url = i['href']
-                name = i.string
-                size = i.findPrevious('span').string
-                if 'NEW' in size:
-                    size = ''
-                addLink(coloring( __language__(30006),"orange",__language__(30006) )+name+' '+size, 'http://www.archive.org'+url, desc, '', thumb)
-        except:
-            pass
-
-
-def getPlaylist(url, iconimage):
-        player = xbmc.Player()
-        if player.isPlaying():
-            player.stop()
-        playlist = xbmc.PlayList(0)
-        playlist.clear()
-
-        match = re.compile("IAD.mrss = '(.+?)'").findall(getResponse(url))[0]
-        soup = BeautifulStoneSoup(match, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-        for i in soup('item'):
-            name = urllib.unquote_plus(i('media:title')[0].string.encode("utf-8"))
-            url = i ('media:content')[0]['url']
+                    desc = ''
             try:
-                duration = i('media:content')[0]['duration']
+                addDir(name,base_url+href,3,desc,iconimage)
             except:
-                duration = ''
-            liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
-            liz.setInfo( type="Video", infoLabels={ "Title": name, "Duration": duration } )
-            playlist.add(url='http://www.archive.org'+url, listitem=liz)
-        xbmc.executebuiltin('playlist.playoffset(music,0)')
+                try:
+                    print "--- exception: trying ('utf-8', 'ignore') ---"
+                    desc = desc.encode('utf-8', 'ignore')
+                    addDir(name.encode('utf-8', 'ignore'),base_url+href,3,desc,iconimage)
+                except:
+                    try:
+                        addDir(name.encode('utf-8', 'ignore'),base_url+href,3,'',iconimage)
+                        print 'DESC ERROR: Name: '+name.encode('utf-8', 'ignore')
+                    except:
+                        print 'There was an error adding show Directory'
+                        try:
+                            print 'NAME: '+name
+                        except:
+                            print 'NAME ERROR'
+                        try:
+                            print 'URL: '+href
+                        except:
+                            print 'URL ERROR'
+        try:
+            page = re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)[0]
+            url = base_url+page.replace('&amp;','&')
+            addDir(__language__(30007),url,2,'',iconimage)
+        except:
+            print '--- exception: next page ---'
+            pass
+
+
+def getMedia(url, title, iconimage):
+        link = getResponse(url)
+        soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        try:
+            dl_items = soup('div', attrs={'id' : 'col1'})[0]('a')
+            if dl_items > 0:
+                downloads = get_media_downloads(dl_items)
+            else:
+                downloads = None
+                print '--- No Downloads ---'
+        except:
+            print '--- error getting downloads ---'
+            downloads = None
+        thumb = None
+        try:
+            for i in range(len(soup.findAll('td', attrs={'class' : "ttlHeader"}))):
+                if soup.findAll('td', attrs={'class' : "ttlHeader"})[i].string == 'Image Files':
+                    a = soup.findAll('td', attrs={'class' : "ttlHeader"})[i]
+                    thumb = a.findNext('a')['href']
+        except: pass
+        if not thumb:
+            try:
+                thumb = soup('div', attrs={'id' : 'col1'})[0].img['src']
+                if thumb == '/images/glogo.png?cnt=0':
+                    thumb = None
+                    raise
+            except: pass
+        if not thumb:
+            try:
+                thumb = base_url+soup('table', attrs={'id' : "ff4"})[0]('a')[0]['href']
+                if not thumb.find('.jpg' or '.gif'):
+                    thumb = base_url+soup('table', attrs={'id' : "ff4"})[0]('a')[1]['href']
+                    if not thumb.find('.jpg' or '.gif'):
+                        thumb = None
+                        raise
+            except: pass
+        if not thumb:
+            try:
+                thumb = re.compile('<a href=".+?"><img title=".+?" alt=".+?" id=".+?" src="(.+?)?cnt=0"/></a>').findall(link)[0]
+            except:
+                try:
+                    thumb = re.compile('<img id="thumbnail" src="(.+?)" style=".+?" alt=".+?" title=".+?">').findall(link)[0]
+                except:
+                    thumb = iconimage
+        try:
+            duration = re.findall('Run time: (.+?)\n', str(soup('div', attrs={'id' : 'col1'})[0]))[0].split('  ')[0]
+            if 'minutes' in duration:
+                duration = duration.split(' minutes')[0]+':00'
+        except:
+            duration = ''
+        scripts = soup('script', attrs={'type' : "text/javascript"})
+        data = False
+        for i in range(len(scripts)):
+            if 'IAP' in str(scripts[i]):
+                try:
+                    pattern = re.compile('IAP.jwplayer\(".+?",   (.+?),  {"start"')
+                    data = ast.literal_eval(pattern.findall(str(scripts[i]).replace('\n',''))[0])
+                except:
+                    print '--- execption: data ---'
+                break
+        if data:
+            m_type = None
+            href = None
+            for i in data:
+                try:
+                    duration = i['duration']
+                except KeyError: pass
+                duration = str(duration).split('.')[0]
+                name = i['title']
+                try:
+                    thumb = i['image']
+                except KeyError: pass
+                for m in i['levels']:
+                    if m['type'] == 'audio/mpeg':
+                        href = m['file']
+                    elif m['type'] == 'video/h264':
+                        href = m['file']
+                if href is None:
+                    href = i['levels'][0]['file']
+                if thumb.startswith('/'):
+                    thumb = base_url+thumb
+                if href.endswith('mp3' or 'ogg' or 'flac'):
+                    m_type = 'audio'
+                    desc = title
+                else:
+                    try:
+                        desc = ''
+                        d = soup('div', attrs={'id' : "midcol"})[0]('p', attrs={'class' : 'content'})[0].contents
+                        for i in range(len(d)):
+                            if str(d[i]) != '<br />':
+                                desc += str(d[i]).split('<')[0]
+                    except:
+                        print '--- exception: description ---'
+                        desc = title
+                addLink(name, base_url+href, desc, duration, thumb, m_type, downloads)
+        else:
+            if downloads is not None:
+                list_downloads(str(downloads), thumb)
+
+
+def get_media_downloads(items):
+        dl_types = ['VBR M3U', 'Torrent', 'VBR ZIP', 'h.264', 'h.264 720P', 'DivX', 'HTTPS',
+                    'QuickTime', 'Ogg Video', 'CD/DVD', 'MPEG1', 'MPEG4', '512Kb MPEG4',
+                    'HiRes MPEG4', 'MPEG2', '64Kb MPEG4', '256Kb MPEG4', 'Cinepack', 'Windows Media']
+        downloads = []
+        for i in items:
+            name = i.string
+            url = None
+            if name in dl_types:
+                if name == 'CD/DVD':
+                    name = 'CD-DVD ISO'
+                if name == 'HTTPS':
+                    name = 'All Files'
+                if name == 'Torrent':
+                    name += ' File'
+                if not 'File' in name:
+                    try:
+                        if (i.findPrevious('span').string is None) or (i.findPrevious('span').string == 'NEW!'):
+                            pass
+                        else:
+                            name += ' ' + i.findPrevious('span').string
+                    except:
+                        print '--- get size of %s exception ---' %name
+                href = i['href']
+                if href.startswith('http'):
+                    url = href
+                else:
+                    url = base_url+href
+                downloads.append((str(name), str(url)))
+            else: continue
+        return downloads
+
+
+def get_all_files(url, thumb):
+        soup = BeautifulSoup(getResponse(url), convertEntities=BeautifulSoup.HTML_ENTITIES)('a')
+        for i in soup:
+            if not i.string.endswith('/'):
+                dl_url = url+'/'+i['href']
+                u=sys.argv[0]+"?url="+urllib.quote_plus(dl_url)+"&mode=9"
+                liz=xbmcgui.ListItem(i.string, iconImage=thumb, thumbnailImage=thumb)
+                liz.setProperty("Fanart_Image", fanart)
+                xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
 
 
 def getBrowseKeyword(url, iconimage):
@@ -329,7 +369,7 @@ def getBrowseKeyword(url, iconimage):
             try:
                 name = i.a.string.encode('utf-8')
                 href = i.a['href']
-                addDir(name,'http://www.archive.org'+href,2,'',iconimage)
+                addDir(name,base_url+href,2,'',iconimage)
             except:
                 print 'There was an error adding Directory'
 
@@ -342,7 +382,7 @@ def getBrowseByTitle(url, iconimage):
             try:
                 name = i.string.encode('utf-8')
                 href = i['href'].replace(' ','%20')
-                addDir(name,'http://www.archive.org'+href,2,'',iconimage)
+                addDir(name,base_url+href,2,'',iconimage)
             except:
                 print 'There was an error adding Directory'
 
@@ -354,7 +394,7 @@ def getBrowseByAuthor(url, iconimage):
             try:
                 name = i.string.encode('utf-8')
                 href = i['href'].replace(' ','%20')
-                addDir(name,'http://www.archive.org'+href,2,'',iconimage)
+                addDir(name,base_url+href,2,'',iconimage)
             except:
                 print 'There was an error adding Directory'
 
@@ -366,7 +406,7 @@ def getBrowseLanguage(url, iconimage):
             name = i.string.encode('utf-8')
             items = i.next.next[:-1].encode('utf-8')
             href = i['href']
-            addDir(name+items,'http://www.archive.org'+href,2,'',iconimage)
+            addDir(name+items,base_url+href,2,'',iconimage)
 
 
 def getBrowseByArtist(url, iconimage):
@@ -376,7 +416,7 @@ def getBrowseByArtist(url, iconimage):
             name = i('a')[0].string.encode('utf-8')
             shows = i('a')[1].string.encode('utf-8')
             href = i.a['href']
-            addDir(name+' ( '+shows+' )','http://www.archive.org'+href,1,'',iconimage)
+            addDir(name+' ( '+shows+' )',base_url+href,1,'',iconimage)
 
 
 def Search(url, iconimage):
@@ -394,25 +434,40 @@ def Search(url, iconimage):
 
 
 def DownloadFiles(url):
-        filename = url.split('/')[-1]
-        def download(url, dest):
-            dialog = xbmcgui.DialogProgress()
-            dialog.create(__settings__.getLocalizedString(30000), __settings__.getLocalizedString(30013), filename)
-            urllib.urlretrieve(url, dest, lambda nb, bs, fs, url = url: _pbhook(nb, bs, fs, url, dialog))
-        def _pbhook(numblocks, blocksize, filesize, url = None,dialog = None):
+        path = __settings__.getSetting('download')
+        if path == "":
+            xbmc.executebuiltin("XBMC.Notification("+__language__(30000)+","+__language__(30015)+",10000,"+icon+")")
+            __settings__.openSettings()
+        path = __settings__.getSetting('download')
+        if path == "":
+            return
+        name = url.rsplit('/', 1)[1]
+        params = {"url": url, "download_path": path, "Title": name}
+        print '######### Download #############'
+        print str(params)
+        print '################################'
+        downloader.download(name, params)
+
+
+def list_downloads(downloads, thumb):
+        downloads = ast.literal_eval(downloads)
+        for i in downloads:
             try:
-                percent = min((numblocks * blocksize * 100) / filesize, 100)
-                dialog.update(percent)
-            except:
-                percent = 100
-                dialog.update(percent)
-            if dialog.iscanceled():
-                dialog.close()
-        if __settings__.getSetting('download') == '':
-            xbmc.executebuiltin("XBMC.Notification("+__language__(30000)+","+__language__(30015)+",5000,"+icon+")")
-            __settings__.openSettings('download')
-        filepath = xbmc.translatePath(os.path.join(__settings__.getSetting('download'),filename))
-        download(url, filepath)
+                if (i[0] == 'All Files') or (i[0] == 'all files'):
+                    name = 'List All Files For Download'
+                    mode = '12'
+                    url = i[1]
+                    isfolder = True
+                else:
+                    mode = '9'
+                    url = base_url+i[1]
+                    isfolder = False
+                    name = 'Download - %s' %i[0]
+                u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
+                liz=xbmcgui.ListItem(coloring(name ,"cyan", name), iconImage=thumb, thumbnailImage=thumb)
+                liz.setProperty("Fanart_Image", fanart)
+                xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isfolder)
+            except: pass
 
 
  # Thanks to gifty for the coloring function!
@@ -439,6 +494,16 @@ def coloring( text , color , colorword ):
         return colored_text
 
 
+def getInHMS(seconds):
+    hours = seconds / 3600
+    seconds -= 3600*hours
+    minutes = seconds / 60
+    seconds -= 60*minutes
+    if hours == 0:
+        return "%02d:%02d" % (minutes, seconds)
+    return "%02d:%02d:%02d" % (hours, minutes, seconds)
+
+
 def get_params():
         param=[]
         paramstring=sys.argv[2]
@@ -457,23 +522,71 @@ def get_params():
         return param
 
 
-def addLink(name, url, desc, duration, iconimage):
+def addLink(name, url, desc, duration, iconimage, m_type, downloads):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": desc, "Duration": duration } )
-        contextMenu = [('Download','XBMC.Container.Update(%s?url=%s&mode=9)' %(sys.argv[0], urllib.quote_plus(url)))]
+        tracknumber = ''
+        if '. ' in name:
+            tracknumber = int(name.split('. ')[0])
+            name = name.split('. ')[1]
+        if m_type is 'audio':
+            name = name.replace('>',' ')
+            if ' Live at ' in desc:
+                artist = desc.split(' Live at ')[0]
+                album = 'Live At '+desc.split(' Live at ')[1]
+            elif ' - ' in desc:
+                artist = desc.split(' - ')[0]
+                album = desc.split(' - ')[1]
+            else:
+                artist = ''
+                album = ''
+            try:
+                year = int(re.findall(' on (.+?)-.+?-.+?', desc)[0])
+            except:
+                year = ''
+            liz.setInfo(type="Music", infoLabels={"Title": name, "Duration": int(duration), "Album": album,
+                                                  "Artist": artist, "Tracknumber": tracknumber, "Year": year})
+        else:
+            if duration != '':
+                if not ':' in duration:
+                    duration = getInHMS(int(duration))
+            liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Duration": duration,
+                                                  "Tracknumber": tracknumber})
+        contextMenu = []
+        try:
+            dl_name = name
+            extension = url.rsplit('.', 1)[1]
+            dl_name += '.'
+            dl_name += extension
+        except:
+            dl_name = url.rsplit('/', 1)[1]
+        contextMenu.append((('Download - %s' %dl_name, 'XBMC.RunPlugin(%s?url=%s&mode=9)'
+                             %(sys.argv[0], urllib.quote_plus(url)))))
+        if downloads is not None:
+            if len(downloads) < 8:
+                for i in downloads:
+                        if i[0] == 'All Files':
+                            contextMenu.append(('List %s For Download' %i[0],'XBMC.Container.Update(%s?url=%s&mode=12)'
+                                                %(sys.argv[0], urllib.quote_plus(i[1]))))
+                        else:
+                            contextMenu.append(('Download - %s' %i[0],'XBMC.RunPlugin(%s?url=%s&mode=9)'
+                                                %(sys.argv[0], urllib.quote_plus(i[1]))))
+            else:
+                contextMenu.append(('Get Download List (%s)' %str(len(downloads)),'XBMC.Container.Update(%s?mode=10&downloads=%s)'
+                                    %(sys.argv[0], str(downloads).replace(', ','__'))))
         liz.addContextMenuItems(contextMenu)
-        liz.setProperty( "Fanart_Image", fanart )
+        liz.setProperty("Fanart_Image", fanart)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
         return ok
 
 
 def addDir(name, url, mode, desc, iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&desc="+urllib.quote_plus(desc)+"&iconimage="+urllib.quote_plus(iconimage)
+        u=(sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+
+           "&desc="+urllib.quote_plus(desc)+"&iconimage="+urllib.quote_plus(iconimage))
         ok=True
         liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": desc } )
-        liz.setProperty( "Fanart_Image", fanart )
+        liz.setProperty("Fanart_Image", fanart)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -484,6 +597,7 @@ name=None
 mode=None
 iconimage=None
 desc=None
+content_type=None
 
 try:
     url=urllib.unquote_plus(params["url"])
@@ -502,7 +616,15 @@ try:
 except:
     pass
 try:
+    downloads=params["downloads"].replace('__',', ')
+except:
+    pass
+try:
     mode=int(params["mode"])
+except:
+    pass
+try:
+    content_type=params["content_type"]
 except:
     pass
 
@@ -510,10 +632,14 @@ print "Mode: "+str(mode)
 print "URL: "+str(url)
 print "Name: "+str(name)
 
-if mode==None or url==None or len(url)<1:
-    print ""
-    addDir(__language__(30016),'http://www.archive.org/details/audio',1,'','http://ia600304.us.archive.org/25/items/audio/audio.gif')
-    addDir(__language__(30017),'http://www.archive.org/details/movies',1,'','http://ia700303.us.archive.org/0/items/movies/movies.gif')
+if mode==None:
+    if content_type == 'audio':
+        getCategories('http://www.archive.org/details/audio', 'http://ia600304.us.archive.org/25/items/audio/audio.gif')
+    elif content_type == 'video':
+        getCategories('http://www.archive.org/details/movies', 'http://ia700303.us.archive.org/0/items/movies/movies.gif')
+    else:
+        addDir(__language__(30016),'http://www.archive.org/details/audio',1,'','http://ia600304.us.archive.org/25/items/audio/audio.gif')
+        addDir(__language__(30017),'http://www.archive.org/details/movies',1,'','http://ia700303.us.archive.org/0/items/movies/movies.gif')
 
 elif mode==1:
     print "getCategories"
@@ -525,7 +651,7 @@ elif mode==2:
 
 elif mode==3:
     print "getMedia"
-    getMedia(url, desc, iconimage)
+    getMedia(url, name, iconimage)
 
 elif mode==4:
     print "getBrowseByAuthor"
@@ -553,10 +679,14 @@ elif mode==9:
 
 elif mode==10:
     print ""
-    getPlaylist(url, iconimage)
+    list_downloads(downloads, iconimage)
 
 elif mode==11:
     print ""
     getBrowseByArtist(url, iconimage)
+
+elif mode==12:
+    print "get_all_files"
+    get_all_files(url, iconimage)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))	

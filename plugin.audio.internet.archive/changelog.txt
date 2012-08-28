@@ -1,0 +1,3 @@
+Version 1.1.1
+fix for getting the playlist
+moved downloads to the context menu

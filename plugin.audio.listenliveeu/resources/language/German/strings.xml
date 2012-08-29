@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- German strings.xml by bootsy (bootsycollins82@gmail.com) -->
+<strings>
+    <!-- Main -->
+    <string id="30000">Neu hinzugefügt</string>
+    <string id="30001">Nach Ländern sortieren</string>
+    <string id="30002">Nach Genre sortieren</string>
+    <string id="30003">Nur Bookmarks anzeigen</string>
+    
+    <!-- Context -->
+    <string id="30004">Bookmark hinzufügen</string>
+    <string id="30005">Bookmark löschen</string>
+    <string id="30006">Alle Bookmarks löschen</string>
+    
+    <!-- Favorites -->
+    <string id="30007">Bookmark hinzugefügt!</string>
+    <string id="30008">Bookmark NICHT hinzugefügt!</string>
+    <string id="30009">Bookmark löschen?</string>
+    <string id="30010">Bookmark gelöscht!</string>
+    <string id="30011">Bookmark NICHT gelöscht!</string>
+    <string id="30012">Alle Bookmarks löschen?</string>
+    <string id="30013">Alle Bookmarks gelöscht!</string>
+    <string id="30014">Bookmarks NICHT gelöscht!</string>
+    <string id="30015">Bookmark bereits vorhanden.</string>
+    <string id="30016">Keine weiteren Bookmarks vorhanden.</string>
+    <string id="30017">Keine Bookmarks vorhanden.</string>
+
+    <!-- Settings -->   
+    <string id="30020">Standort anzeigen</string>
+    <string id="30021">Genre / Kommentar anzeigen</string>
+    <string id="30022">Stream Rate anzeigen</string>
+    <string id="30023">Mindestqualität (Kbps)</string>
+</strings>

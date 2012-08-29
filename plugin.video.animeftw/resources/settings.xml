@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="username_ftw" type="text" label="20002" default=""/>
+    <setting id="password_ftw" type="text" label="20003" option="hidden" default=""/>
+</settings>

@@ -1,0 +1,69 @@
+Index: resources/lib/main_ftw2.py
+===================================================================
+--- resources/lib/main_ftw2.py	(revision 43)
++++ resources/lib/main_ftw2.py	(working copy)
+@@ -136,33 +135,34 @@
+ 		htmlSource = self.getHTML(url)
+ 		soup = BeautifulSoup.BeautifulSoup(htmlSource, convertEntities=BeautifulSoup.BeautifulSoup.HTML_ENTITIES)
+ 		episodes = soup.findAll(category)
++		if len(episodes) > 1:
++			for i, episode in enumerate(episodes):
++				if category == 'episode':
++					epname = unicode(episode.find('epnumber').string + ".) " + episode.find('name').string.replace('`', '\'')).encode('utf-8')
++				else:
++					epname = unicode(episode.find('name').string.replace('`', '\'')).encode('utf-8')
++				UI().addItem({'Title': epname, 'mode':'playEpisode', 'url': episode.find('videolink').string, 'Thumb': seriesimage, 'Seriesname': seriesname}, None, True, len(episodes))
++			del episodes
++			UI().endofdirectory('none')
++		else:
++			info = {}
++			info['name'] = unicode(episodes[0].find('name').string.replace('`', '\'')).encode('utf-8')
++			info['epname'] = ''
++			info['thumb'] = seriesimage
++			self.playVid(episodes[0].find('videolink').string, info['name'], seriesimage)
+ 		
+-		for i, episode in enumerate(episodes):
+-			if category == 'episode':
+-				epname = unicode(episode.find('epnumber').string + ".) " + episode.find('name').string.replace('`', '\'')).encode('utf-8')
+-			else:
+-				epname = unicode(episode.find('name').string.replace('`', '\'')).encode('utf-8')
+-			
+-			url = episode.find('videolink').string
+-			thumbnail = episode.find('image').string
+-			if thumbnail == "http://static.ftw-cdn.com/site-images/video-images/noimage.png":
+-				thumbnail = seriesimage
+-			
+-			li = xbmcgui.ListItem(epname, path = url, thumbnailImage = thumbnail)
+-			li.setInfo(type="Video", infoLabels={ "Title": epname })
+-			li.setProperty("IsPlayable","true");
+-			xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=False)
+-		del episodes
+-		UI().endofdirectory()
+-		
+ 	def playVid(self, url, name, thumb):
+-		stream_url = url.replace(' ', '')
++		stream_url = url.replace(' ', '%20')
+ 		stream_url += '?Referrer=www.animeftw.tv'
+ 		if thumb == None:
+ 			thumb = ''
+-		item = xbmcgui.ListItem( label = name, label2 = name, iconImage = thumb, thumbnailImage = thumb)
+-		item.setInfo("video", infoLabels={ "Title": name })
+-		xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(stream_url, item)
++		print 'url = ' + stream_url
++		#item = xbmcgui.ListItem( label = name, label2 = name, iconImage = thumb, thumbnailImage = thumb, path = stream_url)
++		item = xbmcgui.ListItem( label = name, label2 = name, iconImage = "DefaultVideo.png", thumbnailImage = thumb)
++		item.setInfo(type="video", infoLabels={ "Title": name })
++		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=stream_url,listitem=item)
++		#xbmcplugin.setResolvedUrl(handle = int(sys.argv[1]), succeeded = True, listitem = item)
++		#xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(stream_url, item)
+ 
+ class UI:
+ 	
+@@ -250,6 +250,7 @@
+ 		grabFTW().getEpisodes(self.main.args.url, self.main.args.name, self.main.args.icon, self.main.args.mode)
+ 		
+ 	def startVideo(self):
++		print "startVideo: '" + self.main.args.url + "' title: " + self.main.args.name
+ 		grabFTW().playVid(self.main.args.url, self.main.args.name, self.main.args.icon)
+ 
+ class Main:

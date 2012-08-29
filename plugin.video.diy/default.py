@@ -14,11 +14,19 @@ icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 def getRequest(url):
         headers = {'User-agent' : '	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0) Gecko/20100101 Firefox/10.0',
                    'Referer' : 'http://www.diynetwork.com'}
-        req = urllib2.Request(url,None,headers)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        return link
+        try:
+            req = urllib2.Request(url,None,headers)
+            response = urllib2.urlopen(req)
+            data = response.read()
+            response.close()
+            return data
+        except urllib2.URLError, e:
+            print 'We failed to open "%s".' % url
+            if hasattr(e, 'reason'):
+                print 'We failed to reach a server.'
+                print 'Reason: ', e.reason
+            if hasattr(e, 'code'):
+                print 'We failed with error code - %s.' % e.code
 
 
 def getShows():
@@ -63,7 +71,8 @@ def getMoreShows():
 
 
 def index(url, iconimage):
-        url='http://www.diynetwork.com'+url
+        if not url.startswith('http'):
+            url = 'http://www.diynetwork.com'+url
         soup = BeautifulSoup(getRequest(url))
         if soup.find('div', attrs={'id' : "more-videos-from-show"}):
             shows = soup.find('div', attrs={'id' : "more-videos-from-show"})('h4')

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="plugin.audio.listenliveeu"
+  version="0.4.5"
+  name="ListenLiveEU"
+  provider-name="bootsy, xycl">
+  <requires>
+   <import addon="xbmc.python" version="2.0"/>
+  </requires>
+  <extension
+    point="xbmc.python.pluginsource"
+    library="default.py">
+   <provides>audio</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">European radio stations streaming live on the internet</summary>
+    <summary lang="de">Europäische Radiostationen, die live im Internet streamen</summary>
+    <summary lang="hu">Európai internetes rádiók</summary>
+    <description lang="en">Welcome to listenlive.eu, a web radio directory showcasing over 4000 radio stations from across Europe streaming live on the internet.</description>
+    <description lang="de">Listenlive.eu ist ein Web-Radio Aggregator mit mehr als 4000 Radiostationen aus Europa.</description>
+    <description lang="hu">A listenlive.eu több mint 4000 élo rádióadást tartalmaz Európából, melyeket az interneten keresztül érhetsz el.</description>
+    <platform>all</platform>
+  </extension>
+</addon>

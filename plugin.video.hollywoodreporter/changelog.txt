@@ -1,0 +1,9 @@
+0.0.4
+ support playback of mp4 videos
+0.0.3
+ fixed playback of some videos
+ now use always best available video quality
+0.0.2
+ small fixes
+0.0.1
+ initial release

@@ -1,3 +1,6 @@
+Version 1.0.2
+fix for getting video url
+
 Version 1.0.1
 fix pagenation
 added new categories

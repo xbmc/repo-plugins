@@ -1,5 +1,4 @@
 <settings>
    <setting id="sort_by" type="select" lvalues="30025|30026|30027|30028|30029" label="30030" default="highest_rated"/>
    <setting id="sort_time" type="select" lvalues="30038|30039|30040" label="30037" default="all_time"/>
-   <setting id="video_quality" type="enum" lvalues="30034|30035" label="30036" default="0"/>
 </settings>

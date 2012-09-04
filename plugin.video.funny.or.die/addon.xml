@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.funny.or.die"
        name="Funny or Die"
-       version="1.0.1"
+       version="1.0.2"
        provider-name="divingmule">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
 	<import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="script.common.plugin.cache" version="1.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
@@ -15,5 +16,6 @@
     <summary>funnyordie.com Videos</summary>
     <description>Funny Or Die is a comedy video website that combines user-generated content with original, exclusive content. The site is a place where celebrities, established and up-and-coming comedians and regular users can all put up stuff they think is funny.</description>
     <platform>all</platform>
+    <language>en</language>
   </extension>
 </addon>

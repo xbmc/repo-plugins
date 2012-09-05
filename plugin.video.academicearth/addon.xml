@@ -3,8 +3,8 @@
   <requires>
     <import addon="xbmc.python" version="2.0"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>
-    <import addon="script.module.xbmcswift" version="0.2.0"/>
-    <import addon="plugin.video.youtube" version="2.9.1"/>
+    <import addon="script.module.xbmcswift2" version="1.1.1"/>
+    <import addon="plugin.video.youtube" version="3.1.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>

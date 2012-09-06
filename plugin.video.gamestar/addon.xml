@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.gamestar"
-  version="0.1.3"
+  version="0.1.4"
   name="GamestarVideo"
   provider-name="Raptor 2101 [raptor2101@gmx.de]">
   <requires>

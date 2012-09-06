@@ -26,15 +26,15 @@ class GamestarWeb(object):
 
     ##setup regular expressions
     self.imageRegex = "<img src=\".*\" width=\"\\d*\" height=\"\\d*\" alt=\".*\" title=\".*\" />"
-    self.linkRegex =  "/index.cfm\\?pid=\\d*?(&amp;|&)pk=\\d*?"
+    self.linkRegex =  "/videos/.*?,\\d*?\\.html"
     self.simpleLinkRegex = "<a href=\""+self.linkRegex+"\" .+?>.+?</a>";
     self.hrefRegex = "<a.*? href=\""+self.linkRegex+"\">"
-    self.headerRegex ="<strong>.+</strong>\\s*.*\\s*</a>"
+    self.headerRegex = "<strong>.+</strong>\\s*.*\\s*</a>"
     self.titleRegex = "<a.*?>(.*?)</a>"
 
     self._regEx_extractVideoThumbnail = re.compile("<div class=\"videoPreview\">\\s*"+self.hrefRegex+"\\s*"+self.imageRegex+"\\s*</a>\\s*<span>\\s*"+self.hrefRegex+"\\s*"+self.headerRegex);
     self._regEx_extractTargetLink = re.compile(self.linkRegex);
-    self._regEx_extractVideoID = re.compile("pk=\\d*");
+    self._regEx_extractVideoID = re.compile("\\d*.html");
     self._regEx_extractVideoLink = re.compile("http.*(mp4|flv)");
     self._regEx_extractPictureLink = re.compile("http://.*.jpg");
     self._regEx_extractHeader = re.compile(self.headerRegex);
@@ -74,7 +74,7 @@ class GamestarWeb(object):
       rootDocument = self.loadPage(categorie.url);
       for videoThumbnail in self._regEx_extractVideoThumbnail.finditer(rootDocument):       
         videoThumbnail = videoThumbnail.group()
-        videoID = self._regEx_extractVideoID.search(videoThumbnail).group().replace("pk=","");
+        videoID = self._regEx_extractVideoID.search(videoThumbnail).group().replace(".html","");
         
         header = self._regEx_extractHeader.search(videoThumbnail).group();
         header = re.sub("(<strong>)|(</strong>)|(</a>)", "", header);

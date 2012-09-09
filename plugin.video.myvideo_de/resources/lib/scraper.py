@@ -100,8 +100,6 @@ def get_path(path):
         items = __parse_channels(tree, path)
     elif 'mv_charts' in path:
         items = __parse_channels(tree, path)
-    elif 'Musik_Charts' in path:
-        items = __parse_music_charts(tree, path)
     elif 'Charts' in path:  # fixme: still needed?
         items = __parse_video_charts(tree, path)
     elif 'channel' in path:
@@ -321,23 +319,6 @@ def __parse_categories(tree, path):
                       'path': path,
                       'is_folder': is_folder})
     __log('__parse_categories finished with %d elements' % len(items))
-    return items
-
-
-def __parse_music_charts(tree, path):
-    __log('__parse_music_charts started with path: %s' % path)
-    r_section = re.compile('lBox floatLeft pHalfBox charts_box')
-    sections = tree.findAll('div', {'class': r_section})
-    items = []
-    for sec in sections:
-        d = sec.find('td', {'class': 'wLListLeft'})
-        title = d.nextSibling.string.strip()
-        path = sec.find('a', {'class': 'sBold'})['href']
-        is_folder = True
-        items.append({'title': title,
-                      'path': path,
-                      'is_folder': is_folder})
-    __log('__parse_music_charts finished with %d elements' % len(items))
     return items
 
 

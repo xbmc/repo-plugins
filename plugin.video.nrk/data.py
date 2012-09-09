@@ -14,23 +14,27 @@
 '''
 
 import re
-
+import requests
 import BeautifulSoup
+import StorageServer
+import CommonFunctions
+from subs import get_subtitles
+
 html_decode = lambda string: BeautifulSoup.BeautifulSoup(string,
     convertEntities=BeautifulSoup.BeautifulSoup.HTML_ENTITIES).contents[0]
-
-import CommonFunctions
 parseDOM = CommonFunctions.parseDOM
+requests = requests.session(headers={'User-Agent':'xbmc.org','X-Requested-With':'XMLHttpRequest'})
+cache = StorageServer.StorageServer('nrk.no', 336)
 
-import requests
-requests = requests.session(headers={'User-Agent':'xbmc.org'})
+def _get_cached(url):
+  f = lambda x: requests.get(x).json
+  return cache.cacheFunction(f, url)
 
 
 def parse_by_letter(arg):
   """ returns: </serie/newton> or </program/koif45000708> """
-  url = "http://tv.nrk.no/programmer/%s?filter=rettigheter" % arg
+  url = "http://tv.nrk.no/programmer/%s?filter=rettigheter&ajax=true" % arg
   html = requests.get(url).text
-  html = parseDOM(html, 'div', {'id':'programList'})
   return _parse_list(html)
 
 def parse_by_category(arg):
@@ -68,12 +72,11 @@ def parse_recommended():
 
 
 def parse_most_recent():
-  url = "http://tv.nrk.no/listobjects/recentlysent"
-  html = requests.get(url).text
-  urls = parseDOM(html, 'a', {'class':'listobject-link'}, ret='href')
-  thumbs = parseDOM(html, 'img', ret='src')[::2] #extract even elements
-  html = ''.join(parseDOM(html, 'span', {'class':'listobject-title'}))
-  titles = parseDOM(html, 'strong')
+  url = "http://tv.nrk.no/listobjects/recentlysent.json/page/0"
+  elems = requests.get(url).json['ListObjectViewModels']
+  titles = [ e['Title'] for e in elems ]
+  thumbs = [ e['ImageUrl'] for e in elems ]
+  urls = [ e['Url'] for e in elems ]
   titles = map(html_decode, titles)
   return titles, urls, thumbs
 
@@ -94,7 +97,6 @@ def parse_episodes(series_id, season_id):
   """ returns: </serie/aktuelt-tv/nnfa50051612/16-05-2012..> """
   url = "http://tv.nrk.no/program/Episodes/%s/%s" % (series_id, season_id)
   html = requests.get(url).text
-  html = parseDOM(html, 'table', {'class':'episodeTable'})
   trs = parseDOM(html, 'tr', {'class':'has-programtooltip episode-row js-click *'})
   titles = [ parseDOM(tr, 'a', {'class':'p-link'})[0] for tr in trs ]
   titles = map(html_decode, titles)
@@ -107,7 +109,7 @@ def parse_episodes(series_id, season_id):
 def parse_media_url(video_id, bitrate):
   bitrate = 4 if bitrate > 4 else bitrate
   url = "http://nrk.no/serum/api/video/%s" % video_id
-  url = requests.get(url).json['mediaURL']
+  url = _get_cached(url)['mediaURL']
   url = url.replace('/z/', '/i/', 1)
   url = url.rsplit('/', 1)[0]
   url = url + '/index_%s_av.m3u8' % bitrate
@@ -115,6 +117,6 @@ def parse_media_url(video_id, bitrate):
 
 def _get_descr(url):
   url = "http://nrk.no/serum/api/video/%s" % url.split('/')[3]
-  descr = requests.get(url).json['description']
+  descr = _get_cached(url)['description']
   return descr
 

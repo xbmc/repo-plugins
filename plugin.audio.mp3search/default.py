@@ -10,7 +10,7 @@ downloader = downloader.SimpleDownloader()
 __plugin__ = "mp3search"
 __author__ = "ghua@seznam.cz"
 __url__ = ""
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 
 
@@ -158,8 +158,8 @@ def doSearch(fquery,fpage,isave=True):
 
         asearched=[]
         
-        req = urllib2.Request('http://togrool.com/search.xhtml?query='+fquery+'&searchtype=mp3&page='+str(fpage)+'&source=page')
-        req.add_header('User-Agent', ' Mozilla/5.0 (Windows NT 5.1; rv:13.0) Gecko/20100101 Firefox/13.0.1')
+        req = urllib2.Request('http://searchmp3.mobi/search.xhtml?query='+fquery+'&searchtype=mp3&page='+str(fpage)+'&source=page')
+        req.add_header('User-Agent', ' Mozilla/5.0 (Windows NT 5.1; rv:13.0) Gecko/20100101 Firefox/14.0.1')
         req.add_header('Cache-Control',' no-cache')
         req.add_header('Connection',' close')
 
@@ -168,7 +168,8 @@ def doSearch(fquery,fpage,isave=True):
                 response = urllib2.urlopen(req)
                 link=response.read()
                 response.close()
-                match=re.compile('<a href="http://togrool.com/download(.+?)\?').findall(link)
+                #match=re.compile('<a href="http://togrool.com/download(.+?)\?').findall(link)
+                match=re.compile('<a href="http://searchmp3.mobi/download(.+?)\?').findall(link)
 
                 if isave:                        
                         asearched=getDatFile("searched.dat")
@@ -182,8 +183,8 @@ def doSearch(fquery,fpage,isave=True):
 
                 for i in range(len(match)):
 
-                        req = urllib2.Request('http://togrool.com/download'+match[i])
-                        req.add_header('User-Agent', ' Mozilla/5.0 (Windows NT 5.1; rv:13.0) Gecko/20100101 Firefox/13.0.1')
+                        req = urllib2.Request('http://searchmp3.mobi/download'+match[i])
+                        req.add_header('User-Agent', ' Mozilla/5.0 (Windows NT 5.1; rv:13.0) Gecko/20100101 Firefox/15.0.1')
                         req.add_header('Cache-Control',' no-cache')
                         req.add_header('Connection',' keep-alive')
 

@@ -16,7 +16,6 @@
 import os
 import re
 import xbmc
-
 import requests
 requests = requests.session(headers={'User-Agent':'xbmc.org'})
 

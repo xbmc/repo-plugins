@@ -18,9 +18,6 @@ import os
 import sys
 import time
 import xbmc, xbmcaddon, xbmcplugin
-import data
-import subs
-
 from itertools import repeat
 from xbmcplugin import addDirectoryItem
 from xbmcplugin import endOfDirectory
@@ -74,26 +71,31 @@ def view(titles, urls, descr=repeat(''), thumbs=repeat(''), bgs=repeat('')):
 
 @plugin.route('/recommended')
 def recommended():
+  import data
   titles, urls, bgs = data.parse_recommended()
   view(titles, urls, bgs=bgs)
 
 @plugin.route('/mostrecent')
 def mostrecent():
+  import data
   titles, urls, thumbs = data.parse_most_recent()
   view(titles, urls, thumbs=thumbs)
 
 @plugin.route('/categories')
 def categories():
+  import data
   titles, urls = data.parse_categories()
   view(titles, urls)
 
 @plugin.route('/kategori/<arg>')
 def category(arg):
+  import data
   titles, urls = data.parse_by_category(arg)
   view(titles, urls)
 
 @plugin.route('/letters')
 def letters():
+  import data
   common = ['0-9'] + map(chr, range(97, 123))
   titles = common + [ u'æ', u'ø', u'å' ]
   titles = [ e.upper() for e in titles ]
@@ -102,11 +104,13 @@ def letters():
 
 @plugin.route('/letters/<arg>')
 def letter(arg):
+  import data
   titles, urls = data.parse_by_letter(arg)
   view(titles, urls)
 
 @plugin.route('/serie/<arg>')
 def seasons(arg):
+  import data
   titles, urls = data.parse_seasons(arg)
   if len(titles) == 1:
     plugin.redirect(plugin.url_for(urls[0]))
@@ -115,6 +119,7 @@ def seasons(arg):
 
 @plugin.route('/program/Episodes/<series_id>/<season_id>')
 def episodes(series_id, season_id):
+  import data
   titles, urls, descr = data.parse_episodes(series_id, season_id)
   view(titles, urls, descr=descr)
 
@@ -122,10 +127,11 @@ def episodes(series_id, season_id):
 @plugin.route('/program/<video_id>')
 @plugin.route('/program/<video_id>/.*')
 def play(video_id, series_id=""):
+  import data
   url = data.parse_media_url(video_id, BITRATE)
   xbmcplugin.setResolvedUrl(plugin.handle, True, ListItem(path=url))
   player = xbmc.Player()
-  subtitle = subs.get_subtitles(video_id)
+  subtitle = data.get_subtitles(video_id)
   #Wait for stream to start
   start_time = time.time()
   while not player.isPlaying() and time.time() - start_time < 10:

@@ -1,3 +1,6 @@
+[B]4.0.1[/B]
+- Diverse ytelsesforbedringer
+
 [B]4.0.0[/B]
 - Ny versjon basert på NRKs nye nett-TV
 

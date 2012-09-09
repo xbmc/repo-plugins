@@ -5,6 +5,7 @@
   <string id="30002">Folgend</string>
   <string id="30003">Suche</string>
   <string id="30004">Einstellungen</string>
+  <string id="30005">Featured Streams</string>
   
   <!-- search -->
   <string id="30101">Suche nach Kanälen</string>
@@ -18,4 +19,13 @@
   <string id="32002">Keine Live-Daten gefunden</string>
   <string id="32003">Keine Archive gefunden für</string>
   <string id="32004">User Token Fehler</string>
+  <string id="32005">Geaenderte Video Einstellung</string>
+  <string id="32006">Gewaehlte Qualitaet nicht verfuegbar...Eventuell Premium Content?</string>
+  
+    <!--settings -->
+  <string id="33000">Video Qualität</string>
+  <string id="33001">Beste</string>
+  <string id="33002">720p</string>
+  <string id="33003">480p</string>
+  <string id="33004">360p</string>
 </strings>

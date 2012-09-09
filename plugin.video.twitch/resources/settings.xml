@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <!-- General -->
-  <category label="Account">
+  <category label="General">
     <setting id="username" type="text" label="Username" default="" />
+	<!-- Video Quality -->
+    <setting id="video" type="enum" label="33000" lvalues="33001|33002|33003|33004" default="0" />
   </category>
+  
+
 </settings>

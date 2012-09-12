@@ -1,0 +1,3 @@
+<settings>
+	<setting id="quality" type="select" label="30004" lvalues="30005|30006" default="High"/>
+</settings>

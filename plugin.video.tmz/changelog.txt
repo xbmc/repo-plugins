@@ -1,3 +1,13 @@
+[B]Version 2.0.4[/B]
+
+- Updated addon to support recent website changes.
+
+[B]Version 2.0.3[/B]
+
+- Switched to setResolvedUrl/IsPlayable method for video playback
+- Added Buggalo Exception Collector
+- Added options for Low/High video quality
+
 [B]Version 2.0.2[/B]
 
 - Updated addon to support recent website changes.

@@ -2,31 +2,31 @@
 	<strings>
 	<string id="30000">MyPicture Database</string>
 	<string id="30001">Database</string>
-    
+
 	<!-- Date formats : use the date formatting you found in this : http://docs.python.org/library/time.html#time.strftime -->
-	<string id="30002">%A %d %B %Y</string>      <!-- date format -->
-	<string id="30003">%B %Y</string>         <!-- month format -->
-	<string id="30004">%Y</string>            <!-- year format -->
-	<string id="30005">Ma.|Di.|Wo.|Do.|Vr.|Za.|Zo.</string>
-	<string id="30006">Jan.|Feb.|Mrt.|Apr.|Mei|Jun.|Jul.|Aug.|Sep.|Okt.|Nov.|Dec.</string>
-	<string id="30007">Maandag|Dinsdag|Woensdag|Donderdag[Vrijdag|Zaterdag|Zondag</string>
-	<string id="30008">Januari|Februari|Maart|April|Mei|Juni|Juli|Augustus|September|Oktober|November|December</string>
+	<string id="30002">%A %d %B %Y</string> <!-- date format -->
+	<string id="30003">%B %Y</string> <!-- month format -->
+	<string id="30004">%Y</string> <!-- year format -->
+	<string id="30005">ma.|di.|wo.|do.|vr.|za.|zo.</string>
+	<string id="30006">jan.|feb.|mrt.|apr.|mei|jun.|jul.|aug.|sep.|okt.|nov.|dec.</string>
+	<string id="30007">maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag</string>
+	<string id="30008">januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december</string>
 	<string id="30009"></string>
 
 	<string id="30020">Afbeeldingen locatie</string>
 	<string id="30021">Verwijderen ontbrekende afbeeldingen</string>
 	<string id="30022">Recursieve scan ( incl. sub-folders )</string>
-	<string id="30023">Te scannen locatie</string>
-	<string id="30024">Uitvoeren scan bij opstarten Addon</string>
-	<string id="30025">Initialiseer database bij opstarten Addon</string>
+	<string id="30023">Bestandstypen afbeeldingen</string>
+	<string id="30024">Uitvoeren scan bij opstarten add-on</string>
+	<string id="30025">Initialiseer database bij opstarten add-on</string>
 	<string id="30026">Gebruik afbeeldingen als fanart</string><!-- setting -->
-	<string id="30027">Settings for the dialog scan popup</string>   
-	<string id="30028">Videos extensions</string>
-	<string id="30029">Use the videos</string>
+	<string id="30027">Instellingen popup scan dialoog</string> 
+	<string id="30028">Bestandstypen videos</string>
+	<string id="30029">Gebruik videos</string>
 	<string id="30030">Algemeen</string>
 	<string id="30031">Bestanden</string>
-	<string id="30032">Age of recent files (dagen)</string>
-	<string id="30033">Menu Items</string>
+	<string id="30032">Ouderdom recente afbeeldingen (dagen)</string>
+	<string id="30033">Menu items</string>
 	<string id="30034">Geef alle afbeelingen weer</string>
 	<string id="30035">Aantal afbeeldingen per pagina</string>
 
@@ -38,58 +38,58 @@
 	<string id="30045">4 sterren</string>
 	<string id="30046">5 sterren</string>
 
-	<string id="30050">Afbeeldingen</string>
+	<string id="30050">afbeeldingen</string>
 	<string id="30051">Videos</string>
-    <string id="30052">Tags</string>
+	<string id="30052">tags</string>
 
 	<string id="30060">Locatie op schijf</string>
 	<string id="30061">Archiveer afbeeldingen</string>
 	<string id="30062">Exporteer afbeeldingen naar</string>
 	<string id="30063">Voeg bestand toe aan archief</string>
-	<string id="30064">Archief '%s' bestaat al</string> <!-- %s will be replaced by the name of the archive -->
+	<string id="30064">Archief '%s' bestaat al</string>
 	<string id="30065">Overschrijven ?</string>
 	<string id="30066">Archive canceled.</string>
 	<string id="30067">Afbeelding toevoegen aan archive</string>
 	<string id="30068">Het archiveren is afgebroken</string>
-	<string id="30069">%s errors while archiving %s files</string> <!-- %s errors while zipping %s files -->
-	<string id="30070">%s afbeeldingen succesvol gearchiveerd</string>    <!-- %s files successfully Zipped !! -->
+	<string id="30069">%s errors while archiving %s files</string>
+	<string id="30070">%s afbeeldingen succesvol gearchiveerd</string>
 	<string id="30071">Localization of the picture on disk</string>
 
 	<string id="30090">Afbeeldingen zonder plaats</string>
 	<string id="30091">Afbeeldingen zonder land</string>
-	<string id="30092">Overige afbeeldingen in '%s'</string> <!-- other pictures in country (%s replaced by a given country) -->
-	<string id="30093">Weergeven op locatie</string>
-	<string id="30094">Weergeven op categorie</string>
-	<string id="30095">Weergeven op aanvullende categorie</string>
+	<string id="30092">Overige afbeeldingen in '%s'</string>
+	<string id="30093">Weergeven locatie</string>
+	<string id="30094">Weergeven categorie</string>
+	<string id="30095">Weergeven subcategorie</string>
 	<string id="30096">Afbeeldingen zonder categorie</string>
-	<string id="30097">Weergeven per categorie</string>
+	<string id="30097">Weergeven categorie</string>
 	<string id="30098">Zoeken</string>
-	<string id="30099">Invoeren bestandsmappen</string>   
-	<string id="30100">Volledige periode %s (%s pics)</string>
-	<string id="30101">Weergeven op datum</string>
-	<string id="30102">Weergeven op mappen</string>
-	<string id="30103">Weergeven op trefwoorden</string>
+	<string id="30099">Invoeren directories</string> 
+	<string id="30100">Volledige periode %s (%s afbeeldingen)</string>
+	<string id="30101">Weergeven datum</string>
+	<string id="30102">Weergeven directories</string>
+	<string id="30103">Weergeven trefwoorden</string>
 	<string id="30104">Geen trefwoorden</string>
 	<string id="30105">Perioden</string>
-	<string id="30106">Voeg een periode toe</string>
+	<string id="30106">Voeg periode toe</string>
 	<string id="30107">Kies begindatum</string>
 	<string id="30108">Kies einddatum</string>
 	<string id="30109">Afbeeldingen van %s tot %s</string>
-	<string id="30110">Geef een naam aan deze periode :</string>
-	<string id="30111">Verwijder deze periode</string>
-	<string id="30112">Hernoem deze periode</string>
+	<string id="30110">Geef periode een naam:</string>
+	<string id="30111">Verwijder periode</string>
+	<string id="30112">Hernoem periode</string>
 	<string id="30113">van %s tot %s</string>
 	<string id="30114">Geef datum in</string>
 	<string id="30115">Zoekwoord</string>
-	<string id="30116">%s results for '%s' in '%s'</string> <!-- %s replaced respectively by : number of results, searched term, field where found -->
-	<string id="30117">Begindatum van de periode</string>
-	<string id="30118">Einddatum van de periode</string>
-	<string id="30119">The search for '%s' did not match in the whole database</string> <!-- %s replaced by searched term-->
-    <string id="30120">Weergeven personen</string>
-    <string id="30121">Afbeeldingen zonder personen</string>
-    <string id="30122">Weergeven op tags</string>
+	<string id="30116">%s results for '%s' in '%s'</string>
+	<string id="30117">Begindatum periode</string>
+	<string id="30118">Einddatum periode</string>
+	<string id="30119">Zoekopdracht '%s' niet gevonden</string>
+	<string id="30120">Weergeven personen</string>
+	<string id="30121">Afbeeldingen zonder personen</string>
+	<string id="30122">Weergeven tags</string>
 
-	<string id="30130">De %s laatste afbeeldingen</string>
+	<string id="30130">Laatste %s afbeeldingen</string>
 	<string id="30131">Recente afbeeldingen (aantal afbeeldingen)</string>
 	<string id="30132"></string>
 	<string id="30133"></string>
@@ -104,47 +104,47 @@
 	<string id="30152">Voeg aan collectie toe</string>
 	<string id="30153">Geef een nieuwe naam</string>
 	<string id="30154">Afbeelding toegevoegd</string>
-	<string id="30155">Geef naam voor nieuwe collectie</string>
+	<string id="30155">Naam nieuwe collectie</string>
 	<string id="30156">Kies een collectie</string>
 	<string id="30157">Nieuwe collectie</string>
-	<string id="30158">Verwijder deze collectie</string>
-	<string id="30159">Hernoem deze collectie</string>
-	<string id="30160">Maak een nieuwe collectie aan</string>
-	<string id="30161">%s afbeeldingen toegevoegd</string>    <!-- %s replaced by the number of pictures added -->
+	<string id="30158">Verwijder collectie</string>
+	<string id="30159">Hernoem collectie</string>
+	<string id="30160">Aanmaken nieuwe collectie</string>
+	<string id="30161">%s afbeeldingen toegevoegd</string>
 
 	<string id="30180">Export-pad</string>
 	<string id="30181">Map aanmaken bij export ?</string>
 	<string id="30182">Geef de mapnaam</string>
 	<string id="30183">Export afgebroken !</string>
 	<string id="30184">Aan het exporteren...</string>
-	<string id="30185">Exporteer '%s' naar :</string>       <!-- %s replaced by the filename that is beeing copied -->
-	<string id="30186">Bestand '%s' bestaat al</string>  <!-- %s replaced by the filename that is beeing copied -->
+	<string id="30185">Exporteer '%s' naar :</string>
+	<string id="30186">Bestand '%s' bestaat al</string>
 	<string id="30187">Overschrijven ?</string>
 	<string id="30188">Klaar met exporteren</string>
-	<string id="30189">%s afbeeldingen gekopieerd naar %s</string> <!-- %s[number of files] copied to %s[distination folder]-->
+	<string id="30189">%s afbeeldingen gekopieerd naar %s</string>
 	<string id="30190">Geexporteerde afbeeldingen</string>
 	
-    <string id="30201">Folder to scan</string>
-    <string id="30202">Browse this folder recursively</string>
-    <string id="30203">Delete the database entries if picture does not exists anymore</string>
-    <string id="30204">Path added !</string>
-    <string id="30205">Path deleted !</string>
-    <string id="30206">Do a scan now</string>
-    <string id="30207">Delete this path from database</string>
-    <string id="30208">[B]Add[/B] a path to database</string>
-    <string id="30209">Uploads from last %s days</string>
-    <string id="30210">Remove this path from excluded</string>
-    <string id="30211">Add a folder to [B]exclude[/B]</string>
-    <string id="30212">Exclude this folder from database</string>
-    <string id="30213">Scan all paths</string>	
-    <string id="30214">Yes = scan all pictures.</string>
-    <string id="30215">No = scan only modified/new pictures.</string>
-    <string id="30216"></string> <!-- placeholder for third line of above questions -->
+	<string id="30201">Directory scannen</string>
+	<string id="30202">Directory recursief scannen</string>
+	<string id="30203">Verwijderen database entries als afbeelding niet meer bestaat</string>
+	<string id="30204">Directory toegevoegd</string>
+	<string id="30205">Directory verwijderd</string>
+	<string id="30206">Start scannen</string>
+	<string id="30207">Verwijderen directory</string>
+	<string id="30208">[B]Toevoegen[/B] directory</string>
+	<string id="30209">Toegevoegd laatste %s dagen</string>
+	<string id="30210">Verwijderen directory van uitsluiting</string>
+	<string id="30211">Toevoegen directory om [B]uit te sluiten[/B]</string>
+	<string id="30212">Directory uitsluiten</string>
+	<string id="30213">Alle directories scannen</string>	
+	<string id="30214">Ja = alle afbeeldingen scannen</string>
+	<string id="30215">Nee = alleen gewijzigde/nieuwe afbeelinegn scannen</string>
+	<string id="30216"></string> <!-- placeholder for third line of above questions -->
 
 	<string id="30220">Geolocatie</string>
-	<string id="30221">Fetching the map... (%0.2f%%)</string>  <!-- %0.2f%% will be replaced by the percent of download for a map -->
-	<string id="30222">Zoom=%s</string>       <!-- %s will be replaced by the zoom level in a map -->
-	<string id="30223">Use up / down arrows to zoom in / out</string>
+	<string id="30221">Opvragen kaart... (%0.2f%%)</string>
+	<string id="30222">Zoom=%s</string>
+	<string id="30223">Gebruik up/down toetsen om te zoomen</string>
 	<string id="30224"></string>
 	<string id="30225"></string>
 	<string id="30226"></string>
@@ -159,7 +159,7 @@
 	<string id="30245">Herscannen</string>
 	<string id="30246">Aan het verwijderen</string>
 	<string id="30247">Momentje...</string>
-	<string id="30248">%s scanned / %s added / %s deleted / %s modified</string>  <!-- %s respectively changed by number : scanned, added, deleted, modified -->
+	<string id="30248">%s gescanned / %s toegevoegd / %s verwijderd / %s gewijzigd</string>
 	<string id="30249"></string>
 
 	<string id="30300">Bestandsnaam</string>
@@ -176,21 +176,21 @@
 	<string id="30311"></string>
 	<string id="30312"></string>
 	<string id="30313"></string>
-	<string id="30314"></string>      
-    
-    <string id="30600">Filter Wizard</string>
-    <string id="30601">Tags</string>
-    <string id="30602">Contents</string>
-    
-    <string id="30610">Please select tags</string>
-    <string id="30611">1 tag checked</string>
-    <string id="30612">%s tags checked</string>    
-    <string id="30613">OK</string>    
-    <string id="30614">Cancel</string>  
-    <string id="30615">Match all tags</string>     
-    
-    <string id="30620">Translate your tags</string>
-    <string id="30621">Close Editor</string>
-    <string id="30622">Leave translation empty to hide tag type in MyPicsDB</string>    
-    <string id="30623">Translation for %s</string>
+	<string id="30314"></string>
+
+	<string id="30600">Filter wizard</string>
+	<string id="30601">Tags</string>
+	<string id="30602">Waarde</string>
+
+	<string id="30610">Selecteer een tags (red checkbox means "not")</string>
+	<string id="30611">1 tag ingevoerd</string>
+	<string id="30612">%s tags ingevoerd</string>
+	<string id="30613">OK</string>
+	<string id="30614">Cancel</string>
+	<string id="30615">Match alle tags</string> 
+
+	<string id="30620">Synoniemen voor tags</string>
+	<string id="30621">Sluiten editor</string>
+	<string id="30622">Laat synoniem leeg om te verbergen</string>
+	<string id="30623">Synoniem %s</string>
 </strings>

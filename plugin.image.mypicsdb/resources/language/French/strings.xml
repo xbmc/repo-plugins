@@ -182,7 +182,7 @@
     <string id="30601">Etiquettes</string>
     <string id="30602">Contenus</string>
     
-    <string id="30610">Choisissez les étiquettes</string>
+    <string id="30610">Choisissez les étiquettes (red checkbox means "not")</string>
     <string id="30611">1 étiquette sélectionnée</string>
     <string id="30612">%s étiquettes sélectionnées</string>    
     <string id="30613">OK</string>    

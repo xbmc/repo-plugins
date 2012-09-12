@@ -1,11 +1,34 @@
-1) Please translate MyPicsDB into your native language!
+1) Howto
+==================================================================================
+Don't change the plugin configuration unless you know what you do!
+
+a) You must add picture sources to XBMC
+b) Within MyPicsDB (not in the configuration) select menu "Paths of pictures folders" to add these paths to the database.
+
+HINT: Net shares or use of a NAS
+Python add-ons aren't able to access remote files! This will change with Frodo due to amendment of xbmcvfs.
+To access remote files there are three possibilities depending on your used OS.
+
+a) Windows client with SMB access to NAS
+   The path to a remote SMB source is stored in XBMC like SMB://server/directory
+   This is changed by MyPicsDB to \\server\directory 
+   Therefore it'll work on Windows if the local user has access to the remote directory.
+   To give him access you must use the same User/Password combination on Windows and on the NAS. 
+b) Windows client with mapped drive letter to NAS
+   Add the mapped drive as a picture source to XBMC
+c) Linux, MacOS, OpenELEC
+   These OS are Unix based and they don't support UNC paths like Windows.
+   You must locally mount your remote directory and then add the local mount point to XBMC as a picture source.
+   Afterwards MyPicsDB can access the "local" pictures.
+
+
+2) Please translate MyPicsDB into your native language!
 ==================================================================================
    Files can be found in plugin.image.mypicsdb/resources/language
    Please be aware that the / must be replaced with a \ for Windows!
-   Always use the english file to translate!
 
 
-2) Auto-update  MyPicsDB
+3) Auto-update  MyPicsDB
 ==================================================================================
    Idea from Fungify 
    You can call (example for Windows):
@@ -15,7 +38,7 @@
    Fungify uses this approach to automatically update MyPicsDB via HTTP API with a cron job.
    wget --directory-prefix=tmp --http-user=<xbmc username> --http-passwd=<xbmc password> "http://Servername:Portnumber/xbmcCmds/xbmcHttp?command=ExecBuiltIn&parameter=XBMC.RunScript("<full path to plugin>\plugin.image.mypicsdb\scanpath.py",--database)
 
-3) For skinners
+4) For skinners
 ==================================================================================
   Done by MikeBZH44
 

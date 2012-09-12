@@ -182,7 +182,7 @@
     <string id="30601">Tags</string>
     <string id="30602">Inhalt</string>
     
-    <string id="30610">Bitte Tags auswählen, nach denen gefiltert wird</string>
+    <string id="30610">Bitte Tags auswählen (rote Checkbox bedeutet "nicht")</string>
     <string id="30611">1 Tag ausgewählt</string>
     <string id="30612">%s Tags ausgewählt</string>    
     <string id="30613">Okay</string>    

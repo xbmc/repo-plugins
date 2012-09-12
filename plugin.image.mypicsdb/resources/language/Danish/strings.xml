@@ -182,7 +182,7 @@
     <string id="30601">Tags / nøgleord</string>
     <string id="30602">Indhold</string>
     
-    <string id="30610">Markér tags / nøgleord</string>
+    <string id="30610">Markér tags / nøgleord (red checkbox means "not")</string>
     <string id="30611">1 tag markeret</string>
     <string id="30612">%s tags markeret</string>    
     <string id="30613">OK</string>    

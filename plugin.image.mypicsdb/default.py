@@ -207,8 +207,15 @@ class Main:
 
             if coords: suffix = suffix + "[COLOR=C0C0C0C0][G][/COLOR]"
 
-            infolabels = { "picturepath":picname+" "+suffix,"title": "title of the pic", "date": date  }
+            (exiftime,) = MPDB.Request( """select "EXIF DateTimeOriginal" from files where strPath='%s' and strFilename='%s'"""%(picpath,picname))
+            resolution = MPDB.Request( """select "EXIF ExifImageWidth", "EXIF ExifImageLength" from files where strPath='%s' and strFilename='%s'"""%(picpath,picname))
 
+            if exiftime[0] != None and resolution[0][0] != None and resolution[0][1] != None:
+                infolabels = { "picturepath":picname+" "+suffix, "date": date, "exif:resolution": str(resolution[0][0]) + ',' + str(resolution[0][1]), "exif:exiftime": exiftime[0] } 
+            else:
+                infolabels = { "picturepath":picname+" "+suffix, "date": date  }
+            
+            
             if rating:
                 suffix = suffix + "[COLOR=C0FFFF00]"+("*"*int(rating))+"[/COLOR][COLOR=C0C0C0C0]"+("*"*(5-int(rating)))+"[/COLOR]"
             liz.setInfo( type="pictures", infoLabels=infolabels )
@@ -227,7 +234,13 @@ class Main:
         if fanart:
             liz.setProperty( "Fanart_Image", fanart )
 
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=join(picpath,picname),listitem=liz,isFolder=False)
+        # revert smb:// to \\ replacement
+        fullfilepath = join(picpath,picname)
+
+        fullfilepath=fullfilepath.replace("\\\\", "smb://")
+        fullfilepath=fullfilepath.replace("\\", "/")
+        
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=fullfilepath,listitem=liz,isFolder=False)
 
     def show_home(self):
 ##        # last month
@@ -452,22 +465,36 @@ class Main:
         del ui
 
     def show_wizard(self):
-        global GlobalFilter, GlobalMatchAll
+        global GlobalFilterTrue, GlobalFilterFalse, GlobalMatchAll
         picfanart = join(PIC_PATH,"fanart-keyword.png")
         ui = FilterWizard.FilterWizard( "FilterWizard.xml" , Addon.getAddonInfo('path'), "Default", FilterWizardDelegate)
         ui.doModal()
         del ui
-
+        
+        newtagtrue = ""
+        newtagfalse = ""
         matchall = (1 if GlobalMatchAll else 0)
-        if len(GlobalFilter) > 0:
-            newtag = ""
-            for tag in GlobalFilter:
-                if len(newtag)==0:
-                    newtag = tag
+        
+        if len(GlobalFilterTrue) > 0:
+            
+            for tag in GlobalFilterTrue:
+                if len(newtagtrue)==0:
+                    newtagtrue = tag
                 else:
-                    newtag += "|||" + tag
-            newtag = decoder.smart_unicode(newtag)
-            xbmc.executebuiltin("XBMC.Container.Update(%s?action='showpics'&viewmode='view'&method='wizard'&matchall='%s'&kw='%s')" % ( sys.argv[0], matchall, quote_plus(newtag.encode('utf-8'))))
+                    newtagtrue += "|||" + tag
+            newtagtrue = decoder.smart_unicode(newtagtrue)
+
+        if len(GlobalFilterFalse) > 0:
+            
+            for tag in GlobalFilterFalse:
+                if len(newtagfalse)==0:
+                    newtagfalse = tag
+                else:
+                    newtagfalse += "|||" + tag
+            newtagfalse = decoder.smart_unicode(newtagfalse)
+
+        if len(GlobalFilterTrue) > 0 or len(GlobalFilterFalse) > 0:
+            xbmc.executebuiltin("XBMC.Container.Update(%s?action='showpics'&viewmode='view'&method='wizard'&matchall='%s'&kw='%s'&nkw='%s')" % ( sys.argv[0], matchall, quote_plus(newtagtrue.encode('utf-8')), quote_plus(newtagfalse.encode('utf-8'))))
 
 
     def show_tagtypes(self):
@@ -803,16 +830,16 @@ class Main:
 
         refresh=True
 
-        print "Argument " + self.args.do
+        #print "Argument " + self.args.do
 
         if self.args.do=="addroot":#add a root to scan
             dialog = xbmcgui.Dialog()
-            newroot = dialog.browse(0, __language__(30201), 'pictures')
+            newroot = dialog.browse(0, __language__(30201) , 'pictures')
             
             if not newroot:
                 return
             if not RunningOS.startswith("darwin") and newroot.startswith("smb:"):
-                newroot=newroot.replace("smb:","")
+                newroot=newroot.replace("smb://","\\\\")
                 newroot=newroot.replace("/","\\")
 
             if str(self.args.exclude)=="1":
@@ -829,11 +856,12 @@ class Main:
                 xbmc.executebuiltin( "Notification(%s,%s,%s,%s)"%(__language__(30000).encode("utf8"),__language__(30204).encode("utf8"),3000,join(home,"icon.png").encode("utf8") ) )
                 if not(xbmc.getInfoLabel( "Window.Property(DialogAddonScan.IsAlive)" ) == "true"): #si dialogaddonscan n'est pas en cours d'utilisation...
                     if dialog.yesno(__language__(30000),__language__(30206)):#do a scan now ?
-                        xbmc.executebuiltin( "RunScript(%s,%s--rootpath=%s) "%( join( home, "scanpath.py").encode('utf-8'),
-                                                                              recursive and "-r, " or "",
-                                                                              decoder.smart_unicode(newroot).encode('utf-8')
-                                                                                )
-                                             )
+                        xbmc.executebuiltin( "RunScript(%s,%s--rootpath=%s)"%( join( home, "scanpath.py"),
+                                                                               recursive and "-r, " or "",
+                                                                               quote_plus(newroot.encode('utf-8'))
+                                                                              )
+                                           )
+
                         xbmc.executebuiltin( "Container.Refresh(\"%s?action='rootfolders'&do='showroots'&exclude='1'&viewmode='view'\",)"%(sys.argv[0],))
 
                 else:
@@ -859,8 +887,8 @@ class Main:
                     path,recursive,update,exclude = MPDB.getRoot(unquote_plus(self.args.rootpath))
                     xbmc.executebuiltin( "RunScript(%s,%s--rootpath=%s)"%( join( home, "scanpath.py"),
                                                                            recursive and "-r, " or "",
-                                                                              quote_plus(path.encode('utf-8'))
-                                                                            )
+                                                                           quote_plus(path.encode('utf-8'))
+                                                                          )
                                          )
                 else:#clic sur un chemin à exclure...
                     pass
@@ -1277,7 +1305,7 @@ class Main:
 
         # we are showing pictures for a TAG selection
         elif self.args.method == "wizard":
-            filelist = MPDB.search_filter_tags(unquote_plus(self.args.kw).decode("utf8"), self.args.matchall)
+            filelist = MPDB.search_filter_tags(unquote_plus(self.args.kw).decode("utf8"), unquote_plus(self.args.nkw).decode("utf8"), self.args.matchall)
 
         # we are showing pictures for a TAG selection
         elif self.args.method == "tag":
@@ -1574,12 +1602,14 @@ class Main:
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-GlobalFilter  = []
+GlobalFilterTrue  = []
+GlobalFilterFalse  = []
 GlobalMatchAll = False
 Handle        = 0
-def FilterWizardDelegate(Array, MatchAll = False):
-    global GlobalFilter, GlobalMatchAll, Handle
-    GlobalFilter  = Array
+def FilterWizardDelegate(ArrayTrue, ArrayFalse, MatchAll = False):
+    global GlobalFilterTrue, GlobalFilterFalse, GlobalMatchAll, Handle
+    GlobalFilterTrue  = ArrayTrue
+    GlobalFilterFalse  = ArrayFalse
     GlobalMatchAll = MatchAll
     Handle        = int(sys.argv[ 1 ] )
 

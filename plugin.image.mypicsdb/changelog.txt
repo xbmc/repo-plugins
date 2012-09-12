@@ -1,5 +1,18 @@
+2012/09/10 --> v 1.1.0
+Update: Filter wizard now has a "not" function. 
+        Green checkbox -> picture must contain the tag
+        Red checkbox   -> picture must NOT contain the tag
+
+2012/09/08 --> v 1.0.2
+Update: Resolution and EXIF:Datetime infolabels set for "Pic Thumbs" view
+Fix:    Error "no such column: files.GPS GPSLatitudeRef" now fixed
+Fix:    English translation
+
+2012/08/07 --> v 1.0.1
+Update: New dutch translation from mhdebokx
+
 2012/08/03 --> v 1.0.0
-Update: New french translation
+Update: New french translation from mikebzh44
 
 2012/07/30 --> v 0.9.2
 Update: Sha not calculated for videos

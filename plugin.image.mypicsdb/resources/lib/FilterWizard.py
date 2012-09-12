@@ -113,14 +113,16 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
         
         AlreadyChecked = item.getProperty("checked")
  
-        if checked == 0:
+        if checked == -1:
+            item.setProperty( "checked", "uncheckbutton.png")
+        elif checked == 0:
             item.setProperty( "checked", "transparent.png")
             if AlreadyChecked != "transparent.png":
                 self.checkedTags -= 1
 
         else:
             item.setProperty( "checked", "checkbutton.png")
-            if AlreadyChecked != "checkbutton.png":
+            if AlreadyChecked == "transparent.png":
                 self.checkedTags += 1
 
         self.getControl( TAGS_CONTENT_LIST ).setVisible(False)
@@ -130,17 +132,24 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
         #try:
             # Cancel
             if ( action.getId() in CANCEL_DIALOG or self.getFocusId() == BUTTON_CANCEL and action.getId() in SELECT_ITEM ):
-                array = []
-                self.filter (array, False)
+                arraytrue = []
+                arrayfalse = []
+                self.filter (arraytrue,arrayfalse,False)
                 self.close()
                 
             # Okay
             if ( self.getFocusId() == BUTTON_OK and action.getId() in SELECT_ITEM ):
-                returnArray = []
+                arraytrue = []
+                arrayfalse = []
+                
                 for key, value in self.CheckTagNames.iteritems():
                     if value == 1:
-                        returnArray.append( key)
-                self.filter (returnArray, self.bAnd )
+                        arraytrue.append( key)
+ 
+                    if value == -1:
+                        arrayfalse.append( key)
+                
+                self.filter (arraytrue, arrayfalse, self.bAnd )
                 self.close()
             
             # Match all button
@@ -163,6 +172,9 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
                     key = decoder.smart_unicode(self.CurrentlySelectedTagType) + '||' + decoder.smart_unicode(item.getLabel2())
                     
                     if checked == "checkbutton.png":
+                        self.checkGUITagContent(item, -1)
+                        self.CheckTagNames[ key ] = -1
+                    elif checked == "uncheckbutton.png":
                         self.checkGUITagContent(item, 0)
                         self.CheckTagNames[ key ] = 0
                     else :
@@ -178,10 +190,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
                     self.getControl( CHECKED_LABEL ).setVisible(False)
                     self.getControl( CHECKED_LABEL ).setVisible(True)
 
-            #else:
-            #    print "ActionID = " + str( action.getId() )
-        #except:
-        #    pass
+
 
 
 

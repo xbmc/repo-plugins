@@ -16,12 +16,12 @@
     <string id="30020">Picture folder</string>
     <string id="30021">Remove from database missing pictures</string>
     <string id="30022">Recursive scan ( all sub-folders will be scanned for pictures )</string>
-    <string id="30023">Folder to scan</string>
+    <string id="30023">Picture extensions</string>
     <string id="30024">Perform scan at addon startup</string>
     <string id="30025">Initialize the database at next addon startup</string>
     <string id="30026">Use the picture as fanart for pictures</string><!-- setting -->
     <string id="30027">Settings for the dialog scan popup</string>
-    <string id="30028">Videos extensions</string>
+    <string id="30028">Video extensions</string>
     <string id="30029">Use the videos</string>
     <string id="30030">General</string> 
     <string id="30031">Files</string> 
@@ -64,7 +64,7 @@
     <string id="30096">Pictures without categories</string>
     <string id="30097">Browse by Category</string>
     <string id="30098">Global search</string>
-    <string id="30099">Paths of pictures folders</string>    
+    <string id="30099">Paths of picture folders</string>    
     <string id="30100">All images from %s (%s pics)</string>
     <string id="30101">Browse by Date</string>
     <string id="30102">Browse by Folders</string>
@@ -182,7 +182,7 @@
     <string id="30601">Tags</string>
     <string id="30602">Contents</string>
 
-    <string id="30610">Please select tags</string>
+    <string id="30610">Please select tags (red checkbox means "not")</string>
     <string id="30611">1 tag checked</string>
     <string id="30612">%s tags checked</string>
     <string id="30613">OK</string>    

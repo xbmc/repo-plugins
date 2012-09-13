@@ -97,7 +97,7 @@ def get_subtitles_for_talk(talk_soup, accepted_languages, logger):
         msg = 'No subtitles found'
         logger(msg, msg)
         return None
-    matches = [l for l in languages if l in accepted_languages]
+    matches = [l for l in accepted_languages if l in languages]
     if not matches:
         msg = 'No subtitles in: %s' % (",".join(accepted_languages))
         logger(msg, msg)

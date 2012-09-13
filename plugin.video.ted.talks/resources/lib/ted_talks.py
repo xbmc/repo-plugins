@@ -137,6 +137,7 @@ class UI:
     def themes(self):
         themes = Themes(self.get_HTML)
         for title, link, img, count in themes.get_themes():
+            # Need to associate count with the item so that we can use it when that one selected.
             self.addItem(title, 'themeVids', link, img, isFolder=True)
         self.endofdirectory()
 

@@ -1,3 +1,7 @@
+[B]Version 3.1.4[/B]
+Respect order of custom language codes when fetching subtitles (issue#26)
+Allow subtitles to be disabled (issue#27)
+
 [B]Version 3.1.3[/B]
 Fix subtitles (issue#25)
 

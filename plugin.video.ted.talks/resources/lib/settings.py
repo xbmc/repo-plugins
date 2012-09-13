@@ -28,7 +28,7 @@ def get_subtitle_languages():
     Returns list of ISO639-1 language codes in order of preference,
     or None if disabled.
     '''
-    if not enable_subtitles:
+    if enable_subtitles == 'false':
         return None
     if not subtitle_language.strip():
         return language_mapping.get_language_code(xbmc_language)

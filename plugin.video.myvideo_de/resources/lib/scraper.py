@@ -147,6 +147,8 @@ def get_video(video_id, console_debug=False):
             params[a] = b
         else:
             encxml = unquote(b)
+    if not params.get('domain'):
+        params['domain'] = 'www.myvideo.de'
     xmldata_url = '%s?%s' % (encxml, urlencode(params))
     if 'flash_playertype=MTV' in xmldata_url:
         __log('get_video avoiding MTV player')

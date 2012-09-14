@@ -1,3 +1,5 @@
+0.1.10
+ - fix tv shows (no more Hasselhoff Video...)
 0.1.9
  - fix "Musik Charts"
 0.1.8

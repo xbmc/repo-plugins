@@ -515,4 +515,4 @@ elif _id > 0:
     playvideo("http://mobile.nolife-tv.com/online/player-" + str(_id))
 
 xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
-xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=False)
+xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)

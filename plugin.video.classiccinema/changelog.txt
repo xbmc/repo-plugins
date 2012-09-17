@@ -1,0 +1,8 @@
+Version 1.0.1
+* Upgrade to xbmcswift2
+* Use youtube addon for youtube videos
+* First Eden release
+
+Version 0.9.0
+* Updated required version of python for Eden.
+

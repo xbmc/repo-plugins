@@ -1,3 +1,8 @@
+[B]Version 1.1.6[/B]
+- Add new shows (by dethfeet)
+- Fix blip.tv, springboard
+- Add mp3 playback
+
 [B]Version 1.1.5[/B]
 - Show more recent videos (by dethfeet)
 - Fix user submissions (by dethfeet)

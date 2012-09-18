@@ -19,9 +19,11 @@ def showEpisode(episode_page):
         {"function":showEpisodeDorkly, "regex":"http://www.dorkly.com/(e/|moogaloop/noobtube.swf\?clip_id=)([0-9]*)"},
         {"function":showEpisodeSpringboard, "regex":"\.springboardplatform\.com/mediaplayer/springboard/video/(.*?)/(.*?)/(.*?)/"},
         {"function":showEpisodeSpringboard, "regex":"\\$sb\\(\"(.*?)\",{\"sbFeed\":{\"partnerId\":(.*?),\"type\":\"video\",\"contentId\":(.*?),\"cname\":\"(.*?)\"},\"style\":{\"width\":.*?,\"height\":.*?}}\\);"},
+        {"function":showEpisodeSpringboardBitLy, "regex":"<script.*?src=\"http://www.springboardplatform.com/js/overlay\".*? id=\".*?\".*?src=\"(.*?)\".*?</iframe>"},
         {"function":showEpisodeDaylimotion, "regex":"(http://www.dailymotion.com/video/.*?)_"},          
         {"function":showEpisodeGametrailers, "regex":"<a href=\"(http://www.gametrailers.com/video/angry-video-screwattack/(.*))\" target=\"_blank\">"},
         {"function":showEpisodeSpike, "regex":"<a href=\"(http://www.spike.com/.*?)\""},               
+        {"function":playEpisodeMP3, "regex":"href=\"(.*?\.mp3)\""}
     )
     
     for provider in providers:
@@ -33,6 +35,7 @@ def showEpisode(episode_page):
 def showEpisodeBip(videoItem):
     _regex_extractVideoFeedURL = re.compile("file=(.*?)&", re.DOTALL);
     _regex_extractVideoFeedURL2 = re.compile("file=(.*)", re.DOTALL);
+    _regex_extractVideoFeedURL3 = re.compile("data-episode-id=\"(.*?)\"", re.DOTALL);
 
     videoLink = videoItem.group(1)
     
@@ -44,9 +47,13 @@ def showEpisodeBip(videoItem):
     feedURL = _regex_extractVideoFeedURL.search(fullURL)
     if feedURL is None:
         feedURL = _regex_extractVideoFeedURL2.search(fullURL)
-    feedURL = urllib.unquote(feedURL.group(1))
     
-    blipId = feedURL[feedURL.rfind("/") + 1:]
+    if feedURL is None:
+        page = showEpisodeLoadPage(videoLink) 
+        blipId = _regex_extractVideoFeedURL3.search(page).group(1)
+    else:#This still needed for older links
+        feedURL = urllib.unquote(feedURL.group(1))
+        blipId = feedURL[feedURL.rfind("/") + 1:]
     
     stream_url = "plugin://plugin.video.bliptv/?action=play_video&videoid=" + blipId
     item = xbmcgui.ListItem(path=stream_url)
@@ -74,7 +81,7 @@ def showEpisodeDorkly(videoItem):
     return False
     
 def showEpisodeSpringboard(videoItem):
-    _regex_extractVideoSpringboardStream = re.compile("<media:content duration=\"[0-9]*?\" medium=\"video\" bitrate=\"[0-9]*?\" fileSize=\"[0-9]*?\" url=\"(.*?)\" type=\".*?\" />");
+    _regex_extractVideoSpringboardStream = re.compile("<media:content duration=\"[0-9]*?\" medium=\"video\" .*? url=\"(.*?)\" type=\".*?\" />");
     
     siteId = videoItem.group(2)
     contentId = videoItem.group(3)
@@ -90,6 +97,20 @@ def showEpisodeSpringboard(videoItem):
     item = xbmcgui.ListItem(path=stream_url)
     xbmcplugin.setResolvedUrl(thisPlugin, True, item)
     return False
+
+def showEpisodeSpringboardBitLy(videoItem):
+    videoLink = videoItem.group(1)
+    #GET the 301 redirect URL
+    req = urllib2.Request(videoLink)
+    response = urllib2.urlopen(req)
+    fullURL = response.geturl()
+    
+    _regex_extractVideoSpringboard = re.compile("(embed_iframe)/(.*?)/video/(.*?)/(.*?)/.*?")
+    
+    videoItem = _regex_extractVideoSpringboard.search(fullURL)
+    
+    return showEpisodeSpringboard(videoItem)
+
 
 def showEpisodeDaylimotion(videoItem):
     url = videoItem.group(1)
@@ -148,7 +169,13 @@ def showEpisodeSpike(videoItem):
         item = xbmcgui.ListItem(path=stream_url)
         xbmcplugin.setResolvedUrl(thisPlugin, True, item)
         return False
-    
+
+def playEpisodeMP3(videoItem):
+    stream_url = videoItem.group(1)
+    item = xbmcgui.ListItem(path=stream_url)
+    xbmcplugin.setResolvedUrl(thisPlugin, True, item)
+    return False
+
 def showEpisodeLoadPage(url):
     print url
     req = urllib2.Request(url)

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon
 	id="plugin.video.retrowaretv"
-	version="1.1.5"
+	version="1.1.6"
 	name="Retroware TV"
 	provider-name="dethfeet">
 <requires>
 	<import addon="xbmc.python" version="2.0"/>
-    <import addon="plugin.video.bliptv" version="0.4.0"/>
-    <import addon="plugin.video.youtube" version="0.4.0"/>
+    <import addon="plugin.video.bliptv" version="0.6.0"/>
+    <import addon="plugin.video.youtube" version="3.1.0"/>
 </requires>
 <extension point="xbmc.python.pluginsource"
 		library="default.py">

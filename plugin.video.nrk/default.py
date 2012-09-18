@@ -41,19 +41,20 @@ def view_top():
 
 @plugin.route('/live')
 def live():
+  b = ['380','659','1394','2410','3660'][BITRATE-1]
   img_path = os.path.join(ADDON_PATH, "resources/images")
-  add_item("NRK 1", "mms://a1377.l11673952706.c116739.g.lm.akamaistream.net/D/1377/116739/v0001/reflector:52706",os.path.join(img_path, "nrk1.png"))
-  add_item("NRK 2", "mms://a746.l11674151924.c116741.g.lm.akamaistream.net/D/746/116741/v0001/reflector:51924", os.path.join(img_path, "nrk2.png"))
-  add_item("NRK 3", "mms://a1372.l11674333102.c116743.g.lm.akamaistream.net/D/1372/116743/v0001/reflector:33102", os.path.join(img_path, "nrk3.png"))
+  add("NRK 1", "http://nrk1us-f.akamaihd.net/i/nrk1us_0@79328/index_%s_av-b.m3u8?sd=10&rebase=on" % b,os.path.join(img_path, "nrk1.png"))
+  add("NRK 2", "http://nrk2us-f.akamaihd.net/i/nrk2us_0@79327/index_%s_av-b.m3u8?sd=10&rebase=on" % b, os.path.join(img_path, "nrk2.png"))
+  add("NRK 3", "http://nrk3us-f.akamaihd.net/i/nrk3us_0@79326/index_%s_av-b.m3u8?sd=10&rebase=on" % b, os.path.join(img_path, "nrk3.png"))
   endOfDirectory(plugin.handle)
 
-def add_item(title, url, thumb=""):
+def add(title, url, thumb=""):
   li =  ListItem(title, thumbnailImage=thumb)
-  li.setProperty('mimetype', 'application/x-mpegURL')
+  li.setProperty('mimetype', 'application/vnd.apple.mpegurl')
   addDirectoryItem(plugin.handle, url, li, False)
 
 
-def view(titles, urls, descr=repeat(''), thumbs=repeat(''), bgs=repeat('')):
+def view(titles, urls, thumbs=repeat(''), bgs=repeat(''), descr=repeat('')):
   total = len(titles)
   for title, url, descr, thumb, bg in zip(titles, urls, descr, thumbs, bgs):
     descr = descr() if callable(descr) else descr
@@ -72,26 +73,22 @@ def view(titles, urls, descr=repeat(''), thumbs=repeat(''), bgs=repeat('')):
 @plugin.route('/recommended')
 def recommended():
   import data
-  titles, urls, bgs = data.parse_recommended()
-  view(titles, urls, bgs=bgs)
+  view(*data.parse_recommended())
 
 @plugin.route('/mostrecent')
 def mostrecent():
   import data
-  titles, urls, thumbs = data.parse_most_recent()
-  view(titles, urls, thumbs=thumbs)
+  view(*data.parse_most_recent())
 
 @plugin.route('/categories')
 def categories():
   import data
-  titles, urls = data.parse_categories()
-  view(titles, urls)
+  view(*data.parse_categories())
 
 @plugin.route('/kategori/<arg>')
 def category(arg):
   import data
-  titles, urls = data.parse_by_category(arg)
-  view(titles, urls)
+  view(*data.parse_by_category(arg))
 
 @plugin.route('/letters')
 def letters():
@@ -105,23 +102,21 @@ def letters():
 @plugin.route('/letters/<arg>')
 def letter(arg):
   import data
-  titles, urls = data.parse_by_letter(arg)
-  view(titles, urls)
+  view(*data.parse_by_letter(arg))
 
 @plugin.route('/serie/<arg>')
 def seasons(arg):
   import data
-  titles, urls = data.parse_seasons(arg)
+  titles, urls, thumbs, bgs = data.parse_seasons(arg)
   if len(titles) == 1:
     plugin.redirect(plugin.url_for(urls[0]))
     return
-  view(titles, urls)
+  view(titles, urls, thumbs=thumbs, bgs=bgs)
 
 @plugin.route('/program/Episodes/<series_id>/<season_id>')
 def episodes(series_id, season_id):
   import data
-  titles, urls, descr = data.parse_episodes(series_id, season_id)
-  view(titles, urls, descr=descr)
+  view(*data.parse_episodes(series_id, season_id))
 
 @plugin.route('/serie/<series_id>/<video_id>/.*')
 @plugin.route('/program/<video_id>')

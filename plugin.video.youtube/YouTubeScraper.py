@@ -1,6 +1,6 @@
 '''
    YouTube plugin for XBMC
-   Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+   Copyright (C) 2010-2012 Tobias Ussing And Henrik Mosgaard Jensen
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -662,6 +662,3 @@ class YouTubeScraper():
         result = self.paginator(params)
         self.common.log(repr(result), 5)
         return result
-
-if __name__ == '__main__':
-    sys.exit(0)

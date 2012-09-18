@@ -29,7 +29,7 @@ except ImportError:
     import xbmcvfsdummy as xbmcvfs
 
 # plugin constants
-version = "3.1.0"
+version = "3.2.0"
 plugin = "YouTube-" + version
 author = "TheCollective"
 url = "www.xbmc.com"
@@ -76,12 +76,16 @@ if (__name__ == "__main__" ):
     utils = YouTubeUtils.YouTubeUtils()
     import YouTubeStorage
     storage = YouTubeStorage.YouTubeStorage()
+    import YouTubePluginSettings
+    pluginsettings = YouTubePluginSettings.YouTubePluginSettings()
     import YouTubeCore
     core = YouTubeCore.YouTubeCore()
     import YouTubeLogin
     login = YouTubeLogin.YouTubeLogin()
     import YouTubeFeeds
     feeds = YouTubeFeeds.YouTubeFeeds()
+    import YouTubeSubtitleControl
+    subtitles = YouTubeSubtitleControl.YouTubeSubtitleControl()
     import YouTubePlayer
     player = YouTubePlayer.YouTubePlayer()
     import SimpleDownloader as downloader

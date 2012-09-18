@@ -1,17 +1,21 @@
 [B]TODO:[/B]
 - Fix RTMP support.
-- Purchasable movies.
-- Unit test coverage of Core above 90% I'm looking at you "Fetch page"
 - Unit test new functions in storage...
-- Replace scraper with feeds for: shows, disco.
+- Replace scraper with feeds for: shows.
 - Integration tests on all user actions.
 - Use extractJS and urlparse.parse_qs.
+- UTF8/16 does not work consistently(Verify failures against minidom implementation)
+- Embed playback fallback
 
 [B]Errata[/B]
 - [XBMC] Thumbnails sometimes turns into black box or Folder (XBMC not detecting when thumbnail is set and defaulting to icon?)
 - [XBMC] When sorting items, it's impossible to get them to return to their original order
 - [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time
 - [RTMPDUMP] Doesn't support handshake type 10 which is required by youtube.
+
+[B]Version 3.2.0[/B]
+- Fixed playback
+- Minor refactoring to increase testability
 
 [B]Version 3.1.0[/B]
 - Fixed login

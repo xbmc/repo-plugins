@@ -1,6 +1,6 @@
 '''
    YouTube plugin for XBMC
-   Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+   Copyright (C) 2010-2012 Tobias Ussing And Henrik Mosgaard Jensen
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ class YouTubeNavigation():
         self.common = sys.modules["__main__"].common
         self.cache = sys.modules["__main__"].cache
 
+        self.pluginsettings = sys.modules["__main__"].pluginsettings
         self.playlist = sys.modules["__main__"].playlist
         self.login = sys.modules["__main__"].login
         self.feeds = sys.modules["__main__"].feeds
@@ -43,6 +44,7 @@ class YouTubeNavigation():
         self.downloader = sys.modules["__main__"].downloader
         self.storage = sys.modules["__main__"].storage
         self.scraper = sys.modules["__main__"].scraper
+        self.subtitles = sys.modules["__main__"].subtitles
 
         # This list contains the main menu structure the user first encounters when running the plugin
         #     label                        , path                                          , thumbnail                    ,  login                  ,  feed / action
@@ -128,8 +130,6 @@ class YouTubeNavigation():
         if (get("action") in ["edit_search", "edit_disco"]):
             self.storage.editStoredSearch(params)
             self.listMenu(params)
-        if (get("action") == "delete_artist"):
-            self.storage.deleteStoredArtist(params)
         if (get("action") == "remove_favorite"):
             self.removeFromFavorites(params)
         if (get("action") == "add_favorite"):
@@ -242,14 +242,15 @@ class YouTubeNavigation():
             return
 
         self.common.log("path: " + repr(download_path))
-        (video, status) = self.player.getVideoObject(params)
+        (video, status) = self.player.buildVideoObject(params)
 
         if "video_url" in video and download_path:
             params["Title"] = video['Title']
             params["url"] = video['video_url']
             params["download_path"] = download_path
-            filename = "%s-[%s].mp4" % (''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS), video["videoid"])
-            self.player.downloadSubtitle(video)
+            filename = "%s-[%s].mp4" % (''.join(c for c in video['Title'] if c not in self.utils.INVALID_CHARS), video["videoid"])
+
+            self.subtitles.downloadSubtitle(video)
             if get("async"):
                 self.downloader.download(filename, params, async=False)
             else:
@@ -624,7 +625,7 @@ class YouTubeNavigation():
                     cm.append((self.language(30513) % title, 'XBMC.RunPlugin(%s?path=%s&editid=%s&action=remove_subscription)' % (sys.argv[0], item("path"), item("editid"))))
 
         if (item("contact") and not get("store")):
-            if (self.settings.getSetting("username") != "" and self.settings.getSetting("oauth2_access_token")):
+            if (self.pluginsettings.userHasProvidedValidCredentials()):
                 if (item("external")):
                     cm.append((self.language(30026), 'XBMC.RunPlugin(%s?path=%s&action=add_contact&contact=%s&)' % (sys.argv[0], item("path"), item("Title"))))
                 else:

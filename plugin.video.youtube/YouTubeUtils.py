@@ -1,6 +1,6 @@
 '''
    YouTube plugin for XBMC
-   Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+   Copyright (C) 2010-2012 Tobias Ussing And Henrik Mosgaard Jensen
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,12 +32,10 @@ class YouTubeUtils:
         self.INVALID_CHARS = "\\/:*?\"<>|"
         self.THUMBNAIL_PATH = os.path.join(self.settings.getAddonInfo('path'), "thumbnails")
 
-    # Shows a more user-friendly notification
     def showMessage(self, heading, message):
         duration = ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10][int(self.settings.getSetting('notification_length'))]) * 1000
-        self.xbmc.executebuiltin('XBMC.Notification("%s", "%s", %s)' % (heading, message, duration))
+        self.xbmc.executebuiltin((u'XBMC.Notification("%s", "%s", %s)' % (heading, message, duration)).encode("utf-8"))
 
-    # Resolves the full thumbnail path for the plugins skins directory
     def getThumbnail(self, title):
         if (not title):
             title = "DefaultFolder"
@@ -51,7 +49,6 @@ class YouTubeUtils:
 
         return thumbnail
 
-    # Standardised error handler
     def showErrorMessage(self, title="", result="", status=500):
         if title == "":
             title = self.language(30600)
@@ -63,7 +60,6 @@ class YouTubeUtils:
         else:
             self.showMessage(title, self.language(30617))
 
-    # generic function for building the item url filters out many item params to reduce unicode problems
     def buildItemUrl(self, item_params={}, url=""):
         blacklist = ("path", "thumbnail", "Overlay", "icon", "next", "content", "editid", "summary", "published", "count", "Rating", "Plot", "Title", "new_results_function")
         for key, value in item_params.items():
@@ -71,7 +67,6 @@ class YouTubeUtils:
                 url += key + "=" + value + "&"
         return url
 
-    # Adds a default next folder to a result set
     def addNextFolder(self, items=[], params={}):
         get = params.get
         item = {"Title": self.language(30509), "thumbnail": "next", "next": "true", "page": str(int(get("page", "0")) + 1)}

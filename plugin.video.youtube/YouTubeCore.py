@@ -1,6 +1,6 @@
 '''
     YouTube plugin for XBMC
-    Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+    Copyright (C) 2010-2012 Tobias Ussing And Henrik Mosgaard Jensen
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,12 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys
-import urllib
-import urllib2
 import re
+import sys
 import time
 import socket
+import urllib
+import urllib2
+#import chardet
+
 try:
     import simplejson as json
 except ImportError:
@@ -254,7 +256,6 @@ class YouTubeCore():
         return folders
 
     def getBatchDetailsOverride(self, items, params={}):
-        ytobjects = []
         videoids = []
 
         for video in items:
@@ -464,8 +465,13 @@ class YouTubeCore():
 
             con = urllib2.urlopen(request)
 
-            ret_obj["content"] = con.read()
+            inputdata = con.read()
+            #data_type = chardet.detect(inputdata)
+            #inputdata = inputdata.decode(data_type["encoding"])
+            #self.common.log("AAAAAAAAAAAAAAAAAA: " + repr(type(inputdata)) + " - " + repr(data_type))
+            ret_obj["content"] = inputdata.decode("utf-8")
             ret_obj["location"] = link
+
             ret_obj["new_url"] = con.geturl()
             ret_obj["header"] = str(con.info())
             con.close()
@@ -478,18 +484,7 @@ class YouTubeCore():
                 ret_obj["status"] = 200
                 return ret_obj
             else:
-                self.common.log("found verify age request: " + repr(params))
-                # We need login to verify age
-                if not get("login"):
-                    params["error"] = get("error", 0)
-                    params["login"] = "true"
-                    return self._fetchPage(params)
-                elif get("no_verify_age", "false") == "false":
-                    ret_obj["status"] = 303
-                    ret_obj["content"] = self.language(30606)
-                    return self._verifyAge(link, ret_obj["new_url"], params)
-                else:
-                    return ret_obj
+                self.common.log("Youtube requires you to verify your age to view this content: " + repr(params))
 
         except urllib2.HTTPError, e:
             cont = False
@@ -611,73 +606,6 @@ class YouTubeCore():
             self.common.log("couldn't find any errors: " + repr(ret))
 
         return False
-
-    def _verifyAge(self, org_link, next_url, params={}):
-        self.common.log("org_link : " + org_link + " - next_url: " + next_url)
-        fetch_options = {"link": next_url, "no_verify_age": "true", "login": "true"}
-        verified = False
-        step = 0
-        ret = {}
-        while not verified and fetch_options and step < 6:
-            self.common.log("Step : " + str(step))
-            step += 1
-
-            if step == 5:
-                return {"content": self._findErrors(ret), "status": 303}
-
-            ret = self._fetchPage(fetch_options)
-            fetch_options = False
-
-            # Check if we should login.
-            new_url = self.common.parseDOM(ret["content"].replace("\n", " "), "form", attrs={"id": "gaia_loginform"}, ret="action")
-
-            if len(new_url) == 1:
-                if isinstance(self.login, str):
-                    self.login = sys.modules["__main__"].login
-                self.login._httpLogin({"page": ret})
-
-            new_url = self.common.parseDOM(ret["content"], "form", attrs={"id": "confirm-age-form"}, ret="action")
-
-            if len(new_url) > 0:
-                self.common.log("Part A - Type 1")
-                new_url = "http://www.youtube.com/" + new_url[0]
-                next_url = self.common.parseDOM(ret["content"], "input", attrs={"name": "next_url"}, ret="value")
-                set_racy = self.common.parseDOM(ret["content"], "input", attrs={"name": "set_racy"}, ret="value")
-                session_token_start = ret["content"].find("'XSRF_TOKEN': '") + len("'XSRF_TOKEN': '")
-                session_token_stop = ret["content"].find("',", session_token_start)
-                session_token = ret["content"][session_token_start:session_token_stop]
-
-                fetch_options = {"link": new_url, "no_verify_age": "true", "login": "true", "url_data": {"next_url": next_url[0], "set_racy": set_racy[0], "session_token": session_token}}
-                continue
-            else:
-                self.common.log("Part A - Type 2")
-                actions = self.common.parseDOM(ret["content"], "div", attrs={"id": "verify-actions"})
-                if len(actions) > 0:
-                    new_url = self.common.parseDOM(actions, "button", attrs={"type": "button"}, ret="href")
-                    fetch_options = {"link": new_url[0].replace("&amp;", "&"), "no_verify_age": "true", "login": "true"}
-                    continue
-
-            new_url = self.common.parseDOM(ret["content"], "button", attrs={"href": "/verify.*?"}, ret="href")
-            if len(new_url) > 0:
-                target_url = ret["new_url"]
-                if target_url.rfind("/") > 10:
-                    target_url = target_url[:target_url.find("/", 10)]
-                else:
-                    target_url += "/"
-
-                fetch_options = {"link": target_url + new_url[0], "no_verify_age": "true", "login": "true"}
-                continue
-
-            if ret["content"].find("PLAYER_CONFIG") > -1:
-                self.common.log("Found PLAYER_CONFIG. Verify successful")
-                return ret
-
-            if not fetch_options:
-                self.common.log("Nothing hit, assume we are verified: " + repr(ret))
-                fetch_options = {"link": org_link, "no_verify_age": "true", "login": "true"}
-                return self._fetchPage(fetch_options)
-
-        self.common.log("Done")
 
     def _oRefreshToken(self):
         self.common.log("")
@@ -825,7 +753,7 @@ class YouTubeCore():
 
         self.cache.setMulti(pre_id, save_data)
 
-    def getYTCache(self, pre_id, ytobjects, key):
+    def getYTCache(self, pre_id, ytobjects):
         self.common.log(pre_id)
         load_data = []
         for item in ytobjects:
@@ -834,7 +762,7 @@ class YouTubeCore():
 
         res = self.cache.getMulti(pre_id, load_data)
         if len(res) != len(load_data):
-            self.common.log("Length mismatch:" + repr(res) + " -" + repr(load_data))
+            self.common.log("Length mismatch:" + repr(res) + " - " + repr(load_data))
         i = 0
         for item in ytobjects:
             if "videoid" in item:
@@ -959,7 +887,7 @@ class YouTubeCore():
         self.addNextPageLinkIfNecessary(params, xml, ytobjects)
 
         self.setYTCache("videoidcache", ytobjects)
-        self.getYTCache("vidstatus-", ytobjects, "Overlay")
+        self.getYTCache("vidstatus-", ytobjects)
 
         self.common.log("Done: " + str(len(ytobjects)),3)
         return ytobjects

@@ -1,6 +1,6 @@
 '''
    YouTube plugin for XBMC
-    Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+    Copyright (C) 2010-2012 Tobias Ussing And Henrik Mosgaard Jensen
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,11 +18,10 @@
 
 import sys
 import urllib
-import re
-import os.path
-import time
+import cgi
 try: import simplejson as json
 except ImportError: import json
+import urllib
 
 
 class YouTubePlayer():
@@ -57,367 +56,31 @@ class YouTubePlayer():
     urls = {}
     urls['video_stream'] = "http://www.youtube.com/watch?v=%s&safeSearch=none"
     urls['embed_stream'] = "http://www.youtube.com/get_video_info?video_id=%s"
-    urls['timed_text_index'] = "http://www.youtube.com/api/timedtext?type=list&v=%s"
     urls['video_info'] = "http://gdata.youtube.com/feeds/api/videos/%s"
-    urls['close_caption_url'] = "http://www.youtube.com/api/timedtext?type=track&v=%s&lang=%s"
-    urls['transcription_url'] = "http://www.youtube.com/api/timedtext?sparams=asr_langs,caps,expire,v&asr_langs=en,ja&caps=asr&expire=%s&key=yttt1&signature=%s&hl=en&type=trackformat=1&lang=en&kind=asr&name=&v=%s&tlang=en"
-    urls['annotation_url'] = "http://www.youtube.com/annotations/read2?video_id=%s&feat=TC"
-    urls['remove_watch_later'] = "http://www.youtube.com/addto_ajax?action_delete_from_playlist=1"
 
     def __init__(self):
-        self.xbmc = sys.modules["__main__"].xbmc
         self.xbmcgui = sys.modules["__main__"].xbmcgui
         self.xbmcplugin = sys.modules["__main__"].xbmcplugin
-        self.xbmcvfs = sys.modules["__main__"].xbmcvfs
 
+        self.storage = sys.modules["__main__"].storage
         self.settings = sys.modules["__main__"].settings
         self.language = sys.modules["__main__"].language
-        self.plugin = sys.modules["__main__"].plugin
         self.dbg = sys.modules["__main__"].dbg
 
         self.common = sys.modules["__main__"].common
         self.utils = sys.modules["__main__"].utils
         self.cache = sys.modules["__main__"].cache
         self.core = sys.modules["__main__"].core
-
-        self.login = sys.modules["__main__"].login
-        self.feeds = sys.modules["__main__"].feeds
-        self.storage = sys.modules["__main__"].storage
-        self.scraper = sys.modules["__main__"].scraper
-
-    # ================================ Subtitle Downloader ====================================
-    def downloadSubtitle(self, video={}):
-        self.common.log("")
-        get = video.get
-
-        style = ""
-        result = ""
-
-        if self.settings.getSetting("annotations") == "true" and not "downloadPath" in video:
-            xml = self.core._fetchPage({"link": self.urls["annotation_url"] % get('videoid')})
-            if xml["status"] == 200 and xml["content"]:
-                (result, style) = self.transformAnnotationToSSA(xml["content"])
-
-        if self.settings.getSetting("lang_code") != "0":
-            subtitle_url = self.getSubtitleUrl(video)
-
-            if not subtitle_url and self.settings.getSetting("transcode") == "true":
-                    subtitle_url = self.getTranscriptionUrl(video)
-
-            if subtitle_url:
-                xml = self.core._fetchPage({"link": subtitle_url})
-                if xml["status"] == 200 and xml["content"]:
-                    result += self.transformSubtitleXMLtoSRT(xml["content"])
-
-        if len(result) > 0:
-            result = "[Script Info]\r\n; This is a Sub Station Alpha v4 script.\r\n; For Sub Station Alpha info and downloads,\r\n; go to http://www.eswat.demon.co.uk/\r\n; or email kotus@eswat.demon.co.uk\r\nTitle: Auto Generated\r\nScriptType: v4.00\r\nCollisions: Normal\r\nPlayResY: 1280\r\nPlayResX: 800\r\n\r\n[V4 Styles]\r\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, TertiaryColour, BackColour, Bold, Italic, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, AlphaLevel, Encoding\r\nStyle: Default,Arial,80,&H00FFFFFF&,65535,65535,&00000000&,-1,0,1,3,2,2,0,0,0,0,0\r\nStyle: speech,Arial,60,0,65535,65535,&H4BFFFFFF&,0,0,3,1,0,1,0,0,0,0,0\r\nStyle: popup,Arial,60,0,65535,65535,&H4BFFFFFF&,0,0,3,3,0,1,0,0,0,0,0\r\nStyle: highlightText,Wolf_Rain,60,15724527,15724527,15724527,&H4BFFFFFF&,0,0,1,1,2,2,5,5,0,0,0\r\n" + style + "\r\n[Events]\r\nFormat: Marked, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\r\n" + result
-
-            result += "Dialogue: Marked=0,0:00:0.00,0:00:0.00,Default,Name,0000,0000,0000,,\r\n"  # This solves a bug.
-            self.saveSubtitle(result, video)
-            self.common.log("Done")
-            return True
-
-        self.common.log("Failure")
-        return False
-
-    def getSubtitleUrl(self, video={}):
-        self.common.log("")
-        get = video.get
-        url = ""
-
-        xml = self.core._fetchPage({"link": self.urls["timed_text_index"] % get('videoid')})
-
-        self.common.log("subtitle index: " + repr(xml["content"]))
-
-        if xml["status"] == 200:
-            subtitle = ""
-            code = ""
-            codelist = self.common.parseDOM(xml["content"], "track", ret="lang_code")
-            sublist = self.common.parseDOM(xml["content"], "track", ret="name")
-            if len(sublist) != len(codelist):
-                self.common.log("Code list and sublist length mismatch: " + repr(codelist) + " - " + repr(sublist))
-                return ""
-
-            if len(codelist) > 0:
-                # Fallback to first in list.
-                subtitle = sublist[0].replace(" ", "%20")
-                code = codelist[0]
-
-            lang_code = ["off", "en", "es", "de", "fr", "it", "ja"][int(self.settings.getSetting("lang_code"))]
-            self.common.log("selected language: " + repr(lang_code))
-            for i in range(0, len(codelist)):
-                data = codelist[i].lower()
-                if data.find("-") > -1:
-                    data = data[:data.find("-")]
-
-                if codelist[i].find(lang_code) > -1:
-                    subtitle = sublist[i].replace(" ", "%20")
-                    code = codelist[i]
-                    self.common.log("found subtitle specified: " + subtitle + " - " + code)
-                    break
-
-                if codelist[i].find("en") > -1:
-                    subtitle = sublist[i].replace(" ", "%20")
-                    code = "en"
-                    self.common.log("found subtitle default: " + subtitle + " - " + code)
-                
-
-            if code:
-                url = self.urls["close_caption_url"] % (get("videoid"), code)
-                if len(subtitle) > 0:
-                    url += "&name=" + subtitle
-
-
-        self.common.log("found subtitle url: " + repr(url))
-        return url
-
-    def getSubtitleFileName(self, video):
-        get = video.get
-        lang_code = ["off", "en", "es", "de", "fr", "it", "ja"][int(self.settings.getSetting("lang_code"))]
-        filename = ''.join(c for c in self.common.makeUTF8(video['Title']) if c not in self.utils.INVALID_CHARS) + "-[" + get('videoid') + "]-" + lang_code.upper() + ".ssa"
-        filename = filename.encode("ascii", "ignore")
-        return filename
-
-    def saveSubtitle(self, result, video={}):
-        self.common.log("")
-        filename = self.getSubtitleFileName(video)
-
-        path = os.path.join(self.xbmc.translatePath(self.settings.getAddonInfo("profile")).decode("utf-8"), filename)
-
-        w = self.storage.openFile(path, "wb")
-        w.write(self.utils.convertStringToBinary(result))
-        w.close()
-
-        if "downloadPath" in video:
-            self.xbmcvfs.rename(path, os.path.join(video["downloadPath"], filename))
-
-
-    def getTranscriptionUrl(self, video={}):
-        self.common.log("")
-        get = video.get
-        trans_url = ""
-        if "ttsurl" in video:
-            if len(video["ttsurl"]) > 0:
-                trans_url = urllib.unquote(video["ttsurl"]).replace("\\", "") + "&type=trackformat=1&lang=en&kind=asr&name=&v=" + get("videoid")
-                if self.settings.getSetting("lang_code") > 1:  # 1 == en
-                    lang_code = ["off", "en", "es", "de", "fr", "it", "ja"][int(self.settings.getSetting("lang_code"))]
-                    trans_url += "&tlang=" + lang_code
-        return trans_url
-
-    def simpleReplaceHTMLCodes(self, str):
-        str = str.strip()
-        str = str.replace("&amp;", "&")
-        str = str.replace("&quot;", '"')
-        str = str.replace("&hellip;", "...")
-        str = str.replace("&gt;", ">")
-        str = str.replace("&lt;", "<")
-        str = str.replace("&#39;", "'")
-        return str
-
-    def convertSecondsToTimestamp(self, seconds):
-        self.common.log("", 3)
-        hours = str(int(seconds / 3600))
-        seconds = seconds % 3600
-
-        minutes = str(int(seconds/60))
-        if len(minutes) == 1:
-            minutes = "0" + minutes
-
-        seconds = str(seconds % 60)
-        if len(seconds) == 1:
-            seconds = "0" + seconds
-
-        self.common.log("Done", 3)
-        return "%s:%s:%s" % (hours, minutes, seconds)
-
-    def transformSubtitleXMLtoSRT(self, xml):
-        self.common.log("")
-
-        result = ""
-        for node in self.common.parseDOM(xml, "text", ret=True):
-            text = self.common.parseDOM(node, "text")[0]
-            text = self.simpleReplaceHTMLCodes(text).replace("\n", "\\n")
-            start = float(self.common.parseDOM(node, "text", ret="start")[0])
-            duration = self.common.parseDOM(node, "text", ret="dur")
-            end = start + 0.1
-            if len(duration) > 0:
-                end = start + float(duration[0])
-
-            start = self.convertSecondsToTimestamp(start)
-            end = self.convertSecondsToTimestamp(end)
-
-            if start and end:
-                result += "Dialogue: Marked=%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\r\n" % ("0", start, end, "Default", "Name", "0000", "0000", "0000", "", text)
-
-        return result
-
-    def transformColor(self, color):
-        self.common.log("Color: %s - len: %s" % (color, len(color)), 3)
-        if color:
-            color = hex(int(color))
-            color = str(color)
-            color = color[2:]
-            self.common.log("Color: %s - len: %s" % (color, len(color)), 5)
-            if color == "0":
-                color = "000000"
-            if len(color) == 4:
-                color = "00" + color
-            if len(color) == 6:
-                color = color[4:6] + color[2:4] + color[0:2]
-
-        self.common.log("Returning color: %s - len: %s" % (color, len(color)), 5)
-        return color
-
-    def transformAlpha(self, alpha):
-        self.common.log("Alpha: %s - len: %s" % (alpha, len(alpha)), 5)
-        if not alpha or alpha == "0" or alpha == "0.0":
-            alpha = "-1"  # No background.
-        else:
-            # YouTube and SSA have inverted alphas.
-            alpha = int(float(alpha) * 256)
-            alpha = hex(256 - alpha)
-            alpha = alpha[2:]
-
-        self.common.log("Alpha: %s - len: %s" % (alpha, len(alpha)), 5)
-        return alpha
-
-    def transformAnnotationToSSA(self, xml):
-        self.common.log("")
-        result = ""
-        ssa_fixes = []
-        style_template = "Style: annot%s,Arial,%s,&H%s&,&H%s&,&H%s&,&H%s&,0,0,3,3,0,1,0,0,0,0,0\r\n"
-        styles_count = 0
-        append_style = ""
-        entries = self.common.parseDOM(xml, "annotation", ret=True)
-        for node in entries:
-            if node:
-                stype = "".join(self.common.parseDOM(node, "annotation", ret="type"))
-                style = "".join(self.common.parseDOM(node, "annotation", ret="style"))
-                self.common.log("stype : " + stype, 5)
-                self.common.log("style : " + style, 5)
-
-                if stype == "highlight":
-                    linkt = "".join(self.common.parseDOM(node, "url", ret="type"))
-                    linkv = "".join(self.common.parseDOM(node, "url", ret="value"))
-                    if linkt == "video":
-                        self.common.log("Reference to video : " + linkv)
-                elif node.find("TEXT") > -1:
-                    text = self.common.parseDOM(node, "TEXT")
-                    if len(text):
-                        text = self.common.replaceHTMLCodes(text[0])
-                        start = ""
-
-                        ns_fsize = 60
-                        start = False
-                        end = False
-
-                        if style == "popup":
-                            cnode = self.common.parseDOM(node, "rectRegion", ret="t")
-                            start = cnode[0]
-                            end = cnode[1]
-                            tmp_y = self.common.parseDOM(node, "rectRegion", ret="y")
-                            tmp_h = self.common.parseDOM(node, "rectRegion", ret="h")
-                            tmp_x = self.common.parseDOM(node, "rectRegion", ret="x")
-                            tmp_w = self.common.parseDOM(node, "rectRegion", ret="w")
-                        elif style == "speech":
-                            cnode = self.common.parseDOM(node, "anchoredRegion", ret="t")
-                            start = cnode[0]
-                            end = cnode[1]
-                            tmp_y = self.common.parseDOM(node, "anchoredRegion", ret="y")
-                            tmp_h = self.common.parseDOM(node, "anchoredRegion", ret="h")
-                            tmp_x = self.common.parseDOM(node, "anchoredRegion", ret="x")
-                            tmp_w = self.common.parseDOM(node, "anchoredRegion", ret="w")
-                        elif style == "higlightText":
-                            cnode = False
-                        else:
-                            cnode = False
-
-                        for snode in self.common.parseDOM(node, "appearance", attrs={"fgColor": ".*?"}, ret=True):
-                            ns_fsize = self.common.parseDOM(snode, "appearance", ret="textSize")
-                            if len(ns_fsize):
-                                ns_fsize = int(1.2 * (1280 * float(ns_fsize[0]) / 100))
-                            else:
-                                ns_fsize = 60
-                            ns_fcolor = self.common.parseDOM(snode, "appearance", ret="fgColor")
-                            ns_fcolor = self.transformColor(ns_fcolor[0])
-
-                            ns_bcolor = self.common.parseDOM(snode, "appearance", ret="bgColor")
-                            ns_bcolor = self.transformColor(ns_bcolor[0])
-
-                            ns_alpha = self.common.parseDOM(snode, "appearance", ret="bgAlpha")
-                            ns_alpha = self.transformAlpha(ns_alpha[0])
-
-                            append_style += style_template % (styles_count, ns_fsize, ns_fcolor, ns_fcolor, ns_fcolor, ns_alpha + ns_bcolor)
-                            style = "annot" + str(styles_count)
-                            styles_count += 1
-
-                        self.common.log("start: %s - end: %s - style: %s" % (start, end, style), 5)
-                        if start and end and style != "highlightText":
-                            marginV = 1280 * float(tmp_y[0]) / 100
-                            marginV += 1280 * float(tmp_h[0]) / 100
-                            marginV = 1280 - int(marginV)
-                            marginV += 5
-                            marginL = int((800 * float(tmp_x[0]) / 100))
-                            marginL += 5
-                            marginR = 800 - marginL - int((800 * float(tmp_w[0]) / 100)) - 15
-                            if marginR < 0:
-                                marginR = 0
-                            result += "Dialogue: Marked=%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\r\n" % ("0", start, end, style, "Name", marginL, marginR, marginV, "", text)
-                            ssa_fixes.append([start, end])
-
-        # Fix errors in the SSA specs.
-        if len(ssa_fixes) > 0:
-            for a_start, a_end in ssa_fixes:
-                for b_start, b_end in ssa_fixes:
-                    if time.strptime(a_end[0:a_end.rfind(".")], "%H:%M:%S") < time.strptime(b_start[0:b_start.rfind(".")], "%H:%M:%S"):
-                        result += "Dialogue: Marked=0,%s,%s,Default,Name,0000,0000,0000,,\r\n" % (a_end, b_start)
-
-        self.common.log("Done : " + repr((result, append_style)),5)
-        return (result, append_style)
-
-    def addSubtitles(self, video={}):
-        get = video.get
-        self.common.log("fetching subtitle if available")
-
-        filename = self.getSubtitleFileName(video)
-
-        download_path = os.path.join(self.settings.getSetting("downloadPath").decode("utf-8"), filename)
-        path = os.path.join(self.xbmc.translatePath(self.settings.getAddonInfo("profile")).decode("utf-8"), filename)
-
-        set_subtitle = False
-        if self.xbmcvfs.exists(download_path):
-            path = download_path
-            set_subtitle = True
-        elif self.xbmcvfs.exists(path):
-            set_subtitle = True
-        elif self.downloadSubtitle(video):
-            set_subtitle = True
-
-        self.common.log("Done trying to locate: " + path, 4)
-        if self.xbmcvfs.exists(path) and not "downloadPath" in video and set_subtitle:
-            player = self.xbmc.Player()
-
-            i = 0
-            while not player.isPlaying():
-                i += 1
-                self.common.log("Waiting for playback to start ")
-                time.sleep(1)
-                if i > 10:
-                    break
-
-            self.xbmc.Player().setSubtitles(path)
-            self.common.log("added subtitle %s to playback" % path)
-
-    # ================================ Video Playback ====================================
+        self.subtitles = sys.modules["__main__"].subtitles
 
     def playVideo(self, params={}):
         self.common.log(repr(params), 3)
         get = params.get
 
-        (video, status) = self.getVideoObject(params)
+        (video, status) = self.buildVideoObject(params)
 
         if status != 200:
-            self.common.log("construct video url failed contents of video item " + repr(video))
+            self.common.log(u"construct video url failed contents of video item " + repr(video))
             self.utils.showErrorMessage(self.language(30603), video["apierror"], status)
             return False
 
@@ -425,120 +88,24 @@ class YouTubePlayer():
 
         listitem.setInfo(type='Video', infoLabels=video)
 
-        self.common.log("Playing video: " + repr(video['Title']) + " - " + repr(get('videoid')) + " - " + repr(video['video_url']))
+        self.common.log(u"Playing video: " + repr(video['Title']) + " - " + repr(get('videoid')) + " - " + repr(video['video_url']))
 
         self.xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
 
         if self.settings.getSetting("lang_code") != "0" or self.settings.getSetting("annotations") == "true":
-            self.addSubtitles(video)
+            self.subtitles.addSubtitles(video)
 
         if (get("watch_later") == "true" and get("playlist_entry_id")):
-            self.common.log("removing video from watch later playlist")
+            self.common.log(u"removing video from watch later playlist")
             self.core.remove_from_watch_later(params)
 
         self.storage.storeValue("vidstatus-" + video['videoid'], "7")
-
-    def getVideoUrlMap(self, pl_obj, video={}):
-        self.common.log(repr(pl_obj))
-        links = {}
-        video["url_map"] = "true"
-
-        html = ""
-        if "fmt_stream_map" in pl_obj["args"]:
-            html = pl_obj["args"]["fmt_stream_map"]
-
-        if len(html) == 0 and "url_encoded_fmt_stream_map" in pl_obj["args"]:
-            html = urllib.unquote(pl_obj["args"]["url_encoded_fmt_stream_map"])
-
-        if len(html) == 0 and"fmt_url_map" in  pl_obj["args"]:
-            html = pl_obj["args"]["fmt_url_map"]
-
-        html = urllib.unquote_plus(html)
-
-        if "liveplayback_module" in pl_obj["args"]:
-            video["live_play"] = "true"
-
-        fmt_url_map = [html]
-        if html.find("|") > -1:
-            fmt_url_map = html.split('|')
-        elif html.find(",url=") > -1:
-            fmt_url_map = html.split(',url=')
-        elif html.find("&conn=") > -1:
-            video["stream_map"] = "true"
-            fmt_url_map = html.split('&conn=')
-
-        if len(fmt_url_map) > 0:
-            for index, fmt_url in enumerate(fmt_url_map):
-                if fmt_url.find("&url") > -1:
-                    self.common.log("Searching for fmt_url_map : " + repr(fmt_url))
-                    fmt_url = fmt_url.split("&url")
-                    fmt_url_map += [fmt_url[1]]
-                    fmt_url = fmt_url[0]
-
-                if (len(fmt_url) > 7 and fmt_url.find("&") > 7):
-                    quality = "5"
-                    final_url = fmt_url.replace(" ", "%20").replace("url=", "")
-
-                    if (final_url.rfind(';') > 0):
-                        final_url = final_url[:final_url.rfind(';')]
-
-                    if (final_url.rfind(',') > final_url.rfind('&id=')):
-                        final_url = final_url[:final_url.rfind(',')]
-                    elif (final_url.rfind(',') > final_url.rfind('/id/') and final_url.rfind('/id/') > 0):
-                        final_url = final_url[:final_url.rfind('/')]
-
-                    if (final_url.rfind('itag=') > 0):
-                        quality = final_url[final_url.rfind('itag=') + 5:]
-                        if quality.find('&') > -1:
-                            quality = quality[:quality.find('&')]
-                        if quality.find(',') > -1:
-                            quality = quality[:quality.find(',')]
-                    elif (final_url.rfind('/itag/') > 0):
-                        quality = final_url[final_url.rfind('/itag/') + 6:]
-
-                    if final_url.find("&type") > 0:
-                        final_url = final_url[:final_url.find("&type")]
-                    if self.settings.getSetting("preferred") == "false":
-                        pos = final_url.find("://")
-                        fpos = final_url.find("fallback_host")
-                        if pos > -1 and fpos > -1:
-                            host = final_url[pos + 3:]
-                            if host.find("/") > -1:
-                                host = host[:host.find("/")]
-                            fmt_fallback = final_url[fpos + 14:]
-                            if fmt_fallback.find("&") > -1:
-                                fmt_fallback = fmt_fallback[:fmt_fallback.find("&")]
-                            self.common.log("Swapping cached host [%s] and fallback host [%s] " % (host, fmt_fallback), 5)
-                            final_url = final_url.replace(host, fmt_fallback)
-                            final_url = final_url.replace("fallback_host=" + fmt_fallback, "fallback_host=" + host)
-
-                    # Extract RTMP variables
-                    if final_url.find("rtmp") > -1 and index > 0:
-                        if "url" in pl_obj:
-                            final_url += " swfurl=" + pl_obj["url"] + " swfvfy=1"
-
-                        playpath = False
-                        if final_url.find("stream=") > -1:
-                            playpath = final_url[final_url.find("stream=") + 7:]
-                            if playpath.find("&") > -1:
-                                playpath = playpath[:playpath.find("&")]
-                        else:
-                            playpath = fmt_url_map[index - 1]
-
-                        if playpath:
-                            if "ptk" in pl_obj["args"] and "ptchn" in pl_obj["args"]:
-                                final_url += " playpath=" + playpath + "?ptchn=" + pl_obj["args"]["ptchn"] + "&ptk=" + pl_obj["args"]["ptk"]
-
-                    links[int(quality)] = final_url.replace('\/', '/')
-
-        self.common.log("done " + repr(links))
-        return links
 
     def getInfo(self, params):
         get = params.get
         video = self.cache.get("videoidcache" + get("videoid"))
         if len(video) > 0:
-            self.common.log("returning cache ")
+            self.common.log(u"returning cache ")
             return (eval(video), 200)
 
         result = self.core._fetchPage({"link": self.urls["video_info"] % get("videoid"), "api": "true"})
@@ -547,12 +114,12 @@ class YouTubePlayer():
             video = self.core.getVideoInfo(result["content"], params)
 
             if len(video) == 0:
-                self.common.log("- Couldn't parse API output, YouTube doesn't seem to know this video id?")
+                self.common.log(u"- Couldn't parse API output, YouTube doesn't seem to know this video id?")
                 video = {}
                 video["apierror"] = self.language(30608)
                 return (video, 303)
         else:
-            self.common.log("- Got API Error from YouTube!")
+            self.common.log(u"- Got API Error from YouTube!")
             video = {}
             video["apierror"] = result["content"]
 
@@ -562,12 +129,12 @@ class YouTubePlayer():
         self.cache.set("videoidcache" + get("videoid"), repr(video))
         return (video, result["status"])
 
-    def selectVideoQuality(self, links, params):
+    def selectVideoQuality(self, params, links):
         get = params.get
         link = links.get
         video_url = ""
 
-        self.common.log("")
+        self.common.log(u"")
 
         if get("action") == "download":
             hd_quality = int(self.settings.getSetting("hd_videos_download"))
@@ -636,215 +203,164 @@ class YouTubePlayer():
                         text += "*"
                     self.common.log(text)
             else:
-                self.common.log("- Missing fmt_value: " + repr(fmt_key))
+                self.common.log(u"- Missing fmt_value: " + repr(fmt_key))
 
         if hd_quality == 0 and not get("quality"):
             return self.userSelectsVideoQuality(params, links)
 
         if not len(video_url) > 0:
-            self.common.log("- construct_video_url failed, video_url not set")
+            self.common.log(u"- construct_video_url failed, video_url not set")
             return video_url
-
-        if get("proxy"):
-            proxy = get("proxy")
-            video_url = proxy + urllib.quote(video_url) + " |Referer=" + proxy[:proxy.rfind("/")]
 
         if get("action") != "download":
             video_url += " | " + self.common.USERAGENT
 
-        self.common.log("Done")
+        self.common.log(u"Done")
         return video_url
 
     def userSelectsVideoQuality(self, params, links):
-        get = params.get
+        levels =    [([37,121], u"1080p"),
+                     ([22,45,120], u"720p"),
+                     ([35,44], u"480p"),
+                     ([18], u"380p"),
+                     ([34,43],u"360p"),
+                     ([5],u"240p"),
+                     ([17],u"144p")]
+
         link = links.get
         quality_list = []
         choices = []
 
-        if link(37):
-            quality_list.append((37, "1080p"))
-        elif link(121):
-            quality_list.append((121, "1080p"))
+        for qualities, name in levels:
+            for quality in qualities:
+                if link(quality):
+                    quality_list.append((quality, name))
+                    break
 
-        if link(22):
-            quality_list.append((22, "720p"))
-        elif link(45):
-            quality_list.append((45, "720p"))
-        elif link(120):
-            quality_list.append((120, "720p"))
-
-        if link(35):
-            quality_list.append((35, "480p"))
-        elif link(44):
-            quality_list.append((44, "480p"))
-
-        if link(18):
-            quality_list.append((18, "380p"))
-
-        if link(34):
-            quality_list.append((34, "360p"))
-        elif link(43):
-            quality_list.append((43, "360p"))
-
-        if link(5):
-            quality_list.append((5, "240p"))
-        if link(17):
-            quality_list.append((17, "144p"))
-
-        if link(38) and False:
-            quality_list.append((37, "2304p"))
-
-        for (quality, message) in quality_list:
-            choices.append(message)
+        for (quality, name) in quality_list:
+            choices.append(name)
 
         dialog = self.xbmcgui.Dialog()
         selected = dialog.select(self.language(30518), choices)
 
         if selected > -1:
-            (quality, message) = quality_list[selected]
+            (quality, name) = quality_list[selected]
             return link(quality)
 
-        return ""
+        return u""
 
-    def getLocalFileSource(self, get, status, video):
-        result = ""
-        if (get("action", "") != "download"):
-            path = self.settings.getSetting("downloadPath")
-            filename = ''.join(c for c in self.common.makeUTF8(video['Title']) if c not in self.utils.INVALID_CHARS) + "-[" + get('videoid') + "]" + ".mp4"
-            path = os.path.join(path.decode("utf-8"), filename)
-            try:
-                if self.xbmcvfs.exists(path):
-                    result = path
-            except:
-                self.common.log("failed to locate local subtitle file, trying youtube instead")
-        return result
+    def checkForErrors(self, video):
+        status = 200
 
-    def getVideoObject(self, params):
+        if video[u"video_url"] == u"":
+            status = 303
+            vget = video.get
+            if vget(u"live_play"):
+                video[u'apierror'] = self.language(30612)
+            elif vget(u"stream_map"):
+                video[u'apierror'] = self.language(30620)
+            else:
+                video[u'apierror'] = self.language(30618)
+
+        return (video, status)
+
+    def buildVideoObject(self, params):
         self.common.log(repr(params))
-        get = params.get
 
-        links = []
         (video, status) = self.getInfo(params)
 
         if status != 200:
-            video['apierror'] = self.language(30618)
+            video[u'apierror'] = self.language(30618)
             return (video, 303)
 
-        video_url = self.getLocalFileSource(get, status, video)
+        video_url = self.subtitles.getLocalFileSource(params, video)
         if video_url:
-            video['video_url'] = video_url
+            video[u'video_url'] = video_url
             return (video, 200)
 
-        (links, video) = self._getVideoLinks(video, params)
+        (links, video) = self.extractVideoLinksFromYoutube(video, params)
 
-        if not links and self.settings.getSetting("proxy"):
-            params["proxy"] = self.settings.getSetting("proxy")
-            (links, video) = self._getVideoLinks(video, params)
+        video[u"video_url"] = self.selectVideoQuality(params, links)
 
-        if links:
-            video["video_url"] = self.selectVideoQuality(links, params)
-            if video["video_url"] == "":
-                video['apierror'] = self.language(30618)
-                status = 303
-        else:
-            status = 303
-            vget = video.get
-            if not "apierror" in video:
-                if vget("live_play"):
-                    video['apierror'] = self.language(30612)
-                elif vget("stream_map"):
-                    video['apierror'] = self.language(30620)
-                else:
-                    video['apierror'] = self.language(30618)
+        (video, status) = self.checkForErrors(video)
 
-        self.common.log("Done : " + repr(status))
+        self.common.log(u"Done")
+
         return (video, status)
 
-    def _convertFlashVars(self, html):
-        self.common.log(repr(html))
-        obj = {"PLAYER_CONFIG": {"args": {}}}
-        temp = html.split("&")
-        for item in temp:
-            self.common.log(item, 9)
-            it = item.split("=")
-            self.common.log(it, 9)
-            obj["PLAYER_CONFIG"]["args"][it[0]] = urllib.unquote_plus(it[1])
-        return obj
+    def extractFlashVars(self, data):
+        flashvars = {}
+        found = False
 
-    def _getVideoLinks(self, video, params):
-        self.common.log("trying website: " + repr(params))
+        for line in data.split("\n"):
+            if line.strip().startswith("var swf = \""):
+                found = True
+                p1 = line.find("=")
+                p2 = line.rfind(";")
+                if p1 <= 0 or p2 <= 0:
+                    continue
+                data = line[p1 + 1:p2]
+                break
+
+        if found:
+            data = json.loads(data)
+            data = data[data.find("flashvars"):]
+            data = data[data.find("\""):]
+            data = data[:1 + data[1:].find("\"")]
+
+            for k, v in cgi.parse_qs(data).items():
+                flashvars[k] = v[0]
+
+        return flashvars
+
+    def scrapeWebPageForVideoLinks(self, result, video):
+        links = {}
+
+        flashvars = self.extractFlashVars(result[u"content"])
+        if not flashvars.has_key(u"url_encoded_fmt_stream_map"):
+            return (links, video)
+
+        if flashvars.has_key(u"ttsurl"):
+            video[u"ttsurl"] = flashvars[u"ttsurl"]
+
+        for url_desc in flashvars[u"url_encoded_fmt_stream_map"].split(u","):
+            url_desc_map = cgi.parse_qs(url_desc)
+
+            if not (url_desc_map.has_key(u"url") or url_desc_map.has_key(u"stream")):
+                continue
+
+            key = int(url_desc_map[u"itag"][0])
+            url = u""
+            if url_desc_map.has_key(u"url"):
+                url = urllib.unquote(url_desc_map[u"url"][0])
+            elif url_desc_map.has_key(u"stream"):
+                url = urllib.unquote(url_desc_map[u"stream"][0])
+
+            if url_desc_map.has_key(u"sig"):
+                url = url + u"&signature=" + url_desc_map[u"sig"][0]
+
+            links[key] = url
+
+        return links
+
+    def extractVideoLinksFromYoutube(self, video, params):
+        self.common.log(u"trying website: " + repr(params))
 
         get = params.get
-        player_object = {}
-        links = []
-        fresult = False
 
-        if get("proxy"):
-            result = self.core._fetchPage({"link": self.urls["video_stream"] % get("videoid"), "proxy": get("proxy")})
-        else:
-            result = self.core._fetchPage({"link": self.urls["video_stream"] % get("videoid")})
+        result = self.core._fetchPage({u"link": self.urls[u"video_stream"] % get(u"videoid")})
 
-        if result["status"] == 200:
-            start = result["content"].find("yt.playerConfig = ")
-            if start > -1:
-                self.common.log("Found player_config", 4)
-                start = start + len("yt.playerConfig = ")
-                end = result["content"].find("};", start) + 1
-                data = result["content"][start: end]
-                if len(data) > 0:
-                    data = data.replace("\\/", "/")
-                    player_object = json.loads('{ "PLAYER_CONFIG" : ' + data + "}" )
-                    self.common.log("player_object " + repr(player_object), 4)
-            else:
-                self.common.log("Using flashvars")
-                data = result["content"].replace("\n", "").replace("\u0026", "&").replace("&amp;", "&").replace('\\"', '"')
-                data = re.findall('flashvars="(.*?)"', data)
-                src = self.common.parseDOM(result["content"], "embed", attrs={"id": "movie_player"}, ret="src")
-                self.common.log(repr(data) + " - " + repr(src))
-                if len(data) > 0 and len(src) > 0:
-                    self.common.log("Using flashvars converting", 4)
-                    data = data[0].replace("\n", "")
-                    player_object = self._convertFlashVars(data)
-                    if "PLAYER_CONFIG" in player_object:
-                        player_object["PLAYER_CONFIG"]["url"] = src[0]
+        if result[u"status"] != 200:
+            self.common.log(u"Couldn't get video page from YouTube")
+            return ({}, video)
 
-        elif get("no_embed", "false") == "false":
-            self.common.log("Falling back to embed")
-
-            if get("proxy"):
-                fresult = self.core._fetchPage({"link": self.urls["embed_stream"] % get("videoid"), "proxy": get("proxy")})
-            else:
-                fresult = self.core._fetchPage({"link": self.urls["embed_stream"] % get("videoid") })
-
-            # Fallback error reporting
-            if fresult["content"].find("status=fail") > -1:
-                fresult["status"] = 303
-                error = fresult["content"]
-                if error.find("reason=") > -1:
-                    error = error[error.find("reason=") + len("reason="):]
-                    if error.find("%3Cbr") > -1:
-                        error = error[:error.find("%3Cbr")]
-                video["apierror"] = error.replace("+", " ")
-
-            if fresult["status"] == 200:
-                # this gives no player_object["PLAYER_CONFIG"]["url"] for rtmpe...
-                player_object = self._convertFlashVars(fresult["content"])
-
-        # Find playback URI
-        if "PLAYER_CONFIG" in player_object:
-            if "args" in player_object["PLAYER_CONFIG"]:
-                if "ttsurl" in player_object["PLAYER_CONFIG"]["args"]:
-                    video["ttsurl"] = player_object["PLAYER_CONFIG"]["args"]["ttsurl"]
-
-                links = self.getVideoUrlMap(player_object["PLAYER_CONFIG"], video)
+        links = self.scrapeWebPageForVideoLinks(result, video)
 
         if len(links) == 0:
-            self.common.log("Couldn't find url map or stream map.")
+            self.common.log(u"Couldn't find video url- or stream-map.")
 
-            if not "apierror" in video:
-                video['apierror'] = self.core._findErrors(result)
-                if not video['apierror'] and fresult:
-                    video['apierror'] = self.core._findErrors(fresult)
+            if not u"apierror" in video:
+                video[u'apierror'] = self.core._findErrors(result)
 
-        self.common.log("Done")
+        self.common.log(u"Done")
         return (links, video)

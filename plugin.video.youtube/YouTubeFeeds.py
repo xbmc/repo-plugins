@@ -1,6 +1,6 @@
 '''
     YouTube plugin for XBMC
-    Copyright (C) 2010-2011 Tobias Ussing And Henrik Mosgaard Jensen
+    Copyright (C) 2010-2012 Tobias Ussing And Henrik Mosgaard Jensen
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -63,16 +63,16 @@ class YouTubeFeeds():
         self.utils = sys.modules["__main__"].utils
         self.storage = sys.modules["__main__"].storage
         self.core = sys.modules["__main__"].core
+        self.pluginsettings = sys.modules["__main__"].pluginsettings
         self.common = sys.modules["__main__"].common
 
     def createUrl(self, params={}):
         self.common.log("", 4)
         get = params.get
         time = "this_week"
-        per_page = (10, 15, 20, 25, 30, 40, 50)[int(self.settings.getSetting("perpage"))]
-        region = ('', 'AU', 'BR', 'CA', 'CZ', 'FR', 'DE', 'GB', 'NL', 'HK', 'IN', 'IE', 'IL', 'IT', 'JP', 'MX', 'NZ', 'PL', 'RU', 'KR', 'ES', 'SE', 'TW', 'US', 'ZA')[int(self.settings.getSetting("region_id"))]
+        per_page = self.pluginsettings.itemsPerPage()
+        region = self.pluginsettings.currentRegion()
 
-        print "perpage " + repr(per_page)
         page = get("page", "0")
         start_index = per_page * int(page) + 1
         url = ""
@@ -86,7 +86,7 @@ class YouTubeFeeds():
         if get("search"):
             url = self.urls["search"]
             query = urllib.unquote_plus(get("search"))
-            safe_search = ("none", "moderate", "strict")[int(self.settings.getSetting("safe_search"))]
+            safe_search = self.pluginsettings.safeSearchLevel()
             url = url % (query, safe_search)
             authors = self.settings.getSetting("stored_searches_author")
             if len(authors) > 0:
@@ -171,7 +171,7 @@ class YouTubeFeeds():
         self.common.log("", 4)
         get = params.get
         page = int(get("page", "0"))
-        per_page = (10, 15, 20, 25, 30, 40, 50)[int(self.settings.getSetting("perpage"))]
+        per_page = self.pluginsettings.itemsPerPage()
         next = 'false'
 
         videos = self.storage.retrieve(params)
@@ -227,7 +227,7 @@ class YouTubeFeeds():
                 return self.storage.getStoredSearches(params)
 
         page = int(get("page", "0"))
-        per_page = (10, 15, 20, 25, 30, 40, 50)[int(self.settings.getSetting("perpage"))]
+        per_page = self.pluginsettings.itemsPerPage()
 
         if (page != 0):
             result = self.storage.retrieve(params)
@@ -277,7 +277,6 @@ class YouTubeFeeds():
 
     def listCategories(self, params={}):
         self.common.log("", 4)
-        result = {"content": "", "status": 303}
 
         url = self.createUrl(params)
         ytobjects = []

@@ -26,9 +26,14 @@ __settings__   = xbmcaddon.Addon(id='plugin.audio.icecast')
 __language__   = __settings__.getLocalizedString
 __addonname__  = "Icecast"
 
-TIMESTAMP_THRESHOLD = 86400
+TIMESTAMP_THRESHOLD = 604800
 BASE_URL = 'http://dir.xiph.org/yp.xml'
 CHUNK_SIZE = 65536
+
+# Define new class to implement HEAD HTTP method
+class HeadRequest(urllib2.Request):
+  def get_method(self):
+    return "HEAD"
 
 # Parse XML to DOM
 def parseXML(xml):
@@ -58,15 +63,26 @@ def readRemoteXML():
   dialog.create(__language__(30093), __language__(30094))
   dialog.update(1)
 
+  # Fetch the uncompressed file size
+  response_size = urllib2.urlopen(HeadRequest(BASE_URL))
+  total_size = response_size.info().getheader('Content-Length')
+  total_size = int(total_size)
+
+  # Request gzip'ed download.
   # Download in chunks of CHUNK_SIZE, update the dialog
   # URL progress bar code taken from triptych (http://stackoverflow.com/users/43089/triptych):
   # See original code http://stackoverflow.com/questions/2028517/python-urllib2-progress-hook
-  response = urllib2.urlopen(BASE_URL);
-  total_size = response.info().getheader('Content-Length').strip()
-  total_size = int(total_size)
+  request = urllib2.Request(BASE_URL)
+  request.add_header('Accept-encoding', 'gzip')
+  response = urllib2.urlopen(request);
+
   bytes_so_far = 0
   str_list = []
   xml = ''
+
+  # Because apache gzip's on-the-fly, it will not set Content-Length; instead, divide real size by 10.
+  if response.info().get('Content-Encoding') == 'gzip':
+    total_size = int(total_size/10)
 
   while 1:
     chunk = response.read(CHUNK_SIZE)
@@ -84,12 +100,23 @@ def readRemoteXML():
 
     percent = float(bytes_so_far) / total_size
     val = int(percent * 100)
+    if (val > 99):
+      val = 100
     dialog.update(val)
 
   response.close()
+  response_data = ''.join(str_list)
 
   if dialog_was_canceled == 0:
-    xml = ''.join(str_list)
+    # Check if the response was gzip'ed (as we requested)
+    if response.info().get('Content-Encoding') == 'gzip':
+      import StringIO, gzip
+      compressed_stream = StringIO.StringIO(response_data)
+      gzipper = gzip.GzipFile(fileobj=compressed_stream)
+      xml = gzipper.read()
+    else:
+      xml = response_data
+
     dialog.update(100)
     time.sleep(1)
 

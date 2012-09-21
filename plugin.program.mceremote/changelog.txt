@@ -1,3 +1,12 @@
+[B]Version 2.0.4 20th Sep 2012[/B]
+- Remove dependance on xbmc.gui from addon.xml
+
+[B]Version 2.0.3 20th Sep 2012[/B]
+- Use xbmc.gui 3.0
+
+[B]Version 2.0.2 18th Sep 2012[/B]
+- Add new language tag
+
 [B]Version 2.0.1 20th Nov 2011[/B]
 - Cosmetic change to the add-on description
 

@@ -81,7 +81,7 @@ class FetchJob(workerpool.Job):
                                 thumbnail = self.span.contents[0]['src']
                         name = self.span.contents[len(self.span) - 1].strip()
                         
-			myheaders = {'Cookie' : self.cookies, 'Referer' : 'http://www.glwiz.com/homepage.aspx'}
+			myheaders = {'Cookie' : self.cookies, 'User-Agent' : 'XBMC', 'Referer' : 'http://www.glwiz.com/homepage.aspx'}
                         r = self.http.request('GET', itemurl, headers=myheaders)
                         link = r.data
 

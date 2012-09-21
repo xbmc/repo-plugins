@@ -9,7 +9,7 @@ __plugin__ = 'Pakee'
 __author__ = 'pakeeapp@gmail.com'
 __url__ = 'http://code.google.com/p/pakee/'
 __date__ = '01-04-2011'
-__version__ = '1.0.21'
+__version__ = '1.0.22'
 __settings__ = xbmcaddon.Addon(id='plugin.video.pakee')
 __profilepath__    = xbmc.translatePath( __settings__.getAddonInfo('profile') )
 __baseurl__ = 'http://sastatv.com'
@@ -29,6 +29,9 @@ PLUGIN_MODE_PLAY_SLIDESHOW = 90
 PLUGIN_MODE_OPEN_SETTINGS = 100
 PLUGIN_MODE_PLAY_STREAM = 110
 PLUGIN_MODE_PLAY_4SHARED = 120
+PLUGIN_MODE_QUERY_DM = 130
+PLUGIN_MODE_BUILD_DM_USER = 140
+PLUGIN_MODE_GET_USERINFO = 150
 
 
 #view modes
@@ -117,7 +120,7 @@ def play_picture_slideshow(origurl, name):
 
 #Create and play a playlist from the video/audio files contained in the passed in RSS url
 def play_playlist(origurl, index):
-	print "Starting play_playlist(): url: " + str(origurl + " index: " + str(index))
+	#print "Starting play_playlist(): url: " + str(origurl + " index: " + str(index))
 	xbmc.executebuiltin("XBMC.Notification("+ __plugin__ +",Starting playlist from selection,60)")
 
 	items = getItemsFromUrl(origurl)
@@ -176,6 +179,16 @@ def play_playlist(origurl, index):
 		elif url.startswith('http://embed.novamov.com') and guid is not None and guid != '':
 				xbmc.log('Found nova url..needs resolving: ' + url)
 				playlisturl = resolve_novamov(url,guid)
+
+		#for nowvideo.eu video
+		elif url.startswith('http://embed.nowvideo.eu/embed.php') and guid is not None and guid != '':
+			xbmc.log('Found nowvideo.eu url..needs resolving: ' + url)
+			playlisturl = resolve_nowvideo(url,guid)
+
+		#for hostingbulk.com video
+		elif url.startswith('http://hostingbulk.com/') and guid is not None and guid != '':
+			xbmc.log('Found hosting bulk url..needs resolving: ' + url)
+			playlisturl = resolve_hostingbulk(url,guid)
 
 
 
@@ -256,30 +269,32 @@ def play_fourshared(url, name):
 #saw embed (long url) received in form of http://xxxxxxxxx&streamer=xxxxx
 def find_stream(url, name):
 	xbmc.log("Starting find_stream with url: " + str(url))
-	pageUrl = url.split("&streamer=")[0]
-	streamer = url.split("&streamer=")[1]
-	print ('Opening ' + pageUrl)
-	res = open_url(pageUrl)
-	#print (res)
-	playpath = ''
-	swfUrl = ''
+	try:
+		pageUrl = url.split("&streamer=")[0]
+		streamer = url.split("&streamer=")[1]
+		print ('Opening ' + pageUrl)
+		res = open_url(pageUrl)
+		#print (res)
+		playpath = ''
+		swfUrl = ''
+	
+		for line in res.split("\n"):
+			#print ("line:" + line)
+			matches = re.search(r'file.*\'(.+)\'', line)
+			if matches:
+				playpath = matches.group(1)
+				print ("Found playpath:" + playpath)
+	
+			matches = re.search(r'(http.+\.swf)', line)
+			if matches:
+				swfUrl = matches.group(1)
+				print ("Found swfUrl:" + swfUrl)
 
-	for line in res.split("\n"):
-		#print ("line:" + line)
-		matches = re.search(r'file.*\'(.+)\'', line)
-		if matches:
-			playpath = matches.group(1)
-			print ("Found playpath:" + playpath)
-
-		matches = re.search(r'(http.+\.swf)', line)
-		if matches:
-			swfUrl = matches.group(1)
-			print ("Found swfUrl:" + swfUrl)
-
-	streamurl = "%s playpath=%s swfUrl=%s pageurl=%s swfVfy=true live=true" % (streamer, playpath, swfUrl, pageUrl)
-	xbmc.log ("streamurl: " + streamurl)
-	return (streamurl)
-
+		streamurl = "%s playpath=%s swfUrl=%s pageurl=%s swfVfy=true live=true" % (streamer, playpath, swfUrl, pageUrl)
+		xbmc.log ("streamurl: " + streamurl)
+		return (streamurl)
+	except:
+		return (" ")
 
 #saw embed (short url) received in form of http://xxxxxxxxx&streamer=xxxxx
 def find_sawlive_url(url, name):
@@ -305,7 +320,7 @@ def find_sawlive_url(url, name):
 	xbmc.log ("url: " + url)
 	return (find_stream(url, name))
 
-#dailymotion url received in form of 'http://embed.novamov.com/embed.php?v=xxxxx'
+#novamov url received in form of 'http://embed.novamov.com/embed.php?v=xxxxx'
 def resolve_novamov(url, guid):
 	xbmc.log("Starting resolve_novamov with url: " + str(url) + " and guid: " + str(guid))
 	req = urllib2.Request(url)
@@ -341,6 +356,55 @@ def resolve_novamov(url, guid):
 	print ('auth url is ' + str(link))
 	return link
 
+def cache_page(url):
+	req = urllib2.Request(url)
+	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+	response = urllib2.urlopen(req)
+	data=response.read()
+	response.close()
+	return data
+
+def get_match(data, regex) :
+    match = "";
+    m = re.search(regex, data)
+    if m != None :
+        match = m.group(1)
+    return match
+
+#nowvideo.eu url received in form of 'embed.nowvideo.eu/embed.php?v=xxxxxxx'
+def resolve_nowvideo(url, guid):
+	xbmc.log("Starting resolve_nowvideo with url: " + str(url) + " and guid: " + str(guid))
+
+	data = cache_page(url)
+
+	file = get_match(data,'flashvars.file="([^"]+)"')
+	key = get_match(data,'flashvars.filekey="([^"]+)"')
+	codes = get_match(data,'flashvars.cid="([^"]+)"')
+	url = "http://www.nowvideo.eu/api/player.api.php?file="+file+"&user=undefined&codes="+codes+"&pass=undefined&key="+key.replace(".","%2E").replace("-","%2D")
+	data = cache_page(url)
+
+	location = get_match(data,'url=([^\&]+)&')
+	location = location + "?client=FLASH"
+
+	if not location:
+		location = 'CONTENTREMOVED'
+	print ('auth url is ' + str(location))
+	return location
+
+#nowvideo.eu url received in form of 'embed.nowvideo.eu/embed.php?v=xxxxxxx'
+def resolve_hostingbulk(url, guid):
+	xbmc.log("Starting resolve_hostingbulk with url: " + str(url) + " and guid: " + str(guid))
+
+	data = cache_page(url)
+
+	location = get_match(data,'(http.+?mp4)')
+	location = location + "?start=0"
+
+	if not location:
+		location = 'CONTENTREMOVED'
+	print ('auth url is ' + str(location))
+	return location
+
 
 #dailymotion url received in form of 'http://www.dailymotion.com/embed/video/xxxxx'
 def resolve_dailymotion(url, guid):
@@ -355,23 +419,11 @@ def resolve_dailymotion(url, guid):
 	match=re.compile('\/([a-zA-Z0-9-_]+?)\.mp4\?auth=(.+?)","stream').findall(link)
 	for guid, url in match:
 	    match = 'http://www.dailymotion.com/cdn/H264-512x384/video/'+guid+'.mp4?auth='+url 
-	    #match = 'http://www.dailymotion.com/cdn/H264-512x384/video/'+guid+'.mp4?auth='+url+'&redirect=0' 
 
 	if not match:
 		match = 'CONTENTREMOVED'
 	print ('auth url is ' + str(match))
 	return match
-
-	#try:
-	#	req = urllib2.Request(match)
-	#	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-	#	response = urllib2.urlopen(req)
-	#	link=response.read()
-	#	response.close()
-	#	print ('dailmotion link is ' + str(link))
-	#	return link
-	#except:
-	#	return 'VIDEOREMOVED'
 
 def build_show_directory(origurl):
 
@@ -508,7 +560,7 @@ def build_show_directory(origurl):
 				if setting_playmode == 0:
 					mode = PLUGIN_MODE_PLAY_STREAM
 					url = resolve_dailymotion(url,guid)
-					if url == 'CONTENTREMOVED':
+					if not url or url == 'CONTENTREMOVED':
 						label = 'Content Removed'
 
 
@@ -516,6 +568,29 @@ def build_show_directory(origurl):
 				else:
 					mode = PLUGIN_MODE_PLAY_PLAYLIST
 					url = origurl
+
+			if url.startswith('http://hostingbulk.com/'):
+
+				xbmc.log('Found hosting bulk url..needs resolving: ' + url)
+				if itemCount == 0:
+					resolvedlabel = '<' + str(__settings__.getLocalizedString(30050)) + '>'
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = sastatv_thumb, thumbnailImage = sastatv_thumb )
+					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
+
+
+				#play single video
+				if setting_playmode == 0:
+					mode = PLUGIN_MODE_PLAY_STREAM
+					url = resolve_hostingbulk(url, guid) 
+
+					if url == 'CONTENTREMOVED':
+						label = 'Content Removed'
+
+				#play video playlist
+				else:
+					mode = PLUGIN_MODE_PLAY_PLAYLIST
+					url = origurl
+
 
 			if url.startswith('http://embed.novamov.com'):
 				xbmc.log('Found novamov url..needs resolving: ' + url)
@@ -538,11 +613,32 @@ def build_show_directory(origurl):
 					mode = PLUGIN_MODE_PLAY_PLAYLIST
 					url = origurl
 
+			if url.startswith('http://embed.nowvideo.eu/embed.php'):
+				xbmc.log('Found nowvideo.eu url..needs resolving: ' + url)
+				if itemCount == 0:
+					resolvedlabel = '<' + str(__settings__.getLocalizedString(30050)) + '>'
+					playAll = xbmcgui.ListItem( label = resolvedlabel, iconImage = sastatv_thumb, thumbnailImage = sastatv_thumb )
+					xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_PLAY_PLAYLIST)+"&index=0&name=Playlist&url=" + urllib.quote_plus(origurl), listitem = playAll, isFolder = True )
+
+
+				#play single video
+				if setting_playmode == 0:
+					mode = PLUGIN_MODE_PLAY_STREAM
+					url = resolve_nowvideo(url,guid)
+
+					if url == 'CONTENTREMOVED':
+						label = 'Content Removed'
+
+				#play video playlist
+				else:
+					mode = PLUGIN_MODE_PLAY_PLAYLIST
+					url = origurl
 
 
 			#video stream found
-			if 'fetchLiveFeeds.php' not in url and (url.startswith('rtmpe://') or url.startswith('rtmp://') or url.startswith('mms://') or url.startswith('rtsp://') or '.avi' in url or '.wmv' in url or '.m3u8' in url or '.flv' in url or '.wsx' in url or 'desistreams.xml' in origurl or 'LiveTV.xml' in origurl):
+			if 'fetchLiveFeeds.php' not in url and (isVideoFile(url) or isStreamUrl(url) or 'fetchLiveFeeds.php' in origurl):
 				isFolder = False
+				print "playing video file: " + str(name)
 
 				#for rtmp/rtmpe streams if no timeout is specified, pick the timeout specifed by user
 				if 'timeout=' not in url and (url.startswith('rtmpe://') or url.startswith('rtmp://')):				
@@ -618,6 +714,14 @@ def build_show_directory(origurl):
 		searchYT = xbmcgui.ListItem( label = 'YouTube user favorites...', iconImage = thumb, thumbnailImage = thumb )
 		xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_BUILD_YT_FAV)+"&name=YouTube user favorites", listitem = searchYT, isFolder = True )
 
+		searchYT = xbmcgui.ListItem( label = 'Search DailyMotion...', iconImage = thumb, thumbnailImage = thumb )
+		xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_QUERY_DM)+"&name=Search DailyMotion...", listitem = searchYT, isFolder = True )
+
+		searchYT = xbmcgui.ListItem( label = 'Dailymotion user uploads/playlists...', iconImage = thumb, thumbnailImage = thumb )
+		xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_BUILD_DM_USER)+"&name=Dailymotion user uploads and playlists", listitem = searchYT, isFolder = True )
+
+		settings = xbmcgui.ListItem( label = 'Account Details', iconImage = thumb, thumbnailImage = thumb )
+		xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_GET_USERINFO)+"&name=Settings", listitem = settings, isFolder = True )
 
 		settings = xbmcgui.ListItem( label = 'Settings', iconImage = thumb, thumbnailImage = thumb )
 		xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = sys.argv[0] + "?mode="+str(PLUGIN_MODE_OPEN_SETTINGS)+"&name=Settings", listitem = settings, isFolder = True )
@@ -645,13 +749,32 @@ def build_show_directory(origurl):
 
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
+def isStreamUrl(url):
+
+	if 'dailymotion.com' in url:
+		return False
+
+	if url.startswith('rtmpe://') or url.startswith('rtmp://') or url.startswith('mms://') or url.startswith('rtsp://') or '.wsx' in url or '.m3u8' in url or 'facebook.com/rsrc.php' in url:
+		return True
+	else:
+		return False
+
+
+def isVideoFile(url):
+
+	if 'dailymotion.com' in url:
+		return True
+	if '.mp4' in url or '.wmv' in url or '.m4v' in url or '.avi' in url or '.webm' in url or '.flv' in url or '.m3u' in url:
+		return True
+	else:
+		return False
 
 
 def isMusicFile(url):
 
 	if 'dailymotion.com' in url:
 		return False
-	if '.mp3' in url or '.wma' in url or '.m4a' in url or 'http://bit.ly' in url or '/getSharedFile/' in url or '.mp4' in url or 'kiwi6.com' in url:
+	if '.mp3' in url or '.wma' in url or '.m4a' in url or 'http://bit.ly' in url or '/getSharedFile/' in url or 'kiwi6.com' in url:
 		return True
 	else:
 		return False
@@ -694,18 +817,20 @@ def getItemsFromUrl(url):
 			xbmcgui.Dialog().ok(__settings__.getLocalizedString(30500),__settings__.getLocalizedString(30502).replace('\\n','\n'))
 			open_settings()
 
-		#url not found at start (root url not found). server down ask user to check later
-		elif url == __rooturl__:
-			print __settings__.getLocalizedString(30504)
-			print errorMsg
-			xbmcgui.Dialog().ok(__settings__.getLocalizedString(30500),__settings__.getLocalizedString(30504).replace('\\n','\n'))
-
 		#url not found during navigation within addon, ask user to try another link
 		else:
 			print __settings__.getLocalizedString(30503)
 			print errorMsg
 			xbmcgui.Dialog().ok(__settings__.getLocalizedString(30500),__settings__.getLocalizedString(30503).replace('\\n','\n'))
 		return
+	except:
+		print ("Error while loading url")
+		#url not found at start (root url not found). server down ask user to check later
+		if url == __rooturl__:
+			print __settings__.getLocalizedString(30504)
+			xbmcgui.Dialog().ok(__settings__.getLocalizedString(30500),__settings__.getLocalizedString(30504).replace('\\n','\n'))
+		return
+
 
 	dom =  xml.dom.minidom.parseString(data)
 	items = dom.getElementsByTagName('item')
@@ -721,6 +846,8 @@ def getItemFields(item):
 	guid = ''
 	description = ''
 	pubDate = '01.01.1960'
+	t = (2009, 2, 17, 17, 3, 38, 1, 48, 0)
+	tpubDate = time.gmtime(time.mktime(t))
 	rating = 0.0
 	duration = 0
 	viewcount = '0'
@@ -729,12 +856,14 @@ def getItemFields(item):
 		label = clean(getText(item.getElementsByTagName("title")[0].childNodes))
 	else:
 		label = 'No title'
+
 	if item.getElementsByTagName("enclosure"):
 		url = item.getElementsByTagName("enclosure")[0].getAttribute('url')
 		print ('Found enclosure link: ' + url)
 	elif item.getElementsByTagName("link"):
 		url = getText(item.getElementsByTagName("link")[0].childNodes)
-
+	elif item.getElementsByTagNameNS("http://search.yahoo.com/mrss/","content"):
+		url = item.getElementsByTagNameNS("http://search.yahoo.com/mrss/","content")[0].getAttribute('url')
 	else:
 		url = ''
 
@@ -781,22 +910,27 @@ def getItemFields(item):
 	viewcount = string.atoi(viewcount)
 
 
-	if item.getElementsByTagName("pubDate"):
-		pubDate = getText(item.getElementsByTagName("pubDate")[0].childNodes)
-		if pubDate == '':
-			pubDate = '01.01.1960'
-		elif '+' in pubDate:
-			tpubDate = time.strptime(pubDate, '%a, %d %b %Y %H:%M:%S +0000')
+	try:
+		if item.getElementsByTagName("pubDate"):
+			pubDate = getText(item.getElementsByTagName("pubDate")[0].childNodes)
+			if pubDate == '':
+				pubDate = '01.01.1960'
+			elif '+' in pubDate:
+				tpubDate = time.strptime(pubDate, '%a, %d %b %Y %H:%M:%S +0000')
+	
+			elif '/' in pubDate:
+				tpubDate = time.strptime(pubDate, '%Y/%m/%d')
+	
+			elif '-' in pubDate:
+				tpubDate = time.strptime(pubDate, '%Y-%m-%d')
+	
+			else:
+				tpubDate = time.strptime(pubDate, '%a, %d %b %Y %H:%M:%S GMT')
+	
 			pubDate = time.strftime("%d.%m.%Y", tpubDate)
 		else:
-			try:
-				tpubDate = time.strptime(pubDate, '%Y-%m-%d')
-			except:
-				tpubDate = time.strptime(pubDate, '%a, %d %b %Y %H:%M:%S GMT')
-
-
-			pubDate = time.strftime("%d.%m.%Y", tpubDate)
-	else:
+			pubDate = '01.01.1960'
+	except:
 		pubDate = '01.01.1960'
 
 	if item.getElementsByTagName("guid"):
@@ -817,7 +951,9 @@ def getText(nodelist):
 	
 def build_search_directory(paramName):
 	if paramName == 'querydb':
-		title = 'Search DB'
+		title = 'Search Sastatv'
+	elif paramName == 'querydm':
+		title = 'Search DailyMotion'
 	else:
 		title = 'Search YouTube'
 
@@ -832,8 +968,12 @@ def build_search_directory(paramName):
 	build_show_directory('http://sastatv.com/secure/php/getYoutubePlaylistQuick.php?' + paramName + '=' + search_string)
 
 
-def build_ytuser_directory():
-	keyboard = xbmc.Keyboard( '', 'Enter YouTube userid' )
+def build_user_directory(paramName):
+	if paramName == 'id':
+		title = 'Enter YouTube userid'
+	else:
+		title = 'Enter Dailymotion userid'
+	keyboard = xbmc.Keyboard( '', title )
 	keyboard.doModal()
 	if ( keyboard.isConfirmed() == False ):
 		return
@@ -841,7 +981,7 @@ def build_ytuser_directory():
 	if len( search_string ) == 0:
 		return
 
-	build_show_directory('http://sastatv.com/secure/php/getYoutubePlaylistQuick.php?id=' + search_string)
+	build_show_directory('http://sastatv.com/secure/php/getYoutubePlaylistQuick.php?' + paramName + '=' + search_string)
 
 def build_ytuser_favs_directory():
 	keyboard = xbmc.Keyboard( '', 'Enter YouTube userid' )
@@ -919,8 +1059,12 @@ elif mode == PLUGIN_MODE_QUERY_DB:
 	build_search_directory('querydb')
 elif mode == PLUGIN_MODE_QUERY_YT:
 	build_search_directory('queryyt')
+elif mode == PLUGIN_MODE_QUERY_DM:
+	build_search_directory('querydm')
 elif mode == PLUGIN_MODE_BUILD_YT_USER:
-	build_ytuser_directory()
+	build_user_directory('id')
+elif mode == PLUGIN_MODE_BUILD_DM_USER:
+	build_user_directory('dmid')
 elif mode == PLUGIN_MODE_BUILD_YT_FAV:
 	build_ytuser_favs_directory()
 elif mode == PLUGIN_MODE_PLAY_PLAYLIST:
@@ -933,5 +1077,7 @@ elif mode == PLUGIN_MODE_OPEN_SETTINGS:
 	open_settings()
 elif mode == PLUGIN_MODE_PLAY_4SHARED:
 	play_fourshared(url,name)
+elif mode == PLUGIN_MODE_GET_USERINFO:
+	build_show_directory('http://sastatv.com/secure/php/getUserInfo.php?id=' + __settings__.getSetting('username') + '&addon=' + __plugin__ + '&version=' + __version__)
 
 

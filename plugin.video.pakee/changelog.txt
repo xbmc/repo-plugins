@@ -1,3 +1,8 @@
+[B]Version 1.0.22[/B]
+-Added support to search dailymotion videos and user playlists
+-Added support for hostingbulk and nowvideo.eu videos
+-Added support for alternate date format representation in RSS format
+
 [B]Version 1.0.21[/B]
 -Added support for dailymotion, nova, sastatv video
 

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
         id="plugin.video.onside.tv"
-        version="2.0.2"
+        version="2.1.0"
         name="Onside TV"
-        provider-name="ariba [mail@nielsriber.dk], twinther [tommy@winther.nu]">
+        provider-name="twinther [tommy@winther.nu]">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
         <import addon="script.module.buggalo" version="1.0.1"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>

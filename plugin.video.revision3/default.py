@@ -1,11 +1,11 @@
 
-import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, time, buggalo
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, time, buggalo, urllib2
 
 plugin =  'Revision3'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '08-26-2012'
-__version__ = '2.0.8'
+__date__ = '09-23-2012'
+__version__ = '2.0.9'
 settings = xbmcaddon.Addon(id='plugin.video.revision3')
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -59,8 +59,18 @@ def open_url(url):
 			retries += 1
 			time.sleep(3)
 	buggalo.addExtraData('url', url)
+	buggalo.addExtraData('status', data['status'])
 	dialog = xbmcgui.Dialog()
 	ok = dialog.ok(plugin, settings.getLocalizedString( 30023 ) + '\n' + settings.getLocalizedString( 30024 ))
+	raise Exception("open_url ERROR")
+	
+def open_url2(url):
+	req = urllib2.Request(url)
+	req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20100101 Firefox/12.0')
+	content = urllib2.urlopen(req)
+	data = content.read()
+	content.close()
+	return data
 
 def build_main_directory(url):
 	path = url
@@ -128,10 +138,15 @@ def build_sub_directory(url, name):
 			settings.setSetting(img.rsplit('/')[6], fanart)
 		except:
 			fanart = 'http://statics.revision3.com/_/images/shows/' + img.rsplit('/')[6] + '/show_background.jpg'
-			if common.fetchPage({"link": fanart})['status'] == 200:
+			try:
+				test = open_url2(fanart)
 				settings.setSetting(img.rsplit('/')[6], fanart)
-			else:
+			except:
 				settings.setSetting(img.rsplit('/')[6], fanart_bg)
+			# if common.fetchPage({"link": fanart})['status'] == 200:
+				# settings.setSetting(img.rsplit('/')[6], fanart)
+			# else:
+				# settings.setSetting(img.rsplit('/')[6], fanart_bg)
 	try:
 		child = common.parseDOM(html, "div", attrs = { "id": "child-episodes" })
 		label = common.parseDOM(html, "a", attrs = { "href": "#child-episodes" })[0]

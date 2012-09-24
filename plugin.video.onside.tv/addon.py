@@ -23,70 +23,51 @@ import re
 import os
 import sys
 import urlparse
+import simplejson
 import buggalo
 
 BASE_URL = 'http://onside.dk'
-buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
+VIDEO_URL = 'http://video.onside.dk/api/photo/list?raw&format=json&photo_id=%s&source=embed&player_id=0'
 
 class OnsideException(Exception):
     pass
 
 class OnsideTV(object):
-    def listCategories(self):
-        html = self.downloadUrl(BASE_URL + '/onsidetv')
-        for m in re.finditer('<a href="/onsidetv/([^/]+)/[^<]+>([^<]+)</a>', html, re.DOTALL):
-            slug = m.group(1)
-            name = m.group(2)
+    def listVideos(self, page = 0):
+        url = BASE_URL + '/onside_tv/arkiv'
+        if page > 0:
+            url += '?page=%d' % page
 
-            item = xbmcgui.ListItem(name[5:], iconImage=ICON)
-            item.setProperty('Fanart_Image', FANART)
-            xbmcplugin.addDirectoryItem(HANDLE, PATH + '?slug='+ slug + '&page=1', item, True)
+        html = self.downloadUrl(url)
+        for m in re.finditer('field-created">(.*?)<a href="([^"]+)"><span class="Video">([^<]+)<', html, re.DOTALL):
+            path = m.group(2)
+            title = m.group(3).replace('&#039;', "'")
 
-        xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_LABEL)
-        xbmcplugin.endOfDirectory(HANDLE)
-
-    def listPrograms(self, slug, page):
-        html = self.downloadUrl(BASE_URL + '/onsidetv/' + slug + '/' + str(page))
-        for m in re.finditer('<a href="/fodbold-video/([^"]+)".*?<img src="(.*?)".*?class="video-title">(.*?)</div>.*?class="desc">(.*?)</div>.*?class="date">(.*?)</div>', html, re.DOTALL):
-            slug = m.group(1)
-            image = m.group(2)
-            title = m.group(3)
-            description = m.group(4)
-            dateStr = m.group(5)
-
-            icon = BASE_URL + image
-            icon = icon.replace('136x91', 'onsidetv_658x366')
-            item = xbmcgui.ListItem(title, iconImage = icon, thumbnailImage = icon)
+            item = xbmcgui.ListItem(title, iconImage = ICON, thumbnailImage = ICON)
             item.setProperty('IsPlayable', 'true')
-            item.setProperty('Fanart_Image', icon)
+            item.setProperty('Fanart_Image', FANART)
             item.setInfo(type = 'video', infoLabels = {
                 'studio' : ADDON.getAddonInfo('name'),
                 'title' : title,
-                'plot' : description,
-                'date' : dateStr[0:10]
             })
-            xbmcplugin.addDirectoryItem(HANDLE, PATH + '?play=' + slug, item)
+            xbmcplugin.addDirectoryItem(HANDLE, PATH + '?play=' + path, item)
 
         if ADDON.getSetting('show.load.next.page') == 'true':
-            m = re.search('<a href="/onsidetv/([^/]+)/\d+">&gt;&gt;', html)
-            if m:
+            if -1 != html.find('<a href="/onside_tv/arkiv?page=' + str(page + 1) + '"'):
                 item = xbmcgui.ListItem(ADDON.getLocalizedString(30000), iconImage=ICON)
                 item.setProperty('Fanart_Image', FANART)
-                xbmcplugin.addDirectoryItem(HANDLE, PATH + '?slug='+ m.group(1) + '&page=' + str(page + 1), item, True)
+                xbmcplugin.addDirectoryItem(HANDLE, PATH + '?page=' + str(page + 1), item, True)
 
-        xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_DATE)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def playProgram(self, slug):
-        url = BASE_URL + '/fodbold-video/' + slug
+    def playProgram(self, path):
+        url = BASE_URL + path
         html = self.downloadUrl(url)
-        m = re.search('id="onside_video_player" href="(.*?)"', html)
-
-        videoUrl = m.group(1)
-        if videoUrl[0:7] != 'http://':
-            videoUrl = BASE_URL + videoUrl
-
-        item = xbmcgui.ListItem(path = videoUrl)
+        m = re.search('photo_id=(\d+)', html)
+        photoId = m.group(1)
+        json = simplejson.loads(self.downloadUrl(VIDEO_URL % photoId))
+        path = 'http://video.onside.dk' + json['photos'][0]['video_hd_download']
+        item = xbmcgui.ListItem(path = path)
         xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
     def downloadUrl(self, url):
@@ -113,14 +94,16 @@ if __name__ == '__main__':
     FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
     ICON = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
 
+    buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     otv = OnsideTV()
     try:
-        if PARAMS.has_key('slug'):
-            otv.listPrograms(PARAMS['slug'][0], int(PARAMS['page'][0]))
-        elif PARAMS.has_key('play'):
+        if PARAMS.has_key('play'):
             otv.playProgram(PARAMS['play'][0])
+        elif PARAMS.has_key('page'):
+            otv.listVideos(int(PARAMS['page'][0]))
         else:
-            otv.listCategories()
+            otv.listVideos()
+
     except OnsideException, ex:
         otv.showError(str(ex))
     except Exception:

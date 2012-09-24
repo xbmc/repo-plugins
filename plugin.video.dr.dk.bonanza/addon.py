@@ -32,6 +32,7 @@ import xbmcplugin
 import xbmcaddon
 
 BASE_URL = 'http://www.dr.dk/Bonanza/'
+VIDEO_TYPES = ['VideoHigh', 'VideoMid', 'VideoLow', 'Audio']
 
 class BonanzaException(Exception):
     pass
@@ -153,25 +154,33 @@ class Bonanza(object):
             item.setProperty('IsPlayable', 'true')
             item.setInfo('video', infoLabels)
 
+            url = '?mode=play'
+            for file in json['Files']:
+                if file['Type'] in VIDEO_TYPES:
+                    url += '&' + file['Type'] + '=' + file['Location']
 
-            url = self.findFileLocation(json, 'VideoMid')
-            # Also check for audio
-            if url is None:
-                url = self.findFileLocation(json, 'Audio')
-            if url is None:
-                continue
-
-            items.append((PATH + '?mode=play&playlist=' + url, item, False))
+            items.append((PATH + url, item, False))
         xbmcplugin.addDirectoryItems(HANDLE, items)
 
-    def playContent(self, url):
+    def playContent(self):
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+
+        print PARAMS
+        for type in VIDEO_TYPES:
+            if PARAMS.has_key(type.lower()):
+                url = self.fixRtmpUrl(PARAMS[type.lower()][0])
+                item = xbmcgui.ListItem(type, path = url)
+                playlist.add(url, item)
+
+        xbmcplugin.setResolvedUrl(HANDLE, True, playlist[0])
+
+    def fixRtmpUrl(self, url):
         if url[0:4] == 'rtmp':
             # patch videoUrl to work with xbmc
             m = re.match('(rtmp://.*?)/(.*)', url)
             url = '%s/bonanza/%s' % (m.group(1), m.group(2))
-
-        item = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(HANDLE, True, item)
+        return url
 
     def findFileLocation(self, json, type):
         for file in json['Files']:
@@ -269,7 +278,7 @@ if __name__ == '__main__':
         elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'latest':
             b.showLatest()
         elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'play':
-            b.playContent(PARAMS['playlist'][0])
+            b.playContent()
         else:
             b.showCategories()
 

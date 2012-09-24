@@ -1,3 +1,6 @@
+[B]Version 2.1.8 - 2012-09-16[/B]
+- Updated streams for DR2, DR K and DR Ramasjang
+
 [B]Version 2.1.7 - 2012-08-01[/B]
 - Fixed Kanal Sport, TV/Midt-Vest, TV2/Øst
 - Added retries and error handling to resolve TV2/Regions stream host

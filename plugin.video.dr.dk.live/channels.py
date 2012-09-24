@@ -104,9 +104,9 @@ Channel(1, CATEGORY_DR, "dr1.stream").add_urls(
     low    = ['rtmp://livetv.gss.dr.dk/live/livedr01astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr01bstream1 live=1'])
 # DR2
 Channel(2, CATEGORY_DR, "dr2.stream").add_urls(
-    high   = ['rtmp://rtmplive.dr.dk/live/livedr02astream3 live=1', 'rtmp://rtmplive.dr.dk/live/livedr02bstream3 live=1'],
-    medium = ['rtmp://rtmplive.dr.dk/live/livedr02astream2 live=1', 'rtmp://rtmplive.dr.dk/live/livedr02bstream2 live=1'],
-    low    = ['rtmp://rtmplive.dr.dk/live/livedr02astream1 live=1', 'rtmp://rtmplive.dr.dk/live/livedr02bstream1 live=1'])
+    high   = ['rtmp://livetv.gss.dr.dk/live/livedr02astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr02bstream3 live=1'],
+    medium = ['rtmp://livetv.gss.dr.dk/live/livedr02astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr02bstream2 live=1'],
+    low    = ['rtmp://livetv.gss.dr.dk/live/livedr02astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr02bstream1 live=1'])
 # DR Update
 Channel(3, CATEGORY_DR).add_urls(#, "drupdate.stream").add_urls(
     high   = 'rtmp://livetv.gss.dr.dk/live/livedr03astream3 live=1',
@@ -114,14 +114,14 @@ Channel(3, CATEGORY_DR).add_urls(#, "drupdate.stream").add_urls(
     low    = 'rtmp://livetv.gss.dr.dk/live/livedr03astream1 live=1')
 # DR K
 Channel(4, CATEGORY_DR, "drk.stream").add_urls(
-    high   = ['rtmp://rtmplive.dr.dk/live/livedr04astream3 live=1', 'rtmp://rtmplive.dr.dk/live/livedr04bstream3 live=1'],
-    medium = ['rtmp://rtmplive.dr.dk/live/livedr04astream2 live=1', 'rtmp://rtmplive.dr.dk/live/livedr04bstream2 live=1'],
-    low    = ['rtmp://rtmplive.dr.dk/live/livedr04astream1 live=1', 'rtmp://rtmplive.dr.dk/live/livedr04bstream1 live=1'])
+    high   = ['rtmp://livetv.gss.dr.dk/live/livedr04astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr04bstream3 live=1'],
+    medium = ['rtmp://livetv.gss.dr.dk/live/livedr04astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr04bstream2 live=1'],
+    low    = ['rtmp://livetv.gss.dr.dk/live/livedr04astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr04bstream1 live=1'])
 # DR Ramasjang
 Channel(5, CATEGORY_DR, "drramasjang.stream").add_urls(
-    high   = ['rtmp://rtmplive.dr.dk/live/livedr05astream3 live=1', 'rtmp://rtmplive.dr.dk/live/livedr05bstream3 live=1'],
-    medium = ['rtmp://rtmplive.dr.dk/live/livedr05astream2 live=1', 'rtmp://rtmplive.dr.dk/live/livedr05bstream2 live=1'],
-    low    = ['rtmp://rtmplive.dr.dk/live/livedr05astream1 live=1', 'rtmp://rtmplive.dr.dk/live/livedr05bstream1 live=1'])
+    high   = ['rtmp://livetv.gss.dr.dk/live/livedr05astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr05bstream3 live=1'],
+    medium = ['rtmp://livetv.gss.dr.dk/live/livedr05astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr05bstream2 live=1'],
+    low    = ['rtmp://livetv.gss.dr.dk/live/livedr05astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr05bstream1 live=1'])
 # DR HD
 Channel(6, CATEGORY_DR, "drhd.stream").add_urls(
     best   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream3 live=1'],

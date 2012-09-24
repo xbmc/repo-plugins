@@ -1,3 +1,8 @@
+[B]Version 2.1.3 - 2012-09-17[/B]
+- Change video stream selection. Now all available streams are added to a playlist
+  and XBMC will play the first item that works.
+  This is necessary as in some cases the high quality or medium quality stream is not playable.
+
 [B]Version 2.1.2 - 2012-04-18[/B]
 - Fixed playback problem with many videos
 - Allow XBMC to track 'Watched' status

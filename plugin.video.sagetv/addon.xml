@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.sagetv"
+       name="SageTV"
+       version="1.2.4"
+       provider-name="kricker,lehighbri,aaronb">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+    <import addon='script.module.parsedom' version='1.1.0'/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <summary>SageTV: Browse and manage airings and recordings</summary>
+    <description>Allows you to connect to your SageTV server where you can browse and view recordings, view and manage your upcoming recordings, browse channel listings, and search for airings and recordings.
+
+Dependencies:
+SageTV with:
+    Jetty Web Server 2.3.0.14 or newer
+    Sagex-api vs 7.1.9.10 or newer
+    Batch Metadata Tools 4.10.1
+    xbmc.js (Copy xbmc.js from "plugin.video.sagetv\extras\sagex\services" to your "SageTV\SageTV\sagex\services" directory)
+
+</description>
+  </extension>
+</addon>

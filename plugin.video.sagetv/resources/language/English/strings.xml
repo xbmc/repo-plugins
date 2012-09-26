@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Addon Settings-->
+    <string id="20000">SageTV Server Address</string>
+    <string id="20001">SageTV Webserver Port</string>
+    <string id="20002">SageTV Webserver Username</string>
+    <string id="20003">SageTV Webserver Password</string>
+    <string id="20004">SageTV Recording Folder</string>
+    <string id="20005">SageTV Recording Folder Network path</string>
+    <string id="20006">SageTV Server MAC Address (for WOL)</string>
+    <!-- Settings-->
+    
+    <string id="21000">SageTV Server Not Found</string>
+    <string id="21001">Unable to connect to your SageTV server.</string>
+    <string id="21002">1) Please confirm it is running.</string>
+    <string id="21003">2. Confirm the settings of this addon are correct.</string>
+    <string id="21004">Dependency Missing</string>
+    <string id="21005">This addon requires sagex-api-services version</string>
+    <string id="21006">You do not have the sagex-api plugin installed</string>
+    <string id="21007">Please install sagex-api-services to enable this plugin.</string>
+    <string id="21008">You have version</string>
+    <string id="21009">Please install/upgrade your sagex-api-services version to</string>
+    <string id="21010">Search</string>
+    <string id="21011">SageTV addon</string>
+    <string id="21012">Delete successful</string>
+    <string id="21013">Scheduled recording successful</string>
+    <string id="21014">Attemping to playback live T</string>
+    <string id="21015">Unable to playback live TV</string>
+    <string id="21016">Delete Show</string>
+    <string id="21017">Cancel Recording</string>
+    <string id="21018">Remove Favorite</string>
+    <string id="21019">Record</string>
+    <string id="21020">Watch Now</string>
+    <string id="21021">Playback failed; filesize not big enough for playback</string>
+</strings>

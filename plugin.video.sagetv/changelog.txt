@@ -1,0 +1,39 @@
+[B]Version 1.2.4 (Sep 25, 2012)[/B]
+- Fixed WOL support
+- Added sorting by date to "Watch Recordings"
+- Fixed local -> network path substitutions
+- Changed "UNC path" to "Network path" in settings
+
+[B]Version 1.2.3 (Sep 24, 2012)[/B]
+- Added WOL support
+
+[B]Version 1.2.2 (Sep 20, 2012)[/B]
+- Fixed issue with live TV playing back w/ UNC path
+- Watched status is pulled from SageTV and set in XBMC (only one way for now... watching a show in XBMC does not sync the status back to SageTV)
+
+[B]Version 1.2.1 (Sep 20, 2012)[/B]
+- Localized all GUI strings
+
+[B]Version 1.2.0 (Sep 20, 2012)[/B]
+- Updated dependency to use python 2.0 instead of 1.0
+- Changed name of addon to all lowercase to be consistent with addon naming requirements
+
+[B]Version 1.1.1 (Sep 19, 2012)[/B]
+- Added support to watch an airing live
+- Added initial notifications to give feedback after various context menu items are executed (e.g. delete, start recording)
+- Updated display text for shows without descriptions or episode titles (e.g. some news and sports shows)
+- Updated search to not search within an episode's description field (just search within episode title and show title)
+
+[B]Version 1.1.0 (Sep 18, 2012)[/B]
+- Support up to 5 recording directory mappings
+- Updated how airings/recordings of various genres are displayed (e.g. Movies vs. TV Shows)
+- Updated thumbnail and poster images
+- Significant performance improvement when displaying lists of shows and episodes (this was accomplished by completely re-doing) how the metadata is pulled and implemented a custom sagex .js file that enables the addon on to only pull the metadata it needs and nothing more)
+- Enhanced "Search for Airings" and "Search for Recordings" to 1) be case insensitive, 2, search for a substring vs. the exact string, and 3) search across the show title, episode title, and description fields (vs. just the show title filed before)
+- Added check to see if sagex-api-services is installed and then to check that the minimum required version is installed which this addon requires
+
+[B]Version 1.0.0 (Sep 11, 2012)[/B]
+- Initial commit to Eden add-on system
+
+TODO:
+-Sync watched status

@@ -1,3 +1,7 @@
+Version 1.0.9
+added option to show scores in game lists
+added a kind-of calender function for getting game dates, thanks to J_K_M_A_N for the inspiration!
+
 Version 1.0.8
 added game highlights patch from bunglebungle - http://forum.xbmc.org/showthread.php?tid=104391&pid=1109006#pid1109006
 

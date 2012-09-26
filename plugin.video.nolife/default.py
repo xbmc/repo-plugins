@@ -157,7 +157,7 @@ def getlast():
             _date_len = remove_html_tags(
                         re.compile(reg_date).findall(str(element))[0]
                         )
-            _duration = _date_len.split(' - ')[1][:-2]
+            _duration = _date_len.split(' - ')[1]
 
             reg_vid = 'a href="emission-.*" '
             _vid   = re.compile(reg_vid).findall(str(element))[0][17:][:-2]
@@ -238,7 +238,7 @@ def search():
                 _date_len = remove_html_tags(
                             re.compile(reg_date).findall(str(element))[0]
                             )
-                _duration = _date_len.split(' - ')[1][:-2]
+                _duration = _date_len.split(' - ')[1]
                 addlink(_name + " - " + _desc, 
                         "plugin://plugin.video.nolife?id=" + _searchid, 
                         _thumb, 
@@ -311,7 +311,7 @@ def getlinks(show):
                                 )
                     _thumb    = re.compile('data-thumb=".*"').findall(
                                                     str(element))[0][12:][:-1]
-                    _duration = _date_len.split(' - ')[1][:-2]
+                    _duration = _date_len.split(' - ')[1]
 
                     req_id = 'a href="emission-.*" '
                     _id = re.compile(req_id).findall(

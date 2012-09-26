@@ -10,10 +10,10 @@
   <string id="30007">Power Rankings</string>
   <string id="30008">MLB.com Realtime Highlights</string>
   <string id="30009">Baseball's Best Moments</string>
-  <string id="30010">Today's Games</string>
-  <string id="30011">Yesterday's Games</string>
-  <string id="30012">The day before Yesterday's Games</string>
-  <string id="30013">Tomorrow's Games</string>
+  <string id="30010">Older Dates</string>
+  <string id="30011">Future Dates</string>
+  <string id="30012">Show Scores In Game Lists</string>
+  <string id="30013"></string>
   <string id="30014">Enter a Date</string>
   <string id="30015">MLBMC</string>
   <string id="30016">This section requires at minimum a free mlb.com account. If you want to look around add anything in the email setting.</string>

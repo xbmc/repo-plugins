@@ -548,8 +548,8 @@ def getGames(url):
         except:
             xbmc.executebuiltin("XBMC.Notification("+__language__(30015)+","+__language__(30030)+",10000,"+icon+")")
             return
-        mode = '7'
         for game in games:
+            mode = '7'
             home_team = game['home_team_city']
             away_team = game['away_team_city']
             status = game['status']['status']

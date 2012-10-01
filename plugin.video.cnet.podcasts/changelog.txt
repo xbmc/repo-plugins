@@ -1,3 +1,6 @@
+version 1.0.6
+fix bug in scraper
+
 version 1.0.5
 updated show list, thanks pkscuot
 
@@ -23,3 +26,11 @@ added categories for SD and HD
 
 version - 0.0.1
 initial
+
+
+
+
+
+
+
+

@@ -72,10 +72,12 @@ def INDEX(url,hd_url,audio_url,iconimage):
                 continue
             try:
                 desc = i('itunes:summary')[0].string
+                if desc == None: raise
             except:
                 desc = ''
             try:
                 date = i('pubdate')[0].string
+                if date == None: raise
             except:
                 date = ''
             try:

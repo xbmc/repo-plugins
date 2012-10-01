@@ -1,3 +1,8 @@
+[B]Version 2.0.10[/B]
+- Added better support for HTTP Errors
+- Fixed reported 'UnicodeDecodeError' errors
+- Fixed reported 'IndexError' errors
+
 [B]Version 2.0.9[/B]
 - Fixed error when loading shows
 

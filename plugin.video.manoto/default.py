@@ -69,6 +69,15 @@ def getStreamsFromPlayList(playlist):
 
 def loginAndParse():
 	url = 'http://' + domain + '/live'
+
+	if not cj:		
+		resp = opener.open(url)		
+		html_data = resp.read()		
+		parsedJS = re.findall(r"setCookie\('(.*?)'\s*,\s*'(.*?)'\s*,\s*(.*?)\);", html_data)		
+		
+		if len(parsedJS) > 0:	
+			ck = cookielib.Cookie(version=0, name=parsedJS[0][0], value=parsedJS[0][1], port=None, port_specified=False, domain=domain, domain_specified=False, domain_initial_dot=False, path='/', path_specified=True, secure=False, expires=None, discard=True, comment=None, comment_url=None, rest={'HttpOnly': None}, rfc2109=False)		
+			cj.set_cookie(ck)
 	
 	resp = opener.open(url)
 	html_data = resp.read()
@@ -76,6 +85,10 @@ def loginAndParse():
 	soup = BeautifulSoup(html_data)
 	eventVal = soup.find('input',id='__EVENTVALIDATION',type='hidden')
 	viewState = soup.find('input',id='__VIEWSTATE',type='hidden')
+
+	if eventVal is None or viewState is None:
+                xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))
+                return False
 
 	params = '__EVENTARGUMENT=&__EVENTTARGET=ctl00%%24ContentPlaceHolderMainContent%%24lbtnEnter&__EVENTVALIDATION=%s&__VIEWSTATE=%s&ctl00%%24ContentPlaceHolderMainContent%%24txtUsername=%s&ctl00%%24ContentPlaceHolderMainContent%%24txtPassword=%s' % (urllib.quote(eventVal['value']), urllib.quote(viewState['value']), urllib.quote(__settings__.getSetting('username')), urllib.quote(__settings__.getSetting('password')))
 	

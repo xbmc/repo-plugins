@@ -1,7 +1,0 @@
-* text=auto !eol
-/LICENSE.txt -text
-/addon.xml -text
-/default.py -text
-/icon.png -text
-resources/language/English/strings.xml -text
-resources/settings.xml -text

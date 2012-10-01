@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.nolife"
        name="Nolife Online"
-       version="1.10"
+       version="1.11"
        provider-name="gormux">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -16,12 +16,17 @@
     <minversion>29000</minversion>
     <language>fr</language>
     <summary>Nolife Online XBMC Plugin</summary>
-    <description>Un plugin pour accéder au contenu de Nolife Online.
+    <description lang="fr">Un plugin pour accéder au contenu de Nolife Online.
 Nécéssite un compte payant sur le site http://www.nolife-tv.com
 Abonnez-vous :)
 Pour toute question : julien@gormotte.info
     </description>
-    <disclaimer>Ce plugin n'est ni publié ni maintenu par Nolife, et donc non officiel.</disclaimer>
+    <description lang="en">A plugin to access Nolife Online content.
+A paid account is necessary. Register on http://www.nolife-tv.com.
+Any question ? Ask julien@gormotte.info.
+    </description>
+    <disclaimer lang="fr">Ce plugin n'est ni publié ni maintenu par Nolife, et donc non officiel.</disclaimer>
+    <disclaimer lang="en">This plugin is not official. Any questions are for me and not Nolife stafff.</disclaimer>
   </extension>
 </addon>
 

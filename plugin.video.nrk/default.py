@@ -43,9 +43,9 @@ def view_top():
 def live():
   b = ['380','659','1394','2410','3660'][BITRATE-1]
   img_path = os.path.join(ADDON_PATH, "resources/images")
-  add("NRK 1", "http://nrk1us-f.akamaihd.net/i/nrk1us_0@79328/index_%s_av-b.m3u8?sd=10&rebase=on" % b,os.path.join(img_path, "nrk1.png"))
-  add("NRK 2", "http://nrk2us-f.akamaihd.net/i/nrk2us_0@79327/index_%s_av-b.m3u8?sd=10&rebase=on" % b, os.path.join(img_path, "nrk2.png"))
-  add("NRK 3", "http://nrk3us-f.akamaihd.net/i/nrk3us_0@79326/index_%s_av-b.m3u8?sd=10&rebase=on" % b, os.path.join(img_path, "nrk3.png"))
+  add("NRK 1", "http://nrk1us-f.akamaihd.net/i/nrk1us_0@79328/index_%s_av-p.m3u8?sd=10&rebase=on" % b,os.path.join(img_path, "nrk1.png"))
+  add("NRK 2", "http://nrk2us-f.akamaihd.net/i/nrk2us_0@79327/index_%s_av-p.m3u8?sd=10&rebase=on" % b, os.path.join(img_path, "nrk2.png"))
+  add("NRK 3", "http://nrk3us-f.akamaihd.net/i/nrk3us_0@79326/index_%s_av-p.m3u8?sd=10&rebase=on" % b, os.path.join(img_path, "nrk3.png"))
   endOfDirectory(plugin.handle)
 
 def add(title, url, thumb=""):
@@ -127,10 +127,11 @@ def play(video_id, series_id=""):
   xbmcplugin.setResolvedUrl(plugin.handle, True, ListItem(path=url))
   player = xbmc.Player()
   subtitle = data.get_subtitles(video_id)
-  #Wait for stream to start
-  start_time = time.time()
-  while not player.isPlaying() and time.time() - start_time < 10:
-    time.sleep(1.)
+  if subtitle:
+    #Wait for stream to start
+    start_time = time.time()
+    while not player.isPlaying() and time.time() - start_time < 10:
+      time.sleep(1.)
     player.setSubtitles(subtitle)
     if not SHOW_SUBS:
       player.showSubtitles(False)

@@ -21,22 +21,24 @@ requests = requests.session(headers={'User-Agent':'xbmc.org'})
 
 
 def get_subtitles(video_id):
-  filename = os.path.join(xbmc.translatePath("special://temp"),'nrk.srt') 
-  f = open(filename, 'w')
   html = requests.get("http://tv.nrk.no/programsubtitles/%s" % video_id).text
-  parts = re.compile(r'<p begin="(.*?)" dur="(.*?)".*?>(.*?)</p>',re.DOTALL).findall(html)
-  i = 0
-  for begint, dur, contents in parts:
-    begin = _stringToTime(begint)
-    dur = _stringToTime(dur)
-    end = begin+dur
-    i += 1
-    f.write(str(i))
-    f.write('\n%s' % _timeToString(begin))
-    f.write(' --> %s\n' % _timeToString(end))
-    f.write(re.sub('<br></br>\s*','\n',' '.join(contents.replace('<span style="italic">','<i>').replace('</span>','</i>').split())).encode('utf-8'))
-    f.write('\n\n')
-  f.close()
+  if not html:
+    return None
+  
+  filename = os.path.join(xbmc.translatePath("special://temp"),'nrk.srt')
+  with open(filename, 'w') as f:
+    parts = re.compile(r'<p begin="(.*?)" dur="(.*?)".*?>(.*?)</p>',re.DOTALL).findall(html)
+    i = 0
+    for begint, dur, contents in parts:
+      begin = _stringToTime(begint)
+      dur = _stringToTime(dur)
+      end = begin+dur
+      i += 1
+      f.write(str(i))
+      f.write('\n%s' % _timeToString(begin))
+      f.write(' --> %s\n' % _timeToString(end))
+      f.write(re.sub('<br></br>\s*','\n',' '.join(contents.replace('<span style="italic">','<i>').replace('</span>','</i>').split())).encode('utf-8'))
+      f.write('\n\n')
   return filename
 
 def _stringToTime(txt):

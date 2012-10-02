@@ -51,6 +51,7 @@ def parse_categories():
 
 def _parse_list(html):
   titles = parseDOM(html, 'a')
+  titles = [ re.sub('<[^>]*>', '', t) for t in titles ]
   titles = map(html_decode, titles)
   urls = parseDOM(html, 'a', ret='href')
   thumbs = [ _thumb_url(url) for url in urls ]

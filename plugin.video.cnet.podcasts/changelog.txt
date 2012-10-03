@@ -1,3 +1,6 @@
+version 1.0.7
+updated podcasts list 
+
 version 1.0.6
 fix bug in scraper
 

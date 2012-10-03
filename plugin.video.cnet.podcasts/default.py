@@ -14,21 +14,23 @@ icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 
 
 def CATEGORIES():
-        addDir(__language__(30000), 'allcnetvideopodcasts', 'allhdpodcast', 'http://audiopodcasts.cnet.com/', 3, 'allCNETvideo_600x600.jpg')
-        addDir(__language__(30029), 'AlwaysOnsd', 'AlwaysOnhd', '',3,'http://i.d.com.com/i/tron/cnettv/podcast/AlwaysOn_600x600.jpg')
-        addDir(__language__(30004), 'applebyte', 'applebytehd', '',3,'podcastsHD_applebyte_600x600.jpg')
-        addDir(__language__(30003), 'cartechvideo', 'cartechvideohd', '',3,'podcastsHD_cartech_600x600.jpg')
-        addDir(__language__(30012), 'cartechpodcastvideo', '', 'cartech',3,'cnet_cartech_600.jpg')
-        addDir(__language__(30002), 'news', 'cnetnewshd', '',3,'podcastsHD_news_600x600.jpg')
-        addDir(__language__(30005), 'conversations', 'conversationshd', '',3,'podcastsHD_conversations_600x600.jpg')
-        addDir(__language__(30007), 'top5', 'top5hd', '',3,'podcastsHD_top5_600x600.jpg')
-        addDir(__language__(30030), 'CNETUpdateSD', 'CNETUpdateHD', '',3,'http://i.i.com.com/cnwk.1d/i/tim/2012/04/25/CNET_update_iTunes_600x600_300x300.jpg')
-        addDir(__language__(30027), 'deviceconquersd', 'deviceconquerhd', '', 3, 'http://www.cnet.com/i/pod/cast/Device&Conquer300x300.jpg')
-        addDir(__language__(30013), 'prizefight', 'prizefighthd', '', 3, 'podcastsHD_prizefight_600x600.jpg')
-        addDir(__language__(30015), 'roundtablevideo', 'roundtablehqvideo', 'roundtablepodcast',3,'reporters_roundtable_600x600.jpg')
-        addDir(__language__(30025), 'rumorhasitsd', 'rumorhasithq', '', 3, 'rumorHasIt_300x300.jpg')
-        addDir(__language__(30014), 'tapthatapp', 'tapthatapphd', '', 3, 'tapThatAppHD_600x600.jpg')
-        addDir(__language__(30016), 'the404video', 'the404hqvideo', 'The404', 3, 'the404_600x600.jpg')
+        addDir(__language__(30000), 'allcnetvideopodcasts', 'allhdpodcast', 'http://audiopodcasts.cnet.com/', 1, 'allCNETvideo_600x600.jpg')
+        addDir(__language__(30029), 'AlwaysOnsd', 'AlwaysOnhd', '', 1, 'http://i.d.com.com/i/tron/cnettv/podcast/AlwaysOn_600x600.jpg')
+        addDir(__language__(30004), 'applebyte', 'applebytehd', '', 1, 'podcastsHD_applebyte_600x600.jpg')
+        addDir(__language__(30003), 'cartechvideo', 'cartechvideohd', '', 1, 'podcastsHD_cartech_600x600.jpg')
+        addDir(__language__(30001), 'cnetoncarssd', 'cnetoncarshd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/08/27/onCars_600x600.jpg')
+        addDir(__language__(30005), 'conversations', 'conversationshd', '', 1, 'podcastsHD_conversations_600x600.jpg')
+        addDir(__language__(30030), 'CNETUpdateSD', 'CNETUpdateHD', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/04/25/CNET_update_iTunes_600x600_300x300.jpg')
+        addDir(__language__(30002), 'news', 'cnetnewshd', '', 1, 'podcastsHD_news_600x600.jpg')
+        addDir(__language__(30007), 'top5', 'top5hd', '', 1, 'podcastsHD_top5_600x600.jpg')
+        addDir(__language__(30006), 'crackingopensd', 'crackingopenhd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/07/26/crackingOpen_600x600.jpg')
+        addDir(__language__(30009), 'firstlook', 'firstlookhd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/07/24/firstLook_600x600_600x600.jpg')
+        addDir(__language__(30008), 'howto', 'howtohd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/07/24/howTo_600x600_600x600.jpg')
+        addDir(__language__(30010), 'InsideScoopsd', 'InsideScoophd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/09/19/insideScoop_600x600.jpg')
+        addDir(__language__(30013), 'prizefight', 'prizefighthd', '', 1, 'podcastsHD_prizefight_600x600.jpg')
+        addDir(__language__(30025), 'rumorhasitsd', 'rumorhasithq', '', 1, 'rumorHasIt_300x300.jpg')
+        addDir(__language__(30014), 'tapthatapp', 'tapthatapphd', '', 1, 'tapThatAppHD_600x600.jpg')
+        addDir(__language__(30016), 'the404video', 'the404hqvideo', 'The404', 1, 'the404_600x600.jpg')
 
 
 def GetInHMS(seconds):
@@ -51,12 +53,12 @@ def INDEX(url,hd_url,audio_url,iconimage):
             link = url
         if link == '':
             link = url
-        if not link.startswith('http'):
-            link = 'http://feeds.feedburner.com/cnet/'+link+'?format=xml'
-            replace_list = ['rumorhasit', 'deviceconque', 'alwayson', 'cnetupdate']
-            for i in replace_list:
-                if i in link:
-                    link = link.replace('cnet/','')
+        link = 'http://feeds.feedburner.com/cnet/'+link+'?format=xml'
+        replace_list = ['rumorhasit', 'crackingopen', 'alwayson', 'cnetupdate', 'cnetoncars']
+        for i in replace_list:
+            if i in link:
+                link = link.replace('cnet/','')
+        print 'Feed Url: '+link
         req = urllib2.Request(link)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
@@ -66,7 +68,8 @@ def INDEX(url,hd_url,audio_url,iconimage):
         for i in soup('item'):
             name = i('title')[0].string
             try:
-                url = i('media:content')[0]['url']
+                media_url = i('media:content')[0]['url']
+                if media_url == None: raise
             except:
                 print ' --- No media:content url for "%s" --- ' %name
                 continue
@@ -86,10 +89,12 @@ def INDEX(url,hd_url,audio_url,iconimage):
             except:
                 duration = ''
             description = desc+' \n\n'+date
+            u=sys.argv[0]+"?mode=2&url="+urllib.quote_plus(media_url)
             liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
             liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description, "Duration":duration } )
             liz.setProperty( "Fanart_Image", iconimage )
-            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
+            liz.setProperty('IsPlayable', 'true')
+            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
 
 
 def get_params():
@@ -163,7 +168,11 @@ print "Name: "+str(name)
 if mode==None:
     CATEGORIES()
 
-elif mode==3:
+elif mode==1:
     INDEX(url,hd_url,audio_url,iconimage)
+
+elif mode==2:
+    item = xbmcgui.ListItem(path=url)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

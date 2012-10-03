@@ -3,6 +3,18 @@
 - Removed feature
 
 
+2 Oct 2012 v2.0.0
++ Using JSON to get streams addresses instead of parsing the HTML for them
++ Added an indication of what quality the stream is, shown as i.e: 64 kb
+* Complete rewrite of the codebase, making it more modular and generally awesomer
+* Changed the highlight color of new channels from orange to blue, as the "currently playing" channel is orange in the default skin for Eden
+* Changed default refresh rate from 360 (6 hours) to 720 hours (12 hours)
+* Updated addons description
+- Not scraping the the HTML any more using regexs to scavenge for streams
+
+Thanks to Daniel Connelly for making me aware of the JSON data and for being my willing guinea pig ;)
+
+
 25 Apr 2012 v1.1.1
 * Changed cache path from using xbmc.getaddoninfo('path') to xbmc.getaddoninfo('profile')
 * Renamed resource/language/english to resource/language/English

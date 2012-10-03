@@ -5,7 +5,7 @@
 	<string id="30001">Stream source</string>
 	<string id="30010">Force cache refresh (use when changing settings)</string>
 	<string id="30002">Premium</string>
-	<string id="30003">Username</string>
+	<string id="30003">E-mail/username</string>
 	<string id="30004">Password</string>
 	<string id="30005">Use 'My favorites' playlist</string>
 	<string id="30013">Stream bitrate</string>
@@ -18,7 +18,7 @@
 	<string id="30014">General</string>
 
 	<string id="30015">Get HQ streams with DI Premium at http://www.di.fm</string>
-	<string id="30016">Version:  1.1.1</string>
+	<string id="30016">Version:  2.0.0</string>
 	<string id="30017">Author:  Tim C. 'Bitcrusher' Steinmetz</string>
 	<string id="30018">Homepage:  http://qualisoft.dk</string>
 	<string id="30019">E-mail:  timcst@gmail.com</string>
@@ -33,6 +33,8 @@
 	<string id="30027">Accounttype (public/premium), plugin version, country.</string>
 	<string id="30028">I know it's a bit of a cheap trick, having it on by default ;)</string>
 	<string id="30029">-Tim</string>
+	
+	<string id="30030">Use first stream from each channel (Starts playing faster)</string>
 
 	<string id="30100">Connection error</string>
 	<string id="30101">Could not connect to di.fm</string>
@@ -49,7 +51,7 @@
 	<string id="30131">There was found </string>
 	<string id="30132"> new piece(s) of channelart</string>
 	<string id="30133">meaning there could be new channels.</string>
-	<string id="30134">The new channels are highlighted in orange</string>
+	<string id="30134">The new channels are highlighted in blue</string>
 
 	<string id="30140">Cachefiles are missing</string>
 	<string id="30141">At least one of the cachefiles is missing</string>
@@ -61,4 +63,9 @@
 	<string id="30152"> piece(s) of channelart missing</string>
 	<string id="30153">You should refresh your cache</string>
 	<string id="30154">Disable using 'My Favorites' to get new channelart</string>
+	
+	<string id="30160">Problem downloading channelart</string>
+	<string id="30161">There was a problem downloading channelart for: </string>
+	<string id="30162">From URL: </string>
+
 </strings>

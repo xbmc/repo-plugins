@@ -10,13 +10,16 @@ import urllib2
 
 class HTTPComm :
 	# Login
+	
+	_cj = cookielib.CookieJar()
+	
 	def post( self, url, postdata ) :
 		timeout = 10
 		socket.setdefaulttimeout(timeout)
 
-		cj = cookielib.CookieJar()
+		
 		# create an opener
-		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self._cj))
 
 		# Add useragent, sites don't like to interact with scripts
 		opener.addheaders = [
@@ -52,7 +55,7 @@ class HTTPComm :
 		socket.setdefaulttimeout(timeout)
 
 		#create an opener
-		opener = urllib2.build_opener()
+		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self._cj))
 		#Add useragent, sites don't like to interact with scripts
 		opener.addheaders = [
 			('User-Agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.8) Gecko/20100723 Ubuntu/10.04 (lucid) Firefox/3.6.8'),

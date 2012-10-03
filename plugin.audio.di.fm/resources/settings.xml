@@ -2,7 +2,7 @@
 <settings>
 	<category label="30014">
 		<setting id="sortaz" type="bool" label="30011" default="true" />
-		<setting id="cacheexpire" type="number" label="30012" default="360" />
+		<setting id="cacheexpire" type="number" label="30012" default="720" />
 		<setting id="forceupdate" type="bool" label="30010" default="false" />
 		<setting id="getpremium" type="lsep" label="30015" />
 		<setting type="lsep" label="30017" />

@@ -33,376 +33,364 @@ import xbmcplugin
 import xbmcaddon
 import pickle
 import time
-import random
 from xml.dom import minidom
 from httpcomm import HTTPComm	
+
+# Import JSON - compatible with Python<v2.6
+try:
+    import json
+except ImportError:
+    import simplejson as json
 
 # Various vars used throughout the script
 HANDLE = int(sys.argv[1])
 ADDON = xbmcaddon.Addon(id='plugin.audio.sky.fm')
 
-
 # Plugin constants
-__plugin__       = "Sky.fm"
+__plugin__       = ADDON.getAddonInfo('name')
 __author__       = "Tim C. Steinmetz"
 __url__          = "http://qualisoft.dk/"
 __platform__     = "xbmc media center, [LINUX, OS X, WIN32]"
-__date__         = "3. May 2012"
+__date__         = "30. October 2012"
 __version__      = ADDON.getAddonInfo('version')
 
+class musicAddonXbmc:
+	_addonProfilePath = xbmc.translatePath( ADDON.getAddonInfo('profile') ).decode('utf-8') # Dir where plugin settings and cache will be stored
 
-
-BASEURL    = "http://www.sky.fm"
-PREMIUMURL = "http://www.sky.fm/login"
-
-PROFILEPATH = xbmc.translatePath( ADDON.getAddonInfo('profile') ).decode('utf-8')
-
-ART_DIR = os.path.join( PROFILEPATH, 'resources', 'art', '' ) # path to channelart
-
-STREAMURLSCACHE = PROFILEPATH + "cachestream.dat"
-STREAMTITLESCACHE = PROFILEPATH + "cachestreamtitle.dat"
-STREAMBITRATECACHE = PROFILEPATH + "streamrate.dat"
-STREAMLABELCOLORCACHE = PROFILEPATH + "streamisnew.dat"
-CHECKINFILE = PROFILEPATH + "lastcheckin.dat"
-TMP_STREAM = PROFILEPATH + "tmp_stream.dat"
-
-NEWSTREAMS = 0
-LABELCOLOR = 'FF0000'
-
-HTTPCOMM = None
-
-xbmc.log( "[PLUGIN] %s v%s (%s)" % ( __plugin__, __version__, __date__ ), xbmc.LOGNOTICE )
-
-# Main class
-class Main:
-	def __init__(self) :
-		self.getStreams()
+	_cacheStreams	= _addonProfilePath + "cache_streamlist.dat"
+	_cacheListenkey	= _addonProfilePath + "cache_listenkey.dat"
+	_checkinFile	= _addonProfilePath + "cache_lastcheckin.dat"
 	
-		# If streams should be sorted A-Z
-		if ADDON.getSetting('sortaz') == "true" :
-			xbmcplugin.addSortMethod( HANDLE, sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-
-		# End of list
-		xbmcplugin.endOfDirectory( HANDLE, succeeded=True )
-
-		# If stats is allowed and its been at least 24 hours since last stat checkin
-		if (ADDON.getSetting('allowstats') == "true") and (self.checkFileTime(CHECKINFILE, 86400) == True) :
-			open(CHECKINFILE, "w")
+	_baseUrl 		= "http://www.sky.fm"
+	_loginUrl		= "http://www.sky.fm/login"
+	_listenkeyUrl	= "http://www.sky.fm/member/listen_key"
+	
+	_publicStreamsJson40k	= "http://listen.sky.fm/appleapp_low"			# Public AAC 40k/sec AAC+ JSON url
+	_premiumStreamsJson40k	= "http://listen.sky.fm/appleapp_premium_low" 		# AAC 40k/sec AAC+ JSON url
+	_premiumStreamsJson64k	= "http://listen.sky.fm/appleapp_premium_medium"	# AAC 64k/sec AAC+ JSON url
+	_premiumStreamsJson128k	= "http://listen.sky.fm/appleapp_premium"			# AAC 128k/sec AAC+ JSON url
+	_favoritesStreamJson40k	= "http://listen.sky.fm/premium_low/favorites.pls" 		# Favorites AAC 40k/sec AAC+ playlist url
+	_favoritesStreamJson64k	= "http://listen.sky.fm/premium_medium/favorites.pls"	# Favorites AAC 64k/sec AAC+ playlist url
+	_favoritesStreamJson128k= "http://listen.sky.fm/premium/favorites.pls"			# Favorites AAC 128k/sec AAC+ playlist url
+	
+	_httpComm = HTTPComm() # Init CURL thingy
+	_frontpageHtml = ""
+	
+	_newChannels = 0
+	_bitrate = 40
+	
+	def __init__( self ) :
+		# If stats is allowed and its been at least 24 hours since last checkin
+		if (ADDON.getSetting('allowstats') == "true") and (self.checkFileTime(self._checkinFile, self._addonProfilePath, 86400) == True) :
+			open(self._checkinFile, "w")
 			
 			account = 'public'
 			if ADDON.getSetting('username') != "" :
 				account = 'premium'
-
+		
 			xbmc.log( 'Submitting stats', xbmc.LOGNOTICE )
-			HTTPCOMM.get('http://stats.qualisoft.dk/?plugin=sky&version=' + __version__ + '&account=' + account + '&key=5a2a72084f40402656555b665a0fdcddbbd87553')
+			self._httpComm.get('http://stats.qualisoft.dk/?plugin=sky&version=' + __version__ + '&account=' + account + '&key=5a2a72084f40402656555b665a0fdcddbbd87553')
 		
+		xbmc.log( "[PLUGIN] %s v%s (%s)" % ( __plugin__, __version__, __date__ ), xbmc.LOGNOTICE )
 
+		
 	# Let's get some tunes!
-	def getStreams(self) :
-		global LABELCOLOR
-		global HTTPCOMM
-
-		failedstreams = 0
-
-		# will be cached
-		streamurls = []
-		streamtitles = []
-		streamisnew = []
-		streambitrate = 40
-		channelicons = None
-
-		# Precompiling regexes
-		iconreplacement_re = re.compile('[ \'-]', re.I) # generic regex for iconnames
+	def start( self ) :
+		jsonList = [] 	# list that data from the JSON will be put in
+		streamList = []	# the final list of channels, with small custom additions
 		
-		channelicon_re	= re.compile('="[\d\w\s]+?" src="(http:[^"]+)"', re.I)	
-		playlist_re	= None
-
-		HTTPCOMM = HTTPComm() # Init CURL thingy
-
-		# Check if cachefiles has expired
-		if ((int( ADDON.getSetting("cacheexpire") ) * 60) != 0 and self.checkFileTime(STREAMURLSCACHE, (int( ADDON.getSetting("cacheexpire") ) * 60)) == True) or ADDON.getSetting("forceupdate") == "true" :
-		
-			# If username NOT set, get public streams
-			if ADDON.getSetting('username') == "" :
-				xbmc.log( "Refreshing public streams", xbmc.LOGNOTICE )
-				channeltitle_re = re.compile('>([^<]+)</a>[\s\r\n]*<ul>[\s\r\n]*<li>[\s\r\n]*<a href="/play/[^"]+" data-wp="false">WebPlayer</a>', re.I)
-				streamurl_re 	= re.compile('<li>[\s\r\n]*<a href="/play/([^"]+)" data-wp="false">WebPlayer</a>', re.I) # first stream in .pls file
-
-
-				# list of possible stream servers
-				publicservers = []
-				publicservers.append( 'http://u16b.sky.fm/' )				
-				publicservers.append( 'http://u12.sky.fm/' )
-				publicservers.append( 'http://u12b.sky.fm/' )
-				publicservers.append( 'http://u16.sky.fm/' )
-				publicservers.append( 'http://u17.sky.fm/' )
-				publicservers.append( 'http://u17b.sky.fm/' )
-
-				# Get frontpage of sky.fm - if it fails, show a dialog in XBMC
-				try :
-					htmlData     = HTTPCOMM.get( BASEURL )
-				except Exception:
-					xbmcgui.Dialog().ok( ADDON.getLocalizedString(30100), ADDON.getLocalizedString(30101), ADDON.getLocalizedString(30102) )
-					xbmc.log( 'Connection error - Could not connect to sky.fm - Check your internet connection', xbmc.LOGERROR )
-					return False
-
-				playlists = streamurl_re.findall(htmlData)
-				xbmc.log( 'Found ' + str(len(playlists)) + ' streams', xbmc.LOGNOTICE )
-
-				streamtitles = channeltitle_re.findall(htmlData)
-				xbmc.log( 'Found ' + str(len(streamtitles)) + ' titles', xbmc.LOGNOTICE )
-						
-				channelicons  = channelicon_re.findall(htmlData)
-				xbmc.log( 'Found ' + str(len(channelicons)) + ' pieces of channelart', xbmc.LOGNOTICE )
-
-				if len(playlists) == 0 :
-					xbmcgui.Dialog().ok( ADDON.getLocalizedString(30110), ADDON.getLocalizedString(30111), ADDON.getLocalizedString(30112) )
-					return False
+		# Check if cachefile has expired
+		if ADDON.getSetting("forceupdate") == "true" or ((int( ADDON.getSetting("cacheexpire") ) * 60) != 0 and self.checkFileTime(self._cacheStreams, self._addonProfilePath, (int( ADDON.getSetting("cacheexpire") ) * 60)) == True) :
+			listenkey = ""	# will contain the premium listenkey
+			
+			if ADDON.getSetting('username') != "" and ADDON.getSetting("usefavorites") == 'false' : # if username is set and not using favorites
+				xbmc.log( "Going for Premium streams", xbmc.LOGNOTICE )
 				
-				# output public streams to XBMC
-				for index, item in enumerate(playlists):
-					LABELCOLOR = 'FF0000'
-					cur_servernr = 0
-					streamurl = ''
-					gotStream = False
-					random.shuffle(publicservers) # Shuffle streamservers aka 'cheap-ass load balancing' :P
-
-					while gotStream == False : # HTTPCOMM.testStream will return True when hitting a positive stream
-						gotStream = HTTPCOMM.testStream(publicservers[cur_servernr] + 'sky_' + playlists[index] + '_aacplus.flv')
-						streamurl = publicservers[cur_servernr] + 'sky_' + playlists[index] + '_aacplus.flv'
-						if cur_servernr < len(publicservers)-1 :
-							cur_servernr = cur_servernr+1
-						elif cur_servernr == len(publicservers)-1 :
-							gotStream = True
-							streamurl = 'nostreamingserverfound'
-							failedstreams = failedstreams+1
-					
-					streamtitle = streamtitles[index]
-
-					icon = ART_DIR + string.lower(iconreplacement_re.sub('', streamtitle) + ".png")
-
-					if(not self.getStreamicon( icon, channelicons[index] )) : # if False is returned, use plugin icon
-						icon = xbmc.translatePath( os.path.join( ADDON.getAddonInfo('path'), '' ) ) + 'icon.png'
-
-					if streamurl != 'nostreamingserverfound' :
-						# Will highlight new channels/has new channelart
-						if LABELCOLOR != 'FF0000' :
-							self.addItem(streamtitle, streamurl, streambitrate, icon, LABELCOLOR)
-						else :
-							self.addItem(streamtitle, streamurl, streambitrate, icon, False)
-
-					streamtitles.append(streamtitle) # for caching
-					streamurls.append(streamurl)
-					streamisnew.append(LABELCOLOR)
-
-
-			# TODO: The premium support is disabled for now. As it's not possible to enter username
-			# Got some logic about Premium stream handeling I need to work out
-
-			# Get premium streams
-			elif ( ADDON.getSetting('username') != "" ) :
-				xbmc.log( "Refreshing premium streams", xbmc.LOGNOTICE )
-
-				channeltitle_re = re.compile('>([^<]+)</a>[\s\r\n]*<ul>[\s\r\n]*<li>[\s\r\n]*<a href="/play/[^"]+" data-wp="true">WebPlayer</a>', re.I)
-				streamurl_re 	= re.compile('<li>[\s\r\n]*<a href="/play/([^"]+)" data-wp="true">WebPlayer</a>', re.I) # first stream in .pls file
-
-				logindata = urllib.urlencode({ 'member_session[username]':  ADDON.getSetting('username'),
-  							       'member_session[password]':  ADDON.getSetting('password') })
-
-				# list of possible stream servers
-				premiumservers = []
-				premiumservers.append( 'http://72.26.216.106/' )
-				
-				# Login and get frontpage of sky.fm - if it fails, show a dialog in XBMC
-				try :
-					htmlData = HTTPCOMM.post( PREMIUMURL, logindata, PROFILEPATH + 'authcookie.lwp' )
-				except Exception:
-					xbmcgui.Dialog().ok( ADDON.getLocalizedString(30100), ADDON.getLocalizedString(30101), ADDON.getLocalizedString(30102) )
-					xbmc.log( 'Connection error - Could not connect to sky.fm - Check your internet connection', xbmc.LOGERROR )
-					return False
-				
-				playlists = streamurl_re.findall(htmlData)
-				xbmc.log( 'Found ' + str(len(playlists)) + ' streams', xbmc.LOGNOTICE )
-
-				streamtitles = channeltitle_re.findall(htmlData)
-				xbmc.log( 'Found ' + str(len(streamtitles)) + ' titles', xbmc.LOGNOTICE )
-						
-				channelicons  = channelicon_re.findall(htmlData)
-				xbmc.log( 'Found ' + str(len(channelicons)) + ' pieces of channelart', xbmc.LOGNOTICE )
-
-				if len(playlists) == 0 :
-					xbmcgui.Dialog().ok( ADDON.getLocalizedString(30110), ADDON.getLocalizedString(30111), ADDON.getLocalizedString(30112) )
-					return False
-
-				playlists.pop(0) # removes the favorites stream
-				streamtitles.pop(0)
-
-				# Go find the listening key
-				listenkeyData = HTTPCOMM.get( 'http://www.sky.fm/play/' + playlists[0], PROFILEPATH + 'authcookie.lwp' )
-				keymatch = re.search(r"API.Config.listenKey = '([^']+)'", listenkeyData)
-				#print listenkeyData
-				if not keymatch: # If no listening key was found
-					xbmcgui.Dialog().ok( ADDON.getLocalizedString(30160), ADDON.getLocalizedString(30111), ADDON.getLocalizedString(30112) )
-					xbmc.log( 'No listening key found', xbmc.LOGERROR )
-					return False
+				# Checks if forceupdate is set and if the listenkey cachefile exists
+				if ADDON.getSetting("forceupdate") == "true" or not os.path.exists(self._cacheListenkey) :
+					listenkey = self.getListenkey()
+					pickle.dump( listenkey, open(self._cacheListenkey, "w"), protocol=0 ) # saves listenkey for further use
 				else :
-					xbmc.log( 'Found listening key', xbmc.LOGNOTICE )
-
+					listenkey = pickle.load( open(self._cacheListenkey, "r") )
 				
-
-				for index, item in enumerate(playlists) :
-					#playlist = HTTPCOMM.get(item)
-					
-					LABELCOLOR = 'FF0000'
-					cur_servernr = 0
-
-					streamurl = ''
-					gotStream = False
-
-					streamurl = premiumservers[cur_servernr] + playlists[index] + '?' + keymatch.group(1) + '&type=.flv'
-
-					'''
-					random.shuffle(premiumservers) # Shuffle streamservers aka 'cheap-ass load balancing' :P
-					
-					while gotStream == False : # HTTPCOMM.testStream will return True when hitting a positive stream
-						gotStream = HTTPCOMM.testStream(premiumservers[cur_servernr] + playlists[index] + '?' + keymatch.group(1) + '&type=.flv')
-						streamurl = premiumservers[cur_servernr] + playlists[index] + '?' + keymatch.group(1) + '&type=.flv'
-						#print premiumservers[cur_servernr] + playlists[index] + '?' + keymatch.group(1) + '&type=.flv'
-						if cur_servernr < len(premiumservers)-1 :
-							cur_servernr = cur_servernr+1
-						elif cur_servernr == len(premiumservers)-1 :
-							gotStream = True
-							streamurl = False
-					'''
-					if streamurl != False : # only add to GUI if stream returned data
-						streamtitle = streamtitles[index]
-
-						icon = ART_DIR + string.lower(iconreplacement_re.sub('', streamtitle) + ".png")
-	
-						if(not self.getStreamicon( icon, channelicons[index] )) : # if False is returned, use plugin icon
-							icon = xbmc.translatePath( os.path.join( ADDON.getAddonInfo('path'), '' ) ) + 'icon.png'
-
-						# will highlight new channels/has new channelart
-						if LABELCOLOR != 'FF0000' :
-							self.addItem(streamtitle, streamurl, streambitrate, icon, LABELCOLOR)
-						else :
-							self.addItem(streamtitle, streamurl, streambitrate, icon, False)
-						print "xxx" + streamurl
-						streamtitles.append(streamtitle) # for caching
-						streamurls.append(streamurl)
-						streamisnew.append(LABELCOLOR)
-					else :
-						xbmc.log( 'Failed to reach the premium stream at ' + playlists[index], xbmc.LOGERROR )
-						failedstreams = failedstreams+1
-
-				xbmc.log( 'Found ' + str(len(playlists)) + ' streams', xbmc.LOGNOTICE )
+				if ADDON.getSetting('bitrate') == '0' :
+					self._bitrate = 40
+					jsonList = self.getJSONChannelList( self._premiumStreamsJson40k )
+					streamList = self.customizeStreamListAddMenuitem( jsonList, listenkey )
+				elif ADDON.getSetting('bitrate') == '1' :
+					self._bitrate = 64
+					jsonList = self.getJSONChannelList( self._premiumStreamsJson64k )
+					streamList = self.customizeStreamListAddMenuitem( jsonList, listenkey )
+				else :
+					self._bitrate = 128
+					jsonList = self.getJSONChannelList( self._premiumStreamsJson128k )
+					streamList = self.customizeStreamListAddMenuitem( jsonList, listenkey )
 				
-
-			# Write channels to cache
-			pickle.dump(streamurls, open(STREAMURLSCACHE, "w"), protocol=0)
-			pickle.dump(streamtitles,  open(STREAMTITLESCACHE, "w"), protocol=0)
-			pickle.dump(streambitrate, open(STREAMBITRATECACHE, "w"), protocol=0)
-			pickle.dump(streamisnew, open(STREAMLABELCOLORCACHE, "w"), protocol=0)
-		
-			if (NEWSTREAMS > 0) : # Yay! New channels found
-				xbmc.log( 'New channels found - There was found ' + str(NEWSTREAMS) + ' new piece(s) of channelart - Meaning there could be new channels', xbmc.LOGNOTICE )
-				xbmcgui.Dialog().ok( ADDON.getLocalizedString(30130), ADDON.getLocalizedString(30131) + str(NEWSTREAMS) + ADDON.getLocalizedString(30132), ADDON.getLocalizedString(30133),ADDON.getLocalizedString(30134) )
-
-			if (failedstreams > 0) : # Streams that failed
-				xbmc.log( 'Failed to reach ' + str(failedstreams) + ' streams', xbmc.LOGNOTICE )
-				xbmcgui.Dialog().ok( ADDON.getLocalizedString(30170), ADDON.getLocalizedString(30171) + str(failedstreams) + ADDON.getLocalizedString(30172), ADDON.getLocalizedString(30173) )
-
+				xbmc.log( "Bitrate set to " + str( self._bitrate ), xbmc.LOGNOTICE )
 				
-			# Resets the 'Force refresh' setting
-			ADDON.setSetting(id="forceupdate", value="false")
+				
+			elif ADDON.getSetting('username') != "" and ADDON.getSetting("usefavorites") == 'true' : # if username is set and wants to use favorites
+				xbmc.log( "Going for Premium favorite streams", xbmc.LOGNOTICE )
+				listenkey = self.getListenkey()
+				if ADDON.getSetting('bitrate') == '0' :
+					self._bitrate = 40
+					streamList = self.getFavoriteStreamsList( self._favoritesStreamJson40k + "?" + listenkey )
+				elif ADDON.getSetting('bitrate') == '1' :
+					self._bitrate = 64
+					streamList = self.getFavoriteStreamsList( self._favoritesStreamJson64k + "?" + listenkey )
+				else :
+					self._bitrate = 128
+					streamList = self.getFavoriteStreamsList( self._favoritesStreamJson128k + "?" + listenkey )
+				
+				xbmc.log( "Bitrate set to " + str(self._bitrate), xbmc.LOGNOTICE )
+				
+				for channel in streamList :
+					self.addItem( channel['name'], channel['playlist'], channel["description"], channel['bitrate'], self._addonProfilePath + "art_" + channel['key'] + ".png", channel['isNew'] )
+
+			else :
+				xbmc.log( "Going for Public streams", xbmc.LOGNOTICE )
+				jsonList = self.getJSONChannelList( self._publicStreamsJson40k )
+				streamList = self.customizeStreamListAddMenuitem(jsonList, "") # sending a blank string as listenkey
+
+			# save streams to cachefile
+			pickle.dump( streamList, open(self._cacheStreams, "w"), protocol=0 )
+			
+			if (self._newChannels > 0) : # Yay! New channels found
+				xbmc.log( ADDON.getLocalizedString(30130) + " " + ADDON.getLocalizedString(30131) + str(self._newChannels) + ADDON.getLocalizedString(30132) + " " + ADDON.getLocalizedString(30133) + " " + ADDON.getLocalizedString(30134), xbmc.LOGNOTICE )
+				xbmcgui.Dialog().ok( ADDON.getLocalizedString(30130), ADDON.getLocalizedString(30131) + str(self._newChannels) + ADDON.getLocalizedString(30132), ADDON.getLocalizedString(30133),ADDON.getLocalizedString(30134) )
 
 		else :
-			if not os.path.isfile(STREAMTITLESCACHE) or not os.path.isfile(STREAMURLSCACHE) or not os.path.isfile(STREAMBITRATECACHE) or not os.path.isfile(STREAMLABELCOLORCACHE) :
-				xbmc.log( 'Cachefiles are missing - At least one of the cachefiles is missing please go to the addon settings and select "Force cache refresh"', xbmc.LOGERROR )
-				xbmcgui.Dialog().ok( ADDON.getLocalizedString(30140), ADDON.getLocalizedString(30141), ADDON.getLocalizedString(30142), ADDON.getLocalizedString(30143) )
-				return False
+			xbmc.log( "Using cached streams", xbmc.LOGNOTICE )
+			streamList = pickle.load( open(self._cacheStreams, "r") )
 
-			streamurls     = pickle.load(open(STREAMURLSCACHE, "r"))    # load streams from cache
-			streamtitles   = pickle.load(open(STREAMTITLESCACHE, "r"))  # load streamtitles from cache
-			streambitrate  = pickle.load(open(STREAMBITRATECACHE, "r")) # load stream bitrate from cache
-			streamisnew    = pickle.load(open(STREAMLABELCOLORCACHE, "r"))   # load stream 'is new' from cache
+			# Add streams to GUI
+			for channel in streamList :	
+				self.addItem( channel['name'], channel['playlist'], channel["description"], channel['bitrate'], self._addonProfilePath + "art_" + channel['key'] + ".png", channel['isNew'] )
+				
+		# If streams should be sorted A-Z
+		if ADDON.getSetting('sortaz') == "true" :
+			xbmcplugin.addSortMethod( HANDLE, sortMethod=xbmcplugin.SORT_METHOD_LABEL )
+		
+		# End of channel list
+		xbmcplugin.endOfDirectory( HANDLE, succeeded=True )
 
-			# Output cache list of streams to XBMC
-			for index, item in enumerate(streamurls):
-				playlist = item
-				streamurl = str(item)
-				streamtitle = streamtitles[index]
-				icon = ART_DIR + string.lower(iconreplacement_re.sub('', streamtitle) + ".png")
-
-				if(not self.getStreamicon( icon, False )) : # if False is returned, use plugin icon
-					icon = xbmc.translatePath( os.path.join( ADDON.getAddonInfo('path'), '' ) ) + 'icon.png'
-
-				if streamisnew[index] != 'FF0000' :
-					self.addItem(streamtitle, streamurl, streambitrate, icon, streamisnew[index])
-				else :
-					self.addItem(streamtitle, streamurl, streambitrate, icon, False)
-
-			if (NEWSTREAMS < 0) : # Missing channelart dialog
-				xbmc.log( "Channelart missing - There is " + str(abs(NEWSTREAMS)) + " piece(s) of channelart missing - You should refresh your cache - Disable using 'My Favorites' to get new channelart", xbmc.LOGWARNING )
-				xbmcgui.Dialog().ok( ADDON.getLocalizedString(30150), ADDON.getLocalizedString(30151) + str(abs(NEWSTREAMS)) + ADDON.getLocalizedString(30152), ADDON.getLocalizedString(30153), ADDON.getLocalizedString(30154))
+		# Resets the 'Force refresh' setting
+		ADDON.setSetting( id="forceupdate", value="false" )
 		
 		return True
-
 		
-	# Adds streams to XBMC itemlist
-	def addItem(self, channeltitle, streamurl, streambitrate, icon, labelcolor) :
-		if labelcolor != False :
-			li = xbmcgui.ListItem(label="[COLOR FF" + labelcolor + "]" + channeltitle + "[/COLOR]",thumbnailImage=icon)
-			print "color item: " + labelcolor
+		
+	"""return list - False if it fails
+	Gets the favorites playlist and returns the streams as a list
+	Also every channel is added to the GUI from here, as the progress indication
+	in the GUI would not reflect that something is actually happening till the very end
+	"""
+	def customizeStreamListAddMenuitem( self, list, listenkey ) :
+		# Precompiling regexes		
+		streamurl_re = re.compile('File\d+=([^\n]*)', re.I) # streams in .pls file
+		
+		streamList = []
+		
+		# Will add list elements to a new list, with a few additions
+		for channel in list :
+			channel['key'] = self.makeChannelIconname( channel['name'] ) # customize the key that is used to find channelart
+			channel['isNew'] = False # is used to highlight when it's a new channel
+			channelArt = "art_" + channel['key'] + ".png"
+			channel['bitrate'] = self._bitrate
+			
+			if ADDON.getSetting('username') != "" : # append listenkey to playlist url if username is set
+				channel['playlist'] = self.getFirstStream( channel['playlist'] + "?" + listenkey, streamurl_re )
+			else :
+				channel['playlist'] = self.getFirstStream( channel['playlist'], streamurl_re )
+				
+			if (not os.path.isfile(self._addonProfilePath + channelArt)) : # if channelart is not in cache
+				print "Channelart for " + channel['name'] + " not found in cache at " + self._addonProfilePath + channelArt
+				self.getChannelArt( channel['id'], "art_" + channel['key'] )
+				channel['isNew'] = True
+				self._newChannels = self._newChannels + 1
+			
+			streamList.append( channel )
+			
+			# I'd have prefeered it if I didn't have to add menuitem from within this method
+			# but I have to, too give the user some visual feedback that stuff is happening
+			self.addItem( channel['name'], channel['playlist'], channel["description"], self._bitrate, self._addonProfilePath + "art_" + channel['key'] + ".png", channel['isNew'] )
+
+		return streamList # returns the channellist so it can be saved to cache
+	
+	
+	"""return bool
+	Will check if channelart/icon is present in cache - if not, try to download
+	"""
+	def getChannelArt( self, channelId, channelKey ) :
+		channelArt_re = re.compile('data-id="' + str(channelId) +'">(?:[\n\s]*)<a(?:[^>]*)><img(?:[^>]*)src="([^"]*)"', re.I)
+		
+		try :
+			if (self._frontpageHtml == "") : # If frontpage html has not already been downloaded, do it
+				self._frontpageHtml = self._httpComm.get( self._baseUrl )
+		
+			channelartDict = channelArt_re.findall( self._frontpageHtml )
+
+			# Will download and save the channelart to the cache
+			self._httpComm.getImage( channelartDict[0], self._addonProfilePath + channelKey + ".png" )
+
+			return True
+
+		except Exception :
+			sys.exc_clear() # Clears all exceptions so the script will continue to run
+			xbmcgui.Dialog().ok( ADDON.getLocalizedString(30160), ADDON.getLocalizedString(30161), ADDON.getLocalizedString(30162) + channelartDict[0] )
+			xbmc.log( ADDON.getLocalizedString(30160) + " " + ADDON.getLocalizedString(30161) + channelKey + " " + ADDON.getLocalizedString(30162)+ channelartDict[0], xbmc.LOGERROR )
+			return False
+		
+		return True
+	
+	
+	"""return String
+	Extracts the premium listenkey from the frontpage html
+	"""
+	def getListenkey( self ) :
+		listenkey_re = re.compile('Key is:<br />[^<]*<strong>([\w\d]*)<', re.DOTALL)
+		
+		try :
+			logindata = urllib.urlencode({	'member_session[username]':  ADDON.getSetting('username'),
+											'member_session[password]':  ADDON.getSetting('password') })
+			
+			self._httpComm.post( self._loginUrl, logindata ) # logs in so the listenkey page is accessible
+			
+			listenkeyHtml = self._httpComm.get( self._listenkeyUrl)
+			listenkeyDict = listenkey_re.findall( listenkeyHtml )
+			
+			xbmc.log( "Found listenkey", xbmc.LOGNOTICE )
+			return listenkeyDict[0]
+
+		except Exception :
+			sys.exc_clear() # Clears all exceptions so the script will continue to run
+			xbmcgui.Dialog().ok( ADDON.getLocalizedString(30100), ADDON.getLocalizedString(30101), ADDON.getLocalizedString(30102) )
+			xbmc.log( ADDON.getLocalizedString(30100) + " " + ADDON.getLocalizedString(30101) + " " + ADDON.getLocalizedString(30102), xbmc.LOGERROR )
+			return False
+		
+		return False
+
+	
+	"""return list - False if it fails
+	Will get a HTML page containing JSON data, decode it and return
+	"""
+	def getJSONChannelList( self, url ) :
+		try :
+			jsonData = self._httpComm.get( url )
+			jsonData = json.loads(jsonData)
+		except Exception : # Show error message in XBMC GUI if failing to parse JSON
+			sys.exc_clear() # Clears all exceptions so the script will continue to run
+			xbmcgui.Dialog().ok( ADDON.getLocalizedString(30100), ADDON.getLocalizedString(30101), ADDON.getLocalizedString(30102) )
+			xbmc.log( ADDON.getLocalizedString(30100) + " " + ADDON.getLocalizedString(30101) + " " + ADDON.getLocalizedString(30102), xbmc.LOGERROR )
+			return False
+
+		return jsonData
+	
+	
+	"""return list - False if it fails
+	Gets the favorites playlist and returns the streams as a list
+	"""
+	def getFavoriteStreamsList( self, url ) :
+		try :
+			favoritesPlaylist = self._httpComm.get( url ) # favorites .pls playlist in plaintext
+			favoritesList = [] # list that will contain streamlist
+			
+			streamurl_re 	= re.compile( 'File\d+=([^\n]*)', re.I ) # first stream in .pls file
+			channeltitle_re = re.compile( 'Title\d+=([^\n]*)', re.I )
+			
+			streamTitles = channeltitle_re.findall( favoritesPlaylist )
+			streamUrls	= streamurl_re.findall( favoritesPlaylist )
+			
+			if len(streamUrls) == len( streamTitles ) : # only continue if the count of urls and titles are equal
+				for streamUrl in streamUrls :
+					listitem = {}
+					listitem['playlist'] = streamUrl
+					tmp_name = streamTitles.pop()
+					listitem['name'] = tmp_name.replace( "SKY FM - ", "" ) # favorite stream titles has some "fluff" text it that is removed
+					listitem['key'] = self.makeChannelIconname( listitem['name'] )
+					listitem['isNew'] = False
+					listitem['bitrate'] = self._bitrate
+					listitem['description'] = ""
+					favoritesList.append( listitem )
+					
+			else :
+				return False
+
+			return favoritesList
+			
+		except Exception : # Show error message in XBMC GUI if failing to parse JSON
+			#sys.exc_clear() # Clears all exceptions so the script will continue to run
+			xbmcgui.Dialog().ok( ADDON.getLocalizedString(30120), ADDON.getLocalizedString(30111), url )
+			xbmc.log( ADDON.getLocalizedString(30120) + " " + ADDON.getLocalizedString(30111) + " " + url, xbmc.LOGERROR )
+			return False
+
+		return favoritesList
+
+	
+	"""return string
+	Will take a channelname, lowercase it and remove spaces, dashes and other special characters
+	The string returned is normally used as part of the filename for the channelart
+	"""
+	def makeChannelIconname( self, channelname ) :
+		iconreplacement_re = re.compile('[^a-z0-9]', re.I) # regex that hits everything but a-z and 0-9
+		iconname = string.lower(iconreplacement_re.sub( '', channelname) )
+		return iconname
+	
+	
+	"""return bool
+	Simply adds a music item to the XBMC GUI
+	"""
+	# Adds item to XBMC itemlist
+	def addItem( self, channelTitle, streamUrl, streamDescription, streamBitrate, icon, isNewChannel ) :
+
+		if isNewChannel == True : # tart it up a bit if it's a new channel
+			li = xbmcgui.ListItem(label="[COLOR FF007EFF]" + channelTitle + "[/COLOR]",thumbnailImage=icon)
+			xbmc.log( "New channel found: " + channelTitle, xbmc.LOGERROR )
 		else :
-			li = xbmcgui.ListItem(label=channeltitle,thumbnailImage=icon)
-			print "normal item"
+			li = xbmcgui.ListItem(label=channelTitle, thumbnailImage=icon)
 
 		li.setProperty("mimetype", 'audio/aac')
+		li.setInfo( type="Music", infoLabels={ "label": channelTitle, "Genre": channelTitle, "Comment": streamDescription, "Size": (streamBitrate * 1024) })
 		li.setProperty("IsPlayable", "true")
 		li.setProperty("IsLive", "true")
-		li.setInfo('audio', { "title": channeltitle, "size": int(streambitrate)*1024 })
-		xbmcplugin.addDirectoryItem(handle=HANDLE, url=streamurl, listitem=li, isFolder=False)
 
+		xbmcplugin.addDirectoryItem(handle=HANDLE, url=streamUrl, listitem=li, isFolder=False)
+		
 		return True
 
+	
+	"""return string
+	Gets the first stream from a playlist
+	"""
+	def getFirstStream( self, playlistUrl, regex ) :
+		plsData = self._httpComm.get( playlistUrl )
 
-	# Will check if Streamart/icon is present on disk - if not, try to download
-	def getStreamicon(self, iconpath, iconurl) :
-		global NEWSTREAMS
-		global LABELCOLOR
+		streamurls = regex.findall(plsData)
+		
+		return streamurls[0]
+	
 
-		if not os.path.exists(ART_DIR): # if dir for channel art is missing, create it
-        		os.makedirs(ART_DIR)
-
-		if (not os.path.isfile(iconpath) and iconurl) :
-			HTTPCOMM.getImage( iconurl, iconpath )
-			if not os.path.exists(iconpath) and not os.path.isfile(iconpath) : # fallback to plugin icon, if still no channel art
-				LABELCOLOR = 'FF0000'
-				return False
-			else :
-				LABELCOLOR = 'FFA800'
-				NEWSTREAMS += 1
-		elif (not os.path.exists(iconpath) and not os.path.isfile(iconpath) ) :
-			NEWSTREAMS -= 1
-			xbmc.log( 'Icon not found cached: ' + iconpath, xbmc.LOGWARNING )
+	"""return bool
+	Checks if a file is older than x seconds
+	"""
+	def checkFileTime( self, tmpfile, cachedir, timesince ) :
+		if not os.path.exists( cachedir ) :
+			os.makedirs( cachedir )
 			return False
-		return True
-
-
-	# Checks if a file is older than x seconds - returns bool
-	def checkFileTime(self, tmpfile, timesince):
+		
 		# If file exists, check timestamp
-		if os.path.isfile(tmpfile) :
-			if os.path.getmtime(tmpfile) > (time.time() - timesince) :
-				xbmc.log( 'It has not been ' + str(timesince) + ' seconds since last pagehit, using cache', xbmc.LOGNOTICE )
+		if os.path.exists( tmpfile ) :
+			if os.path.getmtime( tmpfile ) > ( time.time() - timesince ) :
+				xbmc.log( 'It has not been ' + str( timesince/60 ) + ' minutes since ' + tmpfile + ' was last updated', xbmc.LOGNOTICE )
 				return False
 			else :
-				xbmc.log( 'Cache has expired - refreshing cache', xbmc.LOGNOTICE )
+				xbmc.log( 'The cachefile ' + tmpfile + ' + has expired', xbmc.LOGNOTICE )
 				return True
 		# If file does not exist, return true so the file will be created by scraping the page
 		else :
-			xbmc.log( 'Cachefile does not exist', xbmc.LOGNOTICE )
+			xbmc.log( 'The cachefile ' + tmpfile + ' does not exist', xbmc.LOGNOTICE )
 			return True
 
-Main()
+			
+MusicAddonInstance = musicAddonXbmc()
+MusicAddonInstance.start()

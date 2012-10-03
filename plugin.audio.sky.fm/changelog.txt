@@ -2,6 +2,20 @@
 * Fixed/improved feature
 - Removed feature
 
+
+2 October 2012 v2.0.0
++ Added Premium support
++ Added favorites support
++ Added an indication of what quality the stream is, shown as i.e: 64 kb
+* Using Di.fms own JSON data to get stream addresses
+* Complete rewrite of the codebase, making it more modular and generally awesomer
+* Changed the highlight color of new channels from orange to blue, as the "currently playing" channel is orange in the default skin for Eden
+* Changed default refresh rate from 360 (6 hours) to 720 hours (12 hours)
+- Not scraping the the HTML any more using regexs to scavenge for streams
+
+Thanks to Daniel Connelly for making me aware of the JSON data and for being my willing guinea pig ;)
+
+
 27 May 2012 v1.0.0
 + Initial release
 + Support for public/free streams

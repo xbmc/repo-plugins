@@ -381,6 +381,10 @@ def playvideo(video):
         _video = video + "?quality=1"
     elif quality == "TV" or quality == "2":
         _video = video + "?quality=3"
+    elif quality == "720p" or quality == "3":
+        _video = video + "?quality=4"
+    elif quality == "1080p" or quality == "4":
+        _video = video + "?quality=5"
     else:
         _video = video
 

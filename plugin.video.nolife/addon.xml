@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.nolife"
        name="Nolife Online"
-       version="0.11"
+       version="0.12"
        provider-name="gormux">
   <requires>
     <import addon="xbmc.python" version="1.0"/>

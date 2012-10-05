@@ -1,3 +1,6 @@
+Version 2.0.4
+updated to reflect website changes
+
 Version 2.0.3
 fix for changes to the common cache plugin
 added a play mode for video directories

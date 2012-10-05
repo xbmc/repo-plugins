@@ -1,4 +1,4 @@
-import re, sys
+import re, sys, time
 
 from xml.dom import minidom
 
@@ -20,20 +20,30 @@ class tvnz:
   self.urls['episodes'] = '_episodes_group'
   self.urls['extras'] = '_extras_group'
   self.urls['playerKey'] = 'AQ~~,AAAA4FQHurk~,l-y-mylVvQmMeQArl3N6WrFttyxCZNYX'
-  #self.urls['playerKey'] = 'AQ%7E%7E%2CAAAA4FQHurk%7E%2Cl-y-mylVvQmMeQArl3N6WrFttyxCZNYX'
   self.urls['publisherID'] = 963482467001
+  
 # http://tvnz.co.nz/video
-  #self.urls['const'] = 'f86d6617a68b38ee0f400e1f4dc603d6e3b4e4ed'
-  #self.urls['playerID'] = 1029272630001
+  self.urls['const'] = 'f86d6617a68b38ee0f400e1f4dc603d6e3b4e4ed'
+  self.urls['experienceID'] = 1029272630001
+  self.urls['playerID'] = str(self.urls['experienceID'])
+  
 # http://tvnz.co.nz/ondemand/xl
-  self.urls['const'] = 'c533b8ff14118661efbd88d7be2520a0427d3b62'
-  self.urls['playerID'] = 1257248093001
+  self.urls['const_PS3'] = 'c533b8ff14118661efbd88d7be2520a0427d3b62'
+  self.urls['const2_PS3'] = '2823513dd61191c88af73bcacb66fd8e5d7d79bc'
+  self.urls['experienceID_PS3'] = 1257248093001
+  
   self.urls['PS3'] = 'http://tvnz.co.nz/ondemand/xl'
+  #self.urls['PS3'] = 'http://tvnz.co.nz/stylesheets/ps3/entertainment/flash/ps3Flash.swf'
   self.urls['contentID'] = 'http://tvnz.co.nz/ondemand/xl'
   #self.urls['contentID'] = 'http://tvnz.co.nz/ondemand/xl&dynamicStreaming=true&isSlim=true&isSlim=1?smoothing=true&playerHeight=512&playerWidth=640&videoSmoothing=true'
-  #self.urls['PS3'] = 'http://tvnz.co.nz/stylesheets/ps3/entertainment/flash/ps3Flash.swf'
-  self.urls['swfUrl'] = 'http://admin.brightcove.com/viewer/us20120920.1336/federatedSlim/BrightcovePlayer.swf'
+  self.urls['swfUrl'] = 'http://admin.brightcove.com/viewer/us20120920.1336/federatedVideoUI/BrightcovePlayer.swf'
+  self.urls['swfUrl_PS3'] = 'http://admin.brightcove.com/viewer/us20120920.1336/federatedSlim/BrightcovePlayer.swf?uid=' + str(long(time.time() * 1000))
+  #self.urls['swfUrl_PS3'] = 'http://admin.brightcove.com/viewer/us20120920.1336/federatedSlim/BrightcovePlayer.swf'
+  #self.urls['swfUrl_PS3'] = 'http://c.brightcove.com/services/viewer/federated_f9?&playerWidth=640&playerHeight=512&dynamicStreaming=true&isSlim=true&playerKey=AQ%7E%7E%2CAAAA4FQHurk%7E%2Cl-y-mylVvQmMeQArl3N6WrFttyxCZNYX&playerID=1257248093001&videoSmoothing=true&isSlim=1?smoothing=true'
+  #self.urls['swfUrl_PS3'] = 'http://tvnz.co.nz/stylesheets/ps3/entertainment/flash/ps3Flash.swf'
 
+  self.PS3 = True
+  self.IOS = True
   self.bitrate_min = 400000
   self.xbmcitems = tools.xbmcItems(self.channel)
   self.prefetch = False
@@ -54,12 +64,6 @@ class tvnz:
     return document.documentElement
   sys.stderr.write("No XML Data")
   return False
-
- #def index(self):
- # from brightcove import api
- # brightcove = api.Brightcove(self.urls['playerKey'])
- # print brightcove.find_all_videos().items[0]
-
 
  def index(self):
   page = webpage(self.url("ps3_navigation")) # http://tvnz.co.nz/content/ps3_navigation/ps3_xml_skin.xml
@@ -124,17 +128,25 @@ class tvnz:
    if xml:
     #for ep in xml.getElementsByTagName('Episode').extend(xml.getElementsByTagName('Extra')):
     #for ep in map(xml.getElementsByTagName, ['Episode', 'Extra']):
+    count = xml.getElementsByTagName('Episode').length
     for ep in xml.getElementsByTagName('Episode'):
      item = self._episode(ep)
      if item:
       self.xbmcitems.items.append(item)
+      if self.prefetch:
+       self.xbmcitems.add(count)
     for ep in xml.getElementsByTagName('Extras'):
      item = self._episode(ep)
      if item:
       self.xbmcitems.items.append(item)
-    self.xbmcitems.sorting.append("DATE")
-    self.xbmcitems.type = "episodes"
-    self.xbmcitems.addall()
+    #self.xbmcitems.sorting.append("DATE")
+    #self.xbmcitems.type = "episodes"
+    #self.xbmcitems.addall()
+    if self.prefetch:
+     self.xbmcitems.sort()
+    else:
+     self.xbmcitems.addall()
+
 
  def firstepisode(self, id):
   page = webpage(self.url(id + self.urls['episodes']))
@@ -199,49 +211,41 @@ class tvnz:
   item.urls = self._geturls(id)
   self.xbmcitems.resolve(item, self.channel)
 
- def _geturlsold(self, id):
-  page = webpage("/".join((self.urls['base'], self.urls['content'], id, self.urls['play'])))
-  if page.doc:
-   xml = self._xml(page.doc)
-   if xml:
-    urls = dict()
-    for chapter in xml.getElementsByTagName('seq'):
-     for video in chapter.getElementsByTagName('video'):
-      bitrate = int(video.attributes["systemBitrate"].value)
-      urls[bitrate] = list()
-    for chapter in xml.getElementsByTagName('seq'):
-     for video in chapter.getElementsByTagName('video'):
-      bitrate = int(video.attributes["systemBitrate"].value)
-      url = video.attributes["src"].value
-      if url[:7] == 'http://': # easy case - we have an http URL
-       urls[bitrate].append(url)
-       #print "HTTP URL: " + url
-#      elif url[:5] == 'rtmp:': # rtmp case
-#       rtmp_url = "rtmpe://fms-streaming.tvnz.co.nz/tvnz.co.nz"
-#       playpath = " playpath=" + url[5:]
-#       flashversion = " flashVer=MAC%2010,0,32,18"
-#       swfverify = " swfurl=http://tvnz.co.nz/stylesheets/tvnz/entertainment/flash/ondemand/player.swf swfvfy=true"
-#       conn = " conn=S:-720"
-#       urls[bitrate].append(url)
-       #print "RTMP URL: " + rtmp_url + playpath + flashversion + swfverify + conn
-    if len(urls) > 0:
-     return urls
-    experienceID = int(re.compile(';sid=([0-9]+);').findall(page.doc)[0])
-    contentURL = "http://tvnz.co.nz/" + xml.getElementsByTagName('meta')[0].attributes['content'].value.split('/')[0] + "/video"
-    rtmpdata = self.get_clip_info(int(id), experienceID, contentURL)
-    print rtmpdata['programmedContent']['videoPlayer']['mediaDTO']['renditions'][0]['defaultURL']
-    #self.xbmcitems.message("Sorry, TVNZ RTMP URLs are not supported yet")
-   else:
-    sys.stderr.write("_geturls: No xml")
-  else:
-   sys.stderr.write("_geturls: No page.doc")
-
  def _geturls(self, id):
-  rtmpdata = self.get_clip_info(int(id), 12345, self.urls['contentID'])
-  #print rtmpdata['programmedContent']['videoPlayer']['mediaDTO']['renditions'][0]['defaultURL']
-  #print rtmpdata['configuredProperties']['videoPlayer']['mediaDTO']['renditions'][0]['defaultURL']
+  urls = dict()
+  if self.PS3:
+   rtmpdata = self.get_clip_info_ps3(int(id))
+   for rendition in rtmpdata:
+    if self.IOS:
+     urls[rendition["encodingRate"]] = 'hls+' + rendition["defaultURL"]
+     #urls[rendition["encodingRate"]] = 'apple' + rendition["defaultURL"]
+    else:
+     urls[rendition["encodingRate"]] = rendition["defaultURL"] + ' swfVfy=true swfUrl=' + self.urls['swfUrl_PS3']
+  else:
+   rtmpdata = self.get_clip_info(int(id), 'http://tvnz.co.nz/beyond-the-darklands/s5-ep4-video-5091613')
+   for rendition in rtmpdata:
+    urls[rendition["encodingRate"]] = rendition["defaultURL"] + ' swfUrl=' + self.urls['swfUrl_PS3']
+  return urls
 
- def get_clip_info(self, contentID, experienceID, url):
+ def _printResponse(self, env, response):
+  import pprint
+  pp = pprint.PrettyPrinter()
+  print "pprint env:"
+  pp.pprint(env)
+  print "pprint env.bodies:"
+  pp.pprint(env.bodies)
+  print "pprint response:"
+  pp.pprint(response)
+  print "pprint programmedContent:"
+  pp.pprint(response['programmedContent'])
+  print "pprint videoPlayer:"
+  pp.pprint(response['programmedContent']['videoPlayer'])
+  print "pprint mediaDTO:"
+  pp.pprint(response['programmedContent']['videoPlayer']['mediaDTO'])
+  print "pprint renditions:"
+  pp.pprint(response['programmedContent']['videoPlayer']['mediaDTO']['renditions'])
+
+ def get_clip_info(self, contentID, url):
   import pyamf
   #from pyamf import register_class
   from pyamf import remoting
@@ -249,36 +253,30 @@ class tvnz:
   conn = httplib.HTTPConnection("c.brightcove.com")
   pyamf.register_class(ViewerExperienceRequest, 'com.brightcove.experience.ViewerExperienceRequest')
   pyamf.register_class(ContentOverride, 'com.brightcove.experience.ContentOverride')
-  content_override = ContentOverride(contentID)
-  #viewer_exp_req = ViewerExperienceRequest(self.urls['PS3'], [content_override], contentID, self.urls['playerKey'])
-  viewer_exp_req = ViewerExperienceRequest(url, [content_override], contentID, self.urls['playerKey'])
+  viewer_exp_req = ViewerExperienceRequest(url, [ContentOverride(contentID)], self.urls['experienceID'], "")
   env = remoting.Envelope(amfVersion = 3)
-  #env.bodies.append(("/1",  remoting.Request(target = "com.brightcove.player.runtime.PlayerMediaFacade.findMediaById", body = [self.urls['const'], self.urls['playerID'], contentID, self.urls['publisherID']], envelope = env)))
-  #env.bodies.append(("/1",  remoting.Request(target = "com.brightcove.experience.ExperienceRuntimeFacade.getProgrammingWithOverrides", body = [self.urls['const'], self.urls['playerID'], [content_override]], envelope = env)))
   env.bodies.append(("/1",  remoting.Request(target = "com.brightcove.experience.ExperienceRuntimeFacade.getDataForExperience", body = [self.urls['const'], viewer_exp_req], envelope = env)))
-  #env.bodies.append(("/1",  remoting.Request(target = "com.brightcove.experience.ExperienceRuntimeFacade.getDataForExperience", body = [self.urls['const'], self.urls['playerID'], contentID, self.urls['publisherID']], envelope = env)))
-  #print remoting.encode(env)
-  conn.request("POST", "/services/messagebroker/amf?playerKey=" + self.urls['playerKey'], str(remoting.encode(env).read()), {'content-type': 'application/x-amf'})
-  #conn.request("POST", "/services/messagebroker/amf?playerID=" + str(self.urls['playerID']), str(remoting.encode(env).read()), {'content-type': 'application/x-amf'})
+  #conn.request("POST", "/services/messagebroker/amf?playerKey=" + self.urls['playerKey'], str(remoting.encode(env).read()), {'content-type': 'application/x-amf'})
+  conn.request("POST", "/services/messagebroker/amf?playerId=" + self.urls['playerID'], str(remoting.encode(env).read()), {'content-type': 'application/x-amf'})
   resp = conn.getresponse().read()
   response = remoting.decode(resp).bodies[0][1].body
-  import pprint
-  pp = pprint.PrettyPrinter()
-  print "pprint viewer_exp_req:"
-  pp.pprint(viewer_exp_req)
-  print "pprint env:"
-  pp.pprint(env)
-  print "pprint env.bodies:"
-  pp.pprint(env.bodies)
-  print "pprint resp:"
-  pp.pprint(resp)
-  print "pprint remoting.decode(resp):"
-  pp.pprint(remoting.decode(resp))
-  #print "print response"
-  #print response
-  #return response
-  #return remoting.decode(conn.getresponse().read()).bodies[0][1].body['configuredProperties']['videoPlayer']['mediaDTO']['renditions']
   return response['programmedContent']['videoPlayer']['mediaDTO']['renditions']
+
+ def get_clip_info_ps3(self, contentID):
+  import pyamf
+  #from pyamf import register_class
+  from pyamf import remoting
+  import httplib
+  conn = httplib.HTTPConnection("c.brightcove.com")
+  env = remoting.Envelope(amfVersion = 3)
+  env.bodies.append(("/1",  remoting.Request(target = "com.brightcove.player.runtime.PlayerMediaFacade.findMediaByReferenceId", body = [self.urls['const2_PS3'], self.urls['experienceID_PS3'], str(contentID), self.urls['publisherID']], envelope = env)))
+  conn.request("POST", "/services/messagebroker/amf?playerKey=" + self.urls['playerKey'], str(remoting.encode(env).read()), {'content-type': 'application/x-amf'})
+  resp = conn.getresponse().read()
+  response = remoting.decode(resp).bodies[0][1].body
+  if self.IOS:
+   return response['IOSRenditions']
+  else:
+   return response['renditions']
 
  def advert(self, chapter):
   advert = chapter.getElementsByTagName('ref')

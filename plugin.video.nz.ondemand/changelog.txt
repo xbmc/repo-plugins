@@ -1,3 +1,6 @@
+[B]2.3.0[/B]
+- Added ChoiceTV
+
 [B]2.2.1[/B]
 - Disabled TVNZ, as this source is not currently working
 

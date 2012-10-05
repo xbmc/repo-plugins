@@ -71,12 +71,8 @@ def tv3():
    tv3.index(False)
 
 def tvnz():
- #import resources.channels.tvnz as tvnz
- #import resources.channels.tvnz
- #tvnz = resources.channels.tvnz.tvnz
  from resources.channels.tvnz import tvnz as tvnzclass
  tvnz = tvnzclass()
- #if params.get("type", "") == "":
  if params.get("info", "") != "":
   tvnz.play(params["id"][0], params["info"][0])
  elif not "type" in params:
@@ -93,6 +89,16 @@ def tvnz():
    tools.addsorting(["label"], "tvshows")
   elif params["type"][0] == "search":
    tvnz.search()
+
+def choicetv():
+ from resources.channels.choicetv import choicetv as choicetvclass
+ choicetv = choicetvclass()
+ if params.get("type", "") != "":
+  choicetv.index(params["type"][0], params["id"][0])
+ elif params.get("view", "") != "":
+  choicetv.play(params["view"][0])
+ else:
+  choicetv.index()
 
 def ziln():
  from resources.channels.ziln import ziln as zilnclass
@@ -140,12 +146,22 @@ if params:
    tv3()
   elif params["ch"][0] == "TVNZ":
    tvnz()
+  elif params["ch"][0] == "ChoiceTV":
+   choicetv()
   elif params["ch"][0] == "Ziln":
    ziln()
   elif params["ch"][0] == "NZOnScreen":
    nzonscreen()
 # elif params["ch"][0] == "iSKY":
+# https://www.skytv.co.nz/skyid/rest/login?skin=isky
+# POST:
+# email
+# password
 # elif params["ch"][0] == "Quickflix":
+# https://secure.quickflix.co.nz/Partial/Secure/Standard/Login
+# POST:
+# LoginEmail
+# LoginPassword
 # elif params["ch"][0] == "IGLOO":
   elif params["ch"][0] == "Prime":
    from resources.channels.prime import prime as primeclass
@@ -153,13 +169,13 @@ if params:
   else:
    sys.stderr.write("Invalid Channel ID")
 else:
- #channels = ["TV3", "TVNZ", "Prime", "NZOnScreen", "Ziln"]
  channels = dict()
  channels["TV3"] = "Latest TV On Demand video from both TV3 and FOUR."
  #channels["TVNZ"] = "Ready when you are."
  channels["Prime"] = "Prime News: First At 5:30 brings you the top news and sports stories from New Zealand and around the world."
  channels["NZOnScreen"] = "The online showcase of New Zealand television, film and music video."
  channels["Ziln"] = "Ziln links the audience reach of broadband internet with a potentially limitless amount of targetted live streaming and View On Demand TV/video content."
+ channels["ChoiceTV"] = "Choice TV's programming centres on entertainment, information and lifestyle content from around the world."
  xbmcitems = tools.xbmcItems()
  for channel, description in channels.iteritems():
   if not settings.getSetting('%s_hide' % channel) == "true":

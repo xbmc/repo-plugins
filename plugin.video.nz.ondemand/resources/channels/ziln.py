@@ -60,8 +60,8 @@ class ziln:
    if type == "search":
     type = "video"
    if len(programmes) > 0:
-    for programme in programmes:
-     list = programme.find('ul')
+    for program in programmes:
+     list = program.find('ul')
      if list:
       listitems = list.findAll('li')
       count = len(listitems)

@@ -235,7 +235,7 @@ class xbmcItems:
     pass
    item.info = sourceitem.info.copy()
    item.info['Title'] += " (" + str(bitrate) + " " + sourceitem.units + ")"
-   item.info['FileName'] = self.stack(url)
+   item.info['FileName'] = url
    #item.urls[bitrate] = (self.stack(url))
    self.items.append(item)
   self.addall()
@@ -281,12 +281,17 @@ class xbmcItems:
   return pickle.loads(urllib.unquote(todecode))
 
  def stack(self, urls): #Build a URL stack from multiple URLs for the XBMC player
-  if str(type(urls)) == "<type 'str'>":
+  if str(type(urls)) == "<type 'str'>" or str(type(urls)) == "<type 'unicode'>":
    return urls
   if len(urls) == 1:
    return urls[0]
   elif len(urls) > 1:
    return "stack://" + " , ".join([url.replace(',', ',,').strip() for url in urls])
+  return False
+
+ def booleansetting(self, setting):  
+  if settings.getSetting(setting) == 'true':
+   return True
   return False
 
  def message(self, message, title = "Warning"): #Show an on-screen message (useful for debugging)

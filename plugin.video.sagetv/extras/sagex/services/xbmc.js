@@ -10,6 +10,7 @@
 function GetTVMediaFilesWithSubsetOfProperties() {
    var shows = new java.util.ArrayList();
    var files =  MediaFileAPI.GetMediaFiles("T");
+   files = Database.Sort(files,true,"GetAiringStartTime")
    var s = files.length;
    for (var i=0;i<s;i++) {
       var mf = files[i];
@@ -57,6 +58,7 @@ function GetMediaFilesForShowWithSubsetOfProperties(showtitle) {
       show.put('SegmentFiles', MediaFileAPI.GetSegmentFiles(mf));
       show.put('WatchedDuration', AiringAPI.GetWatchedDuration(mf));
       show.put('IsWatched', AiringAPI.IsWatched(mf));
+      show.put('FileDuration', MediaFileAPI.GetFileDuration(mf));
       shows.add(show);
    }
    return shows;
@@ -89,6 +91,7 @@ function SearchForMediaFiles(searchterm) {
           show.put('SegmentFiles', MediaFileAPI.GetSegmentFiles(mf));
           show.put('WatchedDuration', AiringAPI.GetWatchedDuration(mf));
           show.put('IsWatched', AiringAPI.IsWatched(mf));
+          show.put('FileDuration', MediaFileAPI.GetFileDuration(mf));
           shows.add(show);
       }
    }
@@ -105,9 +108,8 @@ function GetTVMediaFilesGroupedByTitle() {
       if (shows==null) {
          shows = new java.util.ArrayList();
          grouped.put(file.get('ShowTitle'), shows);
-         // add full mediafile
+         shows.add(file);
       }
-      shows.add(file);
    }
    return grouped;
 }

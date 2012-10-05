@@ -1,3 +1,10 @@
+[B]Version 1.2.6 (Oct 1, 2012)[/B]
+- Updated playback path settings to require you to browse for it vs. free-text to ensure the path that is used for live TV playback is correctly formatted
+- Added resume/partially watched support (e.g. if you've started to watch a show in SageTV, XBMC will know this and prompt you if you want to resume at the same point in SageTV); note that this does NOT sync the progress or watched status from XBMC back to SageTV
+
+[B]Version 1.2.5 (Sep 25, 2012)[/B]
+- Workaround added for network path issues for LiveTV playback (for now)
+
 [B]Version 1.2.4 (Sep 25, 2012)[/B]
 - Fixed WOL support
 - Added sorting by date to "Watch Recordings"

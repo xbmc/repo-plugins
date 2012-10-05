@@ -7,7 +7,7 @@
     <setting id="sage_mac" type="text" label="20006" default="FF:FF:FF:FF:FF:FF"/>
     <setting type="sep" />
     <setting id="sage_rec" type="text" label="20004" default="E:\SageTV Recordings\" />
-    <setting id="sage_unc" type="folder" label="20005" default=""/>
+    <setting id="sage_unc" type="folder" label="20005" default="smb://localhost/SageTV Recordings/"/>
     <setting id="sage_rec2" enable="!eq(-1,)" type="text" label="20004" default="" />
     <setting id="sage_unc2" enable="!eq(-2,)" type="folder" label="20005" default=""/>
     <setting id="sage_rec3" enable="!eq(-1,)" type="text" label="20004" default="" />

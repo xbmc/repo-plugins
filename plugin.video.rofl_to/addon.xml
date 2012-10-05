@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rofl_to" name="Rofl.to" version="0.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="script.module.xbmcswift2" version="1.1.1" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>en de</language>
+    <platform>all</platform>
+    <summary lang="de">Luste Videos</summary>
+    <summary lang="en">Funny Videos</summary>
+    <description lang="de">Hier gibt es täglich neue Lustige Videos + Clips.</description>
+    <description lang="en">Daily updated funny videos + clips. Your #1 resource for fun videos.</description>
+  </extension>
+</addon>

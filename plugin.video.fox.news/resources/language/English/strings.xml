@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30001">Latest</string>
-  <string id="30002">On Air</string>
-  <string id="30003">Hot Topics</string>
-  <string id="30004">US</string>
-  <string id="30005">World</string>
-  <string id="30006">Politics</string>
-  <string id="30007">Entertainment</string>
-  <string id="30008">Travel</string>
-  <string id="30009">Leisure</string>
-  <string id="30010">Health</string>
-  <string id="30011">SciTech</string>
-  <string id="30012">Opinion</string>
-  <string id="30013">Sports</string>
-  <string id="30014">FNC iMag</string>
-  <string id="30015">High</string>
-  <string id="30016">Medium</string>
-  <string id="30017">Low</string>
-  <string id="30018">Video Quality</string>
-  <string id="30019">Play</string>
+  <string id="30001">Video Quality</string>
+  <string id="30002">High</string>
+  <string id="30003">Medium</string>
+  <string id="30004">Medium-Low</string>
+  <string id="30005">Low</string>
+  <string id="30006"></string>
+  <string id="30007"></string>
+  <string id="30008"></string>
+  <string id="30009"></string>
+  <string id="30010"></string>
 </strings>

@@ -12,7 +12,7 @@
         <setting id="showall" type="bool" label="33012" default="false"/>
         <setting id="show_n" subsetting="true" type="slider" label="33013" default="30" range="10,10,100" enable="!eq(-1,true)"/>
         <setting id="showseen" type="bool" label="33015" default="true"/>
-        <setting id="quality" type="enum" label="33014" values="LQ|HQ|TV" default="TV"/>
+        <setting id="quality" type="enum" label="33014" values="LQ|HQ|TV|720p|1080p" default="TV"/>
     </category>
 
 </settings>

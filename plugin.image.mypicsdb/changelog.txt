@@ -1,3 +1,6 @@
+2012/10/06 --> v 1.1.1
+Fix:    Two UTF-8 / Unicode conversion errors fixed.
+
 2012/09/10 --> v 1.1.0
 Update: Filter wizard now has a "not" function. 
         Green checkbox -> picture must contain the tag

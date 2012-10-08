@@ -858,7 +858,7 @@ class Main:
                     if dialog.yesno(__language__(30000),__language__(30206)):#do a scan now ?
                         xbmc.executebuiltin( "RunScript(%s,%s--rootpath=%s)"%( join( home, "scanpath.py"),
                                                                                recursive and "-r, " or "",
-                                                                               quote_plus(newroot.encode('utf-8'))
+                                                                               quote_plus(newroot)
                                                                               )
                                            )
 
@@ -966,7 +966,7 @@ class Main:
 
             #Show excluded folders
             for path,recursive,update in excludefolders:
-                self.addAction(name      = "[COLOR=FFFF0000][B][ - ][/B][/COLOR] "+path.decode("utf8"),
+                self.addAction(name      = "[COLOR=FFFF0000][B][ - ][/B][/COLOR] "+path,
                             params    = [("do","rootclic"),("rootpath",path),("viewmode","view"),("exclude","1")],#paramètres
                             action    = "rootfolders",#action
                             iconimage = join(PIC_PATH,"settings.png"),#icone

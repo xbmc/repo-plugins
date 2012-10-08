@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon
-  id="plugin.image.mypicsdb" version="1.1.0" name="My Pictures Database" provider-name="Alexsolex, Xycl, MikeBZH44">
+  id="plugin.image.mypicsdb" version="1.1.1" name="My Pictures Database" provider-name="Alexsolex, Xycl, MikeBZH44">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
     <import addon="script.module.dialogaddonscan" version="1.1.0"/>

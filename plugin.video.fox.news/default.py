@@ -17,7 +17,7 @@ __language__ = __settings__.getLocalizedString
 home = __settings__.getAddonInfo('path')
 icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
 cache = StorageServer.StorageServer("foxnews", 24)
-quality = __settings__.getSetting('video_quality')
+quality = __settings__.getSetting('quality')
 
 
 def make_request(url, headers=None):

@@ -1,3 +1,6 @@
+Version 2.0.5
+fix for setting type change
+
 Version 2.0.4
 updated to reflect website changes
 

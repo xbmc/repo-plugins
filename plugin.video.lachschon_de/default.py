@@ -1,18 +1,30 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
+xbox = xbmc.getCondVisibility("System.Platform.xbox")
+addon = xbmcaddon.Addon(id='plugin.video.lachschon_de')
+translation = addon.getLocalizedString
 
-settings = xbmcaddon.Addon(id='plugin.video.lachschon_de')
-translation = settings.getLocalizedString
+forceViewMode=addon.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(addon.getSetting("viewMode"))
 
 def index():
-        addDir(translation(30001),"http://www.lachschon.de/gallery/trend/?set_gallery_type=video&set_image_type=small&page=1",1,"")
-        addDir(translation(30002),"http://www.lachschon.de/gallery/top/?set_gallery_type=video&set_image_type=small&page=1",1,"")
-        addDir(translation(30003),"http://www.lachschon.de/gallery/random/?set_gallery_type=video&set_image_type=small&page=1",1,"")
-        addDir(translation(30004),"SEARCH",3,"")
+        addDir(translation(30005),"http://www.lachschon.de/gallery/new/?set_gallery_type=video&set_image_type=small&page=1","listVideos","")
+        addDir(translation(30001),"http://www.lachschon.de/gallery/trend/?set_gallery_type=video&set_image_type=small&page=1","listVideos","")
+        addDir(translation(30002),"http://www.lachschon.de/gallery/top/?set_gallery_type=video&set_image_type=small&page=1","listVideos","")
+        addDir(translation(30007),"http://www.lachschon.de/gallery/mostvoted/?set_gallery_type=video&set_image_type=small&page=1","listVideos","")
+        addDir(translation(30003),"http://www.lachschon.de/gallery/random/?set_gallery_type=video&set_image_type=small&page=1","listVideos","")
+        addDir(translation(30004),"SEARCH","search","")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def search():
         keyboard = xbmc.Keyboard('', str(translation(30004)))
@@ -23,11 +35,10 @@ def search():
 
 def listVideos(url):
         content = getUrl(url)
+        match=re.compile('<a class="direction forward" href="\\?page=(.+?)">weiter <', re.DOTALL).findall(content)
         urlNextPage=""
-        if content.find('">weiter <')>=0:
-          nextPage=content[content.find('<a class="direction" href="?page=')+33:]
-          nextPage=nextPage[:nextPage.find('"')]
-          urlNextPage=url[:url.find("&page=")]+"&page="+nextPage
+        if len(match)>0:
+          urlNextPage=url[:url.find("&page=")]+"&page="+match[0]
         content = content[content.find('<ul id="itemlist">'):content.find('<p class="advert-notice">')]
         spl=content.split('<li>')
         for i in range(1,len(spl),1):
@@ -36,32 +47,43 @@ def listVideos(url):
             url=match[0]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
-            match=re.compile('<span class="subtitle">(.+?)</span>', re.DOTALL).findall(entry)
-            title=match[0]
+            match=re.compile('<span class="rating">(.+?)</span>', re.DOTALL).findall(entry)
+            rating=-1
+            if len(match)>0:
+              rating=int(int(match[0].replace(".",""))/10)
+            match=re.compile('class="title" href="(.+?)"(.+?)title="(.+?)">(.+?)\n', re.DOTALL).findall(entry)
+            title=match[0][3]
             title=cleanTitle(title)
-            addLink(title,"http://www.lachschon.de"+url,2,thumb)
+            if rating!=-1:
+              title=title+" ("+str(rating)+"%)"
+            addLink(title,"http://www.lachschon.de"+url,"playVideo",thumb)
         if urlNextPage!="":
-          addDir("Next Page",urlNextPage,1,'')
+          addDir(translation(30006),urlNextPage,"listVideos",'')
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
         content = getUrl(url)
-        id=content[content.find('http://www.youtube.com/embed/')+29:]
-        id=id[:id.find('?')]
-        fullData = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + id
+        youtubeID=content[content.find('http://www.youtube.com/embed/')+29:]
+        youtubeID=youtubeID[:youtubeID.find('?')]
+        if xbox==True:
+          fullData = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + youtubeID
+        else:
+          fullData = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + youtubeID
         listitem = xbmcgui.ListItem(path=fullData)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
-        title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&#39;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
+        title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","'").replace("&#39;","'").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
         title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
         title=title.strip()
         return title
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:14.0) Gecko/20100101 Firefox/14.0.1')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link
@@ -95,25 +117,16 @@ def addDir(name,url,mode,iconimage):
         return ok
          
 params=parameters_string_to_dict(sys.argv[2])
-url=None
-mode=None
+mode=params.get('mode')
+url=params.get('url')
+if type(url)==type(str()):
+  url=urllib.unquote_plus(url)
 
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        mode=int(params["mode"])
-except:
-        pass
-
-
-if mode==None or url==None or len(url)<1:
-        index()
-       
-elif mode==1:
-        listVideos(url)
-elif mode==2:
-        playVideo(url)
-elif mode==3:
-        search()
+if mode == 'listVideos':
+    listVideos(url)
+elif mode == 'playVideo':
+    playVideo(url)
+elif mode == 'search':
+    search()
+else:
+    index()

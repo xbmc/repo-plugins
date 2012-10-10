@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30001">Extras</string>
-  <string id="30002">Alle Extras</string>
+    <string id="30001">TV-Magazin</string>
+    <string id="30002">Pantoffelkino-TV (alte Folgen)</string>
+    <string id="30003">Folge {episode} vom {date}</string>
+    <string id="30004">Alte Folgen</string>
+    <string id="30005">Extras: Alle Extras</string>
+    <string id="30006">Extras: Aktuell im Gespräch</string>
+    <string id="30007">Extras: Schlechte Filme TV</string>
+    <string id="30008">Extras: Pantoffelkino-TV out-takes</string>
+    <string id="30009">Postecke</string>
+    <string id="30010">Postecke (Audioversion)</string>
+    
+    <string id="30100">Couch-Einstellungen</string>
+    <string id="30101">FKTV-Couch nutzen</string>
+    <string id="30102">Benutzername</string>
+    <string id="30103">Passwort</string>
 </strings>

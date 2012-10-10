@@ -2,18 +2,19 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
-settings = xbmcaddon.Addon(id='plugin.video.southpark_de')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.southpark_de')
+translation = addon.getLocalizedString
 
-language=settings.getSetting("language")
-forceViewMode=settings.getSetting("forceViewMode")
+language=addon.getSetting("language")
+forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
 else:
   forceViewMode=False
-viewMode=str(settings.getSetting("viewMode"))
+viewMode=str(addon.getSetting("viewMode"))
 
 if language=="0":
   language=""
@@ -22,12 +23,15 @@ elif language=="1":
 
 def index():
         addLink(translation(30003),"",'playRandom',"","")
-        content = getUrl("http://www.southpark.de/alleEpisoden/")
-        content = content[content.find('<div id="content_epfinder"'):]
-        content = content[:content.find('<div class="content_carouselwrap">')]
+        content = getUrl("http://www.southpark.de/alle-episoden")
+        content = content[content.find('content_epfinder'):]
+        content = content[:content.find('content_carouselwrap')]
+        match=re.compile('data-promoId="(.+?)"', re.DOTALL).findall(content)
+        promoId=match[0]
         match=re.compile('href="(.+?)">(.+?)</a>', re.DOTALL).findall(content)
         for url, staffel in match:
-          addDir(str(translation(30001))+" "+staffel,"http://www.southpark.de"+url,'listVideos',"")
+          if url.find("/random")==-1:
+            addDir(str(translation(30001))+" "+staffel,"http://www.southpark.de/feeds/full-episode/carousel/"+staffel+"/"+promoId,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -38,59 +42,60 @@ def playRandom():
         i=1
         for i in range(1,100,1):
           if xbox==True:
-            url="plugin://video/SouthPark.de/?url=http://www.southpark.de/alleEpisoden/random/&mode=playVideo"
+            url="plugin://video/SouthPark.de/?url=http://www.southpark.de/alle-episoden/random&mode=playVideo"
           else:
-            url="plugin://plugin.video.southpark_de/?url=http://www.southpark.de/alleEpisoden/random/&mode=playVideo"
+            url="plugin://plugin.video.southpark_de/?url=http://www.southpark.de/alle-episoden/random&mode=playVideo"
           listitem = xbmcgui.ListItem("South Park: "+translation(30003)+" "+str(i))
           i=i+1
           playlist.add(url,listitem)
 
 def listVideos(url):
+        xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
         content = getUrl(url)
-        match=re.compile('<li><span>(.+?)</span></li>', re.DOTALL).findall(content)
-        season=match[0]
-        spl=content.split('<li class="grid_item">')
+        spl=content.split('title:')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('<span class="title eptitle">(.+?)</span>', re.DOTALL).findall(entry)
+            match=re.compile("'(.+?)',", re.DOTALL).findall(entry)
             title=match[0]
             title=cleanTitle(title)
-            match=re.compile('<span class="epnumber">(.+?)</span>', re.DOTALL).findall(entry)
+            match=re.compile("episodenumber:'(.+?)'", re.DOTALL).findall(entry)
             episode=match[0]
-            match=re.compile('<span class="epdesc">(.+?)</span>', re.DOTALL).findall(entry)
+            nr="S"+episode[0:2]+"E"+episode[2:4]
+            match=re.compile("description:'(.+?)'", re.DOTALL).findall(entry)
             desc=match[0]
-            match=re.compile('href="/alleEpisoden/(.+?)/"', re.DOTALL).findall(entry)
-            url="http://www.southpark.de/alleEpisoden/"+match[0]+"/"
-            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            match=re.compile("url:'(.+?)'", re.DOTALL).findall(entry)
+            url=match[0]
+            match=re.compile("thumbnail:'(.+?)'", re.DOTALL).findall(entry)
             thumb=match[0]
-            addLink(episode+" - "+title,url,'playVideo',thumb,desc)
+            thumb=thumb[:thumb.find("?")]
+            addLink(nr+" - "+title,url,'playVideo',thumb,desc)
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
         content = getUrl(url)
-        matchTitle=re.compile('<meta name="title" content="(.+?)"', re.DOTALL).findall(content)
-        matchDesc=re.compile('<meta name="description" content="(.+?)"', re.DOTALL).findall(content)
-        match=re.compile(':southparkstudios.de:(.+?)"', re.DOTALL).findall(content)
+        matchTitle=re.compile('<h1>(.+?)</h1>', re.DOTALL).findall(content)
+        matchDesc=re.compile('<h2>(.+?)</h2>', re.DOTALL).findall(content)
+        match=re.compile('http://media.mtvnservices.com/mgid:arc:episode:southpark.de:(.+?)"', re.DOTALL).findall(content)
         if len(match)>0:
-          content = getUrl("http://www.southpark.de/feeds/video-player/mrss/mgid%3Ahcx%3Acontent%3Asouthparkstudios.de%3A"+match[0]+"?lang="+language)
+          content = getUrl("http://www.southpark.de/feeds/video-player/mrss/mgid%3Aarc%3Aepisode%3Asouthpark.de%3A"+match[0]+"?lang="+language)
           spl=content.split('<item>')
           urlFull="stack://"
           for i in range(1,len(spl),1):
               entry=spl[i]
-              match=re.compile('<media:content url="(.+?)"', re.DOTALL).findall(entry)
-              url=match[0]
+              match=re.compile('<media:content type="text/xml" medium="video" duration="(.+?)" isDefault="true" url="(.+?)"', re.DOTALL).findall(entry)
+              url=match[0][1].replace("&amp;","&")
               content = getUrl(url)
-              matchMp4=re.compile('bitrate="(.+?)" width="(.+?)" height="(.+?)" type="video/mp4">\n<src>(.+?)</src>', re.DOTALL).findall(content)
-              matchFlv=re.compile('bitrate="(.+?)" width="(.+?)" height="(.+?)" type="video/x-flv">\n<src>(.+?)</src>', re.DOTALL).findall(content)
+              matchMp4=re.compile('width="(.+?)" height="(.+?)" type="video/mp4" bitrate="(.+?)">(.+?)<src>(.+?)</src>', re.DOTALL).findall(content)
+              matchFlv=re.compile('width="(.+?)" height="(.+?)" type="video/x-flv" bitrate="(.+?)">(.+?)<src>(.+?)</src>', re.DOTALL).findall(content)
               urlNew=""
               bitrate=0
               if len(matchMp4)>0:
                 match=matchMp4
               elif len(matchFlv)>0:
                 match=matchFlv
-              for br,temp1,temp2,url in match:
+              for temp1,temp2,br,temp3,url in match:
                 if int(br)>bitrate:
                   bitrate=int(br)
                   urlNew=url
@@ -113,17 +118,13 @@ def playVideo(url):
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
         title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
-        title=title.strip()
+        title=title.replace("\\'","'").strip()
         return title
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20100101 Firefox/15.0.1')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

@@ -5,6 +5,6 @@
   <string id="30003">Random</string>
   <string id="30004">Episode is not available</string>
   <string id="30101">Language</string>
-  <string id="30102">Force ViewMode</string>
-  <string id="30103">ViewMode</string>
+  <string id="30102">Force View</string>
+  <string id="30103">ViewID</string>
 </strings>

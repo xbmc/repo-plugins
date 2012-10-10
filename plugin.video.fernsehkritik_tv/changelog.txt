@@ -5,3 +5,4 @@
 1.0.4 - Fixed newest TV-Magazin Episode
 1.0.5 - Various fixes and optical optimizations
 1.0.6 - Fixed missing TV-Magazin episodes
+1.1.0 - Support for FKTV Couch, added MP3 and MOV feed for Postecke (currently Couch users only)

@@ -8,3 +8,5 @@
 - Fixed playback for older videos
 1.0.4
 - Added setting for maximum bitrate
+1.0.5
+- Fixed site changes

@@ -4,17 +4,17 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,httplib,socket,
 
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-settings = xbmcaddon.Addon(id='plugin.video.cbsnews_com')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.cbsnews_com')
+translation = addon.getLocalizedString
 
-forceViewMode=settings.getSetting("forceViewMode")
+forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
 else:
   forceViewMode=False
-viewMode=str(settings.getSetting("viewMode"))
+viewMode=str(addon.getSetting("viewMode"))
 
-maxBitRate=settings.getSetting("maxBitRate")
+maxBitRate=addon.getSetting("maxBitRate")
 qual=[500,1000,1500,2000,3000]
 maxBitRate=qual[int(maxBitRate)]
 
@@ -24,7 +24,7 @@ def index():
         for i in range(1,len(spl),1):
             entry=spl[i]
             match=re.compile('"(.+?)"', re.DOTALL).findall(entry)
-            nextUrl="http://www.cbsnews.com"+match[0]
+            nextUrl=match[0]
             match=re.compile('nodeid="(.+?)"', re.DOTALL).findall(entry)
             match2=re.compile('nodeId="(.+?)"', re.DOTALL).findall(entry)
             if len(match)>0:
@@ -127,9 +127,9 @@ def listVideos(url):
         matchPage2=re.compile('<li class="next" section="next"><a href="(.+?)" rel="next">', re.DOTALL).findall(content)
         urlNext=""
         if len(matchPage)>0:
-          urlNext="http://www.cbsnews.com"+matchPage[0]
+          urlNext=matchPage[0]
         if len(matchPage2)>0:
-          urlNext="http://www.cbsnews.com"+matchPage2[0]
+          urlNext=matchPage2[0]
         if urlNext!="":
           if urlNext.find("/video//")>=0:
             urlNext=urlNext.replace("/video//","/video/"+tempTitle+"/")

@@ -1,2 +1,5 @@
+0.0.2
+- Bump for repo
+
 0.0.1 (unreleased)
  - Initial Release

@@ -16,13 +16,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # http://www.gnu.org/copyleft/gpl.html
 
-from xbmcswift import xbmcgui
+from xbmcswift import xbmcgui, xbmc
 from resources.lib.eyetv_parser import Eyetv
 from resources.lib.eyetv_live import EyetvLive
 from config import plugin
 
 
 BIT_RATE = ('320', '800', '1200', '2540', '4540')
+
 
 def create_eyetv_live():
     """Return an Eyetvlive instance initialized with proper settings
@@ -39,16 +40,27 @@ def create_eyetv_live():
         password = ''
     return EyetvLive(server, bitrate, password)
 
+
 @plugin.route('/', default=True)
 def show_homepage():
-    """Default view showing available categories"""
-    items = [
-        # Live TV
-        {'label': plugin.get_string(30020), 'url': plugin.url_for('live_tv')},
-        # Recordings
-        {'label': plugin.get_string(30021), 'url': plugin.url_for('show_recordings')},
-    ]
-    return plugin.add_items(items)
+    """Default view showing enabled categories"""
+    livetv = plugin.get_setting('livetv')
+    recordings = plugin.get_setting('recordings')
+    if livetv == 'true' and recordings != 'true':
+        return live_tv()
+    elif livetv != 'true' and recordings == 'true':
+        return show_recordings()
+    else:
+        # Show both categories if they are both enabled
+        # (or both disabled)
+        items = [
+            # Live TV
+            {'label': plugin.get_string(30020), 'url': plugin.url_for('live_tv')},
+            # Recordings
+            {'label': plugin.get_string(30021), 'url': plugin.url_for('show_recordings')},
+        ]
+        return plugin.add_items(items)
+
 
 @plugin.route('/live/')
 def live_tv():
@@ -63,12 +75,14 @@ def live_tv():
     } for channel in channels]
     return plugin.add_items(items)
 
+
 @plugin.route('/watch/<serviceid>/')
 def watch_channel(serviceid):
     """Resolve and play the chosen channel"""
     live = create_eyetv_live()
     url = live.get_channel_url(serviceid)
     return plugin.set_resolved_url(url)
+
 
 @plugin.route('/recordings/')
 def show_recordings():

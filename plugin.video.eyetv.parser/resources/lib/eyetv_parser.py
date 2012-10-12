@@ -27,7 +27,7 @@ try:
     import xbmcvfs
 except ImportError:
     import shutil
-    copyfile =  shutil.copyfile
+    copyfile = shutil.copyfile
 else:
     copyfile = xbmcvfs.copy
 
@@ -48,6 +48,7 @@ def clean_xml(filename):
     f.write(clean)
     f.close()
 
+
 class Plist:
     """Simple class to read Apple's plist format
 
@@ -57,7 +58,7 @@ class Plist:
         # collections
         "array": lambda x: [v.text for v in x],
         "dict": lambda x:
-            dict((x[i].text, x[i+1].text) for i in range(0, len(x), 2)),
+            dict((x[i].text, x[i + 1].text) for i in range(0, len(x), 2)),
         "key": lambda x: x.text or "",
 
         # simple types

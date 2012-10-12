@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.image.cheezburger_network" name="Cheezburger Network" version="0.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+    <import addon="script.module.xmltodict" version="0.2.0"/>
+    <import addon="script.module.xbmcswift2" version="1.1.1" />
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>image</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language></language>
+    <platform>all</platform>
+    <summary lang="en">funny pictures</summary>
+    <description lang="en">Cheezburger: All your funny in one place</description>
+  </extension>
+</addon>

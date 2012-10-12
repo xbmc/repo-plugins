@@ -31,6 +31,7 @@ from config import plugin
 
 EYETVPORT = 2170
 
+
 class EyetvLive:
     """Class to watch live TV using EyeTV iPhone access"""
 

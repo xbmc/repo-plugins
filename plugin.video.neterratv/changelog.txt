@@ -1,0 +1,24 @@
+Changelog for XBMC neterratv plugin created by mr.olix@gmail.com
+
+0.0.1
+- first shoot for BTV only
+
+0.0.2
+- add support for multiple TV stations
+
+0.0.3
+- update logo
+
+0.0.4
+- implemented neterratv as class
+- cookie support to avoid logins again
+Todo: Need function to delete cookie file 
+
+0.0.5 - first version for the public
+- now we get the TV list from the website in Kyrillic
+- added supported for recorded series
+- play the stream directly
+
+0.0.6
+- updated email addresses
+- 

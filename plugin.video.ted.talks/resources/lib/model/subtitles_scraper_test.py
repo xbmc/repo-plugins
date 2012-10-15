@@ -44,15 +44,19 @@ World
         soup = MinimalSoup(urllib.urlopen('http://www.ted.com/talks/richard_wilkinson.html').read())
         flashvars = subtitles_scraper.get_flashvars(soup)
 
-        self.assertTrue('15330', flashvars['introDuration']) # TED intro, need to offset subtitles with this
-        self.assertEquals('1253', flashvars['ti']) # talk ID
+        # TED intro, need to offset subtitles with this.
+        # Used to have this at ms granularity - now only s :(
+        self.assertEquals('15', flashvars['introDuration'])
+
+        # Talk ID, need this to request subtitles.
+        self.assertEquals('1253', flashvars['talkId'])
 
         expected = set(['sq', 'ar', 'hy', 'bg', 'ca', 'zh-cn', 'zh-tw', 'hr', 'cs', 'da', 'nl', 'en', 'fr', 'ka', 'de', 'el', 'he', 'hu', 'id', 'it', 'ja', 'ko', 'fa', 'mk', 'pl', 'pt', 'pt-br', 'ro', 'ru', 'sr', 'sk', 'es', 'th', 'tr', 'uk', 'vi'])
         self.assertEquals(expected, set(subtitles_scraper.get_languages(soup)))
 
         subs = subtitles_scraper.get_subtitles_for_talk(soup, ['banana', 'fr', 'en'], None)
         self.assertTrue(subs.startswith('''1
-00:00:15,330 --> 00:00:18,330
+00:00:15,000 --> 00:00:18,000
 Vous savez tous que ce que je vais dire est vrai.
 
 2'''))

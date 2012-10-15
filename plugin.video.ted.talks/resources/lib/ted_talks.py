@@ -46,7 +46,7 @@ class UI:
         #let xbmc know the script is done adding items to the list.
         xbmcplugin.endOfDirectory(handle=int(sys.argv[1]), updateListing=False)
 
-    def addItem(self, title, mode, url=None, img=None, video_info={}, talkID=None, isFolder=True, total_items=0):
+    def addItem(self, title, mode, url=None, img="", video_info={}, talkID=None, isFolder=True, total_items=0):
         # Create action url
         args = {'mode': mode}
         if url:

@@ -1,3 +1,10 @@
+2.0.0
+- Rewrite
+- THUMBNAILS!!! :)
+- use api instead scraping html
+- New Icon
+- Thubmnail View
+
 1.0.1
 - Fix video-listing (website changes)
 

@@ -2,11 +2,10 @@
 <strings>
     <!-- Root Menu -->
     <string id="30000">Aktuelle Videos</string>
-    <string id="30001">Zufälliges Video</string>
     <string id="30002">Archiv</string>
     <string id="30003">Suche</string>
     <!-- Settings -->
-    <string id="30010">Bevorzugtes Video</string>
-    <string id="30011">Flash</string>
-    <string id="30012">Mobil</string>
+    <string id="30010">ViewMode "Thumbnail" erzwingen</string>
+    <!-- Messages -->
+    <string id="30020">Netzwerkfehler</string>
 </strings>

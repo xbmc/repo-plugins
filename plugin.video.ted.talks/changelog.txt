@@ -1,3 +1,7 @@
+[B]Version 3.1.5[/B]
+Fix subtitles (issue#29)
+Fix for listItem API change in XBMC on Raspberry Pi builds and/or Frodo (issue#28)
+
 [B]Version 3.1.4[/B]
 Respect order of custom language codes when fetching subtitles (issue#26)
 Allow subtitles to be disabled (issue#27)

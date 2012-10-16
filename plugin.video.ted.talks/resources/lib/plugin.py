@@ -23,4 +23,4 @@ def report(gnarly_message, friendly_message=None):
     import xbmc
     print "[%s] %s" % (__plugin__, gnarly_message)
     if friendly_message:
-        xbmc.executebuiltin('Notification(%s,%s,)' % (__pluginLS__, friendly_message))
+        xbmc.executebuiltin('Notification("%s","%s",)' % (__pluginLS__, friendly_message))

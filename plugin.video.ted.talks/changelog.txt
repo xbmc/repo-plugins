@@ -1,3 +1,6 @@
+[B]Version 3.1.6[/B]
+Fix getting subtitles using default xbmc language (issue#30)
+
 [B]Version 3.1.5[/B]
 Fix subtitles (issue#29)
 Fix for listItem API change in XBMC on Raspberry Pi builds and/or Frodo (issue#28)

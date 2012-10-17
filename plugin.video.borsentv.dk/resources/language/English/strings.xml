@@ -2,11 +2,10 @@
 <strings>
     <string id="30100">All</string>
     <string id="30101">Investor</string>
-    <string id="30102">Private economy</string>
-    <string id="30103">Economy</string>
+    <string id="30102">Investor 1000</string>
+    <string id="30103">Career</string>
     <string id="30104">Politics</string>
-    <string id="30105">IT</string>
-    <string id="30106">Career</string>
-    <string id="30107">Weekend</string>
-    <string id="30108">Investor 1000</string>
+    <string id="30105">Private economy</string>
+    <string id="30106">Economy</string>
+    <string id="30107">Finance</string>
 </strings>

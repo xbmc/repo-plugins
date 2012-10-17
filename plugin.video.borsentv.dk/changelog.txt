@@ -1,3 +1,6 @@
+[B]Version 1.0.4 - 2012-10-10[/B]
+- Updated feeds, icon and fanart (Thanks to Thomas Riise)
+
 [B]Version 1.0.3 - 2012-10-03[/B]
 - Changed addon to use RSS feeds to greatly simplify the codebase
 

@@ -51,7 +51,7 @@ strUrl = 'http://' + __settings__.getSetting("sage_user") + ':' + __settings__.g
 IMAGE_POSTER = xbmc.translatePath(os.path.join(__cwd__,'resources','media','poster.jpg'))
 IMAGE_THUMB = xbmc.translatePath(os.path.join(__cwd__,'resources','media','thumb.jpg'))
 DEFAULT_CHARSET = 'utf-8'
-MIN_VERSION_SAGEX_REQUIRED = "7.1.9.10"
+MIN_VERSION_SAGEX_REQUIRED = "7.1.9.12"
 
 # 500-THUMBNAIL 501/502/505/506/507/508-LIST 503-MINFO2 504-MINFO 515-MINFO3
 confluence_views = [500,501,502,503,504,508]
@@ -70,15 +70,15 @@ def TOPLEVELCATEGORIES():
     print "Successfully able to connect to the SageTV server @ " + __settings__.getSetting("sage_ip") + ':' + __settings__.getSetting("sage_port")
     sagexVersion = ""
     for plugin in plugins:
-        if(plugin.get("PluginIdentifier") == "sagex-api"):
+        if(plugin.get("PluginIdentifier") == "sagex-api-services"):
             sagexVersion = plugin.get("PluginVersion")
  
-    print "TOPLEVELCATEGORIES STARTED; sagex-api version=" + sagexVersion
+    print "TOPLEVELCATEGORIES STARTED; sagex-api-services version=" + sagexVersion
     if(sagexVersion == ""):
         xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21006),__language__(21007))
         return        
     if(comparePluginVersions(sagexVersion, MIN_VERSION_SAGEX_REQUIRED) < 0):
-        xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + MIN_VERSION_SAGEX_REQUIRED, __language__(21008) + " " + sagexVersion,__language__(21009) + " " + MIN_VERSION_SAGEX_REQUIRED)
+        xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21008) + " " + sagexVersion,__language__(21009) + " " + MIN_VERSION_SAGEX_REQUIRED)
         return
 
     addTopLevelDir('1. Watch Recordings', strUrl + '/sagex/api?c=xbmc:GetTVMediaFilesGroupedByTitle&size=500&encoder=json',1,IMAGE_POSTER,'Browse previously recorded and currently recording shows')
@@ -94,7 +94,7 @@ def VIEWLISTOFRECORDEDSHOWS(url,name):
     now = time.time()
     strNowObject = date.fromtimestamp(now)
     now = "%02d.%02d.%s" % (strNowObject.day+1, strNowObject.month, strNowObject.year)
-    addDir('[All Shows]',strUrl + '/sagex/api?c=xbmc:GetMediaFilesForShowWithSubsetOfProperties&1=&size=500&encoder=json',11,IMAGE_POSTER,IMAGE_THUMB,'',now)
+    addDir('[All Shows]',strUrl + '/sagex/api?c=xbmc:GetMediaFilesForShowWithSubsetOfProperties&1=&size=500&encoder=json',11,IMAGE_POSTER,IMAGE_THUMB,'',now,'')
     titleObjects = executeSagexAPIJSONCall(url, "Result")
     titles = titleObjects.keys()
     for title in titles:
@@ -113,8 +113,9 @@ def VIEWLISTOFRECORDEDSHOWS(url,name):
         #urlToShowEpisodes = strUrl + '/sage/Search?searchType=TVFiles&SearchString=' + urllib2.quote(strTitle.encode("utf8")) + '&DVD=on&sort2=airdate_asc&partials=both&TimeRange=0&pagelen=100&sort1=title_asc&filename=&Video=on&search_fields=title&xml=yes'
         print "ADDING strTitle=" + strTitle + "; urlToShowEpisodes=" + urlToShowEpisodes
         imageUrl = strUrl + "/sagex/media/poster/" + strMediaFileID
+        fanartUrl = strUrl + "/sagex/media/background/" + strMediaFileID
         #print "ADDING imageUrl=" + imageUrl
-        addDir(strTitle, urlToShowEpisodes,11,imageUrl,'',strExternalID,strAiringdate)
+        addDir(strTitle, urlToShowEpisodes,11,imageUrl,'',strExternalID,strAiringdate,fanartUrl)
 
 def VIEWLISTOFEPISODESFORSHOW(url,name):
     mfs = executeSagexAPIJSONCall(url, "Result")
@@ -137,9 +138,10 @@ def VIEWLISTOFEPISODESFORSHOW(url,name):
         episodeNum = int(mfSubset.get("EpisodeNumber"))
         studio = mfSubset.get("AiringChannelName")
         isFavorite = mfSubset.get("IsFavorite")
-        watchedDuration = mfSubset.get("WatchedDuration") // 1000
-        fileDuration = mfSubset.get("FileDuration") // 1000
+        watchedDuration = mfSubset.get("WatchedDuration", 0) // 1000
+        fileDuration = mfSubset.get("FileDuration", 0) // 1000
         isWatched = mfSubset.get("IsWatched")
+        isArchived = mfSubset.get("IsLibraryFile")
         
         startTime = float(mfSubset.get("AiringStartTime") // 1000)
         strAiringdateObject = date.fromtimestamp(startTime)
@@ -169,10 +171,23 @@ def VIEWLISTOFEPISODESFORSHOW(url,name):
         else:
             strDisplayText = strTitle
 
-        strFilepath = mfSubset.get("SegmentFiles")[0]
+        segs = mfSubset.get("SegmentFiles")
+        if(len(segs) == 1):
+            strMappedFilepath = filemap(mfSubset.get("SegmentFiles")[0])
+        else:
+            #If a recording has multiple segments, stack them to group the segments together such that during playback it's transparent to the user
+            strMappedFilepath = "stack://"
+            for seg in segs:
+                strMappedFilepath = strMappedFilepath + filemap(seg) + " , "
+            #Once the stack:// is generated, remove the extraneous " , " at the end of it
+            strMappedFilepath = strMappedFilepath[0:len(strMappedFilepath)-3]
+            #strMappedFilepath = strUrl + '/sagex/api?c=xbmc:GetPlaylistOfSegmentsForMediafile&1=%s&2=%s&3=%s&raw_content_type=audio/mpegurl&encoder=raw' % (strMediaFileID, urllib2.quote(sage_rec.encode("utf8")), urllib2.quote(sage_unc.encode("utf8")))
         
+        print "************SEGS=" + str(segs)
+        print "************strMappedFilepath=" + str(strMappedFilepath)
         imageUrl = strUrl + "/sagex/media/poster/" + strMediaFileID
-        addMediafileLink(strDisplayText,filemap(strFilepath),strDescription,imageUrl,strGenre,strOriginalAirdate,strAiringdate,strTitle,strMediaFileID,strAiringID,seasonNum,episodeNum,studio,isFavorite,isWatched,watchedDuration,fileDuration)
+        fanartUrl = strUrl + "/sagex/media/background/" + strMediaFileID
+        addMediafileLink(strDisplayText,strMappedFilepath,strDescription,imageUrl,strGenre,strOriginalAirdate,strAiringdate,strTitle,strMediaFileID,strAiringID,seasonNum,episodeNum,studio,isFavorite,isWatched,watchedDuration,fileDuration,fanartUrl,isArchived)
 
     xbmc.executebuiltin("Container.SetViewMode(504)")
 
@@ -299,6 +314,8 @@ def VIEWAIRINGSONCHANNEL(url,name):
 
 def SEARCHFORRECORDINGS(url,name):
     titleToSearchFor = common.getUserInput(__language__(21010),"")
+    if(titleToSearchFor == "" or titleToSearchFor == None):
+        return
     url = strUrl + '/sagex/api?c=xbmc:SearchForMediaFiles&1=%s&size=100&encoder=json' % urllib2.quote(titleToSearchFor.encode("utf8"))
     #url = strUrl + '/sagex/api?command=EvaluateExpression&1=FilterByMethod(GetMediaFiles("T"), "GetMediaTitle", "' + urllib2.quote(titleToSearchFor.encode("utf8")) + '", true)&size=100&encoder=json'
     mfs = executeSagexAPIJSONCall(url, "Result")
@@ -322,9 +339,10 @@ def SEARCHFORRECORDINGS(url,name):
         episodeNum = int(mfSubset.get("EpisodeNumber"))
         studio = mfSubset.get("AiringChannelName")
         isFavorite = mfSubset.get("IsFavorite")
-        watchedDuration = mfSubset.get("WatchedDuration") // 1000
-        fileDuration = mfSubset.get("FileDuration") // 1000
+        watchedDuration = mfSubset.get("WatchedDuration", 0) // 1000
+        fileDuration = mfSubset.get("FileDuration", 0) // 1000
         isWatched = mfSubset.get("IsWatched")
+        isArchived = mfSubset.get("IsLibraryFile")
         
         startTime = float(mfSubset.get("AiringStartTime") // 1000)
         strAiringdateObject = date.fromtimestamp(startTime)
@@ -352,15 +370,30 @@ def SEARCHFORRECORDINGS(url,name):
                     strDescription = strGenre
                 
 
-        strFilepath = mfSubset.get("SegmentFiles")[0]
+        segs = mfSubset.get("SegmentFiles")
+        if(len(segs) == 1):
+            strMappedFilepath = filemap(mfSubset.get("SegmentFiles")[0])
+        else:
+            #If a recording has multiple segments, stack them to group the segments together such that during playback it's transparent to the user
+            strMappedFilepath = "stack://"
+            for seg in segs:
+                strMappedFilepath = strMappedFilepath + filemap(seg) + " , "
+            #Once the stack:// is generated, remove the extraneous " , " at the end of it
+            strMappedFilepath = strMappedFilepath[0:len(strMappedFilepath)-3]
+            #strMappedFilepath = strUrl + '/sagex/api?c=xbmc:GetPlaylistOfSegmentsForMediafile&1=%s&2=%s&3=%s&raw_content_type=audio/mpegurl&encoder=raw' % (strMediaFileID, urllib2.quote(sage_rec.encode("utf8")), urllib2.quote(sage_unc.encode("utf8")))
         
+        print "************SEGS=" + str(segs)
+        print "************strMappedFilepath=" + str(strMappedFilepath)
         imageUrl = strUrl + "/sagex/media/poster/" + strMediaFileID
-        addMediafileLink(strDisplayText,filemap(strFilepath),strDescription,imageUrl,strGenre,strOriginalAirdate,strAiringdate,strTitle,strMediaFileID,strAiringID,seasonNum,episodeNum,studio,isFavorite,isWatched,watchedDuration,fileDuration)
+        fanartUrl = strUrl + "/sagex/media/background/" + strMediaFileID
+        addMediafileLink(strDisplayText,strMappedFilepath,strDescription,imageUrl,strGenre,strOriginalAirdate,strAiringdate,strTitle,strMediaFileID,strAiringID,seasonNum,episodeNum,studio,isFavorite,isWatched,watchedDuration,fileDuration,fanartUrl,isArchived)
 
     xbmc.executebuiltin("Container.SetViewMode(504)")
 
 def SEARCHFORAIRINGS(url,name):
     titleToSearchFor = common.getUserInput(__language__(21010),"")
+    if(titleToSearchFor == "" or titleToSearchFor == None):
+        return
     now = time.time()
     startRange = str(long(now * 1000))
     #url = strUrl + '/sagex/api?command=EvaluateExpression&1=FilterByRange(SearchByTitle("%s","T"),"GetAiringStartTime","%s",java_lang_Long_MAX_VALUE,true)&encoder=json' % (urllib2.quote(titleToSearchFor.encode("utf8")), startRange)
@@ -428,35 +461,61 @@ def get_params():
                                 
         return param
 
-def addMediafileLink(name,url,plot,iconimage,genre,originalairingdate,airingdate,showtitle,mediafileid,airingid,seasonnum,episodenum,studio,isfavorite,iswatched,resumetime,totaltime):
+def addMediafileLink(name,url,plot,iconimage,genre,originalairingdate,airingdate,showtitle,mediafileid,airingid,seasonnum,episodenum,studio,isfavorite,iswatched,resumetime,totaltime,fanartimage,isArchived):
         ok=True
         liz=xbmcgui.ListItem(name)
         scriptToRun = "special://home/addons/plugin.video.sagetv/contextmenuactions.py"
         actionDelete = "delete|" + strUrl + '/sagex/api?command=DeleteFile&1=mediafile:' + mediafileid
+        actionDeleteSetWatched = "deletesetwatched|" + strUrl + '/sagex/api?command=SetWatched&1=mediafile:' + mediafileid + "|" + strUrl + '/sagex/api?command=DeleteFile&1=mediafile:' + mediafileid
+        actionDeleteClearWatched = "deleteclearwatched|" + strUrl + '/sagex/api?command=ClearWatched&1=mediafile:' + mediafileid + "|" + strUrl + '/sagex/api?command=DeleteFile&1=mediafile:' + mediafileid
+        actionDeleteDontLike = "deletedontlike|" + strUrl + '/sagex/api?command=SetDontLike&1=mediafile:' + mediafileid + "|" + strUrl + '/sagex/api?command=DeleteFile&1=mediafile:' + mediafileid
+        actionDeleteWrongRecording = "deletewrongrecording|" + strUrl + '/sagex/api?command=DeleteFileWithoutPrejudice&1=mediafile:' + mediafileid
+        actionSetWatched = "setwatched|" + strUrl + '/sagex/api?command=SetWatched&1=mediafile:' + mediafileid
+        actionClearWatched = "clearwatched|" + strUrl + '/sagex/api?command=ClearWatched&1=mediafile:' + mediafileid
+        actionSetArchived = "setarchived|" + strUrl + '/sagex/api?command=MoveFileToLibrary&1=mediafile:' + mediafileid
+        actionClearArchived = "cleararchived|" + strUrl + '/sagex/api?command=MoveTVFileOutOfLibrary&1=mediafile:' + mediafileid
         actionCancelRecording = "cancelrecording|" + strUrl + '/sagex/api?command=CancelRecord&1=mediafile:' + mediafileid
         actionRemoveFavorite = "removefavorite|" + strUrl + '/sagex/api?command=EvaluateExpression&1=RemoveFavorite(GetFavoriteForAiring(GetAiringForID(' + airingid + ')))'
+        actionWatchStream = "watchstream|" + strUrl + "|" + mediafileid
+        
         bisAiringRecording = isAiringRecording(airingid)
 
+        contextMenuItems = []
+
         if(bisAiringRecording):
-          if(isfavorite):
-            liz.addContextMenuItems([(__language__(21016), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDelete + ')'), (__language__(21017), 'XBMC.RunScript(' + scriptToRun + ', ' + actionCancelRecording + ')'), (__language__(21018), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRemoveFavorite + ')')], True)
-          else:
-            liz.addContextMenuItems([(__language__(21016), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDelete + ')'), (__language__(21017), 'XBMC.RunScript(' + scriptToRun + ', ' + actionCancelRecording + ')')], True)
+            contextMenuItems.append((__language__(21017), 'XBMC.RunScript(' + scriptToRun + ', ' + actionCancelRecording + ')'))
+            if(isfavorite):
+                contextMenuItems.append((__language__(21018), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRemoveFavorite + ')'))
         else:
-          if(isfavorite):
-            liz.addContextMenuItems([(__language__(21016), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDelete + ')'), (__language__(21018), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRemoveFavorite + ')')], True)
-          liz.addContextMenuItems([(__language__(21016), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDelete + ')')], True)
+            if(isfavorite):
+                contextMenuItems.append((__language__(21018), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRemoveFavorite + ')'))
 
         if(iswatched):
+            contextMenuItems.append((__language__(21023), 'XBMC.RunScript(' + scriptToRun + ', ' + actionClearWatched + ')'))
             liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": plot, "Genre": genre, "date": airingdate, "premiered": originalairingdate, "aired": originalairingdate, "TVShowTitle": showtitle, "season": seasonnum, "episode": episodenum, "studio": studio, "overlay": 7, "playcount": 1 } )
         else:
-            liz.setProperty("resumetime",str(resumetime))
-            liz.setProperty("totaltime",str(totaltime))
+            contextMenuItems.append((__language__(21022), 'XBMC.RunScript(' + scriptToRun + ', ' + actionSetWatched + ')'))
+            if(resumetime != 0 and totaltime != 0):
+                liz.setProperty("resumetime",str(resumetime))
+                liz.setProperty("totaltime",str(totaltime))
             liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": plot, "Genre": genre, "date": airingdate, "premiered": originalairingdate, "aired": originalairingdate, "TVShowTitle": showtitle, "season": seasonnum, "episode": episodenum, "studio": studio, "overlay": 6, "playcount": 0 } )
 
+        if(isArchived):
+            contextMenuItems.append((__language__(21025), 'XBMC.RunScript(' + scriptToRun + ', ' + actionClearArchived + ')'))
+        else:
+            contextMenuItems.append((__language__(21024), 'XBMC.RunScript(' + scriptToRun + ', ' + actionSetArchived + ')'))
+
+        contextMenuItems.append((__language__(21016), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDelete + ')'))
+        contextMenuItems.append((__language__(21026), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDeleteSetWatched + ')'))
+        contextMenuItems.append((__language__(21027), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDeleteClearWatched + ')'))
+        contextMenuItems.append((__language__(21028), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDeleteDontLike + ')'))
+        contextMenuItems.append((__language__(21029), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDeleteWrongRecording + ')'))
+        contextMenuItems.append((__language__(21037), 'XBMC.RunScript(' + scriptToRun + ', ' + actionWatchStream + ')'))
+        liz.addContextMenuItems(contextMenuItems, True)
         
         liz.setIconImage(iconimage)
         liz.setThumbnailImage(iconimage)
+        liz.setProperty("fanart_image",fanartimage)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
         return ok
 
@@ -465,29 +524,37 @@ def addAiringLink(name,url,plot,iconimage,genre,originalairingdate,airingdate,sh
     liz=xbmcgui.ListItem(name)
     scriptToRun = "special://home/addons/plugin.video.sagetv/contextmenuactions.py"
     actionCancelRecording = "cancelrecording|" + strUrl + '/sagex/api?command=CancelRecord&1=airing:' + airingid
+    actionAddFavorite = "addfavorite|" + strUrl + '/sagex/api?command=AddFavorite&1=%s&2=true&3=true&4=&5=&6=&7=&8=&9=&10=&11=&12=&13=&14=' % showtitle
     actionRemoveFavorite = "removefavorite|" + strUrl + '/sagex/api?command=EvaluateExpression&1=RemoveFavorite(GetFavoriteForAiring(GetAiringForID(' + airingid + ')))'
     actionRecord = "record|" + strUrl + '/sagex/api?command=Record&1=airing:' + airingid
     actionWatchNow = "watchnow|" + strUrl + "|" + airingid
     
     bisAiringScheduledToRecord = isAiringScheduledToRecord(airingid)
     
+    contextMenuItems = []
+    
     if(bisAiringScheduledToRecord):
+        contextMenuItems.append((__language__(21017), 'XBMC.RunScript(' + scriptToRun + ', ' + actionCancelRecording + ')'))
         if(isfavorite):
-            liz.addContextMenuItems([(__language__(21017), 'XBMC.RunScript(' + scriptToRun + ', ' + actionCancelRecording + ')'), (__language__(21018), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRemoveFavorite + ')')], True)
+            contextMenuItems.append((__language__(21018), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRemoveFavorite + ')'))
         else:
-            liz.addContextMenuItems([(__language__(21017), 'XBMC.RunScript(' + scriptToRun + ', ' + actionCancelRecording + ')')], True)
+            contextMenuItems.append((__language__(21030), 'XBMC.RunScript(' + scriptToRun + ', ' + actionAddFavorite + ')'))
     else:
         if(isfavorite):
-            liz.addContextMenuItems([('Record', 'XBMC.RunScript(' + scriptToRun + ', ' + actionRecord + ')'), (__language__(21018), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRemoveFavorite + ')')], True)
+            contextMenuItems.append((__language__(21019), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRecord + ')'))
+            contextMenuItems.append((__language__(21018), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRemoveFavorite + ')'))
         else:
             #Check if an airing is airing live right now; if it is, provide the ability to watch it live
             bisAiringLiveNow = isAiringLiveNow(starttime, endtime)
             print "bisAiringLiveNow=" + str(bisAiringLiveNow)
             if(bisAiringLiveNow):
-                liz.addContextMenuItems([(__language__(21020), 'XBMC.RunScript(' + scriptToRun + ', ' + actionWatchNow + ')'), (__language__(21019), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRecord + ')')], True)
-            else:
-                liz.addContextMenuItems([(__language__(21019), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRecord + ')')], True)
+                contextMenuItems.append((__language__(21020), 'XBMC.RunScript(' + scriptToRun + ', ' + actionWatchNow + ')'))
+                
+            contextMenuItems.append((__language__(21019), 'XBMC.RunScript(' + scriptToRun + ', ' + actionRecord + ')'))
+            contextMenuItems.append((__language__(21030), 'XBMC.RunScript(' + scriptToRun + ', ' + actionAddFavorite + ')'))
 
+    liz.addContextMenuItems(contextMenuItems, True)
+    
     liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": plot, "Genre": genre, "date": airingdate, "premiered": originalairingdate, "aired": originalairingdate, "TVShowTitle": showtitle, "season": seasonnum, "episode": episodenum, "studio": studio } )
     liz.setIconImage(iconimage)
     liz.setThumbnailImage(iconimage)
@@ -553,7 +620,7 @@ def addTopLevelDir(name,url,mode,iconimage,dirdescription):
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
     return ok
 
-def addDir(name,url,mode,iconimage,thumbimage,showexternalid,airingdate):
+def addDir(name,url,mode,iconimage,thumbimage,showexternalid,airingdate,fanartimage):
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
     ok=True
     liz=xbmcgui.ListItem(name)
@@ -566,6 +633,7 @@ def addDir(name,url,mode,iconimage,thumbimage,showexternalid,airingdate):
         liz.setThumbnailImage(thumbimage)
     else:
         liz.setThumbnailImage(iconimage)
+    liz.setProperty("fanart_image",fanartimage)
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
     return ok
 

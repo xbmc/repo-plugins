@@ -59,6 +59,7 @@ function GetMediaFilesForShowWithSubsetOfProperties(showtitle) {
       show.put('WatchedDuration', AiringAPI.GetWatchedDuration(mf));
       show.put('IsWatched', AiringAPI.IsWatched(mf));
       show.put('FileDuration', MediaFileAPI.GetFileDuration(mf));
+      show.put('IsLibraryFile', MediaFileAPI.IsLibraryFile(mf));
       shows.add(show);
    }
    return shows;
@@ -92,6 +93,7 @@ function SearchForMediaFiles(searchterm) {
           show.put('WatchedDuration', AiringAPI.GetWatchedDuration(mf));
           show.put('IsWatched', AiringAPI.IsWatched(mf));
           show.put('FileDuration', MediaFileAPI.GetFileDuration(mf));
+          show.put('IsLibraryFile', MediaFileAPI.IsLibraryFile(mf));
           shows.add(show);
       }
    }
@@ -112,4 +114,15 @@ function GetTVMediaFilesGroupedByTitle() {
       }
    }
    return grouped;
+}
+
+function GetPlaylistOfSegmentsForMediafile(mediafileID,sage_rec,sage_unc) {
+    var mf = MediaFileAPI.GetMediaFileForID(mediafileID);
+    if (mf == "" || sage_rec == "" || sage_unc == "") return "";
+    var segs = MediaFileAPI.GetSegmentFiles(mf);
+    ret = "#EXTM3U\n";
+    for (var i=0;i<segs.length;i++) {
+        ret = ret + segs[i].getAbsolutePath().replace(sage_rec,sage_unc) + "\n";
+    }
+    return ret;
 }

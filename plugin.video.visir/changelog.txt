@@ -1,3 +1,8 @@
+Version 1.3.0:
+	
+	A complete redesign of http://www.visir.is/ (where all the data is scraped from) caused a total failure of the plugin.  Scraper functionality updated to work with the new web site.
+	Note: some streams may still be broken as it has not been tested thoroughly.  Live TV not tested at all, most likely stil broken.
+	
 Version 1.2.0:
 	
 	Some flash based streams where not working (for example sports/EPL).  Needed to add special handling for those to work.

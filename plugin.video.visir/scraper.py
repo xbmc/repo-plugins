@@ -23,23 +23,23 @@ def getRootCategories():
 	categories = []
 	html = fetchPage("http://www.visir.is/section/MEDIA")
 	soup = BeautifulSoup(html)
-	ul = soup.find("ul", attrs={"id": "filmCatList"})
+	ul = soup.find("ul", attrs={"id": "PagerIndex"})
 	for li in ul.findAll("li"):
 		if (li['class'].find('undir') == -1):
-			categories.append({"name":li.span.contents[0].encode('utf-8'), "id":li['aevar']})
+			categories.append({"name":li.contents[0].encode('utf-8'), "id":li['data-kat']})
 	return categories
 
 def getSubCategories(parent):
 	categories = []
 	html = fetchPage("http://www.visir.is/section/MEDIA")
 	soup = BeautifulSoup(html)
-	ul = soup.find("ul", attrs={"id": "filmCatList"})
+	ul = soup.find("ul", attrs={"id": "PagerIndex"})
 	for li in ul.findAll("li"):
 		if (li['class'].find('childof'+parent) > -1):
 			type = ""
 			if li.has_key('sourcetype'):
 				type = li['sourcetype']
-			categories.append({"name":li.span.contents[0].encode('utf-8'), "id": parent, "subid":li['aevar'], "type":type})
+			categories.append({"name":li.contents[0].encode('utf-8'), "id": parent, "subid":li['data-kat'], "type":type})
 	return categories
 
 def getVideos(category):
@@ -67,7 +67,7 @@ def getVideoData(fileid):
 		return { "rtmpurl":"rtmp://klippur.visir.is/vod/_definst_/", "playpath":playpath, "swfplayer":"http://www.visir.is/jwplayer/player59.swf" }
 	else:
 		# Other cases, simply fetch the video URL based on the file Id
-		path = fetchPage("http://m3.visir.is/sjonvarp/myndband/bara-slod?itemid=" + fileid)
+		path = fetchPage("http://m.visir.is/sjonvarp/myndband/bara-slod?itemid=" + fileid)
 		return { "rtmpurl":path, "playpath":"", "swfplayer":"" }
 	
 	

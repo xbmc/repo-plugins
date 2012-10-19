@@ -194,8 +194,6 @@ def list_albums(params):
 
     albums = db.GetAlbums()
     if (not albums):
-	dialog = gui.Dialog()
-	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     commands = []
@@ -248,8 +246,6 @@ def list_events(params):
 
     rolls = db.GetRolls()
     if (not rolls):
-	dialog = gui.Dialog()
-	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     commands = []
@@ -310,8 +306,6 @@ def list_faces(params):
 
     faces = db.GetFaces()
     if (not faces):
-	dialog = gui.Dialog()
-	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     commands = []
@@ -378,8 +372,6 @@ def list_places(params):
 
     places = db.GetPlaces()
     if (not places):
-	dialog = gui.Dialog()
-	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     commands = []
@@ -441,8 +433,6 @@ def list_keywords(params):
 
     keywords = db.GetKeywords()
     if (not keywords):
-	dialog = gui.Dialog()
-	dialog.ok(addon.getLocalizedString(30240), addon.getLocalizedString(30241))
 	return
 
     hidden_keywords = addon.getSetting('hidden_keywords')
@@ -542,12 +532,13 @@ def import_library(xmlpath, xmlfile, masterspath, masters_realpath, enable_place
     else:
 	gui.Window(10000).setProperty("iphoto_scanning", "True")
 
-    # always ignore Books and currently selected album
+    # always ignore Books and all Event type albums
     album_ign = []
     album_ign.append("Book")
     album_ign.append("Selected Event Album")
+    album_ign.append("Event")
 
-    # ignore albums published to MobileMe if configured to do so
+    # ignore albums published to MobileMe/iCloud if configured to do so
     album_ign_publ = addon.getSetting('album_ignore_published')
     if (album_ign_publ == ""):
 	album_ign_publ = "true"
@@ -590,7 +581,7 @@ def import_library(xmlpath, xmlfile, masterspath, masters_realpath, enable_place
     except:
 	print traceback.print_exc()
     else:
-	iparser = IPhotoParser(xmlpath, xmlfile, masterspath, masters_realpath, album_ign, enable_places, map_aspect, db.AddAlbumNew, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, import_progress_callback, progress_dialog)
+	iparser = IPhotoParser(xmlpath, xmlfile, masterspath, masters_realpath, album_ign, enable_places, map_aspect, db.SetConfig, db.AddAlbumNew, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, import_progress_callback, progress_dialog)
 
 	try:
 	    progress_dialog.update(0, addon.getLocalizedString(30219))
@@ -608,11 +599,6 @@ def import_library(xmlpath, xmlfile, masterspath, masters_realpath, enable_place
 	    print "iPhoto: Library imported successfully."
 	    progress_dialog.close()
 	    gui.Window(10000).setProperty("iphoto_scanning", "False")
-	    try:
-		# this is non-critical
-		db.UpdateLastImport()
-	    except:
-		pass
 
 def reset_db(params):
     try:

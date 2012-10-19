@@ -16,6 +16,7 @@ except:
 
 import sys
 import os
+import time
 import locale
 
 try:
@@ -172,7 +173,7 @@ class IPhotoDB:
 	       id integer primary key,
 	       name varchar,
 	       thumbpath varchar,
-	       keyphotoid integer,
+	       keyphotoid varchar,
 	       keyphotoidx integer,
 	       photocount integer,
 	       faceorder integer
@@ -273,16 +274,13 @@ class IPhotoDB:
 
 	self.Commit()
 
-    def UpdateLastImport(self):
-	try:
-	    self.SetConfig('lastimport', 'dummy')
-	    self.dbconn.execute("""UPDATE config
-				   SET value = datetime('now')
-				   WHERE key = ?""",
-				('lastimport',))
-	    self.Commit()
-	except Exception, e:
-	    print "iphoto.db: UpdateLastImport: " + to_str(e)
+    def GetIphotoVersion(self):
+	verstr = self.GetConfig('version')
+	if (verstr == None):
+	    ver = 0.0
+	else:
+	    ver = float('.'.join(verstr.split('.')[:2]))
+	return ver
 
     def GetTableId(self, table, value, column='name', autoadd=False, autoclean=True):
 	try:
@@ -383,11 +381,19 @@ class IPhotoDB:
 	faces = []
 	try:
 	    cur = self.dbconn.cursor()
+
+	    if (self.GetIphotoVersion() < 9.4):
+		idtype = "M.id"
+	    else:
+		idtype = "M.guid"
+
 	    cur.execute("""SELECT F.id, F.name, F.thumbpath, F.photocount
-			 FROM faces F LEFT JOIN media M ON F.keyphotoid = M.id
-			 ORDER BY F.faceorder""")
+			 FROM faces F LEFT JOIN media M ON F.keyphotoid = %s
+			 ORDER BY F.faceorder""" % (idtype))
+
 	    for tuple in cur:
 		faces.append(tuple)
+
 	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetFaces: " + to_str(e)
@@ -633,6 +639,11 @@ class IPhotoDB:
 	try:
 	    cur = self.dbconn.cursor()
 
+	    if (self.GetIphotoVersion() < 9.4):
+		cmpkey = 'MediaID'
+	    else:
+		cmpkey = 'GUID'
+
 	    faces = []
 	    cur.execute("""SELECT id, keyphotoid, keyphotoidx FROM faces""")
 	    for tuple in cur:
@@ -644,7 +655,7 @@ class IPhotoDB:
 		VALUES (?, ?)""", (faceid, mediaid))
 
 		for fid, fkey, fkeyidx in faces:
-		    if int(fkey) == int(mediaid):
+		    if (fkey == media[cmpkey]):
 			fthumb = os.path.splitext(thumbpath)[0] + "_face%s.jpg" % (fkeyidx)
 			self.dbconn.execute("""
 			UPDATE faces SET thumbpath = ?
@@ -791,6 +802,8 @@ class IPhotoParserState:
 	self.nphotos = 0
 	self.nphotostotal = 0
 	self.level = 0
+	self.appversion = False
+	self.inappversion = 0
 	self.archivepath = False
 	self.inarchivepath = 0
 	self.albums = False
@@ -812,6 +825,7 @@ class IPhotoParserState:
 class IPhotoParser:
     def __init__(self, library_path="", xmlfile="", masters_path="", masters_real_path="",
 		 album_ign=[], enable_places=False, map_aspect=0.0,
+		 config_callback=None,
 		 album_callback=None, roll_callback=None, face_callback=None, keyword_callback=None, photo_callback=None,
 		 progress_callback=None, progress_dialog=None):
 	self.libraryPath = library_path
@@ -820,10 +834,11 @@ class IPhotoParser:
 	self.mastersRealPath = masters_real_path
 	if (self.mastersPath and self.mastersRealPath):
 	    try:
-		print "Rewriting referenced masters path '%s'" % (to_str(self.mastersPath))
-		print "as '%s'" % (to_str(self.mastersRealPath))
+		print "iphoto.db: Rewriting referenced masters path '%s'" % (to_str(self.mastersPath))
+		print "iphoto.db: as '%s'" % (to_str(self.mastersRealPath))
 	    except:
 		pass
+	self.iphotoVersion = "0.0.0"
 	self.imagePath = ""
 	self.parser = xml.parsers.expat.ParserCreate()
 	self.parser.StartElementHandler = self.StartElement
@@ -844,6 +859,7 @@ class IPhotoParser:
 	self.albumIgn = album_ign
 	self.enablePlaces = enable_places
 	self.mapAspect = map_aspect
+	self.ConfigCallback = config_callback
 	self.AlbumCallback = album_callback
 	self.RollCallback = roll_callback
 	self.FaceCallback = face_callback
@@ -938,6 +954,15 @@ class IPhotoParser:
 		    self.PhotoCallback(a, self.imagePath, self.libraryPath, self.mastersPath, self.mastersRealPath, self.enablePlaces, self.mapAspect, self.updateProgress)
 		    state.nphotos += 1
 		    self.updateProgress()
+
+	    if (self.ConfigCallback):
+		print "iphoto.db: Writing configuration"
+		if (self.iphotoVersion != "0.0.0"):
+		    self.ConfigCallback('version', self.iphotoVersion)
+		try:
+		    self.ConfigCallback('lastimport', to_str(time.time()))
+		except:
+		    pass
 	except ParseCanceled:
 	    raise
 	except Exception, e:
@@ -967,7 +992,10 @@ class IPhotoParser:
     def StartElement(self, name, attrs):
 	state = self.state
 	self.lastdata = False
-	if (state.archivepath):
+	if (state.appversion):
+	    state.inappversion += 1
+	    state.key = name
+	elif (state.archivepath):
 	    state.inarchivepath += 1
 	    state.key = name
 	elif (state.albums):
@@ -1004,14 +1032,23 @@ class IPhotoParser:
 	self.lastdata = False
 	state = self.state
 
-	if (state.archivepath):
+	# Application Version
+	if (state.appversion):
+	    if (not state.key):
+		self.iphotoVersion = state.value
+		print "iphoto.db: Detected iPhoto Version %s" % self.iphotoVersion
+		state.appversion = False
+	    state.inappversion -= 1
+
+	# Archive Path
+	elif (state.archivepath):
 	    if (not state.key):
 		self.imagePath = state.value
 		state.archivepath = False
 		if (self.imagePath != self.libraryPath):
 		    try:
-			print "Rewriting iPhoto archive path '%s'" % (to_str(self.imagePath))
-			print "as '%s'" % (to_str(self.libraryPath))
+			print "iPhoto.db: Rewriting iPhoto archive path '%s'" % (to_str(self.imagePath))
+			print "iPhoto.db: as '%s'" % (to_str(self.libraryPath))
 		    except:
 			pass
 	    state.inarchivepath -= 1
@@ -1098,7 +1135,14 @@ class IPhotoParser:
 
 	# determine which section we are in
 	if (state.key and state.level == 3):
-	    if (data == "Archive Path"):
+	    if (data == "Application Version"):
+		state.appversion = True
+		state.albums = False
+		state.rolls = False
+		state.faces = False
+		state.keywords = False
+		state.master = False
+	    elif (data == "Archive Path"):
 		state.archivepath = True
 		state.albums = False
 		state.rolls = False
@@ -1106,6 +1150,7 @@ class IPhotoParser:
 		state.keywords = False
 		state.master = False
 	    elif (data == "List of Albums"):
+		state.appversion = False
 		state.archivepath = False
 		state.albums = True
 		state.rolls = False
@@ -1113,6 +1158,7 @@ class IPhotoParser:
 		state.keywords = False
 		state.master = False
 	    elif (data == "List of Rolls"):
+		state.appversion = False
 		state.archivepath = False
 		state.albums = False
 		state.rolls = True
@@ -1120,6 +1166,7 @@ class IPhotoParser:
 		state.keywords = False
 		state.master = False
 	    elif (data == "List of Faces"):
+		state.appversion = False
 		state.archivepath = False
 		state.albums = False
 		state.rolls = False
@@ -1127,6 +1174,7 @@ class IPhotoParser:
 		state.keywords = False
 		state.master = False
 	    elif (data == "List of Keywords"):
+		state.appversion = False
 		state.archivepath = False
 		state.albums = False
 		state.rolls = False
@@ -1134,6 +1182,7 @@ class IPhotoParser:
 		state.keywords = True
 		state.master = False
 	    elif (data == "Master Image List"):
+		state.appversion = False
 		state.archivepath = False
 		state.albums = False
 		state.rolls = False

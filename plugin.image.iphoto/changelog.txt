@@ -1,3 +1,7 @@
+1.9.2 - 20121017
+- Fixes for iPhoto 9.4.
+- Ignore Albums of type "Event".
+
 1.9.1 - 20120803
 - Support for Metropolis skin.
 

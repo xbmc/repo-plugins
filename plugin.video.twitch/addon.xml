@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='0.2.1' name='TwitchTV' provider-name='StateOfTheArt'>
+<addon id='plugin.video.twitch' version='0.2.2' name='TwitchTV' provider-name='StateOfTheArt'>
   <requires>
     <import addon='xbmc.python' version='2.0'/>
     <import addon='script.module.simplejson' version='2.0.10'/>

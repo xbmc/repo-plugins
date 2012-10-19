@@ -22,3 +22,5 @@
 - added fallback-function, if selected video does not support video settings
 0.2.1
 - added featured streams section
+0.2.2
+- added teams section - thx to kokarn

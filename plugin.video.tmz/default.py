@@ -1,34 +1,24 @@
 
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, time, datetime, buggalo
+import simplejson as json
 
 plugin = 'TMZ'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '10-07-2012'
-__version__ = '2.0.5'
+__date__ = '10-20-2012'
+__version__ = '2.0.6'
 settings = xbmcaddon.Addon( id = 'plugin.video.tmz' )
+dbg = False
+dbglevel = 3
 icon = os.path.join( settings.getAddonInfo( 'path' ), 'icon.png' )
+fanart_bg = os.path.join( settings.getAddonInfo( 'path' ), 'fanart.jpg' )
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 
+import CommonFunctions
+common = CommonFunctions
+common.plugin = plugin + ' ' + __version__
+
 def retry(ExceptionToCheck, tries=4, delay=5, backoff=2, logger=None):
-    """Retry calling the decorated function using an exponential backoff.
-
-    http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/
-    original from: http://wiki.python.org/moin/PythonDecoratorLibrary#Retry
-
-    :param ExceptionToCheck: the exception to check. may be a tuple of
-        excpetions to check
-    :type ExceptionToCheck: Exception or tuple
-    :param tries: number of times to try (not retry) before giving up
-    :type tries: int
-    :param delay: initial delay between retries in seconds
-    :type delay: int
-    :param backoff: backoff multiplier e.g. value of 2 will double the delay
-        each retry
-    :type backoff: int
-    :param logger: logger to use. If None, print
-    :type logger: logging.Logger instance
-    """
     def deco_retry(f):
         def f_retry(*args, **kwargs):
             mtries, mdelay = tries, delay
@@ -36,7 +26,7 @@ def retry(ExceptionToCheck, tries=4, delay=5, backoff=2, logger=None):
             while mtries >= 0:
 				if mtries == 0:
 					dialog = xbmcgui.Dialog()
-					ret = dialog.yesno(plugin, settings.getLocalizedString( 30054 ), nolabel = settings.getLocalizedString( 30052 ), yeslabel = settings.getLocalizedString( 30053 ))
+					ret = dialog.yesno(plugin, settings.getLocalizedString( 30054 ), '', '', settings.getLocalizedString( 30052 ), settings.getLocalizedString( 30053 ))
 					if ret == False:
 						mtries, mdelay = tries, delay
 					else:
@@ -59,7 +49,7 @@ def retry(ExceptionToCheck, tries=4, delay=5, backoff=2, logger=None):
             if try_one_last_time:
                 return f(*args, **kwargs)
             return
-        return f_retry  # true decorator
+        return f_retry 
     return deco_retry
 
 def clean( name ):
@@ -71,16 +61,17 @@ def clean( name ):
 @retry(IndexError)	
 def build_main_directory():
 	main=[
-		( settings.getLocalizedString( 30000 ) ),
-		( settings.getLocalizedString( 30001 ) ),
-		( settings.getLocalizedString( 30002 ) ),
-		( settings.getLocalizedString( 30003 ) )
+		( settings.getLocalizedString( 30007 ), '2' ),
+		( settings.getLocalizedString( 30000 ), '0' ),
+		( settings.getLocalizedString( 30001 ), '0' ),
+		( settings.getLocalizedString( 30002 ), '0' ),
+		( settings.getLocalizedString( 30003 ), '0' )
 		]
-	for name in main:
-		listitem = xbmcgui.ListItem( label = name, iconImage = icon, thumbnailImage = icon )
-		u = sys.argv[0] + "?mode=0&name=" + urllib.quote_plus( name )
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
+	for name, mode in main:
+		ListItem(name, icon, '', mode, True, False, True)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
+	setViewMode("515")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
 @retry(IndexError)
@@ -99,21 +90,85 @@ def build_video_directory( name ):
 				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/0_' + videoUrl.split('_')[1]
 			else:
 				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/0_' + videoUrl.split('_')[1] + '/flavorId/0_' + videoUrl.split('_')[3]
-			listitem = xbmcgui.ListItem( label = title, iconImage = thumb, thumbnailImage = thumb )
-			listitem.setInfo( type="Video", infoLabels={ "Title": title, "Director": "TMZ", "Studio": name, "Duration": str(datetime.timedelta(seconds=int(duration))) } )
-			listitem.setProperty('IsPlayable', 'true')
-			u = sys.argv[0] + "?mode=1&name=" + urllib.quote_plus( title ) + "&url=" + urllib.quote_plus( url ) + "&thumb=" + urllib.quote_plus( thumb ) + "&studio=" + urllib.quote_plus( name )
-			ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = False )
+			infoLabels = { "Title": title, "Director": "TMZ", "Studio": name, "Plot": title, "Duration": str(datetime.timedelta(seconds=int(duration))) }
+			ListItem(title, thumb, url, '1', False, infoLabels, True)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
+	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
 @retry(IndexError)	
+def build_search_directory():
+	page = 1
+	checking = True
+	string = common.getUserInput(settings.getLocalizedString( 30007 ), "")
+	if not string:
+		return
+	while checking:
+		url = 'http://www.tmz.com/search/json/videos/' + urllib.quote(string) + '/' + str(page) + '.json'
+		data = get_page(url)
+		if data['error'] == 'HTTP Error 404: Not Found':
+			dialog = xbmcgui.Dialog()
+			ok = dialog.ok( plugin , settings.getLocalizedString( 30009 ) + '\n' + settings.getLocalizedString( 30010 ) )
+			return
+		elif data['error'] != None:
+			text = open_url( url )['content']
+		else:
+			text = data['content']
+		jdata = json.loads(text)
+		total = int(jdata['total'])
+		count = int(jdata['count'])
+		if ((total - page * 25) > 0):
+			page = page + 1
+		else:
+			checking = False
+		for results in jdata['results']:
+			title = results['title'].encode('ascii', 'ignore')
+			videoUrl = results['URL'].replace("\\", "")
+			thumb = results['thumbnailUrl'].replace("\\", "") + '/width/490/height/266/type/3'
+			infoLabels = { "Title": title, "Director": "TMZ", "Plot": title }
+			ListItem(title, thumb, videoUrl, '3', False, infoLabels, True)
+	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
+	setViewMode("503")
+	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
+
+@retry(IndexError)	
+def get_search_url(name, url, thumb):
+	if settings.getSetting("quality") == settings.getLocalizedString( 30005 ) or len(url.split('/')[4]) > 10:
+		meta = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + thumb.split('/')[9]
+		data = open_url( meta )['content']
+		url = re.compile('<media url=\"(.+?)\"').findall(data)[0]
+	else:
+		data = open_url( url )['content']
+		url = common.parseDOM(data, "meta", attrs = { "name": "VideoURL" }, ret = "content")[0]
+	play_video( name, url, thumb, 'TMZ' )
+
+@retry(IndexError)	
 def play_video( name, url, thumb, studio ):
-	data = open_url( url )['content']
-	url = re.compile('<media url=\"(.+?)\"').findall(data)[0]
+	if studio != 'TMZ':
+		data = open_url( url )['content']
+		url = re.compile('<media url=\"(.+?)\"').findall(data)[0]
 	listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = thumb, path = url )
-	listitem.setInfo( type="Video", infoLabels={ "Title": name , "Director": "TMZ", "Studio": studio } )
+	listitem.setInfo( type="Video", infoLabels={ "Title": name , "Director": "TMZ", "Studio": studio, "Plot": name } )
 	xbmcplugin.setResolvedUrl( handle = int( sys.argv[1] ), succeeded = True, listitem = listitem )
+
+def ListItem(label, image, url, mode, isFolder, infoLabels = False, fanart = False):
+	listitem = xbmcgui.ListItem(label = label, iconImage = image, thumbnailImage = image)
+	if fanart:
+		listitem.setProperty('fanart_image', fanart_bg)
+	if infoLabels:
+		listitem.setInfo( type = "Video", infoLabels = infoLabels )
+	if not isFolder:
+		listitem.setProperty('IsPlayable', 'true')
+	if mode == '1':
+		u = sys.argv[0] + "?mode=1&name=" + urllib.quote_plus(label) + "&url=" + urllib.quote_plus(url) + "&studio=" + urllib.quote_plus(infoLabels['Studio']) + "&thumb=" + urllib.quote_plus(image)
+	elif mode == '3':
+		u = sys.argv[0] + "?mode=3&name=" + urllib.quote_plus(label) + "&url=" + urllib.quote_plus(url) + "&thumb=" + urllib.quote_plus(image)
+	else:
+		u = sys.argv[0] + "?mode=" + mode + "&name=" + urllib.quote_plus(label)
+	ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = isFolder)
+	return ok
 	
 def open_url(url):
 	retries = 0
@@ -128,7 +183,7 @@ def open_url(url):
 		except:
 			retries += 1
 	dialog = xbmcgui.Dialog()
-	ret = dialog.yesno(plugin, settings.getLocalizedString( 30050 ), data['error'], nolabel = settings.getLocalizedString( 30052 ), yeslabel = settings.getLocalizedString( 30053 ))
+	ret = dialog.yesno(plugin, settings.getLocalizedString( 30050 ), data['error'], '', settings.getLocalizedString( 30052 ), settings.getLocalizedString( 30053 ))
 	if ret == False:
 		open_url(url)
 	else:
@@ -154,25 +209,12 @@ def get_page(url):
 	except Exception, e:
 		data['error'] = str(e)
 		return data
+		
+def setViewMode(id):
+	if xbmc.getSkinDir() == "skin.confluence" and settings.getSetting('view') == 'true':
+		xbmc.executebuiltin("Container.SetViewMode(" + id + ")")
 
-def get_params():
-	param = []
-	paramstring = sys.argv[2]
-	if len( paramstring ) >= 2:
-		params = sys.argv[2]
-		cleanedparams = params.replace( '?', '' )
-		if ( params[len( params ) - 1] == '/' ):
-			params = params[0:len( params ) - 2]
-		pairsofparams = cleanedparams.split( '&' )
-		param = {}
-		for i in range( len( pairsofparams ) ):
-			splitparams = {}
-			splitparams = pairsofparams[i].split( '=' )
-			if ( len( splitparams ) ) == 2:
-				param[splitparams[0]] = splitparams[1]					
-	return param
-
-params = get_params()
+params = common.getParameters(sys.argv[2])
 mode = None
 name = None
 url = None
@@ -180,25 +222,25 @@ studio = None
 thumb = None
 
 try:
-        url = urllib.unquote_plus(params["url"])
+	url = urllib.unquote_plus(params["url"])
 except:
-        pass
+	pass
 try:
-        name = urllib.unquote_plus(params["name"])
+	name = urllib.unquote_plus(params["name"])
 except:
-        pass
+	pass
 try:
-        mode = int(params["mode"])
+	mode = int(params["mode"])
 except:
-        pass
+	pass
 try:
-		studio = urllib.unquote_plus(params["studio"])
+	studio = urllib.unquote_plus(params["studio"])
 except:
-        pass
+	pass
 try:
-		thumb = urllib.unquote_plus(params["thumb"])
+	thumb = urllib.unquote_plus(params["thumb"])
 except:
-        pass
+	pass
 
 try:
 	if mode == None:
@@ -207,6 +249,10 @@ try:
 		build_video_directory( name )
 	elif mode == 1:
 		play_video( name, url, thumb, studio )
+	elif mode == 2:
+		build_search_directory()
+	elif mode == 3:
+		get_search_url(name, url, thumb)
 except Exception:
 	buggalo.onExceptionRaised()
 	

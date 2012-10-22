@@ -1,3 +1,4 @@
 <settings>
 	<setting id="quality" type="select" label="30004" lvalues="30005|30006" default="High"/>
+	<setting id="view" type="bool" label="30021" default="true"/>
 </settings>

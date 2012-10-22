@@ -7,3 +7,5 @@
 - Changed icon
 1.0.2
 - Fixed site changes for newest vids
+1.0.3
+- Fixed site changes for newest vids (multi parts)

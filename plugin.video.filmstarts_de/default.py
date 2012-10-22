@@ -4,22 +4,21 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,socket
 
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
-settings = xbmcaddon.Addon(id='plugin.video.filmstarts_de')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.filmstarts_de')
+translation = addon.getLocalizedString
 
-showAllTrailers=settings.getSetting("showAllTrailers")
-forceViewMode=settings.getSetting("forceViewMode")
+showAllTrailers=addon.getSetting("showAllTrailers")
+forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
 else:
   forceViewMode=False
-viewMode=str(settings.getSetting("viewMode"))
+viewMode=str(addon.getSetting("viewMode"))
 
 def index():
         addDir('Trailer: '+translation(30008),'',"search",'')
         addDir('Trailer: '+translation(30001),'http://www.filmstarts.de/trailer/aktuell_im_kino.html?version=1',"showSortDirection",'')
         addDir('Trailer: '+translation(30002),'http://www.filmstarts.de/trailer/bald_im_kino.html?version=1',"showSortDirection",'')
-        #addDir('Trailer: Archiv','http://www.filmstarts.de/trailer/archiv.html?version=1',"showSortDirection",'')
         addDir('Filmstarts: Interviews','http://www.filmstarts.de/trailer/interviews/',"listVideosInterview",'')
         addDir('Filmstarts: Fünf Sterne','http://www.filmstarts.de/videos/shows/funf-sterne',"listVideosMagazin",'')
         addDir('Filmstarts: Fehlerteufel','http://www.filmstarts.de/videos/shows/filmstarts-fehlerteufel',"listVideosMagazin",'')
@@ -119,8 +118,9 @@ def listTrailers(url):
             title=match[0].replace(" DF", " - "+str(translation(30009))).replace(" OV", " - "+str(translation(30010)))
             title=cleanTitle(title)
             match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
-            url="http://www.filmstarts.de"+match[0]
-            addLink(title,url,'playVideo',thumb)
+            if len(match)>0:
+              url="http://www.filmstarts.de"+match[0]
+              addLink(title,url,'playVideo',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -155,16 +155,16 @@ def search():
 
 def playVideo(url):
         content = getUrl(url)
-        if url.find("?cmedia=")>=0:
-          match=re.compile("cmedia: '(.+?)',\nref: '(.+?)',\ntypeRef: '(.+?)'", re.DOTALL).findall(content)
+        match=re.compile("cmedia: '(.+?)',\nref: '(.+?)',\ntypeRef: '(.+?)'", re.DOTALL).findall(content)
+        match2=re.compile('"cmedia" : (.+?),"ref" : (.+?),"siteKey" : "(.+?)","typeRef" : "(.+?)"', re.DOTALL).findall(content)
+        if len(match)>0:
           media=match[0][0]
           ref=match[0][1]
           typeRef=match[0][2]
-        elif url.find("/trailer/")>=0:
-          match=re.compile('"cmedia" : (.+?),"ref" : (.+?),"siteKey" : "(.+?)","typeRef" : "(.+?)"', re.DOTALL).findall(content)
-          media=match[0][0]
-          ref=match[0][1]
-          typeRef=match[0][3]
+        elif len(match2)>0:
+          media=match2[0][0]
+          ref=match2[0][1]
+          typeRef=match2[0][3]
         content = getUrl('http://www.filmstarts.de/ws/AcVisiondata.ashx?media='+media+'&ref='+ref+'&typeref='+typeRef)
         match=re.compile('hd_path="(.+?)"', re.DOTALL).findall(content)
         url=match[0]

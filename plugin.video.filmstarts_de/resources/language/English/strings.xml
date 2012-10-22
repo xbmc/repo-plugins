@@ -10,7 +10,7 @@
   <string id="30008">Search</string>
   <string id="30009">German</string>
   <string id="30010">Original</string>
-  <string id="30101">Force ViewMode</string>
-  <string id="30102">ViewMode</string>
+  <string id="30101">Force View</string>
+  <string id="30102">ViewID</string>
   <string id="30103">Show all trailers</string>
 </strings>

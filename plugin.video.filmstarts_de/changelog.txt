@@ -15,3 +15,5 @@
 - Removed trailer archiv
 - Added setting to show all trailers
 - Added setting to force view mode
+1.0.6
+- Fixed site changes for some vids

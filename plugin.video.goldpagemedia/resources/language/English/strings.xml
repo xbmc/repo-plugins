@@ -1,0 +1,7 @@
+<strings>
+    <string id="30000">General settings</string>
+    <string id="30001">Show channel's description (Vietnamese Unicode)</string>
+	<string id="30002">Show channel's description on the right of channel's name</string>
+    <string id="30100">tv24.vn settings</string>
+    <string id="30101">Use HTTP streams instead of RTMP</string>
+</strings>

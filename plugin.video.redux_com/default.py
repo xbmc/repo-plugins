@@ -1,12 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,socket
+from random import shuffle
 
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
-addon = xbmcaddon.Addon(id='plugin.video.redux_com')
-translation = addon.getLocalizedString
 
 forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
@@ -14,6 +13,12 @@ if forceViewMode=="true":
 else:
   forceViewMode=False
 viewMode=str(addon.getSetting("viewMode"))
+
+tvMode=addon.getSetting("tvMode")
+if tvMode=="true":
+  tvMode=True
+else:
+  tvMode=False
 
 def index():
         content = getUrl("http://redux.com/hg.shellinit")
@@ -50,13 +55,15 @@ def listChannels(type):
             id = id[:id.find('\\"')]
             match=re.compile("preload='(.+?)'", re.DOTALL).findall(entry)
             thumb=match[0]
-            addDir(title,id,'listVideos',thumb)
+            if tvMode==True:
+              addLink(title,id,'playAll',thumb)
+            else:
+              addDir(title,id,'listVideos',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(id):
-        urlMain=url
         content = getUrl("http://redux.com/hg.channelinfo/"+id)
         spl=content.split('"pid":')
         for i in range(1,len(spl),1):
@@ -104,6 +111,37 @@ def playVimeo(id):
           url = "plugin://plugin.video.vimeo/?path=/root/video&action=play_video&videoid=" + id
         listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+
+def playAll(id):
+        content = getUrl("http://redux.com/hg.channelinfo/"+id)
+        spl=content.split('"pid":')
+        playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playlist.clear()
+        del(spl[0])
+        shuffle(spl)
+        for i in range(0,len(spl),1):
+            entry=spl[i]
+            match=re.compile('"title":"(.+?)"', re.DOTALL).findall(entry)
+            title=match[0]
+            title=cleanTitle(title)
+            match=re.compile('"type":"(.+?)"', re.DOTALL).findall(entry)
+            type=match[0]
+            match=re.compile('"id":"(.+?)"', re.DOTALL).findall(entry)
+            id=match[0]
+            if type=="youtube":
+              if xbox==True:
+                url = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + id
+              else:
+                url = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + id
+              listitem = xbmcgui.ListItem(title)
+              playlist.add(url,listitem)
+            elif type=="vimeo":
+              if xbox==True:
+                url = "plugin://video/Vimeo/?path=/root/video&action=play_video&videoid=" + id
+              else:
+                url = "plugin://plugin.video.vimeo/?path=/root/video&action=play_video&videoid=" + id
+              listitem = xbmcgui.ListItem(title)
+              playlist.add(url,listitem)
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
@@ -161,5 +199,7 @@ elif mode == 'playYoutube':
     playYoutube(url)
 elif mode == 'playVimeo':
     playVimeo(url)
+elif mode == 'playAll':
+    playAll(url)
 else:
     index()

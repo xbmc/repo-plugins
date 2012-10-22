@@ -3,8 +3,6 @@
 import urllib,urllib2,re,xbmc,xbmcgui,xbmcaddon,xbmcplugin
 
 pluginhandle = int(sys.argv[1])
-settings = xbmcaddon.Addon(id='plugin.video.tageswebschau')
-translation = settings.getLocalizedString
 
 def index():
         content = getUrl("http://www.radiobremen.de/extranet/tws/json/tws_toc.json?_=1338860844174")
@@ -24,8 +22,12 @@ def index():
 
 def playVideo(url):
         content = getUrl(url)
-        match=re.compile('"url" : "http://(.+?)_L.mp4"', re.DOTALL).findall(content)
-        url="http://"+match[0]+"_L.mp4"
+        match1=re.compile('"url" : "http://(.+?)_L.mp4"', re.DOTALL).findall(content)
+        match2=re.compile('"url":"http://(.+?)_L.mp4"', re.DOTALL).findall(content)
+        if len(match1)>0:
+          url="http://"+match1[0]+"_L.mp4"
+        elif len(match2)>0:
+          url="http://"+match2[0]+"_L.mp4"
         listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 

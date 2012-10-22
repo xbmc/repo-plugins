@@ -7,6 +7,10 @@
 	<string id="30004">Video quality (Requires restart)</string>
 	<string id="30005">Low</string>
 	<string id="30006">High</string>
+	<string id="30007">Search</string>
+    <string id="30009">No videos found. Please check your spelling</string>
+    <string id="30010">or try again using different search words.</string>
+	<string id="30021">Enable default view for Confluence skin</string>
 	<string id="30050">There was a connection error:</string>
 	<string id="30051">If this problem persists, please submit the error report.</string>
 	<string id="30052">Retry</string>

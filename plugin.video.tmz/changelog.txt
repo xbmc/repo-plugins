@@ -1,3 +1,9 @@
+[B]Version 2.0.6[/B]
+- Added Search menu
+- Added default view for Confluence skin
+- Added fanart
+- Fixed "yesno() takes no keyword arguments" error
+
 [B]Version 2.0.5[/B]
 - Added retry function for HTTP and Index errors
 

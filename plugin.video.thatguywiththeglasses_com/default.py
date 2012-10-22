@@ -69,7 +69,7 @@ def listVideos(url):
         id=match[0]
         match=re.compile('<input type="hidden" name="sectionid" value="(.+?)"', re.DOTALL).findall(content)
         sectionId=match[0]
-        content = getUrl("http://thatguywiththeglasses.com"+url,"limit=0&id="+id+"&sectionid="+sectionId+"&task=category&filter_order=a.created&filter_order_Dir=desc&limitstart=0")
+        content = getUrl("http://thatguywiththeglasses.com"+url+"?limit=0&id="+id+"&sectionid="+sectionId+"&task=category&filter_order=a.created&filter_order_Dir=desc&limitstart=0")
         spl=content.split('<tr class="sectiontableentry')
         for i in range(1,len(spl),1):
             entry=spl[i]
@@ -133,7 +133,7 @@ def listParts(match):
         partUrls=[]
         for url in match:
           partNames.append("Part "+str(i))
-          partUrls.append("http://blip.tv/play/"+url)
+          partUrls.append("http://blip.tv/play/"+url.replace(".x?p=1",""))
           i+=1
         dialog = xbmcgui.Dialog()
         nr=dialog.select("Parts", partNames)

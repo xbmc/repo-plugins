@@ -57,6 +57,7 @@ def readConfig():
 		f = open(configFile, "r+")
 		try:
 			goldpagemedia_path = f.readline()
+			goldpagemedia_path = goldpagemedia_path.strip()
 		except:
 			pass
 		finally:
@@ -66,11 +67,14 @@ def readConfig():
 	
 def writeConfig():
 	configFile = xbmc.translatePath( os.path.join( home, configFileName ) )
-	f = open(configFile, "w+")
+	print "xbmc.translatePath(home) = " + xbmc.translatePath(home)
 	try:
+		f = open(configFile, "w+")	
 		f.write(goldpagemedia_path)
-	finally:
 		f.close()
+	except:
+		print "pass except write config here"
+		pass
 
 def readFileChannelOnline():
 	try:
@@ -485,6 +489,7 @@ def play_video(url, name, adv_index):
 		dialog.ok("Error", "Have an error when play item.")
 
 def getAdvertising(adv_index):
+	print "#### get Advertising ####"
 	try:
 		req = urllib2.Request(goldpagemedia_path + file_advertising_online)
 		response = urllib2.urlopen(req)
@@ -500,7 +505,6 @@ def getAdvertising(adv_index):
 			else:
 				adv_index = int(adv_index) - 1
 			
-		print "Cuoi cung thi adv_index = " + str(adv_index)
 		adv = soup('adv')[int(adv_index)]
 		result = {}
 		if adv != None:

@@ -5,6 +5,7 @@
     <setting id="sage_user" type="text" label="20002" default="sage"/>
     <setting id="sage_pass" type="text" option="hidden" label="20003" default="frey"/>
     <setting id="sage_mac" type="text" label="20006" default="FF:FF:FF:FF:FF:FF"/>
+    <setting id="streaming_quality" type="enum" label="20007" values="150|240|440|640|840|1240|1840" default="1840"/>
     <setting type="sep" />
     <setting id="sage_rec" type="text" label="20004" default="E:\SageTV Recordings\" />
     <setting id="sage_unc" type="folder" label="20005" default="smb://localhost/SageTV Recordings/"/>

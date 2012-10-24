@@ -126,3 +126,17 @@ function GetPlaylistOfSegmentsForMediafile(mediafileID,sage_rec,sage_unc) {
     }
     return ret;
 }
+
+function GetFavoriteIDForShowTitle(showtitle) {
+   var favs =  FavoriteAPI.GetFavorites();
+   favoriteID = "";
+   var s = favs.length;
+   for (var i=0;i<s;i++) {
+      var fav = favs[i];
+      if(showtitle == FavoriteAPI.GetFavoriteTitle(fav)) {
+	 favoriteID = ""+FavoriteAPI.GetFavoriteID(fav);
+	 break;
+      }
+   }
+   return favoriteID;
+}

@@ -1,3 +1,13 @@
+[B]Version 1.3.4 (Oct 17, 2012)[/B]
+- Improved display of show titles that contain special (non-ASCII) characters (added UTF8 support)
+
+[B]Version 1.3.3 (Oct 16, 2012)[/B]
+- Added new streaming quality setting and enhanced "Watch (Stream)" context menu to force what quality to stream the recording back as (note that this is a workaround to using the standard streaming URL which does not work due to a bug in ffmpeg that we're waiting to get fixed)
+- Added "Add/Remove Favorite" show level context menu items
+
+[B]Version 1.3.2 (Oct 16, 2012)[/B]
+- Added show level context menu items to enable "Set All Watched", "Clear All Watched", and "Delete All" which takes action on all episodes within a show
+
 [B]Version 1.3.1 (Oct 13, 2012)[/B]
 - Added "Watch (Streamed)" context menu item which enables playing back via using SageTV remote services
 - Fixed file/watched duration issue where "None" wasn't handled

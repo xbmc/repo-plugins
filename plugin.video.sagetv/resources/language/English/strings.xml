@@ -8,6 +8,7 @@
     <string id="20004">SageTV Recording Folder</string>
     <string id="20005">SageTV Recording Folder Network path</string>
     <string id="20006">SageTV Server MAC Address (for WOL)</string>
+    <string id="20007">Streaming Bandwidth (kbps)</string>
     <!-- Settings-->
     
     <string id="21000">SageTV Server Not Found</string>
@@ -52,4 +53,7 @@
     <string id="21039">You do not have the media streaming services plugin installed</string>
     <string id="21040">Please install media streaming services to enable watching streams.</string>
     <string id="21041">Please install/upgrade your media streaming services plugin version to</string>
+    <string id="21042">Set All Watched</string>
+    <string id="21043">Clear All Watched</string>
+    <string id="21044">Delete All</string>
 </strings>

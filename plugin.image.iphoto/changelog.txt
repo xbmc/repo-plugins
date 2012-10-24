@@ -1,3 +1,7 @@
+1.9.3 - 20121023
+- Warn user that Keywords are unsupported with iPhoto >= 9.4.
+- Work around for bogus Face entries in XML.
+
 1.9.2 - 20121017
 - Fixes for iPhoto 9.4.
 - Ignore Albums of type "Event".

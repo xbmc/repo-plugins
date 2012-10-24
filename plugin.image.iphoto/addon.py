@@ -423,6 +423,11 @@ def list_photos_with_keyword(params):
 def list_keywords(params):
     global db, BASE_URL, ICONS_PATH, album_ign_empty, view_mode
 
+    if (db.GetIphotoVersion() >= 9.4):
+	dialog = gui.Dialog()
+	dialog.ok(addon.getLocalizedString(30262), addon.getLocalizedString(30263))
+	return
+
     keywordid = 0
     try:
 	keywordid = params['keywordid']

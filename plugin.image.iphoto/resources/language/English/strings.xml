@@ -26,6 +26,8 @@
     <string id="30252">Scanning...</string>
     <string id="30260">Library import in progress</string>
     <string id="30261">Unable to reset database.</string>
+    <string id="30262">Currently unsupported</string>
+    <string id="30263">This function is unsupported in this version of iPhoto.</string>
 
 
     <!-- Category strings -->

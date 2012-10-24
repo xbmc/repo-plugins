@@ -562,6 +562,8 @@ class IPhotoDB:
 
 	try:
 	    faceid = int(face['key'])
+	    facekey = face['key image']
+	    faceidx = face['key image face index']
 	except:
 	    return
 
@@ -571,8 +573,8 @@ class IPhotoDB:
 	    VALUES (?, ?, ?, ?, ?, ?)""",
 				(faceid,
 				 face['name'],
-				 face['key image'],
-				 face['key image face index'],
+				 facekey,
+				 faceidx,
 				 face['PhotoCount'],
 				 face['Order']))
 	except sqlite.IntegrityError:

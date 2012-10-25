@@ -1,6 +1,6 @@
 #xbmc tvkaista.fi plugin
 #
-#Copyright (C) 2009-2011  Viljo Viitanen <viljo.viitanen@iki.fi>
+#Copyright (C) 2009-2012  Viljo Viitanen <viljo.viitanen@iki.fi>
 #Copyright (C) 2010       stilester
 #Copyright (C) 2008-2009  J. Luukko
 #
@@ -31,12 +31,17 @@
 #7.1.2011 tuki tvkaistan proxyille
 #11.8.2011 naytetaan aika aina Suomen ajassa
 #13.11.2011 proxytuki pois tarpeettomana, sarjojen sorttaus
+#24.10.2012 bugikorjaus, lisatty oma user-agent tvkaistan dokumentaation mukaan
+#           fiksumpi virheilmoitus vaarasta kayttajatunnuksesta/salasanasta
 
 import locale
 locale.setlocale(locale.LC_ALL, 'C')
 
 import xbmcgui, urllib, urllib2, cookielib , re, os, xbmcplugin, htmlentitydefs, time, xbmcaddon, calendar
 tvkaista_addon = xbmcaddon.Addon("plugin.video.tvkaista");
+
+VERSION = "3.0.3"
+MYHEADERS = { 'User-Agent': "tvkaista-xbmc version "+VERSION+";" }
 
 BASE_RESOURCE_PATH = xbmc.translatePath( os.path.join( tvkaista_addon.getAddonInfo('path'), "resources" ) )
 sys.path.append( os.path.join( BASE_RESOURCE_PATH, "lib" ) )
@@ -168,14 +173,22 @@ def listprograms(url):
   passman.add_password(None, "http://www.tvkaista.fi", tvkaista_addon.getSetting("username"), \
                          tvkaista_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman))
-  urllib2.install_opener(opener)
   #print "listprograms avataan: "+url+'/'+bitrate()+'.rss'
   try:
-      content = urllib2.urlopen(url+'/'+bitrate()+'.rss').read()
+      if url.endswith('/'):
+        needslash=''
+      else:
+        needslash='/'
+      request = urllib2.Request(url+needslash+bitrate()+'.rss', headers=MYHEADERS)
+      content = opener.open(request).read()
   except urllib2.HTTPError,e:
+    if e.code == 401:
+      desc=" (virheellinen kayttajatunnus tai salasana)"
+    else:
+      desc=""
     u=sys.argv[0]
-    listfolder = xbmcgui.ListItem('www-pyynto ei onnistunut '+str(e.code))
-    listfolder.setInfo('video', {'Title': 'www-pyynto ei onnistunut '+str(e.code)})
+    listfolder = xbmcgui.ListItem('www-pyynto ei onnistunut '+str(e.code)+desc)
+    listfolder.setInfo('video', {'Title': 'www-pyynto ei onnistunut '+str(e.code)+desc})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=0)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
     return
@@ -263,14 +276,18 @@ def listdates(url):
   passman.add_password(None, "http://www.tvkaista.fi", tvkaista_addon.getSetting("username"), \
                          tvkaista_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman))
-  urllib2.install_opener(opener)
   #print "listdates avataan: "+url
   try:
-      content = urllib2.urlopen('http://www.tvkaista.fi/feed/channels/').read()
+      request = urllib2.Request('http://www.tvkaista.fi/feed/channels/', headers=MYHEADERS)
+      content = opener.open(request).read()
   except urllib2.HTTPError,e:
+    if e.code == 401:
+      desc=" (virheellinen kayttajatunnus tai salasana)"
+    else:
+      desc=""
     u=sys.argv[0]
-    listfolder = xbmcgui.ListItem('www-pyynto ei onnistunut '+str(e.code))
-    listfolder.setInfo('video', {'Title': 'www-pyynto ei onnistunut '+str(e.code)})
+    listfolder = xbmcgui.ListItem('www-pyynto ei onnistunut '+str(e.code)+desc)
+    listfolder.setInfo('video', {'Title': 'www-pyynto ei onnistunut '+str(e.code)+desc})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
     return
@@ -301,14 +318,18 @@ def listfeeds(url):
   passman.add_password(None, "http://www.tvkaista.fi", tvkaista_addon.getSetting("username"), \
                          tvkaista_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman))
-  urllib2.install_opener(opener)
   #print "listfeeds avataan: "+url
   try:
-      content = urllib2.urlopen(url).read()
+      request = urllib2.Request(url, headers=MYHEADERS)
+      content = opener.open(request).read()
   except urllib2.HTTPError,e:
+    if e.code == 401:
+      desc=" (virheellinen kayttajatunnus tai salasana)"
+    else:
+      desc=""
     u=sys.argv[0]
-    listfolder = xbmcgui.ListItem('www-pyynto ei onnistunut '+str(e.code))
-    listfolder.setInfo('video', {'Title': 'www-pyynto ei onnistunut '+str(e.code)})
+    listfolder = xbmcgui.ListItem('www-pyynto ei onnistunut '+str(e.code)+desc)
+    listfolder.setInfo('video', {'Title': 'www-pyynto ei onnistunut '+str(e.code)+desc})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
     return
@@ -377,20 +398,25 @@ def addremove(action,id):
           'password': tvkaista_addon.getSetting("password"), 'rememberme':'on'}
   cj = cookielib.CookieJar()
   opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-  r = opener.open('http://www.tvkaista.fi/login/', urllib.urlencode(opts))
+  request = urllib2.Request('http://www.tvkaista.fi/login/', headers=MYHEADERS)
+  r = opener.open(request, urllib.urlencode(opts))
   dialog = xbmcgui.Dialog()
   try:
     if action==1:
-      r = opener.open("http://www.tvkaista.fi/recordings/?action=addtoplaylist&id=%s"%id)
+      request = urllib2.Request("http://www.tvkaista.fi/recordings/?action=addtoplaylist&id=%s"%id, headers=MYHEADERS)
+      r = opener.open(request)
       dialog.ok('Tvkaista', 'Ohjelma lisatty listalle.')
     elif action==2:
-      r = opener.open("http://www.tvkaista.fi/recordings/?action=removefromplaylist&id=%s"%id)
+      request = urllib2.Request("http://www.tvkaista.fi/recordings/?action=removefromplaylist&id=%s"%id, headers=MYHEADERS)
+      r = opener.open(request)
       dialog.ok('Tvkaista', 'Ohjelma poistettu listalta.')
     elif action==3:
-      r = opener.open("http://www.tvkaista.fi/recordings/?action=addseasonpass&id=%s"%id)
+      request = urllib2.Request("http://www.tvkaista.fi/recordings/?action=addseasonpass&id=%s"%id, headers=MYHEADERS)
+      r = opener.open(request)
       dialog.ok('Tvkaista', 'Ohjelma lisatty sarjoihin')
     elif action==4:
-      r = opener.open("http://www.tvkaista.fi/recordings/?action=removeseasonpass&spid=%s"%id)
+      request = urllib2.Request("http://www.tvkaista.fi/recordings/?action=removeseasonpass&spid=%s"%id, headers=MYHEADERS)
+      r = opener.open(request)
       dialog.ok('Tvkaista', 'Ohjelma poistettu sarjoista.')
     else:
       dialog.ok('Tvkaista', 'Ohjelmavirhe!')

@@ -1,3 +1,8 @@
+[B]Version 1.0.3 - 2012-10-21[/B]
+- Added Norwegian translation (thanks cptspiff)
+- Fixed problems with differences between Eden and Frodo (http://trac.xbmc.org/ticket/13349)
+- Improved handling of HTTP errors
+
 [B]Version 1.0.2 - 2012-04-29[/B]
 - Added region selection as first screen
 - Added support viasat4play.no

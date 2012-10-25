@@ -119,6 +119,8 @@ class TV3PlayAddon(object):
         url = 'http://www.%s/program/%s' % (region, slug)
         buggalo.addExtraData('url', url)
         html = self.downloadUrl(url)
+        if not html:
+            raise TV3PlayException(ADDON.getLocalizedString(204))
         fanart = self.downloadAndCacheFanart(slug, html)
 
         m = re.search('Table body(.*?)</tbody>.*?Table body(.*?)</tbody>', html, re.DOTALL)
@@ -172,6 +174,8 @@ class TV3PlayAddon(object):
         url = 'http://www.%s/rss/%s' % (region, RSS[int(id)])
         buggalo.addExtraData('url', url)
         xml = self.downloadUrl(url)
+        if not xml:
+            raise TV3PlayException(ADDON.getLocalizedString(204))
         doc = ElementTree.fromstring(xml.replace('&', '&amp;'))
 
         items = list()
@@ -210,6 +214,8 @@ class TV3PlayAddon(object):
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
 
+        firstItem = None
+
         # Preroll
         prerollNode = doc.find('Product/AdCalls/preroll')
         if prerollNode is not None:
@@ -219,6 +225,8 @@ class TV3PlayAddon(object):
                 flvUrl = node.findtext('InLine/Creatives/Creative/Linear/MediaFiles/MediaFile')
                 item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
                 playlist.add(flvUrl, item)
+
+                firstItem = item
 
         start = 0
         for idx, node in enumerate(doc.findall('Product/AdCalls/midroll')):
@@ -235,6 +243,9 @@ class TV3PlayAddon(object):
             featureItem = xbmcgui.ListItem(doc.findtext('Product/Title'), thumbnailImage=doc.findtext('Product/Images/ImageMedia/Url'), path = itemUrl)
             playlist.add(itemUrl, featureItem)
             start = stop
+
+            if firstItem is None:
+                firstItem = featureItem
 
             item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
             playlist.add(adUrl, item)
@@ -253,14 +264,20 @@ class TV3PlayAddon(object):
                 item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
                 playlist.add(flvUrl, item)
 
-        xbmcplugin.setResolvedUrl(HANDLE, True, playlist[0])
+        if firstItem is not None:
+            xbmcplugin.setResolvedUrl(HANDLE, True, firstItem)
+        else:
+            xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
 
     def getPlayProductXml(self, videoId):
         url = 'http://viastream.viasat.tv/PlayProduct/%s' % videoId
         buggalo.addExtraData('playProductXml', url)
         xml = self.downloadUrl(url)
-        xml = re.sub('&[^a]', '&amp;', xml)
-        return ElementTree.fromstring(xml)
+        if xml:
+            xml = re.sub('&[^a]', '&amp;', xml)
+            return ElementTree.fromstring(xml)
+        else:
+            return ElementTree.Element('data-not-loaded') # to avoid unnessecary error handling
 
     def getRtmpUrl(self, videoUrl):
         if videoUrl[0:4] == 'rtmp':
@@ -281,7 +298,7 @@ class TV3PlayAddon(object):
         if xml:
             return ElementTree.fromstring(xml.decode('utf8', 'ignore'))
         else:
-            return None
+            return ElementTree.Element('data-not-loaded') # to avoid unnessecary error handling
 
     def downloadAndCacheFanart(self, slug, html):
         fanartPath = os.path.join(CACHE_PATH, '%s.jpg' % slug.encode('iso-8859-1', 'replace'))

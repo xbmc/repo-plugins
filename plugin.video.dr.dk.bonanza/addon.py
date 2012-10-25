@@ -166,14 +166,20 @@ class Bonanza(object):
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
 
-        print PARAMS
+        firstItem = None
         for type in VIDEO_TYPES:
             if PARAMS.has_key(type.lower()):
                 url = self.fixRtmpUrl(PARAMS[type.lower()][0])
                 item = xbmcgui.ListItem(type, path = url)
                 playlist.add(url, item)
 
-        xbmcplugin.setResolvedUrl(HANDLE, True, playlist[0])
+                if firstItem is None:
+                    firstItem = item
+
+        if firstItem is not None:
+            xbmcplugin.setResolvedUrl(HANDLE, True, firstItem)
+        else:
+            xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
 
     def fixRtmpUrl(self, url):
         if url[0:4] == 'rtmp':

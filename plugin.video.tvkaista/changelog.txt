@@ -1,3 +1,5 @@
+[B]2.2.3[/B]
+- Bugfix+add custom user-agent string as requested by tvkaista api documentation
 [B]2.2.2[/B]
 - Bugfix
 [B]2.2.1[/B]

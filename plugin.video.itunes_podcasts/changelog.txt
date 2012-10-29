@@ -1,0 +1,11 @@
+0.9.1
+ - changed add-on name to "Apple iTunes Podcasts"
+ - fixed spaces in search term
+ - fixed keyboard dialog after context action
+0.9.0
+ - initial release
+ Features:
+	 - more than 60 genres
+	 - audio and video Podcasts
+	 - search for podcasts
+	 - manage "My Podcasts" favorites

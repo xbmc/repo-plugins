@@ -1,0 +1,13 @@
++ New feature
+* Fixed/improved feature
+- Removed feature
+
+
+26 Oct 2012 v1.0.0
++ Initial release
++ Premium and premium favorites support
++ Automatic download of new channel art for new channels
+
+Thanks to DexN for making me aware of the JSON data and for being my willing guinea pig ;)
+
+The floral pattern used in the icon used under Creative Commons by Coby17 - http://coby17.deviantart.com/

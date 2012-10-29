@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30014">
+		<setting id="sortaz" type="bool" label="30011" default="true" />
+		<setting id="cacheexpire" type="number" label="30012" default="720" />
+		<setting id="forceupdate" type="bool" label="30010" default="false" />
+		<setting id="getpremium" type="lsep" label="30015" />
+		<setting type="lsep" label="30017" />
+		<setting type="lsep" label="30018" />
+		<setting type="lsep" label="30019" />
+		<setting type="lsep" label="30016" />
+	</category>
+	<category label="30002">
+		<setting id="username" type="text" label="30003" />
+		<setting id="password" type="text" option="hidden" label="30004" />
+		<setting id="bitrate" type="enum" label="30013" values="40|64|128" default="2" />
+		<setting id="usefavorites" type="bool" label="30005" default="false" />
+		<setting id="forceupdate" type="bool" label="30010" default="false" />
+		<setting type="lsep" label="30017" />
+		<setting type="lsep" label="30018" />
+		<setting type="lsep" label="30019" />
+		<setting type="lsep" label="30016" />
+	</category>
+	<category label="30020">
+		<setting id="allowstats" type="bool" label="30021" default="true" />
+		<setting type="lsep" label="30022" />
+		<setting type="lsep" label="30023" />
+		<setting type="lsep" label="30024" />
+		<setting type="lsep" label="30025" />
+		<setting type="lsep" label="30026" />
+		<setting type="lsep" label="30027" />
+		<setting type="lsep" label="30028" />
+		<setting type="lsep" label="30029" />
+	</category>
+</settings> 

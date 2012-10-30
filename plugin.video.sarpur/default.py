@@ -76,7 +76,7 @@ def spila_live(stod):
     #if stod == 'ruv':
     #stream_info['playpath'] = 'http://194.144.162.36:1935/ruv/beint-2/playlist.m3u8?key=%d' % int(math.floor(random.random() * 9999)) 
     stream_info['playpath'] = 'beint-2' 
-    stream_info['rtmp_url'] = 'rtmp://178.19.48.171/ruv?key=%d' % int(math.floor(random.random() * 9999))
+    stream_info['rtmp_url'] = 'rtmp://212.30.206.129/ruv?key=%d' % int(math.floor(random.random() * 9999))
     stream_info['page_url'] = 'http://ruv.is/ruv'
 
     item = xbmcgui.ListItem("RTL")

@@ -6,6 +6,7 @@ from random import shuffle
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
+addon = xbmcaddon.Addon(id='plugin.video.redux_com')
 
 forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":

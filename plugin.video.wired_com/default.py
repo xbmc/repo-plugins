@@ -3,18 +3,18 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,httplib,socket,time
 from pyamf import remoting
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-xbox = xbmc.getCondVisibility("System.Platform.xbox")
-settings = xbmcaddon.Addon(id='plugin.video.wired_com')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.wired_com')
+translation = addon.getLocalizedString
 
-maxBitRate=settings.getSetting("maxBitRate")
-forceViewMode=settings.getSetting("forceViewMode")
+maxBitRate=addon.getSetting("maxBitRate")
+forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
 else:
   forceViewMode=False
-viewMode=str(settings.getSetting("viewMode"))
+viewMode=str(addon.getSetting("viewMode"))
 
 qual=[512000,1024000,2048000,3072000,4096000,5120000]
 maxBitRate=qual[int(maxBitRate)]
@@ -22,12 +22,12 @@ maxBitRate=qual[int(maxBitRate)]
 def index():
         addDir("Latest","http://www.wired.com/video/",'listVideos',"")
         content = getUrl("http://www.wired.com/video/")
-        content = content[content.find("<li class='bc_topics bc_otherChannels'>"):]
+        content = content[content.find('<li class="bc_topics bc_otherChannels">'):]
         content = content[:content.find("</div>")]
         match=re.compile('<li><a href="(.+?)">(.+?)</a></li>', re.DOTALL).findall(content)
         for url,title in match:
           if title!="Nebula":
-            addDir(title,url,'listVideos',"")
+            addDir(title,"http://www.wired.com"+url,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -39,17 +39,17 @@ def listVideos(url):
         spl=content.split('<div class="lineupThumb">')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile("_popDesc_1' class='bc_popDesc'>(.+?)</div>", re.DOTALL).findall(entry)
+            match=re.compile('_popDesc_1" class="bc_popDesc">(.+?)</div>', re.DOTALL).findall(entry)
             desc=""
             if len(match)>0:
               desc=match[0]
               desc=cleanTitle(desc)
-            match=re.compile("alt='(.+?)'", re.DOTALL).findall(entry)
+            match=re.compile('alt="(.+?)"', re.DOTALL).findall(entry)
             title=match[0]
             title=cleanTitle(title)
-            match=re.compile("<div id='bc_(.+?)_", re.DOTALL).findall(entry)
+            match=re.compile('<div id="bc_(.+?)_', re.DOTALL).findall(entry)
             id=match[0]
-            match=re.compile("_thumbUrl_1' class='bc_popDesc'>(.+?)</div>", re.DOTALL).findall(entry)
+            match=re.compile('_thumbUrl_1" class="bc_popDesc">(.+?)</div>', re.DOTALL).findall(entry)
             thumb=""
             if len(match)>0:
               thumb=match[0]
@@ -112,12 +112,8 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20100101 Firefox/15.0.1')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

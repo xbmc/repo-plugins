@@ -2,6 +2,6 @@
 <strings>
   <string id="30001">Next Page</string>
   <string id="30101">Maximum bitrate</string>
-  <string id="30102">Force ViewMode</string>
-  <string id="30103">ViewMode</string>
+  <string id="30102">Force View</string>
+  <string id="30103">ViewID</string>
 </strings>

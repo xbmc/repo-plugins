@@ -17,7 +17,7 @@
 
 import urllib2, datetime
 
-import xbmcplugin, xbmcgui
+import xbmcplugin, xbmcgui, xbmcaddon
 
 import parserss
 
@@ -31,6 +31,8 @@ podcast_config = {
     "tagesthemen": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/tagesthemen",
                             "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesthemen" },
                      "name": "Tagesthemen" },
+    "tageswebschau": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/tageswebschau" },
+                       "name": "tagesWEBschau" }, 
     "nachtmagazin": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/nachtmagazin",
                                "L": "http://www.tagesschau.de/export/video-podcast/webl/nachtmagazin" },
                       "name": "Nachtmagazin" },
@@ -49,14 +51,13 @@ podcast_config = {
 # ------------------------------------------------------------
 
 # -- Settings -----------------------------------------------
-# TODO: This should be configurabe in a settings dialog
+settings = xbmcaddon.Addon(id='plugin.video.tagesschau')
+quality_id = settings.getSetting("quality")
+quality = ['M', 'L'][int(quality_id)]
 
 # change order here or remove elements if you like
-podcasts = ("tagesschau", "tagesschau100", "tagesthemen", "nachtmagazin", 
+podcasts = ("tagesschau", "tagesschau100", "tagesthemen", "tageswebschau", "nachtmagazin", 
             "berichtausberlin", "wochenspiegel", "deppendorfswoche", "tagesschauvor20jahren")
-
-# Quality
-quality = "L"
 
 # Time format
 datetimeformat = "%a %d. %B %Y, %H:%M"
@@ -91,10 +92,10 @@ def getName(podcast, item):
 
     return item["title"]
 
-def addLink(name, url, iconimage):
+def addLink(name, url, iconimage, description):
         ok = True
         liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo(type="Video", infoLabels={ "Title": name } )
+        liz.setInfo(type="Video", infoLabels={ "Title": name, "Plot": description } )
         ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=liz)
         return ok
 
@@ -102,6 +103,6 @@ for podcast in podcasts:
     feed = parserss.parserss(getUrl(podcast, quality))
     if len(feed["items"]) > 0:
         item = feed["items"][0]
-        addLink(getName(podcast, item), item["media"]["url"], feed["image"])
+        addLink(getName(podcast, item), item["media"]["url"], feed["image"], item.get("description", ""))
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

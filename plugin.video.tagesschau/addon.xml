@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
-  id="plugin.video.tagesschau"
-  version="1.2.1"
-  name="Tagesschau"
-  provider-name="nevermore">
+    id="plugin.video.tagesschau"
+    version="1.3.1"
+    name="Tagesschau"
+    provider-name="nevermore">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
   </requires>
-
-    <extension point="xbmc.python.pluginsource" library="tagesschau.py">
-        <provides>video</provides>
-    </extension>
-    <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-	    <summary lang="de">Tagesschau</summary>
-        <summary lang="en">Tagesschau</summary>
-	    <description lang="de">
-	  Die ARD-Nachrichtenmagazine' Tagesschau', 'Tagesschau in 100 Sekunden' und 'Tagesthemen'.
-	    </description>
-        <description lang="en">
-	  Watch german news magazines 'Tagesschau', 'Tagesschau in 100 Sekunden' and 'Tagesthemen'.
-	    </description>
-        <disclaimer lang="en">Videos from tagesschau.de</disclaimer>
-    </extension>
+  
+  <extension point="xbmc.python.pluginsource" library="tagesschau.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>de</language>
+    <platform>all</platform>
+    <summary lang="de">Tagesschau</summary>
+    <summary lang="en">Tagesschau</summary>
+    <description lang="de">
+      Die 'Tagesschau', 'Tagesschau in 100 Sekunden', 'Tagesthemen' und andere ARD Nachrichtenmagazine.
+    </description>
+    <description lang="en">
+      Watch the 'Tagesschau', 'Tagesschau in 100 Sekunden', 'Tagesthemen' and other ARD news magazines from Germany.
+    </description>
+    <disclaimer lang="en">Videos from tagesschau.de</disclaimer>
+  </extension>
 </addon>

@@ -1,3 +1,11 @@
+version 1.3.1
+ * Added language tag
+
+version 1.3.0
+ * Added a "preferred quality" setting
+ * Added "tagesWEBschau" podcast
+ * Added descriptions to the videos
+
 version 1.2.0
  * release for eden-pre
 

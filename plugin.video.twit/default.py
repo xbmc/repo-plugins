@@ -17,38 +17,38 @@ except:
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.twit')
 __language__ = __settings__.getLocalizedString
-playback = __settings__.getSetting('playback')
 home = __settings__.getAddonInfo('path')
 fanart = xbmc.translatePath( os.path.join(home, 'fanart.jpg'))
 icon = xbmc.translatePath( os.path.join(home, 'icon.png'))
 cache = StorageServer.StorageServer("twit", 24)
 
+# thumbs are from http://leoville.tv/podcasts/coverart/
 thumbs = {
-          'All About Android' : 'http://leo.am/podcasts/coverart/aaa600video.jpg',
-          'Before You Buy' : 'http://leoville.tv/podcasts/coverart/byb600video.jpg',
-          'FLOSS Weekly' : 'http://leoville.tv/podcasts/coverart/floss600video.jpg',
-          'Frame Rate' : 'http://leoville.tv/podcasts/coverart/fr600video.jpg',
-          'Ham Nation' : 'http://leoville.tv/podcasts/coverart/hn144video.jpg',
-          'Home Theater Geeks' : 'http://leoville.tv/podcasts/coverart/htg144video.jpg',
-          'iFive for the iPhone' : 'http://feeds.twit.tv/podcasts/coverart/ifive600video.jpg',
-          'iPad Today' : 'http://leoville.tv/podcasts/coverart/ipad600video.jpg',
-          'Know How...' : 'http://feeds.twit.tv/podcasts/coverart/kh600video.jpg',
-          'MacBreak Weekly' : 'http://leoville.tv/podcasts/coverart/mbw144video.jpg',
-          'NSFW' : 'http://leoville.tv/podcasts/coverart/nsfw144video.jpg',
-          'Radio Leo' : 'http://twit.tv/files/imagecache/coverart-small/coverart/aaa600.jpg',
-          'Security Now' : 'http://leoville.tv/podcasts/coverart/sn600video.jpg',
-          'Tech News Today' : 'http://leoville.tv/podcasts/coverart/tnt144video.jpg',
-          'The Giz Wiz' : 'http://static.mediafly.com/publisher/images/72acf86f350b40c5b5fd132dcacc78be/icon-600x600.png',
-          'The Social Hour' : 'http://leoville.tv/podcasts/coverart/tsh600video.jpg',
-          'The Tech Guy' : 'http://leoville.tv/podcasts/coverart/ttg144video.jpg',
-          'This Week In Computer Hardware' : 'http://static.mediafly.com/publisher/images/f76d60fdd2ea4822adbc50d2027839ce/icon-600x600.png',
-          'This Week in Enterprise Tech' : 'http://feeds.twit.tv/podcasts/coverart/twiet600video.jpg',
-          'This Week in Google' : 'http://leoville.tv/podcasts/coverart/twig600video.jpg',
-          'this WEEK in LAW' : 'http://static.mediafly.com/publisher/images/b2911bcc34174461ba970d2e38507340/icon-600x600.png',
-          'this WEEK in TECH' : 'http://leoville.tv/podcasts/coverart/twit144video.jpg',
-          'Triangulation' : 'http://static.mediafly.com/publisher/images/c60ef74e0a3545e490d7cefbc369d168/icon-600x600.png',
-          'TWiT Live Specials' : 'http://leoville.tv/podcasts/coverart/specials144video.jpg',
-          'Windows Weekly' : 'http://leoville.tv/podcasts/coverart/ww600video.jpg',
+    'All About Android' : 'aaa600.jpg',
+    'Before You Buy' : 'byb600.jpg',
+    'FLOSS Weekly' : 'floss600.jpg',
+    'Frame Rate' : 'fr600.jpg',
+    'Ham Nation' : 'hn600.jpg',
+    'Home Theater Geeks' : 'htg600.jpg',
+    'iFive for the iPhone' : 'ifive600.jpg',
+    'iPad Today' : 'ipad600.jpg',
+    'Know How...' : 'kh600.jpg',
+    'MacBreak Weekly' : 'mbw600.jpg',
+    'NSFW' : 'nsfw600.jpg',
+    'Radio Leo' : 'nsfw600.jpg',
+    'Security Now' : 'sn600.jpg',
+    'Tech News Today' : 'tnt600.jpg',
+    'The Giz Wiz' : 'dgw600.jpg',
+    'The Social Hour' : 'tsh600.jpg',
+    'The Tech Guy' : 'ttg600.jpg',
+    'This Week In Computer Hardware' : 'twich600.png',
+    'This Week in Enterprise Tech' : 'twiet600.jpg',
+    'This Week in Google' : 'twig600.jpg',
+    'This Week in Law' : 'twil600.jpg',
+    'This Week in Tech' : 'twit600.jpg',
+    'Triangulation' : 'tri600.jpg',
+    'TWiT Live Specials' : 'specials600.jpg',
+    'Windows Weekly' : 'ww600.jpg',
           }
 
 
@@ -72,60 +72,36 @@ def make_request(url):
 
 def get_thumb(url):
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-        items = soup('div', attrs={'class' : "dropdown"})[1]('option')
-        for i in items:
-            if i.string == 'RSS':
-                feed_url = i['value']
-                break
         try:
-            thumb = re.compile('<itunes:image href="(.+?)"/>').findall(make_request(feed_url))[0].split(' ')[0].strip()
+            thumb = soup.find('div', attrs={'class' : "views-field views-field-field-cover-art-fid"})('img')['src']
+            if thumb == None: raise
         except:
-            try:
-                thumb = soup('span', attrs={'class' : "field-content"})[0].img['src']
-            except:
-                thumb = icon
+            thumb = icon
         return thumb
 
 
-def show_check():
-        try:
-            show_list = json.loads(cache.get("show_list"))
-        except:
-            show_list = []
+def cache_shows():
         url = 'http://twit.tv/shows'
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         shows = soup.findAll('div', attrs={'class' : 'item-list'})[2]('li')
-        for i in shows:
-            name = str(i('a')[-1].string)
-            if not name in show_list:
-                cache_shows(shows)
-                break
-        return(json.loads(cache.get("show_list")))
-
-
-def cache_shows(shows):
         show_list = []
         for i in shows:
             name = str(i('a')[-1].string)
-            url = ('http://twit.tv/show/'+name.replace("'",'').replace('.','').replace(' ','-').lower()
-                   .replace('-for-the','').replace('the-giz-wiz','weekly-daily-giz-wiz'))
+            show_url = ('http://twit.tv/show/'+name.replace("'",'').replace('.','').replace(' ','-').lower()
+                        .replace('-for-the','').replace('the-giz-wiz','weekly-daily-giz-wiz'))
             try:
-                thumb = thumbs[name]
+                thumb = 'http://twit-xbmc.googlecode.com/svn/images/'+thumbs[name]
             except:
                 print '--- NO Thumb in Thumbs ---'
-                try:
-                    thumb = get_thumb(url)
-                except:
-                    thumb = icon
-                    print '--- get_thumb FAILED: %s - %s ---' %(name, url)
-            show_list.append((name, url, thumb))
-        cache.set("show_list", json.dumps(show_list))
+                thumb = get_thumb(url)
+            show_list.append((name, show_url, thumb))
+        return show_list
 
 
 def get_shows():
-        addDir(__language__(30038),'none',7,xbmc.translatePath(os.path.join(home, 'icon.png')))
+        addDir(__language__(30008),'none',7,xbmc.translatePath(os.path.join(home, 'icon.png')))
         addDir(__language__(30000),'addLiveLinks',3,xbmc.translatePath(os.path.join(home, 'resources', 'live.png')))
-        shows = cache.cacheFunction(show_check)
+        shows = cache.cacheFunction(cache_shows)
         for i in shows:
             if i[0] == 'Radio Leo': continue
             addDir(i[0], i[1], 1, i[2])
@@ -231,6 +207,10 @@ def getVideo(url):
 
 
 def setUrl(url_list, set=True):
+        if content_type == 'audio':
+            playback = '3'
+        else:
+            playback = __settings__.getSetting('playback')
         if playback == '3':
             url = url_list[3]
         if playback == '2':
@@ -252,7 +232,7 @@ def setUrl(url_list, set=True):
         else:
             if url == 'no_url':
                 dialog = xbmcgui.Dialog()
-                ret = dialog.yesno(__language__(30040), __language__(30039))
+                ret = dialog.yesno(__language__(30001), __language__(30002))
                 if ret:
                     url = url_list[3]
                 else: return
@@ -261,11 +241,11 @@ def setUrl(url_list, set=True):
 
 
 def addLiveLinks():
-        addLink(__language__(30032),'http://bglive-a.bitgravity.com/twit/live/high?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
-        addLink(__language__(30033),'http://bglive-a.bitgravity.com/twit/live/low?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
-        addLink(__language__(30034),'http://cgw.ustream.tv/Viewer/getStream/1/1524.amf','','',5,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
-        addLink(__language__(30035),'URL','','',6,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
-        addLink(__language__(30041),'http://twit.am/listen','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
+        addLink(__language__(30003),'http://bglive-a.bitgravity.com/twit/live/high?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
+        addLink(__language__(30004),'http://bglive-a.bitgravity.com/twit/live/low?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
+        addLink(__language__(30005),'http://cgw.ustream.tv/Viewer/getStream/1/1524.amf','','',5,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
+        addLink(__language__(30006),'URL','','',6,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
+        addLink(__language__(30007),'http://twit.am/listen','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
 
 
 def getUstream(url):
@@ -324,7 +304,8 @@ def addLink(name,url,description,date,mode,iconimage):
             description += "\n \n Published: " + date
         except:
             pass
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
+        u=(sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+
+           "&iconimage="+urllib.quote_plus(iconimage)+"&content_type="+content_type)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description } )
@@ -335,7 +316,8 @@ def addLink(name,url,description,date,mode,iconimage):
 
 
 def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
+        u=(sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+
+           "&iconimage="+urllib.quote_plus(iconimage)+"&content_type="+content_type)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
@@ -348,6 +330,7 @@ params=get_params()
 url=None
 name=None
 mode=None
+content_type='video'
 
 try:
     url=urllib.unquote_plus(params["url"])
@@ -363,6 +346,10 @@ except:
     pass
 try:
     mode=int(params["mode"])
+except:
+    pass
+try:
+    content_type=str(params["content_type"])
 except:
     pass
 

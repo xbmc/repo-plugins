@@ -42,6 +42,13 @@ if ( sage_unc5 != '' and sage_unc5 != None ):
 def filemap(filepath):
     for (rec, unc) in sagemappings:
         if ( filepath.find(rec) != -1 ):
+            # If the user didn't specify a trailing \ or / in the recording path setting, add that as that's critical to mapping the path correctly
+            if(rec.find("\\") != -1):
+                if(rec.rfind("\\") != (len(rec)-1)):
+                    rec = rec + "\\"
+            elif(rec.find("/") != -1):
+                if(rec.rfind("/") != (len(rec)-1)):
+                    rec = rec + "/"
             return filepath.replace(rec, unc)
 
     return filepath
@@ -59,19 +66,23 @@ confluence_views = [500,501,502,503,504,508]
 
 def TOPLEVELCATEGORIES():
 
-    url = strUrl + '/sagex/api?command=GetInstalledPlugins&encoder=json'
-    plugins = executeSagexAPIJSONCall(url, "Result")
+    #url = strUrl + '/sagex/api?command=GetInstalledPluginss&encoder=json'
+    url = strUrl + '/sagex/api?c=xbmc:GetPluginVersion&1=sagex-api-services&encoder=json'
+    sagexVersion = executeSagexAPIJSONCall(url, "Result")
 
-    if(plugins == None or len(plugins) == 0):
-        print "SageTV not detected, or required plugins not installed"
-        xbmcgui.Dialog().ok(__language__(21000),__language__(21001),__language__(21002),__language__(21003))
-        return
+    if(sagexVersion == None or sagexVersion.find("Exception") != -1):
+        #If no plugins were returned, first check that the user has the appropriate xbmc.js which has the required GetPluginVersion method
+        print "************errorMsg=" + str(sagexVersion)
+        if(sagexVersion == "java.lang.NoSuchMethodException: no such method: GetPluginVersion"):
+            print "GetPluginVersion method not found in the xbmc.js file; user must make sure they have the latest xbmc.js installed on their SageTV server"
+            xbmcgui.Dialog().ok(__language__(21004),__language__(21045),__language__(21046),__language__(21047))
+            return
+        else:
+            print "SageTV not detected, or required plugins not installed"
+            xbmcgui.Dialog().ok(__language__(21000),__language__(21001),__language__(21002),__language__(21003))
+            return
         
     print "Successfully able to connect to the SageTV server @ " + __settings__.getSetting("sage_ip") + ':' + __settings__.getSetting("sage_port")
-    sagexVersion = ""
-    for plugin in plugins:
-        if(plugin.get("PluginIdentifier") == "sagex-api-services"):
-            sagexVersion = plugin.get("PluginVersion")
  
     print "TOPLEVELCATEGORIES STARTED; sagex-api-services version=" + sagexVersion
     if(sagexVersion == ""):
@@ -197,7 +208,7 @@ def VIEWUPCOMINGRECORDINGS(url,name):
     for airing in airings:
         show = airing.get("Show")
         strTitle = airing.get("AiringTitle")
-        strTitle = unicodedata.normalize('NFKD', strTitle).encode('ascii','ignore')
+        strTitleEncoded = strTitle.encode("utf8")
         strEpisode = show.get("ShowEpisode")
         if(strEpisode == None):
             strEpisode = ""        
@@ -223,22 +234,22 @@ def VIEWUPCOMINGRECORDINGS(url,name):
 
         # if there is no episode name use the description in the title
         
-        strDisplayText = strTitle
+        strDisplayText = strTitleEncoded
         if(strGenre.find("Movie")<0 and strGenre.find("Movies")<0 and strGenre.find("Film")<0 and strGenre.find("Shopping")<0 and strGenre.find("Consumer")<0):
             if(strEpisode == ""):
                 if(strDescription != ""):
-                    strDisplayText = strTitle + ' - ' + strDescription
+                    strDisplayText = strTitleEncoded + ' - ' + strDescription
                 else:
                     if(strGenre.find("News")>=0):
                         strDisplayText = studio + " News - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
                         strDescription = strGenre
                     elif(strGenre.find("Sports")>=0):
-                        strDisplayText = strTitle + " - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
+                        strDisplayText = strTitleEncoded + " - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
                         strDescription = strGenre
             else:
-                strDisplayText = strTitle + ' - ' + strEpisode
+                strDisplayText = strTitleEncoded + ' - ' + strEpisode
         strDisplayText = strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime + ": " + strDisplayText
-        addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitle,strAiringID,seasonNum,episodeNum,studio,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
+        addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitleEncoded,strAiringID,seasonNum,episodeNum,studio,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
 
     xbmc.executebuiltin("Container.SetViewMode(504)")
 
@@ -268,7 +279,7 @@ def VIEWAIRINGSONCHANNEL(url,name):
     for airing in airings:
         show = airing.get("Show")
         strTitle = airing.get("AiringTitle")
-        strTitle = unicodedata.normalize('NFKD', strTitle).encode('ascii','ignore')
+        strTitleEncoded = strTitle.encode("utf8")
         strEpisode = show.get("ShowEpisode")
         if(strEpisode == None):
             strEpisode = ""        
@@ -293,22 +304,22 @@ def VIEWAIRINGSONCHANNEL(url,name):
             strOriginalAirdate = "%02d.%02d.%s" % (strOriginalAirdateObject.day, strOriginalAirdateObject.month, strOriginalAirdateObject.year)
 
         # if there is no episode name use the description in the title
-        strDisplayText = strTitle
+        strDisplayText = strTitleEncoded
         if(strGenre.find("Movie")<0 and strGenre.find("Movies")<0 and strGenre.find("Film")<0 and strGenre.find("Shopping")<0 and strGenre.find("Consumer")<0):
             if(strEpisode == ""):
                 if(strDescription != ""):
-                    strDisplayText = strTitle + ' - ' + strDescription
+                    strDisplayText = strTitleEncoded + ' - ' + strDescription
                 else:
                     if(strGenre.find("News")>=0):
                         strDisplayText = studio + " News - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
                         strDescription = strGenre
                     elif(strGenre.find("Sports")>=0):
-                        strDisplayText = strTitle + " - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
+                        strDisplayText = strTitleEncoded + " - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
                         strDescription = strGenre
             else:
-                strDisplayText = strTitle + ' - ' + strEpisode
+                strDisplayText = strTitleEncoded + ' - ' + strEpisode
         strDisplayText = strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime + ": " + strDisplayText
-        addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitle,strAiringID,seasonNum,episodeNum,studio,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
+        addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitleEncoded,strAiringID,seasonNum,episodeNum,studio,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
 
     xbmc.executebuiltin("Container.SetViewMode(504)")
 
@@ -402,7 +413,7 @@ def SEARCHFORAIRINGS(url,name):
     for airing in airings:
         show = airing.get("Show")
         strTitle = airing.get("AiringTitle")
-        strTitle = unicodedata.normalize('NFKD', strTitle).encode('ascii','ignore')
+        strTitleEncoded = strTitle.encode("utf8")
         strEpisode = show.get("ShowEpisode")
         if(strEpisode == None):
             strEpisode = ""        
@@ -427,18 +438,18 @@ def SEARCHFORAIRINGS(url,name):
             strOriginalAirdate = "%02d.%02d.%s" % (strOriginalAirdateObject.day, strOriginalAirdateObject.month, strOriginalAirdateObject.year)
 
         # if there is no episode name use the description in the title
-        strDisplayText = strTitle
+        strDisplayText = strTitleEncoded
         if(strGenre.find("Movie")<0 and strGenre.find("Movies")<0 and strGenre.find("Film")<0 and strGenre.find("Shopping")<0 and strGenre.find("Consumer")<0):
             if(strEpisode == ""):
                 if(strDescription != ""):
-                    strDisplayText = strTitle + ' - ' + strDescription
+                    strDisplayText = strTitleEncoded + ' - ' + strDescription
                 else:
                     strDisplayText = studio + " News - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
                     strDescription = strGenre
             else:
-                strDisplayText = strTitle + ' - ' + strEpisode
+                strDisplayText = strTitleEncoded + ' - ' + strEpisode
         strDisplayText = strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime + ": " + strDisplayText
-        addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitle,strAiringID,seasonNum,episodeNum,studio,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
+        addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitleEncoded,strAiringID,seasonNum,episodeNum,studio,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
 
     xbmc.executebuiltin("Container.SetViewMode(504)")
 
@@ -611,7 +622,12 @@ def executeSagexAPIJSONCall(url, resultToGet):
     numKeys = len(objKeys)
     if(numKeys == 1):
         return resp.get(resultToGet)    
-
+    elif(numKeys > 1):
+        error = resp.get("error")
+        if(error != None and error != ""):
+            return error
+        else:
+            return None
     else:
         return None
 

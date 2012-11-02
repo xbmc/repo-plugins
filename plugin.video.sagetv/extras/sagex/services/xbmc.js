@@ -134,9 +134,24 @@ function GetFavoriteIDForShowTitle(showtitle) {
    for (var i=0;i<s;i++) {
       var fav = favs[i];
       if(showtitle == FavoriteAPI.GetFavoriteTitle(fav)) {
-	 favoriteID = ""+FavoriteAPI.GetFavoriteID(fav);
-	 break;
+        favoriteID = ""+FavoriteAPI.GetFavoriteID(fav);
+        break;
       }
    }
    return favoriteID;
+}
+
+function GetPluginVersion(pluginidentifier) {
+   var PluginAPI = Packages.sagex.api.PluginAPI;
+   var plugins =  PluginAPI.GetInstalledPlugins();
+   pluginVersion = "";
+   var s = plugins.length;
+   for (var i=0;i<s;i++) {
+      var plugin = plugins[i];
+      if(pluginidentifier == PluginAPI.GetPluginIdentifier(plugin)) {
+        pluginVersion = PluginAPI.GetPluginVersion(plugin);
+        break;
+      }
+   }
+   return pluginVersion;
 }

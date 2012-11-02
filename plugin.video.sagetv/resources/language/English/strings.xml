@@ -14,7 +14,7 @@
     <string id="21000">SageTV Server Not Found</string>
     <string id="21001">Unable to connect to your SageTV server.</string>
     <string id="21002">1) Please confirm it is running.</string>
-    <string id="21003">2. Confirm the settings of this addon are correct.</string>
+    <string id="21003">2) Confirm the settings of this addon are correct.</string>
     <string id="21004">Dependency Missing</string>
     <string id="21005">This addon requires sagex-api-services version</string>
     <string id="21006">You do not have the sagex-api-services plugin installed</string>
@@ -56,4 +56,7 @@
     <string id="21042">Set All Watched</string>
     <string id="21043">Clear All Watched</string>
     <string id="21044">Delete All</string>
+    <string id="21045">Your xbmc.js file is not up-to-date</string>
+    <string id="21046">Please confirm that you copied the latest xbmc.js file</string>
+    <string id="21047">to your SageTV\sagex\services folder</string>
 </strings>

@@ -11,7 +11,7 @@
     <string id="30020"> Next</string>
     <string id="30021"> Previous</string>
 
-    <!--Category Descriptions  30031-30034 from http://www.arretsurimages.net/emissions.php-->
+    <!--Category Descriptions  30031-30035 from http://www.arretsurimages.net/emissions.php-->
     <!--@rret sur images-->
     <string id="30031">Program of media literacy, that you might already have been watching on France 5.</string>
     <!--Ligne J@une-->
@@ -20,6 +20,8 @@
     <string id="30033">Literary program that delves into the secrets of writers' production.</string>
     <!--@ux sources-->
     <string id="30034">Every week, Maja Neskovic conducts an interview with a columnist, an intellectual or any other french omniscient on his sources.</string>
+    <!--@u Prochain Episode-->
+    <string id="30035">They write TV shows. Or produce them. Or make their accessories. Or are just fans. Rafik Djoumi will confess them. Episode after episode.</string>
 
     <!--Errors-->
     <string id="30050">Logon Error</string>

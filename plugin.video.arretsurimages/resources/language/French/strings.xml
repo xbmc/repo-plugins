@@ -11,7 +11,7 @@
     <string id="30020"> Suivant</string>
     <string id="30021"> Précédent</string>
 
-    <!--Category Descriptions  30031-30034 from http://www.arretsurimages.net/emissions.php-->
+    <!--Category Descriptions  30031-30035 from http://www.arretsurimages.net/emissions.php-->
     <!--@rret sur images-->
     <string id="30031">Émission de décryptage des médias, que vous regardiez peut-être déjà sur France 5 avant son éviction.</string>
     <!--Ligne J@une-->
@@ -20,6 +20,8 @@
     <string id="30033">Émission littéraire qui se plonge dans les secrets de la production des écrivains.</string>
     <!--@ux sources-->
     <string id="30034">Chaque semaine, Maja Neskovic interroge sur ses sources un éditorialiste, un intellectuel, ou tout autre "omniscient" à la française.</string>
+    <!--@u Prochain Episode-->
+    <string id="30035">Ils écrivent des séries télévisées. Ou ils les réalisent. Ou fabriquent leurs accessoires. Ou ils sont simplement des spécialistes fans. Rafik Djoumi va les confesser. Episode après épisode.</string>
 
     <!--Errors-->
     <string id="30050">Erreur de connexion</string>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">All subgenres</string>
+    <string id="30001">Top 500 Stations</string>
+    <string id="30002">Browse by genre</string>
+    <string id="30003">My Stations</string>
+    <string id="30004">Search Station by name</string>
+    <string id="30005">Search Current Track playing Station</string>
+    <!-- Context Menu -->
+    <string id="30010">Add to "My Stations"</string>
+    <string id="30011">Remove from "My Stations"</string>
+    <!-- Settings -->
+    <string id="30100">Show Subgenres</string>
+    <string id="30101">Num stations in list</string>
+    <string id="30102">Show Bitrate in Title</string>
+    <string id="30103">Choose a random server (Don't ask)</string>
+    <!-- Messages -->
+    <string id="30200">Network Error</string>
+</strings>

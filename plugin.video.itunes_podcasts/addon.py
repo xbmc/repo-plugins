@@ -39,12 +39,16 @@ STRINGS = {
 
 @plugin.route('/')
 def show_root():
-    # If we are on Eden we redirect the view to a simple switch for video/audio
-    # If on Frodo get the content_type from the request args
+    # If we are on Eden get the content_type from the FolderPath
+    # On Frodo we get the content_type from the request args
     if not 'content_type' in plugin.request.args:
-        url = plugin.url_for(endpoint='show_content_types')
-        return plugin.redirect(url)
-    content_type = plugin.request.args['content_type']
+        folder_path = xbmc.getInfoLabel('Container.FolderPath')
+        if 'video' in folder_path:
+            content_type = ('video', )
+        elif 'audio' in folder_path:
+            content_type = ('audio', )
+    else:
+        content_type = plugin.request.args['content_type']
     if isinstance(content_type, (list, tuple)):
         content_type = content_type[0]
     items = (
@@ -60,21 +64,6 @@ def show_root():
             endpoint='search',
             content_type=content_type
         )},
-    )
-    return plugin.finish(items)
-
-
-@plugin.route('/content_types/')
-def show_content_types():
-    items = (
-        {'label': _('video'), 'path': plugin.url_for(
-            endpoint='show_root',
-            content_type='video'
-        )},
-        {'label': _('audio'), 'path': plugin.url_for(
-            endpoint='show_root',
-            content_type='audio'
-        )}
     )
     return plugin.finish(items)
 

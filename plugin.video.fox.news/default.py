@@ -51,10 +51,10 @@ def get_categories():
 
 
 def get_sub_categories(url):
-        if url.startswith('/?'):
-            url = 'http://video.foxnews.com'+url
-        elif url.startswith('//video.foxnews'):
+        if url.startswith('//video.foxnews'):
             url = 'http:'+url
+        elif url.startswith('/'):
+            url = 'http://video.foxnews.com'+url
         data = make_request(url)
         soup = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
         featured_name = soup.body.h1.contents[0].strip()

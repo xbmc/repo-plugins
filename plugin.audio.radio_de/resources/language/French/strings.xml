@@ -20,8 +20,20 @@
     <string id="30301">Anglais</string>
     <string id="30302">Allemand</string>
     <string id="30303">Français</string>
+    <string id="30310">Forcer la vue Vignette</string>
 
     <!-- Context Menu -->
     <string id="30400">Ajouter à "Mes stations"</string>
     <string id="30401">Supprimer de "Mes stations"</string>
+    <string id="30402">Modifier la station personnalisée</string>
+
+    <!-- Custom Station -->
+    <string id="30500">Veuillez entrer %s</string> <!-- %s will be filled by 30501, 30502 or 30503 -->
+    <string id="30501">le titre</string>
+    <string id="30502">l'url de la vignette ou le chemin</string>
+    <string id="30503">l'url du flux</string>
+    <string id="30504">Ajouter une station personnalisée...</string>
+
+    <!-- Error Message -->
+    <string id="30600">Erreur réseau</string>
 </strings>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.shoutcast" name="Shoutcast 2" version="2.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
+        <import addon="script.module.xbmcswift2" version="1.2.0"/>
+        <import addon="script.module.xmltodict" version="0.2.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language></language>
+        <platform>all</platform>
+        <summary lang="de">mehr als 50.000 kostenlose Internet Radio Sender</summary>
+        <summary lang="en">more than 50.000 free internet radio stations</summary>
+        <summary lang="es">Más de 50.000 emisoras de radio por Internet gratuitas</summary>
+        <description lang="de">Dieses Add-on ermöglicht dir Zugriff auf über 50.000 kostenlose Internet Radio Sender.[CR]Aktuelle Features:[CR]- Top 500 Sender[CR]- Nach Genre browsen[CR]- Sender nach Name suchen[CR]- Sender nach aktuellem Track suchen[CR]- Sender per Kontext Menu in die "Meine Sender"-Liste kopieren[CR]- Anzeige der Bitrate und Anzahl Höhrer[CR]- 500 Sender pro Seite[CR]- Schnell durch lokalen Cache</description>
+        <description lang="en">With this Add-on you can browse more than 50.000 free internet radio stations. Current Features:[CR]- Top 500 Stations[CR]- Browse by genre (and subgenre if enabled in settings)[CR]- Search Station by name[CR]- Search Stations by current playing track[CR]- You can manage a "My Stations"-list[CR]- bitrate and amount of listeners visible and sortable[CR]- 500 Stations on each Page (can be changed in the settings)[CR]- uses cache (24h genre, 1h station listings)</description>
+        <description lang="es">Con este Add-on pueden escucharse más de 50.000 emisoras de radio por Internet gratuitas. Características:[CR]- Las 500 mejores emisoras.[CR]- Búsqueda por género (y por subgéneros si se habilita en la configuración).[CR]- Búsqueda de emisoras por nombre.[CR]- Búsqueda de emisoras que reproducen una canción.[CR]- Posibilidad de administrar un directorio con "Mis emisoras".[CR]- Directorios ordenados que muestran bitrate y cantidad de oyentes.[CR]- 500 emisoras en cada página (la cantidad puede cambiarse en la configuración).[CR]- Uso de caché (24h género, 1h directorio de emisoras).</description>
+    </extension>
+</addon>

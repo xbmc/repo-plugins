@@ -1,0 +1,14 @@
+2.0.1
+ - added method and setting for auto choose server (don't ask for playlist entries)
+
+2.0.0
+ - Initial Release
+ - Features:
+    Top 500 Stations
+    Browse by genre (and subgenre if enabled in settings)
+    Search Station by name
+    Search Stations by current playing track
+    You can manage a "My Stations"-list
+    bitrate and amount of listeners visible and sortable
+    500 Stations on each Page (can be changed in the settings)
+    uses cache (24h genre, 1h station listings)

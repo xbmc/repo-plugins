@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Todos los subgéneros</string>
+    <string id="30001">Las 500 mejores emisoras</string>
+    <string id="30002">Buscar por género</string>
+    <string id="30003">Mis emisoras</string>
+    <string id="30004">Buscar por nombre</string>
+    <string id="30005">Buscar emisoras que reproducen una canción</string>
+    <!-- Context Menu -->
+    <string id="30010">Añadir a "Mis emisoras"</string>
+    <string id="30011">Quitar de "Mis emisoras"</string>
+    <!-- Settings -->
+    <string id="30100">Mostrar subgéneros</string>
+    <string id="30101">Número de emisoras en directorios</string>
+    <string id="30102">Mostrar bitrate junto al nombre</string>
+    <string id="30103">Elegir un servidor aleatorio (No preguntar)</string>
+    <!-- Messages -->
+    <string id="30200">Error en la conexión</string>
+</strings>

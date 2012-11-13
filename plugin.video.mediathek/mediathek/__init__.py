@@ -93,8 +93,6 @@ class Mediathek(object):
         return ''
     except:
       return ''
-    
-    
       
   def buildMenu(self, path, treeNode = None):
     if(type(path) in (str,unicode)):

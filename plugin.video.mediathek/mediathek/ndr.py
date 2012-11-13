@@ -102,7 +102,7 @@ class NDRMediathek(Mediathek):
         xmlDom = minidom.parseString(xmlPage);
     except:
         xmlDom = False
-    return xmlDom;  
+    return xmlDom;
     
   def extractVideoObjects(self, rssFeed, initCount):
     nodes = rssFeed.getElementsByTagName("mediaItem");
@@ -159,7 +159,7 @@ class NDRMediathek(Mediathek):
         
         imageNode = videoNode.getElementsByTagName("images")[0].getElementsByTagName("image")
         if len(imageNode):
-            imageNode =imageNode[0]
+            imageNode = imageNode[0]
             imageNode = imageNode.getElementsByTagName("urls")[0]
             picture = self.readText(imageNode, "url")
         else:

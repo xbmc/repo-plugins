@@ -1,3 +1,5 @@
+0.4.6 - Minor fix for rasp-xbmc
+	added new channels for kika
 0.4.5 - FIX: ARTE and KIKA - adopt format changes
 0.4.4 - FIX: Get ARD working again (base code from soern)
 0.4.3 - FIX: NDR streams / NDR changed their streaming adresses by soern

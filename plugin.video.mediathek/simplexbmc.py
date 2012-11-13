@@ -46,10 +46,13 @@ class SimpleXbmcGui(object):
     else:
       title = transformHtmlCodes(displayObject.title +" - "+ displayObject.subTitle);
     
-    if displayObject.date is not None:  
+    if displayObject.date is not None:
       title = "(%s) %s"%(time.strftime("%d.%m",displayObject.date),title);  
     
-    listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=displayObject.picture)
+    if displayObject.picture is not None:
+      listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=displayObject.picture)
+    else
+      else listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
     
     if(displayObject.isPlayable):
       if(displayObject.isPlayable == "PlayList"):

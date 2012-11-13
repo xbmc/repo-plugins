@@ -72,9 +72,11 @@ class KIKAPlus(Mediathek):
               (
                 TreeNode("1.4.0","Schloss Einstein - Erfurt",             "http://kikaplus.net/clients/kika/kikaplus/?programm=90&ag=4",True),
                 TreeNode("1.4.1","Schnitzeljagd im Heiligen Land",        "http://kikaplus.net/clients/kika/kikaplus/?programm=122&ag=3",True),
-                TreeNode("1.4.2","STURMFREI",                             "http://kikaplus.net/clients/kika/kikaplus/?programm=165&ag=4",True),
-                TreeNode("1.4.3","TANZALARM!",                            "http://kikaplus.net/clients/kika/kikaplus/?programm=92&ag=3",True),
-                TreeNode("1.4.4","Wissen macht Ah!",                      "http://kikaplus.net/clients/kika/kikaplus/?programm=86&ag=4",True),
+                TreeNode("1.4.2",u"Eine Möhre für Zwei",                  "http://kikaplus.net/clients/kika/kikaplus/?programm=168&ag=4",True),
+                TreeNode("1.4.3","SHERLOCK YACK - Der Zoodetektiv",       "http://kikaplus.net/clients/kika/kikaplus/?programm=184&ag=3",True),
+                TreeNode("1.4.4","STURMFREI",                             "http://kikaplus.net/clients/kika/kikaplus/?programm=165&ag=4",True),
+                TreeNode("1.4.5","TANZALARM!",                            "http://kikaplus.net/clients/kika/kikaplus/?programm=92&ag=3",True),
+                TreeNode("1.4.6","Wissen macht Ah!",                      "http://kikaplus.net/clients/kika/kikaplus/?programm=86&ag=4",True),
               )
             ),
             

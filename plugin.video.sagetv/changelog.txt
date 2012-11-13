@@ -1,3 +1,7 @@
+[B]Version 1.3.8 (Nov 8, 2012)[/B]
+- Added additional error checking upon launch of the addon to ensure the correct sagex plugins are installed (and if they aren't it will kick you back to the main menu after informing you of the issue)
+- Added in initial language translations for German, Slovak, Spanish, Swedish, Lithuanian, and Portuguese (Brazil)
+
 [B]Version 1.3.7 (Nov 1, 2012)[/B]
 - Streamlined initial check for the sagex-api-services plugin upon launch of the addon; this should enable loading the addon's main menu much faster
 - **Note that this change requires you to copy the updated xbmc.js file to your sagetv\sagex\services folder

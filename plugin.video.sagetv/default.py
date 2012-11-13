@@ -73,13 +73,20 @@ def TOPLEVELCATEGORIES():
     if(sagexVersion == None or sagexVersion.find("Exception") != -1):
         #If no plugins were returned, first check that the user has the appropriate xbmc.js which has the required GetPluginVersion method
         print "************errorMsg=" + str(sagexVersion)
-        if(sagexVersion == "java.lang.NoSuchMethodException: no such method: GetPluginVersion"):
+        if(sagexVersion == "Exception: Problem accessing /sagex/api"):
+            print "Sagex API not installed on the SageTV server"
+            xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21006),__language__(21007))
+            xbmc.executebuiltin('ActivateWindow(Home)')
+            return
+        elif(sagexVersion.find("java.lang.NoSuchMethodException: no such method: GetPluginVersion") != -1 or sagexVersion.find("Missing Service File") != -1):
             print "GetPluginVersion method not found in the xbmc.js file; user must make sure they have the latest xbmc.js installed on their SageTV server"
             xbmcgui.Dialog().ok(__language__(21004),__language__(21045),__language__(21046),__language__(21047))
+            xbmc.executebuiltin('ActivateWindow(Home)')
             return
         else:
             print "SageTV not detected, or required plugins not installed"
             xbmcgui.Dialog().ok(__language__(21000),__language__(21001),__language__(21002),__language__(21003))
+            xbmc.executebuiltin('ActivateWindow(Home)')
             return
         
     print "Successfully able to connect to the SageTV server @ " + __settings__.getSetting("sage_ip") + ':' + __settings__.getSetting("sage_port")
@@ -87,9 +94,11 @@ def TOPLEVELCATEGORIES():
     print "TOPLEVELCATEGORIES STARTED; sagex-api-services version=" + sagexVersion
     if(sagexVersion == ""):
         xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21006),__language__(21007))
+        xbmc.executebuiltin('ActivateWindow(Home)')
         return        
     if(comparePluginVersions(sagexVersion, MIN_VERSION_SAGEX_REQUIRED) < 0):
         xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21008) + " " + sagexVersion,__language__(21009) + " " + MIN_VERSION_SAGEX_REQUIRED)
+        xbmc.executebuiltin('ActivateWindow(Home)')
         return
 
     addTopLevelDir('1. Watch Recordings', strUrl + '/sagex/api?c=xbmc:GetTVMediaFilesGroupedByTitle&size=500&encoder=json',1,IMAGE_POSTER,'Browse previously recorded and currently recording shows')
@@ -616,6 +625,8 @@ def executeSagexAPIJSONCall(url, resultToGet):
       input = urllib.urlopen(url)
       
     fileData = input.read()
+    if(fileData.find("Problem accessing /sagex/api") != -1):
+        return "Exception: Problem accessing /sagex/api"
     resp = unicodeToStr(json.JSONDecoder().decode(fileData))
 
     objKeys = resp.keys()

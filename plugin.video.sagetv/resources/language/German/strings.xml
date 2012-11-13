@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">SageTV Server Adresse</string>
+    <string id="20001">SageTV Webserver Port</string>
+    <string id="20002">SageTV Benutzername für den Webserver</string>
+    <string id="20003">SageTV Passwort für den Webserver</string>
+    <string id="20004">Verzeichnis für SageTV Aufnahmen</string>
+    <string id="20005">Verzeichnis für SageTV Aufnahmen (Netzwerkpfad)</string>
+    <string id="20006">MAC-Adresse des SageTV Server (benötigt für WakeOnLan)</string>
+    <string id="20007">Bandbreite für Streaming (kbps)</string>
+
+    <!-- Settings -->
+    <string id="21000">SageTV Server nicht gefunden</string>
+    <string id="21001">Konnte keine Verbindung zum SageTV Server herstellen</string>
+    <string id="21002">1) Prüfe ob der Server läuft</string>
+    <string id="21003">2) Bestätige, dass die Einstellungen dieses Addons korrekt sind.</string>
+    <string id="21004">Abhängigkeit nicht erfüllt</string>
+    <string id="21005">Dieses Addon benötigt sagex-api-services der Version</string>
+    <string id="21006">sagex-api-services Addon ist nicht installiert</string>
+    <string id="21007">Bitte installieren sagex-api-services um dieses Addon zu aktivieren</string>
+    <string id="21008">Deine Version ist</string>
+    <string id="21009">Bitte installieren/upgrade sagex-api-services auf Version</string>
+    <string id="21010">Suche</string>
+    <string id="21011">SageTV Addon</string>
+    <string id="21012">Erfolgreich gelöscht</string>
+    <string id="21013">Aufnahme geplant</string>
+    <string id="21014">Versuche Live-TV wiederzugeben</string>
+    <string id="21015">Wiedergabe von Live-TV nicht möglich</string>
+    <string id="21016">Löschen</string>
+    <string id="21017">Aufnahme abbrechen</string>
+    <string id="21018">Favorit entfernen</string>
+    <string id="21019">Aufnahme</string>
+    <string id="21020">Jetzt ansehen</string>
+    <string id="21021">Wiedergabe fehlgeschlagen; Dateigröße nicht ausreichend für Wiedergabe</string>
+    <string id="21022">Markiere als gesehen</string>
+    <string id="21023">Markiere als ungesehen</string>
+    <string id="21024">Zum Archiv hinzufügen</string>
+    <string id="21025">Aus dem Archiv entfernen</string>
+    <string id="21026">Löschen und als gesehen markiert</string>
+    <string id="21027">Löschen und als ungesehen markieren</string>
+    <string id="21028">Löschen und Status "Gefällt mir nicht" setzen</string>
+    <string id="21029">Löschen /  Falsche Aufnahme</string>
+    <string id="21030">Favorit hinzufügen</string>
+    <string id="21031">Favorit hinzugefügt</string>
+    <string id="21032">Favorit entfernt</string>
+    <string id="21033">Wähle gesehen Flag</string>
+    <string id="21034">Gesehen Flag zurücksetzen</string>
+    <string id="21035">Wähle Archiv Flag</string>
+    <string id="21036">Archiv Flag zurücksetzen</string>
+    <string id="21037">Ansehen (Stream)</string>
+    <string id="21038">Dieses Addon benötigt Medien Streaming Dienst in der Version</string>
+    <string id="21039">Medien Streaming Dienst - Plugin nicht installiert</string>
+    <string id="21040">Bitte installieren den Medien Streaming Dienst um Streaming zu aktivieren</string>
+    <string id="21041">Bitte installiere/update das Medien Streaming Dienst - Plugin in der Version</string>
+    <string id="21042">Alles als gesehen markieren</string>
+    <string id="21043">Gesehen Markierung für alle zurücksetzen</string>
+    <string id="21044">Alle löschen</string>
+    <string id="21045">Deine xbmc.js-Datei ist nicht aktuell</string>
+    <string id="21046">Bitte bestätige, dass du die aktuellste xbmc.js-Datei kopiert hast</string>
+    <string id="21047">zu deinem SageTV\sagex\services Ordner</string>
+</strings>

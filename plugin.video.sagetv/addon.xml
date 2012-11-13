@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.sagetv"
        name="SageTV"
-       version="1.3.7"
+       version="1.3.8"
        provider-name="kricker,lehighbri,aaronb">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
@@ -12,17 +12,25 @@
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
+    <summary lang="ar">ستيج تي في: استعراض و إدارة البث المباشر و التسجيلات</summary>
+    <summary lang="bg">SageTV: Преглеждайте и управлявайте излъчвания и записи</summary>
+    <summary lang="de">SageTV: Verwalte und schaue Sendungen und Aufnahmen</summary>
+    <summary lang="en">SageTV: Browse and manage airings and recordings</summary>
+    <summary lang="es">SageTV: Examinar y administrar transmisiones y grabaciones</summary>
+    <summary lang="fr">SageTV: Parcourir et gérer vos diffusions et enregistrements</summary>
+    <summary lang="lt">SageTV: Naršyti ir valdyti rodymą ir įrašus</summary>
+    <summary lang="pt_BR">SageTV:  Procurar e administrar transmissões e gravações</summary>
+    <summary lang="sk">SageTV: prehliadajte a spravujte vysielania a nahrávky</summary>
+    <summary lang="sv">SageTV: Bläddra och administrera sändningar och inspelningar</summary>
+    <description lang="ar">يسمح لك الاتصال بمخدم ستيج تي في الخاص بك حيث تستطيع استعراض و عرض التسجيلات, عرض و إدارة تسجيلاتك القادمة, استعراض قوائم المحطات, و البحث عن البث المباشر و التسجيلات&#10;&#10;التبعات:&#10;مع ستيج تي في:&#10;Jetty Web Server 2.3.0.14  أو أحدث&#10; Sagex-api vs 7.1.9.10 أو أحدث&#10; Batch Metadata Tools 4.10.1&#10;xbmc.js (نسخxbmc.js من"plugin.video.sagetv\extras\sagex\services" إلى الخاص بك "SageTV\SageTV\sagex\services" )&#10;</description>
+    <description lang="bg">Позволява Ви да се свържете със SageTV сървър, от който можете да преглеждате и възпроизвеждате записани предавания, да настройвате автоматично записване на предавания, преглеждате списъка с канали и търсите излъчвани предавания/записи.&#10;&#10;Изисквания:&#10;SageTV с:&#10;    Jetty Web Server 2.3.0.14 или по-нов&#10;    Sagex-api vs 7.1.9.10 или по-нов&#10;    Batch Metadata Tools 4.10.1&#10;    xbmc.js (Копирайте xbmc.js от "plugin.video.sagetv\extras\sagex\services" във вашата "SageTV\SageTV\sagex\services" директория)&#10;</description>
+    <description lang="de">Erlaubt es Dir, dich zu einem SageTV-Server zu verbinden, aus dem du Aufnahmen durchsuchen und ansehen, kommende Aufnahmen verwalten und sehen, Kanallisten ansehen und nach Sendeterminen und Aufnahmen suchen kannst.&#10;&#10;Anforderungen:&#10;SageTV mit:&#10;Jetty Web Server 2.3.0.14 oder neuer&#10;Sagex-api vs 7.1.9.10 oder neuer&#10; Batch Metadata Tools 4.10.1&#10; xbmc.js (Kopiere xbmc.js aus "plugin.video.sagetv\extras\sagex\services" in den "SageTV\SageTV\sagex\services" Ordner)&#10;&#10;</description>
+    <description lang="en">Allows you to connect to your SageTV server where you can browse and view recordings, view and manage your upcoming recordings, browse channel listings, and search for airings and recordings.&#10;&#10;Dependencies:&#10;SageTV with:&#10;    Jetty Web Server 2.3.0.14 or newer&#10;    Sagex-api vs 7.1.9.10 or newer&#10;    Batch Metadata Tools 4.10.1&#10;    xbmc.js (Copy xbmc.js from "plugin.video.sagetv\extras\sagex\services" to your "SageTV\SageTV\sagex\services" directory)&#10;&#10;</description>
+    <description lang="es">Permitir conexiones con el servidor SageTV, donde puedes examinar y ver grabaciones,  ver y administrar tus próximas grabaciones, examinar la lista de canales, y buscar transmisiones y grabaciones&#10;&#10;Dependencias:&#10;SageTV con:&#10;Servidor Web Jetty 2.3.0.14 o superior&#10;Sagex-api ver. 7.1.9.10 o superior&#10;Lote de Metadata Tools 4.10.1&#10;xbmc.js (Copiar xbmc.js desde "plugin.video.sagetv\extras\sagex\services" a tu directorio "SageTV\SageTV\sagex\services"&#10;&#10;</description>
+    <description lang="lt">Leidžia jums prisijungti prie jūsų SageTV serverio, kur jūs galite naršyti ir peržiūrėti įrašus, peržiūrėti ir valdyti savo būsimą(-us) įrašus, naršyti kanalų sąrašus. Airings įrašų paieška.&#10;Priklausomybės:&#10;SageTV with:&#10;Jetty Web Server 2.3.0.14 or newer&#10;Sagex-api vs 7.1.9.10 or newer&#10;Batch Metadata Tools 4.10.1&#10;xbmc.js (Copy xbmc.js from "plugin.video.sagetv\extras\sagex\services" to your "SageTV\SageTV\sagex\services" directory)&#10;</description>
+    <description lang="pt_BR">Permite que você se conectar ao servidor SageTV onde você pode navegar e ver gravações, visualizar e gerenciar suas gravações futuras, procure listagem de canais e busca de transmissões e gravações&#10;Dependências:&#10;SageTV com:&#10;    Jetty Web Server 2.3.0.14 ou mais recente&#10;    Sagex-api vs 7.1.9.10 ou mais recente&#10;    Batch Metadata Tools 4.10.1&#10;    xbmc.js (Copy xbmc.js from "plugin.video.sagetv\extras\sagex\services" to your "SageTV\SageTV\sagex\services" directory)&#10;&#10;</description>
+    <description lang="sk">Umožní Vám pripojenie na Váš SageTV server, kde môžete prehliadať a pozerať nahrávky, pozerať a spravovať pripravované nahrávania, prehliadať zoznam kanálov a vyhľadávať vysielania a nahrávky.&#10;&#10;Závislosti SageTV:&#10;    Jetty Web Server 2.3.0.14 alebo novší&#10;    Sagex-api vs 7.1.9.10 alebo novší&#10;    Batch Metadata Tools 4.10.1&#10;    xbmc.js (Zkopírujte xbmc.js z "plugin.video.sagetv\extras\sagex\services" do Vášho "SageTV\SageTV\sagex\services" priečinku)&#10;&#10;</description>
+    <description lang="sv">Gör det möjligt att ansluta till din SageTV server där du kan bläddra och se inspelningar, se och administrera kommande inspelningar, bläddra kanallistningar, och söka efter sändningar och inspelningar.&#10;&#10;Krav på ytterligare tillägg:&#10;SageTV med:&#10;    Jetty Web Server 2.3.0.14 eller nyare&#10;    Sagex-api vs 7.1.9.10 eller nyare&#10;    Batch Metadata Tools 4.10.1&#10;    xbmc.js (Kopiera xbmc.js från "plugin.video.sagetv\extras\sagex\services" till "SageTV\SageTV\sagex\services" katalogen)&#10;&#10;</description>
     <platform>all</platform>
-    <summary>SageTV: Browse and manage airings and recordings</summary>
-    <description>Allows you to connect to your SageTV server where you can browse and view recordings, view and manage your upcoming recordings, browse channel listings, and search for airings and recordings.
-
-Dependencies:
-SageTV with:
-    Jetty Web Server 2.3.0.14 or newer
-    Sagex-api vs 7.1.9.10 or newer
-    Batch Metadata Tools 4.10.1
-    xbmc.js (Copy xbmc.js from "plugin.video.sagetv\extras\sagex\services" to your "SageTV\SageTV\sagex\services" directory)
-
-</description>
   </extension>
 </addon>

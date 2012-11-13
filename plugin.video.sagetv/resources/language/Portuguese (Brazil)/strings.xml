@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">Endereço Servidor SageTV</string>
+    <string id="20001">Posta Servidor Web SageTV</string>
+    <string id="20002">Servidor Web SageTV Usuário</string>
+    <string id="20003">Servidor Web SageTV Senha</string>
+    <string id="20004">Pasta Gravações SageTV</string>
+    <string id="20005">Caminho rede para pasta de gravações do SageTV</string>
+    <string id="20006">Endereço MAC Servidor SageTV (para WOL)</string>
+    <string id="20007">Tamanho da banda para streaming (kbps)</string>
+
+    <!-- Settings -->
+    <string id="21000">Servidor SageTV não localizado</string>
+    <string id="21001">Não consegui me conectar ao servidor SageTv.</string>
+    <string id="21002">1) Por favor, confirme que está em execução</string>
+    <string id="21003">2) Confirme os ajustes deste addon se estão corretos.</string>
+    <string id="21004">Faltando dependências</string>
+    <string id="21005">Este addon requer versão sagex-api-services</string>
+    <string id="21006">Você não possui o plugin sagex-api-services instalado</string>
+    <string id="21007">Por favor instale sagex-api-services para ativar este plugin</string>
+    <string id="21008">Sua versão</string>
+    <string id="21009">Por favor instale/atualize sua versão sagex-api-services para</string>
+    <string id="21010">Procurar</string>
+    <string id="21011">SageTV addon</string>
+    <string id="21012">Deletado com sucesso</string>
+    <string id="21013">Gravações Programadas</string>
+    <string id="21014">Tentando reproduzir Ao Vivo T</string>
+    <string id="21015">Não é possível a reprodução de TV ao vivo</string>
+    <string id="21016">Delete</string>
+    <string id="21017">Cancelar Gravação</string>
+    <string id="21018">Remover dos Favoritos</string>
+    <string id="21019">Gravar</string>
+    <string id="21020">Assistir Agora</string>
+    <string id="21021">Reprodução falhou; tamanho arquivo não é suficiente para reproduzir</string>
+    <string id="21022">Marcar assistidos</string>
+    <string id="21023">Limpar assistidos</string>
+    <string id="21024">Setar Arquivados</string>
+    <string id="21025">Limpar Arquivados</string>
+    <string id="21026">Deletar &amp; Setar Assistidos</string>
+    <string id="21027">Deletar &amp; Limpar Assistidos</string>
+    <string id="21028">Excluir &amp; Definir Não gostei</string>
+    <string id="21029">Deletar/Gravações com Erro</string>
+    <string id="21030">Adicionar Favoritos</string>
+    <string id="21031">Favorito Adicionado</string>
+    <string id="21032">Favorito Removido</string>
+    <string id="21033">Setar sinalizador assistido</string>
+    <string id="21034">Sinalizador de Assistido Desmarcado</string>
+    <string id="21035">Definir sinalizador arquivados</string>
+    <string id="21036">Sinalizador de Arquivo Desmarcado</string>
+    <string id="21037">Assistir (Fluxo)</string>
+    <string id="21038">Este addon requer versão media streaming services</string>
+    <string id="21039">Você não tem o plugin Media Streaming Services instalado</string>
+    <string id="21040">Por favor instale media streaming services para ativar assistir por streaming.</string>
+    <string id="21041">Por favor instale/atualize seu media streaming services plugin para versão</string>
+    <string id="21042">Marcar todos como assistidos</string>
+    <string id="21043">Limpar todos Assistidos</string>
+    <string id="21044">Deletar Tudo</string>
+    <string id="21045">Seu arquivo xbmc.js não está atualizado</string>
+    <string id="21046">Por favor confirme que você copiou o arquivo mais recente de xbmc.js</string>
+    <string id="21047">para sua pasta SageTV\services</string>
+</strings>

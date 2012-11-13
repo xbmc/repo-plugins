@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">Adresa SageTV servera</string>
+    <string id="20001">Port SageTV web-servera</string>
+    <string id="20002">Užívateľské meno SageTV web-servera</string>
+    <string id="20003">Heslo SageTV web-servera</string>
+    <string id="20004">Priečinok SageTV nahrávok</string>
+    <string id="20005">Sieťová adresa priečinku SageTV nahrávok</string>
+    <string id="20006">MAC adresa SageTV servera (pre WakeOnLan)</string>
+    <string id="20007">Šírka pásma streamovania (kbps)</string>
+
+    <!-- Settings -->
+    <string id="21000">SageTV Server nenájdený</string>
+    <string id="21001">Nedá sa pripojiť k SageTV serveru</string>
+    <string id="21002">1. Prosím potvrďte, že server beží</string>
+    <string id="21003">2. Potvrďte, že nastavenia tohoto doplnku sú správne.</string>
+    <string id="21004">Chýbajú závislosti</string>
+    <string id="21005">Tento doplnok vyžaduje 'sagex-api-services' verzie</string>
+    <string id="21006">Nemáte 'sagex-api-services' doplnok nainštalovaný</string>
+    <string id="21007">Prosím nainštalujte 'sagex-api-services' na aktivovanie tohoto doplnku. </string>
+    <string id="21008">Máte verziu</string>
+    <string id="21009">Prosím inštalujte/aktualizujte Váš 'sagex-api-services' na verziu</string>
+    <string id="21010">Hľadať</string>
+    <string id="21011">SageTV doplnok</string>
+    <string id="21012">Vymazanie úspešné</string>
+    <string id="21013">Naplánované nahrávanie</string>
+    <string id="21014">Pokus spustiť živé TV vysielanie</string>
+    <string id="21015">Nemožno spustiť živé TV vysielanie</string>
+    <string id="21016">Vymazať</string>
+    <string id="21017">Zrušiť nahrávanie</string>
+    <string id="21018">Odstrániť obľúbené</string>
+    <string id="21019">Nahrávať</string>
+    <string id="21020">Pozerať</string>
+    <string id="21021">Prehrávanie zlyhalo; veľkosť súboru nedostatočná na prehrávanie</string>
+    <string id="21022">Označiť videné</string>
+    <string id="21023">Zrušiť videné</string>
+    <string id="21024">Nastaviť archivované</string>
+    <string id="21025">Zrušiť archivované</string>
+    <string id="21026">Zmazať a Označiť videné</string>
+    <string id="21027">Zmazať a Zrušiť videné</string>
+    <string id="21028">Zmazať a nastaviť Nepáči sa mi</string>
+    <string id="21029">Zmazať / Nesprávna nahrávka</string>
+    <string id="21030">Pridať Obľúbené</string>
+    <string id="21031">Obľúbené pridané</string>
+    <string id="21032">Obľúbené odstránené</string>
+    <string id="21033">Nastavený príznak Videné</string>
+    <string id="21034">Príznak Videné zrušený</string>
+    <string id="21035">Nastavený príznak Archivovať</string>
+    <string id="21036">Zrušený príznak Archivovať</string>
+    <string id="21037">Pozerať (streamovaný)</string>
+    <string id="21038">Tento doplnok vyžaduje 'media streaming service' verzie</string>
+    <string id="21039">Nemáte nainštalovaný 'media streaming service' doplnok</string>
+    <string id="21040">Prosím nainštalujte 'media streaming service' aby ste povolili streamovanie</string>
+    <string id="21041">Prosím inštalujte/aktualizujte Váš 'media streaming service plugin' na verziu</string>
+    <string id="21042">Označiť všetky videné</string>
+    <string id="21043">Odznačiť všetky videné</string>
+    <string id="21044">Vymazať všetky</string>
+    <string id="21045">Váš xbmc.js nie je aktuálny</string>
+    <string id="21046">Prosím potvrďte, že ste skopírovali posledný/najnovší xbmc.js súbor</string>
+    <string id="21047">do Vášho 'SageTV\sagex\services' priečinku</string>
+</strings>

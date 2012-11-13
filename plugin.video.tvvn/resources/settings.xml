@@ -5,6 +5,6 @@
 		<setting id="descriptions_on_right" type="bool" label="30002" default="true"/>
 	</category>
 	<category label="30100">
-		<setting id="tv24_http" type="bool" label="30101" default="true"/>
+		<setting id="tv24_http" type="bool" label="30101" default="false"/>
 	</category>
 </settings>

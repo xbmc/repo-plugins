@@ -2,7 +2,7 @@
 #---------------------------------------------------------------------
 # File: tvvn.py
 # By:   Binh Nguyen <binh@vnoss.org>
-# Date: 26-07-2012
+# Date: 10-11-2012
 #---------------------------------------------------------------------
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -44,13 +44,14 @@ src_vtc =   	[VTCURL,
 				'']
 
 # tv24.vn
-TV24URLList = 	['rtmp://112.197.2.16:1935/live',
-			    'rtmp://112.197.2.11:1935/live']
+TV24URLList = 	[#'rtmpe://112.197.2.16:1935/live',
+			    'rtmpe://112.197.2.11:1935/live']
 TV24URL = choice(TV24URLList)
 src_tv24 =  	[TV24URL,
-				'http://tv24.vn/jwplayer/player.swf',
-				'http://www.tv24.vn',
+				'http://tv24.vn/getflash.ashx',
+				'http://tv24.vn',
 				'']
+				#'http://tv24.vn/jwplayer/player.swf',
 
 # xunghe.vn
 src_trt  =  	['rtmp://118.69.176.149/live',
@@ -68,9 +69,9 @@ src_vietface = 	[VFTVURL,
 				'']
 
 # van tv
-src_vantv = 	['rtmp://flash67.ustream.tv:1935/ustreamVideo/3097098',
-			 	'http://static-cdn1.ustream.tv/swf/live/viewer.rsl:194.swf',
-			 	'http://www.552vantv.com',
+src_vantv = 	['rtmp://199.66.239.55:1935',
+			 	'http://static-cdn1.ustream.tv/swf/live/viewer.rsl:255.swf',
+				'http://vietpho.com/online-channels.php?id=72&gID=0&page=1',
 				'']
 
 # little saigon tv
@@ -98,10 +99,10 @@ src_vbstv = 	['rtmp://74.63.219.101:1935/vbstele',
 				'vbstele']
 
 # vpoptv
-src_vpoptv =	['rtmp://64.62.143.5/live',
-				'http://www.lihattv.com/scripts/videogallery.swf',
-				'http://livetvstreaming.ucoz.com',
-				'']
+src_vpoptv =	['rtmp://www.evietmusic.com',
+				'http://www.vpoptv.com/player.swf',
+				'http://www.vpoptv.com/main/default.php?language=en',
+				'liveStream']
 
 # lifetv
 src_lifetv = 	['rtmp://video.lifetv.vn/live',
@@ -209,26 +210,28 @@ def show_menu_sctv():
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def show_menu_local():
-	add_link('HTV7', 'src_tv24',  'htv7.stream',  '',  'htv7.png', 'Thông tin, Giải trí, Thể thao')
-	add_link('HTV9', 'src_tv24',  'htv9.stream',  '',  'htv9.png', 'Chính trị, Xã hội, Văn hóa')
-	add_link('HN1', 'src_tv24',  'hn1.stream',  '',   '', 'Hà Nội 1')
+	#add_link('HTV7', 'src_tv24',  'htv7.stream',  '',  'htv7.png', 'Thông tin, Giải trí, Thể thao')
+	#add_link('HTV9', 'src_tv24',  'htv9.stream',  '',  'htv9.png', 'Chính trị, Xã hội, Văn hóa')
+	add_link('HTV7', 'src_vtc',  'htv7',  '',  'htv7.png', 'Thông tin, Giải trí, Thể thao')
+	add_link('HTV9', 'src_vtc',  'htv91',  '',  'htv9.png', 'Chính trị, Xã hội, Văn hóa')
+	add_link('HN1', 'src_vtc',  'hanoi11',  '',   '', 'Hà Nội 1')
 	add_link('TRT1', 'src_trt',  'trt',  '',   '', 'Thừa Thiên Huế')
-	add_link('LA34', 'src_tv24',  'la34.stream',  '',   '', 'Long An')
-	add_link('THVL1', 'src_tv24',  'thvl1.stream',  '',   '', 'Vĩnh Long')
-	add_link('ĐN1', 'src_tv24',  'dn1.stream',  '',   '', 'Đồng Nai 1')
-	add_link('HGV', 'src_tv24',  'thhg.stream',  '',   '', 'Hậu Giang')
-	add_link('STV', 'src_tv24',  'thst.stream',  '',   '', 'Sóc Trăng')
-	add_link('THTG', 'src_tv24',  'thtg.stream',  '',   '', 'Tiền Giang')
-	add_link('QRT', 'src_tv24',  'qrt.stream',  '',   '', 'Quảng Nam')
-	add_link('BTV', 'src_tv24',  'bthtv.stream',  '',   '', 'Bình Thuận')
-	add_link('THĐT', 'src_tv24',  'thdt.stream',  '',   '', 'Đồng Tháp')
+	#add_link('LA34', 'src_tv24',  'la34.stream',  '',   '', 'Long An')
+	#add_link('THVL1', 'src_tv24',  'thvl1.stream',  '',   '', 'Vĩnh Long')
+	#add_link('ĐN1', 'src_tv24',  'dn1.stream',  '',   '', 'Đồng Nai 1')
+	#add_link('HGV', 'src_tv24',  'thhg.stream',  '',   '', 'Hậu Giang')
+	#add_link('STV', 'src_tv24',  'thst.stream',  '',   '', 'Sóc Trăng')
+	#add_link('THTG', 'src_tv24',  'thtg.stream',  '',   '', 'Tiền Giang')
+	#add_link('QRT', 'src_tv24',  'qrt.stream',  '',   '', 'Quảng Nam')
+	#add_link('BTV', 'src_tv24',  'bthtv.stream',  '',   '', 'Bình Thuận')
+	#add_link('THĐT', 'src_tv24',  'thdt.stream',  '',   '', 'Đồng Tháp')
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
  
 def show_menu_overseas():
 	add_link('Vietface', 'src_vietface',  'urlparams_qm_channel:1005_qm_token:6436488_qm_video:L_qm_audio:L_qm_finished_gops:1',   '',  'vietfacetv.png', 'Vietface Media Group')
 	add_link('SaigonTV', 'src_sgtv',  'myStream.sdp',   '',  'saigontv.png', 'Saigon TV')
 	add_link('GlobalTV', 'src_globaltv',  'myStream.sdp',   '',  'globaltv.png', 'Global Television')
-	add_link('VAN-TV', 'src_vantv',  'streams/live_1',   '',  'vantv.png', 'Vietnamese American Network TV')
+	add_link('VAN-TV', 'src_vantv',  'ustream',   '',  'vantv.png', 'Vietnamese American Network TV')
 	add_link('VBSTV', 'src_vbstv',  'myStream.sdp',   '',  'vbstv.png', 'Vietnamese Broadcasting Services')
 	add_link('LSTV', 'src_lsgtv',  'livestream',   '',  'lsaigontv.png', 'Little Saigon TV')
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -241,14 +244,18 @@ def show_menu_vov():
 	xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def Init():
-	add_link('VTV1', 'src_tv24',  'vtv1.stream',  '',  'vtv1.png', 'Thông tin tổng hợp')
-	add_link('VTV2', 'src_tv24',  'vtv2.stream',  '',  'vtv2.png', 'Khoa học, Giáo dục')
-	add_link('VTV3', 'src_tv24',  'vtv3.stream',  '',  'vtv3.png', 'Thể thao, Giải trí, Thông tin Kinh tế')
-	add_link('VTV4', 'src_tv24',  'vtv4.stream',  '',  'vtv4.png', 'Kênh cho người Việt Nam ở nước ngoài')
-	add_link('VTV6', 'src_tv24',  'vtv6.stream',  '',  'vtv6.png', 'Kênh cho Thanh, thiếu niên')
+	#add_link('VTV1', 'src_tv24',  'vtv1.stream',  '',  'vtv1.png', 'Thông tin tổng hợp')
+	#add_link('VTV2', 'src_tv24',  'vtv2.stream',  '',  'vtv2.png', 'Khoa học, Giáo dục')
+	#add_link('VTV3', 'src_tv24',  'vtv3.stream',  '',  'vtv3.png', 'Thể thao, Giải trí, Thông tin Kinh tế')
+	#add_link('VTV4', 'src_tv24',  'vtv4.stream',  '',  'vtv4.png', 'Kênh cho người Việt Nam ở nước ngoài')
+	#add_link('VTV6', 'src_tv24',  'vtv6.stream',  '',  'vtv6.png', 'Kênh cho Thanh, thiếu niên')
+	#add_link('ANTV', 'src_tv24',  'antv.stream',  '',  'antv.png', 'An ninh TV')
+	add_link('VTV1', 'src_vtc',   'vtv11',  'VTV1/15',  'vtv1.png', 'Thông tin tổng hợp')
+	add_link('VTV2', 'src_vtc',   'vtv2',   'VTV2/23',  'vtv2.png', 'Khoa học, Giáo dục')
+	add_link('VTV3', 'src_vtc',   'vtv31',  'VTV3/3',  'vtv3.png', 'Thể thao, Giải trí, Thông tin Kinh tế')
+	add_link('VTV4', 'src_vtc',   'vtv4',   'VTV4/2',  'vtv4.png', 'Kênh cho người Việt Nam ở nước ngoài')
 	add_link('VTV9', 'src_tv24',  'vtv9.stream',  '',  'vtv9.png', 'Kênh cho Khán giả miền Nam')
-	add_link('ANTV', 'src_tv24',  'antv.stream',  '',  'antv.png', 'An ninh TV')
-	add_link('VpopTV', 'src_vpoptv', 'Stream33', '', 'vpoptv.png', 'Kênh âm nhạc đặc sắc')
+	add_link('VpopTV', 'src_vpoptv', 'mtv', '', 'vpoptv.png', 'Kênh âm nhạc đặc sắc')
 	add_link('lifetv', 'src_lifetv', 'Stream1', '', 'lifetv.png', 'Lối sống và sức khỏe')
 	add_link('VTC1', 'src_vtc',  'vtc11',  'VTC1/10',  'vtc1.png', 'Thời sự tổng hợp')
 	add_link('VTC2', 'src_vtc',  'vtc21',  'VTC2/11',  'vtc2.png', 'Khoa học, Công nghệ')
@@ -278,11 +285,11 @@ def play_video(src, name, stream_name, ref):
 	swfUrl=prov[1]
 	flashVer='LNX_11,2,202,233'
 
-	fullURL=videoUrl+' swfVfy=1 live=1 playpath='+stream_name+' flashVer='+flashVer+' pageUrl='+pageUrl+' tcUrl='+videoUrl+' swfUrl='+swfUrl 
+	fullURL=videoUrl+' swfVfy=1 live=1 token=!3zxcvbnm4@ playpath='+stream_name+' flashVer='+flashVer+' pageUrl='+pageUrl+' tcUrl='+videoUrl+' swfUrl='+swfUrl 
 	if (prov[3] != ''):
 		fullURL=fullURL+' app='+prov[3]
 	if (src == "src_tv24" and mysettings.getSetting('tv24_http') == 'true'):
-		fullURL=prov[0].replace("rtmp://","http://")+"/"+stream_name+"/playlist.m3u8"
+		fullURL=prov[0].replace("rtmpe://","http://")+"/"+stream_name+"/playlist.m3u8"
 	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(fullURL, item)
 
 if mode==None:

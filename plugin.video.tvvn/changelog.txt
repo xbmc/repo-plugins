@@ -1,3 +1,8 @@
+version 0.8.2 (10/11/2012):
+ * reverted VTV1-4, HTV7,9 & HN1 to vtc.com.vn's source
+ * fixed VpopTV
+ * temporarily removed dead tv24.vn channels (very flaky source lately)
+
 version 0.8.1 (27/07/2012):
  * adds LifeTV and VpopTV (thanks to bolex17)
 

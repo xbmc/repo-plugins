@@ -2,7 +2,6 @@
 <addon id="plugin.video.dmax" name="DMAX Videotheke" version="0.0.3" provider-name="dethfeet">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
-    <import addon="xbmc.gui" version="2.11"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>

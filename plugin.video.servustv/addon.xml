@@ -2,7 +2,6 @@
 <addon id="plugin.video.servustv" name="ServusTV - Mediathek" version="0.0.4" provider-name="dethfeet">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
-    <import addon="xbmc.gui" version="2.11"/>
     <import addon="script.module.pyamf" version="0.6.1"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">

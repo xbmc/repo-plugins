@@ -18,8 +18,7 @@
 
 
 
-import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon,xbmc,base64,datetime,os,time
-import sys
+import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon,xbmc,os
 from datetime import date
 from datetime import datetime
 import settings
@@ -114,7 +113,7 @@ def Channels(name,url):
                 if dialog.yesno(language(30021),language(30022),'',language(30023),language(30024),language(30025)):
                         if dialog.yesno(language(30021),'','   ',language(30026),language(30027),language(30028)):
                                 keyemail = None
-                                keyboard = xbmc.Keyboard('', 'E-mail')
+                                keyboard = xbmc.Keyboard('', language(30307))
                                 keyboard.doModal()
                                 if keyboard.isConfirmed():
                                     keyemail = keyboard.getText()
@@ -122,7 +121,7 @@ def Channels(name,url):
                                     return False
                                     
                                 keypassword = None
-                                keyboard = xbmc.Keyboard('', 'Password')
+                                keyboard = xbmc.Keyboard('', language(30308))
                                 keyboard.doModal()
                                 if keyboard.isConfirmed():
                                     keypassword = keyboard.getText()
@@ -144,7 +143,7 @@ def Channels(name,url):
                                 try:
                                     country=settings.country()
                                     city = ''
-                                    keyboard = xbmc.Keyboard('', 'Input Your City')
+                                    keyboard = xbmc.Keyboard('', language(30309))
                                     keyboard.doModal()
                                     if keyboard.isConfirmed():
                                         city = keyboard.getText()
@@ -163,7 +162,7 @@ def Channels(name,url):
                                         dialog.ok(language(30021),language(30034),language(30035),language(30036))
                         else:
                                 keyemail = None
-                                keyboard = xbmc.Keyboard('', 'E-mail')
+                                keyboard = xbmc.Keyboard('', language(30307))
                                 keyboard.doModal()
                                 if keyboard.isConfirmed():
                                     keyemail = keyboard.getText()
@@ -171,7 +170,7 @@ def Channels(name,url):
                                     return False
                                     
                                 keypassword = None
-                                keyboard = xbmc.Keyboard('', 'Password')
+                                keyboard = xbmc.Keyboard('', language(30308))
                                 keyboard.doModal()
                                 if keyboard.isConfirmed():
                                     keypassword = keyboard.getText()
@@ -200,11 +199,14 @@ def Channels(name,url):
             setView('episodes', 'default') 
             
     
-def getStream(channels,resolution):
+def getStream(channels,resolution,watch_timeout):
+    watch_timeout=str(watch_timeout)
     if resolution == '0':
         quality  = 'LOW'
+        if len(watch_timeout)>5:
+            quality  = 'HIGH'
     else:
-        quality = 'HIGH'
+        quality  = 'HIGH'
 
     for item in channels:
         if item['quality'].upper() == quality:
@@ -217,19 +219,26 @@ def FilmOn(url,iconimage):
         link = net.http_GET(url).content
         data = json.loads(link)
         channels= data['streams']
-        stream = getStream(channels,resolution)
+        watch_timeout= data['watch-timeout']
+        stream = getStream(channels,resolution,watch_timeout)
         if stream is not None:
             foregex= stream['url']+'<'
-            url= stream['url']
             playpath=stream['name']
             name=stream['quality']
-            regex = re.compile('rtmp://(.+?)/(.+?)/(.+?)id=([a-f0-9]*?)<')
-            match1 = regex.search(foregex)
-            app = '%s/%sid=%s' %(match1.group(2), match1.group(3),match1.group(4))
-            tcUrl=str(url)
+            if re.search('mp4:bc', link, re.IGNORECASE):
+                    regex = re.compile('rtmp://(.+?)/(.+?)/<')
+                    match = regex.search(foregex)
+                    app = '%s/' %(match.group(2))
+                    url= stream['url']+playpath
+            if not re.search('mp4:bc', link, re.IGNORECASE):
+                    regex = re.compile('rtmp://(.+?)/(.+?)/(.+?)id=([a-f0-9]*?)<')
+                    match = regex.search(foregex)
+                    app = '%s/%sid=%s' %(match.group(2), match.group(3),match.group(4))
+                    url= stream['url']
+            tcUrl=stream['url']
             swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
             pageUrl = 'http://www.filmon.com/'
-            url= str(url)+' playpath='+str(playpath)+' app='+str(app)+' swfUrl='+str(swfUrl)+' tcUrl='+str(tcUrl)+' pageurl='+str(pageUrl) 
+            url= str(url)+' playpath='+str(playpath)+' app='+str(app)+' swfUrl='+str(swfUrl)+' tcUrl='+str(tcUrl)+' pageurl='+str(pageUrl)
             xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(url)
             addLink(name,url,iconimage,'','','','','','','','')
             setView('movies', 'default') 

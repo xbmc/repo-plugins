@@ -2,28 +2,30 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-xbox = xbmc.getCondVisibility("System.Platform.xbox")
-settings = xbmcaddon.Addon(id='plugin.video.ign_com')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.ign_com')
+translation = addon.getLocalizedString
 
-maxVideoQuality=settings.getSetting("maxVideoQuality")
-forceViewMode=settings.getSetting("forceViewMode")
+maxVideoQuality=addon.getSetting("maxVideoQuality")
+forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
 else:
   forceViewMode=False
-viewMode=str(settings.getSetting("viewMode"))
+viewMode=str(addon.getSetting("viewMode"))
 
 qual=[500000,1000000,2500000,3000000]
 maxVideoQuality=qual[int(maxVideoQuality)]
 
 def index():
         addDir(translation(30002),"http://www.ign.com/videos/all/filtergalleryajax?filter=all",'listVideos',"")
+        addDir("IGN Daily Fix","http://www.ign.com/videos/series/ign-daily-fix",'listVideos',"")
+        addDir("IGN Live","http://www.ign.com/videos/series/ign-live",'listVideos',"")
         addDir(translation(30003),"http://www.ign.com/videos/all/filtergalleryajax?filter=games-review",'listVideos',"")
         addDir(translation(30004),"http://www.ign.com/videos/all/filtergalleryajax?filter=games-trailer",'listVideos',"")
         addDir(translation(30005),"http://www.ign.com/videos/all/filtergalleryajax?filter=movies-trailer",'listVideos',"")
-        addDir(translation(30006),"http://www.ign.com/videos/all/filtergalleryajax?filter=series",'listVideos',"")
+        #addDir(translation(30006),"http://www.ign.com/videos/all/filtergalleryajax?filter=series",'listVideos',"")
         addDir(translation(30007),"http://www.ign.com/videos/allseriesajax",'listSeries',"")
         addDir(translation(30008),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
@@ -36,19 +38,20 @@ def listVideos(url):
         for i in range(1,len(spl),1):
             entry=spl[i]
             match=re.compile('<li>(.+?)</li>', re.DOTALL).findall(entry)
-            length=match[0].replace(" mins","")
-            match=re.compile('<p class="video-description">\n                    <span class="publish-date">(.+?)</span> -(.+?)</p>', re.DOTALL).findall(entry)
-            date=match[0][0]
-            desc=match[0][1]
-            desc=cleanTitle(desc)
-            match=re.compile('title="(.+?)"', re.DOTALL).findall(entry)
-            title=match[0]
-            title=cleanTitle(title)
-            match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
-            url=match[0]
-            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-            thumb=match[0]
-            addLink(title,url,'playVideo',thumb,date+"\n"+desc,length)
+            if len(match)>0:
+              length=match[0].replace(" mins","")
+              match=re.compile('<p class="video-description">\n                    <span class="publish-date">(.+?)</span> -(.+?)</p>', re.DOTALL).findall(entry)
+              date=match[0][0]
+              desc=match[0][1]
+              desc=cleanTitle(desc)
+              match=re.compile('title="(.+?)"', re.DOTALL).findall(entry)
+              title=match[0]
+              title=cleanTitle(title)
+              match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
+              url=match[0]
+              match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+              thumb=match[0]
+              addLink(title,url,'playVideo',thumb,date+"\n"+desc,length)
         matchPage=re.compile('<a id="moreVideos" href="(.+?)"', re.DOTALL).findall(content)
         if len(matchPage)>0:
           urlNext="http://www.ign.com"+matchPage[0]
@@ -110,7 +113,7 @@ def listSearchResults(url):
 
 def playVideo(url):
         content = getUrl(url)
-        match=re.compile('"video_id":"(.+?)"', re.DOTALL).findall(content)
+        match=re.compile('data-video-id="(.+?)"', re.DOTALL).findall(content)
         content = getUrl("http://apis.ign.com/video/v3/videos/osmf/"+match[0]+".smil")
         match=re.compile('<video src="(.+?)" system-bitrate="(.+?)"/>', re.DOTALL).findall(content)
         finalUrl=""
@@ -128,12 +131,8 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

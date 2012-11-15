@@ -3,6 +3,6 @@
   <string id="30001">Nächste Seite</string>
   <string id="30002">Neue Videos</string>
   <string id="30008">Suchen</string>
-  <string id="30101">Maximale Videoqualität</string>
-  <string id="30102">ViewMode erzwingen</string>
+  <string id="30101">Maximale Videobitrate</string>
+  <string id="30102">View erzwingen</string>
 </strings>

@@ -5,8 +5,8 @@ import simplejson as json
 plugin = 'TMZ'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '10-20-2012'
-__version__ = '2.0.6'
+__date__ = '11-10-2012'
+__version__ = '2.0.7'
 settings = xbmcaddon.Addon( id = 'plugin.video.tmz' )
 dbg = False
 dbglevel = 3
@@ -86,10 +86,10 @@ def build_video_directory( name ):
 		videoUrl = epsdata[0][3].replace("\\", "")
 		thumb = epsdata[0][5].replace("\\", "") + '/width/490/height/266/type/3'
 		if videoUrl.find('http://cdnbakmi.kaltura.com') == -1:
-			if settings.getSetting("quality") == settings.getLocalizedString( 30005 ):
-				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/0_' + videoUrl.split('_')[1]
+			if settings.getSetting("quality") == '0':
+				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + videoUrl.split('_')[0].split('/')[-1:][0] + '_' + videoUrl.split('_')[1]
 			else:
-				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/0_' + videoUrl.split('_')[1] + '/flavorId/0_' + videoUrl.split('_')[3]
+				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + videoUrl.split('_')[0].split('/')[-1:][0] + '_' + videoUrl.split('_')[1] + '/flavorId/0_' + videoUrl.split('_')[3]
 			infoLabels = { "Title": title, "Director": "TMZ", "Studio": name, "Plot": title, "Duration": str(datetime.timedelta(seconds=int(duration))) }
 			ListItem(title, thumb, url, '1', False, infoLabels, True)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
@@ -135,7 +135,7 @@ def build_search_directory():
 
 @retry(IndexError)	
 def get_search_url(name, url, thumb):
-	if settings.getSetting("quality") == settings.getLocalizedString( 30005 ) or len(url.split('/')[4]) > 10:
+	if settings.getSetting("quality") == '0' or len(url.split('/')[4]) > 10:
 		meta = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + thumb.split('/')[9]
 		data = open_url( meta )['content']
 		url = re.compile('<media url=\"(.+?)\"').findall(data)[0]
@@ -147,8 +147,13 @@ def get_search_url(name, url, thumb):
 @retry(IndexError)	
 def play_video( name, url, thumb, studio ):
 	if studio != 'TMZ':
-		data = open_url( url )['content']
-		url = re.compile('<media url=\"(.+?)\"').findall(data)[0]
+		try:
+			data = open_url( url )['content']
+			url = re.compile('<media url=\"(.+?)\"').findall(data)[0]
+		except:
+			url = 'http://www.tmz.com/videos/' + url.split('/')[9]
+			data = open_url( url )['content']
+			url = common.parseDOM(data, "meta", attrs = { "name": "VideoURL" }, ret = "content")[0]
 	listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = thumb, path = url )
 	listitem.setInfo( type="Video", infoLabels={ "Title": name , "Director": "TMZ", "Studio": studio, "Plot": name } )
 	xbmcplugin.setResolvedUrl( handle = int( sys.argv[1] ), succeeded = True, listitem = listitem )

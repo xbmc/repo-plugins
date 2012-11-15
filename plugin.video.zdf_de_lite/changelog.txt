@@ -1,8 +1,21 @@
-1.0.0 - First Try
-1.0.1 - Fixed small bug & added channel logos
-1.0.2 - Changed Timeout
-1.0.3 - Added News
-1.0.4 - Various fixes and optical optimizations
-1.0.5 - Added livestreams
-1.0.6 - Fixed search & some optical optimizations
-1.0.7 - Various small fixes
+1.0.0
+- First Try
+1.0.1
+- Fixed small bug & added channel logos
+1.0.2
+- Changed Timeout
+1.0.3
+- Added News
+1.0.4
+- Various fixes and optical optimizations
+1.0.5
+- Added livestreams
+1.0.6
+- Fixed search
+1.0.7
+- Various small fixes
+1.0.8
+- Added HD content
+- Fixed livestreaming
+- Added some categories
+- Added setting for minimum video length

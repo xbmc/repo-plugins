@@ -1,4 +1,5 @@
 <settings>
+   <setting id="minLength" type="enum" label="30103" values="0|5|10|20|30" default="2"/>
    <setting id="forceViewMode" type="bool" label="30101" default="false"/>
    <setting id="viewMode" type="number" label="30102" default="500"/>
 </settings>

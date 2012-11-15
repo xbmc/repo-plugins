@@ -14,43 +14,50 @@ else:
   forceViewMode=False
 viewMode=str(addon.getSetting("viewMode"))
 
+minLength=addon.getSetting("minLength")
+mins=[0,5,10,20,30]
+minLength=mins[int(minLength)]
+
 def index():
+        addDir(translation(30005),"http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/tipps",'listVideos',"")
+        addDir(translation(30006),"http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/aktuellste",'listVideos',"")
+        addDir(translation(30007),"http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/meist-gesehen",'listVideos',"")
         addDir("ZDF","zdf",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209114/tImg/4009328")
         addDir("ZDFneo","zdfneo",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209122/tImg/5939058")
         addDir("ZDFkultur","zdfkultur",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1317640/tImg/5960283")
         addDir("ZDFinfo","zdfinfo",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209120/tImg/5880352")
         addDir("3sat","dreisat",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209116/tImg/5784929")
         addDir("LIVE","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day0",'listVideos',"")
-        addDir(str(translation(30001))+": A-Z","",'listAZ',"")
-        addDir(str(translation(30001))+": Thema","http://www.zdf.de/ZDFmediathek/hauptnavigation/themen",'listThemen',"")
-        addDir(str(translation(30001))+": "+str(translation(30002)),"",'search',"")
         addDir(translation(30003),"http://www.zdf.de/ZDFmediathek/hauptnavigation/nachrichten/ganze-sendungen",'listShows',"")
+        addDir(str(translation(30001))+": A-Z","",'listAZ',"")
+        addDir(translation(30004),"http://www.zdf.de/ZDFmediathek/hauptnavigation/themen",'listThemen',"")
+        addDir(translation(30002),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listChannel(url):
         if url=="zdf":
-          addDir("Das Aktuellste","http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209114",'listVideos',"")
-          addDir("Meist gesehen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209114",'listVideos',"")
+          addDir(translation(30006),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209114",'listVideos',"")
+          addDir(translation(30007),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209114",'listVideos',"")
         elif url=="zdfneo":
-          addDir("Das Aktuellste","http://www.zdf.de/ZDFmediathek/kanaluebersicht/aktuellste/857392",'listVideos',"")
-          addDir("Tipps","http://www.zdf.de/ZDFmediathek/senderstartseite/sst0/1209122",'listVideos',"")
-          addDir("Themen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209122",'listShows',"")
-          addDir("Sendungen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209122",'listShows',"")
+          addDir(translation(30006),"http://www.zdf.de/ZDFmediathek/kanaluebersicht/aktuellste/857392",'listVideos',"")
+          addDir(translation(30005),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst0/1209122",'listVideos',"")
+          addDir(translation(30009),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209122",'listShows',"")
+          addDir(translation(30008),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209122",'listShows',"")
         elif url=="zdfkultur":
-          addDir("Das Aktuellste","http://www.zdf.de/ZDFmediathek/kanaluebersicht/aktuellste/1321386",'listVideos',"")
-          addDir("Tipps","http://www.zdf.de/ZDFmediathek/senderstartseite/sst0/1317640",'listVideos',"")
-          addDir("Sendungen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1317640",'listShows',"")
-          addDir("Meist gesehen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1317640",'listVideos',"")
+          addDir(translation(30006),"http://www.zdf.de/ZDFmediathek/kanaluebersicht/aktuellste/1321386",'listVideos',"")
+          addDir(translation(30005),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst0/1317640",'listVideos',"")
+          addDir(translation(30008),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1317640",'listShows',"")
+          addDir(translation(30007),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1317640",'listVideos',"")
         elif url=="zdfinfo":
-          addDir("Das Aktuellste","http://www.zdf.de/ZDFmediathek/kanaluebersicht/aktuellste/398",'listVideos',"")
-          addDir("Tipps","http://www.zdf.de/ZDFmediathek/senderstartseite/sst0/1209120",'listVideos',"")
-          addDir("Sendungen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209120",'listShows',"")
-          addDir("Meist gesehen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209120",'listVideos',"")
+          addDir(translation(30006),"http://www.zdf.de/ZDFmediathek/kanaluebersicht/aktuellste/398",'listVideos',"")
+          addDir(translation(30005),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst0/1209120",'listVideos',"")
+          addDir(translation(30008),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209120",'listShows',"")
+          addDir(translation(30007),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209120",'listVideos',"")
         elif url=="dreisat":
-          addDir("Das Aktuellste","http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209116",'listVideos',"")
-          addDir("Sendungen","http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209116",'listShows',"")
+          addDir(translation(30006),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst1/1209116",'listVideos',"")
+          addDir(translation(30008),"http://www.zdf.de/ZDFmediathek/senderstartseite/sst2/1209116",'listShows',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -77,13 +84,15 @@ def listShows(url,bigThumb):
 
 def listVideos(url):
         urlMain=url
-        if url.find("/nachrichten/ganze-sendungen")==-1:
+        if url.find("/nachrichten/ganze-sendungen")>=0:
+          url=url.replace("&amp;","&")+"&teaserListIndex=75"
+        elif url.find("/hauptnavigation/startseite/")>=0:
+          pass
+        else:
           if url.find("?bc=")>=0:
             url=url[:url.find("?bc=")]
           if url.find("?sucheText=")==-1:
             url=url+"?teaserListIndex=500"
-        else:
-          url=url.replace("&amp;","&")+"&teaserListIndex=75"
         content = getUrl(url)
         spl=content.split('<div class="image">')
         for i in range(1,len(spl),1):
@@ -119,35 +128,38 @@ def listVideos(url):
               if urlMain.find("/live/day0")>0 and entry.find(">LIVE</a></p>")>=0:
                 addLink(title,url,'playVideo',thumb,length)
               elif urlMain.find("/live/day0")==-1 and entry.find(">LIVE</a></p>")==-1:
-                addLink(title,url,'playVideo',thumb,length)
+                minutes=999
+                if length.find(":")>0:
+                  minutes=int(length[:length.find(":")])
+                elif length.find(" ")>0:
+                  minutes=int(length[:length.find(" ")])
+                if minutes>=minLength:
+                  addLink(title,url,'playVideo',thumb,length)
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
         content = getUrl("http://www.zdf.de/ZDFmediathek/xmlservice/web/beitragsDetails?id="+url+"&ak=web")
+        match0=re.compile('<formitaet basetype="h264_aac_mp4_rtmp_zdfmeta_http" isDownload="false">\n                <quality>hd</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
         match1=re.compile('<formitaet basetype="h264_aac_mp4_rtmp_zdfmeta_http" isDownload="false">\n                <quality>veryhigh</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
         match2=re.compile('<formitaet basetype="h264_aac_mp4_rtmp_zdfmeta_http" isDownload="false">\n                <quality>high</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
-        match3=re.compile('<formitaet basetype="h264_aac_na_rtsp_mov_http" isDownload="false">\n                <quality>veryhigh</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
+        match3=re.compile('<formitaet basetype="h264_aac_na_rtmp_zdfmeta_http" isDownload="false">\n                <quality>veryhigh</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
         url=""
         finalUrl=""
         if content.find("<type>livevideo</type>")>=0:
           if len(match3)>=1:
             url=match3[0]
-            content = getUrl(url)
-            match=re.compile('RTSPtext\n(.+?)\n', re.DOTALL).findall(content)
-            finalUrl=match[0]
         elif content.find("<type>video</type>")>=0:
-          if len(match1)>=1:
+          if len(match0)>=1:
+            url=match0[0]
+          elif len(match1)>=1:
             url=match1[0]
-            content = getUrl(url)
-            match=re.compile('<default-stream-url>(.+?)</default-stream-url>', re.DOTALL).findall(content)
-            finalUrl=match[0]
           elif len(match2)>=1:
             url=match2[1]
-            content = getUrl(url)
-            match=re.compile('<default-stream-url>(.+?)</default-stream-url>', re.DOTALL).findall(content)
-            finalUrl=match[0]
+        content = getUrl(url)
+        match=re.compile('<default-stream-url>(.+?)</default-stream-url>', re.DOTALL).findall(content)
+        finalUrl=match[0]
         if finalUrl!="":
           listitem = xbmcgui.ListItem(path=finalUrl)
           return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -181,7 +193,7 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20100101 Firefox/15.0.1')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()

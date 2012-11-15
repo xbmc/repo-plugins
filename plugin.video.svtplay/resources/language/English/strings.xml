@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-	<string id="30000">Video quality</string>
-	<string id="30001">List size</string>
-
-    <string id="30100">Low</string>
-    <string id="30101">Mid</string>
-    <string id="30102">High</string>
-    <string id="30103">HD</string>
-
-    <string id="30200">Next page...</string>
-    
-    <string id="30300">Search</string>
-    <string id="30301">Error</string>
-    <string id="30302">The search string was empty.</string>
-    <string id="30403">Searching...</string>
-	
-	<string id="30500">Debug</string>
-	<string id="30501">Context menu label</string>
-	<string id="30502">URL video quality</string>
-	<string id="30503">Command</string>
-	
-	<string id="30600">Address or network problem. It might get better by itself, if you wait for a bit.</string>
+  <string id="30000">Programs A-Ö</string>
+  <string id="30001">Categories</string>
+  <string id="30002">Live</string>
+  <string id="30003">Latest programs</string>  
+  <string id="30004">Latest news broadcast</string>
+  <string id="30005">Recommended</string>
+  <string id="30006">PSL</string>
+  <string id="30100">This program is only available at www.svtplay.se</string>
+  <string id="30101">More programs...</string>
+  <string id="30500">Debug</string>
+  <string id="30501">Show subtitles</string>
+  <string id="30502">Group programs in A-Ö by first character</string>
+  <string id="30503">Number of programs per page</string>
+  <string id="30504">Hide sign language interpreted programs</string>
+  <string id="30505">Don't use avc1.77.30 streams</string>
+  <string id="40001">General</string>
+  <string id="40002">Advanced</string>
 </strings>

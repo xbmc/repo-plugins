@@ -10,3 +10,5 @@
 - Added setting for maximum bitrate
 1.0.5
 - Fixed site changes
+1.0.6
+- Some small fixes

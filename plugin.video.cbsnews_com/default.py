@@ -40,7 +40,10 @@ def index():
             else:
               pageType="1611"
             url="http://www.cbsnews.com/"+pageType+"-"+noteId+"_162-1.html?nomesh"
-            addDir(title,url+"#"+nextUrl,'listLatest',"")
+            if title=="48 Hours":
+              addDir(title,nextUrl,'listVideos',"")
+            else:
+              addDir(title,url+"#"+nextUrl,'listLatest',"")
         addDir("CBS Sunday Morning","http://www.cbsnews.com/2076-3445_162-0.html",'listVideos',"")
         addDir("Up To The Minute","http://www.cbsnews.com/2076-3455_162-0.html",'listVideos',"")
         addDir(translation(30002),"",'search',"")
@@ -61,8 +64,10 @@ def listLatest(url):
             if url.find("/video/watch/")==0:
               url="http://www.cbsnews.com"+url
             match=re.compile('<p class="assetDek">(.+?)</p>', re.DOTALL).findall(entry)
-            desc=match[0]
-            desc=cleanTitle(desc)
+            desc=""
+            if len(match)>0:
+              desc=match[0]
+              desc=cleanTitle(desc)
             match=re.compile('class="assetTitle">(.+?)</a>', re.DOTALL).findall(entry)
             title=match[0]
             title=cleanTitle(title)
@@ -95,8 +100,10 @@ def listVideos(url):
               match=re.compile('<p class="datestamp">(.+?)</p>', re.DOTALL).findall(entry)
               date=match[0].replace('<span class="separatorGrey">|</span> ','')
               match=re.compile('<p class="storyDek">(.+?)</p>', re.DOTALL).findall(entry)
-              desc=match[0]
-              desc=cleanTitle(desc)
+              desc=""
+              if len(match)>0:
+                desc=match[0]
+                desc=cleanTitle(desc)
               match=re.compile('<h2 class="storyTitle"><a href="(.+?)">(.+?)</a></h2>', re.DOTALL).findall(entry)
               url=match[0][0]
               title=match[0][1]
@@ -115,8 +122,10 @@ def listVideos(url):
               match=re.compile('<p class="datestamp">(.+?)</p>', re.DOTALL).findall(entry)
               date=match[0].replace('<span class="separatorGrey">|</span> ','')
               match=re.compile('<p class="storyDek">(.+?)</p>', re.DOTALL).findall(entry)
-              desc=match[0]
-              desc=cleanTitle(desc)
+              desc=""
+              if len(match)>0:
+                desc=match[0]
+                desc=cleanTitle(desc)
               match=re.compile('alt=(.+?)/>', re.DOTALL).findall(entry)
               title=match[0]
               title=cleanTitle(title).replace('"','')
@@ -189,7 +198,7 @@ def playVideo(url):
               bitrate=int(match[0])
               if bitrate>maxBitrateTemp and bitrate<=maxBitRate:
                 maxBitrateTemp=bitrate
-                match=re.compile('DeliveryUrl><!\\[CDATA\\[(.+?)\\]\\]></DeliveryUrl>', re.DOTALL).findall(entry)
+                match=re.compile('<DeliveryUrl><!\\[CDATA\\[(.+?)\\]\\]></DeliveryUrl>', re.DOTALL).findall(entry)
                 finalUrl=match[0]
         if finalUrl!="":
           listitem = xbmcgui.ListItem(path=finalUrl)
@@ -203,7 +212,7 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/14.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()

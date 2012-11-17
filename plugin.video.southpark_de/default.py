@@ -15,6 +15,7 @@ if forceViewMode=="true":
 else:
   forceViewMode=False
 viewMode=str(addon.getSetting("viewMode"))
+playIntro=addon.getSetting("playIntro")
 
 if language=="0":
   language=""
@@ -75,14 +76,18 @@ def listVideos(url):
 
 def playVideo(url):
         content = getUrl(url)
-        matchTitle=re.compile('<h1>(.+?)</h1>', re.DOTALL).findall(content)
-        matchDesc=re.compile('<h2>(.+?)</h2>', re.DOTALL).findall(content)
+        matchTitle=re.compile('<h1 itemprop="name">(.+?)</h1>', re.DOTALL).findall(content)
+        matchDesc=re.compile('<h2 itemprop="description">(.+?)</h2>', re.DOTALL).findall(content)
+        matchSE=re.compile('/s(.+?)e(.+?)-', re.DOTALL).findall(content)
         match=re.compile('http://media.mtvnservices.com/mgid:arc:episode:southpark.de:(.+?)"', re.DOTALL).findall(content)
         if len(match)>0:
           content = getUrl("http://www.southpark.de/feeds/video-player/mrss/mgid%3Aarc%3Aepisode%3Asouthpark.de%3A"+match[0]+"?lang="+language)
           spl=content.split('<item>')
           urlFull="stack://"
-          for i in range(1,len(spl),1):
+          start=2
+          if playIntro=="true":
+            start=1
+          for i in range(start,len(spl),1):
               entry=spl[i]
               match=re.compile('<media:content type="text/xml" medium="video" duration="(.+?)" isDefault="true" url="(.+?)"', re.DOTALL).findall(entry)
               url=match[0][1].replace("&amp;","&")
@@ -106,9 +111,7 @@ def playVideo(url):
               urlFull+=urlNew+" , "
           urlFull=urlFull[:-3]
           listitem = xbmcgui.ListItem(path=urlFull)
-          title=matchTitle[0]
-          if title.find("South Park: ")==-1:
-            title="South Park: "+title
+          title="S"+matchSE[0][0]+"E"+matchSE[0][1]+" - "+matchTitle[0]
           desc=matchDesc[0]
           listitem.setInfo( type="Video", infoLabels={ "Title": title , "Plot": desc } )
           return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -123,7 +126,7 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20100101 Firefox/15.0.1')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()

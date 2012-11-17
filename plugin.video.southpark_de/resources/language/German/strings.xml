@@ -2,8 +2,9 @@
 <strings>
   <string id="30001">Staffel</string>
   <string id="30002">Folge</string>
-  <string id="30003">Zufällig</string>
+  <string id="30003">Per Zufall</string>
   <string id="30004">Folge ist nicht verfuegbar</string>
   <string id="30101">Sprache</string>
   <string id="30102">View erzwingen</string>
+  <string id="30104">Intro abspielen</string>
 </strings>

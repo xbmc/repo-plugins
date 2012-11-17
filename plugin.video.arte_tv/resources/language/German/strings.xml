@@ -4,12 +4,17 @@
   <string id="30002">Alle Videos</string>
   <string id="30003">Sendungen A-Z</string>
   <string id="30004">Events</string>
-  <string id="30005">Suche</string>
+  <string id="30005">Suchen</string>
   <string id="30006">nach Titel</string>
   <string id="30007">nach Datum</string>
   <string id="30008">nach Bewertung</string>
   <string id="30009">nach Aufrufen</string>
   <string id="30010">Nächste Seite</string>
+  <string id="30011">Videos des Tages</string>
+  <string id="30012">Live WEB (Konzerte)</string>
+  <string id="30018">Video ist noch nicht verfuegbar</string>
+  <string id="30019">Video ist nicht mehr verfuegbar</string>
   <string id="30101">Sprache (Videos)</string>
   <string id="30102">Videos pro Seite</string>
+  <string id="30104">View erzwingen</string>
 </strings>

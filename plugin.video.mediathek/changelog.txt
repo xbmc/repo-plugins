@@ -1,3 +1,4 @@
+0.4.7 - Fix syntax error
 0.4.6 - Minor fix for rasp-xbmc
 	added new channels for kika
 0.4.5 - FIX: ARTE and KIKA - adopt format changes

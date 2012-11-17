@@ -51,8 +51,8 @@ class SimpleXbmcGui(object):
     
     if displayObject.picture is not None:
       listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=displayObject.picture)
-    else
-      else listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
+    else:
+      listItem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png")
     
     if(displayObject.isPlayable):
       if(displayObject.isPlayable == "PlayList"):

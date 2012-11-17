@@ -10,6 +10,18 @@
   <string id="30008">by Votes</string>
   <string id="30009">by Hits</string>
   <string id="30010">Next Page</string>
+  <string id="30011">Videos of the day</string>
+  <string id="30012">Live WEB (Concerts)</string>
+  <string id="30013">Pop, Rock, Electro</string>
+  <string id="30014">Classic</string>
+  <string id="30015">Jazz & Blues</string>
+  <string id="30016">World Music</string>
+  <string id="30017">Theater & Dance</string>
+  <string id="30018">Video is not available yet</string>
+  <string id="30019">Video is no longer available</string>
   <string id="30101">Language (Videos)</string>
   <string id="30102">Videos per Page</string>
+  <string id="30103">Timeout</string>
+  <string id="30104">Force View</string>
+  <string id="30105">ViewID</string>
 </strings>

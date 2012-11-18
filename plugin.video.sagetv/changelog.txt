@@ -1,3 +1,7 @@
+[B]Version 1.4.0 (Nov 13, 2012)[/B]
+- Removed dependency on CommonFunctions (script.module.parsedom) which was previously used to ask what text to search for using the search for recordings/airings
+- Enhanced xbmc.js to include a version number to ensure that the latest xbmc.js file is being used as the addon versions up over time
+
 [B]Version 1.3.8 (Nov 8, 2012)[/B]
 - Added additional error checking upon launch of the addon to ensure the correct sagex plugins are installed (and if they aren't it will kick you back to the main menu after informing you of the issue)
 - Added in initial language translations for German, Slovak, Spanish, Swedish, Lithuanian, and Portuguese (Brazil)

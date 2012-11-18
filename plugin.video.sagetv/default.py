@@ -1,5 +1,5 @@
 import urllib,urllib2,re,string
-import xbmc,xbmcplugin,xbmcgui,xbmcaddon,CommonFunctions
+import xbmc,xbmcplugin,xbmcgui,xbmcaddon
 import os
 import simplejson as json
 import unicodedata
@@ -7,8 +7,6 @@ import time
 from xml.dom.minidom import parse
 from time import strftime,sleep
 from datetime import date
-
-common = CommonFunctions
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.sagetv')
 __language__ = __settings__.getLocalizedString
@@ -59,6 +57,7 @@ IMAGE_POSTER = xbmc.translatePath(os.path.join(__cwd__,'resources','media','post
 IMAGE_THUMB = xbmc.translatePath(os.path.join(__cwd__,'resources','media','thumb.jpg'))
 DEFAULT_CHARSET = 'utf-8'
 MIN_VERSION_SAGEX_REQUIRED = "7.1.9.12"
+VERSION_XBMCJS_REQUIRED = "1.0.0"
 
 # 500-THUMBNAIL 501/502/505/506/507/508-LIST 503-MINFO2 504-MINFO 515-MINFO3
 confluence_views = [500,501,502,503,504,508]
@@ -67,6 +66,14 @@ confluence_views = [500,501,502,503,504,508]
 def TOPLEVELCATEGORIES():
 
     #url = strUrl + '/sagex/api?command=GetInstalledPluginss&encoder=json'
+    url = strUrl + '/sagex/api?c=xbmc:GetXBMCJSVersionNumber&encoder=json'
+    xbmcjsVersion = executeSagexAPIJSONCall(url, "Result")
+    if(xbmcjsVersion != VERSION_XBMCJS_REQUIRED):
+        print "***xbmc.js version found=" + xbmcjsVersion + "; user must make sure they have the latest xbmc.js installed on their SageTV server (VERSION_XBMCJS_REQUIRED=" + VERSION_XBMCJS_REQUIRED + ")"
+        xbmcgui.Dialog().ok(__language__(21004),__language__(21045),__language__(21046),__language__(21047))
+        xbmc.executebuiltin('ActivateWindow(Home)')
+        return
+    
     url = strUrl + '/sagex/api?c=xbmc:GetPluginVersion&1=sagex-api-services&encoder=json'
     sagexVersion = executeSagexAPIJSONCall(url, "Result")
 
@@ -78,11 +85,6 @@ def TOPLEVELCATEGORIES():
             xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21006),__language__(21007))
             xbmc.executebuiltin('ActivateWindow(Home)')
             return
-        elif(sagexVersion.find("java.lang.NoSuchMethodException: no such method: GetPluginVersion") != -1 or sagexVersion.find("Missing Service File") != -1):
-            print "GetPluginVersion method not found in the xbmc.js file; user must make sure they have the latest xbmc.js installed on their SageTV server"
-            xbmcgui.Dialog().ok(__language__(21004),__language__(21045),__language__(21046),__language__(21047))
-            xbmc.executebuiltin('ActivateWindow(Home)')
-            return
         else:
             print "SageTV not detected, or required plugins not installed"
             xbmcgui.Dialog().ok(__language__(21000),__language__(21001),__language__(21002),__language__(21003))
@@ -91,7 +93,7 @@ def TOPLEVELCATEGORIES():
         
     print "Successfully able to connect to the SageTV server @ " + __settings__.getSetting("sage_ip") + ':' + __settings__.getSetting("sage_port")
  
-    print "TOPLEVELCATEGORIES STARTED; sagex-api-services version=" + sagexVersion
+    print "TOPLEVELCATEGORIES STARTED; xbmc.js file version=" + xbmcjsVersion + ";sagex-api-services version=" + sagexVersion
     if(sagexVersion == ""):
         xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21006),__language__(21007))
         xbmc.executebuiltin('ActivateWindow(Home)')
@@ -333,7 +335,10 @@ def VIEWAIRINGSONCHANNEL(url,name):
     xbmc.executebuiltin("Container.SetViewMode(504)")
 
 def SEARCHFORRECORDINGS(url,name):
-    titleToSearchFor = common.getUserInput(__language__(21010),"")
+    keyboard = xbmc.Keyboard('', __language__(21010))
+    keyboard.doModal()
+    if (keyboard.isConfirmed()):
+        titleToSearchFor = keyboard.getText()
     if(titleToSearchFor == "" or titleToSearchFor == None):
         return
     url = strUrl + '/sagex/api?c=xbmc:SearchForMediaFiles&1=%s&size=100&encoder=json' % urllib2.quote(titleToSearchFor.encode("utf8"))
@@ -410,9 +415,13 @@ def SEARCHFORRECORDINGS(url,name):
     xbmc.executebuiltin("Container.SetViewMode(504)")
 
 def SEARCHFORAIRINGS(url,name):
-    titleToSearchFor = common.getUserInput(__language__(21010),"")
+    keyboard = xbmc.Keyboard('', __language__(21010))
+    keyboard.doModal()
+    if (keyboard.isConfirmed()):
+        titleToSearchFor = keyboard.getText()
     if(titleToSearchFor == "" or titleToSearchFor == None):
         return
+
     now = time.time()
     startRange = str(long(now * 1000))
     #url = strUrl + '/sagex/api?command=EvaluateExpression&1=FilterByRange(SearchByTitle("%s","T"),"GetAiringStartTime","%s",java_lang_Long_MAX_VALUE,true)&encoder=json' % (urllib2.quote(titleToSearchFor.encode("utf8")), startRange)

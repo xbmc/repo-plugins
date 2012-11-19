@@ -17,7 +17,10 @@ except:
     pass
 from urllib2 import Request,urlopen,unquote,HTTPError
 from urllib import urlencode,urlretrieve,urlcleanup
-import simplejson as json
+try:
+    import simplejson as json
+except:
+    import json
 import xml.dom.minidom
 from xml.parsers.expat import ExpatError
 from traceback import print_exc

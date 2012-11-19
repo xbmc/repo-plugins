@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<!-- Portuguese strings.xml by hudo (hudokkow [AT] gmail [DOT] com) -->
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Portuguese language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pt/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
 <strings>
-    <!-- Plugin strings -->
-    <string id="30200">%d estrela(s)</string>
-    <string id="30213">Importar biblioteca iPhoto</string>
+    <!-- Plugin settings strings -->
+    <string id="30000">Caminho para AlbumData.xml</string>
+    <string id="30001">Ignorar álbuns publicados (MobileMe)</string>
+    <string id="30002">Ignorar álbuns 'marcados'</string>
 
     <!-- Category strings -->
     <string id="30100">Eventos</string>
@@ -11,8 +15,7 @@
     <string id="30102">Classificações</string>
     <string id="30103">&lt;&lt; Importar biblioteca iPhoto &gt;&gt;</string>
 
-    <!-- Plugin settings strings -->
-    <string id="30000">Caminho para AlbumData.xml</string>
-    <string id="30001">Ignorar álbuns publicados (MobileMe)</string>
-    <string id="30002">Ignorar álbuns 'marcados'</string>
+    <!-- Plugin strings -->
+    <string id="30200">%d estrela(s)</string>
+    <string id="30213">Importar biblioteca iPhoto</string>
 </strings>

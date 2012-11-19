@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Greek language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/el/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Plugin settings strings -->
+    <string id="30000">Διαδρομή της Συλλογής iPhoto ή Aperture</string>
+    <string id="30001">Αγνόηση δημοσιευμένων (MobileMe) άλμπουμ</string>
+    <string id="30002">Αγνόηση άλμπουμ 'Με Σημαία'</string>
+    <string id="30003">Αυτόματη ενημέρωση συλλογής</string>
+    <string id="30004">Απόκρυψη Ενημέρωσης Συλλογής στο κεντρικό μενού</string>
+    <string id="30005">Αγνόηση άδειων άλμπουμ</string>
+    <string id="30006">Αγνόηση λέξεων-κλειδιά</string>
+    <string id="30015">Ενεργοποίηση υποστήριξης Τοποθεσιών</string>
+    <string id="30016">Προβολή Τοποθεσιών ως</string>
+    <string id="30017">Διευθύνσεις</string>
+    <string id="30018">Ζεύγη Lat/Lon</string>
+    <string id="30020">Προεπιλεγμένη μέθοδος ταξινόμησης φωτογραφιών</string>
+    <string id="30021">Κανένα</string>
+    <string id="30022">Ημερομηνία XML</string>
+    <string id="30025">Λήψη χαρτών από το Google</string>
+    <string id="30026">Προβολή χάρτη σαν fanart</string>
+    <string id="30027">Διαχείριση Συλλογής (οι αλλαγές απαιτούν επανασάρωση)</string>
+    <string id="30028">Τοπική αρχική διαδρομή για Masters</string>
+    <string id="30029">Επανεγγραφή αρχικής διαδρομής ως</string>
+    <string id="30030">Απόκρυψη Προβολής Βοήθειας στο κεντρικό μενού</string>
+
+    <!-- Plugin settings Skin strings -->
+    <string id="30060">Τύπος Προβολής στο Confluence</string>
+    <string id="30061">Προεπιλογή</string>
+    <string id="30062">Μικρογραφίες</string>
+    <string id="30063">Εικόνες</string>
+    <string id="30066">Τύπος Προβολής στο Metropolis</string>
+    <string id="30067">Προεπιλογή</string>
+    <string id="30068">Πλέγμα Εικόνας</string>
+    <string id="30069">Γκαλερί Fanart</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Γενικά</string>
+    <string id="30091">Προβολή</string>
+    <string id="30092">Κέλυφος</string>
+    <string id="30099">Για προχωρημένους</string>
+
+    <!-- Category strings -->
+    <string id="30100">Συμβάντα</string>
+    <string id="30101">Άλμπουμ</string>
+    <string id="30102">Αξιολογήσεις</string>
+    <string id="30103">&lt;&lt; Ενημέρωση Συλλογής &gt;&gt;</string>
+    <string id="30104">Λέξεις Κλειδιά</string>
+    <string id="30105">Πρόσωπα</string>
+    <string id="30106">Τοποθεσίες</string>
+    <string id="30107">&lt;&lt; Προβολή Βοήθειας &gt;&gt;</string>
+    <string id="30108">Έργα</string>
+
+    <!-- Plugin strings -->
+    <string id="30200">%d αστέρι</string>
+    <string id="30210">Εισαγωγή Συλλογής</string>
+    <string id="30211">Έγινε εισαγωγή %d αντικειμένων</string>
+    <string id="30212">Σάρωση Συλλογής...</string>
+    <string id="30213">Ενημέρωση συλλογής</string>
+    <string id="30214">Αγνόηση Λέξεως-Κλειδί</string>
+    <string id="30215">Αφαίρεση αποθηκευμένων χαρτών</string>
+    <string id="30216">Επαναφορά βάσης δεδομένων πρόσθετου</string>
+    <string id="30217">Έγγραφα πρόσθετου</string>
+    <string id="30219">Γίνεται επαναφορά βάσης δεδομένων πρόσθετου...</string>
+    <string id="30220">Ενεργοποίηση Υποστήριξης για Τοποθεσίες;</string>
+    <string id="30221">Οι Τοποθεσίες αναζητούν διευθύνσεις μέσω του Google.</string>
+    <string id="30222">Μπορεί να καθυστερήσει την εισαγωγή της συλλογής.</string>
+    <string id="30223">Θα πρέπει να ξαναγίνει εισαγωγή της συλλογής.</string>
+    <string id="30230">Διαγραφή βάσης δεδομένων πρόσθετου;</string>
+    <string id="30231">Η βάση δεδομένων του πρόσθετου είναι κατεστραμμένη</string>
+    <string id="30232">Η διαγραφή δε θα επηρεάσει τη Συλλογή των Φωτογραφιών σας.</string>
+    <string id="30233">Θα πρέπει να ξαναγίνει σάρωση μετά από αυτό.</string>
+    <string id="30240">Αποτυχία προετοιμασίας της βάσης δεδομένων.</string>
+    <string id="30241">Εισάγετε ξανά τη Συλλογή σας.</string>
+    <string id="30250">Διαγράφονται οι προσωρινά αποθηκευμένοι χάρτες</string>
+    <string id="30252">Σάρωση...</string>
+    <string id="30260">Εισαγωγή Συλλογής σε εξέλιξη</string>
+    <string id="30261">Αδυναμία επαναφοράς της βάσης δεδομένων.</string>
+    <string id="30262">Δεν υποστηρίζεται προς το παρόν</string>
+    <string id="30263">Αυτή η λειτουργία δεν υποστηρίζεται %s %s.</string>
+
+    <!-- Action Results (Notifications) -->
+    <string id="30300">Εισαγωγή συλλογής σε εξέλιξη</string>
+    <string id="30301">Επιτυχής εισαγωγή συλλογής</string>
+    <string id="30302">Αποτυχία εισαγωγής συλλογής</string>
+    <string id="30310">Κανένα αντικείμενο</string>
+    <string id="30320">Έγινε επαναφορά της βάσης δεδομένων</string>
+    <string id="30321">Αποτυχία επαναφοράς της βάσης δεδομένων</string>
+    <string id="30322">Διεγράφησαν %d αποθηκευμένοι χάρτες</string>
+    <string id="30330">Απόκρυψη λέξεως κλειδί '%s'</string>
+</strings>

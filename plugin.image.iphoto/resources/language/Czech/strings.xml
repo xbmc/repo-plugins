@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Czech language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/cs/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30017">Adresy</string>
+    <string id="30021">Žádné</string>
+    <string id="30061">Výchozí</string>
+    <string id="30067">Výchozí</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Obecné</string>
+    <string id="30091">Pohled</string>
+    <string id="30092">Vzhled</string>
+    <string id="30099">Pokročilé</string>
+
+    <!-- Category strings -->
+    <string id="30100">Události</string>
+    <string id="30101">Alba</string>
+    <string id="30102">Hodnocení</string>
+    <string id="30104">Klíčová slova</string>
+    <string id="30106">Místa</string>
+    <string id="30108">Projekty</string>
+    <string id="30252">Zkoumám...</string>
+    <string id="30310">Žádné položky</string>
+</strings>

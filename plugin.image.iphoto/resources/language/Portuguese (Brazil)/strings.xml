@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Portuguese (Brazil) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pt_BR/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Plugin settings strings -->
+    <string id="30000">Caminho para Iphoto ou Coleção Existente</string>
+    <string id="30001">Ignore álbuns publicados (MobileMe) </string>
+    <string id="30002">Ignorar Álbum ´sinalizado' </string>
+    <string id="30003">Auto atualizar coleção</string>
+    <string id="30004">Ocultar item Atualizar Coleção no menu principal</string>
+    <string id="30005">Ignorar álbuns vazios</string>
+    <string id="30006">Ignorar palavras chaves</string>
+    <string id="30015">Ativar suporte a locais</string>
+    <string id="30016">Mostrar Locais como</string>
+    <string id="30017">Endereços</string>
+    <string id="30018">Pares Lat/Lon</string>
+    <string id="30020">Método ordenar foto padrão</string>
+    <string id="30021">Nenhum</string>
+    <string id="30022">Dados XML</string>
+    <string id="30025">Download Mapas do Google</string>
+    <string id="30026">Mostrar mapa como fanart</string>
+    <string id="30027">Coleção Administrada (alterar  vai requerer reescanear)</string>
+    <string id="30028">Caminho raiz local para Masters</string>
+    <string id="30029">Reescreva caminho raiz como</string>
+    <string id="30030">Ocultar item Ver Documentação no menu principal</string>
+
+    <!-- Plugin settings Skin strings -->
+    <string id="30060">Modo de Visualização na Confluence</string>
+    <string id="30061">Default</string>
+    <string id="30062">Imagem Miniaturas</string>
+    <string id="30063">Vitrine de Imagens</string>
+    <string id="30066">Modo Visualização em Metropolis</string>
+    <string id="30067">Default</string>
+    <string id="30068">Grade Imagem</string>
+    <string id="30069">Galeria Fanart</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Geral</string>
+    <string id="30091">Visualização</string>
+    <string id="30092">Skin</string>
+    <string id="30099">Avançado</string>
+
+    <!-- Category strings -->
+    <string id="30100">Eventos</string>
+    <string id="30101">Álbuns</string>
+    <string id="30102">Classificações</string>
+    <string id="30103">&lt;&lt;Atualizar Coleção&gt;&gt;</string>
+    <string id="30104">Palavras Chaves</string>
+    <string id="30105">Rostos</string>
+    <string id="30106">Lugares</string>
+    <string id="30107">&lt;&lt;Ver Documentação&gt;&gt;</string>
+    <string id="30108">Projetos</string>
+
+    <!-- Plugin strings -->
+    <string id="30200">%d estrelas</string>
+    <string id="30210">Importando Coleção</string>
+    <string id="30211">Itens %d Importado</string>
+    <string id="30212">Escaneando Coleção</string>
+    <string id="30213">Atualizar coleção</string>
+    <string id="30214">Ignorar palavras chaves</string>
+    <string id="30215">Remover Mapas Cache</string>
+    <string id="30216">Resetar banco de dados do addon</string>
+    <string id="30217">Documentação do addon</string>
+    <string id="30219">Resetando banco de dados do addon</string>
+    <string id="30220">Ativar Suporte para Lugares?</string>
+    <string id="30221">Ver endereços dos locais via Google.</string>
+    <string id="30222">Isto pode tornar lento a importação da coleção.</string>
+    <string id="30223">Você precisará reimportar sua coleção.</string>
+    <string id="30230">Deletar banco de dados do addon?</string>
+    <string id="30231">Banco de Dados do Addon Corrompido</string>
+    <string id="30232">Excluí-lo não irá prejudicar a sua biblioteca de fotos.</string>
+    <string id="30233">Você necessitará reescanear após isto.</string>
+    <string id="30240">Falhou na inicialização do banco de dados do addon</string>
+    <string id="30241">Por favor importe novamente sua coleção</string>
+    <string id="30250">Deletando imagens dos mapas do cache</string>
+    <string id="30252">Escaneando...</string>
+    <string id="30260">Importar coleção em progresso</string>
+    <string id="30261">Não é possível redefinir banco de dados.</string>
+    <string id="30262">Atualmente não suportado</string>
+    <string id="30263">Este função não é suportada %s %s</string>
+
+    <!-- Action Results (Notifications) -->
+    <string id="30300">Importação de coleção em progresso</string>
+    <string id="30301">Coleção importada com sucesso</string>
+    <string id="30302">Importar Coleção Falhou</string>
+    <string id="30310">Sem itens</string>
+    <string id="30320">Resetar Banco de Dados</string>
+    <string id="30321">Falha ao resetar Banco de Dados</string>
+    <string id="30322">Deletado %d mapas do cache</string>
+    <string id="30330">Ocultar '%s'  palavra chave</string>
+</strings>

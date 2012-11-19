@@ -1,3 +1,26 @@
+2.0.0 - 20121119
+- Support for importing Aperture libraries.
+- Main Menu only shows currently-supported functions.
+- Fix import of libraries specified with VFS paths.
+- Better database error-handling.
+- More efficient database usage.
+- Fix Keywords with iPhoto < 9.4.
+- Correct use of icons/thumbnails.
+- Set Fanart_Image Property for skins to use.
+- Pop-up notifications of results of actions.
+- Translation updates:
+  Czech
+  German
+  Greek
+  Hebrew
+  Hungarian
+  Italian
+  Lithuanian
+  Portuguese
+  Portuguese (Brazil)
+  Slovak
+  Swedish
+
 1.9.3 - 20121023
 - Warn user that Keywords are unsupported with iPhoto >= 9.4.
 - Work around for bogus Face entries in XML.

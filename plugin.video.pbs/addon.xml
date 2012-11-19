@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.pbs"
        name="PBS"
-       version="2.0.1"
+       version="2.0.2"
        provider-name="stacked">
   <requires>
 	<import addon="xbmc.python" version="2.0"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
+	<import addon="script.module.buggalo" version="1.1.2"/>
+	<import addon="script.module.parsedom" version="1.2.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>PBS: Discover award-winning programming – right at your fingertips.</summary>
-    <description>Watch award-winning national programming and locally produced shows. Catch up on the episodes you may have missed and watch your favorite, full-length shows free and on-demand.</description>
+    <summary lang="en">PBS: Discover award-winning programming – right at your fingertips.</summary>
+    <description lang="en">Watch award-winning national programming and locally produced shows. Catch up on the episodes you may have missed and watch your favorite, full-length shows free and on-demand.</description>
     <platform>all</platform>
 	<language>en</language>
-	<disclaimer>Please report any issues with this addon to stacked.xbmc@gmail.com</disclaimer>
+	<disclaimer>Some videos are Geoblocked. Please report any issues with this addon to stacked.xbmc@gmail.com</disclaimer>
   </extension>
 </addon>

@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hungarian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
 <strings>
-    <!-- Plugin strings -->
-    <string id="30200">%d csillag</string>
-    <string id="30210">iPhoto könyvtár importálása</string>
-    <string id="30211">Importálva %d elem</string>
-    <string id="30212">AlbumData.xml átvizsgálása...</string>
-    <string id="30213">iPhoto könyvtár importálása</string>
+    <!-- Plugin settings strings -->
+    <string id="30000">AlbumData.xml elérési útja</string>
+    <string id="30001">Publikált (MobileMe) albumok figyelmen kívül hagyása</string>
+    <string id="30002">A 'Flagged' albumok figyelmen kívül hagyása</string>
+    <string id="30003">A könyvtár auto-frissítése</string>
 
     <!-- Category strings -->
     <string id="30100">Események</string>
@@ -13,9 +16,10 @@
     <string id="30102">Besorolások</string>
     <string id="30103">&lt;&lt; iPhoto könyvtár importálása &gt;&gt;</string>
 
-    <!-- Plugin settings strings -->
-    <string id="30000">AlbumData.xml elérési útja</string>
-    <string id="30001">Publikált (MobileMe) albumok figyelmen kívül hagyása</string>
-    <string id="30002">A 'Flagged' albumok figyelmen kívül hagyása</string>
-    <string id="30003">A könyvtár auto-frissítése</string>
+    <!-- Plugin strings -->
+    <string id="30200">%d csillag</string>
+    <string id="30210">iPhoto könyvtár importálása</string>
+    <string id="30211">Importálva %d elem</string>
+    <string id="30212">AlbumData.xml átvizsgálása...</string>
+    <string id="30213">iPhoto könyvtár importálása</string>
 </strings>

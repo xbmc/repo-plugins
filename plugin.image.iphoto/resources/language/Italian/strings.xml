@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Italian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/it/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Plugin settings strings -->
+    <string id="30000">Percorso della Libreria iPhoto o Aperture</string>
+    <string id="30001">Ignora album pubblicati (MobileMe)</string>
+    <string id="30003">Aggiornamento automatico libreria</string>
+    <string id="30004">Nascondi Aggiornamento Libreria nel menu principale</string>
+    <string id="30005">Ignora album vuoti</string>
+    <string id="30006">Ignora parole chiave</string>
+    <string id="30015">Abilita il supporto a Luoghi</string>
+    <string id="30016">Mostra Luoghi come</string>
+    <string id="30017">Indirizzi</string>
+    <string id="30018">Latitudine/Longitudine</string>
+    <string id="30021">Nessuno</string>
+    <string id="30022">Data XML</string>
+    <string id="30025">Scarica mappe da Google</string>
+    <string id="30061">Default</string>
+    <string id="30067">Default</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Generale</string>
+    <string id="30091">Visualizza</string>
+    <string id="30092">Skin</string>
+    <string id="30099">Avanzato</string>
+
+    <!-- Category strings -->
+    <string id="30100">Eventi</string>
+    <string id="30101">Album</string>
+    <string id="30102">Classifica</string>
+    <string id="30103">&lt;&lt; Aggiorna Libreria &gt;&gt;</string>
+    <string id="30104">Parole chiave</string>
+    <string id="30105">Volti</string>
+    <string id="30106">Luoghi</string>
+    <string id="30108">Progetti</string>
+    <string id="30210">Importando la Libreria</string>
+    <string id="30211">Ho importato %d oggetti</string>
+    <string id="30212">Scan della Libreria...</string>
+    <string id="30213">Aggiorna libreria</string>
+    <string id="30214">Ignora parola chiave</string>
+    <string id="30215">Rimuovi le mappe dalla cache</string>
+    <string id="30217">Documentazione addon</string>
+    <string id="30220">Abilita il supporto per Luoghi?</string>
+    <string id="30222">Questo potrebbe rallentare un po' l'importazione della libreria.</string>
+    <string id="30223">Dovrai anche reimportare la tua libreria.</string>
+    <string id="30232">Cancellarlo non danneggerà la tua Libreria foto.</string>
+    <string id="30241">Per favore reimporta la tua Libreria.</string>
+    <string id="30260">Importazione Libreria in corso</string>
+    <string id="30262">Al momento non supportato</string>
+    <string id="30263">Questa funzione non è supportata %s %s.</string>
+
+    <!-- Action Results (Notifications) -->
+    <string id="30300">Importazione Libreria in corso</string>
+    <string id="30301">Libreria importata con successo</string>
+    <string id="30302">Importazione Libreria fallita</string>
+    <string id="30310">Nessun oggetto</string>
+    <string id="30320">Reset Database</string>
+    <string id="30321">Reset Database fallito</string>
+</strings>

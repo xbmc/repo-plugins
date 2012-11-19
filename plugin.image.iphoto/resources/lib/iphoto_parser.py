@@ -1,5 +1,5 @@
 """
-    Parser for iPhoto's AlbumData.xml
+    Parser for iPhoto's AlbumData.xml and Aperture's ApertureData.xml
 """
 
 __author__ = "jingai <jingai@floatingpenguins.com>"
@@ -62,14 +62,19 @@ class IPhotoDB:
     def __init__(self, dbfile):
 	self.placeList = {}
 	try:
+	    print "iphoto.db: Opening database: %s" % (dbfile)
+	    self.dbFile = os.path.basename(dbfile)
 	    self.dbPath = os.path.dirname(dbfile)
 	    self.dbconn = sqlite.connect(dbfile)
-	    self.InitDB()
 	except Exception, e:
-	    print "iphoto.db: init: " + to_str(e)
+	    print "iphoto.db: __init__: " + to_str(e)
 	    raise e
 
-	return
+    def __del__(self):
+	try:
+	    self.CloseDB()
+	except:
+	    pass
 
     def InitDB(self):
 	self.dbconn.execute("PRAGMA synchronous = OFF")
@@ -78,6 +83,8 @@ class IPhotoDB:
 	self.dbconn.execute("PRAGMA temp_store = MEMORY")
 	self.dbconn.execute("PRAGMA encoding = \"UTF-8\"")
 
+	print "iphoto.db: Initializing database"
+
 	try:
 	    # config table
 	    self.dbconn.execute("""
@@ -85,14 +92,19 @@ class IPhotoDB:
 	       key varchar primary key,
 	       value varchar
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: config"
 
 	try:
 	    # media table
 	    self.dbconn.execute("""
 	    CREATE TABLE media (
-	       id integer primary key,
+	       id varchar primary key,
 	       mediatypeid integer,
 	       rollid integer,
 	       caption varchar,
@@ -107,8 +119,13 @@ class IPhotoDB:
 	       thumbpath varchar,
 	       originalpath varchar
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: media"
 
 	try:
 	    # mediatypes table
@@ -117,8 +134,13 @@ class IPhotoDB:
 	       id integer primary key,
 	       name varchar
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: mediatypes"
 
 	try:
 	    # rolls (events) table
@@ -126,22 +148,32 @@ class IPhotoDB:
 	    CREATE TABLE rolls (
 	       id integer primary key,
 	       name varchar,
-	       keyphotoid integer,
+	       keyphotoid varchar,
 	       rolldate integer,
 	       photocount integer
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: rolls"
 
 	try:
 	    # rollmedia table
 	    self.dbconn.execute("""
 	    CREATE TABLE rollmedia (
 	       rollid integer,
-	       mediaid integer
+	       mediaid varchar
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: rollmedia"
 
 	try:
 	    # albums table
@@ -150,21 +182,31 @@ class IPhotoDB:
 	       id integer primary key,
 	       name varchar,
 	       master boolean,
-	       guid varchar,
+	       uuid varchar,
 	       photocount integer
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: albums"
 
 	try:
 	    # albummedia table
 	    self.dbconn.execute("""
 	    CREATE TABLE albummedia (
 	       albumid integer,
-	       mediaid integer
+	       mediaid varchar
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: albummedia"
 
 	try:
 	    # faces table
@@ -178,18 +220,28 @@ class IPhotoDB:
 	       photocount integer,
 	       faceorder integer
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: faces"
 
 	try:
 	    # facesmedia table
 	    self.dbconn.execute("""
 	    CREATE TABLE facesmedia (
 	       faceid integer,
-	       mediaid integer
+	       mediaid varchar
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: facesmedia"
 
 	try:
 	    # places table
@@ -202,18 +254,28 @@ class IPhotoDB:
 	       fanartpath varchar,
 	       photocount integer
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: places"
 
 	try:
 	    # placesmedia table
 	    self.dbconn.execute("""
 	    CREATE TABLE placesmedia (
 	       placeid integer,
-	       mediaid integer
+	       mediaid varchar
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: placesmedia"
 
 	try:
 	    # keywords table
@@ -223,28 +285,49 @@ class IPhotoDB:
 	       name varchar,
 	       photocount integer
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: keywords"
 
 	try:
 	    # keywordmedia table
 	    self.dbconn.execute("""
 	    CREATE TABLE keywordmedia (
 	       keywordid integer,
-	       mediaid integer
+	       mediaid varchar
 	    )""")
-	except:
+	except sqlite.OperationalError, e:
 	    pass
+	except Exception, e:
+	    print "iphoto.db: InitDB: " + to_str(e)
+	    raise e
+	else:
+	    print "iphoto.db: InitDB: Created table: keywordmedia"
+
+	self.Commit()
 
     def ResetDB(self):
+	print "iphoto.db: Resetting database"
 	for table in ['media', 'mediatypes', 'rolls', 'rollmedia', 'albums', 'albummedia', 'faces', 'facesmedia', 'places', 'placesmedia', 'keywords', 'keywordmedia']:
 	    try:
 		self.dbconn.execute("DROP TABLE %s" % table)
+	    except sqlite.OperationalError:
+		pass
 	    except Exception, e:
 		print "iphoto.db: ResetDB: " + to_str(e)
 		raise e
+	    else:
+		print "iphoto.db: ResetDB: Dropped table: " + table
+	self.Commit()
 
-	self.InitDB()
+    def CloseDB(self):
+	print "iphoto.db: Closing database"
+	self.dbconn.commit()
+	self.dbconn.close()
 
     def Commit(self):
 	try:
@@ -254,48 +337,50 @@ class IPhotoDB:
 	    raise e
 
     def GetConfig(self, key):
+	rv = None
+	cur = self.dbconn.cursor()
 	try:
-	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT value FROM config WHERE key = ? LIMIT 1""", (key,))
 	    row = cur.fetchone()
-	    cur.close()
 	    if (row):
-		return row[0]
+		rv = row[0]
 	except:
 	    pass
-
-	return None
+	cur.close()
+	return rv
 
     def SetConfig(self, key, value):
-	if (self.GetConfig(key) == None):
+	if (self.GetConfig(key) is None):
 	    self.dbconn.execute("""INSERT INTO config (key, value) VALUES (?, ?)""", (key, value))
 	else:
 	    self.dbconn.execute("""UPDATE config SET value = ?  WHERE key = ?""", (value, key))
-
 	self.Commit()
 
-    def GetIphotoVersion(self):
+    def GetLibrarySource(self):
+	src = self.GetConfig('source')
+	return src
+
+    def GetLibraryVersion(self):
 	verstr = self.GetConfig('version')
-	if (verstr == None):
+	if (verstr is None):
 	    ver = 0.0
 	else:
 	    ver = float('.'.join(verstr.split('.')[:2]))
 	return ver
 
     def GetTableId(self, table, value, column='name', autoadd=False, autoclean=True):
+	rv = None
+	cur = self.dbconn.cursor()
 	try:
 	    if (autoclean and not value):
 		value = "Unknown"
-
-	    cur = self.dbconn.cursor()
 
 	    # query db for column with specified name
 	    cur.execute("SELECT id FROM %s WHERE %s = ?" % (table, column),
 			(value,))
 	    row = cur.fetchone()
 
-	    # create named ID if requested
-	    if not row and autoadd and value and len(value) > 0:
+	    if (not row and autoadd and value and len(value) > 0):
 		nextid = cur.execute("SELECT MAX(id) FROM %s" % table).fetchone()[0]
 		if not nextid:
 		    nextid = 1
@@ -303,86 +388,88 @@ class IPhotoDB:
 		    nextid += 1
 		cur.execute("INSERT INTO %s (id, %s) VALUES (?, ?)" % (table, column),
 			    (nextid, value))
-		cur.close()
-		return nextid # return new id
-	    cur.close()
-	    return row[0] # return id
+		rv = nextid # new id
+	    else:
+		rv = row[0] # existing id
 	except Exception, e:
 	    print "iphoto.db: GetTableId: " + to_str(e)
 	    raise e
+	cur.close()
+	return rv
 
     def GetMediaTypeId(self, mediatype, autoadd=False):
 	return self.GetTableId('mediatypes', mediatype, 'name', autoadd)
 
     def GetAlbums(self):
+	print "iphoto.db: Retrieving list of Albums"
 	albums = []
+	cur = self.dbconn.cursor()
 	try:
-	    cur = self.dbconn.cursor()
 	    cur.execute("SELECT id, name, photocount FROM albums")
 	    for tuple in cur:
 		albums.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetAlbums: " + to_str(e)
 	    pass
-
+	cur.close()
 	return albums
 
     def GetMediaInAlbum(self, albumid, sort_col="NULL"):
+	print "iphoto.db: Retrieving media from Album ID %s" % (to_str(albumid))
 	media = []
+	cur = self.dbconn.cursor()
 	try:
 	    if (sort_col != "NULL"):
 		sort_col = "M." + sort_col
-	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM albummedia A LEFT JOIN media M ON A.mediaid = M.id
 			WHERE A.albumid = ? ORDER BY %s ASC""" % (sort_col), (albumid,))
 	    for tuple in cur:
 		media.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetMediaInAlbum: " + to_str(e)
 	    pass
-
+	cur.close()
 	return media
 
     def GetRolls(self):
+	print "iphoto.db: Retrieving list of Events"
 	rolls = []
+	cur = self.dbconn.cursor()
 	try:
-	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT R.id, R.name, M.thumbpath, R.rolldate, R.photocount 
 			 FROM rolls R LEFT JOIN media M ON R.keyphotoid = M.id WHERE R.keyphotoid != 0""")
 	    for tuple in cur:
 		rolls.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetRolls: " + to_str(e)
 	    pass
+	cur.close()
 	return rolls
 
     def GetMediaInRoll(self, rollid, sort_col="NULL"):
+	print "iphoto.db: Retrieving media from Event ID %s" % (to_str(rollid))
 	media = []
+	cur = self.dbconn.cursor()
 	try:
 	    if (sort_col != "NULL"):
 		sort_col = "M." + sort_col
-	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM media M WHERE M.rollid = ? ORDER BY %s ASC""" % (sort_col), (rollid,))
 	    for tuple in cur:
 		media.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetMediaInRoll: " + to_str(e)
 	    pass
-
+	cur.close()
 	return media
 
     def GetFaces(self):
+	print "iphoto.db: Retrieving list of Faces"
 	faces = []
+	cur = self.dbconn.cursor()
 	try:
-	    cur = self.dbconn.cursor()
-
-	    if (self.GetIphotoVersion() < 9.4):
+	    if (self.GetLibrarySource() == "iPhoto" and self.GetLibraryVersion() < 9.4):
 		idtype = "M.id"
 	    else:
 		idtype = "M.guid"
@@ -393,111 +480,109 @@ class IPhotoDB:
 
 	    for tuple in cur:
 		faces.append(tuple)
-
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetFaces: " + to_str(e)
 	    pass
-
+	cur.close()
 	return faces
 
     def GetMediaWithFace(self, faceid, sort_col="NULL"):
+	print "iphoto.db: Retrieving media with Face ID %s" % (to_str(faceid))
 	media = []
+	cur = self.dbconn.cursor()
 	try:
 	    if (sort_col != "NULL"):
 		sort_col = "M." + sort_col
-	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM facesmedia A LEFT JOIN media M ON A.mediaid = M.id
 			WHERE A.faceid = ? ORDER BY %s ASC""" % (sort_col), (faceid,))
 	    for tuple in cur:
 		media.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetMediaWithFace: " + to_str(e)
 	    pass
-
+	cur.close()
 	return media
 
     def GetPlaces(self):
+	print "iphoto.db: Retrieving list of Places"
 	places = []
+	cur = self.dbconn.cursor()
 	try:
-	    cur = self.dbconn.cursor()
 	    cur.execute("SELECT id, latlon, address, thumbpath, fanartpath, photocount FROM places")
 	    for tuple in cur:
 		places.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetPlaces: " + to_str(e)
 	    pass
-
+	cur.close()
 	return places
 
     def GetMediaWithPlace(self, placeid, sort_col="NULL"):
+	print "iphoto.db: Retrieving media with Place ID %s" % (to_str(placeid))
 	media = []
+	cur = self.dbconn.cursor()
 	try:
 	    if (sort_col != "NULL"):
 		sort_col = "M." + sort_col
-	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM placesmedia A LEFT JOIN media M ON A.mediaid = M.id
 			WHERE A.placeid = ? ORDER BY %s ASC""" % (sort_col), (placeid,))
 	    for tuple in cur:
 		media.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetMediaWithPlace: " + to_str(e)
 	    pass
-
+	cur.close()
 	return media
 
     def GetKeywords(self):
+	print "iphoto.db: Retrieving list of Keywords"
 	keywords = []
+	cur = self.dbconn.cursor()
 	try:
-	    cur = self.dbconn.cursor()
 	    cur.execute("SELECT id, name, photocount FROM keywords ORDER BY name")
 	    for tuple in cur:
 		keywords.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetKeywords: " + to_str(e)
 	    pass
-
+	cur.close()
 	return keywords
 
     def GetMediaWithKeyword(self, keywordid, sort_col="NULL"):
+	print "iphoto.db: Retrieving media with Keyword ID %s" % (to_str(keywordid))
 	media = []
+	cur = self.dbconn.cursor()
 	try:
 	    if (sort_col != "NULL"):
 		sort_col = "M." + sort_col
-	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM keywordmedia A LEFT JOIN media M ON A.mediaid = M.id
 			WHERE A.keywordid = ? ORDER BY %s ASC""" % (sort_col), (keywordid,))
 	    for tuple in cur:
 		media.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetMediaWithKeyword: " + to_str(e)
 	    pass
-
+	cur.close()
 	return media
 
     def GetMediaWithRating(self, rating, sort_col="NULL"):
+	print "iphoto.db: Retrieving media with Rating %s" % (to_str(rating))
 	media = []
+	cur = self.dbconn.cursor()
 	try:
 	    if (sort_col != "NULL"):
 		sort_col = "M." + sort_col
-	    cur = self.dbconn.cursor()
 	    cur.execute("""SELECT M.caption, M.mediapath, M.thumbpath, M.originalpath, M.rating, M.mediadate, M.mediasize
 			FROM media M WHERE M.rating = ? ORDER BY %s ASC""" % (sort_col), (rating,))
 	    for tuple in cur:
 		media.append(tuple)
-	    cur.close()
 	except Exception, e:
 	    print "iphoto.db: GetMediaWithRating: " + to_str(e)
 	    pass
-
+	cur.close()
 	return media
 
     def AddAlbumNew(self, album, album_ign):
@@ -505,23 +590,34 @@ class IPhotoDB:
 
 	try:
 	    albumid = int(album['AlbumId'])
+	    albumuuid = album['uuid']
 	    albumtype = album['Album Type']
 	except:
 	    return
 
+	try:
+	    photocount = album['PhotoCount']
+	except:
+	    photocount = 0
+	    pass
+
 	# weed out ignored albums
-	if (albumtype in album_ign):
+	if (photocount == 0 or albumtype in album_ign or albumuuid in album_ign):
+	    try:
+		print "iphoto.db: Ignoring album '%s' of type '%s'" % (album['AlbumName'], albumtype)
+	    except:
+		pass
 	    return
 
 	try:
 	    self.dbconn.execute("""
-	    INSERT INTO albums (id, name, master, guid, photocount)
+	    INSERT INTO albums (id, name, master, uuid, photocount)
 	    VALUES (?, ?, ?, ?, ?)""",
 				(albumid,
 				 album['AlbumName'],
 				 album.has_key('Master'),
-				 album['GUID'],
-				 album['PhotoCount']))
+				 albumuuid,
+				 photocount))
 	    for media in album['medialist']:
 		self.dbconn.execute("""
 		INSERT INTO albummedia (albumid, mediaid)
@@ -534,9 +630,34 @@ class IPhotoDB:
     def AddRollNew(self, roll):
 	#print "AddRollNew()", roll
 
+	src = self.GetLibrarySource()
+
 	try:
-	    rollid = int(roll['RollID'])
+	    if (src == "iPhoto"):
+		rollid = int(roll['RollID'])
+		rollname = roll['RollName']
+		rolldate = int(float(roll['RollDateAsTimerInterval']))
+	    else:
+		rollid = int(roll['AlbumId'])
+		rollname = roll['ProjectName']
+		rolldate = int(float(roll['ProjectEarliestDateAsTimerInterval']))
 	except:
+	    return
+
+	try:
+	    if (src == "iPhoto"):
+		photocount = roll['PhotoCount']
+	    else:
+		photocount = roll['NumImages']
+	except:
+	    photocount = 0
+	    pass
+
+	if (photocount == 0):
+	    try:
+		print "iphoto.db: Ignoring empty Event '%s'" % (rollname)
+	    except:
+		pass
 	    return
 
 	try:
@@ -544,10 +665,10 @@ class IPhotoDB:
 	    INSERT INTO rolls (id, name, keyphotoid, rolldate, photocount)
 	    VALUES (?, ?, ?, ?, ?)""",
 				(rollid,
-				 roll['RollName'],
+				 rollname,
 				 roll['KeyPhotoKey'],
-				 int(float(roll['RollDateAsTimerInterval'])),
-				 roll['PhotoCount']))
+				 rolldate,
+				 photocount))
 	    for media in roll['medialist']:
 		self.dbconn.execute("""
 		INSERT INTO rollmedia (rollid, mediaid)
@@ -568,6 +689,19 @@ class IPhotoDB:
 	    return
 
 	try:
+	    photocount = face['PhotoCount']
+	except:
+	    photocount = 0
+	    pass
+
+	if (photocount == 0):
+	    try:
+		print "iphoto.db: Ignoring empty Face '%s'" % (face['name'])
+	    except:
+		pass
+	    return
+
+	try:
 	    self.dbconn.execute("""
 	    INSERT INTO faces (id, name, keyphotoid, keyphotoidx, photocount, faceorder)
 	    VALUES (?, ?, ?, ?, ?, ?)""",
@@ -575,7 +709,7 @@ class IPhotoDB:
 				 face['name'],
 				 facekey,
 				 faceidx,
-				 face['PhotoCount'],
+				 photocount,
 				 face['Order']))
 	except sqlite.IntegrityError:
 	    pass
@@ -638,10 +772,9 @@ class IPhotoDB:
 	    mediasize = 0
 	    pass
 
+	cur = self.dbconn.cursor()
 	try:
-	    cur = self.dbconn.cursor()
-
-	    if (self.GetIphotoVersion() < 9.4):
+	    if (self.GetLibrarySource() == "iPhoto" and self.GetLibraryVersion() < 9.4):
 		cmpkey = 'MediaID'
 	    else:
 		cmpkey = 'GUID'
@@ -656,7 +789,7 @@ class IPhotoDB:
 		INSERT INTO facesmedia (faceid, mediaid)
 		VALUES (?, ?)""", (faceid, mediaid))
 
-		for fid, fkey, fkeyidx in faces:
+		for (fid, fkey, fkeyidx) in faces:
 		    if (fkey == media[cmpkey]):
 			fthumb = os.path.splitext(thumbpath)[0] + "_face%s.jpg" % (fkeyidx)
 			self.dbconn.execute("""
@@ -681,12 +814,13 @@ class IPhotoDB:
 				 thumbpath,
 				 originalpath))
 
-	    if enablePlaces == True:
+	    if (enablePlaces == True):
 		# convert lat/lon pair to an address
 		try:
 		    lat = float(media['latitude'])
 		    lon = float(media['longitude'])
 		    if (lat == 0.0 and lon == 0.0):
+			# force exception for ungeotagged photos
 			del lat, lon
 		    lat = to_str(lat)
 		    lon = to_str(lon)
@@ -699,8 +833,8 @@ class IPhotoDB:
 				addr = self.placeList[i][0]
 				placeid = i
 				break
-			if addr is None:
-			    updateProgress("Geocoding %s %s" % (lat, lon))
+			if (addr is None):
+			    updateProgress("Geocode: %s %s" % (lat, lon))
 			    addr = geocode("%s %s" % (lat, lon))[0]
 			    updateProgress()
 
@@ -708,7 +842,7 @@ class IPhotoDB:
 				if (self.placeList[i][0] == addr):
 				    placeid = i
 				    break
-			    if placeid is None:
+			    if (placeid is None):
 				placeid = len(self.placeList)
 				self.placeList[placeid] = []
 				#print "new placeid %d for addr '%s'" % (placeid, addr)
@@ -719,6 +853,7 @@ class IPhotoDB:
 			raise e
 		except:
 		    #print "No location information for photo id %d" % (mediaid)
+		    updateProgress("Geocode: Error")
 		    pass
 		else:
 		    if (addr not in self.placeList[placeid]):
@@ -726,7 +861,7 @@ class IPhotoDB:
 			fanartpath = ""
 			thumbpath = ""
 			if (mapAspect != 0.0):
-			    updateProgress("Fetching map...")
+			    updateProgress("Map Image: %s %s" % (lat, lon))
 			    try:
 				map_size_x = MAP_IMAGE_X_MAX
 				map_size_y = int(float(map_size_x) / mapAspect)
@@ -740,8 +875,10 @@ class IPhotoDB:
 				thumbpath = map.fetch("map_", "_thumb")
 			    except Exception, e:
 				print "iphoto.db: AddMediaNew: map: " + to_str(e)
+				updateProgress("Map Image: Error downloading")
 				pass
-			updateProgress()
+			    else:
+				updateProgress()
 
 			# add new Place
 			self.placeList[placeid].append(addr)
@@ -785,12 +922,11 @@ class IPhotoDB:
 		    self.dbconn.execute("""
 		    UPDATE keywords SET photocount = ?
 		    WHERE id = ?""", (photocount, keywordid))
-
-	    cur.close()
 	except sqlite.IntegrityError:
 	    pass
 	except Exception, e:
 	    raise e
+	cur.close()
 
 
 class ParseCanceled(Exception):
@@ -804,8 +940,8 @@ class IPhotoParserState:
 	self.nphotos = 0
 	self.nphotostotal = 0
 	self.level = 0
-	self.appversion = False
-	self.inappversion = 0
+	self.libversion = False
+	self.inlibversion = 0
 	self.archivepath = False
 	self.inarchivepath = 0
 	self.albums = False
@@ -825,22 +961,25 @@ class IPhotoParserState:
 	self.valueType = ""
 
 class IPhotoParser:
-    def __init__(self, library_path="", xmlfile="", masters_path="", masters_real_path="",
+    def __init__(self, library_source="iPhoto", library_path="", xmlfile="", masters_path="", masters_real_path="",
 		 album_ign=[], enable_places=False, map_aspect=0.0,
 		 config_callback=None,
 		 album_callback=None, roll_callback=None, face_callback=None, keyword_callback=None, photo_callback=None,
-		 progress_callback=None, progress_dialog=None):
+		 progress_callback=None):
+	self.librarySource = library_source
+	self.libraryVersion = "0.0.0"
 	self.libraryPath = library_path
 	self.xmlfile = xmlfile
 	self.mastersPath = masters_path
 	self.mastersRealPath = masters_real_path
+	print "iphoto.parser: Library source is %s" % (self.librarySource)
+	print "iphoto.parser: Reading '%s'" % (self.xmlfile)
 	if (self.mastersPath and self.mastersRealPath):
 	    try:
-		print "iphoto.db: Rewriting referenced masters path '%s'" % (to_str(self.mastersPath))
-		print "iphoto.db: as '%s'" % (to_str(self.mastersRealPath))
+		print "iphoto.parser: Rewriting referenced masters path '%s'" % (to_str(self.mastersPath))
+		print "iphoto.parser: as '%s'" % (to_str(self.mastersRealPath))
 	    except:
 		pass
-	self.iphotoVersion = "0.0.0"
 	self.imagePath = ""
 	self.parser = xml.parsers.expat.ParserCreate()
 	self.parser.StartElementHandler = self.StartElement
@@ -868,7 +1007,6 @@ class IPhotoParser:
 	self.KeywordCallback = keyword_callback
 	self.PhotoCallback = photo_callback
 	self.ProgressCallback = progress_callback
-	self.ProgressDialog = progress_dialog
 	self.lastdata = False
 	self._reset_photo()
 	self._reset_album()
@@ -890,7 +1028,7 @@ class IPhotoParser:
 
     def _reset_album(self):
 	self.currentAlbum = {}
-	for a in ['GUID', 'Master']:
+	for a in ['uuid', 'master']:
 	    self.currentAlbum[a] = ""
 	for a in self.currentAlbum.keys():
 	    self.currentAlbum[a] = ""
@@ -900,6 +1038,8 @@ class IPhotoParser:
 	self.currentRoll = {}
 	for a in self.currentRoll.keys():
 	    self.currentRoll[a] = ""
+	self.currentRoll['PhotoCount'] = '0'
+	self.currentRoll['NumImages'] = '0'
 	self.currentRoll['medialist'] = []
 
     def _reset_face(self):
@@ -912,14 +1052,14 @@ class IPhotoParser:
 	for a in self.currentKeyword.keys():
 	    self.currentKeyword[a] = ""
 
-    def updateProgress(self, altinfo=""):
+    def updateProgress(self, altinfo=" "):
 	if (not self.ProgressCallback):
 	    return
 
 	state = self.state
-	ret = self.ProgressCallback(self.ProgressDialog, altinfo, state.nphotos, state.nphotostotal)
-	if (ret == None):
-	    raise ParseCanceled("iPhoto library parse canceled by user.")
+	ret = self.ProgressCallback(altinfo, state.nphotos, state.nphotostotal)
+	if (ret is None):
+	    raise ParseCanceled("Parse canceled by user")
 
     def commitAll(self):
 	state = self.state
@@ -927,6 +1067,16 @@ class IPhotoParser:
 	state.nphotostotal = len(self.albumList) + len(self.rollList) + len(self.faceList) + len(self.keywordList) + len(self.photoList)
 
 	try:
+	    if (self.ConfigCallback):
+		print "iphoto.parser: Writing configuration"
+		self.ConfigCallback('source', self.librarySource)
+		if (self.libraryVersion != "0.0.0"):
+		    self.ConfigCallback('version', self.libraryVersion)
+		try:
+		    self.ConfigCallback('lastimport', to_str(time.time()))
+		except:
+		    pass
+
 	    if (self.AlbumCallback and len(self.albumList) > 0):
 		for a in self.albumList:
 		    self.AlbumCallback(a, self.albumIgn)
@@ -956,19 +1106,10 @@ class IPhotoParser:
 		    self.PhotoCallback(a, self.imagePath, self.libraryPath, self.mastersPath, self.mastersRealPath, self.enablePlaces, self.mapAspect, self.updateProgress)
 		    state.nphotos += 1
 		    self.updateProgress()
-
-	    if (self.ConfigCallback):
-		print "iphoto.db: Writing configuration"
-		if (self.iphotoVersion != "0.0.0"):
-		    self.ConfigCallback('version', self.iphotoVersion)
-		try:
-		    self.ConfigCallback('lastimport', to_str(time.time()))
-		except:
-		    pass
 	except ParseCanceled:
 	    raise
 	except Exception, e:
-	    print "iphoto.db: commitAll: " + to_str(e)
+	    print "iphoto.parser: commitAll: " + to_str(e)
 	    raise e
 
     def Parse(self):
@@ -982,20 +1123,24 @@ class IPhotoParser:
 	    self.parser.Parse(buf, True)
 	    f.close()
 	except Exception, e:
-	    print "iphoto.db: Parse: " + to_str(e)
+	    print "iphoto.parser: Parse: " + to_str(e)
+	    print "iphoto.parser: Parse failed"
 	    raise e
 
 	try:
 	    self.commitAll()
 	except Exception, e:
-	    print "iphoto.db: Parse: " + to_str(e)
+	    print "iphoto.parser: Parse: " + to_str(e)
+	    print "iphoto.parser: Parse failed"
 	    raise e
+
+	print "iphoto.parser: Parse successful"
 
     def StartElement(self, name, attrs):
 	state = self.state
 	self.lastdata = False
-	if (state.appversion):
-	    state.inappversion += 1
+	if (state.libversion):
+	    state.inlibversion += 1
 	    state.key = name
 	elif (state.archivepath):
 	    state.inarchivepath += 1
@@ -1035,12 +1180,12 @@ class IPhotoParser:
 	state = self.state
 
 	# Application Version
-	if (state.appversion):
+	if (state.libversion):
 	    if (not state.key):
-		self.iphotoVersion = state.value
-		print "iphoto.db: Detected iPhoto Version %s" % self.iphotoVersion
-		state.appversion = False
-	    state.inappversion -= 1
+		self.libraryVersion = state.value
+		print "iphoto.parser: Detected %s Version %s" % (self.librarySource, self.libraryVersion)
+		state.libversion = False
+	    state.inlibversion -= 1
 
 	# Archive Path
 	elif (state.archivepath):
@@ -1049,8 +1194,8 @@ class IPhotoParser:
 		state.archivepath = False
 		if (self.imagePath != self.libraryPath):
 		    try:
-			print "iPhoto.db: Rewriting iPhoto archive path '%s'" % (to_str(self.imagePath))
-			print "iPhoto.db: as '%s'" % (to_str(self.libraryPath))
+			print "iphoto.parser: Rewriting archive path '%s'" % (to_str(self.imagePath))
+			print "iphoto.parser: as '%s'" % (to_str(self.libraryPath))
 		    except:
 			pass
 	    state.inarchivepath -= 1
@@ -1070,13 +1215,13 @@ class IPhotoParser:
 
 	# Rolls
 	elif (state.rolls):
-	    if (state.inroll == 3 and self.currentRoll.has_key('RollID')):
+	    if (state.inroll == 3 and (self.currentRoll.has_key('RollID') or self.currentRoll.has_key('AlbumId'))):
 		self.currentRoll['medialist'].append(state.value)
 	    elif (state.inroll == 2 and not state.key):
 		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
 		self.currentRoll[state.keyValue] = state.value
 	    state.inroll -= 1
-	    if (state.inroll == 0 and self.currentRoll.has_key('RollID')):
+	    if (state.inroll == 0 and (self.currentRoll.has_key('RollID') or self.currentRoll.has_key('AlbumId'))):
 		# Finished reading roll
 		self.rollList.append(self.currentRoll)
 		self._reset_roll()
@@ -1107,6 +1252,8 @@ class IPhotoParser:
 	elif (state.master):
 	    if (state.inmaster == 1 and state.key):
 		self.currentPhoto['MediaID'] = state.keyValue
+		if (self.librarySource == "Aperture"):
+		    self.currentPhoto['GUID'] = state.keyValue
 	    elif (state.inmaster == 3 and not state.key and state.keyValue == "Keywords"):
 		self.currentPhoto['keywordlist'].append(state.value)
 	    elif (state.inmaster == 4 and not state.key and state.keyValue == "face key"):
@@ -1115,7 +1262,7 @@ class IPhotoParser:
 		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
 		self.currentPhoto[state.keyValue] = state.value
 	    state.inmaster -= 1
-	    if (state.inmaster == 0 and self.currentPhoto.has_key('GUID') and self.currentPhoto['GUID']):
+	    if (state.inmaster == 0 and self.currentPhoto.has_key('ThumbPath') and self.currentPhoto['ThumbPath']):
 		# Finished reading master photo list
 		self.photoList.append(self.currentPhoto)
 		self._reset_photo()
@@ -1138,7 +1285,7 @@ class IPhotoParser:
 	# determine which section we are in
 	if (state.key and state.level == 3):
 	    if (data == "Application Version"):
-		state.appversion = True
+		state.libversion = True
 		state.albums = False
 		state.rolls = False
 		state.faces = False
@@ -1152,15 +1299,15 @@ class IPhotoParser:
 		state.keywords = False
 		state.master = False
 	    elif (data == "List of Albums"):
-		state.appversion = False
+		state.libversion = False
 		state.archivepath = False
 		state.albums = True
 		state.rolls = False
 		state.faces = False
 		state.keywords = False
 		state.master = False
-	    elif (data == "List of Rolls"):
-		state.appversion = False
+	    elif (data == "List of Rolls" or data == "Project List"):
+		state.libversion = False
 		state.archivepath = False
 		state.albums = False
 		state.rolls = True
@@ -1168,7 +1315,7 @@ class IPhotoParser:
 		state.keywords = False
 		state.master = False
 	    elif (data == "List of Faces"):
-		state.appversion = False
+		state.libversion = False
 		state.archivepath = False
 		state.albums = False
 		state.rolls = False
@@ -1176,7 +1323,7 @@ class IPhotoParser:
 		state.keywords = False
 		state.master = False
 	    elif (data == "List of Keywords"):
-		state.appversion = False
+		state.libversion = False
 		state.archivepath = False
 		state.albums = False
 		state.rolls = False
@@ -1184,7 +1331,7 @@ class IPhotoParser:
 		state.keywords = True
 		state.master = False
 	    elif (data == "Master Image List"):
-		state.appversion = False
+		state.libversion = False
 		state.archivepath = False
 		state.albums = False
 		state.rolls = False
@@ -1195,7 +1342,7 @@ class IPhotoParser:
 	return
 
 
-def test_progress_callback(progress_dialog, altinfo, nphotos, ntotal):
+def test_progress_callback(altinfo, nphotos, ntotal):
     percent = int(float(nphotos * 100) / ntotal)
     print "%d/%d (%d%%)" % (nphotos, ntotal, percent)
     if (altinfo != ""):
@@ -1210,15 +1357,18 @@ def profile_main():
 
 def main():
     try:
-	xmlfile = sys.argv[1]
-	dbfile = sys.argv[2]
+	xmltype = sys.argv[1]
+	xmlpath = os.path.dirname(sys.argv[2])
+	xmlfile = sys.argv[2]
+	dbfile = sys.argv[3]
     except:
-	print "Usage iphoto_parser.py <xmlfile> <db>"
+	print "Usage iphoto_parser.py <iPhoto|Aperture> <xmlfile> <db>"
 	sys.exit(1)
 
     db = IPhotoDB(dbfile)
     db.ResetDB()
-    iparser = IPhotoParser("", xmlfile, "", "", "", False, 0.0, db.AddAlbumNew, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, test_progress_callback)
+    db.InitDB()
+    iparser = IPhotoParser(xmltype, xmlpath, xmlfile, "", "", [], False, 0.0, db.SetConfig, db.AddAlbumNew, db.AddRollNew, db.AddFaceNew, db.AddKeywordNew, db.AddMediaNew, test_progress_callback)
     try:
 	iparser.Parse()
     except:

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hebrew language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/he/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30017">כתובות</string>
+    <string id="30061">ברירת מחדל</string>
+    <string id="30067">ברירת מחדל</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">כללי</string>
+    <string id="30092">סקין</string>
+    <string id="30099">מתקדם</string>
+
+    <!-- Category strings -->
+    <string id="30100">ארועים</string>
+    <string id="30101">אלבומים</string>
+    <string id="30105">פרצופים</string>
+    <string id="30106">מקומות</string>
+</strings>

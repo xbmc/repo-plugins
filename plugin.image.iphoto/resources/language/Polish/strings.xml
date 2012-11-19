@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Polish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Plugin settings strings -->
+    <string id="30000">Ścieżka do iPhoto lub link do biblioteki</string>
+    <string id="30001">Ignoruj ​​opublikowane (MobileMe) albumy</string>
+    <string id="30002">Ignoruj ​​'Oflagowany' album</string>
+    <string id="30003">Automatyczna aktualizacja biblioteki</string>
+    <string id="30004">Ukryj przycik aktualizacji w menu głównym</string>
+    <string id="30005">Ignoruj puste albumy</string>
+    <string id="30006">Ignoruj słowa kluczowe</string>
+    <string id="30015">Włącz obsługę miejsc</string>
+    <string id="30016">Pokaż miejsca jako</string>
+    <string id="30017">adresy</string>
+    <string id="30020">Domyśłna metoda sortowania zdjęć</string>
+    <string id="30021">Żaden</string>
+    <string id="30022">Data XML</string>
+    <string id="30025">Pobierz mapy z Google</string>
+    <string id="30026">Pokaż mapę jako fanart</string>
+    <string id="30027">Zarządzaj biblioteką (zmiana wymaga przeskanowania)</string>
+    <string id="30030">Ukryj Pokażę Dokumentację w menu głównym</string>
+
+    <!-- Plugin settings Skin strings -->
+    <string id="30060">Tryb wyglądu w Confluence</string>
+    <string id="30061">Domyśłny</string>
+    <string id="30066">Tryb wyglądu w Metropolis</string>
+    <string id="30067">Domyśłny</string>
+    <string id="30092">Skóra</string>
+    <string id="30099">Zaawansowany</string>
+
+    <!-- Category strings -->
+    <string id="30100">Zdarzenia</string>
+    <string id="30101">Albumy</string>
+    <string id="30102">Oceny</string>
+    <string id="30103">&lt;&lt; uaktualnij bibliotekę &gt;&gt;</string>
+    <string id="30104">Słowa kluczowe</string>
+    <string id="30105">Twarze</string>
+    <string id="30106">Miejsca</string>
+    <string id="30107">&lt;&lt; wyświetl dokumentację &gt;&gt;</string>
+    <string id="30108">Projekty</string>
+
+    <!-- Plugin strings -->
+    <string id="30200">%d gwiazd</string>
+    <string id="30210">Importowanie biblioteki</string>
+    <string id="30211">Importowane %d pozycje</string>
+    <string id="30212">Skanuję biblioteke...</string>
+    <string id="30213">Aktualizuj bibliotekę</string>
+    <string id="30214">Ignoruj słowa kluczowe</string>
+    <string id="30215">Usuń z pamięci podręcznej mapy</string>
+    <string id="30216">Resetuj bazę wtyczki</string>
+    <string id="30217">Dokumentacja wtyczki</string>
+    <string id="30219">Resetowanie bazy wtyczki...</string>
+    <string id="30220">Włącz wsparcie dla Miejsc?</string>
+</strings>

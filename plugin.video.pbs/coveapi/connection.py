@@ -6,6 +6,13 @@ import urllib2
 
 import simplejson as json
 
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, buggalo, time
+from urllib2 import Request, urlopen, URLError, HTTPError 
+
+plugin = "PBS"
+settings = xbmcaddon.Addon( id = 'plugin.video.pbs' )
+buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
+
 from coveapi import COVEAPI_HOST, COVEAPI_ENDPOINT_CATEGORIES, \
     COVEAPI_ENDPOINT_GROUPS, COVEAPI_ENDPOINT_PROGRAMS, \
     COVEAPI_ENDPOINT_VIDEOS
@@ -90,88 +97,106 @@ class COVEAPIConnection(object):
 
 
 class Requestor(object):
-    """Handle API requests.
-    
-    Keyword arguments:
-    `api_app_id` -- your COVE API app id
-    `api_app_secret` -- your COVE API secret key
-    `endpoint` -- endpoint of COVE API request
-    
-    Returns:
-    `coveapi.connection.Requestor` instance
-    """
-    def __init__(self, api_app_id, api_app_secret, endpoint,
-                 api_host=COVEAPI_HOST):
-        self.api_app_id = api_app_id
-        self.api_app_secret = api_app_secret
-        self.endpoint = endpoint
-        self.api_host = api_host
+	"""Handle API requests.
+
+	Keyword arguments:
+	`api_app_id` -- your COVE API app id
+	`api_app_secret` -- your COVE API secret key
+	`endpoint` -- endpoint of COVE API request
+
+	Returns:
+	`coveapi.connection.Requestor` instance
+	"""
+	def __init__(self, api_app_id, api_app_secret, endpoint,
+				 api_host=COVEAPI_HOST):
+		self.api_app_id = api_app_id
+		self.api_app_secret = api_app_secret
+		self.endpoint = endpoint
+		self.api_host = api_host
 
 
-    def get(self, resource, **params):
-        """Fetch single resource from API service.
+	def get(self, resource, **params):
+		"""Fetch single resource from API service.
 
-        Keyword arguments:
-        `resource` -- resource id or uri
-        `**params` -- filters, fields, sorts (see api documentation)
-        
-        Returns:
-        `dict` (json)
-        """
-        if type(resource) == int:
-            endpoint = '%s%s/' % (self.endpoint, resource)
-        else:
-            if resource.startswith('http://'):
-                endpoint = resource
-            else:
-                endpoint = '%s%s' % (self.api_host, resource)
-        
-        return self._make_request(endpoint, params)
+		Keyword arguments:
+		`resource` -- resource id or uri
+		`**params` -- filters, fields, sorts (see api documentation)
+		
+		Returns:
+		`dict` (json)
+		"""
+		if type(resource) == int:
+			endpoint = '%s%s/' % (self.endpoint, resource)
+		else:
+			if resource.startswith('http://'):
+				endpoint = resource
+			else:
+				endpoint = '%s%s' % (self.api_host, resource)
+		
+		return self._make_request(endpoint, params)
 
 
-    def filter(self, **params):
-        """Fetch resources from API service per specified parameters.
+	def filter(self, **params):
+		"""Fetch resources from API service per specified parameters.
 
-        Keyword arguments:
-        `**params` -- filters, fields, sorts (see api documentation)
-        
-        Returns:
-        `dict` (json)
-        """
-        return self._make_request(self.endpoint, params)
-    
+		Keyword arguments:
+		`**params` -- filters, fields, sorts (see api documentation)
+		
+		Returns:
+		`dict` (json)
+		"""
+		return self._make_request(self.endpoint, params)
 
-    def _make_request(self, endpoint, params=None):
-        """Send request to COVE API and return results as json object.
-        
-        Keyword arguments:
-        `endpoint` -- endpoint of COVE API request
-        `**params` -- filters, fields, sorts (see api documentation)
-        
-        Returns:
-        `dict` (json)
-        """
-        if not params:
-            params = {}
 
-        query = endpoint
-        if params:
-            params = params.items()
-            params.sort()
-            
-            # Note: We're using urllib.urlencode() below which escapes spaces as
-            # a plus ("+") since that is what the COVE API expects. But a space
-            # should really be encoded as "%20" (ie. urllib.quote()). I believe
-            # this is a bug in the COVE API authentication scheme... but we have
-            # to live with this in the client. We'll update this to use "%20"
-            # once the COVE API supports it properly.
-            query = '%s?%s' % (query, urllib.urlencode(params))
-        
-        request = urllib2.Request(query)
-        
-        auth = PBSAuthorization(self.api_app_id, self.api_app_secret)
-        signed_request = auth.sign_request(request)
-        
-        response = urllib2.urlopen(signed_request)
-        print query
-        return json.loads(response.read())
+	def _make_request(self, endpoint, params=None):
+		"""Send request to COVE API and return results as json object.
+		
+		Keyword arguments:
+		`endpoint` -- endpoint of COVE API request
+		`**params` -- filters, fields, sorts (see api documentation)
+		
+		Returns:
+		`dict` (json)
+		"""
+		save1 = endpoint
+		save2 = params
+		if not params:
+			params = {}
+
+		query = endpoint
+		if params:
+			params = params.items()
+			params.sort()
+			
+			# Note: We're using urllib.urlencode() below which escapes spaces as
+			# a plus ("+") since that is what the COVE API expects. But a space
+			# should really be encoded as "%20" (ie. urllib.quote()). I believe
+			# this is a bug in the COVE API authentication scheme... but we have
+			# to live with this in the client. We'll update this to use "%20"
+			# once the COVE API supports it properly.
+			query = '%s?%s' % (query, urllib.urlencode(params))
+		
+		retries = 0
+		error = None
+		while retries < 4:
+			time.sleep(5*retries)
+			try:
+				request = urllib2.Request(query)
+				auth = PBSAuthorization(self.api_app_id, self.api_app_secret)
+				signed_request = auth.sign_request(request)
+				response = urllib2.urlopen(signed_request)
+			except Exception, e:
+				error = str(e)
+			if error == None:
+				return json.loads(response.read())
+			else:
+				retries += 1
+		dialog = xbmcgui.Dialog()
+		ret = dialog.yesno(plugin, settings.getLocalizedString( 30050 ), error, '', settings.getLocalizedString( 30052 ), settings.getLocalizedString( 30053 ))
+		if ret == False:
+			self._make_request(save1, save2)
+		else:
+			ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
+			buggalo.addExtraData('error', error)
+			raise Exception("coveapi ERROR")
+

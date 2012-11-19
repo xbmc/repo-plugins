@@ -1,3 +1,15 @@
+[B]Version 2.0.2[/B]
+- Added separate directory for PBS Kids programs
+- Fixed issue with missing videos on some programs
+- Added function to select the highest video quality available (640x360 SD)
+- Switched from DVDPLAYER to setResolvedUrl/IsPlayable method for video playback
+- Added watched and resume capabilities
+- Added function to retry on timeout and connection errors
+- Added Buggalo Error Reporting
+- Added most watched videos to main directory
+- Switched search function to query PBS COVE API instead of video.pbs.org
+- Added default view for Confluence skin
+
 [B]Version 2.0.1[/B]
 
 - Added more programs including PBS KIDS

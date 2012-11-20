@@ -80,7 +80,13 @@ class BlipTVScraper:
             self.common.log("found items " + repr(dom_pages), 4)
             for item in dom_pages:
                 thumbnail = self.extractAndResizeThumbnail(item)
-                title = self.common.parseDOM(item, "h1", attrs={"class": "ShowTitle"})[0]
+
+                title = self.common.parseDOM(item, "h1", attrs={"class": "ShowTitle"})
+                if not title:
+                    title = self.common.parseDOM(item, "div", attrs={"class": "ShowTitle"})[0]
+                else:
+                    title = title[0]
+
                 name = self.common.parseDOM(title, "a")[0]
                 link = self.common.parseDOM(title, "a", ret="href")[0]
                 tmp.append({"path": get("path"), "show": link, "scraper": "show", "Title": self.common.replaceHTMLCodes(name.strip()), "thumbnail": thumbnail})
@@ -215,7 +221,13 @@ class BlipTVScraper:
 
             for show in show_list:
                 thumbnail = self.extractAndResizeThumbnail(show)
-                title = self.common.parseDOM(show, "h1", attrs={"class": "ShowTitle"})[0]
+                print "show: " + repr(show)
+                title = self.common.parseDOM(show, "h1", attrs={"class": "ShowTitle"})
+                if not title:
+                    title = self.common.parseDOM(show, "div", attrs={"class": "ShowTitle"})[0]
+                else:
+                    title = title[0]
+
                 name = self.common.parseDOM(title, "a")[0]
                 link = self.common.parseDOM(title, "a", ret="href")[0]
 

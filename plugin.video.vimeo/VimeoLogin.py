@@ -140,14 +140,16 @@ class VimeoLogin():
 
     def performHttpLogin(self, xsrft):
         self.common.log("")
-        request = {'email': self.settings.getSetting("user_email"),
+        request = {'action': 'login',
+                   'service': 'vimeo',
+                   'email': self.settings.getSetting("user_email"),
                    'password': self.settings.getSetting("user_password"),
                    'token': xsrft}
 
-        self.common.fetchPage({"link": "http://vimeo.com/log_in", "post_data": request,
+        result = self.common.fetchPage({"link": "http://vimeo.com/log_in", "post_data": request,
                                 "refering": "http://www.vimeo.com/log_in"})
 
-        result = self.common.fetchPage({"link": "http://vimeo.com/", "refering": "http://vimeo.com/log_in"})
+        #result = self.common.fetchPage({"link": "http://vimeo.com/", "refering": "http://vimeo.com/log_in"})
 
         self.common.log("Done")
         return result

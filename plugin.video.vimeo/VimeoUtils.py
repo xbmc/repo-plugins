@@ -28,7 +28,7 @@ class VimeoUtils:
         self.plugin = sys.modules["__main__"].plugin
         self.dbg = sys.modules["__main__"].dbg
         self.PR_VIDEO_QUALITY = self.settings.getSetting("pr_video_quality") == "true"
-        self.INVALID_CHARS = "\\/:*?\"<>|"
+        self.INVALID_CHARS = u"\\/:*?\"<>|"
         self.THUMBNAIL_PATH = os.path.join(self.settings.getAddonInfo('path'), "thumbnails")
 
     # Shows a more user-friendly notification

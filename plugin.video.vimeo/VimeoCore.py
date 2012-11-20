@@ -38,7 +38,6 @@ class VimeoCore(object):
 
     def setLike(self, params):
         self.common.log("")
-
         get = params.get
 
         if (get("action") == "add_favorite"):
@@ -52,7 +51,6 @@ class VimeoCore(object):
 
     def updateContact(self, params):
         self.common.log("")
-
         get = params.get
 
         if (get("action") == "add_contact"):
@@ -192,7 +190,9 @@ class VimeoCore(object):
         if (not result):
             self.common.log("result was empty")
             return (result, 303)
-        
+        else:
+            result = result.decode("utf-8","ignore")
+
         if get("folder") == "contact":
             result = self._get_contacts(result)
         elif get("folder") == "category":
@@ -363,7 +363,7 @@ class VimeoCore(object):
 
         next = self.checkIfMorePagesExist(value)
 
-        video_list = self.common.parseDOM(value, "video", ret=True)
+        video_list = self.common.parseDOM(value, u"video", ret=True)
         for entry in video_list:
             video = {}
             video['videoid'] = self.common.parseDOM(entry, "video",ret="id")[0]

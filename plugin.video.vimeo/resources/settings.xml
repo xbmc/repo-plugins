@@ -4,9 +4,8 @@
   <category label="30247">
     <setting id="user_email" type="text" label="30200" default="" />
     <setting id="user_password" type="text" option="hidden" label="30201" enable="!eq(-1,)" default="" />
-    <setting id="accept" type="enum" option="hidden" enable="!eq(-1,0)" lvalues="30224|30225" default="0" />
     <setting type="sep" /> 
-    <setting id="hd_videos" type="enum" label="30208" lvalues="30215|30217|30216" default="2" />
+    <setting id="hd_videos" type="enum" label="30208" lvalues="30215|30217|30216" default="1" />
     <setting id="downloadPath" type="folder" label="30207" default="" />
     <setting type="sep" />
     <setting id="perpage" type="enum" label="30210" values="10|15|20|25|30|40|50" default="6" />

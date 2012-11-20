@@ -213,7 +213,7 @@ class VimeoNavigation():
             params["Title"] = video['Title']
             params["url"] = video['video_url']
             params["download_path"] = download_path
-            filename = "%s-[%s].mp4" % (''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS), video["videoid"])
+            filename = u"%s-[%s].mp4" % (u''.join(c for c in video['Title'] if c not in self.utils.INVALID_CHARS), video["videoid"])
             if get("async"):
                 self.downloader.download(filename, params, async=False)
             else:

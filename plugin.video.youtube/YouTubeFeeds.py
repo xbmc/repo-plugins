@@ -153,8 +153,7 @@ class YouTubeFeeds():
         if result["status"] != 200:
             return (result["content"], result["status"])
 
-        if not get("folder"):
-            videos = self.core.getVideoInfo(result["content"], params)
+        videos = self.core.getVideoInfo(result["content"], params)
 
         if len(videos) == 0:
             return (videos, 303)

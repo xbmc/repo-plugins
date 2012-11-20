@@ -62,11 +62,12 @@ class YouTubeNavigation():
             {'Title':self.language(30049)  ,'path':"/root/explore/feeds/trending"          , 'thumbnail':"featured"          , 'login':"false" , 'feed':"feed_trending" },
             {'Title':self.language(30015)  ,'path':"/root/explore/feeds/favorites"         , 'thumbnail':"top"               , 'login':"false" , 'feed':"feed_favorites" },
             {'Title':self.language(30016)  ,'path':"/root/explore/feeds/rated"             , 'thumbnail':"top"               , 'login':"false" , 'feed':"feed_rated" },
-            {'Title':self.language(30043)  ,'path':"/root/explore/movies"                  , 'thumbnail':"movies"            , 'login':"false" , 'scraper':'movies', 'folder':'true'},
+            #{'Title':self.language(30043)  ,'path':"/root/explore/movies"                  , 'thumbnail':"movies"            , 'login':"false" , 'scraper':'movies', 'folder':'true'},
             {'Title':self.language(30052)  ,'path':"/root/explore/music"                   , 'thumbnail':"music"             , 'login':"false" , 'store':"disco_searches", "folder":"true" },
             {'Title':self.language(30040)  ,'path':"/root/explore/music/new"               , 'thumbnail':"search"            , 'login':"false" , 'scraper':"search_disco"},
             {'Title':self.language(30055)  ,'path':"/root/explore/music/top100"            , 'thumbnail':"music"             , 'login':"false" , 'scraper':'music_top100'},
-            {'Title':self.language(30042)  ,'path':"/root/explore/shows"                   , 'thumbnail':"shows"             , 'login':"false" , 'scraper':'shows', 'folder':'true'},
+            #{'Title':self.language(30042)  ,'path':"/root/explore/shows"                   , 'thumbnail':"shows"             , 'login':"false" , 'scraper':'shows', 'folder':'true'},
+            {'Title':self.language(30032)  ,'path':"/root/explore/trailers"                , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':'trailers'},
             {'Title':self.language(30051)  ,'path':"/root/explore/live"                    , 'thumbnail':"live"              , 'login':"false" , 'feed':"feed_live" },
             {'Title':self.language(30019)  ,'path':"/root/recommended"                     , 'thumbnail':"recommended"       , 'login':"true"  , 'user_feed':"recommended" },
             {'Title':self.language(30008)  ,'path':"/root/watch_later"                     , 'thumbnail':"watch_later"       , 'login':"true"  , 'user_feed':"watch_later" },
@@ -425,9 +426,7 @@ class YouTubeNavigation():
         item = item_params.get
 
         icon = item("icon", "default")
-        if (get("scraper", "").find("trailers") > -1):
-            icon = "trailers"
-        elif(get("scraper", "").find("movies") > -1):
+        if (get("scraper", "").find("movies") > -1):
             icon = "movies"
         elif(get("scraper", "").find("music") > -1):
             icon = "music"

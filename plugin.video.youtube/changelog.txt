@@ -13,6 +13,15 @@
 - [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time
 - [RTMPDUMP] Doesn't support handshake type 10 which is required by youtube.
 
+[B]Version 3.3.0[/B]
+- Fixed playback of over 18 videos, should now work if the user is logged in.
+- Fixed bug where playback or video listing would fail due to bug in cache
+- Fixed problem in core that would sometimes break playback
+- Fixed problem in player that would cause hard crash when playback stream isn't available
+- Disabled movie section since it seems completely broken on the home page
+- Disabled show section since it seems completely broken on the home page
+- Added new scraper for VISO trailers which seems to have replace the old trailers page.
+
 [B]Version 3.2.0[/B]
 - Fixed playback
 - Minor refactoring to increase testability

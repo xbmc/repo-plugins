@@ -1,3 +1,7 @@
+V3.1.9
+Added Auto Select Stream Resolution
+Clean Up Code
+
 v3.1.8
 Added Languages
 Added If Subscribed High Stream Will Automatically Play

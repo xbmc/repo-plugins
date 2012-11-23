@@ -92,11 +92,11 @@ ses = xbmcgui.Window(10000).getProperty("SessionID")
 
 
                 
-def CATEGORIES():       
+def GROUPS():       
         if ADDON.getSetting('filmon') == 'true':
-                addDir(language(30059),'url',5,'http://www.filmon.com/tv/themes/filmontv/img/mobile/filmon-logo-stb.png','','','','','','','','')
+                ADD_DIRECTORY_ITEM(language(30059),'url',5,'http://www.filmon.com/tv/themes/filmontv/img/mobile/filmon-logo-stb.png','','','','','','','','')
         if ADDON.getSetting('filmon') == 'true':
-                        addDir(language(30060),'url',9,'http://www.filmon.com/tv/themes/filmontv/images/category/favorites_stb.png','','','','','','','','')                                
+                        ADD_DIRECTORY_ITEM(language(30060),'url',9,'http://www.filmon.com/tv/themes/filmontv/images/category/favorites_stb.png','','','','','','','','')                                
         grp='http://www.filmon.com/api/groups?session_key=%s' % (ses)
         link = net.http_GET(grp).content
         data = json.loads(link)
@@ -104,10 +104,10 @@ def CATEGORIES():
                 url = field['group_id']
                 name = field['group']
                 iconimage= field['logo_148x148_uri']
-                addDir(name,url,3,iconimage,'','','','','','','','')
+                ADD_DIRECTORY_ITEM(name,url,3,iconimage,'','','','','','','','')
                 setView('tvshows', 'default') 
         
-def Channels(name,url):
+def CHANNELS(name,url):
         if ADDON.getSetting('firstrun') == 'false':
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(language(30021),language(30022),'',language(30023),language(30024),language(30025)):
@@ -141,7 +141,7 @@ def Channels(name,url):
                                 except:
                                         dialog.ok(language(30021), language(30029), language(30030),language(30031))    
                                 try:
-                                    country=settings.country()
+                                    country=settings.RETURN_COUNTRIES(url)
                                     city = ''
                                     keyboard = xbmc.Keyboard('', language(30309))
                                     keyboard.doModal()
@@ -195,18 +195,22 @@ def Channels(name,url):
             iconimage = str(icon).replace('/logo','/extra_big_logo')
             description = ''
             name = name.encode("utf-8")
-            addDir(name,url,2,iconimage,description,'favorites','','','','tvguide','','')
+            ADD_DIRECTORY_ITEM(name,url,2,iconimage,description,'favorites','','','','tvguide','','')
             setView('episodes', 'default') 
             
     
-def getStream(channels,resolution,watch_timeout):
+def GET_STREAM_RESOLUTION(channels,resolution,watch_timeout):
     watch_timeout=str(watch_timeout)
     if resolution == '0':
         quality  = 'LOW'
+        
+    if resolution == '1':
+        quality  = 'HIGH'
+        
+    if resolution == '2':
+        quality  = 'LOW'
         if len(watch_timeout)>5:
             quality  = 'HIGH'
-    else:
-        quality  = 'HIGH'
 
     for item in channels:
         if item['quality'].upper() == quality:
@@ -214,13 +218,13 @@ def getStream(channels,resolution,watch_timeout):
     return None 
      
                       
-def FilmOn(url,iconimage):
+def GET_STREAMS(url,iconimage):
         url='http://www.filmon.com/api/channel/%s?session_key=%s' % (url,ses)
         link = net.http_GET(url).content
         data = json.loads(link)
         channels= data['streams']
         watch_timeout= data['watch-timeout']
-        stream = getStream(channels,resolution,watch_timeout)
+        stream = GET_STREAM_RESOLUTION(channels,resolution,watch_timeout)
         if stream is not None:
             foregex= stream['url']+'<'
             playpath=stream['name']
@@ -240,11 +244,11 @@ def FilmOn(url,iconimage):
             pageUrl = 'http://www.filmon.com/'
             url= str(url)+' playpath='+str(playpath)+' app='+str(app)+' swfUrl='+str(swfUrl)+' tcUrl='+str(tcUrl)+' pageurl='+str(pageUrl)
             xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(url)
-            addLink(name,url,iconimage,'','','','','','','','')
+            ADD_STREAM_LINK(name,url,iconimage,'','','','','','','','')
             setView('movies', 'default') 
                         
                     
-def MyRecordings(url):
+def GET_RECORDINGS(url):
         url='http://www.filmon.com/api/dvr-list?session_key=%s'%(ses)
         link = net.http_GET(url).content
         data = json.loads(link)
@@ -277,26 +281,26 @@ def MyRecordings(url):
 	            status=language(30050)
 	            name='%s %s' %(status,name)
 	            name = name.encode('utf-8')
-	            addLink(name,url,iconimage,description,'','','','delete','','',rec)
+	            ADD_STREAM_LINK(name,url,iconimage,description,'','','','delete','','',rec)
             if status=='Accepted':
 	            status=language(30051)
 	            name='%s %s' %(status,name)
 	            name = name.encode('utf-8')
-	            addLink(name,url,iconimage,description,'','','','delete','','',rec)
+	            ADD_STREAM_LINK(name,url,iconimage,description,'','','','delete','','',rec)
             if status=='Recording':
 	            status=language(30052)
 	            name='%s %s' %(status,name)
 	            name = name.encode('utf-8')
-	            addLink(name,url,iconimage,description,'','','','delete','','',rec)
+	            ADD_STREAM_LINK(name,url,iconimage,description,'','','','delete','','',rec)
             if status=='Failed':
 	            status=language(30053)
 	            name='%s %s' %(status,name)
 	            name = name.encode('utf-8')
-	            addLink(name,url,iconimage,description,'','','','delete','','',rec)
+	            ADD_STREAM_LINK(name,url,iconimage,description,'','','','delete','','',rec)
             setView('movies', 'epg')
                 
                 
-def Record(url,programme_id,startdate_time):
+def RECORD_PROGRAMME(url,programme_id,startdate_time):
         url ='http://filmon.com/api/dvr-add?session_key=%s&channel_id=%s&programme_id=%s&start_time=%s' % (ses,url,programme_id,startdate_time)
         link = net.http_GET(url).content
         try:
@@ -311,7 +315,7 @@ def Record(url,programme_id,startdate_time):
                 dialog = xbmcgui.Dialog()
                 dialog.ok(language(30021),language(3004),language(30043),language(30044))
                 
-def Delete(startdate_time):
+def DELETE_RECORDING(startdate_time):
         url='http://www.filmon.com/api/dvr-remove?session_key=%s&recording_id=%s'%(ses,startdate_time)
         try:
                 link = net.http_GET(url).content
@@ -325,7 +329,7 @@ def Delete(startdate_time):
                 dialog = xbmcgui.Dialog()
                 dialog.ok(language(30021),'',language(30047),'')
                 
-def EPG(url,iconimage):
+def TV_GUIDE(url,iconimage):
                 url= 'http://www.filmon.com/api/channel/%s?session_key=%s' % (url,ses)
                 link = net.http_GET(url).content
                 data = json.loads(link)
@@ -349,10 +353,10 @@ def EPG(url,iconimage):
                     name = name.encode('utf-8')
                     description = desc.encode('utf-8')
                     url =str(cid)
-                    addDir(name,url,2,iconimage,description,'','','record','','',programme_id,startdate_time)
+                    ADD_DIRECTORY_ITEM(name,url,2,iconimage,description,'','','record','','',programme_id,startdate_time)
                     setView('movies', 'epg') 
                     
-def channel_dict(url):
+def RETURN_CHANNEL_NAME_FAVOURITES(url):
     r='http://www.filmon.com/api/channel/%s?session_key=%s'%(url,ses)
     link = net.http_GET(r).content
     data=json.loads(link)
@@ -360,7 +364,7 @@ def channel_dict(url):
     name=name.encode('utf-8')
     return name
 
-def FAV(url):
+def GET_FAVOURITES(url):
     grp='http://www.filmon.com/api/favorites?session_key=%s&run=get'% (ses)
     link = net.http_GET(grp).content
     data=json.loads(link)
@@ -368,17 +372,17 @@ def FAV(url):
     for field in result:
         url=field['channel_id']
         iconimage='http://static.filmon.com/couch/channels/%s/extra_big_logo.png'%(url)
-        name=channel_dict(url)
-        addDir(name,url,2,iconimage,'','','delete','','','tvguide','','')
+        name=RETURN_CHANNEL_NAME_FAVOURITES(url)
+        ADD_DIRECTORY_ITEM(name,url,2,iconimage,'','','delete','','','tvguide','','')
         setView('movies', 'default') 
                 
-def favourite(url):
+def ADD_FAVOURITES(url):
     dialog = xbmcgui.Dialog()
     grp='http://www.filmon.com/api/favorites?session_key=%s&channel_id=%s&run=add'%(ses,url)
     link = net.http_GET(grp).content
     dialog.ok(language(30021),language(30048),' ','')  
 
-def deletefavourite(url):
+def DELETE_FAVOURITES(url):
     dialog = xbmcgui.Dialog()
     grp='http://www.filmon.com/api/favorites?session_key=%s&channel_id=%s&run=remove'%(ses,url)
     link = net.http_GET(grp).content
@@ -403,7 +407,7 @@ def get_params():
         return param
 
         
-def addDir(name,url,mode,iconimage,description, favorites, deletefav, record, deleterecord, tvguide,programme_id,startdate_time):
+def ADD_DIRECTORY_ITEM(name,url,mode,iconimage,description, favorites, deletefav, record, deleterecord, tvguide,programme_id,startdate_time):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&description="+urllib.quote_plus(description)+"&programme_id="+urllib.quote_plus(programme_id)+"&startdate_time="+urllib.quote_plus(startdate_time)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png",thumbnailImage=iconimage)
@@ -427,7 +431,7 @@ def addDir(name,url,mode,iconimage,description, favorites, deletefav, record, de
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok   
                      
-def addLink(name,url,iconimage,description, favorites, deletefav, record, deleterecord,tvguide,programme_id,startdate_time):
+def ADD_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,tvguide,programme_id,startdate_time):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description } )
@@ -512,15 +516,15 @@ print "IconImage: "+str(iconimage)
 
 if mode==None or url==None or len(url)<1:
         print ""
-        CATEGORIES()
+        GROUPS()
         
 elif mode==2:
         print ""+url
-        FilmOn(url,iconimage)
+        GET_STREAMS(url,iconimage)
         
 elif mode==3:
         print ""+url
-        Channels(name,url)
+        CHANNELS(name,url)
         
 elif mode==4:
         print ""+url
@@ -528,31 +532,31 @@ elif mode==4:
         
 elif mode==5:
         print ""+url
-        MyRecordings(url)
+        GET_RECORDINGS(url)
         
 elif mode==6:
         print ""+url
-        Record(url,programme_id,startdate_time)
+        RECORD_PROGRAMME(url,programme_id,startdate_time)
         
 elif mode==7:
         print ""+url
-        Delete(startdate_time)
+        DELETE_RECORDING(startdate_time)
         
 elif mode==8:
         print ""+url
-        EPG(url,iconimage)
+        TV_GUIDE(url,iconimage)
         
 elif mode==9:
         print ""+url
-        FAV(url)
+        GET_FAVOURITES(url)
         
 elif mode==10:
         print ""+url
-        favourite(url)
+        ADD_FAVOURITES(url)
         
 elif mode==11:
         print ""+url
-        deletefavourite(url)
+        DELETE_FAVOURITES(url)
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 

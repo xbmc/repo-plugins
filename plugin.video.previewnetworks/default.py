@@ -120,9 +120,18 @@ if sys.argv[ 2 ] == "":
         categories(True)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 elif ( __name__ == "__main__" ):
-    if ( sys.argv[ 2 ].startswith( "?url" ) ):
+#
+    if ( sys.argv[ 2 ].find( "Download_Trailer" ) > 0 ):
+        import resources.lib.download as download
+        download.Main()
+    elif ( sys.argv[ 2 ].startswith( "?OpenSettings" ) ):
+        xbmcaddon.Addon( id=__plugin__).openSettings()
+        xbmc.executebuiltin( "Container.Refresh" )
+##    if ( sys.argv[ 2 ].startswith( "?url" ) ):
+    elif ( sys.argv[ 2 ].find("url") > 0 ):
         paramstring=sys.argv[2]
         if len(paramstring)>0 :
+            print "paramstring %s" % paramstring
             params=cgi.parse_qs(paramstring[ 1 : ],True)
             item=str(get(params,"item"))
             if item == '0':
@@ -133,14 +142,3 @@ elif ( __name__ == "__main__" ):
                 import resources.lib.trailers as plugin
                 plugin.Main(url_source,item)
                 del plugin
-    elif ( sys.argv[ 2 ].startswith( "?Fetch_Showtimes" ) ):
-        import resources.lib.showtimes as showtimes
-        s = showtimes.GUI( "plugin-AMTII-showtimes.xml", Addon.getAddonInfo('path') , "default" )
-        del s
-    elif ( sys.argv[ 2 ].startswith( "?Download_Trailer" ) ):
-        import resources.lib.download as download
-        download.Main()
-    elif ( sys.argv[ 2 ].startswith( "?OpenSettings" ) ):
-        #xbmcaddon.Addon( id=os.path.basename( Addon.getAddonInfo('path')  ) ).openSettings()
-        xbmcaddon.Addon( id=__plugin__).openSettings()
-        xbmc.executebuiltin( "Container.Refresh" )

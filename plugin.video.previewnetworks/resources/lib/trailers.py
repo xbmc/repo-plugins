@@ -219,7 +219,7 @@ class _Parser:
                             if ( not ok ): raise
         except:
             # oops print error message
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            print "PN1 ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         return ok
 
@@ -286,7 +286,7 @@ class _Parser:
             # add the item to the media list
             return self.MediaWindow.add( dirItem )
         except:
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            print "PN2 ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return False
 
 
@@ -369,6 +369,8 @@ class Main:
             # set proper source
             extension = self.settings[ "region" ]+self.settings[ "product" ]+self.ITEM_CURRENT_URL
             base_path = self.BASE_CURRENT_SOURCE_PATH % extension
+            #print "extension %s" % extension
+            #print "base_path %s" % base_path
 
             if self.ITEM_CURRENT_URL == '99':
                 curr_phrase = ''
@@ -379,6 +381,7 @@ class Main:
                 base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "channel_id" ],search_phrase)
             else:
                 base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "channel_id" ])
+            #print "base_url %s" % base_url
             #
             # get the source files date if it exists
             try: date = os.path.getmtime( base_path )
@@ -407,7 +410,7 @@ class Main:
             	ok = self.save_xml_source( xmlSource )
         except:
             # oops print error message
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            print "PN3 ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         if ( ok ):
             return xmlSource
@@ -433,7 +436,7 @@ class Main:
             return True
         except:
             # oops print error message
-            print "ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
+            print "PN4 ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return False
 
     def parse_xml_source( self, xmlSource ):

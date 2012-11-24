@@ -1,0 +1,107 @@
+Version 1.8.3 (22 Nov 2012)
+- By default check first two episodes in each show listing to see of they are not Youtube or not (only performed for recent episodes). Prefixed with [Not on Youtube] if that is the case. option in settings, under "Advanced", to do this for ALL recent episodes. Turning on this option may increase the length of time taken to show episode listings for some shows.
+
+Version 1.8.2 (21 Nov 2012)
+- Youtube plugin 3.3.0 works, no need for my version any more. If you installed the "official" Youtube plugin from the repository it will have automatigically been replaced with the new version.
+
+- Remove code to check for version 3.2 of the Youtube plugin
+
+- The text [Not on Youtube] will appear beside the first (usually the latest) episode in the show list, if that video cannot be found on Youtube. For some shows that will mean that the show is not Youtube (e.g. US shows), for others it means that the latest episode is not yet on Youtube (sometimes it takes a day or two for new episodes).
+
+Version 1.8.1 (08 Nov 2012)
+- Fix for Hollyoaks playing silly buggers with episode numbers
+
+- Fix for Youtube "show" pages having a different name for shows compared to 4oD. "Come Dine With Me" was affected.
+
+- Fix script error instead of "Unable to find MP4 and unable to steam from Youtube" dialog, when Youtube video is not available. 
+
+
+Version 1.8.0 (05 Nov 2012)
+- Workaround for the "No MP4 found" problem, automatically uses 4od's Youtube channels for videos that fail to play. Only works for Ch4 programmes, so still no US shows, and only for shows that 4oD put on Youtube.
+
+- Added socket timeout handling
+
+- Improved cache handling - if an error occur. You can now set the socket timeout in the plugin settingss processing data from the cache, a fresh copy of the same data is taken from the web and that is processed instead
+
+- Added more debug logging
+
+
+The 4od plugin uses the Youtube plugin to play recent 4od programmes from Youtube. If you don't have the Youtube plugin installed the Youtube plugin should automatically install when the 4od plugin first tries to use it.
+However the current version of the Youtube plugin (3.2.0) doesn't work with the 4od videos. The changes described in the following issues must be made to fix those problems:
+
+	https://code.google.com/p/youtubexbmc/issues/detail?id=46
+	https://code.google.com/p/youtubexbmc/issues/detail?id=47
+
+A version of the Youtube plugin that has these fixes can be found here: http://mossy-xbmc-repo.googlecode.com/files/plugin.video.youtube-3.2.1.zip. Hopefully the next version released by the Youtube plugin guys will incorporate the changes.
+
+If you don't have the Youtube plugin already installed then it's best if you install the version from the officail XBMC repository first. Then if you install my version it will be replaced by the "official" version when they make their next release.
+
+Note that you need to be logged into Youtube, via the Youtube plugin, in order for it to work. Playback should work, download may not.
+
+
+Older programmes (before mid-August 2012) should play and download as before.
+
+
+Version 1.0.4 (16 June 2012)
+
+- Added experimental proxy support, HTTP,SOCK4/5, including authentication (Thanks to dlake02 for suggesting socksipy)
+
+- Added subtitle support. Off by default, change in settings
+
+- Added "Now Playing" media info
+
+- Added HTTP cache disable option in settings
+
+- (John Taylor) Added gzip handling. Occassionally web pages are downloaded compressed. This fix handles those occassions.
+
+- Improved error handling
+
+- Bug fix: Latest/Most Popular/A-Z/etc. Thumbnails coming up blank
+
+- Bug fix: Prevent caching of 0-byte pages or 404 error pages.
+
+- Bug fix: Orphaned processes in Linux, one for each downloaded episode, causing delays in shutting down XBMC.
+
+- Bug fix: Instant "Download Finished" notification but no download in Windows. Should now download.
+
+- But fix: Shows with no series and episodes numbers did not have unique default download filenames.
+
+
+Version 1.0.3 (03 June 2012)
+
+- Added sort by Latest, Most Popular, or alphabetically
+
+- Added SOCK4 proxy support. Can only be used with proxies that do not require a username/password.
+
+- Added paging so that only 50 programmes are listed at a time, within a category. Can be turned off in the settings.
+
+- Display a proper error message when Homeland (or other programmes with the same problem) fail.
+
+
+Version 1.0.2 (30 May 2012)
+
+(njtaylor) Fixed episodes not playing via "ll" server ("Script Error")
+
+(alnicol) Fixed error preventing download action
+
+(spoyser) Allow spaces in download path
+
+Set cache folder to the originally intended folder: [XBMC]/userdata/addon_data/plugin.video.4od/cache
+
+Problem: Changes in the episode listing webpage caused the plug-in to stall indefinitely
+Fix 1: Update the plug-in to match the webpage changes
+Fix 2: Change the way the listings are parsed so that future changes won't cause the plug-in to hang, even if the episodes won't play, or show in the listing.
+
+Dynamically determine the URL of the 4od swf player from the webpage, resolving any URL redirect in the process. This should resolve the "plays for 1 or 2 minutes and then stops" problem.
+
+Version 1.0.1 (29 Dec 2011)
+
+- Added a setting for default select action: Play/Download/Ask (Thanks to alcoheca)
+- Added genre, episode number and first aired date episode information
+- Remove unused subprocess module reference which caused errors on some platforms
+- Changed use of deprecated md5 module to hashlib.md5 where available
+- Fixed problem where duplicate episodes would sometimes appear
+
+Version 1.0.0
+
+- Initial release

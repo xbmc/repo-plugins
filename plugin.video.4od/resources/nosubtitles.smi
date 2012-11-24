@@ -1,0 +1,20 @@
+<SAMI>
+<HEAD>
+<STYLE TYPE="text/css">
+<!--
+P {margin-left:8pt; margin-right:8pt; margin-bottom:2pt; margin-top:2pt;
+   text-align:center; font-size:20pt; font-family:arial, sans-serif;
+   font-weight:normal; color:white;}
+.EGCC {Name:English; lang:en-EN; SAMIType:CC;}
+#STDPrn {Name:Standard Print;}
+#LargePrn {Name:Large Print; font-size:20pt;}
+#SmallPrn {Name:Small Print; font-size:10pt;}
+-->
+</STYLE>
+</HEAD>
+<BODY>
+<SYNC Start=2000><P Class=EGCC>
+No subtitles available
+<SYNC Start=60000><P Class=EGCC>&nbsp;
+</BODY>
+</SAMI>

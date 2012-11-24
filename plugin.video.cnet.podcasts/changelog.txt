@@ -1,3 +1,6 @@
+version 1.0.8
+fix for changes in Frodo
+
 version 1.0.7
 updated podcasts list 
 

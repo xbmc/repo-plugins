@@ -56,7 +56,7 @@ def INDEX(url,hd_url,audio_url,iconimage):
         link = 'http://feeds.feedburner.com/cnet/'+link+'?format=xml'
         replace_list = ['rumorhasit', 'crackingopen', 'alwayson', 'cnetupdate', 'cnetoncars']
         for i in replace_list:
-            if i in link:
+            if i.lower() in link.lower():
                 link = link.replace('cnet/','')
         print 'Feed Url: '+link
         req = urllib2.Request(link)
@@ -135,6 +135,8 @@ params=get_params()
 url=None
 name=None
 mode=None
+hd_url=None
+audio_url=None
 
 try:
     url=urllib.unquote_plus(params["url"])

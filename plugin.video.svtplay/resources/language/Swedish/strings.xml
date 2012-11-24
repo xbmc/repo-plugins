@@ -6,9 +6,14 @@
   <string id="30003">Senaste program</string>
   <string id="30004">Senaste nyhetsprogram</string>
   <string id="30005">Rekommenderat</string>
-  <string id="30006">PSL</string>
+  <string id="30006">Sök</string>
   <string id="30100">Detta program är endast tillgängligt på www.svtplay.se</string>
-  <string id="30101">Fler program...</string>
+  <string id="30101">Visa fler...</string>
+  <string id="30102">Sök efter:</string>
+  <string id="30103">Sökningen gav inga räffar</string>
+  <string id="30104">Program</string>
+  <string id="30105">Avsnitt</string>
+  <string id="30106">Klipp</string>
   <string id="30500">Debug</string>
   <string id="30501">Visa undertexter</string>
   <string id="30502">Gruppera program i A-Ö efter första bokstav</string>

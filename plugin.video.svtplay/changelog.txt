@@ -1,3 +1,11 @@
+Version 3.0.1
+-------------
+- Added search, fixed urls etc (by linqcan)
+
+Version 3.0.0
+-------------
+- Rewrite for Frodo
+
 Version 2.0.4
 -------------
 - Updated SWF-player URL (by dahlSTROM)

@@ -20,7 +20,10 @@ MODE_CATEGORIES = "categories"
 MODE_CATEGORY = "ti"
 MODE_LETTER = "letter"
 MODE_RECOMMENDED = "rp"
-MODE_PSL = "psl"
+MODE_SEARCH = "search"
+MODE_SEARCH_TITLES = "search_titles"
+MODE_SEARCH_EPISODES = "search_episodes"
+MODE_SEARCH_CLIPS = "search_clips"
 
 BASE_URL = "http://www.svtplay.se"
 
@@ -29,7 +32,7 @@ URL_CATEGORIES = "/kategorier"
 URL_TO_LATEST = "?tab=episodes&sida=1"
 URL_TO_LATEST_NEWS = "?tab=news&sida=1"
 URL_TO_RECOMMENDED = "?tab=recommended&sida=1"
-URL_TO_PSL = "/psl"
+URL_TO_SEARCH = "/sok?q="
 
 VIDEO_PATH_RE = "/(klipp|video|live)/\d+"
 VIDEO_PATH_SUFFIX = "?type=embed"
@@ -65,7 +68,8 @@ def viewStart():
   addDirectoryItem(localize(30002), { "mode": MODE_LIVE })
   addDirectoryItem(localize(30003), { "mode": MODE_LATEST, "page": 1 })
   addDirectoryItem(localize(30004), { "mode": MODE_LATEST_NEWS, "page": 1 })
-  addDirectoryItem(localize(30006), { "mode": MODE_PSL, "page": 1 })
+  addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
+
 
 def viewAtoO():
   html = getPage(BASE_URL + URL_A_TO_O)
@@ -102,7 +106,7 @@ def viewLive():
 
         if match:
 
-          url = match.group() + VIDEO_PATH_SUFFIX
+          url = urllib.quote(match.group() + VIDEO_PATH_SUFFIX)
 
           addDirectoryItem(common.replaceHTMLCodes(text), { "mode": MODE_VIDEO, "url": url }, None, False, True)
 
@@ -183,8 +187,93 @@ def viewCategory(url,page,index):
 def viewProgram(url,page,index):
   createDirectory(url,page,index,MODE_PROGRAM,MODE_VIDEO)
 
-def viewPSL(page,index):
-  createDirectory(URL_TO_PSL,page,index,MODE_PSL,MODE_VIDEO)
+def viewSearch():
+
+  keyword = common.getUserInput(localize(30102))
+  keyword = urllib.quote(keyword)
+  common.log("Search string: " + keyword)
+
+  if keyword == "" or not keyword:
+    viewStart()
+    return 
+
+  keyword = re.sub(r" ","+",keyword) 
+
+  url = URL_TO_SEARCH + keyword
+  html = getPage(BASE_URL + url)
+  foundTab = False
+  url = urllib.quote(url)
+ 
+  # Try fetching the "titles" tab. If it exists; create link to result directory   
+  try:
+    common.parseDOM(html, "div", attrs = { "data-tabname": "titles" })[0]
+    foundTab = True
+  except:
+    # Do nothing
+    common.log("No titles found")
+  else:
+    addDirectoryItem(localize(30104), { 
+                    "mode": MODE_SEARCH_TITLES,
+                    "url": url,
+                    "page": 1,
+                    "index": 0 })
+
+  # Try fetching the "episodes" tab. If it exists; create link to result directory   
+  try:
+    common.parseDOM(html, "div", attrs = { "data-tabname": "episodes" })[0]
+    foundTab = True
+  except:
+    # Do nothing
+    common.log("No episodes found")
+  else:
+    addDirectoryItem(localize(30105), { 
+                    "mode": MODE_SEARCH_EPISODES,
+                    "url": url,
+                    "page": 1,
+                    "index": 0 })
+
+  # Try fetching the "clips" tab. If it exists; create link to result directory   
+  try:
+    common.parseDOM(html, "div", attrs = { "data-tabname": "clips" })[0]
+    foundTab = True
+  except:
+    # Do nothing 
+    common.log("No clips found")
+  else:
+    addDirectoryItem(localize(30106), { 
+                    "mode": MODE_SEARCH_CLIPS,
+                    "url": url,
+                    "page": 1,
+                    "index": 0 })
+ 
+  if not foundTab:
+    # Raise dialog with a "No results found" message
+    common.log("No search result") 
+    dialog = xbmcgui.Dialog()
+    dialog.ok("SVT Play",localize(30103))
+    viewSearch()
+    return
+
+def viewSearchResults(url,mode,page,index):
+  """
+  Creates a directory for the search results from
+  the tab specified by the mode parameter.
+  """ 
+  common.log("url: " + url + " mode: " + mode)
+  dirtype = None
+
+  if MODE_SEARCH_TITLES == mode:
+    dirtype = MODE_PROGRAM
+  elif MODE_SEARCH_EPISODES == mode:
+    dirtype = MODE_VIDEO
+  elif MODE_SEARCH_CLIPS == mode:
+    dirtype = MODE_VIDEO
+  else:
+    common.log("Undefined mode")
+    viewStart()
+    return
+
+  createDirectory(url,page,index,mode,dirtype)
 
 def createDirectory(url,page,index,callertype,dirtype):
   """
@@ -197,19 +286,19 @@ def createDirectory(url,page,index,callertype,dirtype):
     url = "/" + url
 
   tabname = "episodes"
-  if callertype == MODE_RECOMMENDED:
+  if MODE_RECOMMENDED == callertype:
     tabname = "recommended"
-  elif callertype == MODE_LATEST_NEWS:
+  elif MODE_LATEST_NEWS == callertype:
     tabname = "news"
-  elif callertype == MODE_PSL:
+  elif MODE_SEARCH_CLIPS == callertype:
     tabname = "clips"
-  elif callertype == MODE_CATEGORY:
+  elif MODE_CATEGORY == callertype or MODE_SEARCH_TITLES == callertype:
     tabname = "titles"
 
   (foundUrl,ajaxurl,lastpage) = parseAjaxUrlAndLastPage(url,tabname)
 
   if not foundUrl:
-    populateDirNoPaging(url,MODE_VIDEO)
+    populateDirNoPaging(url,dirtype,tabname)
     return
 
   fetchitems = True
@@ -242,14 +331,16 @@ def parseAjaxUrlAndLastPage(url,tabname):
   Fetches the Ajax URL and the the last page number
   from a program page.
   """
+  common.log("url: " + url + ", tabname: " + tabname)
   classexp = "[^\"']*playShowMoreButton[^\"']*"
   dataname = "sida"
   html = getPage(BASE_URL + url)
+
   container = common.parseDOM(html,
                               "div",
-                              attrs = { "class": "[^\"']*playBoxBody[^\"']*", "data-tabname": tabname })[0]
+                              attrs = { "class": "[^\"']*[playBoxBody|playBoxAltBody][^\"']*", "data-tabname": tabname })[0]
   try:
-      ajaxurl = common.parseDOM(container,
+    ajaxurl = common.parseDOM(container,
                                 "a",
                                 attrs = { "class": classexp, "data-name": dataname },
                                 ret = "data-baseurl")[0]
@@ -272,6 +363,8 @@ def populateDir(ajaxurl,mode,page,index):
   all items on a page were used to populate the previous
   directory.
   """
+  common.log("ajaxurl: " + ajaxurl + ", mode: " + mode + ", page: " + page + ", index: " + str(index))
+
   global CURR_DIR_ITEMS
 
   articles = getArticles(ajaxurl,page)
@@ -283,70 +376,73 @@ def populateDir(ajaxurl,mode,page,index):
     if CURR_DIR_ITEMS >= MAX_DIR_ITEMS:
       CURR_DIR_ITEMS = 0
       return (False,index)
-
-    text = common.parseDOM(article, "h5")[0]
-    href = common.parseDOM(article, "a",
-                           attrs = { "class": "[^\"']*playLink[^\"']*" },
-                           ret = "href")[0]
-    thumbnail = common.parseDOM(article,
-                  "img",
-                  attrs = { "class": "playGridThumbnail" },
-                  ret = "src")[0]
-    thumbnail = thumbnail.replace("/medium/", "/large/")
-
-    if settings.getSetting("hidesignlanguage") == "false" or text.lower().endswith("teckentolkad") == False:
-
-      if mode == MODE_VIDEO:
-        href = href + VIDEO_PATH_SUFFIX
-        addDirectoryItem(common.replaceHTMLCodes(text),
-                 { "mode": mode, "url": href }, thumbnail, False)
-      elif mode == MODE_PROGRAM:
-        addDirectoryItem(common.replaceHTMLCodes(text),
-                 { "mode": mode, "url": href, "page": 1 }, thumbnail)
-
-      CURR_DIR_ITEMS += 1
+      
+    createDirItem(article,mode)      
 
     index += 1
 
   return (True,0)
 
-def populateDirNoPaging(url,mode):
+def populateDirNoPaging(url,mode,tabname):
   """
   Program pages that have less than 8 videos
   does not have a way to fetch the Ajax URL.
   Therefore we need a separate parse function
   for these programs.
   """
+  common.log("url: " + url + ", mode: " + mode + ", tabname: " + tabname)
 
-  articles = getArticles(url,None)
-
+  articles = getArticles(url,None,tabname)
+  
   for article in articles:
-    text = common.parseDOM(article, "h5")[0]
-    href = common.parseDOM(article, "a",
-                            attrs = { "class": "[^\"']*playLink[^\"']*" },
-                            ret = "href")[0]
-    thumbnail = common.parseDOM(article,
-                                "img",
-                                attrs = { "class": "playGridThumbnail" },
-                                ret = "src")[0]
-    thumbnail = thumbnail.replace("/medium/", "/large/")
+    createDirItem(article,mode)
+
+def createDirItem(article,mode):
+  """
+  Given an article and a mode; create directory item
+  for the article.
+  """
+  global CURR_DIR_ITEMS
+
+  text = common.parseDOM(article, "h5")[0]
+  href = common.parseDOM(article, "a",
+                          attrs = { "class": "[^\"']*[playLink|playAltLink][^\"']*" },
+                          ret = "href")[0]
+  thumbnail = common.parseDOM(article,
+                              "img",
+                              attrs = { "class": "playGridThumbnail" },
+                              ret = "src")[0]
+  thumbnail = thumbnail.replace("/medium/", "/large/")
+
+  if settings.getSetting("hidesignlanguage") == "false" or \
+     text.lower().endswith("teckentolkad") == False:
 
     if(mode == MODE_VIDEO):
-      href = href + VIDEO_PATH_SUFFIX
+      href = urllib.quote(href + VIDEO_PATH_SUFFIX)
       addDirectoryItem(common.replaceHTMLCodes(text),
-                       { "mode": mode, "url": href, "page": 1 }, thumbnail, False)
+                      { "mode": mode, "url": href }, thumbnail, False)
+    elif mode == MODE_PROGRAM:
+      addDirectoryItem(common.replaceHTMLCodes(text),
+                      { "mode": mode, "url": href, "page": 1 }, thumbnail, True)
+    CURR_DIR_ITEMS += 1
 
-def getArticles(ajaxurl,page):
+def getArticles(ajaxurl,page,tabname=None):
   """
-  Fetches all "articles" DOM elements in a "svtGridBlock".
+  Fetches all "article" DOM elements in a "svtGridBlock".
   """
   if page:
     html = getPage(BASE_URL + ajaxurl + "sida=" + page)
   else:
     html = getPage(BASE_URL + ajaxurl)
-  container = common.parseDOM(html,
-                "div",
-                attrs = { "class": "[^\"']*svtGridBlock[^\"']*" })[0]
+
+  if not tabname:
+    container = common.parseDOM(html,
+                  "div",
+                  attrs = { "class": "[^\"']*svtGridBlock[^\"']*" })[0]
+  else:
+    container = common.parseDOM(html,
+                  "div",
+                  attrs = { "data-tabname": tabname })[0]
 
   articles = common.parseDOM(container, "article")
   return articles
@@ -528,7 +624,11 @@ elif mode == MODE_LETTER:
   viewProgramsByLetter(letter)
 elif mode == MODE_RECOMMENDED:
   viewLatest(mode,page,index)
-elif mode == MODE_PSL:
-  viewPSL(page,index)
+elif mode == MODE_SEARCH:
+  viewSearch()
+elif mode == MODE_SEARCH_TITLES or \
+     mode == MODE_SEARCH_EPISODES or \
+     mode == MODE_SEARCH_CLIPS:
+  viewSearchResults(url,mode,page,index)
 
 xbmcplugin.endOfDirectory(pluginHandle)

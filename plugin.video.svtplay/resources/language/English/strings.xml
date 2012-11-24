@@ -6,9 +6,14 @@
   <string id="30003">Latest programs</string>  
   <string id="30004">Latest news broadcast</string>
   <string id="30005">Recommended</string>
-  <string id="30006">PSL</string>
+  <string id="30006">Search</string>
   <string id="30100">This program is only available at www.svtplay.se</string>
-  <string id="30101">More programs...</string>
+  <string id="30101">Show more...</string>
+  <string id="30102">Search for:</string>
+  <string id="30103">The search returned no results</string>
+  <string id="30104">Programs</string>
+  <string id="30105">Episodes</string>
+  <string id="30106">Clips</string>
   <string id="30500">Debug</string>
   <string id="30501">Show subtitles</string>
   <string id="30502">Group programs in A-Ö by first character</string>

@@ -21,6 +21,9 @@
 	<string id="30020">Enter search term.</string>
 	<string id="30021">Enable default view for Confluence skin</string>
 	<string id="30022">Play downloaded shows.</string>
-	<string id="30023">There was a problem connecting to the web page.</string>
-	<string id="30024">If this problem persists, please submit the error report.</string>
+	<string id="30050">There was a connection error:</string>
+	<string id="30051">If this problem persists, please submit the error report.</string>
+	<string id="30052">Retry</string>
+	<string id="30053">Quit</string>
+	<string id="30054">There was an index error.</string>
 </strings>

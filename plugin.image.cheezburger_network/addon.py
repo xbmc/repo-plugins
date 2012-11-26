@@ -34,6 +34,7 @@ plugin = Plugin(__addon_name__, __addon_id__, __file__)
 
 api = cheez_api.CheezburgerApi(
     developer_key='df1b9bff-ce69-46e7-8732-1035272f3ee7',
+    client_id=2117,
     default_count=int(plugin.get_setting('per_page'))
 )
 

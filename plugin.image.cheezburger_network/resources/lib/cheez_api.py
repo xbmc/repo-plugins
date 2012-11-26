@@ -33,7 +33,8 @@ class CheezburgerApi():
 
     API_URL = 'http://api.cheezburger.com/xml/'
 
-    def __init__(self, developer_key, default_count=None):
+    def __init__(self, developer_key, client_id, default_count=None):
+        self.client_id = client_id
         self.developer_key = developer_key
         self.default_count = default_count or 25
 
@@ -94,6 +95,7 @@ class CheezburgerApi():
         self.log('opening url: %s' % url)
         req = Request(url)
         req.add_header('DeveloperKey', self.developer_key)
+        req.add_header('ClientID', self.client_id)
         req.add_header('User-Agent', 'Python CheezburgerApi')
         try:
             response = urlopen(req).read()

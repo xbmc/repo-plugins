@@ -177,9 +177,10 @@ class Requestor(object):
 			query = '%s?%s' % (query, urllib.urlencode(params))
 		
 		retries = 0
-		error = None
-		while retries < 4:
-			time.sleep(5*retries)
+		while retries < 11:
+			error = None
+			if retries != 0:
+				time.sleep(3)
 			try:
 				request = urllib2.Request(query)
 				auth = PBSAuthorization(self.api_app_id, self.api_app_secret)
@@ -188,9 +189,11 @@ class Requestor(object):
 			except Exception, e:
 				error = str(e)
 			if error == None:
-				return json.loads(response.read())
-			else:
-				retries += 1
+				try:
+					return json.loads(response.read())['results']
+				except Exception, e:
+					error = str(e)
+			retries += 1
 		dialog = xbmcgui.Dialog()
 		ret = dialog.yesno(plugin, settings.getLocalizedString( 30050 ), error, '', settings.getLocalizedString( 30052 ), settings.getLocalizedString( 30053 ))
 		if ret == False:

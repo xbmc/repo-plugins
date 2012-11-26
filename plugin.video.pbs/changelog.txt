@@ -1,4 +1,13 @@
+[B]Version 2.0.3[/B]
+
+- Replaced get_params with getParameters
+- Fixed "No JSON object could be decoded" error
+- Fixed "exceptions.TypeError" error
+- Fixed retry on timeout bug
+- Fixed play back issue with new PBS Kids videos
+
 [B]Version 2.0.2[/B]
+
 - Added separate directory for PBS Kids programs
 - Fixed issue with missing videos on some programs
 - Added function to select the highest video quality available (640x360 SD)

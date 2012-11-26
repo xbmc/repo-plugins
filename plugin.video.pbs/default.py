@@ -5,8 +5,8 @@ from urllib2 import Request, urlopen, URLError, HTTPError
 plugin = "PBS"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '11-18-2012'
-__version__ = '2.0.2'
+__date__ = '11-25-2012'
+__version__ = '2.0.3'
 settings = xbmcaddon.Addon( id = 'plugin.video.pbs' )
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -54,7 +54,7 @@ def build_main_directory():
 	
 def build_most_watched_directory():
 	url = 'http://video.pbs.org/'
-	data = open_url( url )['content']
+	data = open_url( url )
 	list = common.parseDOM(data, "ul", attrs = { "class": "video-list clear clearfix" })
 	videos = common.parseDOM(list, "span", attrs = { "class": "title clear clearfix" })
 	img = common.parseDOM(list, "img", ret = "src")
@@ -73,11 +73,11 @@ def build_programs_directory( name, page ):
 	checking = True
 	while checking:
 		start = str( 200 * page )
-		#data = cove.programs.filter(fields='associated_images,mediafiles,categories',filter_categories__namespace__name='COVE Taxonomy',order_by='title',limit_start=start)['results']
+		#data = cove.programs.filter(fields='associated_images,mediafiles,categories',filter_categories__namespace__name='COVE Taxonomy',order_by='title',limit_start=start)
 		if name != settings.getLocalizedString( 30014 ) and name != settings.getLocalizedString( 30000 ):
-			data = cove.programs.filter(fields='associated_images',order_by='title',limit_start=start,filter_title=name)['results']
+			data = cove.programs.filter(fields='associated_images',order_by='title',limit_start=start,filter_title=name)
 		else:
-			data = cove.programs.filter(fields='associated_images',order_by='title',limit_start=start)['results']
+			data = cove.programs.filter(fields='associated_images',order_by='title',limit_start=start)
 		if ( len(data) ) == 200:
 			page = page + 1
 		else:
@@ -115,7 +115,7 @@ def build_programs_directory( name, page ):
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 		
 def build_topics_directory():
-	data = cove.categories.filter(order_by='name',filter_namespace__name='COVE Taxonomy')['results']
+	data = cove.categories.filter(order_by='name',filter_namespace__name='COVE Taxonomy')
 	item = None
 	for results in data:
 		if item != results['name']:
@@ -141,7 +141,7 @@ def build_search_keyboard():
 def build_search_directory( url, page ):
 	save_url = url.replace( ' ', '%20' )
 	url = 'http://www.pbs.org/search/?q=' + url.replace( ' ', '%20' ) + '&ss=pbs&mediatype=Video&start=' + str( page * 10 )
-	data = open_url( url )['content']
+	data = open_url( url )
 	title_id_thumb = re.compile('<a title="(.*?)" target="" rel="nofollow" onclick="EZDATA\.trackGaEvent\(\'search\', \'navigation\', \'external\'\);" href="(.*?)"><img src="(.*?)" class="ez-primaryThumb"').findall(data)
 	program = re.compile('<p class="ez-metaextra1 ez-icon">(.*?)</p>').findall(data)
 	plot = re.compile('<p class="ez-desc">(.*?)<div class="(ez-snippets|ez-itemUrl)">', re.DOTALL).findall(data)
@@ -175,23 +175,23 @@ def find_videos( name, program_id, topic, page ):
 	backup_url = None
 	if topic == 'True':
 		program_id = 'program_id'
-		data = cove.videos.filter(fields='associated_images,mediafiles,categories',filter_categories__name=name,order_by='-airdate',filter_availability_status='Available',limit_start=start,exclude_type__in='Chapter,Promotion')['results']
+		data = cove.videos.filter(fields='associated_images,mediafiles,categories',filter_categories__name=name,order_by='-airdate',filter_availability_status='Available',limit_start=start,exclude_type__in='Chapter,Promotion')
 	elif topic == 'False':
-		data = cove.videos.filter(fields='associated_images,mediafiles',filter_tp_media_object_id=program_id,limit_start=start)['results']
+		data = cove.videos.filter(fields='associated_images,mediafiles',filter_tp_media_object_id=program_id,limit_start=start)
 		print "PBS - Video ID: " + program_id
 		if len(data) == 0:
 			dialog = xbmcgui.Dialog()
 			ok = dialog.ok( plugin , settings.getLocalizedString( 30009 ) + '\n' + 'http://video.pbs.org/video/' + program_id )
 			return
 	elif topic == 'search':
-		data = cove.videos.filter(fields='associated_images,mediafiles',filter_title__contains=name,order_by='-airdate',filter_availability_status='Available',limit_start=start)['results']
+		data = cove.videos.filter(fields='associated_images,mediafiles',filter_title__contains=name,order_by='-airdate',filter_availability_status='Available',limit_start=start)
 		if len(data) == 0:
-			data = cove.videos.filter(fields='associated_images,mediafiles',filter_title__contains=string.capwords(name),order_by='-airdate',filter_availability_status='Available',limit_start=start)['results']
+			data = cove.videos.filter(fields='associated_images,mediafiles',filter_title__contains=string.capwords(name),order_by='-airdate',filter_availability_status='Available',limit_start=start)
 	else:
 		topic = 'topic'
-		data = cove.videos.filter(fields='associated_images,mediafiles',filter_program=program_id,order_by='-airdate',filter_availability_status='Available',limit_start=start,exclude_type__in='Chapter,Promotion')['results']
+		data = cove.videos.filter(fields='associated_images,mediafiles',filter_program=program_id,order_by='-airdate',filter_availability_status='Available',limit_start=start,exclude_type__in='Chapter,Promotion')
 		if len(data) <= 1:
-			data = cove.videos.filter(fields='associated_images,mediafiles',filter_program=program_id,order_by='-airdate',filter_availability_status='Available',limit_start=start)['results']
+			data = cove.videos.filter(fields='associated_images,mediafiles',filter_program=program_id,order_by='-airdate',filter_availability_status='Available',limit_start=start)
 	for results in data:
 		playable = None
 		if results['associated_images'] != None and len(results['associated_images']) > 0:
@@ -246,7 +246,7 @@ def play_video( name, url, thumb, plot, studio, starttime, backup_url ):
 		dialog = xbmcgui.Dialog()
 		ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
 		return
-	data = open_url( url + '&format=SMIL' )['content']
+	data = open_url( url + '&format=SMIL' )
 	print 'PBS - ' + studio + ' - ' + name
 	try:
 		print data
@@ -277,10 +277,10 @@ def play_video( name, url, thumb, plot, studio, starttime, backup_url ):
 			ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
 			return
 	src = re.compile( '<ref src="(.+?)" title="(.+?)" (author)?' ).findall( data )[0][0]
-	if src.find('m3u8') != -1:
-		dialog = xbmcgui.Dialog()
-		ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
-		return
+	# if src.find('m3u8') != -1:
+		# dialog = xbmcgui.Dialog()
+		# ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
+		# return
 	playpath = None
 	if base == 'http://ad.doubleclick.net/adx/':
 		src_data = src.split( "&lt;break&gt;" )
@@ -319,16 +319,17 @@ def ListItem(label, image, url, isFolder, infoLabels = False):
 
 def open_url(url):
 	retries = 0
-	while retries < 4:
+	while retries < 11:
+		data = {'content': None, 'error': None}
 		try:
-			time.sleep(5*retries)
+			if retries != 0:
+				time.sleep(3)
 			data = get_page(url)
 			if data['content'] != None and data['error'] == None:
-				return data
-			else:
-				retries += 1
-		except:
-			retries += 1
+				return data['content']
+		except Exception, e:
+			data['error'] = str(e)
+		retries += 1
 	dialog = xbmcgui.Dialog()
 	ret = dialog.yesno(plugin, settings.getLocalizedString( 30050 ), data['error'], '', settings.getLocalizedString( 30052 ), settings.getLocalizedString( 30053 ))
 	if ret == False:
@@ -361,24 +362,18 @@ def setViewMode(id):
 	if xbmc.getSkinDir() == "skin.confluence":
 		xbmc.executebuiltin("Container.SetViewMode(" + id + ")")
 
-def get_params():
-	param = []
-	paramstring = sys.argv[2]
-	if len( paramstring ) >= 2:
-		params = sys.argv[2]
-		cleanedparams = params.replace( '?', '' )
-		if ( params[len( params ) - 1] == '/' ):
-			params = params[0:len( params ) - 2]
-		pairsofparams = cleanedparams.split( '&' )
-		param = {}
-		for i in range( len( pairsofparams ) ):
-			splitparams = {}
-			splitparams = pairsofparams[i].split( '=' )
-			if ( len( splitparams ) ) == 2:
-				param[splitparams[0]] = splitparams[1]					
-	return param
+def getParameters(parameterString):
+    commands = {}
+    splitCommands = parameterString[parameterString.find('?') + 1:].split('&')
+    for command in splitCommands:
+        if (len(command) > 0):
+            splitCommand = command.split('=')
+            key = splitCommand[0]
+            value = splitCommand[1]
+            commands[key] = value
+    return commands
 
-params = get_params()
+params = getParameters(sys.argv[2])
 starttime = None
 mode = None
 name = None

@@ -27,7 +27,13 @@ def _unescape(text):
 
 def _json(url):
     '''Returns a decoded JSON response for the given url'''
-    return json.load(urllib2.urlopen(url))
+    # Their API is returning some weird characters at the beginning of the
+    # response which breaks the JSON parser, so we need to strip them first.
+    conn = urllib2.urlopen(url)
+    raw = conn.read()
+    conn.close()
+    start, end = raw.find('{'), raw.rfind('}') + 1
+    return json.loads(raw[start:end])
 
 
 def get_categories():
@@ -70,7 +76,7 @@ def _build_item(post):
     # Some posts will have a direct link to a video resource such as an ogg
     # or mp4 file. It is found in the custom_fields dict, with a key of
     # either 'ogg' or 'mp4'.
-    try: 
+    try:
         item['video_url'] = (key for key in post['custom_fields']
                               if key in resources).next()
     except StopIteration:

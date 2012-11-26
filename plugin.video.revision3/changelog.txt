@@ -1,18 +1,28 @@
+[B]Version 2.0.11[/B]
+
+- Fixed index error caused by getParameters
+- Updated open_url and retry functions
+
+
 [B]Version 2.0.10[/B]
+
 - Added better support for HTTP Errors
 - Fixed reported 'UnicodeDecodeError' errors
 - Fixed reported 'IndexError' errors
 
 [B]Version 2.0.9[/B]
+
 - Fixed error when loading shows
 
 [B]Version 2.0.8[/B]
+
 - Added support for connection timeout errors
 - Fixed loop when switching between download settings
 - Fixed 'img' referenced before assignment error
 - Fixed error when a "Unknown File Type" is played
 
 [B]Version 2.0.7[/B]
+
 - Fixed infoLabels for "Other Episodes"
 
 [B]Version 2.0.6[/B]

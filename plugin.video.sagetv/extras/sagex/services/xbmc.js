@@ -1,12 +1,14 @@
 /*
-* Name: GetMediaFilesWithSubsetOfInfo
+* Name: xbmc.js
 * Author: lehighbri
 *
-* Return: array of mediafile objects with minimum set of information
-* Purpose: will grab all mediafiles from sage and only return the information that the XBMC cares about thereby
-* reducing the amount of traffic
-* 
 **********************/
+var XBMCJS_VERSION_NUMBER = '1.0.0';
+
+function GetXBMCJSVersionNumber() {
+   return XBMCJS_VERSION_NUMBER;
+}
+
 function GetTVMediaFilesWithSubsetOfProperties() {
    var shows = new java.util.ArrayList();
    var files =  MediaFileAPI.GetMediaFiles("T");

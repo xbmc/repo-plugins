@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- French language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">Adresse du serveur Sage TV</string>
+    <string id="20001">Port du serveur web SageTV</string>
+    <string id="20002">Nom d'utilisateur du serveur web SageTV</string>
+    <string id="20003">Mot de passe du serveur web SageTV</string>
+    <string id="20004">Dossier d'enregistrements de SageTV</string>
+    <string id="20007">Bande passante de streaming (kbps)</string>
+
+    <!-- Settings -->
+    <string id="21000">Serveur SageTV introuvable</string>
+    <string id="21001">Impossible de se connecté à votre serveur SageTV.</string>
+    <string id="21002">1) Veuillez confirmer qu'il est en marche.</string>
+    <string id="21004">Dépendance manquante</string>
+    <string id="21008">Vous avez la version</string>
+    <string id="21010">Recherche</string>
+    <string id="21011">Extension SageTV</string>
+    <string id="21012">Suppression réussie</string>
+    <string id="21013">Enregistrement programmé</string>
+    <string id="21014">Tentative de lire des programmes télévisés en direct</string>
+    <string id="21015">Incapable de lire des programmes télévisés en direct</string>
+    <string id="21016">Supprimer</string>
+    <string id="21017">Annuler l'enregistrement</string>
+    <string id="21018">Retirer des favoris</string>
+    <string id="21019">Enregistrer</string>
+    <string id="21020">Visionnez maintenant</string>
+    <string id="21022">Marqué comme vue</string>
+    <string id="21023">Marqué comme non vue</string>
+    <string id="21044">Effacer tous</string>
+</strings>

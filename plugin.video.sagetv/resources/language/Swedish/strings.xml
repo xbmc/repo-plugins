@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Swedish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sv/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">SageTV serveradress</string>
+    <string id="20001">SageTV webbserverport</string>
+    <string id="20002">SageTV webbserveranvändarnamn</string>
+    <string id="20003">SageTV webbserverlösenord</string>
+    <string id="20004">SageTV inspelningsmapp</string>
+    <string id="20005">SageTV nätverkssökväg för inspelningsmapp</string>
+    <string id="20006">SageTV server macadress (för WOL)</string>
+    <string id="20007">Strömningsbandvidd (kbps)</string>
+
+    <!-- Settings -->
+    <string id="21000">SageTV server hittades inte</string>
+    <string id="21001">Kunde inte ansluta till din SageTV server.</string>
+    <string id="21002">1. Kontrollera att den körs.</string>
+    <string id="21003">2) Bekräfta att tilläggets inställningar stämmer.</string>
+    <string id="21004">Saknade beroende</string>
+    <string id="21005">Detta tillägg kräver sagex-api-services version</string>
+    <string id="21006">Du har inte sagex-api-services tillägget installerat </string>
+    <string id="21007">Installera sagex-api-services för detta tillägg skall fungera. </string>
+    <string id="21008">Du har version</string>
+    <string id="21009">Installera/uppgradera din sagex-api-services version för att</string>
+    <string id="21010">Sök</string>
+    <string id="21011">SageTV tillägg</string>
+    <string id="21012">Borttagning lyckades</string>
+    <string id="21013">Schemalagd inspelning</string>
+    <string id="21014">Försöker att spela upp live TV</string>
+    <string id="21015">Misslyckades med uppspelning av live TV</string>
+    <string id="21016">Ta bort</string>
+    <string id="21017">Avbryt inspelning</string>
+    <string id="21018">Ta bort favorit</string>
+    <string id="21019">Spela in</string>
+    <string id="21020">Titta nu</string>
+    <string id="21021">Uppspelning misslyckades, filstorlek inte stor nog för uppspelning</string>
+    <string id="21022">Märk som visad</string>
+    <string id="21023">Rensa visade</string>
+    <string id="21024">Välj arkiverad</string>
+    <string id="21025">Rensa arkiverade</string>
+    <string id="21026">Ta bort &amp; Välj Visad</string>
+    <string id="21027">Ta bort &amp; ångra Visad  </string>
+    <string id="21028">Ta bort &amp; Välj Gillar inte</string>
+    <string id="21029">Ta bort / Felaktig Inspelning</string>
+    <string id="21030">Lägg till favorit</string>
+    <string id="21031">La till favorit</string>
+    <string id="21032">Ta bort favorit</string>
+    <string id="21033">Välj flagga visad</string>
+    <string id="21034">Ångra flagga visad</string>
+    <string id="21035">Välj flagga arkiverad</string>
+    <string id="21036">Ångra flagga arkiverad</string>
+    <string id="21037">Titta (Strömmad)</string>
+    <string id="21038">Detta tillägg kräver media streaming services version</string>
+    <string id="21039">Du har inte media streaming service tillägget installerat</string>
+    <string id="21040">Installera media streaming service tillägget för att kunna titta</string>
+    <string id="21041">Installera/uppgradera ditt media streaming service tillägg till version</string>
+    <string id="21042">Markera alla som visade</string>
+    <string id="21043">Rensa alla visade</string>
+    <string id="21044">Ta bort alla</string>
+    <string id="21045">Din xbmc.js fil är inte uppdaterad</string>
+    <string id="21046">Bekräfta att du kopierade den senaste xbmc.js filen</string>
+    <string id="21047">till SageTV\sage\services mappen</string>
+</strings>

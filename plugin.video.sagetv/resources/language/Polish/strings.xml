@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Polish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">Adres serwera SageTV</string>
+    <string id="20001">Port Webserwera SageTV</string>
+    <string id="20002">Login Webserwera SageTV</string>
+    <string id="20003">Hasło Webserwera SageTV</string>
+    <string id="20004">Folder nagrywania</string>
+    <string id="20005">Ścieżka sieciowa folderu nagrywania</string>
+    <string id="20006">MAC adres serwera SageTV (dla WOL)</string>
+    <string id="20007">Jakość strumienia (kbps)</string>
+
+    <!-- Settings -->
+    <string id="21000">Serwer SageTV nie znaleziony</string>
+    <string id="21001">Nie można połączyć się z serwerem SageTV.</string>
+    <string id="21002">1) Proszę potwierdzić, że jest uruchomiony.</string>
+    <string id="21003">2) Potwierdź ustawienia wtyczki</string>
+    <string id="21004">Brak zależności</string>
+    <string id="21005">Wtyczka ta wymaga sagex-api-services</string>
+    <string id="21006">Brak zainstalowanego pluginu sagex-api-services</string>
+    <string id="21007">By uruchomić tę wtyczkę zainstalulj najpierw sagex-api-services</string>
+    <string id="21008">Posiadasz wersje</string>
+    <string id="21009">Zaktualizuj lub zainstaluj sagex-api-services do wersji</string>
+    <string id="21010">Szukaj</string>
+    <string id="21011">Wtyczka SageTV</string>
+    <string id="21012">Powodzenie usunięcia</string>
+    <string id="21013">Zaplanowane nagrywanie</string>
+    <string id="21014">Przystępuje do odtwarzania na żywo</string>
+    <string id="21015">Nie można odtwożyć na żywo</string>
+    <string id="21016">Usuń</string>
+    <string id="21017">Anuluj nagrywanie</string>
+    <string id="21018">Usuń ulubione</string>
+    <string id="21019">Nagrywaj</string>
+    <string id="21020">Obejrzyj teraz</string>
+    <string id="21021">Błąd odtwarzania; rozmiar pliku zbyt mały by odtworzyć</string>
+    <string id="21022">Ustaw Obejrzane</string>
+    <string id="21023">Wyczyść Obejrzane</string>
+    <string id="21024">Ustaw Archiwalne</string>
+    <string id="21025">Wyczyść Archiwalne</string>
+    <string id="21026">Usuń i oznacz jako Obejrzane</string>
+    <string id="21027">Usuń i wyczyść Obejrzane</string>
+    <string id="21028">Usuń i ustaw Nie lubie</string>
+    <string id="21029">Usuń / Złe nagranie</string>
+    <string id="21030">Dodaj ulubione</string>
+    <string id="21031">Dodane ulubione</string>
+    <string id="21032">Usunięte ulubione</string>
+    <string id="21033">Oznacz jako Obejrzane</string>
+    <string id="21034">Odznacz jako Obejrzane</string>
+    <string id="21035">Oznacz jako Archiwalne</string>
+    <string id="21036">Odznacz jako Archiwalne</string>
+    <string id="21037">Ogladaj (strumieniowo)</string>
+    <string id="21038">Wtyczka ta wymaga media streaming services w wersji</string>
+    <string id="21039">Nie masz zainstalowanej wtyczki media streaming services</string>
+    <string id="21040">Zainstaluj media streaming services aby umożliwić oglądanie strumieni</string>
+    <string id="21041">Zainstaluj lub uaktualnij plugin media streaming services do wersji</string>
+    <string id="21042">Zaznacz Wszystkie obejrzane</string>
+    <string id="21043">Odznacz Wszystkie obejrzane</string>
+    <string id="21044">Usuń wszystko</string>
+    <string id="21045">Plik xbmc.js nie jest najnowszy</string>
+    <string id="21046">Potwierdź przekopiowanie najnowszego pliku xbmc.js</string>
+    <string id="21047">do folderu  SageTV\sagex\services</string>
+</strings>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Arabic language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ar/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">عنوان مخدم ستيج تي في</string>
+    <string id="20001">مدخل مخدم ستيج تي في</string>
+    <string id="20002">اسم مستخدم مخدم ستيج تي في</string>
+    <string id="20003">كلمة مرور مخدم ستيج تي في</string>
+    <string id="20004">مجلد تسجيل ستيج تي في</string>
+    <string id="20005">مسار شبكة مجلد تسجيل ستيج تي في</string>
+    <string id="21010">بحث</string>
+    <string id="21019">تسجيل</string>
+</strings>

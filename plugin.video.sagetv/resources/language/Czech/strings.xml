@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Czech language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/cs/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">Adresa serveru SageTV</string>
+    <string id="20001">Port webového serveru SageTV</string>
+    <string id="20002">Uživatelské jméno webového serveru SageTV</string>
+    <string id="20003">Heslo webového serveru SageTV</string>
+    <string id="20004">Složka nahrávek SageTV</string>
+    <string id="20007">Šířka pásma proudového vysílání (kbps)</string>
+
+    <!-- Settings -->
+    <string id="21000">Server SageTV nelze nalézt</string>
+    <string id="21001">Nelze se spojit s vaším serverem SageTV</string>
+    <string id="21002">1. Ověřte, prosím, že server běží.</string>
+    <string id="21004">Chybí závislosti</string>
+    <string id="21005">Toto rozšíření vyžaduje sagex-api-service verze</string>
+    <string id="21008">Máte verzi</string>
+    <string id="21010">Hledat</string>
+    <string id="21011">Doplněk SageTV</string>
+    <string id="21016">Smazat</string>
+    <string id="21017">Zrušit nahrávání</string>
+    <string id="21018">Odstranit oblíbené</string>
+    <string id="21019">Nahrávat</string>
+    <string id="21020">Shlédnout</string>
+    <string id="21021">Přehrávání selhalo. Velikost souboru není dostatečná pro přehrání.</string>
+    <string id="21022">Označit jako shlédnuté</string>
+    <string id="21030">Přidat oblíbené</string>
+    <string id="21044">Smazat vše</string>
+</strings>

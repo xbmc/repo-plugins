@@ -1,3 +1,7 @@
+[B]Version 1.4.1 (Nov 26, 2012)[/B]
+- Included enhanced xbmc.js that was accidentally not checked in with version 1.4.0
+- Included latest language file updates
+
 [B]Version 1.4.0 (Nov 13, 2012)[/B]
 - Removed dependency on CommonFunctions (script.module.parsedom) which was previously used to ask what text to search for using the search for recordings/airings
 - Enhanced xbmc.js to include a version number to ensure that the latest xbmc.js file is being used as the addon versions up over time

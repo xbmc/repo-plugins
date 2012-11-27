@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Greek language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/el/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">Διεύθυνση Διακομιστή του SageTV</string>
+    <string id="20001">Θύρα Διακομιστή Ιστού του SageTV</string>
+    <string id="20002">Όνομα χρήστη Διακομιστή Ιστού SageTV</string>
+    <string id="20003">Κωδικός Διακομιστή Ιστού του SageTV</string>
+    <string id="20004">Φάκελος Εγγραφών του SageTV</string>
+    <string id="20005">Διαδρομή Δικτύου του Φακέλου Εγγραφών του SageTV</string>
+    <string id="20006">Διεύθυνση MAC του διακομιστή του SageTV (για WOL)</string>
+    <string id="20007">Ταχύτητα Ροής (kbps)</string>
+
+    <!-- Settings -->
+    <string id="21000">Διακομιστής του SageTV: Δε βρέθηκε</string>
+    <string id="21001">Αδυναμία σύνδεσης στο διακομιστή του SageTV.</string>
+    <string id="21002">1) Επιβεβαιώστε ότι εκτελείται.</string>
+    <string id="21003">2) Επιβεβαιώστε ότι οι ρυθμίσεις αυτού του πρόσθετου είναι σωστές.</string>
+    <string id="21004">Έλλειψη Εξάρτησης</string>
+    <string id="21005">Αυτό το πρόσθετο απαιτεί έκδοση του sagex-api-services</string>
+    <string id="21006">Δεν είναι εγκατεστημένο το plugin του sagex-api-services</string>
+    <string id="21007">Εγκαταστήστε το sagex-api-services για να ενεργοποιήσετε αυτό το plugin.</string>
+    <string id="21008">Έχετε την έκδοση</string>
+    <string id="21009">Ενημερώστε/Αναβαθμίστε την έκδοση του sagex-api-services στην</string>
+    <string id="21010">Αναζήτηση</string>
+    <string id="21011">Πρόσθετο SageTV</string>
+    <string id="21012">Αποτυχία διαγραφής</string>
+    <string id="21013">Προγραμματισμένη εγγραφή</string>
+    <string id="21014">Προσπάθεια αναπαραγωγής Live TV</string>
+    <string id="21015">Αδυναμία αναπαραγωγής Live TV</string>
+    <string id="21016">Διαγραφή</string>
+    <string id="21017">Ακύρωση Εγγραφής</string>
+    <string id="21018">Απομάκρυνση Αγαπημένου</string>
+    <string id="21019">Εγγραφή</string>
+    <string id="21020">Προβολή Τώρα</string>
+    <string id="21021">Αποτυχία αναπαραγωγής. Το μέγεθος του αρχείου είναι πολύ μικρό για αναπαραγωγή</string>
+    <string id="21022">Ορισμός ως Προβληθέν</string>
+    <string id="21023">Εκκαθάριση Προβληθέντων</string>
+    <string id="21024">Ορισμός ως Αρχειακού</string>
+    <string id="21025">Εκκαθάριση Αρχείου</string>
+    <string id="21026">Διαγραφή &amp; Ορισμός ως Προβληθέν</string>
+    <string id="21027">Διαγραφή &amp; Εκκαθάριση Προβληθέντων</string>
+    <string id="21028">Διαγραφή &amp; Ορισμός ως Δεν Μου Αρέσει</string>
+    <string id="21029">Διαγραφή / Λανθασμένη Εγγραφή</string>
+    <string id="21030">Προσθήκη Αγαπημένου</string>
+    <string id="21031">Προστέθηκε Αγαπημένο</string>
+    <string id="21032">Απομακρύνθηκε Αγαπημένο</string>
+    <string id="21033">Επισήμανση ως προβληθέν</string>
+    <string id="21034">Έγινε εκκαθάριση της σημαίας προβληθέντος</string>
+    <string id="21035">Ορίστηκε η σημαία αρχειακού</string>
+    <string id="21036">Έγινε εκκαθάριση της σημαίας αρχειακού</string>
+    <string id="21037">Προβολή (Ροή)</string>
+    <string id="21038">Αυτό το πρόσθετο απαιτεί έκδοση του media streaming services</string>
+    <string id="21039">Δεν είναι εγκατεστημένο το plugin του media streaming services</string>
+    <string id="21040">Εγκαταστήστε το media streaming services για να ενεργοποιήσετε την προβολή ροών.</string>
+    <string id="21041">Ενημερώστε/Αναβαθμίστε την έκδοση του plugin του media streaming services στην</string>
+    <string id="21042">Ορισμός Όλων ως Προβληθέντων</string>
+    <string id="21043">Εκκαθάριση Όλων των Προβληθέντων</string>
+    <string id="21044">Διαγραφή Όλων</string>
+    <string id="21045">Το αρχείο xbmc.js δεν είναι ενημερωμένο</string>
+    <string id="21046">Επαληθεύστε ότι αντιγράψατε το πιο πρόσφατο αρχείο xbmc.js</string>
+    <string id="21047">στο φάκελο SageTV\sagex\services</string>
+</strings>

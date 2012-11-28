@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <strings>
     <string id="32001">Authentification</string>
     <string id="32011">Nom d'utilisateur</string>
@@ -7,5 +8,8 @@
     <string id="33012">Afficher toutes les émissions</string>
     <string id="33013">Nombre d'émissions à afficher</string>
     <string id="33014">Qualité vidéo</string>
-    <string id="33014">Afficher les émissions déjà vues</string>
+    <string id="33015">Afficher les émissions déjà vues</string>
+    <string id="33016">Dernières émissions</string>
+    <string id="33017">Émissions</string>
+    <string id="33018">Recherche</string>
 </strings>

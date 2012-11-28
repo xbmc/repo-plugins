@@ -14,22 +14,39 @@
 
 """
 Nolife Online addon for XBMC
-Author:     gormux
+Authors:     gormux, DeusP
 """
 
-import re, xbmcplugin, xbmcgui, xbmcaddon, urllib, urllib2, sys, cookielib
+import re, xbmcplugin, xbmcgui, xbmcaddon, urllib, urllib2, sys, cookielib, pickle
 from BeautifulSoup import BeautifulSoup
 
+# Global variable definition
+## Header for every log in this plugin
+pluginLogHeader = "[XBMC_NOLIFE] "
+
+## Values for the mode parameter
+MODE_LAST_SHOWS, MODE_CATEGORIES, MODE_SEARCH, MODE_SHOW_BY_URL, MODE_LINKS = range(5)
+
+settings  = xbmcaddon.Addon(id='plugin.video.nolife')
+url       = 'http://online.nolife-tv.com/index.php?'
+name      = 'Nolife Online'
+mode      = None
+version   = settings.getAddonInfo('version')
+useragent = "XBMC Nolife-plugin/" + version
+language = settings.getLocalizedString
+
 def remove_html_tags(data):
-    """
-    Permits to remove all HTML tags
+    """Permits to remove all HTML tags
+        
+    This function removes the differents HTML tags of a string
     """
     page = re.compile(r'<.*?>')
     return page.sub('', data)
 
 def requestinput():
-    """
-    Uses the xbmc's keyboard to get a string
+    """Request input from user
+        
+    Uses the XBMC's keyboard to get a string
     """
     kbd = xbmc.Keyboard('default', 'heading', True)
     kbd.setDefault('')
@@ -82,102 +99,98 @@ def parse_categories():
                     emissions.append(emission)
     return emissions
 
-def index():
+def login():
+    """Log into the Nolife website
+        
+    This method log the user into the website, checks credentials and return the current
     """
-    Checks credentials
-    """
+    
     settings = xbmcaddon.Addon(id='plugin.video.nolife')
     user     = settings.getSetting( "username" )
     pwd      = settings.getSetting( "password" )
     loginrequest = urllib.urlencode({'vb_login_username': user,
-                                     'vb_login_password': pwd,
-                                     's': '',
-                                     'securitytoken': 'guest',
-                                     'do': 'login',
-                                     'vb_login_md5password': '',
-                                     'vb_login_md5password_utf': ''})
-    import cookielib
-    cj = cookielib.CookieJar()
-    req = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    page = req.open("http://forum.nolife-tv.com/login.php", loginrequest)
+                                'vb_login_password': pwd,
+                                's': '',
+                                'securitytoken': 'guest',
+                                'do': 'login',
+                                'vb_login_md5password': '',
+                                'vb_login_md5password_utf': ''})
+    
+
+    requestHandler.addheaders = [("User-agent", useragent)]
+    page = requestHandler.open("http://forum.nolife-tv.com/login.php", loginrequest)
     res = BeautifulSoup(page.read())
     if re.compile('pas valide').findall(str(res)):
+        xbmc.log(msg=pluginLogHeader + "Invalid username, aborting",level=xbmc.LOGERROR)
         err = xbmcgui.Dialog()
         err.ok("Erreur", "Nom d'utilisateur ou mot de passe invalide.","Veuillez vérifier les informations de connexion dans","les paramètres de l'addon.")
         doanerror
-    if re.compile('votre quota').findall(str(res)):
+    elif re.compile('votre quota').findall(str(res)):
+        xbmc.log(msg=pluginLogHeader + "User account locked",level=xbmc.LOGERROR)
         err = xbmcgui.Dialog()
         err.ok("Message", "Trop d'erreurs d'authentification.","Veuillez patienter 15 minutes avant de rééssayer","Vérifiez également vos informations de connexion.")
         doanerror
+    else:
+        xbmc.log(msg=pluginLogHeader + "Valid User",level=xbmc.LOGERROR)
 
+def initialIndex():
+    """Creates initial index
+    
+    Create the initial menu with the right identification values for the add-on to know which option have been selected
     """
-    Creates initial index
-    """
-    add_dir('Dernières émissions', 'http://onsenfout', 0, '')
-    add_dir('Émissions', 'http://mobile.nolife-tv.com', 1, '')
-    add_dir('Recherche', 'http://mobile.nolife-tv.com', 2, '')
+    add_dir(unicode(language(33016)), 'http://mobile.nolife-tv.com', MODE_LAST_SHOWS, '')
+    add_dir(unicode(language(33017)), 'http://mobile.nolife-tv.com', MODE_CATEGORIES, '')
+    add_dir(unicode(language(33018)), 'http://mobile.nolife-tv.com', MODE_SEARCH, '')
 
-def getlast():
+def getlastVideos():
+    """Get last uploaded videos
+        
+    Get the videos in the "last videos" menu option
     """
-    Get last uploaded videos
-    """
-    settings = xbmcaddon.Addon(id='plugin.video.nolife')
-    user     = settings.getSetting( "username" )
-    pwd      = settings.getSetting( "password" )
-    loginrequest = urllib.urlencode({'vb_login_username': user,
-                                     'vb_login_password': pwd,
-                                     's': '',
-                                     'securitytoken': 'guest',
-                                     'do': 'login',
-                                     'vb_login_md5password': '',
-                                     'vb_login_md5password_utf': ''})
-    postrequest = urllib.urlencode({'emissions': 0, 
-                                    'famille': 0, 
-                                    'a': 'ge'})
-    headers = { "Content-type": "application/x-www-form-urlencoded",
-                "Accept": "text/plain" }
-    import cookielib
-    cj = cookielib.CookieJar()
-    req = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    req.open("http://forum.nolife-tv.com/login.php", loginrequest)
-    page = req.open("http://mobile.nolife-tv.com/do.php", postrequest)
+    postrequest = urllib.urlencode({'emissions': 0,
+                                   'famille': 0,
+                                   'a': 'ge'})
+    
+    page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
     liste = BeautifulSoup(page.read()).findAll('li')
     for element in liste:
         if re.compile('data-icon="arrow-r"').findall(str(element)):
-
+            
             if  re.compile('icones/32/on').findall(str(element)):
                 _seen = True
             else:
                 _seen = False
             
             reg_date = '<p style="padding-right:25px;'\
-                       ' padding-left:10px;">.*</p>'
+                ' padding-left:10px;">.*</p>'
             _thumb    = re.compile('data-thumb=".*"').findall(
-                                                str(element))[0][12:][:-1]
+                                                              str(element))[0][12:][:-1]
             _date_len = remove_html_tags(
-                        re.compile(reg_date).findall(str(element))[0]
-                        )
+                                         re.compile(reg_date).findall(str(element))[0]
+                                         )
             _duration = _date_len.split(' - ')[1]
-
+            
             reg_vid = 'a href="emission-.*" '
             _vid   = re.compile(reg_vid).findall(str(element))[0][17:][:-2]
-
+            
             reg_desc = '<p style="padding-left:10px;"><strong>.*'
             _desc  = remove_html_tags(
-                   re.compile(reg_desc).findall(str(element))[0][30:])
+                                      re.compile(reg_desc).findall(str(element))[0][30:])
             
             _name  = remove_html_tags(
-                   re.compile('<h3.*').findall(str(element))[0])
+                                      re.compile('<h3.*').findall(str(element))[0])
             
-            addlink( _name + " - " + _desc, 
-                     "plugin://plugin.video.nolife?id=" + _vid, 
-                     _thumb, 
-                     _duration,
-                     _seen )
+            addlink( _name + " - " + _desc,
+                    "plugin://plugin.video.nolife?id=" + _vid,
+                    _thumb, 
+                    _duration,
+                    _seen )
 
+    
 def getcategories():
-    """
-    Gets all categories and adds directories
+    """Gets all categories and adds directories
+    
+    Get the differents categories of the videos
     """
     emissions = parse_categories()
     cat = []
@@ -185,36 +198,21 @@ def getcategories():
         cat.append(element[0])
     categories = set(cat)
     for category in categories:
-        add_dir(category, category, 3, '')
+        add_dir(category, category, MODE_SHOW_BY_URL, '')
 
 def search():
-    """
-    Searches the site
+    """Searches a video on Nolife website
+        
+    This function allows to search for a show
     """
     searchstring        = requestinput()
     if searchstring == 'Null':
         mode = 1
     else:
-        settings = xbmcaddon.Addon(id='plugin.video.nolife')
-        user     = settings.getSetting( "username" )
-        pwd      = settings.getSetting( "password" )
-        loginrequest = urllib.urlencode({'vb_login_username': user,
-                                         'vb_login_password': pwd,
-                                         's': '',
-                                         'securitytoken': 'guest',
-                                         'do': 'login',
-                                         'vb_login_md5password': '',
-                                         'vb_login_md5password_utf': ''})
-        postrequest = urllib.urlencode({'search': searchstring, 
-                                        'submit': 'Rechercher'})
-        headers = {"Content-type":"application/x-www-form-urlencoded",
-                   "Accept":"text/plain",
-                   "Referer":"http://mobile.nolife-tv.com/online/rechercher/"}
-        import cookielib
-        cj = cookielib.CookieJar()
-        req = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-        req.open("http://forum.nolife-tv.com/login.php", loginrequest)
-        page = req.open("http://mobile.nolife-tv.com/online/", postrequest)
+        postrequest = urllib.urlencode({'search': searchstring,
+                                       'submit': 'Rechercher'})
+
+        page = requestHandler.open("http://mobile.nolife-tv.com/online/", postrequest)
         liste = BeautifulSoup(page.read()).findAll('li')
 
         for element in liste:
@@ -252,7 +250,7 @@ def getshows(category):
     emissions = parse_categories()
     for emission in emissions:
         if emission[0] == category:
-            add_dir(emission[1], emission[2], 4, emission[3])
+            add_dir(emission[1], emission[2], MODE_LINKS, emission[3])
 
 def getlinks(show):
     """
@@ -271,24 +269,14 @@ def getlinks(show):
     if show == "3" and showall == "true":
         show_n = 100
     i          = 0
+
     while finished == False:
-        loginrequest = urllib.urlencode({'vb_login_username': user,
-                                         'vb_login_password': pwd,
-                                         's': '',
-                                         'securitytoken': 'guest',
-                                         'do': 'login',
-                                         'vb_login_md5password': '',
-                                         'vb_login_md5password_utf': ''})
-        postrequest = urllib.urlencode({'emissions': i, 
+        postrequest = urllib.urlencode({'emissions': i,
                                         'famille': show,
                                         'a': 'ge' })
         headers = { "Content-type": "application/x-www-form-urlencoded",
                     "Accept": "text/plain" }
-        import cookielib
-        cj = cookielib.CookieJar()
-        req = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-        req.open("http://forum.nolife-tv.com/login.php", loginrequest)
-        page = req.open("http://mobile.nolife-tv.com/do.php", postrequest)
+        page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
         liste = BeautifulSoup(page.read()).findAll('li')
         if liste == []:
             finished = True
@@ -367,7 +355,7 @@ def getlinks(show):
                         emission[4] )
 
 
-def playvideo(video):
+def playvideo(requestHandler, video):
     """
     Plays video
     """
@@ -388,22 +376,9 @@ def playvideo(video):
     else:
         _video = video
 
-    loginrequest = urllib.urlencode({'vb_login_username': user,
-                                     'vb_login_password': pwd,
-                                     's': '',
-                                     'securitytoken': 'guest',
-                                     'do': 'login',
-                                     'vb_login_md5password': '',
-                                     'vb_login_md5password_utf': ''})
-    headers = { "Content-type": "application/x-www-form-urlencoded",
-                "Accept": "text/plain" }
-    import cookielib
-    cj = cookielib.CookieJar()
-    req = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    req.addheaders = [("User-agent", useragent)]
-    req.open("http://forum.nolife-tv.com/login.php", loginrequest)
-    page = req.open(_video)
+    page = requestHandler.open(_video)
     url  = page.geturl()
+    xbmc.log(msg=pluginLogHeader + "URL :" + url,level=xbmc.LOGDEBUG)
     listitem   = xbmcgui.ListItem( label='', 
                                    iconImage='', 
                                    thumbnailImage='', 
@@ -456,15 +431,23 @@ def addlink(name, url, iconimage, duration, bool_seen):
                                        isFolder=False )
     return ok
 
+
 def add_dir(name, url, mode, iconimage):
     """
     Adds a directory to the list
     """
     ok  = True
-    url = sys.argv[0]+"?url="+urllib.quote_plus(url)+\
-          "&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-    liz = xbmcgui.ListItem(name, 
-                           iconImage="DefaultFolder.png", 
+    
+    # Hack to avoid incompatiblity of urllib with unicode string
+    if isinstance(name, str):
+        xbmc.log(msg="[XXX] str dir",level=xbmc.LOGERROR)
+        url = sys.argv[0]+"?url="+urllib.quote_plus(url)+\
+            "&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+    else:
+        url = sys.argv[0]+"?url="+urllib.quote_plus(url)+\
+        "&mode="+str(mode)+"&name="+urllib.quote_plus(name.encode("ascii", "ignore"))
+    liz = xbmcgui.ListItem(name,
+                           iconImage="DefaultFolder.png",
                            thumbnailImage=iconimage)
     liz.setInfo( 
                  type="Video", 
@@ -476,22 +459,18 @@ def add_dir(name, url, mode, iconimage):
                                        isFolder=True )
     return ok
 
-params = get_params()
+## Start of the add-on
+xbmc.log(msg=pluginLogHeader + "-----------------------",level=xbmc.LOGDEBUG)
+xbmc.log(msg=pluginLogHeader + "Nolife plugin main loop",level=xbmc.LOGDEBUG)
+pluginHandle = int(sys.argv[1])
 
-url       = 'http://online.nolife-tv.com/index.php?'
-name      = 'Nolife Online'
-mode      = None
-settings  = xbmcaddon.Addon(id='plugin.video.nolife')
-version   = settings.getAddonInfo('version')
-useragent = "XBMC Nolife-plugin/" + version
+## Reading parameters given to the add-on
+params = get_params()
+xbmc.log(msg=pluginLogHeader + "Parameters read",level=xbmc.LOGDEBUG)
 
 
 try:
     url = urllib.unquote_plus(params["url"])
-except:
-    pass
-try:
-    name = urllib.unquote_plus(params["name"])
 except:
     pass
 try:
@@ -503,20 +482,39 @@ try:
 except:
     _id = 0
 
-if ( mode == None or url == None or len(url) < 1 ) and _id == 0:
-    index()
-elif mode == 0 and _id == 0:
-    getlast()
-elif mode == 1 and _id == 0:
+xbmc.log(msg=pluginLogHeader + "requested mode : " + str(mode),level=xbmc.LOGDEBUG)
+xbmc.log(msg=pluginLogHeader + "requested url : " + url,level=xbmc.LOGDEBUG)
+xbmc.log(msg=pluginLogHeader + "requested id : " + str(_id),level=xbmc.LOGDEBUG)
+
+# Starting request handler
+# FIXME : Find a way to keep the cookies in the add-on session to avoid relogin all the time
+xbmc.log(msg=pluginLogHeader + "No cookies, adding a jar",level=xbmc.LOGDEBUG)
+cj = cookielib.CookieJar()
+requestHandler = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+login()
+
+# Determining and executing action
+if( mode == None or url == None or len(url) < 1 ) and _id == 0:
+    xbmc.log(msg=pluginLogHeader + "Loading initial index",level=xbmc.LOGDEBUG)
+    initialIndex()
+elif mode == MODE_LAST_SHOWS and _id == 0:
+    xbmc.log(msg=pluginLogHeader + "Retrieving last plushied videos",level=xbmc.LOGDEBUG)
+    getlastVideos()
+elif mode == MODE_CATEGORIES and _id == 0:
+    xbmc.log(msg=pluginLogHeader + "Retrieving shows categories",level=xbmc.LOGDEBUG)
     getcategories()
-elif mode == 2 and _id == 0:
+elif mode == MODE_SEARCH and _id == 0:
+    xbmc.log(msg=pluginLogHeader + "Starting a search",level=xbmc.LOGDEBUG)
     search()
-elif mode == 3 and _id == 0:
+elif mode == MODE_SHOW_BY_URL and _id == 0:
+    xbmc.log(msg=pluginLogHeader + "Retrieving shows for the url : " + url,level=xbmc.LOGDEBUG)
     getshows(url)
-elif mode == 4 and _id == 0:
+elif mode == MODE_LINKS and _id == 0:
+    xbmc.log(msg=pluginLogHeader + "Getting links",level=xbmc.LOGDEBUG)
     getlinks(url)
 elif _id > 0:
-    playvideo("http://mobile.nolife-tv.com/online/player-" + str(_id))
+    xbmc.log(msg=pluginLogHeader + "Trying to play video id : " + str(_id),level=xbmc.LOGDEBUG)
+    playvideo(requestHandler, "http://mobile.nolife-tv.com/online/player-" + str(_id));
 
 xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
 xbmcplugin.endOfDirectory(int(sys.argv[1]), cacheToDisc=True)

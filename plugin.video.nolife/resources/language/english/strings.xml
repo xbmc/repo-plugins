@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <strings>
     <string id="32001">Authentication</string>
     <string id="32011">Username</string>
@@ -8,4 +9,7 @@
     <string id="33013">Number of videos to show</string>
     <string id="33014">Quality</string>
     <string id="33015">Show already seen videos</string>
+    <string id="33016">Last shows</string>
+    <string id="33017">Shows</string>
+    <string id="33018">Search</string>
 </strings>

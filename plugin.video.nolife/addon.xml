@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.nolife"
        name="Nolife Online"
-       version="1.12"
+       version="1.14.0"
        provider-name="gormux">
   <requires>
-    <import addon="xbmc.python" version="1.0"/>
+    <import addon="xbmc.python" version="2.0"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
@@ -19,11 +19,11 @@
     <description lang="fr">Un plugin pour accéder au contenu de Nolife Online.
 Nécéssite un compte payant sur le site http://www.nolife-tv.com
 Abonnez-vous :)
-Pour toute question : julien@gormotte.info
+Pour toute question : julien@gormotte.info ou http://bugs.gormotte.info
     </description>
     <description lang="en">A plugin to access Nolife Online content.
-A paid account is necessary. Register on http://www.nolife-tv.com.
-Any question ? Ask julien@gormotte.info.
+A paid account is necessary. Register on http://www.nolife-tv.com
+Any question ? Ask julien@gormotte.info, or see http://bugs.gormotte.info
     </description>
     <disclaimer lang="fr">Ce plugin n'est ni publié ni maintenu par Nolife, et donc non officiel.</disclaimer>
     <disclaimer lang="en">This plugin is not official. Any questions are for me and not Nolife stafff.</disclaimer>

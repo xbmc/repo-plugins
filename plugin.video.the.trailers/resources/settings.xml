@@ -23,5 +23,6 @@
         <setting label="30265" type="bool" id="cp_use_https" default="false" visible="eq(-3,true)"/>
         <setting label="30261" type="text" id="cp_user" default="" visible="eq(-4,true)"/>
         <setting label="30262" type="text" id="cp_password" default="" enable="!eq(-1,)" visible="eq(-5,true)" option="hidden"/>
+        <setting label="30267" type="enum" id="cp_version" default="0" lvalues="30268|30269" visible="eq(-6,true)"/>
     </category>
 </settings>

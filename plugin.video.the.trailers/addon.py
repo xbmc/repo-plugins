@@ -173,6 +173,7 @@ def get_trailer(source_id, movie_title, mode):
     except NoDownloadPath:
         xbmcgui.Dialog().ok(_('no_download_path'),
                             _('no_download_path'))
+        return
     except (NoQualitySelected, NoTrailerSelected):
         return
 
@@ -193,8 +194,11 @@ def ask_trailer_type(source, movie_title):
     # if the user wants to be asked, show the select dialog
     if plugin.get_setting('ask_trailer') == 'true':
         trailer_types = source.get_trailer_types(movie_title)
+        if not trailer_types:
+            __log('there are no trailers found for selection')
+            return 'trailer'
         # is there more than one trailer_types, ask
-        if len(trailer_types) > 1:
+        elif len(trailer_types) > 1:
             dialog = xbmcgui.Dialog()
             selected = dialog.select(_('choose_trailer_type'),
                                      [t['title'] for t in trailer_types])
@@ -324,7 +328,11 @@ def download_trailer(local_path, remote_url, trailer_id):
 @plugin.route('/add_to_couchpotato/<movie_title>')
 def add_to_couchpotato(movie_title):
     __log('add_to_couchpotato started with movie_title=%s' % movie_title)
-    import resources.lib.couchpotato as couchpotato
+    cp_version = int(plugin.get_setting('cp_version'))
+    if cp_version == 0:
+        import resources.lib.couchpotatov1 as couchpotato
+    else:
+        import resources.lib.couchpotatov2 as couchpotato
     couchpotato.Main()
     return
 
@@ -361,6 +369,7 @@ def __format_movie(m):
             'is_playable': True,
             'is_folder': False,
             'iconImage': m.get('thumb', 'DefaultVideo.png'),
+            'thumbnail': m.get('thumb', 'DefaultVideo.png'),
             'info': {'title': m.get('title'),
                      'duration': m.get('duration', '0:00'),
                      'size': int(m.get('size', 0)),

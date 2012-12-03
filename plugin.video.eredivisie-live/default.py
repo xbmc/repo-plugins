@@ -21,6 +21,7 @@
 
 import xbmcplugin
 import xbmcgui
+import xbmcaddon
 import sys
 import urllib2
 import re
@@ -74,8 +75,8 @@ def addListingDir(item):
 
 def get_videos(links):
   results = [{"name": title_re.search(string).group(1), "location": base_url+href_re.search(string).group(1)} for string in links if 'video-play-button' in string]
-  return results 
-  
+  return results
+
 def get_bitrates(url):
   results = []
   playlist_url = playlist_re.search(urllib2.urlopen(url).read()).group(1)
@@ -86,7 +87,7 @@ def get_bitrates(url):
     if bandwidth_temp:
       bandwidth_found = True
       bandwidth = '%i kbps'%(int(bandwidth_temp.group(1))/1000)
-    elif bandwidth_found:      
+    elif bandwidth_found:
       results.append({"name": bandwidth, "location": line.strip('\n')})
   return results
 
@@ -101,7 +102,7 @@ def addVideoLink(item):
   xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=False)
 
 def get_next_page(links):
-  result = {"name": "Next page"}
+  result = {"name": __language__(30004)}
   for string in links:
     if 'class="forward active"' in string:
       result['location'] = base_url+href_re.search(string).group(1)
@@ -119,6 +120,8 @@ def listVideoItems(url):
   addListingDir(next_page)
 
 ## Begin of main script
+__settings__ = xbmcaddon.Addon(id='plugin.video.eredivisie-live')
+__language__ = __settings__.getLocalizedString
 params=get_params() # First, get the parameters
 
 if 'filter' in params: # Filter chosen, load items
@@ -136,11 +139,11 @@ elif 'item' in params: # Item selected, show bitrate options
   items = get_bitrates(params['item'])
   for item in items:
     addVideoLink(item)
-    
+
 else: # First entry, show main listing
-  addFilterDir('List all videos', '')
-  addFilterDir('Filter by competition', 'competition')
-  addFilterDir('Filter by club', 'club')
-  addFilterDir('Filter by category', 'category')
+  addFilterDir(__language__(30000), '')
+  addFilterDir(__language__(30001), 'competition')
+  addFilterDir(__language__(30002), 'club')
+  addFilterDir(__language__(30003), 'category')
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

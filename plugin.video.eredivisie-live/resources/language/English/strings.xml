@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <string id="30000">List all videos</string>
+    <string id="30001">Filter by competition</string>
+    <string id="30002">Filter by club</string>
+    <string id="30003">Filter by category</string>
+    <string id="30004">Next page</string>
+</strings>

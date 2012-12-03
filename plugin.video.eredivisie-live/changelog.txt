@@ -9,3 +9,9 @@ Filter paywall items from listing
 
 [B]2.0.2:[/B]
 Improve speed, add next page button
+
+[B]2.0.3:[/B]
+Added language support
+
+[B]3.0.0:[/B]
+Fix incompatibilites with frodo

@@ -57,7 +57,7 @@ IMAGE_POSTER = xbmc.translatePath(os.path.join(__cwd__,'resources','media','post
 IMAGE_THUMB = xbmc.translatePath(os.path.join(__cwd__,'resources','media','thumb.jpg'))
 DEFAULT_CHARSET = 'utf-8'
 MIN_VERSION_SAGEX_REQUIRED = "7.1.9.12"
-VERSION_XBMCJS_REQUIRED = "1.0.0"
+VERSION_XBMCJS_REQUIRED = "1.4.2"
 
 # 500-THUMBNAIL 501/502/505/506/507/508-LIST 503-MINFO2 504-MINFO 515-MINFO3
 confluence_views = [500,501,502,503,504,508]
@@ -116,9 +116,10 @@ def VIEWLISTOFRECORDEDSHOWS(url,name):
     now = time.time()
     strNowObject = date.fromtimestamp(now)
     now = "%02d.%02d.%s" % (strNowObject.day+1, strNowObject.month, strNowObject.year)
-    addDir('[All Shows]',strUrl + '/sagex/api?c=xbmc:GetMediaFilesForShowWithSubsetOfProperties&1=&size=500&encoder=json',11,IMAGE_POSTER,IMAGE_THUMB,'',now,'')
     titleObjects = executeSagexAPIJSONCall(url, "Result")
     titles = titleObjects.keys()
+    totalEpisodesForAllShows = 0
+    totalEpisodesWatchedForAllShows = 0
     for title in titles:
         mfsForTitle = titleObjects.get(title)
         for mfSubset in mfsForTitle:
@@ -126,9 +127,14 @@ def VIEWLISTOFRECORDEDSHOWS(url,name):
             strTitleEncoded = strTitle.encode("utf8")
             strMediaFileID = mfSubset.get("MediaFileID")
             strExternalID = mfSubset.get("ShowExternalID")
+            strGenre = mfSubset.get("ShowGenre")
             startTime = float(mfSubset.get("AiringStartTime") // 1000)
             strAiringdateObject = date.fromtimestamp(startTime)
             strAiringdate = "%02d.%02d.%s" % (strAiringdateObject.day, strAiringdateObject.month, strAiringdateObject.year)
+            totalEpisodesForShow = mfSubset.get("TotalEpisodes")
+            totalEpisodesWatchedForShow = mfSubset.get("TotalWatchedEpisodes")
+            totalEpisodesForAllShows = totalEpisodesForAllShows + totalEpisodesForShow
+            totalEpisodesWatchedForAllShows = totalEpisodesWatchedForAllShows + totalEpisodesWatchedForShow
             break
         urlToShowEpisodes = strUrl + '/sagex/api?c=xbmc:GetMediaFilesForShowWithSubsetOfProperties&1=' + urllib2.quote(strTitleEncoded) + '&size=500&encoder=json'
         #urlToShowEpisodes = strUrl + '/sagex/api?command=EvaluateExpression&1=FilterByMethod(GetMediaFiles("T"),"GetMediaTitle","' + urllib2.quote(strTitle.encode("utf8")) + '",true)&size=500&encoder=json'
@@ -137,7 +143,8 @@ def VIEWLISTOFRECORDEDSHOWS(url,name):
         imageUrl = strUrl + "/sagex/media/poster/" + strMediaFileID
         fanartUrl = strUrl + "/sagex/media/background/" + strMediaFileID
         #print "ADDING imageUrl=" + imageUrl
-        addDir(strTitleEncoded, urlToShowEpisodes,11,imageUrl,'',strExternalID,strAiringdate,fanartUrl)
+        addDir(strTitleEncoded, urlToShowEpisodes,11,imageUrl,'',strExternalID,strAiringdate,fanartUrl,totalEpisodesForShow,totalEpisodesWatchedForShow,strGenre)
+    addDir('[All Shows]',strUrl + '/sagex/api?c=xbmc:GetMediaFilesForShowWithSubsetOfProperties&1=&size=500&encoder=json',11,IMAGE_POSTER,IMAGE_THUMB,'',now,'',totalEpisodesForAllShows,totalEpisodesWatchedForAllShows,'')
 
 def VIEWLISTOFEPISODESFORSHOW(url,name):
     mfs = executeSagexAPIJSONCall(url, "Result")
@@ -549,6 +556,7 @@ def addMediafileLink(name,url,plot,iconimage,genre,originalairingdate,airingdate
         liz.setIconImage(iconimage)
         liz.setThumbnailImage(iconimage)
         liz.setProperty("fanart_image",fanartimage)
+        xbmcplugin.setContent(int(sys.argv[1]),'episodes')
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
         return ok
 
@@ -591,6 +599,7 @@ def addAiringLink(name,url,plot,iconimage,genre,originalairingdate,airingdate,sh
     liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": plot, "Genre": genre, "date": airingdate, "premiered": originalairingdate, "aired": originalairingdate, "TVShowTitle": showtitle, "season": seasonnum, "episode": episodenum, "studio": studio } )
     liz.setIconImage(iconimage)
     liz.setThumbnailImage(iconimage)
+    xbmcplugin.setContent(int(sys.argv[1]),'episodes')
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
     return ok
 
@@ -664,20 +673,22 @@ def addTopLevelDir(name,url,mode,iconimage,dirdescription):
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
     return ok
 
-def addDir(name,url,mode,iconimage,thumbimage,showexternalid,airingdate,fanartimage):
+def addDir(name,url,mode,iconimage,thumbimage,showexternalid,airingdate,fanartimage,totalepisodesforshow,totalepisodeswatchedforshow,strgenre):
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
     ok=True
     liz=xbmcgui.ListItem(name)
     strSeriesDescription = ""
     strSeriesDescription = getShowSeriesDescription(showexternalid)
 
-    liz.setInfo(type="video", infoLabels={ "Title": name, "Plot": strSeriesDescription, "date": airingdate } )
+    liz.setInfo(type="video", infoLabels={ "Title": name, "Plot": strSeriesDescription, "date": airingdate, "aired": airingdate, "Genre": strgenre, "episode": totalepisodesforshow } )
     liz.setIconImage(iconimage)
     if(thumbimage != ""):
         liz.setThumbnailImage(thumbimage)
     else:
         liz.setThumbnailImage(iconimage)
     liz.setProperty("fanart_image",fanartimage)
+    liz.setProperty("WatchedEpisodes",str(totalepisodeswatchedforshow))
+    liz.setProperty("UnWatchedEpisodes",str(totalepisodesforshow-totalepisodeswatchedforshow))
     
     if(name != "[All Shows]"):
         scriptToRun = "special://home/addons/plugin.video.sagetv/contextmenuactions.py"
@@ -698,7 +709,8 @@ def addDir(name,url,mode,iconimage,thumbimage,showexternalid,airingdate,fanartim
         contextMenuItems.append((__language__(21044), 'XBMC.RunScript(' + scriptToRun + ', ' + actionDeleteAll + ')'))
         liz.addContextMenuItems(contextMenuItems, True)
     
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+    xbmcplugin.setContent(int(sys.argv[1]),'tvshows')
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=totalepisodesforshow)
     return ok
 
 def addChannelDir(name,url,mode,iconimage,channeldescription):
@@ -827,5 +839,4 @@ elif mode==5:
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_EPISODE)
 
-xbmcplugin.setContent(int(sys.argv[1]),'episodes')
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

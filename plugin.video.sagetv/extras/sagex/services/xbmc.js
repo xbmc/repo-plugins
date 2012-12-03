@@ -3,7 +3,7 @@
 * Author: lehighbri
 *
 **********************/
-var XBMCJS_VERSION_NUMBER = '1.0.0';
+var XBMCJS_VERSION_NUMBER = '1.4.2';
 
 function GetXBMCJSVersionNumber() {
    return XBMCJS_VERSION_NUMBER;
@@ -21,6 +21,7 @@ function GetTVMediaFilesWithSubsetOfProperties() {
       show.put('ShowTitle', MediaFileAPI.GetMediaTitle(mf));
       show.put('ShowExternalID', ShowAPI.GetShowExternalID(mf));
       show.put('AiringStartTime', AiringAPI.GetAiringStartTime(mf));
+      show.put('ShowGenre', ShowAPI.GetShowCategoriesString(mf));
       shows.add(show);
    }
    return shows;
@@ -108,16 +109,20 @@ function GetTVMediaFilesGroupedByTitle() {
    var s = files.size();
    for (var i=0;i<s;i++) {
       var file = files.get(i);
-      var shows = grouped.get(file.get('ShowTitle'));
+      var showTitle = file.get('ShowTitle')
+      var shows = grouped.get(showTitle);
       if (shows==null) {
          shows = new java.util.ArrayList();
-         grouped.put(file.get('ShowTitle'), shows);
+         grouped.put(showTitle, shows);
+         var totalEpisodes = GetTotalNumberOfEpisodesForShow(showTitle);
+         var watchedEpisodes = GetTotalNumberOfWatchedEpisodesForShow(showTitle);
+         file.put("TotalEpisodes",totalEpisodes);
+         file.put("TotalWatchedEpisodes",watchedEpisodes);
          shows.add(file);
       }
    }
    return grouped;
 }
-
 function GetPlaylistOfSegmentsForMediafile(mediafileID,sage_rec,sage_unc) {
     var mf = MediaFileAPI.GetMediaFileForID(mediafileID);
     if (mf == "" || sage_rec == "" || sage_unc == "") return "";
@@ -156,4 +161,27 @@ function GetPluginVersion(pluginidentifier) {
       }
    }
    return pluginVersion;
+}
+
+function GetTotalNumberOfEpisodesForShow(showtitle) {
+   var files;
+   if(showtitle == "") {
+      files = MediaFileAPI.GetMediaFiles("T");
+   }
+   else {
+      files = Database.FilterByMethod(MediaFileAPI.GetMediaFiles("T"), "GetMediaTitle", showtitle, true);
+   }
+   return files.length;
+}
+
+function GetTotalNumberOfWatchedEpisodesForShow(showtitle) {
+   var files;
+   if(showtitle == "") {
+      files = MediaFileAPI.GetMediaFiles("T");
+   }
+   else {
+      files = Database.FilterByMethod(MediaFileAPI.GetMediaFiles("T"), "GetMediaTitle", showtitle, true);
+   }
+   files = Database.FilterByBoolMethod(files, "IsWatched", true);
+   return files.length;
 }

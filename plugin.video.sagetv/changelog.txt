@@ -1,3 +1,6 @@
+[B]Version 1.4.2 (Nov 30, 2012)[/B]
+- Included additional show level metadata including # of episodes (both total, watched, and unwatched), genre, and most recent aired date
+
 [B]Version 1.4.1 (Nov 26, 2012)[/B]
 - Included enhanced xbmc.js that was accidentally not checked in with version 1.4.0
 - Included latest language file updates

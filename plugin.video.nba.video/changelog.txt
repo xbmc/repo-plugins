@@ -1,3 +1,13 @@
+[B]Version 1.0.1[/B]
+
+- Updated addon for 2012-2013 NBA season
+- Replaced get_params with getParameters
+- Switched from DVDPLAYER to setResolvedUrl/IsPlayable method for video playback
+- Added watched and resume capabilities
+- Added function to retry on timeout and connection errors
+- Added Buggalo Error Reporting
+- Added default view for Confluence skin
+
 [B]Version 1.0.0[/B]
 
-- Initial commit.
+- Initial commit

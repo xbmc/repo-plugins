@@ -1,3 +1,9 @@
+[B]Version 2.0.4[/B]
+
+- Fixed HTTP 404 Error on PBS Kids videos
+- Fixed "object of type 'NoneType' has no len()" error
+- Fixed "list indices must be integers, not str" error
+
 [B]Version 2.0.3[/B]
 
 - Replaced get_params with getParameters

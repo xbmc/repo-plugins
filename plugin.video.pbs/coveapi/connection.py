@@ -190,7 +190,9 @@ class Requestor(object):
 				error = str(e)
 			if error == None:
 				try:
-					return json.loads(response.read())['results']
+					data = json.loads(response.read())['results']
+					if data != None:
+						return data
 				except Exception, e:
 					error = str(e)
 			retries += 1

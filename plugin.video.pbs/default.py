@@ -5,8 +5,8 @@ from urllib2 import Request, urlopen, URLError, HTTPError
 plugin = "PBS"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '11-25-2012'
-__version__ = '2.0.3'
+__date__ = '11-28-2012'
+__version__ = '2.0.4'
 settings = xbmcaddon.Addon( id = 'plugin.video.pbs' )
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -246,6 +246,19 @@ def play_video( name, url, thumb, plot, studio, starttime, backup_url ):
 		dialog = xbmcgui.Dialog()
 		ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
 		return
+	if url.find('http://urs.pbs.org/redirect/') != -1:
+		print 'PBS - Using backup_url'
+		if backup_url != 'None':
+			play_mp4( name, backup_url, thumb, plot, studio, starttime )
+			return
+		else:
+			dialog = xbmcgui.Dialog()
+			ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
+			ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
+			buggalo.addExtraData('url', url)
+			buggalo.addExtraData('info', studio + ' - ' + name)
+			raise Exception("PBS Kids backup_url ERROR")
+			return
 	data = open_url( url + '&format=SMIL' )
 	print 'PBS - ' + studio + ' - ' + name
 	try:
@@ -275,6 +288,10 @@ def play_video( name, url, thumb, plot, studio, starttime, backup_url ):
 		else:
 			dialog = xbmcgui.Dialog()
 			ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
+			ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
+			buggalo.addExtraData('url', url)
+			buggalo.addExtraData('info', studio + ' - ' + name)
+			raise Exception("backup_url ERROR")
 			return
 	src = re.compile( '<ref src="(.+?)" title="(.+?)" (author)?' ).findall( data )[0][0]
 	# if src.find('m3u8') != -1:
@@ -327,6 +344,8 @@ def open_url(url):
 			data = get_page(url)
 			if data['content'] != None and data['error'] == None:
 				return data['content']
+			if data['error'] == 'HTTP Error 404: NOT FOUND':
+				break
 		except Exception, e:
 			data['error'] = str(e)
 		retries += 1

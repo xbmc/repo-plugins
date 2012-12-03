@@ -1,0 +1,46 @@
+[B]Version 1.0.6[/B]
+
+- Initial commit to Eden and Frodo
+- Fixed error when attempting to play trailer
+- Replaced default folder icon
+- Replaced get_params with getParameters
+- Switched from DVDPLAYER to setResolvedUrl/IsPlayable method for video playback
+- Added watched and resume capabilities
+- Added function to retry on timeout and connection errors
+- Added Buggalo Error Reporting
+- Added default view for Confluence skin
+
+[B]Version 1.0.5[/B]
+
+- Fixed issue with "HD" videos not playing
+
+[B]Version 1.0.4[/B]
+
+- Replaced os.getcwd with addon.getAddonInfo('path')
+- Added Featured Trailers menu
+- Added Front page trailers to the main menu
+- Cleaned up code
+- Updated icon
+- Other minor changes
+
+[B]Version 1.0.3[/B]
+
+- Fixed playback errors
+- Updated icon
+
+[B]Version 1.0.2[/B]
+
+- Added posters to the trailer listings and the "Now Playing" hud
+- Other minor changes
+
+[B]Version 1.0.1[/B]
+
+- Only trailers are listed
+- HD trailers are used if available
+- Added "Coming Soon" page
+- Removed settings menu and download button
+- Other minor changes
+
+[B]Version 1.0.0[/B]
+
+- Converted plugin to the new add-on system.

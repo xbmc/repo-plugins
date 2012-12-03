@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="1.3.2"
-    name="Tagesschau"
-    provider-name="nevermore">
+    version="2.0.0"
+    name="tagesschau"
+    provider-name="Jörn Schumacher, Henning Saul">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
   </requires>
@@ -14,13 +14,13 @@
   <extension point="xbmc.addon.metadata">
     <language>de</language>
     <platform>all</platform>
-    <summary lang="de">Tagesschau</summary>
-    <summary lang="en">Tagesschau</summary>
+    <summary lang="de">Die Nachrichten der ARD</summary>
+    <summary lang="en">News from Germany's public broadcaster ARD</summary>
     <description lang="de">
-      Die 'Tagesschau', 'Tagesschau in 100 Sekunden', 'Tagesthemen' und andere ARD Nachrichtenmagazine.
+      Die Nachrichten der ARD mit aktuellen Videos, kompletten Sendungen und Hintergrundberichten.
     </description>
     <description lang="en">
-      Watch the 'Tagesschau', 'Tagesschau in 100 Sekunden', 'Tagesthemen' and other ARD news magazines from Germany.
+      News in German from Germany's trusted public broadcaster ARD, featuring current videos, complete broadcasts and background information.
     </description>
     <disclaimer lang="en">Videos from tagesschau.de</disclaimer>
   </extension>

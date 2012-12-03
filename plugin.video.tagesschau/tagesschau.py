@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2011 Jörn Schumacher 
+# Copyright 2011 Jörn Schumacher, Henning Saul 
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,94 +15,133 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import urllib2, datetime
+import sys, urllib, urlparse
 
-import xbmcplugin, xbmcgui, xbmcaddon
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
-import parserss
+from tagesschau_json_api import VideoContentProvider, JsonSource, LazyVideoContent
 
-# -- Podcast Configuration -----------------------------------
-podcast_config = {
-    "tagesschau": { "url": {"M": "http://www.tagesschau.de/export/video-podcast/webm/tagesschau",
-                            "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesschau" },
-                    "name": "Tagesschau"},
-    "tagesschau100": { "url": { "default": "http://www.tagesschau.de/export/video-podcast/tagesschau-in-100-sekunden" },
-                       "name": "Tagesschau in 100 Sekunden" },
-    "tagesthemen": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/tagesthemen",
-                            "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesthemen" },
-                     "name": "Tagesthemen" },
-    "tageswebschau": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/tageswebschau" },
-                       "name": "tagesWEBschau" }, 
-    "nachtmagazin": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/nachtmagazin",
-                               "L": "http://www.tagesschau.de/export/video-podcast/webl/nachtmagazin" },
-                      "name": "Nachtmagazin" },
-    "berichtausberlin": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/bab",
-                                   "L": "http://www.tagesschau.de/export/video-podcast/webl/bab" },
-                          "name": "Bericht aus Berlin" },
-    "wochenspiegel": { "url": {"M": "http://www.tagesschau.de/export/video-podcast/webm/wochenspiegel",
-                               "L": "http://www.tagesschau.de/export/video-podcast/webl/wochenspiegel" },
-                       "name": "Wochenspiegel" },
-    "deppendorfswoche": { "url": { "default": "http://www.tagesschau.de/export/video-podcast/deppendorfswoche" },
-                          "name": "Deppendorfs Woche" },
-    "tagesschauvor20jahren": { "url": { "M": "http://www.tagesschau.de/export/video-podcast/webm/tagesschau-vor-20-jahren",
-                                        "L": "http://www.tagesschau.de/export/video-podcast/webl/tagesschau-vor-20-jahren" },
-                               "name": "Tagesschau vor 20 Jahren" }
-    }
-# ------------------------------------------------------------
+# -- Constants ----------------------------------------------
+ADDON_ID = 'plugin.video.tagesschau'
+FANART = xbmc.translatePath('special://home/addons/' + ADDON_ID + '/fanart.jpg')
+ACTION_PARAM = 'action'
+FEED_PARAM = 'feed'
+ID_PARAM = 'tsid'
+URL_PARAM = 'url'
+
+DEFAULT_IMAGE_URL = 'http://miss.tagesschau.de/image/sendung/ard_portal_vorspann_ts.jpg'
 
 # -- Settings -----------------------------------------------
-settings = xbmcaddon.Addon(id='plugin.video.tagesschau')
+settings = xbmcaddon.Addon(id=ADDON_ID)
 quality_id = settings.getSetting("quality")
 quality = ['M', 'L'][int(quality_id)]
 
-# change order here or remove elements if you like
-podcasts = ("tagesschau", "tagesschau100", "tagesthemen", "tageswebschau", "nachtmagazin", 
-            "berichtausberlin", "wochenspiegel", "deppendorfswoche", "tagesschauvor20jahren")
+# -- I18n ---------------------------------------------------
+language = xbmcaddon.Addon(id='plugin.video.tagesschau').getLocalizedString
+strings = { 'latest_videos': language(30100),
+            'latest_broadcasts': language(30101),
+            'dossiers': language(30102),
+            'archived_broadcasts': language(30103)
+}
 
-# Time format
-datetimeformat = "%a %d. %B %Y, %H:%M"
-dateformat = "%a %d. %B %Y"
 # ------------------------------------------------------------
 
-def getUrl(podcast, quality):
-    """Returns podcast URL in the desired quality (if available)"""
-    config = podcast_config[podcast]["url"]
-    if quality in config.keys():
-        return config[quality]
 
-    default_quality = config.keys()[0]
-    return config[default_quality]
+def addVideoContentDirectory(title, method):
+    url_data = { ACTION_PARAM: 'list_feed',
+                 FEED_PARAM: method  }
+    url = 'plugin://' + ADDON_ID + '/?' + urllib.urlencode(url_data)
+    li = xbmcgui.ListItem(title, thumbnailImage=DEFAULT_IMAGE_URL)
+    li.setProperty('Fanart_Image', FANART)
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)    
+    
+def getListItem(videocontent):    
+    title = videocontent.title
+    image_url = videocontent.image_url()
+    if(not image_url):
+        image_url = DEFAULT_IMAGE_URL
+    li = xbmcgui.ListItem(title, thumbnailImage=image_url)
+    li.setProperty('Fanart_Image', FANART)
+    li.setProperty('IsPlayable', 'true')
+    li.setInfo(type="Video", infoLabels={ "Title": title,
+                                          "Plot": videocontent.description,
+                                          "Duration": str((videocontent.duration or 0) / 60) })    
+    return li
 
-def getName(podcast, item):
-    """Returns a proper name for an item"""
-    if item["datetime"]:
-        name = podcast_config[podcast]["name"]
-        date, time = item["datetime"]
-        timestr = ""
+def getUrl(videocontent, method):
+    url_data = { ACTION_PARAM: 'play_video' }
+    # for LazyVideoContent let's defer its expensive video_url call
+    if isinstance(videocontent, LazyVideoContent):
+        url_data[FEED_PARAM] = method
+        url_data[ID_PARAM] = urllib.quote(videocontent.tsid)
+    else:
+        url_data[URL_PARAM] = urllib.quote(videocontent.video_url(quality))
+    return 'plugin://' + ADDON_ID + '?' + urllib.urlencode(url_data)
+    
+def addVideoContentItem(videocontent, method):
+    li = getListItem(videocontent)
+    url = getUrl(videocontent, method)  
+    return xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, li, False)
 
-        # special treatment for "Tagesschau vor 20 Jahren"
-        if podcast == "tagesschauvor20jahren":
-            date = datetime.date(date.year - 20, date.month, date.day)
+def addVideoContentItems(videocontents, method):
+    items = []
+    for videocontent in videocontents:
+        li = getListItem(videocontent)
+        url = getUrl(videocontent, method)
+        items.append((url, li, False))   
+    return xbmcplugin.addDirectoryItems(int(sys.argv[1]), items, len(items))
 
-        if date and time:
-            timestr = datetime.datetime.combine(date,time).strftime(datetimeformat)
-        else:
-            timestr = date.strftime(dateformat)
-        return name + " (" + timestr + ")"
+def get_params():
+    paramstring = sys.argv[2]
+    params = urlparse.parse_qs(urlparse.urlparse(paramstring).query)
+    
+    for key in params:
+        params[key] = params[key][0]
+    return params
+    
+# TODO: can't figure out how to set fanart for root/back folder of plugin
+# http://trac.xbmc.org/ticket/8228? 
+xbmcplugin.setPluginFanart(int(sys.argv[1]), 'special://home/addons/' + ADDON_ID + '/fanart.jpg')
 
-    return item["title"]
+params = get_params()
+provider = VideoContentProvider(JsonSource())
 
-def addLink(name, url, iconimage, description):
-        ok = True
-        liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo(type="Video", infoLabels={ "Title": name, "Plot": description } )
-        ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=liz)
-        return ok
+if params.get(ACTION_PARAM) == 'play_video':
+    # expecting either url or feed and id param
+    url = params.get(URL_PARAM)
+    if url:
+        url = urllib.unquote(url) 
+    else: 
+        videos_method = getattr(provider, params[FEED_PARAM])
+        videos = videos_method()    
+        tsid = urllib.unquote(params[ID_PARAM])
+        # find video with matching tsid
+        for video in videos:
+            if video.tsid == tsid:
+                url = video.video_url(quality)    
+    listitem = xbmcgui.ListItem(path=url)
+    xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=(url != None), listitem=listitem)
 
-for podcast in podcasts:
-    feed = parserss.parserss(getUrl(podcast, quality))
-    if len(feed["items"]) > 0:
-        item = feed["items"][0]
-        addLink(getName(podcast, item), item["media"]["url"], feed["image"], item.get("description", ""))
+elif params.get(ACTION_PARAM) == 'list_feed':
+    # list video for a directory
+    videos_method = getattr(provider, params[FEED_PARAM])
+    videos = videos_method()
+    addVideoContentItems(videos, params[FEED_PARAM])
 
+else:
+    # populate root directory
+    # check whether there is a livestream
+    videos = provider.livestreams()
+    if(len(videos) == 1):
+        addVideoContentItem(videos[0], "livestreams")
+
+    # add directories for other feeds        
+    add_named_directory = lambda x: addVideoContentDirectory(strings[x], x)
+    add_named_directory('latest_videos')
+    add_named_directory('latest_broadcasts')
+    add_named_directory('dossiers')
+    add_named_directory('archived_broadcasts')   
+        
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+

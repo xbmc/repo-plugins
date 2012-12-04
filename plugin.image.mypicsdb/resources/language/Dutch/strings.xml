@@ -15,7 +15,7 @@
 
 	<string id="30020">Afbeeldingen locatie</string>
 	<string id="30021">Verwijderen ontbrekende afbeeldingen</string>
-	<string id="30022">Recursieve scan ( incl. sub-folders )</string>
+	<string id="30022">Recursieve scan (incl. sub-folders)</string>
 	<string id="30023">Bestandstypen afbeeldingen</string>
 	<string id="30024">Uitvoeren scan bij opstarten add-on</string>
 	<string id="30025">Initialiseer database bij opstarten add-on</string>
@@ -25,7 +25,7 @@
 	<string id="30029">Gebruik videos</string>
 	<string id="30030">Algemeen</string>
 	<string id="30031">Bestanden</string>
-	<string id="30032">Ouderdom recente afbeeldingen (dagen)</string>
+	<string id="30032">Ouderdom recente afbeeldingen (aantal dagen)</string>
 	<string id="30033">Menu items</string>
 	<string id="30034">Geef alle afbeelingen weer</string>
 	<string id="30035">Aantal afbeeldingen per pagina</string>
@@ -48,17 +48,17 @@
 	<string id="30063">Voeg bestand toe aan archief</string>
 	<string id="30064">Archief '%s' bestaat al</string>
 	<string id="30065">Overschrijven ?</string>
-	<string id="30066">Archive canceled.</string>
-	<string id="30067">Afbeelding toevoegen aan archive</string>
+	<string id="30066">Archiveer afgebroken</string>
+	<string id="30067">Afbeelding toevoegen aan archief</string>
 	<string id="30068">Het archiveren is afgebroken</string>
-	<string id="30069">%s errors while archiving %s files</string>
+	<string id="30069">%s fouten tijdens archiveren %s bestanden</string>
 	<string id="30070">%s afbeeldingen succesvol gearchiveerd</string>
-	<string id="30071">Localization of the picture on disk</string>
+	<string id="30071">Lokaliseren van afbeelding op disk</string>
 
 	<string id="30090">Afbeeldingen zonder plaats</string>
 	<string id="30091">Afbeeldingen zonder land</string>
 	<string id="30092">Overige afbeeldingen in '%s'</string>
-	<string id="30093">Weergeven locatie</string>
+	<string id="30093">Weergeven land</string>
 	<string id="30094">Weergeven categorie</string>
 	<string id="30095">Weergeven subcategorie</string>
 	<string id="30096">Afbeeldingen zonder categorie</string>
@@ -81,14 +81,15 @@
 	<string id="30113">van %s tot %s</string>
 	<string id="30114">Geef datum in</string>
 	<string id="30115">Zoekwoord</string>
-	<string id="30116">%s results for '%s' in '%s'</string>
+	<string id="30116">%s resultaten voor '%s' in '%s'</string>
 	<string id="30117">Begindatum periode</string>
 	<string id="30118">Einddatum periode</string>
 	<string id="30119">Zoekopdracht '%s' niet gevonden</string>
 	<string id="30120">Weergeven personen</string>
 	<string id="30121">Afbeeldingen zonder personen</string>
 	<string id="30122">Weergeven tags</string>
-
+    <string id="30123">Help</string>
+    
 	<string id="30130">Laatste %s afbeeldingen</string>
 	<string id="30131">Recente afbeeldingen (aantal afbeeldingen)</string>
 	<string id="30132"></string>
@@ -138,9 +139,11 @@
 	<string id="30212">Directory uitsluiten</string>
 	<string id="30213">Alle directories scannen</string>	
 	<string id="30214">Ja = alle afbeeldingen scannen</string>
-	<string id="30215">Nee = alleen gewijzigde/nieuwe afbeelinegn scannen</string>
+	<string id="30215">Nee = alleen gewijzigde/nieuwe afbeelingen scannen</string>
 	<string id="30216"></string> <!-- placeholder for third line of above questions -->
-
+    <string id="30217">De folders dienen opnieuw gescand te worden</string>
+    <string id="30218">uitsluiten afbeeldingen</string>
+    
 	<string id="30220">Geolocatie</string>
 	<string id="30221">Opvragen kaart... (%0.2f%%)</string>
 	<string id="30222">Zoom=%s</string>
@@ -152,12 +155,12 @@
 	<string id="30228"></string>
 
 	<string id="30240"></string>
-	<string id="30241">Aan het voorbereiden</string>
-	<string id="30242">Aan het verversen</string>
+	<string id="30241">Voorbereiden</string>
+	<string id="30242">Verversen</string>
 	<string id="30243">passing</string>
-	<string id="30244">Aan het toevoegen</string>
+	<string id="30244">Toevoegen</string>
 	<string id="30245">Herscannen</string>
-	<string id="30246">Aan het verwijderen</string>
+	<string id="30246">Verwijderen</string>
 	<string id="30247">Momentje...</string>
 	<string id="30248">%s gescanned / %s toegevoegd / %s verwijderd / %s gewijzigd</string>
 	<string id="30249"></string>
@@ -182,11 +185,11 @@
 	<string id="30601">Tags</string>
 	<string id="30602">Waarde</string>
 
-	<string id="30610">Selecteer een tags (red checkbox means "not")</string>
+	<string id="30610">Selecteer een tag (red checkbox betekend "niet/not")</string>
 	<string id="30611">1 tag ingevoerd</string>
 	<string id="30612">%s tags ingevoerd</string>
 	<string id="30613">OK</string>
-	<string id="30614">Cancel</string>
+	<string id="30614">Afbreken</string>
 	<string id="30615">Match alle tags</string> 
 
 	<string id="30620">Synoniemen voor tags</string>

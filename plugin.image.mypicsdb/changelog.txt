@@ -1,3 +1,98 @@
+2012/12/03 --> v 1.2.9
+Update: Changed version number to 3 digits due to request from XBMC team
+
+2012/12/03 --> v 1.2.8.4
+Fix:    Fanart picture for list items removed.
+
+2012/11/28 --> v 1.2.8.3
+Fix:    Debug prints removed
+
+2012/11/27 --> v 1.2.8.2
+Fix:    Scanning fixed for Frodo Beta 1
+
+2012/11/26 --> v 1.2.8.1
+Update: Settings dialog changed
+
+2012/11/19 --> v 1.2.8
+Update: Changed for first Frodo beta release
+
+2012/11/14 --> v 1.2.7.6
+Fix:    In any case of an IPTC parser error the complete IPTC tags for the picture will be ignored.
+Update: Several new imported XMP Iptc4xmpCore and Iptc4xmpExt tags which replace IPTC IIM tags.
+
+2012/11/07 --> v 1.2.7.5
+Fix:    Unicode error in collections fixed.
+
+2012/11/07 --> v 1.2.7.4
+Update: Counting pictures in subfolders changed due to performance.
+
+2012/11/07 --> v 1.2.7.3
+Fix:    Counting tags corrected.
+Update: 2 new indexes on table folders and one changed on table files
+
+2012/11/06 --> v 1.2.7.2
+Fix:    Periods now work even if there are NULL dates in the pictures
+
+2012/11/06 --> v 1.2.7.1
+Fix:    Browse by date now works even if there are NULL dates in the pictures
+
+2012/11/05 --> v 1.2.4 - 1.2.7
+Fix:    Changed string variables in SQL statements to bind variables.
+Fix:    Unicode issue in RequestWithBinds()
+Update: Performance update. New function list_TagTypesAndCount().
+
+2012/11/04 --> v 1.2.3
+Fix:    Apostrophes in tags caused errors
+
+2012/11/04 --> v 1.2.2
+Fix:    DB cleanup function had a bug which caused the "browse by folder" and "browse by date" menus to stop working.
+
+2012/11/03 --> v 1.2.1
+Fix:    Needed version of script.module.dialogaddonscan set to 1.1.1 due to Frodo changes in add-on.
+
+2012/11/02 --> v 1.2
+Fix:    Several fixes for Frodo
+
+2012/10/30 --> v 1.1.9.1
+Update: Initialization of DB changed. See readme.txt chapter 2)
+Fix:    storageserverdummy path corrected
+
+2012/10/27 --> v 1.1.9
+Fix:    Missing EXIF version caused an SQL error.
+Fix:    Several fixes for filenames containing an apostrophe
+Update: Removing missing files and directories from database improved.
+
+2012/10/23 --> v 1.1.8.1
+Fix:    Deleting files containing an apostrophe.
+Fix:    Debug prints deleted in scanpath.py
+
+2012/10/23 --> v 1.1.8
+Fix:    Path fixed when retrieving "EXIF DateTimeOriginal", "EXIF ExifImageWidth" and "EXIF ExifImageLength".
+Fix:    EXIF parser now handles JPEG marker APP14 (0xFFEE) with Segment Adobe correctly.
+
+2012/10/22 --> v 1.1.7
+Fix:    SQL statement to get the "EXIF DateTimeOriginal" changed due to exceptions if tag isn't set.
+
+2012/10/16 --> v 1.1.6
+Update: Filter Wizard only show tags if there are pictures
+Update: Main menu contains a help menu item which shows the readme.txt
+
+2012/10/15 --> v 1.1.5
+Update: After adding an exclude path a hint dialog box is displayed to inform the user to rescan the paths.
+Update: Exclude path can be entered before adding the first include path
+Update: Browse by folder now with sort method label
+
+2012/10/12 --> v 1.1.4
+Fix:    Video menu didn't show any videos
+
+2012/10/10 --> v 1.1.3
+Update: Container.Refresh(...) for new exclude path(s)
+
+2012/10/09 --> v 1.1.2
+Update: New XMP tag Iptc4xmpExt:PersonInImage for people tagging and several more from Iptc4xmpExt extension
+Fix:    Now Frodo compatible
+Fix:    Warning message "problems with charset recognition" removed from IPTC parser
+
 2012/10/06 --> v 1.1.1
 Fix:    Two UTF-8 / Unicode conversion errors fixed.
 

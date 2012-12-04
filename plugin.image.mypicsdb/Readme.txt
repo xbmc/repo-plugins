@@ -1,4 +1,4 @@
-1) Howto
+1) How to include picture paths
 ==================================================================================
 Don't change the plugin configuration unless you know what you do!
 
@@ -21,14 +21,27 @@ c) Linux, MacOS, OpenELEC
    You must locally mount your remote directory and then add the local mount point to XBMC as a picture source.
    Afterwards MyPicsDB can access the "local" pictures.
 
+   
+Excluding paths
+a) Add the exclude path(s) via menu "Paths of pictures folders".
+b) Rescan the paths which contain these added exclude paths to remove the pictures from MyPicsDB
 
-2) Please translate MyPicsDB into your native language!
+2) General problems with MyPicsDB
+==================================================================================
+If you have unexplainable problems like pictures don't get included into database and you're a long time user of MyPicsDB 
+then it will be a good decision to delete the database and start with a new one.
+To do this select "Pictures->Add-ons", press "C" and select "Add-on settings". Activate "Initialze the database at next startup" on tab "General" and press "OK".
+Then start MyPicsDB. All tables (except table rootpaths which includes your entered picture paths) are dropped and recreated. 
+This means that the already entered paths are still available and that you can start a rescan with "Paths of picture folders"->"Scan all paths". 
+Because all pictures were deleted from database it doesn't matter what you select in the following dialog box.
+
+3) Please translate MyPicsDB into your native language!
 ==================================================================================
    Files can be found in plugin.image.mypicsdb/resources/language
    Please be aware that the / must be replaced with a \ for Windows!
 
 
-3) Auto-update  MyPicsDB
+4) Auto-update  MyPicsDB
 ==================================================================================
    Idea from Fungify 
    You can call (example for Windows):
@@ -38,7 +51,7 @@ c) Linux, MacOS, OpenELEC
    Fungify uses this approach to automatically update MyPicsDB via HTTP API with a cron job.
    wget --directory-prefix=tmp --http-user=<xbmc username> --http-passwd=<xbmc password> "http://Servername:Portnumber/xbmcCmds/xbmcHttp?command=ExecBuiltIn&parameter=XBMC.RunScript("<full path to plugin>\plugin.image.mypicsdb\scanpath.py",--database)
 
-4) For skinners
+5) For skinners
 ==================================================================================
   Done by MikeBZH44
 

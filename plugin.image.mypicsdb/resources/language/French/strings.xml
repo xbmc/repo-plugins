@@ -88,6 +88,7 @@
     <string id="30120">Recherche par personnes</string>
     <string id="30121">Images sans personnes dessus</string>
     <string id="30122">Parcourir par étiquettes</string>
+    <string id="30123">Help</string>
     
     <string id="30130">Les %s dernières photos</string>
     <string id="30131">Photos récentes (nombre de photos)</string>
@@ -140,7 +141,9 @@
     <string id="30214">Oui = scanner toutes les photos.</string>
     <string id="30215">Non = scanner seulement les photos modifiées / ajoutées.</string>
     <string id="30216"></string> <!-- placeholder for third line of above questions -->
-
+    <string id="30217">You must rescan the folders</string>
+    <string id="30218">to exclude the pictures!</string>
+    
     <string id="30220">Géolocaliser</string>
     <string id="30221">Récupération de la carte... (%0.2f%%)</string>  <!-- %0.2f%% will be replaced by the percent of download for a map -->
     <string id="30222">Zoom=%s</string>       <!-- %s will be replaced by the zoom level in a map -->

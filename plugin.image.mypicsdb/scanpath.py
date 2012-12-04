@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
-
+ 
 usagestr = """
 requires : MyPictures Database library
 requires : XBMC mediacenter (at least Dharma version)
@@ -77,6 +77,7 @@ from traceback import print_exc,format_tb
 if sysmodules.has_key("MypicsDB"):
     del sysmodules["MypicsDB"]
 import MypicsDB as MPDB
+import CharsetDecoder as decoder
 
 global pictureDB
 pictureDB = join(DB_PATH,"MyPictures.db")
@@ -138,6 +139,7 @@ def main2():
 
     #dateadded = strftime("%Y-%m-%d %H:%M:%S")#pour inscrire la date de scan des images dans la base
     if options.rootpath:
+        options.rootpath = decoder.smart_utf8(unquote_plus( options.rootpath)).replace("\\\\", "\\").replace("\\\\", "\\").replace("\\'", "\'")
         #print "options.rootpath = " + smart_unicode(options.rootpath).encode('utf-8')
         scan = AddonScan()
         scan.create( __language__(30000) )
@@ -248,7 +250,8 @@ def browse_folder(dirname,parentfolderID=None,recursive=True,updatepics=False,ad
     sys_enc = sys.getfilesystemencoding()
     dirname = smart_unicode(dirname)
 
-    #print "In browse_folder"
+    print "In browse_folder"
+    print decoder.smart_utf8(dirname)
 
     #######
     # Pre STEP: cleanup keywords in database
@@ -282,7 +285,7 @@ def browse_folder(dirname,parentfolderID=None,recursive=True,updatepics=False,ad
 
     except:
         print_exc()
-        MPDB.log( "Error while trying to get directory content" )
+        MPDB.log( "Error while trying to get directory content", MPDB.LOGERROR )
         listdir=[]
 
 
@@ -330,8 +333,6 @@ def browse_folder(dirname,parentfolderID=None,recursive=True,updatepics=False,ad
             #on enlève l'image traitée de listdir
             if len(listdir) > 0:
                 listdir.pop(listdir.index(picfile))
-                #print "Pop "
-                #print smart_unicode(picfile).encode('utf-8')
             if not rescan: #si pas de rescan
                 #les images ne sont pas à scanner de force
                 if picfile in listDBdir: #si l'image est déjà en base
@@ -339,14 +340,12 @@ def browse_folder(dirname,parentfolderID=None,recursive=True,updatepics=False,ad
                     if updatepics: #si le paramètre est configuré pour mettre à jour les metas d'une photo
                         #Il faut mettre à jour les images...
                         if extension in vidsext:
-                            print "Video"
                             DoScan = True
                             update = True
                             straction = __language__(30242)#Updating
                             if file_is_accessible(dirname, picfile):
                                 cptchanged = cptchanged + 1
                         elif not (MPDB.fileSHA(join(dirname,picfile))==MPDB.getFileSha(dirname,picfile)): #si l'image a changé depuis qu'elle est en base
-                            print "No Video"
                             #Scan les metas et ajoute l'image avec un paramètre de mise à jour = true
                             DoScan = True
                             update = True
@@ -406,8 +405,23 @@ def browse_folder(dirname,parentfolderID=None,recursive=True,updatepics=False,ad
                         picentry.update(get_metas(dirname,picfile))
                     # insert picture into table files
                     try:
+                        for index in picentry:
+                            if isinstance(picentry[index], str) == False        \
+                              and isinstance(picentry[index], unicode) == False \
+                              and isinstance(picentry[index], int) == False     \
+                              and isinstance(picentry[index], long) == False    \
+                              and isinstance(picentry[index], float) == False:
+                                    picentry[index] = ""
+
+                        #if isinstance(picentry['EXIF ExifVersion'], str) == False:
+                            #picentry['EXIF ExifVersion'] = ""
+
                         MPDB.DB_file_insert(dirname,picfile,picentry,update)
                     except MPDB.MyPictureDB:
+                        print "Error in " + smart_unicode(dirname).encode('utf-8') + "  File:" + smart_unicode(picfile).encode('utf-8')
+                        print "Parameter set start"
+                        print picentry
+                        print "Parameter set end"
                         pass
                 except:
                     print_exc()
@@ -439,13 +453,13 @@ def browse_folder(dirname,parentfolderID=None,recursive=True,updatepics=False,ad
         MPDB.log( "" )
 
     if cpt:
-        MPDB.log( "%s new pictures found in %s"%(str(cpt),dirname) )
+        MPDB.log( "%s new pictures found in %s"%(str(cpt),dirname), MPDB.LOGNOTICE )
         #unicode(info.data[k].encode("utf8").__str__(),"utf8")
         compte=compte+cpt
         cpt=0
     if recursive: #gestion de la recursivité. On rappel cette même fonction pour chaque dossier rencontré
-        MPDB.log( "scan the subfolders of :")
-        MPDB.log( dirname )
+        MPDB.log( "scan the subfolders of :", MPDB.LOGNOTICE)
+        MPDB.log( dirname, MPDB.LOGNOTICE )
         for item in listdir:
             try:
                 joineddir = join(dirname,item)
@@ -471,12 +485,7 @@ def file_is_accessible(dirname, picfile):
     dirname = smart_unicode(dirname)
     picfile = smart_unicode(picfile)
 
-    #print "is_accessible"
-    #print dirname.encode('utf-8')
-    #print picfile.encode('utf-8')
-
     filename = smart_unicode(join(dirname,picfile))
-    #print filename.encode('utf-8')
 
     try:
         a=str(stat(filename).st_mtime)
@@ -484,7 +493,6 @@ def file_is_accessible(dirname, picfile):
         try:
             a=str(stat(filename.encode('utf-8')).st_mtime)
         except:
-            #print "False stat"
             return False
     try:
         f = open(filename , 'rb')
@@ -494,10 +502,8 @@ def file_is_accessible(dirname, picfile):
             f = open(filename.encode('utf-8') , 'rb')
             f.close()
         except:
-            #print "False open"
             return False
 
-    #print "True"
     return True
 
 
@@ -528,7 +534,7 @@ def get_metas(dirname,picfile):
             #EXIF infos are added to a dictionnary
             picentry.update(exif)
         except:
-            print "Exception thrown from  MPDB.get_exif"
+            print "Exception thrown from MPDB.get_exif"
 
         ###############################
         #    getting  IPTC  infos     #
@@ -539,7 +545,7 @@ def get_metas(dirname,picfile):
             #IPTC infos are added to a dictionnary
             picentry.update(iptc)
         except:
-            print "Exception thrown from  MPDB.get_iptc"
+            print "Exception thrown from MPDB.get_iptc"
 
         ###############################
         #    getting  XMP infos       #
@@ -548,13 +554,13 @@ def get_metas(dirname,picfile):
             xmp = MPDB.get_xmp(dirname, picfile)
             picentry.update(xmp)
         except:
-            print "Exception thrown from  MPDB.get_xmp"
+            print "Exception thrown from MPDB.get_xmp"
 
         
     else:
         picentry={}
         #this should never happen
-        print "file was neither of video type, nor picture type... Check the extensions in settings"
+        MPDB.log( "file was neither of video type, nor picture type... Check the extensions in settings", LOGNOTICE )
 
     return picentry
 

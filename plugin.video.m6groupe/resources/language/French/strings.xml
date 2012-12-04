@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Plugin name -->
+  <string id="30000">M6 groupe</string>
+  <!-- Settings -->
+  <string id="30001">Général</string>
+  <string id="30010">Chaînes</string>
+  <string id="30011">M6 et W9</string>
+  <string id="30012">M6</string>
+  <string id="30013">W9</string>
+  <string id="30020">Afficher par</string>
+  <string id="30021">genres</string>
+  <string id="30022">clips</string>
+  <string id="30101">Avancé</string>
+  <string id="30102">Délai de rafraichissement du catalogue (minutes)</string>
+</strings>

@@ -1,0 +1,8 @@
+[B]Version 1.0.1[/B]
+
+- Added M6 and W9 thumbnails
+
+[B]Version 1.0.0[/B]
+
+- Initial release
+- Icon by freezy (thanks!)

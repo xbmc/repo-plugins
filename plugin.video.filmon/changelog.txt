@@ -1,3 +1,14 @@
+v3.2.2
+Fixed Favorites
+Fixed Tvguide in Favorites
+
+v3.2.1
+Fixed Recordings
+Changed So Player Not Directly Called
+
+v3.2.0
+Fixed Encode Error
+
 V3.1.9
 Added Auto Select Stream Resolution
 Clean Up Code

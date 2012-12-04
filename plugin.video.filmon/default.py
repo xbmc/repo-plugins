@@ -26,6 +26,8 @@ from hashlib import md5
 import json
 from threading import Timer
 from t0mm0.common.net import Net
+
+
 net = Net()
 ADDON = xbmcaddon.Addon(id='plugin.video.filmon')
 resolution=ADDON.getSetting('res')
@@ -104,6 +106,7 @@ def GROUPS():
                 url = field['group_id']
                 name = field['group']
                 iconimage= field['logo_148x148_uri']
+                name = name.encode("utf-8")
                 ADD_DIRECTORY_ITEM(name,url,3,iconimage,'','','','','','','','')
                 setView('tvshows', 'default') 
         
@@ -189,13 +192,14 @@ def CHANNELS(name,url):
         data = json.loads(link, encoding='utf8')
         channels = data['channels']
         for field in data['channels']:
-            url = field["id"]
+            programme_id = field["id"]
             name = field["title"]
             icon = field["logo"]
             iconimage = str(icon).replace('/logo','/extra_big_logo')
             description = ''
             name = name.encode("utf-8")
-            ADD_DIRECTORY_ITEM(name,url,2,iconimage,description,'favorites','','','','tvguide','','')
+            url = GET_STREAMS(programme_id)
+            ADD_STREAM_LINK(name,url,iconimage,description,'favorites','','','','tvguide',programme_id,'')
             setView('episodes', 'default') 
             
     
@@ -218,7 +222,7 @@ def GET_STREAM_RESOLUTION(channels,resolution,watch_timeout):
     return None 
      
                       
-def GET_STREAMS(url,iconimage):
+def GET_STREAMS(url):
         url='http://www.filmon.com/api/channel/%s?session_key=%s' % (url,ses)
         link = net.http_GET(url).content
         data = json.loads(link)
@@ -243,9 +247,7 @@ def GET_STREAMS(url,iconimage):
             swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
             pageUrl = 'http://www.filmon.com/'
             url= str(url)+' playpath='+str(playpath)+' app='+str(app)+' swfUrl='+str(swfUrl)+' tcUrl='+str(tcUrl)+' pageurl='+str(pageUrl)
-            xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(url)
-            ADD_STREAM_LINK(name,url,iconimage,'','','','','','','','')
-            setView('movies', 'default') 
+        return url
                         
                     
 def GET_RECORDINGS(url):
@@ -260,23 +262,12 @@ def GET_RECORDINGS(url):
             channel = field['channel_id']
             time = field['time_start']
             status = field['status']
-            playPath = field['stream_name']
             url= field['stream_url']
-            foregex = field['stream_url']+'<'
-            regex = re.compile('rtmp://(.+?)/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)/(.+?)<')
-            match1 = regex.search(foregex)
             time=float(time)
             desc = desc.encode('utf-8')
             d=date.fromtimestamp(time).strftime("%d/%m/%Y")
             description='[B][%s][/B]\n%s'%(d,desc)
             iconimage='https://static.filmon.com/couch/channels/%s/extra_big_logo.png' % str(channel)
-            try:
-	            app = '%s/%s/%s/%s/%s/%s' %(match1.group(2), match1.group(3),match1.group(4),match1.group(5),match1.group(6),match1.group(7))
-            except:
-	            app = ''
-            swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
-            pageUrl = 'http://www.filmon.com/my/recordings'
-            url= str(url)+' playpath='+str(playPath)+' app='+str(app)+' swfUrl='+str(swfUrl)+' tcUrl='+str(url)+' pageurl='+str(pageUrl)
             if status=='Recorded':
 	            status=language(30050)
 	            name='%s %s' %(status,name)
@@ -363,6 +354,8 @@ def RETURN_CHANNEL_NAME_FAVOURITES(url):
     name=data['title']
     name=name.encode('utf-8')
     return name
+    
+    
 
 def GET_FAVOURITES(url):
     grp='http://www.filmon.com/api/favorites?session_key=%s&run=get'% (ses)
@@ -370,10 +363,11 @@ def GET_FAVOURITES(url):
     data=json.loads(link)
     result=data['result']
     for field in result:
-        url=field['channel_id']
-        iconimage='http://static.filmon.com/couch/channels/%s/extra_big_logo.png'%(url)
-        name=RETURN_CHANNEL_NAME_FAVOURITES(url)
-        ADD_DIRECTORY_ITEM(name,url,2,iconimage,'','','delete','','','tvguide','','')
+        programme_id=field['channel_id']
+        iconimage='http://static.filmon.com/couch/channels/%s/extra_big_logo.png'%(programme_id)
+        name=RETURN_CHANNEL_NAME_FAVOURITES(programme_id)
+        url = GET_STREAMS(programme_id)
+        ADD_STREAM_LINK(name,url,iconimage,'','','delete','','','tvguide',programme_id,'')
         setView('movies', 'default') 
                 
 def ADD_FAVOURITES(url):
@@ -451,7 +445,7 @@ def ADD_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record
               liz.addContextMenuItems(items=menu, replaceItems=True)
               
         if tvguide:
-              menu.append((language(30058),'XBMC.Container.Update(%s?name=None&url=%s&mode=8&iconimage=%s&description=None)'%(sys.argv[0],url,iconimage)))
+              menu.append((language(30058),'XBMC.Container.Update(%s?name=None&url=%s&mode=8&iconimage=%s&description=None)'%(sys.argv[0],programme_id,iconimage)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
         return ok 

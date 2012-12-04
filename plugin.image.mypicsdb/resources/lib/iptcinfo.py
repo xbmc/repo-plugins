@@ -901,7 +901,7 @@ class IPTCInfo(object):
             try:
               cs = unpack('!H', temp)[0]
             except:
-              print 'WARNING: problems with charset recognition', repr(temp)
+              #print 'WARNING: problems with charset recognition', repr(temp)
               cs = sys_enc
             self.inp_charset = self.c_charset.get(cs, sys_enc)
             self.log("BlindScan: found character set '%s' at offset %d"

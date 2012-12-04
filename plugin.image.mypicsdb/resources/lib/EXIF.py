@@ -1631,7 +1631,7 @@ def process_file(f, stop_tag='UNDEF', details=True, strict=False, debug=False):
         offset = 0
     elif data[0:2] == '\xFF\xD8':
         # it's a JPEG file
-        while data[2] == '\xFF' and data[6:10] in ('JFIF', 'JFXX', 'OLYM', 'Phot'):
+        while data[2] == '\xFF' and data[6:10] in ('JFIF', 'JFXX', 'OLYM', 'Phot', 'Adob'):        
             length = ord(data[4])*256+ord(data[5])
             f.read(length-8)
             # fake an EXIF beginning of file

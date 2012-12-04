@@ -17,7 +17,7 @@
   <category label="30031">
     <setting id="picsext" type="text" label="30023" default="JPG|JPEG|TIF|PNG|GIF|BMP" />
     <setting id="usevids" type="bool" label="30029" default="true" />
-    <setting id="vidsext" type="text" label="30028" default="AVI|MPEG|MP4|MOV|MP2|MP4|FLV" enable="eq(-1,true)"/>
+    <setting id="vidsext" type="text" label="30028" default="AVI|MPEG|MPG|MKV|MOV|MP2|MP4|FLV" enable="eq(-1,true)"/>
   </category>
 
   <category label="30033">
@@ -25,17 +25,19 @@
     <setting id="m_1" type="bool" label="30209" enable="eq(-1,false)" default="true"/>
     <setting id="m_2" type="bool" label="30130" enable="eq(-2,false)" default="true"/>
     <setting id="m_3" type="bool" label="30051" enable="eq(-3,false)" default="true"/>
-    <setting id="m_4" type="bool" label="30101" enable="eq(-4,false)" default="true"/>
-    <setting id="m_5" type="bool" label="30102" enable="eq(-5,false)" default="true"/>
+    <setting id="m_13" type="bool" label="30120" enable="eq(-4,false)" default="true"/>
+    <setting id="m_14" type="bool" label="30122" enable="eq(-5,false)" default="true"/>
+    <setting id="m_4" type="bool" label="30101" enable="eq(-6,false)" default="true"/>
+    <setting id="m_5" type="bool" label="30102" enable="eq(-7,false)" default="true"/>
+<!--    
     <setting id="m_6" type="bool" label="30103" enable="eq(-6,false)" default="true"/>
     <setting id="m_7" type="bool" label="30097" enable="eq(-7,false)" default="true"/>
     <setting id="m_8" type="bool" label="30095" enable="eq(-8,false)" default="true"/>
-    <setting id="m_9" type="bool" label="30093" enable="eq(-9,false)" default="true"/>
-    <setting id="m_10" type="bool" label="30105" enable="eq(-10,false)" default="true"/>
-    <setting id="m_11" type="bool" label="30150" enable="eq(-11,false)" default="true"/>
-    <setting id="m_12" type="bool" label="30098" enable="eq(-12,false)" default="true"/>
-    <setting id="m_13" type="bool" label="30120" enable="eq(-13,false)" default="true"/>
-    <setting id="m_14" type="bool" label="30122" enable="eq(-14,false)" default="true"/>
+-->    
+    <setting id="m_9" type="bool" label="30093" enable="eq(-8,false)" default="true"/>
+    <setting id="m_10" type="bool" label="30105" enable="eq(-9,false)" default="true"/>
+    <setting id="m_11" type="bool" label="30150" enable="eq(-10,false)" default="true"/>
+    <setting id="m_12" type="bool" label="30098" enable="eq(-11,false)" default="true"/>
   </category>
     <!-- <category label="debugging"> -->
     <!-- pour recréer la base lors du scan -->

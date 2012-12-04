@@ -88,6 +88,7 @@
     <string id="30120">Anzeige nach Personen</string>
     <string id="30121">Bilder ohne Personen</string>
     <string id="30122">Anzeige nach Tags</string>
+    <string id="30123">Hilfe</string>
     
     <string id="30130">Die letzten %s Bilder</string>
     <string id="30131">Neue Bilder (Anzahl)</string>
@@ -140,6 +141,8 @@
     <string id="30214">Ja = Alle Bilder erneut scannen.</string>
     <string id="30215">Nein = Nur geänderte Bilder scannen.</string>
     <string id="30216"></string> <!-- placeholder for third line of above questions -->
+    <string id="30217">Die Pfade müssen erneut gegescannt werden,</string>
+    <string id="30218">um die Bilder endgültig auszuschließen!</string>
     
     <string id="30220">Geolocation</string>
     <string id="30221">Fetching the map... (%0.2f%%)</string>  <!-- %0.2f%% will be replaced by the percent of download for a map -->

@@ -30,10 +30,12 @@ SELECT_ITEM = (ACTION_SELECT_ITEM, ACTION_MOUSE_START)
 
 class FilterWizard( xbmcgui.WindowXMLDialog ):
     
-    def __init__( self, xml, cwd, default, filter):
+    def __init__( self, xml, cwd, default):
         xbmcgui.WindowXMLDialog.__init__(self)
+        
+    def setDelegate(self, filter):
         self.filter = filter
-    
+        
     def onInit( self ):  
         self.setup_all()
 

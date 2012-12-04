@@ -88,6 +88,7 @@
     <string id="30120">Browse by Persons</string>
     <string id="30121">Pictures without persons</string>
     <string id="30122">Browse by Tags</string>
+    <string id="30123">Help</string>
     
     <string id="30130">The %s latest pics</string>
     <string id="30131">Recent pics (number of images)</string>
@@ -140,6 +141,8 @@
     <string id="30214">Yes = scan all pictures.</string>
     <string id="30215">No = scan only modified/new pictures.</string>
     <string id="30216"></string> <!-- placeholder for third line of above questions -->
+    <string id="30217">You must rescan the folders</string>
+    <string id="30218">to exclude the pictures!</string>
     
     <string id="30220">Geolocation</string>
     <string id="30221">Fetching the map... (%0.2f%%)</string>  <!-- %0.2f%% will be replaced by the percent of download for a map -->

@@ -10,21 +10,49 @@ import CharsetDecoder as decoder
 from HTMLParser import HTMLParser
 
 tag_set = {'persons' : 'MPReg:PersonDisplayName',
+
+           'Iptc4xmpExt:PersonInImage' : 'Iptc4xmpExt:PersonInImage', 
+           'Iptc4xmpExt:City' : 'Iptc4xmpExt:City', 
+           'Iptc4xmpExt:CountryName' : 'Iptc4xmpExt:CountryName', 
+           'Iptc4xmpExt:CountryCode' : 'Iptc4xmpExt:CountryCode', 
+           'Iptc4xmpExt:Sublocation' : 'Iptc4xmpExt:Sublocation', 
+           'Iptc4xmpExt:Event' : 'Iptc4xmpExt:Event', 
+           'Iptc4xmpExt:WorldRegion' : 'Iptc4xmpExt:WorldRegion', 
+           'Iptc4xmpExt:ProvinceState' : 'Iptc4xmpExt:ProvinceState', 
+           'Iptc4xmpExt:Event' : 'Iptc4xmpExt:Event', 
+           
            'Iptc4xmpCore:Location' : 'Iptc4xmpCore:Location',
+           'Iptc4xmpCore:City' : 'Iptc4xmpCore:City',
+           'Iptc4xmpCore:Country' : 'Iptc4xmpCore:Country',
+           'Iptc4xmpCore:CountryCode' : 'Iptc4xmpCore:CountryCode',
+           'Iptc4xmpCore:Province-State' : 'Iptc4xmpCore:Province-State',
+           'Iptc4xmpCore:Creator' : 'Iptc4xmpCore:Creator',
+           'Iptc4xmpCore:DateCreated' : 'Iptc4xmpCore:DateCreated',
+           'Iptc4xmpCore:Description' : 'Iptc4xmpCore:Description',
+           'Iptc4xmpCore:DescriptionWriter' : 'Iptc4xmpCore:DescriptionWriter',
+           'Iptc4xmpCore:Headline' : 'Iptc4xmpCore:Headline',
+           'Iptc4xmpCore:Keywords' : 'Iptc4xmpCore:Keywords',
+           'Iptc4xmpCore:Title' : 'Iptc4xmpCore:Title',
+
            'xmp:Label' : 'xmp:Label',
-           'Image Rating' : 'xmp:Rating',
-           'City' : 'photoshop:City',
-           'country/primary location name' : 'photoshop:Country',
+           'xmp:Rating' : 'xmp:Rating',
+           
+           'photoshop:Category' : 'photoshop:Category',
+           'photoshop:City' : 'photoshop:City',
+           'photoshop:Country' : 'photoshop:Country',
            'photoshop:DateCreated' : 'photoshop:DateCreated',
            'photoshop:Headline' : 'photoshop:Headline',
            'photoshop:State' : 'photoshop:State',
-           #'MicrosoftPhoto:LastKeywordXMP' : 'MicrosoftPhoto:LastKeywordXMP',
-           #'MicrosoftPhoto:LastKeywordIPTC' : 'MicrosoftPhoto:LastKeywordIPTC',
+           'photoshop:SupplementalCategories' : 'photoshop:SupplementalCategories',
+           'photoshop:Urgency' : 'photoshop:Urgency',
+           'photoshop:Instructions' : 'photoshop:Instructions',
+           'photoshop:CaptionWriter' : 'photoshop:CaptionWriter',
+
            'dc:creator' : 'dc:creator',
            'dc:description' : 'dc:description',
            'dc:rights' : 'dc:rights',
            'dc:subject' : 'dc:subject',
-           'dc:title' : 'dc:title' }
+           'dc:title' : 'dc:title'}
 
 
 

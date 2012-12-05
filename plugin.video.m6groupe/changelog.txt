@@ -1,3 +1,7 @@
+[B]Version 1.0.2[/B]
+
+- Added 6ter channel
+
 [B]Version 1.0.1[/B]
 
 - Added M6 and W9 thumbnails

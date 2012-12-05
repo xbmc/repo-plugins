@@ -29,8 +29,12 @@ from config import plugin
 CATALOGUE_URL = 'http://static.m6replay.fr/catalog/m6group_web/%s/catalogue.json'
 CLIP_URL = 'http://static.m6replay.fr/catalog/m6group_web/%s/clip/%s/clip_infos-%s.json'
 IMAGES_URL = 'http://static.m6replay.fr/images/'
-CODE = {'M6': 'm6replay', 'W9': 'w9replay'}
 TTL = int(plugin.get_setting('cached_ttl'))
+
+
+def code(channel):
+    """Return the channel code"""
+    return channel.lower() + 'replay'
 
 
 def get_json(url):
@@ -82,8 +86,7 @@ def get_catalog(channel):
     """Return a catalog with only the needed information
 
     This catalog is cached"""
-    code = CODE[channel]
-    full_catalog = get_json(CATALOGUE_URL % code)
+    full_catalog = get_json(CATALOGUE_URL % code(channel))
     # Only get main genres (no parent)
     genres = [{'id': id_gnr,
                'label': gnr[u'name']
@@ -141,7 +144,7 @@ def get_clips(channel, id_pgm='all'):
 def get_clip_url(channel, clip):
     """Return the playable url of the clip"""
     clip_key = '/'.join([clip[-2:], clip[-4:-2]])
-    asset = get_json(CLIP_URL % (CODE[channel], clip_key, clip))[u'asset']
+    asset = get_json(CLIP_URL % (code(channel), clip_key, clip))[u'asset']
     urls = [val[u'url'] for val in asset.values() if val[u'url'].startswith('mp4:')]
     if urls:
         return get_rtmp_url(urls[0])

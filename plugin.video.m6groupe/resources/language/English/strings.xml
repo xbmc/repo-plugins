@@ -5,9 +5,10 @@
   <!-- Settings -->
   <string id="30001">General</string>
   <string id="30010">Channels</string>
-  <string id="30011">M6 and W9</string>
+  <string id="30011">all</string>
   <string id="30012">M6</string>
   <string id="30013">W9</string>
+  <string id="30014">6ter</string>
   <string id="30020">Show by</string>
   <string id="30021">genres</string>
   <string id="30022">clips</string>

@@ -23,7 +23,7 @@ from config import plugin
 from xbmcswift2 import SortMethod
 import resources.lib.catalog as catalog
 
-CHANNELS = ('all', 'M6', 'W9')
+CHANNELS = ('all', 'M6', 'W9', '6ter')
 SHOW_BY = ('genre', 'clips')
 MEDIA_PATH = os.path.join(plugin.addon.getAddonInfo('path'), 'resources', 'media')
 
@@ -32,12 +32,10 @@ MEDIA_PATH = os.path.join(plugin.addon.getAddonInfo('path'), 'resources', 'media
 def index():
     channels = CHANNELS[int(plugin.get_setting('channels'))]
     if channels == 'all':
-        items = [{'label': 'M6Replay',
-                  'path': plugin.url_for('show_channel', channel='M6'),
-                  'thumbnail': os.path.join(MEDIA_PATH, 'm6.png')},
-                {'label': 'W9Replay',
-                 'path': plugin.url_for('show_channel', channel='W9'),
-                 'thumbnail': os.path.join(MEDIA_PATH, 'w9.png')}]
+        items = [{'label': channel + 'Replay',
+                  'path': plugin.url_for('show_channel', channel=channel),
+                  'thumbnail': os.path.join(MEDIA_PATH, channel.lower() + '.png')}
+                    for channel in CHANNELS[1:]]
         return items
     else:
         return show_channel(channels)

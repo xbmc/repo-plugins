@@ -1,3 +1,9 @@
+[B]Version 1.4.4 (Dec 4, 2012)[/B]
+- Added additional check upon launch to ensure that the xbmc.js is not corrupt (aka someone manually copied from an HTML page versus downloading it correctly)
+
+[B]Version 1.4.3 (Dec 4, 2012)[/B]
+- Enhanced dependency version checking logic when the addon is first launched
+
 [B]Version 1.4.2 (Nov 30, 2012)[/B]
 - Included additional show level metadata including # of episodes (both total, watched, and unwatched), genre, and most recent aired date
 

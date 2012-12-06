@@ -65,24 +65,21 @@ confluence_views = [500,501,502,503,504,508]
 
 def TOPLEVELCATEGORIES():
 
-    #url = strUrl + '/sagex/api?command=GetInstalledPluginss&encoder=json'
-    url = strUrl + '/sagex/api?c=xbmc:GetXBMCJSVersionNumber&encoder=json'
-    xbmcjsVersion = executeSagexAPIJSONCall(url, "Result")
-    if(xbmcjsVersion != VERSION_XBMCJS_REQUIRED):
-        print "***xbmc.js version found=" + xbmcjsVersion + "; user must make sure they have the latest xbmc.js installed on their SageTV server (VERSION_XBMCJS_REQUIRED=" + VERSION_XBMCJS_REQUIRED + ")"
-        xbmcgui.Dialog().ok(__language__(21004),__language__(21045),__language__(21046),__language__(21047))
-        xbmc.executebuiltin('ActivateWindow(Home)')
-        return
-    
     url = strUrl + '/sagex/api?c=xbmc:GetPluginVersion&1=sagex-api-services&encoder=json'
     sagexVersion = executeSagexAPIJSONCall(url, "Result")
 
+    #First check that the sagex-services plugin exists in SageTV and can be called
     if(sagexVersion == None or sagexVersion.find("Exception") != -1):
         #If no plugins were returned, first check that the user has the appropriate xbmc.js which has the required GetPluginVersion method
         print "************errorMsg=" + str(sagexVersion)
         if(sagexVersion == "Exception: Problem accessing /sagex/api"):
             print "Sagex API not installed on the SageTV server"
             xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21006),__language__(21007))
+            xbmc.executebuiltin('ActivateWindow(Home)')
+            return
+        elif(sagexVersion.find("javax.script.ScriptException: sun.org.mozilla.javascript.internal.EvaluatorException") != -1):
+            print "xbmc.js file found but does not appear to be a valid .js file and is likely corrupt"
+            xbmcgui.Dialog().ok(__language__(21004),__language__(21048),__language__(21046),__language__(21047))
             xbmc.executebuiltin('ActivateWindow(Home)')
             return
         else:
@@ -93,7 +90,7 @@ def TOPLEVELCATEGORIES():
         
     print "Successfully able to connect to the SageTV server @ " + __settings__.getSetting("sage_ip") + ':' + __settings__.getSetting("sage_port")
  
-    print "TOPLEVELCATEGORIES STARTED; xbmc.js file version=" + xbmcjsVersion + ";sagex-api-services version=" + sagexVersion
+    #Second check that the version of the sagex-services plugin matches the minimum version required by this addon
     if(sagexVersion == ""):
         xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21006),__language__(21007))
         xbmc.executebuiltin('ActivateWindow(Home)')
@@ -102,6 +99,17 @@ def TOPLEVELCATEGORIES():
         xbmcgui.Dialog().ok(__language__(21004),__language__(21005) + " " + MIN_VERSION_SAGEX_REQUIRED, __language__(21008) + " " + sagexVersion,__language__(21009) + " " + MIN_VERSION_SAGEX_REQUIRED)
         xbmc.executebuiltin('ActivateWindow(Home)')
         return
+
+    #Third check that the version of xbmc.js file matches the minimum version required by this addon
+    url = strUrl + '/sagex/api?c=xbmc:GetXBMCJSVersionNumber&encoder=json'
+    xbmcjsVersion = executeSagexAPIJSONCall(url, "Result")
+    if(xbmcjsVersion != VERSION_XBMCJS_REQUIRED):
+        print "***xbmc.js version found=" + xbmcjsVersion + "; user must make sure they have the latest xbmc.js installed on their SageTV server (VERSION_XBMCJS_REQUIRED=" + VERSION_XBMCJS_REQUIRED + ")"
+        xbmcgui.Dialog().ok(__language__(21004),__language__(21045),__language__(21046),__language__(21047))
+        xbmc.executebuiltin('ActivateWindow(Home)')
+        return
+    
+    print "TOPLEVELCATEGORIES STARTED; xbmc.js file version=" + xbmcjsVersion + ";sagex-api-services version=" + sagexVersion
 
     addTopLevelDir('1. Watch Recordings', strUrl + '/sagex/api?c=xbmc:GetTVMediaFilesGroupedByTitle&size=500&encoder=json',1,IMAGE_POSTER,'Browse previously recorded and currently recording shows')
     addTopLevelDir('2. View Upcoming Recordings', strUrl + '/sagex/api?command=GetScheduledRecordings&encoder=json',2,IMAGE_POSTER,'View and manage your upcoming recording schedule')
@@ -793,12 +801,14 @@ if mode==None or url==None or len(url)<1:
         print ""
         TOPLEVELCATEGORIES()
        
+#Watch Recordings
 elif mode==1:
     print ""+url
     VIEWLISTOFRECORDEDSHOWS(url,name)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
         
+#View List of Episodes for a show
 elif mode==11:
     print ""+url
     VIEWLISTOFEPISODESFORSHOW(url,name)
@@ -806,6 +816,7 @@ elif mode==11:
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
         
+#View upcoming recordings
 elif mode==2:
     print ""+url
     VIEWUPCOMINGRECORDINGS(url,name)
@@ -813,18 +824,21 @@ elif mode==2:
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_EPISODE)
 
+#View channel listing
 elif mode==3:
     print ""+url
     VIEWCHANNELLISTING(url,name)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
 
+#View airings on channel
 elif mode==31:
     print ""+url
     VIEWAIRINGSONCHANNEL(url,name)
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_EPISODE)
 
+#Search for recordings
 elif mode==4:
     print ""+url
     SEARCHFORRECORDINGS(url,name)
@@ -832,6 +846,7 @@ elif mode==4:
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_EPISODE)
 
+#Search for airings
 elif mode==5:
     print ""+url
     SEARCHFORAIRINGS(url,name)

@@ -1,14 +1,22 @@
+[B]Version 2.0.8[/B]
+
+- Fixed index error caused by gzip encoding (Thanks to jbel & divingmule)
+- Fixed error when loading 'Raw & Uncut'
+
 [B]Version 2.0.7[/B]
+
 - Updated addon to support recent website changes.
 - Fixed settings issue in Frodo
 
 [B]Version 2.0.6[/B]
+
 - Added Search menu
 - Added default view for Confluence skin
 - Added fanart
 - Fixed "yesno() takes no keyword arguments" error
 
 [B]Version 2.0.5[/B]
+
 - Added retry function for HTTP and Index errors
 
 [B]Version 2.0.4[/B]

@@ -1,12 +1,12 @@
 
-import xbmc, xbmcaddon, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, time, datetime, buggalo
+import xbmc, xbmcaddon, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, time, datetime, buggalo, gzip, StringIO
 import simplejson as json
 
 plugin = 'TMZ'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '11-10-2012'
-__version__ = '2.0.7'
+__date__ = '12-05-2012'
+__version__ = '2.0.8'
 settings = xbmcaddon.Addon( id = 'plugin.video.tmz' )
 dbg = False
 dbglevel = 3
@@ -18,7 +18,7 @@ import CommonFunctions
 common = CommonFunctions
 common.plugin = plugin + ' ' + __version__
 
-def retry(ExceptionToCheck, tries=4, delay=5, backoff=2, logger=None):
+def retry(ExceptionToCheck, tries=11, delay=3, backoff=1, logger=None):
     def deco_retry(f):
         def f_retry(*args, **kwargs):
             mtries, mdelay = tries, delay
@@ -76,7 +76,7 @@ def build_main_directory():
 
 @retry(IndexError)
 def build_video_directory( name ):
-	data = open_url( 'http://www.tmz.com/videos/' )['content']
+	data = open_url( 'http://www.tmz.com/videos/' )
 	content = re.compile('{ name: \'' + name.upper() + '\',( )?\n         allInitialJson: \[(.+?)\],\n', re.DOTALL).findall( data )
 	match = re.compile('\n{\n  (.+?)\n}', re.DOTALL).findall( content[0][1] )
 	for videos in match:
@@ -112,7 +112,7 @@ def build_search_directory():
 			ok = dialog.ok( plugin , settings.getLocalizedString( 30009 ) + '\n' + settings.getLocalizedString( 30010 ) )
 			return
 		elif data['error'] != None:
-			text = open_url( url )['content']
+			text = open_url( url )
 		else:
 			text = data['content']
 		jdata = json.loads(text)
@@ -137,10 +137,10 @@ def build_search_directory():
 def get_search_url(name, url, thumb):
 	if settings.getSetting("quality") == '0' or len(url.split('/')[4]) > 10:
 		meta = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + thumb.split('/')[9]
-		data = open_url( meta )['content']
+		data = open_url( meta )
 		url = re.compile('<media url=\"(.+?)\"').findall(data)[0]
 	else:
-		data = open_url( url )['content']
+		data = open_url( url )
 		url = common.parseDOM(data, "meta", attrs = { "name": "VideoURL" }, ret = "content")[0]
 	play_video( name, url, thumb, 'TMZ' )
 
@@ -148,11 +148,11 @@ def get_search_url(name, url, thumb):
 def play_video( name, url, thumb, studio ):
 	if studio != 'TMZ':
 		try:
-			data = open_url( url )['content']
+			data = open_url( url )
 			url = re.compile('<media url=\"(.+?)\"').findall(data)[0]
 		except:
 			url = 'http://www.tmz.com/videos/' + url.split('/')[9]
-			data = open_url( url )['content']
+			data = open_url( url )
 			url = common.parseDOM(data, "meta", attrs = { "name": "VideoURL" }, ret = "content")[0]
 	listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = thumb, path = url )
 	listitem.setInfo( type="Video", infoLabels={ "Title": name , "Director": "TMZ", "Studio": studio, "Plot": name } )
@@ -177,16 +177,19 @@ def ListItem(label, image, url, mode, isFolder, infoLabels = False, fanart = Fal
 	
 def open_url(url):
 	retries = 0
-	while retries < 4:
+	while retries < 11:
+		data = {'content': None, 'error': None}
 		try:
-			time.sleep(5*retries)
+			if retries != 0:
+				time.sleep(3)
 			data = get_page(url)
 			if data['content'] != None and data['error'] == None:
-				return data
-			else:
-				retries += 1
-		except:
-			retries += 1
+				return data['content']
+			if data['error'] == 'HTTP Error 404: Not Found':
+				break
+		except Exception, e:
+			data['error'] = str(e)
+		retries += 1
 	dialog = xbmcgui.Dialog()
 	ret = dialog.yesno(plugin, settings.getLocalizedString( 30050 ), data['error'], '', settings.getLocalizedString( 30052 ), settings.getLocalizedString( 30053 ))
 	if ret == False:
@@ -203,7 +206,11 @@ def get_page(url):
 		req = urllib2.Request(url)
 		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0.1')
 		content = urllib2.urlopen(req)
-		html = content.read()
+		if url.find('http://www.tmz.com/videos') != -1:
+			gzip_filehandle = gzip.GzipFile(fileobj=StringIO.StringIO(content.read()))
+			html = gzip_filehandle.read()
+		else:
+			html = content.read()
 		content.close()
 		try:
 			data['content'] = html.decode("utf-8")
@@ -219,7 +226,18 @@ def setViewMode(id):
 	if xbmc.getSkinDir() == "skin.confluence" and settings.getSetting('view') == 'true':
 		xbmc.executebuiltin("Container.SetViewMode(" + id + ")")
 
-params = common.getParameters(sys.argv[2])
+def getParameters(parameterString):
+    commands = {}
+    splitCommands = parameterString[parameterString.find('?') + 1:].split('&')
+    for command in splitCommands:
+        if (len(command) > 0):
+            splitCommand = command.split('=')
+            key = splitCommand[0]
+            value = splitCommand[1]
+            commands[key] = value
+    return commands
+
+params = getParameters(sys.argv[2])
 mode = None
 name = None
 url = None

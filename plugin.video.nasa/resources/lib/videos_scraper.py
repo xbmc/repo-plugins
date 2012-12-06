@@ -1,18 +1,41 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+#     Copyright (C) 2012 Tristan Fischer (sphere@dersphere.de)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
 import simplejson
 import datetime
 from urllib import urlencode
 from urllib2 import urlopen, Request
 import re
 
-USER_AGENT = ('Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.7 '
-              '(KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+USER_AGENT = (
+    'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.7 '
+    '(KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7'
+)
 
 REFERER = 'http://www.nasa.gov/multimedia/videogallery/index.html'
 
 API_URL = 'http://cdn-api.vmixcore.com/apis/media.php'
 
-VIDEO_LANDING_URL = ('http://www.nasa.gov/multimedia/'
-                     'videogallery/vmixVideoLanding2.js')
+VIDEO_LANDING_URL = (
+    'http://www.nasa.gov/multimedia/'
+    'videogallery/vmixVideoLanding2.js'
+)
 
 
 class Scraper(object):
@@ -32,8 +55,10 @@ class Scraper(object):
         genre_ids = re.search(r_genre_ids, html).group(1).split(',')
         video_topics = []
         for genre_id, genre_name in zip(genre_ids, genre_names):
-            video_topics.append({'id': genre_id,
-                                 'name': genre_name.strip("'")})
+            video_topics.append({
+                'id': genre_id,
+                'name': genre_name.strip("'")
+            })
         log('get_video_topics got %d topics' % len(video_topics))
         return video_topics
 
@@ -48,17 +73,19 @@ class Scraper(object):
             start = 0
         if limit < 0 or limit > 250:
             limit = 15
-        params = {'action': 'getMediaList',
-                  'class_id': 1,
-                  'alltime': 1,
-                  'order_method': order_method,
-                  'order': order,
-                  'get_count': 1,
-                  'export': 'JSONP',
-                  'start': start,
-                  'limit': limit,
-                  'metadata': 1,
-                  'atoken': self.atoken}
+        params = {
+            'action': 'getMediaList',
+            'class_id': 1,
+            'alltime': 1,
+            'order_method': order_method,
+            'order': order,
+            'get_count': 1,
+            'export': 'JSONP',
+            'start': start,
+            'limit': limit,
+            'metadata': 1,
+            'atoken': self.atoken
+        }
         if int(topic_id) < 1000:  # just a guess...
             params['external_genre_ids'] = topic_id
         else:
@@ -75,16 +102,18 @@ class Scraper(object):
             limit = 15
         if fields is None:
             fields = ['title', ]
-        params = {'action': 'searchMedia',
-                  'class_id': 1,
-                  'get_count': 1,
-                  'export': 'JSONP',
-                  'start': start,
-                  'limit': limit,
-                  'metadata': 1,
-                  'atoken': self.atoken,
-                  'fields': ','.join(fields),
-                  'query': query}
+        params = {
+            'action': 'searchMedia',
+            'class_id': 1,
+            'get_count': 1,
+            'export': 'JSONP',
+            'start': start,
+            'limit': limit,
+            'metadata': 1,
+            'atoken': self.atoken,
+            'fields': ','.join(fields),
+            'query': query
+        }
         videos = self.__get_videos(params)
         log('search_videos finished with %d videos' % len(videos))
         return videos
@@ -94,24 +123,27 @@ class Scraper(object):
         html = self.__get_url(url, get_dict=params)
         json = self.__get_json(html)
         items = json.get('media') or json.get('medias', {}).get('media', [])
-        videos = [{'title': item['title'],
-                   'duration': self.__format_duration(item['duration']),
-                   'thumbnail': item['thumbnail'][0]['url'],
-                   'description': item['description'],
-                   'date': self.__format_date(item['date_published_start']),
-                   'filesize': int(item['formats']['format'][-1]['filesize']),
-                   'author': item['author'],
-                   'genres': [g['name'] for g in item.get('genres', [])],
-                   'id': item['id'],
-                  } for item in items]
+        videos = [{
+            'title': item['title'],
+            'duration': self.__format_duration(item['duration']),
+            'thumbnail': item['thumbnail'][0]['url'],
+            'description': item['description'],
+            'date': self.__format_date(item['date_published_start']),
+            'filesize': int(item['formats']['format'][-1]['filesize']),
+            'author': item['author'],
+            'genres': [g['name'] for g in item.get('genres', [])],
+            'id': item['id'],
+        } for item in items]
         total_count = json['total_count']
         return videos, total_count
 
     def get_video(self, id):
         log('get_video started with id=%s' % id)
-        params = {'action': 'getMedia',
-                  'media_id': id,
-                  'atoken': self.atoken}
+        params = {
+            'action': 'getMedia',
+            'media_id': id,
+            'atoken': self.atoken
+        }
         url = API_URL
         html = self.__get_url(url, get_dict=params)
         media = self.__get_json(html)
@@ -120,15 +152,19 @@ class Scraper(object):
         timestamp = self.__get_timestamp()
         p = 'token=%s&expires=%s&signature=%s' % (token, timestamp, signature)
         download_url = 'http://media.vmixcore.com/vmixcore/download?%s' % p
-        video = {'title': media['title'],
-                 'thumbnail': media['thumbnail'][0]['url'],
-                 'url': download_url}
+        video = {
+            'title': media['title'],
+            'thumbnail': media['thumbnail'][0]['url'],
+            'url': download_url
+        }
         log('get_video finished')
         return video
 
     def __get_nasa_signature(self, token):
-        sig_url = ('http://hscripts.vmixcore.com/clients/nasa/'
-                   'generate_signature.php?token=%s' % token)
+        sig_url = (
+            'http://hscripts.vmixcore.com/clients/nasa/'
+            'generate_signature.php?token=%s' % token
+        )
         t = self.__get_url(sig_url)
         r_sig = re.compile('"signature":"(.+?)"')
         signature = re.search(r_sig, t).group(1)

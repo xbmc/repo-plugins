@@ -1,5 +1,24 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+#     Copyright (C) 2012 Tristan Fischer (sphere@dersphere.de)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
 from urllib2 import urlopen
-from BeautifulSoup import BeautifulStoneSoup, BeautifulSoup
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 import re
 
 MAIN_URL = 'http://www.nasa.gov/rss/'
@@ -20,8 +39,10 @@ def get_vodcasts():
                     title = cells[0].b.string
                     link = cells[1].a['href']
                     if '/rss/' in link:
-                        vodcasts.append({'title': title[1:],
-                                         'rss_file': link[5:]})
+                        vodcasts.append({
+                            'title': title[1:],
+                            'rss_file': link[5:]
+                        })
             break
     log('get_vodcasts finished with %d vodcasts' % len(vodcasts))
     return vodcasts
@@ -40,10 +61,12 @@ def show_vodcast_videos(rss_file):
             thumbnail = item.find(r_media)['url']
         else:
             thumbnail = 'DefaultVideo.png'
-        videos.append({'title': item.title.string,
-                       'thumbnail': thumbnail,
-                       'url': item.enclosure['url'],
-                       'description': item.description.string})
+        videos.append({
+            'title': item.title.string,
+            'thumbnail': thumbnail,
+            'url': item.enclosure['url'],
+            'description': item.description.string
+        })
     log('show_vodcast_videos finished with %d videos' % len(videos))
     return videos
 

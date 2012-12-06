@@ -1,5 +1,10 @@
-1.0.2
+1.0.3 (06.12.2012)
+  - migrate to xbmcswift2
+  - updated translations
+  - code refactoring
+
+1.0.2 (04.08.2012)
   fix all live streams
 
-1.0.1
+1.0.1 (20.02.2012)
   initial release

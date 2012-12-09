@@ -1,9 +1,9 @@
 ########################################
-#  Digitally Imported XBMC plugin
+#  JazzRadio.com XBMC plugin
 #  by Tim C. 'Bitcrusher' Steinmetz
 #  http://qualisoft.dk
-#  Github: https://github.com/Bitcrusher/Digitally-Imported-XBMC-plugin
-#  Git Read-only: git://github.com/Bitcrusher/Digitally-Imported-XBMC-plugin.git
+#  Github: https://github.com/Bitcrusher/Jazzradio-com-XBMC-plugin.git
+#  Git Read-only: git://github.com/Bitcrusher/Jazzradio-com-XBMC-plugin.git
 #
 #  This Program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -33,10 +33,9 @@ import xbmcplugin
 import xbmcaddon
 import pickle
 import time
-import unicodedata
 from xml.dom import minidom
-from httpcomm import HTTPComm	
-
+from httpcomm import HTTPComm
+from ConfigParser import SafeConfigParser
 
 # Import JSON - compatible with Python<v2.6
 try:
@@ -44,44 +43,49 @@ try:
 except ImportError:
     import simplejson as json
 
-# Various vars used throughout the script
+# Config parser
+parser = SafeConfigParser()
+parser.read( os.path.dirname(__file__) + "/config.ini" )
+
+# Various constants used throughout the script
 HANDLE = int(sys.argv[1])
-ADDON = xbmcaddon.Addon(id='plugin.audio.jazzradio.com')
+ADDON = xbmcaddon.Addon(id=parser.get('plugin', 'id'))
 
 # Plugin constants
 __plugin__       = ADDON.getAddonInfo('name')
 __author__       = "Tim C. Steinmetz"
 __url__          = "http://qualisoft.dk/"
 __platform__     = "xbmc media center, [LINUX, OS X, WIN32]"
-__date__         = "2. October 2012"
+__date__         = parser.get('plugin', 'date')
 __version__      = ADDON.getAddonInfo('version')
 
 class musicAddonXbmc:
 	_addonProfilePath = xbmc.translatePath( ADDON.getAddonInfo('profile') ).decode('utf-8') # Dir where plugin settings and cache will be stored
-	
-	_checkinKey 	= "381b49f1b3522ea7fd125245c66e63537776726c"
-	
+
 	_cacheStreams	= _addonProfilePath + "cache_streamlist.dat"
 	_cacheListenkey	= _addonProfilePath + "cache_listenkey.dat"
 	_checkinFile	= _addonProfilePath + "cache_lastcheckin.dat"
 	
-	_baseUrl 		= "http://www.jazzradio.com/"
-	_loginUrl		= "http://www.jazzradio.com/login"
-	_listenkeyUrl	= "http://www.jazzradio.com/member/listen_key"
+	_baseUrl 		= parser.get('urls', 'baseUrl')
+	_loginUrl		= parser.get('urls', 'loginUrl')
+	_listenkeyUrl		= parser.get('urls', 'listenkeyUrl')
 	
-	_publicStreamsJson40k	= "http://listen.jazzradio.com/public3/"		# Public AAC 40k/sec AAC+ JSON url
-	_premiumStreamsJson40k	= "http://listen.jazzradio.com/premium_low/" 	# AAC 40k/sec AAC+ JSON url
-	_premiumStreamsJson64k	= "http://listen.jazzradio.com/premium_medium/"	# AAC 64k/sec AAC+ JSON url
-	_premiumStreamsJson128k	= "http://listen.jazzradio.com/premium/"		# AAC 128k/sec AAC+ JSON url
-	_favoritesStreamJson40k	= "http://listen.jazzradio.com/premium_low/favorites.pls" 		# Favorites AAC 40k/sec AAC+ playlist url
-	_favoritesStreamJson64k	= "http://listen.jazzradio.com/premium_medium/favorites.pls"	# Favorites AAC 64k/sec AAC+ playlist url
-	_favoritesStreamJson128k= "http://listen.jazzradio.com/premium/favorites.pls"			# Favorites AAC 128k/sec AAC+ playlist url
+	_publicStreamsJson40k	= parser.get('urls', 'publicStreamsJson40k')	# Public AAC 40k/sec AAC+ JSON url
+	_premiumStreamsJson40k	= parser.get('urls', 'premiumStreamsJson40k')	# AAC 40k/sec AAC+ JSON url
+	_premiumStreamsJson64k	= parser.get('urls', 'premiumStreamsJson64k')	# AAC 64k/sec AAC+ JSON url
+	_premiumStreamsJson128k	= parser.get('urls', 'premiumStreamsJson128k')	# AAC 128k/sec AAC+ JSON url
+	_premiumStreamsJson256k	= parser.get('urls', 'premiumStreamsJson256k')	# MP3 256k/sec AAC+ JSON url
+	_favoritesStreamJson40k	= parser.get('urls', 'favoritesStreamJson40k') 	# Favorites AAC 40k/sec AAC+ playlist url
+	_favoritesStreamJson64k	= parser.get('urls', 'favoritesStreamJson64k')	# Favorites AAC 64k/sec AAC+ playlist url
+	_favoritesStreamJson128k= parser.get('urls', 'favoritesStreamJson128k')	# Favorites AAC 128k/sec AAC+ playlist url
+	_favoritesStreamJson256k= parser.get('urls', 'favoritesStreamJson256k')	# Favorites MP3 256k/sec AAC+ playlist url
 	
 	_httpComm = HTTPComm() # Init CURL thingy
 	_frontpageHtml = ""
 	
 	_newChannels = 0
 	_bitrate = 40
+	_streamMimeType = 'audio/aac'
 	
 	def __init__( self ) :
 		# If stats is allowed and its been at least 24 hours since last checkin
@@ -93,8 +97,8 @@ class musicAddonXbmc:
 				account = 'premium'
 		
 			xbmc.log( 'Submitting stats', xbmc.LOGNOTICE )
-			self._httpComm.get('http://stats.qualisoft.dk/?plugin=' +  ADDON.getAddonInfo('id') +'&version=' + __version__ + '&account=' + account + '&key=' + self._checkinKey)
-			print 'http://stats.qualisoft.dk/?plugin=' +  ADDON.getAddonInfo('id') +'&version=' + __version__ + '&account=' + account + '&key=' + self._checkinKey
+			self._httpComm.get('http://stats.qualisoft.dk/?plugin='+ ADDON.getAddonInfo('id') + '&version=' + __version__ + '&account=' + account + '&key=' + parser.get('plugin', 'checkinkey'))
+		
 		xbmc.log( "[PLUGIN] %s v%s (%s)" % ( __plugin__, __version__, __date__ ), xbmc.LOGNOTICE )
 
 		
@@ -102,7 +106,7 @@ class musicAddonXbmc:
 	def start( self ) :
 		jsonList = [] 	# list that data from the JSON will be put in
 		streamList = []	# the final list of channels, with small custom additions
-		
+
 		# Check if cachefile has expired
 		if ADDON.getSetting("forceupdate") == "true" or ((int( ADDON.getSetting("cacheexpire") ) * 60) != 0 and self.checkFileTime(self._cacheStreams, self._addonProfilePath, (int( ADDON.getSetting("cacheexpire") ) * 60)) == True) :
 			listenkey = ""	# will contain the premium listenkey
@@ -125,9 +129,14 @@ class musicAddonXbmc:
 					self._bitrate = 64
 					jsonList = self.getJSONChannelList( self._premiumStreamsJson64k )
 					streamList = self.customizeStreamListAddMenuitem( jsonList, listenkey )
-				else :
+				elif ADDON.getSetting('bitrate') == '2' :
 					self._bitrate = 128
 					jsonList = self.getJSONChannelList( self._premiumStreamsJson128k )
+					streamList = self.customizeStreamListAddMenuitem( jsonList, listenkey )
+				else :
+					self._bitrate = 256
+					self._streamMimeType = 'audio/mpeg'
+					jsonList = self.getJSONChannelList( self._premiumStreamsJson256k )
 					streamList = self.customizeStreamListAddMenuitem( jsonList, listenkey )
 				
 				xbmc.log( "Bitrate set to " + str( self._bitrate ), xbmc.LOGNOTICE )
@@ -142,9 +151,13 @@ class musicAddonXbmc:
 				elif ADDON.getSetting('bitrate') == '1' :
 					self._bitrate = 64
 					streamList = self.getFavoriteStreamsList( self._favoritesStreamJson64k + "?" + listenkey )
-				else :
+				elif ADDON.getSetting('bitrate') == '2' :
 					self._bitrate = 128
 					streamList = self.getFavoriteStreamsList( self._favoritesStreamJson128k + "?" + listenkey )
+				else :
+					self._bitrate = 256
+					self._streamMimeType = 'audio/mpeg'
+					streamList = self.getFavoriteStreamsList( self._favoritesStreamJson256k + "?" + listenkey )
 				
 				xbmc.log( "Bitrate set to " + str(self._bitrate), xbmc.LOGNOTICE )
 				
@@ -168,9 +181,9 @@ class musicAddonXbmc:
 			streamList = pickle.load( open(self._cacheStreams, "r") )
 
 			# Add streams to GUI
-			for channel in streamList :	
-				self.addItem( channel['name'], channel['playlist'], channel["description"], channel['bitrate'], self._addonProfilePath + "art_" + channel['key'] + ".png", channel['isNew'] )
-		
+			for channel in streamList :
+			    self.addItem( channel['name'].encode('utf-8'), channel['playlist'], channel["description"], channel['bitrate'], self._addonProfilePath + "art_" + channel['key'] + ".png", channel['isNew'] )
+				
 		# If streams should be sorted A-Z
 		if ADDON.getSetting('sortaz') == "true" :
 			xbmcplugin.addSortMethod( HANDLE, sortMethod=xbmcplugin.SORT_METHOD_LABEL )
@@ -184,7 +197,7 @@ class musicAddonXbmc:
 		return True
 		
 		
-	"""Return list - False if it fails
+	"""return list - False if it fails
 	Gets the favorites playlist and returns the streams as a list
 	Also every channel is added to the GUI from here, as the progress indication
 	in the GUI would not reflect that something is actually happening till the very end
@@ -201,14 +214,15 @@ class musicAddonXbmc:
 			channel['isNew'] = False # is used to highlight when it's a new channel
 			channelArt = "art_" + channel['key'] + ".png"
 			channel['bitrate'] = self._bitrate
-		
+			channel["description"] = channel["description"].encode('utf-8')
+			
 			if ADDON.getSetting('username') != "" : # append listenkey to playlist url if username is set
 				channel['playlist'] = self.getFirstStream( channel['playlist'] + "?" + listenkey, streamurl_re )
 			else :
 				channel['playlist'] = self.getFirstStream( channel['playlist'], streamurl_re )
 				
 			if (not os.path.isfile(self._addonProfilePath + channelArt)) : # if channelart is not in cache
-				print "Channelart for " + channel['name'].encode('ascii', 'ignore') + " not found in cache at " + self._addonProfilePath + channelArt
+				xbmc.log( "Channelart for " + channel['name'].encode("ascii","ignore") + " not found in cache at " + self._addonProfilePath + channelArt, xbmc.LOGNOTICE )
 				self.getChannelArt( channel['id'], "art_" + channel['key'] )
 				channel['isNew'] = True
 				self._newChannels = self._newChannels + 1
@@ -249,7 +263,7 @@ class musicAddonXbmc:
 	
 	
 	"""return String
-	Extracts the premium listenkey from the frontpage html
+	Extracts the premium listenkey from the listenkey page html
 	"""
 	def getListenkey( self ) :
 		listenkey_re = re.compile('Key is:<br />[^<]*<strong>([\w\d]*)<', re.DOTALL)
@@ -281,7 +295,6 @@ class musicAddonXbmc:
 	def getJSONChannelList( self, url ) :
 		try :
 			jsonData = self._httpComm.get( url )
-			jsonData = jsonData.encode('ascii', 'replace')
 			jsonData = json.loads(jsonData)
 		except Exception : # Show error message in XBMC GUI if failing to parse JSON
 			sys.exc_clear() # Clears all exceptions so the script will continue to run
@@ -307,11 +320,11 @@ class musicAddonXbmc:
 			streamUrls	= streamurl_re.findall( favoritesPlaylist )
 			
 			if len(streamUrls) == len( streamTitles ) : # only continue if the count of urls and titles are equal
-				for streamUrl in streamUrls :
+			    
+				for i in range(len(streamUrls)) :
 					listitem = {}
-					listitem['playlist'] = streamUrl
-					tmp_name = streamTitles.pop()
-					listitem['name'] = tmp_name.replace( "JAZZRADIO.com - ", "" ) # favorite stream titles has some "fluff" text it that is removed
+					listitem['playlist'] = streamUrls[i]
+					listitem['name'] = streamTitles[i].replace( parser.get('plugin', 'playlistStripName') + " ", "" ) # favorite stream titles has some "fluff" text it that is removed
 					listitem['key'] = self.makeChannelIconname( listitem['name'] )
 					listitem['isNew'] = False
 					listitem['bitrate'] = self._bitrate
@@ -354,8 +367,8 @@ class musicAddonXbmc:
 		else :
 			li = xbmcgui.ListItem(label=channelTitle, thumbnailImage=icon)
 
-		li.setProperty("mimetype", 'audio/aac')
-		li.setInfo( type="Music", infoLabels={ "label": channelTitle, "Genre": channelTitle, "Comment": streamDescription, "Size": (streamBitrate * 1024)  })
+		li.setProperty("mimetype", self._streamMimeType)
+		li.setInfo( type="Music", infoLabels={ "label": channelTitle, "Genre": channelTitle, "Comment": streamDescription, "Size": (streamBitrate * 1024) })
 		li.setProperty("IsPlayable", "true")
 		li.setProperty("IsLive", "true")
 
@@ -369,6 +382,7 @@ class musicAddonXbmc:
 	"""
 	def getFirstStream( self, playlistUrl, regex ) :
 		plsData = self._httpComm.get( playlistUrl )
+
 		streamurls = regex.findall(plsData)
 		
 		return streamurls[0]
@@ -394,7 +408,7 @@ class musicAddonXbmc:
 		else :
 			xbmc.log( 'The cachefile ' + tmpfile + ' does not exist', xbmc.LOGNOTICE )
 			return True
-	
+
 			
 MusicAddonInstance = musicAddonXbmc()
 MusicAddonInstance.start()

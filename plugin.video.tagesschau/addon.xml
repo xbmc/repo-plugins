@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.tagesschau"
-    version="2.0.0"
-    name="tagesschau"
+    version="2.0.1"
+    name="Tagesschau"
     provider-name="Jörn Schumacher, Henning Saul">
   <requires>
     <import addon="xbmc.python" version="2.0"/>

@@ -64,7 +64,7 @@ def parse_recommended():
   html = requests.get(url).text
   html = parseDOM(html, 'ul', {'id':'introSlider'})[0]
   
-  h1s = parseDOM(html, 'h1')
+  h1s = parseDOM(html, 'h2')
   titles2 = parseDOM(h1s, 'a')
   titles1 = parseDOM(html, 'strong')
   titles = [ "%s - %s" % (t1, t2) for t1, t2 in zip(titles1, titles2) ]

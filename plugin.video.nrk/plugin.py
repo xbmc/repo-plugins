@@ -18,21 +18,19 @@
 import xbmcaddon
 import xbmcswift
 
-addon = xbmcaddon.Addon()
-plugin = xbmcswift.Plugin(addon.getAddonInfo('name'), addon.getAddonInfo('id'), '')
+class Plugin(xbmcswift.Plugin):
+  def __init__(self):
+    addon = xbmcaddon.Addon()
+    xbmcswift.Plugin.__init__(self, addon.getAddonInfo('name'), addon.getAddonInfo('id'), '')
 
-def url_for(url):
-  return 'plugin://%s%s' % (plugin._plugin_id, url)
+  def make_url(self, url):
+    return 'plugin://%s%s' % (self._plugin_id, url)
 
-def route_for(path):
-  for rule in plugin._routes:
-    try:
-      view_func, items = rule.match(path)
-    except xbmcswift.urls.NotFoundException:
-      continue
-    return view_func
-  return None
-
-plugin.route_for = route_for
-plugin.url_for = url_for
-
+  def route_for(self, path):
+    for rule in self._routes:
+      try:
+        view_func, items = rule.match(path)
+      except xbmcswift.urls.NotFoundException:
+        continue
+      return view_func
+    return None

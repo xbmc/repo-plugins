@@ -22,7 +22,8 @@ from itertools import repeat
 from xbmcplugin import addDirectoryItem
 from xbmcplugin import endOfDirectory
 from xbmcgui import ListItem
-from plugin import plugin
+import plugin
+plugin = plugin.Plugin()
 
 ADDON = xbmcaddon.Addon()
 ADDON_PATH = ADDON.getAddonInfo('path')
@@ -32,11 +33,11 @@ SHOW_SUBS = ADDON.getSetting('showsubtitles')
 
 @plugin.route('/')
 def view_top():
-  addDirectoryItem(plugin.handle, plugin.url_for("/live"), ListItem("Direkte"), True)
-  addDirectoryItem(plugin.handle, plugin.url_for("/recommended"), ListItem("Aktuelt"), True)
-  addDirectoryItem(plugin.handle, plugin.url_for("/mostrecent"), ListItem("Siste"), True)
-  addDirectoryItem(plugin.handle, plugin.url_for("/categories"), ListItem("Kategorier"), True)
-  addDirectoryItem(plugin.handle, plugin.url_for("/letters"), ListItem("A-Å"), True)
+  addDirectoryItem(plugin.handle, plugin.make_url("/live"), ListItem("Direkte"), True)
+  addDirectoryItem(plugin.handle, plugin.make_url("/recommended"), ListItem("Aktuelt"), True)
+  addDirectoryItem(plugin.handle, plugin.make_url("/mostrecent"), ListItem("Siste"), True)
+  addDirectoryItem(plugin.handle, plugin.make_url("/categories"), ListItem("Kategorier"), True)
+  addDirectoryItem(plugin.handle, plugin.make_url("/letters"), ListItem("A-Å"), True)
   endOfDirectory(plugin.handle)
 
 @plugin.route('/live')
@@ -66,7 +67,7 @@ def view(titles, urls, thumbs=repeat(''), bgs=repeat(''), descr=repeat('')):
     li.setProperty('fanart_image', bg)
     if playable:
       li.setInfo('video', {'plot':descr})
-    addDirectoryItem(plugin.handle, plugin.url_for(url), li, not playable, total)
+    addDirectoryItem(plugin.handle, plugin.make_url(url), li, not playable, total)
   endOfDirectory(plugin.handle)
 
 
@@ -109,7 +110,7 @@ def seasons(arg):
   import data
   titles, urls, thumbs, bgs = data.parse_seasons(arg)
   if len(titles) == 1:
-    plugin.redirect(plugin.url_for(urls[0]))
+    plugin.redirect(plugin.make_url(urls[0]))
     return
   view(titles, urls, thumbs=thumbs, bgs=bgs)
 

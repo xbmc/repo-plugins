@@ -3,6 +3,14 @@
 - Removed feature
 
 
+8 December 2012 v1.1.0
++ Added a 4th stream quality option for Premium members: 256k/sec MP3
++ Now using the config.ini file to hopefully streamline the process of updating the di.fm/sky.fm/jazzradio.com plugins
+* Fixed it so UTF8 chars is handled correctly in channelnames
+* Fixed a "miscalculation" that made it so when using favorites, the playlist being activated when clicking the channelname,
+  was actually the one belonging to the next channelname, etc.
+
+
 26 Oct 2012 v1.0.0
 + Initial release
 + Premium and premium favorites support

@@ -1,4 +1,4 @@
-This file is part of Digitally Imported XBMC Addon.
+This file is part of JazzRadio.com XBMC Addon.
 
 Digitally Imported XBMC Addon is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

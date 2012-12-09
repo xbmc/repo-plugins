@@ -1,102 +1,196 @@
 import urllib, urllib2, re, sys, os
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin
-		
-###################################
-##########  Class Day 9  ##########
-###################################
-				
-class Day9:	
 
-	USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
-	__settings__ = xbmcaddon.Addon(id='plugin.video.day9')
-	__language__ = __settings__.getLocalizedString
-	
-	def action(self, params):
-		get = params.get
-		if (get("action") == "showTitles"):
-			self.showTitles(params)
-		if (get("action") == "showGames"):
-			self.showGames(params)
-			
-	# ------------------------------------- Menu functions ------------------------------------- #
-	
-	# display the root menu
-	def root(self):
-		self.addCategory(self.__language__(31000), 'http://blip.tv/pr/show_get_full_episode_list?users_id=570336&lite=0&esi=1', 'showTitles', 1)
-		
-		
-	# ------------------------------------- Add functions ------------------------------------- #
+import CommonFunctions
+from BeautifulSoup import BeautifulSoup
 
-	
-	def addCategory(self, title, url, action, page = 1):
-		url=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&title="+title+"&action="+urllib.quote_plus(action)+"&page="+str(page)
-		listitem=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage="DefaultFolder.png")
-		listitem.setInfo( type="Video", infoLabels={ "Title": title } )
-		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=True)
-		
-	def addVideo(self,title,url):
-		liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage="DefaultVideo.png")
-		liz.setInfo( type="Video", infoLabels={ "Title": title } )
-		xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-		
-	# ------------------------------------- Show functions ------------------------------------- #
-	
-	
-	def showTitles(self, params = {}):
-		get = params.get
-		link = self.getRequest(get("url"))
-		title = re.compile('<span class="Title">\n\t\t\n\t\t\t(.*?)\n\t\t\n\t</span>').findall(link)
-		url = re.compile('<a class="ArchiveCard" href="(.*?)">').findall(link)
-		
-		for i in range(len(title)):
-			self.addCategory(title[i], 'http://blip.tv'+url[i], 'showGames', '')
-			
-		page = int(get("page"))+1
-		url = 'http://blip.tv/pr/show_get_full_episode_list?users_id=570336&lite=0&esi=1&page='+str(page)
-		self.addCategory('more episodes...', url, 'showTitles', page)
-			
-	def showGames(self, params = {}):
-		get = params.get
-		url_map = urllib.unquote_plus(get('url')).split('-')
-			
-		link = self.getRequest('http://blip.tv/rss/view/'+url_map[-1])
-		result = re.findall('blip:role="(.*?)".+?isDefault=".*?" type=".*?" url="(.*?)"', link)
-		settingsHD = int(self.__settings__.getSetting( "hd_videos" ))
-		
-		if settingsHD > 0:
-			for i in range(len(result)):
-				if result[i][0] == 'Blip HD 720':
-					url = result[i][1]
-				else:
-					url = result[i][1]
-		else:
-			for i in range(len(result)):
-				if result[i][0] == 'Blip HD 720':
-					pass
-				else:
-					url = result[i][1]
-		self.addVideo(get("title"), url)
-		
-		
-	# ------------------------------------- Data functions ------------------------------------- #
+pluginhandle=int(sys.argv[1])
 
-	
-	def getParams(self, paramList):	
-		splitParams = paramList[paramList.find('?')+1:].split('&')
-		paramsFinal = {}
-		for value in splitParams:
-			splitParams = value.split('=')
-			type = splitParams[0]
-			content = splitParams[1]
-			if type == 'url':
-				content = urllib.unquote_plus(content)
-			paramsFinal[type] = content
-		return paramsFinal
-		
-	def getRequest(self, url):
-		req = urllib2.Request(url)
-		req.add_header('User-Agent', self.USERAGENT)
-		response = urllib2.urlopen(req)
-		link=response.read()
-		response.close()
-		return link
+class Day9:
+
+    USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
+    __settings__ = xbmcaddon.Addon(id='plugin.video.day9')
+    __language__ = __settings__.getLocalizedString
+    common = CommonFunctions
+
+    # this should probably move into default.py or it's own actions.py and not be so iffy
+    def action(self, params):
+        get = params.get
+        if (get("action") == "showTitles"):
+            self.showTitles(params)
+        if (get("action") == "showGames"):
+            self.showGames(params)
+        if (get("action") == "removeSearch"):
+            self.removeSearch(params)
+        if (get("action") == "newSearchDialog"):
+            self.newSearchDialog(params)
+        if (get("action") == "showSearch"):
+            self.showSearch(params)
+        if (get("action") == "showVideo"):
+            self.showVideo(params)
+
+    # ------------------------------------- Menu functions ------------------------------------- #
+
+    # display the root menu
+    def root(self):
+        self.addCategory(self.__language__(31000), 'http://day9.tv/archives', 'showTitles')
+        self.addCategory(self.__language__(31002), '', 'showSearch')
+        # these need to be dynamic
+        self.addCategory('Funday Monday', 'http://day9.tv/archives?q=%22Funday%20Monday%22', 'showTitles')
+        self.addCategory('Newbie Tuesday', 'http://day9.tv/archives?q=%22Newbie%20Tuesday%22', 'showTitles')
+        self.addCategory('MetaDating', 'http://day9.tv/archives?q=MetaDating', 'showTitles')
+        self.addCategory('Red Bull LAN', 'http://day9.tv/archives?q=%22Red%20Bull%20LAN%22', 'showTitles')
+        self.addCategory('Amnesia: The Dark Descent', 'http://day9.tv/archives?q=%22Amnesia%3A%20The%20Dark%20Descent%22', 'showTitles')
+        self.addCategory('IEM GamesCom', 'http://day9.tv/archives?q=%22IEM%20GamesCom%22', 'showTitles')
+        self.addCategory('Protoss', 'http://day9.tv/archives?q=protoss', 'showTitles')
+        self.addCategory('Zerg', 'http://day9.tv/archives?q=zerg', 'showTitles')
+        self.addCategory('Terran', 'http://day9.tv/archives?q=terran', 'showTitles')
+
+
+    # ------------------------------------- Add functions ------------------------------------- #
+
+
+    def addCategory(self, title, url, action, menu=None):
+        url=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&title="+title+"&action="+urllib.quote_plus(action)
+        listitem=xbmcgui.ListItem(title,iconImage="DefaultFolder.png", thumbnailImage="DefaultFolder.png")
+        listitem.setInfo( type="Video", infoLabels={ "Title": title } )
+        if menu:
+            listitem.addContextMenuItems(menu, replaceItems=True)
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=True)
+
+    def addVideo(self,title,youtubeid,description='',picture=''):
+        url=sys.argv[0]+"?youtubeid="+youtubeid+"&action=showVideo"
+        liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage="DefaultVideo.png")
+        liz.setInfo( type="Video", infoLabels={ "Title": title } )
+        liz.setProperty('IsPlayable', 'true')
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
+
+    # ------------------------------------- Show functions ------------------------------------- #
+
+    def newSearchDialog(self, params = {}):
+        search = self.common.getUserInput(self.__language__(32000))
+        search=urllib.quote_plus(search)
+        save = xbmcgui.Dialog().yesno(self.__language__(32010), self.__language__(32015) % search)
+        if save:
+            self.saveSearch(search)
+        params['url']='http://day9.tv/archives?q='+search
+        self.showTitles(params=params)
+
+    def showSearch(self, params = {}):
+        get = params.get
+        self.addCategory(self.__language__(32000), 'url', 'newSearchDialog')
+        searches = self.getSearch() 
+        for search in searches:
+            cm = []
+            cm.append((self.__language__(32500) % search, 'XBMC.RunPlugin(%s?action=removeSearch&search=%s)' % (sys.argv[0], search)))
+            url='http://day9.tv/archives?q='+search
+            self.addCategory(search, url, 'showTitles', menu=cm)
+
+    def removeSearch(self, params = {}):
+        get = params.get
+        search = get("search")
+        delete = xbmcgui.Dialog().yesno(self.__language__(32598), self.__language__(32599) % search)
+        if delete:
+            self.deleteSearch(search)
+
+    def showTitles(self, params = {}):
+        get = params.get
+        link = self.getRequest(get("url"))
+        # the convert is to get rid of things like &#39;  Fixes unfiled bug
+        # with dailies 484, 393, 389, 388.
+        tree = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        # narrow down the search to get rid of upcoming shows
+        # I'd like to add them just to inform people of what/when things are
+        # happening but there isn't good markup to isolate them.  I guess I
+        # could excise the existing shows and say whatever is left is
+        # upcoming...
+        results=tree.find('ul', { "id" : "results" })
+        for r in results.findAll('h3'):
+            link = r.contents[0]
+            self.addCategory(str(link.contents[0]), 'http://day9.tv/' + str(link['href']), 'showGames')
+                
+        try: 
+            nextpage = tree.find('li', { "class" : "next" }).find('a').get('href')
+            if nextpage: 
+                url = 'http://day9.tv/archives/'+nextpage
+                self.addCategory(self.__language__(31001), url, 'showTitles')
+        except:
+            return
+
+    def showGames(self, params = {}):
+        get = params.get
+        link = self.getRequest(get("url"))
+        tree = BeautifulSoup(link)
+        # ideally we grab the pictures and comment text, airdate, etc to
+        # include them in the display
+        i=0
+        for video in tree.findAll('iframe'):
+            v=re.match('http://www.youtube.com/embed/(.*)', video.get('src'))
+            i=i+1
+            self.addVideo(get("title")+' Part '+str(i), youtubeid=v.group(1))
+
+    def showVideo(self, params = {}):
+        get = params.get
+        youTubeId = get("youtubeid")
+        # need to start a video before you can hand it over youtube plugin
+        req = urllib2.Request('http://www.youtube.com/embed/'+youTubeId)
+        response = urllib2.urlopen(req)
+        link = response.read()
+        response.close()
+
+        stream_url = "plugin://plugin.video.youtube/?action=play_video&videoid=" + youTubeId
+        item = xbmcgui.ListItem(path=stream_url)
+        item.setProperty("IsPlayable","true")
+        xbmcplugin.setResolvedUrl(pluginhandle, True, item)
+        return False
+
+    # ------------------------------------- Data functions ------------------------------------- #
+
+
+    # need to work out how editing is going to work for this.  Also don't know
+    # if it matters but I'm storing searches quoted where other people stored
+    # them unquoted.  I feel like this way is safer.
+    def saveSearchList(self, searches):
+        self.__settings__.setSetting("saved_searches", repr(searches))
+
+    def saveSearch(self, search):
+        searches = self.getSearch()
+        searches.append(urllib.quote_plus(search))
+        self.saveSearchList(searches)
+
+    def deleteSearch(self, search):
+        searches = self.getSearch()
+        for count, s in enumerate(searches):
+            if (search == s):
+                del (searches[count])
+                self.saveSearchList(searches)
+                break
+        xbmc.executebuiltin("Container.Refresh")
+ 
+    def getSearch(self):
+        try:
+            searches = eval(self.__settings__.getSetting("saved_searches"))
+        except:
+            searches = []
+        return searches
+
+
+    def getParams(self, paramList):
+        splitParams = paramList[paramList.find('?')+1:].split('&')
+        paramsFinal = {}
+        for value in splitParams:
+            splitParams = value.split('=')
+            type = splitParams[0]
+            content = splitParams[1]
+            if type == 'url':
+                content = urllib.unquote_plus(content)
+            paramsFinal[type] = content
+        return paramsFinal
+
+    def getRequest(self, url):
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', self.USERAGENT)
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        return link

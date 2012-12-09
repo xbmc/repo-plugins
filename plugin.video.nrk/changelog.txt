@@ -1,3 +1,6 @@
+[B]4.2.2[/B]
+- Sideendringer
+
 [B]4.2.1[/B]
 - Fikset direktestrømmer
 - Fikset undertekst

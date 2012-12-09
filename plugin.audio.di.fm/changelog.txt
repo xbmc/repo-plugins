@@ -3,6 +3,14 @@
 - Removed feature
 
 
+8 December 2012 v2.1.0
++ Added a 4th stream quality option for Premium members: 256k/sec MP3
++ Now using the config.ini file to hopefully streamline the process of updating the di.fm/sky.fm/jazzradio.com plugins
+* Fixed it so UTF8 chars is handled correctly in channelnames
+* Fixed a "miscalculation" that made it so when using favorites, the playlist being activated when clicking the channelname,
+  was actually the one belonging to the next channelname, etc.
+
+
 2 Oct 2012 v2.0.0
 + Using JSON to get streams addresses instead of parsing the HTML for them
 + Added an indication of what quality the stream is, shown as i.e: 64 kb
@@ -12,7 +20,7 @@
 * Updated addons description
 - Not scraping the the HTML any more using regexs to scavenge for streams
 
-Thanks to Daniel Connelly for making me aware of the JSON data and for being my willing guinea pig ;)
+Thanks to DexN for making me aware of the JSON data and for being my willing guinea pig ;)
 
 
 25 Apr 2012 v1.1.1

@@ -38,4 +38,7 @@
 	<string id="32100">错误！</string>
 	<string id="32101">无法连接到守护进程。</string>
 	<string id="32102">你现在要修改设置吗？</string>
+	<!-- stream -->
+	<string id="32201">视频流播放</string>
+	<string id="32202">视频流文件</string>
 </strings>

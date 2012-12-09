@@ -1,7 +1,11 @@
 import urllib, sys, os, re, time
 import xbmcaddon, xbmcplugin, xbmcgui, xbmc
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
 
-# Plugin constants 
+# Plugin constants
 __addonname__ = "uTorrent"
 __addonid__   = "plugin.program.utorrent"
 __addon__     = xbmcaddon.Addon(id=__addonid__)
@@ -10,7 +14,7 @@ __cwd__       = xbmc.translatePath( __addon__.getAddonInfo('path') )
 __profile__   = xbmc.translatePath( __addon__.getAddonInfo('profile') )
 __icondir__   = os.path.join( __cwd__,'resources','icons' )
 
-# Shared resources 
+# Shared resources
 BASE_RESOURCE_PATH = os.path.join( __cwd__, 'resources', 'lib' )
 sys.path.append (BASE_RESOURCE_PATH)
 
@@ -52,61 +56,74 @@ def updateList():
     token = getToken()
     url = baseurl + token + '&list=1'
     data = myClient.HttpCmd(url)
-    data = data.split('\n')
     torrentList = []
-    for line in data:
-        if '\"rssfeeds\"' in line:
-            xbmc.log( "%s::updateList - %s" % ( __addonname__, 'break with \"rssfeeds\"' ), xbmc.LOGDEBUG )
-            break
-        if len(line) > 80:
-            tor = re.findall('\"[^\"]*\"|[0-9\-]+', line)
-            xbmc.log( "%s::updateList - %d: %s" % ( __addonname__, len(torrentList), str(tor) ), xbmc.LOGDEBUG )
-            hashnum = tor[0][1:-1]
-            status = tor[1]
-            torname = tor[2]
-            complete = tor[4]
-            complete = int(complete)
-            complete = complete / 10.0
-            size = int(tor[3]) / (1024*1024)
-            if (size >= 1024.00):
-                size_str = str(round(size / 1024.00,2)) +"Gb"
-            else:
-                size_str = str(size) + "Mb"
-            up_rate = round(float(tor[8]) / (1024),2)
-            down_rate = round(float(tor[9]) / (1024),2)
-            remain = int(tor[10]) / 60
-            if (remain >=60):
-                remain_str = str(remain//60) + __language__(30006).encode('utf8') + str(remain%60) + __language__(30007).encode('utf8')
-            elif(remain == -1):
-                remain_str = __language__(30008).encode('utf8')
-            else:
-                remain_str = str(remain) + __language__(30007).encode('utf8')
-            tup = (hashnum, status, torname, complete, size_str, up_rate, down_rate,remain_str)
-            torrentList.append(tup)
+    data = unicode(data, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(data)
+    for torrent in json_response['torrents']:
+        xbmc.log( "%s::updateList - %d: %s" % ( __addonname__, len(torrentList), str(torrent) ), xbmc.LOGDEBUG )
+        hashnum = torrent[0].encode('utf-8')
+        status = torrent[1]
+        torname = torrent[2].encode('utf-8')
+        sid = torrent[22]
+        complete = torrent[4] / 10.0
+        size = torrent[3] / (1024*1024)
+        if (size >= 1024.00):
+            size_str = str(round(size / 1024.00,2)) + "Gb"
+        else:
+            size_str = str(size) + "Mb"
+        up_rate = round(torrent[8] / 1024, 2)
+        down_rate = round(torrent[9] / 1024, 2)
+        remain = torrent[10] / 60
+        if (remain >=60):
+            remain_str = str(remain//60) + __language__(30006).encode('utf8') + str(remain%60) + __language__(30007).encode('utf8')
+        elif(remain == -1):
+            remain_str = __language__(30008).encode('utf8')
+        else:
+            remain_str = str(remain) + __language__(30007).encode('utf8')
+        tup = (hashnum, status, torname, complete, size_str, up_rate, down_rate, remain_str, sid)
+        torrentList.append(tup)
     return torrentList
 
 def listTorrents():
     tupList = updateList()
     mode = 1
-    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str in tupList:
-        if int(bw) in (169,232,233):
+    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str,sid in tupList:
+        if bw in (169,232,233):
             thumb = os.path.join(__icondir__,'pause.png')
-        elif int(bw) in (130,137,200,201):
+        elif bw in (130,137,200,201):
             thumb = os.path.join(__icondir__,'play.png')
-        elif int(bw) in (128,136):
+        elif bw in (128,136):
             thumb = os.path.join(__icondir__,'stop.png')
-        elif int(bw) == 200:
+        elif bw == 200:
             thumb = os.path.join(__icondir__,'queued.png')
         else:
             thumb = os.path.join(__icondir__,'unknown.png')
         url = baseurl
-        addDir(name+" "+__language__(30001).encode('utf8')+str(complete)+"% "+__language__(30002).encode('utf8')+size_str+" "+__language__(30003).encode('utf8')+ str(down_rate)+"Kb/s "+__language__(30004).encode('utf8')+str(up_rate)+"Kb/s "+__language__(30005).encode('utf8')+remain_str,url,mode,thumb,hashnum)
+        addDir(name+" [COLOR FFFF0000]"
+                +__language__(30001).encode('utf8')+"[/COLOR]"+str(complete)+"% [COLOR FF00FF00]"
+                +__language__(30002).encode('utf8')+"[/COLOR]"+size_str+" [COLOR FFFFFF00]"
+                +__language__(30003).encode('utf8')+"[/COLOR]"+str(down_rate)+"Kb/s [COLOR FF00FFFF]"
+                +__language__(30004).encode('utf8')+"[/COLOR]"+str(up_rate)+"Kb/s [COLOR FFFF00FF]"
+                +__language__(30005).encode('utf8')+"[/COLOR]"+remain_str,url,mode,thumb,hashnum,sid)
         mode = mode + 1
     xbmcplugin.endOfDirectory(int(sys.argv[1]),cacheToDisc=False)
 
-def performAction(selection):
+
+def getFiles(hash):
+    token = getToken()
+    url = baseurl + token + '&action=getfiles&hash='+hash
+    data = myClient.HttpCmd(url)
+    fileList = []
+    data = unicode(data, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(data)
+    for file in json_response['files'][1]:
+        xbmc.log( "%s::getFiles - %d: %s" % ( __addonname__, len(fileList), str(file) ), xbmc.LOGDEBUG )
+        fileList.append(file[0].encode('utf-8'))
+    return fileList
+
+def performAction(selection,sid):
     dialog = xbmcgui.Dialog()
-    sel = dialog.select(__language__(32001),[__language__(32002),__language__(32003),__language__(32004),__language__(32005),__language__(32006),__language__(32007),__language__(32008)])
+    sel = dialog.select(__language__(32001),[__language__(32002),__language__(32003),__language__(32004),__language__(32005),__language__(32006),__language__(32007),__language__(32008),__language__(32201)])
     token = getToken()
     if sel == 0:
         myClient.HttpCmd(baseurl+token+'&action=pause&hash='+selection)
@@ -122,11 +139,17 @@ def performAction(selection):
         myClient.HttpCmd(baseurl+token+'&action=remove&hash='+selection)
     if sel == 6:
         myClient.HttpCmd(baseurl+token+'&action=removedata&hash='+selection)
+    if sel == 7:
+        files = getFiles(selection)
+        if len(files) > 1: 
+             xbmc.Player().play('http://'+UT_USER+':'+UT_PASSWORD+'@'+UT_ADDRESS+':'+UT_PORT+'/proxy?sid='+sid+'&file='+str(dialog.select(__language__(32202),files)))
+        else:
+             xbmc.Player().play('http://'+UT_USER+':'+UT_PASSWORD+'@'+UT_ADDRESS+':'+UT_PORT+'/proxy?sid='+sid+'&file=0')
     xbmc.executebuiltin('Container.Refresh')
 
 def pauseAll():
     tupList = updateList()
-    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str in tupList:
+    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str,sid in tupList:
         token = getToken()
         url = baseurl + token + '&action=pause&hash='+hashnum
         myClient.HttpCmd(url)
@@ -135,7 +158,7 @@ def pauseAll():
 
 def resumeAll():
     tupList = updateList()
-    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str in tupList:
+    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str,sid in tupList:
         token = getToken()
         url = baseurl + token + '&action=unpause&hash='+hashnum
         myClient.HttpCmd(url)
@@ -144,7 +167,7 @@ def resumeAll():
 
 def stopAll():
     tupList = updateList()
-    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str in tupList:
+    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str,sid in tupList:
         token = getToken()
         url = baseurl + token + '&action=stop&hash='+hashnum
         myClient.HttpCmd(url)
@@ -153,7 +176,7 @@ def stopAll():
 
 def startAll():
     tupList = updateList()
-    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str in tupList:
+    for hashnum, bw, name, complete,size_str, up_rate, down_rate,remain_str,sid in tupList:
         token = getToken()
         url = baseurl + token + '&action=start&hash='+hashnum
         myClient.HttpCmd(url)
@@ -198,7 +221,7 @@ def addFiles():
             Response = myClient.HttpCmd(url, postdta=Postx, content=Contentx)
     time.sleep(1)
     xbmc.executebuiltin('Container.Refresh')
-        
+
 def get_params():
     param=[]
     paramstring=sys.argv[2]
@@ -217,8 +240,8 @@ def get_params():
 
     return param
 
-def addDir(name,url,mode,iconimage,hashNum):
-    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&hashNum="+str(hashNum)
+def addDir(name,url,mode,iconimage,hashNum,sid):
+    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&hashNum="+str(hashNum)+"&sid="+str(sid)
     ok = True
     point = xbmcgui.ListItem(name,thumbnailImage=iconimage)
     rp = "XBMC.RunPlugin(%s?mode=%s)"
@@ -230,6 +253,7 @@ url = None
 name = None
 mode = 0
 hashNum = None
+sid = None
 
 try:
     url = urllib.unquote_plus(params['url'])
@@ -245,6 +269,10 @@ except:
     pass
 try:
     hashNum = urllib.unquote_plus(params['hashNum'])
+except:
+    pass
+try:
+    sid = urllib.unquote_plus(params['sid'])
 except:
     pass
 
@@ -271,5 +299,4 @@ elif mode == 1005:
 
 elif 0 < mode < 1000:
     xbmc.log( "%s::main - hashNum: %s" % ( __addonname__, hashNum ), xbmc.LOGDEBUG )
-    performAction(hashNum)
-
+    performAction(hashNum,sid)

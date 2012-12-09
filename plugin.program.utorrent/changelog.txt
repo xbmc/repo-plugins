@@ -1,4 +1,9 @@
-﻿[B]1.1.0 (2012.1.21)[/B]
+﻿[B]1.1.1 (2012.12.9)[/B]
+added stream capability, thanks burlizzi
+added color tags
+changed: use simplejson to get data
+
+[B]1.1.0 (2012.1.21)[/B]
 initialized into eden
 
 [B]1.0.5 (2011.1.30)[/B]

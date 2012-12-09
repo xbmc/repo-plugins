@@ -8,3 +8,7 @@ It requires XBMC 12.0 (frodo) to function.
 The plugin fetches the video URL from the SVT Play website and feeds it to the XBMC video player. HLS (m3u8) is the preferred video format by the plugin.
 
 Created by nilzen.
+
+Known issues:
+
+* Video playback may stutter on Apple TV2 due to the use of the h264 profile avc1.77.30

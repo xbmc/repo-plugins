@@ -63,9 +63,10 @@ def getListItem(videocontent):
     li = xbmcgui.ListItem(title, thumbnailImage=image_url)
     li.setProperty('Fanart_Image', FANART)
     li.setProperty('IsPlayable', 'true')
-    li.setInfo(type="Video", infoLabels={ "Title": title,
-                                          "Plot": videocontent.description,
-                                          "Duration": str((videocontent.duration or 0) / 60) })    
+    li.setInfo(type="Video", infoLabels={ "Title": unicode(title),
+                                          "Plot": unicode(videocontent.description),
+                                          "Duration": str((videocontent.duration or 0)/60) })
+
     return li
 
 def getUrl(videocontent, method):

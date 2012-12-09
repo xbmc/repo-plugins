@@ -432,10 +432,10 @@ def ADD_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record
         liz.setProperty("IsPlayable","true")
         menu = []
         if favorites:
-              menu.append((language(30054),'XBMC.RunPlugin(%s?name=None&url=%s&mode=10&iconimage=None&description=None)'%(sys.argv[0],url)))
+              menu.append((language(30054),'XBMC.RunPlugin(%s?name=None&url=%s&mode=10&iconimage=None&description=None)'%(sys.argv[0],programme_id)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
         if deletefav:
-              menu.append((language(30055),'XBMC.RunPlugin(%s?name=None&url=%s&mode=11&iconimage=None&description=None)'%(sys.argv[0],url)))
+              menu.append((language(30055),'XBMC.RunPlugin(%s?name=None&url=%s&mode=11&iconimage=None&description=None)'%(sys.argv[0],programme_id)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
         if record:
               menu.append((language(30056),'XBMC.RunPlugin(%s?name=None&url=%s&mode=6&iconimage=None&description=None&pid=%s&st=%s)'%(sys.argv[0],url,programme_id,startdate_time)))

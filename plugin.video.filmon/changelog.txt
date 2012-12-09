@@ -1,3 +1,6 @@
+v3.2.3
+Fixed Added Favourites
+
 v3.2.2
 Fixed Favorites
 Fixed Tvguide in Favorites

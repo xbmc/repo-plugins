@@ -1,3 +1,10 @@
+v2.0.1
+- re-release to eden/frodo
+
+v2.0.0
+- rewrite by Robert to use the new day9.tv website for content source, and to
+  use youtube as the backend for streaming.
+
 v1.0.2
 - AGAIN: Updated the code due to blip.tv changes on their website
 
@@ -17,7 +24,8 @@ v0.3
 - Deleting the "favourite" feature for now
 
 v0.2
-- The plugin "Starcraft 2" has been splitted into 2 plugins, "Day9" and "djWHEAT".
+- The plugin "Starcraft 2" has been splitted into 2 plugins, "Day9" and
+  "djWHEAT".
 
 v0.1 
 - The first realese of the plugin Starcraft2.

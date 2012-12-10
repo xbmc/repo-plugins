@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.on_aol" name="On Aol" version="1.0.0" provider-name="divingmule">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="script.common.plugin.cache" version="1.3.0"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary>Videos form on.aol.com.</summary>
+    <description>
+        This add-on lets you watch videos from Aol's video portal on.aol.com.
+        There is a large variety of content from Aol and their many partners from across the web.
+    </description>
+    <platform>all</platform>
+    <language>en</language>
+  </extension>
+</addon>

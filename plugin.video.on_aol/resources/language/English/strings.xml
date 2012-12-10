@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Featured</string>
+  <string id="30001">Top Picks</string>
+  <string id="30002">Featured Partners</string>
+  <string id="30003">Channels</string>
+  <string id="30004">All Topics</string>
+  <string id="30005">Search</string>
+  <string id="30006">Enter Search Terms</string>
+  <string id="30007">Next Page</string>
+  <string id="30008">Enable add-on debugging.</string>
+  <string id="30009">Preferred Video Quality</string>
+  <string id="30010">320p</string>
+  <string id="30011">480p</string>
+  <string id="30012">720p</string>
+  <string id="30013">1080p</string>
+  <string id="30014">Save search queries</string>
+  <string id="30015">Video Search</string>
+  <string id="30016">Partner Search</string>
+  <string id="30017">Remove Search Query</string>
+  <string id="30018">Remove from Add-on Favorites</string>
+  <string id="30019">Add to Add-on Favorites</string>
+  <string id="30020">Favorites</string>
+</strings>

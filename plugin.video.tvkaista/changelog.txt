@@ -1,3 +1,5 @@
+[B]3.0.4[/B]
+- Added fanart image. Thanks to Sven Weiß and koobyak!
 [B]3.0.3[/B]
 - Bugfix+add custom user-agent string as requested by tvkaista api documentation
 [B]3.0.2[/B]

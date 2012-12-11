@@ -10,7 +10,9 @@
     <string id="30007">Search</string>
 	<string id="30009">No results found for </string>
 	<string id="30010">Try using the Film Database.</string>
-	<string id="30011">Enter the film's starting letter or word, or release year:</string>
+	<string id="30011">Enter the film's starting letter, word, or release year:</string>
+	<string id="30012">This video is currently not available.</string>
+	<string id="30013">Try searching for the movie.</string>
 	<string id="30050">There was a connection error:</string>
 	<string id="30051">If this problem persists, please submit the error report.</string>
 	<string id="30052">Retry</string>

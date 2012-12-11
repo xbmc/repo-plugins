@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 plugin = 'Trailer Addict'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '12-02-2012'
-__version__ = '1.0.6'
+__date__ = '12-10-2012'
+__version__ = '1.0.7'
 settings = xbmcaddon.Addon( id = 'plugin.video.trailer.addict' )
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 
@@ -17,7 +17,7 @@ oscar_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media
 popcorn_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'popcorn.png' )
 poster_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'poster.png' )
 
-def open_url(url):
+def open_url(url, get = False):
 	retries = 0
 	while retries < 11:
 		data = {'content': None, 'error': None}
@@ -25,7 +25,9 @@ def open_url(url):
 			if retries != 0:
 				time.sleep(3)
 			data = get_page(url)
-			if data['content'] != None and data['error'] == None:
+			if data['content'] != None and \
+			   data['error'] == None and \
+			   type(data['content']) == str or type(data['content']) == unicode:
 				return data['content']
 			if data['error'] == 'HTTP Error 404: Not Found':
 				break
@@ -170,7 +172,7 @@ def build_search_directory():
 	link_title = re.compile( '</div><a href="/tags/(.*?)">(.*?)</a><br />' ).findall( data )
 	if len( link_title ) == 0:
 		dialog = xbmcgui.Dialog()
-		ok = dialog.ok( __plugin__ , settings.getLocalizedString(30009) + search_string + '.\n' + settings.getLocalizedString(30010) )
+		ok = dialog.ok( plugin , settings.getLocalizedString(30009) + search_string + '.\n' + settings.getLocalizedString(30010) )
 		build_main_directory()
 		return
 	item_count=0
@@ -186,13 +188,16 @@ def build_search_directory():
 def build_film_database_directory():
 	keyboard = xbmc.Keyboard( '', settings.getLocalizedString(30011) )
 	keyboard.doModal()
-	if ( keyboard.isConfirmed() == False ):
-		return
-	search_string = keyboard.getText().replace( ' ', '+' )
-	if len( search_string ) == 0:
+	search_string = keyboard.getText().rsplit(' ')[0]
+	if ( (keyboard.isConfirmed() == False) or (len( search_string ) == 0) ):
 		return
 	data = open_url( 'http://www.traileraddict.com/thefilms/' + search_string )
 	link_title = re.compile( '<img src="/images/arrow2.png" class="arrow"> <a href="(.+?)">(.+?)</a>' ).findall( data )
+	if len( link_title ) == 0:
+		dialog = xbmcgui.Dialog()
+		ok = dialog.ok( plugin , settings.getLocalizedString(30009) + search_string + '.\n' + settings.getLocalizedString(30013) )
+		build_main_directory()
+		return
 	item_count=0
 	for url, title in link_title:
 		url = 'http://www.traileraddict.com/' + url
@@ -268,13 +273,13 @@ def play_video( url, name ):
 	else:
 		url = 'http://www.traileraddict.com/fvar.php?tid=' + url
 	data = open_url( url )
+	thumb = re.compile( '&image=(.+?)&' ).findall( data )[0]
+	if thumb == 'http://www.traileraddict.com/images/noembed-removed.png':
+		dialog = xbmcgui.Dialog()
+		ok = dialog.ok(plugin, settings.getLocalizedString( 30012 ))
+		return
 	url = re.compile( 'fileurl=(.+?)\n&vidwidth', re.DOTALL ).findall( data )[0]
-	thumb = re.compile( '&image=(.+?)' ).findall( data )[0]
 	url = url.replace( '%3A', ':').replace( '%2F', '/' ).replace( '%3F', '?' ).replace( '%3D', '=' ).replace( '%26', '&' ).replace( '%2F', '//' )
-	req = urllib2.Request( url )
-	content = urllib2.urlopen( req )
-	url = content.geturl()
-	content.close()
 	listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = xbmc.getInfoImage( "ListItem.Thumb" ), path = str(url) )
 	listitem.setInfo( type="Video", infoLabels={ "Title": name , "Studio": plugin } )
 	xbmcplugin.setResolvedUrl( handle = int( sys.argv[1] ), succeeded = True, listitem = listitem )

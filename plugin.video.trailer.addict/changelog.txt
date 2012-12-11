@@ -1,3 +1,11 @@
+[B]Version 1.0.7[/B]
+
+- Fixed __plugin__ is not defined error
+- Fixed 'urllib2.URLError' error
+- Fixed HTTP Error 404 when searching the Film Database
+- Fixed 'list index out of range' error
+- Fixed 'expected string or buffer' error
+
 [B]Version 1.0.6[/B]
 
 - Initial commit to Eden and Frodo

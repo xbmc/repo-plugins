@@ -5,8 +5,8 @@ import simplejson as json
 plugin = 'TMZ'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '12-05-2012'
-__version__ = '2.0.8'
+__date__ = '12-10-2012'
+__version__ = '2.0.9'
 settings = xbmcaddon.Addon( id = 'plugin.video.tmz' )
 dbg = False
 dbglevel = 3
@@ -206,10 +206,13 @@ def get_page(url):
 		req = urllib2.Request(url)
 		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0.1')
 		content = urllib2.urlopen(req)
-		if url.find('http://www.tmz.com/videos') != -1:
-			gzip_filehandle = gzip.GzipFile(fileobj=StringIO.StringIO(content.read()))
-			html = gzip_filehandle.read()
-		else:
+		try:
+			if content.info()['Content-Encoding'] == 'gzip':
+				gzip_filehandle = gzip.GzipFile(fileobj=StringIO.StringIO(content.read()))
+				html = gzip_filehandle.read()
+			else:
+				html = content.read()
+		except:
 			html = content.read()
 		content.close()
 		try:

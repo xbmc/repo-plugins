@@ -576,36 +576,49 @@ def startVideo(url):
 
 def hlsStrip(videoUrl):
     """
-    This function removes all streams except
-    the 1024x576 or 704x396 stream from an .m3u8 HLS
-    playlist file. This is to ensure highest available
-    quality on devices like ATV2 that do not handle
-    avc1.77.30 well yet.
-    Note! The for-loop only works because of the ordering
-    in the .m3u8 file, so it is fragile.
+    Extracts the stream that supports the
+    highest bandwidth and is not using the avc1.77.30 codec.
+    Returns the path to a m3u8 file on the local disk with a
+    reference to the extracted stream.
     """
+    common.log("Stripping file: " + videoUrl)
+
     ufile = urllib.urlopen(videoUrl)
+    lines = ufile.readlines()
+
     newplaylist = "#EXTM3U\n"
     header = ""
     hlsurl = ""
-    foundheader = False
-    for line in ufile.readlines():
-        if ("1024x576" in line) or ("704x396" in line):
-            header = line
-            foundheader = True
-            continue
-        if foundheader:
-            foundheader = False
-            hlsurl = line
-            continue
+    bandwidth = 0
+    foundhigherquality = False
 
+    for line in lines:
+      if foundhigherquality:
+        foundhigherquality = False
+        hlsurl = line
+      if "EXT-X-STREAM-INF" in line:
+        if not "avc1.77.30" in line:
+          match = re.match(r'.*BANDWIDTH=(\d+),.*CODECS=\"(.+?),.+',line)
+          if match:
+            if bandwidth < int(match.group(1)):
+              foundhigherquality = True
+              header = line
+              bandwidth = int(match.group(1))
+          continue
+
+    if bandwidth == 0:
+      return None
+
+    ufile.close()
     newpath = os.path.join(xbmc.translatePath("special://temp"),"svt.m3u8")
     newfile = open(newpath, 'w')
     newplaylist += header + hlsurl
+
     try:
         newfile.write(newplaylist)
     finally:
         newfile.close()
+
     return newpath
 
 

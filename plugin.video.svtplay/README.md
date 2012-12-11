@@ -12,3 +12,4 @@ Created by nilzen.
 Known issues:
 
 * Video playback may stutter on Apple TV2 due to the use of the h264 profile avc1.77.30
+  * Use the advanced plugin option "Don't use avc1.77.30 streams" to workaround this issue. Note that HD video is not supported on Apple TV 2 anymore due to changes by SVT.

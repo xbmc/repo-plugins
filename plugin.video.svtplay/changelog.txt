@@ -1,3 +1,7 @@
+Version 3.1.2
+-------------
+- Restored playback on Apple TV 2 (by linqcan)
+
 Version 3.1.1
 -------------
 - Fixed broken parsing of alphabetical program listing (by linqcan)

@@ -50,9 +50,13 @@
   <string id="30217">A weekly talk show taking a pragmatic look at the art and business of Software Development and related technologies.</string>
 
   <!-- Settings -->
-  <string id="30100">General</string>	
-	<string id="30101">Video Quality</string>
-	<string id="30102">High</string>
-	<string id="30103">Low</string>
+  <string id="30100">General</string>
+  <string id="30101">Video Quality</string>
+  <string id="30102">High</string>
+  <string id="30103">Low</string>
+  <string id="30104">Episodes per Page</string>
+
+  <!-- Misc -->
+  <string id="30300">Older episodes</string>
 
 </strings>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.jupiterbroadcasting"
        name="Jupiter Broadcasting"
-       version="2.8.0"
+       version="2.8.1"
        provider-name="Rob Loach">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
@@ -13,7 +13,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary>Jupiter Broadcasting video addon</summary>
-    <description>Watch shows from the Jupiter Broadcasting Network including the Linux Action Show, STOked, TechSNAP and more.</description>
+    <description>Watch shows from the Jupiter Broadcasting Network including the Linux Action Show, TechSNAP, SciByte, FauxShow, Coder Radio, and more.</description>
     <platform>all</platform>
     <language>en</language>
   </extension>

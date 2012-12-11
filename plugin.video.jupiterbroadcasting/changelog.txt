@@ -1,3 +1,8 @@
+[B]Version 2.8.1[/B]
+- #4 FauxShow: Use JupiterBroadcasting.com feeds
+- #2 Pagination
+- #3 Ship show images with the addon
+
 [B]Version 2.8.0: July 7th, 2012[/B]
 - New show: Coder Radio
 

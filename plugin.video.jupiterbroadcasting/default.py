@@ -74,11 +74,11 @@ def CATEGORIES():
 
     # FauxShow
     shows[__language__(30011)] = {
-        'feed': 'http://blip.tv/fauxshow/rss/itunes',
-        'feed-low': 'http://blip.tv/fauxshow/rss/itunes',
-        'image': 'http://a.images.blip.tv/FauxShow-300x300_show_image205.png',
+        'feed': 'http://www.jupiterbroadcasting.com/feeds/FauxShowHD.xml',
+        'feed-low': 'http://www.jupiterbroadcasting.com/feeds/FauxShowMobile.xml',
+        'image': 'http://www.jupiterbroadcasting.com/images/FauxShowStillcrop600.jpg',
         'plot': __language__(30211),
-        'genre': 'Humour'
+        'genre': 'Comedy'
     }
 
     # Jupiter@Nite

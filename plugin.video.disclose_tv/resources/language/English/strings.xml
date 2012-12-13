@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Page</string>
+
+    <!-- Settings -->
+    <string id="30100">Force ViewMode "Thumbnail"</string>
+</strings>

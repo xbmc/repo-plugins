@@ -40,7 +40,7 @@ def make_request(url, headers=None):
 
 
 def get_categories():
-        url = 'http://video.foxnews.com/playlist/latest-featured-videos/'
+        url = 'http://video.foxnews.com/playlist/latest-latest-news/'
         data = make_request(url)
         soup = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
         add_dir(soup.body.h1.contents[0].strip(), '', 2, icon)

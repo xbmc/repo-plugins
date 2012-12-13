@@ -1,3 +1,12 @@
+Version 1.8.6 (12 Dec 2012)
+- Broken for ALL videos, due to changes in the 4oD and Youtube encryption
+
+Version 1.8.5 (27 Nov 2012)
+- Fix loading script error caused by the last fix
+
+Version 1.8.4 (27 Nov 2012)
+- Fix disabled cache bug
+
 Version 1.8.3 (22 Nov 2012)
 - By default check first two episodes in each show listing to see of they are not Youtube or not (only performed for recent episodes). Prefixed with [Not on Youtube] if that is the case. option in settings, under "Advanced", to do this for ALL recent episodes. Turning on this option may increase the length of time taken to show episode listings for some shows.
 

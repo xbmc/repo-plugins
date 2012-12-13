@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.4od"
        name="4oD"
-       version="1.8.3"
+       version="1.8.6"
        provider-name="mossy">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
-        <import addon="plugin.video.youtube" version="3.3.0"/>
+        <import addon="plugin.video.youtube"/>
     </requires>
     <extension point="xbmc.python.pluginsource"
                library="default.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+	<broken>Broken for ALL videos, due to changes in the 4oD and Youtube encryption</broken>
 	<language>en</language>
         <platform>all</platform>
         <summary>Channel 4 On Demand</summary>
         <description>Channel 4 On Demand</description>
-	<disclaimer>May not work outside the UK and Ireland</disclaimer>
+	<disclaimer>You need to login into Youtube in the Youtube pluging in order to wathc some programmes. May not work outside the UK and Ireland</disclaimer>
     </extension>
 </addon>

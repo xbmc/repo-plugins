@@ -227,7 +227,6 @@ def CachePage(url, data):
 		xbmc.log ("Add page to cache", xbmc.LOGDEBUG)
 		_Cache_Add( url, data )
 
-
 def GetURL( url, logLevel, maxAgeSeconds=0 ):
 	global gLastCode
 
@@ -235,7 +234,7 @@ def GetURL( url, logLevel, maxAgeSeconds=0 ):
 	# If no cache dir has been specified then return the data without caching
 	if _CheckCacheDir() == False:
        		xbmc.log ("Not caching HTTP", xbmc.LOGDEBUG)
-		return _GetURL_NoCache( url )
+		return _GetURL_NoCache( url, logLevel )
 
 
 	if ( maxAgeSeconds > 0 ):

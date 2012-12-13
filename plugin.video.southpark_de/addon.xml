@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.southpark_de" name="SouthPark.de" version="1.0.2" provider-name="AddonScriptorDE">
+<addon id="plugin.video.southpark_de" name="SouthPark.de" version="1.0.3" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
     </requires>

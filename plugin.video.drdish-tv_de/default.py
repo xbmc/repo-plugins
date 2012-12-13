@@ -12,7 +12,6 @@ def index():
         addDir(translation(30002),"multimedia",'listCategories',"")
         addDir(translation(30003),"ratgeber",'listCategories',"")
         addDir(translation(30004),"leben-mit-zukunft",'listCategories',"")
-        addDir(translation(30005),"special-creations",'listCategories',"")
         addDir(translation(30006),"gastformate",'listCategories',"")
         addDir(translation(30007),"http://www.drdish-tv.com/neueste-videos/",'listVideos',"")
         addDir(translation(30008),"http://www.drdish-tv.com/tv-programm/",'listVideosTV',"")
@@ -23,7 +22,6 @@ def listCategories(url):
           listMultimedia()
           listRatgeber()
           listZukunft()
-          listSpecial()
           listGastformate()
         elif url=="multimedia":
           listMultimedia()
@@ -31,8 +29,6 @@ def listCategories(url):
           listRatgeber()
         elif url=="leben-mit-zukunft":
           listZukunft()
-        elif url=="special-creations":
-          listSpecial()
         elif url=="gastformate":
           listGastformate()
         xbmcplugin.endOfDirectory(pluginhandle)
@@ -40,37 +36,24 @@ def listCategories(url):
 def listMultimedia():
           addDir("Pixel - Digital Lifestyle","http://www.drdish-tv.com/sendungen/multimedia/pixel/",'listVideos',"")
           addDir("Dr.Dish Magazin - Das Abenteuer","http://www.drdish-tv.com/sendungen/multimedia/dr-dish-magazin/",'listVideos',"")
-          addDir("Reset - Satellit, Kabel und Terrestrik","http://www.drdish-tv.com/sendungen/multimedia/reset/",'listVideos',"")
-          addDir("3PUNKTNULL - Kinder, Jugend, Medien","http://www.drdish-tv.com/sendungen/multimedia/3punktnull/",'listVideos',"")
           addDir("Hard & Soft - Produktneuheiten im Überblick","http://www.drdish-tv.com/sendungen/multimedia/hard-soft/",'listVideos',"")
-          addDir("digitalLEADERS - Portrait-Serie","http://www.drdish-tv.com/sendungen/multimedia/digitalleaders/",'listVideos',"")
-          addDir("IRT TV","http://www.drdish-tv.com/sendungen/multimedia/irt-tv/",'listVideos',"")
 
 def listRatgeber():
           addDir("Wissen Videos - Dr.Dish antwortet ","http://www.drdish-tv.com/sendungen/ratgeber/wissen-videos/",'listVideos',"")
 
 def listZukunft():
           addDir("eTV - Erde Energie Effizienz ","http://www.drdish-tv.com/sendungen/wohnen-mit-zukunft/etv/",'listVideos',"")
-          addDir("HITEC TV","http://www.drdish-tv.com/sendungen/wohnen-mit-zukunft/hitec-tv/",'listVideos',"")
           addDir("ESA TV","http://www.drdish-tv.com/sendungen/leben-mit-zukunft/esa-tv/",'listVideos',"")
 
-def listSpecial():
-          addDir("I LOVE - Clever kaufen ","http://www.drdish-tv.com/i-love/",'listVideos',"")
-          addDir("Fernsehakademie","http://www.drdish-tv.com/sendungen/special-creations/fernseh-akademie/",'listVideos',"")
-          addDir("VideoWeb TV","http://www.drdish-tv.com/sendungen/special-creations/videoweb-tv/",'listVideos',"")
-
 def listGastformate():
-          addDir("COMPUTER CLUB 2","http://www.drdish-tv.com/sendungen/gastformate/computer-club-2/",'listVideos',"")
           addDir("portalZINE TV","http://www.drdish-tv.com/sendungen/gastformate/portalzine-tv/",'listVideos',"")
-          addDir("KWOBB","http://www.drdish-tv.com/sendungen/gastformate/kwobb/",'listVideos',"")
-          addDir("Seid Ihr elektrisch?","http://www.drdish-tv.com/sendungen/gastformate/seid-ihr-elektrisch/",'listVideos',"")
 
 def listVideos(url):
         content = getUrl(url)
         spl=content.split('<div class="videocontent">')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('<a href="videoplayer/video/(.+?)/">', re.DOTALL).findall(entry)
+            match=re.compile('tx_kaltura_pi1%5Bclipid%5D=(.+?)&amp;', re.DOTALL).findall(entry)
             url=match[0]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
@@ -88,7 +71,7 @@ def listVideosTV(url):
         spl=content.split('<div class="sendeplan-item">')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('<a href="videoplayer/video/(.+?)/" >', re.DOTALL).findall(entry)
+            match=re.compile('tx_kaltura_pi1%5Bclipid%5D=(.+?)"', re.DOTALL).findall(entry)
             url=match[0]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]

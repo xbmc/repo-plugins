@@ -92,6 +92,8 @@ def playVideo(url):
               match=re.compile('<media:content type="text/xml" medium="video" duration="(.+?)" isDefault="true" url="(.+?)"', re.DOTALL).findall(entry)
               url=match[0][1].replace("&amp;","&")
               content = getUrl(url)
+              if 'currently undergoing maintenance' in content:
+                continue
               matchMp4=re.compile('width="(.+?)" height="(.+?)" type="video/mp4" bitrate="(.+?)">(.+?)<src>(.+?)</src>', re.DOTALL).findall(content)
               matchFlv=re.compile('width="(.+?)" height="(.+?)" type="video/x-flv" bitrate="(.+?)">(.+?)<src>(.+?)</src>', re.DOTALL).findall(content)
               urlNew=""

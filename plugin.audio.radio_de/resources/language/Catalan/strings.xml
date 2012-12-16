@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Catalan language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ca/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Settings -->
+    <string id="30300">Idioma</string>
+    <string id="30301">Anglès</string>
+    <string id="30302">Alemany</string>
+    <string id="30303">Francès</string>
+</strings>

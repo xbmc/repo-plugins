@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- German language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/de/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
 <strings>
     <!-- Root menu entries -->
     <string id="30100">Tipps der Redaktion</string>
@@ -28,7 +32,7 @@
     <string id="30402">Sender editieren</string>
 
     <!-- Custom Station -->
-    <string id="30500">Bitte %s angeben</string> <!-- %s will be filled by 30501, 30502 or 30503 -->
+    <string id="30500">Bitte %s angeben</string> <!--%s will be filled by 30501, 30502 or 30503 -->
     <string id="30501">Titel</string>
     <string id="30502">Thumbnail url oder Pfad</string>
     <string id="30503">Stream url</string>

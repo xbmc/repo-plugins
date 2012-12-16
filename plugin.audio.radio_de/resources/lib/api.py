@@ -185,7 +185,7 @@ class RadioApi():
             else:
                 thumbnail = ''
             genre = station.get('genresAndTopics') or ','.join(
-                station['genres'] + station['topics'],
+                station.get('genres', []) + station.get('topics', []),
             )
             formated_stations.append({
                 'name': station['name'],

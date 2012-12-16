@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- General Strings -->
+    <string id="30001">Beliebte Dokus</string>
+    <string id="30002">Neue Dokus</string>
+    <string id="30003">Tags</string>
+    <string id="30004">Alle Dokus</string>
+    <string id="30005">Top Dokus</string>
+    <string id="30005">Suche</string>
+        <!-- Settings -->
+    <string id="30100">ViewMode Thumbnail erzwingen</string>
+    <!-- Notifications -->
+    <string id="30200">Netzwerk Fehler</string>
+</strings>

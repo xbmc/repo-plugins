@@ -1,0 +1,4 @@
+requests
+brightcove
+BeautifulSoup
+xbmcswift2

@@ -1,235 +1,328 @@
-import urllib,urllib2,re,os
-import xbmcplugin,xbmcgui,xbmcaddon
-from BeautifulSoup import BeautifulSoup
+﻿import urllib
+import urllib2
+import re
+import os
+import xbmcplugin
+import xbmcgui
+import xbmcaddon
+import StorageServer
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.foodnetwork')
-__language__ = __settings__.getLocalizedString
-home = __settings__.getAddonInfo('path')
-icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-
-
-def getShows():
-		req = urllib2.Request('http://www.foodnetwork.com/food-network-full-episodes/videos/index.html')
-		req.addheaders = [('Referer', 'http://www.foodnetwork.com'),
-				('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
-		response = urllib2.urlopen(req)
-		link=response.read()
-		response.close()
-		soup = BeautifulSoup(link)
-		shows = soup.find('ul', attrs={'class' : "playlists"})('li')
-		for show in shows:
-				name = show('a')[0].string
-				url = show['data-channel']
-				addDir(name,url,1,icon)
-		addDir(__language__(30000),'',4,icon)
-		addDir(__language__(30001),'',2,icon)
-		
-		
-def getTopVideos():
-		req = urllib2.Request('http://www.foodnetwork.com/food-network-top-food-videos/videos/index.html')
-		req.addheaders = [('Referer', 'http://www.foodnetwork.com'),
-				('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
-		response = urllib2.urlopen(req)
-		link=response.read()
-		response.close()
-		soup = BeautifulSoup(link)
-		shows = soup.find('ul', attrs={'class' : "playlists"})('li')
-		for show in shows:
-				name = show('a')[0].string
-				url = show['data-channel']
-				addDir(name,url,1,icon)
-
-def getShowClips():
-        addDir(__language__(30002), 'http://www.foodnetwork.com/40-a-day/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-40-Dollars-Day.jpg')
-        addDir(__language__(30003), 'http://www.foodnetwork.com/30-minute-meals/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp200-show-30-Minute-Meals.jpg')
-        addDir(__language__(30004), 'http://www.foodnetwork.com/ask-aida/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Ask-Aida.jpg')
-        addDir(__language__(30005), 'http://www.foodnetwork.com/barefoot-contessa/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp200-show-Barefoot-Contessa.jpg')
-        addDir(__language__(30006), 'http://www.foodnetwork.com/big-daddys-house/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Big-Daddys-House.jpg')
-        addDir(__language__(30007), 'http://www.foodnetwork.com/boy-meets-grill/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Boy-Meets-Grill.jpg')
-        addDir(__language__(30008), 'http://www.foodnetwork.com/chefs-vs-city/index.html', 3, 'http://img.foodnetwork.com/FOOD/2009/06/01/spShow_chefs-vs-city_s994x100.jpg')
-        addDir(__language__(30009), 'http://www.foodnetwork.com/chic-easy/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/12/sp100-Chic-and-Easy.jpg')
-        addDir(__language__(30010), 'http://www.foodnetwork.com/chopped/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/11/13/sp100-Chopped.jpg')
-        #addDir(__language__(30011), 'http://www.foodnetwork.com/crave/index.html', 3, '')
-        addDir(__language__(30012), 'http://www.foodnetwork.com/dear-food-network/index.html', 3, '')
-        addDir(__language__(30013), 'http://www.foodnetwork.com/diners-drive-ins-and-dives/index.html', 3, 'http://img.foodnetwork.com/FOOD/2011/04/12/FN_Show-DDD-Header_s994x200.jpg')
-        addDir(__language__(30014), 'http://www.foodnetwork.com/dinner-impossible/index.html', 3, 'http://img.foodnetwork.com/FOOD/2009/01/22/sp100-Dinner-Impossible-Irvine.jpg')
-        addDir(__language__(30015), 'http://www.foodnetwork.com/down-home-with-the-neelys/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/26/sp200-down-home-neelys.jpg')
-        addDir(__language__(30016), 'http://www.foodnetwork.com/easy-entertaining-with-michael-chiarello/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Easy-Entertaining.jpg')
-        addDir(__language__(30017), 'http://www.foodnetwork.com/everyday-italian/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/29/sp200-show-Everyday-Italian-rev1.jpg')
-        addDir(__language__(30018), 'http://www.foodnetwork.com/extreme-chef/index.html', 3, 'http://img.foodnetwork.com/FOOD/2011/06/22/FN_ExtremeChef_Showpg-hdr_994x100.jpg')
-        addDir(__language__(30019), 'http://www.foodnetwork.com/extreme-cuisine-with-jeff-corwin/index.html', 3, 'http://img.foodnetwork.com/FOOD/2009/02/04/sp200-extreme-cuisine.jpg')
-        addDir(__language__(30020), 'http://www.foodnetwork.com/feasting-on-waves/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/12/sp100-Feasting-on-Waves.jpg')
-        addDir(__language__(30021), 'http://www.foodnetwork.com/food-detectives/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Food-Detectives.jpg')
-        addDir(__language__(30022), 'http://www.foodnetwork.com/giada-at-home/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/10/09/sp100-Giada-at-Home.jpg')
-        addDir(__language__(30023), 'http://www.foodnetwork.com/guy-off-the-hook/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/09/04/sp200-Guy-Off-Hook_2.jpg')
-        addDir(__language__(30024), 'http://www.foodnetwork.com/healthy-appetite-with-ellie-krieger/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Healthy-Appetite.jpg')
-        addDir(__language__(30025), 'http://www.foodnetwork.com/howd-that-get-on-my-plate/index.html', 3, 'http://img.foodnetwork.com/FOOD/2010/02/12/sp100_Howd-That-Get-Plate_s994x100.jpg')
-        addDir(__language__(30026), 'http://www.foodnetwork.com/jamie-at-home/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Jamie-at-Home.jpg')
-        addDir(__language__(30027), 'http://www.foodnetwork.com/paulas-best-dishes/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/12/sp100-Paulas-Best-Dishes.jpg')
-        addDir(__language__(30028), 'http://www.foodnetwork.com/paulas-home-cooking/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp200-show-Paulas-Home-Cooking.jpg')
-        addDir(__language__(30029), 'http://www.foodnetwork.com/paulas-party/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/12/sp100-Paulas-Party.jpg')
-        addDir(__language__(30030), 'http://www.foodnetwork.com/quick-fix-meals-with-robin-miller/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Quick-Fix-Meals.jpg')
-        addDir(__language__(30031), 'http://www.foodnetwork.com/rescue-chef/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Rescue-Chef.jpg')
-        addDir(__language__(30032), 'http://www.foodnetwork.com/road-tasted-with-the-neelys/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/12/sp100-Road-Tasted-Neelys.jpg')
-        addDir(__language__(30033), 'http://www.foodnetwork.com/simply-delicioso-with-ingrid-hoffmann/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Simply-Delicioso.jpg')
-        addDir(__language__(30034), 'http://www.foodnetwork.com/the-best-thing-i-ever-ate/index.html', 3, 'http://img.foodnetwork.com/FOOD/2009/05/14/spShow_the-best-thing-i-ever-ate_s994x100.jpg')
-        addDir(__language__(30035), 'http://www.foodnetwork.com/the-chef-jeff-project/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/09/04/sp100-Cheff-Jeff-Project.jpg')
-        addDir(__language__(30036), 'http://www.foodnetwork.com/the-cooking-loft/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Cooking-Loft.jpg')
-        #addDir(__language__(30037), 'http://www.foodnetwork.com/tough-cookies/index.html', 3, '')
-        addDir(__language__(30038), 'http://www.foodnetwork.com/tylers-ultimate/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Tylers-Ultimate.jpg')
-        addDir(__language__(30039), 'http://www.foodnetwork.com/ultimate-recipe-showdown/index.html', 3, 'http://img.foodnetwork.com/FOOD/2010/02/04/URS_banner_s994x200.jpg')
-        addDir(__language__(30040), 'http://www.foodnetwork.com/unwrapped/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/08/08/sp100-Unwrapped.jpg')
-        addDir(__language__(30041), 'http://www.foodnetwork.com/viva-daisy/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/12/23/sp100-viva-daisy.jpg')
-        addDir(__language__(30042), 'http://www.foodnetwork.com/what-would-brian-boitano-make/index.html', 3, 'http://img.foodnetwork.com/FOOD/2009/06/01/spShow_WWBBM_s994x100.jpg')
-        addDir(__language__(30043), 'http://www.foodnetwork.com/will-work-for-food/index.html', 3, 'http://img.foodnetwork.com/FOOD/2008/11/14/sp100-Will-Work-For-Food.jpg')
-
-		
-def index(url):
-		req = urllib2.Request('http://www.foodnetwork.com/food/channel/xml/0,,'+url+',00.xml')
-		req.addheaders = [('Referer', 'http://www.hgtv.com'),
-				('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
-		response = urllib2.urlopen(req)
-		link=response.read()
-		response.close()
-		soup = BeautifulSoup(link)
-		videos = soup('video')
-		for video in videos:
-				name = video('clipname')[0].string
-				length = video('length')[0].string
-				thumb = video('thumbnailurl')[0].string
-				description = video('abstract')[0].string
-				link = video('videourl')[0].string
-				playpath = link.replace('http://wms.scrippsnetworks.com','').replace('.wmv','')
-				url = 'rtmp://flash.scrippsnetworks.com:1935/ondemand?ovpfv=1.1 swfUrl="http://common.scrippsnetworks.com/common/snap/snap-3.0.3.swf" playpath='+playpath
-				addLink(name,url,description,length,thumb)
+base_url = 'http://www.foodnetwork.com'
+addon = xbmcaddon.Addon(id='plugin.video.foodnetwork')
+addon_version = addon.getAddonInfo('version')
+cache = StorageServer.StorageServer("foodnetwork", 6)
+home = xbmc.translatePath(addon.getAddonInfo('path'))
+icon = os.path.join(home,'icon.png')
+__language__ = addon.getLocalizedString
+debug = addon.getSetting('debug')
+if debug == 'true':
+    cache.dbg = True
 
 
-def indexShowClips(url):
-		req = urllib2.Request(url)
-		req.addheaders = [('Referer', 'http://www.foodnetwork.com'),
-				('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
-		response = urllib2.urlopen(req)
-		link=response.read()
-		response.close()
-		soup = BeautifulSoup(link)
-		showID=re.compile("snap = new SNI.Food.Player.FullSize\(\\'vplayer-1\\',\\'(.+?)\\'\)").findall(link)
-		if len(showID)<1:
-				showID=re.compile("snap = new SNI.Food.Player.FullSize\(\\'vid-player\\', (.+?)\)").findall(link)
-		if len(showID)<1:
-				try:
-						url = soup.findAll('ul', attrs={'class' : "tabnav clrfix"})[0]('a')[-1]['href']
-				except:
-						print '-------->video not found'
-						return
-				url='http://www.foodnetwork.com'+url
-				req = urllib2.Request(url)
-				req.addheaders = [('Referer', 'http://www.foodnetwork.com'),
-						('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
-				response = urllib2.urlopen(req)
-				link=response.read()
-				response.close()
-				showID=re.compile("snap = new SNI.Food.Player.FullSize\(\\'vplayer-1\\',\\'(.+?)\\'\)").findall(link)
-				if len(showID)<1:
-						showID=re.compile("snap = new SNI.Food.Player.FullSize\(\\'vid-player\\', (.+?)\)").findall(link)
-				if len(showID)<1:
-						print '--------->video not found'
-						return
-		print'--------> '+showID[0]
-		req = urllib2.Request('http://www.foodnetwork.com/food/channel/xml/0,,'+showID[0]+',00.xml')
-		req.addheaders = [('Referer', 'http://www.hgtv.com'),
-				('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0) Gecko/20100101 Firefox/4.0')]
-		response = urllib2.urlopen(req)
-		link=response.read()
-		response.close()
-		soup = BeautifulSoup(link)
-		videos = soup('video')
-		for video in videos:
-				name = video('clipname')[0].string
-				length = video('length')[0].string
-				thumb = video('thumbnailurl')[0].string
-				description = video('abstract')[0].string
-				link = video('videourl')[0].string
-				playpath = link.replace('http://wms.scrippsnetworks.com','').replace('.wmv','')
-				url = 'rtmp://flash.scrippsnetworks.com:1935/ondemand?ovpfv=1.1 swfUrl="http://common.scrippsnetworks.com/common/snap/snap-3.0.3.swf" playpath='+playpath
-				addLink(name,url,description,length,thumb)
-		
+def addon_log(string):
+    if debug == 'true':
+        xbmc.log("[addon.foodnetwork-%s]: %s" %(addon_version, string))
+
+
+def make_request(url):
+        addon_log('Request URL: ' + url)
+        try:
+            headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0',
+                       'Referer' : base_url}
+            req = urllib2.Request(url,None,headers)
+            response = urllib2.urlopen(req)
+            data = response.read()
+            addon_log('ResponseInfo: %s' %response.info())
+            response.close()
+            return data
+        except urllib2.URLError, e:
+            addon_log('We failed to open "%s".' %url)
+            if hasattr(e, 'reason'):
+                addon_log('We failed to reach a server.')
+                addon_log('Reason: %s' %e.reason)
+            if hasattr(e, 'code'):
+                addon_log('We failed with error code - %s.' %e.code)
+
+
+def cache_shows():
+        cat = {
+            'videos': {'url': base_url+'/food-network-top-food-videos/videos/index.html'},
+            'episodes': {'url': base_url+'/food-network-full-episodes/videos/index.html'}
+            }
+        for i in cat.keys():
+            soup = BeautifulSoup(make_request(cat[i]['url']), convertEntities=BeautifulSoup.HTML_ENTITIES)
+            play_lists = []
+            playlists = soup.find('ul', attrs={'class': 'playlists'})('li')
+            for p in playlists:
+                play_lists.append((p.a.string, p['data-channel'], p.a['href']))
+            cat[i]['playlists'] = play_lists
+            if not cat.has_key('most_popular'):
+                most_popular = soup.find('h4', text='Videos').findNext('ul', attrs={'class': 'media'})('a')
+                video_list = []
+                for m in most_popular:
+                    video_list.append((m.string, m['href']))
+                cat['most_popular'] = video_list
+        return cat
+
+
+def get_categories():
+        addDir(__language__(30000),'episodes',1,icon)
+        addDir(__language__(30001),'videos',1,icon)
+        addDir(__language__(30002),'most_popular',1,icon)
+        addDir(__language__(30003),'all_shows',5,icon)
+
+
+def get_cat(url):
+        if url == 'most_popular':
+            items = cache.cacheFunction(cache_shows)[url]
+            for i in items:
+                addDir(i[0],i[1],3,icon,'','',True)
+        else:
+            items = cache.cacheFunction(cache_shows)[url]['playlists']
+            for i in items:
+                title = i[0]
+                if title.endswith('Full Episodes'):
+                    title = title.replace('Full Episodes','').replace(' - ','')
+                addDir(title,i[2],2,icon)
+
+
+def get_all_shows():
+        show_file = os.path.join(home, 'resources', 'show_list')
+        show_list = eval(open(show_file, 'r').read())
+        for i in show_list:
+            if i.has_key('video_href'):
+                if i.has_key('thumb'): thumb = i['thumb']
+                else: thumb = icon
+                addDir(i['name'], i['video_href'], 6, thumb)
+
+
+def get_video_xml(url, show=False):
+        video_id = None
+        try:
+            if int(eval(url)):
+                video_id = eval(url)
+        except: pass
+        if not video_id:
+            if url.startswith('/'):
+                url = base_url+url
+            data = make_request(url)
+            if show:
+                playlists = None
+                soup = BeautifulSoup(data, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
+                try:
+                    playlists = soup.find('ul', attrs={'class': "playlists"})('li')
+                except: pass
+                if playlists:
+                    for i in playlists:
+                        addDir(i.a.string, i.a['href'], 2, icon)
+                    return
+            try:
+                video_id = re.findall('var snap = new SNI.Food.Player.VideoAsset\(.+?, (.+?)\);', data)[0]
+            except:
+                try:
+                    video_id = re.findall('var snap = new SNI.Food.Player.FullSize\(.+?, (.+?)\);', data)[0]
+                except:
+                    try:
+                        video_id = re.findall('var snap = new SNI.Food.Player.FullSizeNoPlaylist\(.+?, (.+?)\);', data)[0]
+                    except:
+                        addon_log('Unable to find video_id')
+        if video_id:
+            xml_url = 'http://www.foodnetwork.com/food/channel/xml/0,,%s,00.xml' %video_id
+            soup = BeautifulStoneSoup(make_request(xml_url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+            if show:
+                for i in soup('video'):
+                    addDir(i.clipname.string, i.videourl.string, 4, i.thumbnailurl.string, i.abstract.string, i.length.string, True)
+            else:
+                resolve_url(soup.video.videourl.string)
+
+
+def get_playlist(url, name):
+        if not name == __language__(30005):
+            playlist_url = url.rsplit(',', 1)[0].rsplit('/', 1)[1]
+        else: playlist_url = url
+        json_url = '%s/food/feeds/channel-video/%s_RA,00.json' %(base_url, playlist_url)
+        items = eval(make_request(json_url).split('var snapTravelingLib = ')[1])[0]
+        for i in items['videos']:
+            addDir(i['label'], i['videoURL'], 4, i['thumbnailURL'], i['description'], i['length'], True)
+        if items['last'] < items['total']:
+            page_items = playlist_url.rsplit('_', 2)
+            page_url = '%s_%s_%s' %(page_items[0], (int(page_items[1])+1), page_items[2])
+            addDir(__language__(30005), page_url, 2, icon)
+
+
+def resolve_url(url):
+        playpath = url.replace('http://wms.scrippsnetworks.com','').replace('.wmv','')
+        final_url = (
+            'rtmp://flash.scrippsnetworks.com:1935/ondemand?ovpfv=1.1 '
+            'swfUrl=http://common.scrippsnetworks.com/common/snap/snap-3.2.17.swf '
+            'playpath='+playpath
+            )
+        item = xbmcgui.ListItem(path=final_url)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+
+def cache_all_shows():
+        url = 'http://www.foodnetwork.com/shows/index.html'
+        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        items = soup.find('div', attrs={'class': "list-wrap"})('li')
+        show_list = []
+        for i in items:
+            show = {}
+            show['name'] = i.a.string
+            show['page_href'] = i.a['href']
+            show_list.append(show)
+
+        dialog = xbmcgui.Dialog()
+        ok = dialog.yesno(
+            __language__(30011),
+            __language__(30009),
+            __language__(30010)
+            )
+        if ok:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            for i in show_list:
+                data = make_request(base_url+i['page_href'])
+                if data:
+                    s_soup = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+                    item = s_soup.find('span', attrs={'class': "lgbtn-text"}, text='videos')
+                    if not item:
+                        item = s_soup.find('span', attrs={'class': "lgbtn-text"}, text='VIDEOS')
+                    if item:
+                        i['video_href'] = item.findPrevious('a')['href']
+                    else:
+                        try:
+                            item = re.findall('var snap = new SNI.Food.Player.VideoAsset\(.+?, (.+?)\);', data)[0]
+                        except:
+                            try:
+                                item = re.findall('var snap = new SNI.Food.Player.FullSize\(.+?, (.+?)\);', data)[0]
+                            except:
+                                try:
+                                    item = re.findall('var snap = new SNI.Food.Player.FullSizeNoPlaylist\(.+?, (.+?)\);', data)[0]
+                                except:
+                                    addon_log('Unable to find video_id')
+                                    item = None
+                        if item:
+                            i['video_href'] = item
+                    try:
+                        ok = i['video_href']
+                        addon_log('Videos: True: %s' %i['name'])
+                    except:
+                        addon_log('Videos: False: %s' %i['name'])
+                        addon_log('Removing %s From Show List'  %i['name'])
+                        for index in range(len(show_list)):
+                            if show_list[index]['name'] == i['name']:
+                                    del show_list[index]
+                                    break
+                        continue
+                    thumb = None
+                    try: thumb = re.findall('background: url\((.+?)\)', data)[0]
+                    except:
+                        try: thumb = s_soup.find('div', attrs={'id': "main-bd"}).img['src']
+                        except: pass
+                    if thumb:
+                        i['thumb'] = thumb
+                else:
+                    addon_log('No Data')
+                xbmc.sleep(500)
+            show_file = os.path.join(home, 'resources', 'show_list')
+            w = open(show_file, 'w')
+            w.write(repr(show_list))
+            w.close()
+            addon_log('%s Shows with videos in Show List' %len(show_list))
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+
+
+def get_length_in_minutes(length):
+        l_split = length.split(':')
+        minutes = int(l_split[-2])
+        if int(l_split[-1]) >= 30:
+            minutes += 1
+        if len(l_split) == 3:
+            minutes += (int(l_split[0]) * 60)
+        if minutes < 1:
+            minutes = 1
+        return minutes
+
 
 def get_params():
-		param=[]
-		paramstring=sys.argv[2]
-		if len(paramstring)>=2:
-				params=sys.argv[2]
-				cleanedparams=params.replace('?','')
-				if (params[len(params)-1]=='/'):
-						params=params[0:len(params)-2]
-				pairsofparams=cleanedparams.split('&')
-				param={}
-				for i in range(len(pairsofparams)):
-						splitparams={}
-						splitparams=pairsofparams[i].split('=')
-						if (len(splitparams))==2:
-								param[splitparams[0]]=splitparams[1]
-								
-		return param
+        param=[]
+        paramstring=sys.argv[2]
+        if len(paramstring)>=2:
+            params=sys.argv[2]
+            cleanedparams=params.replace('?','')
+            if (params[len(params)-1]=='/'):
+                params=params[0:len(params)-2]
+            pairsofparams=cleanedparams.split('&')
+            param={}
+            for i in range(len(pairsofparams)):
+                splitparams={}
+                splitparams=pairsofparams[i].split('=')
+                if (len(splitparams))==2:
+                    param[splitparams[0]]=splitparams[1]
+            return param
 
 
-def addLink(name,url,description,length,iconimage):
-		ok=True
-		liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-		liz.setInfo( type="Video", infoLabels={ "Title": name , "Plot":description, "Duration":length } )
-		ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-		return ok
+def addDir(name,url,mode,iconimage,desc='',length='',isplayable=False):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        isfolder=True
+        if isplayable:
+            if ':' in length:
+                duration = get_length_in_minutes(length)
+            else: duration = length
+            liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": desc, "Duration": duration } )
+            liz.setProperty('IsPlayable', 'true')
+            isfolder=False
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isfolder)
+        return ok
 
 
-def addDir(name,url,mode,iconimage):
-		u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-		ok=True
-		liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-		liz.setInfo( type="Video", infoLabels={ "Title": name } )
-		ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-		return ok
-		
-			
 params=get_params()
 url=None
 name=None
 mode=None
 
 try:
-		url=urllib.unquote_plus(params["url"])
+    url=urllib.unquote_plus(params["url"])
 except:
-		pass
+    pass
 try:
-		name=urllib.unquote_plus(params["name"])
+    name=urllib.unquote_plus(params["name"])
 except:
-		pass
+    pass
 try:
-		mode=int(params["mode"])
+    mode=int(params["mode"])
 except:
-		pass
+        pass
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+addon_log("Mode: "+str(mode))
+addon_log("URL: "+str(url))
+addon_log("Name: "+str(name))
 
 if mode==None:
-		print ""
-		getShows()
-	
+    get_categories()
+
 elif mode==1:
-		print ""+url
-		index(url)
+    get_cat(url)
 
 elif mode==2:
-		print ""+url
-		getShowClips()
+    get_playlist(url, name)
 
 elif mode==3:
-		print ""+url
-		indexShowClips(url)
+    get_video_xml(url)
 
 elif mode==4:
-		print ""+url
-		getTopVideos()
+    resolve_url(url)
+
+elif mode==5:
+    get_all_shows()
+
+elif mode==6:
+    get_video_xml(url, True)
+
+elif mode==7:
+    cache_all_shows()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

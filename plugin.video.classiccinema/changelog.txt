@@ -1,3 +1,7 @@
+Version 1.1.1
+* Update addon due to website changes
+* Add xbmcswift2 as a dependency in addon.xml.
+
 Version 1.0.1
 * Upgrade to xbmcswift2
 * Use youtube addon for youtube videos

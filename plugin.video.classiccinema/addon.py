@@ -7,89 +7,61 @@
     :copyright: (c) 2012 by Jonathan Beluch
     :license: GPLv3, see LICENSE.txt for more details.
 '''
-import operator
-from urlparse import urljoin
-from urllib import urlencode
-from BeautifulSoup import BeautifulSoup as BS
-from xbmcswift2 import Plugin, download_page
-from resources.lib.getflashvideo import get_flashvideo_url
+from xbmcswift2 import Plugin, xbmcgui
+from resources.lib import api
 
 
-plugin = Plugin('Classic Cinema', 'plugin.video.classiccinema', __file__)
-BASE_URL = 'http://www.classiccinemaonline.com'
+plugin = Plugin()
 
 
-def full_url(path):
-    '''Returns a full url for the given path.'''
-    return urljoin(BASE_URL, path)
+# Warn users that some menus may be empty
+user_data = plugin.get_storage('user_data')
+if 'not_first_time' not in user_data.keys():
+    dialog = xbmcgui.Dialog()
+    dialog.ok(
+        'Classic Cinema',
+        'The website has recently changed so all of the old',
+        'films are not yet uploaded to the new website.'
+    )
+    user_data['not_first_time'] = True
 
 
 @plugin.route('/')
 def show_browse_methods():
     '''Default view. Displays the different ways to browse the site.'''
-    movies = plugin.get_string(30100)
-    silent_films = plugin.get_string(30101)
-    serials = plugin.get_string(30102)
-
-    items = [
-        {'label': movies, 'path': plugin.url_for('show_movie_genres')},
-        {'label': silent_films, 'path': plugin.url_for('show_silent_genres')},
-        {'label': serials, 'path': plugin.url_for('show_serials')},
-    ]
-
+    items = [{
+        'label': ctg,
+        'path': plugin.url_for('show_genres', category=ctg),
+    } for ctg in api.get_categories()]
     return items
 
 
-@plugin.route('/movies/', name='show_movie_genres',
-              options={'path': 'index.php/movie-billboards'})
-@plugin.route('/silents/', name='show_silent_genres',
-              options={'path': 'index.php/silent-films-menu'})
-@plugin.route('/serials/', name='show_serials',
-              options={'path': 'index.php/serials'})
-def show_genres(path):
-    '''For movies and silent films, will display genres. For serials, will
-    display serial names.'''
-    src = download_page(full_url(path))
-    html = BS(src, convertEntities=BS.HTML_ENTITIES)
-
-    a_tags = html.findAll('a', {'class': 'category'})
-    items = [{'label': a.string,
-              'path': plugin.url_for('show_movies', url=full_url(a['href'])),
-              } for a in a_tags]
-
-    sorted_items = sorted(items, key=operator.itemgetter('label'))
-    return sorted_items
+@plugin.route('/categories/<category>')
+def show_genres(category):
+    items = [{
+        'label': title,
+        'path': plugin.url_for('show_films', genre_url=url),
+    } for title, url in api.get_genres_flat(category)]
+    return items
 
 
-@plugin.route('/movies/<url>/')
-def show_movies(url):
-    '''Displays available movies for a given url.'''
-    # Need to POST to url in order to get back all results and not be limited
-    # to 10. Currently can hack using only the 'limit=0' querystring, other
-    # params aren't needed.
-    data = {'limit': '0'}
-    src = download_page(url, urlencode(data))
-    html = BS(src, convertEntities=BS.HTML_ENTITIES)
-
-    trs = html.findAll('tr', {'class': lambda c: c in ['even', 'odd']})
-
-    items = [{'label': tr.a.string.strip(),
-              'path': plugin.url_for('show_movie', url=full_url(tr.a['href'])),
-              'is_playable': True,
-              'info': {'title': tr.a.string.strip()},
-              } for tr in trs]
-
-    sorted_items = sorted(items, key=operator.itemgetter('label'))
-    return sorted_items
+@plugin.route('/genres/<genre_url>')
+def show_films(genre_url):
+    plugin.log.info(genre_url)
+    items = [{
+        'label': title,
+        'path': plugin.url_for('play_film', url=url),
+        'is_playable': True,
+    } for title, url in api.get_films(genre_url)]
+    return items
 
 
-@plugin.route('/watch/<url>/')
-def show_movie(url):
-    '''Show the video.'''
-    src = download_page(url)
-    url = get_flashvideo_url(src=src)
-    plugin.log.info('Resolved url to %s' % url)
-    return plugin.set_resolved_url(url)
+@plugin.route('/play/<url>')
+def play_film(url):
+    film = api.get_film(url)
+
+    # TODO: pass full listitem once xbmcswift2 supports it
+    return plugin.set_resolved_url(film['url'])
 
 
 if __name__ == '__main__':

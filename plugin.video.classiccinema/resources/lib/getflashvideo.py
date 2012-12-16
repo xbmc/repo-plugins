@@ -87,7 +87,7 @@ class ArchiveVideo(object):
         embed_tags = BS(src, parseOnlyThese=SS('embed'))
         flashvars = embed_tags.find('embed')['flashvars']
         obj = json.loads(flashvars.split('=', 1)[1].replace("'", '"'))
-        path = obj['playlist'][1]['url'] 
+        path = obj['playlist'][1]['url']
         return path
 
     @staticmethod
@@ -96,5 +96,5 @@ class ArchiveVideo(object):
         flashvars = embed_tags.find('embed')['flashvars']
         obj = json.loads(flashvars.split('=', 1)[1].replace("'", '"'))
         base_url = obj['clip']['baseUrl']
-        path = obj['playlist'][1]['url'] 
+        path = obj['playlist'][1]['url']
         return urlparse.urljoin(base_url, path)

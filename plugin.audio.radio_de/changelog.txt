@@ -1,3 +1,6 @@
+2.0.2 (16.12.2012)
+    - fix no genre available (resulted in script error)
+
 2.0.1 (03.11.2012)
     - added migration code to convert old my_stations to new system
     - fixed unicode in custom station title

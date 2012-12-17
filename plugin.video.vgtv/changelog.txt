@@ -1,0 +1,5 @@
+[B]1.0.2[/B]
+- Updated xbmc.python version and language tag for plugin
+
+[B]1.0.1[/B]
+- Initial release

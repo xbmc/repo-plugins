@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin name -->
+    <string id="30000">VGTV</string>
+
+    <!-- Main menu items -->
+    <string id="30001">Recent</string>
+    <string id="30002">Most viewed</string>
+    <string id="30003">Search</string>
+
+    <!-- Pagination -->
+    <string id="30004">Previous page</string>
+    <string id="30005">Next page</string>
+
+</strings>

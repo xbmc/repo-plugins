@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Plugin name -->
+    <string id="30000">VGTV</string>
+
+    <!-- Main menu items -->
+    <string id="30001">Siste</string>
+    <string id="30002">Mest sett</string>
+    <string id="30003">Søk</string>
+
+    <!-- Pagination -->
+    <string id="30004">Forrige side</string>
+    <string id="30005">Neste side</string>
+
+</strings>

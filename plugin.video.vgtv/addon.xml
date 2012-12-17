@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.vgtv" name="VGTV" version="1.0.2" provider-name="Espen Hovlandsdal">
+  <requires>
+    <import addon="xbmc.python" version="2.0"/>
+    <import addon="script.module.xbmcswift2" version="1.1.1"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>no</language>
+    <summary>VGTV.no</summary>
+    <description>Enjoy videos from VGTV.no - News, sports and entertainment - mainly Norwegian.</description>
+    <description lang="no">Se videoer fra VGTV.no - NettTV fra Verdens Gang (VG).</description>
+  </extension>
+</addon>

@@ -1,3 +1,8 @@
+[B]4.3.0[/B]
+- Søkefunksjon
+- NRKs radiokanaler er nå tilgjengelig som direktestrømmer
+- Fikset: videoer noen ganger ikke kunne spilles av pga. feil med mellomlagringen
+
 [B]4.2.2[/B]
 - Sideendringer
 

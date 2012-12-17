@@ -19,7 +19,6 @@ import xbmc
 import requests
 requests = requests.session(headers={'User-Agent':'xbmc.org'})
 
-
 def get_subtitles(video_id):
   html = requests.get("http://tv.nrk.no/programsubtitles/%s" % video_id).text
   if not html:
@@ -47,4 +46,3 @@ def _stringToTime(txt):
 
 def _timeToString(time):
   return '%02d:%02d:%02d,%03d' % (time/3600,(time%3600)/60,time%60,(time%1)*1000)
-

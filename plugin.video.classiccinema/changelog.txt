@@ -1,4 +1,7 @@
 Version 1.1.1
+* Add missing dependency for requests
+
+Version 1.1.0
 * Update addon due to website changes
 * Add xbmcswift2 as a dependency in addon.xml.
 

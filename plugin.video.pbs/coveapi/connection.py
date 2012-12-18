@@ -191,6 +191,7 @@ class Requestor(object):
 			if error == None:
 				try:
 					data = json.loads(response.read())['results']
+					test_len = len(data)
 					if data != None:
 						return data
 				except Exception, e:

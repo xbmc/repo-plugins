@@ -5,8 +5,8 @@ from urllib2 import Request, urlopen, URLError, HTTPError
 plugin = "PBS"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '11-28-2012'
-__version__ = '2.0.4'
+__date__ = '12-17-2012'
+__version__ = '2.0.6'
 settings = xbmcaddon.Addon( id = 'plugin.video.pbs' )
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -48,7 +48,6 @@ def build_main_directory():
 	except:
 		pass
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
 	setViewMode("501")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 	
@@ -107,7 +106,6 @@ def build_programs_directory( name, page ):
 		# u = { 'mode': '1', 'page': str( int( page ) + 1 ) }
 		# ListItem(label = '[Next Page (' + str( int( page ) + 2 ) + ')]', image = next_thumb, url = u, isFolder = True, infoLabels = False)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
 	if name == settings.getLocalizedString( 30014 ):
 		setViewMode("500")
 	else:
@@ -123,7 +121,6 @@ def build_topics_directory():
 			ListItem(label = results['name'], image = topics_thumb, url = u, isFolder = True, infoLabels = False)
 			item = results['name']
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
-	xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
 	setViewMode("515")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
@@ -165,7 +162,6 @@ def build_search_directory( url, page ):
 		ListItem(label = '[Next Page (' + str( int( page ) + 2 ) + ')]', image = next_thumb, url = u, isFolder = True, infoLabels = False)
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_STUDIO )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-	xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
 	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
@@ -219,7 +215,7 @@ def find_videos( name, program_id, topic, page ):
 			else:
 				url = results['mediafiles'][playable]['video_download_url']
 				mode = '7'
-			infoLabels = { "Title": results['title'].encode('utf-8'), "Director": "PBS", "Studio": name, "Plot": results['long_description'].encode('utf-8'), "Duration": str(datetime.timedelta(milliseconds=int(results['mediafiles'][0]['length_mseconds']))), "Aired": results['airdate'].rsplit(' ')[0] }
+			infoLabels = { "Title": results['title'].encode('utf-8'), "Director": "PBS", "Studio": name, "Plot": results['long_description'].encode('utf-8'), "Duration": int(results['mediafiles'][0]['length_mseconds'])/1000, "Aired": results['airdate'].rsplit(' ')[0] }
 			u = { 'mode': mode, 'name': urllib.quote_plus( results['title'].encode('utf-8') ), 'url': urllib.quote_plus( url ), 'thumb': urllib.quote_plus( thumb ), 'plot': urllib.quote_plus( results['long_description'].encode('utf-8') ), 'studio': urllib.quote_plus( name ), 'backup_url': urllib.quote_plus( backup_url ) }
 			ListItem(label = results['title'].encode('utf-8'), image = thumb, url = u, isFolder = False, infoLabels = infoLabels)
 	if topic == 'False':
@@ -237,7 +233,6 @@ def find_videos( name, program_id, topic, page ):
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_UNSORTED )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RUNTIME )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_LABEL )
-	xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
 	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
@@ -247,18 +242,28 @@ def play_video( name, url, thumb, plot, studio, starttime, backup_url ):
 		ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
 		return
 	if url.find('http://urs.pbs.org/redirect/') != -1:
-		print 'PBS - Using backup_url'
-		if backup_url != 'None':
-			play_mp4( name, backup_url, thumb, plot, studio, starttime )
+		try:
+			import requests
+			headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0.1'}
+			config = {'max_retries': 10}
+			r = requests.head(url , headers=headers, config=config, allow_redirects=False)
+			new_url = r.headers['location']
+			play_mp4( name, new_url, thumb, plot, studio, starttime )
 			return
-		else:
-			dialog = xbmcgui.Dialog()
-			ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
-			ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
-			buggalo.addExtraData('url', url)
-			buggalo.addExtraData('info', studio + ' - ' + name)
-			raise Exception("PBS Kids backup_url ERROR")
-			return
+		except  Exception, e:
+			print 'PBS - Using backup_url'
+			if backup_url != 'None':
+				play_mp4( name, backup_url, thumb, plot, studio, starttime )
+				return
+			else:
+				dialog = xbmcgui.Dialog()
+				ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
+				ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
+				buggalo.addExtraData('url', url)
+				buggalo.addExtraData('error', str(e))
+				buggalo.addExtraData('info', studio + ' - ' + name)
+				raise Exception("redirect_url ERROR")
+				return
 	data = open_url( url + '&format=SMIL' )
 	print 'PBS - ' + studio + ' - ' + name
 	try:
@@ -310,14 +315,14 @@ def play_video( name, url, thumb, plot, studio, starttime, backup_url ):
 	else:
 		rtmp_url = base
 		playpath = "mp4:" + src.replace('mp4:','')
-	listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = thumb, path = clean( rtmp_url ))
+	listitem = xbmcgui.ListItem( label = name, iconImage = thumb, thumbnailImage = thumb, path = clean( rtmp_url ))
 	listitem.setInfo( type="Video", infoLabels={ "Title": name , "Director": "PBS", "Studio": "PBS: " + studio, "Plot": plot } )
 	if playpath != None:
 		listitem.setProperty("PlayPath", playpath)
 	xbmcplugin.setResolvedUrl( handle = int( sys.argv[1] ), succeeded = True, listitem = listitem )
 
 def play_mp4( name, url, thumb, plot, studio, starttime ):
-	listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = thumb, path = clean( url ) )
+	listitem = xbmcgui.ListItem( label = name, iconImage = thumb, thumbnailImage = thumb, path = clean( url ) )
 	listitem.setInfo( type="Video", infoLabels={ "Title": name , "Director": "PBS", "Studio": "PBS: " + studio, "Plot": plot } )
 	xbmcplugin.setResolvedUrl( handle = int( sys.argv[1] ), succeeded = True, listitem = listitem )
 
@@ -326,6 +331,11 @@ def ListItem(label, image, url, isFolder, infoLabels = False):
 	listitem.setProperty('fanart_image', fanart)
 	if infoLabels:
 		listitem.setInfo( type = "Video", infoLabels = infoLabels )
+		if "Duration" in infoLabels:
+			if hasattr( listitem, "addStreamInfo" ):
+				listitem.addStreamInfo('video', { 'duration': infoLabels["Duration"] })
+			else:
+				listitem.setInfo( type="Video", infoLabels={ "Duration": str(datetime.timedelta(milliseconds=int(infoLabels["Duration"])*1000)) } )
 	if not isFolder:
 		listitem.setProperty('IsPlayable', 'true')
 	u = sys.argv[0] + '?'
@@ -344,7 +354,7 @@ def open_url(url):
 			data = get_page(url)
 			if data['content'] != None and data['error'] == None:
 				return data['content']
-			if data['error'] == 'HTTP Error 404: NOT FOUND':
+			if data['error'].find('404:') != -1:
 				break
 		except Exception, e:
 			data['error'] = str(e)
@@ -379,6 +389,7 @@ def get_page(url):
 		
 def setViewMode(id):
 	if xbmc.getSkinDir() == "skin.confluence":
+		xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
 		xbmc.executebuiltin("Container.SetViewMode(" + id + ")")
 
 def getParameters(parameterString):

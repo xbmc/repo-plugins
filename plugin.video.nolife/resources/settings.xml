@@ -3,8 +3,10 @@
 
     <!-- Authentication -->
     <category label="32001">
-        <setting id="username" type="text" label="32011" default=""/>
-        <setting id="password" type="text" option="hidden" label="32012" default=""/>
+        <setting id="authenticate" type="bool" label="32010" default="false" />
+        <setting id="username" type="text" label="32011" enable="eq(-1,true)" default="" />
+        <setting id="password" type="text" option="hidden" label="32012" default="" enable="eq(-2,true)"/>
+        <setting id="extracts" type="bool" option="hidden" label="32013" default="" enable="eq(-3,false)"/>
     </category>
     <!-- Affichage -->
     <category label="33001">

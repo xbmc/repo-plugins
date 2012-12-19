@@ -17,8 +17,20 @@ Nolife Online addon for XBMC
 Authors:     gormux, DeusP
 """
 
-import re, xbmcplugin, xbmcgui, xbmcaddon, urllib, urllib2, sys, cookielib, pickle
+import os, re, xbmcplugin, xbmcgui, xbmcaddon, urllib, urllib2, sys, cookielib, pickle
 from BeautifulSoup import BeautifulSoup
+
+"""
+Class used as a C-struct to store video informations
+"""
+class videoInfo:
+    pass
+
+"""
+Class used to report login error
+"""
+class loginExpcetion(Exception):
+    pass
 
 # Global variable definition
 ## Header for every log in this plugin
@@ -27,6 +39,9 @@ pluginLogHeader = "[XBMC_NOLIFE] "
 ## Values for the mode parameter
 MODE_LAST_SHOWS, MODE_CATEGORIES, MODE_SEARCH, MODE_SHOW_BY_URL, MODE_LINKS = range(5)
 
+## Values for the subscription mode
+FREE, STANDARD, SUPPORT = range(3)
+
 settings  = xbmcaddon.Addon(id='plugin.video.nolife')
 url       = 'http://online.nolife-tv.com/index.php?'
 name      = 'Nolife Online'
@@ -34,6 +49,8 @@ mode      = None
 version   = settings.getAddonInfo('version')
 useragent = "XBMC Nolife-plugin/" + version
 language = settings.getLocalizedString
+subscription = FREE
+fanartimage = os.path.join(settings.getAddonInfo("path"), "fanart.jpg")
 
 def remove_html_tags(data):
     """Permits to remove all HTML tags
@@ -121,17 +138,17 @@ def login():
     page = requestHandler.open("http://forum.nolife-tv.com/login.php", loginrequest)
     res = BeautifulSoup(page.read())
     if re.compile('pas valide').findall(str(res)):
-        xbmc.log(msg=pluginLogHeader + "Invalid username, aborting",level=xbmc.LOGERROR)
+        xbmc.log(msg=pluginLogHeader + "Invalid username, aborting",level=xbmc.LOGFATAL)
         err = xbmcgui.Dialog()
-        err.ok("Erreur", "Nom d'utilisateur ou mot de passe invalide.","Veuillez vérifier les informations de connexion dans","les paramètres de l'addon.")
-        doanerror
+        err.ok(unicode(language(35002)), unicode(language(34001)), unicode(language(34002)))
+        raise loginExpcetion()
     elif re.compile('votre quota').findall(str(res)):
-        xbmc.log(msg=pluginLogHeader + "User account locked",level=xbmc.LOGERROR)
+        xbmc.log(msg=pluginLogHeader + "User account locked",level=xbmc.LOGSEVERE)
         err = xbmcgui.Dialog()
-        err.ok("Message", "Trop d'erreurs d'authentification.","Veuillez patienter 15 minutes avant de rééssayer","Vérifiez également vos informations de connexion.")
-        doanerror
+        err.ok(unicode(language(35001)), unicode(language(34003)), unicode(language(34004)), unicode(language(34005)))
+        raise loginExpcetion()
     else:
-        xbmc.log(msg=pluginLogHeader + "Valid User",level=xbmc.LOGERROR)
+        xbmc.log(msg=pluginLogHeader + "Valid User",level=xbmc.LOGDEBUG)
 
 def initialIndex():
     """Creates initial index
@@ -147,6 +164,7 @@ def getlastVideos():
         
     Get the videos in the "last videos" menu option
     """
+    showseen   = settings.getSetting( "showseen" )
     postrequest = urllib.urlencode({'emissions': 0,
                                    'famille': 0,
                                    'a': 'ge'})
@@ -154,37 +172,16 @@ def getlastVideos():
     page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
     liste = BeautifulSoup(page.read()).findAll('li')
     for element in liste:
-        if re.compile('data-icon="arrow-r"').findall(str(element)):
-            
-            if  re.compile('icones/32/on').findall(str(element)):
-                _seen = True
-            else:
-                _seen = False
-            
-            reg_date = '<p style="padding-right:25px;'\
-                ' padding-left:10px;">.*</p>'
-            _thumb    = re.compile('data-thumb=".*"').findall(
-                                                              str(element))[0][12:][:-1]
-            _date_len = remove_html_tags(
-                                         re.compile(reg_date).findall(str(element))[0]
-                                         )
-            _duration = _date_len.split(' - ')[1]
-            
-            reg_vid = 'a href="emission-.*" '
-            _vid   = re.compile(reg_vid).findall(str(element))[0][17:][:-2]
-            
-            reg_desc = '<p style="padding-left:10px;"><strong>.*'
-            _desc  = remove_html_tags(
-                                      re.compile(reg_desc).findall(str(element))[0][30:])
-            
-            _name  = remove_html_tags(
-                                      re.compile('<h3.*').findall(str(element))[0])
-            
-            addlink( _name + " - " + _desc,
-                    "plugin://plugin.video.nolife?id=" + _vid,
-                    _thumb, 
-                    _duration,
-                    _seen )
+        extractVideoInfo(element)
+        
+        videoInfo = extractVideoInfo(element)
+        if ( showseen == "false" and videoInfo.seen == False ):
+            if isAvailableForUser(videoInfo.availability):
+                addlink( videoInfo.name + " - " + videoInfo.desc,
+                    "plugin://plugin.video.nolife?id=" + videoInfo.vid,
+                    videoInfo.thumb,
+                    videoInfo.duration,
+                    videoInfo.seen )
 
     
 def getcategories():
@@ -216,41 +213,43 @@ def search():
         liste = BeautifulSoup(page.read()).findAll('li')
 
         for element in liste:
-            if re.compile('data-icon="arrow-r"').findall(str(element)):
-                if  re.compile('icones/32/on').findall(str(element)):
-                    _seen = True
-                else:
-                    _seen = False
-                reg_srch = 'a href="emission-.*" '
-                _searchid = re.compile(reg_srch).findall(
-                                                    str(element))[0][17:][:-2]
-                reg_desc = '<p style="padding-left:10px;"><strong>.*'
-                _thumb    = re.compile('data-thumb=".*"').findall(
-                                                    str(element))[0][12:][:-1]
-                _bdesc = re.compile(reg_desc).findall(str(element))[0][30:]
-                _bname = re.compile('<h3.*').findall(str(element))[0]
-                _desc = remove_html_tags(_bdesc)
-                _name = remove_html_tags(_bname)
-                reg_date = '<p style="padding-right:25px;'\
-                           ' padding-left:10px;">.*</p>'
-                _date_len = remove_html_tags(
-                            re.compile(reg_date).findall(str(element))[0]
-                            )
-                _duration = _date_len.split(' - ')[1]
-                addlink(_name + " - " + _desc, 
-                        "plugin://plugin.video.nolife?id=" + _searchid, 
-                        _thumb, 
-                        _duration,
-                        _seen )
+            videoInfo = extractVideoSearchInfo(element)
+
+            if videoInfo != None:
+                if isAvailableForUser(videoInfo.availability):
+                    addlink(videoInfo.name + " - " + videoInfo.desc,
+                        "plugin://plugin.video.nolife?id=" + videoInfo.id,
+                        videoInfo.thumb,
+                        videoInfo.duration,
+                        videoInfo.seen )
 
 def getshows(category):
     """
     Gets shows in a category
     """
     emissions = parse_categories()
+    excluded_shows = [ '75', '104', '89' ]
     for emission in emissions:
-        if emission[0] == category:
-            add_dir(emission[1], emission[2], MODE_LINKS, emission[3])
+        if  not emission[2] in excluded_shows:
+            if emission[0] == category:
+                add_dir(emission[1], emission[2], MODE_LINKS, emission[3])
+
+def isAvailableForUser(type_of_show):
+    """
+    Return true is the show is available for user, false otherwise
+    """
+    if "Archive" in type_of_show:
+        if subscription >= SUPPORT:
+            return True
+        else:
+            return False
+    elif "Standard" in type_of_show:
+        if subscription >= STANDARD or settings.getSetting("extracts") == 'true':
+            return True
+        else:
+            return False
+    else:
+        return True
 
 def getlinks(show):
     """
@@ -260,8 +259,7 @@ def getlinks(show):
     show_n     = settings.getSetting( "show_n" )
     showall    = settings.getSetting( "showall" )
     showseen   = settings.getSetting( "showseen" )
-    user       = settings.getSetting( "username" )
-    pwd        = settings.getSetting( "password" )
+
     if showall == "true":
         show_n = 65536
     emissions  = []
@@ -282,44 +280,20 @@ def getlinks(show):
             finished = True
         else:
             for element in liste:
+                
                 if int(float(show_n)) == len(emissions):
                     finished = True
                     break
-                if ( re.compile('data-icon="arrow-r"').findall(str(element))
-                     and int(float(show_n)) > len(emissions) ):
-                    if re.compile('icones/32/on').findall(str(element)):
-                        _seen = True
-                    else:
-                        _seen = False
+                
+                videoInfo = extractVideoInfo(element)
 
-                    reg_date = '<p style="padding-right:25px;'\
-                               ' padding-left:10px;">.*</p>'
-                    _date_len = remove_html_tags(
-                                re.compile(reg_date).findall(str(element))[0]
-                                )
-                    _thumb    = re.compile('data-thumb=".*"').findall(
-                                                    str(element))[0][12:][:-1]
-                    _duration = _date_len.split(' - ')[1]
-
-                    req_id = 'a href="emission-.*" '
-                    _id = re.compile(req_id).findall(
-                                                    str(element))[0][17:][:-2]
-
-                    req_desc = '<p style="padding-left:10px;"><strong>.*'
-                    _desc = remove_html_tags(
-                            re.compile(req_desc).findall(str(element))[0][30:]
-                            )
-
-                    _name     = remove_html_tags(
-                                re.compile('<h3.*').findall(str(element))[0]
-                                )
-
-                    emissions.append([_id, 
-                                      _name, 
-                                      _desc, 
-                                      _duration, 
-                                      _seen, 
-                                      _thumb])
+                if isAvailableForUser(videoInfo.availability):
+                        emissions.append([videoInfo.id,
+                                            videoInfo.name,
+                                            videoInfo.desc,
+                                            videoInfo.duration,
+                                            videoInfo.seen,
+                                            videoInfo.thumb])
             i = i + 1   
 
     for emission in emissions:
@@ -360,8 +334,6 @@ def playvideo(requestHandler, video):
     Plays video
     """
     settings = xbmcaddon.Addon(id='plugin.video.nolife')
-    user     = settings.getSetting( "username" )
-    pwd      = settings.getSetting( "password" )
     quality  = settings.getSetting( "quality" )
     if   quality == "HQ" or quality == "1":
         _video = video + "?quality=2"
@@ -376,6 +348,7 @@ def playvideo(requestHandler, video):
     else:
         _video = video
 
+    requestHandler.addheaders = [("User-agent", useragent)]
     page = requestHandler.open(_video)
     url  = page.geturl()
     xbmc.log(msg=pluginLogHeader + "URL :" + url,level=xbmc.LOGDEBUG)
@@ -440,24 +413,116 @@ def add_dir(name, url, mode, iconimage):
     
     # Hack to avoid incompatiblity of urllib with unicode string
     if isinstance(name, str):
-        xbmc.log(msg="[XXX] str dir",level=xbmc.LOGERROR)
         url = sys.argv[0]+"?url="+urllib.quote_plus(url)+\
             "&mode="+str(mode)+"&name="+urllib.quote_plus(name)
     else:
         url = sys.argv[0]+"?url="+urllib.quote_plus(url)+\
         "&mode="+str(mode)+"&name="+urllib.quote_plus(name.encode("ascii", "ignore"))
-    liz = xbmcgui.ListItem(name,
-                           iconImage="DefaultFolder.png",
-                           thumbnailImage=iconimage)
+    showid = url.split('?')[1].split('&')[0].split('=')[1]
+    thumbnailimage = os.path.join(settings.getAddonInfo("path"), 'resources', 'images', showid + '.jpeg')
+    if not iconimage == '':
+        liz = xbmcgui.ListItem(name,
+                               iconImage=iconimage,
+                               thumbnailImage=iconimage)
+    else:
+        liz = xbmcgui.ListItem(name,
+                               iconImage=thumbnailimage,
+                               thumbnailImage=thumbnailimage)
+
     liz.setInfo( 
                  type="Video", 
                  infoLabels={ "Title": name } 
                )
+    liz.setProperty('fanart_image', fanartimage)
     ok  = xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), 
                                        url=url, 
                                        listitem=liz, 
                                        isFolder=True )
     return ok
+
+def get_subscription_mode():
+    """
+    Return the subscription mode for the current user
+    """
+    url = "http://mobile.nolife-tv.com/abonnement/"
+
+    page = requestHandler.open(url)
+    htmlContent = page.read();
+    if "Soutien" in htmlContent:
+        xbmc.log(msg=pluginLogHeader + "User has a support account",level=xbmc.LOGNOTICE)
+        return SUPPORT
+    elif "Standard" in htmlContent:
+        xbmc.log(msg=pluginLogHeader + "User has a standard account",level=xbmc.LOGNOTICE)
+        return STANDARD
+    else :
+        xbmc.log(msg=pluginLogHeader + "User has no account",level=xbmc.LOGNOTICE)
+        return FREE
+
+
+def extractVideoInfo(element):
+    """
+    Extract video info from html and store it in videoInfo class    
+    """
+    info = videoInfo()
+    if re.compile('data-icon="arrow-r"').findall(str(element)):
+        
+        if  re.compile('icones/32/on').findall(str(element)):
+            info.seen = True
+        else:
+            info.seen = False
+        
+        reg_date = '<p style="padding-right:25px;'\
+            ' padding-left:10px;">.*</p>'
+        info.thumb    = re.compile('data-thumb=".*"').findall(str(element))[0][12:][:-1]
+        _date_len = remove_html_tags(re.compile(reg_date).findall(str(element))[0])
+        info.duration = _date_len.split(' - ')[1]
+        
+        req_id = 'a href="emission-.*" '
+        info.id = re.compile(req_id).findall(str(element))[0][17:][:-2]
+        
+        req_availability = '<p style="float:right; margin-right:-15px; clear:right;"><strong>.*'
+        info.availability = remove_html_tags(re.compile(req_availability).findall(str(element))[0][57:].replace("[", "").replace("]", ""))
+
+        reg_vid = 'a href="emission-.*" '
+        info.vid   = re.compile(reg_vid).findall(str(element))[0][17:][:-2]
+        
+        reg_desc = '<p style="padding-left:10px;"><strong>.*'
+        info.desc  = remove_html_tags(re.compile(reg_desc).findall(str(element))[0][30:])
+
+        info.name  = remove_html_tags(re.compile('<h3.*').findall(str(element))[0])
+
+    return info
+
+def extractVideoSearchInfo(element):
+    """
+    Extract video info from html from a search page and store it in videoInfo class
+    """
+    info = None
+    if re.compile('data-icon="arrow-r"').findall(str(element)):
+        info = videoInfo()
+        if  re.compile('icones/32/on').findall(str(element)):
+            info.seen = True
+        else:
+            info.seen = False
+    
+        reg_srch = 'a href="emission-.*" '
+        info.id = re.compile(reg_srch).findall(str(element))[0][17:][:-2]
+
+        reg_desc = '<p style="padding-left:10px;"><strong>.*'
+        info.thumb    = re.compile('data-thumb=".*"').findall(str(element))[0][12:][:-1]
+        _bdesc = re.compile(reg_desc).findall(str(element))[0][30:]
+        _bname = re.compile('<h3.*').findall(str(element))[0]
+        info.desc = remove_html_tags(_bdesc)
+        info.name = remove_html_tags(_bname)
+
+        req_availibity = '<p style="float:right; margin-right:-15px; clear:right;"><strong>.*'
+        info.availability = remove_html_tags(re.compile(req_availibity).findall(str(element))[0][30:])
+    
+        reg_date = '<p style="padding-right:25px; padding-left:10px;">.*</p>'
+        _date_len = remove_html_tags(re.compile(reg_date).findall(str(element))[0])
+        info.duration = _date_len.split(' - ')[1]
+
+    return info
 
 ## Start of the add-on
 xbmc.log(msg=pluginLogHeader + "-----------------------",level=xbmc.LOGDEBUG)
@@ -491,7 +556,14 @@ xbmc.log(msg=pluginLogHeader + "requested id : " + str(_id),level=xbmc.LOGDEBUG)
 xbmc.log(msg=pluginLogHeader + "No cookies, adding a jar",level=xbmc.LOGDEBUG)
 cj = cookielib.CookieJar()
 requestHandler = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-login()
+
+# The login is only done for authenticated mode
+if settings.getSetting( "authenticate" ) == "true":
+    xbmc.log(msg=pluginLogHeader + "authentication requested",level=xbmc.LOGDEBUG)
+    login()
+
+# Find the access mode of the user
+subscription = get_subscription_mode()
 
 # Determining and executing action
 if( mode == None or url == None or len(url) < 1 ) and _id == 0:

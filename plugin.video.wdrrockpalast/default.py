@@ -27,7 +27,13 @@ def playVideo(url):
         response.close()
         video_url=re.compile('dslSrc=([^&]+?)&amp;').findall(link)
         title_url=re.compile('<title>([^-]+?)- Rockpalast').findall(link)
-        xbmc.Player().play(video_url[0])
+
+        url = urllib.unquote_plus(video_url[0])
+        title = title_url[0]
+        
+        listitem = xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage='HTTP://www.wdr.de/tv/rockpalast/codebase/img/audioplayerbild_512x288.jpg')
+        listitem.setInfo('video', {'Title': title})
+        xbmc.Player(xbmc.PLAYER_CORE_AUTO).play( url, listitem)       
 
 def getParams():
         param=[]

@@ -175,14 +175,13 @@ def getlastVideos():
         extractVideoInfo(element)
         
         videoInfo = extractVideoInfo(element)
-        if ( showseen == "false" and videoInfo.seen == False ):
+        if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
             if isAvailableForUser(videoInfo.availability):
                 addlink( videoInfo.name + " - " + videoInfo.desc,
                     "plugin://plugin.video.nolife?id=" + videoInfo.vid,
                     videoInfo.thumb,
                     videoInfo.duration,
                     videoInfo.seen )
-
     
 def getcategories():
     """Gets all categories and adds directories

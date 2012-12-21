@@ -10,36 +10,49 @@ from BeautifulSoup import BeautifulSoup
 import StorageServer
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.funny.or.die')
+addon_version = __settings__.getAddonInfo('version')
 __language__ = __settings__.getLocalizedString
-sort = __settings__.getSetting('sort_by').replace(' ','_').lower()
-sort_time = __settings__.getSetting('sort_time').replace(' ','_').lower()
-home = __settings__.getAddonInfo('path')
-icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-cache = StorageServer.StorageServer("FunnyOrDie", 24)
+home = xbmc.translatePath(__settings__.getAddonInfo('path'))
+icon = os.path.join(home, 'icon.png')
+next_png = os.path.join(home, 'resources', 'next.png')
+cache = StorageServer.StorageServer("FunnyOrDie", 12)
+# settings type changed, reset is needed for updates
+if __settings__.getSetting('first_run') == 'true':
+    __settings__.setSetting('sort_by', '0')
+    __settings__.setSetting('sort_time', '0')
+    __settings__.setSetting('first_run', 'false')
 
 
-def make_request(url, headers=None):
+def addon_log(string):
+        xbmc.log("[addon.funnyordie-%s]: %s" %(addon_version, string))
+
+def make_request(url):
         try:
-            if headers is None:
-                headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1',
-                           'Referer' : 'http://www.funnyordie.com/videos'}
+            headers = {
+                'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0',
+                'Referer' : 'http://www.funnyordie.com/videos'
+                }
             req = urllib2.Request(url,None,headers)
             response = urllib2.urlopen(req)
             data = response.read()
             response.close()
             return data
         except urllib2.URLError, e:
-            print 'We failed to open "%s".' % url
+            addon_log('We failed to open "%s".' % url)
             if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason: ', e.reason
+                addon_log('We failed to reach a server.')
+                addon_log('Reason: %s' %e.reason)
             if hasattr(e, 'code'):
-                print 'We failed with error code - %s.' % e.code
-                xbmc.executebuiltin("XBMC.Notification(FunnyOrDie,HTTP ERROR: "+str(e.code)+",5000,"+icon+")")
+                addon_log('We failed with error code - %s.' %e.code)
+                xbmc.executebuiltin(
+                    "XBMC.Notification(FunnyOrDie,HTTP ERROR: %s,5000,%s)"
+                    %(e.code, icon)
+                    )
 
 
 def cache_categories():
-        soup = BeautifulSoup(make_request('http://www.funnyordie.com/browse/videos/all/all/most_buzz'))
+        url = 'http://www.funnyordie.com/browse/videos/all/all/most_recent'
+        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         items = soup('div', attrs={'class' : 'dropdown'})[0]('a')
         cat_list = []
         for i in items:
@@ -48,10 +61,26 @@ def cache_categories():
 
 
 def get_categories():
+        addDir(__language__(30024), 'search', 3, icon)
+        sort = {
+            '0': 'most_buzz',
+            '1': 'most_recent',
+            '2': 'most_viewed',
+            '3': 'most_favorited',
+            '4': 'highest_rated'
+            }
+        sort_t = {
+            '0': '',
+            '1': 'this_week',
+            '2': 'this_month'
+            }
+
+        sort_by = sort[__settings__.getSetting('sort_by')]
+        sort_time = sort_t[__settings__.getSetting('sort_time')]
         for i in cache.cacheFunction(cache_categories):
-            url = 'http://www.funnyordie.com/'
-            url += '%s/%s/%s' %(i[1].rsplit('/', 1)[0], sort, sort_time)
-            addDir(i[0],url,1,icon)
+            url = 'http://www.funnyordie.com'
+            url += '%s/%s/%s' %(i[1].rsplit('/', 1)[0], sort_by, sort_time)
+            addDir(i[0], url, 1, icon)
 
 
 ## Thanks to Fredrik Lundh for this function - http://effbot.org/zone/re-sub.htm#unescape-html
@@ -86,7 +115,9 @@ def index(url):
             try:
                 desc = unescape(re.findall('class="title" title="(.+?)"', i)[0])
             except:
-                print '--desc exception--'
+                desc = ''
+                addon_log('desc exception')
+                continue
             name = desc.split(' from')[0]
             vid_id = re.findall('data-viewkey="(.+?)"', i)[0][1:]
             try:
@@ -97,27 +128,59 @@ def index(url):
                 duration = re.findall('<span class="duration">(.+?)</span>', i)[0]
             except:
                 duration = ''
-            u=sys.argv[0]+"?url="+urllib.quote_plus(vid_id)+"&mode=2&name="+urllib.quote_plus(name)
-            liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=thumb)
-            liz.setInfo(type="Video", infoLabels={"Title": name, "Duration": duration, "Plot": desc})
-            liz.setProperty('IsPlayable', 'true')
-            xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,totalItems=20)
+            addDir(name, vid_id, 2, thumb, duration, desc, True)
 
         try:
             page_num = re.findall('next_page = (.+?);', data)[0]
             page = '?page='+page_num
-            if not 'more' in url:
-                url = url.replace('videos','more/videos')
-            url = url.split('?page')[0]+page
-            addDir(__language__(30031), url, 1, xbmc.translatePath(os.path.join(home, 'resources', 'next.png')))
+            if not '?page=' in url:
+                page_url = None
+                replace_list = ['exclusives', 'immortal']
+                for i in replace_list:
+                    if i in url:
+                        page_url = url.replace('/all/', '/').replace('/videos/','/more/videos/all/')
+                if not page_url:
+                        page_url = url.replace('/videos/','/more/videos/')
+                if __settings__.getSetting('sort_time') == '0':
+                    page_url += 'all_time'
+                page_url += page
+            else:
+                page_url = url.split('?page')[0]+page
+            addDir(__language__(30031), page_url, 1, next_png)
         except:
-            print '--- nextpage exception ---'
+            addon_log('nextpage exception')
 
 
 def playVid(url):
         url = 'http://vo.fod4.com/v/%s/v600.mp4' %url
         item = xbmcgui.ListItem(path=url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+
+def search(search_url):
+        if search_url == 'search':
+            keyboard = xbmc.Keyboard('', __language__(30006))
+            keyboard.doModal()
+            if keyboard.isConfirmed() == False:
+                return
+            search_query = keyboard.getText()
+            if len(search_query) == 0:
+                return
+            search_url = 'http://www.funnyordie.com/search/a/videos?q='+urllib.quote_plus(search_query)
+        soup = BeautifulSoup(make_request(search_url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        search_results = soup.findAll('div', attrs={'class': "box search_results_box"})[0]('div', attrs={'class': 'details '})
+        for i in search_results:
+            # href = i.a['href']
+            title = i.a['title'].encode('utf-8')
+            try: duration = i.find('span', attrs={'class': 'duration'}).string
+            except: duration = ''
+            thumb = i.findPrevious('a', attrs={'class': 'nail'}).img['src']
+            vid_key = i.findPrevious('h2').findPrevious('div')['data-viewkey'][1:]
+            addDir(title, vid_key, 2, thumb, duration, '', True)
+        page = soup.find('a', attrs={'rel': 'next'})
+        if page:
+            page_url = 'http://www.funnyordie.com'+page['href']
+            addDir(__language__(30031), page_url, 3, next_png)
 
 
 def get_params():
@@ -139,12 +202,30 @@ def get_params():
         return param
 
 
-def addDir(name,url,mode,iconimage):
+def get_length_in_minutes(length):
+        l_split = length.split(':')
+        minutes = int(l_split[-2])
+        if int(l_split[-1]) >= 30:
+            minutes += 1
+        if len(l_split) == 3:
+            minutes += (int(l_split[0]) * 60)
+        if minutes < 1:
+            minutes = 1
+        return minutes
+
+
+def addDir(name,url,mode,iconimage,duration='',desc='',isplayable=False):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        isfolder = True
+        if isplayable:
+            if ':' in duration:
+                duration = get_length_in_minutes(duration)
+            liz.setInfo(type="Video", infoLabels={"Title": name, "Duration": duration, "Plot": desc})
+            liz.setProperty('IsPlayable', 'true')
+            isfolder = False
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isfolder)
         return ok
 
 
@@ -170,20 +251,20 @@ try:
 except:
     pass
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+addon_log("Mode: "+str(mode))
+addon_log("URL: "+str(url))
+addon_log("Name: "+str(name))
 
 if mode==None:
-    print ""
     get_categories()
 
 elif mode==1:
-    print ""+url
     index(url)
 
 elif mode==2:
-    print ""
     playVid(url)
+
+elif mode==3:
+    search(url)
 
 xbmcplugin.endOfDirectory(handle=int(sys.argv[1]))

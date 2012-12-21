@@ -1,30 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30000">All</string>
-  <string id="30001">Exclusives</string>
-  <string id="30002">Immortal</string>
-  <string id="30003">Animation</string>
-  <string id="30004">Animals Being Awesome</string>
-  <string id="30005">Clean Comedy</string>
-  <string id="30006">Doumb People</string>
-  <string id="30007">Fails</string>
-  <string id="30008">Internet Memes</string>
-  <string id="30009">Kids Being Awesome</string>
-  <string id="30010">Mashups</string>
-  <string id="30011">Music</string>
-  <string id="30012">News Fails</string>
-  <string id="30013">Nostalgia</string>
-  <string id="30014">Not Safe For Work Videos</string>
-  <string id="30015">Parody</string>
-  <string id="30016">Politics</string>
-  <string id="30017">Rants</string>
-  <string id="30018">Real Life</string>
-  <string id="30019">Recaps</string>
-  <string id="30020">Sketch</string>
-  <string id="30021">Sports</string>
-  <string id="30022">Stand Up</string>
-  <string id="30023">Web Series</string>  
-  <string id="30024"></string>
+  <string id="30024">Search</string>
   <string id="30025">Most Buzzed</string>
   <string id="30026">Most Recent</string>
   <string id="30027">Most Viewed</string>

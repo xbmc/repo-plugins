@@ -34,7 +34,7 @@ TAGS_URL = "http://pyvideo.org/api/v1/tag/?limit=0"
 TAG_URL = "http://pyvideo.org/api/v1/tag/{id}/?limit=0"
 VIDEO_URL = "http://pyvideo.org/api/v1/video/{id}/"
 
-YOUTUBE_URL = 'plugin://plugin.video.youtube?path=/root/video&action=play_video&videoid={ID}'
+YOUTUBE_URL = 'plugin://plugin.video.youtube?path=/root/video&action=play_video&videoid={id}'
 
 FORMATS = ['ogv', 'webm', 'mp4', 'flv']
 

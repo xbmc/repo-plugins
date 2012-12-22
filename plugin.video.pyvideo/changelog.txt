@@ -1,0 +1,5 @@
+version 1.0.3:
+ * Bugfix: Corrected handling of YouTube Videos
+
+version 1.0.0:
+ * initial release

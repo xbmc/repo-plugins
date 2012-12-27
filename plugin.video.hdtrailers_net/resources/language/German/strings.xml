@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Seite</string>
+    <string id="30002">Neuste</string>
+    <string id="30003">Beliebteste</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">Bibliothek (Alle nach Anfangsbuchstaben)</string>
+    <string id="30006">Diese Woche im Kino</string>
+    <string id="30007">Bald im Kino</string>
+
+    <!-- Settings -->
+    <string id="30100">ViewMode "Thumbnail" erzwingen</string>
+    <string id="30101">Trailer zeigen</string>
+    <string id="30102">Clips zeigen</string>
+    <string id="30103">Quelle in Video-Titel einbetten</string>
+    <string id="30110">Video Auflösung</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">Media-Typ (Skin bezogen)</string>
+    <string id="30121">Videos</string>
+    <string id="30122">Filme</string>
+</strings>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Page</string>
+    <string id="30002">Latest</string>
+    <string id="30003">Most Watched</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">Library (All by Initial)</string>
+    <string id="30006">Opening this week</string>
+    <string id="30007">Coming Soon</string>
+
+    <!-- Settings -->
+    <string id="30100">Force ViewMode "Thumbnail"</string>
+    <string id="30101">Show Trailer</string>
+    <string id="30102">Show Clips</string>
+    <string id="30103">Show Source in video title</string>
+    <string id="30110">Video Resolution</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">Content-Type (Skin related)</string>
+    <string id="30121">Videos</string>
+    <string id="30122">Movies</string>
+</strings>

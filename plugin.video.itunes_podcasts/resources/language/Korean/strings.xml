@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Korean language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ko/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">모든 장르</string>
+    <string id="30002">장르로 탐색</string>
+    <string id="30003">내 팟캐스트</string>
+    <string id="30004">찾기</string>
+    <string id="30005">비디오 팟캐스트</string>
+    <string id="30006">오디오 팟캐스트</string>
+    <string id="30007">비디오/음악 없음!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">"내 팟캐스트"에 추가</string>
+    <string id="30011">"내 팟캐스트"에서 제거</string>
+
+    <!-- Settings -->
+    <string id="30100">팟캐스트: 썸네일로 보기</string>
+    <string id="30101">팟캐스트 항목: 썸네일로 보기</string>
+    <string id="30102">아이튠스 국가와 언어</string>
+    <string id="30103">표시할 팟캐스트 목록 (최대 300)</string>
+    <string id="30104">검색에 표시할 팟캐스트 (최대 200)</string>
+    <string id="30105">하위 장르 보기</string>
+
+    <!-- Messages -->
+    <string id="30200">네트워크 에러</string>
+</strings>

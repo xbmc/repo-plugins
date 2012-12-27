@@ -49,9 +49,11 @@ STOREFRONT_IDS = {
     'FI': 143447,  # Finland
     'FR': 143442,  # France
     'DE': 143443,  # Germany
+    'DK': 143458,  # Denmark
     'GR': 143448,  # Greece
     'IT': 143450,  # Italy
     'JP': 143462,  # Japan
+    'KR': 143466,  # Korea
     'LU': 143451,  # Luxembourg
     'MX': 143468,  # Mexico
     'NL': 143452,  # Netherlands
@@ -197,14 +199,14 @@ class ItunesPodcastApi():
                 'summary': item.get('summary'),
                 'author': item.get('author'),
                 'item_url': link['url'],
-                'size': int(link.get('length', 0)),
+                'size': int(link.get('length', 0) or 0),
                 'thumb': item.get('image', {}).get('href') or fallback_thumb,
                 'duration': link.get('duration', '0:00'),
                 'pub_date': __format_date(item.get('published_parsed')),
                 'rights': content['feed'].get('copyright')
             })
         if not items:
-            raise NotImplementedError
+            raise NoEnclosureException
         return items
 
     def search_podcast(self, search_term, limit=50):

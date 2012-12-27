@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Polish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Wszystkie gatunki</string>
+    <string id="30002">Przeglądaj według gatunku</string>
+    <string id="30003">Moje podcasty</string>
+    <string id="30004">Szukaj</string>
+    <string id="30005">Podcasty Wideo</string>
+    <string id="30006">Podcasty Audio</string>
+    <string id="30007">Nie znaleziono plików Muzycznych/Wideo</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Dodaj do moich podcastów</string>
+    <string id="30011">Usuń z moich podcastów</string>
+
+    <!-- Settings -->
+    <string id="30100">Wygląd podcastów: Zmień na Miniatury</string>
+    <string id="30101">Wygląd pozycji podcastó: Zmień na Miniatury</string>
+    <string id="30102">Kraj i Język Itunes</string>
+    <string id="30103">Podcasty do pokazania w liście (max 300)</string>
+    <string id="30104">Podcasty wyszukane (max 200)</string>
+    <string id="30105">Pokaż pod gatunki</string>
+
+    <!-- Messages -->
+    <string id="30200">Błąd sieci</string>
+</strings>

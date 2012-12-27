@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Greek language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/el/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Όλα τα είδη</string>
+    <string id="30002">Περιήγηση ανά είδος</string>
+    <string id="30003">Τα Podcast μου</string>
+    <string id="30004">Αναζήτηση</string>
+    <string id="30005">Βίντεο Podcast</string>
+    <string id="30006">Ηχητικά Podcast</string>
+    <string id="30007">Δε βρέθηκαν Βίντεο/Μουσική!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Προσθήκη στα "Podcast μου"</string>
+    <string id="30011">Αφαίρεση από τα "Podcast μου"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcast: Οι 'Μικρογραφίες' σαν Τύπος Προβολής</string>
+    <string id="30101">Αντικείμενα Podcast: Οι 'Μικρογραφίες' σαν Τύπος Προβολής</string>
+    <string id="30102">Χώρα και Γλώσσα iTunes</string>
+    <string id="30103">Προβολή podcast σε λίστα (μέγ. 300)</string>
+    <string id="30104">Προβολή podcast σε αναζήτηση (μέγ. 200)</string>
+    <string id="30105">Προβολή Υπο-Ειδών</string>
+
+    <!-- Messages -->
+    <string id="30200">Σφάλμα Δικτύου</string>
+</strings>

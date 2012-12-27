@@ -5,6 +5,7 @@
 	<string id="30002">Vorherige Seite</string>
 	<string id="30003">Nächste Seite</string>
 	<string id="30004">Testvideo abspielen</string>
+	<string id="30005">Video abspielen</string>
 	
 	<string id="30100">Login fehlgeschlagen für Benutzer "%s".</string>
 	<string id="30101">Überprüfe Deine Daten in den Plugin-Einstellungen.</string>

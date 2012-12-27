@@ -135,8 +135,6 @@ class RadioApi():
                  % (path, param))
         url = '%s/%s' % (self.api_url, path)
         if param:
-            # fix urllib's unicode handling in urlencode
-            param = dict((k, v.encode('utf-8')) for (k, v) in param.items())
             url += '?%s' % urlencode(param)
         response = self.__urlopen(url)
         json_data = json.loads(response)
@@ -145,15 +143,14 @@ class RadioApi():
     def __resolve_playlist(self, stream_url):
         self.log('__resolve_playlist started with stream_url=%s'
                  % stream_url)
-        stream_url = stream_url.lower()
-        if stream_url.endswith('m3u'):
+        if stream_url.lower().endswith('m3u'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .m3u file')
             for line in response.splitlines():
                 if line and not line.strip().startswith('#'):
                     stream_url = line.strip()
                     break
-        elif stream_url.endswith('pls'):
+        elif stream_url.lower().endswith('pls'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .pls file')
             for line in response.splitlines():
@@ -180,7 +177,13 @@ class RadioApi():
     def __format_stations(stations):
         formated_stations = []
         for station in stations:
-            if station['picture1Name']:
+            if station.get('picture1TransName'):
+                thumbnail_trans = (
+                    station['pictureBaseURL'] + station['picture1TransName']
+                ).replace('_1_', '_4_')
+            else:
+                thumbnail_trans = ''
+            if station.get('picture1Name'):
                 thumbnail = station['pictureBaseURL'] + station['picture1Name']
             else:
                 thumbnail = ''
@@ -190,6 +193,7 @@ class RadioApi():
             formated_stations.append({
                 'name': station['name'],
                 'thumbnail': thumbnail,
+                'thumbnail_trans': thumbnail,
                 'rating': station['rating'],
                 'genre': genre,
                 'bitrate': station['bitrate'],

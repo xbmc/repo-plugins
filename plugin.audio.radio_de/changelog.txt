@@ -1,3 +1,8 @@
+2.1.3 (26.12.2012)
+    - better station logos
+    - fix unicode error
+    - change to xbmcswift 1.3.0
+
 2.0.2 (16.12.2012)
     - fix no genre available (resulted in script error)
 

@@ -99,9 +99,9 @@ def show_top_stations():
 
 @plugin.route('/stations/search/')
 def search():
-    search_string = __keyboard(_('enter_name_country_or_language'))
-    if search_string:
-        url = plugin.url_for('search_result', search_string=search_string)
+    query = plugin.keyboard(heading=_('enter_name_country_or_language'))
+    if query:
+        url = plugin.url_for('search_result', search_string=query)
         plugin.redirect(url)
 
 
@@ -126,7 +126,7 @@ def custom_my_station(station_id):
         station = [s for s in stations if s['id'] == station_id][0]
     for param in ('name', 'thumbnail', 'stream_url'):
         heading = _('please_enter') % _(param)
-        station[param] = __keyboard(heading, station.get(param, '')) or ''
+        station[param] = plugin.keyboard(station.get(param, ''), heading) or ''
     station_name = station.get('name', 'custom')
     station_id = station_name.decode('ascii', 'ignore').encode('ascii')
     station['id'] = station_id
@@ -186,13 +186,6 @@ def get_stream_url(station_id):
     return plugin.set_resolved_url(stream_url)
 
 
-def __keyboard(title, text=''):
-    keyboard = xbmc.Keyboard(text, title)
-    keyboard.doModal()
-    if keyboard.isConfirmed() and keyboard.getText():
-        return keyboard.getText()
-
-
 def __add_stations(stations, add_custom=False):
     __log('__add_stations started with %d items' % len(stations))
     items = []
@@ -219,7 +212,7 @@ def __add_stations(stations, add_custom=False):
             ))
         items.append({
             'label': station.get('name', ''),
-            'thumbnail': station.get('thumbnail', '').replace('_1', '_4'),
+            'thumbnail': station.get('thumbnail_trans', ''),
             'icon': station.get('thumbnail', ''),
             'info': {
                 'title': station.get('name', ''),

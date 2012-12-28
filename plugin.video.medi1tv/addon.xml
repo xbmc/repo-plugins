@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.medi1tv" name="Medi1TV" version="0.1.1"
+	provider-name="Ayoub DARDORY (Apolikamixitos)">
+	<requires>
+		<import addon="xbmc.python" version="2.0" />
+		<import addon="script.module.beautifulsoup" version="3.0.8" />
+		<import addon="script.module.simplejson" version="2.0.10" />
+		<import addon="script.module.xbmcswift" version="0.2.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<language>ar fr</language>
+		<platform>all</platform>
+		<summary lang="en">Watch videos and programs replays of the
+			Moroccan tv station Medi1TV.
+		</summary>
+		<description lang="en">Bilingual Arabic / French, the channel
+			broadcasts news programs, magazines, debates (talk shows), reports
+			and documentaries covering varied topics. Medi1TV channel is
+			particularly interested in regional news Maghreb. It broadcasts 24
+			hours on 24, seven days a week.
+		</description>
+		<summary lang="fr">Regarder les videos la rediffusion des
+			programmes de la chaine Marocaine Medi1TV.
+		</summary>
+		<description lang="fr">Medi 1 TV est une
+			chaîne de télévision
+			généraliste privée marocaine créée le 1er
+			décembre 2006, elle émet ses
+			programmes depuis Tanger.
+			Bilingue arabe/français, la chaîne diffuse
+			des journaux télévisés, des magazines, des débats (talk-shows), des
+			reportages et des documentaires touchant des sujets divers et variés.
+			La chaîne Medi 1 TV s'intéresse en particulier à l’actualité
+			régionale du Maghreb. Elle émet 24 heures sur 24, sept jours sur
+			sept.
+		</description>
+		<summary lang="ar">شاهد فيديوهات قناة ميدي1تي في المغربية و البرامج
+			المعادة
+		</summary>
+		<description lang="ar">تقدم "مدي 1 سات" 25 نشرة وموجز إخباري
+			بشكل متواصل يوميا، باللغتين العربية والفرنسية، نقاش، حوارات،
+			ريبورتاجات، وثائقي، عبر تغطية واسعة جهويا وعالميا. غنى ومواكبة
+			للمواضيع المقترحة، مهنية وروح المسؤولية لفريق عمل من حوالي 200 شخص
+			ينتمون إلى أكثر من 10 بلدان.
+
+			فضاء للتحليل والتنوع، والرأي الحر، يوفر
+			للمشاهد انفتاحا على العالم، وفق
+			رؤية القرب والمواكبة، والاستقلالية في
+			تغطية الأحداث السياسية،
+			الاقتصادية، الثقافية، الفنية، والرياضية.
+
+			قناة
+			"مدي 1 سات" تؤكد باستمرار اختياراتها كقناة إخبارية للمغرب العربي
+			الكبير، وكقناة مرجعية بمنطقة حوض البحر الأبيض المتوسط.
+		</description>
+	</extension>
+</addon>

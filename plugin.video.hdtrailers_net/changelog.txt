@@ -1,0 +1,9 @@
+1.0.0
+ - new icon
+ - added ability to override content-type in movie-view
+ - Fixed Cover in FullScreenVideo OSD
+ - Added images for next- and previous-page
+ - catch and show notify on network error
+
+0.0.1
+ - initial release

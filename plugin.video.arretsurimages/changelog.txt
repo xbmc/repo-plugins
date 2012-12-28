@@ -1,3 +1,11 @@
+[B]Version 2.3.2[/B]
+
+- New branch for frodo
+
+[B]Version 2.2.2[/B]
+
+- Fixed UnicodeEncodeError
+
 [B]Version 2.2.1[/B]
 
 - Added new program "au Prochain Episode"

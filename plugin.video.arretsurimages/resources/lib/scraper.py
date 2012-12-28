@@ -28,7 +28,7 @@ URLASI = 'http://www.arretsurimages.net'
 
 
 def log(msg, level=xbmc.LOGNOTICE):
-    xbmc.log('ASI scraper: %s' % msg, level)
+    xbmc.log('ASI scraper: %s' % msg.encode('utf-8'), level)
 
 
 def debug(msg):

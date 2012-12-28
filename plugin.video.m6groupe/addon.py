@@ -54,6 +54,7 @@ def show_channel(channel):
 def show_genres(channel):
     genres = catalog.get_genres(channel)
     items = [{'label': gnr['label'],
+              'thumbnail': gnr['thumb'],
               'path': plugin.url_for('show_programs', channel=channel, genre=gnr['id'])
              } for gnr in genres]
     return plugin.finish(items, sort_methods=[SortMethod.LABEL])

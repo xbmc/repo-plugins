@@ -1,3 +1,9 @@
+[B]Version 1.0.3[/B]
+
+- Added genre thumbnail thanks to JUL1EN094
+- Added swfVfy thanks to JUL1EN094
+- Try to get the mp4 url from the f4m url when it is not defined
+
 [B]Version 1.0.2[/B]
 
 - Added 6ter channel

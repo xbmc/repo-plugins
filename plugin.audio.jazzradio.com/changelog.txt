@@ -3,6 +3,11 @@
 - Removed feature
 
 
+22 December 2012 v1.1.1
+* Made 256k quality selectable from config (duh!)
+* 256k is now default quality for Premium members
+
+
 8 December 2012 v1.1.0
 + Added a 4th stream quality option for Premium members: 256k/sec MP3
 + Now using the config.ini file to hopefully streamline the process of updating the di.fm/sky.fm/jazzradio.com plugins

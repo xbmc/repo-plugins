@@ -1,11 +1,20 @@
+1.1.2 (Frodo Version)
+ - show notification when podcast has no items
+ - added korea and dansk storefront
+ - fixed error on podcast items with invalid length
+ - added translations
+
 1.0.1
  - Autodetect content-type in Eden
+
 1.0.0
  - Initial release in the Eden-Repository
+
 0.9.1
  - changed add-on name to "Apple iTunes Podcasts"
  - fixed spaces in search term
  - fixed keyboard dialog after context action
+
 0.9.0
  - initial release
  Features:

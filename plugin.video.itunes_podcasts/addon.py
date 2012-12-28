@@ -18,7 +18,8 @@
 #
 
 from xbmcswift2 import Plugin, xbmc
-from resources.lib.api import ItunesPodcastApi, NetworkError
+from resources.lib.api import \
+    ItunesPodcastApi, NetworkError, NoEnclosureException
 
 plugin = Plugin()
 api = ItunesPodcastApi()
@@ -33,7 +34,8 @@ STRINGS = {
     'audio': 30006,
     'add_to_my_podcasts': 30010,
     'remove_from_my_podcasts': 30011,
-    'network_error': 30200
+    'network_error': 30200,
+    'no_media_found': 30007,
 }
 
 
@@ -101,9 +103,13 @@ def show_podcasts(content_type, genre_id):
 
 @plugin.route('/<content_type>/podcast/items/<podcast_id>/')
 def show_items(content_type, podcast_id):
-    podcast_items = api.get_podcast_items(
-        podcast_id=podcast_id
-    )
+    try:
+        podcast_items = api.get_podcast_items(
+            podcast_id=podcast_id
+        )
+    except NoEnclosureException:
+        plugin.notify(msg=_('no_media_found'))
+        return plugin.finish(succeeded=False)
     return __add_podcast_items(content_type, podcast_id, podcast_items)
 
 
@@ -245,12 +251,14 @@ def __get_country():
     if not plugin.get_setting('country_already_set'):
         lang_country_mapping = (
             ('chin', 'CN'),
+            ('denm', 'DK'),
             ('fin', 'FI'),
             ('fre', 'FR'),
             ('germa', 'DE'),
             ('greec', 'GR'),
             ('ital', 'IT'),
             ('japa', 'JP'),
+            ('kor', 'KR'),
             ('dutch', 'NL'),
             ('norw', 'NO'),
             ('pol', 'PL'),

@@ -1,3 +1,9 @@
+[B]Version 2.0.10[/B]
+
+- Updated addon to support recent website changes.
+- Fixed duration time issue
+- Moved main functions to addonfunc.py
+
 [B]Version 2.0.9[/B]
 
 - Fixed 'Not a gzipped file' error

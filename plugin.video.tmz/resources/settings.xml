@@ -1,4 +1,3 @@
 <settings>
 	<setting id="quality" type="enum" label="30004" lvalues="30005|30006" default="1"/>
-	<setting id="view" type="bool" label="30021" default="true"/>
 </settings>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.bilmagasinettv.dk" version="1.0.0" name="Bil Magasinet TV" provider-name="twinther [tommy@winther.nu]">
+    <requires>
+        <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
+        <import addon="script.module.buggalo" version="1.1.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Bil Magasinet TV</summary>
+        <description lang="en">If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+        <summary lang="da">Bil Magasinet TV</summary>
+        <description lang="da">Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+        <license>GPL 2.0</license>
+        <platform>all</platform>
+        <language>da</language>
+    </extension>
+</addon>

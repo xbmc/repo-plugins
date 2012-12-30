@@ -1,3 +1,14 @@
+[B]Version 2.0.8[/B]
+
+- Updated code to be compatible with Requests v1.0.4
+
+[B]Version 2.0.7[/B]
+
+- Fixed duration time issue
+- Fixed 'argument 1 must be unicode or str' error
+- Fixed 'NoneType' has no len()" error in find_videos
+- Fixed redirect_url error
+
 [B]Version 2.0.6[/B]
 
 - Fixed access_voilation error

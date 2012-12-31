@@ -1,3 +1,7 @@
+1.0.7
+
+Allow unicode symbols in playlist names.
+
 1.0.6
 
 Fix play next issue.

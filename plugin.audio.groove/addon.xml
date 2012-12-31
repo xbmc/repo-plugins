@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.groove" name="Grooveshark XBMC"
-	version="1.0.6" provider-name="Stephen Denham">
+	version="1.0.7" provider-name="Stephen Denham">
 	<requires>
 		<import addon="xbmc.python" version="2.0" />
 		<import addon="script.module.simplejson"/>
@@ -9,6 +9,7 @@
 	<provides>audio</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
+		<language>en</language>
 		<platform>all</platform>
 		<summary lang="en">Grooveshark addon for XBMC.</summary>
 		<description lang="en">

@@ -19,7 +19,7 @@
     <string id="21001">Unable to connect to your SageTV server.</string>
     <string id="21002">1) Please confirm it is running.</string>
     <string id="21003">2) Confirm the settings of this addon are correct.</string>
-    <string id="21004">Dependency Missing</string>
+    <string id="21004">Dependency Missing or Corrupt</string>
     <string id="21005">This addon requires sagex-api-services version</string>
     <string id="21006">You do not have the sagex-api-services plugin installed</string>
     <string id="21007">Please install sagex-api-services to enable this plugin.</string>
@@ -63,4 +63,5 @@
     <string id="21045">Your xbmc.js file is not up-to-date</string>
     <string id="21046">Please confirm that you copied the latest xbmc.js file</string>
     <string id="21047">to your SageTV\sagex\services folder</string>
+    <string id="21048">Your xbmc.js file is corrupt</string>
 </strings>

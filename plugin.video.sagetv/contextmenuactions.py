@@ -186,19 +186,15 @@ elif(args[0] == "watchstream"):
     streamingUrl = strUrl + "/stream/HTTPLiveStreamingPlaylist?MediaFileId=%s&ConversionId=%s&Quality=%s" % (mediaFileID, str(int(time.time())), qualitySetting)
     #First check that the media streaming services plugin is installed
     validStreamingServicesPluginVersionFound = True
-    url = strUrl + '/sagex/api?command=GetInstalledPlugins&encoder=json'
-    plugins = executeSagexAPIJSONCall(url, "Result")
+    #url = strUrl + '/sagex/api?command=GetInstalledPlugins&encoder=json'
+    url = strUrl + '/sagex/api?c=xbmc:GetPluginVersion&1=mediastreaming&encoder=json'
+    streamingServicesPluginVersion = executeSagexAPIJSONCall(url, "Result")
 
-    if(plugins == None or len(plugins) == 0):
+    if(streamingServicesPluginVersion == None or len(streamingServicesPluginVersion) == 0):
         print "SageTV not detected, or required plugins not installed"
         xbmcgui.Dialog().ok(__language__(21000),__language__(21001),__language__(21002),__language__(21003))
         validStreamingServicesPluginVersionFound = False
         
-    streamingServicesPluginVersion = ""
-    for plugin in plugins:
-        if(plugin.get("PluginIdentifier") == "mediastreaming"):
-            streamingServicesPluginVersion = plugin.get("PluginVersion")
-
     print "***SageTV mediastreaming plugin version installed=" + streamingServicesPluginVersion
     if(streamingServicesPluginVersion == ""):
         xbmcgui.Dialog().ok(__language__(21004),__language__(21038) + " " + MIN_VERSION_STREAMING_SERVICES_PLUGIN_REQUIRED, __language__(21039),__language__(21040))

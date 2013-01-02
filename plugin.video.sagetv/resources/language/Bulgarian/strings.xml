@@ -10,5 +10,6 @@
     <!-- Settings -->
     <string id="21000">Не е открит SageTV сървър</string>
     <string id="21010">Търси</string>
+    <string id="21016">Изтрий</string>
     <string id="21019">Запис</string>
 </strings>

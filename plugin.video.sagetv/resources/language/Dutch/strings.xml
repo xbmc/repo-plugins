@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Dutch language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/nl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">SageTV Server Adres</string>
+    <string id="20001">SageTV Webserver Poort</string>
+    <string id="20002">SageTV Webserver Gebruikersnaam</string>
+    <string id="20003">SageTV Webserver Wachtwoord</string>
+
+    <!-- Settings -->
+    <string id="21000">SageTV Server Niet Gevonden</string>
+    <string id="21008">Jij hebt versie</string>
+    <string id="21010">Zoeken</string>
+    <string id="21012">Verwijderen succesvol</string>
+    <string id="21016">Verwijderen</string>
+    <string id="21017">Annuleer opname</string>
+    <string id="21018">Verwijder Favoriet</string>
+    <string id="21019">Opnemen</string>
+    <string id="21020">Bekijk Nu</string>
+    <string id="21030">Favoriet toevoegen</string>
+    <string id="21031">Favoriet toegevoegd</string>
+    <string id="21032">Favoriet verwijderd</string>
+    <string id="21044">Verwijder Alles</string>
+</strings>

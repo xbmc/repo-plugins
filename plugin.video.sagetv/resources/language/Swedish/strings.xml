@@ -63,4 +63,5 @@
     <string id="21045">Din xbmc.js fil är inte uppdaterad</string>
     <string id="21046">Bekräfta att du kopierade den senaste xbmc.js filen</string>
     <string id="21047">till SageTV\sage\services mappen</string>
+    <string id="21048">Din xbmc.js fil är skadad</string>
 </strings>

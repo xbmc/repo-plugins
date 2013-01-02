@@ -1,3 +1,10 @@
+[B]Version 1.4.6 (Jan 2, 2013)[/B]
+- Streamlined mediastreaming plugin version checking when using the "Watch (Streamed)" context menu item
+- Included latest language file updates
+
+[B]Version 1.4.5 (Jan 1, 2013)[/B]
+- Updated language files from Transifex
+
 [B]Version 1.4.4 (Dec 4, 2012)[/B]
 - Added additional check upon launch to ensure that the xbmc.js is not corrupt (aka someone manually copied from an HTML page versus downloading it correctly)
 

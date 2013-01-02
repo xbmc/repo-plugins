@@ -1,8 +1,17 @@
+[B]Version 2.0.12[/B]
+
+- Version bump for frodo
+- Fixed video settings issue
+- Fixed fanart issue
+- Fixed 'access_voilation' errors
+- Fixed 'TypeError' in get_video
+- Fixed ascii errors during search
+- Fixed missing 'Next Page' folder
+
 [B]Version 2.0.11[/B]
 
 - Fixed index error caused by getParameters
 - Updated open_url and retry functions
-
 
 [B]Version 2.0.10[/B]
 

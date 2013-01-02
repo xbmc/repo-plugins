@@ -1,4 +1,4 @@
-requests
+requests>=1.0.4
 brightcove
 BeautifulSoup
 xbmcswift2

@@ -25,7 +25,7 @@ def _url(path):
 
 def get_topics():
     '''Returns a list of (topic_name, url) of available topics'''
-    html = BS(requests.get(BASE_URL).content)
+    html = BS(requests.get(BASE_URL).text)
     menu = html.find('div', {'class': 'navigation clearfix'})
     links = menu.findAll('a', href=lambda h: h.startswith('/video/landing/'))
     return [(a.text, _url(a['href'])) for a in links]
@@ -36,7 +36,7 @@ def get_sub_topics(topic_url):
     given topic page. If the provided url is a sub topic page, an empty list
     will be returned.
     '''
-    html = BS(requests.get(topic_url).content)
+    html = BS(requests.get(topic_url).text)
     menu = html.find('div', {'class': 'subCategories clearfix'})
 
     if menu.find('li', {'class': 'firstItem selected'}):

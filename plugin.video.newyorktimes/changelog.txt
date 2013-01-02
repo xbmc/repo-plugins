@@ -1,3 +1,8 @@
+Version 1.2.1
+* Update python version
+* Bump major version to differentiate between eden
+* Update usage of requests module
+
 Version 0.2
 * Update addon to reflect website changes
 * Upgrade to xbmcswift2

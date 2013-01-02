@@ -1,3 +1,7 @@
+Version 2.1.2
+* Update xbmc python version
+* Bump major version to differentiate from eden
+
 Version 1.1.1
 * Add missing dependency for requests
 

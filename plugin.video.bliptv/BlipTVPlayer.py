@@ -17,10 +17,12 @@
 '''
 
 import sys
+import urllib2
 import xml.dom.minidom as minidom
 
 
 class BlipTVPlayer:
+
     def __init__(self):
         # BlipTV Playback Feeds
         self.settings = sys.modules["__main__"].settings
@@ -139,7 +141,7 @@ class BlipTVPlayer:
             return video_url
 
         if get("action") != "download":
-            video_url += " | " + self.utils.USERAGENT
+            video_url += " | " + self.common.USERAGENT
 
         self.common.log("Done" )
         return video_url
@@ -172,6 +174,11 @@ class BlipTVPlayer:
                 params['apierror'] = self.language(30618)
         else:
             params['apierror'] = self.language(30618)
+
+        if get("action") == "download":
+            tmp = urllib2.urlopen(video["video_url"])
+            video["video_url"] = tmp.geturl()
+            tmp.close()
 
         self.common.log("Done")
         return video

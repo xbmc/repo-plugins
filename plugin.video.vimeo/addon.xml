@@ -1,19 +1,19 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.vimeo' version='2.4.0' name='Vimeo' provider-name='TheCollective'>
+<addon id="plugin.video.vimeo" name="Vimeo" provider-name="TheCollective" version="3.5.1">
   <requires>
-    <import addon='xbmc.python' version='2.0'/>
-    <import addon='script.common.plugin.cache' version='1.3.0'/>
-    <import addon='script.module.parsedom' version='1.3.0'/>
-    <import addon='script.module.simple.downloader' version='0.9.3'/>
+    <import addon="xbmc.python" version="2.1.0" />
+    <import addon="script.common.plugin.cache" version="2.5.0" />
+    <import addon="script.module.parsedom" version="2.5.1" />
+    <import addon="script.module.simple.downloader" version="1.9.4" />
   </requires>
-  <extension point='xbmc.python.pluginsource' library='default.py'>
+  <extension library="default.py" point="xbmc.python.pluginsource">
         <provides>video</provides>
   </extension>
-  <extension point='xbmc.addon.metadata'>
+  <extension point="xbmc.addon.metadata">
     <platform>all</platform>
-    <summary lang='en'>Vimeo video plugin</summary>
-    <description lang='en'>Plugin that allows you to browse and view videos from everybodys favorite alternative video site!</description>
-    <summary lang='bg'>Видео добавка за Vimeo</summary>
-    <description lang='bg'>Добавката ви позволява да разглеждате и гледате видео клипове от любимия на всички алтернативен видео сайт!</description>
+    <summary lang="en">Vimeo video plugin</summary>
+    <description lang="en">Plugin that allows you to browse and view videos from everybodys favorite alternative video site!</description>
+    <summary lang="bg">Видео добавка за Vimeo</summary>
+    <description lang="bg">Добавката ви позволява да разглеждате и гледате видео клипове от любимия на всички алтернативен видео сайт!</description>
   </extension>
 </addon>

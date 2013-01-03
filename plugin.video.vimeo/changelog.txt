@@ -3,8 +3,16 @@
 - [XBMC] has Excessive Memory use after running the plugin for prolonged periods of time
 - [Vimeo] Vimeo's implementation of Oauth 1 is time sensetive, meaning that an incorrectly set system clock will prevent the plugin from logging in
 
-[B]Todo[/B]
-- More context menu items to take advantage of new core
+[B]Version 2.5.0[/B]
+- Added album management, add / remove videos and delete / create albums
+- Added Play all option to albums, new subscription videos, watch later, and the liked videos feed, option will allow the user to queue and playback a up to 250 videos
+- Added "More videos by user" navigation option
+- Fixed: login didnt work on new installs since the accept feature was removed from settings.
+- Fixed: Description of most video context menu items were wrong
+
+[B]Version 2.4.0[/B]
+- Changed: removed the need to accept plugin's access to vimeo in settings.
+- Fixed: Vimeo login was broken again.
 
 [B]Version 2.3.0[/B]
 - Playback was broken, and only allowed playback of SD videos, this bug fix might require the user to reset their video quality settings.

@@ -145,11 +145,11 @@ class VimeoCore(object):
         get = params.get
 
         user_id = self.settings.getSetting("userid")
-        if (get("external")):
+        if (get("external") or get("contact")):
             user_id = get("contact")
 
         page = int(get("page", "0")) + 1
-        per_page = (10, 15, 20, 25, 30, 40, 50,)[int(self.settings.getSetting("perpage"))]
+        per_page = (10, 15, 20, 25, 30, 40, 50)[int(self.settings.getSetting("perpage"))]
         
         self.common.log("calling vimeo api for " + get("api","None") + " with user_id: " + repr(user_id) + " page: " + repr(page) + " per_page: " + repr(per_page), 4)
 
@@ -292,6 +292,8 @@ class VimeoCore(object):
             group = {}
             group['contact'] = ids[i]
             group['Title'] = titles[i]
+            group['store'] = "contact_options"
+            group['folder'] = "true"
 
             thumbs_width = self.common.parseDOM(portraits, "portrait", ret="width")
             thumbs_url = self.common.parseDOM(portraits, "portrait")
@@ -357,6 +359,7 @@ class VimeoCore(object):
         return next
 
     def _getvideoinfo(self, value, params):
+        get = params.get
         self.common.log("")
 
         vobjects = []
@@ -386,7 +389,7 @@ class VimeoCore(object):
 
             vobjects.append(video)
 
-        if next:
+        if next and not get("fetch_all"):
             self.utils.addNextFolder(vobjects, params)
 
         self.common.log("Done")

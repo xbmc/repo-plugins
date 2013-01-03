@@ -43,10 +43,10 @@ class VimeoPlaylistControl():
         result = []
 
         # fetch the video entries
-        if get("playlist") and not get("api"):
-            params["user_feed"] = "playlist"
+        if get("album") and not get("api"):
             result = self.getUserFeed(params)
-        elif get("api") in ["recommended", "watch_later", "newsubscriptions", "favorites", "playlist"]:
+        elif get("api") in ["my_videos", "my_watch_later", "my_newsubscriptions", "my_likes"]:
+            params["login"] = "true"
             result = self.getUserFeed(params)
 
         if len(result) == 0:
@@ -92,36 +92,26 @@ class VimeoPlaylistControl():
     def getUserFeed(self, params={}):
         get = params.get
 
-        if get("api") == "albums":
-            if not get("album"):
-                return False
-        elif get("api") in ["newsubscriptions", "favorites"]:
-            if not get("contact"):
-                return False
-
         return self.feeds.listAll(params)
 
-    def addToPlaylist(self, params={}):
+    def addToAlbum(self, params={}):
         get = params.get
 
         result = []
         if (not get("album")):
-            params["api"] = "albums"
-            params["login"] = "true"
-            params["folder"] = "true"
-            result = self.feeds.listAll(params)
+            result = self.feeds.listAll({"api": "my_albums", "login":"true", "folder":"album" })
 
         selected = -1
         if result:
             list = []
-            list.append(self.language(30529))
+            list.append(self.language(30033))
             for item in result:
                 list.append(item["Title"])
             dialog = self.xbmcgui.Dialog()
-            selected = dialog.select(self.language(30528), list)
+            selected = dialog.select(self.language(30533), list)
 
         if selected == 0:
-            self.createPlaylist(params)
+            self.createAlbum(params)
         elif selected > 0:
             params["album"] = result[selected - 1].get("album")
 
@@ -131,9 +121,9 @@ class VimeoPlaylistControl():
 
         return False
 
-    def createPlaylist(self, params={}):
+    def createAlbum(self, params={}):
         get = params.get
-        input = self.common.getUserInput(self.language(30529))
+        input = self.common.getUserInput(self.language(30033))
 
         if input and get("videoid"):
 
@@ -144,7 +134,7 @@ class VimeoPlaylistControl():
 
         return False
 
-    def removeFromPlaylist(self, params={}):
+    def removeFromAlbum(self, params={}):
         get = params.get
 
         if get("album") and get("videoid"):
@@ -157,7 +147,7 @@ class VimeoPlaylistControl():
             self.xbmc.executebuiltin("Container.Refresh")
         return True
 
-    def deletePlaylist(self, params):
+    def deleteAlbum(self, params):
         get = params.get
         if get("album"):
             (message, status) = self.core.deleteAlbum(params)

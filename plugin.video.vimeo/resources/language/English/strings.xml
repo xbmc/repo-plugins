@@ -35,6 +35,7 @@
     <string id="30030">Logged in</string>
     <string id="30031">My Watch Later</string>
     <string id="30032">My Downloads</string>
+    <string id="30033">New Album..</string>
     
     <!-- Plugin settings strings -->
     <string id="30200">User email</string>
@@ -95,6 +96,12 @@
     <string id="30528">Sort most subscribed</string>
     <string id="30529">Remove from Watch Later</string>
     <string id="30530">Add to Watch Later</string>
+    <string id="30531">Play All</string>
+    <string id="30532">Play from here</string>
+    <string id="30533">Add to Album..</string>
+    <string id="30534">Remove from Album</string>
+    <string id="30535">Delete Album</string>
+    <string id="30536">More video by %s</string>
 
     <!-- messages -->
     <string id="30600">Error</string>

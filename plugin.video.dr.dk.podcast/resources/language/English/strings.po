@@ -1,0 +1,46 @@
+# XBMC Media Center language file
+# Addon Name: DR.dk Podcasts
+# Addon id: plugin.video.dr.dk.podcast
+# Addon version: 3.0.0s
+# Addon Provider: twinther [tommy@winther.nu]
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#100"
+msgid "All podcasts"
+msgstr ""
+
+msgctxt "#101"
+msgid "Podcasts by channel"
+msgstr ""
+
+msgctxt "#102"
+msgid "Podcasts by letter"
+msgstr ""
+
+msgctxt "#103"
+msgid "Search"
+msgstr ""
+
+msgctxt "#200"
+msgid "Search for podcasts"
+msgstr ""
+
+msgctxt "#900"
+msgid "There was an error while retrieving podcasts."
+msgstr ""
+
+msgctxt "#901"
+msgid "Please try again later. Error message is:"
+msgstr ""

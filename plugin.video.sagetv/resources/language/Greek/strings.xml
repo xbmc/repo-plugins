@@ -19,7 +19,7 @@
     <string id="21001">Αδυναμία σύνδεσης στο διακομιστή του SageTV.</string>
     <string id="21002">1) Επιβεβαιώστε ότι εκτελείται.</string>
     <string id="21003">2) Επιβεβαιώστε ότι οι ρυθμίσεις αυτού του πρόσθετου είναι σωστές.</string>
-    <string id="21004">Έλλειψη Εξάρτησης</string>
+    <string id="21004">Έλλειψη ή Πρόβλημα Εξάρτησης</string>
     <string id="21005">Αυτό το πρόσθετο απαιτεί έκδοση του sagex-api-services</string>
     <string id="21006">Δεν είναι εγκατεστημένο το plugin του sagex-api-services</string>
     <string id="21007">Εγκαταστήστε το sagex-api-services για να ενεργοποιήσετε αυτό το plugin.</string>
@@ -63,4 +63,5 @@
     <string id="21045">Το αρχείο xbmc.js δεν είναι ενημερωμένο</string>
     <string id="21046">Επαληθεύστε ότι αντιγράψατε το πιο πρόσφατο αρχείο xbmc.js</string>
     <string id="21047">στο φάκελο SageTV\sagex\services</string>
+    <string id="21048">Το αρχείο σας xbmc.js είναι προβληματικό</string>
 </strings>

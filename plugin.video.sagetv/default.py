@@ -110,6 +110,13 @@ def TOPLEVELCATEGORIES():
         return
     
     print "TOPLEVELCATEGORIES STARTED; xbmc.js file version=" + xbmcjsVersion + ";sagex-api-services version=" + sagexVersion
+    print "*****SETTINGS*****"
+    print "*****sage_rec=" + sage_rec + ";sage_unc=" + sage_unc + "*****"
+    print "*****sage_rec2=" + sage_rec2 + ";sage_unc2=" + sage_unc2 + "*****"
+    print "*****sage_rec3=" + sage_rec3 + ";sage_unc3=" + sage_unc3 + "*****"
+    print "*****sage_rec4=" + sage_rec4 + ";sage_unc4=" + sage_unc4 + "*****"
+    print "*****sage_rec5=" + sage_rec5 + ";sage_unc5=" + sage_unc5 + "*****"
+    print "*****sage_mac=" + sage_mac + "*****"
 
     addTopLevelDir('1. Watch Recordings', strUrl + '/sagex/api?c=xbmc:GetTVMediaFilesGroupedByTitle&size=500&encoder=json',1,IMAGE_POSTER,'Browse previously recorded and currently recording shows')
     addTopLevelDir('2. View Upcoming Recordings', strUrl + '/sagex/api?command=GetScheduledRecordings&encoder=json',2,IMAGE_POSTER,'View and manage your upcoming recording schedule')

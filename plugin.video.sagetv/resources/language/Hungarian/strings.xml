@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hungarian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Addon Settings -->
+    <string id="20000">SageTV szerver címe</string>
+    <string id="20001">SageTV webszerver port</string>
+    <string id="20002">SageTV webszerver felhasználónév</string>
+    <string id="20003">SageTV webszerver jelszó</string>
+    <string id="20004">SageTV felvétel mappa</string>
+    <string id="20005">SageTV hálózati felvétel mappa útvonala</string>
+    <string id="20006">Sage TV szerver MAC címe (wake-on-LAN)</string>
+    <string id="20007">Folyam adatsebesség (kbit/s)</string>
+
+    <!-- Settings -->
+    <string id="21000">SageTV szerver nem található</string>
+    <string id="21001">Nem sikerült a SageTV szerverhez csatlakozni</string>
+    <string id="21002">1) Ellenőrizze, hogy fut-e?</string>
+    <string id="21003">2) Ellenőrizze, hogy a kiegészítő beállításai helyesek</string>
+    <string id="21004">Hiányzó vagy hibás függőség</string>
+    <string id="21005">Ehhez a kiegészítőhöz szükséges a sagex-api-services</string>
+    <string id="21006">Nincs telepítve a sagex-api-services beépülő modul</string>
+    <string id="21007">Kérjük telepítse a sagex-api-services beépülő modult.</string>
+    <string id="21008">Az ön verziója:</string>
+    <string id="21009">Kérjük frissítse / telepítse a sagex-api-services következő verzióját:</string>
+    <string id="21010">Keresés</string>
+    <string id="21011">SageTV kiegészítő</string>
+    <string id="21012">Sikeresen törölve</string>
+    <string id="21013">Programozott felvétel</string>
+    <string id="21014">Élő TV adás lejátszása</string>
+    <string id="21015">Nem lehetséges élő TV adást lejátszani</string>
+    <string id="21016">Törlés</string>
+    <string id="21017">Felvétel eltávolítása</string>
+    <string id="21018">Kedvenc törlése</string>
+    <string id="21019">Felvétel</string>
+    <string id="21020">Nézze most</string>
+    <string id="21021">Lejátszás sikertelen; a fájlméret nem elég nagy</string>
+    <string id="21022">Nézettként megjelöl</string>
+    <string id="21023">Nem nézettként jelöl</string>
+    <string id="21024">Archívnak megjelöl</string>
+    <string id="21025">Nem archívnak jelöl</string>
+    <string id="21026">Törlés és nézettként jelöl</string>
+    <string id="21027">Törlés és nem nézettként jelöl</string>
+    <string id="21028">Törlés és nem tetszőnek jelöl</string>
+    <string id="21029">Törlés / Rossz felvétel</string>
+    <string id="21030">Kedvenc hozzáadása</string>
+    <string id="21031">Kedvenc hozzáadva</string>
+    <string id="21032">Kedvenc törölve</string>
+    <string id="21033">Nézettként megjelölve</string>
+    <string id="21034">Nem nézettként jelölve</string>
+    <string id="21035">Archívnak megjelölve</string>
+    <string id="21036">Nem archívnak jelölve</string>
+    <string id="21042">Mindet nézettként megjelöl</string>
+    <string id="21043">Mindet nem nézettként jelöl</string>
+    <string id="21044">Összes törlése</string>
+    <string id="21045">Az xbmc.js fájl nem naprakész</string>
+    <string id="21046">Ellenőrizze, hogy bemásolta-e a legfrissebb xbmc.js fájlt</string>
+    <string id="21047">a SageTV\sagex\services mappába</string>
+    <string id="21048">Az xbmc.js fájl hibás</string>
+</strings>

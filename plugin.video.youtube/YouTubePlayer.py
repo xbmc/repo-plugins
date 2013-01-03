@@ -21,7 +21,6 @@ import urllib
 import cgi
 try: import simplejson as json
 except ImportError: import json
-import urllib
 
 
 class YouTubePlayer():
@@ -72,6 +71,7 @@ class YouTubePlayer():
         self.utils = sys.modules["__main__"].utils
         self.cache = sys.modules["__main__"].cache
         self.core = sys.modules["__main__"].core
+        self.login = sys.modules["__main__"].login
         self.subtitles = sys.modules["__main__"].subtitles
 
     def playVideo(self, params={}):
@@ -365,11 +365,24 @@ class YouTubePlayer():
 
         return page
 
+    def isVideoAgeRestricted(self, result):
+        error = self.common.parseDOM(result['content'], "div", attrs={"id": "watch7-player-age-gate-content"})
+        self.common.log(repr(error))
+        return len(error) > 0
+
     def extractVideoLinksFromYoutube(self, video, params):
         self.common.log(u"trying website: " + repr(params))
         get = params.get
 
         result = self.getVideoPageFromYoutube(get)
+        if self.isVideoAgeRestricted(result) and self.pluginsettings.userName() != "":
+            self.login.login()
+            result = self.getVideoPageFromYoutube(get)
+
+        if self.isVideoAgeRestricted(result):
+            self.common.log(u"Age restricted video")
+            if not self.pluginsettings.userHasProvidedValidCredentials():
+                self.utils.showMessage(self.language(30600), self.language(30622))
 
         if result[u"status"] != 200:
             self.common.log(u"Couldn't get video page from YouTube")

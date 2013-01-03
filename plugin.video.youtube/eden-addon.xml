@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<addon id='plugin.video.youtube' version='3.4.999' name='YouTube' provider-name='TheCollective'>
+  <requires>
+    <import addon='xbmc.python' version='2.0'/>
+    <import addon='script.module.simplejson' version='2.0.10'/>
+    <import addon='script.common.plugin.cache' version='1.5.0'/>
+    <import addon='script.module.parsedom' version='1.5.0'/>
+    <import addon='script.module.simple.downloader' version='0.9.4'/>
+  </requires>
+  <extension point='xbmc.python.pluginsource' library='default.py'>
+        <provides>video</provides>
+  </extension>
+  <extension point='xbmc.addon.metadata'>
+    <platform>all</platform>
+    <summary lang='en'>YouTube video plugin</summary>
+    <description lang='en'>Plugin that lets you browse and play videos from everybody's favorite video site!</description>
+    <disclaimer lang='en'>Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+    <summary lang='bg'>Видео добавка за YouTube</summary>
+    <description lang='bg'>Добавката ви позволява да разглеждате и гледате видео клипове от любимия на на всички видео сайт!</description>
+    <disclaimer lang='bg'>Някои части от добавката може да са незаконни в държавата, в която се намирате - моля, проверете местните закони, преди да я инсталирате.</disclaimer>
+  </extension>
+</addon>

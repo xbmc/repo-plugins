@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Croatian language-Team URL: http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/hr/ -->
+<!-- Report language file syntax bugs at: http://trac.xbmc.org/ -->
+
+<strings>
+    <string id="30006">Traži</string>
+    <string id="30023">Liste Izvedbi</string>
+
+    <!-- Plugin settings strings -->
+    <string id="30200">Korisničko ime</string>
+    <string id="30201">Zaporka</string>
+    <string id="30204">Danas</string>
+    <string id="30218">Općenito</string>
+    <string id="30219">Promjenjivo</string>
+    <string id="30222">Sve</string>
+    <string id="30247">Mapa</string>
+    <string id="30260">Napredno</string>
+    <string id="30277">Isključeno</string>
+    <string id="30278">Engleski</string>
+    <string id="30279">Španjolski</string>
+    <string id="30280">Njemački</string>
+    <string id="30281">Francuski</string>
+    <string id="30282">Talijanski</string>
+    <string id="30283">Japanski</string>
+    <string id="30502">Video informacije</string>
+    <string id="30521">Reproduciraj od</string>
+
+    <!-- messages -->
+    <string id="30600">Greška</string>
+    <string id="30603">Sviranje Liste izvedbi prekinuto</string>
+    <string id="30624">Preuzimanje</string>
+</strings>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Persian language-Team URL: http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/fa/ -->
+<!-- Report language file syntax bugs at: http://trac.xbmc.org/ -->
+
+<strings>
+    <!-- Category strings -->
+    <string id="30001">خوراک YouTube</string>
+    <string id="30002">علاقه‌مندی‌های من</string>
+    <string id="30005">بارگزاری‌های من</string>
+    <string id="30006">جستجو</string>
+    <string id="30007">جستجو...</string>
+    <string id="30010">آخرین پسند شده ها</string>
+    <string id="30011">بیش‌ترین بازدید</string>
+    <string id="30015">برترین علاقه‌مندی‌ها</string>
+    <string id="30020">علاقه‌مندی‌ها</string>
+    <string id="30022">بارگزاری‌ها</string>
+    <string id="30024">افزودن تماس</string>
+    <string id="30025">حذف تماس</string>
+    <string id="30026">افزودن تماس</string>
+    <string id="30027">ورود</string>
+    <string id="30029">تماس</string>
+    <string id="30031">ورود موفقیت‌آمیز بود</string>
+    <string id="30035">آخرین</string>
+    <string id="30039">محبوب‌ترین هنرمند</string>
+    <string id="30043">فیلم‌های YouTube</string>
+    <string id="30044">کاوش YouTube</string>
+    <string id="30045">بارگیری‌های من</string>
+    <string id="30046">بازی‌های محبوب</string>
+    <string id="30047">آخرین بازی‌ها</string>
+    <string id="30058">فصل  %s</string>
+    <string id="30059">تاریخچه من</string>
+
+    <!-- Plugin settings strings -->
+    <string id="30200">نام کاربری</string>
+    <string id="30201">کلمه عبور</string>
+    <string id="30204">امروز</string>
+    <string id="30205">این هفته</string>
+    <string id="30206">این ماه</string>
+    <string id="30218">عمومی</string>
+    <string id="30222">همه</string>
+    <string id="30223">استرالیا</string>
+    <string id="30224">برزیل</string>
+    <string id="30225">کانادا</string>
+    <string id="30226">جمهوری چک</string>
+    <string id="30227">فرانسه</string>
+    <string id="30228">آلمان</string>
+    <string id="30229">بریتانیا</string>
+    <string id="30230">هلند</string>
+    <string id="30231">هنگ کنگ</string>
+    <string id="30232">هند</string>
+    <string id="30233">ایرلند</string>
+    <string id="30234">رژیم اشغال‌گر قدس</string>
+    <string id="30235">ایتالیا</string>
+    <string id="30236">ژاپن</string>
+    <string id="30237">مکزیک</string>
+    <string id="30238">نیوزیلند</string>
+    <string id="30239">لهستان</string>
+    <string id="30240">روسیه</string>
+    <string id="30241">کره جنوبی</string>
+    <string id="30242">اسپانیا</string>
+    <string id="30244">تایوان</string>
+    <string id="30245">ایالات متحده</string>
+    <string id="30247">پوشه</string>
+    <string id="30253">نمایش علاقه‌مندی‌ها</string>
+    <string id="30254">نمایش لیست ÷خش</string>
+    <string id="30256">نمایش بارگزاری‌ها</string>
+    <string id="30257">نمایش بارگیری‌ها</string>
+    <string id="30258">نمایش جستجو</string>
+    <string id="30260">پیشرفته</string>
+    <string id="30269">نمایش خبرخوان</string>
+    <string id="30277">خاموش</string>
+    <string id="30278">انگلیسی</string>
+    <string id="30279">اسپانیائی</string>
+    <string id="30280">آلمانی</string>
+    <string id="30281">فرانسوی</string>
+    <string id="30282">ایتالیائی</string>
+    <string id="30283">ژاپنی</string>
+    <string id="30501">دانلود ویدئو</string>
+    <string id="30502">اطلاعات ویدئو</string>
+    <string id="30503">افزودن به علاقه‌مندی‌های من</string>
+    <string id="30506">حذف از علاقه‌مندی‌های من</string>
+    <string id="30507">هنرمندان هم رده</string>
+    <string id="30508">حذف جستجو</string>
+    <string id="30509">نتایج بیشتر</string>
+    <string id="30510">نمایش علاقه‌مندی‌ها</string>
+    <string id="30511">نمایش بارگزاری‌ها</string>
+    <string id="30514">پیدا کردن هم رده</string>
+    <string id="30515">ویرایش جستجو</string>
+    <string id="30520">پخش همه</string>
+    <string id="30523">در حال پخش...</string>
+    <string id="30601">بدون نتیجه!</string>
+    <string id="30603">خطا در پخش</string>
+    <string id="30604">بارگیری به اتمام رسید</string>
+    <string id="30609">خطای ورود</string>
+    <string id="30624">در حال بارگیری</string>
+    <string id="30625">عملیات بارگیری شکست خورد</string>
+</strings>

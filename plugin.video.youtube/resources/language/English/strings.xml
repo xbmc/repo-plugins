@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- English language-Team URL: http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/en/ -->
+<!-- Report language file syntax bugs at: http://trac.xbmc.org/ -->
+
 <strings>
     <!-- Category strings -->
     <string id="30001">YouTube Feeds</string>
@@ -61,7 +65,6 @@
     <string id="30058">Season %s</string>
     <string id="30059">My History</string>
 
-    
     <!-- Plugin settings strings -->
     <string id="30200">Username</string>
     <string id="30201">Password</string>
@@ -84,32 +87,32 @@
     <string id="30220">Strict</string>
     <string id="30221">YouTube feeds country region</string>
     <string id="30222">All</string>
-	<string id="30223">Australia</string>
-	<string id="30224">Brazil</string>
-	<string id="30225">Canada</string>
-	<string id="30226">Czech Republic</string>
-	<string id="30227">France</string>
-	<string id="30228">Germany</string>
-	<string id="30229">Great Britain</string>
-	<string id="30230">Holland</string>
-	<string id="30231">Hong Kong</string>
-	<string id="30232">India</string>
-	<string id="30233">Ireland</string>
-	<string id="30234">Israel</string>
-	<string id="30235">Italy</string>
-	<string id="30236">Japan</string>
-	<string id="30237">Mexico</string>
-	<string id="30238">New Zealand</string>
-	<string id="30239">Poland</string>
-	<string id="30240">Russia</string>
-	<string id="30241">South Korea</string>
-	<string id="30242">Spain</string>
-	<string id="30243">Sweden</string>
-	<string id="30244">Taiwan</string>
-	<string id="30245">United States</string>    
+    <string id="30223">Australia</string>
+    <string id="30224">Brazil</string>
+    <string id="30225">Canada</string>
+    <string id="30226">Czech Republic</string>
+    <string id="30227">France</string>
+    <string id="30228">Germany</string>
+    <string id="30229">Great Britain</string>
+    <string id="30230">Holland</string>
+    <string id="30231">Hong Kong</string>
+    <string id="30232">India</string>
+    <string id="30233">Ireland</string>
+    <string id="30234">Israel</string>
+    <string id="30235">Italy</string>
+    <string id="30236">Japan</string>
+    <string id="30237">Mexico</string>
+    <string id="30238">New Zealand</string>
+    <string id="30239">Poland</string>
+    <string id="30240">Russia</string>
+    <string id="30241">South Korea</string>
+    <string id="30242">Spain</string>
+    <string id="30243">Sweden</string>
+    <string id="30244">Taiwan</string>
+    <string id="30245">United States</string>
     <string id="30246">Debug</string>
     <string id="30247">Folder</string>
-    <string id="30248">Show Explore YouTube</string>    
+    <string id="30248">Show Explore YouTube</string>
     <string id="30249">Show Youtube Suggests</string>
     <string id="30250">Show Watch Later</string>
     <string id="30251">Show Liked Videos</string>
@@ -174,7 +177,7 @@
     <string id="30520">Play All</string>
     <string id="30521">Play from here</string>
     <string id="30522">Shuffle and Play All</string>
-    <string id="30523">Now Playing...</string>        
+    <string id="30523">Now Playing...</string>
     <string id="30524">Edit disco search</string>
     <string id="30525">Delete disco search</string>
     <string id="30526">View playlists</string>
@@ -185,17 +188,17 @@
     <string id="30531">Reverse Playlist</string>
     <string id="30539">Delete Playlist</string>
     <string id="30540">Delete artist</string>
-	
+
     <!-- messages -->
     <string id="30600">Error</string>
     <string id="30601">No results!</string>
     <string id="30602">No recent activity</string>
     <string id="30603">Playback failed</string>
     <string id="30604">Download complete</string>
-    <string id="30605">Preparing download</string> 
+    <string id="30605">Preparing download</string>
     <string id="30606">Verify your age in a browser</string>
     <string id="30607">Skipping download</string>
-    <string id="30608">YouTube doesn't seem to know this video id!</string>    
+    <string id="30608">YouTube doesn't seem to know this video id!</string>
     <string id="30609">Login Failed</string>
     <string id="30610">Refinement cleared</string>
     <string id="30611">Download folder not set</string>
@@ -206,16 +209,15 @@
     <string id="30616">Refinement added</string>
     <string id="30617">Unknown error</string>
     <string id="30618">Couldn't locate video url</string>
-    <string id="30619">RTMPe download not supported</string> 
+    <string id="30619">RTMPe download not supported</string>
     <string id="30620">Stream type not supported</string>
     <string id="30621">Bad username or password</string>
     <string id="30622">Playback requires valid YouTube account</string>
     <string id="30623">Maximum login attempts tried.</string>
     <string id="30624">Downloading</string>
     <string id="30625">Download Failed</string>
-    <string id="30626">RTMPe playback currently not supported</string> 
-    <string id="30627">Please provide 2-factor authentication PIN</string> 
-    <string id="30628">Please provide your password</string> 
+    <string id="30626">RTMPe playback currently not supported</string>
+    <string id="30627">Please provide 2-factor authentication PIN</string>
+    <string id="30628">Please provide your password</string>
     <string id="30629">SSL protocol not supported.</string>
-
 </strings>

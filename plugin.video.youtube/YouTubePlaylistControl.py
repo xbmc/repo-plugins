@@ -46,15 +46,17 @@ class YouTubePlaylistControl():
 
         # fetch the video entries
         if get("scraper") == "search_disco":
-            result = self.getDiscoSearch(params)
+            (result, status) = self.scraper.searchDisco(params)
+            print repr(result)
         elif get("scraper") == "liked_videos":
-            result = self.getLikedVideos(params)
+            (result, status) = self.getLikedVideos(params)
         elif get("scraper") == "music_top100":
             result = self.getYouTubeTop100(params)
-        elif get("playlist") and not get("user_feed"):
+        elif get("playlist"):
             params["user_feed"] = "playlist"
             result = self.getUserFeed(params)
-        elif get("user_feed") in ["recommended", "watch_later", "newsubscriptions", "favorites", "playlist"]:
+        elif get("user_feed") in ["recommended", "watch_later", "newsubscriptions", "favorites"]:
+            params["login"] = "true"
             result = self.getUserFeed(params)
         elif get("video_list"):
             (ytobjects, status) = self.core.getBatchDetails(get("video_list").split(","))
@@ -121,20 +123,19 @@ class YouTubePlaylistControl():
             return False
 
         playlist = self.xbmc.PlayList(self.xbmc.PLAYLIST_VIDEO)
-        for video in videos:
-            listitem = self.xbmcgui.ListItem(label=video['Title'], iconImage=video['thumbnail'], thumbnailImage=video['thumbnail'], path=video['video_url'])
+
+        video_url = "%s?path=/root&action=play_video&videoid=%s"
+        # queue all entries
+        for entry in videos:
+            video = entry.get
+            if video("videoid") == "false":
+                continue
+            listitem = self.xbmcgui.ListItem(label=video("Title"), iconImage=video("thumbnail"), thumbnailImage=video("thumbnail"))
             listitem.setProperty('IsPlayable', 'true')
-            listitem.setInfo(type='Video', infoLabels=video)
-            playlist.add("%s?path=/root&action=play_video&videoid=%s" % (sys.argv[0], video["videoid"] ), listitem)
-            self.common.log("Queuing video: " + self.common.makeAscii(video['Title']) + " - " + get('videoid') + " - " + video['video_url'])
+            listitem.setProperty("Video", "true" )
+            listitem.setInfo(type='Video', infoLabels=entry)
 
-    def getDiscoSearch(self, params={}):
-        (result, status) = self.scraper.searchDisco(params)
-
-        if status == 200:
-            (result, status) = self.core.getBatchDetails(result, params)
-
-        return result
+            playlist.add(video_url % (sys.argv[0], video("videoid") ), listitem)
 
     def getUserFeed(self, params={}):
         get = params.get
@@ -161,12 +162,7 @@ class YouTubePlaylistControl():
         if not get("scraper") or not get("login"):
             return False
 
-        (result, status) = self.scraper.scrapeUserVideoFeed(params)
-        self.common.log("Liked videos "  + repr(result))
-        if status == 200:
-            (result, status) = self.core.getBatchDetails(result, params)
-
-        return result
+        return self.scraper.scrapeUserLikedVideos(params)
 
     def addToPlaylist(self, params={}):
         get = params.get

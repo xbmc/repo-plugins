@@ -1,3 +1,6 @@
+[B]Version 2.0.1 - 2012-11-27[/B]
+- Updated to match site changes (thanks to Kenneth Jacobsen)
+
 [B]Version 2.0.0[/B]
 - First version for Eden
 - No new features since v1.1.0

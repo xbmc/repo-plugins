@@ -7,7 +7,7 @@ import xbmcgui
 import xbmcplugin
 import xbmcaddon
 
-VIDEO_PODCAST_URL = 'http://www.dr.dk/podcast/Video'
+VIDEO_PODCAST_URL = 'http://www.dr.dk/podcast/api/GetByFirst?type=tv&take=1000'
 
 class DrDkPodcast(object):
     def showOverview(self):
@@ -15,15 +15,13 @@ class DrDkPodcast(object):
         html = u.read()
         u.close()
 
-        icon = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
         fanart = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
-
-        for m in re.finditer('<h2>.*?<a href="[^"]+">([^<]+)</a>\s+</h2>\s+<p>([^<]*)</p>.*?(http://vpodcast.dr.dk/feeds/.*?\\.xml)', html, re.DOTALL):
+        for m in re.finditer(b"{\"Title\":\"(.*?)\",\"Type\":\"(.*?)\",\"Channel\":\"(.*?)\",\"ChannelGroup\":\"(.*?)\",\"ImageLinkScaled\":\"(.*?)\",\"XmlLink\":\"(.*?)\"", html, re.DOTALL):
             title = m.group(1)
-            description = m.group(2)
-            url = m.group(3)
+            description = ''
+            url = m.group(6)
 
-            item = xbmcgui.ListItem(title, iconImage = icon)
+            item = xbmcgui.ListItem(title, iconImage = m.group(5))
             item.setProperty('Fanart_Image', fanart)
             item.setInfo(type = 'video', infoLabels = {
                 'title' : title,

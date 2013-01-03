@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="plugin.video.dr.dk.podcast"
-	version="2.0.0"
+	version="2.0.1"
 	name="DR.dk Video Podcasts"
 	provider-name="twinther [tommy@winther.nu]">
 	<requires>
@@ -16,6 +16,7 @@
 		<description lang="en">DR (Danish Broadcasting Corporation) provides a variation of their programming as podcasts, where typically 5-10 of the latest episodes are available online.</description>
 		<description lang="da">DR udgiver en række af deres programmer som video podcasts, hvor typisk de seneste 5-10 afsnit er tilgængelige online.</description>
 		<license>GPL 2.0</license>
-		<platform>all</platform>        
+		<platform>all</platform>
+        <language>da</language>
 	</extension>
 </addon>

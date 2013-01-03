@@ -33,6 +33,7 @@ class YouTubeUtils:
         self.THUMBNAIL_PATH = os.path.join(self.settings.getAddonInfo('path'), "thumbnails")
 
     def showMessage(self, heading, message):
+        self.common.log(repr(type(heading)) + " - " + repr(type(message)))
         duration = ([1, 2, 3, 4, 5, 6, 7, 8, 9, 10][int(self.settings.getSetting('notification_length'))]) * 1000
         self.xbmc.executebuiltin((u'XBMC.Notification("%s", "%s", %s)' % (heading, message, duration)).encode("utf-8"))
 

@@ -1,22 +1,122 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.youtube' version='3.3.0' name='YouTube' provider-name='TheCollective'>
+<addon id="plugin.video.youtube" name="YouTube" provider-name="TheCollective" version="4.4.1">
   <requires>
-    <import addon='xbmc.python' version='2.0'/>
-    <import addon='script.module.simplejson' version='2.0.10'/>
-    <import addon='script.common.plugin.cache' version='1.3.0'/>
-    <import addon='script.module.parsedom' version='1.3.0'/>
-    <import addon='script.module.simple.downloader' version='0.9.3'/>
+    <import addon="xbmc.python" version="2.1.0" />
+    <import addon="script.module.simplejson" version="2.0.10" />
+    <import addon="script.common.plugin.cache" version="2.5.0" />
+    <import addon="script.module.parsedom" version="2.5.1" />
+    <import addon="script.module.simple.downloader" version="1.9.4" />
   </requires>
-  <extension point='xbmc.python.pluginsource' library='default.py'>
+  <extension library="default.py" point="xbmc.python.pluginsource">
         <provides>video</provides>
   </extension>
-  <extension point='xbmc.addon.metadata'>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="af">YouTube video byvoegsel</summary>
+    <summary lang="be">YouTube video plugin</summary>
+    <summary lang="bg">Видео добавка за YouTube</summary>
+    <summary lang="cs">Modul videa YouTube</summary>
+    <summary lang="da">YouTube videoplugin</summary>
+    <summary lang="de">YouTube Video Plugin</summary>
+    <summary lang="el">Plugin για το YouTube</summary>
+    <summary lang="en">YouTube video plugin</summary>
+    <summary lang="es">Plugin de video de YouTube</summary>
+    <summary lang="es_AR">Plugin de video de YouTube</summary>
+    <summary lang="es_MX">Plugin de vídeo de Youtube</summary>
+    <summary lang="eu">YouTube bideo gehigarria</summary>
+    <summary lang="fa">پلاگین You Tube</summary>
+    <summary lang="fi">YouTube-videoliitännäinen</summary>
+    <summary lang="fr">Extension vidéo YouTube</summary>
+    <summary lang="gl">Extensión de vídeo de YouTube</summary>
+    <summary lang="he">תוסף וידאו YouTube </summary>
+    <summary lang="hu">YouTube video kiegészítő</summary>
+    <summary lang="it">Plugin video YouTube</summary>
+    <summary lang="ja">YouTube ビデオプラグイン</summary>
+    <summary lang="ko">YouTube 비디오 플러그인</summary>
+    <summary lang="lt">YouTube vaizdo įskiepis</summary>
+    <summary lang="mk">YouTube видео додаток</summary>
+    <summary lang="nl">YoutTube video plugin</summary>
+    <summary lang="no">YouTube video tillegg</summary>
+    <summary lang="pl">Wtyczka YouTube</summary>
+    <summary lang="pt">Plugin de vídeo YouTube</summary>
+    <summary lang="pt_BR">Plugin de vídeo YouTube</summary>
+    <summary lang="ro">Plugin video YouTube</summary>
+    <summary lang="ru">Дополнение видео YouTube</summary>
+    <summary lang="sk">Zásuvný modul pre video z YouTube</summary>
+    <summary lang="sl">Video vtičnik YouTube</summary>
+    <summary lang="sv">YouTube videotillägg</summary>
+    <summary lang="th">ส่วนเสริมวิดีโอ YouTube</summary>
+    <summary lang="uk">Відео додаток YouTube</summary>
+    <summary lang="zh">YouTube视频插件</summary>
+    <summary lang="zh_TW">YouTube 影片外掛</summary>
+    <description lang="af">Byvoegsel wat jou toelaat om videos te blaai en speel vanaf almal se gunsteling video werf!</description>
+    <description lang="be">Plugin that lets you browse and play videos from everybody's favorite video site!</description>
+    <description lang="bg">Добавката Ви позволява да разглеждате и гледате видео клипове от любимия на на всички видео сайт!</description>
+    <description lang="cs">Modul, který vám umožní procházet a přehrávat videa z nejoblíbenější stránky s videi.</description>
+    <description lang="da">Plugin som lader dig browse og afspille videoer fra alles yndlings videoside!</description>
+    <description lang="de">Ein Plugin, welches Ihnen erlaubt Videos von Youtube abzuspielen.</description>
+    <description lang="el">Plugin το οποίο σας επιτρέπει να περιηγηθείτε και να δείτε βίντεο από την πιο αγαπητή ιστοσελίδα βίντεο!</description>
+    <description lang="en">Plugin that lets you browse and play videos from everybody's favorite video site!</description>
+    <description lang="es">Este plugin te permite buscar y reproducir vídeos desde el sitio de vídeos favorito de todos!</description>
+    <description lang="es_AR">¡Este plugin te permite buscar y reproducir videos desde el sitio de videos favorito de todos!</description>
+    <description lang="es_MX">¡El Plugin que te permite explorar y reproducir vídeos del sitio favorito de todos!</description>
+    <description lang="fa">این پلاگین امکان مرور و پخش ویدئو از سایت های ورد علاقه تان را به شما میدهد.</description>
+    <description lang="fi">Plugin jolla voi selata ja katsoa videoita kaikkien suosikkivideosivustolta!</description>
+    <description lang="fr">Programme permettant parcours et visualisation des chaînes du meilleur site vidéo !</description>
+    <description lang="gl">Extensión que permite explorar e reproducir vídeos do sitio favorito de todos!</description>
+    <description lang="he">תוסף שמאפשר לך לדפדף ולנגן מתוך אתר הוידאו האהוב על כולם!</description>
+    <description lang="hu">A kiegészítő lehetővé teszi mindenkinek, hogy böngésszen, és lejátsszon videókat, mindenki kedvenc videómegosztójáról!</description>
+    <description lang="it">Plugin the ti permette di cercare e riprodurre video dal sito di video preferito da tutti!</description>
+    <description lang="ja">みんなが大好き、あの有名なサイト上の動画をブラウズ・再生するプラグイン！</description>
+    <description lang="ko">YouTube 동영상을 탐색하고 재생할 수 있는 플러그인</description>
+    <description lang="lt">Įskiepis, kuris leidžia jums naršyti ir leisti vaizdo įrašus YouTube svetainėje!</description>
+    <description lang="mk">Дополнување кое ви овозможува пребарување и пуштање на видеа од омилени видео страни!</description>
+    <description lang="nl">Plugin waarmee u kunt bladeren en video's af te spelen vanaf een ieders favoriete video site!</description>
+    <description lang="no">Et tillegg som lar deg bla gjennom og spille av videoer fra alles favoritt video nettsted!</description>
+    <description lang="pl">Ten plugin pozwala na przeszukiwanie i odtwarzanie wideo z powszechnie lubianej strony!</description>
+    <description lang="pt">Plugin que permite procurar e reproduzir vídeos do site favorito de todos!</description>
+    <description lang="pt_BR">Plugin que permite navegar e reproduzir vídeos do site favorito de vídeos de todo mundo!</description>
+    <description lang="ro">Plugin ce va permita sa gasiti şi să vizualizaţi videoclipuri de pe site-ul favorit al tuturora.</description>
+    <description lang="ru">Данное дополнение позволяет находить и смотреть видео на всеми любимом сайте.</description>
+    <description lang="sk">Tento zásuvný modul umožňuje prehliadať a prehrávať videá z najobľúbenejšej videostránky na svete!</description>
+    <description lang="sl">Vtičnik, ki omogoča predvajanje posnetkov z vaše najljubše video strani!</description>
+    <description lang="sv">Tillägget låter dig bläddra och spela videor från allas favoritvideosajt!</description>
+    <description lang="th">ส่วนเสริมที่ช่วยให้คุณสามารถเรียกดูและเล่นวิดีโอจากเว็บไซต์วิดีโอที่ทุกคนชื่นชอบ!</description>
+    <description lang="zh">让你能浏览和播放最受欢迎的视频网站内容的插件！</description>
+    <disclaimer lang="af">Sommige dele van hierdie byvoegsel mag dalk nie wettig wees in jou land van verblyf nie - gaan die plaaslike wette na voor installering.</disclaimer>
+    <disclaimer lang="be">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+    <disclaimer lang="bg">Някои части от добавката може да са незаконни в държавата, в която се намирате - моля, проверете местните закони, преди да я инсталирате.</disclaimer>
+    <disclaimer lang="ca">Algunes parts d'aquest complement poden no ser legals al vostre país de residència - si us plau verificau les lleis locals abans d'instal·lar-lo.</disclaimer>
+    <disclaimer lang="cs">Některé části tohoto doplňku nemusí být legální ve vašem státě - prosím ověřte vaše zákony před instalací.</disclaimer>
+    <disclaimer lang="da">Nogle dele af dette add-on er muligvis ikke lovlige i dit hjemland - Kontroller venligst dette ved de lokale myndigheder inden du installerer.</disclaimer>
+    <disclaimer lang="de">Einige Teile dieses Addons könnten in deinem Land verboten sein - bitte stelle vor der installation sicher, dass du keine Gesetze verletzt.</disclaimer>
+    <disclaimer lang="el">Κάποια τμήματα αυτού του πρόσθετου ενδέχεται να μην είναι νόμιμα στη χώρα σας - ελέγξετε τη νομοθεσία πριν την εγκατάσταση.</disclaimer>
+    <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+    <disclaimer lang="es">Algunas partes de este addon pueden no ser legales en tu país de residencia - verifica tus leyes locales antes de instalar.</disclaimer>
+    <disclaimer lang="es_AR">Algunas partes de este add-on pueden no ser legales en tu país de residencia - verifica tus leyes locales antes de instalar.</disclaimer>
+    <disclaimer lang="es_MX">Algunas partes de este addon pueden no ser legales en tu país de residencia - por favor consulta tus leyes locales antes de instalar</disclaimer>
+    <disclaimer lang="fi">Jotkin tämän lisäosan osat eivät ehkä ole laillisia maassasi - tarkista paikalliset lait ennen asentamista.</disclaimer>
+    <disclaimer lang="fr">Certaines options de cette extension ne sont peut-être pas autorisées dans votre pays - Merci de le vérifier avant son installation.</disclaimer>
+    <disclaimer lang="gl">Algunhas partes deste engadido poden non ser legais no teu país - por favor verifica as leis locais antes de instalalo.</disclaimer>
+    <disclaimer lang="he">חלקים מתוסף זה עלולים להיות לא חוקיים במקום מגורייך-אנא בדוק את החוקים החלים עלייך לפני התקנת התוסף.</disclaimer>
+    <disclaimer lang="hu">A kiegészítő egyes részei lehet, hogy nem legálisak az Ön hazájában - kérjük ellenőrizze a helyi törvényeket a telepítés elött. </disclaimer>
+    <disclaimer lang="it">Alcune parti di questo addon potrebbero non essere legali nel tuo paese di residenza - Ti preghiamo di controllare la tua normativa locale prima di installarlo.</disclaimer>
+    <disclaimer lang="ja">本アドオンの一部は、お住まいの国によっては違法となる可能性があります。インストール前にお住まいの国の法律をご確認ください。</disclaimer>
+    <disclaimer lang="ko">이 추가기능의 일부분은 사용자의 국가나 거주지역에 따라 합법적이지 않을 수도 있습니다 - 설치하기 전에 관련 법률을 확인하세요.</disclaimer>
+    <disclaimer lang="lt">Kai kurios šio priedo dalys gali būti Nerodomos/Nepaleidžiamos jūsų Šalyje - prašome patikrinti savo vietinius įstatymus prieš įdiegiant priedą.</disclaimer>
+    <disclaimer lang="mk">Некои делови од дополнувањето може да не се легални во вашата држава - провери пред да инсталираш.</disclaimer>
+    <disclaimer lang="nl">Sommige onderdelen van deze plugin kunnen illegaal zijn in uw land.
+Raadpleeg de lokale wetgeving voordat u deze plugin installeert.</disclaimer>
+    <disclaimer lang="no">Noen deler av dette tillegget kan hende ikke er lovlig i landet du bor i - vennligst sjekk med dine lokale lover før du installerer.</disclaimer>
+    <disclaimer lang="pl">Niektóre części tego dodatku mogą być nielegalne w twoim kraju - przed instalacją sprawdź zgodność ze swoim lokalnym prawem.</disclaimer>
+    <disclaimer lang="pt">Algumas partes deste addon podem não ser legais no seu país de residência - por favor confira as leis regionais antes de instalar.</disclaimer>
+    <disclaimer lang="pt_BR">Algumas partes deste addon podem não ser legais em seu país de residência - por favor, verifique as leis locais antes de instalar.</disclaimer>
+    <disclaimer lang="ro">Unele părți ale acestui addon ar putea fi ilegale în țara ta - verifică legislația locală înainte de a-l instala.</disclaimer>
+    <disclaimer lang="ru">Некоторые элементы этого дополнения могут являться незаконными в вашей стране проживания. Перед установкой ознакомьтесь с местным законодательством.</disclaimer>
+    <disclaimer lang="sk">Niektoré časti tohto doplnku nemusia byť vo vašej krajine legálne - pred inštaláciou si prosím overte, či je to v súlade s vašim lokálnym právom.</disclaimer>
+    <disclaimer lang="sl">Deli tega dodatka mogoče niso legalni v kraju vašega bivanja - preverite pred namestitvijo.</disclaimer>
+    <disclaimer lang="sv">Någon del av detta tillägg kanske är olagligt i ditt land - kontrollera dina lokala lagar innan installation.</disclaimer>
+    <disclaimer lang="th">บางส่วนจากส่วนขยายนี้อาจไม่ถูกต้องตามกฏหมายในประเทศของคุณ กรุณาตรวจสอบกฏหมายในประเทศของคุณก่อนทำการติดตั้ง</disclaimer>
+    <disclaimer lang="zh">这个插件的某些内容可能不符合你所在国家的法律规定 - 请在在安装前确认符合当地法律。</disclaimer>
     <platform>all</platform>
-    <summary lang='en'>YouTube video plugin</summary>
-    <description lang='en'>Plugin that lets you browse and play videos from everybody's favorite video site!</description>
-    <disclaimer lang='en'>Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
-    <summary lang='bg'>Видео добавка за YouTube</summary>
-    <description lang='bg'>Добавката ви позволява да разглеждате и гледате видео клипове от любимия на на всички видео сайт!</description>
-    <disclaimer lang='bg'>Някои части от добавката може да са незаконни в държавата, в която се намирате - моля, проверете местните закони, преди да я инсталирате.</disclaimer>
   </extension>
 </addon>

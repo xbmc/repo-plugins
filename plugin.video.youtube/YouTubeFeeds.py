@@ -202,7 +202,7 @@ class YouTubeFeeds():
             if (thumbnail):
                 self.storage.store(params, thumbnail, "thumbnail")
 
-            if (len(result) > 0):
+            if (len(result) > 0 and get("fetch_all") != "true"):
                 if (per_page * (page + 1) < len(result)):
                     next = 'true'
 
@@ -296,7 +296,9 @@ class YouTubeFeeds():
         get = params.get
         result = {"content": "", "status": 303}
 
+        auth = "false"
         if get("login") == "true":
+            auth = "true"
             if (not self.core._getAuth()):
                 self.common.log("login required but auth wasn't set!")
                 return (self.language(30609), 303)
@@ -308,7 +310,7 @@ class YouTubeFeeds():
 
         ytobjects = []
 
-        result = self.core._fetchPage({"link": url, "auth": "true"})
+        result = self.core._fetchPage({"link": url, "auth": auth})
 
         if result["status"] == 200:
             if get("folder") == "true":

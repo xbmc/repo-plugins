@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+import re
 import sys
 import time
 try: import simplejson as json
@@ -157,6 +158,7 @@ class YouTubeLogin():
         if get("new", "false") == "true" or get("page", "false") != "false":
             self.settings.setSetting("login_info", "")
             self.settings.setSetting("SID", "")
+            self.settings.setSetting("login_cookies", "")
         elif self.settings.getSetting("login_info") != "":
             self.common.log("returning existing login info: " + self.settings.getSetting("login_info"))
             return (self.settings.getSetting("login_info"), 200)
@@ -176,7 +178,7 @@ class YouTubeLogin():
 
             ret = self.core._fetchPage(fetch_options)
 
-            if ret["content"].find("captcha") > -1:
+            if ret["content"].find(" captcha") > -1:
                 self.common.log("Captcha needs to be filled")
                 break
             fetch_options = False
@@ -197,7 +199,7 @@ class YouTubeLogin():
                 return(ret, status)
 
             # Click login link on youtube.com
-            newurl = self.common.parseDOM(ret["content"], "button", attrs={"id": "masthead-user-button"}, ret="href")
+            newurl = self.common.parseDOM(ret["content"], "button", attrs={"href": ".*?ServiceLogin.*?"}, ret="href")
             if len(newurl) > 0:
                 # Start login procedure
                 if newurl[0] != "#":
@@ -323,6 +325,14 @@ class YouTubeLogin():
         cookies = self.common.getCookieInfoAsHTML()
         login_info = self.common.parseDOM(cookies, "cookie", attrs={"name": "LOGIN_INFO"}, ret="value")
         SID = self.common.parseDOM(cookies, "cookie", attrs={"name": "SID", "domain": ".youtube.com"}, ret="value")
+        scookies = {}
+        self.common.log("COOKIES:" + repr(cookies))
+        tnames = re.compile(" name='(.*?)' ").findall(cookies)
+        for key in tnames:
+            tval = self.common.parseDOM(cookies, "cookie", attrs={"name": key}, ret="value")
+            if len(tval) > 0:
+                scookies[key] = tval[0]
+        self.common.log("COOKIES:" + repr(scookies))
 
         if len(login_info) == 1:
             self.common.log("LOGIN_INFO: " + repr(login_info))
@@ -338,6 +348,7 @@ class YouTubeLogin():
 
         if len(SID) == 1 and len(login_info) == 1:
             status = 200
+            self.settings.setSetting("login_cookies", repr(scookies))
 
         self.common.log("Done")
         return status

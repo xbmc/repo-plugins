@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Icelandic language-Team URL: http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/is/ -->
+<!-- Report language file syntax bugs at: http://trac.xbmc.org/ -->
+
+<strings>
+    <string id="30006">Leita</string>
+    <string id="30020">UPPÁHALDS</string>
+    <string id="30023">Spilunarlistar</string>
+    <string id="30035">Nýjast</string>
+
+    <!-- Plugin settings strings -->
+    <string id="30200">Notandanafn</string>
+    <string id="30201">Lykilorð</string>
+    <string id="30204">Í dag</string>
+    <string id="30218">Almennt</string>
+    <string id="30219">Hóflegt</string>
+    <string id="30222">Allir</string>
+    <string id="30247">Mappa</string>
+    <string id="30277">Af</string>
+    <string id="30278">Enska</string>
+    <string id="30279">Spænska</string>
+    <string id="30280">Þýska</string>
+    <string id="30281">Franska</string>
+    <string id="30282">Ítalska</string>
+    <string id="30283">Japanska</string>
+    <string id="30502">Skjáupplýsingar</string>
+    <string id="30521">Spila hér</string>
+
+    <!-- messages -->
+    <string id="30600">Villa</string>
+    <string id="30603">Hætt við spilun spilunarlista</string>
+    <string id="30624">Niðurhala</string>
+</strings>

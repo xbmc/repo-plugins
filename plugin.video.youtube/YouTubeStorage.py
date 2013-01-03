@@ -296,7 +296,7 @@ class YouTubeStorage():
         if key:
             key += "_thumb"
 
-        return key
+        return key.encode("utf-8","ignore")
 
     def _getValueStorageKey(self, params={}, item={}):
         self.common.log(repr(params), 5)

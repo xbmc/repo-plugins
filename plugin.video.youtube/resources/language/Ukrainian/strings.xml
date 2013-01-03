@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Ukrainian language-Team URL: http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/uk/ -->
+<!-- Report language file syntax bugs at: http://trac.xbmc.org/ -->
+
+<strings>
+    <string id="30002">Моє улюблене</string>
+    <string id="30005">Мої завантаження</string>
+    <string id="30006">Пошук</string>
+    <string id="30007">Пошук...</string>
+    <string id="30008">Мої заплановані перегляди</string>
+    <string id="30009">Найбільш обговорюване</string>
+    <string id="30012">Нещодавні</string>
+    <string id="30017">Мої списки програвання</string>
+    <string id="30018">Мої контакти</string>
+    <string id="30019">YouTube пропонує</string>
+    <string id="30020">Улюблені</string>
+    <string id="30021">Підписки</string>
+    <string id="30022">Завантаження</string>
+    <string id="30023">Списки відтворення</string>
+    <string id="30024">Додати контакт...</string>
+    <string id="30025">Видалити контакт</string>
+    <string id="30026">Додати контакт</string>
+    <string id="30028">Змінити налаштування додатку</string>
+    <string id="30030">Оновлення каталогу...</string>
+    <string id="30033">Популярне</string>
+    <string id="30034">В кінотеатрах</string>
+    <string id="30037">YouTube Дискотека!</string>
+    <string id="30038">Топ 50</string>
+    <string id="30039">Найпопулярніші артисти</string>
+    <string id="30041">YouTube Категорії</string>
+    <string id="30042">YouTube Шоу</string>
+    <string id="30043">YouTube Фільми</string>
+    <string id="30052">YouTube Музика</string>
+    <string id="30053">Рекомендована музика</string>
+    <string id="30054">Популярні артисти</string>
+    <string id="30057">YouTube Освіта</string>
+    <string id="30059">Моя історія</string>
+
+    <!-- Plugin settings strings -->
+    <string id="30200">Ім'я користувача</string>
+    <string id="30201">Пароль</string>
+    <string id="30203">За весь час</string>
+    <string id="30204">Сьогодні</string>
+    <string id="30205">Цього тижня</string>
+    <string id="30206">Цього місяця</string>
+    <string id="30208">Максимальна якість відео</string>
+    <string id="30209">Увімкнути пезпечний пошук (YouTube SafeSearch)</string>
+    <string id="30218">Загальні</string>
+    <string id="30219">помірний</string>
+    <string id="30222">Усі треки</string>
+    <string id="30235">Італія</string>
+    <string id="30236">Японія</string>
+    <string id="30237">Мексика</string>
+    <string id="30238">Нова Зеландія</string>
+    <string id="30239">Польща</string>
+    <string id="30240">Росія</string>
+    <string id="30241">Південна Корея</string>
+    <string id="30242">Іспанія</string>
+    <string id="30243">Швеція</string>
+    <string id="30244">Тайвань</string>
+    <string id="30245">Сполучені Штати Америки</string>
+    <string id="30247">Папка</string>
+    <string id="30261">Максимальна якість відео (Звантаження)</string>
+    <string id="30262">Таке ж як і для програвання</string>
+    <string id="30277">Вимкн.</string>
+    <string id="30278">Англійська</string>
+    <string id="30279">Іспанська</string>
+    <string id="30280">Німецька</string>
+    <string id="30281">Французька</string>
+    <string id="30282">Італійська</string>
+    <string id="30283">Японська</string>
+    <string id="30502">Відомості про відеосистему</string>
+    <string id="30520">Програти все</string>
+    <string id="30521">Відтворювати звідси</string>
+    <string id="30522">Перемішати і програти все</string>
+    <string id="30523">Зараз програється...</string>
+
+    <!-- messages -->
+    <string id="30600">Помилка</string>
+    <string id="30603">Відтворення списку перервано</string>
+    <string id="30617">Невідома помилка</string>
+    <string id="30621">Неправильне ім'я користувача чи пароль</string>
+    <string id="30622">Програвання вимагає дійсного облікового запису YouTube</string>
+    <string id="30624">Завантаження…</string>
+    <string id="30628">Будь-ласка введіть ваш пароль</string>
+    <string id="30629">Протокол SSL не підтримується.</string>
+</strings>

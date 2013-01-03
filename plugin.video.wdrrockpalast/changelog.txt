@@ -1,3 +1,12 @@
+[B]v2.1.2 (03.01.2013)[/B]
+- Fix:    Frodo version numbers for add-on and xbmc.python
+
+[B]v1.1.2 (01.01.2013)[/B]
+- Update: Compatibility fix for Eden and Frodo.
+
+[B]v1.1.1 (24.12.2012)[/B]
+- Fix:    Unicode issues fixed.
+
 [B]v1.1.0 (21.12.2012)[/B]
 - Change: xbmc.Player.play(url) to xbmc.Player.play(url, listitem) due to several guys complaining about none working videos.
 - Update: Due to the set title in above listitem, in play mode the plugin now shows the artist name instead of the video filename.

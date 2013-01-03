@@ -38,6 +38,7 @@
     <string id="30030">Вписани сте</string>
     <string id="30031">За гледане по-късно</string>
     <string id="30032">Свалени</string>
+    <string id="30033">New Album..</string>
     
     <!-- Plugin settings strings -->
     <string id="30200">Ел. поща</string>
@@ -97,6 +98,12 @@
     <string id="30528">Sort most subscribed</string>
     <string id="30529">Премахни от "За гледане по-късно"</string>
     <string id="30530">Добави в "За гледане по-късно"</string>
+    <string id="30531">Play All</string>
+    <string id="30532">Play from here</string>
+    <string id="30533">Add to Album..</string>
+    <string id="30534">Remove from Album</string>
+    <string id="30535">Delete Album</string>
+    <string id="30536">More video by %s</string>
 
     <!-- messages -->
     <string id="30600">Грешка</string>

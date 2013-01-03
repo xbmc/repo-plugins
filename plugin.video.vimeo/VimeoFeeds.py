@@ -103,46 +103,40 @@ class VimeoFeeds():
     def listAll(self, params={}):
         self.common.log("")
         get = params.get
-        result = {"content": "", "status": 303}
+        params["fetch_all"] = "true"
 
         if get("login") == "true":
-            if (not self.core._getAuth()):
-                self.common.log("login required but auth wasn't set!")
+            if (not self.login._getAuth()):
+                self.common.log("Login required but auth wasn't set!")
                 return (self.language(30609), 303)
 
-            if result["status"] == 200:
-                if get("folder") == "true":
-                    ytobjects = self.core.getFolderInfo(result["content"], params)
-                else:
-                    ytobjects = self.core.getVideoInfo(result["content"], params)
+        (vobjects, status) = self.core.list(params)
 
-        if len(ytobjects) == 0:
-            return ytobjects
+        if status != 200:
+            return []
 
-        next = ytobjects[len(ytobjects) - 1].get("next", "false")
-        if next == "true":
-            ytobjects = ytobjects[:len(ytobjects) - 1]
+        next = len(vobjects) > 0
 
-        index = 0
-        while next == "true":
-            index += 50
+        page = 0
+        while next:
+            page += 1
+            params["page"] = str(page)
+            (temp_objects, status) = self.core.list(params)
 
-            if result["status"] != 200:
+            if status != 200:
                 break
-            temp_objects = []
 
-            next = temp_objects[len(temp_objects) - 1].get("next", "false")
+            next = len(temp_objects) > 0
 
-            if next == "true":
-                temp_objects = temp_objects[:len(temp_objects) - 1]
-            
-            ytobjects += temp_objects
+            vobjects += temp_objects
+            if get("action") == "play_all" and len(vobjects) >= 250:
+                break
 
         if get("api"):
-            if get("api") != "playlist" and get("action") != "play_all":
-                ytobjects.sort(key=lambda item: item["Title"].lower(), reverse=False)
+            if get("api") and get("action") != "play_all":
+                vobjects.sort(key=lambda item: item["Title"].lower(), reverse=False)
             else:
                 if (self.storage.getReversePlaylistOrder(params)):
-                    ytobjects.reverse()
+                    vobjects.reverse()
         
-        return ytobjects
+        return vobjects

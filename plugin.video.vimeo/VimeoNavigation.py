@@ -54,6 +54,7 @@ class VimeoNavigation():
                 {'Title':self.language(30002)  ,'path':"/root/my_likes"                			, 'thumbnail':"favorites"           , 'login':"true"  , 'api':"my_likes"},
                 {'Title':self.language(30012)  ,'path':"/root/my_contacts"                      , 'thumbnail':"contacts"            , 'login':"true"  , 'api':"my_contacts" , 'folder':'contact'},
                 {'Title':self.language(30009)  ,'path':"/root/my_albums"                        , 'thumbnail':"playlists"           , 'login':"true"  , 'api':"my_albums" , 'folder':'album'},
+                {'Title':self.language(30033)  ,'path':"/root/my_albums/new"                    , 'thumbnail':"playlists"           , 'login':"true"  , 'action':"create_album"},
                 {'Title':self.language(30031)  ,'path':'/root/my_watch_later'                   , 'thumbnail':"watch_later"         , 'login':"true"  , 'api':"my_watch_later"},
                 {'Title':self.language(30010)  ,'path':"/root/my_groups"                        , 'thumbnail':"network"             , 'login':"true"  , 'api':"my_groups" , 'folder':'group'},
                 {'Title':self.language(30003)  ,'path':"/root/subscriptions"                    , 'thumbnail':"subscriptions"       , 'login':"true"  , 'api':"my_channels" , 'folder':'channel'},
@@ -169,16 +170,16 @@ class VimeoNavigation():
             self.downloadVideo(params)
         if (get("action") == "play_all"):
             self.playlist.playAll(params)
-        if (get("action") == "add_to_playlist"):
-            self.playlist.addToPlaylist(params)
-        if (get("action") == "remove_from_playlist"):
-            self.playlist.removeFromPlaylist(params)
-        if (get("action") == "delete_playlist"):
-            self.playlist.deletePlaylist(params)
+        if (get("action") == "add_to_album"):
+            self.playlist.addToAlbum(params)
+        if (get("action") == "remove_from_album"):
+            self.playlist.removeFromAlbum(params)
+        if (get("action") == "delete_album"):
+            self.playlist.deleteAlbum(params)
         if (get("action") == "reverse_order"):
             self.storage.reversePlaylistOrder(params)
-        if (get("action") == "create_playlist"):
-            self.playlist.createPlaylist(params)
+        if (get("action") == "create_album"):
+            self.playlist.createAlbum(params)
 
 
     #================================== Plugin Actions =========================================
@@ -442,15 +443,29 @@ class VimeoNavigation():
             else:
                 cm.append((self.language(30503) % title, 'XBMC.RunPlugin(%s?path=%s&action=add_favorite&videoid=%s&)' % (sys.argv[0], get("path"), item("videoid"))))
 
+        if (get("api") in ["my_videos", "my_watch_later", "my_newsubscriptions", "my_likes"]):
+            cm.append((self.language(30532), 'XBMC.RunPlugin(%s?path=%s&action=play_all&api=%s&videoid=%s&)' % (sys.argv[0], get("path"), get("api"), item("videoid"))))
+
+        if (item("contact")):
+            author = self.common.makeAscii(item("Studio","Unknown user"))
+            cm.append((self.language(30536) % author, "XBMC.Container.Update(%s?path=%s&api=my_videos&contact=%s)" % (sys.argv[0], get("path"), item("contact") )))
+
+        if (get("album")):
+            if self.settings.getSetting("userid") and not get("external"):
+                cm.append((self.language(30534), 'XBMC.RunPlugin(%s?path=%s&action=remove_from_album&album=%s&videoid=%s&)' % (sys.argv[0], get("path"), get("album"), item("videoid"))))
+            cm.append((self.language(30532), 'XBMC.RunPlugin(%s?path=%s&action=play_all&album=%s&videoid=%s&)' % (sys.argv[0], get("path"), get("album"), item("videoid"))))
+        elif (self.settings.getSetting("userid")):
+            cm.append((self.language(30533), 'XBMC.RunPlugin(%s?path=%s&action=add_to_album&videoid=%s&)' % (sys.argv[0], get("path"), item("videoid"))))
+
         if (get("api") == "my_watch_later"):
-            cm.append((self.language(30506), "XBMC.RunPlugin(%s?path=%s&action=remove_watch_later&videoid=%s)" % (sys.argv[0], get("path"), item("videoid"))))
+            cm.append((self.language(30529), "XBMC.RunPlugin(%s?path=%s&action=remove_watch_later&videoid=%s)" % (sys.argv[0], get("path"), item("videoid"))))
         else:
-            cm.append((self.language(30507), "XBMC.RunPlugin(%s?path=%s&action=add_watch_later&videoid=%s)" % (sys.argv[0], get("path"), item("videoid"))))
+            cm.append((self.language(30530), "XBMC.RunPlugin(%s?path=%s&action=add_watch_later&videoid=%s)" % (sys.argv[0], get("path"), item("videoid"))))
 
         cm.append((self.language(30500), "XBMC.RunPlugin(%s?path=%s&action=download&videoid=%s)" % (sys.argv[0], get("path"), item("videoid"))))
-        cm.append((self.language(30514), "XBMC.Container.Update(%s?path=%s&action=search&search=%s)" % (sys.argv[0], get("path"), urllib.quote_plus(self.common.makeAscii(title)))))
-        cm.append((self.language(30501), "XBMC.Action(Queue)",))
-        cm.append((self.language(30500), "XBMC.Action(Info)",))
+        cm.append((self.language(30507), "XBMC.Container.Update(%s?path=%s&action=search&search=%s)" % (sys.argv[0], get("path"), urllib.quote_plus(self.common.makeAscii(title)))))
+        cm.append((self.language(30502), "XBMC.Action(Queue)",))
+        cm.append((self.language(30501), "XBMC.Action(Info)",))
 
         return cm
 
@@ -477,13 +492,20 @@ class VimeoNavigation():
             else:
                 cm.append((self.language(30511) % title, 'XBMC.RunPlugin(%s?path=%s&group=%s&action=leave_group)' % (sys.argv[0], get("path"), item("group"))))
 
+        if (item("api") in ["my_videos", "my_watch_later", "my_newsubscriptions", "my_likes"]):
+            cm.append((self.language(30531), 'XBMC.RunPlugin(%s?path=%s&action=play_all&api=%s&)' % (sys.argv[0], get("path"), item("api"))))
+
+        if (item("album")):
+            cm.append((self.language(30531), 'XBMC.RunPlugin(%s?path=%s&action=play_all&album=%s&)' % (sys.argv[0], get("path"), item("album"))))
+
         if (item("api") == "my_likes"  or item("album") or item("api") == "my_videos"):
             cm.append((self.language(30514), "XBMC.Action(Queue)"))
+
+        if (item("album") and self.settings.getSetting("userid") and not item("external")):
+            cm.append((self.language(30535), 'XBMC.RunPlugin(%s?path=%s&action=delete_album&album=%s&)' % (sys.argv[0], get("path"), item("album"))))
 
         if (item("search")):
             cm.append((self.language(30508), 'XBMC.RunPlugin(%s?path=%s&action=delete_search&store=searches&delete=%s&)' % (sys.argv[0], item("path"), item("search"))))
             cm.append((self.language(30506), 'XBMC.Container.Update(%s?path=%s&action=edit_search&store=searches&search=%s&)' % (sys.argv[0], item("path"), item("search"))))
-
-        cm.append((self.language(30523), "XBMC.ActivateWindow(VideoPlaylist)"))
 
         return cm

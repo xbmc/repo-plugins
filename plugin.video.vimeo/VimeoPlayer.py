@@ -126,7 +126,7 @@ class VimeoPlayer():
         #Check if file has been downloaded locally and use that as a source instead
         if (status == 200 and get("action", "") != "download"):
             path = self.settings.getSetting("downloadPath")
-            filename = ''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS) + "-[" + get('videoid') + "]" + ".mp4"
+            filename = u''.join(c for c in video['Title'] if c not in self.utils.INVALID_CHARS) + u"-[" + get('videoid') + u"]" + u".mp4"
             path = os.path.join(path.decode("utf-8"), filename)
             try:
                 if self.xbmcvfs.exists(path):

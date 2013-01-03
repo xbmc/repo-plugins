@@ -191,10 +191,6 @@ class VimeoLogin():
     def login_get_verifier(self, auth_url):
         self.common.log("login_get_verifier - auth_url: " + auth_url)
 
-        if self.settings.getSetting("accept") != "0":
-            self.common.log("login failed accept disabled") # this is fucking retarded
-            return (self.language(30606), 303)
-
         self.common.log("Part 1 httpLogin", 3)
         token = self.extractCrossSiteScriptingToken()
         login_page = self.performHttpLogin(token[0])

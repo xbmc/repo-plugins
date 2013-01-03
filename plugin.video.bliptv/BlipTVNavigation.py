@@ -87,6 +87,7 @@ class BlipTVNavigation:
         self.xbmcplugin.endOfDirectory(handle=int(sys.argv[1]), succeeded=True, cacheToDisc=cache)
 
     def downloadVideo(self, params):
+        get = params.get
 
         if not self.settings.getSetting("downloadPath"):
             self.common.log("Download path missing. Opening settings")
@@ -102,7 +103,10 @@ class BlipTVNavigation:
             "useragent"] = "curl/7.22.0 (x86_64-pc-linux-gnu) libcurl/7.22.0 OpenSSL/1.0.1 zlib/1.2.3.4 libidn/1.23 librtmp/2.3"
             filename = "%s-[%s].mp4" % (
                 ''.join(c for c in video['Title'].decode("utf-8") if c not in self.utils.INVALID_CHARS), video["videoid"])
-            self.downloader.download(filename, params)
+            if get("async"):
+                self.downloader.download(filename, params, async=False)
+            else:
+                self.downloader.download(filename, params)
         else:
             if "apierror" in video:
                 self.utils.showMessage(self.language(30625), video["apierror"])

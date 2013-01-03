@@ -7,6 +7,12 @@
 
 [B]Errata[/B]
 
+[B]Version 0.8.0[/B]
+- Fixed site changes broke downloader
+
+[B]Version 0.7.0[/B]
+- Fixed Show scraper
+
 [B]Version 0.6.0[/B]
 - Blip.tv changed the layout of their main page and broke most of the scraper
 - Downloader will no longer try to download a file if the download path is missing.

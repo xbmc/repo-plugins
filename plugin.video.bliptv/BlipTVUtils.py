@@ -31,7 +31,7 @@ class BlipTVUtils:
 
         self.VALID_CHARS = "-_.() %s%s" % (string.ascii_letters, string.digits)
         self.INVALID_CHARS = "\\/:*?\"<>|"
-        self.USERAGENT = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8"
+        self.USERAGENT = "Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1"
         self.settings = sys.modules["__main__"].settings
         self.THUMBNAIL_PATH = os.path.join(self.settings.getAddonInfo('path'), "thumbnails")
 

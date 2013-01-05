@@ -68,7 +68,7 @@ def getStreamsFromPlayList(playlist):
 
 
 def loginAndParse():
-	url = 'http://' + domain + '/live'
+	url = 'https://' + domain + '/live'
 
 	if not cj:		
 		resp = opener.open(url)		
@@ -92,7 +92,7 @@ def loginAndParse():
 
 	params = '__EVENTARGUMENT=&__EVENTTARGET=ctl00%%24ContentPlaceHolderMainContent%%24lbtnEnter&__EVENTVALIDATION=%s&__VIEWSTATE=%s&ctl00%%24ContentPlaceHolderMainContent%%24txtUsername=%s&ctl00%%24ContentPlaceHolderMainContent%%24txtPassword=%s' % (urllib.quote(eventVal['value']), urllib.quote(viewState['value']), urllib.quote(__settings__.getSetting('username')), urllib.quote(__settings__.getSetting('password')))
 	
-	resp = opener.open('http://www.manoto1.com/LiveStream.aspx', params) 	
+	resp = opener.open('https://www.manoto1.com/LiveStream.aspx', params) 	
 
 	resp = opener.open(url)
 	html_data = resp.read()

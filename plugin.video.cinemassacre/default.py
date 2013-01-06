@@ -1,137 +1,233 @@
-import xbmcplugin
-import xbmcgui
-import xbmcaddon
-import sys
-import urllib, urllib2
-import re
-import showEpisode
+import xbmcplugin, xbmcgui, xbmcaddon
+import urllib, urllib2, re
+import showEpisode, sys, os#, random
+try: import StorageServer
+except: import storageserverdummy as StorageServer
+import CommonFunctions as common
+import thisCommonFunctions as common2
 
+cache = StorageServer.StorageServer("cinemassacre", 24)
+#cache.dbg = True
+#common.dbg = True
 addon = xbmcaddon.Addon(id='plugin.video.cinemassacre')
 
 thisPlugin = int(sys.argv[1])
 
 baseLink = "http://cinemassacre.com/"
 
-hideMenuItem = []
-hideMenuItem.append("412") # Gallery
-hideMenuItem.append("486") # Fan Stuff
-hideMenuItem.append("402") # Full list of AVGN Videos
-hideMenuItem.append("225") # Game Collection
+defaultsXML = os.path.join(addon.getAddonInfo('path'), 'resources',"defaults.xml")
+dontShowTheseUrls = []
+defaultFolderIcons = {"default":os.path.join(addon.getAddonInfo('path'), "icon.png"),"list":[]}
 
-_regex_extractMenu = re.compile("<ul id=\"navlist\">(.*?)<ul id=\"navpages\">", re.DOTALL);
+def retFileAsString(fileName):
+    file = common.openFile(fileName, "r")
+    tmpContents = file.read()
+    file.close()
+    return tmpContents
+    
+def getDefaultIcons():
+    xmlContents = retFileAsString(defaultsXML)
+    iconList =  common2.parseDOM(xmlContents, "icons")
+    iconUrlList =  common2.parseDOM(iconList, "icon", ret="url")
+    iconImgList =  common2.parseDOM(iconList, "icon", ret="image")
+    
+    retList = []
+    for i in range(0,len(iconUrlList)):
+        retList.append({"url": iconUrlList[i], "image": os.path.join(addon.getAddonInfo('path'), 'resources', 'images', iconImgList[i])})
+    return retList
 
-_regex_extractMenuItem = re.compile("<li class=\"cat-item cat-item-([0-9]{1,4})\"><a href=\"(http://cinemassacre.com/category/[a-z0-9\-]*/)\" title=\"(.*?)\">(.*?)</a>", re.DOTALL);
-_regex_extractMenuItemSub = re.compile("<li class=\"cat-item cat-item-([0-9]{1,4})\"><a href=\"(http://cinemassacre.com/category/[a-z0-9\-]*/[a-z0-9\-]*/)\" title=\"(.*?)\">(.*?)</a>", re.DOTALL);
-_regex_extractMenuItemSubSub = re.compile("<li class=\"cat-item cat-item-([0-9]{1,4})\"><a href=\"(http://cinemassacre.com/category/[a-z0-9\-]*/[a-z0-9\-]*/[a-z0-9\-]*/)\" title=\"(.*?)\">(.*?)</a>", re.DOTALL);
+def getNotShownUrls():
+    xmlContents = retFileAsString(defaultsXML)
+    exclList =  common2.parseDOM(xmlContents, "excludeUrls")
+    urlList =  common2.parseDOM(exclList, "url")
+    
+    retList = []
+    for url in urlList:
+        retList.append(url)
+    return retList
 
-_regex_extractShow = re.compile("<!-- content -->(.*?)<!-- /content -->", re.DOTALL)
-_regex_extractRecent = re.compile("<!-- videos -->(.*?)<!-- /videos -->", re.DOTALL);
+def excludeUrl(url):
+    for notUrl in dontShowTheseUrls:
+      if notUrl in url:
+        return True
+    return False
 
-_regex_extractEpisode = re.compile("<!-- video -->(.*?)<!-- /video -->", re.DOTALL)
-_regex_extractEpisodeLink = re.compile("<h3><a href=\"(.*?)\">(.*?)</a></h3>", re.DOTALL)
-_regex_extractEpisodeImg = re.compile("<img src=\"(.*?)\" alt=\"(.*?)\" />", re.DOTALL)
-_regex_extractEpisodeImg2 = re.compile("<img width=\"[0-9]*\" height=\"[0-9]*\" src=\"(.*?)\" class=\".*?\" alt=\"(.*?)\" title=\".*?\" />", re.DOTALL)
+def checkDefaultIcon(url):
+    possibleIcon = ""
+    for defaultIcon in defaultFolderIcons["list"]:
+        if (defaultIcon["url"] in url) and (len(defaultIcon["image"]) > len(possibleIcon)):
+            possibleIcon = defaultIcon["image"]
+    if len(possibleIcon) == 0:
+        possibleIcon = defaultFolderIcons["default"]
+    return possibleIcon
+    
+def addEpisodeListToDirectory(epList):
+    print "Adding Video List: %s" % epList
+    for episode in epList:
+        if not excludeUrl(episode['url']):
+            addDirectoryItem(remove_html_special_chars(episode['title']), {"action" : "episode", "link": episode['url']}, episode['thumb'], False)
+    xbmcplugin.endOfDirectory(thisPlugin)        
+    
+def extractEpisodeImg(episode):
+    linkImage = common2.parseDOM(episode, "div", attrs={"class": "video-tnail"})
+    linkImage = common2.parseDOM(linkImage, "img", ret="src")
+    linkImageTmp = re.compile('src=([^&]*)', re.DOTALL).findall(linkImage[0])
+    if len(linkImageTmp)>0:
+        if linkImageTmp[0][:1] != "/":
+            linkImageTmp[0] = "/" + linkImageTmp[0]
+        linkImage = baseLink+linkImageTmp[0]
+    else:
+        if (len(linkImage[0]) > 0) and (baseLink in linkImage[0]):
+            linkImage = linkImage[0]
+        else:
+            linkImage = ""
+    return linkImage
 
+def pageInCache(episodeList,link):
+    storedList = cache.get(link)
+    try:
+        storedList = eval(storedList)
+    except:
+        storedList = []
+    if (len(storedList) >= len(episodeList)):
+        for i in range(0,len(episodeList)):
+            if episodeList[i] != storedList[i]:
+                return []
+        print "Using Stored Cache Page"
+        return storedList
+    return []
+    
 def mainPage():
     global thisPlugin
+    addDirectoryItem(addon.getLocalizedString(30000), {"action" : "recent", "link": ""}, defaultFolderIcons["default"])  
+    subMenu(baseLink)
 
-    addDirectoryItem(addon.getLocalizedString(30000), {"action" : "recent", "link": ""})  
-    subMenu(level1=0, level2=0)
-
-def subMenu(level1=0, level2=0):
+def subMenu(link,row='[]'):
     global thisPlugin
-    page = load_page(baseLink)
-    mainMenu = extractMenu(page)
+    link = urllib.unquote(link)
+    page = load_page(link)
+    mainMenu = extractMenu(page,urllib.unquote(row))
     
-    if level1 == 0:
-        menu = mainMenu
-    elif level2 == 0:
-        menu = mainMenu[int(level1)]['children']
-    else:
-        menu = mainMenu[int(level1)]['children'][int(level2)]['children']
+    if not len(mainMenu):
+        return showPage(link) # If link has no sub categories then display video list
     
-    counter = 0
-    for menuItem in menu:
+    if len(link) != len(baseLink) and (link != '#'):
+      addDirectoryItem(addon.getLocalizedString(30001), {"action" : "show", "link": link}, defaultFolderIcons["default"]) # All Videos Link
+    
+    for menuItem in mainMenu:
         menu_name = remove_html_special_chars(menuItem['name']);
-        
         menu_link = menuItem['link'];
-        if len(menuItem['children']) and level1 == 0:
-            addDirectoryItem(menu_name, {"action" : "submenu", "link": counter})  
-        elif len(menuItem['children']):
-            addDirectoryItem(menu_name, {"action" : "subsubmenu", "link": level1 + ";" + str(counter)})  
-        else:        
-            addDirectoryItem(menu_name, {"action" : "show", "link": menu_link})
-        counter = counter + 1
+        if excludeUrl(menu_link):
+           continue
+        menu_icon = checkDefaultIcon(menu_link)
+        addDirectoryItem(menu_name, {"action" : "submenu", "link": menu_link, "row": menuItem['row']}, menu_icon)
+        
     xbmcplugin.endOfDirectory(thisPlugin)
 
 def recentPage():
     global thisPlugin
     page = load_page(baseLink)
-    show = _regex_extractRecent.search(page)    
-    extractEpisodes(show)
+    show = common2.parseDOM(page, "div", attrs={"class": "footercontainer3"})
+    show = common2.parseDOM(show, "div", attrs={"class": "footeritem"})
+    show = common2.parseDOM(show, "li")
+    linkList = []
+    for item in show:
+        title = common2.parseDOM(item, "a")[0]
+        link = common2.parseDOM(item, "a", ret="href")[0]
+        linkList.append({"title":title, "url":link, "thumb":""})
+    addEpisodeListToDirectory(linkList)
     
-def extractMenu(page):
-    menu = _regex_extractMenu.search(page).group(1);
-    menuList = []
-    
-    parent = -1;
-    parentHidden = True
-    parent2Hidden = True
-    for line in menu.split("\n"):
-        menuItem = _regex_extractMenuItem.search(line)
-        if menuItem is not None:
-            if not menuItem.group(1) in hideMenuItem:
-                parentHidden = False
-                parent = parent + 1
-                parent2 = -1
-                menuList.append({"name" : menuItem.group(4), "link" : menuItem.group(2), "children" : []})
-            else:
-                parentHidden = True
-        elif not parentHidden:
-            menuItemSub = _regex_extractMenuItemSub.search(line)
-            if menuItemSub is not None:
-                if not menuItemSub.group(1) in hideMenuItem:
-                    parent2Hidden = False
-                    parent2 = parent2 + 1
-                    menuList[parent]['children'].append({"name" : menuItemSub.group(4), "link" : menuItemSub.group(2), "children" : []});
-                else:
-                    parent2Hidden = True
-            elif not parent2Hidden:
-                menuItemSubSub = _regex_extractMenuItemSubSub.search(line)
-                if menuItemSubSub is not None:
-                    if not menuItemSubSub.group(1) in hideMenuItem:
-                        menuList[parent]['children'][parent2]['children'].append({"name" : menuItemSubSub.group(4), "link" : menuItemSubSub.group(2), "children" : []});
-    return menuList
-    
+def extractMenu(page,row='[]'):
+    navList = common2.parseDOM(page, "div", attrs={"id": "navArea"})
+    navList = common2.parseDOM(navList[0], "ul", attrs={"id": "menu-main-menu"})
+    navList = common2.parseDOM(navList[0], "li")
+    row2 = eval(row)
+    tempCont = navList
+    for i in row2:
+        tempCont = common2.parseDOM(tempCont[i], "li")
+
+    retList = []
+    for i in range(0,len(tempCont)):
+        tmpRow = eval(row)
+        tmpRow.append(i)
+        testNav = re.compile('^<a href="([^\"\']*?)">([^<]*?)</a>').findall(tempCont[i])
+        try:
+            retList.append({"name": testNav[0][1],"link": testNav[0][0], "row":repr(tmpRow)})
+        except: print "extractMenu: list index out of range"
+    return retList
+
 def showPage(link):
     global thisPlugin
-    page = load_page(urllib.unquote(link))
-    show = _regex_extractShow.search(page)
-    extractEpisodes(show)
+    link = urllib.unquote(link)
+    page = load_page(link)
+    # Some pages has the newest video in a "Featured Video" section
+    show = common2.parseDOM(page, "div", attrs={"id": "featuredImg"})
+    try:
+        fTitle = common2.parseDOM(show, "span", attrs={"id": "archiveCaption"})[0]
+        fTitle = common2.parseDOM(fTitle, "a")[0]
+        fLink = common2.parseDOM(show, "a", ret="href")[0]
+        fImg = common2.parseDOM(show, "img", ret="src")[0]
+    except: print "No featured video found"
+
+    show = common2.parseDOM(page, "div", attrs={"id": "postlist"})
+    episodeList = extractEpisodes(show)
+    episodeList.insert(0, {"title":fTitle, "url":fLink, "thumb":fImg})
+    #cache.delete(link)
+    
+    ##Check first page against cache
+    cachedPage = pageInCache(episodeList,link) # Returns empty list if cache differs
+    if (len(cachedPage)>0):
+        episodeList = cachedPage
+        show = None
+    
+    if (show != None):
+        curPage = int(re.compile('var count = (\d+?);').findall(page)[0])
+        pageTotal = int(re.compile('var total = (\d+?);').findall(page)[0])
+        pageCat = re.compile('var cat = (\d+?);').findall(page)[0]
+        nextPageUrl = baseLink + "wp-admin/admin-ajax.php"
+		
+        while (curPage <= pageTotal):
+            pageData = "action=infinite_scroll&page_no="+ str(curPage) + '&cat=' + pageCat + '&loop_file=loop'
+            page = load_page(nextPageUrl,pageData)
+            linkList = extractEpisodes(page)
+            episodeList = episodeList + linkList
+            curPage += 1
+
+    cache.set(link, repr(episodeList)) #update cache
+    addEpisodeListToDirectory(episodeList)
 
 def extractEpisodes(show):
-    episodes = list(_regex_extractEpisode.finditer(show.group(1)))
+    episodes = common2.parseDOM(show, "div", attrs={"class": "archiveitem"})
+    linkList = []
     for episode in episodes:
-        episode_html = episode.group(1)
-        episod_title = _regex_extractEpisodeLink.search(episode_html).group(2)
-        episod_title = remove_html_special_chars(episod_title)
-        episode_link = _regex_extractEpisodeLink.search(episode_html).group(1)
-        episode_img = _regex_extractEpisodeImg.search(episode_html)
-        if episode_img is None:
-            episode_img = _regex_extractEpisodeImg2.search(episode_html)
-        episode_img = episode_img.group(1)
-        addDirectoryItem(episod_title, {"action" : "episode", "link": episode_link}, episode_img, False)
-    xbmcplugin.endOfDirectory(thisPlugin)
-
+        episode = episode.encode('ascii', 'ignore')
+        episode_link = common2.parseDOM(episode, "a", ret="href")[0]
+        if excludeUrl(episode_link):
+            continue
+        episode_title = common2.parseDOM(episode, "a")[0]
+        episode_title = re.compile('<div>([^<]*?)</div>').findall(episode_title)[0]
+        try:
+            episode_img = common2.parseDOM(episode, "img", ret="src")[0]
+        except:
+            episode_img = ""
+        linkList.append({"title":episode_title, "url":episode_link, "thumb":episode_img})
+    return linkList
 
 def playEpisode(link):
     link = urllib.unquote(link)
     page = load_page(link)
     showEpisode.showEpisode(page)
 
-def load_page(url):
-    print url
-    req = urllib2.Request(url)
+def load_page(url, data=None):
+    print "Getting page: " + url
+    if len(url)<5:
+        url = baseLink
+    if data!=None:
+      req = urllib2.Request(url,data)
+      req.add_header('Content-Type', 'application/x-www-form-urlencoded')
+    else:
+      req = urllib2.Request(url)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:14.0) Gecko/20100101 Firefox/14.0.1')
     response = urllib2.urlopen(req)
     link = response.read()
     response.close()
@@ -141,15 +237,13 @@ def addDirectoryItem(name, parameters={}, pic="", folder=True):
     li = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=pic)
     if not folder:
         li.setProperty('IsPlayable', 'true')
-    url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+    url = sys.argv[0] + '?' + urllib.urlencode(parameters)# + "&randTok=" + str(random.randint(1000, 10000))
     return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=folder)
 
 def remove_html_special_chars(inputStr):
-    inputStr = inputStr.replace("&#8211;", "-")
-    inputStr = inputStr.replace("&#8217;", "'")#\x92
-    inputStr = inputStr.replace("&#039;", chr(39))# '
-    inputStr = inputStr.replace("&#038;", chr(38))# &
-    return inputStr
+    inputStr = common.replaceHTMLCodes(inputStr)
+    inputStr=inputStr.strip()
+    return common.makeAscii(inputStr)
     
 def get_params():
     param = []
@@ -168,19 +262,22 @@ def get_params():
                 param[splitparams[0]] = splitparams[1]
     
     return param
-    
+
+dontShowTheseUrls = getNotShownUrls()
+defaultFolderIcons["list"] = getDefaultIcons()
+
 if not sys.argv[2]:
     mainPage()
 else:
     params = get_params()
     if params['action'] == "show":
+        print "Video List"
         showPage(params['link'])
     elif params['action'] == "submenu":
-        subMenu(params['link'])
-    elif params['action'] == "subsubmenu":
-        levels = urllib.unquote(params['link']).split(";")
-        subMenu(levels[0], levels[1])
+        print "Menu"
+        subMenu(params['link'],params['row'])
     elif params['action'] == "recent":
+        print "Recent list"
         recentPage()
     elif params['action'] == "episode":
         print "Episode"

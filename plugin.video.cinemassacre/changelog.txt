@@ -1,3 +1,9 @@
+1.0.1 - Updated with website changes
+1.0.0 - Frodo Branch
+0.0.9 - Added Screenwave Media Support
+0.0.8 - Handle shorten URLs with springboard videos
+0.0.7 - Reenabled support for videos from gametrailers.com
+0.0.6 - Fixed bug with springboard video playback
 0.0.5 - Remove unneeded categories
         moved showEpisode to a seperate file
 0.0.4 - Using youtube and blip.tv plugins for playback

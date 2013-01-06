@@ -164,7 +164,7 @@ class GrooveAPI:
 	# Get IP
 	def _getIP(self):
 		try:
-			myip = urllib2.urlopen('http://whatismyip.org').read()
+			myip = urllib2.urlopen('http://ipecho.net/plain').read()
 			if re.match("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", myip):
 				if self._debugging:
 					print "IP is " + myip
@@ -556,6 +556,6 @@ class GrooveAPI:
 
 		while (i < len(playlists)):
 			s = playlists[i]
-			list.append([str(s['PlaylistName']).encode('utf-8'), s['PlaylistID']])
+			list.append([str(s['PlaylistName']).encode('utf8', 'ignore'), s['PlaylistID']])
 			i = i + 1
 		return list

@@ -480,7 +480,6 @@ class Grooveshark:
     def playSong(self, item):
         global playTimer
         global player
-        player.stop()
         if item != None:
             # Get stream as it could have expired
             item.select(True)
@@ -705,7 +704,7 @@ class Grooveshark:
     def _get_login(self):
         if (self.username == "" or self.password == ""):
             dialog = xbmcgui.Dialog()
-            dialog.ok(__language__(30008), __language__(30069), __language__(30070))
+            dialog.ok(__language__(30008), __language__(30069), __language__(30070), __language__(30082))
             return 0
         else:
             if self.userid == 0:
@@ -714,7 +713,7 @@ class Grooveshark:
                 return uid
             else:
                 dialog = xbmcgui.Dialog()
-                dialog.ok(__language__(30008), __language__(30069), __language__(30070))
+                dialog.ok(__language__(30008), __language__(30069), __language__(30070), __language__(30082))
                 return 0
     
     # File download            

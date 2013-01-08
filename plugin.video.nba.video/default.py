@@ -5,8 +5,8 @@ import simplejson as json
 plugin = 'NBA Video'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '12-17-2012'
-__version__ = '1.0.2'
+__date__ = '01-06-2013'
+__version__ = '2.0.3'
 settings = xbmcaddon.Addon( id = 'plugin.video.nba.video' )
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -22,32 +22,44 @@ import CommonFunctions
 common = CommonFunctions
 common.plugin = plugin + ' ' + __version__
 
+from addonfunc import addListItem, playListItem, getUrl, getPage, setViewMode, getParameters, retry
+
+@retry(IndexError)	
 def build_main_directory():
 	main=[
-		( settings.getLocalizedString( 30000 ), highlights_thumb, 'games%2F*%7Cchannels%2Fplayoffs', '0' ),
-		( settings.getLocalizedString( 30001 ), topplays_thumb, 'channels%2Ftop_plays', '0' ),
-		( settings.getLocalizedString( 30002 ), teams_thumb, 'null', '1' ),
-		( settings.getLocalizedString( 30003 ), search_thumb, 'search', '0' )
+		( settings.getLocalizedString( 30000 ), highlights_thumb, 'games%2F*%7Cchannels%2Fplayoffs', '0', 'highlights' ),
+		( settings.getLocalizedString( 30001 ), topplays_thumb, 'channels%2Ftop_plays', '0', 'top_plays' ),
+		( settings.getLocalizedString( 30002 ), teams_thumb, 'null', '1', 'null' ),
+		( settings.getLocalizedString( 30003 ), search_thumb, 'search', '0', 'null' )
 		]
-	for name, thumbnailImage, url, mode in main:
-		u = { 'mode': mode, 'url': urllib.quote_plus( url ) }
+	for name, thumbnailImage, url, mode, section in main:
+		u = { 'mode': mode, 'url': url, 'section': section }
 		infoLabels = { "Title": name, "Plot": name }
-		ListItem(label = '[ ' + name + ' ]', image = thumbnailImage, url = u, isFolder = True, infoLabels = infoLabels)
-	build_video_directory('channels%2F*%7Cgames%2F*%7Cflip_video_diaries%7Cfiba', 1)
+		addListItem(label = '[ ' + name + ' ]', image = thumbnailImage, url = u, isFolder = True, infoLabels = infoLabels, fanart = fanart)
+	build_video_directory('channels%2F*%7Cgames%2F*%7Cflip_video_diaries%7Cfiba', 1, 'all_videos')
 	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
-def build_video_directory( url, page ):
+@retry(IndexError)
+def build_video_directory( url, page, section ):
 	if url == 'search':
+		search = True
 		text = common.getUserInput(settings.getLocalizedString( 30003 ), "")
 		if text == None:
 			return
 		url = 'channels%2F*%7Cgames%2F*%7Cflip_video_diaries%7Cfiba&text=' + urllib.quote( text )
+	else:
+		search =  False
 	save_url = url
-	url = 'http://searchapp2.nba.com/nba-search/query.jsp?section=' + url + '&season=1213&sort=recent&hide=true&type=advvideo&npp=15&start=' + str(1+(15*(page-1)))
-	html = open_url( url ).decode('ascii', 'ignore')
+	if page == 1 and search != True:
+		base = 'http://www.nba.com/.element/ssi/auto/2.0/aps/video/playlists/' + section + '.html?section='
+	else:
+		base = 'http://searchapp2.nba.com/nba-search/query.jsp?section='
+	url = base + url + '&season=1213&sort=recent&hide=true&type=advvideo&npp=15&start=' + str(1+(15*(page-1)))
+	html = getUrl(url)
 	textarea = common.parseDOM(html, "textarea", attrs = { "id": "jsCode" })[0]
-	query = json.loads(textarea.decode('latin1').encode('utf8'))
+	content = textarea.replace("\\'","\\\\'").replace('\\\\"','\\\\\\"').replace('\\n','').replace('\\t','').replace('\\x','')
+	query = json.loads(content)
 	data = query['results'][0]
 	count = query['metaResults']['advvideo']
 	if len(data) == 0:
@@ -57,121 +69,49 @@ def build_video_directory( url, page ):
 	for results in data:
 		mediaDateUts = time.ctime(float(results['mediaDateUts']))
 		date = datetime.datetime.fromtimestamp(time.mktime(time.strptime(mediaDateUts, '%a %b %d %H:%M:%S %Y'))).strftime('%d.%m.%Y')
-		title = results['title'].replace('\\','').encode('utf-8')
+		title = results['title'].replace('\\','')
 		thumb = results['metadata']['media']['thumbnail']['url'].replace('136x96','576x324')
 		length = results['metadata']['video']['length'].split(':')
 		duration = int(length[0]) * 60 + int(length[1])
-		plot = results['metadata']['media']['excerpt'].replace('\\','').encode('utf-8')
+		plot = results['metadata']['media']['excerpt'].replace('\\','')
 		url = results['id'].replace('/video/', '').replace('/index.html','')
-		infoLabels={ "Title": title, "Plot": plot, "Duration": duration, "Aired": date }
-		u = { 'mode': '3', 'name': urllib.quote_plus( title ), 'url': urllib.quote_plus( url ), 'thumb': urllib.quote_plus( thumb ), 'plot': urllib.quote_plus( plot ) }
-		ListItem(label = title, image = thumb, url = u, isFolder = False, infoLabels = infoLabels)
+		infoLabels={ "Title": title, "Plot": plot, "Aired": date }
+		u = { 'mode': '3', 'name': title, 'url': url, 'thumb': thumb, 'plot': plot }
+		addListItem(label = title, image = thumb, url = u, isFolder = False, infoLabels = infoLabels, fanart = fanart, duration = duration)
 	if int(page) * 15 < int(count):
-		u = { 'mode': '0', 'page': str( int( page ) + 1 ), 'url': urllib.quote_plus( save_url ) }
-		ListItem(label = '[Next Page (' + str( int( page ) + 1 ) + ')]', image = next_thumb, url = u, isFolder = True, infoLabels = False)
+		u = { 'mode': '0', 'page': str( int( page ) + 1 ), 'url': save_url, 'section': section }
+		addListItem(label = '[Next Page (' + str( int( page ) + 1 ) + ')]', image = next_thumb, url = u, isFolder = True, infoLabels = False, fanart = fanart)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
 	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
+@retry(IndexError)
 def build_teams_directory():
-	html = open_url( 'http://www.nba.com/video/' )
+	html = getUrl( 'http://www.nba.com/video/' )
 	team_names = common.parseDOM(html, "a", attrs = { "id": "nbaVidSelectLk" })
 	team_nicks = common.parseDOM(html, "a", attrs = { "id": "nbaVidSelectLk" }, ret="onclick")
 	item_count = 0
 	for title in team_names:
 		nick = re.compile("\(\'teams/(.+?)\'").findall(team_nicks[item_count])[0]
 		url = 'teams%2F' + nick + '%7Cgames%2F*%7Cchannels%2F*&team=' + title.replace(' ','%20') + '&site=nba%2C' + nick
-		u = { 'mode': '0', 'url': urllib.quote_plus( url ) }
-		ListItem(label = title, image = teams_thumb, url = u, isFolder = True, infoLabels = False)
+		u = { 'mode': '0', 'url': url, 'section': nick + '_all' }
+		addListItem(label = title, image = teams_thumb, url = u, isFolder = True, infoLabels = False, fanart = fanart)
 		item_count += 1	
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_LABEL )
 	setViewMode("515")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )		
-	
+
+@retry(IndexError)	
 def play_video( name, url, thumb, plot ):
 	url = 'http://www.nba.com/video/' + url + '.xml'
-	html = open_url( url )
-	url = 'http://nba.cdn.turner.com/nba/big' + common.parseDOM(html, "file", attrs = { "type": "large" })[0]
-	listitem = xbmcgui.ListItem( label = name, iconImage = thumb, thumbnailImage = thumb, path = url )
-	listitem.setInfo( type="Video", infoLabels={ "Title": name , "Studio": plugin, "Plot": plot } )
-	xbmcplugin.setResolvedUrl( handle = int( sys.argv[1] ), succeeded = True, listitem = listitem )
-
-def open_url( url ):
-	retries = 0
-	while retries < 11:
-		data = {'content': None, 'error': None}
-		try:
-			if retries != 0:
-				time.sleep(3)
-			data = get_page(url)
-			if data['content'] != None and data['error'] == None:
-				return data['content']
-			if data['error'].find('404:') != -1:
-				break
-		except Exception, e:
-			data['error'] = str(e)
-		retries += 1
-	dialog = xbmcgui.Dialog()
-	ret = dialog.yesno(plugin, settings.getLocalizedString( 30050 ), data['error'], '', settings.getLocalizedString( 30052 ), settings.getLocalizedString( 30053 ))
-	if ret == False:
-		open_url(url)
-	else:
-		ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
-		buggalo.addExtraData('url', url)
-		buggalo.addExtraData('error', data['error'])
-		raise Exception("open_url ERROR")
-	
-def get_page(url):
-	data = {'content': None, 'error': None}
-	try:
-		req = urllib2.Request(url)
-		req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0.1')
-		content = urllib2.urlopen(req)
-		html = content.read()
-		content.close()
-		try:
-			data['content'] = html.decode("utf-8")
-			return data
-		except:
-			data['content'] = html
-			return data
-	except Exception, e:
-		data['error'] = str(e)
-		return data
-		
-def ListItem(label, image, url, isFolder, infoLabels = False):
-	listitem = xbmcgui.ListItem(label = label, iconImage = image, thumbnailImage = image)
-	listitem.setProperty('fanart_image', fanart)
-	if infoLabels:
-		listitem.setInfo( type = "Video", infoLabels = infoLabels )
-		if "Duration" in infoLabels:
-			if hasattr( listitem, "addStreamInfo" ):
-				listitem.addStreamInfo('video', { 'duration': infoLabels["Duration"] })
-			else:
-				listitem.setInfo( type="Video", infoLabels={ "Duration": str(datetime.timedelta(milliseconds=int(infoLabels["Duration"])*1000)) } )
-	if not isFolder:
-		listitem.setProperty('IsPlayable', 'true')
-	u = sys.argv[0] + '?'
-	for key, value in url.items():
-		u = u + key + '=' + value + '&'
-	ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = isFolder)
-	return ok	
-	
-def setViewMode(id):
-	if xbmc.getSkinDir() == "skin.confluence":
-		xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
-		xbmc.executebuiltin("Container.SetViewMode(" + id + ")")
-
-def getParameters(parameterString):
-    commands = {}
-    splitCommands = parameterString[parameterString.find('?') + 1:].split('&')
-    for command in splitCommands:
-        if (len(command) > 0):
-            splitCommand = command.split('=')
-            key = splitCommand[0]
-            value = splitCommand[1]
-            commands[key] = value
-    return commands
+	html = getPage( url )
+	if html['error'] == 'HTTP Error 404: Not Found':
+		dialog = xbmcgui.Dialog()
+		ok = dialog.ok( plugin , settings.getLocalizedString( 30006 ) )
+		return
+	url = 'http://nba.cdn.turner.com/nba/big' + common.parseDOM(html['content'], "file", attrs = { "type": "large" })[0]
+	infoLabels = { "Title": name , "Studio": plugin, "Plot": plot }
+	playListItem(label = name, image = thumb, path = url, infoLabels = infoLabels, PlayPath = False)
 
 params = getParameters(sys.argv[2])
 mode = None
@@ -202,6 +142,10 @@ try:
 except:
         pass
 try:
+		section = urllib.unquote_plus(params["section"])
+except:
+        pass
+try:
         page = int(params["page"])
 except:
         pass
@@ -210,7 +154,7 @@ try:
 	if mode == None:
 		build_main_directory()
 	elif mode == 0:
-		build_video_directory( url, page )
+		build_video_directory( url, page, section )
 	elif mode == 1:
 		build_teams_directory()
 	elif mode == 3:

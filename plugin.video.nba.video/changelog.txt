@@ -1,3 +1,13 @@
+[B]Version 1.0.3[/B]
+
+- Version bump for frodo
+- Fixed duration time issue
+- Fixed 'argument 1 must be unicode or str' error
+- Fixed 404 error on videos that aren't available
+- Fixed issue with new videos not appearing on the first page
+- Added retry function to help with connection errors
+- Added setting for default view in Confluence skin
+
 [B]Version 1.0.2[/B]
 
 - Fixed duration issue in Frodo by using addStreamInfo()

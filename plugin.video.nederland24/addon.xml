@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nederland24" name="Nederland 24" version="2.1.4" provider-name="bosel">
+<addon id="plugin.video.nederland24" name="Nederland 24" version="2.1.5" provider-name="bosel">
   <requires>
       <import addon="xbmc.python" version="2.0"/>
   </requires>

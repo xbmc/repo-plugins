@@ -1,3 +1,8 @@
+<b>2.1.5</b>
+Eden
+-Required changes due to cancelled channels
+-Required fixes due to altered website
+
 <b>2.1.4</b>
 Eden
 -Channels - Disable Laatste Achtuurjournaal

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Basque language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/eu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30021">Bat ere ez</string>
+    <string id="30023">Etiketa</string>
+    <string id="30024">Tamaina</string>
+    <string id="30061">Lehenetsia</string>
+    <string id="30067">Lehenetsia</string>
+    <string id="30081">Gorakorra</string>
+    <string id="30082">Beherakorra</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Orokorra</string>
+    <string id="30092">Skin-a</string>
+    <string id="30101">Albumak</string>
+    <string id="30104">Hitz gakoak</string>
+    <string id="30213">Eguneratu liburutegia</string>
+</strings>

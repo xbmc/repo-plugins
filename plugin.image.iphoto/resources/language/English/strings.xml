@@ -1,5 +1,63 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- English language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/en/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
 <strings>
+    <!-- Plugin settings strings -->
+    <string id="30000">Path to iPhoto or Aperture Library</string>
+    <string id="30001">Ignore published (MobileMe) albums</string>
+    <string id="30002">Ignore 'Flagged' album</string>
+    <string id="30003">Auto update library</string>
+    <string id="30004">Hide Update Library item in main menu</string>
+    <string id="30005">Ignore empty albums</string>
+    <string id="30006">Ignore keywords</string>
+    <string id="30015">Enable Places support</string>
+    <string id="30016">Show Places as</string>
+    <string id="30017">Addresses</string>
+    <string id="30018">Lat/Lon Pairs</string>
+
+    <!-- Plugin settings Skin strings -->
+    <string id="30020">Default photo sort method</string>
+    <string id="30021">None</string>
+    <string id="30022">XML Date</string>
+    <string id="30023">Label</string>
+    <string id="30024">Size</string>
+    <string id="30025">Download maps from Google</string>
+    <string id="30026">Show map as fanart</string>
+    <string id="30027">Managed Library (change requires rescan)</string>
+    <string id="30028">Local root path to Masters</string>
+    <string id="30029">Rewrite root path as</string>
+    <string id="30030">Hide View Documentation item in main menu</string>
+    <string id="30060">View mode in Confluence</string>
+    <string id="30061">Default</string>
+    <string id="30062">Pic Thumbs</string>
+    <string id="30063">Image Wrap</string>
+    <string id="30066">View mode in Metropolis</string>
+    <string id="30067">Default</string>
+    <string id="30068">Picture Grid</string>
+    <string id="30069">Galary Fanart</string>
+    <string id="30080">Default photo sort direction</string>
+    <string id="30081">Ascending</string>
+    <string id="30082">Descending</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">General</string>
+    <string id="30091">View</string>
+    <string id="30092">Skin</string>
+    <string id="30099">Advanced</string>
+
+    <!-- Category strings -->
+    <string id="30100">Events</string>
+    <string id="30101">Albums</string>
+    <string id="30102">Ratings</string>
+    <string id="30103">&lt;&lt; Update Library &gt;&gt;</string>
+    <string id="30104">Keywords</string>
+    <string id="30105">Faces</string>
+    <string id="30106">Places</string>
+    <string id="30107">&lt;&lt; View Documentation &gt;&gt;</string>
+    <string id="30108">Projects</string>
+
     <!-- Plugin strings -->
     <string id="30200">%d star</string>
     <string id="30210">Importing Library</string>
@@ -37,57 +95,4 @@
     <string id="30321">Failed to reset database</string>
     <string id="30322">Deleted %d cached maps</string>
     <string id="30330">Keyword '%s' hidden</string>
-
-    <!-- Category strings -->
-    <string id="30100">Events</string>
-    <string id="30101">Albums</string>
-    <string id="30102">Ratings</string>
-    <string id="30103">&lt;&lt; Update Library &gt;&gt;</string>
-    <string id="30104">Keywords</string>
-    <string id="30105">Faces</string>
-    <string id="30106">Places</string>
-    <string id="30107">&lt;&lt; View Documentation &gt;&gt;</string>
-    <string id="30108">Projects</string>
-
-
-    <!-- Plugin settings strings -->
-    <string id="30000">Path to iPhoto or Aperture Library</string>
-    <string id="30001">Ignore published (MobileMe) albums</string>
-    <string id="30002">Ignore 'Flagged' album</string>
-    <string id="30003">Auto update library</string>
-    <string id="30004">Hide Update Library item in main menu</string>
-    <string id="30005">Ignore empty albums</string>
-    <string id="30006">Ignore keywords</string>
-    <string id="30015">Enable Places support</string>
-    <string id="30016">Show Places as</string>
-    <string id="30017">Addresses</string>
-    <string id="30018">Lat/Lon Pairs</string>
-    <string id="30020">Default photo sort method</string>
-    <string id="30021">None</string>
-    <string id="30022">XML Date</string>
-    <string id="30025">Download maps from Google</string>
-    <string id="30026">Show map as fanart</string>
-    <string id="30027">Managed Library (change requires rescan)</string>
-    <string id="30028">Local root path to Masters</string>
-    <string id="30029">Rewrite root path as</string>
-    <string id="30030">Hide View Documentation item in main menu</string>
-
-
-    <!-- Plugin settings Skin strings -->
-    <string id="30060">View mode in Confluence</string>
-    <string id="30061">Default</string>
-    <string id="30062">Pic Thumbs</string>
-    <string id="30063">Image Wrap</string>
-
-    <string id="30066">View mode in Metropolis</string>
-    <string id="30067">Default</string>
-    <string id="30068">Picture Grid</string>
-    <string id="30069">Galary Fanart</string>
-
-
-    <!-- Plugin settings Categories strings -->
-    <string id="30090">General</string>
-    <string id="30091">View</string>
-    <string id="30092">Skin</string>
-    <string id="30099">Advanced</string>
 </strings>

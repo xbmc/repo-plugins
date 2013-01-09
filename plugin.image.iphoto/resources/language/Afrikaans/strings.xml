@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Afrikaans language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/af/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30021">Geen</string>
+    <string id="30023">Etiket</string>
+    <string id="30024">Grootte</string>
+    <string id="30060">Vertoon modus in Confluence</string>
+    <string id="30061">Verstek</string>
+    <string id="30062">Prent Duime</string>
+    <string id="30063">Prent Toedraai</string>
+    <string id="30067">Verstek</string>
+    <string id="30081">Stygend</string>
+    <string id="30082">Dalend</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Algemeen</string>
+    <string id="30091">Besigtig</string>
+    <string id="30092">Omslag</string>
+    <string id="30099">Gevorderde</string>
+    <string id="30101">Albums</string>
+    <string id="30104">Sleutelwoorde</string>
+    <string id="30213">Opdateer biblioteek</string>
+</strings>

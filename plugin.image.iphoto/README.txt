@@ -112,8 +112,6 @@ Known Issues
   See http://github.com/jingai/plugin.image.iphoto/issues/6
 * Selecting previous picture sometimes erroneously selects next instead
   See http://trac.xbmc.org/ticket/11826
-* Sorting by Date sorts on the file date, not the EXIF date.
-  See http://trac.xbmc.org/ticket/10519
 * Can only set default view mode in select skins
   See http://trac.xbmc.org/ticket/9952
 

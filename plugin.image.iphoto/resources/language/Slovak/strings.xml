@@ -16,17 +16,19 @@
     <string id="30016">Zobraziť Miesta ako</string>
     <string id="30017">Adresy</string>
     <string id="30018">Zemepisná šírka/dľžka</string>
+
+    <!-- Plugin settings Skin strings -->
     <string id="30020">Predvolené zoradenie fotiek</string>
     <string id="30021">Žiadne</string>
     <string id="30022">XML Dátum</string>
+    <string id="30023">Label</string>
+    <string id="30024">Veľkosť</string>
     <string id="30025">Stiahnuť mapy z Google</string>
     <string id="30026">Ukázať mapu ako fanart</string>
     <string id="30027">Spravovaná knižnica (zmena vyžaduje opätovné prehľadanie)</string>
     <string id="30028">Lokálna koreňová cesta k Masters</string>
     <string id="30029">Prepísať koreňovú cestu na</string>
     <string id="30030">Skryť položku 'Zobraziť Dokumentáciu' v hlavnom menu</string>
-
-    <!-- Plugin settings Skin strings -->
     <string id="30060">Režim zobrazenia v Confluence</string>
     <string id="30061">Predvolené</string>
     <string id="30062">Náhľady obrázku</string>
@@ -35,6 +37,9 @@
     <string id="30067">Predvolené</string>
     <string id="30068">Obrazová mriežka</string>
     <string id="30069">Fanart Galérie</string>
+    <string id="30080">Predvolený smer triedenia fotiek</string>
+    <string id="30081">Vzostupný</string>
+    <string id="30082">Zostupný</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">Všeobecné</string>

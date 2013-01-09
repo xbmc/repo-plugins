@@ -7,27 +7,39 @@
     <!-- Plugin settings strings -->
     <string id="30000">Pfad zu iPhoto- oder Aperture-Bibliothek</string>
     <string id="30001">Ignoriere veröffentlichte (MobileMe-) Alben</string>
+    <string id="30002">Ignorierte 'geflaggte' Alben</string>
     <string id="30003">Bibliothek automatisch aktualisieren</string>
+    <string id="30004">Verstecke Aktualisiere Datenbank Punkt im Hauptmenü</string>
     <string id="30005">Ignoriere leere Alben</string>
     <string id="30006">Ignoriere Schlüsselwörter</string>
     <string id="30015">Aktiviere Plätze-Unterstützung</string>
     <string id="30016">Zeige Plätze als</string>
     <string id="30017">Adressen</string>
     <string id="30018">Längen-/Breitengradpaare</string>
+
+    <!-- Plugin settings Skin strings -->
     <string id="30020">Standard-Fotosortiermethode</string>
     <string id="30021">Keine</string>
     <string id="30022">XML-Datum</string>
+    <string id="30023">Label</string>
+    <string id="30024">Size</string>
     <string id="30025">Karte von Google laden</string>
+    <string id="30026">Zeige Karte als Fanart</string>
     <string id="30027">Verwaltete Bibliothek (benötigt erneuten Suchlauf)</string>
+    <string id="30028">Lokaler Stammpfad</string>
+    <string id="30029">Schreibe Stammpfad als</string>
     <string id="30030">Verstecke "Zeige Handbuch" im Hauptmenü</string>
-
-    <!-- Plugin settings Skin strings -->
     <string id="30060">Zeige Modus in Confluence</string>
     <string id="30061">Standard</string>
     <string id="30062">Foto-Vorschaubilder</string>
+    <string id="30063">Bild Wrap</string>
     <string id="30066">Zeige Modus in Metropolis</string>
     <string id="30067">Standard</string>
     <string id="30068">Fotogitter</string>
+    <string id="30069">Gallerie FanArt</string>
+    <string id="30080">Standard Foto-Sortierungsreihenfolge</string>
+    <string id="30081">Aufsteigend</string>
+    <string id="30082">Absteigend</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">Allgemein</string>
@@ -45,6 +57,9 @@
     <string id="30106">Plätze</string>
     <string id="30107">&lt;&lt; Zeige Handbuch &gt;&gt;</string>
     <string id="30108">Projekte</string>
+
+    <!-- Plugin strings -->
+    <string id="30200">%d Sterne</string>
     <string id="30210">Importiere Bibliothek</string>
     <string id="30211">Importierte %d Oblekte</string>
     <string id="30212">Scanne Bibliothek</string>
@@ -61,6 +76,13 @@
     <string id="30230">Addon-Datenbank löschen?</string>
     <string id="30231">Addon-Datenbank ist defekt.</string>
     <string id="30232">Löschen wird Ihre Fotobibliothek nicht beeinflussen.</string>
+    <string id="30233">Hiernach wirst du rescannen müssen.</string>
+    <string id="30240">Addon Datenbank einlesen fehlgeschlagen.</string>
+    <string id="30241">Bitte reimportiere deine Datenbank.</string>
+    <string id="30250">Lösche zwischengespeicherte Kartenbilder</string>
+    <string id="30252">Scanne...</string>
+    <string id="30260">Bibliotheksimport läuft</string>
+    <string id="30261">Datenbank zurücksetzen fehlgeschlagen.</string>
     <string id="30262">Derzeit nicht unterstützt</string>
     <string id="30263">Diese Funktion wird nicht unterstützt %s %s.</string>
 
@@ -68,7 +90,9 @@
     <string id="30300">Bibliotheksimport läuft</string>
     <string id="30301">Bibliotheksimport erfolgreich</string>
     <string id="30302">Bibliotheksimport fehlgeschlagen</string>
+    <string id="30310">Keine Inhalte</string>
     <string id="30320">Datenbank zurücksetzen</string>
     <string id="30321">Zurücksetzen der Datenbank fehlgeschlagen</string>
+    <string id="30322">%d zwischengespeicherte Karten gelöscht</string>
     <string id="30330">Schlüsselwort '%s' versteckt</string>
 </strings>

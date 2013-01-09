@@ -243,23 +243,10 @@ class IPhotoGUI:
 	elif (e == "false"):
 	    self.enable_maps = False
 
-	# force configured sort method when set to "DEFAULT".
-	# XBMC sorts by file date when user selects "DATE" as the sort method,
-	# so we have no way to sort by the date stored in the XML or the EXIF
-	# data without providing an override to "DEFAULT".
-	# this works out well because I don't believe iPhoto stores the photos
-	# in the XML in any meaningful order anyway.
-	self.media_sort_col = addon.getSetting('default_sort_photo')
-	if (self.media_sort_col == ""):
-	    self.media_sort_col = "NULL"
-	    addon.setSetting('default_sort_photo', '0')
-	elif (self.media_sort_col == "1"):
-	    self.media_sort_col = "mediadate"
-	else:
-	    self.media_sort_col = "NULL"
-
 	self.context_menu_items = []
 	self.view_mode = 0
+	self.sort_method = 0
+	self.sort_dir = ""
 	self.db = None
 	self.dbSrc = None
 	self.dbVer = 0.0
@@ -402,7 +389,7 @@ class IPhotoGUI:
 		    elif (vm == 2):
 			self.view_mode = 59	    # Galary Fanart
 
-	sort_date = False
+	sort_date_avail = False
 	n = 0
 	ntotal = len(media)
 	for (caption, mediapath, thumbpath, originalpath, rating, mediadate, mediasize) in media:
@@ -419,10 +406,8 @@ class IPhotoGUI:
 		try:
 		    item.setProperty('Fanart_Image', mediapath)
 		    item_date = time.strftime("%d.%m.%Y", time.localtime(APPLE_EPOCH + float(mediadate)))
-		    #JSL: setting the date here to enable sorting prevents XBMC
-		    #JSL: from scanning the EXIF/IPTC info
-		    #item.setInfo(type="pictures", infoLabels={ "date": item_date })
-		    #sort_date = True
+		    item.setInfo(type="pictures", infoLabels={ "date": item_date })
+		    sort_date_avail = True
 		except:
 		    pass
 
@@ -431,14 +416,38 @@ class IPhotoGUI:
 
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
-	if (sort_date == True):
+	if (sort_date_avail == True):
 	    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
+	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_SIZE)
+
+	# force configured sort method
+	sm = addon.getSetting('default_sort_method')
+	if (sm == ""):
+	    addon.setSetting('default_sort_method', '0')
+	else:
+	    sm = int(sm)
+	    if (sm == 1 and sort_date_avail):
+		self.sort_method = plugin.SORT_METHOD_DATE
+	    elif (sm == 2):
+		self.sort_method = plugin.SORT_METHOD_LABEL
+	    elif (sm == 3):
+		self.sort_method = plugin.SORT_METHOD_SIZE
+
+	# force configured sort direction
+	sd = addon.getSetting('default_sort_dir')
+	if (sd == ""):
+	    addon.setSetting('default_sort_dir', '0')
+	else:
+	    if (sd == "1"):
+		self.sort_dir = "Ascending"
+	    elif (sd == "2"):
+		self.sort_dir = "Descending"
 
 	print "iphoto.gui: Displaying %d of %d media items" % (n, ntotal)
 	return n
 
     def list_photos_in_album(self, albumid):
-	media = self.db.GetMediaInAlbum(albumid, self.media_sort_col)
+	media = self.db.GetMediaInAlbum(albumid)
 	return self.render_media(media)
 
     def list_albums(self):
@@ -487,9 +496,9 @@ class IPhotoGUI:
     def list_photos_in_event(self, rollid):
 	if (self.dbSrc == "Aperture"):
 	    # Aperture Projects are lists of Albums
-	    media = self.db.GetMediaInAlbum(rollid, self.media_sort_col)
+	    media = self.db.GetMediaInAlbum(rollid)
 	else:
-	    media = self.db.GetMediaInRoll(rollid, self.media_sort_col)
+	    media = self.db.GetMediaInRoll(rollid)
 	return self.render_media(media)
 
     def list_events(self):
@@ -506,7 +515,7 @@ class IPhotoGUI:
 
 	self.generic_context_menu_items()
 
-	sort_date = False
+	sort_date_avail = False
 	n = 0
 	ntotal = len(rolls)
 	for (rollid, name, thumbpath, rolldate, count) in rolls:
@@ -519,7 +528,7 @@ class IPhotoGUI:
 	    try:
 		item_date = time.strftime("%d.%m.%Y", time.localtime(APPLE_EPOCH + float(rolldate)))
 		item.setInfo(type="pictures", infoLabels={ "date": item_date })
-		sort_date = True
+		sort_date_avail = True
 	    except:
 		pass
 
@@ -528,7 +537,7 @@ class IPhotoGUI:
 
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_UNSORTED)
 	plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_LABEL)
-	if (sort_date == True):
+	if (sort_date_avail == True):
 	    plugin.addSortMethod(int(sys.argv[1]), plugin.SORT_METHOD_DATE)
 
 	# default view for select skins
@@ -544,7 +553,7 @@ class IPhotoGUI:
 	return n
 
     def list_photos_with_face(self, faceid):
-	media = self.db.GetMediaWithFace(faceid, self.media_sort_col)
+	media = self.db.GetMediaWithFace(faceid)
 	return self.render_media(media)
 
     def list_faces(self):
@@ -588,7 +597,7 @@ class IPhotoGUI:
 	return n
 
     def list_photos_with_place(self, placeid):
-	media = self.db.GetMediaWithPlace(placeid, self.media_sort_col)
+	media = self.db.GetMediaWithPlace(placeid)
 	return self.render_media(media)
 
     def list_places(self):
@@ -645,7 +654,7 @@ class IPhotoGUI:
 	return n
 
     def list_photos_with_keyword(self, keywordid):
-	media = self.db.GetMediaWithKeyword(keywordid, self.media_sort_col)
+	media = self.db.GetMediaWithKeyword(keywordid)
 	return self.render_media(media)
 
     def list_keywords(self):
@@ -701,7 +710,7 @@ class IPhotoGUI:
 	return n
 
     def list_photos_with_rating(self, rating):
-	media = self.db.GetMediaWithRating(rating, self.media_sort_col)
+	media = self.db.GetMediaWithRating(rating)
 	return self.render_media(media)
 
     def list_ratings(self):
@@ -907,10 +916,17 @@ if (__name__ == "__main__"):
 
     if (items > 0):
 	plugin.endOfDirectory(int(sys.argv[1]), True)
+	if (iphoto.view_mode or iphoto.sort_method):
+	    xbmc.sleep(300)
 	if (iphoto.view_mode):
 	    print "iphoto.gui: Trying to set view mode in %s to %d" % (SKIN_NAME, iphoto.view_mode)
-	    xbmc.sleep(300)
 	    xbmc.executebuiltin("Container.SetViewMode(%d)" % (iphoto.view_mode))
+	if (iphoto.sort_method):
+	    print "iphoto.gui: Trying to set sort method to %d" % (iphoto.sort_method)
+	    xbmc.executebuiltin("Container.SetSortMethod(%d)" % (iphoto.sort_method))
+	if (iphoto.sort_dir != ""):
+	    print "iphoto.gui: Trying to set sort direction to %s" % (iphoto.sort_dir)
+	    xbmc.executebuiltin("Container.SortDirection(%s)" % (iphoto.sort_dir))
     elif (items == 0):
 	action_result = addon.getLocalizedString(30310)
 

@@ -16,17 +16,19 @@
     <string id="30016">Mostrar Lugares como</string>
     <string id="30017">Direcciones</string>
     <string id="30018">Lat/Lon Coordenadas</string>
+
+    <!-- Plugin settings Skin strings -->
     <string id="30020">Metodo de Orden por defecto</string>
     <string id="30021">Ninguno</string>
     <string id="30022">Datos XML</string>
+    <string id="30023">Firma</string>
+    <string id="30024">Resolución</string>
     <string id="30025">Descargar mapa desde Google</string>
     <string id="30026">Mostrar mapa como fanart</string>
     <string id="30027">Administrar biblioteca (requiere actualizar)</string>
     <string id="30028">Ruta local a Masters</string>
     <string id="30029">Sobrescribir directorio raíz como</string>
     <string id="30030">Ocultar Ver Documentación en el menú principal</string>
-
-    <!-- Plugin settings Skin strings -->
     <string id="30060">Modo de Vista en Confluence</string>
     <string id="30061">Por defecto</string>
     <string id="30062">Pic Thumbs</string>
@@ -35,6 +37,9 @@
     <string id="30067">Por defecto</string>
     <string id="30068">Picture Grid</string>
     <string id="30069">Galary Fanart</string>
+    <string id="30080">Dirección de organización de fotos por defecto</string>
+    <string id="30081">Ascendente</string>
+    <string id="30082">Descendente</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">General</string>

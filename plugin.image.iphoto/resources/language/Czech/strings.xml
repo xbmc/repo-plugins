@@ -6,8 +6,15 @@
 <strings>
     <string id="30017">Adresy</string>
     <string id="30021">Žádné</string>
+    <string id="30023">Label</string>
+    <string id="30024">Velikost</string>
+    <string id="30060">Režim zobrazení ve vzhledu Confluence</string>
     <string id="30061">Výchozí</string>
+    <string id="30062">Náhledy obrázků</string>
+    <string id="30063">Obrázky</string>
     <string id="30067">Výchozí</string>
+    <string id="30081">Vzestupně</string>
+    <string id="30082">Sestupně</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">Obecné</string>
@@ -22,6 +29,7 @@
     <string id="30104">Klíčová slova</string>
     <string id="30106">Místa</string>
     <string id="30108">Projekty</string>
+    <string id="30213">Aktualizovat knihovnu</string>
     <string id="30252">Zkoumám...</string>
     <string id="30310">Žádné položky</string>
 </strings>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Spanish (Mexico) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/es_MX/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30021">Ninguno</string>
+    <string id="30023">Firma</string>
+    <string id="30024">Tamaño</string>
+    <string id="30060">Tipo de vista en Confluence</string>
+    <string id="30061">Por defecto</string>
+    <string id="30062">Imágenes Miniatura</string>
+    <string id="30063">Envoltura de Imágen</string>
+    <string id="30067">Por defecto</string>
+    <string id="30081">Ascendente</string>
+    <string id="30082">Descendente</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">General</string>
+    <string id="30091">Ver</string>
+    <string id="30092">Skin</string>
+    <string id="30099">Avanzado</string>
+    <string id="30101">Álbumes</string>
+    <string id="30104">Palabras clave</string>
+    <string id="30213">Actualizar biblioteca</string>
+</strings>

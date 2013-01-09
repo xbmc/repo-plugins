@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Icelandic language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/is/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30021">Ekkert</string>
+    <string id="30023">Útgefandi</string>
+    <string id="30024">Stærð</string>
+    <string id="30061">Sjálfgefið</string>
+    <string id="30062">Smámyndir</string>
+    <string id="30063">Myndafletting</string>
+    <string id="30067">Sjálfgefið</string>
+    <string id="30081">Hækkandi</string>
+    <string id="30082">Lækkandi</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Almennt</string>
+    <string id="30091">Sýn</string>
+    <string id="30092">Útlit</string>
+    <string id="30101">Hljómplötur</string>
+    <string id="30104">Lykilorð</string>
+    <string id="30213">Uppfæra safn</string>
+</strings>

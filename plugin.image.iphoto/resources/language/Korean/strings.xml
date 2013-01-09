@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Korean language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ko/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30021">없음</string>
+    <string id="30023">라벨</string>
+    <string id="30024">크기</string>
+    <string id="30060">Confluence 스킨에서 보기 형식</string>
+    <string id="30061">보통</string>
+    <string id="30062">사진 미리보기</string>
+    <string id="30063">이미지 나열</string>
+    <string id="30067">보통</string>
+    <string id="30068">사진 격자</string>
+    <string id="30081">올림차순</string>
+    <string id="30082">내림차순</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">메뉴</string>
+    <string id="30091">보기</string>
+    <string id="30092">스킨</string>
+    <string id="30099">고급</string>
+    <string id="30101">앨범</string>
+    <string id="30104">키워드</string>
+    <string id="30213">라이브러리 업데이트</string>
+</strings>

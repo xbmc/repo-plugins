@@ -5,17 +5,28 @@
 
 <strings>
     <string id="30017">כתובות</string>
+    <string id="30021">ללא</string>
+    <string id="30023">חברת הפקה</string>
+    <string id="30024">גודל</string>
+    <string id="30060">מוד צפיה ב confluence </string>
     <string id="30061">ברירת מחדל</string>
+    <string id="30062">תמונות ממוזערות</string>
+    <string id="30063">עטיפת תמונה</string>
     <string id="30067">ברירת מחדל</string>
+    <string id="30081">עולה</string>
+    <string id="30082">יורד</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">כללי</string>
+    <string id="30091">תצוגה</string>
     <string id="30092">סקין</string>
     <string id="30099">מתקדם</string>
 
     <!-- Category strings -->
     <string id="30100">ארועים</string>
     <string id="30101">אלבומים</string>
+    <string id="30104">מילות מפתח</string>
     <string id="30105">פרצופים</string>
     <string id="30106">מקומות</string>
+    <string id="30213">עדכן ספריה</string>
 </strings>

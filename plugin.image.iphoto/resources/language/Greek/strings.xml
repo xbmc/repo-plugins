@@ -16,17 +16,19 @@
     <string id="30016">Προβολή Τοποθεσιών ως</string>
     <string id="30017">Διευθύνσεις</string>
     <string id="30018">Ζεύγη Lat/Lon</string>
+
+    <!-- Plugin settings Skin strings -->
     <string id="30020">Προεπιλεγμένη μέθοδος ταξινόμησης φωτογραφιών</string>
     <string id="30021">Κανένα</string>
     <string id="30022">Ημερομηνία XML</string>
+    <string id="30023">Ετικέτα</string>
+    <string id="30024">Μέγεθος</string>
     <string id="30025">Λήψη χαρτών από το Google</string>
     <string id="30026">Προβολή χάρτη σαν fanart</string>
     <string id="30027">Διαχείριση Συλλογής (οι αλλαγές απαιτούν επανασάρωση)</string>
     <string id="30028">Τοπική αρχική διαδρομή για Masters</string>
     <string id="30029">Επανεγγραφή αρχικής διαδρομής ως</string>
     <string id="30030">Απόκρυψη Προβολής Βοήθειας στο κεντρικό μενού</string>
-
-    <!-- Plugin settings Skin strings -->
     <string id="30060">Τύπος Προβολής στο Confluence</string>
     <string id="30061">Προεπιλογή</string>
     <string id="30062">Μικρογραφίες</string>
@@ -35,6 +37,9 @@
     <string id="30067">Προεπιλογή</string>
     <string id="30068">Πλέγμα Εικόνας</string>
     <string id="30069">Γκαλερί Fanart</string>
+    <string id="30080">Προεπιλεγμένη κατεύθυνση ταξινόμησης φωτογραφιών</string>
+    <string id="30081">Αύξουσα</string>
+    <string id="30082">Φθίνουσα</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">Γενικά</string>

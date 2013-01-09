@@ -16,17 +16,19 @@
     <string id="30016">Visa platser som</string>
     <string id="30017">Adresser</string>
     <string id="30018">Lat/Lon par</string>
+
+    <!-- Plugin settings Skin strings -->
     <string id="30020">Standardmetod för bildsortering</string>
     <string id="30021">Ingen</string>
     <string id="30022">XML-datum</string>
+    <string id="30023">Etikett</string>
+    <string id="30024">Storlek</string>
     <string id="30025">Ladda ner kartor från Google</string>
     <string id="30026">Visa kartor som fanart</string>
     <string id="30027">Hanterat bibliotek (ändring kräver omskanning)</string>
     <string id="30028">Lokal rotsökväg till mästare</string>
     <string id="30029">Skriv om rotsökväg som</string>
     <string id="30030">Dölj visa dokumentation på huvudmenyn</string>
-
-    <!-- Plugin settings Skin strings -->
     <string id="30060">Visningsläge i Confluence</string>
     <string id="30061">Standard</string>
     <string id="30062">Bildminiatyr</string>
@@ -35,6 +37,9 @@
     <string id="30067">Standard</string>
     <string id="30068">Bildrutnät</string>
     <string id="30069">Galaryfanart</string>
+    <string id="30080">Standard sorteringsordning</string>
+    <string id="30081">Stigande</string>
+    <string id="30082">Fallande</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">Allmän</string>

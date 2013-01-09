@@ -17,9 +17,16 @@
     <string id="30018">Latitudine/Longitudine</string>
     <string id="30021">Nessuno</string>
     <string id="30022">Data XML</string>
+    <string id="30023">Etichetta</string>
+    <string id="30024">Dimensione</string>
     <string id="30025">Scarica mappe da Google</string>
+    <string id="30060">Modalità di visualizzazione di Confluence</string>
     <string id="30061">Default</string>
+    <string id="30062">Miniature immagini</string>
+    <string id="30063">Immagine</string>
     <string id="30067">Default</string>
+    <string id="30081">Ascendente</string>
+    <string id="30082">Discendente</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">Generale</string>

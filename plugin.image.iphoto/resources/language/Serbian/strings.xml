@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Serbian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sr/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30021">Ništa</string>
+    <string id="30023">Etiketa</string>
+    <string id="30024">Velič.</string>
+    <string id="30061">Podrazumevano</string>
+    <string id="30062">Sličice</string>
+    <string id="30063">Poređano</string>
+    <string id="30067">Podrazumevano</string>
+    <string id="30081">Uzlazno</string>
+    <string id="30082">Silazno</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Opšte</string>
+    <string id="30092">Maska</string>
+    <string id="30101">Albumi</string>
+    <string id="30104">Ključne reči</string>
+    <string id="30213">Ažuriraj biblioteku</string>
+</strings>

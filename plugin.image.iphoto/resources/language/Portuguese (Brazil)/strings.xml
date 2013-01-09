@@ -16,17 +16,19 @@
     <string id="30016">Mostrar Locais como</string>
     <string id="30017">Endereços</string>
     <string id="30018">Pares Lat/Lon</string>
+
+    <!-- Plugin settings Skin strings -->
     <string id="30020">Método ordenar foto padrão</string>
     <string id="30021">Nenhum</string>
     <string id="30022">Dados XML</string>
+    <string id="30023">Gravadora/marca</string>
+    <string id="30024">Tamanho</string>
     <string id="30025">Download Mapas do Google</string>
     <string id="30026">Mostrar mapa como fanart</string>
     <string id="30027">Coleção Administrada (alterar  vai requerer reescanear)</string>
     <string id="30028">Caminho raiz local para Masters</string>
     <string id="30029">Reescreva caminho raiz como</string>
     <string id="30030">Ocultar item Ver Documentação no menu principal</string>
-
-    <!-- Plugin settings Skin strings -->
     <string id="30060">Modo de Visualização na Confluence</string>
     <string id="30061">Default</string>
     <string id="30062">Imagem Miniaturas</string>
@@ -35,6 +37,9 @@
     <string id="30067">Default</string>
     <string id="30068">Grade Imagem</string>
     <string id="30069">Galeria Fanart</string>
+    <string id="30080">Direção de ordenamento padrão para fotos.</string>
+    <string id="30081">Crescente</string>
+    <string id="30082">Decrescente</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">Geral</string>

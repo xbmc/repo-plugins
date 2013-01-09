@@ -16,17 +16,19 @@
     <string id="30016">Rodyti 'Klubai' kaip</string>
     <string id="30017">Adresai</string>
     <string id="30018">Lat/Lon poros</string>
+
+    <!-- Plugin settings Skin strings -->
     <string id="30020">Numatytasis nuotraukų rūšiavimo būdas</string>
     <string id="30021">Niekas</string>
     <string id="30022">XML data</string>
+    <string id="30023">Etiketė</string>
+    <string id="30024">Dydis</string>
     <string id="30025">Atsisiųsti žemėlapius iš Google</string>
     <string id="30026">Rodyti žemėlapį kaip FanArt</string>
     <string id="30027">Tvarkyti biblioteką (pakeitimas reikalauja 'Nuskaityti iš naujo')</string>
     <string id="30028">Lokacinis šakninio kelio vadovas</string>
     <string id="30029">Perrašykite šakninį kelią</string>
     <string id="30030">Rodyti 'Paslėpti dokumentaciją' punktą pagrindiniame meniu</string>
-
-    <!-- Plugin settings Skin strings -->
     <string id="30060">Confluence peržiūros režimas</string>
     <string id="30061">Numatytasis</string>
     <string id="30062">Pic Thumbs</string>
@@ -35,6 +37,9 @@
     <string id="30067">Numatytasis</string>
     <string id="30068">Vaizdo tinklelis</string>
     <string id="30069">Galerija FanArt</string>
+    <string id="30080">Numatytosios nuotraukos rūšiavimo kryptis</string>
+    <string id="30081">Didėjančia tvarka</string>
+    <string id="30082">Mažėjančia tvarka</string>
 
     <!-- Plugin settings Categories strings -->
     <string id="30090">Pagrindinis</string>
@@ -89,5 +94,5 @@
     <string id="30320">Duomenų bazė atstatoma</string>
     <string id="30321">Duomenų bazė atstatymas nepavyko</string>
     <string id="30322">Panaikinta %d žemėlapiai talpykloje</string>
-    <string id="30330">Raktiniai žodžiai '%s' paslėpta</string>
+    <string id="30330">Raktiniai žodžiai '%s' paslėpti</string>
 </strings>

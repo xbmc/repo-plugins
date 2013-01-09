@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Ukrainian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/uk/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="30021">Ні</string>
+    <string id="30023">Студія</string>
+    <string id="30024">Розмір</string>
+    <string id="30061">За промовчанням</string>
+    <string id="30062">Мініатюри</string>
+    <string id="30063">Карусель картинок</string>
+    <string id="30067">За промовчанням</string>
+    <string id="30081">Висхідний</string>
+    <string id="30082">Низхідний</string>
+
+    <!-- Plugin settings Categories strings -->
+    <string id="30090">Загальні</string>
+    <string id="30091">Перегляд</string>
+    <string id="30092">Обкладинка</string>
+    <string id="30101">Альбоми</string>
+    <string id="30104">Ключові слова</string>
+    <string id="30213">Оновити медіатеку</string>
+</strings>

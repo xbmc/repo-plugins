@@ -1,3 +1,12 @@
+2.0.3 - 20130108
+- Update language files from Transifex.
+
+2.0.2 - 20121215
+- Update language files from Transifex.
+
+2.0.1 - 20121211
+- Update language files from Transifex.
+
 2.0.0 - 20121119
 - Support for importing Aperture libraries.
 - Main Menu only shows currently-supported functions.

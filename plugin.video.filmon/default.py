@@ -204,18 +204,20 @@ def CHANNELS(name,url):
             
     
 def GET_STREAM_RESOLUTION(channels,resolution,watch_timeout):
+    print channels
     watch_timeout=str(watch_timeout)
     if resolution == '0':
         quality  = 'LOW'
-        
+        if not 'low' in channels:
+            quality  = 'HIGH'
     if resolution == '1':
         quality  = 'HIGH'
-        
     if resolution == '2':
         quality  = 'LOW'
         if len(watch_timeout)>5:
             quality  = 'HIGH'
-
+        if not 'low' in channels:
+            quality  = 'HIGH'
     for item in channels:
         if item['quality'].upper() == quality:
             return item
@@ -233,18 +235,31 @@ def GET_STREAMS(url):
             foregex= stream['url']+'<'
             playpath=stream['name']
             name=stream['quality']
-            if re.search('mp4:bc', link, re.IGNORECASE):
+            try:
                     regex = re.compile('rtmp://(.+?)/(.+?)/<')
                     match = regex.search(foregex)
                     app = '%s/' %(match.group(2))
                     url= stream['url']+playpath
-            if not re.search('mp4:bc', link, re.IGNORECASE):
+                    swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
+            except:
+                    pass
+            try:
                     regex = re.compile('rtmp://(.+?)/(.+?)/(.+?)id=([a-f0-9]*?)<')
                     match = regex.search(foregex)
                     app = '%s/%sid=%s' %(match.group(2), match.group(3),match.group(4))
                     url= stream['url']
+                    swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
+            except:
+                    pass
+            try:
+                    regex = re.compile('rtmp://(.+?)/(.+?)id=(.+?)"')
+                    match1 = regex.search(foregex)
+                    app = '%sid=%s' %(match1.group(2), match1.group(3))
+                    url= stream['url']+playpath
+                    swfUrl='http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf?v=28'
+            except:
+                    pass
             tcUrl=stream['url']
-            swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
             pageUrl = 'http://www.filmon.com/'
             url= str(url)+' playpath='+str(playpath)+' app='+str(app)+' swfUrl='+str(swfUrl)+' tcUrl='+str(tcUrl)+' pageurl='+str(pageUrl)
         return url

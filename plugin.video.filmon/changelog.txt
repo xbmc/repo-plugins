@@ -1,3 +1,10 @@
+v4.2.5
+Fixed Local Channels
+Frodo Compatible
+
+v3.2.4
+Fixed Local Channels
+
 v3.2.3
 Fixed Added Favourites
 

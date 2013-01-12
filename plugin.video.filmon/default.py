@@ -235,30 +235,35 @@ def GET_STREAMS(url):
             foregex= stream['url']+'<'
             playpath=stream['name']
             name=stream['quality']
-            try:
-                    regex = re.compile('rtmp://(.+?)/(.+?)/<')
-                    match = regex.search(foregex)
-                    app = '%s/' %(match.group(2))
+            if re.search('m4v',playpath,re.IGNORECASE):
+                    app = 'vod'
                     url= stream['url']+playpath
                     swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
-            except:
-                    pass
-            try:
-                    regex = re.compile('rtmp://(.+?)/(.+?)/(.+?)id=([a-f0-9]*?)<')
-                    match = regex.search(foregex)
-                    app = '%s/%sid=%s' %(match.group(2), match.group(3),match.group(4))
-                    url= stream['url']
-                    swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
-            except:
-                    pass
-            try:
-                    regex = re.compile('rtmp://(.+?)/(.+?)id=(.+?)"')
-                    match1 = regex.search(foregex)
-                    app = '%sid=%s' %(match1.group(2), match1.group(3))
-                    url= stream['url']+playpath
-                    swfUrl='http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf?v=28'
-            except:
-                    pass
+            else:
+                    try:
+                            regex = re.compile('rtmp://(.+?)/(.+?)/<')
+                            match = regex.search(foregex)
+                            app = '%s/' %(match.group(2))
+                            url= stream['url']+playpath
+                            swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
+                    except:
+                            pass
+                    try:
+                            regex = re.compile('rtmp://(.+?)/(.+?)/(.+?)id=(.+?)<')
+                            match = regex.search(foregex)
+                            app = '%s/%sid=%s' %(match.group(2), match.group(3),match.group(4))
+                            url= stream['url']
+                            swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
+                    except:
+                            pass
+                    try:
+                            regex = re.compile('rtmp://(.+?)/(.+?)id=(.+?)<')
+                            match1 = regex.search(foregex)
+                            app = '%sid=%s' %(match1.group(2), match1.group(3))
+                            url= stream['url']+playpath
+                            swfUrl='http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf?v=28'
+                    except:
+                            pass
             tcUrl=stream['url']
             pageUrl = 'http://www.filmon.com/'
             url= str(url)+' playpath='+str(playpath)+' app='+str(app)+' swfUrl='+str(swfUrl)+' tcUrl='+str(tcUrl)+' pageurl='+str(pageUrl)

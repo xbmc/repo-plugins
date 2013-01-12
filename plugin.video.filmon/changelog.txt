@@ -1,3 +1,6 @@
+v4.2.6
+Fixed News Channels
+
 v4.2.5
 Fixed Local Channels
 Frodo Compatible

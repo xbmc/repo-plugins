@@ -1,3 +1,9 @@
+[B]2.0.4[/B]
+- Changed versioning scheme to differentiate frodo from eden branch
+
+[B]1.0.3[/B]
+- Fixed a crash when a video does not have a mp4 or m3u8 entry in the feed
+
 [B]1.0.2[/B]
 - Updated xbmc.python version and language tag for plugin
 

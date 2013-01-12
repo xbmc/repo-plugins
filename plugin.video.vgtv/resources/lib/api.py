@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Copyright 2012 Espen Hovlandsdal
+# Copyright 2012-2013 Espen Hovlandsdal
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -150,6 +150,9 @@ class VgtvApi():
             if ('mp4' not in video['formats']['http'] and
                 'm3u8' in video['formats']['http']):
                 format = 'm3u8'
+            elif ('mp4' not in video['formats']['http'] and
+                'flv' in video['formats']['http']):
+                format = 'flv'
         else:
             # Reverse order for stuff we have to resolve
             # Had some trouble getting mp4 stream to work

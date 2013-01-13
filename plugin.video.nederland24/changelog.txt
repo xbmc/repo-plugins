@@ -1,20 +1,27 @@
-<b>2.1.5</b>
+[B]2.2.0 EDEN[/B]
+-create Eden branch
+-Changelog format
+-Additional channel package - laatste journaal, laatste achtuurjournaal, jeugdjournaal
+-Fanart added
+-Cleanup
+
+[B]2.1.5[/B]
 Eden
 -Required changes due to cancelled channels
 -Required fixes due to altered website
 
-<b>2.1.4</b>
+[B]2.1.4[/B]
 Eden
 -Channels - Disable Laatste Achtuurjournaal
 -Set language
 -Cleanup
 
-<b>2.1.3</b>
+[B]2.1.3[/B]
 Eden
 -Settings - Default Settings
 -Cleanup
 
-<b>2.1.2</b>
+[B]2.1.2[/B]
 Eden
 -Channels - Cancelled channels removed
 -Channels - Sources for j24/p24 updated to improve stability

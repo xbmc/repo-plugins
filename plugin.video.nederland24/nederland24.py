@@ -18,6 +18,9 @@ IMG_DIR = os.path.join(settings.getAddonInfo("path"),"resources", "media")
 def addLink(name,url,iconimage,description,channelId):
 
     retval=True
+    
+
+#curl http://nos.nl/nieuws/live/politiek24/#tab-programma
 
     #if channelId!="0" and channelId!="29":
         #HTML=urllib2.urlopen("http://player.omroep.nl/?zenid=" + channelId).read()
@@ -39,6 +42,7 @@ def addLink(name,url,iconimage,description,channelId):
         #print ""
 
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    liz.setProperty("IsPlayable","true")
     liz.setInfo( type="Video", infoLabels={ "Title": name,
                                                 #"Season":1,
                                                 #"Episode":1,,
@@ -48,6 +52,27 @@ def addLink(name,url,iconimage,description,channelId):
                                                 })
     retval = xbmcplugin.addDirectoryItem(handle,url=url,listitem=liz)
     return retval
+    
+#Journaal Additional Channels (lifted from nos addon, with thanks)
+if settings.getSetting( "Journaal Additional Channels" )=='true':
+    link_re = re.compile(r'<a.*?</a>', re.S)
+    video_re = re.compile(r'http://.*\.mp4')
+    title_re = re.compile(r'<h3>(.*?)</h3>')
+    meta_re = re.compile(r'<p class="video-meta">(.*?)</p>')
+    img_re = re.compile(r'<img src="(.*?)"')
+
+    URL='http://tv.nos.nl'
+    html=urllib2.urlopen(URL).read()
+    for (a, video_url) in zip(link_re.findall(html), video_re.findall(html)):
+      a = a.replace('\n', '')
+      title = title_re.search(a).group(1).strip()
+      meta = ', '.join([meta_part.strip() for meta_part in re.sub(r'\s+', ' ', meta_re.search(a).group(1)).split('<br />')])
+      #img = URL + '/browser/' + img_re.search(a).group(1).strip()
+      img = os.path.join(IMG_DIR, "placeholder24.png")
+      #title = title + ' - ' + meta
+      addLink(title, video_url, img, meta, 116)
+  
+
 
 ####Disabled website has changed
 # ## Laatste achtuurjournaal ipad mp4, single link

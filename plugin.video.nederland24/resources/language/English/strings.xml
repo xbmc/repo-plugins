@@ -14,6 +14,7 @@
 	<string id="30113">Laatste Achtuurjournaal</string>
 	<string id="30114">Journaal 24 Alternative</string>
 	<string id="30115">Politiek 24 Alternative</string>
+	<string id="30116">Journaal Additional Channels</string>
 	<!--Bandwidth-->
 	<string id="30201">Low Bandwidth</string>
 	<string id="30202">Disable GEOIP restricted channels (for usage outside of the Netherlands)</string>

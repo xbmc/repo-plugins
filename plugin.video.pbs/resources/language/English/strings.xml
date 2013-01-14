@@ -17,9 +17,13 @@
 	<string id="30014">PBS Kids</string>
 	<string id="30015">Sorry. You are not in a geographic region that has</string>
 	<string id="30016">access to this content.</string>
+	<string id="30017">Preferred video quality:</string>
+	<string id="30018">2500k-1200k</string>
+	<string id="30019">800k-500k</string>
 	<string id="30050">There was a connection error:</string>
 	<string id="30051">If this problem persists, please submit the error report.</string>
 	<string id="30052">Retry</string>
 	<string id="30053">Quit</string>
 	<string id="30054">There was an index error.</string>
+	<string id="30055">Enable default view for Confluence skin</string>
 </strings>

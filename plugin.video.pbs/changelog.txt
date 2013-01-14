@@ -1,3 +1,22 @@
+[B]Version 2.0.9[/B]
+
+- Version bump for Frodo
+- Fixed 'listitem' is not defined error
+- Fixed play back error in rtmp steams
+- Added setting for preferred video quality (720p on Frodo only)
+- Added setting for default view in Confluence skin
+
+[B]Version 2.0.8[/B]
+
+- Updated code to be compatible with Requests v1.0.4
+
+[B]Version 2.0.7[/B]
+
+- Fixed duration time issue
+- Fixed 'argument 1 must be unicode or str' error
+- Fixed 'NoneType' has no len()" error in find_videos
+- Fixed redirect_url error
+
 [B]Version 2.0.6[/B]
 
 - Fixed access_voilation error

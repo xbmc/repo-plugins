@@ -1,0 +1,4 @@
+<settings>
+   <setting id="quality" type="enum" label="30017" lvalues="30019|30018" default="1"/>
+   <setting id="view" type="bool" label="30055" default="true"/>
+</settings>

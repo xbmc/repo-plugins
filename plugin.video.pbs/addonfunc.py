@@ -1,18 +1,23 @@
 '''
 Addon Functions
-date: 12-29-2012
-version: 0.0.2
+__author__ = 'stacked <stacked.xbmc@gmail.com>'
+__url__ = 'http://code.google.com/p/plugin/'
+__date__ = '01-12-2013'
+__version__ = '0.0.6'
 '''
 
-import xbmc, xbmcgui, xbmcaddon, xbmcplugin, urllib2, sys, time, datetime, buggalo
+import xbmc, xbmcgui, xbmcaddon, xbmcplugin, urllib, urllib2, sys, time, datetime, buggalo
 settings = sys.modules["__main__"].settings
 plugin = sys.modules["__main__"].plugin
 useragent = 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0'
 
 def addListItem(label, image, url, isFolder, infoLabels = False, fanart = False, duration = False):
 	listitem = xbmcgui.ListItem(label = label, iconImage = image, thumbnailImage = image)
-	if not isFolder: listitem.setProperty('IsPlayable', 'true')
-	if fanart: listitem.setProperty('fanart_image', fanart)
+	if not isFolder:
+		if settings.getSetting('download') == '' or settings.getSetting('download') == 'false':
+			listitem.setProperty('IsPlayable', 'true')
+	if fanart:
+		listitem.setProperty('fanart_image', fanart)
 	if infoLabels:
 		listitem.setInfo(type = 'video', infoLabels = infoLabels)
 		if duration:
@@ -20,9 +25,10 @@ def addListItem(label, image, url, isFolder, infoLabels = False, fanart = False,
 				listitem.addStreamInfo('video', { 'duration': int(duration) })
 			else:
 				listitem.setInfo(type = 'video', infoLabels = { 'duration': str(datetime.timedelta(milliseconds=int(duration)*1000)) } )
-	u = sys.argv[0] + '?'
-	for key, value in url.items():
-		u += key + '=' + value + '&'
+	if url['mode']:
+		u = sys.argv[0] + '?' + urllib.urlencode(url)
+	else:
+		u = url['url']
 	ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = isFolder)
 	return ok
 
@@ -86,12 +92,14 @@ def getPage(url, gzip = False):
 		data['error'] = str(e)
 		return data
 		
-def setViewMode(id):
+def setViewMode(id, type = False):
+	if type == False: type = 'episodes'
 	if xbmc.getSkinDir() == 'skin.confluence':
-		xbmcplugin.setContent(int( sys.argv[1] ), 'episodes')
-		xbmc.executebuiltin('Container.SetViewMode(' + id + ')')
+		xbmcplugin.setContent(int( sys.argv[1] ), type)
+		if settings.getSetting('view') == 'true':
+			xbmc.executebuiltin('Container.SetViewMode(' + id + ')')
 
-#From CommonFunctions.py in parsedom 
+#From http://wiki.xbmc.org/index.php?title=Add-on:Parsedom_for_xbmc_plugins 
 def getParameters(parameterString):
     commands = {}
     splitCommands = parameterString[parameterString.find('?') + 1:].split('&')
@@ -103,7 +111,7 @@ def getParameters(parameterString):
             commands[key] = value
     return commands
 
-#Original from http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/	
+#From http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/	
 def retry(ExceptionToCheck, tries = 10, delay = 3, backoff = 1, logger = None):
     def deco_retry(f):
         def f_retry(*args, **kwargs):
@@ -117,6 +125,7 @@ def retry(ExceptionToCheck, tries = 10, delay = 3, backoff = 1, logger = None):
 						mtries, mdelay = tries, delay
 					else:
 						ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
+						buggalo.addExtraData('error', str(e))
 						raise Exception("retry Error")
 				try:
 					return f(*args, **kwargs)

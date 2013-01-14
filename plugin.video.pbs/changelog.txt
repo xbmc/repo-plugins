@@ -1,3 +1,11 @@
+[B]Version 3.0.9[/B]
+
+- Version bump for Frodo
+- Fixed 'listitem' is not defined error
+- Fixed play back error in rtmp steams
+- Added setting for preferred video quality (720p on Frodo only)
+- Added setting for default view in Confluence skin
+
 [B]Version 2.0.8[/B]
 
 - Updated code to be compatible with Requests v1.0.4

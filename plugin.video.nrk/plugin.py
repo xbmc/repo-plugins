@@ -12,19 +12,19 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-
-""" some xbmcswift boilerplate """
-
 import xbmcaddon
-import xbmcswift
+import xbmcswift2 as xbmcswift
 
 class Plugin(xbmcswift.Plugin):
   def __init__(self):
-    addon = xbmcaddon.Addon()
-    xbmcswift.Plugin.__init__(self, addon.getAddonInfo('name'), addon.getAddonInfo('id'), '')
-
+    xbmcswift.Plugin.__init__(self)
+  
+  @property
+  def path(self):
+    return self.addon.getAddonInfo('path')
+  
   def make_url(self, url):
-    return 'plugin://%s%s' % (self._plugin_id, url)
+    return 'plugin://%s%s' % (self.id, url)
 
   def route_for(self, path):
     for rule in self._routes:

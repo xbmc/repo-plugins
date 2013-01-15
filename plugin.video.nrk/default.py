@@ -13,7 +13,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-
 import os
 import sys
 import time
@@ -26,11 +25,8 @@ from xbmcgui import ListItem
 import plugin
 plugin = plugin.Plugin()
 
-ADDON = xbmcaddon.Addon()
-ADDON_PATH = ADDON.getAddonInfo('path')
-BITRATE = int(ADDON.getSetting('bitrate')) + 1
-SHOW_SUBS = ADDON.getSetting('showsubtitles')
-
+BITRATE = int(plugin.get_setting('bitrate')) + 1
+SHOW_SUBS = int(plugin.get_setting('showsubtitles')) == 1
 
 @plugin.route('/')
 def view_top():
@@ -65,7 +61,7 @@ def live():
 
 def add(title, url, mimetype, thumb=""):
   if thumb:
-    img_path = os.path.join(ADDON_PATH, "resources/images")
+    img_path = os.path.join(plugin.path, "resources/images")
     thumb = os.path.join(img_path, thumb)
   li =  ListItem(title, thumbnailImage=thumb)
   li.setProperty('mimetype', mimetype)
@@ -82,7 +78,7 @@ def view(titles, urls, thumbs=repeat(''), bgs=repeat(''), descr=repeat(''), upda
     li.setProperty('isplayable', str(playable))
     li.setProperty('fanart_image', bg)
     if playable:
-      li.setInfo('video', {'plot':descr})
+      li.setInfo('video', {'title':title, 'plot':descr})
     addDirectoryItem(plugin.handle, plugin.make_url(url), li, not playable, total)
   endOfDirectory(plugin.handle, updateListing=update_listing)
 
@@ -117,13 +113,11 @@ def letters():
 
 @plugin.route('/search')
 def search():
-  keyboard = xbmc.Keyboard()
-  keyboard.setHeading('Søk')
-  keyboard.doModal()
-  if keyboard.isConfirmed():
-    query = keyboard.getText()
-    query = quote(query)
-    plugin.redirect(plugin.make_url('/search/%s/1' % query))
+  query = plugin.keyboard(heading="Søk")
+  if query:
+    plugin.redirect(plugin.make_url('/search/%s/1' % quote(query)))
+  else:
+    plugin._end_of_directory = True # hack: prevent xbmcswift from calling endOfDirectory
 
 @plugin.route('/search/<query>/<page>')
 def search_results(query, page):
@@ -171,5 +165,5 @@ def play(video_id, series_id=""):
     if not SHOW_SUBS:
       player.showSubtitles(False)
 
-if ( __name__ == "__main__" ):
+if  __name__ == "__main__" :
   plugin.run()

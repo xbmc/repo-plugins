@@ -2,6 +2,18 @@ CHANGES
 =======
 
 
+Version 1.1.2
+-------------
+
+* Bump version of requests dependency
+
+Version 1.1.1
+-------------
+
+* Major version bump to differentiate from eden
+* Update to use 1.0.x API for requests
+
+
 Version 0.1.0
 -------------
 

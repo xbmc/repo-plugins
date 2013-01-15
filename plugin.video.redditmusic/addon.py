@@ -115,7 +115,7 @@ def show_sub(name, view, before=None, after=None):
     # pagination list items
     if _after:
         valid_items.insert(0, {
-            'label': 'Next »',
+            'label': u'Next »',
             'path': plugin.url_for('show_sub_after', name=name, view=view,
                                    after=_after),
         })
@@ -124,7 +124,7 @@ def show_sub(name, view, before=None, after=None):
     # because that request will return 0 links.
     if _before and (before or after):
         valid_items.insert(0, {
-            'label': '« Previous',
+            'label': u'« Previous',
             'path': plugin.url_for('show_sub_before', name=name, view=view,
                                    before=_before),
         })

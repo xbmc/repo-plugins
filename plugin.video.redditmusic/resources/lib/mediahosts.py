@@ -115,7 +115,7 @@ class SoundCloud(_MediaHost):
         method only returns the first mp3 file found on the page. It doesn't
         support multiple files.
         '''
-        resp = requests.get(url).content
+        resp = requests.get(url).text
         match = cls.PTN.search(resp)
         if not match:
             return None

@@ -42,7 +42,7 @@ class Reddit(object):
 
         resp = requests.get(url, params=params,
                             headers={'User-Agent': self.user_agent})
-        data = resp.json['data']
+        data = resp.json()['data']
         before, after = data['before'], data['after']
         children = data['children']
         return [child['data'] for child in children], (before, after)

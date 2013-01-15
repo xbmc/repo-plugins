@@ -1,6 +1,7 @@
 Academic Earth for XBMC
 =======================
-version 1.2.0
+
+[![Build Status](https://secure.travis-ci.org/jbeluch/xbmc-academic-earth.png)](http://travis-ci.org/jbeluch/xbmc-academic-earth)
 
 ### Summary
 

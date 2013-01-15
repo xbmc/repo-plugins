@@ -1,3 +1,10 @@
+Version 2.3.3
+* Add missing language tag to addon.xml.
+
+Version 2.3.2
+* Update addon to reflect website changes.
+* Version bump to differentiate from eden.
+
 Version 1.3.1
 * New version number to force updates
 

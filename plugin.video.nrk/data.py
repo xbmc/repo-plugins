@@ -20,13 +20,17 @@ import HTMLParser
 import StorageServer
 import CommonFunctions
 from itertools import repeat
-from subs import get_subtitles
 
 html_decode = HTMLParser.HTMLParser().unescape
 parseDOM = CommonFunctions.parseDOM
-session = requests.session(headers={'User-Agent':'xbmc.org'})
-xhrsession = requests.session(headers={'User-Agent':'xbmc.org','X-Requested-With':'XMLHttpRequest'})
 cache = StorageServer.StorageServer('nrk.no', 336)
+
+session = requests.session()
+session.headers['User-Agent'] = 'xbmc.org'
+
+xhrsession = requests.session()
+xhrsession.headers['User-Agent'] = 'xbmc.org'
+xhrsession.headers['X-Requested-With'] = 'XMLHttpRequest'
 
 
 def get_by_letter(arg):
@@ -75,7 +79,7 @@ def get_recommended():
 
 def get_most_recent():
   url = "http://tv.nrk.no/listobjects/recentlysent.json/page/0"
-  elems = xhrsession.get(url).json['ListObjectViewModels']
+  elems = xhrsession.get(url).json()['ListObjectViewModels']
   titles = [ e['Title'] for e in elems ]
   titles = map(html_decode, titles)
   urls = [ e['Url'] for e in elems ]

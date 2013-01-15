@@ -1,3 +1,7 @@
+[B]4.3.1[/B]
+- Fikset linjeskift i undertekster
+- Fikset tittel på infoside
+
 [B]4.3.0[/B]
 - Søkefunksjon
 - NRKs radiokanaler er nå tilgjengelig som direktestrømmer

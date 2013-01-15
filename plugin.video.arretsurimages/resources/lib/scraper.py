@@ -60,7 +60,7 @@ def get_json(url):
     try:
         debug('JSON request: %s' % url)
         r = requests.get(url)
-        return r.json
+        return r.json()
     except (requests.ConnectionError, requests.HTTPError):
         error('JSON request failed' % url)
 

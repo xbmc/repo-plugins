@@ -44,7 +44,7 @@ def get_json(url):
     try:
         plugin.log.info('JSON request: %s' % url)
         r = requests.get(url)
-        return r.json
+        return r.json()
     except (requests.ConnectionError, requests.HTTPError):
         plugin.log.error('JSON request failed' % url)
 

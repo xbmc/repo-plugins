@@ -1,3 +1,7 @@
+[B]Version 2.0.4[/B]
+
+- Update for requests 1.0.4
+
 [B]Version 2.0.3[/B]
 
 - New branch for frodo

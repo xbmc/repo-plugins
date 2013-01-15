@@ -26,7 +26,9 @@ parseDOM = CommonFunctions.parseDOM
 getParameters = CommonFunctions.getParameters
 
 import requests
-requests = requests.session(headers={'User-Agent':'xbmc.org'})
+
+session = requests.session()
+session.headers['User-Agent'] = 'xbmc.org'
 
 
 FILMARKIVET_BASE = "http://www.filmarkivet.se/sv/"
@@ -53,7 +55,7 @@ def parse_categories(subcat):
 
 	try:
 		url = FILMARKIVET_BASE + "Sok/?quicksearch=sorted"
-		html = requests.get(url).text
+		html = session.get(url).text
 		html = parseDOM(html, 'div', {'class':'result-body'})
 		html = parseDOM(html, 'div', {'class':'unit size1of5 filter-col'})
 
@@ -78,7 +80,7 @@ def parse_categories(subcat):
 def parse_category(arg, page=1):
 	try:
 		url = FILMARKIVET_BASE + 'Sok/?quicksearch=sorted&%s&page=%d' % (arg, page)
-		html = requests.get(url).text
+		html = session.get(url).text
 
 		hits = parseHits(html)
 		films = parseFilms(html)
@@ -105,7 +107,7 @@ def make_theme_url(url):
 def parse_themes():
 	try:
 		url = FILMARKIVET_BASE
-		html = requests.get(url).text
+		html = session.get(url).text
 		html = parseDOM(html, 'ul', {'class':'themes'})
 		html = parseDOM(html, 'li')
 
@@ -121,7 +123,7 @@ def parse_themes():
 def parse_theme(theme_id, page=1):
 	try:
 		url = FILMARKIVET_BASE + 'Sok/?themeid=%s&page=%d' % (theme_id, page)
-		html = requests.get(url).text
+		html = session.get(url).text
 
 		hits = parseHits(html)
 		films = parseFilms(html)
@@ -138,7 +140,7 @@ def parse_theme(theme_id, page=1):
 def parse_popular(page=1):
 	try:
 		url = FILMARKIVET_BASE + 'Sok/?quicksearch=popular&page=%d' % page
-		html = requests.get(url).text
+		html = session.get(url).text
 
 		hits = parseHits(html)
 		films = parseFilms(html)
@@ -155,7 +157,7 @@ def parse_popular(page=1):
 def parse_recent(page=1):
 	try:
 		url = FILMARKIVET_BASE + 'Sok/?quicksearch=latest&page=%d' % page
-		html = requests.get(url).text
+		html = session.get(url).text
 
 		hits = parseHits(html)
 		films = parseFilms(html)
@@ -172,7 +174,7 @@ def parse_recent(page=1):
 def parse_search(search_string, page=1):
 	try:
 		url = FILMARKIVET_BASE + 'Sok/?q=%s&page=%d' % (search_string, page)
-		html = requests.get(url).text
+		html = session.get(url).text
 
 		hits = parseHits(html)
 		films = parseFilms(html)
@@ -241,7 +243,7 @@ def parseFilms(html):
   
 def parse_media_url(video_id):
 	url = FILMARKIVET_BASE + 'Film/?movieid=%s' % video_id
-	html = requests.get(url).text
+	html = session.get(url).text
 	html = parseDOM(html, 'div', {'class':'moviecontainer'})
 	html = parseDOM(html, 'div', {'id':'player'})
 	html = parseDOM(html, 'video')

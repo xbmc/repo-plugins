@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Swedish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sv/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="3101">Aktion</string>
+    <string id="3102">Avsluta</string>
+    <string id="3120">Demotext</string>
+    <string id="29000">Qobuz-spellista</string>
+    <string id="29001">Ingen nuvarande spellista</string>
+    <string id="30002">Låtsökbegränsning</string>
+    <string id="30003">Albumsökbegränsning</string>
+    <string id="30004">Artistsökbegränsning</string>
+    <string id="30007">Ingen Qobuz-tjänst</string>
+    <string id="30008">Qobuz XBMC</string>
+    <string id="30009">Kunde inte ansluta till Qobuz.</string>
+    <string id="30010">Vänligen försök igen senare</string>
+    <string id="30011">Nya...</string>
+    <string id="30012">Gjord</string>
+    <string id="30013">Sök efter sånger...</string>
+    <string id="30014">Sök efter album...</string>
+    <string id="30015">Sök efter artister...</string>
+    <string id="30016">Populära Qobuz-låtar för artist...</string>
+    <string id="30017">Populära Qobuzsånger</string>
+    <string id="30018">Mina Qobuzfavoriter</string>
+    <string id="30019">Visa spellistor</string>
+    <string id="30020">Sök efter låtar drivna av Qobuz</string>
+    <string id="30021">Inga matchande låtar.</string>
+    <string id="30022">Sök efter album drivna av Qobuz</string>
+    <string id="30023">Inga matchande album.</string>
+    <string id="30024">Sök efter artister drivna av Qobuz</string>
+    <string id="30025">Inga matchande artister.</string>
+    <string id="30026">Användarnamn</string>
+    <string id="30027">Inga Qobuz-spellistor hittades.</string>
+    <string id="30028">Sök efter arists album drivna av Qobuz</string>
+    <string id="30029">Inga matchande album.</string>
+    <string id="30030">Inga matchange artister.</string>
+    <string id="30031">Du har inga favoriter</string>
+    <string id="30032">Inga populära låtar.</string>
+    <string id="30033">Du har inga Qobuz-spellistor.</string>
+    <string id="30034">Du måste vara inloggad</string>
+    <string id="30035">för att få tillgång till dina Qobuz spellistor</string>
+    <string id="30036">La till i favoriter</string>
+    <string id="30037">för att lägga till i favoriter.</string>
+    <string id="30038">Tog bort från Qobuz-favoriter</string>
+    <string id="30039">för att ta bort Qobuz-favoriter.</string>
+    <string id="30040">för att komma åt Qobuz Musikströmmningstjänst[CR][I]Var god⏎ »»kontrollera dina användaruppgifter i tilläggsinställningarna[CR]eller försök senare[/I]⏎ »</string>
+    <string id="30041">Sök efter populära låtar från artist driven av Qobuz⏎ »</string>
+    <string id="30042">Inga populära låtar.</string>
+    <string id="30043">Inga matchande artister.</string>
+    <string id="30044">Kunde inte spela låt</string>
+    <string id="30045">Qobuz-spellistnamn</string>
+    <string id="30046">Kan inte skapa Qobuz-spellista</string>
+    <string id="30047">Qobuz-spellista skapad</string>
+    <string id="30048">för att skapa en Qobuz-spellista.</string>
+    <string id="30049">Qobuz-spellistnamn</string>
+    <string id="30050">Kan inte döpa om Qobuz-spellista</string>
+    <string id="30051">för att döpa om Qobuz-spellista.</string>
+    <string id="30052">Ta bort denna Qobuz-spellista?</string>
+    <string id="30053">Kan inte ta bort Qobuz-spellista</string>
+    <string id="30054">för att ta bort en Qobuz-spellista.</string>
+    <string id="30055">Qobuz-spellistnamn</string>
+    <string id="30056">Kan inte skapa Qobuz-spellista</string>
+    <string id="30057">Qobuz-spellista skapad</string>
+    <string id="30058">Kunde inte lägga till i spellista</string>
+    <string id="30059">La till låt i Qobuz-spellista</string>
+    <string id="30060">Du har inga Qobuz-spellistor.</string>
+    <string id="30061">för att lägga till en låt till Qobuz-spellista.</string>
+    <string id="30062">Ta bort denna låt från</string>
+    <string id="30063">Qobuz-spellistan?</string>
+    <string id="30064">Kunde inte ta bort</string>
+    <string id="30065">låt från Qobuz-spellista.</string>
+    <string id="30066">Tog bort låt från Qobuz-spellista</string>
+    <string id="30067">för att ta bort en låt från Qobuz-spellista</string>
+    <string id="30068">Inga liknande artister</string>
+    <string id="30069">Kunde inte logga in</string>
+    <string id="30070">Kontrollera användarnamn och lösen i inställningar.</string>
+    <string id="30071">Qobuz-favorit</string>
+    <string id="30072">Ingen Qobuz-favorit</string>
+    <string id="30073">Ta bort från Qobuz-spellista</string>
+    <string id="30074">Lägg till i Qobuz-spellista</string>
+    <string id="30075">Mera sånger</string>
+    <string id="30076">Skapa Qobuz-spellista</string>
+    <string id="30077">Ta bort Qobuz-spellista</string>
+    <string id="30078">Döp om spellista</string>
+    <string id="30079">Visa favoriter</string>
+    <string id="30080">Lägg till som ny spellista</string>
+
+    <!-- Recommandation -->
+    <string id="30082">Visa rekommendationer</string>
+    <string id="30083">Pressutmärkelser</string>
+    <string id="30084">Nyheter</string>
+    <string id="30085">Bästsäljare</string>
+    <string id="30086">Redaktörens val</string>
+    <string id="30087">Pop / Rock</string>
+    <string id="30088">Electro</string>
+    <string id="30089">Jazz</string>
+    <string id="30090">Chanson Française</string>
+    <string id="30091">Soul / Funk / Rap</string>
+    <string id="30092">Världsmusik</string>
+    <string id="30093">Blues / Country / Folk</string>
+    <string id="30094">Film-soundtrack</string>
+    <string id="30095">Klassisk</string>
+    <string id="30096">Alla</string>
+    <string id="30097">Reggae</string>
+    <string id="30098">Historiska dokument / Literatur / Humor</string>
+    <string id="30100">Visa inköp</string>
+    <string id="30101">Visa nyheter</string>
+    <string id="30102">Mest presenterade</string>
+    <string id="30200">Rap / Hiphop / R&amp;B / Soul</string>
+    <string id="30201">Barn / Karaoke / Milljö</string>
+    <string id="30202">Techno</string>
+    <string id="30203">Reggae</string>
+
+    <!-- Cache Addon Menu -->
+    <string id="31000">Tid i minuter för olika Qobuz-data att lagras i⏎ »»buffert[CR][I]- Ange noll för att inaktivera buffring[/I]</string>
+    <string id="31001">Albumbuffertlängd</string>
+    <string id="31002">Artistbuffertlängd</string>
+    <string id="31003">Låtbuffertlängd</string>
+    <string id="31004">Rekommenderad buffertlängd</string>
+    <string id="31005">Använd spellistsbuffertlängd</string>
+    <string id="31006">Buffert</string>
+    <string id="31007">Buffertinställningar</string>
+    <string id="31008">Authensieringsbuffertlängd</string>
+    <string id="31009">Rensa buffert</string>
+    <string id="31010">Spellistshanterare</string>
+
+    <!-- Cache Notify -->
+    <string id="31100">Qobuz-buffert</string>
+    <string id="31101">Fel medans rensning av buffrad data</string>
+
+    <!-- Stream -->
+    <string id="32000">Strömmningstyp</string>
+    <string id="32001">Hoppa över prov</string>
+
+    <!-- URL Resolver -->
+    <string id="33000">Lösning aktiverad</string>
+
+    <!-- Color -->
+    <string id="33101">Färger</string>
+    <string id="33102">Undermenyobjektsfärger</string>
+    <string id="33103">Undermenys varningobjektsfärger</string>
+    <string id="33104">Spellistobjektsfärger</string>
+
+    <!-- Qobuz Player -->
+    <string id="34000">Qobuz-spelare</string>
+    <string id="34001">Spelar låt</string>
+    <string id="34002">Misslyckades att spela låt</string>
+
+    <!-- Search -->
+    <string id="35000">Sökning aktiverad</string>
+    <string id="35001">Ingen matchande låt</string>
+    <string id="35002">Inget matchande album</string>
+    <string id="35003">Ingen matchande artist</string>
+
+    <!-- Notification -->
+    <string id="36000">Qobuz</string>
+    <string id="36001">Tom mapp</string>
+    <string id="36002">Meddelande</string>
+    <string id="36003">Meddela när uppspelning startar</string>
+
+    <!-- credentials -->
+    <string id="37000">Användarnamn</string>
+    <string id="37001">Lösenord</string>
+
+    <!-- Sort -->
+    <string id="38000">Användaruppgifter</string>
+    <string id="38001">Strömma</string>
+    <string id="38002">Sökbegränsning</string>
+    <string id="38003">Annan</string>
+    <string id="38004">Visa rekommenderade objekt</string>
+    <string id="38005">Aktivera skanningsfunktion (experimentell)</string>
+
+    <!-- Context Menu -->
+    <string id="39000">Detta album</string>
+    <string id="39001">Alla album</string>
+    <string id="39002">Visa stor mapp</string>
+    <string id="39003">Skanna</string>
+    <string id="39004">Liknande artist</string>
+    <string id="39005">Lägg till nuvarande spellista</string>
+    <string id="39006">Visa spellistor</string>
+    <string id="39007">Ange som nuvarande</string>
+    <string id="39008">Skapa</string>
+    <string id="39009">Byt namn</string>
+    <string id="39010">Ta bort</string>
+    <string id="39011">Lägg till i favoriter</string>
+
+    <!-- Progress bar -->
+    <string id="40000">Startar</string>
+    <string id="40001">Tom mapp</string>
+    <string id="40002">Visar</string>
+    <string id="40003">Färdig</string>
+    <string id="40004">Behandlar data</string>
+    <string id="40005">Hitta liknande artist</string>
+
+    <!-- Free account warning -->
+    <string id="41000">Varning för gratiskonto</string>
+    <string id="41001">Gratis konto kan endast lyssna på 1mn prov</string>
+    <string id="41002">Du behöver prenumerera för att lyssna på full musik.</string>
+    <string id="41003">Qobuz strömning mp3 och FLAC</string>
+</strings>

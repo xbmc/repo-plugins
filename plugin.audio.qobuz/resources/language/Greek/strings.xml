@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Greek language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/el/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="3101">Δράση</string>
+    <string id="3102">Έξοδος</string>
+    <string id="3120">Δοκιμαστικό κείμενο</string>
+    <string id="29000">Λίστα Αναπ/γής Qobuz</string>
+    <string id="29001">Καμία τρέχουσα λίστα αναπ/γής</string>
+    <string id="30002">Όριο αναζητήσεων τραγουδιών</string>
+    <string id="30003">Όριο αναζητήσεων άλμπουμ</string>
+    <string id="30004">Όριο αναζητήσεων καλλιτεχνών</string>
+    <string id="30007">Καμία υπηρεσία Qobuz</string>
+    <string id="30008">Qobuz XBMC</string>
+    <string id="30009">Αδυναμία σύνδεσης με το Qobuz.</string>
+    <string id="30010">Δοκιμάστε αργότερα</string>
+    <string id="30011">Νέο...</string>
+    <string id="30012">Δημιουργήθηκε</string>
+    <string id="30013">Αναζήτηση τραγουδιών...</string>
+    <string id="30014">Αναζήτηση άλμπουμ...</string>
+    <string id="30015">Αναζήτηση καλλιτεχνών...</string>
+    <string id="30016">Δημοφιλή τραγούδια Qobuz του καλλιτέχνη...</string>
+    <string id="30017">Δημοφιλή τραγούδια Qobuz</string>
+    <string id="30018">Τα αγαπημένα μου του Qobuz</string>
+    <string id="30019">Εμφάνιση λιστών αναπ/γής</string>
+    <string id="30020">Αναζήτηση τραγουδιών που στηρίζονται από το Qobuz</string>
+    <string id="30021">Κανένα τραγούδι που να ταιριάζει.</string>
+    <string id="30022">Αναζήτηση άλμπουμ που στηρίζονται από το Qobuz</string>
+    <string id="30023">Κανένα άλμπουμ που να ταιριάζει.</string>
+    <string id="30024">Αναζήτηση καλλιτεχνών που στηρίζονται από το Qobuz</string>
+    <string id="30025">Κανένας καλλιτέχνης που να ταιριάζει.</string>
+    <string id="30026">Όνομα χρήστη</string>
+    <string id="30027">Δε βρέθηκαν λίστες αναπ/γής Qobuz.</string>
+    <string id="30028">Αναζήτηση άλμπουμ καλλιτεχνών που στηρίζονται από το Qobuz</string>
+    <string id="30029">Κανένα άλμπουμ που να ταιριάζει.</string>
+    <string id="30030">Κανένας καλλιτέχνης που να ταιριάζει.</string>
+    <string id="30031">Δεν έχετε αγαπημένα.</string>
+    <string id="30032">Κανένα δημοφιλές τραγούδι.</string>
+    <string id="30033">Δεν έχετε λίστες αναπ/γής Qobuz.</string>
+    <string id="30034">Πρέπει να συνδεθείτε για να</string>
+    <string id="30035">έχετε πρόσβαση στις λίστες αναπ/γής Qobuz</string>
+    <string id="30036">Προστέθηκε στα αγαπημένα</string>
+    <string id="30037">προσθέσετε αγαπημένα.</string>
+    <string id="30038">Αφαιρέθηκε από τα αγαπημένα Qobuz</string>
+    <string id="30039">αφαιρέσετε αγαπημένα του Qobuz.</string>
+    <string id="30040">έχετε πρόσβαση στην υπηρεσία Μουσικών Ροών Qobuz[CR][I]Παρακαλώ&#10;		ελέγξτε τα στοιχεία σας στις ρυθμίσεις πρόσθετου[CR]ή δοκιμάστε ξανά αργότερα[/I]&#10;	</string>
+    <string id="30041">Αναζήτηση δημοφιλών τραγουδιών καλλιτέχνη που στηρίζεται από το Qobuz&#10;	</string>
+    <string id="30042">Κανένα δημοφιλές τραγούδι.</string>
+    <string id="30043">Κανένας καλλιτέχνης που να ταιριάζει.</string>
+    <string id="30044">Αδυναμία αναπαραγωγής</string>
+    <string id="30045">Όνομα λίστας αναπ/γής Qobuz</string>
+    <string id="30046">Αδυναμία δημιουργίας λίστας αναπ/γής Qobuz</string>
+    <string id="30047">Δημιουργήθηκε λίστα αναπ/γής Qobuz</string>
+    <string id="30048">δημιουργήσετε λίστα αναπ/γής Qobuz.</string>
+    <string id="30049">Όνομα λίστας αναπ/γής Qobuz</string>
+    <string id="30050">Αδυναμία μετονομασίας λίστας αναπ/γής Qobuz</string>
+    <string id="30051">μετονομάσετε μια λίστα αναπ/γής Qobuz</string>
+    <string id="30052">Διαγραφή αυτής της λίστας αναπ/γής Qobuz;</string>
+    <string id="30053">Αδυναμία αφαίρεσης της λίστας αναπ/γής Qobuz</string>
+    <string id="30054">διαγράψετε μια λίστα αναπ/γής Qobuz.</string>
+    <string id="30055">Όνομα λίστας αναπ/γής Qobuz</string>
+    <string id="30056">Αδυναμία δημιουργίας λίστας αναπ/γής Qobuz</string>
+    <string id="30057">Δημιουργήθηκε λίστα αναπ/γής Qobuz</string>
+    <string id="30058">Αδυναμία προσθήκης στη λίστα αναπ/γής</string>
+    <string id="30059">Προστέθηκε τραγούδι στη λίστα αναπ/γής Qobuz</string>
+    <string id="30060">Δεν έχετε καμία λίστα αναπ/γής Qobuz.</string>
+    <string id="30061">προσθέσετε ένα τραγούδι στη λίστα αναπ/γής Qobuz.</string>
+    <string id="30062">Διαγραφή αυτού του τραγουδιού από</string>
+    <string id="30063">τη λίστα αναπ/γής Qobuz;</string>
+    <string id="30064">Αδυναμία αφαίρεσης</string>
+    <string id="30065">τραγουδιού από τη λίστα αναπ/γής Qobuz.</string>
+    <string id="30066">Αφαιρέθηκε το τραγούδι από τη λίστα αναπ/γής Qobuz</string>
+    <string id="30067">διαγράψετε ένα τραγούδι από τη λίστα αναπ/γής Qobuz.</string>
+    <string id="30068">Κανένας παρόμοιος καλλιτέχνης.</string>
+    <string id="30069">Αδυναμία σύνδεσης.</string>
+    <string id="30070">Ελέγξτε το όνομα χρήστη και τον κωδικό στις ρυθμίσεις.</string>
+    <string id="30071">Αγαπημένο του Qobuz</string>
+    <string id="30072">Δεν είναι αγαπημένο του Qobuz</string>
+    <string id="30073">Αφαίρεση από τη λίστα αναπ/γής Qobuz</string>
+    <string id="30074">Προσθήκη στη λίστα αναπ/γής Qobuz</string>
+    <string id="30075">Περισσότερα τραγούδια</string>
+    <string id="30076">Δημιουργία λίστας αναπ/γής Qobuz</string>
+    <string id="30077">Διαγραφή λίστας αναπ/γής Qobuz</string>
+    <string id="30078">Μετονομασία λίστας αναπ/γής</string>
+    <string id="30079">Προβολή Αγαπημένων</string>
+    <string id="30080">Προσθήκη σαν νέα λίστα αναπ/γής</string>
+
+    <!-- Recommandation -->
+    <string id="30082">Προβολή Προτεινόμενων</string>
+    <string id="30083">Δημοσιογραφικά βραβεία</string>
+    <string id="30084">Ειδήσεις</string>
+    <string id="30085">Μπεστ Σέλλερ</string>
+    <string id="30086">Επιλογή Συντακτών</string>
+    <string id="30087">Ποπ / Ροκ</string>
+    <string id="30088">Ηλεκτρονική</string>
+    <string id="30089">Τζαζ</string>
+    <string id="30090">Σανσόν</string>
+    <string id="30091">Σόουλ / Φανκ / Ραπ</string>
+    <string id="30092">Διεθνής Μουσική</string>
+    <string id="30093">Μπλουζ / Κάουντρι / Φολκλορικά</string>
+    <string id="30094">Μουσική Ταινιών</string>
+    <string id="30095">Κλασική</string>
+    <string id="30096">Όλα</string>
+    <string id="30097">Ρέγκε</string>
+    <string id="30098">Ιστορικά ντοκουμέντα / Λογοτεχνία / Χιούμορ</string>
+    <string id="30100">Προβολή Αγορών</string>
+    <string id="30101">Προβολή Ειδήσεων</string>
+    <string id="30102">Πιο δημοφιλή</string>
+    <string id="30200">Ραπ / Χιπ Χοπ / RB / Σόουλ</string>
+    <string id="30201">Παιδικά / Καραόκε / Ατμοσφαιρικά</string>
+    <string id="30202">Τέκνο</string>
+    <string id="30203">Ρέγκε</string>
+
+    <!-- Cache Addon Menu -->
+    <string id="31000">Χρόνος (σε λεπτά) που θα αποθηκεύονται δεδομένα του Qobuz στη λανθάνουσα&#10;		μνήμη[CR][I]- Ορίστε μηδέν για να την απενεργοποιήσετε[/I]</string>
+    <string id="31001">Διάρκεια λανθάνουσας μνήμης άλμπουμ</string>
+    <string id="31002">Διάρκεια λανθάνουσας μνήμης καλλιτέχνη</string>
+    <string id="31003">Διάρκεια λανθάνουσας μνήμης τραγουδιού</string>
+    <string id="31004">Προτεινόμενη διάρκεια λανθάνουσας μνήμης </string>
+    <string id="31005">Διάρκεια λανθάνουσας μνήμης λίστας αναπ/γής</string>
+    <string id="31006">Λανθάνουσα μνήμη</string>
+    <string id="31007">Ρυθμίσεις λανθάνουσας μνήμης</string>
+    <string id="31008">Διάρκεια επαλήθευσης λανθάνουσας μνήμης</string>
+    <string id="31009">Διαγραφή λανθάνουσας μνήμης</string>
+    <string id="31010">Διαχείριση Λιστών Αναπ/γής</string>
+
+    <!-- Cache Notify -->
+    <string id="31100">Λανθάνουσα μνήμη Qobuz</string>
+    <string id="31101">Σφάλμα κατά τη διαγραφή των δεδομένων λανθάνουσας μνήμης</string>
+
+    <!-- Stream -->
+    <string id="32000">Τύπος ροής</string>
+    <string id="32001">Παράλειψη δείγματος</string>
+
+    <!-- URL Resolver -->
+    <string id="33000">Ενεργοποίηση Επίλυσης</string>
+
+    <!-- Color -->
+    <string id="33101">Χρώματα</string>
+    <string id="33102">Χρώμα αντικειμένων μενού επιλογών</string>
+    <string id="33103">Χρώμα προειδοποίησης αντικειμένων μενού επιλογών</string>
+    <string id="33104">Χρώμα αντικειμένων λίστας αναπ/γής</string>
+
+    <!-- Qobuz Player -->
+    <string id="34000">Αναπαραγωγέας Qobuz</string>
+    <string id="34001">Αναπαραγωγή τραγουδιού</string>
+    <string id="34002">Αποτυχία αναπαραγωγής</string>
+
+    <!-- Search -->
+    <string id="35000">Ενεργοποίηση Αναζήτησης</string>
+    <string id="35001">Κανένα τραγούδι που να ταιριάζει</string>
+    <string id="35002">Κανένα άλμπουμ που να ταιριάζει.</string>
+    <string id="35003">Κανένας καλλιτέχνης που να ταιριάζει</string>
+
+    <!-- Notification -->
+    <string id="36000">Qobuz</string>
+    <string id="36001">Κενός φάκελος</string>
+    <string id="36002">Ειδοποίηση</string>
+    <string id="36003">Ειδοποίηση κατά την εκκίνηση τραγουδιού</string>
+
+    <!-- credentials -->
+    <string id="37000">Όνομα χρήστη</string>
+    <string id="37001">Κωδικός πρόσβασης</string>
+
+    <!-- Sort -->
+    <string id="38000">Στοιχεία χρήστη</string>
+    <string id="38001">Ροή πολυμέσων</string>
+    <string id="38002">Όριο αναζητήσεων</string>
+    <string id="38003">Άλλο</string>
+    <string id="38004">Προβολή προτεινόμενων αντικειμένων</string>
+    <string id="38005">Λειτουργία σάρωσης (πειραματικό)</string>
+
+    <!-- Context Menu -->
+    <string id="39000">Αυτό το άλμπουμ</string>
+    <string id="39001">Όλα τα άλμπουμ</string>
+    <string id="39002">Προβολή μεγάλου φακέλου</string>
+    <string id="39003">Σάρωση</string>
+    <string id="39004">Παρόμοιος καλλιτέχνης</string>
+    <string id="39005">Προσθήκη στην τρέχουσα λίστα αναπ/γής</string>
+    <string id="39006">Προβολή λιστών αναπ/γής</string>
+    <string id="39007">Ορισμός ως τρέχον</string>
+    <string id="39008">Δημιουργία</string>
+    <string id="39009">Μετονομασία</string>
+    <string id="39010">Αφαίρεση</string>
+    <string id="39011">Προσθήκη στα αγαπημένα</string>
+
+    <!-- Progress bar -->
+    <string id="40000">Έναρξη</string>
+    <string id="40001">Κενός φάκελος</string>
+    <string id="40002">Προβολή</string>
+    <string id="40003">Τέλος</string>
+    <string id="40004">Επεξεργασία δεδομένων</string>
+    <string id="40005">Εύρεση παρόμοιων καλλιτεχνών</string>
+
+    <!-- Free account warning -->
+    <string id="41000">Προειδοποίηση δωρεάν λογαριασμού</string>
+    <string id="41001">Οι δωρεάν λογαριασμοί μπορούν να ακούσουν μόνο ένα δείγμα ενός λεπτού</string>
+    <string id="41002">Πρέπει να εγγραφείτε για να ακούσετε πλήρη μουσική.</string>
+    <string id="41003">Ροή Qobuz mp3 και FLAC</string>
+</strings>

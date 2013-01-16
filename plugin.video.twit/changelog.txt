@@ -1,3 +1,9 @@
+Version 1.1.1
+fix latest episodes, we now scrape the web-page as the rss isn't viable anymore
+added set-content-type as tv-shows, episodes; this enables more view modes
+added flowsoft hls strems for twit live
+added add-on setting "TWiT Live", select from the various live streams here instead of adding a directory
+
 Version 1.1.0
 fix for website changes
 added support for 'content_type' parameter, when launched as a music add-on, the playback setting is ignored and audio will be selected 

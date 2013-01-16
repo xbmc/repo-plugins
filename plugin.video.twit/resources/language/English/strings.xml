@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id='30000'>TWiT Live</string>
-  <string id="30001">TWiT</string>
-  <string id="30002">Seems the video is not up yet.  Play the audio?</string>
-  <string id="30003">Bitgravity 1 Mbps</string>
-  <string id="30004">Bitgravity 400 kbps</string>
-  <string id='30005'>Ustream 1.5 Mbps</string>
-  <string id="30006">Justin.TV 1 Mbps</string>
-  <string id="30007">Audio TWiT.am/listen</string>
-  <string id="30008">Latest Episodes</string>
-  <string id="30009"></string>
-  <string id='30010'>Playback</string>
-  <string id='30011'>Video (HD) 1280x720 Bitrate 2500</string>
-  <string id="30012">Video (SD) 864x480 Bitrate 500</string>
-  <string id="30013">Video (low/mobile) 640x368 Bitrate 256</string>
-  <string id="30014">Audio</string>
+  <string id='30000'>Latest Episodes</string>
+  <string id="30001">TWiT Live</string>
+  <string id="30002">Available Streams</string>
+  <string id="30003">Bitgravity (hls 1 mbps)</string>
+  <string id="30004">Bitgravity (hls 400 kbps)</string>
+  <string id='30005'>Bitgravity (http 1 mbps)</string>
+  <string id="30006">Bitgravity (http 400 kbps)</string>
+  <string id="30007">Ustream (rtmp 1.5 mbps)</string>
+  <string id="30008">JustinTV (rtmp 1 mbps)</string>
+  <string id="30009">Flosoft.biz (hls 1.5 mbps)</string>
+  <string id='30010'>Flosoft.biz (hls 1 mbps)</string>
+  <string id='30011'>Flosoft.biz (hls 600 kbps)</string>
+  <string id="30012">Flosoft.biz (hls 400 kbps)</string>
+  <string id="30013">Audio TWiT.am/listen</string>
+  <string id="30014">Playback Type</string>
+  <string id="30015">Video (HD) 1280x720 Bitrate 2500</string>
+  <string id="30016">Video (SD) 864x480 Bitrate 500</string>
+  <string id="30017">Video (low/mobile) 640x368 Bitrate 256</string>
+  <string id="30018">Audio</string>
+  <string id="30019">Add-on Debugging</string>
+  <string id="30020"></string>
 </strings>

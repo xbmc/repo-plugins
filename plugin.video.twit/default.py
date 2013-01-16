@@ -5,51 +5,34 @@ import os
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
+import StorageServer
+from datetime import datetime
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 try:
     import json
 except:
     import simplejson as json
-try:
-    import StorageServer
-except:
-    import storageserverdummy as StorageServer
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.twit')
-__language__ = __settings__.getLocalizedString
-home = __settings__.getAddonInfo('path')
-fanart = xbmc.translatePath( os.path.join(home, 'fanart.jpg'))
-icon = xbmc.translatePath( os.path.join(home, 'icon.png'))
-cache = StorageServer.StorageServer("twit", 24)
+addon = xbmcaddon.Addon(id='plugin.video.twit')
+__language__ = addon.getLocalizedString
+addon_version = addon.getAddonInfo('version')
+home = xbmc.translatePath(addon.getAddonInfo('path'))
+fanart = os.path.join(home, 'fanart.jpg')
+icon = os.path.join(home, 'icon.png')
+live_icon = os.path.join(home, 'resources', 'live.png')
+cache = StorageServer.StorageServer("twit", 2)
+debug = addon.getSetting('debug')
+first_run = addon.getSetting('first_run')
 
-# thumbs are from http://leoville.tv/podcasts/coverart/
-thumbs = {
-    'All About Android' : 'aaa600.jpg',
-    'Before You Buy' : 'byb600.jpg',
-    'FLOSS Weekly' : 'floss600.jpg',
-    'Frame Rate' : 'fr600.jpg',
-    'Ham Nation' : 'hn600.jpg',
-    'Home Theater Geeks' : 'htg600.jpg',
-    'iFive for the iPhone' : 'ifive600.jpg',
-    'iPad Today' : 'ipad600.jpg',
-    'Know How...' : 'kh600.jpg',
-    'MacBreak Weekly' : 'mbw600.jpg',
-    'NSFW' : 'nsfw600.jpg',
-    'Radio Leo' : 'nsfw600.jpg',
-    'Security Now' : 'sn600.jpg',
-    'Tech News Today' : 'tnt600.jpg',
-    'The Giz Wiz' : 'dgw600.jpg',
-    'The Social Hour' : 'tsh600.jpg',
-    'The Tech Guy' : 'ttg600.jpg',
-    'This Week In Computer Hardware' : 'twich600.png',
-    'This Week in Enterprise Tech' : 'twiet600.jpg',
-    'This Week in Google' : 'twig600.jpg',
-    'This Week in Law' : 'twil600.jpg',
-    'This Week in Tech' : 'twit600.jpg',
-    'Triangulation' : 'tri600.jpg',
-    'TWiT Live Specials' : 'specials600.jpg',
-    'Windows Weekly' : 'ww600.jpg',
-          }
+
+def addon_log(string):
+        if debug == 'true':
+            xbmc.log("[addon.TWiT-%s]: %s" %(addon_version, string))
+
+
+def cache_shows_file():
+        show_file = os.path.join(home, 'resources', 'shows')
+        cache.set("shows", open(show_file, 'r').read())
 
 
 def make_request(url):
@@ -62,49 +45,61 @@ def make_request(url):
             response.close()
             return data
         except urllib2.URLError, e:
-            print 'We failed to open "%s".' % url
+            addon_log( 'We failed to open "%s".' % url)
             if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason: ', e.reason
+                addon_log('We failed to reach a server.')
+                addon_log('Reason: ', e.reason)
             if hasattr(e, 'code'):
-                print 'We failed with error code - %s.' % e.code
+                addon_log('We failed with error code - %s.' % e.code)
 
 
-def get_thumb(url):
+def shows_cache(shows):
+        url = 'http://twit.tv/shows'
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        show_items = soup.findAll('div', attrs={'class' : 'item-list'})[2]('li')
+        for i in show_items:
+            name = str(i('a')[-1].string)
+            try:
+                show = shows[name]
+            except:
+                addon_log('Show not in cache: '+name)
+                show_url = ('http://twit.tv/show/'+name.replace("'",'').replace('.','').replace(' ','-').lower()
+                            .replace('-for-the','').replace('the-giz-wiz','weekly-daily-giz-wiz'))
+                new_show = cache_show(name, show_url)
+                if new_show:
+                    addon_log('Cached new show: '+name)
+        return "True"
+
+
+def cache_show(name, url):
+        shows = eval(cache.get('shows'))
+        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        try:
+            desc = soup.find('div', attrs={'class': "field-content"}).getText()
+            if desc == None: raise
+        except:
+            addon_log('description exception: '+name)
+            desc = ''
         try:
             thumb = soup.find('div', attrs={'class' : "views-field views-field-field-cover-art-fid"})('img')['src']
             if thumb == None: raise
         except:
+            addon_log('thumb exception: '+name)
             thumb = icon
-        return thumb
+        shows[name] = {'show_url': url, 'thumb': thumb, 'description': desc}
+        cache.set("shows", repr(shows))
+        return True
 
 
-def cache_shows():
-        url = 'http://twit.tv/shows'
-        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-        shows = soup.findAll('div', attrs={'class' : 'item-list'})[2]('li')
-        show_list = []
-        for i in shows:
-            name = str(i('a')[-1].string)
-            show_url = ('http://twit.tv/show/'+name.replace("'",'').replace('.','').replace(' ','-').lower()
-                        .replace('-for-the','').replace('the-giz-wiz','weekly-daily-giz-wiz'))
-            try:
-                thumb = 'http://twit-xbmc.googlecode.com/svn/images/'+thumbs[name]
-            except:
-                print '--- NO Thumb in Thumbs ---'
-                thumb = get_thumb(url)
-            show_list.append((name, show_url, thumb))
-        return show_list
-
-
-def get_shows():
-        addDir(__language__(30008),'none',7,xbmc.translatePath(os.path.join(home, 'icon.png')))
-        addDir(__language__(30000),'addLiveLinks',3,xbmc.translatePath(os.path.join(home, 'resources', 'live.png')))
-        shows = cache.cacheFunction(cache_shows)
-        for i in shows:
-            if i[0] == 'Radio Leo': continue
-            addDir(i[0], i[1], 1, i[2])
+def get_shows(shows):
+        addDir(__language__(30000),'latest_episodes',4,icon)
+        addLink(__language__(30001),'twit_live','','',3,live_icon)
+        cache_shows = eval(cache.cacheFunction(shows_cache, shows))
+        if not cache_shows:
+            addon_log('shows_cache FAILED')
+        for i in shows.keys():
+            if i == 'Radio Leo': continue
+            addDir(i, shows[i]['show_url'], 1, shows[i]['thumb'], shows[i]['description'])
 
 
 def index(url,iconimage):
@@ -130,132 +125,121 @@ def index(url,iconimage):
             pass
 
 
-def indexTwitFeed():
-        url ='http://twit.tv/node/feed'
-        soup = BeautifulStoneSoup(make_request(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-        for i in soup('item'):
-            try:
-                title = i.title.string
-                url = i.link
-                date = i.pubdate.string.rsplit(' ', 1)[0]
-                item_str = str(i).replace('  ','').replace('\n','')
-            except:
-                continue
-            url_list = []
-            try:
-                vid_url_high = re.compile('HD Video URL:&nbsp;</div>(.+?)</div>').findall(item_str)[0]
-            except:
-                vid_url_high = 'no_url'
-            url_list.append(vid_url_high)
-            try:
-                vid_url = re.compile('Video URL:&nbsp;</div>(.+?)</div>').findall(item_str)[0]
-            except:
-                vid_url = 'no_url'
-            url_list.append(vid_url)
-            try:
-                vid_url_low = re.compile('Video URL \(mobile\):&nbsp;</div>(.+?)</div></div>').findall(item_str)[0]
-            except:
-                vid_url_low = 'no_url'
-            url_list.append(vid_url_low)
-            try:
-                aud_url = re.compile('MP3 feed URL:&nbsp;</div>(.+?)</div></div></div>').findall(item_str)[0]
-            except:
-                aud_url = 'no_url'
-            url_list.append(aud_url)
-
-            url = setUrl(url_list, False)
-            if not url == 'no_url':
-                try:
-                    episode_name = re.compile('<div class="field-item odd">(.+?)</div></div>').findall(item_str)[0]
-                    if episode_name.startswith('<img'):
-                        episode_name = re.compile('<div class="field-item odd"><p>(.+?)</p><p>').findall(item_str)[0]
-                    episode_name = episode_name.replace('&amp;', '&').replace('&quot;', '"').replace('&#039;', "'").encode('ascii', 'ignore')
-                except:
-                    episode_name = ''
-                try:
-                    thumb = re.compile('<img src="(.+?)" alt=').findall(item_str)[0]
-                except:
-                    thumb = ''
-                try:
-                    desc = re.compile('<div class="field-item odd"><p>(.+?)</p></div></div>').findall(item_str)[0]
-                    pattern = re.compile('<.+?>').findall(desc)
-                    for i in pattern:
-                        desc = desc.replace(i,'')
-                    description = desc.replace('&amp;', '&').replace('&quot;', '"').replace('&#039;', "'")
-                except:
-                    description = ''
-                name = title+' - '+episode_name
-                addLink(name, url, description, date, 4, thumb)
-            else: print '--- There was a problem adding episode %s ---' % title
-
-
-def getVideo(url):
+def cache_latest_episods():
+        shows = eval(cache.get('shows'))
+        url = 'http://twit.tv/'
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-        url_list = ['no_url', 'no_url', 'no_url', 'no_url']
+        h_tag = soup.find('h2', attrs={'class': 'block-title'}, text='Most Recent Episodes')
+        items_string = str(h_tag.findNext('div', attrs={'class': "view-content"})('div'))
+        items_string = items_string.replace('\n','').replace('> <','><').replace('>, <','><')
+        pattern = (
+            '<span class="field-content">(.+?)</span></div><div class=".+?"><span class=".+?">'
+            '<div class="coverart"><img src="(.+?)" alt="" title="" width=".+?" height=".+?" class=".+?" />'
+            '</div><div class="show-info"><a href="(.+?)">(.+?)</a>(.+?) </div></span></div><div class=".+?">'
+            '<div class="field-content"><p>(.+?)</p>'
+            )
+        items_list = re.findall(pattern, items_string)
+        episode_list = []
+        episodes = ''
+        for show, thumb, href, episode, date, desc in items_list:
+            if episode in episodes:
+                addon_log('episode already in list')
+                continue
+            name = '%s - %s' %(show, episode)
+            try:
+                thumbnail = shows[show]['thumb']
+            except:
+                addon_log('thumbnail exception: '+show)
+                thumbnail = thumb
+            episode_list.append((name,href,desc,date,thumbnail))
+            episodes += episode+', '
+        return episode_list
+
+
+def get_latest_episodes():
+        episodes = cache.cacheFunction(cache_latest_episods)
+        for i in episodes:
+            addLink(i[0], i[1], i[2], i[3], 2, i[4])
+
+
+def set_media_url(url):
+        playback_settings = {
+            '0': 'hd download',
+            '1': 'sd download',
+            '2': 'download',
+            '3': 'audio download'
+        }
+        soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+        media_urls = {}
         for i in soup('span', attrs={'class' : "download"}):
-            name = i.a['class']
-            url = i.a['href']
-            if name == 'audio download':
-                url_list[3] = url
-            if name == 'sd-low download':
-                url_list[2] = url
-            if name == 'sd download':
-                url_list[1] = url
-            if name == 'hd download':
-                url_list[0] = url
-        setUrl(url_list)
-
-
-def setUrl(url_list, set=True):
+            media_urls[i.a['class']] = i.a['href']
         if content_type == 'audio':
-            playback = '3'
+            playback_setting = '3'
+            playback_type = 'audio download'
         else:
-            playback = __settings__.getSetting('playback')
-        if playback == '3':
-            url = url_list[3]
-        if playback == '2':
-            url = url_list[2]
-            if url == 'no_url':
-                url = url_list[1]
-        if playback == '1':
-            url = url_list[1]
-            if url == 'no_url':
-                url = url_list[2]
-        if playback == '0':
-            url = url_list[0]
-            if url == 'no_url':
-                url = url_list[1]
-                if url == 'no_url':
-                    url = url_list[2]
-        if not set:
-            return url
+            playback_setting = addon.getSetting('playback')
+            playback_type = playback_settings[playback_setting]
+        playback_url = None
+        if media_urls.has_key(playback_type):
+            playback_url = media_urls[playback_type]
         else:
-            if url == 'no_url':
-                dialog = xbmcgui.Dialog()
-                ret = dialog.yesno(__language__(30001), __language__(30002))
-                if ret:
-                    url = url_list[3]
-                else: return
-            item = xbmcgui.ListItem(path=url)
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+            p_set = int(playback_setting)
+            if (p_set + 1) <= 3:
+                for i in range(len(playback_settings)):
+                    p_set += 1
+                    if p_set < 3:
+                        try:
+                            playback_url = media_urls[playback_settings[str(p_set)]]
+                            break
+                        except: continue
+        if not playback_url:
+            dialog = xbmcgui.Dialog()
+            ret = dialog.select(__language__(30002), media_urls.keys())
+            playback_url = media_urls.values()[ret]
+
+        if playback_url:
+            success = True
+        else:
+            success = False
+            playback_url = ''
+        item = xbmcgui.ListItem(path=playback_url)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), success, item)
 
 
-def addLiveLinks():
-        addLink(__language__(30003),'http://bglive-a.bitgravity.com/twit/live/high?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
-        addLink(__language__(30004),'http://bglive-a.bitgravity.com/twit/live/low?noprefix','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
-        addLink(__language__(30005),'http://cgw.ustream.tv/Viewer/getStream/1/1524.amf','','',5,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
-        addLink(__language__(30006),'URL','','',6,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
-        addLink(__language__(30007),'http://twit.am/listen','','',4,xbmc.translatePath( os.path.join( home, 'resources', 'live.png' ) ))
+def twit_live():
+        live_streams = [
+            'http://twit.live-s.cdn.bitgravity.com/cdn-live-s1/_definst_/twit/live/high/playlist.m3u8',
+            'http://twit.live-s.cdn.bitgravity.com/cdn-live-s1/_definst_/twit/live/low/playlist.m3u8',
+            'http://bglive-a.bitgravity.com/twit/live/high?noprefix',
+            'http://bglive-a.bitgravity.com/twit/live/low?noprefix',
+            'ustream',
+            'justintv',
+            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStreamHi_1628/playlist.m3u8',
+            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_1128/playlist.m3u8',
+            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_696/playlist.m3u8',
+            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_496/playlist.m3u8',
+            'http://twit.am/listen'
+        ]
+        if content_type == 'audio':
+            link = 'http://twit.am/listen'
+        else:
+            link = live_streams[int(addon.getSetting('twit_live'))]
+            if link == 'justintv':
+                link = get_jtv()
+            elif link == 'ustream':
+                link = get_ustream()
+        item = xbmcgui.ListItem(path=link)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 
-def getUstream(url):
+def get_ustream():
         def getSwf():
                 url = 'http://www.ustream.tv/flash/viewer.swf'
                 req = urllib2.Request(url)
                 response = urllib2.urlopen(req)
                 swfUrl = response.geturl()
                 return swfUrl
-        data = make_request(url)
+        data = make_request('http://cgw.ustream.tv/Viewer/getStream/1/1524.amf')
         match = re.compile('.*(rtmp://.+?)\x00.*').findall(data)
         rtmp = match[0]
         sName = re.compile('.*streamName\W\W\W(.+?)[/]*\x00.*').findall(data)
@@ -263,22 +247,17 @@ def getUstream(url):
         swf = ' swfUrl='+getSwf()
         pageUrl = ' pageUrl=http://live.twit.tv'
         url = rtmp + playpath + swf + pageUrl + ' swfVfy=1 live=true'
-        playLive(url)
+        return url
 
 
-def getJtv():
+def get_jtv():
         soup = BeautifulSoup(make_request('http://usher.justin.tv/find/twit.xml?type=live'))
         token = ' jtv='+soup.token.string.replace('\\','\\5c').replace(' ','\\20').replace('"','\\22')
         rtmp = soup.connect.string+'/'+soup.play.string
         Pageurl = ' Pageurl=http://www.justin.tv/twit'
-        swf = ' swfUrl=http://www.justin.tv/widgets/live_embed_player.swf?channel=twit'
+        swf = ' swfUrl=http://www.justin.tv/widgets/live_embed_player.swf?channel=twit live=true'
         url = rtmp+token+swf+Pageurl
-        playLive(url)
-
-
-def playLive(url):
-        item = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        return url
 
 
 def get_params():
@@ -300,31 +279,41 @@ def get_params():
 
 
 def addLink(name,url,description,date,mode,iconimage):
-        try:
-            description += "\n \n Published: " + date
-        except:
-            pass
         u=(sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+
            "&iconimage="+urllib.quote_plus(iconimage)+"&content_type="+content_type)
         ok=True
+        episode = None
+        try: episode = int(re.findall('#(.+?):', name)[0])
+        except:
+            try: episode = int(name.split(' ')[-1])
+            except: pass
         liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description } )
-        liz.setProperty( "Fanart_Image", fanart )
+        liz.setInfo(type="Video", infoLabels={"Title": name, "Plot":description, "Aired": date, "episode": episode})
+        liz.setProperty("Fanart_Image", fanart)
         liz.setProperty('IsPlayable', 'true')
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
         return ok
 
 
-def addDir(name,url,mode,iconimage):
+def addDir(name,url,mode,iconimage,description=None):
         u=(sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+
            "&iconimage="+urllib.quote_plus(iconimage)+"&content_type="+content_type)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setInfo(type="Video", infoLabels={"Title": name, "Plot":description})
         liz.setProperty( "Fanart_Image", fanart )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
+
+if debug == 'true':
+    cache.dbg = True
+
+if first_run == 'true':
+    cache_shows_file()
+    addon_log('first_run, caching shows file')
+    xbmc.sleep(1000)
+    addon.setSetting('first_run', 'false')
 
 params=get_params()
 url=None
@@ -353,44 +342,40 @@ try:
 except:
     pass
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+addon_log("Mode: "+str(mode))
+addon_log("URL: "+str(url))
+addon_log("Name: "+str(name))
 
-if mode==None or url==None or len(url)<1:
-    print ""
-    get_shows()
+if mode==None:
+    try:
+        shows = eval(cache.get('shows'))
+        if isinstance(shows, dict):
+            get_shows(shows)
+        else: raise
+    except:
+        addon_log('"shows" cache missing')
+        cache_shows_file()
+        addon_log('caching shows file, this should only happen if common cache db is reset')
+        xbmc.sleep(1000)
+        shows = eval(cache.get('shows'))
+        if isinstance(shows, dict):
+            get_shows(shows)
+        else:
+            addon_log('"shows" cache ERROR')
+    xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 elif mode==1:
-    print ""
     index(url,iconimage)
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
 
 elif mode==2:
-    print ""
-    getVideo(url)
+    set_media_url(url)
 
 elif mode==3:
-    print ""
-    addLiveLinks()
+    twit_live()
 
 elif mode==4:
-    print ""
-    playLive(url)
-
-elif mode==5:
-    print ""
-    getUstream(url)
-
-elif mode==6:
-    print ""
-    getJtv()
-
-elif mode==7:
-    print ""
-    indexTwitFeed()
-
-elif mode==8:
-    print ""
-    setUrl(url)
+    get_latest_episodes()
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

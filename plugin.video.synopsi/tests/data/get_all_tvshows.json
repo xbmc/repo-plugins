@@ -1,0 +1,19 @@
+{
+    "limits": {
+        "start": 0, 
+        "total": 1, 
+        "end": 1
+    }, 
+    "tvshows": [
+        {
+            "tvshowid": 1, 
+            "episode": 0, 
+            "lastplayed": "", 
+            "label": "How I Met Your Mother", 
+            "imdbnumber": "75760", 
+            "file": "/home/smid/Videos/TVShows/How.I.Met.Your.Mother/", 
+            "playcount": 1, 
+            "thumbnail": "special://masterprofile/Thumbnails/Video/e/e90fe071.tbn"
+        }
+    ]
+}

@@ -1,0 +1,169 @@
+<window id="3090">
+	<defaultcontrol always="true">500</defaultcontrol>
+	<allowoverlay>yes</allowoverlay>
+	<views>500</views>
+	<onload condition="Skin.HasSetting(ActivateTvTunes) + System.HasAddon(script.tvtunes)">XBMC.RunScript(script.tvtunes,backend=True&amp;loop=False)</onload>
+
+	<controls>
+		<include>CommonVideoBackground</include>
+		<include>CommonMediaPlayingBackground</include>
+		<include>ContentPanelBackgrounds</include>
+		<control type="group">
+			<include>Window_OpenClose_Animation</include>
+<!--		<include>CommonRootView</include> <!-- view id = 50 -->
+<!--		<include>FullWidthList</include> <!-- view id = 51 -->
+<!--		<include>ThumbnailView</include> <!-- view id = 500 -->
+			<control type="group">
+				<visible>Control.IsVisible(500)</visible>
+				<include>VisibleFadeEffect</include>
+				<control type="panel" id="500">
+					<posx>90</posx>
+					<posy>80</posy>
+					<width>1080</width>
+					<height>558</height>
+					<onleft>2</onleft>
+					<onright>60</onright>
+					<onup>500</onup>
+					<ondown>500</ondown>
+					<viewtype label="21371">list</viewtype>
+					<pagecontrol>60</pagecontrol>
+					<scrolltime>200</scrolltime>
+					<preloaditems>2</preloaditems>
+					<itemlayout height="186" width="216">
+						<control type="image">
+							<posx>1</posx>
+							<posy>0</posy>
+							<width>214</width>
+							<height>160</height>
+							<bordertexture border="5">button-focus.png</bordertexture>
+							<bordersize>5</bordersize>
+							<texture background="true">$INFO[ListItem.Icon]</texture>
+							<visible>!Container.Content(Episodes)</visible>
+						</control>
+						<control type="image">
+							<posx>1</posx>
+							<posy>0</posy>
+							<width>214</width>
+							<height>160</height>
+							<aspectratio>scale</aspectratio>
+							<bordertexture border="5">button-nofocus.png</bordertexture>
+							<bordersize>5</bordersize>
+							<texture background="true">$INFO[ListItem.Icon]</texture>
+							<visible>Container.Content(Episodes)</visible>
+						</control>
+						<control type="label">
+							<posx>108</posx>
+							<posy>160</posy>
+							<width>200</width>
+							<height>25</height>
+							<font>font12</font>
+							<textcolor>grey2</textcolor>
+							<selectedcolor>selected</selectedcolor>
+							<align>center</align>
+							<aligny>center</aligny>
+							<info>ListItem.Label</info>
+						</control>
+						<control type="image">
+							<posx>180</posx>
+							<posy>130</posy>
+							<width>30</width>
+							<height>30</height>
+							<aspectratio>keep</aspectratio>
+							<texture>$INFO[ListItem.Overlay]</texture>
+						</control>
+						<control type="image">
+							<posx>1</posx>
+							<posy>0</posy>
+							<width>214</width>
+							<height>160</height>
+							<aspectratio>keep</aspectratio>
+							<bordersize>5</bordersize>
+							<texture background="true">$INFO[ListItem.Property(CustomOverlay)]</texture>
+						</control>
+					</itemlayout>
+					<focusedlayout height="186" width="216">
+						<control type="image">
+							<posx>1</posx>
+							<posy>0</posy>
+							<width>214</width>
+							<height>160</height>
+							<bordertexture border="5">folder-focus.png</bordertexture>
+							<bordersize>5</bordersize>
+							<texture background="true">$INFO[Listitem.Icon]</texture>
+							<visible>!Container.Content(Episodes)</visible>
+						</control>
+						<control type="image">
+							<posx>1</posx>
+							<posy>0</posy>
+							<width>214</width>
+							<height>160</height>
+							<aspectratio>scale</aspectratio>
+							<bordertexture border="5">folder-focus.png</bordertexture>
+							<bordersize>5</bordersize>
+							<texture background="true">$INFO[Listitem.Icon]</texture>
+							<visible>Container.Content(Episodes)</visible>
+						</control>
+						<control type="label">
+							<posx>108</posx>
+							<posy>160</posy>
+							<width>200</width>
+							<height>25</height>
+							<font>font12</font>
+							<textcolor>white</textcolor>
+							<selectedcolor>selected</selectedcolor>
+							<align>center</align>
+							<aligny>center</aligny>
+							<info>ListItem.Label</info>
+						</control>
+						<control type="image">
+							<posx>180</posx>
+							<posy>130</posy>
+							<width>30</width>
+							<height>30</height>
+							<aspectratio>keep</aspectratio>
+							<texture>$INFO[ListItem.Overlay]</texture>
+						</control>
+
+						<control type="image">
+							<posx>1</posx>
+							<posy>0</posy>
+							<width>214</width>
+							<height>160</height>
+							<aspectratio>keep</aspectratio>
+							<bordersize>5</bordersize>
+							<texture background="true">$INFO[ListItem.Property(CustomOverlay)]</texture>
+						</control>
+					</focusedlayout>
+				</control>
+				<control type="scrollbar" id="60">
+					<posx>1170</posx>
+					<posy>80</posy>
+					<width>25</width>
+					<height>550</height>
+					<texturesliderbackground border="0,14,0,14">ScrollBarV.png</texturesliderbackground>
+					<texturesliderbar border="2,16,2,16">ScrollBarV_bar.png</texturesliderbar>
+					<texturesliderbarfocus border="2,16,2,16">ScrollBarV_bar_focus.png</texturesliderbarfocus>
+					<textureslidernib>ScrollBarNib.png</textureslidernib>
+					<textureslidernibfocus>ScrollBarNib.png</textureslidernibfocus>
+					<onleft>500</onleft>
+					<onright>2</onright>
+					<showonepage>false</showonepage>
+					<orientation>vertical</orientation>
+					<visible>True</visible>
+				</control>
+			</control>
+		</control>
+		
+		<control type="image">
+			<description>debug image</description>
+			<posx>100</posx>
+			<posy>100</posy>
+			<width>200</width>
+			<height>200</height>
+			<aspectratio>stretch</aspectratio>
+			<texture>debug.png</texture>
+			<visible>False</visible>
+		</control>
+
+	</controls>
+</window>

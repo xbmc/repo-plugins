@@ -1,0 +1,8 @@
+[B]Version 0.4.6[/B]
+- Fixed: addon.xml to get into official repository
+- Added: Show "watched" stripes in tvshow detail
+- Fixed: few bugs
+
+[B]0.0.1[/B]
+
+- Initial addon

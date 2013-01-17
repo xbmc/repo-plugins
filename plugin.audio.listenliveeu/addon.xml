@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
-  id="plugin.audio.listenliveeu"
-  version="0.4.5"
-  name="ListenLiveEU"
-  provider-name="bootsy, xycl">
+  id="plugin.audio.listenliveeu" version="0.4.6" name="ListenLiveEU" provider-name="bootsy, xycl">
   <requires>
    <import addon="xbmc.python" version="2.0"/>
   </requires>
@@ -20,5 +17,6 @@
     <description lang="de">Listenlive.eu ist ein Web-Radio Aggregator mit mehr als 4000 Radiostationen aus Europa.</description>
     <description lang="hu">A listenlive.eu több mint 4000 élo rádióadást tartalmaz Európából, melyeket az interneten keresztül érhetsz el.</description>
     <platform>all</platform>
+    <language></language>
   </extension>
 </addon>

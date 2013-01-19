@@ -1,6 +1,24 @@
+[B]Version 1.0.1[/B]
+
+- Update: Language files from Transifex
+
+[B]Version 1.0.0[/B]
+
+- Update: Version set to 1.0.0 for Frodo
+
+
+[B]Version 0.4.6[/B]
+
+- Necessary changes for Frodo Release
+- Unicode error in stream listing corrected. Thanks to georgio.
+- Works now with unicode characters in Windows XBMC path and user profile paths
+- Unix style linefeeds
+
+
 [B]Version 0.4.5[/B]
 
 - Necessary changes for Eden Release
+
 
 [B]Version 0.4.3[/B]
 

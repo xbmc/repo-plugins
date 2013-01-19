@@ -1,0 +1,105 @@
+# XBMC Media Center language file
+# Addon Name: ListenLiveEU
+# Addon id: plugin.audio.listenliveeu
+# Addon Provider: bootsy, xycl
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: German (http://www.transifex.com/projects/p/xbmc-addons/language/de/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "New additions"
+msgstr "Neu hinzugefügt"
+
+msgctxt "#30001"
+msgid "Browse by country"
+msgstr "Nach Ländern sortieren"
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr "Nach Genre sortieren"
+
+msgctxt "#30003"
+msgid "Browse by bookmarks"
+msgstr "Nur Bookmarks anzeigen"
+
+msgctxt "#30004"
+msgid "Add bookmark"
+msgstr "Bookmark hinzufügen"
+
+msgctxt "#30005"
+msgid "Delete bookmark"
+msgstr "Bookmark löschen"
+
+msgctxt "#30006"
+msgid "Delete all bookmarks"
+msgstr "Alle Bookmarks löschen"
+
+msgctxt "#30007"
+msgid "Bookmark added!"
+msgstr "Bookmark hinzugefügt!"
+
+msgctxt "#30008"
+msgid "Bookmark NOT added!"
+msgstr "Bookmark NICHT hinzugefügt!"
+
+msgctxt "#30009"
+msgid "Delete bookmark?"
+msgstr "Bookmark löschen?"
+
+msgctxt "#30010"
+msgid "Bookmark deleted!"
+msgstr "Bookmark gelöscht!"
+
+msgctxt "#30011"
+msgid "Bookmark NOT deleted!"
+msgstr "Bookmark NICHT gelöscht!"
+
+msgctxt "#30012"
+msgid "Delete all bookmarks?"
+msgstr "Alle Bookmarks löschen?"
+
+msgctxt "#30013"
+msgid "All bookmarks deleted!"
+msgstr "Alle Bookmarks gelöscht!"
+
+msgctxt "#30014"
+msgid "Bookmarks NOT deleted!"
+msgstr "Bookmarks NICHT gelöscht!"
+
+msgctxt "#30015"
+msgid "Bookmark already exists."
+msgstr "Bookmark bereits vorhanden."
+
+msgctxt "#30016"
+msgid "No other bookmarks available."
+msgstr "Keine weiteren Bookmarks vorhanden."
+
+msgctxt "#30017"
+msgid "No bookmarks available."
+msgstr "Keine Bookmarks vorhanden."
+
+msgctxt "#30020"
+msgid "Show location"
+msgstr "Standort anzeigen"
+
+msgctxt "#30021"
+msgid "Show genre / comment"
+msgstr "Genre / Kommentar anzeigen"
+
+msgctxt "#30022"
+msgid "Show stream rate"
+msgstr "Stream Rate anzeigen"
+
+msgctxt "#30023"
+msgid "Minimum quality (Kbps)"
+msgstr "Mindestqualität (Kbps)"

@@ -1,0 +1,162 @@
+# XBMC Media Center language file
+# Addon Name: ListenLiveEU
+# Addon id: plugin.audio.listenliveeu
+# Addon Provider: bootsy, xycl
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#Main
+
+msgctxt "#30000"
+msgid "New additions"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Browse by country"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Browse by genre"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Browse by bookmarks"
+msgstr ""
+
+#Context
+
+msgctxt "#30004"
+msgid "Add bookmark"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Delete bookmark"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Delete all bookmarks"
+msgstr ""
+
+#Favorites
+
+msgctxt "#30007"
+msgid "Bookmark added!"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Bookmark NOT added!"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Delete bookmark?"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Bookmark deleted!"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Bookmark NOT deleted!"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Delete all bookmarks?"
+msgstr ""
+
+msgctxt "#30013"
+msgid "All bookmarks deleted!"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Bookmarks NOT deleted!"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Bookmark already exists."
+msgstr ""
+
+msgctxt "#30016"
+msgid "No other bookmarks available."
+msgstr ""
+
+msgctxt "#30017"
+msgid "No bookmarks available."
+msgstr ""
+
+#empty strings from id 30018 to 30019
+#Settings
+
+msgctxt "#30020"
+msgid "Show location"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Show genre / comment"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Show stream rate"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Minimum quality (Kbps)"
+msgstr ""
+
+msgctxt "#30024"
+msgid "16"
+msgstr ""
+
+msgctxt "#30025"
+msgid "24"
+msgstr ""
+
+msgctxt "#30026"
+msgid "32"
+msgstr ""
+
+msgctxt "#30027"
+msgid "48"
+msgstr ""
+
+msgctxt "#30028"
+msgid "56"
+msgstr ""
+
+msgctxt "#30029"
+msgid "64"
+msgstr ""
+
+msgctxt "#30030"
+msgid "96"
+msgstr ""
+
+msgctxt "#30031"
+msgid "112"
+msgstr ""
+
+msgctxt "#30032"
+msgid "128"
+msgstr ""
+
+msgctxt "#30033"
+msgid "160"
+msgstr ""
+
+msgctxt "#30034"
+msgid "196"
+msgstr ""
+
+msgctxt "#30035"
+msgid "256"
+msgstr ""

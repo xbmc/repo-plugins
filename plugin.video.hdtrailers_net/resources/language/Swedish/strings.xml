@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Swedish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sv/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Sida</string>
+    <string id="30002">Senaste</string>
+    <string id="30003">Mest sedda</string>
+    <string id="30004">Topp 10</string>
+    <string id="30005">Bibliotek (Alla med begynnelsebokstaven)</string>
+    <string id="30006">Premiär denna vecka</string>
+    <string id="30007">Kommer snart</string>
+
+    <!-- Settings -->
+    <string id="30100">Tvinga visningsläget "Tumnagel"</string>
+    <string id="30101">Visa trailer</string>
+    <string id="30102">Visa klipp</string>
+    <string id="30103">Visa källan i titeln</string>
+    <string id="30110">Videoupplösning</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">Innehållstyp (Skalrelaterat)</string>
+    <string id="30121">VIDEO</string>
+    <string id="30122">FILMER</string>
+</strings>

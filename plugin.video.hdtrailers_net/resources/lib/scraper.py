@@ -125,7 +125,7 @@ def _get_movies(url):
         'id': td.a['href'].split('/')[2],
         'title': td.a.img['alt'],
         'thumb': td.a.img['src']
-    } for td in tree.findAll('td', {'class': 'indexTableTrailerImage'})]
+    } for td in tree.findAll('td', 'indexTableTrailerImage') if td.a.img]
     has_next_page = tree.find(
         'a',
         attrs={'class': 'startLink'},

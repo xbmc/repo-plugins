@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Greek language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/el/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Σελίδα</string>
+    <string id="30002">Πρόσφατα</string>
+    <string id="30003">Πιο Προβεβλημένα</string>
+    <string id="30004">10 κορυφαία</string>
+    <string id="30005">Συλλογή (Όλα με Αρχικά)</string>
+    <string id="30006">Αυτή τη βδομάδα</string>
+    <string id="30007">Σύντομα στους Κινηματογράφους</string>
+
+    <!-- Settings -->
+    <string id="30100">Οι 'Μικρογραφίες' σαν Τύπος Προβολής</string>
+    <string id="30101">Προβολή Διαφημιστικού</string>
+    <string id="30102">Προβολή Αποσπασμάτων</string>
+    <string id="30103">Εμφάνιση Πηγής στον τίτλο του βίντεο</string>
+    <string id="30110">Ανάλυση Βίντεο</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">Τύπος Περιεχομένου (Αναλόγως του κελύφους)</string>
+    <string id="30121">Βίντεο</string>
+    <string id="30122">Ταινίες</string>
+</strings>

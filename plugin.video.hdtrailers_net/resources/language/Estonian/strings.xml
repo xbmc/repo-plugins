@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Estonian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/et/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Leht</string>
+    <string id="30002">Viimased</string>
+    <string id="30112">720p</string>
+    <string id="30121">Videod</string>
+    <string id="30122">Filmid</string>
+</strings>

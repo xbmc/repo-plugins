@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Arabic language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ar/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">عناصر</string>
+    <string id="30002">أخير</string>
+    <string id="30003">الأكثر مشاهدة</string>
+    <string id="30004">أول 10</string>
+    <string id="30005">المكتبة (الكل من البداية)</string>
+    <string id="30006">يفتح هذا الأسبوع</string>
+    <string id="30007">قريبا</string>
+
+    <!-- Settings -->
+    <string id="30100">عرض وضع "ظفر" إجباري</string>
+    <string id="30101">عرض مقطع</string>
+    <string id="30102">عرض مقطع</string>
+    <string id="30103">عرض المصدر في عنوان الفيديو</string>
+    <string id="30110">دقة الفيديو</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">نوع-المحتوى (متعلق بالمظهر)</string>
+    <string id="30121">فيديو</string>
+    <string id="30122">أفلام</string>
+</strings>

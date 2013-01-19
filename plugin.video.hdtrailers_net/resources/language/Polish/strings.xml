@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Polish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pl/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Strona</string>
+    <string id="30002">Najnowsze</string>
+    <string id="30003">Najczęściej oglądane</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">Biblioteka (Wszystkie po inicjałach)</string>
+    <string id="30006">Premiery tygodnia</string>
+    <string id="30007">Wkrótce w kinach</string>
+
+    <!-- Settings -->
+    <string id="30100">Wymuś widok "Thumbnail"</string>
+    <string id="30101">Pokaż zwiastun</string>
+    <string id="30102">Pokaż klip</string>
+    <string id="30103">Pokaż źródło w tytule wideo</string>
+    <string id="30110">Rozdzielczość wideo</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">Typ kontentu (związane ze skórą)</string>
+    <string id="30121">WIDEO</string>
+    <string id="30122">Filmy</string>
+</strings>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Basque language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/eu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Orrialdea</string>
+    <string id="30002">Azken</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30121">Bideoak</string>
+    <string id="30122">Filmak</string>
+</strings>

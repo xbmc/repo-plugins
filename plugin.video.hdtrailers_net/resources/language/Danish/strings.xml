@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Danish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/da/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Side</string>
+    <string id="30002">Seneste</string>
+    <string id="30003">Mest sete</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">Bibliotek (Alle efter initial)</string>
+    <string id="30006">Åbner denne uge</string>
+    <string id="30007">Kommer snart</string>
+
+    <!-- Settings -->
+    <string id="30100">Tving visning "Miniaturebilleder"</string>
+    <string id="30101">Vis Trailer</string>
+    <string id="30102">Vis Klip</string>
+    <string id="30103">Vis Kilde i videotitel</string>
+    <string id="30110">Videoopløsning</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">Indholdstype (Skinrelateret)</string>
+    <string id="30121">Videoer</string>
+    <string id="30122">Film</string>
+</strings>

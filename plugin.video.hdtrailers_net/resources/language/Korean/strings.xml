@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Korean language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ko/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">페이지</string>
+    <string id="30002">최근 추가</string>
+    <string id="30003">가장 많이 시청</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">라이브러리 (알파벳순)</string>
+    <string id="30006">이번 주 개봉</string>
+    <string id="30007">개봉 예정</string>
+
+    <!-- Settings -->
+    <string id="30100">"썸네일" 보기형식 강제 사용</string>
+    <string id="30101">예고편 보기</string>
+    <string id="30102">클립 보기</string>
+    <string id="30103">비디오 제목에 소스 표시</string>
+    <string id="30110">비디오 해상도</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">콘텐츠 종류 (스킨 관련)</string>
+    <string id="30121">비디오</string>
+    <string id="30122">영화</string>
+</strings>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Italian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/it/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Pagina</string>
+    <string id="30002">Ultimo</string>
+    <string id="30003">Più Visti</string>
+    <string id="30004">I primi 10</string>
+    <string id="30005">Libreria (tutto per iniziale)</string>
+    <string id="30006">Inizia questa settimana</string>
+    <string id="30007">Prossimamente</string>
+
+    <!-- Settings -->
+    <string id="30100">Forza la visualizzazione ad "Thumbnail" </string>
+    <string id="30101">Mostra Trailer</string>
+    <string id="30102">Mostra Filmati</string>
+    <string id="30103">Mostra Fonte nel titolo del video</string>
+    <string id="30110">Risoluzione Video</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">Tipo di Contenuto (relativo allo Skin)</string>
+    <string id="30121">VIDEO</string>
+    <string id="30122">FILM</string>
+</strings>

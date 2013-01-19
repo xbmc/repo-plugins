@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Spanish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/es/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Página</string>
+    <string id="30002">Nuevo</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30121">VIDEOS</string>
+    <string id="30122">Películas</string>
+</strings>

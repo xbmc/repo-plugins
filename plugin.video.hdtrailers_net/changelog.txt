@@ -1,3 +1,7 @@
+1.0.1
+ - fixed coming-soon
+ - updated translations
+
 1.0.0
  - new icon
  - added ability to override content-type in movie-view

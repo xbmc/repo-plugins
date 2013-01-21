@@ -2,10 +2,10 @@
 <addon 
     id="plugin.video.the.trailers"
     name="The Trailers"
-    version="0.9.3"
+    version="1.9.4"
     provider-name="Martijn, Sphere">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift" version="0.2.0"/>
         <import addon="script.module.beautifulsoup" version="3.0.8"/>
         <import addon="script.module.simple.downloader" version="0.9.2"/>

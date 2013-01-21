@@ -30,6 +30,8 @@ class AppleTrailers(object):
 
     MAIN_URL = 'http://trailers.apple.com/trailers/home/xml/current.xml'
     MOVIE_URL = 'http://trailers.apple.com/moviesxml/s/%s/index.xml'
+    BACKUP_MOVIE_URL='http://trailers.apple.com/trailers/%s/includes/playlists/web.inc'
+    BACKUP_MOVIE_BASE='http://trailers.apple.com/trailers/%s/'
     '''
     TRAILER_QUALITIES = [{'title': 'iPod',
                           'id': 'i320.m4v'},
@@ -106,15 +108,25 @@ class AppleTrailers(object):
                    % movie_title)
         movie = self.get_single_movie(movie_title)
         url = self.MOVIE_URL % movie['movie_string']
-        cache_filename = '%s.xml' % movie['movie_string'].split('/')[1]
-        tree = self.__get_tree(url, cache_filename=cache_filename)
-        r_type = re.compile('/moviesxml/s/.+?/.+?/(.+?).xml')
         trailer_types = []
-        for t in tree.findAll('gotourl', {'target': 'main'}):
-            if t.find('b'):
-                type_string = re.search(r_type, t['url']).group(1)
-                trailer_types.append({'title': t['draggingname'],
-                                      'id': type_string})
+        try:
+            cache_filename = '%s.xml' % movie['movie_string'].split('/')[1]
+            tree = self.__get_tree(url, cache_filename=cache_filename)
+            r_type = re.compile('/moviesxml/s/.+?/.+?/(.+?).xml')
+            for t in tree.findAll('gotourl', {'target': 'main'}):
+                if t.find('b'):
+                    type_string = re.search(r_type, t['url']).group(1)
+                    trailer_types.append({'title': t['draggingname'],
+                                    'id': type_string})
+        except:            
+            t_url=self.BACKUP_MOVIE_URL % movie['movie_string']
+            cache_filename='%swebinc.xml' % movie['movie_string'].split('/')[1] 
+            tree=self.__get_tree(t_url,cache_filename=cache_filename)
+            for t in tree.findAll('div',{'class':'column first'}):
+                if t.find('h3'):
+                    trailer_types.append({'title': t.find('h3').getText(),'id':t.find('h3').getText().lower().replace(" ","")})
+
+
         return trailer_types
 
     def get_trailer_qualities(self, movie_title):
@@ -128,21 +140,37 @@ class AppleTrailers(object):
                     % (movie_title, trailer_type, quality_id))
         movie = self.get_single_movie(movie_title)
         url = self.MOVIE_URL % movie['movie_string']
-        if trailer_type != 'trailer':
-            url = url.replace('index', trailer_type)
-        cache_filename = '%s-%s.xml' % (movie['movie_string'].split('/')[1],
-                                        trailer_type)
-        html = self.__get_url(url, cache_filename=cache_filename)
-        r_section = re.compile('<array>(.*?)</array>', re.DOTALL)
-        section = re.search(r_section, html).group(1)
-        tree = BS(section, convertEntities=BS.XML_ENTITIES)
-        trailers = []
-        for s in tree.findAll('dict'):
-            for k in s.findAll('key'):
-                if k.string == 'previewURL':
-                    url = k.nextSibling.string
-                    if quality_id in url:
-                        return ('%s?|User-Agent=%s' % (url, self.UA))
+        try:
+            if trailer_type != 'trailer':
+                url = url.replace('index', trailer_type)
+            cache_filename = '%s-%s.xml' % (movie['movie_string'].split('/')[1],
+                                            trailer_type)
+            html = self.__get_url(url, cache_filename=cache_filename)
+            r_section = re.compile('<array>(.*?)</array>', re.DOTALL)
+            section = re.search(r_section, html).group(1)
+            tree = BS(section, convertEntities=BS.XML_ENTITIES)
+            trailers = []
+            for s in tree.findAll('dict'):
+                for k in s.findAll('key'):
+                    if k.string == 'previewURL':
+                        url = k.nextSibling.string
+                        if quality_id in url:
+                            return ('%s?|User-Agent=%s' % (url, self.UA))
+        except:            
+            url=self.BACKUP_MOVIE_BASE % movie['movie_string']
+            tree = None
+            if quality_id=='h480p.mov':
+                tree=self.__get_tree(url + 'itsxml/25-'+trailer_type+'.xml')
+            if quality_id=='h720p.mov':
+                tree=self.__get_tree(url + 'itsxml/26-'+trailer_type+'.xml')
+            if quality_id=='h1080p.mov':
+                tree=self.__get_tree(url + 'itsxml/27-'+trailer_type+'.xml')
+            for s in tree.findAll('dict'):
+                for k in s.findAll('key'):                
+                    if k.string == 'URL':
+                        url = k.nextSibling.string
+                        if quality_id in url:
+                            return ('%s?|User-Agent=%s' % (url, self.UA))
 
     def __get_movies(self):
         self.__log('__get_movies started')

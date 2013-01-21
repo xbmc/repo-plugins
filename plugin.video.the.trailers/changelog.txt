@@ -1,3 +1,6 @@
+[B]0.9.4[/B]
+- Fix apple trailers thx to "el.kiwi"
+
 [B]0.9.3[/B]
 - Fix empty ListItem.Art(thumb)
 - Fix error when canncelling if asked for download path

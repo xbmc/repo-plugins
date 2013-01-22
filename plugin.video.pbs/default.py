@@ -1,12 +1,12 @@
 
-import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, base64, string, sys, os, traceback, time, xbmcaddon, datetime, coveapi, buggalo
-from urllib2 import Request, urlopen, URLError, HTTPError
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, base64, string, sys, os, coveapi, buggalo
+import simplejson as json
 
 plugin = "PBS"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '12-30-2012'
-__version__ = '2.0.9'
+__date__ = '01-20-2013'
+__version__ = '2.0.10'
 settings = xbmcaddon.Addon( id = 'plugin.video.pbs' )
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -24,7 +24,7 @@ import CommonFunctions
 common = CommonFunctions
 common.plugin = plugin + ' ' + __version__
 
-from addonfunc import addListItem, playListItem, getUrl, setViewMode, getParameters, retry
+from addonfunc import addListItem, playListItem, getUrl, setViewMode, getParameters, retry, useragent
 
 try:
 	if common.getXBMCVersion() >= 12.0:
@@ -212,24 +212,24 @@ def find_videos( name, program_id, topic, page ):
 		if len(data) <= 1:
 			data = cove.videos.filter(fields='associated_images,mediafiles',filter_program=program_id,order_by='-airdate',filter_availability_status='Available',limit_start=start)
 	for results in data:
-		encoding = {}
-		if results['associated_images'] != None and len(results['associated_images']) > 0:
-			thumb = results['associated_images'][0]['url']
-		else:
-			thumb = 'None'
-		for videos in results['mediafiles']:
-			encoding[clean_type(videos['video_encoding']['name'])] = { 'url': videos['video_data_url'], 'backup_url': videos['video_download_url'] }
-		cycle = 0
-		while cycle <= 2:
-			if type[cycle] in encoding:
-				url = str(encoding[type[cycle]]['url'])
-				backup_url = str(encoding[type[cycle]]['backup_url'])
-				break
-			cycle += 1
-		if cycle == 3:
-			url = str(encoding.items()[0][1]['url'])
-			backup_url = str(encoding.items()[0][1]['backup_url'])
 		if len(results['mediafiles']) != 0:
+			encoding = {}
+			if results['associated_images'] != None and len(results['associated_images']) > 0:
+				thumb = results['associated_images'][0]['url']
+			else:
+				thumb = 'None'
+			for videos in results['mediafiles']:
+				encoding[clean_type(videos['video_encoding']['name'])] = { 'url': videos['video_data_url'], 'backup_url': videos['video_download_url'] }
+			cycle = 0
+			while cycle <= 2:
+				if type[cycle] in encoding:
+					url = str(encoding[type[cycle]]['url'])
+					backup_url = str(encoding[type[cycle]]['backup_url'])
+					break
+				cycle += 1
+			if cycle == 3:
+				url = str(encoding.items()[0][1]['url'])
+				backup_url = str(encoding.items()[0][1]['backup_url'])
 			infoLabels = { "Title": results['title'].encode('utf-8'), "Director": "PBS", "Studio": name, "Plot": results['long_description'].encode('utf-8'), "Aired": results['airdate'].rsplit(' ')[0], "Duration": str((int(results['mediafiles'][0]['length_mseconds'])/1000)/60) }
 			u = { 'mode': '5', 'name': results['title'].encode('utf-8'), 'url': url, 'thumb': thumb, 'plot': results['long_description'].encode('utf-8'), 'studio': name, 'backup_url': backup_url }
 			addListItem(label = results['title'].encode('utf-8'), image = thumb, url = u, isFolder = False, infoLabels = infoLabels, fanart = fanart, duration = str(int(results['mediafiles'][0]['length_mseconds'])/1000))
@@ -252,108 +252,102 @@ def find_videos( name, program_id, topic, page ):
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
 def play_video( name, url, thumb, plot, studio, starttime, backup_url ):
-	if url == 'None':
-		if backup_url != 'None':
-			if url.find('http://urs.pbs.org/redirect/') != -1:
-				play_video( name, backup_url, thumb, plot, studio, None, 'None' )
-			else:
-				infoLabels = { "Title": name , "Studio": "PBS: " + studio, "Plot": plot }
-				playListItem(label = name, image = thumb, path = clean(backup_url), infoLabels = infoLabels, PlayPath = False)
-			return
-		else:
-			dialog = xbmcgui.Dialog()
-			ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
-			return
-	if url.find('http://urs.pbs.org/redirect/') != -1:
+	print 'PBS - ' + studio + ' - ' + name
+	print url
+	playpath = False
+	
+	#Release Urls
+	if 'http://release.theplatform.com/' in url:
+		data = getUrl( url + '&format=SMIL' )
 		try:
-			import requests
-			status = 0
-			headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0'}
-			while status <= 10:
-				if status != 0: time.sleep(3)
-				r = requests.head(url , headers=headers, allow_redirects=False)
-				new_url = r.headers['location']
-				if new_url != None: break
-				status += 1
-			infoLabels = { "Title": name , "Studio": "PBS: " + studio, "Plot": plot }
-			playListItem(label = name, image = thumb, path = clean(new_url), infoLabels = infoLabels, PlayPath = False)
-			return
-		except  Exception, e:
-			print 'PBS - Using backup_url'
-			if backup_url != 'None':
-				if url.find('http://urs.pbs.org/redirect/') != -1:
-					play_video( name, backup_url, thumb, plot, studio, None, 'None' )
-				else:
-					infoLabels = { "Title": name , "Studio": "PBS: " + studio, "Plot": plot }
-					playListItem(label = name, image = thumb, path = clean(backup_url), infoLabels = infoLabels, PlayPath = False)
-				return
-			else:
+			msg = common.parseDOM(data, "ref", ret = "title")[0]
+			if msg == 'Unauthorized':
 				dialog = xbmcgui.Dialog()
 				ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
-				ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
-				buggalo.addExtraData('url', url)
-				buggalo.addExtraData('error', str(e))
-				buggalo.addExtraData('info', studio + ' - ' + name)
-				raise Exception("redirect_url ERROR")
 				return
-	data = getUrl( url + '&format=SMIL' )
-	print 'PBS - ' + studio + ' - ' + name
-	try:
-		print data
-	except:
-		pass
-	try:
-		msg = common.parseDOM(data, "ref", ret = "title")[0]
-		if msg == 'Unauthorized':
-			dialog = xbmcgui.Dialog()
-			ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
-			return
-		if msg == 'Unavailable':
-			dialog = xbmcgui.Dialog()
-			ok = dialog.ok( plugin , settings.getLocalizedString( 30015 ) + '\n' + settings.getLocalizedString( 30016 ) )
-			return
-	except:
-		print 'PBS - Failed to check video status'
-		pass
-	try:
-		base = re.compile( '<meta base="(.+?)" />' ).findall( data )[0]
-		src = re.compile( '<ref src="(.+?)" title="(.+?)" (author)?' ).findall( data )[0][0]
-	except:
-		print 'PBS - Using backup_url'
-		if backup_url != 'None':
-			if url.find('http://urs.pbs.org/redirect/') != -1:
-				play_video( name, backup_url, thumb, plot, studio, None, 'None' )
+			if msg == 'Unavailable':
+				dialog = xbmcgui.Dialog()
+				ok = dialog.ok( plugin , settings.getLocalizedString( 30015 ) + '\n' + settings.getLocalizedString( 30016 ) )
+				return
+		except:
+			print 'PBS - Failed to check video status'
+		try:
+			base = re.compile( '<meta base="(.+?)" />' ).findall( data )[0]
+			src = re.compile( '<ref src="(.+?)" title="(.+?)" (author)?' ).findall( data )[0][0]
+		except:
+			print 'PBS - Release backup_url'
+			if backup_url != 'None':
+				url = backup_url
+				backup_url = 'None'
 			else:
-				infoLabels = { "Title": name , "Studio": "PBS: " + studio, "Plot": plot }
-				playListItem(label = name, image = thumb, path = clean(backup_url), infoLabels = infoLabels, PlayPath = False)
-			return
+				url = 'None'
+				backup_url = 'None'
+		if url != 'None' and 'http://urs.pbs.org/redirect/' not in url:
+			if base == 'http://ad.doubleclick.net/adx/':
+				src_data = src.split( "&lt;break&gt;" )
+				url = src_data[0] + "mp4:" + src_data[1].replace('mp4:','')
+			elif base != 'http://ad.doubleclick.net/adx/' and 'http://' in base:
+				url = clean(base + src.replace('mp4:',''))
+			else:
+				url = base
+				playpath = "mp4:" + src.replace('mp4:','')
+	
+	#Empty Urls
+	if url == 'None':
+		print 'PBS - Empty backup_url'
+		if backup_url != 'None':
+			url = backup_url
+			backup_url = 'None'
 		else:
-			dialog = xbmcgui.Dialog()
-			ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
-			ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
-			buggalo.addExtraData('url', url)
-			buggalo.addExtraData('info', studio + ' - ' + name)
-			raise Exception("backup_url ERROR")
-			return
-	# if src.find('m3u8') != -1:
-		# dialog = xbmcgui.Dialog()
-		# ok = dialog.ok( plugin , settings.getLocalizedString( 30008 ) )
-		# return
-	playpath = None
-	if base == 'http://ad.doubleclick.net/adx/':
-		src_data = src.split( "&lt;break&gt;" )
-		rtmp_url = src_data[0] + "mp4:" + src_data[1].replace('mp4:','')
-	elif base != 'http://ad.doubleclick.net/adx/' and base.find('http://') != -1:
-		infoLabels = { "Title": name , "Studio": "PBS: " + studio, "Plot": plot }
-		playListItem(label = name, image = thumb, path = clean(base+src.replace('mp4:','')), infoLabels = infoLabels, PlayPath = False)
-		return
-	elif src.find('.flv') != -1 or base.find('http://') != -1:
-		rtmp_url = base + src
-	else:
-		rtmp_url = base
-		playpath = "mp4:" + src.replace('mp4:','')
+			url = 'None'
+			backup_url = 'None'
+			
+	#Redirect Urls
+	if 'http://urs.pbs.org/redirect/' in url:
+		redirect = True
+		while redirect:
+			try:
+				content = getUrl( url + '?format=json' )
+				query = json.loads(content)
+				if query['http_code'] != 302 or query['url'] == None:
+					if query['http_code'] == 403:
+						dialog = xbmcgui.Dialog()
+						ok = dialog.ok( plugin , settings.getLocalizedString( 30015 ) + '\n' + settings.getLocalizedString( 30016 ) )
+						return
+					else:
+						raise Exception("redirect Error")
+				if 'mp4:' in query['url']:
+					url = query['url'].rsplit('mp4:')[0]
+					playpath = 'mp4:' + query['url'].rsplit('mp4:')[1]
+				else:
+					url = query['url']
+				redirect = False
+			except Exception, e:
+				print str(e)
+				print 'PBS - Redirect backup_url'
+				if backup_url != 'None':
+					if 'http://urs.pbs.org/redirect/' in backup_url:
+						redirect = True
+					else:
+						redirect = False
+					url = backup_url
+					backup_url = 'None'
+				else:
+					url = 'None'
+					backup_url = 'None'
+					redirect = False
+				
+	#Fails
+	if url == 'None' and backup_url == 'None':		
+		dialog = xbmcgui.Dialog()
+		ok = dialog.ok(plugin , settings.getLocalizedString( 30008 ))
+		ok = dialog.ok(plugin, settings.getLocalizedString( 30051 ))
+		buggalo.addExtraData('url', url)
+		buggalo.addExtraData('info', studio + ' - ' + name)
+		raise Exception("backup_url ERROR")
+		
 	infoLabels = { "Title": name , "Studio": "PBS: " + studio, "Plot": plot }
-	playListItem(label = name, image = thumb, path = rtmp_url, infoLabels = infoLabels, PlayPath = playpath)
+	playListItem(label = name, image = thumb, path = url, infoLabels = infoLabels, PlayPath = playpath)
 
 params = getParameters(sys.argv[2])
 starttime = None
@@ -432,8 +426,5 @@ try:
 		play_video( name, url, thumb, plot, studio, starttime, backup_url )
 	elif mode == 6:
 		build_search_directory( url, page )
-	elif mode == 7:
-		infoLabels = { "Title": name , "Studio": "PBS: " + studio, "Plot": plot }
-		playListItem(label = name, image = thumb, path = clean(url), infoLabels = infoLabels, PlayPath = False)
 except Exception:
 	buggalo.onExceptionRaised()

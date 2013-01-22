@@ -1,4 +1,11 @@
-[B]Version 2.0.9[/B]
+[B]Version 2.0.10[/B]
+
+- Fixed index error when loading directories
+- Fixed redirect_url errors
+- Added better support for PBS URS protected links
+- Removed Requests dependency
+
+[B]Version 3.0.9[/B]
 
 - Version bump for Frodo
 - Fixed 'listitem' is not defined error

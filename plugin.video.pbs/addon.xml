@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.pbs"
        name="PBS"
-       version="2.0.9"
+       version="2.0.10"
        provider-name="stacked">
   <requires>
 	<import addon="xbmc.python" version="2.0"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
 	<import addon="script.module.buggalo" version="1.1.2"/>
 	<import addon="script.module.parsedom" version="1.3.0"/>
-	<import addon="script.module.requests" version="0.13.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
             library="default.py">

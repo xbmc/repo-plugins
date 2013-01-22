@@ -1,16 +1,16 @@
 ﻿
-import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, xbmcvfs
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, buggalo, time, datetime, _strptime
 
 plugin = 'G4TV'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '01-30-2012'
-__version__ = '2.0.0'
+__date__ = '01-21-2013'
+__version__ = '3.0.1'
 settings = xbmcaddon.Addon(id='plugin.video.g4tv')
+buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
 dbglevel = 3
 next_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'next.png' )
-downloads_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'downloads.png' )
 search = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'search.png' )
 showName = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'shows.png' )
 recent = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'recent.png' )
@@ -23,33 +23,9 @@ import CommonFunctions
 common = CommonFunctions
 common.plugin = plugin + ' ' + __version__
 
-#import SimpleDownloader as downloader
-#downloader = downloader.SimpleDownloader()
-
-def open_url(url):
-	print url
-	retries = 0
-	while retries < 3:
-		try:
-			req = urllib2.Request(url)
-			req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8')
-			content=urllib2.urlopen(req)
-			data=content.read()
-			content.close()
-			return data
-		except:
-			retries += 1
-			print 'G4TV - Retries: ' + str(retries)
-			continue
-	else:
-		print 'G4TV - Fetch of ' + url + ' failed after ' + str(retries) + 'tries.'
-		return 'none'
+from addonfunc import addListItem, playListItem, getUrl, getPage, setViewMode, getParameters, retry
 
 def build_main_directory():
-	if settings.getSetting('folder') == 'true' and settings.getSetting( 'downloadPath' ):
-		url = settings.getSetting("downloadPath")
-		listitem = xbmcgui.ListItem( label = settings.getLocalizedString( 30018 ), iconImage = downloads_thumb, thumbnailImage = downloads_thumb )
-		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = url, listitem = listitem, isFolder = True)
 	main=[
 		( settings.getLocalizedString( 30011 ), recent, '2', 'recent' ),
 		( settings.getLocalizedString( 30012 ), search, '2', 'search' ),
@@ -61,24 +37,26 @@ def build_main_directory():
 		]
 	for name, thumbnailImage, mode, type in main:
 		url = 'http://g4tv.com/videos/?sort=mostrecent&q=null&ajax=true'
-		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultVideo.png", thumbnailImage = thumbnailImage )
-		u = sys.argv[0] + "?mode=" + mode + "&name=" + urllib.quote_plus( name ) + "&type=" + urllib.quote_plus( type ) + "&url=" + urllib.quote_plus( url )
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
+		u = { 'mode': mode, 'name': name, 'type': type, 'url': url }
+		infoLabels = { "Title": name, "Plot": name }
+		addListItem(label = name, image = thumbnailImage , url = u, isFolder = True, infoLabels = infoLabels)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
 def build_sub_directory(name, type):
-	html = open_url('http://g4tv.com/videos/index.html')
+	html = getUrl('http://g4tv.com/videos/index.html')
 	content = common.parseDOM(html, "div", attrs = { "id": "search_" + type })
 	filter = common.parseDOM(content, "a", attrs = { "href": "#" })
 	count = common.parseDOM(content, "span", attrs = { "class": "count" })
 	for item_count in range(len(filter) - 1):
 		name = filter[item_count]
 		url = 'http://g4tv.com/videos/?sort=mostrecent&q=null&ajax=true&' + type + '=' + name.replace(' ', '+')
-		listitem = xbmcgui.ListItem( label = name + ' ' + count[item_count + 1], iconImage = "DefaultFolder.png", thumbnailImage = eval(type) )
-		u = sys.argv[0] + "?mode=2&name=" + urllib.quote_plus(name) + "&url=" + urllib.quote_plus(url)
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
+		u = { 'mode': '2', 'name': name, 'url': url }
+		infoLabels = { "Title": name, "Plot": name }
+		addListItem(label = name + ' ' + count[item_count + 1], image = eval(type), url = u, isFolder = True, infoLabels = infoLabels)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_UNSORTED )
+	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
 def build_video_directory(name, url):
@@ -86,7 +64,7 @@ def build_video_directory(name, url):
 		searchr = common.getUserInput(settings.getLocalizedString( 30001 ), "").replace(' ','%20')
 		url = 'http://g4tv.com/videos/?sort=mostrecent&q='+ searchr +'&ajax=true'
 	nexturl = url
-	html = open_url(url + '&page=' + str(page))
+	html = getUrl(url + '&page=' + str(page))
 	wrap1 = common.parseDOM(html, "div", attrs = { "class": "li-wrap-1" })
 	wrap2 = common.parseDOM(html, "div", attrs = { "class": "li-wrap-2" })
 	desc = common.parseDOM(wrap1, "p", attrs = { "class": "desc" })
@@ -101,23 +79,33 @@ def build_video_directory(name, url):
 		return
 	for item_count in range(len(img)):
 		if common.stripTags(info[item_count]).find('Views') == -1:
-			duration = common.stripTags(info[item_count]).rsplit('|')[1].replace(' ','')
+			length = common.stripTags(info[item_count]).rsplit('|')[1].replace(' ','').split(':')
 		else:
-			duration = common.stripTags(info[item_count]).rsplit('|')[2].replace(' ','')
+			length = common.stripTags(info[item_count]).rsplit('|')[2].replace(' ','').split(':')
+		duration = int(length[0]) * 60 + int(length[1])
 		thumb = img[item_count].replace('138x78','256x256')
-		plot = common.stripTags(clean(desc[item_count])) + '\n\n' + common.stripTags(info[item_count]).rsplit('|')[0]
+		plot = common.stripTags(clean(desc[item_count]))
 		name = common.stripTags(clean(title[item_count]))
+		try:
+			posted = common.stripTags(info[item_count]).rsplit('|')[0].rsplit(':')[1].strip()
+			if 'ago' in posted:
+				days = int(posted.rsplit(' ')[0])
+				aired = (datetime.date.today() - datetime.timedelta(days=days)).strftime('%d.%m.%Y')
+			else:
+				aired = datetime.datetime.fromtimestamp(time.mktime(time.strptime(posted, "%b %d, %Y"))).strftime('%d.%m.%Y')
+			infoLabels = { "Title": name, "Plot": plot, "Aired": aired }
+		except:
+			infoLabels = { "Title": name, "Plot": plot }
 		url = href[item_count]
-		listitem = xbmcgui.ListItem(label = name, iconImage = thumb, thumbnailImage = thumb)
-		listitem.setInfo( type = "Video", infoLabels = { "Title": name, "Plot": plot, "Duration": duration } )
-		u = sys.argv[0] + "?mode=3&name=" + urllib.quote_plus(name) + "&url=" + urllib.quote_plus(url) + "&plot=" + urllib.quote_plus(plot) + "&thumb=" + urllib.quote_plus(thumb)
-		ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
+		u = { 'mode': '3', 'name': name, 'url': url, 'plot': plot, 'thumb': thumb }
+		addListItem(label = name, image = thumb, url = u, isFolder = False, infoLabels = infoLabels, fanart = False, duration = duration)
 	if len(img) >= 15:
-		listitem = xbmcgui.ListItem(label = settings.getLocalizedString( 30019 ), iconImage = "DefaultVideo.png", thumbnailImage = next_thumb)
-		u = sys.argv[0] + "?mode=2&name=" + urllib.quote_plus(name) + "&url=" + urllib.quote_plus(nexturl) + "&page=" + str(int(page) + 1)
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
+		u = { 'mode': '2', 'name': name, 'url': nexturl, 'page': str(int(page) + 1) }
+		infoLabels = { "Title": settings.getLocalizedString( 30019 ), "Plot": settings.getLocalizedString( 30019 ) }
+		addListItem(label = settings.getLocalizedString( 30019 ), image = next_thumb, url = u, isFolder = True, infoLabels = infoLabels)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_UNSORTED )
 	xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_VIDEO_RUNTIME )
+	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
 def clean(name):
@@ -135,21 +123,12 @@ def clean_file(name):
 def play_video(name, url, plot, thumb):
 	videokey = re.compile('videos/(.+?)/(.+?)/').findall(url)
 	url = 'http://g4tv.com/xml/broadbandplayerservice.asmx/GetEmbeddedHdVideo?videoKey='+videokey[0][0]+'&playLargeVideo=true&excludedVideoKeys=&playlistType=normal&maxPlaylistSize=0'
-	data = open_url(url)
+	data = getUrl(url)
 	url = clean(re.compile('&amp;r=(.+?)</FilePath>').findall(data)[0])
-	if settings.getSetting('download') == 'true':
-		while not settings.getSetting('downloadPath'):
-			dialog = xbmcgui.Dialog()
-			ok = dialog.ok(plugin, settings.getLocalizedString( 30020 ))
-			settings.openSettings()
-		params = { "url": url, "download_path": settings.getSetting('downloadPath'), "Title": name }
-		downloader.download(clean_file(name) + '.' + url.split('/')[-1].split('.')[-1], params)
-	else:
-		listitem = xbmcgui.ListItem(label = name , iconImage = 'DefaultVideo.png', thumbnailImage = thumb)
-		listitem.setInfo( type = "Video", infoLabels={ "Title": name, "Studio": plugin, "Plot": plot } )
-		xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(url, listitem)
+	infoLabels = { "Title": name, "Studio": plugin, "Plot": plot }
+	playListItem(label = name, image = thumb, path = url, infoLabels = infoLabels)
 
-params = common.getParameters(sys.argv[2])
+params = getParameters(sys.argv[2])
 mode = None
 name = None
 url = None
@@ -187,11 +166,14 @@ try:
 except:
 	pass
 
-if mode == None:
-	build_main_directory()
-elif mode == 1:
-	build_sub_directory(name, type)
-elif mode == 2:
-	build_video_directory(name, url)
-elif mode == 3:
-	play_video(name, url, plot, thumb)	
+try:
+	if mode == None:
+		build_main_directory()
+	elif mode == 1:
+		build_sub_directory(name, type)
+	elif mode == 2:
+		build_video_directory(name, url)
+	elif mode == 3:
+		play_video(name, url, plot, thumb)	
+except Exception:
+	buggalo.onExceptionRaised()

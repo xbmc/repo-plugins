@@ -1,3 +1,10 @@
+[B]Version 3.0.1[/B]
+
+- Fixed 'Script failed!' Error
+- Fixed index error caused by getParameters
+- Added default view for Confluence skin
+- Version bump for frodo
+
 [B]Version 2.0.0[/B]
 
 - Initial commit to Eden add-on system

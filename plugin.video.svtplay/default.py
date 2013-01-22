@@ -26,6 +26,7 @@ MODE_SEARCH_EPISODES = "search_episodes"
 MODE_SEARCH_CLIPS = "search_clips"
 
 BASE_URL = "http://www.svtplay.se"
+SWF_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2012.51.swf" 
 
 URL_A_TO_O = "/program"
 URL_CATEGORIES = "/kategorier"
@@ -527,25 +528,31 @@ def startVideo(url):
   player = xbmc.Player()
   startTime = time.time()
   videoUrl = None
-  hlsvideo = False
+  extension = "None"
 
   for video in jsonObj["video"]["videoReferences"]:
-    if video["url"].find(".m3u8") > 0:
+    """
+    Determine which file extension that will be used
+    m3u8 is preferred, hence the break.
+    Order: m3u8, f4m, mp4, flv
+    """
+    if video["url"].endswith(".m3u8"):
+      extension = "HLS"
       videoUrl = video["url"]
-      hlsvideo = True
       break
-    if video["url"].endswith(".flv"):
+    if video["url"].endswith(".f4m"):
+      extension = "F4M"
       videoUrl = video["url"]
-      break
+      continue
     if video["url"].endswith(".mp4"):
+      extension = "MP4"
       videoUrl = video["url"]
-      break
-    else:
-      if video["url"].endswith("/manifest.f4m"):
-        videoUrl = video["url"].replace("/z/", "/i/").replace("/manifest.f4m", "/master.m3u8")
-        hlsvideo = True
-      else:
-        common.log("Skipping unknown filetype: " + video["url"])
+      continue
+    if video["url"].endswith(".flv"):
+      extension = "FLV"
+      videoUrl = video["url"]
+      continue
+    videoUrl = video["url"]
 
   for sub in jsonObj["video"]["subtitleReferences"]:
     if sub["url"].endswith(".wsrt"):
@@ -554,11 +561,25 @@ def startVideo(url):
       if len(sub["url"]) > 0:
         common.log("Skipping unknown subtitle: " + sub["url"])
 
-  if hlsvideo and HLS_STRIP:
-      videoUrl = hlsStrip(videoUrl)
+  if extension == "HLS" and HLS_STRIP:
+    videoUrl = hlsStrip(videoUrl)
+
+  if extension == "F4M":
+    videoUrl = videoUrl.replace("/z/", "/i/").replace("manifest.f4m","master.m3u8")
+
+  if extension == "MP4":
+    videoUrl = mp4Handler(jsonObj)
+
+  if extension == "None":
+    # No supported video was found
+    common.log("No supported video extension found for URL: " + videoUrl)
+    videoUrl = None
 
   if videoUrl:
 
+    if extension == "MP4" and videoUrl.startswith("rtmp://"):
+      videoUrl = videoUrl + " swfUrl="+SWF_URL+" swfVfy=1"
+ 
     xbmcplugin.setResolvedUrl(pluginHandle, True, xbmcgui.ListItem(path=videoUrl))
 
     if subtitle:
@@ -573,6 +594,40 @@ def startVideo(url):
   else:
     dialog = xbmcgui.Dialog()
     dialog.ok("SVT PLAY", localize(30100))
+
+def mp4Handler(jsonObj):
+  """
+  If there are several mp4 streams in the json object:
+  pick the one with the highest bandwidth.
+
+  Some programs are available with multiple mp4 streams
+  for different bitrates. This function ensures that the one
+  with the highest bitrate is chosen.
+
+  Can possibly be extended to support some kind of quality
+  setting in the plugin.
+  """
+  videos = []
+
+  # Find all mp4 videos
+  for video in jsonObj["video"]["videoReferences"]:
+    if video["url"].endswith(".mp4"):
+      videos.append(video)
+  
+  if len(videos) == 1:
+    return videos[0]["url"]
+
+  bitrate = 0
+  url = ""
+
+  # Find the video with the highest bitrate
+  for video in videos:
+    if video["bitrate"] > bitrate:
+      bitrate = video["bitrate"]
+      url = video["url"]          
+
+  common.log("mp4 handler info: bitrate="+str(bitrate)+" url="+url)
+  return url
 
 def hlsStrip(videoUrl):
     """

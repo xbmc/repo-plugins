@@ -1,3 +1,7 @@
+Version 3.1.3
+-------------
+- Added handling of programs with multiple MP4 streams (linqcan)
+
 Version 3.1.2
 -------------
 - Restored playback on Apple TV 2 (by linqcan)

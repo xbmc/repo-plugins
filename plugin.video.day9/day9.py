@@ -61,7 +61,7 @@ class Day9:
     def addVideo(self,title,youtubeid,description='',picture=''):
         url=sys.argv[0]+"?youtubeid="+youtubeid+"&action=showVideo"
         liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage="DefaultVideo.png")
-        liz.setInfo( type="Video", infoLabels={ "Title": title } )
+        liz.setInfo( type="Video", infoLabels={ "Title": title, "Plot" : description } )
         liz.setProperty('IsPlayable', 'true')
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
 
@@ -96,8 +96,6 @@ class Day9:
     def showTitles(self, params = {}):
         get = params.get
         link = self.getRequest(get("url"))
-        # the convert is to get rid of things like &#39;  Fixes unfiled bug
-        # with dailies 484, 393, 389, 388.
         tree = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         # narrow down the search to get rid of upcoming shows
         # I'd like to add them just to inform people of what/when things are
@@ -121,13 +119,18 @@ class Day9:
         get = params.get
         link = self.getRequest(get("url"))
         tree = BeautifulSoup(link)
-        # ideally we grab the pictures and comment text, airdate, etc to
-        # include them in the display
+	airdate = tree.find('time')
+        # instead of using the title from get("title") we're grabbing it from the page to avoid HTML %20 and such.  Could probably strip it with HTML_ENTITIES again if need be.  This became a problem with frodo I think.  It no longer parses the HTML.  
+        title = tree.find('h1', { "name" : "title" }).contents[0]
+        try: 
+            description = tree.find(text='Description').findNext('p')
+        except:
+            description = ''
         i=0
         for video in tree.findAll('iframe'):
             v=re.match('http://www.youtube.com/embed/(.*)', video.get('src'))
             i=i+1
-            self.addVideo(get("title")+' Part '+str(i), youtubeid=v.group(1))
+            self.addVideo(str(title)+' Part '+str(i), youtubeid=v.group(1), description=description)
 
     def showVideo(self, params = {}):
         get = params.get

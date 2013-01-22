@@ -1,3 +1,9 @@
+v2.1.2
+- updated for frodo's use of xbmc.python 2.1.0
+
+v2.0.2
+- update to fix titles on frodo.  Also adds some support for description/airdate
+
 v2.0.1
 - re-release to eden/frodo
 

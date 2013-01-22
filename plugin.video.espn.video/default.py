@@ -1,13 +1,13 @@
 
-import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, traceback, xbmcaddon, xbmcvfs
-from urllib2 import Request, urlopen, URLError, HTTPError
+import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, buggalo
 
 plugin = "ESPN Video"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '07-26-2012'
-__version__ = '1.0.2'
+__date__ = '01-20-2013'
+__version__ = '1.0.3'
 settings = xbmcaddon.Addon(id='plugin.video.espn.video')
+buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
 dbglevel = 3
 next_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'next.png' )
@@ -21,6 +21,8 @@ import CommonFunctions
 common = CommonFunctions
 common.plugin = plugin + ' ' + __version__
 
+from addonfunc import addListItem, playListItem, getUrl, getPage, setViewMode, getParameters, retry
+
 def build_main_directory():
 	main=[
 		( settings.getLocalizedString( 30000 ), tvshows_thumb, 'menu2949050', '1' ),
@@ -29,18 +31,19 @@ def build_main_directory():
 		( settings.getLocalizedString( 30005 ), search_thumb, 'search', '2' )
 		]
 	for name, thumbnailImage, url, mode in main:
-		listitem = xbmcgui.ListItem( label = '[ ' + name + ' ]', iconImage = "DefaultVideo.png", thumbnailImage = thumbnailImage )
-		u = sys.argv[0] + "?mode=" + mode + "&thumb=" + urllib.quote_plus( thumbnailImage ) + "&url=" + urllib.quote_plus( url ) + "&name=" + urllib.quote_plus( name )
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
+		u = { 'mode': mode, 'thumb': thumbnailImage, 'url': url, 'name': name }
+		infoLabels = { "Title": name, "Plot": name }
+		addListItem(label = '[ ' + name + ' ]', image = thumbnailImage, url = u, isFolder = True, infoLabels = infoLabels)
 	if settings.getSetting('presets_search') != '' and settings.getSetting('history') == 'true':
-		listitem = xbmcgui.ListItem( label = '[ ' + settings.getLocalizedString( 30006 ) + ' ]', iconImage = "DefaultVideo.png", thumbnailImage = history_thumb )
-		u = sys.argv[0] + "?mode=4"
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )		
+		u = { 'mode': '4' }
+		infoLabels = { "Title": settings.getLocalizedString( 30006 ), "Plot": settings.getLocalizedString( 30006 ) }
+		addListItem(label = '[ ' + settings.getLocalizedString( 30006 ) + ' ]', image = history_thumb, url = u, isFolder = True, infoLabels = infoLabels)
 	build_video_directory('http://espn.go.com/video/format/libraryPlaylist?categoryid=2378529', 'The Latest', 'null')
+	setViewMode("503")
 
 def build_sub_directory(url, thumb):
 	saveurl = url
-	html = common.fetchPage({"link": "http://espn.go.com/video/"})["content"]
+	html = getUrl('http://espn.go.com/video/')
 	menu = common.parseDOM(html, "div", attrs = { "id": url })
 	channel = common.parseDOM(menu, "li", attrs = { "class": "channel" })
 	title = common.parseDOM(channel, "a")
@@ -55,17 +58,18 @@ def build_sub_directory(url, thumb):
 			]	
 		for name, search in shows:
 			url = 'http://search.espn.go.com/results?searchString=' + search + '&start=0&dims=6'
-			listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultFolder.png", thumbnailImage = tvshows_thumb )
-			u = sys.argv[0] + "?mode=2" + "&name=" + urllib.quote_plus( settings.getLocalizedString( 30005 ) ) + "&url=" + urllib.quote_plus( url ) + "&type=" + urllib.quote_plus( 'history' )
-			ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
+			u = { 'mode': '2', 'name': settings.getLocalizedString( 30005 ), 'url': url, 'type': 'history' }
+			infoLabels = { "Title": name, "Plot": name }
+			addListItem(label = name, image = tvshows_thumb, url = u, isFolder = True, infoLabels = infoLabels)
 	for name in title:
 		name = name.rsplit('(')[0]
 		url = 'http://espn.go.com/video/format/libraryPlaylist?categoryid=' + id[item_count].replace('channel','')
-		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultFolder.png", thumbnailImage = thumb )
-		u = sys.argv[0] + "?mode=2" + "&name=" + urllib.quote_plus( name ) + "&url=" + urllib.quote_plus( url ) + "&type=" + urllib.quote_plus( 'null' )
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )
+		u = { 'mode': '2', 'name': name, 'url': url, 'type': 'null' }
+		infoLabels = { "Title": name, "Plot": name }
+		addListItem(label = name, image = thumb, url = u, isFolder = True, infoLabels = infoLabels)
 		item_count += 1	
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
 def build_video_directory(url, name, type):
@@ -86,10 +90,10 @@ def build_video_directory(url, name, type):
 					save_str = presets
 			settings.setSetting("presets_search", save_str)
 		else:
-			newStr = common.getParameters(url)["searchString"]
+			newStr = getParameters(url)["searchString"]
 		url = 'http://search.espn.go.com/results?searchString=' + newStr + '&start=' + str(int(page) * 16) + '&dims=6'
 		nexturl = url
-		html = common.fetchPage({"link": url})["content"]
+		html = getUrl(url)
 		results = common.parseDOM(html, "li", attrs = { "class": "result video-result" })
 		titledata = common.parseDOM(results, "h3")
 		title = common.parseDOM(titledata, "a", attrs = { "rel": "nofollow" })
@@ -107,7 +111,7 @@ def build_video_directory(url, name, type):
 			return
 	else:
 		nexturl = url
-		html = common.fetchPage({"link": url + "&pageNum=" + str(int(page)) + "&sortBy=&assetURL=http://assets.espn.go.com&module=LibraryPlaylist&pagename=vhub_index"})["content"]
+		html = getUrl(url + "&pageNum=" + str(int(page)) + "&sortBy=&assetURL=http://assets.espn.go.com&module=LibraryPlaylist&pagename=vhub_index")
 		videocell = common.parseDOM(html, "div", attrs = { "class": "video-cell" })
 		title = common.parseDOM(videocell, "h5")
 		thumb = common.parseDOM(videocell, "img", ret = "src")
@@ -119,15 +123,16 @@ def build_video_directory(url, name, type):
 		data = thumb[item_count].replace('_thumdnail_wbig.jpg','').replace('.jpg','').rsplit('/')[-4:]
 		url = data[0] + '/' + data[1] + '/' + data[2] + '/' + data[3]
 		thumbnailImage = thumb[item_count].replace('_thumdnail_wbig','')
-		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultFolder.png", thumbnailImage = thumbnailImage )
-		u = sys.argv[0] + "?mode=3" + "&name=" + urllib.quote_plus( name ) + "&url=" + urllib.quote_plus( url ) + "&thumb=" + urllib.quote_plus( thumbnailImage ) + "&plot=" + urllib.quote_plus( plot )
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = False )
+		u = { 'mode': '3', 'name': name, 'url': url, 'thumb': thumbnailImage, 'plot': plot }
+		infoLabels = { "Title": name, "Plot": name }
+		addListItem(label = name, image = thumbnailImage, url = u, isFolder = False, infoLabels = infoLabels)
 		item_count += 1
 	if pagecount[0] != pagecount[1]:
-		listitem = xbmcgui.ListItem(label = settings.getLocalizedString( 30003 ), iconImage = "DefaultVideo.png", thumbnailImage = next_thumb)
-		u = sys.argv[0] + "?mode=2&name=" + urllib.quote_plus(nextname) + "&url=" + urllib.quote_plus(nexturl) + "&page=" + str(int(page) + 1) + "&type=" + urllib.quote_plus( 'null' )
-		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )	
+		u = { 'mode': '2', 'name': nextname, 'url': nexturl, 'page': str(int(page) + 1), 'type': 'null' }
+		infoLabels = { "Title": settings.getLocalizedString( 30003 ), "Plot": settings.getLocalizedString( 30003 ) }
+		addListItem(label = settings.getLocalizedString( 30003 ), image = next_thumb, url = u, isFolder = True, infoLabels = infoLabels)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 	
 def build_history_directory():
@@ -143,10 +148,12 @@ def build_history_directory():
 		cm = [ ( 'Remove', "XBMC.RunPlugin(%s?mode=5&name=%s&url=%s)" % ( sys.argv[ 0 ], urllib.quote_plus(name), urllib.quote_plus('search') ), ) ]
 		cm += [ ( 'Edit', "XBMC.RunPlugin(%s?mode=6&name=%s&url=%s)" % ( sys.argv[ 0 ], urllib.quote_plus(name), urllib.quote_plus('search') ), ) ]
 		listitem = xbmcgui.ListItem( label = name, iconImage = "DefaultFolder.png", thumbnailImage = history_thumb )
+		listitem.setInfo(type = 'video', infoLabels = { "Title": name, "Plot": name })
 		listitem.addContextMenuItems( cm, replaceItems = False )
 		u = sys.argv[0] + "?mode=2" + "&name=" + urllib.quote_plus( settings.getLocalizedString( 30005 ) ) + "&url=" + urllib.quote_plus( url ) + "&type=" + urllib.quote_plus( 'history' )
 		ok = xbmcplugin.addDirectoryItem( handle = int( sys.argv[1] ), url = u, listitem = listitem, isFolder = True )	
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 	
 def remove_menu(name, url):
@@ -185,21 +192,20 @@ def edit_menu(name, url):
 
 def play_video(url, name, thumb, plot):
 	if plot.find('http://') != -1:
-		html = common.fetchPage({"link": plot})["content"]
+		html = getUrl(plot)
 		plot = common.parseDOM(html, "meta", attrs = { "name": "description" }, ret = "content")[0].replace('ESPN Video: ', '')
-	listitem = xbmcgui.ListItem(label = name , iconImage = thumb, thumbnailImage = thumb)
-	listitem.setInfo( type = "Video", infoLabels={ "Title": name, "Studio": plugin, "Plot": plot } )
-	result = common.fetchPage({"link": "http://vod.espn.go.com/motion/" + url + ".smil?FLVPlaybackVersion=2.1"})
-	if result["status"] != 200:
+	infoLabels = { "Title": name, "Studio": plugin, "Plot": plot }
+	result = getPage("http://vod.espn.go.com/motion/" + url + ".smil?FLVPlaybackVersion=2.1")
+	if '404' in str(result["error"]):
 		dialog = xbmcgui.Dialog()
 		ok = dialog.ok( plugin , settings.getLocalizedString( 30004 ) + ' (' + str(result["status"]) + ')' )
 		return
 	else:
 		playpath = "mp4:" + url + "_" + settings.getSetting("quality") + ".mp4"
-		listitem.setProperty("PlayPath", playpath)
-		xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play('rtmp://svod.espn.go.com/motion/', listitem)
+		url = 'rtmp://svod.espn.go.com/motion/'
+		playListItem(label = name, image = thumb, path = url, infoLabels = infoLabels, PlayPath = playpath)
 
-params = common.getParameters(sys.argv[2])
+params = getParameters(sys.argv[2])
 mode = None
 name = None
 url = None
@@ -235,18 +241,21 @@ try:
 except:
 	pass
 
-if mode == None:
-	build_main_directory()
-elif mode == 1:
-	build_sub_directory(url, thumb)
-elif mode == 2:
-	build_video_directory(url, name, type)
-elif mode == 3:
-	play_video(url, name, thumb, plot)
-elif mode == 4:
-	build_history_directory()
-elif mode == 5:
-	remove_menu(name, url)
-elif mode == 6:
-	edit_menu(name, url)
+try:
+	if mode == None:
+		build_main_directory()
+	elif mode == 1:
+		build_sub_directory(url, thumb)
+	elif mode == 2:
+		build_video_directory(url, name, type)
+	elif mode == 3:
+		play_video(url, name, thumb, plot)
+	elif mode == 4:
+		build_history_directory()
+	elif mode == 5:
+		remove_menu(name, url)
+	elif mode == 6:
+		edit_menu(name, url)
+except Exception:
+	buggalo.onExceptionRaised()
 	

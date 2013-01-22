@@ -307,5 +307,8 @@
 	<string id="30307">Email</string>
 	<string id="30308">Password</string>
 	<string id="30309">Input Your City</string>
+	<string id="30311">[COLOR red][B]        SORRY YOU HAVE INSUFFICIENT SPACE![/B][/COLOR]</string>
+	<string id="30312">[COLOR yellow][B]YOU NEED TO PURCHASE DVR ONLINE TO RECORD[/B][/COLOR]</string>	
+	<string id="30313">[COLOR red][B]     WWW.FILMON.COM/INDEX/SUBSCRIPTIONS[/B][/COLOR]</string>	
 </strings>
 

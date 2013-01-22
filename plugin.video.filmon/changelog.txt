@@ -1,3 +1,13 @@
+v3.2.7
+Bug Fix
+
+v3.2.6
+Fixed News Channels
+
+v3.2.5
+Fixed Local Channels
+Frodo Compatible
+
 v3.2.4
 Fixed Local Channels
 

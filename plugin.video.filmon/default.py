@@ -58,10 +58,10 @@ def keepAlive():
         xbmcgui.Window(10000).clearProperty("SessionID")
         return
 
-    print '=======================KEEPING THE SESSION ALIVE !!==========================='
     ses = xbmcgui.Window(10000).getProperty("SessionID")
+    print '=======================KEEPING THE SESSION ALIVE =%s !!==========================='%(ses)
     urllib2.urlopen(keep_alive+ses)
-    t = Timer(30.0, keepAlive)
+    t = Timer(60.0, keepAlive)
     t.start()
 
 if not xbmcgui.Window(10000).getProperty("SessionID"):
@@ -198,17 +198,17 @@ def CHANNELS(name,url):
             iconimage = str(icon).replace('/logo','/extra_big_logo')
             description = ''
             name = name.encode("utf-8")
-            url = GET_STREAMS(programme_id)
-            ADD_STREAM_LINK(name,url,iconimage,description,'favorites','','','','tvguide',programme_id,'')
+            ADD_DIRECTORY_ITEM(name,'url',12,iconimage,description,programme_id,'','','','tvguide',programme_id,'')
             setView('episodes', 'default') 
             
     
 def GET_STREAM_RESOLUTION(channels,resolution,watch_timeout):
     print channels
+    print '============ RESOLUTION IS SET TO %s ============='%(str(resolution).replace('0','LOW').replace('1','HIGH').replace('2','AUTO SELECTED'))
     watch_timeout=str(watch_timeout)
     if resolution == '0':
         quality  = 'LOW'
-        if not 'low' in channels:
+        if not re.search('low',str(channels),re.IGNORECASE):
             quality  = 'HIGH'
     if resolution == '1':
         quality  = 'HIGH'
@@ -216,8 +216,9 @@ def GET_STREAM_RESOLUTION(channels,resolution,watch_timeout):
         quality  = 'LOW'
         if len(watch_timeout)>5:
             quality  = 'HIGH'
-        if not 'low' in channels:
+        if not re.search('low',str(channels),re.IGNORECASE):
             quality  = 'HIGH'
+    print '=========== STREAMING %s QUALITY ================'% (quality)
     for item in channels:
         if item['quality'].upper() == quality:
             return item
@@ -225,7 +226,9 @@ def GET_STREAM_RESOLUTION(channels,resolution,watch_timeout):
      
                       
 def GET_STREAMS(url):
+        ses=GET_SESSION_ID()
         url='http://www.filmon.com/api/channel/%s?session_key=%s' % (url,ses)
+        print '============ GETTING NEW SESSION_ID = %s  =================='%(ses)
         link = net.http_GET(url).content
         data = json.loads(link)
         channels= data['streams']
@@ -235,28 +238,34 @@ def GET_STREAMS(url):
             foregex= stream['url']+'<'
             playpath=stream['name']
             name=stream['quality']
-            try:
-                    regex = re.compile('rtmp://(.+?)/(.+?)/<')
-                    match = regex.search(foregex)
-                    app = '%s/' %(match.group(2))
-                    url= stream['url']+playpath
-                    swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
-            except:
-                    pass
-            try:
-                    regex = re.compile('rtmp://(.+?)/(.+?)/(.+?)id=([a-f0-9]*?)<')
-                    match = regex.search(foregex)
-                    app = '%s/%sid=%s' %(match.group(2), match.group(3),match.group(4))
-                    url= stream['url']
-                    swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
-            except:
-                    pass
-            try:
-                    match1 = regex.search(url1)
-                    app = '%sid=%s' %(match1.group(2), match1.group(3))
-                    swfUrl='http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf?v=28'
-            except:
-                    pass
+            if re.search('m4v',playpath ,re.IGNORECASE):
+                app = 'vod'
+                swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
+                url= stream['url']+'/'+playpath
+            else:
+                try:
+                        regex = re.compile('rtmp://(.+?)/live/(.+?)id=(.+?)<')
+                        match = regex.search(foregex)
+                        app = 'live/%sid=%s' %(match.group(2),match.group(3))
+                        url= stream['url']
+                        swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
+                except:
+                        pass
+                try:
+                        regex = re.compile('rtmp://(.+?)/(.+?)id=(.+?)"')
+                        match1 = regex.search(foregex)
+                        app = '%sid=%s' %(match1.group(2), match1.group(3))
+                        swfUrl='http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf?v=28'
+                except:
+                        pass
+                try:
+                        regex = re.compile('rtmp://(.+?)/(.+?)/<')
+                        match = regex.search(foregex)
+                        app = '%s/' %(match.group(2))
+                        url= stream['url']+'/'+playpath
+                        swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
+                except:
+                        pass
             tcUrl=stream['url']
             pageUrl = 'http://www.filmon.com/'
             url= str(url)+' playpath='+str(playpath)+' app='+str(app)+' swfUrl='+str(swfUrl)+' tcUrl='+str(tcUrl)+' pageurl='+str(pageUrl)
@@ -264,7 +273,8 @@ def GET_STREAMS(url):
                         
                     
 def GET_RECORDINGS(url):
-        url='http://www.filmon.com/api/dvr-list?session_key=%s'%(ses)
+        url='http://www.filmon.com/api/dvr-list?session_key=%s&format=json'%(ses)
+        print url
         link = net.http_GET(url).content
         data = json.loads(link)
         recordings = data['recordings']
@@ -282,42 +292,46 @@ def GET_RECORDINGS(url):
             description='[B][%s][/B]\n%s'%(d,desc)
             iconimage='https://static.filmon.com/couch/channels/%s/extra_big_logo.png' % str(channel)
             if status=='Recorded':
-	            status=language(30050)
-	            name='%s %s' %(status,name)
-	            name = name.encode('utf-8')
-	            ADD_STREAM_LINK(name,url,iconimage,description,'','','','delete','','',rec)
+                status=language(30050)
+                name='%s %s' %(status,name)
+                name = name.encode('utf-8')
+                ADD_RECORD_LINK(name,url,iconimage,description,'','','','delete','','',rec)
             if status=='Accepted':
-	            status=language(30051)
-	            name='%s %s' %(status,name)
-	            name = name.encode('utf-8')
-	            ADD_STREAM_LINK(name,url,iconimage,description,'','','','delete','','',rec)
+                status=language(30051)
+                name='%s %s' %(status,name)
+                name = name.encode('utf-8')
+                ADD_RECORD_LINK(name,url,iconimage,description,'','','','delete','','',rec)
             if status=='Recording':
-	            status=language(30052)
-	            name='%s %s' %(status,name)
-	            name = name.encode('utf-8')
-	            ADD_STREAM_LINK(name,url,iconimage,description,'','','','delete','','',rec)
+                status=language(30052)
+                name='%s %s' %(status,name)
+                name = name.encode('utf-8')
+                ADD_RECORD_LINK(name,url,iconimage,description,'','','','delete','','',rec)
             if status=='Failed':
-	            status=language(30053)
-	            name='%s %s' %(status,name)
-	            name = name.encode('utf-8')
-	            ADD_STREAM_LINK(name,url,iconimage,description,'','','','delete','','',rec)
+                status=language(30053)
+                name='%s %s' %(status,name)
+                name = name.encode('utf-8')
+                ADD_RECORD_LINK(name,url,iconimage,description,'','','','delete','','',rec)
             setView('movies', 'epg')
                 
                 
 def RECORD_PROGRAMME(url,programme_id,startdate_time):
         url ='http://filmon.com/api/dvr-add?session_key=%s&channel_id=%s&programme_id=%s&start_time=%s' % (ses,url,programme_id,startdate_time)
-        link = net.http_GET(url).content
         try:
-                
-                if re.search('true',link ,re.IGNORECASE):
+                link = net.http_GET(url).content
+                try:
+                        
+                        if re.search('true',link ,re.IGNORECASE):
+                                dialog = xbmcgui.Dialog()
+                                dialog.ok(language(30021),language(30039),' ',language(30040))
+                        if re.search('false',link ,re.IGNORECASE):
+                                dialog = xbmcgui.Dialog()
+                                dialog.ok(language(30021),language(30041),' ',language(30042))
+                except:
                         dialog = xbmcgui.Dialog()
-                        dialog.ok(language(30021),language(30039),' ',language(30040))
-                if re.search('false',link ,re.IGNORECASE):
-                        dialog = xbmcgui.Dialog()
-                        dialog.ok(language(30021),language(30041),' ',language(30042))
+                        dialog.ok(language(30021),language(30040),language(30043),language(30044))
         except:
-                dialog = xbmcgui.Dialog()
-                dialog.ok(language(30021),language(3004),language(30043),language(30044))
+            dialog = xbmcgui.Dialog()
+            dialog.ok(language(30021),language(30311),language(30312),language(30313))               
                 
 def DELETE_RECORDING(startdate_time):
         url='http://www.filmon.com/api/dvr-remove?session_key=%s&recording_id=%s'%(ses,startdate_time)
@@ -379,8 +393,7 @@ def GET_FAVOURITES(url):
         programme_id=field['channel_id']
         iconimage='http://static.filmon.com/couch/channels/%s/extra_big_logo.png'%(programme_id)
         name=RETURN_CHANNEL_NAME_FAVOURITES(programme_id)
-        url = GET_STREAMS(programme_id)
-        ADD_STREAM_LINK(name,url,iconimage,'','','delete','','','tvguide',programme_id,'')
+        ADD_DIRECTORY_ITEM(name,url,12,iconimage,'','',programme_id,'','','tvguide',programme_id,'')
         setView('movies', 'default') 
                 
 def ADD_FAVOURITES(url):
@@ -394,6 +407,28 @@ def DELETE_FAVOURITES(url):
     grp='http://www.filmon.com/api/favorites?session_key=%s&channel_id=%s&run=remove'%(ses,url)
     link = net.http_GET(grp).content
     dialog.ok(language(30021),language(30049),' ','')  
+    
+    
+def GET_SESSION_ID():
+    url= api+'init/'
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', USER_AGENT)
+    response = urllib2.urlopen(req)
+    link=response.read()
+    match= re.compile('"session_key":"(.+?)"').findall (link)
+    sess=match[0]
+    if ADDON.getSetting('filmon') == 'true':
+            log=api+'login?session_key=%s&login=%s&password=%s' % (sess,user,password)
+            req =urllib2.Request(log)
+            req.add_header('User-Agent', USER_AGENT)
+            response = urllib2.urlopen(req)
+            link=response.read()
+            response.close()    
+            xbmcgui.Window(10000).setProperty("SessionID", sess)
+    if ADDON.getSetting('filmon') == 'false':
+            xbmcgui.Window(10000).setProperty("SessionID", sess)
+    return sess
+    
                 
 def get_params():
         param=[]
@@ -421,10 +456,10 @@ def ADD_DIRECTORY_ITEM(name,url,mode,iconimage,description, favorites, deletefav
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot":description} )
         menu = []
         if favorites:
-              menu.append((language(30054),'XBMC.RunPlugin(%s?name=None&url=%s&mode=10&iconimage=None&description=None)'%(sys.argv[0],url)))
+              menu.append((language(30054),'XBMC.RunPlugin(%s?name=None&url=%s&mode=10&iconimage=None&description=None)'%(sys.argv[0],favorites)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
         if deletefav:
-              menu.append((language(30055),'XBMC.RunPlugin(%s?name=None&url=%s&mode=11&iconimage=None&description=None)'%(sys.argv[0],url)))
+              menu.append((language(30055),'XBMC.RunPlugin(%s?name=None&url=%s&mode=11&iconimage=None&description=None)'%(sys.argv[0],deletefav)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
         if record:
               menu.append((language(30056),'XBMC.RunPlugin(%s?name=None&url=%s&mode=6&iconimage=None&description=None&programme_id=%s&startdate_time=%s)'%(sys.argv[0],url,programme_id,startdate_time)))
@@ -433,13 +468,26 @@ def ADD_DIRECTORY_ITEM(name,url,mode,iconimage,description, favorites, deletefav
               menu.append((language(30057),'XBMC.RunPlugin(%s?name=None&url=None&mode=7&iconimage=None&description=None&startdate_time=%s)'%(sys.argv[0],startdate_time)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
         if tvguide:
-              menu.append((language(30058),'XBMC.Container.Update(%s?name=None&url=%s&mode=8&iconimage=%s&description=None)'%(sys.argv[0],url,iconimage)))
+              menu.append((language(30058),'XBMC.Container.Update(%s?name=None&url=%s&mode=8&iconimage=%s&description=None)'%(sys.argv[0],programme_id,iconimage)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        if mode==12:
+              ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
+        else:
+              ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok   
                      
-def ADD_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,tvguide,programme_id,startdate_time):
-        ok=True
+def PLAY_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,tvguide,programme_id,startdate_time):
+        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description } )
+        liz.setProperty("IsPlayable","true")
+        url = GET_STREAMS(programme_id)
+        pl = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        pl.clear()
+        pl.add(url, liz)
+        xbmc.Player(xbmc.PLAYER_CORE_MPLAYER).play(pl)
+        
+        
+def ADD_RECORD_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,tvguide,programme_id,startdate_time):
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description } )
         liz.setProperty("IsPlayable","true")
@@ -460,8 +508,10 @@ def ADD_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record
         if tvguide:
               menu.append((language(30058),'XBMC.Container.Update(%s?name=None&url=%s&mode=8&iconimage=%s&description=None)'%(sys.argv[0],programme_id,iconimage)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
-        return ok 
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
+        
+    
+          
         
 def setView(content, viewType):
         # set content type so library shows more views and info
@@ -564,6 +614,10 @@ elif mode==10:
 elif mode==11:
         print ""+url
         DELETE_FAVOURITES(url)
+        
+elif mode==12:
+        print ""+url
+        PLAY_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,'',programme_id,startdate_time)
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 

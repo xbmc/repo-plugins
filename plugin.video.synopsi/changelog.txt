@@ -1,3 +1,6 @@
+[B]Version 0.4.7[/B]
+- Added: send checkin w/o rating for a played file stopped before 70% of progress
+
 [B]Version 0.4.6[/B]
 - Fixed: addon.xml to get into official repository
 - Added: Show "watched" stripes in tvshow detail

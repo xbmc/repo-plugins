@@ -176,6 +176,8 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		# ask for rating only if more than 70% of movie passed
 		if percent > 0.7:
 			self.rate_file(self.last_played_file)
+		else:
+			self.send_checkin(self.last_played_file)
 
 	def paused(self):
 		self.update_current_time()
@@ -185,7 +187,7 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		self.update_current_time()
 		self.playerEvent('resume')
 
-	def rate_file(self, filename):
+	def rate_file(self, filename, rate=True):
 		# work only on files in library
 		if not self.cache.hasFilename(filename):
 			return False
@@ -202,18 +204,19 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		# prepare the data
 		data = { 'player_events': json.dumps(self.playerEvents) }
 
-		rating = get_rating()
-		# if user rated the title
-		if rating < 4:
-			data['rating'] = rating
+		if rate:
+			rating = get_rating()
+			# if user rated the title
+			if rating < 4:
+				data['rating'] = rating
 
 		self.apiclient.titleWatched(detail['stvId'], **data)
 
 		# clear the player events
 		self.playerEvents = []
 
-
-
+	def send_checkin(self, filename):
+		self.rate_file(filename, rate=False)
 
 class Scrobbler(MyThread):
 	"""

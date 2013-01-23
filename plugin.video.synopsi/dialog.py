@@ -499,7 +499,9 @@ def open_video_dialog(tpl_data, close=False):
 		ui = VideoDialog("VideoInfo.xml", __cwd__, "Default", data=tpl_data)
 		ui.doModal()
 		del ui
-	
+
+
+
 def show_submenu(action_code, **kwargs):
 	try:
 		item_list = top.apiClient.get_item_list(action_code=action_code, **kwargs)
@@ -509,17 +511,17 @@ def show_submenu(action_code, **kwargs):
 			item_list.append(item_show_all_movies_hack)
 
 		if not item_list:
-			dialog_ok(exc_text_by_mode(action_code))
-			return
-			
+			raise ListEmptyException()
+
 	except AuthenticationError as e:
 		if dialog_check_login_correct():
 			show_submenu(action_code, **kwargs)
-
+			
 		return
 
 	except ListEmptyException:
-		dialog_ok(exc_text_by_mode(p['mode']))
+		dialog_ok(exc_text_by_mode(action_code))
+		return
 		
 	except:
 		log(traceback.format_exc())

@@ -41,7 +41,7 @@ class SynopsiPlayer(xbmc.Player):
 
 
 	def __init__(self):
-		super(SynopsiPlayer, self).__init__()
+		super(SynopsiPlayer, self).__init__()	# this will probably not call the xbmc.Player's init, but it is ok
 		self.log('INIT')
 		self.current_time = 0
 
@@ -201,9 +201,15 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		if not detail.has_key('stvId'):
 			return False
 
-		# prepare the data
+		## prepare the data
 		data = { 'player_events': json.dumps(self.playerEvents) }
+	
+		# prepare timestamp if avail
+		pe = self.playerEvents
+		if len(pe) > 0 and pe[0]['event'] == 'start':
+			data['timestamp'] = pe[0]['timestamp']
 
+		# prepare rating if requested
 		if rate:
 			rating = get_rating()
 			# if user rated the title
@@ -217,34 +223,3 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 
 	def send_checkin(self, filename):
 		self.rate_file(filename, rate=False)
-
-class Scrobbler(MyThread):
-	"""
-	Thread creates SynopsiPlayer to receive events and waits for ABORT request.
-	"""
-	def __init__(self, xcache):
-		super(Scrobbler, self).__init__()
-		self.log('Created Scrobbler thread')
-		self.cache = xcache
-		self.player = None
-
-	def log(self, msg):
-		self._log.debug('Scrobbler: ' + msg)
-
-	def run(self):
-		self.log('thread run start')
-
-		self.player = SynopsiPlayerDecor()
-		self.player.setStvList(self.cache)
-
-		#   wait for abort flag
-		while not library.ABORT_REQUESTED and not xbmc.abortRequested:
-			self.player.update_current_time()
-			xbmc.sleep(500)
-
-		dbg = ''
-		if library.ABORT_REQUESTED: dbg += "library.ABORT_REQUESTED "
-		if xbmc.abortRequested: dbg += "xbmc.abortRequested "
-
-		self.log("thread run end " + dbg)
-

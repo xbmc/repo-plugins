@@ -93,6 +93,7 @@ t_emptylist_by_mode = {
 	ActionCode.UnwatchedEpisodes: t_nounwatched,
 	ActionCode.UpcomingEpisodes: t_noupcoming,
 	ActionCode.LocalMovieRecco: t_nolocalrecco,
+	ActionCode.LocalMovies: t_nolocalrecco,	
 	ActionCode.LocalTVShows: t_nolocaltvshow
 }
 

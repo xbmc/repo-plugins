@@ -16,10 +16,11 @@ x	video detail
 	x	handle HACK_SHOW_ALL_LOCAL_MOVIES
 	x	handle AuthenticationError
 	x	remove obsolete Container.* calls
-	-	paskovanie k tvshows - zistit v ktorych episodach su already-watched episody
+	x	paskovanie k tvshows - zistit v ktorych seasons su already-watched episody
+	-	paskovanie k tvshows - opaskovat seasons 'on-disk' (aspon jedna episoda)
 	x	local movies / tvshows / episodes - paska watched nefunguje
 x	bug: similars v epizodach
--	"show all local movies" fails on empty list
+x	"show all local movies" fails on empty list
 -	icon vs thhumbnail v listingoch
 x	512kB hash (synopsi hash)
 -	cache
@@ -28,7 +29,11 @@ x	512kB hash (synopsi hash)
 n	corrections between episode/movie types
 	-	possible only with scraper
 -	test how do the profiles work, and their options about sharing media sources/information
--	frodo version
+
+x	apiclient - send timestamp with checkin/watched
+n	apiclient - update library/list method
+x	remove scrobbler, move xbmc.player to main (service) thread
+x	rpc listener - remove scrobbler dependency, use global player
 
 
 x	You need xbmc.python 2.0 for eden. See http://wiki.xbmc.org/index.php?title=Addon.xml

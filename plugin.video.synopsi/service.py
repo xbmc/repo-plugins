@@ -11,7 +11,7 @@ import sys
 import time
 
 # application
-from scrobbler import Scrobbler
+from scrobbler import SynopsiPlayerDecor
 from library import RPCListenerHandler
 from cache import *
 from utilities import home_screen_fill, login_screen, log
@@ -25,7 +25,6 @@ threading.current_thread().name = 'service.py'
 __addon__  = get_current_addon()
 __cwd__	= __addon__.getAddonInfo('path')
 __addon__.setSetting('ADDON_SERVICE_FIRSTRUN', "false")
-
 
 DEFAULT_SERVICE_PORT=int(__addon__.getSetting('ADDON_SERVICE_PORT'))
 
@@ -43,6 +42,10 @@ def main():
 	# try to restore cache
 	cache = StvList(iuid, apiclient1)
 	top.stvList = cache
+
+	top.player = SynopsiPlayerDecor()
+	top.player.setStvList(cache)
+	
 	
 	try:
 		cache.load()
@@ -57,11 +60,11 @@ def main():
 		thread.start_new_thread(cache_rebuild_hp_update, ())
 
 
-	s = Scrobbler(cache)
-	l = RPCListenerHandler(cache, s)
+	threads = []
+	l = RPCListenerHandler(cache)
+	threads.append(l)
 	aos = AddonService('localhost', DEFAULT_SERVICE_PORT, apiclient1, cache)
-
-	threads = [s, l, aos]
+	threads.append(aos)
 
 	for t in threads:
 		t.start()
@@ -70,7 +73,7 @@ def main():
 	while True:
 		xbmc.sleep(500)
 
-		if not l.isAlive() and not s.isAlive() and not aos.isAlive():
+		if not [t for t in threads if t.isAlive()]:
 			log('All threads are dead. Exiting loop')
 			break
 
@@ -78,6 +81,9 @@ def main():
 			log('service.py abortRequested')
 			log('waiting for: ' + str(','.join([i.name for i in threads if i.isAlive()])))
 			aos.stop()
+
+		top.player.update_current_time()
+
 
 	log('Service loop END')
 	cache.save()

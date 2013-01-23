@@ -64,7 +64,6 @@ class ApiClient(loggable.Loggable):
 			self._log.addHandler(logging.StreamHandler(sys.stdout))
 
 		#~ self._log.setLevel(debugLvl)
-		self._log.debug('apiclient __init__ (%s, %s)' % (self.username, self.password))
 		self.accessTokenTimeout = accessTokenTimeout		# [minutes] how long is stv accessToken valid ?
 		self.accessTokenSessionStart = None
 		self.failedRequest = []
@@ -215,6 +214,7 @@ class ApiClient(loggable.Loggable):
 		if not self.isAuthenticated():
 			self.getAccessToken()
 
+		self._log.debug('-' * 20)
 		url = self.apiUrl + requestData['methodPath']
 		method = requestData['method']
 		data = None
@@ -288,7 +288,7 @@ class ApiClient(loggable.Loggable):
 			'method': 'post',
 			'data': data
 		}
-
+				
 		self.execute(req)
 
 	def titleIdentify(self, props=defaultIdentifyProps, **data):

@@ -1,3 +1,7 @@
+Version 1.5.0
+* Upgrade to xbmcswift2.
+* Update API interaction.
+
 Version 1.4.2
 * Update plugin to reflect Khan API changes
 * Use youtube for playback when an mp4 isn't available

@@ -44,9 +44,9 @@ class User:
         finally:
             response.close()
         #set username & password in the sign in form
-        form = forms[1]
-        form["users[username]"] = username
-        form["users[password]"] = password
-        form["users[rememberme]"] = ["on"]
+        form = forms[0]
+        form["user[email]"] = username
+        form["user[password]"] = password
+        form.find_control(name="user[remember_me]", type="checkbox", id="user_remember_me").selected = True
         #click submit
         return self.get_HTML(form.click())

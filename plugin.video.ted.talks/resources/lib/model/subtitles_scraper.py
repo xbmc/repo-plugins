@@ -9,7 +9,7 @@ import urllib
 import re
 
 __friendly_message__ = 'Error showing subtitles'
-__talkIdKey__ = 'talkId'
+__talkIdKey__ = 'ti'
 __introDurationKey__ = 'introDuration'
 
 def format_time(time):
@@ -53,15 +53,28 @@ def get_flashvars(soup):
     if not flashvar_match:
         raise Exception('Could not get flashVars')
 
-    talkId_re = re.compile('"%s":(\d+)' % (__talkIdKey__))
-    introDuration_re = re.compile('"%s":(\d+)' % (__introDurationKey__))
+    talkId_re = re.compile('"?%s"?:"?(\d+)"?' % (__talkIdKey__))
     flashvars = urllib.unquote(flashvar_match.group(1).encode('ascii'))
 
     talkId_match = talkId_re.search(flashvars)
     if not talkId_match:
         raise Exception('Could not get talk ID')
 
-    introDuration_match = introDuration_re.search(flashvars)
+    input_tag2 = soup.find('script', type='text/javascript', text=re.compile('var talkDetails'))
+    if not input_tag2:
+        raise Exception('Could not find the talkDetails container')
+
+    talkDetails_re = re.compile('var talkDetails = (\{.*\})');
+    talkDetails_match = talkDetails_re.search(input_tag2.string)
+
+    if not talkDetails_match:
+        raise Exception('Could not get talkDetails')
+
+    talkDetails = urllib.unquote(talkDetails_match.group(1).encode('ascii'))
+
+    introDuration_re = re.compile('"%s":(\d+)' % (__introDurationKey__))
+    introDuration_match = introDuration_re.search(talkDetails)
+
     if not introDuration_match:
         raise Exception('Could not get intro duration')
 

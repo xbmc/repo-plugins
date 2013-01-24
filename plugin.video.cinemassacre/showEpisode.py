@@ -25,7 +25,8 @@ def showEpisode(episode_page):
         {"function":showEpisodeSpringboard, "regex":"\\$sb\\(\"(.*?)\",{\"sbFeed\":{\"partnerId\":(.*?),\"type\":\"video\",\"contentId\":(.*?),\"cname\":\"(.*?)\"},\"style\":{\"width\":.*?,\"height\":.*?}}\\);"},
         {"function":showEpisodeDaylimotion, "regex":"(http://www.dailymotion.com/video/.*?)_"},
         {"function":showEpisodeGametrailers, "regex":"<a href=\"(http://www.gametrailers.com/videos/(.*).*)\" target=\"_blank\">"},
-        {"function":showEpisodeSpringboadAfterResolve, "regex":"<script src=\"http://www.springboardplatform.com/js/overlay\"></script><iframe id=\"(.*?)\" src=\"(.*?)\""},
+        {"function":showEpisodeSpringboadAfterResolve, "regex":"src=\"(http\:\/\/cdn\.springboard\.gorillanation\.com/mediaplayer/springboard/video/(?:.*?)/(?:.*?)/(?:.*?)/)"},
+        {"function":showEpisodeSpringboadAfterResolve, "regex":"<script src=\"http://www.springboardplatform.com/js/overlay\"></script><iframe id=\"(?:.*?)\" src=\"(.*?)\""},
         {"function":showEpisodeSpike, "regex":"<a href=\"(http://www.spike.com/.*?)\""},
         {"function":showEpisodeScreenwave, "regex":"((?:[^\"\']*)screenwavemedia.com/(?:[^\/]*)/embed.php(?:[^\"\']*))"},
     )
@@ -70,13 +71,16 @@ def showEpisodeScreenwave(videoItem):
     
 def showEpisodeSpringboadAfterResolve(videoItem):
     _regex_extractVideoParameters = re.compile("http://cms\.springboard.*\.com/(.*?)/(.*?)/video/(.*?)/.*?/(.*?)")
+    _regex_extractVideoParameters2 = re.compile("http\://cms\.springboardplatform\.com/xml_feeds_advanced/(.*?)/(.*?)/rss3/(.*?)/")
 
     # Handle shortened URLs
-    req = urllib2.Request(videoItem.group(2))
+    req = urllib2.Request(videoItem.group(1))
     response = urllib2.urlopen(req)
     fullURL = response.geturl()
 
     videoItem = _regex_extractVideoParameters.search(fullURL)
+    if videoItem is None:
+       videoItem = _regex_extractVideoParameters2.search(fullURL)
     showEpisodeSpringboard(videoItem)
     return False
 

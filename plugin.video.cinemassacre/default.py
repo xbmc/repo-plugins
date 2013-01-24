@@ -126,15 +126,10 @@ def subMenu(link,row='[]'):
 
 def recentPage():
     global thisPlugin
-    page = load_page(baseLink)
-    show = common2.parseDOM(page, "div", attrs={"class": "footercontainer3"})
-    show = common2.parseDOM(show, "div", attrs={"class": "footeritem"})
-    show = common2.parseDOM(show, "li")
-    linkList = []
-    for item in show:
-        title = common2.parseDOM(item, "a")[0]
-        link = common2.parseDOM(item, "a", ret="href")[0]
-        linkList.append({"title":title, "url":link, "thumb":""})
+    pageUrl = baseLink + "wp-admin/admin-ajax.php"
+    pageData = "action=infinite_scroll&loop_file=loop"
+    page = load_page(pageUrl,pageData)
+    linkList = extractEpisodes(page)
     addEpisodeListToDirectory(linkList)
     
 def extractMenu(page,row='[]'):

@@ -1,3 +1,6 @@
+[B]1.9.5[/B]
+- Fix apple trailers thx to "el.kiwi"
+
 [B]1.9.4[/B]
 - Frodo bump
 

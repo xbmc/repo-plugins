@@ -160,11 +160,14 @@ class AppleTrailers(object):
             url=self.BACKUP_MOVIE_BASE % movie['movie_string']
             tree = None
             if quality_id=='h480p.mov':
-                tree=self.__get_tree(url + 'itsxml/25-'+trailer_type+'.xml')
+                cache=(movie['movie_string'].split('/')[1])+trailer_type+quality_id+'.xml'
+                tree=self.__get_tree(url + 'itsxml/25-'+trailer_type+'.xml',cache_filename=cache)
             if quality_id=='h720p.mov':
-                tree=self.__get_tree(url + 'itsxml/26-'+trailer_type+'.xml')
+                cache=(movie['movie_string'].split('/')[1])+trailer_type+quality_id+'.xml'
+                tree=self.__get_tree(url + 'itsxml/26-'+trailer_type+'.xml',cache_filename=cache)
             if quality_id=='h1080p.mov':
-                tree=self.__get_tree(url + 'itsxml/27-'+trailer_type+'.xml')
+                cache=(movie['movie_string'].split('/')[1])+trailer_type+quality_id+'.xml'
+                tree=self.__get_tree(url + 'itsxml/27-'+trailer_type+'.xml',cache_filename=cache)
             for s in tree.findAll('dict'):
                 for k in s.findAll('key'):                
                     if k.string == 'URL':

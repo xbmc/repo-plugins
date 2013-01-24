@@ -2,7 +2,7 @@
 <addon 
     id="plugin.video.the.trailers"
     name="The Trailers"
-    version="0.9.4"
+    version="0.9.5"
     provider-name="Martijn, Sphere">
     <requires>
         <import addon="xbmc.python" version="2.0"/>

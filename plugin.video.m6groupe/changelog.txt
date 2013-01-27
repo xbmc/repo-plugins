@@ -1,3 +1,10 @@
+[B]Version 2.0.5[/B]
+
+- Fix video duration
+- Fix 6ter catalog (unknown genre id)
+- Add debug traces
+- Add parameter to enable/disbale SWF verification
+
 [B]Version 2.0.4[/B]
 
 - Update for requests 1.0.4

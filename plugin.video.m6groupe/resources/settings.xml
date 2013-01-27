@@ -6,5 +6,6 @@
     </category>
     <category label="30101">
         <setting label="30102" id="cached_ttl" type="text" default="180" />
+        <setting label="30103" id="swf_verify" type="bool" default="false" />
     </category>
 </settings>

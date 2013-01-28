@@ -38,7 +38,7 @@ def get_by_letter(arg):
 def get_by_category(arg):
   url = "http://tv.nrk.no/kategori/%s" % arg
   html = xhrsession.get(url).text
-  html = parseDOM(html, 'div', {'class':'alpha-list clear'})
+  html = parseDOM(html, 'div', {'id':'programList'})
   return _parse_list(html)
 
 def get_categories():
@@ -75,7 +75,7 @@ def get_recommended():
 
 def get_most_recent():
   url = "http://tv.nrk.no/listobjects/recentlysent.json/page/0"
-  elems = xhrsession.get(url).json['ListObjectViewModels']
+  elems = xhrsession.get(url).json['ListObjectModels']
   titles = [ e['Title'] for e in elems ]
   titles = map(html_decode, titles)
   urls = [ e['Url'] for e in elems ]

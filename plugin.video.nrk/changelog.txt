@@ -1,3 +1,9 @@
+[B]4.4.2[/B]
+- Sideendringer
+
+[B]4.4.1[/B]
+- Frodo
+
 [B]4.3.1[/B]
 - Fikset linjeskift i undertekster
 - Fikset tittel på infoside

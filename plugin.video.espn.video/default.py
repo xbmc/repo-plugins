@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, buggal
 plugin = "ESPN Video"
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '01-20-2013'
-__version__ = '2.0.3'
+__date__ = '01-27-2013'
+__version__ = '2.0.4'
 settings = xbmcaddon.Addon(id='plugin.video.espn.video')
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -23,6 +23,7 @@ common.plugin = plugin + ' ' + __version__
 
 from addonfunc import addListItem, playListItem, getUrl, getPage, setViewMode, getParameters, retry
 
+@retry(IndexError)
 def build_main_directory():
 	main=[
 		( settings.getLocalizedString( 30000 ), tvshows_thumb, 'menu2949050', '1' ),
@@ -41,6 +42,7 @@ def build_main_directory():
 	build_video_directory('http://espn.go.com/video/format/libraryPlaylist?categoryid=2378529', 'The Latest', 'null')
 	setViewMode("503")
 
+@retry(IndexError)
 def build_sub_directory(url, thumb):
 	saveurl = url
 	html = getUrl('http://espn.go.com/video/')
@@ -72,6 +74,7 @@ def build_sub_directory(url, thumb):
 	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
+@retry(IndexError)
 def build_video_directory(url, name, type):
 	nextname = name
 	if name == settings.getLocalizedString( 30005 ):
@@ -93,10 +96,15 @@ def build_video_directory(url, name, type):
 			newStr = getParameters(url)["searchString"]
 		url = 'http://search.espn.go.com/results?searchString=' + newStr + '&start=' + str(int(page) * 16) + '&dims=6'
 		nexturl = url
-		html = getUrl(url)
+		html = getUrl(url).decode('ascii', 'ignore')
 		results = common.parseDOM(html, "li", attrs = { "class": "result video-result" })
 		titledata = common.parseDOM(results, "h3")
 		title = common.parseDOM(titledata, "a", attrs = { "rel": "nofollow" })
+		if len(title) == 0:
+			dialog = xbmcgui.Dialog()
+			ok = dialog.ok( plugin , settings.getLocalizedString( 30013 ) + '\n' + settings.getLocalizedString( 30014 ) )
+			remove_menu(newStr,'search')
+			return
 		img = common.parseDOM(results, "a", attrs = { "class": "list-thumb" })
 		desc = common.parseDOM(results, "p")
 		thumb = common.parseDOM(img, "img", ret = "src" )
@@ -104,11 +112,6 @@ def build_video_directory(url, name, type):
 		maxlength = common.parseDOM(pagenum, "span")[1].replace('of ','')
 		value = common.parseDOM(pagenum, "input", attrs = { "id": "page-number" }, ret = "value" )[0]
 		pagecount = [ value, maxlength ]
-		if len(title) == 0:
-			dialog = xbmcgui.Dialog()
-			ok = dialog.ok( plugin , settings.getLocalizedString( 30013 ) + '\n' + settings.getLocalizedString( 30014 ) )
-			remove_menu(newStr,'search')
-			return
 	else:
 		nexturl = url
 		html = getUrl(url + "&pageNum=" + str(int(page)) + "&sortBy=&assetURL=http://assets.espn.go.com&module=LibraryPlaylist&pagename=vhub_index")
@@ -119,13 +122,24 @@ def build_video_directory(url, name, type):
 		pagecount = common.parseDOM(html, "div", attrs = { "class": "page-numbers" })[0].rsplit(' of ')
 	item_count = 0
 	for name in title:
-		plot = desc[item_count]
-		data = thumb[item_count].replace('_thumdnail_wbig.jpg','').replace('.jpg','').rsplit('/')[-4:]
-		url = data[0] + '/' + data[1] + '/' + data[2] + '/' + data[3]
-		thumbnailImage = thumb[item_count].replace('_thumdnail_wbig','')
-		u = { 'mode': '3', 'name': name, 'url': url, 'thumb': thumbnailImage, 'plot': plot }
-		infoLabels = { "Title": name, "Plot": name }
-		addListItem(label = name, image = thumbnailImage, url = u, isFolder = False, infoLabels = infoLabels)
+		if '/espn360/' not in thumb[item_count]:
+			if 'http://' in desc[item_count]:
+				plot = name
+			else:
+				plot = desc[item_count]
+			try:
+				data = thumb[item_count].replace('_thumdnail_wbig.jpg','').replace('.jpg','').rsplit('motion/')
+				url = data[1]
+			except:
+				data = thumb[item_count].replace('_thumdnail_wbig.jpg','').replace('.jpg','').rsplit('/')[-4:]
+				if len(data) >= 4:
+					url = data[0] + '/' + data[1] + '/' + data[2] + '/' + data[3]
+				else:
+					url = 'null'
+			thumbnailImage = thumb[item_count].replace('_thumdnail_wbig','')
+			u = { 'mode': '3', 'name': name, 'url': url.replace('motion/',''), 'thumb': thumbnailImage, 'plot': plot }
+			infoLabels = { "Title": name, "Plot": plot }
+			addListItem(label = name, image = thumbnailImage, url = u, isFolder = False, infoLabels = infoLabels)
 		item_count += 1
 	if pagecount[0] != pagecount[1]:
 		u = { 'mode': '2', 'name': nextname, 'url': nexturl, 'page': str(int(page) + 1), 'type': 'null' }
@@ -191,14 +205,11 @@ def edit_menu(name, url):
 	xbmc.executebuiltin( "Container.Refresh" )
 
 def play_video(url, name, thumb, plot):
-	if plot.find('http://') != -1:
-		html = getUrl(plot)
-		plot = common.parseDOM(html, "meta", attrs = { "name": "description" }, ret = "content")[0].replace('ESPN Video: ', '')
 	infoLabels = { "Title": name, "Studio": plugin, "Plot": plot }
 	result = getPage("http://vod.espn.go.com/motion/" + url + ".smil?FLVPlaybackVersion=2.1")
 	if '404' in str(result["error"]):
 		dialog = xbmcgui.Dialog()
-		ok = dialog.ok( plugin , settings.getLocalizedString( 30004 ) + ' (' + str(result["status"]) + ')' )
+		ok = dialog.ok(plugin, settings.getLocalizedString( 30004 ))
 		return
 	else:
 		playpath = "mp4:" + url + "_" + settings.getSetting("quality") + ".mp4"

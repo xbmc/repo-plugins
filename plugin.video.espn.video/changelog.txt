@@ -1,4 +1,10 @@
-[B]Version 1.0.3[/B]
+[B]Version 1.0.4[/B]
+
+- Fixed 'status' error when playing videos
+- Fixed 'ascii' errors when searching
+- Fixed 'IndexError' when searching
+
+[B]Version 2.0.3[/B]
 
 - Fixed error when playing videos
 - Version bump for Frodo

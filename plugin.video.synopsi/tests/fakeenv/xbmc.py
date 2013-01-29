@@ -1,9 +1,13 @@
+
+# python standart library
 import logging
 import sys
 import SocketServer
 import socket
 import time
 import json
+import os
+
 from mythread import MyThread
 
 abortRequested = False
@@ -30,7 +34,7 @@ def executebuiltin(builtin):
 		print "Executed Builtin:", builtin
 
 def translatePath(path):
-	return 'data/'
+		return 'data/'
 
 class Player(MyThread):
 	def __init__(self):

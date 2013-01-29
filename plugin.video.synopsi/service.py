@@ -19,6 +19,7 @@ from app_apiclient import AppApiClient
 from addonservice import AddonService
 import top
 import threading
+import dialog
 
 threading.current_thread().name = 'service.py'
 
@@ -40,30 +41,28 @@ def main():
 	iuid = get_install_id()
 
 	# try to restore cache
-	cache = StvList(iuid, apiclient1)
-	top.stvList = cache
-
+	top.stvList = StvList(iuid, apiclient1)
 	top.player = SynopsiPlayerDecor()
-	top.player.setStvList(cache)
+	top.player.setStvList(top.stvList)
 	
 	
 	try:
-		cache.load()
-		thread.start_new_thread(home_screen_fill, (apiclient1, cache))
+		top.stvList.load()
+		thread.start_new_thread(home_screen_fill, (apiclient1, top.stvList))
 	except:
 		# first time
 		log('CACHE restore failed. If this is your first run, its ok. Rebuilding cache')
 		def cache_rebuild_hp_update():
-			cache.rebuild()
-			home_screen_fill(apiclient1, cache)
+			top.stvList.rebuild()
+			home_screen_fill(apiclient1, top.stvList)
 
 		thread.start_new_thread(cache_rebuild_hp_update, ())
 
 
 	threads = []
-	l = RPCListenerHandler(cache)
+	l = RPCListenerHandler(top.stvList)
 	threads.append(l)
-	aos = AddonService('localhost', DEFAULT_SERVICE_PORT, apiclient1, cache)
+	aos = AddonService('localhost', DEFAULT_SERVICE_PORT, apiclient1, top.stvList)
 	threads.append(aos)
 
 	for t in threads:
@@ -86,7 +85,10 @@ def main():
 
 
 	log('Service loop END')
-	cache.save()
+	top.stvList.save()
+	
+	dialog.close_all_dialogs()
+	log('Service thread END')
 
 if __name__ == "__main__":
 	main()

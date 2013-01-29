@@ -49,6 +49,11 @@ def close_current_dialog():
 	if d:
 		d.close()
 
+def close_all_dialogs():
+	for d in opendialogs:
+		d.close()
+		del d
+
 class ListDialog(xbmcgui.WindowXMLDialog):
 	""" Dialog for choosing movie corrections """
 	def __init__(self, *args, **kwargs):
@@ -132,11 +137,15 @@ class ListDialog(xbmcgui.WindowXMLDialog):
 			else:
 				show_video_dialog({'type': item.getProperty('type'), 'id': stv_id}, close=False)
 
-	def close(self):
-		current_window = opendialogs.pop()
-		if current_window != self:
-			log('WARNING: dialog queue inconsistency')
+	def close(self):		
+		# check if closing the currently opened dialog
+		if opendialogs[-1] != self:
+			log('WARNING: Dialog queue inconsistency. Non-top dialog close')
+			
+		opendialogs.remove(self)
 		xbmcgui.WindowXMLDialog.close(self)
+
+		
 
 def open_list_dialog(tpl_data, close=True):
 	#~ path = '/home/smid/projects/XBMC/resources/skins/Default/720p/'
@@ -305,10 +314,12 @@ class VideoDialog(xbmcgui.WindowXMLDialog):
 
 		return
 
-	def close(self):
-		current_window = opendialogs.pop()
-		if current_window != self:
-			log('WARNING: dialog queue inconsistency')
+	def close(self):		
+		# check if closing the currently opened dialog
+		if opendialogs[-1] != self:
+			log('WARNING: Dialog queue inconsistency. Non-top dialog close')
+			
+		opendialogs.remove(self)
 		xbmcgui.WindowXMLDialog.close(self)
 
 
@@ -353,10 +364,12 @@ class SelectMovieDialog(xbmcgui.WindowXMLDialog):
 		if (action.getId() in CANCEL_DIALOG):
 			self.close()
 
-	def close(self):
-		current_window = opendialogs.pop()
-		if current_window != self:
-			log('WARNING: dialog queue inconsistency')
+	def close(self):		
+		# check if closing the currently opened dialog
+		if opendialogs[-1] != self:
+			log('WARNING: Dialog queue inconsistency. Non-top dialog close')
+			
+		opendialogs.remove(self)
 		xbmcgui.WindowXMLDialog.close(self)
 
 
@@ -400,9 +413,13 @@ def show_video_dialog_data(stv_details, json_data={}, close=False):
 		if t1_similars.has_key('titles'):
 			stv_details['similars'] = t1_similars['titles']
 	elif stv_details['type'] == 'tvshow':
+		seasons = top.stvList.get_tvshow_local_seasons(stv_details['id'])
+		log('seasons on disk:' + str(seasons))
+		
 		# append seasons
 		if stv_details.has_key('seasons'):
-			stv_details['similars'] = [ {'id': i['id'], 'name': 'Season %d' % i['season_number'], 'cover_medium': i['cover_medium'], 'watched': i['episodes_count'] == i['watched_count']} for i in stv_details['seasons'] ]
+			stv_details['similars'] = [ {'id': i['id'], 'name': 'Season %d' % i['season_number'], 'cover_medium': i['cover_medium'], 'watched': i['episodes_count'] == i['watched_count'], 'file': i['season_number'] in seasons} for i in stv_details['seasons'] ]
+			log(dump(stv_details['similars']))
 				
 
 	# similar overlays

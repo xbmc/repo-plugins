@@ -6,5 +6,5 @@ This is SynopsiTV App that provides reccomendations based on your viewing style.
 
 ### Installation
 
-* Download zip and install as zip directly from XBMC > System > Settings > Add-ons > Install from zip file
+* Install directly from XBMC > System > Settings > Add-ons > Get Add-ons > (XBMC.org Add-ons) > Video Add-ons > SynopsiTV
 

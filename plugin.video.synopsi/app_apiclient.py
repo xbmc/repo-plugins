@@ -217,3 +217,8 @@ class AppApiClient(ApiClient):
 		elif action_code==ActionCode.TVShowEpisodes:
 			return self.get_tvshow_season(kwargs['stv_id'])
 		
+
+	def titleIdentify(self, props=defaultIdentifyProps, **data):
+		data['file_name'] = rel_path(data['file_name'])
+		return ApiClient.titleIdentify(self, props, **data)
+

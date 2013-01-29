@@ -423,7 +423,7 @@ class ApiClient(loggable.Loggable):
 			props += ['cast']
 
 		req = {
-			'methodPath': '/tvshow/%d/' % titleId,
+			'methodPath': 'tvshow/%d/' % titleId,
 			'method': 'get',
 			'data': {
 				'title_property[]': ','.join(props),

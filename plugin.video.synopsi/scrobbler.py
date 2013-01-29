@@ -122,7 +122,10 @@ class SynopsiPlayer(xbmc.Player):
 
 	def get_time(self, default=None):
 		try:
-			t = self.getTime()
+			if self.isPlayingVideo():
+				t = self.getTime()
+			else:
+				raise Exception('fix: xbmc missing exception')
 		except:
 			return default
 

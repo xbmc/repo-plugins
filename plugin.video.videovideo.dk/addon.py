@@ -19,6 +19,7 @@
 #
 import sys
 import urllib2
+import urlparse
 import simplejson
 import buggalo
 
@@ -48,7 +49,7 @@ class VideoVideoHD(object):
                 'plot' : show['description']
             })
             item.setProperty('Fanart_Image', show['imagefull'])
-            url = PATH + '?' + show['url']
+            url = PATH + '?url=' + show['url']
             xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
 
         if teasers is not None:
@@ -57,7 +58,7 @@ class VideoVideoHD(object):
                 item.setInfo(type = 'video', infoLabels = {
                     'title' : teaser['headline'],
                     'plot' : teaser['text'],
-                    'duration' : teaser['episode']['duration'],
+                    'duration' : self.parseDuration(teaser['episode']['duration']),
                     'studio' : ADDON.getAddonInfo('name')
                 })
                 item.setProperty('Fanart_Image', teaser['episode']['imagefull'])
@@ -85,7 +86,7 @@ class VideoVideoHD(object):
                 'date' : date,
                 'aired' : aired,
                 'year' : int(year),
-                'duration' : episode['duration'],
+                'duration' : self.parseDuration(episode['duration']),
                 'studio' : ADDON.getAddonInfo('name')
             }
             item.setInfo('video', infoLabels)
@@ -96,6 +97,11 @@ class VideoVideoHD(object):
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_DATE)
         xbmcplugin.endOfDirectory(HANDLE)
+
+    def parseDuration(self, durationString):
+        duration = 60 * int(durationString[0:2])
+        duration += int(durationString[3:5])
+        return str(duration)
 
     def downloadJson(self, url):
         try:
@@ -119,13 +125,13 @@ if __name__ == '__main__':
     ADDON = xbmcaddon.Addon()
     PATH = sys.argv[0]
     HANDLE = int(sys.argv[1])
-    PARAMS = sys.argv[2]
+    PARAMS = urlparse.parse_qs(sys.argv[2][1:])
 
     buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     vvd = VideoVideoHD()
     try:
-        if PARAMS != '':
-            vvd.showShow(PARAMS[1:]) # remove ?
+        if PARAMS.has_key('url'):
+            vvd.showShow(PARAMS['url'][0])
         else:
             vvd.showOverview()
 

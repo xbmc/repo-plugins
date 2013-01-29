@@ -1,3 +1,7 @@
+[B]Version 2.0.3 - 2013-01-27[/B]
+- Updated to use script.module.buggalo
+- Fixed a couple minor programs reported by buggalo
+
 [B]Version 2.0.2 - 2012-02-23[/B]
 - Fix problem with YouSee check
 

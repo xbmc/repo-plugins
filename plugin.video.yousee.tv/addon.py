@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2012 Tommy Winther
+#      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -31,26 +31,27 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
+
 class YouSeeTv(object):
     def showOverview(self):
         iconImage = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
 
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30000), iconImage = iconImage)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30000), iconImage=iconImage)
         item.setProperty('Fanart_Image', FANART_IMAGE)
         url = PATH + '?area=livetv'
         xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
 
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30001), iconImage = iconImage)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30001), iconImage=iconImage)
         item.setProperty('Fanart_Image', FANART_IMAGE)
         url = PATH + '?area=movie-genre'
         xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
 
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30002), iconImage = iconImage)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30002), iconImage=iconImage)
         item.setProperty('Fanart_Image', FANART_IMAGE)
         url = PATH + '?area=movie-theme'
         xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
 
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30003), iconImage = iconImage)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30003), iconImage=iconImage)
         item.setProperty('Fanart_Image', FANART_IMAGE)
         url = PATH + '?area=movie-search'
         xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
@@ -74,22 +75,22 @@ class YouSeeTv(object):
             iconImage = os.path.join(CACHE_PATH, str(channel['id']) + '.png')
             if not os.path.exists(iconImage):
                 iconImage = channel['logos']['large']
-            item = xbmcgui.ListItem(channel['nicename'], iconImage = iconImage, thumbnailImage = iconImage)
+            item = xbmcgui.ListItem(channel['nicename'], iconImage=iconImage, thumbnailImage=iconImage)
             item.setProperty('Fanart_Image', FANART_IMAGE)
             item.setProperty('IsPlayable', 'true')
             url = PATH + '?channel=' + str(channel['id'])
             xbmcplugin.addDirectoryItem(HANDLE, url, item)
 
-        xbmcplugin.endOfDirectory(HANDLE, succeeded = len(channels) > 0)
+        xbmcplugin.endOfDirectory(HANDLE, succeeded=len(channels) > 0)
 
     def playLiveTVChannel(self, channelId):
         api = ysapi.YouSeeLiveTVApi(CACHE_PATH)
         channel = api.channel(channelId)
         stream = api.streamUrl(channelId)
-        if not stream or not stream.has_key('url') or not stream['url']:
+        if not stream or not 'url' in stream or not stream['url']:
             xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
 
-            if stream and stream.has_key('error'):
+            if stream and 'error' in stream:
                 self._showError(stream['error'])
             else:
                 self._showError()
@@ -98,7 +99,7 @@ class YouSeeTv(object):
         thumbnailImage = os.path.join(CACHE_PATH, str(channelId) + '.png')
         if not os.path.exists(thumbnailImage):
             thumbnailImage = channel['logos']['large']
-        item = xbmcgui.ListItem(channel['nicename'], path = stream['url'], thumbnailImage = thumbnailImage)
+        item = xbmcgui.ListItem(channel['nicename'], path=stream['url'], thumbnailImage=thumbnailImage)
         xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
     def showMovieGenres(self):
@@ -110,10 +111,10 @@ class YouSeeTv(object):
             return
 
         for genre in genres:
-            item = xbmcgui.ListItem(genre['name'] + ' (' + str(genre['count']) + ')', iconImage = ICON)
+            item = xbmcgui.ListItem(genre['name'] + ' (' + str(genre['count']) + ')', iconImage=ICON)
             item.setProperty('Fanart_Image', FANART_IMAGE)
             url = PATH + '?genre=' + genre['url_id']
-            xbmcplugin.addDirectoryItem(HANDLE, url, item, isFolder = True, totalItems = int(genre['count']))
+            xbmcplugin.addDirectoryItem(HANDLE, url, item, isFolder=True, totalItems=int(genre['count']))
 
         xbmcplugin.endOfDirectory(HANDLE)
 
@@ -131,7 +132,6 @@ class YouSeeTv(object):
         xbmcplugin.setContent(HANDLE, 'movies')
         xbmcplugin.endOfDirectory(HANDLE)
 
-
     def showMovieThemes(self):
         api = ysapi.YouSeeMovieApi(CACHE_PATH)
         themes = api.themes()
@@ -140,18 +140,17 @@ class YouSeeTv(object):
             xbmcplugin.endOfDirectory(HANDLE, False)
             return
 
-
         for theme in themes:
-            item = xbmcgui.ListItem(theme['name'] + ' (' + str(theme['count']) + ')', iconImage = ICON)
+            item = xbmcgui.ListItem(theme['name'] + ' (' + str(theme['count']) + ')', iconImage=ICON)
             item.setProperty('Fanart_Image', FANART_IMAGE)
             url = PATH + '?genre=' + theme['url_id']
-            xbmcplugin.addDirectoryItem(HANDLE, url, item, isFolder = True, totalItems = int(theme['count']))
+            xbmcplugin.addDirectoryItem(HANDLE, url, item, isFolder=True, totalItems=int(theme['count']))
 
         xbmcplugin.endOfDirectory(HANDLE)
 
     def showMoviesInTheme(self, theme):
         api = ysapi.YouSeeMovieApi(CACHE_PATH)
-        moviesInTheme= api.moviesInTheme(theme)
+        moviesInTheme = api.moviesInTheme(theme)
         if not moviesInTheme:
             self._showError()
             xbmcplugin.endOfDirectory(HANDLE, False)
@@ -174,7 +173,6 @@ class YouSeeTv(object):
                 xbmcplugin.endOfDirectory(HANDLE, False)
                 return
 
-
             for movie in movies['movies']:
                 self._addMovieDirectoryItem(movie)
 
@@ -193,13 +191,13 @@ class YouSeeTv(object):
         infoLabels['mpaa'] = str(movie['age_rating'])
         infoLabels['code'] = str(movie['imdb_id'])
         infoLabels['genre'] = ' / '.join(movie['genres'])
-        if movie['trailer'].has_key('rtmpe'):
+        if 'rtmpe' in movie['trailer']:
             infoLabels['trailer'] = movie['trailer']['rtmpe']
 
         iconImage = movie['cover_prefix'] + movie['covers']['big']
 
-        item = xbmcgui.ListItem(movie['title'] + ' (DKK ' + str(movie['price']) + ')', iconImage = iconImage)
-        item.setInfo('video', infoLabels = infoLabels)
+        item = xbmcgui.ListItem(movie['title'] + ' (DKK ' + str(movie['price']) + ')', iconImage=iconImage)
+        item.setInfo('video', infoLabels=infoLabels)
         item.setProperty('Fanart_Image', FANART_IMAGE)
         url = PATH + '?orderMovie=' + movie['id']
         xbmcplugin.addDirectoryItem(HANDLE, url, item)
@@ -222,12 +220,13 @@ class YouSeeTv(object):
 
         if self._anyChannelIconsMissing(channels):
             import PIL.Image
-            sys.modules['Image'] = PIL.Image # http://projects.scipy.org/scipy/ticket/1374
+
+            sys.modules['Image'] = PIL.Image  # http://projects.scipy.org/scipy/ticket/1374
 
             for channel in channels:
                 path = os.path.join(CACHE_PATH, str(channel['id']) + '.png')
                 xbmc.log("Generating image for " + channel['nicename'] + "...")
-                
+
                 u = urllib2.urlopen(channel['logos']['large'])
                 data = u.read()
                 u.close()
@@ -250,7 +249,7 @@ class YouSeeTv(object):
     def isYouSeeIP(self):
         api = ysapi.YouSeeUsersApi(CACHE_PATH)
         try:
-            isYouSeeIP = api.isYouSeeIP()
+            isYouSeeIP = api.isYouSeeIP()['status'] == 1
         except Exception:
             isYouSeeIP = False
 
@@ -272,11 +271,12 @@ class YouSeeTv(object):
         line3 = ADDON.getLocalizedString(39003)
         xbmcgui.Dialog().ok(title, line1, line2, line3)
 
-    def _showError(self, description = None):
+    def _showError(self, description=None):
+        xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
         if description is None:
             description = ADDON.getLocalizedString(30053)
         xbmcgui.Dialog().ok(ADDON.getLocalizedString(30050), ADDON.getLocalizedString(30051),
-            ADDON.getLocalizedString(30052), description)
+                            ADDON.getLocalizedString(30052), description)
 
 
 if __name__ == '__main__':
@@ -294,22 +294,22 @@ if __name__ == '__main__':
 
     ytv = YouSeeTv()
     try:
-        if PARAMS.has_key('area') and PARAMS['area'][0] == 'livetv':
+        if 'area' in PARAMS and PARAMS['area'][0] == 'livetv':
             ytv.showLiveTVChannels()
-        elif PARAMS.has_key('channel'):
+        elif 'channel' in PARAMS:
             ytv.playLiveTVChannel(PARAMS['channel'][0])
 
-        elif PARAMS.has_key('area') and PARAMS['area'][0] == 'movie-genre':
+        elif 'area' in PARAMS and PARAMS['area'][0] == 'movie-genre':
             ytv.showMovieGenres()
-        elif PARAMS.has_key('genre'):
+        elif 'genre' in PARAMS:
             ytv.showMoviesInGenre(PARAMS['genre'][0])
 
-        elif PARAMS.has_key('area') and PARAMS['area'][0] == 'movie-theme':
+        elif 'area' in PARAMS and PARAMS['area'][0] == 'movie-theme':
             ytv.showMovieThemes()
-        elif PARAMS.has_key('theme'):
+        elif 'theme' in PARAMS:
             ytv.showMoviesInTheme(PARAMS['theme'][0])
 
-        elif PARAMS.has_key('area') and PARAMS['area'][0] == 'movie-search':
+        elif 'area' in PARAMS and PARAMS['area'][0] == 'movie-search':
             ytv.searchMovies()
 
         elif ADDON.getSetting('hide.movie.area') == 'true':

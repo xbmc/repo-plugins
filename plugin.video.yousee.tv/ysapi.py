@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2012 Tommy Winther
+#      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -39,12 +39,15 @@ AREA_TVGUIDE = 'tvguide'
 AREA_SYSTEM = 'system'
 AREA_CONTENT = 'content'
 AREA_ARCHIVE = 'archive'
+AREA_PLAY = 'play'
 
 METHOD_GET = 'get'
 METHOD_POST = 'post'
 
+
 class YouSeeApiException(Exception):
     pass
+
 
 class YouSeeApi(object):
     COOKIE_JAR = cookielib.LWPCookieJar()
@@ -54,11 +57,14 @@ class YouSeeApi(object):
         xbmc.log('YouSeeApi.__init__(dataPath = %s)' % dataPath, xbmc.LOGDEBUG)
         self.cookieFile = os.path.join(dataPath, self.COOKIES_LWP)
         if os.path.isfile(self.cookieFile):
-            self.COOKIE_JAR.load(self.cookieFile, ignore_discard=True, ignore_expires=True)
+            try:
+                self.COOKIE_JAR.load(self.cookieFile, ignore_discard=True, ignore_expires=True)
+            except cookielib.LoadError:
+                pass  # ignore
 
         urllib2.install_opener(urllib2.build_opener(urllib2.HTTPCookieProcessor(self.COOKIE_JAR)))
 
-    def _invoke(self, area, function, params = None, method = METHOD_GET):
+    def _invoke(self, area, function, params=None, method=METHOD_GET):
         url = API_URL + '/' + area + '/' + function
         if method == METHOD_GET and params:
             for key, value in params.items():
@@ -68,7 +74,7 @@ class YouSeeApi(object):
         xbmc.log('Invoking URL: %s' % re.sub('/password/([^/]+)/', '/password/****/', url), xbmc.LOGDEBUG)
 
         try:
-            r = urllib2.Request(url, headers = {'X-API-KEY' : API_KEY})
+            r = urllib2.Request(url, headers={'X-API-KEY': API_KEY})
             if method == METHOD_POST and params:
                 xbmc.log("POST data: %s" % urllib.urlencode(params), xbmc.LOGDEBUG)
                 r.add_data(urllib.urlencode(params))
@@ -84,8 +90,9 @@ class YouSeeApi(object):
 
         try:
             return simplejson.loads(json)
-        except simplejson.JSONDecodeError:
+        except:
             return None
+
 
 class YouSeeLiveTVApi(YouSeeApi):
     def channel(self, id):
@@ -96,8 +103,9 @@ class YouSeeLiveTVApi(YouSeeApi):
         @return:
         """
         return self._invoke(AREA_LIVETV, 'channel', {
-            'id' : id
+            'id': id
         })
+
     def popularChannels(self):
         """
         Returns list of channels sorted by popularity.
@@ -105,21 +113,11 @@ class YouSeeLiveTVApi(YouSeeApi):
         """
         return self._invoke(AREA_LIVETV, 'popularchannels')
 
-    def allowedChannels(self, branch = 'yousee'):
+    def allowedChannels(self):
         """
         Returns list of channels the requesting IP is allowed to stream.
         """
-        params = dict()
-        if branch == 'tdc':
-            params['branch'] = branch
-            try:
-                u = urllib2.urlopen('http://automation.whatismyip.com/n09230945.asp')
-                params['clientip'] = u.read()
-                u.close()
-            except urllib2.URLError:
-                pass
-
-        return self._invoke(AREA_LIVETV, 'allowed_channels', params)
+        return self._invoke(AREA_LIVETV, 'allowed_channels')
 
     def suggestedChannels(self):
         """
@@ -128,8 +126,7 @@ class YouSeeLiveTVApi(YouSeeApi):
         """
         return self._invoke(AREA_LIVETV, 'suggested_channels')
 
-
-    def streamUrl(self, channelId, client = 'xbmc'):
+    def streamUrl(self, channelId, client='xbmc'):
         """
         Returns absolute streaming URL for channel.
         Channel rights are based on client ip address.
@@ -140,11 +137,12 @@ class YouSeeLiveTVApi(YouSeeApi):
         @type client: str
         """
         json = self._invoke(AREA_LIVETV, 'streamurl', {
-            'channel_id' : channelId,
-            'client' : client
+            'channel_id': channelId,
+            'client': client
         })
 
         return json
+
 
 class YouSeeMovieApi(YouSeeApi):
     def themes(self):
@@ -169,7 +167,7 @@ class YouSeeMovieApi(YouSeeApi):
         @return:
         """
         return self._invoke(AREA_MOVIE, 'search', {
-            'query' : query
+            'query': query
         })
 
     def moviesInGenre(self, genre):
@@ -178,7 +176,7 @@ class YouSeeMovieApi(YouSeeApi):
         @param genre: Genre
         """
         return self._invoke(AREA_MOVIE, 'movies_in_genre', {
-            'genre' : genre
+            'genre': genre
         })
 
     def moviesInTheme(self, theme):
@@ -187,7 +185,7 @@ class YouSeeMovieApi(YouSeeApi):
         @param theme: Theme
         """
         return self._invoke(AREA_MOVIE, 'movies_in_theme', {
-            'theme' : theme
+            'theme': theme
         })
 
     def related(self, movie_id):
@@ -197,7 +195,7 @@ class YouSeeMovieApi(YouSeeApi):
         @return: List of movies (see moviedata method for description of movie object)
         """
         return self._invoke(AREA_MOVIE, 'related', {
-            'movie_id' : movie_id
+            'movie_id': movie_id
         })
 
     def supported_payment_methods(self, amount):
@@ -206,7 +204,7 @@ class YouSeeMovieApi(YouSeeApi):
         @return: List of cards
         """
         return self._invoke(AREA_MOVIE, 'supported_payment_methods', {
-            'amount' : amount
+            'amount': amount
         })
 
 
@@ -225,37 +223,46 @@ class YouSeeTVGuideApi(YouSeeApi):
         """
         return self._invoke(AREA_TVGUIDE, 'categories')
 
-    def programs(self, channelId, offset = 0):
-         """
+    def programs(self, channelId, offset=0):
+        """
          Returns program list
          """
-         return self._invoke(AREA_TVGUIDE, 'programs', {
-             'channel_id' : channelId,
-             'offset' : offset
-         })
+        return self._invoke(AREA_TVGUIDE, 'programs', {
+            'channel_id': channelId,
+            'offset': offset
+        })
+
 
 class YouSeePlayApi(YouSeeApi):
     def album(self, id):
         return self._invoke(AREA_PLAY, 'album', {
-            'id' : id
+            'id': id
         })
+
 
 class YouSeeUsersApi(YouSeeApi):
     def login(self, username, password):
         return self._invoke(AREA_USERS, 'login', {
-            'username' : username,
-            'password' : password
+            'username': username,
+            'password': password
+        })
+
+    def user(self, session_id):
+        return self._invoke(AREA_USERS, 'user', {
+            'yspro': session_id
         })
 
     def transactions(self):
         return self._invoke(AREA_USERS, 'transactions')
 
     def isYouSeeIP(self):
-        return self._invoke(AREA_USERS, 'isyouseeip') == 1
+        return self._invoke(AREA_USERS, 'isyouseeip')
+
 
 class YouSeeSystemApi(YouSeeApi):
     def supportmessage(self):
         return self._invoke(AREA_SYSTEM, 'supportmessage')
+
 
 class YouSeeContentApi(YouSeeApi):
     def teasers(self, area):
@@ -266,14 +273,15 @@ class YouSeeContentApi(YouSeeApi):
         @return:
         """
         return self._invoke(AREA_CONTENT, 'teasers', {
-            'area' : area
+            'area': area
         })
+
 
 class YouSeeArchiveApi(YouSeeApi):
     def genres(self):
         return self._invoke(AREA_ARCHIVE, 'genres')
 
-    def programs(self, channel_id = None, genre_id = None, tvdate = None):
+    def programs(self, channel_id=None, genre_id=None, tvdate=None):
         """
         Returns program list
         @param channel_id: (optional)
@@ -294,7 +302,7 @@ class YouSeeArchiveApi(YouSeeApi):
     def allowed_channels(self):
         return self._invoke(AREA_ARCHIVE, 'allowed_channels')
 
-    def search(self, query, offset = None, limit = None):
+    def search(self, query, offset=None, limit=None):
         params = dict()
         params['query'] = query
         if offset:
@@ -303,7 +311,7 @@ class YouSeeArchiveApi(YouSeeApi):
             params['limit'] = limit
         return self._invoke(AREA_ARCHIVE, 'search', params)
 
-    def streamurl(self, epg_id, client = 'xbmc'):
+    def streamurl(self, epg_id, client='xbmc'):
         """
 
         @param epg_id: program_id
@@ -311,20 +319,40 @@ class YouSeeArchiveApi(YouSeeApi):
         @return:
         """
         return self._invoke(AREA_ARCHIVE, 'streamurl', {
-            'epg_id' : epg_id,
-            'client' : client
+            'epg_id': epg_id,
+            'client': client
         })
+
+
+class YouSeePlayApi(YouSeeApi):
+    def search(self, query, limit=None, offset=None, startLetter=None):
+        return self._invoke(AREA_PLAY, 'search', {
+            'query': query.replace(' ', '+')
+        })
+
+    def usersession(self, externalPersonId, email):
+        return self._invoke(AREA_PLAY, 'usersession', {
+            'external_person_id': externalPersonId,
+            'email': email
+        })
+
+    def streamUrl(self, trackId, userSession):
+        return self._invoke(AREA_PLAY, 'streamurl', {
+            'track_id': trackId,
+            'usersession': userSession
+        })
+
 
 if __name__ == '__main__':
     api = YouSeeLiveTVApi('/tmp')
-    json = api.channel(1)
+    json = api.allowedChannels()
 
-#    api = YouSeeTVGuideApi()
-#    json = api.programs(1)
+    #    api = YouSeeTVGuideApi()
+    #    json = api.programs(1)
 
-#    api = YouSeeMovieApi()
-#    json= api.moviesInGenre('action')['movies'][1]
+    #    api = YouSeeMovieApi()
+    #    json= api.moviesInGenre('action')['movies'][1]
 
     s = simplejson.dumps(json, sort_keys=True, indent='    ')
-    print '\n'.join([l.rstrip() for l in  s.splitlines()])
+    print '\n'.join([l.rstrip() for l in s.splitlines()])
 

@@ -12,3 +12,6 @@ Improve speed, add next page button
 
 [B]2.0.3:[/B]
 Added language support
+
+[B]2.0.4:[/B]
+Fix breakage due to cookielaws

@@ -1,3 +1,9 @@
+2.1.0
+ - Rename Add-on to "SHOUTcast" to match guidelines
+ - Changed to xbmcswift2 v1.3
+ - Fix Sorting
+ - updated translations
+
 2.0.1
  - added method and setting for auto choose server (don't ask for playlist entries)
 

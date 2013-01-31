@@ -107,7 +107,7 @@ def resolve_playlist(playlist_url):
 
 @plugin.route('/search/station/')
 def search_station():
-    search_string = __keyboard(_('search_station'))
+    search_string = plugin.keyboard(heading=_('search_station'))
     if search_string:
         url = plugin.url_for(
             endpoint='search_station_result',
@@ -124,7 +124,7 @@ def search_station_result(search_string):
 
 @plugin.route('/search/current_track/')
 def search_current_track():
-    search_string = __keyboard(_('search_current_track'))
+    search_string = plugin.keyboard(heading=_('search_current_track'))
     if search_string:
         url = plugin.url_for(
             endpoint='search_current_track_result',
@@ -191,9 +191,9 @@ def __add_stations(stations):
             name = station['name']
         item = {
             'label': name,
-            'label2': str(i),
             'thumbnail': icon,
             'info': {
+                'count': i,
                 'genre': station.get('genre') or '',
                 'size': station.get('bitrate') or 0,
                 'listeners': station.get('listeners') or 0,
@@ -234,13 +234,6 @@ def get_cached(func, *args, **kwargs):
     def wrap(func_name, *args, **kwargs):
         return func(*args, **kwargs)
     return wrap(func.__name__, *args, **kwargs)
-
-
-def __keyboard(title, text=''):
-    keyboard = xbmc.Keyboard(text, title)
-    keyboard.doModal()
-    if keyboard.isConfirmed() and keyboard.getText():
-        return keyboard.getText()
 
 
 def _(string_id):

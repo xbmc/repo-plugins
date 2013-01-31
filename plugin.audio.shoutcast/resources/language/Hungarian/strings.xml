@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hungarian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Minden alműfaj</string>
+    <string id="30001">Top 500 rádióállomás</string>
+    <string id="30002">Műfaj szerinti böngészés</string>
+    <string id="30003">Én állomásaim</string>
+    <string id="30004">Állomás keresése név szerint</string>
+    <string id="30005">A jelenlegi számot játszó állomás keresése</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Hozzáadás az "én állomásaim"-hoz</string>
+    <string id="30011">Eltávolítás az "én állomásaim"-ból</string>
+
+    <!-- Settings -->
+    <string id="30100">Alműfajok mutatása</string>
+    <string id="30101">Állomásszám a listában</string>
+    <string id="30102">Bitarány mutatása a címben</string>
+    <string id="30103">Véletlenszerű kiszolgálóválasztás (kérdezés nélkül)</string>
+
+    <!-- Messages -->
+    <string id="30200">Hálózati hiba</string>
+</strings>

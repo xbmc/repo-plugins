@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Danish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/da/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Alle undergenrer</string>
+    <string id="30001">Top 500 Stationer</string>
+    <string id="30002">Gennemse efter genre</string>
+    <string id="30003">Mine Stationer</string>
+    <string id="30004">Søg efter navn på Station</string>
+    <string id="30005">Søg efter Station ud fra nuværende nummer</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Føj til "Mine Stationer"</string>
+    <string id="30011">Fjern fra "Mine Stationer"</string>
+
+    <!-- Settings -->
+    <string id="30100">Vis Undergenrer</string>
+    <string id="30101">Nummerer stationer på liste </string>
+    <string id="30102">Vis Bitrate i Titel</string>
+    <string id="30103">Vælg en tilfældig server (Spørg ikke)</string>
+
+    <!-- Messages -->
+    <string id="30200">Netværksfejl</string>
+</strings>

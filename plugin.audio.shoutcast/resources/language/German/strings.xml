@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- German language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/de/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
 <strings>
     <!-- Root Menu -->
     <string id="30000">Alle Untergenre</string>
@@ -7,14 +11,17 @@
     <string id="30003">Meine Sender</string>
     <string id="30004">Sender Suche nach Name</string>
     <string id="30005">Suche Sender nach aktuellem Track</string>
+
     <!-- Context Menu -->
     <string id="30010">Zu "Meine Sender" hinzufügen</string>
     <string id="30011">Von "Meine Sender" entfernen</string>
+
     <!-- Settings -->
     <string id="30100">Untergenres anzeigen</string>
     <string id="30101">Anzahl Podcasts</string>
     <string id="30102">Bitrate in Title einfügen</string>
     <string id="30103">Wähle zufälligen Server (nicht fragen)</string>
+
     <!-- Messages -->
     <string id="30200">Netzwerkfehler</string>
 </strings>

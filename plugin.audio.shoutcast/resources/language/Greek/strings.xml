@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Greek language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/el/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Όλα τα υπο-είδη</string>
+    <string id="30001">Κορυφαίοι 500 Σταθμοί</string>
+    <string id="30002">Περιήγηση ανά είδος</string>
+    <string id="30003">Οι Σταθμοί μου</string>
+    <string id="30004">Αναζήτηση Σταθμού με βάση το όνομα</string>
+    <string id="30005">Αναζήτηση Σταθμού Τρέχοντος Τραγουδιού</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Προσθήκη στους "Σταθμούς μου"</string>
+    <string id="30011">Αφαίρεση από τους "Σταθμούς μου"</string>
+
+    <!-- Settings -->
+    <string id="30100">Προβολή Υπο-Ειδών</string>
+    <string id="30101">Αριθμός σταθμών στη λίστα</string>
+    <string id="30102">Προβολή Bitrate στον Τίτλο</string>
+    <string id="30103">Επιλογή τυχαίου διακομιστή (Χωρίς ερώτηση)</string>
+
+    <!-- Messages -->
+    <string id="30200">Σφάλμα Δικτύου</string>
+</strings>

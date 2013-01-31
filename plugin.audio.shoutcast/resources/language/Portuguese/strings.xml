@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Portuguese language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/pt/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">Todos os sub-géneros</string>
+    <string id="30001">Top 500 Rádios</string>
+    <string id="30002">Procurar por género</string>
+    <string id="30003">Minhas Rádios</string>
+    <string id="30004">Procurar Rádio por nome</string>
+    <string id="30005">Procurar Rádio por faixa em reprodução</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Adicionar às "Minhas Rádios"</string>
+    <string id="30011">Remover das "Minhas Rádios"</string>
+
+    <!-- Settings -->
+    <string id="30100">Exibir Sub-Géneros</string>
+    <string id="30101">Num. rádios na lista</string>
+    <string id="30102">Exibir bitrate no Título</string>
+    <string id="30103">Escolher um servidor ao acaso (não perguntar)</string>
+
+    <!-- Messages -->
+    <string id="30200">Erro de Rede</string>
+</strings>

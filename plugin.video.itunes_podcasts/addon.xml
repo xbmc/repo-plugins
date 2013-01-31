@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.itunes_podcasts" name="Apple iTunes Podcasts" version="1.1.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.itunes_podcasts" name="Apple iTunes Podcasts" version="1.1.3" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
-        <import addon="script.module.xbmcswift2" version="1.2.0"/>
+        <import addon="script.module.xbmcswift2" version="1.3.0"/>
         <import addon="script.module.feedparser" version="0.5.7"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
@@ -19,22 +19,30 @@
         <summary lang="en">Apple iTunes Podcast Browser</summary>
         <summary lang="es">Explorador de Apple iTunes Podcasts</summary>
         <summary lang="fr">Navigateur Apple iTunes Podcast</summary>
+        <summary lang="hu">Apple iTunes podcast böngésző</summary>
+        <summary lang="it">Browser per Podcast di Apple iTunes </summary>
         <summary lang="ko">애플 iTunes 팟캐스트 탐색기</summary>
         <summary lang="lt">Apple iTunes [COLOR=red]Podcast[/COLOR] naršyklė</summary>
         <summary lang="pl">Przeglądarka podcastów Apple iTunes</summary>
+        <summary lang="pt">Navegador Apple iTunes Podcast</summary>
         <summary lang="pt_BR">Procurar Podcast Aplle Itunes</summary>
+        <summary lang="sk">Prehliadač na Apple iTunes Podcast</summary>
         <summary lang="sv">Apple iTunes podcast-utforskare</summary>
         <description lang="be">This add-on lets you browse and search for thousands of free Podcasts.[CR]It provides both, audio and video podcasts - each devided into over 60 genres. You can also search for specific podcasts by name.[CR]It is also possible to manage a "My Podcasts" list via context-menu.</description>
-        <description lang="da">Dette add-on lader dig udforske og søge efter tusinder af gratis Podcasts.[CR]Det tilbyder både lyd- og videopodcasts - hver især opdelt i over 60 genrer. Du kan også søge efter specifikke navne på podcasts.[CR]Det er også muligt at håndtere *Mine Podcasts" via kontekstmenuen.</description>
+        <description lang="da">Dette addon lader dig udforske og søge efter tusinder af gratis Podcasts.[CR]Det tilbyder både lyd- og videopodcasts - hver især opdelt i over 60 genrer. Du kan også søge efter specifikke navne på podcasts.[CR]Det er også muligt at håndtere "Mine Podcasts" via kontekstmenuen.</description>
         <description lang="de">Dieses Add-on ermöglicht das durchsuchen von tausenden kostenlosen Podcasts.[CR]Es bieted Video- und Audio-Podcasts - je aufgeteilt auf über 60 Genre. Auch ist es möglich nach Podcasts zu suchen.[CR]Außerdem ist es möglich eine "Meine Podcasts"-Liste über das Kontext-Menu zu verwalten.</description>
         <description lang="el">Αυτό το πρόσθετο σας επιτρέπει να περιηγηθείτε και να αναζητήσετε χιλιάδες δωρεάν Podcast.[CR]Παρέχει podcast βίντεο και ήχου - και τα δύο χωρισμένα σε 60 είδη. Μπορείτε να αναζητήσετε συγκεκριμένα podcast με το όνομα.[CR]Είναι, επίσης, δυνατό να διαχειριστείτε μία λίστα "Podcast μου" μέσω του μενού επιλογών.</description>
         <description lang="en">This add-on lets you browse and search for thousands of free Podcasts.[CR]It provides both, audio and video podcasts - each devided into over 60 genres. You can also search for specific podcasts by name.[CR]It is also possible to manage a "My Podcasts" list via context-menu.</description>
         <description lang="es">Este complemento le permite explorar y buscar entre miles de Podcasts gratuitos.[CR]Proporciona acceso a podcasts de audio y video divididos en más de 60 géneros. Incluso puede buscar podcasts por su nombre.[CR]Incluso es posible manejar sus podcasts mediante la lista "Mis Podacsts" del menú contextual.</description>
         <description lang="fr">Cette extension vous permet de naviguer et trouver des milliers de Podcasts gratuit.[CR]Il existe des podcasts audio et vidéo, divisé en 60 genres différents. Vous pouvez également cherche un podcast par nom.[CR]Il est possible de gérer une liste de "Mes Podcasts" via le menu contextuel.</description>
+        <description lang="hu">Ez a kiegészítő lehetővé teszi több ezer ingyenes podcast böngészését és keresését[CR]Hang és videó podcastok is elérhetőek, 60 műfajra osztva. Név szerint is lehetséges a keresés egy adott podcastra.[CR]A helyi menü segítségével kezelheti "saját" podcastjait.</description>
+        <description lang="it">Questo add-on ti permette di sfogliare e cercare centinai di Podcast liberi.[CR]Fornisce sia podcast video che audio - ognuno diviso in 60 generi. puoi cercare podcast specifici per nome.[CR]E' anche possibile gestire la lista: "I miei Podcast" tramite il menù contestuale</description>
         <description lang="ko">이 애드온으로 수천개의 무료 팟캐스트를 탐색하고 검색할 수 있습니다.[CR]각 60개 이상의 장르로 구분된 오디오와 비디오 팟캐스트를 제공합니다. 특정한 팟캐스트를 이름으로 검색할 수 있습니다.[CR]컨텍스트 메뉴를 이용해 "내 팟캐스트" 목록을 관리할 수 있습니다.</description>
         <description lang="lt">Šis priedas leidžia jums naršyti ir ieškoti tūkstančių nemokamai Podcasts [COLOR=red](toliau verčiama kaip - Transliacijos)[/COLOR].[CR]Jis suteikia prieigą prie garso ir vaizdo internetinės medijos failų - kur/katrie kiekvienas suskirstytas į daugiau nei 60 žanrų.Taip pat jūs galite ieškoti konkrečių prenumeruojamų transliacijų pagal pavadinimą.[CR]Taip pat galima valdyti "Mano Transliacijos" sąrašą per kontekstinį meniu.</description>
         <description lang="pl">Wtyczka ta umożliwia ci przeglądanie i szukanie w śród tysięcy darmowych Podcastów.[CR]Posiada zarówno Podcasty audio i video, każde dostępne w ponad 60 gatunkach. Możesz dodatkowo szukać konkretnych Podcastów po nazwie.[CR]Dodatkowo możesz zarządzać listą swoich ulubionych Podcastów poprzez menu kontekstowe.</description>
+        <description lang="pt">Este add-on permite-lhe navegar e procurar por milhares de Podcasts grátis.[CR]Oferece podcasts de áudio e vídeo, divididas em mais de 60 géneros. Pode também procurar por nome podcasts específicas.[CR]É também possível gerir uma lista "Minhas Podcasts" através do menu de contexto.</description>
         <description lang="pt_BR">Este add-on deixa navegar e procurar por milhares de Podcasts gratuitos.[CR]Ele fornece áudio e podcasts de vídeo - cada um dividido em mais de 60 gêneros. Você também pode procurar podcasts específicos pelo nome. [CR] Também é possível gerenciar  uma lista de "Meus Podcasts"  através do menu de contexto.</description>
+        <description lang="sk">Tento doplnok Vám umožní prehliadať a vyhľadávať v tisícoch voľných Podcast-ov.&#10;Poskytuje audio aj video podcast-y - každý rozdelený do viac než 60 žánrov. Môžete zároveň hľadať konkrétny podcast podľa mena.&#10;Zároveň môžete cez kontextové menu spravovať zoznam "Moje Podcast-y".</description>
         <description lang="sv">Detta tillägg låter dig bläddra och söka efter tusentals podcasts.[CR]Det tillhandahåller både ljud- och video-podcasts - Var och en indelad i över 60 genres. Du kan också söka efter specifika podcasts genom namn.[CR]Det är också möjligt att hantera "Mina podcasts"-listan via innehållsmenyn.</description>
     </extension>
 </addon>

@@ -147,7 +147,11 @@ class ItunesPodcastApi():
             return thumbs[0].get('label')
 
         def __get_date(parent_node):
-            return parent_node.get('attributes', {}).get('label')
+            date_str = parent_node.get('label')
+            if not date_str:
+                return ''
+            y, m, d = date_str.split('T')[0].split('-')
+            return '%s.%s.%s' % (d, m, y)
 
         return [{
             'id': item['id']['attributes']['im:id'],

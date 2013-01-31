@@ -4,5 +4,6 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30002">Selaa lajityypeittäin</string>
     <string id="30004">Etsi</string>
 </strings>

@@ -4,8 +4,25 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- Root Menu -->
+    <string id="30000">Todos os géneros</string>
     <string id="30002">Procurar por género</string>
+    <string id="30003">Minhas Podcasts</string>
     <string id="30004">Procurar</string>
+    <string id="30005">Podcasts Vídeo</string>
+    <string id="30006">Podcasts Áudio</string>
+    <string id="30007">Não foi encontrado Vídeo/Música!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Adicionar a "Minhas Podcasts"</string>
+    <string id="30011">Remover de "Minhas Podcasts"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcasts: Forçar Vista para Miniatura</string>
+    <string id="30101">Itens de Podcasts: Forçar Vista para Miniatura</string>
+    <string id="30102">País e Idioma do Itunes</string>
+    <string id="30103">Nº de Podcasts na lista (300 máx.)</string>
+    <string id="30104">Nº de Podcasts na procura (200 máx.)</string>
     <string id="30105">Exibir Sub-Géneros</string>
 
     <!-- Messages -->

@@ -15,3 +15,6 @@ Added language support
 
 [B]3.0.0:[/B]
 Fix incompatibilites with frodo
+
+[B]3.0.1:[/B]
+Fix breakage due to cookielaws

@@ -34,7 +34,8 @@ name_re = re.compile(r'<span class="name">(.*?)</span>')
 bandwidth_re = re.compile(r'BANDWIDTH=([0-9]+)')
 playlist_re = re.compile(r'id="video-smil" value="(.*?)"')
 
-base_url = 'http://eredivisielive.nl'
+cookies_prefix = 'http://cookies.eredivisielive.nl/accepted.php?url='
+base_url = 'eredivisielive.nl'
 
 number_of_items = 100
 
@@ -62,11 +63,11 @@ def addFilterDir(name, filterString):
 def get_filter_list(filter_string):
   results = []
   filter_re = re.compile(r'<div id="filter-'+filter_string+'-options".*?</div>', re.S)
-  links = link_re.findall(filter_re.search(urllib2.urlopen(base_url+'/video').read()).group(0))
+  links = link_re.findall(filter_re.search(urllib2.build_opener(urllib2.HTTPCookieProcessor).open(cookies_prefix+base_url+'/video').read()).group(0))
   for link in links:
     location = href_re.search(link).group(1)
     if location != '/video/overzicht/':
-      results.append({"name": name_re.search(link).group(1), "location": base_url+location})
+      results.append({"name": name_re.search(link).group(1), "location": cookies_prefix+base_url+location})
   return results
 
 def addListingDir(item):
@@ -75,13 +76,13 @@ def addListingDir(item):
   xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 
 def get_videos(links):
-  results = [{"name": title_re.search(string).group(1), "location": base_url+href_re.search(string).group(1)} for string in links if 'video-play-button' in string]
+  results = [{"name": title_re.search(string).group(1), "location": cookies_prefix+base_url+href_re.search(string).group(1)} for string in links if 'video-play-button' in string]
   return results
 
 def get_bitrates(url):
   results = []
-  playlist_url = playlist_re.search(urllib2.urlopen(urllib.unquote(url)).read()).group(1)
-  playlist = urllib2.urlopen(playlist_url).readlines()
+  playlist_url = playlist_re.search(urllib2.build_opener(urllib2.HTTPCookieProcessor).open(urllib.unquote(url)).read()).group(1)
+  playlist = urllib2.build_opener(urllib2.HTTPCookieProcessor).open(playlist_url).readlines()
   bandwidth_found = False
   for line in playlist:
     bandwidth_temp = bandwidth_re.search(line)
@@ -106,14 +107,14 @@ def get_next_page(links):
   result = {"name": __language__(30004)}
   for string in links:
     if 'class="forward active"' in string:
-      result['location'] = base_url+href_re.search(string).group(1)
+      result['location'] = cookies_prefix+base_url+href_re.search(string).group(1)
       return result
 
 def listVideoItems(url):
   next_page={'location': url}
   items=[]
   while next_page and len(items)<number_of_items:
-    links = link_re.findall(urllib2.urlopen(urllib.unquote(next_page['location'])).read())
+    links = link_re.findall(urllib2.build_opener(urllib2.HTTPCookieProcessor).open(urllib.unquote(next_page['location'])).read())
     items += get_videos(links)
     next_page = get_next_page(links)
   for item in items:
@@ -127,7 +128,7 @@ params=get_params() # First, get the parameters
 
 if 'module' in params: # Filter chosen, load items
   if params['module'] == 'all':
-    listVideoItems(base_url+'/video')
+    listVideoItems(cookies_prefix+base_url+'/video')
   else:
     items = get_filter_list(params['module'])
     for item in items:

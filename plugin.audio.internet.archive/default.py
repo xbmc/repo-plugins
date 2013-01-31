@@ -1,4 +1,4 @@
-import urllib
+﻿import urllib
 import urllib2
 import re
 import os
@@ -268,7 +268,7 @@ def getMedia(url, title, iconimage):
                 duration = duration.split(' minutes')[0]+':00'
         except:
             duration = ''
-        scripts = soup('script', attrs={'type' : "text/javascript"})
+        scripts = soup('script')
         data = False
         for i in range(len(scripts)):
             if 'IAP' in str(scripts[i]):
@@ -290,13 +290,13 @@ def getMedia(url, title, iconimage):
                 try:
                     thumb = i['image']
                 except KeyError: pass
-                for m in i['levels']:
-                    if m['type'] == 'audio/mpeg':
+                for m in i['sources']:
+                    if m['type'] == 'mp3':
                         href = m['file']
                     elif m['type'] == 'video/h264':
                         href = m['file']
                 if href is None:
-                    href = i['levels'][0]['file']
+                    href = i['sources'][0]['file']
                 if thumb.startswith('/'):
                     thumb = base_url+thumb
                 if href.endswith('mp3' or 'ogg' or 'flac'):

@@ -1,16 +1,24 @@
+[B]Version 1.0.2[/B]
+
+- Fixed: sending checkins wrong api usage
+- Fixed: restart fails on OSX, trying quit after restart
+
 [B]Version 1.0.1[/B]
+
 - Added: season 'on-disk' strips in tvshow detail 
 - Improved: idetification, send filenames without xbmc's source path part
 
 [B]Version 1.0.0[/B]
+
 - Fixed: Frodo version requirements
 - Fixed: Empty list exception for "Local movies"
 
 [B]Version 0.4.6[/B]
+
 - Fixed: addon.xml to get into official repository
 - Added: Show "watched" stripes in tvshow detail
 - Fixed: few bugs
 
-[B]0.0.1[/B]
+[B]Version 0.0.1[/B]
 
 - Initial addon

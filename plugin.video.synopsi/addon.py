@@ -280,6 +280,7 @@ try:
 except ShutdownRequestedException:
 	xbmcplugin.endOfDirectory(dirhandle)
 	xbmc.executebuiltin('RestartApp')
+	xbmc.executebuiltin('Quit')
 except:
 	log(traceback.format_exc())
 	xbmcplugin.endOfDirectory(dirhandle)

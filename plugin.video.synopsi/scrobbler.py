@@ -210,7 +210,7 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		# prepare timestamp if avail
 		pe = self.playerEvents
 		if len(pe) > 0 and pe[0]['event'] == 'start':
-			data['timestamp'] = pe[0]['timestamp']
+			data['created_time'] = pe[0]['timestamp']
 
 		# prepare rating if requested
 		if rate:

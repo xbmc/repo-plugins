@@ -182,10 +182,8 @@ def check_first_run():
 		reloadSkin = True			
 		__addon__.setSetting('FIRSTRUN', "false")
 
-	if addon_getSetting('ADDON_SERVICE_FIRSTRUN') != "false":
-		#~ xbmc.executebuiltin("RunPlugin('plugin://plugin.video.synopsi/?action=restart')")
-		#~ return
-		
+
+	if addon_getSetting('ADDON_SERVICE_FIRSTRUN') != "false":		
 		if dialog_need_restart():
 			raise ShutdownRequestedException('User requested shutdown')
 		else:

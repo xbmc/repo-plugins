@@ -1,0 +1,3 @@
+0.0.7 Initial pull request to XBMC master repo
+      Support for user galleries, categories, recent and popular.
+      

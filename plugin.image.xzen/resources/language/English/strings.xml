@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Main -->
+  <string id="30001">Zenfolio</string>
+  <string id="30002">Zenfolio Authentication not completed</string>
+  <string id="30003">(Can still browse public galleries etc.)</string>
+  <string id="30004">Untitled</string>
+  <string id="30005">Group</string>
+  <string id="30006">Untitled Folder</string>
+  <string id="30007">Set</string>
+  <string id="30008">User Galleries</string>
+  <string id="30009">Categories</string>
+  <string id="30010">Recent Photos</string>
+  <string id="30011">Recent Galleries</string>
+  <string id="30012">Recent Collections</string>
+  <string id="30013">Popular Photos</string>
+  <string id="30014">Popular Galleries</string>
+  <string id="30015">Popular Collections</string>
+  <string id="30016">Couldn't connect to Zenfolio!</string>
+  <string id="30017">Shouldn't have got here - a mode was passed, without a matching action!</string>
+
+  <!-- Settings labels -->
+  <string id="30100">Zenfolio Account Login (if you want to browse your own account)</string>
+  <string id="30101">Username</string>
+  <string id="30102">Password</string>
+  <string id="30103">If you have password protected your originals at ZenFolio, enter your</string>
+  <string id="30104">password below (only supports one global password at this stage)</string>
+  <string id="30105">Password for user gallery access</string>
+  <string id="30106">If you have issues getting user authentication to work, try enabling this:</string>
+  <string id="30107">TLS Work Around</string>
+
+
+</strings>

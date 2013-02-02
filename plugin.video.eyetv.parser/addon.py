@@ -96,8 +96,6 @@ def show_recordings():
     else:
         items = [{
             'label': info['title'],
-            'iconImage': icon,
-            'thumbnailImage': thumbnail,
             'url': url,
             'info': info,
             'is_folder': False,

@@ -1,3 +1,8 @@
+[B]Version 2.2.0[/B]
+
+- Do not pass icon and thumbnail due to crash with frodo
+- Bump version for frodo
+
 [B]Version 2.1.3[/B]
 
 - Added settings to disable a category

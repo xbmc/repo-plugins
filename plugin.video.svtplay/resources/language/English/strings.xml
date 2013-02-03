@@ -7,6 +7,7 @@
   <string id="30004">Latest news broadcast</string>
   <string id="30005">Recommended</string>
   <string id="30006">Search</string>
+  <string id="30007">BestOfSVT.se</string>
   <string id="30100">This program is only available at www.svtplay.se</string>
   <string id="30101">Show more...</string>
   <string id="30102">Search for:</string>
@@ -20,6 +21,7 @@
   <string id="30503">Number of programs per page</string>
   <string id="30504">Hide sign language interpreted programs</string>
   <string id="30505">Don't use avc1.77.30 streams</string>
+  <string id="30506">Show both clips and episodes for programs</string>
   <string id="40001">General</string>
   <string id="40002">Advanced</string>
 </strings>

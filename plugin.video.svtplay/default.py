@@ -9,6 +9,7 @@ import xbmcaddon
 import xbmcplugin
 import CommonFunctions
 import os
+import resources.lib.bestofsvt as bestof
 
 MODE_A_TO_O = "a-o"
 MODE_PROGRAM = "pr"
@@ -21,9 +22,11 @@ MODE_CATEGORY = "ti"
 MODE_LETTER = "letter"
 MODE_RECOMMENDED = "rp"
 MODE_SEARCH = "search"
-MODE_SEARCH_TITLES = "search_titles"
-MODE_SEARCH_EPISODES = "search_episodes"
-MODE_SEARCH_CLIPS = "search_clips"
+MODE_BESTOF_CATEGORIES = "bestofcategories"
+MODE_BESTOF_CATEGORY = "bestofcategory"
+MODE_VIEW_TITLES = "view_titles"
+MODE_VIEW_EPISODES = "view_episodes"
+MODE_VIEW_CLIPS = "view_clips"
 
 BASE_URL = "http://www.svtplay.se"
 SWF_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2012.51.swf" 
@@ -38,6 +41,12 @@ URL_TO_SEARCH = "/sok?q="
 VIDEO_PATH_RE = "/(klipp|video|live)/\d+"
 VIDEO_PATH_SUFFIX = "?type=embed"
 
+TAB_TITLES      = "titles"
+TAB_EPISODES    = "episodes"
+TAB_CLIPS       = "clips"
+TAB_NEWS        = "news"
+TAB_RECOMMENDED = "recommended"
+
 MAX_NUM_GRID_ITEMS = 12
 CURR_DIR_ITEMS = 0
 
@@ -49,17 +58,33 @@ localize = settings.getLocalizedString
 common = CommonFunctions
 common.plugin = "SVT Play 3"
 
+# Get and set settings
+common.dbg = False
 if settings.getSetting('debug') == "true":
   common.dbg = True
-else:
-  common.dbg = False
 
+HLS_STRIP = False
 if settings.getSetting("hlsstrip") == "true":
     HLS_STRIP = True
-else:
-    HLS_STRIP = False
+
+FULL_PROGRAM_PARSE = False
+if settings.getSetting("fullparse") == "true":
+  FULL_PROGRAM_PARSE = True
+
+HIDE_SIGN_LANGUAGE = False
+if settings.getSetting("hidesignlanguage") == "true":
+  HIDE_SIGN_LANGUAGE = True
+
+SHOW_SUBTITLES = False
+if settings.getSetting("showsubtitles") == "true":
+  SHOW_SUBTITLES = True
+
+USE_ALPHA_CATEGORIES = False
+if settings.getSetting("alpha") == "true":
+  USE_ALPHA_CATEGORIES = True
 
 MAX_DIR_ITEMS = int(float(settings.getSetting("diritems")))
+
 
 def viewStart():
 
@@ -70,6 +95,8 @@ def viewStart():
   addDirectoryItem(localize(30003), { "mode": MODE_LATEST, "page": 1 })
   addDirectoryItem(localize(30004), { "mode": MODE_LATEST_NEWS, "page": 1 })
   addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
+  addDirectoryItem(localize(30007), { "mode": MODE_BESTOF_CATEGORIES })
+
 
 
 def viewAtoO():
@@ -185,11 +212,17 @@ def viewCategory(url,page,index):
   createDirectory(url,page,index,MODE_CATEGORY,MODE_PROGRAM)
 
 def viewProgram(url,page,index):
-  createDirectory(url,page,index,MODE_PROGRAM,MODE_VIDEO)
+  if FULL_PROGRAM_PARSE:
+    createTabIndex(url)
+  else:
+    createDirectory(url,page,index,MODE_PROGRAM,MODE_VIDEO)
 
 def viewSearch():
 
   keyword = common.getUserInput(localize(30102))
+  if not keyword:
+    viewStart()
+    return
   keyword = urllib.quote(keyword)
   common.log("Search string: " + keyword)
 
@@ -200,51 +233,54 @@ def viewSearch():
   keyword = re.sub(r" ","+",keyword) 
 
   url = URL_TO_SEARCH + keyword
+  
+  createTabIndex(url)
+
+def createTabIndex(url):
+  """
+  Creates a directory item for each available tab; Klipp, Hela program, Programtitlar
+  """
   html = getPage(BASE_URL + url)
   foundTab = False
  
-  # Try fetching the "titles" tab. If it exists; create link to result directory   
-  try:
-    common.parseDOM(html, "div", attrs = { "data-tabname": "titles" })[0]
-    foundTab = True
-  except:
+  # Search for the "titles" tab. If it exists; create link to result directory   
+  foundTab = tabExists(url,TAB_TITLES)
+  if foundTab:
+    addDirectoryItem(localize(30104), { 
+                    "mode": MODE_VIEW_TITLES,
+                    "url": url,
+                    "page": 1,
+                    "index": 0 })
+  else:
     # Do nothing
     common.log("No titles found")
-  else:
-    addDirectoryItem(localize(30104), { 
-                    "mode": MODE_SEARCH_TITLES,
+
+
+  # Search for the "episodes" tab. If it exists; create link to result directory   
+  foundTab = tabExists(url,TAB_EPISODES)
+  if foundTab:
+    addDirectoryItem(localize(30105), { 
+                    "mode": MODE_VIEW_EPISODES,
                     "url": url,
                     "page": 1,
                     "index": 0 })
-
-  # Try fetching the "episodes" tab. If it exists; create link to result directory   
-  try:
-    common.parseDOM(html, "div", attrs = { "data-tabname": "episodes" })[0]
-    foundTab = True
-  except:
+  else:
     # Do nothing
     common.log("No episodes found")
-  else:
-    addDirectoryItem(localize(30105), { 
-                    "mode": MODE_SEARCH_EPISODES,
+
+
+  # Search for the "clips" tab. If it exists; create link to result directory   
+  foundTab = tabExists(url,TAB_CLIPS)
+  if foundTab:
+    addDirectoryItem(localize(30106), { 
+                    "mode": MODE_VIEW_CLIPS,
                     "url": url,
                     "page": 1,
                     "index": 0 })
-
-  # Try fetching the "clips" tab. If it exists; create link to result directory   
-  try:
-    common.parseDOM(html, "div", attrs = { "data-tabname": "clips" })[0]
-    foundTab = True
-  except:
+  else:
     # Do nothing 
     common.log("No clips found")
-  else:
-    addDirectoryItem(localize(30106), { 
-                    "mode": MODE_SEARCH_CLIPS,
-                    "url": url,
-                    "page": 1,
-                    "index": 0 })
- 
+
   if not foundTab:
     # Raise dialog with a "No results found" message
     common.log("No search result") 
@@ -253,7 +289,26 @@ def viewSearch():
     viewSearch()
     return
 
-def viewSearchResults(url,mode,page,index):
+def tabExists(url,tabname):
+  """
+  Check if a specific tab exists in the DOM.
+  """
+  html = getPage(BASE_URL + url)
+  return elementExists(html,"div",{ "data-tabname": tabname})
+
+def elementExists(html,etype,attrs):
+  """
+  Check if a specific element exists in the DOM.
+
+  Returns True if the element exists and False if not.
+  """
+
+  htmlelement = common.parseDOM(html,etype, attrs = attrs)
+
+  return len(htmlelement) > 0
+
+
+def viewPageResults(url,mode,page,index):
   """
   Creates a directory for the search results from
   the tab specified by the mode parameter.
@@ -261,11 +316,11 @@ def viewSearchResults(url,mode,page,index):
   common.log("url: " + url + " mode: " + mode)
   dirtype = None
 
-  if MODE_SEARCH_TITLES == mode:
+  if MODE_VIEW_TITLES == mode:
     dirtype = MODE_PROGRAM
-  elif MODE_SEARCH_EPISODES == mode:
+  elif MODE_VIEW_EPISODES == mode:
     dirtype = MODE_VIDEO
-  elif MODE_SEARCH_CLIPS == mode:
+  elif MODE_VIEW_CLIPS == mode:
     dirtype = MODE_VIDEO
   else:
     common.log("Undefined mode")
@@ -273,6 +328,32 @@ def viewSearchResults(url,mode,page,index):
     return
 
   createDirectory(url,page,index,mode,dirtype)
+
+def viewBestOfCategories():
+  """
+  Creates a directory displaying each of the
+  categories from the bestofsvt page
+  """
+  categories = bestof.getCategories()
+  params = {}
+  params["mode"] = MODE_BESTOF_CATEGORY
+
+  for category in categories:
+    params["url"] = category["url"]
+    addDirectoryItem(category["title"], params)
+
+def viewBestOfCategory(url):
+  """
+  Creates a directory containing all shows displayed
+  for a category
+  """
+  shows = bestof.getShows(url)
+  params = {}
+  params["mode"] = MODE_VIDEO
+
+  for show in shows:
+    params["url"] = show["url"] + VIDEO_PATH_SUFFIX
+    addDirectoryItem(show["title"], params, show["thumbnail"], False)
 
 def createDirectory(url,page,index,callertype,dirtype):
   """
@@ -284,15 +365,21 @@ def createDirectory(url,page,index,callertype,dirtype):
   if not url.startswith("/"):
     url = "/" + url
 
-  tabname = "episodes"
+  tabname = TAB_EPISODES
   if MODE_RECOMMENDED == callertype:
-    tabname = "recommended"
+    tabname = TAB_RECOMMENDED
   elif MODE_LATEST_NEWS == callertype:
-    tabname = "news"
-  elif MODE_SEARCH_CLIPS == callertype:
-    tabname = "clips"
-  elif MODE_CATEGORY == callertype or MODE_SEARCH_TITLES == callertype:
-    tabname = "titles"
+    tabname = TAB_NEWS
+  elif MODE_VIEW_CLIPS == callertype:
+    tabname = TAB_CLIPS
+  elif MODE_CATEGORY == callertype or MODE_VIEW_TITLES == callertype:
+    tabname = TAB_TITLES
+
+  if not tabExists(url,tabname) and tabname == TAB_EPISODES:
+    tabname = TAB_CLIPS # In case there are no episodes for a show, get the clips instead
+  elif not tabExists(url,tabname):
+    common.log("Could not find tab "+tabname+" on page. Aborting!")
+    return 
 
   (foundUrl,ajaxurl,lastpage) = parseAjaxUrlAndLastPage(url,tabname)
 
@@ -338,12 +425,15 @@ def parseAjaxUrlAndLastPage(url,tabname):
   container = common.parseDOM(html,
                               "div",
                               attrs = { "class": "[^\"']*[playBoxBody|playBoxAltBody][^\"']*", "data-tabname": tabname })[0]
-  try:
+
+  attrs = { "class": classexp, "data-name": dataname}
+  
+  if elementExists(container,"a", attrs):
     ajaxurl = common.parseDOM(container,
-                                "a",
-                                attrs = { "class": classexp, "data-name": dataname },
-                                ret = "data-baseurl")[0]
-  except:
+                              "a",
+                              attrs = attrs,
+                              ret = "data-baseurl")[0]
+  else:
     return (False,"","")
 
   lastpage = common.parseDOM(container,
@@ -405,8 +495,7 @@ def createDirItem(article,mode):
 
   (title,url,thumbnail,info) = article
 
-  if settings.getSetting("hidesignlanguage") == "false" or \
-     title.lower().endswith("teckentolkad") == False:
+  if (not HIDE_SIGN_LANGUAGE) or title.lower().endswith("teckentolkad") == False:
 
     params = {}
     params["mode"] = mode
@@ -513,6 +602,7 @@ def startVideo(url):
   if not url.startswith("/"):
     url = "/" + url
 
+  common.log("url: " + url)
   html = getPage(BASE_URL + url)
 
   jsonString = common.parseDOM(html, "param", attrs = { "name": "flashvars" }, ret = "value")[0]
@@ -529,6 +619,7 @@ def startVideo(url):
   startTime = time.time()
   videoUrl = None
   extension = "None"
+  args = ""
 
   for video in jsonObj["video"]["videoReferences"]:
     """
@@ -536,23 +627,29 @@ def startVideo(url):
     m3u8 is preferred, hence the break.
     Order: m3u8, f4m, mp4, flv
     """
-    if video["url"].endswith(".m3u8"):
+    tmpurl = video["url"]
+    argpos = tmpurl.rfind("?")
+    if argpos > 0:
+      args = tmpurl[argpos:]
+      tmpurl = tmpurl[:argpos]
+
+    if tmpurl.endswith(".m3u8"):
       extension = "HLS"
-      videoUrl = video["url"]
+      videoUrl = tmpurl
       break
-    if video["url"].endswith(".f4m"):
+    if tmpurl.endswith(".f4m"):
       extension = "F4M"
-      videoUrl = video["url"]
+      videoUrl = tmpurl
       continue
-    if video["url"].endswith(".mp4"):
+    if tmpurl.endswith(".mp4"):
       extension = "MP4"
-      videoUrl = video["url"]
+      videoUrl = tmpurl
       continue
-    if video["url"].endswith(".flv"):
+    if tmpurl.endswith(".flv"):
       extension = "FLV"
-      videoUrl = video["url"]
+      videoUrl = tmpurl
       continue
-    videoUrl = video["url"]
+    videoUrl = tmpurl
 
   for sub in jsonObj["video"]["subtitleReferences"]:
     if sub["url"].endswith(".wsrt"):
@@ -570,12 +667,16 @@ def startVideo(url):
   if extension == "MP4":
     videoUrl = mp4Handler(jsonObj)
 
-  if extension == "None":
+  if extension == "None" and videoUrl:
     # No supported video was found
     common.log("No supported video extension found for URL: " + videoUrl)
     videoUrl = None
 
   if videoUrl:
+    
+    if args:
+      common.log("Appending arguments: "+args)
+      videoUrl = videoUrl + args
 
     if extension == "MP4" and videoUrl.startswith("rtmp://"):
       videoUrl = videoUrl + " swfUrl="+SWF_URL+" swfVfy=1"
@@ -589,7 +690,7 @@ def startVideo(url):
 
       player.setSubtitles(subtitle)
 
-      if settings.getSetting("showsubtitles") == "false":
+      if not SHOW_SUBTITLES:
         player.showSubtitles(False)
   else:
     dialog = xbmcgui.Dialog()
@@ -751,7 +852,7 @@ if not index:
 if not mode:
   viewStart()
 elif mode == MODE_A_TO_O:
-  if settings.getSetting("alpha") == "true":
+  if USE_ALPHA_CATEGORIES:
     viewAlphaDirectories()
   else:
     viewAtoO()
@@ -775,9 +876,13 @@ elif mode == MODE_RECOMMENDED:
   viewLatest(mode,page,index)
 elif mode == MODE_SEARCH:
   viewSearch()
-elif mode == MODE_SEARCH_TITLES or \
-     mode == MODE_SEARCH_EPISODES or \
-     mode == MODE_SEARCH_CLIPS:
-  viewSearchResults(url,mode,page,index)
+elif mode == MODE_VIEW_TITLES or \
+     mode == MODE_VIEW_EPISODES or \
+     mode == MODE_VIEW_CLIPS:
+  viewPageResults(url,mode,page,index)
+elif mode == MODE_BESTOF_CATEGORIES:
+  viewBestOfCategories()
+elif mode == MODE_BESTOF_CATEGORY:
+  viewBestOfCategory(url)
 
 xbmcplugin.endOfDirectory(pluginHandle)

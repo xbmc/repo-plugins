@@ -3,6 +3,7 @@
   <category label="40001">
     <setting id="diritems" type="slider" label="30503" default="20" range="20,10,100" option="int" />
     <setting id="alpha" type="bool" label="30502" default="false" />
+    <setting id="fullparse" type="bool" label="30506" default="false" />
     <setting id="hidesignlanguage" type="bool" label="30504" default="false" />
     <setting id="showsubtitles" type="bool" label="30501" default="false" />
     <setting id="debug" type="bool" label="30500" default="false" />

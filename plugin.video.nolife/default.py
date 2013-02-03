@@ -17,8 +17,9 @@ Nolife Online addon for XBMC
 Authors:     gormux, DeusP
 """
 
-import os, re, xbmcplugin, xbmcgui, xbmcaddon, urllib, urllib2, sys, cookielib, pickle
+import os, re, xbmcplugin, xbmcgui, xbmcaddon, urllib, urllib2, sys, cookielib, pickle, datetime
 from BeautifulSoup import BeautifulSoup
+
 
 """
 Class used as a C-struct to store video informations
@@ -51,6 +52,12 @@ useragent = "XBMC Nolife-plugin/" + version
 language = settings.getLocalizedString
 subscription = FREE
 fanartimage = os.path.join(settings.getAddonInfo("path"), "fanart.jpg")
+
+"""
+Data directory for cookie saving
+"""
+data_dir = xbmc.translatePath(settings.getAddonInfo('profile'))
+cookie_file = os.path.join(settings.getAddonInfo('path'), 'cookies')
 
 def remove_html_tags(data):
     """Permits to remove all HTML tags
@@ -122,6 +129,7 @@ def login():
     This method log the user into the website, checks credentials and return the current
     """
     
+    xbmc.log(msg=pluginLogHeader + "Logging in",level=xbmc.LOGDEBUG)
     settings = xbmcaddon.Addon(id='plugin.video.nolife')
     user     = settings.getSetting( "username" )
     pwd      = settings.getSetting( "password" )
@@ -133,7 +141,6 @@ def login():
                                 'vb_login_md5password': '',
                                 'vb_login_md5password_utf': ''})
     
-
     requestHandler.addheaders = [("User-agent", useragent)]
     page = requestHandler.open("http://forum.nolife-tv.com/login.php", loginrequest)
     res = BeautifulSoup(page.read())
@@ -141,14 +148,17 @@ def login():
         xbmc.log(msg=pluginLogHeader + "Invalid username, aborting",level=xbmc.LOGFATAL)
         err = xbmcgui.Dialog()
         err.ok(unicode(language(35002)), unicode(language(34001)), unicode(language(34002)))
+        settings.setSetting('loginok', "")
         raise loginExpcetion()
     elif re.compile('votre quota').findall(str(res)):
         xbmc.log(msg=pluginLogHeader + "User account locked",level=xbmc.LOGSEVERE)
         err = xbmcgui.Dialog()
         err.ok(unicode(language(35001)), unicode(language(34003)), unicode(language(34004)), unicode(language(34005)))
+        settings.setSetting('loginok', "")
         raise loginExpcetion()
     else:
         xbmc.log(msg=pluginLogHeader + "Valid User",level=xbmc.LOGDEBUG)
+        settings.setSetting('loginok', "ok")
 
 def initialIndex():
     """Creates initial index
@@ -165,23 +175,30 @@ def getlastVideos():
     Get the videos in the "last videos" menu option
     """
     showseen   = settings.getSetting( "showseen" )
-    postrequest = urllib.urlencode({'emissions': 0,
+    i = 0
+    finished = False
+    while finished == False:
+        postrequest = urllib.urlencode({'emissions': i,
                                    'famille': 0,
                                    'a': 'ge'})
     
-    page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
-    liste = BeautifulSoup(page.read()).findAll('li')
-    for element in liste:
-        extractVideoInfo(element)
+        page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
+        liste = BeautifulSoup(page.read()).findAll('li')
+        for element in liste:
+            if == len(emissions) == 30:
+                finished = True
+                break
+
+            extractVideoInfo(element)
         
-        videoInfo = extractVideoInfo(element)
-        if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
-            if isAvailableForUser(videoInfo.availability):
-                addlink( videoInfo.name + " - " + videoInfo.desc,
-                    "plugin://plugin.video.nolife?id=" + videoInfo.vid,
-                    videoInfo.thumb,
-                    videoInfo.duration,
-                    videoInfo.seen )
+            videoInfo = extractVideoInfo(element)
+            if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
+                if isAvailableForUser(videoInfo.availability):
+                    addlink( videoInfo.name + " - " + videoInfo.desc,
+                        "plugin://plugin.video.nolife?id=" + videoInfo.vid,
+                        videoInfo.thumb,
+                        videoInfo.duration,
+                        videoInfo.seen )
     
 def getcategories():
     """Gets all categories and adds directories
@@ -356,7 +373,7 @@ def playvideo(requestHandler, video):
                                    thumbnailImage='', 
                                    path=url )
 
-    xbmcplugin.setResolvedUrl(0, True, listitem)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
 
 def get_params():
     """
@@ -523,6 +540,35 @@ def extractVideoSearchInfo(element):
 
     return info
 
+def createCookie():
+    """
+    Create a cookie.
+    If an older cookie exists its removed before the creation of the new cookie
+    """
+    xbmc.log(msg=pluginLogHeader + "Creation of new cookie",level=xbmc.LOGDEBUG)
+    settings.setSetting('loginok', "")
+    if os.path.isfile(cookie_file):
+        os.remove(cookie_file)
+    cj = cookielib.LWPCookieJar()
+    return cj
+    
+
+def loadCookie():
+    """
+    Load a cookie file
+    """
+    xbmc.log(msg=pluginLogHeader + "Loading cookie",level=xbmc.LOGDEBUG)
+    cj = cookielib.LWPCookieJar()
+    cj.load(filename=cookie_file, ignore_discard=True)
+    return cj
+    
+def saveCookie():
+    """
+    Save cookieJar to cookie file
+    """
+    xbmc.log(msg=pluginLogHeader + "Saving cookie",level=xbmc.LOGDEBUG)
+    cj.save(filename=cookie_file, ignore_discard=True)
+
 ## Start of the add-on
 xbmc.log(msg=pluginLogHeader + "-----------------------",level=xbmc.LOGDEBUG)
 xbmc.log(msg=pluginLogHeader + "Nolife plugin main loop",level=xbmc.LOGDEBUG)
@@ -531,7 +577,6 @@ pluginHandle = int(sys.argv[1])
 ## Reading parameters given to the add-on
 params = get_params()
 xbmc.log(msg=pluginLogHeader + "Parameters read",level=xbmc.LOGDEBUG)
-
 
 try:
     url = urllib.unquote_plus(params["url"])
@@ -551,18 +596,31 @@ xbmc.log(msg=pluginLogHeader + "requested url : " + url,level=xbmc.LOGDEBUG)
 xbmc.log(msg=pluginLogHeader + "requested id : " + str(_id),level=xbmc.LOGDEBUG)
 
 # Starting request handler
-# FIXME : Find a way to keep the cookies in the add-on session to avoid relogin all the time
-xbmc.log(msg=pluginLogHeader + "No cookies, adding a jar",level=xbmc.LOGDEBUG)
-cj = cookielib.CookieJar()
+if not os.path.isfile(cookie_file) or (datetime.datetime.now() - datetime.datetime.fromtimestamp(os.stat(cookie_file).st_mtime)).seconds > 900:
+        xbmc.log(msg=pluginLogHeader + "Cookie is too old or does not exists",level=xbmc.LOGDEBUG)
+        cj = createCookie()
+        saveCookie()
+
+cj = loadCookie()
 requestHandler = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 
-# The login is only done for authenticated mode
-if settings.getSetting( "authenticate" ) == "true":
-    xbmc.log(msg=pluginLogHeader + "authentication requested",level=xbmc.LOGDEBUG)
-    login()
-
+xbmc.log(msg=pluginLogHeader + "Login state : " + settings.getSetting('loginok'),level=xbmc.LOGDEBUG)
+if settings.getSetting('authenticate') == "true":
+    if not settings.getSetting('loginok') == "ok":
+        xbmc.log(msg=pluginLogHeader + "User not logged",level=xbmc.LOGDEBUG)
+        xbmc.log(msg=pluginLogHeader + "Process to login",level=xbmc.LOGDEBUG)
+        login()
+        xbmc.log(msg=pluginLogHeader + "Reading subscription mode",level=xbmc.LOGDEBUG)
+        settings.setSetting('subscriptionMode',str(get_subscription_mode()))
+        saveCookie()
+else:
+    xbmc.log(msg=pluginLogHeader + "Authenticated mode not requested",level=xbmc.LOGDEBUG)
+    xbmc.log(msg=pluginLogHeader + "Reading subscription mode",level=xbmc.LOGDEBUG)
+    settings.setSetting('subscriptionMode','0')
+    
 # Find the access mode of the user
-subscription = get_subscription_mode()
+subscription = settings.getSetting('subscriptionMode')
+xbmc.log(msg=pluginLogHeader + "User mode value : " + subscription,level=xbmc.LOGDEBUG)
 
 # Determining and executing action
 if( mode == None or url == None or len(url) < 1 ) and _id == 0:

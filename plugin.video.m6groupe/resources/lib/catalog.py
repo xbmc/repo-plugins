@@ -30,6 +30,10 @@ CATALOGUE_URL = 'http://static.m6replay.fr/catalog/m6group_web/%s/catalogue.json
 CLIP_URL = 'http://static.m6replay.fr/catalog/m6group_web/%s/clip/%s/clip_infos-%s.json'
 IMAGES_URL = 'http://static.m6replay.fr/images/'
 TTL = int(plugin.get_setting('cached_ttl'))
+if plugin.get_setting('swf_verify') == 'true':
+    SWF_VERIFY = ' swfUrl=http://www.m6replay.fr/rel-3/M6ReplayV3Application-3.swf swfVfy=1'
+else:
+    SWF_VERIFY = ''
 # Bump the CATALOG_API to force a refresh of the catalog
 CATALOG_API = '1.0'
 
@@ -60,7 +64,11 @@ def url_thumb(item):
 
 def get_id_parent(full_catalog, id_gnr):
     """Return the parent id of gnr"""
-    id_parent = full_catalog[u'gnrList'][id_gnr][u'idParent']
+    try:
+        id_parent = full_catalog[u'gnrList'][id_gnr][u'idParent']
+    except KeyError:
+        # Unknown genre, just return the given id
+        return id_gnr
     if id_parent is None:
         # Genre has no parent
         return id_gnr
@@ -96,6 +104,8 @@ def get_catalog(channel, api):
                'label': gnr[u'name'],
                'thumb': url_thumb(gnr),
               } for id_gnr, gnr in full_catalog[u'gnrList'].items() if gnr[u'idParent'] is None]
+    plugin.log.debug('genres:')
+    plugin.log.debug(genres)
     # Get programs with visible clips
     programs = [{'id': id_pgm,
                  'label': pgm[u'name'],
@@ -104,6 +114,8 @@ def get_catalog(channel, api):
                  'clips': pgm[u'clpList'][u'vi'],
                  'id_gnr': get_id_parent(full_catalog, str(pgm[u'idGnr'])),
                 } for id_pgm, pgm in full_catalog[u'pgmList'].items() if pgm[u'clpList'][u'vi']]
+    plugin.log.debug('programs:')
+    plugin.log.debug(programs)
     # Get visible clips
     clips = [{'id': id_clp,
               'label': ' - '.join([clp[u'programName'], clp[u'clpName']]),
@@ -113,6 +125,8 @@ def get_catalog(channel, api):
               'thumb': url_thumb(clp),
               'id_pgm': str(clp[u'idPgm'])
              } for id_clp, clp in full_catalog[u'clpList'].items() if clp[u'type'] == u'vi']
+    plugin.log.debug('clips:')
+    plugin.log.debug(clips)
     return {'genres': genres,
             'programs': programs,
             'clips': clips}
@@ -154,13 +168,16 @@ def get_clip_url(channel, clip):
     # Look for a mp4 url
     for url in urls:
         if url.startswith('mp4:'):
+            plugin.log.debug('mp4 url found')
             return get_rtmp_url(url)
     # No mp4 url found, try to convert it from the f4m url
     for url in urls:
         if url.endswith('.f4m'):
+            plugin.log.debug('using .f4m url')
             link = 'mp4:production/regienum/' + url.split('/')[-1].replace('.f4m', '.mp4')
             return get_rtmp_url(link)
     # No url found
+    plugin.log.debug('no url found')
     return None
 
 
@@ -181,4 +198,4 @@ def get_rtmp_url(playpath):
     #filename = os.path.basename(playpath)
     token_url = encode_playpath(app, playpath, int(time.time()))
     rtmp_url = '/'.join([rtmp, app, token_url])
-    return rtmp_url + ' swfUrl=http://www.m6replay.fr/rel-3/M6ReplayV3Application-3.swf swfVfy=1 timeout=10'
+    return rtmp_url + SWF_VERIFY + ' timeout=10'

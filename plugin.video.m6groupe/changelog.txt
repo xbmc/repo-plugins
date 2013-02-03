@@ -1,3 +1,9 @@
+[B]Version 1.0.4[/B]
+
+- Fix 6ter catalog (unknown genre id)
+- Add debug traces
+- Add parameter to enable/disbale SWF verification
+
 [B]Version 1.0.3[/B]
 
 - Added genre thumbnail thanks to JUL1EN094

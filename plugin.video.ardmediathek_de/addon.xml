@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.ardmediathek_de" name="ARD Mediathek" version="2.0.2" provider-name="AddonScriptorDE">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="de">Das Erste, Einsfestival, EinsPlus, Phoenix, WDR, SWR, HR, MDR, NDR, RBB, BR und BR Alpha Mediathek</summary>
+        <summary lang="en">Das Erste, Einsfestival, EinsPlus, Phoenix, WDR, SWR, HR, MDR, NDR, RBB, BR und BR Alpha Media Library</summary>
+        <language>de</language>
+        <description lang="de">Das Erste, Einsfestival, EinsPlus, Phoenix, WDR, SWR, HR, MDR, NDR, RBB, BR und BR Alpha Mediathek</description>
+        <description lang="en">Das Erste, Einsfestival, EinsPlus, Phoenix, WDR, SWR, HR, MDR, NDR, RBB, BR und BR Alpha Media Library</description>
+        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+    <platform>all</platform>
+    </extension>
+</addon>

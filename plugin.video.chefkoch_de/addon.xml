@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.chefkoch_de" name="Chefkoch.de" version="1.0.0" provider-name="AddonScriptorDE">
+<addon id="plugin.video.chefkoch_de" name="Chefkoch.de" version="2.0.1" provider-name="AddonScriptorDE">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>

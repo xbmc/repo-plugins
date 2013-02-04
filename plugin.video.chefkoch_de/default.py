@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-xbox = xbmc.getCondVisibility("System.Platform.xbox")
 settings = xbmcaddon.Addon(id='plugin.video.chefkoch_de')
 translation = settings.getLocalizedString
 
@@ -31,28 +31,30 @@ def index():
 
 def listVideos(url):
         content = getUrl(url)
-        if content.find("| Seite")==-1:
+        if ",0/" in url:
           splStart=1
         else:
           splStart=2
         spl=content.split('	<a href="http://www.chefkoch.de/magazin/rt/')
         for i in range(splStart,len(spl),1):
             entry=spl[i]
-            match=re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
+            match=re.compile('<a href="(.+?)" name="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
             url=match[0][0]
-            title=match[0][1]
+            title=match[0][2]
             title=cleanTitle(title)
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
             match=re.compile('<strong>ca. (.+?) Min.</strong>', re.DOTALL).findall(entry)
             length=""
             if len(match)>0:
-              length=" ("+match[0]+" min)"
-            addLink(title+length,url,'playVideo',thumb)
-        matchPage=re.compile('<span class="n"><strong><a href="(.+?)">', re.DOTALL).findall(content)
+              length=match[0]
+            addLink(title,url,'playVideo',thumb,length)
+        matchPage=re.compile('<span class="n"><strong><a href="(.+?)">(.+?)</a>', re.DOTALL).findall(content)
         if len(matchPage)>0:
-          urlNext="http://www.chefkoch.de"+matchPage[0]
-          addDir(translation(30001),urlNext,'listVideos',"")
+          for url,title in matchPage:
+            if title.find("chste")>=0:
+              urlNext="http://www.chefkoch.de"+url
+              addDir(translation(30001),urlNext,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -76,11 +78,7 @@ def cleanTitle(title):
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link
@@ -96,11 +94,11 @@ def parameters_string_to_dict(parameters):
                     paramDict[paramSplits[0]] = paramSplits[1]
         return paramDict
 
-def addLink(name,url,mode,iconimage):
+def addLink(name,url,mode,iconimage,duration):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Duration": duration } )
         liz.setProperty('IsPlayable', 'true')
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
         return ok

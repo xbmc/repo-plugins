@@ -5,3 +5,4 @@
 1.0.4 - Fixed Livestream Problem
 1.0.5 - Changed Timeout again
 1.0.6 - Various fixes and optical optimizations
+1.0.7 - Fixed wrong localization string & Livestream problem

@@ -19,3 +19,6 @@
 - Fixed livestreaming
 - Added some categories
 - Added setting for minimum video length
+1.0.9
+- Added show favorites
+- Fixed livestreaming

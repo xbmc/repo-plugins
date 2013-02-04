@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,os
 
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-addon = xbmcaddon.Addon(id='plugin.video.zdf_de_lite')
+addonID = 'plugin.video.zdf_de_lite'
+addon = xbmcaddon.Addon(id=addonID)
 translation = addon.getLocalizedString
+channelFavsFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".favorites")
 
 forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
@@ -19,19 +21,38 @@ mins=[0,5,10,20,30]
 minLength=mins[int(minLength)]
 
 def index():
-        addDir(translation(30005),"http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/tipps",'listVideos',"")
         addDir(translation(30006),"http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/aktuellste",'listVideos',"")
-        addDir(translation(30007),"http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/meist-gesehen",'listVideos',"")
         addDir("ZDF","zdf",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209114/tImg/4009328")
         addDir("ZDFneo","zdfneo",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209122/tImg/5939058")
         addDir("ZDFkultur","zdfkultur",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1317640/tImg/5960283")
         addDir("ZDFinfo","zdfinfo",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209120/tImg/5880352")
         addDir("3sat","dreisat",'listChannel',"http://www.zdf.de/ZDFmediathek/contentblob/1209116/tImg/5784929")
-        addDir("LIVE","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day0",'listVideos',"")
+        addDir("Live","http://www.zdf.de/ZDFmediathek/hauptnavigation/live/day0",'listVideos',"")
+        addDir(translation(30005),"http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/tipps",'listVideos',"")
+        addDir(translation(30007),"http://www.zdf.de/ZDFmediathek/hauptnavigation/startseite/meist-gesehen",'listVideos',"")
         addDir(translation(30003),"http://www.zdf.de/ZDFmediathek/hauptnavigation/nachrichten/ganze-sendungen",'listShows',"")
-        addDir(str(translation(30001))+": A-Z","",'listAZ',"")
+        addDir(translation(30001),"",'listAZ',"")
+        addDir(translation(30010),"",'listShowsFavs',"")
         addDir(translation(30004),"http://www.zdf.de/ZDFmediathek/hauptnavigation/themen",'listThemen',"")
         addDir(translation(30002),"",'search',"")
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def listShowsFavs():
+        xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
+        if os.path.exists(channelFavsFile):
+          fh = open(channelFavsFile, 'r')
+          all_lines = fh.readlines()
+          for line in all_lines:
+            title=line[line.find("###TITLE###=")+12:]
+            title=title[:title.find("#")]
+            url=line[line.find("###URL###=")+10:]
+            url=url[:url.find("#")]
+            thumb=line[line.find("###THUMB###=")+12:]
+            thumb=thumb[:thumb.find("#")]
+            addShowFavDir(title,urllib.unquote_plus(url),"listVideos",thumb)
+          fh.close()
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -77,7 +98,7 @@ def listShows(url,bigThumb):
             title=match[0][1]
             title=cleanTitle(title)
             if url.find("?bc=nrt;nrg&amp;gs=446")==-1 and url.find("?bc=nrt;nrg&amp;gs=1456548")==-1 and url.find("?bc=nrt;nrg&amp;gs=1384544")==-1 and url.find("?bc=nrt;nrg&amp;gs=1650526")==-1 and url.find("?bc=nrt;nrg&amp;gs=1650818")==-1:
-              addDir(title,"http://www.zdf.de"+url,'listVideos',"http://www.zdf.de"+thumb)
+              addShowDir(title,"http://www.zdf.de"+url,'listVideos',"http://www.zdf.de"+thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -135,6 +156,11 @@ def listVideos(url):
                   minutes=int(length[:length.find(" ")])
                 if minutes>=minLength:
                   addLink(title,url,'playVideo',thumb,length)
+        content=content[content.find('<span class="paging">'):]
+        match=re.compile('<a href="/ZDFmediathek/suche(.+?)" class="forward">(.+?)</a>', re.DOTALL).findall(content)
+        for url, title in match:
+          if title=="Weiter":
+            addDir(translation(30011),"http://www.zdf.de/ZDFmediathek/suche"+url.replace("&amp;","&"),'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -144,7 +170,7 @@ def playVideo(url):
         match0=re.compile('<formitaet basetype="h264_aac_mp4_rtmp_zdfmeta_http" isDownload="false">\n                <quality>hd</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
         match1=re.compile('<formitaet basetype="h264_aac_mp4_rtmp_zdfmeta_http" isDownload="false">\n                <quality>veryhigh</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
         match2=re.compile('<formitaet basetype="h264_aac_mp4_rtmp_zdfmeta_http" isDownload="false">\n                <quality>high</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
-        match3=re.compile('<formitaet basetype="h264_aac_na_rtmp_zdfmeta_http" isDownload="false">\n                <quality>veryhigh</quality>\n                <url>(.+?)</url>', re.DOTALL).findall(content)
+        match3=re.compile('<formitaet basetype="h264_aac_na_rtsp_mov_http" isDownload="false">\n                <quality>veryhigh</quality>\n                <url>\n(.+?)</url>', re.DOTALL).findall(content)
         url=""
         finalUrl=""
         if content.find("<type>livevideo</type>")>=0:
@@ -157,15 +183,18 @@ def playVideo(url):
             url=match1[0]
           elif len(match2)>=1:
             url=match2[1]
-        content = getUrl(url)
-        match=re.compile('<default-stream-url>(.+?)</default-stream-url>', re.DOTALL).findall(content)
-        finalUrl=match[0]
+        if url.find("http://")==0:
+          content = getUrl(url)
+          match=re.compile('<default-stream-url>(.+?)</default-stream-url>', re.DOTALL).findall(content)
+          finalUrl=match[0]
+        elif url.find("rtsp://")==0:
+          finalUrl=url
         if finalUrl!="":
           listitem = xbmcgui.ListItem(path=finalUrl)
           return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def search():
-        keyboard = xbmc.Keyboard('', 'Video Suche')
+        keyboard = xbmc.Keyboard('', translation(30002))
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
           search_string = keyboard.getText().replace(" ","+")
@@ -226,7 +255,27 @@ def addDir(name,url,mode,iconimage):
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
-         
+
+def addShowDir(name,url,mode,iconimage):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        playListInfos="###MODE###=ADD###TITLE###="+name+"###URL###="+urllib.quote_plus(url)+"###THUMB###="+iconimage+"###END###"
+        liz.addContextMenuItems([(translation(30028), 'XBMC.RunScript(special://home/addons/'+addonID+'/favs.py,'+urllib.quote_plus(playListInfos)+')',)])
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        return ok
+
+def addShowFavDir(name,url,mode,iconimage):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        playListInfos="###MODE###=REMOVE###REFRESH###=TRUE###TITLE###="+name+"###URL###="+urllib.quote_plus(url)+"###THUMB###="+iconimage+"###END###"
+        liz.addContextMenuItems([(translation(30029), 'XBMC.RunScript(special://home/addons/'+addonID+'/favs.py,'+urllib.quote_plus(playListInfos)+')',)])
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        return ok
+
 params=parameters_string_to_dict(sys.argv[2])
 mode=params.get('mode')
 url=params.get('url')
@@ -247,5 +296,7 @@ elif mode == 'search':
     search()
 elif mode == 'listAZ':
     listAZ()
+elif mode == 'listShowsFavs':
+    listShowsFavs()
 else:
     index()

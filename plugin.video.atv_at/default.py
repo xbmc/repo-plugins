@@ -1,11 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-xbox = xbmc.getCondVisibility("System.Platform.xbox")
-settings = xbmcaddon.Addon(id='plugin.video.atv_at')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.atv_at')
+translation = addon.getLocalizedString
+
+forceViewMode=addon.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(addon.getSetting("viewMode"))
 
 def index():
         content = getUrl("http://atv.at/mediathek")
@@ -21,6 +28,8 @@ def index():
           thumb=match[0]
           addDir(title,url,'listVideos',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
         if url.find("http://atv.at/contentset/")==0:
@@ -50,6 +59,8 @@ def listVideos(url):
         if currentPage<maxPage:
           addDir(translation(30001)+" ("+str(currentPage+1)+")",url[:len(url)-1]+str(currentPage+1),'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(entry):
         matchIDs=re.compile('"url":"http:\\\/\\\/atv.at\\\/static\\\/assets\\\/(.+?)"', re.DOTALL).findall(entry)
@@ -57,15 +68,12 @@ def playVideo(entry):
         title=match[0][0]+" - "+match[0][1]
         title=cleanTitle(title)
         if len(matchIDs)>1:
-          playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-          playlist.clear()
-          i=1
+          urlFull="stack://"
           for id in matchIDs:
-            url="http://atv.at/static/assets/"+id.replace("\\","")
-            listitem = xbmcgui.ListItem(title+" ("+str(i)+"/"+str(len(matchIDs))+")")
-            playlist.add(url,listitem)
-            i=i+1
-          xbmc.executebuiltin('XBMC.Playlist.PlayOffset(-1)')
+            urlFull+="http://atv.at/static/assets/"+id.replace("\\","")+" , "
+          urlFull=urlFull[:-3]
+          listitem = xbmcgui.ListItem(path=urlFull)
+          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
         else:
           url="http://atv.at/static/assets/"+matchIDs[0].replace("\\","")
           listitem = xbmcgui.ListItem(path=url)
@@ -80,11 +88,8 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

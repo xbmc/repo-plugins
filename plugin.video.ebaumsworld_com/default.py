@@ -4,15 +4,15 @@ import xbmcaddon,xbmcplugin,xbmcgui,sys,urllib,urllib2,re,socket
 
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
-settings = xbmcaddon.Addon(id='plugin.video.ebaumsworld_com')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.ebaumsworld_com')
+translation = addon.getLocalizedString
 
-forceViewMode=settings.getSetting("forceViewMode")
+forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
 else:
   forceViewMode=False
-viewMode=str(settings.getSetting("viewMode"))
+viewMode=str(addon.getSetting("viewMode"))
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
@@ -35,9 +35,9 @@ def index():
 def listVideos(url):
         content = getUrl(url)
         matchPage=re.compile('<a class="next" href="(.+?)">', re.DOTALL).findall(content)
-        content = content[content.find('<ul class="mediaListingList" id="mediaList">'):]
+        content = content[content.find('<ul class="mediaListingGrid" id="mediaList">'):]
         content = content[:content.find('<div class="paginationControl">')]
-        spl=content.split('<li class="mediaListItem">')
+        spl=content.split('<li class="mediaGridItem ">')
         for i in range(1,len(spl),1):
             entry=spl[i]
             match=re.compile('<img alt="(.+?)"', re.DOTALL).findall(entry)
@@ -51,6 +51,13 @@ def listVideos(url):
             comments=match[0]
             match=re.compile('<span class="uploadTime">(.+?)</span>', re.DOTALL).findall(entry)
             date=match[0]
+            match=re.compile('<span class="listingStars"><span title="(.+?) stars"', re.DOTALL).findall(entry)
+            if len(match)>0:
+              try:
+                rating=int(float(match[0])*20)
+                title=title+" ("+str(rating)+"%)"
+              except:
+                pass
             match=re.compile('<li class="description">(.+?)</li>', re.DOTALL).findall(entry)
             desc=match[0]
             desc=date+" - "+views+" Views - "+comments+" Comments\nDescription: "+desc
@@ -74,7 +81,14 @@ def search():
 def playVideo(id):
         content = getUrl("http://www.ebaumsworld.com/video/player/"+id+"?env=id0")
         match=re.compile('<file>(.+?)</file>', re.DOTALL).findall(content)
-        listitem = xbmcgui.ListItem(path=match[0])
+        url=match[0]
+        if url.find("youtube.com")>0:
+          id=url[url.find("=")+1:]
+          if xbox==True:
+            url = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + id
+          else:
+            url = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + id
+        listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
@@ -85,12 +99,8 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

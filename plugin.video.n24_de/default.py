@@ -13,11 +13,11 @@ def index():
         addDir("Magazine","magazin",1,"")
         addDir("Computer/Technik","computer",1,"")
         addDir("Wirtschaft/Börse","wirtschaft",1,"")
-        addDir("MM - Das Männermagazin","maennermagazin",1,"")
         addDir("History","history",1,"")
         addDir("Panorama","panorama",1,"")
         addDir("Politik","politik",1,"")
         addDir("Spezial","spezial",1,"")
+        addDir("Service","service",1,"")
         addDir("Auto","auto",1,"")
         addDir("Talks","talk",1,"")
         addDir("N24 "+str(translation(30002)),"search",8,"")
@@ -51,19 +51,10 @@ def liveStream():
         try:
           playLiveStream()
         except:
-          try:
-            playLiveStream()
-          except:
-            try:
-              playLiveStream()
-            except:
-              xbmc.executebuiltin('XBMC.Notification(Info,'+str(translation(30001))+',5000)')
+          xbmc.executebuiltin('XBMC.Notification(Info,'+str(translation(30003))+',5000)')
 
 def playLiveStream():
-        content = getUrl("http://www.n24.de/mediathek/n24-livestream/stream.html")
-        match=re.compile('filename&quot;:&quot;(.+?)&quot;', re.DOTALL).findall(content)
-        filename=match[0]
-        listitem = xbmcgui.ListItem(path="rtmp://pssimn24livefs.fplive.net/pssimn24live-live/"+filename+" swfUrl=http://www.n24.de/media/flash/homeplayer_swf.swf live=true timeout=60")
+        listitem = xbmcgui.ListItem(path="rtmp://pssimn24livefs.fplive.net/pssimn24live-live/n24live2011_01 swfUrl=http://www.n24.de/media/flash/homeplayer_swf.swf live=true timeout=60")
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def playVideo(url):
@@ -76,6 +67,7 @@ def playVideo(url):
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
+        req.add_header('Referer', 'http://www.n24.de/')
         response = urllib2.urlopen(req,timeout=30)
         link=response.read()
         response.close()

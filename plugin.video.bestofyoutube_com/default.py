@@ -48,6 +48,15 @@ def playVideo(id):
         listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
+def listLatest():
+        content = getUrl("http://feeds.feedburner.com/bestofyoutubedotcom")
+        match=re.compile('<item><title>(.+?)</title><description>(.+?)a href="(.+?)"(.+?)img src="(.+?)"', re.DOTALL).findall(content)
+        for title,desc,url,temp,thumb in match:
+                addLink(title,url,2,thumb)
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
 def listVideos(url):
         content = getUrl(url)
         spl=content.split("<div class='main'>")
@@ -131,6 +140,8 @@ if type(url)==type(str()):
 
 if mode == 'listVideos':
     listVideos(url)
+elif mode == 'listLatest':
+    listLatest()
 elif mode == 'playVideo':
     playVideo(url)
 elif mode == 'bestOf':

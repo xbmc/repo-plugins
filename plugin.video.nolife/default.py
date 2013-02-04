@@ -175,7 +175,9 @@ def getlastVideos():
     Get the videos in the "last videos" menu option
     """
     showseen   = settings.getSetting( "showseen" )
+    showlast   = int(settings.getSetting( "showlast" ).split('.')[0])
     i = 0
+    emissions = []
     finished = False
     while finished == False:
         postrequest = urllib.urlencode({'emissions': i,
@@ -185,7 +187,7 @@ def getlastVideos():
         page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
         liste = BeautifulSoup(page.read()).findAll('li')
         for element in liste:
-            if == len(emissions) == 30:
+            if len(emissions) == showlast:
                 finished = True
                 break
 
@@ -194,12 +196,21 @@ def getlastVideos():
             videoInfo = extractVideoInfo(element)
             if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
                 if isAvailableForUser(videoInfo.availability):
-                    addlink( videoInfo.name + " - " + videoInfo.desc,
-                        "plugin://plugin.video.nolife?id=" + videoInfo.vid,
-                        videoInfo.thumb,
-                        videoInfo.duration,
-                        videoInfo.seen )
-    
+                        emissions.append([videoInfo.id,
+                                            videoInfo.name,
+                                            videoInfo.desc,
+                                            videoInfo.duration,
+                                            videoInfo.seen,
+                                            videoInfo.thumb])
+        i = i + 1
+
+    for emission in emissions:
+        addlink(emission[1],
+                "plugin://plugin.video.nolife?id=" + emission[0],
+                emission[5],
+                emission[3],
+                emission[4] )
+
 def getcategories():
     """Gets all categories and adds directories
     
@@ -374,6 +385,7 @@ def playvideo(requestHandler, video):
                                    path=url )
 
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+    xbmc.executebuiltin("Container.Refresh")
 
 def get_params():
     """
@@ -410,9 +422,9 @@ def addlink(name, url, iconimage, duration, bool_seen):
     liz.setInfo( 
                  type="Video", 
                  infoLabels={ "title": name, 
-                              "duration" : duration,
                               "playcount": int(bool_seen) } 
                )
+    liz.addStreamInfo("video", { 'duration':duration })
     liz.setProperty("IsPlayable","true")
     ok  = xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), 
                                        url=url, 
@@ -491,7 +503,7 @@ def extractVideoInfo(element):
             ' padding-left:10px;">.*</p>'
         info.thumb    = re.compile('data-thumb=".*"').findall(str(element))[0][12:][:-1]
         _date_len = remove_html_tags(re.compile(reg_date).findall(str(element))[0])
-        info.duration = _date_len.split(' - ')[1]
+        info.duration = sum(int(x) * 60 ** i for i,x in enumerate(reversed(_date_len.split(' - ')[1].strip('s').split(":"))))
         
         req_id = 'a href="emission-.*" '
         info.id = re.compile(req_id).findall(str(element))[0][17:][:-2]

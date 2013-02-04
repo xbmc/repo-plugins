@@ -12,8 +12,9 @@
     <category label="33001">
         <setting id="type" type="enum" label="33011" values="theme|type" default="theme"/>
         <setting id="showall" type="bool" label="33012" default="false"/>
-        <setting id="show_n" subsetting="true" type="slider" label="33013" default="30" range="10,10,100" enable="!eq(-1,true)"/>
+        <setting id="show_n" subsetting="true" type="slider" label="33013" default="30" range="10,10,100" enable="!eq(-1,true)" option="int"/>
         <setting id="showseen" type="bool" label="33015" default="true"/>
+        <setting id="showlast" subsetting="true" type="slider" label="33020" default="30" range="10,10,100" option="int"/>
         <setting id="quality" type="enum" label="33014" values="LQ|HQ|TV|720p|1080p" default="TV"/>
     </category>
 

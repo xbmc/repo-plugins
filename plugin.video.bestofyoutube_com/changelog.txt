@@ -12,3 +12,5 @@
 - Added Random Videos & Search
 1.0.6
 - Fixed site changes for latest videos
+1.0.7
+- Fixed playback for some videos

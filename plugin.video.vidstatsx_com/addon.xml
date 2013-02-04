@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.vidstatsx_com" name="VidStatsX.com" version="1.0.1" provider-name="AddonScriptorDE">
+<addon id="plugin.video.vidstatsx_com" name="VidStatsX.com" version="2.0.2" provider-name="AddonScriptorDE">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.video.youtube" version="3.0.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">

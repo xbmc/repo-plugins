@@ -2,3 +2,5 @@
 - First Try
 1.0.1
 - Changed some navigation code
+1.0.2
+- Fixed site changes

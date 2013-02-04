@@ -44,6 +44,8 @@ def favoriteChannels():
             addChannelFavDir(user,user+"#1",'showYoutubeOrderBy',"")
           fh.close()
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def mostSubscribedMain():
         url="http://vidstatsx.com/youtube-top-100-most-subscribed-channels"
@@ -51,7 +53,6 @@ def mostSubscribedMain():
         addDir(translation(30005),url,"showCategories","")
         addDir(translation(30006),url,"showLanguages","")
         addDir("VEVO","http://vidstatsx.com/vevo-most-subscribed","listChannels","")
-        addDir(translation(30007),"http://vidstatsx.com/youtube-top-100-most-subscribed-women","listChannels","")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -68,6 +69,8 @@ def mostViewedMain():
 def videoChartsMain():
         addDir(translation(30004),"http://vidstatsx.com/most-viewed-videos-today","videoChartsOrderBy","")
         showCategories("http://vidstatsx.com/most-viewed-videos-today")
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def topGainersMain():
         addDir(translation(30021),"http://vidstatsx.com/top-100-1h-sub-gains","listChannels","")
@@ -200,6 +203,8 @@ def listVideos(params):
           addLink(title,id,'playVideo',thumb,"Date: "+date+"; Views: "+viewCount+"\n"+desc,duration,author)
         addDir(translation(30075),user+"#"+str(int(index)+25)+"#"+orderby,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideoCharts(url):
         content = getUrlVSX(url)
@@ -232,7 +237,7 @@ def playVideo(youtubeID):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()

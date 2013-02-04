@@ -1,11 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon
+import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
+addon = xbmcaddon.Addon(id='plugin.video.sueddeutsche_de')
+translation = addon.getLocalizedString
 
-settings = xbmcaddon.Addon(id='plugin.video.sueddeutsche_de')
-translation = settings.getLocalizedString
+forceViewMode=addon.getSetting("forceViewMode")
+if forceViewMode=="true":
+  forceViewMode=True
+else:
+  forceViewMode=False
+viewMode=str(addon.getSetting("viewMode"))
 
 def index():
         addDir(translation(30001),"http://rss.sueddeutsche.de/query/%23/sort/-docdatetime/drilldown/%C2%A7documenttype%3AVideo",'listVideos',"")
@@ -15,12 +22,17 @@ def index():
         addDir(translation(30005),"http://rss.sueddeutsche.de/query/%23/nav/%C2%A7documenttype%3AVideo/sort/-docdatetime/drilldown/%C2%A7ressort%3A%5EKultur%24",'listVideos',"")
         addDir(translation(30006),"http://rss.sueddeutsche.de/query/%23/nav/%C2%A7documenttype%3AVideo/sort/-docdatetime/drilldown/%C2%A7ressort%3A%5EWirtschaft%24",'listVideos',"")
         addDir(translation(30007),"http://rss.sueddeutsche.de/query/%23/nav/%C2%A7documenttype%3AVideo/sort/-docdatetime/drilldown/%C2%A7ressort%3A%5ELeben%24",'listVideos',"")
+        addDir(translation(30010),"http://rss.sueddeutsche.de/query/%23/nav/%C2%A7documenttype%3AVideo/sort/-docdatetime/drilldown/%C2%A7ressort%3A%5EService%24",'listVideos',"")
+        addDir(translation(30011),"http://rss.sueddeutsche.de/query/%23/nav/%C2%A7documenttype%3AVideo/sort/-docdatetime/drilldown/%C2%A7ressort%3A%5EWissen%24",'listVideos',"")
+        addDir(translation(30012),"http://rss.sueddeutsche.de/query/%23/nav/%C2%A7documenttype%3AVideo/sort/-docdatetime/drilldown/%C2%A7ressort%3A%5EDigital%24",'listVideos',"")
+        addDir(translation(30013),"http://rss.sueddeutsche.de/query/%23/nav/%C2%A7documenttype%3AVideo/sort/-docdatetime/drilldown/%C2%A7ressort%3A%5EAuto%24",'listVideos',"")
         addDir(translation(30008),"",'listColumns',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listColumns():
         xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
-        addDir("Rasenschach - Die EM Taktikkolumne","http://www.sueddeutsche.de/thema/Taktik-Kolumne",'listColumnVideos',"http://gfx.sueddeutsche.de/video/kolumnen/rasenschach.jpg")
         addDir("Der Nächste, bitte","http://www.sueddeutsche.de/thema/Der_N%C3%A4chste_bitte",'listColumnVideos',"http://gfx.sueddeutsche.de/video/kolumnen/der_naechste_bitte.jpg")
         addDir("Prantls Politik","http://www.sueddeutsche.de/thema/Prantls_Politik",'listColumnVideos',"http://gfx.sueddeutsche.de/video/kolumnen/prantl.jpg")
         addDir("Global betrachtet","http://www.sueddeutsche.de/thema/global_betrachtet",'listColumnVideos',"http://gfx.sueddeutsche.de/video/kolumnen/global_betrachtet.jpg")
@@ -33,18 +45,23 @@ def listColumns():
         addDir("Der Flügelflitzer","http://www.sueddeutsche.de/thema/Fl%C3%BCgelflitzer",'listColumnVideos',"http://gfx.sueddeutsche.de/video/kolumnen/fluegelflitzer.jpg")
         addDir("2 mal 2 - Der Fußball Schlagabtausch","http://www.sueddeutsche.de/thema/2_mal_2",'listColumnVideos',"http://gfx.sueddeutsche.de/video/kolumnen/2x2.jpg")
         addDir("Auftakt","http://www.sueddeutsche.de/thema/Auftakt",'listColumnVideos',"http://gfx.sueddeutsche.de/video/kolumnen/auftakt.jpg")
+        addDir("Rasenschach - Die Fußball Taktikkolumne","http://www.sueddeutsche.de/thema/Rasenschach",'listColumnVideos',"http://gfx.sueddeutsche.com/video/kolumnen/rasenschach.jpg")
+        addDir("089","http://www.sueddeutsche.de/thema/089",'listColumnVideos',"http://gfx.sueddeutsche.de/video/kolumnen/muenchner_mysterien.gif")
+        addDir("Einfach Technik","http://www.sueddeutsche.de/thema/Einfach_Technik",'listColumnVideos',"http://gfx.sueddeutsche.com/video/kolumnen/helmut_martin-jung.jpg")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listColumnVideos(url):
         content = getUrl(url)
-        spl=content.split("<li class='hentry")
+        spl=content.split('<div class="teaser')
         for i in range(1,len(spl),1):
           entry=spl[i]
           match=re.compile('<a href="(.+?)"', re.DOTALL).findall(entry)
           url=match[0]
           match=re.compile('<img src="(.+?)"', re.DOTALL).findall(entry)
           thumb=match[0]
-          match=re.compile('</span>\n	      (.+?)\n', re.DOTALL).findall(entry)
+          match=re.compile('<em>(.+?)</em>', re.DOTALL).findall(entry)
           title=match[0]
           title=cleanTitle(title)
           addLink(title,url,'playVideo',thumb)
@@ -53,37 +70,40 @@ def listColumnVideos(url):
         if len(match)>0:
           addDir(translation(30009),match[0],'listColumnVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
         content = getUrl(url)
-        spl=content.split('<li class="hentry">')
+        spl=content.split('<div class="teaser">')
         for i in range(2,len(spl),1):
           entry=spl[i]
           match=re.compile('<a href="(.+?)"', re.DOTALL).findall(entry)
           url=match[0]
           match=re.compile('<img src="(.+?)"', re.DOTALL).findall(entry)
-          thumb=match[0]
-          match=re.compile('</span>(.+?)<', re.DOTALL).findall(entry)
+          thumb=""
+          if len(match)>0:
+            thumb=match[0]
+          match=re.compile('</strong>(.+?)<span class="department">', re.DOTALL).findall(entry)
           title=match[0]
-          match=re.compile('<p class="entry-summary">\n              (.+?) ', re.DOTALL).findall(entry)
+          match=re.compile('<span class="date">(.+?)</span>', re.DOTALL).findall(entry)
           date=match[0]
-          date=date[:6]
+          date=date[:5]
           title=cleanTitle(title)
           addLink(date+" "+title,url,'playVideo',thumb)
         match=re.compile('<li class="next">\n          	<a href="(.+?)"', re.DOTALL).findall(content)
         if len(match)>0:
           addDir(translation(30009),"http://rss.sueddeutsche.de"+match[0],'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
-        try:
-          content = getUrl(url)
-          match=re.compile('"video"      : "(.+?)"', re.DOTALL).findall(content)
-          if len(match)>0:
-            listitem = xbmcgui.ListItem(path=match[0])
-            return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
-        except:
-          pass
+        content = getUrl(url)
+        match=re.compile('"video": "(.+?)"', re.DOTALL).findall(content)
+        if len(match)>0:
+          listitem = xbmcgui.ListItem(path=match[0])
+          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
@@ -93,8 +113,8 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

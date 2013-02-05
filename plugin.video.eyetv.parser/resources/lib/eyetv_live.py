@@ -32,6 +32,10 @@ from config import plugin
 EYETVPORT = 2170
 
 
+class EyetvLiveError(Exception):
+    pass
+
+
 class EyetvLive:
     """Class to watch live TV using EyeTV iPhone access"""
 
@@ -44,11 +48,11 @@ class EyetvLive:
         if not self.is_up():
             xbmc.log('EyeTV is not running', xbmc.LOGERROR)
             xbmcgui.Dialog().ok(plugin.get_string(30110), plugin.get_string(30111))
-            exit(0)
+            raise EyetvLiveError
         if not self.wifi_access_is_on():
             xbmc.log('iPhone Access returned an error', xbmc.LOGERROR)
             xbmcgui.Dialog().ok(plugin.get_string(30110), plugin.get_string(30112))
-            exit(0)
+            raise EyetvLiveError
 
     def get_data(self, url):
         """Return the dictionary corresponding to the url request
@@ -71,11 +75,11 @@ class EyetvLive:
                 xbmcgui.Dialog().ok(plugin.get_string(30110), plugin.get_string(30115))
             else:
                 xbmcgui.Dialog().ok(plugin.get_string(30110), str(e))
-            exit(0)
+            raise EyetvLiveError
         except urllib2.URLError, e:
             xbmc.log('URLError: %s %s' % (full_url, str(e.reason)), xbmc.LOGERROR)
             xbmcgui.Dialog().ok(plugin.get_string(30110), plugin.get_string(30114))
-            exit(0)
+            raise EyetvLiveError
         if f.headers.get('Content-Encoding') == 'gzip':
             compresseddata = f.read()
             gzipper = gzip.GzipFile(fileobj=StringIO.StringIO(compresseddata))
@@ -124,7 +128,7 @@ class EyetvLive:
         if not data['success']:
             xbmc.log('live/tuneto error code: %d' % data['errorcode'], xbmc.LOGERROR)
             xbmcgui.Dialog().ok(plugin.get_string(30110), plugin.get_string(30113))
-            exit(0)
+            raise EyetvLiveError
         # Wait before checking if stream is ready
         # Otherwise we get the answer for the old stream when changing channel
         time.sleep(1)

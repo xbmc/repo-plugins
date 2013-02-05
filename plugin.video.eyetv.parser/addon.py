@@ -18,7 +18,7 @@
 
 from xbmcswift import xbmcgui, xbmc
 from resources.lib.eyetv_parser import Eyetv
-from resources.lib.eyetv_live import EyetvLive
+from resources.lib.eyetv_live import EyetvLive, EyetvLiveError
 from config import plugin
 
 
@@ -65,8 +65,11 @@ def show_homepage():
 @plugin.route('/live/')
 def live_tv():
     """Display the channels available for live TV"""
-    live = create_eyetv_live()
-    channels = live.get_channels()
+    try:
+        live = create_eyetv_live()
+        channels = live.get_channels()
+    except EyetvLiveError:
+        return show_homepage()
     items = [{
         'label': ' '.join((channel['displayNumber'], channel['name'])),
         'url': plugin.url_for('watch_channel', serviceid=channel['serviceID']),
@@ -79,8 +82,11 @@ def live_tv():
 @plugin.route('/watch/<serviceid>/')
 def watch_channel(serviceid):
     """Resolve and play the chosen channel"""
-    live = create_eyetv_live()
-    url = live.get_channel_url(serviceid)
+    try:
+        live = create_eyetv_live()
+        url = live.get_channel_url(serviceid)
+    except EyetvLiveError:
+        return None
     return plugin.set_resolved_url(url)
 
 

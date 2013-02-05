@@ -473,7 +473,10 @@ class AppStvList(OnlineStvList):
 		return local_tvshows.values()
 
 	def get_tvshow_local_seasons(self, stv_id):
-		tvshow = self.byType['tvshow'][stv_id]
+		tvshow = self.byType['tvshow'].get(stv_id)
+		if not tvshow:
+			return []
+			
 		xbmc_id = tvshow['xbmc_id']
 				
 		seasons = []		

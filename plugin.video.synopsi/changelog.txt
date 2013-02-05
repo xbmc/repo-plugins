@@ -1,3 +1,10 @@
+[B]Version 1.0.3[/B]
+
+- Added: send software info on checkin
+- Added: store refresh token for future token-auth
+- Added: login/settings info, where to sign-up
+- Fixed: sending wrong position
+
 [B]Version 1.0.2[/B]
 
 - Fixed: sending checkins wrong api usage

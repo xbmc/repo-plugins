@@ -98,6 +98,10 @@ class AppApiClient(ApiClient):
 		self._lock_access_token.release()
 		return res
 
+	def setRefreshToken(self, token):
+		ADDON = get_current_addon()
+		ADDON.setSetting('REFTOKEN', token)		
+
 	# convienent functions
 	def get_unwatched_episodes(self):
 		episodes = self.unwatchedEpisodes()
@@ -221,4 +225,8 @@ class AppApiClient(ApiClient):
 	def titleIdentify(self, props=defaultIdentifyProps, **data):
 		data['file_name'] = rel_path(data['file_name'])
 		return ApiClient.titleIdentify(self, props, **data)
+
+	def titleWatched(self, titleId, **data):
+		data['software_info'] = software_info()
+		return ApiClient.titleWatched(self, titleId, **data)
 

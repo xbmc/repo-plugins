@@ -412,14 +412,11 @@ def show_video_dialog_data(stv_details, json_data={}, close=False):
 		t1_similars = top.apiClient.titleSimilar(stv_details['id'])
 		if t1_similars.has_key('titles'):
 			stv_details['similars'] = t1_similars['titles']
-	elif stv_details['type'] == 'tvshow':
+	elif stv_details['type'] == 'tvshow' and stv_details.has_key('seasons'):
 		seasons = top.stvList.get_tvshow_local_seasons(stv_details['id'])
-		log('seasons on disk:' + str(seasons))
-		
-		# append seasons
-		if stv_details.has_key('seasons'):
-			stv_details['similars'] = [ {'id': i['id'], 'name': 'Season %d' % i['season_number'], 'cover_medium': i['cover_medium'], 'watched': i['episodes_count'] == i['watched_count'], 'file': i['season_number'] in seasons} for i in stv_details['seasons'] ]
-			log(dump(stv_details['similars']))
+		log('seasons on disk:' + str(seasons))		
+		stv_details['similars'] = [ {'id': i['id'], 'name': 'Season %d' % i['season_number'], 'cover_medium': i['cover_medium'], 'watched': i['episodes_count'] == i['watched_count'], 'file': i['season_number'] in seasons} for i in stv_details['seasons'] ]
+
 				
 
 	# similar overlays

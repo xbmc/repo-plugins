@@ -21,6 +21,7 @@ import xml.etree.ElementTree as ET
 import time
 import sys
 import xml.etree.ElementTree as et
+import platform
 
 common = CommonFunctions
 common.plugin = "SynopsiTV"
@@ -114,6 +115,31 @@ class ShutdownRequestedException(Exception):
 class ListEmptyException(BaseException):
 	pass
 
+
+def player_info():
+	try:
+		info = {
+			'player_name': xbmc.getInfoLabel('System.FriendlyName'), 
+			'build_version': xbmc.getInfoLabel('System.BuildVersion')
+		}
+	except:
+		info = {'player_name': 'N/A'}
+		
+	return info
+
+def os_info():
+	try:
+		info = list(os.uname())
+		del info[1]
+	except:
+		info = 'N/A'
+	
+	return info
+
+def software_info():
+	i = { 'os_info': os_info() }
+	i.update(player_info())
+	return i 
 
 def dump(var):
 	return json.dumps(var, indent=4)

@@ -52,7 +52,7 @@ class ApiClient(loggable.Loggable):
 		self.username = username
 		self.password = password
 		self.accessToken = None
-		#~ self.refreshToken = None
+		self.refreshToken = None
 		self.apiUrl = self.baseUrl + rel_api_url
 		self.originReqHost = originReqHost
 		self.authHeaders = None
@@ -187,10 +187,13 @@ class ApiClient(loggable.Loggable):
 
 		self.updateAccessTokenTimeout()
 		self.accessToken = response_json['access_token']
-		#~ self.refreshToken = response_json['refresh_token']
+		self.setRefreshToken(response_json['refresh_token'])
 		self._log.debug('new access token: ' + self.accessToken)
 		return True
 
+	def setRefreshToken(self, token):
+		self.refreshToken = token
+		
 	def updateAccessTokenTimeout(self):
 		self.accessTokenSessionStart = datetime.datetime.now()
 

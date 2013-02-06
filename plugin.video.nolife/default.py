@@ -205,11 +205,19 @@ def getlastVideos():
         i = i + 1
 
     for emission in emissions:
-        addlink(emission[1],
-                "plugin://plugin.video.nolife?id=" + emission[0],
-                emission[5],
-                emission[3],
-                emission[4] )
+        if emission[2] == '':
+            addlink(emission[1],
+                    "plugin://plugin.video.nolife?id=" + emission[0],
+                    emission[5],
+                    emission[3],
+                    emission[4] )
+
+        else:
+            addlink(emission[1] + ' - ' + emission[2],
+                    "plugin://plugin.video.nolife?id=" + emission[0],
+                    emission[5],
+                    emission[3],
+                    emission[4] )
 
 def getcategories():
     """Gets all categories and adds directories
@@ -362,6 +370,7 @@ def playvideo(requestHandler, video):
     """
     settings = xbmcaddon.Addon(id='plugin.video.nolife')
     quality  = settings.getSetting( "quality" )
+    autorefresh = settings.getSetting("autorefresh")
     if   quality == "HQ" or quality == "1":
         _video = video + "?quality=2"
     elif quality == "LQ" or quality == "0":
@@ -385,7 +394,8 @@ def playvideo(requestHandler, video):
                                    path=url )
 
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
-    xbmc.executebuiltin("Container.Refresh")
+    if autorefresh == "true":
+        xbmc.executebuiltin("Container.Refresh")
 
 def get_params():
     """

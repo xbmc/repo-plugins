@@ -6,12 +6,12 @@ import os
 # Modules XBMC
 import xbmc
 import xbmcgui
-from xbmcaddon import Addon
+from traceback import print_exc
+import common
 
 # constants
-ADDON      = Addon( "plugin.image.mypicsdb" )
-ADDON_NAME = ADDON.getAddonInfo( "name" )
-ADDON_DIR  = ADDON.getAddonInfo( "path" )
+ADDON_NAME = common.getaddon_name()
+ADDON_DIR  = common.getaddon_path()
 
 
 class Viewer:

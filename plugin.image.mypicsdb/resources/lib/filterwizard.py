@@ -1,15 +1,26 @@
 #!/usr/bin/python
 # -*- coding: utf8 -*-
 
-import sys
-import os
-import xbmc
-import xbmcgui
-import urllib
-import MypicsDB as MPDB
-import CharsetDecoder as decoder
+""" 
+Copyright (C) 2012 Xycl
 
-_ = sys.modules[ "__main__" ].__language__
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+"""
+
+import xbmcgui
+import MypicsDB as MPDB
+import common
 
 
 STATUS_LABEL       = 100
@@ -33,19 +44,19 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
     def __init__( self, xml, cwd, default):
         xbmcgui.WindowXMLDialog.__init__(self)
         
-    def setDelegate(self, filter):
-        self.filter = filter
+    def setDelegate(self, filterfunc):
+        self.filter = filterfunc
         
     def onInit( self ):  
         self.setup_all()
 
     def setup_all( self ):
-        self.getControl( STATUS_LABEL ).setLabel( _(30610) )
-        self.getControl( TAGS_COLUMN ).setLabel(  _(30601) )        
-        self.getControl( CONTENT_COLUMN ).setLabel( _(30602) )        
-        self.getControl( BUTTON_OK ).setLabel( _(30613) )
-        self.getControl( BUTTON_CANCEL ).setLabel( _(30614) )
-        self.getControl( BUTTON_MATCHALL ).setLabel( _(30615) )
+        self.getControl( STATUS_LABEL ).setLabel( common.getstring(30610) )
+        self.getControl( TAGS_COLUMN ).setLabel(  common.getstring(30601) )        
+        self.getControl( CONTENT_COLUMN ).setLabel( common.getstring(30602) )        
+        self.getControl( BUTTON_OK ).setLabel( common.getstring(30613) )
+        self.getControl( BUTTON_CANCEL ).setLabel( common.getstring(30614) )
+        self.getControl( BUTTON_MATCHALL ).setLabel( common.getstring(30615) )
         self.getControl( TAGS_LIST ).reset()
 
         
@@ -56,12 +67,11 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
         self.CheckTagNames = {}
         
         if self.checkedTags == 1:
-            self.getControl( CHECKED_LABEL ).setLabel(  _(30611) )
+            self.getControl( CHECKED_LABEL ).setLabel(  common.getstring(30611) )
         else:
-            self.getControl( CHECKED_LABEL ).setLabel(  _(30612)% (self.checkedTags) )
+            self.getControl( CHECKED_LABEL ).setLabel(  common.getstring(30612)% (self.checkedTags) )
         
-        
-        TotalTagTypes = len(self.TagTypes)
+
         i = 0
         for TagType in self.TagTypes:
             TagTypeItem = xbmcgui.ListItem( label=TagType)   
@@ -78,7 +88,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
 
      
     def isContentChecked(self, tagType, tagContent):
-        key = decoder.smart_unicode(tagType) + '||' + decoder.smart_unicode(tagContent)
+        key = common.smart_unicode(tagType) + '||' + common.smart_unicode(tagContent)
         if key in self.CheckTagNames :
             checked = self.CheckTagNames[ key ]    
         else :
@@ -90,7 +100,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
     
         self.getControl( TAGS_CONTENT_LIST ).reset()
         TagContents = [u"%s"%k  for k in MPDB.list_Tags(tagType)]
-        TotalTagContents = len(TagContents)
+
         self.CurrentlySelectedTagType = tagType
         
         for TagContent in TagContents:
@@ -106,10 +116,10 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
             self.getControl( TAGS_CONTENT_LIST ).addItem( TagContentItem )
             
     def onClick( self, controlId ):
-      pass    
+        pass    
 
     def onFocus( self, controlId ):
-      self.controlId = controlId
+        self.controlId = controlId
 
     def checkGUITagContent(self, item, checked):
         
@@ -171,7 +181,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
                 pos  = self.getControl( TAGS_CONTENT_LIST ).getSelectedPosition()
                 if pos != -1 and item != None:
                     checked = item.getProperty("checked")
-                    key = decoder.smart_unicode(self.CurrentlySelectedTagType) + '||' + decoder.smart_unicode(item.getLabel2())
+                    key = common.smart_unicode(self.CurrentlySelectedTagType) + '||' + common.smart_unicode(item.getLabel2())
                     
                     if checked == "checkbutton.png":
                         self.checkGUITagContent(item, -1)
@@ -186,9 +196,9 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
                     
 
                     if self.checkedTags == 1:
-                        self.getControl( CHECKED_LABEL ).setLabel(  _(30611) )
+                        self.getControl( CHECKED_LABEL ).setLabel(  common.getstring(30611) )
                     else:
-                        self.getControl( CHECKED_LABEL ).setLabel(  _(30612)% (self.checkedTags) )
+                        self.getControl( CHECKED_LABEL ).setLabel(  common.getstring(30612)% (self.checkedTags) )
                     self.getControl( CHECKED_LABEL ).setVisible(False)
                     self.getControl( CHECKED_LABEL ).setVisible(True)
 

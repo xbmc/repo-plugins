@@ -1,3 +1,36 @@
+2013/02/05--> v 1.3.4
+Fix:    Infinitive loop in EXIF parser due to malformed pictures fixed.
+Update: EXIF tag "Image Artist" added
+Update: New translations for tag types: Image Model, Image Make and Image Artist
+
+2013/02/01--> v 1.3.3
+Fix:    DB version check was wrong
+
+2013/01/31 --> v 1.3.2
+Update: XMP mwg-rs:RegionList Face recognition tags now supported
+
+2013/01/30 --> v 1.3.1
+Update: Source code cleanup
+Fix:    Fixed unicode error in pathscanner.py
+Fix:    Error in parameters parsing corrected
+Fix:    English language file corrected
+Fix:    DB initialization fixed.
+
+2013/01/22 --> v 1.3.0
+Update: scanpaths.py now supports remote shares
+Update: default.py now supports multi paths
+Update: Scanning can be cancelled by clicking on the close button of the scan dialog
+Fix:    Problem with plus sign in path names fixed.
+Fix:    Problem with "&" in tags fixed.
+
+2012/12/12 --> v 1.2.11
+Fix:    Changed all files to Unix style line break
+Update: New EXIF parser
+Fix:    Synonym for Iptc4xmpCore:Country changed from 'Country' to 'Country Code'
+
+2012/12/12 --> v 1.2.10
+Fix:    Skin set properties for picture categories produced an SQL error.
+
 2012/12/03 --> v 1.2.9
 Update: Changed version number to 3 digits due to request from XBMC team
 

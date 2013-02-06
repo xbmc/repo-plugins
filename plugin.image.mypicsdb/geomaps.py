@@ -4,14 +4,10 @@
 import xbmcgui,xbmc
 from urllib2 import Request, urlopen
 from urllib import urlencode
-#import urllib2,urllib
-from os.path import join,isfile,basename,exists
+from os.path import join,isfile,basename
 import os
 from traceback import print_exc
-from xbmcaddon import Addon
-import CharsetDecoder as decoder
-addon = Addon(id='plugin.image.mypicsdb')
-__language__ = addon.getLocalizedString
+import resources.lib.common as common
 
 ACTION_CANCEL_DIALOG  = ( 9, 10, 92, 216, 247, 257, 275, 61467, 61448, )
 
@@ -48,7 +44,7 @@ class main(xbmcgui.Window):
         self.addControl(self.ctrl_map)
         self.addControl(self.ctrl_pic)
         self.addControl(self.lbl_info)
-        self.lbl_info.setLabel(__language__(30223))#Use UP and DOWN arrow to zoom in / out
+        self.lbl_info.setLabel(common.getstring(30223))#Use UP and DOWN arrow to zoom in / out
 
     def zoom(self,way,step=1):
         if way=="+":
@@ -110,16 +106,16 @@ class main(xbmcgui.Window):
             #mapfile is not downloaded yet, download it now...
             try:
                 #f=open(unicode(mapfile, 'utf-8'),"wb")
-                f=open(decoder.smart_unicode(mapfile), "wb")
+                f=open(common.smart_unicode(mapfile), "wb")
             except:
                 try:
-                    f=open(decoder.smart_utf8(mapfile), "wb")
+                    f=open(common.smart_utf8(mapfile), "wb")
                 except:
                     print_exc()
                 #print "GEO Exception: "+mapfile
             for i in range(1+(filesize/10)):
                 f.write(urlfile.read(10))
-                self.lbl_info.setLabel(__language__(30221)%(100*(float(i*10)/filesize)))#getting map... (%0.2f%%)
+                self.lbl_info.setLabel(common.getstring(30221)%(100*(float(i*10)/filesize)))#getting map... (%0.2f%%)
             urlfile.close()
             #pDialog.close()
             try:
@@ -129,7 +125,7 @@ class main(xbmcgui.Window):
                 pass
         self.set_pic(self.picfile)
         self.set_map(mapfile)
-        self.lbl_info.setLabel(__language__(30222)%int(100*(float(self.zoomlevel)/self.ZMAX)))#Zoom level %s
+        self.lbl_info.setLabel(common.getstring(30222)%int(100*(float(self.zoomlevel)/self.ZMAX)))#Zoom level %s
 
     def set_map(self,mapfile):
         self.ctrl_map.setImage(mapfile)

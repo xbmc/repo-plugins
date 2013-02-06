@@ -32,12 +32,13 @@ from channels import CHANNELS, CATEGORIES, QUALITIES
 
 TITLE_OFFSET = 31000
 
+
 class DanishLiveTV(object):
-    def showChannels(self, category = None):
+    def showChannels(self, category=None):
         try:
             quality = QUALITIES[int(ADDON.getSetting('quality'))]
         except ValueError:
-            quality = QUALITIES[0] # fallback for old settings value
+            quality = QUALITIES[0]  # fallback for old settings value
 
         if category is not None:
             channels = CATEGORIES[category]
@@ -54,14 +55,14 @@ class DanishLiveTV(object):
                 try:
                     idx = int(ADDON.getSetting(channel.get_config_key()))
                 except ValueError:
-                    idx = 0 # fallback for missing settings
+                    idx = 0  # fallback for missing settings
 
             if channel.get_url(quality, idx):
                 title = ADDON.getLocalizedString(TITLE_OFFSET + channel.get_id())
                 item = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
                 item.setInfo('video', infoLabels={
                     'title': title,
-                    'studio' : ADDON.getLocalizedString(channel.get_category())
+                    'studio': ADDON.getLocalizedString(channel.get_category())
                 })
                 item.setProperty('Fanart_Image', FANART)
                 item.setProperty('IsPlayable', 'true')
@@ -75,7 +76,7 @@ class DanishLiveTV(object):
             item = xbmcgui.ListItem(title, iconImage=ICON, thumbnailImage=ICON)
             item.setProperty('Fanart_Image', FANART)
             url = PATH + '?category=%d' % id
-            xbmcplugin.addDirectoryItem(HANDLE, url, item, isFolder = True)
+            xbmcplugin.addDirectoryItem(HANDLE, url, item, isFolder=True)
 
         xbmcplugin.endOfDirectory(HANDLE)
 
@@ -83,7 +84,7 @@ class DanishLiveTV(object):
         try:
             quality = QUALITIES[int(ADDON.getSetting('quality'))]
         except ValueError:
-            quality = QUALITIES[0] # fallback for old settings value
+            quality = QUALITIES[0]  # fallback for old settings value
 
         for channel in CHANNELS:
             if str(channel.get_id()) == id:
@@ -110,10 +111,10 @@ class DanishLiveTV(object):
 
     def imInDenmark(self):
         if ADDON.getSetting('warn.if.not.in.denmark') != 'true':
-            return # Don't bother checking
+            return  # Don't bother checking
 
         try:
-            u = urllib2.urlopen('http://www.dr.dk/nu/api/estoyendinamarca.json', timeout = 30)
+            u = urllib2.urlopen('http://www.dr.dk/nu/api/estoyendinamarca.json', timeout=30)
             response = u.read()
             u.close()
             imInDenmark = 'true' == response
@@ -144,9 +145,9 @@ if __name__ == '__main__':
     buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     try:
         danishTV = DanishLiveTV()
-        if PARAMS.has_key('playChannel'):
+        if 'playChannel' in PARAMS:
             danishTV.playChannel(PARAMS['playChannel'][0])
-        elif PARAMS.has_key('category'):
+        elif 'category' in PARAMS:
             danishTV.showChannels(int(PARAMS['category'][0]))
         elif ADDON.getSetting('group.by.category') == 'true':
             danishTV.imInDenmark()

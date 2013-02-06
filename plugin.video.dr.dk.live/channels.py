@@ -19,10 +19,10 @@
 #
 import urllib2
 
-Q_BEST = 0   # 1700 kb/s
-Q_HIGH = 1   # 1000 kb/s
-Q_MEDIUM = 2 # 500 kb/s
-Q_LOW = 3    # 250 kb/s
+Q_BEST = 0    # 1700 kb/s
+Q_HIGH = 1    # 1000 kb/s
+Q_MEDIUM = 2  # 500 kb/s
+Q_LOW = 3     # 250 kb/s
 
 QUALITIES = [Q_BEST, Q_HIGH, Q_MEDIUM, Q_LOW]
 
@@ -32,6 +32,7 @@ CATEGORY_DR = 30201
 CATEGORY_TV2_REG = 30202
 CATEGORY_MISC = 30203
 CATEGORIES = {CATEGORY_DR : list(), CATEGORY_TV2_REG : list(), CATEGORY_MISC : list()}
+
 
 class Channel(object):
     def __init__(self, id, category, config_key = None):
@@ -77,6 +78,7 @@ class Channel(object):
     def get_config_key(self):
         return self.config_key
 
+
 class TV2RChannel(Channel):
     def get_url(self, quality, idx = 0):
         url = super(TV2RChannel, self).get_url(quality, idx)
@@ -93,10 +95,10 @@ class TV2RChannel(Channel):
                 u.close()
                 return s[9:]
             except Exception:
-                pass # probably timeout; retry
+                pass  # probably timeout; retry
         return 'unable.to.get.host.from.loadbalancer'
 
-# http://dr.dk/nu/embed/live?height=467&width=830
+# http://www.dr.dk/mu/Bundle?ChannelType=%24eq%28%22TV%22%29&BundleType=%24eq%28%22Channel%22%29&DrChannel=true&limit=0
 # DR1
 Channel(1, CATEGORY_DR, "dr1.stream").add_urls(
     high   = ['rtmp://livetv.gss.dr.dk/live/livedr01astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr01bstream3 live=1'],
@@ -107,11 +109,16 @@ Channel(2, CATEGORY_DR, "dr2.stream").add_urls(
     high   = ['rtmp://livetv.gss.dr.dk/live/livedr02astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr02bstream3 live=1'],
     medium = ['rtmp://livetv.gss.dr.dk/live/livedr02astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr02bstream2 live=1'],
     low    = ['rtmp://livetv.gss.dr.dk/live/livedr02astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr02bstream1 live=1'])
+# DR 3
+Channel(6, CATEGORY_DR, "dr3.stream").add_urls(
+    best   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'], # DR has stream2 for all speeds - weird
+    high   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
+    medium = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'])
 # DR Update
-Channel(3, CATEGORY_DR).add_urls(#, "drupdate.stream").add_urls(
-    high   = 'rtmp://livetv.gss.dr.dk/live/livedr03astream3 live=1',
-    medium = 'rtmp://livetv.gss.dr.dk/live/livedr03astream2 live=1',
-    low    = 'rtmp://livetv.gss.dr.dk/live/livedr03astream1 live=1')
+Channel(3, CATEGORY_DR, "drupdate.stream").add_urls(
+    high   = ['rtmp://livetv.gss.dr.dk/live/livedr03astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr03bstream3 live=1',],
+    medium = ['rtmp://livetv.gss.dr.dk/live/livedr03astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr03bstream2 live=1'],
+    low    = ['rtmp://livetv.gss.dr.dk/live/livedr03astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr03bstream1 live=1'])
 # DR K
 Channel(4, CATEGORY_DR, "drk.stream").add_urls(
     high   = ['rtmp://livetv.gss.dr.dk/live/livedr04astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr04bstream3 live=1'],
@@ -122,11 +129,6 @@ Channel(5, CATEGORY_DR, "drramasjang.stream").add_urls(
     high   = ['rtmp://livetv.gss.dr.dk/live/livedr05astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr05bstream3 live=1'],
     medium = ['rtmp://livetv.gss.dr.dk/live/livedr05astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr05bstream2 live=1'],
     low    = ['rtmp://livetv.gss.dr.dk/live/livedr05astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr05bstream1 live=1'])
-# DR HD
-Channel(6, CATEGORY_DR, "drhd.stream").add_urls(
-    best   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream3 live=1'],
-    high   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
-    medium = ['rtmp://livetv.gss.dr.dk/live/livedr06astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream1 live=1'])
 
 # TV2 Fyn
 TV2RChannel(100, CATEGORY_TV2_REG).add_urls(
@@ -178,10 +180,5 @@ Channel(202, CATEGORY_MISC).add_urls(
 )
 # kanalsport.dk
 Channel(203, CATEGORY_MISC).add_urls(
-    best   = 'http://lswb-de-08.servers.octoshape.net:1935/live/kanalsport/1000k/playlist.m3u8'
+    best   = 'http://lswb-de-08.servers.octoshape.net:1935/live/kanalsport_1000k/playlist.m3u8'
 )
-
-# tv aarhus
-#Channel(204, CATEGORY_MISC).add_urls(
-#    best   = 'http://flash.digicast.dk/clients_live/digicast/live/playlist.m3u8'
-#)

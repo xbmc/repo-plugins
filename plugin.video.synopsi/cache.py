@@ -56,14 +56,29 @@ class OfflineStvList(object):
 		data_path = xbmc.translatePath('special://masterprofile/addon_data/')
 		return os.path.join(data_path, addon_id, 'cache.dat')
 
-	def serialize(self):
-		json_str = json.dumps(self.getItems())
+	@classmethod
+	def getDefaultList(cls, apiClient=None):
+		if not apiClient:
+			apiClient = AppApiClient.getDefaultClient()
 
-		return json_str
+		iuid = get_install_id()
+		cache = StvList(iuid, apiClient)
+			
+		try:
+			cache.load()
+		except:
+			# first time
+			log('CACHE restore failed. If this is your first run, its ok')
+
+		return cache
+
+	def serialize(self):	
+		pickled_base64_cache = base64.b64encode(pickle.dumps([self.items, self.byType, self.byTypeId, self.byFilename, self.byStvId]))
+		return pickled_base64_cache
 
 	def deserialize(self, _string):
-		json_obj = json.loads(_string)
-		return json_obj
+		self.items, self.byType, self.byTypeId, self.byFilename, self.byStvId = pickle.loads(base64.b64decode(_string))
+		self.dump()
 
 	def log(self, msg):
 		log('CACHE / ' + msg)
@@ -88,7 +103,7 @@ class OfflineStvList(object):
 		movie = xbmc_rpc.get_details(atype, aid)
 		movie['type'] = atype
 		movie['id'] = aid
-
+		
 		# if not in cache, it's been probably added
 		if not self.hasTypeId(movie['type'], movie['id']):
 			# get stv hash
@@ -119,16 +134,18 @@ class OfflineStvList(object):
 			else:
 				self.log('File NOT identified %s' % movie['file'])
 
-
-			self.put(movie)
+			# current block could raise ApiCallError, when there is not a real problem
+			try:
+				self.put(movie)
+			except Exception, e:
+				self.log('EXCEPTION / ' + unicode(e.message))
 
 			# debug warning on movie type mismatch
 			if movie['type'] != title.get('type'):
 				self.log('Xbmc/Synopsi identification type mismatch: %s / %s in [%s]' % (movie['type'], title.get('type'), movie.get('file')))
 
 			# for episode, add tvshow
-			if title.has_key('id') and movie['type'] == 'episode' and title.get('type') == 'episode':
-				self.log('xbmc episode:'+dump(filtertitles(movie)))
+			if title.get('type') == 'episode' and title.has_key('id') and movie['type'] == 'episode':
 				self.add_tvshow(title['tvshow_id'], movie['tvshowid'])
 
 		# it is already in cache, some property has changed (e.g. lastplayed time)
@@ -139,14 +156,9 @@ class OfflineStvList(object):
 		" Adds a tvshow with stvId into cache, if it's not already there "
 		if not self.byStvId.has_key(stvId):
 			stv_title = self.apiClient.tvshow(stvId, commonTitleProps)
-
 			stv_title['xbmc_id'] = xbmc_id
 
-			# if tvshow not in cache yet
-			if not self.hasStvId(stv_title['id']):
-				self.log('tvshow stv id:' + str(stv_title['id']))
-				self.log('tvshow xbmc id:' + str(xbmc_id))
-				self.put(stv_title)
+			self.put(stv_title)
 
 	def put(self, item):
 		" Put a new record in the list "
@@ -175,8 +187,8 @@ class OfflineStvList(object):
 		self.items.append(item)
 
 		logstr = 'PUT / ' + str(item.get('type')) + '--' + str(item.get('id')) + ' | ' + item.get('file', '')
-
 		self.log(logstr)
+								
 
 	def update(self, item):
 		typeIdStr = self._getKey(item['type'], item['id'])
@@ -280,7 +292,8 @@ class OfflineStvList(object):
 			self.log(dump(filtertitles(rec)))
 
 	def dump(self):
-		self.log(dump(filtertitles(self.byTypeId)))
+		#~ self.log(dump(filtertitles(self.byTypeId)))
+		self.log(dump(self.byType))
 		#~ self.log(dump(self.byStvId))
 		#~ self.log(dump(self.byFilename))
 
@@ -392,15 +405,8 @@ class OfflineStvList(object):
 		f.close()
 
 	def load(self):
-		self.clear()
 		f = open(self.filePath, 'r')
-		json_obj = self.deserialize(f.read())
-		for item in json_obj:
-			try:
-				OfflineStvList.put(self, item)
-			except DuplicateStvIdException, e:
-				self.log('LOAD / ' + unicode(e))
-
+		self.deserialize(f.read())
 		f.close()
 
 	def _getKey(self, atype, aid):
@@ -465,6 +471,20 @@ class AppStvList(OnlineStvList):
 		local_tvshows = self.getAllByType('tvshow')
 		log('local tvshows ' + dump(local_tvshows))
 		return local_tvshows.values()
+
+	def get_tvshow_local_seasons(self, stv_id):
+		tvshow = self.byType['tvshow'].get(stv_id)
+		if not tvshow:
+			return []
+			
+		xbmc_id = tvshow['xbmc_id']
+				
+		seasons = []		
+		for i in self.byType['episode'].values():
+			if i['tvshowid'] == xbmc_id and i['season'] not in seasons:
+				seasons.append(i['season'])
+		
+		return seasons		
 
 #	the final class name used in application, instead of rewriting classnames
 class StvList(AppStvList):

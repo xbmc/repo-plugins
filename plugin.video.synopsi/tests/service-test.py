@@ -7,7 +7,6 @@ import sys
 
 sys.path.append('..')
 service = __import__('service')
-scrobbler = __import__('scrobbler')
 import xbmc, xbmcgui, xbmcaddon
 
 

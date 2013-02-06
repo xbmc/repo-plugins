@@ -23,7 +23,22 @@ class UtilitiesTest(TestCase):
 			return movie
 		
 		print gethash(hash_path)
-
+	
+	def test_xml_sources(self):
+		sources = get_movie_sources()
+		sources.sort(key=len, reverse=True)
+		print sources
+		
+	def test_rel_path(self):
+		path1 = '/home/smid/Videos/_testset/TVShows/xxx/the/movie/file.avi'
+		rel1 = rel_path(path1)
+		self.assertEqual(rel1, 'the/movie/file.avi')
+		path2 = '/home/smid/Videos/_testset/TVShows/the/movie/file.avi'
+		rel2 = rel_path(path2)
+		self.assertEqual(rel2, 'the/movie/file.avi')
+		path3 = '/home/smid/Videos/_testset/the/movie/file.avi'
+		rel3 = rel_path(path3)
+		self.assertEqual(rel3, '/home/smid/Videos/_testset/the/movie/file.avi')
 
 if __name__ == '__main__':
 	test_item1 = {

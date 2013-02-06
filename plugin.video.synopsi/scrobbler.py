@@ -14,6 +14,7 @@ from utilities import *
 import top
 
 
+TIME_UNKNOWN = 65535
 CANCEL_DIALOG = (9, 10, 92, 216, 247, 257, 275, 61467, 61448, )
 # Default XBMC constant for hidden cancel button
 
@@ -62,6 +63,8 @@ class SynopsiPlayer(xbmc.Player):
 			event['position'] = position
 		elif self.playing:
 			event['position'] = int(self.current_time)
+		else:
+			event['position'] = TIME_UNKNOWN
 
 		self.playerEvents.append(event)
 
@@ -120,9 +123,12 @@ class SynopsiPlayer(xbmc.Player):
 		if self.playing:
 			self.resumed()
 
-	def get_time(self, default=None):
+	def get_time(self, default=TIME_UNKNOWN):
 		try:
-			t = self.getTime()
+			if self.isPlayingVideo():
+				t = int(self.getTime())
+			else:
+				raise Exception('fix: xbmc missing exception')
 		except:
 			return default
 
@@ -146,12 +152,15 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 	def update_current_time(self):
 		""" This function updates the current_time. To avoid race condition, it will not update
 			the current time, if get_time returns None, but the player is still playing a file
-			(acording to the self.playing variable). This indicates that the scrobbler update loop
+			(acording to the self.playing variable). This indicates that the service thread update loop
 			tries to update time while we are in the onPlayBackStopped method and handlers """
+		
 		t = self.get_time()
+			
 		if t or not self.playing:
 			self.current_time = t
-
+			
+			
 		#~ self.get_media_info_tag()
 
 	def started(self):
@@ -207,7 +216,7 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		# prepare timestamp if avail
 		pe = self.playerEvents
 		if len(pe) > 0 and pe[0]['event'] == 'start':
-			data['timestamp'] = pe[0]['timestamp']
+			data['created_time'] = pe[0]['timestamp']
 
 		# prepare rating if requested
 		if rate:

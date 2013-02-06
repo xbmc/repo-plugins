@@ -15,15 +15,6 @@ from utilities import *
 from apiclient import *
 from cache import OfflineStvList, DuplicateStvIdException
 
-def pprint(data):
-	global logger
-
-	if data is dict and data.has_key('_db_queries'):
-		del data['_db_queries']
-	msg = dump(data)
-	# print msg
-	logger.debug(msg)
-
 
 class CacheTest(TestCase):
 	def setUp(self):
@@ -33,6 +24,7 @@ class CacheTest(TestCase):
 
 		cache.put(test_item1)
 		cache.put(test_item3)
+		cache.put(test_item_tvshow)
 		cache.save()
 
 		cache.load()
@@ -138,6 +130,12 @@ class CacheTest(TestCase):
 		self.assertEquals(i[0]['stv_title_hash'], 'ba7c6a7bc6a7b6c')
 		self.assertEquals(i[0]['file'], '/var/log/virtual.ext')
 
+	def test_show_saved_cache(self):
+		cache = OfflineStvList('xyz_test', '/home/smid/.xbmc/userdata/addon_data/plugin.video.synopsi/cache.dat')
+		cache.load()
+		cache.dump()
+		
+
 if __name__ == '__main__':
 	test_item1 = {
 		'type': 'movie',
@@ -161,6 +159,12 @@ if __name__ == '__main__':
 		'file': u'/var/log/tvshow/Čučoriedky žužlavé.avi',
 		'stvId': 10011,
 		'stv_title_hash': 'c34t66627bc6a7b6cb8ac8bc',
+	}
+
+	test_item_tvshow = {
+		'type': 'tvshow',
+		'id': 1,
+		'stvId': 901,
 	}
 
 	c = connection

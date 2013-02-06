@@ -18,16 +18,6 @@ from utilities import *
 from apiclient import *
 from cache import OnlineStvList, DuplicateStvIdException
 
-def pprint(data):
-	global logger
-
-	if data is dict and data.has_key('_db_queries'):
-		del data['_db_queries']
-	msg = dump(data)
-	# print msg
-	logger.debug(msg)
-
-
 class OnlineCacheTest(TestCase):
 	def setUp(self):
 		print '=' * 50

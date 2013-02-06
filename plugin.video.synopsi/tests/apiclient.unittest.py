@@ -14,15 +14,36 @@ sys.path.insert(0, os.path.abspath('fakeenv'))
 from utilities import *
 from apiclient import *
 
-def pprint(data):
-	global logger
+# test data
+exampleEvents = [
+	{
+		"event": "start",
+		"timestamp": '2012-10-08 16:54:34',
+		"position": 1222
+	},
+	{
+		"event": "pause",
+		"timestamp": '2012-10-08 16:54:40',
+		"position": 1359
+	},
+	{
+		"event": "resume",
+		"timestamp": '2012-10-08 16:55:10',
+		"position": 1359
+	},
+	{
+		"event": "pause",
+		"timestamp": '2012-10-08 16:55:10',
+		"position": 65535
+	},
+	{
+		"event": "stop",
+		"timestamp": '2012-10-08 16:55:15',
+		"position": 1460
+	},
+]
 
-	if data is dict and data.has_key('_db_queries'):
-		del data['_db_queries']
 
-	msg = dump(data)
-	# print msg
-	logger.debug(msg)
 
 
 class ApiTest(TestCase):
@@ -88,29 +109,6 @@ class ApiTest(TestCase):
 
 		data = client.libraryTitleAdd(stv_title_id)
 
-		exampleEvents = [
-			{
-			    "event": "start",
-			    "timestamp": '2012-10-08 16:54:34',
-			    "position": 1222
-			},
-			{
-			    "event": "pause",
-			    "timestamp": '2012-10-08 16:54:40',
-			    "position": 1359
-			},
-			{
-			    "event": "resume",
-			    "timestamp": '2012-10-08 16:55:10',
-			    "position": 1359
-			},
-			{
-			    "event": "stop",
-			    "timestamp": '2012-10-08 16:55:15',
-			    "position": 1460
-			},
-		]
-
 		#exampleEvents = []
 
 		watched_data = {
@@ -121,6 +119,18 @@ class ApiTest(TestCase):
 		data = client.titleWatched(stv_title_id, **watched_data)
 
 		data = client.libraryTitleRemove(stv_title_id)
+
+	def test_titleWatched(self):
+		client.getAccessToken()
+		stv_title_id = 145948
+		watched_data = {
+			'rating': 1,
+			'player_events': json.dumps(exampleEvents),
+			'software_info': 'Test bullshit'
+		}
+
+		data = client.titleWatched(stv_title_id, **watched_data)
+		
 
 	def test_profile_recco(self):
 

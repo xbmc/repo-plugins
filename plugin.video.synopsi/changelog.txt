@@ -1,3 +1,14 @@
+[B]Version 0.5.0 [/B]
+
+- Added: send software info on checkin
+- Added: store refresh token for future token-auth
+- Added: login/settings info, where to sign-up
+- Fixed: sending wrong position
+- Fixed: sending checkins wrong api usage
+- Fixed: restart fails on OSX, trying quit after restart
+- Added: season 'on-disk' strips in tvshow detail 
+- Improved: idetification, send filenames without xbmc's source path part
+
 [B]Version 0.4.9[/B]
 - Fixed: moved scrobbler/player to main thread, removing one thread
 - Added: send timestamp for checkin
@@ -7,10 +18,11 @@
 - Fixed: Empty list exception for "Local movies"
 
 [B]Version 0.4.6[/B]
+
 - Fixed: addon.xml to get into official repository
 - Added: Show "watched" stripes in tvshow detail
 - Fixed: few bugs
 
-[B]0.0.1[/B]
+[B]Version 0.0.1[/B]
 
 - Initial addon

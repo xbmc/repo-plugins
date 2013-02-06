@@ -5,8 +5,11 @@
         <setting id="SETTINGS_VERSION" option="hidden" type="number" visible="false" default="1" />
 
         <!--Login-->
+        <setting label="69700" type="lsep" />
+    	        
         <setting id="USER" label="69503" type="text" default=""/>
     	<setting id="PASS" label="69502" option="hidden" type="text" enable="!eq(-1,)" default=""/>
+    	
     	
     	<!--TOKENS-->
         <setting id="BASE_URL" option="hidden" type="text" visible="false" default="https://api.synopsi.tv/" />

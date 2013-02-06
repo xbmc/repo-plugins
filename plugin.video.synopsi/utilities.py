@@ -1,5 +1,6 @@
 # xbmc
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
+import CommonFunctions
 
 # python standart lib
 import json
@@ -16,16 +17,20 @@ from base64 import b64encode
 from urllib import urlencode
 from urllib2 import Request, urlopen
 from copy import copy
-import xml.etree.ElementTree as ET
 import time
 import sys
+import xml.etree.ElementTree as et
+
+common = CommonFunctions
+common.plugin = "SynopsiTV"
+
 
 __addon__  = xbmcaddon.Addon()
 __addonname__ = __addon__.getAddonInfo('name')
 __addonpath__	= __addon__.getAddonInfo('path')
 __author__  = __addon__.getAddonInfo('author')
 __version__   = __addon__.getAddonInfo('version')
-__profile__      = __addon__.getAddonInfo('profile')
+__profile__      = xbmc.translatePath(__addon__.getAddonInfo('profile'))
 __lockLoginScreen__ = threading.Lock()
 
 # constant
@@ -109,6 +114,31 @@ class ListEmptyException(BaseException):
 	pass
 
 
+def player_info():
+	try:
+		info = {
+			'player_name': xbmc.getInfoLabel('System.FriendlyName'), 
+			'build_version': xbmc.getInfoLabel('System.BuildVersion')
+		}
+	except:
+		info = {'player_name': 'N/A'}
+		
+	return info
+
+def os_info():
+	try:
+		info = list(os.uname())
+		del info[1]
+	except:
+		info = 'N/A'
+	
+	return info
+
+def software_info():
+	i = { 'os_info': os_info() }
+	i.update(player_info())
+	return i 
+
 def dump(var):
 	return json.dumps(var, indent=4)
 
@@ -176,7 +206,8 @@ def check_first_run():
 		reloadSkin = True			
 		__addon__.setSetting('FIRSTRUN', "false")
 
-	if addon_getSetting('ADDON_SERVICE_FIRSTRUN') != "false":
+
+	if addon_getSetting('ADDON_SERVICE_FIRSTRUN') != "false":		
 		if dialog_need_restart():
 			raise ShutdownRequestedException('User requested shutdown')
 		else:
@@ -234,7 +265,7 @@ def dialog_yesno(msg):
 
 def clear_setting_cache():
 	"Clear cached addon setting. Useful after update"
-	settingsPath = xbmc.translatePath(os.path.join(__profile__, 'settings.xml'))
+	settingsPath = os.path.join(__profile__, 'settings.xml')
 	if os.path.exists(settingsPath):
 		os.remove(settingsPath)
 
@@ -254,7 +285,7 @@ def get_settings_file_version():
 	return value
 
 def setting_cache_append_string(string):
-	settingsPath = xbmc.translatePath(os.path.join(__profile__, 'settings.xml'))
+	settingsPath = os.path.join(__profile__, 'settings.xml')
 
 	# load file
 	with open(settingsPath) as f:
@@ -506,7 +537,7 @@ def get_api_port():
 	path = xbmc.translatePath(path)
 
 	try:
-		tree = ET.parse(path)
+		tree = et.parse(path)
 		root = tree.getroot()
 		nodes = root.findall('.//tcpport')
 		value = int(nodes[0].text)
@@ -686,5 +717,20 @@ def show_categories():
 	add_directory("Upcoming TV Episodes", "url", ActionCode.UpcomingEpisodes, "list.png")
 	add_directory("Login and Settings", "url", ActionCode.LoginAndSettings, "list.png")
 
+def get_movie_sources():		
+	userdata = xbmc.translatePath('special://userdata')
+	sourceFilePath = os.path.join(userdata, 'sources.xml')
+	tree = et.parse(sourceFilePath)
+	root = tree.getroot()
+	el = root.findall('video/source/path')
+	return sorted([i.text for i in el], key=len, reverse=True)
 
-
+def rel_path(realpath):
+	sources = get_movie_sources()
+	for src in sources:
+		if realpath.startswith(src):
+			return realpath[len(src):]
+	
+	return realpath
+		
+	

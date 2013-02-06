@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
-	id="plugin.video.dr.dk.live" version="2.1.8" name="Danish Live TV" provider-name="twinther [tommy@winther.nu]">
+	id="plugin.video.dr.dk.live" version="2.1.9" name="Danish Live TV" provider-name="twinther [tommy@winther.nu]">
 	<requires>
 		<import addon="xbmc.python" version="2.0"/>
-        <import addon="script.module.buggalo" version="1.0.1"/>
+        <import addon="script.module.buggalo" version="1.1.2"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="addon.py">
 		<provides>video</provides>

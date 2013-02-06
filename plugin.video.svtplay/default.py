@@ -10,7 +10,10 @@ import xbmcplugin
 import CommonFunctions
 import os
 import resources.lib.bestofsvt as bestof
+import resources.lib.helper as helper
+import resources.lib.svt as svt
 
+MODE_CHANNELS = "kanaler"
 MODE_A_TO_O = "a-o"
 MODE_PROGRAM = "pr"
 MODE_LIVE = "live"
@@ -29,10 +32,12 @@ MODE_VIEW_EPISODES = "view_episodes"
 MODE_VIEW_CLIPS = "view_clips"
 
 BASE_URL = "http://www.svtplay.se"
-SWF_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2012.51.swf" 
+SWF_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2013.02.swf" 
+JSON_SUFFIX = "?output=json"
 
 URL_A_TO_O = "/program"
 URL_CATEGORIES = "/kategorier"
+URL_CHANNELS = "/kanaler"
 URL_TO_LATEST = "?tab=episodes&sida=1"
 URL_TO_LATEST_NEWS = "?tab=news&sida=1"
 URL_TO_RECOMMENDED = "?tab=recommended&sida=1"
@@ -88,6 +93,7 @@ MAX_DIR_ITEMS = int(float(settings.getSetting("diritems")))
 
 def viewStart():
 
+  addDirectoryItem(localize(30008), { "mode": MODE_CHANNELS })
   addDirectoryItem(localize(30000), { "mode": MODE_A_TO_O })
   addDirectoryItem(localize(30001), { "mode": MODE_CATEGORIES })
   addDirectoryItem(localize(30005), { "mode": MODE_RECOMMENDED, "page": 1 })
@@ -98,9 +104,20 @@ def viewStart():
   addDirectoryItem(localize(30007), { "mode": MODE_BESTOF_CATEGORIES })
 
 
+def viewChannels():
+  channels = svt.getChannels(BASE_URL + URL_CHANNELS)
+  
+  params = {}
+  params["mode"] = MODE_VIDEO
+
+  for channel in channels:
+    params["url"] = channel["url"]
+    addDirectoryItem(channel["title"],params,channel["thumbnail"],False,True)
+    
+  
 
 def viewAtoO():
-  html = getPage(BASE_URL + URL_A_TO_O)
+  html = helper.getPage(BASE_URL + URL_A_TO_O)
 
   texts = common.parseDOM(html, "a" , attrs = { "class": "playAlphabeticLetterLink" })
   hrefs = common.parseDOM(html, "a" , attrs = { "class": "playAlphabeticLetterLink" }, ret = "href")
@@ -109,7 +126,7 @@ def viewAtoO():
     addDirectoryItem(common.replaceHTMLCodes(text), { "mode": MODE_PROGRAM, "url": hrefs[index], "page": 1 })
 
 def viewLive():
-  html = getPage(BASE_URL)
+  html = helper.getPage(BASE_URL)
 
   tabId = common.parseDOM(html, "a", attrs = { "class": "[^\"']*playButton-TabLive[^\"']*" }, ret = "data-tab")
 
@@ -134,12 +151,12 @@ def viewLive():
 
         if match:
 
-          url = match.group() + VIDEO_PATH_SUFFIX
+          url = match.group()
 
           addDirectoryItem(common.replaceHTMLCodes(text), { "mode": MODE_VIDEO, "url": url }, None, False, True)
 
 def viewCategories():
-  html = getPage(BASE_URL + URL_CATEGORIES)
+  html = helper.getPage(BASE_URL + URL_CATEGORIES)
 
   container = common.parseDOM(html, "ul", attrs = { "class": "[^\"']*svtGridBlock[^\"']*" })
 
@@ -157,21 +174,21 @@ def viewAlphaDirectories():
   Used to create the alphabetical A-Ö directory items.
   Addon setting has to be enabled for this to trigger.
   """
-  html = getPage(BASE_URL + URL_A_TO_O)
+  html = helper.getPage(BASE_URL + URL_A_TO_O)
 
   container = common.parseDOM(html, "div", attrs = { "id" : "playAlphabeticLetterList" })
 
-  letters = common.parseDOM(container, "h2", attrs = { "class" : "playAlphabeticLetterHeading " })
+  letters = common.parseDOM(container, "h3", attrs = { "class" : "playAlphabeticLetterHeading " })
 
   for letter in letters:
     url = letter
-    addDirectoryItem(convertChar(letter), { "mode": MODE_LETTER, "letter": url })
+    addDirectoryItem(helper.convertChar(letter), { "mode": MODE_LETTER, "letter": url })
 
 def viewProgramsByLetter(letter):
 
   letter = urllib.unquote(letter)
 
-  html = getPage(BASE_URL + URL_A_TO_O)
+  html = helper.getPage(BASE_URL + URL_A_TO_O)
 
   container = common.parseDOM(html, "div", attrs = { "id": "playAlphabeticLetterList" })
 
@@ -179,7 +196,7 @@ def viewProgramsByLetter(letter):
 
   for letterbox in letterboxes:
 
-    heading = common.parseDOM(letterbox, "h2")[0]
+    heading = common.parseDOM(letterbox, "h3")[0]
 
     if heading == letter:
       break
@@ -240,7 +257,7 @@ def createTabIndex(url):
   """
   Creates a directory item for each available tab; Klipp, Hela program, Programtitlar
   """
-  html = getPage(BASE_URL + url)
+  html = helper.getPage(BASE_URL + url)
   foundTab = False
  
   # Search for the "titles" tab. If it exists; create link to result directory   
@@ -293,7 +310,7 @@ def tabExists(url,tabname):
   """
   Check if a specific tab exists in the DOM.
   """
-  html = getPage(BASE_URL + url)
+  html = helper.getPage(BASE_URL + url)
   return elementExists(html,"div",{ "data-tabname": tabname})
 
 def elementExists(html,etype,attrs):
@@ -352,7 +369,7 @@ def viewBestOfCategory(url):
   params["mode"] = MODE_VIDEO
 
   for show in shows:
-    params["url"] = show["url"] + VIDEO_PATH_SUFFIX
+    params["url"] = show["url"]
     addDirectoryItem(show["title"], params, show["thumbnail"], False)
 
 def createDirectory(url,page,index,callertype,dirtype):
@@ -420,7 +437,7 @@ def parseAjaxUrlAndLastPage(url,tabname):
   common.log("url: " + url + ", tabname: " + tabname)
   classexp = "[^\"']*playShowMoreButton[^\"']*"
   dataname = "sida"
-  html = getPage(BASE_URL + url)
+  html = helper.getPage(BASE_URL + url)
 
   container = common.parseDOM(html,
                               "div",
@@ -503,7 +520,7 @@ def createDirItem(article,mode):
     folder = False
 
     if(mode == MODE_VIDEO):
-      params["url"] = url + VIDEO_PATH_SUFFIX
+      params["url"] = url
     elif mode == MODE_PROGRAM:
       folder = True
       params["page"] = 1
@@ -525,7 +542,7 @@ def getArticles(ajaxurl,page,tabname=None):
   else:
     pageurl = BASE_URL + ajaxurl 
   
-  html = getPage(pageurl)
+  html = helper.getPage(pageurl)
 
   if not tabname:
     container = common.parseDOM(html,
@@ -564,54 +581,24 @@ def getArticles(ajaxurl,page,tabname=None):
     info["title"] = title
     info["plot"] = plot
     info["aired"] = aired
-    info["duration"] = convertDuration(duration)
+    info["duration"] = helper.convertDuration(duration)
     newarticles.append((title,href,thumbnail,info))
     i += 1
  
   return newarticles
 
-def convertDuration(duration):
-  """
-  Converts SVT's duration format to XBMC friendly format (minutes).
-
-  SVT has the following format on their duration strings:
-  1 h 30 min
-  1 min 30 sek
-  1 min
-  """
-
-  match = re.match(r'(^(\d+)\sh)*(\s*(\d+)\smin)*(\s*(\d+)\ssek)*',duration)
-
-  dhours = 0
-  dminutes = 0
-  dseconds = 0
-
-  if match.group(1):
-    dhours = int(match.group(2)) * 60
-
-  if match.group(3):
-    dminutes = int(match.group(4))
- 
-  if match.group(5):
-    dseconds = int(match.group(6)) / 60
-
-  return str(dhours + dminutes + dseconds) 
 
 def startVideo(url):
 
   if not url.startswith("/"):
     url = "/" + url
 
+  url = url + JSON_SUFFIX
   common.log("url: " + url)
-  html = getPage(BASE_URL + url)
+  html = helper.getPage(BASE_URL + url)
 
-  jsonString = common.parseDOM(html, "param", attrs = { "name": "flashvars" }, ret = "value")[0]
-
-  jsonString = jsonString.lstrip("json=")
-  jsonString = common.replaceHTMLCodes(jsonString)
-
+  jsonString = common.replaceHTMLCodes(html)
   jsonObj = json.loads(jsonString)
-
   common.log(jsonString)
 
   subtitle = None
@@ -674,7 +661,7 @@ def startVideo(url):
 
   if videoUrl:
     
-    if args:
+    if args and not HLS_STRIP:
       common.log("Appending arguments: "+args)
       videoUrl = videoUrl + args
 
@@ -778,19 +765,6 @@ def hlsStrip(videoUrl):
     return newpath
 
 
-def getPage(url):
-
-  result = common.fetchPage({ "link": url })
-
-  if result["status"] == 200:
-    	return result["content"]
-
-  if result["status"] == 500:
-    common.log("redirect url: %s" %result["new_url"])
-    common.log("header: %s" %result["header"])
-    common.log("content: %s" %result["content"])
-
-
 def addDirectoryItem(title, params, thumbnail = None, folder = True, live = False, info = None):
 
   li = xbmcgui.ListItem(title)
@@ -810,35 +784,7 @@ def addDirectoryItem(title, params, thumbnail = None, folder = True, live = Fals
   xbmcplugin.addDirectoryItem(pluginHandle, sys.argv[0] + '?' + urllib.urlencode(params), li, folder)
 
 
-def convertChar(char):
-  if char == "&Aring;":
-    return "Å"
-  elif char == "&Auml;":
-    return "Ä"
-  elif char == "&Ouml;":
-    return "Ö"
-  else:
-    return char
-
-def getUrlParameters(arguments):
-
-  params = {}
-
-  if arguments:
-    
-      start = arguments.find("?") + 1
-      pairs = arguments[start:].split("&")
-
-      for pair in pairs:
-
-        split = pair.split("=")
-
-        if len(split) == 2:
-          params[split[0]] = split[1]
-  
-  return params
-
-params = getUrlParameters(sys.argv[2])
+params = helper.getUrlParameters(sys.argv[2])
 
 mode = params.get("mode")
 url = urllib.unquote_plus(params.get("url", ""))
@@ -884,5 +830,7 @@ elif mode == MODE_BESTOF_CATEGORIES:
   viewBestOfCategories()
 elif mode == MODE_BESTOF_CATEGORY:
   viewBestOfCategory(url)
+elif mode == MODE_CHANNELS:
+  viewChannels()
 
 xbmcplugin.endOfDirectory(pluginHandle)

@@ -1,3 +1,8 @@
+Version 3.1.5
+-------------
+- Add new feature "Kanaler" from site (linqcan)
+- Restore broken A-Z listing (linqcan)
+
 Version 3.1.4
 -------------
 - Fixed playback for live programs (linqcan)

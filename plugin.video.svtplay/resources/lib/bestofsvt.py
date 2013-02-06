@@ -1,4 +1,5 @@
 import CommonFunctions
+import helper as helper
 
 BESTOF_BASE_URL = "http://www.bestofsvt.se"
 common = CommonFunctions
@@ -9,7 +10,7 @@ def getCategories():
   """
   Returns all categories in the header menu
   """
-  html = getPage(BESTOF_BASE_URL)
+  html = helper.getPage(BESTOF_BASE_URL)
   
   menu = common.parseDOM(html, "ul", attrs = { "class": "menu_1"})[0]
 
@@ -29,7 +30,7 @@ def getShows(url):
   """
   Returns all shows in a category
   """
-  html = getPage(BESTOF_BASE_URL + url)
+  html = helper.getPage(BESTOF_BASE_URL + url)
 
   container = common.parseDOM(html, "div", attrs = {"class":"[^\"']*content_show_videos[^\"']*"})[0]
 
@@ -46,16 +47,3 @@ def getShows(url):
     shows.append({"title":title,"url":href,"thumbnail":thumb})
 
   return shows
-
-def getPage(url):
-
-  result = common.fetchPage({ "link": url })
-  
-  if result["status"] == 200:
-    return result["content"]
-
-  if result["status"] == 500:
-    common.log("redirect url: %s" &result["new_url"])
-    common.log("header: %s" %result["header"])
-    common.log("content: %s" %result["content"])
-    return None

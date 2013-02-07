@@ -7,7 +7,7 @@ pluginhandle = int(sys.argv[1])
 addon = xbmcaddon.Addon(id='plugin.video.ign_com')
 translation = addon.getLocalizedString
 
-maxVideoQuality=addon.getSetting("maxVideoQuality")
+maxVideoQuality=addon.getSetting("maxVideoQualityRes")
 forceViewMode=addon.getSetting("forceViewMode")
 if forceViewMode=="true":
   forceViewMode=True
@@ -15,7 +15,7 @@ else:
   forceViewMode=False
 viewMode=str(addon.getSetting("viewMode"))
 
-qual=[500000,1000000,2500000,3000000]
+qual=[640,960,1280]
 maxVideoQuality=qual[int(maxVideoQuality)]
 
 def index():
@@ -86,47 +86,63 @@ def search():
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
           search_string = keyboard.getText().replace(" ","+")
-          listSearchResults('http://www.ign.com/search/video?query='+search_string+'&sort=&videotype=')
+          listSearchResults('http://www.ign.com/search?q='+search_string+'&page=0&count=10&type=video')
 
 def listSearchResults(url):
+        urlMain = url
         content = getUrl(url)
-        spl=content.split('<div class="video-result clear">')
+        spl=content.split('<div class="search-item"')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('<span class="publisherLink">(.+?)</span>', re.DOTALL).findall(entry)
-            date=match[0]
-            match=re.compile('<a class="video-title" href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
+            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            thumb=cleanUrl(match[0])
+            entry=entry[entry.find('<div class="search-item-title">'):]
+            match=re.compile('<span class="duration">(.+?)<span>', re.DOTALL).findall(entry)
+            length=""
+            if len(match)>0:
+              length=cleanTitle(match[0])
+            match=re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
             url=match[0][0]
             title=match[0][1]
             title=cleanTitle(title)
-            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-            thumb=match[0]
-            addLink(title,url,'playVideo',thumb,date)
-        matchPage=re.compile('href="(.+?)">(.+?)</a>', re.DOTALL).findall(content)
-        for url, title in matchPage:
-          if title=="Next&nbsp;&raquo;":
-            urlNext="http://www.ign.com"+url
-            addDir(translation(30001),urlNext,'listSearchResults',"")
+            addLink(title,url,'playVideo',thumb,"",length)
+        match=re.compile('data-page="(.+?)"', re.DOTALL).findall(content)
+        page=int(match[0])
+        match=re.compile('data-total="(.+?)"', re.DOTALL).findall(content)
+        maxPage=int(int(match[0])/10)
+        urlNext=urlMain.replace("page="+str(page),"page="+str(page+1))
+        if page<maxPage:
+          addDir(translation(30001),urlNext,'listSearchResults',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
         content = getUrl(url)
-        match=re.compile('data-video-id="(.+?)"', re.DOTALL).findall(content)
-        content = getUrl("http://apis.ign.com/video/v3/videos/osmf/"+match[0]+".smil")
-        match=re.compile('<video src="(.+?)" system-bitrate="(.+?)"/>', re.DOTALL).findall(content)
         finalUrl=""
-        for url, bitrate in match:
-          if int(bitrate)<=maxVideoQuality:
-            finalUrl="http://"+url
-        listitem = xbmcgui.ListItem(path=finalUrl)
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        spl=content.split('<li class="video-file mp4"')
+        for i in range(1,len(spl),1):
+          entry=spl[i]
+          match=re.compile('data-width="(.+?)"', re.DOTALL).findall(entry)
+          res=match[0]
+          match=re.compile('data-id="(.+?)"', re.DOTALL).findall(entry)
+          url=match[0]
+          match=re.compile('data-type="(.+?)"', re.DOTALL).findall(entry)
+          ext=match[0]
+          if int(res)<=maxVideoQuality:
+            finalUrl="http://assets.ign.com/videos/zencoder/"+res+"/"+url+"."+ext
+        if finalUrl!="":
+          listitem = xbmcgui.ListItem(path=finalUrl)
+          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","'").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
         title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
-        title=title.strip()
+        title=title.replace("<em>","").replace("</em>","").strip()
+        return title
+
+def cleanUrl(title):
+        title=title.replace("&#x3A;",":").replace("&#x2F;","/")
         return title
 
 def getUrl(url):

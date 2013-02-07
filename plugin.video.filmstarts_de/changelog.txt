@@ -17,3 +17,6 @@
 - Added setting to force view mode
 1.0.6
 - Fixed site changes for some vids
+1.0.7 / 2.0.7
+- Added video playback for youtube trailers
+- Fixed video playback for filmstarts trailers

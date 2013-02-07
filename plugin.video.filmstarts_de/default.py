@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,socket
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
 addon = xbmcaddon.Addon(id='plugin.video.filmstarts_de')
@@ -155,30 +156,47 @@ def search():
 
 def playVideo(url):
         content = getUrl(url)
-        match=re.compile("cmedia: '(.+?)',\nref: '(.+?)',\ntypeRef: '(.+?)'", re.DOTALL).findall(content)
-        match2=re.compile('"cmedia" : (.+?),"ref" : (.+?),"siteKey" : "(.+?)","typeRef" : "(.+?)"', re.DOTALL).findall(content)
-        if len(match)>0:
-          media=match[0][0]
-          ref=match[0][1]
-          typeRef=match[0][2]
+        match1=re.compile('"cmedia" : (.+?),', re.DOTALL).findall(content)
+        match2=re.compile("cmedia: '(.+?)'", re.DOTALL).findall(content)
+        if len(match1)>0:
+          media=match1[0]
         elif len(match2)>0:
-          media=match2[0][0]
-          ref=match2[0][1]
-          typeRef=match2[0][3]
-        content = getUrl('http://www.filmstarts.de/ws/AcVisiondata.ashx?media='+media+'&ref='+ref+'&typeref='+typeRef)
-        match=re.compile('hd_path="(.+?)"', re.DOTALL).findall(content)
-        url=match[0]
-        listitem = xbmcgui.ListItem(path=url)
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+          media=match2[0]
+        match1=re.compile('"ref" : (.+?),', re.DOTALL).findall(content)
+        match2=re.compile("ref: '(.+?)'", re.DOTALL).findall(content)
+        if len(match1)>0:
+          ref=match1[0]
+        elif len(match2)>0:
+          ref=match2[0]
+        match1=re.compile('"typeRef" : "(.+?)"', re.DOTALL).findall(content)
+        match2=re.compile("typeRef: '(.+?)'", re.DOTALL).findall(content)
+        if len(match1)>0:
+          typeRef=match1[0]
+        elif len(match2)>0:
+          typeRef=match2[0]
+        content = getUrl('http://www.filmstarts.de/ws/AcVisiondataV4.ashx?media='+media+'&ref='+ref+'&typeref='+typeRef)
+        finalUrl=""
+        match1=re.compile('/nmedia/youtube:(.+?)"', re.DOTALL).findall(content)
+        match2=re.compile('hd_path="(.+?)"', re.DOTALL).findall(content)
+        if len(match1)>0:
+          finalUrl=getYoutubeUrl(match1[0])
+        elif len(match2)>0:
+          finalUrl=match2[0]
+        if finalUrl!="":
+          listitem = xbmcgui.ListItem(path=finalUrl)
+          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+
+def getYoutubeUrl(id):
+          if xbox==True:
+            url = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + id
+          else:
+            url = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + id
+          return url
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        if xbox==True:
-          socket.setdefaulttimeout(30)
-          response = urllib2.urlopen(req)
-        else:
-          response = urllib2.urlopen(req,timeout=30)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:18.0) Gecko/20100101 Firefox/18.0')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

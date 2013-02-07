@@ -4,14 +4,14 @@ Todo : Due to performance reasons RDF data is parsed by string functions.
        Perhaps there is a fast xml parser library?
 """
 
-import os,sys,re
+import re
 from os.path import join
-import CharsetDecoder as decoder
+import common
 from HTMLParser import HTMLParser
 
-tag_set = {'persons' : 'MPReg:PersonDisplayName',
-
+tag_set = {'MPReg:PersonDisplayName' : 'MPReg:PersonDisplayName',
            'Iptc4xmpExt:PersonInImage' : 'Iptc4xmpExt:PersonInImage', 
+           'mwg-rs:RegionList:Face': 'mwg-rs:RegionList',
            'Iptc4xmpExt:City' : 'Iptc4xmpExt:City', 
            'Iptc4xmpExt:CountryName' : 'Iptc4xmpExt:CountryName', 
            'Iptc4xmpExt:CountryCode' : 'Iptc4xmpExt:CountryCode', 
@@ -73,7 +73,7 @@ class XMP_Tags(object):
             f = open(join(dirname,picfile), 'rb')
         except:
             path = join(dirname.encode('utf-8'),picfile.encode('utf-8'))
-            path = decoder.smart_unicode(path).encode('utf-8')
+            path = common.smart_unicode(path).encode('utf-8')
             f = open(path, 'rb')
         content = f.read()
         f.close()
@@ -82,18 +82,7 @@ class XMP_Tags(object):
         end   = content.rfind("</" + xmptag) + 4 + len(xmptag)
         inner = content[start:end]
         self.get_xmp_inner = inner
-        """   
-        if start != -1:
-            end   = content.rfind("</" + xmptag) + 4 + len(xmptag)
-            inner = content[start:end]
-            self.get_xmp_inner = inner
-        else:
-            xmptag = 'x:xapmeta'
-            start = content.find("<" + xmptag)
-            end   = content.rfind("</" + xmptag) + 4 + len(xmptag)
-            inner = content[start:end]
-            self.get_xmp_inner = inner
-         """
+
 
             
     def get_xmp(self, dirname, picfile):
@@ -136,8 +125,6 @@ class XMP_Tags(object):
                         except:
                             value = unicode(people, encoding="cp1252", errors='replace')
 
-                        #print "Value: " + value
-                          
                         # find inner tags and delete them  <rdf:li[^>]*?>(.*?)</rdf:li>
                         matchouter=re.compile('<rdf:Alt[^>]*?>(.*?)</rdf:Alt>',re.DOTALL).findall(value)
 
@@ -153,16 +140,30 @@ class XMP_Tags(object):
                             for inner in matchinner:
                                 inner = inner.strip(' \t\n\r')
                                 if len(inner) > 0:
-                                    if len(key) > 0:
-                                        #print "1: " + inner
-                                        key += '||' + inner
+                                    # Test for face in mwg-rs:RegionList
+                                    if 'mwg-rs:RegionList' == tagname:
+                                        faces=re.compile('<rdf:Description[^>]*?mwg-rs:Name="([^>]*?)"[^>]*?mwg-rs:Type="Face"[^>]*?>',re.DOTALL).findall(inner)
+                                        for face in faces:
+                                            if len(key) > 0:
+                                                key += '||' + face
+                                            else:
+                                                key = face
+                                        faces=re.compile('<rdf:Description[^>]*?mwg-rs:Type="Face"[^>]*?mwg-rs:Name="([^>]*?)"[^>]*?>',re.DOTALL).findall(inner)
+                                        for face in faces:
+                                            if len(key) > 0:
+                                                key += '||' + face
+                                            else:
+                                                key = face
+                                     
                                     else:
-                                        #print "2: " + inner
-                                        key = inner
+
+                                        if len(key) > 0:
+                                            key += '||' + inner
+                                        else:
+                                            key = inner
                                     
                                 value = key
                                 
-                        #print "3: " + value
                         if len(value) > 0:
                             value = HTMLParser().unescape(value)
                             if xmp.has_key(storedtag):

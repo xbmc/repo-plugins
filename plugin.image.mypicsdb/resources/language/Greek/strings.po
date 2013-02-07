@@ -1,0 +1,769 @@
+# XBMC Media Center language file
+# Addon Name: My Pictures Database
+# Addon id: plugin.image.mypicsdb
+# Addon Provider: Xycl, MikeBZH44, Alexsolex
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Greek (http://www.transifex.com/projects/p/xbmc-addons/language/el/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "MyPicture Database"
+msgstr "Βάση Δεδομένων Εικόνων MyPicture"
+
+msgctxt "#30001"
+msgid "Database"
+msgstr "Βάση Δεδομένων (Β.Δ)"
+
+msgctxt "#30002"
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+msgctxt "#30003"
+msgid "%B %Y"
+msgstr "%B %Y"
+
+msgctxt "#30004"
+msgid "%Y"
+msgstr "%Y"
+
+msgctxt "#30005"
+msgid "Mo.|Tu.|We.|Th.|Fr.|Sa.|Su."
+msgstr "Δε.|Τρ.|Τε.|Πε.|Πα.|Σα.|Κυ."
+
+msgctxt "#30006"
+msgid "Jan.|Feb.|Mar|Apr.|May|Jun.|Jul.|Aug.|Sep.|Oct.|Nov.|Dec."
+msgstr "Ιαν.|Φεβ.|Μαρ.|Απρ.|Μαϊ.|Ιουν.|Ιουλ.|Αυγ.|Σεπ.|Οκτ.|Νοε.|Δεκ."
+
+msgctxt "#30007"
+msgid "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"
+msgstr "Δευτέρα|Τρίτη|Τετάρτη|Πέμπτη|Παρασκευή|Σάββατο|Κυριακή"
+
+msgctxt "#30008"
+msgid "January|February|March|April|May|June|July|August|September|October|November|December"
+msgstr "Ιανουάριος|Φεβρουάριος|Μάρτιος|Απρίλιος|Μάιος|Ιούνιος|Ιούλιος|Αύγουστος|Σεπτέμβριος|Οκτώβριος|Νοέμβριος|Δεκέμβριος"
+
+msgctxt "#30020"
+msgid "Picture folder"
+msgstr "Φάκελος εικόνων"
+
+msgctxt "#30021"
+msgid "Remove from database missing pictures"
+msgstr "Απομάκρυνση από τη βάση δεδομένων εικόνων που λείπουν"
+
+msgctxt "#30022"
+msgid "Recursive scan ( all sub-folders will be scanned for pictures )"
+msgstr "Σάρωση και των υποφακέλων για εικόνες"
+
+msgctxt "#30023"
+msgid "Picture extensions"
+msgstr "Επεκτάσεις αρχείων εικόνων"
+
+msgctxt "#30024"
+msgid "Perform scan at addon startup"
+msgstr "Σάρωση κατά την εκκίνηση του πρόσθετου"
+
+msgctxt "#30025"
+msgid "Initialize the database at next addon startup"
+msgstr "Αρχικοποίηση της βάσης δεδομένων κατά την επόμενη έναρξη του πρόσθετου"
+
+msgctxt "#30026"
+msgid "Use the picture as fanart for pictures"
+msgstr "Χρήση της εικόνας ως fanart των εικόνων"
+
+msgctxt "#30027"
+msgid "Settings for the dialog scan popup"
+msgstr "Ρυθμίσεις του παραθύρου σάρωσης"
+
+msgctxt "#30028"
+msgid "Video extensions"
+msgstr "Επεκτάσεις αρχείων βίντεο"
+
+msgctxt "#30029"
+msgid "Use the videos"
+msgstr "Χρήση των βίντεο"
+
+msgctxt "#30030"
+msgid "General"
+msgstr "Γενικά"
+
+msgctxt "#30031"
+msgid "Files"
+msgstr "Αρχεία"
+
+msgctxt "#30032"
+msgid "Age of recent files (days)"
+msgstr "Ηλικία πρόσφατων αρχείων (ημέρες)"
+
+msgctxt "#30033"
+msgid "Menu Items"
+msgstr "Αντικείμενα Μενού"
+
+msgctxt "#30034"
+msgid "Display all items"
+msgstr "Εμφάνιση όλων των αντικειμένων"
+
+msgctxt "#30035"
+msgid "Number of pics per page"
+msgstr "Πλήθος εικόνων ανά σελίδα"
+
+msgctxt "#30040"
+msgid "Only display pictures with rating of at least"
+msgstr "Εμφάνιση εικόνων με βαθμολογία τουλάχιστον 1 αστέρι"
+
+msgctxt "#30041"
+msgid "All"
+msgstr "Όλα"
+
+msgctxt "#30042"
+msgid "1 star"
+msgstr "1 αστέρι"
+
+msgctxt "#30043"
+msgid "2 stars"
+msgstr "2 αστέρια"
+
+msgctxt "#30044"
+msgid "3 stars"
+msgstr "3 αστέρια"
+
+msgctxt "#30045"
+msgid "4 stars"
+msgstr "4 αστέρια"
+
+msgctxt "#30046"
+msgid "5 stars"
+msgstr "5 αστέρια"
+
+msgctxt "#30050"
+msgid "Pics"
+msgstr "Εικόνες"
+
+msgctxt "#30051"
+msgid "Videos"
+msgstr "Βίντεο"
+
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Ετικέτες"
+
+msgctxt "#30060"
+msgid "Locate on disk"
+msgstr "Εύρεση στο δίσκο"
+
+msgctxt "#30061"
+msgid "Archive those pictures"
+msgstr "Αρχειοθέτηση αυτών των εικόνων"
+
+msgctxt "#30062"
+msgid "Export those pictures to..."
+msgstr "Εξαγωγή αυτών των εικόνων σε..."
+
+msgctxt "#30063"
+msgid "Add the file to archive :"
+msgstr "Προσθήκη αρχείου στην Αρχειοθήκη :"
+
+msgctxt "#30064"
+msgid "The archive '%s' already exists in"
+msgstr "Η Αρχειοθήκη '%s' υπάρχει ήδη στο"
+
+msgctxt "#30065"
+msgid "Overwrite ?"
+msgstr "Να αντικατασταθεί ;"
+
+msgctxt "#30066"
+msgid "Archive canceled."
+msgstr "Ακύρωση αρχειοθέτησης."
+
+msgctxt "#30067"
+msgid "Adding the picture to archive..."
+msgstr "Προσθήκη της εικόνας στην Αρχειοθήκη..."
+
+msgctxt "#30068"
+msgid "The archiving has been canceled !"
+msgstr "Ακυρώθηκε η αρχειοθέτηση !"
+
+msgctxt "#30069"
+msgid "%s errors while archiving %s files"
+msgstr "Προέκυψαν %s λάθη κατά την αρχειοθέτηση %s αρχείων"
+
+msgctxt "#30070"
+msgid "%s pictures successfully archived !!"
+msgstr "%s εικόνες αρχειοθετήθηκαν επιτυχώς !!"
+
+msgctxt "#30071"
+msgid "Localization of the picture on disk"
+msgstr "Τοπική προσαρμογή της εικόνας στο δίσκο"
+
+msgctxt "#30090"
+msgid "Pictures without City"
+msgstr "Εικόνες χωρίς Πόλη"
+
+msgctxt "#30091"
+msgid "Pictures without Country"
+msgstr "Εικόνες χωρίς Χώρα"
+
+msgctxt "#30092"
+msgid "Other pictures in '%s'"
+msgstr "Άλλες εικόνες στο '%s'"
+
+msgctxt "#30093"
+msgid "Browse by Geography"
+msgstr "Περιήγηση ανάλογα με τη Γεωγραφία"
+
+msgctxt "#30094"
+msgid "Pictures without supplemental category"
+msgstr "Εικόνες χωρίς συμπληρωματικές κατηγορίες"
+
+msgctxt "#30095"
+msgid "Browse by Supplemental Category"
+msgstr "Περιήγηση ανά Συμπληρωματική Κατηγορία"
+
+msgctxt "#30096"
+msgid "Pictures without categories"
+msgstr "Εικόνες χωρίς κατηγορίες"
+
+msgctxt "#30097"
+msgid "Browse by Category"
+msgstr "Περιήγηση ανά Κατηγορία"
+
+msgctxt "#30098"
+msgid "Global search"
+msgstr "Γενικευμένη αναζήτηση"
+
+msgctxt "#30099"
+msgid "Paths of picture folders"
+msgstr "Διαδρομές των φακέλων εικόνων"
+
+msgctxt "#30100"
+msgid "All images from %s (%s pics)"
+msgstr "Όλες οι εικόνες από το %s (%s εικόνες)"
+
+msgctxt "#30101"
+msgid "Browse by Date"
+msgstr "Περιήγηση ανά Ημερομηνία"
+
+msgctxt "#30102"
+msgid "Browse by Folders"
+msgstr "Περιήγηση ανά Φάκελο"
+
+msgctxt "#30103"
+msgid "Browse by Keywords"
+msgstr "Περιήγηση ανά Λέξη-Κλειδί"
+
+msgctxt "#30104"
+msgid "No keyword pictures"
+msgstr "Καμία εικόνα με λέξη-κλειδί"
+
+msgctxt "#30105"
+msgid "Date ranges"
+msgstr "Χρονική περίοδος"
+
+msgctxt "#30106"
+msgid "Add a new date range"
+msgstr "Προσθήκη νέας χρονικής περιόδου"
+
+msgctxt "#30107"
+msgid "Choose the start date"
+msgstr "Επιλέξτε την ημερομηνία έναρξης"
+
+msgctxt "#30108"
+msgid "Choose the end date"
+msgstr "Επιλέξτε την ημερομηνία τέλους"
+
+msgctxt "#30109"
+msgid "Pics from %s to %s"
+msgstr "Εικόνες από %s έως %s"
+
+msgctxt "#30110"
+msgid "Input a title for this date range :"
+msgstr "Εισάγετε έναν τίτλο για αυτή τη χρονική περίοδο :"
+
+msgctxt "#30111"
+msgid "Delete this date range"
+msgstr "Διαγραφή αυτής της χρονικής περιόδου"
+
+msgctxt "#30112"
+msgid "Rename this date range"
+msgstr "Μετονομασία αυτής της χρονικής περιόδου"
+
+msgctxt "#30113"
+msgid "From %s to %s"
+msgstr "Από %s έως %s"
+
+msgctxt "#30114"
+msgid "Input manually date"
+msgstr "Εισαγωγή ημερομηνίας χειροκίνητα"
+
+msgctxt "#30115"
+msgid "Word to search for"
+msgstr "Λέξη για αναζήτηση"
+
+msgctxt "#30116"
+msgid "%s results for '%s' in '%s'"
+msgstr "%s αποτελέσματα για '%s' σε '%s'"
+
+msgctxt "#30117"
+msgid "Start date of the date range"
+msgstr "Ημερομηνία έναρξης της χρονικής περιόδου"
+
+msgctxt "#30118"
+msgid "End date of the date range"
+msgstr "Ημερομηνία τέλους της χρονικής περιόδου"
+
+msgctxt "#30119"
+msgid "The search for '%s' did not match in the whole database"
+msgstr "Η αναζήτηση για '%s' δε βρήκε αποτελέσματα σε όλη τη βάση δεδομένων"
+
+msgctxt "#30120"
+msgid "Browse by Persons"
+msgstr "Περιήγηση ανά Άτομα"
+
+msgctxt "#30121"
+msgid "Pictures without persons"
+msgstr "Εικόνες χωρίς άτομα"
+
+msgctxt "#30122"
+msgid "Browse by Tags"
+msgstr "Περιήγηση ανά Ετικέτες"
+
+msgctxt "#30123"
+msgid "Help"
+msgstr "Βοήθεια"
+
+msgctxt "#30130"
+msgid "The %s latest pics"
+msgstr "Οι %s πιο πρόσφατες εικόνες"
+
+msgctxt "#30131"
+msgid "Recent pics (number of images)"
+msgstr "Πρόσφατες εικόνες (πλήθος)"
+
+msgctxt "#30150"
+msgid "Collections"
+msgstr "Συλλογές"
+
+msgctxt "#30151"
+msgid "Remove from the collection"
+msgstr "Απομάκρυνση από τη συλλογή"
+
+msgctxt "#30152"
+msgid "Add to collection..."
+msgstr "Προσθήκη στη συλλογή..."
+
+msgctxt "#30153"
+msgid "Input a new title"
+msgstr "Εισάγετε έναν νέο τίτλο"
+
+msgctxt "#30154"
+msgid "Picture added in"
+msgstr "Η εικόνα προστέθηκε στο"
+
+msgctxt "#30155"
+msgid "Input a title for the new collection"
+msgstr "Εισάγετε έναν τίτλο για τη νέα συλλογή"
+
+msgctxt "#30156"
+msgid "Choose a collection"
+msgstr "Επιλογή συλλογής"
+
+msgctxt "#30157"
+msgid "New collection"
+msgstr "Νέα συλλογή"
+
+msgctxt "#30158"
+msgid "Remove this collection"
+msgstr "Απομάκρυνση της συλλογής"
+
+msgctxt "#30159"
+msgid "Rename this collection"
+msgstr "Μετονομασία της συλλογής"
+
+msgctxt "#30160"
+msgid "Create a new collection"
+msgstr "Δημιουργία νέας συλλογής"
+
+msgctxt "#30161"
+msgid "%s pictures added in"
+msgstr "%s εικόνες προστέθηκαν στο"
+
+msgctxt "#30180"
+msgid "Choose the destination for the export"
+msgstr "Επιλέξτε τον προορισμό για την εξαγωγή"
+
+msgctxt "#30181"
+msgid "Do you want to create a folder to export pictures ?"
+msgstr "Επιθυμείτε να δημιουργήσετε ένα φάκελο για εξαγωγή εικόνων ;"
+
+msgctxt "#30182"
+msgid "Input the folder name"
+msgstr "Εισάγετε το όνομα φακέλου"
+
+msgctxt "#30183"
+msgid "picture export canceled !"
+msgstr "ακυρώθηκε η εξαγωγή εικόνων !"
+
+msgctxt "#30184"
+msgid "Picture exporting..."
+msgstr "Εξαγωγή εικόνων..."
+
+msgctxt "#30185"
+msgid "Exporting '%s' to :"
+msgstr "Εξαγωγή '%s' στο :"
+
+msgctxt "#30186"
+msgid "a file '%s' already exists"
+msgstr "υπάρχει ήδη ένα αρχείο '%s'"
+
+msgctxt "#30187"
+msgid "Overwrite ?"
+msgstr "Να αντικατασταθεί ;"
+
+msgctxt "#30188"
+msgid "Export finished !"
+msgstr "Ολοκλήρωση εξαγωγής !"
+
+msgctxt "#30189"
+msgid "%s pictures copied to %s"
+msgstr "%s εικόνες αντιγράφηκαν στο %s"
+
+msgctxt "#30190"
+msgid "Exported pictures"
+msgstr "Εξαγμένες εικόνες"
+
+msgctxt "#30201"
+msgid "Folder to scan"
+msgstr "Φάκελος προς σάρωση"
+
+msgctxt "#30202"
+msgid "Browse this folder recursively"
+msgstr "Σάρωση και των υποφακέλων του"
+
+msgctxt "#30203"
+msgid "Delete the database entries if picture does not exists anymore"
+msgstr "Διαγραφή των καταχωρίσεων της βάσης δεδομένων αν η εικόνα δεν υπάρχει πλέον"
+
+msgctxt "#30204"
+msgid "Path added !"
+msgstr "Προστέθηκε διαδρομή !"
+
+msgctxt "#30205"
+msgid "Path deleted !"
+msgstr "Διεγράφη διαδρομή !"
+
+msgctxt "#30206"
+msgid "Do a scan now"
+msgstr "Να γίνει σάρωση τώρα"
+
+msgctxt "#30207"
+msgid "Delete this path from database"
+msgstr "Διαγραφή αυτής της διαδρομής από τη βάση δεδομένων"
+
+msgctxt "#30208"
+msgid "[B]Add[/B] a path to database"
+msgstr "[B]Προσθήκη[/B] μίας διαδρομής στη βάση δεδομένων"
+
+msgctxt "#30209"
+msgid "Uploads from last %s days"
+msgstr "Αρχεία που φορτώθηκαν τις τελευταίες %s ημέρες"
+
+msgctxt "#30210"
+msgid "Remove this path from excluded"
+msgstr "Απομάκρυνση αυτής της διαδρομής από τα εξαιρεμένα"
+
+msgctxt "#30211"
+msgid "Add a folder to [B]exclude[/B]"
+msgstr "Προσθήκη φακέλου για [B]εξαίρεση[/B]"
+
+msgctxt "#30212"
+msgid "Exclude this folder from database"
+msgstr "Εξαίρεση αυτού του φακέλου από τη βάση δεδομένων"
+
+msgctxt "#30213"
+msgid "Scan all paths"
+msgstr "Σάρωση όλων των διαδρομών"
+
+msgctxt "#30214"
+msgid "Yes = scan all pictures."
+msgstr "Ναι = σάρωση όλων των εικόνων."
+
+msgctxt "#30215"
+msgid "No = scan only modified/new pictures."
+msgstr "Όχι = σάρωση μόνο των τροποποιημένων/νέων εικόνων."
+
+msgctxt "#30217"
+msgid "You must rescan the folders"
+msgstr "Πρέπει να σαρώσετε ξανά τους φακέλους"
+
+msgctxt "#30218"
+msgid "to exclude the pictures!"
+msgstr "για να εξαιρεθούν οι εικόνες!"
+
+msgctxt "#30220"
+msgid "Geolocation"
+msgstr "Γεωεντοπισμός"
+
+msgctxt "#30221"
+msgid "Fetching the map... (%0.2f%%)"
+msgstr "Γίνεται λήψη του χάρτη... (%0.2f%%)"
+
+msgctxt "#30222"
+msgid "Zoom=%s"
+msgstr "Ζουμ=%s"
+
+msgctxt "#30223"
+msgid "Use up / down arrows to zoom in / out"
+msgstr "Χρησιμοποιήστε τα βέλη πάνω / κάτω για μεγέθυνση / σμίκρυνση"
+
+msgctxt "#30241"
+msgid "preparing"
+msgstr "προετοιμασία"
+
+msgctxt "#30242"
+msgid "refreshing"
+msgstr "ανανέωση"
+
+msgctxt "#30243"
+msgid "passing"
+msgstr "πέρασμα"
+
+msgctxt "#30244"
+msgid "adding"
+msgstr "προσθήκη"
+
+msgctxt "#30245"
+msgid "re-scan"
+msgstr "ξανα-σάρωση"
+
+msgctxt "#30246"
+msgid "deleting"
+msgstr "διαγραφή"
+
+msgctxt "#30247"
+msgid "Please wait..."
+msgstr "Παρακαλώ περιμένετε..."
+
+msgctxt "#30248"
+msgid "%s scanned / %s added / %s deleted / %s modified"
+msgstr "%s σαρώθηκαν / %s προστέθηκαν / %s διαγράφηκαν / %s τροποποιήθηκαν"
+
+msgctxt "#30300"
+msgid "file name"
+msgstr "όνομα αρχείου"
+
+msgctxt "#30301"
+msgid "path"
+msgstr "διαδρομή"
+
+msgctxt "#30302"
+msgid "path (thumbnail)"
+msgstr "διαδρομή (μικρογραφία)"
+
+msgctxt "#30303"
+msgid "Show the slideshow"
+msgstr "Προβολή της παρουσίασης διαφανειών"
+
+msgctxt "#30600"
+msgid "Filter Wizard"
+msgstr "Οδηγός Φίλτρου"
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr "Ετικέτες"
+
+msgctxt "#30602"
+msgid "Contents"
+msgstr "Περιεχόμενα"
+
+msgctxt "#30610"
+msgid "Please select tags (red checkbox means \"not\")"
+msgstr "Επιλέξτε ετικέτες (η κόκκινη σημείωση σημαίνει \"όχι\")"
+
+msgctxt "#30611"
+msgid "1 tag checked"
+msgstr "Σημειώθηκε 1 ετικέτα"
+
+msgctxt "#30612"
+msgid "%s tags checked"
+msgstr "Ελέγχθηκαν %s ετικέτες"
+
+msgctxt "#30613"
+msgid "OK"
+msgstr "Εντάξει"
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr "Άκυρο"
+
+msgctxt "#30615"
+msgid "Match all tags"
+msgstr "Ταίριασμα όλων των ετικετών"
+
+msgctxt "#30620"
+msgid "Translate your tags"
+msgstr "Μετάφραση των ετικετών σας"
+
+msgctxt "#30621"
+msgid "Close Editor"
+msgstr "Κλείσιμο Επεξεργασίας"
+
+msgctxt "#30622"
+msgid "Leave translation empty to hide tag type in MyPicsDB"
+msgstr "Να μείνει η μετάφραση κενή για να μη φαίνεται ο τύπος ετικέτας στο MyPicsDB"
+
+msgctxt "#30623"
+msgid "Translation for %s"
+msgstr "Μετάφραση για %s'"
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "Καταγραφή σφαλμάτων"
+
+msgctxt "#30651"
+msgid "Enable debugging (regardless of XBMC settings)"
+msgstr "Ενεργοποίηση εντοπισμού σφαλμάτων (ανεξαρτήτως των ρυθμίσεων του XBMC)"
+
+msgctxt "#30660"
+msgid "Database Settings"
+msgstr "Ρυθμίσεις Βάσης Δεδομένων (Β.Δ.)"
+
+msgctxt "#30661"
+msgid "Database Backend"
+msgstr "Backend Βάσης Δεδομένων"
+
+msgctxt "#30662"
+msgid "Sqlite"
+msgstr "Sqlite"
+
+msgctxt "#30663"
+msgid "MySql"
+msgstr "MySql"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "Χρήστης"
+
+msgctxt "#30665"
+msgid "Password"
+msgstr "Κωδικός πρόσβασης"
+
+msgctxt "#30666"
+msgid "IP-Address or Name"
+msgstr "Διεύθυνση IP ή Όνομα"
+
+msgctxt "#30667"
+msgid "Port"
+msgstr "Θύρα"
+
+msgctxt "#30668"
+msgid "MySql DB Name"
+msgstr "Όνομα Β.Δ. MySql"
+
+msgctxt "#30669"
+msgid "Sqlite DB Name"
+msgstr "Όνομα Β.Δ. Sqlite"
+
+msgctxt "#30700"
+msgid "Country"
+msgstr "Χώρα"
+
+msgctxt "#30701"
+msgid "Country Code"
+msgstr "Κωδικός Χώρας"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "Πολιτεία"
+
+msgctxt "#30703"
+msgid "City"
+msgstr "Πόλη"
+
+msgctxt "#30704"
+msgid "Location"
+msgstr "Τοποθεσία"
+
+msgctxt "#30705"
+msgid "Event"
+msgstr "Γεγονός"
+
+msgctxt "#30706"
+msgid "Date Added"
+msgstr "Ημερομηνία Προσθήκης"
+
+msgctxt "#30707"
+msgid "Date Created"
+msgstr "Ημερομηνία Δημιουργίας"
+
+msgctxt "#30708"
+msgid "Date/Time Created"
+msgstr "Ημέρα/Ώρα Δημιουργίας"
+
+msgctxt "#30709"
+msgid "Description"
+msgstr "Περιγραφή"
+
+msgctxt "#30710"
+msgid "Headline"
+msgstr "Επικεφαλίδα"
+
+msgctxt "#30711"
+msgid "Title"
+msgstr "Τίτλος"
+
+msgctxt "#30712"
+msgid "Creator"
+msgstr "Δημιουργός"
+
+msgctxt "#30713"
+msgid "Creator Title"
+msgstr "Τίτλος Δημιουργού"
+
+msgctxt "#30714"
+msgid "Copyright"
+msgstr "Πνευματικά Δικαιώματα"
+
+msgctxt "#30715"
+msgid "Label"
+msgstr "Ετικέτα"
+
+msgctxt "#30716"
+msgid "Image Rating"
+msgstr "Βαθμολογία Εικόνας"
+
+msgctxt "#30717"
+msgid "Keyword"
+msgstr "Λέξη κλειδί"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "Κατηγορία"
+
+msgctxt "#30719"
+msgid "Supplemental Category"
+msgstr "Επιπρόσθετη Κατηγορία"
+
+msgctxt "#30720"
+msgid "Person"
+msgstr "Άτομο"
+
+msgctxt "#30721"
+msgid "Image Width"
+msgstr "Πλάτος Εικόνας"
+
+msgctxt "#30722"
+msgid "Image Length"
+msgstr "Μήκος Εικόνας"
+
+msgctxt "#30723"
+msgid "Orientation"
+msgstr "Προσανατολισμός"

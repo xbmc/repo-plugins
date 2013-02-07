@@ -1,0 +1,105 @@
+# XBMC Media Center language file
+# Addon Name: My Pictures Database
+# Addon id: plugin.image.mypicsdb
+# Addon Provider: Xycl, MikeBZH44, Alexsolex
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Chinese (Traditional) (http://www.transifex.com/projects/p/xbmc-addons/language/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30001"
+msgid "Database"
+msgstr "資料庫"
+
+msgctxt "#30030"
+msgid "General"
+msgstr "一般設定"
+
+msgctxt "#30031"
+msgid "Files"
+msgstr "檔案"
+
+msgctxt "#30041"
+msgid "All"
+msgstr "全部"
+
+msgctxt "#30051"
+msgid "Videos"
+msgstr "視訊"
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr "標籤"
+
+msgctxt "#30613"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr "取消"
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "除錯"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "用戶"
+
+msgctxt "#30665"
+msgid "Password"
+msgstr "密碼"
+
+msgctxt "#30667"
+msgid "Port"
+msgstr "遠端伺服器埠號"
+
+msgctxt "#30700"
+msgid "Country"
+msgstr "國家"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "州"
+
+msgctxt "#30703"
+msgid "City"
+msgstr "城市"
+
+msgctxt "#30704"
+msgid "Location"
+msgstr "位置"
+
+msgctxt "#30709"
+msgid "Description"
+msgstr "描述"
+
+msgctxt "#30710"
+msgid "Headline"
+msgstr "標題"
+
+msgctxt "#30711"
+msgid "Title"
+msgstr "標題"
+
+msgctxt "#30715"
+msgid "Label"
+msgstr "標籤"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "類別"
+
+msgctxt "#30723"
+msgid "Orientation"
+msgstr "方位"

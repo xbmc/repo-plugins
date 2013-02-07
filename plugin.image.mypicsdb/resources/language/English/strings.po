@@ -1,0 +1,870 @@
+# XBMC Media Center language file
+# Addon Name: My Pictures Database
+# Addon id: plugin.image.mypicsdb
+# Addon Provider: Xycl, MikeBZH44, Alexsolex
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "MyPicture Database"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Database"
+msgstr ""
+
+#Date formats : use the date formatting you found in this : http://docs.python.org/library/time.html#time.strftime
+
+#.date format
+msgctxt "#30002"
+msgid "%A %d %B %Y"
+msgstr ""
+
+#.month format
+msgctxt "#30003"
+msgid "%B %Y"
+msgstr ""
+
+#.year format
+msgctxt "#30004"
+msgid "%Y"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Mo.|Tu.|We.|Th.|Fr.|Sa.|Su."
+msgstr ""
+
+msgctxt "#30006"
+msgid "Jan.|Feb.|Mar|Apr.|May|Jun.|Jul.|Aug.|Sep.|Oct.|Nov.|Dec."
+msgstr ""
+
+msgctxt "#30007"
+msgid "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"
+msgstr ""
+
+msgctxt "#30008"
+msgid "January|February|March|April|May|June|July|August|September|October|November|December"
+msgstr ""
+
+#empty strings from id 30009 to 30019
+
+msgctxt "#30020"
+msgid "Picture folder"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Remove from database missing pictures"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Recursive scan ( all sub-folders will be scanned for pictures )"
+msgstr ""
+
+msgctxt "#30023"
+msgid "Picture extensions"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Perform scan at addon startup"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Initialize the database at next addon startup"
+msgstr ""
+
+#.setting
+msgctxt "#30026"
+msgid "Use the picture as fanart for pictures"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Settings for the dialog scan popup"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Video extensions"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Use the videos"
+msgstr ""
+
+msgctxt "#30030"
+msgid "General"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Files"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Age of recent files (days)"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Menu Items"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Display all items"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Number of pics per page"
+msgstr ""
+
+#empty strings from id 30036 to 30039
+
+msgctxt "#30040"
+msgid "Only display pictures with rating of at least"
+msgstr ""
+
+msgctxt "#30041"
+msgid "All"
+msgstr ""
+
+msgctxt "#30042"
+msgid "1 star"
+msgstr ""
+
+msgctxt "#30043"
+msgid "2 stars"
+msgstr ""
+
+msgctxt "#30044"
+msgid "3 stars"
+msgstr ""
+
+msgctxt "#30045"
+msgid "4 stars"
+msgstr ""
+
+msgctxt "#30046"
+msgid "5 stars"
+msgstr ""
+
+#empty strings from id 30047 to 30049
+
+msgctxt "#30050"
+msgid "Pics"
+msgstr ""
+
+msgctxt "#30051"
+msgid "Videos"
+msgstr ""
+
+msgctxt "#30052"
+msgid "Tags"
+msgstr ""
+
+#empty strings from id 30053 to 30059
+
+msgctxt "#30060"
+msgid "Locate on disk"
+msgstr ""
+
+msgctxt "#30061"
+msgid "Archive those pictures"
+msgstr ""
+
+msgctxt "#30062"
+msgid "Export those pictures to..."
+msgstr ""
+
+msgctxt "#30063"
+msgid "Add the file to archive :"
+msgstr ""
+
+#.%s will be replaced by the name of the archive
+msgctxt "#30064"
+msgid "The archive '%s' already exists in"
+msgstr ""
+
+msgctxt "#30065"
+msgid "Overwrite ?"
+msgstr ""
+
+msgctxt "#30066"
+msgid "Archive canceled."
+msgstr ""
+
+msgctxt "#30067"
+msgid "Adding the picture to archive..."
+msgstr ""
+
+msgctxt "#30068"
+msgid "The archiving has been canceled !"
+msgstr ""
+
+#.%s errors while zipping %s files
+msgctxt "#30069"
+msgid "%s errors while archiving %s files"
+msgstr ""
+
+#.%s files successfully Zipped !!
+msgctxt "#30070"
+msgid "%s pictures successfully archived !!"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Localization of the picture on disk"
+msgstr ""
+
+#empty strings from id 30072 to 30089
+
+msgctxt "#30090"
+msgid "Pictures without City"
+msgstr ""
+
+msgctxt "#30091"
+msgid "Pictures without Country"
+msgstr ""
+
+#.other pictures in country (%s replaced by a given country)
+msgctxt "#30092"
+msgid "Other pictures in '%s'"
+msgstr ""
+
+msgctxt "#30093"
+msgid "Browse by Geography"
+msgstr ""
+
+msgctxt "#30094"
+msgid "Pictures without supplemental category"
+msgstr ""
+
+msgctxt "#30095"
+msgid "Browse by Supplemental Category"
+msgstr ""
+
+msgctxt "#30096"
+msgid "Pictures without categories"
+msgstr ""
+
+msgctxt "#30097"
+msgid "Browse by Category"
+msgstr ""
+
+msgctxt "#30098"
+msgid "Global search"
+msgstr ""
+
+msgctxt "#30099"
+msgid "Paths of picture folders"
+msgstr ""
+
+msgctxt "#30100"
+msgid "All images from %s (%s pics)"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Browse by Date"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Browse by Folders"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Browse by Keywords"
+msgstr ""
+
+msgctxt "#30104"
+msgid "No keyword pictures"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Date ranges"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Add a new date range"
+msgstr ""
+
+msgctxt "#30107"
+msgid "Choose the start date"
+msgstr ""
+
+msgctxt "#30108"
+msgid "Choose the end date"
+msgstr ""
+
+msgctxt "#30109"
+msgid "Pics from %s to %s"
+msgstr ""
+
+msgctxt "#30110"
+msgid "Input a title for this date range :"
+msgstr ""
+
+msgctxt "#30111"
+msgid "Delete this date range"
+msgstr ""
+
+msgctxt "#30112"
+msgid "Rename this date range"
+msgstr ""
+
+msgctxt "#30113"
+msgid "From %s to %s"
+msgstr ""
+
+msgctxt "#30114"
+msgid "Input manually date"
+msgstr ""
+
+msgctxt "#30115"
+msgid "Word to search for"
+msgstr ""
+
+#.%s replaced respectively by : number of results, searched term, field where found
+msgctxt "#30116"
+msgid "%s results for '%s' in '%s'"
+msgstr ""
+
+msgctxt "#30117"
+msgid "Start date of the date range"
+msgstr ""
+
+msgctxt "#30118"
+msgid "End date of the date range"
+msgstr ""
+
+#.%s replaced by searched term
+msgctxt "#30119"
+msgid "The search for '%s' did not match in the whole database"
+msgstr ""
+
+msgctxt "#30120"
+msgid "Browse by Persons"
+msgstr ""
+
+msgctxt "#30121"
+msgid "Pictures without persons"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Browse by Tags"
+msgstr ""
+
+msgctxt "#30123"
+msgid "Help"
+msgstr ""
+
+#empty strings from id 30124 to 30129
+
+msgctxt "#30130"
+msgid "The %s latest pics"
+msgstr ""
+
+msgctxt "#30131"
+msgid "Recent pics (number of images)"
+msgstr ""
+
+#empty strings from id 30132 to 30149
+
+msgctxt "#30150"
+msgid "Collections"
+msgstr ""
+
+msgctxt "#30151"
+msgid "Remove from the collection"
+msgstr ""
+
+msgctxt "#30152"
+msgid "Add to collection..."
+msgstr ""
+
+msgctxt "#30153"
+msgid "Input a new title"
+msgstr ""
+
+msgctxt "#30154"
+msgid "Picture added in"
+msgstr ""
+
+msgctxt "#30155"
+msgid "Input a title for the new collection"
+msgstr ""
+
+msgctxt "#30156"
+msgid "Choose a collection"
+msgstr ""
+
+msgctxt "#30157"
+msgid "New collection"
+msgstr ""
+
+msgctxt "#30158"
+msgid "Remove this collection"
+msgstr ""
+
+msgctxt "#30159"
+msgid "Rename this collection"
+msgstr ""
+
+msgctxt "#30160"
+msgid "Create a new collection"
+msgstr ""
+
+#.%s replaced by the number of pictures added
+msgctxt "#30161"
+msgid "%s pictures added in"
+msgstr ""
+
+#empty strings from id 30162 to 30179
+
+msgctxt "#30180"
+msgid "Choose the destination for the export"
+msgstr ""
+
+msgctxt "#30181"
+msgid "Do you want to create a folder to export pictures ?"
+msgstr ""
+
+msgctxt "#30182"
+msgid "Input the folder name"
+msgstr ""
+
+msgctxt "#30183"
+msgid "picture export canceled !"
+msgstr ""
+
+msgctxt "#30184"
+msgid "Picture exporting..."
+msgstr ""
+
+#.%s replaced by the filename that is beeing copied
+msgctxt "#30185"
+msgid "Exporting '%s' to :"
+msgstr ""
+
+#.%s replaced by the filename that is beeing copied
+msgctxt "#30186"
+msgid "a file '%s' already exists"
+msgstr ""
+
+msgctxt "#30187"
+msgid "Overwrite ?"
+msgstr ""
+
+msgctxt "#30188"
+msgid "Export finished !"
+msgstr ""
+
+#.%s[number of files] copied to %s[distination folder]
+msgctxt "#30189"
+msgid "%s pictures copied to %s"
+msgstr ""
+
+msgctxt "#30190"
+msgid "Exported pictures"
+msgstr ""
+
+#empty strings from id 30191 to 30200
+
+msgctxt "#30201"
+msgid "Folder to scan"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Browse this folder recursively"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Delete the database entries if picture does not exists anymore"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Path added !"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Path deleted !"
+msgstr ""
+
+msgctxt "#30206"
+msgid "Do a scan now"
+msgstr ""
+
+msgctxt "#30207"
+msgid "Delete this path from database"
+msgstr ""
+
+msgctxt "#30208"
+msgid "[B]Add[/B] a path to database"
+msgstr ""
+
+msgctxt "#30209"
+msgid "Uploads from last %s days"
+msgstr ""
+
+msgctxt "#30210"
+msgid "Remove this path from excluded"
+msgstr ""
+
+msgctxt "#30211"
+msgid "Add a folder to [B]exclude[/B]"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Exclude this folder from database"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Scan all paths"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Yes = scan all pictures."
+msgstr ""
+
+msgctxt "#30215"
+msgid "No = scan only modified/new pictures."
+msgstr ""
+
+#empty string with id 30216
+
+msgctxt "#30217"
+msgid "You must rescan the folders"
+msgstr ""
+
+msgctxt "#30218"
+msgid "to exclude the pictures!"
+msgstr ""
+
+#empty string with id 30219
+
+msgctxt "#30220"
+msgid "Geolocation"
+msgstr ""
+
+#.%0.2f%% will be replaced by the percent of download for a map
+msgctxt "#30221"
+msgid "Fetching the map... (%0.2f%%)"
+msgstr ""
+
+#.%s will be replaced by the zoom level in a map
+msgctxt "#30222"
+msgid "Zoom=%s"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Use up / down arrows to zoom in / out"
+msgstr ""
+
+#empty strings from id 30224 to 30240
+
+msgctxt "#30241"
+msgid "preparing"
+msgstr ""
+
+msgctxt "#30242"
+msgid "refreshing"
+msgstr ""
+
+msgctxt "#30243"
+msgid "passing"
+msgstr ""
+
+msgctxt "#30244"
+msgid "adding"
+msgstr ""
+
+msgctxt "#30245"
+msgid "re-scan"
+msgstr ""
+
+msgctxt "#30246"
+msgid "deleting"
+msgstr ""
+
+msgctxt "#30247"
+msgid "Please wait..."
+msgstr ""
+
+#.%s respectively changed by number : scanned, added, deleted, modified
+msgctxt "#30248"
+msgid "%s scanned / %s added / %s deleted / %s modified"
+msgstr ""
+
+#empty strings from id 30249 to 30299
+
+msgctxt "#30300"
+msgid "file name"
+msgstr ""
+
+msgctxt "#30301"
+msgid "path"
+msgstr ""
+
+msgctxt "#30302"
+msgid "path (thumbnail)"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Show the slideshow"
+msgstr ""
+
+#empty strings from id 30304 to 30599
+
+msgctxt "#30600"
+msgid "Filter Wizard"
+msgstr ""
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr ""
+
+msgctxt "#30602"
+msgid "Contents"
+msgstr ""
+
+#empty strings from id 30603 to 30609
+
+msgctxt "#30610"
+msgid "Please select tags (red checkbox means \"not\")"
+msgstr ""
+
+msgctxt "#30611"
+msgid "1 tag checked"
+msgstr ""
+
+msgctxt "#30612"
+msgid "%s tags checked"
+msgstr ""
+
+msgctxt "#30613"
+msgid "OK"
+msgstr ""
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr ""
+
+msgctxt "#30615"
+msgid "Match all tags"
+msgstr ""
+
+#empty strings from id 30616 to 30619
+
+msgctxt "#30620"
+msgid "Translate your tags"
+msgstr ""
+
+msgctxt "#30621"
+msgid "Close Editor"
+msgstr ""
+
+msgctxt "#30622"
+msgid "Leave translation empty to hide tag type in MyPicsDB"
+msgstr ""
+
+msgctxt "#30623"
+msgid "Translation for %s"
+msgstr ""
+
+#empty strings from id 30624 to 30649
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr ""
+
+msgctxt "#30651"
+msgid "Enable debugging (regardless of XBMC settings)"
+msgstr ""
+
+#empty strings from id 30652 to 30659
+
+msgctxt "#30660"
+msgid "Database Settings"
+msgstr ""
+
+msgctxt "#30661"
+msgid "Database Backend"
+msgstr ""
+
+msgctxt "#30662"
+msgid "Sqlite"
+msgstr ""
+
+msgctxt "#30663"
+msgid "MySql"
+msgstr ""
+
+msgctxt "#30664"
+msgid "User"
+msgstr ""
+
+msgctxt "#30665"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30666"
+msgid "IP-Address or Name"
+msgstr ""
+
+msgctxt "#30667"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30668"
+msgid "MySql DB Name"
+msgstr ""
+
+msgctxt "#30669"
+msgid "Sqlite DB Name"
+msgstr ""
+
+#empty strings from id 30670 to 30699
+
+# tag type translation
+msgctxt "#30700"
+msgid "Country"
+msgstr ""
+
+# tag type translation
+msgctxt "#30701"
+msgid "Country Code"
+msgstr ""
+
+# tag type translation
+msgctxt "#30702"
+msgid "State"
+msgstr ""
+
+# tag type translation
+msgctxt "#30703"
+msgid "City"
+msgstr ""
+
+# tag type translation
+msgctxt "#30704"
+msgid "Location"
+msgstr ""
+
+# tag type translation
+msgctxt "#30705"
+msgid "Event"
+msgstr ""
+
+# tag type translation
+msgctxt "#30706"
+msgid "Date Added"
+msgstr ""
+
+# tag type translation
+msgctxt "#30707"
+msgid "Date Created"
+msgstr ""
+
+# tag type translation
+msgctxt "#30708"
+msgid "Date/Time Created"
+msgstr ""
+
+# tag type translation
+msgctxt "#30709"
+msgid "Description"
+msgstr ""
+
+# tag type translation
+msgctxt "#30710"
+msgid "Headline"
+msgstr ""
+
+# tag type translation
+msgctxt "#30711"
+msgid "Title"
+msgstr ""
+
+# tag type translation
+msgctxt "#30712"
+msgid "Creator"
+msgstr ""
+
+# tag type translation
+msgctxt "#30713"
+msgid "Creator Title"
+msgstr ""
+
+# tag type translation
+msgctxt "#30714"
+msgid "Copyright"
+msgstr ""
+
+# tag type translation
+msgctxt "#30715"
+msgid "Label"
+msgstr ""
+
+# tag type translation
+msgctxt "#30716"
+msgid "Image Rating"
+msgstr ""
+
+# tag type translation
+msgctxt "#30717"
+msgid "Keyword"
+msgstr ""
+
+# tag type translation
+msgctxt "#30718"
+msgid "Category"
+msgstr ""
+
+# tag type translation
+msgctxt "#30719"
+msgid "Supplemental Category"
+msgstr ""
+
+# tag type translation
+msgctxt "#30720"
+msgid "Person"
+msgstr ""
+
+# tag type translation
+msgctxt "#30721"
+msgid "Image Width"
+msgstr ""
+
+# tag type translation
+msgctxt "#30722"
+msgid "Image Length"
+msgstr ""
+
+# tag type translation
+msgctxt "#30723"
+msgid "Orientation"
+msgstr ""
+
+# tag type translation
+msgctxt "#30724"
+msgid "Flash"
+msgstr ""
+
+# tag type translation
+msgctxt "#30725"
+msgid "Image Model"
+msgstr ""
+
+# tag type translation
+msgctxt "#30726"
+msgid "Image Make"
+msgstr ""
+
+# tag type translation
+msgctxt "#30727"
+msgid "Image Artist"
+msgstr ""

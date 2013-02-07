@@ -1,0 +1,769 @@
+# XBMC Media Center language file
+# Addon Name: My Pictures Database
+# Addon id: plugin.image.mypicsdb
+# Addon Provider: Xycl, MikeBZH44, Alexsolex
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Swedish (http://www.transifex.com/projects/p/xbmc-addons/language/sv/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "MyPicture Database"
+msgstr "MyPictures-databas"
+
+msgctxt "#30001"
+msgid "Database"
+msgstr "Databas"
+
+msgctxt "#30002"
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+msgctxt "#30003"
+msgid "%B %Y"
+msgstr "%B %Y"
+
+msgctxt "#30004"
+msgid "%Y"
+msgstr "%Y"
+
+msgctxt "#30005"
+msgid "Mo.|Tu.|We.|Th.|Fr.|Sa.|Su."
+msgstr "Mån.|Tis.|Ons.|Tors.|Fre.|Lör.|Sön."
+
+msgctxt "#30006"
+msgid "Jan.|Feb.|Mar|Apr.|May|Jun.|Jul.|Aug.|Sep.|Oct.|Nov.|Dec."
+msgstr "Jan.|Feb.|Mar|Apr.|Maj|Jun.|Jul.|Aug.|Sep.|Okt.|Nov.|Dec."
+
+msgctxt "#30007"
+msgid "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"
+msgstr "Måndag|Tisdag|Onsdag|Torsdag|Fredag|Lördag|Söndag"
+
+msgctxt "#30008"
+msgid "January|February|March|April|May|June|July|August|September|October|November|December"
+msgstr "Januari|Februari|Mars|April|Maj|Juni|Juli|Augusti|September|Oktober|November|December"
+
+msgctxt "#30020"
+msgid "Picture folder"
+msgstr "Bildmapp"
+
+msgctxt "#30021"
+msgid "Remove from database missing pictures"
+msgstr "Ta bort saknade bilder från databas"
+
+msgctxt "#30022"
+msgid "Recursive scan ( all sub-folders will be scanned for pictures )"
+msgstr "Rekursiv skanning ( alla undermappar kommer att skannas efter bilder )"
+
+msgctxt "#30023"
+msgid "Picture extensions"
+msgstr "Bildfiländelser"
+
+msgctxt "#30024"
+msgid "Perform scan at addon startup"
+msgstr "Utför skanning vid tilläggsuppstart"
+
+msgctxt "#30025"
+msgid "Initialize the database at next addon startup"
+msgstr "Initiera databasen nästa gång tillägget startas"
+
+msgctxt "#30026"
+msgid "Use the picture as fanart for pictures"
+msgstr "Använd bild som fanart för bilderna"
+
+msgctxt "#30027"
+msgid "Settings for the dialog scan popup"
+msgstr "Inställningar för skanningsdialog"
+
+msgctxt "#30028"
+msgid "Video extensions"
+msgstr "Videofiländelser"
+
+msgctxt "#30029"
+msgid "Use the videos"
+msgstr "Använd videorna"
+
+msgctxt "#30030"
+msgid "General"
+msgstr "Menyer"
+
+msgctxt "#30031"
+msgid "Files"
+msgstr "Filer"
+
+msgctxt "#30032"
+msgid "Age of recent files (days)"
+msgstr "Ålder på nyliga filer (dagar)"
+
+msgctxt "#30033"
+msgid "Menu Items"
+msgstr "Menyobjekt"
+
+msgctxt "#30034"
+msgid "Display all items"
+msgstr "Visa alla objekt"
+
+msgctxt "#30035"
+msgid "Number of pics per page"
+msgstr "Antal bilder per sida"
+
+msgctxt "#30040"
+msgid "Only display pictures with rating of at least"
+msgstr "Visa endast bilder med betyg högre än"
+
+msgctxt "#30041"
+msgid "All"
+msgstr "Alla"
+
+msgctxt "#30042"
+msgid "1 star"
+msgstr "1 stjärna"
+
+msgctxt "#30043"
+msgid "2 stars"
+msgstr "2 stjärnor"
+
+msgctxt "#30044"
+msgid "3 stars"
+msgstr "3 stjärnor"
+
+msgctxt "#30045"
+msgid "4 stars"
+msgstr "4 stjärnor"
+
+msgctxt "#30046"
+msgid "5 stars"
+msgstr "5 stjärnor"
+
+msgctxt "#30050"
+msgid "Pics"
+msgstr "Bilder"
+
+msgctxt "#30051"
+msgid "Videos"
+msgstr "VIDEO"
+
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Taggar"
+
+msgctxt "#30060"
+msgid "Locate on disk"
+msgstr "Hitta på disk"
+
+msgctxt "#30061"
+msgid "Archive those pictures"
+msgstr "Arkivera dessa bilder"
+
+msgctxt "#30062"
+msgid "Export those pictures to..."
+msgstr "Exportera dessa bilder till..."
+
+msgctxt "#30063"
+msgid "Add the file to archive :"
+msgstr "Lägg till filer till arkiv :"
+
+msgctxt "#30064"
+msgid "The archive '%s' already exists in"
+msgstr "Arkivet '%s' existerar redan i"
+
+msgctxt "#30065"
+msgid "Overwrite ?"
+msgstr "Skriv över?"
+
+msgctxt "#30066"
+msgid "Archive canceled."
+msgstr "Arkivering avbruten."
+
+msgctxt "#30067"
+msgid "Adding the picture to archive..."
+msgstr "Lägger till bilden i arkivet..."
+
+msgctxt "#30068"
+msgid "The archiving has been canceled !"
+msgstr "Arkiveringen har avbrytits !"
+
+msgctxt "#30069"
+msgid "%s errors while archiving %s files"
+msgstr "%s fel medans arkivering av %s filer"
+
+msgctxt "#30070"
+msgid "%s pictures successfully archived !!"
+msgstr "%s bilder arkiverades !!"
+
+msgctxt "#30071"
+msgid "Localization of the picture on disk"
+msgstr "Lokalisering av bilder på lokal disk"
+
+msgctxt "#30090"
+msgid "Pictures without City"
+msgstr "Bilder utan stad"
+
+msgctxt "#30091"
+msgid "Pictures without Country"
+msgstr "Bilder utan land"
+
+msgctxt "#30092"
+msgid "Other pictures in '%s'"
+msgstr "Andra bilder i '%s'"
+
+msgctxt "#30093"
+msgid "Browse by Geography"
+msgstr "Bläddra efter geografi"
+
+msgctxt "#30094"
+msgid "Pictures without supplemental category"
+msgstr "Bilder utan kompletterande kategori"
+
+msgctxt "#30095"
+msgid "Browse by Supplemental Category"
+msgstr "Bläddra efter kompletterande kategori"
+
+msgctxt "#30096"
+msgid "Pictures without categories"
+msgstr "Bilder utan kategorier"
+
+msgctxt "#30097"
+msgid "Browse by Category"
+msgstr "Bläddra efter kategori"
+
+msgctxt "#30098"
+msgid "Global search"
+msgstr "Global sökning"
+
+msgctxt "#30099"
+msgid "Paths of picture folders"
+msgstr "Sökväg till bildmappar"
+
+msgctxt "#30100"
+msgid "All images from %s (%s pics)"
+msgstr "Alla bilder från %s (%s bilder)"
+
+msgctxt "#30101"
+msgid "Browse by Date"
+msgstr "Bläddra efter datum"
+
+msgctxt "#30102"
+msgid "Browse by Folders"
+msgstr "Bläddra efter mappar"
+
+msgctxt "#30103"
+msgid "Browse by Keywords"
+msgstr "Bläddra efter nyckelord"
+
+msgctxt "#30104"
+msgid "No keyword pictures"
+msgstr "Inga nyckelordsbilder"
+
+msgctxt "#30105"
+msgid "Date ranges"
+msgstr "Datumomfång"
+
+msgctxt "#30106"
+msgid "Add a new date range"
+msgstr "Lägg till ett nytt datumomfång"
+
+msgctxt "#30107"
+msgid "Choose the start date"
+msgstr "Välj startdatum"
+
+msgctxt "#30108"
+msgid "Choose the end date"
+msgstr "Välj slutdatum"
+
+msgctxt "#30109"
+msgid "Pics from %s to %s"
+msgstr "Bilder från %s till %s"
+
+msgctxt "#30110"
+msgid "Input a title for this date range :"
+msgstr "Ange en titel för detta datumomfång :"
+
+msgctxt "#30111"
+msgid "Delete this date range"
+msgstr "Ta bort detta datumomfång"
+
+msgctxt "#30112"
+msgid "Rename this date range"
+msgstr "Döp om detta datumomfång"
+
+msgctxt "#30113"
+msgid "From %s to %s"
+msgstr "Från %s till %s"
+
+msgctxt "#30114"
+msgid "Input manually date"
+msgstr "Ange datum manuellt"
+
+msgctxt "#30115"
+msgid "Word to search for"
+msgstr "Ord att söka efter"
+
+msgctxt "#30116"
+msgid "%s results for '%s' in '%s'"
+msgstr "%s resultat för %s i '%s'"
+
+msgctxt "#30117"
+msgid "Start date of the date range"
+msgstr "Startdatum för omfånget"
+
+msgctxt "#30118"
+msgid "End date of the date range"
+msgstr "Slutdatum för omfånget"
+
+msgctxt "#30119"
+msgid "The search for '%s' did not match in the whole database"
+msgstr "Sökningen efter '%s' fanns inte någonstans i hela databasen"
+
+msgctxt "#30120"
+msgid "Browse by Persons"
+msgstr "Bläddra efter personer"
+
+msgctxt "#30121"
+msgid "Pictures without persons"
+msgstr "Bilder utan personer"
+
+msgctxt "#30122"
+msgid "Browse by Tags"
+msgstr "Bläddra efter taggar"
+
+msgctxt "#30123"
+msgid "Help"
+msgstr "Hjälp"
+
+msgctxt "#30130"
+msgid "The %s latest pics"
+msgstr "%s senaste bilder"
+
+msgctxt "#30131"
+msgid "Recent pics (number of images)"
+msgstr "Nyligen tillagda bilder (antal bilder)"
+
+msgctxt "#30150"
+msgid "Collections"
+msgstr "Samlingar"
+
+msgctxt "#30151"
+msgid "Remove from the collection"
+msgstr "Ta bort från samlingen"
+
+msgctxt "#30152"
+msgid "Add to collection..."
+msgstr "Lägg till samlingen..."
+
+msgctxt "#30153"
+msgid "Input a new title"
+msgstr "Ange en ny titel"
+
+msgctxt "#30154"
+msgid "Picture added in"
+msgstr "Bilder tillagda i"
+
+msgctxt "#30155"
+msgid "Input a title for the new collection"
+msgstr "Ange en titel för den nya samlingen"
+
+msgctxt "#30156"
+msgid "Choose a collection"
+msgstr "Välj en samling"
+
+msgctxt "#30157"
+msgid "New collection"
+msgstr "Ny samling"
+
+msgctxt "#30158"
+msgid "Remove this collection"
+msgstr "Ta bort denna samling"
+
+msgctxt "#30159"
+msgid "Rename this collection"
+msgstr "Döp om samlingen"
+
+msgctxt "#30160"
+msgid "Create a new collection"
+msgstr "Skapa en ny samling"
+
+msgctxt "#30161"
+msgid "%s pictures added in"
+msgstr "%s bilder tillagda i"
+
+msgctxt "#30180"
+msgid "Choose the destination for the export"
+msgstr "Välj en destination för exporten"
+
+msgctxt "#30181"
+msgid "Do you want to create a folder to export pictures ?"
+msgstr "Vill du skapa en mapp för bildexporten ?"
+
+msgctxt "#30182"
+msgid "Input the folder name"
+msgstr "Ange mappnamnet"
+
+msgctxt "#30183"
+msgid "picture export canceled !"
+msgstr "bildexport avbruten !"
+
+msgctxt "#30184"
+msgid "Picture exporting..."
+msgstr "Bilder exporteras..."
+
+msgctxt "#30185"
+msgid "Exporting '%s' to :"
+msgstr "Exporterar '%s' till :"
+
+msgctxt "#30186"
+msgid "a file '%s' already exists"
+msgstr "en fil '%s' existerar redan"
+
+msgctxt "#30187"
+msgid "Overwrite ?"
+msgstr "Skriva över ?"
+
+msgctxt "#30188"
+msgid "Export finished !"
+msgstr "Export slutförd !"
+
+msgctxt "#30189"
+msgid "%s pictures copied to %s"
+msgstr "%s bilder kopierade till %s"
+
+msgctxt "#30190"
+msgid "Exported pictures"
+msgstr "Exporterade bilder"
+
+msgctxt "#30201"
+msgid "Folder to scan"
+msgstr "Mapp att skanna"
+
+msgctxt "#30202"
+msgid "Browse this folder recursively"
+msgstr "Bläddra denna mapp rekursivt"
+
+msgctxt "#30203"
+msgid "Delete the database entries if picture does not exists anymore"
+msgstr "Ta bort databasposterna om bilderna inte existerar mer"
+
+msgctxt "#30204"
+msgid "Path added !"
+msgstr "Sökväg tillagd !"
+
+msgctxt "#30205"
+msgid "Path deleted !"
+msgstr "Sökväg borttagen !"
+
+msgctxt "#30206"
+msgid "Do a scan now"
+msgstr "Skanna nu"
+
+msgctxt "#30207"
+msgid "Delete this path from database"
+msgstr "Ta bort denna sökväg från databasen"
+
+msgctxt "#30208"
+msgid "[B]Add[/B] a path to database"
+msgstr "[B]Lägg till[/B] en sökväg till databasen"
+
+msgctxt "#30209"
+msgid "Uploads from last %s days"
+msgstr "Uppladdningar från dom %s senaste dagarna"
+
+msgctxt "#30210"
+msgid "Remove this path from excluded"
+msgstr "Ta bort denna sökväg från uteslutna"
+
+msgctxt "#30211"
+msgid "Add a folder to [B]exclude[/B]"
+msgstr "Lägg till en mapp att [B]utesluta[/B]"
+
+msgctxt "#30212"
+msgid "Exclude this folder from database"
+msgstr "Uteslut denna mapp från databasen"
+
+msgctxt "#30213"
+msgid "Scan all paths"
+msgstr "Skanna alla sökvägar"
+
+msgctxt "#30214"
+msgid "Yes = scan all pictures."
+msgstr "Ja = skanna alla bilder."
+
+msgctxt "#30215"
+msgid "No = scan only modified/new pictures."
+msgstr "Nej = skanna endast modifierade/nya bilder."
+
+msgctxt "#30217"
+msgid "You must rescan the folders"
+msgstr "Du måste skanna om mapparna"
+
+msgctxt "#30218"
+msgid "to exclude the pictures!"
+msgstr "för att utesluta bilderna!"
+
+msgctxt "#30220"
+msgid "Geolocation"
+msgstr "Geoplats"
+
+msgctxt "#30221"
+msgid "Fetching the map... (%0.2f%%)"
+msgstr "Hämtar mapp... (%0.2f%%)"
+
+msgctxt "#30222"
+msgid "Zoom=%s"
+msgstr "Zoom=%s"
+
+msgctxt "#30223"
+msgid "Use up / down arrows to zoom in / out"
+msgstr "Använd upp / ner piltangenterna för att zooma in / ut"
+
+msgctxt "#30241"
+msgid "preparing"
+msgstr "förbereder"
+
+msgctxt "#30242"
+msgid "refreshing"
+msgstr "uppdaterar"
+
+msgctxt "#30243"
+msgid "passing"
+msgstr "passning"
+
+msgctxt "#30244"
+msgid "adding"
+msgstr "lägger till"
+
+msgctxt "#30245"
+msgid "re-scan"
+msgstr "Skanna om"
+
+msgctxt "#30246"
+msgid "deleting"
+msgstr "raderar"
+
+msgctxt "#30247"
+msgid "Please wait..."
+msgstr "Vänta..."
+
+msgctxt "#30248"
+msgid "%s scanned / %s added / %s deleted / %s modified"
+msgstr "%s skannade / %s tillagda / %s borttagna / %s modifierade"
+
+msgctxt "#30300"
+msgid "file name"
+msgstr "filnamn"
+
+msgctxt "#30301"
+msgid "path"
+msgstr "sökväg"
+
+msgctxt "#30302"
+msgid "path (thumbnail)"
+msgstr "sökväg (miniatyr)"
+
+msgctxt "#30303"
+msgid "Show the slideshow"
+msgstr "Visa bildspelet"
+
+msgctxt "#30600"
+msgid "Filter Wizard"
+msgstr "Filterguide"
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr "Taggar"
+
+msgctxt "#30602"
+msgid "Contents"
+msgstr "Innehåll"
+
+msgctxt "#30610"
+msgid "Please select tags (red checkbox means \"not\")"
+msgstr "Välj taggar (röda markeringar betyder \"inte\")"
+
+msgctxt "#30611"
+msgid "1 tag checked"
+msgstr "1 tagg markerad"
+
+msgctxt "#30612"
+msgid "%s tags checked"
+msgstr "%s taggar markerade"
+
+msgctxt "#30613"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgctxt "#30615"
+msgid "Match all tags"
+msgstr "Matcha alla taggar"
+
+msgctxt "#30620"
+msgid "Translate your tags"
+msgstr "Översätt dina taggar"
+
+msgctxt "#30621"
+msgid "Close Editor"
+msgstr "Stäng redigerare"
+
+msgctxt "#30622"
+msgid "Leave translation empty to hide tag type in MyPicsDB"
+msgstr "Lämna översättning tom för att dölja taggtyp i MyPicsDB"
+
+msgctxt "#30623"
+msgid "Translation for %s"
+msgstr "Översättning för %s"
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "Debuggning"
+
+msgctxt "#30651"
+msgid "Enable debugging (regardless of XBMC settings)"
+msgstr "Aktivera debuggning (oavsett XBMC-inställning)"
+
+msgctxt "#30660"
+msgid "Database Settings"
+msgstr "Databasinställningar"
+
+msgctxt "#30661"
+msgid "Database Backend"
+msgstr "Databasmotor"
+
+msgctxt "#30662"
+msgid "Sqlite"
+msgstr "SQLite"
+
+msgctxt "#30663"
+msgid "MySql"
+msgstr "MySQL"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "Användare"
+
+msgctxt "#30665"
+msgid "Password"
+msgstr "Lösenord"
+
+msgctxt "#30666"
+msgid "IP-Address or Name"
+msgstr "IP-adress eller namn"
+
+msgctxt "#30667"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30668"
+msgid "MySql DB Name"
+msgstr "MySQL-databasnamn"
+
+msgctxt "#30669"
+msgid "Sqlite DB Name"
+msgstr "SQLite-databasnamn"
+
+msgctxt "#30700"
+msgid "Country"
+msgstr "Land"
+
+msgctxt "#30701"
+msgid "Country Code"
+msgstr "Landskod"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "Delstat"
+
+msgctxt "#30703"
+msgid "City"
+msgstr "Stad"
+
+msgctxt "#30704"
+msgid "Location"
+msgstr "Plats"
+
+msgctxt "#30705"
+msgid "Event"
+msgstr "Händelse"
+
+msgctxt "#30706"
+msgid "Date Added"
+msgstr "Datum tillagt"
+
+msgctxt "#30707"
+msgid "Date Created"
+msgstr "Datum skapad"
+
+msgctxt "#30708"
+msgid "Date/Time Created"
+msgstr "Datum/tid skapad"
+
+msgctxt "#30709"
+msgid "Description"
+msgstr "Beskrivning"
+
+msgctxt "#30710"
+msgid "Headline"
+msgstr "Rubrik"
+
+msgctxt "#30711"
+msgid "Title"
+msgstr "Titel"
+
+msgctxt "#30712"
+msgid "Creator"
+msgstr "Skapare"
+
+msgctxt "#30713"
+msgid "Creator Title"
+msgstr "Skapartitel"
+
+msgctxt "#30714"
+msgid "Copyright"
+msgstr "Upphovsrätt"
+
+msgctxt "#30715"
+msgid "Label"
+msgstr "Etikett"
+
+msgctxt "#30716"
+msgid "Image Rating"
+msgstr "Bildbetyg"
+
+msgctxt "#30717"
+msgid "Keyword"
+msgstr "Nyckelord"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "Kategori"
+
+msgctxt "#30719"
+msgid "Supplemental Category"
+msgstr "Kompletterande kategori"
+
+msgctxt "#30720"
+msgid "Person"
+msgstr "Person"
+
+msgctxt "#30721"
+msgid "Image Width"
+msgstr "Bildbredd"
+
+msgctxt "#30722"
+msgid "Image Length"
+msgstr "Bildlängd"
+
+msgctxt "#30723"
+msgid "Orientation"
+msgstr "Riktning"

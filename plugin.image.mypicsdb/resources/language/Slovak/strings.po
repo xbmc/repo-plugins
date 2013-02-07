@@ -1,0 +1,769 @@
+# XBMC Media Center language file
+# Addon Name: My Pictures Database
+# Addon id: plugin.image.mypicsdb
+# Addon Provider: Xycl, MikeBZH44, Alexsolex
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Slovak (http://www.transifex.com/projects/p/xbmc-addons/language/sk/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+msgctxt "#30000"
+msgid "MyPicture Database"
+msgstr "MyPicture databáza"
+
+msgctxt "#30001"
+msgid "Database"
+msgstr "Databáza"
+
+msgctxt "#30002"
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+msgctxt "#30003"
+msgid "%B %Y"
+msgstr "%B %Y"
+
+msgctxt "#30004"
+msgid "%Y"
+msgstr "%Y"
+
+msgctxt "#30005"
+msgid "Mo.|Tu.|We.|Th.|Fr.|Sa.|Su."
+msgstr "Po.|Ut.|St.|Št.|Pi.|So.|Ne."
+
+msgctxt "#30006"
+msgid "Jan.|Feb.|Mar|Apr.|May|Jun.|Jul.|Aug.|Sep.|Oct.|Nov.|Dec."
+msgstr "Jan.|Feb.|Mar|Apr.|Máj|Jún|Júl|Aug.|Sep.|Okt.|Nov.|Dec."
+
+msgctxt "#30007"
+msgid "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"
+msgstr "Pondelok|Utorok|Streda|Štvrtok|Piatok|Sobota|Nedeľa"
+
+msgctxt "#30008"
+msgid "January|February|March|April|May|June|July|August|September|October|November|December"
+msgstr "Január|Február|Marec|Apríl|Máj|Jún|Júl|August|September|Október|November|December"
+
+msgctxt "#30020"
+msgid "Picture folder"
+msgstr "Priečinok obrázkov"
+
+msgctxt "#30021"
+msgid "Remove from database missing pictures"
+msgstr "Odstrániť chýbajúce obrázky z databázy"
+
+msgctxt "#30022"
+msgid "Recursive scan ( all sub-folders will be scanned for pictures )"
+msgstr "Prehľadávaj rekurzívne (vo všetkých podpriečinkoch budú hľadané obrázky)"
+
+msgctxt "#30023"
+msgid "Picture extensions"
+msgstr "Prípony obrázkových súborov"
+
+msgctxt "#30024"
+msgid "Perform scan at addon startup"
+msgstr "Vykonať prehľadávanie pri štarte doplnku"
+
+msgctxt "#30025"
+msgid "Initialize the database at next addon startup"
+msgstr "Inicializovať databázu pri ďalšom štarte doplnku "
+
+msgctxt "#30026"
+msgid "Use the picture as fanart for pictures"
+msgstr "Použiť tento obrázok ako FanArt obrázkov"
+
+msgctxt "#30027"
+msgid "Settings for the dialog scan popup"
+msgstr "Nastavenia pre kontextové menu prehľadávania"
+
+msgctxt "#30028"
+msgid "Video extensions"
+msgstr "Prípony video súborov"
+
+msgctxt "#30029"
+msgid "Use the videos"
+msgstr "Použi videá"
+
+msgctxt "#30030"
+msgid "General"
+msgstr "Všeobecné"
+
+msgctxt "#30031"
+msgid "Files"
+msgstr "Súbory"
+
+msgctxt "#30032"
+msgid "Age of recent files (days)"
+msgstr "Vek naposledy pridaných súborov (dni)"
+
+msgctxt "#30033"
+msgid "Menu Items"
+msgstr "Položky menu"
+
+msgctxt "#30034"
+msgid "Display all items"
+msgstr "Zobraziť všetky položky"
+
+msgctxt "#30035"
+msgid "Number of pics per page"
+msgstr "Počet obrázkov na stránku"
+
+msgctxt "#30040"
+msgid "Only display pictures with rating of at least"
+msgstr "Zobraz len obrázky s hodnotením najmenej"
+
+msgctxt "#30041"
+msgid "All"
+msgstr "Všetky"
+
+msgctxt "#30042"
+msgid "1 star"
+msgstr "1 hviezda"
+
+msgctxt "#30043"
+msgid "2 stars"
+msgstr "2 hviezdy"
+
+msgctxt "#30044"
+msgid "3 stars"
+msgstr "3 hviezdy"
+
+msgctxt "#30045"
+msgid "4 stars"
+msgstr "4 hviezdy"
+
+msgctxt "#30046"
+msgid "5 stars"
+msgstr "5 hviezd"
+
+msgctxt "#30050"
+msgid "Pics"
+msgstr "Obrázky"
+
+msgctxt "#30051"
+msgid "Videos"
+msgstr "Video"
+
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Značky"
+
+msgctxt "#30060"
+msgid "Locate on disk"
+msgstr "Lokalizuj na disku"
+
+msgctxt "#30061"
+msgid "Archive those pictures"
+msgstr "Archivovať tie obrázky"
+
+msgctxt "#30062"
+msgid "Export those pictures to..."
+msgstr "Exportovať tie obrázky do..."
+
+msgctxt "#30063"
+msgid "Add the file to archive :"
+msgstr "Pridať súbor do archívu:"
+
+msgctxt "#30064"
+msgid "The archive '%s' already exists in"
+msgstr "Archív '%s' už existuje v"
+
+msgctxt "#30065"
+msgid "Overwrite ?"
+msgstr "Prepísať"
+
+msgctxt "#30066"
+msgid "Archive canceled."
+msgstr "Archív bol zrušený"
+
+msgctxt "#30067"
+msgid "Adding the picture to archive..."
+msgstr "Pridávanie obrázku do archívu..."
+
+msgctxt "#30068"
+msgid "The archiving has been canceled !"
+msgstr "Archivovanie bolo zrušené !"
+
+msgctxt "#30069"
+msgid "%s errors while archiving %s files"
+msgstr "%s chýb počas archivovania %s súborov"
+
+msgctxt "#30070"
+msgid "%s pictures successfully archived !!"
+msgstr "%s obrázkov úspešne archivovaných !!"
+
+msgctxt "#30071"
+msgid "Localization of the picture on disk"
+msgstr "Lokalizácia obrázku na disku"
+
+msgctxt "#30090"
+msgid "Pictures without City"
+msgstr "Obrázky bez Mesta"
+
+msgctxt "#30091"
+msgid "Pictures without Country"
+msgstr "Obrázky bez Krajiny"
+
+msgctxt "#30092"
+msgid "Other pictures in '%s'"
+msgstr "Ostatné obrázky v '%s'"
+
+msgctxt "#30093"
+msgid "Browse by Geography"
+msgstr "Prehliadať podľa Geografie"
+
+msgctxt "#30094"
+msgid "Pictures without supplemental category"
+msgstr "Obrázky bez Dodatkovej Kategórie"
+
+msgctxt "#30095"
+msgid "Browse by Supplemental Category"
+msgstr "Prehliadať podľa Dodatkovej Kategórie"
+
+msgctxt "#30096"
+msgid "Pictures without categories"
+msgstr "Obrázky bez Kategórie"
+
+msgctxt "#30097"
+msgid "Browse by Category"
+msgstr "Prehliadať podľa Kategórie"
+
+msgctxt "#30098"
+msgid "Global search"
+msgstr "Globálne vyhľadávanie"
+
+msgctxt "#30099"
+msgid "Paths of picture folders"
+msgstr "Cesty priečinkov obrázkov"
+
+msgctxt "#30100"
+msgid "All images from %s (%s pics)"
+msgstr "Všetky obrázky z %s (%s obrázkov)"
+
+msgctxt "#30101"
+msgid "Browse by Date"
+msgstr "Prehliadať podľa Dátumu"
+
+msgctxt "#30102"
+msgid "Browse by Folders"
+msgstr "Prehliadať podľa Priečinku"
+
+msgctxt "#30103"
+msgid "Browse by Keywords"
+msgstr "Prehliadať podľa Kľúčového slova"
+
+msgctxt "#30104"
+msgid "No keyword pictures"
+msgstr "Žiadne obrázky podľa kľúčového slova"
+
+msgctxt "#30105"
+msgid "Date ranges"
+msgstr "Rozsah dátumov"
+
+msgctxt "#30106"
+msgid "Add a new date range"
+msgstr "Pridať nový rozsah dátumov"
+
+msgctxt "#30107"
+msgid "Choose the start date"
+msgstr "Zvoliť počiatočný dátum"
+
+msgctxt "#30108"
+msgid "Choose the end date"
+msgstr "Zvoliť konečný dátum"
+
+msgctxt "#30109"
+msgid "Pics from %s to %s"
+msgstr "Obrázky od %s do %s"
+
+msgctxt "#30110"
+msgid "Input a title for this date range :"
+msgstr "Zadajte pomenovanie pre tento rozsah dátumov:"
+
+msgctxt "#30111"
+msgid "Delete this date range"
+msgstr "Vymazať tento rozsah dátumov"
+
+msgctxt "#30112"
+msgid "Rename this date range"
+msgstr "Premenovať tento rozsah dátumov"
+
+msgctxt "#30113"
+msgid "From %s to %s"
+msgstr "Od %s do %s"
+
+msgctxt "#30114"
+msgid "Input manually date"
+msgstr "Zadajte dátum manuálne"
+
+msgctxt "#30115"
+msgid "Word to search for"
+msgstr "Vyhľadávané slovo"
+
+msgctxt "#30116"
+msgid "%s results for '%s' in '%s'"
+msgstr "%s výsledkov pre '%s' v '%s'"
+
+msgctxt "#30117"
+msgid "Start date of the date range"
+msgstr "Počiatočný dátum rozsahu dátumov"
+
+msgctxt "#30118"
+msgid "End date of the date range"
+msgstr "Konečný dátum rozsahu dátumov"
+
+msgctxt "#30119"
+msgid "The search for '%s' did not match in the whole database"
+msgstr "V celej databáze sa nenašiel záznam totožný s vyhľadávaným '%s'."
+
+msgctxt "#30120"
+msgid "Browse by Persons"
+msgstr "Prehliadať podľa Osoby"
+
+msgctxt "#30121"
+msgid "Pictures without persons"
+msgstr "Obrázky bez Osoby"
+
+msgctxt "#30122"
+msgid "Browse by Tags"
+msgstr "Prehliadať podľa Značky"
+
+msgctxt "#30123"
+msgid "Help"
+msgstr "Nápoveda"
+
+msgctxt "#30130"
+msgid "The %s latest pics"
+msgstr "%s naposledy pridaných obrázkov"
+
+msgctxt "#30131"
+msgid "Recent pics (number of images)"
+msgstr "Naposledy pridané obrázky (počet obrázkov)"
+
+msgctxt "#30150"
+msgid "Collections"
+msgstr "Kolekcie"
+
+msgctxt "#30151"
+msgid "Remove from the collection"
+msgstr "Odstrániť z kolekcie"
+
+msgctxt "#30152"
+msgid "Add to collection..."
+msgstr "Pridať do kolekcie"
+
+msgctxt "#30153"
+msgid "Input a new title"
+msgstr "Zadať nový titul"
+
+msgctxt "#30154"
+msgid "Picture added in"
+msgstr "Obrázok pridaný v"
+
+msgctxt "#30155"
+msgid "Input a title for the new collection"
+msgstr "Zadať titul pre novú kolekciu"
+
+msgctxt "#30156"
+msgid "Choose a collection"
+msgstr "Zvoliť kolekciu"
+
+msgctxt "#30157"
+msgid "New collection"
+msgstr "Nová kolekcia"
+
+msgctxt "#30158"
+msgid "Remove this collection"
+msgstr "Odstrániť túto kolekciu"
+
+msgctxt "#30159"
+msgid "Rename this collection"
+msgstr "Premenovať túto kolekciu"
+
+msgctxt "#30160"
+msgid "Create a new collection"
+msgstr "Vytvoriť novú kolekciu"
+
+msgctxt "#30161"
+msgid "%s pictures added in"
+msgstr "%s obrázkov pridaných v"
+
+msgctxt "#30180"
+msgid "Choose the destination for the export"
+msgstr "Zvoľte cieľový priečinok pre export"
+
+msgctxt "#30181"
+msgid "Do you want to create a folder to export pictures ?"
+msgstr "Chcete vytvoriť priečinok pre export obrázkov ?"
+
+msgctxt "#30182"
+msgid "Input the folder name"
+msgstr "Zadajte názov priečinku"
+
+msgctxt "#30183"
+msgid "picture export canceled !"
+msgstr "export obrázkov zrušený !"
+
+msgctxt "#30184"
+msgid "Picture exporting..."
+msgstr "Exportujem obrázky..."
+
+msgctxt "#30185"
+msgid "Exporting '%s' to :"
+msgstr "Exportujem '%s' do :"
+
+msgctxt "#30186"
+msgid "a file '%s' already exists"
+msgstr "súbor '%s' už existuje"
+
+msgctxt "#30187"
+msgid "Overwrite ?"
+msgstr "Prepísať ?"
+
+msgctxt "#30188"
+msgid "Export finished !"
+msgstr "Export skončil !"
+
+msgctxt "#30189"
+msgid "%s pictures copied to %s"
+msgstr "%s obrázkov skopírovaných do %s"
+
+msgctxt "#30190"
+msgid "Exported pictures"
+msgstr "Exportované obrázky"
+
+msgctxt "#30201"
+msgid "Folder to scan"
+msgstr "Priečinok na prehľadávanie"
+
+msgctxt "#30202"
+msgid "Browse this folder recursively"
+msgstr "Prehliadať tento priečinok rekurzívne"
+
+msgctxt "#30203"
+msgid "Delete the database entries if picture does not exists anymore"
+msgstr "Zmazať položky databázy pokiaľ obrázok už neexistuje"
+
+msgctxt "#30204"
+msgid "Path added !"
+msgstr "Cesta pridaná !"
+
+msgctxt "#30205"
+msgid "Path deleted !"
+msgstr "Cesta zmazaná !"
+
+msgctxt "#30206"
+msgid "Do a scan now"
+msgstr "Spusti prehľadávanie teraz"
+
+msgctxt "#30207"
+msgid "Delete this path from database"
+msgstr "Vymazať túto cestu z databázy"
+
+msgctxt "#30208"
+msgid "[B]Add[/B] a path to database"
+msgstr "[B]Pridať[/B] cestu do databázy"
+
+msgctxt "#30209"
+msgid "Uploads from last %s days"
+msgstr "Nahrávky posledných %s dní"
+
+msgctxt "#30210"
+msgid "Remove this path from excluded"
+msgstr "Vyňať túto cestu z vyradených"
+
+msgctxt "#30211"
+msgid "Add a folder to [B]exclude[/B]"
+msgstr "Pridať cestu do [B]vyradených[/B]"
+
+msgctxt "#30212"
+msgid "Exclude this folder from database"
+msgstr "Odstrániť tento priečinok z databázy"
+
+msgctxt "#30213"
+msgid "Scan all paths"
+msgstr "Prehľadať všetky cesty"
+
+msgctxt "#30214"
+msgid "Yes = scan all pictures."
+msgstr "Áno = Prehľadať všetky obrázky"
+
+msgctxt "#30215"
+msgid "No = scan only modified/new pictures."
+msgstr "Nie = Áno = Prehľadať len zmenené/nové obrázky"
+
+msgctxt "#30217"
+msgid "You must rescan the folders"
+msgstr "Musíte opäť prehľadať všetky priečinky"
+
+msgctxt "#30218"
+msgid "to exclude the pictures!"
+msgstr "aby ste vyradili obrázky!"
+
+msgctxt "#30220"
+msgid "Geolocation"
+msgstr "Geolokácia"
+
+msgctxt "#30221"
+msgid "Fetching the map... (%0.2f%%)"
+msgstr "Vyvolávam mapu... (%0.2f%%)"
+
+msgctxt "#30222"
+msgid "Zoom=%s"
+msgstr "Priblíženie=%s"
+
+msgctxt "#30223"
+msgid "Use up / down arrows to zoom in / out"
+msgstr "Použite šípky Hore / Dole pre ovládanie priblíženia"
+
+msgctxt "#30241"
+msgid "preparing"
+msgstr "pripravuje sa"
+
+msgctxt "#30242"
+msgid "refreshing"
+msgstr "obnovuje sa"
+
+msgctxt "#30243"
+msgid "passing"
+msgstr "končí sa"
+
+msgctxt "#30244"
+msgid "adding"
+msgstr "pridáva sa"
+
+msgctxt "#30245"
+msgid "re-scan"
+msgstr "znovu-prehľadávanie"
+
+msgctxt "#30246"
+msgid "deleting"
+msgstr "vymazáva sa"
+
+msgctxt "#30247"
+msgid "Please wait..."
+msgstr "Prosím čakajte..."
+
+msgctxt "#30248"
+msgid "%s scanned / %s added / %s deleted / %s modified"
+msgstr "%s prehľadaných / %s pridaných / %s vymazaných / %s modifikovaných"
+
+msgctxt "#30300"
+msgid "file name"
+msgstr "meno súboru"
+
+msgctxt "#30301"
+msgid "path"
+msgstr "cesta"
+
+msgctxt "#30302"
+msgid "path (thumbnail)"
+msgstr "cesta (náhľad)"
+
+msgctxt "#30303"
+msgid "Show the slideshow"
+msgstr "Ukázať prezentáciu"
+
+msgctxt "#30600"
+msgid "Filter Wizard"
+msgstr "Sprievodca filtrovania"
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr "Značky"
+
+msgctxt "#30602"
+msgid "Contents"
+msgstr "Obsahy"
+
+msgctxt "#30610"
+msgid "Please select tags (red checkbox means \"not\")"
+msgstr "Prosím zvoľte značky (červené začiarkávacie políčko znamená nie)"
+
+msgctxt "#30611"
+msgid "1 tag checked"
+msgstr "1 značka začiarknutá"
+
+msgctxt "#30612"
+msgid "%s tags checked"
+msgstr "%s značiek začiarknutých"
+
+msgctxt "#30613"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgctxt "#30615"
+msgid "Match all tags"
+msgstr "Zladiť všetky značky"
+
+msgctxt "#30620"
+msgid "Translate your tags"
+msgstr "Preložiť Vaše značky"
+
+msgctxt "#30621"
+msgid "Close Editor"
+msgstr "Zatvoriť editor"
+
+msgctxt "#30622"
+msgid "Leave translation empty to hide tag type in MyPicsDB"
+msgstr "Nechať preklad prázdny a skryť značku v MyPicsDB"
+
+msgctxt "#30623"
+msgid "Translation for %s"
+msgstr "Preklad pre %s"
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "Ladenie / Debug"
+
+msgctxt "#30651"
+msgid "Enable debugging (regardless of XBMC settings)"
+msgstr "Povoliť ladenie (debugging / bez ohľadu na nastavenie XBMC)"
+
+msgctxt "#30660"
+msgid "Database Settings"
+msgstr "Nastavenia databázy"
+
+msgctxt "#30661"
+msgid "Database Backend"
+msgstr "Databázový backend"
+
+msgctxt "#30662"
+msgid "Sqlite"
+msgstr "Sqlite"
+
+msgctxt "#30663"
+msgid "MySql"
+msgstr "MySql"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "Užívateľ"
+
+msgctxt "#30665"
+msgid "Password"
+msgstr "Heslo"
+
+msgctxt "#30666"
+msgid "IP-Address or Name"
+msgstr "IP adresa alebo meno"
+
+msgctxt "#30667"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30668"
+msgid "MySql DB Name"
+msgstr "Názov MySql DB"
+
+msgctxt "#30669"
+msgid "Sqlite DB Name"
+msgstr "Názov Sqlite DB"
+
+msgctxt "#30700"
+msgid "Country"
+msgstr "Krajina"
+
+msgctxt "#30701"
+msgid "Country Code"
+msgstr "Kód krajiny"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "Štát"
+
+msgctxt "#30703"
+msgid "City"
+msgstr "Mesto"
+
+msgctxt "#30704"
+msgid "Location"
+msgstr "Poloha"
+
+msgctxt "#30705"
+msgid "Event"
+msgstr "Udalosť"
+
+msgctxt "#30706"
+msgid "Date Added"
+msgstr "Dátum pridaný"
+
+msgctxt "#30707"
+msgid "Date Created"
+msgstr "Dátum vytvorený"
+
+msgctxt "#30708"
+msgid "Date/Time Created"
+msgstr "Dátum / čas vytvorený"
+
+msgctxt "#30709"
+msgid "Description"
+msgstr "Popis"
+
+msgctxt "#30710"
+msgid "Headline"
+msgstr "Nadpis"
+
+msgctxt "#30711"
+msgid "Title"
+msgstr "Názov"
+
+msgctxt "#30712"
+msgid "Creator"
+msgstr "Autor"
+
+msgctxt "#30713"
+msgid "Creator Title"
+msgstr "Názov autora"
+
+msgctxt "#30714"
+msgid "Copyright"
+msgstr "Copyright"
+
+msgctxt "#30715"
+msgid "Label"
+msgstr "Label"
+
+msgctxt "#30716"
+msgid "Image Rating"
+msgstr "Hodnotenie obrázku"
+
+msgctxt "#30717"
+msgid "Keyword"
+msgstr "Kľúčové slovo"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "Kategória"
+
+msgctxt "#30719"
+msgid "Supplemental Category"
+msgstr "Doplnková kategória"
+
+msgctxt "#30720"
+msgid "Person"
+msgstr "Osoba"
+
+msgctxt "#30721"
+msgid "Image Width"
+msgstr "Šírka obrázku"
+
+msgctxt "#30722"
+msgid "Image Length"
+msgstr "Výška obrázku"
+
+msgctxt "#30723"
+msgid "Orientation"
+msgstr "Orientácia"

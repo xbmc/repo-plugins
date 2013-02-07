@@ -1,0 +1,681 @@
+# XBMC Media Center language file
+# Addon Name: My Pictures Database
+# Addon id: plugin.image.mypicsdb
+# Addon Provider: Xycl, MikeBZH44, Alexsolex
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/xbmc-addons/language/pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30000"
+msgid "MyPicture Database"
+msgstr "Baza danych MyPicture"
+
+msgctxt "#30001"
+msgid "Database"
+msgstr "Baza danych"
+
+msgctxt "#30002"
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+msgctxt "#30003"
+msgid "%B %Y"
+msgstr "%B %Y"
+
+msgctxt "#30004"
+msgid "%Y"
+msgstr "%Y"
+
+msgctxt "#30005"
+msgid "Mo.|Tu.|We.|Th.|Fr.|Sa.|Su."
+msgstr "Po|Wt|Śr|Cz|Pt|So|Nie"
+
+msgctxt "#30006"
+msgid "Jan.|Feb.|Mar|Apr.|May|Jun.|Jul.|Aug.|Sep.|Oct.|Nov.|Dec."
+msgstr "Sty|Luty|Marz|Kwie|Maj|Czer|Lip|Sier|Wrz|Paź|Lis|Gru"
+
+msgctxt "#30007"
+msgid "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"
+msgstr "Poniedziałek|Wtorek|Środa|Czwartek|Piątek|Sobota|Niedziela"
+
+msgctxt "#30008"
+msgid "January|February|March|April|May|June|July|August|September|October|November|December"
+msgstr "Styczeń|Luty|Marzec|Kwiecień|Maj|Czerwiec|Lipiec|Sierpień|Wrzesień|Październik|Listopad|Grudzień"
+
+msgctxt "#30020"
+msgid "Picture folder"
+msgstr "Folder Zdjęć"
+
+msgctxt "#30021"
+msgid "Remove from database missing pictures"
+msgstr "Usuń z bazy danych brakujące zdjęcia"
+
+msgctxt "#30022"
+msgid "Recursive scan ( all sub-folders will be scanned for pictures )"
+msgstr "Skanowanie rekursywne (zdjęcia będą przeskanowane we wszystkich podfolderach)"
+
+msgctxt "#30023"
+msgid "Picture extensions"
+msgstr "Rozszerzenia zdjęć"
+
+msgctxt "#30024"
+msgid "Perform scan at addon startup"
+msgstr "Uruchom skanowanie po wystartowaniu dodatku"
+
+msgctxt "#30025"
+msgid "Initialize the database at next addon startup"
+msgstr "Przy następnym uruchomieniu dodatku zainicjuj bazę danych"
+
+msgctxt "#30026"
+msgid "Use the picture as fanart for pictures"
+msgstr "Użyj tego zdjęcia jako fanart dla zdjęć"
+
+msgctxt "#30027"
+msgid "Settings for the dialog scan popup"
+msgstr "Ustawienia dla wyskakującego okna skanowania"
+
+msgctxt "#30028"
+msgid "Video extensions"
+msgstr "Rozszerzenia Wideo"
+
+msgctxt "#30029"
+msgid "Use the videos"
+msgstr "Użyj wideo"
+
+msgctxt "#30030"
+msgid "General"
+msgstr "Ogólny"
+
+msgctxt "#30031"
+msgid "Files"
+msgstr "FILES"
+
+msgctxt "#30032"
+msgid "Age of recent files (days)"
+msgstr "Wiek ostatnich plików (w dnaich)"
+
+msgctxt "#30033"
+msgid "Menu Items"
+msgstr "Pozycje Menu"
+
+msgctxt "#30034"
+msgid "Display all items"
+msgstr "Wyświetl wszystkie elementy"
+
+msgctxt "#30035"
+msgid "Number of pics per page"
+msgstr "Ilość zdjęć na stronę"
+
+msgctxt "#30040"
+msgid "Only display pictures with rating of at least"
+msgstr "Pokazuj jedynie zdjęcia z oceną co najmniej"
+
+msgctxt "#30041"
+msgid "All"
+msgstr "Wszystkie"
+
+msgctxt "#30042"
+msgid "1 star"
+msgstr "1 gwiazdka"
+
+msgctxt "#30043"
+msgid "2 stars"
+msgstr "2 gwiazdki"
+
+msgctxt "#30044"
+msgid "3 stars"
+msgstr "3 gwiazdki"
+
+msgctxt "#30045"
+msgid "4 stars"
+msgstr "4 gwiazdki"
+
+msgctxt "#30046"
+msgid "5 stars"
+msgstr "5 gwiazdek"
+
+msgctxt "#30050"
+msgid "Pics"
+msgstr "Zdjęcia"
+
+msgctxt "#30051"
+msgid "Videos"
+msgstr "WIDEO"
+
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Tagi"
+
+msgctxt "#30060"
+msgid "Locate on disk"
+msgstr "Umieść na dysku"
+
+msgctxt "#30061"
+msgid "Archive those pictures"
+msgstr "Archiwizuj te zdjęcia"
+
+msgctxt "#30062"
+msgid "Export those pictures to..."
+msgstr "Eksportuj te zdjęcia do..."
+
+msgctxt "#30063"
+msgid "Add the file to archive :"
+msgstr "Dodaj ten plik do archiwum:"
+
+msgctxt "#30064"
+msgid "The archive '%s' already exists in"
+msgstr "Archiwum '%s' już istnieje w "
+
+msgctxt "#30065"
+msgid "Overwrite ?"
+msgstr "Nadpisać?"
+
+msgctxt "#30066"
+msgid "Archive canceled."
+msgstr "Archiwizacja anulawna."
+
+msgctxt "#30067"
+msgid "Adding the picture to archive..."
+msgstr "Dodawanie zdjęć do archiwum..."
+
+msgctxt "#30068"
+msgid "The archiving has been canceled !"
+msgstr "Archwizacja została anulowana!"
+
+msgctxt "#30069"
+msgid "%s errors while archiving %s files"
+msgstr "Wystąpiło %s błędów podczas archiwizacji %s plików"
+
+msgctxt "#30070"
+msgid "%s pictures successfully archived !!"
+msgstr "Pomyślnie zarchiwizowano %s zdjęć!!"
+
+msgctxt "#30071"
+msgid "Localization of the picture on disk"
+msgstr "Lokalizacja zdjęcia na dysku"
+
+msgctxt "#30090"
+msgid "Pictures without City"
+msgstr "Zdjęcia bez miasta"
+
+msgctxt "#30091"
+msgid "Pictures without Country"
+msgstr "Zdjęcia bez kraju"
+
+msgctxt "#30092"
+msgid "Other pictures in '%s'"
+msgstr "Inne zdjęcia z '%s'"
+
+msgctxt "#30093"
+msgid "Browse by Geography"
+msgstr "Przeglądaj geograficznie"
+
+msgctxt "#30094"
+msgid "Pictures without supplemental category"
+msgstr "Zdjęcia bez dodatkowej kategorii"
+
+msgctxt "#30095"
+msgid "Browse by Supplemental Category"
+msgstr "Przeglądaj po dodatkowej kategorii"
+
+msgctxt "#30096"
+msgid "Pictures without categories"
+msgstr "Zdjęcia bez kategorii"
+
+msgctxt "#30097"
+msgid "Browse by Category"
+msgstr "Przęglądaj po kategoriach"
+
+msgctxt "#30098"
+msgid "Global search"
+msgstr "Globalne wyszukiwanie"
+
+msgctxt "#30099"
+msgid "Paths of picture folders"
+msgstr "Ścieżka do folderów zdjęć"
+
+msgctxt "#30100"
+msgid "All images from %s (%s pics)"
+msgstr "Wszystkie zdjęcia z %s (%s zdjęć)"
+
+msgctxt "#30101"
+msgid "Browse by Date"
+msgstr "Przeglądaj po dacie"
+
+msgctxt "#30102"
+msgid "Browse by Folders"
+msgstr "Przeglądaj po folderach"
+
+msgctxt "#30103"
+msgid "Browse by Keywords"
+msgstr "Przeglądaj po słowach kluczowych"
+
+msgctxt "#30104"
+msgid "No keyword pictures"
+msgstr "Brak zdjęć ze słowami kluczowymi"
+
+msgctxt "#30105"
+msgid "Date ranges"
+msgstr "Zakres dat"
+
+msgctxt "#30106"
+msgid "Add a new date range"
+msgstr "Dodaj nowy zakres dat"
+
+msgctxt "#30107"
+msgid "Choose the start date"
+msgstr "Wybierz datę początkową"
+
+msgctxt "#30108"
+msgid "Choose the end date"
+msgstr "Wybierz datę końcową"
+
+msgctxt "#30109"
+msgid "Pics from %s to %s"
+msgstr "Zdjęcia od %s do %s"
+
+msgctxt "#30110"
+msgid "Input a title for this date range :"
+msgstr "Wprowadź tytuł dla tego zakresu dat:"
+
+msgctxt "#30111"
+msgid "Delete this date range"
+msgstr "Usuń ten zakres dat"
+
+msgctxt "#30112"
+msgid "Rename this date range"
+msgstr "Zmień tytuł tego zakresu dat"
+
+msgctxt "#30113"
+msgid "From %s to %s"
+msgstr "Od %s do %s"
+
+msgctxt "#30114"
+msgid "Input manually date"
+msgstr "Wprowadź datę ręcznie"
+
+msgctxt "#30115"
+msgid "Word to search for"
+msgstr "Słowa do wyszukania"
+
+msgctxt "#30116"
+msgid "%s results for '%s' in '%s'"
+msgstr "%s wyników dla '%s' w '%s'"
+
+msgctxt "#30117"
+msgid "Start date of the date range"
+msgstr "Data początkowa zakresu"
+
+msgctxt "#30118"
+msgid "End date of the date range"
+msgstr "Data końcowa zakresu"
+
+msgctxt "#30119"
+msgid "The search for '%s' did not match in the whole database"
+msgstr "Poszukiwanie frazy '%s' nie zwróciło żadnych wyników"
+
+msgctxt "#30120"
+msgid "Browse by Persons"
+msgstr "Przeglądaj po Osobie"
+
+msgctxt "#30121"
+msgid "Pictures without persons"
+msgstr "Zdjęcia bez osób"
+
+msgctxt "#30122"
+msgid "Browse by Tags"
+msgstr "Przeglądaj po Tagach"
+
+msgctxt "#30123"
+msgid "Help"
+msgstr "Pomoc"
+
+msgctxt "#30130"
+msgid "The %s latest pics"
+msgstr "%s najnowszych zdjęć"
+
+msgctxt "#30131"
+msgid "Recent pics (number of images)"
+msgstr "Ostatnie zdjęcia (liczba zdjęć)"
+
+msgctxt "#30150"
+msgid "Collections"
+msgstr "Kolekcje"
+
+msgctxt "#30151"
+msgid "Remove from the collection"
+msgstr "Usuń z kolecji"
+
+msgctxt "#30152"
+msgid "Add to collection..."
+msgstr "Dodaj do kolecji..."
+
+msgctxt "#30153"
+msgid "Input a new title"
+msgstr "Wprowadź nowy tytuł"
+
+msgctxt "#30154"
+msgid "Picture added in"
+msgstr "Zdjęcie dodane w "
+
+msgctxt "#30155"
+msgid "Input a title for the new collection"
+msgstr "Wprowadź tytuł dla nowej kolecji"
+
+msgctxt "#30156"
+msgid "Choose a collection"
+msgstr "Wybierz kolecję"
+
+msgctxt "#30157"
+msgid "New collection"
+msgstr "Nowa kolekcja"
+
+msgctxt "#30158"
+msgid "Remove this collection"
+msgstr "Usuń tą kolecję"
+
+msgctxt "#30159"
+msgid "Rename this collection"
+msgstr "Zmień tytuł tej kolecji"
+
+msgctxt "#30160"
+msgid "Create a new collection"
+msgstr "Stwórz nową kolekcję"
+
+msgctxt "#30161"
+msgid "%s pictures added in"
+msgstr "%s zdjęć dodanych w "
+
+msgctxt "#30180"
+msgid "Choose the destination for the export"
+msgstr "Wybierz cel exportu"
+
+msgctxt "#30181"
+msgid "Do you want to create a folder to export pictures ?"
+msgstr "Czy chcesz utwórzyć folder by wyeksportować zdjęcia?"
+
+msgctxt "#30182"
+msgid "Input the folder name"
+msgstr "Wprowadź nazwę folderu"
+
+msgctxt "#30183"
+msgid "picture export canceled !"
+msgstr "Anulowano eksport zdjęć!"
+
+msgctxt "#30184"
+msgid "Picture exporting..."
+msgstr "Eksportowanie zdjęć..."
+
+msgctxt "#30185"
+msgid "Exporting '%s' to :"
+msgstr "Eksportowanie '%s' do:"
+
+msgctxt "#30186"
+msgid "a file '%s' already exists"
+msgstr "plik '%s' już istnieje"
+
+msgctxt "#30187"
+msgid "Overwrite ?"
+msgstr "Nadpisać?"
+
+msgctxt "#30188"
+msgid "Export finished !"
+msgstr "Zakończono eksport!"
+
+msgctxt "#30189"
+msgid "%s pictures copied to %s"
+msgstr "skopiowano %s zdjęć do %s"
+
+msgctxt "#30190"
+msgid "Exported pictures"
+msgstr "Wyeksportowane zdjęcia"
+
+msgctxt "#30201"
+msgid "Folder to scan"
+msgstr "Folder do skanowania"
+
+msgctxt "#30202"
+msgid "Browse this folder recursively"
+msgstr "Przeglądaj ten folder rekursywnie"
+
+msgctxt "#30203"
+msgid "Delete the database entries if picture does not exists anymore"
+msgstr "Usuwaj wpisy z bazy danych jeżeli zdjęcie już nie istnieje"
+
+msgctxt "#30204"
+msgid "Path added !"
+msgstr "Dodano ścieżkę!"
+
+msgctxt "#30205"
+msgid "Path deleted !"
+msgstr "Usunięto ścieżkę!"
+
+msgctxt "#30206"
+msgid "Do a scan now"
+msgstr "Wykonaj teraz skanowanie"
+
+msgctxt "#30207"
+msgid "Delete this path from database"
+msgstr "Usuń tę ścieżkę z bazy danych"
+
+msgctxt "#30208"
+msgid "[B]Add[/B] a path to database"
+msgstr "[B]Dodaj[/B] ścieżkę do bazy danych"
+
+msgctxt "#30209"
+msgid "Uploads from last %s days"
+msgstr "Wysłane z ostatnich %s dni"
+
+msgctxt "#30210"
+msgid "Remove this path from excluded"
+msgstr "Usuń tę ścieżkę z wykluczonych"
+
+msgctxt "#30211"
+msgid "Add a folder to [B]exclude[/B]"
+msgstr "Dodaj folder do [B]wykluczonych[/B]"
+
+msgctxt "#30212"
+msgid "Exclude this folder from database"
+msgstr "Wyklucz ten folder z bazy danych"
+
+msgctxt "#30213"
+msgid "Scan all paths"
+msgstr "Skanuj wszystkie ścieżki"
+
+msgctxt "#30214"
+msgid "Yes = scan all pictures."
+msgstr "Tak = skanuj wszystkie zdjęcia."
+
+msgctxt "#30215"
+msgid "No = scan only modified/new pictures."
+msgstr "Nie = skanuj jedynie nowe/zmodyfikowane zdjęcia."
+
+msgctxt "#30217"
+msgid "You must rescan the folders"
+msgstr "Musisz ponownie przeskanować foldery"
+
+msgctxt "#30218"
+msgid "to exclude the pictures!"
+msgstr "by wykluczyć zdjęcia!"
+
+msgctxt "#30220"
+msgid "Geolocation"
+msgstr "Geolokacja"
+
+msgctxt "#30221"
+msgid "Fetching the map... (%0.2f%%)"
+msgstr "Pobieranie mapy... (%0.2f%%)"
+
+msgctxt "#30222"
+msgid "Zoom=%s"
+msgstr "Powiększenie=%s"
+
+msgctxt "#30223"
+msgid "Use up / down arrows to zoom in / out"
+msgstr "Użyj strzałek góra/dół by powiększyć/pomniejszyć"
+
+msgctxt "#30241"
+msgid "preparing"
+msgstr "przygotowywanie"
+
+msgctxt "#30242"
+msgid "refreshing"
+msgstr "odświeżanie"
+
+msgctxt "#30243"
+msgid "passing"
+msgstr "podawanie"
+
+msgctxt "#30244"
+msgid "adding"
+msgstr "dodawanie"
+
+msgctxt "#30245"
+msgid "re-scan"
+msgstr "ponowne skanowanie"
+
+msgctxt "#30246"
+msgid "deleting"
+msgstr "usuwanie"
+
+msgctxt "#30247"
+msgid "Please wait..."
+msgstr "Proszę czekać..."
+
+msgctxt "#30248"
+msgid "%s scanned / %s added / %s deleted / %s modified"
+msgstr "%s przeskanowanych / %s dodanych / %s usuniętych / %s zmodyfikowanych"
+
+msgctxt "#30300"
+msgid "file name"
+msgstr "nazwa pliku"
+
+msgctxt "#30301"
+msgid "path"
+msgstr "ścieżka"
+
+msgctxt "#30302"
+msgid "path (thumbnail)"
+msgstr "ścieżka (miniatura)"
+
+msgctxt "#30303"
+msgid "Show the slideshow"
+msgstr "Wyświetl pokaz slajdów"
+
+msgctxt "#30600"
+msgid "Filter Wizard"
+msgstr "Kreator filtrów"
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr "Tagi"
+
+msgctxt "#30602"
+msgid "Contents"
+msgstr "Zawartość"
+
+msgctxt "#30610"
+msgid "Please select tags (red checkbox means \"not\")"
+msgstr "Wybierz proszę tagi (czerwony checkbox oznacza 'nie')"
+
+msgctxt "#30611"
+msgid "1 tag checked"
+msgstr "zaznaczono 1 tag"
+
+msgctxt "#30612"
+msgid "%s tags checked"
+msgstr "zaznaczono %s tagów"
+
+msgctxt "#30613"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr "Anuluj"
+
+msgctxt "#30615"
+msgid "Match all tags"
+msgstr "Dopasuj wszystkie tagi"
+
+msgctxt "#30620"
+msgid "Translate your tags"
+msgstr "Przetłumacz swoje tagi"
+
+msgctxt "#30621"
+msgid "Close Editor"
+msgstr "Zamknij edytor"
+
+msgctxt "#30622"
+msgid "Leave translation empty to hide tag type in MyPicsDB"
+msgstr "Pozostaw tlumaczenie pustym aby ukryć typ taga w MyPicsDB"
+
+msgctxt "#30623"
+msgid "Translation for %s"
+msgstr "Tłumaczenie dla %s"
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "Diagnozowanie błędów"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "Użytkownik"
+
+msgctxt "#30665"
+msgid "Password"
+msgstr "Hasło"
+
+msgctxt "#30667"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30700"
+msgid "Country"
+msgstr "Kraj"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "Prowincja/stan"
+
+msgctxt "#30703"
+msgid "City"
+msgstr "Miasto"
+
+msgctxt "#30704"
+msgid "Location"
+msgstr "Lokalizacja"
+
+msgctxt "#30709"
+msgid "Description"
+msgstr "Opis"
+
+msgctxt "#30710"
+msgid "Headline"
+msgstr "Nagłówek"
+
+msgctxt "#30711"
+msgid "Title"
+msgstr "Tytuł"
+
+msgctxt "#30715"
+msgid "Label"
+msgstr "Wytwórnia"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "Kategoria"
+
+msgctxt "#30723"
+msgid "Orientation"
+msgstr "Orientacja"

@@ -1,0 +1,113 @@
+# XBMC Media Center language file
+# Addon Name: My Pictures Database
+# Addon id: plugin.image.mypicsdb
+# Addon Provider: Xycl, MikeBZH44, Alexsolex
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Norwegian (http://www.transifex.com/projects/p/xbmc-addons/language/no/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: no\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Database"
+msgstr "Database"
+
+msgctxt "#30030"
+msgid "General"
+msgstr "Generelt"
+
+msgctxt "#30031"
+msgid "Files"
+msgstr "Filer"
+
+msgctxt "#30041"
+msgid "All"
+msgstr "Alle"
+
+msgctxt "#30050"
+msgid "Pics"
+msgstr "Bilder"
+
+msgctxt "#30051"
+msgid "Videos"
+msgstr "Videoer"
+
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Etiketter"
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr "Etiketter"
+
+msgctxt "#30613"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr "Avbryt"
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "Feilsøking"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "Bruker"
+
+msgctxt "#30665"
+msgid "Password"
+msgstr "Passord"
+
+msgctxt "#30667"
+msgid "Port"
+msgstr "Port"
+
+msgctxt "#30700"
+msgid "Country"
+msgstr "Land"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "Region"
+
+msgctxt "#30703"
+msgid "City"
+msgstr "By"
+
+msgctxt "#30704"
+msgid "Location"
+msgstr "Sted"
+
+msgctxt "#30709"
+msgid "Description"
+msgstr "Beskrivelse"
+
+msgctxt "#30710"
+msgid "Headline"
+msgstr "Overskrift"
+
+msgctxt "#30711"
+msgid "Title"
+msgstr "Tittel"
+
+msgctxt "#30715"
+msgid "Label"
+msgstr "Navn"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "Kategori"
+
+msgctxt "#30723"
+msgid "Orientation"
+msgstr "Orientering "

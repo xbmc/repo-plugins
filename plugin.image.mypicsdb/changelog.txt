@@ -1,3 +1,96 @@
+2013/02/06--> v 2.0.0
+Added:  Productive Frodo Version
+
+2013/02/05--> v 1.9.24
+Update: New translations for tag types: Image Model, Image Make and Image Artist
+
+2013/02/05--> v 1.9.22
+Fix:    Infinitive loop in EXIF parser due to malformed pictures fixed.
+
+2013/02/04--> v 1.9.21
+Update: EXIF tag "Image Artist" added
+
+2013/02/04--> v 1.9.20
+Update: Additional skins removed
+
+2013/02/01--> v 1.9.19
+Fix:    DB version check was wrong
+
+2013/01/25 --> v 1.9.18
+Fix:    Geo-Location decommissioned due to bug in Frodo
+Update: XMP mwg-rs:RegionList Face recognition tags now supported
+Update: Language files from Transifex
+
+2013/01/25 --> v 1.9.17
+Fix:    English language file corrected
+
+2013/01/25 --> v 1.9.15
+Update: Source code cleanup
+
+2013/01/22 --> v 1.9.14
+Fix:    Fixed unicode error in pathscanner.py
+
+2013/01/22 --> v 1.9.13
+Fix:    Error in parameters parsing corrected
+Fix:    English language file corrected
+
+2013/01/21 --> v 1.9.12
+ATTENTION: Database update forces a re-scan of all pictures!
+Update: Tag translations are now part of the Transifex translations
+Update: Language files from Transifex
+Fix:    DB initialization fixed.
+
+2013/01/17 --> v 1.9.11
+Update: Latest translations
+
+2013/01/16 --> v 1.9.10
+Update: Logging step 2
+Update: Scanning can be cancelled by clicking on the close button of the scan dialog
+
+2013/01/15 --> v 1.9.9
+Update: New logging introduced
+
+2013/01/10 --> v 1.9.8
+Fix:    Problem with plus sign in path names fixed.
+
+2013/01/09 --> v 1.9.7
+Fix:    Video files fixed.
+
+2013/01/07 --> v 1.9.6
+Fix:    Global search works again (broken after cleanup of DB)
+Fix:    Excluded paths work again (broken after deployment of new file scanner)
+
+2013/01/01 --> v 1.9.5
+Update: Files which Sha value isn't changed won't be re-scanned
+Update: Latest translations pulled.
+
+2013/01/01 --> v 1.9.4
+Fix:    Problem with "&" in tags fixed.
+
+2012/12/27 --> v 1.9.3
+Fix:    Obsolete debug print removed which caused unicode exceptions
+Update: Progress Bar re-enabled
+
+2012/12/23 --> v 1.9.2
+Update: Language files from Transifex
+
+2012/12/19 --> v 1.9.1
+Fix:    scanpaths.py unicode issues in tag parsers
+Fix:    GPS tags
+
+2012/12/18 --> v 1.9.0 First Frodo only Beta version
+Update: scanpaths.py now supports remote shares
+Update: default.py now supports multi paths
+Update: Files table doesn't anymore contain tags
+
+2012/12/12 --> v 1.2.11
+Fix:    Changed all files to Unix style line break
+Update: New EXIF parser
+Fix:    Synonym for Iptc4xmpCore:Country changed from 'Country' to 'Country Code'
+
+2012/12/12 --> v 1.2.10
+Fix:    Skin set properties for picture categories produced an SQL error.
+
 2012/12/03 --> v 1.2.9
 Update: Changed version number to 3 digits due to request from XBMC team
 

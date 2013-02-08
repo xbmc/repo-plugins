@@ -2,8 +2,8 @@ import xbmc, xbmcaddon, xbmcgui, xbmcplugin
 import os
 import re
 
-ADDON = xbmcaddon.Addon(id='plugin.video.filmon')
-language = ADDON.getLocalizedString
+ADDON= xbmcaddon.Addon(id='plugin.video.filmon')
+language=ADDON.getLocalizedString
 
      
         

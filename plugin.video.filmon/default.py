@@ -96,9 +96,9 @@ ses = xbmcgui.Window(10000).getProperty("SessionID")
                 
 def GROUPS():       
         if ADDON.getSetting('filmon') == 'true':
-                ADD_DIRECTORY_ITEM(language(30059),'url',5,'http://www.filmon.com/tv/themes/filmontv/img/mobile/filmon-logo-stb.png','','','','','','','','')
+                ADD_DIRECTORY_ITEM(language(30059),'url',5,'http://www.filmon.com/tv/themes/filmontv/img/mobile/filmon-logo-stb.png','','','','','','','','','')
         if ADDON.getSetting('filmon') == 'true':
-                        ADD_DIRECTORY_ITEM(language(30060),'url',9,'http://www.filmon.com/tv/themes/filmontv/images/category/favorites_stb.png','','','','','','','','')                                
+                        ADD_DIRECTORY_ITEM(language(30060),'url',9,'http://www.filmon.com/tv/themes/filmontv/images/category/favorites_stb.png','','','','','','','','','')                                
         grp='http://www.filmon.com/api/groups?session_key=%s' % (ses)
         link = net.http_GET(grp).content
         data = json.loads(link)
@@ -107,10 +107,10 @@ def GROUPS():
                 name = field['group']
                 iconimage= field['logo_148x148_uri']
                 name = name.encode("utf-8")
-                ADD_DIRECTORY_ITEM(name,url,3,iconimage,'','','','','','','','')
+                ADD_DIRECTORY_ITEM(name,url,3,iconimage,'','','','','','','','',name)
                 setView('tvshows', 'default') 
         
-def CHANNELS(name,url):
+def CHANNELS(name,url,group):
         if ADDON.getSetting('firstrun') == 'false':
                 dialog = xbmcgui.Dialog()
                 if dialog.yesno(language(30021),language(30022),'',language(30023),language(30024),language(30025)):
@@ -194,11 +194,11 @@ def CHANNELS(name,url):
         for field in data['channels']:
             programme_id = field["id"]
             name = field["title"]
-            icon = field["logo"]
+            icon = field["big_logo"]
             iconimage = str(icon).replace('/logo','/extra_big_logo')
             description = ''
             name = name.encode("utf-8")
-            ADD_DIRECTORY_ITEM(name,'url',12,iconimage,description,programme_id,'','','','tvguide',programme_id,'')
+            ADD_DIRECTORY_ITEM(name,'url',12,iconimage,description,programme_id,'','','','tvguide',programme_id,'',group)
             setView('episodes', 'default') 
             
     
@@ -226,6 +226,8 @@ def GET_STREAM_RESOLUTION(channels,resolution,watch_timeout):
      
                       
 def GET_STREAMS(url):
+        dp = xbmcgui.DialogProgress()
+        dp.create("FilmOn",'Please Wait While We Load Your Stream','')
         ses=GET_SESSION_ID()
         url='http://www.filmon.com/api/channel/%s?session_key=%s' % (url,ses)
         print '============ GETTING NEW SESSION_ID = %s  =================='%(ses)
@@ -239,7 +241,7 @@ def GET_STREAMS(url):
             playpath=stream['name']
             name=stream['quality']
             if re.search('m4v',playpath ,re.IGNORECASE):
-                app = 'vod'
+                app = 'vodlast'
                 swfUrl= 'http://www.filmon.com/tv/modules/FilmOnTV/files/flashapp/filmon/FilmonPlayer.swf'
                 url= stream['url']+'/'+playpath
             else:
@@ -371,7 +373,7 @@ def TV_GUIDE(url,iconimage):
                     name = name.encode('utf-8')
                     description = desc.encode('utf-8')
                     url =str(cid)
-                    ADD_DIRECTORY_ITEM(name,url,2,iconimage,description,'','','record','','',programme_id,startdate_time)
+                    ADD_DIRECTORY_ITEM(name,url,2,iconimage,description,'','','record','','',programme_id,startdate_time,'')
                     setView('movies', 'epg') 
                     
 def RETURN_CHANNEL_NAME_FAVOURITES(url):
@@ -393,7 +395,7 @@ def GET_FAVOURITES(url):
         programme_id=field['channel_id']
         iconimage='http://static.filmon.com/couch/channels/%s/extra_big_logo.png'%(programme_id)
         name=RETURN_CHANNEL_NAME_FAVOURITES(programme_id)
-        ADD_DIRECTORY_ITEM(name,url,12,iconimage,'','',programme_id,'','','tvguide',programme_id,'')
+        ADD_DIRECTORY_ITEM(name,url,12,iconimage,'','',programme_id,'','','tvguide',programme_id,'','')
         setView('movies', 'default') 
                 
 def ADD_FAVOURITES(url):
@@ -429,6 +431,8 @@ def GET_SESSION_ID():
             xbmcgui.Window(10000).setProperty("SessionID", sess)
     return sess
     
+ 
+    
                 
 def get_params():
         param=[]
@@ -449,8 +453,8 @@ def get_params():
         return param
 
         
-def ADD_DIRECTORY_ITEM(name,url,mode,iconimage,description, favorites, deletefav, record, deleterecord, tvguide,programme_id,startdate_time):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&description="+urllib.quote_plus(description)+"&programme_id="+urllib.quote_plus(programme_id)+"&startdate_time="+urllib.quote_plus(startdate_time)
+def ADD_DIRECTORY_ITEM(name,url,mode,iconimage,description, favorites, deletefav, record, deleterecord, tvguide,programme_id,startdate_time,group):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)+"&description="+urllib.quote_plus(description)+"&programme_id="+urllib.quote_plus(programme_id)+"&startdate_time="+urllib.quote_plus(startdate_time)+"&group="+urllib.quote_plus(group)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png",thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot":description} )
@@ -470,13 +474,14 @@ def ADD_DIRECTORY_ITEM(name,url,mode,iconimage,description, favorites, deletefav
         if tvguide:
               menu.append((language(30058),'XBMC.Container.Update(%s?name=None&url=%s&mode=8&iconimage=%s&description=None)'%(sys.argv[0],programme_id,iconimage)))
               liz.addContextMenuItems(items=menu, replaceItems=True)
-        if mode==12:
-              ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
-        else:
+              
+        if not mode==12:
               ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        else:
+              ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
         return ok   
                      
-def PLAY_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,tvguide,programme_id,startdate_time):
+def PLAY_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,tvguide,programme_id,startdate_time,group):
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description } )
         liz.setProperty("IsPlayable","true")
@@ -533,6 +538,7 @@ record=None
 deleterecord=None
 programme_id=None
 startdate_time=None
+group=None
 
 try:
         url=urllib.unquote_plus(params["url"])
@@ -562,6 +568,10 @@ try:
         startdate_time=urllib.unquote_plus(params["startdate_time"])
 except:
         pass
+try:        
+        group=urllib.unquote_plus(params["group"])
+except:
+        pass
         
 
 print "Mode: "+str(mode)
@@ -581,7 +591,7 @@ elif mode==2:
         
 elif mode==3:
         print ""+url
-        CHANNELS(name,url)
+        CHANNELS(name,url,group)
         
 elif mode==4:
         print ""+url
@@ -617,7 +627,7 @@ elif mode==11:
         
 elif mode==12:
         print ""+url
-        PLAY_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,'',programme_id,startdate_time)
+        PLAY_STREAM_LINK(name,url,iconimage,description, favorites, deletefav, record, deleterecord,'',programme_id,startdate_time,group)
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 

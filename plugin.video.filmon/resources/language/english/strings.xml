@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 
 <strings>
-	<!-- XBMC -->
+	<!-- FILMON ACCOUNT -->
 	<string id="30010">FILMON ACCOUNT</string>
 	<string id="30011">Email</string>
     <string id="30012">Password</string>

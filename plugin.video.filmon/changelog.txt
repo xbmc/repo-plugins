@@ -1,10 +1,14 @@
+v4.2.8
+Fix For New Added Channels
+Better Way Of Handling If Directory Is Folder Or Not
+
 v4.2.7
 Bug Fix
 
 v4.2.6
 Fixed News Channels
 
-v4.2.5
+v3.2.5
 Fixed Local Channels
 Frodo Compatible
 
@@ -124,6 +128,7 @@ Added Epg
 
 v1.1
 Added High Strem Too
+
 
 v1.0
 Initial Release

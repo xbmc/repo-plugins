@@ -1,4 +1,8 @@
-Version 3.1.5
+Version 3.1.6
+-------------
+- Fix broken listing of BestOfSvt.se due to site change (linqcan)
+
+-Version 3.1.5
 -------------
 - Add new feature "Kanaler" from site (linqcan)
 - Restore broken A-Z listing (linqcan)

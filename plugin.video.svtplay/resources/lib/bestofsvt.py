@@ -1,9 +1,8 @@
 import CommonFunctions
 import helper as helper
 
-BESTOF_BASE_URL = "http://www.bestofsvt.se"
+BESTOF_BASE_URL = "http://www.bestofsvt.se/index_xbmc.php"
 common = CommonFunctions
-common.plugin = "SVT Play 3:bestofsvt"
 
 
 def getCategories():
@@ -12,7 +11,7 @@ def getCategories():
   """
   html = helper.getPage(BESTOF_BASE_URL)
   
-  menu = common.parseDOM(html, "ul", attrs = { "class": "menu_1"})[0]
+  menu = common.parseDOM(html, "ul", attrs = {"class": "menu_1"})[0]
 
   lis = common.parseDOM(menu, "li")
 
@@ -20,11 +19,13 @@ def getCategories():
 
   for li in lis:
     title = common.parseDOM(li, "a")[0]
-    href = common.parseDOM(li, "a", ret = "href")[0]
+    url = common.parseDOM(li, "a", ret = "href")[0]
     title = common.replaceHTMLCodes(title)
-    categories.append({"title":title,"url":href})
+    url = createUrl(url)
+    categories.append({"title":title,"url":url})
   
   return categories
+
 
 def getShows(url):
   """
@@ -47,3 +48,15 @@ def getShows(url):
     shows.append({"title":title,"url":href,"thumbnail":thumb})
 
   return shows
+
+
+def createUrl(url):
+  """
+  Create a url "?kategori=" from "/kategori/"
+  """
+  common.log("Incoming url: " + url)
+  if url == "/":
+    return "?"
+  newurl = url.lstrip("/")
+  newurl = newurl.split("/")
+  return "?" + newurl[0] + "=" + newurl[1] 

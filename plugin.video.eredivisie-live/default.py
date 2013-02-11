@@ -76,7 +76,7 @@ def addListingDir(item):
   xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
 
 def get_videos(links):
-  results = [{"name": title_re.search(string).group(1), "location": cookies_prefix+base_url+href_re.search(string).group(1)} for string in links if 'video-play-button' in string]
+  results = [{"name": title_re.search(string).group(1), "location": urllib.quote(cookies_prefix+base_url+href_re.search(string).group(1))} for string in links if 'video-play-button' in string]
   return results
 
 def get_bitrates(url):

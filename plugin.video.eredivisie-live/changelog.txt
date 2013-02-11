@@ -15,3 +15,6 @@ Added language support
 
 [B]2.0.4:[/B]
 Fix breakage due to cookielaws
+
+[B]2.0.5:[/B]
+Need to urlencode manually in eden

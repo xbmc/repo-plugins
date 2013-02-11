@@ -7,8 +7,22 @@
     <!-- Default strings -->
     <string id="30001">Página</string>
     <string id="30002">Nuevo</string>
+    <string id="30003">Más vistos</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">Biblioteca (por inicial)</string>
+    <string id="30006">Apertura esta semana</string>
+    <string id="30007">Próximamente</string>
+
+    <!-- Settings -->
+    <string id="30100">Forzar Modo de Vista "Miniaturas"</string>
+    <string id="30101">Ver Trailer</string>
+    <string id="30102">Ver Clips</string>
+    <string id="30103">Mostrar la fuente en el título del video</string>
+    <string id="30110">Resolución de vídeo</string>
+    <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
+    <string id="30120">Content-Type (relacionados con la piel)</string>
     <string id="30121">VIDEOS</string>
     <string id="30122">Películas</string>
 </strings>

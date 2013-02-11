@@ -192,6 +192,10 @@ def play_video(source, url):
             'plugin://plugin.video.youtube/'
             '?action=play_video&videoid=%s' % video_id
         )
+    elif source == 'yahoo-redir':
+        import re
+        vid, res = re.search('id=(.+)&resolution=(.+)', url).groups()
+        url = scraper.get_yahoo_url(vid, res)
     log('Using URL: %s' % url)
     return plugin.set_resolved_url(url)
 

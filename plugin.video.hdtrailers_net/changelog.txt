@@ -1,3 +1,6 @@
+1.0.2
+ - fixed playback of yahoo trailers (some shown with source "hd-trailers.net")
+
 1.0.1
  - fixed coming-soon
  - updated translations

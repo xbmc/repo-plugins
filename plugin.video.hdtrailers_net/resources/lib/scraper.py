@@ -17,6 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+import json
 import urllib2
 from BeautifulSoup import BeautifulSoup
 
@@ -27,6 +28,7 @@ USER_AGENT = 'XBMC Add-on HD-Trailers.net v0.1.0'
 
 SOURCES = (
     'apple.com',
+    'yahoo-redir',
     'yahoo.com',
     'youtube.com',
     'moviefone.com',
@@ -119,6 +121,22 @@ def get_videos(movie_id):
     return movie, trailers, clips
 
 
+def get_yahoo_url(vid, res):
+    data_url = (
+        "http://video.query.yahoo.com/v1/public/yql?"
+        "q=SELECT+*+FROM+yahoo.media.video.streams+WHERE+id='%(video_id)s'+"
+        "AND+format='mp4'+AND+protocol='http'+"
+        "AND+plrs='sdwpWXbKKUIgNzVhXSce__'+AND+"
+        "region='US'&env=prod&format=json"
+    )
+    data = __get_json(data_url % {'video_id': vid})
+    media = data.get('query', {}).get('results', {}).get('mediaObj', [])
+    for stream in media[0].get('streams'):
+        if int(stream.get('height')) == int(res):
+            return stream['host'] + stream['path']
+    raise NotImplementedError
+
+
 def _get_movies(url):
     tree = __get_tree(url)
     movies = [{
@@ -157,6 +175,17 @@ def __get_tree(url):
     log('__get_tree got %d bytes' % len(html))
     tree = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)
     return tree
+
+
+def __get_json(url):
+    log('__get_json opening url: %s' % url)
+    headers = {'User-Agent': USER_AGENT}
+    req = urllib2.Request(url, None, headers)
+    try:
+        response = urllib2.urlopen(req).read()
+    except urllib2.HTTPError, error:
+        raise NetworkError('HTTPError: %s' % error)
+    return json.loads(response)
 
 
 def log(msg):

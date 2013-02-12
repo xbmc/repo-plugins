@@ -76,7 +76,7 @@ class BRAlphaMediathek(Mediathek):
     
   @classmethod
   def name(self):
-    return "BR Alpha";
+    return "BR-Alpha";
     
   def isSearchable(self):
     return False;

@@ -72,12 +72,13 @@ class DreiSatMediathek(Mediathek):
       TreeNode("13","Musik","http://www.3sat.de/mediathek/rss/mediathek_musik.xml",True),
       TreeNode("14","nano","http://www.3sat.de/mediathek/rss/mediathek_nano.xml",True),
       TreeNode("15","neues","http://www.3sat.de/mediathek/rss/mediathek_neues.xml",True),
-      TreeNode("16",u"Peter Voß fragt","http://www.3sat.de/mediathek/rss/mediathek_begegnungen.xml",True),
-      TreeNode("17","Recht brisant","http://www.3sat.de/mediathek/rss/mediathek_Recht%20brisant.xml",True),
-      TreeNode("18","scobel","http://www.3sat.de/mediathek/rss/mediathek_scobel.xml",True),
-      TreeNode("19","SCHWEIZWEIT","http://www.3sat.de/mediathek/rss/mediathek_schweizweit.xml",True),
-      TreeNode("20","Theater","http://www.3sat.de/mediathek/rss/mediathek_theater.xml",True),
-      TreeNode("21","vivo","http://www.3sat.de/mediathek/rss/mediathek_vivo.xml",True),
+      TreeNode("16","makro","http://www.3sat.de/mediathek/rss/mediathek_makro.xml",True),
+      TreeNode("17",u"Peter Voß fragt","http://www.3sat.de/mediathek/rss/mediathek_begegnungen.xml",True),
+      TreeNode("18","Recht brisant","http://www.3sat.de/mediathek/rss/mediathek_Recht%20brisant.xml",True),
+      TreeNode("19","scobel","http://www.3sat.de/mediathek/rss/mediathek_scobel.xml",True),
+      TreeNode("20","SCHWEIZWEIT","http://www.3sat.de/mediathek/rss/mediathek_schweizweit.xml",True),
+      TreeNode("21","Theater","http://www.3sat.de/mediathek/rss/mediathek_theater.xml",True),
+      TreeNode("22","vivo","http://www.3sat.de/mediathek/rss/mediathek_vivo.xml",True),
       );
       
     self.rootLink = "http://www.3sat.de"

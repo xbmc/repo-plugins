@@ -1,3 +1,6 @@
+[B]4.3.3[/B]
+- Fikset: plugin krasjet hvis videobeskrivelse ikke fantes
+
 [B]4.3.2[/B]
 - Sideendringer
 

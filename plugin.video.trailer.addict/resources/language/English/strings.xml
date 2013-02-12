@@ -6,7 +6,7 @@
     <string id="30003">[ Top 150 Films of the Week ]</string>
     <string id="30004">[ Featured Trailers ]</string>
     <string id="30005">No trailers found!</string>
-    <string id="30006">Please report this problem to stacked.xbmc@gmail.com</string>
+    <string id="30006">There are currently no trailers available.</string>
     <string id="30007">Search</string>
 	<string id="30009">No results found for </string>
 	<string id="30010">Try using the Film Database.</string>
@@ -18,4 +18,5 @@
 	<string id="30052">Retry</string>
 	<string id="30053">Quit</string>
 	<string id="30054">There was an index error.</string>
+	<string id="30055">Enable default view for Confluence skin</string>
 </strings>

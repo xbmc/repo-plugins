@@ -142,20 +142,16 @@ def get_media_url(video_id, bitrate):
 
 
 def _get_cached_json(url, node):
-  return _get_cached(url, lambda x: json.loads(x)[node])
-
-def _get_cached(url, transform):
   data = cache.get(url)
   if data:
     try:
-      ret = transform(data)
-      return ret
-    except: # assume data is broken
+      return json.loads(data)[node]
+    except: # cache might be broken
       pass
   data = xhrsession.get(url).text
   cache.delete(url)
   cache.set(url, data)
-  return transform(data)
+  return json.loads(data)[node]
 
 def _thumb_url(id):
   return "http://nrk.eu01.aws.af.cm/t/%s" % id.strip('/')
@@ -165,5 +161,7 @@ def _fanart_url(id):
 
 def _get_descr(url):
   url = "http://nrk.no/serum/api/video/%s" % url.split('/')[3]
-  descr = _get_cached_json(url, 'description')
-  return descr
+  try:
+    return _get_cached_json(url, 'description')
+  except:
+    return ""

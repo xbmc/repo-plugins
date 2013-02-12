@@ -67,7 +67,7 @@ def get_filter_list(filter_string):
   for link in links:
     location = href_re.search(link).group(1)
     if location != '/video/overzicht/':
-      results.append({"name": name_re.search(link).group(1), "location": cookies_prefix+base_url+location})
+      results.append({"name": name_re.search(link).group(1), "location": urllib.quote(cookies_prefix+base_url+location)})
   return results
 
 def addListingDir(item):
@@ -107,7 +107,7 @@ def get_next_page(links):
   result = {"name": __language__(30004)}
   for string in links:
     if 'class="forward active"' in string:
-      result['location'] = cookies_prefix+base_url+href_re.search(string).group(1)
+      result['location'] = urllib.quote(cookies_prefix+base_url+href_re.search(string).group(1))
       return result
 
 def listVideoItems(url):

@@ -17,16 +17,14 @@
 import sys
 import os
 
-import pprint
-
 from constants import Mode
 from debug import info, debug, warn
 from dog import dog
-import qobuz
-from node.flag import NodeFlag as Flag
+from node import Flag
 from exception import QobuzXbmcError
 from gui.util import dialogLoginFailure, getSetting, containerRefresh
-
+import qobuz
+from cache import cache
 def get_checked_parameters():
     """Parse parameters passed to xbmc plugin as sys.argv
     """
@@ -72,27 +70,10 @@ class QobuzBootstrap(object):
         qobuz.rpc = XbmcRPC()
 
     def bootstrap_registry(self):
-        """Bootstrap our registry (access Qobuz data)
-        """
-        from registry import QobuzRegistry
-        streamFormat = 6 if getSetting('streamtype') == 'flac' else 5
-        cacheDurationMiddle = getSetting('cache_duration_middle', 
-                                         isInt=True) * 60
-        cacheDurationLong = getSetting('cache_duration_long', 
-                                       isInt=True) * 60
-        try:
-            qobuz.registry = QobuzRegistry(
-                cacheType='default',
-                username=getSetting('username'),
-                password=getSetting('password'),
-                basePath=qobuz.path.cache,
-                streamFormat=streamFormat, 
-                hashKey=True,
-                cacheMiddle=cacheDurationMiddle,
-                cacheLong=cacheDurationLong
-            )
-            qobuz.registry.get(name='user')
-        except QobuzXbmcError:
+        from api import api
+        cache.base_path = qobuz.path.cache
+        api.stream_format = 6 if getSetting('streamtype') == 'flac' else 5
+        if not api.login(getSetting('username'), getSetting('password')):
             dialogLoginFailure()
             #@TODO sys.exit killing XBMC? FRODO BUG ?
             # sys.exit(1)
@@ -157,18 +138,9 @@ class QobuzBootstrap(object):
         for p in self.params:
             info(self, "Param: " + p + ' = ' + str(self.params[p]))
 
-    def erase_cache(self):
-        """Erasing all cached data
-        """
-        qobuz.registry.delete_by_name('^.*\.dat$')
-
     def dispatch(self):
         """Routing based on parameters
         """
-        #info(self, "Mode: %s, Node: %s" % (Mode.to_s(self.MODE),
-        #      Flag.to_s(int(self.params['nt']))))
-        # info(self, "Parameters:\n %s" % (pprint.pformat(self.params) ))
-         
         if self.MODE == Mode.PLAY:
             from player import QobuzPlayer
             debug(self, "Playing song")
@@ -184,7 +156,7 @@ class QobuzBootstrap(object):
             return r.run()
         elif self.MODE == Mode.VIEW_BIG_DIR:
             r = renderer(self.nodeType, self.params)
-            r.whiteFlag = Flag.TRACK | Flag.PRODUCT
+            r.whiteFlag = Flag.TRACK | Flag.ALBUM
             r.depth = -1
             return r.run()
         elif self.MODE == Mode.SCAN:

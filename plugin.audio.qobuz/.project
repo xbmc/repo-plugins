@@ -15,15 +15,4 @@
 		<nature>com.aptana.projects.webnature</nature>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
-	<filteredResources>
-		<filter>
-			<id>1331459313201</id>
-			<name></name>
-			<type>22</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-true-.*\.py(c|o)</arguments>
-			</matcher>
-		</filter>
-	</filteredResources>
 </projectDescription>

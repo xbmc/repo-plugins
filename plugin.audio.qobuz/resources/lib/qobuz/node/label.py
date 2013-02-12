@@ -14,25 +14,19 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
-import xbmcgui
-import xbmc
-
-import qobuz
-from flag import NodeFlag
 from inode import INode
-from debug import log, warn
+from debug import warn
 from gui.util import getImage, getSetting, lang
-
-'''
-    @class Node_label:
-'''
-
+from node import Flag
+from api import api
 
 class Node_label(INode):
-
-    def __init__(self, parent=None, parameters=None, progress=None):
+    '''
+    @class Node_label:
+    '''
+    def __init__(self, parent=None, parameters=None):
         super(Node_label, self).__init__(parent, parameters)
-        self.type = NodeFlag.LABEL
+        self.nt = Flag.LABEL
         self.set_label(lang(42100))
         self.url = None
         self.is_folder = True
@@ -40,18 +34,17 @@ class Node_label(INode):
 
     def hook_post_data(self):
         self.label = self.get_property('name')
-        self.id = self.get_property('id')
+        self.nid = self.get_property('nid')
 
-    def _build_down(self, xbmc_directory, lvl, whiteFlag, blackFlag):
+    def populate(self, xbmc_directory, lvl, whiteFlag, blackFlag):
         offset = self.get_parameter('offset') or 0
         #@bug: Qobuz service seam do don't return total so pagination is broken
         limit = getSetting('pagination_limit')
-        data = qobuz.registry.get(
-            name='label-list', id=self.id, limit=limit, offset=offset)
+        data = api.get('/label/list', limit=limit, offset=offset)
         if not data:
             warn(self, "No label data")
             return False
-        for item in data['data']['labels']['items']:
+        for item in data['labels']['items']:
             node = Node_label()
             node.data = item
             self.add_child(node)

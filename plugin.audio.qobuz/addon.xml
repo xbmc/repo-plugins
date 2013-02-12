@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.qobuz" name="Qobuz XBMC" version="0.11.0"
+<addon id="plugin.audio.qobuz" name="Qobuz XBMC" version="1.0.0"
 	provider-name="d@corp">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
@@ -12,16 +12,16 @@
 	<extension point="xbmc.addon.metadata">
 		<language>en fr</language>
 		<summary lang="en">Qobuz addon for XBMC.</summary>
-		<description lang="en">&#10;Qobuz addon for XBMC. It enables
-			accessto Qobuz music streaming service. You should enter your Qobuz
-			username and password in the addon settings and you need a valid
-			subscription. (This application uses the Qobuz API but is not
-			certified by Qobuz.)&#10; </description>
-		<description lang="fr">&#10;addon Qobuz pour XBMC. Il permet
+		<description lang="en">Qobuz addon for XBMC. It enables 
+			access to Qobuz music streaming service. 
+			You should enter your Qobuz username and password in the addon
+			settings and you need a valid subscription. 
+			(This application uses the Qobuz API but is not certified by Qobuz.)</description>
+		<description lang="fr">addon Qobuz pour XBMC. Il permet
 			d'accéder à l'ensemble du service streaming de Qobuz. Vous devez
 			fournir un nom d'utilisateur ainsi qu'un mot de passe dans les
-			paramètres de l'addon et un abonnement valide (This application uses
-			the Qobuz API but is not certified by Qobuz.)&#10; </description>
+			paramètres de l'addon et un abonnement valide 
+			(This application uses the Qobuz API but is not certified by Qobuz.)</description>
 		<platform>all</platform>
 	</extension>
 	<extension point="xbmc.service"

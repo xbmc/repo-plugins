@@ -1,3 +1,13 @@
+1.0.0
+-----
+* clean up
+* bugfixes
+* public playlists
+
+0.11.2
+-----
+* fixes and covers
+
 0.11.0 
 -----
 * Add "friends" feature

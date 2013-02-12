@@ -15,37 +15,29 @@
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
 import re
-from debug import debug
-
 
 class dog():
-
+    '''Checking script parameter against regular expression
+    '''
     def __init__(self):
         self.allowed_keys = {
             'mode': '^\d{1,10}$', # Mode View/Scan/BigDir ...
-            'nid':  '^\d{1,14}$', # Node id (node.id)
+            'nid':  '^\d{1,14}$', # Node id (node.nid)
             'nt':   '^\d{1,10}$', # Node type (node.type)
             'qnt':  '^\d{1,20}$', # Node type in query
             'qid':  '^\d{1,14}$', # Node id in query
             'nm': "^[\w\d_]+$",   # Method to be called on node
             'genre-type': '^(\d+|null)$', # Reco params
             'genre-id': '^(\d+|null)$',   # Reco params
-            'url': '^.*$',
             'search-type': "^(artists|tracks|albums)$",
-            'view-filter': "^\d+$",
             'depth': "^(-)?\d+$",
             'query': "^.*$",
-#            'action': "^(scan)$",
             'track-id': "^\d{1,10}$",
-            'name': "^[\w\d_.]+$",
             'parent-id': "^\d{1,10}$",
             'offset': "^\d{1,10}$",
-#            'fakeExt': '^FakeFile\.flac$'
         }
 
-    ''' Match value against regexp '''
     def kv_is_ok(self, key, value):
-#        debug(self, key + ' - ' + value)
         if key not in self.allowed_keys:
             return False
         match = None

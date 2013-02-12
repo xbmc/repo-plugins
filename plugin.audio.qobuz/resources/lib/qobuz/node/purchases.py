@@ -14,37 +14,34 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
-import qobuz
-from flag import NodeFlag
 from inode import INode
 from debug import warn
+from api import api
+from node import Flag, getNode
 from gui.util import lang, getImage, getSetting
-
-from product import Node_product
-from track import Node_track
 
 class Node_purchases(INode):
     '''Displaying product purchased by user (track and album)
     '''
-    def __init__(self, parent=None, params=None):
-        super(Node_purchases, self).__init__(parent, params)
+    def __init__(self, parent=None, parameters=None):
+        super(Node_purchases, self).__init__(parent, parameters)
         self.label = lang(30100)
-        self.type = NodeFlag.PURCHASES
+        self.nt = Flag.PURCHASES
         self.content_type = 'albums'
         self.image = getImage('album')
         self.offset = self.get_parameter('offset') or 0
         
-    def pre_build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         limit = getSetting('pagination_limit')
-        data = qobuz.registry.get(
-            name='user-purchases', limit=limit, offset=self.offset)
+        data = api.get('/purchase/getUserPurchases', limit=limit, 
+                           offset=self.offset, user_id=api.user_id)
         if not data:
             warn(self, "Cannot fetch purchases data")
             return False
-        self.data = data['data']
+        self.data = data
         return True
         
-    def _build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
         if 'albums' in self.data:
             self.__populate_albums(Dir, lvl, whiteFlag, blackFlag)
         elif 'tracks' in self.data:
@@ -52,14 +49,14 @@ class Node_purchases(INode):
 
     def __populate_albums(self, Dir, lvl, whiteFlag, blackFlag):
         for album in self.data['albums']['items']:
-            node = Node_product()
+            node = getNode(Flag.ALBUM)
             node.data = album
             self.add_child(node)
         return list
     
     def __populate_tracks(self, Dir, lvl, whiteFlag, blackFlag):
         for track in self.data['tracks']['items']:
-            node = Node_track()
+            node = getNode(Flag.TRACK)
             node.data = track
             self.add_child(node)
         return list

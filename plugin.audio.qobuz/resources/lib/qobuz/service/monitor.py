@@ -21,7 +21,6 @@ from time import time
 import xbmcaddon
 import xbmcgui
 import xbmc
-import cPickle as pickle
 
 pluginId = 'plugin.audio.qobuz'
 __addon__ = xbmcaddon.Addon(id=pluginId)
@@ -35,20 +34,12 @@ qobuzDir = xbmc.translatePath(os.path.join(libDir, 'qobuz'))
 sys.path.append(libDir)
 sys.path.append(qobuzDir)
 
-from exception import QobuzXbmcError
 from bootstrap import QobuzBootstrap
 from debug import warn, log
-import qobuz
-from util.file import FileUtil
-from gui.util import containerRefresh, notifyH, getImage, executeBuiltin, \
-    setResolvedUrl
-from node.track import Node_track
 from api import api
 import threading
-from xbmcrpc import rpc
-from util import getNode
-from node.flag import NodeFlag as Flag
-
+from cache import cache
+from cache.cacheutil import clean_old
 keyTrackId = 'QobuzPlayerTrackId'
 keyMonitoredTrackId = 'QobuzPlayerMonitoredTrackId'
 
@@ -127,56 +118,57 @@ class MyPlayer(xbmc.Player):
         self.trackId = None
         return False
 
-#    def onQueueNextItem(self):
-#        return True
-#        nid  = self.getProperty(keyTrackId) 
-#        warn (self, "next item queued from monitor !!!!!!" + nid )
-#        pos = self.playlist().getposition()
-#        if pos == -1:
-#            print "-1"
-#            pos = len(self.playlist()) - 1
-#        res = rpc.getInfoLabels(labels=['Container(50).Position','MusicPlayer.PlaylistPosition', 'MusicPlayer.PlaylistLength', 'ListItem.FileName']).result()
-#        pos = res['Container(50).Position']
-#        if not pos:
-#            pos = len(self.playlist())
-#        pos = int(pos) - 1
-#        print "Position: %s" % (repr(pos))
-#        itempath = self.playlist()[pos].getfilename()
-#
-#        print "Item: %s" % (itempath)
-#        label = xbmc.getInfoLabel('ListItem.Path')
-#        print "Label: %s" % (label)
-#        import re
-#        m = re.search('^musicdb://.*/(\d+)(\?.*)$', itempath)
-#        if m:
-#            res = rpc.getSongDetails(m.group(1)).result()
-#            print "GetInfo %s" % (res)
-#            m2 = re.search('"qobuz_track_id": "(\d+)"', 
-#                           res['songdetails']['comment'])
-#            node = getNode(Flag.TRACK, {'nid': m2.group(1)})
-#            node.pre_build_down(None, None,None, Flag.NONE)
-#            self.play(node.get_streaming_url(), 
-#                                          node.makeListItem(), True)
-#            self.playlist().add(node.get_streaming_url(), node.makeListItem(), pos + 1)
-#            self.playlist().remove(itempath)
-#            setResolvedUrl(handle=qobuz.boot.handle,
-#            succeeded=True,
-#            listitem=node.makeListItem())
-#            return True
-#        print m.group(1)
-#        print "GetInfo %s" % (rpc.getSongDetails().result())
-#        return super(MyPlayer, self).onQueueNextItem()
-
 class Monitor(xbmc.Monitor):
 
-    def __init__(self, qobuz):
+    def __init__(self):
         super(Monitor, self).__init__()
         self.abortRequested = False
-        self.garbage_refresh = 60 * 5
+        self.garbage_refresh = 60
         self.last_garbage_on = time() - (self.garbage_refresh + 1)
 
     def onAbortRequested(self):
         self.abortRequested = True
+
+    def onDatabaseUpdated( self, database ):
+        import sqlite3 as lite
+        if database != 'music':
+            return 0
+        dbfile = os.path.join(xbmc.translatePath('special://profile/')
+                              ,"Database","MyMusic32.db")
+        try:
+            con = lite.connect(dbfile)
+            cur = con.cursor()    
+            cur.execute('SELECT DISTINCT(IdAlbum), comment from song')
+            data = cur.fetchall()
+            for line in data:
+                musicdb_idAlbum = line[0]
+                import re
+                try:
+                    qobuz_idAlbum = re.search(u'aid=(\d+)', line[1]).group(1)
+                except: 
+                    continue
+                sqlcmd = "SELECT rowid from art WHERE media_id=?" 
+                data2=None
+                try:
+                    cur.execute(sqlcmd,str(musicdb_idAlbum))
+                    data2 = cur.fetchone()
+                except: pass
+                if  data2 is None : 
+                    sqlcmd2 = "INSERT INTO art VALUES ( NULL, (?) , 'album', 'thumb', (?) )"
+                    subdir = qobuz_idAlbum[:4]
+                    url = "http://static.qobuz.com/images/jaquettes/" + subdir + "/" + qobuz_idAlbum + "_600.jpg"
+                    try:
+                        cur.execute (sqlcmd2,(str(musicdb_idAlbum), url))
+                    except: pass
+            con.commit()
+        except lite.Error, e:
+            print "Error %s:" % e.args[0]
+            return -1;
+        finally:
+            if con:
+                con.commit()
+                con.close()
+        return True       
 
     def is_garbage_time(self):
         if time() > (self.last_garbage_on + self.garbage_refresh):
@@ -192,75 +184,18 @@ class Monitor(xbmc.Monitor):
             return False
 
     def cache_remove_old(self, **ka):
-        timeStarted = time()
         self.last_garbage_on = time()
-        gData = {'limit': 1, 'count': 0}
-        if 'limit' in ka:
-            gData['limit'] = ka['limit']
-        """Callback deleting one file
-        """
-        def delete_one(fileName, gData):
-            gData['count'] += 1
-            data = None
-            with open(fileName, 'rb') as f:
-                f = open(fileName, 'rb')
-                try:
-                    data = pickle.load(f)
-                except:
-                    return False
-                finally:
-                    f.close()
-            if not data or ((int(data['updatedOn']) + 
-                            int(data['refresh'])) < time()):
-                log("QobuzCache", (
-                    "Removing old file: %s") % (repr(fileName)))
-                try:
-                    fu.unlink(fileName)
-                    gData['limit'] -= 1
-                except Exception as e:
-                    warn("QobuzCache", ("Can't remove file %s\n%s")
-                         % (repr(fileName), repr(e)))
-                    return False
-                if gData['limit'] <= 0:
-                    return False
-            return True
-        fu = FileUtil()
-        fu.find(qobuz.path.cache, '^.*\.dat$', delete_one, gData)
-        log(self, "%s cached file(s) checked in %2.1s s" 
-            % (str(gData['count']), 
-               str(time() - timeStarted) ))
-        return True
-
-    def cache_remove_user_data(self):
-        log(self, "Removing cached user data")
-        try:
-            if not qobuz.path.cache:
-                raise QobuzXbmcError(who=self,
-                                     what='qobuz_core_setting_not_set',
-                                     additional='setting')
-            fu = FileUtil()
-            flist = fu.find(qobuz.path.cache, '^user.*\.dat$')
-            for fileName in flist:
-                    log(self, "Removing file " + fileName)
-                    if not fu.unlink(fileName):
-                        warn(self, "Failed to remove " + fileName)
-            executeBuiltin(containerRefresh())
-        except:
-            warn(self, "Error while removing cached data")
-            notifyH('Qobuz',
-                    'Failed to remove user data', getImage('icon-error-256'))
-            return False
-        return True
-
+        clean_old(cache)
+        
     def onSettingsChanged(self):
-        self.cache_remove_user_data()
+        pass
 
 boot = QobuzBootstrap(__addon__, 0)
 logLabel = 'QobuzMonitor'
 import pprint
 try:
     boot.bootstrap_app()
-    monitor = Monitor(qobuz)
+    monitor = Monitor()
     player = MyPlayer()
     alive = True
     while alive:

@@ -1,41 +1,28 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
-import qobuz
-from flag import NodeFlag as Flag
+'''
+    qobuz.node.album
+    ~~~~~~~~~~~~~~~~
+
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 from inode import INode
 from debug import warn
-from gui.util import getImage, getSetting
+from gui.util import getImage, getSetting, htm2xbmc
 from gui.contextmenu import contextMenu
-
-'''
-    @class Node_product:
-'''
-
-from track import Node_track
+from api import api
+from node import getNode, Flag
 
 SPECIAL_PURCHASES = ['0000020110926', '0000201011300', '0000020120220',
                      '0000020120221']
 
 
-class Node_product(INode):
-
-    def __init__(self, parent=None, params=None):
-        super(Node_product, self).__init__(parent, params)
-        self.type = Flag.PRODUCT
+class Node_album(INode):
+    '''
+        @class Node_product:
+    '''
+    def __init__(self, parent, params):
+        super(Node_album, self).__init__(parent, params)
+        self.nt = Flag.ALBUM
         self.image = getImage('album')
         self.content_type = 'songs'
         self.is_special_purchase = False
@@ -47,21 +34,29 @@ class Node_product(INode):
         except:
             pass
 
-    def pre_build_down(self, Dir, lvl, whiteFlag, blackFlag):
-        data = None
-        if self.is_special_purchase:
-            data = qobuz.registry.get(name='purchase', id=self.id)
-        else:
-            data = qobuz.registry.get(name='product', id=self.id)
+        @property
+        def nid(self):
+            return self._nid
+        @nid.getter
+        def nid(self):
+            return self._nid
+        @nid.setter
+        def nid(self, value):
+            self._id = value
+            if value in SPECIAL_PURCHASES:
+                self.is_special_purchase = True
+
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
+        data = api.get('/album/get', album_id=self.nid)
         if not data:
             warn(self, "Cannot fetch product data")
             return False
-        self.data = data['data']
+        self.data = data
         return True
-    
-    def _build_down(self, Dir, lvl, whiteFlag, blackFlag):
+
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
         for track in self.data['tracks']['items']:
-            node = Node_track()
+            node = getNode(Flag.TRACK)
             if not 'image' in track:
                 track['image'] = self.get_image()
             node.data = track
@@ -73,7 +68,7 @@ class Node_product(INode):
         if 'asLocalURL' in ka and ka['asLocalURL']:
             from constants import Mode
             ka['mode'] = Mode.SCAN
-        return super(Node_product, self).make_url(**ka)
+        return super(Node_album, self).make_url(**ka)
     
     def makeListItem(self, replaceItems=False):
         import xbmc, xbmcgui
@@ -92,6 +87,7 @@ class Node_product(INode):
             'artist': self.get_artist(),
             'title': self.get_title(),
             'album': self.get_title(),
+            'comment': self.get_description()
         })
         ctxMenu = contextMenu()
         self.attach_context_menu(item, ctxMenu)
@@ -113,12 +109,9 @@ class Node_product(INode):
         return album
 
     def get_artist_id(self):
-        a = self.get_property(['artist/id',
+        return self.get_property(['artist/id',
                                'interpreter/id',
                               'composer/id'])
-        if a:
-            return int(a)
-        return ''
 
     def get_title(self):
         return self.get_property('title')
@@ -150,4 +143,4 @@ class Node_product(INode):
         return year
 
     def get_description(self):
-        return self.get_property('description')
+        return htm2xbmc(self.get_property('description'))

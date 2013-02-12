@@ -1,68 +1,56 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.node.artist
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-import qobuz
-from flag import NodeFlag
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 from inode import INode
-from product import Node_product
 from debug import warn
 from gui.util import getSetting
 from gui.contextmenu import contextMenu
-import xbmcgui
-
+from api import api
+from node import getNode, Flag
 '''
     @class Node_artist(Inode): Artist
 '''
 
 class Node_artist(INode):
 
-    def __init__(self, parent=None, parameters=None, progress=None):
+    def __init__(self, parent=None, parameters=None):
         super(Node_artist, self).__init__(parent, parameters)
-        self.type = NodeFlag.ARTIST
+        self.nt = Flag.ARTIST
         self.set_label(self.get_name())
         self.is_folder = True
         self.slug = ''
-        self.content_type = 'albums'
+        self.content_type = 'artists'
         self.offset = self.get_parameter('offset') or 0
         
     def hook_post_data(self):
+        self.nid = self.get_property('id')
         self.name = self.get_property('name')
         self.image = self.get_image()
         self.slug = self.get_property('slug')
         self.label = self.name
         
-    def pre_build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         limit = getSetting('pagination_limit')
-        data = qobuz.registry.get(name='artist',id=self.id,
-            artist_id=self.id, limit=limit, offset=self.offset, extra='albums')
+        data = api.get('/artist/get', artist_id=self.nid, limit=limit, 
+                           offset=self.offset, extra='albums')
         if not data:
             warn(self, "Build-down: Cannot fetch artist data")
             return False
-        self.data = data['data']
+        self.data = data
         return True
     
-    def _build_down(self, Dir, lvl, whiteFlag, blackFlag):
-        node_artist = Node_artist()
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
+        node_artist = getNode(Flag.ARTIST)
         node_artist.data = self.data
         node_artist.label = '[ %s ]' % (node_artist.label)
         if not 'albums' in self.data: 
             return True
         for pData in self.data['albums']['items']:
-            node = Node_product()
+            node = getNode(Flag.ALBUM)
             node.data = pData
             self.add_child(node)
         return True
@@ -70,11 +58,14 @@ class Node_artist(INode):
         del self._data['tracks']
 
     def get_artist_id(self):
-        return self.id
+        return self.nid
 
     def get_image(self):
-        image = self.get_property(['image/extralarge', 
-                                   'image/mega', 
+        image = self.get_property(['image/extralarge',
+                                   'image/mega',
+                                   'image/large',
+                                   'image/medium',
+                                   'image/small',
                                    'picture'])
         if image: 
             image = image.replace('126s', '_')
@@ -96,6 +87,7 @@ class Node_artist(INode):
         return self.get_property('description')
 
     def makeListItem(self, replaceItems=False):
+        import xbmcgui
         image = self.get_image()
         url = self.make_url()
         name = self.get_label()
@@ -104,13 +96,18 @@ class Node_artist(INode):
                                 image,
                                 image,
                                 url)
-#        item.setInfo('music', {
-#                    'artist': self.get_label(),
-#        })
         if not item:
             warn(self, "Error: Cannot make xbmc list item")
             return None
         item.setPath(url)
+        item.setInfo('music' , infoLabels={
+#            'genre': 'reggae', # self.get_genre(),
+#            'year': '2000', # self.get_year(),
+            'artist': self.get_artist(),           
+#            'album': self.get_title(),
+            'comment': self.get_description()
+#           'Artist_Description': 'coucou'
+        })
         ctxMenu = contextMenu()
         self.attach_context_menu(item, ctxMenu)
         item.addContextMenuItems(ctxMenu.getTuples(), replaceItems)

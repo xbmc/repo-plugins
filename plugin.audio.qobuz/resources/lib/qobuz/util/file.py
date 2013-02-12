@@ -14,68 +14,61 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
-
 import os
-import time
-import random
-import string
 import re
+import tempfile
+
 from debug import warn
 
-
-class FileUtil():
-
-    def __init__(self):
-        pass
-
-    def generate_filename(self, size=8, chars=string.ascii_letters + string.digits):
-        return ''.join(random.choice(chars) for x in range(size))
-
-    def _write(self, path, flag, data):
-        ret = False
-        with os.open(path, flag) as fd:
-            with os.fdopen(fd, 'wb') as fo:
-                fo.write(data)
-                # fo.flush()
-                # os.fsync(fd)
-                ret = True
-
-        return ret
-
-    def _unlink(self, path):
-        if not os.path.exists(path):
-            return False
-        os.unlink(path)
-        retry = 3
-        ret = False
-        while retry > 0:
-            if not os.path.exists(path):
-                return True
-            time.sleep(.250)
-            retry -= 1
+def unlink(filename):
+    if not os.path.exists(filename):
         return False
+    tmpfile = tempfile.mktemp('.dat', 'invalid-', os.path.dirname(filename))
+    os.rename(filename, tmpfile)
+    return os.unlink(tmpfile)
 
-    def _safe_unlink(self, path):
-        if not os.path.exists(path):
-            return True
-        basepath = os.path.dirname(path)
-        new = self.generate_filename() + '.' + self.generate_filename(3)
-        newpath = os.path.join(basepath, new)
-        os.rename(path, newpath)
-        if not os.path.exists(newpath):
-            return False
-        return self._unlink(newpath)
+# From http://stackoverflow.com/questions/12003805/threadsafe-and-fault-tolerant-file-writes
+class RenamedTemporaryFile(object):
+    """
+    A temporary file object which will be renamed to the specified
+    path on exit.
+    """
+    def __init__(self, final_path, **kwargs):
+        tmpfile_dir = kwargs.pop('dir', None)
 
-    def write(self, path, data):
-        if os.path.exists(path):
-            return False
-        return self._write(path, os.O_WRONLY | os.O_EXCL | os.O_CREAT, data)
+        # Put temporary file in the same directory as the location for the
+        # final file so that an atomic move into place can occur.
 
-    def unlink(self, path):
-        return self._safe_unlink(path)
+        if tmpfile_dir is None:
+            tmpfile_dir = os.path.dirname(final_path)
 
-    ''' Find '''
-    def find(self, directory, pattern, callback=None, gData=None):
+        self.tmpfile = tempfile.NamedTemporaryFile(dir=tmpfile_dir, 
+                                                   delete=False, **kwargs)
+        self.final_path = final_path
+        
+    def __getattr__(self, attr):
+        """
+        Delegate attribute access to the underlying temporary file object.
+        """
+        return getattr(self.tmpfile, attr)
+
+    def __enter__(self):
+        self.tmpfile.__enter__()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is None:
+            self.tmpfile.delete = False
+            result = self.tmpfile.__exit__(exc_type, exc_val, exc_tb)
+            os.rename(self.tmpfile.name, self.final_path)
+        else:
+            self.tmpfile.delete = True
+            result = self.tmpfile.__exit__(exc_type, exc_val, exc_tb)
+            os.unlink(self.tmpfile.name)
+        return result
+
+''' Find '''
+def find(directory, pattern, callback=None, gData=None):
         flist = []
         fok = re.compile(pattern)
         for dirname, dirnames, filenames in os.walk(directory):
@@ -87,7 +80,7 @@ class FileUtil():
                             if not callback(path, gData):
                                 return None
                         except Exception as e:
-                            warn(self, "Callback raise exception: " + repr(e))
+                            warn('[find]', "Callback raise exception: " + repr(e))
                             return None
                     flist.append(path)
         return flist

@@ -16,24 +16,22 @@
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
 import xbmcgui
 
-from flag import NodeFlag
 from inode import INode
-from product import Node_product
 from debug import warn
 import weakref
 from api import api
 from gui.contextmenu import contextMenu
 from gui.util import getSetting
-
+from node import getNode, Flag
 '''
     @class Node_product_by_artist:
 '''
 
-class Node_product_by_artist(INode):
+class Node_albums_by_artist(INode):
 
     def __init__(self, parent=None, parameters=None):
-        super(Node_product_by_artist, self).__init__(parent, parameters)
-        self.type = NodeFlag.ARTIST
+        super(Node_albums_by_artist, self).__init__(parent, parameters)
+        self.nt = Flag.ALBUMS_BY_ARTIST
         self.content_type = 'albums'
         self.offset = self.get_parameter('offset') or 0
     '''
@@ -56,22 +54,22 @@ class Node_product_by_artist(INode):
         return self.get_property('slug')
 
     def get_artist_id(self):
-        return self.id
+        return self.nid
 
     '''
         Build Down
     '''
-    def pre_build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         limit = getSetting('pagination_limit')
-        data = api.artist_get(
-            artist_id=self.id, limit=limit, offset=self.offset, extra='albums')
+        data = api.get('/artist/getSimilarArtist', artist_id=self.nid, 
+                       limit=limit, offset=self.offset, extra='albums')
         if not data:
             warn(self, "Cannot fetch albums for artist: " + self.get_label())
             return False
         self.data = data
         return True
     
-    def _build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
         count = 0
         total = len(self.data['albums']['items'])
         for album in self.data['albums']['items']:
@@ -83,7 +81,7 @@ class Node_product_by_artist(INode):
                 except:
                     warn(self, "Strange thing happen")
                     pass
-            node = Node_product()
+            node = getNode(Flag.ALBUM)
             node.data = album
             count += 1
             Dir.update(count, total, "Add album:" + node.get_label(), '')

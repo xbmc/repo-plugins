@@ -17,12 +17,11 @@
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
 import xbmcgui
 
-import qobuz
-from flag import NodeFlag as Flag
+from api import api
 from inode import INode
-from product import Node_product
-from debug import warn
+from node import getNode, Flag
 from gui.util import getSetting, lang, getImage
+from debug import warn
 
 RECOS_TYPE_IDS = {
     1: 'new-releases',
@@ -61,7 +60,7 @@ class Node_recommendation(INode):
     '''
     def __init__(self, parent=None, parameters=None):
         super(Node_recommendation, self).__init__(parent, parameters)
-        self.type = Flag.RECOMMENDATION
+        self.nt = Flag.RECOMMENDATION
         self.genre_id = self.get_parameter('genre-id')
         self.genre_type = self.get_parameter('genre-type')
         self.set_label(lang(30082))
@@ -81,13 +80,12 @@ class Node_recommendation(INode):
             return None
         return str(self.genre_type) + '-' + str(self.genre_id)
 
-    def pre_build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         if not (self.genre_type and self.genre_id):
             return True
         offset = self.offset or 0
         limit = getSetting('pagination_limit')
-        data = qobuz.registry.get(name='recommendation',
-                                  id=self.myid(),
+        data = api.get('/album/getFeatured',
                                   type=RECOS_TYPE_IDS[int(self.genre_type)],
                                   genre_id=self.genre_id,
                                   limit=limit,
@@ -95,15 +93,15 @@ class Node_recommendation(INode):
         if not data:
             warn(self, "Cannot fetch data for recommendation")
             return False
-        self.data = data['data']
+        self.data = data
         return True
     
     def __populate_type(self, Dir, lvl, whiteFlag, blackFlag):
         ''' Populate type, we don't have genre_type nor genre_id
         '''
         for gid in RECOS_TYPE_IDS:
-            node = Node_recommendation()
-            node.genre_type = gid
+            node = getNode(Flag.RECOMMENDATION, {'genre-type': gid})
+#            node.genre_type = gid
             node.set_label(
                 self.label + ' / ' + RECOS_TYPES[gid])
             self.add_child(node)
@@ -113,9 +111,10 @@ class Node_recommendation(INode):
         '''Populate genre, we have genre_type but no genre_id
         '''
         for genre_id in RECOS_GENRES:
-            node = Node_recommendation()
-            node.genre_type = self.genre_type
-            node.genre_id = genre_id
+            node = getNode(Flag.RECOMMENDATION, {'genre-type': self.genre_type,
+                                                 'genre-id': genre_id })
+#            node.genre_type = self.genre_type
+#            node.genre_id = genre_id
             label = '%s / %s / %s' % (self.label, 
                                       RECOS_TYPES[int(self.genre_type)],
                                      RECOS_GENRES[genre_id])  
@@ -129,12 +128,12 @@ class Node_recommendation(INode):
         if not self.data:
             return False
         for product in self.data['albums']['items']:
-            node = Node_product()
+            node = getNode(Flag.ALBUM)
             node.data = product
             self.add_child(node)
         return True
 
-    def _build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
         '''We are populating our node based on genre_type and genre_id
         '''
         if not self.genre_type:

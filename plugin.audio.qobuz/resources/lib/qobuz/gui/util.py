@@ -15,6 +15,8 @@
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
 import os, sys
+import re
+  
 try:
     """
     Dirty trick that permit to import this module outside of xbmc
@@ -38,6 +40,11 @@ from debug import log, debug
 import qobuz
 
 from xbmcrpc import showNotification, getInfoLabels
+
+def htm2xbmc(htm):
+    def replace(m):
+        return '[' + m.group(1) + m.group(2).upper() + ']'
+    return re.sub('<(/?)(i|b)>', replace, htm, re.IGNORECASE)
 
 def getImage(name):
     if not qobuz.path:
@@ -82,10 +89,12 @@ def dialogLoginFailure():
 def isFreeAccount():
     """Check if account if it's a Qobuz paid account
     """
-    data = qobuz.registry.get(name='user')
+    from api import api
+    data = api.get('/user/login', username=api.username, 
+                   password=api.password)
     if not data:
         return True
-    if not data['data']['user']['credential']['id']:
+    if not data['user']['credential']['id']:
         return True
     return False
 
@@ -111,8 +120,10 @@ def color(colorItem, msg):
     return '[COLOR=%s]%s[/COLOR]' % (colorItem, msg)
 
 def lang(langId):
-    return qobuz.addon.getLocalizedString(langId)
-
+    s = qobuz.addon.getLocalizedString(langId)
+    if not s:
+        raise KeyError(langId)
+    return s
 
 def runPlugin(url):
     return 'XBMC.RunPlugin("%s")' % (url)
@@ -154,7 +165,7 @@ def setResolvedUrl(**ka):
 def getSetting(key, **ka):
     """Helper to access xbmcaddon.getSetting
         Parameter:
-        key: The key to retrieve from setting
+        key: Key to retrieve from setting
         * optional: isBool (convert 'true' and 'false to python boolean), 
             isInt (return data as integer) 
     """

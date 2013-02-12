@@ -14,12 +14,11 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
-import qobuz
-from flag import NodeFlag as Flag
+from node import Flag, getNode
 from inode import INode
 from debug import warn, error
 from gui.util import lang, getImage, getSetting
-from playlist import Node_playlist
+from api import api
 
 class Node_user_playlists(INode):
     """User playlists node
@@ -29,7 +28,7 @@ class Node_user_playlists(INode):
         super(Node_user_playlists, self).__init__(parent, parameters)
         self.label = lang(30019)
         self.image = getImage('userplaylists')
-        self.type = Flag.USERPLAYLISTS
+        self.nt = Flag.USERPLAYLISTS
         self.content_type = 'files'
         display_by = self.get_parameter('display-by')
         if not display_by:
@@ -39,37 +38,45 @@ class Node_user_playlists(INode):
         self.display_product_cover = display_cover
         self.offset = self.get_parameter('offset') or 0
 
-    def set_display_by(self, type):
+    def set_display_by(self, dtype):
         vtype = ('product', 'songs')
-        if not type in vtype:
-            error(self, "Invalid display by: " + type)
-        self.display_by = type
+        if not dtype in vtype:
+            error(self, "Invalid display by: " + dtype)
+        self.display_by = dtype
 
     def get_display_by(self):
         return self.display_by
 
-    def pre_build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def set_current_playlist_id(self, playlist_id):
+        userdata = self.get_user_storage()
+        userdata['current_playlist'] = int(playlist_id)
+        userdata.sync()
+
+    def get_current_playlist_id(self):
+        userdata = self.get_user_storage()
+        if not 'current_playlist' in userdata:
+            return None
+        return int(userdata['current_playlist'])
+
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         limit = getSetting('pagination_limit')
-        data = qobuz.registry.get(
-            name='user-playlists', limit=limit, offset=self.offset)
+        data = api.get('/playlist/getUserPlaylists', limit=limit, 
+                                offset=self.offset, user_id=api.user_id)
         if not data:
             warn(self, "Build-down: Cannot fetch user playlists data")
             return False
-        self.data = data['data']
+        self.data = data
         return True
 
-    def _build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
         login = getSetting('username')
-        cid = qobuz.registry.get(
-            name='user-current-playlist-id', noRemote=True)
-        if cid:
-            cid = int(cid['data'])
+        cid = self.get_current_playlist_id()
         for data in self.data['playlists']['items']:
-            node = Node_playlist(self, {'offset': 0})
+            node = getNode(Flag.PLAYLIST, {'offset': 0})
             node.data = data
             if self.display_product_cover:
                 pass
-            if (cid and cid == node.id):
+            if (cid and cid == node.nid):
                 node.set_is_current(True)
             if node.get_owner() == login:
                 node.set_is_my_playlist(True)

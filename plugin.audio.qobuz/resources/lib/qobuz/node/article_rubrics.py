@@ -1,19 +1,10 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.node.article_rubrics
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 import xbmcgui
 import xbmc
 
@@ -31,7 +22,7 @@ class Node_article_rubrics(INode):
 
     def __init__(self, parent=None, parameters=None):
         super(Node_article_rubrics, self).__init__(parent, parameters)
-        self.type = Flag.ARTICLE_RUBRICS
+        self.nt = Flag.ARTICLE_RUBRICS
         self.rubric_id = self.get_parameter('qid')
         self.is_folder = True
         self.image = getImage('album')
@@ -48,18 +39,18 @@ class Node_article_rubrics(INode):
         if not l: return "Articles"
         return l
 
-    def pre_build_down(self, Dir, lvl , whiteFlag, blackFlag):
+    def fetch(self, Dir, lvl , whiteFlag, blackFlag):
         limit = getSetting('pagination_limit')
         data = qobuz.registry.get(
                                   name='article_listrubrics', 
-                                  id=self.id, offset=self.offset, 
+                                  id=self.nid, offset=self.offset, 
                                   limit=limit)
         if not data: 
             return False
         self.data = data['data']
         return True
 
-    def _build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
         for rubric in self.data['rubrics']['items']:
             node = Node_articles(self, {'nid': rubric['id']})
             node.data = rubric

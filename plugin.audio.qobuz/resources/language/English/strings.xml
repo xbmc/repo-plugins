@@ -148,6 +148,7 @@
     <string id="33102">Context menu items color</string>
     <string id="33103">Context menu items warning color</string>
     <string id="33104">Playlist items color</string>
+    <string id="33105">Context menu section format</string>
 
     <!-- Qobuz Player -->
     <string id="34000">Qobuz Player</string>
@@ -168,6 +169,7 @@
     <string id="36004">Nothing to add</string>
     <string id="36005">Add albums to favorites?</string>
 	<string id="36006">Add tracks to favorites?</string>
+	<string id="36007">Add artists to favorites?</string>
 	
     <!-- credentials -->
     <string id="37000">Username</string>
@@ -195,6 +197,7 @@
     <string id="39009">Rename</string>
     <string id="39010">Remove</string>
     <string id="39011">Add to favorites</string>
+    <string id="39012">Subscribe</string>
 
     <!-- Progress bar -->
     <string id="40000">Starting</string>
@@ -226,6 +229,7 @@
     <!-- nodes -->
 	<string id="42100">Label</string>
 	<string id="42101">Genre</string>
+	<string id="42102">Public playlists</string>
 	
 	<!-- options -->
 	<string id="42200">Show recommandations</string>

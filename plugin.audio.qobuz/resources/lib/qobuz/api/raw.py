@@ -1,19 +1,13 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.api.raw
+    ~~~~~~~~~~~~~~~~~~
+
+    Our base api, all method are mapped like <endpoint>_<method>
+    see Qobuz API on GitHub (https://github.com/Qobuz/api-documentation)
+    
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
 import sys
 import pprint
 from time import time
@@ -33,7 +27,7 @@ def _api_error_string(self, url="", params={}, json=""):
                 url, pprint.pformat(params),
                 pprint.pformat(json))
 
-class __API__:
+class QobuzApiRaw(object):
 
     def __init__(self):
         self.appid = "285473059" # XBMC
@@ -123,7 +117,6 @@ class __API__:
         _copy_params = copy.deepcopy(params)
         if 'password' in _copy_params:
             _copy_params['password'] = '***'
-        # info(self, "Request: %s %s [%s]" % (url, pprint.pformat(_copy_params), pprint.pformat(headers)))
         """ END / DEBUG """
         r = None
         try:
@@ -133,8 +126,6 @@ class __API__:
             warn(self, self.error)
             return None
         self.status_code = r.status_code
-        _api_error_string('azdazdaz', 'azdazdza')
-        # print "Code %s" % r.status_code
         if int(r.status_code) != 200:
             if r.status_code == 400:
                 self.error = "Bad request"
@@ -265,9 +256,8 @@ class __API__:
         # of the General Terms and Conditions
         # (http://www.qobuz.com/apps/api/QobuzAPI-TermsofUse.pdf)
         params = {'user_id': self.user_id, 'track_id': track_id}
-        # warn(self, pprint.pformat(params))
         return self._api_request(params, '/track/reportStreamingStart')
-
+    
     def track_resportStreamingEnd(self, track_id, duration):
         duration = math.floor(int(duration))
         if duration < 5:
@@ -402,7 +392,11 @@ class __API__:
                        'is_public', 'is_collaborative', 'tracks_id'])
         res = self._api_request(ka, '/playlist/update')
         return res
-
+    
+    def playlist_getPublicPlaylists(self, **ka):
+        self._check_ka(ka, '', ['type','limit','offset'])
+        res = self._api_request(ka, '/playlist/getPublicPlaylists')
+        return res
     """
         Artist
     """
@@ -443,5 +437,3 @@ class __API__:
     def article_get(self, **ka):
         self._check_ka(ka, ['article_id'])
         return self._api_request(ka, '/article/get')
-    
-api = __API__()

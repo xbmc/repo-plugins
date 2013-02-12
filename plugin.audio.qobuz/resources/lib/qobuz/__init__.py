@@ -14,3 +14,11 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+__all__ = ['addon', 'boot', 'path', 'rpc']
+
+addon = None
+#debug = None
+path = None
+boot = None
+rpc = None
+player = None

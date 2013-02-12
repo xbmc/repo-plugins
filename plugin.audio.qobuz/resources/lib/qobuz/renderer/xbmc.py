@@ -28,7 +28,7 @@ class QobuzXbmcRenderer(IRenderer):
             params: dictionary, parameters passed to our plugin
         * You can set parameter after init (see renderer.Irenderer)
     """
-    def __init__(self, node_type, params=None):
+    def __init__(self, node_type, params={}):
         super(QobuzXbmcRenderer, self).__init__(node_type, params)
 
     def add_directory_item(self, **ka):
@@ -67,7 +67,7 @@ class QobuzXbmcRenderer(IRenderer):
         if getSetting('contextmenu_replaceitems', isBool=True):
             Dir.replaceItems = True
         try:
-            ret = self.root.build_down(Dir, self.depth, 
+            ret = self.root.populating(Dir, self.depth, 
                                        self.whiteFlag, self.blackFlag)
         except Qerror as e:
             Dir.end_of_directory(False)
@@ -95,6 +95,7 @@ class QobuzXbmcRenderer(IRenderer):
 
     def scan(self):
         import sys
+        from node.flag import Flag
         """Building tree when using Xbmc library scanning 
         feature
         """
@@ -104,12 +105,15 @@ class QobuzXbmcRenderer(IRenderer):
                 self.node_type)))
             return False
         handle = qobuz.boot.handle
-        # print "Handle: %s" % (handle)
         Dir = Directory(self.root, self.nodes, withProgress=False)
         Dir.handle = int(sys.argv[1])
         Dir.asList = False
         Dir.asLocalURL = True
-        ret = self.root.build_down(Dir, self.depth, 
+        if self.root.nt & Flag.TRACK:
+            self.root.fetch(None, None, Flag.TRACK, Flag.NONE)
+            Dir.add_node(self.root)
+        else:
+            self.root.populating(Dir, self.depth, 
                                        self.whiteFlag, self.blackFlag)
         Dir.set_content(self.root.content_type)
         Dir.end_of_directory()

@@ -15,8 +15,8 @@
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
 from debug import log
-from node.flag import NodeFlag as Flag
-from util import getNode
+from node import Flag
+from node import getNode
 
 class IRenderer(object):
     """Base class for our renderer
@@ -24,7 +24,7 @@ class IRenderer(object):
         node_type: int, type of node (see node.NodeFlag)
         parameters: dictionary, parameters passed to our plugin
     """
-    def __init__(self, node_type, parameters=None):
+    def __init__(self, node_type, parameters = {}):
         self.node_type = node_type
         self.parameters = parameters
         self.root = None
@@ -34,12 +34,6 @@ class IRenderer(object):
         self.asList = False
         self.nodes = []
         self.enable_progress = True
-
-    def to_s(self):
-        import pprint
-        """Return this object as a string
-        """
-        return pprint.pformat(self)
 
     def set_root_node(self):
         """Import correct node object based on node_type parameter, setting
@@ -68,3 +62,6 @@ class IRenderer(object):
             if getattr(self.root, methodName)():
                 return True
             return False
+
+    def run (self):
+        raise NotImplemented()

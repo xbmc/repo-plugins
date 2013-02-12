@@ -1,16 +1,52 @@
-#     Copyright 2011 Joachim Basmaison, Cyril Leclerc
-#
-#     This file is part of xbmc-qobuz.
-#
-#     xbmc-qobuz is free software: you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation, either version 3 of the License, or
-#     (at your option) any later version.
-#
-#     xbmc-qobuz is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-#     GNU General Public License for more details.
-#
-#     You should have received a copy of the GNU General Public License
-#     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+'''
+    qobuz.node
+    ~~~~~~~~~~
+    
+    :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
+    :license: GPLv3, see LICENSE for more details.
+'''
+
+__all__ = ['getNode', 'flag']
+
+from node.flag import Flag
+from debug import log
+
+def getNode(qnt, params = {}, **ka):
+        ''' Caching import ??? '''
+        nodeName = Flag.to_s(qnt)
+        modulePath = nodeName
+        moduleName = 'Node_' + nodeName
+        Module = module_import(modulePath, moduleName)
+#        mixinPath = 'qobuzxbmc.node.%s_mixin' % nodeName
+#        mixinName = 'Node_' + nodeName + '_mixin'
+#        Final = Module
+#        try:
+#            Mixin = module_import(mixinPath, mixinName)
+#            Final = mixin_factory(moduleName, Module, Mixin)
+#        except Exception as e:
+#            print repr(e)
+#            pass
+        """ 
+            Initializing our new node 
+            - no parent 
+            - parameters 
+            """
+        parent = None
+        if 'parent' in ka:
+            parent = ka['parent']
+        node = Module(parent, params)
+        return node
+
+def mixin_factory(name, base, mixin):
+    return type(name, (base, mixin), {})
+
+def module_import(path, name, **ka):
+        """ from node.foo import Node_foo """
+        modPackage = __import__(path, globals(), 
+                                locals(), [name], -1)
+        """ Getting Module from Package """
+        Module = getattr(modPackage, name)
+        return Module
+
+class ErrorNoData(Exception):
+    pass

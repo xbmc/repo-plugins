@@ -14,23 +14,3 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
-from node.flag import NodeFlag as Flag
-from debug import log
-
-def getNode(qnt, params = {}):
-        nodeName = Flag.to_s(qnt)
-        log('getNode', 'Returning %s node' % (nodeName))
-        modulePath = 'node.' + nodeName
-        moduleName = 'Node_' + nodeName
-        """ from node.foo import Node_foo """
-        modPackage = __import__(modulePath, globals(), 
-                                locals(), [moduleName], -1)
-        """ Getting Module from Package """
-        nodeModule = getattr(modPackage, moduleName)
-        """ 
-            Initializing our new node 
-            - no parent 
-            - parameters 
-            """
-        node = nodeModule(None, params)
-        return node

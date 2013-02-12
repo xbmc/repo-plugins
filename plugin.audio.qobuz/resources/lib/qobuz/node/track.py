@@ -14,52 +14,50 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
-import qobuz
 from constants import Mode
-from flag import NodeFlag as Flag
+from node import Flag, ErrorNoData
 from inode import INode
 from debug import warn
-from gui.util import lang, getImage, runPlugin
+from gui.util import lang, getImage, runPlugin, getSetting
 from gui.contextmenu import contextMenu
 from api import api
 
-'''
-    NODE TRACK
-'''
-
-
 class Node_track(INode):
-
+    '''
+        NODE TRACK
+    '''
     def __init__(self, parent=None, parameters=None):
         super(Node_track, self).__init__(parent, parameters)
-        self.type = Flag.TRACK
+        self.nt = Flag.TRACK
         self.content_type = 'songs'
         self.qobuz_context_type = 'playlist'
         self.is_folder = False
         self.status = None
         self.image = getImage('song')
 
-    def pre_build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def fetch(self, Dir, lvl, whiteFlag, blackFlag):
         if blackFlag & Flag.STOPBUILD == Flag.STOPBUILD:
             return False
-        data = qobuz.registry.get(name='track', id=self.id)
+        data = api.get('/track/get', track_id=self.nid)
         if not data:
             return False
-        self.data = data['data']
+        self.data = data
         return True
     
-    def _build_down(self, Dir, lvl, whiteFlag, blackFlag):
+    def populate(self, Dir, lvl, whiteFlag, blackFlag):
         Dir.add_node(self)
         return True
 
     def make_url(self, **ka):
         if 'asLocalURL' in ka and ka['asLocalURL']:
-            import pprint
-            # print pprint.pformat(self.data)
-            return 'http://127.0.0.1:33574/qobuz/%s/%s/%s.mpc' % (
+            album_id = self.get_property('album/id')
+            if not album_id:
+                album_id = self.parent.nid
+            url = 'http://127.0.0.1:33574/qobuz/%s/%s/%s.mpc' % (
                     str(self.get_artist_id()),
-                    str(self.parent.id),
-                    str(self.id))
+                    album_id,
+                    str(self.nid))
+            return url
         if not 'mode' in ka: 
             ka['mode'] = Mode.PLAY 
         return super(Node_track, self).make_url(**ka)
@@ -93,10 +91,16 @@ class Node_track(INode):
             return album
         if not self.parent:
             return ''
-        if self.parent.type & Flag.PRODUCT:
+        if self.parent.nt & Flag.ALBUM:
             return self.parent.get_title()
         return ''
-
+    
+    def get_album_id(self):
+        aid = self.get_property('album/id')
+        if not aid and self.parent:
+            return self.parent.nid
+        return aid
+    
     def get_image(self):
         image = self.get_property(['album/image/large', 'image/large', 
                                       'image/small',
@@ -105,7 +109,7 @@ class Node_track(INode):
             return image.replace('_230.', '_600.')
         if not self.parent:
             return self.image
-        if self.parent.type & (Flag.PRODUCT | Flag.PLAYLIST):
+        if self.parent.nt & (Flag.ALBUM | Flag.PLAYLIST):
             return self.parent.get_image()
 
     def get_playlist_track_id(self):
@@ -123,21 +127,22 @@ class Node_track(INode):
             return genre
         if not self.parent:
             return ''
-        if self.parent.type & Flag.PRODUCT:
+        if self.parent.nt & Flag.ALBUM:
             return self.parent.get_genre()
         return ''
 
     def get_streaming_url(self):
-        data = qobuz.registry.get(name='user-stream-url', 
-                                  id=self.id)
+        data = self.__getFileUrl()
         if not data:
-            return ''
-        if not 'data' in data or not 'url' in data['data']:
-            warn(self, 
-                 "streaming_url, no url returned\n" +  
-                 "API Error: %s" % (api.error)) 
-            return ''
-        return data['data']['url']
+            return False
+        restrictions = self.get_restrictions()
+        for restriction in restrictions:
+            print "Restriction: %s" % (restriction)
+        if not 'url' in data:
+            warn(self, "streaming_url, no url returned\n"  
+                "API Error: %s" % (api.error)) 
+            return None
+        return data['url']
 
     def get_artist(self):
         return self.get_property(['artist/name',
@@ -173,7 +178,7 @@ class Node_track(INode):
         import time
         try:
             date = self.get_property('album/released_at')
-            if not date and self.parent and self.parent.type & Flag.PRODUCT:
+            if not date and self.parent and self.parent.nt & Flag.ALBUM:
                 return self.parent.get_year()
         except:
             pass
@@ -182,37 +187,60 @@ class Node_track(INode):
             year = time.strftime("%Y", time.localtime(date))
         except:
             pass
-
         return year
-
+    
+    def is_playable(self):
+        url = self.get_streaming_url()
+        if not url:
+            return False
+        restrictions = self.get_restrictions()
+        if 'TrackUnavailable' in restrictions:
+            return False
+        if 'AlbumUnavailable' in restrictions:
+            return False
+        return True
+    
     def get_description(self):
         if self.parent:
             return self.parent.get_description()
         return ''
 
-    def is_sample(self):
-        nid = self.id or self.parameters['nid']
-        data = qobuz.registry.get(name='user-stream-url', id=nid)
+    def __getFileUrl(self):
+        format_id = 6 if getSetting('streamtype') == 'flac' else 5
+        data = api.get('/track/getFileUrl', format_id=format_id,
+                           track_id=self.nid, user_id=api.user_id)
         if not data:
             warn(self, "Cannot get stream type for track (network problem?)")
-            return ''
-        try:
-            return data['data']['sample']
-        except:
-            return ''
+            return None
+        return data
 
-    def get_mimetype(self):
-        nid = self.id or self.parameters['nid']
-        data = qobuz.registry.get(name='user-stream-url', id=nid)
-        formatId = None
+    def get_restrictions(self):
+        data = self.__getFileUrl()
+        if not data: 
+            raise ErrorNoData('Cannot get track restrictions')
+        restrictions = []
+        if not 'restrictions' in data:
+            return restrictions
+        for restriction in data['restrictions']:
+            restrictions.append(restriction['code'])
+        return restrictions
+
+    def is_sample(self):
+        data = self.__getFileUrl()
         if not data:
-            warn(self, "Cannot get mime/type for track (network problem?)")
-            return ''
-        try:
-            formatId = int(data['data']['format_id'])
-        except:
+            return False
+        if 'sample' in data:
+            return data['sample']
+        return False
+    
+    def get_mimetype(self):
+        data = self.__getFileUrl()
+        if not data:
+            return False
+        if not 'format_id' in data:
             warn(self, "Cannot get mime/type for track (restricted track?)")
-            return ''
+            return False
+        formatId = int(data['format_id'])
         mime = ''
         if formatId == 6:
             mime = 'audio/flac'
@@ -222,9 +250,9 @@ class Node_track(INode):
             warn(self, "Unknow format " + str(formatId))
             mime = 'audio/mpeg'
         return mime
-    
+
     """ We add this information only when playing item because it require
-        use to fetch data from Qobuz
+        us to fetch data from Qobuz
     """
     def item_add_playing_property(self, item):
         mime = self.get_mimetype()
@@ -234,7 +262,7 @@ class Node_track(INode):
         item.setProperty('mimetype', mime)
         item.setPath(self.get_streaming_url())
         return True
-    
+
     def makeListItem(self, replaceItems=False):
         import xbmcgui
         media_number = self.get_media_number()
@@ -255,7 +283,6 @@ class Node_track(INode):
         #    duration = 60
         # label = '[COLOR=FF555555]' + label + '[/COLOR]
         # [[COLOR=55FF0000]Sample[/COLOR]]'
-#        print "MakeItem %s" % (self.get_image())
         mode = Mode.PLAY
         url = self.make_url(mode=mode)
         image = self.get_image()
@@ -282,17 +309,31 @@ class Node_track(INode):
             comment = mlabel
         if description:
             comment += ' - ' + description
+        '''Xbmc Library fix: Compilation showing one entry by track
+            We are setting artist like 'VA / Artist'
+            Data snippet:
+                {u'id': 26887, u'name': u'Interpr\xe8tes Divers'}
+                {u'id': 145383, u'name': u'Various Artists'}
+                {u'id': 255948, u'name': u'Multi Interpretes'}
+        '''
+        artist = self.get_artist()
+        if self.parent and hasattr(self.parent, 'get_artist_id'):
+            artist_id = str(self.parent.get_artist_id())
+            #if artist_id in ['26887', '145383', '255948']:
+            if self.parent.get_artist() != artist:
+                artist = '%s / %s' % (self.parent.get_artist(), artist)
+        desc = description or 'Qobuz Music Streaming'
         item.setInfo(type='music', infoLabels={
-                     'count': self.id,
+                     'count': self.nid,
                      'title': self.get_title(),
                      'album': self.get_album(),
                      'genre': self.get_genre(),
-                     'artist': self.get_artist(),
+                     'artist': artist,
                      'tracknumber': track_number,
                      'duration': duration,
                      'year': self.get_year(),
-                     'comment': 'Qobuz Music Streaming',
-                     'lyrics': "Chant down babylon lalalala" 
+                     'comment': desc + ' (aid=' + self.get_album_id() + ')'
+                     # 'lyrics': "Chant down babylon lalalala" 
                      })
         item.setProperty('DiscNumber', str(media_number))
         item.setProperty('IsPlayable', isplayable)
@@ -305,16 +346,16 @@ class Node_track(INode):
         return item
 
     def attach_context_menu(self, item, menu):
-        if self.parent and (self.parent.type & Flag.PLAYLIST == Flag.PLAYLIST):
-            url = self.parent.make_url(type=Flag.PLAYLIST,
-                id=self.parent.id,
+        if self.parent and (self.parent.nt & Flag.PLAYLIST == Flag.PLAYLIST):
+            colorCaution = getSetting('item_caution_color')
+            url = self.parent.make_url(nt=Flag.PLAYLIST,
+                id=self.parent.nid,
                 qid=self.get_playlist_track_id(),
                 nm='gui_remove_track',
                 mode=Mode.VIEW)
-            # print "URL %s" % (url)
             menu.add(path='playlist/remove', 
                      label=lang(30073),
-                     cmd=runPlugin(url))
+                     cmd=runPlugin(url), color=colorCaution)
 
         ''' Calling base class '''
         super(Node_track, self).attach_context_menu(item, menu)

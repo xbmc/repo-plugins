@@ -212,6 +212,7 @@
     <!-- nodes -->
     <string id="42100">Label</string>
 	<string id="42101">Genre</string>
+	<string id="42102">Public playlists</string>
 	
 	<!-- options -->                                 
 	<string id="42200">Afficher les recommandations</string> 

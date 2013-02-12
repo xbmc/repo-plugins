@@ -1,3 +1,10 @@
+[B]Version 2.0.8[/B]
+
+- Version bump for frodo
+- Fixed 'access_voilation' errors
+- Added retry function to help with connection errors
+- Added dialog for movies missing trailers
+
 [B]Version 1.0.7[/B]
 
 - Fixed __plugin__ is not defined error

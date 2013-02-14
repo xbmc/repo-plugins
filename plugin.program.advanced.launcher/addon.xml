@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.advanced.launcher" name="Advanced Launcher" version="1.7.6" provider-name="Angelscry">
+<addon id="plugin.program.advanced.launcher" name="Advanced Launcher" version="1.7.7" provider-name="Angelscry">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
         <import addon="script.module.simplejson" version="2.0.9"/>
@@ -17,4 +17,5 @@
         <description lang="fr">Advanced Launcher permet de lancer toutes les applications Linux, Windows and OS X (avec support des lignes de commandes ou non) directement depuis l'interface d'XBMC. Advanced Launcher offre également la possibilité de modifier, télécharger (depuis les ressoures web) et de gérer toues les meta-donées (informations et images) relatives à ces applications.</description>
         <description lang="fi">Advanced Launcherilla voit käynnistää XBMC:n käyttöliittymästä mitä tahansa sovelluksia. Käynnistettävistä sovelluksista voi hakea tietoja ja kuvia Internet-tietokannoista.</description>
     </extension>
+    <broken>Please use the repo http://www.gwenael.org/Repository/repository.angelscry.xbmc-plugins/repository.angelscry.xbmc-plugins-1.2.2.zip</broken> 
 </addon>

@@ -11,12 +11,14 @@ from BeautifulSoup import BeautifulSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.audio.internet.archive')
 __language__ = __settings__.getLocalizedString
-home = __settings__.getAddonInfo('path')
-icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
+home = xbmc.translatePath(__settings__.getAddonInfo('path'))
+icon = os.path.join(home, 'icon.png')
+fanart = os.path.join(home, 'fanart.jpg')
 sort = __settings__.getSetting('sort_by')
 base_url = 'http://www.archive.org'
 downloader = downloader.SimpleDownloader()
+debug = __settings__.getSetting('debug')
+addon_version = __settings__.getAddonInfo('version')
 
 if sort=="":
     sort = __language__(30011)
@@ -31,6 +33,11 @@ elif sort==__language__(30012):
     set = 'avg_rating%3B-num_reviews'
 
 
+def addon_log(string):
+        if debug == 'true':
+            xbmc.log("[addon.internet.archive-%s]: %s" %(addon_version, string))
+
+
 def getResponse(url):
         try:
             headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0.2) Gecko/20100101 Firefox/10.0.2'}
@@ -40,12 +47,12 @@ def getResponse(url):
             response.close()
             return link
         except urllib2.URLError, e:
-            print 'We failed to open "%s".' % url
+            addon_log('We failed to open "%s".' % url)
             if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason: ', e.reason
+                addon_log('We failed to reach a server.')
+                addon_log('Reason: ', e.reason)
             if hasattr(e, 'code'):
-                print 'We failed with error code - %s.' % e.code
+                addon_log('We failed with error code - %s.' % e.code)
                 xbmc.executebuiltin("XBMC.Notification("+__language__(30000)+","+__language__(30001)+str(e.code)+",5000,"+icon+")")
 
 
@@ -62,7 +69,7 @@ def getCategories(url, iconimage):
                 try:
                     spotlight_url = soup('div', attrs={'id' : "spotlight"})[0]('a')[0]['href']
                 except:
-                    print '--- spotlight_url not found ---'
+                    addon_log('spotlight_url not found')
                     raise
             try:
                 spotlight_name = soup('div', attrs={'id' : "spotlight"})[0]('a')[1].string.encode('utf-8')
@@ -126,11 +133,11 @@ def getCategories(url, iconimage):
                     desc = i.br.next.encode('utf-8', 'ignore')
                     addDir(name+' ('+i.nobr.string+')',url,1,desc,thumb)
                 else:
-                    print '-- No Categories --'
+                    addon_log('No Categories')
         except:
-            print '--- exception: categories ---'
+            addon_log('exception: categories')
 
-	
+
 def getShowList(url, iconimage):
         if 'gutenberg' in url:
             href = url.split('sort=')[0]+'3%20AND%20mediatype%3Aaudio'
@@ -142,7 +149,7 @@ def getShowList(url, iconimage):
         try:
             soup = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         except:
-            print 'SOUP ERROR'
+            addon_log('SOUP ERROR')
             soup = BeautifulSoup(link)
         try:
             items = soup('table', attrs={'class' : "resultsTable"})[0]('tr')
@@ -155,7 +162,7 @@ def getShowList(url, iconimage):
             try:
                 href = i.a['href']
             except:
-                print 'No URL'
+                addon_log('No URL')
                 continue
             try:
                 if len(i.a.contents)>1:
@@ -179,7 +186,7 @@ def getShowList(url, iconimage):
             try:
                 desc = i.br.next
             except:
-                print '--- exception: description ---'
+                addon_log('exception: description')
             if desc != '':
                 try:
                     if 'class="searchTerm"' in str(desc):
@@ -192,29 +199,29 @@ def getShowList(url, iconimage):
                 addDir(name,base_url+href,3,desc,iconimage)
             except:
                 try:
-                    print "--- exception: trying ('utf-8', 'ignore') ---"
+                    addon_log("exception: trying ('utf-8', 'ignore')")
                     desc = desc.encode('utf-8', 'ignore')
                     addDir(name.encode('utf-8', 'ignore'),base_url+href,3,desc,iconimage)
                 except:
                     try:
                         addDir(name.encode('utf-8', 'ignore'),base_url+href,3,'',iconimage)
-                        print 'DESC ERROR: Name: '+name.encode('utf-8', 'ignore')
+                        addon_log('DESC ERROR: Name: '+name.encode('utf-8', 'ignore'))
                     except:
-                        print 'There was an error adding show Directory'
+                        addon_log('There was an error adding show Directory')
                         try:
-                            print 'NAME: '+name
+                            addon_log('NAME: '+name)
                         except:
-                            print 'NAME ERROR'
+                            addon_log('NAME ERROR')
                         try:
-                            print 'URL: '+href
+                            addon_log('URL: '+href)
                         except:
-                            print 'URL ERROR'
+                            addon_log('URL ERROR')
         try:
             page = re.compile('</a> &nbsp;&nbsp;&nbsp; <a href="(.+?)">Next</a>').findall(link)[0]
             url = base_url+page.replace('&amp;','&')
             addDir(__language__(30007),url,2,'',iconimage)
         except:
-            print '--- exception: next page ---'
+            addon_log('exception: next page')
             pass
 
 
@@ -227,9 +234,9 @@ def getMedia(url, title, iconimage):
                 downloads = get_media_downloads(dl_items)
             else:
                 downloads = None
-                print '--- No Downloads ---'
+                addon_log('No Downloads')
         except:
-            print '--- error getting downloads ---'
+            addon_log('error getting downloads')
             downloads = None
         thumb = None
         try:
@@ -270,15 +277,17 @@ def getMedia(url, title, iconimage):
             duration = ''
         scripts = soup('script')
         data = False
-        for i in range(len(scripts)):
-            if 'IAP' in str(scripts[i]):
+        for i in scripts:
+            if "Play('jw6'," in str(i):
                 try:
-                    pattern = re.compile('IAP.jwplayer\(".+?",   (.+?),  {"start"')
-                    data = ast.literal_eval(pattern.findall(str(scripts[i]).replace('\n',''))[0])
+                    pattern = re.compile('Play\(\'jw6\',\[(.+?)\],{"start"')
+                    data = ast.literal_eval(pattern.findall(str([i]).replace('\n','').replace('  ',''))[0])
                 except:
-                    print '--- execption: data ---'
+                    addon_log('execption: data')
                 break
         if data:
+            if isinstance(data, dict):
+                data = [data]
             m_type = None
             href = None
             for i in data:
@@ -310,7 +319,7 @@ def getMedia(url, title, iconimage):
                             if str(d[i]) != '<br />':
                                 desc += str(d[i]).split('<')[0]
                     except:
-                        print '--- exception: description ---'
+                        addon_log('exception: description')
                         desc = title
                 addLink(name, base_url+href, desc, duration, thumb, m_type, downloads)
         else:
@@ -340,7 +349,7 @@ def get_media_downloads(items):
                         else:
                             name += ' ' + i.findPrevious('span').string
                     except:
-                        print '--- get size of %s exception ---' %name
+                        addon_log('get size of %s exception' %name)
                 href = i['href']
                 if href.startswith('http'):
                     url = href
@@ -351,13 +360,13 @@ def get_media_downloads(items):
         return downloads
 
 
-def get_all_files(url, thumb):
+def get_all_files(url, iconimage):
         soup = BeautifulSoup(getResponse(url), convertEntities=BeautifulSoup.HTML_ENTITIES)('a')
         for i in soup:
             if not i.string.endswith('/'):
                 dl_url = url+'/'+i['href']
                 u=sys.argv[0]+"?url="+urllib.quote_plus(dl_url)+"&mode=9"
-                liz=xbmcgui.ListItem(i.string, iconImage=thumb, thumbnailImage=thumb)
+                liz=xbmcgui.ListItem(i.string, iconImage=iconimage, thumbnailImage=iconimage)
                 liz.setProperty("Fanart_Image", fanart)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
 
@@ -371,20 +380,20 @@ def getBrowseKeyword(url, iconimage):
                 href = i.a['href']
                 addDir(name,base_url+href,2,'',iconimage)
             except:
-                print 'There was an error adding Directory'
+                addon_log('There was an error adding Directory')
 
 
 def getBrowseByTitle(url, iconimage):
         soup = BeautifulSoup(getResponse(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         items = soup('div', attrs={'id' : "browsetitle"})[0]('a')
-        print len(items)
+        addon_log('Items: %s' %len(items))
         for i in items:
             try:
                 name = i.string.encode('utf-8')
                 href = i['href'].replace(' ','%20')
                 addDir(name,base_url+href,2,'',iconimage)
             except:
-                print 'There was an error adding Directory'
+                addon_log('There was an error adding Directory')
 
 
 def getBrowseByAuthor(url, iconimage):
@@ -396,7 +405,7 @@ def getBrowseByAuthor(url, iconimage):
                 href = i['href'].replace(' ','%20')
                 addDir(name,base_url+href,2,'',iconimage)
             except:
-                print 'There was an error adding Directory'
+                addon_log('There was an error adding Directory')
 
 
 def getBrowseLanguage(url, iconimage):
@@ -443,13 +452,13 @@ def DownloadFiles(url):
             return
         name = url.rsplit('/', 1)[1]
         params = {"url": url, "download_path": path, "Title": name}
-        print '######### Download #############'
-        print str(params)
-        print '################################'
+        addon_log('######### Download #############')
+        addon_log(str(params))
+        addon_log('################################')
         downloader.download(name, params)
 
 
-def list_downloads(downloads, thumb):
+def list_downloads(downloads, iconimage):
         downloads = ast.literal_eval(downloads)
         for i in downloads:
             try:
@@ -463,8 +472,8 @@ def list_downloads(downloads, thumb):
                     url = base_url+i[1]
                     isfolder = False
                     name = 'Download - %s' %i[0]
-                u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
-                liz=xbmcgui.ListItem(coloring(name ,"cyan", name), iconImage=thumb, thumbnailImage=thumb)
+                u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode+"&iconimage="+urllib.quote_plus(iconimage)
+                liz=xbmcgui.ListItem(coloring(name ,"cyan", name), iconImage=iconimage, thumbnailImage=iconimage)
                 liz.setProperty("Fanart_Image", fanart)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isfolder)
             except: pass
@@ -566,14 +575,14 @@ def addLink(name, url, desc, duration, iconimage, m_type, downloads):
             if len(downloads) < 8:
                 for i in downloads:
                         if i[0] == 'All Files':
-                            contextMenu.append(('List %s For Download' %i[0],'XBMC.Container.Update(%s?url=%s&mode=12)'
-                                                %(sys.argv[0], urllib.quote_plus(i[1]))))
+                            contextMenu.append(('List %s For Download' %i[0],'XBMC.Container.Update(%s?url=%s&mode=12&iconimage=%s)'
+                                                %(sys.argv[0], urllib.quote_plus(i[1]), urllib.quote_plus(iconimage))))
                         else:
                             contextMenu.append(('Download - %s' %i[0],'XBMC.RunPlugin(%s?url=%s&mode=9)'
                                                 %(sys.argv[0], urllib.quote_plus(i[1]))))
             else:
-                contextMenu.append(('Get Download List (%s)' %str(len(downloads)),'XBMC.Container.Update(%s?mode=10&downloads=%s)'
-                                    %(sys.argv[0], str(downloads).replace(', ','__'))))
+                contextMenu.append(('Get Download List (%s)' %str(len(downloads)),'XBMC.Container.Update(%s?mode=10&downloads=%s&iconimage=%s)'
+                                    %(sys.argv[0], str(downloads).replace(', ','__'), urllib.quote_plus(iconimage))))
         liz.addContextMenuItems(contextMenu)
         liz.setProperty("Fanart_Image", fanart)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
@@ -628,9 +637,9 @@ try:
 except:
     pass
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+addon_log("Mode: "+str(mode))
+addon_log("URL: "+str(url))
+addon_log("Name: "+str(name))
 
 if mode==None:
     if content_type == 'audio':
@@ -642,51 +651,51 @@ if mode==None:
         addDir(__language__(30017),'http://www.archive.org/details/movies',1,'','http://ia700303.us.archive.org/0/items/movies/movies.gif')
 
 elif mode==1:
-    print "getCategories"
+    addon_log("getCategories")
     getCategories(url, iconimage)
 
 elif mode==2:
-    print "getShowList"
+    addon_log("getShowList")
     getShowList(url, iconimage)
 
 elif mode==3:
-    print "getMedia"
+    addon_log("getMedia")
     getMedia(url, name, iconimage)
 
 elif mode==4:
-    print "getBrowseByAuthor"
+    addon_log("getBrowseByAuthor")
     getBrowseByAuthor(url, iconimage)
 
 elif mode==5:
-    print "getBrowseByTitle"
+    addon_log("getBrowseByTitle")
     getBrowseByTitle(url, iconimage)
 
 elif mode==6:
-    print "Search"
+    addon_log("Search")
     Search(url, iconimage)
 
 elif mode==7:
-    print ""
+    addon_log("getBrowseKeyword")
     getBrowseKeyword(url, iconimage)
 
 elif mode==8:
-    print ""
+    addon_log("getBrowseLanguage")
     getBrowseLanguage(url, iconimage)
 
 elif mode==9:
-    print ""
+    addon_log("DownloadFiles")
     DownloadFiles(url)
 
 elif mode==10:
-    print ""
+    addon_log("list_downloads")
     list_downloads(downloads, iconimage)
 
 elif mode==11:
-    print ""
+    addon_log("getBrowseByArtist")
     getBrowseByArtist(url, iconimage)
 
 elif mode==12:
-    print "get_all_files"
+    addon_log("get_all_files")
     get_all_files(url, iconimage)
 
-xbmcplugin.endOfDirectory(int(sys.argv[1]))	
+xbmcplugin.endOfDirectory(int(sys.argv[1]))

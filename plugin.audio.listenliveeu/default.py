@@ -72,10 +72,11 @@ def addFav(url):
             nameurl = 'name=%s&url=%s%s' % (name, url, '\n')
             doc = open(FILE_FAVS, "r+")
             text = doc.read().decode('utf-8')
+            doc.close()
             if nameurl in text:
-                doc.close()            
                 dialog.ok( __plugin__ + ' v' + __version__, __language__(30015), '', urllib.unquote_plus(name).decode('utf-8') )
             else:
+                doc = open(FILE_FAVS, "a+")
                 doc.write(nameurl)
                 doc.close()                
                 dialog.ok( __plugin__ + ' v' + __version__, __language__(30007), '', urllib.unquote_plus(name).decode('utf-8') )

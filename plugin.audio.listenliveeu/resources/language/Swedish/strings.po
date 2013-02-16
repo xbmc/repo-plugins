@@ -28,6 +28,66 @@ msgctxt "#30002"
 msgid "Browse by genre"
 msgstr "Bläddra efter genre"
 
+msgctxt "#30003"
+msgid "Browse by bookmarks"
+msgstr "Bläddra efter bokmärken"
+
+msgctxt "#30004"
+msgid "Add bookmark"
+msgstr "Lägg till bokmärke"
+
+msgctxt "#30005"
+msgid "Delete bookmark"
+msgstr "Ta bort bokmärke"
+
+msgctxt "#30006"
+msgid "Delete all bookmarks"
+msgstr "Ta bort alla bokmärken"
+
+msgctxt "#30007"
+msgid "Bookmark added!"
+msgstr "Bokmärke tillagt!"
+
+msgctxt "#30008"
+msgid "Bookmark NOT added!"
+msgstr "Bokmärke INTE tillagt!"
+
+msgctxt "#30009"
+msgid "Delete bookmark?"
+msgstr "Ta bort bokmärke?"
+
+msgctxt "#30010"
+msgid "Bookmark deleted!"
+msgstr "Bokmärke borttaget!"
+
+msgctxt "#30011"
+msgid "Bookmark NOT deleted!"
+msgstr "Bokmärke INTE borttaget!"
+
+msgctxt "#30012"
+msgid "Delete all bookmarks?"
+msgstr "Ta bort alla bokmärken?"
+
+msgctxt "#30013"
+msgid "All bookmarks deleted!"
+msgstr "Alla bokmärken borttagna!"
+
+msgctxt "#30014"
+msgid "Bookmarks NOT deleted!"
+msgstr "Bokmärken INTE borttagna!"
+
+msgctxt "#30015"
+msgid "Bookmark already exists."
+msgstr "Bokmärket existerar redan."
+
+msgctxt "#30016"
+msgid "No other bookmarks available."
+msgstr "Inga andra bokmärken tillgängliga."
+
+msgctxt "#30017"
+msgid "No bookmarks available."
+msgstr "Inga bokmärken tillgängliga."
+
 msgctxt "#30020"
 msgid "Show location"
 msgstr "Visa plats"

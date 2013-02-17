@@ -1,4 +1,7 @@
-﻿[B]1.7.7[/B]
+[B]1.7.8[/B]
+. Mark as broken
+
+[B]1.7.7[/B]
 . http://www.gwenael.org/Repository/repository.angelscry.xbmc-plugins/repository.angelscry.xbmc-plugins-1.2.2.zip
 
 [B]1.7.6[/B]

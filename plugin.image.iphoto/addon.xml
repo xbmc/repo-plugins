@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.0" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.1" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="2.1.0"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
@@ -18,6 +18,7 @@
 	<summary lang="hu">iPhoto könyvtár importálása az XBMC-be</summary>
 	<summary lang="it">Importa la libreria iPhoto in XBMC.</summary>
 	<summary lang="ja">iPhoto ライブラリを XBMC に読み込む</summary>
+	<summary lang="ko">iPhoto 라이브러리를 XBMC로 가져오세요.</summary>
 	<summary lang="lt">Importuoti iPhoto biblioteka i XBMC.</summary>
 	<summary lang="nl">Imports iPhoto library into XBMC.</summary>
 	<summary lang="no">Importer iPhoto bibloteket til XBMC</summary>
@@ -37,12 +38,14 @@
 	<description lang="es">Importe su biblioteca de iPhoto en Eventos, Albumes, Caras, Lugares, Palabras claves y valoraciones.[CR][CR]Para más información, lea el README en http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="hu">iPhoto könyvtár importálása az Események, Albumok és Besorolás kategóriákba.</description>
 	<description lang="it">Importa la libreria iPhoto nelle categorie Eventi, Album, Volti, Luoghi, Parole chiave e Classifica. [CR][CR]Per maggiori informazioni, vedi il file README su http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="ko">iPhoro 라이브러리를 이벤트, 앨범, 얼굴, 장고, 키워드, 평점 카테고리로 가져오세요.[CR][CR]자세한 정보는 http://github.com/jingai/plugin.image.iphoto 에서 README 파일을 참고하세요.</description>
 	<description lang="lt">Importuoja(-uoti) iPhoto Library į/iš renginiai, albumai, veidai, vietos raktinius žodžius, ir reitingus:. Norėdami gauti daugiau informacijos iš failo readme http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="pl">Importuj zawartość iPhoto do takich bibliotek jak Wydarzenia, Albumy, Twarze, Miejsca, Słowa kluczowe czy Oceny kategorii[CR][CR]By dowiedzieć się wiecej, zajrzyj pod http://github.com/jingai/plugin.image.iphoto i przeczytaj README</description>
 	<description lang="pt">Importa bibliotecas iPhoto para Eventos, Álbuns e Classificações.</description>
 	<description lang="pt_BR">Importações biblioteca do iPhoto em Eventos, Álbuns, Rostos, Lugares, palavras-chave e categorias de ratings. [CR] [CR] Para mais informações, consulte o README no&#10;http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="sk">Importuje iPhoto knižnicu do Udalostí, Albumov, Klúčových slov a Hodnotení v kategóriách.&#10;&#10;Pre via informácií si prečítajte README na http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="sv">Importerar iPhoto biblioteket till händelser, album, ansikten, platser, nyckelord och betygs kategorier.[CR][CR]För mer information, läs README på http://github.com/jingai/plugin.image.iphoto</description>
+	<language></language>
 	<platform>all</platform>
     </extension>
 </addon>

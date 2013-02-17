@@ -8,14 +8,36 @@
     <string id="30000">Caminho para AlbumData.xml</string>
     <string id="30001">Ignorar álbuns publicados (MobileMe)</string>
     <string id="30002">Ignorar álbuns 'marcados'</string>
+    <string id="30003">Actualizar biblioteca automaticamente</string>
+    <string id="30004">Ocultar 'Actualizando Biblioteca' no menu principal</string>
+    <string id="30005">Ignorar álbuns vazios</string>
+    <string id="30006">Ignorar palavras-chave</string>
+    <string id="30015">Activar suporte de Lugares</string>
+    <string id="30016">Exibir Lugares como</string>
+    <string id="30017">Endereços</string>
+    <string id="30018">Pares Lat/Lon</string>
+
+    <!-- Plugin settings Skin strings -->
+    <string id="30020">Método padrão para ordenar fotos</string>
     <string id="30021">Nenhum</string>
+    <string id="30022">Data XML</string>
     <string id="30023">Editora</string>
     <string id="30024">Tamanho</string>
+    <string id="30025">Transferir mapas do Google</string>
+    <string id="30026">Exibir mapa como fanart</string>
+    <string id="30027">Biblioteca Organizada (necessita de reanálise)</string>
+    <string id="30028">Localização de raiz local para Masters</string>
+    <string id="30029">Reescrever localização raiz como</string>
+    <string id="30030">Ocultar "Ver Documentação" do menu principal</string>
     <string id="30060">Tipo de vista em Confluence</string>
     <string id="30061">Padrão</string>
     <string id="30062">Miniatura e Imagem</string>
     <string id="30063">Imagens</string>
+    <string id="30066">Vista em Metropolis</string>
     <string id="30067">Padrão</string>
+    <string id="30068">Grelha de Fotos</string>
+    <string id="30069">Fanart da Galeria</string>
+    <string id="30080">Orientação padrão da ordenação das fotos </string>
     <string id="30081">Ascendente</string>
     <string id="30082">Descendente</string>
 
@@ -31,8 +53,46 @@
     <string id="30102">Classificações</string>
     <string id="30103">&lt;&lt; Importar biblioteca iPhoto &gt;&gt;</string>
     <string id="30104">Palavras-chave</string>
+    <string id="30105">Rostos</string>
+    <string id="30106">Lugares</string>
+    <string id="30107">&lt;&lt; Ver Documentação &gt;&gt;</string>
+    <string id="30108">Projectos</string>
 
     <!-- Plugin strings -->
     <string id="30200">%d estrela(s)</string>
+    <string id="30210">Importando Biblioteca</string>
+    <string id="30211">%d itens importados</string>
+    <string id="30212">Analisando Biblioteca...</string>
     <string id="30213">Importar biblioteca iPhoto</string>
+    <string id="30214">Ignorar Palavra-chave</string>
+    <string id="30215">Remover mapas em cache</string>
+    <string id="30216">Reinicializar a base de dados do addon</string>
+    <string id="30217">Documentação do addon</string>
+    <string id="30219">Reinicializando a base de dados do addon...</string>
+    <string id="30220">Activar Suporte para Lugares?</string>
+    <string id="30221">Os Lugares encontram os endereços pelo Google.</string>
+    <string id="30222">Isto pode atrasar um pouco a importação da biblioteca.</string>
+    <string id="30223">Também necessitará de reimportar a sua biblioteca.</string>
+    <string id="30230">Apagar a base de dados do addon?</string>
+    <string id="30231">A base de dados do addon está corrupta.</string>
+    <string id="30232">Apagá-la não irá afectar a sua Biblioteca de Fotos.</string>
+    <string id="30233">Será necessária uma reanálise depois disto.</string>
+    <string id="30240">A inicialização da base de dados do addon falhou.</string>
+    <string id="30241">Por favor, re-importe a sua biblioteca.</string>
+    <string id="30250">Apagando imagens de mapa em cache</string>
+    <string id="30252">Analisando...</string>
+    <string id="30260">Importação de biblioteca a decorrer</string>
+    <string id="30261">Não é possível reinicializar a base de dados.</string>
+    <string id="30262">Actualmente não suportado</string>
+    <string id="30263">Esta função não é suportada %s %s.</string>
+
+    <!-- Action Results (Notifications) -->
+    <string id="30300">Importação de biblioteca a decorrer</string>
+    <string id="30301">A importação de biblioteca foi concluída</string>
+    <string id="30302">A importação de biblioteca falhou</string>
+    <string id="30310">Sem itens</string>
+    <string id="30320">Reinicialização da base de dados</string>
+    <string id="30321">Não foi possível reinicializar a base de dados</string>
+    <string id="30322">Apagando %d mapas em cache</string>
+    <string id="30330">Palavras-chave '%s' ocultas</string>
 </strings>

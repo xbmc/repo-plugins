@@ -7,6 +7,7 @@
     <!-- Plugin settings strings -->
     <string id="30000">Percorso della Libreria iPhoto o Aperture</string>
     <string id="30001">Ignora album pubblicati (MobileMe)</string>
+    <string id="30002">Ignora album "Flaggati"</string>
     <string id="30003">Aggiornamento automatico libreria</string>
     <string id="30004">Nascondi Aggiornamento Libreria nel menu principale</string>
     <string id="30005">Ignora album vuoti</string>
@@ -15,16 +16,28 @@
     <string id="30016">Mostra Luoghi come</string>
     <string id="30017">Indirizzi</string>
     <string id="30018">Latitudine/Longitudine</string>
+
+    <!-- Plugin settings Skin strings -->
+    <string id="30020">Metodo predefinito di ordinamento foto</string>
     <string id="30021">Nessuno</string>
     <string id="30022">Data XML</string>
     <string id="30023">Etichetta</string>
     <string id="30024">Dimensione</string>
     <string id="30025">Scarica mappe da Google</string>
+    <string id="30026">Mostra la mappa come fanart</string>
+    <string id="30027">Gestisci Libreria (i cambiamenti richiedono una nuova scansione)</string>
+    <string id="30028">Percorso locale principale a Master</string>
+    <string id="30029">Riscrivi il percorso principale come</string>
+    <string id="30030">Nascondi Vedi Documentazione nel menù principale</string>
     <string id="30060">Modalità di visualizzazione di Confluence</string>
     <string id="30061">Default</string>
     <string id="30062">Miniature immagini</string>
     <string id="30063">Immagine</string>
+    <string id="30066">Metodo di Visualizzazione in Metropolis</string>
     <string id="30067">Default</string>
+    <string id="30068">Griglia delle Foto</string>
+    <string id="30069">Galary Fanart</string>
+    <string id="30080">Direzione ordinamento foto predefinita</string>
     <string id="30081">Ascendente</string>
     <string id="30082">Discendente</string>
 
@@ -42,20 +55,34 @@
     <string id="30104">Parole chiave</string>
     <string id="30105">Volti</string>
     <string id="30106">Luoghi</string>
+    <string id="30107">&lt;&lt; Vedi Documentazione &gt;&gt;</string>
     <string id="30108">Progetti</string>
+
+    <!-- Plugin strings -->
+    <string id="30200">%d stella</string>
     <string id="30210">Importando la Libreria</string>
     <string id="30211">Ho importato %d oggetti</string>
     <string id="30212">Scan della Libreria...</string>
     <string id="30213">Aggiorna libreria</string>
     <string id="30214">Ignora parola chiave</string>
     <string id="30215">Rimuovi le mappe dalla cache</string>
+    <string id="30216">Resetta il db degli addon</string>
     <string id="30217">Documentazione addon</string>
+    <string id="30219">Sto resettando il db addon</string>
     <string id="30220">Abilita il supporto per Luoghi?</string>
+    <string id="30221">Cerca i luoghi degli indirizzi tramite Google</string>
     <string id="30222">Questo potrebbe rallentare un po' l'importazione della libreria.</string>
     <string id="30223">Dovrai anche reimportare la tua libreria.</string>
+    <string id="30230">Elimino il db degli addon?</string>
+    <string id="30231">Il db degli addon è corrotto</string>
     <string id="30232">Cancellarlo non danneggerà la tua Libreria foto.</string>
+    <string id="30233">Avrai bisogno di ri-scansionare dopo questo.</string>
+    <string id="30240">Inizializzazione db addon fallita</string>
     <string id="30241">Per favore reimporta la tua Libreria.</string>
+    <string id="30250">Sto cancellando le immagini di mappe nella cache</string>
+    <string id="30252">Scansione in corso......</string>
     <string id="30260">Importazione Libreria in corso</string>
+    <string id="30261">Impossibile resettare db.</string>
     <string id="30262">Al momento non supportato</string>
     <string id="30263">Questa funzione non è supportata %s %s.</string>
 
@@ -66,4 +93,6 @@
     <string id="30310">Nessun oggetto</string>
     <string id="30320">Reset Database</string>
     <string id="30321">Reset Database fallito</string>
+    <string id="30322">Eliminate %d mappe nella cache</string>
+    <string id="30330">Parola chiave '%s'  nascosta</string>
 </strings>

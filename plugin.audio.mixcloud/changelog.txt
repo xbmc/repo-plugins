@@ -1,3 +1,7 @@
+1.1.0
+- Added German localisation
+- Added compatibility to frodo python engine
+
 1.0.1
 - Added French localisation
 

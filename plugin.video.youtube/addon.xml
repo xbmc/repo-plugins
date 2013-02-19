@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id="plugin.video.youtube" name="YouTube" provider-name="TheCollective" version="4.4.1">
+<addon id="plugin.video.youtube" name="YouTube" provider-name="TheCollective" version="4.4.2">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.simplejson" version="2.0.10" />
-    <import addon="script.common.plugin.cache" version="2.5.0" />
+    <import addon="script.common.plugin.cache" version="2.5.1" />
     <import addon="script.module.parsedom" version="2.5.1" />
     <import addon="script.module.simple.downloader" version="1.9.4" />
   </requires>
@@ -118,5 +118,6 @@ Raadpleeg de lokale wetgeving voordat u deze plugin installeert.</disclaimer>
     <disclaimer lang="th">บางส่วนจากส่วนขยายนี้อาจไม่ถูกต้องตามกฏหมายในประเทศของคุณ กรุณาตรวจสอบกฏหมายในประเทศของคุณก่อนทำการติดตั้ง</disclaimer>
     <disclaimer lang="zh">这个插件的某些内容可能不符合你所在国家的法律规定 - 请在在安装前确认符合当地法律。</disclaimer>
     <platform>all</platform>
+    <language />
   </extension>
 </addon>

@@ -27,12 +27,28 @@ def INDEX():
   response = urllib2.urlopen(req)
   link=response.read()
   response.close()
-  links = string.split(link,'<div class="vodList"')[1].split('<div class="vodItems"')
+  links = string.split(link,'<div class="vodList')[1].split('<div class="vodItems')
   del links[0]
   for link in links:
     url = 'http://www.rbk.no'+link.split('<a href="')[1].split('"')[0]
-    name = link.split('<a href="')[1].split('>')[1].split('<')[0].strip()
+    name = link.split('<a href="')[2].split('>')[1].split('<')[0].strip()
+    datetab = {" januar "    : ".01.",
+               " februar "   : ".02.",
+               " mars "      : ".03.",
+               " april "     : ".04.",
+               " mai "       : ".05.",
+               " juni "      : ".06.",
+               " juli "      : ".07.",
+               " august "    : ".08.",
+               " september " : ".09.",
+               " oktober"    : ".10.",
+               " november "  : ".11.",
+               " desember "  : ".12."}
     date = link.split('<div class="vodItemDate">')[1].split('<')[0].strip()
+    pattern = re.compile('(' + '|'.join(datetab.keys()) + ')')
+    date = pattern.sub(lambda x: datetab[x.group()], date)
+    if date[2] is not '.':
+      date = '0'+date
     thumb = 'http://www.rbk.no'+link.split('<img src="')[1].split('"')[0]
     addLink(name,url,thumb,date)
 
@@ -97,4 +113,6 @@ if len(url) > 0:
 else:
   INDEX()
   xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_DATE)
+  xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_LABEL)
+  xbmcplugin.addSortMethod(int(sys.argv[1]),xbmcplugin.SORT_METHOD_UNSORTED)
   xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -14,6 +14,8 @@ import httplib
 # application
 from utilities import *
 import loggable
+import resources.const as const
+
 
 RATING_CODE = {
 	1: 'like',
@@ -81,14 +83,14 @@ class ApiClient(loggable.Loggable):
 
 		# get or generate install-unique ID
 		ApiClient._instance = cls(
-			__addon__.getSetting('BASE_URL'),
-			__addon__.getSetting('KEY'),
-			__addon__.getSetting('SECRET'),
+			const.BASE_URL,
+			const.KEY,
+			const.SECRET,
 			__addon__.getSetting('USER'),
 			__addon__.getSetting('PASS'),
 			iuid,
 			debugLvl=logging.ERROR,
-			rel_api_url=__addon__.getSetting('REL_API_URL'),
+			rel_api_url=const.REL_API_URL
 		)
 
 		return ApiClient._instance

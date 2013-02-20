@@ -7,6 +7,7 @@ import thread
 # application
 from utilities import *
 import dialog
+import resources.const as const
 
 class ServiceTCPHandler(SocketServer.StreamRequestHandler):
 	def __init__(self, *args, **kwargs):
@@ -25,6 +26,14 @@ class ServiceTCPHandler(SocketServer.StreamRequestHandler):
 			return
 
 		try:
+			# check interface version
+			iface_version = json_data['iface_version']
+			if iface_version != const.SERVICE_IFACE_VERSION:
+				exc = { 'type': 'VersionMismatch',
+						'message': 'plugin version (%s) doesn\'t match service version (%s). Please restart service' % (iface_version, const.SERVICE_IFACE_VERSION) }
+				self.wfile.write(json.dumps({'exception': exc}))
+				return
+			
 			# handle requested method
 			methodName = json_data['command']
 			arguments = json_data.get('arguments', {})
@@ -33,10 +42,10 @@ class ServiceTCPHandler(SocketServer.StreamRequestHandler):
 			result = method(**arguments)
 
 			# convert non-string result to json string
-			if not isinstance(result, str):
-				result = json.dumps(result)
-			elif not result:
+			if result == None:
 				result = '{}'
+			elif not isinstance(result, str):
+				result = json.dumps(result)
 
 			self.server._log.debug('RESULT: ' + result)
 
@@ -100,10 +109,10 @@ class AddonHandler(ServiceTCPHandler):
 		thread.start_new_thread(dialog.show_submenu, (), kwargs)
 				
 	def show_video_dialog(self, json_data):
-		thread.start_new_thread(dialog.show_video_dialog, (json_data))
+		thread.start_new_thread(dialog.show_video_dialog, (json_data, ))
 
 	def show_video_dialog_byId(self, stv_id):
-		thread.start_new_thread(dialog.show_video_dialog_byId, (stv_id))
+		thread.start_new_thread(dialog.show_video_dialog_byId, (stv_id, ))
 
 	def open_settings(self):
 		__addon__ = get_current_addon()

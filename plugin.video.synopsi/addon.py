@@ -29,6 +29,7 @@ import threading
 from utilities import *
 from cache import StvList
 from xbmcrpc import xbmc_rpc
+import resources.const as const
 
 threading.current_thread().name = 'addon.py'
 
@@ -49,7 +50,8 @@ class AddonClient(object):
 		try:
 			json_data = {
 				'command': command,
-				'arguments': arguments
+				'arguments': arguments,
+				'iface_version': const.SERVICE_IFACE_VERSION
 			}
 
 			response = None
@@ -71,7 +73,17 @@ class AddonClient(object):
 			response_json = json.loads(response)
 			#~ xbmc.log('CLIENT / JSON RESPONSE / ' + dump(response))
 
+			# handle exceptions
+			if response_json.get('exception'):
+				exc = response_json['exception']
+				if exc['type'] == 'VersionMismatch':
+					if dialog_need_restart(t_needrestart_update):
+						raise ShutdownRequestedException('User requested shutdown')
+					
+
 		# TODO: some handling
+		except ShutdownRequestedException, e:
+			raise
 		except:
 			xbmc.log('CLIENT / ERROR / RESPONSE ' + str(response))
 			#~ raise
@@ -137,6 +149,7 @@ class AddonClient(object):
 try:
 	dirhandle = int(sys.argv[1])
 
+	log('SYNOPSI ADDON (%s) START' % VERSION)
 	log('SYS ARGV:' + str(sys.argv))
 
 	url_parsed = urlparse.urlparse(sys.argv[2])
@@ -255,7 +268,7 @@ try:
         }
         ]
 
-		dialog.open_list_dialog({ 'items': items }, close=True)
+		dialog.open_list_dialog({ 'items': items }, close=False)
 	
 
 	elif p['mode']==972:
@@ -273,6 +286,7 @@ try:
 
 
 	elif p['mode']==973:
+		#~ addonclient.show_video_dialog_byId(2406418)
 		addonclient.debug_3()
 	else:
 		raise UnknownModeException('Unknown mode: %s' % p['mode'])

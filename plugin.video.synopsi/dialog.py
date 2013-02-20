@@ -18,6 +18,7 @@ from utilities import *
 from app_apiclient import AppApiClient, AuthenticationError
 from cache import StvList, DuplicateStvIdException
 import top
+from threading import Thread
 
 ACTIONS_CLICK = [7, 100]
 LIST_ITEM_CONTROL_ID = 500
@@ -36,11 +37,13 @@ __profile__      = __addon__.getAddonInfo('profile')
 
 itemFolderBack = {'name': '...', 'cover_medium': 'DefaultFolderBack.png', 'id': HACK_GO_BACK, 'type': 'HACK'}
 
-opendialogs = []
+open_dialogs = []
+closed_dialogs = []
+stashed_dialogs = []
 
 def get_current_dialog():
-	if opendialogs:
-		return opendialogs[-1]
+	if open_dialogs:
+		return open_dialogs[-1]
 	else:
 		return None
 
@@ -49,33 +52,92 @@ def close_current_dialog():
 	if d:
 		d.close()
 
-def close_all_dialogs():
-	for d in opendialogs:
-		d.close()
-		del d
+	return d
 
-class ListDialog(xbmcgui.WindowXMLDialog):
-	""" Dialog for choosing movie corrections """
-	def __init__(self, *args, **kwargs):
+def close_all_dialogs():
+	while 1:
+		d = close_current_dialog()
+		if not d:
+			break
+
+def stash_all_dialogs():
+	while 1:
+		d = close_current_dialog()
+		if not d:
+			break
+
+		stashed_dialogs.append(d)
+
+def unstash_all_dialogs():
+	log('stashed_dialogs:' + str(stashed_dialogs))
+	for d in stashed_dialogs:
+		open_dialogs.append(d)
+		d.doModal()
+
+def open_dialog(dialogClass, xmlFile, tpl_data, close=False):		
+	if close:
+		close_current_dialog()
+			
+	ui = dialogClass(xmlFile, __cwd__, "Default", data=tpl_data)
+	ui.doModal()
+		
+	result = ui.result
+	return result	
+
+class MyDialog(xbmcgui.WindowXMLDialog):
+	def __init__(self):
+		self.parentWindow = open_dialogs[-1] if open_dialogs else None
+		open_dialogs.append(self)
+		self.result = None
+	
+	def close(self):
+		# check if closing the currently opened dialog
+		if open_dialogs[-1] != self:
+			log('WARNING: Dialog queue inconsistency. Non-top dialog close')
+
+		xbmcgui.WindowXMLDialog.close(self)
+		open_dialogs.remove(self)
+	
+class ListDialog(MyDialog):
+	""" Dialog for synopsi listings with custom cover overlays """
+	def __init__(self, strXMLname, strFallbackPath, strDefaultName, **kwargs):
+		super(ListDialog, self).__init__()
 		self.data = kwargs['data']
+
+		if kwargs['data'].has_key('_async_init'):
+			self._async_init = kwargs['data']['_async_init']
+			
 		self.controlId = None
 		self.selectedMovie = None
-		opendialogs.append(self)
+		self.listControl = None
 
 	def onInit(self):
-		self.updateItems()
+		self.listControl = self.getControl(LIST_ITEM_CONTROL_ID)
+		self.listControl.reset()
 		
+		if self.__dict__.get('_async_init'):
+			result = {}
+			kwargs = self._async_init.get('kwargs', {})
+			kwargs['result'] = result
+			try:
+				self._async_init['method'](**kwargs)
+			except (AuthenticationError, ListEmptyException) as e:
+				self.close()
+				return
+				
+			self.data = result
+			
+		self.updateItems()
+				
 	def updateItems(self):
 		items = []
 		items.append(self._getListItem(itemFolderBack))
 		for item in self.data['items']:
 			li = self._getListItem(item)
 			items.append(li)
-
 		try:
-			listControl = self.getControl(LIST_ITEM_CONTROL_ID)
-			listControl.addItems(items)
-			self.setFocus(listControl)
+			self.listControl.addItems(items)
+			self.setFocus(self.listControl)
 		except:
 			log('Adding items failed')
 	
@@ -137,55 +199,86 @@ class ListDialog(xbmcgui.WindowXMLDialog):
 			else:
 				show_video_dialog({'type': item.getProperty('type'), 'id': stv_id}, close=False)
 
-	def close(self):		
-		# check if closing the currently opened dialog
-		if opendialogs[-1] != self:
-			log('WARNING: Dialog queue inconsistency. Non-top dialog close')
-			
-		opendialogs.remove(self)
-		xbmcgui.WindowXMLDialog.close(self)
-
 		
 
-def open_list_dialog(tpl_data, close=True):
-	#~ path = '/home/smid/projects/XBMC/resources/skins/Default/720p/'
-	path = ''
-	
-	try:
-		win = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
-	except ValueError, e:
-		log('Window ValueError')
-		ui = ListDialog(path + "custom_MyVideoNav.xml", __addonpath__, "Default", data=tpl_data)
-		ui.doModal()
-		del ui
-	else:
-		win = xbmcgui.WindowDialog(xbmcgui.getCurrentWindowDialogId())
-		if close:
-			close_current_dialog()
-		ui = ListDialog(path + "custom_MyVideoNav.xml", __addonpath__, "Default", data=tpl_data)
-		ui.doModal()
-		del ui
+def open_list_dialog(tpl_data, close=False):
+	open_dialog(ListDialog, "custom_MyVideoNav.xml", tpl_data, close)
 
 def show_movie_list(item_list):
 	open_list_dialog({ 'items': item_list })
 
-
 def show_tvshows_episodes(stv_id):
-	items = top.apiClient.get_tvshow_season(stv_id)
-	open_list_dialog({'items': items })
+	def init_data(result, **kwargs):
+		log('asyn handler show_tvshows_episodes: ' + str(kwargs))
+		result['items'] = top.apiClient.get_tvshow_season(stv_id)
+	
+	tpl_data = { '_async_init': { 'method': init_data, 'kwargs': {} }}
+
+	open_list_dialog(tpl_data)
 
 
-class VideoDialog(xbmcgui.WindowXMLDialog):
+class VideoDialog(MyDialog):
 	"""
 	Dialog about video information.
 	"""
 	def __init__(self, *args, **kwargs):
+		super(VideoDialog, self).__init__()
 		self.data = kwargs['data']
-		self.parentWindow = opendialogs[-1]
 		self.controlId = None
-		opendialogs.append(self)
+		
+	def _init_data(self):
+		json_data = self.data
+		if json_data.get('type') == 'tvshow':
+			stv_details = top.apiClient.tvshow(json_data['id'], cast_props=defaultCastProps)
+		else:
+			stv_details = top.apiClient.title(json_data['id'], defaultDetailProps, defaultCastProps)
+			
+		top.stvList.updateTitle(stv_details)
+
+		# add xbmc id if available
+		if json_data.has_key('id') and top.stvList.hasStvId(json_data['id']):
+			cacheItem = top.stvList.getByStvId(json_data['id'])
+			json_data['xbmc_id'] = cacheItem['id']
+			try:
+				json_data['xbmc_movie_detail'] = xbmc_rpc.get_details('movie', json_data['xbmc_id'], True)
+			except:
+				pass
+
+		# add similars or seasons (bottom covers list)
+		if stv_details['type'] == 'movie':
+			# get similar movies
+			t1_similars = top.apiClient.titleSimilar(stv_details['id'])
+			if t1_similars.has_key('titles'):
+				stv_details['similars'] = t1_similars['titles']
+		elif stv_details['type'] == 'tvshow' and stv_details.has_key('seasons'):
+			seasons = top.stvList.get_tvshow_local_seasons(stv_details['id'])
+			log('seasons on disk:' + str(seasons))		
+			stv_details['similars'] = [ {'id': i['id'], 'name': 'Season %d' % i['season_number'], 'cover_medium': i['cover_medium'], 'watched': i['episodes_count'] == i['watched_count'], 'file': i['season_number'] in seasons} for i in stv_details['seasons'] ]
+
+		# similar overlays
+		if stv_details.has_key('similars'):
+			for item in stv_details['similars']:
+				top.stvList.updateTitle(item)
+
+				oc = 0
+				if item.get('file'):
+					oc |= OverlayCode.OnYourDisk
+				if item.get('watched'):
+					oc |= OverlayCode.AlreadyWatched
+
+				if oc:
+					item['overlay'] = overlay_image[oc]
+
+		self.data = video_dialog_template_fill(stv_details, json_data)
 
 	def onInit(self):
+		# reset some default garbage
+		self.getControl(59).reset()
+		
+		# initialze data for the form
+		self._init_data()
+		
+		# fill-in the form
 		win = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
 		win.setProperty("Movie.Title", self.data["name"] + '[COLOR=gray] (' + unicode(self.data.get('year')) + ')[/COLOR]')
 		win.setProperty("Movie.Plot", self.data["plot"])
@@ -196,7 +289,7 @@ class VideoDialog(xbmcgui.WindowXMLDialog):
 
 		# set available labels
 		i = 1
-		for key, value in self.data['labels'].iteritems():
+		for key, value in self.data['labels']:
 			win.setProperty("Movie.Label.{0}.1".format(i), key)
 			win.setProperty("Movie.Label.{0}.2".format(i), value)
 			i = i + 1
@@ -246,11 +339,11 @@ class VideoDialog(xbmcgui.WindowXMLDialog):
 
 		# play
 		if controlId == 5:
-			self.close()
+			close_all_dialogs()
 
 		# trailer
 		elif controlId == 10:
-			self.close()
+			close_all_dialogs()
 
 		# already watched
 		elif controlId == 11:
@@ -267,7 +360,6 @@ class VideoDialog(xbmcgui.WindowXMLDialog):
 			stv_id = int(selected_item.getProperty('id'))
 
 			if self.data['type'] == 'tvshow':
-				self.close()
 				show_tvshows_episodes(stv_id)				
 			else:
 				show_video_dialog_byId(stv_id, close=True)
@@ -301,12 +393,8 @@ class VideoDialog(xbmcgui.WindowXMLDialog):
 		try:
 			search_term = common.getUserInput(t_correct_search_title, "")
 			if search_term:
-				results = top.apiClient.search(search_term, SEARCH_RESULT_LIMIT)
-				if len(results['search_result']) == 0:
-					dialog_ok('No results')
-				else:
-					data = { 'movies': results['search_result'] }
-					return open_select_movie_dialog(data)
+				data = { 'search_term': search_term }
+				return open_select_movie_dialog(data)				
 			else:
 				dialog_ok(t_enter_title_to_search)
 		except:
@@ -314,45 +402,48 @@ class VideoDialog(xbmcgui.WindowXMLDialog):
 
 		return
 
-	def close(self):		
-		# check if closing the currently opened dialog
-		if opendialogs[-1] != self:
-			log('WARNING: Dialog queue inconsistency. Non-top dialog close')
-			
-		opendialogs.remove(self)
-		xbmcgui.WindowXMLDialog.close(self)
 
-
-class SelectMovieDialog(xbmcgui.WindowXMLDialog):
+class SelectMovieDialog(MyDialog):
 	""" Dialog for choosing movie corrections """
 	def __init__(self, *args, **kwargs):
+		super(SelectMovieDialog, self).__init__()
 		self.data = kwargs['data']
 		self.controlId = None
 		self.selectedMovie = None
-		opendialogs.append(self)
+
+	def _init_data(self):
+		results = top.apiClient.search(self.data['search_term'], SEARCH_RESULT_LIMIT)
+		if len(results['search_result']) == 0:
+			dialog_ok('No results')
+			self.close()
+			return False
+		else:
+			self.data.update({ 'movies': results['search_result'] })		
+			return True
 
 	def onInit(self):
-		items = []
-		for item in self.data['movies']:
-			text = '%s [COLOR=gray](%s)[/COLOR]' % (item['name'], item.get('year', '?'))
+		if self._init_data():
+			items = []
+			for item in self.data['movies']:
+				text = '%s [COLOR=gray](%s)[/COLOR]' % (item['name'], item.get('year', '?'))
 
-			if item.get('type') == 'episode':
-				text = 'S%sE%s - ' % (item.get('season_number', '??'), item.get('episode_number', '??')) + text
+				if item.get('type') == 'episode':
+					text = 'S%sE%s - ' % (item.get('season_number', '??'), item.get('episode_number', '??')) + text
 
-			li = xbmcgui.ListItem(text, iconImage=item['cover_medium'])
-			li.setProperty('id', str(item['id']))
-			li.setProperty('director', ', '.join(item.get('directors')) if item.has_key('directors') else t_unavail)
-			cast = ', '.join([i['name'] for i in item['cast']]) if item.has_key('cast') else t_unavail			
-			li.setProperty('cast', cast)
-			items.append(li)
+				li = xbmcgui.ListItem(text, iconImage=item['cover_medium'])
+				li.setProperty('id', str(item['id']))
+				li.setProperty('director', ', '.join(item.get('directors')) if item.has_key('directors') else t_unavail)
+				cast = ', '.join([i['name'] for i in item['cast']]) if item.has_key('cast') else t_unavail			
+				li.setProperty('cast', cast)
+				items.append(li)
 
-			self.getControl(59).addItems(items)
+				self.getControl(59).addItems(items)
 
 	def onClick(self, controlId):
 		log('onClick: ' + str(controlId))
 		if self.controlId == 59:
 			sel_index = self.getControl(59).getSelectedPosition()
-			self.selectedMovie = self.data['movies'][sel_index]
+			self.result = self.data['movies'][sel_index]
 			self.close()
 
 
@@ -364,77 +455,15 @@ class SelectMovieDialog(xbmcgui.WindowXMLDialog):
 		if (action.getId() in CANCEL_DIALOG):
 			self.close()
 
-	def close(self):		
-		# check if closing the currently opened dialog
-		if opendialogs[-1] != self:
-			log('WARNING: Dialog queue inconsistency. Non-top dialog close')
-			
-		opendialogs.remove(self)
-		xbmcgui.WindowXMLDialog.close(self)
-
 
 def open_select_movie_dialog(tpl_data):
-	ui = SelectMovieDialog("SelectMovie.xml", __cwd__, "Default", data=tpl_data)
-	ui.doModal()
-	result = ui.selectedMovie
-	del ui
-	return result
+	return open_dialog(SelectMovieDialog, "SelectMovie.xml", tpl_data)
 
-def show_video_dialog_byId(stv_id, close=False):				
-	stv_details = top.apiClient.title(stv_id, defaultDetailProps, defaultCastProps)
-	top.stvList.updateTitle(stv_details)
-	show_video_dialog_data(stv_details, close=close)
+def show_video_dialog_byId(stv_id, close=False):
+	show_video_dialog({'id': stv_id}, close)	
 
 def show_video_dialog(json_data, close=False):	
-	if json_data.get('type') == 'tvshow':
-		stv_details = top.apiClient.tvshow(json_data['id'], cast_props=defaultCastProps)
-	else:
-		stv_details = top.apiClient.title(json_data['id'], defaultDetailProps, defaultCastProps)
-		
-	top.stvList.updateTitle(stv_details)
-	show_video_dialog_data(stv_details, json_data, close)
-
-def show_video_dialog_data(stv_details, json_data={}, close=False):
-	log('stv_details:' + dump(stv_details))
-
-	# add xbmc id if available
-	if json_data.has_key('id') and top.stvList.hasStvId(json_data['id']):
-		cacheItem = top.stvList.getByStvId(json_data['id'])
-		json_data['xbmc_id'] = cacheItem['id']
-		try:
-			json_data['xbmc_movie_detail'] = xbmc_rpc.get_details('movie', json_data['xbmc_id'], True)
-		except:
-			pass
-
-	# add similars or seasons (bottom covers list)
-	if stv_details['type'] == 'movie':
-		# get similar movies
-		t1_similars = top.apiClient.titleSimilar(stv_details['id'])
-		if t1_similars.has_key('titles'):
-			stv_details['similars'] = t1_similars['titles']
-	elif stv_details['type'] == 'tvshow' and stv_details.has_key('seasons'):
-		seasons = top.stvList.get_tvshow_local_seasons(stv_details['id'])
-		log('seasons on disk:' + str(seasons))		
-		stv_details['similars'] = [ {'id': i['id'], 'name': 'Season %d' % i['season_number'], 'cover_medium': i['cover_medium'], 'watched': i['episodes_count'] == i['watched_count'], 'file': i['season_number'] in seasons} for i in stv_details['seasons'] ]
-
-				
-
-	# similar overlays
-	if stv_details.has_key('similars'):
-		for item in stv_details['similars']:
-			top.stvList.updateTitle(item)
-
-			oc = 0
-			if item.get('file'):
-				oc |= OverlayCode.OnYourDisk
-			if item.get('watched'):
-				oc |= OverlayCode.AlreadyWatched
-
-			if oc:
-				item['overlay'] = overlay_image[oc]
-
-	tpl_data = video_dialog_template_fill(stv_details, json_data)
-	open_video_dialog(tpl_data, close)
+	open_video_dialog(json_data, close)
 
 
 def video_dialog_template_fill(stv_details, json_data={}):
@@ -449,77 +478,50 @@ def video_dialog_template_fill(stv_details, json_data={}):
 
 	tpl_data=stv_details
 
-	stv_labels = {}
-	if tpl_data.get('genres'):
-		stv_labels['Genre'] = ', '.join(tpl_data['genres'])	
-	if tpl_data.get('runtime'):
-		stv_labels['Runtime'] = '%d min' % tpl_data['runtime']
-	if tpl_data.get('directors'):
-		stv_labels['Director'] = ', '.join(tpl_data['directors'])
-	if tpl_data.get('cast'):
-		stv_labels['Cast'] = ', '.join(map(lambda x:x['name'], tpl_data['cast']))
-	#~ if tpl_data.get('writers'):
-		#~ stv_labels['Writer'] = ', '.join(tpl_data['writers'])
-	if tpl_data.get('date'):
-		tpl_data['release_date'] = datetime.fromtimestamp(tpl_data['date'])
-		stv_labels['Release date'] = tpl_data['release_date'].strftime('%x')
-
-	xbmclabels = {}
+	# store file in tpl
 	if tpl_data.has_key('xbmc_movie_detail'):
-		d = tpl_data['xbmc_movie_detail']
-		if d.get('director'):
-			xbmclabels["Director"] = ', '.join(d['director'])
-		#~ if d.get('writer'):
-			#~ xbmclabels["Writer"] = d['writer']
-		if d.get('runtime'):
-			xbmclabels["Runtime"] = d['runtime'] + ' min'
-		if d.get('premiered'):
-			xbmclabels["Release date"] = d['premiered']
-			if not tpl_data.get('release_date'):
-				try:
-					tpl_data['release_date'] = datetime.strptime(d['premiered'], '%m/%d/%y')
-				except:
-					pass
-
 		if d.get('file'):
 			tpl_data['file'] = d.get('file')
 
-	labels = {}
-	labels.update(xbmclabels)
-	labels.update(stv_labels)
+	# store labels
+	labels = []	
 
-	# set unavail labels
-	for label in ['Genre', 'Runtime', 'Director','Cast']:
-		if not labels.has_key(label):
-			labels[label] = t_unavail
+	# append tuple to labels, translated by trfn, or the N/A string
+	def append_tuple(stv_label, tpl_label, trfn):
+		if tpl_data.get(tpl_label):
+			val = trfn(tpl_data[tpl_label])
+		else:
+			val = t_unavail
+				
+		labels.append((stv_label, val))
+	
+	# translate functions
+	def tr_genre(data): return ', '.join(data)
+	def tr_cast(data): return ', '.join(map(lambda x:x['name'], data))
+	def tr_runtime(data): return '%d min' % data
 
+	append_tuple('Genre', 'genres', tr_genre)
+	append_tuple('Cast', 'cast', tr_cast)
+	append_tuple('Director', 'directors', tr_genre)		# reuse tr_genre here	
+	append_tuple('Runtime', 'runtime', tr_runtime)
+		
+	if tpl_data.get('date'):
+		tpl_data['release_date'] = datetime.fromtimestamp(tpl_data['date'])
+		labels.append(('Release date', tpl_data['release_date'].strftime('%x')))
+		
 	tpl_data['labels'] = labels
 	tpl_data['BottomListingLabel'] = type2listinglabel.get(tpl_data['type'], '')
 
 	return tpl_data
 
 def open_video_dialog(tpl_data, close=False):
-	try:
-		win = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
-	except ValueError, e:
-		log('Window ValueError')
-		ui = VideoDialog("VideoInfo.xml", __cwd__, "Default", data=tpl_data)
-		ui.doModal()
-		del ui
-	else:
-		win = xbmcgui.WindowDialog(xbmcgui.getCurrentWindowDialogId())
-		if close:
-			close_current_dialog()
-		ui = VideoDialog("VideoInfo.xml", __cwd__, "Default", data=tpl_data)
-		ui.doModal()
-		del ui
+	open_dialog(VideoDialog, "VideoInfo.xml", tpl_data, close)
 
 
-
-def show_submenu(action_code, **kwargs):
+def get_submenu_item_list(action_code, **kwargs):
 	try:
 		item_list = top.apiClient.get_item_list(action_code=action_code, **kwargs)
-		
+
 		# hack HACK_SHOW_ALL_LOCAL_MOVIES
 		if action_code==ActionCode.LocalMovieRecco:
 			item_list.append(item_show_all_movies_hack)
@@ -530,16 +532,26 @@ def show_submenu(action_code, **kwargs):
 	except AuthenticationError as e:
 		if dialog_check_login_correct():
 			show_submenu(action_code, **kwargs)
-			
-		return
+
+		raise
 
 	except ListEmptyException:
 		dialog_ok(exc_text_by_mode(action_code))
-		return
+		raise
 		
 	except:
 		log(traceback.format_exc())
 		dialog_ok(t_listing_failed)
+		raise
 			
-	show_movie_list(item_list)
+	return item_list
 
+
+def show_submenu(action_code, **kwargs):
+	def init_data(result, **kwargs):
+		log('init_data kwargs: ' + str(kwargs))
+		result['items'] = get_submenu_item_list(**kwargs)
+	
+	kwargs['action_code'] = action_code	
+	tpl_data = { '_async_init': { 'method': init_data, 'kwargs': kwargs }}
+	open_list_dialog(tpl_data)

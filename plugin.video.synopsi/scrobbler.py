@@ -12,7 +12,7 @@ import json
 # application
 from utilities import *
 import top
-
+import dialog
 
 TIME_UNKNOWN = 65535
 CANCEL_DIALOG = (9, 10, 92, 216, 247, 257, 275, 61467, 61448, )
@@ -31,7 +31,6 @@ class SynopsiPlayer(xbmc.Player):
 	ended = False
 	stopped = False
 	paused = False
-	ended_without_rating = False
 	apiclient = None
 
 	playing = False
@@ -123,7 +122,7 @@ class SynopsiPlayer(xbmc.Player):
 		if self.playing:
 			self.resumed()
 
-	def get_time(self, default=TIME_UNKNOWN):
+	def get_time(self, default=None):
 		try:
 			if self.isPlayingVideo():
 				t = int(self.getTime())
@@ -131,7 +130,7 @@ class SynopsiPlayer(xbmc.Player):
 				raise Exception('fix: xbmc missing exception')
 		except:
 			return default
-
+			
 		return t
 
 	def get_media_info_tag(self):
@@ -156,10 +155,8 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 			tries to update time while we are in the onPlayBackStopped method and handlers """
 		
 		t = self.get_time()
-			
 		if t or not self.playing:
 			self.current_time = t
-			
 			
 		#~ self.get_media_info_tag()
 
@@ -173,12 +170,10 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		# rate file
 		self.rate_file(self.last_played_file)
 
-	def ended_without_rating(self):
-		self.playerEvent('end')
+		self.onAfterStop()
 
 	def stopped(self):
 		self.playerEvent('stop')
-		#~ self.log(dump(self.playerEvents))
 		percent = self.current_time / self.total_time
 		self.log('percent:' + str(self.current_time / self.total_time))
 
@@ -187,6 +182,14 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 			self.rate_file(self.last_played_file)
 		else:
 			self.send_checkin(self.last_played_file)
+		
+		self.onAfterStop()
+
+	def onAfterStop(self):
+		# unstash all dialogs, if any
+		#~ dialog.unstash_all_dialogs()
+		pass
+
 
 	def paused(self):
 		self.update_current_time()
@@ -204,12 +207,15 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		# get stv id
 		detail = self.cache.getByFilename(filename)
 
-		self.log('detail: ' + str(detail))
+		self.log('rating detail: ' + str(detail))
 
 		# only for identified by synopsi
 		if not detail.has_key('stvId'):
 			return False
-
+		
+		# disallow sending 'watched' event for this file from scrobbler
+		self.cache.setBlockEvents(detail['type'], detail['id'])
+				
 		## prepare the data
 		data = { 'player_events': json.dumps(self.playerEvents) }
 	
@@ -225,10 +231,14 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 			if rating < 4:
 				data['rating'] = rating
 
-		self.apiclient.titleWatched(detail['stvId'], **data)
-
-		# clear the player events
-		self.playerEvents = []
+		try:
+			self.apiclient.titleWatched(detail['stvId'], **data)
+		finally:
+			# allow sending 'watched' event for this file from scrobbler
+			self.cache.resetBlockEvents()
+			
+			# clear the player events
+			self.playerEvents = []
 
 	def send_checkin(self, filename):
 		self.rate_file(filename, rate=False)

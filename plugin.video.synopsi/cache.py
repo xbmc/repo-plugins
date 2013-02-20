@@ -98,7 +98,7 @@ class OfflineStvList(object):
 	def addorupdate(self, atype, aid):
 		if not atype in playable_types:
 			return
-
+		
 		# find out actual data about movie
 		movie = xbmc_rpc.get_details(atype, aid)
 		movie['type'] = atype
@@ -111,7 +111,7 @@ class OfflineStvList(object):
 			movie['stv_title_hash'] = stv_hash(path)
 			movie['os_title_hash'] = hash_opensubtitle(path)
 
-
+			
 			# TODO: stv_subtitle_hash - hash of the subtitle file if present
 			ident = {}
 			self._translate_xbmc2stv_keys(ident, movie)
@@ -191,6 +191,7 @@ class OfflineStvList(object):
 								
 
 	def update(self, item):
+		changed_keys = []
 		typeIdStr = self._getKey(item['type'], item['id'])
 		cacheItem = self.byTypeId[typeIdStr]
 
@@ -201,8 +202,10 @@ class OfflineStvList(object):
 			if not cacheItem.has_key(key) or not item[key] == cacheItem[key]:
 				updateStr += key + ': ' + str(getattr(cacheItem, key, None)) + ' -> ' + str(item[key]) + ' | '
 				cacheItem[key] = item[key]
+				changed_keys.append(key)
 
 		self.log('UPDATE / ' + typeIdStr + ' / ' + updateStr)
+		return (cacheItem, changed_keys)
 
 	def remove(self, atype, aid):
 		typeIdStr = self._getKey(atype, aid)
@@ -427,7 +430,8 @@ class OnlineStvList(OfflineStvList):
 	def __init__(self, uuid, apiclient, filePath=None):
 		super(OnlineStvList, self).__init__(uuid, filePath)
 		self.apiClient = apiclient
-
+		self._block_rating = None
+		
 	@classmethod
 	def getDefaultList(cls, apiClient=None):
 		if cls._instance:
@@ -448,7 +452,17 @@ class OnlineStvList(OfflineStvList):
 		# if known by synopsi, add to list
 		if item.has_key('stvId'):
 			self.apiClient.libraryTitleAdd(item['stvId'])
+			# if already watched, check-in to title
+			if item.get('lastplayed'):
+				self.apiClient.titleWatched(item['stvId'], created_time=item.get('lastplayed'))
 
+	def update(self, item):
+		cacheItem, changed_keys = OfflineStvList.update(self, item)
+		
+		# update lastplayed only if it is not in the rating process, and it is not the 'unwatched' action
+		if 'lastplayed' in changed_keys and cacheItem.get('lastplayed') and not self.getBlockEvents(item['type'], item['id']):
+			self.apiClient.titleWatched(cacheItem['stvId'], created_time=cacheItem.get('lastplayed'))
+		
 	def remove(self, atype, aid):
 		if self.hasTypeId(atype, aid):
 			item = self.getByTypeId(atype, aid)
@@ -465,6 +479,19 @@ class OnlineStvList(OfflineStvList):
 		self.apiClient.title_identify_correct(new_title['id'], old_title['stv_title_hash'])
 
 		return new_item
+
+	def setBlockEvents(self, atype, aid):
+		self._block_rating = (atype, aid)
+
+	def resetBlockEvents(self):
+		self._block_rating = None
+		
+	def getBlockEvents(self, atype, aid):
+		if self._block_rating == (atype, aid):
+			return True
+		
+		return False
+
 
 class AppStvList(OnlineStvList):
 	def get_local_tvshows(self):

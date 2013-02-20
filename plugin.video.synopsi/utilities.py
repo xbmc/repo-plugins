@@ -21,6 +21,9 @@ import time
 import sys
 import xml.etree.ElementTree as et
 
+# application
+import resources.const
+
 common = CommonFunctions
 common.plugin = "SynopsiTV"
 
@@ -29,7 +32,7 @@ __addon__  = xbmcaddon.Addon()
 __addonname__ = __addon__.getAddonInfo('name')
 __addonpath__	= __addon__.getAddonInfo('path')
 __author__  = __addon__.getAddonInfo('author')
-__version__   = __addon__.getAddonInfo('version')
+VERSION   = __addon__.getAddonInfo('version')
 __profile__      = xbmc.translatePath(__addon__.getAddonInfo('profile'))
 __lockLoginScreen__ = threading.Lock()
 
@@ -85,6 +88,7 @@ t_nounwatched = 'There are no unwatched episodes in your TV Show tracking'
 t_nolocalrecco = 'There are no items in this list. Either you have no movies in your library or they have not been recognized by Synopsi'
 t_nolocaltvshow = 'There are no items in this list. Either you have no episodes in your library or they have not been recognized by Synopsi'
 t_needrestart = 'To start the SynopsiTV service, please turn off your media center then turn it back on again. Do this now?'
+t_needrestart_update = 'Addon service has been updated. For the plugin to work correctly, turn off your media center then turn it back on again. Do this now?'
 t_enter_title_to_search =  'Enter a title name to search for.'
 t_correct_search_title = 'Search for the correct title'
 
@@ -135,7 +139,7 @@ def os_info():
 	return info
 
 def software_info():
-	i = { 'os_info': os_info() }
+	i = { 'plugin_version': VERSION, 'os_info': os_info() }
 	i.update(player_info())
 	return i 
 
@@ -268,21 +272,6 @@ def clear_setting_cache():
 	settingsPath = os.path.join(__profile__, 'settings.xml')
 	if os.path.exists(settingsPath):
 		os.remove(settingsPath)
-
-def get_settings_file_version():
-	path = os.path.join(__addonpath__, 'resources', 'settings.xml')
-
-	value = None
-	try:
-		with open(path, 'r') as _file:
-			temp = _file.read()
-			if "SETTINGS_VERSION" in temp:
-				version = re.compile('\<setting id="SETTINGS_VERSION" option="hidden" type="number" visible="false" default="(\d+)" /\>').findall(temp)
-				value = int(version[0])
-	except (IOError, IndexError):
-		pass
-
-	return value
 
 def setting_cache_append_string(string):
 	settingsPath = os.path.join(__profile__, 'settings.xml')
@@ -671,9 +660,9 @@ def dialog_login_fail_yesno():
 	return result
 
 
-def dialog_need_restart():
+def dialog_need_restart(reason=t_needrestart):
 	dialog = xbmcgui.Dialog()
-	yes = dialog_yesno(t_needrestart)
+	yes = dialog_yesno(reason)
 	return yes
 
 
@@ -711,7 +700,7 @@ def show_categories():
 	xbmc.executebuiltin("Container.SetViewMode(503)")
 	add_directory("Movie Recommendations", "url", ActionCode.MovieRecco, "list.png")
 	add_directory("Popular TV Shows", "url", ActionCode.TVShows, "list.png")
-	add_directory("Local Movie recommendations", "url", ActionCode.LocalMovieRecco, "list.png")
+	add_directory("Local Movie Recommendations", "url", ActionCode.LocalMovieRecco, "list.png")
 	add_directory("Local TV Shows", "url", ActionCode.LocalTVShows, "list.png")
 	add_directory("Unwatched TV Show Episodes", "url", ActionCode.UnwatchedEpisodes, "list.png")
 	add_directory("Upcoming TV Episodes", "url", ActionCode.UpcomingEpisodes, "list.png")

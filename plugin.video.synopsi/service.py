@@ -14,7 +14,7 @@ import time
 from scrobbler import SynopsiPlayerDecor
 from library import RPCListenerHandler
 from cache import *
-from utilities import home_screen_fill, login_screen, log
+from utilities import home_screen_fill, login_screen, log, VERSION
 from app_apiclient import AppApiClient
 from addonservice import AddonService
 import top
@@ -30,6 +30,8 @@ __addon__.setSetting('ADDON_SERVICE_FIRSTRUN', "false")
 DEFAULT_SERVICE_PORT=int(__addon__.getSetting('ADDON_SERVICE_PORT'))
 
 def main():
+	log('SYNOPSI SERVICE (%s) START' % VERSION)
+	
 	apiclient1 = AppApiClient.getDefaultClient()
 	top.apiClient = apiclient1
 

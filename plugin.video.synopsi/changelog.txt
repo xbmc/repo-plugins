@@ -1,3 +1,13 @@
+[B]Version 1.0.4[/B]
+
+- Fixed: labels in movie details
+- Fixed: dialog navigation, back button, hide dialogs on movie play
+- Added: mark as already watched when adding files to library
+- Added: mark as watched from context menu is properly handled
+- Fixed: bug with movie time evaluation
+- Fixed: dialogs and windows are now opened immediately after user's requests, data are filled in afterwards
+- Fixed: few minor bugs
+
 [B]Version 1.0.3[/B]
 
 - Added: send software info on checkin

@@ -1,0 +1,16 @@
+[B]0.0.5[/B]
+- Removed the download of the thumbnails and program info (it's now faster again)
+- Added search functionality
+
+[B]0.0.4[/B]
+- Name of the recording is now direct play link. Recording info is now available from info (I key)
+- Whole program title is now showed
+- Download thumbnails and program infos, which might affect the performance
+
+[B]0.0.2[/B]
+- Loading of the directory is now faster (some changes to UI logic)
+- Unwatched recordings are now marked with *
+- "yesterday" and "today" are showed in recording name instead of date
+
+[B]0.0.1[/B]
+- Initial version

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Asetukset</string>
+  <string id="30001">Käyttäjänimi</string>
+  <string id="30002">Salasana</string>
+  <string id="30003">Kirjautuminen epäonnistui!</string>
+  <string id="30004">Tarkista asetukset.</string>
+  <string id="30006">Su</string>
+  <string id="30007">Ma</string>
+  <string id="30008">Ti</string>
+  <string id="30009">Ke</string>
+  <string id="30010">To</string>
+  <string id="30011">Pe</string>
+  <string id="30012">La</string>  
+  <string id="30013">Tänään</string>
+  <string id="30014">Eilen</string>
+  <string id="30015">Katso</string>
+  <string id="30016">Kesto</string>
+  <string id="30017">Etsi..</string>
+</strings>

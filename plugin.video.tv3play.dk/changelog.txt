@@ -1,3 +1,12 @@
+[B]Version 2.0.0 - 2013-01-13[/B]
+- Rewrote addon to use TV3 Play mobile API to get streams in h264 format.
+  Currently mobile API is only available for DK, NO and SE regions
+- Updated language files from Transifex
+
+[B]Version 1.0.4 - 2012-12-28[/B]
+- Fixed problem with video playback
+- Updated language files from Transifex
+
 [B]Version 1.0.3 - 2012-10-21[/B]
 - Added Norwegian translation (thanks cptspiff)
 - Fixed problems with differences between Eden and Frodo (http://trac.xbmc.org/ticket/13349)

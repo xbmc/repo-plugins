@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Hungarian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/hu/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="100">Reklám</string>
+    <string id="101">Általános</string>
+    <string id="102">Régió</string>
+    <string id="103">Klipek</string>
+    <string id="150">Válasszon régiót</string>
+    <string id="200">Hiba történt a TV3 Play-el folytatott kommunikációban</string>
+    <string id="201">A hibaüzenet:</string>
+    <string id="202">Nem található a lejátszási URL</string>
+    <string id="203">Nem található évad</string>
+    <string id="204">Nem sikerült a programok listáját letölteni</string>
+    <string id="301">Legújabb videók</string>
+    <string id="302">Legnézettebb</string>
+    <string id="303">Legkedveltebb</string>
+    <string id="304">Legújabb klipek</string>
+</strings>

@@ -1,22 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tv3play.dk" version="1.0.3" name="TV3 Play" provider-name="twinther [tommy@winther.nu]">
+<addon id="plugin.video.tv3play.dk" version="2.0.0" name="TV3 Play" provider-name="twinther [tommy@winther.nu]">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
-        <import addon="script.module.buggalo" version="1.0.1"/>
-        <import addon="script.module.elementtree" version="1.2.7"/>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.buggalo" version="1.1.2"/>
+        <import addon="script.module.simplejson" version="2.0.10"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <summary lang="en">Watch the latest shows from TV3 Play and Viasat 4 Play</summary>
+        <summary lang="be">Watch the latest shows from TV3 Play and Viasat 4 Play</summary>
+        <summary lang="ca">Mireu els darrers programes de TV3 Play i Viasat 4 Play</summary>
         <summary lang="da">Se de seneste udsendelser fra TV3 Play og Viasat 4 Play</summary>
+        <summary lang="de">Zeige die letzten Shows von TV3 Play und Viasat 4 Play</summary>
+        <summary lang="el">Παρακολουθήστε τις πιο πρόσφατες εκπομπές από το TV3 Play και το Viasat 4 Play</summary>
+        <summary lang="en">Watch the latest shows from TV3 Play and Viasat 4 Play</summary>
+        <summary lang="hu">Nézze meg a legfrissebb műsorokat a TV3 Play és Viasat 4 Play oldalakról</summary>
+        <summary lang="ko">TV3 Play와 Viasat4 Play의 최근 쇼 감상</summary>
+        <summary lang="lt">Žiūrėti naujausius laidas iš TV3Play ir Viasat 4 Play</summary>
+        <summary lang="no">Se de nyeste episodene fra TV3 Play og Viasat 4 Play</summary>
+        <summary lang="pl">Oglądaj najnowsze programy z TV3 Play oraz Viasat 4 Play</summary>
+        <summary lang="pt_BR">Assista os últimos shows de TV3 Play e Viasat 4 Play</summary>
+        <summary lang="sk">Sledujte najaktuálnejšie vysielanie z TV3 Play a Viasat 4 Play</summary>
+        <summary lang="sv">Titta på dom senaste serierna från TV3 Play och Viasat 4 Play</summary>
+        <description lang="be">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+        <description lang="ca">A TV3 Play podeu veure tota la programació pròpia de TV3 i algunes sèries estrangeres. Hi ha també extres d'alguns programes.[CR][CR]Si teniu comentaris o suggerències per aquest afegitó, per favor no dubteu en participar en el debat al meu blog http://tommy.winther.nu</description>
+        <description lang="da">På TV3 Play kan du se alle TV3's egne programmer og nogle udenlandske serier. Der er også ekstramateriale til flere af programmerne.[CR][CR]Har du kommentarer, ris eller ros til denne add-on er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+        <description lang="de">Auf TV3 Play kannst du alle TV3 Programme und einige ausländische Serien sehen. Außerdem gibt es für einige Programme extra funktionen. [CR][CR]Falls du Kommentare oder Empfehlungen für dieses Addon hast, fühle dich so frei und beteilige dich an der Debatte auf meinem Blog unter http://tommy.winther.nu</description>
+        <description lang="el">Στο TV3 Play μπορείτε να παρακολουθήσετε όλο το πρόγραμμά του καθώς και κάποιες ξένες σειρές. Υπάρχουν, επίσης, επιπλέον λειτουργίες για κάποια προγράμματα.[CR][CR]Αν έχετε σχόλια ή προτάσεις για αυτό το πρόσθετο, παρακαλούμε να συμμετάσχετε ελεύθερα στη συζήτηση στο blog μου στο http://tommy.winther.nu</description>
         <description lang="en">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
-        <description lang="da">På TV3 Play kan du se alle TV3's egne programmer og nogle udenlandske serier. Der er også ekstramateriale til flere af programmerne.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+        <description lang="hu">A TV3 Play-en saját műsorokat és külföldi sorozatokat nézhet. [CR][CR]Ha hozzászólása vagy javaslata van a kiegészítővel kapcsolatban, keresse fel a blogomat a tommy.winther.nu címen</description>
+        <description lang="ko">On TV3 Play you can watch all of TV3's own programming and some foreign series. There is also extra feature for some programming.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+        <description lang="lt">TV3 Play priede galite žiūrėti visas TV3 savo šalies ir kai kurias užsienio laidas. Taip pat yra papildoma programos funkcija[CR] [Cr]Jei turite pastabų ar pasiūlymų šiam priedui, prašome nedvejodami dalyvauti diskusijose mano dienoraštyje http://tommy.winther.nu</description>
+        <description lang="no">På TV3 Play kan du se alle av TV3`s egne programmer og noen utenlanske serier. Det finnes også tilleggs funksjoner til noen av programmene. Hvis du har kommentarer eller forslag til dette tillegget, vennligst føl deg fri til å bli med i bebatten på min blogg: http://tommy.winther.nu</description>
+        <description lang="pl">Na TV3 Play możesz oglądać wszystkie własne programy TV3 oraz kilka zagranicznych serii. Istnieje równierz dodatkowa funkcje dla niektórych programów.[CR][CR]Jeśli masz uwagi lub sugestie dotyczące tej wtyczki, uprzejmie prosimy o udział w debacie na blogu na http://tommy.winther.nu</description>
+        <description lang="pt_BR">Na TV3 você pode assistir toda a programação da própria TV3 e algumas séries estrangeiras. Há também recursos extras para alguma programação. [CR] [CR] Se você tiver comentários ou sugestões para este add-on, por favor, sinta-se livre para participar do debate no meu blog em http://tommy.winther.nu</description>
+        <description lang="sk">Na TV3 Play môžete sledovať všetku vlastnú tvorbu TV3 a niektoré zahraničné seriály. K dispozícii je tiež extra funkcie pre niektoré programy.&#10;&#10;Ak máte poznámky či pripomienky k tomuto doplnku, prosím prispejte do diskusie na blogu http://tommy.winther.nu.</description>
+        <description lang="sv">På TV3 Play kan du se alla TV3's egna program samt några utländska serier. Det finns också extra funktioner för några av programmen.[CR][CR]Om du har kommentarer eller förslag för detta tillägg, känn dig som hemma och delta i debatten på min blogg http://tommy.winther.nu</description>
+        <disclaimer lang="be">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
+        <disclaimer lang="ca">Algunes parts d'aquest afegitó podrien ser il·legals al vostre pais de residència - per favor, comprovau les vostres lleis locals.</disclaimer>
+        <disclaimer lang="da">Nogle dele af denne add-on er muligvis ikke lovlige i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <disclaimer lang="de">Einige Teile dieses Addons sind eventuell nicht in deinem derzeitigen Land legal - bitte überprüfe deine lokalen Gesetze.</disclaimer>
+        <disclaimer lang="el">Κάποια τμήματα αυτού του πρόσθετου ενδέχεται να μην είναι νόμιμα στη χώρα σας - ελέγξτε τη νομοθεσία σας.</disclaimer>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws.</disclaimer>
-        <disclaimer lang="da">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
+        <disclaimer lang="hu">A kiegészítő néhány részlete illegális lehet az ön országában - kérjük nézzen utána a törvényeknek.</disclaimer>
+        <disclaimer lang="ko">이 애드온의 일부는 거주하는 국가에 따라 합법적이지 않을 수도 있습니다. 이용 지역의 법률을 확인하세요.</disclaimer>
+        <disclaimer lang="lt">Kai kurios šio priedo dalys negali būti naudojamos/vartojamos/žiūrimos jūsų šalyje - prašome patikrinti gyvenamosios vietos įstatymus.</disclaimer>
+        <disclaimer lang="no">Noen deler av dette tillegget kan hende ikke er lovlig i dit land - vennligst sjekk med dine lokale lover.</disclaimer>
+        <disclaimer lang="pl">Niektóre części tej wtyczki moga być nielegalne w twoim kraju  - proszę sprawdzić z lokalnymi przepisami.</disclaimer>
+        <disclaimer lang="pt_BR">Algumas partes desta addon pode não ser legais em seu país - por favor verifique as leis locais, antes de usar.</disclaimer>
+        <disclaimer lang="sk">Niektoré časti tohoto doplnku môžu byť protizákonné vo Vašej krajine pobytu - prosím informujte sa o miestnych zákonoch.</disclaimer>
+        <disclaimer lang="sv">Några delar i detta tillägg kanske inte är lagligt i ditt hemland - var god kontrollera med dom lokala lagarna.</disclaimer>
         <license>GPLv2</license>
         <platform>all</platform>
-        <language>da se no lv lt et</language>
+        <language>da se no</language>
     </extension>
 </addon>

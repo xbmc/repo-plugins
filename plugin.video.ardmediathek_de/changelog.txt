@@ -4,4 +4,8 @@
 - Fixed bug while browsing tv shows (missing videos)
 1.0.2
 - Some small fixes
-- Added show favorites
+- Added show favourites
+1.0.3 / 2.0.3
+- Fixed FSK videos
+- Added live stream
+- Added context menu for playing alternative stream

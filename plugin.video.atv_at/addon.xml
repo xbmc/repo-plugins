@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.atv_at" name="ATV.at" version="2.0.1" provider-name="AddonScriptorDE">
+<addon id="plugin.video.atv_at" name="ATV.at" version="2.0.2" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -13,7 +13,6 @@
         <language>de</language>
         <description lang="de">ATV.at Mediathek</description>
         <description lang="en">ATV.at media library</description>
-        <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
     <platform>all</platform>
     </extension>
 </addon>

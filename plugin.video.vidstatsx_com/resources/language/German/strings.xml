@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <string id="30101">View erzwingen</string>
+  <string id="30027">Favoriten</string>
   <string id="30028">Zu Addon Favs hinzufügen</string>
   <string id="30029">Aus Addon Favs entfernen</string>
   <string id="30075">Nächste Seite</string>
+  <string id="30076">Channel hinzufügen</string>
 </strings>

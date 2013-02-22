@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="30001">TV magazine</string>
-    <string id="30002">Pantoffelkino-TV (old episodes)</string>
+    <string id="30002">Pantoffelkino-TV</string>
     <string id="30003">Episode {episode} from {date}</string>
     <string id="30004">Older episodes</string>
     <string id="30005">Special: All Specials</string>
     <string id="30006">Special: Aktuell im Gespräch</string>
     <string id="30007">Special: Schlechte Filme TV</string>
-    <string id="30008">Special: Pantoffelkino-TV out-takes</string>
+    <string id="30008">Special: Pantoffelkino-TV</string>
     <string id="30009">Postecke</string>
     <string id="30010">Postecke (Audio version)</string>
-    
+    <string id="30011">Episode is not yet available</string>
     <string id="30100">Couch settings</string>
     <string id="30101">Use FKTV Couch</string>
     <string id="30102">Username</string>

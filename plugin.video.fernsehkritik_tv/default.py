@@ -1,26 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import xbmcplugin
-import xbmcgui
-import sys
-import urllib
-import urllib2
-import cookielib
-import re
-import random
-import xbmcaddon
-import time
+import xbmcplugin, xbmcgui, sys, urllib, urllib2, cookielib, re, random, xbmcaddon, time, socket
 
+socket.setdefaulttimeout(30)
 thisPlugin = int(sys.argv[1])
-
-settings        = xbmcaddon.Addon(id='plugin.video.fernsehkritik_tv')
-useCouch        = settings.getSetting('useCouch') == 'true'
-userAgentString = 'Mozilla/5.0 (X11; Linux x86_64; rv:14.0) Gecko/20100101 Firefox/14.0.1'
-
+settings = xbmcaddon.Addon(id='plugin.video.fernsehkritik_tv')
+useCouch = settings.getSetting('useCouch') == 'true'
+userAgentString = 'Mozilla/5.0 (X11; Linux x86_64; rv:18.0) Gecko/20100101 Firefox/18.0'
 
 def translation(id):
     return str(settings.getLocalizedString(id).encode('utf-8'))
-
 
 def index():
     addDir(translation(30001), 'http://fernsehkritik.tv/tv-magazin/')
@@ -29,11 +18,10 @@ def index():
         addDir(translation(30009), 'https://couch.fernsehkritik.tv/feed/postecke/mp4')
         addDir(translation(30010), 'https://couch.fernsehkritik.tv/feed/postecke/mp3')
     addDir(translation(30005), 'http://fernsehkritik.tv/extras/')
-    addDir(translation(30006), 'http://fernsehkritik.tv/extras/aktuell/')
     addDir(translation(30007), 'http://fernsehkritik.tv/extras/sftv/')
     addDir(translation(30008), 'http://fernsehkritik.tv/extras/pktv/')
+    addDir(translation(30006), 'http://fernsehkritik.tv/extras/aktuell/')
     xbmcplugin.endOfDirectory(thisPlugin)
-
 
 def listVideos(url):
     if 'couch.fernsehkritik.tv/feed' not in url:
@@ -87,7 +75,7 @@ def listVideos(url):
             addLink(entry['title'], entry['url'], 2, 'http://fernsehkritik.tv/images/magazin/folge' + episodeNumber + '.jpg', episodeDesc)
             
             # Insert directory for older episodes
-            addDir(translation(30004), 'http://fernsehkritik.tv/tv-magazin/komplett/', 1, 'DefaultNetwork.png')
+            addDir(translation(30004), 'http://fernsehkritik.tv/tv-magazin/komplett/')
     
     elif url == 'https://couch.fernsehkritik.tv/feed/postecke/mp4' or url == 'https://couch.fernsehkritik.tv/feed/postecke/mp3':
         episodes = re.compile('<item>\s*<title>\s*(.*?)\s*</title>.*?<enclosure url="([^"]+)".*?<itunes:summary><!\[CDATA\[(.*?)\]\]></itunes:summary>', re.DOTALL).finditer(content)
@@ -115,11 +103,10 @@ def listVideos(url):
     
     xbmcplugin.endOfDirectory(thisPlugin)
 
-
 def playVideo(urlOne):
     if useCouch and 'couch.fernsehkritik.tv' in urlOne:
         opener   = urllib2.build_opener(urllib2.HTTPCookieProcessor(getCouchSession()))
-        response = opener.open(urlOne, timeout=30)
+        response = opener.open(urlOne)
         videoUrl = response.geturl()
         response.close()
         
@@ -138,26 +125,29 @@ def playVideo(urlOne):
             return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
         else:
             content = getUrl(urlOne + '/Start')
-            match   = re.compile(r'var flattr_tle = \'(.+?)\'', re.DOTALL).findall(content)
-            title   = match[0]
-            if content.find('playlist = [') >= 0:
-                content  = content[content.find('playlist = ['):]
-                content  = content[:content.find('];')]
-                match    = re.compile(r"\{ url: base \+ '(\d+(?:-\d+)?\.flv)' \}", re.DOTALL).findall(content)
-                playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-                playlist.clear()
-                
-                for i,filename in enumerate(match):
-                    url = 'http://dl' + str(random.randint(1, 3)) + '.fernsehkritik.tv/fernsehkritik' + filename
-                    listitem = xbmcgui.ListItem(title + ' (' + str(i) + '/' + str(len(match)) + ')')
-                    
-                    playlist.add(url,listitem)
-                xbmc.executebuiltin('XBMC.Playlist.PlayOffset(-1)')
-            else:
-                match = re.compile("file=='(.+?)'", re.DOTALL).findall(content)
-                filename = match[0]
-                listitem = xbmcgui.ListItem(path='http://dl' + str(random.randint(1,3)) + '.fernsehkritik.tv/antik/' + filename)
-                return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
+            try:
+              match   = re.compile(r'var flattr_tle = \'(.+?)\'', re.DOTALL).findall(content)
+              title   = match[0]
+              if content.find('playlist = [') >= 0:
+                  content  = content[content.find('playlist = ['):]
+                  content  = content[:content.find('];')]
+                  match    = re.compile(r"\{ url: base \+ '(\d+(?:-\d+)?\.flv)' \}", re.DOTALL).findall(content)
+                  
+                  urlFull="stack://"
+                  for i,filename in enumerate(match):
+                      url = 'http://dl' + str(random.randint(1, 3)) + '.fernsehkritik.tv/fernsehkritik' + filename + " , "
+                      urlFull += url
+                  urlFull=urlFull[:-3]
+                  
+                  listitem = xbmcgui.ListItem(path=urlFull)
+                  return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
+              else:
+                  match = re.compile("file=='(.+?)'", re.DOTALL).findall(content)
+                  filename = match[0]
+                  listitem = xbmcgui.ListItem(path='http://dl' + str(random.randint(1,3)) + '.fernsehkritik.tv/antik/' + filename)
+                  return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
+            except:
+              xbmc.executebuiltin('XBMC.Notification(Info:,'+str(translation(30209))+',5000)')
     else:
         content = getUrl('http://fernsehkritik.tv/swf/extras_cfg.php?id=' + urlOne)
         match   = re.compile('"file":"(.+?)"', re.DOTALL).findall(content)
@@ -165,33 +155,30 @@ def playVideo(urlOne):
         listitem = xbmcgui.ListItem(path=file)
         return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
 
-
 def getUrl(url):
     if useCouch and 'couch.fernsehkritik.tv' in url:
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(getCouchSession()))
         opener.addheaders = [('User-Agent', userAgentString)]
-        response = opener.open(url, timeout=30)
+        response = opener.open(url)
     else:
         request = urllib2.Request(url)
         request.add_header('User-Agent',userAgentString)
-        response = urllib2.urlopen(request, timeout=30)
+        response = urllib2.urlopen(request)
         
     link = response.read()
     response.close()
     
     return link
 
-
 def getCouchFeed(url):
     passwordMgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
     passwordMgr.add_password(None, url, settings.getSetting('couchUsername'), settings.getSetting('couchPassword'))
     authHandler   = urllib2.HTTPBasicAuthHandler(passwordMgr)
     opener        = urllib2.build_opener(authHandler)
-    request       = opener.open(url, timeout=30)
+    request       = opener.open(url)
     content       = request.read()
     request.close()
     return content
-
 
 def assembleEpisodeEntry(episodeNumber, url, germanDate, desc):
     episode = {}
@@ -222,13 +209,12 @@ def getCouchSession():
         opener            = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookieJar))
         opener.addheaders = [('User-Agent', userAgentString)]
         # Get session cookie
-        response          = opener.open('https://couch.fernsehkritik.tv/', timeout=30)
+        response          = opener.open('https://couch.fernsehkritik.tv/')
         # Log in
-        response          = opener.open('https://couch.fernsehkritik.tv/login.php', postDataEncoded, timeout=30)
+        response          = opener.open('https://couch.fernsehkritik.tv/login.php', postDataEncoded)
         response.close()
     
     return cookieJar
-
 
 def addLink(name, url, mode=1, iconimage='', description='', isVideo=True):
     u    = sys.argv[0] + '?url=' + urllib.quote_plus(url) + '&mode=' + str(mode)
@@ -242,7 +228,6 @@ def addLink(name, url, mode=1, iconimage='', description='', isVideo=True):
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
-
 def addDir(name, url, mode=1, iconimage=''):
     u   = sys.argv[0] + '?url=' + urllib.quote_plus(url) + '&mode=' + str(mode)
     ok  = True
@@ -250,7 +235,6 @@ def addDir(name, url, mode=1, iconimage=''):
     liz.setInfo(type="Video", infoLabels={ 'Title': name })
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
-
 
 def parseGermanDate(dateString):
     # Parse month manually to avoid changing the locale
@@ -263,7 +247,6 @@ def parseGermanDate(dateString):
     
     return time.strptime(dateString, '%d. %m %Y')
 
-
 def parameters_string_to_dict(parameters):
     """Convert parameters encoded in a URL to a dict."""
     paramDict = {}
@@ -275,23 +258,15 @@ def parameters_string_to_dict(parameters):
                 paramDict[paramSplits[0]] = paramSplits[1]
     return paramDict
 
-params = parameters_string_to_dict(sys.argv[2])
-url = None
-mode = None
+params=parameters_string_to_dict(sys.argv[2])
+mode=params.get('mode')
+url=params.get('url')
+if type(url)==type(str()):
+  url=urllib.unquote_plus(url)
 
-try:
-    url = urllib.unquote_plus(params['url'])
-except:
-    pass
-try:
-    mode = int(params['mode'])
-except:
-    pass
-
-
-if mode == None or url == None or len(url) < 1:
-    index()
-elif mode == 1:
+if mode == "1":
     listVideos(url)
-elif mode == 2:
+elif mode == "2":
     playVideo(url)
+else:
+    index()

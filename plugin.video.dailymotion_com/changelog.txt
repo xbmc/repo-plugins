@@ -1,0 +1,16 @@
+1.0.0
+- First Try
+1.0.1
+- Added user favourites
+- Fixed site changes
+- Fixed max video resolution bug
+1.0.2
+- Fixed site changes / video playback
+- Added contextmenu for adding user while browsing videos
+1.0.3 / 2.0.3
+- Added context menu for adding user of the selected video
+- Added context menu for adding user manually
+- Added category "Popular"
+- Some other changes
+1.0.4 / 2.0.4
+- Added message for toggling the family filter

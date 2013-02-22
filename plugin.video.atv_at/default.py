@@ -6,12 +6,7 @@ socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 addon = xbmcaddon.Addon(id='plugin.video.atv_at')
 translation = addon.getLocalizedString
-
 forceViewMode=addon.getSetting("forceViewMode")
-if forceViewMode=="true":
-  forceViewMode=True
-else:
-  forceViewMode=False
 viewMode=str(addon.getSetting("viewMode"))
 
 def index():
@@ -28,7 +23,7 @@ def index():
           thumb=match[0]
           addDir(title,url,'listVideos',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
@@ -59,25 +54,26 @@ def listVideos(url):
         if currentPage<maxPage:
           addDir(translation(30001)+" ("+str(currentPage+1)+")",url[:len(url)-1]+str(currentPage+1),'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(entry):
-        matchIDs=re.compile('"url":"http:\\\/\\\/atv.at\\\/static\\\/assets\\\/(.+?)"', re.DOTALL).findall(entry)
-        match=re.compile('"(.+?)","subtitle":"(.+?)"', re.DOTALL).findall(entry)
-        title=match[0][0]+" - "+match[0][1]
-        title=cleanTitle(title)
-        if len(matchIDs)>1:
-          urlFull="stack://"
-          for id in matchIDs:
-            urlFull+="http://atv.at/static/assets/"+id.replace("\\","")+" , "
-          urlFull=urlFull[:-3]
-          listitem = xbmcgui.ListItem(path=urlFull)
-          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        if '"geoblocked":true' not in entry:
+          entry = entry[entry.find("contentset_id"):]
+          matchUrls=re.compile('"url":"(.+?)"', re.DOTALL).findall(entry)
+          if len(matchUrls)>1:
+            urlFull="stack://"
+            for url in matchUrls:
+              urlFull+=url.replace("\\","")+" , "
+            urlFull=urlFull[:-3]
+            listitem = xbmcgui.ListItem(path=urlFull)
+            return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+          elif len(matchUrls)==1:
+            urlFull=matchUrls[0].replace("\\","")
+            listitem = xbmcgui.ListItem(path=urlFull)
+            return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
         else:
-          url="http://atv.at/static/assets/"+matchIDs[0].replace("\\","")
-          listitem = xbmcgui.ListItem(path=url)
-          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+          xbmc.executebuiltin('XBMC.Notification(Info:,'+str(translation(30002))+',5000)')
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
@@ -88,7 +84,7 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:18.0) Gecko/20100101 Firefox/18.0')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()

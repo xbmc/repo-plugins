@@ -6,12 +6,7 @@ socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 addon = xbmcaddon.Addon(id='plugin.video.theonion_com')
 translation = addon.getLocalizedString
-
 forceViewMode=addon.getSetting("forceViewMode")
-if forceViewMode=="true":
-  forceViewMode=True
-else:
-  forceViewMode=False
 viewMode=str(addon.getSetting("viewMode"))
 
 def index():
@@ -24,7 +19,7 @@ def index():
         addDir(translation(30004),"http://www.theonion.com/playlists/biggest-stories-of-2012/",'listVideos',"")
         addDir(translation(30005),"http://www.theonion.com/playlists/best-of-the-onion-review/",'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
@@ -33,8 +28,8 @@ def listVideos(url):
         spl=content.split('<li data-video-id=')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('data-url="(.+?)"', re.DOTALL).findall(entry)
-            url=match[0]
+            match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
+            url="http://www.theonion.com"+match[0]
             match=re.compile('class="title">(.+?)<', re.DOTALL).findall(entry)
             title=match[0]
             title=cleanTitle(title)
@@ -44,7 +39,9 @@ def listVideos(url):
               desc=match[0]
               desc=cleanTitle(desc)
             match=re.compile('<span class="duration">(.+?)</span>', re.DOTALL).findall(entry)
-            length=match[0]
+            length=""
+            if len(match)>0:
+              length=match[0]
             match=re.compile('data-src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
             addLink(title,url,'playVideo',thumb,length,desc)
@@ -53,11 +50,17 @@ def listVideos(url):
           urlNext=mainUrl+match[0]
           addDir(translation(30001),urlNext,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(url):
-        listitem = xbmcgui.ListItem(path=url)
+        content = getUrl(url)
+        match=re.compile('<source src="(.+?)" type="(.+?)">', re.DOTALL).findall(content)
+        finalUrl=""
+        for url, type in match:
+          if type=="video/mp4":
+            finalUrl=url
+        listitem = xbmcgui.ListItem(path=finalUrl)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
@@ -68,7 +71,7 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/13.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:18.0) Gecko/20100101 Firefox/18.0')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()

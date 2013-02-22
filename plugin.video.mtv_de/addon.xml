@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.mtv_de" name="MTV.de" version="2.1.0" provider-name="AddonScriptorDE">
+<addon id="plugin.video.mtv_de" name="MTV.de" version="2.1.1" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
     </requires>

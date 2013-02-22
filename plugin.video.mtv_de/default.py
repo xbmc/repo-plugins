@@ -93,7 +93,7 @@ def playlist(playlist):
         xbmcplugin.endOfDirectory(pluginhandle)
 
 def artists():
-        letters=["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+        letters = [chr(i) for i in xrange(ord('a'), ord('z')+1)]
         for letter in letters:
           addDir(letter.upper(),letter,'artistsAZ',"")
         xbmcplugin.endOfDirectory(pluginhandle)
@@ -281,14 +281,14 @@ def listCharts(url):
           fh.close()
         content = getUrl(url)
         newTitles=""
-        content = content[content.find("<ol class='charts_list'>"):]
-        content = content[:content.find("</ol>")]
+        content = content[content.find("<div class='current_season'>"):]
+        content = content[:content.find("</ul>")]
         spl=content.split('<li')
         for i in range(1,len(spl),1):
             entry=spl[i]
             if entry.find("class='no_video'")==-1 and entry.find("class='active no_video'")==-1:
-              match=re.compile('href="/(.+?)"', re.DOTALL).findall(entry)
-              url="http://www.mtv.de/"+match[0]
+              match=re.compile("data-uma-token='(.+?)'", re.DOTALL).findall(entry)
+              url=match[0]
               match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
               thumb=match[0]
               match=re.compile('title="(.+?)"', re.DOTALL).findall(entry)
@@ -392,51 +392,60 @@ def playVideoMain(url):
             return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def search(SEARCHTYPE):
-        keyboard = xbmc.Keyboard('', 'Video Suche')
+        keyboard = xbmc.Keyboard('', 'Search')
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
-          search_string = keyboard.getText().replace(" ","%20")
+          search_string = keyboard.getText().replace(" ","+")
+          url="http://www.mtv.de/search?query="+search_string+"&ajax=1"
+          content = getUrlSearch(url)
           if SEARCHTYPE=="SEARCH_ARTIST":
-            url="http://www.google.de/search?q=site:http://www.mtv.de/musikvideos_artist/%20"+search_string+"&ie=UTF-8"
-            content=getUrl(url)
-            spl=content.split('<a href="http://www.mtv.de/musikvideos_artist/')
-            newArtists=""
-            for i in range(1,len(spl),1):
-              entry=spl[i]
-              url="http://www.mtv.de/musikvideos_artist/"+entry[:entry.find('"')]
-              title=entry[entry.find('>')+1:]
-              title=title[:title.find('-')]
-              title=title.replace("<em>","").replace("</em>","")
-              title=cleanTitle(title)
-              addArtistDir(title,url,'listVideos',"")
-            xbmcplugin.endOfDirectory(pluginhandle)
-          else:
-            url="http://www.google.de/search?q=site:http://www.mtv.de/musikvideos/%20"+search_string+"&ie=UTF-8"
-            content=getUrl(url)
-            spl=content.split('<a href="http://www.mtv.de/musikvideos/')
-            for i in range(1,len(spl),1):
-              entry=spl[i]
-              url="http://www.mtv.de/musikvideos/"+entry[:entry.find('"')]
-              title=entry[entry.find('>')+1:]
-              if title.find("- Musikvideo")>=0:
-                title=title[:title.find('- Musikvideo')]
-              elif title.find("- MTV.de")>=0:
-                title=title[:title.find('- MTV.de')]
-              elif title.find("<b>")>=0:
-                title=title[:title.find("<b>")]
-              title=title.replace("<em>","").replace("</em>","")
-              title=cleanTitle(title)
-              if title.find(" von ")>=0:
-                spl2=title.split(" von ")
-                title=spl2[1]+" - "+spl2[0]
-              if url.find("/playlist")==-1:
-                addLink(title,url,'playVideo',"")
-            xbmcplugin.endOfDirectory(pluginhandle)
+            if content.find("<h2>Artists</h2>")>=0:
+              content=content[content.find("<h2>Artists</h2>"):]
+              content=content[:content.find("</ul>")]
+              spl=content.split('<li>')
+              for i in range(1,len(spl),1):
+                  entry=spl[i]
+                  match=re.compile('<a href="(.+?)"', re.DOTALL).findall(entry)
+                  url=match[0]
+                  match=re.compile('<h3>(.+?)</h3>', re.DOTALL).findall(entry)
+                  title=match[0]
+                  title=cleanTitle(title)
+                  addArtistDir(title,"http://www.mtv.de"+url,'listVideos',"")
+          elif SEARCHTYPE=="SEARCH_SPECIAL":
+            if content.find("<h2>Videos</h2>")>=0:
+              content=content[content.find("<h2>Videos</h2>"):]
+              content=content[:content.find("</ul>")]
+              spl=content.split('<li>')
+              for i in range(1,len(spl),1):
+                  entry=spl[i]
+                  match=re.compile('<a href="(.+?)"', re.DOTALL).findall(entry)
+                  url=match[0]
+                  match=re.compile('<h3>(.+?)</h3>', re.DOTALL).findall(entry)
+                  title1=match[0]
+                  match=re.compile('<p>(.+?)</p>', re.DOTALL).findall(entry)
+                  title=match[0]+" - "+title1
+                  title=cleanTitle(title)
+                  if filterVids=="true":
+                    if title.lower().find("all eyes on")==-1 and title.lower().find("interview")==-1:
+                      addLink(title,"http://www.mtv.de"+url,'playVideo',"")
+                  else:
+                    addLink(title,"http://www.mtv.de"+url,'playVideo',"")
+          xbmcplugin.endOfDirectory(pluginhandle)
 
 def getUrl(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
         response = urllib2.urlopen(req,timeout=30)
+        link=response.read()
+        response.close()
+        return link
+
+def getUrlSearch(url):
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
+        req.add_header('X-Requested-With', 'XMLHttpRequest')
+        req.add_header('Referer', 'http://www.mtv.de/charts')
+        response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         return link

@@ -1,3 +1,6 @@
+[B]1.0.5[/B]
+- Fixed a bug where categories would not be reported correctly
+
 [B]1.0.4[/B]
 - Changed versioning scheme to differentiate frodo from eden branch
 

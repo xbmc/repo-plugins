@@ -223,7 +223,7 @@ class VgtvApi():
         url += 'event=videoplay&identification=' + str(id) + '&text1=vgtv-xbmc'
 
         if category is not None:
-            url += '&text2=' + str(category)
+            url += '&text2=' + category.get('drVideoId')
 
         try:
             urllib2.urlopen(url)

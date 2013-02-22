@@ -9,7 +9,7 @@
   <string id="30007">Women</string>
   <string id="30008">Featured</string>
   <string id="30009">Newest</string>
-  <string id="30010">Most Viewed</string>
+  <string id="30010">Most Popular</string>
   <string id="30011">Top Rated</string>
   <string id="30013">Top Favorited</string>
   <string id="30015">Most Commented</string>
@@ -24,7 +24,7 @@
   <string id="30024">Past 7 Days</string>
   <string id="30025">Past 14 Days</string>
   <string id="30026">Past 30 Days</string>
-  <string id="30027">Favorite Channels</string>
+  <string id="30027">Favourites</string>
   <string id="30028">Add to addon favs</string>
   <string id="30029">Remove from addon favs</string>
   <string id="30030">Autos and Vehicles</string>
@@ -68,6 +68,9 @@
   <string id="30073">Taiwan</string>
   <string id="30074">United States</string>
   <string id="30075">Next Page</string>
+  <string id="30076">Add channel</string>
+  <string id="30077">Added channel to favourites</string>
+  <string id="30078">Removed channel from favourites</string>
   <string id="30101">Force View</string>
   <string id="30102">ViewID</string>
   <string id="30103">Video Charts Order (Type)</string>

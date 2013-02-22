@@ -17,20 +17,15 @@ videoChartsSortTime=addon.getSetting("videoChartsSortTime")
 times=[translation(30105),translation(30017),translation(30018),translation(30019)]
 videoChartsSortTime=times[int(videoChartsSortTime)]
 forceViewMode=addon.getSetting("forceViewMode")
-if forceViewMode=="true":
-  forceViewMode=True
-else:
-  forceViewMode=False
 viewMode=str(addon.getSetting("viewMode"))
 
 def index():
-        addDir(translation(30027),"","favoriteChannels","")
+        addFDir(translation(30027),"","favoriteChannels","")
         addDir(translation(30001),"","mostSubscribedMain","")
         addDir(translation(30002),"","mostViewedMain","")
-        addDir(translation(30020),"","topGainersMain","")
         addDir(translation(30003),"","videoChartsMain","")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def favoriteChannels():
@@ -44,7 +39,7 @@ def favoriteChannels():
             addChannelFavDir(user,user+"#1",'showYoutubeOrderBy',"")
           fh.close()
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def mostSubscribedMain():
@@ -54,7 +49,7 @@ def mostSubscribedMain():
         addDir(translation(30006),url,"showLanguages","")
         addDir("VEVO","http://vidstatsx.com/vevo-most-subscribed","listChannels","")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def mostViewedMain():
@@ -63,13 +58,13 @@ def mostViewedMain():
         addDir(translation(30005),url,"showCategories","")
         addDir(translation(30006),url,"showLanguages","")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def videoChartsMain():
-        addDir(translation(30004),"http://vidstatsx.com/most-viewed-videos-today","videoChartsOrderBy","")
-        showCategories("http://vidstatsx.com/most-viewed-videos-today")
-        if forceViewMode==True:
+        addDir(translation(30004),"http://vidstatsx.com/most-popular-videos-today","videoChartsOrderBy","")
+        showCategories("http://vidstatsx.com/most-popular-videos-today")
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def topGainersMain():
@@ -77,7 +72,7 @@ def topGainersMain():
         addDir(translation(30023),"http://vidstatsx.com/top-100-24h-sub-gains","listChannels","")
         addDir(translation(30024),"http://vidstatsx.com/top-100-7d-sub-gains","listChannels","")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listChannels(url):
@@ -91,27 +86,29 @@ def listChannels(url):
           match2=re.compile('<td class="rank center">(.+?)</td><td>(.+?)</td>', re.DOTALL).findall(entry)
           if siteTitle.find("Top 100 Most Viewed")>=0:
             count=match1[0][1]
+            count+=" Views"
           else:
             count=match2[0][1]
+            count+=" Subscribers"
           count=count.replace('<span class="gray">K</span>','K')
           match=re.compile('href="//www.youtube.com/user/(.+?)"', re.DOTALL).findall(entry)
           user=match[0]
-          title=user+" ("+count+")"
+          title=user+"  -  "+count
           addChannelDir(title,user+"#1",'showYoutubeOrderBy',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def showCategories(url):
-        if url=="http://vidstatsx.com/most-viewed-videos-today":
+        if url=="http://vidstatsx.com/most-popular-videos-today":
           type="videoChartsOrderBy"
         else:
           type="listChannels"
         cats=[[translation(30030), "autos-vehicles"],[translation(30031), "comedy"],[translation(30032), "education"],[translation(30033), "entertainment"],[translation(30034), "film-animation"],[translation(30035), "games-gaming"],[translation(30036), "how-to-style"],[translation(30037), "news-politics"],[translation(30038), "nonprofit-activism"],[translation(30039), "people-vlogs"],[translation(30040), "pets-animals"],[translation(30041), "science-tech"],[translation(30042), "shows"],[translation(30043), "sports"],[translation(30044), "travel-events"]]
         for cat in cats:
-          addDir(cat[0],url.replace("-most-subscribed-channels","-most-subscribed-"+cat[1]+"-channels").replace("-most-viewed","-most-viewed-"+cat[1]).replace("most-viewed-videos-","most-viewed-"+cat[1]+"-videos-"),type,"")
+          addDir(cat[0],url.replace("-most-subscribed-channels","-most-subscribed-"+cat[1]+"-channels").replace("-most-viewed","-most-viewed-"+cat[1]).replace("most-popular-videos-","most-popular-"+cat[1]+"-videos-"),type,"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def showLanguages(url):
@@ -119,7 +116,7 @@ def showLanguages(url):
         for cat in cats:
           addDir(cat[0],url.replace("-most-subscribed-channels","-most-subscribed-"+cat[1]+"-channels").replace("-most-viewed","-most-viewed-"+cat[1]),"listChannels","")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def showYoutubeOrderBy(url):
@@ -127,7 +124,7 @@ def showYoutubeOrderBy(url):
         addDir(translation(30010),url+"#viewCount","listVideos","")
         addDir(translation(30011),url+"#rating","listVideos","")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def videoChartsOrderBy(url):
@@ -135,24 +132,24 @@ def videoChartsOrderBy(url):
           listVideoCharts(url)
         else:
           if videoChartsSortType==str(translation(30105)):
-            addDir(translation(30010),url,"videoChartsOrderBy2","")
-            addDir(translation(30013),url.replace("/most-viewed-","/top-favorited-"),"videoChartsOrderBy2","")
-            addDir(translation(30011),url.replace("/most-viewed-","/top-rated-"),"videoChartsOrderBy2","")
-            addDir(translation(30015),url.replace("/most-viewed-","/most-commented-"),"videoChartsOrderBy2","")
-            addDir(translation(30016),url.replace("/most-viewed-","/most-responded-"),"videoChartsOrderBy2","")
+            addDir(translation(30010),url,"listVideoCharts","")
+            addDir(translation(30013),url.replace("/most-popular-","/top-favorited-"),"videoChartsOrderBy2","")
+            addDir(translation(30011),url.replace("/most-popular-","/top-rated-"),"videoChartsOrderBy2","")
+            addDir(translation(30015),url.replace("/most-popular-","/most-commented-"),"videoChartsOrderBy2","")
+            addDir(translation(30016),url.replace("/most-popular-","/most-responded-"),"videoChartsOrderBy2","")
             xbmcplugin.endOfDirectory(pluginhandle)
-            if forceViewMode==True:
+            if forceViewMode=="true":
               xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
           elif videoChartsSortType==translation(30010):
             videoChartsOrderBy2(url)
           elif videoChartsSortType==translation(30013):
-            videoChartsOrderBy2(url.replace("/most-viewed-","/top-favorited-"))
+            videoChartsOrderBy2(url.replace("/most-popular-","/top-favorited-"))
           elif videoChartsSortType==translation(30011):
-            videoChartsOrderBy2(url.replace("/most-viewed-","/top-rated-"))
+            videoChartsOrderBy2(url.replace("/most-popular-","/top-rated-"))
           elif videoChartsSortType==translation(30015):
-            videoChartsOrderBy2(url.replace("/most-viewed-","/most-commented-"))
+            videoChartsOrderBy2(url.replace("/most-popular-","/most-commented-"))
           elif videoChartsSortType==translation(30016):
-            videoChartsOrderBy2(url.replace("/most-viewed-","/most-responded-"))
+            videoChartsOrderBy2(url.replace("/most-popular-","/most-responded-"))
 
 def videoChartsOrderBy2(url):
         if videoChartsSortTime==str(translation(30105)):
@@ -160,7 +157,7 @@ def videoChartsOrderBy2(url):
           addDir(translation(30018),url.replace("-today","-this-week"),"listVideoCharts","")
           addDir(translation(30019),url.replace("-today","-this-month"),"listVideoCharts","")
           xbmcplugin.endOfDirectory(pluginhandle)
-          if forceViewMode==True:
+          if forceViewMode=="true":
             xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
         elif videoChartsSortTime==translation(30017):
             listVideoCharts(url)
@@ -175,35 +172,42 @@ def listVideos(params):
         index=spl[1]
         orderby=spl[2]
         content = getUrl("http://gdata.youtube.com/feeds/api/videos?author="+user+"&racy=include&max_results=25&start-index="+index+"&orderby="+orderby)
+        match=re.compile("<openSearch:totalResults>(.+?)</openSearch:totalResults><openSearch:startIndex>(.+?)</openSearch:startIndex>", re.DOTALL).findall(content)
+        maxIndex=int(match[0][0])
+        startIndex=int(match[0][1])
         spl=content.split('<entry>')
         for i in range(1,len(spl),1):
-          entry=spl[i]
-          match=re.compile('<id>http://gdata.youtube.com/feeds/api/videos/(.+?)</id>', re.DOTALL).findall(entry)
-          id=match[0]
-          match=re.compile("viewCount='(.+?)'", re.DOTALL).findall(entry)
-          viewCount=match[0]
-          match=re.compile("duration='(.+?)'", re.DOTALL).findall(entry)
-          durationTemp=int(match[0])
-          min=durationTemp/60
-          sec=durationTemp%60
-          duration=str(min)+":"+str(sec)
-          match=re.compile("<author><name>(.+?)</name>", re.DOTALL).findall(entry)
-          author=match[0]
-          match=re.compile("<title type='text'>(.+?)</title>", re.DOTALL).findall(entry)
-          title=match[0]
-          title=cleanTitle(title)
-          match=re.compile("<content type='text'>(.+?)</content>", re.DOTALL).findall(entry)
-          desc=""
-          if len(match)>0:
-            desc=match[0]
-            desc=cleanTitle(desc)
-          match=re.compile("<published>(.+?)T", re.DOTALL).findall(entry)
-          date=match[0]
-          thumb="http://img.youtube.com/vi/"+id+"/0.jpg"
-          addLink(title,id,'playVideo',thumb,"Date: "+date+"; Views: "+viewCount+"\n"+desc,duration,author)
-        addDir(translation(30075),user+"#"+str(int(index)+25)+"#"+orderby,'listVideos',"")
+          try:
+            entry=spl[i]
+            match=re.compile('<id>http://gdata.youtube.com/feeds/api/videos/(.+?)</id>', re.DOTALL).findall(entry)
+            id=match[0]
+            match=re.compile("viewCount='(.+?)'", re.DOTALL).findall(entry)
+            viewCount=match[0]
+            match=re.compile("duration='(.+?)'", re.DOTALL).findall(entry)
+            durationTemp=int(match[0])
+            min=(durationTemp/60)+1
+            sec=durationTemp%60
+            duration=str(min)+":"+str(sec)
+            match=re.compile("<author><name>(.+?)</name>", re.DOTALL).findall(entry)
+            author=match[0]
+            match=re.compile("<title type='text'>(.+?)</title>", re.DOTALL).findall(entry)
+            title=match[0]
+            title=cleanTitle(title)
+            match=re.compile("<content type='text'>(.+?)</content>", re.DOTALL).findall(entry)
+            desc=""
+            if len(match)>0:
+              desc=match[0]
+              desc=cleanTitle(desc)
+            match=re.compile("<published>(.+?)T", re.DOTALL).findall(entry)
+            date=match[0]
+            thumb="http://img.youtube.com/vi/"+id+"/0.jpg"
+            addLink(title,id,'playVideo',thumb,"Date: "+date+"; Views: "+viewCount+"\n"+desc,duration,author)
+          except:
+            pass
+        if startIndex+25<=maxIndex:
+          addDir(translation(30075),user+"#"+str(int(index)+25)+"#"+orderby,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideoCharts(url):
@@ -224,7 +228,7 @@ def listVideoCharts(url):
           desc=cleanTitle(desc)
           addLink(title,id,'playVideo',thumb,desc)
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(youtubeID):
@@ -235,9 +239,62 @@ def playVideo(youtubeID):
         listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
+def favourites(param):
+        mode=param[param.find("###MODE###=")+11:]
+        mode=mode[:mode.find("###")]
+        channelEntry=param[param.find("###USER###="):]
+
+        if mode=="ADD":
+          if os.path.exists(channelFavsFile):
+            fh = open(channelFavsFile, 'r')
+            content=fh.read()
+            fh.close()
+            if content.find(channelEntry)==-1:
+              fh=open(channelFavsFile, 'a')
+              fh.write(channelEntry+"\n")
+              fh.close()
+          else:
+            fh=open(channelFavsFile, 'a')
+            fh.write(channelEntry+"\n")
+            fh.close()
+          xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30077)+',2000)')
+        elif mode=="REMOVE":
+          refresh=param[param.find("###REFRESH###=")+14:]
+          refresh=refresh[:refresh.find("###USER###=")]
+          fh = open(channelFavsFile, 'r')
+          content=fh.read()
+          fh.close()
+          entry=content[content.find(channelEntry):]
+          fh=open(channelFavsFile, 'w')
+          fh.write(content.replace(channelEntry+"\n",""))
+          fh.close()
+          if refresh=="TRUE":
+            xbmc.executebuiltin("Container.Refresh")
+          xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30078)+',2000)')
+
+def addFav():
+        keyboard = xbmc.Keyboard('', translation(30076))
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+          name = keyboard.getText()
+          channelEntry="###USER###="+name+"###END###"
+          if os.path.exists(channelFavsFile):
+            fh = open(channelFavsFile, 'r')
+            content=fh.read()
+            fh.close()
+            if content.find(channelEntry)==-1:
+              fh=open(channelFavsFile, 'a')
+              fh.write(channelEntry+"\n")
+              fh.close()
+          else:
+            fh=open(channelFavsFile, 'a')
+            fh.write(channelEntry+"\n")
+            fh.close()
+          xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30077)+',2000)')
+
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:18.0) Gecko/20100101 Firefox/18.0')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
@@ -275,13 +332,22 @@ def addDir(name,url,mode,iconimage):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
+def addFDir(name,url,mode,iconimage):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.addContextMenuItems([(translation(30076), 'XBMC.RunPlugin(plugin://'+addonID+'/?mode=addFav)',)])
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+        return ok
+
 def addChannelDir(name,url,mode,iconimage):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        playListInfos="###MODE###=ADD###USER###="+name[:name.find(" (")]+"###END###"
-        liz.addContextMenuItems([(translation(30028), 'XBMC.RunScript(special://home/addons/'+addonID+'/channelFavs.py,'+urllib.quote_plus(playListInfos)+')',)])
+        playListInfos="###MODE###=ADD###USER###="+name[:name.find("  -")]+"###END###"
+        liz.addContextMenuItems([(translation(30028), 'XBMC.RunPlugin(plugin://'+addonID+'/?mode=favourites&url='+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -291,7 +357,7 @@ def addChannelFavDir(name,url,mode,iconimage):
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         playListInfos="###MODE###=REMOVE###REFRESH###=TRUE###USER###="+name+"###END###"
-        liz.addContextMenuItems([(translation(30029), 'XBMC.RunScript(special://home/addons/'+addonID+'/channelFavs.py,'+urllib.quote_plus(playListInfos)+')',)])
+        liz.addContextMenuItems([(translation(30029), 'XBMC.RunPlugin(plugin://'+addonID+'/?mode=favourites&url='+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -340,5 +406,9 @@ elif mode == 'listVideoCharts':
     listVideoCharts(url)
 elif mode == 'playVideo':
     playVideo(url)
+elif mode == 'favourites':
+    favourites(url)
+elif mode == 'addFav':
+    addFav()
 else:
     index()

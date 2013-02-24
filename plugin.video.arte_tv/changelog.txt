@@ -4,3 +4,5 @@
 - Added "Videos of the day"
 - Added "Arte Live Web"
 - Some other fixes
+1.0.2 / 2.0.2
+- Fixed video playback

@@ -21,7 +21,7 @@
   <string id="30019">Video is no longer available</string>
   <string id="30101">Language (Videos)</string>
   <string id="30102">Videos per Page</string>
-  <string id="30103">Timeout</string>
+  <string id="30103">Timeout (sec)</string>
   <string id="30104">Force View</string>
   <string id="30105">ViewID</string>
 </strings>

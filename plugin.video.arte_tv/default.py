@@ -3,23 +3,19 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,socket,time
 
 pluginhandle = int(sys.argv[1])
-settings = xbmcaddon.Addon(id='plugin.video.arte_tv')
-translation = settings.getLocalizedString
+addon = xbmcaddon.Addon(id='plugin.video.arte_tv')
+translation = addon.getLocalizedString
 
-forceViewMode=settings.getSetting("forceViewMode")
-if forceViewMode=="true":
-  forceViewMode=True
-else:
-  forceViewMode=False
-viewMode=str(settings.getSetting("viewMode"))
-timeout=int(settings.getSetting("timeout"))
+forceViewMode=addon.getSetting("forceViewMode")
+viewMode=str(addon.getSetting("viewMode"))
+timeout=int(addon.getSetting("timeout"))
 socket.setdefaulttimeout(timeout)
 
 language=""
-language=settings.getSetting("language")
+language=addon.getSetting("language")
 if language=="":
-  settings.openSettings()
-  language=settings.getSetting("language")
+  addon.openSettings()
+  language=addon.getSetting("language")
 
 if language=="0":
   language="de"
@@ -27,7 +23,7 @@ elif language=="1":
   language="fr"
 
 numbers=["10","25","50","100",]
-videosPerPage=numbers[int(settings.getSetting("itemsPerPage"))]
+videosPerPage=numbers[int(addon.getSetting("itemsPerPage"))]
 
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#39;","'").replace("&#039;","'").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
@@ -44,6 +40,8 @@ def index():
         addDir(translation(30005),"SEARCH","search","")
         addDir(translation(30012),"","listWebLiveMain","")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def showSortList(url):
         if url=="ARTE_7":
@@ -64,6 +62,8 @@ def showSortList(url):
         addDir(translation(30008),urlRated,"listVideos","")
         addDir(translation(30006),urlTitle,"listVideos","")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listShows(url):
         if url=="ALL_VIDS":
@@ -90,6 +90,8 @@ def listShows(url):
           url="http://videos.arte.tv"+match[0]
           addDir(title,url,'showSortList',"")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def vidsDay(url):
         content = getUrl(url)
@@ -107,6 +109,8 @@ def vidsDay(url):
           thumb="http://videos.arte.tv"+match[0][2]
           addLink(title,url,'playVideo',thumb,desc)
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listWebLive(url):
         urlMain=url
@@ -138,8 +142,11 @@ def listWebLive(url):
         match=re.compile('moveValue=(.+?)&', re.DOTALL).findall(urlMain)
         page=int(match[0])
         if hasNextPage:
-          addDir("Next",urlMain.replace("moveValue="+str(page)+"&","moveValue="+str(page+1)+"&"),"listWebLive","")
+          nextPage=str(page+1)
+          addDir(translation(30010)+" ("+nextPage+")",urlMain.replace("moveValue="+str(page)+"&","moveValue="+nextPage+"&"),"listWebLive","")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listWebLiveMain():
         addDir(translation(30002),"http://liveweb.arte.tv/searchEvent.do?method=displayElements&eventDateMode=0&moveValue=1&eventDateMode=0&chronology=&globalNames=&classification=0&categoryId=&displayMode=0&eventTagName=","listWebLive","")
@@ -150,7 +157,8 @@ def listWebLiveMain():
         addDir(translation(30017),"http://liveweb.arte.tv/searchEvent.do?method=displayElements&categoryId=3&eventDateMode=0&moveValue=1&eventDateMode=0&chronology=&globalNames=&classification=0&displayMode=0&eventTagName=","listWebLive","")
         addDir(translation(30005),"","searchWebLive","")
         xbmcplugin.endOfDirectory(pluginhandle)
-
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
         urlMain=url
@@ -199,6 +207,8 @@ def listVideos(url):
               nextPage=match[0]
               addDir(translation(30010)+" ("+nextPage+")",url,"listVideos","")
         xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def search():
         keyboard = xbmc.Keyboard('', translation(30005))
@@ -232,8 +242,12 @@ def playVideo(url):
           urlNew=match1[0]
         elif len(match2)==1:
           urlNew=match2[0]
-        listitem = xbmcgui.ListItem(path=urlNew.replace("/MP4:","/mp4:")+" swfVfy=1 swfUrl=http://videos.arte.tv/blob/web/i18n/view/player_23-3188338-data-5044926.swf")
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        if urlNew!="":
+          urlNew=urlNew.replace("MP4:","mp4:")
+          base=urlNew[:urlNew.find("mp4:")]
+          playpath=urlNew[urlNew.find("mp4:"):]
+          listitem = xbmcgui.ListItem(path=base+" playpath="+playpath+" swfVfy=1 swfUrl=http://videos.arte.tv/blob/web/i18n/view/player_24-3188338-data-5168030.swf")
+          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def playLiveEvent(url):
         content = getUrl(url)
@@ -256,7 +270,9 @@ def playLiveEvent(url):
             xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30019)+'!,5000)')
           else:
             urlNew=urlNew[:urlNew.find("?")].replace("/MP4:","/mp4:")
-            listitem = xbmcgui.ListItem(path=urlNew)
+            base=urlNew[:urlNew.find("mp4:")]
+            playpath=urlNew[urlNew.find("mp4:"):]
+            listitem = xbmcgui.ListItem(path=base+" playpath="+playpath)
             return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def getUrl(url,cookie=None):

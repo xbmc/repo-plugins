@@ -1,2 +1,4 @@
-0.0.1 (FIXME)
+0.0.2 (25.02.2013)
+ - use stream info for duration
+0.0.1 (27.12.2012)
  - initial release

@@ -56,7 +56,7 @@ class Scraper:
             if len(span_content) == 1:
                 duration = span_content[0].split(' ')[1]
             elif len(span_content) == 2:
-                duration = span_content[1]
+                duration = span_content[1].strip()
             else:
                 duration = ''
             videos.append({
@@ -64,7 +64,7 @@ class Scraper:
                 'thumbnail': self.__img(li.find('img')['src']),
                 'path': path,
                 'title': title,
-                'duration': duration.strip()
+                'duration': self.__secs_from_duration(duration)
             })
         return videos
 
@@ -72,6 +72,13 @@ class Scraper:
         url = MAIN_URL + '/videos/config/video/%s.js' % video_id
         json = self.__get_json(url)
         return json['clip']['url']
+
+    @staticmethod
+    def __secs_from_duration(d):
+        seconds = 0
+        for part in d.split(':'):
+            seconds = seconds * 60 + int(part)
+        return seconds
 
     @staticmethod
     def __img(url):

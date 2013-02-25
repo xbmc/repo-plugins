@@ -89,7 +89,9 @@ def __format_videos(videos):
         'thumbnail': video['thumbnail'],
         'info': {
             'count': i,
-            'duration': video['duration']
+        },
+        'stream_info': {
+            'video': {'duration': video['duration']}
         },
         'is_playable': True,
         'path': plugin.url_for(

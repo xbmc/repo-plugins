@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.bilmagasinettv.dk" version="2.0.0" name="Bil Magasinet TV" provider-name="twinther [tommy@winther.nu]">
+<addon id="plugin.video.bilmagasinettv.dk" version="2.0.1" name="Bil Magasinet TV" provider-name="twinther [tommy@winther.nu]">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
@@ -17,4 +17,5 @@
         <platform>all</platform>
         <language>da</language>
     </extension>
+    <broken>broken due to site changes</broken>
 </addon>

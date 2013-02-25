@@ -12,5 +12,6 @@
     <language>en de fr es it ru</language>
     <description lang="en">FilmOn.com is an internet based television provider owned by FilmOn.TV Networks Inc. FilmOn.TV Networks was founded by Alki David in 2006.FilmOn.com subscription packages include access to over 120 streaming TV channels in addition to premium FilmOn.com Movie channels and pay-per-view channels</description>
     <platform>all</platform>
+    <broken>Addon is no longer available through the xbmc.org repo</broken>
   </extension>
 </addon>

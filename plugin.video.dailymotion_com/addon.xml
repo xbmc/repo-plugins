@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.0.4" provider-name="AddonScriptorDE">
+<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="2.0.5" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -12,6 +12,5 @@
         <language></language>
         <description lang="en">Movies, TV, Music, User-Clips, 3D and Livestreams</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
-    <platform>all</platform>
     </extension>
 </addon>

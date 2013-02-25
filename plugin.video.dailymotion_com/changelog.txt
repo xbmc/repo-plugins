@@ -6,7 +6,6 @@
 - Fixed max video resolution bug
 1.0.2
 - Fixed site changes / video playback
-- Added contextmenu for adding user while browsing videos
 1.0.3 / 2.0.3
 - Added context menu for adding user of the selected video
 - Added context menu for adding user manually
@@ -14,3 +13,5 @@
 - Some other changes
 1.0.4 / 2.0.4
 - Added message for toggling the family filter
+1.0.5 / 2.0.5
+- Removed family filter setting

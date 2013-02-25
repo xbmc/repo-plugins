@@ -24,7 +24,7 @@
   <string id="30022">Video not available</string>
   <string id="30023">Added</string>
   <string id="30024">Favourites</string>
-  <string id="30028">Add user to favs</string>
+  <string id="30028">Add {user} to favs</string>
   <string id="30029">Remove from addon favs</string>
   <string id="30030">Added user to favs</string>
   <string id="30031">Are you over 18 and would like to turn off the family filter?</string>

@@ -4,6 +4,8 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,os
 from datetime import datetime
 from datetime import timedelta
 
+familyFilter="on"
+
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
@@ -11,20 +13,13 @@ addonID = 'plugin.video.dailymotion_com'
 addon = xbmcaddon.Addon(addonID)
 translation = addon.getLocalizedString
 channelFavsFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".favorites")
-familyFilterFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/familyFilter")
+familyFilterFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/family_filter_off")
+
+if os.path.exists(familyFilterFile):
+  familyFilter="off"
 
 while (not os.path.exists(xbmc.translatePath("special://profile/addon_data/"+addonID+"/settings.xml"))):
   addon.openSettings()
-
-if os.path.exists(familyFilterFile):
-  fh = open(familyFilterFile, 'r')
-  familyFilter = fh.read()
-  fh.close()
-else:
-  familyFilter="on"
-  fh = open(familyFilterFile, 'w')
-  fh.write("on")
-  fh.close()
 
 forceViewMode=addon.getSetting("forceViewMode")
 viewMode=str(addon.getSetting("viewMode"))
@@ -271,16 +266,20 @@ def playArte(id):
             urlNew=match1[0]
           elif len(match2)==1:
             urlNew=match2[0]
-          listitem = xbmcgui.ListItem(path=urlNew+" swfVfy=1 swfUrl=http://videos.arte.tv/blob/web/i18n/view/player_23-3188338-data-4993762.swf")
+          urlNew=urlNew.replace("MP4:","mp4:")
+          base=urlNew[:urlNew.find("mp4:")]
+          playpath=urlNew[urlNew.find("mp4:"):]
+          listitem = xbmcgui.ListItem(path=base+" playpath="+playpath+" swfVfy=1 swfUrl=http://videos.arte.tv/blob/web/i18n/view/player_24-3188338-data-5168030.swf")
           return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
         except:
           xbmc.executebuiltin('XBMC.Notification(Info:,'+str(translation(30022))+' (Arte)!,5000)')
 
 def addFav():
-        keyboard = xbmc.Keyboard('', translation(30028))
+        keyboard = xbmc.Keyboard('', translation(30033))
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
-          channelEntry = "###USER###="+keyboard.getText()+"###THUMB###=###END###"
+          user=keyboard.getText()
+          channelEntry = "###USER###="+user+"###THUMB###=###END###"
           if os.path.exists(channelFavsFile):
             fh = open(channelFavsFile, 'r')
             content=fh.read()
@@ -326,29 +325,6 @@ def favourites(param):
           if refresh=="TRUE":
             xbmc.executebuiltin("Container.Refresh")
 
-def toggleFamilyFilter():
-        fh = open(familyFilterFile, 'r')
-        familyFilter = fh.read()
-        fh.close()
-        if familyFilter=="on":
-          dialog = xbmcgui.Dialog()
-          ret = dialog.yesno(translation(30104), translation(30031))
-          if ret==1:
-            familyFilter="off"
-            fh = open(familyFilterFile, 'w')
-            fh.write(familyFilter)
-            fh.close()
-            xbmc.executebuiltin("Container.Refresh")
-        else:
-          dialog = xbmcgui.Dialog()
-          ret = dialog.yesno(translation(30104), translation(30032))
-          if ret==1:
-            familyFilter="on"
-            fh = open(familyFilterFile, 'w')
-            fh.write(familyFilter)
-            fh.close()
-            xbmc.executebuiltin("Container.Refresh")
-
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","'").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
         title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
@@ -357,7 +333,7 @@ def cleanTitle(title):
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:18.0) Gecko/20100101 Firefox/18.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:19.0) Gecko/20100101 Firefox/19.0')
         req.add_header('Cookie',"lang="+language+"; family_filter="+familyFilter)
         response = urllib2.urlopen(req)
         link=response.read()
@@ -382,7 +358,7 @@ def addLink(name,url,mode,iconimage,user,desc,duration):
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": desc, "Duration": duration } )
         liz.setProperty('IsPlayable', 'true')
         playListInfos="###MODE###=ADD###USER###="+user+"###THUMB###=DefaultVideo.png###END###"
-        liz.addContextMenuItems([(translation(30028), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=favourites&url='+urllib.quote_plus(playListInfos)+')',), (translation(30104), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=toggleFamilyFilter)',)])
+        liz.addContextMenuItems([(translation(30028).format(user=user), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=favourites&url='+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
         return ok
 
@@ -391,7 +367,6 @@ def addDir(name,url,mode,iconimage):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        liz.addContextMenuItems([(translation(30104), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=toggleFamilyFilter)',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -401,7 +376,7 @@ def addUserDir(name,url,mode,iconimage,oTitle):
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         playListInfos="###MODE###=ADD###USER###="+oTitle+"###THUMB###="+iconimage+"###END###"
-        liz.addContextMenuItems([(translation(30028), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=favourites&url='+urllib.quote_plus(playListInfos)+')',), (translation(30104), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=toggleFamilyFilter)',)])
+        liz.addContextMenuItems([(translation(30028).format(user=oTitle), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=favourites&url='+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -410,7 +385,7 @@ def addFavDir(name,url,mode,iconimage):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        liz.addContextMenuItems([(translation(30033), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=addFav)',), (translation(30104), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=toggleFamilyFilter)',)])
+        liz.addContextMenuItems([(translation(30033), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=addFav)',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -420,7 +395,7 @@ def addUserFavDir(name,url,mode,iconimage,oTitle):
         liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         playListInfos="###MODE###=REMOVE###REFRESH###=TRUE###USER###="+oTitle+"###THUMB###="+iconimage+"###END###"
-        liz.addContextMenuItems([(translation(30029), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=favourites&url='+urllib.quote_plus(playListInfos)+')',), (translation(30104), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=toggleFamilyFilter)',)])
+        liz.addContextMenuItems([(translation(30029), 'XBMC.RunPlugin(plugin://plugin.video.dailymotion_com/?mode=favourites&url='+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
 
@@ -458,7 +433,5 @@ elif mode == 'playArte':
     playArte(url)
 elif mode == 'search':
     search()
-elif mode == 'toggleFamilyFilter':
-    toggleFamilyFilter()
 else:
     index()

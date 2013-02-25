@@ -16,6 +16,6 @@
         <license>GPL 2.0</license>
         <platform>all</platform>
         <language>da</language>
+        <broken>broken due to site changes</broken>
     </extension>
-    <broken>broken due to site changes</broken>
 </addon>

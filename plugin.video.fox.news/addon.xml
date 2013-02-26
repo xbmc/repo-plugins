@@ -1,21 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.fox.news"
        name="Fox News"
-       version="2.0.7"
+       version="3.0.0"
        provider-name="divingmule">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
-        <import addon="script.module.beautifulsoup" version="3.0.8"/>
-        <import addon="script.common.plugin.cache" version="0.9.1"/>
+      <import addon="xbmc.python" version="2.1.0"/>
+      <import addon="script.module.beautifulsoup" version="3.2.0"/>
+      <import addon="script.common.plugin.cache" version="2.5.1"/>
     </requires>
-    <extension point="xbmc.python.pluginsource"
-               library="default.py">
-        <provides>video</provides>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+      <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
-        <platform>all</platform>
-        <language>en</language>
-        <summary lang="en">Fox News</summary>
-        <description lang="en">With this add-on you can watch all the videos from video.foxnews.com. Thanks to redeyed for the original plugin!</description>
+      <platform>all</platform>
+      <language>en</language>
+      <summary lang="en">Fox News</summary>
+      <description lang="en">
+        With this add-on you can watch all the videos from video.foxnews.com. Thanks to redeyed for the original plugin!
+      </description>
+      <forum>http://forum.xbmc.org/showthread.php?tid=57175</forum>
+      <source>https://code.google.com/p/foxnews-xbmc/source/checkout</source>
+      <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     </extension>
 </addon>

@@ -1,6 +1,7 @@
-import urllib
+﻿import urllib
 import urllib2
 import os
+import re
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
@@ -40,12 +41,12 @@ def make_request(url, headers=None):
 
 
 def get_categories():
+        # add_dir('Watch Live', '', 5, icon)
         url = 'http://video.foxnews.com/playlist/latest-latest-news/'
         data = make_request(url)
         soup = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
         add_dir(soup.body.h1.contents[0].strip(), '', 2, icon)
-        h = soup.find('div', attrs={'class' : 'all'})
-        for i in h.findNext('ul')('a'):
+        for i in soup.find('nav')('a'):
             add_dir(i.string, i['href'], 1, icon)
         cache.set("videos_dict", repr({ "videos": get_video_list(data) }))
 
@@ -159,6 +160,50 @@ def resolve_url(url):
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), succeeded, item)
 
 
+def get_live_streams():
+        playlist_id = None
+        items = None
+        data = make_request('http://video.foxnews.com/playlist/live-landing-page/')
+        pattern = 'pageVars.playlistId = "(.+?)";'
+        match = re.findall(pattern, data)
+        if len(match) > 0:
+            playlist_id = match[0]
+        if playlist_id:
+            json_url = 'http://video.foxnews.com/v/feed/playlist/%s.js?template=fox&callback=FOX_Header_Watch_Feed' %playlist_id
+            j_data = json.loads(make_request(json_url).strip('FOX_Header_Watch_Feed(')[:-1])
+            items = j_data['channel']['item']
+        if items:
+            for i in items:
+                title = i['title']
+                smil = i['enclosure']['@attributes']['url']
+                thumb = i['media-group']['media-thumbnail']['@attributes']['url']
+                print (title, smil, thumb)
+                u=sys.argv[0]+"?url="+urllib.quote_plus(smil)+"&mode=6"
+                liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage=thumb)
+                liz.setInfo(type="Video", infoLabels={"Title": title})
+                liz.setProperty('IsPlayable', 'true')
+                ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
+
+
+def resolve_live_url(url):
+        resolved_url = ''
+        succeeded = False
+        soup = BeautifulSoup(make_request(url))
+        base = soup.find('meta', attrs={'name': "httpBase"})['content']
+        renditions = []
+        for i in soup('video'):
+            renditions.append({'bitrate': i['system-bitrate'], 'href': i['src']})
+        sorted_renditions = sorted(renditions, key=lambda k: int(k['bitrate']), reverse=True)
+        if len(sorted_renditions) == 4:
+            resolved_url = base + sorted_renditions[int(quality)]['href']
+        else:
+            resolved_url = base + sorted_renditions[0]['href']
+        if resolved_url != '':
+            succeeded = True
+        item = xbmcgui.ListItem(path=resolved_url)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), succeeded, item)
+
+
 
 def add_link(date, name, duration, href, thumb, desc):
         description = date+'\n\n'+desc
@@ -237,5 +282,11 @@ elif mode==3:
 
 elif mode==4:
     resolve_url(url)
+
+elif mode==5:
+    get_live_streams()
+
+elif mode==6:
+    resolve_live_url(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

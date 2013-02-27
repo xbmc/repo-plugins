@@ -12,3 +12,6 @@
 - Fixed site changes
 1.0.6
 - Some small fixes
+1.0.7
+- Changed navigation on 60 minutes and Evening news
+- Fixed search

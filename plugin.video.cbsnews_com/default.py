@@ -40,16 +40,58 @@ def index():
             else:
               pageType="1611"
             url="http://www.cbsnews.com/"+pageType+"-"+noteId+"_162-1.html?nomesh"
-            if title=="48 Hours":
+            if title=="Evening News":
+              addDir(title,"",'listEveningMain',"")
+            elif title=="60 Minutes":
+              addDir(title,"",'list60MinutesMain',"")
+            elif title=="48 Hours":
               addDir(title,nextUrl,'listVideos',"")
             else:
               addDir(title,url+"#"+nextUrl,'listLatest',"")
-        addDir("CBS Sunday Morning","http://www.cbsnews.com/2076-3445_162-0.html",'listVideos',"")
         addDir("Up To The Minute","http://www.cbsnews.com/2076-3455_162-0.html",'listVideos',"")
         addDir(translation(30002),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def listEveningMain():
+        addLink(translation(30004),"",'playEveningLatest',"")
+        addDir(translation(30005),"http://www.cbsnews.com/2003-503445_162-0.html",'listVideos',"")
+        addDir(translation(30006),"http://www.cbsnews.com/video/eveningnews/",'listVideos',"")
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def list60MinutesMain():
+        content = getUrl("http://www.cbsnews.com/60-minutes/")
+        match=re.compile('<strong class="sideScrollerTitle"><span>(.+?)</span></strong>', re.DOTALL).findall(content)
+        for title in match:
+          addDir(title,title,'list60Minutes',"")
+        addDir(translation(30007),"http://www.cbsnews.com/video/60minutes/",'listVideos',"")
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def list60Minutes(title):
+        content = getUrl("http://www.cbsnews.com/60-minutes/")
+        content = content[content.find('<strong class="sideScrollerTitle"><span>'+title+'</span></strong>'):]
+        content = content[:content.find('</ul>'):]
+        match=re.compile('<li class="promoBox"> <a href="(.+?)"(.+?)loadsrc="(.+?)"(.+?)class="assetTitle">(.+?)</a> <p class="storySub">(.+?)</p> </li>', re.DOTALL).findall(content)
+        for url, temp, thumb, temp2, title, date in match:
+          fullDate=date
+          date=date.strip().replace(",","")
+          dateTemp = time.strptime(date, '%B %d %Y')
+          dateShort = time.strftime("%m/%d", dateTemp)
+          title=dateShort+" - "+title
+          addLink(title,url,'playVideo',thumb,fullDate)
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode==True:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def playEveningLatest():
+        content = getUrl("http://www.cbsnews.com/2003-503445_162-0.html")
+        match=re.compile('<li> <a href="(.+?)"(.+?)alt="(.+?)"', re.DOTALL).findall(content)
+        playVideo(match[0][0], match[0][2])
 
 def listLatest(url):
         spl=url.split("#")
@@ -76,7 +118,12 @@ def listLatest(url):
             date=""
             if len(match)>0:
               length=match[0][0]
-              date=match[0][1].strip()
+              length=str(int(length[:length.find(":")])+1)
+              date=match[0][1]
+              date=date[:date.find("|")].strip().replace(",","")
+              dateTemp = time.strptime(date, '%B %d %Y')
+              dateShort = time.strftime("%m/%d", dateTemp)
+              title=dateShort+" - "+title
               desc=date+"\n"+desc
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
@@ -88,29 +135,40 @@ def listLatest(url):
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
+        if "http://" not in url:
+          url="http://www.cbsnews.com"+url
+        urlMain=url
         content = getUrl(url)
         tempTitle=""
         match=re.compile('http://www.cbsnews.com/video/(.+?)/', re.DOTALL).findall(url)
         if len(match)>0:
           tempTitle=match[0]
-        if content.find('<div style="background-image')>=0:
+        if content.find('<div style="background-image')>=0 and "http://www.cbsnews.com/2003-503445_162-0" not in urlMain:
           spl=content.split('<div style="background-image')
           for i in range(1,len(spl),1):
               entry=spl[i]
+              match=re.compile('<h2 class="storyTitle"><a href="(.+?)">(.+?)</a></h2>', re.DOTALL).findall(entry)
+              url=match[0][0]
+              title=match[0][1]
+              title=cleanTitle(title)
               match=re.compile('<p class="datestamp">(.+?)</p>', re.DOTALL).findall(entry)
-              date=match[0].replace('<span class="separatorGrey">|</span> ','')
+              date=""
+              if len(match)>0:
+                date=match[0].replace('<span class="separatorGrey">','')
+                date=date[:date.find("|")].strip().replace(",","")
+                dateTemp = time.strptime(date, '%B %d %Y')
+                dateShort = time.strftime("%m/%d", dateTemp)
+                title=dateShort+" - "+title
               match=re.compile('<p class="storyDek">(.+?)</p>', re.DOTALL).findall(entry)
               desc=""
               if len(match)>0:
                 desc=match[0]
                 desc=cleanTitle(desc)
-              match=re.compile('<h2 class="storyTitle"><a href="(.+?)">(.+?)</a></h2>', re.DOTALL).findall(entry)
-              url=match[0][0]
-              title=match[0][1]
-              title=cleanTitle(title)
+              if date!="":
+                desc=date+"\n"+desc
               match=re.compile("url\\('(.+?)'\\)", re.DOTALL).findall(entry)
               thumb=match[0]
-              addLink(title,url,'playVideo',thumb,date+"\n"+desc)
+              addLink(title,url,'playVideo',thumb,desc)
         elif content.find('<li> <a href="http://www.cbsnews.com/video/watch/')>=0 or content.find('<li> <a href="/video/watch/')>=0:
           if content.find('<li> <a href="http://www.cbsnews.com/video/watch/')>=0:
             spl=content.split('<li> <a href="http://www.cbsnews.com/video/watch/')
@@ -118,17 +176,24 @@ def listVideos(url):
             spl=content.split('<li> <a href="/video/watch/')
           for i in range(1,len(spl),1):
               entry=spl[i]
+              match=re.compile('alt=(.+?)/>', re.DOTALL).findall(entry)
+              title=match[0]
+              title=cleanTitle(title).replace('"','')
               url="http://www.cbsnews.com/video/watch/"+entry[:entry.find('"')]
               match=re.compile('<p class="datestamp">(.+?)</p>', re.DOTALL).findall(entry)
-              date=match[0].replace('<span class="separatorGrey">|</span> ','')
+              date=""
+              if len(match)>0:
+                date=match[0].replace('<span class="separatorGrey">','')
+                date=date[:date.find("|")].strip().replace(",","")
+                dateTemp = time.strptime(date, '%B %d %Y')
+                dateShort = time.strftime("%m/%d", dateTemp)
+                if "http://www.cbsnews.com/2003-503445_162-0" not in urlMain:
+                  title=dateShort+" - "+title
               match=re.compile('<p class="storyDek">(.+?)</p>', re.DOTALL).findall(entry)
               desc=""
               if len(match)>0:
                 desc=match[0]
                 desc=cleanTitle(desc)
-              match=re.compile('alt=(.+?)/>', re.DOTALL).findall(entry)
-              title=match[0]
-              title=cleanTitle(title).replace('"','')
               match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
               thumb=match[0]
               addLink(title,url,'playVideo',thumb,date+"\n"+desc)
@@ -152,34 +217,30 @@ def search():
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
           search_string = keyboard.getText().replace(" ","+")
-          listSearchResults('http://www.cbsnews.com/1770-5_162-0.html?query='+search_string+'&searchtype=cbsSearch&rpp=10&pageType=14&tag=ltcol;narrow;mt')
+          listSearchResults('http://www.cbsnews.com/1770-5_162-0.html?query='+search_string+'&searchtype=cbsSearch&pageType=14&rpp=30')
 
 def listSearchResults(url):
         content = getUrl(url)
         spl=content.split('<li section=')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('<p class="storyDek">(.+?)</p>', re.DOTALL).findall(entry)
-            desc=match[0]
-            match=re.compile('<p class="datestamp">(.+?)</p>', re.DOTALL).findall(entry)
+            match=re.compile('<span class="date">(.+?)<', re.DOTALL).findall(entry)
             date=match[0]
             match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
             url=match[0]
-            match=re.compile('class="storyTitle">(.+?)</a>', re.DOTALL).findall(entry)
+            match=re.compile('class="title">(.+?)<', re.DOTALL).findall(entry)
             title=match[0]
             title=cleanTitle(title)
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-            thumb=match[0]
-            addLink(title,url,'playVideo',thumb,date+"\n"+desc)
-        matchPage=re.compile('<li class="next"> <a href="(.+?)">', re.DOTALL).findall(content)
-        if len(matchPage)>0:
-          urlNext="http://www.cbsnews.com"+matchPage[0]
-          addDir(translation(30001),urlNext,'listSearchResults',"")
+            thumb=""
+            if len(match)>0:
+              thumb=match[0]
+            addLink(title,url,'playVideo',thumb,date)
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
-def playVideo(url):
+def playVideo(url,title=""):
         content = getUrl(url)
         match=re.compile('setVideoId\\("(.+?)"\\)', re.DOTALL).findall(content)
         match2=re.compile('setVideoId\\((.+?)\\)', re.DOTALL).findall(content)
@@ -202,6 +263,8 @@ def playVideo(url):
                 finalUrl=match[0]
         if finalUrl!="":
           listitem = xbmcgui.ListItem(path=finalUrl)
+          if title!="":
+            listitem.setInfo( type="Video", infoLabels={ "Title": title } )
           xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):
@@ -256,8 +319,16 @@ if mode == 'listVideos':
     listVideos(url)
 elif mode == 'listLatest':
     listLatest(url)
+elif mode == 'listEveningMain':
+    listEveningMain()
+elif mode == 'list60MinutesMain':
+    list60MinutesMain()
+elif mode == 'list60Minutes':
+    list60Minutes(url)
 elif mode == 'listSearchResults':
     listSearchResults(url)
+elif mode == 'playEveningLatest':
+    playEveningLatest()
 elif mode == 'playVideo':
     playVideo(url)
 elif mode == 'search':

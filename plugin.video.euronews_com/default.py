@@ -228,7 +228,8 @@ def playLive():
         content = content[content.find('"'+language+'":'):]
         match=re.compile('"server":"(.+?)"', re.DOTALL).findall(content)
         server=match[0].replace("\\","")
-        listitem = xbmcgui.ListItem(path=server+language+"_video750_flash_all.sdp swfUrl=http://www.euronews.com/media/player_live_1_14.swf")
+        url = server.replace("rtmp","rtsp")+language+"_video750_flash_all.sdp"
+        listitem = xbmcgui.ListItem(path=url)
         return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def cleanTitle(title):

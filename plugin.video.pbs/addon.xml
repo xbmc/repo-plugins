@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.pbs"
        name="PBS"
-       version="2.0.10"
+       version="2.0.11"
        provider-name="stacked">
   <requires>
 	<import addon="xbmc.python" version="2.0"/>

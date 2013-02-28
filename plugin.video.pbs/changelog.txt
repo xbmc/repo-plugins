@@ -1,4 +1,10 @@
-[B]Version 2.0.10[/B]
+[B]Version 2.0.11[/B]
+
+- Removed deprecated video quality 'MPEG-4 500kbps'
+- Set default video quality to 'MP4 800k'
+- Fixed 'base' referenced before assignment error
+
+[B]Version 3.0.10[/B]
 
 - Fixed index error when loading directories
 - Fixed redirect_url errors

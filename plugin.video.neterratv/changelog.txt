@@ -21,4 +21,7 @@ Todo: Need function to delete cookie file
 
 0.0.6
 - updated email addresses
-- 
+0.0.7
+- neterra website was re-designed 
+- the old webpage is available under old.neterra.tv 
+- I changed the URL to the old URL

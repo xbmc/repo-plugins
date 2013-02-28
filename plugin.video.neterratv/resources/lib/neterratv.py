@@ -36,10 +36,10 @@ class neterra:
     CLASSNAME = 'neterra'
     COOKIEFILE = 'cookies.lwp'
     PLUGINID = 'plugin.video.neterratv'
-    MAINURL = 'http://www.neterra.tv/bg/'
-    LOGINURL = 'http://www.neterra.tv/bg/login.php'
+    MAINURL = 'http://old.neterra.tv/bg/'
+    LOGINURL = 'http://old.neterra.tv/bg/login.php'
     USERAGENT = {'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
-    BTVURL = 'http://www.neterra.tv/bg/media.php?id=1&bm=2'
+    BTVURL = 'http://old.neterra.tv/bg/media.php?id=1&bm=2'
     
     
     #globals
@@ -142,7 +142,7 @@ returns true if login successful
         isLoggedIn = False
         urlopen = urllib2.urlopen
         request = urllib2.Request
-        theurl = 'http://www.neterra.tv/bg/login.php'
+        theurl = 'http://old.neterra.tv/bg/login.php'
         self.__log('----URL request started for: ' + theurl + ' ----- ')
         txdata = 'username=' + self.__username__ + '&password=' + self.__password__ + '&submitted=1'
         req = request(self.LOGINURL, txdata, self.USERAGENT)
@@ -265,8 +265,8 @@ returns a soup obejct
                                     url=''
                                 else:
                                     #build the url
-                                    # example http://www.neterra.tv/bg/playlivestream.php?epid=94718&q=12&plid=3
-                                    url = 'http://www.neterra.tv/bg/playlivestream.php?epid=' + str(parameters[0]) + '&q=' + str(parameters[1]) + '&plid=' + str(parameters[2])                                           
+                                    # example http://old.neterra.tv/bg/playlivestream.php?epid=94718&q=12&plid=3
+                                    url = 'http://old.neterra.tv/bg/playlivestream.php?epid=' + str(parameters[0]) + '&q=' + str(parameters[1]) + '&plid=' + str(parameters[2])                                           
                             else:
                                 url = ''                    
                         if len(url) > 1:
@@ -361,8 +361,8 @@ returns a soup obejct
                                 url=''
                             else:
                                 #build the url
-                                # http://www.neterra.tv/bg/playlivestream.php?epid=94718&q=12&plid=3
-                                url = 'http://www.neterra.tv/bg/playstream.php?epid=' + str(parameters[0]) + '&q=' + str(parameters[1]) + '&plid=' + str(parameters[2])                                           
+                                # http://old.neterra.tv/bg/playlivestream.php?epid=94718&q=12&plid=3
+                                url = 'http://old.neterra.tv/bg/playstream.php?epid=' + str(parameters[0]) + '&q=' + str(parameters[1]) + '&plid=' + str(parameters[2])                                           
                         else:
                             url = ''                    
                     if len(url) > 1:

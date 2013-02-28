@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.neterratv" name="Neterra.TV" version="0.0.6" provider-name="mr.olix@gmail.com">
+<addon id="plugin.video.neterratv" name="Neterra.TV" version="0.0.7" provider-name="mr.olix@gmail.com">
   <requires>
     <import addon="xbmc.python" version="2.0"/>
     <import addon="script.module.xbmcswift" version="0.2.0"/>

@@ -19,7 +19,7 @@
 
    Description:
    These funtions are called from the main plugin module, aimed to ease and simplify the plugin development process.
-   Release 0.1.1
+   Release 0.1.3
 '''
 
 # First of all We must import all the libraries used for plugin development.
@@ -31,6 +31,7 @@ import xbmcplugin, xbmcaddon, xbmcgui, xbmc, xbmcaddon
 def get_plugin_settings(plugin_id=""):
     return xbmcaddon.Addon(id=plugin_id)
     
+
 debug_enable = False # The debug logs are disabled by default.
 
 # This function sets the debug_enable var to log everything if debug option is true.
@@ -39,19 +40,20 @@ def set_debug_mode(debug_flag=""):
     if debug_flag == "true":
         debug_enable = True
 
+
 # This function logs the messages into the main XBMC log file. Called from main plugin module.
 def log(message):
     if debug_enable:
         xbmc.log(message.encode('ascii', 'ignore'))
 
+
 # This function logs the messages into the main XBMC log file. Called from the libraries module by other functions.
 def _log(message):
     if debug_enable:
-        xbmc.log("lutils.%s" % message.encode('ascii', 'ignore'))
+        xbmc.log("lutils." + message.encode('ascii', 'ignore'))
+
 
 # This function gets all the parameters passed to the plugin from XBMC API and retuns a dictionary.
-# Example:
-# plugin://plugin.video.atactv/?parametro1=valor1&parametro2=valor2&parametro3
 def get_plugin_parms():
     params = sys.argv[2]
     _log("get_plugin_parms " + str(params))
@@ -64,15 +66,16 @@ def get_plugin_parms():
 
 
 # This function loads the html code from a webserver and returns it into a string.
-def carga_web(url):
+def carga_web(url, headers=""):
     _log("carga_web " + url)
 
-    MiReq = urllib2.Request(url) # esto funciona de forma diferente porque metemos una cabecera.
-    # Tenemos que hacer creer a la web que usamos un navegador de usuario real.
-    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0') # Cabecera del Firefox.
-    MiConex = urllib2.urlopen(MiReq) # abrimos una conexion con la URL
-    MiHTML = MiConex.read() # Chupamos TODO el contenido de la pagina web y lo salvamos en una variable
-    MiConex.close() # Cerramos la conexion con la pagina web, pues ya tenemos toda la info que necesitamos.
+    MiReq = urllib2.Request(url) # We have to use this method as we need to add some headers.
+    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0') # Firefox header.
+    for key in headers:
+        MiReq.add_header(key, headers[key])
+    MiConex = urllib2.urlopen(MiReq) # Opens the http connection to the URL.
+    MiHTML = MiConex.read() # Gets all the html contents from the URL and stores it into a variable.
+    MiConex.close() # Close the http connection as we get what we need.
 
     return MiHTML
 
@@ -88,23 +91,18 @@ def get_redirect(url):
     return MiHTML
 
 
-# This function sends a http GET with XMLHttpRequest, and gets back a JSON from the web server stored into a dict. 
-def get_json(url):
-    _log("get_json " + url)
-
-    MiReq = urllib2.Request(url)
-    MiReq.add_header('User-Agent', 'Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20100101 Firefox/17.0')
-    MiReq.add_header('Accept', 'application/json, text/javascript, */*')
-    MiReq.add_header('Accept-Encoding', 'deflate')
-    MiReq.add_header('X-Requested-With', 'XMLHttpRequest')
-    MiReq.add_header('Referer', 'http://www.tv5mondeplus.com/videos')
-    MiReq.add_header('Cookie', 'ns_cookietest=true; ns_session=true')
-
-    MiConex = urllib2.urlopen(MiReq)
-    MiJSON = MiConex.read()
-    MiConex.close()
-
+# This function returns a json object collected from the web into a dictionary.
+def get_json_dict(MiJSON):
     return json.loads(MiJSON)
+
+
+# This function cleans the date field obtained from the emissions JSON video list.
+def limpia_fecha(date):
+    fecha = date.split(",")
+    dia = fecha[1][1:].replace("..","")
+    hora = fecha[2][1:8]
+    _log("limpia_fecha (%s %s)"  % (dia, hora))
+    return "(%s %s)" % (dia, hora)
 
 
 # This function allows us to find multiples matches from a regexp into a string.
@@ -127,11 +125,16 @@ def find_first(text,pattern):
     except:
         return ""
 
-# This function adds a directory entry into the XBMC GUI throught the API
-def addDir(action = "", title = "", url = "", thumbnail = ""):
-    _log("addDir action = [" + action + "] title = [" + title + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
 
-    dir_url = '%s?action=%s&url=%s' % (sys.argv[0], action, urllib.quote_plus(url))
+# This function adds a directory entry into the XBMC GUI throught the API
+def addDir(action = "", title = "", url = "", thumbnail = "", referer = ""):
+    _log("addDir action = [" + action + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
+
+    if referer:
+        dir_url = '%s?action=%s&url=%s&referer=%s' % (sys.argv[0], action, urllib.quote_plus(url), urllib.quote_plus(referer))
+    else:
+        dir_url = '%s?action=%s&url=%s' % (sys.argv[0], action, urllib.quote_plus(url))
+
     dir_item = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = thumbnail)
     dir_item.setInfo(type = "Video", infoLabels = {"Title": title})
     return xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = dir_url, listitem = dir_item, isFolder = True)
@@ -139,7 +142,7 @@ def addDir(action = "", title = "", url = "", thumbnail = ""):
 
 # This function adds a video link entry into the XBMC GUI throught the API
 def addLink(action = "", title = "", plot = "", url = "", thumbnail = ""):
-    _log("addDir action = [" + action + "] title = [" + title + "] plot = [" + plot + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
+    _log("addLink action = [" + action + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
 
     link_url = '%s?action=%s&url=%s' % (sys.argv[0], action, urllib.quote_plus(url))
     link_item = xbmcgui.ListItem(title, iconImage = "DefaultVideo.png", thumbnailImage = thumbnail)
@@ -153,10 +156,12 @@ def close_dir(pluginhandle):
     _log("close_dir pluginhadle: %s" % pluginhandle)
     xbmcplugin.endOfDirectory(pluginhandle)
 
+
 # This funtion shows a popup window with a notices message through the XBMC GUI during 5 secs.
 def showWarning(message):
     _log("showWarning message: %s" % message)
     xbmc.executebuiltin('XBMC.Notification(Info:,' + message + '!,6000)')
+
 
 # This function plays the video file pointed by the URL passed as argument.
 def play_resolved_url(pluginhandle= "", url = ""):

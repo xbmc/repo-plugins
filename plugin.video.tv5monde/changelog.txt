@@ -1,25 +1,29 @@
-0.0.1
-- First Try.
-0.0.2
-- Added json query from category video list.
-- Supported category selection ordered by date.
-0.9.99
-- Supported french characteres on titles.
-- Play older videos at the end of category list.
-1.0.0
-- Refactoring and code optimization.
-- First public release.
-1.0.1
-- Fix a pre 2.7 python syntax error in get_plugin_parms to run over Windows 7 and ATV. 
-- change fanart and icon images.
+1.1.2
+- Added TV5MONDE+7 and Programs sections.
+- Fixed bug with last page link under each category section.
+- Some refactoring and cleaning up.
+1.1.1
+- Scaled fanart and icon images according to add-ons standards.
+- Added language tag into addon.xml to allow add-ons search by language.
+1.1.0
+- Change xbmc.python rel to 2.1.0 for Frodo branch.
 1.0.2
 - Suported debug option from plugin settings. Now debug is disabled by default.
 - Suported internationalization of gui messages: English, Spanish and French.
 - Modified plugin description.
 - Change the copyleft license from GPLv2 to GPLv3.
 - Eden and Frodo branches splited for pull to oficial repositories. 
-1.1.0
-- Change xbmc.python rel to 2.1.0 for Frodo branch.
-1.1.1
-- Scaled fanart and icon images according to add-ons standards.
-- Added language tag into addon.xml to allow add-ons search by language.
+1.0.1
+- Fix a pre 2.7 python syntax error in get_plugin_parms to run over Windows 7 and ATV. 
+- Change fanart and icon images.
+1.0.0
+- Refactoring and code optimization.
+- First public release.
+0.9.99
+- Supported french characteres on titles.
+- Play older videos at the end of category list.
+0.0.2
+- Added json query from category video list.
+- Supported category selection ordered by date.
+0.0.1
+- First Try.

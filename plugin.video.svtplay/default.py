@@ -31,28 +31,6 @@ MODE_VIEW_TITLES = "view_titles"
 MODE_VIEW_EPISODES = "view_episodes"
 MODE_VIEW_CLIPS = "view_clips"
 
-BASE_URL = "http://www.svtplay.se"
-SWF_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2013.02.swf" 
-JSON_SUFFIX = "?output=json"
-
-URL_A_TO_O = "/program"
-URL_CATEGORIES = "/kategorier"
-URL_CHANNELS = "/kanaler"
-URL_TO_LATEST = "?tab=episodes&sida=1"
-URL_TO_LATEST_NEWS = "?tab=news&sida=1"
-URL_TO_RECOMMENDED = "?tab=recommended&sida=1"
-URL_TO_SEARCH = "/sok?q="
-
-VIDEO_PATH_RE = "/(klipp|video|live)/\d+"
-VIDEO_PATH_SUFFIX = "?type=embed"
-
-TAB_TITLES      = "titles"
-TAB_EPISODES    = "episodes"
-TAB_CLIPS       = "clips"
-TAB_NEWS        = "news"
-TAB_RECOMMENDED = "recommended"
-
-MAX_NUM_GRID_ITEMS = 12
 CURR_DIR_ITEMS = 0
 
 pluginHandle = int(sys.argv[1])
@@ -105,7 +83,7 @@ def viewStart():
 
 
 def viewChannels():
-  channels = svt.getChannels(BASE_URL + URL_CHANNELS)
+  channels = svt.getChannels()
   
   params = {}
   params["mode"] = MODE_VIDEO
@@ -115,100 +93,39 @@ def viewChannels():
     addDirectoryItem(channel["title"],params,channel["thumbnail"],False,True)
     
   
-
 def viewAtoO():
-  html = helper.getPage(BASE_URL + URL_A_TO_O)
+  programs = svt.getAtoO()
+  
+  for program in programs:
+    addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"], "page": 1 })
 
-  texts = common.parseDOM(html, "a" , attrs = { "class": "playAlphabeticLetterLink" })
-  hrefs = common.parseDOM(html, "a" , attrs = { "class": "playAlphabeticLetterLink" }, ret = "href")
-
-  for index, text in enumerate(texts):
-    addDirectoryItem(common.replaceHTMLCodes(text), { "mode": MODE_PROGRAM, "url": hrefs[index], "page": 1 })
 
 def viewLive():
-  html = helper.getPage(BASE_URL)
+  programs = svt.getLivePrograms()
+  
+  for program in programs:
+    addDirectoryItem(program["title"], { "mode": MODE_VIDEO, "url": program["url"] }, program["thumbnail"], False, True)
 
-  tabId = common.parseDOM(html, "a", attrs = { "class": "[^\"']*playButton-TabLive[^\"']*" }, ret = "data-tab")
-
-  if len(tabId) > 0:
-
-    tabId = tabId[0]
-
-    container = common.parseDOM(html, "div", attrs = { "class": "[^\"']*svtTab-" + tabId + "[^\"']*" })
-
-    lis = common.parseDOM(container, "li", attrs = { "class": "[^\"']*svtMediaBlock[^\"']*" })
-
-    for li in lis:
-
-      liveIcon = common.parseDOM(li, "img", attrs = { "class": "[^\"']*playBroadcastLiveIcon[^\"']*"})
-
-      if len(liveIcon) > 0:
-
-        text = common.parseDOM(li, "h5")[0]
-        href = common.parseDOM(li, "a", ret = "href")[0]
-
-        match = re.match(VIDEO_PATH_RE, href)
-
-        if match:
-
-          url = match.group()
-
-          addDirectoryItem(common.replaceHTMLCodes(text), { "mode": MODE_VIDEO, "url": url }, None, False, True)
 
 def viewCategories():
-  html = helper.getPage(BASE_URL + URL_CATEGORIES)
+  categories = svt.getCategories()
 
-  container = common.parseDOM(html, "ul", attrs = { "class": "[^\"']*svtGridBlock[^\"']*" })
+  for category in categories:
+    addDirectoryItem(category["title"], { "mode": MODE_CATEGORY, "url": category["url"], "page": 1})
 
-  lis = common.parseDOM(container, "li" , attrs = { "class": "[^\"']*svtMediaBlock[^\"']*" })
-
-  for li in lis:
-
-    href = common.parseDOM(li, "a", ret = "href")[0]
-    text = common.parseDOM(li, "h2")[0]
-
-    addDirectoryItem(common.replaceHTMLCodes(text), { "mode": MODE_CATEGORY, "url": href, "page": 1})
 
 def viewAlphaDirectories():
-  """
-  Used to create the alphabetical A-Ö directory items.
-  Addon setting has to be enabled for this to trigger.
-  """
-  html = helper.getPage(BASE_URL + URL_A_TO_O)
+  alphas = svt.getAlphas() 
 
-  container = common.parseDOM(html, "div", attrs = { "id" : "playAlphabeticLetterList" })
+  for alpha in alphas:
+    addDirectoryItem(alpha["title"], { "mode": MODE_LETTER, "letter": alpha["char"] })
 
-  letters = common.parseDOM(container, "h3", attrs = { "class" : "playAlphabeticLetterHeading " })
-
-  for letter in letters:
-    url = letter
-    addDirectoryItem(helper.convertChar(letter), { "mode": MODE_LETTER, "letter": url })
 
 def viewProgramsByLetter(letter):
+  programs = svt.getProgramsByLetter(letter)
 
-  letter = urllib.unquote(letter)
-
-  html = helper.getPage(BASE_URL + URL_A_TO_O)
-
-  container = common.parseDOM(html, "div", attrs = { "id": "playAlphabeticLetterList" })
-
-  letterboxes = common.parseDOM(container, "div", attrs = { "class": "playAlphabeticLetter" })
-
-  for letterbox in letterboxes:
-
-    heading = common.parseDOM(letterbox, "h3")[0]
-
-    if heading == letter:
-      break
-
-  lis = common.parseDOM(letterbox, "li", attrs = { "class": "[^\"']*playListItem[^\"']*" })
-
-  for li in lis:
-
-    href = common.parseDOM(li, "a", ret = "href")[0]
-    text = common.parseDOM(li, "a")[0]
-
-    addDirectoryItem(common.replaceHTMLCodes(text), { "mode": MODE_PROGRAM, "url": href, "page": 1 })
+  for program in programs:
+    addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"], "page": 1 })
 
 
 def viewLatest(mode,page,index):
@@ -216,11 +133,11 @@ def viewLatest(mode,page,index):
   dirtype = MODE_VIDEO
 
   if mode == MODE_LATEST_NEWS:
-    url = URL_TO_LATEST_NEWS
+    url = svt.URL_TO_LATEST_NEWS
   elif mode == MODE_RECOMMENDED:
-    url = URL_TO_RECOMMENDED
+    url = svt.URL_TO_RECOMMENDED
   elif mode == MODE_LATEST:
-    url = URL_TO_LATEST
+    url = svt.URL_TO_LATEST
 
   createDirectory(url,page,index,mode,dirtype)
 
@@ -228,41 +145,42 @@ def viewLatest(mode,page,index):
 def viewCategory(url,page,index):
   createDirectory(url,page,index,MODE_CATEGORY,MODE_PROGRAM)
 
+
 def viewProgram(url,page,index):
   if FULL_PROGRAM_PARSE:
     createTabIndex(url)
   else:
     createDirectory(url,page,index,MODE_PROGRAM,MODE_VIDEO)
 
+
 def viewSearch():
 
   keyword = common.getUserInput(localize(30102))
-  if not keyword:
+  if keyword == "" or not keyword:
     viewStart()
     return
   keyword = urllib.quote(keyword)
   common.log("Search string: " + keyword)
 
-  if keyword == "" or not keyword:
-    viewStart()
-    return 
-
   keyword = re.sub(r" ","+",keyword) 
 
-  url = URL_TO_SEARCH + keyword
+  url = svt.URL_TO_SEARCH + keyword
   
   createTabIndex(url)
+
 
 def createTabIndex(url):
   """
   Creates a directory item for each available tab; Klipp, Hela program, Programtitlar
   """
-  html = helper.getPage(BASE_URL + url)
-  foundTab = False
+  html = svt.getPage(url)
+  tTab = False
+  eTab = False
+  cTab = False
  
   # Search for the "titles" tab. If it exists; create link to result directory   
-  foundTab = tabExists(url,TAB_TITLES)
-  if foundTab:
+  if helper.tabExists(html,svt.TAB_TITLES):
+    tTab = True
     addDirectoryItem(localize(30104), { 
                     "mode": MODE_VIEW_TITLES,
                     "url": url,
@@ -274,8 +192,8 @@ def createTabIndex(url):
 
 
   # Search for the "episodes" tab. If it exists; create link to result directory   
-  foundTab = tabExists(url,TAB_EPISODES)
-  if foundTab:
+  if helper.tabExists(html,svt.TAB_EPISODES):
+    eTab = True
     addDirectoryItem(localize(30105), { 
                     "mode": MODE_VIEW_EPISODES,
                     "url": url,
@@ -287,8 +205,8 @@ def createTabIndex(url):
 
 
   # Search for the "clips" tab. If it exists; create link to result directory   
-  foundTab = tabExists(url,TAB_CLIPS)
-  if foundTab:
+  if helper.tabExists(html,svt.TAB_CLIPS):
+    cTab = True
     addDirectoryItem(localize(30106), { 
                     "mode": MODE_VIEW_CLIPS,
                     "url": url,
@@ -298,31 +216,16 @@ def createTabIndex(url):
     # Do nothing 
     common.log("No clips found")
 
+  foundTab = tTab or eTab or cTab
+
   if not foundTab:
     # Raise dialog with a "No results found" message
-    common.log("No search result") 
+    # Should only happen when using Search
+    common.log("No search results") 
     dialog = xbmcgui.Dialog()
     dialog.ok("SVT Play",localize(30103))
-    viewSearch()
+    viewStart()
     return
-
-def tabExists(url,tabname):
-  """
-  Check if a specific tab exists in the DOM.
-  """
-  html = helper.getPage(BASE_URL + url)
-  return elementExists(html,"div",{ "data-tabname": tabname})
-
-def elementExists(html,etype,attrs):
-  """
-  Check if a specific element exists in the DOM.
-
-  Returns True if the element exists and False if not.
-  """
-
-  htmlelement = common.parseDOM(html,etype, attrs = attrs)
-
-  return len(htmlelement) > 0
 
 
 def viewPageResults(url,mode,page,index):
@@ -346,6 +249,7 @@ def viewPageResults(url,mode,page,index):
 
   createDirectory(url,page,index,mode,dirtype)
 
+
 def viewBestOfCategories():
   """
   Creates a directory displaying each of the
@@ -358,6 +262,7 @@ def viewBestOfCategories():
   for category in categories:
     params["url"] = category["url"]
     addDirectoryItem(category["title"], params)
+
 
 def viewBestOfCategory(url):
   """
@@ -372,37 +277,42 @@ def viewBestOfCategory(url):
     params["url"] = show["url"]
     addDirectoryItem(show["title"], params, show["thumbnail"], False)
 
+
 def createDirectory(url,page,index,callertype,dirtype):
   """
-  Parses Ajax URL and last page number from the argument url and
-  then calls populateDir to populate a directory with
-  video/program items.
+  Creates a directory with list items from the supplied program
+  page (url).
   """
 
   if not url.startswith("/"):
     url = "/" + url
 
-  tabname = TAB_EPISODES
+  tabname = svt.TAB_EPISODES
   if MODE_RECOMMENDED == callertype:
-    tabname = TAB_RECOMMENDED
+    tabname = svt.TAB_RECOMMENDED
   elif MODE_LATEST_NEWS == callertype:
-    tabname = TAB_NEWS
+    tabname = svt.TAB_NEWS
   elif MODE_VIEW_CLIPS == callertype:
-    tabname = TAB_CLIPS
+    tabname = svt.TAB_CLIPS
   elif MODE_CATEGORY == callertype or MODE_VIEW_TITLES == callertype:
-    tabname = TAB_TITLES
+    tabname = svt.TAB_TITLES
 
-  if not tabExists(url,tabname) and tabname == TAB_EPISODES:
-    tabname = TAB_CLIPS # In case there are no episodes for a show, get the clips instead
-  elif not tabExists(url,tabname):
-    common.log("Could not find tab "+tabname+" on page. Aborting!")
+  html = svt.getPage(url)
+
+  if not helper.tabExists(html,tabname) and tabname == svt.TAB_EPISODES:
+    tabname = svt.TAB_CLIPS # In case there are no episodes for a show, get the clips instead
+  
+  if not helper.tabExists(html,tabname):
+    common.log("Could not find tab "+tabname+" on page with url "+url+". Aborting!")
     return 
 
-  (foundUrl,ajaxurl,lastpage) = parseAjaxUrlAndLastPage(url,tabname)
+  ajaxurl = svt.getAjaxUrl(html,tabname)
 
-  if not foundUrl:
+  if not ajaxurl:
     populateDirNoPaging(url,dirtype,tabname)
     return
+  
+  lastpage = svt.getLastPage(html,tabname)
 
   fetchitems = True
   pastlastpage = False
@@ -417,7 +327,23 @@ def createDirectory(url,page,index,callertype,dirtype):
       pastlastpage = True
       break
 
-    (fetchitems,lastindex) = populateDir(ajaxurl,dirtype,str(page),index)
+    global CURR_DIR_ITEMS
+
+    articles = svt.getArticles(ajaxurl,str(page))
+    articles = articles[index:]
+    lastindex = 0
+
+    for article in articles:
+
+      if CURR_DIR_ITEMS >= MAX_DIR_ITEMS:
+        CURR_DIR_ITEMS = 0
+        fetchitems = False
+        break
+        
+      createDirItem(article,dirtype)      
+
+      lastindex += 1
+
     page += 1
 
   if not pastlastpage:
@@ -429,79 +355,20 @@ def createDirectory(url,page,index,callertype,dirtype):
                "index": lastindex})
 
 
-def parseAjaxUrlAndLastPage(url,tabname):
-  """
-  Fetches the Ajax URL and the the last page number
-  from a program page.
-  """
-  common.log("url: " + url + ", tabname: " + tabname)
-  classexp = "[^\"']*playShowMoreButton[^\"']*"
-  dataname = "sida"
-  html = helper.getPage(BASE_URL + url)
-
-  container = common.parseDOM(html,
-                              "div",
-                              attrs = { "class": "[^\"']*[playBoxBody|playBoxAltBody][^\"']*", "data-tabname": tabname })[0]
-
-  attrs = { "class": classexp, "data-name": dataname}
-  
-  if elementExists(container,"a", attrs):
-    ajaxurl = common.parseDOM(container,
-                              "a",
-                              attrs = attrs,
-                              ret = "data-baseurl")[0]
-  else:
-    return (False,"","")
-
-  lastpage = common.parseDOM(container,
-                 "a",
-                 attrs = { "class": classexp, "data-name": dataname },
-                 ret = "data-lastpage")[0]
-
-  ajaxurl = common.replaceHTMLCodes(ajaxurl)
-  return (True,ajaxurl,lastpage)
-
-def populateDir(ajaxurl,mode,page,index):
-  """
-  Populates a directory with items from a "Ajax" page.
-
-  index is used as a starting reference if the not
-  all items on a page were used to populate the previous
-  directory.
-  """
-  common.log("ajaxurl: " + ajaxurl + ", mode: " + mode + ", page: " + page + ", index: " + str(index))
-
-  global CURR_DIR_ITEMS
-
-  articles = getArticles(ajaxurl,page)
-  articles = articles[index:]
-  index = 0
-
-  for article in articles:
-
-    if CURR_DIR_ITEMS >= MAX_DIR_ITEMS:
-      CURR_DIR_ITEMS = 0
-      return (False,index)
-      
-    createDirItem(article,mode)      
-
-    index += 1
-
-  return (True,0)
-
 def populateDirNoPaging(url,mode,tabname):
   """
   Program pages that have less than 8 videos
   does not have a way to fetch the Ajax URL.
-  Therefore we need a separate parse function
-  for these programs.
+  Use the normal page URL to populate the
+  directory.
   """
   common.log("url: " + url + ", mode: " + mode + ", tabname: " + tabname)
 
-  articles = getArticles(url,None,tabname)
+  articles = svt.getArticles(url,None,tabname)
   
   for article in articles:
     createDirItem(article,mode)
+
 
 def createDirItem(article,mode):
   """
@@ -510,92 +377,32 @@ def createDirItem(article,mode):
   """
   global CURR_DIR_ITEMS
 
-  (title,url,thumbnail,info) = article
-
   if (not HIDE_SIGN_LANGUAGE) or title.lower().endswith("teckentolkad") == False:
 
     params = {}
     params["mode"] = mode
-    params["url"] = url
+    params["url"] = article["url"]
     folder = False
 
-    if(mode == MODE_VIDEO):
-      params["url"] = url
-    elif mode == MODE_PROGRAM:
+    if mode == MODE_PROGRAM:
       folder = True
       params["page"] = 1
 
-    addDirectoryItem(title, params, thumbnail, folder, False, info)
+    addDirectoryItem(article["title"], params, article["thumbnail"], folder, False, article["info"])
     CURR_DIR_ITEMS += 1
-
-def getArticles(ajaxurl,page,tabname=None):
-  """
-  Fetches all "article" DOM elements in a "svtGridBlock" and
-  returns a list of quadruples containing:  
-  title - the title of the article
-  href - the URL of the article
-  thumbnail - the thumbnail of the article
-  info - metadata of the article
-  """
-  if page:
-    pageurl = BASE_URL + ajaxurl + "sida=" + page
-  else:
-    pageurl = BASE_URL + ajaxurl 
-  
-  html = helper.getPage(pageurl)
-
-  if not tabname:
-    container = common.parseDOM(html,
-                  "div",
-                  attrs = { "class": "[^\"']*svtGridBlock[^\"']*" })[0]
-  else:
-    container = common.parseDOM(html,
-                  "div",
-                  attrs = { "data-tabname": tabname })[0]
-
-  articles = common.parseDOM(container, "article")
-  plots = common.parseDOM(container, "article", ret = "data-description")
-  airtimes = common.parseDOM(container, "article", ret = "data-broadcasted")
-  durations = common.parseDOM(container, "article", ret = "data-length")
-  newarticles = []
-  i = 0
- 
-  for article in articles:
-    info = {}
-    plot = plots[i]
-    aired = airtimes[i]
-    duration = durations[i]
-    title = common.parseDOM(article,"h5")[0]
-    href = common.parseDOM(article, "a",
-                            attrs = { "class": "[^\"']*[playLink|playAltLink][^\"']*" },
-                            ret = "href")[0]
-    thumbnail = common.parseDOM(article,
-                                "img",
-                                attrs = { "class": "playGridThumbnail" },
-                                ret = "src")[0]
-    thumbnail = thumbnail.replace("/medium/", "/large/")
-    
-    title = common.replaceHTMLCodes(title)
-    plot = common.replaceHTMLCodes(plot)
-    aired = common.replaceHTMLCodes(aired) 
-    info["title"] = title
-    info["plot"] = plot
-    info["aired"] = aired
-    info["duration"] = helper.convertDuration(duration)
-    newarticles.append((title,href,thumbnail,info))
-    i += 1
- 
-  return newarticles
 
 
 def startVideo(url):
-
+  """
+  Starts the XBMC player if a valid video url is 
+  found for the given page url.
+  """
   if not url.startswith("/"):
     url = "/" + url
 
-  url = url + JSON_SUFFIX
+  url = url + svt.JSON_SUFFIX
   common.log("url: " + url)
-  html = helper.getPage(BASE_URL + url)
+  html = svt.getPage(url)
 
   jsonString = common.replaceHTMLCodes(html)
   jsonObj = json.loads(jsonString)
@@ -666,7 +473,7 @@ def startVideo(url):
       videoUrl = videoUrl + args
 
     if extension == "MP4" and videoUrl.startswith("rtmp://"):
-      videoUrl = videoUrl + " swfUrl="+SWF_URL+" swfVfy=1"
+      videoUrl = videoUrl + " swfUrl="+svt.SWF_URL+" swfVfy=1"
  
     xbmcplugin.setResolvedUrl(pluginHandle, True, xbmcgui.ListItem(path=videoUrl))
 
@@ -680,12 +487,14 @@ def startVideo(url):
       if not SHOW_SUBTITLES:
         player.showSubtitles(False)
   else:
+    # No video URL was found
     dialog = xbmcgui.Dialog()
     dialog.ok("SVT PLAY", localize(30100))
 
+
 def mp4Handler(jsonObj):
   """
-  If there are several mp4 streams in the json object:
+  If there are several mp4 streams in the JSON object:
   pick the one with the highest bandwidth.
 
   Some programs are available with multiple mp4 streams
@@ -717,6 +526,7 @@ def mp4Handler(jsonObj):
   common.log("mp4 handler info: bitrate="+str(bitrate)+" url="+url)
   return url
 
+
 def hlsStrip(videoUrl):
     """
     Extracts the stream that supports the
@@ -737,9 +547,10 @@ def hlsStrip(videoUrl):
 
     for line in lines:
       if foundhigherquality:
+        # The stream url is on the line proceeding the header
         foundhigherquality = False
         hlsurl = line
-      if "EXT-X-STREAM-INF" in line:
+      if "EXT-X-STREAM-INF" in line: # The header
         if not "avc1.77.30" in line:
           match = re.match(r'.*BANDWIDTH=(\d+),.*CODECS=\"(.+?),.+',line)
           if match:

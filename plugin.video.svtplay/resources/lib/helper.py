@@ -3,9 +3,11 @@ import CommonFunctions
 import re
 
 common = CommonFunctions
-common.plugin = "SVT Play 3::helper"
+THUMB_SIZE = "extralarge"
 
 def getPage(url):
+  if not url.startswith("/") and not url.startswith("http://"):
+    url = "/" + url
 
   result = common.fetchPage({ "link": url })
   
@@ -59,7 +61,9 @@ def convertDuration(duration):
 
 
 def getUrlParameters(arguments):
-
+  """
+  Return URL parameters as a dict from a query string
+  """
   params = {}
 
   if arguments:
@@ -77,3 +81,30 @@ def getUrlParameters(arguments):
   return params
 
 
+def tabExists(html,tabname):
+  """
+  Check if a specific tab exists in the DOM.
+  """
+  return elementExists(html,"div",{ "data-tabname": tabname})
+
+
+def elementExists(html,etype,attrs):
+  """
+  Check if a specific element exists in the DOM.
+  """
+
+  htmlelement = common.parseDOM(html,etype, attrs = attrs)
+
+  return len(htmlelement) > 0
+
+
+def prepareThumb(thumbnail):
+  """
+  Returns a thumbnail with size 'large'
+  """
+  common.log("old thumbnail: " + thumbnail)
+  if not thumbnail.startswith("http://"):
+    thumbnail = "http://www.svtplay.se" + thumbnail
+  thumbnail = re.sub(r"/small|medium|large|extralarge/", "/"+THUMB_SIZE+"/", thumbnail)
+  common.log("new thumbnail: " + thumbnail)
+  return thumbnail

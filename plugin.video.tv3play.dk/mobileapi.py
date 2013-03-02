@@ -21,11 +21,12 @@ import simplejson
 import urllib2
 import urllib
 
-IPAD_USERAGENT = 'Mozilla/5.0 (iPad; CPU OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.0.2 Mobile/9A5248d Safari/6533.18.5'
+IPAD_USERAGENT = 'TV3 Play/1.0.3 CFNetwork/548.0.4 Darwin/11.0.0'
 
 API_URL = ' http://www.%s/mobileapi/%s'
 IMAGE_URL = 'http://play.pdl.viaplay.com/%s'
 VIASTREAM_URL = 'http://viastream.viasat.tv/%s'
+
 
 class TV3PlayMobileApi(object):
     def __init__(self, region):
@@ -41,7 +42,7 @@ class TV3PlayMobileApi(object):
         return formats
 
     def getVideos(self, category):
-        return self._call_api('formatcategory/%s/video' % category) #?splitByType' % category)
+        return self._call_api('formatcategory/%s/video' % category)
 
     def getMobileStream(self, videoId):
         return self._call_api(VIASTREAM_URL % ('MobileStream/%s' % videoId))
@@ -56,7 +57,7 @@ class TV3PlayMobileApi(object):
         return self._call_api('format')
 
     def detailed(self, formatId):
-        return self._call_api('detailed', {'formatid' : formatId})
+        return self._call_api('detailed', {'formatid': formatId})
 
     def featured(self):
         return self._call_api('featured')
@@ -64,8 +65,7 @@ class TV3PlayMobileApi(object):
     def mostviewed(self):
         return self._call_api('mostviewed')
 
-
-    def _call_api(self, url, params = None):
+    def _call_api(self, url, params=None):
         if url[0:4] != 'http':
             url = API_URL % (self.region, url)
 
@@ -86,15 +86,15 @@ class TV3PlayMobileApi(object):
 
     def _http_request(self, url):
         try:
-            r = urllib2.Request(url, headers = {
-                'user-agent' : IPAD_USERAGENT
+            r = urllib2.Request(url, headers={
+                'user-agent': IPAD_USERAGENT
             })
             u = urllib2.urlopen(r)
             content = u.read()
             u.close()
+            return content
         except Exception as ex:
             raise TV3PlayMobileApiException(ex)
-        return content
 
 
 class TV3PlayMobileApiException(Exception):

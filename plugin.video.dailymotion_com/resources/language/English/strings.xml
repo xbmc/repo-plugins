@@ -17,7 +17,7 @@
   <string id="30015">All Users</string>
   <string id="30016">Featured</string>
   <string id="30017">Official</string>
-  <string id="30018">MotionMakers</string>
+  <string id="30018">Creative</string>
   <string id="30019">Most Popular</string>
   <string id="30020">Most Commented</string>
   <string id="30021">Top Rated</string>
@@ -30,9 +30,18 @@
   <string id="30031">Are you over 18 and would like to turn off the family filter?</string>
   <string id="30032">Turn the family filter on?</string>
   <string id="30033">Add user</string>
+  <string id="30034">My stuff</string>
+  <string id="30035">Contacts</string>
+  <string id="30036">Following</string>
+  <string id="30037">Favourites</string>
+  <string id="30038">Playlists</string>
+  <string id="30039">3D</string>
+  <string id="30040">All</string>
   <string id="30101">Country</string>
   <string id="30102">Force View</string>
   <string id="30103">ViewID</string>
   <string id="30104">Toggle Family Filter</string>
-  <string id="30105">Max video quality</string>
+  <string id="30105">Maximum resolution</string>
+  <string id="30106">Dailymotion Username</string>
+  <string id="30107">Items per page</string>
 </strings>

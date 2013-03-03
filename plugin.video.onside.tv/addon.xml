@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
         id="plugin.video.onside.tv"
-        version="2.1.0"
+        version="2.1.1"
         name="Onside TV"
         provider-name="twinther [tommy@winther.nu]">
     <requires>
@@ -20,5 +20,6 @@
         <license>GPL 2.0</license>
         <platform>all</platform>
         <language>da</language>
+        <broken>broken due to site changes</broken>
     </extension>
 </addon>

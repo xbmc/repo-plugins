@@ -1,3 +1,6 @@
+Version 1.1.1
+fix archived MLB.tv games
+
 Version 1.1.0
 fix bug in mlb.tv listing
 

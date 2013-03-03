@@ -1,4 +1,4 @@
-# *  This Program is free software; you can redistribute it and/or modify
+﻿# *  This Program is free software; you can redistribute it and/or modify
 # *  it under the terms of the GNU General Public License as published by
 # *  the Free Software Foundation; either version 2, or (at your option)
 # *  any later version.
@@ -771,7 +771,7 @@ def mlbGame(event_id, full_count=False):
         event_id = soup.find('event-id').string
         for item in items:
             if item.state.string == 'MEDIA_ARCHIVE':
-                if event_id.split('-')[2] != '2012':
+                if int(event_id.split('-')[2]) < 2012:
                     scenario = __settings__.getSetting('archive_scenario')
                 else:
                     scenario = 'FMS_CLOUD'

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">720 @ 1.8-Mbs</string>
+  <string id="30001">400 @ 1.2-Mbs</string>
+  <string id="30002">360 @ 800-Kbs</string>
+  <string id="30003">360 @ 500-Kbs</string>
+  <string id="30004">360 @ 300-Kbs</string>
+  <string id="30005">224 @ 200-Kbs</string>
+  <string id="30006"></string>
+  <string id="30007">Preferred Video Quality</string>
+  <string id="30008">Enable add-on debugging.</string>
+  <string id="30009">General</string>
+  <string id="30010">Filters</string>
+  <string id="30011">All Series</string>
+  <string id="30012">Sprint Cup</string>
+  <string id="30013">Nationwide</string>
+  <string id="30014">Camping World Truck</string>
+  <string id="30015">Series</string>
+  <string id="30016">Time</string>
+  <string id="30017">Last Year</string>
+  <string id="30018">Last Month</string>
+  <string id="30019">Last Week</string>
+  <string id="30020">Last 24 Hours</string>
+  <string id="30021">Sort</string>
+  <string id="30022">Most Recent</string>
+  <string id="30023">Most Popular</string>
+  <string id="30024">Load Featured Videos First</string>
+  <string id="30025"></string>
+</strings>

@@ -1,3 +1,4 @@
+0.4.9 - FIX: KiKa Plus naming
 0.4.8 - ADD: show http://www.3sat.de/mediathek/rss/mediathek_makro.xml to 3sat show list.
 	FIX: BR Alpha
 0.4.7 - Fix syntax error

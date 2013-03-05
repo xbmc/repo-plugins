@@ -90,7 +90,7 @@ class KIKAPlus(Mediathek):
     self.regex_videoLink=re.compile("rtmp://.*?\.mp4");
   @classmethod
   def name(self):
-    return "KI.KA Plus";
+    return "KI.KA-Plus";
   
   def isSearchable(self):
     return False;

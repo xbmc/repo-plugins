@@ -13,6 +13,9 @@
 - [XBMC] Has Excessive Memory use after running the plugin for prolonged periods of time
 - [RTMPDUMP] Doesn't support handshake type 10 which is required by youtube.
 
+[B]Version 3.4.3[/B]
+- Fixed login
+
 [B]Version 3.4.2[/B]
 - Fixed playback bug cause by youtube site changes
 - Fixed bug when using unicode characters in search

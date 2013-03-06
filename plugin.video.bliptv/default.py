@@ -26,7 +26,7 @@ try: import xbmcvfs
 except: import xbmcvfsdummy as xbmcvfs
 
 # plugin constants
-version = "0.8.1"
+version = "0.8.2"
 plugin = "BlipTV-" + version
 author = "TheCollective"
 url = "www.xbmc.com"

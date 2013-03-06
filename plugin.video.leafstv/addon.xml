@@ -11,5 +11,6 @@
     <description>Stream content from LeafsTV Interactive.</description>
     <platform>all</platform>
     <disclaimer></disclaimer>
+    <broken>service unavailable</broken>
   </extension>
 </addon>

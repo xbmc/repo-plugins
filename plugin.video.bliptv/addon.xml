@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id="plugin.video.bliptv" name="BlipTV" provider-name="TheCollective" version="1.8.1">
+<addon id="plugin.video.bliptv" name="BlipTV" provider-name="TheCollective" version="1.8.2">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
-    <import addon="script.common.plugin.cache" version="2.5.0" />
+    <import addon="script.common.plugin.cache" version="2.5.1" />
     <import addon="script.module.parsedom" version="2.5.1" />
     <import addon="script.module.simple.downloader" version="1.9.4" />
   </requires>
@@ -11,6 +11,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
+    <language />
     <summary lang="en">Bliptv video plugin</summary>
     <description lang="en">Plugin that let's you browse and play videos from BlipTV!</description>
     <summary lang="bg">Видео добавка за Bliptv</summary>

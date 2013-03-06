@@ -38,7 +38,7 @@ class BlipTVNavigation:
         self.xbmcplugin = sys.modules["__main__"].xbmcplugin
 
         # This list contains the main menu structure the user first encounters when running the plugin
-        #                           label                                                  , path                                                                                , thumbnail                                        ,  scraper / action
+        #    label                         , path                                          , thumbnail                            ,  scraper / action
         self. categories = (
             {'Title':self.language(30016)  ,'path':"/root/explore"                         , 'thumbnail':"explore"                },
             {'Title':self.language(30001)  ,'path':"/root/explore/browse"                  , 'thumbnail':"explore"                , 'scraper': 'browse_shows' },

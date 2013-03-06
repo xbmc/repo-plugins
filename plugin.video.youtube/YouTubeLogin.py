@@ -209,7 +209,7 @@ class YouTubeLogin():
             # Fill out login information and send.
             newurl = self.common.parseDOM(ret["content"].replace("\n", " "), "form", attrs={"id": "gaia_loginform"}, ret="action")
             if len(newurl) > 0:
-                (galx, url_data) = self._fillLoginInfo(ret["content"])
+                (galx, url_data) = self._fillLoginInfo(ret)
                 if len(galx) > 0 and len(url_data) > 0:
                     fetch_options = {"link": newurl[0], "no-language-cookie": "true", "url_data": url_data, "hidden": "true", "referer": ret["location"]}
                     self.common.log("Part B")
@@ -256,12 +256,18 @@ class YouTubeLogin():
 
         return (ret, status)
 
-    def _fillLoginInfo(self, content):
+    def _fillLoginInfo(self, ret):
+        content = ret["content"]
         rmShown = self.common.parseDOM(content, "input", attrs={"name": "rmShown"}, ret="value")
         cont = self.common.parseDOM(content, "input", attrs={"name": "continue"}, ret="value")
-        uilel = self.common.parseDOM(content, "input", attrs={"name": "uilel"}, ret="value")
-        if len(uilel) == 0:
+        uilel = self.common.parseDOM(content, "input", attrs={"name": "uilel"}, ret="value") # Deprecated?
+        if len(uilel) == 0: # Deprecated?
             uilel = self.common.parseDOM(content, "input", attrs= {"id":"uilel"}, ret="value")
+        if len(uilel) == 0 and ret["new_url"].find("uilel=") > -1:
+            uilel = ret["new_url"][ret["new_url"].find("uilel=")+6]
+            if uilel.find("&") > -1:
+                uilel = uilel[:uilel.find("&")]
+            uilel = [uilel]
         dsh = self.common.parseDOM(content, "input", attrs={"name": "dsh"}, ret="value")
         if len(dsh) == 0:
             dsh = self.common.parseDOM(content, "input", attrs={"id": "dsh"}, ret="value")

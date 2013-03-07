@@ -377,7 +377,7 @@ def createDirItem(article,mode):
   """
   global CURR_DIR_ITEMS
 
-  if (not HIDE_SIGN_LANGUAGE) or title.lower().endswith("teckentolkad") == False:
+  if (not HIDE_SIGN_LANGUAGE) or (article["title"].lower().endswith("teckentolkad") == False and article["title"].lower().find("teckenspråk".decode("utf-8")) == -1):
 
     params = {}
     params["mode"] = mode

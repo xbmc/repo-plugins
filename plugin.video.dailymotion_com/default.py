@@ -4,7 +4,7 @@ import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon,base64,socket,os,datet
 
 familyFilter="1"
 
-socket.setdefaulttimeout(30)
+socket.setdefaulttimeout(60)
 pluginhandle = int(sys.argv[1])
 addonID = 'plugin.video.dailymotion_com'
 addon = xbmcaddon.Addon(addonID)
@@ -38,6 +38,7 @@ def index():
           addDir(translation(30034),"","personalMain","")
         addDir(translation(30006),"",'listChannels',"")
         addDir(translation(30007),"",'sortUsers1',"")
+        addDir(translation(30042),"ALL",'listGroups',"")
         addDir(translation(30002),"",'search',"")
         addDir(translation(30003),"",'listLive',"")
         addDir(translation(30039), '3D:ALL','sortVideos1','','')
@@ -46,20 +47,41 @@ def index():
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def personalMain():
+        addDir(translation(30041),"https://api.dailymotion.com/user/"+dmUser+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1",'listVideos',"")
         addDir(translation(30035),"https://api.dailymotion.com/user/"+dmUser+"/following?fields=username,avatar_large_url,videos_total,views_total&sort=popular&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1",'listUsers',"")
         addDir(translation(30036),"https://api.dailymotion.com/user/"+dmUser+"/subscriptions?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1",'listVideos',"")
         addDir(translation(30037),"https://api.dailymotion.com/user/"+dmUser+"/favorites?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1",'listVideos',"")
-        addDir(translation(30038),"",'listUserPlaylists',"")
+        addDir(translation(30038),"https://api.dailymotion.com/user/"+dmUser+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1",'listUserPlaylists',"")
+        addDir(translation(30042),"https://api.dailymotion.com/user/"+dmUser+"/groups?fields=id,name,description&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1",'listGroups',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
-def listUserPlaylists():
-        url="https://api.dailymotion.com/user/"+dmUser+"/playlists?fields=id,name,videos_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
+def listUserPlaylists(url):
         content = getUrl(url)
         match=re.compile('{"id":"(.+?)","name":"(.+?)","videos_total":(.+?)}', re.DOTALL).findall(content)
         for id, title, vids in match:
-          addDir(title+" ("+vids+")", id+"_"+dmUser+"_"+title,'showPlaylist','')
+          addDir(title+" ("+vids+")", urllib.quote_plus(id+"_"+dmUser+"_"+title),'showPlaylist','')
+        match=re.compile('"page":(.+?),', re.DOTALL).findall(content)
+        currentPage=int(match[0])
+        nextPage=currentPage+1
+        if '"has_more":true' in content:
+          addDir(translation(30001)+" ("+str(nextPage)+")",url.replace("page="+str(currentPage),"page="+str(nextPage)),'listUserPlaylists',"")
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
+def listGroups(url):
+        if url=="ALL": url="https://api.dailymotion.com/groups?fields=id,name,description&sort=recent&filters=featured&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
+        content = getUrl(url)
+        match=re.compile('{"id":"(.+?)","name":"(.+?)","description":(.+?)}', re.DOTALL).findall(content)
+        for id, title, desc in match:
+          addDir(cleanTitle(title), "group:"+id,'sortVideos1','',desc)
+        match=re.compile('"page":(.+?),', re.DOTALL).findall(content)
+        currentPage=int(match[0])
+        nextPage=currentPage+1
+        if '"has_more":true' in content:
+          addDir(translation(30001)+" ("+str(nextPage)+")",url.replace("page="+str(currentPage),"page="+str(nextPage)),'listGroups',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -94,6 +116,7 @@ def sortVideos1(url):
         type=url[:url.find(":")]
         id=url[url.find(":")+1:]
         if type=="3D": url="https://api.dailymotion.com/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&filters=3d&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
+        elif type=="group": url="https://api.dailymotion.com/group/"+id+"/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
         else: url="https://api.dailymotion.com/videos?fields=description,duration,id,owner.username,taken_time,thumbnail_large_url,title,views_total&"+type+"="+id+"&sort=recent&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language+"&page=1"
         addDir(translation(30008),url,'listVideos',"")
         addDir(translation(30009),url.replace("sort=recent","sort=visited"),'sortVideos2',"")
@@ -131,14 +154,17 @@ def sortUsers2(url):
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
-        content = getUrl(url).replace("\\","")
+        content = getUrl(url)
         match=re.compile('{"description":"(.*?)","duration":(.+?),"id":"(.+?)","owner.username":"(.+?)","taken_time":(.+?),"thumbnail_large_url":"(.*?)","title":"(.+?)","views_total":(.+?)}', re.DOTALL).findall(content)
         for desc, duration, id, user, date, thumb, title, views in match:
           duration=str(int(duration)/60+1)
-          desc="User: "+user+"  |  "+views+" Views  |  "+datetime.datetime.fromtimestamp(int(date)).strftime('%Y-%m-%d')+"\n"+desc
+          date=""
+          try: date=datetime.datetime.fromtimestamp(int(date)).strftime('%Y-%m-%d')
+          except: pass
+          desc="User: "+user+"  |  "+views+" Views  |  "+date+"\n"+desc
           if user=="hulu": pass
-          elif user=="ARTEplus7": addLink(cleanTitle(title),id,'playArte',thumb,user,desc,duration)
-          else: addLink(cleanTitle(title),id,'playVideo',thumb,user,desc,duration)
+          elif user=="ARTEplus7": addLink(cleanTitle(title),id,'playArte',thumb.replace("\\",""),user,desc,duration)
+          else: addLink(cleanTitle(title),id,'playVideo',thumb.replace("\\",""),user,desc,duration)
         match=re.compile('"page":(.+?),', re.DOTALL).findall(content)
         currentPage=int(match[0])
         nextPage=currentPage+1
@@ -149,10 +175,10 @@ def listVideos(url):
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listUsers(url):
-        content = getUrl(url).replace("\\","")
+        content = getUrl(url)
         match=re.compile('{"username":"(.+?)","avatar_large_url":"(.*?)","videos_total":(.+?),"views_total":(.+?)}', re.DOTALL).findall(content)
         for user, thumb, videos, views in match:
-          addUserDir(cleanTitle(user),'owner:'+user,'sortVideos1',thumb,"Views: "+views+"\nVideos: "+videos)
+          addUserDir(cleanTitle(user),'owner:'+user,'sortVideos1',thumb.replace("\\",""),"Views: "+views+"\nVideos: "+videos)
         match=re.compile('"page":(.+?),', re.DOTALL).findall(content)
         currentPage=int(match[0])
         nextPage=currentPage+1
@@ -163,10 +189,10 @@ def listUsers(url):
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listLive():
-        content = getUrl("https://api.dailymotion.com/videos?fields=id,thumbnail_large_url%2Ctitle%2Cviews_last_hour&filters=live&sort=visited-hour&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language).replace("\\","")
+        content = getUrl("https://api.dailymotion.com/videos?fields=id,thumbnail_large_url%2Ctitle%2Cviews_last_hour&filters=live&sort=visited-hour&limit="+itemsPerPage+"&family_filter="+familyFilter+"&localization="+language)
         match=re.compile('\\{"id":"(.+?)","thumbnail_large_url":"(.+?)","title":"(.+?)","views_last_hour":(.+?)\\}', re.DOTALL).findall(content)
         for id, thumb, title, views in match:
-          addLiveLink(title,id,'playVideo',thumb,views)
+          addLiveLink(cleanTitle(title),id,'playVideo',thumb.replace("\\",""),views)
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -294,9 +320,15 @@ def favourites(param):
 def cleanTitle(title):
         title=title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","'").replace("&quot;","\"").replace("&szlig;","ß").replace("&ndash;","-")
         title=title.replace("&Auml;","Ä").replace("&Uuml;","Ü").replace("&Ouml;","Ö").replace("&auml;","ä").replace("&uuml;","ü").replace("&ouml;","ö")
-        title=title.replace("u00c4","Ä").replace("u00e4","ä").replace("u00d6","Ö").replace("u00f6","ö").replace("u00dc","Ü").replace("u00fc","ü").replace("u00df","ß")
-        title=title.strip()
+        title=decodeUnicode(title)
+        title=title.strip().replace("\\","")
         return title
+
+def decodeUnicode(content):
+        uc = {"\u00a0":" ","\u00a1":"¡","\u00a2":"¢","\u00a3":"£","\u00a4":"¤","\u00a5":"¥","\u00a6":"¦","\u00a7":"§","\u00a9":"©","\u00aa":"ª","\u00ab":"«","\u00ac":"¬","\u00ae":"®","\u00b0":"°","\u00b1":"±","\u00b2":"²","\u00b3":"³","\u00b5":"µ","\u00b6":"¶","\u00b7":"·","\u00b8":"¸","\u00b9":"¹","\u00ba":"º","\u00bb":"»","\u00bc":"¼","\u00bd":"½","\u00be":"¾","\u00bf":"¿","\u00c0":"À","\u00c1":"Á","\u00c2":"Â","\u00c3":"Ã","\u00c4":"Ä","\u00c5":"Å","\u00c6":"Æ","\u00c7":"Ç","\u00c8":"È","\u00c9":"É","\u00ca":"Ê","\u00cb":"Ë","\u00cc":"Ì","\u00cd":"Í","\u00ce":"Î","\u00cf":"Ï","\u00d0":"Ð","\u00d1":"Ñ","\u00d2":"Ò","\u00d3":"Ó","\u00d4":"Ô","\u00d5":"Õ","\u00d6":"Ö","\u00d7":"×","\u00d8":"Ø","\u00d9":"Ù","\u00da":"Ú","\u00db":"Û","\u00dc":"Ü","\u00dd":"Ý","\u00de":"Þ","\u00df":"ß","\u00e0":"à","\u00e1":"á","\u00e2":"â","\u00e3":"ã","\u00e4":"ä","\u00e5":"å","\u00e6":"æ","\u00e7":"ç","\u00e8":"è","\u00e9":"é","\u00ea":"ê","\u00eb":"ë","\u00ec":"ì","\u00ed":"í","\u00ee":"î","\u00ef":"ï","\u00f0":"ð","\u00f1":"ñ","\u00f2":"ò","\u00f3":"ó","\u00f4":"ô","\u00f5":"õ","\u00f6":"ö","\u00f7":"÷","\u00f8":"ø","\u00f9":"ù","\u00fa":"ú","\u00fb":"û","\u00fc":"ü","\u00fd":"ý","\u00fe":"þ","\u00ff":"ÿ","\u0100":"Ā","\u0101":"ā","\u0102":"Ă","\u0103":"ă","\u0104":"Ą","\u0105":"ą","\u0106":"Ć","\u0107":"ć","\u0108":"Ĉ","\u0109":"ĉ","\u010c":"Č","\u010d":"č","\u010e":"Ď","\u010f":"ď","\u0110":"Đ","\u0111":"đ","\u0112":"Ē","\u0113":"ē","\u0114":"Ĕ","\u0115":"ĕ","\u0118":"Ę","\u0119":"ę","\u011a":"Ě","\u011b":"ě","\u011c":"Ĝ","\u011d":"ĝ","\u011e":"Ğ","\u011f":"ğ","\u0122":"Ģ","\u0123":"ģ","\u0124":"Ĥ","\u0125":"ĥ","\u0126":"Ħ","\u0127":"ħ","\u0128":"Ĩ","\u0129":"ĩ","\u012a":"Ī","\u012b":"ī","\u012c":"Ĭ","\u012d":"ĭ","\u012e":"Į","\u012f":"į","\u0131":"ı","\u0134":"Ĵ","\u0135":"ĵ","\u0136":"Ķ","\u0137":"ķ","\u0138":"ĸ","\u0139":"Ĺ","\u013a":"ĺ","\u013b":"Ļ","\u013c":"ļ","\u013d":"Ľ","\u013e":"ľ","\u0141":"Ł","\u0142":"ł","\u0143":"Ń","\u0144":"ń","\u0145":"Ņ","\u0146":"ņ","\u0147":"Ň","\u0148":"ň","\u014a":"Ŋ","\u014b":"ŋ","\u014c":"Ō","\u014d":"ō","\u014e":"Ŏ","\u014f":"ŏ","\u0150":"Ő","\u0151":"ő","\u0152":"Œ","\u0153":"œ","\u0154":"Ŕ","\u0155":"ŕ","\u0156":"Ŗ","\u0157":"ŗ","\u0158":"Ř","\u0159":"ř","\u015a":"Ś","\u015b":"ś","\u015c":"Ŝ","\u015d":"ŝ","\u015e":"Ş","\u015f":"ş","\u0160":"Š","\u0161":"š","\u0162":"Ţ","\u0163":"ţ","\u0164":"Ť","\u0165":"ť","\u0166":"Ŧ","\u0167":"ŧ","\u0168":"Ũ","\u0169":"ũ","\u016a":"Ū","\u016b":"ū","\u016c":"Ŭ","\u016d":"ŭ","\u016e":"Ů","\u016f":"ů","\u0170":"Ű","\u0171":"ű","\u0172":"Ų","\u0173":"ų","\u0174":"Ŵ","\u0175":"ŵ","\u0176":"Ŷ","\u0177":"ŷ","\u0178":"Ÿ","\u0179":"Ź","\u017a":"ź","\u017d":"Ž","\u017e":"ž","\u017f":"ſ","\u0180":"ƀ","\u0197":"Ɨ","\u01b5":"Ƶ","\u01b6":"ƶ","\u01cd":"Ǎ","\u01ce":"ǎ","\u01cf":"Ǐ","\u01d0":"ǐ","\u01d1":"Ǒ","\u01d2":"ǒ","\u01d3":"Ǔ","\u01d4":"ǔ","\u01e4":"Ǥ","\u01e5":"ǥ","\u01e6":"Ǧ","\u01e7":"ǧ","\u01e8":"Ǩ","\u01e9":"ǩ","\u01ea":"Ǫ","\u01eb":"ǫ","\u01f0":"ǰ","\u01f4":"Ǵ","\u01f5":"ǵ","\u01f8":"Ǹ","\u01f9":"ǹ","\u021e":"Ȟ","\u021f":"ȟ","\u0228":"Ȩ","\u0229":"ȩ","\u0232":"Ȳ","\u0233":"ȳ","\u0259":"ə","\u0268":"ɨ","\u1e10":"Ḑ","\u1e11":"ḑ","\u1e20":"Ḡ","\u1e21":"ḡ","\u1e26":"Ḧ","\u1e27":"ḧ","\u1e28":"Ḩ","\u1e29":"ḩ","\u1e30":"Ḱ","\u1e31":"ḱ","\u1e3e":"Ḿ","\u1e3f":"ḿ","\u1e54":"Ṕ","\u1e55":"ṕ","\u1e7c":"Ṽ","\u1e7d":"ṽ","\u1e80":"Ẁ","\u1e81":"ẁ","\u1e82":"Ẃ","\u1e83":"ẃ","\u1e84":"Ẅ","\u1e85":"ẅ","\u1e8c":"Ẍ","\u1e8d":"ẍ","\u1e90":"Ẑ","\u1e91":"ẑ","\u1e97":"ẗ","\u1e98":"ẘ","\u1e99":"ẙ","\u1ebc":"Ẽ","\u1ebd":"ẽ","\u1ef2":"Ỳ","\u1ef3":"ỳ","\u1ef8":"Ỹ","\u1ef9":"ỹ","\u2008":" ","\u2013":"–","\u2014":"—","\u2018":"‘","\u2019":"’","\u201a":"‚","\u201c":"“","\u201d":"”","\u201e":"„","\u2030":"‰","\u2039":"‹","\u203a":"›","\u2070":"⁰","\u2071":"ⁱ","\u2074":"⁴","\u2075":"⁵","\u2076":"⁶","\u2077":"⁷","\u2078":"⁸","\u2079":"⁹","\u207a":"⁺","\u207c":"⁼","\u207d":"⁽","\u207e":"⁾","\u207f":"ⁿ","\u2080":"₀","\u2081":"₁","\u2082":"₂","\u2083":"₃","\u2084":"₄","\u2085":"₅","\u2086":"₆","\u2087":"₇","\u2088":"₈","\u2089":"₉","\u208a":"₊","\u208c":"₌","\u208d":"₍","\u208e":"₎","\u20a0":"₠","\u20a1":"₡","\u20a2":"₢","\u20a3":"₣","\u20a4":"₤","\u20a5":"₥","\u20a6":"₦","\u20a7":"₧","\u20a8":"₨","\u20a9":"₩","\u20ab":"₫","\u20ac":"€","\u2120":"℠","\u2122":"™","\u301d":"〝","\u301e":"〞"}
+        for key, value in uc.iteritems():
+          content=content.replace(key, value)
+        return content
 
 def getUrl(url):
         req = urllib2.Request(url)
@@ -402,6 +434,8 @@ elif mode == 'listUsers':
     listUsers(url)
 elif mode == 'listChannels':
     listChannels()
+elif mode == 'listGroups':
+    listGroups(url)
 elif mode == 'favourites':
     favourites(url)
 elif mode == 'addFav':
@@ -413,7 +447,7 @@ elif mode == 'listPersonalUsers':
 elif mode == 'favouriteUsers':
     favouriteUsers()
 elif mode == 'listUserPlaylists':
-    listUserPlaylists()
+    listUserPlaylists(url)
 elif mode == 'showPlaylist':
     showPlaylist(url)
 elif mode == 'sortVideos1':

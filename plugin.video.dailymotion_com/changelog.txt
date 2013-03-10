@@ -18,3 +18,6 @@
 1.0.6 / 2.0.6
 - Now using the Dailymotion API
 - Added personal stuff
+1.0.7 / 2.0.7
+- Added more personal stuff
+- Fixed encoding problems

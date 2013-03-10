@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Chinese (Simple) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/zh/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Root Menu -->
+    <string id="30000">所有子类</string>
+    <string id="30001">500强站点</string>
+    <string id="30002">按类别浏览</string>
+    <string id="30003">我的电台</string>
+    <string id="30004">按名字搜索电台</string>
+    <string id="30005">按当前播放曲目搜索电台</string>
+
+    <!-- Context Menu -->
+    <string id="30010">加入“我的电台”</string>
+    <string id="30011">从“我的电台”删除</string>
+
+    <!-- Settings -->
+    <string id="30100">显示子类</string>
+    <string id="30101">列表中电台数</string>
+    <string id="30102">标题显示比特率</string>
+    <string id="30103">选择一个随机服务器（不提问）</string>
+
+    <!-- Messages -->
+    <string id="30200">网络错误</string>
+</strings>

@@ -1,3 +1,7 @@
+2.1.1
+ - updated translations
+ - migrated to xbmcswift2 v2.4.0
+
 2.1.0
  - Rename Add-on to "SHOUTcast" to match guidelines
  - Changed to xbmcswift2 v1.3

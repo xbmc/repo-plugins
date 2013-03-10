@@ -63,7 +63,7 @@ def show_top500_stations():
 @plugin.route('/genres/', name='show_genre')
 @plugin.route('/genres/<parent_genre_id>/', name='show_subgenre')
 def show_genre(parent_genre_id=None):
-    show_subgenres = plugin.get_setting('show_subgenres') == 'true'
+    show_subgenres = plugin.get_setting('show_subgenres', bool)
     genres = get_cached(api.get_genres, parent_genre_id, TTL=1440)
     items = []
     if show_subgenres and parent_genre_id:
@@ -164,8 +164,8 @@ def __add_stations(stations):
     icon = 'special://home/addons/%s/icon.png' % addon_id
     my_stations_ids = my_stations.keys()
     items = []
-    show_bitrate = plugin.get_setting('show_bitrate_in_title') == 'true'
-    choose_random = plugin.get_setting('choose_random_server') == 'true'
+    show_bitrate = plugin.get_setting('show_bitrate_in_title', bool)
+    choose_random = plugin.get_setting('choose_random_server', bool)
     for i, station in enumerate(stations):
         station_id = str(station['id'])
         if not station_id in my_stations_ids:
@@ -245,7 +245,7 @@ def _(string_id):
 
 
 if __name__ == '__main__':
-    limit = int(plugin.get_setting('limit'))
+    limit = plugin.get_setting('limit', int)
     api.set_limit(limit)
     try:
         plugin.run()

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.sevenload_de" name="SevenLoad.de" version="1.0.3" provider-name="AddonScriptorDE">
+<addon id="plugin.video.sevenload_de" name="SevenLoad.de" version="1.0.4" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
     </requires>
@@ -8,11 +8,10 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="de">Sendungen und Userclips des deutschen Videoportals SevenLoad.de</summary>
-        <summary lang="en">Shows and Userclips from german media library SevenLoad.de</summary>
+        <summary lang="de">Videos auf SevenLoad.de</summary>
+        <summary lang="en">Videos from SevenLoad.de</summary>
         <language>de</language>
-        <description lang="de">Sendungen und Userclips des deutschen Videoportals SevenLoad.de</description>
-        <description lang="en">Shows and Userclips from german media library SevenLoad.de</description>
-    <platform>all</platform>
+        <description lang="de">Videos auf SevenLoad.de</description>
+        <description lang="en">Videos from SevenLoad.de</description>
     </extension>
 </addon>

@@ -8,10 +8,6 @@ settings = xbmcaddon.Addon(id='plugin.video.myspass_de')
 translation = settings.getLocalizedString
 
 forceViewMode=settings.getSetting("forceViewMode")
-if forceViewMode=="true":
-  forceViewMode=True
-else:
-  forceViewMode=False
 viewMode=str(settings.getSetting("viewMode"))
 
 def index():
@@ -20,7 +16,7 @@ def index():
         addDir(translation(30004),"full_episodes",'listOrderType',"")
         addDir(translation(30005),"clips",'listOrderType',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listShows(type):
@@ -31,14 +27,14 @@ def listShows(type):
           if url.find("/myspass/shows/"+type+"/")>=0:
             addDir(title,"http://www.myspass.de"+url,"listMediaTypes","")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listMediaTypes(url):
         addDir(translation(30004),url+"#seasonlist_full_episode",'listSeasons',"")
         addDir(translation(30005),url+"#seasonlist_clip",'listSeasons',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listOrderType(type):
@@ -47,7 +43,7 @@ def listOrderType(type):
         addDir(translation(30009),"http://www.myspass.de/myspass/includes/php/ajax.php?action=getVideoList&sortBy=votes&category="+type+"&ajax=true&timeSpan=all&pageNumber=0",'listVideos',"")
         addDir(translation(30010),"http://www.myspass.de/myspass/includes/php/ajax.php?action=getVideoList&sortBy=comments&category="+type+"&ajax=true&timeSpan=all&pageNumber=0",'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listSeasons(url):
@@ -79,7 +75,7 @@ def listSeasons(url):
           if urlNewVideos!="":
             addDir(translation(30007),urlNewVideos,'listVideosAZ',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideosAZ(url):
@@ -94,14 +90,19 @@ def listVideosAZ(url):
             match=re.compile('</h5>(.+?)</div>', re.DOTALL).findall(entry)
             desc=match[0]
             desc=cleanTitle(desc)
-            match=re.compile('&amp;id=(.+?)&', re.DOTALL).findall(entry)
-            id=match[0]
+            match=re.compile("location.href='(.+?)'", re.DOTALL).findall(entry)
+            id=match[0].split("/")[-2]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb="http://www.myspass.de"+match[0]
             entry=entry[entry.find('<td class="duration"'):]
             entry=entry[entry.find('<a href='):]
             match=re.compile('>(.+?)<', re.DOTALL).findall(entry)
             duration=match[0]
+            match=re.compile('(.+?):(.+?):(.+?)', re.DOTALL).findall(duration)
+            if len(match)>0:
+              duration=str(int(match[0][0])*60+int(match[0][1]))
+            if duration.startswith("0:"):
+              duration="1"
             addLink(title,id,'playVideo',thumb,desc,duration)
         match=re.compile("setPageByAjaxTextfield\\('(.+?)', '(.+?)'", re.DOTALL).findall(content)
         if len(match)>0:
@@ -111,7 +112,7 @@ def listVideosAZ(url):
             urlNext=urlMain.replace("&pageNumber="+str(currentPage-1),"&pageNumber="+str(currentPage))
             addDir(translation(30001)+" ("+str(currentPage)+")",urlNext,'listVideosAZ',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideos(url):
@@ -129,6 +130,11 @@ def listVideos(url):
             thumb="http://www.myspass.de"+match[0]
             match=re.compile('<span class="length">(.+?)</span>', re.DOTALL).findall(entry)
             duration=match[0]
+            match=re.compile('(.+?):(.+?):(.+?)', re.DOTALL).findall(duration)
+            if len(match)>0:
+              duration=str(int(match[0][0])*60+int(match[0][1]))
+            if duration.startswith("0:"):
+              duration="1"
             addLink(title,id,'playVideo',thumb,"",duration)
         match=re.compile("setPageByAjaxTextfield\\('(.+?)', '(.+?)'", re.DOTALL).findall(content)
         if len(match)>0:
@@ -138,7 +144,7 @@ def listVideos(url):
             urlNext=urlMain.replace("&pageNumber="+str(currentPage-1),"&pageNumber="+str(currentPage))
             addDir(translation(30001)+" ("+str(currentPage)+")",urlNext,'listVideos',"")
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode==True:
+        if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playVideo(id):

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
+	<setting id="download_path" type="folder" label="30123" source="auto" option="writeable"/>
 	<setting id="force_viewmode" type="bool" label="30100" default="true"/>
 	<setting id="content_type" type="enum" label="30120" default="0" lvalues="30121|30122"/>
 	<setting id="show_trailer" type="bool" label="30101" default="true"/>

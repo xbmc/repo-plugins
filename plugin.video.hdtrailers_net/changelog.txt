@@ -1,3 +1,12 @@
+1.1.1
+ - fix downloading on yahoo-redir, apple, yahoo
+
+1.1.0
+ - added possibility to download trailers
+ - play already downloaded trailers from local path
+ - indicate if trailer is already downloaded or download still in progress
+ - changed to xbmcswift2 v2.4.0
+
 1.0.2
  - fixed playback of yahoo trailers (some shown with source "hd-trailers.net")
 

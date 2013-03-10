@@ -12,6 +12,9 @@
     <string id="30005">Library (All by Initial)</string>
     <string id="30006">Opening this week</string>
     <string id="30007">Coming Soon</string>
+    <string id="30008">Download this Trailer</string>
+    <string id="30009">[B]DOWNLOADED[/B]</string>
+    <string id="30010">[B]download in progress[/B]</string>
 
     <!-- Settings -->
     <string id="30100">Force ViewMode "Thumbnail"</string>
@@ -25,4 +28,13 @@
     <string id="30120">Content-Type (Skin related)</string>
     <string id="30121">Videos</string>
     <string id="30122">Movies</string>
+    <string id="30123">Download-Path</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">No download path</string>
+    <string id="30131">Do you want to you set it now?</string>
+
+    <!-- Notify -->
+    <string id="30150">Network Error</string>
+    <string id="30151">Download not possible atm</string>
 </strings>

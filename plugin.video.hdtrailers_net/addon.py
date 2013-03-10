@@ -17,7 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from xbmcswift2 import Plugin
+from xbmcswift2 import Plugin, xbmcgui
 from resources.lib import scraper
 
 STRINGS = {
@@ -27,7 +27,14 @@ STRINGS = {
     'top_ten': 30004,
     'all_by_initial': 30005,
     'opening': 30006,
-    'coming_soon': 30007
+    'coming_soon': 30007,
+    'download': 30008,
+    'already_downloaded': 30009,
+    'download_in_progress': 30010,
+    'no_download_path': 30130,
+    'want_set_now': 30131,
+    'network_error': 30150,
+    'download_not_possible': 30151
 }
 
 plugin = Plugin()
@@ -122,28 +129,30 @@ def show_movies(source):
             movie_id=movie['id']
         ),
     } for i, movie in enumerate(movies)])
-    content_setting = int(plugin.get_setting('content_type'))
-    content_type = ('videos', 'movies')[content_setting]
+    content_type = plugin.get_setting(
+        'content_type', choices=('videos', 'movies')
+    )
     plugin.set_content(content_type)
 
     finish_kwargs = {
         'sort_methods': ('PLAYLIST_ORDER', 'TITLE'),
         'update_listing': 'update' in plugin.request.args
     }
-    if plugin.get_setting('force_viewmode') == 'true':
-            finish_kwargs['view_mode'] = 'thumbnail'
+    if plugin.get_setting('force_viewmode', bool):
+        finish_kwargs['view_mode'] = 'thumbnail'
     return plugin.finish(items, **finish_kwargs)
 
 
 @plugin.route('/videos/<movie_id>/')
 def show_videos(movie_id):
     movie, trailers, clips = scraper.get_videos(movie_id)
-
-    resolution_setting = int(plugin.get_setting('resolution'))
-    resolution = ('480p', '720p', '1080p')[resolution_setting]
-    show_trailer = plugin.get_setting('show_trailer') == 'true'
-    show_clips = plugin.get_setting('show_clips') == 'true'
-    show_source_in_title = plugin.get_setting('show_source_in_title') == 'true'
+    downloads = plugin.get_storage('downloads')
+    resolution = plugin.get_setting(
+        'resolution', choices=('480p', '720p', '1080p')
+    )
+    show_trailer = plugin.get_setting('show_trailer', bool)
+    show_clips = plugin.get_setting('show_clips', bool)
+    show_source_in_title = plugin.get_setting('show_source_in_title', bool)
 
     videos = []
     if show_trailer:
@@ -154,10 +163,17 @@ def show_videos(movie_id):
     items = []
     for i, video in enumerate(videos):
         if resolution in video.get('resolutions'):
+            url = video['resolutions'][resolution]
             if show_source_in_title:
                 title = '%s (%s)' % (video['title'], video['source'])
             else:
                 title = video['title']
+            if url in downloads:
+                import xbmcvfs  # FIXME: import from swift after fixed there
+                if xbmcvfs.exists(downloads[url]):
+                    title = '%s - %s' % (title, _('already_downloaded'))
+                else:
+                    title = '%s - %s' % (title, _('download_in_progress'))
             items.append({
                 'label': title,
                 'thumbnail': movie['thumb'],
@@ -167,11 +183,18 @@ def show_videos(movie_id):
                     'date': video['date'],
                     'count': i,
                 },
+                'context_menu': [
+                    (_('download'), 'XBMC.RunPlugin(%s)' % plugin.url_for(
+                        endpoint='download_video',
+                        source=video['source'],
+                        url=url
+                    ))
+                ],
                 'is_playable': True,
                 'path': plugin.url_for(
                     endpoint='play_video',
                     source=video['source'],
-                    url=video['resolutions'][resolution]
+                    url=url
                 ),
             })
 
@@ -183,21 +206,75 @@ def show_videos(movie_id):
 
 @plugin.route('/video/<source>/<url>')
 def play_video(source, url):
+    downloads = plugin.get_storage('downloads')
+    if url in downloads:
+        local_file = downloads[url]
+        # download was already started
+        import xbmcvfs  # FIXME: import from swift after fixed there
+        if xbmcvfs.exists(local_file):
+            # download was also finished
+            log('Using local file: %s' % local_file)
+            return plugin.set_resolved_url(local_file)
+    playable_url = _get_playable_url(source, url)
+    log('Using URL: %s' % playable_url)
+    return plugin.set_resolved_url(playable_url)
+
+
+@plugin.route('/video/<source>/<url>/download')
+def download_video(source, url):
+    import SimpleDownloader
+    sd = SimpleDownloader.SimpleDownloader()
+    playable_url = _get_playable_url(source, url)
     if source == 'apple.com':
-        url = '%s|User-Agent=QuickTime' % url
+        sd.common.USERAGENT = 'QuickTime'
+        playable_url = playable_url.split('|')[0]
+    elif source == 'youtube.com':
+        plugin.notify(msg=_('download_not_possible'))
+        return
+    download_path = plugin.get_setting('download_path')
+    while not download_path:
+        try_again = xbmcgui.Dialog().yesno(
+            _('no_download_path'),
+            _('want_set_now')
+        )
+        if not try_again:
+            return
+        plugin.open_settings()
+        download_path = plugin.get_setting('download_path')
+    filename = playable_url.split('?')[0].split('/')[-1]
+    if filename == 'makeplaylist.dll':
+        filename = playable_url.split('=')[-1]  # yahoo...
+    params = {
+        'url': playable_url,
+        'download_path': download_path
+    }
+    sd.download(filename, params)
+    downloads = plugin.get_storage('downloads')
+    downloads[url] = xbmc.translatePath(download_path + filename)
+    downloads.sync()
+
+
+def _get_playable_url(source, raw_url, download_mode=False):
+    if source == 'apple.com':
+        raw_url = '%s|User-Agent=QuickTime' % raw_url
     elif source == 'youtube.com':
         import re
-        video_id = re.search(r'v=(.+)&?', url).groups(1)
-        url = (
-            'plugin://plugin.video.youtube/'
-            '?action=play_video&videoid=%s' % video_id
-        )
+        video_id = re.search(r'v=(.+)&?', raw_url).groups(1)
+        if download_mode:
+            raw_url = (
+                'plugin://plugin.video.youtube/'
+                '?action=download&videoid=%s' % video_id
+            )
+        else:
+            raw_url = (
+                'plugin://plugin.video.youtube/'
+                '?action=play_video&videoid=%s' % video_id
+            )
     elif source == 'yahoo-redir':
         import re
-        vid, res = re.search('id=(.+)&resolution=(.+)', url).groups()
-        url = scraper.get_yahoo_url(vid, res)
-    log('Using URL: %s' % url)
-    return plugin.set_resolved_url(url)
+        vid, res = re.search('id=(.+)&resolution=(.+)', raw_url).groups()
+        raw_url = scraper.get_yahoo_url(vid, res)
+    return raw_url
 
 
 def _(string_id):

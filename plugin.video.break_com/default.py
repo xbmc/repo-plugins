@@ -26,6 +26,7 @@ def index():
             title=cleanTitle(title)
             if url!="http://www.break.com/action-unleashed/":
               addDir(title,url,'listChannel',thumb)
+        addDir(translation(30004),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -81,6 +82,35 @@ def listVideos(url):
         if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
+def listSearchVideos(url):
+        content = getUrl(url)
+        contentNext = content[content.find('<div class="btm_cmore"'):]
+        contentNext = contentNext[:contentNext.find('<script>')]
+        matchPage=re.compile('<a href="(.+?)" title="(.+?)">(.+?)</a>', re.DOTALL).findall(contentNext)
+        content = content[:content.find('<div class="btm_cmore"')]
+        spl=content.split('<article class=')
+        for i in range(1,len(spl),1):
+            entry=spl[i]
+            match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
+            url=match[0]
+            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            thumb=""
+            if len(match)>0:
+              thumb=match[0]
+            match=re.compile('alt="(.+?)"', re.DOTALL).findall(entry)
+            title=match[0]
+            title=cleanTitle(title)
+            addLink(title,url,'playVideo',thumb,"")
+        urlNext=""
+        for url, title1, title2 in matchPage:
+          if title2=="Next":
+            urlNext=url
+        if urlNext!="":
+          addDir(translation(30003),urlNext,'listSearchVideos',"")
+        xbmcplugin.endOfDirectory(pluginhandle)
+        if forceViewMode=="true":
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+
 def playVideo(url):
           content = getUrl(url)
           match1=re.compile("videoPath: '(.+?)'", re.DOTALL).findall(content)
@@ -117,12 +147,19 @@ def playVideo(url):
           listitem = xbmcgui.ListItem(path=url)
           return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
+def search():
+        keyboard = xbmc.Keyboard('', translation(30004))
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+          search_string = keyboard.getText().replace(" ","-")
+          listSearchVideos('http://www.break.com/surfacevideo/'+search_string+'/relevance/1/')
+
 def cleanTitle(title):
         return title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#038;","&").replace("&#39;","'").replace("&#039;","'").replace("&#8211;","-").replace("&#8220;","-").replace("&#8221;","-").replace("&#8217;","'").replace("&quot;","\"").strip()
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:16.0) Gecko/20100101 Firefox/16.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:19.0) Gecko/20100101 Firefox/19.0')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
@@ -166,9 +203,13 @@ if mode == 'listChannelVideos':
     listChannelVideos(url)
 elif mode == 'listVideos':
     listVideos(url)
+elif mode == 'listSearchVideos':
+    listSearchVideos(url)
 elif mode == 'listChannel':
     listChannel(url)
 elif mode == 'playVideo':
     playVideo(url)
+elif mode == 'search':
+    search()
 else:
     index()

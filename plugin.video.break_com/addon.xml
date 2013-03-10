@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.break_com" name="Break.com" version="2.0.1" provider-name="AddonScriptorDE">
+<addon id="plugin.video.break_com" name="Break.com" version="2.0.2" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.video.youtube" version="3.1.0"/>
@@ -12,6 +12,5 @@
         <summary lang="en">Watch videos from Break.com</summary>
         <language></language>
         <description lang="en">Watch videos from Break.com</description>
-    <platform>all</platform>
     </extension>
 </addon>

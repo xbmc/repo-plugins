@@ -62,11 +62,12 @@ class RoflApi():
             m = re.search(re_length, div.a['title'])
             if m:
                 d = m.groupdict()
-                duration = '%d:%02i' % (
-                    int(d.get('mins') or 0), int(d.get('secs') or 0),
+                duration = (
+                    int(d.get('mins') or 0) * 60
+                    + int(d.get('secs') or 0)
                 )
             else:
-                duration = '0:00'
+                duration = 0
             video = {
                 'title': div.h2.a.string.strip(),
                 'video_id': self.__pathify(div.a['href']),

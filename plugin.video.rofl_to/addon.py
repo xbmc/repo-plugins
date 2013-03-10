@@ -1,10 +1,7 @@
 from xbmcswift2 import Plugin, xbmc
 from resources.lib.api import RoflApi, NetworkError
 
-__addon_id__ = 'plugin.video.rofl_to'
-__addon_name__ = 'Rofl.to'
-
-plugin = Plugin(__addon_name__, __addon_id__, __file__)
+plugin = Plugin()
 
 
 STRINGS = {
@@ -79,8 +76,8 @@ def show_videos(sort_method, category, page):
             'play_video',
             video_id=video['video_id'],
         ),
-        'info': {
-            'duration': video.get('duration'),
+        'stream_info': {
+            'video': {'duration': video['duration']},
         },
         'is_playable': True,
     } for video in videos])
@@ -128,7 +125,7 @@ def _(string_id):
 
 
 def log(msg):
-    print('%s addon: %s' % (__name__, msg))
+    plugin.log.info('%s addon: %s' % (__name__, msg))
 
 
 if __name__ == '__main__':

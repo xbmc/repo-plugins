@@ -1,19 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.rofl_to" name="Rofl.to" version="0.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
-  <requires>
-    <import addon="xbmc.python" version="2.0"/>
-    <import addon="script.module.beautifulsoup" version="3.0.8"/>
-    <import addon="script.module.xbmcswift2" version="1.1.1" />
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <language>en de</language>
-    <platform>all</platform>
-    <summary lang="de">Luste Videos</summary>
-    <summary lang="en">Funny Videos</summary>
-    <description lang="de">Hier gibt es täglich neue Lustige Videos + Clips.</description>
-    <description lang="en">Daily updated funny videos + clips. Your #1 resource for fun videos.</description>
-  </extension>
+<addon id="plugin.video.rofl_to" name="Rofl.to" version="0.1.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.beautifulsoup" version="3.0.8"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>en de</language>
+        <platform>all</platform>
+        <summary lang="ar">فيديوهات مضحكة</summary>
+        <summary lang="be">Funny Videos</summary>
+        <summary lang="ca">Videos divertits</summary>
+        <summary lang="da">Sjove Videoer</summary>
+        <summary lang="de">Luste Videos</summary>
+        <summary lang="el">Αστεία Βίντεο</summary>
+        <summary lang="en">Funny Videos</summary>
+        <summary lang="es">Videos divertidos</summary>
+        <summary lang="fa_IR">فیلم خنده دار</summary>
+        <summary lang="fr">Vidéos amusantes</summary>
+        <summary lang="gl">Vídeos divertidos</summary>
+        <summary lang="hu">Vicces videók</summary>
+        <summary lang="it">Video divertenti</summary>
+        <summary lang="ko">재미있는 동영상</summary>
+        <summary lang="lt">Linksma vaizdo įrašai</summary>
+        <summary lang="pl">Śmieszne filmiki</summary>
+        <summary lang="pt">Vídeos Divertidos</summary>
+        <summary lang="pt_BR">Vídeos Engraçados</summary>
+        <summary lang="ro">Videoclipuri Comice</summary>
+        <summary lang="ru">Смешное видео</summary>
+        <summary lang="sk">Zábavné videá</summary>
+        <summary lang="sv">Roliga videor</summary>
+        <description lang="ar">فيديوهات مضحكة و مقاطع محدثة يوميا. مصدرك #1 للفيديوهات المضحكة</description>
+        <description lang="be">Daily updated funny videos + clips. Your #1 resource for fun videos.</description>
+        <description lang="ca">Videos divertits actualitzats diariament. La vostra font #1 per videos divertits.</description>
+        <description lang="da">Dagligt opdaterede sjove videoer og klip. Din #1 kilde til sjove videoer</description>
+        <description lang="de">Hier gibt es täglich neue Lustige Videos + Clips.</description>
+        <description lang="el">Καθημερινά ανανεώσιμα αστεία βίντεο + κλιπ. Η νούμερο 1 πηγή αστείων βίντεο.</description>
+        <description lang="en">Daily updated funny videos + clips. Your #1 resource for fun videos.</description>
+        <description lang="es">Videos + clips divertidos actualizados a diario. Tu recurso número 1 de videos divertidos.</description>
+        <description lang="fa_IR">فیلم های خنده دار که هر روز آپدیت می شوند + کلیپ. منبع #1 برای خنده و سر گرمی.</description>
+        <description lang="gl">Vídeos e clips actualizados diariamente. O teu principal recurso de vídeos divertidos.</description>
+        <description lang="hu">Ma feltöltött vicces videók és klipek. A mulatságos videók elsődleges forrása.</description>
+        <description lang="it">Video divertenti aggiornati quotidianamente. La tua risorsa numero #1 per video esilaranti.</description>
+        <description lang="ko">재미있는 동영상이 매일 업데이트됩니다. 재미있는 비디오의 #1 사이트.</description>
+        <description lang="lt">Kasdien naujausi/atnaujinami juokingi video + clipai. Jūsų # 1 įdomus video.</description>
+        <description lang="pl">Codziennie aktualizowane śmieszne filmy oraz klipy. Numer 1 wśród zabawnych filmów.</description>
+        <description lang="pt">Vídeos e clipes divertidos, actualizados diariamente. O seu recurso número um para vídeos de humor.</description>
+        <description lang="pt_BR">Vídeos engraçador atualizados diariamente + clips. Sua fonte número  #1 para vídeos divertidos.</description>
+        <description lang="ro">Videoclipuri comice actualizate zilnic. Sursa ta numărul 1 de videoclipuri comice.</description>
+        <description lang="ru">Еженедельно обновляемые смешные видео + клипы. Твой #1 ресурс для веселых видео.</description>
+        <description lang="sk">Denne aktualizované zábavné videá a klipy. Váš prvý zdroj zábavných videí.</description>
+        <description lang="sv">Dagligen uppdaterade roliga videor + klipp. Din första källa för roliga videor.</description>
+    </extension>
 </addon>

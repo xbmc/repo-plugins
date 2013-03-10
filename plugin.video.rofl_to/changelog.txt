@@ -1,2 +1,8 @@
+0.1.0 (09.03.2013)
+ - fixed duration
+ - migrated to xbmcswift2 v2.4.0
+ - code cosmetics
+ - updated translations
+
 0.0.1 (04.10.2012)
  - Initial Release

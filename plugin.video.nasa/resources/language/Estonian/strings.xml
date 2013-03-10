@@ -6,5 +6,6 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Leht</string>
+    <string id="30101">Videod</string>
     <string id="30201">Pealkiri</string>
 </strings>

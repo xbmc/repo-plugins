@@ -6,5 +6,6 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Strana</string>
+    <string id="30101">Videa</string>
     <string id="30201">Skladba</string>
 </strings>

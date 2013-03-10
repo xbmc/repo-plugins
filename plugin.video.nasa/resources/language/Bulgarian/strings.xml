@@ -6,5 +6,6 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Страница</string>
+    <string id="30101">Видео</string>
     <string id="30201">Заглавие</string>
 </strings>

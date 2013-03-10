@@ -6,4 +6,6 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Faqe</string>
+    <string id="30101">Video</string>
+    <string id="30201">Titulli</string>
 </strings>

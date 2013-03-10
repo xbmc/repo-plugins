@@ -6,5 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Side</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Livestreams</string>
+    <string id="30101">Videoer</string>
+    <string id="30103">Vodcasts</string>
+
+    <!-- Search -->
+    <string id="30200">Søg efter Videoer</string>
     <string id="30201">Titel</string>
 </strings>

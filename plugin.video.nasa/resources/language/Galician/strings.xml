@@ -6,5 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Páxina</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Fluxos ao vivo</string>
+    <string id="30101">Vídeos</string>
+    <string id="30103">Vodcasts</string>
+
+    <!-- Search -->
+    <string id="30200">Buscar Vídeos</string>
     <string id="30201">Título</string>
 </strings>

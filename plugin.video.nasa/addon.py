@@ -175,8 +175,9 @@ def __format_videos(videos):
         'label': video['title'],
         'thumbnail': video['thumbnail'],
         'info': {
+            'count': i,
+            'studio': video['duration'],
             'originaltitle': video['title'],
-            'duration': video['duration'],
             'plot': video['description'],
             'date': video['date'],
             'size': video['filesize'],
@@ -188,7 +189,7 @@ def __format_videos(videos):
             endpoint='play_video',
             id=video['id']
         ),
-    } for video in videos]
+    } for i, video in enumerate(videos)]
     return items
 
 

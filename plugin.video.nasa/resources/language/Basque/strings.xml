@@ -4,5 +4,15 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- Default strings -->
+    <string id="30001">Orrialdea</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Jarioak</string>
+    <string id="30101">Bideoak</string>
+    <string id="30103">Podcast-al</string>
+
+    <!-- Search -->
+    <string id="30200">Bideo bilaketa</string>
     <string id="30201">Titulua</string>
 </strings>

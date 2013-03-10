@@ -17,7 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import simplejson
+import json
 import datetime
 from urllib import urlencode
 from urllib2 import urlopen, Request
@@ -217,8 +217,7 @@ class Scraper(object):
         return response
 
     def __get_json(self, html):
-        json_obj = simplejson.loads(html)
-        return json_obj
+        return json.loads(html)
 
     def __format_duration(self, seconds_str):
         '''returns 'HH:MM:SS' '''

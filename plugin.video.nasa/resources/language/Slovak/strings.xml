@@ -6,5 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Strana</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Živé vysielanie</string>
+    <string id="30101">Video</string>
+    <string id="30103">Vodcast-y</string>
+
+    <!-- Search -->
+    <string id="30200">Hľadať videá</string>
     <string id="30201">Názov</string>
 </strings>

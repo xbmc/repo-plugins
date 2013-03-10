@@ -6,6 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Page</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">Streaming vidéo live</string>
     <string id="30101">VIDÉOS</string>
+    <string id="30103">Podcasts vidéos</string>
+
+    <!-- Search -->
+    <string id="30200">Rechercher des vidéos</string>
     <string id="30201">Titre</string>
 </strings>

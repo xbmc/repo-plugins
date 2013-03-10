@@ -6,5 +6,13 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">عناصر</string>
+
+    <!-- Root menu entries -->
+    <string id="30100">بث مباشر</string>
+    <string id="30101">فيديو</string>
+    <string id="30103">بث ملفات فيديو رقمية</string>
+
+    <!-- Search -->
+    <string id="30200">بحث عن فيديو</string>
     <string id="30201">العنوان</string>
 </strings>

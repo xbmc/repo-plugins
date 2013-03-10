@@ -6,5 +6,6 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Pagina</string>
+    <string id="30101">Filme</string>
     <string id="30201">Titlu</string>
 </strings>

@@ -6,5 +6,6 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Sivu</string>
+    <string id="30101">Videot</string>
     <string id="30201">Kappale</string>
 </strings>

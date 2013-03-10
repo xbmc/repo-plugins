@@ -1,3 +1,8 @@
+1.1.0 (09.03.2013)
+  - update translations
+  - small improvements
+  - show video duration as studio
+
 1.0.3 (06.12.2012)
   - migrate to xbmcswift2
   - updated translations

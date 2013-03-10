@@ -6,5 +6,6 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">ページ</string>
+    <string id="30101">ビデオ</string>
     <string id="30201">タイトル</string>
 </strings>

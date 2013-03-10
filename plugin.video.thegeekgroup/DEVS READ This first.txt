@@ -1,0 +1,4 @@
+Notes to developers 
+Line Endings MUST be UNIX (LF)
+if they are not Unix then XBMC will not allow the update of the plugin to be added to the public XBMC add-on repo
+Michael KB3NZQ

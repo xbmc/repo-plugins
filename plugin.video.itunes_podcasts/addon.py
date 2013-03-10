@@ -42,6 +42,9 @@ STRINGS = {
 @plugin.route('/')
 def show_root():
     content_type = plugin.request.args['content_type']
+    if not content_type:
+        url = plugin.url_for(endpoint='show_content_types')
+        return plugin.redirect(url)
     if isinstance(content_type, (list, tuple)):
         content_type = content_type[0]
     items = (
@@ -61,9 +64,24 @@ def show_root():
     return plugin.finish(items)
 
 
+@plugin.route('/content_types/')
+def show_content_types():
+    items = (
+        {'label': _('video'), 'path': plugin.url_for(
+            endpoint='show_root',
+            content_type='video'
+        )},
+        {'label': _('audio'), 'path': plugin.url_for(
+            endpoint='show_root',
+            content_type='audio'
+        )}
+    )
+    return plugin.finish(items)
+
+
 @plugin.route('/<content_type>/genres/')
 def show_genres(content_type):
-    show_subgenres = plugin.get_setting('show_subgenres') == 'true'
+    show_subgenres = plugin.get_setting('show_subgenres', bool)
     genres = api.get_genres(flat=show_subgenres)
     items = []
     for genre in genres:
@@ -83,7 +101,7 @@ def show_genres(content_type):
 
 @plugin.route('/<content_type>/podcasts/by-genre/<genre_id>/')
 def show_podcasts(content_type, genre_id):
-    num_podcasts_list = int(plugin.get_setting('num_podcasts_list'))
+    num_podcasts_list = plugin.get_setting('num_podcasts_list', int)
     podcasts = api.get_podcasts(
         content_type=content_type,
         genre_id=genre_id,
@@ -145,7 +163,7 @@ def search(content_type):
 
 @plugin.route('/<content_type>/podcasts/search/<search_string>/')
 def search_result(content_type, search_string):
-    num_podcasts_search = int(plugin.get_setting('num_podcasts_search'))
+    num_podcasts_search = plugin.get_setting('num_podcasts_search', int)
     podcasts = api.search_podcast(
         search_term=search_string,
         limit=num_podcasts_search
@@ -199,7 +217,7 @@ def __add_podcasts(content_type, podcasts):
     finish_kwargs = {
         'sort_methods': ('PLAYLIST_ORDER', 'TITLE', 'DATE')
     }
-    if plugin.get_setting('force_viewmode_podcasts') == 'true':
+    if plugin.get_setting('force_viewmode_podcasts', bool):
         finish_kwargs['view_mode'] = 'thumbnail'
     return plugin.finish(items, **finish_kwargs)
 
@@ -228,7 +246,7 @@ def __add_podcast_items(content_type, podcast_id, podcast_items):
     finish_kwargs = {
         'sort_methods': ('PLAYLIST_ORDER', 'TITLE', 'DATE', 'SIZE')
     }
-    if plugin.get_setting('force_viewmode_items') == 'true':
+    if plugin.get_setting('force_viewmode_items', bool):
         finish_kwargs['view_mode'] = 'thumbnail'
     return plugin.finish(items, **finish_kwargs)
 

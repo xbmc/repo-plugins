@@ -176,6 +176,12 @@ class ItunesPodcastApi():
             else:
                 return ''
 
+        def __format_size(size_str):
+            if size_str and str(size_str).isdigit():
+                return int(size_str)
+            else:
+                return 0
+
         def __get_enclosure_link(node):
             if isinstance(node, (list, tuple)):
                 for item in node:
@@ -203,7 +209,7 @@ class ItunesPodcastApi():
                 'summary': item.get('summary'),
                 'author': item.get('author'),
                 'item_url': link['url'],
-                'size': int(link.get('length', 0) or 0),
+                'size': __format_size(link.get('length', '')),
                 'thumb': item.get('image', {}).get('href') or fallback_thumb,
                 'duration': link.get('duration', '0:00'),
                 'pub_date': __format_date(item.get('published_parsed')),

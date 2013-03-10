@@ -1,3 +1,11 @@
+[B]Version 3.0.0 - 2013-05-08[/B]
+
+- Frodo
+
+[B]Version 2.0.4 - 2013-05-08[/B]
+
+- Fixed breakage due to switch to Youtube
+
 [B]Version 2.0.3 - 2012-05-21[/B]
 
 - Fixed breakage due to changes to website

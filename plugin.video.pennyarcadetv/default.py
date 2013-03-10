@@ -36,31 +36,31 @@ def getHTML(forURL, withPOSTData=None, withReferrer=__baseURL__):
     data = response.read()
     response.close()
     return data
-  
+
 def getRedirectURL(forURL, withReferrer=None):
     log("Get redirect for URL: " + forURL)
     req = urllib2.Request(forURL, None, getHeaders(withReferrer))
-    return urllib2.urlopen(req).url 
-  
+    return urllib2.urlopen(req).url
+
 def listShowsAndLatest(showOnlyLatest):
-    #Note: not sure if using set content is worth the effort since there isn"t much 
+    #Note: not sure if using set content is worth the effort since there isn"t much
     #metadata available for these episodes other than title and image
     #xbmcplugin.setContent(pluginHandle, "tvshows")
     showsPage = BeautifulSoup(getHTML(forURL=__baseURL__ + "/patv"), convertEntities=BeautifulSoup.HTML_ENTITIES)
-  
+
     titleRegex = re.compile("Season (?P<s>[0-9]): Episode (?P<ep>[0-9]+) - (?P<title>.+)")
     onlyNumberRegex = re.compile("Season (?P<s>[0-9]): Episode (?P<ep>[0-9]+)")
-  
+
     #Parse the current ep and show links from the root page
     infoDivs = showsPage.findAll("div",attrs={"class":"info"})
     foundShows = []
     foundEps = []
-  
+
     #Get a list of found shows and current episodes
     for div in infoDivs:
         try:
             links = div.findAll("a")
-            
+
             if links[0]["title"] == "Watch Now":
                 ep = {}
                 #Show title
@@ -68,7 +68,7 @@ def listShowsAndLatest(showOnlyLatest):
 
                 #Episode title
                 titleParts = titleRegex.match(links[2]["title"]) or onlyNumberRegex.match(links[2]["title"])
-                if(titleParts is not None): 
+                if(titleParts is not None):
                     titleParts = titleParts.groupdict()
                     ep["title"] += " - %sx%s" % (titleParts["s"], titleParts["ep"])
                     if "title" in titleParts:
@@ -94,7 +94,7 @@ def listShowsAndLatest(showOnlyLatest):
             log("Issue with parsing show or ep div.")
             log(div)
             continue
-          
+
     #Add the found shows
     if not __latestInSub__ or (__latestInSub__ and not showOnlyLatest) :
         for show in foundShows:
@@ -105,7 +105,7 @@ def listShowsAndLatest(showOnlyLatest):
                 isFolder=True,
                 url=pluginPath + "?action=listshowepisodes&url=" + show["url"],
                 listitem=li)
-    
+
     #Add latest directory if necessary
     if __latestInSub__ and not showOnlyLatest :
         xbmcplugin.addDirectoryItem(
@@ -113,10 +113,10 @@ def listShowsAndLatest(showOnlyLatest):
             isFolder=True,
             url=pluginPath + "?action=listlatestepisodes",
             listitem=xbmcgui.ListItem(__strings__(30051)))
-    
+
     #Add latest episodes if necessary
     if not __latestInSub__ or showOnlyLatest :
-        for ep in foundEps: 
+        for ep in foundEps:
             li = xbmcgui.ListItem(ep["title"], thumbnailImage=ep["imgurl"])
             li.setProperty("IsPlayable", "true")
             xbmcplugin.addDirectoryItem(
@@ -136,7 +136,7 @@ def addEpisodeItem(name, url, img):
         listitem=li)
 
 def listShowEpisodes(url):
-    #TODO - not sure if using set content is worth the effort since there isn"t much 
+    #TODO - not sure if using set content is worth the effort since there isn"t much
     #metadata available for these episodes other than title and image
     #xbmcplugin.setContent(pluginHandle, "episodes")
     urlRegex = re.compile(".*/(.*?)/")
@@ -145,7 +145,7 @@ def listShowEpisodes(url):
     epLists = episodesPage.findAll(attrs={"class" : "episodes"})
     if not epLists:
         epLists = episodesPage.findAll(attrs={"id" : "episodes"})
-  
+
     #passing counter into format ep name for non number episodes
     seasonCounter = len(epLists)
     for epList in epLists:
@@ -158,28 +158,28 @@ def listShowEpisodes(url):
         seasonCounter -= 1
 
     xbmcplugin.endOfDirectory(pluginHandle)
-  
+
 def formatEpName(url, epName, urlRegex, seasonCt):
     #for urls that don"t have trailing / so they will work with regex
     if url[-1] != "/":
         url += "/"
-  
+
     #some eps in penny arcade series have non-number episodes
     epPart = urlRegex.match(url).groups()[0]
-    try: 
+    try:
         test = int(epPart)
         finalName = epPart[0] + "x" + epPart[1:] + " - "
     except:
         finalName = "%sx00 - " % (seasonCt)
-  
+
     idx = epName.find(":")
     if idx != -1:
         finalName += epName[idx+2:]
     else:
         finalName += epName
-    
+
     return finalName
-    
+
 def playVideo(url):
     #Start at video page http://www.penny-arcade.com/patv/[show]/[episode]
     #Get the embed tag on the video page as the first step to get the final url
@@ -187,35 +187,14 @@ def playVideo(url):
     #Assuming a single embed tag works for now
     embedUrl = videoPage("iframe")[0]["src"]
 
-    #embedUrl redirects to another Url that has a QS param for a Url to the rss file for this specific video
-    #4 is to get the query portion of the final url, not sure why the named attribute doesn"t work..
-    redirectUrl = urlparse.urlparse(getRedirectURL(forURL=embedUrl))
-    redirectQS = parse_qs(redirectUrl[5])
-    rssFileUrl = redirectQS["file"][0]
-    rssFile = BeautifulStoneSoup(getHTML(forURL=rssFileUrl))
+    # Get youtube id
+    youtube_id = embedUrl.split('/')[4]
 
-    #assuming first is default, if not true for all will need to alter this.
-    mediaTags = rssFile("media:content")
-    
-    #todo - should probably add a default choice, need to be sure what's all available first
-    choices = []
-    for mTag in mediaTags:
-        size = float(mTag["filesize"]) / (1024*1024)
-        choices.append("%s (%sx%s) (%.2f MB)" % (mTag["blip:role"],mTag["width"],mTag["height"], size))
-        
-    selected = xbmcgui.Dialog().select(__strings__(30052), choices)
-    
-    #todo - should figure out how to gracefully not play something if they back out of 
-    #selection
-    if selected == -1:
-        selected = 0
-        
-    finalVideoUrl = mediaTags[selected]["url"]
-
-    #set the final url as the resolved url
-    resolvedItem = xbmcgui.ListItem(path=finalVideoUrl)
+    # Pass youtube id to youtube plugin
+    youtube_url = 'plugin://plugin.video.youtube?action=play_video&videoid=%s' % (youtube_id)
+    resolvedItem = xbmcgui.ListItem(path=youtube_url)
     xbmcplugin.setResolvedUrl(pluginHandle, True, resolvedItem)
-  
+
 #Set default action
 action="listshowsandlatest"
 
@@ -224,7 +203,7 @@ params = parse_qs(pluginQuery[1:])
 
 if len(params) > 0:
   action = params["action"][0]
-  
+
 if action == "listshowsandlatest":
   listShowsAndLatest(showOnlyLatest=False)
 elif action == "listlatestepisodes":

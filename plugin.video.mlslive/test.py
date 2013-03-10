@@ -58,7 +58,7 @@ if options.game != None:
 
     sys.exit(0)
 
-print "OFfset = " + str(options.offset)
+print "Offset = " + str(options.offset)
 #games = my_mls.getGames()
 games = my_mls.getGames(options.offset)
 teams = my_mls.getTeams()

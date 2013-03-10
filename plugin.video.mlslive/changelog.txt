@@ -1,3 +1,7 @@
+[B]Version 1.0.1[/B]
+
+- fix the live stream WS calls. Now all live games work.
+
 [B]Version 1.0.0[/B]
 
 - initial revision. Plays live and on-demand matches from the MLS Live service.

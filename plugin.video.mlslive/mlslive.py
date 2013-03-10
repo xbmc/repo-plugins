@@ -23,6 +23,7 @@ class MLSLive:
         """
         Initialize the MLSLive class.
         """
+        self.PUBLISH_POINT = 'http://live.mlssoccer.com/mlsmdl/servlets/publishpoint'
         self.LOGIN_PAGE = 'https://live.mlssoccer.com/mlsmdl/secure/login'
         self.GAMES_PAGE_PREFIX = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/games_for_week_'
         self.GAMES_PAGE_SUFFIX = '.js'
@@ -165,7 +166,7 @@ class MLSLive:
         @param game the game data dictionary
         @return true if the game is live, otherwise, false
         """
-        if game['gameStatus'][:4] == 'LIVE':
+        if (game['gameStatus'][:4] == 'LIVE') or (game['gameStatus'][:4] == 'HALF'):
             return True
         return False
 
@@ -218,7 +219,6 @@ class MLSLive:
         @return a string containing the game XML data
         """
         game_xml_url = self.GAME_PREFIX + game_id + self.GAME_SUFFIX
-        self.jar = cookielib.CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
         try:
             resp = opener.open(game_xml_url)
@@ -271,7 +271,21 @@ class MLSLive:
         @param game_id the game id
         @return the live stream
         """
-        game_xml = self.getGameXML(game_id)
+        values = { 'type' : 'game',
+                   'gt' : 'live',
+                   'id' : game_id }
+
+        uri = self.PUBLISH_POINT + '?' + urllib.urlencode(values)
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
+        # set the user agent to get the HLS stream
+        opener.addheaders = [('User-agent', 'Sony')]
+        try:
+            resp = opener.open(uri)
+        except:
+            print "Unable to get live game XML configuration"
+            return ""
+
+        game_xml = resp.read()
 
         try:
             dom = xml.dom.minidom.parseString(game_xml)
@@ -279,19 +293,8 @@ class MLSLive:
             print "Unable to parse game XML for game " + game_id
             return ""
 
-        rss_node = dom.getElementsByTagName('rss')[0]
-        chan_node = rss_node.getElementsByTagName('channel')[0]
-        url = ""
-        for item in chan_node.getElementsByTagName('item'):
+        result_node = dom.getElementsByTagName('result')[0]
+        path_node = result_node.getElementsByTagName('path')[0]
+        stream_url = path_node.firstChild.nodeValue
 
-            # get the group list and make sure its valid
-            group_list = item.getElementsByTagName('media:group')
-            if group_list == None or len(group_list) == 0:
-                continue
-
-            # get the content node and then the URL
-            content_node = group_list[0].getElementsByTagName('media:content')[0]
-            url = content_node.getAttribute('url')
-            break
-
-        return url
+        return stream_url.split('?')[0]

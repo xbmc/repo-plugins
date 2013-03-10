@@ -17,7 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from xbmcswift2 import Plugin, xbmc
+from xbmcswift2 import Plugin
 from resources.lib.api import WimpApi, NetworkError
 
 plugin = Plugin()
@@ -81,7 +81,7 @@ def show_archived_videos(year, month):
 
 @plugin.route('/search/')
 def search():
-    search_string = __keyboard(_('search'))
+    search_string = plugin.keyboard(heading=_('search'))
     if search_string:
         url = plugin.url_for(
             'search_result',
@@ -112,16 +112,9 @@ def __add_videos(videos):
     finish_kwargs = {
         'sort_methods': ('DATE', )
     }
-    if plugin.get_setting('force_viewmode') == 'true':
+    if plugin.get_setting('force_viewmode', bool):
         finish_kwargs['view_mode'] = 'thumbnail'
     return plugin.finish(items, **finish_kwargs)
-
-
-def __keyboard(title, text=''):
-    keyboard = xbmc.Keyboard(text, title)
-    keyboard.doModal()
-    if keyboard.isConfirmed() and keyboard.getText():
-        return keyboard.getText()
 
 
 def _(string_id):

@@ -1,3 +1,6 @@
+2.0.1
+- Updated translations
+
 2.0.0
 - Rewrite
 - THUMBNAILS!!! :)

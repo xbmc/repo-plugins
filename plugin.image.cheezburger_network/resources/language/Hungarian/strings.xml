@@ -6,4 +6,11 @@
 <strings>
     <!-- Menu entries -->
     <string id="30000">Oldal</string>
+    <string id="30001">Böngészés oldalak szerint</string>
+    <string id="30002">Kategóriánkénti sorsolt</string>
+    <string id="30003">Sorsoljon újat</string>
+
+    <!-- Settings -->
+    <string id="30100">Képek száma oldalanként</string>
+    <string id="30101">Kis képek nézet kényszerítése</string>
 </strings>

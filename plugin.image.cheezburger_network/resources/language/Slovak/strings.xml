@@ -6,4 +6,11 @@
 <strings>
     <!-- Menu entries -->
     <string id="30000">Strana</string>
+    <string id="30001">Prehliadať podľa stránky</string>
+    <string id="30002">Náhodne podľa kategórie</string>
+    <string id="30003">Nový náhodný výber</string>
+
+    <!-- Settings -->
+    <string id="30100">Obrázkov na stránku</string>
+    <string id="30101">Vynútiť zobrazenie náhľadov</string>
 </strings>

@@ -20,8 +20,6 @@
 from xbmcswift2 import Plugin
 import resources.lib.cheez_api as cheez_api
 
-__addon_id__ = 'plugin.image.cheezburger_network'
-__addon_name__ = 'Cheezburger Network'
 
 STRINGS = {
     'page': 30000,
@@ -30,15 +28,15 @@ STRINGS = {
     'new_random': 30003,
 }
 
-plugin = Plugin(__addon_name__, __addon_id__, __file__)
+plugin = Plugin()
 
 api = cheez_api.CheezburgerApi(
     developer_key='df1b9bff-ce69-46e7-8732-1035272f3ee7',
     client_id=2117,
-    default_count=int(plugin.get_setting('per_page'))
+    default_count=plugin.get_setting('per_page', int)
 )
 
-force_thumbnail = plugin.get_setting('force_viewmode') == 'true'
+force_thumbnail = plugin.get_setting('force_viewmode', bool)
 
 
 @plugin.route('/')

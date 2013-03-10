@@ -6,4 +6,11 @@
 <strings>
     <!-- Menu entries -->
     <string id="30000">Pagina</string>
+    <string id="30001">Sfoglia per Sito</string>
+    <string id="30002">Casuale per Categotia</string>
+    <string id="30003">Nuovo Casuale</string>
+
+    <!-- Settings -->
+    <string id="30100">Immagini per Sito</string>
+    <string id="30101">Forza tipo di visualizzazione Anteprima</string>
 </strings>

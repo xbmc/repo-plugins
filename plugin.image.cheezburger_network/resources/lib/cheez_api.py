@@ -65,6 +65,10 @@ class CheezburgerApi():
             site_id, (page - 1) * count, count
         )
         tree = self.__get_tree(url)
+        asset_generator = (
+            a for a in tree['Assets']['Assets']['Asset']
+            if a['AssetType'] == 'Image'
+        )
         assets = [{
             'id': self.__id(asset['AssetId']),
             'type': asset['AssetType'],
@@ -72,7 +76,7 @@ class CheezburgerApi():
             'title': asset['Title'],
             'description': asset['FullText'],
             'image': asset['ImageUrl'],
-        } for asset in tree['Assets']['Assets']['Asset']]
+        } for asset in asset_generator]
         return assets
 
     def get_random_lols(self, category_id, count=None):
@@ -106,6 +110,7 @@ class CheezburgerApi():
                 raise NetworkError(error)
         except URLError, error:
             raise NetworkError(error)
+        print response
         self.log('got %d bytes' % len(response))
         tree = xmltodict.parse(response)
         return tree

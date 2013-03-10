@@ -6,4 +6,11 @@
 <strings>
     <!-- Menu entries -->
     <string id="30000">페이지</string>
+    <string id="30001">사이트별 탐색</string>
+    <string id="30002">카테고리별 무작위</string>
+    <string id="30003">새로운 무작위</string>
+
+    <!-- Settings -->
+    <string id="30100">사이트당 이미지</string>
+    <string id="30101">썸네일 보기</string>
 </strings>

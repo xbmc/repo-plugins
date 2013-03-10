@@ -6,4 +6,11 @@
 <strings>
     <!-- Menu entries -->
     <string id="30000">Side</string>
+    <string id="30001">Gennemse efter Webside</string>
+    <string id="30002">Tilfældige efter Kategori</string>
+    <string id="30003">Hent Nyt Tilfældigt</string>
+
+    <!-- Settings -->
+    <string id="30100">Billeder per Webside</string>
+    <string id="30101">Tving Miniaturebillede-visning</string>
 </strings>

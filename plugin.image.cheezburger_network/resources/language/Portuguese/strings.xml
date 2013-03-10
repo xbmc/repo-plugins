@@ -6,4 +6,11 @@
 <strings>
     <!-- Menu entries -->
     <string id="30000">Página</string>
+    <string id="30001">Navegar por Site</string>
+    <string id="30002">Aleatorizar por Categoria</string>
+    <string id="30003">Obter Nova Aleatorização</string>
+
+    <!-- Settings -->
+    <string id="30100">Imagens por Site</string>
+    <string id="30101">Forçar Vista de Miniaturas</string>
 </strings>

@@ -14,28 +14,73 @@ from BeautifulSoup import BeautifulSoup
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.gfq')
 __language__ = __settings__.getLocalizedString
-videoq = __settings__.getSetting('video_quality')
 home = __settings__.getAddonInfo('path')
 fanart = xbmc.translatePath( os.path.join( home, 'fanart.jpg' ) )
 
 
 def categories():
         addDir(__language__(30000),'addLiveLinks',3,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
-        addDir(__language__(30101),'http://feeds.feedburner.com/BehindTheCountervideo?format=xml',1,'http://www.guysfromqueens.com/wp-content/uploads/2011/11/btc-video600x600.jpg')
-        addDir(__language__(30102),'http://feeds.feedburner.com/BigBrotherRewindvideo?format=xml',1,'http://www.guysfromqueens.com/wp-content/uploads/powerpress/bbr2011-600x600-971.jpg')
-        addDir(__language__(30103),'http://feeds.feedburner.com/ImJustSayingvideo?format=xml',1,'http://img185.imageshack.us/img185/3955/imjustsayingitunesbanne.jpg')
-        addDir(__language__(30104),'http://feeds.feedburner.com/SpencerKobrensTheBaldTruthvideo?format=xml',1,'http://www.guysfromqueens.com/wp-content/uploads/2011/11/tbt-video600x600.jpg')
-        addDir(__language__(30105),'http://feeds.feedburner.com/TechNewsWeeklyvideo?format=xml',1,'http://www.guysfromqueens.com/wp-content/uploads/2011/11/tnw-video600x600.jpg')
-        addDir(__language__(30106),'http://feeds.feedburner.com/TheAndrewZarianShowvideo?format=xml',1,'http://www.guysfromqueens.com/wp-content/uploads/2011/11/azshow-video-600x600.jpg')
-        addDir(__language__(30107),'http://blip.tv/Chauncehaydenshow/rss',1,'http://a.images.blip.tv/Steppinout-300x300_show_image550.jpg')
-        addDir(__language__(30108),'http://feeds.feedburner.com/TheFreeForAllvideo?format=xml',1,'http://www.guysfromqueens.com/wp-content/uploads/2011/11/ffa-video600x600.jpg')
-        addDir(__language__(30109),'http://feeds.feedburner.com/TheNewsWithJessicavideo?format=xml',1,'http://www.guysfromqueens.com/wp-content/uploads/2011/11/news-video600x600.jpg')
-        addDir(__language__(30110),'http://feeds.feedburner.com/WhatTheTechvideo?format=xml',1,'http://www.guysfromqueens.com/wp-content/uploads/2011/11/wtt600x600-video.jpg')
+        addDir(__language__(30100),'http://blip.tv/gfqnetwork/rss',1,xbmc.translatePath( os.path.join( home, 'resources/live.png' ) ))
+
+	headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'}
+	req = urllib2.Request('http://www.guysfromqueens.com/feeds',None,headers)
+	response = urllib2.urlopen(req)
+	showHTML=response.read()
+	response.close()
+
+	showHTML=showHTML.replace('&amp;','&')
+	showHTML=showHTML.replace('&quot;','"')
+	showHTML=showHTML.replace('&apos;',"'")
+	showHTML=showHTML.replace('&#039;',"'")
+	showHTML=showHTML.replace('&lt;','<')
+	showHTML=showHTML.replace('&gt;','>')
+	showHTML=showHTML.replace('&nbsp;',' ')
+	showHTML=showHTML.replace('&shy;','-')
+
+	# Cut HTML off before inactive shows are listed
+	showHTML=showHTML.split('id="searchform"')[0]
+
+        soup = BeautifulSoup(showHTML, convertEntities=BeautifulSoup.HTML_ENTITIES)
+
+        items_left = soup.findAll('div', attrs={'style' : "float: left; width: 300px; margin: 0 30px 20px 0;"})
+        items_right = soup.findAll('div', attrs={'style' : "float: left; width: 300px;"})
+        items = items_left + items_right
+        ShowTitles = []
+        CoverLinks = []
+        ShowLinks = []
+
+	for index in range (len(items)):
+		sub_items = BeautifulSoup(str(items[index]))
+
+		title_items = sub_items.findAll('h2')
+		ShowTitles=ShowTitles+re.compile('<h2>(.*)</h2>').findall(str(title_items))
+
+		cover_items = sub_items.findAll('img')
+		CoverLinks=CoverLinks+re.compile('<img width="150" height="150" .* src="(.*)" title=".*').findall(str(cover_items))
+
+		link_items = sub_items.findAll('a')
+		ShowLinks=ShowLinks+re.compile('.*<a href="(.*)" target="_blank">RSS .*video.*</a>.*').findall(str(link_items))
+
+		#print 'debug:::: ShowTitles: '+str(len(ShowTitles))
+		#print 'debug:::: CoverLinks: '+str(len(CoverLinks))
+		#print 'debug:::: ShowLinks: '+str(len(ShowLinks))
+
+	Sorted_ShowTitles = sorted(ShowTitles)
+
+	for sort_index in range (len(Sorted_ShowTitles)):
+		for index in range (len(ShowTitles)):
+			if Sorted_ShowTitles[sort_index] == ShowTitles[index]:
+				CoverLink=str(CoverLinks[index])
+				CoverLink=CoverLink.replace('-150x150','')
+				print 'debug:::: CoverLink: '+str(CoverLink)
+				addDir(ShowTitles[index],ShowLinks[index],1,CoverLink)
+		 		
 
 def addLiveLinks():
-        addLink(__language__(30001)+' ','URL',__language__(30001)+' ','',7,xbmc.translatePath( os.path.join( home, 'resources/live-stickam.png' ) ))
-        addLink(__language__(30002)+' ','http://cgw.ustream.tv/Viewer/getStream/1/3068635.amf',__language__(30002)+' ','',5,xbmc.translatePath( os.path.join( home, 'resources/live-ustream.png' ) ))
-        addLink(__language__(30003)+' ','URL',__language__(30003)+' ','',6,xbmc.translatePath( os.path.join( home, 'resources/live-justintv.png' ) ))
+        addLink(__language__(30001)+' ','URL',__language__(30001)+' ','',7,xbmc.translatePath( os.path.join( home, 'resources/vaughn.png' ) ))
+        addLink(__language__(30002)+' ','http://cgw.ustream.tv/Viewer/getStream/1/3068635.amf',__language__(30002)+' ','',5,xbmc.translatePath( os.path.join( home, 'resources/ustream.png' ) ))
+        addLink(__language__(30003)+' ','URL',__language__(30003)+' ','',6,xbmc.translatePath( os.path.join( home, 'resources/justintv.png' ) ))
+        addLink(__language__(30004)+' ','http://s25.streamerportal.com:8235/live',__language__(30004)+' ','',4,xbmc.translatePath( os.path.join( home, 'resources', 'resources/live.png' ) ))
 
 def index(url,iconimage):
         headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'}
@@ -55,9 +100,6 @@ def index(url,iconimage):
         soup = BeautifulSoup(link)
 
         info = soup.findAll('enclosure')
-	#print 'debug:::: info: '+str(info)
-
-	vidurls=re.compile('<enclosure.*url="(.+?)".*').findall(str(info))
 
         title = soup.findAll('title')
         del title[0];del title[0]
@@ -77,9 +119,16 @@ def index(url,iconimage):
             pubdate = soup.findAll('pubdate')
             date=re.compile('<pubdate>(.+?)</pubdate>').findall(str(pubdate))
 
+        link = link.replace('>','>\r\n')
+
+        soup = BeautifulSoup(link)
+        info = soup.findAll('enclosure')
+
+	vidurls=re.compile('.*<enclosure.*url="(.+?)".*').findall(str(info))
 
 	#print 'debug:::: Name Length: '+str(len(name))
 	#print 'debug:::: URL Length: '+str(len(vidurls))
+	#print 'debug:::: URL test: '+str(vidurls[0])
 	#print 'debug:::: Description Length: '+str(len(description))
 	#print 'debug:::: Date Length: '+str(len(date))
 
@@ -96,57 +145,45 @@ def getSwf(inURL):
         swfUrl = response.geturl()
         return swfUrl
 
-
 def getUstream(url):
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
-                   'Referer' : 'http://www.ustream.tv/gfqlive'}
+        def getSwf():
+                url = 'http://www.ustream.tv/flash/viewer.swf'
+                req = urllib2.Request(url)
+                response = urllib2.urlopen(req)
+                swfUrl = response.geturl()
+                return swfUrl
+
+
+
+        headers = {'User-agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13'}
         data = None
         req = urllib2.Request(url,data,headers)
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-
-        match = re.compile('(rtmp://.+?)\x00').findall(link)
+        match = re.compile('.*(rtmp://.+?)\x00.*').findall(link)
         rtmp = match[0]
-
-        sName = re.compile('streamName\W\W\W(.+?)[/]*\x00').findall(link)
-        playpath = ' playpath='+sName[0]+' app=ustreamVideo/3068635'
-        swf = ' swfUrl='+getSwf('http://www.ustream.tv/flash/viewer.swf')
+        sName = re.compile('.*streamName\W\W\W(.+?)[/]*\x00.*').findall(link)
+        playpath = ' playpath='+sName[0]
+        swf = ' swfUrl='+getSwf()
         pageUrl = ' pageUrl=http://www.ustream.tv/gfqlive'
         url = rtmp + playpath + swf + pageUrl + ' swfVfy=1 live=true'
+        playLive(url)
+
+def getVaughn():
+        rtmpIP = 'live.vaughnlive.tv:443/live'
+        #rtmpIP = 'video-viewing-slc-02.vaughnsoft.com:443/live'
+	app = 'app=live'
+        swfUrl = 'swfUrl=http://vaughnlive.tv/swf/live_vaughnlive_player_v3.swf?channel=gfqnetwork'
+        tcUrl = 'rtmp://' + rtmpIP
+        pageUrl = 'pageUrl=http://vaughnlive.tv/gfqnetwork'
+        Playpath = 'Playpath=live_gfqnetwork'
+        live = 'live=true'
+
+        url = tcUrl + ' ' + swfUrl + ' ' + app + ' ' + Playpath + ' ' + pageUrl + ' ' + live
 
         item = xbmcgui.ListItem(path=url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
-
-def getStickam():
-	UserID = '175141254'
-
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
-                   'Referer' : 'http://www.stickam.com/guysfromqueens'}
-        req = urllib2.Request('http://player.stickam.com/servlet/flash/getChannel?type=join&performerID=' + UserID,None,headers)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        soup = BeautifulSoup(link)
-
-        match = re.compile('freeServerIP=(.+?),.*channelID=(.+?)&.*').findall(str(link))
-	match = match[0]
-	rtmpIP = match[0]
-	HostID = match[1]
-
-	app = 'app=video_chat2_stickam_peep/'+HostID
-	swfUrl = 'swfUrl='+getSwf('http://player.stickam.com/flash/stickam/stickam_simple_video_player.swf')
-	tcUrl = 'rtmp://' + rtmpIP + '/video_chat2_stickam_peep/' + HostID + '/public/mainHostFeed'
-	pageUrl = 'pageUrl=http://www.stickam.com/guysfromqueens'
-	connamf = 'conn=O:1 conn=NS:channel:' + UserID + ' conn=O:1'
-	live = 'live=true'
-
-	url = tcUrl + ' ' + swfUrl + ' ' + app + ' ' + pageUrl + ' ' + connamf + ' ' + live
-
-        item = xbmcgui.ListItem(path=url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
 
 def getJtv():
         headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
@@ -276,6 +313,6 @@ elif mode==6:
 
 elif mode==7:
     print ""
-    getStickam()
+    getVaughn()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -16,9 +16,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-import simplejson as json
+import json
 from urllib import urlencode
 from urllib2 import urlopen, Request, HTTPError, URLError
+import random
 
 
 class RadioApiError(Exception):
@@ -143,20 +144,24 @@ class RadioApi():
     def __resolve_playlist(self, stream_url):
         self.log('__resolve_playlist started with stream_url=%s'
                  % stream_url)
+        servers = []
         if stream_url.lower().endswith('m3u'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .m3u file')
-            for line in response.splitlines():
-                if line and not line.strip().startswith('#'):
-                    stream_url = line.strip()
-                    break
+            servers = [
+                l for l in response.splitlines()
+                if l.strip() and not l.strip().startswith('#')
+            ]
         elif stream_url.lower().endswith('pls'):
             response = self.__urlopen(stream_url)
             self.log('__resolve_playlist found .pls file')
-            for line in response.splitlines():
-                if line.strip().startswith('File1'):
-                    stream_url = line.split('=')[1]
-                    break
+            servers = [
+                l.split('=')[1] for l in response.splitlines()
+                if l.lower().startswith('file')
+            ]
+        if servers:
+            self.log('__resolve_playlist found %d servers' % len(servers))
+            return random.choice(servers)
         return stream_url
 
     def __urlopen(self, url):
@@ -177,29 +182,25 @@ class RadioApi():
     def __format_stations(stations):
         formated_stations = []
         for station in stations:
-            if station.get('picture1TransName'):
-                thumbnail_trans = (
-                    station['pictureBaseURL'] + station['picture1TransName']
-                ).replace('_1_', '_4_')
-            else:
-                thumbnail_trans = ''
-            if station.get('picture1Name'):
-                thumbnail = station['pictureBaseURL'] + station['picture1Name']
-            else:
-                thumbnail = ''
+            thumbnail = (
+                station.get('picture4TransName') or
+                station.get('picture4Name') or
+                station.get('picture1TransName').replace('_1_', '_4_') or
+                station.get('picture1Name').replace('_1_', '_4_')
+            )
             genre = station.get('genresAndTopics') or ','.join(
                 station.get('genres', []) + station.get('topics', []),
             )
             formated_stations.append({
                 'name': station['name'],
-                'thumbnail': thumbnail,
-                'thumbnail_trans': thumbnail,
+                'thumbnail': station['pictureBaseURL'] + thumbnail,
                 'rating': station['rating'],
                 'genre': genre,
                 'bitrate': station['bitrate'],
                 'id': station['id'],
                 'current_track': station['currentTrack'],
-                'stream_url': station.get('streamURL', '')
+                'stream_url': station.get('streamURL', ''),
+                'description': station.get('description', '')
             })
         return formated_stations
 

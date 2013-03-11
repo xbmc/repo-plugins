@@ -4,6 +4,9 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30102">Selaa lajityypeittäin</string>
+    <string id="30104">Selaa maittain</string>
+
     <!-- Settings -->
     <string id="30300">Kieli</string>
     <string id="30301">Englanti</string>

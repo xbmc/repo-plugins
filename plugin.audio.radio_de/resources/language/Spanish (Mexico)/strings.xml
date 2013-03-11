@@ -9,4 +9,8 @@
     <string id="30301">Inglés</string>
     <string id="30302">Alemán</string>
     <string id="30303">Francés</string>
+    <string id="30310">Forzar Modo de Vista a Miniatura</string>
+
+    <!-- Error Message -->
+    <string id="30600">Error de red</string>
 </strings>

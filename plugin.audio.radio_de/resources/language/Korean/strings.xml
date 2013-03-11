@@ -4,6 +4,9 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30102">장르로 탐색</string>
+    <string id="30104">국가별 탐색</string>
+
     <!-- Settings -->
     <string id="30300">언어</string>
     <string id="30301">영어</string>

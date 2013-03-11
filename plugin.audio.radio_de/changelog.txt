@@ -1,3 +1,11 @@
+2.2.0 (11.03.2013)
+    - better station logos
+    - better add-on icon
+    - changed to xbmcswift2 v2.4.0
+    - small code improvements
+    - use random server on playlists (instead first one)
+    - update translations
+
 2.1.3 (26.12.2012)
     - better station logos
     - fix unicode error

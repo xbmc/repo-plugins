@@ -4,9 +4,19 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30102">按类别浏览</string>
+    <string id="30108">我的电台</string>
+
     <!-- Settings -->
     <string id="30300">语言</string>
     <string id="30301">英语</string>
     <string id="30302">德语</string>
     <string id="30303">法语</string>
+
+    <!-- Context Menu -->
+    <string id="30400">加入“我的电台”</string>
+    <string id="30401">从“我的电台”删除</string>
+
+    <!-- Error Message -->
+    <string id="30600">网络错误</string>
 </strings>

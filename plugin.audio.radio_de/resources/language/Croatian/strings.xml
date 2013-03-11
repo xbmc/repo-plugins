@@ -4,6 +4,9 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30102">Pregled po žanru</string>
+    <string id="30104">Pregled po državi</string>
+
     <!-- Settings -->
     <string id="30300">Jezik</string>
     <string id="30301">Engleski</string>

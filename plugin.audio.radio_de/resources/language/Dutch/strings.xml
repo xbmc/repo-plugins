@@ -4,6 +4,9 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30102">Blader op genre</string>
+    <string id="30104">Blader op land</string>
+
     <!-- Settings -->
     <string id="30300">Taal</string>
     <string id="30301">Engels</string>

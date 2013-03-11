@@ -212,8 +212,7 @@ def __add_stations(stations, add_custom=False):
             ))
         items.append({
             'label': station.get('name', ''),
-            'thumbnail': station.get('thumbnail_trans', ''),
-            'icon': station.get('thumbnail', ''),
+            'thumbnail': station['thumbnail'],
             'info': {
                 'title': station.get('name', ''),
                 'rating': str(station.get('rating', '0.0')),
@@ -241,47 +240,24 @@ def __add_stations(stations, add_custom=False):
             'SONG_RATING',
         ],
     }
-    if plugin.get_setting('force_viewmode') == 'true':
+    if plugin.get_setting('force_viewmode', bool):
         finish_kwargs['view_mode'] = 'thumbnail'
     return plugin.finish(items, **finish_kwargs)
 
 
-def migrate_my_stations():
-    if not plugin.get_setting('migrate') == 'done':
-        __log('migrate_my_stations')
-        import os
-        import simplejson as json
-        profile_path = xbmc.translatePath(
-            plugin._addon.getAddonInfo('profile')
-        )
-        ms_file = os.path.join(profile_path, 'mystations.json')
-        if os.path.isfile(ms_file):
-            my_stations_old = json.load(open(ms_file, 'r'))
-            for old_station in my_stations_old:
-                station_id = old_station['station_id']
-                __log('migrating: %s' % station_id)
-                station = radio_api.get_station_by_station_id(station_id)
-                my_stations[station_id] = station
-            my_stations.sync()
-        plugin.set_setting('migrate', 'done')
-
-
 def __get_language():
-    if not plugin.get_setting('not_first_run'):
+    languages = ('english', 'german', 'french')
+    if not plugin.get_setting('not_first_run', str):
         xbmc_language = xbmc.getLanguage().lower()
         __log('__get_language has first run with xbmc_language=%s'
               % xbmc_language)
-        if xbmc_language.startswith('english'):
-            plugin.set_setting('language', '0')
-        elif xbmc_language.startswith('german'):
-            plugin.set_setting('language', '1')
-        elif xbmc_language.startswith('french'):
-            plugin.set_setting('language', '2')
-        else:
-            plugin.open_settings()
+        for i, lang in enumerate(languages):
+            if xbmc_language.lower().startswith(lang):
+                plugin.set_setting('language', str(i))
+                __log('__get_language detected: %s' % languages[i])
+                break
         plugin.set_setting('not_first_run', '1')
-    lang_id = plugin.get_setting('language') or 0
-    return ('english', 'german', 'french')[int(lang_id)]
+    return plugin.get_setting('language', choices=languages)
 
 
 def __log(text):
@@ -298,7 +274,6 @@ def _(string_id):
 if __name__ == '__main__':
     radio_api.set_language(__get_language())
     radio_api.log = __log
-    migrate_my_stations()
     try:
         plugin.run()
     except RadioApiError:

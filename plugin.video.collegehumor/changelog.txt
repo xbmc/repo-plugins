@@ -1,3 +1,10 @@
+2.1.0
+ Only show original content
+ Fixed playback
+ changed from xbmcswift to xbmcswift2 v2.4.0
+ code cleanup
+ added translations
+
 2.0.0
  Rewrite of most code
  Fix all playback URLs

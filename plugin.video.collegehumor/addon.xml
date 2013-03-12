@@ -1,18 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.collegehumor" name="CollegeHumor" version="2.0.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
-  <requires>
-    <import addon="xbmc.python" version="2.0"/>
-    <import addon="script.module.beautifulsoup" version="3.0.8"/>
-    <import addon="script.module.xbmcswift" version="0.2.0"/>
-    <import addon="plugin.video.youtube" version="3.1.0" />
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <language>en</language>
-    <platform>all</platform>
-    <summary lang="en">Watch videos from www.collegehumor.com</summary>
-    <description lang="en">CollegeHumor finds funny videos from all over the internet plus some original videos that they made themself.</description>
-  </extension>
+<addon id="plugin.video.collegehumor" name="CollegeHumor" version="2.1.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.beautifulsoup" version="3.0.8"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>en</language>
+        <platform>all</platform>
+        <summary lang="ar">مشاهدة فيديو من www.collegehumor.com</summary>
+        <summary lang="be">Watch videos from www.collegehumor.com</summary>
+        <summary lang="bg">Гледайте видеа от www.collegehumor.com</summary>
+        <summary lang="ca">Mireu videos de www.collegehumor.com</summary>
+        <summary lang="da">Se videoer fra www.collegehumor.com</summary>
+        <summary lang="de">Schau Videos von collegehumor.com</summary>
+        <summary lang="el">Παρακολουθήστε βίντεο από το www.collegehumor.com</summary>
+        <summary lang="en">Watch videos from www.collegehumor.com</summary>
+        <summary lang="es">Videos de www.collegehumor.com</summary>
+        <summary lang="es_MX">Mira videos desde www.collegehumor.com</summary>
+        <summary lang="fa_IR">تماشای ویدیو از www.collegehumor.com</summary>
+        <summary lang="gl">Ver vídeos de www.collegehumor.com</summary>
+        <summary lang="hu">Videók megtekintése a www.collegehumor.com oldalról</summary>
+        <summary lang="it">Guarda i video da www.collegehumor.com</summary>
+        <summary lang="ko">www.collegehumor.com의 비디오 시청</summary>
+        <summary lang="lt">Žiūrėti vaizdo įrašus iš www.collegehumor.com</summary>
+        <summary lang="nl">Bekijk video's van www.collegehumor.com</summary>
+        <summary lang="pl">Oglądaj filmy z www.collegehumor.com</summary>
+        <summary lang="pt">Veja vídeos de www.collegehumor.com</summary>
+        <summary lang="pt_BR">Assista vídeos de www.collegehumor.com</summary>
+        <summary lang="ro">Urmărește videoclipuri de pe www.collegehumor.com</summary>
+        <summary lang="sk">Pozerajte videá z www.collegehumor.com</summary>
+        <summary lang="sv">Titta på videor från www.collegehumor.com</summary>
+        <description lang="ar">كوليج هومر يجد فيديوهات من كل الشبكة زائد فيديوهات أصلية صنعوها بأنفسهم.</description>
+        <description lang="be">CollegeHumor finds funny videos from all over the internet plus some original videos that they made themself.</description>
+        <description lang="bg">В CollegeHumor можете да намерите смешни видеа от най-различни сайтове, а някои са дело на екипа на сайта.</description>
+        <description lang="ca">CollegeHumor troba videos divertits des de tota la xarxa internet a mes a mes de material original realitzat per ells mateixos.</description>
+        <description lang="da">CollegeHumor finder sjove videoer fra hele internettet, plus nogle originale videoer de selv har lavet.</description>
+        <description lang="de">CollegeHumor findet lustige Videos aus dem gesamten Internet plus ein paar Videos von den Machern selbst.</description>
+        <description lang="el">Το CollegeHumor βρίσκει αστεία βίντεο από όλο το Διαδίκτυο καθώς και πρωτότυπα βίντεο που έκαναν οι ίδιοι.</description>
+        <description lang="en">CollegeHumor finds funny videos from all over the internet plus some original videos that they made themself.</description>
+        <description lang="es">CollegeHumor busca videos divertidos por todo internet además de algunos videos originales hechos por ellos mismos.</description>
+        <description lang="es_MX">CollegeHumor encuentra videos chistosos desde toda la internet mas algunos videos originales hechos por ellos mismos.</description>
+        <description lang="fa_IR">CollegeHumor ویدیو های سرگرم کننده از سرتاسر اینترنت پیدا می کند به علاوه ویدیو های اورجینالی نیز خودش می سازد.</description>
+        <description lang="gl">CollegeHumor busca vídeos divertidos por todo internet máis algúns vídeos orixinais feitos por eles.</description>
+        <description lang="hu">A CollegeHumor vicces videókat talál az interneten, valamint bemutat néhány saját készítésűt is.</description>
+        <description lang="it">College Humor trova video divertenti da internet ed in più alcuni autoprodotti.</description>
+        <description lang="ko">CollegeHumor은 인터넷의 재미있는 동영상과 자체 제작한 동영상을 제공합니다.</description>
+        <description lang="lt">CollegeHumor randa linksmus vaizdo įrašus visame internete plius kai kuriuos originalius vaizdo įrašus katruos jie sukūrė patys.</description>
+        <description lang="nl">CollegeHumor vind grappige video's van overal op het internet plus sommige originele video's die ze zelf hebben gemaakt.</description>
+        <description lang="pl">Collegehumor wyszukuje śmieszne filmy z całego internetu plus kilka oryginalnych filmów, które są wykonane przez ekipę Collegehumor.</description>
+        <description lang="pt">O CollegeHumor reúne vídeos hilariantes encontrados na internet e acrescenta ainda alguns vídeos feitos pela equipa do site.</description>
+        <description lang="pt_BR">CollegeHumor encontra vídeos engraçados de toda a internet além de alguns vídeos originais produzidos por eles mesmos.</description>
+        <description lang="ro">Pe CollegeHumor sunt găzduite videoclipuri comice de pe internet plus unele făcute chiar de ei.</description>
+        <description lang="sk">CollegeHumor vyhľadáva zábavné videá po celom internete a pridáva originálne videá z vlastnej produkcie.</description>
+        <description lang="sv">CollegeHumer hittar roliga vidoer från hela internet plus några originella videor som dom producerat själva.</description>
+    </extension>
 </addon>

@@ -1,7 +1,30 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#
+#     Copyright (C) 2013 Tristan Fischer (sphere@dersphere.de)
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+
 import urllib2
 import re
 from BeautifulSoup import BeautifulSoup
 from urllib import urlencode
+
+
+MOBILE_URL = 'http://m.collegehumor.com/'
+MAIN_URL = 'http://www.collegehumor.com/'
 
 IPAD_USERAGENT = (
     'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) '
@@ -9,17 +32,17 @@ IPAD_USERAGENT = (
     'Version/4.0.4 Mobile/7B334b Safari/531.21.10'
 )
 
-MOBILE_URL = 'http://m.collegehumor.com/'
-MAIN_URL = 'http://www.collegehumor.com/'
 
-
-def getCategories():
+def get_categories():
     url = MOBILE_URL + 'videos/browse'
-    tree = __getTree(url)
+    tree = __get_tree(url, mobile=True)
     categories = []
     for a in tree.find('ul', {'data-role': 'listview'}).findAll('a'):
         if 'playlist' in a['href']:
             print 'Skipping Playlist'
+            continue
+        elif 'video' in a['href']:
+            print 'Skipping'
             continue
         categories.append({
             'title': a.string,
@@ -28,10 +51,10 @@ def getCategories():
     return categories
 
 
-def getVideos(category, page=1):
+def get_videos(category, page=1):
     post = {'render_mode': 'ajax'}
     url = MOBILE_URL + '%s/page:%s' % (category, page)
-    tree = __getTree(url, post)
+    tree = __get_tree(url, post, mobile=True)
     videos = []
     elements = tree.find('ul', {'data-role': 'listview'}).findAll('a')
     for a in elements:
@@ -47,24 +70,14 @@ def getVideos(category, page=1):
     return videos, has_next_page
 
 
-def getVideoFile(link):
+def get_video_file(link):
     url = MAIN_URL + link
-    tree = __getTree(url)
+    tree = __get_tree(url)
 
-    print 'Simple, we used IPAD UA - so maybe we have luck'
     video_object = tree.find('video')
     if video_object and video_object.get('src'):
         return video_object['src']
 
-    print 'No luck. Ok, maybe it\'s youtube?'
-    re_youtube = re.compile('http://www.youtube.com/embed/(\w+)')
-    youtube_iframe = tree.find('iframe', {'src': re_youtube})
-    if youtube_iframe:
-        yotube_id = re.search(re_youtube, youtube_iframe['src']).group(1)
-        return ('plugin://plugin.video.youtube/'
-                '?action=play_video&videoid=%s' % yotube_id)
-
-    print 'Still no luck. But there could also be some ugly JS HTML5'
     re_flv = re.compile("flvSourceUrl: '([^']+)',")
     js_code = tree.find('script', {'type': 'text/javascript'},
                         text=re_flv)
@@ -72,44 +85,17 @@ def getVideoFile(link):
         flv_url = re.search(re_flv, js_code).group(1)
         return flv_url
 
-    print 'Nope. We don\'t like multiple HTTP request, but...'
-    url = MAIN_URL + 'moogaloop/video/%s' % link.split('/')[1]
-    moogaloop_tree = __getTree(url)
-    video_file = moogaloop_tree.video.file.string
-    if 'manifest' not in video_file:
-        return video_file
 
-    print 'Noooo. OK, now we like HTTP requests, take another one!'
-    re_content = re.compile("content: '([^']+)',")
-    re_video_id = re.compile("videoId: '([^']+)',")
-    re_video_url = re.compile('"adUrl":"([^"]+)"')
-    js_code = tree.find('script', {'type': 'text/javascript'},
-                        text=re_content)
-    if js_code:
-        content = re.search(re_content, js_code).group(1)
-        video_id = re.search(re_video_id, js_code).group(1)
-        url = (
-            'http://ads.rnmd.net/getAds?delivery=jsonp&adType=videosrc'
-            '&adDiv=%s&url=%s&appId=college_humor_web&v=1'
-        ) % (video_id, content)
-        tree = __getTree(url)
-        json_code = tree.contents[0]
-        video_url = re.search(re_video_url, json_code)
-        if video_url:
-            return video_url.group(1).replace('\/', '/')
-
-    print 'Game Over - nothing to see here, move along...'
-    raise NotImplementedError
-
-
-def __getTree(url, data_dict=None):
+def __get_tree(url, data_dict=None, mobile=True):
     print 'Opening url: %s' % url
     if data_dict:
         post_data = urlencode(data_dict)
     else:
         post_data = ' '
     req = urllib2.Request(url, post_data)
-    req.add_header('User-Agent', IPAD_USERAGENT)
+    if mobile:
+        req.add_header('Cookie', 'force_mobile=1')
+        req.add_header('User-Agent', IPAD_USERAGENT)
     req.add_header('X-Requested-With', 'XMLHttpRequest')
     response = urllib2.urlopen(req).read()
     tree = BeautifulSoup(response, convertEntities=BeautifulSoup.HTML_ENTITIES)

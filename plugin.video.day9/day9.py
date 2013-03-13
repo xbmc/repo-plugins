@@ -1,4 +1,4 @@
-import urllib, urllib2, re, sys, os
+import urllib, urllib2, re, sys, os, base64
 import xbmc, xbmcaddon, xbmcgui, xbmcplugin
 
 import CommonFunctions
@@ -51,7 +51,7 @@ class Day9:
 
 
     def addCategory(self, title, url, action, menu=None):
-        url=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&title="+title+"&action="+urllib.quote_plus(action)
+        url=sys.argv[0]+"?url="+base64.encodestring(url)+"&title="+base64.encodestring(title)+"&action="+urllib.quote_plus(action)
         listitem=xbmcgui.ListItem(title,iconImage="DefaultFolder.png", thumbnailImage="DefaultFolder.png")
         listitem.setInfo( type="Video", infoLabels={ "Title": title } )
         if menu:
@@ -95,13 +95,14 @@ class Day9:
 
     def showTitles(self, params = {}):
         get = params.get
-        link = self.getRequest(get("url"))
+        link = self.getRequest(base64.decodestring(get("url")))
         tree = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         # narrow down the search to get rid of upcoming shows
         # I'd like to add them just to inform people of what/when things are
         # happening but there isn't good markup to isolate them.  I guess I
         # could excise the existing shows and say whatever is left is
         # upcoming...
+
         results=tree.find('ul', { "id" : "results" })
         for r in results.findAll('h3'):
             link = r.contents[0]
@@ -117,11 +118,10 @@ class Day9:
 
     def showGames(self, params = {}):
         get = params.get
-        link = self.getRequest(get("url"))
+        link = self.getRequest(base64.decodestring(get("url")))
         tree = BeautifulSoup(link)
 	airdate = tree.find('time')
-        # instead of using the title from get("title") we're grabbing it from the page to avoid HTML %20 and such.  Could probably strip it with HTML_ENTITIES again if need be.  This became a problem with frodo I think.  It no longer parses the HTML.  
-        title = tree.find('h1', { "name" : "title" }).contents[0]
+	title = base64.decodestring(get("title"))
         try: 
             description = tree.find(text='Description').findNext('p')
         except:

@@ -42,7 +42,7 @@ def show_categories():
     return plugin.finish(items)
 
 
-@plugin.route('/<category_id>/<page>/')
+@plugin.route('/videos/<category_id>/<page>/')
 def show_videos(category_id, page):
     videos, has_next_page = scraper.get_items(
         category=category_id,

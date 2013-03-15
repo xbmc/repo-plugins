@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.image.xzen"
-  version="0.0.7"
+  version="0.0.8"
   name="XZen"
   provider-name="bossanova808 (bossanova808@gmail.com)">
   <requires>

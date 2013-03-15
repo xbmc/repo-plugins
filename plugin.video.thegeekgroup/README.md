@@ -4,7 +4,7 @@ Watch shows from the [The Geek Group](http://www.Thegeekgroup.org) network in [X
 
 Shows
 -----
-* [Live Show](http://www.thegeekgroup.org)
+* [Live Show](http://www.thegeekgroup.org/live)
 
 
 Instructions
@@ -14,5 +14,7 @@ Instructions
 
 About
 -----
-* Author: [MadManMarkAu] () [KB3NZQ]
+* Author: [MadManMarkAu](https://bitbucket.org/MadManMarkAu)
+* Author: [KB3NZQ](https://bitbucket.org/kb3nzq)
 * Source: [GitHub](https://github.com/KB3NZQ/XBMC-TheGeekGroup)
+* Source: [BitBucket](https://bitbucket.org/kb3nzq/xbmc-thegeekgroup)

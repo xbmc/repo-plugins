@@ -1,0 +1,85 @@
+# XBMC Media Center language file
+# Addon Name: iPhoto
+# Addon id: plugin.image.iphoto
+# Addon Provider: jingai
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Spanish (Mexico) (http://www.transifex.com/projects/p/xbmc-addons/language/es_MX/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_MX\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30021"
+msgid "None"
+msgstr "Ninguno"
+
+msgctxt "#30023"
+msgid "Label"
+msgstr "Firma"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "Tamaño"
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "Tipo de vista en Confluence"
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "Por defecto"
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "Imágenes Miniatura"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "Envoltura de Imágen"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "Por defecto"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "Ascendente"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "Descendente"
+
+msgctxt "#30090"
+msgid "General"
+msgstr "General"
+
+msgctxt "#30091"
+msgid "View"
+msgstr "Ver"
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr "Skin"
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr "Avanzado"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "Álbumes"
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "Palabras clave"
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr "Actualizar biblioteca"

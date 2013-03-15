@@ -1,0 +1,93 @@
+# XBMC Media Center language file
+# Addon Name: iPhoto
+# Addon id: plugin.image.iphoto
+# Addon Provider: jingai
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: French (http://www.transifex.com/projects/p/xbmc-addons/language/fr/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30021"
+msgid "None"
+msgstr "Aucun"
+
+msgctxt "#30023"
+msgid "Label"
+msgstr "Label(s)"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "taille"
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "Mode d'affichage dans Confluence"
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "Défaut"
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "Vignettes"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "Galerie d'images"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "Défaut"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "Grille Image"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "Croissant"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "Décroissant"
+
+msgctxt "#30090"
+msgid "General"
+msgstr "Général"
+
+msgctxt "#30091"
+msgid "View"
+msgstr "Vue"
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr "Thème"
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr "Avancés"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "Albums"
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "Mots-clés"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "Projet"
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr "Actualiser la médiathèque"

@@ -1,0 +1,101 @@
+# XBMC Media Center language file
+# Addon Name: iPhoto
+# Addon id: plugin.image.iphoto
+# Addon Provider: jingai
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Hebrew (http://www.transifex.com/projects/p/xbmc-addons/language/he/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: he\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "כתובות"
+
+msgctxt "#30021"
+msgid "None"
+msgstr "ללא"
+
+msgctxt "#30023"
+msgid "Label"
+msgstr "חברת הפקה"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "גודל"
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "מוד צפיה ב confluence "
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "ברירת מחדל"
+
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "תמונות ממוזערות"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "עטיפת תמונה"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "ברירת מחדל"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "עולה"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "יורד"
+
+msgctxt "#30090"
+msgid "General"
+msgstr "כללי"
+
+msgctxt "#30091"
+msgid "View"
+msgstr "תצוגה"
+
+msgctxt "#30092"
+msgid "Skin"
+msgstr "סקין"
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr "מתקדם"
+
+msgctxt "#30100"
+msgid "Events"
+msgstr "ארועים"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "אלבומים"
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "מילות מפתח"
+
+msgctxt "#30105"
+msgid "Faces"
+msgstr "פרצופים"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "מקומות"
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr "עדכן ספריה"

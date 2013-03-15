@@ -835,7 +835,7 @@ class IPhotoDB:
 				break
 			if (addr is None):
 			    updateProgress("Geocode: %s %s" % (lat, lon))
-			    addr = geocode("%s %s" % (lat, lon))[0]
+			    addr = geocode("%s,%s" % (lat, lon))[0]
 			    updateProgress()
 
 			    for i in self.placeList:
@@ -1078,30 +1078,35 @@ class IPhotoParser:
 		    pass
 
 	    if (self.AlbumCallback and len(self.albumList) > 0):
+		print "iphoto.parser: Adding albums to database"
 		for a in self.albumList:
 		    self.AlbumCallback(a, self.albumIgn)
 		    state.nphotos += 1
 		    self.updateProgress()
 
 	    if (self.RollCallback and len(self.rollList) > 0):
+		print "iphoto.parser: Adding events to database"
 		for a in self.rollList:
 		    self.RollCallback(a)
 		    state.nphotos += 1
 		    self.updateProgress()
 
 	    if (self.FaceCallback and len(self.faceList) > 0):
+		print "iphoto.parser: Adding faces to database"
 		for a in self.faceList:
 		    self.FaceCallback(a)
 		    state.nphotos += 1
 		    self.updateProgress()
 
 	    if (self.KeywordCallback and len(self.keywordList) > 0):
+		print "iphoto.parser: Adding keywords to database"
 		for a in self.keywordList:
 		    self.KeywordCallback(a)
 		    state.nphotos += 1
 		    self.updateProgress()
 
 	    if (self.PhotoCallback and len(self.photoList) > 0):
+		print "iphoto.parser: Adding photos to database"
 		for a in self.photoList:
 		    self.PhotoCallback(a, self.imagePath, self.libraryPath, self.mastersPath, self.mastersRealPath, self.enablePlaces, self.mapAspect, self.updateProgress)
 		    state.nphotos += 1

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.1" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.4" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="2.1.0"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
@@ -11,7 +11,7 @@
 	<summary lang="be">Imports iPhoto library into XBMC.</summary>
 	<summary lang="bg">Внася iPhoto библиотека в XBMC</summary>
 	<summary lang="da">Importerer iPhoto-bibliotek til XBMC</summary>
-	<summary lang="de">Import Ihre iPhoto-Bibliothek in XBMC</summary>
+	<summary lang="de">Importiert die iPhoto-Bibliothek in XBMC.</summary>
 	<summary lang="el">Εισάγει συλλογές iPhoto στο XBMC.</summary>
 	<summary lang="en">Imports iPhoto library into XBMC.</summary>
 	<summary lang="es">Importar librería iPhoto</summary>
@@ -45,6 +45,7 @@
 	<description lang="pt_BR">Importações biblioteca do iPhoto em Eventos, Álbuns, Rostos, Lugares, palavras-chave e categorias de ratings. [CR] [CR] Para mais informações, consulte o README no&#10;http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="sk">Importuje iPhoto knižnicu do Udalostí, Albumov, Klúčových slov a Hodnotení v kategóriách.&#10;&#10;Pre via informácií si prečítajte README na http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="sv">Importerar iPhoto biblioteket till händelser, album, ansikten, platser, nyckelord och betygs kategorier.[CR][CR]För mer information, läs README på http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="zh">导入iPhoto照片库到事件、相册、肖像、地点、关键字和评分类别。[CR][CR]更多信息见 http://github.com/jingai/plugin.image.iphoto 说明文件</description>
 	<language></language>
 	<platform>all</platform>
     </extension>

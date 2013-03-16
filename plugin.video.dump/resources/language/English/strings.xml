@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- English language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/en/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
 <strings>
     <!-- Root Menu -->
     <string id="30000">Current Videos</string>
-    <string id="30001">Random Video</string>
     <string id="30002">Archive</string>
     <string id="30003">Search</string>
+
     <!-- Settings -->
-    <string id="30010">Preferred Video</string>
-    <string id="30011">Flash</string>
-    <string id="30012">Mobile</string>
+    <string id="30010">Force ViewMode to Thumbnail</string>
+
+    <!-- Messages -->
+    <string id="30020">Network Error</string>
 </strings>

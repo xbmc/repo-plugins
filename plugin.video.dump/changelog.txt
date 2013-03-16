@@ -1,2 +1,10 @@
+2.0.0
+	- thumbnails :-)
+	- 95% code rewrite
+	- changed to xbmcswift2
+	- cosmetics
+	- better video quality
+	- does anybody read changelogs?
+
 1.0.0
-- fork from the wimp.com (which is original from Insayne)
+	- fork from the wimp.com (which is original from Insayne)

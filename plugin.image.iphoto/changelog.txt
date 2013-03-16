@@ -1,3 +1,6 @@
+2.0.4 - 20130315
+- Fix Places support.
+
 2.0.3 - 20130108
 - Update language files from Transifex.
 

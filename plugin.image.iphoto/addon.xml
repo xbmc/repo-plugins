@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="2.0.3" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="2.0.4" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="2.0"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
@@ -43,6 +43,7 @@
 	<description lang="pt_BR">Importações biblioteca do iPhoto em Eventos, Álbuns, Rostos, Lugares, palavras-chave e categorias de ratings. [CR] [CR] Para mais informações, consulte o README no&#10;http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="sk">Importuje iPhoto knižnicu do Udalostí, Albumov, Klúčových slov a Hodnotení v kategóriách.&#10;&#10;Pre via informácií si prečítajte README na http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="sv">Importerar iPhoto biblioteket till händelser, album, ansikten, platser, nyckelord och betygs kategorier.[CR][CR]För mer information, läs README på http://github.com/jingai/plugin.image.iphoto</description>
+	<language></language>
 	<platform>all</platform>
     </extension>
 </addon>

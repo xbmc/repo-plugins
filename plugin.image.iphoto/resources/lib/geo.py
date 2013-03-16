@@ -25,8 +25,7 @@ import xml.dom.minidom
 from xml.parsers.expat import ExpatError
 from traceback import print_exc
 
-GOOGLE_API_KEY = None
-GOOGLE_DOMAIN = "maps.google.com"
+GOOGLE_DOMAIN = "maps.googleapis.com"
 
 MAP_ZOOM_MIN = 1
 MAP_ZOOM_MAX = 21
@@ -65,14 +64,23 @@ class GeocoderError(Exception):
 class GeocoderResultError(GeocoderError):
     pass
 
-class GBadKeyError(GeocoderError):
-    pass
-
 class GQueryError(GeocoderResultError):
     pass
 
 class GTooManyQueriesError(GeocoderResultError):
     pass
+
+def check_status(status):
+    if status == 'ZERO_RESULTS':
+	raise GQueryError("Geocode was successful but returned no results.")
+    elif status == 'OVER_QUERY_LIMIT':
+	raise GTooManyQueriesError("The given key has gone over the requests limit in the 24 hour period or has submitted too many requests in too short a period of time.")
+    elif status == 'REQUEST_DENIED':
+	raise GQueryError("Request was denied, generally because of lack of a sensor parameter.")
+    elif status == 'INVALID_REQUEST':
+	raise GQueryError("Invalid request.  Probably missing address or latlng.")
+    else:
+	raise GeocoderResultError("Unknown error.")
 
 # forward geocode an address or reverse geocode a latitude/longitude pair.
 # input loc should not be pre-urlencoded (that is, use spaces, not plusses).
@@ -80,11 +88,9 @@ class GTooManyQueriesError(GeocoderResultError):
 # returns all addresses found with their corresponding lat/lon pairs, unless
 # exactly_one is True, which returns just the first (probably best) match.
 def geocode(loc, exactly_one=True):
-    req_url = "http://%s/maps/geo" % (GOOGLE_DOMAIN.strip('/'))
+    req_url = "http://%s/maps/api/geocode/json" % (GOOGLE_DOMAIN.strip('/'))
     req_hdr = { 'User-Agent':HTTP_USER_AGENT }
-    req_par = { 'q':loc, 'output':'json' }
-    if GOOGLE_API_KEY:
-	req_par['key'] = GOOGLE_API_KEY
+    req_par = { 'latlng':loc, 'sensor':'false', 'output':'json' }
     req_dat = urlencode(req_par)
 
     req = Request(unquote(req_url + "?" + req_dat), None, req_hdr)
@@ -93,34 +99,16 @@ def geocode(loc, exactly_one=True):
 	resp = decode_page(resp)
 
     doc = json.loads(resp)
-    places = doc.get('Placemark', [])
+    places = doc.get('results', [])
 
-    if len(places) == 0:
-	# Got empty result. Parse out the status code and raise an error if necessary.
-	status = doc.get("Status", [])
-	status_code = status["code"]
-	if status_code == 400:
-	    raise GeocoderResultError("Bad request (Server returned status 400)")
-	elif status_code == 500:
-	    raise GeocoderResultError("Unkown error (Server returned status 500)")
-	elif status_code == 601:
-	    raise GQueryError("An empty lookup was performed")
-	elif status_code == 602:
-	    raise GQueryError("No corresponding geographic location could be found for the specified location, possibly because the address is relatively new, or because it may be incorrect.")
-	elif status_code == 603:
-	    raise GQueryError("The geocode for the given location could be returned due to legal or contractual reasons")
-	elif status_code == 610:
-	    raise GBadKeyError("The api_key is either invalid or does not match the domain for which it was given.")
-	elif status_code == 620:
-	    raise GTooManyQueriesError("The given key has gone over the requests limit in the 24 hour period or has submitted too many requests in too short a period of time.")
+    if not places:
+	check_status(doc.get('status'))
 	return None
 
-    if exactly_one and len(places) != 1:
-	raise ValueError("Didn't find exactly one placemark! (Found %d.)" % len(places))
-
     def parse_place(place):
-	location = place.get('address')
-	longitude, latitude = place['Point']['coordinates'][:2]
+	location = place.get('formatted_address')
+	latitude = place['geometry']['location']['lat']
+	longitude = place['geometry']['location']['lng']
 	return (location, (latitude, longitude))
 
     if exactly_one:
@@ -204,8 +192,6 @@ class staticmap:
 		"maptype":"%s" % (self.maptype),
 		"sensor":"false"
 	    }
-	    if (GOOGLE_API_KEY):
-		req_par['key'] = GOOGLE_API_KEY
 	    if (self.showmarker == True):
 		req_par['markers'] = self.marker
 	    else:
@@ -249,7 +235,7 @@ if (__name__ == "__main__"):
 	sys.exit(1)
 
     try:
-	places = geocode("%s %s" % (lat, lon), False)
+	places = geocode("%s,%s" % (lat, lon), False)
 	for p in places:
 	    print places
 

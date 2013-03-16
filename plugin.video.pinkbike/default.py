@@ -40,7 +40,7 @@ def listPage(url):
         id = re.findall(re_pinkbike, link)[0]
         id = int(id)
         partId = int(math.fabs(id/10000))
-        url = 'http://lv1.pinkbike.org/vf/' + str(partId) + '/pbvid-' + str(id) + '.flv'
+        url = 'http://lv1.pinkbike.org/vf/' + str(partId) + '/pbvid-' + str(id) + '.mp4'
         thumb = inItem.find('img', 'thimg')['src']
         time = inItem.find('span', 'fblack').contents[0]
         plot = inItem.find('p', 'uFullInfo f10 fgrey3').contents[0].strip()

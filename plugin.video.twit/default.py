@@ -7,6 +7,7 @@ import xbmcgui
 import xbmcaddon
 import StorageServer
 from datetime import datetime
+from pyamf import remoting
 from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 try:
     import json
@@ -168,7 +169,7 @@ def set_media_url(url):
             '1': 'sd download',
             '2': 'download',
             '3': 'audio download'
-        }
+            }
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         media_urls = {}
         for i in soup('span', attrs={'class' : "download"}):
@@ -219,7 +220,7 @@ def twit_live():
             'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_696/playlist.m3u8',
             'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_496/playlist.m3u8',
             'http://twit.am/listen'
-        ]
+            ]
         if content_type == 'audio':
             link = 'http://twit.am/listen'
         else:
@@ -228,8 +229,12 @@ def twit_live():
                 link = get_jtv()
             elif link == 'ustream':
                 link = get_ustream()
+        success = False
+        if link:
+            success = True
+        else: link = ''
         item = xbmcgui.ListItem(path=link)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+        xbmcplugin.setResolvedUrl(int(sys.argv[1]), success, item)
 
 
 def get_ustream():
@@ -240,24 +245,44 @@ def get_ustream():
                 swfUrl = response.geturl()
                 return swfUrl
         data = make_request('http://cgw.ustream.tv/Viewer/getStream/1/1524.amf')
-        match = re.compile('.*(rtmp://.+?)\x00.*').findall(data)
-        rtmp = match[0]
-        sName = re.compile('.*streamName\W\W\W(.+?)[/]*\x00.*').findall(data)
-        playpath = ' playpath='+sName[0]
-        swf = ' swfUrl='+getSwf()
-        pageUrl = ' pageUrl=http://live.twit.tv'
-        url = rtmp + playpath + swf + pageUrl + ' swfVfy=1 live=true'
-        return url
+        amf_data = remoting.decode(data).bodies[0][1].body
+        if amf_data['success']:
+            hls_url = None
+            if amf_data.has_key('liveHttpUrl'):
+                try: hls_url = amf_data['liveHttpUrl']
+                except: pass
+            if hls_url:
+                return hls_url
+            else:
+                streams = None
+                try:
+                    streams = amf_data['streamVersions']['streams/live_1']['streamVersionCdn']
+                except: pass
+                if streams:
+                    for i in streams.keys():
+                        rtmp = streams[i].values()[0]
+                        path = streams[i].values()[1]
+                        break
+                    playpath = ' playpath='+path
+                    swf = ' swfUrl='+getSwf()
+                    pageUrl = ' pageUrl=http://live.twit.tv'
+                    url = rtmp + playpath + swf + pageUrl + ' swfVfy=1 live=true'
+                    return url
+                else:
+                    return None
 
 
 def get_jtv():
-        soup = BeautifulSoup(make_request('http://usher.justin.tv/find/twit.xml?type=live'))
-        token = ' jtv='+soup.token.string.replace('\\','\\5c').replace(' ','\\20').replace('"','\\22')
-        rtmp = soup.connect.string+'/'+soup.play.string
-        Pageurl = ' Pageurl=http://www.justin.tv/twit'
-        swf = ' swfUrl=http://www.justin.tv/widgets/live_embed_player.swf?channel=twit live=true'
-        url = rtmp+token+swf+Pageurl
-        return url
+        try:
+            soup = BeautifulSoup(make_request('http://usher.justin.tv/find/twit.xml?type=live'))
+            token = ' jtv='+soup.token.string.replace('\\','\\5c').replace(' ','\\20').replace('"','\\22')
+            rtmp = soup.connect.string+'/'+soup.play.string
+            Pageurl = ' Pageurl=http://www.justin.tv/twit'
+            swf = ' swfUrl=http://www.justin.tv/widgets/live_embed_player.swf?channel=twit live=true'
+            url = rtmp+token+swf+Pageurl
+            return url
+        except:
+            return None
 
 
 def get_params():
@@ -363,10 +388,12 @@ if mode==None:
         else:
             addon_log('"shows" cache ERROR')
     xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode==1:
     index(url,iconimage)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode==2:
     set_media_url(url)
@@ -377,5 +404,4 @@ elif mode==3:
 elif mode==4:
     get_latest_episodes()
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))

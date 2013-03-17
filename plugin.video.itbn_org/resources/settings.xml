@@ -1,0 +1,12 @@
+<?xml version ="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+<category label= ”General”>
+<setting id=" username" type="text" label="2 000"
+default ="" />
+<setting id=" password" type="text" option=" hidden "
+label=" 2001" enable ="!eq( -1,)" default="" />
+<setting type ="sep" />
+<setting id="debug" type= "bool" label ="2002 "
+default ="false" />
+</category >
+</settings>

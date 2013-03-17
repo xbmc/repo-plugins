@@ -1,0 +1,10 @@
+Version 1.1.4
+-fixed addon description
+-fixed minor bug in listing Programs
+
+Version 1.1.5
+-fixed bugs when automatically switching between list and thumbnail mode
+-fixed minor bug in name listing
+
+Version 1.1.6
+-cleaned up some bits of code

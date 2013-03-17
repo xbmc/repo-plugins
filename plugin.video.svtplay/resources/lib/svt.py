@@ -123,7 +123,7 @@ def getCategories():
   for li in lis:
     category = {}
     category["url"] = common.parseDOM(li, "a", ret = "href")[0]
-    title = common.parseDOM(li, "h2")[0]
+    title = common.parseDOM(li, "h3")[0]
     category["title"] = common.replaceHTMLCodes(title)
     categories.append(category)
 

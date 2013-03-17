@@ -45,7 +45,9 @@ def getShows(url):
     thumb = common.parseDOM(box, "img", ret = "src")[0]
     thumb = thumb.replace("/medium/", "/large/")
     title = common.parseDOM(box, "div", attrs = {"class":"image_info_1"})[0]
-    shows.append({"title":title,"url":href,"thumbnail":thumb})
+    info = {}
+    info["plot"] = common.parseDOM(box, "img", ret = "title")[0]
+    shows.append({"title":title,"url":href,"thumbnail":thumb, "info": info})
 
   return shows
 

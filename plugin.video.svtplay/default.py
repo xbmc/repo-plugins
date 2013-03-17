@@ -56,8 +56,7 @@ if settings.getSetting("fullparse") == "true":
 
 HIDE_SIGN_LANGUAGE = False
 if settings.getSetting("hidesignlanguage") == "true":
-  HIDE_SIGN_LANGUAGE = True
-
+  HIDE_SIGN_LANGUAGE = True 
 SHOW_SUBTITLES = False
 if settings.getSetting("showsubtitles") == "true":
   SHOW_SUBTITLES = True
@@ -275,7 +274,7 @@ def viewBestOfCategory(url):
 
   for show in shows:
     params["url"] = show["url"]
-    addDirectoryItem(show["title"], params, show["thumbnail"], False)
+    addDirectoryItem(show["title"], params, show["thumbnail"], False, False, show["info"])
 
 
 def createDirectory(url,page,index,callertype,dirtype):

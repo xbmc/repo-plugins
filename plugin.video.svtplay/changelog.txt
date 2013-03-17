@@ -1,3 +1,8 @@
+Version 3.2.2
+-------------
+- Fix broken category listing due to site change (linqcan)
+- Add program information for BestOfSvt.se (linqcan)
+
 Version 3.2.1
 -------------
 - Fixed issue when hide sign language is enabled

@@ -1,3 +1,6 @@
+Version 2.0.1
+fix ustream live stream
+
 Version 2.0.0
 major version bump for frodo
 fix latest episodes, we now scrape the web-page as the rss isn't viable anymore

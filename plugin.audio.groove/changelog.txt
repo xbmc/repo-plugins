@@ -1,3 +1,12 @@
+2.0.2
+
+Correct icon resolution.
+
+2.0.1
+
+Better resolution icon.
+Fix playlists with accented characters.
+
 2.0.0
 
 Frodo version.

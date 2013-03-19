@@ -29,7 +29,7 @@ defaultIdentifyProps = commonTitleProps + ['tvshow_id']
 watchableTitleProps = commonTitleProps + ['watched']
 defaultTVShowProps = commonTitleProps + ['seasons']
 smallListProps = ['id', 'cover_medium', 'name', 'watched', 'type']
-defaultEpisodeProps = smallListProps + ['season_number', 'episode_number']
+defaultEpisodeProps = smallListProps + ['season_number', 'episode_number', 'cover_large', 'tvshow_id', 'tvshow_name']
 allSeasonProps = ['id', 'cover_full', 'cover_large', 'cover_medium', 'cover_small', 'cover_thumbnail', 'season_number', 'episodes_count', 'watched_count']
 defaultSeasonProps = ['id', 'cover_medium', 'season_number', 'episodes_count', 'watched_count']
 defaultSeasonProps2 = ['id', 'episodes']
@@ -462,7 +462,7 @@ class ApiClient(loggable.Loggable):
 
 		return self.execute(req)
 
-	def unwatchedEpisodes(self, props=watchableTitleProps):
+	def unwatchedEpisodes(self, props=defaultEpisodeProps):
 		req = {
 			'methodPath': 'profile/unwatched_episodes/',
 			'method': 'get',

@@ -18,7 +18,7 @@ class Loggable(object):
 		# assure that log dir exists
 		logdir = self.get_log_dir()
 
-		if not os.path.exists(logdir):
+		if not xbmcvfs.exists(logdir):
 			xbmcvfs.mkdir(logdir)
 
 		fh = logging.handlers.RotatingFileHandler(os.path.join(logdir, self.name + '.log'), mode='w', backupCount=2)

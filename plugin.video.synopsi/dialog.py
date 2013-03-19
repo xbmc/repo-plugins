@@ -20,6 +20,9 @@ from cache import StvList, DuplicateStvIdException
 import top
 from threading import Thread
 
+# temporary
+import random
+
 ACTIONS_CLICK = [7, 100]
 LIST_ITEM_CONTROL_ID = 500
 HACK_GO_BACK = -2
@@ -111,23 +114,37 @@ class ListDialog(MyDialog):
 		self.selectedMovie = None
 		self.listControl = None
 
-	def onInit(self):
+
+	def onInit(self):		
+		win = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
+		
 		self.listControl = self.getControl(LIST_ITEM_CONTROL_ID)
 		self.listControl.reset()
-		
+
+		# asynchronous initialization
 		if self.__dict__.get('_async_init'):
 			result = {}
 			kwargs = self._async_init.get('kwargs', {})
 			kwargs['result'] = result
 			try:
-				self._async_init['method'](**kwargs)
+				self._async_init['method'](**kwargs)	# method(result=result, +kwargs)
 			except (AuthenticationError, ListEmptyException) as e:
 				self.close()
 				return
 				
-			self.data = result
+			self.data.update(result['result'])
+
+		# exception of incoming data format
+		if self.data.has_key('episodes'):
+			self.data['items'] = self.data['episodes']
+			first_episode = self.data['items'][0]
+			self.data['tvshow_name'] = first_episode['tvshow_name']
+			self.data['_categoryName'] = self.data['tvshow_name'] + ' - Season ' + first_episode['season_number']
 			
+		win.setProperty('ContainerCategory', self.data.get('_categoryName', ''))
+		
 		self.updateItems()
+		
 				
 	def updateItems(self):
 		items = []
@@ -156,9 +173,27 @@ class ListDialog(MyDialog):
 
 	def _getListItem(self, item):
 		#~ itemPath = 'mode=' + str(ActionCode.VideoDialogShowById) + '&amp;stv_id=' + str(item['id'])
-		li = xbmcgui.ListItem(item['name'], iconImage=item['cover_medium'])
+		itemName = item['name']
+		
+		# add year after name
+		if item.has_key('year'):
+			itemName += ' (' + str(item['year']) + ')'
+
+		# for episodes, add epis-ident
+		if item['type'] == 'episode':
+			episident = get_episode_identifier(item)
+			itemName = '%s - %s' % (episident, itemName)
+		
+		# create listitem with basic properties	
+		li = xbmcgui.ListItem(itemName, iconImage=item['cover_medium'])
 		li.setProperty('id', str(item['id']))
 		li.setProperty('type', str(item['type']))
+
+		if item['type'] == 'episode':
+			li.setProperty('episode_number', str(item['episode_number']))
+			li.setProperty('season_number', str(item['season_number']))
+			li.setProperty('tvshow_name', str(item['tvshow_name']))
+			
 		#~ li.setProperty('path', str(itemPath))		
 			
 		# prefer already set custom_overlay, if N/A set custom overlay
@@ -197,7 +232,14 @@ class ListDialog(MyDialog):
 			elif stv_id == HACK_SHOW_ALL_LOCAL_MOVIES:
 				show_submenu(ActionCode.LocalMovies)
 			else:
-				show_video_dialog({'type': item.getProperty('type'), 'id': stv_id}, close=False)
+				data = {'type': item.getProperty('type'), 'id': stv_id}
+				if data['type'] == 'episode':
+					data['season_number'] = item.getProperty('season_number')
+					data['episode_number'] = item.getProperty('episode_number')
+					data['tvshow_name'] = item.getProperty('tvshow_name')
+					#~ data['tvshow_name'] = self.data['tvshow_name']
+
+				show_video_dialog(data, close=False)
 
 		
 
@@ -208,11 +250,10 @@ def show_movie_list(item_list):
 	open_list_dialog({ 'items': item_list })
 
 def show_tvshows_episodes(stv_id):
-	def init_data(result, **kwargs):
-		log('asyn handler show_tvshows_episodes: ' + str(kwargs))
-		result['items'] = top.apiClient.get_tvshow_season(stv_id)
+	def init_data(result):
+		result['result'] = top.apiClient.get_tvshow_season(stv_id)
 	
-	tpl_data = { '_async_init': { 'method': init_data, 'kwargs': {} }}
+	tpl_data = { '_async_init': { 'method': init_data }}
 
 	open_list_dialog(tpl_data)
 
@@ -225,9 +266,10 @@ class VideoDialog(MyDialog):
 		super(VideoDialog, self).__init__()
 		self.data = kwargs['data']
 		self.controlId = None
-		
+
 	def _init_data(self):
 		json_data = self.data
+
 		if json_data.get('type') == 'tvshow':
 			stv_details = top.apiClient.tvshow(json_data['id'], cast_props=defaultCastProps)
 		else:
@@ -280,7 +322,12 @@ class VideoDialog(MyDialog):
 		
 		# fill-in the form
 		win = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
-		win.setProperty("Movie.Title", self.data["name"] + '[COLOR=gray] (' + unicode(self.data.get('year')) + ')[/COLOR]')
+		str_title = self.data['name'] + '[COLOR=gray] (' + unicode(self.data.get('year')) + ')[/COLOR]'
+		if self.data['type'] == 'episode':
+			episident = get_episode_identifier(self.data)			
+			str_title = self.data['tvshow_name'] + ' - [COLOR=gray]' + episident + ' -[/COLOR] ' + str_title
+			
+		win.setProperty("Movie.Title", str_title)
 		win.setProperty("Movie.Plot", self.data["plot"])
 		win.setProperty("Movie.Cover", self.data["cover_full"])
 
@@ -550,9 +597,9 @@ def get_submenu_item_list(action_code, **kwargs):
 
 def show_submenu(action_code, **kwargs):
 	def init_data(result, **kwargs):
-		log('init_data kwargs: ' + str(kwargs))
-		result['items'] = get_submenu_item_list(**kwargs)
+		result['result'] = {'items': get_submenu_item_list(**kwargs)}
 	
-	kwargs['action_code'] = action_code	
-	tpl_data = { '_async_init': { 'method': init_data, 'kwargs': kwargs }}
+	categoryName = submenu_categories_dict[action_code]
+	kwargs['action_code'] = action_code
+	tpl_data = { '_categoryName': categoryName, '_async_init': { 'method': init_data, 'kwargs': kwargs }}
 	open_list_dialog(tpl_data)

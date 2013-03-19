@@ -1,3 +1,11 @@
+[B]Version 1.0.5[/B]
+
++ Added: display year after movie name
++ Added: display episode identification in every episode listings
++ Added: breadcrumbs for listings
++ Added: display tvshow name in episode detail
+* Fixed: show correct titles on home screen (recently added)
+
 [B]Version 1.0.4[/B]
 
 - Fixed: labels in movie details

@@ -4,6 +4,8 @@ from unittest import *
 import logging
 import json
 from copy import copy
+import random
+import string
 
 # test helper
 from common import connection
@@ -92,10 +94,58 @@ class ApiTest(TestCase):
 		stv_title = client.titleIdentify(**ident2)
 		self.assertTrue(stv_title.has_key('type'))
 
+		ident3 = {
+			'file_name': '_videne/Notorious/Notorious.[2009self.Eng].TELESYNC.DivX-LTT.avi',
+		}
+
+		stv_title = client.titleIdentify(**ident3)
+
+		self.assertTrue(stv_title.has_key('type'))
+
+		ident = {
+			'file_name': '_videne/Notorious/Notorious.[2009self.Eng].TELESYNC.DivX-LTT.avi',
+			'stv_title_hash': None,
+			'os_title_hash': None
+		}
+
+		stv_title = client.titleIdentify(**ident)
+
+		self.assertTrue(stv_title.has_key('type'))
+		
+		ident = {
+			'file_name': '_videne/Notorious/Notorious.[2009self.Eng].TELESYNC.DivX-LTT.avi',
+			'stv_title_hash': ''
+		}
+
+		stv_title = client.titleIdentify(**ident)
+
+		self.assertTrue(stv_title.has_key('type'))
+
+		ident = {
+			'file_name': 'Avatar.avi',
+			'stv_title_hash': ''
+		}
+
+		stv_title = client.titleIdentify(**ident)
+
+		self.assertTrue(stv_title.has_key('type'))
+
+		ident = {
+			'file_name': 'Rambo.avi',
+		}
+
+		stv_title = client.titleIdentify(**ident)
+
+		self.assertTrue(stv_title.has_key('type'))
+
 
 	def test_library_add(self):
 		client.getAccessToken()
-
+		
+		# change the device id, to use empty library
+		randstr = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(10))
+		client.device_id = 'testing_' + randstr
+		
 		ident = {
 			'file_name': '/Volumes/FLOAT/Film/_videne/Notorious/Notorious.[2009self.Eng].TELESYNC.DivX-LTT.avi',
 			'stv_title_hash': '8b05ff1ad4865480e4705a42b413115db2bf94db',
@@ -142,21 +192,55 @@ class ApiTest(TestCase):
 		self.assertTrue(data.has_key('titles'))
 		self.assertTrue(len(data['titles']) > 0)
 
+
 	def test_profile_recco_local(self):
+		""" 
+			To test local recco, we have to prepare a scenario for it:
+			- create new client with origin library
+			- get global recco
+			- add some random titles from global recco to library
+			- add titles not in global recco to library
+			- test that first title is in local recco, and second not
+		"""
+		props = [ 'id', 'name', 'year', 'cover_small' ]
 
+		device_id = ''.join([random.choice(string.hexdigits) for n in xrange(32)])
+		new_client = ApiClient(c['base_url'], c['key'], c['secret'], c['username'], c['password'], device_id, debugLvl = logging.DEBUG, rel_api_url=c['rel_api_url'])
+		
+		# get global recco
+		reco_global = new_client.profileRecco('movie', False, 50, props)
+		reco_global_ids = [i['id'] for i in reco_global['titles']]
+		
+		# pick five titles
+		random_pick = list(set([random.choice(reco_global_ids) for i in xrange(0,5)]))
+		
+		# add them to library
+		for i in random_pick:
+			new_client.libraryTitleAdd(i)
+		
+		# wait a little !
+		time.sleep(1)
+		
+		# get local recco
+		reco_local = new_client.profileRecco('movie', True, 50, props)
 
-		props = [ 'year', 'cover_small' ]
-		data = client.profileRecco('movie', True, 5, props)
-
-		self.assertTrue(data.has_key('recco_id'))
-		self.assertTrue(data.has_key('titles'))
-		self.assertTrue(len(data['titles']) > 0)
+		reco_local_ids = [i['id'] for i in reco_local['titles']]
+		
+		# check local recco		
+		self.assertTrue(reco_local.has_key('recco_id'))
+		self.assertTrue(reco_local.has_key('titles'))
+		self.assertTrue(len(reco_local['titles']) > 0)
+		
+		# every picked movie should be in local recco
+		for i in random_pick:
+			self.assertTrue(i in reco_local_ids)
+		
 
 	def test_profile_recco_watched(self):
 		props = [ 'id', 'year', 'cover_small' ]
 		data = client.profileRecco('movie', False, 5, props)
 		all_ids = [ i['id'] for i in data['titles'] ]
-		print dump(all_ids)
+
 		self.assertTrue(data.has_key('recco_id'))
 		self.assertTrue(data.has_key('titles'))
 		self.assertTrue(len(data['titles']) > 0)
@@ -166,7 +250,7 @@ class ApiTest(TestCase):
 
 		new_data = client.profileRecco('movie', False, 5, props)
 		all_ids = [ i['id'] for i in new_data['titles'] ]
-		print dump(all_ids)
+
 		self.assertFalse(check_id in all_ids)
 
 
@@ -196,12 +280,14 @@ class ApiTest(TestCase):
 	def test_season(self):
 		title = client.season(14376)
 
-		# print dump(title)
+		self.assertTrue(title.has_key('episodes'))
+		es = title['episodes']
+		self.assertTrue(es[0].has_key('season_number'))
+		self.assertTrue(es[0].has_key('episode_number'))
+		self.assertTrue(es[0].has_key('watched'))
+		self.assertTrue(es[0].has_key('id'))
 
-		self.assertTrue(title.has_key('cover_full'))
-		self.assertTrue(title.get('type')=='tvshow')
-		self.assertTrue(title.get('year')==2005)
-		self.assertTrue(title['cast'][0]['name']=='Josh Radnor')
+
 
 	def test_unicode_input(self):
 		data = {
@@ -216,8 +302,12 @@ class ApiTest(TestCase):
 
 	def test_search(self):
 		result = client.search('Adams aebler', 13)
-		# print dump(result)
+		
 		self.assertTrue(result.has_key('search_result'))
+		self.assertTrue(result['search_result'][0]['id'] == 514461)
+
+
+		result = client.search('Love', 13)
 		self.assertTrue(len(result['search_result']) == 13)
 
 	def test_identify_correct(self):
@@ -225,6 +315,7 @@ class ApiTest(TestCase):
 		# print dump(result)
 		self.assertTrue(result['status']=='ok')
 
+	@skip('this needs deeper work')
 	def test_identify_correct_library(self):
 		TITLE_CORRECTION_TARGET = 1947362
 		CORRECTION_FILE_HASH = '52b6f00222cdb3631d9914aee6b662961e924aa5'	# hash of my "three times" file
@@ -298,7 +389,7 @@ class ApiTest(TestCase):
 		self.assertTrue(TITLE_CORRECTION_TARGET not in lib_ids)
 		self.assertTrue(SOME_ID_IN_LIBRARY in lib_ids)
 
-
+	@skip('this needs deeper work')
 	def test_correction_recco(self):
 		TITLE_CORRECTION_TARGET = 1947362
 		CORRECTION_FILE_HASH = '52b6f00222cdb3631d9914aee6b662961e924aa5'	# hash of my "three times" file
@@ -327,15 +418,25 @@ class ApiTest(TestCase):
 			print 'removing %d from library' % TITLE_CORRECTION_TARGET
 			client.libraryTitleRemove(TITLE_CORRECTION_TARGET)
 
-
-
+    
 	def test_library(self):
 		result = client.library(['date', 'genres', 'cover_small'])
-		print dump(result)
+		self.assertTrue(result.get('created'))
+		self.assertTrue(result.get('device_id'))
+		self.assertTrue(result.get('name'))
+		self.assertTrue(result.get('titles'))
+		self.assertTrue(type(result['titles']) is list)
+		
+		result2 = client.library(['id', 'cover_full', 'cover_large', 'cover_medium', 'cover_small', 'cover_thumbnail', 'date', 'genres', 'url', 'name', 'plot', 'released', 'trailer', 'type', 'year', 'runtime', 'directors', 'writers', 'cast', 'watched'])
+		self.assertTrue(result2.get('created'))
+		self.assertTrue(result2.get('device_id'))
+		self.assertTrue(result2.get('name'))
+		self.assertTrue(result2.get('titles'))
+		self.assertTrue(type(result2['titles']) is list)
 
 if __name__ == '__main__':
 	c = connection
-	client = ApiClient(c['base_url'], c['key'], c['secret'], c['username'], c['password'], c['device_id'], debugLvl = logging.WARNING, rel_api_url=c['rel_api_url'])
+	client = ApiClient(c['base_url'], c['key'], c['secret'], c['username'], c['password'], c['device_id'], debugLvl = logging.DEBUG, rel_api_url=c['rel_api_url'])
 
 	logger = logging.getLogger()
 

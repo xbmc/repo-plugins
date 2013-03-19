@@ -22,13 +22,32 @@ class UtilitiesTest(TestCase):
 			movie['os_title_hash'] = hash_opensubtitle(path)
 			return movie
 		
-		print gethash(hash_path)
+		#~ print gethash(hash_path)
+				
+		nonex_hash = gethash('x://non-existent')
+		self.assertEqual(nonex_hash['stv_title_hash'], None)
+		self.assertEqual(nonex_hash['os_title_hash'], None)
+		
+		
+	@skip('this is not supposed to work yet')	
+	def test_samba_hash(self):	
+		# test samba share hash (assumes local samba share)
+		# cannot run this test outside xbmc
+		local_path = '~/Videos/Movies/Intouchables/Intouchables.2011.FRENCH.720p.BluRay.x264.mkv'
+		local_hash = gethash(local_path)
+	
+		samba_path = 'smb://crux/movies/Intouchables/Intouchables.2011.FRENCH.720p.BluRay.x264.mkv'
+		samba_hash = gethash(local_path)
+		
+		self.assertEqual(local_hash, samba_hash)
+		
 	
 	def test_xml_sources(self):
 		sources = get_movie_sources()
 		sources.sort(key=len, reverse=True)
 		print sources
-		
+
+	
 	def test_rel_path(self):
 		path1 = '/home/smid/Videos/_testset/TVShows/xxx/the/movie/file.avi'
 		rel1 = rel_path(path1)

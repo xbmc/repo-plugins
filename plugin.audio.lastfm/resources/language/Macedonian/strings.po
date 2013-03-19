@@ -1,0 +1,85 @@
+# XBMC Media Center language file
+# Addon Name: Last.fm
+# Addon id: plugin.audio.lastfm
+# Addon Provider: Team-XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Macedonian (http://www.transifex.com/projects/p/xbmc-addons/language/mk/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: mk\n"
+"Plural-Forms: nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Општо"
+
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "Испрати песни на Last.fm"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "Last.fm корисничко име"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "Last.fm лозинка"
+
+msgctxt "#32011"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32012"
+msgid "Do you want to add the current track to your loved tracks?"
+msgstr "Сакате ли да ја додадете сегашнава нумера во ваши омилени нумери?"
+
+msgctxt "#32013"
+msgid "Do you want to ban the current track?"
+msgstr "Сакате ли да ја забраните сегашната нумера?"
+
+msgctxt "#32014"
+msgid "Added to your loved tracks: '%s'."
+msgstr "Додадено во ваши сакани нумери: „%s“."
+
+msgctxt "#32015"
+msgid "Could not add '%s' to your loved tracks."
+msgstr "Не е можно да се додаде „%s“ во ваши сакани нумери."
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "Забрането: „%s“."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "Не е можно да се забрани „%s“."
+
+msgctxt "#32018"
+msgid "Do you want to remove this track from your loved tracks?"
+msgstr "Сакате ли да отстраните оваа нумера од сакани нумери?"
+
+msgctxt "#32019"
+msgid "Do you want to un-ban this track?"
+msgstr "Сакате ли да отповикате забрана за оваа нумера?"
+
+msgctxt "#32024"
+msgid "Remove from loved tracks"
+msgstr "Отстрането од сакани нумери"
+
+msgctxt "#32025"
+msgid "Un-ban"
+msgstr "Отповикај забрана"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "Пребарај"
+
+msgctxt "#32079"
+msgid "No results found"
+msgstr "Нема резултати"

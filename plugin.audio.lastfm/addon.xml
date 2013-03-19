@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.lastfm" name="Last.fm" version="0.1.1" provider-name="Team-XBMC">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="radio.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.service" library="scrobbler.py" start="login"/>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Last.fm radio and scrobbler</summary>
+		<description lang="en">Listen to last.fm radio and/or scrobble your tracks to last.fm</description>
+		<platform>all</platform>
+		<forum>http://forum.xbmc.org/showthread.php?tid=154230</forum>
+		<source>https://code.google.com/p/ronie/source/</source>
+	</extension>
+</addon>

@@ -1,0 +1,85 @@
+# XBMC Media Center language file
+# Addon Name: Last.fm
+# Addon id: plugin.audio.lastfm
+# Addon Provider: Team-XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Maltese (http://www.transifex.com/projects/p/xbmc-addons/language/mt/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: mt\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==0 || ( n%100>1 && n%100<11) ? 1 : (n%100>10 && n%100<20 ) ? 2 : 3);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Ġenerali"
+
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "Ibgħat Diski lil LastFM"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "LastFM Username"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "LastFM Sigriet"
+
+msgctxt "#32011"
+msgid "Last.fm"
+msgstr "LastFM"
+
+msgctxt "#32012"
+msgid "Do you want to add the current track to your loved tracks?"
+msgstr "Trid iżżid din it-trekk mal-lista ta’ treks li tħobb?"
+
+msgctxt "#32013"
+msgid "Do you want to ban the current track?"
+msgstr "Trid tagħmel bojkott li din it-trekk?"
+
+msgctxt "#32014"
+msgid "Added to your loved tracks: '%s'."
+msgstr "Miżjud mat-treks li tħobb: '%s'."
+
+msgctxt "#32015"
+msgid "Could not add '%s' to your loved tracks."
+msgstr "Problema biex iżżid '%s' mal-lista ta’ treks li tħobb."
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "Bojkott: '%s'."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "Problema biex tagħmel bojkott lil '%s'."
+
+msgctxt "#32018"
+msgid "Do you want to remove this track from your loved tracks?"
+msgstr "Trid tneħħi din it-trekk mil-lista ta' treks li tħobb?"
+
+msgctxt "#32019"
+msgid "Do you want to un-ban this track?"
+msgstr "Trid tneħħi l-bojkott fuq din it-trek?"
+
+msgctxt "#32024"
+msgid "Remove from loved tracks"
+msgstr "Neħħi mit-treks li tħobb"
+
+msgctxt "#32025"
+msgid "Un-ban"
+msgstr "Neħħi bojkott"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "Fittex"
+
+msgctxt "#32079"
+msgid "No results found"
+msgstr "Ma nstabux riżultati"

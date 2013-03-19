@@ -1,0 +1,18 @@
+v0.1.1
+- add custiom radio stations
+
+v0.1.0
+- release
+
+v0.0.4
+- fix crash due to empty infolabels
+
+v0.0.3
+- new way of handling the playlist
+- added search option
+
+v0.0.2
+- re-code to api v2
+
+v0.0.1
+- initial beta

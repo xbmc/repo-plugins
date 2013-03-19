@@ -1,0 +1,41 @@
+# XBMC Media Center language file
+# Addon Name: Last.fm
+# Addon id: plugin.audio.lastfm
+# Addon Provider: Team-XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Hindi (Devanagiri) (http://www.transifex.com/projects/p/xbmc-addons/language/hi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: hi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "सामान्य"
+
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "Last.fm के लिए गाने सबमिट"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "Last.fm उपयोगकर्ता नाम"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "Last.fm पासवर्ड"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "धुन्धना"
+
+msgctxt "#32079"
+msgid "No results found"
+msgstr "कोई परिणाम नहीं मिले"

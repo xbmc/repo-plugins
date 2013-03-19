@@ -1,0 +1,85 @@
+# XBMC Media Center language file
+# Addon Name: Last.fm
+# Addon id: plugin.audio.lastfm
+# Addon Provider: Team-XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/xbmc-addons/language/pt_BR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Geral"
+
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "Enviar músicas para o Last.fm"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "Nome de usuário Last.fm"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "Senha Last.fm"
+
+msgctxt "#32011"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32012"
+msgid "Do you want to add the current track to your loved tracks?"
+msgstr "Você quer adicionar a faixa atual para as suas faixas prediletas?"
+
+msgctxt "#32013"
+msgid "Do you want to ban the current track?"
+msgstr "Você quer banir a faixa atual?"
+
+msgctxt "#32014"
+msgid "Added to your loved tracks: '%s'."
+msgstr "Adicionado às suas faixas prediletas: '%s'."
+
+msgctxt "#32015"
+msgid "Could not add '%s' to your loved tracks."
+msgstr "Não foi possível adicionar '%s' em suas faixas prediletas."
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "Banida: '%s'."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "Não foi possível banir '%s'."
+
+msgctxt "#32018"
+msgid "Do you want to remove this track from your loved tracks?"
+msgstr "Você quer remover esta faixa de suas faixas prediletas?"
+
+msgctxt "#32019"
+msgid "Do you want to un-ban this track?"
+msgstr "Você quer desbanir esta faixa?"
+
+msgctxt "#32024"
+msgid "Remove from loved tracks"
+msgstr "Remover de faixas prediletas"
+
+msgctxt "#32025"
+msgid "Un-ban"
+msgstr "Desbanir"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "Pesquisar"
+
+msgctxt "#32079"
+msgid "No results found"
+msgstr "Nenhum resultado encontrado"

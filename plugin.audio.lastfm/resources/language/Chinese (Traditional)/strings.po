@@ -1,0 +1,85 @@
+# XBMC Media Center language file
+# Addon Name: Last.fm
+# Addon id: plugin.audio.lastfm
+# Addon Provider: Team-XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Chinese (Traditional) (http://www.transifex.com/projects/p/xbmc-addons/language/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "一般設定"
+
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "提交歌曲資訊到 Last.fm"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "Last.fm 帳號"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "Last.fm 密碼"
+
+msgctxt "#32011"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32012"
+msgid "Do you want to add the current track to your loved tracks?"
+msgstr "你想把目前歌曲加入你的最愛嗎？"
+
+msgctxt "#32013"
+msgid "Do you want to ban the current track?"
+msgstr "你想封鎖目前的歌曲嗎？"
+
+msgctxt "#32014"
+msgid "Added to your loved tracks: '%s'."
+msgstr "已加入你的最愛歌曲： '%s'"
+
+msgctxt "#32015"
+msgid "Could not add '%s' to your loved tracks."
+msgstr "不能加入 '%s' 到你的最愛"
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "被封鎖： '%s'."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "不能封鎖 '%s'."
+
+msgctxt "#32018"
+msgid "Do you want to remove this track from your loved tracks?"
+msgstr "你想從你的最愛移除這首歌曲嗎？"
+
+msgctxt "#32019"
+msgid "Do you want to un-ban this track?"
+msgstr "你想解除封鎖這首歌曲嗎？"
+
+msgctxt "#32024"
+msgid "Remove from loved tracks"
+msgstr "從最愛中移除"
+
+msgctxt "#32025"
+msgid "Un-ban"
+msgstr "解除封鎖"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "搜尋"
+
+msgctxt "#32079"
+msgid "No results found"
+msgstr "無結果"

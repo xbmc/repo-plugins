@@ -1,0 +1,85 @@
+# XBMC Media Center language file
+# Addon Name: Last.fm
+# Addon id: plugin.audio.lastfm
+# Addon Provider: Team-XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Lithuanian (http://www.transifex.com/projects/p/xbmc-addons/language/lt/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: lt\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Pagrindinis"
+
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "Pateikti dainas Last.fm"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "Naudotojo vardas Last.fm"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "Slaptažodis Last.fm"
+
+msgctxt "#32011"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32012"
+msgid "Do you want to add the current track to your loved tracks?"
+msgstr "Ar norite įtraukti pasirinktą takelį į savo mylimus kūrinius?"
+
+msgctxt "#32013"
+msgid "Do you want to ban the current track?"
+msgstr "Ar norite uždrausti esamą įrašą?"
+
+msgctxt "#32014"
+msgid "Added to your loved tracks: '%s'."
+msgstr "Pridėti prie savo mylimų kūrinių: '%s'."
+
+msgctxt "#32015"
+msgid "Could not add '%s' to your loved tracks."
+msgstr "Negalima pridėti '%s' prie savo mylimų kūrinių."
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "Užblokuota: '%s'."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "Nepavyko užblokuoti: '%s'."
+
+msgctxt "#32018"
+msgid "Do you want to remove this track from your loved tracks?"
+msgstr "Norite pašalinti šį kūrinį iš savo 'Mylimiausi kūriniai'?"
+
+msgctxt "#32019"
+msgid "Do you want to un-ban this track?"
+msgstr "Norite atblokuoti šį kūrinį?"
+
+msgctxt "#32024"
+msgid "Remove from loved tracks"
+msgstr "Pašalinti iš 'Mylimiausi kūriniai'"
+
+msgctxt "#32025"
+msgid "Un-ban"
+msgstr "Atblokuoti"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "Paieška"
+
+msgctxt "#32079"
+msgid "No results found"
+msgstr "Rezultatų nerasta"

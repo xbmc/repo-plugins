@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.vidstatsx_com" name="VidStatsX.com" version="1.0.3" provider-name="AddonScriptorDE">
+<addon id="plugin.video.vidstatsx_com" name="VidStatsX.com" version="1.0.4" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
         <import addon="plugin.video.youtube" version="3.0.0"/>
+        <import addon="plugin.video.youtube.channels" version="1.0.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="en">View various YouTube channel and video charts (for example by category/country) from VidStatsX.com and organize your own favourite channels</summary>
+        <summary lang="en">View various YouTube channel and video charts from VidStatsX.com (for example by category/country)</summary>
         <language></language>
-        <description lang="en">View various YouTube channel and video charts (for example by category/country) from VidStatsX.com and organize your own favourite channels</description>
-    <platform>all</platform>
+        <description lang="en">View various YouTube channel and video charts from VidStatsX.com (for example by category/country)</description>
     </extension>
 </addon>

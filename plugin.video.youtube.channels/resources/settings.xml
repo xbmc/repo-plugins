@@ -1,0 +1,29 @@
+<settings>
+  <category label="30008">
+    <setting id="cat_0" type="text" label="30100" default="" />
+    <setting id="cat_1" type="text" label="30101" default="" />
+    <setting id="cat_2" type="text" label="30102" default="" />
+    <setting id="cat_3" type="text" label="30103" default="" />
+    <setting id="cat_4" type="text" label="30104" default="" />
+    <setting id="cat_5" type="text" label="30105" default="" />
+    <setting id="cat_6" type="text" label="30106" default="" />
+    <setting id="cat_7" type="text" label="30107" default="" />
+    <setting id="cat_8" type="text" label="30108" default="" />
+    <setting id="cat_9" type="text" label="30109" default="" />
+    <setting id="cat_10" type="text" label="30110" default="" />
+    <setting id="cat_11" type="text" label="30111" default="" />
+    <setting id="cat_12" type="text" label="30112" default="" />
+    <setting id="cat_13" type="text" label="30113" default="" />
+    <setting id="cat_14" type="text" label="30114" default="" />
+    <setting id="cat_15" type="text" label="30115" default="" />
+    <setting id="cat_16" type="text" label="30116" default="" />
+    <setting id="cat_17" type="text" label="30117" default="" />
+    <setting id="cat_18" type="text" label="30118" default="" />
+    <setting id="cat_19" type="text" label="30119" default="" />
+  </category>
+  <category label="30013">
+    <setting id="showMessages" type="bool" label="30020" default="false"/>
+    <setting id="forceView" type="bool" label="30014" default="true"/>
+    <setting id="viewMode" type="number" label="30015" default="500"/>
+  </category>
+</settings>

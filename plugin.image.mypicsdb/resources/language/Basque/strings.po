@@ -48,6 +48,14 @@ msgctxt "#30614"
 msgid "Cancel"
 msgstr "Utzi"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "Gorde"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Ezabatu"
+
 msgctxt "#30650"
 msgid "Debugging"
 msgstr "Arazketa"

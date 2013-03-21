@@ -508,10 +508,6 @@ msgctxt "#30218"
 msgid "to exclude the pictures!"
 msgstr "hogy kizárja a képeket"
 
-msgctxt "#30220"
-msgid "Geolocation"
-msgstr "Geolokáció"
-
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
 msgstr "Térkép betöltése... (%0.2f%%)"
@@ -523,6 +519,10 @@ msgstr "Nagyítás=%s"
 msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr "Használja a fel/le nyilakat a nagyításhoz/kicsinyítéshez"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Bezárás"
 
 msgctxt "#30241"
 msgid "preparing"
@@ -608,6 +608,18 @@ msgctxt "#30615"
 msgid "Match all tags"
 msgstr "Minden címke egyezzen"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "Mentés"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Visszaállítás"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Törlés"
+
 msgctxt "#30620"
 msgid "Translate your tags"
 msgstr "Címkék fordítása"
@@ -679,3 +691,7 @@ msgstr "Kategória"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Tájolás"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"

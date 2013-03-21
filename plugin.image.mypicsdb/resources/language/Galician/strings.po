@@ -20,6 +20,30 @@ msgctxt "#30001"
 msgid "Database"
 msgstr "Base de datos"
 
+msgctxt "#30003"
+msgid "%B %Y"
+msgstr "%B %Y"
+
+msgctxt "#30004"
+msgid "%Y"
+msgstr "%Y"
+
+msgctxt "#30005"
+msgid "Mo.|Tu.|We.|Th.|Fr.|Sa.|Su."
+msgstr "Lun|Mar|Mér|Xov|Ven|Sáb|Dom"
+
+msgctxt "#30006"
+msgid "Jan.|Feb.|Mar|Apr.|May|Jun.|Jul.|Aug.|Sep.|Oct.|Nov.|Dec."
+msgstr "Xan|Feb|Mar|Abr|Mai|Xuñ|Xul|Ago|Set|Out|Nov|Dec"
+
+msgctxt "#30007"
+msgid "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"
+msgstr "Luns|Martes|Mércores|Xoves|Venres|Sábado|Domingo"
+
+msgctxt "#30008"
+msgid "January|February|March|April|May|June|July|August|September|October|November|December"
+msgstr "Xaneiro|Febreiro|Marzo|Abril|Maio|Xuño|Xullo|Agosto|Setembro|Outubro|Novembro|Decembro"
+
 msgctxt "#30030"
 msgid "General"
 msgstr "Xeral"
@@ -32,9 +56,45 @@ msgctxt "#30041"
 msgid "All"
 msgstr "Todos"
 
+msgctxt "#30042"
+msgid "1 star"
+msgstr "1 estrela"
+
+msgctxt "#30043"
+msgid "2 stars"
+msgstr "2 estrelas"
+
+msgctxt "#30044"
+msgid "3 stars"
+msgstr "3 estrelas"
+
+msgctxt "#30045"
+msgid "4 stars"
+msgstr "4 estrelas"
+
+msgctxt "#30046"
+msgid "5 stars"
+msgstr "5 estrelas"
+
 msgctxt "#30051"
 msgid "Videos"
 msgstr "Vídeos"
+
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Etiquetas"
+
+msgctxt "#30123"
+msgid "Help"
+msgstr "Axuda"
+
+msgctxt "#30150"
+msgid "Collections"
+msgstr "Coleccións"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Pechar"
 
 msgctxt "#30601"
 msgid "Tags"
@@ -48,9 +108,25 @@ msgctxt "#30614"
 msgid "Cancel"
 msgstr "Cancelar"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "Gardar"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Reiniciar"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Eliminar"
+
 msgctxt "#30650"
 msgid "Debugging"
 msgstr "Depurado"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "Usuario"
 
 msgctxt "#30665"
 msgid "Password"
@@ -99,3 +175,7 @@ msgstr "Categoría"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Orientación"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"

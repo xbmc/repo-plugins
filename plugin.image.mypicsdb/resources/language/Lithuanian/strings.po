@@ -44,6 +44,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "Kolekcijos"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Uždaryta(-i)"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Žymos"
@@ -55,6 +59,18 @@ msgstr "GERAI"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Baigti"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Išsaugoti"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Atstatyti"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Naikinti"
 
 msgctxt "#30650"
 msgid "Debugging"
@@ -111,3 +127,7 @@ msgstr "Kategorija"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Orientacija"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"

@@ -2,31 +2,19 @@
 # Addon Name: My Pictures Database
 # Addon id: plugin.image.mypicsdb
 # Addon Provider: Xycl, MikeBZH44, Alexsolex
-# Translators:
-# Jonas Nielsen <jonas9elsen@hotmail.com>, 2012-2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-01-26 13:32+0000\n"
-"Last-Translator: TeamXBMC <xbmctranslations@gmail.com>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/xbmc-addons/language/da/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgctxt "Addon Summary"
-msgid "Advanced Pictures manager"
-msgstr "Udvidet Billedhåndtering"
-
-msgctxt "Addon Description"
-msgid ""
-"Manage your pictures as you do for musics and videos[CR]Then you'll be able "
-"to sort your pictures by day/month/year, keywords and much more"
-msgstr "Håndter dine billeder, som du håndterer musik og videoer[CR]Så vil du kunne sortere dine billeder efter dag/måned/år, nøgleord og meget andet"
 
 msgctxt "#30000"
 msgid "MyPicture Database"
@@ -36,17 +24,14 @@ msgctxt "#30001"
 msgid "Database"
 msgstr "Database"
 
-#. ate format
 msgctxt "#30002"
 msgid "%A %d %B %Y"
 msgstr "%A %d %B %Y"
 
-#. onth format
 msgctxt "#30003"
 msgid "%B %Y"
 msgstr "%B %Y"
 
-#. ear format
 msgctxt "#30004"
 msgid "%Y"
 msgstr "%Y"
@@ -64,8 +49,7 @@ msgid "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"
 msgstr "Mandag|Tirsdag|Onsdag|Torsdag|Fredag|Lørdag|Søndag"
 
 msgctxt "#30008"
-msgid ""
-"January|February|March|April|May|June|July|August|September|October|November|December"
+msgid "January|February|March|April|May|June|July|August|September|October|November|December"
 msgstr "Januar|Februar|Marts|April|Maj|Juni|Juli|August|September|Oktober|November|December"
 
 msgctxt "#30020"
@@ -92,7 +76,6 @@ msgctxt "#30025"
 msgid "Initialize the database at next addon startup"
 msgstr "Genopbyg database, når addon startes igen."
 
-#. etting
 msgctxt "#30026"
 msgid "Use the picture as fanart for pictures"
 msgstr "Brug billedet som fanart til Billeder"
@@ -189,7 +172,6 @@ msgctxt "#30063"
 msgid "Add the file to archive :"
 msgstr "Føj billedet til arkivet:"
 
-#. s will be replaced by the name of the archive
 msgctxt "#30064"
 msgid "The archive '%s' already exists in"
 msgstr "Arkivet '%s' findes allerede i"
@@ -210,12 +192,10 @@ msgctxt "#30068"
 msgid "The archiving has been canceled !"
 msgstr "Arkiveringen er blevet annulleret!"
 
-#. s errors while zipping %s files
 msgctxt "#30069"
 msgid "%s errors while archiving %s files"
 msgstr "%s fejl under arkivering af %s filer"
 
-#. s files successfully Zipped !!
 msgctxt "#30070"
 msgid "%s pictures successfully archived !!"
 msgstr "%s billeder arkiveret med succes!!"
@@ -232,7 +212,6 @@ msgctxt "#30091"
 msgid "Pictures without Country"
 msgstr "Billeder uden Land"
 
-#. ther pictures in country (%s replaced by a given country)
 msgctxt "#30092"
 msgid "Other pictures in '%s'"
 msgstr "Andre billeder fra '%s'"
@@ -329,8 +308,6 @@ msgctxt "#30115"
 msgid "Word to search for"
 msgstr "Søgeord"
 
-#. s replaced respectively by : number of results, searched term, field where
-#. found
 msgctxt "#30116"
 msgid "%s results for '%s' in '%s'"
 msgstr "%s resultater for '%s' i '%s'"
@@ -343,7 +320,6 @@ msgctxt "#30118"
 msgid "End date of the date range"
 msgstr "Datointervallets slutdato"
 
-#. s replaced by searched term
 msgctxt "#30119"
 msgid "The search for '%s' did not match in the whole database"
 msgstr "'%s' kunne ikke lokaliseres i databasen"
@@ -416,7 +392,6 @@ msgctxt "#30160"
 msgid "Create a new collection"
 msgstr "Opret en ny samling"
 
-#. s replaced by the number of pictures added
 msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s billeder føjet til"
@@ -441,12 +416,10 @@ msgctxt "#30184"
 msgid "Picture exporting..."
 msgstr "Eksport billede..."
 
-#. s replaced by the filename that is beeing copied
 msgctxt "#30185"
 msgid "Exporting '%s' to :"
 msgstr "Exporter '%s' til:"
 
-#. s replaced by the filename that is beeing copied
 msgctxt "#30186"
 msgid "a file '%s' already exists"
 msgstr "Filen '%s' eksisterer allerede"
@@ -459,7 +432,6 @@ msgctxt "#30188"
 msgid "Export finished !"
 msgstr "Eksport udført."
 
-#. s[number of files] copied to %s[distination folder]
 msgctxt "#30189"
 msgid "%s pictures copied to %s"
 msgstr "%s billeder kopieret til %s"
@@ -536,16 +508,10 @@ msgctxt "#30218"
 msgid "to exclude the pictures!"
 msgstr "for at ignorere billederne!"
 
-msgctxt "#30220"
-msgid "Geolocation"
-msgstr "Geolokation"
-
-#. 0.2f%% will be replaced by the percent of download for a map
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
 msgstr "Henter kortet... (%0.2f%%)"
 
-#. s will be replaced by the zoom level in a map
 msgctxt "#30222"
 msgid "Zoom=%s"
 msgstr "Zoom=%s"
@@ -553,6 +519,10 @@ msgstr "Zoom=%s"
 msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr "Brug op / ned-piletasterne til at zoome ind / ud"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Luk"
 
 msgctxt "#30241"
 msgid "preparing"
@@ -582,7 +552,6 @@ msgctxt "#30247"
 msgid "Please wait..."
 msgstr "Vent venligst..."
 
-#. s respectively changed by number : scanned, added, deleted, modified
 msgctxt "#30248"
 msgid "%s scanned / %s added / %s deleted / %s modified"
 msgstr "%s skannet / %s tilføjet / %s slettet / %s ændret"
@@ -639,6 +608,18 @@ msgctxt "#30615"
 msgid "Match all tags"
 msgstr "Match alle tags"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "Gem"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Nulstil"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Slet"
+
 msgctxt "#30620"
 msgid "Translate your tags"
 msgstr "Oversæt dine tags"
@@ -659,26 +640,6 @@ msgctxt "#30650"
 msgid "Debugging"
 msgstr "Foretag fejlretning"
 
-msgctxt "#30651"
-msgid "Enable debugging (regardless of XBMC settings)"
-msgstr ""
-
-msgctxt "#30660"
-msgid "Database Settings"
-msgstr ""
-
-msgctxt "#30661"
-msgid "Database Backend"
-msgstr ""
-
-msgctxt "#30662"
-msgid "Sqlite"
-msgstr ""
-
-msgctxt "#30663"
-msgid "MySql"
-msgstr ""
-
 msgctxt "#30664"
 msgid "User"
 msgstr "Bruger"
@@ -687,138 +648,50 @@ msgctxt "#30665"
 msgid "Password"
 msgstr "Adgangskode"
 
-msgctxt "#30666"
-msgid "IP-Address or Name"
-msgstr ""
-
 msgctxt "#30667"
 msgid "Port"
 msgstr "Port"
 
-msgctxt "#30668"
-msgid "MySql DB Name"
-msgstr ""
-
-msgctxt "#30669"
-msgid "Sqlite DB Name"
-msgstr ""
-
-# tag type translation
 msgctxt "#30700"
 msgid "Country"
 msgstr "Land"
 
-# tag type translation
-msgctxt "#30701"
-msgid "Country Code"
-msgstr ""
-
-# tag type translation
 msgctxt "#30702"
 msgid "State"
 msgstr "Stat"
 
-# tag type translation
 msgctxt "#30703"
 msgid "City"
 msgstr "By"
 
-# tag type translation
 msgctxt "#30704"
 msgid "Location"
 msgstr "Lokalitet"
 
-# tag type translation
-msgctxt "#30705"
-msgid "Event"
-msgstr ""
-
-# tag type translation
-msgctxt "#30706"
-msgid "Date Added"
-msgstr ""
-
-# tag type translation
-msgctxt "#30707"
-msgid "Date Created"
-msgstr ""
-
-# tag type translation
-msgctxt "#30708"
-msgid "Date/Time Created"
-msgstr ""
-
-# tag type translation
 msgctxt "#30709"
 msgid "Description"
 msgstr "Beskrivelse"
 
-# tag type translation
 msgctxt "#30710"
 msgid "Headline"
 msgstr "Overskrift"
 
-# tag type translation
 msgctxt "#30711"
 msgid "Title"
 msgstr "Titel"
 
-# tag type translation
-msgctxt "#30712"
-msgid "Creator"
-msgstr ""
-
-# tag type translation
-msgctxt "#30713"
-msgid "Creator Title"
-msgstr ""
-
-# tag type translation
-msgctxt "#30714"
-msgid "Copyright"
-msgstr ""
-
-# tag type translation
 msgctxt "#30715"
 msgid "Label"
 msgstr "Navn"
 
-# tag type translation
-msgctxt "#30716"
-msgid "Image Rating"
-msgstr ""
-
-# tag type translation
-msgctxt "#30717"
-msgid "Keyword"
-msgstr ""
-
-# tag type translation
 msgctxt "#30718"
 msgid "Category"
 msgstr "Kategori"
 
-# tag type translation
-msgctxt "#30719"
-msgid "Supplemental Category"
-msgstr ""
-
-# tag type translation
-msgctxt "#30720"
-msgid "Person"
-msgstr ""
-
-# tag type translation
-msgctxt "#30721"
-msgid "Image Width"
-msgstr ""
-
-# tag type translation
-msgctxt "#30722"
-msgid "Image Length"
-msgstr ""
-
-# tag type translation
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Retning"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"

@@ -24,6 +24,10 @@ msgctxt "#30031"
 msgid "Files"
 msgstr "Datoteke"
 
+msgctxt "#30041"
+msgid "All"
+msgstr "Sve"
+
 msgctxt "#30051"
 msgid "Videos"
 msgstr "Filmovi"
@@ -31,6 +35,14 @@ msgstr "Filmovi"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Otkaži"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Sačuvaj"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Izbriši"
 
 msgctxt "#30650"
 msgid "Debugging"

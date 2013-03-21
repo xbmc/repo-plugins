@@ -168,7 +168,11 @@ msgctxt "#30052"
 msgid "Tags"
 msgstr ""
 
-#empty strings from id 30053 to 30059
+msgctxt "#30053"
+msgid "Excluded Files"
+msgstr ""
+
+#empty strings from id 30054 to 30059
 
 msgctxt "#30060"
 msgid "Locate on disk"
@@ -423,7 +427,33 @@ msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr ""
 
-#empty strings from id 30162 to 30179
+msgctxt "#30162"
+msgid "Import album from Picasa xml"
+msgstr ""
+
+msgctxt "#30163"
+msgid "Unable to read Picasa xml"
+msgstr ""
+
+msgctxt "#30164"
+msgid "Specify date range"
+msgstr ""
+
+msgctxt "#30165"
+msgid "Following files are missing in MyPicsDB and could not be imported:[CR][CR]"
+msgstr ""
+
+msgctxt "#30166"
+msgid "Picture \"%s\" in \"%s\"[CR]"
+msgstr ""
+
+msgctxt "#30167"
+msgid "Import errors"
+msgstr ""
+
+msgctxt "#30168"
+msgid "Import album from saved filter settings"
+msgstr ""
 
 msgctxt "#30180"
 msgid "Choose the destination for the export"
@@ -547,7 +577,7 @@ msgstr ""
 #empty string with id 30219
 
 msgctxt "#30220"
-msgid "Geolocation"
+msgid "Google Map"
 msgstr ""
 
 #.%0.2f%% will be replaced by the percent of download for a map
@@ -564,7 +594,19 @@ msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr ""
 
-#empty strings from id 30224 to 30240
+msgctxt "#30224"
+msgid "Close"
+msgstr ""
+
+msgctxt "#30225"
+msgid "Zoom In"
+msgstr ""
+
+msgctxt "#30226"
+msgid "Zoom Out"
+msgstr ""
+
+#empty strings from id 30227 to 30240
 
 msgctxt "#30241"
 msgid "preparing"
@@ -631,7 +673,19 @@ msgctxt "#30602"
 msgid "Contents"
 msgstr ""
 
-#empty strings from id 30603 to 30609
+#empty strings from id 30603 to 30606
+
+msgctxt "#30607"
+msgid "Last used filter"
+msgstr ""
+
+msgctxt "#30608"
+msgid "Select filter"
+msgstr ""
+
+msgctxt "#30609"
+msgid "Enter filter name"
+msgstr ""
 
 msgctxt "#30610"
 msgid "Please select tags (red checkbox means \"not\")"
@@ -657,7 +711,21 @@ msgctxt "#30615"
 msgid "Match all tags"
 msgstr ""
 
-#empty strings from id 30616 to 30619
+msgctxt "#30616"
+msgid "Load"
+msgstr ""
+
+msgctxt "#30617"
+msgid "Save"
+msgstr ""
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr ""
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr ""
 
 msgctxt "#30620"
 msgid "Translate your tags"
@@ -685,7 +753,15 @@ msgctxt "#30651"
 msgid "Enable debugging (regardless of XBMC settings)"
 msgstr ""
 
-#empty strings from id 30652 to 30659
+msgctxt "#30652"
+msgid "Filter:"
+msgstr ""
+
+msgctxt "#30653"
+msgid "New Filter"
+msgstr ""
+
+#empty strings from id 30654 to 30659
 
 msgctxt "#30660"
 msgid "Database Settings"

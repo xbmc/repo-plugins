@@ -13,10 +13,14 @@ b) Rescan the paths which contain these added exclude paths to remove the pictur
 
 2) General problems with MyPicsDB
 ==================================================================================
-If you have unexplainable problems like pictures don't get included into database and you're a long time user of MyPicsDB 
-then it will be a good decision to delete the database and start with a new one.
-To do this select "Pictures->Add-ons", press "C" and select "Add-on settings". Activate "Initialze the database at next startup" on tab "General" and press "OK".
-Then start MyPicsDB. All tables (except table rootpaths which includes your entered picture paths) are dropped and recreated. 
+If you have unexplainable problems like pictures don't get included into database and you're a long time user of MyPicsDB then it will be a good decision to delete the database and start with a new one.
+
+To do this select "Pictures->Add-ons", press "C" and select "Add-on settings". 
+Activate "Initialze the database at next startup" on tab "General" and press "OK".
+
+Then start MyPicsDB. 
+All tables (except table rootpaths which includes your entered picture paths) are dropped and recreated. 
+
 This means that the already entered paths are still available and that you can start a rescan with "Paths of picture folders"->"Scan all paths". 
 Because all pictures were deleted from database it doesn't matter what you select in the following dialog box.
 
@@ -24,13 +28,19 @@ Because all pictures were deleted from database it doesn't matter what you selec
 3) Auto-update  MyPicsDB
 ==================================================================================
    Idea from Fungify 
-   You can call (example for Windows):
-   XBMC.RunScript("C:\Users\Name\AppData\Roaming\XBMC\addons\plugin.image.mypicsdb\scanpath.py",--database)
-   where Name is the name of the xbmc windows user.
    
-   Fungify uses this approach to automatically update MyPicsDB via HTTP API with a cron job.
+   To auto update the database you can use the following XBMC command:
+   RunScript("C:\Users\Name\AppData\Roaming\XBMC\addons\plugin.image.mypicsdb\scanpa​th.py",--database)
+   (Name is your Windows user!)
+   
+   Frodo:
+   Use the service "The Scheduler" (http://forum.xbmc.org/showthread.php?tid=144378) and create a custom built-in script with the above command.
+   
+   Eden:
+   Update MyPicsDB via HTTP API with a cron job.
    wget --directory-prefix=tmp --http-user=<xbmc username> --http-passwd=<xbmc password> "http://Servername:Portnumber/xbmcCmds/xbmcHttp?command=ExecBuiltIn&parameter=XBMC.RunScript("<full path to plugin>\plugin.image.mypicsdb\scanpath.py",--database)
 
+   
 4) For skinners
 ==================================================================================
   Done by MikeBZH44

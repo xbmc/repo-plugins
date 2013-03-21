@@ -48,6 +48,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "Collections"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Close"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Tags"
@@ -59,6 +63,18 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Cancel"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Save"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Reset"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Delete"
 
 msgctxt "#30650"
 msgid "Debugging"
@@ -115,3 +131,7 @@ msgstr "Category"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Арыентацыя"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"

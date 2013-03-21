@@ -36,6 +36,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Видео"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Затвори"
+
 msgctxt "#30613"
 msgid "OK"
 msgstr "Добре"
@@ -43,6 +47,14 @@ msgstr "Добре"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Отказ"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Запиши"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Изтрий"
 
 msgctxt "#30650"
 msgid "Debugging"

@@ -156,6 +156,10 @@ msgctxt "#30052"
 msgid "Tags"
 msgstr "Ετικέτες"
 
+msgctxt "#30053"
+msgid "Excluded Files"
+msgstr "Εξαιρούμενα Αρχεία"
+
 msgctxt "#30060"
 msgid "Locate on disk"
 msgstr "Εύρεση στο δίσκο"
@@ -509,8 +513,8 @@ msgid "to exclude the pictures!"
 msgstr "για να εξαιρεθούν οι εικόνες!"
 
 msgctxt "#30220"
-msgid "Geolocation"
-msgstr "Γεωεντοπισμός"
+msgid "Google Map"
+msgstr "Χάρτης Google"
 
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
@@ -523,6 +527,18 @@ msgstr "Ζουμ=%s"
 msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr "Χρησιμοποιήστε τα βέλη πάνω / κάτω για μεγέθυνση / σμίκρυνση"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Κλείσιμο"
+
+msgctxt "#30225"
+msgid "Zoom In"
+msgstr "Μεγέθυνση"
+
+msgctxt "#30226"
+msgid "Zoom Out"
+msgstr "Σμίκρυνση"
 
 msgctxt "#30241"
 msgid "preparing"
@@ -584,6 +600,18 @@ msgctxt "#30602"
 msgid "Contents"
 msgstr "Περιεχόμενα"
 
+msgctxt "#30607"
+msgid "Last used filter"
+msgstr "Τελευταίο φίλτρο που χρησιμοποιήθηκε"
+
+msgctxt "#30608"
+msgid "Select filter"
+msgstr "Επιλογή φίλτρου"
+
+msgctxt "#30609"
+msgid "Enter filter name"
+msgstr "Εισαγωγή ονόματος φίλτρου"
+
 msgctxt "#30610"
 msgid "Please select tags (red checkbox means \"not\")"
 msgstr "Επιλέξτε ετικέτες (η κόκκινη σημείωση σημαίνει \"όχι\")"
@@ -608,6 +636,22 @@ msgctxt "#30615"
 msgid "Match all tags"
 msgstr "Ταίριασμα όλων των ετικετών"
 
+msgctxt "#30616"
+msgid "Load"
+msgstr "Φόρτωση"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Αποθήκευση"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Επαναφορά"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Διαγραφή"
+
 msgctxt "#30620"
 msgid "Translate your tags"
 msgstr "Μετάφραση των ετικετών σας"
@@ -631,6 +675,14 @@ msgstr "Καταγραφή σφαλμάτων"
 msgctxt "#30651"
 msgid "Enable debugging (regardless of XBMC settings)"
 msgstr "Ενεργοποίηση εντοπισμού σφαλμάτων (ανεξαρτήτως των ρυθμίσεων του XBMC)"
+
+msgctxt "#30652"
+msgid "Filter:"
+msgstr "Φίλτρο:"
+
+msgctxt "#30653"
+msgid "New Filter"
+msgstr "Νέο Φίλτρο"
 
 msgctxt "#30660"
 msgid "Database Settings"
@@ -767,3 +819,19 @@ msgstr "Μήκος Εικόνας"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Προσανατολισμός"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"
+
+msgctxt "#30725"
+msgid "Image Model"
+msgstr "Μοντέλο Εικόνας"
+
+msgctxt "#30726"
+msgid "Image Make"
+msgstr "Τύπος Εικόνας"
+
+msgctxt "#30727"
+msgid "Image Artist"
+msgstr "Καλλιτέχνης Εικόνας"

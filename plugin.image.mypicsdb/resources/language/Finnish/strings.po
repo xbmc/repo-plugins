@@ -44,6 +44,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "Kokoelmat"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Sulje"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Tagit"
@@ -55,6 +59,14 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Peruuta"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Tallenna"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Poista"
 
 msgctxt "#30650"
 msgid "Debugging"

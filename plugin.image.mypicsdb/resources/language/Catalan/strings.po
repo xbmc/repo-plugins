@@ -36,6 +36,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Videos"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Tanca"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Etiquetes"
@@ -47,6 +51,14 @@ msgstr "D'acord"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Cancel·la"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Desa"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Elimina"
 
 msgctxt "#30650"
 msgid "Debugging"

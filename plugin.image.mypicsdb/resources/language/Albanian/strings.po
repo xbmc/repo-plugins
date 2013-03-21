@@ -16,6 +16,102 @@ msgstr ""
 "Language: sq\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Database"
+msgstr "Baza e të dhënave"
+
+msgctxt "#30030"
+msgid "General"
+msgstr "I përgjithsëm"
+
+msgctxt "#30031"
+msgid "Files"
+msgstr "Skeda"
+
+msgctxt "#30041"
+msgid "All"
+msgstr "Gjith"
+
+msgctxt "#30051"
+msgid "Videos"
+msgstr "Video"
+
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Tag'a"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Mbyll"
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr "Tag'a"
+
+msgctxt "#30613"
+msgid "OK"
+msgstr "OK"
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr "Anulo"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Ruaj"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Fshij"
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "Debugging"
+
+msgctxt "#30665"
+msgid "Password"
+msgstr "Fjalkalim"
+
+msgctxt "#30667"
+msgid "Port"
+msgstr "Porti"
+
+msgctxt "#30700"
+msgid "Country"
+msgstr "Vendi"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "Shteti"
+
+msgctxt "#30703"
+msgid "City"
+msgstr "Qyteti"
+
 msgctxt "#30704"
 msgid "Location"
 msgstr "Lokalizimi"
+
+msgctxt "#30709"
+msgid "Description"
+msgstr "Përshkrimi"
+
+msgctxt "#30710"
+msgid "Headline"
+msgstr "Titulli kryesor"
+
+msgctxt "#30711"
+msgid "Title"
+msgstr "Titulli"
+
+msgctxt "#30715"
+msgid "Label"
+msgstr "Etiketë"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "Kategorija"
+
+msgctxt "#30723"
+msgid "Orientation"
+msgstr "Orientimi"

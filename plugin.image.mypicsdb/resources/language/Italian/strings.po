@@ -150,11 +150,15 @@ msgstr "Foto"
 
 msgctxt "#30051"
 msgid "Videos"
-msgstr "VIDEO"
+msgstr "Video"
 
 msgctxt "#30052"
 msgid "Tags"
 msgstr "Etichette"
+
+msgctxt "#30053"
+msgid "Excluded Files"
+msgstr "File Esclusi"
 
 msgctxt "#30060"
 msgid "Locate on disk"
@@ -342,7 +346,7 @@ msgstr "Aiuto"
 
 msgctxt "#30130"
 msgid "The %s latest pics"
-msgstr "%s ultime foto"
+msgstr "La %s ultime foto"
 
 msgctxt "#30131"
 msgid "Recent pics (number of images)"
@@ -482,7 +486,7 @@ msgstr "Elimina questo percorso de quelli esclusi"
 
 msgctxt "#30211"
 msgid "Add a folder to [B]exclude[/B]"
-msgstr "Aggiungi una cartella a [B]esclusa[/B]"
+msgstr "Aggiungi una cartella da [B]escludere[/B]"
 
 msgctxt "#30212"
 msgid "Exclude this folder from database"
@@ -509,8 +513,8 @@ msgid "to exclude the pictures!"
 msgstr "Escludere le immagini?"
 
 msgctxt "#30220"
-msgid "Geolocation"
-msgstr "Geolocalizzazione"
+msgid "Google Map"
+msgstr "Mappa Google"
 
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
@@ -523,6 +527,18 @@ msgstr "Zoom=%s"
 msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr "Use up / down arrows to zoom in / out Usa le frecce su / giù per zummare avanti / indietro"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Chiudi"
+
+msgctxt "#30225"
+msgid "Zoom In"
+msgstr "Zoom In"
+
+msgctxt "#30226"
+msgid "Zoom Out"
+msgstr "Zoom Out"
 
 msgctxt "#30241"
 msgid "preparing"
@@ -584,6 +600,18 @@ msgctxt "#30602"
 msgid "Contents"
 msgstr "Contenuti"
 
+msgctxt "#30607"
+msgid "Last used filter"
+msgstr "Ultimo Filtro Usato"
+
+msgctxt "#30608"
+msgid "Select filter"
+msgstr "Seleziona Filtro"
+
+msgctxt "#30609"
+msgid "Enter filter name"
+msgstr "Inserisci nome del filtro"
+
 msgctxt "#30610"
 msgid "Please select tags (red checkbox means \"not\")"
 msgstr "Per favore seleziona le etichette (la spunta rossa vuol dire \"no\") "
@@ -608,6 +636,22 @@ msgctxt "#30615"
 msgid "Match all tags"
 msgstr "Trova tutte le etichette"
 
+msgctxt "#30616"
+msgid "Load"
+msgstr "Carica"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Salva"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Resetta"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Elimina"
+
 msgctxt "#30620"
 msgid "Translate your tags"
 msgstr "Traduci le tue etichette"
@@ -628,17 +672,65 @@ msgctxt "#30650"
 msgid "Debugging"
 msgstr "Debugging"
 
+msgctxt "#30651"
+msgid "Enable debugging (regardless of XBMC settings)"
+msgstr "Abilita debug (indipendentemente dalle impostazioni di XBMC)"
+
+msgctxt "#30652"
+msgid "Filter:"
+msgstr "Filtro:"
+
+msgctxt "#30653"
+msgid "New Filter"
+msgstr "Nuovo Filtro"
+
+msgctxt "#30660"
+msgid "Database Settings"
+msgstr "Impostazioni db"
+
+msgctxt "#30661"
+msgid "Database Backend"
+msgstr "Backend db"
+
+msgctxt "#30662"
+msgid "Sqlite"
+msgstr "Sqlite"
+
+msgctxt "#30663"
+msgid "MySql"
+msgstr "MySql"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "Utente"
+
 msgctxt "#30665"
 msgid "Password"
 msgstr "Password"
+
+msgctxt "#30666"
+msgid "IP-Address or Name"
+msgstr "Indirizzo IP o Nome"
 
 msgctxt "#30667"
 msgid "Port"
 msgstr "Porta"
 
+msgctxt "#30668"
+msgid "MySql DB Name"
+msgstr "Nome db MySqu"
+
+msgctxt "#30669"
+msgid "Sqlite DB Name"
+msgstr "Nome db Sqlite "
+
 msgctxt "#30700"
 msgid "Country"
 msgstr "Nazione"
+
+msgctxt "#30701"
+msgid "Country Code"
+msgstr "Codice Nazione"
 
 msgctxt "#30702"
 msgid "State"
@@ -652,6 +744,22 @@ msgctxt "#30704"
 msgid "Location"
 msgstr "Località"
 
+msgctxt "#30705"
+msgid "Event"
+msgstr "evento"
+
+msgctxt "#30706"
+msgid "Date Added"
+msgstr "Data di inserimento"
+
+msgctxt "#30707"
+msgid "Date Created"
+msgstr "Data di creazione"
+
+msgctxt "#30708"
+msgid "Date/Time Created"
+msgstr "Data/Ora di creazione"
+
 msgctxt "#30709"
 msgid "Description"
 msgstr "Descrizione"
@@ -664,14 +772,66 @@ msgctxt "#30711"
 msgid "Title"
 msgstr "Titolo"
 
+msgctxt "#30712"
+msgid "Creator"
+msgstr "Creatore"
+
+msgctxt "#30713"
+msgid "Creator Title"
+msgstr "Titolo Creatore"
+
+msgctxt "#30714"
+msgid "Copyright"
+msgstr "Copyright"
+
 msgctxt "#30715"
 msgid "Label"
 msgstr "Etichetta"
+
+msgctxt "#30716"
+msgid "Image Rating"
+msgstr "Voto Immagine"
+
+msgctxt "#30717"
+msgid "Keyword"
+msgstr "Parola chiave"
 
 msgctxt "#30718"
 msgid "Category"
 msgstr "Categoria"
 
+msgctxt "#30719"
+msgid "Supplemental Category"
+msgstr "Categoria supplementare"
+
+msgctxt "#30720"
+msgid "Person"
+msgstr "Persona"
+
+msgctxt "#30721"
+msgid "Image Width"
+msgstr "Larghezza Immagine"
+
+msgctxt "#30722"
+msgid "Image Length"
+msgstr "Lunghezza Immagine"
+
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Orientamento"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"
+
+msgctxt "#30725"
+msgid "Image Model"
+msgstr "Modello Immagine"
+
+msgctxt "#30726"
+msgid "Image Make"
+msgstr "Marca Immagine"
+
+msgctxt "#30727"
+msgid "Image Artist"
+msgstr "Artista Immagine"

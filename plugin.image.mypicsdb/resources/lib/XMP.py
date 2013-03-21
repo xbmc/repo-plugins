@@ -12,6 +12,7 @@ from HTMLParser import HTMLParser
 tag_set = {'MPReg:PersonDisplayName' : 'MPReg:PersonDisplayName',
            'Iptc4xmpExt:PersonInImage' : 'Iptc4xmpExt:PersonInImage', 
            'mwg-rs:RegionList:Face': 'mwg-rs:RegionList',
+
            'Iptc4xmpExt:City' : 'Iptc4xmpExt:City', 
            'Iptc4xmpExt:CountryName' : 'Iptc4xmpExt:CountryName', 
            'Iptc4xmpExt:CountryCode' : 'Iptc4xmpExt:CountryCode', 
@@ -20,7 +21,7 @@ tag_set = {'MPReg:PersonDisplayName' : 'MPReg:PersonDisplayName',
            'Iptc4xmpExt:WorldRegion' : 'Iptc4xmpExt:WorldRegion', 
            'Iptc4xmpExt:ProvinceState' : 'Iptc4xmpExt:ProvinceState', 
            'Iptc4xmpExt:Event' : 'Iptc4xmpExt:Event', 
-           
+
            'Iptc4xmpCore:Location' : 'Iptc4xmpCore:Location',
            'Iptc4xmpCore:City' : 'Iptc4xmpCore:City',
            'Iptc4xmpCore:Country' : 'Iptc4xmpCore:Country',
@@ -36,7 +37,7 @@ tag_set = {'MPReg:PersonDisplayName' : 'MPReg:PersonDisplayName',
 
            'xmp:Label' : 'xmp:Label',
            'xmp:Rating' : 'xmp:Rating',
-           
+
            'photoshop:Category' : 'photoshop:Category',
            'photoshop:City' : 'photoshop:City',
            'photoshop:Country' : 'photoshop:Country',

@@ -44,6 +44,14 @@ msgctxt "#30614"
 msgid "Cancel"
 msgstr "Batal"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "Simpan"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Hapus"
+
 msgctxt "#30665"
 msgid "Password"
 msgstr "Password"
@@ -51,6 +59,10 @@ msgstr "Password"
 msgctxt "#30667"
 msgid "Port"
 msgstr "Port"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "Wilayah"
 
 msgctxt "#30711"
 msgid "Title"

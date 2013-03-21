@@ -16,6 +16,7 @@
   
   <category label="30031">
     <setting id="picsext" type="text" label="30023" default="JPG|JPEG|TIF|PNG|GIF|BMP" />
+    <setting id="picsexcl" type="text" label="30053" default="folder.jpg" />
     <setting id="usevids" type="bool" label="30029" default="true" />
     <setting id="vidsext" type="text" label="30028" default="AVI|MPEG|MPG|MKV|MOV|MP2|MP4|FLV" enable="eq(-1,true)"/>
   </category>

@@ -2,31 +2,19 @@
 # Addon Name: My Pictures Database
 # Addon id: plugin.image.mypicsdb
 # Addon Provider: Xycl, MikeBZH44, Alexsolex
-# Translators:
-# Michel de Bokx <michel@debokx.com>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2013-02-04 17:40+0000\n"
-"Last-Translator: mhdebokx <michel@debokx.com>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/xbmc-addons/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-msgctxt "Addon Summary"
-msgid "Advanced Pictures manager"
-msgstr "Afbeeldingen manager"
-
-msgctxt "Addon Description"
-msgid ""
-"Manage your pictures as you do for musics and videos[CR]Then you'll be able "
-"to sort your pictures by day/month/year, keywords and much more"
-msgstr "Toon uw afbeeldingen zoals voor muziek en video’s. [CR]Op basis van meta-gegevens in de afbeeldingen kunt een slideshow starten, zoals op datums, categorieën, trefwoorden of andere EXIF/IPTC/XMP tags."
 
 msgctxt "#30000"
 msgid "MyPicture Database"
@@ -36,17 +24,14 @@ msgctxt "#30001"
 msgid "Database"
 msgstr "Database"
 
-#. ate format
 msgctxt "#30002"
 msgid "%A %d %B %Y"
 msgstr "%A %d %B %Y"
 
-#. onth format
 msgctxt "#30003"
 msgid "%B %Y"
 msgstr "%B %Y"
 
-#. ear format
 msgctxt "#30004"
 msgid "%Y"
 msgstr "%Y"
@@ -64,8 +49,7 @@ msgid "Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday"
 msgstr "maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag"
 
 msgctxt "#30008"
-msgid ""
-"January|February|March|April|May|June|July|August|September|October|November|December"
+msgid "January|February|March|April|May|June|July|August|September|October|November|December"
 msgstr "januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december"
 
 msgctxt "#30020"
@@ -92,7 +76,6 @@ msgctxt "#30025"
 msgid "Initialize the database at next addon startup"
 msgstr "Initialiseer database bij opstarten add-on"
 
-#. etting
 msgctxt "#30026"
 msgid "Use the picture as fanart for pictures"
 msgstr "Gebruik afbeeldingen als fanart"
@@ -189,7 +172,6 @@ msgctxt "#30063"
 msgid "Add the file to archive :"
 msgstr "Voeg bestand toe aan archief"
 
-#. s will be replaced by the name of the archive
 msgctxt "#30064"
 msgid "The archive '%s' already exists in"
 msgstr "Archief '%s' bestaat al"
@@ -210,12 +192,10 @@ msgctxt "#30068"
 msgid "The archiving has been canceled !"
 msgstr "Het archiveren is afgebroken"
 
-#. s errors while zipping %s files
 msgctxt "#30069"
 msgid "%s errors while archiving %s files"
 msgstr "%s fouten tijdens archiveren %s bestanden"
 
-#. s files successfully Zipped !!
 msgctxt "#30070"
 msgid "%s pictures successfully archived !!"
 msgstr "%s afbeeldingen succesvol gearchiveerd"
@@ -232,7 +212,6 @@ msgctxt "#30091"
 msgid "Pictures without Country"
 msgstr "Afbeeldingen zonder land"
 
-#. ther pictures in country (%s replaced by a given country)
 msgctxt "#30092"
 msgid "Other pictures in '%s'"
 msgstr "Overige afbeeldingen in '%s'"
@@ -329,8 +308,6 @@ msgctxt "#30115"
 msgid "Word to search for"
 msgstr "Zoekwoord"
 
-#. s replaced respectively by : number of results, searched term, field where
-#. found
 msgctxt "#30116"
 msgid "%s results for '%s' in '%s'"
 msgstr "%s resultaten voor '%s' in '%s'"
@@ -343,7 +320,6 @@ msgctxt "#30118"
 msgid "End date of the date range"
 msgstr "Einddatum periode"
 
-#. s replaced by searched term
 msgctxt "#30119"
 msgid "The search for '%s' did not match in the whole database"
 msgstr "Zoekopdracht '%s' niet gevonden"
@@ -416,7 +392,6 @@ msgctxt "#30160"
 msgid "Create a new collection"
 msgstr "Aanmaken nieuwe collectie"
 
-#. s replaced by the number of pictures added
 msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s afbeeldingen toegevoegd"
@@ -441,12 +416,10 @@ msgctxt "#30184"
 msgid "Picture exporting..."
 msgstr "Aan het exporteren..."
 
-#. s replaced by the filename that is beeing copied
 msgctxt "#30185"
 msgid "Exporting '%s' to :"
 msgstr "Exporteer '%s' naar :"
 
-#. s replaced by the filename that is beeing copied
 msgctxt "#30186"
 msgid "a file '%s' already exists"
 msgstr "Bestand '%s' bestaat al"
@@ -459,7 +432,6 @@ msgctxt "#30188"
 msgid "Export finished !"
 msgstr "Klaar met exporteren"
 
-#. s[number of files] copied to %s[distination folder]
 msgctxt "#30189"
 msgid "%s pictures copied to %s"
 msgstr "%s afbeeldingen gekopieerd naar %s"
@@ -536,16 +508,10 @@ msgctxt "#30218"
 msgid "to exclude the pictures!"
 msgstr "uitsluiten afbeeldingen"
 
-msgctxt "#30220"
-msgid "Geolocation"
-msgstr "Geolocatie"
-
-#. 0.2f%% will be replaced by the percent of download for a map
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
 msgstr "Opvragen kaart... (%0.2f%%)"
 
-#. s will be replaced by the zoom level in a map
 msgctxt "#30222"
 msgid "Zoom=%s"
 msgstr "Zoom=%s"
@@ -553,6 +519,10 @@ msgstr "Zoom=%s"
 msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr "Gebruik up/down toetsen om te zoomen"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Sluiten"
 
 msgctxt "#30241"
 msgid "preparing"
@@ -582,7 +552,6 @@ msgctxt "#30247"
 msgid "Please wait..."
 msgstr "Momentje..."
 
-#. s respectively changed by number : scanned, added, deleted, modified
 msgctxt "#30248"
 msgid "%s scanned / %s added / %s deleted / %s modified"
 msgstr "%s gescanned / %s toegevoegd / %s verwijderd / %s gewijzigd"
@@ -638,6 +607,18 @@ msgstr "Afbreken"
 msgctxt "#30615"
 msgid "Match all tags"
 msgstr "Match alle tags"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Opslaan"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Reset"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Verwijderen"
 
 msgctxt "#30620"
 msgid "Translate your tags"
@@ -703,123 +684,114 @@ msgctxt "#30669"
 msgid "Sqlite DB Name"
 msgstr "Sqlite database"
 
-# tag type translation
 msgctxt "#30700"
 msgid "Country"
 msgstr "Land"
 
-# tag type translation
 msgctxt "#30701"
 msgid "Country Code"
 msgstr "Landcode"
 
-# tag type translation
 msgctxt "#30702"
 msgid "State"
 msgstr "Staat"
 
-# tag type translation
 msgctxt "#30703"
 msgid "City"
 msgstr "Stad"
 
-# tag type translation
 msgctxt "#30704"
 msgid "Location"
 msgstr "Locatie"
 
-# tag type translation
 msgctxt "#30705"
 msgid "Event"
 msgstr "Gebeurtenis"
 
-# tag type translation
 msgctxt "#30706"
 msgid "Date Added"
 msgstr "Datum toegevoegd"
 
-# tag type translation
 msgctxt "#30707"
 msgid "Date Created"
 msgstr "Datum aangemaakt"
 
-# tag type translation
 msgctxt "#30708"
 msgid "Date/Time Created"
 msgstr "Datum/tijd aangemaakt"
 
-# tag type translation
 msgctxt "#30709"
 msgid "Description"
 msgstr "Omschrijving"
 
-# tag type translation
 msgctxt "#30710"
 msgid "Headline"
 msgstr "Kop"
 
-# tag type translation
 msgctxt "#30711"
 msgid "Title"
 msgstr "Titel"
 
-# tag type translation
 msgctxt "#30712"
 msgid "Creator"
 msgstr "Auteur"
 
-# tag type translation
 msgctxt "#30713"
 msgid "Creator Title"
 msgstr "Auteur titel"
 
-# tag type translation
 msgctxt "#30714"
 msgid "Copyright"
 msgstr "Copyright"
 
-# tag type translation
 msgctxt "#30715"
 msgid "Label"
 msgstr "Platenlabel"
 
-# tag type translation
 msgctxt "#30716"
 msgid "Image Rating"
 msgstr "Rating"
 
-# tag type translation
 msgctxt "#30717"
 msgid "Keyword"
 msgstr "Trefwoorden"
 
-# tag type translation
 msgctxt "#30718"
 msgid "Category"
 msgstr "Categorie"
 
-# tag type translation
 msgctxt "#30719"
 msgid "Supplemental Category"
 msgstr "Aanvullende categorie"
 
-# tag type translation
 msgctxt "#30720"
 msgid "Person"
 msgstr "Personen"
 
-# tag type translation
 msgctxt "#30721"
 msgid "Image Width"
 msgstr "Breedte"
 
-# tag type translation
 msgctxt "#30722"
 msgid "Image Length"
 msgstr "Hoogte"
 
-# tag type translation
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Oriëntatie"
 
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flits"
+
+msgctxt "#30725"
+msgid "Image Model"
+msgstr "Afbeelding Model"
+
+msgctxt "#30726"
+msgid "Image Make"
+msgstr "Afbeelding Merk"
+
+msgctxt "#30727"
+msgid "Image Artist"
+msgstr "Afbeelding Artiest"

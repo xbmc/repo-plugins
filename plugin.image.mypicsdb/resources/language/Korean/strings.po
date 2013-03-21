@@ -184,6 +184,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "컬렉션"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "닫기"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "태그"
@@ -195,6 +199,18 @@ msgstr "확인"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "취소"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "저장"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "초기화"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "삭제"
 
 msgctxt "#30650"
 msgid "Debugging"
@@ -251,3 +267,7 @@ msgstr "카테고리"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "방향"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "플래시"

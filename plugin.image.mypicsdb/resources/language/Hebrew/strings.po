@@ -36,6 +36,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "וידאו"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "סגור"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "תגיות"
@@ -47,6 +51,14 @@ msgstr "אישור"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "בטל"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "שמור"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "מחיקה"
 
 msgctxt "#30650"
 msgid "Debugging"

@@ -35,7 +35,7 @@ def getaddon_path():
 
 
 def getaddon_name():
-    __settings__.getAddonInfo('name')
+    return __settings__.getAddonInfo('name')
 
     
 def getaddon_info(parm):
@@ -85,6 +85,21 @@ def run_script(script):
     xbmc.executebuiltin('XBMC.RunScript(%s)'%smart_utf8(script))
 
 
+def get_params():
+    """ extract params from argv[2] to make a dict (key=value) """
+    param_dict = {}
+    try:
+        if sys.argv[2]:
+            param_pairs=sys.argv[2][1:].split( "&" )
+            for params_pair in param_pairs:
+                param_splits = params_pair.split('=')
+                if (len(param_splits))==2:
+                    param_dict[urllib.unquote_plus(param_splits[0])] = urllib.unquote_plus(param_splits[1])
+    except:
+        pass
+    return param_dict
+
+        
 def smart_unicode(s):
     """credit : sfaxman"""
     if not s:

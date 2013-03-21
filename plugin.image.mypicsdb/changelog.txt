@@ -1,19 +1,62 @@
-2013/02/06--> v 2.0.0
+2013/03/20 --> v 2.2.0
+Update: Production release
+
+2013/03/19 --> v 2.1.3
+Update: A dialog with missing pictures from Picasa import
+New:    Import a save filter as a collection
+
+2013/03/18 --> v 2.1.2
+New:    Import of albums from Picasa (done by herve502)
+
+2013/03/08 --> v 2.1.1
+New:    Date period support in Filter Wizard
+Fix:    Fixed bug when adding a period
+
+2013/03/08 --> v 2.0.8
+Update: Language files from Transifex
+
+2013/03/05 --> v 2.0.7
+Fix:    Checked tags corrected in Filter Wizard
+
+2013/03/01 --> v 2.0.6
+Update: Source code cleanup
+
+2013/02/27 --> v 2.0.5
+New:    Tag type YYYY-MM introduced
+
+2013/02/25 --> v 2.0.4
+Update: Readme.txt amended
+
+2013/02/21 --> v 2.0.4
+Fix:    Displayed count of pictures in "Browse by Tags" corrected
+
+2013/02/19 --> v 2.0.3
+New:    Sort by date now possible with sort by play count. This include also the timestamp.
+
+2013/02/15 --> v 2.0.2
+Fix:    Global search repaired
+
+2013/02/13 --> v 2.0.1
+New:    Save/Load/Delete filter wizard settings
+New:    Store filenames to exclude from scan in add-on settings
+Update: Google Maps reintroduced
+
+2013/02/06 --> v 2.0.0
 Added:  Productive Frodo Version
 
-2013/02/05--> v 1.9.24
+2013/02/05 --> v 1.9.24
 Update: New translations for tag types: Image Model, Image Make and Image Artist
 
-2013/02/05--> v 1.9.22
+2013/02/05 --> v 1.9.22
 Fix:    Infinitive loop in EXIF parser due to malformed pictures fixed.
 
-2013/02/04--> v 1.9.21
+2013/02/04 --> v 1.9.21
 Update: EXIF tag "Image Artist" added
 
-2013/02/04--> v 1.9.20
+2013/02/04 --> v 1.9.20
 Update: Additional skins removed
 
-2013/02/01--> v 1.9.19
+2013/02/01 --> v 1.9.19
 Fix:    DB version check was wrong
 
 2013/01/25 --> v 1.9.18

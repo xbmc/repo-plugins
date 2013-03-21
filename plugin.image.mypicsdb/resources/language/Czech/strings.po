@@ -48,6 +48,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "Sbírky"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Zavřít"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Značky"
@@ -59,6 +63,18 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Zrušit"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Uložit"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Obnovit"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Smazat"
 
 msgctxt "#30650"
 msgid "Debugging"

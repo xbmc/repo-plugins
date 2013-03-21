@@ -40,6 +40,10 @@ msgctxt "#30123"
 msgid "Help"
 msgstr "Abi"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Sulge"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Sildid"
@@ -51,6 +55,14 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Katkesta"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Salvesta"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Kustuta"
 
 msgctxt "#30650"
 msgid "Debugging"

@@ -44,6 +44,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "Söfn"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Loka"
+
 msgctxt "#30613"
 msgid "OK"
 msgstr "Í lagi"
@@ -51,6 +55,14 @@ msgstr "Í lagi"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Hætta við"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Vista"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Eyða"
 
 msgctxt "#30650"
 msgid "Debugging"

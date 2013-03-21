@@ -40,6 +40,14 @@ msgctxt "#30614"
 msgid "Cancel"
 msgstr "कटना"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "बचाना"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "मिटाना"
+
 msgctxt "#30650"
 msgid "Debugging"
 msgstr "डिबगिंग"
@@ -51,6 +59,10 @@ msgstr "बंदरगाह"
 msgctxt "#30700"
 msgid "Country"
 msgstr "देश"
+
+msgctxt "#30702"
+msgid "State"
+msgstr "क्षेत्र"
 
 msgctxt "#30711"
 msgid "Title"

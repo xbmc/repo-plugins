@@ -27,6 +27,17 @@ class Viewer:
         self.window = xbmcgui.Window( self.WINDOW )
         # give window time to initialize
         xbmc.sleep( 100 )
+        
+        if "text" in kwargs:
+            self.text = kwargs["text"]
+        else:
+            self.text = ""
+            
+        if "header" in kwargs:
+            self.header = kwargs["header"]
+        else:
+            self.header = "Readme"           
+
         # set controls
         self.setControls()
 
@@ -40,8 +51,12 @@ class Viewer:
 
     def getText( self ):
         try:
-            txt = open( os.path.join( ADDON_DIR, "Readme.txt" ) ).read()
-            return "Readme", txt
+            if self.text == "":
+                txt = open( os.path.join( ADDON_DIR, "Readme.txt" ) ).read()
+            else:
+                txt = self.text
+
+            return self.header, txt
         except:
             print_exc()
         return "", ""

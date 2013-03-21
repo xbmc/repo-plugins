@@ -36,6 +36,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "視訊"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "關閉"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "標籤"
@@ -47,6 +51,18 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "取消"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "儲存"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "重置"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "刪除"
 
 msgctxt "#30650"
 msgid "Debugging"

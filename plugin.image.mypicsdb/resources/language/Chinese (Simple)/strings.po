@@ -48,6 +48,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "系列"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "关闭"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "标签"
@@ -59,6 +63,14 @@ msgstr "确定"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "取消"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "保存"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "删除"
 
 msgctxt "#30650"
 msgid "Debugging"
@@ -111,3 +123,7 @@ msgstr "类别"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "方位"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"

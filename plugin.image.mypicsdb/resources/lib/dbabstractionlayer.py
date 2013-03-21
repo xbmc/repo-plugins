@@ -69,10 +69,8 @@ else:
 """
 
 
-import xbmc, sys
+import xbmc
 import common
-
-AddonName = ( sys.modules[ "__main__" ].AddonName )
 
 database=''
 

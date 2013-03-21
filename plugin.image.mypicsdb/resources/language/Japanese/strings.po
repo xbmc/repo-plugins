@@ -36,6 +36,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "ビデオ"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "閉じる"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "タグ"
@@ -47,6 +51,14 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "キャンセル"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "保存"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "削除"
 
 msgctxt "#30650"
 msgid "Debugging"

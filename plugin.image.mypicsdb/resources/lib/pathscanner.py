@@ -19,7 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 """
 
-import os, urllib, re
+import os, urllib
 import xbmc, xbmcvfs
 import common
 import json
@@ -62,7 +62,6 @@ class Scanner(object):
     def _walk(self, path, recursive, types):
         filenames = []
         dirnames   = []
-        files     = []
 
         path = xbmc.translatePath(path)
         common.log("Scanner._walk",'"%s"'%path)

@@ -40,6 +40,10 @@ msgctxt "#30052"
 msgid "Tags"
 msgstr "Oznake"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Zatvori"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Oznake"
@@ -51,6 +55,18 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Poništi"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Sačuvaj"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Početne postavke"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Izbriši"
 
 msgctxt "#30650"
 msgid "Debugging"

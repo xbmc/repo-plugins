@@ -44,6 +44,14 @@ msgctxt "#30614"
 msgid "Cancel"
 msgstr "Nuligi"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "Konservi"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Forigi"
+
 msgctxt "#30665"
 msgid "Password"
 msgstr "pasvorto"

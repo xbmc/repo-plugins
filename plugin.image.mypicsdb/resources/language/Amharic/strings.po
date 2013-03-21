@@ -36,6 +36,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "አልበም"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "መዝጊያ"
+
 msgctxt "#30613"
 msgid "OK"
 msgstr "እሺ "
@@ -43,6 +47,14 @@ msgstr "እሺ "
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "መሰረዣ"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "ማስቀመጫ"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "ማጥፊያ"
 
 msgctxt "#30665"
 msgid "Password"

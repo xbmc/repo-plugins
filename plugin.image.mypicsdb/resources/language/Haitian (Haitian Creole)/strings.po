@@ -24,6 +24,14 @@ msgctxt "#30614"
 msgid "Cancel"
 msgstr "Anule"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "Enregistre"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Efface"
+
 msgctxt "#30665"
 msgid "Password"
 msgstr "mo de pas"

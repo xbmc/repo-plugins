@@ -10,7 +10,7 @@
         <setting id="dr1.stream" label="31001" type="enum" default="0" lvalues="30106|30107" />
         <setting id="dr2.stream" label="31002" type="enum" default="0" lvalues="30106|30107" />
         <setting id="dr3.stream" label="31006" type="enum" default="0" lvalues="30106|30107" />
-        <setting id="drupdate.stream" label="31003" type="enum" default="0" lvalues="30106|30107" />
+        <setting id="drultra.stream" label="31003" type="enum" default="0" lvalues="30106|30107" />
         <setting id="drk.stream" label="31004" type="enum" default="0" lvalues="30106|30107" />
         <setting id="drramasjang.stream" label="31005" type="enum" default="0" lvalues="30106|30107" />
     </category>

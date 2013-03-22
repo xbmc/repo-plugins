@@ -114,8 +114,8 @@ Channel(6, CATEGORY_DR, "dr3.stream").add_urls(
     best   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'], # DR has stream2 for all speeds - weird
     high   = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
     medium = ['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'])
-# DR Update
-Channel(3, CATEGORY_DR, "drupdate.stream").add_urls(
+# DR Ultra
+Channel(3, CATEGORY_DR, "drultra.stream").add_urls(
     high   = ['rtmp://livetv.gss.dr.dk/live/livedr03astream3 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr03bstream3 live=1',],
     medium = ['rtmp://livetv.gss.dr.dk/live/livedr03astream2 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr03bstream2 live=1'],
     low    = ['rtmp://livetv.gss.dr.dk/live/livedr03astream1 live=1', 'rtmp://livetv.gss.dr.dk/live/livedr03bstream1 live=1'])

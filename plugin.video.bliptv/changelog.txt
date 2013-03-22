@@ -7,6 +7,9 @@
 
 [B]Errata[/B]
 
+[B]Version 0.8.3[/B]
+- Fixed: site changes broke episode search
+
 [B]Version 0.8.2[/B]
 - Fixed: site changes broke parts of the show scraper
 

@@ -53,7 +53,7 @@ class YouTubeSubtitleControl():
         style = u""
         result = u""
 
-        if self.settings.getSetting("annotations") == "true" and not "downloadPath" in video:
+        if self.settings.getSetting("annotations") == "true" and not "download_path" in video:
             xml = self.core._fetchPage({"link": self.urls["annotation_url"] % get('videoid')})
             if xml["status"] == 200 and xml["content"]:
                 (result, style) = self.transformAnnotationToSSA(xml["content"])
@@ -156,8 +156,8 @@ class YouTubeSubtitleControl():
 
         w.close()
 
-        if "downloadPath" in video:
-            self.xbmcvfs.rename(path, os.path.join(video["downloadPath"], filename))
+        if "download_path" in video:
+            self.xbmcvfs.rename(path, os.path.join(video["download_path"], filename))
 
 
     def getTranscriptionUrl(self, video={}):
@@ -349,7 +349,7 @@ class YouTubeSubtitleControl():
 
         filename = self.getSubtitleFileName(video)
 
-        download_path = os.path.join(self.settings.getSetting("downloadPath").decode("utf-8"), filename)
+        download_path = os.path.join(self.settings.getSetting("download_path").decode("utf-8"), filename)
         path = os.path.join(self.xbmc.translatePath(self.settings.getAddonInfo("profile")).decode("utf-8"), filename)
 
         set_subtitle = False
@@ -362,7 +362,7 @@ class YouTubeSubtitleControl():
             set_subtitle = True
 
         self.common.log(u"Done trying to locate: " + path, 4)
-        if self.xbmcvfs.exists(path) and not "downloadPath" in video and set_subtitle:
+        if self.xbmcvfs.exists(path) and not "download_path" in video and set_subtitle:
             player = self.xbmc.Player()
 
             i = 0
@@ -380,7 +380,7 @@ class YouTubeSubtitleControl():
         get = params.get
         result = u""
         if (get("action", "") != "download"):
-            path = self.settings.getSetting("downloadPath")
+            path = self.settings.getSetting("download_path")
             filename = u"".join(c for c in self.common.makeUTF8(video['Title']) if c not in self.utils.INVALID_CHARS) + u"-[" + get('videoid') + u"]" + u".mp4"
             path = os.path.join(path.decode("utf-8"), filename)
             try:

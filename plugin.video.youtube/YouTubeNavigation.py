@@ -99,8 +99,8 @@ class YouTubeNavigation():
                     if (cat_get("path").rfind("/") <= len(path + "/")):
                         setting = self.settings.getSetting(cat_get("path").replace("/root/explore/", "").replace("/root/", ""))
                         if not setting or setting == "true":
-                            if (cat_get("feed") == "downloads"):
-                                if (self.settings.getSetting("downloadPath")):
+                            if cat_get("feed") == "downloads":
+                                if (self.settings.getSetting("download_path")):
                                     self.addListItem(params, category)
                             else:
                                 self.addListItem(params, category)
@@ -391,7 +391,7 @@ class YouTubeNavigation():
 
         listitem.setProperty("Folder", "true")
         if (item("feed") == "downloads"):
-            url = self.settings.getSetting("downloadPath")
+            url = self.settings.getSetting("download_path")
         self.xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=True, totalItems=size)
         self.common.log("Done", 5)
 

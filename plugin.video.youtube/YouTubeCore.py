@@ -476,13 +476,9 @@ class YouTubeCore():
 
             self.common.log("Result: %s " % repr(ret_obj), 9)
 
-            # Return result if it isn't age restricted
-            if (ret_obj["content"].find("verify-actions") == -1 and ret_obj["content"].find("verify-age-actions") == -1):
-                self.common.log("done")
-                ret_obj["status"] = 200
-                return ret_obj
-            else:
-                self.common.log("Youtube requires you to verify your age to view this content: " + repr(params))
+            self.common.log("done")
+            ret_obj["status"] = 200
+            return ret_obj
 
         except urllib2.HTTPError, e:
             cont = False
@@ -493,47 +489,22 @@ class YouTubeCore():
             if e.code == 400 or True:
                 self.common.log("Unhandled HTTPError : [%s] %s " % (e.code, msg), 1)
 
-            if msg.find("<?xml") > -1:
-                acted = False
-
-                self.common.log("REPLACE THIS MINIDOM WITH PARSEDOM: " + repr(msg))
-                import xml.dom.minidom as minidom
-                dom = minidom.parseString(msg)
-                self.common.log(str(len(msg)))
-                domains = dom.getElementsByTagName("domain")
-                codes = dom.getElementsByTagName("code")
-                for domain in domains:
-                    self.common.log(repr(domain.firstChild.nodeValue), 5)
-                    if domain.firstChild.nodeValue == "yt:quota":
-                        self.common.log("Hit quota... sleeping for 100 seconds")
-                        time.sleep(100)
-                        acted = True
-
-                if not acted:
-                    for code in codes:
-                        self.common.log(repr(code.firstChild.nodeValue), 5)
-                        if code.firstChild.nodeValue == "too_many_recent_calls":
-                            self.common.log("Hit quota... sleeping for 10 seconds")
-                            time.sleep(10)
-                            acted = True
-
-            else:  # Legacy this.
-                if msg.find("yt:quota") > 1:
-                    self.common.log("Hit quota... sleeping for 10 seconds")
-                    time.sleep(10)
-                elif msg.find("too_many_recent_calls") > 1:
-                    self.common.log("Hit quota... sleeping for 10 seconds")
-                    time.sleep(10)
-                elif err.find("Token invalid") > -1:
-                    self.common.log("refreshing token")
-                    self._oRefreshToken()
-                elif err.find("User Rate Limit Exceeded") > -1:
-                    self.common.log("Hit limit... Sleeping for 10 seconds")
-                    time.sleep(10)
-                else:
-                    if e.fp:
-                        cont = e.fp.read()
-                        self.common.log("HTTPError - Headers: " + str(e.headers) + " - Content: " + cont)
+            if msg.find("yt:quota") > 1:
+                self.common.log("Hit quota... sleeping for 10 seconds")
+                time.sleep(10)
+            elif msg.find("too_many_recent_calls") > 1:
+                self.common.log("Hit quota... sleeping for 10 seconds")
+                time.sleep(10)
+            elif err.find("Token invalid") > -1:
+                self.common.log("refreshing token")
+                self._oRefreshToken()
+            elif err.find("User Rate Limit Exceeded") > -1:
+                self.common.log("Hit limit... Sleeping for 10 seconds")
+                time.sleep(10)
+            else:
+                if e.fp:
+                    cont = e.fp.read()
+                    self.common.log("HTTPError - Headers: " + str(e.headers) + " - Content: " + cont)
 
             params["error"] = get("error", 0) + 1
             ret_obj = self._fetchPage(params)

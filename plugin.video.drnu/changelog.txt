@@ -1,3 +1,15 @@
+[B]Version 2.1.10 - 2013-03-22[/B]
+- Reconstruct rtmp:// url to fix playback problems
+
+[B]Version 2.1.9 - 2013-02-22[/B]
+- Fixed script error on Eden related to duration changes
+
+[B]Version 2.1.8 - 2013-02-19[/B]
+- Added option to show stream selector on video playback
+- Added option to sort videos by title (instead of default by date)
+- Fixed display of video durations
+- Changed fanart to high resolution
+
 [B]Version 2.1.7 - 2012-08-01[/B]
 - Updated date parsing rules to match changes in DR NU API
 

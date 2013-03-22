@@ -30,7 +30,7 @@ import xbmcplugin
 
 import buggalo
 
-REGIONS = ['tv3play.dk', 'tv3play.se', 'tv3play.no', 'viasat4play.no']  # , 'tv3play.lt', 'tv3play.lv', 'tv3play.ee']
+REGIONS = ['tv3play.dk', 'tv3play.se', 'tv3play.no', 'tv3play.lt', 'tv3play.lv', 'tv3play.ee', 'viasat4play.no']
 RSS = {301: 'recent', 302: 'mostviewed', 303: 'highestrated', 304: 'recent?type=clip'}
 
 
@@ -62,18 +62,24 @@ class TV3PlayAddon(object):
         #        item.setProperty('Fanart_Image', FANART)
         #        items.append((PATH + '?region=%s&special=mostviewed' % region, item, True))
 
-        for format in self.api.getAllFormats():
-            fanart = mobileapi.IMAGE_URL % format['image'].replace(' ', '%20')
+        formats = self.api.getAllFormats()
+        if not formats:
+            xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
+            self.displayError('Mobile API not available for this region yet! Try later...')
+            return
+
+        for series in formats:
+            fanart = mobileapi.IMAGE_URL % series['image'].replace(' ', '%20')
 
             infoLabels = {
-                'title': format['title'],
-                'plot': format['description']
+                'title': series['title'],
+                'plot': series['description']
             }
 
-            item = xbmcgui.ListItem(format['title'], iconImage=fanart)
+            item = xbmcgui.ListItem(series['title'], iconImage=fanart)
             item.setInfo('video', infoLabels)
             item.setProperty('Fanart_Image', fanart)
-            items.append((PATH + '?region=%s&format=%s' % (region, format['id']), item, True))
+            items.append((PATH + '?region=%s&format=%s' % (region, series['id']), item, True))
 
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.endOfDirectory(HANDLE)
@@ -190,4 +196,3 @@ if __name__ == '__main__':
 
     except Exception:
         buggalo.onExceptionRaised()
-

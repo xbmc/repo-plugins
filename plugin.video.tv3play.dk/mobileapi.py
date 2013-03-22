@@ -36,8 +36,9 @@ class TV3PlayMobileApi(object):
         formats = list()
 
         format = self.format()
-        for section in format['sections']:
-            formats.extend(section['formats'])
+        if format:
+            for section in format['sections']:
+                formats.extend(section['formats'])
 
         return formats
 

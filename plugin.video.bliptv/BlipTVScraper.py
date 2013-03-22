@@ -120,15 +120,15 @@ class BlipTVScraper:
             url = self.createUrl(params, page)
 
             result = self.common.fetchPage({"link": url})
-            lst = self.common.parseDOM(result["content"], "div", {"class": "EpisodeCard Extended"})
+            lst = self.common.parseDOM(result["content"], "div", {"class": "MyBlipEpisodeCardWrap"})
 
-            if len(lst) > 0 and page <= 20:
+            if len(lst) > 0 and page <= 50:
                 next = "true"
 
             for ep in lst:
-                title = self.common.parseDOM(ep, "h5", ret="title")
-                videoid = self.common.parseDOM(ep, "a", attrs={"class": "EpisodeThumb"}, ret="href")
-                image = self.common.parseDOM(ep, "img", attrs={"class": "ThumbnailImage"}, ret="src")
+                title = self.common.parseDOM(ep, "span", {"class":"EpisodeTitle"})[0]
+                videoid = self.common.parseDOM(ep, "a", attrs={"class": "EpisodeCardLink"}, ret="href")
+                image = self.common.parseDOM(ep, "img", attrs={"class": "Thumb"}, ret="src")
 
                 item = {}
                 item["videoid"] = videoid[0][videoid[0].rfind("-") + 1:]

@@ -28,8 +28,9 @@ def login():
 	soup = BeautifulSoup(html_data)
 	eventVal = soup.find('input',id='__EVENTVALIDATION',type='hidden')
 	viewState = soup.find('input',id='__VIEWSTATE',type='hidden')
-	loginURL = 'http://www.glwiz.com/homepage.aspx?__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=%s&__VIEWSTATE=%s&pageHeader%%24ScriptManager1=pageHeader%%24UpdatePanel1%%7CpageHeader%%24buttonLogin&pageHeader%%24buttonLogin=%%20&pageHeader%%24txtPassword=%s&pageHeader%%24txtUsername=%s' % (urllib.quote(eventVal['value']), urllib.quote(viewState['value']), urllib.quote(__settings__.getSetting('password')), urllib.quote(__settings__.getSetting('username')))
-	opener.open(loginURL)
+	loginURL = 'http://www.glwiz.com/homepage.aspx'
+	data = '__EVENTARGUMENT=&__EVENTTARGET=&__EVENTVALIDATION=%s&__VIEWSTATE=%s&pageHeader%%24ScriptManager1=pageHeader%%24UpdatePanel1%%7CpageHeader%%24buttonLogin&pageHeader%%24buttonLogin=%%20&pageHeader%%24txtPassword=%s&pageHeader%%24txtUsername=%s' % (urllib.quote(eventVal['value']), urllib.quote(viewState['value']), urllib.quote(__settings__.getSetting('password')), urllib.quote(__settings__.getSetting('username')))
+	opener.open(loginURL, data)
 	resp = opener.open('http://www.glwiz.com/ajax.aspx?channel=tvlist&type=reg&genre=1')
 	html_data = resp.read()
 	return html_data != 'NoAccess'	

@@ -35,7 +35,8 @@
     <string id="30201">Remove from favorite program series</string>
 
     <string id="30500">General</string>
-    <string id="30501">Enable [I]chapter[/I] navigation</string>
+    <string id="30501">Enable chapter navigation</string>
+    <string id="30502">Show quality chooser before starting video playback</string>
 
     <string id="30900">There was an error while communication with DR NU.</string>
     <string id="30901">Please try again later. Error message is:</string>

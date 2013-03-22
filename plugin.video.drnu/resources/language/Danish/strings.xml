@@ -35,7 +35,8 @@
     <string id="30201">Fjern fra foretrukne programmer</string>
 
     <string id="30500">Generelt</string>
-    <string id="30501">Aktiver [I]kapitel[/I] navigation</string>
+    <string id="30501">Aktiver kapitel navigation</string>
+    <string id="30502">Vis kvalitetsvælger før videoen afspilles</string>
 
     <string id="30900">Der er sket en fejl i kommunikationen med DR NU.</string>
     <string id="30901">Prøv igen senere. Fejlen er:</string>

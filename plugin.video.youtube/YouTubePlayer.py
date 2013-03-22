@@ -215,7 +215,7 @@ class YouTubePlayer():
             return video_url
 
         if get("action") != "download":
-            video_url += " | " + self.common.USERAGENT
+            video_url += '|' + urllib.urlencode({'User-Agent':self.common.USERAGENT})
 
         self.common.log(u"Done")
         return video_url
@@ -295,9 +295,9 @@ class YouTubePlayer():
         found = False
 
         for line in data.split("\n"):
-            if line.strip().startswith("yt.playerConfig = "):
+            if line.strip().find(";ytplayer.config = ") > 0:
                 found = True
-                p1 = line.find("=")
+                p1 = line.find(";ytplayer.config = ") + len(";ytplayer.config = ") - 1
                 p2 = line.rfind(";")
                 if p1 <= 0 or p2 <= 0:
                     continue
@@ -370,13 +370,12 @@ class YouTubePlayer():
         get = params.get
 
         result = self.getVideoPageFromYoutube(get)
-        if self.isVideoAgeRestricted(result) and self.pluginsettings.userName() != "":
-            self.login.login()
-            result = self.getVideoPageFromYoutube(get)
-
         if self.isVideoAgeRestricted(result):
             self.common.log(u"Age restricted video")
-            if not self.pluginsettings.userHasProvidedValidCredentials():
+            if self.pluginsettings.userHasProvidedValidCredentials():
+                self.login._httpLogin({"new":"true"})
+                result = self.getVideoPageFromYoutube(get)
+            else:
                 self.utils.showMessage(self.language(30600), self.language(30622))
 
         if result[u"status"] != 200:

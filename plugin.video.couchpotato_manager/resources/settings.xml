@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="username" type="text" label="30300" />
+    <setting id="password" type="text" label="30301" option="hidden" />
+    <setting type="sep" />
+    <setting id="use_https" type="bool" label="30302" default="false" />
+    <setting id="hostname" type="text" label="30303" default="localhost" />
+    <setting id="port" type="number" label="30304" default="5050" />
+    <setting id="default_profile" type="action" label="30306" action="RunPlugin(plugin://plugin.video.couchpotato_manager/settings/default_profile)"/>
+</settings>

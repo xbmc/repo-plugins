@@ -4,4 +4,6 @@
 	<string id="30002">Teksting</string>
 	<string id="30003">Av</string>
 	<string id="30004">På</string>
+	<string id="30005">Obs: Kvalitet på direktestrømmer bestemmes av båndbreddebegrensning</string>
+	<string id="30006">satt i Innstillinger->System->Internettilgang</string>
 </strings>

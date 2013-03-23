@@ -1,3 +1,9 @@
+[B]4.4.5[/B]
+- Fikset direktestrømmer og «siste» pga. sideendringer
+
+[B]4.4.4[/B]
+- Kompatibilitetsendringer
+
 [B]4.4.3[/B]
 - Fikset: plugin krasjet hvis videobeskrivelse ikke fantes
 

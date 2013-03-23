@@ -79,11 +79,11 @@ def get_recommended():
 
 def get_most_recent():
   url = "http://tv.nrk.no/listobjects/recentlysent.json/page/0"
-  elems = xhrsession.get(url).json()['ListObjectModels']
+  elems = xhrsession.get(url).json()['Data']
   titles = [ e['Title'] for e in elems ]
   titles = map(html_decode, titles)
   urls = [ e['Url'] for e in elems ]
-  thumbs = [ e['ImageUrl'] for e in elems ]
+  thumbs = [ e['Images'][0]['ImageUrl'] for e in elems ]
   fanart = [ _fanart_url(url) for url in urls ]
   return titles, urls, thumbs, fanart
 

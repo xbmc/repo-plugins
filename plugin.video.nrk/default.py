@@ -39,10 +39,9 @@ def view_top():
 
 @plugin.route('/live')
 def live():
-  b = ['380','659','1394','2410','3660'][BITRATE-1]
-  add("NRK 1", "http://nrk1us-f.akamaihd.net/i/nrk1us_0@79328/index_%s_av-p.m3u8?sd=10&rebase=on" % b, "application/vnd.apple.mpegurl", "nrk1.png")
-  add("NRK 2", "http://nrk2us-f.akamaihd.net/i/nrk2us_0@79327/index_%s_av-p.m3u8?sd=10&rebase=on" % b, "application/vnd.apple.mpegurl", "nrk2.png")
-  add("NRK 3", "http://nrk3us-f.akamaihd.net/i/nrk3us_0@79326/index_%s_av-p.m3u8?sd=10&rebase=on" % b, "application/vnd.apple.mpegurl", "nrk3.png")
+  add("NRK 1", "http://nrk1-i.akamaihd.net/hls/live/201543/nrk1/master.m3u8", "application/vnd.apple.mpegurl", "nrk1.png")
+  add("NRK 2", "http://nrk2-i.akamaihd.net/hls/live/201544/nrk2/master.m3u8", "application/vnd.apple.mpegurl", "nrk2.png")
+  add("NRK 3", "http://nrk3-i.akamaihd.net/hls/live/201545/nrk3/master.m3u8", "application/vnd.apple.mpegurl", "nrk3.png")
   add("NRK P1", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h", "audio/mpeg")
   add("NRK P2", "http://lyd.nrk.no/nrk_radio_p2_mp3_h", "audio/mpeg")
   add("NRK P3", "http://lyd.nrk.no/nrk_radio_p3_mp3_h", "audio/mpeg")

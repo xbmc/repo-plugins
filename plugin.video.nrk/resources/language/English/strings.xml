@@ -4,4 +4,6 @@
 	<string id="30002">Subtitles</string>
 	<string id="30003">Off</string>
 	<string id="30004">On</string>
+	<string id="30005">Note: Quality on live streams are determined by the bandwidth</string>
+	<string id="30006">limitation set in Settings->System->Internet access</string>
 </strings>

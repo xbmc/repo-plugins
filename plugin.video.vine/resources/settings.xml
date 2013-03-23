@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>		
+	<!-- General -->
+	<category label="30100">
+	 <setting id="show_tweets" type="bool" label="60030" default="true"/>
+	</category>
+
+	<!-- Advanced -->
+	<category label="30400">
+	 <setting id="socket_timeout" type="number" label="30420" default="0"/>
+	 <setting id="http_cache_disable_adv" label="30170" type="bool" default="false" />
+	</category>
+</settings>

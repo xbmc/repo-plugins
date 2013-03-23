@@ -1,3 +1,14 @@
+2.0.1
+ Code rewrite (using dedicated API)
+ New menu structure
+ Platform filter in settings
+ Video quality choosable
+ Better icons/thumbnails
+ Frodo changes (duration)
+ Catch network errors
+ Added Possibility to search videos by game
+ Context Menu Integration
+
 1.1.5
  Fixed Playback (website changes)
 

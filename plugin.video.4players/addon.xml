@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.4players" name="4Players Videos" version="1.1.5" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.4players" name="4Players Videos" version="2.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
   <requires>
-    <import addon="xbmc.python" version="2.0"/>
-    <import addon="script.module.beautifulsoup" version="3.0.8"/>
-    <import addon="script.module.xbmcswift" version="0.2.0"/>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -11,9 +10,7 @@
   <extension point="xbmc.addon.metadata">
     <platform>all</platform>
     <language>de</language>
-    <summary lang="de">Computerspiel-Videos und -Trailer von www.4players.de</summary>
-    <summary lang="en">Watch game videos and trailers from www.4players.de</summary>
-    <description lang="de">Bietet aktuelle Videos und Trailer zu Computer- und Konsolenspielen von der Webseite www.4players.de</description>
-    <description lang="en">You can watch all computer- and console-game videos and trailers from the german website www.4players.de</description>
+    <summary lang="en">Game related videos from www.4players.de</summary>
+    <description lang="en">4Players is a german video-game magazine.[CR]With this add-on you can browse latest- or popular-videos, game reviews or browse videos by games you are interested in.[CR]You can also filter the videos by platforms in the add-on settings.</description>
   </extension>
 </addon>

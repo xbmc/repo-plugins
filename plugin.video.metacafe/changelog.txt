@@ -1,0 +1,6 @@
+0.0.2
+ - added YouTube and Muzu.tv playback
+ - added notify message for Territory-Error
+
+0.0.1
+ - initial release

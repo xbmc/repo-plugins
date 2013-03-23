@@ -1,0 +1,51 @@
+Version 1.0.9 (15 Mar 2012)
+- Fix Now and Next times in AerTV. There is now a local time offset option in the plugin settings for people in foreign timezones.
+- Fix: TV3 RTMP streams now require verification
+- Fix: After a successful download sometimes a download error message appears
+- Close progress dialog on download start
+
+Version 1.0.8
+- Improve progress dialog
+
+Version 1.0.7
+- Moved repository
+
+Version 1.0.6
+- Fix for people who get unusual URLs from RTE, e.g. "/player/6c..." instead of "/player/ie..."
+
+Version 1.0.4
+- Bug fix: Not starting for anyone who doesn't have mercurial.wireproto package
+
+Version 1.0.3
+- Bug fix: RTE2 HD not working in AerTV
+
+Version 1.0.2
+- Added TG4
+- Added option to use proxy setting for RTMP streams (SOCKS4/SOCKS5 proxies only)
+- Added bit rate setting for AerTV and TG4 (higher bit rate = better quality)
+- Added 'Test Forwarded IP' context menu item
+- Added 'Clear HTTP Cache' context menu item
+- Moved socksipy into a separate module
+
+Version 1.0.1
+- [TV3] Fixed listing of shows with no description in "All Shows A - Z"
+- [TV3] Fixed truncated exception logging
+- [TV3] Fixed age checking
+
+
+Version 1.0.0
+- Added AerTV (RTE, TV3, TG4, etc) with "Now" and "Next" for each channel
+- Fixed cache management to delete older cached pages
+
+Version 0.99.1
+- Added Live RTE
+- TV3
+- [RTE] Added default thumbnails for high level categories
+- [RTE] Added option to not get programme details for every episode in listings (slows down episode listing). On by default.
+- [RTE] Added thumbnails to search results
+- Various fixes, more error handling, more comprehensive debug logging
+
+Version 0.99.0
+- Pre-release
+- RTE only
+

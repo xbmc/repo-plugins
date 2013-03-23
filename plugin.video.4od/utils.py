@@ -6,11 +6,10 @@ from time import mktime,strptime
 import xbmc
 from xbmc import log
 
-from errorhandler import ErrorCodes
-from errorhandler import ErrorHandler
+import unicodedata
 
 # Only used if we fail to parse the URL from the website
-__SwfPlayerDefault__ = 'http://www.channel4.com/static/programmes/asset/flash/swf/4odplayer-11.31.2.swf'
+__SwfPlayerDefault__ = 'http://www.channel4.com/static/programmes/asset/flash/swf/4odplayer-11.34.1.swf'
 __Aug12__ = mktime(strptime("12 Aug 2012", "%d %b %Y"))
 
 # Return true if date is later than 12 Aug 2012
@@ -29,12 +28,26 @@ def isRecentDate(dateString):
 
 	return False
 
+def log(msg, level = xbmc.LOGNOTICE, method = None):
+    try:
+        if method is None:
+            method = inspect.stack()[1][3]
+            
+        if isinstance(msg, unicode):
+            xbmc.log((u"%s : '%s'" % (method, msg)).encode('utf8'), level)
+        else:
+            xbmc.log(to_unicode((u"%s : '%s'" % (method, msg))).encode('utf8'), level)
+    except ( Exception ) as e:
+        xbmc.log(u"FALLBACK %s : '%s'" % (method, repr(msg)), level)
+
+
 def findString(method, pattern, string, flags = (re.DOTALL | re.IGNORECASE)):
-	match = re.search( pattern, string, flags )
+	match = ( pattern, string, flags )
 	#match = None ###
 	if match is not None:
-		return (match.group(1), None)
+		return (match.group(1))
 
+	return None
 	# Limit logging of string to 1000 chars
 	limit = 1000
 	# Can't find pattern in string
@@ -44,33 +57,25 @@ def findString(method, pattern, string, flags = (re.DOTALL | re.IGNORECASE)):
 
 
 
+
 def GetSwfPlayer( html ):
-	log ("html size:" + str(len(html)), xbmc.LOGDEBUG)
+	log (u"html size:" + str(len(html)), xbmc.LOGDEBUG)
 
-	error = None
+	try:
+		swfRoot = re.search(u'var swfRoot = \'(.*?)\'', html, re.DOTALL | re.IGNORECASE).group(1)
+		fourodPlayerFile = re.search(u'var fourodPlayerFile = \'(.*?)\'', html, re.DOTALL | re.IGNORECASE).group(1)
+		#TODO Find out how to get the "asset/flash/swf/" part dynamically
+		swfPlayer = u"http://www.channel4.com" + swfRoot + u"asset/flash/swf/" + fourodPlayerFile
 
-	(swfRoot, error) = findString('GetSwfPlayer', 'var swfRoot = \'(.*?)\'', html)
-	if error is None:
+		# Resolve redirect, if any
+		req = urllib2.Request(swfPlayer)
+		res = urllib2.urlopen(req)
+		swfPlayer = res.geturl()
+	except (Exception) as e:
+		log (u"Exception resolving swfPlayer URL: " + str(e), xbmc.LOGWARNING)
+		log (u"Unable to determine swfPlayer URL. Using default: " + __SwfPlayerDefault__, xbmc.LOGWARNING)  
 
-		(fourodPlayerFile, error) = findString('GetSwfPlayer', 'var fourodPlayerFile = \'(.*?)\'', html)
-		if error is None:
-
-			#TODO Find out how to get the "asset/flash/swf/" part dynamically
-			swfPlayer = "http://www.channel4.com" + swfRoot + "asset/flash/swf/" + fourodPlayerFile
-
-			try:
-				# Resolve redirect, if any
-				req = urllib2.Request(swfPlayer)
-				res = urllib2.urlopen(req)
-				swfPlayer = res.geturl()
-			except Exception, e:
-				# Exception resolving swfPlayer URL
-				error = ErrorHandler('GetSwfPlayer', ErrorCodes.EXCEPTION_RESOLVING_SWFPLAYER, str(e))
-
-	if error is not None:
 		swfPlayer = __SwfPlayerDefault__
-		# Unable to determine swfPlayer URL. Using default: 
-		error.process(__language__(30520), __SwfPlayerDefault__, xbmc.LOGWARNING)
 	
 	return swfPlayer
 
@@ -95,7 +100,63 @@ def remove_extra_spaces(data):
     p = re.compile(r'\s+')
     return p.sub(' ', data)
 
+def replace_non_alphanum(data):
+    p = re.compile(r'[^0-9A-Za-z]+')
+    return p.sub('', data)
+
+def valueIfDefined(value, name = None):
+    try:
+        if name is None:
+            return value
+        else:
+            return name + ": " + value
+    except NameError:
+        if name is None:
+            return ""
+        else:
+            return name + ": Not defined"
+
+def isVariableDefined(variable):
+    try:
+        variable
+        return True
+    except NameError:
+        return False
+    
+def extractJSON(text):
+    start = text.index('(') + 1
+    end = text.rindex(')')
+    
+    return text[start:end]
 
 
+def drepr(x, sort = True, indent = 0):
+    if isinstance(x, dict):
+        r = '{\n'
+        for (key, value) in (sorted(x.items()) if sort else x.iteritems()):
+            r += (' ' * (indent + 4)) + repr(key) + ': '
+            r += drepr(value, sort, indent + 4) + ',\n'
+        r = r.rstrip(',\n') + '\n'
+        r += (' ' * indent) + '}'
+    elif hasattr(x, '__iter__'):
+        r = '[\n'
+        for value in (sorted(x) if sort else x):
+            r += (' ' * (indent + 4)) + drepr(value, sort, indent + 4) + ',\n'
+        r = r.rstrip(',\n') + '\n'
+        r += (' ' * indent) + ']'
+    else:
+        r = repr(x)
+    return r
 
+def normalize(text):
+    if isinstance(text, str):
+        try:
+            text = text.decode('utf8')
+        except:
+            try:
+                text = text.decode('latin1')
+            except:
+                text = text.decode('utf8', 'ignore')
+
+    return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
 

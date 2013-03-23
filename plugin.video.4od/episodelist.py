@@ -1,25 +1,46 @@
 # -*- coding: utf-8 -*-
 import re
+import sys
 
-import xbmc
-import xbmcgui
-from xbmc import log
+from time import strftime,strptime,mktime
+from datetime import date
+import time
 
-from errorhandler import ErrorCodes
-from errorhandler import ErrorHandler
-from geturllib import CacheHelper
+import simplejson
+
+if hasattr(sys.modules[u"__main__"], u"xbmc"):
+	xbmc = sys.modules[u"__main__"].xbmc
+else:
+	import xbmc
+	
+if hasattr(sys.modules[u"__main__"], u"xbmcgui"):
+	xbmcgui = sys.modules[u"__main__"].xbmcgui
+else:
+	import xbmcgui
+
+if hasattr(sys.modules[u"__main__"], u"xbmcplugin"):
+	xbmcplugin = sys.modules[u"__main__"].xbmcplugin
+else:
+	import xbmcplugin
+
+from watched import Watched
+
+from BeautifulSoup import BeautifulSoup
+
+from httpmanager import HttpManager
+from loggingexception import LoggingException
 
 import utils
 from xbmcaddon import Addon
 
-__PluginName__  = 'plugin.video.4od'
+__PluginName__  = u'plugin.video.4od'
 __addon__ = Addon(__PluginName__)
 __language__ = __addon__.getLocalizedString
 
 #TODO Add more comprehensive debug logging to this class (EpisodeList)
 #TODO There is much reliance on member variables. Probably many cases 
-#     where member variables are redundant or can be replaced by local vars passed
-#     as parameters or returned from methods. Clean up.
+#	 where member variables are redundant or can be replaced by local vars passed
+#	 as parameters or returned from methods. Clean up.
 
 #==================================================================================
 # EpisodeList
@@ -29,278 +50,306 @@ __language__ = __addon__.getLocalizedString
 #
 # Those methods are
 # 1) Parse a web page that lists episodes of a show and create an XBMC list item
-#    for each episode
+#	for each episode
 #
 # 2) Parse the SAME web page to find a particular episode  
 #==================================================================================
 
+ps3ShowUrl = u"http://ps3.channel4.com/pmlsd/%s/4od.json?platform=ps3&uid=%s" # showId, time
+
 class EpisodeList:
 
-	def __init__(self, baseURL, cache):
-		self.assetId 		= ''
+	def __init__(self, baseURL, cache, showWatched = False):
+		self.log = sys.modules[u"__main__"].log
+		self.assetId		 = u''
 		self.baseURL		= baseURL
-		self.cache 		= cache
+		self.cache		 = cache
+		self.showWatched = showWatched 
+		self.episodeDetails = {}
 
 	def getAssetId(self):
 		return self.assetId
 
-	def getHTML(self):
-		return self.html
-
-
 	def initialise(self, showId, showTitle):
-		method = "EpisodeList.initialise"
-		log ("initialise showId: %s, showTitle: %s " % ( showId, showTitle ), xbmc.LOGDEBUG)
-		(self.html, logLevel) = self.cache.GetURLFromCache( "http://www.channel4.com/programmes/" + showId + "/4od", 600 ) # 10 minutes
+		method = u"EpisodeList.initialise"
+		self.log (u"initialise showId: %s, showTitle: %s " % ( showId, showTitle ), xbmc.LOGDEBUG)
 
-		if self.html is None or self.html == '':
-			error = ErrorHandler('EpisodeList.initialise', ErrorCodes.ERROR_GETTING_EPISODE_LIST, __language__(30800))
-			return error
+		try:
+			jsonText = None
+			url = None
+			url = ps3ShowUrl % (showId, int(time.time()*1000))
 
-		self.swfPlayer = utils.GetSwfPlayer( self.html )
+			jsonText = self.cache.GetWebPage( url, 600 ) # 10 minutes
+			jsonData = simplejson.loads(jsonText)
 
-		(self.genre, error) = utils.findString(method, '<meta name="primaryBrandCategory" content="(.*?)"/>', self.html)
-		if error is not None:
-			# Can't determine genre
-			error.process(__language__(30710), "", xbmc.LOGWARNING)
-			self.genre = ''
+			if isinstance(jsonData[u'feed'][u'entry'], list):
+				self.entries = jsonData[u'feed'][u'entry']
+			else:
+				# Single entry, put in a list
+				self.entries = [ jsonData[u'feed'][u'entry'] ] 
 
-		(ol, error) = utils.findString(method, '<ol class="all-series">(.*?)</div>', self.html)
-		if error is not None:
-			return error						
+			self.showId = showId
+			self.showTitle = showTitle
 
-		self.listItemsHtml = re.findall( '<li(.*?[^p])>', ol, re.DOTALL | re.IGNORECASE )
-		self.showId = showId
-		self.showTitle = showTitle
-
-		return None
-
-	def getEpisodeDetails(self, htmlListItem):
-		
-		dataKeyValues = re.findall('data-([a-zA-Z\-]*?)="(.*?)"', htmlListItem, re.DOTALL | re.IGNORECASE )
-		assetId		= ''
-		url		= ''
-		image		= ''
-		premieredDate	= ''
-		progTitle	= ''
-		epTitle		= ''
-		description	= ''
-		epNum		= ''
-		seriesNum	= ''
-		programmeNum = ''
-
-
-		for dataKeyValue in dataKeyValues:
-			if ( dataKeyValue[0].lower() == 'wsprogrammeid' ):
-				try: 
-					programmeString = re.search( '[0-9]*?-([0-9][0-9][0-9])', dataKeyValue[1], re.DOTALL)
-					
-					if programmeString:
-						programmeNum = int(programmeString.group(1))
-				except:
-					pass
-				continue
-
-			if ( dataKeyValue[0].lower() == 'episode-number' ):
-				try: 
-					epNum 	= int(dataKeyValue[1])
-				except:
-					pass
-				continue
-
-			if ( dataKeyValue[0].lower() == 'assetid' ):
-				assetId		= dataKeyValue[1]
-				continue 
-			if ( dataKeyValue[0].lower() == 'episodeurl' ):
-				url		= dataKeyValue[1]
-				continue
-			if ( dataKeyValue[0].lower() == 'image-url'):
-				image		= dataKeyValue[1]
-				continue
-			if ( dataKeyValue[0].lower()  == 'txdate'):
-				dateParts = dataKeyValue[1].split()
-				if len(dateParts) == 3:
-					if len(dateParts[0]) == 1:
-						dateParts[0] = '0' + dateParts[0]
-
-					dateParts[1] = (dateParts[1])[0:3]
-
-					premieredDate = "%s %s %s" % (dateParts[0], dateParts[1], dateParts[2])
-				else:
-					premieredDate = dataKeyValue[1]
-
-				continue
-
-			if ( dataKeyValue[0].lower()  == 'episodetitle' ):
-				progTitle	= dataKeyValue[1]
-				continue
-			if ( dataKeyValue[0].lower()  == 'episodeinfo' ):
-				epTitle		= dataKeyValue[1]
-				continue
-			if ( dataKeyValue[0].lower()  == 'episodesynopsis' ):
-				description	= dataKeyValue[1]
-				continue
-			if ( dataKeyValue[0].lower() == 'series-number' ):
-				try: 
-					seriesNum = int(dataKeyValue[1])
-				except:
-					pass
-				continue
-
-
-		if assetId <> '':
-			log ('Episode details: ' + str((assetId,epNum,url,image,premieredDate,progTitle,epTitle,description,seriesNum,programmeNum)), xbmc.LOGDEBUG)
-			self.assetId 		= assetId
-			self.epNum 		= epNum
-			self.url 		= url
-			self.image 		= image
-			self.premieredDate 	= premieredDate
-			self.progTitle 		= progTitle
-			self.epTitle 		= epTitle
-			self.description	= description
-			self.seriesNum		= seriesNum
-			self.programmeNum		= programmeNum
-
-
-	def refineEpisodeDetails(self):
-#		xbmc.log( "Start: %s" % str(self.seriesNum), xbmc.LOGDEBUG)
-#		xbmc.log( str(self.epNum), xbmc.LOGDEBUG)
-		if ( self.seriesNum == "" or self.epNum == "" ):
-			pattern = 'series-([0-9]+?)/episode-([0-9]+?)'
-			seasonAndEpisodeList = re.findall( pattern, self.url, re.DOTALL | re.IGNORECASE )
-
-#			xbmc.log( "%s" % seasonAndEpisodeList)
-			if len(seasonAndEpisodeList) > 0:
-				seasonAndEpisode = seasonAndEpisodeList[0]
-				print seasonAndEpisode
-
-				self.seriesNum = int(seasonAndEpisode[0])
-				self.epNum = int(seasonAndEpisode[1])
+			return True
+		except (Exception) as exception:
+			if not isinstance(exception, LoggingException):
+				exception = LoggingException.fromException(exception)
 			
-#				xbmc.log( "End1: %s" % str(self.seriesNum), xbmc.LOGDEBUG)
-#				xbmc.log( str(self.epNum), xbmc.LOGDEBUG)
+			if jsonText is not None:
+				msg = u"jsonText:\n\n%s\n\n" % jsonText
+				exception.addLogMessage(msg)
+			
+			# 'Error getting episode list'
+			exception.addLogMessage(__language__(30790))
+			raise exception
+	
+	def getInfolabelsAndLogo(self, episodeDetail):
+		
+		infoLabels = {
+						u'Title': episodeDetail.label, 
+						u'Plot': episodeDetail.description, 
+						u'PlotOutline': episodeDetail.description, 
+						u'Premiered': episodeDetail.premieredDate,
+						u'Season': episodeDetail.seriesNum,
+						u'Episode': episodeDetail.epNum
+						}
 
-#		xbmc.log( "End2: %s" % str(self.seriesNum), xbmc.LOGDEBUG)
-#		xbmc.log( str(self.epNum), xbmc.LOGDEBUG)
+		return (infoLabels, episodeDetail.thumbnail)
+		
+	def createNewListItem(self, episodeDetail):
+		(infoLabels, thumbnail) = self.getInfolabelsAndLogo(episodeDetail)
 
-		# Correct inconsistent Come Dine With Me episodes numbers
-		if self.epNum <> "" and self.programmeNum <> "" and self.epNum !=  self.programmeNum:
-			xbmc.log("Different episode and programmes values: %s, %s" % (self.epNum, self.programmeNum), xbmc.LOGERROR)
-			match = re.search('come-dine-with-me/', self.url, re.DOTALL | re.IGNORECASE)
-			if match:
-					self.epNum =  self.programmeNum
-
-
-		if ( self.epNum == "" ):
-			self.epNum = self.programmeNum
-
-		#elif len(self.premieredDate) > 0:
-		#	self.filename = self.showId + "." + self.premieredDate.replace( ' ', '.' )
-		#else:
-		#	self.filename = self.showId + "." + self.assetId
-
-		self.progTitle = self.progTitle.strip()
-		self.progTitle = self.progTitle.replace( '&amp;', '&' )
-		self.epTitle = self.epTitle.strip()
-		self.showTitle = utils.remove_extra_spaces(utils.remove_square_brackets(self.showTitle))
-		if ( self.progTitle == self.showTitle and self.epTitle <> "" ):
-			self.label = self.epTitle
-		else:
-			self.label = self.progTitle
-
-		if self.label == '':
-			self.label = self.showTitle
-
-		if len(self.premieredDate) > 0 and self.premieredDate not in self.label:
-				self.label = self.label + '  [' + self.premieredDate + ']'
-
-		self.description = utils.remove_extra_spaces(utils.remove_html_tags(self.description))
-		self.description = self.description.replace( '&amp;', '&' )
-		self.description = self.description.replace( '&pound;', '£')
-		self.description = self.description.replace( '&quot;', "'" )
-
-		if (self.image == ""):
-			(self.thumbnail, error) = utils.findString('EpisodeList.refineEpisodeDetails', '<meta property="og:image" content="(.*?)"', self.html)
-			if error is not None:
-				# Error getting image
-				error.process(ERROR_GETTING_IMAGE, "", xbmc.LOGWARNING)
-				self.thumbnail = ''
-
-		else:
-			self.thumbnail = "http://www.channel4.com" + self.image
-
-
-	def createNewListItem(self):
-		newListItem = xbmcgui.ListItem( self.label )
-		newListItem.setThumbnailImage(self.thumbnail)
-
-		infoLabels = {'Title': self.label, 'Plot': self.description, 'PlotOutline': self.description, 'Genre': self.genre, 'premiered': self.premieredDate}
-
-		if self.epNum <> '':
-			infoLabels['Episode'] = self.epNum
- 
-		newListItem.setInfo('video', infoLabels)
+		contextMenuItems = []
+		if self.showWatched:
+			if Watched().isWatched(episodeDetail.assetId):
+				infoLabels['PlayCount']  = 1
+				contextMenuItems.append((u'Mark as unwatched', u"XBMC.RunPlugin(%s?unwatched=1&ep=%s)" % (sys.argv[0], episodeDetail.assetId) ))
+			else:
+				contextMenuItems.append((u'Mark as watched', u"XBMC.RunPlugin(%s?watched=1&ep=%s)" % (sys.argv[0], episodeDetail.assetId) ))
+			
+		newListItem = xbmcgui.ListItem( infoLabels['Title'] )
+		newListItem.setThumbnailImage(thumbnail)
+		newListItem.setInfo(u'video', infoLabels)
+		
+		if len(contextMenuItems) > 0:
+			newListItem.addContextMenuItems( contextMenuItems )
 
 		return newListItem
-
-
+		
+		
 	#==============================================================================
 	# createListItems
 	#
 	# Create an XBMC list item for each episode
 	#==============================================================================
-	def createListItems(self, mycgi, youtube):
+	def createListItems(self, mycgi):
+		listItems = []
+		epsDict = dict()
 		
-	        listItems = []
-	        epsDict = dict()
-
-		episodeIndex = 0
-	        for listItemHtml in self.listItemsHtml:
-	                self.getEpisodeDetails(listItemHtml)
-
-	                if (self.assetId == ''):
-        	                continue;
-
-    		        if ( self.assetId in epsDict ):
-				continue
-
-        	        epsDict[self.assetId] = 1
-
-			self.refineEpisodeDetails()
-
-			if youtube.isNotOnYoutube(episodeIndex, self.showId, self.seriesNum, self.epNum, self.premieredDate):
-				self.label = '[Not on Youtube] ' + self.label
-
-			episodeIndex = episodeIndex + 1
-
-	                newListItem = self.createNewListItem( )
-	                #url = self.baseURL + '?ep=' + mycgi.URLEscape(self.assetId) + "&show=" + mycgi.URLEscape(self.showId) + "&title=" + mycgi.URLEscape(self.label) + "&fn=" + mycgi.URLEscape(self.filename) + "&swfPlayer=" + mycgi.URLEscape(self.swfPlayer)
-			url = self.baseURL + '?ep=' + mycgi.URLEscape(self.assetId) + "&show=" + mycgi.URLEscape(self.showId) + "&seriesNumber=" + mycgi.URLEscape(str(self.seriesNum)) + "&episodeNumber=" + mycgi.URLEscape(str(self.epNum)) + "&title=" + mycgi.URLEscape(self.label) + "&swfPlayer=" + mycgi.URLEscape(self.swfPlayer)
-
-	                listItems.append( (url,newListItem,False) )
-
+		#episodeIndex = 0
+		for entry in self.entries:
+			episodeDetail = EpisodeDetail(entry, self.log)
+			self.episodeDetails[episodeDetail.assetId] = episodeDetail 
+			
+			episodeDetail.refine(self.showId, self.showTitle)
+			
+			newListItem = self.createNewListItem( episodeDetail )
+			
+			url = self.baseURL + u'&ep=' + mycgi.URLEscape(episodeDetail.assetId) + u"&show=" + mycgi.URLEscape(self.showId) + u"&seriesNumber=" + mycgi.URLEscape(str(episodeDetail.seriesNum)) + "&episodeNumber=" + mycgi.URLEscape(str(episodeDetail.epNum)) + "&title=" + mycgi.URLEscape(episodeDetail.label) #+ "&swfPlayer=" + mycgi.URLEscape(self.swfPlayer)
+			
+			listItems.append( (url, newListItem, False) )
 
 		return listItems
 
+	def GetEpisodeDetail(self, matchingAssetId):
+		for entry in self.entries:
+			episodeDetail = EpisodeDetail(entry, self.log)
+			if episodeDetail.assetId == matchingAssetId:
+				episodeDetail.refine(self.showId, self.showTitle)
+				
+				return episodeDetail
+			
+		return None
 
 	#==============================================================================
 	# createNowPlayingListItem
 	#
 	# Create a single XBMC list item for one particular episode
 	#==============================================================================
-	def createNowPlayingListItem(self, matchingAssetId):
+	def createNowPlayingListItem(self, episodeDetail):
+
+		newListItem = self.createNewListItem(episodeDetail)
+		return newListItem
 		
-	        for listItemHtml in self.listItemsHtml:
-	                self.getEpisodeDetails(listItemHtml)
+"""
+{"feed":
+	{"link":
+		{"self":"http:\/\/ps3.channel4.com\/pmlsd\/the-horse-hoarder.json?platform=ps3",
+		"related":["http:\/\/ps3.channel4.com\/pmlsd\/the-horse-hoarder\/episode-guide.json?platform=ps3","http:\/\/ps3.channel4.com\/pmlsd\/the-horse-hoarder\/4od.json?platform=ps3","http:\/\/ps3.channel4.com\/pmlsd\/the-horse-hoarder\/4od\/recommendations.json?platform=ps3"]
+		},
+	"$":"\n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n",
+	"id":"tag:ps3.channel4.com,2009:\/programmes\/the-horse-hoarder",
+	"title":"The Horse Hoarder",
+	"subtitle":
+		{"@type":"html",
+		"$":"Pensioner Clwyd Davies has accumulated 52 untamed horses, which he keeps at his home in Wrexham's suburbs"
+		},
+	"updated":"2013-01-07T12:30:53.872Z",
+	"author":
+		{"$":"\n	\n  ",
+		"name":"Channel 4 Television"
+		},
+	"logo":
+		{"@imageSource":"own",
+		"$":"http:\/\/cache.channel4.com\/assets\/programmes\/images\/the-horse-hoarder\/ea8a20f0-2ba9-4648-8eec-d25a0fe35d3c_200x113.jpg"
+		},
+	"category":[
+		{"@term":"http:\/\/ps3.channel4.com\/pmlsd\/tags\/animals.atom?platform=ps3",
+		"@scheme":"tag:ps3.channel4.com,2010:\/category\/primary",
+		"@label":"Animals"
+		},
+		{"@term":"http:\/\/ps3.channel4.com\/pmlsd\/tags\/documentaries.atom?platform=ps3",
+		"@scheme":"tag:ps3.channel4.com,2010:\/category\/secondary",
+		"@label":"Documentaries"
+		}],
+	"dc:relation.BrandFlattened":false,
+	"dc:relation.presentationBrand":"C4",
+	"dc:relation.platformClientVersion":1,
+	"dc:relation.BrandWebSafeTitle":"the-horse-hoarder",
+	"dc:relation.BrandTitle":"The Horse Hoarder",
+	"dc:relation.ProgrammeType":"OOS",
+	"generator":
+		{"@version":"1.43","$":"PMLSD"},
+	"entry":
+		{"link":
+			{"related":"http:\/\/ais.channel4.com\/asset\/3464654",
+			"self":"http:\/\/ps3.channel4.com\/pmlsd\/the-horse-hoarder\/episode-guide\/series-1\/episode-1.json?platform=ps3"
+			},
+		"$":"\n	\n	\n	\n	\n	\n	\n	\n	\n	\n	\n	\n  ",
+		"id":"tag:ps3.channel4.com,2009:\/programmes\/the-horse-hoarder\/episode-guide\/series-1\/episode-1",
+		"title":"The Horse Hoarder",
+		"summary":
+			{"@type":"html",
+			"$":"Pensioner Clwyd Davies squats in a derelict house, dedicating his life to caring for 52 wild horses. But he has been reported to the RSPCA. This documentary follows Clwyd's battle to keep his horses."
+			},
+		"updated":"2013-01-07T12:30:54.027Z",
+		"content":
+			{"$":"\n	  \n	",
+			"thumbnail":
+				{"@url":"http:\/\/cache.channel4.com\/assets\/programmes\/images\/the-horse-hoarder\/series-1\/episode-1\/e5c98d93-4f82-4174-b3f1-a1f7d180958a_200x113.jpg",
+				"@height":"113",
+				"@width":"200",
+				"@imageSource":"own",
+				"@altText":"The Horse Hoarder"
+				}
+			},
+		"dc:relation.SeriesNumber":1,
+		"dc:relation.EpisodeNumber":1,
+		"dc:date.Last":"2013-01-07T20:30:00.000Z",
+		"dc:relation.LastChannel":"C4"
+		}
+	}
+}
+"""
+class EpisodeDetail:
+	def __init__(self, entry, log):
+		self.log = log
+		self.label = ""
+		self.thumbnail = ""
+		player = entry[u'group'][u'player']['@url']
+		match = re.search(u'http://ais.channel4.com/asset/(\d+)', player)
+		self.assetId= match.group(1)
+		self.url = entry[u'link'][u'related']
 
-	                if (self.assetId <> matchingAssetId):
-        	                continue;
+		try:
+			self.epNum = int(entry[u'dc:relation.EpisodeNumber'])
+		except (Exception) as exception:
+			self.logException(exception, u'dc:relation.EpisodeNumber')
+			self.epNum = ""
 
-			self.label = ''
-			self.thumbnail = ''
-			self.refineEpisodeDetails()
+		try:
+			self.hasSubtitles = bool(entry['dc:relation.Subtitles'])
+		except (Exception) as exception:
+			self.logException(exception, u'dc:relation.Subtitles')
+			self.hasSubtitles = False
 
-			newListItem = self.createNewListItem()
-			return newListItem
+		try:
+			self.thumbnail = entry[u'group'][u'thumbnail'][u'@url']
+		except (Exception) as exception:
+			self.logException(exception, u'thumbnail')
+			self.thumbnail = ""
 
+		try:
+			lastDate = date.fromtimestamp(mktime(strptime(entry[u'dc:date.TXDate'], u"%Y-%m-%dT%H:%M:%S.%fZ")))
+			self.premieredDate = lastDate.strftime(u"%d.%m.%Y")
+		except (Exception) as exception:
+			self.logException(exception, u'dc:date.Last')
+			self.premieredDate = ""
+
+		try:
+			self.epTitle = unicode(entry[u'title'])
+		except (Exception) as exception:
+			self.logException(exception, u'title')
+			self.epTitle = ""
+
+		try:
+			self.description = entry[u'summary'][u'$']
+		except (Exception) as exception:
+			self.logException(exception, u'summary')
+			self.description = ""
+			
+		try:
+			self.seriesNum = int(entry[u'dc:relation.SeriesNumber'])
+		except (Exception) as exception:
+			self.logException(exception, u'dc:relation.SeriesNumber')
+			self.seriesNum = ""
+
+		self.log (u'Episode details: ' + unicode((self.assetId,self.epNum,self.url,self.thumbnail,self.premieredDate,self.epTitle,self.description,self.seriesNum,self.hasSubtitles)), xbmc.LOGDEBUG)
+
+	def refine(self, showId, showTitle):
+		if ( self.seriesNum == u"" or self.epNum == u"" ):
+			pattern = u'series-([0-9]+)(\\\)?/episode-([0-9]+)'
+			seasonAndEpisodeMatch = re.search( pattern, self.url, re.DOTALL | re.IGNORECASE )
+
+			self.log(u"Searching for season and episode numbers in url: %s" % self.url)
+			if seasonAndEpisodeMatch is not None:
+				self.seriesNum = int(seasonAndEpisodeMatch.group(1))
+				self.epNum = int(seasonAndEpisodeMatch.group(3))
+			
+#				self.log( "End1: %s" % str(self.seriesNum), xbmc.LOGDEBUG)
+#				self.log( str(self.epNum), xbmc.LOGDEBUG)
+
+#		self.log( "End2: %s" % str(self.seriesNum), xbmc.LOGDEBUG)
+#		self.log( str(self.epNum), xbmc.LOGDEBUG)
+
+		if len(self.premieredDate) > 0:
+			self.filename = showId + "." + self.premieredDate.replace( ' ', '.' )
+		else:
+			self.filename = showId + "." + self.assetId
+
+		self.epTitle = self.epTitle.strip()
+		showTitle = utils.remove_extra_spaces(utils.remove_square_brackets(showTitle))
+
+		self.label = self.epTitle
+		if self.epTitle == showTitle:
+			self.label = "Series %d Episode %d" % (self.seriesNum, self.epNum)
+
+		if len(self.premieredDate) > 0 and self.premieredDate not in self.label:
+				self.label = self.label + u'  [' + self.premieredDate + u']'
+
+		self.description = utils.remove_extra_spaces(utils.remove_html_tags(self.description))
+		self.description = self.description.replace( u'&amp;', u'&' )
+		self.description = self.description.replace( u'&pound;', u'£')
+		self.description = self.description.replace( u'&quot;', u"'" )
+
+
+	def logException(self, exception, detailName):
+		if not isinstance(exception, LoggingException):
+			exception = LoggingException.fromException(exception)
+	
+		# 'Error getting episode data "%s"'
+		exception.addLogMessage(__language__(30960) % detailName)
+		exception.printLogMessages(severity = xbmc.LOGWARNING)
+		
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 
 gParamDict = {}
@@ -23,6 +24,9 @@ def _GetParamDict():
 	if ( gQSParsed == False ):
 		_ParseQS()
 	return gParamDict
+
+def ParamCount():
+	return len(_GetParamDict())
 
 def _ParseQS():
 	global gParamDict

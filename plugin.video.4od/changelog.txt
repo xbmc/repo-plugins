@@ -1,3 +1,36 @@
+Version 2.0.9 (16 Mar 2013)
+- Prevent potential divide-by-zero problem when "Show Watched" is on.
+
+Version 2.0.8 (15 Mar 2013)
+- Fix downloads
+
+Version 2.0.7 (04 Mar 2013)
+- Added option to get streams via proxy
+- Added "Show Watched" option. Turn on automatic watch in plugin settings. Manu
+- Fixed subtitles
+- Improved progress dialog
+
+Version 2.0.6 (04 Mar 2013)
+- Moved repository
+
+Version 2.0.5 (08 Feb 2013)
+- Fix bug - Due to 4oD perversely treating the title of a programme called "40" as an integer rather than a string, error on the second page of the A-Z Drama listing
+
+Version 2.0.4 (06 Feb 2013)
+- Fix bug - import os - used by downloads
+
+Version 2.0.3 (06 Feb 2013)
+- Fix bug - Forgot to specify BeautifulSoup depency
+
+Version 2.0.2 (06 Feb 2013)
+- Fix bug - Wrong socksipy dependency version number (Eden only)
+
+Version 2.0.1 (06 Feb 2013)
+- Fix bug - only works if you have pyamf module installed
+
+Version 2.0.0 (06 Feb 2013)
+- Working again, uses ps3.channel4.com
+
 Version 1.8.6 (12 Dec 2012)
 - Broken for ALL videos, due to changes in the 4oD and Youtube encryption
 

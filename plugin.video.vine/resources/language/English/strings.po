@@ -1,0 +1,308 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2013-03-13 21:26+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30050"
+msgid "Error getting web page"
+msgstr ""
+
+#empty strings from id 30051 to 30099
+
+msgctxt "#30100"
+msgid "General"
+msgstr ""
+
+#empty strings from id 30101 to 30119
+
+msgctxt "#30120"
+msgid "Ask"
+msgstr ""
+
+#empty strings from id 30121 to 30129
+
+msgctxt "#30130"
+msgid "Play"
+msgstr ""
+
+#empty strings from id 30131 to 30139
+
+msgctxt "#30140"
+msgid "Download"
+msgstr ""
+
+#empty strings from id 30141 to 30169
+
+msgctxt "#30170"
+msgid "Disable HTTP Cache"
+msgstr ""
+
+#empty strings from id 30171 to 30369
+
+msgctxt "#30370"
+msgid "Forwarded IP"
+msgstr ""
+
+#empty strings from id 30371 to 30399
+
+msgctxt "#30400"
+msgid "Advanced"
+msgstr ""
+
+#empty strings from id 30401 to 30419
+
+msgctxt "#30420"
+msgid "Socket Timeout"
+msgstr ""
+
+#empty strings from id 30421 to 30499
+
+msgctxt "#30500"
+msgid "Search"
+msgstr ""
+
+#empty strings from id 30501 to 30529
+
+msgctxt "#30530"
+msgid "Do you want to play or download?"
+msgstr ""
+
+#empty strings from id 30531 to 30559
+
+msgctxt "#30560"
+msgid "Download Error"
+msgstr ""
+
+#empty strings from id 30561 to 30569
+
+msgctxt "#30570"
+msgid "You have not located your rtmpdump executable.\n Please update the addon settings and try again."
+msgstr ""
+
+#empty strings from id 30571 to 30579
+
+msgctxt "#30580"
+msgid "You have not set the default download folder.\n Please update the addon settings and try again."
+msgstr ""
+
+#empty strings from id 30581 to 30589
+
+msgctxt "#30590"
+msgid "Save programme as..."
+msgstr ""
+
+#empty strings from id 30591 to 30599
+
+msgctxt "#30600"
+msgid "Save to folder..."
+msgstr ""
+
+#empty strings from id 30601 to 30609
+
+msgctxt "#30610"
+msgid "Starting download"
+msgstr ""
+
+#empty strings from id 30611 to 30619
+
+msgctxt "#30620"
+msgid "Download Finished"
+msgstr ""
+
+#empty strings from id 30621 to 30764
+
+msgctxt "#30765"
+msgid "Cannot show categories"
+msgstr ""
+
+#empty strings from id 30766 to 30779
+
+msgctxt "#30780"
+msgid "Error processing web page"
+msgstr ""
+
+#empty strings from id 30781 to 30794
+
+msgctxt "#30795"
+msgid "Error getting category web page"
+msgstr ""
+
+#empty strings from id 30796 to 30969
+
+msgctxt "#30970"
+msgid "Error getting subtitles"
+msgstr ""
+
+#empty strings from id 30971 to 31009
+
+msgctxt "#31010"
+msgid "Proxy for HTTP"
+msgstr ""
+
+#empty strings from id 31011 to 31019
+
+msgctxt "#31020"
+msgid "Proxy for HTTP and RTMP"
+msgstr ""
+
+#empty strings from id 31021 to 31999
+
+msgctxt "#32000"
+msgid "rtmpdump path is not set"
+msgstr ""
+
+#empty strings from id 32001 to 32009
+
+msgctxt "#32010"
+msgid "Download Folder is not set"
+msgstr ""
+
+#empty strings from id 32011 to 32019
+
+msgctxt "#32020"
+msgid "rtmp url is not set"
+msgstr ""
+
+#empty strings from id 32021 to 32119
+
+msgctxt "#32120"
+msgid "Error playing or downloading episode %s"
+msgstr ""
+
+#empty strings from id 32121 to 32399
+
+msgctxt "#32400"
+msgid "Default"
+msgstr ""
+
+#empty strings from id 32401 to 32409
+
+msgctxt "#32410"
+msgid "Lowest Available"
+msgstr ""
+
+#empty strings from id 32411 to 32419
+
+msgctxt "#32420"
+msgid "Highest Available"
+msgstr ""
+
+#empty strings from id 32421 to 32429
+
+msgctxt "#32430"
+msgid "Max 200kps"
+msgstr ""
+
+#empty strings from id 32431 to 32439
+
+msgctxt "#32440"
+msgid "Max 350kps"
+msgstr ""
+
+#empty strings from id 32441 to 32449
+
+msgctxt "#32450"
+msgid "Max 500kps"
+msgstr ""
+
+#empty strings from id 32451 to 32459
+
+msgctxt "#32460"
+msgid "Max 750kps"
+msgstr ""
+
+#empty strings from id 32461 to 32469
+
+msgctxt "#32470"
+msgid "Max 1000kps"
+msgstr ""
+
+#empty strings from id 32471 to 32479
+
+msgctxt "#32480"
+msgid "Max 1500kps"
+msgstr ""
+
+#empty strings from id 32481 to 32489
+
+msgctxt "#32490"
+msgid "Max 2000kps"
+msgstr ""
+
+#empty strings from id 32491 to 32639
+
+msgctxt "#32640"
+msgid "Preparing to play video"
+msgstr ""
+
+#empty strings from id 32641 to 32719
+
+msgctxt "#32720"
+msgid "Preparing to play video"
+msgstr ""
+
+#empty strings from id 32721 to 59999
+
+msgctxt "#60000"
+msgid "Latest Vines"
+msgstr ""
+
+#empty strings from id 60001 to 60009
+
+msgctxt "#60010"
+msgid "Search by #tag"
+msgstr ""
+
+#empty strings from id 60011 to 60029
+
+msgctxt "#60030"
+msgid "Show Tweets"
+msgstr ""
+
+#empty strings from id 60031 to 60039
+
+msgctxt "#60040"
+msgid "WARNING: These videos are not moderated. By using"
+msgstr ""
+
+msgctxt "#60041"
+msgid "this plugin you are accepting sole responsibility"
+msgstr ""
+
+msgctxt "#60042"
+msgid "for any and all consequences of said use."
+msgstr ""
+
+#empty strings from id 60043 to 60049
+
+msgctxt "#60050"
+msgid "Continue"
+msgstr ""
+
+#empty strings from id 60051 to 60059
+
+msgctxt "#60060"
+msgid "Cancel"
+msgstr ""
+
+#empty strings from id 60061 to 60069
+
+msgctxt "#60070"
+msgid "No videos found"
+msgstr ""
+
+#empty strings from id 60071 to 60079
+
+msgctxt "#60080"
+msgid "Computer says \"No\""
+msgstr ""

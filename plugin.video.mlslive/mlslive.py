@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
 
-import urllib, urllib2, xml.dom.minidom, json, cookielib, time, datetime
+import urllib, urllib2, xml.dom.minidom, json, cookielib, time, datetime, unicodedata
 
 class MLSLive:
 
@@ -27,12 +27,20 @@ class MLSLive:
         self.LOGIN_PAGE = 'https://live.mlssoccer.com/mlsmdl/secure/login'
         self.GAMES_PAGE_PREFIX = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/games_for_week_'
         self.GAMES_PAGE_SUFFIX = '.js'
-        
+
+        # Video channel information 
+        self.CHANNELS_PAGE = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/channels.js'
+        self.CHANNEL_PREFIX = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/channel_'
+        self.CHANNEL_SUFFIX = '.js'
+
         # Odd, but the year is still 2011 -- I expect this will change in the future
         self.GAME_PREFIX = 'http://mls.cdnak.neulion.com/mobile/feeds/game/2011/'
         self.GAME_SUFFIX = '_ced.xml'
 
         self.TEAM_PAGE = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/teams_2013.js'
+
+        # resolution for images
+        self.RES = '560x320'
 
 
     def login(self, username, password):
@@ -67,6 +75,35 @@ class MLSLive:
         
         return False
 
+    def getMonday(self, week_offset):
+        today = datetime.date.today()
+        monday = today + datetime.timedelta(days=-today.weekday(), weeks=week_offset)
+        return monday
+
+
+    def getWeeks(self):
+        week_offset = 0
+        week_found = True
+        weeks = {}
+
+        # work backwards through the weeks as long as there are games
+        while week_found:
+            games = self.getGames(week_offset)
+            if len(games) > 0:
+                weeks[week_offset] = self.getMonday(week_offset).strftime("%B %d, %Y")
+                week_offset = week_offset - 1
+            else:
+                week_found = False
+
+        # return the weeks
+        return weeks
+
+
+    def getGamesURI(self, week_offset): 
+        monday = self.getMonday(week_offset)
+        monday_str = monday.strftime("%Y-%m-%d")
+        return self.GAMES_PAGE_PREFIX + monday_str + self.GAMES_PAGE_SUFFIX
+
 
     def getGames(self, week_offset):
         """
@@ -91,11 +128,7 @@ class MLSLive:
         - gameStatus ("FINAL","UPCOMING", "LIVE - 50'"
         - visitorTeamName (pretty vistor team name)
         """
-        today = datetime.date.today()
-        monday = today + datetime.timedelta(days=-today.weekday(), weeks=week_offset)
-        monday_str = monday.strftime("%Y-%m-%d")
-        games_url = self.GAMES_PAGE_PREFIX + monday_str + self.GAMES_PAGE_SUFFIX
-
+        games_url = self.getGamesURI(week_offset)
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
         try:
             resp = opener.open(games_url)
@@ -298,3 +331,43 @@ class MLSLive:
         stream_url = path_node.firstChild.nodeValue
 
         return stream_url.split('?')[0]
+
+
+    def getVideoChannels(self):
+        """
+        Get the list of video channels
+        """
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
+        try:
+            resp = opener.open(self.CHANNELS_PAGE)
+        except:
+            print "Unable to load channels list."
+            return None
+
+        json_data = resp.read()
+
+        return json.loads(json_data)['channels']
+
+    def getChannelImage(self, channel):
+        """
+        Get the channel image URL
+        """
+        return channel['tile'].replace('[res]', self.RES)
+
+
+    def getChannelVideos(self, channel_id):
+        """
+        Get the list of videos for the channel
+        """
+        url = self.CHANNEL_PREFIX + channel_id + self.CHANNEL_SUFFIX
+        print url
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
+        try:
+            resp = opener.open(url)
+        except:
+            print "Unable to load channel video list."
+            return None
+
+        json_data = resp.read()
+
+        return json.loads(json_data)['items']

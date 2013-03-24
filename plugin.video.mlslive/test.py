@@ -8,10 +8,12 @@ parser.add_option('-u', '--user', type='string', dest='user',
                   help="Username for authentication")
 parser.add_option('-p', '--password', type='string', dest='password',
                   help="Password for authentication")
-parser.add_option("-g", "--game", type='string', dest='game',
+parser.add_option('-g', '--game', type='string', dest='game',
                   help="Game to display")
-parser.add_option("-o", "--offset", type='int', dest='offset', default=0,
+parser.add_option('-o', '--offset', type='int', dest='offset', default=0,
                   help="Week offset (from present)")
+parser.add_option('-c', '--channel', type='string', dest='channel',
+                  help="List channel (with no value) or channel contents")
 
 (options, args) = parser.parse_args()
 
@@ -29,6 +31,20 @@ my_mls = mlslive.MLSLive()
 if not my_mls.login(options.user, options.password):
     print "Unable to authenticte with MLS live. please set username and password."
     sys.exit(1)
+
+weeks = my_mls.getWeeks()
+print weeks
+
+if options.channel == None:
+    print "Video Channels:"
+    channels = my_mls.getVideoChannels()
+    for channel in channels:
+        print '\t' + channel['channelID'] + ') ' + channel['name']
+else:
+    videos = my_mls.getChannelVideos(options.channel)
+    for video in videos:
+        print video['clipID'] + ') ' + video['title']
+    sys.exit()
 
 if options.game != None:
 
@@ -58,8 +74,6 @@ if options.game != None:
 
     sys.exit(0)
 
-print "Offset = " + str(options.offset)
-#games = my_mls.getGames()
 games = my_mls.getGames(options.offset)
 teams = my_mls.getTeams()
 

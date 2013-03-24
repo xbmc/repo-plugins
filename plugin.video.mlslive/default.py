@@ -23,6 +23,39 @@ __language__ = __settings__.getLocalizedString
 GAME_IMAGE_PREFIX = 'http://e2.cdnl3.neulion.com/mls/ced/images/roku/HD/'
 
 
+def createChannelsMenu(my_mls):
+    channels = my_mls.getVideoChannels()
+    for channel in channels:
+        title = channel['name']
+        li = xbmcgui.ListItem(title, iconImage=my_mls.getChannelImage(channel))
+        li.setInfo( type="Video", infoLabels={"Title" : title})
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                    url=sys.argv[0] + "?" + urllib.urlencode({'channel' : channel['channelID']}),
+                                    listitem=li,
+                                    isFolder=True)
+
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+
+def createChannelMenu(my_mls, values_string):
+    """
+    Create the list of videos in the channel
+    """
+    values = dict(urlparse.parse_qsl(values_string))
+    videos = my_mls.getChannelVideos(values['channel'])
+    for video in videos:
+        title = video['title']
+        li = xbmcgui.ListItem(title, iconImage=video['imageUrl'])
+        li.setInfo( type="Video", infoLabels={"Title" : title})
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                    url=video['content']['ios'],
+                                    listitem=li,
+                                    isFolder=False)
+
+    # signal the end of the directory
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+
 def createFinalMenu(my_mls, values_string):
     """
     Create a menu for games that have already finished
@@ -31,11 +64,11 @@ def createFinalMenu(my_mls, values_string):
     """
     values = dict(urlparse.parse_qsl(values_string))
     streams = my_mls.getFinalStreams(values['id'])
-    
+
     if (streams == None):
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
         return
-    
+
     for key in streams.keys():
         title = my_mls.adjustArchiveString(values['title'], key)
         li = xbmcgui.ListItem(title, iconImage=values['image'])
@@ -44,14 +77,39 @@ def createFinalMenu(my_mls, values_string):
                                     url=streams[key],
                                     listitem=li,
                                     isFolder=False)
+
+    # signal the end of the directory
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 
-def createMainMenu(my_mls, values_string):
+def createWeeksMenu(my_mls):
+    """
+    Create a menu listing all of the weeks of the current MLS season
+    """
+
+    weeks = my_mls.getWeeks();
+
+    for week in sorted(weeks.keys(), reverse=True):
+        title = __language__(30009) + weeks[week]
+        li = xbmcgui.ListItem(title)
+        li.setInfo( type="Video", infoLabels={"Title" : title})
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                    url=sys.argv[0] + "?" + urllib.urlencode({'week' : str(week)}),
+                                    listitem=li,
+                                    isFolder=True)
+
+
+    # signal the end of the directory
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+
+def createWeekMenu(my_mls, values_string, final_only=True):
     """
     Create the main menu consisting of the days games
     @param my_mls the MLS live object
     @param values_string the string containing the week offset from the present
+    @param final_only boolean indicating if we should only show games that have
+           completed
     """
     # get the values -- should just be the week offset
     values = dict(urlparse.parse_qsl(values_string))
@@ -60,21 +118,11 @@ def createMainMenu(my_mls, values_string):
     teams = my_mls.getTeams()
     offset = int(values['week'])
 
-    # add next week
-    nli = xbmcgui.ListItem(__language__(30009))
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                url=sys.argv[0] + "?" + urllib.urlencode({'week' : offset + 1}),
-                                listitem=nli,
-                                isFolder=True)
-
-    # add previous week
-    pli = xbmcgui.ListItem(__language__(30010))
-    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                url=sys.argv[0] + "?" + urllib.urlencode({'week' : offset - 1}),
-                                listitem=pli,
-                                isFolder=True)
-
     for game in my_mls.getGames(offset):
+
+        # if final == (live or upcoming) then don't use it 
+        if final_only == (my_mls.isGameLive(game) or my_mls.isGameUpcoming(game)):
+            continue
 
         # get the pretty title        
         game_str = my_mls.getGameString(game, __language__(30008))
@@ -111,6 +159,30 @@ def createMainMenu(my_mls, values_string):
                                         url=url,
                                         listitem=li,
                                         isFolder=True)
+
+    # signal the end of the directory
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+
+def createMainMenu(my_mls):
+    # add the game
+    live = xbmcgui.ListItem(__language__(30010))
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                url=sys.argv[0] + "?" + urllib.urlencode({'id' : 'live'}),
+                                listitem=live,
+                                isFolder=True)
+
+    vod = xbmcgui.ListItem(__language__(30011))
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                url=sys.argv[0] + "?" + urllib.urlencode({'id' : 'replay'}),
+                                listitem=vod,
+                                isFolder=True)
+
+    chan = xbmcgui.ListItem(__language__(30012))
+    xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
+                                url=sys.argv[0] + "?" + urllib.urlencode({'id' : 'channels'}),
+                                listitem=chan,
+                                isFolder=True)
 
     # signal the end of the directory
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -156,8 +228,17 @@ my_mls = authenticate()
 if my_mls == None:
     print "ERROR: Unable to authenticate"
 elif (len(sys.argv[2]) == 0):
-    createMainMenu(my_mls, 'week=0')
+    createMainMenu(my_mls)
+elif sys.argv[2] == '?id=live':
+    createWeekMenu(my_mls, "week=0", False)
+elif sys.argv[2] == '?id=replay':
+    createWeeksMenu(my_mls)
+elif sys.argv[2] == '?id=channels':
+    createChannelsMenu(my_mls)
+elif sys.argv[2][:8] == '?channel':
+    createChannelMenu(my_mls, sys.argv[2][1:])
 elif sys.argv[2][:3] == '?id':
     createFinalMenu(my_mls, sys.argv[2][1:])
 elif sys.argv[2][:5] == '?week':
-    createMainMenu(my_mls, sys.argv[2][1:])
+    createWeekMenu(my_mls, sys.argv[2][1:])
+

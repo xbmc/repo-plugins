@@ -1,3 +1,8 @@
+[B]Version 1.0.2[/B]
+
+- improve live and replay match menu layout
+- add video channels
+
 [B]Version 1.0.1[/B]
 
 - fix the live stream WS calls. Now all live games work.

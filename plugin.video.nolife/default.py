@@ -510,7 +510,7 @@ def extractVideoInfo(element):
             info.seen = False
         
         reg_date = '<p style="padding-right:25px;'\
-            ' padding-left:10px;">.*</p>'
+            ' padding-left:55px;">.*</p>'
         info.thumb    = re.compile('data-thumb=".*"').findall(str(element))[0][12:][:-1]
         _date_len = remove_html_tags(re.compile(reg_date).findall(str(element))[0])
         info.duration = sum(int(x) * 60 ** i for i,x in enumerate(reversed(_date_len.split(' - ')[1].strip('s').split(":"))))
@@ -524,7 +524,7 @@ def extractVideoInfo(element):
         reg_vid = 'a href="emission-.*" '
         info.vid   = re.compile(reg_vid).findall(str(element))[0][17:][:-2]
         
-        reg_desc = '<p style="padding-left:10px;"><strong>.*'
+        reg_desc = '<p style="padding-left:55px;"><strong>.*'
         info.desc  = remove_html_tags(re.compile(reg_desc).findall(str(element))[0][30:])
 
         info.name  = remove_html_tags(re.compile('<h3.*').findall(str(element))[0])
@@ -546,7 +546,7 @@ def extractVideoSearchInfo(element):
         reg_srch = 'a href="emission-.*" '
         info.id = re.compile(reg_srch).findall(str(element))[0][17:][:-2]
 
-        reg_desc = '<p style="padding-left:10px;"><strong>.*'
+        reg_desc = '<p style="padding-left:55px;"><strong>.*'
         info.thumb    = re.compile('data-thumb=".*"').findall(str(element))[0][12:][:-1]
         _bdesc = re.compile(reg_desc).findall(str(element))[0][30:]
         _bname = re.compile('<h3.*').findall(str(element))[0]
@@ -556,7 +556,7 @@ def extractVideoSearchInfo(element):
         req_availibity = '<p style="float:right; margin-right:-15px; clear:right;"><strong>.*'
         info.availability = remove_html_tags(re.compile(req_availibity).findall(str(element))[0][30:])
     
-        reg_date = '<p style="padding-right:25px; padding-left:10px;">.*</p>'
+        reg_date = '<p style="padding-right:25px; padding-left:55px;">.*</p>'
         _date_len = remove_html_tags(re.compile(reg_date).findall(str(element))[0])
         info.duration = _date_len.split(' - ')[1]
 

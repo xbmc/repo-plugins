@@ -1,3 +1,8 @@
+[B]Version 1.0.6[/B]
+
+* Fixed: if xbmc.Player doesn't provide runtime, plugin failed to show rating dialog
+* Fixed: api directors format change
+
 [B]Version 1.0.5[/B]
 
 + Added: display year after movie name

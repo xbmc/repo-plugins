@@ -90,10 +90,10 @@ class SynopsiPlayer(xbmc.Player):
 		else:
 			if xbmc.Player().isPlayingVideo():
 				self.playing = True
-				self.total_time = xbmc.Player().getTotalTime()
+				self.media_file = self.getPlayingFile()
+				self.total_time = self.getTotalTime()
 				self.current_time = self.get_time()
 				self.started()
-				self.media_file = self.getPlayingFile()
 				self.mediainfotag = self.getVideoInfoTag()
 				self.last_played_file = self.media_file
 				self.subtitle_file = self.getSubtitles()
@@ -132,6 +132,15 @@ class SynopsiPlayer(xbmc.Player):
 			return default
 			
 		return t
+
+	def getTotalTime(self):
+		tt = xbmc.Player().getTotalTime()
+
+		if not tt:
+			title = self.cache.getByFilename(self.media_file)
+			tt = title.get('runtime')
+		
+		return tt
 
 	def get_media_info_tag(self):
 		try:
@@ -174,9 +183,14 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 
 	def stopped(self):
 		self.playerEvent('stop')
+
+		# if we still dont have total runtime, use some default average (this should now be very rare case)
+		if not self.total_time:
+			self.total_time = 5400
+		
 		percent = self.current_time / self.total_time
 		self.log('percent:' + str(self.current_time / self.total_time))
-
+		
 		# ask for rating only if more than 70% of movie passed
 		if percent > 0.7:
 			self.rate_file(self.last_played_file)

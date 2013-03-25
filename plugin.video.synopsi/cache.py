@@ -128,6 +128,11 @@ class OfflineStvList(object):
 
 			if title.has_key('id'):
 				movie['stvId'] = title['id']
+
+				# use synopsi runtime if possible
+				if title.get('runtime'):
+					movie['runtime'] = 60 * title['runtime']
+					
 				self.log('identified: ' + title['name'])
 			else:
 				self.log('NOT identified %s' % movie['file'])

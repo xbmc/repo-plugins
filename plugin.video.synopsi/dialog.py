@@ -549,7 +549,7 @@ def video_dialog_template_fill(stv_details, json_data={}):
 
 	append_tuple('Genre', 'genres', tr_genre)
 	append_tuple('Cast', 'cast', tr_cast)
-	append_tuple('Director', 'directors', tr_genre)		# reuse tr_genre here	
+	append_tuple('Director', 'directors', tr_cast)		# reuse tr_cast here	
 	append_tuple('Runtime', 'runtime', tr_runtime)
 		
 	if tpl_data.get('date'):

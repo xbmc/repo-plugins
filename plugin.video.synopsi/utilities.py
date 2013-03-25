@@ -103,7 +103,7 @@ t_nounwatched = 'There are no unwatched episodes in your TV Show tracking'
 t_nolocalrecco = 'There are no items in this list. Either you have no movies in your library or they have not been recognized by Synopsi'
 t_nolocaltvshow = 'There are no items in this list. Either you have no episodes in your library or they have not been recognized by Synopsi'
 t_needrestart = 'To start the SynopsiTV service, please turn off your media center then turn it back on again. Do this now?'
-t_needrestart_update = 'Addon service has been updated. For the plugin to work correctly, turn off your media center then turn it back on again. Do this now?'
+t_needrestart_update = 'Addon has been recently updated. For the plugin to work, it\'s neccessary to restart your media center. Restart now ?'
 t_enter_title_to_search =  'Enter a title name to search for.'
 t_correct_search_title = 'Search for the correct title'
 
@@ -234,7 +234,7 @@ def check_first_run():
 				xbmc.executebuiltin('ReloadSkin()')		
 			raise Exception('Addon service is not running')
 
-def dialog_text(msg, max_line_length=20, max_lines=3):
+def dialog_text(msg, max_line_length=60, max_lines=3):
 	line_end = [0]
 	idx = -1
 	line_no = 0
@@ -274,11 +274,11 @@ def list_get(alist, index, default=''):
 		return default
 
 def dialog_ok(msg):
-	lines = dialog_text(msg, 45)
+	lines = dialog_text(msg)
 	return xbmcgui.Dialog().ok(t_stv, list_get(lines, 0), list_get(lines, 1), list_get(lines, 2))
 
 def dialog_yesno(msg):
-	lines = dialog_text(msg, 45)
+	lines = dialog_text(msg)
 	return xbmcgui.Dialog().yesno(t_stv, list_get(lines, 0), list_get(lines, 1), list_get(lines, 2))
 
 

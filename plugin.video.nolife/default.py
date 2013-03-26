@@ -109,7 +109,7 @@ def parse_categories():
             fam = re.compile('>.*<').findall(str(elem))[0].strip('<>')
         else:
             if fam != 'garbage':
-                reg_cat   = '<h1 style="padding-left:10px;">.*</h1>'
+                reg_cat   = '<h1 style="padding-left:55px;">.*</h1>'
                 catname   = re.compile(reg_cat).findall(
                                             str(elem))[0][31:][:-5]
                 reg_sid   = '<a href=.*'

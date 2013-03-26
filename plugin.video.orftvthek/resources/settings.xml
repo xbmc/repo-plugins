@@ -1,0 +1,3 @@
+<settings>
+    <setting id="mp4stream" type="bool" label="High Quality Stream (Experimental)" default="false" />
+</settings>

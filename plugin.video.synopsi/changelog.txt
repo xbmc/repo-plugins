@@ -1,3 +1,13 @@
+[B]Version 0.5.2[/B]
+
+* Fixed: if xbmc.Player doesn't provide runtime, plugin failed to show rating dialog
+* Fixed: api directors format change
++ Added: display year after movie name
++ Added: display episode identification in every episode listings
++ Added: breadcrumbs for listings
++ Added: display tvshow name in episode detail
+* Fixed: show correct titles on home screen (recently added)
+
 [B]Version 0.5.1 [/B]
 
 - Fixed: labels in movie details

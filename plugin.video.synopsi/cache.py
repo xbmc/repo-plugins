@@ -1,5 +1,5 @@
 # xbmc
-import xbmc
+import xbmc, xbmcvfs
 
 # python standart lib
 import base64
@@ -47,7 +47,6 @@ class OfflineStvList(object):
 		self.filePath = filePath or self.__class__.getDefaultFilePath()
 		self.clear()
 		self.uuid = uuid
-		#~ self.list()
 
 	@classmethod
 	def getDefaultFilePath(cls):
@@ -78,7 +77,6 @@ class OfflineStvList(object):
 
 	def deserialize(self, _string):
 		self.items, self.byType, self.byTypeId, self.byFilename, self.byStvId = pickle.loads(base64.b64decode(_string))
-		self.dump()
 
 	def log(self, msg):
 		log('CACHE / ' + msg)
@@ -130,9 +128,14 @@ class OfflineStvList(object):
 
 			if title.has_key('id'):
 				movie['stvId'] = title['id']
+
+				# use synopsi runtime if possible
+				if title.get('runtime'):
+					movie['runtime'] = 60 * title['runtime']
+					
 				self.log('identified: ' + title['name'])
 			else:
-				self.log('File NOT identified %s' % movie['file'])
+				self.log('NOT identified %s' % movie['file'])
 
 			# current block could raise ApiCallError, when there is not a real problem
 			try:
@@ -161,7 +164,7 @@ class OfflineStvList(object):
 			self.put(stv_title)
 
 	def put(self, item):
-		" Put a new record in the list "
+		""" Put a new record in the list """
 		self.log('PUT ' + dump(filtertitles(item)))
 		# check if an item with this stvId is not already there
 		if item.has_key('stvId') and self.hasStvId(item['stvId']):
@@ -311,10 +314,10 @@ class OfflineStvList(object):
 
 	def clear(self):
 		self.items = []
-		self.byType = { 'movie': {}, 'tvshow': {}, 'episode': {}, 'season': {}}
-		self.byTypeId = {}
+		self.byType = { 'movie': {}, 'tvshow': {}, 'episode': {}, 'season': {}}		# ids here are xbmc_ids, except tvshow_ids!
+		self.byTypeId = {}															# ids here are xbmc_ids
 		self.byFilename = {}
-		self.byStvId = {}
+		self.byStvId = {}															# ids here are stv_ids
 
 	def getItems(self):
 		return self.items
@@ -403,12 +406,12 @@ class OfflineStvList(object):
 
 	def save(self):
 		self.log('SAVING / ' + self.filePath)
-		f = open(self.filePath, 'w')
+		f = xbmcvfs.File(self.filePath, 'w')
 		f.write(self.serialize())
 		f.close()
 
 	def load(self):
-		f = open(self.filePath, 'r')
+		f = xbmcvfs.File(self.filePath, 'r')
 		self.deserialize(f.read())
 		f.close()
 
@@ -496,7 +499,7 @@ class OnlineStvList(OfflineStvList):
 class AppStvList(OnlineStvList):
 	def get_local_tvshows(self):
 		local_tvshows = self.getAllByType('tvshow')
-		log('local tvshows ' + dump(local_tvshows))
+				
 		return local_tvshows.values()
 
 	def get_tvshow_local_seasons(self, stv_id):

@@ -8,7 +8,7 @@ import json
 from utilities import *
 from loggable import Loggable
 
-defaultProperties = ['file', 'imdbnumber', "lastplayed", "playcount"]
+defaultProperties = ['file', 'imdbnumber', "lastplayed", "playcount", "runtime"]
 
 class xbmcRPCclient(Loggable):
 

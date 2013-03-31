@@ -11,4 +11,7 @@
     <string id="30113">1080p</string>
     <string id="30121">וידאו</string>
     <string id="30122">סרטים</string>
+
+    <!-- Notify -->
+    <string id="30150">שגיאת רשת</string>
 </strings>

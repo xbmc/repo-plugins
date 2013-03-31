@@ -25,4 +25,10 @@
     <string id="30120">Indholdstype (Skinrelateret)</string>
     <string id="30121">Videoer</string>
     <string id="30122">Film</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Ingen valgt downloadmappe</string>
+
+    <!-- Notify -->
+    <string id="30150">Netværksfejl</string>
 </strings>

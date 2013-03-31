@@ -11,4 +11,10 @@
     <string id="30113">1080p</string>
     <string id="30121">Videos</string>
     <string id="30122">Películas</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">No existe ruta de descarga</string>
+
+    <!-- Notify -->
+    <string id="30150">Error de red</string>
 </strings>

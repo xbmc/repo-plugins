@@ -12,6 +12,9 @@
     <string id="30005">Biblioteca (por inicial)</string>
     <string id="30006">Apertura esta semana</string>
     <string id="30007">Próximamente</string>
+    <string id="30008">Descargar este trailer</string>
+    <string id="30009">[B]DESCARGADO[/B]</string>
+    <string id="30010">[B]descarga en curso[/B]</string>
 
     <!-- Settings -->
     <string id="30100">Forzar Modo de Vista "Miniaturas"</string>
@@ -25,4 +28,13 @@
     <string id="30120">Content-Type (relacionados con la piel)</string>
     <string id="30121">VIDEOS</string>
     <string id="30122">Películas</string>
+    <string id="30123">Ruta de descarga</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Ruta de descarga no indicada</string>
+    <string id="30131">¿Deseas configurarlo ahora?</string>
+
+    <!-- Notify -->
+    <string id="30150">Error de conexión</string>
+    <string id="30151">Descarga atm no es posible</string>
 </strings>

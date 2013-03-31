@@ -31,11 +31,13 @@ STRINGS = {
     'download': 30008,
     'already_downloaded': 30009,
     'download_in_progress': 30010,
+    'add_to_cp': 30011,
     'no_download_path': 30130,
     'want_set_now': 30131,
     'network_error': 30150,
     'download_not_possible': 30151
 }
+CP_ADD_URL = 'plugin://plugin.video.couchpotato_manager/movies/add?title=%s'
 
 plugin = Plugin()
 
@@ -124,6 +126,10 @@ def show_movies(source):
         'info': {
             'count': i,
         },
+        'context_menu': [(
+            _('add_to_cp'),
+            'XBMC.RunPlugin(%s)' % CP_ADD_URL % movie['title']
+        )],
         'path': plugin.url_for(
             endpoint='show_videos',
             movie_id=movie['id']

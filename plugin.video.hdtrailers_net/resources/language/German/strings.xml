@@ -12,6 +12,9 @@
     <string id="30005">Bibliothek (Alle nach Anfangsbuchstaben)</string>
     <string id="30006">Diese Woche im Kino</string>
     <string id="30007">Bald im Kino</string>
+    <string id="30008">Diesen Trailer herunteladen</string>
+    <string id="30009">[B]HERUNTERGELADEN[/B]</string>
+    <string id="30010">[B]wird heruntergeladen[B]</string>
 
     <!-- Settings -->
     <string id="30100">ViewMode "Thumbnail" erzwingen</string>
@@ -25,4 +28,13 @@
     <string id="30120">Media-Typ (Skin bezogen)</string>
     <string id="30121">Videos</string>
     <string id="30122">Filme</string>
+    <string id="30123">Download Verzeichnis</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Kein Downloadpfad</string>
+    <string id="30131">Möchtest du es jetzt einstellen?</string>
+
+    <!-- Notify -->
+    <string id="30150">Netzwerkfehler</string>
+    <string id="30151">Download im Moment nicht möglich</string>
 </strings>

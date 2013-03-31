@@ -12,6 +12,9 @@
     <string id="30005">Coleção (Todos por inicial)</string>
     <string id="30006">Abrindo esta semana</string>
     <string id="30007">Em breve</string>
+    <string id="30008">Download deste Trailer</string>
+    <string id="30009">[B]TRANSFERIDO[/B]</string>
+    <string id="30010">[B]download em progresso[/B]</string>
 
     <!-- Settings -->
     <string id="30100">Forçar exibição "Miniatura"</string>
@@ -25,4 +28,13 @@
     <string id="30120">Tipo de conteúdo (relacionado a skin)</string>
     <string id="30121">Vídeos</string>
     <string id="30122">Filmes</string>
+    <string id="30123">Caminho Download</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Nenhum caminho para download</string>
+    <string id="30131">Você deseja setar agora?</string>
+
+    <!-- Notify -->
+    <string id="30150">Erro Rede</string>
+    <string id="30151">Download indisponível neste momento</string>
 </strings>

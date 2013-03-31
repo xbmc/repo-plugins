@@ -11,4 +11,7 @@
     <string id="30113">1080p</string>
     <string id="30121">Видео</string>
     <string id="30122">Филми</string>
+
+    <!-- Notify -->
+    <string id="30150">Мрежова грешка</string>
 </strings>

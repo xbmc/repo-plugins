@@ -6,6 +6,9 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">сторінка</string>
+    <string id="30002">Останнє</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
     <string id="30121">Відео</string>
     <string id="30122">Фільми</string>
 </strings>

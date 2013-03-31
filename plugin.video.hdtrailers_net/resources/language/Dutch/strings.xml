@@ -18,4 +18,7 @@
     <string id="30113">1080p</string>
     <string id="30121">Videos</string>
     <string id="30122">Films</string>
+
+    <!-- Notify -->
+    <string id="30150">Netwerk Fout</string>
 </strings>

@@ -7,22 +7,34 @@
     <!-- Default strings -->
     <string id="30001">Pagina</string>
     <string id="30002">Ultimo</string>
-    <string id="30003">Più Visti</string>
-    <string id="30004">I primi 10</string>
+    <string id="30003">Più visti</string>
+    <string id="30004">Top 10</string>
     <string id="30005">Libreria (tutto per iniziale)</string>
     <string id="30006">Inizia questa settimana</string>
     <string id="30007">Prossimamente</string>
+    <string id="30008">Scarica questo trailer</string>
+    <string id="30009">[B]SCARICATO[/B]</string>
+    <string id="30010">[B]download in corso[/B]</string>
 
     <!-- Settings -->
-    <string id="30100">Forza la visualizzazione ad "Thumbnail" </string>
-    <string id="30101">Mostra Trailer</string>
-    <string id="30102">Mostra Filmati</string>
-    <string id="30103">Mostra Fonte nel titolo del video</string>
-    <string id="30110">Risoluzione Video</string>
+    <string id="30100">Forza la visualizzazione "Thumbnail" </string>
+    <string id="30101">Mostra trailer</string>
+    <string id="30102">Mostra filmati</string>
+    <string id="30103">Mostra la fonte nel titolo del video</string>
+    <string id="30110">Risoluzione del video</string>
     <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
-    <string id="30120">Tipo di Contenuto (relativo allo Skin)</string>
-    <string id="30121">VIDEO</string>
-    <string id="30122">FILM</string>
+    <string id="30120">Tipo di contenuto (relativo alla skin)</string>
+    <string id="30121">Video</string>
+    <string id="30122">Film</string>
+    <string id="30123">Percorso di download</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Nessun percorso impostato per il download</string>
+    <string id="30131">Vuoi impostarlo ora?</string>
+
+    <!-- Notify -->
+    <string id="30150">Errore di rete</string>
+    <string id="30151">Impossibile scaricare al momento</string>
 </strings>

@@ -25,4 +25,10 @@
     <string id="30120">Tartalomtípus (felszínnel kapcsolatos)</string>
     <string id="30121">Videók</string>
     <string id="30122">Filmek</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Nincs letöltés útvonal</string>
+
+    <!-- Notify -->
+    <string id="30150">Hálózati hiba</string>
 </strings>

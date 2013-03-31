@@ -6,4 +6,9 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Trang</string>
+    <string id="30002">Mới nhất</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30121">Video</string>
+    <string id="30122">Phim</string>
 </strings>

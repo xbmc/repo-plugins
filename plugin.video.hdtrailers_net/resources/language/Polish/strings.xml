@@ -12,6 +12,9 @@
     <string id="30005">Biblioteka (Wszystkie po inicjałach)</string>
     <string id="30006">Premiery tygodnia</string>
     <string id="30007">Wkrótce w kinach</string>
+    <string id="30008">Pobierz ten zwiastun</string>
+    <string id="30009">[B]POBRANO[/B]</string>
+    <string id="30010">[B]pobieranie w toku[/B]</string>
 
     <!-- Settings -->
     <string id="30100">Wymuś widok "Thumbnail"</string>
@@ -25,4 +28,13 @@
     <string id="30120">Typ kontentu (związane ze skórą)</string>
     <string id="30121">WIDEO</string>
     <string id="30122">Filmy</string>
+    <string id="30123">Ścieżka pobierania</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Brak ścieżki pobierania</string>
+    <string id="30131">Ustawić teraz?</string>
+
+    <!-- Notify -->
+    <string id="30150">Błąd sieci</string>
+    <string id="30151">W tym momencie pobieranie nie jest możliwe</string>
 </strings>

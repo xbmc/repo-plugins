@@ -7,8 +7,34 @@
     <!-- Default strings -->
     <string id="30001">页</string>
     <string id="30002">最新</string>
+    <string id="30003">观看最多</string>
+    <string id="30004">前10名</string>
+    <string id="30005">资料库（初始为全部）</string>
+    <string id="30006">本周开放</string>
+    <string id="30007">即将推出</string>
+    <string id="30008">下载此预告片</string>
+    <string id="30009">[B]已下载[/B]</string>
+    <string id="30010">[B]正在下载[/B]</string>
+
+    <!-- Settings -->
+    <string id="30100">视图模式强制为“缩略图”</string>
+    <string id="30101">显示预告片</string>
+    <string id="30102">显示电影剪辑</string>
+    <string id="30103">在视频标题显示来源</string>
+    <string id="30110">视频分辨率</string>
+    <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
+    <string id="30120">内容类型（皮肤相关）</string>
     <string id="30121">视频</string>
     <string id="30122">电影</string>
+    <string id="30123">下载-目录</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">无下载目录</string>
+    <string id="30131">你要现在设置吗？</string>
+
+    <!-- Notify -->
+    <string id="30150">网络错误</string>
+    <string id="30151">目前无法下载</string>
 </strings>

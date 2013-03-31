@@ -12,6 +12,9 @@
     <string id="30005">Bibliotek (Alla med begynnelsebokstaven)</string>
     <string id="30006">Premiär denna vecka</string>
     <string id="30007">Kommer snart</string>
+    <string id="30008">Ladda ner denna trailer</string>
+    <string id="30009">[B]NEDLADDADE[/B]</string>
+    <string id="30010">[B]nedladdning pågår[/B]</string>
 
     <!-- Settings -->
     <string id="30100">Tvinga visningsläget "Tumnagel"</string>
@@ -25,4 +28,13 @@
     <string id="30120">Innehållstyp (Skalrelaterat)</string>
     <string id="30121">VIDEO</string>
     <string id="30122">FILMER</string>
+    <string id="30123">Nedladdningssökväg</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Ingen nedladdningsmapp</string>
+    <string id="30131">Vill du ange den nu?</string>
+
+    <!-- Notify -->
+    <string id="30150">Nätverksfel</string>
+    <string id="30151">Nedladdning inte möjlig för närvarande</string>
 </strings>

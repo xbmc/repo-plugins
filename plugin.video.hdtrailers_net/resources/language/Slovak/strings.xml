@@ -25,4 +25,10 @@
     <string id="30120">Obsah (Závislé od Vzhľadu)</string>
     <string id="30121">Video</string>
     <string id="30122">Filmy</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Chýba Priečinok sťahovania</string>
+
+    <!-- Notify -->
+    <string id="30150">Sieťová chyba</string>
 </strings>

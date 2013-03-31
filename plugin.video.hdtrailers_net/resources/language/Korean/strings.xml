@@ -25,4 +25,10 @@
     <string id="30120">콘텐츠 종류 (스킨 관련)</string>
     <string id="30121">비디오</string>
     <string id="30122">영화</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">다운로드 경로 없음</string>
+
+    <!-- Notify -->
+    <string id="30150">네트워크 오류</string>
 </strings>

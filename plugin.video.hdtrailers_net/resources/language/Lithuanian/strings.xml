@@ -11,4 +11,7 @@
     <string id="30113">1080p</string>
     <string id="30121">Video</string>
     <string id="30122">Filmai</string>
+
+    <!-- Notify -->
+    <string id="30150">Tinklo klaida</string>
 </strings>

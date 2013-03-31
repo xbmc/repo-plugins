@@ -11,4 +11,10 @@
     <string id="30113">1080p</string>
     <string id="30121">Відэа</string>
     <string id="30122">Фільмы</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">No download path</string>
+
+    <!-- Notify -->
+    <string id="30150">Network Error</string>
 </strings>

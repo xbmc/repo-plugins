@@ -12,6 +12,9 @@
     <string id="30005">Συλλογή (Όλα με Αρχικά)</string>
     <string id="30006">Αυτή τη βδομάδα</string>
     <string id="30007">Σύντομα στους Κινηματογράφους</string>
+    <string id="30008">Λήψη αυτού του Διαφημιστικού</string>
+    <string id="30009">[B]ΕΛΗΦΘΗ[/B]</string>
+    <string id="30010">[B]λήψη σε εξέλιξη[/B]</string>
 
     <!-- Settings -->
     <string id="30100">Οι 'Μικρογραφίες' σαν Τύπος Προβολής</string>
@@ -25,4 +28,13 @@
     <string id="30120">Τύπος Περιεχομένου (Αναλόγως του κελύφους)</string>
     <string id="30121">Βίντεο</string>
     <string id="30122">Ταινίες</string>
+    <string id="30123">Διαδρομή-Λήψεων</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Καμία διαδρομή λήψεων</string>
+    <string id="30131">Επιθυμείτε να το ορίσετε τώρα;</string>
+
+    <!-- Notify -->
+    <string id="30150">Σφάλμα Δικτύου</string>
+    <string id="30151">Αδυναμία λήψης αυτή τη στιγμή</string>
 </strings>

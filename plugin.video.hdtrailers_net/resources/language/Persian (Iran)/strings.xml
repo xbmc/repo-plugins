@@ -6,4 +6,8 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">صفحه</string>
+
+    <!-- Settings -->
+    <string id="30100">اجبار به حالت "تصاویر بند انگشتی"</string>
+    <string id="30122">فیلم ها</string>
 </strings>

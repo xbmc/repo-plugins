@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-# Copyright 2011 Jonathan Beluch. 
+# Copyright 2011 Jonathan Beluch.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -78,11 +78,11 @@ def parse_video(video):
 
 
 def get_videos(count, list_id, start_index):
-    '''Returns a tuple of (videos, total_videos) where videos is a list of 
+    '''Returns a tuple of (videos, total_videos) where videos is a list of
     dicts containing video information and total_videos is the toal number
     of videos available for the given list_id. The number of videos returned
     is specified by the given count.
-    
+
     This function queris the gdata youtube API. The AlJazeera website uses the
     same API on the client side via javascript.'''
     params = {
@@ -122,7 +122,7 @@ def show_homepage():
 
 @plugin.route('/live/')
 def watch_live():
-    rtmpurl = 'rtmp://aljazeeraflashlivefs.fplive.net:1935/aljazeeraflashlive-live/aljazeera_english_1 live=true'
+    rtmpurl = 'rtmp://aljazeeraflashlivefs.fplive.net:443/aljazeeraflashlive-live?videoId=883816736001&lineUpId=&pubId=665003303001&playerId=751182905001&affiliateId=/aljazeera_eng_med?videoId=883816736001&lineUpId=&pubId=665003303001&playerId=751182905001&affiliateId= live=true'
     li = xbmcgui.ListItem('AlJazeera Live')
     xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(rtmpurl, li)
     # Return an empty list so we can test with plugin.crawl() and
@@ -174,7 +174,7 @@ def show_categories3(onclick_func, clips=False):
         })
         tds = tds[1:]
 
-    for td in tds: 
+    for td in tds:
         count, list_id, start_index, method = parse_queryvideo_args(td['onclick'])
         items.append({
             'label': td.string,
@@ -230,5 +230,5 @@ def show_videos(list_id, start_index, count):
     return plugin.add_items(items)
 
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     plugin.run()

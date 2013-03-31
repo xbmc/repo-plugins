@@ -1,3 +1,10 @@
+Version 1.9.4
+* Fix strings.xml
+
+Version 1.9.3
+* Fix live URL
+* Bump new version for Frodo
+
 Version 0.9.2
 * Add language tag to addon.xml
 

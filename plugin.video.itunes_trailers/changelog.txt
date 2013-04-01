@@ -1,0 +1,14 @@
+0.0.2 (01.04.2013)
+- added possibility to have different qualities for stream and download
+- fix add-on on python < 2.7
+
+0.0.1 (28.03.2013)
+- initial release
+  Features:
+    Choose Trailer Quality in add-on settings (480p, 720p, 1080p)
+    Ability to download trailers in background (if a trailer is already downloaded it will be played locally)
+    "Add to CouchPotato"-Feature via CouchPotato Manager
+    Choose "All", "Most Recent", "Most Popular", "Exclusive Only" as source
+    Ability to set a "Movie Limit" in settings to increase add-on speed on slow machines like the raspberry pi
+    24h Cache of Movies (using cPickle, should be faster on slow machines)
+    High-Res Cover and Fanart

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Context menu entries -->
+    <string id="30001">Download Trailer</string>
+    <string id="30002">[B]DOWNLOADED[/B]</string>
+    <string id="30003">Add to CouchPotato</string>
+    <string id="30004">[B]download in progress[/B]</string>
+    <!-- Settings -->
+    <string id="30010">Source</string>
+    <string id="30011">All</string>
+    <string id="30012">Most Recent</string>
+    <string id="30013">Most Popular</string>
+    <string id="30014">Exclusive</string>
+    <string id="30020">Movie Limit</string>
+    <string id="30021">No Limit</string>
+    <string id="30022">First 50</string>
+    <string id="30023">First 100</string>
+    <string id="30030">Trailer quality (Stream)</string>
+    <string id="30031">HD480p</string>
+    <string id="30032">HD720p</string>
+    <string id="30033">HD1080p</string>
+    <string id="30040">Trailer quality (Download)</string>
+    <string id="30041">Same as Stream</string>
+    <string id="30050">Trailer download path</string>
+    <string id="30051">Force Trailers ViewMode to Thumbnail</string>
+    <!-- Network Error -->
+    <string id="30100">Network Error</string>
+    <!-- OK Dialogs -->
+    <string id="30101">No download path</string>
+    <string id="30102">Do you want to you set it now?</string>
+</strings>

@@ -56,8 +56,9 @@ def show_homepage():
         items = [
             # Live TV
             {'label': plugin.get_string(30020), 'url': plugin.url_for('live_tv')},
-            # Recordings
+            # Recordings & Playlists
             {'label': plugin.get_string(30021), 'url': plugin.url_for('show_recordings')},
+            {'label': plugin.get_string(30022), 'url': plugin.url_for('show_playlists')},
         ]
         return plugin.add_items(items)
 
@@ -107,6 +108,43 @@ def show_recordings():
             'is_folder': False,
             'is_playable': True,
         } for (url, icon, thumbnail, info) in eyetv.recordingsInfo()]
+        return plugin.add_items(items)
+
+
+@plugin.route('/playlists/')
+def show_playlists():
+    """Shows all playlists from archive path"""
+    archivePath = plugin.get_setting('archivePath')
+    sortMethod = int(plugin.get_setting('sortMethod'))
+    try:
+        eyetv = Eyetv(archivePath, sortMethod)
+    except IOError:
+        xbmcgui.Dialog().ok(plugin.get_string(30100), plugin.get_string(30101))
+    else:
+        items = [{
+            'label': name + " (" + str(icount) + " Episodes) ",
+            'url': plugin.url_for('display_playlist', playlistid=plid),
+        } for (name, icount, plid) in eyetv.playlistsInfo()]
+        return plugin.add_items(items)
+
+
+@plugin.route('/showplaylist/<playlistid>/')
+def display_playlist(playlistid):
+    """Shows all recordings from playlist """
+    archivePath = plugin.get_setting('archivePath')
+    sortMethod = int(plugin.get_setting('sortMethod'))
+    try:
+        eyetv = Eyetv(archivePath, sortMethod)
+    except IOError:
+        xbmcgui.Dialog().ok(plugin.get_string(30100), plugin.get_string(30101))
+    else:
+        items = [{
+            'label': info['title'],
+            'url': url,
+            'info': info,
+            'is_folder': False,
+            'is_playable': True,
+        } for (url, icon, thumbnail, info)  in eyetv.RecordingsInPlaylist(playlistid)]
         return plugin.add_items(items)
 
 

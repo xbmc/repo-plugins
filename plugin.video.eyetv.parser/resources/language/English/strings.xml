@@ -21,6 +21,7 @@
     <!--Category-->
     <string id="30020">Live TV</string>
     <string id="30021">Recordings</string>
+    <string id="30022">Playlists</string>
 
     <!--Errors-->
     <string id="30100">Could not parse 'EyeTV Archive.xml'</string>

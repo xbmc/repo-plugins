@@ -99,8 +99,10 @@ class Eyetv:
         plist = Plist().load(localXml)
         # Remove temporary file
         os.remove(localXml)
+        self.playlists = plist["Playlists"]
         # Get all recordings from the plist
         self.recordings = plist["Recordings"].values()
+        self.recordingdict = plist["Recordings"]
         # Sort the list of recordings
         self.recordings.sort(key=lambda recording: recording[SORTKEYS[sortMethod]])
         if sortMethod == 1:
@@ -126,6 +128,29 @@ class Eyetv:
             thumbnail = filename + u'.thumbnail.tiff'
             infoLabels = {'title': recording['Display Title'], 'plot': recording['Description']}
             yield (url, icon, thumbnail, infoLabels)
+
+    def playlistsInfo(self):
+        """Generator that returns all recordings as a tuple (name, count, plid)"""
+        for playlist in self.playlists:
+            name = playlist["Name"]
+            plid = str(playlist["Playlist ID"])
+            icount = len(playlist["Playlist Items"])
+            yield (name, icount, plid)
+
+    def RecordingsInPlaylist(self, playid):
+        """Generator that returns all recordings as a tuple (url, icon, thumbnail, infoLabels)"""
+        for playlist in self.playlists:
+            plid = playlist["Playlist ID"]
+            if str(plid) == playid:
+                for precording in playlist["Playlist Items"]:
+                    precordingID = precording["Recording ID"]
+                    recording = self.recordingdict[str(precordingID)]
+                    filename = self._recordingPath(recording)
+                    url = filename + u'.mpg'
+                    icon = filename + u'.tiff'
+                    thumbnail = filename + u'.thumbnail.tiff'
+                    infoLabels = {'title': recording['Display Title'], 'plot': recording['Description']}
+                    yield (url, icon, thumbnail, infoLabels)
 
     def nbRecordings(self):
         """Return the number of recordings available"""

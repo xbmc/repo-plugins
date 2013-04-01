@@ -67,6 +67,13 @@ if settings.getSetting("alpha") == "true":
 
 MAX_DIR_ITEMS = int(float(settings.getSetting("diritems")))
 
+BW_SELECT = False
+if settings.getSetting("bwselect") == "true":
+  BW_SELECT = True
+
+LOW_BANDWIDTH  = int(float(settings.getSetting("bandwidth")))
+HIGH_BANDWIDTH = svt.getHighBw(LOW_BANDWIDTH)
+LOW_BANDWIDH   = LOW_BANDWIDTH
 
 def viewStart():
 
@@ -453,6 +460,8 @@ def startVideo(url):
 
   if extension == "HLS" and HLS_STRIP:
     videoUrl = hlsStrip(videoUrl)
+  elif extension == "HLS" and BW_SELECT: 
+    videoUrl = getStream(videoUrl)
 
   if extension == "F4M":
     videoUrl = videoUrl.replace("/z/", "/i/").replace("manifest.f4m","master.m3u8")
@@ -467,7 +476,7 @@ def startVideo(url):
 
   if videoUrl:
     
-    if args and not HLS_STRIP:
+    if args and not (HLS_STRIP or BW_SELECT):
       common.log("Appending arguments: "+args)
       videoUrl = videoUrl + args
 
@@ -539,7 +548,6 @@ def hlsStrip(videoUrl):
     lines = ufile.readlines()
 
     newplaylist = "#EXTM3U\n"
-    header = ""
     hlsurl = ""
     bandwidth = 0
     foundhigherquality = False
@@ -551,11 +559,10 @@ def hlsStrip(videoUrl):
         hlsurl = line
       if "EXT-X-STREAM-INF" in line: # The header
         if not "avc1.77.30" in line:
-          match = re.match(r'.*BANDWIDTH=(\d+),.*CODECS=\"(.+?),.+',line)
+          match = re.match(r'.*BANDWIDTH=(\d+).+',line)
           if match:
             if bandwidth < int(match.group(1)):
               foundhigherquality = True
-              header = line
               bandwidth = int(match.group(1))
           continue
 
@@ -563,16 +570,38 @@ def hlsStrip(videoUrl):
       return None
 
     ufile.close()
-    newpath = os.path.join(xbmc.translatePath("special://temp"),"svt.m3u8")
-    newfile = open(newpath, 'w')
-    newplaylist += header + hlsurl
+    hlsurl = hlsurl.rstrip()
+    common.log("Returned stream url : " + hlsurl)
+    return hlsurl
 
-    try:
-        newfile.write(newplaylist)
-    finally:
-        newfile.close()
 
-    return newpath
+def getStream(url):
+  """
+  Returns a stream matching the set bandwidth
+  """
+  
+  f = urllib.urlopen(url)
+  lines = f.readlines()
+  
+  marker = "#EXT-X-STREAM-INF"
+  found = False
+
+  for line in lines:
+    if found:
+      # The stream url is on the line proceeding the header
+      hlsurl = line
+      break
+    if marker in line: # The header
+      match = re.match(r'.*BANDWIDTH=(\d+)000.+',line)
+      if match:
+        if LOW_BANDWIDTH < int(match.group(1)) < HIGH_BANDWIDTH:
+          common.log("Found stream with bandwidth " + match.group(1) + " for selected bandwidth " + str(LOW_BANDWIDTH))
+          found = True
+  
+  f.close()
+  hlsurl = hlsurl.rstrip()
+  common.log("Returned stream url: " + hlsurl)
+  return hlsurl
 
 
 def addDirectoryItem(title, params, thumbnail = None, folder = True, live = False, info = None):

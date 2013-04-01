@@ -7,7 +7,9 @@ import urllib
 common = CommonFunctions
 
 BASE_URL = "http://www.svtplay.se"
-SWF_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2013.02.swf"
+SWF_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2013.05.swf"
+
+BANDWIDTH = [300,500,900,1600,2500,5000]
 
 URL_A_TO_O = "/program"
 URL_CATEGORIES = "/kategorier"
@@ -289,3 +291,10 @@ def getPage(url):
   Wrapper, calls helper.getPage
   """
   return helper.getPage(BASE_URL + url) 
+
+def getHighBw(low):
+  """
+  Returns the higher bandwidth boundary
+  """
+  i = BANDWIDTH.index(low)
+  return BANDWIDTH[i+1]

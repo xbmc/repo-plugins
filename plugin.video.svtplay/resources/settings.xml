@@ -10,5 +10,7 @@
   </category>
   <category label="40002">
     <setting id="hlsstrip" type="bool" label="30505" default="false" />
+    <setting id="bwselect" type="bool" label="30507" default="false" enable="eq(-1,false)" />
+    <setting id="bandwidth" type="select" label="30508" default="2500" values="300|500|900|1600|2500" enable="eq(-1,true) + eq(-2,false)" />
   </category>
 </settings>

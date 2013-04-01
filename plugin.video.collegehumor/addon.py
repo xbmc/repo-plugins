@@ -34,7 +34,7 @@ def show_categories():
             page='1',
         ),
     } for category in categories]
-    return plugin.add_items(items)
+    return plugin.finish(items)
 
 
 @plugin.route('/category/<category>/<page>/')
@@ -78,7 +78,7 @@ def show_videos(category, page):
                 page=prev_page
             ),
         })
-    return plugin.add_items(items)
+    return plugin.finish(items)
 
 
 @plugin.route('/watch/<url>/')

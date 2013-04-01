@@ -39,10 +39,8 @@ def get_categories():
     categories = []
     for a in tree.find('ul', {'data-role': 'listview'}).findAll('a'):
         if 'playlist' in a['href']:
-            print 'Skipping Playlist'
             continue
-        elif 'video' in a['href']:
-            print 'Skipping'
+        elif a['href'].startswith('/video'):
             continue
         categories.append({
             'title': a.string,
@@ -59,7 +57,6 @@ def get_videos(category, page=1):
     elements = tree.find('ul', {'data-role': 'listview'}).findAll('a')
     for a in elements:
         if 'playlist' in a['href']:
-            print 'Skipping Playlist'
             continue
         videos.append({
             'title': a.h3.string,
@@ -87,7 +84,6 @@ def get_video_file(link):
 
 
 def __get_tree(url, data_dict=None, mobile=True):
-    print 'Opening url: %s' % url
     if data_dict:
         post_data = urlencode(data_dict)
     else:

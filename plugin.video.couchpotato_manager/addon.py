@@ -443,7 +443,8 @@ def get_api():
                 use_https=plugin.get_setting('use_https', bool),
                 username=plugin.get_setting('username', unicode),
                 password=plugin.get_setting('password', unicode),
-                api_key=plugin.get_setting('api_key', str)
+                api_key=plugin.get_setting('api_key', str),
+                url_base=plugin.get_setting('url_base', str)
             )
         except AuthenticationError:
             try_again = xbmcgui.Dialog().yesno(

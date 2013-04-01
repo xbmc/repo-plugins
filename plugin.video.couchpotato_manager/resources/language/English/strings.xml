@@ -56,5 +56,6 @@
     <string id="30304">Port</string>
     <string id="30305">Api Key</string>
     <string id="30306">Set default profile</string>
+    <string id="30307">Url Base (for use with mod_proxy)</string>
     <string id="30310">You only need username/password OR Api Key!</string>
 </strings>

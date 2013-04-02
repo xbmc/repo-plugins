@@ -1,0 +1,2 @@
+- Showing videos in the category Nieuws (without having to check whether each page contains a video or not)
+- Removing afleveringen (right side of the page) from category 'afleveringen'

@@ -1,9 +1,16 @@
-0.0.4
+0.1.0 (01.04.2013)
+ added translations
+ cosmetics
+
+0.0.4 (05.11.2012)
  support playback of mp4 videos
+
 0.0.3
  fixed playback of some videos
  now use always best available video quality
+
 0.0.2
  small fixes
+
 0.0.1
  initial release

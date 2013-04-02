@@ -1,19 +1,65 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.hollywoodreporter" name="TheHollywoodReporter" version="0.0.4" provider-name="Tristan Fischer (sphere@dersphere.de)">
-  <requires>
-    <import addon="xbmc.python" version="2.0"/>
-    <import addon="script.module.beautifulsoup" version="3.0.8"/>
-    <import addon="script.module.xbmcswift" version="0.2.0"/>
-    <import addon="script.module.pyamf" version="0.6.1"/>
-    <import addon="plugin.video.youtube" version="3.1.0" />
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <language>en</language>
-    <platform>all</platform>
-    <summary lang="en">Videos from www.hollywoodreporter.com</summary>
-    <description lang="en">The premier destination and most-widely trusted resource for entertainment news, reviews, videos and analysis.</description>
-  </extension>
+<addon id="plugin.video.hollywoodreporter" name="TheHollywoodReporter" version="0.1.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.beautifulsoup" version="3.0.8"/>
+        <import addon="script.module.xbmcswift" version="0.2.0"/>
+        <import addon="script.module.pyamf" version="0.6.1"/>
+        <import addon="plugin.video.youtube" version="4.4.4"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language />
+        <platform>all</platform>
+        <website>http://www.hollywoodreporter.com/</website>
+        <source>https://github.com/dersphere/plugin.video.hollywoodreporter</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=139160</forum>
+        <email>sphere@dersphere.de</email>
+        <summary lang="ar">فيديو من www.hollywoodreporter.com</summary>
+        <summary lang="be">Videos from www.hollywoodreporter.com</summary>
+        <summary lang="ca">Videos des www.hollywoodreporter.com</summary>
+        <summary lang="da">Videoer fra www.hollywoodreporter.com</summary>
+        <summary lang="de">Videos von hollywoodreporter.com</summary>
+        <summary lang="el">Βίντεο από το www.hollywoodreporter.com</summary>
+        <summary lang="en">Videos from www.hollywoodreporter.com</summary>
+        <summary lang="es">Videos de www.hollywoodreporter.com</summary>
+        <summary lang="es_MX">Videos desde www.hollywoodreporter.com</summary>
+        <summary lang="fa_IR">ویدیوهایی از www.hollywoodreporter.com</summary>
+        <summary lang="gl">Vídeos de www.hollywoodreporter.com</summary>
+        <summary lang="hu">Videók a www.hollywoodreporter.com oldalról</summary>
+        <summary lang="it">Video da  www.hollywoodreporter.com</summary>
+        <summary lang="ko">www.hollywoodreporter.com의 동영상</summary>
+        <summary lang="lt">Video iš www.hollywoodreporter.com</summary>
+        <summary lang="nl">Video's van www.hollywoodreporter.com</summary>
+        <summary lang="pl">Filmy z www.hollywoodreporter.com</summary>
+        <summary lang="pt">Vídeos de www.hollywoodreporter.com</summary>
+        <summary lang="pt_BR">Vídeos de www.hollywoodreporter.com</summary>
+        <summary lang="sk">Videá z www.hollywoodreporter.com</summary>
+        <summary lang="sv">Videor från www.hollywoodreporter.com</summary>
+        <summary lang="zh">www.hollywoodreporter.com的视频</summary>
+        <description lang="ar">المقصد الرئيسي و المصدر الموثوق على نطاق واسع للترفيه, الأخبار, المشاركات. الفيديو و التحليل.</description>
+        <description lang="be">The premier destination and most-widely trusted resource for entertainment news, reviews, videos and analysis.</description>
+        <description lang="ca">La primera destinació i recurs de confiança amb més acceptació per notícies, reportages, videos i anàlisi d'entreteniment.</description>
+        <description lang="da">Den bedste og mest troværdige kilde til nyheder, anmeldelser, videoer og analyser fra og om underholdningsbranchen.</description>
+        <description lang="de">Die erste Anlaufstelle und der am meisten vertraute Quelle für Unterhaltung, Neuigkeiten, Tests, Videos und Analysen.</description>
+        <description lang="el">Ο κυριότερος προορισμός και η πιο έμπιστη πηγή ψυχαγωγικών ειδήσεων, κριτικών, βίντεο και αναλύσεων.</description>
+        <description lang="en">The premier destination and most-widely trusted resource for entertainment news, reviews, videos and analysis.</description>
+        <description lang="es">El destino principal y el recurso más fiable de noticias, críticas, videos y análisis del mundo del entretenimiento.</description>
+        <description lang="es_MX">La primera y mas confiable fuente para noticias, reviews, videos y análisis del entretenimiento.</description>
+        <description lang="fa_IR">مقصد برتر و مطمئن ترین مرجع برای اخبار سرگرمی, نقد و بررسی, فیلم ها و آنالیز.</description>
+        <description lang="gl">O principal e maior recurso confiable de novas sobre lecer, opinións, vídeos e análises.</description>
+        <description lang="hu">A szórakoztató hírek, visszatekintések, videók és analízisek elsődleges célpontja és legmegbízhatóbb forrása.</description>
+        <description lang="it">La risorsa principale per notizie di intrattenimento, recensioni, video e analisi.</description>
+        <description lang="ko">엔터테인먼트 뉴스, 리뷰, 비디오와 분석 제공</description>
+        <description lang="lt">Geriausia paskirties vieta ir plačiausiai patikimas šaltinis: pramogų naujienos, nuomonės, vaizdo įrašai ir analizės.</description>
+        <description lang="nl">De vooraanstaande bestemming en meest betrouwbare bron voor entertainment nieuws, reviews, video's en analyses.</description>
+        <description lang="pl">Główne i zarazem najbardziej zaufane źródło powszechnych wiadomości rozrywki, opini, filmów wideo oraz analiz.</description>
+        <description lang="pt">Para notícias do mundo do entretenimento, críticas, vídeos e análises, esta é a fonte número um e também a mais fiável.</description>
+        <description lang="pt_BR">O principal destino e recursos amplamente confiáveis para o entretenimento notícias, análises, vídeos e análise.</description>
+        <description lang="sk">Prvý cieľ a najdôveryhodnejší zdroj správ, recenzií, videí a analýz z Hollywoodu.</description>
+        <description lang="sv">Den primära destinationen och mest betrodda källan för underhållningsnyheter, granskningar, videor och analyser.</description>
+        <description lang="zh">首选和最值得信赖的 娱乐新闻、评论、视频和分析来源</description>
+    </extension>
 </addon>

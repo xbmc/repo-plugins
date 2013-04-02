@@ -1,6 +1,7 @@
 <settings>
-   <setting id="type" type="labelenum" lvalues="30001|30002|30003" label="30000" default="MP4:HD"/>
+   <setting id="format" type="labelenum" lvalues="30001|30002|30003" label="30000" default="HD"/>
    <setting id="download" type="bool" label="30004" default="false"/>
    <setting id="downloadPath" type="folder" enable="eq(-1,true)" label="30005" default="" /> 
    <setting id="folder" type="bool" enable="eq(-2,true)" label="30008" default="true"/>
+   <setting id="view" type="bool" label="30055" default="true"/>
 </settings>

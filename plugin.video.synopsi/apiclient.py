@@ -57,20 +57,16 @@ class ApiClient(loggable.Loggable):
 		self.refreshToken = None
 		self.apiUrl = self.baseUrl + rel_api_url
 		self.originReqHost = originReqHost
-		self.authHeaders = None
 		self.device_id = device_id
-
-		# xbmc.log('Log handler count %d ' % len(self._log.handlers))
-
+	
+		self._log.setLevel(debugLvl)
+		
 		if len(self._log.handlers)==0:
 			self._log.addHandler(logging.StreamHandler(sys.stdout))
 
-		#~ self._log.setLevel(debugLvl)
 		self.accessTokenTimeout = accessTokenTimeout		# [minutes] how long is stv accessToken valid ?
 		self.accessTokenSessionStart = None
 		self.failedRequest = []
-		# self._log.error('APIURL:' + self.apiUrl)
-		# self._log.error('BASEURL:' + self.baseUrl)
 
 	@classmethod
 	def getDefaultClient(cls):
@@ -117,11 +113,11 @@ class ApiClient(loggable.Loggable):
 		return connected
 
 	def doRequest(self, req, cacheable=True):
-		if not self.isAuthenticated():
-			access = self.getAccessToken()
-			if not access:
-				self._log.error('Could not get the auth token')
-				return False
+		#~ if not self.isAuthenticated():
+			#~ access = self.getAccessToken()
+			#~ if not access:
+				#~ self._log.error('Could not get the auth token')
+				#~ return False
 
 		# put the cacheable request into queue
 		if cacheable:
@@ -143,10 +139,10 @@ class ApiClient(loggable.Loggable):
 			'password': self.password
 		}
 
-		self.authHeaders = {'AUTHORIZATION': 'BASIC %s' % b64encode("%s:%s" % (self.key, self.secret))}
+		authHeaders = {'AUTHORIZATION': 'BASIC %s' % b64encode("%s:%s" % (self.key, self.secret))}
 
-		# self._log.debug('apiclient getaccesstoken u:%s p:%s' % (self.username, self.password))
-		# self._log.debug('apiclient getaccesstoken %s' % str(data))
+		#~ self._log.debug('apiclient getaccesstoken u:%s p:%s' % (self.username, self.password))
+		#~ self._log.debug('apiclient getaccesstoken %s' % str(data))
 
 		# get token
 		try:
@@ -154,7 +150,7 @@ class ApiClient(loggable.Loggable):
 			req = Request(
 					self.baseUrl + 'oauth2/token/',
 					data=urlencode(data),
-					headers=self.authHeaders,
+					headers=authHeaders,
 					origin_req_host=self.originReqHost)
 
 			# self._log.debug('request REQ HOST:' + str(req.get_origin_req_host()))
@@ -168,12 +164,17 @@ class ApiClient(loggable.Loggable):
 			response_json = json.loads(response.readline())
 
 		except HTTPError as e:
-			response = json.loads(e.read())
-			if "User authentication failed" in response['error_description']:
-				self._log.info('%d %s' % (e.code, response['error_description']))
-			else:
-				self._log.error('%d %s' % (e.code, e))
-				self._log.error(e.read())
+			try:
+				response = json.loads(e.read())
+			
+				if "User authentication failed" in response['error_description']:
+					self._log.info('%d %s' % (e.code, response['error_description']))
+				else:
+					self._log.error('%d %s' % (e.code, e))
+					self._log.error(e.read())
+			except:
+				self._log.error('HTTPError: %d\nReceived:\n"%s"' % (e.code, e.read()))
+				
 
 			raise AuthenticationError()
 
@@ -215,11 +216,24 @@ class ApiClient(loggable.Loggable):
 
 		return safe_data
 
+
 	def execute(self, requestData, cacheable=True):
+		if requestData.get('_noauth'):
+			return self.execute_noauth(requestData, cacheable)
+		else:
+			return self.execute_auth(requestData, cacheable)
+
+
+	def execute_auth(self, requestData, cacheable=True):
 		if not self.isAuthenticated():
 			self.getAccessToken()
 
+		return self.execute_noauth(requestData, cacheable=True)
+
+
+	def execute_noauth(self, requestData, cacheable=True):
 		self._log.debug('-' * 20)
+		
 		url = self.apiUrl + requestData['methodPath']
 		method = requestData['method']
 		data = None
@@ -229,6 +243,8 @@ class ApiClient(loggable.Loggable):
 		else:
 			requestData['data'] = self._unicode_input(requestData['data'])
 
+		authHeaders = {'AUTHORIZATION': 'BASIC %s' % b64encode("%s:%s" % (self.key, self.secret))} 
+	
 		# append data to post
 		if method == 'post':
 			post = requestData['data']
@@ -255,27 +271,31 @@ class ApiClient(loggable.Loggable):
 				Request(
 					url,
 					data = data,
-					headers = self.authHeaders,
+					headers = authHeaders,
 					origin_req_host = self.originReqHost
 				),
 				False
 			)
 
+			if response_json.get('status') == 'error':
+				raise ApiCallError('ApiClient response: ' + json.dumps(response_json.get('errors')))
+
+			self.updateAccessTokenTimeout()
+
 		except HTTPError as e:
-			response_json = json.loads(e.read())
-			self._log.error('APICLIENT HTTP %s :\nURL:%s\nERROR STRING: %s\nSERVER RESPONSE: %s' % (e.code, url, unicode(e), response_json))
+			response_json_str = e.read()
+			try:
+				response_json = json.loads(response_json_str)
+			except:
+				response_json = response_json_str
+				
+			self._log.error('APICLIENT HTTP %s :\nURL:%s\nERROR STRING: %s\nSERVER RESPONSE: "%s"' % (e.code, url, unicode(e), response_json))
 
 		except URLError as e:
 			self._log.error('APICLIENT:' + url)
 			self._log.error('APICLIENT:' + unicode(e))
 			self._log.error('APICLIENT:' + unicode(e.reason))
 			response_json = {}
-
-		else:
-			self.updateAccessTokenTimeout()
-
-		if response_json.get('status') == 'error':
-			raise ApiCallError('ApiClient response: ' + json.dumps(response_json.get('errors')))
 
 		return response_json
 
@@ -334,7 +354,7 @@ class ApiClient(loggable.Loggable):
 			data['stv_subtitle_hash'] = stv_subtitle_hash
 
 		req = {
-			'methodPath': '/title/identify/mark_pair/',
+			'methodPath': 'title/identify/mark_pair/',
 			'method': 'post',
 			'data': data
 		}
@@ -406,7 +426,7 @@ class ApiClient(loggable.Loggable):
 			props += ['cast']
 
 		req = {
-			'methodPath': '/title/%d/' % titleId,
+			'methodPath': 'title/%d/' % titleId,
 			'method': 'get',
 			'data': {
 				'title_property[]': ','.join(props)
@@ -491,3 +511,17 @@ class ApiClient(loggable.Loggable):
 
 		return self.execute(req)
 
+	def profileCreate(self, realname, email):
+		req = {
+			'_noauth': True,
+			'methodPath': 'profile/create',
+			'method': 'post',
+			'data': {
+				'realname': realname,
+				'email': email,
+			}
+		}
+
+		return self.execute(req)
+		
+		

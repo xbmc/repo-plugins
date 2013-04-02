@@ -3,11 +3,18 @@
 <settings>
     <category label="69500">
         <!--Login-->
-        <setting label="69700" type="lsep" />
-    	        
+        <setting label="69699" type="lsep" />
+        <setting label="69701" type="action" option="close" action="RunScript(plugin.video.synopsi, -1, addon.py?mode=920)"/>
+
+        <setting label="" type="lsep"/>
+        <setting label="" type="lsep"/>
+        <setting label="" type="lsep"/>
+
+        <setting label="69700" type="lsep" />    	        
         <setting id="USER" label="69503" type="text" default=""/>
     	<setting id="PASS" label="69502" option="hidden" type="text" enable="!eq(-1,)" default=""/>
     	
+    	    	
     	<!--TOKENS-->
         <setting id="ADDON_SERVICE_PORT" option="hidden" type="number" visible="false" default="9091" />
 

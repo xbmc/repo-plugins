@@ -59,6 +59,17 @@ class UtilitiesTest(TestCase):
 		rel3 = rel_path(path3)
 		self.assertEqual(rel3, '/home/smid/Videos/_testset/the/movie/file.avi')
 
+	def test_dialog_text(self):
+		text = 'Name should have at least two words. Enter a valid email address.'
+		print dialog_text(text, 60)
+		text = 'Name should have at least two words. Enter a valid email address.'
+		print dialog_text(text, 40)
+		text = 'one two three one two three one two three one two three one two three'
+		print dialog_text(text, 20)
+
+	def test_get_api_port(self):
+		print get_api_port()
+
 if __name__ == '__main__':
 	test_item1 = {
 		'type': 'movie',

@@ -32,8 +32,7 @@ DEFAULT_SERVICE_PORT=int(__addon__.getSetting('ADDON_SERVICE_PORT'))
 def main():
 	log('SYNOPSI SERVICE (%s) START' % VERSION)
 	
-	apiclient1 = AppApiClient.getDefaultClient()
-	top.apiClient = apiclient1
+	top.apiClient = AppApiClient.getDefaultClient()
 
 	# check first run
 	check_first_run()
@@ -42,20 +41,20 @@ def main():
 	iuid = get_install_id()
 
 	# try to restore cache
-	top.stvList = StvList(iuid, apiclient1)
+	top.stvList = StvList(iuid, top.apiClient)
 	top.player = SynopsiPlayerDecor()
 	top.player.setStvList(top.stvList)
 	
 	
 	try:
 		top.stvList.load()
-		thread.start_new_thread(home_screen_fill, (apiclient1, top.stvList))
+		thread.start_new_thread(home_screen_fill, (top.apiClient, top.stvList))
 	except:
 		# first time
 		log('CACHE restore failed. If this is your first run, its ok. Rebuilding cache')
 		def cache_rebuild_hp_update():
 			top.stvList.rebuild()
-			home_screen_fill(apiclient1, top.stvList)
+			home_screen_fill(top.apiClient, top.stvList)
 
 		thread.start_new_thread(cache_rebuild_hp_update, ())
 
@@ -63,7 +62,7 @@ def main():
 	threads = []
 	l = RPCListenerHandler(top.stvList)
 	threads.append(l)
-	aos = AddonService('localhost', DEFAULT_SERVICE_PORT, apiclient1, top.stvList)
+	aos = AddonService('localhost', DEFAULT_SERVICE_PORT, top.apiClient, top.stvList)
 	threads.append(aos)
 
 	for t in threads:

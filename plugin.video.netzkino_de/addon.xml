@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.netzkino_de" name="Netzkino.de" version="0.0.3" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.netzkino_de" name="Netzkino.de" version="0.1.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
-        <import addon="script.module.xbmcswift2" version="1.2.0"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -11,26 +11,43 @@
     <extension point="xbmc.addon.metadata">
         <language>de</language>
         <platform>all</platform>
-        <!-- translation commit: 84113ddafdde2c18eac5fd9b9b8144abff06ccf9 -->
+        <website>http://www.netzkino.de</website>
+        <source>https://github.com/dersphere/plugin.video.netzkino_de</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=161290</forum>
+        <email>sphere@dersphere.de</email>
         <summary lang="be">Free german movies</summary>
+        <summary lang="da">Gratis Tyske film</summary>
         <summary lang="de">Konstenlose Spielfilme</summary>
         <summary lang="el">Δωρεάν γερμανικές ταινίες</summary>
         <summary lang="en">Free german movies</summary>
         <summary lang="es">Películas alemanas gratis</summary>
+        <summary lang="gl">Filmes alemáns de balde</summary>
+        <summary lang="hu">Ingyenes német mozifilmek</summary>
+        <summary lang="it">Film tedeschi gratuiti</summary>
         <summary lang="ko">무료 독일 영화</summary>
         <summary lang="lt">NVokiečių filmai dykai/nemokamai</summary>
+        <summary lang="nl">Gratis duitse films</summary>
         <summary lang="pl">Darmowe filmy niemieckie</summary>
+        <summary lang="pt">Filmes alemães grátis</summary>
         <summary lang="pt_BR">Filmes alemães gratuítos</summary>
+        <summary lang="sk">Voľne dostupné nemecké filmy</summary>
         <summary lang="sv">Gratis tyska filmer</summary>
         <description lang="be">Netzkino.de is the first legal and free movie portal in germany</description>
+        <description lang="da">Netzkino.de er den første lovlige og gratis filmportal i Tyskland</description>
         <description lang="de">Netzkino.de ist das erste und einzige legale + kostenlose Spielfilmportal im deutschsprachigen Raum</description>
         <description lang="el">Το Netzkino.de είναι το πρώτο νόμιμο portal δωρεάν ταινιών στη Γερμανία</description>
         <description lang="en">Netzkino.de is the first legal and free movie portal in germany</description>
         <description lang="es">Netzkino.de es el primer portal legal y gratuito de películas en Alemania</description>
+        <description lang="gl">Netzkino.de é o primeiro portal alemán de filmes de balde e legais</description>
+        <description lang="hu">A netzkino.de az első ingyenes és legális mozioldal Németországban.</description>
+        <description lang="it">Netzkino.de è il primo portale di film gratuito e legale in Germania </description>
         <description lang="ko">Netzkino.de는 독일의 합법적이 무료 영화 포털입니다.</description>
         <description lang="lt">Netzkino.de yra pirmasis juridiškai įteisintas nemokamų filmų portalas Vokietijoje</description>
+        <description lang="nl">Netzkino.de is de 1e en gratis filmsite in duitsland</description>
         <description lang="pl">Netzkino.de to pierwszy legalny i darmowy portal w niemczech</description>
+        <description lang="pt">Netzkino.de é o primeiro site grátis e legal de filmes na alemanha</description>
         <description lang="pt_BR">Netzkino.de é o primeiro portal legal e gratuíto de filmes na Alemanha.</description>
+        <description lang="sk">Netzkino.de je prvý legálny a voľný nemecký filmový portál</description>
         <description lang="sv">Netzkino.de är den första gratis lagliga filmportalen i Tyskland</description>
     </extension>
 </addon>

@@ -23,9 +23,10 @@ from urllib2 import urlopen, Request, HTTPError, URLError
 
 
 MAIN_URL = 'http://www.netzkino.de/capi/'
-MOVIE_URL = ('http://mf.netzkinomobil.c.nmdn.net/netzkino_mobil'
-             '/_definst_/mp4:%s/playlist.m3u8')
+HLS_URL = ('http://mf.netzkinomobil.c.nmdn.net/netzkino_mobil'
+           '/_definst_/mp4:%s/playlist.m3u8')
 RTMP_URL = 'rtmp://mf.netzkino.c.nmdn.net/netzkino/_definst_/mp4:%s'
+MP4_URL = 'http://dl.netzkinotv.c.nmdn.net/netzkino_tv/%s.mp4'
 
 VISIBLE_CATEGORIES = (
     ('81', 'Neu bei Netzkino'),
@@ -120,11 +121,14 @@ class NetzkinoApi():
             })
         return movies
 
-    def get_stream_url(self, stream_path):
-        return MOVIE_URL % stream_path
+    def get_hls_url(self, stream_path):
+        return HLS_URL % stream_path
 
     def get_rtmp_url(self, stream_path):
         return RTMP_URL % stream_path
+
+    def get_mp4_url(self, stream_path):
+        return MP4_URL % stream_path
 
     def __get_json(self, url, path=None):
         if path:

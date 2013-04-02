@@ -65,10 +65,12 @@ def show_movies(category_id):
 
 @plugin.route('/movie/<stream_path>/')
 def play_movie(stream_path):
-    if plugin.get_setting('use_rtmp') == 'true':
-        stream_url = api.get_rtmp_url(stream_path)
-    else:
-        stream_url = api.get_stream_url(stream_path)
+    stream_func = plugin.get_setting('playback_mode', choices=(
+        api.get_mp4_url,
+        api.get_rtmp_url,
+        api.get_hls_url
+    ))
+    stream_url = stream_func(stream_path)
     return plugin.set_resolved_url(stream_url)
 
 if __name__ == '__main__':

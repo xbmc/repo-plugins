@@ -6,7 +6,11 @@
 <strings>
     <!-- Settings -->
     <string id="30100">ViewMode Thumbnail erzwingen</string>
-    <string id="30101">RTMP benutzen (Verhindert stocken)</string>
+    <string id="30101"></string>
+    <string id="30102">Wiedergabemodus</string>
+    <string id="30103">MP4</string>
+    <string id="30104">RTMP</string>
+    <string id="30105">HLS</string>
 
     <!-- Messages -->
     <string id="30200">Netzwerkfehler</string>

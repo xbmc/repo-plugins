@@ -1,6 +1,11 @@
+0.1.0 (02.04.2013)
+ - added new (default) playback mode (MP4)
+
 0.0.3 (25.11.2012)
  - updated translations
+
 0.0.2
  - added option to play in rtmp mode (avoids stuttering) default enabled
+
 0.0.1
  - initial release

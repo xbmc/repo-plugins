@@ -1,0 +1,12 @@
+<settings>
+  <category label="31001">
+    <setting id="username" type="text" label="30000" default=""/>
+    <setting id="password" type="text" option="hidden" label="30001" default=""/>
+    <setting type="sep" />
+    <setting id="bitrate" type="enum" label="30003" values="Quality high|Quality low" default="Quality high"/>
+  </category>   
+  <category label="31002">
+   <setting label="30005" type="folder" id="tempdir" source="auto" option="writeable" default=""/>
+   <setting label="30006" type="folder" id="savedir" source="auto" option="writeable" default=""/>
+  </category>   
+</settings>

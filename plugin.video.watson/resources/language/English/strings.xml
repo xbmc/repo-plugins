@@ -1,0 +1,15 @@
+<strings>
+  <string id="30000">Watson Username</string>
+  <string id="30001">Watson Password</string>
+  <string id="30003">Video quality</string>
+  <string id="30004">Search</string>
+  <string id="30005">Temporary dir</string>
+  <string id="30006">Download dir</string>
+  <string id="30007">Movies</string>  
+  <string id="31001">General</string>
+  <string id="31002">Directories</string>    
+  <string id="32001">LiveTV</string>
+  <string id="32002">Archive</string>
+  <string id="32003">Search recordings...</string>
+  <string id="32004">Search from recordings</string>
+</strings>

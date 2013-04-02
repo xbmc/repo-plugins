@@ -1,0 +1,14 @@
+<strings>
+  <string id="30000">Watson Kayttajatunnus</string>
+  <string id="30001">Watson Salasana</string>
+  <string id="30003">Videon laatu</string>
+  <string id="30004">Haku</string>
+  <string id="30005">Väliaikaistiedostot</string>
+  <string id="30006">Lataus hakemisto</string>
+  <string id="31001">Yleiset</string>    
+  <string id="31002">Hakemistot</string>    
+  <string id="32001">LiveTV</string>
+  <string id="32002">Arkisto</string>
+  <string id="32003">Etsi...</string>
+  <string id="32004">Hae tallenteista</string>
+</strings>

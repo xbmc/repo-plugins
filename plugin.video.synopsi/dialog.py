@@ -94,12 +94,14 @@ class MyDialog(xbmcgui.WindowXMLDialog):
 		self.result = None
 	
 	def close(self):
-		# check if closing the currently opened dialog
-		if open_dialogs[-1] != self:
-			log('WARNING: Dialog queue inconsistency. Non-top dialog close')
-
+		if open_dialogs:
+			# check if closing the currently opened dialog
+			if open_dialogs[-1] != self:
+				log('WARNING: Dialog queue inconsistency. Non-top dialog close')
+			
+			open_dialogs.remove(self)
+			
 		xbmcgui.WindowXMLDialog.close(self)
-		open_dialogs.remove(self)
 	
 class ListDialog(MyDialog):
 	""" Dialog for synopsi listings with custom cover overlays """
@@ -602,3 +604,58 @@ def show_submenu(action_code, **kwargs):
 	kwargs['action_code'] = action_code
 	tpl_data = { '_categoryName': categoryName, '_async_init': { 'method': init_data, 'kwargs': kwargs }}
 	open_list_dialog(tpl_data)
+
+
+# settings create account dialog
+class CreateAccountDialog(MyDialog):
+	ctl_create_account_id = 110
+	ctl_realname = 4
+	ctl_email = 5
+	
+	
+	""" Dialog for choosing movie corrections """
+	def __init__(self, *args, **kwargs):
+		super(CreateAccountDialog, self).__init__()
+		self.data = kwargs['data']
+		self.real_name = ''
+		self.email = __addon__.getSetting('USER')
+
+	def onInit(self):
+		self.getControl(self.ctl_email).setLabel(self.email)
+		
+	def onAction(self, action):
+		if action in CANCEL_DIALOG:
+			self.close()
+		# click on 'real name' button/input
+		elif action in ACTIONS_CLICK and (self.getFocusId() == self.ctl_realname):
+			act_value = self.getControl(self.ctl_realname).getLabel()
+			self.real_name = common.getUserInput('Enter Real Name', act_value)
+			self.getControl(self.ctl_realname).setLabel(self.real_name)
+
+		# click on 'email' button/input
+		elif action in ACTIONS_CLICK and (self.getFocusId() == self.ctl_email):
+			act_value = self.getControl(self.ctl_email).getLabel()
+			self.email = common.getUserInput('Enter Email', act_value)
+			self.getControl(self.ctl_email).setLabel(self.email)
+
+		# click on 'create account' button
+		elif action in ACTIONS_CLICK and (self.getFocusId() == self.ctl_create_account_id):
+			result = top.apiClient.profileCreate(self.real_name, self.email)
+			if result.get('status') == 'created':
+				dialog_ok('Thank You for Signing Up! Check your inbox for an email from us to complete the process. We are happy to have you.')
+				self.close()
+			elif result.get('status') == 'failed':
+				if result.get('message') is str:
+					message = result['message']
+				else:
+					message = ' '.join([' '.join(i) for i in result['message'].values()])
+
+				dialog_ok(message)
+			else:
+				log('Failed to create account.' + str(result))
+
+			return True
+
+def open_create_account_dialog(tpl_data):
+	dlg_result = open_dialog(CreateAccountDialog, "AccountCreate.xml", tpl_data)
+	

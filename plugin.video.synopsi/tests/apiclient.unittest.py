@@ -223,7 +223,7 @@ class ApiTest(TestCase):
 		
 		# get local recco
 		reco_local = new_client.profileRecco('movie', True, 50, props)
-
+		
 		reco_local_ids = [i['id'] for i in reco_local['titles']]
 		
 		# check local recco		
@@ -312,7 +312,7 @@ class ApiTest(TestCase):
 
 	def test_identify_correct(self):
 		result = client.title_identify_correct(1947362, '8b05ff1ad4865480e4705a42b413115db2bf94db')
-		# print dump(result)
+		#~ print dump(result)
 		self.assertTrue(result['status']=='ok')
 
 	@skip('this needs deeper work')
@@ -433,6 +433,24 @@ class ApiTest(TestCase):
 		self.assertTrue(result2.get('name'))
 		self.assertTrue(result2.get('titles'))
 		self.assertTrue(type(result2['titles']) is list)
+
+	def test_profileCreate(self):
+		device_id = ''.join([random.choice(string.hexdigits) for n in xrange(32)])
+		new_client = ApiClient(c['base_url'], c['key'], c['secret'], None, None, device_id, debugLvl = logging.DEBUG, rel_api_url=c['rel_api_url'])
+		
+		# bad request
+		result = new_client.profileCreate('Real \;\"\\"Name', '"select 1\".smid\"@gmail.com')		
+		print result
+		
+		# good request, but repeated
+		result = new_client.profileCreate('Real Second Name', 'martin.smid@gmail.com')		
+		print result
+		
+		# good request, unique
+		result = new_client.profileCreate('Real Third Name', 'martin.smid+%s@gmail.com' % device_id)		
+		print result
+		
+		#~ self.assertEqual(result.get('status'), 'created')
 
 if __name__ == '__main__':
 	c = connection

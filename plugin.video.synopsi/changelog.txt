@@ -1,3 +1,10 @@
+[B]Version 0.5.3[/B]
+
+* Fixed: incorrect splitting text in dialogs
+* Fixed: incorrect time progress calculation
+* Fixed: wrong api port detection
+* Fixed: showing success login notifications repeatedly
+
 [B]Version 0.5.2[/B]
 
 * Fixed: if xbmc.Player doesn't provide runtime, plugin failed to show rating dialog

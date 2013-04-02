@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.synopsi"
        name="SynopsiTV"
-       version="0.5.2"
+       version="0.5.3"
        provider-name="Synopsi.TV">
 	<requires>
 		<import addon="xbmc.python" version="2.0"/>

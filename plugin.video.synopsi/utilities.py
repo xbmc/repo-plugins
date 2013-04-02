@@ -23,6 +23,7 @@ import xml.etree.ElementTree as et
 
 # application
 import resources.const
+import top
 
 common = CommonFunctions
 common.plugin = "SynopsiTV"
@@ -79,6 +80,7 @@ class ActionCode:
 
 	TVShowEpisodes = 60
 
+	DialogAccountCreate = 920
 	VideoDialogShow = 900
 	VideoDialogShowById = 910
 
@@ -200,6 +202,13 @@ def get_current_addon():
 	global __addon__
 	return __addon__
 
+def addon_openSettings():
+	addon = get_current_addon()
+	addon.openSettings()
+	changed = top.apiClient.checkAccountChange()
+
+	return changed
+
 def addon_getSetting(aid, adef=None):
 	addon = get_current_addon()
 	try:
@@ -219,8 +228,9 @@ def check_first_run():
 	if __addon__.getSetting('FIRSTRUN') == 'true':
 		log('SYNOPSI FIRST RUN')
 
+		addon_openSettings()
+
 		# enable home screen recco
-		__addon__.openSettings()
 		xbmc.executebuiltin('Skin.SetBool(homepageShowRecentlyAdded)')
 		reloadSkin = True			
 		__addon__.setSetting('FIRSTRUN', "false")
@@ -244,7 +254,14 @@ def dialog_text(msg, max_line_length=50, max_lines=3):
 		last_idx = idx
 		idx = msg.find(' ', idx+1)
 		if idx==-1:
-			break
+			# if length of this line would fit into $max_line_length
+			if len(msg) - line_end[-1] > max_line_length:
+				line_end.append(last_idx)
+				line_no += 1
+				if line_no >= max_lines:
+					break				
+			else:
+				break
 		elif idx-line_end[-1] > max_line_length:
 			line_end.append(last_idx)
 			line_no += 1
@@ -438,10 +455,10 @@ def stv_hash(filepath):
 		fcontent = f.read(chunk_length)
 		if len(fcontent) != chunk_length:
 			raise IOError()
-			
+
 		sha1.update(fcontent)
 		f.close()
-	
+
 	except (IOError) as e:
 		log('Unable to hash file [%s]' % filepath)
 		return None
@@ -687,8 +704,8 @@ def get_rating():
 
 def dialog_check_login_correct():
 	if dialog_login_fail_yesno():
-		addon = get_current_addon()
-		result = addon.openSettings()
+		addon_openSettings()
+
 		# openSettings do not return users click, so we return if user had the intention to correct credentials
 		return True
 	else:

@@ -188,7 +188,7 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		if not self.total_time:
 			self.total_time = 5400
 		
-		percent = self.current_time / self.total_time
+		percent = float(self.current_time) / float(self.total_time)
 		self.log('percent:' + str(self.current_time / self.total_time))
 		
 		# ask for rating only if more than 70% of movie passed

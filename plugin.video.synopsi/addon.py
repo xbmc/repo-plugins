@@ -136,6 +136,9 @@ class AddonClient(object):
 	def open_settings(self):
 		return self.execute('open_settings')
 
+	def dialog_account_create(self, params):
+		return self.execute('dialog_account_create', params=params)
+
 	def debug_1(self):
 		return self.execute('debug_1')
 
@@ -149,8 +152,7 @@ class AddonClient(object):
 try:
 	dirhandle = int(sys.argv[1])
 
-	log('SYNOPSI ADDON (%s) START' % VERSION)
-	log('SYS ARGV:' + str(sys.argv))
+	log('SYNOPSI ADDON (%s) START %s' % (VERSION, str(sys.argv)))
 
 	url_parsed = urlparse.urlparse(sys.argv[2])
 	params = urlparse.parse_qs(url_parsed.query)
@@ -183,9 +185,9 @@ try:
 		raise InputParamsException('Wrong params: ' + str(sys.argv))
 
 	#~ log('params:' + str(params))
-	log('mode: %s type: %s' % (p['mode'], p['type']))
+	#~ log('mode: %s type: %s' % (p['mode'], p['type']))
 	#~ log('url: %s' % (p['url']))
-	log('data: %s' % (p['data']))
+	#~ log('data: %s' % (p['data']))
 
 	# hacks
 	if p['mode'] == ActionCode.VideoDialogShow and p['json_data']['id'] == HACK_SHOW_ALL_LOCAL_MOVIES:
@@ -212,6 +214,10 @@ try:
 
 	elif p['mode']==ActionCode.LoginAndSettings:
 		addonclient.open_settings()
+
+	elif p['mode']==ActionCode.DialogAccountCreate:
+		addonclient.dialog_account_create({})
+
 
 	# debugging
 	elif p['mode']==970:

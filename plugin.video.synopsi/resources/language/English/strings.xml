@@ -22,6 +22,8 @@
     <string id="69602">OK</string>
     <string id="69603">Terrible</string>
     <string id="69604">SynopsiTV Rating</string>
-    <string id="69700">To use our service, sign up at [B]www.synopsi.tv[/B].</string>
+    <string id="69699">To use our service, sign up by clicking below or visit [B]www.synopsi.tv[/B]</string>
+    <string id="69701">Sign up</string>
+    <string id="69700">If you already have an account, fill in your credentials here:</string>
     
 </strings>

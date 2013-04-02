@@ -115,8 +115,10 @@ class AddonHandler(ServiceTCPHandler):
 		thread.start_new_thread(dialog.show_video_dialog_byId, (stv_id, ))
 
 	def open_settings(self):
-		__addon__ = get_current_addon()
-		thread.start_new_thread(__addon__.openSettings, ())
+		thread.start_new_thread(addon_openSettings, ())
+
+	def dialog_account_create(self, params):
+		thread.start_new_thread(dialog.open_create_account_dialog, (params, ))
 
 	def debug_1(self):
 		self.server.stvList.clear()

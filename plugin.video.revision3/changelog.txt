@@ -1,3 +1,12 @@
+[B]Version 3.0.13[/B]
+
+- Updated addon to support recent Revision3 changes
+- Switch to Revision3 v0.1 API
+- Removed broken search function
+- Added Networks and Featured directory
+- Added new icons (Credits to calincio)
+- Added optional information to addon.xml
+
 [B]Version 3.0.12[/B]
 
 - Version bump for frodo

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="30000">Video Quality</string>
-    <string id="30001">MP4:HD</string>
-    <string id="30002">MP4:Large</string>
-    <string id="30003">MP4:Phone</string>
+    <string id="30001">HD</string>
+    <string id="30002">High</string>
+    <string id="30003">Low</string>
 	<string id="30004">Enable Video Download</string>
 	<string id="30005">Download Location</string>
 	<string id="30008">Show Downloads Folder</string>
@@ -11,19 +11,27 @@
     <string id="30010">or try again using different search words.</string>
 	<string id="30011">Please set a Download Location.</string>
 	<string id="30012">Downloads</string>
-	<string id="30013">Just Released</string>
+	<string id="30013">Most Recent</string>
 	<string id="30014">Archived Shows</string>
 	<string id="30015">Search</string>
 	<string id="30016">Next Page</string>
 	<string id="30017">Video Type</string>
-	<string id="30018">Just released Revision3 shows.</string>
+	<string id="30018">Get the latest episodes across all current Revision3 shows</string>
 	<string id="30019">Take a step back into the past of Revision3. Watch some of the shows that are no longer in production.</string>
 	<string id="30020">Enter search term.</string>
 	<string id="30021">Enable default view for Confluence skin</string>
-	<string id="30022">Play downloaded shows.</string>
+	<string id="30022">Play downloaded shows</string>
+	<string id="30023">Featured</string>
+	<string id="30024">Get a list of episodes chosen to be featured by Revision3</string>
+	<string id="30025">Lmpzb24/YXBpX2tleT1iMGY2OTZmZjM0M2JlYTUzZGI1NjRiNGY1NGQ0N2YxOTg4OWFiZWFm</string>
+	<string id="30026">There are no videos available for</string>
+	<string id="30027">Networks</string>
+	<string id="30028">Whether you're a gamer, tech enthusiast, or just like to know what's hot right now you can't miss Revision3's newest networks! Tune in for all the best content plus bonus clips you won't see anywhere else.</string>
+	<string id="30029">Please update your Revision3 favorites.</string>
 	<string id="30050">There was a connection error:</string>
 	<string id="30051">If this problem persists, please submit the error report.</string>
 	<string id="30052">Retry</string>
 	<string id="30053">Quit</string>
 	<string id="30054">There was an index error.</string>
+	<string id="30055">Enable default view for Confluence skin</string>
 </strings>

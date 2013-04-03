@@ -33,5 +33,11 @@
   <string id="33002">720p</string>
   <string id="33003">480p</string>
   <string id="33004">360p</string>
-  
+  <string id="33010">Display titles</string>
+  <string id="33011">Streamer - Stream Title</string>
+  <string id="33012">Viewers - Streamer - Stream Title</string>
+  <string id="33013">Stream Title</string>
+  <string id="33014">Streamer</string>
+
+  <string id="33100">Username</string>
 </strings>

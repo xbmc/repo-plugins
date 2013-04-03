@@ -24,3 +24,17 @@
 - added featured streams section
 0.2.2
 - added teams section - thx to kokarn
+0.2.3
+- code refactor
+- integration of xbmcswift2
+0.2.4
+- fixed bug in following section
+- fixed bug in function getBestJtvTokenPossible
+0.2.5
+- serveral fixes and new features thx to grocal
+- fixed 'status' in favorite json data might be null
+- new translation: Polish
+- changed getting live favorite channels from on single .json query (user/favorite with live=true variable set)
+- channel listing in format "[channel_name] channel_status_text"
+0.2.6
+- bug fix: crashes or wrong error messages, when opening streams

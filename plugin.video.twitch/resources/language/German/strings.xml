@@ -33,4 +33,11 @@
   <string id="33002">720p</string>
   <string id="33003">480p</string>
   <string id="33004">360p</string>
+  <string id="33010">Stream-Bezeichnung</string>
+  <string id="33011">Streamer - Status</string>
+  <string id="33012">Zuschauerzahl - Streamer - Status</string>
+  <string id="33013">Status</string>
+  <string id="33014">Streamer</string>
+
+  <string id="33100">Benutzername</string>
 </strings>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- main menu -->
+  <string id="30001">Gry</string>
+  <string id="30002">Śledzeni</string>
+  <string id="30003">Szukaj</string>
+  <string id="30004">Ustawienia</string>
+  <string id="30005">Popularne kanały</string>
+  <string id="30006">Drużyny</string>
+  
+  <!--search -->
+  <string id="30101">Szukaj kanałów</string>
+  
+  <!--general --> 
+  <string id="31000">TwitchTV</string>
+  <string id="31001">następne...</string>
+
+   <!--notifications --> 
+  <string id="32001">Błąd HTTP</string>
+  <string id="32002">Brak danych</string>
+  <string id="32003">Brak archiwum</string>
+  <string id="32004">Błąd tokena</string>
+  <string id="32005">Ustawienia video zmienione</string>
+  <string id="32006">Wybrane ustawienia video niedostępne</string>
+  <string id="32007">Błąd TwitchAPI</string>
+  <string id="32008">Błąd JSON</string>
+  <string id="32009">Nieudane parsowanie wyników</string>
+  <string id="32010">Sprawdź połączenie internetowe</string>
+  
+  <!--settings -->
+  <string id="33000">Jakość video</string>
+  <string id="33001">Najlepsza możliwa</string>
+  <string id="33002">720p</string>
+  <string id="33003">480p</string>
+  <string id="33004">360p</string>
+  <string id="33010">Schemat wyświetlania tytułów</string>
+  <string id="33011">Kanał - Tytuł</string>
+  <string id="33012">Liczba oglądających - Kanał - Tytuł</string>
+  <string id="33013">Tytuł</string>
+  <string id="33014">Kanał</string>
+  
+  <string id="33100">Użytkownik</string>
+</strings>

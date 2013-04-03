@@ -1,8 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id='plugin.video.twitch' version='0.2.2' name='TwitchTV' provider-name='StateOfTheArt'>
+<addon id='plugin.video.twitch' version='0.2.6' name='TwitchTV' provider-name='StateOfTheArt'>
   <requires>
-    <import addon='xbmc.python' version='2.0'/>
+    <import addon='xbmc.python' version='2.1.0'/>
     <import addon='script.module.simplejson' version='2.0.10'/>
+    <import addon="script.module.xbmcswift2" version="1.2.0"/>
   </requires>
   <extension point='xbmc.python.pluginsource' library='default.py'>
         <provides>video</provides>
@@ -10,9 +11,13 @@
   <extension point='xbmc.addon.metadata'>
     <platform>all</platform>
     <language>en</language>
+    <source>https://github.com/StateOfTheArt89/Twitch.tv-on-XBMC</source>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
     <summary lang='de'>TwitchTV video plugin</summary>
     <description lang='de'>Schaue die besten Gaming-Streams auf XBMC!</description>
     <summary lang='en'>TwitchTV video plugin</summary>
     <description lang='en'>Watch your favorite gaming streams on XBMC!</description>
+    <summary lang='pl'>TwitchTV video plugin</summary>
+    <description lang='pl'>Oglądaj ulubione programy TwitchTV na XBMC!</description>
   </extension>
 </addon>

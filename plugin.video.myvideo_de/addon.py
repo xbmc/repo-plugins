@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-#     Copyright (C) 2012 Tristan Fischer
+#     Copyright (C) 2012 Tristan Fischer (sphere@dersphere.de)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -17,187 +17,236 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from xbmcswift import Plugin, xbmc, xbmcplugin, xbmcgui, clean_dict
-import resources.lib.scraper as scraper
+import string
+from xbmcswift2 import Plugin, xbmc, xbmcgui
+import SimpleDownloader
+from resources.lib import scraper
 
-__addon_name__ = 'MyVideo.de'
-__id__ = 'plugin.video.myvideo_de'
+STRINGS = {
+    'page': 30000,
+    'search': 30001,
+    'download': 30020,
+    'no_download_path': 30030,
+    'set_now?': 30031,
+    'hls_error': 30032,
+}
 
-DEBUG = False
-
-THUMBNAIL_VIEW_IDS = {'skin.confluence': 500,
-                      'skin.aeon.nox': 551,
-                      'skin.confluence-vertical': 500,
-                      'skin.jx720': 52,
-                      'skin.pm3-hd': 53,
-                      'skin.rapier': 50,
-                      'skin.simplicity': 500,
-                      'skin.slik': 53,
-                      'skin.touched': 500,
-                      'skin.transparency': 53,
-                      'skin.xeebo': 55}
+plugin = Plugin()
 
 
-class Plugin_mod(Plugin):
-
-    def add_items(self, iterable, is_update=False, sort_method_ids=[],
-                  override_view_mode=False):
-        items = []
-        urls = []
-        for i, li_info in enumerate(iterable):
-            items.append(self._make_listitem(**li_info))
-            if self._mode in ['crawl', 'interactive', 'test']:
-                print '[%d] %s%s%s (%s)' % (i + 1, '', li_info.get('label'),
-                                            '', li_info.get('url'))
-                urls.append(li_info.get('url'))
-        if self._mode is 'xbmc':
-            if override_view_mode:
-                skin = xbmc.getSkinDir()
-                thumbnail_view = THUMBNAIL_VIEW_IDS.get(skin)
-                if thumbnail_view:
-                    cmd = 'Container.SetViewMode(%s)' % thumbnail_view
-                    xbmc.executebuiltin(cmd)
-            xbmcplugin.addDirectoryItems(self.handle, items, len(items))
-            for id in sort_method_ids:
-                xbmcplugin.addSortMethod(self.handle, id)
-            xbmcplugin.endOfDirectory(self.handle, updateListing=is_update)
-        return urls
-
-    def _make_listitem(self, label, label2='', iconImage='', thumbnail='',
-                       path='', **options):
-        li = xbmcgui.ListItem(label, label2=label2, iconImage=iconImage,
-                              thumbnailImage=thumbnail, path=path)
-        cleaned_info = clean_dict(options.get('info'))
-        if cleaned_info:
-            li.setInfo('video', cleaned_info)
-        if options.get('is_playable'):
-            li.setProperty('IsPlayable', 'true')
-        if options.get('context_menu'):
-            li.addContextMenuItems(options['context_menu'])
-        return options['url'], li, options.get('is_folder', True)
-
-plugin = Plugin_mod(__addon_name__, __id__, __file__)
-
-
-@plugin.route('/', default=True)
+@plugin.route('/')
 def show_categories():
-    __log('show_categories start')
-    entries = scraper.get_categories()
-    items = [{'label': e['title'],
-              'url': plugin.url_for('show_subcategories',
-                                    path=e['path'])}
-             for e in entries]
-    items.append({'label': plugin.get_string(30001),
-                  'url': plugin.url_for('video_search')})
-    __log('show_categories end')
-    return plugin.add_items(items)
+    items = [{
+        'label': category['title'],
+        'path': plugin.url_for(
+            endpoint='show_subcategories',
+            path=category['path']
+        )
+    } for category in scraper.get_categories()]
+    items.append({
+        'label': _('search'),
+        'path': plugin.url_for('video_search')}
+    )
+    return plugin.finish(items)
 
 
 @plugin.route('/search/')
 def video_search():
-    __log('search start')
-    keyboard = xbmc.Keyboard('', 'Video Suche')
-    keyboard.doModal()
-    if keyboard.isConfirmed() and keyboard.getText():
-        search_string = keyboard.getText()
+    search_string = __keyboard(_('search'))
+    if search_string:
         __log('search gots a string: "%s"' % search_string)
-        url = plugin.url_for('video_search_result',
-                             search_string=search_string)
+        url = plugin.url_for(
+            endpoint='video_search_result',
+            search_string=search_string
+        )
         plugin.redirect(url)
 
 
 @plugin.route('/search/<search_string>/')
 def video_search_result(search_string):
-    __log('video_search_result started with string=%s' % search_string)
-    entries = scraper.get_search_result(search_string)
-    __log('search end')
-    return __add_items(entries)
+    items = scraper.get_search_result(search_string)
+    return __add_items(items)
 
 
 @plugin.route('/category/<path>/')
 def show_subcategories(path):
-    __log('show_subcategories start')
-    entries = scraper.get_sub_categories(path)
-    items = [{'label': e['title'],
-              'url': plugin.url_for('show_path',
-                                    path=e['path'])}
-             for e in entries]
-    __log('show_subcategories end')
-    return plugin.add_items(items)
+    categories = scraper.get_sub_categories(path)
+    items = [{
+        'label': category['title'],
+        'path': plugin.url_for(
+            endpoint='show_path',
+            path=category['path']
+        )
+    } for category in categories]
+    return plugin.finish(items)
 
 
 @plugin.route('/<path>/')
 def show_path(path):
-    __log('show_path started with path: %s' % path)
-    entries = scraper.get_path(path)
-    __log('show_path end')
-    return __add_items(entries)
+    items = scraper.get_path(path)
+    return __add_items(items)
 
 
 def __add_items(entries):
     items = []
-    sort_methods = [xbmcplugin.SORT_METHOD_UNSORTED, ]
-    force_viewmode = plugin.get_setting('force_viewmode') == 'true'
     update_on_pageswitch = plugin.get_setting('update_on_pageswitch') == 'true'
     has_icons = False
     is_update = False
-    for e in entries:
-        if force_viewmode and not has_icons and e.get('thumb', False):
+    for entry in entries:
+        if not has_icons and entry.get('thumb'):
             has_icons = True
-        if e.get('pagenination', False):
-            if e['pagenination'] == 'PREV':
+        if entry.get('pagenination'):
+            if entry['pagenination'] == 'PREV':
                 if update_on_pageswitch:
                     is_update = True
-                title = '<< %s %s <<' % (plugin.get_string(30000), e['title'])
-            elif e['pagenination'] == 'NEXT':
-                title = '>> %s %s >>' % (plugin.get_string(30000), e['title'])
-            items.append({'label': title,
-                          'iconImage': 'DefaultFolder.png',
-                          'is_folder': True,
-                          'is_playable': False,
-                          'url': plugin.url_for('show_path',
-                                                path=e['path'])})
-        elif e['is_folder']:
-            items.append({'label': e['title'],
-                          'iconImage': e.get('thumb', 'DefaultFolder.png'),
-                          'is_folder': True,
-                          'is_playable': False,
-                          'url': plugin.url_for('show_path',
-                                                path=e['path'])})
+                title = '<< %s %s <<' % (_('page'), entry['title'])
+            elif entry['pagenination'] == 'NEXT':
+                title = '>> %s %s >>' % (_('page'), entry['title'])
+            items.append({
+                'label': title,
+                'icon': 'DefaultFolder.png',
+                'path': plugin.url_for(
+                    endpoint='show_path',
+                    path=entry['path']
+                )
+            })
+        elif entry['is_folder']:
+            items.append({
+                'label': entry['title'],
+                'icon': entry.get('thumb', 'DefaultFolder.png'),
+                'path': plugin.url_for(
+                    endpoint='show_path',
+                    path=entry['path']
+                )
+            })
         else:
-            items.append({'label': e['title'],
-                          'iconImage': e.get('thumb', 'DefaultVideo.png'),
-                          'info': {'duration': e.get('length', '0:00'),
-                                   'plot': e.get('description', ''),
-                                   'studio': e.get('username', ''),
-                                   'date': e.get('date'),
-                                   'year': e.get('year'),
-                                   'rating': e.get('rating'),
-                                   'votes': e.get('votes'),
-                                   'views': e.get('views')},
-                          'is_folder': False,
-                          'is_playable': True,
-                          'url': plugin.url_for('watch_video',
-                                                video_id=e['video_id'])})
-    sort_methods.extend((xbmcplugin.SORT_METHOD_VIDEO_RATING,
-                         xbmcplugin.SORT_METHOD_VIDEO_RUNTIME,))
-    __log('__add_items end')
-    return plugin.add_items(items, is_update=is_update,
-                            sort_method_ids=sort_methods,
-                            override_view_mode=has_icons)
+            download_url = plugin.url_for(
+                endpoint='download_video',
+                video_id=entry['video_id']
+            )
+            items.append({
+                'label': entry['title'],
+                'icon': entry.get('thumb', 'DefaultVideo.png'),
+                'info': {
+                    'plot': entry.get('description', ''),
+                    'studio': entry.get('username', ''),
+                    'date': entry.get('date', ''),
+                    'year': int(entry.get('year', 0)),
+                    'rating': float(entry.get('rating', 0)),
+                    'votes': unicode(entry.get('votes')),
+                    'views': unicode(entry.get('views', 0))
+                },
+                'context_menu': [
+                    (_('download'), 'XBMC.RunPlugin(%s)' % download_url),
+                ],
+                'stream_info': {
+                    'video': {'duration': entry.get('length', 0)}
+                },
+                'is_playable': True,
+                'path': plugin.url_for(
+                    endpoint='watch_video',
+                    video_id=entry['video_id']
+                )
+            })
+    finish_kwargs = {
+        #'sort_methods': ('UNSORTED', 'RATING', 'RUNTIME'),
+        'update_listing': is_update
+    }
+    if has_icons and plugin.get_setting('force_viewmode') == 'true':
+        finish_kwargs['view_mode'] = 'thumbnail'
+    return plugin.finish(items, **finish_kwargs)
 
 
-@plugin.route('/video/<video_id>/')
+@plugin.route('/video/<video_id>/download')
+def download_video(video_id):
+    download_path = plugin.get_setting('download_path')
+    while not download_path:
+        dialog = xbmcgui.Dialog()
+        set_now = dialog.yesno(_('no_download_path'), _('set_now?'))
+        if set_now:
+            plugin.open_settings()
+            download_path = plugin.get_setting('download_path')
+        else:
+            return
+    sd = SimpleDownloader.SimpleDownloader()
+    video = scraper.get_video(video_id)
+    filename = __get_legal_filename(video['title'])
+    if not video['rtmpurl']:
+        params = {
+            'url': video['filepath'] + video['file'],
+        }
+    else:
+        params = {
+            'use_rtmpdump': True,
+            'url': video['rtmpurl'],
+            'tcUrl': video['rtmpurl'],
+            'swfUrl': video['swfobj'],
+            'pageUrl': video['pageurl'],
+            'playpath': video['playpath']
+        }
+    params['download_path'] = download_path
+    __log('params: %s' % repr(params))
+    __log('start downloading: %s to path: %s' % (filename, download_path))
+    sd.download(filename, params)
+
+
+@plugin.route('/video/<video_id>/play')
 def watch_video(video_id):
-    __log('watch_video started with video_id: %s' % video_id)
-    video_url = scraper.get_video(video_id)
+    video = scraper.get_video(video_id)
+    if not video['rtmpurl']:
+        __log('watch_video using FLV')
+        video_url = video['filepath'] + video['file']
+        __log('wget %s' % video_url)
+    else:
+        __log('watch_video using RTMPE or RTMPT')
+        __log((
+            'rtmpdump '
+            '--rtmp "%(rtmpurl)s" '
+            '--flv "test.flv" '
+            '--tcUrl "%(rtmpurl)s" '
+            '--swfVfy "%(swfobj)s" '
+            '--pageUrl "%(pageurl)s" '
+            '--playpath "%(playpath)s"'
+        ) % video)
+        video_url = (
+            '%(rtmpurl)s '
+            'tcUrl=%(rtmpurl)s '
+            'swfVfy=%(swfobj)s '
+            'pageUrl=%(pageurl)s '
+            'playpath=%(playpath)s'
+        ) % video
     __log('watch_video finished with url: %s' % video_url)
     return plugin.set_resolved_url(video_url)
 
 
+def __keyboard(title, text=''):
+    keyboard = xbmc.Keyboard(text, title)
+    keyboard.doModal()
+    if keyboard.isConfirmed() and keyboard.getText():
+        return keyboard.getText()
+
+
+def __get_legal_filename(title):
+    chars = ' ._-%s%s' % (string.ascii_letters, string.digits)
+    return '%s.flv' % ''.join((c for c in title if c in chars))
+
+
+def _(string_id):
+    if string_id in STRINGS:
+        return plugin.get_string(STRINGS[string_id])
+    else:
+        plugin.log.warning('String is missing: %s' % string_id)
+        return string_id
+
+
 def __log(text):
-    xbmc.log('%s addon: %s' % (__addon_name__, text))
+    plugin.log.info(text)
 
 
 if __name__ == '__main__':
-    plugin.run()
+    try:
+        plugin.run()
+    except scraper.NetworkError:
+        plugin.notify(msg=_('network_error'))
+    except NotImplementedError:
+        plugin.notify(msg=_('hls_error'))

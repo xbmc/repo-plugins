@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Korean language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/ko/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- General entries -->
+    <string id="30000">페이지</string>
+    <string id="30001">찾기</string>
+
+    <!-- Settings -->
+    <string id="30010">썸네일 보기모드</string>
+    <string id="30011">페이지 전환시 컨테이너 업데이트</string>
+</strings>

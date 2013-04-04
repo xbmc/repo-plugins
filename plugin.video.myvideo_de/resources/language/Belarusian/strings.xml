@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
-<!-- English language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/en/ -->
+<!-- Belarusian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/be/ -->
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
@@ -8,16 +8,7 @@
     <string id="30000">Page</string>
     <string id="30001">Search</string>
 
-    <!-- Context Menu entries -->
-    <string id="30020">Download Video</string>
-
-    <!-- dialog entries -->
-    <string id="30030">No Download path!</string>
-    <string id="30031">Do you want to set the path now?</string>
-    <string id="30032">HLS not supported</string>
-
     <!-- Settings -->
     <string id="30010">Force ViewMode to Thumbnail</string>
     <string id="30011">Update container on page switch</string>
-    <string id="30012">Download Path</string>
 </strings>

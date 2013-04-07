@@ -1,0 +1,16 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: xbmc-plugin-tagesschauvideoblogs 0.1.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Preferred-Encodings: utf-8 latin1\n"
+
+msgctxt "#32001"
+msgid "All"
+msgstr "Alle"
+
+msgctxt "#32002"
+msgid "Newest"
+msgstr "Neueste"

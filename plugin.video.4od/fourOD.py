@@ -567,6 +567,7 @@ class FourODProvider(Provider):
     
         # Get the stream info
         (streamUri, auth) = self.GetStreamInfo(assetUrl)
+        self.log(u'streamUri: %s' % streamUri, xbmc.LOGDEBUG)
 
         url = re.search(u'(.*?)mp4:', streamUri).group(1)
         app = re.search(u'.com/(.*?)mp4:', streamUri).group(1)
@@ -575,8 +576,14 @@ class FourODProvider(Provider):
             url = url + u"?ovpfv=1.1&" + auth
             app = app + u"?ovpfv=1.1&" + auth
         
+        self.log(u'url: %s' % url, xbmc.LOGDEBUG)
         swfPlayer = self.GetSwfPlayer()
-        rtmpvar = rtmp.RTMP(rtmp = streamUri, app = app, swfVfy = swfPlayer, playPath = playPath, pageUrl = urlRoot)
+        
+        port = None
+        if self.addon.getSetting('rtmp_port_alt') == "true":
+            port = 443
+            
+        rtmpvar = rtmp.RTMP(rtmp = url, app = app, swfVfy = swfPlayer, playPath = playPath, pageUrl = urlRoot, port = port)
         return rtmpvar
     
     #==============================================================================

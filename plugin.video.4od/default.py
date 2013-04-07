@@ -42,10 +42,12 @@ import rtmp
 
 from utils import log
 
-pluginName  = 'plugin.video.4od'
 pluginHandle = int(sys.argv[1])
 
-addon = Addon(pluginName)
+addon = Addon()
+version = addon.getAddonInfo('version')
+pluginName = addon.getAddonInfo('id')
+name = addon.getAddonInfo('name')
 language = addon.getLocalizedString
 httpManager = HttpManager()
 
@@ -105,6 +107,8 @@ def executeCommand():
 if __name__ == "__main__":
 
         try:
+            log (u"Name: %s, Version: %s" % (name, version), xbmc.LOGDEBUG)
+
             if addon.getSetting('http_cache_disable_adv') == 'false':
                 httpManager.SetCacheDir( CACHE_FOLDER )
     

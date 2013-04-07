@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.4od"
        name="4oD"
-       version="2.0.9"
+       version="2.0.10"
        provider-name="mossy">
     <requires>
         <import addon="script.module.socksipy" version="1.0.0"/>

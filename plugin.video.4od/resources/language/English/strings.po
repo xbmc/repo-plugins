@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2013-03-16 14:46+0000\n"
+"POT-Creation-Date: 2013-03-28 15:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -435,7 +435,13 @@ msgctxt "#50501"
 msgid "Auto-Watch Percentage"
 msgstr ""
 
-#empty strings from id 50502 to 51039
+#empty strings from id 50502 to 50509
+
+msgctxt "#50510"
+msgid "Use alternative RTMP port: 443"
+msgstr ""
+
+#empty strings from id 50511 to 51039
 
 msgctxt "#51040"
 msgid "Error processing asset data"

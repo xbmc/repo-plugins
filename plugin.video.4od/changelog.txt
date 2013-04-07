@@ -1,3 +1,6 @@
+Version 3.0.10 (28 Mar 2013)
+- Option to use port 443 for RTMP streams
+
 Version 3.0.9 (16 Mar 2013)
 - Prevent potential divide-by-zero problem when "Show Watched" is on.
 

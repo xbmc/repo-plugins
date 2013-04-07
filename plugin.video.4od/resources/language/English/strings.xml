@@ -68,7 +68,10 @@
   <string id="32700">Getting video stream url</string>
   <string id="32710">Getting episode information</string>
   <string id="32720">Preparing to play video</string>
+  <string id="32730"></string>
+  
   <string id="50500">Showed Watched</string>
   <string id="50501">Auto-Watch Percentage</string>
+  <string id="50510">Use alternative RTMP port: 443</string>
   <string id="51040">Error processing asset data</string>
 </strings>

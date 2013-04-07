@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import xbmc
 import sys
+import re
 
 
 class RTMP:
-    def __init__(self, rtmp, tcUrl = None, auth = None, app = None, playPath = None, swfUrl = None, swfVfy = None, pageUrl = None, live = None, socks = None):
+    def __init__(self, rtmp, tcUrl = None, auth = None, app = None, playPath = None, swfUrl = None, swfVfy = None, pageUrl = None, live = None, socks = None, port = None):
         if hasattr(sys.modules[u"__main__"], u"log"):
             self.log = sys.modules[u"__main__"].log
         else:
@@ -20,6 +21,7 @@ class RTMP:
         self.pageUrl = pageUrl
         self.live = live
         self.socks = socks
+        self.port = port
         
         self.rtmpdumpPath = None
         self.downloadFolder = None
@@ -95,6 +97,9 @@ class RTMP:
         if self.socks is not None:
             parameters[u"socks"] = self.socks
 
+        if self.port is not None:
+            parameters[u"port"] = self.port
+
         self.log(u"parameters: " + unicode(parameters), xbmc.LOGDEBUG)
         return parameters
 
@@ -146,6 +151,10 @@ class RTMP:
             args.append(u"--socks")
             args.append(u'"%s"' % self.socks)
 
+        if self.port is not None:
+            args.append(u"--port")
+            args.append(u'%d' % self.port)
+            
         parameters = u' '.join(args)
 
         self.log(u"parameters: " + parameters, xbmc.LOGDEBUG)
@@ -157,7 +166,20 @@ class RTMP:
             exception = Exception(self.language(32020))
             raise exception;
 
-        args = [u"%s" % self.rtmp]
+        if self.port is None:
+            args = [u"%s" % self.rtmp]
+        else:
+            try:
+                # Replace "rtmp://abc.def.com:default_port/ghi/jkl" with "rtmp://abc.def.com:port/ghi/jkl"
+                match=re.search("(.+//[^/]+):\d+(/.*)", self.rtmp,  re.DOTALL | re.IGNORECASE )
+                if match is None:
+                    # Replace "rtmp://abc.def.com/ghi/jkl" with "rtmp://abc.def.com:port/ghi/jkl"
+                    match=re.search("(.+//[^/]+)(/.*)", self.rtmp,  re.DOTALL | re.IGNORECASE )
+                    
+                args = [u"%s:%d%s" % (match.group(1), self.port, match.group(2))]
+            except (Exception) as exception:
+                self.log("Exception changing default port: " + repr(exception))
+                args = [u"%s" % self.rtmp]
 
         if self.auth is not None:
             args.append(u"auth=%s" % self.auth)

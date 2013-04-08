@@ -1,3 +1,5 @@
+[B]3.0.5[/B]
+- Add context menu item for searching similar named programs, add support for new 1M MPEG4 stream
 [B]3.0.4[/B]
 - Added fanart image. Thanks to Sven Weiß and koobyak!
 [B]3.0.3[/B]

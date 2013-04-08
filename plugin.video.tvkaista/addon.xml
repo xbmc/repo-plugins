@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.tvkaista" name="TVKaista.fi" version="3.0.4" provider-name="Viljo Viitanen">
+<addon id="plugin.video.tvkaista" name="TVKaista.fi" version="3.0.5" provider-name="Viljo Viitanen">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
     </requires>
@@ -16,4 +16,8 @@
         <disclaimer lang="en">Updated for XBMC Dharma beta 1 by stilester</disclaimer>
         <disclaimer lang="fi">Päivittänyt XBMC Dharma beta 1:lle stilester</disclaimer>
     </extension>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <source>https://code.google.com/p/tvkaistaforxbmcv2/source/checkout</source>
+    <website>https://code.google.com/p/tvkaistaforxbmcv2/</website>
+    <email>viljo.viitanen@gmail.com</email>
 </addon>

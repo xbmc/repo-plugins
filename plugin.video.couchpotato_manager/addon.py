@@ -239,22 +239,19 @@ def show_movies(status):
 
 @plugin.route('/movies/add/')
 def add_new_wanted():
+    if 'imdb_id' in plugin.request.args:
+        imdb_id = plugin.request.args['imdb_id'][0]
+        if imdb_id:
+            return add_new_wanted_by_id(imdb_id)
     if 'title' in plugin.request.args:
         search_title = plugin.request.args['title'][0]
     else:
         search_title = plugin.keyboard(heading=_('enter_movie_title'))
     if search_title:
-        url = plugin.url_for(
-            endpoint='add_new_wanted_result',
-            search_title=search_title,
-        )
-        plugin.redirect(url)
-
-
-@plugin.route('/movies/add/<search_title>')
-def add_new_wanted_result(search_title):
-    movies = api.search_wanted(search_title)
-    if movies:
+        movies = api.search_wanted(search_title)
+        if not movies:
+            plugin.notify(msg=_('no_movie_found'))
+            return
         items = [
             '%s (%s)' % (movie['titles'][0], movie['year'])
             for movie in movies
@@ -264,28 +261,42 @@ def add_new_wanted_result(search_title):
         )
         if selected >= 0:
             selected_movie = movies[selected]
-            if not plugin.get_setting('default_profile', str):
-                profiles = api.get_profiles()
-                items = [profile['label'] for profile in profiles]
-                selected = xbmcgui.Dialog().select(
-                    _('select_profile'), items
+            profile_id = ask_profile()
+            if profile_id:
+                success = api.add_wanted(
+                    profile_id=profile_id,
+                    movie_identifier=selected_movie['imdb']
                 )
-                if selected >= 0:
-                    selected_profile = profiles[selected]
-                    profile_id = selected_profile['id']
-                else:
-                    return
-            else:
-                profile_id = plugin.get_setting('default_profile', int)
-            success = api.add_wanted(
-                profile_id=profile_id,
-                movie_identifier=selected_movie['imdb'],
-                movie_title=selected_movie['titles'][0]
-            )
-            if success:
-                plugin.notify(msg=_('wanted_added'))
+                if success:
+                    plugin.notify(msg=_('wanted_added'))
+
+
+@plugin.route('/movies/add-by-id/<imdb_id>')
+def add_new_wanted_by_id(imdb_id):
+    profile_id = ask_profile()
+    if profile_id:
+        success = api.add_wanted(
+            profile_id=profile_id,
+            movie_identifier=imdb_id
+        )
+        if success:
+            plugin.notify(msg=_('wanted_added'))
+
+
+def ask_profile():
+    if not plugin.get_setting('default_profile', str):
+        profiles = api.get_profiles()
+        items = [profile['label'] for profile in profiles]
+        selected = xbmcgui.Dialog().select(
+            _('select_profile'), items
+        )
+        if selected == -1:
+            return
+        selected_profile = profiles[selected]
+        profile_id = selected_profile['id']
     else:
-        plugin.notify(msg=_('no_movie_found'))
+        profile_id = plugin.get_setting('default_profile', int)
+    return profile_id
 
 
 @plugin.route('/movies/<library_id>/releases/')

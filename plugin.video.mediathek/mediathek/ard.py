@@ -23,7 +23,7 @@ class ARDMediathek(Mediathek):
     self.gui = simpleXbmcGui;
     self.rootLink = "http://www.ardmediathek.de"
     self.menuTree = (
-                      TreeNode("0","Neuste Videos",self.rootLink+"/ard/servlet/content/3474442",True),
+                      TreeNode("0","Neuste Videos",self.rootLink+"/fernsehen",True),
                       TreeNode("1","Kategorien","",False,(
                         TreeNode("1.0",u"Nachrichten",self.rootLink+"/kategorien/nachrichten?clipFilter=fernsehen&documentId=506",True),
                         TreeNode("1.1",u"Politik & Zeitgeschehen",self.rootLink+"/ard/servlet/content/3516690?clipFilter=fernsehen&documentId=206",True),
@@ -44,47 +44,47 @@ class ARDMediathek(Mediathek):
                         TreeNode("1.16",u"Religion & Kirche",self.rootLink+"/ard/servlet/content/3516690?clipFilter=fernsehen&documentId=678",True),
                         TreeNode("1.17",u"In der Region",self.rootLink+"/ard/servlet/content/3516690?clipFilter=fernsehen&documentId=550",True),
                         )),
-                      TreeNode("2","Sendungen von A-Z","",False,(
-                        TreeNode("2.0","0-9",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=0-9/index.html",True),
-                        TreeNode("2.1","A",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=A/index.html",True),
-                        TreeNode("2.2","B",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=B/index.html",True),
-                        TreeNode("2.3","C",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=C/index.html",True),
-                        TreeNode("2.4","D",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=D/index.html",True),
-                        TreeNode("2.5","E",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=E/index.html",True),
-                        TreeNode("2.6","F",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=F/index.html",True),
-                        TreeNode("2.7","G",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=G/index.html",True),
-                        TreeNode("2.8","H",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=H/index.html",True),
-                        TreeNode("2.9","I",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=I/index.html",True),
-                        TreeNode("2.10","J",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=J/index.html",True),
-                        TreeNode("2.11","K",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=K/index.html",True),
-                        TreeNode("2.12","L",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=L/index.html",True),
-                        TreeNode("2.13","M",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=M/index.html",True),
-                        TreeNode("2.14","N",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=N/index.html",True),
-                        TreeNode("2.15","O",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=O/index.html",True),
-                        TreeNode("2.16","P",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=P/index.html",True),
-                        TreeNode("2.17","Q",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=Q/index.html",True),
-                        TreeNode("2.18","R",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=R/index.html",True),
-                        TreeNode("2.19","S",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=S/index.html",True),
-                        TreeNode("2.20","T",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=T/index.html",True),
-                        TreeNode("2.21","U",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=U/index.html",True),
-                        TreeNode("2.22","V",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=V/index.html",True),
-                        TreeNode("2.23","W",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=W/index.html",True),
-                        TreeNode("2.24","X",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=X/index.html",True),
-                        TreeNode("2.25","Y",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=Y/index.html",True),
-                        TreeNode("2.26","Z",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=Z/index.html",True),
-                        )),
+                      #TreeNode("2","Sendungen von A-Z","",False,(
+                      #  TreeNode("2.0","0-9",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=0-9/index.html",True),
+                      #  TreeNode("2.1","A",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=A/index.html",True),
+                      #  TreeNode("2.2","B",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=B/index.html",True),
+                      #  TreeNode("2.3","C",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=C/index.html",True),
+                      #  TreeNode("2.4","D",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=D/index.html",True),
+                      #  TreeNode("2.5","E",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=E/index.html",True),
+                      #  TreeNode("2.6","F",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=F/index.html",True),
+                      #  TreeNode("2.7","G",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=G/index.html",True),
+                      #  TreeNode("2.8","H",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=H/index.html",True),
+                      #  TreeNode("2.9","I",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=I/index.html",True),
+                      #  TreeNode("2.10","J",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=J/index.html",True),
+                      #  TreeNode("2.11","K",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=K/index.html",True),
+                      #  TreeNode("2.12","L",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=L/index.html",True),
+                      #  TreeNode("2.13","M",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=M/index.html",True),
+                      #  TreeNode("2.14","N",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=N/index.html",True),
+                      #  TreeNode("2.15","O",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=O/index.html",True),
+                      #  TreeNode("2.16","P",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=P/index.html",True),
+                      #  TreeNode("2.17","Q",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=Q/index.html",True),
+                      #  TreeNode("2.18","R",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=R/index.html",True),
+                      #  TreeNode("2.19","S",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=S/index.html",True),
+                      #  TreeNode("2.20","T",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=T/index.html",True),
+                      #  TreeNode("2.21","U",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=U/index.html",True),
+                      #  TreeNode("2.22","V",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=V/index.html",True),
+                      #  TreeNode("2.23","W",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=W/index.html",True),
+                      #  TreeNode("2.24","X",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=X/index.html",True),
+                      #  TreeNode("2.25","Y",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=Y/index.html",True),
+                      #  TreeNode("2.26","Z",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=Z/index.html",True),
+                      #  )),
                       )
       
     videoDocument_link_Regex = "/.*?documentId=(\\d*)"
     metaInfo_link_Regex = "/ard/servlet/ajax-cache/\\d*/view=ajax(/clipFilter=fernsehen){0,1}(/isFromList=true){0,1}/index.html"
     ajaxDocumentLink = "/ard/servlet/ajax-cache/(\\d*)/view=(switch|ajax|list)(/clipFilter=fernsehen){0,1}(/content=fernsehen){0,1}(/documentId=\\d*){0,1}/index.html"
-    self.findImage_regex = "<img.*?src=\".*?\".*?/>"; #?
+    self.findImage_regex = "<img.*?src=\".*?\".*?/>"; 
     #Regex für das Parsen der hauptseiten
     self.regex_ajaxLinkTag = re.compile("<a href=\""+ajaxDocumentLink+"\" title=\"\"><span>Neueste Clips</span></a>")
     self.regex_ajaxLink = re.compile(ajaxDocumentLink);
-    self.regex_videoLinks = re.compile("<img.*?src=\"(.*?)\".*?/>\\s*?</div>\\s*?<h3 class=\"mt-title\">\\s*?<a href=\""+videoDocument_link_Regex+"\" class=\".*\" rel=\""+metaInfo_link_Regex+"\">");
+    self.regex_videoLinks = re.compile("<img.*?src=\"(.*?)\".*?/>\\s*?</div>\\s*?<h3 class=\"mt-title\">\\s*?<a href=\""+videoDocument_link_Regex+"\" class=\".*\" rel=\""+metaInfo_link_Regex+"\".*?>");
     self.regex_videoSeriesLinks = re.compile("<a id=\".*\" class=\".*\" rel=\""+metaInfo_link_Regex+"\" href=\""+videoDocument_link_Regex+"\">");
-    self.regex_subLinks = re.compile("<a class=\"mt-box_preload.*?\" href=\""+ajaxDocumentLink+"\">");
+    self.regex_subLinks = re.compile("<a href=\""+ajaxDocumentLink+"\".*?>");
     self.regex_videoDocumentLink = re.compile(videoDocument_link_Regex);
     self.regex_MetaInfo = re.compile(metaInfo_link_Regex);
     self.regex_Date = re.compile("\\d{2}\\.\\d{2}\\.\\d{2}");
@@ -149,25 +149,24 @@ class ARDMediathek(Mediathek):
     
     
   def buildPageMenu(self, link, initCount, subLink = False):
-    self.gui.log("Build Page Menu: "+link);    
+    self.gui.log("Build Page Menu: %s SubLink: %d"%(link,subLink));    
     mainPage = self.loadPage(link);
     
     try:
       self.gui.log("Elements");
       if(subLink):
-        link = self.regex_ajaxLink.search(mainPage).group();
-        self.gui.log(link);
+        return self.extractVideoObjects(mainPage);
       else:
         htmlTag = self.regex_ajaxLinkTag.search(mainPage).group();
         link = self.regex_ajaxLink.search(htmlTag).group();
       
-      ajaxPage = self.loadPage(self.rootLink + link);
-      
-      return self.extractVideoObjects(ajaxPage);
+        ajaxPage = self.loadPage(self.rootLink + link);
+        return self.extractVideoObjects(ajaxPage);
     except:
       self.gui.log("Categorien");
       elementCount = self.extractCategorieObjects(mainPage);
       if(elementCount == 0):
+        self.gui.log("No Categories found");
         for link in self.regex_subLinks.finditer(mainPage):
           link = link.group();
           link = self.regex_ajaxLink.search(link).group();

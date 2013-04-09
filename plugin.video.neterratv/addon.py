@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-#     Copyright (C) 2012 mr.olix@gmail.com
+#     Copyright (C) 2013 mr.olix@gmail.com
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -22,12 +22,11 @@
 #    I started my the plugin code based on his code.
 # 
 
-
+#imports
 from xbmcswift import Plugin, xbmc, xbmcplugin, xbmcgui, clean_dict
-
-
-import resources.lib.neterratv as neterratv
 import sys
+#import from 
+import resources.lib.neterratv as neterratv
 
 DEBUG = False
 REMOTE_DBG = False
@@ -115,68 +114,103 @@ called when the script starts
 @plugin.route('/', default=True)
 def main_menu():
     __log('main_menu start')
+        
+    items=[]
+    items.append({'label': u'TV на ЖИВО',
+                  'url': plugin.url_for('tvlistlive',id_type='live')})
+    items.append({'label': u'TV на ЗАПИС',
+                  'url': plugin.url_for('tvlistlive',id_type='vod')})
+    items.append({'label': u'МУЗИКА',
+                  'url': plugin.url_for('tvlistlive',id_type='music')})
+    items.append({'label': u'TIMESHIFT',
+                  'url': plugin.url_for('tvlistlive',id_type='timeshift')})
+    items.append({'label': u'ФИЛМИ',
+                  'url': plugin.url_for('tvlistlive',id_type='movies')})
+    
+    __log('main_menu finished')
+    return plugin.add_items(items)
+
+'''
+    creates menu list on selected id_type
+'''
+@plugin.route('/tvlistlive/<id_type>')
+def tvlistlive(id_type):
+    __log('tvlistlive start')
     #get a list with the TV stations
-    stations = neterratv.showTVStations(plugin.get_setting('username'), plugin.get_setting('password'))
+    menulist=[]
     items=[]
-    for item in stations:
-        items.append({'label': item[0],
-                      'url': plugin.url_for('select_recordorlive',tvstation_name=item[0],tvstation_code=item[1])})
+    if id_type =='live':
+        menulist=neterratv.showTVStations(plugin.get_setting('username'), plugin.get_setting('password'))
+        if menulist:         
+            for item in menulist:
+                items.append({'label': item[0],
+                              'url': plugin.url_for('tvstation_playtv',tvstation_code=item[1])})                
+    if id_type =='vod':
+        menulist=neterratv.showVODStations(plugin.get_setting('username'), plugin.get_setting('password'))
+        if menulist:         
+            for item in menulist:
+                items.append({'label': item[0],
+                              'url': plugin.url_for('show_recordedlist',tvstation_code=item[1])})
+    if id_type =='music':
+        menulist=neterratv.showMusicProds(plugin.get_setting('username'), plugin.get_setting('password'))
+        if menulist:         
+            for item in menulist:
+                items.append({'label': item[0],
+                              'url': plugin.url_for('show_musicstreams',tvstation_code=item[1])})
+    
+    if id_type =='timeshift':        
+        menulist=neterratv.showTimeshiftProds(plugin.get_setting('username'), plugin.get_setting('password'))
+        if menulist:         
+            for item in menulist:
+                items.append({'label': item[0],
+                              'url': plugin.url_for('tvstation_playtv',tvstation_code='issue_id='+item[1])})
+        
+    if id_type =='movies':
+        menulist=neterratv.showMovieProds(plugin.get_setting('username'), plugin.get_setting('password'))
+        if menulist:         
+            for item in menulist:
+                items.append({'label': item[0],
+                              'url': plugin.url_for('show_movielist',tvstation_code=item[1])})
+                   
+    if not menulist:
+            items.append({'label': 'Error - no entries found',
+                          'url': 'error'})                
+    __log('tvlistlive finished')
     return plugin.add_items(items)
-
+    
 '''
-display TV live stream or recorded streams
-'''
-@plugin.route('/select_recordorlive/<tvstation_name>,<tvstation_code>')
-def select_recordorlive(tvstation_name,tvstation_code):
-    __log('select_recordorlive start')
-    items=[]
-    items.append({'label': 'TV ' + tvstation_name,
-            'url': plugin.url_for('tvstation_playtv',tvstation_code=tvstation_code)})
-    #append all others
-    items.append({'label': 'Recorded ' + tvstation_name,
-                  'url': plugin.url_for('show_recordedlist',tvstation_code=tvstation_code)})
-    __log('select_recordorlive')
-    return plugin.add_items(items)
-
-'''
-display list with the available TV streams from the selected TV station
+    display list with the available TV streams from the selected TV station
 '''
 @plugin.route('/tvstation_playtv/<tvstation_code>')
 def tvstation_playtv(tvstation_code):
     
     __log('tvstation_playtv started with string=%s' % tvstation_code)
-       
-    username = plugin.get_setting('username')
-    password = plugin.get_setting('password')
-    
-    stations = neterratv.getTVStationsStreams(tvstation_code, username, password)
-    
-    items=[]
-    i=0
-    for station in stations:
-        if i==0:
-            items=[{'label': 'TV ' + station[0],
-                    'url': plugin.url_for('tvstation_play',tvstation_code=station[1])}]
-            i=i+1
-        else:
-            items.append({'label': 'TV ' + station[0],
-                    'url': plugin.url_for('tvstation_play',tvstation_code=station[1])})
-
-    __log('tvstation_playtv finished with string=%s' % tvstation_code)
-    return plugin.add_items(items)
+           
+    neterratv.getTVStream(plugin.get_setting('username'), plugin.get_setting('password'),tvstation_code)    
 
 '''
-show available recorded streams for select TV station
+    display list with the available TV streams from the selected TV station
+'''
+@plugin.route('/issue_play/<tvstation_code>')
+def issue_play(tvstation_code):
+    
+    __log('issue_play started with string=%s' % tvstation_code)
+           
+    neterratv.getIssueStream(plugin.get_setting('username'), plugin.get_setting('password'),tvstation_code)
+    #neterratv.getBTVStream(plugin.get_setting('username'), plugin.get_setting('password'))
+
+'''
+    gets available recorded streams for select TV station and adds it to list
 '''
 @plugin.route('/show_recordedlist/<tvstation_code>')
 def show_recordedlist(tvstation_code):
     
-    __log('select_recordedstreams start')
+    __log('show_recordedlist start')
 
     username = plugin.get_setting('username')
     password = plugin.get_setting('password')
     
-    stations = neterratv.showTVStationRecorded(tvstation_code, username, password)
+    stations = neterratv.showVODProds(tvstation_code, username, password)
     
     items=[]
     i=0
@@ -189,11 +223,11 @@ def show_recordedlist(tvstation_code):
             items.append({'label': station[0],
                     'url': plugin.url_for('show_recordedstreams',tvstation_code=station[1])})
 
-    __log('select_recordedstreams finished with string=%s' % tvstation_code)
+    __log('show_recordedlist finished with string=%s' % tvstation_code)
     return plugin.add_items(items)
 
 '''
-shows available recorded streams for selected stream
+    gets available recorded issues for given code and adds to list 
 '''
 @plugin.route('/show_recordedstreams/<tvstation_code>')
 def show_recordedstreams(tvstation_code):
@@ -203,56 +237,116 @@ def show_recordedstreams(tvstation_code):
     username = plugin.get_setting('username')
     password = plugin.get_setting('password')
     
-    stations = neterratv.showTVStationRecordedStreams(tvstation_code, username, password)
+    stations = neterratv.showVODIssues(tvstation_code, username, password)
     
     items=[]
     i=0
     for station in stations:
         if i==0:
             items=[{'label': station[0],
-                    'url': plugin.url_for('tvstation_play',tvstation_code=station[1])}]
+                    'url': plugin.url_for('issue_play',tvstation_code=station[1])}]
             i=i+1
         else:
             items.append({'label': station[0],
-                    'url': plugin.url_for('tvstation_play',tvstation_code=station[1])})
+                    'url': plugin.url_for('issue_play',tvstation_code=station[1])})
 
     __log('show_recordedstreams with string=%s' % tvstation_code)
     return plugin.add_items(items)
 
 '''
-returns the play link for the given URL
+    gets available music issues for given code and adds to list 
 '''
-@plugin.route('/tvstation_play/<tvstation_code>')
-def tvstation_play(tvstation_code):
+@plugin.route('/show_musicstreams/<tvstation_code>')
+def show_musicstreams(tvstation_code):
     
-    __log('tvstation_play started with string=%s' % tvstation_code)
-    
+    __log('show_musicstreams start')
+
     username = plugin.get_setting('username')
     password = plugin.get_setting('password')
     
-    url = neterratv.getTVPlayLink(tvstation_code,username,password)
+    stations = neterratv.showMusicIssues(tvstation_code, username, password)
     
-    '''    
-    items=[{'label': plugin.get_string(30002),
-                  'url': url,'is_folder':False,'title':'Play','video_id':'0'}]
-    '''
-    
-    #try to call the player with the link 
+    items=[]
+    i=0
+    for station in stations:
+        if i==0:
+            items=[{'label': station[0],
+                    'url': plugin.url_for('issue_play',tvstation_code=station[1])}]
+            i=i+1
+        else:
+            items.append({'label': station[0],
+                    'url': plugin.url_for('issue_play',tvstation_code=station[1])})
 
-    #listitem = xbmcgui.ListItem(label='Play TV', path=url)
+    __log('show_musicstreams with string=%s' % tvstation_code)
+    return plugin.add_items(items)
 
-    #listitem.setInfo(type='Video',infoLabels={ "Label": "TV" })
-    #xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
-    #xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
-    
-    xbmc.Player().play(url)
-    print 'URL: ' + url
-    __log('tvstation_play end')
-    
-    #return __add_items(items)
 
 '''
-private methods
+    gets available movie issues for given code and adds to list 
+'''
+@plugin.route('/show_movielist/<tvstation_code>')
+def show_movielist(tvstation_code):
+    
+    __log('show_movielist start')
+
+    username = plugin.get_setting('username')
+    password = plugin.get_setting('password')
+    
+    stations = neterratv.showMovieIssues(tvstation_code, username, password)
+
+    items=[]
+    i=0
+    for station in stations:
+        if i==0:
+            items=[{'label': station[0],
+                    'url': plugin.url_for('issue_play',tvstation_code=station[1])}]
+            i=i+1
+        else:
+            items.append({'label': station[0],
+                    'url': plugin.url_for('issue_play',tvstation_code=station[1])})
+
+    __log('show_movielist with string=%s' % tvstation_code)
+    return plugin.add_items(items)
+
+
+
+'''
+    gets available timeshift streams given code and adds to list 
+'''
+@plugin.route('/show_timeshiftstream/<tvstation_code>')
+def show_timeshiftstreams(tvstation_code):
+    
+    __log('show_timeshiftstreams start')
+
+    username = plugin.get_setting('username')
+    password = plugin.get_setting('password')
+    
+    stations = neterratv.showMusicIssues(tvstation_code, username, password)
+    
+    items=[]
+    i=0
+    for station in stations:
+        if i==0:
+            items=[{'label': station[0],
+                    'url': plugin.url_for('issue_play',tvstation_code=station[1])}]
+            i=i+1
+        else:
+            items.append({'label': station[0],
+                    'url': plugin.url_for('issue_play',tvstation_code=station[1])})
+
+    __log('show_timeshiftstreams with string=%s' % tvstation_code)
+    return plugin.add_items(items)
+
+'''
+    end of public methods
+'''
+
+'''
+    private methods
+'''
+
+'''
+    adds items to XBMC 
 '''
 def __add_items(entries):
     items = []
@@ -310,8 +404,12 @@ def __add_items(entries):
                             sort_method_ids=sort_methods,
                             override_view_mode=has_icons)
 
+'''
+    log method
+'''
 def __log(text):
     xbmc.log('%s addon: %s' % (__addon_name__, text))
+
 
 if __name__ == '__main__':
     plugin.run()

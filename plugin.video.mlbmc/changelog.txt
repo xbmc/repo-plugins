@@ -1,3 +1,12 @@
+Version 2.0.1
+clean up of the previous testing release
+
+Version 2.0.0.1
+a lot of code changes, this is a testing(beta) release
+added scrapping of mlb.com playlists
+added higher quality mlb.com videos
+added a workaround for posiable bug, where plugin cacheToDisk seems to fail, makeing it easier to get locked out of MLV.tv 
+
 Version 2.0.0
 major version bumb for frodo
 fix archived MLB.tv games

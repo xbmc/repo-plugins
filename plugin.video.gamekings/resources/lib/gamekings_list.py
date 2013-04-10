@@ -7,7 +7,7 @@ from gamekings_utils import HTTPCommunicator
 import os
 import re
 import sys
-import urllib
+import urllib, urllib2
 import urlparse
 import xbmc
 import xbmcaddon
@@ -80,21 +80,22 @@ class Main:
 		# Get the thumbnail urls
 		#<img src="http://www.gamekings.tv/wp-content/uploads/20130307_gowascensionreviewsplash1-75x75.jpg" alt="God of War: Ascension Review">
 		#for http://www.gamekings.tv/pcgamersunite/ the thumbnail links sometimes contain '//': f.e. http://www.gamekings.tv//wp-content/uploads/20110706_hww_alienwarelaptop_slider-75x75.jpg
-		thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://www.gamekings.tv/wp-content/uploads/")})
-			
+		#thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://www.gamekings.tv/wp-content/uploads/")})
+		thumbnail_urls = soup.findAll('img', attrs={'src': re.compile("^http://www.gamekings.tv/")})
+		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(thumbnail_urls)", str(len(thumbnail_urls)) ), xbmc.LOGNOTICE )
 		
-		# Get the video page urls
-		#http://www.gamekings.tv/videos/special-forces-team-x-review/
-		#skip this: http://www.gamekings.tv/videos/gears-of-war-judgment-hands-on/#disqus_thread
-		video_page_urls = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/videos/")})
+		# Get the titles and video page urls
+		#<a href="http://www.gamekings.tv/videos/lars-gustavsson-over-battlefield-4/" title="Lars Gustavsson over Battlefield 4">
+		#skip this: <a href='http://www.gamekings.tv/videos/lars-gustavsson-over-battlefield-4/#disqus_thread'>
+		video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/videos/")})
 		
 		if (self.DEBUG) == 'true':
-			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_page_urls)", str(len(video_page_urls)) ), xbmc.LOGNOTICE )
+			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_page_urls_and_titles)", str(len(video_page_urls_and_titles)) ), xbmc.LOGNOTICE )
 			
-		for video_page_url in video_page_urls :
-			video_page_url = video_page_url['href']
+		for video_page_url_and_title in video_page_urls_and_titles :
+			video_page_url = video_page_url_and_title['href']
 			#if link ends with a '/': process the link, if not: skip the link
 			if video_page_url.endswith('/'):
 				pass
@@ -113,9 +114,17 @@ class Main:
 				continue
 			
 			# Make title
-			title = str(video_page_url)
-			title = title[31:]
-			title = title.capitalize()
+			#for category is 'afleveringen' use the video_page_url to make the title	
+			if self.plugin_category == __language__(30001):
+				title = str(video_page_url)
+				title = title[31:]
+				title = title.capitalize()
+			#for other category use the title attribute	
+			else:
+				title = video_page_url_and_title['title']
+				#convert from unicode to encoded text (don't use str() to do this)
+				title = title.encode('utf-8')
+			
 			title = title.replace('-',' ')
 			title = title.replace('/',' ')
 			title = title.replace(' i ',' I ')
@@ -152,12 +161,21 @@ class Main:
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "title", str(title) ), xbmc.LOGNOTICE )
 
-			if str(self.video_list_page_url) == "http://www.gamekings.tv/pcgamersunite/":	  
-				thumbnail_url = ''
-			elif thumbnail_urls_index >= len(thumbnail_urls):
+			if thumbnail_urls_index >= len(thumbnail_urls):
 				thumbnail_url = ''
 			else:
 				thumbnail_url = thumbnail_urls[thumbnail_urls_index]['src']
+
+			if (self.DEBUG) == 'true':
+				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "thumbnail_url", str(thumbnail_url) ), xbmc.LOGNOTICE )
+
+			#in afleveringen category, skip link if there's no thumbnail. i do this because those links repeat on every page and are redundant imho.
+			#it's bit of a hack but it'll do for now			
+			if self.plugin_category == __language__(30001):
+				if thumbnail_url == '':
+					if (self.DEBUG) == 'true':
+						xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "skipped video_page_url aflevering in pc category because it doesn't have a thumbnail", str(video_page_url_and_title) ), xbmc.LOGNOTICE )
+					continue
 
 			# Add to list
 			parameters = {"action" : "play", "video_page_url" : video_page_url}

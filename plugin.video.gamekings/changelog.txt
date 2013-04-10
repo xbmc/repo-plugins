@@ -1,3 +1,15 @@
-v1.0.0 (Sunday, 17 March 2013) :
- - initial version;
+v1.0.0 (Sunday, 2 april 2013) :
+- initial version
+- filled in optional fields in addon.xml
+- added a display of an httperror
+- published it on github 
+
+v1.0.1 (Wednesday, 10 april 2013) :
+- fixed thumbnails for pc category
+- removed repeating episodes in afleveringen category
+- added popup if media file cannnot be played or is not found
+- filled in optional fields in addon.xml
+- used title attribute more if possible
+
+
  

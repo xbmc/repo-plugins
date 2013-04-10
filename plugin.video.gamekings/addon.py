@@ -17,8 +17,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.gamekings"
-__date__        = "2 april 2013"
-__version__     = "1.0.0"
+__date__        = "10 april 2013"
+__version__     = "1.0.1"
 
 #
 # Imports
@@ -26,7 +26,7 @@ __version__     = "1.0.0"
 import os
 import re
 import sys
-import urllib
+import urllib, urllib2
 import urlparse
 import xbmc
 import xbmcaddon

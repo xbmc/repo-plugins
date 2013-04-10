@@ -23,7 +23,7 @@ class Main:
 	#
 	def __init__( self ) :
 		# Get plugin settings
-		self.DEBUG     = __settings__.getSetting('debug')
+		self.DEBUG = __settings__.getSetting('debug')
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "File", str(__file__) ), xbmc.LOGNOTICE )
@@ -44,6 +44,13 @@ class Main:
 	#
 	def playVideo( self ) :
 		#
+		# Init
+		#
+		no_url_found = False
+		unplayable_media_file = False
+		have_valid_url = False
+		
+		#
 		# Get current list item details
 		#
 		title     = unicode( xbmc.getInfoLabel( "ListItem.Title"  ), "utf-8" )
@@ -60,7 +67,7 @@ class Main:
 		
 		httpCommunicator = HTTPCommunicator()
 		
-		#Incidently a page request gets a HTTP Error 500: Internal Server Error
+		#Sometimes a page request gets a HTTP Error 500: Internal Server Error
 		#f.e. http://www.gamekings.tv/videos/het-fenomeen-minecraft/
 		try:
 			html_data = httpCommunicator.get ( self.video_page_url )
@@ -75,17 +82,23 @@ class Main:
 		soup = BeautifulSoup(html_data)
 		
 		# Get the video url
-		# <meta property="og:video" content="http://stream.gamekings.tv/20130306_SpecialForces.mp4"/>
+		#<meta property="og:video" content="http://stream.gamekings.tv/20130306_SpecialForces.mp4"/>
 		video_urls = soup.findAll('meta', attrs={'content': re.compile("^http://stream.gamekings.tv/")}, limit=1)
+		
+		if (self.DEBUG) == 'true':
+			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_urls)", str(len(video_urls)) ), xbmc.LOGNOTICE )
+		
 		if len(video_urls) == 0:
-			have_valid_url = False
+			no_url_found = True
 		else:
 			video_url = video_urls[0]['content']
+			if (self.DEBUG) == 'true':
+				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url", str(video_url) ), xbmc.LOGNOTICE )
 			if httpCommunicator.exists( video_url ):
 				have_valid_url = True
 			else:
-				have_valid_url = False
-		
+				unplayable_media_file = True
+				
 		# Play video
 		if have_valid_url:
 			playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
@@ -106,8 +119,10 @@ class Main:
 		#
 		# Alert user
 		#
-		else:
-			xbmcgui.Dialog().ok( __language__(30000), __language__(30505) )
+	 	elif no_url_found:
+			xbmcgui.Dialog().ok( __language__(30000), __language__(30505))
+		elif unplayable_media_file:
+			xbmcgui.Dialog().ok( __language__(30000), __language__(30506))
 	
 #
 # The End

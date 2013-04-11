@@ -158,8 +158,8 @@ def get_video(video_id):
     encxml = ''
     videopage_url = MAIN_URL + 'watch/%s/' % video_id
     html = __get_url(videopage_url, MAIN_URL)
-    video['title'] = re.search(r_title, html).group(1)
-    sec = re.search(r_adv, html).group(1)
+    video['title'] = r_title.search(html).group(1)
+    sec = r_adv.search(html).group(1)
     for (a, b) in re.findall(r_adv_p, sec):
         if not a == '_encxml':
             params[a] = b
@@ -178,24 +178,25 @@ def get_video(video_id):
     enc_data_b = unhexlify(enc_data)
     sk = __md5(b64decode(b64decode(GK)) + __md5(str(video_id)))
     dec_data = __rc4crypt(enc_data_b, sk)
-    rtmpurl = re.search(r_rtmpurl, dec_data).group(1)
+    rtmpurl = r_rtmpurl.search(dec_data).group(1)
     video['rtmpurl'] = unquote(rtmpurl)
     if 'myvideo2flash' in video['rtmpurl']:
         __log('get_video forcing RTMPT')
         video['rtmpurl'] = video['rtmpurl'].replace('rtmpe://', 'rtmpt://')
-    playpath = re.search(r_playpath, dec_data).group(1)
+    playpath = r_playpath.search(dec_data).group(1)
     video['file'] = unquote(playpath)
+    m_filepath = r_path.search(dec_data)
+    video['filepath'] = m_filepath.group(1)
     if not video['file'].endswith('f4m'):
         ppath, prefix = unquote(playpath).split('.')
         video['playpath'] = '%s:%s' % (prefix, ppath)
     else:
-        raise NotImplementedError
-        video['playpath'] = video['file']
-    swfobj = re.search(r_swf, html).group(1)
+        video['hls_playlist'] = (
+            video['filepath'] + video['file']
+        ).replace('.f4m', '.m3u8')
+    swfobj = r_swf.search(html).group(1)
     video['swfobj'] = unquote(swfobj)
     video['pageurl'] = videopage_url
-    m_filepath = re.search(r_path, dec_data)
-    video['filepath'] = m_filepath.group(1)
     return video
 
 
@@ -442,7 +443,7 @@ def __parse_channels(tree):
                 'a', {'class': 'pView pSmaller pnBack'}
             )
             if prev_link:
-                link = re.search(r_pagelink, prev_link['onclick']).group(1)
+                link = r_pagelink.search(prev_link['onclick']).group(1)
                 items.append({
                     'title': prev_link['title'],
                     'pagenination': 'PREV',
@@ -452,7 +453,7 @@ def __parse_channels(tree):
                 'a', {'class': 'pView pSmaller pnNext'}
             )
             if next_link:
-                link = re.search(r_pagelink, next_link['onclick']).group(1)
+                link = r_pagelink.search(next_link['onclick']).group(1)
                 items.append({
                     'title': next_link['title'],
                     'pagenination': 'NEXT',
@@ -484,7 +485,7 @@ def __parse_channels(tree):
         if pagination:
             prev_link = pagination.find('a', {'class': 'pView pnBack'})
             if prev_link:
-                link = re.search(r_pagelink, prev_link['onclick']).group(1)
+                link = r_pagelink.search(prev_link['onclick']).group(1)
                 items.append({
                     'title': prev_link['title'],
                     'pagenination': 'PREV',
@@ -492,7 +493,7 @@ def __parse_channels(tree):
                 })
             next_link = pagination.find('a', {'class': 'pView pnNext'})
             if next_link:
-                link = re.search(r_pagelink, next_link['onclick']).group(1)
+                link = r_pagelink.search(next_link['onclick']).group(1)
                 items.append({
                     'title': next_link['title'],
                     'pagenination': 'NEXT',
@@ -549,7 +550,7 @@ def __parse_movies(tree):
     if pagination:
         prev_link = pagination.find('a', {'class': 'pView pnBack'})
         if prev_link:
-            link = re.search(r_pagelink, prev_link['onclick']).group(1)
+            link = r_pagelink.search(prev_link['onclick']).group(1)
             items.append({
                 'title': prev_link['title'],
                 'pagenination': 'PREV',
@@ -557,7 +558,7 @@ def __parse_movies(tree):
             })
         next_link = pagination.find('a', {'class': 'pView pnNext'})
         if next_link:
-            link = re.search(r_pagelink, next_link['onclick']).group(1)
+            link = r_pagelink.search(next_link['onclick']).group(1)
             items.append({
                 'title': next_link['title'],
                 'pagenination': 'NEXT',
@@ -635,7 +636,7 @@ def __format_length(length_str):
 def __detect_folder(path):
     video_id = None
     is_folder = True
-    m_id = re.search(R_ID, path)
+    m_id = R_ID.search(path)
     if m_id:
         video_id = m_id.group(1)
         is_folder = False

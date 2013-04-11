@@ -104,7 +104,7 @@ def __add_items(entries):
                 title = '>> %s %s >>' % (_('page'), entry['title'])
             items.append({
                 'label': title,
-                'icon': 'DefaultFolder.png',
+                'thumbnail': 'DefaultFolder.png',
                 'path': plugin.url_for(
                     endpoint='show_path',
                     path=entry['path']
@@ -113,7 +113,7 @@ def __add_items(entries):
         elif entry['is_folder']:
             items.append({
                 'label': entry['title'],
-                'icon': entry.get('thumb', 'DefaultFolder.png'),
+                'thumbnail': entry.get('thumb', 'DefaultFolder.png'),
                 'path': plugin.url_for(
                     endpoint='show_path',
                     path=entry['path']
@@ -126,7 +126,7 @@ def __add_items(entries):
             )
             items.append({
                 'label': entry['title'],
-                'icon': entry.get('thumb', 'DefaultVideo.png'),
+                'thumbnail': entry.get('thumb', 'DefaultVideo.png'),
                 'info': {
                     'plot': entry.get('description', ''),
                     'studio': entry.get('username', ''),
@@ -171,6 +171,9 @@ def download_video(video_id):
     sd = SimpleDownloader.SimpleDownloader()
     video = scraper.get_video(video_id)
     filename = __get_legal_filename(video['title'])
+    if 'hls_playlist' in video:
+        plugin.notify(_('Download not supported'))
+        return
     if not video['rtmpurl']:
         params = {
             'url': video['filepath'] + video['file'],
@@ -193,6 +196,9 @@ def download_video(video_id):
 @plugin.route('/video/<video_id>/play')
 def watch_video(video_id):
     video = scraper.get_video(video_id)
+    if 'hls_playlist' in video:
+        __log('watch_video using HLS')
+        video_url = video['hls_playlist']
     if not video['rtmpurl']:
         __log('watch_video using FLV')
         video_url = video['filepath'] + video['file']

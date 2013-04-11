@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 #
-#     Copyright (C) 2012 mr.olix@gmail.com
+#     Copyright (C) 2013 mr.olix@gmail.com
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,15 +18,16 @@
 
 from xbmcswift import xbmc, xbmcaddon
 
-
 import urllib2
 import cookielib
 import os.path
-from BeautifulSoup import BeautifulSoup
+
 
 # set debug to generate log entries
 DEBUG = False
-LIBNAME = 'neterra'
+
+#libname
+LIBNAME = 'neterratv'
 
 '''
 class handles html get and post for neterratv website
@@ -34,20 +35,41 @@ class handles html get and post for neterratv website
 class neterra:
     #static values
     CLASSNAME = 'neterra'
-    COOKIEFILE = 'cookies.lwp'
-    PLUGINID = 'plugin.video.neterratv'
-    MAINURL = 'http://old.neterra.tv/bg/'
-    LOGINURL = 'http://old.neterra.tv/bg/login.php'
+    PLUGINID = 'plugin.video.neterratv' 
+    COOKIEFILE = 'cookies.lwp' #file to store cookie information    
     USERAGENT = {'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
-    BTVURL = 'http://old.neterra.tv/bg/media.php?id=1&bm=2'
+    MAINURL = 'http://www.neterra.tv/' #main url
+    TVLIVEURL = 'http://www.neterra.tv/content/live'
+    USEROPTIONLIVE = 'type_view=live&choice_view=1'
+    LOGINURL = 'http://www.neterra.tv/user/login_page' #login url
+    TVLISTURL = 'http://www.neterra.tv/page/service/tv_channels' #url to get list of all TV stations    
+    VODLISTURL = 'http://www.neterra.tv/content/vod' #url to get the list of VOD TV stations
+    VODPRODURL = 'http://www.neterra.tv/content/prods' #url to get the list of VOD prods
+    VODISSUEURL = 'http://www.neterra.tv/content/issues' #url to get the list of prod issues
+    MUSICPRODURL = 'http://www.neterra.tv/content/music' #url to get the list of music prods
+    TIMESHIFTURL = 'http://www.neterra.tv/content/timeshift' #url to get the list of timeshift TV stations
+    MOVIEPRODURL = 'http://www.neterra.tv/content/movies' #url to get the list of movies
+    CHANGEUSEROPTIONURL = 'http://www.neterra.tv/content/change_user_options' #url to get the list of prod issues
+    CONTENTSTREAMURL = 'http://www.neterra.tv/content/get_stream' #url to get streams
+    USEROPTIONVOD = 'type_view=vod_prods&choice_view=1' #sets view to small icons
+    USEROPTIONVODIUSSUES = 'type_view=vod_issues&choice_view=1' #sets view to small icons
+    USEROPTIONMOVIES = 'type_view=movies&choice_view=1' #sets view to small icons
+    USEROPTIONMUSIC = 'type_view=music&choice_view=1' #sets view to small icons
+    USEROPTIONMUSICISSUES = 'type_view=music_issues&choice_view=1' #sets view to small icons
+    USEROPTIONTIMESHIFT = 'type_view=timeshift&choice_view=1' #sets view to small icons
+    DEFAULTPOSTSETTINGS = 'offset=0&category=&date=&text=' #defaul optins
+    SWFPLAYERURL = 'swfUrl=http://www.neterra.tv/players/players/flowplayer/flowplayer.rtmp-3.2.10.swf' #url to flash player
+    ISLOGGEDINSTR = '<form method="POST" action="http://www.neterra.tv/user/login_page" id="login_fail_form">' #string to check if user is logged in
+       
     
+    SWFBUFFERDEFAULT = 'buffer=3000'
     
-    #globals
+    #globals variables
     __cj__ = None
     __cookiepath__ = None
     __isLoggedIn__ = None
     __username__ = None
-    __password__ = None
+    __password__ = None    
     
     '''
 method for logging
@@ -62,14 +84,15 @@ method for logging
             
     '''
 default constructor initialize all class variables here
-called everytime the script runs
+called every time the script runs
 '''
     def __init__(self, username, password):
         self.__log('start __init__')
         self.__username__ = username
         self.__password__ = password
         self.initCookie()
-        self.openSite(self.BTVURL)        
+        #TODO may remove opening of default URL
+        self.openSite(self.MAINURL)        
         self.__log('finished __init__')
         
         '''
@@ -110,6 +133,7 @@ updates the cookie to cookie file
         
         '''
 opens url and returns html stream 
+also checks if user is logged in
 '''
     def openSite(self, url):        
         self.__log('Start openSite')
@@ -121,16 +145,69 @@ opens url and returns html stream
         # create a request object
         handle = urlopen(req)
         htmlstr = handle.read()
-        startpoint = htmlstr.find('<form action="login.php" method="post" id="login" name="login">')
-        if (startpoint != -1):
-            #if not logged in
+        startpoint = htmlstr.find(self.ISLOGGEDINSTR)
+        #if not logged in
+        if (startpoint != -1):            
             #login
             self.logIn()
             #open page again
             handle = urlopen(req)
             htmlstr = handle.read()
         self.updateCookie()
-        self.__log('Finished openSite')
+        self.__log('htmlstr: ' + htmlstr)
+        self.__log('Finished openSite: ' + theurl)
+        return htmlstr
+
+        '''
+opens url and returns html stream 
+'''
+    def openContentStream(self,url,issue_id):        
+        self.__log('Start openContentStream')
+        urlopen = urllib2.urlopen
+        request = urllib2.Request
+        theurl = url
+        txtdata = issue_id
+        self.__log('txtdata:_ ' + txtdata)
+        req = request(theurl, txtdata, self.USERAGENT)
+        # create a request object
+        handle = urlopen(req)
+        htmlstr = handle.read()
+        startpoint = htmlstr.find(self.ISLOGGEDINSTR)
+        #if not logged in
+        if (startpoint != -1):            
+            #login
+            self.logIn()
+            #open page again
+            handle = urlopen(req)
+            htmlstr = handle.read()
+        self.updateCookie()
+        self.__log('Finished ContenStream: ' + theurl)
+        self.__log('htmlstr: ' + htmlstr)
+        return htmlstr
+    
+    '''
+opens url and returns html stream 
+'''
+    def openContentStream2(self, url):        
+        self.__log('Start openContentStream2')
+        self.__log('URL: ' + url)
+        urlopen = urllib2.urlopen
+        request = urllib2.Request
+        theurl = url
+        req = request(theurl,'', self.USERAGENT)
+        # create a request object
+        handle = urlopen(req)
+        htmlstr = handle.read()
+        startpoint = htmlstr.find(self.ISLOGGEDINSTR)
+        #if not logged in
+        if (startpoint != -1):            
+            #login
+            self.logIn()
+            #open page again
+            handle = urlopen(req)
+            htmlstr = handle.read()
+        self.updateCookie()
+        self.__log('Finished openContenStream2')
         return htmlstr
     
     '''
@@ -142,285 +219,666 @@ returns true if login successful
         isLoggedIn = False
         urlopen = urllib2.urlopen
         request = urllib2.Request
-        theurl = 'http://old.neterra.tv/bg/login.php'
+        theurl = self.LOGINURL
         self.__log('----URL request started for: ' + theurl + ' ----- ')
-        txdata = 'username=' + self.__username__ + '&password=' + self.__password__ + '&submitted=1'
+        txdata = 'login_username=' + self.__username__ + '&login_password=' + self.__password__ + '&login=1&login_type=1'
         req = request(self.LOGINURL, txdata, self.USERAGENT)
         self.__log('----URL requested: ' + theurl + ' txdata: ' + txdata)
         # create a request object
-        handle = urlopen(req)        
+        handle = urlopen(req)     
         link = handle.read() 
+        self.__log(link)
         self.__log('----URL request finished for: ' + theurl + ' ----- ')
         self.updateCookie()
         #check for string in page 
         #<form action="login.php" method="post" id="login" name="login">
-        startpoint = link.find('<form action="login.php" method="post" id="login" name="login">')
-        if (startpoint == -1):
+        startpoint = link.find(self.ISLOGGEDINSTR)
+        if (startpoint != -1):
             isLoggedIn = True
-        self.__log('Finished logIn')
+        self.__log('Finished logIn')        
         return isLoggedIn
-    
-    '''
-returns playable link from html stream
-''' 
-    def getPlayLink(self, html):
-        self.__log('Start getPlayLink')
-        #find <PARAM NAME="url" VALUE="mms
-        startpoint = html.find('<PARAM NAME="url" VALUE="mms')
-        self.__log('startpoint: ' + str(startpoint))
-        #find next > from start
-        endpoint = html.find('>', startpoint)
-        self.__log('endpoint: ' + str(endpoint))
-        res = html[startpoint:endpoint]
-        self.__log('res: ' + str(res))
-        startpoint = res.find("mms")
-        mmsurl = res[startpoint:len(res) - 1]
-        self.__log('Playablelink is mmsurl: ' + mmsurl)
-        self.__log('Finished getPlayLink')
-        return mmsurl
-    '''
-returns a soup obejct
-'''
-    def getTree(self, html):
-        self.__log('In getTree')
-        return BeautifulSoup(html)
-        #return BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)
         
     '''
-    returns list with TV stations from the tabke head_tv_select 
+    returns list with VOD stations 
 ''' 
-    def getTVStations(self, html):
-        self.__log('Start getTVStations')
-        tree = self.getTree(html)
-        sections = tree.find('div', {'class': 'head_tv_select'})
-        links = sections.findAll('a')
+    def getVODStations(self, html):        
+        self.__log('Start getVODStations')        
+        self.__log('html: ' + html)
+        startpoint = html.find('prods')
+        endpoint = html.find('count')
+        text = html[startpoint:endpoint]
+        self.__log('text: ' + text)
+        text = text.replace('prods','')
+        text = text.replace('count','')
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
         items = []
-        for lnk in links:                    
-            items.append((lnk.text.encode('utf-8'), lnk.attrs[1][1]))        
+        if links:
+            for lnk in links:
+                text=lnk
+                if (text.find('media_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    media_id = text.replace('media_id','')                                        
+                    self.__log('media_id: ' + media_id)
+                if (text.find('media_name')!=-1):                                         
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    media_name = text.replace('media_name','')                                       
+                    self.__log('media_name: ' + media_name)                                                
+                    items.append((media_name.decode('unicode_escape').encode('UTF-8'), media_id))
+        else:
+            items.append('Error no items found', 'Error')      
+        self.__log('Finished getVODStations')
+        return items
+
+    '''
+    returns list with VOD prods 
+''' 
+    def getVODProds(self, html):        
+        self.__log('Start getVODProds')
+        self.__log('html: ' + html)
+        startpoint = html.find('prods')
+        endpoint = html.find('count')
+        text = html[startpoint:endpoint]
+        self.__log('text: ' + text)
+        text = text.replace('prods','')
+        text = text.replace('count','')
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
+        items = []
+        if links:
+            for lnk in links:
+                text=lnk.encode('utf-8')
+                if (text.find('product_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    product_id = text.replace('product_id','')                                        
+                    self.__log('product_id: ' + product_id)
+                if (text.find('product_name')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    product_name = text.replace('product_name','')                                                                               
+                    self.__log('product_name: ' + product_name.decode('unicode_escape','ignore').encode('utf-8'))                                    
+                    items.append((product_name.decode('unicode_escape','ignore').encode('utf-8'), product_id))
+        else:
+            items.append('Error no items found', 'Error')      
+        self.__log('Finished getVODProds')
+        return items
+
+    '''
+    returns list with TV stations 
+''' 
+    def getTVStations(self, html):        
+        self.__log('Start getTVStations')
+        self.__log('html: ' + html)
+        startpoint = html.find('tv_choice_result')
+        endpoint = html.find('"count"')
+        text = html[startpoint:endpoint]
+        self.__log('text: ' + text)
+        text = text.replace('tv_choice_result','')
+        text = text.replace('"count"','')
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
+        items = []
+        if links:
+            for lnk in links:
+                text=lnk.encode('utf-8')                
+                if (text.find('"product_name"')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    product_name = text.replace('product_name','')                                                                               
+                if (text.find('issues_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    issues_id = text.replace('issues_id','')                                        
+                    self.__log('issues_id: ' + issues_id)
+                    self.__log('product_name: ' + product_name.decode('unicode_escape','ignore').encode('utf-8'))                                    
+                    items.append((product_name.decode('unicode_escape','ignore').encode('utf-8'), 'http://www.neterra.tv/content#ignore_list=0&type=live&issue_id='+issues_id))
+        else:
+            items.append('Error no items found', 'Error')      
         self.__log('Finished getTVStations')
         return items
 
+
+
     '''
-    returns link to TV stream 
+    returns list with Music prods 
 ''' 
-    def getTVStreamLinks(self, html):
-        self.__log('Start getTVStreamLink')
-        # DOCTYPE is mal formatted. Replace to ensure characters are handled correct by soup        
-        html = html.replace('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">')
-        i = html.find('table id="mostrecent"')
-        #return list
+    def getMusicProds(self, html):        
+        self.__log('Start getMusicProds')
+        self.__log('html: ' + html)
+        startpoint = html.find('prods')
+        endpoint = html.find('count')
+        text = html[startpoint:endpoint]
+        self.__log('text: ' + text)
+        text = text.replace('prods','')
+        text = text.replace('count','')
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
         items = []
-        if i > 0:
-            tree = self.getTree(html)
-           
-            # get the links for the table mostrecent  
-            sections = tree.find('table', {'id': 'mostrecent'})
-            
-            #get all the rows
-            rows = sections.findAll('tr')
-            
-            #loop over the rows
-            #get TV station name from first cell
-            #get links from the next cells
-            
-            
-            #header list
-            headers = []
-            rowcount = 0
-            for row in rows:
-                rowcount = rowcount + 1           
-                #print "Row:" + row.text
-                cells = row.contents
-                column = 0
-                tvstationname = ''
-                #get qualities from table headers and fill header list
-                if rowcount == 1:
-                    for cell in cells:
-                        headers.append(cell.text)
-                else:            
-                    for cell in cells:                    
-                        url = ''
-                        text = str(cell)
-                        #strip of TD tags
-                        if column == 0:
-                            # for first cell get the text with name of the station
-                            tvstationname = cell.text
-                            #print "TV station: " + tvstationname
-                            url = ''
-                        else:
-                            # for all others get the onclick link
-                            # example: onclick="playLiveStream('205957', '15',5, '576', '518')        
-                            startpoint = text.find('playLiveStream')
-                            if startpoint > 1:
-                                endpoint = text.find('">', startpoint)
-                                text = text[startpoint:endpoint]                
-                                text = text.replace("'", '')
-                                text = text.replace('playLiveStream', '')
-                                text = text.replace('(', '')
-                                text = text.replace(')', '')
-                                text = text.replace(' ', '')
-                                parameters = text.split(",")                            
-                                #skip entries for flash player
-                                if int(parameters[2])==5:                                
-                                    url=''
-                                else:
-                                    #build the url
-                                    # example http://old.neterra.tv/bg/playlivestream.php?epid=94718&q=12&plid=3
-                                    url = 'http://old.neterra.tv/bg/playlivestream.php?epid=' + str(parameters[0]) + '&q=' + str(parameters[1]) + '&plid=' + str(parameters[2])                                           
-                            else:
-                                url = ''                    
-                        if len(url) > 1:
-                            print 'Columnnr: ' + str(column)
-                            items.append([tvstationname+' '+headers[column], url])
-                        #increase column number
-                        column = column + 1  
+        if links:
+            for lnk in links:
+                text=lnk.encode('utf-8')
+                if (text.find('product_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    product_id = text.replace('product_id','')                                        
+                    self.__log('product_id: ' + product_id)
+                if (text.find('product_name')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    product_name = text.replace('product_name','')                                                                               
+                    self.__log('product_name: ' + product_name.decode('unicode_escape','ignore').encode('utf-8'))                                    
+                    items.append((product_name.decode('unicode_escape','ignore').encode('utf-8'), product_id))
         else:
-            items.append(['No TV streams found','nix'])
-        self.__log('Finished getTVStreamLink')
+            items.append('Error no items found', 'Error')      
+        self.__log('Finished getMusicProds')
         return items
-
-        '''
-        returns link to recorded series or shows  
-    ''' 
-    def getTVStationsRecordedList(self, html):
-            self.__log('Start getTVStationsRecordedStreamsLinks')
-            #replace the DOCTYPE to ensure correct html encoding
-            html = html.replace('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">')
-            tree = self.getTree(html)            
-            items = []
-            # check if table exist
-            i = html.find('class="predavane_main_holder"')
-            if i>0:       
-                sections = tree.find('table', {'class': 'predavane_main_holder'})        
-                #get all cells
-                cells = sections.findAll('td')                
-                #loop over cells and fill items
-                for cell in cells:
-                    if cell.text<>'&nbsp;':
-                        items.append([cell.text,cell.a['href']])
-                        print 'Cell href: ' + cell.a['href']
-            else:
-                items.append(['No recorded found','nix'])
-            self.__log('Finished getTVStationsRecordedStreamsLinks')
-            return items
+    
+    '''
+    returns list with movie prods 
+''' 
+    def getMovieProds(self, html):        
+        self.__log('Start getMovieProds')
+        self.__log('html: ' + html)
+        startpoint = html.find('"prods":[[')        
+        text = html[startpoint:]
+        self.__log('text: ' + text)
+        text = text.replace('"prods":','')       
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
+        items = []
+        if links:
+            product_name=''
+            product_id =''
+            for lnk in links:
+                text=lnk
+                self.__log('Item: ' + text)                                    
+                if (text.find('product_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    product_id = text.replace('product_id','')                                        
+                    self.__log('product_id: ' + product_id)
+                if (text.find('product_name')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    product_name = text.replace('product_name','')                                                                               
+                    self.__log('product_name: ' + product_name.decode('unicode_escape','ignore').encode('utf-8'))                                    
+                    items.append((product_name.decode('unicode_escape','ignore').encode('utf-8'), product_id))
+                    product_name=''
+                    product_id =''
+        else:
+            items.append('Error no items found', 'Error')      
+            self.__log('Finished getMovieProds')
+        return items
 
     '''
-    return link to TV stream 
+    returns list with timeshift prods 
 ''' 
-    def getTVRecordedStreamLinks(self, html):
-        self.__log('Start getTVRecordedStreamLinks')
-        html = html.replace('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">')
-        tree = self.getTree(html)  
-        sections = tree.find('table', {'id': 'mostrecent'})
-        
-        #get all the rows
-        rows = sections.findAll('tr')
-        
-        #loop over the rows
-        #get TV station name from first cell
-        #get links from the next cells
-        #return list
+    def getTimeshiftProds(self, html):        
+        self.__log('Start getTimeshiftProds')
+        self.__log('html: ' + html)
+        startpoint = html.find('tv_choice_result')        
+        text = html[startpoint:]
+        self.__log('text: ' + text)
+        text = text.replace('tv_choice_result','')
+        text = text.replace('"count":0','')
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
         items = []
-        #header list
-        headers = []
-        rowcount = 0
-        for row in rows:
-            rowcount = rowcount + 1           
-            #print "Row:" + row.text
-            cells = row.contents            
-            column = 0
-            tvstationname = ''
-            #get qualities from table headers and fill header list
-            if rowcount == 1:
-                for cell in cells:
-                    headers.append(cell.text.replace('&nbsp;',''))
-            else:            
-                for cell in cells:                    
-                    url = ''
-                    text = str(cell)
-                    #strip of TD tags
-                    if column == 0:
-                        # for first cell get the text with name of the station
-                        tvstationname = cell.text.replace('&nbsp;','')                                
-                        url = ''
-                    else:
-                        # for all others get the onclick link
-                        # example: onclick="playLiveStream('205957', '15',5, '576', '518')        
-                        startpoint = text.find('playStream')
-                        if startpoint > 1:
-                            endpoint = text.find('">', startpoint)
-                            text = text[startpoint:endpoint]                
-                            text = text.replace("'", '')
-                            text = text.replace('playStream', '')
-                            text = text.replace('(', '')
-                            text = text.replace(')', '')
-                            text = text.replace(' ', '')
-                            parameters = text.split(",")                            
-                            #skip entries for flash player
-                            if int(parameters[2])==5:                                
-                                url=''
-                            else:
-                                #build the url
-                                # http://old.neterra.tv/bg/playlivestream.php?epid=94718&q=12&plid=3
-                                url = 'http://old.neterra.tv/bg/playstream.php?epid=' + str(parameters[0]) + '&q=' + str(parameters[1]) + '&plid=' + str(parameters[2])                                           
-                        else:
-                            url = ''                    
-                    if len(url) > 1:
-                        print 'Columnnr: ' + str(column)
-                        items.append([tvstationname+' '+headers[column], url])
-                    #increase column number
-                    column = column + 1        
-        self.__log('Finished getTVRecordedStreamLinks')
+        if links:
+            issues_name=''
+            issues_id =''
+            for lnk in links:
+                text=lnk
+                self.__log('Item: ' + text)                                    
+                if (text.find('issues_name')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    issues_name = text.replace('issues_name','')                                                                               
+                    self.__log('issues_name: ' + issues_name.decode('unicode_escape','ignore').encode('utf-8'))                                    
+                if (text.find('issues_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    issues_id = text.replace('issues_id','')                                        
+                    self.__log('issues_id: ' + issues_id)
+                    items.append((issues_name.decode('unicode_escape','ignore').encode('utf-8'), issues_id))
+                    issues_name=''
+                    issues_id =''
+        else:
+            items.append('Error no items found', 'Error')      
+        self.__log('Finished getTimeshiftProds')
         return items
 
+
+    '''
+    returns list with VOD issues 
+''' 
+    def getVODIssues(self, html):        
+        self.__log('Start getVODIssues')
+        self.__log('html: ' + html)       
+        text = html
+        self.__log('text: ' + text)
+        text = text.replace('prods":','')
+        text = text.replace('count','')
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
+        items = []
+        if links:
+            issues_id=''
+            issues_url=''
+            issues_date_aired=''                
+            for lnk in links:
+                text=lnk
+                if (text.find('issues_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    issues_id = text.replace('issues_id','')                                        
+                    self.__log('issues_id: ' + issues_id)                    
+                if (text.find('issues_date_aired')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    text = text.replace('issues_date_aired','')
+                    text = text.replace('null','')
+                    issues_date_aired = text                                                           
+                    self.__log('issues_date_aired: ' + issues_date_aired)                                      
+                if (text.find('issues_url')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    text = text.replace('issues_url','')
+                    issues_url = text.replace('null','')                                       
+                    self.__log('issues_url: ' + issues_url.decode('unicode_escape','ignore').encode('utf-8'))
+                    #.decode('unicode_escape','ignore').encode('utf-8'))                                    
+                    items.append((issues_url.decode('unicode_escape','ignore').encode('utf-8')+' '+issues_date_aired, issues_id))
+                    issues_url=''
+                    issues_date_aired=''
+                    issues_id=''
+        else:
+            items.append('Error no items found', 'Error')      
+        self.__log('Finished getVODIssues')
+        return items
+
+
+    '''
+    returns list with music issues 
+''' 
+    def getMusicIssues(self, html):        
+        self.__log('Start getMusicIssues')
+        self.__log('html: ' + html)        
+        text = html#[startpoint:endpoint]
+        self.__log('text: ' + text)
+        text = text.replace('prods":','')
+        text = text.replace('count','')
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
+        items = []
+        if links:
+            issues_id=''
+            issues_url=''
+            issues_date_aired=''                
+            for lnk in links:
+                text=lnk
+                if (text.find('issues_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    issues_id = text.replace('issues_id','')                                        
+                    self.__log('issues_id: ' + issues_id)                    
+                if (text.find('issues_date_aired')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    text = text.replace('issues_date_aired','')
+                    text = text.replace('null','')
+                    issues_date_aired = text                                                           
+                    self.__log('issues_date_aired: ' + issues_date_aired)                                      
+                if (text.find('issues_url')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    text = text.replace('issues_url','')
+                    issues_url = text.replace('null','')                                       
+                    self.__log('issues_url: ' + issues_url.decode('unicode_escape','ignore').encode('utf-8'))
+                    #.decode('unicode_escape','ignore').encode('utf-8'))                                    
+                    items.append((issues_url.decode('unicode_escape','ignore').encode('utf-8')+' '+issues_date_aired, issues_id))
+                    issues_url=''
+                    issues_date_aired=''
+                    issues_id=''
+        else:
+            items.append('Error no items found', 'Error')      
+        self.__log('Finished getMusicIssues')
+        return items
+
+    '''
+    returns list with movie issues 
+''' 
+    def getMovieIssues(self, html):        
+        self.__log('Start getMovieIssues')
+        self.__log('html: ' + html)       
+        text = html
+        self.__log('text: ' + text)
+        text = text.replace('prods":','')
+        text = text.replace('count','')
+        text = text.replace('[','')
+        text = text.replace(']','')
+        text = text.replace('{','')
+        text = text.replace('}','')
+        self.__log('text: ' +  text)
+        links = text.split(',')
+        items = []
+        if links:
+            issues_id=''
+            issues_url=''
+            issues_date_aired=''                
+            for lnk in links:
+                text=lnk
+                if (text.find('issues_id')!=-1):                                            
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    issues_id = text.replace('issues_id','')                                        
+                    self.__log('issues_id: ' + issues_id)                    
+                if (text.find('issues_date_aired')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    text = text.replace('issues_date_aired','')
+                    text = text.replace('null','')
+                    issues_date_aired = text                                                           
+                    self.__log('issues_date_aired: ' + issues_date_aired)                                      
+                if (text.find('issues_url')!=-1):                      
+                    text = text.replace('"','')
+                    text = text.replace(':','')
+                    text = text.replace('issues_url','')
+                    issues_url = text.replace('null','')                                       
+                    self.__log('issues_url: ' + issues_url.decode('unicode_escape','ignore').encode('utf-8'))
+                    #.decode('unicode_escape','ignore').encode('utf-8'))                                    
+                    items.append((issues_url.decode('unicode_escape','ignore').encode('utf-8')+' '+issues_date_aired, issues_id))
+                    issues_url=''
+                    issues_date_aired=''
+                    issues_id=''
+        else:
+            items.append('Error no items found', 'Error')      
+        self.__log('Finished getMovieIssues')
+        return items
+
+        
+    '''
+test method returns stream to BTV
 '''
-Public methods not part of neterra class
+    def getBTVStream(self):       
+        self.logIn()
+        stream = self.openContentStream(self.CONTENTSTREAMURL,'130139')
+        return stream
+
+    '''
+    returns the stream to live TV
+'''
+    def getTVStream(self,url):
+        self.__log('Start getTVStream')
+        #parse url for id
+        self.__log('url: ' + url)
+        startpoint = url.rfind('issue_id=')
+        #remove / from string
+        text = url[startpoint:len(url)]             
+        self.__log('text: ' + text)   
+        self.logIn()
+        stream = self.openContentStream(self.CONTENTSTREAMURL,text)
+        self.__log('Finished getTVStream')
+        return stream
+    
+    def getIssueStream(self,url):
+        self.__log('Start getIssueStream')
+        #parse url for id
+        self.__log('url: ' + url)        
+        text = 'issue_id='+url             
+        self.__log('text: ' + text)   
+        self.logIn()
+        stream = self.openContentStream(self.CONTENTSTREAMURL,text)
+        self.__log('Finished getIssueStream')
+        return stream
+'''
+    end of neterratv class
 '''
 
-def getTVPlayLink(tv_url, tv_username, tv_password):
-    log('Start getTVPlayLink')
+'''
+    Public methods in lib neterra 
+    Note: These methods are not part of the neterratv class
+'''
+   
+'''
+    test method to open BTV stream
+'''
+def getBTVStream(tv_username, tv_password):
+    log('Start getBTVStream')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    log('Finished getTVPlayLink')
+    Neterra.logIn()
     #get a play link for the URL
-    return Neterra.getPlayLink(Neterra.openSite(tv_url))
+    html = Neterra.getBTVStream()
+    log(html)
+    #parse html for flashplayer link
+    startpoint = html.find('rtmp')
+    endpoint = html.find('file_link')-3
+    #remove / from string
+    text = html[startpoint:endpoint]                
+    text = text.replace('\\','')
+    log('text: ' + text)   
+    url=text+' swfUrl=http://www.neterra.tv/players/players/flowplayer/flowplayer.rtmp-3.2.10.swf playpath=btv_live_sd2.stream live=true'            
+    html=''
+    xbmc.Player().play(url)
+    log('URL: ' + url)
+    log('Finished getBTVStream')
+    return html
+
+'''
+    opens live tv stream
+'''
+def getTVStream(tv_username, tv_password, url):
+    log('Start getTVStream')
+    #get a neterra class
+    Neterra = neterra(tv_username, tv_password)    
+    html=Neterra.getTVStream(url)
+    log(html)
+    #parse html for flashplayer link
+    startpoint = html.find('rtmp')
+    endpoint = html.find('file_link')-3
+    #remove crap from string
+    rtmp = html[startpoint:endpoint]                
+    rtmp = rtmp.replace('\\','')    
+    startpoint = html.find('file_link')+len('file_link')+3
+    endpoint = html.find(',',startpoint)-1
+    playpath = html[startpoint:endpoint]
+    #log some details
+    log('playpath: ' + playpath)
+    log('rtmp: ' + rtmp)        
+    url=rtmp+' '+ neterra.SWFPLAYERURL+' playpath='+playpath+' live=1 '+neterra.SWFBUFFERDEFAULT +' conn=O:1 conn=NN:capabilities:239 conn=O:1 conn=NN:audioCodecs:3575 conn=O:1 conn=NN:videoCodecs:252 conn=O:1 conn=NN:videoFunction:1 conn=O:1 conn=NN:objectEncoding:3 conn=O:1 conn=NS:flashVer:3:WIN 11,6,602,180' #conn=O:0'
+    #call player
+    xbmc.Player().play(url)
+    log('URL: ' + url)
+    log('Finished getTVStream')
+    html=''
+    return html
+
+'''
+    opens VOD stream
+'''
+def getIssueStream(tv_username, tv_password, url):
+    log('Start getIssueStream')
+    #get a neterra class
+    Neterra = neterra(tv_username, tv_password)    
+    html=Neterra.getIssueStream(url)
+    log(html)
+    #parse html for flashplayer link
+    startpoint = html.find('rtmp')
+    endpoint = html.find('file_link')-3
+    #remove / from string
+    rtmp = html[startpoint:endpoint]                
+    rtmp = rtmp.replace('\\','')
+    startpoint = rtmp.find('/vod')
+    endpoint = len(rtmp)
+    app = rtmp[startpoint+1:endpoint]
+    startpoint = html.find('file_link')+len('file_link')+3
+    endpoint = html.find(',',startpoint)-1
+    playpath = html[startpoint:endpoint]
+    playpath = playpath.replace('\\','')
+    tcUrl = rtmp
+    #log some details
+    log('playpath: ' + playpath)
+    log('rtmp: ' + rtmp)
+    log('app: ' +app)
+    log('tcUrl: '+tcUrl)
+    #ensure app name is given as there rtmplib has problems to parse information from rtmp string
+    url=rtmp+' app='+app+' tcUrl='+tcUrl+' '+neterra.SWFPLAYERURL+' playpath='+playpath+' live=0 ' + neterra.SWFBUFFERDEFAULT
+    #call player
+    xbmc.Player().play(url)
+    log('URL: ' + url)
+    log('Finished getTVStream')
+    html=''
+    return html
 
 
+'''
+    returns list of all live TV stations
+'''
 def showTVStations(tv_username, tv_password):
     log('Start showTVStations')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
     log('Finished showTVStations')
+    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONLIVE)
     #return list of all TV stations
-    return Neterra.getTVStations(Neterra.openSite(Neterra.MAINURL))
+    return Neterra.getTVStations(Neterra.openContentStream(neterra.TVLIVEURL,neterra.DEFAULTPOSTSETTINGS))
 
-def getTVStationsStreams(tv_url, tv_username, tv_password):
-    log('Start getTVStationsStreams')
+'''
+    returns list of all TV stations that provide VOD's
+'''
+def showVODStations(tv_username, tv_password):
+    log('Start showVODVStations')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    link = Neterra.MAINURL + tv_url    
-    log('Finished getTVStationsStreams')
-    #return list with all TV station stream for the selected TV station
-    return Neterra.getTVStreamLinks(Neterra.openSite(link))
+    #call the URL to switch userview to small icons    
+    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONVOD)
+    log('Finished showVODTVStations')
+    #return list of all VOD TV's
+    return Neterra.getVODStations(Neterra.openContentStream(neterra.VODLISTURL,neterra.DEFAULTPOSTSETTINGS))
 
-def showTVStationRecorded(tv_url, tv_username, tv_password):
-    log('Start showTVStationRecorded')
+'''
+    returns list of available Music products
+'''
+def showMusicProds(tv_username, tv_password):
+    log('Start showMusicProds')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    link = Neterra.MAINURL + tv_url    
-    log('Finished showTVStationRecorded')
-    #return list with all TV station stream for the selected TV station
-    return Neterra.getTVStationsRecordedList(Neterra.openSite(link))
+    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONMUSIC)
+    log('Finished showMusicProds')
+    #return list of all prods for music
+    return Neterra.getMusicProds(Neterra.openContentStream(neterra.MUSICPRODURL,neterra.DEFAULTPOSTSETTINGS))
 
-def showTVStationRecordedStreams(tv_url, tv_username, tv_password):
-    log('Start showTVStationRecorded')
+'''
+    returns list of available timeshift products
+'''
+def showTimeshiftProds(tv_username, tv_password):
+    log('Start showTimeshiftProds')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    link = Neterra.MAINURL + tv_url    
-    log('Finished showTVStationRecorded')
-    #return list with all TV station stream for the selected TV station
-    return Neterra.getTVRecordedStreamLinks(Neterra.openSite(link))
-         
+    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONTIMESHIFT)
+    log('Finished showTimeshiftProds')
+    #return list of all prods for music
+    return Neterra.getTimeshiftProds(Neterra.openContentStream(neterra.TIMESHIFTURL,neterra.DEFAULTPOSTSETTINGS))
+
+'''
+    returns list of available movie products
+'''
+def showMovieProds(tv_username, tv_password):
+    log('Start showMovieProds')
+    #get a neterra class
+    Neterra = neterra(tv_username, tv_password)    
+    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONMOVIES)
+    log('Finished showMovieProds')
+    return Neterra.getMovieProds(Neterra.openContentStream(neterra.MOVIEPRODURL,neterra.DEFAULTPOSTSETTINGS))
+
+'''
+    returns list of available VOD products like shows or series for selected_ID (prod ID)
+'''
+def showVODProds(selected_ID,tv_username, tv_password):
+    log('Start showVODProds')
+    #get a neterra class
+    Neterra = neterra(tv_username, tv_password)
+    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONVOD)
+    log('Finished showVODProds')
+    #return list of all prods for VOD
+    return Neterra.getVODProds(Neterra.openContentStream(neterra.VODPRODURL,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
+
+'''
+    returns list of available issues for the selected_ID (issue id)
+'''
+def showVODIssues(selected_ID,tv_username, tv_password):
+    log('Start showVODIssues')
+    #get a neterra class
+    Neterra = neterra(tv_username, tv_password)
+    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONVODIUSSUES)
+    log('Finished showVODIssues')
+    #return list of all prods for VOD
+    return Neterra.getVODIssues(Neterra.openContentStream(neterra.VODISSUEURL,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
+
+    '''
+    returns list of available issues for the selected_ID (issue id)
+'''
+def showMusicIssues(selected_ID,tv_username, tv_password):
+    log('Start showMusicIssues')
+    #get a neterra class
+    Neterra = neterra(tv_username, tv_password)
+    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONMUSICISSUES)
+    log('Finished showMusicIssues')
+    #return list of all prods for VOD
+    return Neterra.getMusicIssues(Neterra.openContentStream(neterra.VODISSUEURL,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
+
+
+'''
+    returns list of available issues for the selected_ID (issue id)
+'''
+def showMovieIssues(selected_ID,tv_username, tv_password):
+    log('Start showMovieIssues')
+    #get a neterra class
+    Neterra = neterra(tv_username, tv_password)
+    #Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONMUSICISSUES)
+    log('Finished showMovieIssues')
+    #return list of all prods for VOD
+    return Neterra.getMovieIssues(Neterra.openContentStream(neterra.VODISSUEURL,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
+
+
+'''
+    public log method
+'''         
 def log(text):
     debug = None
     if (debug == True):

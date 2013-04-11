@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Root menu -->
+    <string id="30000">[B]Add new Custom List[/B]</string>
+    <string id="30001">[B]Add new Movie[/B]</string>
+    <string id="30002">Show Watchlist</string>
+    <string id="30003">Show Custom Lists</string>
+    <!-- Context menu -->
+    <string id="30100">Add-on Settings</string>
+    <string id="30101">Delete List</string>
+    <string id="30102">Delete Movie</string>
+    <string id="30103">Show Movie Info</string>
+    <!-- Dialogs -->
+    <string id="30110">Please enter Movie title</string>
+    <string id="30111">Please select the correct Movie</string>
+    <string id="30112">Please select the List</string>
+    <string id="30113">Delete Movie</string>
+    <string id="30114">Are you sure to delete?</string>
+    <string id="30115">Delete List</string>
+    <string id="30116">Are you sure to delete?</string>
+    <string id="30117">My Watchlist</string>
+    <!-- Error dialogs -->
+    <string id="30120">Connection error</string>
+    <string id="30121">Wrong User-Credentials</string>
+    <string id="30122">Do you want to change them now?</string>
+    <!-- Noticications -->
+    <string id="30130">No Movie found</string>
+    <string id="30131">Success</string>
+    <!-- Help Dialog -->
+    <string id="30140">Please use context menu</string>
+    <string id="30141">You need to open the context-menu</string>
+    <string id="30142">to choose the action you want</string>
+    <string id="30143"></string>
+    <!-- Settings -->
+    <string id="30300">Username</string>
+    <string id="30301">Password</string>
+    <string id="30302">Default List</string>
+    <string id="30303">Use HTTPS</string>
+    <string id="30310">Default Privacy for new Lists</string>
+    <string id="30311">Private</string>
+    <string id="30312">Friends</string>
+    <string id="30313">Public</string>
+</strings>

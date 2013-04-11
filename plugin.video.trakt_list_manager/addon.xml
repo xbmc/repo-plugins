@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.trakt_list_manager" name="Trakt.tv List Manager" version="0.1.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>executable video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language />
+        <platform>all</platform>
+        <website>http://www.trakt.tv</website>
+        <source>https://github.com/dersphere/plugin.video.trakt_list_manager</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=161319</forum>
+        <email>sphere@dersphere.de</email>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <summary lang="en">Manage Trakt.tv Lists from XBMC</summary>
+        <description lang="en">With Trakt.tv List Manager you can manage your Trakt.tv Lists.[CR]Current Features:[CR]- Create/Delete/View Custom Lists[CR]- Add/Delete Movies from Custom Lists[CR]- View Watchlist</description>
+    </extension>
+</addon>

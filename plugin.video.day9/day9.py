@@ -95,7 +95,7 @@ class Day9:
 
     def showTitles(self, params = {}):
         get = params.get
-        link = self.getRequest(base64.decodestring(get("url")))
+        link = self.getRequest(base64.decodestring(urllib.unquote(get("url"))))
         tree = BeautifulSoup(link, convertEntities=BeautifulSoup.HTML_ENTITIES)
         # narrow down the search to get rid of upcoming shows
         # I'd like to add them just to inform people of what/when things are
@@ -118,10 +118,10 @@ class Day9:
 
     def showGames(self, params = {}):
         get = params.get
-        link = self.getRequest(base64.decodestring(get("url")))
+        link = self.getRequest(base64.decodestring(urllib.unquote(get("url"))))
         tree = BeautifulSoup(link)
 	airdate = tree.find('time')
-	title = base64.decodestring(get("title"))
+	title = base64.decodestring(urllib.unquote(get("title")))
         try: 
             description = tree.find(text='Description').findNext('p')
         except:
@@ -131,6 +131,14 @@ class Day9:
             v=re.match('http://www.youtube.com/embed/(.*)', video.get('src'))
             i=i+1
             self.addVideo(str(title)+' Part '+str(i), youtubeid=v.group(1), description=description)
+        if i == 0:
+            # No embedded videos, try scraping links
+            for L in tree.findAll('a'):
+                m = re.match('http://www.youtube.com/watch\?v=(.*)', L.get('href', ''))
+                if m:
+                    print "Matched"
+                    vid_title = L.string if L.string is not None else 'Part %d'%i
+                    self.addVideo(str(title)+' - ' + vid_title, youtubeid=m.group(1), description=description)
 
     def showVideo(self, params = {}):
         get = params.get

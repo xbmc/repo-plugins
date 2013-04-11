@@ -30,3 +30,6 @@ Todo: Need function to delete cookie file
 0.0.8
 - changed code to work with new neterra website using flashplayer
 - some code make-up
+
+0.1.9
+- increased version number to Frodo version

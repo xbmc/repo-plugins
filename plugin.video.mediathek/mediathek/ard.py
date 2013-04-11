@@ -160,18 +160,21 @@ class ARDMediathek(Mediathek):
       else:
         self.gui.log("Search AjaxLinks");
         for htmlTag in self.regex_ajaxLinkTag.finditer(mainPage):
-          htmlTag = self.regex_ajaxLinkTag.search(htmlTag.group()).group();
-          link = self.regex_ajaxLink.search(htmlTag).group();
-          ajaxPage = self.loadPage(self.rootLink + link);
-          elementCount = self.extractVideoObjects(ajaxPage);
-          if(elementCount == 0):
-            self.gui.log("no video objects found - retry search for ajax link");
-            htmlTag = self.regex_ajaxLinkTag.search(ajaxPage);
-            if(htmlTag is not None):
-              htmlTag = htmlTag.group();
-              link = self.regex_ajaxLink.search(htmlTag).group();
-              ajaxPage = self.loadPage(self.rootLink + link);
-              elementCount = self.extractVideoObjects(ajaxPage);
+          try:
+            htmlTag = self.regex_ajaxLinkTag.search(htmlTag.group()).group();
+            link = self.regex_ajaxLink.search(htmlTag).group();
+            ajaxPage = self.loadPage(self.rootLink + link);
+            elementCount = self.extractVideoObjects(ajaxPage);
+            if(elementCount == 0):
+              self.gui.log("no video objects found - retry search for ajax link");
+              htmlTag = self.regex_ajaxLinkTag.search(ajaxPage);
+              if(htmlTag is not None):
+                htmlTag = htmlTag.group();
+                link = self.regex_ajaxLink.search(htmlTag).group();
+                ajaxPage = self.loadPage(self.rootLink + link);
+                elementCount = self.extractVideoObjects(ajaxPage);
+          except:
+            continue;
     except:
       elementCount = 0;
     if(elementCount == 0):

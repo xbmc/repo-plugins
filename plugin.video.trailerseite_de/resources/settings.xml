@@ -1,0 +1,6 @@
+<settings>
+   <setting id="showAllTrailers" type="bool" label="30103" default="true"/>
+   <setting id="maxVideoQuality" type="enum" label="30100" values="SD|1080p" default="1"/>
+   <setting id="forceViewMode" type="bool" label="30101" default="true"/>
+   <setting id="viewMode" type="number" label="30102" default="500"/>
+</settings>

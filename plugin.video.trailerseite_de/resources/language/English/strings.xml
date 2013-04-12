@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">New starts</string>
+  <string id="30002">Preview</string>
+  <string id="30003">Highlights</string>
+  <string id="30004">Arthouse</string>
+  <string id="30005">Charts (DE)</string>
+  <string id="30006">Charts (US)</string>
+  <string id="30007">Charts (Arthouse)</string>
+  <string id="30008">Cinema movies A-Z</string>
+  <string id="30009">Bluray: New starts</string>
+  <string id="30010">Bluray: Preview</string>
+  <string id="30011">Bluray: Charts</string>
+  <string id="30012">Interviews</string>
+  <string id="30013">Add to queue</string>
+  <string id="30014">Cinema movies by release date</string>
+  <string id="30015">Newest Trailers</string>
+  <string id="30016">Newest Videos</string>
+  <string id="30100">Maximum video quality</string>
+  <string id="30101">Force View</string>
+  <string id="30102">ViewID</string>
+  <string id="30103">Show trailer selection</string>
+</strings>

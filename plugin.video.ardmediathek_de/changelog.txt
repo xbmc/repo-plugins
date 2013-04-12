@@ -9,3 +9,7 @@
 - Fixed FSK videos
 - Added live stream
 - Added context menu for playing alternative stream
+1.0.4 / 2.0.4
+- Fixed videoplayback for some streams
+- Added context menu "Add to queue"
+- Changed livestream url

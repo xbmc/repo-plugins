@@ -4,3 +4,6 @@
 [B]Version 1.0.1[/B]
 - Added missing language string.
 - Resolve url rather than force the player to open it.
+
+[B]Version 2.0.0[/B]
+- Total addon re-write with more stability and new shows.

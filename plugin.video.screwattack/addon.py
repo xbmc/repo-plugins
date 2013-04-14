@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 #
-#      Copyright (C) 2012 David Gray (N3MIS15)
+#      Copyright (C) 2013 David Gray (N3MIS15)
 #      N3MIS15@gmail.com
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -19,184 +20,205 @@
 #
 
 import os
-import sys
-import urllib2
-import urlparse
-import string
-
-import xbmcgui
+import xbmc
 import xbmcaddon
-import xbmcplugin
-import xbmcvfs
+import xbmcgui
+import urllib2
+import CommonFunctions
+from xbmcswift2 import Plugin, ListItem
 
-from BeautifulSoup import BeautifulSoup
-import SimpleDownloader as downloader
-downloader = downloader.SimpleDownloader()
+__plugin__= "plugin.video.screwattack"
+__addon__ = xbmcaddon.Addon(__plugin__)
+__version__ = __addon__.getAddonInfo("version")
+icon = __addon__.getAddonInfo("icon")
 
+plugin = Plugin()
+common = CommonFunctions
+common.plugin = __plugin__ + __version__
+common.dbg = True
+common.dbglevel = 3
 
-base_url = 'http://www.screwattack.com'
-shows = [
-    {'title': 30000, 'param': 'sidescrollers=0'},
-    {'title': 30001, 'param': 'death-battle=0'},
-    {'title': 30002, 'param': 'clip-week=0'},
-    {'title': 30003, 'param': 'hard-news=0'},
-    {'title': 30004, 'param': 'Top-10s=0'},
-    {'title': 30005, 'param': 'out-box=0'},
-    {'title': 30006, 'param': 'best-ever=0'},
-    {'title': 30007, 'param': 'screwin-around=0'},
-    {'title': 30008, 'param': 'random-awesomeness=0'},
-    {'title': 30009, 'param': 'Cinemassacre=0'},
-]
+base_url = "http://www.screwattack.com"
+base_springboard = "http://cms.springboardplatform.com/xml_feeds_advanced/index/711/rss3/"
+base_youtube = "plugin://plugin.video.youtube/?action=play_video&videoid="
+base_bliptv = "plugin://plugin.video.bliptv/?path=/root/video&action=play_video&videoid="
 
-
-def screwattack_home():
-    for show in shows:
-        item = xbmcgui.ListItem(addon.getLocalizedString(show['title']), iconImage=icon)
-        item.setProperty('Fanart_Image', fanart)
-
-        url = '%s?%s' % (path, show['param'])
-        xbmcplugin.addDirectoryItem(num, url, item, True)
-
-    xbmcplugin.setContent(num, 'episodes')
-    xbmcplugin.endOfDirectory(num)
+def get_string(string_id):
+    return __addon__.getLocalizedString(string_id).encode("utf-8", "ignore")
 
 
-def screwattack_episodes(show, page='0'):
-    url = '%s/user/%s/videos?page=%s' % (base_url, show, page)
-    soup = BeautifulSoup(urllib2.urlopen(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-
-    content = soup.find('div', id="content")
-    field = content.findAll('span', 'field-content')
-
-    for f in field:
-        atag = f.find('h2', 'title').a
-        href = atag['href']
-        title = atag.string
-        try:
-            img = f.find('a', 'imagecache').img['src']
-        except:
-            img = icon
-        plot = f.find('div', 'info').string
-
-        url = '%s?video=%s&show=%s&title=%s&img=%s' % (path, href, show, title, img)
-
-        item = xbmcgui.ListItem(title, thumbnailImage=img)
-        item.setInfo('Video', {'Title': title, 'Plot': plot})
-        item.setProperty('Fanart_Image', fanart)
-
-        item.addContextMenuItems([(addon.getLocalizedString(39900), 'XBMC.RunPlugin(%s&download=true)' % url)])
-        item.setProperty('IsPlayable', 'true')
-        xbmcplugin.addDirectoryItem(num, url, item, False)
-
-
-    if content.find('li', 'pager-next').a:
-        item = xbmcgui.ListItem(addon.getLocalizedString(30010), iconImage=icon)
-        item.setProperty('Fanart_Image', fanart)
-
-        url = '%s?%s=%s' % (path, show, int(page)+1)
-        xbmcplugin.addDirectoryItem(num, url, item, True)
-
-    xbmcplugin.setContent(num, 'episodes')
-    xbmcplugin.endOfDirectory(num)
-
-
-def screwattack_open(url, show, title=None, img=None, download=False):
-    url = urllib2.urlopen(base_url+url)
-    soup = BeautifulSoup(url)
-    unique = None
-    video = None
-
+def get_bool_setting(setting):
     try:
-        src = soup.iframe['src']
+        return int(__addon__.getSetting(setting))
+    except ValueError:
+        return 0
 
-        if 'youtube' in src:
-            x = src.find('embed/') + 6
-            y = src.find('?')
-            video = 'plugin://plugin.video.youtube/?action=play_video&videoid=' + src[x:y]
-            unique = True
+
+def notification(header, message, time=5000, icon=icon):
+    xbmc.executebuiltin("XBMC.Notification(%s,%s,%i,%s)" % (header, message, time, icon))
+
+
+def find_between(s, first, last):
+    try:
+        start = s.index(first) + len(first)
+        end = s.index(last, start)
+        return s[start:end]
+    except ValueError:
+        return ""
+
+
+@plugin.route("/")
+def index():
+    show_list = list()
+    data = urllib2.urlopen(base_url).read()
+
+    shows = common.parseDOM(html=data, name="li", attrs={"class": "menu-11731 menuparent menu-path-screwattackcom-shows-originals odd "})[0]
+    for show in common.parseDOM(html=shows, name="li"):
+        title = common.replaceHTMLCodes(common.stripTags(show))
+        path = common.parseDOM(html=show, name="a", ret="href")[0]
+
+        if title.lower() not in ["love/hate", "advantage content", "out of the box"]:
+            show_list.append({
+                "label": title,
+                "icon": icon,
+                "path": plugin.url_for("show_episodes", path=path, page=0)
+            })
+
+
+    live_shows = common.parseDOM(html=data, name="li", attrs={"class": "menu-22426 menuparent menu-path-screwattackcom-shows-originals even "})[0]
+    for show in common.parseDOM(html=live_shows, name="li"):
+        title = common.replaceHTMLCodes(common.stripTags(show))
+        path = common.parseDOM(html=show, name="a", ret="href")[0]
+
+        show_list.append({
+            "label": title,
+            "icon": icon,
+            "path": plugin.url_for("show_episodes", path=path, page=0)
+        })
+
+    return show_list
+
+
+@plugin.route("/show_episodes/<path>/<page>/")
+def show_episodes(path, page):
+    episode_list = list()
+
+    if not path.startswith("http://"):
+        path = base_url + path
+    url = "%s?page=%s" % (path, page)
+
+    data = urllib2.urlopen(url).read()
+    body = common.parseDOM(html=data, name="div", attrs={"class": "body-container-middle"})
+
+    content = common.parseDOM(html=body, name="div", attrs={"class": "view-content"})
+    content = content[0] if not "profile-banner" in content[0] else content[1]
+    episodes = common.parseDOM(html=content, name="span", attrs={"class": "field-content"})
+
+    for episode in episodes:
+        image = common.parseDOM(html=episode, name="img", ret="src")[0]
+        ep_path = common.parseDOM(html=episode, name="a", ret="href")[0]
+        title = common.replaceHTMLCodes(common.stripTags(common.parseDOM(html=episode, name="h2")[0]))
+        plot = common.replaceHTMLCodes(common.stripTags(common.parseDOM(html=episode, name="div", attrs={"class": "info"})[0]))
+        episode_list.append({"label": title, "thumbnail": image, "path": plugin.url_for("play_episode", path=ep_path), "is_playable": True})
+
+    next = common.parseDOM(html=body, name="li", attrs={"class": "pager-next last"})
+    if next:
+        next = next[0]
+
+    if "active" in next:
+        episode_list.append({"label": get_string(92000), "icon": icon, "path": plugin.url_for("show_episodes", path=path, page=int(page)+1)})
+
+    return episode_list
+
+
+@plugin.route("/play/<path>/")
+def play_episode(path):
+    url = base_url + path
+    quality = ["720", "360"][get_bool_setting("prefered_quality")]
+    data = urllib2.urlopen(url).read()
+    sa_player = common.parseDOM(html=data, name="div", attrs={"class": "player-regular"})
+    if sa_player:
+        sa_player = sa_player[0]
+
+        if "scre004" in sa_player: # Springboard New
+            print "[ScrewAttack] Trying springboard player"
+            # Variation 1
+            sa_id = find_between(sa_player, "/video/", "/scr")
+
+            # Variation 2
+            if not sa_id.isdigit():
+                print "[ScrewAttack] Variation 1 Check Failed"
+                sa_id = find_between(sa_player, "/711/", "/\"")
+
+            # Variation 3
+            if not sa_id.isdigit():
+                print "[ScrewAttack] Variation 2 Check Failed"
+                sa_id = find_between(sa_player, "scre004_", "\"")
+
+            # Variation 4
+            if not sa_id.isdigit():
+                print "[ScrewAttack] Variation 3 Check Failed"
+                # Springboard can also play youtube videos
+                youtube_id = find_between(sa_player, "youtube/scre004/", "/")
+                if youtube_id:
+                    video = plugin.set_resolved_url(base_youtube + youtube_id)
+                    return video
+
+            if not sa_id.isdigit():
+                # If we dont have an id by now give up and log the player tag so we can add a new variation.
+                print "[ScrewAttack] Variation 4 Check Failed"
+                print "[ScrewAttack] Could not find id in springboard player."
+                print sa_player
+                notification(get_string(90000), get_string(90001))
+                return
+
+            xml_url = base_springboard + sa_id
+            xml = urllib2.urlopen(xml_url).read()
+
+            video_heights = common.parseDOM(html=xml, name="media:content", ret="height")
+            video_urls = common.parseDOM(html=xml, name="media:content", ret="url")
+            video_url = None
+
+            if video_urls: # Try to use prefered quality
+                for i in range(len(video_heights)):
+                    if quality == video_heights[i]:
+                        video_url = video_urls[i]
+
+                if not video_url:
+                    video_url = video_urls[0]
+
+                video = plugin.set_resolved_url(video_url)
+            else:
+                notification(get_string(90000), get_string(90001))
+
+        elif "gorillanation" in sa_player: # Springboard Old
+            xml_url = common.parseDOM(html=sa_player, name="object", ret="file")[0]
+            xml = urllib2.urlopen(xml_url).read()
+            video = plugin.set_resolved_url(common.parseDOM(html=xml, name="media:content", ret="url")[0])
+
+        elif "youtube" in sa_player: # Youtube
+            youtube_id = find_between(sa_player, "embed/", "?")
+            video = plugin.set_resolved_url(base_youtube + youtube_id)
+
+        elif "blip.tv" in sa_player: # Blip.tv
+            blip_url = common.parseDOM(html=data, name="iframe", ret="src")[0]
+            blip_data = urllib2.urlopen(blip_url).read()
+            blip_id = common.parseDOM(html=blip_data, name="div", attrs={"id": "EpisodeInfo"}, ret="data-episode-id")[0]
+            video = plugin.set_resolved_url(base_bliptv + blip_id)
+
+        elif "twitch" in sa_player: # Twitch.tv
+            video = plugin.set_resolved_url("plugin://plugin.video.twitch/playLive/screwattack/")
+
         else:
-            _id = soup.iframe['id']
-            x = _id.find('_') + 1
-            unique = _id[x:]
-    except:
-        pass
-
-    if not unique:
-        try:
-            _id = soup.find('object').find('param')['value'][:-1]
-            x = _id.rfind('/') + 1
-            unique = _id[x:]
-        except:
-            screwattack_popup(90000, 90001)
+            print "[ScrewAttack] Unknown Player: " + sa_player
+            notification(get_string(90000), get_string(90001))
             return
 
-    if not video:
-        video = 'http://screwattack.springboardplatform.com/storage/screwattack.com/conversion/%s.mp4' % unique
-
-    if download:
-        screwattack_download(video, title, show)
-    else:
-
-        item = xbmcgui.ListItem(label=title, thumbnailImage=img, path=video)
-        item.setInfo(type='Video', infoLabels={'Title': title.title()})
-        xbmcplugin.setResolvedUrl(handle=num, succeeded=True, listitem=item)
-
-    return
-
-
-def screwattack_download(url, title, showname):
-    if addon.getSetting('download_path'):
-        download_path = addon.getSetting('download_path')
-        valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-        title = ''.join(c for c in title if c in valid_chars)
-
-        if addon.getSetting('use_show_path'):
-            for show in shows:
-
-                if show['param'][:-2] == showname:
-                    download_path = os.path.join(download_path, ''.join(c for c in addon.getLocalizedString(show['title']) if c in valid_chars))
-                    if not xbmcvfs.exists(download_path):
-                        xbmcvfs.mkdir(download_path)
-
-                    break
-
-        downloader.download(title+'.mp4', {'url': url, 'Title': title, 'download_path': download_path})
+        return video
 
     else:
-        screwattack_popup(90010, 90011)
-
-
-def screwattack_popup(heading, line1):
-    heading = addon.getLocalizedString(heading)
-    line1 = addon.getLocalizedString(line1)
-    xbmcgui.Dialog().ok(heading, line1)
-
+        notification(get_string(90000), get_string(90001))
 
 if __name__ == '__main__':
-    addon = xbmcaddon.Addon(id='plugin.video.screwattack')
-    path = sys.argv[0]
-    params = urlparse.parse_qs(sys.argv[2][1:])
-    num = int(sys.argv[1])
-    icon = os.path.join(addon.getAddonInfo('path'), 'icon.png')
-    fanart = os.path.join(addon.getAddonInfo('path'), 'fanart.jpg')
-
-    if params.keys():
-        if not 'video' in params:
-            screwattack_episodes(params.keys()[0], params[params.keys()[0]][0])
-
-        else:
-            vid_params = {
-                'url': params['video'][0],
-                'show': params['show'][0],
-                'title': params['title'][0],
-                'img': params['img'][0]
-            }
-
-            if 'download' in params:
-                vid_params['download'] = True
-
-            screwattack_open(**vid_params)
-
-    else:
-        screwattack_home()
+    plugin.run()
 

@@ -12,45 +12,42 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 
-# plugin constants
-__plugin__ = "rpcalendar"
-__author__ = "RPiola"
-__url__ = "http://pi.ilpiola.it/rpcalendar/"
-__git_url__ = ""
-__credits__ = ""
-__version__ = "1.0.1"
 
 class CalendarDialog(xbmcgui.WindowDialog):
 
     def __init__(self,m,y,nf):
         self.retval=0
-        self.background=xbmcgui.ControlImage(0,0,self.getWidth(),self.getHeight(),os.path.join(addon.getAddonInfo('path'),'resources','media','background.jpg'),colorDiffuse='0xff777777')
+        # dovrebbero essere self.getWidth() e self.getHeight()...
+        self.w=1280
+        self.h=720
+        self.background=xbmcgui.ControlImage(0,0,self.w,self.h,os.path.join(addon.getAddonInfo('path'),'resources','media','background.jpg'),colorDiffuse='0xff777777')
         self.addControl(self.background)
-        self.titlelabel1=xbmcgui.ControlLabel(70,70,self.getWidth()-40,30,addon.getLocalizedString(id=30000),textColor='0xffffffff',alignment=6)
+        self.titlelabel1=xbmcgui.ControlLabel(70,70,self.w-140,30,addon.getLocalizedString(id=30000),textColor='0xffffffff',alignment=6)
         self.addControl(self.titlelabel1)
-        self.titlelabel2=xbmcgui.ControlLabel(70,110,self.getWidth()-40,30,str(m)+'/'+str(y),textColor='0xffffffff',alignment=6)
+        self.titlelabel2=xbmcgui.ControlLabel(70,110,self.w-140,30,str(m)+'/'+str(y),textColor='0xffffffff',alignment=6)
         self.addControl(self.titlelabel2)
-        self.weeklabel=xbmcgui.ControlLabel(70+(self.getWidth()-40)/10,150,100,30,addon.getLocalizedString(id=30002),textColor='0xffc0c0ff',alignment=6)
+        self.weeklabel=xbmcgui.ControlLabel(70+(self.w-140)/10,150,100,30,addon.getLocalizedString(id=30002),textColor='0xffc0c0ff',alignment=6)
         self.addControl(self.weeklabel)
-        self.weekday1=xbmcgui.ControlLabel(70+2*(self.getWidth()-40)/10,150,100,30,addon.getLocalizedString(id=30011),textColor='0xffc0c0ff',alignment=6)
+        self.weekday1=xbmcgui.ControlLabel(70+2*(self.w-140)/10,150,100,30,addon.getLocalizedString(id=30011),textColor='0xffc0c0ff',alignment=6)
         self.addControl(self.weekday1)
-        self.weekday2=xbmcgui.ControlLabel(70+3*(self.getWidth()-40)/10,150,100,30,addon.getLocalizedString(id=30012),textColor='0xffc0c0ff',alignment=6)
+        self.weekday2=xbmcgui.ControlLabel(70+3*(self.w-140)/10,150,100,30,addon.getLocalizedString(id=30012),textColor='0xffc0c0ff',alignment=6)
         self.addControl(self.weekday2)
-        self.weekday3=xbmcgui.ControlLabel(70+4*(self.getWidth()-40)/10,150,100,30,addon.getLocalizedString(id=30013),textColor='0xffc0c0ff',alignment=6)
+        self.weekday3=xbmcgui.ControlLabel(70+4*(self.w-140)/10,150,100,30,addon.getLocalizedString(id=30013),textColor='0xffc0c0ff',alignment=6)
         self.addControl(self.weekday3)
-        self.weekday4=xbmcgui.ControlLabel(70+5*(self.getWidth()-40)/10,150,100,30,addon.getLocalizedString(id=30014),textColor='0xffc0c0ff',alignment=6)
+        self.weekday4=xbmcgui.ControlLabel(70+5*(self.w-140)/10,150,100,30,addon.getLocalizedString(id=30014),textColor='0xffc0c0ff',alignment=6)
         self.addControl(self.weekday4)
-        self.weekday5=xbmcgui.ControlLabel(70+6*(self.getWidth()-40)/10,150,100,30,addon.getLocalizedString(id=30015),textColor='0xffc0c0ff',alignment=6)
+        self.weekday5=xbmcgui.ControlLabel(70+6*(self.w-140)/10,150,100,30,addon.getLocalizedString(id=30015),textColor='0xffc0c0ff',alignment=6)
         self.addControl(self.weekday5)
-        self.weekday6=xbmcgui.ControlLabel(70+7*(self.getWidth()-40)/10,150,100,30,addon.getLocalizedString(id=30016),textColor='0xffc0c0ff',alignment=6)
+        self.weekday6=xbmcgui.ControlLabel(70+7*(self.w-140)/10,150,100,30,addon.getLocalizedString(id=30016),textColor='0xffc0c0ff',alignment=6)
         self.addControl(self.weekday6)
-        self.weekday7=xbmcgui.ControlLabel(70+8*(self.getWidth()-40)/10,150,100,30,addon.getLocalizedString(id=30017),textColor='0xffc0c0ff',alignment=6)
+        self.weekday7=xbmcgui.ControlLabel(70+8*(self.w-140)/10,150,100,30,addon.getLocalizedString(id=30017),textColor='0xffc0c0ff',alignment=6)
         self.addControl(self.weekday7)
         self.cal=calendar.Calendar(0)
         self.rowno=0
         self.dayno=0
         self.daylabels=[ 0 ] * 31
         self.weeklabels=[ 0 ] * 7
+        #print (str(self.getResolution())+':'+str(self.getWidth())+'x'+str(self.getHeight()))
         for self.week in self.cal.monthdayscalendar(y,m):
             self.firstday=1
             self.columnno=0
@@ -60,21 +57,21 @@ class CalendarDialog(xbmcgui.WindowDialog):
                 if self.day != 0:
                    if self.firstday == 1:
                        self.thedate=datetime.date(y,m,self.day)
-                       self.weeklabels[self.rowno]=xbmcgui.ControlLabel(70+(self.getWidth()-40)/10,150+self.rowno*30,100,30,str(self.thedate.isocalendar()[1]),textColor='0xffc0c0ff',alignment=6)
+                       self.weeklabels[self.rowno]=xbmcgui.ControlLabel(70+(self.w-140)/10,150+self.rowno*30,100,30,str(self.thedate.isocalendar()[1]),textColor='0xffc0c0ff',alignment=6)
                        self.addControl(self.weeklabels[self.rowno])
                        self.firstday=0
                    if m==currentmonth and y==currentyear and self.day==currentday:
                        self.tc='0xffff0000'
                    else:
                        self.tc='0xffffffff'
-                   self.daylabels[self.dayno]=xbmcgui.ControlLabel(70+(self.columnno+1)*(self.getWidth()-40)/10,150+self.rowno*30,100,30,str(self.day),textColor=self.tc,alignment=6)
+                   self.daylabels[self.dayno]=xbmcgui.ControlLabel(70+(self.columnno+1)*(self.w-140)/10,150+self.rowno*30,100,30,str(self.day),textColor=self.tc,alignment=6)
                    self.addControl(self.daylabels[self.dayno])
                    self.dayno=self.dayno+1
-        self.buttonok=xbmcgui.ControlButton(self.getWidth()/2-100,self.getHeight()-80,200,30,addon.getLocalizedString(id=30003),alignment=6)
+        self.buttonok=xbmcgui.ControlButton(self.w/2-100,self.h-80,200,30,addon.getLocalizedString(id=30003),alignment=6)
         self.addControl(self.buttonok)
-        self.buttonprev=xbmcgui.ControlButton(self.getWidth()/2-350,self.getHeight()-80,200,30,addon.getLocalizedString(id=30004),alignment=6)
+        self.buttonprev=xbmcgui.ControlButton(self.w/2-350,self.h-80,200,30,addon.getLocalizedString(id=30004),alignment=6)
         self.addControl(self.buttonprev)
-        self.buttonnext=xbmcgui.ControlButton(self.getWidth()/2+150,self.getHeight()-80,200,30,addon.getLocalizedString(id=30005),alignment=6)
+        self.buttonnext=xbmcgui.ControlButton(self.w/2+150,self.h-80,200,30,addon.getLocalizedString(id=30005),alignment=6)
         self.addControl(self.buttonnext)
         self.buttonprev.controlRight(self.buttonok)
         self.buttonok.controlLeft(self.buttonprev)

@@ -140,13 +140,13 @@ def tvlistlive(id_type):
     menulist=[]
     items=[]
     if id_type =='live':
-        menulist=neterratv.showTVStations(plugin.get_setting('username'), plugin.get_setting('password'))
+        menulist=neterratv.showTVStations(plugin.get_setting('username'), plugin.get_setting('password'))        
         if menulist:         
             for item in menulist:
                 items.append({'label': item[0],
                               'url': plugin.url_for('tvstation_playtv',tvstation_code=item[1])})                
     if id_type =='vod':
-        menulist=neterratv.showVODStations(plugin.get_setting('username'), plugin.get_setting('password'))
+        menulist=neterratv.showVODStations(plugin.get_setting('username'), plugin.get_setting('password'))        
         if menulist:         
             for item in menulist:
                 items.append({'label': item[0],
@@ -159,14 +159,14 @@ def tvlistlive(id_type):
                               'url': plugin.url_for('show_musicstreams',tvstation_code=item[1])})
     
     if id_type =='timeshift':        
-        menulist=neterratv.showTimeshiftProds(plugin.get_setting('username'), plugin.get_setting('password'))
+        menulist=neterratv.showTimeshiftProds(plugin.get_setting('username'), plugin.get_setting('password'))       
         if menulist:         
             for item in menulist:
                 items.append({'label': item[0],
                               'url': plugin.url_for('tvstation_playtv',tvstation_code='issue_id='+item[1])})
         
     if id_type =='movies':
-        menulist=neterratv.showMovieProds(plugin.get_setting('username'), plugin.get_setting('password'))
+        menulist=neterratv.showMovieProds(plugin.get_setting('username'), plugin.get_setting('password'))        
         if menulist:         
             for item in menulist:
                 items.append({'label': item[0],
@@ -179,25 +179,24 @@ def tvlistlive(id_type):
     return plugin.add_items(items)
     
 '''
-    display list with the available TV streams from the selected TV station
+    plays the select live TV
 '''
 @plugin.route('/tvstation_playtv/<tvstation_code>')
 def tvstation_playtv(tvstation_code):
     
     __log('tvstation_playtv started with string=%s' % tvstation_code)
            
-    neterratv.getTVStream(plugin.get_setting('username'), plugin.get_setting('password'),tvstation_code)    
+    neterratv.playLiveStream(plugin.get_setting('username'), plugin.get_setting('password'),tvstation_code)    
 
 '''
-    display list with the available TV streams from the selected TV station
+    plays the selected issue
 '''
 @plugin.route('/issue_play/<tvstation_code>')
 def issue_play(tvstation_code):
     
     __log('issue_play started with string=%s' % tvstation_code)
            
-    neterratv.getIssueStream(plugin.get_setting('username'), plugin.get_setting('password'),tvstation_code)
-    #neterratv.getBTVStream(plugin.get_setting('username'), plugin.get_setting('password'))
+    neterratv.playIssueStream(plugin.get_setting('username'), plugin.get_setting('password'),tvstation_code)   
 
 '''
     gets available recorded streams for select TV station and adds it to list

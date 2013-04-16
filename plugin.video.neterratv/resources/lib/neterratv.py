@@ -35,34 +35,38 @@ class handles html get and post for neterratv website
 class neterra:
     #static values
     CLASSNAME = 'neterra'
-    PLUGINID = 'plugin.video.neterratv' 
+    PLUGINID = 'plugin.video.neterratv'
+     
     COOKIEFILE = 'cookies.lwp' #file to store cookie information    
     USERAGENT = {'User-agent' : 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'}
+    
+    LIVE = 'live'
+    VOD = 'vod'
+    PRODS = 'prods'
+    ISSUES = 'issues'
+    MUSIC = 'music'
+    TIMESHIFT = 'timeshift'
+    MOVIES = 'movies'
+    GETSTREAM = 'get_stream'
     MAINURL = 'http://www.neterra.tv/' #main url
-    TVLIVEURL = 'http://www.neterra.tv/content/live'
-    USEROPTIONLIVE = 'type_view=live&choice_view=1'
     LOGINURL = 'http://www.neterra.tv/user/login_page' #login url
-    TVLISTURL = 'http://www.neterra.tv/page/service/tv_channels' #url to get list of all TV stations    
-    VODLISTURL = 'http://www.neterra.tv/content/vod' #url to get the list of VOD TV stations
-    VODPRODURL = 'http://www.neterra.tv/content/prods' #url to get the list of VOD prods
-    VODISSUEURL = 'http://www.neterra.tv/content/issues' #url to get the list of prod issues
-    MUSICPRODURL = 'http://www.neterra.tv/content/music' #url to get the list of music prods
-    TIMESHIFTURL = 'http://www.neterra.tv/content/timeshift' #url to get the list of timeshift TV stations
-    MOVIEPRODURL = 'http://www.neterra.tv/content/movies' #url to get the list of movies
-    CHANGEUSEROPTIONURL = 'http://www.neterra.tv/content/change_user_options' #url to get the list of prod issues
-    CONTENTSTREAMURL = 'http://www.neterra.tv/content/get_stream' #url to get streams
+    TVLISTURL = 'http://www.neterra.tv/page/service/tv_channels' #url to get list of all TV stations
+    CONTENTURL = 'http://www.neterra.tv/content/' #content url
+    SMALLICONS = '&choice_view=1'
+    USEROPTION = 'change_user_options'
+    USEROPTIONLIVE = 'type_view=live&choice_view=1'
     USEROPTIONVOD = 'type_view=vod_prods&choice_view=1' #sets view to small icons
     USEROPTIONVODIUSSUES = 'type_view=vod_issues&choice_view=1' #sets view to small icons
     USEROPTIONMOVIES = 'type_view=movies&choice_view=1' #sets view to small icons
     USEROPTIONMUSIC = 'type_view=music&choice_view=1' #sets view to small icons
     USEROPTIONMUSICISSUES = 'type_view=music_issues&choice_view=1' #sets view to small icons
     USEROPTIONTIMESHIFT = 'type_view=timeshift&choice_view=1' #sets view to small icons
-    DEFAULTPOSTSETTINGS = 'offset=0&category=&date=&text=' #defaul optins
-    SWFPLAYERURL = 'swfUrl=http://www.neterra.tv/players/players/flowplayer/flowplayer.rtmp-3.2.10.swf' #url to flash player
+    DEFAULTPOSTSETTINGS = 'offset=0&category=&date=&text=' #default options
     ISLOGGEDINSTR = '<form method="POST" action="http://www.neterra.tv/user/login_page" id="login_fail_form">' #string to check if user is logged in
-       
     
-    SWFBUFFERDEFAULT = 'buffer=3000'
+    #flashplayer settings
+    SWFBUFFERDEFAULT = 'buffer=3000'        
+    SWFPLAYERURL = 'swfUrl=http://www.neterra.tv/players/players/flowplayer/flowplayer.rtmp-3.2.10.swf' #url to flash player
     
     #globals variables
     __cj__ = None
@@ -185,31 +189,7 @@ opens url and returns html stream
         self.__log('htmlstr: ' + htmlstr)
         return htmlstr
     
-    '''
-opens url and returns html stream 
-'''
-    def openContentStream2(self, url):        
-        self.__log('Start openContentStream2')
-        self.__log('URL: ' + url)
-        urlopen = urllib2.urlopen
-        request = urllib2.Request
-        theurl = url
-        req = request(theurl,'', self.USERAGENT)
-        # create a request object
-        handle = urlopen(req)
-        htmlstr = handle.read()
-        startpoint = htmlstr.find(self.ISLOGGEDINSTR)
-        #if not logged in
-        if (startpoint != -1):            
-            #login
-            self.logIn()
-            #open page again
-            handle = urlopen(req)
-            htmlstr = handle.read()
-        self.updateCookie()
-        self.__log('Finished openContenStream2')
-        return htmlstr
-    
+
     '''
 login into the neterra tv webpage
 returns true if login successful
@@ -230,8 +210,6 @@ returns true if login successful
         self.__log(link)
         self.__log('----URL request finished for: ' + theurl + ' ----- ')
         self.updateCookie()
-        #check for string in page 
-        #<form action="login.php" method="post" id="login" name="login">
         startpoint = link.find(self.ISLOGGEDINSTR)
         if (startpoint != -1):
             isLoggedIn = True
@@ -320,12 +298,12 @@ returns true if login successful
     def getTVStations(self, html):        
         self.__log('Start getTVStations')
         self.__log('html: ' + html)
-        startpoint = html.find('tv_choice_result')
-        endpoint = html.find('"count"')
+        startpoint = html.find('tv_choice_result')        
+        endpoint = html.find('"breadcrum_info"')        
         text = html[startpoint:endpoint]
         self.__log('text: ' + text)
-        text = text.replace('tv_choice_result','')
-        text = text.replace('"count"','')
+        text = text.replace('tv_choice_result','')        
+        text = text.replace('"breadcrum_info"','')        
         text = text.replace('[','')
         text = text.replace(']','')
         text = text.replace('{','')
@@ -629,16 +607,7 @@ returns true if login successful
             items.append('Error no items found', 'Error')      
         self.__log('Finished getMovieIssues')
         return items
-
-        
-    '''
-test method returns stream to BTV
-'''
-    def getBTVStream(self):       
-        self.logIn()
-        stream = self.openContentStream(self.CONTENTSTREAMURL,'130139')
-        return stream
-
+  
     '''
     returns the stream to live TV
 '''
@@ -651,7 +620,8 @@ test method returns stream to BTV
         text = url[startpoint:len(url)]             
         self.__log('text: ' + text)   
         self.logIn()
-        stream = self.openContentStream(self.CONTENTSTREAMURL,text)
+        #stream = self.openContentStream(self.CONTENTSTREAMURL,text)
+        stream = self.openContentStream(self.CONTENTURL+self.GETSTREAM,text)
         self.__log('Finished getTVStream')
         return stream
     
@@ -662,7 +632,7 @@ test method returns stream to BTV
         text = 'issue_id='+url             
         self.__log('text: ' + text)   
         self.logIn()
-        stream = self.openContentStream(self.CONTENTSTREAMURL,text)
+        stream = self.openContentStream(self.CONTENTURL+self.GETSTREAM,text)
         self.__log('Finished getIssueStream')
         return stream
 '''
@@ -674,36 +644,12 @@ test method returns stream to BTV
     Note: These methods are not part of the neterratv class
 '''
    
-'''
-    test method to open BTV stream
-'''
-def getBTVStream(tv_username, tv_password):
-    log('Start getBTVStream')
-    #get a neterra class
-    Neterra = neterra(tv_username, tv_password)
-    Neterra.logIn()
-    #get a play link for the URL
-    html = Neterra.getBTVStream()
-    log(html)
-    #parse html for flashplayer link
-    startpoint = html.find('rtmp')
-    endpoint = html.find('file_link')-3
-    #remove / from string
-    text = html[startpoint:endpoint]                
-    text = text.replace('\\','')
-    log('text: ' + text)   
-    url=text+' swfUrl=http://www.neterra.tv/players/players/flowplayer/flowplayer.rtmp-3.2.10.swf playpath=btv_live_sd2.stream live=true'            
-    html=''
-    xbmc.Player().play(url)
-    log('URL: ' + url)
-    log('Finished getBTVStream')
-    return html
 
 '''
-    opens live tv stream
+    plays live stream
 '''
-def getTVStream(tv_username, tv_password, url):
-    log('Start getTVStream')
+def playLiveStream(tv_username, tv_password, url):
+    log('Start playLiveStream')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)    
     html=Neterra.getTVStream(url)
@@ -720,19 +666,20 @@ def getTVStream(tv_username, tv_password, url):
     #log some details
     log('playpath: ' + playpath)
     log('rtmp: ' + rtmp)        
-    url=rtmp+' '+ neterra.SWFPLAYERURL+' playpath='+playpath+' live=1 '+neterra.SWFBUFFERDEFAULT +' conn=O:1 conn=NN:capabilities:239 conn=O:1 conn=NN:audioCodecs:3575 conn=O:1 conn=NN:videoCodecs:252 conn=O:1 conn=NN:videoFunction:1 conn=O:1 conn=NN:objectEncoding:3 conn=O:1 conn=NS:flashVer:3:WIN 11,6,602,180' #conn=O:0'
+    #url=rtmp+' '+ neterra.SWFPLAYERURL+' playpath='+playpath+' live=1 '+neterra.SWFBUFFERDEFAULT +' conn=O:1 conn=NN:capabilities:239 conn=O:1 conn=NN:audioCodecs:3575 conn=O:1 conn=NN:videoCodecs:252 conn=O:1 conn=NN:videoFunction:1 conn=O:1 conn=NN:objectEncoding:3 conn=O:1 conn=NS:flashVer:3:WIN 11,6,602,180' #conn=O:0'
+    url=rtmp+' '+ neterra.SWFPLAYERURL+' playpath='+playpath+' live=1 '+neterra.SWFBUFFERDEFAULT
     #call player
     xbmc.Player().play(url)
     log('URL: ' + url)
-    log('Finished getTVStream')
+    log('Finished playLiveStream')
     html=''
     return html
 
 '''
-    opens VOD stream
+    play issue stream
 '''
-def getIssueStream(tv_username, tv_password, url):
-    log('Start getIssueStream')
+def playIssueStream(tv_username, tv_password, url):
+    log('Start playIssueStream')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)    
     html=Neterra.getIssueStream(url)
@@ -761,10 +708,9 @@ def getIssueStream(tv_username, tv_password, url):
     #call player
     xbmc.Player().play(url)
     log('URL: ' + url)
-    log('Finished getTVStream')
+    log('Finished playIssueStream')
     html=''
     return html
-
 
 '''
     returns list of all live TV stations
@@ -774,9 +720,9 @@ def showTVStations(tv_username, tv_password):
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
     log('Finished showTVStations')
-    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONLIVE)
+    Neterra.openContentStream(neterra.CONTENTURL+neterra.USEROPTION,neterra.USEROPTIONLIVE)
     #return list of all TV stations
-    return Neterra.getTVStations(Neterra.openContentStream(neterra.TVLIVEURL,neterra.DEFAULTPOSTSETTINGS))
+    return Neterra.getTVStations(Neterra.openContentStream(neterra.CONTENTURL+neterra.LIVE,neterra.DEFAULTPOSTSETTINGS))
 
 '''
     returns list of all TV stations that provide VOD's
@@ -786,10 +732,11 @@ def showVODStations(tv_username, tv_password):
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
     #call the URL to switch userview to small icons    
-    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONVOD)
+    Neterra.openContentStream(neterra.CONTENTURL+neterra.USEROPTION,neterra.USEROPTIONVOD)
     log('Finished showVODTVStations')
     #return list of all VOD TV's
-    return Neterra.getVODStations(Neterra.openContentStream(neterra.VODLISTURL,neterra.DEFAULTPOSTSETTINGS))
+    return Neterra.getVODStations(Neterra.openContentStream(neterra.CONTENTURL+neterra.VOD,neterra.DEFAULTPOSTSETTINGS))
+
 
 '''
     returns list of available Music products
@@ -798,10 +745,10 @@ def showMusicProds(tv_username, tv_password):
     log('Start showMusicProds')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONMUSIC)
+    Neterra.openContentStream(neterra.CONTENTURL+neterra.USEROPTION,neterra.USEROPTIONMUSIC)
     log('Finished showMusicProds')
     #return list of all prods for music
-    return Neterra.getMusicProds(Neterra.openContentStream(neterra.MUSICPRODURL,neterra.DEFAULTPOSTSETTINGS))
+    return Neterra.getMusicProds(Neterra.openContentStream(neterra.CONTENTURL+neterra.MUSIC,neterra.DEFAULTPOSTSETTINGS))
 
 '''
     returns list of available timeshift products
@@ -810,10 +757,10 @@ def showTimeshiftProds(tv_username, tv_password):
     log('Start showTimeshiftProds')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONTIMESHIFT)
+    Neterra.openContentStream(neterra.CONTENTURL+neterra.USEROPTION,neterra.USEROPTIONTIMESHIFT)
     log('Finished showTimeshiftProds')
     #return list of all prods for music
-    return Neterra.getTimeshiftProds(Neterra.openContentStream(neterra.TIMESHIFTURL,neterra.DEFAULTPOSTSETTINGS))
+    return Neterra.getTimeshiftProds(Neterra.openContentStream(neterra.CONTENTURL+neterra.TIMESHIFT,neterra.DEFAULTPOSTSETTINGS))
 
 '''
     returns list of available movie products
@@ -822,9 +769,9 @@ def showMovieProds(tv_username, tv_password):
     log('Start showMovieProds')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)    
-    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONMOVIES)
+    Neterra.openContentStream(neterra.CONTENTURL+neterra.USEROPTION,neterra.USEROPTIONMOVIES)
     log('Finished showMovieProds')
-    return Neterra.getMovieProds(Neterra.openContentStream(neterra.MOVIEPRODURL,neterra.DEFAULTPOSTSETTINGS))
+    return Neterra.getMovieProds(Neterra.openContentStream(neterra.CONTENTURL+neterra.MOVIES,neterra.DEFAULTPOSTSETTINGS))
 
 '''
     returns list of available VOD products like shows or series for selected_ID (prod ID)
@@ -833,10 +780,10 @@ def showVODProds(selected_ID,tv_username, tv_password):
     log('Start showVODProds')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONVOD)
+    Neterra.openContentStream(neterra.CONTENTURL+neterra.USEROPTION,neterra.USEROPTIONVOD)
     log('Finished showVODProds')
     #return list of all prods for VOD
-    return Neterra.getVODProds(Neterra.openContentStream(neterra.VODPRODURL,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
+    return Neterra.getVODProds(Neterra.openContentStream(neterra.CONTENTURL+neterra.PRODS,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
 
 '''
     returns list of available issues for the selected_ID (issue id)
@@ -845,23 +792,22 @@ def showVODIssues(selected_ID,tv_username, tv_password):
     log('Start showVODIssues')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONVODIUSSUES)
+    Neterra.openContentStream(neterra.CONTENTURL+neterra.USEROPTION,neterra.USEROPTIONVODIUSSUES)
     log('Finished showVODIssues')
     #return list of all prods for VOD
-    return Neterra.getVODIssues(Neterra.openContentStream(neterra.VODISSUEURL,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
+    return Neterra.getVODIssues(Neterra.openContentStream(neterra.CONTENTURL+neterra.ISSUES,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
 
-    '''
+'''
     returns list of available issues for the selected_ID (issue id)
 '''
 def showMusicIssues(selected_ID,tv_username, tv_password):
     log('Start showMusicIssues')
     #get a neterra class
     Neterra = neterra(tv_username, tv_password)
-    Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONMUSICISSUES)
+    Neterra.openContentStream(neterra.CONTENTURL+neterra.USEROPTION,neterra.USEROPTIONMUSICISSUES)
     log('Finished showMusicIssues')
     #return list of all prods for VOD
-    return Neterra.getMusicIssues(Neterra.openContentStream(neterra.VODISSUEURL,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
-
+    return Neterra.getMusicIssues(Neterra.openContentStream(neterra.CONTENTURL+neterra.ISSUES,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
 
 '''
     returns list of available issues for the selected_ID (issue id)
@@ -869,12 +815,10 @@ def showMusicIssues(selected_ID,tv_username, tv_password):
 def showMovieIssues(selected_ID,tv_username, tv_password):
     log('Start showMovieIssues')
     #get a neterra class
-    Neterra = neterra(tv_username, tv_password)
-    #Neterra.openContentStream(neterra.CHANGEUSEROPTIONURL,neterra.USEROPTIONMUSICISSUES)
+    Neterra = neterra(tv_username, tv_password)    
     log('Finished showMovieIssues')
     #return list of all prods for VOD
-    return Neterra.getMovieIssues(Neterra.openContentStream(neterra.VODISSUEURL,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
-
+    return Neterra.getMovieIssues(Neterra.openContentStream(neterra.CONTENTURL+neterra.ISSUES,neterra.DEFAULTPOSTSETTINGS+'&id='+selected_ID))
 
 '''
     public log method

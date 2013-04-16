@@ -50,6 +50,7 @@ __act_names__ = {
 # define local actions
 __act_names_local__ = {
     'info': 'ShowNodeInfo',
+	'pinfo': 'ShowProgramInfo',
     'config': 'ShowAddonConfig'
     }
     
@@ -89,6 +90,20 @@ def ShowNodeInfo(addr):
         output = name + ' (' + str(int(float(status)/255.0*100.0)) + '%)' + '\n' + shared.translate(33002) + ': ' + str(addr)
     else:
         output = name + '\n' + shared.translate(33002) + ': ' + str(addr)
+    
+    dialog = xbmcgui.Dialog()
+    ok = dialog.ok(shared.translate(33001),output)
+	
+def ShowProgramInfo(addr):
+    '''
+    ShowProgramInfo(addr)
+    
+    DESCRIPTION:
+    This action displays program information
+    on the screen.
+    '''
+
+    output = shared.translate(33002) + ': ' + str(addr)
     
     dialog = xbmcgui.Dialog()
     ok = dialog.ok(shared.translate(33001),output)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.isybrowse" name="ISY Browser" version="0.1.1" provider-name="Humble Robot">
+<addon id="plugin.program.isybrowse" name="ISY Browser" version="0.2.0" provider-name="Humble Robot">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
     </requires>
     
     <extension point="xbmc.python.pluginsource" library="ISYbrowse.py">
@@ -16,5 +16,12 @@
         
         Instructions at: https://code.google.com/p/isy-events/</description>
         <disclaimer lang="en">This addon requires an ISY-99 Series Controller available from Universal Devices Inc (www.universal-devices.com) and must be setup to connect to it.</disclaimer>
+    
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <forum>http://forum.xbmc.org/showthread.php?tid=146503</forum>
+        <website>https://code.google.com/p/isy-events/</website>
+        <source>https://code.google.com/p/isy-events/source/browse/</source>
+        <email>Humble.Robot.Development@gmail.com</email>
+        
     </extension>
 </addon>

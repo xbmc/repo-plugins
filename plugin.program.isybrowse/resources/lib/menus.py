@@ -177,7 +177,7 @@ class main(object):
                 action = 'run'
                 
             # compile the context menu
-            context = createContext(False, False, False, type != 'folder')
+            context = createContext(False, False, False, type != 'folder', True)
             
             self.listing.append({'name': name, 
                 'image_key': image, 
@@ -238,7 +238,7 @@ class main(object):
         '''
         xbmcplugin.endOfDirectory(handle=self.handle, updateListing=False, cacheToDisc=False)
        
-def createContext(onoff=False, toggle=False, dim=False, run=False):
+def createContext(onoff=False, toggle=False, dim=False, run=False, program=False):
     '''
     createContext(onoff, dim, run)
     
@@ -283,11 +283,13 @@ def createContext(onoff=False, toggle=False, dim=False, run=False):
         new_items = [
             (shared.translate(32013), 'run'), 
             (shared.translate(32014), 'then'), 
-            (shared.translate(32015), 'else'),
-            (shared.translate(32016), 'info')]
+            (shared.translate(32015), 'else')]
         for item in new_items:
             menu.append(item)
     
-    menu.append((shared.translate(32012), 'info'))
-    
+	if program:
+		menu.append((shared.translate(32012), 'pinfo'))
+	else:
+		menu.append((shared.translate(32012), 'info'))
+	
     return menu

@@ -95,7 +95,11 @@ class isy(object):
         return data
         
     def _ParseNodeXML(self, data, return_node=None, return_parent=None):
-        dom = parseString(data)
+        try:
+		    dom = parseString(data)
+        except:
+            data += '>' # sometimes the xml is missing the closing bracket
+            dom = parseString(data)
         node_types = ['folder', 'node', 'group']
         child_dict = {}
         for ntype in node_types:

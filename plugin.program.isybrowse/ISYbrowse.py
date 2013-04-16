@@ -25,9 +25,9 @@
 
 # CONSTANTS
 __author__ = 'Humble Robot'
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 __url__ = 'https://code.google.com/p/isy-events/'
-__date__ = '11/2012'
+__date__ = '4/2013'
 
 # IMPORTS
 # system

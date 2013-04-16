@@ -1,0 +1,29 @@
+# XBMC Media Center language file
+# Addon Name: Apple iTunes Trailers
+# Addon id: plugin.video.itunes_trailers
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Chinese (Traditional) (http://www.transifex.com/projects/p/xbmc-addons/language/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "#30010"
+msgid "Source"
+msgstr "來源"
+
+msgctxt "#30011"
+msgid "All"
+msgstr "全部"
+
+msgctxt "#30012"
+msgid "Most Recent"
+msgstr "最新"

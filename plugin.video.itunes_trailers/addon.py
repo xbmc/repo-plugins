@@ -28,11 +28,14 @@ STRINGS = {
     'already_downloaded': 30002,
     'add_to_cp': 30003,
     'download_in_progress': 30004,
+    'add_to_trakt': 30005,
     'network_error': 30100,
     'no_download_path': 30101,
     'want_set_now': 30102,
 }
+
 CP_ADD_URL = 'plugin://plugin.video.couchpotato_manager/movies/add?title=%s'
+TRAKT_ADD_URL = 'plugin://plugin.video.trakt_list_manager/movies/add?title=%s'
 
 plugin = Plugin()
 
@@ -128,10 +131,16 @@ def get_movies(source, limit):
         raise NotImplementedError
 
     def __context(movie_title):
-        return [(
-            _('add_to_cp'),
-            'XBMC.RunPlugin(%s)' % CP_ADD_URL % movie_title
-        )]
+        return [
+            (
+                _('add_to_cp'),
+                'XBMC.RunPlugin(%s)' % CP_ADD_URL % movie_title
+            ),
+            (
+                _('add_to_trakt'),
+                'XBMC.RunPlugin(%s)' % TRAKT_ADD_URL % movie_title
+            )
+        ]
 
     items = [{
         'label': movie['title'],

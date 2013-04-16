@@ -1,3 +1,7 @@
+0.1.0 (15.04.2013)
+- added Trakt.tv Integration via Trakt.tv List Manager
+- added translations
+
 0.0.2 (01.04.2013)
 - added possibility to have different qualities for stream and download
 - fix add-on on python < 2.7

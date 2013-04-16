@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <category label="30000">
+        <setting type="sep" />
+        <setting label="30001" type="enum" id="prefered_quality" lvalues="30003|30004|30005|30006|30007|30008|30009"/>
+    </category>
+</settings>

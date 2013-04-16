@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+    <string id="30000">Video Quality</string>
+    <string id="30001">Prefered Video Quality</string>
+    <string id="30002">Choose Quality</string>
+    <string id="30003">Ask</string>
+    <string id="30004">216x384</string>
+    <string id="30005">288x512</string>
+    <string id="30006">360x640</string>
+    <string id="30007">432x768</string>
+    <string id="30008">540x960</string>
+    <string id="30009">720x1280</string>
+
+    <string id="40000">Shows</string>
+    <string id="40001">Consoles</string>
+    <string id="40002">All</string>
+    <string id="40003">Trailers</string>
+    <string id="40004">Gameplay</string>
+    <string id="40005">Interviews</string>
+    <string id="40006">Features</string>
+    <string id="40007">Previews</string>
+    <string id="40008">Reviews</string>
+    <string id="40009">More...</string>
+    <string id="40010">XBOX 360</string>
+    <string id="40011">PS4</string>
+    <string id="40012">PS3</string>
+    <string id="40013">WII U</string>
+    <string id="40014">PC</string>
+    <string id="40015">VITA</string>
+    <string id="40016">3DS</string>
+</strings>

@@ -1,3 +1,7 @@
+1.2.1 (15.04.2013)
+- Trakt.tv Integration via Trakt.tv List Manager
+- updated translations
+
 1.2.0 (29.03.2013)
 - CouchPotato Integration via CouchPotato Manager
   You can now add movies to CouchPotato via the context-menu

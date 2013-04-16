@@ -10,11 +10,12 @@
     <string id="30003">Más vistos</string>
     <string id="30004">Top 10</string>
     <string id="30005">Biblioteca (por inicial)</string>
-    <string id="30006">Apertura esta semana</string>
+    <string id="30006">Estrenos de esta semana</string>
     <string id="30007">Próximamente</string>
     <string id="30008">Descargar este trailer</string>
     <string id="30009">[B]DESCARGADO[/B]</string>
     <string id="30010">[B]descarga en curso[/B]</string>
+    <string id="30011">Añadir esta película a CouchPotato</string>
 
     <!-- Settings -->
     <string id="30100">Forzar Modo de Vista "Miniaturas"</string>
@@ -26,7 +27,7 @@
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
     <string id="30120">Content-Type (relacionados con la piel)</string>
-    <string id="30121">VIDEOS</string>
+    <string id="30121">Videos</string>
     <string id="30122">Películas</string>
     <string id="30123">Ruta de descarga</string>
 
@@ -36,5 +37,5 @@
 
     <!-- Notify -->
     <string id="30150">Error de conexión</string>
-    <string id="30151">Descarga atm no es posible</string>
+    <string id="30151">En estos momentos no es posible la descarga</string>
 </strings>

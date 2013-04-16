@@ -53,17 +53,17 @@ def get_most_watched():
 
 
 def get_top_ten():
-    url = MAIN_URL + 'top-movies'
+    url = MAIN_URL + 'top-movies/'
     return _get_movies(url)
 
 
 def get_opening_this_week():
-    url = MAIN_URL + 'opening-this-week'
+    url = MAIN_URL + 'opening-this-week/'
     return _get_movies(url)
 
 
 def get_coming_soon():
-    url = MAIN_URL + 'coming-soon'
+    url = MAIN_URL + 'coming-soon/'
     return _get_movies(url)
 
 

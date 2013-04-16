@@ -32,12 +32,14 @@ STRINGS = {
     'already_downloaded': 30009,
     'download_in_progress': 30010,
     'add_to_cp': 30011,
+    'add_to_trakt': 30012,
     'no_download_path': 30130,
     'want_set_now': 30131,
     'network_error': 30150,
     'download_not_possible': 30151
 }
 CP_ADD_URL = 'plugin://plugin.video.couchpotato_manager/movies/add?title=%s'
+TRAKT_ADD_URL = 'plugin://plugin.video.trakt_list_manager/movies/add?title=%s'
 
 plugin = Plugin()
 
@@ -129,6 +131,9 @@ def show_movies(source):
         'context_menu': [(
             _('add_to_cp'),
             'XBMC.RunPlugin(%s)' % CP_ADD_URL % movie['title']
+        ), (
+            _('add_to_trakt'),
+            'XBMC.RunPlugin(%s)' % TRAKT_ADD_URL % movie['title']
         )],
         'path': plugin.url_for(
             endpoint='show_videos',
@@ -295,7 +300,7 @@ def log(text):
     plugin.log.info(text)
 
 if __name__ == '__main__':
-    try:
-        plugin.run()
-    except scraper.NetworkError:
-        plugin.notify(msg=_('network_error'))
+    #try:
+    plugin.run()
+    #except scraper.NetworkError:
+    #    plugin.notify(msg=_('network_error'))

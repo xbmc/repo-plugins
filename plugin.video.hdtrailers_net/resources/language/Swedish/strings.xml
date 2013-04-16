@@ -15,6 +15,7 @@
     <string id="30008">Ladda ner denna trailer</string>
     <string id="30009">[B]NEDLADDADE[/B]</string>
     <string id="30010">[B]nedladdning pågår[/B]</string>
+    <string id="30011">Lägg till denna film i CouchPotato</string>
 
     <!-- Settings -->
     <string id="30100">Tvinga visningsläget "Tumnagel"</string>

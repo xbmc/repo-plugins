@@ -7,11 +7,34 @@
     <!-- Default strings -->
     <string id="30001">Page</string>
     <string id="30002">Dernier</string>
+    <string id="30003">Plus regardés</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">Médiathèque (Toute par initiale)</string>
+    <string id="30006">Ouverture cette semaine</string>
+    <string id="30007">A venir</string>
+    <string id="30008">Télécharger cette Bande-annonce</string>
+    <string id="30009">[B] TÉLÉCHARGÉ[/B]</string>
+    <string id="30010">[B]téléchargement en cours[/B]</string>
+    <string id="30011">Ajouter ce Film à CouchPotato</string>
+
+    <!-- Settings -->
+    <string id="30100">Forcer la vue "Vignette"</string>
+    <string id="30101">Montrer Bande-annonce</string>
+    <string id="30102">Montrer les Clips</string>
+    <string id="30103">Montrer la source dans le titre de la vidéo</string>
+    <string id="30110">Résolution de la vidéo</string>
+    <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
     <string id="30121">Vidéos</string>
     <string id="30122">Films</string>
+    <string id="30123">Chemin de téléchargement</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Chemin de téléchargement non défini</string>
+    <string id="30131">Voulez vous le définir maintenant ?</string>
 
     <!-- Notify -->
     <string id="30150">Erreur réseau</string>
+    <string id="30151">Téléchargement impossible atm</string>
 </strings>

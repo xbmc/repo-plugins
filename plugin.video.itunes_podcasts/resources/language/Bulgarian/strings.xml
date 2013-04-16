@@ -5,4 +5,7 @@
 
 <strings>
     <string id="30004">Търси</string>
+
+    <!-- Messages -->
+    <string id="30200">Мрежова грешка</string>
 </strings>

@@ -2,7 +2,7 @@ import unittest
 from rss_scraper import NewTalksRss
 from datetime import datetime
 import sys
-try:    
+try:
     from elementtree.ElementTree import fromstring
 except ImportError:
     from xml.etree.ElementTree import fromstring
@@ -20,7 +20,7 @@ minimal_item = """
 </item>"""
 
 class TestNewTalksRss(unittest.TestCase):
-    
+
     def setUp(self):
         self.talks = NewTalksRss(lambda x: sys.stdout.write(x))
 
@@ -33,26 +33,25 @@ class TestNewTalksRss(unittest.TestCase):
             'thumb':'invalid://nowhere/nothing.jpg',
             'title':'fus ro dah',
             'plot':'Unrelenting Force',
-            'duration':'00:30',
-            'id':'830'
+            'duration':'00:30'
         }
         self.assertEqual(expected_details, details)
-        
+
     def test_get_talk_details_broken_date(self):
         """
         It just seems likely this will break sooner or later, check that we handle gracefully.
         """
         document = fromstring(minimal_item)
-        document.find('./pubDate').text = "Sat, 04 02 2012 08:14:00" # Same date, different formatting
+        document.find('./pubDate').text = "Sat, 04 02 2012 08:14:00"  # Same date, different formatting
         details = self.talks.get_talk_details(document)
         date_now = datetime.strftime(datetime.now(), "%d.%m.%Y")
         self.assertEqual(date_now, details['date'])
 
     def test_smoke(self):
         talks = list(self.talks.get_new_talks())
-        self.assertTrue(len(talks) > 10) # If there are less then this than worry?
-        talk = talks[0] # Sanity check on most recent talk
-        self.assertTrue(len(talk) == 8)
+        self.assertTrue(len(talks) > 10)  # If there are less then this than worry?
+        talk = talks[0]  # Sanity check on most recent talk
+        self.assertEqual(7, len(talk))
         self.assertIsNotNone(talk['author'])
         self.assertIsNotNone(talk['date'])
         self.assertIsNotNone(talk['link'])
@@ -60,5 +59,4 @@ class TestNewTalksRss(unittest.TestCase):
         self.assertIsNotNone(talk['title'])
         self.assertIsNotNone(talk['plot'])
         self.assertIsNotNone(talk['duration'])
-        self.assertIsNotNone(talk['id'])
 

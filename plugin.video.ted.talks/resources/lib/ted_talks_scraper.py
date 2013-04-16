@@ -3,8 +3,9 @@ from model.util import resizeImage
 from BeautifulSoup import SoupStrainer, MinimalSoup as BeautifulSoup
 from model.url_constants import URLTED
 import model.subtitles_scraper as subtitles_scraper
+import model.talk_scraper as talk_scraper
 
-#MAIN URLS
+# MAIN URLS
 URLSPEAKERS = 'http://www.ted.com/speakers/atoz/page/'
 URLSEARCH = 'http://www.ted.com/search?q=%s/page/'
 
@@ -45,40 +46,13 @@ class TedTalks:
         self.getHTML = getHTML
         self.logger = logger
 
-    def getVideoDetails(self, url, subs_language=None):
-        """self.videoDetails={Title, Director, Genre, Plot, id, url}"""
-        #TODO: get 'related tags' and list them under genre
-        html = self.getHTML(url)
-        url = ""
-        soup = BeautifulSoup(html)
-        #get title
-        title = soup.find('span', attrs={'id':'altHeadline'}).string
-        #get speaker from title
-        speaker = title.split(':', 1)[0]
-        #get description:
-        plot = soup.find('p', attrs={'id':'tagline'}).string
-        #get url
-        #detectors for link to video in order of preference
-        linkDetectors = [
-            lambda l: re.compile('High-res video \(MP4\)').match(str(l.string)),
-            lambda l: re.compile('http://download.ted.com/talks/.+.mp4').match(str(l['href'])),
-        ]
-        for link in soup.findAll('a', href=True):
-            for detector in linkDetectors:
-                if detector(link):
-                    url = link['href']
-                    linkDetectors = linkDetectors[:linkDetectors.index(detector)] # Only look for better matches than what we have
-                    break
-
-        if url == "":
-            # look for utub link
-            utublinks = re.compile('http://(?:www.)?youtube.com/v/([^\&]*)\&').findall(html)
-            for link in utublinks:
-                url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % (link)
+    def getVideoDetails(self, url, video_quality, subs_language=None):
+        talk_html = self.getHTML(url)
+        video_url, title, speaker, plot = talk_scraper.get(talk_html, video_quality)
 
         subs = None
         if subs_language:
-            subs = subtitles_scraper.get_subtitles_for_talk(soup, subs_language, self.logger)
+            subs = subtitles_scraper.get_subtitles_for_talk(talk_html, subs_language, self.logger)
 
-        return title, url, subs, {'Director':speaker, 'Genre':'TED', 'Plot':plot, 'PlotOutline':plot}
+        return title, video_url, subs, {'Director':speaker, 'Genre':'TED', 'Plot':plot, 'PlotOutline':plot}
 

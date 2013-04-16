@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings> <!--Finnish  24/12/2009-->
     <string id="30000">TED Talks</string>
     
@@ -26,9 +26,6 @@
     <string id="30075">Kirjautuminen</string>
     <string id="30070">Käyttäjänimi</string>
     <string id="30071">Salasana</string>
-    <string id="30076">Lataus</string>
-    <string id="30073">Polku</string>
-    <string id="30074">Kysy aina latauspolkua</string>
     
     <!--Context Menu-->
     <!--<string id="13347">Queue item</string>from system-->

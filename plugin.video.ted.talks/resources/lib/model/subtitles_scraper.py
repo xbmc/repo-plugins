@@ -7,9 +7,11 @@ http://estebanordano.com.ar/wp-content/uploads/2010/01/TEDTalkSubtitles.py_.zip
 import simplejson
 import urllib
 import re
+# Custom xbmc thing for fast parsing. Can't rely on lxml being available as of 2012-03.
+import CommonFunctions as xbmc_common
 
 __friendly_message__ = 'Error showing subtitles'
-__talkIdKey__ = 'ti'
+__talkIdKey__ = 'id'
 __introDurationKey__ = 'introDuration'
 
 def format_time(time):
@@ -27,58 +29,44 @@ def format_subtitles(subtitles, introDuration):
         result += '%d\n%s --> %s\n%s\n\n' % (idx + 1, format_time(start), format_time(end), sub['content'])
     return result
 
-def get_languages(soup):
+def get_languages(talk_html):
     '''
     Get languages for a talk, or empty array if we fail.
     '''
-    select_tag = soup.find('select', id='languageCode')
+    select_tag = xbmc_common.parseDOM(talk_html, 'select', attrs={'id':'languageCode'})
     if not select_tag:
         return []
-    options = select_tag.findAll('option')
-    return [v for v in [o['value'].encode('ascii') for o in options] if v]
+    options = xbmc_common.parseDOM(select_tag, 'option', ret='value')
+    return [o for o in options if o]
 
-def get_flashvars(soup):
+def get_flashvars(talk_html):
     '''
     Get flashVars for a talk.
     Blow up if we can't find it or if we fail to parse.
     returns dict of values, no guarantees are made about which values are present.
     '''
-    input_tag = soup.find('script', type='text/javascript', text=re.compile('var flashVars'))
-    if not input_tag:
-        raise Exception('Could not find flashVars container')
-
-    flashvar_re = re.compile('var flashVars = \{([^}]+)\}', re.MULTILINE)
-    flashvar_match = flashvar_re.search(input_tag.string)
-
-    if not flashvar_match:
-        raise Exception('Could not get flashVars')
-
-    talkId_re = re.compile('"?%s"?:"?(\d+)"?' % (__talkIdKey__))
-    flashvars = urllib.unquote(flashvar_match.group(1).encode('ascii'))
-
-    talkId_match = talkId_re.search(flashvars)
-    if not talkId_match:
-        raise Exception('Could not get talk ID')
-
-    input_tag2 = soup.find('script', type='text/javascript', text=re.compile('var talkDetails'))
-    if not input_tag2:
-        raise Exception('Could not find the talkDetails container')
-
     talkDetails_re = re.compile('var talkDetails = (\{.*\})');
-    talkDetails_match = talkDetails_re.search(input_tag2.string)
+    talkDetails_match = None
+    for script in xbmc_common.parseDOM(talk_html, 'script', attrs={'type':'text/javascript'}):
+        if not talkDetails_match:
+            talkDetails_match = talkDetails_re.search(script)
 
     if not talkDetails_match:
-        raise Exception('Could not get talkDetails')
+        raise Exception('Could not find the talkDetails container')
+
+    talkId_re = re.compile('"%s":(\d+)' % (__talkIdKey__))
+    talkId_match = talkId_re.search(talkDetails_match.group(1))
+    if not talkId_match:
+        print talkDetails_match.group(1)
+        raise Exception('Could not get talk ID')
 
     talkDetails = urllib.unquote(talkDetails_match.group(1).encode('ascii'))
-
     introDuration_re = re.compile('"%s":(\d+)' % (__introDurationKey__))
     introDuration_match = introDuration_re.search(talkDetails)
-
     if not introDuration_match:
         raise Exception('Could not get intro duration')
 
-    return {__talkIdKey__ : talkId_match.group(1), __introDurationKey__ : introDuration_match.group(1)}
+    return talkId_match.group(1), introDuration_match.group(1)
 
 def get_subtitles(talk_id, language):
     url = 'http://www.ted.com/talks/subtitles/id/%s/lang/%s' % (talk_id, language)
@@ -96,25 +84,18 @@ def get_subtitles_for_url(url):
         captions += [{'start': caption['startTime'], 'duration': caption['duration'], 'content': caption['content']}]
     return captions
 
-def get_subtitles_for_talk(talk_soup, accepted_languages, logger):
+def get_subtitles_for_talk(talk_html, accepted_languages, logger):
     '''
     Return subtitles in srt format, or notify the user and return None if there was a problem.
     '''
     try:
-        flashvars = get_flashvars(talk_soup)
+        talk_id, intro_duration = get_flashvars(talk_html)
     except Exception, e:
         logger('Could not display subtitles: %s' % (e), __friendly_message__)
         return None
 
-    if __talkIdKey__ not in flashvars:
-        logger('Could not determine talk ID for subtitles.', __friendly_message__)
-        return None
-    if __introDurationKey__ not in flashvars:
-        logger('Could not determine intro duration for subtitles.', __friendly_message__)
-        return None
-
     try:
-        languages = get_languages(talk_soup)
+        languages = get_languages(talk_html)
     except Exception, e:
         logger('Could not display subtitles: %s' % (e), __friendly_message__)
         return None
@@ -128,5 +109,5 @@ def get_subtitles_for_talk(talk_soup, accepted_languages, logger):
         logger(msg, msg)
         return None
 
-    raw_subtitles = get_subtitles(flashvars[__talkIdKey__], matches[0])
-    return format_subtitles(raw_subtitles, int(flashvars[__introDurationKey__]) * 1000)
+    raw_subtitles = get_subtitles(talk_id, matches[0])
+    return format_subtitles(raw_subtitles, int(intro_duration) * 1000)

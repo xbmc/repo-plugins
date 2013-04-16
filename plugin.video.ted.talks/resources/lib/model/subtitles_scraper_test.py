@@ -40,21 +40,23 @@ World
             subs_file.close()
         self.assertEqual([{'duration': 3000, 'start': 0, 'content': 'What'}, {'duration': 4000, 'start': 3000, 'content': 'Began'}], subs)
 
-    def test_real_talk(self):
-        soup = MinimalSoup(urllib.urlopen('http://www.ted.com/talks/richard_wilkinson.html').read())
-        flashvars = subtitles_scraper.get_flashvars(soup)
+    def test_real_talk_page(self):
+        """Test methods that take the talk page HTML"""
+
+        html = urllib.urlopen('http://www.ted.com/talks/richard_wilkinson.html').read()
+        talk_id, intro_duration = subtitles_scraper.get_flashvars(html)
 
         # TED intro, need to offset subtitles with this.
         # Used to have this at ms granularity - now only s :(
-        self.assertEquals('15', flashvars['introDuration'])
+        self.assertEquals('15', intro_duration)
 
         # Talk ID, need this to request subtitles.
-        self.assertEquals('1253', flashvars['ti'])
+        self.assertEquals('1253', talk_id)
 
         expected = set(['sq', 'ar', 'hy', 'bg', 'ca', 'zh-cn', 'zh-tw', 'hr', 'cs', 'da', 'nl', 'en', 'fr', 'ka', 'de', 'el', 'he', 'hu', 'id', 'it', 'ja', 'ko', 'fa', 'mk', 'pl', 'pt', 'pt-br', 'ro', 'ru', 'sr', 'sk', 'es', 'th', 'tr', 'uk', 'vi'])
-        self.assertEquals(expected, set(subtitles_scraper.get_languages(soup)))
+        self.assertEquals(expected, set(subtitles_scraper.get_languages(html)))
 
-        subs = subtitles_scraper.get_subtitles_for_talk(soup, ['banana', 'fr', 'en'], None)
+        subs = subtitles_scraper.get_subtitles_for_talk(html, ['banana', 'fr', 'en'], None)
         self.assertTrue(subs.startswith('''1
 00:00:15,000 --> 00:00:18,000
 Vous savez tous que ce que je vais dire est vrai.

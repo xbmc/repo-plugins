@@ -13,6 +13,8 @@ def init():
     addon = xbmcaddon.Addon(id='plugin.video.ted.talks')
     global __plugin__, getLS, __author__, __version__, __pluginLS__
     __plugin__ = addon.getAddonInfo('name')
+    import CommonFunctions
+    CommonFunctions.plugin = __plugin__
     getLS = addon.getLocalizedString
     __pluginLS__ = getLS(30000)
     __author__ = addon.getAddonInfo('author')

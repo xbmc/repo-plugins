@@ -7,6 +7,7 @@ username = 'Ted'
 password = 'Ted'
 download_mode = True
 download_path = '/tmp/'
+video_quality = 3
 enable_subtitles = True
 xbmc_language = 'English'
 subtitle_language = 'en'
@@ -14,11 +15,12 @@ subtitle_language = 'en'
 def init():
     import xbmc, xbmcaddon
     addon = xbmcaddon.Addon(id='plugin.video.ted.talks')
-    global username, password, download_mode, download_path, enable_subtitles, xbmc_language, subtitle_language
+    global username, password, download_mode, download_path, video_quality, enable_subtitles, xbmc_language, subtitle_language
     username = addon.getSetting('username')
     password = addon.getSetting('password')
     download_mode = addon.getSetting('downloadMode')
     download_path = addon.getSetting('downloadPath')
+    video_quality = addon.getSetting('video_quality')
     enable_subtitles = addon.getSetting('enable_subtitles')
     xbmc_language = xbmc.getLanguage()
     subtitle_language = addon.getSetting('subtitle_language')

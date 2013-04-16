@@ -41,9 +41,9 @@ class UI:
             sortMethod = xbmcplugin.SORT_METHOD_LABEL
         elif sortMethod == 'date':
             sortMethod = xbmcplugin.SORT_METHOD_DATE
-        #Sort methods are required in library mode.
+        # Sort methods are required in library mode.
         xbmcplugin.addSortMethod(int(sys.argv[1]), sortMethod)
-        #let xbmc know the script is done adding items to the list.
+        # let xbmc know the script is done adding items to the list.
         xbmcplugin.endOfDirectory(handle=int(sys.argv[1]), updateListing=False)
 
     def addItem(self, title, mode, url=None, img="", video_info={}, talkID=None, isFolder=True, total_items=0):
@@ -61,7 +61,7 @@ class UI:
         if len(video_info) > 0:
             li.setInfo('video', video_info)
         if not isFolder:
-            li.setProperty("IsPlayable", "true") #let xbmc know this can be played, unlike a folder.
+            li.setProperty("IsPlayable", "true")  # let xbmc know this can be played, unlike a folder.
             context_menu = menu_util.create_context_menu(getLS=plugin.getLS)
             li.addContextMenuItems(context_menu, replaceItems=True)
         else:
@@ -70,7 +70,7 @@ class UI:
 
     def playVideo(self, url, icon):
         subs_language = settings.get_subtitle_languages()
-        title, url, subs, info_labels = self.ted_talks.getVideoDetails(url, subs_language)
+        title, url, subs, info_labels = self.ted_talks.getVideoDetails(url=url, video_quality=settings.video_quality, subs_language=subs_language)
         li = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon, path=url)
         li.setInfo(type='Video', infoLabels=info_labels)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, li)
@@ -103,7 +103,7 @@ class UI:
         self.addItem(plugin.getLS(30001), 'newTalksRss', video_info={'Plot':plugin.getLS(30031)})
         self.addItem(plugin.getLS(30002), 'speakers', video_info={'Plot':plugin.getLS(30032)})
         self.addItem(plugin.getLS(30003), 'themes', video_info={'Plot':plugin.getLS(30033)})
-        #self.addItemplugin.({'Title':getLS(30004), 'mode':'search', 'Plot':getLS(30034)})
+        # self.addItemplugin.({'Title':getLS(30004), 'mode':'search', 'Plot':getLS(30034)})
         if settings.username:
             self.addItem(plugin.getLS(30005), 'favorites', video_info={'Plot':plugin.getLS(30035)})
         self.endofdirectory()
@@ -111,7 +111,7 @@ class UI:
     def newTalksRss(self):
         newTalks = NewTalksRss(plugin.report)
         for talk in newTalks.get_new_talks():
-            self.addItem(talk['title'], 'playVideo', talk['link'], talk['thumb'], talk, talk['id'], isFolder=False)
+            self.addItem(title=talk['title'], mode='playVideo', url=talk['link'], img=talk['thumb'], video_info=talk, isFolder=False)
         self.endofdirectory(sortMethod='date')
 
     def speakerGroups(self):
@@ -131,7 +131,7 @@ class UI:
         speakers = ted_talks_scraper.Speakers(self.get_HTML)
         for title, link, img in speakers.getTalks(url):
             self.addItem(title, 'playVideo', link, img, isFolder=False)
-        #end the list
+        # end the list
         self.endofdirectory()
 
     def themes(self):
@@ -148,7 +148,7 @@ class UI:
         self.endofdirectory()
 
     def favorites(self):
-        #attempt to login
+        # attempt to login
         userID, realname = login(self.user, settings.username, settings.password)
         if userID:
             for title, url, img in Favorites(plugin.report, self.get_HTML).getFavoriteTalks(userID):

@@ -1,7 +1,7 @@
 from url_constants import URLSPEAKERS
 from BeautifulSoup import SoupStrainer, MinimalSoup
 import re
-from resources.lib.model.url_constants import URLTED
+from url_constants import URLTED
 
 
 class Speakers:

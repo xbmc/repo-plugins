@@ -3,8 +3,8 @@ from favorites_scraper import Favorites
 import os
 import sys
 import tempfile
-from resources.lib.model.fetcher import Fetcher
-from resources.lib.model.user import User
+from fetcher import Fetcher
+from user import User
 
 
 class TestFavorites(unittest.TestCase):

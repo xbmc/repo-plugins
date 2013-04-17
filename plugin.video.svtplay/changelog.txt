@@ -1,3 +1,7 @@
+Version 3.3.1
+-------------
+- Fix broken listing due to site changes (khoda)
+
 Version 3.3.0
 -------------
 - Add possibility to set a fixed bandwidth for the plugin (linqcan)

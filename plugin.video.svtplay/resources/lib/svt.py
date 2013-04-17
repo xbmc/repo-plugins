@@ -64,7 +64,7 @@ def getLivePrograms():
   """
   html = getPage(URL_TO_LIVE)
   
-  container = common.parseDOM(html, "div", attrs = { "class": "svtUnit svtNth-1"})[0]
+  container = common.parseDOM(html, "section", attrs = { "class": "svtUnit svtNth-1"})[0]
 
   lis = common.parseDOM(container, "li", attrs = { "class": "[^\"']*svtMediaBlock[^\"']*" })
   articles = []
@@ -76,7 +76,7 @@ def getLivePrograms():
 
     if len(liveIcon) > 0:
 
-      title = common.parseDOM(li, "h5")[0]
+      title = common.parseDOM(li, "h1")[0]
       url = common.parseDOM(li, "a", ret = "href")[0]
       thumbnail = common.parseDOM(li, "img", attrs = { "class": "[^\"']*playBroadcastThumbnail[^\"']*" }, ret = "src")[0]
       thumbnail = helper.prepareThumb(thumbnail)
@@ -262,7 +262,7 @@ def getArticles(url,page,tabname=None):
     plot = plots[index]
     aired = airtimes[index]
     duration = durations[index]
-    title = common.parseDOM(article,"h5")[0]
+    title = common.parseDOM(article,"h1")[0]
     newarticle["url"] = common.parseDOM(article, "a",
                             attrs = { "class": "[^\"']*[playLink|playAltLink][^\"']*" },
                             ret = "href")[0]

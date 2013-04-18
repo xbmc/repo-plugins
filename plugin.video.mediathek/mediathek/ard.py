@@ -23,7 +23,7 @@ class ARDMediathek(Mediathek):
     self.gui = simpleXbmcGui;
     self.rootLink = "http://www.ardmediathek.de"
     self.menuTree = (
-                      TreeNode("0","Neuste Videos",self.rootLink+"/ard/servlet/content/3474442",True),
+                      TreeNode("0","Neuste Videos",self.rootLink+"/fernsehen",True),
                       TreeNode("1","Kategorien","",False,(
                         TreeNode("1.0",u"Nachrichten",self.rootLink+"/kategorien/nachrichten?clipFilter=fernsehen&documentId=506",True),
                         TreeNode("1.1",u"Politik & Zeitgeschehen",self.rootLink+"/ard/servlet/content/3516690?clipFilter=fernsehen&documentId=206",True),
@@ -78,13 +78,13 @@ class ARDMediathek(Mediathek):
     videoDocument_link_Regex = "/.*?documentId=(\\d*)"
     metaInfo_link_Regex = "/ard/servlet/ajax-cache/\\d*/view=ajax(/clipFilter=fernsehen){0,1}(/isFromList=true){0,1}/index.html"
     ajaxDocumentLink = "/ard/servlet/ajax-cache/(\\d*)/view=(switch|ajax|list)(/clipFilter=fernsehen){0,1}(/content=fernsehen){0,1}(/documentId=\\d*){0,1}/index.html"
-    self.findImage_regex = "<img.*?src=\".*?\".*?/>"; #?
+    self.findImage_regex = "<img.*?src=\".*?\".*?/>"; 
     #Regex für das Parsen der hauptseiten
-    self.regex_ajaxLinkTag = re.compile("<a href=\""+ajaxDocumentLink+"\" title=\"\"><span>Neueste Clips</span></a>")
+    self.regex_ajaxLinkTag = re.compile("<a class=\".*?mt-box_preload.*?\" href=\""+ajaxDocumentLink+"\">")
     self.regex_ajaxLink = re.compile(ajaxDocumentLink);
-    self.regex_videoLinks = re.compile("<img.*?src=\"(.*?)\".*?/>\\s*?</div>\\s*?<h3 class=\"mt-title\">\\s*?<a href=\""+videoDocument_link_Regex+"\" class=\".*\" rel=\""+metaInfo_link_Regex+"\">");
+    self.regex_videoLinks = re.compile("<img.*?src=\"(.*?)\".*?/>\\s*?</div>\\s*?<h3 class=\"mt-title\">\\s*?<a href=\""+videoDocument_link_Regex+"\" class=\".*\" rel=\""+metaInfo_link_Regex+"\".*?>");
     self.regex_videoSeriesLinks = re.compile("<a id=\".*\" class=\".*\" rel=\""+metaInfo_link_Regex+"\" href=\""+videoDocument_link_Regex+"\">");
-    self.regex_subLinks = re.compile("<a class=\"mt-box_preload.*?\" href=\""+ajaxDocumentLink+"\">");
+    self.regex_subLinks = re.compile("<a href=\""+ajaxDocumentLink+"\".*?>");
     self.regex_videoDocumentLink = re.compile(videoDocument_link_Regex);
     self.regex_MetaInfo = re.compile(metaInfo_link_Regex);
     self.regex_Date = re.compile("\\d{2}\\.\\d{2}\\.\\d{2}");
@@ -149,25 +149,39 @@ class ARDMediathek(Mediathek):
     
     
   def buildPageMenu(self, link, initCount, subLink = False):
-    self.gui.log("Build Page Menu: "+link);    
+    self.gui.log("Build Page Menu: %s SubLink: %d"%(link,subLink));    
     mainPage = self.loadPage(link);
     
+    elementCount = 0;
     try:
-      self.gui.log("Elements");
       if(subLink):
-        link = self.regex_ajaxLink.search(mainPage).group();
-        self.gui.log(link);
+        self.gui.log("Extract VideoObjects");
+        elementCount = self.extractVideoObjects(mainPage);
       else:
-        htmlTag = self.regex_ajaxLinkTag.search(mainPage).group();
-        link = self.regex_ajaxLink.search(htmlTag).group();
-      
-      ajaxPage = self.loadPage(self.rootLink + link);
-      
-      return self.extractVideoObjects(ajaxPage);
+        self.gui.log("Search AjaxLinks");
+        for htmlTag in self.regex_ajaxLinkTag.finditer(mainPage):
+          try:
+            htmlTag = self.regex_ajaxLinkTag.search(htmlTag.group()).group();
+            link = self.regex_ajaxLink.search(htmlTag).group();
+            ajaxPage = self.loadPage(self.rootLink + link);
+            elementCount = self.extractVideoObjects(ajaxPage);
+            if(elementCount == 0):
+              self.gui.log("no video objects found - retry search for ajax link");
+              htmlTag = self.regex_ajaxLinkTag.search(ajaxPage);
+              if(htmlTag is not None):
+                htmlTag = htmlTag.group();
+                link = self.regex_ajaxLink.search(htmlTag).group();
+                ajaxPage = self.loadPage(self.rootLink + link);
+                elementCount = self.extractVideoObjects(ajaxPage);
+          except:
+            continue;
     except:
+      elementCount = 0;
+    if(elementCount == 0):
       self.gui.log("Categorien");
       elementCount = self.extractCategorieObjects(mainPage);
       if(elementCount == 0):
+        self.gui.log("No Categories found");
         for link in self.regex_subLinks.finditer(mainPage):
           link = link.group();
           link = self.regex_ajaxLink.search(link).group();
@@ -175,7 +189,7 @@ class ARDMediathek(Mediathek):
           elementCount += self.buildPageMenu(self.rootLink+link, 0,True);
           if(elementCount > 60):
             break;
-      return elementCount;
+    return elementCount;
           
           
       

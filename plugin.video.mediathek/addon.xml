@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.mediathek"
-  version="0.4.7"
+  version="0.4.10"
   name="Mediathek"
   provider-name="Raptor 2101 [raptor2101@gmx.de]">
   <requires>
@@ -25,5 +25,10 @@ Currently implemented:
 </description>
     <language>de</language>
     <platform>all</platform>
-  </extension>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <forum>https://github.com/raptor2101/Mediathek/issues</forum>
+    <website>https://github.com/raptor2101/Mediathek</website>
+    <source>https://github.com/raptor2101/Mediathek</source>
+    <email>raptor2101@gmx.de</email>
+   </extension>
 </addon>

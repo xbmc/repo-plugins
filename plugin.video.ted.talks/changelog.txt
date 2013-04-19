@@ -1,3 +1,6 @@
+[B]Version 4.1.9[/B]
+Fix playing talks where the title text has no colon (issue#38)
+
 [B]Version 4.1.8[/B]
 Allow video quality to be set (issue#37)
 Playback of Vimeo-hosted talks (issue#24)

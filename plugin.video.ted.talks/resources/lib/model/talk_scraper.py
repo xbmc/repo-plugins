@@ -13,8 +13,9 @@ def get(html, video_quality='320kbps'):
     """
 
     headline = xbmc_common.parseDOM(html, 'span', attrs={'id':'altHeadline'})[0].split(':', 1)
-    speaker = headline[0].strip()
-    title = headline[1].strip()
+    # Cope with no ':' in title.
+    speaker = "Unknown" if len(headline) == 1 else headline[0].strip()
+    title = headline[0].strip() if len(headline) == 1 else headline[1].strip()
     plot = xbmc_common.parseDOM(html, 'p', attrs={'id':'tagline'})[0]
 
     url = None

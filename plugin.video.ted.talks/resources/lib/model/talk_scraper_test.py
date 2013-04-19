@@ -11,13 +11,16 @@ def get_HTML(url):
 class TestTalkScraper(unittest.TestCase):
 
     def test_get_ted_video(self):
-        self.assert_talk_details("http://www.ted.com/talks/ariel_garten_know_thyself_with_a_brain_scanner.html", "http://download.ted.com/talks/ArielGarten_2011X.mp4?apikey=TEDDOWNLOAD", u"Know thyself, with a brain scanner", u"Ariel Garten")
+        self.assert_talk_details("http://www.ted.com/talks/ariel_garten_know_thyself_with_a_brain_scanner.html", "http://download.ted.com/talks/ArielGarten_2011X.mp4?apikey=TEDDOWNLOAD", "Know thyself, with a brain scanner", "Ariel Garten")
+
+        # No ':' in title. Can't determine speaker.
+        self.assert_talk_details("http://www.ted.com/talks/tom_shannon_s_magnetic_sculpture.html", "http://download.ted.com/talks/TomShannon_2003.mp4?apikey=TEDDOWNLOAD", "Tom Shannon's anti-gravity sculpture", "");
 
     def test_get_youtube_video(self):
-        self.assert_talk_details("http://www.ted.com/talks/bjarke_ingels_hedonistic_sustainability.html", "plugin://plugin.video.youtube/?action=play_video&videoid=ogXT_CI7KRU", u"Hedonistic sustainability", u"Bjarke Ingels")
+        self.assert_talk_details("http://www.ted.com/talks/bjarke_ingels_hedonistic_sustainability.html", "plugin://plugin.video.youtube/?action=play_video&videoid=ogXT_CI7KRU", "Hedonistic sustainability", "Bjarke Ingels")
 
     def test_get_vimeo_video(self):
-        self.assert_talk_details("http://www.ted.com/talks/seth_godin_this_is_broken_1.html", "plugin://plugin.video.vimeo?action=play_video&videoid=4246943", u"This is broken", u"Seth Godin")
+        self.assert_talk_details("http://www.ted.com/talks/seth_godin_this_is_broken_1.html", "plugin://plugin.video.vimeo?action=play_video&videoid=4246943", "This is broken", "Seth Godin")
 
     def assert_talk_details(self, talk_url, expected_video_url, expected_title, expected_speaker):
         video_url, title, speaker, plot = talk_scraper.get(get_HTML(talk_url))

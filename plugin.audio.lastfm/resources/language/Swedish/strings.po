@@ -76,6 +76,10 @@ msgctxt "#32025"
 msgid "Un-ban"
 msgstr "Ta bort bannlysning"
 
+msgctxt "#32026"
+msgid "Connect to Last.fm failed"
+msgstr "Anslutning till Last.fm misslyckades"
+
 msgctxt "#32078"
 msgid "Search"
 msgstr "Sök"

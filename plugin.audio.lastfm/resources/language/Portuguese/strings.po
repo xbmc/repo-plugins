@@ -24,6 +24,10 @@ msgctxt "#30001"
 msgid "Submit songs to Last.fm"
 msgstr "Enviar músicas para Last.fm"
 
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "Submeter rádio online para Last.fm"
+
 msgctxt "#30003"
 msgid "Last.fm username"
 msgstr "Nome de utilizador Last.fm"
@@ -75,6 +79,74 @@ msgstr "Remover das faixas favoritas"
 msgctxt "#32025"
 msgid "Un-ban"
 msgstr "Remover da lista de faixas banidas"
+
+msgctxt "#32026"
+msgid "Connect to Last.fm failed"
+msgstr "A ligação a Last.fm falhou"
+
+msgctxt "#32027"
+msgid "No username or password provided"
+msgstr "Não foram indicados nome de utilizador ou palavra-passe"
+
+msgctxt "#32028"
+msgid "Could not retrieve list from Last.fm"
+msgstr "Não foi possível obter lista de Last.fm"
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "Amigos do utilizador %s"
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "Vizinhos do utilizador %s"
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "Top de álbuns para o utilizador %s"
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "Top de artistas para o utilizador %s"
+
+msgctxt "#32055"
+msgid "Top tags for user %s"
+msgstr "Top de etiquetas para o utilizador %s"
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "Top de faixas para o utilizador %s"
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "Faixas banidas recentemente por %s"
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "Faixas escutadas recentemente por %s"
+
+msgctxt "#32063"
+msgid "Listen to %s's mix Last.fm radio"
+msgstr "Ouvir a mistura de %s de rádio Last.fm"
+
+msgctxt "#32067"
+msgid "Biggest fans of %s"
+msgstr "Maiores fãs de %s"
+
+msgctxt "#32068"
+msgid "Similar artists as %s"
+msgstr "Artistas semelhantes a %s"
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "Top de álbuns de %s"
+
+msgctxt "#32070"
+msgid "Top %s tags"
+msgstr "Top de etiquetas para %s"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "Top de faixas de %s"
 
 msgctxt "#32078"
 msgid "Search"

@@ -24,6 +24,10 @@ msgctxt "#30001"
 msgid "Submit songs to Last.fm"
 msgstr "将歌曲提交到 Last.fm"
 
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "将在线电台提交到 Last.fm"
+
 msgctxt "#30003"
 msgid "Last.fm username"
 msgstr "Last.fm 用户名"
@@ -32,53 +36,193 @@ msgctxt "#30004"
 msgid "Last.fm password"
 msgstr "Last.fm 密码"
 
+msgctxt "#30005"
+msgid "Confirm Love/Ban submissions"
+msgstr "确认喜欢/禁忌意见"
+
 msgctxt "#32011"
 msgid "Last.fm"
 msgstr "Last.fm"
 
 msgctxt "#32012"
 msgid "Do you want to add the current track to your loved tracks?"
-msgstr "你想把目前歌曲加入你的最爱吗？"
+msgstr "你想把当前歌曲加入你喜欢的歌曲集吗？"
 
 msgctxt "#32013"
 msgid "Do you want to ban the current track?"
-msgstr "你想封锁目前的歌曲吗？"
+msgstr "你想禁止当前歌曲吗？"
 
 msgctxt "#32014"
 msgid "Added to your loved tracks: '%s'."
-msgstr "加入你的最爱歌曲：'%s'"
+msgstr "加入你喜欢的歌曲集：'%s'"
 
 msgctxt "#32015"
 msgid "Could not add '%s' to your loved tracks."
-msgstr "不能加入 '%s' 到你的最爱"
+msgstr "不能加入 '%s' 到你喜欢的歌曲集"
 
 msgctxt "#32016"
 msgid "Banned: '%s'."
-msgstr "已被封禁：'%s'."
+msgstr "已禁止：'%s'."
 
 msgctxt "#32017"
 msgid "Could not ban '%s'."
-msgstr "不能封禁 '%s'."
+msgstr "无法禁止 '%s'."
 
 msgctxt "#32018"
 msgid "Do you want to remove this track from your loved tracks?"
-msgstr "您想从你的最爱移除这首歌曲吗？"
+msgstr "要从你喜欢的歌曲集移除这首歌曲吗？"
 
 msgctxt "#32019"
 msgid "Do you want to un-ban this track?"
-msgstr "你想解除封锁这首歌曲吗？"
+msgstr "你想解禁这首歌曲吗？"
+
+msgctxt "#32020"
+msgid "Removed from your loved tracks: '%s'."
+msgstr "从你喜欢的歌曲集中删除：'%s'。"
+
+msgctxt "#32021"
+msgid "Could not remove '%s' from your loved tracks."
+msgstr "无法从你喜欢的歌曲集中删除'%s'。"
+
+msgctxt "#32022"
+msgid "Un-banned: '%s'."
+msgstr "已解禁： '%s'。"
+
+msgctxt "#32023"
+msgid "Could not un-ban '%s'."
+msgstr "无法解禁：'%s'。"
 
 msgctxt "#32024"
 msgid "Remove from loved tracks"
-msgstr "从最爱中移除"
+msgstr "从我喜欢的歌曲集中移除"
 
 msgctxt "#32025"
 msgid "Un-ban"
-msgstr "解除封锁"
+msgstr "解禁"
+
+msgctxt "#32026"
+msgid "Connect to Last.fm failed"
+msgstr "连接到 Last.fm 失败"
+
+msgctxt "#32027"
+msgid "No username or password provided"
+msgstr "未提供用户名或密码"
+
+msgctxt "#32028"
+msgid "Could not retrieve list from Last.fm"
+msgstr "无法从 Last.fm 获取列表"
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "用户 %s 的好友"
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "用户 %s 的同好"
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "用户 %s 的专辑排行"
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "用户 %s 的艺人排行"
+
+msgctxt "#32055"
+msgid "Top tags for user %s"
+msgstr "用户 %s 的标签排行"
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "用户 %s 的歌曲排行"
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "%s 最近禁止的歌曲"
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "%s 最近收听的歌曲"
+
+msgctxt "#32059"
+msgid "Tracks recently loved by %s"
+msgstr "%s 最近喜欢的歌曲"
+
+msgctxt "#32060"
+msgid "Weekly album chart for %s"
+msgstr "%s 本周专辑榜"
+
+msgctxt "#32061"
+msgid "Weekly artist chart for %s"
+msgstr "%s 本周艺人榜"
+
+msgctxt "#32062"
+msgid "Weekly track chart for %s"
+msgstr "%s 本周歌曲榜"
+
+msgctxt "#32063"
+msgid "Listen to %s's mix Last.fm radio"
+msgstr "收听 %s 的 mix Last.fm 电台"
+
+msgctxt "#32064"
+msgid "Listen to %s's neighbours Last.fm radio"
+msgstr "收听 %s 同好的 Last.fm 电台"
+
+msgctxt "#32065"
+msgid "Listen to %s's personal Last.fm radio"
+msgstr "收听 %s 的个人 Last.fm 电台"
+
+msgctxt "#32066"
+msgid "Listen to %s's recommendations Last.fm radio"
+msgstr "收听 %s 的推荐 Last.fm 电台"
+
+msgctxt "#32067"
+msgid "Biggest fans of %s"
+msgstr "%s 最爱歌迷"
+
+msgctxt "#32068"
+msgid "Similar artists as %s"
+msgstr "%s 同类艺人"
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "Top %s 专辑"
+
+msgctxt "#32070"
+msgid "Top %s tags"
+msgstr "Top %s 标签"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "Top %s 歌曲"
+
+msgctxt "#32072"
+msgid "Listen to %s fans Last.fm radio"
+msgstr "收听 %s 歌迷的 Last.fm 电台"
+
+msgctxt "#32073"
+msgid "Listen to %s similar artists Last.fm radio"
+msgstr "收听 %s 同类艺人的 Last.fm 电台"
+
+msgctxt "#32074"
+msgid "Top albums for tag %s"
+msgstr "标签 %s 专辑排行"
+
+msgctxt "#32075"
+msgid "Top artists for tag %s"
+msgstr "标签 %s 艺人排行"
+
+msgctxt "#32076"
+msgid "Top tracks for tag %s"
+msgstr "标签 %s 歌曲排行"
+
+msgctxt "#32077"
+msgid "Listen to tag %s Last.fm radio"
+msgstr "收听标签 %s Last.fm 电台"
 
 msgctxt "#32078"
 msgid "Search"
-msgstr "查找"
+msgstr "搜索"
 
 msgctxt "#32079"
 msgid "No results found"

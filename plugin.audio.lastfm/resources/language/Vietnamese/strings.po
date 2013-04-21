@@ -20,6 +20,14 @@ msgctxt "#30000"
 msgid "General"
 msgstr "Chung"
 
+msgctxt "#32012"
+msgid "Do you want to add the current track to your loved tracks?"
+msgstr "Bạn có muốn thêm bài hiện tại vào danh sách các bài yêu thích?"
+
+msgctxt "#32013"
+msgid "Do you want to ban the current track?"
+msgstr "Bạn có muốn cấm bài hiện tại?"
+
 msgctxt "#32078"
 msgid "Search"
 msgstr "Tìm kiếm"

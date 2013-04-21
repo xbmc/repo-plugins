@@ -24,6 +24,10 @@ msgctxt "#30001"
 msgid "Submit songs to Last.fm"
 msgstr "Enviar músicas para o Last.fm"
 
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "Submetar rádio online para Last.fm"
+
 msgctxt "#30003"
 msgid "Last.fm username"
 msgstr "Nome de usuário Last.fm"
@@ -31,6 +35,10 @@ msgstr "Nome de usuário Last.fm"
 msgctxt "#30004"
 msgid "Last.fm password"
 msgstr "Senha Last.fm"
+
+msgctxt "#30005"
+msgid "Confirm Love/Ban submissions"
+msgstr "Confirmar submissões Amor/banir"
 
 msgctxt "#32011"
 msgid "Last.fm"
@@ -68,6 +76,22 @@ msgctxt "#32019"
 msgid "Do you want to un-ban this track?"
 msgstr "Você quer desbanir esta faixa?"
 
+msgctxt "#32020"
+msgid "Removed from your loved tracks: '%s'."
+msgstr "Remover de faixas prediletas: %s"
+
+msgctxt "#32021"
+msgid "Could not remove '%s' from your loved tracks."
+msgstr "Não foi possível remover '%s' em suas faixas prediletas"
+
+msgctxt "#32022"
+msgid "Un-banned: '%s'."
+msgstr "Desbanir: %s'"
+
+msgctxt "#32023"
+msgid "Could not un-ban '%s'."
+msgstr "Não foi possível banir '%s'."
+
 msgctxt "#32024"
 msgid "Remove from loved tracks"
 msgstr "Remover de faixas prediletas"
@@ -76,6 +100,126 @@ msgctxt "#32025"
 msgid "Un-ban"
 msgstr "Desbanir"
 
+msgctxt "#32026"
+msgid "Connect to Last.fm failed"
+msgstr "Conexão para Last.fm falhou"
+
+msgctxt "#32027"
+msgid "No username or password provided"
+msgstr "Nenhum nome de usuário ou senha informado"
+
+msgctxt "#32028"
+msgid "Could not retrieve list from Last.fm"
+msgstr "Não pude recuperar lista de Last.fm"
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "Amigos do usuário %s"
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "Vizinhos do usuário %s"
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "Os melhores álbuns para o usuário %s"
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "Os melhores artistas para o usuário %s"
+
+msgctxt "#32055"
+msgid "Top tags for user %s"
+msgstr "Melhores gêneros para usuário %s"
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "As melhores músicas para o usuário %s"
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "Faixas banidas recentemente por %s"
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "Faixas ouvidas recentemente por %s"
+
+msgctxt "#32059"
+msgid "Tracks recently loved by %s"
+msgstr "Faixas curtidas recentemente por %s"
+
+msgctxt "#32060"
+msgid "Weekly album chart for %s"
+msgstr "Gráfico semanal do álbum para %s"
+
+msgctxt "#32061"
+msgid "Weekly artist chart for %s"
+msgstr "Gráfico semanal do artista para %s"
+
+msgctxt "#32062"
+msgid "Weekly track chart for %s"
+msgstr "Gráfico semanal da música para %s"
+
+msgctxt "#32063"
+msgid "Listen to %s's mix Last.fm radio"
+msgstr "Ouvir pelas mais pedidas de %s's no Last.fm"
+
+msgctxt "#32064"
+msgid "Listen to %s's neighbours Last.fm radio"
+msgstr "Ouvir vizinhos de %s's no Last.fm"
+
+msgctxt "#32065"
+msgid "Listen to %s's personal Last.fm radio"
+msgstr "Ouvir músicas pessoais de %s's no Last.fm"
+
+msgctxt "#32066"
+msgid "Listen to %s's recommendations Last.fm radio"
+msgstr "Ouça recomendações de %s's no Last.fm"
+
+msgctxt "#32067"
+msgid "Biggest fans of %s"
+msgstr "Os maiores fãs de %s"
+
+msgctxt "#32068"
+msgid "Similar artists as %s"
+msgstr "Artistas similares a %s"
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "Os melhores álbuns %s"
+
+msgctxt "#32070"
+msgid "Top %s tags"
+msgstr "Os melhores gêneros de %s"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "As melhores músicas de %s"
+
+msgctxt "#32072"
+msgid "Listen to %s fans Last.fm radio"
+msgstr "Ouvir radios dos fãs de %s no Last.fm"
+
+msgctxt "#32073"
+msgid "Listen to %s similar artists Last.fm radio"
+msgstr "Ouvir por artistas similares a %s na Last.fm"
+
+msgctxt "#32074"
+msgid "Top albums for tag %s"
+msgstr "Álbuns Top por tag %s"
+
+msgctxt "#32075"
+msgid "Top artists for tag %s"
+msgstr "Artistas top por tag %s"
+
+msgctxt "#32076"
+msgid "Top tracks for tag %s"
+msgstr "Ás melhores músicas do gênero %s"
+
+msgctxt "#32077"
+msgid "Listen to tag %s Last.fm radio"
+msgstr "Ouvir gênero %s no Last.fm rádio"
+
 msgctxt "#32078"
 msgid "Search"
 msgstr "Pesquisar"
@@ -83,3 +227,39 @@ msgstr "Pesquisar"
 msgctxt "#32079"
 msgid "No results found"
 msgstr "Nenhum resultado encontrado"
+
+msgctxt "#32080"
+msgid "Custom Last.fm radio stations"
+msgstr "Customizar as estações de rádio Last fm"
+
+msgctxt "#32081"
+msgid "Listen to artist fans Last.fm radio"
+msgstr "Escute rádio Last fm por fans do artista"
+
+msgctxt "#32082"
+msgid "Listen to similar artists Last.fm radio"
+msgstr "Escute rádio Last fm por artistas similares"
+
+msgctxt "#32083"
+msgid "Listen to tag Last.fm radio"
+msgstr "Escute rádio Last fm por etiquetas"
+
+msgctxt "#32084"
+msgid "Listen to user mix Last.fm radio"
+msgstr "Escute rádio Last fm mix dos usuários"
+
+msgctxt "#32085"
+msgid "Listen to user neighbours Last.fm radio"
+msgstr "Escute rádio Last.fm mais próximas"
+
+msgctxt "#32086"
+msgid "Listen to user library Last.fm radio"
+msgstr "Escute rádio Last.fm recomendadas pelas pessoas próximas"
+
+msgctxt "#32087"
+msgid "Listen to user recommendations Last.fm radio"
+msgstr "Escute rádio Last.fm recomendadas pelos usuários"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "Etiqueta"

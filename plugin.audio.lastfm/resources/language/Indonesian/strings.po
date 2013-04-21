@@ -36,6 +36,46 @@ msgctxt "#32011"
 msgid "Last.fm"
 msgstr "LastFM"
 
+msgctxt "#32012"
+msgid "Do you want to add the current track to your loved tracks?"
+msgstr "Apakah anda ingin menambahkan trek sekarang ke trek yang disukai?"
+
+msgctxt "#32013"
+msgid "Do you want to ban the current track?"
+msgstr "Apakah anda ingin menolak trek sekarang?"
+
+msgctxt "#32014"
+msgid "Added to your loved tracks: '%s'."
+msgstr "Sudah menambahkan ke trek yang disukai : '%s'."
+
+msgctxt "#32015"
+msgid "Could not add '%s' to your loved tracks."
+msgstr "Tidak dapat menambahkan '%s' ke trek yang disukai."
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "Ditolak: '%s'."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "tidak dapat menolak '%s'"
+
+msgctxt "#32018"
+msgid "Do you want to remove this track from your loved tracks?"
+msgstr "Apakah anda ingin menghapus trek ini dari trek yang disukai?"
+
+msgctxt "#32019"
+msgid "Do you want to un-ban this track?"
+msgstr "Apakah anda ingin tidak-menolak trek ini?"
+
+msgctxt "#32024"
+msgid "Remove from loved tracks"
+msgstr "Hapus dari trek yang disukai"
+
+msgctxt "#32025"
+msgid "Un-ban"
+msgstr "Tidak lagi menolak"
+
 msgctxt "#32078"
 msgid "Search"
 msgstr "Cari"

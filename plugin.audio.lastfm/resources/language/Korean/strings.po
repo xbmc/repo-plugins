@@ -22,7 +22,11 @@ msgstr "일반"
 
 msgctxt "#30001"
 msgid "Submit songs to Last.fm"
-msgstr "노래를 Last.fm 에 전송"
+msgstr "노래를 Last.fm에 전송"
+
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "온라인 라디오를 Last.fm에 전송"
 
 msgctxt "#30003"
 msgid "Last.fm username"

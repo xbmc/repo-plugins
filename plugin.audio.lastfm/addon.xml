@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.lastfm" name="Last.fm" version="0.1.2" provider-name="Team-XBMC">
+<addon id="plugin.audio.lastfm" name="Last.fm" version="0.1.3" provider-name="Team-XBMC">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>
@@ -8,8 +8,27 @@
 	</extension>
 	<extension point="xbmc.service" library="scrobbler.py" start="login"/>
 	<extension point="xbmc.addon.metadata">
+		<summary lang="de">Last.fm Radio und Scrobbler</summary>
+		<summary lang="el">Ραδιόφωνο και υπηρεσία κοινοποίησης (scrobbler) του Last.fm</summary>
 		<summary lang="en">Last.fm radio and scrobbler</summary>
+		<summary lang="es">Radio y envío de canciones de last.fm</summary>
+		<summary lang="gl">Radio Last.fm e scrobbler</summary>
+		<summary lang="it">Scrobbler e radio di Last.fm</summary>
+		<summary lang="ko">Last.fm 라디오와 스크로블러</summary>
+		<summary lang="pl">Scrobbler radia Last.fm</summary>
+		<summary lang="pt_BR">Last.fm radio e scrobbler</summary>
+		<summary lang="zh">Last.fm 电台和 scrobbler</summary>
+		<description lang="de">Höre Last.fm Radio und/oder scrobble deine Tracks an last.fm</description>
+		<description lang="el">Ακούστε ραδιόφωνο από το last.fm ή/και κοινοποιήστε (scrobble) τα κομμάτια σας στο last.fm</description>
 		<description lang="en">Listen to last.fm radio and/or scrobble your tracks to last.fm</description>
+		<description lang="es">Escuche la radio last.fm y/o envíe sus canciones a last.fm</description>
+		<description lang="gl">Escoite a radio last.fm ou envíe as súas pistas a esta.</description>
+		<description lang="it">Ascolta la radio di last.fm e/o fai lo scrobbling dei tuoi brani</description>
+		<description lang="ko">Last.fm 라디오 듣기, 노래를 last.fm에 스크로블</description>
+		<description lang="pl">Słuchaj radia last.fm i/lub scrobbluj swoje ścieżki do last.fm</description>
+		<description lang="pt_BR">Ouça rádio Last.fm e/ou submeta suas músicas para last.fm</description>
+		<description lang="zh">收听 last.fm 电台和/或提交你的音乐到 last.fm</description>
+		<language></language>
 		<platform>all</platform>
 		<forum>http://forum.xbmc.org/showthread.php?tid=154230</forum>
 		<source>https://code.google.com/p/ronie/source/</source>

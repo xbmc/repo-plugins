@@ -346,10 +346,10 @@ class Main:
         self._add_listitem(LANGUAGE(32081)       , '', '["lastfm://artist/%s/fans", "artist", "artist.search"]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
         self._add_listitem(LANGUAGE(32082)       , '', '["lastfm://artist/%s/similarartists", "artist", "artist.search"]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
         self._add_listitem(LANGUAGE(32083)       , '', '["lastfm://globaltags/%s", "tag", "tag.search"]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
-        self._add_listitem(LANGUAGE(32084)       , '', '["lastfm://user/%s/library", "user", ""]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
-        self._add_listitem(LANGUAGE(32085)       , '', '["lastfm://user/%s/mix", "user", ""]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
-        self._add_listitem(LANGUAGE(32086)       , '', '["lastfm://user/%s/neighbours", "user", ""]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
-        self._add_listitem(LANGUAGE(32087)       , '', '["lastfm://user/%s/recommended", "user", ""]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
+        self._add_listitem(LANGUAGE(32091)       , '', '["lastfm://user/%s/library", "user", ""]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
+        self._add_listitem(LANGUAGE(32092)       , '', '["lastfm://user/%s/mix", "user", ""]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
+        self._add_listitem(LANGUAGE(32093)       , '', '["lastfm://user/%s/neighbours", "user", ""]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
+        self._add_listitem(LANGUAGE(32094)       , '', '["lastfm://user/%s/recommended", "user", ""]', 'DefaultPlaylist.png', False, 'customsearch', 'none')
 
     def _parse_list( self, data, url ):
         #parse the last.fm list

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30001">Meistgesehen</string>
-  <string id="30002">Videosuche</string>
-  <string id="30003">Livestream konnte nicht wiedergegeben werden</string>
+  <string id="30001">Alle Videos</string>
+  <string id="30002">Dokumentationen</string>
+  <string id="30003">Nachrichten</string>
+  <string id="30004">Sendungen</string>
+  <string id="30006">Nächste Seite</string>
+  <string id="30007">Zu Wiedergabeliste hinzufügen</string>
+  <string id="30008">Suchen</string>
+  <string id="30009">Dieses Video ist aktuell nicht verfügbar!</string>
 </strings>

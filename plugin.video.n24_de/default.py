@@ -1,130 +1,143 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import urllib,urllib2,re,xbmcplugin,xbmcgui,sys,xbmcaddon
+import urllib
+import urllib2
+import socket
+import re
+import sys
+import xbmcplugin
+import xbmcaddon
+import xbmcgui
 
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-settings = xbmcaddon.Addon(id='plugin.video.n24_de')
-translation = settings.getLocalizedString
+addonId = 'plugin.video.n24_de'
+addon = xbmcaddon.Addon(id=addonId)
+translation = addon.getLocalizedString
+baseUrl = "http://www.n24.de"
+
 
 def index():
-        addDir(translation(30001),"most_clicked",1,"")
-        addDir("Dokumentationen","doku",1,"")
-        addDir("Reportagen","reportage",1,"")
-        addDir("Magazine","magazin",1,"")
-        addDir("Computer/Technik","computer",1,"")
-        addDir("Wirtschaft/Börse","wirtschaft",1,"")
-        addDir("History","history",1,"")
-        addDir("Panorama","panorama",1,"")
-        addDir("Politik","politik",1,"")
-        addDir("Spezial","spezial",1,"")
-        addDir("Service","service",1,"")
-        addDir("Auto","auto",1,"")
-        addDir("Talks","talk",1,"")
-        addDir("N24 "+str(translation(30002)),"search",8,"")
-        addLink("N24 Live Stream","live",9,"")
-        xbmcplugin.endOfDirectory(pluginhandle)
+    addDir(translation(30001), baseUrl+"/n24/Mediathek/videos/q?query=&hitsPerPage=50&pageNum=1&recent=0&docType=CMVideo&category=&from=&to=&taxonomy=&type=&sort=new", 'listVideos', "")
+    addDir(translation(30002), baseUrl+"/n24/Mediathek/videos/q?query=&hitsPerPage=50&pageNum=1&recent=0&docType=CMVideo&category=&from=&to=&taxonomy=&type=888&sort=new", 'listVideos', "")
+    addDir(translation(30003), baseUrl+"/n24/Mediathek/videos/q?query=&hitsPerPage=50&pageNum=1&recent=0&docType=CMVideo&category=&from=&to=&taxonomy=&type=6&sort=new", 'listVideos', "")
+    addDir(translation(30004), baseUrl+"/n24/Mediathek/videos/q?query=&hitsPerPage=50&pageNum=1&recent=0&docType=CMVideo&category=&from=&to=&taxonomy=&type=32986&sort=new", 'listVideos', "")
+    addDir(translation(30008), "", 'search', "")
+    addLink(translation(30005), "http://www.n24.de/n24/Mediathek/Live/", 'playVideo', "")
+    xbmcplugin.endOfDirectory(pluginhandle)
 
-def catToUrl(cat):
-        listVideos("http://www.n24.de/mediathek/api/box_renderer/GenerateExtendedBox?dataset_name="+cat+"&page=1&limit=40")
 
-def listVideos(url1):
-        content = getUrl(url1)
-        match=re.compile('<a class="img_wrapper" href="(.+?)">\n                                    <img src="(.+?)" width="192" height="108" alt="(.+?)" />\n                                    <span class="play">abspielen</span>\n                                    <strong class="ellipsis">(.+?)</strong>\n                                </a>', re.DOTALL).findall(content)
-        for url,thumb,temp,title in match:
-                addLink(temp,"http://www.n24.de"+url,2,"http://www.n24.de/mediathek/"+thumb)
-        match=re.compile('<span class="page_number">(.+?) von (.+?)</span>', re.DOTALL).findall(content)
-        currentPage=int(match[0][0])
-        maxPage=int(match[0][1])
-        if currentPage<maxPage:
-          urlNew=url1[:url1.find("&page=")]+"&page="+str(currentPage+1)+"&limit=40"
-          addDir("Next Page",urlNew,7,'')
-        xbmcplugin.endOfDirectory(pluginhandle)
+def listVideos(url):
+    urlMain = url
+    content = getUrl(url)
+    spl = content.split('<div class="content">')
+    for i in range(1, len(spl), 1):
+        entry = spl[i]
+        match = re.compile('src=&#034;(.+?)&#034;', re.DOTALL).findall(entry)
+        thumb = match[0]
+        match = re.compile('<h4>.+?<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
+        url = baseUrl+match[0][0]
+        title = match[0][1]
+        title = cleanTitle(title)
+        addLink(title, url, 'playVideo', thumb)
+    match = re.compile('&pageNum=(.+?)&', re.DOTALL).findall(urlMain)
+    currentPage = match[0]
+    nextPage = str(int(currentPage)+1)
+    urlNew = urlMain.replace("&pageNum="+currentPage+"&", "&pageNum="+nextPage+"&")
+    addDir(translation(30006), urlNew, "listVideos", '')
+    xbmcplugin.endOfDirectory(pluginhandle)
 
-def search():
-        keyboard = xbmc.Keyboard('', 'Video Suche')
-        keyboard.doModal()
-        if keyboard.isConfirmed() and keyboard.getText():
-          search_string = keyboard.getText()
-          listVideos("http://www.n24.de/mediathek/api/box_renderer/GenerateSearchResultsBox?search_string="+search_string+"&page=1&limit=40")
-
-def liveStream():
-        try:
-          playLiveStream()
-        except:
-          xbmc.executebuiltin('XBMC.Notification(Info,'+str(translation(30003))+',5000)')
-
-def playLiveStream():
-        listitem = xbmcgui.ListItem(path="rtmp://pssimn24livefs.fplive.net/pssimn24live-live/n24live2011_01 swfUrl=http://www.n24.de/media/flash/homeplayer_swf.swf live=true timeout=60")
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def playVideo(url):
-        content = getUrl(url)
-        match=re.compile('filename&quot;:&quot;(.+?)&quot;', re.DOTALL).findall(content)
-        filename=match[0]
-        listitem = xbmcgui.ListItem(path="rtmp://pssimn24livefs.fplive.net/pssimn24/"+filename)
-        return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+    content = getUrl(url)
+    matchBase = re.compile('videoFlashconnectionUrl = "(.+?)"', re.DOTALL).findall(content)
+    matchPlaypath = re.compile('videoFlashSource = "(.+?)"', re.DOTALL).findall(content)
+    if matchPlaypath:
+      if url == "http://www.n24.de/n24/Mediathek/Live/":
+          filename = matchBase[0] + " playpath="+matchPlaypath[0] + " swfUrl=http://www.n24.de/_swf/HomePlayer.swf live=true timeout=60"
+      else:
+          filename = matchBase[0] + " playpath="+matchPlaypath[0] + " swfUrl=http://www.n24.de/_swf/HomePlayer.swf"
+      listitem = xbmcgui.ListItem(path=filename)
+      xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+    else:
+      xbmc.executebuiltin('XBMC.Notification(Info:,'+translation(30009).encode('utf-8')+',5000)')
+
+
+def queueVideo(url, name):
+    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+    listitem = xbmcgui.ListItem(name)
+    playlist.add(url, listitem)
+
+
+def search():
+    keyboard = xbmc.Keyboard('', translation(30008))
+    keyboard.doModal()
+    if keyboard.isConfirmed() and keyboard.getText():
+        search_string = keyboard.getText().replace(" ", "+")
+        listVideos(baseUrl+"/n24/Mediathek/videos/q?query="+search_string+"&hitsPerPage=50&pageNum=1&recent=0&docType=CMVideo&category=&from=&to=&taxonomy=&type=&sort=new")
+
+
+def cleanTitle(title):
+    title = title.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&#038;", "&").replace("&#39;", "'")
+    title = title.replace("&#039;", "'").replace("&#8211;", "-").replace("&#8220;", "-").replace("&#8221;", "-").replace("&#8217;", "'")
+    title = title.replace("&quot;", "\"").replace("&uuml;", "ü").replace("&auml;", "ä").replace("&ouml;", "ö")
+    title = title.replace("Trailer", "").strip()
+    return title
+
 
 def getUrl(url):
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0')
-        req.add_header('Referer', 'http://www.n24.de/')
-        response = urllib2.urlopen(req,timeout=30)
-        link=response.read()
-        response.close()
-        return link
+    req = urllib2.Request(url)
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:19.0) Gecko/20100101 Firefox/19.0')
+    response = urllib2.urlopen(req)
+    link = response.read()
+    response.close()
+    return link
+
 
 def parameters_string_to_dict(parameters):
-        ''' Convert parameters encoded in a URL to a dict. '''
-        paramDict = {}
-        if parameters:
-            paramPairs = parameters[1:].split("&")
-            for paramsPair in paramPairs:
-                paramSplits = paramsPair.split('=')
-                if (len(paramSplits)) == 2:
-                    paramDict[paramSplits[0]] = paramSplits[1]
-        return paramDict
-
-def addLink(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        liz.setProperty('IsPlayable', 'true')
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
-        return ok
-
-def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
-         
-params=parameters_string_to_dict(sys.argv[2])
-url=None
-mode=None
-
-try:
-        url=urllib.unquote_plus(params["url"])
-except:
-        pass
-try:
-        mode=int(params["mode"])
-except:
-        pass
+    paramDict = {}
+    if parameters:
+        paramPairs = parameters[1:].split("&")
+        for paramsPair in paramPairs:
+            paramSplits = paramsPair.split('=')
+            if (len(paramSplits)) == 2:
+                paramDict[paramSplits[0]] = paramSplits[1]
+    return paramDict
 
 
-if mode==None or url==None or len(url)<1:
-        index()
-       
-elif mode==1:
-        catToUrl(url)
-elif mode==2:
-        playVideo(url)
-elif mode==7:
-        listVideos(url)
-elif mode==8:
-        search()
-elif mode==9:
-        liveStream()
+def addLink(name, url, mode, iconimage):
+    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+urllib.quote_plus(mode)+"&name="+urllib.quote_plus(name)
+    ok = True
+    liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    liz.setInfo(type="Video", infoLabels={"Title": name})
+    liz.setProperty('IsPlayable', 'true')
+    liz.addContextMenuItems([(translation(30007), 'RunPlugin(plugin://'+addonId+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',)])
+    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
+    return ok
+
+
+def addDir(name, url, mode, iconimage):
+    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+urllib.quote_plus(mode)
+    ok = True
+    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz.setInfo(type="Video", infoLabels={"Title": name})
+    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
+    return ok
+
+params = parameters_string_to_dict(sys.argv[2])
+mode = urllib.unquote_plus(params.get('mode', ''))
+url = urllib.unquote_plus(params.get('url', ''))
+name = urllib.unquote_plus(params.get('name', ''))
+
+if mode == 'listVideos':
+    listVideos(url)
+elif mode == 'playVideo':
+    playVideo(url)
+elif mode == 'playLiveStream':
+    playLiveStream(url)
+elif mode == 'queueVideo':
+    queueVideo(url, name)
+elif mode == 'search':
+    search()
+else:
+    index()

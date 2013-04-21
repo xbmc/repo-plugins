@@ -1,2 +1,7 @@
 [B]Version 1.0.0[/B]
 - Initial release.
+
+[B]Version 1.0.1[/B]
+- Check video uri before trying to play it.
+- If prefered quality does not exist, fallback to highest quality.
+- Added forum link to addon.xml

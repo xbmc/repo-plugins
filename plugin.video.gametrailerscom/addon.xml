@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.gametrailerscom" version="1.0.0" name="GameTrailers.com" provider-name="David Gray (N3MIS15)">
+<addon id="plugin.video.gametrailerscom" version="1.0.1" name="GameTrailers.com" provider-name="David Gray (N3MIS15)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0" />
@@ -17,7 +17,7 @@
         <language>en</language>
         <website></website>
         <source>https://github.com/N3MIS15/plugin.video.gametrailerscom</source>
-        <forum></forum>
+        <forum>http://forum.xbmc.org/showthread.php?tid=162908</forum>
         <email>N3MIS15@gmail.com</email>
     </extension>
 </addon>

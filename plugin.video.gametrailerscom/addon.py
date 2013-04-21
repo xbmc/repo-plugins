@@ -199,16 +199,22 @@ def play_video(path):
     video_xml = urllib2.urlopen(path).read().decode("utf-8", "ignore")
     quality_setting = get_bool_setting("prefered_quality")
     quality_i = -1
+    video_quality_list = list()
+
+    if not common.parseDOM(html=video_xml, name="rendition"):
+        # Assume id in path is an info id
+        info_path = path.replace("http://www.gametrailers.com/feeds/mediagen/?uri=", "http://www.gametrailers.com/feeds/mrss?uri=")
+        info_xml = urllib2.urlopen(info_path).read().decode("utf-8", "ignore")
+        path = common.parseDOM(html=info_xml, name="media:content", ret="url")[0]
+        video_xml = urllib2.urlopen(path).read().decode("utf-8", "ignore")
+
+    for i in range(len(common.parseDOM(html=video_xml, name="rendition"))):
+        height = common.parseDOM(html=video_xml, name="rendition", ret="height")[i]
+        width = common.parseDOM(html=video_xml, name="rendition", ret="width")[i]
+        title = "%sx%s" % (height, width)
+        video_quality_list.append(title)
 
     if quality_setting == 0:
-        video_quality_list = list()
-
-        for i in range(len(common.parseDOM(html=video_xml, name="rendition"))):
-            height = common.parseDOM(html=video_xml, name="rendition", ret="height")[i]
-            width = common.parseDOM(html=video_xml, name="rendition", ret="width")[i]
-            title = "%sx%s" % (height, width)
-            video_quality_list.append(title)
-
         dialog = xbmcgui.Dialog()
         quality_i = dialog.select(get_string(30002), video_quality_list)
 
@@ -216,7 +222,15 @@ def play_video(path):
         quality_i = quality_setting - 1
 
     if quality_i != -1:
-        video = common.parseDOM(html=video_xml, name="src")[quality_i]
+        video_sources = common.parseDOM(html=video_xml, name="src")
+
+        if (len(video_sources) - 1) >= quality_i:
+            # Play prefered quality
+            video = video_sources[quality_i]
+        else:
+            # Play highest quality
+            print "[GameTrailers] Prefered quality not found. Playing highest available."
+            video = video_sources[-1]
         video = plugin.set_resolved_url(video)
 
 

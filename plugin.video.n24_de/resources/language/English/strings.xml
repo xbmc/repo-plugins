@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30001">Most Viewed</string>
-  <string id="30002">Video Search</string>
-  <string id="30003">Livestream could not be played</string>
+  <string id="30001">All Videos</string>
+  <string id="30002">Documentaries</string>
+  <string id="30003">News</string>
+  <string id="30004">Shows</string>
+  <string id="30005">Live</string>
+  <string id="30006">Next Page</string>
+  <string id="30007">Add to queue</string>
+  <string id="30008">Search</string>
+  <string id="30009">Video is not available right now!</string>
 </strings>

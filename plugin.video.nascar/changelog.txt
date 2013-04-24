@@ -1,3 +1,6 @@
+Version 1.0.2
+fix website changes
+
 Version 1.0.1
 major update, the old video feed isn't updated anymore, now scrapping the website
 added quality settings up to 720p

@@ -8,6 +8,7 @@ import xbmcgui
 import xbmcaddon
 from BeautifulSoup import BeautifulSoup
 from pyamf import remoting
+from traceback import print_exc
 
 addon = xbmcaddon.Addon(id='plugin.video.nascar')
 home = xbmc.translatePath(addon.getAddonInfo('path'))
@@ -55,7 +56,15 @@ def get_video_items(url, featured=False):
                 items = soup.find('div', attrs={'class': "articlesList"})('article')
             for i in items:
                 if featured:
-                    title = re.findall('"linkText":"(.+?)"', str(i))[0]
+                    try:
+                        a_dict = eval(i.img['data-tracking-params'].replace('\r\n', ''))
+                        title = a_dict['eVar1']
+                    except:
+                        try:
+                            title = re.findall('"eVar1":"(.+?)\n",', str(i.img))[0].strip()
+                        except:
+                            print_exc
+                            pass
                     item_id = i.img['data-ajax-post-data'].split('=')[1].split('&')[0]
                     thumb = i.img['data-resp-url']
                 else:
@@ -158,7 +167,7 @@ if mode==None:
         'sort': ['recent', 'popular']
         }
     videos_url = (
-        'http://www.nascar.com/en_us/%snews-media.all.0.videos.all.all.%s.%s.html'
+        'http://www.nascar.com/en_us/%snews-media.all.0.videos.all.all.%s.%s.all.html'
         %(sort['series'][int(addon.getSetting('series'))],
         sort['time'][int(addon.getSetting('time'))],
         sort['sort'][int(addon.getSetting('sort'))])

@@ -1,17 +1,22 @@
-2.1.1
+2.2.0 (23.04.2013)
+ - fixed unicode related error (Top 500 was broken)
+ - added bitrate filter
+ - updated translations
+
+2.1.1 (09.03.2013)
  - updated translations
  - migrated to xbmcswift2 v2.4.0
 
-2.1.0
+2.1.0 (30.01.2013)
  - Rename Add-on to "SHOUTcast" to match guidelines
  - Changed to xbmcswift2 v1.3
  - Fix Sorting
  - updated translations
 
-2.0.1
+2.0.1 (02.11.2012)
  - added method and setting for auto choose server (don't ask for playlist entries)
 
-2.0.0
+2.0.0 (unreleased)
  - Initial Release
  - Features:
     Top 500 Stations

@@ -166,7 +166,14 @@ def __add_stations(stations):
     items = []
     show_bitrate = plugin.get_setting('show_bitrate_in_title', bool)
     choose_random = plugin.get_setting('choose_random_server', bool)
+    if plugin.get_setting('bitrate_filter_enabled', bool):
+        bitrates = (96, 128, 160, 192)
+        min_bitrate = plugin.get_setting('bitrate_filter', choices=bitrates)
+    else:
+        min_bitrate = None
     for i, station in enumerate(stations):
+        if min_bitrate and int(station.get('bitrate', 0)) < min_bitrate:
+            continue
         station_id = str(station['id'])
         if not station_id in my_stations_ids:
             context_menu = [(
@@ -174,7 +181,7 @@ def __add_stations(stations):
                 'XBMC.RunPlugin(%s)' % plugin.url_for(
                     endpoint='add_to_my_stations',
                     station_id=station_id,
-                    station_name=station['name']
+                    station_name=station['name'].encode('utf-8')
                 )
             )]
         else:

@@ -3,5 +3,7 @@
 	<setting id="choose_random_server" type="bool" label="30103" default="true"/>
 	<setting id="show_subgenres" type="bool" label="30100" default="false"/>
 	<setting id="show_bitrate_in_title" type="bool" label="30102" default="false"/>
+	<setting id="bitrate_filter_enabled" type="bool" label="30104" default="false"/>
+	<setting id="bitrate_filter" type="enum" label="30110" default="1" lvalues="30111|30112|30113|30114" enable="eq(-1,true)"/>
 	<setting id="limit" type="number" label="30101" default="500"/>
 </settings>

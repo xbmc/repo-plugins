@@ -1,3 +1,6 @@
+Version 2.0.1
+fix website changes
+
 Version 2.0.0
 major version bump for frodo
 major update, the old video feed isn't updated anymore, now scrapping the website

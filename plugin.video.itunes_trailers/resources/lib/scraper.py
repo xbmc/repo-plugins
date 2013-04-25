@@ -34,6 +34,7 @@ class NetworkError(Exception):
 class MovieScraper(object):
 
     MOVIES_URL = BASE_URL + '/home/feeds/%s.json'
+    COVER_BASE_URL = 'http://trailers.apple.com'
 
     def get_all_movies(self, limit, filter_dict=None):
         return self._get_movies('studios', limit, filter_dict)
@@ -50,9 +51,13 @@ class MovieScraper(object):
     def _get_movies(self, source, limit, filter_dict):
 
         def __poster(url):
+            if not url.startswith('http'):
+                url = self.COVER_BASE_URL + url
             return url.replace('poster', 'poster-xlarge')
 
         def __background(url):
+            if not url.startswith('http'):
+                url = self.COVER_BASE_URL + url
             return url.replace('poster', 'background')
 
         def __date(date_str):
@@ -128,7 +133,7 @@ class TrailerScraper(object):
             trailer = {
                 'title': li.find('h3').string,
                 'date': '%s.%s.20%s' % (d, m, y),
-                'duration': duration_str.split()[1],
+                'duration': duration_str.split('Runtime:')[-1].strip(),
                 'thumb': li.find('img')['src'],
                 'background': self.BACKGROUND_URL % location,
                 'urls': trailer_urls

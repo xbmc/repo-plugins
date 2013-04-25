@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.itunes_trailers" name="Apple iTunes Trailers" version="0.1.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.itunes_trailers" name="Apple iTunes Trailers" version="0.1.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -39,5 +39,7 @@
         <description lang="pt">O navegador de Trailers do Apple iTunes coloca no seu XBMC as mais recentes e exclusivas apresentações de filmes em HD. Funcionalidades:[CR]- Ver Trailers em 480p/720p/1080p[CR]- Transferir Trailers[CR]- Adicionar Filmes ao CouchPotato</description>
         <description lang="pt_BR">Apple iTunes Movie Trailers entrega os previews mais novos e exclusivos em HD para o XBMC. Recursos:[CR]-Assista trailers em 480p/720p/1080p[CR]-Download Trailers[CR]-Adicione filmes ao CouchPotato</description>
         <description lang="sv">Apple iTunes Movie Trailers ger dig dom senaste och exklusivaste filmförhandsgranskningarna i HD till ditt XBMC. Funktioner:[CR]- Se trailers i 480p/720p/1080p[CR]- Ladda ner trailers[CR]- Lägg till filmer i CouchPotato</description>
+        <disclaimer lang="de">KEIN iTunes benötigt!</disclaimer>
+        <disclaimer lang="en">NO iTunes required!</disclaimer>
     </extension>
 </addon>

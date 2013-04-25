@@ -51,7 +51,7 @@ def show_movies():
         'limit',
         choices=(0, 50, 100)
     )
-    items = get_movies(source, limit)
+    items = get_movies2(source, limit)
     finish_kwargs = {
         'sort_methods': ['date', 'title', 'playlist_order']
     }
@@ -117,7 +117,7 @@ def download_trailer(download_url, play_url):
 
 
 @plugin.cached()
-def get_movies(source, limit):
+def get_movies2(source, limit):
     scraper = MovieScraper()
     if source == 'all':
         movies = scraper.get_all_movies(limit)

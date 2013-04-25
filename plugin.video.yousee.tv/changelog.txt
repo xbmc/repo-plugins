@@ -1,3 +1,6 @@
+[B]Version 3.0.1 - 2013-04-16[/B]
+- Switched to use iPhone streams to get better quality
+
 [B]Version 3.0.0 - 2013-01-29[/B]
 - Initial version for Frodo
 

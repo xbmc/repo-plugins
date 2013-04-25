@@ -19,11 +19,9 @@
 #
 # https://docs.google.com/document/d/1_rs5BXklnLqGS6g6eAjevVHsPafv4PXDCi_dAM2b7G0/edit?pli=1
 #
-import cookielib
 import urllib
 import urllib2
 import simplejson
-import os
 import re
 
 import xbmc
@@ -50,20 +48,6 @@ class YouSeeApiException(Exception):
 
 
 class YouSeeApi(object):
-    COOKIE_JAR = cookielib.LWPCookieJar()
-    COOKIES_LWP = 'cookies.lwp'
-
-    def __init__(self, dataPath):
-        xbmc.log('YouSeeApi.__init__(dataPath = %s)' % dataPath, xbmc.LOGDEBUG)
-        self.cookieFile = os.path.join(dataPath, self.COOKIES_LWP)
-        if os.path.isfile(self.cookieFile):
-            try:
-                self.COOKIE_JAR.load(self.cookieFile, ignore_discard=True, ignore_expires=True)
-            except cookielib.LoadError:
-                pass  # ignore
-
-        urllib2.install_opener(urllib2.build_opener(urllib2.HTTPCookieProcessor(self.COOKIE_JAR)))
-
     def _invoke(self, area, function, params=None, method=METHOD_GET):
         url = API_URL + '/' + area + '/' + function
         if method == METHOD_GET and params:
@@ -81,8 +65,6 @@ class YouSeeApi(object):
             u = urllib2.urlopen(r)
             json = u.read()
             u.close()
-
-            self.COOKIE_JAR.save(self.cookieFile, ignore_discard=True, ignore_expires=True)
         except urllib2.HTTPError, error:
             json = error.read()
         except Exception, ex:
@@ -117,7 +99,9 @@ class YouSeeLiveTVApi(YouSeeApi):
         """
         Returns list of channels the requesting IP is allowed to stream.
         """
-        return self._invoke(AREA_LIVETV, 'allowed_channels')
+        return self._invoke(AREA_LIVETV, 'allowed_channels', {
+            'apiversion': 2
+        })
 
     def suggestedChannels(self):
         """
@@ -344,7 +328,7 @@ class YouSeePlayApi(YouSeeApi):
 
 
 if __name__ == '__main__':
-    api = YouSeeLiveTVApi('/tmp')
+    api = YouSeeLiveTVApi()
     json = api.allowedChannels()
 
     #    api = YouSeeTVGuideApi()

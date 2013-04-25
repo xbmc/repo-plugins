@@ -59,7 +59,7 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def showLiveTVChannels(self):
-        api = ysapi.YouSeeLiveTVApi(CACHE_PATH)
+        api = ysapi.YouSeeLiveTVApi()
         channels = api.allowedChannels()
         if not channels:
             self._showError()
@@ -84,9 +84,9 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE, succeeded=len(channels) > 0)
 
     def playLiveTVChannel(self, channelId):
-        api = ysapi.YouSeeLiveTVApi(CACHE_PATH)
+        api = ysapi.YouSeeLiveTVApi()
         channel = api.channel(channelId)
-        stream = api.streamUrl(channelId)
+        stream = api.streamUrl(channelId, 'iphone')
         if not stream or not 'url' in stream or not stream['url']:
             xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
 
@@ -96,14 +96,35 @@ class YouSeeTv(object):
                 self._showError()
             return
 
+        url = self.getBestStream(stream['url'])
+
         thumbnailImage = os.path.join(CACHE_PATH, str(channelId) + '.png')
         if not os.path.exists(thumbnailImage):
             thumbnailImage = channel['logos']['large']
-        item = xbmcgui.ListItem(channel['nicename'], path=stream['url'], thumbnailImage=thumbnailImage)
+        item = xbmcgui.ListItem(channel['nicename'], path=url, thumbnailImage=thumbnailImage)
         xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
+    def getBestStream(self, url):
+        u = urllib2.urlopen(url)
+        m3u8 = u.read()
+        u.close()
+
+        lines = m3u8.splitlines()
+        bestBitrate = 0
+        path = ''
+        for idx in range(0, len(lines)):
+            pos = lines[idx].rfind('BANDWIDTH')
+            if pos >= 0:
+                bitrate = int(lines[idx][pos + 10:])
+                if bitrate > bestBitrate:
+                    bestBitrate = bitrate
+                    path = lines[idx+1]
+
+        host = url[0:url.find('/', 8)]
+        return host + path
+
     def showMovieGenres(self):
-        api = ysapi.YouSeeMovieApi(CACHE_PATH)
+        api = ysapi.YouSeeMovieApi()
         genres = api.genres()
         if not genres:
             self._showError()
@@ -119,7 +140,7 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def showMoviesInGenre(self, genre):
-        api = ysapi.YouSeeMovieApi(CACHE_PATH)
+        api = ysapi.YouSeeMovieApi()
         moviesInGenre = api.moviesInGenre(genre)
         if not moviesInGenre:
             self._showError()
@@ -133,7 +154,7 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def showMovieThemes(self):
-        api = ysapi.YouSeeMovieApi(CACHE_PATH)
+        api = ysapi.YouSeeMovieApi()
         themes = api.themes()
         if not themes:
             self._showError()
@@ -149,7 +170,7 @@ class YouSeeTv(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def showMoviesInTheme(self, theme):
-        api = ysapi.YouSeeMovieApi(CACHE_PATH)
+        api = ysapi.YouSeeMovieApi()
         moviesInTheme = api.moviesInTheme(theme)
         if not moviesInTheme:
             self._showError()
@@ -166,7 +187,7 @@ class YouSeeTv(object):
         kbd = xbmc.Keyboard('', 'Search movies')
         kbd.doModal()
         if kbd.isConfirmed():
-            api = ysapi.YouSeeMovieApi(CACHE_PATH)
+            api = ysapi.YouSeeMovieApi()
             movies = api.search(kbd.getText())
             if not movies:
                 self._showError()
@@ -222,6 +243,7 @@ class YouSeeTv(object):
             import PIL.Image
 
             sys.modules['Image'] = PIL.Image  # http://projects.scipy.org/scipy/ticket/1374
+            iconImage = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'channel_bg.png')
 
             for channel in channels:
                 path = os.path.join(CACHE_PATH, str(channel['id']) + '.png')
@@ -234,7 +256,6 @@ class YouSeeTv(object):
                 image = PIL.Image.open(StringIO.StringIO(data))
                 (width, height) = image.size
 
-                iconImage = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'channel_bg.png')
                 out = PIL.Image.open(iconImage)
 
                 x = (256 - width) / 2
@@ -247,7 +268,7 @@ class YouSeeTv(object):
                 out.save(path)
 
     def isYouSeeIP(self):
-        api = ysapi.YouSeeUsersApi(CACHE_PATH)
+        api = ysapi.YouSeeUsersApi()
         try:
             isYouSeeIP = api.isYouSeeIP()['status'] == 1
         except Exception:
@@ -262,7 +283,6 @@ class YouSeeTv(object):
             yeslabel = ADDON.getLocalizedString(99975)
             if xbmcgui.Dialog().yesno(heading, line1, line2, line3, nolabel, yeslabel):
                 ADDON.setSetting('warn.if.not.yousee.ip', 'false')
-
 
     def _showWarning(self):
         title = ADDON.getLocalizedString(39000)
@@ -293,6 +313,7 @@ if __name__ == '__main__':
         os.makedirs(CACHE_PATH)
 
     ytv = YouSeeTv()
+    buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     try:
         if 'area' in PARAMS and PARAMS['area'][0] == 'livetv':
             ytv.showLiveTVChannels()

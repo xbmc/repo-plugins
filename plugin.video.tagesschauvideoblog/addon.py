@@ -28,7 +28,7 @@ tagesschauURL = 'http://www.tagesschau.de/'
 h264regexp  = re.compile('http:\/\/[^"]+webl\.h264\.mp4')
 videoregexp = re.compile(re.escape(tagesschauURL)+'videoblog\/[^"]+')
 
-blogsregexp      = re.compile('leftNavL2(.*)sendungenLeft', re.MULTILINE|re.DOTALL)
+blogsregexp      = re.compile('leftNavL3(.*)sendungenLeft', re.MULTILINE|re.DOTALL)
 blogurlregexp    = re.compile('a href="(\/videoblog\/[^"]+)"')
 blogtitleregexp  = re.compile('i2">([^<]+)<')
 entriesregexp    = re.compile('<h2><a[^>]href="\/([^"]+)[^>]+title="([^"]+)')
@@ -113,49 +113,58 @@ def index():
 
 @plugin.route('/newest/')
 def show_newest():
-	feed = feedparser.parse('http://meta.tagesschau.de/tag/videoblog/feed')
-	items = []
-	for entry in feed.entries:
-		item = {
-			'label': parseTitle(entry.title),
-			'path': getH264Video(getVideoPageUrl(entry.description)),
-			'is_playable': True
-		}
-		if item['path'] == None:
-			continue
-		items.append(item)
-		
-	return items
+	try:
+		feed = feedparser.parse('http://meta.tagesschau.de/tag/videoblog/feed')
+		items = []
+		for entry in feed.entries:
+			item = {
+				'label': parseTitle(entry.title),
+				'path': getH264Video(getVideoPageUrl(entry.description)),
+				'is_playable': True
+			}
+			if item['path'] == None:
+				continue
+			items.append(item)
+			
+		return items
+	except:
+		return []
 
 @plugin.route('/blogs/')
 def show_all():
-	items = []
-	blogs = getBlogs()
-	for blog in blogs:
-		item = {
-			'label': blog['title'],
-			'path': plugin.url_for('show_blog', blog=urllib.quote(blog['url']))
-		}
-		items.append(item)
-		
-	return items
+	try:
+		items = []
+		blogs = getBlogs()
+		for blog in blogs:
+			item = {
+				'label': blog['title'],
+				'path': plugin.url_for('show_blog', blog=urllib.quote(blog['url']))
+			}
+			items.append(item)
+			
+		return items
+	except:
+		return []
 
 @plugin.route('/blogs/<blog>')
 def show_blog(blog):
-	items = []
-	url = urllib.unquote(blog)
-	entries = getEntries(url)
-	for entry in entries:
-		item = {
-			'label': entry['title'],
-			'path': getH264Video(entry['url']),
-			'icon': entry['teaser'],
-			'is_playable': True
-		}
-		if item['path'] == None:
-			continue
-		items.append(item)
-	return items
+	try:
+		items = []
+		url = urllib.unquote(blog)
+		entries = getEntries(url)
+		for entry in entries:
+			item = {
+				'label': entry['title'],
+				'path': getH264Video(entry['url']),
+				'icon': entry['teaser'],
+				'is_playable': True
+			}
+			if item['path'] == None:
+				continue
+			items.append(item)
+		return items
+	except:
+		return []
 
 if __name__ == '__main__':
 	plugin.run()

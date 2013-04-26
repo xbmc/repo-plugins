@@ -6,7 +6,7 @@ xbmc-plugin-tagesschauvideoblogs
 License
 =======
 
-The code is under GPLv3. See [LICENSE](https://github.com/fisch42/xbmc-plugin-tageschauvideoblogs/blob/master/LICENSE.txt) for more details.
+The code is under GPLv3. See [LICENSE](https://github.com/fisch42/xbmc-plugin-tagesschauvideoblogs/blob/master/LICENSE.txt) for more details.
 
 We used the following extra software:
   * [feedparser Addon](https://github.com/dersphere/script.module.feedparser), packaged by [Tristan Fischer](https://github.com/dersphere) and written by [Mark Pilgrim and Kurt McKee under MIT License](https://github.com/dersphere/script.module.feedparser/blob/master/LICENSE.txt)

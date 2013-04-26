@@ -1,2 +1,6 @@
 version 0.1.0:
  * initial version
+
+
+version 0.1.1:
+ * fixed errors after changes on tagesschau.de

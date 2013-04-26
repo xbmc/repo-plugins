@@ -8,3 +8,7 @@ Version 1.1.5
 
 Version 1.1.6
 -cleaned up some bits of code
+
+version 1.2.0
+-Removed the extra "Play Video" button before loading video.
+-All live streams now play in HD

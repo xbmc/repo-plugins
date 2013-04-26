@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.pixel.tv" version="3.0.0" name="Pixel.tv" provider-name="twinther">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+		<import addon="script.module.buggalo" version="1.1.2"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">TV for gamers</summary>
+		<summary lang="da">TV der spiller</summary>
+		<description lang="en">Pixel.tv is Denmarks first independent tv station on the internet and is run by experience person with a passion for gaming.[CR][CR]If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+		<description lang="da">Pixel.tv er Danmarks første uafhængige tv-station på nettet, og den bliver drevet af erfarne tv-folk og folk med en passion for gaming.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+		<license>GPL 2.0</license>
+		<platform>all</platform>
+        <language>da</language>
+        <website>http://tommy.winther.nu</website>
+        <source>https://github.com/xbmc-danish-addons/plugin.video.pixel.tv</source>
+        <email>tommy@winther.nu</email>
+	</extension>
+</addon>

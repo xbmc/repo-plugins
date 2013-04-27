@@ -65,7 +65,8 @@ def ADDLINKS(url):
         mylist=zip((source),(name),(thumbnail),(description))
         addDir('Main Menu','',None,main_menu_thumb)
         if previouspage:
-                addDir('Page '+previouspagelabel,'http://www.itbn.org'+previouspage[0],1,previous_thumb)
+		previousurl = sys.argv[0]+"?url="+urllib.quote_plus('http://www.itbn.org'+previouspage[0])+"&mode="+str(11)+"&name="+urllib.quote_plus('Page '+previouspagelabel)                
+		addLink('Page '+previouspagelabel,previousurl,previous_thumb)
         for url,name,thumbnail,description in mylist:
                 description=description.replace("&quot;","\"")
                 description=description.replace("&#039;","\'")
@@ -81,8 +82,12 @@ def ADDLINKS(url):
         if nextpage:
                 addDir('Page '+nextpagelabel,'http://www.itbn.org'+nextpage[0],1,next_thumb)
         video_view = settings.getSetting("list_view") == "1"
-        if 1==1:
-            xbmc.executebuiltin("Container.SetViewMode(500)")
+	if settings.getSetting("thumbnailview") == 'true':        
+		if 1==1:
+                	xbmc.executebuiltin('Container.SetViewMode(500)')
+	if settings.getSetting("thumbnailview") == 'false':
+		if 1==1:
+			xbmc.executebuiltin('Container.SetViewMode(50)')
         
 def GETSOURCE(url,name):
         req = urllib2.Request(url)
@@ -190,13 +195,19 @@ def LIVE(url):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-	match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_600@101613 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_600@101620 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_600@101615 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_600@101622 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_600@101618 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_600@101623 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129064.live.edgefcs.net/live/ playpath=healing_mbr_600@101624 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn/ playpath=juce_super.sdp  live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn_repeater/ playpath=tbnafrica.stream live=true'
+	if settings.getSetting("quality") == '0':
+		match=re.compile('\"andsuperstreamurl\":\"(.+?)\"').findall(link)
+	if settings.getSetting("quality") == '1':
+		match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_300@101613 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_300@101620 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_300@101615 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_300@101622 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_300@101618 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_300@101623 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129064.live.edgefcs.net/live/ playpath=healing_mbr_300@101624 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn/ playpath=juce_super.sdp  live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn_repeater/ playpath=tbnafrica.stream live=true'
+
+	if settings.getSetting("quality") == '2':
+		match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_600@101613 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_600@101620 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_600@101615 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_600@101622 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_600@101618 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_600@101623 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129064.live.edgefcs.net/live/ playpath=healing_mbr_600@101624 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn/ playpath=juce_super.sdp  live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn_repeater/ playpath=tbnafrica.stream live=true'
         title=re.compile('\"name\":\"(.+?)\"').findall(link)
         thumbnail=re.compile('\"icon\":\"(.+?)\"').findall(link)
         mylist=zip((match),(title),(thumbnail))
         for url,name,thumbnail in mylist:
-                addLink(name,url,thumbnail)
-        if 1==1:
+                addLink(name,url,thumbnail)       
+	if 1==1:
                 xbmc.executebuiltin('Container.SetViewMode(500)')
 
 def SEARCH(url):
@@ -261,8 +272,12 @@ def SEARCH(url):
                         addDir(name+' - '+description,url,2,thumbnail)
                 if nextpage:
                         addDir('Page '+nextpagelabel,'http://www.itbn.org'+nextpage[0],1,next_thumb)
-                if 1==1:
-                        xbmc.executebuiltin('Container.SetViewMode(500)')
+		if settings.getSetting("thumbnailview") == 'true':        
+			if 1==1:
+                		xbmc.executebuiltin('Container.SetViewMode(500)')
+		if settings.getSetting("thumbnailview") == 'false':
+			if 1==1:
+				xbmc.executebuiltin('Container.SetViewMode(50)')
         else:
                 MAIN()
 
@@ -312,7 +327,6 @@ def AIRDATE(url):
                         previouspagelabel=''.join(str(e) for e in previouspagelabel)
                 source=zip((prefix),(match),(suffix))
                 mylist=zip((source),(name),(thumbnail),(description))
-                xbmc.executebuiltin('Container.SetViewMode(500)')
                 addDir('Main Menu','',None,main_menu_thumb)
                 if previouspage:
                         addDir('Page '+previouspagelabel,'http://www.itbn.org'+previouspage[0],1,next_thumb)
@@ -330,8 +344,12 @@ def AIRDATE(url):
                         addDir(name+' - '+description,url,2,thumbnail)
                 if nextpage:
                         addDir('Page '+nextpagelabel,'http://www.itbn.org'+nextpage[0],1,next_thumb)
-                if 1==1:
-                        xbmc.executebuiltin('Container.SetViewMode(500)')
+		if settings.getSetting("thumbnailview") == 'true':        
+			if 1==1:
+                		xbmc.executebuiltin('Container.SetViewMode(500)')
+		if settings.getSetting("thumbnailview") == 'false':
+			if 1==1:
+				xbmc.executebuiltin('Container.SetViewMode(50)')
         else:
                 MAIN()
 
@@ -361,8 +379,12 @@ def MOVIES(url):
                 description=description.replace("\\","")
                 description=description.replace("u2019","\'")
                 addDir(reduce(lambda rst, d: rst * 1 + d, (name))+' - '+description,reduce(lambda rst, d: rst * 1 + d, (url)),2,thumbnail)
-        if 1==1:
-                xbmc.executebuiltin('Container.SetViewMode(500)')
+	if settings.getSetting("thumbnailview") == 'true':        
+		if 1==1:
+                	xbmc.executebuiltin('Container.SetViewMode(500)')
+	if settings.getSetting("thumbnailview") == 'false':
+		if 1==1:
+			xbmc.executebuiltin('Container.SetViewMode(50)')
                
 def get_params():
         param=[]
@@ -381,6 +403,10 @@ def get_params():
                                 param[splitparams[0]]=splitparams[1]
                                 
         return param
+
+def PREVIOUS():
+	xbmc.executebuiltin('Action(Back)')
+	
 
 def addLink(name,url,iconimage):
         ok=True
@@ -463,5 +489,8 @@ elif mode==9:
 elif mode==10:
         print ""+url
         MOVIES(url)
+elif mode==11:
+        print ""+url
+        PREVIOUS()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

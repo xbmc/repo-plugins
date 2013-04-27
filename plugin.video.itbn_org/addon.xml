@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
  id="plugin.video.itbn_org"
-    version="1.2.0"
+    version="1.2.1"
     name="iTBN"
     provider-name="Romans I XVI"
     >
@@ -16,6 +16,10 @@
         <summary>XBMC iTBN Viewer</summary>
         <description>iTBN gives access to thousands of hours worth of videos that have aired on TBN, The Church Channel, JC-TV, Smile of a Child, and more.[CR][CR]This addon gives the ability to view videos from iTBN.org and also provides live streams of TBN's 12 television networks.</description>
         <platform>all</platform>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+	<forum>http://forum.xbmc.org/showthread.php?tid=162703</forum>
+	<source>https://github.com/asojka09/plugin.video.itbn_org.git</source>
+	<email>austinsojka@hotmail.com</email>
     </extension>
 </addon>
 

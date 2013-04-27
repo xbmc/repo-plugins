@@ -12,3 +12,8 @@ Version 1.1.6
 version 1.2.0
 -Removed the extra "Play Video" button before loading video.
 -All live streams now play in HD
+
+version 1.2.1
+-Fixed the previous page button (It now calls the Action(Back) function instead of adding another directory.)
+-Added optional tags.
+-Added settings for quality of live streams and a option to disable thumbnail view.

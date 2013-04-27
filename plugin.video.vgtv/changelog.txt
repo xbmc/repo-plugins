@@ -1,3 +1,6 @@
+[B]2.0.6[/B]
+- Fixed a bug where videos could not be played if category ID was defined
+
 [B]2.0.5[/B]
 - Fixed a bug where categories would not be reported correctly
 

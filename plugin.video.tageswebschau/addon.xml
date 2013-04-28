@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tageswebschau" name="TagesWEBschau" version="1.0.2" provider-name="AddonScriptorDE">
+<addon id="plugin.video.tageswebschau" name="TagesWEBschau" version="1.0.3" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
     </requires>
@@ -13,6 +13,9 @@
         <language>de</language>
         <description lang="de">Die neuesten Web-Nachrichten</description>
         <description lang="en">Latest Web-News</description>
-    <platform>all</platform>
+        <website></website>
+        <source>https://github.com/AddonScriptorDE/plugin.video.tageswebschau</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
+        <email>AddonScriptorDE at yahoo dot de</email>
     </extension>
 </addon>

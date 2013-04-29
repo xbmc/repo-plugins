@@ -1,3 +1,13 @@
+0.9.0 (29.04.2013)
+ - code rewrite (class based scrapers)
+ - "My Favorites"- Feature
+ 	You can now add items or folders to the "My Favorites" folder
+ - new visible plugin structure to match the new website structure
+ - fixed Playback (FLV, HLS, RTMP, RTMPE)
+ - fixed some categories
+ - new infolabels (uploader-username, plot)
+ - better thumbnails on some videos
+
 0.2.2 (11.04.2013)
  - added possibility to play HLS videos
  - fixed thumbnails in fullscreen OSD

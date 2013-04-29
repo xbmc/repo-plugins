@@ -7,6 +7,13 @@
     <!-- General entries -->
     <string id="30000">Page</string>
     <string id="30001">Search</string>
+    <string id="30002">[B]My Favorites[/B]</string>
+    <string id="30003">No Scaper Found</string>
+    <string id="30004">[B]Add to My Favorites[/B]</string>
+    <string id="30005">[B]Del from My Favorites[/B]</string>
+    <string id="30006">No Favorites</string>
+    <string id="30007">You need to use the context menu</string>
+    <string id="30008">to add items or folders.</string>
 
     <!-- Context Menu entries -->
     <string id="30020">Download Video</string>

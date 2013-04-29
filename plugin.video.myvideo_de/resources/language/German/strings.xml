@@ -7,6 +7,13 @@
     <!-- General entries -->
     <string id="30000">Seite</string>
     <string id="30001">Suche</string>
+    <string id="30002">[B]Meine Favoriten[/B]</string>
+    <string id="30003">No Scaper Found</string>
+    <string id="30004">[B]Zu Meinen Favoriten[/B]</string>
+    <string id="30005">[B]Aus Meinen Favoriten entfernen[/B]</string>
+    <string id="30006">Keine Favoriten hinzugefügt</string>
+    <string id="30007">Bitte benutze das Kontext-Menu um</string>
+    <string id="30008">Videos oder Ordner hinzuzufügen.</string>
 
     <!-- Context Menu entries -->
     <string id="30020">Video herunterladen</string>

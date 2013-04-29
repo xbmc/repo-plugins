@@ -1,3 +1,7 @@
+0.1.1 (29.04.2013)
+ - added feature to play movies from trakt.tv lists if they are present in 
+   the xbmc database. Present movies are bold.
+
 0.1.0 (07.03.2013)
  - added full watchlist list (add/delete movies)
  - added possibility to set the watchlist or any custom list as default list

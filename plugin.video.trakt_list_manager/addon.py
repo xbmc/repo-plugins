@@ -140,47 +140,22 @@ def show_customlist(list_slug):
             ),
         ]
 
-    items = []
+    raw_movies = (
+        dict(m['movie'].items() + [('plays', m.get('plays', 0))])
+        for m in api.get_list(list_slug).get('items', [])
+        if m['type'] == 'movie'
+    )
+    items = format_movies(raw_movies)
+    for item in items:
+        item['context_menu'] = context_menu(
+            list_slug=list_slug,
+            imdb_id=item.get('imdb_id', ''),
+            tmdb_id=item.get('tmdb_id', '')
+        )
     plugin.set_content('movies')
-    i = 0
-    for i, list_item in enumerate(api.get_list(list_slug).get('items', [])):
-        if not list_item['type'] == 'movie':
-            continue
-        movie = list_item['movie']
-        items.append({
-            'label': movie['title'],
-            'thumbnail': movie['images']['poster'],
-            'info': {
-                'count': i,
-                'code': movie.get('imdb_id', ''),
-                'year': movie.get('year', 0),
-                'plot': movie.get('overview', ''),
-                'mpaa': movie.get('certification', ''),
-                'genre': ', '.join(movie.get('genres', [])),
-                'tagline': movie.get('tagline', ''),
-                'playcount': list_item.get('plays', 0),
-                'rating': movie.get('ratings', {}).get('percentage', 0) / 10.0,
-                'votes': movie.get('ratings', {}).get('votes', 0)
-            },
-            'stream_info': {
-                'video': {'duration': movie.get('runtime', 0) * 60}
-            },
-            'replace_context_menu': True,
-            'context_menu': context_menu(
-                list_slug=list_slug,
-                imdb_id=movie.get('imdb_id', ''),
-                tmdb_id=movie.get('tmdb_id', '')
-            ),
-            'properties': {
-                'fanart_image': movie['images']['fanart'],
-            },
-            'path': plugin.url_for(
-                endpoint='show_help'
-            ),
-        })
     items.append({
         'label': _('add_movie'),
-        'info': {'count': i + 1},
+        'info': {'count': len(items) + 1},
         'path': plugin.url_for(
             endpoint='add_movie_to_customlist',
             list_slug=list_slug,
@@ -216,39 +191,15 @@ def show_watchlist():
             ),
         ]
 
-    i = 0
-    items = [{
-        'label': movie['title'],
-        'thumbnail': movie['images']['poster'],
-        'info': {
-            'count': i,
-            'code': movie.get('imdb_id', ''),
-            'year': movie.get('year', 0),
-            'plot': movie.get('overview', ''),
-            'mpaa': movie.get('certification', ''),
-            'genre': ', '.join(movie.get('genres', [])),
-            'tagline': movie.get('tagline', ''),
-            'rating': movie.get('ratings', {}).get('percentage', 0) / 10.0,
-            'votes': movie.get('ratings', {}).get('votes', 0)
-        },
-        'stream_info': {
-            'video': {'duration': movie.get('runtime', 0) * 60}
-        },
-        'replace_context_menu': True,
-        'context_menu': context_menu(
-            imdb_id=movie.get('imdb_id', ''),
-            tmdb_id=movie.get('tmdb_id', '')
-        ),
-        'properties': {
-            'fanart_image': movie['images']['fanart'],
-        },
-        'path': plugin.url_for(
-            endpoint='show_help'
-        ),
-    } for i, movie in enumerate(api.get_watchlist())]
+    items = format_movies(api.get_watchlist())
+    for item in items:
+        item['context_menu'] = context_menu(
+            imdb_id=item.get('imdb_id', ''),
+            tmdb_id=item.get('tmdb_id', '')
+        )
     items.append({
         'label': _('add_movie'),
-        'info': {'count': i + 1},
+        'info': {'count': len(items) + 1},
         'path': plugin.url_for(
             endpoint='add_movie_to_watchlist',
             refresh=True,
@@ -437,6 +388,73 @@ def set_default_list():
 @plugin.route('/settings')
 def open_settings():
     plugin.open_settings()
+
+
+@plugin.cached()
+def get_xbmc_movies():
+    import json
+    query = {
+        'jsonrpc': '2.0',
+        'id': 0,
+        'method': 'VideoLibrary.GetMovies',
+        'params': {
+            'properties': ['imdbnumber', 'file']
+        }
+    }
+    response = json.loads(xbmc.executeJSONRPC(json.dumps(query)))
+    movie_dict = dict(
+        (movie['imdbnumber'], movie['file'])
+        for movie in response.get('result', {}).get('movies', [])
+    )
+    return movie_dict
+
+
+@plugin.route('/movie/<movie_file>/play')
+def play_movie(movie_file):
+    return plugin.set_resolved_url(movie_file)
+
+
+def format_movies(raw_movies):
+    xbmc_movies = get_xbmc_movies()
+    items = []
+    for i, movie in enumerate(raw_movies):
+        if movie.get('imdb_id', '') in xbmc_movies:
+            label = u'[B]%s[/B]' % movie['title']
+            path = plugin.url_for(
+                endpoint='play_movie',
+                movie_file=xbmc_movies[movie['imdb_id']]
+            )
+        else:
+            label = movie['title']
+            path = plugin.url_for(
+                endpoint='show_help'
+            )
+        items.append({
+            'label': label,
+            'thumbnail': movie['images']['poster'],
+            'info': {
+                'count': i,
+                'code': movie.get('imdb_id', ''),
+                'year': movie.get('year', 0),
+                'plot': movie.get('overview', ''),
+                'mpaa': movie.get('certification', ''),
+                'genre': ', '.join(movie.get('genres', [])),
+                'tagline': movie.get('tagline', ''),
+                'playcount': movie.get('plays', 0),
+                'rating': movie.get('ratings', {}).get('percentage', 0) / 10.0,
+                'votes': movie.get('ratings', {}).get('votes', 0)
+            },
+            'stream_info': {
+                'video': {'duration': movie.get('runtime', 0) * 60}
+            },
+            'replace_context_menu': True,
+            'properties': {
+                'fanart_image': movie['images']['fanart'],
+            },
+            'is_playable': True,
+            'path': path,
+        })
+    return items
 
 
 def get_api():

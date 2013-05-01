@@ -36,6 +36,7 @@ from provider import Provider
 from brightcove import BrightCoveProvider
 
 urlRoot     = u"http://www.aertv.ie"
+apiRoot     = u"http://api.aertv.ie"
 c_brightcove = u"http://c.brightcove.com"
 
 # Default values only used if we can't get the info from the net, e.g. only used if we can't get the info from the net
@@ -69,23 +70,25 @@ class AerTVProvider(BrightCoveProvider):
 
     def GetJSONPath(self):
         epochTimeMS = int(round(time.time() * 1000.0))
-        # POST /?callback=jQuery18208056761118918062_1358250191844 HTTP/1.1
-        callbackToken = "/?callback=jQuery1820%s_%s" % ( random.randint(3000000, 90000000000), epochTimeMS)
+        # POST ?callback=jQuery18208056761118918062_1358250191844 HTTP/1.1
+        callbackToken = "?callback=jQuery1820%s_%s" % ( random.randint(3000000, 90000000000), epochTimeMS)
         return callbackToken 
 
     def ShowRootMenu(self):
         self.log(u"", xbmc.LOGDEBUG)
         
         try:
-            url = urlRoot + self.GetJSONPath()
-            values = {'source':'ddl', 'length':'24', 'type':'basic'}
             ddlJSONText = None
-            ddlJSONText = self.httpManager.GetWebPage(url, 7200, values = values)
-    
-            ddlJSONText = utils.extractJSON (ddlJSONText)
-            ddlJSON = simplejson.loads(ddlJSONText)
-
             epgJSON = None 
+            values = {'api':'ddl', 'type':'basic'}
+            url = self.GetAPIUrl(values)
+
+            ddlJSONText = self.httpManager.GetWebPage(url, 7200)
+            ddlJSONText = utils.extractJSON(ddlJSONText)
+            ddlJSON = simplejson.loads(ddlJSONText)
+            
+            values = {'api':'epg', 'type':'basic'}
+            url = self.GetAPIUrl(values)
             epgJSON = self.GetEpgJSON(url)
 
             return self.ShowChannelList(url, ddlJSON, epgJSON)
@@ -99,13 +102,22 @@ class AerTVProvider(BrightCoveProvider):
                 exception.addLogMessage(msg)
             
             if epgJSON is not None:
-                msg = "epgJSON:\n\n%s\n\n" % repr(epgJSON)
+                msg = "epgJSON:\n\n%s\n\n" % utils.drepr(epgJSON)
                 exception.addLogMessage(msg)
-            
+
             # Cannot show root menu
             exception.addLogMessage(self.language(30010))
             exception.process(severity = self.logLevel(xbmc.LOGERROR))
             return False
+
+    def GetAPIUrl(self, parameters):
+        # {'api':'ddl', 'type':'basic'} => www.apiRoot.com/api/ddl/type/basic
+        url = apiRoot
+        
+        for key in parameters:
+            url = url + '/' + key + '/' + parameters[key]
+            
+        return url + self.GetJSONPath()
 
     def ParseCommand(self, mycgi):
         self.log(u"", xbmc.LOGDEBUG)
@@ -316,13 +328,14 @@ class AerTVProvider(BrightCoveProvider):
     def PlayChannel(self, channel, epgUrl):
         
         try:
-            url = urlRoot + self.GetJSONPath()
-            values = {'source':'player', 'type':'name', 'val':channel}
+            jsonData = None
+            values = {'api':'player', 'type':'name', 'val':channel}
+            url = self.GetAPIUrl(values)
         
             # "Getting channel information"
             self.dialog.update(10, self.language(32730))
-            jsonData = self.httpManager.GetWebPage(url, 20000, values = values)
-    
+
+            jsonData = self.httpManager.GetWebPage(url, 20000)
             jsonText = utils.extractJSON (jsonData)
             playerJSON=simplejson.loads(jsonText)
             self.log("json data:" + unicode(playerJSON))
@@ -426,8 +439,7 @@ class AerTVProvider(BrightCoveProvider):
 
         
     def GetEpgJSON(self, url):
-        values = {'source':'epg', 'length':'24', 'type':'basic', 'check_account' : ''}
-        epgJSONText = self.httpManager.GetWebPage(url, 300, values = values)
+        epgJSONText = self.httpManager.GetWebPage(url, 300)
 
         epgJSONText = utils.extractJSON (epgJSONText)
         epgJSON = simplejson.loads(epgJSONText)

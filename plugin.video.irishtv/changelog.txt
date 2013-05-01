@@ -1,4 +1,7 @@
-Version 1.0.9 (15 Mar 2012)
+Version 1.0.10 (17 Apr 2013)
+- Fix root menu error in AerTV - due to changes in AerTV's API
+
+Version 1.0.9 (15 Mar 2013)
 - Fix Now and Next times in AerTV. There is now a local time offset option in the plugin settings for people in foreign timezones.
 - Fix: TV3 RTMP streams now require verification
 - Fix: After a successful download sometimes a download error message appears

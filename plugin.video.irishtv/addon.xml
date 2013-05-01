@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.irishtv"
        name="Irish TV"
-       version="1.0.9"
+       version="1.0.10"
        provider-name="mossy">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
@@ -17,7 +17,11 @@
 	<language>en</language>
         <platform>all</platform>
         <summary>Irish TV On Demand</summary>
-        <description>Irish TV On Demand. RTE, TV3, AerTV, TG4</description>
-	<disclaimer>May not work outside Ireland</disclaimer>
+        <description>Catchup with RTE, TV3, TG4 or watch live with AerTV.</description>
+        <disclaimer>May not work outside Ireland</disclaimer>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <forum>http://forum.xbmc.org/showthread.php?tid=152897</forum>
+        <website>http://code.google.com/p/mossy-xbmc-repo/</website>
+        <source>http://code.google.com/p/plugin-video-irishtv/source/browse/</source>
     </extension>
 </addon>

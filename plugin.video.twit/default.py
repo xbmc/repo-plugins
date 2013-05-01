@@ -98,7 +98,8 @@ def get_shows(shows):
         cache_shows = eval(cache.cacheFunction(shows_cache, shows))
         if not cache_shows:
             addon_log('shows_cache FAILED')
-        for i in shows.keys():
+        items = sorted(shows.keys(), key=str.lower)
+        for i in items:
             if i == 'Radio Leo': continue
             addDir(i, shows[i]['show_url'], 1, shows[i]['thumb'], shows[i]['description'])
 
@@ -107,7 +108,10 @@ def index(url,iconimage):
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         items = soup.findAll('div', attrs={'id' : "primary"})[0]('div', attrs={'class' : 'field-content'})
         for i in items:
-            url = i.a['href']
+            try:
+                url = i.a['href']
+            except TypeError:
+                continue
             if url.startswith('http://twit.tv/show/'):
                 name = i.a.string.encode('ascii', 'ignore')
                 try:
@@ -334,11 +338,11 @@ def addDir(name,url,mode,iconimage,description=None):
 if debug == 'true':
     cache.dbg = True
 
-if first_run == 'true':
+if first_run != addon_version:
     cache_shows_file()
     addon_log('first_run, caching shows file')
     xbmc.sleep(1000)
-    addon.setSetting('first_run', 'false')
+    addon.setSetting('first_run', addon_version)
 
 params=get_params()
 url=None

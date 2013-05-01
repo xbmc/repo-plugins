@@ -20,7 +20,7 @@ addon_version = addon.getAddonInfo('version')
 home = xbmc.translatePath(addon.getAddonInfo('path'))
 fanart = os.path.join(home, 'fanart.jpg')
 icon = os.path.join(home, 'icon.png')
-live_icon = os.path.join(home, 'resources', 'live.png')
+live_icon = 'http://twit-xbmc.googlecode.com/svn/images/live_icon.png'
 cache = StorageServer.StorageServer("twit", 2)
 debug = addon.getSetting('debug')
 first_run = addon.getSetting('first_run')
@@ -98,7 +98,8 @@ def get_shows(shows):
         cache_shows = eval(cache.cacheFunction(shows_cache, shows))
         if not cache_shows:
             addon_log('shows_cache FAILED')
-        for i in shows.keys():
+        items = sorted(shows.keys(), key=str.lower)
+        for i in items:
             if i == 'Radio Leo': continue
             addDir(i, shows[i]['show_url'], 1, shows[i]['thumb'], shows[i]['description'])
 
@@ -107,7 +108,10 @@ def index(url,iconimage):
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         items = soup.findAll('div', attrs={'id' : "primary"})[0]('div', attrs={'class' : 'field-content'})
         for i in items:
-            url = i.a['href']
+            try:
+                url = i.a['href']
+            except TypeError:
+                continue
             if url.startswith('http://twit.tv/show/'):
                 name = i.a.string.encode('ascii', 'ignore')
                 try:
@@ -316,6 +320,9 @@ def addLink(name,url,description,date,mode,iconimage):
         liz.setInfo(type="Video", infoLabels={"Title": name, "Plot":description, "Aired": date, "episode": episode})
         liz.setProperty("Fanart_Image", fanart)
         liz.setProperty('IsPlayable', 'true')
+        if name == __language__(30001):
+            contextMenu = [('Run IrcChat', "RunPlugin(plugin://plugin.video.twit/?mode=5)")]
+            liz.addContextMenuItems(contextMenu)
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
         return ok
 
@@ -331,14 +338,67 @@ def addDir(name,url,mode,iconimage,description=None):
         return ok
 
 
+def run_ircchat():
+        # check_chat_args
+        nickname = addon.getSetting('nickname')
+        username = addon.getSetting('username')
+        try:
+            ok = nickname
+            if ok is None or ok == '': raise
+            ok = username
+            if ok is None or ok == '': raise
+        except:
+            xbmc.executebuiltin("XBMC.Notification(%s, %s,10000,%s)"
+                %('IrcChat', language(30024), icon))
+            addon.openSettings()
+            nickname = addon.getSetting('nickname')
+            username = addon.getSetting('username')
+            try:
+                ok = nickname
+                if ok is None or ok == '': raise
+                ok = username
+                if ok is None or ok == '': raise
+            except:
+                return
+        # run ircchat script
+        xbmc.executebuiltin(
+            "RunScript(script.ircchat, run_irc=True&nickname=%s&username=%s&password=%s&host=irc.twit.tv&channel=twitlive)"
+            %(nickname, username, addon.getSetting('password'))
+            )
+
+
+def setViewMode():
+        if not addon.getSetting('view_mode') == "0":
+            try:
+                if addon.getSetting('view_mode') == "1": # List
+                    xbmc.executebuiltin('Container.SetViewMode(502)')
+                elif addon.getSetting('view_mode') == "2": # Big List
+                    xbmc.executebuiltin('Container.SetViewMode(51)')
+                elif addon.getSetting('view_mode') == "3": # Thumbnails
+                    xbmc.executebuiltin('Container.SetViewMode(500)')
+                elif addon.getSetting('view_mode') == "4": # Poster Wrap
+                    xbmc.executebuiltin('Container.SetViewMode(501)')
+                elif addon.getSetting('view_mode') == "5": # Fanart
+                    xbmc.executebuiltin('Container.SetViewMode(508)')
+                elif addon.getSetting('view_mode') == "6":  # Media info
+                    xbmc.executebuiltin('Container.SetViewMode(504)')
+                elif addon.getSetting('view_mode') == "7": # Media info 2
+                    xbmc.executebuiltin('Container.SetViewMode(503)')
+                elif addon.getSetting('view_mode') == "8": # Media info 3
+                    xbmc.executebuiltin('Container.SetViewMode(515)')
+            except:
+                addon_log("SetViewMode Failed: "+addon.getSetting('view_mode'))
+                addon_log("Skin: "+xbmc.getSkinDir())
+
+
 if debug == 'true':
     cache.dbg = True
 
-if first_run == 'true':
+if first_run != addon_version:
     cache_shows_file()
     addon_log('first_run, caching shows file')
     xbmc.sleep(1000)
-    addon.setSetting('first_run', 'false')
+    addon.setSetting('first_run', addon_version)
 
 params=get_params()
 url=None
@@ -393,6 +453,7 @@ if mode==None:
 elif mode==1:
     index(url,iconimage)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    setViewMode()
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode==2:
@@ -400,8 +461,14 @@ elif mode==2:
 
 elif mode==3:
     twit_live()
+    xbmc.sleep(1000)
+    if addon.getSetting('run_chat') == 'true':
+        run_ircchat()
 
 elif mode==4:
     get_latest_episodes()
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode==5:
+    run_ircchat()

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.twit"
        name="TWiT"
-       version="2.0.1"
+       version="2.0.2"
        provider-name="divingmule">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -9,6 +9,7 @@
     <import addon="script.common.plugin.cache" version="1.0.0"/>
     <import addon="script.module.simplejson" version="2.0.10"/>
     <import addon="script.module.pyamf" version="0.6.1"/>
+    <import addon="script.ircchat" version="1.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>audio video</provides>

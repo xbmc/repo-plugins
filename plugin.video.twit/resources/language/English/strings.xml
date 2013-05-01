@@ -20,5 +20,19 @@
   <string id="30017">Video (low/mobile) 640x368 Bitrate 256</string>
   <string id="30018">Audio</string>
   <string id="30019">Add-on Debugging</string>
-  <string id="30020"></string>
+  <string id="30020">Run IrcChat when TWiT Live is started</string>
+  <string id="30021">Chat Nickname</string>
+  <string id="30022">Chat User Name</string>
+  <string id="30023">Password</string>
+  <string id="30024">Nickname and User Name are required</string>
+  <string id="30025">Set View Mode For Episodes</string>
+  <string id="30026">Default</string>
+  <string id="30027">List</string>
+  <string id="30028">Big List</string>
+  <string id="30029">Thumbnail</string>
+  <string id="30030">Poster Wrap</string>
+  <string id="30031">Fanart</string>
+  <string id="30032">Media Info</string>
+  <string id="30033">Media Info 2</string>
+  <string id="30034">Media Info 3</string>
 </strings>

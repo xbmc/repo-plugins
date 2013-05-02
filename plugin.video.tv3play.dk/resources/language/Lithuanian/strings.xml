@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Lithuanian language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/lt/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="100">Komercinis</string>
+    <string id="101">Pagrindinis</string>
+    <string id="102">Regionas</string>
+    <string id="103">Vaizdo klipai</string>
+    <string id="150">Pasirinkite regioną</string>
+    <string id="200">Įvyko klaida bandant prisijungti prie TV3 Play.</string>
+    <string id="201">Klaidos pranešimas:</string>
+    <string id="202">Nepavyko rasti URL ryšio</string>
+    <string id="203">Nėra prieinamų sezonų</string>
+    <string id="204">Nepavyko gauti programų sąrašo</string>
+    <string id="301">Paskutinis video</string>
+    <string id="302">Žiūrimiausios laidos</string>
+    <string id="303">Labiausiai patiko(-usios)</string>
+    <string id="304">Naujas vaizdo įrašas</string>
+</strings>

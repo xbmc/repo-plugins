@@ -1,3 +1,10 @@
+[B]Version 1.0.5 - 2013-05-02[/B]
+- Fixed error when initial ad was missing
+
+[B]Version 1.0.4 - 2012-12-28[/B]
+- Fixed problem with video playback
+- Updated language files from Transifex
+
 [B]Version 1.0.3 - 2012-10-21[/B]
 - Added Norwegian translation (thanks cptspiff)
 - Fixed problems with differences between Eden and Frodo (http://trac.xbmc.org/ticket/13349)

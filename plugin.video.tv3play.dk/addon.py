@@ -223,10 +223,10 @@ class TV3PlayAddon(object):
             node = self.getXml(url).find('Ad')
             if node is not None:
                 flvUrl = node.findtext('InLine/Creatives/Creative/Linear/MediaFiles/MediaFile')
-                item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
-                playlist.add(flvUrl, item)
-
-                firstItem = item
+                if flvUrl:
+                    item = xbmcgui.ListItem(ADDON.getLocalizedString(100), iconImage = ICON)
+                    playlist.add(flvUrl, item)
+                    firstItem = item
 
         start = 0
         for idx, node in enumerate(doc.findall('Product/AdCalls/midroll')):
@@ -277,10 +277,12 @@ class TV3PlayAddon(object):
             xml = re.sub('&[^a]', '&amp;', xml)
             return ElementTree.fromstring(xml)
         else:
-            return ElementTree.Element('data-not-loaded') # to avoid unnessecary error handling
+            return ElementTree.Element('data-not-loaded') # to avoid unnecessary error handling
 
     def getRtmpUrl(self, videoUrl):
         if videoUrl[0:4] == 'rtmp':
+            videoUrl = videoUrl.replace('rtmp://tv3playee.data.lt/mtg/', 'rtmp://tv3playee.data.lt/mtg/mtg/')
+            videoUrl = videoUrl.replace('mp4:flash', 'flash')
             return videoUrl.replace(' ', '%20')
 
         xml = self.downloadUrl(videoUrl)
@@ -289,7 +291,7 @@ class TV3PlayAddon(object):
         doc = ElementTree.fromstring(xml)
 
         if doc.findtext('Success') == 'true':
-            return doc.findtext('Url').replace(' ', '%20')
+            return self.getRtmpUrl(doc.findtext('Url').replace(' ', '%20'))
         else:
             raise TV3PlayException(doc.findtext('Msg'))
 
@@ -298,7 +300,7 @@ class TV3PlayAddon(object):
         if xml:
             return ElementTree.fromstring(xml.decode('utf8', 'ignore'))
         else:
-            return ElementTree.Element('data-not-loaded') # to avoid unnessecary error handling
+            return ElementTree.Element('data-not-loaded') # to avoid unnecessary error handling
 
     def downloadAndCacheFanart(self, slug, html):
         fanartPath = os.path.join(CACHE_PATH, '%s.jpg' % slug.encode('iso-8859-1', 'replace'))

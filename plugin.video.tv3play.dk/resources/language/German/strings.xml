@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- German language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/de/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="100">Kommerziell</string>
+    <string id="101">Allgemein</string>
+    <string id="102">Region</string>
+    <string id="103">Clips</string>
+    <string id="150">Wählen Sie eine Region</string>
+    <string id="200">Ein Fehler trat während der Kommunikation mit TV3 Play auf.</string>
+    <string id="201">Die Fehlermeldung lautet:</string>
+    <string id="202">Kann Playback URL nicht finden</string>
+    <string id="203">Keine Staffeln verfügbar</string>
+    <string id="204">Kann Liste von Programmen nicht laden</string>
+    <string id="301">Neueste Videos</string>
+    <string id="302">Meistgesehen</string>
+    <string id="303">Meistbeliebt</string>
+    <string id="304">Neueste Clips</string>
+</strings>

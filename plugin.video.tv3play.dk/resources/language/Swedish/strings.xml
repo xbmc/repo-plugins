@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- Swedish language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/sv/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <string id="100">Reklam</string>
+    <string id="101">Allmän</string>
+    <string id="102">Region</string>
+    <string id="103">Klipp</string>
+    <string id="150">Välj region</string>
+    <string id="200">Ett fel uppstod under kommunikationen med TV3 Play.</string>
+    <string id="201">Felmeddelandet är:</string>
+    <string id="202">Kunde inte hitta uppspelningsURL</string>
+    <string id="203">Inga säsonger tillgängliga</string>
+    <string id="204">Kunde inte hämta programlistan</string>
+    <string id="301">Senaste videor</string>
+    <string id="302">Mest visade</string>
+    <string id="303">Mest omtyckta</string>
+    <string id="304">Senaste klippen</string>
+</strings>

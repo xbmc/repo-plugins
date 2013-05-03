@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#  Copyright 2012 escoand
+#  Copyright 2013 escoand
 #
 #  This file is part of the dradio.de xbmc plugin.
 #
@@ -18,144 +19,309 @@
 #  along with this plugin.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import urllib, urllib2, re, os, sys
-import xbmcaddon, xbmcplugin, xbmcgui, xbmc
+from os.path import join
+from sys import argv
+from time import gmtime, strftime, strptime
+from urllib import quote_plus, urlopen
+from urlparse import parse_qs, urlparse
+from xml.dom.minidom import parseString
+from xbmc import translatePath
+import xbmcaddon
+from xbmcgui import Dialog, ListItem, lock, unlock
+from xbmcplugin import addDirectoryItem, endOfDirectory
+
+Addon = xbmcaddon.Addon("plugin.audio.dradio")
+
+icons = {
+	0: join(Addon.getAddonInfo('path'), 'icon.png'),
+	1: join(Addon.getAddonInfo('path'), 'resources', 'media', 'dlf.png'),
+	3: join(Addon.getAddonInfo('path'), 'resources', 'media', 'dkultur.png'),
+	4: join(Addon.getAddonInfo('path'), 'resources', 'media', 'dwissen.png'),
+}
 
 
-def STATIONS():
-    #addDir("Beide Programme", 'http://www.dradio.de/aod/html/?station=0', 1, '')
-    addDir("Deutschlandfunk", 'http://www.dradio.de/aod/html/?station=1', 1, 'http://www.dradio.de/picts/dfunk.gif')
-    addDir("Deutschlandradio Kultur", 'http://www.dradio.de/aod/html/?station=3', 1, 'http://www.dradio.de/picts/dkultur.gif')
+def CONFIG():
+	global article, playlist, sendungen, streams, themen
+	
+	# parse content
+	dom = parseString(urlopen('http://www.dradio.de/aodflash/xml/config.xml').read())
+	config = dom.getElementsByTagName('config')[0]
+	hosturl = config.getElementsByTagName('hostUrl')[0].getAttribute('value')
+	baseurl = config.getElementsByTagName('baseUrl')[0].getAttribute('value')
+	services = config.getElementsByTagName('services')[0]
+	sendungen = services.getElementsByTagName('urlListSendungen')[0].getAttribute('value')
+	themen = services.getElementsByTagName('urlListThemen')[0].getAttribute('value')
+	streams = config.getElementsByTagName('streamingUrls')[0]
+	playlist = services.getElementsByTagName('urlPlaylist')[0].getAttribute('value')
+	article = services.getElementsByTagName('urlArticleData')[0].getAttribute('value')
+	
+	# urls
+	sendungen = hosturl + baseurl + sendungen
+	themen = hosturl + baseurl + themen
+	playlist = hosturl + baseurl + playlist
+	article = hosturl + baseurl + article
+	streams = {
+		1: streams.getElementsByTagName('streamDLR')[0].getAttribute('value'),
+		3: streams.getElementsByTagName('streamDLF')[0].getAttribute('value'),
+		4: streams.getElementsByTagName('streamDLW')[0].getAttribute('value'),
+	}
 
 
-def BROADCASTS(url):
-	link = get_url(url)
-	brs = re.compile('<strong[^>]*><span[^>]*>([^<]+)</span></strong>.*?<a [^>]*href="([^"]+)"[^>]*>Nachh.ren</a>', re.DOTALL).findall(link)
-	for name, url in brs:
-		addDir(name, url, 2, '')
+def INDEX():
+	global icons
+	
+	# add items
+	addDir(Addon.getLocalizedString(30001), icons[0], {
+		'mode': 0,
+		'station': 0,
+	})
+	addDir(Addon.getLocalizedString(30002), icons[1], {
+		'mode': 0,
+		'station': 1,
+	})
+	addDir(Addon.getLocalizedString(30003), icons[3], {
+		'mode': 0,
+		'station': 3,
+	})
+	addDir(Addon.getLocalizedString(30004), icons[4], {
+		'mode': 0,
+		'station': 4,
+	})
 
 
-def CATEGORIES(url):
-    link = get_url(url)
-    entries = re.compile('<ul class="p05">(.*?)</ul>', re.DOTALL).findall(link)
-    for entry in entries:
-        days = re.compile('<li><a [^>]*href="([^"]+)"[^>]*>(heute|[^<]*gestern)</a></li>').findall(entry)
-        for url, day in days:
-            addDir('Beiträge ' + day, url, 2, '')
-    entries = re.compile('<a [^>]*href="([^"]+)"[^>]*>.*?Sendungen A-Z.*?</a>').findall(link)
-    #for url in entries:
-    #	url = re.sub('\?.*', '?select=all', url)
-    #	addDir('Sendungen von A bis Z', url, 3, '')
-    addDir('Sendungen von A bis Z', 'http://www.dradio.de/dlf/sendungen/?select=all', 3, '')
+def STATION():
+	global mode, name, station, streams
+	
+	# add items
+	#addDir(Addon.getLocalizedString(30101), params = {
+	#	'mode': 10,
+	#	'station': station,
+	#})
+	addDir(Addon.getLocalizedString(30102), params = {
+		'mode': 20,
+		'station': station,
+	})
+	addDir(Addon.getLocalizedString(30103), params = {
+		'mode': 30,
+		'station': station,
+	})
+	addDir(Addon.getLocalizedString(30104), params = {
+		'mode': 40,
+		'station': station,
+	})
+	if station > 0:
+		addLink(Addon.getLocalizedString(30105), streams[station], icons[station], {
+			'title': Addon.getLocalizedString(30105),
+		})
 
 
-def INDEX(url):
-    link = get_url(url)
-    entries = re.compile('<div class="suchergebnis">(.*?)</div>', re.DOTALL).findall(link)
-    for entry in entries:
-        match = re.compile('<p>Sendezeit: (.*)</p>').findall(entry)
-        for date in match:
-            name = date + " - "
-        match = re.compile('<a [^>]*href="([^"]+\.mp3)"[^>]*>(.*)</a>').findall(entry)
-        for url, title in match:
-            title = re.sub('<[^>]+>', '', title)
-            title = re.sub('^[0-9]+\.&nbsp;', '', title)
-            addLink(name + title, url, '')
-    match = re.compile('<a [^>]*href="([^"]+)"[^>]*>vor</a>').findall(link)
-    for url in match:
-        addDir('weitere Beiträge ...', url, 2, '')
-        #INDEX(url)
-    entries = re.compile('<ul class="p05">(.*?)</ul>', re.DOTALL).findall(link)
-    for entry in entries:
-        days = re.compile('<li><a [^>]*href="([^"]+)"[^>]*>([^<]+ Tag)</a></li>').findall(entry)
-        for url, day in days:
-            addDir(day + ' ...', url, 2, '')
+def SEARCH():
+	pass
 
 
-def get_params():
-    param = []
-    paramstring = sys.argv[2]
-    if len(paramstring) >= 2:
-        params = sys.argv[2]
-        cleanedparams = params.replace('?','')
-        if (params[len(params) - 1] == '/'):
-            params = params[0:len(params) - 2]
-        pairsofparams = cleanedparams.split('&')
-        param = {}
-        for i in range(len(pairsofparams)):
-            splitparams = {}
-            splitparams = pairsofparams[i].split('=')
-            if (len(splitparams)) == 2:
-                param[splitparams[0]] = splitparams[1]
-    return param
+def DAILYVIEW():
+	global date, mode
+	
+	try:
+		date = Dialog().numeric(1, Addon.getLocalizedString(30201)).replace(' ', '')
+		date = strftime('%Y%m%d', strptime(date, '%d/%m/%Y'))
+		mode = 90
+	
+		PLAYLIST()
+	
+	except:
+		pass
 
 
-def get_url(url):
-    if url.startswith('/'):
-    	url='http://www.dradio.de/'+url
-    headers = {'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'}
-    print url
-    req = urllib2.Request(url, None, headers)
-    response = urllib2.urlopen(req)
-    link = response.read()
-    response.close()
-    return link
+def PROGRAM():
+	global playlist, sendungen, station
+	
+	# parse content
+	dom = parseString(urlopen(sendungen + 'station=' + str(station)).read())
+	listing = dom.getElementsByTagName('broadcastings')[0]
+	items = listing.getElementsByTagName('item')
+	
+	# add items
+	for item in items:
+		name = item.firstChild.data
+		broadcast = item.getAttribute('id')
+		addDir(name, params = {
+			'mode': 90,
+			'station': station,
+			'broadcast': broadcast,
+		})
 
 
-def addLink(name,url,iconimage):
-    ok=True
-    liz=xbmcgui.ListItem(name, iconImage="DefaultAudio.png", thumbnailImage=iconimage)
-    liz.setInfo( type="Video", infoLabels={ "Title": name } )
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-    return ok
+def TOPICS():
+	global playlist, station, themen
+	
+	# parse content
+	dom = parseString(urlopen(themen + str(station)).read())
+	listing = dom.getElementsByTagName('themen')[0]
+	items = listing.getElementsByTagName('item')
+	
+	# add items
+	for item in items:
+		name = item.firstChild.data
+		theme = item.getAttribute('id')
+		addDir(name, params = {
+			'mode': 90,
+			'station': station,
+			'theme': theme,
+		})
 
 
-def addDir(name,url,mode,iconimage):
-    u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-    ok=True
-    liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    liz.setInfo( type="Video", infoLabels={ "Title": name } )
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-    return ok
+def PLAYLIST():
+	global article, broadcast, date, page, playlist, station, theme
+	
+	# generate url
+	url = playlist + '?station=' + str(station) + '&page=' + str(page)
+	if date != None:
+		url = url + '&date=' + str(date)
+	if broadcast != None:
+		url = url + '&broadcast=' + str(broadcast)
+	if theme != None:
+		url = url + '&theme=' + str(theme)
+	#print url
+	
+	# parse content
+	dom = parseString(urlopen(url).read())
+	listing = dom.getElementsByTagName('entries')[0]
+	items = listing.getElementsByTagName('item')
+	
+	totalItems = int(listing.getAttribute('to')) - int(listing.getAttribute('from'))
+	
+	# add items
+	for item in items:
+		url = item.getAttribute('url')
+		id = item.getElementsByTagName('article')[0].getAttribute('id')
+		name = item.getElementsByTagName('title')[0].firstChild.data
+		timestamp = item.getAttribute('timestamp')
+		name = strftime('%d.%m. %H:%M', gmtime(int(timestamp))) + ' - ' + name
+		
+		# get optional data
+		try:
+			album = item.getElementsByTagName('sendung')[0].firstChild.data
+		except:
+			album = None
+		try:
+			artist = item.getElementsByTagName('author')[0].firstChild.data
+		except:
+			artist = None
+		try:
+			duration = item.getAttribute('duration')
+		except:
+			duration = None
+		try:
+			image = parseString(urlopen(article + '?id=' + id).read()) \
+				.getElementsByTagName('article')[0].getElementsByTagName('image')[0] \
+				.firstChild.data.replace('/90,0/', '/256,0/')
+		except:
+			image = ''
+		
+		addLink(name, url, image, {
+			'album': album,
+			'artist': artist,
+			'date': date,
+			'duration': duration,
+			'title': name,
+		}, totalItems)
+	
+	# previous page
+	if int(listing.getAttribute('page')) > 0:
+		addDir(Addon.getLocalizedString(30301), params = {
+			'mode': mode,
+			'station': station,
+			'page': int(page) - 1,
+			'date': date,
+			'broadcast': broadcast,
+			'theme': theme,
+		})
+	
+	# next page
+	if page + 1 < int(listing.getAttribute('pages')):
+		addDir(Addon.getLocalizedString(30302), params = {
+			'mode': mode,
+			'station': station,
+			'page': int(page) + 1,
+			'date': date,
+			'broadcast': broadcast,
+			'theme': theme,
+		})
 
 
-params=get_params()
-url=None
-name=None
-mode=None
-
-try:
-    url=urllib.unquote_plus(params["url"])
-except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
-
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
-
-if mode==None or url==None or len(url)<1:
-    print ""
-    STATIONS()
-
-elif mode == 1:
-    print ""+url
-    CATEGORIES(url)
-
-elif mode == 2:
-    print ""+url
-    INDEX(url)
-
-elif mode == 3:
-    print ""+url
-    BROADCASTS(url)
+def getParam(name):
+	global argv
+	
+	# parse parameters
+	if len(argv) >= 3:
+		params = parse_qs(urlparse(argv[2]).query)
+		if params.has_key(name):
+			return params[name][0]
+	
+	return None
 
 
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+def addDir(name, image = '', params = {}, totalItems = 0):
+	name = name.encode('utf-8')
+	url = argv[0] + '?'
+	for key in params.keys():
+		if params[key] != None:
+			url = url + str(key) + '=' + str(params[key]) + '&'
+	item = ListItem(name, iconImage = image, thumbnailImage = image)
+	return addDirectoryItem(int(sys.argv[1]), url, item, True, totalItems)
+
+
+def addLink(name, url, image = '', info = {}, totalItems = 0):
+	name = name.encode('utf-8')
+	item = ListItem(name, iconImage = image, thumbnailImage = image)
+	item.setProperty('mimetype', 'audio/mpeg')
+	item.setInfo('music', info)
+	return addDirectoryItem(int(argv[1]), url, item, False, totalItems)
+
+
+# get parameters
+mode = getParam('mode')
+if mode != None:
+	mode = int(mode)
+name = getParam('name')
+station = getParam('station')
+if station != None:
+	station = int(station)
+page = getParam('page')
+if page != None:
+	page = int(page)
+else:
+	page = 0
+date = getParam('date')
+if date != None:
+	date = int(date)
+broadcast = getParam('broadcast')
+theme = getParam('theme')
+
+#print mode, station, page, date, broadcast, theme
+
+
+# get config
+CONFIG()
+
+
+# do handling
+if mode == None:
+	INDEX()
+elif mode == 0:
+	STATION()
+elif mode == 10:
+	SEARCH()
+elif mode == 20:
+	DAILYVIEW()
+elif mode == 30:
+	PROGRAM()
+elif mode == 40:
+	TOPICS()
+elif mode == 90:
+	PLAYLIST()
+
+
+# end menu
+endOfDirectory(int(argv[1]))

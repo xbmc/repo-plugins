@@ -2,17 +2,18 @@
 <addon
 	id="plugin.audio.dradio"
 	name="dradio.de"
-	version="0.2.3"
+	version="1.2.0"
 	provider-name="escoand">
 	<requires>
-		<import addon="xbmc.python" version="2.0" />
+		<import addon="xbmc.python" version="2.1.0" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>audio</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/escoand/plugin.audio.dradio</source>
 		<platform>all</platform>
-		<license>GPL 3.0</license>
 		<language>de</language>
 		<summary>dradio.de - Listening to the radio, whenever you want</summary>
 		<summary lang="de">dradio.de - Radio hören, wenn Sie Zeit haben</summary>

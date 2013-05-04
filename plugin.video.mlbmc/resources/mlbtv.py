@@ -77,7 +77,7 @@ def mlb_login():
 def mlbGame(event_id, full_count=False):
     if not full_count:
         # Check if cookies have expired.
-        cookie_jar.load(cookie_file, ignore_discard=False, ignore_expires=False)
+        cookie_jar.load(cookie_file, ignore_discard=True, ignore_expires=False)
         cookies = {}
         addon_log('These are the cookies we have in the cookie file:')
         for i in cookie_jar:
@@ -135,10 +135,35 @@ def mlbGame(event_id, full_count=False):
     status = soup.find('status-code').string
     if status != "1":
         error_str = SOAPCODES[status]
-        xbmc.executebuiltin("XBMC.Notification("+language(30035)+","+language(30044)+error_str+",10000,"+icon+")")
-        return
+        if not full_count:
+            if login == old and error_str == 'Identity Error':
+                cookie_jar.clear()
+                login = mlb_login()
+            if not login:
+                xbmc.executebuiltin("XBMC.Notification("+language(30035)+","+language(30044)+error_str+",10000,"+icon+")")
+                return
+            else:
+                cookie_jar.load(cookie_file, ignore_discard=True, ignore_expires=True)
+                cookies = {}
+                for i in cookie_jar:
+                    cookies[i.name] = i.value
+                    addon_log('%s: %s' %(i.name, i.value))
+                session = None
+                if cookies.has_key('ftmu'):
+                    addon_log("cookies.has_key('ftmu')")
+                    session = urllib.unquote(cookies['ftmu'])
 
-
+                values = {
+                    'eventId': event_id,
+                    'sessionKey': session,
+                    'fingerprint': urllib.unquote(cookies['fprt']),
+                    'identityPointId': cookies['ipid'],
+                    'subject':'LIVE_EVENT_COVERAGE',
+                    'platform':'WEB_MEDIAPLAYER'
+                    }
+                data = getRequest(url,urllib.urlencode(values),headers)
+        else:
+            return
     cookie_jar.load(cookie_file, ignore_discard=True, ignore_expires=True)
     cookies = {}
     addon_log('These are the cookies we have after UserVerifiedEvent request 1:')
@@ -211,7 +236,10 @@ def mlbGame(event_id, full_count=False):
 
     dialog = xbmcgui.Dialog()
     ret = dialog.select(language(30033), name_list)
-    getGameURL(*verified_content[ret])
+    if ret >= 0:
+        addon_log('Selected: %s' %name_list[ret])
+        addon_log('content: %s' %verified_content[ret][0])
+        getGameURL(*verified_content[ret])
 
 
 def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
@@ -236,6 +264,21 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
     if debug == "true":
         addon_log(data)
     soup = BeautifulStoneSoup(data, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+    try:
+        new_fprt = soup.find('updated-fingerprint').string
+        if len(new_fprt) > 0:
+            addon_log('New Fingerprint: %s' %new_fprt)
+            new_cookie = cookielib.Cookie(
+                version=0, name='fprt', value=new_fprt, port=None, port_specified=False,
+                domain='.mlb.com', domain_specified=False, domain_initial_dot=False,
+                path='/', path_specified=True, secure=False, expires=None, discard=True,
+                comment=None, comment_url=None, rest={'HttpOnly': None}, rfc2109=False)
+            cookie_jar.load(cookie_file, ignore_discard=True, ignore_expires=True)
+            cookie_jar.set_cookie(new_cookie)
+            cookie_jar.save(cookie_file, ignore_discard=True, ignore_expires=True)
+    except AttributeError:
+        addon_log('No New Fingerprint')
+        
     status = soup.find('status-code').string
     if status != "1":
         try:
@@ -343,6 +386,8 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
             addon_log( 'final url: '+final_url )
         item = xbmcgui.ListItem(path=final_url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+
 
 
 def get_smil(url):

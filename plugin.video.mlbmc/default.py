@@ -210,3 +210,7 @@ if mode==25:
 if mode==26:
     mlb.getGameHighlights(url)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+if mode==27:
+    mlb.getRealtimeVideo(url)
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))

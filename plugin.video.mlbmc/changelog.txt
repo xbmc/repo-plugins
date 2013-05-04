@@ -1,3 +1,9 @@
+Version 1.1.4
+fix game highlights
+fix identity error after user has changed their password
+fix canceling the select dialog
+added updating fprt cookie from xml data
+
 Version 1.1.3
 added missing init file
 

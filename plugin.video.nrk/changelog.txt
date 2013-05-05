@@ -1,3 +1,6 @@
+[B]4.4.6[/B]
+- Lagt til "Alltid RR" (radioresepsjonen)
+
 [B]4.4.5[/B]
 - Fikset direktestrømmer og «siste» pga. sideendringer
 

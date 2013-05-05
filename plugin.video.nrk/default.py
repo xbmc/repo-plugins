@@ -46,6 +46,7 @@ def live():
   add("NRK P2", "http://lyd.nrk.no/nrk_radio_p2_mp3_h", "audio/mpeg")
   add("NRK P3", "http://lyd.nrk.no/nrk_radio_p3_mp3_h", "audio/mpeg")
   add("Alltid nyheter", "http://lyd.nrk.no/nrk_radio_alltid_nyheter_mp3_h", "audio/mpeg")
+  add("Alltid RR", "http://lyd.nrk.no/nrk_radio_p3_radioresepsjonen_mp3_h", "audio/mpeg")
   add("Jazz", "http://lyd.nrk.no/nrk_radio_jazz_mp3_h", "audio/mpeg")
   add("Klassisk", "http://lyd.nrk.no/nrk_radio_klassisk_mp3_h", "audio/mpeg")
   add("Folkemusikk", "http://lyd.nrk.no/nrk_radio_folkemusikk_mp3_h", "audio/mpeg")
@@ -77,6 +78,8 @@ def view(titles, urls, thumbs=repeat(''), bgs=repeat(''), descr=repeat(''), upda
     li.setProperty('fanart_image', bg)
     if playable:
       li.setInfo('video', {'title':title, 'plot':descr})
+      li.addStreamInfo('video', {'codec':'h264', 'width':1280, 'height':720})
+      li.addStreamInfo('audio', {'codec':'aac', 'channels':2})
     addDirectoryItem(plugin.handle, plugin.make_url(url), li, not playable, total)
   endOfDirectory(plugin.handle, updateListing=update_listing)
 

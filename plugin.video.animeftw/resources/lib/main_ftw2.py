@@ -6,7 +6,7 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 import xbmcplugin
-import BeautifulSoup
+from xml.etree import ElementTree
 
 SETTINGS = sys.modules[ "__main__" ].__settings__
 
@@ -68,21 +68,23 @@ class grabFTW:
 		
 	def getLatest(self, count = 25):
 		htmlSource = self.getHTML("https://www.animeftw.tv/api/v1/show?" + self.urlString + "&show=latest&start=0&count=" + str(count))
-		soup = BeautifulSoup.BeautifulSoup(htmlSource, convertEntities=BeautifulSoup.BeautifulSoup.HTML_ENTITIES)
-		latest_list = soup.findAll('episode')
+		root = ElementTree.fromstring(htmlSource)
+		latest_list = root.findall('episode')
 		for episode in latest_list:
-			UI().addItem({'Seriesname': unicode(episode.find('series').string.replace('`', '\'')).encode('utf-8'), 'Title': unicode(episode.find('series').string.replace('`', '\'') + " - " + episode.find('epnumber').string + " - " + episode.find('name').string.replace('`', '\'')).encode('utf-8'), 'mode': 'playEpisode', 'url': episode.find('videolink').string })
+			UI().addItem({'Seriesname': unicode(episode.find('series').text.replace('`', '\'')).encode('utf-8'), 'Title': unicode(episode.find('series').text.replace('`', '\'') + " - " + episode.find('epnumber').text + " - " + episode.find('name').text.replace('`', '\'')).encode('utf-8'), 'mode': 'playEpisode', 'url': episode.find('videolink').text })
 		del latest_list
+		del root
 		UI().endofdirectory('title')
 		
 	def getGenres(self):
 		htmlSource = self.getHTML("https://www.animeftw.tv/api/v1/show?" + self.urlString + "&show=tagcloud")
-		soup = BeautifulSoup.BeautifulSoup(htmlSource, convertEntities=BeautifulSoup.BeautifulSoup.HTML_ENTITIES)
-		tag_list = soup.findAll('tag')
+		root = ElementTree.fromstring(htmlSource)
+		tag_list = root.findall('tag')
 		for tag in tag_list:
-			genreFilter = tag['href'].split('filter=')[1]
-			UI().addItem({'Title': unicode(tag.string).encode('utf-8').title(), 'mode': 'anime_all', 'url': tag['href'], 'category': str(genreFilter)})
+			genreFilter = tag.attrib['href'].split('filter=')[1]
+			UI().addItem({'Title': unicode(tag.text).encode('utf-8').title(), 'mode': 'anime_all', 'url': tag.attrib['href'], 'category': str(genreFilter)})
 		del tag_list
+		del root
 		UI().endofdirectory('title')
 		
 	def getListing(self, category = 0, showType = 'anime', count = 2000, filter = None):
@@ -91,16 +93,16 @@ class grabFTW:
 		if filter:
 			url += "&filter=" + str(filter)
 		htmlSource = self.getHTML(url)
-		soup = BeautifulSoup.BeautifulSoup(htmlSource, convertEntities=BeautifulSoup.BeautifulSoup.HTML_ENTITIES)
+		root = ElementTree.fromstring(htmlSource)
 		cat_list = ['episode', 'episode', 'episode', 'episode', 'episode', 'movie']
 		videoType = cat_list[category]
 		print "[FTW] Current video type: " + str(videoType)
-		series_list = soup.findAll('series')
+		series_list = root.findall('series')
 		for series in series_list:
-			numberOfMovies = int(series.find('movies').string)
-			numberOfEpisodes = int(series.find('episodes').string)
-			isOVA = series.find('ova').string
-			isAiring = series.find('airing').string
+			numberOfMovies = int(series.find('movies').text)
+			numberOfEpisodes = int(series.find('episodes').text)
+			isOVA = series.find('ova').text
+			isAiring = series.find('airing').text
 			if numberOfMovies == 1 and numberOfEpisodes == 1 and category != 5:
 				continue
 			elif numberOfMovies < 1 and category == 5:
@@ -114,37 +116,37 @@ class grabFTW:
 			elif isAiring == 'yes' and category == 3:
 				continue
 			else:
-				seriesname = series.find('seriesname').string
+				seriesname = series.find('seriesName').text
 				seriesname = unicode(seriesname.replace('`', '\'')).encode('utf-8')
 				
 				seriesdict = {'name': seriesname, \
-							  'nameorig': unicode(series.find('romaji').string).encode('utf-8'), \
-							  'url': series['href'], \
-							  'thumb': series.find('image').string, \
-							  'plot':unicode(series.find('description').string).encode('utf-8'), \
+							  'nameorig': unicode(series.find('romaji').text).encode('utf-8'), \
+							  'url': series.attrib['href'], \
+							  'thumb': series.find('image').text, \
+							  'plot':unicode(series.find('description').text).encode('utf-8'), \
 							  'rating': 0.0, \
 							  'episodes': numberOfEpisodes, \
-							  'genre': unicode(series.find('category').string).encode('utf-8') }
+							  'genre': unicode(series.find('category').text).encode('utf-8') }
 
 				UI().addItem({'Title':seriesdict['name'], 'mode': videoType, 'url':seriesdict['url'], 'Thumb':seriesdict['thumb']}, seriesdict, True, len(series_list))
 				
 		del series_list
-		del soup
+		del root
 		UI().endofdirectory('title')
 		
 	def getEpisodes(self, url, seriesname = None, seriesimage = None, category = None):
 		htmlSource = self.getHTML(url)
-		soup = BeautifulSoup.BeautifulSoup(htmlSource, convertEntities=BeautifulSoup.BeautifulSoup.HTML_ENTITIES)
-		episodes = soup.findAll(category)
+		root = ElementTree.fromstring(htmlSource)
+		episodes = root.findall('.//' + category)
 		
 		for i, episode in enumerate(episodes):
 			if category == 'episode':
-				epname = unicode(episode.find('epnumber').string + ".) " + episode.find('name').string.replace('`', '\'')).encode('utf-8')
+				epname = unicode(episode.find('epnumber').text + ".) " + episode.find('name').text.replace('`', '\'')).encode('utf-8')
 			else:
-				epname = unicode(episode.find('name').string.replace('`', '\'')).encode('utf-8')
+				epname = unicode(episode.find('name').text.replace('`', '\'')).encode('utf-8')
 			
-			url = episode.find('videolink').string
-			thumbnail = episode.find('image').string
+			url = episode.find('videolink').text
+			thumbnail = episode.find('image').text
 			if thumbnail == "http://static.ftw-cdn.com/site-images/video-images/noimage.png":
 				thumbnail = seriesimage
 			
@@ -153,6 +155,7 @@ class grabFTW:
 			li.setProperty("IsPlayable","true");
 			xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=False)
 		del episodes
+		del root
 		UI().endofdirectory()
 		
 	def playVid(self, url, name, thumb):

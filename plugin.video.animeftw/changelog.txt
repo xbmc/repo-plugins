@@ -1,3 +1,6 @@
+[B]Version 1.7.3[/B]
+- Replacing BeautifulSoup with ElementTree, courtesy of don @ AFTW
+
 [B]Version 1.7.2[/B]
 - Updated Python Version
 - Added Language Tag

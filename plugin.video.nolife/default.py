@@ -175,24 +175,49 @@ def getlastVideos():
     Get the videos in the "last videos" menu option
     """
     showseen   = settings.getSetting( "showseen" )
-    postrequest = urllib.urlencode({'emissions': 0,
+    showlast   = int(settings.getSetting( "showlast" ).split('.')[0])
+    i = 0
+    emissions = []
+    finished = False
+    while finished == False:
+        postrequest = urllib.urlencode({'emissions': i,
                                    'famille': 0,
                                    'a': 'ge'})
     
-    page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
-    liste = BeautifulSoup(page.read()).findAll('li')
-    for element in liste:
-        extractVideoInfo(element)
+        page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
+        liste = BeautifulSoup(page.read()).findAll('li')
+        for element in liste:
+            if len(emissions) == showlast:
+                finished = True
+                break
         
-        videoInfo = extractVideoInfo(element)
-        if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
-            if isAvailableForUser(videoInfo.availability):
-                addlink( videoInfo.name + " - " + videoInfo.desc,
-                    "plugin://plugin.video.nolife?id=" + videoInfo.vid,
-                    videoInfo.thumb,
-                    videoInfo.duration,
-                    videoInfo.seen )
-    
+            videoInfo = extractVideoInfo(element)
+            if videoInfo != None:
+                if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
+                    if isAvailableForUser(videoInfo.availability):
+                        emissions.append([videoInfo.id,
+                                            videoInfo.name,
+                                            videoInfo.desc,
+                                            videoInfo.duration,
+                                            videoInfo.seen,
+                                            videoInfo.thumb])
+                i = i + 1
+
+    for emission in emissions:
+        if emission[2] == '':
+            addlink(emission[1],
+                    "plugin://plugin.video.nolife?id=" + emission[0],
+                    emission[5],
+                    emission[3],
+                    emission[4] )
+
+        else:
+            addlink(emission[1] + ' - ' + emission[2],
+                    "plugin://plugin.video.nolife?id=" + emission[0],
+                    emission[5],
+                    emission[3],
+                    emission[4] )
+
 def getcategories():
     """Gets all categories and adds directories
     
@@ -344,6 +369,7 @@ def playvideo(requestHandler, video):
     """
     settings = xbmcaddon.Addon(id='plugin.video.nolife')
     quality  = settings.getSetting( "quality" )
+    autorefresh = settings.getSetting("autorefresh")
     if   quality == "HQ" or quality == "1":
         _video = video + "?quality=2"
     elif quality == "LQ" or quality == "0":
@@ -366,7 +392,9 @@ def playvideo(requestHandler, video):
                                    thumbnailImage='', 
                                    path=url )
 
-    xbmcplugin.setResolvedUrl(0, True, listitem)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, listitem)
+    if autorefresh == "true":
+        xbmc.executebuiltin("Container.Refresh")
 
 def get_params():
     """
@@ -403,9 +431,9 @@ def addlink(name, url, iconimage, duration, bool_seen):
     liz.setInfo( 
                  type="Video", 
                  infoLabels={ "title": name, 
-                              "duration" : duration,
                               "playcount": int(bool_seen) } 
                )
+    liz.addStreamInfo("video", { 'duration':duration })
     liz.setProperty("IsPlayable","true")
     ok  = xbmcplugin.addDirectoryItem( handle=int(sys.argv[1]), 
                                        url=url, 
@@ -472,10 +500,10 @@ def extractVideoInfo(element):
     """
     Extract video info from html and store it in videoInfo class    
     """
-    info = videoInfo()
+    info = None
     if re.compile('data-icon="arrow-r"').findall(str(element)):
-        
-        if  re.compile('icones/32/on').findall(str(element)):
+        info = videoInfo()
+        if  re.compile('mark_read').findall(str(element)):
             info.seen = True
         else:
             info.seen = False
@@ -484,7 +512,7 @@ def extractVideoInfo(element):
             ' padding-left:55px;">.*</p>'
         info.thumb    = re.compile('data-thumb=".*"').findall(str(element))[0][12:][:-1]
         _date_len = remove_html_tags(re.compile(reg_date).findall(str(element))[0])
-        info.duration = _date_len.split(' - ')[1]
+        info.duration = sum(int(x) * 60 ** i for i,x in enumerate(reversed(_date_len.split(' - ')[1].strip('s').split(":"))))
         
         req_id = 'a href="emission-.*" '
         info.id = re.compile(req_id).findall(str(element))[0][17:][:-2]
@@ -509,7 +537,7 @@ def extractVideoSearchInfo(element):
     info = None
     if re.compile('data-icon="arrow-r"').findall(str(element)):
         info = videoInfo()
-        if  re.compile('icones/32/on').findall(str(element)):
+        if  re.compile('mark_read').findall(str(element)):
             info.seen = True
         else:
             info.seen = False

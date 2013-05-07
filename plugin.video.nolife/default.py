@@ -190,19 +190,18 @@ def getlastVideos():
             if len(emissions) == showlast:
                 finished = True
                 break
-
-            extractVideoInfo(element)
         
             videoInfo = extractVideoInfo(element)
-            if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
-                if isAvailableForUser(videoInfo.availability):
+            if videoInfo != None:
+                if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
+                    if isAvailableForUser(videoInfo.availability):
                         emissions.append([videoInfo.id,
                                             videoInfo.name,
                                             videoInfo.desc,
                                             videoInfo.duration,
                                             videoInfo.seen,
                                             videoInfo.thumb])
-        i = i + 1
+                i = i + 1
 
     for emission in emissions:
         if emission[2] == '':
@@ -501,10 +500,10 @@ def extractVideoInfo(element):
     """
     Extract video info from html and store it in videoInfo class    
     """
-    info = videoInfo()
+    info = None
     if re.compile('data-icon="arrow-r"').findall(str(element)):
-        
-        if  re.compile('icones/32/on').findall(str(element)):
+        info = videoInfo()
+        if  re.compile('mark_read').findall(str(element)):
             info.seen = True
         else:
             info.seen = False
@@ -538,7 +537,7 @@ def extractVideoSearchInfo(element):
     info = None
     if re.compile('data-icon="arrow-r"').findall(str(element)):
         info = videoInfo()
-        if  re.compile('icones/32/on').findall(str(element)):
+        if  re.compile('mark_read').findall(str(element)):
             info.seen = True
         else:
             info.seen = False

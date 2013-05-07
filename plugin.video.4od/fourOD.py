@@ -93,7 +93,7 @@ class FourODProvider(Provider):
                         "http:\/\/ps3.channel4.com\/pmlsd\/tags\/animals\/4od\/title.json?platform=ps3"]
                     },
                 "$":"\n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n    \n  ",
-                "id":"tag:ps3.channel4.com,2009:\/programmes\/tags\/animals",
+                "id":"tag:ps3.channel4.com,2009:\/programmes\/categories\/animals",
                 "title":"Animals",
                 "summary":
                     {"@type":"html",
@@ -109,7 +109,7 @@ class FourODProvider(Provider):
                     continue
                 
                 id = entry[u'id']
-                pattern = u'/programmes/tags/(.+)'
+                pattern = u'/programmes/categories/(.+)'
                 match = re.search(pattern, id, re.DOTALL | re.IGNORECASE)
                 
                 categoryName = match.group(1)

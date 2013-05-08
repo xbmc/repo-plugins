@@ -17,3 +17,6 @@ version 1.2.1
 -Fixed the previous page button (It now calls the Action(Back) function instead of adding another directory.)
 -Added optional tags.
 -Added settings for quality of live streams and a option to disable thumbnail view.
+
+version 1.2.2
+-Fixed a error with the settings not loading correctly after updating to frodo 12.2

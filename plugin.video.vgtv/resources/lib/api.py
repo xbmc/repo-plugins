@@ -23,7 +23,6 @@ import urllib2
 import re
 from utils import unescape
 from datetime import datetime
-from datetime import timedelta
 from urllib import urlencode
 from random import random
 
@@ -110,6 +109,11 @@ class VgtvApi():
                     'tagline': unescape(meta.get('preamble') or ''),
                     'aired': self.get_date(meta.get('timePublished')),
                     'duration': self.get_duration(meta.get('duration'))
+                },
+                'stream_info': {
+                    'video': {
+                        'duration': meta.get('duration', 0)
+                    }
                 },
                 'path': vid_url,
                 'is_playable': True,
@@ -210,7 +214,7 @@ class VgtvApi():
         return datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d')
 
     def get_duration(self, secs):
-        return timedelta(seconds=secs)
+        return str(secs / 60)
 
     def track_play(self, id, category_id, title, resolution, duration):
         category = self.get_category(category_id)

@@ -12,4 +12,7 @@
     <string id="30004">Forrige side</string>
     <string id="30005">Neste side</string>
 
+    <!-- Search context -->
+    <string id="30006">Fjern fra historikk</string>
+
 </strings>

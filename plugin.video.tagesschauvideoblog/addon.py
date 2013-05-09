@@ -26,13 +26,13 @@ plugin = Plugin()
 tagesschauURL = 'http://www.tagesschau.de/'
 
 h264regexp  = re.compile('http:\/\/[^"]+webl\.h264\.mp4')
-videoregexp = re.compile(re.escape(tagesschauURL)+'videoblog\/[^"]+')
+videoregexp = re.compile(re.escape(tagesschauURL)+'ausland\/videoblog\/[^"]+')
 
-blogsregexp      = re.compile('leftNavL3(.*)sendungenLeft', re.MULTILINE|re.DOTALL)
+blogsregexp      = re.compile('Startseite Videoblog(.*)subressort', re.MULTILINE|re.DOTALL)
 blogurlregexp    = re.compile('a href="(\/videoblog\/[^"]+)"')
-blogtitleregexp  = re.compile('i2">([^<]+)<')
-entriesregexp    = re.compile('<h2><a[^>]href="\/([^"]+)[^>]+title="([^"]+)')
-teaserregexp     = re.compile('img src="(\/multimedia\/bilder\/[^"]+klein16x9+[^"]+)')
+blogtitleregexp  = re.compile('">([^<]+)<\/a><\/li>')
+entriesregexp    = re.compile('<h4[^>]*><a[^>]+href="\/([^"]*)"[^>]*>([^<]+)<\/a>')
+teaserregexp     = re.compile('img[^>]+src="(\/multimedia\/bilder\/[^"]+teaser+[^"]+)')
 
 def removeNonAscii(s):
 	return "".join(i for i in s if ord(i)<128)
@@ -60,7 +60,7 @@ def getH264Video(url):
 	return match.group(0)
 
 def getBlogs():
-	req = urllib2.Request(tagesschauURL+'videoblog/index.html')
+	req = urllib2.Request(tagesschauURL+'videoblog/index.html')	
 	response = urllib2.urlopen(req)
 	html = response.read()
 	response.close()

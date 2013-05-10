@@ -1,4 +1,7 @@
 v1.0.0 (Wednesday, 10 April 2013) :
 - initial version
 
+v1.0.1 (Friday, 10 May 2013) :
+- added optional fields addon.xml
+
  

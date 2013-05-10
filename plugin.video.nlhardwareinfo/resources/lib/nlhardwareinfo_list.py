@@ -67,7 +67,7 @@ class Main:
 		#
 		# Init
 		#
-		titles_and_thumbnail_and_urls_index = 0
+		titles_and_thumbnail_urls_index = 0
 		
 		# 
 		# Get HTML page...
@@ -79,10 +79,10 @@ class Main:
 		
 		# Get titles and thumbnails-urls
 		#<img class="thumb_125" src="http://content.hwigroup.net/images/video/video_teaser/000581.jpg" title="Microsoft Surface Pro tablet review" alt="Microsoft Surface Pro tablet review">
-		titles_and_thumbnail_and_urls = soup.findAll('img', attrs={'class': re.compile("^thumb")})
+		titles_and_thumbnail_urls = soup.findAll('img', attrs={'class': re.compile("^thumb")})
 										
 		if (self.DEBUG) == 'true':
-			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(titles_and_thumbnail_and_urls)", str(len(titles_and_thumbnail_and_urls)) ), xbmc.LOGNOTICE )			
+			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(titles_and_thumbnail_urls)", str(len(titles_and_thumbnail_urls)) ), xbmc.LOGNOTICE )			
 		
 		# Get video-page-urls
 		#<div class="image">
@@ -103,7 +103,7 @@ class Main:
 				 xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_page_url", str(video_page_url) ), xbmc.LOGNOTICE )
 	 		
 			# Make title
-			title = titles_and_thumbnail_and_urls[titles_and_thumbnail_and_urls_index]['title']
+			title = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index]['title']
 			#convert from unicode to encoded text (don't use str() to do this)
 			title = title.encode('utf-8')
 			title = title.replace('-',' ')
@@ -142,20 +142,20 @@ class Main:
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "title", str(title) ), xbmc.LOGNOTICE )
 
-			if titles_and_thumbnail_and_urls_index >= len(titles_and_thumbnail_and_urls):
-				title_and_thumbnail_and_url = ''
+			if titles_and_thumbnail_urls_index >= len(titles_and_thumbnail_urls):
+				thumbnail_url = ''
 			else:
-				title_and_thumbnail_and_url = titles_and_thumbnail_and_urls[titles_and_thumbnail_and_urls_index]['src']
+				thumbnail_url = titles_and_thumbnail_urls[titles_and_thumbnail_urls_index]['src']
 
 			# Add to list...
 			parameters = {"action" : "play", "video_page_url" : video_page_url}
 			url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-			listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=title_and_thumbnail_and_url )
+			listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url )
 			listitem.setInfo( "video", { "Title" : title, "Studio" : "nlhardwareinfo" } )
 			folder = False
 			xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
 		
-			titles_and_thumbnail_and_urls_index = titles_and_thumbnail_and_urls_index + 1
+			titles_and_thumbnail_urls_index = titles_and_thumbnail_urls_index + 1
 
 		#Next page entry...
 		if self.next_page_possible == 'True':

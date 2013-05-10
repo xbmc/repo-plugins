@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.nlhardwareinfo" 
 	name="HardwareInfo Tv" 
-	version="1.0.0" 
+	version="1.0.1" 
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.1.0"/>
@@ -13,15 +13,15 @@
 	</extension>
   <extension point="xbmc.addon.metadata">
 	<platform>all</platform>
-	<summary lang="en">Watch videos from Nl.Hardware.Info (dutch)</summary>
+	<summary lang="en">Watch hardware videos from Nl.Hardware.Info (dutch)</summary>
 	<description lang="en">Watch videos from Nl.Hardware.Info (dutch)</description>
 	<disclaimer lang="en">For bugs, requests or general questions visit the HardwareInfo thread on the XBMC forum.</disclaimer>
     <language>nl</language>
     <platform>all</platform>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum></forum>
+    <forum>http://forum.xbmc.org/showthread.php?tid=162123</forum>
     <website>http://nl.hardware.info/</website>
     <email></email>
-    <source></source>
+    <source>git://github.com/skipmodea1/plugin.video.nlhardwareinfo.git</source>
   </extension>
 </addon>

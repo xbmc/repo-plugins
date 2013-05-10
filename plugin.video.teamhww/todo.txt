@@ -1,0 +1,1 @@
+- Removing 'videos' category and going straight to the items (as 'videos' is the only category atm)

@@ -1,3 +1,8 @@
+[B]2.0.7[/B]
+- Introduced search history functionality
+- Added durations for videos
+- Added a root-level "Level Up"-category
+
 [B]2.0.6[/B]
 - Fixed a bug where videos could not be played if category ID was defined
 

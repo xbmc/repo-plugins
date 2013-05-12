@@ -12,4 +12,7 @@
     <string id="30004">Previous page</string>
     <string id="30005">Next page</string>
 
+    <!-- Search context -->
+    <string id="30006">Remove from history</string>
+
 </strings>

@@ -17,18 +17,20 @@
 
 # VGTV plugin for XBMC
 import os
+from resources.lib.api import VgtvApi
 from xbmcswift2 import ListItem
 from xbmcswift2 import Plugin
-from resources.lib.api import VgtvApi
 from xbmcswift2 import xbmcgui
+from xbmcswift2 import actions
 
 STRINGS = {
-    'plugin_name':   30000,
-    'most_recent':   30001,
-    'most_viewed':   30002,
-    'search':        30003,
-    'previous_page': 30004,
-    'next_page':     30005,
+    'plugin_name':         30000,
+    'most_recent':         30001,
+    'most_viewed':         30002,
+    'search':              30003,
+    'previous_page':       30004,
+    'next_page':           30005,
+    'remove_from_history': 30006
 }
 
 plugin = Plugin()
@@ -55,7 +57,11 @@ def index():
     }, {
         'label': _('search'),
         'thumbnail': os.path.join(RES_PATH, 'search.png'),
-        'path': plugin.url_for('input_search')
+        'path': plugin.url_for('show_search_history')
+    }, {
+        'label': 'Level Up',
+        'thumbnail': os.path.join(RES_PATH, 'level-up.png'),
+        'path': plugin.url_for('show_category', id='147')
     }]
 
     plugin.add_items(items)
@@ -82,12 +88,57 @@ def show_most_seen(page):
     return show_video_list('show_most_seen', items, page, last_page)
 
 
+@plugin.route('/searchhistory/')
+def show_search_history():
+    history = plugin.get_storage('search_history')
+    searches = history.get('items', [])
+
+    # If we have no items in the search history, open input
+    if (searches is None or len(searches) == 0):
+        return input_search()
+    
+    # Always start with the "new search"-option
+    items = [{
+        'label': _('search') + '...',
+        'path': plugin.url_for('input_search'),
+        'thumbnail': os.path.join(RES_PATH, 'search.png'),
+    }]
+
+    # Loop and add queries from history
+    for search in searches:
+        items.append({
+            'label': search,
+            'path': plugin.url_for('show_search', page='1', query=search),
+            'thumbnail': os.path.join(RES_PATH, 'search.png'),
+            'context_menu': [
+                make_remove_from_history_context_item(search)
+            ]
+        })
+
+    plugin.add_items(items)
+    return plugin.finish(
+        view_mode='thumbnail',
+        update_listing=False
+    )
+
 @plugin.route('/search/')
 def input_search():
     query = plugin.keyboard(heading=_('search'))
 
     if query is None or len(str(query)) == 0:
         return
+
+    # Store search in history
+    history = plugin.get_storage('search_history')
+    searches = history.get('items', [])
+    searches.insert(0, query)
+
+    # Have we reached or history limit?
+    if len(searches) == 40:
+        searches.pop()
+
+    # Store the search history
+    history['items'] = searches
 
     return show_search(1, query)
 
@@ -124,6 +175,15 @@ def play_id(id, title=None):
 def play_url(url, category=None, id=None, title=None, duration=None):
     track_video_play(id, category, title, duration)
     return plugin.set_resolved_url(url)
+
+@plugin.route('/searchhistory/remove/<query>')
+def remove_from_history(query):
+    history = plugin.get_storage('search_history')
+    searches = history.get('items', [])
+    searches.remove(query)
+    history['items'] = searches
+    
+    return show_search_history()
 
 
 def show_video_list(fn, items, page, last_page, query=''):
@@ -163,6 +223,10 @@ def build_category_list(root_id=0):
 
     return items
 
+def make_remove_from_history_context_item(query):
+    label = _('remove_from_history')
+    new_url = plugin.url_for('remove_from_history', query=query)
+    return (label, 'XBMC.Container.Refresh(%s)' % new_url)
 
 # Call tracking
 def track_video_play(id, category, title, duration):

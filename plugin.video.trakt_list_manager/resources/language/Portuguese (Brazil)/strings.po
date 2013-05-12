@@ -1,0 +1,145 @@
+# XBMC Media Center language file
+# Addon Name: Trakt.tv List Manager
+# Addon id: plugin.video.trakt_list_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Portuguese (Brazil) (http://www.transifex.com/projects/p/xbmc-addons/language/pt_BR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]Adicionar nova lista customizada[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]Adicionar novo Filme[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "Mostrar Lista Assistidos"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "Mostras Listas Customizadas"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Ajustes do Add-on"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "Deletar Lista"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Deletar Filme"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "Mostrar Info Filme"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "Por favor entre título do filme"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Por favor selecione o filme correto"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "Por favor selecione a lista"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Deletar Filme"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Você tem certeza que quer deletar?"
+
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "Deletar Lista"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "Você tem certeza que quer deletar?"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "Minha Lista Assistidos"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Erro Conexão"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "Erro Credenciais do Usuário"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "Você deseja alterar agora?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "Nenhum filme encontrado"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "Sucesso"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Por favor use o menu de contexto"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "Você precisar abrir o menu de contexto"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "para escolher a ação desejada"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Nome de usuário"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Senha"
+
+msgctxt "#30302"
+msgid "Default List"
+msgstr "Lista Padrão"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "Usar HTTPs"
+
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "Privacidade Padrão para novas listas"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "Privada"
+
+msgctxt "#30312"
+msgid "Friends"
+msgstr "Amigos"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "Pública"

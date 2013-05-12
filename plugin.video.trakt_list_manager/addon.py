@@ -409,8 +409,10 @@ def get_xbmc_movies():
     return movie_dict
 
 
-@plugin.route('/movie/<movie_file>/play')
-def play_movie(movie_file):
+@plugin.route('/movie/<imdb_id>/play')
+def play_movie(imdb_id):
+    xbmc_movies = get_xbmc_movies()
+    movie_file = xbmc_movies[imdb_id]
     return plugin.set_resolved_url(movie_file)
 
 
@@ -422,7 +424,7 @@ def format_movies(raw_movies):
             label = u'[B]%s[/B]' % movie['title']
             path = plugin.url_for(
                 endpoint='play_movie',
-                movie_file=xbmc_movies[movie['imdb_id']]
+                imdb_id=movie['imdb_id']
             )
         else:
             label = movie['title']

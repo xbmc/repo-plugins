@@ -1,0 +1,37 @@
+# XBMC Media Center language file
+# Addon Name: Trakt.tv List Manager
+# Addon id: plugin.video.trakt_list_manager
+# Addon Provider: Tristan Fischer (sphere@dersphere.de)
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Swedish (http://www.transifex.com/projects/p/xbmc-addons/language/sv/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sv\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30103"
+msgid "Show Movie Info"
+msgstr "Visa filminformation"
+
+msgctxt "#30300"
+msgid "Username"
+msgstr "Användarnamn"
+
+msgctxt "#30301"
+msgid "Password"
+msgstr "Lösenord"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "Använd HTTPS"
+
+msgctxt "#30312"
+msgid "Friends"
+msgstr "Vänner"

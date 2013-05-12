@@ -1,3 +1,8 @@
+0.1.2 (12.05.2013)
+ - fixed error if movie from watchlist or customlist is present in xbmc
+   database and movie file contains unicode character
+ - added translations
+
 0.1.1 (29.04.2013)
  - added feature to play movies from trakt.tv lists if they are present in 
    the xbmc database. Present movies are bold.

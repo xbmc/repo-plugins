@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.trakt_list_manager" name="Trakt.tv List Manager" version="0.1.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.trakt_list_manager" name="Trakt.tv List Manager" version="0.1.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -15,7 +15,21 @@
         <forum>http://forum.xbmc.org/showthread.php?tid=161319</forum>
         <email>sphere@dersphere.de</email>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <summary lang="de">Verwalten Trakt.tv Listen von XBMC</summary>
+        <summary lang="el">Διαχείριση Λιστών του Trakt.tv από το XBMC</summary>
         <summary lang="en">Manage Trakt.tv Lists from XBMC</summary>
+        <summary lang="gl">Xestionar as listaxes de Trakt.tv dende o XBMC</summary>
+        <summary lang="ko">Trakt.tv 목록 관리</summary>
+        <summary lang="pl">Zarządzanie listami Trakt.tv z XBMC</summary>
+        <summary lang="pt">Gerir Listas Trakt.tv a partir do XBMC</summary>
+        <summary lang="pt_BR">Administrar Lista Trakt.tv via XBMC</summary>
+        <description lang="de">Mit Trakt.tv-Listen-Manager können Sie verwalten Ihre Trakt.tv-Listen.[CR]Aktuelle Features: [CR] - erstellen/löschen/View benutzerdefinierte Listen [CR] - hinzufügen/löschen Filme von benutzerdefinierten Listen [CR]-Watchlist anzeigen </description>
+        <description lang="el">Διαχείριση Λιστών του Trakt.tv μπορείτε να διαχειριστείτε τις λίστες σας του Trakt.tv.[CR]Χαρακτηριστικά:[CR]- Δημιουργία/Διαγραφή/Προβολή Προσαρμοσμένων Λιστών[CR]- Προσθήκη/Διαγραφή Ταινιών από Προσαρμοσμένες Λίστες[CR]- Προβολή Watchlist</description>
         <description lang="en">With Trakt.tv List Manager you can manage your Trakt.tv Lists.[CR]Current Features:[CR]- Create/Delete/View Custom Lists[CR]- Add/Delete Movies from Custom Lists[CR]- View Watchlist</description>
+        <description lang="gl">Grazas ao Xestor de Trakt.tv pode xestionar as súas listaxes.[CR]Características actuais:[CR]- Crear/Eliminar/Ver Listaxes Personalizadas[CR]- Engadir/Eliminar Filmes dende as Listaxes Personalizadas[CR]- Ver Listaxes</description>
+        <description lang="ko">Trakt.tv 목록을 관리할 수 있습니다.[CR]현재 기능:[CR]- 사용자 목록 생성/삭제/보기[CR]- 사용자 목록에서 영화 추가/삭제[CR]- 워치리스트 보기</description>
+        <description lang="pl">Przy użyciu menedżera list Trakt.tv można zarządzać własnymi listami Trakt.tv.[CR]Obecne możliwości:[CR]- Tworzenie/usuwanie/przeglądanie własnych list[CR]- Dodawanie/usuwanie filmów z własnych list[CR]- Przeglądanie list obserwowanych</description>
+        <description lang="pt">Com o Trakt.tv List Manager, pode gerir as suas listas Trakt.tv.[CR]Funcionalidades actuais:[CR]- Criar/Apagar/Ver Listas Personalizadas[CR]- Adicionar/Apagar Filmes em Listas Personalizadas[CR]- Ver Lista de Interesses</description>
+        <description lang="pt_BR">Com Trakt.tv Administrador de lista você pode gerenciar suas listas no Trakt.tv[CR]Recursos Atuais:[CR]-Criar/Deletar/Ver Listas Customizadas[CR]-Adicionar/Deletar Filmes das Listas Customizadas[CR]-Ver Listas dos Assistidos.</description>
     </extension>
 </addon>

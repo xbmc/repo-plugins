@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Programs A-Ö</string>
+  <string id="30001">Categories</string>
+  <string id="30002">Live on SVT Play</string>
+  <string id="30003">Latest programs</string>  
+  <string id="30004">Latest news broadcast</string>
+  <string id="30005">Recommended</string>
+  <string id="30006">Search</string>
+  <string id="30007">BestOfSVT.se</string>
+  <string id="30008">Channels</string>
+  <string id="30100">This program is only available at www.svtplay.se</string>
+  <string id="30101">Show more...</string>
+  <string id="30102">Search for:</string>
+  <string id="30103">The search returned no results</string>
+  <string id="30104">Programs</string>
+  <string id="30105">Episodes</string>
+  <string id="30106">Clips</string>
+  <string id="30500">Debug</string>
+  <string id="30501">Show subtitles</string>
+  <string id="30502">Group programs in A-Ö by first character</string>
+  <string id="30503">Number of programs per page</string>
+  <string id="30504">Hide sign language interpreted programs</string>
+  <string id="30505">Don't use avc1.77.30 streams</string>
+  <string id="30506">Show both clips and episodes for programs</string>
+  <string id="30507">Set bandwidth manually</string>
+  <string id="30508">Bandwidth</string>
+  <string id="40001">General</string>
+  <string id="40002">Advanced</string>
+</strings>

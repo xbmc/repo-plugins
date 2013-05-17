@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2010 by peterpanzki
-import urllib,urllib2,re,time,xbmcplugin,xbmcgui,xbmcaddon
+import urllib,urllib2,re,time,xbmcplugin,xbmcgui,xbmcaddon,threading
 
 # plugin handle
 SITE = "http://www1.spiegel.de/active/playlist/fcgi/playlist.fcgi/asset=flashvideo/mode=list/displaycategory="
@@ -9,6 +9,7 @@ VIDS_PER_SITE = "/count=" + str(VIDS) + "/"
 handle = int(sys.argv[1])
 __addon__        = xbmcaddon.Addon()
 __language__     = __addon__.getLocalizedString
+items = []
 
 def show_root_menu():
     addDirectoryItem(__addon__.getLocalizedString(30003), {"cat": "newsmitfragmenten", "site": 1})  
@@ -28,9 +29,23 @@ def show_cat_menu(cat, vnr):
     for m in match:
         parts = re.compile('<videoid>(.+?)</videoid><thema>(.+?)</thema><headline>(.+?)</headline><teaser>(.+?)</teaser>.+?<date>(.+?)</date><playtime>(.+?)</playtime><thumb>(.+?)</thumb>',re.DOTALL).findall(m)
         for vid,name,headline,teaser,date,playtime,pic in parts:
-            liStyle=xbmcgui.ListItem(name + " - " + headline, iconImage="default.png", thumbnailImage=pic)
-            liStyle.setInfo( type="Video", infoLabels={ "Title": name, "duration": playtime, "plotoutline": headline, "plot": teaser, "date": date})
-            addLinkItem("http://video.spiegel.de/flash/" + getVideo(vid), liStyle)
+            name=convert_to_UTF8(name)
+            headline=convert_to_UTF8(headline)
+            teaser=convert_to_UTF8(teaser)
+            liStyle=xbmcgui.ListItem((name + " - " + headline), iconImage="default.png", thumbnailImage=pic)
+            liStyle.setInfo( type="Video", infoLabels={ "Title": name, "plotoutline": headline, "plot": teaser, "date": date})
+            liStyle.addStreamInfo('video', {'duration': getSeconds(playtime)})
+            items.append({'vid': vid, "li" :liStyle})
+    threads = []
+    for index,i in enumerate(items):
+      # pass the index to the thread function to preserve the original video order
+      thread = threading.Thread(target=setVideoURL, args=(i['vid'],index,))
+      thread.start()
+      threads.append(thread)
+    for t in threads:
+      t.join()
+    for i in items:
+      addLinkItem(i['url'],i['li'])
     content = getUrl(SITE + cat + VIDS_PER_SITE + "start=" + str(int(vnr) + VIDS))
     match = re.compile('<listitem>(.+?)</listitem>',re.DOTALL).findall(content)
     if len(match) > 0:
@@ -67,8 +82,11 @@ def addDirectoryItem(name, parameters={},pic=""):
     url = sys.argv[0] + '?' + urllib.urlencode(parameters)
     return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)
 
-def addLinkItem(url,li):
-    return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=False)
+def addLinkItem(url, li):
+    return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=False, totalItems=len(items))
+
+def setVideoURL(vid, index):
+    items[index]['url']="http://video.spiegel.de/flash/" + getVideo(vid)
 
 def getUrl(url):
     req = urllib2.Request(url)
@@ -76,6 +94,20 @@ def getUrl(url):
     link=response.read()
     response.close()
     return link
+
+def convert_to_UTF8(str):
+    return str.decode('iso-8859-1').encode('utf8')
+
+def getSeconds(playtime):
+    t = map(int, re.split(r"[:]", playtime))
+    if len(t)==1:
+      return t[0]
+    elif len(t)==2:
+      return t[0]*60+t[1]
+    elif len(t)==3:
+      return t[0]*3600+t[1]*60+t[2]
+    else:
+      return 0
 
 # parameter values
 params = parameters_string_to_dict(sys.argv[2])

@@ -1,3 +1,14 @@
+[B]Version 1.1.8[/B]
+- Fix archive section
+- Fix to comply with official repo requirements
+
+[B]Version 1.1.8[/B]
+- Add new logo
+
+[B]Version 1.1.7[/B]
+- Fix "User Content" section
+- Dynamically load show list, making new shows appear automatically in the future
+
 [B]Version 1.1.6[/B]
 - Add new shows (by dethfeet)
 - Fix blip.tv, springboard

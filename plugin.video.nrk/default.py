@@ -39,9 +39,9 @@ def view_top():
 
 @plugin.route('/live')
 def live():
-  add("NRK 1", "http://nrk1-i.akamaihd.net/hls/live/201543/nrk1/master.m3u8", "application/vnd.apple.mpegurl", "nrk1.png")
-  add("NRK 2", "http://nrk2-i.akamaihd.net/hls/live/201544/nrk2/master.m3u8", "application/vnd.apple.mpegurl", "nrk2.png")
-  add("NRK 3", "http://nrk3-i.akamaihd.net/hls/live/201545/nrk3/master.m3u8", "application/vnd.apple.mpegurl", "nrk3.png")
+  add("NRK 1", "http://nrk1-i.akamaihd.net/hls/live/213271/nrk1/master.m3u8", "application/vnd.apple.mpegurl", "nrk1.png")
+  add("NRK 2", "http://nrk2-i.akamaihd.net/hls/live/213272/nrk2/master.m3u8", "application/vnd.apple.mpegurl", "nrk2.png")
+  add("NRK 3", "http://nrk3-i.akamaihd.net/hls/live/213273/nrk3/master.m3u8", "application/vnd.apple.mpegurl", "nrk3.png")
   add("NRK P1", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h", "audio/mpeg")
   add("NRK P2", "http://lyd.nrk.no/nrk_radio_p2_mp3_h", "audio/mpeg")
   add("NRK P3", "http://lyd.nrk.no/nrk_radio_p3_mp3_h", "audio/mpeg")

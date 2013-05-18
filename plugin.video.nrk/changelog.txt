@@ -1,3 +1,6 @@
+[B]4.4.7[/B]
+- Fikset direktestrømmer
+
 [B]4.4.6[/B]
 - Lagt til "Alltid RR" (radioresepsjonen)
 

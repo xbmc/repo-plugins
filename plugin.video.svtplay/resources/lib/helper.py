@@ -15,7 +15,7 @@ def getPage(url):
     return result["content"]
 
   if result["status"] == 500:
-    common.log("redirect url: %s" &result["new_url"])
+    common.log("redirect url: %s" %result["new_url"])
     common.log("header: %s" %result["header"])
     common.log("content: %s" %result["content"])
     return None

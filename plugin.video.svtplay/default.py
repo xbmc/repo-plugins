@@ -149,6 +149,11 @@ def viewLatest(mode,page,index):
 
 
 def viewCategory(url,page,index):
+  if url == svt.URL_TO_OA:
+    dialog = xbmcgui.Dialog()
+    dialog.ok("SVT Play", localize(30107))
+    viewStart()
+    return 
   createDirectory(url,page,index,MODE_CATEGORY,MODE_PROGRAM)
 
 

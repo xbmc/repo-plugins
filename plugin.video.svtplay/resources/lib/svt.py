@@ -19,7 +19,7 @@ URL_TO_LATEST_NEWS = "?tab=news&sida=1"
 URL_TO_RECOMMENDED = "?tab=recommended&sida=1"
 URL_TO_SEARCH = "/sok?q="
 URL_TO_LIVE = "/ajax/live"
-
+URL_TO_OA = "/kategorier/oppetarkiv"
 JSON_SUFFIX = "?output=json"
 
 CLASS_SHOW_MORE_BTN = "[^\"']*playShowMoreButton[^\"']*"

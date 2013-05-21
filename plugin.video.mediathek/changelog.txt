@@ -1,3 +1,4 @@
+0.4.10 - FIX: NDR Fixed by dethfeet 
 0.4.10 - FIX: adopt some specialities in the ARD Format
        - FIX: Get all ARD features back working
        - FIX: Get ARD working again (without "Sendungen A-Z")

@@ -2,20 +2,27 @@
 Addon Functions
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '03-31-2013'
-__version__ = '0.0.7'
+__date__ = '05-12-2013'
+__version__ = '0.0.8'
 '''
 
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, urllib, urllib2, sys, time, datetime, buggalo
 settings = sys.modules["__main__"].settings
 plugin = sys.modules["__main__"].plugin
-useragent = 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0'
+useragent = 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0'
 
-def addListItem(label, image, url, isFolder, infoLabels = False, fanart = False, duration = False):
+def addListItem(label, image, url, isFolder, totalItems, infoLabels = False, fanart = False, duration = False):
 	listitem = xbmcgui.ListItem(label = label, iconImage = image, thumbnailImage = image)
+	if url['mode']:
+		u = sys.argv[0] + '?' + urllib.urlencode(url)
+	else:
+		u = url['url']
 	if not isFolder:
 		if settings.getSetting('download') == '' or settings.getSetting('download') == 'false':
 			listitem.setProperty('IsPlayable', 'true')
+			if settings.getSetting('playall') == 'true':
+				playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+				playlist.add(url = u, listitem = listitem)
 	if fanart:
 		listitem.setProperty('fanart_image', fanart)
 	if infoLabels:
@@ -25,11 +32,7 @@ def addListItem(label, image, url, isFolder, infoLabels = False, fanart = False,
 				listitem.addStreamInfo('video', { 'duration': int(duration) })
 			else:
 				listitem.setInfo(type = 'video', infoLabels = { 'duration': str(datetime.timedelta(milliseconds=int(duration)*1000)) } )
-	if url['mode']:
-		u = sys.argv[0] + '?' + urllib.urlencode(url)
-	else:
-		u = url['url']
-	ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = isFolder)
+	ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = isFolder, totalItems = totalItems)
 	return ok
 
 def playListItem(label, image, path, infoLabels, PlayPath = False):

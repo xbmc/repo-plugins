@@ -16,17 +16,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 import re,time
+import pprint
 from mediathek import *
 from xml.dom import minidom;
 
-regex_dateString = re.compile("\\d{4}-\\d{2}-\\d{2}");
-
 class NDRMediathek(Mediathek):
   @classmethod
+  
   def name(self):
     return "NDR";
+    
   def isSearchable(self):
     return True;
+  
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
     
@@ -45,7 +47,8 @@ class NDRMediathek(Mediathek):
      
     self.rootLink = "http://www.ndr.de"
     self.menuLink = self.rootLink+"/mediathek/mediathek100-mediathek_medium-tv_searchtype-"
-    self.searchLink = self.menuLink+"fulltext_pageSize-"+self.pageSize+".xml?";
+        
+    self.searchLink = self.rootLink+"/mediathek/mediatheksuche101.html?pagenumber=1&search_video=true&"
     
     self.regex_extractVideoLink = re.compile("rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/(.*\\.)(hi.mp4|lo.flv)");  
     
@@ -55,6 +58,8 @@ class NDRMediathek(Mediathek):
     self.mmsBaseLink = "mms://a874.v1608102.c160810.g.vm.akamaistream.net/7/874/160810/v0001/wm.origin.ndr.gl-systemhaus.de/msmedia/";
     self.httpBaseLink = "http://media.ndr.de/progressive/";
     
+    
+    #Hauptmenue
     self.menuTree = [
       TreeNode("0","Die neuesten Videos",self.menuLink+"teasershow_pageSize-"+self.pageSize+".xml",True),
       ];
@@ -68,25 +73,40 @@ class NDRMediathek(Mediathek):
     for menuNode in menuNodes:
         menuId = menuNode.getAttribute('id')
         menuItem = unicode(menuNode.firstChild.data)
-        menuLink = self.rootLink+"/mediathek/mediathek100-mediathek_medium-tv_broadcast-"+menuId+"_pageSize-"+self.pageSize+".xml"
+        menuLink = self.rootLink+"/mediatheksuche105_broadcast-"+menuId+"_format-video_page-1.html"
         self.menuTree.append(TreeNode(str(x),menuItem,menuLink,True));
         x = x+1
     
   def buildPageMenu(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
     
-    rssFeed = self.loadConfigXml(link);
-    self.extractVideoObjects(rssFeed, initCount);
+    htmlPage = self.loadPage(link);
+    
+    regex_extractVideoItems = re.compile("<div class=\"m_teaser\">(.*?)</p>\n</div>\n</div>",re.DOTALL);
+    regex_extractVideoItemHref = re.compile("<a href=\".*?/([^/]*?)\.html\" title=\".*?\" .*?>");
+    regex_extractVideoItemDate = re.compile("<div class=\"subline\">.*?(\\d{2}\.\\d{2}\.\\d{4} \\d{2}:\\d{2})</div>");
+    
+    videoItems = regex_extractVideoItems.findall(htmlPage)
+    nodeCount = initCount + len(videoItems)
+    
+    for videoItem in videoItems:
+      videoID = regex_extractVideoItemHref.search(videoItem).group(1)
+      dateString = regex_extractVideoItemDate.search(videoItem).group(1)
+      dateTime = time.strptime(dateString,"%d.%m.%Y %H:%M");
+      self.extractVideoInformation(videoID,dateTime,nodeCount)
+    
+    #Pagination (weiter)
+    regex_extractNextPage = re.compile("<a href=\"(.*?)\" class=\"button_next\"  title=\"(.*?)\".*?>")
+    nextPageHref = regex_extractNextPage.search(htmlPage)
+    if nextPageHref:
+        menuItemName = nextPageHref.group(2)
+        link = self.rootLink+nextPageHref.group(1)
+        self.gui.buildVideoLink(DisplayObject(menuItemName,"","","description",link,False),self,nodeCount+1);
     
   def searchVideo(self, searchText):
-    searchText = searchText.replace( u'\xf6',"oe")
-    searchText = searchText.replace( u'\xe4',"ae")
-    searchText = searchText.replace( u'\xfc',"ue")
-    searchText = searchText.replace( u'\xdf',"ss")
-    searchText = searchText.encode("latin1")
-    searchText = urllib.urlencode({"searchtext" : searchText})
-    self.buildPageMenu(self.searchLink+searchText,0);
-    print searchText   
+    searchText = searchText.encode("UTF-8")
+    searchText = urllib.urlencode({"query" : searchText})
+    self.buildPageMenu(self.searchLink+searchText,0);   
         
   def readText(self,node,textNode):
     try:
@@ -98,22 +118,13 @@ class NDRMediathek(Mediathek):
   def loadConfigXml(self, link):
     self.gui.log("load:"+link)
     xmlPage = self.loadPage(link);
+    xmlPage = xmlPage.replace(" & "," &amp; ")
+    
     try:
         xmlDom = minidom.parseString(xmlPage);
     except:
         xmlDom = False
     return xmlDom;
-    
-  def extractVideoObjects(self, rssFeed, initCount):
-    nodes = rssFeed.getElementsByTagName("mediaItem");
-    nodeCount = initCount + len(nodes)
-    for itemNode in nodes:
-      self.extractVideoInformation(itemNode,nodeCount);
-      
-  def parseDate(self,dateString):
-    dateString = regex_dateString.search(dateString).group();
-    
-    return time.strptime(dateString,"%Y-%m-%d");
   
   def loadVideoLinks(self, videoNode):
     videoSources = videoNode.getElementsByTagName("sources")[0]
@@ -142,12 +153,7 @@ class NDRMediathek(Mediathek):
     
     return links;
     
-  def extractVideoInformation(self, itemNode, nodeCount):
-    videoId = itemNode.getAttribute("id")
-    
-    dateString = self.readText(itemNode,"date");
-    pubDate = self.parseDate(dateString);
-        
+  def extractVideoInformation(self, videoId, pubDate, nodeCount):
     videoPage = self.rootLink+"/fernsehen/sendungen/media/"+videoId+"-avmeta.xml"
     videoNode = self.loadConfigXml(videoPage)
 

@@ -8,6 +8,8 @@ import re
 import urlparse
 import brightcovePlayer
 
+urllib2.socket.setdefaulttimeout(30)
+
 addon = xbmcaddon.Addon(id='plugin.video.servustv')
 
 thisPlugin = int(sys.argv[1])

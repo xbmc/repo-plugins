@@ -1,3 +1,6 @@
+0.0.6 - Fix addon.xml
+		Fix to comply with official repo requirements
+0.0.5 - Make plugin work again
 0.0.4 - Add changelog
 		Update addon.xml
 		Remove pyamf

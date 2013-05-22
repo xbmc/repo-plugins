@@ -124,7 +124,10 @@ class main(object):
             action = None
             if type == 'node':
                 action = 'toggle'
-                status = max([0, float(nodes[name][2])]) / 255.0 * 100
+                try:
+                    status = max([0, float(nodes[name][2])]) / 255.0 * 100
+                except ValueError:
+                    status = 0
                 if status == 0:
                     image += '_0'
                 elif status < 20:
@@ -287,9 +290,9 @@ def createContext(onoff=False, toggle=False, dim=False, run=False, program=False
         for item in new_items:
             menu.append(item)
     
-	if program:
-		menu.append((shared.translate(32012), 'pinfo'))
-	else:
-		menu.append((shared.translate(32012), 'info'))
+    if program:
+        menu.append((shared.translate(32012), 'pinfo'))
+    else:
+        menu.append((shared.translate(32012), 'info'))
 	
     return menu

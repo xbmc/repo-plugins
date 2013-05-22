@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.isybrowse" name="ISY Browser" version="0.2.0" provider-name="Humble Robot">
+<addon id="plugin.program.isybrowse" name="ISY Browser" version="0.2.1" provider-name="Humble Robot">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>

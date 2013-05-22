@@ -1,2 +1,5 @@
+0.0.4 - Resize logo
+0.0.3 - Fix category browsing
+		Localize strings
 0.0.2 - Add "Neuste Videos"
 0.0.1 - Initial release

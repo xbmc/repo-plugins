@@ -33,6 +33,7 @@ def showEpisode(episode_page):
 def showEpisodeBip(videoItem):
     _regex_extractVideoFeedURL = re.compile("file=(.*?)&", re.DOTALL);
     _regex_extractVideoFeedURL2 = re.compile("file=(.*)", re.DOTALL);
+    _regex_extractVideoFeedURL3 = re.compile("data-episode-id=\"(.*?)\"", re.DOTALL);
 
     videoLink = videoItem.group(1)
     
@@ -44,9 +45,13 @@ def showEpisodeBip(videoItem):
     feedURL = _regex_extractVideoFeedURL.search(fullURL)
     if feedURL is None:
         feedURL = _regex_extractVideoFeedURL2.search(fullURL)
-    feedURL = urllib.unquote(feedURL.group(1))
     
-    blipId = feedURL[feedURL.rfind("/") + 1:]
+    if feedURL is None:
+        page = showEpisodeLoadPage(videoLink) 
+        blipId = _regex_extractVideoFeedURL3.search(page).group(1)
+    else:#This still needed for older links
+        feedURL = urllib.unquote(feedURL.group(1))
+        blipId = feedURL[feedURL.rfind("/") + 1:]
     
     stream_url = "plugin://plugin.video.bliptv/?action=play_video&videoid=" + blipId
     item = xbmcgui.ListItem(path=stream_url)

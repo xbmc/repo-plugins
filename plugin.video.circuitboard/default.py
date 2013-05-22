@@ -9,24 +9,26 @@ import urlparse
 import showEpisode
 
 thisPlugin = int(sys.argv[1])
+addon = xbmcaddon.Addon(id='plugin.video.circuitboard')
+
 baseLink = "http://cbtv.circuit-board.de/"
 newEpisodes = "http://cbtv.circuit-board.de/?feed=rss"
 
-_regex_extractShows = re.compile("<li class=\"page_item page-item-.*?\"><a href=\"("+baseLink+"\?page_id=.*?)\" title=\".*?\"><img src=\"("+baseLink+"wp-content/uploads/icons/.*?)\" class=\"page_icon\" alt=\".*?\">(.*?)</a></li>");
+_regex_extractShows = re.compile("<li class=\"page_item page-item-.*?\"><a href=\"("+baseLink+"\?page_id=.*?)\"><img src=\"("+baseLink+"wp-content/uploads/icon[s]*/.*?)\" class=\"page_icon\" alt=\".*?\">(.*?)</a></li>");
 _regex_extractEpisodes = re.compile("<li><span class=\"class1\"><a href=\"("+baseLink+"\?p=.*?)\">(.*?)</a></span></li>")
-_regex_extractNew = re.compile("<item>[ \r\n\t]*<title>(.*?)</title>[ \r\n\t]*<description><!\[CDATA\[(.*?)\]\]></description>[ \r\n\t]*<link>("+baseLink+"\?p=[0-9]*)</link>[ \r\n\t]*</item>")
+_regex_extractNew = re.compile("<item>[ \r\n\t]*<title>(.*?)</title>[ \r\n\t]*<link>("+baseLink+"\?p=[0-9]*)</link>.*?<description><!\[CDATA\[(.*?)\]\]></description>.*?</item>",re.DOTALL)
 
 def mainPage():
     page = load_page(baseLink)
     
-    addDirectoryItem("Neuste Folgen", {"action" : "new", "link": newEpisodes})
+    addDirectoryItem(addon.getLocalizedString(30000), {"action" : "new", "link": newEpisodes})
     
     
     for show in _regex_extractShows.finditer(page):
         menu_link = show.group(1)
         pic = show.group(2)
         menu_name = remove_html_special_chars(show.group(3))
-        addDirectoryItem(menu_name, {"action" : "show", "link": menu_link})
+        addDirectoryItem(menu_name, {"action" : "show", "link": menu_link}, pic)
     xbmcplugin.endOfDirectory(thisPlugin)
 
 def showPage(link):
@@ -36,7 +38,7 @@ def showPage(link):
         episode_link = episode.group(1)
         episode_title = remove_html_special_chars(episode.group(2))
         
-        addDirectoryItem(episode_title, {"action" : "episode", "link": episode_link}, None, False)
+        addDirectoryItem(episode_title, {"action" : "episode", "link": episode_link}, "", False)
     xbmcplugin.endOfDirectory(thisPlugin)
     
 
@@ -44,10 +46,10 @@ def showNew(link):
     page = load_page(urllib.unquote(link))
     
     for episode in _regex_extractNew.finditer(page):
-        episode_link = episode.group(3)
+        episode_link = episode.group(2)
         episode_title = remove_html_special_chars(episode.group(1))
         
-        addDirectoryItem(episode_title, {"action" : "episode", "link": episode_link}, None, False)
+        addDirectoryItem(episode_title, {"action" : "episode", "link": episode_link}, "", False)
     xbmcplugin.endOfDirectory(thisPlugin)
     
 def playEpisode(link):

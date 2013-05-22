@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <!-- General -->
-  <category label="General">
-    <setting id="username" type="text" label="33100" default="" />
-	<!-- Video Quality -->
-    <setting id="video" type="enum" label="33000" lvalues="33001|33002|33003|33004" default="0" />
- 	<!-- Title Display -->
-	<setting id="titledisplay" type="enum" label="33010" lvalues="33011|33012|33013|33014" default="0" />
-  </category>
-  
-
+	<!-- General -->
+	<category label="General">
+		<setting id="username" type="text" label="33100" default="" />
+		<!-- Video Quality -->
+		<setting id="video" type="enum" label="33000" lvalues="33001|33002|33003|33004" default="0" />
+		<!-- Title Display -->
+		<setting id="titledisplay" type="enum" label="33010" lvalues="33011|33012|33013|33014" default="0" />
+	</category>
 </settings>

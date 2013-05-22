@@ -40,4 +40,10 @@
   <string id="33014">Streamer</string>
 
   <string id="33100">Username</string>
+  
+  <!--title-->
+  <string id="34000">Unnamed Streamer</string>
+  <string id="34001">Untitled Stream</string>
+  <string id="34002">Unknown Number of Viewers</string>
+
 </strings>

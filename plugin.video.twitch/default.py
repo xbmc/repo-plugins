@@ -1,324 +1,187 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import xbmcplugin
-import xbmcgui
+from converter import JsonListItemConverter 
+from functools import wraps
+from twitch import TwitchTV, TwitchVideoResolver, Keys, TwitchException
+from xbmcswift2 import Plugin #@UnresolvedImport
 import sys
-import urllib2
-import urllib
-import re
-import xbmcaddon
-import os
-import socket
-try:
-    import json
-except:
-    import simplejson as json
-from xbmcswift2 import Plugin
 
-settings = xbmcaddon.Addon(id='plugin.video.twitch')
-httpHeaderUserAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0'
-translation = settings.getLocalizedString
-ITEMS_PER_SITE = 20
-plugin = Plugin()
+ITEMS_PER_PAGE = 20
+LINE_LENGTH = 60
+
+PLUGIN = Plugin()
+CONVERTER = JsonListItemConverter(PLUGIN, LINE_LENGTH)
+TWITCHTV = TwitchTV()
 
 
-def downloadWebData(url):
-    try:
-        req = urllib2.Request(url)
-        req.add_header('User-Agent', httpHeaderUserAgent)
-        response = urllib2.urlopen(req)
-        data = response.read()
-        response.close()
-        return data
-    except urllib2.HTTPError, e:
-        # HTTP errors usualy contain error information in JSON Format
-        return e.fp.read()
-    except urllib2.URLError, e:
-        showNotification(translation(32001), translation(32010))
-
-def showNotification(caption, text):
-     xbmc.executebuiltin("XBMC.Notification(" + caption + "," + text + ")")
+def managedTwitchExceptions(func):
+    @wraps(func)
+    def wrapper(*args,**kwargs):
+        try:
+            return func(*args, **kwargs)
+        except TwitchException as error:
+            handleTwitchException(error)
+    return wrapper
 
 
-def getJsonFromTwitchApi(url):
-    jsonString = downloadWebData(url)
-    if jsonString is None:
-        return None
-    try:
-        jsonData = json.loads(jsonString)
-    except:
-        showNotification(translation(32008), translation(32008))
-        return None
-    if type(jsonData) is dict and 'error' in jsonData.keys():
-        showNotification(translation(32007),jsonData['error'])
-        return None
-    return jsonData
-
-def getTitle(streamer, title, viewers):
-        titleDisplay = settings.getSetting('titledisplay')
-        if streamer is None:
-            streamer = '-'
-        if title is None:
-            title = 'no title'
-        if viewers is None:
-            viewers = '0'    
-
-        streamTitle = streamer + ' - ' + title
-        if titleDisplay == '0':
-            #Streamer - Stream Title
-            streamTitle = streamer + ' - ' + title
-        elif titleDisplay == '1':
-            #Viewers - Streamer - Stream Title
-            streamTitle = str(viewers) + ' - ' + streamer + ' - ' + title
-        elif titleDisplay == '2':
-            #Stream Title
-            streamTitle = title
-        elif titleDisplay == '3':
-            #Streamer
-            streamTitle = streamer
-        return streamTitle
+def handleTwitchException(exception):
+    codeTranslations = {TwitchException.NO_STREAM_URL   : 32004,
+                        TwitchException.STREAM_OFFLINE  : 32002,
+                        TwitchException.HTTP_ERROR      : 32001,
+                        TwitchException.JSON_ERROR      : 32008 }
+    code = exception.code
+    title = 31000
+    msg = codeTranslations[code]
+    PLUGIN.notify(PLUGIN.get_string(title), PLUGIN.get_string(msg))
 
 
-@plugin.route('/')
+@PLUGIN.route('/')
 def createMainListing():
     items = [
-        {'label': translation(30005), 'path': plugin.url_for(
-            endpoint='createListOfFeaturedStreams'
-        )},
-        {'label': translation(30001), 'path': plugin.url_for(
-            endpoint='createListOfGames', sindex='0'
-        )},
-        {'label': translation(30002), 'path': plugin.url_for(
-            endpoint='createFollowingList'
-        )},
-        {'label': translation(30006), 'path': plugin.url_for(
-            endpoint='createListOfTeams', sindex='0'
-        )},
-        {'label': translation(30003), 'path': plugin.url_for(
-            endpoint='search'
-        )},
-        {'label': translation(30004), 'path': plugin.url_for(
-            endpoint='showSettings'
-        )}
+        {
+         'label': PLUGIN.get_string(30005),
+         'path': PLUGIN.url_for(endpoint = 'createListOfFeaturedStreams')
+         },
+        {
+         'label': PLUGIN.get_string(30001),
+         'path': PLUGIN.url_for(endpoint = 'createListOfGames', index = '0')
+         },
+        {
+         'label': PLUGIN.get_string(30002),
+         'path': PLUGIN.url_for(endpoint = 'createFollowingList')
+         },
+        {
+         'label': PLUGIN.get_string(30006),
+         'path': PLUGIN.url_for(endpoint = 'createListOfTeams')
+         },
+        {
+         'label': PLUGIN.get_string(30003),
+         'path': PLUGIN.url_for(endpoint = 'search')
+         },
+        {
+         'label': PLUGIN.get_string(30004),
+         'path': PLUGIN.url_for(endpoint = 'showSettings')
+         }
     ]
     return items
 
-@plugin.route('/createListOfFeaturedStreams/')
+
+@PLUGIN.route('/createListOfFeaturedStreams/')
+@managedTwitchExceptions
 def createListOfFeaturedStreams():
-    items = []
-    jsonData = getJsonFromTwitchApi(
-        url='https://api.twitch.tv/kraken/streams/featured')
-    if jsonData is None:
-        return
-    for x in jsonData['featured']:
-        try:
-            streamData = x['stream']
-            channelData = x['stream']['channel']
-            loginname = channelData['name']
-            title = getTitle(streamer=channelData.get('name'), title=channelData.get('status'), viewers=streamData.get('viewers'))
-            items.append({'label': title, 'path': plugin.url_for(endpoint='playLive', name=loginname),
-             'is_playable': True, 'icon' : channelData['logo']})
-        except:
-            pass
+    streams = TWITCHTV.getFeaturedStream()
+    return [CONVERTER.convertChannelToListItem(element[Keys.STREAM][Keys.CHANNEL])
+            for element in streams]
+
+
+@PLUGIN.route('/createListOfGames/<index>/')
+@managedTwitchExceptions
+def createListOfGames(index):
+    index, offset, limit = calculatePaginationValues(index)
+
+    games = TWITCHTV.getGames(offset, limit)
+    items = [CONVERTER.convertGameToListItem(element[Keys.GAME]) for element in games]
+
+    items.append(linkToNextPage('createListOfGames', index))
     return items
 
 
-@plugin.route('/createListOfGames/<sindex>/')
-def createListOfGames(sindex):
-    index = int(sindex)
-    items = []
-    jsonData = getJsonFromTwitchApi(url='https://api.twitch.tv/kraken/games/top?limit=' + str(ITEMS_PER_SITE) + '&offset=' + str(index * ITEMS_PER_SITE))
-    if jsonData is None:
-        return
-    for x in jsonData['top']:
-        try:
-            name = str(x['game']['name'])
-        except:
-            continue
-        try:
-            image = x['game']['images']['super']
-        except:
-            image = ''
-        items.append({'label': name, 'path': plugin.url_for(
-            'createListForGame', gameName=name, sindex='0'), 'icon' : image})
-    if len(jsonData['top']) >= ITEMS_PER_SITE:
-        items.append({'label': translation(31001), 'path': plugin.url_for('createListOfGames', sindex=str(index + 1))})
+@PLUGIN.route('/createListForGame/<gameName>/<index>/')
+@managedTwitchExceptions
+def createListForGame(gameName, index):
+    index, offset, limit = calculatePaginationValues(index)
+    items = [CONVERTER.convertChannelToListItem(item[Keys.CHANNEL])for item
+             in TWITCHTV.getGameStreams(gameName, offset, limit)]
+
+    items.append(linkToNextPage('createListForGame', index, gameName = gameName))
     return items
 
 
-@plugin.route('/createListForGame/<gameName>/<sindex>/')
-def createListForGame(gameName, sindex):
-    index = int(sindex)
-    items = []
-    jsonData = getJsonFromTwitchApi(url='https://api.twitch.tv/kraken/streams?game=' + urllib.quote_plus(gameName) + '&limit=' + str(ITEMS_PER_SITE) + '&offset=' + str(index * ITEMS_PER_SITE))
-    if jsonData is None:
-        return
-    for x in jsonData['streams']:
-        channelData = x['channel']
-        try:
-            image = channelData['logo']
-        except:
-            image = ""
-        title = getTitle(streamer=channelData.get('name'), title=channelData.get('status'), viewers=x.get('viewers'))
-        items.append({'label': title, 'path': plugin.url_for(endpoint='playLive', name=channelData['name']),
-                    'is_playable' : True, 'icon' : image})
-    if len(jsonData['streams']) >= ITEMS_PER_SITE:
-        items.append({'label': translation(31001), 'path': plugin.url_for(
-            'createListForGame', gameName=gameName, sindex=str(index + 1))})
-    return items
-
-
-@plugin.route('/createFollowingList/')
+@PLUGIN.route('/createFollowingList/')
+@managedTwitchExceptions
 def createFollowingList():
-    items = []
-    username = settings.getSetting('username').lower()
-    if not username:
-        settings.openSettings()
-        username = settings.getSetting('username').lower()
-    jsonData = getJsonFromTwitchApi('http://api.justin.tv/api/user/favorites/' + username + '.json?limit=100&offset=0&live=true')
-    if jsonData is None:
-        return
-    for x in jsonData:
-        loginname = x['login']
-        image = x['image_url_huge']
-        title = getTitle(streamer=x.get('login'), title=x.get('status'), viewers=x.get('views_count'))
-        items.append({'label': title , 'path': plugin.url_for(endpoint='playLive', name=loginname), 'icon' : image, 'is_playable' : True})
-    return items    
-
-@plugin.route('/createListOfTeams/')
-def createListOfTeams():
-    items = []
-    jsonData = getJsonFromTwitchApi('https://api.twitch.tv/kraken/teams/')
-    if jsonData is None:
-        return
-    for x in jsonData['teams']:
-        try:
-            image = x['logo']
-        except:
-            image = ""
-        name = x['name']
-        items.append({'label': name, 'path': plugin.url_for(endpoint='createListOfTeamStreams', team=name), 'icon' : image})
-    return items
+    username = getUserName()
+    streams = TWITCHTV.getFollowingStreams(username)
+    return [CONVERTER.convertChannelToListItem(stream[Keys.CHANNEL]) for stream in streams]
 
 
-@plugin.route('/createListOfTeamStreams/<team>/')
-def createListOfTeamStreams(team):
-    items = []      
-    jsonData = getJsonFromTwitchApi(url='http://api.twitch.tv/api/team/' + urllib.quote_plus(team) + '/live_channels.json')
-    if jsonData is None:
-        return
-    for x in jsonData['channels']:
-        try:
-            image = x['channel']['image']['size600']
-        except:
-            image = ""
-        try:
-            channelData = x['channel']
-            title = getTitle(streamer=channelData.get('display_name'), title=channelData.get('title'), viewers=channelData.get('current_viewers'))
-            channelname = x['channel']['name']
-            items.append({'label': title, 'path': plugin.url_for(endpoint='playLive', name=channelname), 'is_playable' : True, 'icon' : image})
-        except:
-            # malformed data element
-            pass
-    return items
-
-
-@plugin.route('/search/')
+@PLUGIN.route('/search/')
+@managedTwitchExceptions
 def search():
-    items = []
-    keyboard = xbmc.Keyboard('', translation(30101))
-    keyboard.doModal()
-    if keyboard.isConfirmed() and keyboard.getText():
-        search_string = urllib.quote_plus(keyboard.getText())
-        sdata = downloadWebData('http://api.swiftype.com/api/v1/public/engines/search.json?callback=jQuery1337&q=' + search_string + '&engine_key=9NXQEpmQPwBEz43TM592&page=1&per_page=' + str(ITEMS_PER_SITE))
-        sdata = sdata.replace('jQuery1337', '')
-        sdata = sdata[1:len(sdata) - 1]
-        jdata = json.loads(sdata)
-        records = jdata['records']['broadcasts']
-        for x in records:
-            items.append({'label': x['title'], 'path': plugin.url_for(
-                endpoint='playLive', name=x['user']
-            ), 'is_playable' : True})
-        return items
+    query = PLUGIN.keyboard('', PLUGIN.get_string(30101))
+    if query:
+        target = PLUGIN.url_for(endpoint = 'searchresults', query = query, index = '0')
+    else:
+        target = PLUGIN.url_for(endpoint = 'createMainListing')
+    PLUGIN.redirect(target)
 
-@plugin.route('/showSettings/')
+
+@PLUGIN.route('/searchresults/<query>/<index>/')
+@managedTwitchExceptions
+def searchresults(query, index = '0'):
+    index, offset, limit = calculatePaginationValues(index)
+    streams = TWITCHTV.searchStreams(query, offset, limit)
+    
+    items = [CONVERTER.convertChannelToListItem(stream[Keys.CHANNEL]) for stream in streams]
+    items.append(linkToNextPage('searchresults', index, query = query))
+    return items
+
+
+@PLUGIN.route('/showSettings/')
 def showSettings():
     #there is probably a better way to do this
-    settings.openSettings()
+    PLUGIN.open_settings()
 
 
-def getSwfUrl(channel_name):
-    # Helper method to grab the swf url
-    base_url = 'http://www.justin.tv/widgets/live_embed_player.swf?channel=%s' % channel_name
-    headers = {'User-agent': httpHeaderUserAgent,
-               'Referer': 'http://www.justin.tv/' + channel_name}
-    req = urllib2.Request(base_url, None, headers)
-    response = urllib2.urlopen(req)
-    return response.geturl()
-
-
-def getBestJtvTokenPossible(name):
-    # Helper method to find another jtv token
-    swf_url = getSwfUrl(name)
-    headers = {'User-agent': httpHeaderUserAgent,
-               'Referer': swf_url}
-    url = 'http://usher.justin.tv/find/' + name + '.json?type=any&group='
-    data = json.loads(downloadWebData(url))
-    bestVideoHeight = -1
-    bestIndex = -1
-    index = 0
-    for x in data:
-        value = x.get('token', '')
-        videoHeight = int(x['video_height'])
-        if (value != '') and (videoHeight > bestVideoHeight):
-            bestVideoHeight = x['video_height']
-            bestIndex = index
-        index = index + 1
-    if bestIndex == -1:
-        return None
-    return data[bestIndex]
-
-
-@plugin.route('/playLive/<name>/')
+@PLUGIN.route('/playLive/<name>/')
+@managedTwitchExceptions
 def playLive(name):
-    swf_url = getSwfUrl(name)
-    headers = {'User-agent': httpHeaderUserAgent,
-               'Referer': swf_url}
-    chosenQuality = settings.getSetting('video')
-    videoTypeName = 'any'
-    if chosenQuality == '0':
-        videoTypeName = 'any'
-    elif chosenQuality == '1':
-        videoTypeName = '720p'
-    elif chosenQuality == '2':
-        videoTypeName = '480p'
-    elif chosenQuality == '3':
-        videoTypeName = '360p'
-    url = 'http://usher.justin.tv/find/' + name + '.json?type=' + \
-        videoTypeName + '&private_code=null&group='
-    data = json.loads(downloadWebData(url))
-    tokenIndex = 0
+    videoQuality = getVideoQuality()
+    resolver = TwitchVideoResolver()
+    rtmpUrl = resolver.getRTMPUrl(name, videoQuality)
+    PLUGIN.set_resolved_url(rtmpUrl)
 
-    try:
-        # trying to get a token in desired quality
-        token = ' jtv=' + data[tokenIndex]['token'].replace(
-            '\\', '\\5c').replace(' ', '\\20').replace('"', '\\22')
-        rtmp = data[tokenIndex]['connect'] + '/' + data[tokenIndex]['play']
-    except:
-        showNotification(translation(32005),translation(32006))
-        jtvtoken = getBestJtvTokenPossible(name)
-        if jtvtoken is None:
-            showNotification(translation(31000),translation(32004))
-            return
-        token = ' jtv=' + jtvtoken['token'].replace('\\', '\\5c').replace(' ', '\\20').replace('"', '\\22')
-        rtmp = jtvtoken['connect'] + '/' + jtvtoken['play']
 
-    swf = ' swfUrl=%s swfVfy=1 live=true' % swf_url
-    Pageurl = ' Pageurl=http://www.justin.tv/' + name
-    url = rtmp+token+swf+Pageurl
-    item = xbmcgui.ListItem(path=url)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+@PLUGIN.route('/createListOfTeams/')
+@managedTwitchExceptions
+def createListOfTeams():
+    items = [CONVERTER.convertTeamToListItem(item)for item in TWITCHTV.getTeams()]
+    return items
 
+
+@PLUGIN.route('/createListOfTeamStreams/<team>/')
+@managedTwitchExceptions
+def createListOfTeamStreams(team):
+    return [CONVERTER.convertTeamChannelToListItem(channel[Keys.CHANNEL]) 
+            for channel in TWITCHTV.getTeamStreams(team)]
+
+
+def calculatePaginationValues(index):
+    index = int(index)
+    limit = ITEMS_PER_PAGE
+    offset = index * limit
+    return  index, offset, limit
+
+
+def getUserName():
+    username = PLUGIN.get_setting('username').lower()
+    if not username:
+        PLUGIN.open_settings()
+        username = PLUGIN.get_setting('username').lower()
+    return username
+
+
+def getVideoQuality():
+    chosenQuality = PLUGIN.get_setting('video')
+    qualities = {'0':sys.maxint, '1':720, '2':480, '3':360}
+    return qualities.get(chosenQuality, sys.maxint)
+
+
+def linkToNextPage(target, currentIndex, **kwargs):
+    return {
+            'label': PLUGIN.get_string(31001),
+            'path': PLUGIN.url_for(target, index = str(currentIndex+1), **kwargs)
+            }
 
 if __name__ == '__main__':
-    plugin.run()
+    PLUGIN.run()

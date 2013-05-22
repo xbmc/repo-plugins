@@ -38,3 +38,9 @@
 - channel listing in format "[channel_name] channel_status_text"
 0.2.6
 - bug fix: crashes or wrong error messages, when opening streams
+1.0.0
+- thx to ccaspers
+- major code refactoring
+- extracted twitch api
+- new search function
+- changed code style to match pep8 requirements

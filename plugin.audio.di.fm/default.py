@@ -240,17 +240,23 @@ class musicAddonXbmc:
 	Will check if channelart/icon is present in cache - if not, try to download
 	"""
 	def getChannelArt( self, channelId, channelKey ) :
-		channelArt_re = re.compile('data-id="' + str(channelId) +'">(?:[\n\s]*)<a(?:[^>]*)><img(?:[^>]*)src="([^"]*)"', re.I)
-		
+		channelArt_re = re.compile('data-channel-id="' + str(channelId) +'">(?:[\n\s]*)<a(?:[^>]*)>(?:[\n\s]*)<img(?:[^>]*)src="([^"]*)"', re.I)
+
 		try :
 			if (self._frontpageHtml == "") : # If frontpage html has not already been downloaded, do it
 				self._frontpageHtml = self._httpComm.get( self._baseUrl )
-		
 			channelartDict = channelArt_re.findall( self._frontpageHtml )
+
+			# Return false if no channel art is found
+			if len(channelartDict) < 1:
+				return False
+
+			# Add HTTP to // syntax links
+			if not "http" in channelartDict[0]:
+				channelartDict[0] = "http:" + channelartDict[0]
 
 			# Will download and save the channelart to the cache
 			self._httpComm.getImage( channelartDict[0], self._addonProfilePath + channelKey + ".png" )
-
 			return True
 
 		except Exception :

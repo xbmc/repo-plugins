@@ -5,3 +5,7 @@
 - Check video uri before trying to play it.
 - If prefered quality does not exist, fallback to highest quality.
 - Added forum link to addon.xml
+
+[B]Version 1.0.2[/B]
+- Added XBOX ONE page
+- Added search

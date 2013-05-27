@@ -1,4 +1,9 @@
+Version 0.2.2
+-------------
+- Added fanart (linqan)
+
 Version 0.2.1
+-------------
 - Shows with "&" are now listed properly.
 
 Version 0.2

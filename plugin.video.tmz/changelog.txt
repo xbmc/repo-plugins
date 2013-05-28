@@ -1,4 +1,12 @@
-[B]Version 2.0.11[/B]
+[B]Version 2.0.12[/B]
+
+- Fixed 'ValueError' when loading Raw & Uncut
+- Fixed 'expected string or buffer' error
+- Added 'Play All' option to play all videos on the current page
+- Added progress bar when loading directories
+- Added aired date for videos
+
+[B]Version 3.0.11[/B]
 
 - Version bump for frodo
 - Fixed 'KeyError' in build_video_directory

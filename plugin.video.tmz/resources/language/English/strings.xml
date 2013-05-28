@@ -10,6 +10,9 @@
 	<string id="30007">Search</string>
     <string id="30009">No videos found. Please check your spelling</string>
     <string id="30010">or try again using different search words.</string>
+	<string id="30030">Play All</string>
+	<string id="30031">Play all videos on the current page.</string>
+	<string id="30032">Enable Play All option</string>
 	<string id="30050">There was a connection error:</string>
 	<string id="30051">If this problem persists, please submit the error report.</string>
 	<string id="30052">Retry</string>

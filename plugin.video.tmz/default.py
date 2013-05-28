@@ -5,8 +5,8 @@ import simplejson as json
 plugin = 'TMZ'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '01-13-2013'
-__version__ = '3.0.11'
+__date__ = '05-26-2013'
+__version__ = '3.0.12'
 settings = xbmcaddon.Addon( id = 'plugin.video.tmz' )
 dbg = False
 dbglevel = 3
@@ -37,40 +37,62 @@ def build_main_directory():
 		]
 	for name, mode in main:
 		u = { 'mode': mode, 'name': name }
-		addListItem(label = name, image = icon, url = u, isFolder = True, infoLabels = False, fanart = fanart)
+		addListItem(label = name, image = icon, url = u, isFolder = True, totalItems = 5, infoLabels = False, fanart = fanart)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
 	setViewMode("515")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
-@retry(IndexError)
+@retry(IndexError, TypeError, ValueError)
 def build_video_directory( name ):
 	data = getUrl( 'http://www.tmz.com/videos/', True )
-	textarea = '[' + re.compile('{ name: \'' + name.upper() + '\',( )?\n         allInitialJson: {(.+?)},\n         (slug|noPaging)?', re.DOTALL).findall( data )[0][1].replace('\n', '').rsplit('[')[1].rsplit(']')[0] + ']'
-	query = json.loads(textarea)
+	textarea = '[{' + re.compile('{ name: \'' + name.upper() + '\',( )?\n         allInitialJson: {(.+?)},\n         (slug|noPaging)?', re.DOTALL).findall( data )[0][1].replace('\n', '').replace('results:','"results":') + '}]'
+	query = json.loads(textarea)[0]["results"]
+	totalItems = len(query)
+	if settings.getSetting('playall') == 'true':
+		playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+		playlist.clear()
+		u = { 'mode': '4' }
+		infoLabels = { "Title": '* ' + settings.getLocalizedString( 30030 ) + ' *', "Plot": settings.getLocalizedString( 30031 ) }
+		addListItem('* ' + settings.getLocalizedString( 30030 ) + ' *', icon, u, False, 0, infoLabels, fanart)
 	for videos in query:
 		title = clean(videos['title'].replace("\\", "")).encode('ascii', 'ignore')
 		duration = videos['duration'].replace("\\", "")
 		videoUrl = videos['videoUrl'].replace("\\", "")
 		thumb = videos['thumbnailUrl'].replace("\\", "") + '/width/490/height/266/type/3'
+		try:
+			if name == settings.getLocalizedString( 30003 ):
+				time = title.rsplit(': ')[1].rsplit(' ')[1].rsplit('/')
+				date = '20' + time[2] + '.' + time[0].zfill(2)  + '.' + time[1]
+			else:
+				date = videos['activeDate'].rsplit('T')[0]
+		except:
+			date = '0000.00.00'
 		if videoUrl.find('http://cdnbakmi.kaltura.com') == -1:
 			if settings.getSetting("quality") == '0':
 				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + videoUrl.split('_')[0].split('/')[-1:][0] + '_' + videoUrl.split('_')[1]
 			else:
 				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + videoUrl.split('_')[0].split('/')[-1:][0] + '_' + videoUrl.split('_')[1] + '/flavorId/0_' + videoUrl.split('_')[3]
-			infoLabels = { "Title": title, "Plot": title, "Duration": str(int(duration)/60) }
+			infoLabels = { "Title": title, "Plot": title, "Duration": str(int(duration)/60), "aired": str(date) }
 			u = { 'mode': '1', 'name': title, 'url': url, 'studio': name, 'thumb': thumb }
-			addListItem(label = title, image = thumb, url = u, isFolder = False, infoLabels = infoLabels, fanart = fanart, duration = duration)
+			addListItem(label = title, image = thumb, url = u, isFolder = False, totalItems = totalItems, infoLabels = infoLabels, fanart = fanart, duration = duration)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
 	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
-@retry(IndexError)	
+@retry(IndexError, ValueError)	
 def build_search_directory():
 	page = 1
 	checking = True
 	string = common.getUserInput(settings.getLocalizedString( 30007 ), "")
 	if not string:
+		build_main_directory()
 		return
+	if settings.getSetting('playall') == 'true':
+		playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+		playlist.clear()
+		u = { 'mode': '4' }
+		infoLabels = { "Title": '* ' + settings.getLocalizedString( 30030 ) + ' *', "Plot": settings.getLocalizedString( 30031 ) }
+		addListItem('* ' + settings.getLocalizedString( 30030 ) + ' *', icon, u, False, 0, infoLabels, fanart)
 	while checking:
 		url = 'http://www.tmz.com/search/json/videos/' + urllib.quote(string) + '/' + str(page) + '.json'
 		data = getPage(url)
@@ -84,7 +106,6 @@ def build_search_directory():
 			text = data['content']
 		jdata = json.loads(text)
 		total = int(jdata['total'])
-		count = int(jdata['count'])
 		if ((total - page * 25) > 0):
 			page = page + 1
 		else:
@@ -95,7 +116,7 @@ def build_search_directory():
 			thumb = results['thumbnailUrl'].replace("\\", "") + '/width/490/height/266/type/3'
 			infoLabels = { "Title": title, "Plot": title }
 			u = { 'mode': '3', 'name': title, 'url': videoUrl, 'thumb': thumb }
-			addListItem(label = title, image = thumb, url = u, isFolder = False, infoLabels = infoLabels, fanart = fanart)
+			addListItem(label = title, image = thumb, url = u, isFolder = False, totalItems = total, infoLabels = infoLabels, fanart = fanart)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
 	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
@@ -124,6 +145,11 @@ def play_video( name, url, thumb, studio ):
 			url = common.parseDOM(data, "meta", attrs = { "name": "VideoURL" }, ret = "content")[0]
 	infoLabels = { "Title": name , "Studio": "TMZ: " + studio, "Plot": name }
 	playListItem(label = name, image = thumb, path = url, infoLabels = infoLabels)
+	
+def playall():
+	playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+	xbmc.Player().play(playlist)
+	return
 
 params = getParameters(sys.argv[2])
 mode = None
@@ -164,6 +190,8 @@ try:
 		build_search_directory()
 	elif mode == 3:
 		get_search_url(name, url, thumb)
+	elif mode == 4:
+		playall()
 except Exception:
 	buggalo.onExceptionRaised()
 	

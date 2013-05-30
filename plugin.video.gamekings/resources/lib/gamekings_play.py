@@ -83,6 +83,8 @@ class Main:
 		
 		# Get the video url
 		#<meta property="og:video" content="http://stream.gamekings.tv/20130306_SpecialForces.mp4"/>
+		#sometimes the content is not (!!) correct and the real link will be "http://stream.gamekings.tv/large/20130529_E3Journaal.mp4" :(
+
 		video_urls = soup.findAll('meta', attrs={'content': re.compile("^http://stream.gamekings.tv/")}, limit=1)
 		
 		if (self.DEBUG) == 'true':
@@ -91,13 +93,17 @@ class Main:
 		if len(video_urls) == 0:
 			no_url_found = True
 		else:
-			video_url = video_urls[0]['content']
+			video_url = str(video_urls[0]['content'])
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url", str(video_url) ), xbmc.LOGNOTICE )
 			if httpCommunicator.exists( video_url ):
 				have_valid_url = True
 			else:
-				unplayable_media_file = True
+				video_url = video_url.replace("http://stream.gamekings.tv/", "http://stream.gamekings.tv/large/")
+				if httpCommunicator.exists( video_url ):
+					have_valid_url = True
+				else:
+					unplayable_media_file = True
 				
 		# Play video
 		if have_valid_url:

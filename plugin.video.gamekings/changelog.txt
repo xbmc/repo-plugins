@@ -11,5 +11,6 @@ v1.0.1 (Wednesday, 10 april 2013) :
 - filled in optional fields in addon.xml
 - used title attribute more if possible
 
-
+v1.0.2 (Wednesday, 29 may 2013) :
+- sometimes the video-url in the content-tag is not (!) correct, in that case trying with added '/large' in the video-url
  

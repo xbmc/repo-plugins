@@ -50,7 +50,8 @@ class NDRMediathek(Mediathek):
         
     self.searchLink = self.rootLink+"/mediathek/mediatheksuche101.html?pagenumber=1&search_video=true&"
     
-    self.regex_extractVideoLink = re.compile("rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/(.*\\.)(hi.mp4|lo.flv)");  
+    self.regex_extractVideoLink = re.compile("rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/(.*\\.)(hi.mp4|lo.flv)");
+    
     
     #self.rtmpBaseLink = "rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/";
     self.rtmpBaseLink = "rtmp://cp160844.edgefcs.net/ondemand/flashmedia/streams/ndr/";
@@ -91,8 +92,11 @@ class NDRMediathek(Mediathek):
     
     for videoItem in videoItems:
       videoID = regex_extractVideoItemHref.search(videoItem).group(1)
-      dateString = regex_extractVideoItemDate.search(videoItem).group(1)
-      dateTime = time.strptime(dateString,"%d.%m.%Y %H:%M");
+      try:
+        dateString = regex_extractVideoItemDate.search(videoItem).group(1)
+        dateTime = time.strptime(dateString,"%d.%m.%Y %H:%M");
+      except:
+        dateTime = None;
       self.extractVideoInformation(videoID,dateTime,nodeCount)
     
     #Pagination (weiter)
@@ -161,7 +165,7 @@ class NDRMediathek(Mediathek):
         videoNode = videoNode.getElementsByTagName("video")[0]
         title = self.readText(videoNode,"headline");
         description = self.readText(videoNode,"teaser");
-        duration = self.readText(videoNode,"duration");
+        duration = self.readText(videoNode,"duration")[:2];
         
         imageNode = videoNode.getElementsByTagName("images")[0].getElementsByTagName("image")
         if len(imageNode):

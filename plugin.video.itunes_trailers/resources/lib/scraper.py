@@ -114,9 +114,10 @@ class TrailerScraper(object):
 
     TRAILERS_URL = BASE_URL + '/%s/includes/playlists/web.inc'
     BACKGROUND_URL = BASE_URL + '/%s/images/background.jpg'
+    OVERLAY_URL = BASE_URL + '/%s/includes/%s/extralarge.html'
 
     def get_trailers(self, location):
-        tree = self.__get_tree(location)
+        tree = self.__get_tree(self.TRAILERS_URL % location)
         trailer_re = re.compile('trailer')
         for li in tree.findAll('li', {'class': trailer_re}):
             p_list = li.find('p').contents
@@ -125,10 +126,27 @@ class TrailerScraper(object):
                 section = li
             else:
                 section = tree
-            trailer_urls = [
-                a['href'] for a in
-                section.findAll('a', {'class': 'target-quicktimeplayer'})
-            ]
+            trailer_url_section = section.findAll(
+                'a', {'class': 'target-quicktimeplayer'}
+            )
+            if trailer_url_section:
+                trailer_urls = [
+                    a['href'] for a in
+                    trailer_url_section
+                ]
+            else:
+                # This is hacky but also done by js on website...
+                tname = li.find('h3').string.replace(' ', '').replace('-', '')
+                trailer_tree = self.__get_tree(
+                    self.OVERLAY_URL % (location, tname.lower())
+                )
+                resolution_gen_url = trailer_tree.find(
+                    'a', {'class': 'movieLink'}
+                )['href'].split('?')[0]
+                trailer_urls = [
+                    resolution_gen_url.replace('720p', res)
+                    for res in ('h480p', 'h720p', 'h1080p')
+                ]
             m, d, y = date_str.split()[1].split('/')
             trailer = {
                 'title': li.find('h3').string,
@@ -140,10 +158,10 @@ class TrailerScraper(object):
             }
             yield trailer
 
-    def __get_tree(self, location):
-        url = self.TRAILERS_URL % location
+    def __get_tree(self, url):
         headers = {'User-Agent': USER_AGENT}
         req = urllib2.Request(url, None, headers)
+        print 'Opening URL: %s' % url
         try:
             return BeautifulSoup(urllib2.urlopen(req).read())
         except urllib2.HTTPError, error:

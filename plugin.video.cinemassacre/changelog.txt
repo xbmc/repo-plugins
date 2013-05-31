@@ -1,3 +1,4 @@
+1.0.4 - Fix screenwave videos
 1.0.3 - Fix springboard videos
 1.0.2 - Fix recent videos
 1.0.1 - Updated with website changes

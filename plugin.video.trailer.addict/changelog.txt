@@ -1,4 +1,11 @@
-[B]Version 1.0.8[/B]
+[B]Version 1.0.9[/B]
+
+- Added Download context menu
+- Added CouchPotato context menu
+- Added 'Library' folder to search for trailers from scanned movies
+- Fixed error when loading movies without trailers
+
+[B]Version 2.0.8[/B]
 
 - Version bump for frodo
 - Fixed 'access_voilation' errors

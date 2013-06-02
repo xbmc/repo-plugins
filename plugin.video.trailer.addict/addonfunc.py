@@ -2,22 +2,36 @@
 Addon Functions
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '01-12-2013'
-__version__ = '0.0.6'
+__date__ = '06-01-2013'
+__version__ = '0.0.10'
 '''
 
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, urllib, urllib2, sys, time, datetime, buggalo
+from urlparse import urlparse
+from os.path import splitext, basename
 settings = sys.modules["__main__"].settings
 plugin = sys.modules["__main__"].plugin
-useragent = 'Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0'
+useragent = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0'
+import SimpleDownloader as downloader
+downloader = downloader.SimpleDownloader()
 
-def addListItem(label, image, url, isFolder, infoLabels = False, fanart = False, duration = False):
+def addListItem(label, image, url, isFolder, totalItems, infoLabels = False, fanart = False, duration = False, cm = False):
 	listitem = xbmcgui.ListItem(label = label, iconImage = image, thumbnailImage = image)
+	if url['mode']:
+		u = sys.argv[0] + '?' + urllib.urlencode(url)
+	else:
+		u = url['url']
 	if not isFolder:
 		if settings.getSetting('download') == '' or settings.getSetting('download') == 'false':
-			listitem.setProperty('IsPlayable', 'true')
+			if label != '* ' + settings.getLocalizedString( 30030 ) + ' *':
+				listitem.setProperty('IsPlayable', 'true')
+				if settings.getSetting('playall') == 'true':
+					playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+					playlist.add(url = u, listitem = listitem)
 	if fanart:
 		listitem.setProperty('fanart_image', fanart)
+	if cm:
+		listitem.addContextMenuItems( cm )
 	if infoLabels:
 		listitem.setInfo(type = 'video', infoLabels = infoLabels)
 		if duration:
@@ -25,11 +39,7 @@ def addListItem(label, image, url, isFolder, infoLabels = False, fanart = False,
 				listitem.addStreamInfo('video', { 'duration': int(duration) })
 			else:
 				listitem.setInfo(type = 'video', infoLabels = { 'duration': str(datetime.timedelta(milliseconds=int(duration)*1000)) } )
-	if url['mode']:
-		u = sys.argv[0] + '?' + urllib.urlencode(url)
-	else:
-		u = url['url']
-	ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = isFolder)
+	ok = xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = isFolder, totalItems = int(totalItems))
 	return ok
 
 def playListItem(label, image, path, infoLabels, PlayPath = False):
@@ -48,7 +58,7 @@ def getUrl(url, gzip = False):
 			data = getPage(url, gzip)
 			if data['content'] != None and data['error'] == None:
 				return data['content']
-			if data['error'].find('404:') != -1:
+			if data['error'].find('404:') != -1 or data['error'].find('400:') != -1:
 				break
 		except Exception, e:
 			data['error'] = str(e)
@@ -98,6 +108,34 @@ def setViewMode(id, type = False):
 		xbmcplugin.setContent(int( sys.argv[1] ), type)
 		if settings.getSetting('view') == 'true':
 			xbmc.executebuiltin('Container.SetViewMode(' + id + ')')
+			
+def start_download(name, path):
+	try:
+		ext = splitext(basename(urlparse(path).path))[1]
+	except:
+		ext = '.mp4'
+	dialog = xbmcgui.Dialog()
+	#dir = dialog.browse(0, settings.getLocalizedString( 30059 ), 'files', '', False, False, settings.getSetting('downloadPath'))
+	if settings.getSetting('downloadPrompt') == 'true':
+		dir = dialog.browse(0, settings.getLocalizedString( 30059 ), 'files')
+	else:
+		while not settings.getSetting('downloadPath'):
+			ok = dialog.ok(plugin, settings.getLocalizedString( 30058 ))
+			settings.openSettings()
+			if settings.getSetting('downloadPrompt') == 'true':
+				dir = dialog.browse(0, 'XBMC', 'files')
+				settings.setSetting('downloadPath', dir)
+		dir = settings.getSetting('downloadPath')
+	if len(dir) == 0:
+		return
+	params = { "url": path, "download_path": dir, "Title": name }
+	downloader.download(clean_file(name) + ext, params)
+
+def clean_file(name):
+    remove=[('\"',''),('\\',''),('/',''),(':',' - '),('|',''),('>',''),('<',''),('?',''),('*','')]
+    for old, new in remove:
+        name=name.replace(old,new)
+    return name
 
 #From http://wiki.xbmc.org/index.php?title=Add-on:Parsedom_for_xbmc_plugins 
 def getParameters(parameterString):

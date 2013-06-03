@@ -1,0 +1,14 @@
+<settings>
+    <category label="30001">
+	    <setting id="server" type="text" label="30101" default="http://konachan.com"/>
+        <setting id="epp" type="slider" label="30102" range="1,100" option="int" default="25"/>
+    </category>
+    <category label="30002">
+	    <setting id="order" type="enum" label="30121" lvalues="30801|30802|30803|30804|30805" default="0"/>
+        <setting id="rating" type="enum" label="30122" lvalues="30821|30822|30823|30824|30825|30826" default="5"/>
+    </category>
+    <category label="30003">
+	    <setting id="previewPools" type="bool" label="30141" default="false"/>
+	    <setting id="shistorySize" type="slider" label="30142" range="1,100" option="int" default="10"/>
+    </category>
+</settings>

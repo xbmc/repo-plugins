@@ -1,0 +1,175 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2013-05-20 19:31+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#SETTINGS WINDOW
+#captions
+
+msgctxt "#30001"
+msgid "Server settings"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Search settings"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Miscellaneous"
+msgstr ""
+
+#svrset
+#empty strings from id 30004 to 30100
+
+msgctxt "#30101"
+msgid "Server-address"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Entries per page"
+msgstr ""
+
+#seaset
+#empty strings from id 30103 to 30120
+
+msgctxt "#30121"
+msgid "Default order"
+msgstr ""
+
+msgctxt "#30122"
+msgid "Rating"
+msgstr ""
+
+#empty strings from id 30123 to 30140
+
+msgctxt "#30141"
+msgid "Load preview for pools"
+msgstr ""
+
+msgctxt "#30142"
+msgid "Size of the search history"
+msgstr ""
+
+#APPLICATION
+#Main menu
+#empty strings from id 30143 to 30800
+
+msgctxt "#30801"
+msgid "Server default"
+msgstr ""
+
+msgctxt "#30802"
+msgid "Score"
+msgstr ""
+
+msgctxt "#30803"
+msgid "Favorited"
+msgstr ""
+
+msgctxt "#30804"
+msgid "Widescreen first"
+msgstr ""
+
+msgctxt "#30805"
+msgid "Widescreen last"
+msgstr ""
+
+#empty strings from id 30806 to 30820
+
+msgctxt "#30821"
+msgid "All"
+msgstr ""
+
+msgctxt "#30822"
+msgid "Safe only"
+msgstr ""
+
+msgctxt "#30823"
+msgid "Questionable only (Ecchi)"
+msgstr ""
+
+msgctxt "#30824"
+msgid "Explicit only (Hentai)"
+msgstr ""
+
+msgctxt "#30825"
+msgid "Questionable and Explicit"
+msgstr ""
+
+msgctxt "#30826"
+msgid "Questionable and Safe"
+msgstr ""
+
+#misc
+#empty strings from id 30827 to 31000
+
+msgctxt "#31001"
+msgid "Latest"
+msgstr ""
+
+msgctxt "#31002"
+msgid "Search"
+msgstr ""
+
+msgctxt "#31003"
+msgid "Random"
+msgstr ""
+
+msgctxt "#31004"
+msgid "Pools"
+msgstr ""
+
+msgctxt "#31005"
+msgid "Search history"
+msgstr ""
+
+#Generic buttons
+#empty strings from id 31006 to 32001
+
+msgctxt "#32002"
+msgid "More"
+msgstr ""
+
+#history
+#empty strings from id 32003 to 33000
+
+msgctxt "#33001"
+msgid "Remove from history"
+msgstr ""
+
+#Search
+#empty strings from id 33002 to 34000
+
+msgctxt "#34001"
+msgid "Enter tag to search for:"
+msgstr ""
+
+#Pools
+#empty strings from id 34002 to 35000
+
+msgctxt "#35001"
+msgid "Search pool"
+msgstr ""
+
+#ERRORS / DEBUG / CONSOLE
+#empty strings from id 35002 to 40000
+
+msgctxt "#40001"
+msgid "ERROR: Pool not readable. Maybe because of japanese characters in it?"
+msgstr ""
+
+#empty strings from id 40002 to 40200
+
+msgctxt "#40201"
+msgid "MOE: Requesting"
+msgstr ""

@@ -1,0 +1,22 @@
+## Version history ##
+### 0.5 Beta ###
+    2013-05-29  Fixed an error requiring the user to reenter the search query when using the slideshow button.
+### 0.4 Beta ###
+    2013-05-20  Updated translation system
+                Various bugfixes
+                Added the German translation
+### 0.3 Beta ###
+    2013-05-20  Added proper icons
+                Added a fanart
+    2013-05-19  Various bugfixes and optimizations
+### 0.2 Beta ###
+    2013-04-01  Added default search parameters (rating and order)
+    2013-04-03  Finished the pools
+                Now using XBMC's built-in caching function
+                Spring cleaning
+    2013-04-18  Added random
+    2013-04-26  Added preview images for pools and the search history
+### 0.1 Beta ###
+    2013-03-29  Started development
+    2013-03-31  Finished latest and basic search
+    2013-04-01  Started with the pools

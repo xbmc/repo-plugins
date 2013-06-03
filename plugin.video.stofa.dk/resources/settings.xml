@@ -3,5 +3,6 @@
     <category label="100">
         <setting id="username" label="101" type="text"/>
         <setting id="password" label="102" type="text"/>
+        <setting id="hide.drm.channels" label="103" type="bool" default="true"/>
     </category>
 </settings>

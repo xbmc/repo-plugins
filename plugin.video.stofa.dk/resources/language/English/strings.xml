@@ -3,9 +3,12 @@
     <string id="100">Login</string>
     <string id="101">Username</string>
     <string id="102">Password</string>
+    <string id="103">Hide DRM protected channels</string>
 
     <string id="200">Your login is invalid.</string>
     <string id="201">Verify your settings and try again.</string>
+    <string id="202">Playback of this channel is not possible.</string>
+    <string id="203">The message from the server is:</string>
 
     <string id="210">You have been blocked by Stofa web-tv by Stofa.</string>
 </strings>

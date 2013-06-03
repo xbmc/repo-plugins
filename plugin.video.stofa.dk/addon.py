@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2012 Tommy Winther
+#      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -33,12 +33,14 @@ import xbmcaddon
 import xbmcgui
 import xbmcplugin
 
+
 class LoginFailedException(Exception):
     pass
 
+
 class StofaWebTv(object):
     LIVE_TV_URL = 'http://webtv.stofa.dk/'
-    STREAM_URL = 'http://webtv.stofa.dk/cmd.php?cmd=get%5Fserver&sid='
+    STREAM_URL = 'http://webtv.stofa.dk/cmd.php?cmd=get_stream_url&sid=%s&datatype=json&segsupport=true&manufacturer=webtv&model=web&uid='
     LOGIN_URL = 'http://webtv.stofa.dk/includes/ajax/login.php?cmd=login_web&'
     CHANNELS_URL = 'http://webtv.stofa.dk/includes/ajax/live.php?cmd=get_sids&inclcn=true'
 
@@ -49,7 +51,6 @@ class StofaWebTv(object):
         if os.path.isfile(self.cookieFile):
             self.COOKIE_JAR.load(self.cookieFile, ignore_discard=True, ignore_expires=True)
         urllib2.install_opener(urllib2.build_opener(urllib2.HTTPCookieProcessor(self.COOKIE_JAR)))
-
 
     def handleLogin(self, html):
         if html.find('<div id="topLogin">Login</div>') >= 0:
@@ -75,7 +76,6 @@ class StofaWebTv(object):
             else:
                 raise LoginFailedException()
 
-
     def listTVChannels(self):
         u = urllib2.urlopen(StofaWebTv.LIVE_TV_URL)
         html = u.read()
@@ -87,15 +87,19 @@ class StofaWebTv(object):
         json = simplejson.loads(u.read())
         u.close()
 
+        print json
+
         channels = dict()
         for sid in json['sids']:
             lcn = json['sids'][sid]['lcn']
             channels[int(lcn)] = sid
 
-
         for lcn in sorted(channels.keys()):
             sid = channels[lcn]
             name = json['sids'][sid]['name']
+
+            if ADDON.getSetting('hide.drm.channels') == 'true' and json['sids'][sid]['DRM_live'] == '1':
+                continue
 
             item = xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=ICON)
             item.setProperty('IsPlayable', 'true')
@@ -106,12 +110,30 @@ class StofaWebTv(object):
         xbmcplugin.endOfDirectory(HANDLE, True)
 
     def playLiveTVChannel(self, channelId):
-        u = urllib2.urlopen(StofaWebTv.STREAM_URL + channelId)
-        params_string = u.read()
+        u = urllib2.urlopen(StofaWebTv.STREAM_URL % channelId)
+        json_string = u.read()
         u.close()
 
-        params = urlparse.parse_qs(params_string)
-        url = params['servers'][0] + params['filename'][0] + ' live=1 swfUrl=http://webtv.stofa.dk/videoplayer.swf swfVfy=true'
+        json = simplejson.loads(json_string)
+        try:
+            # check for errors from server
+            print json
+            self.showError(json['streams'][0]['info'])
+            xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
+            return
+        except KeyError:
+            pass
+
+        url = json['streams']['stream']
+
+        # XBMC doesn't support m3u8 stream selection yet, so let's play the best quality one.
+        u = urllib2.urlopen(url)
+        m3u8 = u.read()
+        u.close()
+
+        stream = m3u8.splitlines()[-1]
+        idx = url.rfind('/') + 1
+        url = url[0:idx] + stream
 
         item = xbmcgui.ListItem(path = url)
         xbmcplugin.setResolvedUrl(HANDLE, True, item)
@@ -119,6 +141,10 @@ class StofaWebTv(object):
     def loginFailed(self):
         heading = buggalo.getRandomHeading()
         xbmcgui.Dialog().ok(heading, ADDON.getLocalizedString(200), ADDON.getLocalizedString(201))
+
+    def showError(self, message):
+        heading = buggalo.getRandomHeading()
+        xbmcgui.Dialog().ok(heading, ADDON.getLocalizedString(202), ADDON.getLocalizedString(203), message)
 
     def decodeHtmlEntities(self, string):
         """Decodes the HTML entities found in the string and returns the modified string.
@@ -168,6 +194,7 @@ if __name__ == '__main__':
     if not os.path.exists(CACHE_PATH):
         os.makedirs(CACHE_PATH)
 
+    buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     stv = StofaWebTv()
     try:
         if PARAMS.has_key('channel'):

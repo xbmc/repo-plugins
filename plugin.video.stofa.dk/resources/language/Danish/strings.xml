@@ -3,9 +3,12 @@
     <string id="100">Login</string>
     <string id="101">Brugernavn</string>
     <string id="102">Adgangskode</string>
+    <string id="103">Skjul DRM beskyttede kanaler</string>
 
     <string id="200">Dit login er ugyldigt.</string>
     <string id="201">Kontroller opsætningen og prøv igen.</string>
+    <string id="202">Kanalen kunne ikke afspilles.</string>
+    <string id="203">Meddelelsen fra serveren er:</string>
 
     <string id="210">Du er blokeret fra Stofa web-tv af Stofa.</string>
 </strings>

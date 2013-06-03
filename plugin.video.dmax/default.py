@@ -3,7 +3,6 @@ import xbmcgui
 import sys
 import urllib, urllib2, urlparse
 import re
-import pprint
 
 import httplib
 from pyamf import AMF0, AMF3
@@ -117,7 +116,8 @@ def get_clip_info(const, playerID, videoPlayer, publisherID):
 def play(const, playerID, videoPlayer, publisherID):
     rtmpdata = get_clip_info(const, playerID, videoPlayer, publisherID)
     streamName = ""
-    streamUrl = rtmpdata['FLVFullLengthURL'];
+    default = 'skip'
+    streamUrl = rtmpdata.get('FLVFullLengthURL', default);
     
     for item in sorted(rtmpdata['renditions'], key=lambda item:item['frameHeight'], reverse=False):
         streamHeight = item['frameHeight']

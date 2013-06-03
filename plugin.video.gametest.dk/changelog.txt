@@ -1,3 +1,6 @@
+[B]Version 3.0.0 - 2013-06-02[/B]
+- Complete rewrite, site uses YouTube now
+
 [B]Version 2.0.0 - 2011-12-28[/B]
 - Fixed problem with parsing date of latest show resulting in a script error
 - Improved error handling with option for the user to submit exceptions/bugs

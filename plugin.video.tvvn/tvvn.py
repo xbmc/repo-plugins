@@ -2,7 +2,7 @@
 #---------------------------------------------------------------------
 # File: tvvn.py
 # By:   Binh Nguyen <binh@vnoss.org>
-# Date: 10-11-2012
+# Date: 2013-06-05
 #---------------------------------------------------------------------
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,101 +18,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #---------------------------------------------------------------------
 
-import os, re, sys, urllib, urllib2, xbmcaddon, xbmcplugin, xbmcgui
-from random import choice
+import os, re, sys, gzip, urllib, urllib2, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
+from StringIO import StringIO
+
+try:
+	import json
+except:
+	import simplejson as json
 
 addon = xbmcaddon.Addon('plugin.video.tvvn')
 profile = xbmc.translatePath(addon.getAddonInfo('profile'))
 mysettings = xbmcaddon.Addon(id='plugin.video.tvvn')
 home = mysettings.getAddonInfo('path')
 fanart = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+datafile = xbmc.translatePath(os.path.join(home, 'data.json'))
 
-#---------------------------------------------------------------------
-# CONFIGURATION STARTS
-#---------------------------------------------------------------------
-# src_name = [stream url, swf player url, referrer url, app name]
-
-# vtc.com.vn
-# See here for more IP's http://www.vtc.com.vn/XMLStart.aspx
-VTCURLList = 	['rtmp://66.160.142.201/live',
-				'rtmp://66.160.142.198/live',
-				'rtmp://66.160.142.197/live']
-VTCURL = choice(VTCURLList)
-src_vtc =   	[VTCURL,
-				'http://vtc.com.vn/player.swf',
-				'http://vtc.com.vn/#',
-				'']
-
-# tv24.vn
-TV24URLList = 	[#'rtmpe://112.197.2.16:1935/live',
-			    'rtmpe://112.197.2.11:1935/live']
-TV24URL = choice(TV24URLList)
-src_tv24 =  	[TV24URL,
-				'http://tv24.vn/getflash.ashx',
-				'http://tv24.vn',
-				'']
-				#'http://tv24.vn/jwplayer/player.swf',
-
-# xunghe.vn
-src_trt  =  	['rtmp://118.69.176.149/live',
-				'http://tv.xunghe.vn/player.swf',
-				'http://tv.xunghe.vn/?tab=Truyen-Hinh&xem=trt1-hue',
-				'']
-
-# vietfacetv.com
-VFTVURLList = 	['rtmp://119.18.184.129:1935/streams',
-				'rtmp://64.71.151.49/streams']
-VFTVURL = choice(VFTVURLList)
-src_vietface = 	[VFTVURL,
-				'http://vietpho.com/ext/js/playerPro.swf',
-			 	'http://vietpho.com/online-channels.php?id=42&gID=0&page=1',
-				'']
-
-# van tv
-src_vantv = 	['rtmp://199.66.239.55:1935',
-			 	'http://static-cdn1.ustream.tv/swf/live/viewer.rsl:255.swf',
-				'http://vietpho.com/online-channels.php?id=72&gID=0&page=1',
-				'']
-
-# little saigon tv
-src_lsgtv = 	['rtmp://stream.s15.cpanelservices.com/lstvlive',
-		  		'http://vietpho.com/ext/js/5.1/player-licensed.swf',
-			 	'http://vietpho.com/online-channels.php?id=2&gID=0&page=1',
-				'lstvlive']
-
-# saigon tv
-src_sgtv = 		['rtmp://74.63.219.101:1935/sgtv',
-				'http://vietpho.com/ext/js/3/mediaplayer.swf',
-				'http://vietpho.com/online-channels.php?id=41&gID=0&page=1',
-				'sgtv']
-
-# global tv
-src_globaltv = 	['rtmp://unirtmp.tulix.tv:1935/globaltv',
-				'http://vietpho.com/ext/js/3/mediaplayer.swf',
-				'http://vietpho.com/online-channels.php?id=5&gID=0&page=1',
-				'globaltv']
-
-# vbs tv
-src_vbstv = 	['rtmp://74.63.219.101:1935/vbstele',
-				'http://vietpho.com/ext/js/3/mediaplayer.swf',
-				'http://vietpho.com/online-channels.php?id=6&gID=0&page=1',
-				'vbstele']
-
-# vpoptv
-src_vpoptv =	['rtmp://www.evietmusic.com',
-				'http://www.vpoptv.com/player.swf',
-				'http://www.vpoptv.com/main/default.php?language=en',
-				'liveStream']
-
-# lifetv
-src_lifetv = 	['rtmp://video.lifetv.vn/live',
-				'http://www.lihattv.com/scripts/videogallery.swf',
-				'http://livetvstreaming.ucoz.com',
-				'']
-
-#---------------------------------------------------------------------
-# CONFIGURATION ENDS
-#---------------------------------------------------------------------
+data = json.loads(open(datafile,"r").read())
 
 mode=None
 
@@ -136,30 +57,40 @@ def get_params():
 
 params=get_params()
 
-try:
-	stream_short_name=urllib.unquote_plus(params["stream_short_name"])
-except:
-	pass
-try:
-	stream_name=urllib.unquote_plus(params["stream_name"])
-except:
-	pass
-try:
-	ref=urllib.unquote_plus(params["ref"])
-except:
-	pass
-try:
-	src=urllib.unquote_plus(params["src"])
-except:
-	pass
-try:
-	mode=int(params["mode"])
-except:
-	pass
+try: 	chn=urllib.unquote_plus(params["chn"])
+except: pass
+try: 	src=urllib.unquote_plus(params["src"])
+except: pass
+try: 	mode=int(params["mode"])
+except: pass
 
-def add_link(name,src,stream_name,ref,iconimage,desc):
+def construct_menu(namex):
+	name = data['directories'][namex]['title']
+	lmode = '2'
+	iconimage = ''
+	desc = data['directories'][namex]['desc']
+
+	menu_items = data['directories'][namex]['content']
+	for menu_item in menu_items:
+		#type == channel
+		if (menu_item['type'] == "chn"):
+			add_chn_link (menu_item['id'])
+		#type == directory
+		if (menu_item['type'] == "dir"):
+			add_dir_link (menu_item['id'])
+	xbmcplugin.endOfDirectory(int(sys.argv[1]))
+	return
+
+def add_chn_link (namex):
 	ok = True
-	short_name = name
+	title = data['channels'][namex]['title']
+	name = title
+	iconimage = data['channels'][namex]['logo']
+	desc = data['channels'][namex]['desc']
+	ref = data['channels'][namex]['src']['referer']
+	stream_name = data['channels'][namex]['src']['playpath']
+	src = data['channels'][namex]['src']['id']
+
 	if (iconimage == ''):
 		iconimage = 'default.png'
 	if (mysettings.getSetting('descriptions')=='true' and desc != ''):
@@ -167,14 +98,17 @@ def add_link(name,src,stream_name,ref,iconimage,desc):
 			name = desc+"    "+name
 		else:
 			name = name+"    "+desc
-	give_url = sys.argv[0]+"?mode=1&stream_name="+stream_name+"&ref="+ref+"&src="+src+"&stream_short_name="+short_name
+
+	give_url = sys.argv[0]+"?mode=1&chn="+namex+"&src="+src
 	liz = xbmcgui.ListItem( name, iconImage=xbmc.translatePath(os.path.join(home, 'resources', 'logos', iconimage)), thumbnailImage=xbmc.translatePath(os.path.join(home, 'resources', 'logos', iconimage)))
 	liz.setInfo(type="Video", infoLabels={"Title": name})
 	liz.setProperty("Fanart_Image",fanart)
 	ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=give_url,listitem=liz)
 
-def add_directory_link(name, lmode, iconimage,desc):
-	name = "["+name+"]"
+def add_dir_link (namex):
+	name = '['+data['directories'][namex]['title']+']'
+	desc = data['directories'][namex]['desc']
+	iconimage = data['directories'][namex]['logo']
 	if (iconimage == ''):
 		iconimage = 'default.png'
 	if (mysettings.getSetting('descriptions')=='true' and desc != ''):
@@ -185,122 +119,62 @@ def add_directory_link(name, lmode, iconimage,desc):
 	li = xbmcgui.ListItem( name, iconImage=xbmc.translatePath(os.path.join(home, 'resources', 'logos', iconimage)), thumbnailImage=xbmc.translatePath(os.path.join(home, 'resources', 'logos', iconimage)))
 	li.setInfo(type="Video", infoLabels={"Title": name})
 	li.setProperty("Fanart_Image",fanart)
-	url = sys.argv[0]+'?mode='+lmode
-	return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=True)
+	give_url = sys.argv[0]+"?mode=2&chn="+namex
+	return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=give_url, listitem=li, isFolder=True)
 
-def show_menu_sctv():
-	add_link('SCTV1', 'src_tv24',  'SDsctv1.stream',  '',   'sctv.png', 'Hài')
-	add_link('SCTV2', 'src_tv24',  'SDsctv2.stream',  '',   'sctv.png', 'Yan TV: Âm nhạc quốc tế')
-	add_link('SCTV3', 'src_tv24',  'SDsctv3.stream',  '',   'sctv.png', 'Sao TV: Thiếu nhi')
-	add_link('SCTV4', 'src_tv24',  'SDsctv4.stream',  '',   'sctv.png', 'Giải trí tổng hợp')
-	add_link('SCTV5', 'src_tv24',  'SDsctv5.stream',  '',   'sctv.png', 'Shopping TV: Mua sắm SCJ ')
-	add_link('SCTV6', 'src_tv24',  'SDsctv6.stream',  '',   'sctv.png', 'Sóng nhạc')
-	add_link('SCTV7', 'src_tv24',  'SDsctv7.stream',  '',   'sctv.png', 'Sân khấu, Văn nghệ tổng hợp')
-	add_link('SCTV8', 'src_tv24',  'SDsctv8.stream',  '',   'sctv.png', 'Thông tin Kinh tế, Thị trường')
-	add_link('SCTV9', 'src_tv24',  'SDsctv9.stream',  '',   'sctv.png', 'Phim châu Á')
-	add_link('SCTV10', 'src_tv24',  'SDsctv10.stream',  '',   'sctv.png', 'Home Shopping Network: Mua sắm')
-	add_link('SCTV11', 'src_tv24',  'SDsctv11.stream',  '',   'sctv.png', 'Hát trên truyền hình')
-	add_link('SCTV12', 'src_tv24',  'SDsctv12.stream',  '',   'sctv.png', 'Du lịch, Khám phá')
-	add_link('SCTV13', 'src_tv24',  'SDsctv13.stream',  '',   'sctv.png', 'Phụ nữ và Gia đình')
-	add_link('SCTV14', 'src_tv24',  'SDsctv14.stream',  '',   'sctv.png', 'Phim Việt')
-	add_link('SCTV15', 'src_tv24',  'SDsctv15.stream',  '',   'sctv.png', 'Thể thao')
-	add_link('SCTV16', 'src_tv24',  'SDsctv16.stream',  '',   'sctv.png', 'Phim truyện nước ngoài')
-	add_link('SCTV17', 'src_tv24',  'SDsctv17.stream',  '',   'sctv.png', 'Phim tổng hợp')
-	add_link('SCTVHD', 'src_tv24',  'SDsctv18.stream',  '',   'sctv.png', 'Thể thao')
-	xbmcplugin.endOfDirectory(int(sys.argv[1]))
+def update_chn_list():
+	url = mysettings.getSetting('json_url')
+	request = urllib2.Request(url)
+	request.add_header('Accept-encoding', 'gzip')
+	url_error = "no"
+	try:
+		response = urllib2.urlopen(request)
+	except urllib2.URLError, e:
+		url_error = "yes"
 
-def show_menu_local():
-	#add_link('HTV7', 'src_tv24',  'htv7.stream',  '',  'htv7.png', 'Thông tin, Giải trí, Thể thao')
-	#add_link('HTV9', 'src_tv24',  'htv9.stream',  '',  'htv9.png', 'Chính trị, Xã hội, Văn hóa')
-	add_link('HTV7', 'src_vtc',  'htv7',  '',  'htv7.png', 'Thông tin, Giải trí, Thể thao')
-	add_link('HTV9', 'src_vtc',  'htv91',  '',  'htv9.png', 'Chính trị, Xã hội, Văn hóa')
-	add_link('HN1', 'src_vtc',  'hanoi11',  '',   '', 'Hà Nội 1')
-	add_link('TRT1', 'src_trt',  'trt',  '',   '', 'Thừa Thiên Huế')
-	#add_link('LA34', 'src_tv24',  'la34.stream',  '',   '', 'Long An')
-	#add_link('THVL1', 'src_tv24',  'thvl1.stream',  '',   '', 'Vĩnh Long')
-	#add_link('ĐN1', 'src_tv24',  'dn1.stream',  '',   '', 'Đồng Nai 1')
-	#add_link('HGV', 'src_tv24',  'thhg.stream',  '',   '', 'Hậu Giang')
-	#add_link('STV', 'src_tv24',  'thst.stream',  '',   '', 'Sóc Trăng')
-	#add_link('THTG', 'src_tv24',  'thtg.stream',  '',   '', 'Tiền Giang')
-	#add_link('QRT', 'src_tv24',  'qrt.stream',  '',   '', 'Quảng Nam')
-	#add_link('BTV', 'src_tv24',  'bthtv.stream',  '',   '', 'Bình Thuận')
-	#add_link('THĐT', 'src_tv24',  'thdt.stream',  '',   '', 'Đồng Tháp')
-	xbmcplugin.endOfDirectory(int(sys.argv[1]))
- 
-def show_menu_overseas():
-	add_link('Vietface', 'src_vietface',  'urlparams_qm_channel:1005_qm_token:6436488_qm_video:L_qm_audio:L_qm_finished_gops:1',   '',  'vietfacetv.png', 'Vietface Media Group')
-	add_link('SaigonTV', 'src_sgtv',  'myStream.sdp',   '',  'saigontv.png', 'Saigon TV')
-	add_link('GlobalTV', 'src_globaltv',  'myStream.sdp',   '',  'globaltv.png', 'Global Television')
-	add_link('VAN-TV', 'src_vantv',  'ustream',   '',  'vantv.png', 'Vietnamese American Network TV')
-	add_link('VBSTV', 'src_vbstv',  'myStream.sdp',   '',  'vbstv.png', 'Vietnamese Broadcasting Services')
-	add_link('LSTV', 'src_lsgtv',  'livestream',   '',  'lsaigontv.png', 'Little Saigon TV')
-	xbmcplugin.endOfDirectory(int(sys.argv[1]))
- 
-def show_menu_vov():
-	add_link('VOV1', 'src_vtc',  'vov1',   'VOV1/29',  'vov1.png', 'Thời sự, Chính trị, Tổng hợp')
-	add_link('VOV2', 'src_vtc',  'vov2',   'VOV2/28',  'vov2.png', 'Văn hóa, Đời sống, Khoa giáo')
-	add_link('VOV3', 'src_vtc',  'vov3',   'VOV3/27',  'vov3.png', 'Âm nhạc, Giải trí')
-	add_link('VOV5', 'src_vtc',  'vov5',   'VOV5/25',  'vov5.png', 'Phát thanh đối ngoại')
-	xbmcplugin.endOfDirectory(int(sys.argv[1]))
+	if (url_error == "no"):
+		buf = StringIO(response.read())
+		f = gzip.GzipFile(fileobj=buf)
+		ff=f.read()
+		r_data=json.loads(ff)
+		if (data['timestamp'] < r_data['timestamp']):
+			day_diff = str((int(r_data['timestamp']) - int(data['timestamp'])) /60/60/24)
+			dialog = xbmcgui.Dialog()
+			ack = dialog.yesno(addon.getLocalizedString(30005), addon.getLocalizedString(30006)+" "+day_diff+" day(s) old",addon.getLocalizedString(30007))
+			if ack:
+				d = open(datafile, 'r+')
+				d.seek(0)
+				d.write(ff)
+				d.close()
+
+def play_link(chn, src):
+	item = xbmcgui.ListItem(chn)
+
+	playpath = data['channels'][chn]['src']['playpath']
+	videoUrl = data['sources'][src]['url']
+	if (playpath != ''):
+		videoUrl = videoUrl+"/"+playpath
+	swfUrl = data['sources'][src]['swfurl']
+	pageUrl = data['sources'][src]['pageurl']
+	if (data['channels'][chn]['src']['referer'] != ''):
+		pageUrl = pageUrl+"/"+data['channels'][chn]['src']['referer']
+	flashVer = 'LNX_11,2,202,233'
+	token = data['sources'][src]['token']
+	app = data['sources'][src]['app']
+
+	full_url = videoUrl+' swfVfy=1 live=1 token='+token+' playpath='+playpath+' flashVer='+flashVer+' pageUrl='+pageUrl+' tcUrl='+videoUrl+' swfUrl='+swfUrl
+
+	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(full_url, item)
+	return
 
 def Init():
-	#add_link('VTV1', 'src_tv24',  'vtv1.stream',  '',  'vtv1.png', 'Thông tin tổng hợp')
-	#add_link('VTV2', 'src_tv24',  'vtv2.stream',  '',  'vtv2.png', 'Khoa học, Giáo dục')
-	#add_link('VTV3', 'src_tv24',  'vtv3.stream',  '',  'vtv3.png', 'Thể thao, Giải trí, Thông tin Kinh tế')
-	#add_link('VTV4', 'src_tv24',  'vtv4.stream',  '',  'vtv4.png', 'Kênh cho người Việt Nam ở nước ngoài')
-	#add_link('VTV6', 'src_tv24',  'vtv6.stream',  '',  'vtv6.png', 'Kênh cho Thanh, thiếu niên')
-	#add_link('ANTV', 'src_tv24',  'antv.stream',  '',  'antv.png', 'An ninh TV')
-	add_link('VTV1', 'src_vtc',   'vtv11',  'VTV1/15',  'vtv1.png', 'Thông tin tổng hợp')
-	add_link('VTV2', 'src_vtc',   'vtv2',   'VTV2/23',  'vtv2.png', 'Khoa học, Giáo dục')
-	add_link('VTV3', 'src_vtc',   'vtv31',  'VTV3/3',  'vtv3.png', 'Thể thao, Giải trí, Thông tin Kinh tế')
-	add_link('VTV4', 'src_vtc',   'vtv4',   'VTV4/2',  'vtv4.png', 'Kênh cho người Việt Nam ở nước ngoài')
-	add_link('VTV9', 'src_tv24',  'vtv9.stream',  '',  'vtv9.png', 'Kênh cho Khán giả miền Nam')
-	add_link('VpopTV', 'src_vpoptv', 'mtv', '', 'vpoptv.png', 'Kênh âm nhạc đặc sắc')
-	add_link('lifetv', 'src_lifetv', 'Stream1', '', 'lifetv.png', 'Lối sống và sức khỏe')
-	add_link('VTC1', 'src_vtc',  'vtc11',  'VTC1/10',  'vtc1.png', 'Thời sự tổng hợp')
-	add_link('VTC2', 'src_vtc',  'vtc21',  'VTC2/11',  'vtc2.png', 'Khoa học, Công nghệ')
-	add_link('VTC10', 'src_vtc', 'vtc101', 'VTC10/22', 'vtc10.png', 'Kênh Văn hóa Việt')
-	add_directory_link('SCTV Channels', '10', 'sctv.png', 'SCTV hợp tác và sản xuất')
-	add_directory_link('VOV Radio', '11', 'vov.png', 'Đài Tiếng nói Việt Nam')
-	add_directory_link('Local Stations', '12', '', 'Truyền hình Địa phương')
-	add_directory_link('Oversea Stations', '13', '', 'Truyền hình Hải ngoại')
-
-	xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-def play_video(src, name, stream_name, ref):
-	prov = globals()[src]
-	item = xbmcgui.ListItem(name)
-
-	stream_name=stream_name.replace('_qm_','?')
-
-	if (ref != ''):
-		pageUrl=prov[2]+"/"+ref
-	else:
-		pageUrl=prov[2]
-
-	if (stream_name != ''):
-		videoUrl=prov[0]+"/"+stream_name
-	else:
-		videoUrl=prov[0]
-	swfUrl=prov[1]
-	flashVer='LNX_11,2,202,233'
-
-	fullURL=videoUrl+' swfVfy=1 live=1 token=!3zxcvbnm4@ playpath='+stream_name+' flashVer='+flashVer+' pageUrl='+pageUrl+' tcUrl='+videoUrl+' swfUrl='+swfUrl 
-	if (prov[3] != ''):
-		fullURL=fullURL+' app='+prov[3]
-	if (src == "src_tv24" and mysettings.getSetting('tv24_http') == 'true'):
-		fullURL=prov[0].replace("rtmpe://","http://")+"/"+stream_name+"/playlist.m3u8"
-	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(fullURL, item)
+	construct_menu("root")
+	if (mysettings.getSetting('json_url_auto_update')=='true' and mysettings.getSetting('json_url')!=''):
+		update_chn_list()
 
 if mode==None:
 	Init()
 elif mode==1:
-	play_video(src, stream_short_name, stream_name, ref)
-elif mode==10:
-	show_menu_sctv()
-elif mode==11:
-	show_menu_vov()
-elif mode==12:
-	show_menu_local()
-elif mode==13:
-	show_menu_overseas()
+	play_link(chn, src)
+elif mode==2:
+	construct_menu(chn)

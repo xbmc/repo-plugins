@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.image.garfield" name="Garfield" version="1.0.0" provider-name="RPiola">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>image</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <disclaimer>Tested on raspbmc final only, but it should work on any xbmc; it is a completely UNOFFICIAL plugin, not endorsed by the author of the Garfield character, Jim Davis, or www.gocomics.com</disclaimer>
+        <summary lang="en">Display daily Garfield comic strip</summary>
+        <description lang="en">Garfield xmbc plugin displays the daily Garfield comic strip. All credits to www.garfield.com</description>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <language/>
+        <website>http://pi.ilpiola.it/garfield</website>
+        <email>roberto@ilpiola.it</email>
+    </extension>
+</addon>

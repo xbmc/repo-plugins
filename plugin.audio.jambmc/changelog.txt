@@ -1,0 +1,91 @@
+1.0.0 (05.06.2013)
+ - Initial release in official Repository
+
+
+[B]Discover[/B]
+- Browse Songs, Albums, Artists, Playlists and Radios.
+- Show Artists near your location
+
+[B]Ordering[/B]
+In most views you have full control about the ordering depending on the context.
+This allows views like "This weeks most popular Songs", "New Albums",
+"This month most downloaded Songs", "All time most popular Artists", ...
+- albums ordering
+    releasedate (desc, asc), popularity (total, month, week)
+- artists ordering
+    name, joindate (desc, asc), popularity (total, month, week)
+- tracks ordering
+    buzzrate, downloads (total, month, week), listens (total, month, week),
+    popularity (total, month, week), releasedate (desc, asc)
+
+[B]Filtering[/B]
+You can filter tracks by tags. Tags can be genres, instruments or themes.
+
+[B]Context[/B]
+- Album Context-Menu
+    - Show Album Info (does not work currently due to XBMC limitations)
+    - Download this Album
+    - Show Songs in this Album
+    - Show Albums by this Artist
+- Song Context-Menu
+    - Show Song Info
+    - Download this Song
+    - Add/Del to Mixtape
+    - Show Albums by this Artist
+    - Show similar Songs
+    - Show Songs in this Album
+- Artist Context-Menu
+    - Show Albums by this Artist
+
+[B]Search[/B]
+- You can search for Songs, Albums, Artists and Playlists
+    - Albums, Artists
+        - Search name (*query*)
+    - Songs
+        - Full Text Search over: name, tags, genre, instruments, mood,
+          artist-, album-name
+
+[B]Download[/B]
+- Downlod single Songs
+- Download complete Albums
+- Once downloaded Songs will be played automatically local (no matter if song 
+  was downloaded single or its album)
+- Covers will also be downloaded and saved next to the audio files so that XBMC
+  can import those to its music database
+- Choose the download Format you like: MP3 (VBR good Quality), OGG or even the
+  lossless format FLAC
+
+[B]Mixtapes[/B]
+- You can manage your own local Mixtapes (similar to playlists)
+- You can create as much Mixtapes and add as much Songs to each as you like
+- Just open the context menu on any Song to add or delete this Song to any
+  existing mixtape or to add it to a new mixtape
+
+[B]Radio[/B]
+- Listen to one of ten Jemando created Radio Streams (Electronic, Rock, Jazz,
+  Jamendo Best of, ...)
+
+[B]Playback History[/B]
+- Every Song you play will be added to your Playback History
+
+Read Data from your Jamendo.com User-Account
+After you entered your Jamendo.com Username you can access:
+    - Artists you are fan of
+    - Albums in your "My Albums"-list
+    - Songs you like, favourited or wrote an review
+    - Your public Playlists
+
+[B]Technical Features[/B]
+- API-Request Cache, most API-Requests are cached for 24 hours to improve the
+  plugin response time
+- XBMC-Skin Image integration. This add-on uses multiple XBMC-Skin provided
+  Images to automatically match your choosen XBMC-Skin's look.
+
+[B]Settings[/B]
+- Set items-per-Page (max 100)
+- Choose the Audio Format. Playback: MP3, OGG. Download: MP3, OGG, FLAC
+- Set Cover Size (Big, Medium, Small)
+- Enable Thumbnail-View forcing. If enabled the plugin will automatically
+  switch to a thumbnail-like view (instead of tabular list view).
+- Force HTTPS. If you are paranoid you can enable HTTPS - all API Requests
+  will be encrypted.

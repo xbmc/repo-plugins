@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30350">
+        <setting id="limit" type="labelenum" label="30300" values="25|50|75|100" default="100"/>
+        <setting id="history_limit" type="labelenum" label="30306" values="25|50|75|100|0" default="50"/>
+        <setting id="force_viewmode" type="bool" label="30301" default="true"/>
+        <setting id="force_viewmode_tracks" type="bool" label="30321" default="false" enable="eq(-1,true)"/>
+        <setting id="image_size" type="enum" label="30317" lvalues="30318|30319|30320" default="0"/>
+    </category>
+    <category label="30351">
+        <setting type="lsep" label="30352"/>
+        <setting id="tracks_download_path" type="folder" label="30303" source="auto" option="writeable"/>
+        <setting id="download_track_cover" type="bool" label="30304" default="true"/>
+        <setting id="show_track_download_progress" type="bool" label="30305" default="true"/>
+        <setting type="lsep" label="30353"/>
+        <setting id="albums_download_path" type="folder" label="30315" source="auto" option="writeable"/>
+        <setting id="download_album_cover" type="bool" label="30313" default="true"/>
+        <setting id="show_album_download_progress" type="bool" label="30314" default="true"/>
+    </category>
+    <category label="30354">
+        <setting id="playback_format" type="enum" label="30307" lvalues="30310|30311" default="0"/>
+        <setting id="download_format" type="enum" label="30308" lvalues="30310|30311|30312" default="0"/>
+    </category>
+    <category label="30355">
+        <setting id="use_https" type="bool" label="30302" default="false"/>
+        <setting id="user_name" type="action" label="30316" action="RunPlugin(plugin://plugin.audio.jamendo/user/set_user_account/)"/>
+    </category>
+</settings>

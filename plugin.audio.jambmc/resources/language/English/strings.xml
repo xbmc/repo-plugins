@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Root menu entries -->
+    <string id="30000">Discover</string>
+    <string id="30001">Search</string>
+    <string id="30002">Browse Songs</string>
+    <string id="30003">Browse Albums</string>
+    <string id="30004">Browse Artists</string>
+    <string id="30005">Show Radios</string>
+    <string id="30006">Show Playlists</string>
+    <string id="30007">Search for Songs</string>
+    <string id="30008">Search for Albums</string>
+    <string id="30009">Search for Artists</string>
+    <string id="30010">Search for Playlists</string>
+    <string id="30011">Your Playback History</string>
+    <string id="30012">Your Downloaded Songs</string>
+    <string id="30013">Your Mixtapes</string>
+    <string id="30014">Jemando selected Songs</string>
+    <string id="30015">Artists you are fan of</string>
+    <string id="30016">Albums in your My-Albums-list</string>
+    <string id="30017">Songs you like or favorite</string>
+    <string id="30018">Your Jamendo User-Account</string>
+    <string id="30019">Your public Playlists</string>
+    <string id="30020">Show Artists near your Location</string>
+    <string id="30021">Your Downloaded Albums</string>
+    <!-- Misc strings -->
+    <string id="30025">Page</string>
+    <string id="30026">Language</string>
+    <string id="30027">Instruments</string>
+    <string id="30028">Tags</string>
+    <!-- Context menu -->
+    <string id="30030">Show Album info</string>
+    <string id="30031">Show Song info</string>
+    <string id="30032">Show Songs in this Album</string>
+    <string id="30033">Show Albums by this Artist</string>
+    <string id="30034">Show similar Songs</string>
+    <string id="30035">Add-on Settings</string>
+    <string id="30036">Download this Song</string>
+    <string id="30037">Download this Album</string>
+    <!-- Dialogs -->
+    <string id="30040">Enter Album title</string>
+    <string id="30041">Enter Artist name</string>
+    <string id="30042">Enter Song search terms</string>
+    <string id="30043">Enter Playlist title</string>
+    <string id="30044">No Download Path</string>
+    <string id="30045">Do you want to set it now?</string>
+    <string id="30046">JamBMC Download Path</string>
+    <string id="30047">Enter your username</string>
+    <string id="30048">Select user</string>
+    <string id="30049">No username set</string>
+    <string id="30050">Geolocation by IP</string>
+    <string id="30051">This requires one anonymous HTTP-request</string>
+    <string id="30052">to the free service www.freegeoip.net</string>
+    <!-- Error dialogs -->
+    <string id="30060">Connection Error</string>
+    <string id="30061">API Error</string>
+    <string id="30062">API returned following error:</string>
+    <string id="30063">Please try again later.</string>
+    <string id="30064">Please check your network or</string>
+    <string id="30065">try again later.</string>
+    <!-- Notifications -->
+    <string id="30070">Download succeeded</string>
+    <string id="30071">No item in History</string>
+    <string id="30072">No items downloaded</string>
+    <!-- Download -->
+    <string id="30080">JamBMC Downloader</string>
+    <string id="30081">Preparing download...</string>
+    <string id="30082">Downloading to: %s</string>
+    <string id="30083">Current Progress: %s MB</string>
+    <string id="30084">Current File: %s</string>
+    <!-- Mixtapes -->
+    <string id="30090">New Mixtape Name</string>
+    <string id="30091">Delete Mixtape</string>
+    <string id="30092">Are you sure?</string>
+    <string id="30093">Add to new Mixtape</string>
+    <string id="30094">Add to Mixtape: %s</string>
+    <string id="30095">Del from Mixtape: %s</string>
+    <string id="30096">Choose Mixtape</string>
+    <string id="30097">Add new Mixtape</string>
+    <string id="30098">Add/Del to Mixtape</string>
+    <string id="30099">Delete Mixtape</string>
+    <!-- Sort methods -->
+    <string id="30100">Order: Default</string>
+    <string id="30101">Order: Buzzrate</string>
+    <string id="30102">Order: Downloads (Week)</string>
+    <string id="30103">Order: Downloads (Month)</string>
+    <string id="30104">Order: Downloads (Total)</string>
+    <string id="30105">Order: Joindate (ASC)</string>
+    <string id="30107">Order: Joindate (DESC)</string>
+    <string id="30108">Order: Listens (Week)</string>
+    <string id="30109">Order: Listens (Month)</string>
+    <string id="30110">Order: Listens (Total)</string>
+    <string id="30111">Order: Name</string>
+    <string id="30112">Order: Popularity (Week)</string>
+    <string id="30113">Order: Popularity (Month)</string>
+    <string id="30114">Order: Popularity (Total)</string>
+    <string id="30115">Order: Releasedate (ASC)</string>
+    <string id="30116">Order: Releasedate (DESC)</string>
+    <!-- Tags -->
+    <string id="30120">Tags</string>
+    <string id="30121">Genre</string>
+    <string id="30122">Instrument</string>
+    <string id="30123">Theme</string>
+    <string id="30124">Rename Mixtape</string>
+    <!-- Settings -->
+    <string id="30300">Max. Items per Page</string>
+    <string id="30301">Force Thumbnail-View</string>
+    <string id="30302">Use HTTPS</string>
+    <string id="30303">Download Path (Songs)</string>
+    <string id="30304">Download Cover (Songs)</string>
+    <string id="30305">Show Progress Dialog while downloading (Songs)</string>
+    <string id="30306">Max. Items in History</string>
+    <string id="30307">Audioformat (Playback)</string>
+    <string id="30308">Audioformat (Download)</string>
+    <string id="30310">MP3</string>
+    <string id="30311">OGG (Vorbis)</string>
+    <string id="30312">FLAC (Lossless)</string>
+    <string id="30313">Download Cover (Albums)</string>
+    <string id="30314">Show Progress Dialog while downloading (Albums)</string>
+    <string id="30315">Download Path (Albums)</string>
+    <string id="30316">Your Jamendo Username</string>
+    <string id="30317">Image Sizes</string>
+    <string id="30318">Big</string>
+    <string id="30319">Medium</string>
+    <string id="30320">Small</string>
+    <string id="30321">... even if all items have the same cover</string>
+    <!-- Setting categories and labels -->
+    <string id="30350">GUI</string>
+    <string id="30351">Download</string>
+    <string id="30352">Song</string>
+    <string id="30353">Album</string>
+    <string id="30354">Audioformat</string>
+    <string id="30355">Username/HTTPS</string>
+</strings>

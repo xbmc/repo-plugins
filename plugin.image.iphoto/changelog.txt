@@ -1,3 +1,6 @@
+2.0.5 - 20130605
+- Ignore non-existent thumbnails in Events.
+
 2.0.4 - 20130315
 - Fix Places support.
 

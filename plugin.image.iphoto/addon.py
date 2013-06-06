@@ -513,7 +513,10 @@ class IPhotoGUI:
 	    if (not count and self.album_ign_empty == "true"):
 		continue
 
-	    item = gui.ListItem(name, iconImage=thumbpath, thumbnailImage=thumbpath)
+            if (thumbpath != None):
+		item = gui.ListItem(name, iconImage=thumbpath, thumbnailImage=thumbpath)
+	    else:
+		item = gui.ListItem(name)
 	    item.addContextMenuItems(self.context_menu_items, True)
 
 	    try:

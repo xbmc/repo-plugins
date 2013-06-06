@@ -28,6 +28,10 @@ msgctxt "#30067"
 msgid "Default"
 msgstr "پیش فرض"
 
+msgctxt "#30082"
+msgid "Descending"
+msgstr "نزولی"
+
 msgctxt "#30090"
 msgid "General"
 msgstr "عمومی"
@@ -35,3 +39,7 @@ msgstr "عمومی"
 msgctxt "#30092"
 msgid "Skin"
 msgstr "پوسته"
+
+msgctxt "#30101"
+msgid "Albums"
+msgstr "آلبوم ها"

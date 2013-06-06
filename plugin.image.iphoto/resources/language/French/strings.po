@@ -16,9 +16,37 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "Mise à jour automatique de la médiathèque"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "Cacher l'élément Mise à jour de la Médiathèque dans le menu principal "
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "Ignorer les albums vides"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "Ignorer les mots-clés"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "Adresses"
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr "Méthode de tri photo par défaut"
+
 msgctxt "#30021"
 msgid "None"
 msgstr "Aucun"
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "Date XML"
 
 msgctxt "#30023"
 msgid "Label"
@@ -27,6 +55,18 @@ msgstr "Label(s)"
 msgctxt "#30024"
 msgid "Size"
 msgstr "taille"
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr "Télécharger les cartes depuis Google"
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "Montrer la carte comme un fanart"
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr "Cacher l'élément Voir Documentation dans le menu principal"
 
 msgctxt "#30060"
 msgid "View mode in Confluence"
@@ -52,6 +92,10 @@ msgctxt "#30068"
 msgid "Picture Grid"
 msgstr "Grille Image"
 
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr "Direction du tri photo par défaut"
+
 msgctxt "#30081"
 msgid "Ascending"
 msgstr "Croissant"
@@ -76,18 +120,158 @@ msgctxt "#30099"
 msgid "Advanced"
 msgstr "Avancés"
 
+msgctxt "#30100"
+msgid "Events"
+msgstr "Evènements"
+
 msgctxt "#30101"
 msgid "Albums"
 msgstr "Albums"
+
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "Classements"
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr "<< Actualiser la médiathèque >>"
 
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "Mots-clés"
 
+msgctxt "#30106"
+msgid "Places"
+msgstr "Endroits"
+
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr "<< Voir Documentation >>"
+
 msgctxt "#30108"
 msgid "Projects"
 msgstr "Projet"
 
+msgctxt "#30200"
+msgid "%d star"
+msgstr "%d étoile"
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr "Import de la Médiathèque"
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr "%d éléments importés"
+
 msgctxt "#30213"
 msgid "Update library"
 msgstr "Actualiser la médiathèque"
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr "Ignorer Mot-clé"
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr "Cartes du cache supprimées"
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Réinitialisation de la base de données de l'extension"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Documentation de l'extension"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Réinitialisation de la base de données de l'extension..."
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr "Ceci peut ralentir l'import de la médiathèque. "
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr "Vous aurez aussi besoin de réimporter votre médiathèque."
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Effacer la base de données de l'extension ?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "La base de données de l'extension est corrompue."
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr "La suppression ne causera pas de dommage à la Médiathèque Photo."
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr "Vous aurez besoin d'effectuer un nouveau balayage après ceci."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Échec de l'initialisation de la base de données de l'extension."
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr "Veuillez réimporter votre Médiathèque."
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr "Effacement des images des cartes du cache"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "Balayage..."
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr "Import de la Médiathèque en cours"
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr "Impossible de réinitialiser la base de données."
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr "Actuellement non supporté"
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr "Cette fonction n'est pas supportée %s %s."
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr "Import de la Médiathèque en cours"
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr "Import de la Médiathèque réalisé avec succès"
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr "Import de la Médiathèque non réalisé"
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "Pas d'éléments"
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr "Réinitialisation de la Base de données"
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr "Impossible de réinitialiser la base de données"
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr "%d cartes du cache éffacées"
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr "Mot-clé '%s' caché"

@@ -20,13 +20,37 @@ msgctxt "#30021"
 msgid "None"
 msgstr "Tidak Ada"
 
+msgctxt "#30023"
+msgid "Label"
+msgstr "Label"
+
+msgctxt "#30024"
+msgid "Size"
+msgstr "Ukuran"
+
 msgctxt "#30061"
 msgid "Default"
 msgstr "Standar"
 
+msgctxt "#30062"
+msgid "Pic Thumbs"
+msgstr "Thumb Citra"
+
+msgctxt "#30063"
+msgid "Image Wrap"
+msgstr "Wrap Citra"
+
 msgctxt "#30067"
 msgid "Default"
 msgstr "Standar"
+
+msgctxt "#30081"
+msgid "Ascending"
+msgstr "Urut"
+
+msgctxt "#30082"
+msgid "Descending"
+msgstr "Terbalik"
 
 msgctxt "#30090"
 msgid "General"
@@ -39,3 +63,11 @@ msgstr "Kulit"
 msgctxt "#30101"
 msgid "Albums"
 msgstr "Album"
+
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "Kata kunci"
+
+msgctxt "#30213"
+msgid "Update library"
+msgstr "Perbarui pustaka"

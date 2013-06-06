@@ -28,6 +28,10 @@ msgctxt "#30024"
 msgid "Size"
 msgstr "Mida"
 
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "Mostra el mode en Confluence"
+
 msgctxt "#30061"
 msgid "Default"
 msgstr "Per defecte"

@@ -72,6 +72,10 @@ msgctxt "#30101"
 msgid "Albums"
 msgstr "Албуми"
 
+msgctxt "#30104"
+msgid "Keywords"
+msgstr "Клучни зборови"
+
 msgctxt "#30213"
 msgid "Update library"
 msgstr "Ажурирај библиотека"

@@ -18,15 +18,15 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "Path to iPhoto or Aperture Library"
-msgstr "Ruta a AlbumData.xml"
+msgstr "Ruta a la biblioteca de iPhoto o Aperture"
 
 msgctxt "#30001"
 msgid "Ignore published (MobileMe) albums"
-msgstr "Ignorar Álbumes publicados (MobileMe)"
+msgstr "Ignorar álbumes publicados (MobileMe)"
 
 msgctxt "#30002"
 msgid "Ignore 'Flagged' album"
-msgstr "Ignorar Álbumes 'Marcados'"
+msgstr "Ignorar álbumes 'Marcados'"
 
 msgctxt "#30003"
 msgid "Auto update library"
@@ -34,19 +34,19 @@ msgstr "Auto actualizar biblioteca"
 
 msgctxt "#30004"
 msgid "Hide Update Library item in main menu"
-msgstr "Ocultar Actualizar biblioteca en el menú principal"
+msgstr "Ocultar Actualizar Biblioteca en el menú principal"
 
 msgctxt "#30005"
 msgid "Ignore empty albums"
-msgstr "Ignorar Álbumes vacios"
+msgstr "Ignorar álbumes vacios"
 
 msgctxt "#30006"
 msgid "Ignore keywords"
-msgstr "Ignorar Palabras Clave"
+msgstr "Ignorar palabras clave"
 
 msgctxt "#30015"
 msgid "Enable Places support"
-msgstr "Habilitar Soporte para Lugares"
+msgstr "Habilitar soporte para Lugares"
 
 msgctxt "#30016"
 msgid "Show Places as"
@@ -58,11 +58,11 @@ msgstr "Direcciones"
 
 msgctxt "#30018"
 msgid "Lat/Lon Pairs"
-msgstr "Lat/Lon Coordenadas"
+msgstr "Coordenadas Lat/Lon"
 
 msgctxt "#30020"
 msgid "Default photo sort method"
-msgstr "Metodo de Orden por defecto"
+msgstr "Método de orden por defecto"
 
 msgctxt "#30021"
 msgid "None"
@@ -70,19 +70,19 @@ msgstr "Ninguno"
 
 msgctxt "#30022"
 msgid "XML Date"
-msgstr "Datos XML"
+msgstr "Fecha XML"
 
 msgctxt "#30023"
 msgid "Label"
-msgstr "Firma"
+msgstr "Etiqueta"
 
 msgctxt "#30024"
 msgid "Size"
-msgstr "Resolución"
+msgstr "Tamaño"
 
 msgctxt "#30025"
 msgid "Download maps from Google"
-msgstr "Descargar mapa desde Google"
+msgstr "Descargar mapas desde Google"
 
 msgctxt "#30026"
 msgid "Show map as fanart"
@@ -114,7 +114,7 @@ msgstr "Por defecto"
 
 msgctxt "#30062"
 msgid "Pic Thumbs"
-msgstr "Pic Thumbs"
+msgstr "Miniaturas"
 
 msgctxt "#30063"
 msgid "Image Wrap"
@@ -214,23 +214,35 @@ msgstr "Importados %d items"
 
 msgctxt "#30212"
 msgid "Scanning Library..."
-msgstr "Escaneando AlbumData.xml..."
+msgstr "Escaneando Biblioteca"
 
 msgctxt "#30213"
 msgid "Update library"
-msgstr "Actualizar Biblioteca"
+msgstr "Actualizar biblioteca"
 
 msgctxt "#30214"
 msgid "Ignore Keyword"
-msgstr "Ignorar Palabras clave"
+msgstr "Ignorar Palabra clave"
 
 msgctxt "#30215"
 msgid "Remove cached maps"
 msgstr "Borrar cache de mapas"
 
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Reestablecer la base de datos del complemento"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Documentación del complemento"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Restableciendo base de datos del complemento..."
+
 msgctxt "#30220"
 msgid "Enable Support for Places?"
-msgstr "Habilitar soporte para Lugares?"
+msgstr "¿Habilitar soporte para Lugares?"
 
 msgctxt "#30221"
 msgid "Places looks up addresses via Google."
@@ -238,27 +250,39 @@ msgstr "Lugares busca la dirección via Google."
 
 msgctxt "#30222"
 msgid "This can slow down the library import a bit."
-msgstr "Esto puede relentizar un poco la importación de la biblioteca."
+msgstr "Esto puede ralentizar un poco la importación de la biblioteca."
 
 msgctxt "#30223"
 msgid "You will also need to reimport your library."
 msgstr "También tandrás que volver a importar la biblioteca."
 
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "¿Borrar base de datos del complemento?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "La base de datos está corrupta."
+
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
-msgstr "Borrarlo no estropeara tu biblioteca de iPhoto"
+msgstr "Borrarlo no dañará tu biblioteca de iPhoto"
 
 msgctxt "#30233"
 msgid "You will need to rescan after this."
-msgstr "Necesitara reescanear después"
+msgstr "Necesitarás reescanear después de esto."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Error al iniciar base de datos."
 
 msgctxt "#30241"
 msgid "Please reimport your Library."
-msgstr "Por favor, reimporta tu librería."
+msgstr "Por favor, vuelve a importar tu Biblioteca."
 
 msgctxt "#30250"
 msgid "Deleting cached map images"
-msgstr "Borrar imagenes de mapas de la cache"
+msgstr "Borrando imagenes de mapas de la cache"
 
 msgctxt "#30252"
 msgid "Scanning..."
@@ -270,7 +294,7 @@ msgstr "Importación en progreso"
 
 msgctxt "#30261"
 msgid "Unable to reset database."
-msgstr "Imposible borrar la base de datos"
+msgstr "Imposible reiniciar la base de datos."
 
 msgctxt "#30262"
 msgid "Currently unsupported"
@@ -278,7 +302,7 @@ msgstr "No soportado"
 
 msgctxt "#30263"
 msgid "This function is unsupported %s %s."
-msgstr "Esta función no esta sonportada %s %s"
+msgstr "Esta función no esta soportada %s %s."
 
 msgctxt "#30300"
 msgid "Library import in progress"
@@ -306,7 +330,7 @@ msgstr "Error al restaurar base de datos"
 
 msgctxt "#30322"
 msgid "Deleted %d cached maps"
-msgstr "Borrado %d cache de mapas"
+msgstr "Borrados %d mapas de cache"
 
 msgctxt "#30330"
 msgid "Keyword '%s' hidden"

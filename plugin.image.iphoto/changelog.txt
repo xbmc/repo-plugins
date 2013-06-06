@@ -1,3 +1,10 @@
+2.1.6 - 20130605
+- Ignore non-existent thumbnails in Events.
+- Update language files from Transifex.
+
+2.1.5 - 20130502
+- Update language files from Transifex.
+
 2.1.4 - 20130315
 - Fix Places support.
 

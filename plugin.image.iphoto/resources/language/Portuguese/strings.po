@@ -18,7 +18,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "Path to iPhoto or Aperture Library"
-msgstr "Caminho para AlbumData.xml"
+msgstr "Localização de biblioteca iPhoto ou Aperture"
 
 msgctxt "#30001"
 msgid "Ignore published (MobileMe) albums"
@@ -178,7 +178,7 @@ msgstr "Classificações"
 
 msgctxt "#30103"
 msgid "<< Update Library >>"
-msgstr "<< Importar biblioteca iPhoto >>"
+msgstr "<< Actualizar Biblioteca >>"
 
 msgctxt "#30104"
 msgid "Keywords"
@@ -228,6 +228,18 @@ msgctxt "#30215"
 msgid "Remove cached maps"
 msgstr "Remover mapas em cache"
 
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Apagar a base de dados do add-on"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Documentação do add-on"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Apagando a base de dados do add-on..."
+
 msgctxt "#30220"
 msgid "Enable Support for Places?"
 msgstr "Activar Suporte para Lugares?"
@@ -244,6 +256,14 @@ msgctxt "#30223"
 msgid "You will also need to reimport your library."
 msgstr "Também necessitará de reimportar a sua biblioteca."
 
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Apagar a base de dados do add-on?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "A base de dados do add-on está corrompida."
+
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
 msgstr "Apagá-la não irá afectar a sua Biblioteca de Fotos."
@@ -251,6 +271,10 @@ msgstr "Apagá-la não irá afectar a sua Biblioteca de Fotos."
 msgctxt "#30233"
 msgid "You will need to rescan after this."
 msgstr "Será necessária uma reanálise depois disto."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Não foi possível iniciar a base de dados do add-on."
 
 msgctxt "#30241"
 msgid "Please reimport your Library."

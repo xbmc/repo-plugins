@@ -16,9 +16,61 @@ msgstr ""
 "Language: gl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "Camiño á Biblioteca de iPhoto ou Aperture"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "Ignorar álbums publicados (MobileMe)"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "Ignorar álbums 'Marcados'"
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "Actualizar auto. biblioteca"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "Agochar Actualizar Biblioteca no menú principal"
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "Ignorar álbums baleiros"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "Ignorar palabras chave"
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "Habilitar Soporte para Lugares"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "Amosar Lugares como"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "Enderezos"
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "Coordenadas Lat/Lon"
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr "Método predefinido para ordenar fotos"
+
 msgctxt "#30021"
 msgid "None"
 msgstr "Ningún"
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "Data XML"
 
 msgctxt "#30023"
 msgid "Label"
@@ -27,6 +79,30 @@ msgstr "Etiqueta"
 msgctxt "#30024"
 msgid "Size"
 msgstr "Tamaño"
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr "Descargar mapas de Google"
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "Amosar o mapa como fanart"
+
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr "Xestionar a biblioteca (requírese volver a analizar)"
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr "Camiño local a Masters"
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr "Reescribir o cartafol raíz como"
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr "Agochar Ver Documentación no menú principal"
 
 msgctxt "#30060"
 msgid "View mode in Confluence"
@@ -44,9 +120,25 @@ msgctxt "#30063"
 msgid "Image Wrap"
 msgstr "Envoltorio de imaxe"
 
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr "Modo Vista en Metropolis"
+
 msgctxt "#30067"
 msgid "Default"
-msgstr "Predeterminado"
+msgstr "Predefinido"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "Grella de Fotos"
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "Fanart da Galería"
+
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr "Dirección predefinida na orde das fotos"
 
 msgctxt "#30081"
 msgid "Ascending"
@@ -66,20 +158,180 @@ msgstr "Vista"
 
 msgctxt "#30092"
 msgid "Skin"
-msgstr "Pel"
+msgstr "Tema"
 
 msgctxt "#30099"
 msgid "Advanced"
 msgstr "Avanzado"
 
+msgctxt "#30100"
+msgid "Events"
+msgstr "Eventos"
+
 msgctxt "#30101"
 msgid "Albums"
 msgstr "Álbumes"
+
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "Puntuacións"
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr "<< Actualizar Biblioteca >>"
 
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "Verbas chave"
 
+msgctxt "#30105"
+msgid "Faces"
+msgstr "Rostros"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "Lugares"
+
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr "<< Ver Documentación >>"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "Proxectos"
+
+msgctxt "#30200"
+msgid "%d star"
+msgstr "%d estrela"
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr "Importando a Biblioteca"
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr "%d elementos importados"
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "Analizando a Biblioteca..."
+
 msgctxt "#30213"
 msgid "Update library"
 msgstr "Actualizar bibloteca"
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr "Ignorar Palabra Chave"
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr "Eliminar mapas cacheados"
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Restabelecer o complemento de base de datos"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Documentación do complemento"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Restabelecendo o complemento de base de datos..."
+
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr "Habilitar o Soporte para Lugares?"
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr "Lugares busca os enderezos mediante Google."
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr "Esto pode baixar a velocidade de importación da biblioteca."
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr "Tamén tera que volver importar a súa biblioteca."
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Eliminar o complemento de base de datos?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "O complemento de base de datos está corrupto."
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr "Eliminalo non danará a súa Biblioteca de iPhoto."
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr "Ten que volver analizar despois disto."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Fallo ao iniciar o complemento de base de datos."
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr "Por favor volva importar a súa Biblioteca."
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr "Eliminando imaxes de mapas cacheadas"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "Analizando..."
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr "Importación da Biblioteca en curso"
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr "Non se puido restabelecer a base de datos."
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr "Non soportado actualmente"
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr "Esta función non está soportada %s %s."
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr "Importación da Biblioteca en curso"
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr "Importación correcta da Biblioteca"
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr "Fallou a importación da Biblioteca"
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "Sen elementos"
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr "Base de datos restaurada"
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr "Fallo ao restaurar a base de datos"
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr "Eliminados %d mapas cacheados"
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr "Agochouse a palabra chave '%s'"

@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-import re,time
+import re, datetime, time, calendar
 import pprint
 from mediathek import *
 from xml.dom import minidom;
@@ -61,44 +61,152 @@ class NDRMediathek(Mediathek):
     
     
     #Hauptmenue
-    self.menuTree = [
-      TreeNode("0","Die neuesten Videos",self.menuLink+"teasershow_pageSize-"+self.pageSize+".xml",True),
-      ];
-    
+    tmp_menu = []
     broadcastsLink = self.menuLink+"broadcasts.xml"
     broadcastsLinkPage = self.loadConfigXml(broadcastsLink);
     
     menuNodes = broadcastsLinkPage.getElementsByTagName("broadcast");
     displayObjects = [];
-    x = 1
+    x = 0
     for menuNode in menuNodes:
         menuId = menuNode.getAttribute('id')
         menuItem = unicode(menuNode.firstChild.data)
         menuLink = self.rootLink+"/mediatheksuche105_broadcast-"+menuId+"_format-video_page-1.html"
-        self.menuTree.append(TreeNode(str(x),menuItem,menuLink,True));
+        tmp_menu.append(TreeNode("0."+str(x),menuItem,menuLink,True));
         x = x+1
     
-  def buildPageMenu(self, link, initCount):
+    self.menuTree = [
+      TreeNode("0","Sendungen von A-Z","",False,tmp_menu),
+      TreeNode("1","Sendung verpasst?","sendungverpasst",True),
+      TreeNode("2","Live","livestream",True),
+      ];
+    
+  def buildPageMenuSendungVerpasst(self,action):
+   #Bis 2008
+    htmlPage = self.loadPage("http://www.ndr.de/mediathek/dropdown105-extapponly.html");
+    
+    regex_verpasstNow = re.compile("<input type=\"hidden\" name=\"verpasstNow\" id =\"verpasstNow\" value=\"(\\d{2}\.\\d{2}\.\\d{4})\" />")
+    verpasstNow = regex_verpasstNow.search(htmlPage).group(1);
+    try:
+        dateTimeTmp = datetime.datetime.strptime(verpasstNow,"%d.%m.%Y");
+    except TypeError:
+        dateTimeTmp = datetime.datetime(*(time.strptime(verpasstNow, "%d.%m.%Y")[0:6]))
+    
+    nodeCount = 0;
+        
+    if action == "":
+        verpasstHeute = dateTimeTmp.strftime("%Y%m%d")
+        dateTimeTmp = dateTimeTmp-datetime.timedelta(1)
+        verpasstGestern = dateTimeTmp.strftime("%Y%m%d")
+        dateTimeTmp = dateTimeTmp-datetime.timedelta(1)
+        verpasstVorGestern = dateTimeTmp.strftime("%Y%m%d")
+               
+        self.gui.buildVideoLink(DisplayObject("Heute","","","description",self.rootLink+"/mediathek/verpasst109-extapponly_date-"+verpasstHeute+"_branding-ndrtv.html",False),self,1);
+        self.gui.buildVideoLink(DisplayObject("Gestern","","","description",self.rootLink+"/mediathek/verpasst109-extapponly_date-"+verpasstGestern+"_branding-ndrtv.html",False),self,2);
+        self.gui.buildVideoLink(DisplayObject("Vorgestern","","","description",self.rootLink+"/mediathek/verpasst109-extapponly_date-"+verpasstVorGestern+"_branding-ndrtv.html",False),self,3);        
+        self.gui.buildVideoLink(DisplayObject("Datum waehlen","","","description","sendungverpasstselect",False),self,4);
+    elif action == "select":
+        dateTimeTmp = dateTimeTmp-datetime.timedelta(3)
+        verpasstStartYear = int(dateTimeTmp.strftime("%Y"))
+        for verpasstStart in reversed(range(1, int(dateTimeTmp.strftime("%m")))):
+            menu_title = str(verpasstStart)+"."+str(verpasstStartYear)
+            menu_action = "sendungverpasstselectmonth"+str(verpasstStartYear)+str(verpasstStart)
+            self.gui.buildVideoLink(DisplayObject(menu_title,"","","description",menu_action,False),self,nodeCount);
+            verpasstStart = verpasstStart - 1
+            nodeCount = nodeCount + 1
+        
+        while verpasstStartYear > 2008:
+            verpasstStartYear = verpasstStartYear - 1
+            menu_title = str(verpasstStartYear)
+            self.gui.buildVideoLink(DisplayObject(menu_title,"","","description","sendungverpasstselectyear"+str(verpasstStartYear),False),self,nodeCount);
+    elif action[0:11] == "selectmonth":
+        action = action[11:]
+        action_year = action[0:4]
+        action_month = action[4:]
+        
+        try:
+            dateTimeTmp2 = datetime.datetime.strptime(action_year+action_month,"%Y%m");
+        except TypeError:
+            dateTimeTmp2 = datetime.datetime(*(time.strptime(action_year+action_month, "%Y%m")[0:6]))
+        
+        if dateTimeTmp.strftime("%Y%m") == dateTimeTmp2.strftime("%Y%m"):
+            startDay = int(dateTimeTmp2.strftime("%d"))
+        else:
+            startDay = calendar.monthrange(int(action_year),int(action_month))[1]
+            
+        try:
+            dateTimeTmp2 = datetime.datetime.strptime(action_year+action_month+str(startDay),"%Y%m%d");
+        except TypeError:
+            dateTimeTmp2 = datetime.datetime(*(time.strptime(action_year+action_month+str(startDay), "%Y%m%d")[0:6]))
+        
+        for i in reversed(range(1, startDay)):
+            verpasstDatum = dateTimeTmp2.strftime("%Y%m%d")
+            menu_title = dateTimeTmp2.strftime("%d.%m.%Y")
+            menu_action = self.rootLink+"/mediathek/verpasst109-extapponly_date-"+verpasstDatum+"_branding-ndrtv.html"
+            self.gui.buildVideoLink(DisplayObject(menu_title,"","","description",menu_action,False),self,nodeCount);        
+            nodeCount = nodeCount + 1
+            dateTimeTmp2 = dateTimeTmp2-datetime.timedelta(1)
+    elif action[0:10] == "selectyear":
+        action = action[10:]
+        action_year = action[0:4]
+        for startMonth in reversed(range(1, 12)):
+            menu_title = str(startMonth)+"."+action_year
+            menu_action = "sendungverpasstselectmonth"+action_year+str(startMonth)
+            self.gui.buildVideoLink(DisplayObject(menu_title,"","","description",menu_action,False),self,nodeCount);        
+            nodeCount = nodeCount + 1
+
+  def buildPageMenuLivestream(self):
+        nodeCount = 0;
+        
+        #Hamburg
+        nodeCount = nodeCount+1
+        links = {};
+        links[0] = SimpleLink("rtmpt://cp160545.live.edgefcs.net/live/ndr_fs_hh_hi_flv@19433", 0);
+        links[1] = SimpleLink("rtmpt://cp160545.live.edgefcs.net/live/ndr_fs_hh_hq_flv@19434", 0);
+        self.gui.buildVideoLink(DisplayObject("Hamburg","","","",links,True),self,nodeCount);
+        
+        #Mecklenburg-Vorpommern
+        nodeCount = nodeCount+1
+        links = {};
+        links[0] = SimpleLink("rtmpt://cp160544.live.edgefcs.net/live/ndr_fs_mv_hi_flv@19430", 0);
+        links[1] = SimpleLink("rtmpt://cp160544.live.edgefcs.net/live/ndr_fs_mv_hq_flv@19431", 0);
+        self.gui.buildVideoLink(DisplayObject("Mecklenburg-Vorpommern","","","",links,True),self,nodeCount);
+        
+        #Niedersachsen
+        nodeCount = nodeCount+1
+        links = {};
+        links[0] = SimpleLink("rtmpt://cp160542.live.edgefcs.net/live/ndr_fs_nds_hi_flv@19435", 0);
+        links[1] = SimpleLink("rtmpt://cp160542.live.edgefcs.net/live/ndr_fs_nds_hq_flv@19436", 0);
+        self.gui.buildVideoLink(DisplayObject("Niedersachsen","","","",links,True),self,nodeCount);
+        
+        #Schleswig-Holstein
+        nodeCount = nodeCount+1
+        links = {};
+        links[0] = SimpleLink("rtmpt://cp160543.live.edgefcs.net/live/ndr_fs_sh_hi_flv@19425", 0);
+        links[1] = SimpleLink("rtmpt://cp160543.live.edgefcs.net/live/ndr_fs_sh_hq_flv@19426", 0);
+        self.gui.buildVideoLink(DisplayObject("Schleswig-Holstein","","","",links,True),self,nodeCount);
+
+  def buildPageMenuVideoList(self, link, initCount):
     self.gui.log("buildPageMenu: "+link);
-    
+
     htmlPage = self.loadPage(link);
-    
-    regex_extractVideoItems = re.compile("<div class=\"m_teaser\">(.*?)</p>\n</div>\n</div>",re.DOTALL);
+
+    regex_extractVideoItems = re.compile("<div class=\"m_teaser\">(.*?)(</p>\n</div>\n</div>|\n</div>\n</div>\n</li>)",re.DOTALL);
     regex_extractVideoItemHref = re.compile("<a href=\".*?/([^/]*?)\.html\" title=\".*?\" .*?>");
     regex_extractVideoItemDate = re.compile("<div class=\"subline\">.*?(\\d{2}\.\\d{2}\.\\d{4} \\d{2}:\\d{2})</div>");
-    
+
     videoItems = regex_extractVideoItems.findall(htmlPage)
     nodeCount = initCount + len(videoItems)
-    
+
     for videoItem in videoItems:
-      videoID = regex_extractVideoItemHref.search(videoItem).group(1)
-      try:
-        dateString = regex_extractVideoItemDate.search(videoItem).group(1)
-        dateTime = time.strptime(dateString,"%d.%m.%Y %H:%M");
-      except:
-        dateTime = None;
-      self.extractVideoInformation(videoID,dateTime,nodeCount)
-    
+        videoID = regex_extractVideoItemHref.search(videoItem[0]).group(1)
+        try:
+            dateString = regex_extractVideoItemDate.search(videoItem[0]).group(1)
+            dateTime = time.strptime(dateString,"%d.%m.%Y %H:%M");
+        except:
+            dateTime = None;
+        self.extractVideoInformation(videoID,dateTime,nodeCount)
+
     #Pagination (weiter)
     regex_extractNextPage = re.compile("<a href=\"(.*?)\" class=\"button_next\"  title=\"(.*?)\".*?>")
     nextPageHref = regex_extractNextPage.search(htmlPage)
@@ -106,7 +214,16 @@ class NDRMediathek(Mediathek):
         menuItemName = nextPageHref.group(2)
         link = self.rootLink+nextPageHref.group(1)
         self.gui.buildVideoLink(DisplayObject(menuItemName,"","","description",link,False),self,nodeCount+1);
+
+  def buildPageMenu(self, link, initCount):
     
+    if link[0:15] == "sendungverpasst":
+        self.buildPageMenuSendungVerpasst(link[15:])
+    elif link == "livestream":
+        self.buildPageMenuLivestream()
+    else:
+        self.buildPageMenuVideoList(link, initCount)
+
   def searchVideo(self, searchText):
     searchText = searchText.encode("UTF-8")
     searchText = urllib.urlencode({"query" : searchText})

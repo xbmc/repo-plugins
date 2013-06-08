@@ -594,7 +594,6 @@ class SessionRequester(object):
             ('User-Agent', ('Mozilla/5.0 (Windows NT 6.1; WOW64) '
                             'AppleWebKit/537.36 (KHTML, like Gecko) '
                             'Chrome/27.0.1453.15 Safari/537.36')),
-            ('Accept-Encoding', 'deflate,sdch'),
             ('Accept-Language', 'de-DE,de;q=0.8,en-US;q=0.6,en;q=0.4'),
         ]
         for header in headers:

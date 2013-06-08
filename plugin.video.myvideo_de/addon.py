@@ -141,6 +141,22 @@ def __add_items(entries, next_page=None, prev_page=None):
             )
         return context_menu
 
+    def format_episode_title(title):
+        if fix_show_title and ('Folge' in title or 'Staffel' in title):
+            title, show = title.rsplit('-', 1)
+            title = title.replace('Staffel ', 'S').replace(' Folge ', 'E')
+            title = title.replace('Folge ', 'E').replace('Ganze Folge', '')
+            return u'%s %s' % (show.strip(), title.strip())
+        return title
+
+    def better_thumbnail(thumb_url):
+        if thumb_url.startswith('http://img') and 'web/138' in thumb_url:
+            thumb_url = thumb_url.replace('http://img', 'http://is')
+            thumb_url = thumb_url.replace('web/138', 'de')
+            thumb_url = thumb_url.replace('.jpg', '.jpg_hq.jpg')
+        return thumb_url
+
+    fix_show_title = plugin.get_setting('fix_show_title', bool)
     temp_items = plugin.get_storage('temp_items')
     temp_items.clear()
     items = []
@@ -161,8 +177,11 @@ def __add_items(entries, next_page=None, prev_page=None):
             })
         else:
             items.append({
-                'label': entry['title'],
-                'thumbnail': entry.get('thumb', 'DefaultVideo.png'),
+                'label': format_episode_title(entry['title']),
+                'thumbnail': better_thumbnail(
+                    entry.get('thumb', 'DefaultVideo.png')
+                ),
+                'icon': entry.get('thumb', 'DefaultVideo.png'),
                 'info': {
                     'video_id': entry['video_id'],
                     'count': i + 1,

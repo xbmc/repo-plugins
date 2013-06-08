@@ -1,7 +1,13 @@
+0.9.1 (08.06.2013)
+ - use better thumbnails (Yeah!)
+ - added setting (default enabled) to rename tv show episodes:
+    from "staffel 1 episode 1 - episodetitle - tvshowtitle"
+    to "tvshowtitle S1E1 - episodetitle"
+
 0.9.0 (29.04.2013)
  - code rewrite (class based scrapers)
  - "My Favorites"- Feature
- 	You can now add items or folders to the "My Favorites" folder
+    You can now add items or folders to the "My Favorites" folder
  - new visible plugin structure to match the new website structure
  - fixed Playback (FLV, HLS, RTMP, RTMPE)
  - fixed some categories

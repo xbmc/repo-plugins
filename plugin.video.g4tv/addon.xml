@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.g4tv"
        name="G4TV"
-       version="3.0.1"
+       version="3.0.2"
        provider-name="stacked">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -17,5 +17,9 @@
     <description lang="en">G4TV is the one destination on television that feeds your addiction for the latest must-have tech gadgets, web culture and video games.</description>
     <platform>all</platform>
 	<language>en</language>
+	<website>https://code.google.com/p/plugin</website>
+	<source>https://github.com/stacked/plugin.video.g4tv</source>
+	<forum>http://forum.xbmc.org/showthread.php?tid=43556</forum>
+	<email>stacked.xbmc@gmail.com</email>
   </extension>
 </addon>

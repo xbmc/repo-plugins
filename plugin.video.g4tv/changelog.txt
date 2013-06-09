@@ -1,4 +1,8 @@
-[B]Version 2.0.1[/B]
+[B]Version 2.0.2[/B]
+
+- Fixed 'AttributeError' when using the search function
+
+[B]Version 3.0.1[/B]
 
 - Fixed 'Script failed!' Error
 - Fixed index error caused by getParameters

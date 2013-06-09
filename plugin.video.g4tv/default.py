@@ -4,8 +4,8 @@ import xbmc, xbmcgui, xbmcplugin, xbmcaddon, urllib, re, string, sys, os, buggal
 plugin = 'G4TV'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '01-21-2013'
-__version__ = '2.0.1'
+__date__ = '06-09-2013'
+__version__ = '2.0.2'
 settings = xbmcaddon.Addon(id='plugin.video.g4tv')
 buggalo.SUBMIT_URL = 'http://www.xbmc.byethost17.com/submit.php'
 dbg = False
@@ -61,8 +61,11 @@ def build_sub_directory(name, type):
 
 def build_video_directory(name, url):
 	if name == settings.getLocalizedString( 30012 ):
-		searchr = common.getUserInput(settings.getLocalizedString( 30001 ), "").replace(' ','%20')
-		url = 'http://g4tv.com/videos/?sort=mostrecent&q='+ searchr +'&ajax=true'
+		searchr = common.getUserInput(settings.getLocalizedString( 30001 ), "")
+		if searchr == None:
+			build_main_directory()
+			return
+		url = 'http://g4tv.com/videos/?sort=mostrecent&q='+ searchr.replace(' ','%20') +'&ajax=true'
 	nexturl = url
 	html = getUrl(url + '&page=' + str(page))
 	wrap1 = common.parseDOM(html, "div", attrs = { "class": "li-wrap-1" })
@@ -76,6 +79,7 @@ def build_video_directory(name, url):
 	if len(img) == 0:
 		dialog = xbmcgui.Dialog()
 		ok = dialog.ok( plugin , settings.getLocalizedString( 30002 ) + '\n' + settings.getLocalizedString( 30003 ) )
+		build_main_directory()
 		return
 	for item_count in range(len(img)):
 		if common.stripTags(info[item_count]).find('Views') == -1:

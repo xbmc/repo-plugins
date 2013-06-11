@@ -1,3 +1,9 @@
+[B]Version 2.3.4[/B]
+
+- Fix navigation items
+- Add optional tags
+- Add quick access to all programs setting
+
 [B]Version 2.3.3[/B]
 
 - Update for requests 1.0.4

@@ -50,6 +50,7 @@
     <string id="30102">high</string>
     <string id="30103">normal</string>
     <string id="30105">Display all parts</string>
+    <string id="30106">Jump to all programs</string>
 
     <!--Context Menu-->
     <string id="30180">Download Video</string>

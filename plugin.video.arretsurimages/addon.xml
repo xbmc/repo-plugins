@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.arretsurimages"
        name="Arrêt Sur Images"
-       version="2.3.3"
+       version="2.3.4"
        provider-name="beenje">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -23,5 +23,9 @@
     <disclaimer lang="en">This add-on requires a subscription to the french site arretsurimages.net for most contents</disclaimer>
     <platform>all</platform>
     <language>fr</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <website>http://www.arretsurimages.net</website>
+    <source>https://github.com/beenje/plugin.video.arretsurimages</source>
+    <email>beenje@gmail.com</email>
   </extension>
 </addon>

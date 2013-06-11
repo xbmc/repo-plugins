@@ -19,5 +19,6 @@
     <category label="30100">
         <setting id="quality" type="enum" label="30101" default="0" lvalues="30102|30103" />
         <setting id="displayParts" type="bool" default="false" label="30105" />
+        <setting id="quickAccess" type="bool" default="false" label="30106" />
     </category>
 </settings>

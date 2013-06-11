@@ -37,20 +37,8 @@ BESTOF_SORTMETHOD = ['recent', 'visited', 'commented', 'rated']
 STREAMS = ['stream_h264_hq_url', 'stream_h264_url']
 
 
-@plugin.route('/')
-def index():
-    """Default view"""
-    items = [
-        {'label': plugin.get_string(30010), 'url': plugin.url_for('emissions')},
-        {'label': plugin.get_string(30011), 'url': plugin.url_for('bestof', page='1')},
-        {'label': plugin.get_string(30012), 'url': plugin.url_for('settings')},
-    ]
-    return plugin.add_items(items)
-
-
-@plugin.route('/emissions/')
-def emissions():
-    """Display the available programs categories"""
+def login():
+    """Login or exit if it fails"""
     # Only available with a subscription
     # Check if username and password have been set
     username = plugin.get_setting('username')
@@ -63,6 +51,28 @@ def emissions():
     if not scraper.is_logged_in(username) and not scraper.login(username, password):
         xbmcgui.Dialog().ok(plugin.get_string(30050), plugin.get_string(30053))
         sys.exit(0)
+
+
+@plugin.route('/')
+def index():
+    """Default view"""
+    quick_access = plugin.get_setting('quickAccess')
+    if quick_access == 'true':
+        # Jump directly to 'toutesLesEmissions'
+        login()
+        return show_programs('toutesLesEmissions', '1')
+    items = [
+        {'label': plugin.get_string(30010), 'url': plugin.url_for('emissions')},
+        {'label': plugin.get_string(30011), 'url': plugin.url_for('bestof', page='1')},
+        {'label': plugin.get_string(30012), 'url': plugin.url_for('settings')},
+    ]
+    return plugin.add_items(items)
+
+
+@plugin.route('/emissions/')
+def emissions():
+    """Display the available programs categories"""
+    login()
     items = [
         {'label': 'Toutes les émissions',
          'url': plugin.url_for('show_programs', label='toutesLesEmissions', page='1'),

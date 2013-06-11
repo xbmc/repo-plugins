@@ -140,13 +140,10 @@ class Programs:
         filterContainer = SoupStrainer(attrs={'class': re.compile('rech-filtres-droite')})
         # There are two 'rech-filtres-droite' per page. Look only in the first one (contents[0])
         for tag in BeautifulSoup(self.html, parseOnlyThese=filterContainer).contents[0].findAll('a'):
-            if 'href' in tag:
-                if tag.string == '&gt;':
-                    nav_items['next'] = True
-                elif tag.string == '&lt;':
-                    nav_items['previous'] = True
-            else:
-                debug('No navigation items found')
+            if tag.string == '&gt;':
+                nav_items['next'] = True
+            elif tag.string == '&lt;':
+                nav_items['previous'] = True
         return nav_items
 
 

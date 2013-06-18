@@ -1,3 +1,11 @@
+0.9.2 (15.06.2013)
+ - use better thumbnails in more (all?) places
+ - fixed Musik/Kuenstler
+ - fixed tv shows:
+ 	Now if a tv show has clips AND full_episodes a selector is shown
+ 	(This was needed because both sections may have a separate pagination)
+ - refactored logging
+
 0.9.1 (08.06.2013)
  - use better thumbnails (Yeah!)
  - added setting (default enabled) to rename tv show episodes:

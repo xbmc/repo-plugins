@@ -17,6 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+import re
 import string
 from xbmcswift2 import Plugin, xbmc, xbmcgui
 import SimpleDownloader
@@ -150,9 +151,9 @@ def __add_items(entries, next_page=None, prev_page=None):
         return title
 
     def better_thumbnail(thumb_url):
-        if thumb_url.startswith('http://img') and 'web/138' in thumb_url:
+        if thumb_url.startswith('http://img') and 'web/' in thumb_url:
             thumb_url = thumb_url.replace('http://img', 'http://is')
-            thumb_url = thumb_url.replace('web/138', 'de')
+            thumb_url = re.sub('web/[0-9]+', 'de', thumb_url)
             thumb_url = thumb_url.replace('.jpg', '.jpg_hq.jpg')
         return thumb_url
 

@@ -1,3 +1,16 @@
+[B]v12.0.1 (18.06.2013)[/B]
+- Change: RegEx changed
+
+[B]v12.0.0 (13.06.2013)[/B]
+- Fix:    RTMP url and parameters of concerts changed
+- Change: Version changed to 12 for Frodo and 11 for Eden
+
+[B]v2.3.0 (15.02.2013)[/B]
+- Update: Parameter handling changed.
+
+[B]v2.2.0 (17.01.2013)[/B]
+- Fix:    urlib.unquote_plus() changed to HTMLParser().unescape()
+
 [B]v2.1.2 (03.01.2013)[/B]
 - Fix:    Frodo version numbers for add-on and xbmc.python
 

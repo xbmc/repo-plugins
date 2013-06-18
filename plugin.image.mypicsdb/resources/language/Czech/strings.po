@@ -40,6 +40,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Videa"
 
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Značky"
+
 msgctxt "#30123"
 msgid "Help"
 msgstr "Nápověda"

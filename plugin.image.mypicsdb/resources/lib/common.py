@@ -65,7 +65,7 @@ def setaddon_setting(name, value):
 
 
 # helpers
-def show_notification(title, message, timeout=2000, image=""):
+def show_notification(title, message, timeout=5000, image=""):
     if image == "":
         command = 'Notification(%s,%s,%s)' % (smart_utf8(title), smart_utf8(message), timeout)
     else:
@@ -182,7 +182,7 @@ def log(module, msg, level=xbmc.LOGDEBUG):
 
 
 # version is a string like 'x.y.z'
-# if first version is greater then -1 is returned. if equal then 0 is returned.
+# if first version is greater then -1 is returned. if equal then 0 is returned else +1
 def check_version(first, second):
     a = first.split('.')
     b = second.split('.')

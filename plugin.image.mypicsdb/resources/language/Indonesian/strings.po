@@ -36,6 +36,14 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Video"
 
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Tag"
+
+msgctxt "#30601"
+msgid "Tags"
+msgstr "Tag"
+
 msgctxt "#30613"
 msgid "OK"
 msgstr "OK"
@@ -52,6 +60,10 @@ msgctxt "#30619"
 msgid "Delete"
 msgstr "Hapus"
 
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "Debugging"
+
 msgctxt "#30665"
 msgid "Password"
 msgstr "Password"
@@ -60,10 +72,42 @@ msgctxt "#30667"
 msgid "Port"
 msgstr "Port"
 
+msgctxt "#30700"
+msgid "Country"
+msgstr "Negara"
+
 msgctxt "#30702"
 msgid "State"
 msgstr "Wilayah"
 
+msgctxt "#30703"
+msgid "City"
+msgstr "Kota"
+
+msgctxt "#30704"
+msgid "Location"
+msgstr "Lokasi"
+
+msgctxt "#30709"
+msgid "Description"
+msgstr "Deskripsi"
+
+msgctxt "#30710"
+msgid "Headline"
+msgstr "Judul"
+
 msgctxt "#30711"
 msgid "Title"
 msgstr "Judul"
+
+msgctxt "#30715"
+msgid "Label"
+msgstr "Label"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "Kategori"
+
+msgctxt "#30723"
+msgid "Orientation"
+msgstr "Orientasi"

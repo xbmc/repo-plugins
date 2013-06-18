@@ -400,7 +400,6 @@ msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s Bilder hinzugefügt in:"
 
-
 msgctxt "#30162"
 msgid "Import album from Picasa xml"
 msgstr "Importiere Album aus einer Picasa XML-Datei"

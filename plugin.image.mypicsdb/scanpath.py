@@ -26,16 +26,18 @@ import xbmc
 import resources.lib.common as common
 
 # python modules
+import mmap
 import optparse
 import os
 from urllib import unquote_plus
 from traceback import print_exc
-from time import strftime,strptime
+from time import strftime, strptime
 
 #local modules
 from resources.lib.pathscanner import Scanner
 
-import resources.lib.MypicsDB as mpdb
+import resources.lib.MypicsDB as MypicsDB
+
 # local tag parsers
 from resources.lib.iptcinfo import IPTCInfo
 from resources.lib.iptcinfo import c_datasets as IPTC_FIELDS
@@ -66,8 +68,9 @@ class VFSScanner:
         self.current_root_entry = 0
         self.total_root_entries = 0
         self.totalfiles  = 0
-
-        for path,_,_,exclude in mpdb.get_all_root_folders():
+        self.mpdb = MypicsDB.MyPictureDB()
+         
+        for path,_,_,exclude in self.mpdb.get_all_root_folders():
             if exclude:
                 common.log("", 'Exclude path "%s" found '%common.smart_unicode(path[:len(path)-1]))
                 self.exclude_folders.append(common.smart_unicode(path[:len(path)-1]))
@@ -109,7 +112,7 @@ class VFSScanner:
             self.scan.close()
 
         elif self.options.database:
-            paths = mpdb.get_all_root_folders()
+            paths = self.mpdb.get_all_root_folders()
             common.log("VFSScanner.dispatcher", "Database refresh started", xbmc.LOGNOTICE)
             self.action = common.getstring(30242)#Updating
             if paths:
@@ -120,7 +123,6 @@ class VFSScanner:
                 self.scan.update(0,0,
                             common.getstring(30000)+" ["+common.getstring(30241)+"]",#MyPicture Database [preparing]
                             common.getstring(30247))#please wait...
-                print paths
                 for path,recursive,update,exclude in paths:
                     if exclude==0:
                         self.total_root_entries += 1
@@ -137,7 +139,7 @@ class VFSScanner:
                 self.scan.close()
                 
         # Set default translation for tag types
-        mpdb.default_tagtypes_translation()
+        self.mpdb.default_tagtypes_translation()
         
         xbmc.executebuiltin( "Notification(%s,%s)"%(common.getstring(30000).encode("utf8"),
                                                     common.getstring(30248).encode("utf8")%(self.picsscanned,self.picsadded,self.picsdeleted,self.picsupdated)
@@ -175,7 +177,7 @@ class VFSScanner:
         common.log("VFSScanner._addpath", '"%s"'%common.smart_utf8(path) )
         # Check excluded paths
         if path in self.exclude_folders:
-            self.picsdeleted = self.picsdeleted + mpdb.delete_paths_from_root(path)
+            self.picsdeleted = self.picsdeleted + self.mpdb.delete_paths_from_root(path)
             return
 
         (dirnames, filenames) = self.filescanner.walk(path, False, self.picture_extensions if self.use_videos == "false" else self.all_extensions)
@@ -185,12 +187,12 @@ class VFSScanner:
         if len(foldername)==0:
             foldername = os.path.split(os.path.dirname(path))[1]
         
-        folderid = mpdb.folder_insert(foldername, path, parentfolderid, 1 if len(filenames)>0 else 0 )
+        folderid = self.mpdb.folder_insert(foldername, path, parentfolderid, 1 if len(filenames)>0 else 0 )
         
         # get currently stored files for 'path' from database.
         # needed for 'added', 'updated' or 'deleted' decision
-        filesfromdb = mpdb.listdir(common.smart_unicode(path))
-        
+        filesfromdb = self.mpdb.listdir(common.smart_unicode(path))
+
         # scan pictures and insert them into database
         if filenames:
             for pic in filenames:
@@ -212,7 +214,7 @@ class VFSScanner:
                              "ftype": extension in self.picture_extensions and "picture" or extension in self.video_extensions and "video" or "",
                              "DateAdded": strftime("%Y-%m-%d %H:%M:%S"),
                              "Thumb": "",
-                             "ImageRating": None
+                             "Image Rating": None
                              }
 
 
@@ -224,7 +226,7 @@ class VFSScanner:
                 if extension in self.picture_extensions:
                     (localfile, isremote) = self.filescanner.getlocalfile(pic)
                     common.log( "VFSScanner._addpath", 'Scanning picture "%s"'%common.smart_utf8(pic))
-                    filesha = mpdb.sha_of_file(localfile) 
+                    filesha = self.mpdb.sha_of_file(localfile) 
 
                     tags = self._get_metas(common.smart_unicode(localfile))
                     picentry.update(tags)
@@ -236,7 +238,7 @@ class VFSScanner:
                     if filename in filesfromdb:  # then it's an update
 
                         sqlupdate   = True
-                        if mpdb.stored_sha(path,filename) != filesha:  # if sha is equal then don't scan again
+                        if self.mpdb.stored_sha(path,filename) != filesha:  # if sha is equal then don't scan again
                             self.picsupdated += 1
                             common.log( "VFSScanner._addpath", "Picture already exists and must be updated")
                             filesfromdb.pop(filesfromdb.index(filename))
@@ -275,7 +277,7 @@ class VFSScanner:
                     continue
                 
                 try:
-                    mpdb.file_insert(path, filename, picentry, sqlupdate, filesha)
+                    self.mpdb.file_insert(path, filename, picentry, sqlupdate, filesha)
                 except Exception, msg:
                     common.log("VFSScanner._addpath", 'Unable to insert picture "%s"'%pic, xbmc.LOGERROR)
                     common.log("VFSScanner._addpath", '"%s" - "%s"'%(Exception, msg), xbmc.LOGERROR)
@@ -296,12 +298,15 @@ class VFSScanner:
         # therefore delete them from db
         if filesfromdb:
             for pic in filesfromdb:
-                mpdb.del_pic(path, pic)
+                self.mpdb.del_pic(path, pic)
                 common.log( "VFSScanner._addpath", 'Picture "%s" deleted from DB'%common.smart_utf8(pic))
                 self.picsdeleted += 1
 
         if recursive:
             for dirname in dirnames:
+                if self.scan.iscanceled():
+                    common.log( "VFSScanner._addpath", "Scanning canncelled", xbmc.LOGNOTICE)
+                    return
                 self._addpath(dirname, folderid, True, update)
                 
     
@@ -326,32 +331,35 @@ class VFSScanner:
                 common.log( "VFSScanner._get_metas()._get_exif()", "Finished reading EXIF tags")
             except Exception,msg:
                 common.log( "VFSScanner._get_metas()._get_exif()", "Exception", xbmc.LOGERROR)
-                print msg
+                common.log( "VFSScanner._get_metas()._get_exif()", msg, xbmc.LOGERROR)
+
 
             ###############################
             #    getting  IPTC  infos     #
             ###############################
             try:
-                common.log( "VFSScanner._get_metas()._get_exif()", 'Reading IPTC tags from "%s"'%fullpath)
+                common.log( "VFSScanner._get_metas()._get_iptc()", 'Reading IPTC tags from "%s"'%fullpath)
                 iptc = self._get_iptc(fullpath)
                 picentry.update(iptc)
-                common.log( "VFSScanner._get_metas()._get_exif()", "Finished reading IPTC tags")
+                common.log( "VFSScanner._get_metas()._get_iptc()", "Finished reading IPTC tags")
             except Exception,msg:
                 common.log( "VFSScanner._get_metas()_get_iptc()", "Exception", xbmc.LOGERROR)
-                print msg
+                common.log( "VFSScanner._get_metas()._get_iptc()", msg, xbmc.LOGERROR)
+
 
 
             ###############################
             #    getting  XMP infos       #
             ###############################
             try:
-                common.log( "VFSScanner._get_metas()._get_exif()", 'Reading XMP tags from "%s"'%fullpath)
+                common.log( "VFSScanner._get_metas()._get_xmp()", 'Reading XMP tags from "%s"'%fullpath)
                 xmp = self._get_xmp(fullpath)
                 picentry.update(xmp)
-                common.log( "VFSScanner._get_metas()._get_exif()", "Finished reading XMP tags")
+                common.log( "VFSScanner._get_metas()._get_xmp()", "Finished reading XMP tags")
             except Exception,msg:
                 common.log( "VFSScanner._get_metas()._get_xmp()", "Exception", xbmc.LOGERROR)
-                print msg
+                common.log( "VFSScanner._get_metas()._get_xmp()", msg, xbmc.LOGERROR)
+
 
 
         return picentry
@@ -385,11 +393,25 @@ class VFSScanner:
                       ]
 
         try:
-            f=open(picfile,"rb")
+            f=open(picfile,"r+b")
         except:
-            f=open(picfile.encode('utf-8'),"rb")
+            f=open(picfile.encode('utf-8'),"r+b")
         common.log( "VFSScanner._get_exif()", 'Calling function EXIF_file for "%s"'%picfile)
-        tags = EXIF_file(f,details=False)
+
+        try:
+            file = 0
+            file = mmap.mmap(f.fileno(), 0)
+            tags = EXIF_file(file, details=False)
+        except:
+            try:
+                tags = EXIF_file(f, details=False)
+            except Exception,msg:
+                common.log( "VFSScanner._get_exif()", "Exception", xbmc.LOGERROR)
+                common.log( "VFSScanner._get_exif()", msg, xbmc.LOGERROR)
+                
+        if file != 0:
+            file.close()
+                
         common.log( "VFSScanner._get_exif()", 'Function returned')
         f.close()
 
@@ -415,6 +437,9 @@ class VFSScanner:
                 except Exception, msg:
                     common.log("VFSScanner._get_exif",  picfile , xbmc.LOGERROR)
                     common.log("VFSScanner._get_exif",  "%s - %s"%(Exception,msg), xbmc.LOGERROR )
+                    
+        if not picentry.has_key("Image Rating"):
+            picentry["Image Rating"] = ""
         return picentry
 
 

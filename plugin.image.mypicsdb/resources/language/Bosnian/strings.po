@@ -32,6 +32,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Filmovi"
 
+msgctxt "#30613"
+msgid "OK"
+msgstr "U redu"
+
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Otkaži"

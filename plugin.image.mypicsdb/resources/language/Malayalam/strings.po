@@ -27,3 +27,11 @@ msgstr "ചലച്ചിതങ്ങള്‍"
 msgctxt "#30613"
 msgid "OK"
 msgstr "ശരി"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "സൂക്ഷിക്കുക"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "കളയുക"

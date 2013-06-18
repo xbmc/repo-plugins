@@ -400,6 +400,34 @@ msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s foto aggiunte"
 
+msgctxt "#30162"
+msgid "Import album from Picasa xml"
+msgstr "Importa album da Picasa xml"
+
+msgctxt "#30163"
+msgid "Unable to read Picasa xml"
+msgstr "Impossibile leggere Picasa xml"
+
+msgctxt "#30164"
+msgid "Specify date range"
+msgstr "Indica intervallo di date"
+
+msgctxt "#30165"
+msgid "Following files are missing in MyPicsDB and could not be imported:[CR][CR]"
+msgstr "I seguenti file sono persi in MyPicsDB e potrebbero non essere importati:[CR][CR]"
+
+msgctxt "#30166"
+msgid "Picture \"%s\" in \"%s\"[CR]"
+msgstr "Foto \"%s\" in \"%s\"[CR]"
+
+msgctxt "#30167"
+msgid "Import errors"
+msgstr "Importa errori"
+
+msgctxt "#30168"
+msgid "Import album from saved filter settings"
+msgstr "Importa album da impostazioni filtro salvate"
+
 msgctxt "#30180"
 msgid "Choose the destination for the export"
 msgstr "Scegli la destinazione per l'esportazione"

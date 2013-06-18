@@ -40,6 +40,14 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Videolar"
 
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Etiketler"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Kapat"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Etiketler"
@@ -51,6 +59,14 @@ msgstr "Tamam"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "İptal"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Kaydet"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Sil"
 
 msgctxt "#30650"
 msgid "Debugging"

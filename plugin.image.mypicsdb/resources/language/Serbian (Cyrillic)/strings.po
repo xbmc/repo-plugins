@@ -44,6 +44,14 @@ msgctxt "#30614"
 msgid "Cancel"
 msgstr "Откажи"
 
+msgctxt "#30617"
+msgid "Save"
+msgstr "Сачувај"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Избриши"
+
 msgctxt "#30650"
 msgid "Debugging"
 msgstr "Тражење грешака"

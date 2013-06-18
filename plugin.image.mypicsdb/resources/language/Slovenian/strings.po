@@ -36,6 +36,14 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Video"
 
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Oznake"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Zapri"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Oznake"
@@ -47,6 +55,14 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Prekliči"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Shrani"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Izbriši"
 
 msgctxt "#30650"
 msgid "Debugging"

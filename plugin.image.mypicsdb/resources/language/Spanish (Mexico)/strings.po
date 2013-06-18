@@ -44,6 +44,10 @@ msgctxt "#30150"
 msgid "Collections"
 msgstr "Colecciones"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Cerrar"
+
 msgctxt "#30613"
 msgid "OK"
 msgstr "OK"
@@ -51,6 +55,14 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Cancelar"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Guardar"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Eliminar"
 
 msgctxt "#30650"
 msgid "Debugging"

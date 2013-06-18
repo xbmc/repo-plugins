@@ -36,6 +36,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "וידאו"
 
+msgctxt "#30052"
+msgid "Tags"
+msgstr "תגיות"
+
 msgctxt "#30224"
 msgid "Close"
 msgstr "סגור"
@@ -63,6 +67,10 @@ msgstr "מחיקה"
 msgctxt "#30650"
 msgid "Debugging"
 msgstr "ניפוי שגיאות"
+
+msgctxt "#30664"
+msgid "User"
+msgstr "משתמש"
 
 msgctxt "#30665"
 msgid "Password"

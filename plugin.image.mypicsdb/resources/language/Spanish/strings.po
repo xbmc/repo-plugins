@@ -70,11 +70,11 @@ msgstr "Extensiones de imágenes"
 
 msgctxt "#30024"
 msgid "Perform scan at addon startup"
-msgstr "Escanear al iniciar el addon"
+msgstr "Escanear al iniciar el complemento"
 
 msgctxt "#30025"
 msgid "Initialize the database at next addon startup"
-msgstr "Iniciar la base de datos en el próximo inicio del addon"
+msgstr "Iniciar la base de datos en el próximo inicio del complemento"
 
 msgctxt "#30026"
 msgid "Use the picture as fanart for pictures"
@@ -106,11 +106,11 @@ msgstr "Antigüedad de elementos recientes (en días)"
 
 msgctxt "#30033"
 msgid "Menu Items"
-msgstr "Items del menú"
+msgstr "Elementos del menú"
 
 msgctxt "#30034"
 msgid "Display all items"
-msgstr "Mostrar todos los items"
+msgstr "Mostrar todos los elementos"
 
 msgctxt "#30035"
 msgid "Number of pics per page"
@@ -156,6 +156,10 @@ msgctxt "#30052"
 msgid "Tags"
 msgstr "Etiquetas"
 
+msgctxt "#30053"
+msgid "Excluded Files"
+msgstr "Archivos excluidos"
+
 msgctxt "#30060"
 msgid "Locate on disk"
 msgstr "Localizar en disco"
@@ -178,7 +182,7 @@ msgstr "El archivo '%s' ya existe en"
 
 msgctxt "#30065"
 msgid "Overwrite ?"
-msgstr "Sobreescribir?"
+msgstr "¿Sobreescribir?"
 
 msgctxt "#30066"
 msgid "Archive canceled."
@@ -190,7 +194,7 @@ msgstr "Añadiendo la imagen al archivo..."
 
 msgctxt "#30068"
 msgid "The archiving has been canceled !"
-msgstr "El proceso de archivo ha sido cancelado!"
+msgstr "¡El proceso de archivo ha sido cancelado!"
 
 msgctxt "#30069"
 msgid "%s errors while archiving %s files"
@@ -198,7 +202,7 @@ msgstr "%s errores al archivar %s elementos"
 
 msgctxt "#30070"
 msgid "%s pictures successfully archived !!"
-msgstr "%s imágenes archivadas con éxito!!"
+msgstr "¡%s imágenes archivadas con éxito!!"
 
 msgctxt "#30071"
 msgid "Localization of the picture on disk"
@@ -206,11 +210,11 @@ msgstr "Localización de la imagen en disco"
 
 msgctxt "#30090"
 msgid "Pictures without City"
-msgstr "Imagen sin ciudad"
+msgstr "Imágenes sin ciudad"
 
 msgctxt "#30091"
 msgid "Pictures without Country"
-msgstr "Imagen sin país"
+msgstr "Imágenes sin país"
 
 msgctxt "#30092"
 msgid "Other pictures in '%s'"
@@ -396,6 +400,30 @@ msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s fotos añadidas en"
 
+msgctxt "#30162"
+msgid "Import album from Picasa xml"
+msgstr "Importar álbum xml de Picasa"
+
+msgctxt "#30163"
+msgid "Unable to read Picasa xml"
+msgstr "No se puede leer el xml de Picasa"
+
+msgctxt "#30164"
+msgid "Specify date range"
+msgstr "Especifique un rango de fechas"
+
+msgctxt "#30165"
+msgid "Following files are missing in MyPicsDB and could not be imported:[CR][CR]"
+msgstr "Los siguientes archivos no se encuentran en MyPicsDB y no se han importado:[CR][CR]"
+
+msgctxt "#30166"
+msgid "Picture \"%s\" in \"%s\"[CR]"
+msgstr "Imágen \"%s\" en \"%s\"[CR]"
+
+msgctxt "#30167"
+msgid "Import errors"
+msgstr "Errores de importacion"
+
 msgctxt "#30180"
 msgid "Choose the destination for the export"
 msgstr "Elija el destino para la exportación"
@@ -418,7 +446,7 @@ msgstr "Exportando imágenes..."
 
 msgctxt "#30185"
 msgid "Exporting '%s' to :"
-msgstr "Exportando '%s' de :"
+msgstr "Exportando '%s' a :"
 
 msgctxt "#30186"
 msgid "a file '%s' already exists"
@@ -426,11 +454,11 @@ msgstr "Ya existe un elemento '%s'"
 
 msgctxt "#30187"
 msgid "Overwrite ?"
-msgstr "Sobreescribir?"
+msgstr "¿Sobreescribir?"
 
 msgctxt "#30188"
 msgid "Export finished !"
-msgstr "Exportación finalizada!"
+msgstr "¡Exportación finalizada!"
 
 msgctxt "#30189"
 msgid "%s pictures copied to %s"
@@ -482,7 +510,7 @@ msgstr "Eliminar esta ruta de excluidos"
 
 msgctxt "#30211"
 msgid "Add a folder to [B]exclude[/B]"
-msgstr "Añadir una carpeta a [B]exclude[/B]"
+msgstr "Añadir una carpeta a [B]excluídos[/B]"
 
 msgctxt "#30212"
 msgid "Exclude this folder from database"
@@ -494,11 +522,11 @@ msgstr "Explorar todas las rutas"
 
 msgctxt "#30214"
 msgid "Yes = scan all pictures."
-msgstr "Si = escanear todas las imágenes"
+msgstr "Sí = escanear todas las imágenes."
 
 msgctxt "#30215"
 msgid "No = scan only modified/new pictures."
-msgstr "No = escanear solamente imágenes nuevas o modificadas"
+msgstr "No = escanear solamente imágenes nuevas o modificadas."
 
 msgctxt "#30217"
 msgid "You must rescan the folders"
@@ -509,8 +537,8 @@ msgid "to exclude the pictures!"
 msgstr "para excluir las imágenes!"
 
 msgctxt "#30220"
-msgid "Geolocation"
-msgstr "Geolocalización"
+msgid "Google Map"
+msgstr "Mapa de Google"
 
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
@@ -524,13 +552,25 @@ msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr "Usar flechas arriba/abajo para acercar/alejar"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Cerrar"
+
+msgctxt "#30225"
+msgid "Zoom In"
+msgstr "Acercar"
+
+msgctxt "#30226"
+msgid "Zoom Out"
+msgstr "Alejar"
+
 msgctxt "#30241"
 msgid "preparing"
 msgstr "preparando"
 
 msgctxt "#30242"
 msgid "refreshing"
-msgstr "refrescando"
+msgstr "actualizando"
 
 msgctxt "#30243"
 msgid "passing"
@@ -584,6 +624,18 @@ msgctxt "#30602"
 msgid "Contents"
 msgstr "Contenidos"
 
+msgctxt "#30607"
+msgid "Last used filter"
+msgstr "Último filtro"
+
+msgctxt "#30608"
+msgid "Select filter"
+msgstr "Elegir filtro"
+
+msgctxt "#30609"
+msgid "Enter filter name"
+msgstr "Introduzca el nombre del archivo"
+
 msgctxt "#30610"
 msgid "Please select tags (red checkbox means \"not\")"
 msgstr "Por favor, seleccione las etiquetas (casilla roja significa \"no\")"
@@ -594,7 +646,7 @@ msgstr "1 etiqueta seleccionada"
 
 msgctxt "#30612"
 msgid "%s tags checked"
-msgstr "%s etiquetas revisadas"
+msgstr "%s etiquetas seleccionadas"
 
 msgctxt "#30613"
 msgid "OK"
@@ -607,6 +659,22 @@ msgstr "Cancelar"
 msgctxt "#30615"
 msgid "Match all tags"
 msgstr "Coincidir todas las etiquetas"
+
+msgctxt "#30616"
+msgid "Load"
+msgstr "Cargar"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Guardar"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Resetear"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Eliminar"
 
 msgctxt "#30620"
 msgid "Translate your tags"
@@ -632,13 +700,21 @@ msgctxt "#30651"
 msgid "Enable debugging (regardless of XBMC settings)"
 msgstr "Habilitar depuración (independientemente de los ajustes XBMC)"
 
+msgctxt "#30652"
+msgid "Filter:"
+msgstr "Filtro:"
+
+msgctxt "#30653"
+msgid "New Filter"
+msgstr "Nuevo Filtro"
+
 msgctxt "#30660"
 msgid "Database Settings"
 msgstr "Propiedades de la base de datos"
 
 msgctxt "#30661"
 msgid "Database Backend"
-msgstr "Base de datos de programas de fondo"
+msgstr "Motor de la base de datos"
 
 msgctxt "#30662"
 msgid "Sqlite"
@@ -666,11 +742,11 @@ msgstr "Puerto"
 
 msgctxt "#30668"
 msgid "MySql DB Name"
-msgstr "Nombre MySql DB"
+msgstr "Nombre de base de datos MySql"
 
 msgctxt "#30669"
 msgid "Sqlite DB Name"
-msgstr "Nombre Sqlite DB"
+msgstr "Nombre de base de datos Sqlite"
 
 msgctxt "#30700"
 msgid "Country"
@@ -734,7 +810,7 @@ msgstr "Derechos de autor"
 
 msgctxt "#30715"
 msgid "Label"
-msgstr "Firma"
+msgstr "Etiqueta"
 
 msgctxt "#30716"
 msgid "Image Rating"
@@ -754,7 +830,7 @@ msgstr "Categoría suplementaria"
 
 msgctxt "#30720"
 msgid "Person"
-msgstr "persona"
+msgstr "Persona"
 
 msgctxt "#30721"
 msgid "Image Width"
@@ -767,3 +843,19 @@ msgstr "Largo de la imagen"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Orientación"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"
+
+msgctxt "#30725"
+msgid "Image Model"
+msgstr "Imagen Modelo"
+
+msgctxt "#30726"
+msgid "Image Make"
+msgstr "Imagen de Marca"
+
+msgctxt "#30727"
+msgid "Image Artist"
+msgstr "Imagen del Artista"

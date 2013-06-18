@@ -156,6 +156,10 @@ msgctxt "#30052"
 msgid "Tags"
 msgstr "Tags"
 
+msgctxt "#30053"
+msgid "Excluded Files"
+msgstr "Arquivos Excluídos"
+
 msgctxt "#30060"
 msgid "Locate on disk"
 msgstr "Localizar no disco"
@@ -396,6 +400,34 @@ msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s fotografias adicionadas em"
 
+msgctxt "#30162"
+msgid "Import album from Picasa xml"
+msgstr "Importar álbum de Picasa xml"
+
+msgctxt "#30163"
+msgid "Unable to read Picasa xml"
+msgstr "Impossível ler Picasa xml"
+
+msgctxt "#30164"
+msgid "Specify date range"
+msgstr "Especifique intervalo data"
+
+msgctxt "#30165"
+msgid "Following files are missing in MyPicsDB and could not be imported:[CR][CR]"
+msgstr "Seguintes arquivos estão faltando em MyPicsDB e não puderam ser importados:[CR][CR]"
+
+msgctxt "#30166"
+msgid "Picture \"%s\" in \"%s\"[CR]"
+msgstr "Imagem \"%s\" em \"%s\"[CR]"
+
+msgctxt "#30167"
+msgid "Import errors"
+msgstr "Erros de importação"
+
+msgctxt "#30168"
+msgid "Import album from saved filter settings"
+msgstr "Importar álbum de ajustes de filtros salvos"
+
 msgctxt "#30180"
 msgid "Choose the destination for the export"
 msgstr "Escolha um destino para a exportação"
@@ -509,8 +541,8 @@ msgid "to exclude the pictures!"
 msgstr "para excluir as imagens!"
 
 msgctxt "#30220"
-msgid "Geolocation"
-msgstr "Geo Localização"
+msgid "Google Map"
+msgstr "Google Map"
 
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
@@ -523,6 +555,18 @@ msgstr "Zoom=%s"
 msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr "Use as setas up / down para zoom in / out"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Fechar"
+
+msgctxt "#30225"
+msgid "Zoom In"
+msgstr "Aumentar Zoom"
+
+msgctxt "#30226"
+msgid "Zoom Out"
+msgstr "Diminuir Zoom"
 
 msgctxt "#30241"
 msgid "preparing"
@@ -584,6 +628,18 @@ msgctxt "#30602"
 msgid "Contents"
 msgstr "Conteúdos"
 
+msgctxt "#30607"
+msgid "Last used filter"
+msgstr "Último filtro usado"
+
+msgctxt "#30608"
+msgid "Select filter"
+msgstr "Filtro Selecionado"
+
+msgctxt "#30609"
+msgid "Enter filter name"
+msgstr "Entre o nome do filtro"
+
 msgctxt "#30610"
 msgid "Please select tags (red checkbox means \"not\")"
 msgstr "Por favor selecione tags (caixa vermelha significa \"não\")"
@@ -608,6 +664,22 @@ msgctxt "#30615"
 msgid "Match all tags"
 msgstr "Corresponder todas as tags"
 
+msgctxt "#30616"
+msgid "Load"
+msgstr "Carregar"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Salvar"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Resetar"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Excluir"
+
 msgctxt "#30620"
 msgid "Translate your tags"
 msgstr "Traduza suas tags"
@@ -631,6 +703,14 @@ msgstr "Debugando"
 msgctxt "#30651"
 msgid "Enable debugging (regardless of XBMC settings)"
 msgstr "Ativar Debug (Independente dos ajustes no XBMC)"
+
+msgctxt "#30652"
+msgid "Filter:"
+msgstr "Filtro:"
+
+msgctxt "#30653"
+msgid "New Filter"
+msgstr "Novo Filtro"
 
 msgctxt "#30660"
 msgid "Database Settings"
@@ -767,3 +847,19 @@ msgstr "Comprimento da Imagem"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Orientação"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"
+
+msgctxt "#30725"
+msgid "Image Model"
+msgstr "Imagem Modelo"
+
+msgctxt "#30726"
+msgid "Image Make"
+msgstr "Adicione Imagem"
+
+msgctxt "#30727"
+msgid "Image Artist"
+msgstr "Imagem Artista"

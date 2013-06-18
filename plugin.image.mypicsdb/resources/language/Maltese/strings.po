@@ -24,13 +24,29 @@ msgctxt "#30031"
 msgid "Files"
 msgstr "Fajl"
 
+msgctxt "#30041"
+msgid "All"
+msgstr "Kollox"
+
 msgctxt "#30051"
 msgid "Videos"
 msgstr "Filmati"
 
+msgctxt "#30613"
+msgid "OK"
+msgstr "OK"
+
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Waqqaf"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Żomm"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Ħassar"
 
 msgctxt "#30665"
 msgid "Password"

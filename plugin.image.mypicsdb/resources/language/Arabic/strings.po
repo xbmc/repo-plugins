@@ -36,6 +36,10 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "فيديو"
 
+msgctxt "#30052"
+msgid "Tags"
+msgstr "علامات"
+
 msgctxt "#30224"
 msgid "Close"
 msgstr "اغلاق"

@@ -156,6 +156,10 @@ msgctxt "#30052"
 msgid "Tags"
 msgstr "tags"
 
+msgctxt "#30053"
+msgid "Excluded Files"
+msgstr "Uitgesloten bestanden"
+
 msgctxt "#30060"
 msgid "Locate on disk"
 msgstr "Locatie op schijf"
@@ -222,7 +226,7 @@ msgstr "Weergeven land"
 
 msgctxt "#30094"
 msgid "Pictures without supplemental category"
-msgstr "Weergeven categorie"
+msgstr "Weergeven zonder subcategorie"
 
 msgctxt "#30095"
 msgid "Browse by Supplemental Category"
@@ -396,6 +400,34 @@ msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s afbeeldingen toegevoegd"
 
+msgctxt "#30162"
+msgid "Import album from Picasa xml"
+msgstr "Album van Picasa XML importeren"
+
+msgctxt "#30163"
+msgid "Unable to read Picasa xml"
+msgstr "Kan Picasa XML niet lezen"
+
+msgctxt "#30164"
+msgid "Specify date range"
+msgstr "Periode specificeren"
+
+msgctxt "#30165"
+msgid "Following files are missing in MyPicsDB and could not be imported:[CR][CR]"
+msgstr "De volgende bestanden ontbreken in MyPicsDB en zijn niet geïmporteerd:[CR][CR]"
+
+msgctxt "#30166"
+msgid "Picture \"%s\" in \"%s\"[CR]"
+msgstr "Afbeelding \"%s\" in \"%s\"[CR]"
+
+msgctxt "#30167"
+msgid "Import errors"
+msgstr "Importeren mislukt"
+
+msgctxt "#30168"
+msgid "Import album from saved filter settings"
+msgstr "Import album vanuit opgeslagen filters"
+
 msgctxt "#30180"
 msgid "Choose the destination for the export"
 msgstr "Export-pad"
@@ -508,6 +540,10 @@ msgctxt "#30218"
 msgid "to exclude the pictures!"
 msgstr "uitsluiten afbeeldingen"
 
+msgctxt "#30220"
+msgid "Google Map"
+msgstr "Google Map"
+
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
 msgstr "Opvragen kaart... (%0.2f%%)"
@@ -523,6 +559,14 @@ msgstr "Gebruik up/down toetsen om te zoomen"
 msgctxt "#30224"
 msgid "Close"
 msgstr "Sluiten"
+
+msgctxt "#30225"
+msgid "Zoom In"
+msgstr "Inzoomen"
+
+msgctxt "#30226"
+msgid "Zoom Out"
+msgstr "Uitzoomen"
 
 msgctxt "#30241"
 msgid "preparing"
@@ -562,15 +606,15 @@ msgstr "Bestandsnaam"
 
 msgctxt "#30301"
 msgid "path"
-msgstr "pad"
+msgstr "directory"
 
 msgctxt "#30302"
 msgid "path (thumbnail)"
-msgstr "pad(thumbnail)"
+msgstr "directory (thumbnail)"
 
 msgctxt "#30303"
 msgid "Show the slideshow"
-msgstr "Geef diaweergave weer"
+msgstr "Start slideshow"
 
 msgctxt "#30600"
 msgid "Filter Wizard"
@@ -584,9 +628,21 @@ msgctxt "#30602"
 msgid "Contents"
 msgstr "Waarde"
 
+msgctxt "#30607"
+msgid "Last used filter"
+msgstr "Laatst gebruikte filter"
+
+msgctxt "#30608"
+msgid "Select filter"
+msgstr "Selecteer filter"
+
+msgctxt "#30609"
+msgid "Enter filter name"
+msgstr "Geef filternaam"
+
 msgctxt "#30610"
 msgid "Please select tags (red checkbox means \"not\")"
-msgstr "Selecteer een tag (red checkbox betekend \"niet/not\")"
+msgstr "Selecteer een tag (rode checkbox betekend \"niet\")"
 
 msgctxt "#30611"
 msgid "1 tag checked"
@@ -606,7 +662,11 @@ msgstr "Afbreken"
 
 msgctxt "#30615"
 msgid "Match all tags"
-msgstr "Match alle tags"
+msgstr "Gelijk aan alle tags"
+
+msgctxt "#30616"
+msgid "Load"
+msgstr "Laden"
 
 msgctxt "#30617"
 msgid "Save"
@@ -643,6 +703,14 @@ msgstr "Fout registratie"
 msgctxt "#30651"
 msgid "Enable debugging (regardless of XBMC settings)"
 msgstr "Aanzetten debuggen (ongeacht XBMC instellingen)"
+
+msgctxt "#30652"
+msgid "Filter:"
+msgstr "Filter:"
+
+msgctxt "#30653"
+msgid "New Filter"
+msgstr "Nieuw Filter"
 
 msgctxt "#30660"
 msgid "Database Settings"
@@ -694,7 +762,7 @@ msgstr "Landcode"
 
 msgctxt "#30702"
 msgid "State"
-msgstr "Staat"
+msgstr "Provincie"
 
 msgctxt "#30703"
 msgid "City"
@@ -726,7 +794,7 @@ msgstr "Omschrijving"
 
 msgctxt "#30710"
 msgid "Headline"
-msgstr "Kop"
+msgstr "Titel"
 
 msgctxt "#30711"
 msgid "Title"
@@ -746,11 +814,11 @@ msgstr "Copyright"
 
 msgctxt "#30715"
 msgid "Label"
-msgstr "Platenlabel"
+msgstr "Label"
 
 msgctxt "#30716"
 msgid "Image Rating"
-msgstr "Rating"
+msgstr "Sterren"
 
 msgctxt "#30717"
 msgid "Keyword"
@@ -786,12 +854,12 @@ msgstr "Flits"
 
 msgctxt "#30725"
 msgid "Image Model"
-msgstr "Afbeelding Model"
+msgstr "Camera model"
 
 msgctxt "#30726"
 msgid "Image Make"
-msgstr "Afbeelding Merk"
+msgstr "Camera merk"
 
 msgctxt "#30727"
 msgid "Image Artist"
-msgstr "Afbeelding Artiest"
+msgstr "Artiest"

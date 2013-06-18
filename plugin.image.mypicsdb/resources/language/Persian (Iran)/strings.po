@@ -16,6 +16,54 @@ msgstr ""
 "Language: fa_IR\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgctxt "#30001"
+msgid "Database"
+msgstr "پایگاه داده"
+
+msgctxt "#30030"
+msgid "General"
+msgstr "عمومی"
+
+msgctxt "#30031"
+msgid "Files"
+msgstr "فایل ها "
+
+msgctxt "#30041"
+msgid "All"
+msgstr "همه"
+
 msgctxt "#30123"
 msgid "Help"
 msgstr "کمک"
+
+msgctxt "#30613"
+msgid "OK"
+msgstr "تایید"
+
+msgctxt "#30614"
+msgid "Cancel"
+msgstr "لغو"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "ذخیره"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "حذف"
+
+msgctxt "#30650"
+msgid "Debugging"
+msgstr "دیباگ"
+
+msgctxt "#30665"
+msgid "Password"
+msgstr "رمز عبور"
+
+msgctxt "#30667"
+msgid "Port"
+msgstr "پورت"
+
+msgctxt "#30718"
+msgid "Category"
+msgstr "دسته بندی"

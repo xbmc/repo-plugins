@@ -400,6 +400,34 @@ msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s εικόνες προστέθηκαν στο"
 
+msgctxt "#30162"
+msgid "Import album from Picasa xml"
+msgstr "Εισαγωγή άλμπουμ από το Picasa xml"
+
+msgctxt "#30163"
+msgid "Unable to read Picasa xml"
+msgstr "Αδυναμία ανάγνωσης του Picasa xml"
+
+msgctxt "#30164"
+msgid "Specify date range"
+msgstr "Προσδιορίστε το εύρος δεδομένων"
+
+msgctxt "#30165"
+msgid "Following files are missing in MyPicsDB and could not be imported:[CR][CR]"
+msgstr "Τα ακόλουθα αρχεία λείπουν από το MyPicsDB και δεν εισήχθησαν:[CR][CR]"
+
+msgctxt "#30166"
+msgid "Picture \"%s\" in \"%s\"[CR]"
+msgstr "Εικόνα \"%s\" στο \"%s\"[CR]"
+
+msgctxt "#30167"
+msgid "Import errors"
+msgstr "Σφάλματα εισαγωγής"
+
+msgctxt "#30168"
+msgid "Import album from saved filter settings"
+msgstr "Εισαγωγή άλμπουμ από αποθηκευμένες ρυθμίσεις φίλτρου"
+
 msgctxt "#30180"
 msgid "Choose the destination for the export"
 msgstr "Επιλέξτε τον προορισμό για την εξαγωγή"

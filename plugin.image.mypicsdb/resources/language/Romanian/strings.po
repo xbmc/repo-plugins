@@ -36,6 +36,14 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Filme"
 
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Etichete"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Închide"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Etichete"
@@ -47,6 +55,14 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Renunță"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Salvează"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Șterge"
 
 msgctxt "#30650"
 msgid "Debugging"

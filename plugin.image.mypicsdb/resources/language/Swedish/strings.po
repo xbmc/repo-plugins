@@ -156,6 +156,10 @@ msgctxt "#30052"
 msgid "Tags"
 msgstr "Taggar"
 
+msgctxt "#30053"
+msgid "Excluded Files"
+msgstr "Exkludera filer"
+
 msgctxt "#30060"
 msgid "Locate on disk"
 msgstr "Hitta på disk"
@@ -396,6 +400,34 @@ msgctxt "#30161"
 msgid "%s pictures added in"
 msgstr "%s bilder tillagda i"
 
+msgctxt "#30162"
+msgid "Import album from Picasa xml"
+msgstr "Importera album från Picasa xml"
+
+msgctxt "#30163"
+msgid "Unable to read Picasa xml"
+msgstr "Kunde inte läsa Picasa xml"
+
+msgctxt "#30164"
+msgid "Specify date range"
+msgstr "Specificera datumomfång"
+
+msgctxt "#30165"
+msgid "Following files are missing in MyPicsDB and could not be imported:[CR][CR]"
+msgstr "Följande filer saknas i MyPicsDB och kunde inte importeras:[CR][CR]"
+
+msgctxt "#30166"
+msgid "Picture \"%s\" in \"%s\"[CR]"
+msgstr "Bild \"%s\" i \"%s\"[CR]"
+
+msgctxt "#30167"
+msgid "Import errors"
+msgstr "Importfel"
+
+msgctxt "#30168"
+msgid "Import album from saved filter settings"
+msgstr "Importera album från sparade filterinställningar"
+
 msgctxt "#30180"
 msgid "Choose the destination for the export"
 msgstr "Välj en destination för exporten"
@@ -509,8 +541,8 @@ msgid "to exclude the pictures!"
 msgstr "för att utesluta bilderna!"
 
 msgctxt "#30220"
-msgid "Geolocation"
-msgstr "Geoplats"
+msgid "Google Map"
+msgstr "Google Map"
 
 msgctxt "#30221"
 msgid "Fetching the map... (%0.2f%%)"
@@ -523,6 +555,18 @@ msgstr "Zoom=%s"
 msgctxt "#30223"
 msgid "Use up / down arrows to zoom in / out"
 msgstr "Använd upp / ner piltangenterna för att zooma in / ut"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Stäng"
+
+msgctxt "#30225"
+msgid "Zoom In"
+msgstr "Zooma in"
+
+msgctxt "#30226"
+msgid "Zoom Out"
+msgstr "Zooma ut"
 
 msgctxt "#30241"
 msgid "preparing"
@@ -584,6 +628,18 @@ msgctxt "#30602"
 msgid "Contents"
 msgstr "Innehåll"
 
+msgctxt "#30607"
+msgid "Last used filter"
+msgstr "Sist använda filter"
+
+msgctxt "#30608"
+msgid "Select filter"
+msgstr "Välj filter"
+
+msgctxt "#30609"
+msgid "Enter filter name"
+msgstr "Använd filternamn"
+
 msgctxt "#30610"
 msgid "Please select tags (red checkbox means \"not\")"
 msgstr "Välj taggar (röda markeringar betyder \"inte\")"
@@ -608,6 +664,22 @@ msgctxt "#30615"
 msgid "Match all tags"
 msgstr "Matcha alla taggar"
 
+msgctxt "#30616"
+msgid "Load"
+msgstr "Ladda"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Spara"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Återställ"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Ta bort"
+
 msgctxt "#30620"
 msgid "Translate your tags"
 msgstr "Översätt dina taggar"
@@ -631,6 +703,14 @@ msgstr "Debuggning"
 msgctxt "#30651"
 msgid "Enable debugging (regardless of XBMC settings)"
 msgstr "Aktivera debuggning (oavsett XBMC-inställning)"
+
+msgctxt "#30652"
+msgid "Filter:"
+msgstr "Filter:"
+
+msgctxt "#30653"
+msgid "New Filter"
+msgstr "Nytt filter"
 
 msgctxt "#30660"
 msgid "Database Settings"
@@ -767,3 +847,19 @@ msgstr "Bildlängd"
 msgctxt "#30723"
 msgid "Orientation"
 msgstr "Riktning"
+
+msgctxt "#30724"
+msgid "Flash"
+msgstr "Flash"
+
+msgctxt "#30725"
+msgid "Image Model"
+msgstr "Bildmodell"
+
+msgctxt "#30726"
+msgid "Image Make"
+msgstr "Bildmärke"
+
+msgctxt "#30727"
+msgid "Image Artist"
+msgstr "Bildartist"

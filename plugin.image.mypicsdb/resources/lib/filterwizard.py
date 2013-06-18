@@ -21,7 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 import xbmc, xbmcgui
 from time import strftime,strptime
 import datetime
-import MypicsDB as MPDB
+import MypicsDB
 import common
 
 
@@ -53,6 +53,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
     
     def __init__( self, xml, cwd, default):
         xbmcgui.WindowXMLDialog.__init__(self)
+        self.MPDB = MypicsDB.MyPictureDB() 
 
 
     def onInit( self ):  
@@ -91,7 +92,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
             self.getControl( TAGS_LIST ).setEnabled(False)
             self.getControl( TAGS_CONTENT_LIST ).setEnabled(False)
 
-            MPDB.filterwizard_save_filter( self.last_used_filter_name, self.active_tags, self.use_and, self.start_date, self.end_date)
+            self.MPDB.filterwizard_save_filter( self.last_used_filter_name, self.active_tags, self.use_and, self.start_date, self.end_date)
 
             self.close()
 
@@ -201,7 +202,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
         
         self.getControl( TAGS_LIST ).reset()
 
-        self.tag_types = [u"%s"%k  for k in MPDB.list_TagTypes()]
+        self.tag_types = [u"%s"%k  for k in self.MPDB.list_TagTypes()]
         self.currently_selected_tagtypes = ''
         self.checked_tags = 0
         self.use_and = False
@@ -215,7 +216,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
         
         # load last filter settings
         if filtersettings != "":
-            self.active_tags, self.use_and, self.start_date, self.end_date = MPDB.filterwizard_load_filter(filtersettings)
+            self.active_tags, self.use_and, self.start_date, self.end_date = self.MPDB.filterwizard_load_filter(filtersettings)
             if self.use_and:
                 self.getControl( BUTTON_MATCHALL ).setSelected(1)
             if self.start_date != "" or self.end_date != "":
@@ -263,7 +264,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
 
         
     def show_filter_settings(self):
-        filters = MPDB.filterwizard_list_filters()
+        filters = self.MPDB.filterwizard_list_filters()
         dialog = xbmcgui.Dialog()
         ret = dialog.select(common.getstring(30608), filters)
         if ret > -1:
@@ -273,7 +274,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
     def load_tag_content_list(self, tagType) :
     
         self.getControl( TAGS_CONTENT_LIST ).reset()
-        TagContents = [u"%s"%k  for k in MPDB.list_tags(tagType)]
+        TagContents = [u"%s"%k  for k in self.MPDB.list_tags(tagType)]
 
         self.currently_selected_tagtypes = tagType
         
@@ -313,25 +314,25 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
         self.getControl( FILTER_NAME ).setVisible(True)   
 
     def delete_filter_settings(self):
-        filters = MPDB.filterwizard_list_filters()
+        filters = self.MPDB.filterwizard_list_filters()
         # don't delete the last used filter
         filters.remove(self.last_used_filter_name)
         dialog = xbmcgui.Dialog()
         ret = dialog.select(common.getstring(30608), filters)
         if ret > -1:
-            MPDB.filterwizard_delete_filter(filters[ret])
+            self.MPDB.filterwizard_delete_filter(filters[ret])
 
 
     def save_filter_settings(self):
         # Display a list of already saved filters to give the possibility to override a filter
         filters = []
         filters.append( common.getstring(30653) )
-        filters = filters + MPDB.filterwizard_list_filters()
+        filters = filters + self.MPDB.filterwizard_list_filters()
         filters.remove(self.last_used_filter_name)
         dialog = xbmcgui.Dialog()
         ret = dialog.select(common.getstring(30608), filters)
         if ret > 0:
-            MPDB.filterwizard_save_filter(filters[ret], self.active_tags, self.use_and, self.start_date, self.end_date)
+            self.MPDB.filterwizard_save_filter(filters[ret], self.active_tags, self.use_and, self.start_date, self.end_date)
         if ret == 0:
             kb = xbmc.Keyboard()
             kb.setHeading(common.getstring(30609))
@@ -339,7 +340,7 @@ class FilterWizard( xbmcgui.WindowXMLDialog ):
             filtersettings = ""
             if (kb.isConfirmed()):
                 filtersettings = kb.getText()
-                MPDB.filterwizard_save_filter(filtersettings, self.active_tags, self.use_and, self.start_date, self.end_date)
+                self.MPDB.filterwizard_save_filter(filtersettings, self.active_tags, self.use_and, self.start_date, self.end_date)
 
                 if filtersettings != '':
                     self.getControl( FILTER_NAME ).setLabel( common.getstring(30652) +' '+filtersettings)

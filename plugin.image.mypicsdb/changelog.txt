@@ -1,9 +1,51 @@
+2013/06/18 --> v 12.0.0
+New:    MySQL support
+Update: Version for Frodo changed to 12
+Update: Readme amended
+
+2013/06/07 --> v 2.2.12
+Fix:    Video import fixed
+Update: Language files from Transifex
+
+2013/05/19 --> v 2.2.11
+Update: Using mmap for EXIF parser
+
+2013/05/18 --> v 2.2.10
+Fix:    Missing date corrected in menu browse by dates in case of using MySql
+
+2013/05/17 --> v 2.2.9
+Fix:    MySql is case sensitive on case sensitive file systems
+Update: scanpath.py logging updated
+
+2013/05/08 --> v 2.2.8
+Fix:    Image Rating
+Fix:    script.module.myconnpy dependency (for MySql) added to addon.xml
+
+2013/05/02 --> v 2.2.6
+Fix:    Deletion of rootpath didn't delete all folders and files from DB
+Fix:    Wrong primary key introduced with MySql support for table TagsInFiles
+
+2013/04/21 --> v 2.2.5
+Update: Language files from Transifex
+
+2013/04/12 --> v 2.2.4
+Fix:    Fixed missing settings after update from an old release
+
+2013/04/12 --> v 2.2.3
+Fix:    Recent pictures for MySql fixed
+
+2013/04/11 --> v 2.2.2
+Update: First MySql release for UAT
+
+2013/03/28 --> v 2.2.1
+Update: Language files from Transifex
+
 2013/03/20 --> v 2.2.0
 Update: Production release
 
 2013/03/19 --> v 2.1.3
 Update: A dialog with missing pictures from Picasa import
-New:    Import a save filter as a collection
+New:    Import a saved filter as a collection
 
 2013/03/18 --> v 2.1.2
 New:    Import of albums from Picasa (done by herve502)

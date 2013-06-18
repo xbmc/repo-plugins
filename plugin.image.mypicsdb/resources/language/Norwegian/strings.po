@@ -44,6 +44,10 @@ msgctxt "#30052"
 msgid "Tags"
 msgstr "Etiketter"
 
+msgctxt "#30224"
+msgid "Close"
+msgstr "Lukk"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Etiketter"
@@ -55,6 +59,18 @@ msgstr "OK"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Avbryt"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Lagre"
+
+msgctxt "#30618"
+msgid "Reset"
+msgstr "Tilbakestill"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Slett"
 
 msgctxt "#30650"
 msgid "Debugging"

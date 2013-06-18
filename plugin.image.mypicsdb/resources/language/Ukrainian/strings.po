@@ -36,6 +36,14 @@ msgctxt "#30051"
 msgid "Videos"
 msgstr "Відео"
 
+msgctxt "#30052"
+msgid "Tags"
+msgstr "Теги"
+
+msgctxt "#30224"
+msgid "Close"
+msgstr "Закрити"
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Теги"
@@ -47,6 +55,14 @@ msgstr "ОК"
 msgctxt "#30614"
 msgid "Cancel"
 msgstr "Скасувати"
+
+msgctxt "#30617"
+msgid "Save"
+msgstr "Зберегти"
+
+msgctxt "#30619"
+msgid "Delete"
+msgstr "Видалити"
 
 msgctxt "#30650"
 msgid "Debugging"

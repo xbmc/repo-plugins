@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 import xbmc
 import xbmcgui
-import MypicsDB as MPDB
+import MypicsDB
 import common
 
 
@@ -39,6 +39,7 @@ class TranslationEditor( xbmcgui.WindowXMLDialog ):
     
     def __init__( self, xml, cwd, default):
         xbmcgui.WindowXMLDialog.__init__(self)
+        self.MPDB = MypicsDB.MyPictureDB()
     
     def onInit( self ):  
         self.getControl( STATUS_LABEL ).setLabel( common.getstring(30620) )
@@ -46,7 +47,7 @@ class TranslationEditor( xbmcgui.WindowXMLDialog ):
         self.getControl( BUTTON_OK ).setLabel( common.getstring(30621) )
         self.getControl( TAGS_LIST ).reset()
         
-        tagtypes_translations =  MPDB.get_tagtypes_translation()
+        tagtypes_translations =  self.MPDB.get_tagtypes_translation()
 
         for tagtype_translation in tagtypes_translations:
             listitem = xbmcgui.ListItem( label=tagtype_translation[0], label2=tagtype_translation[1]) 
@@ -73,7 +74,7 @@ class TranslationEditor( xbmcgui.WindowXMLDialog ):
             kb.doModal()
             if (kb.isConfirmed()):
                 item.setLabel2(kb.getText())
-                MPDB.set_tagtype_translation(common.smart_unicode(item.getLabel()), common.smart_unicode(item.getLabel2()))
+                self.MPDB.set_tagtype_translation(common.smart_unicode(item.getLabel()), common.smart_unicode(item.getLabel2()))
                 self.getControl( TAGS_LIST ).setVisible(False)
                 self.getControl( TAGS_LIST ).setVisible(True)
 

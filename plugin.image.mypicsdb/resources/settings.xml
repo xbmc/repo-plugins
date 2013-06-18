@@ -45,9 +45,9 @@
     <setting id="debugging" type="bool" label="30651" default="false" />
   </category>
   <category label="30660">
-    <setting label="30661" type="labelenum" id="service" lvalues="30662"/> <!--|30663"/>-->
+    <setting label="30661" type="labelenum" id="db_backend" lvalues="30662|30663"/>
     <!--<setting type="lsep" label="30662" /> -->
-    <setting id="db_name_sqlite" type="text" label="30669" default="MyPicsDB" enable="eq(-1,0)"/>    
+    <setting id="db_name_sqlite" type="text" label="30669" default="MyPictures.db" enable="eq(-1,0)"/>    
     <setting id="db_name" type="text" label="30668" default="MyPicsDB" enable="eq(-2,1)"/>
     <setting id="db_user" type="text" label="30664" default="XBMC" enable="eq(-3,1)"/>
     <setting id="db_pass" type="text" label="30665" default="XBMC" enable="eq(-4,1)"/>

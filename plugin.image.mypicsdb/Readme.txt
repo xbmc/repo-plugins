@@ -5,13 +5,31 @@ Don't change the plugin configuration unless you know what you do!
 a) You must add picture sources to XBMC
 b) Within MyPicsDB (not in the configuration) select menu "Paths of pictures folders" to add these paths to the database.
 
-   
 Excluding paths
 a) Add the exclude path(s) via menu "Paths of pictures folders".
 b) Rescan the paths which contain these added exclude paths to remove the pictures from MyPicsDB
 
+Excluding files
+a) This can be done in the plugin settings under "Files"
+b) You only need to enter a unique part of the complete path name. All files which contain this entered part of the path name will be excluded.
+c) Rescan all paths.
+d) To concatenate different file/path name parts use the | sign.
 
-2) General problems with MyPicsDB
+2) MySql
+==================================================================================
+a) You must create a database:
+CREATE DATABASE MyPicsDB CHARACTER SET utf8 COLLATE utf8_bin;
+
+b) Create a user (if not already done for music and movies):
+CREATE USER 'xbmc'@'%' IDENTIFIED BY 'xbmc';
+
+c) give him rights
+GRANT ALL ON *.* TO 'xbmc'@'%';
+
+d) Go to plugin settings and enable MySql. Set the correct user and password (they are case sensitive)!
+
+
+3) General problems with MyPicsDB
 ==================================================================================
 If you have unexplainable problems like pictures don't get included into database and you're a long time user of MyPicsDB then it will be a good decision to delete the database and start with a new one.
 
@@ -25,7 +43,7 @@ This means that the already entered paths are still available and that you can s
 Because all pictures were deleted from database it doesn't matter what you select in the following dialog box.
 
 
-3) Auto-update  MyPicsDB
+4) Auto-update  MyPicsDB
 ==================================================================================
    Idea from Fungify 
    
@@ -41,7 +59,7 @@ Because all pictures were deleted from database it doesn't matter what you selec
    wget --directory-prefix=tmp --http-user=<xbmc username> --http-passwd=<xbmc password> "http://Servername:Portnumber/xbmcCmds/xbmcHttp?command=ExecBuiltIn&parameter=XBMC.RunScript("<full path to plugin>\plugin.image.mypicsdb\scanpath.py",--database)
 
    
-4) For skinners
+5) For skinners
 ==================================================================================
   Done by MikeBZH44
 

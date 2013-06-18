@@ -96,6 +96,10 @@ msgctxt "#30224"
 msgid "Close"
 msgstr "Pechar"
 
+msgctxt "#30247"
+msgid "Please wait..."
+msgstr "Por favor agarde..."
+
 msgctxt "#30601"
 msgid "Tags"
 msgstr "Etiquetas"
@@ -151,6 +155,10 @@ msgstr "Cidade"
 msgctxt "#30704"
 msgid "Location"
 msgstr "Localización"
+
+msgctxt "#30706"
+msgid "Date Added"
+msgstr "Data Engadida"
 
 msgctxt "#30709"
 msgid "Description"

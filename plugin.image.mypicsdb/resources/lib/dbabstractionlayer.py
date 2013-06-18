@@ -47,8 +47,8 @@ Supported methods:
 2) execute(statement, bind_variables). To use bind variables use the ? as placeholder. Example: "select * from table where column = ?".
 3) fetchone(). Fetches one row. Return None in case of end of fetch.
 4) fetchall(). Fetches all rows.
-5) request(). Does an execute() and fetchall() without the possiblity to use bind variables.
-6) request_with_binds(). Does an execute() and fetchall() with bind variables.
+5) request(). Does an execute() and fetchall() with the possiblity to use bind variables.
+
 
 
 Example
@@ -80,18 +80,18 @@ def DBFactory(backend, db_name, *args):
     backends = {'mysql':MysqlConnection, 'sqlite':SqliteConnection}
 
     if backend.lower() == 'mysql':
-        print "mysql"
+
         import mysql.connector as database
             
     # default is to use Sqlite
     else:
-        print "Sqlite"
+        backend = 'sqlite'
         try:
             from sqlite3 import dbapi2 as database
         except:
             from pysqlite2 import dbapi2 as database        
                 
-    return backends[backend](db_name, *args)
+    return backends[backend.lower()](db_name, *args)
     
 
 
@@ -119,7 +119,7 @@ class MysqlConnection(BaseConnection):
     def __init__(self, *args):
         self.connect(*args)
 
-
+    
     def connect( self, db_name, db_user, db_pass, db_address='127.0.0.1', db_port=3306):
         self.db_name  = db_name
         self.db_user = db_user
@@ -129,13 +129,25 @@ class MysqlConnection(BaseConnection):
         else:
             self.db_address = db_address
 
-        self.connection = database.connect(db_address, db_user, db_pass, db_name)
-        self.connection.set_charset('utf-8')
+        self.connection = database.connect(db = db_name, user = db_user, passwd = db_pass, host = db_address) #, port = db_port)
+        self.connection.set_charset('utf8')
         self.connection.set_unicode(True)
 
 
     def cursor(self):        
-        return MysqlCursor(self.connection.cursor())
+        return MysqlCursor(self.connection.cursor(), self.connection)
+
+        
+    def get_ddl_primary_key(self):
+        return " auto_increment not null primary key "
+        
+        
+    def get_ddl_varchar(self, length):
+        return " varchar(%d) "%length
+        
+        
+    def get_backend(self):
+        return "mysql"
 
 
 
@@ -145,33 +157,43 @@ class SqliteConnection(BaseConnection):
         self.connect(*args)
 
 
-    def connect(self, db_name):
+    def connect(self, db_name, *args):
         self.db_name = db_name
         self.connection = database.connect(db_name)
         self.connection.text_factory = unicode
 
 
     def cursor(self):        
-        return SqliteCursor(self.connection.cursor())
+        return SqliteCursor(self.connection.cursor(), self.connection)
+
+
+    def get_ddl_primary_key(self):
+        return " primary key not null "
+
+
+    def get_ddl_varchar(self, length):
+        return " text "
+        
+    def get_backend(self):
+        return "sqlite"
 
 
 
 class BaseCursor(object):
 
-    DEBUGGING = True
-
-    def __init__(self, cursor):
+    def __init__(self, cursor, connection):
         self.cursor = cursor
+        self.connection = connection
 
 
     def close(self):
         self.cursor.close()
 
 
-    def execute(self, sql, bindvariables=None):
-        if bindvariables is not None and isinstance(self, MysqlCursor) == True:
+    def execute(self, sql, bindvariables=[]):
+        if bindvariables and isinstance(self, MysqlCursor) == True:
             sql = sql.replace('?', '%s')
-        if bindvariables is not None:
+        if bindvariables :
             self.cursor.execute(sql, bindvariables)
         else:
             self.cursor.execute(sql)
@@ -186,102 +208,90 @@ class BaseCursor(object):
 
 
     def fetchall(self):
-        return [row for row in self.cursor.fetchall()]
+        rows = []
+        
+        #return [row for row in self.cursor.fetchall()]
+        for row in self.cursor.fetchall():
+            cols = []
+            for col in row:
+
+                if isinstance(col, basestring):
+                    col = common.smart_unicode(col)
+                    #print col
+                #else:
+                #    print type(col)
+                #    print col
+                    
+                cols.append(col)
+                
+            rows.append(cols)
+            
+        return rows
+
+    def request_with_binds(self, statement, bindvariables = []):
+    
+        return self.request(statement, bindvariables)
 
 
-    def request(self, statement):
-        try:
-            self.execute( statement )
-            retour = self.fetchall()
-            self.commit()
-        except Exception,msg:
-            common.log("Database abstraction layer",  "The request failed :", xbmc.LOGERROR )
-            common.log("Database abstraction layer",  "%s - %s"%(Exception,msg), xbmc.LOGERROR )
-            common.log("Database abstraction layer",  "SQL Request> %s"%statement, xbmc.LOGERROR)
-            common.log("Database abstraction layer",  "---", xbmc.LOGERROR )
-            retour= []
-
-        return retour
-
-
-    def request_with_binds(self, statement, bindvariables):
+    def request(self, statement, bindvariables = []):
 
         binds = []
-        for value in bindvariables:
-            if type(value).__name__ == 'str':
-                binds.append(common.smart_unicode(value))
-            else:
-                binds.append(value)
+        return_value= []
         try:
-            self.execute( statement, binds )
-            retour = self.fetchall()
-            self.commit()
+            try:
+                if bindvariables > 0:
+                    for value in bindvariables:
+                        if type(value).__name__ == 'str':
+                            binds.append(common.smart_unicode(value))
+                        else:
+                            binds.append(value)
+                    self.execute( statement, binds )
+                    try:
+                        return_value = self.fetchall()
+                    except:
+                        pass
 
+
+                else:
+                    self.execute( statement, binds )
+                    try:
+                        return_value = self.fetchall()
+                    except:
+                        pass
+                self.connection.commit()
+            except Exception,msg:
+                try:
+                    common.log("Database abstraction layer",  "The request failed :", xbmc.LOGERROR )
+                    common.log("Database abstraction layer",  "%s - %s"%(Exception,str(msg)), xbmc.LOGERROR )
+                except:
+                    pass
+                try:
+                    common.log("Database abstraction layer",  "SQL > %s"%statement, xbmc.LOGERROR)
+                except:
+                    pass
+                try:
+                    i = 1
+                    for var in binds:
+                        common.log ("SQL request numvar = %d  content = %s"%(i,var), xbmc.LOGERROR)
+                        i=i+1
+                except:
+                    pass
         except Exception,msg:
             try:
                 common.log("Database abstraction layer",  "The request failed :", xbmc.LOGERROR )
                 common.log("Database abstraction layer",  "%s - %s"%(Exception,msg), xbmc.LOGERROR )
             except:
                 pass
-            try:
-                common.log("Database abstraction layer",  "SQL RequestWithBinds > %s"%statement, xbmc.LOGERROR)
-            except:
-                pass
-            try:
-                i = 1
-                for var in binds:
-                    common.log ("SQL RequestWithBinds %d> %s"%(i,var), xbmc.LOGERROR)
-                    i=i+1
-                common.log("Database abstraction layer",  "---", xbmc.LOGERROR )
-            except:
-                pass
-            retour= []
 
-        return retour
+        return return_value
 
 
 
 class MysqlCursor(BaseCursor):
     pass
-"""
-    def __init__(self, cursor)
-        self.cursor = cursor
-
-
-    def execute(self, sql, bindvariables=None):
-        if bindvariables is not None and isinstance(self, MysqlCursor) == True
-            sql = sql.replace('?', '%s')
-        self.cursor.execute(sql, bindvariables)
-
-
-    def fetchone(self):
-        row_object = self.cursor.fetchone():
-        return [column for column in row_object]
-
-
-    def fetchall(self):
-        return [row for row in self.cursor.fetchall()]
-"""
 
 
 
 class SqliteCursor(BaseCursor):
     pass
-"""
-    def __init__(self, cursor)
-        self.cursor = cursor
-
-
-    def execute(self, sql, bindvariables=None):
-        self.cursor.execute(sql, bindvariables)
-
-
-    def fetchone(self):
-        row_object = self.cursor.fetchone():
-        return [column for column in row_object]
-
-
-    def fetchall(self):
-        return [row for row in self.cursor]
-"""
 

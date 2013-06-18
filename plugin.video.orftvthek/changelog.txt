@@ -1,3 +1,9 @@
+0.1.2
+- fixed bad view mode on aeon nox
+- added force view option
+- Fixed "Missed a Show?" Feature
+- A few optimizations for RPI
+
 0.1.1
 - Fixed a few Banner/Backdrop Fetching Issues
 - Fixed Livestream Exception

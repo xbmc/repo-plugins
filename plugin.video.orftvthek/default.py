@@ -9,11 +9,14 @@ import os.path
 from xml.dom import Node;
 from xml.dom import minidom;
 
-version = "0.1.1"
+version = "0.1.2"
 plugin = "ORF-TVthek-" + version
 author = "sofaking"
 
-settings = xbmcaddon.Addon(id='plugin.video.orftvthek')
+
+
+socket.setdefaulttimeout(30)
+settings = xbmcaddon.Addon(id='plugin.video.orftvthek') 
 pluginhandle = int(sys.argv[1])
 basepath = settings.getAddonInfo('path')
 resourcespath = os.path.join(basepath,"resources")
@@ -21,6 +24,11 @@ mediapath =  os.path.join(resourcespath,"media")
 
 base_url="http://tvthek.orf.at"
 schedule_url = "http://tvthek.orf.at/schedule"
+
+if xbmc.getSkinDir() == 'skin.confluence':
+   defaultViewMode = 'Container.SetViewMode(503)'
+else:
+   defaultViewMode = 'Container.SetViewMode(518)'
 
 logopath = os.path.join(mediapath,"logos")
 bannerpath = os.path.join(mediapath,"banners")
@@ -30,8 +38,10 @@ defaultbanner = "http://goo.gl/FG03G"
 defaultlogo = "http://goo.gl/FRLJK"
 
 mp4stream = settings.getSetting("mp4stream") == "true"
+forceView = settings.getSetting("forceView") == "true"
 hdid = "Q6A"
 sdid = "Q4A"
+
 
 
 opener = urllib2.build_opener()
@@ -84,6 +94,7 @@ def addDirectory(title,banner,backdrop,link,mode):
         createListItem(title,banner,title,title,backdrop,u,'false',True)
 
 def getBackdrop(html,show):
+    print "Getting Backdrop for %s" % show
     cssVarReg = re.compile('<link .*?href="css/themes/.*?>')
     cssHrefVarReg = re.compile('href=".*?"')
     backdropVarReg = re.compile("/image.*?_image_page.png")
@@ -92,7 +103,10 @@ def getBackdrop(html,show):
        css = cssVarReg.search(html).group()
        css = cssHrefVarReg.search(css).group().replace("href=","")
        css = css.replace('"',"")
-       css = opener.open("%s/%s" % (base_url,css))
+       try:
+          css = opener.open("%s/%s" % (base_url,css))
+       except:
+          css = opener.open("%s/%s" % (base_url,css))
        css = css.read()
        backdrop = backdropVarReg.search(css).group()
        backdrop = "%s%s" % (base_url,backdrop)
@@ -108,6 +122,7 @@ def getBackdrop(html,show):
           return defaultbackdrop
 
 def getLogo(html,show):
+    print "Getting Banner for %s" % show
     suppn = BeautifulSoup(html)
     tmpimg = suppn.findAll('div',{'id':'more-episodes'})
     imgpath = os.path.join(logopath, "%s.jpg" % show.replace(" ","."))
@@ -124,6 +139,9 @@ def getLogo(html,show):
          
 
 def getMoreShows(url,logo,backdrop):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
     date = ""
     title = ""
     link = ""
@@ -134,7 +152,10 @@ def getMoreShows(url,logo,backdrop):
     backdrop = urllib.unquote(backdrop)
     newtitleVarReg = re.compile("<title>.*?</title>")
     liVarReg = re.compile('<li.*?"/li>')
-    html = opener.open(url).read()
+    try:
+       html = opener.open(url).read()
+    except:
+       html = opener.open(url).read()
     soup = BeautifulSoup(html)
     mainTitle  = soup.find('title').text.split("-")[1].strip()
     tmpimg = soup.findAll('div',{'id':'more-episodes'})
@@ -153,9 +174,14 @@ def getMoreShows(url,logo,backdrop):
        children = string.findChildren()
        for child in children:
           tmps = child.findAll('a')
+          i = 1
+          feedcount = len(tmps)
           for tmp in tmps:
            if tmp['href'] != '#':
              if date != oldDate:
+                 i = i+1
+                 percent = i*100/feedcount
+                 progressbar.update(percent)
                  title = "%s | %s" % (date.replace("&#160;"," "),tmp.text.encode('UTF-8').replace("&#160;"," "))
                  link = "%s%s" % (base_url,tmp['href'])
                  banner = logo
@@ -165,14 +191,17 @@ def getMoreShows(url,logo,backdrop):
               date = tmp.text.encode('UTF-8')
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
     xbmcplugin.setPluginFanart(int(sys.argv[1]), backdrop, color2='0xFFFF3300')
 
 def getLinks(url,quality):
     playlist.clear()
     url = urllib.unquote(url)
-    html = opener.open(url).read()
-    
+    try:
+       html = opener.open(url).read()
+    except:
+       html = opener.open(url).read()
     flashVarReg = re.compile("ORF.flashXML = '.*?'");
     xmlVarRef =  re.compile("%3C.*%3E")
     imgVarRef = re.compile("assets/.*?/orf_segments/image.*?.jpeg")
@@ -181,8 +210,10 @@ def getLinks(url,quality):
     backdropVarReg = re.compile("/images/themes/.*?_image_page.png")
 
     csspath = cssHrefVarReg.search(cssVarReg.search(html).group()).group().replace("href=","").replace('"',"")
-    css = opener.open("%s/%s" % (base_url,csspath)).read()
-
+    try:
+       css = opener.open("%s/%s" % (base_url,csspath)).read()
+    except:
+       css = opener.open("%s/%s" % (base_url,csspath)).read()
     try:
       backdrop = backdropVarReg.search(css).group()
       backdrop = "%s%s" % (base_url,backdrop)
@@ -231,7 +262,8 @@ def getLinks(url,quality):
             addFile(title,videoUrl,image,description,runtime,backdrop)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
     
 
 def getMainMenu():
@@ -245,7 +277,8 @@ def getMainMenu():
     addDirectory("Sendung verpasst?",defaultbanner,defaultbackdrop,"","getArchiv")
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
     xbmcplugin.setPluginFanart(int(sys.argv[1]), defaultbackdrop, color2='0xFFFF3300')
 
 def cleanText(string):
@@ -253,15 +286,28 @@ def cleanText(string):
     return string
 
 def getCategoryList(category):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
     category =  urllib.unquote(category)
-    html = opener.open(base_url)
+    print "Opening %s" % base_url
+    try:
+      html = opener.open(base_url)
+    except:
+      html = opener.open(base_url)
     html = html.read()
+    progressbar.update(1)
     soup = BeautifulSoup(html)
     categorymenu = soup.findAll('div',{'class':'column'})
     for column in categorymenu:
        if cleanText(column.find('h4').text).encode('UTF-8') == cleanText(category):
          shows = column.findAll('a')
+         feedcount = len(shows)
+         i = 1
          for show in shows:
+          i = i+1
+          percent = i*100/feedcount
+          progressbar.update(percent)
           html = ""
           title = show.text
           link = "%s%s" % (base_url,show['href'])
@@ -286,7 +332,8 @@ def getCategoryList(category):
           createListItem(cleanText(title),logo,cleanText(title),cleanText(title),backdrop,u,'false',True)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
 
 
 def getLiveStreams():
@@ -334,6 +381,8 @@ def getLiveStreams():
                  videoUrl = url.firstChild.data
     if videoUrl != '':
        addFile(title,videoUrl,image,description,runtime,backdrop)
+    else:
+       addDirectory("Derzeit kein Livestream",defaultbanner,defaultbackdrop,"","goBack")
     
 
     teaserbox = soup.findAll('div',{'id':'more_livestreams'})
@@ -378,15 +427,29 @@ def getLiveStreams():
                addFile(title,videoUrl,image,description,runtime,backdrop)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
 
 def getRecentlyAdded():
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
     html = opener.open(base_url)
     html = html.read()
     soup = BeautifulSoup(html)
     teaserbox = soup.findAll('div',{'id':'teaser-container'})
     for teasers in teaserbox:
-         for teaser in teasers.findAll('li',{'class':'vod'}):
+         vods = teasers.findAll('li',{'class':'vod'})
+         i = 1
+         feedcount = len(vods)
+         for teaser in vods:
+            if progressbar.iscanceled() :
+                xbmcplugin.endOfDirectory(pluginhandle)
+                progressbar.close()
+                break
+            i = i+1
+            percent = i*100/feedcount
+            progressbar.update(percent)
             backdrop = ""
             title = teaser.find('strong',{'class':'highlightteasertitle'}).text.encode('UTF-8').replace("&#160;"," ").replace("&quot;","'")
             backdropFile = os.path.join(backdroppath, "%s.jpg" % title.replace(" ","."))
@@ -400,9 +463,13 @@ def getRecentlyAdded():
             createListItem(cleanText(title),image,cleanText(desc),cleanText(title),backdrop,u,'false',True)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
 
 def getArchiv(url):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
     base_schedule = "%s/schedule/last/" % base_url
     opener = urllib2.build_opener()
     opener.addheaders = [('User-agent', 'Mozilla/5.0')]
@@ -410,7 +477,17 @@ def getArchiv(url):
     html = html.read()
     suppn = BeautifulSoup(html)
     links = suppn.findAll('button')
+    i = 1
+    feedcount = len(links)
     for link in links:
+        if progressbar.iscanceled() :
+                xbmcplugin.endOfDirectory(pluginhandle)
+                xbmc.executebuiltin("Container.SetViewMode(503)")
+                progressbar.close()
+                break
+        i = i+1
+        percent = i*100/feedcount
+        progressbar.update(percent)
         title = link['title'].replace("Sendungen vom","").replace("den","").replace(",  ","").replace(". anzeigen...","").strip()
         if link['name'].replace("day[","").replace("]","") == 'older':
             url = "%sarchiv" % base_schedule
@@ -421,10 +498,14 @@ def getArchiv(url):
         createListItem(cleanText(title),defaultbanner,cleanText(title),"",defaultbackdrop,u,'false',True)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+        xbmc.executebuiltin(defaultViewMode)
 
 	
 def openArchiv(url):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
     url = urllib.unquote(url)
     html = opener.open(url)
     html = html.read()
@@ -439,7 +520,17 @@ def openArchiv(url):
       except:
        links = ""
        clips = ""
+    i = 1
+    feedcount = len(clips)
+    
     for clip in clips:
+        if progressbar.iscanceled() :
+                xbmcplugin.endOfDirectory(pluginhandle)
+                progressbar.close()
+                break
+        i = i+1
+        percent = i*100/feedcount
+        progressbar.update(percent)
         title = ''
         description = ''
         duration = ''
@@ -467,9 +558,6 @@ def openArchiv(url):
             channel = (date.find('img')['alt']).replace('Logo','').strip()
             channellogo = "%s/%s" % (base_url,date.find('img')['src'])
         if title != '':
-           backdropFile = os.path.join(backdroppath, "%s.jpg" % title.replace(" ","."))
-           if os.path.isfile(backdropFile):
-                  backdrop = backdropFile
            title = "[%s] [%s] %s"  % (channel,time,title)
            parameters = {"link" : url,"title" : cleanText(title).encode('UTF-8'),"banner" : image,"backdrop" : "", "mode" : "openSeries"}
            u = sys.argv[0] + '?' + urllib.urlencode(parameters)
@@ -477,9 +565,13 @@ def openArchiv(url):
            createListItem(cleanText(title),image,cleanText(description),cleanText(channel),backdrop,u,'false',True)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+        xbmc.executebuiltin(defaultViewMode)
 
 def getThemenListe(topicurl,title):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
     topicurl = urllib.unquote(topicurl)
     backdrop = ""
     html = opener.open(topicurl)
@@ -487,7 +579,16 @@ def getThemenListe(topicurl,title):
     soup = BeautifulSoup(html)
     backdrop = getBackdrop(html,title.encode('ascii','ignore'))
     topics = soup.findAll('li',{'class':'vod'})
+    i = 1
+    feedcount = len(topics)
     for topic in topics:
+            if progressbar.iscanceled() :
+                xbmcplugin.endOfDirectory(pluginhandle)
+                progressbar.close()
+                break
+            i = i+1
+            percent = i*100/feedcount
+            progressbar.update(percent)
             title = topic.find('strong').text.encode('UTF-8').replace("&#160;"," ").replace("&quot;","'")
             desc = topic.find('span',{'class':'desc'}).text.encode('UTF-8').replace("&#160;"," ").replace("&quot;","'")
             link = "%s%s" % (base_url,topic.find('a')['href'])
@@ -497,7 +598,8 @@ def getThemenListe(topicurl,title):
             createListItem(cleanText(title),image,cleanText(desc),cleanText(title),backdrop,u,'false',True)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
 
 def playFile():
     player = xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER)
@@ -510,6 +612,9 @@ def playFile():
 
 
 def getThemen():
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
     topicurl = "http://tvthek.orf.at/topics"
     backdrop = ""
     html = opener.open(topicurl)
@@ -517,7 +622,16 @@ def getThemen():
     soup = BeautifulSoup(html)
     
     topics = soup.findAll('div',{'class':'row reduced topic-row'})
+    i = 1
+    feedcount = len(topics)
     for topic in topics:
+            if progressbar.iscanceled() :
+                xbmcplugin.endOfDirectory(pluginhandle)
+                progressbar.close()
+                break
+            i = i+1
+            percent = i*100/feedcount
+            progressbar.update(percent)
             title = topic.find('h3',{'class':'title'}).find('span').text.encode('UTF-8').replace("&#160;"," ").replace("&quot;","'")
             desc = ""
             try:
@@ -534,18 +648,35 @@ def getThemen():
             createListItem(cleanText(title),image,cleanText(desc),cleanText(title),backdrop,u,'false',True)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+        xbmc.executebuiltin(defaultViewMode)
 
 def getTabVideos(div):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
     backdrop = ""
     html = opener.open(base_url)
     html = html.read()
     soup = BeautifulSoup(html)
     tipbox = soup.findAll('div',{'id':div})
     for tipps in tipbox:
-         for tipp in tipps.findAll('li'):
+         lis = tipps.findAll('li')
+         i = 1
+         feedcount = len(lis)
+         for tipp in lis:
+            if progressbar.iscanceled() :
+                xbmcplugin.endOfDirectory(pluginhandle)
+                progressbar.close()
+                break
+            i = i+1
+            percent = i*100/feedcount
+            progressbar.update(percent)
             title = tipp.find('strong').text.encode('UTF-8').replace("&#160;"," ").replace("&quot;","'")
-            desc = tipp.find('span',{'class':'desc'}).text.encode('UTF-8').replace("&quot;","").replace("&#160;"," ")
+            try:
+               desc = tipp.find('span',{'class':'desc'}).text.encode('UTF-8').replace("&quot;","").replace("&#160;"," ")
+            except:
+               desc = ""
             image = tipp.find('img')['src']
             link = "%s%s" % (base_url,tipp.find('a')['href'])
             parameters = {"link" : link,"title" : title,"banner" : image,"backdrop" : backdrop, "mode" : "openSeries"}
@@ -553,7 +684,8 @@ def getTabVideos(div):
             createListItem(cleanText(title),image,cleanText(desc),cleanText(title),backdrop,u,'false',True)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
 
 def getCategories():
     html = opener.open(base_url)
@@ -576,7 +708,8 @@ def getCategories():
              createListItem(cleanText(title),defaultbanner,cleanText(description),cleanText(description),defaultbackdrop,u,'false',True)
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
-    xbmc.executebuiltin("Container.SetViewMode(503)")
+    if forceView:
+        xbmc.executebuiltin(defaultViewMode)
 
 #Getting Parameters
 params=parameters_string_to_dict(sys.argv[2])

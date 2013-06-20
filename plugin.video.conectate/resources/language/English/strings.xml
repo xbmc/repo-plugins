@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Page</string>
+    <string id="30002">Default quality</string>
+    <string id="30003">HD</string>
+
+    <!-- Channel strings -->
+    <string id="30101">Encuentro Channel - Movie</string>
+    <string id="30102">Encuentro Channel - Especial</string>
+    <string id="30103">Encuentro Channel - Serie</string>
+    <string id="30104">Encuentro Channel - Micros</string>
+    <string id="30203">PakaPaka Channel - Serie</string>
+    <string id="30204">PakaPaka Channel - Micros</string>
+    <string id="30303">Ronda Channel - Serie</string>
+    <string id="30304">Ronda Channel - Micros</string>
+    <string id="30502">Educ.ar Channel - Especial</string>
+    <string id="30602">Conectar Igualdad Channel - Especial</string>
+
+</strings>

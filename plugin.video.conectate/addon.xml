@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.conectate" name="Conectate.gob.ar" version="1.0.0" provider-name="Andres Trapanotto (andres.trapanotto@gmail.com)">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.beautifulsoup" version="3.0.8"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language />
+    <platform>all</platform>
+    <summary lang="ar">برنامج الفيديو المساعد للوصول لمحتوى من conectate.gob.ar</summary>
+    <summary lang="be">Video plugin to access content from conectate.gob.ar</summary>
+    <summary lang="bg">Видео добавка за достъп до съдържанието на conectate.gob.ar</summary>
+    <summary lang="ca">Afegitó de video per accedir al contingut de conectate.gob.ar</summary>
+    <summary lang="da">Videoplugin som viser indhold fra conectate.gob.ar</summary>
+    <summary lang="de">Video Plug-In für Inhalte von conectate.gob.ar</summary>
+    <summary lang="el">Plugin βίντεο για πρόσβαση σε περιεχόμενο από το conectate.gob.ar</summary>
+    <summary lang="en">Video plugin to access content from conectate.gob.ar</summary>
+    <summary lang="es">Complemento de video para acceder a contenido de conectate.gob.ar</summary>
+    <summary lang="eu">conectate.gob.ar guneko edukiak ikusteko bideo gehigarria</summary>
+    <summary lang="fr">Plugin Vidéo pour accéder au contenu depuis conectate.gob.ar</summary>
+    <summary lang="gl">Engadido de vídeo para acceder ao contido de conectate.gob.ar</summary>
+    <summary lang="hu">Videó plugin a conectate.gob.ar tartalmának eléréséhez</summary>
+    <summary lang="it">Plugin video per accedere ai contenuti di conectate.gob.ar</summary>
+    <summary lang="ko">conectate.gob.ar의 컨텐츠를 이용하기 위한 비디오 플러그인</summary>
+    <summary lang="lt">Vaizdo iskiepis/papildinys prieigai prie turinio iš conectate.gob.ar</summary>
+    <summary lang="nl">Video plugin om toegang tot conectate.gob.ar content te krijgen.</summary>
+    <summary lang="pl">Wtyczka wideo umożliwiająca uzyskanie dostępu do zawartości strony conectate.gob.ar</summary>
+    <summary lang="pt">Extensão de vídeo para aceder aos conteúdos de conectate.gob.ar</summary>
+    <summary lang="pt_BR">Plugin de Vídeo para acessar conteúdo da conectate.gob.ar</summary>
+    <summary lang="ru">Видео-плагин для доступа к содержимому conectate.gob.ar</summary>
+    <summary lang="sk">Video doplnok na prístup k obsahu conectate.gob.ar</summary>
+    <summary lang="sv">Videotillägg för åtkomst till material från conectate.gob.ar</summary>
+    <summary lang="zh">访问来自conectate.gob.ar内容的视频插件</summary>
+    <description lang="en">This video plugin provides access to a lot of videos from Conectate.gob.ar network[CR]All content is dynamic and should be always up to date.</description>
+    <description lang="es">Este complemento de video permite acceder a un montón de vídeos de Conectate.gob.ar[CR]Todo el contenido es dinámico y debería estar siempre actualizado.</description>
+  </extension>
+</addon>

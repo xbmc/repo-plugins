@@ -77,7 +77,7 @@ LOW_BANDWIDH   = LOW_BANDWIDTH
 def viewStart():
 
   addDirectoryItem(localize(30000), { "mode": MODE_A_TO_O })
-
+  addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
   
 def viewAtoO():
   programs = svt.getAtoO()
@@ -96,20 +96,36 @@ def viewProgram(url,page,index):
 
 
 def viewSearch():
-
-  keyword = common.getUserInput(localize(30102))
-  if keyword == "" or not keyword:
+  query = common.getUserInput(localize(30102))
+  if query == "" or not query:
     viewStart()
     return
-  keyword = urllib.quote(keyword)
-  common.log("Search string: " + keyword)
+  query = urllib.quote(query)
+  common.log("Search string: " + query)
 
-  keyword = re.sub(r" ","+",keyword) 
+  query = re.sub(r" ", "+", query)
+  page = 1
+  results = True
 
-  url = svt.URL_TO_SEARCH + keyword
-  
-  createTabIndex(url)
+  while results:
+    results = viewSearchPageResult(query, page)
+    if not results:
+      break
 
+    if svt.hasMoreResults(query, page):
+      page = page + 1
+    else:
+      results = False 
+
+def viewSearchPageResult(query, page):
+  programs = svt.getSearchResult(query, page)
+
+  if not programs:
+    return False  
+
+  for program in programs:
+    addDirectoryItem(program["title"], { "mode": MODE_VIDEO, "url": program["url"] }, False, False, program["info"])
+  return True
 
 
 def viewPageResults(url,mode,page,index):

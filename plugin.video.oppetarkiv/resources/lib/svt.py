@@ -16,7 +16,8 @@ URL_CATEGORIES = "/kategori/titel"
 URL_TO_LATEST = "?tab=episodes&sida=1"
 URL_TO_LATEST_NEWS = "?tab=news&sida=1"
 URL_TO_RECOMMENDED = "?tab=recommended&sida=1"
-URL_TO_SEARCH = "/sok?q="
+URL_TO_SEARCH = "/sok/?q="
+URL_TO_SEARCH_PAGE = "&sida="
 
 JSON_SUFFIX = "?output=json"
 
@@ -157,6 +158,53 @@ def getArticles(url,page,tabname=None):
  
   return newarticles
 
+def getSearchResult(query, page):
+  """
+  Returns the search results from a search query.
+
+  Return result is a list of article objects.
+  """
+  page = getPage(URL_TO_SEARCH + query + URL_TO_SEARCH_PAGE + str(page))
+
+  container = common.parseDOM(page, "div", attrs = { "class": "[^\"']*svtoa-js-searchlist[^\"']*" })
+  if not container:
+    common.log("Could not find svtjs-toogle-group!")
+    return None
+
+  articles = common.parseDOM(container, "article")
+  if not articles:
+    common.log("No articles could be found!")
+    return None
+  
+  newarticles = []
+  for article in articles:
+    newarticle = {}
+    newarticle["url"] = common.parseDOM(article, "a", ret = "href")[0]
+    thumbnail = common.parseDOM(article, "img", ret = "src")[0]
+    thumbnail = helper.prepareThumb(thumbnail)
+    newarticle["thumbnail"] = thumbnail
+    title = common.parseDOM(article, "h2")[0]
+    title = common.parseDOM(title, "a")[0]
+    title = common.replaceHTMLCodes(title)
+    newarticle["title"] = title
+    newarticle["info"] = { "title": title }
+    newarticles.append(newarticle)
+
+  return newarticles
+
+def hasMoreResults(query, page):
+    """
+    Checks if more search results exists for a search result page.
+    Check for the "Visa fler" link in the bottom of the page.
+    """
+    page = getPage(URL_TO_SEARCH + query + URL_TO_SEARCH_PAGE + str(page))
+
+    link = common.parseDOM(page, "a", attrs = { "class": "[^\"']*svtoa-js-search-step-button[^\"']*" })
+
+    if link:
+        return True
+    else:
+        return False
 
 def getPage(url):
   """

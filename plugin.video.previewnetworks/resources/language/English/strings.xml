@@ -58,8 +58,9 @@
     <string id="30120">- Fanart color three (AARRGGBB)</string>
     <string id="30130">- Always play saved trailers</string>
     <string id="30150">Show Clip Extra</string>
-		<string id="30151">Show file quality and format on title</string>
-		<string id="30152">Show original title</string>
+	<string id="30151">Show file quality and format on title</string>
+	<string id="30152">Show original title</string>
+	<string id="30153">Limit number of video list to</string>
 		
 		<string id="30030">Play mode</string>
     <string id="30031">Stream</string>

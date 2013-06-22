@@ -56,7 +56,6 @@ class _Info:
 
 
 class Main:
-    #Addon = xbmcaddon.Addon( id=os.path.basename( os.getcwd() ) )
     Addon = xbmcaddon.Addon( id=__plugin__)
 
     def __init__( self ):

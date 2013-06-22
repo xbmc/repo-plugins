@@ -1,5 +1,5 @@
 """
-    Plugin for streaming Preview network
+    Plugin for streaming Preview network 
 """
 
 # main imports
@@ -21,9 +21,10 @@ __author__ = "nmazz64"
 __url__ = "http://code.google.com/p/previewnetworks-xbmc-plugin"
 __svn_url__ = "http://previewnetworks-xbmc-plugin.googlecode.com/svn/trunk/plugin.video.previewnetworks/"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
-__version__ = "2.3.1"
+__version__ = "2.3.2"
 __svn_revision__ = "$Revision: 0$"
 __XBMC_Revision__ = "31633"
+__Channel_ID__ = "391100379-1"
 
 url_source=None
 
@@ -55,11 +56,11 @@ def categories(root):
     baseurl="http://%s.hdplus.previewnetworks.com/v3.1/%s/"
 
     if root:
-        addDir(Addon.getLocalizedString(30301),baseurl+'now-90/%s',1,now_icon)
-        addDir(Addon.getLocalizedString(30302),baseurl+'coming-90/%s',2,next_icon)
-        addDir(Addon.getLocalizedString(30303),baseurl+'newest-90/%s',3,new_icon)
+        addDir(Addon.getLocalizedString(30301),baseurl+'now-%s/%s',1,now_icon)
+        addDir(Addon.getLocalizedString(30302),baseurl+'coming-%s/%s',2,next_icon)
+        addDir(Addon.getLocalizedString(30303),baseurl+'newest-%s/%s',3,new_icon)
         addDir(Addon.getLocalizedString(30300),'genre:',0,genre_icon)
-        addDir(Addon.getLocalizedString(30340),baseurl+'search-20/%s/?search_field=product_title&search_query=%s',99,search_icon)
+        addDir(Addon.getLocalizedString(30340),baseurl+'search-%s/%s/?search_field=product_title&search_query=%s',99,search_icon)
     else:
         addDir(Addon.getLocalizedString(30304),baseurl+'CinemaAction/%s',10,icona)
         addDir(Addon.getLocalizedString(30305),baseurl+'CinemaAdventure/%s',11,icona)

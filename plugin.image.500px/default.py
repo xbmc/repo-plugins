@@ -1,6 +1,6 @@
 
-import utils
-import utils.xbmc
+import fivehundredpxutils
+import fivehundredpxutils.xbmc
 
 import xbmc
 import xbmcgui
@@ -9,7 +9,7 @@ import xbmcplugin
 from fivehundredpx.client import FiveHundredPXAPI
 
 _CONSUMER_KEY = 'LvUFQHMQgSlaWe3aRQot6Ct5ZC2pdTMyTLS0GMfF'
-_RPP = int(xbmcplugin.getSetting(utils.xbmc.addon_handle, 'rpp'))
+_RPP = int(xbmcplugin.getSetting(fivehundredpxutils.xbmc.addon_handle, 'rpp'))
 API = FiveHundredPXAPI()
 
 
@@ -24,7 +24,7 @@ class Image(object):
 
 
 def feature():
-    params = utils.xbmc.addon_params
+    params = fivehundredpxutils.xbmc.addon_params
     feature = params['feature']
     category = params.get('category', None)
     page = int(params.get('page', 1))
@@ -32,14 +32,14 @@ def feature():
     resp = API.photos(feature=feature, only=category, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
 
     for image in map(Image, resp['photos']):
-        utils.xbmc.add_image(image)
+        fivehundredpxutils.xbmc.add_image(image)
 
     if resp['current_page'] != resp['total_pages']:
         next_page = page + 1
-        url = utils.xbmc.encode_child_url('feature', feature=feature, category=category, page=next_page)
-        utils.xbmc.add_dir('Next page', url)
+        url = fivehundredpxutils.xbmc.encode_child_url('feature', feature=feature, category=category, page=next_page)
+        fivehundredpxutils.xbmc.add_dir('Next page', url)
 
-    utils.xbmc.end_of_directory()
+    fivehundredpxutils.xbmc.end_of_directory()
 
 
 def search():
@@ -48,7 +48,7 @@ def search():
         kb.doModal()
         return kb.getText()
 
-    params = utils.xbmc.addon_params
+    params = fivehundredpxutils.xbmc.addon_params
 
     if 'term' not in params:
         term = getTerm()
@@ -59,14 +59,14 @@ def search():
 
     resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
     for image in map(Image, resp['photos']):
-        utils.xbmc.add_image(image)
+        fivehundredpxutils.xbmc.add_image(image)
 
     if resp['current_page'] != resp['total_pages']:
         next_page = page + 1
-        url = utils.xbmc.encode_child_url('search', term=term, page=next_page)
-        utils.xbmc.add_dir('Next page', url)
+        url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page)
+        fivehundredpxutils.xbmc.add_dir('Next page', url)
 
-    utils.xbmc.end_of_directory()
+    fivehundredpxutils.xbmc.end_of_directory()
 
 
 def features():
@@ -79,13 +79,13 @@ def features():
     )
 
     for feature in features:
-        url = utils.xbmc.encode_child_url('categories', feature=feature)
-        utils.xbmc.add_dir(feature, url)
+        url = fivehundredpxutils.xbmc.encode_child_url('categories', feature=feature)
+        fivehundredpxutils.xbmc.add_dir(feature, url)
 
-    url = utils.xbmc.encode_child_url('search')
-    utils.xbmc.add_dir('Search', url)
+    url = fivehundredpxutils.xbmc.encode_child_url('search')
+    fivehundredpxutils.xbmc.add_dir('Search', url)
 
-    utils.xbmc.end_of_directory()
+    fivehundredpxutils.xbmc.end_of_directory()
 
 
 def categories():
@@ -120,17 +120,17 @@ def categories():
         'Wedding': 25,
     }
 
-    params = utils.xbmc.addon_params
+    params = fivehundredpxutils.xbmc.addon_params
     feature = params['feature']
 
-    url = utils.xbmc.encode_child_url('feature', feature=feature)
-    utils.xbmc.add_dir('All', url)
+    url = fivehundredpxutils.xbmc.encode_child_url('feature', feature=feature)
+    fivehundredpxutils.xbmc.add_dir('All', url)
 
     for category in sorted(categories):
-        url = utils.xbmc.encode_child_url('feature', feature=feature, category=category)
-        utils.xbmc.add_dir(category, url)
+        url = fivehundredpxutils.xbmc.encode_child_url('feature', feature=feature, category=category)
+        fivehundredpxutils.xbmc.add_dir(category, url)
 
-    utils.xbmc.end_of_directory()
+    fivehundredpxutils.xbmc.end_of_directory()
 
 
 try:
@@ -140,7 +140,7 @@ try:
         'search': search,
     }
 
-    params = utils.xbmc.addon_params
+    params = fivehundredpxutils.xbmc.addon_params
     mode_name = params['mode']
     modes[mode_name]()
 except KeyError:

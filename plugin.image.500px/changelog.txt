@@ -1,4 +1,6 @@
-Version 0.2.0 - 
+Version 0.2.1 - June 21, 2013
+- Rename module utils to resolve a confict. 
+Version 0.2.0 - June 19, 2013
 - Export features as directory rather than as a addon setting
 - Added python-500px dependency
 - Faster image list loading 

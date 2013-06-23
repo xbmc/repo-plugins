@@ -2,8 +2,8 @@
 Addon Functions
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '05-26-2013'
-__version__ = '0.0.10'
+__date__ = '06-15-2013'
+__version__ = '0.0.11'
 '''
 
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, urllib, urllib2, sys, time, datetime, buggalo
@@ -137,7 +137,7 @@ def retry(ExceptionToCheck, tries = 10, delay = 3, backoff = 1, logger = None):
 					break
 				except ExceptionToCheck, e:
 					if mtries >= 1:
-						msg = "%s, Retrying in %d seconds..." % (str(e), mdelay)
+						msg = "%s, Retrying in %s seconds..." % (str(e), mdelay)
 						if logger:
 							logger.warning(msg)
 						else:

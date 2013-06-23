@@ -1,3 +1,9 @@
+[B]Version 3.0.13[/B]
+
+- Updated addon to support recent website changes
+- Fixed 'ValueError' error
+- Fixed 'a number is required, not type' error
+
 [B]Version 3.0.12[/B]
 
 - Fixed 'ValueError' when loading Raw & Uncut

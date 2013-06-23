@@ -5,8 +5,8 @@ import simplejson as json
 plugin = 'TMZ'
 __author__ = 'stacked <stacked.xbmc@gmail.com>'
 __url__ = 'http://code.google.com/p/plugin/'
-__date__ = '05-26-2013'
-__version__ = '2.0.12'
+__date__ = '06-22-2013'
+__version__ = '2.0.13'
 settings = xbmcaddon.Addon( id = 'plugin.video.tmz' )
 dbg = False
 dbglevel = 3
@@ -42,7 +42,7 @@ def build_main_directory():
 	setViewMode("515")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
-@retry(IndexError, TypeError, ValueError)
+@retry((IndexError, TypeError, ValueError))
 def build_video_directory( name ):
 	data = getUrl( 'http://www.tmz.com/videos/', True )
 	textarea = '[{' + re.compile('{ name: \'' + name.upper() + '\',( )?\n         allInitialJson: {(.+?)},\n         (slug|noPaging)?', re.DOTALL).findall( data )[0][1].replace('\n', '').replace('results:','"results":') + '}]'
@@ -68,18 +68,23 @@ def build_video_directory( name ):
 		except:
 			date = '0000.00.00'
 		if videoUrl.find('http://cdnbakmi.kaltura.com') == -1:
-			if settings.getSetting("quality") == '0':
-				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + videoUrl.split('_')[0].split('/')[-1:][0] + '_' + videoUrl.split('_')[1]
-			else:
-				url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + videoUrl.split('_')[0].split('/')[-1:][0] + '_' + videoUrl.split('_')[1] + '/flavorId/0_' + videoUrl.split('_')[3]
-			infoLabels = { "Title": title, "Plot": title, "Duration": str(int(duration)/60), "aired": str(date) }
-			u = { 'mode': '1', 'name': title, 'url': url, 'studio': name, 'thumb': thumb }
-			addListItem(label = title, image = thumb, url = u, isFolder = False, totalItems = totalItems, infoLabels = infoLabels, fanart = fanart, duration = duration)
+			low_id =  videoUrl.split('_')[0].split('/')[-1:][0] + '_' + videoUrl.split('_')[1]
+			high_id = videoUrl.split('_')[0].split('/')[-1:][0] + '_' + videoUrl.split('_')[1] + '/flavorId/0_' + videoUrl.split('_')[3]
+		else:
+			low_id = videoUrl.split('/')[9]
+			high_id = videoUrl.split('/')[9] + '/flavorId/' + videoUrl.split('/')[11]
+		if settings.getSetting("quality") == '0':
+			url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + low_id
+		else:
+			url = 'http://cdnapi.kaltura.com/p/' + thumb.split('/')[4] + '/sp/' + thumb.split('/')[6] + '/playManifest/entryId/' + high_id
+		infoLabels = { "Title": title, "Plot": title, "Duration": str(int(duration)/60), "aired": str(date) }
+		u = { 'mode': '1', 'name': title, 'url': url, 'studio': name, 'thumb': thumb }
+		addListItem(label = title, image = thumb, url = u, isFolder = False, totalItems = totalItems, infoLabels = infoLabels, fanart = fanart, duration = duration)
 	xbmcplugin.addSortMethod( handle = int(sys.argv[1]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
 	setViewMode("503")
 	xbmcplugin.endOfDirectory( int( sys.argv[1] ) )
 
-@retry(IndexError, ValueError)	
+@retry((IndexError, ValueError))	
 def build_search_directory():
 	page = 1
 	checking = True

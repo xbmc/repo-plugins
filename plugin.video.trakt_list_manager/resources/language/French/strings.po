@@ -16,9 +16,29 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]Ajouter une nouvelle liste personnalisée[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]Ajouter un nouveau film[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "Afficher Watchlist"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "Afficher les listes personnalisées"
+
 msgctxt "#30100"
 msgid "Add-on Settings"
 msgstr "Paramètres de l'Extension"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "Effacer la liste"
 
 msgctxt "#30102"
 msgid "Delete Movie"
@@ -28,9 +48,17 @@ msgctxt "#30103"
 msgid "Show Movie Info"
 msgstr "Afficher les informations du Film"
 
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "S'il vous plaît entrer le titre du film"
+
 msgctxt "#30111"
 msgid "Please select the correct Movie"
 msgstr "Veuillez sélectionner le Film correct"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "S'il vous plaît sélectionner la liste"
 
 msgctxt "#30113"
 msgid "Delete Movie"
@@ -40,13 +68,25 @@ msgctxt "#30114"
 msgid "Are you sure to delete?"
 msgstr "Etes-vous sûr de vouloir effacer ?"
 
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "Effacer la liste"
+
 msgctxt "#30116"
 msgid "Are you sure to delete?"
 msgstr "Etes-vous sûr de vouloir effacer ?"
 
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "Ma Watchlist"
+
 msgctxt "#30120"
 msgid "Connection error"
 msgstr "Erreur de connexion"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "Mauvaise informations d'identification"
 
 msgctxt "#30122"
 msgid "Do you want to change them now?"
@@ -80,10 +120,26 @@ msgctxt "#30301"
 msgid "Password"
 msgstr "Mot de passe"
 
+msgctxt "#30302"
+msgid "Default List"
+msgstr "Liste par défaut"
+
 msgctxt "#30303"
 msgid "Use HTTPS"
 msgstr "Utiliser HTTPS"
 
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "Confidentialité par défaut des nouvelles listes"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "Privé"
+
 msgctxt "#30312"
 msgid "Friends"
 msgstr "Amis"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "Public"

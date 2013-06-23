@@ -53,6 +53,10 @@ msgctxt "#30103"
 msgid "Show Movie Info"
 msgstr ""
 
+msgctxt "#30104"
+msgid "Add Movie to CouchPotato"
+msgstr ""
+
 #empty strings from id 30104 to 30109
 #Dialogs
 

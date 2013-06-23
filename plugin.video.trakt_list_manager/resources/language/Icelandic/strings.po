@@ -16,6 +16,10 @@ msgstr ""
 "Language: is\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Stilling viðbóta"
+
 msgctxt "#30300"
 msgid "Username"
 msgstr "Notandanafn"
@@ -23,3 +27,7 @@ msgstr "Notandanafn"
 msgctxt "#30301"
 msgid "Password"
 msgstr "Lykilorð"
+
+msgctxt "#30303"
+msgid "Use HTTPS"
+msgstr "Nota HTTPS"

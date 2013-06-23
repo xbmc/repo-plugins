@@ -24,6 +24,8 @@ from resources.lib.api import TraktListApi, AuthenticationError, \
 API_KEY = '2ce240ab6543ebd7d84abe5268a822d5'
 WATCHLIST_SLUG = 'WATCHLIST'  # hacky but reduces code amount...
 
+CP_ADD_URL = 'plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=%s'
+
 STRINGS = {
     # Root menu entries
     'new_customlist': 30000,
@@ -35,6 +37,7 @@ STRINGS = {
     'delete_customlist': 30101,
     'delete_movie': 30102,
     'movie_info': 30103,
+    'add_to_cp': 30104,
     # Dialogs
     'enter_movie_title': 30110,
     'select_movie': 30111,
@@ -133,6 +136,10 @@ def show_customlist(list_slug):
                 )
             ),
             (
+                _('add_to_cp'),
+                'XBMC.RunPlugin(%s)' % CP_ADD_URL % imdb_id
+            ),
+            (
                 _('addon_settings'),
                 'XBMC.RunPlugin(%s)' % plugin.url_for(
                     endpoint='open_settings'
@@ -149,7 +156,7 @@ def show_customlist(list_slug):
     for item in items:
         item['context_menu'] = context_menu(
             list_slug=list_slug,
-            imdb_id=item.get('imdb_id', ''),
+            imdb_id=item['info'].get('code', ''),
             tmdb_id=item.get('tmdb_id', '')
         )
     plugin.set_content('movies')
@@ -184,6 +191,10 @@ def show_watchlist():
                 )
             ),
             (
+                _('add_to_cp'),
+                'XBMC.RunPlugin(%s)' % CP_ADD_URL % imdb_id
+            ),
+            (
                 _('addon_settings'),
                 'XBMC.RunPlugin(%s)' % plugin.url_for(
                     endpoint='open_settings'
@@ -194,7 +205,7 @@ def show_watchlist():
     items = format_movies(api.get_watchlist())
     for item in items:
         item['context_menu'] = context_menu(
-            imdb_id=item.get('imdb_id', ''),
+            imdb_id=item['info'].get('code', ''),
             tmdb_id=item.get('tmdb_id', '')
         )
     items.append({

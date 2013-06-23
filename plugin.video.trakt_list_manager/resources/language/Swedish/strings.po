@@ -16,9 +16,101 @@ msgstr ""
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "[B]Add new Custom List[/B]"
+msgstr "[B]Lägg till ny egen lista[/B]"
+
+msgctxt "#30001"
+msgid "[B]Add new Movie[/B]"
+msgstr "[B]Lägg till ny film[/B]"
+
+msgctxt "#30002"
+msgid "Show Watchlist"
+msgstr "Visa listan över sedda objekt"
+
+msgctxt "#30003"
+msgid "Show Custom Lists"
+msgstr "Visa egna listor"
+
+msgctxt "#30100"
+msgid "Add-on Settings"
+msgstr "Tilläggsinställningar"
+
+msgctxt "#30101"
+msgid "Delete List"
+msgstr "Ta bort lista"
+
+msgctxt "#30102"
+msgid "Delete Movie"
+msgstr "Ta bort film"
+
 msgctxt "#30103"
 msgid "Show Movie Info"
 msgstr "Visa filminformation"
+
+msgctxt "#30110"
+msgid "Please enter Movie title"
+msgstr "Ange filmtitel"
+
+msgctxt "#30111"
+msgid "Please select the correct Movie"
+msgstr "Välj korrekt film"
+
+msgctxt "#30112"
+msgid "Please select the List"
+msgstr "Välj lista"
+
+msgctxt "#30113"
+msgid "Delete Movie"
+msgstr "Ta bort film"
+
+msgctxt "#30114"
+msgid "Are you sure to delete?"
+msgstr "Är du säker att du vill ta bort?"
+
+msgctxt "#30115"
+msgid "Delete List"
+msgstr "Ta bort lista"
+
+msgctxt "#30116"
+msgid "Are you sure to delete?"
+msgstr "Är du säker att du vill ta bort?"
+
+msgctxt "#30117"
+msgid "My Watchlist"
+msgstr "Min lista över sedda objekt"
+
+msgctxt "#30120"
+msgid "Connection error"
+msgstr "Anslutningsfel"
+
+msgctxt "#30121"
+msgid "Wrong User-Credentials"
+msgstr "Felaktiga användaruppgifter"
+
+msgctxt "#30122"
+msgid "Do you want to change them now?"
+msgstr "Vill du ändra dem nu?"
+
+msgctxt "#30130"
+msgid "No Movie found"
+msgstr "Ingen film hittades"
+
+msgctxt "#30131"
+msgid "Success"
+msgstr "Lyckades"
+
+msgctxt "#30140"
+msgid "Please use context menu"
+msgstr "Använd innehållsmenyn"
+
+msgctxt "#30141"
+msgid "You need to open the context-menu"
+msgstr "Du måste öppna innehållsmenyn"
+
+msgctxt "#30142"
+msgid "to choose the action you want"
+msgstr "för att välja vilken händelse du vill ha"
 
 msgctxt "#30300"
 msgid "Username"
@@ -28,10 +120,26 @@ msgctxt "#30301"
 msgid "Password"
 msgstr "Lösenord"
 
+msgctxt "#30302"
+msgid "Default List"
+msgstr "Standardlista"
+
 msgctxt "#30303"
 msgid "Use HTTPS"
 msgstr "Använd HTTPS"
 
+msgctxt "#30310"
+msgid "Default Privacy for new Lists"
+msgstr "Standardrättigheter för nya listor"
+
+msgctxt "#30311"
+msgid "Private"
+msgstr "Privat"
+
 msgctxt "#30312"
 msgid "Friends"
 msgstr "Vänner"
+
+msgctxt "#30313"
+msgid "Public"
+msgstr "Publik"

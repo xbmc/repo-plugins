@@ -112,6 +112,14 @@ msgctxt "#30130"
 msgid "Movie added"
 msgstr "Προστέθηκε η Ταινία"
 
+msgctxt "#30131"
+msgid "No Movie found"
+msgstr "Δε βρέθηκε καμιά Ταινία"
+
+msgctxt "#30132"
+msgid "Success"
+msgstr "Επιτυχία"
+
 msgctxt "#30140"
 msgid "Please use context menu"
 msgstr "Χρησιμοποιήστε το μενού επιλογών"
@@ -179,6 +187,10 @@ msgstr "Κλειδί Api"
 msgctxt "#30306"
 msgid "Set default profile"
 msgstr "Ορισμός προεπιλεγμένου προφίλ"
+
+msgctxt "#30307"
+msgid "Url Base (for use with mod_proxy)"
+msgstr "Βάση Url (για χρήση με mod_proxy)"
 
 msgctxt "#30310"
 msgid "You only need username/password OR Api Key!"

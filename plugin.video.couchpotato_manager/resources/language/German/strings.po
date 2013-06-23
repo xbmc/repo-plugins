@@ -112,6 +112,14 @@ msgctxt "#30130"
 msgid "Movie added"
 msgstr "Film hinzugefügt"
 
+msgctxt "#30131"
+msgid "No Movie found"
+msgstr "Kein Film gefunden"
+
+msgctxt "#30132"
+msgid "Success"
+msgstr "Erfolgreich"
+
 msgctxt "#30140"
 msgid "Please use context menu"
 msgstr "Bitte benutze das Kontext-Menu"
@@ -179,6 +187,10 @@ msgstr "Api Key"
 msgctxt "#30306"
 msgid "Set default profile"
 msgstr "Default Profil setzen"
+
+msgctxt "#30307"
+msgid "Url Base (for use with mod_proxy)"
+msgstr "Basis-URL (zur Verwendung mit mod_proxy)"
 
 msgctxt "#30310"
 msgid "You only need username/password OR Api Key!"

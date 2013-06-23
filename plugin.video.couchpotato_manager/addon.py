@@ -455,7 +455,9 @@ def get_api():
                 username=plugin.get_setting('username', unicode),
                 password=plugin.get_setting('password', unicode),
                 api_key=plugin.get_setting('api_key', str),
-                url_base=plugin.get_setting('url_base', str)
+                url_base=plugin.get_setting('url_base', str),
+                ba_username=plugin.get_setting('ba_username', unicode),
+                ba_password=plugin.get_setting('ba_password', unicode),
             )
         except AuthenticationError:
             try_again = xbmcgui.Dialog().yesno(
@@ -490,7 +492,7 @@ def log(text):
 
 def _(string_id):
     if string_id in STRINGS:
-        return plugin.get_string(STRINGS[string_id])
+        return plugin.get_string(STRINGS[string_id]).encode('utf-8')
     else:
         log('String is missing: %s' % string_id)
         return string_id

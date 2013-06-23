@@ -214,7 +214,27 @@ msgctxt "#30307"
 msgid "Url Base (for use with mod_proxy)"
 msgstr ""
 
-#empty strings from id 30308 to 30309
+msgctxt "#30308"
+msgid "General"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30310"
+msgid "API-Key"
+msgstr ""
+
+msgctxt "#30311"
+msgid "Basic Auth Username"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Basic Auth Password"
+msgstr ""
+
+#empty strings from id 30310 to 30309
 
 msgctxt "#30310"
 msgid "You only need username/password OR Api Key!"

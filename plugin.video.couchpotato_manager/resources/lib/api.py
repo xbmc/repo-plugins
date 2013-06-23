@@ -17,6 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+import base64
 import json
 from urllib import urlencode
 from urllib2 import urlopen, Request, HTTPError, URLError
@@ -49,7 +50,8 @@ class CouchPotatoApi():
         self.api_key = None
 
     def connect(self, hostname, port, use_https=False,
-                username=None, password=None, api_key=None, url_base=None):
+                username=None, password=None, api_key=None, url_base=None,
+                ba_username=None, ba_password=None):
         self.log(
             'connect: hostname="%s" port="%s" use_https="%s" username="%s" '
             'api_key="%s" url_base="%s"'
@@ -63,6 +65,8 @@ class CouchPotatoApi():
         self.username = username
         self.password = password
         self.api_key = api_key
+        self.ba_username = ba_username
+        self.ba_password = ba_password
         if self.api_key:
             self.log('trying api_key...')
             try:
@@ -142,7 +146,7 @@ class CouchPotatoApi():
         }
         url = '%s/getkey/?%s' % (self._api_url, urlencode(params))
         try:
-            json_data = json.loads(urlopen(Request(url)).read())
+            json_data = json.loads(urlopen(self._request(url)).read())
         except URLError:
             raise ConnectionError
         if json_data.get('success') and json_data.get('api_key'):
@@ -159,8 +163,7 @@ class CouchPotatoApi():
             url += '?%s' % urlencode(params)
         # self.log('_api_call using url: %s' % url)
         try:
-            response = urlopen(Request(url))
-            json_data = json.loads(urlopen(Request(url)).read())
+            json_data = json.loads(urlopen(self._request(url)).read())
         except HTTPError, error:
             self.log('__urlopen HTTPError: %s' % error)
             if error.fp.read() == 'Wrong API key used':
@@ -172,6 +175,18 @@ class CouchPotatoApi():
             raise ConnectionError
         # self.log('_api_call response: %s' % repr(json_data))
         return json_data
+
+    def _request(self, url):
+        request = Request(url)
+        if self.ba_username and self.ba_password:
+            request.add_header(
+                'Authorization',
+                'Basic %s' % base64.encodestring('%s:%s' % (
+                    self.ba_username,
+                    self.ba_password)
+                ).replace('\n', '')
+            )
+        return request
 
     @property
     def _api_url(self):

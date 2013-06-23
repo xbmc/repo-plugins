@@ -20,6 +20,10 @@ msgctxt "#30000"
 msgid "All Movies"
 msgstr "Todos os Filmes"
 
+msgctxt "#30001"
+msgid "Add new Movie to Wanted-list"
+msgstr "Adicionar novo Filme à Lista de Procura"
+
 msgctxt "#30002"
 msgid "Wanted Movies"
 msgstr "Filmes Desejados"
@@ -27,6 +31,10 @@ msgstr "Filmes Desejados"
 msgctxt "#30003"
 msgid "Done Movies"
 msgstr "Filmes Concluídos"
+
+msgctxt "#30004"
+msgid "Status List"
+msgstr "Lista de Estados"
 
 msgctxt "#30100"
 msgid "Add-on Settings"
@@ -96,9 +104,21 @@ msgctxt "#30122"
 msgid "Wrong Network Settings or CP not running."
 msgstr "Erro nas Definições de Rede ou o CP não está activo"
 
+msgctxt "#30123"
+msgid "Do you want to change them now?"
+msgstr "Quer alterar agora?"
+
 msgctxt "#30130"
 msgid "Movie added"
 msgstr "Filme adicionado"
+
+msgctxt "#30131"
+msgid "No Movie found"
+msgstr "Nenhum Filme encontrado"
+
+msgctxt "#30132"
+msgid "Success"
+msgstr "Sucesso"
 
 msgctxt "#30140"
 msgid "Please use context menu"
@@ -115,6 +135,22 @@ msgstr "para escolher a acção que pretende"
 msgctxt "#30150"
 msgid "Type"
 msgstr "Tipo"
+
+msgctxt "#30151"
+msgid "Provider"
+msgstr "Fornecedor"
+
+msgctxt "#30152"
+msgid "Provider-Extra"
+msgstr "Fornecedor-Extra"
+
+msgctxt "#30153"
+msgid "Age"
+msgstr "Idade"
+
+msgctxt "#30154"
+msgid "Seeder/Leecher"
+msgstr "Seeder/Leecher"
 
 msgctxt "#30155"
 msgid "Size (MB)"
@@ -151,6 +187,10 @@ msgstr "Chave Api"
 msgctxt "#30306"
 msgid "Set default profile"
 msgstr "Definir perfil padrão"
+
+msgctxt "#30307"
+msgid "Url Base (for use with mod_proxy)"
+msgstr "Base Url (para usar com mod_proxy)"
 
 msgctxt "#30310"
 msgid "You only need username/password OR Api Key!"

@@ -108,6 +108,10 @@ msgctxt "#30130"
 msgid "Movie added"
 msgstr "Película añadida"
 
+msgctxt "#30131"
+msgid "No Movie found"
+msgstr "Película no encontrada"
+
 msgctxt "#30140"
 msgid "Please use context menu"
 msgstr "Por favor, usa el menú contextual"

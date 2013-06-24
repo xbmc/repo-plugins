@@ -17,6 +17,7 @@ cookie_file = os.path.join(profile, 'cookie_file')
 fanart = os.path.join(home, 'fanart.jpg')
 fanart1 = 'http://mlbmc-xbmc.googlecode.com/svn/icons/fanart1.jpg'
 fanart2 = 'http://mlbmc-xbmc.googlecode.com/svn/icons/fanart2.jpg'
+icon = os.path.join(home, 'icon.png')
 addon_version = addon.getAddonInfo('version')
 debug = addon.getSetting('debug')
 cookie_jar = cookielib.LWPCookieJar(cookie_file)

@@ -110,7 +110,7 @@ class Main:
 		
 			listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail )
 			xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
-			listitem.setInfo( "video", { "Title": title, "Studio" : "Gamekings", "Plot" : plot, "Genre" : genre } )
+			listitem.setInfo( "video", { "Title": title, "Studio" : "Teamhww", "Plot" : plot, "Genre" : genre } )
 			playlist.add( video_url, listitem )
 	
 			# Close wait dialog

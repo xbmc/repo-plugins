@@ -17,7 +17,7 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.teamhww"
-__date__        = "10 may 2013"
+__date__        = "23 june 2013"
 __version__     = "1.0.0"
 
 #
@@ -46,7 +46,7 @@ if len(sys.argv[2]) == 0:
     #
     if (DEBUG) == 'true':
         xbmc.log( "[ADDON] %s v%s (%s) is starting, ARGV = %s" % ( __addon__, __version__, __date__, repr(sys.argv) ), xbmc.LOGNOTICE )
-    import teamhww_main as plugin
+    import teamhww_list as plugin
 else:
     action = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['action'][0]
     #

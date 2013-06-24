@@ -134,9 +134,13 @@ def mlbGame(event_id, full_count=False):
     soup = BeautifulStoneSoup(data)
     status = soup.find('status-code').string
     if status != "1":
-        error_str = SOAPCODES[status]
+        try:
+            error_str = SOAPCODES[status]
+        except:
+            error_str = 'Unknown Error'
+        addon_log(error_str)
         if not full_count:
-            if login == old and error_str == 'Identity Error':
+            if login == 'old':
                 cookie_jar.clear()
                 login = mlb_login()
             if not login:
@@ -386,6 +390,7 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
             addon_log( 'final url: '+final_url )
         item = xbmcgui.ListItem(path=final_url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
 
 
 

@@ -1,6 +1,7 @@
 ﻿import urllib
 import sys
 import os
+import re
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -31,12 +32,13 @@ if debug == 'true':
 
 
 def categories():
+    ''' initial directory listing, mode None '''
     thumb_path = 'http://mlbmc-xbmc.googlecode.com/svn/icons/'
     addDir(language(30000),'',3,thumb_path+'mlb.tv.png')
     addDir(language(30001),'',13,thumb_path+'condensed.png')
     addDir(language(30002),'',23,thumb_path+'fullcount.png')
-    addDir(language(30003),'http://www.mlb.com/video/',18,thumb_path+'playlist.png')
-    addPlaylist(language(30004),'http://mlb.mlb.com/video/play.jsp?tcid=mm_mlb_vid',12,thumb_path+'latestvid.png')
+    addDir(language(30003),'http://wapc.mlb.com/play',18,thumb_path+'playlist.png')
+    addPlaylist(language(30004),'play_latest_videos',12,thumb_path+'latestvid.png')
     addDir(language(30005),'add_playlist',4,thumb_path+'tvideo.png')
     addDir(language(30006),'',17,thumb_path+'highlights.png')
     addDir(language(30007),'',22,thumb_path+'podcast.png')
@@ -44,82 +46,112 @@ def categories():
     addDir(language(30009),'',16,thumb_path+'search.png')
 
 
-def mlb_playlist(url):
+def get_playlist_page(url):
+    ''' This function returns a dict of category playlist from the given url '''
     soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-    try:
-        thumb_string = soup.find('div', attrs={'id': "promoFeature"})['style']
-        thumbnail = re.findall('background:url\((.+?)\)', thumb_string)[0]
-    except:
-        thumbnail = ''
-    cats = soup.find('div', attrs={'id': "videoBrowseNav"})
-    categories = cats('li', attrs={'class': 'category'})
-    topics = cats('li', attrs={'class': 'topic'})
-    topic_list = []
-    for i in topics:
-        name = i.a.string
-        topic_id = i.a['rel']
-        topic_list.append((name, topic_id))
-    cates = {}
-    for i in categories:
-        title = i.a.string
-        if title == 'Players':
-            if 'c_id=' in url:
-                team_id = url.split('c_id=')[1]
-                topic_list.append((title, team_id))
+    cats = soup.find('div', attrs={'id': "browse-menu", 'class': "benton"})
+    items = cats('ul', attrs={'class': "browse-categories "})[0]('li')
+    categories = {'topics': [], 'sub_categories': {}}
+    for i in items:
+        if 'topic' in i['class']:
+            categories['topics'].append((i.span.string, i['data-id']))
         else:
-            cates[title] = []
-            items = i.ul('a')
-            for item in items:
-                if item['rel']:
-                    cates[title].append((item.string, item['rel']))
-    return {'thumbnail': thumbnail, 'playlist': topic_list, 'categories': cates}
+            sub_cat = cats.find('ul', attrs={'id': i['data-id']})
+            name = sub_cat['data-catheadline']
+            sub_items = sub_cat('li')
+            categories['sub_categories'][name] = []
+            for item in sub_items:
+                categories['sub_categories'][name].append((item.span.string, item['data-id']))
+    categories['playlist'] = {'main_topic': {'videos': []}}
+    carousel_topics = soup.findAll('div', attrs={'class': "carousel topic"})
+    mp_items = soup.h4.findNextSibling()('div', attrs={'class': 'item'})
+    for i in mp_items:
+        categories['playlist']['main_topic']['videos'].append((i.p.string, i['data-cid'], i.img['data-lazy-src'].split('_th_')[0] + '_th_13.jpg'))
+    for i in carousel_topics:
+        try:
+            thumb = re.findall('url\((.+?)\)', i.div.div['style'])[0]
+        except:
+            try:
+                thumb = i.img['src']
+            except:
+                addon_log('thumb exception')
+        href = i.a['href']
+        vid_list = []
+        topic_items = i('div', attrs={'class': "page topic item"})
+        for item in topic_items:
+            vids = item('li')
+            for x in vids:
+                content_id = x.a['href'].split('content_id=')[1].split('&')[0]
+                vid_list.append((x.find('span', attrs={'class': "headline"}).string, content_id, x.img['data-lazy-src'].split('_th_')[0] + '_th_13.jpg'))
+        categories['playlist'][i.h4.string] = {'thumb': thumb, 'href': href, 'videos': vid_list}
+    return categories
 
 
 def cache_playlist_categories():
-    return mlb_playlist('http://www.mlb.com/video/')
+    ''' helper function to cache the main playlist categories '''
+    return get_playlist_page('http://wapc.mlb.com/play')
 
 
 def cache_current_playlist(url):
-    p_dict = mlb_playlist(url)
+    p_dict = get_playlist_page(url)
     cache.set('current', repr(p_dict))
     return p_dict
 
 
 def get_mlb_playlist(url, name=None):
-    categories = None
+    ''' mode 18-19, adds a directory of playlist categories '''
     thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/playlist.png'
-    if name is None:
-        if url == 'http://www.mlb.com/video/':
-            data = cache.cacheFunction(cache_playlist_categories)
-            addDir('Teams', 'get_playlist', 4, thumb)
-        else:
-            data = cache_current_playlist(url)
-        items = data['playlist']
-        categories = data['categories']
-        # thumb = data['thumbnail']
+    if url == 'http://wapc.mlb.com/play':
+        data = cache.cacheFunction(cache_playlist_categories)
+        main_page = 'True'
+        if name is None:
+            addDir(language(30010), 'get_playlist', 4, thumb)
+            addDir(language(30011), 'browse_categories', 28, thumb)
     else:
-        if url == 'http://www.mlb.com/video/':
-            data = cache.cacheFunction(cache_playlist_categories)
-            items = data['categories'][name]
-            # thumb = data['thumbnail']
-        else:
-            data = eval(cache.get('current'))
-            items = data['categories'][name]
-            # thumb = data['thumbnail']
+        data = cache_current_playlist(url)
+        main_page = 'False'
+        if name:
+            try:
+                team = [i for i in TeamCodes.values() if i[0] == name][0]
+            except:
+                team = None
+            if team:
+                addDir(language(30012), team[1], 20, thumb)
+    addDir(language(30013), 'main_topic', 24, thumb, main_page)
+    for i in data['playlist'].keys():
+        if i != 'main_topic':
+            addDir(i, i, 24, data['playlist'][i]['thumb'], main_page)
 
+
+def get_topic_playlist(topic, main_page):
+    ''' mode 24, adds topic listing of playlist videos '''
+    if main_page:
+        data = cache.cacheFunction(cache_playlist_categories)
+    else:
+        data = eval(cache.get('current'))
+    for i in data['playlist'][topic]['videos']:
+        mm_url = 'http://wapc.mlb.com/gen/multimedia/detail/%s/%s/%s/%s.xml' %(i[1][-3], i[1][-2], i[1][-1], i[1])
+        addLink(i[0], mm_url, '', 2, i[2])
+
+
+def get_playlist_cats(subcat=False):
+    ''' mode 28-29, add directories for browse all playlist '''
+    thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/playlist.png'
+    data = cache.cacheFunction(cache_playlist_categories)
+    if subcat:
+        items = data['sub_categories'][subcat]
+    else:
+        items = data['topics']
     for title, item_id in items:
-        mode = 1
-        if title == 'Players':
-            mode = 20
-        addDir(title, item_id, mode, thumb)
-    if categories:
-        for i in categories.keys():
-            addDir(i , url, 19, thumb)
+        addDir(title, item_id, 1, thumb)
+    if not subcat:
+        for i in data['sub_categories'].keys():
+            addDir(i , i, 29, thumb)
 
 
-def get_players(c_id):
+def get_players(team_ab):
     roster_url = ('http://www.mlb.com/lookup/json/named.roster_active_mlb.bam?'
-                   'status=%27A%27&status=%27D15%27&file_code=%27'+c_id+'%27')
+                   'status=%27A%27&status=%27D15%27&file_code=%27'+team_ab+'%27')
     data = json.loads(getRequest(roster_url))
     items = data['roster_active_mlb']['queryResults']['row']
     for i in items:
@@ -130,6 +162,7 @@ def get_players(c_id):
 
 
 def gameCalender(game_type, start_date=None):
+    ''' mode 13-15, adds calander directory of 10 days from start_date '''
     base = 'http://mlb.mlb.com/gdcross/components/game/mlb/'
     if game_type == 'mlbtv':
         thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/mlb.tv.png'
@@ -155,6 +188,8 @@ def gameCalender(game_type, start_date=None):
 
 
 def getDays(start_date):
+    ''' helper function for gameCalender
+        returns a list of formatted date strings from the start_date - 10 days '''
     pattern = "%B %d, %Y - %A"
     url_pattern = "year_%Y/month_%m/day_%d"
     one_day = timedelta(days=1)
@@ -166,6 +201,7 @@ def getDays(start_date):
 
 
 def mlb_podcasts():
+    ''' mode 22 '''
     thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/podcast.png'
     addDir(language(30020),'http://mlb.mlb.com/feed/podcast/c1261158.xml',10,thumb)
     addDir(language(30021),'http://mlb.mlb.com/feed/podcast/c1265860.xml',10,thumb)
@@ -177,6 +213,7 @@ def mlb_podcasts():
 
 
 def get_podcasts(url):
+    ''' mode 10, parse the podcast feed '''
     soup = BeautifulStoneSoup(getRequest(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
     items = soup('item')
     thumb = soup.find('itunes:image')['href']
@@ -191,9 +228,10 @@ def get_podcasts(url):
 
 
 def getTeams(mode):
+    ''' mode 4 '''
     for name, c_id in TeamCodes.values():
         if mode == 'get_playlist':
-            addDir(name, 'http://www.mlb.com/video/index.jsp?c_id='+c_id, 18, icon)
+            addDir(name, 'http://wapc.mlb.com/%s/play/?c_id=%s' %(c_id, c_id), 19, icon)
         elif mode == 'add_playlist':
             addPlaylist(name, c_id, 5, 'http://mlbmc-xbmc.googlecode.com/svn/icons/tvideo.png')
 
@@ -208,14 +246,15 @@ def getRealtimeVideo(url):
             url = vidId[-3]+'/'+vidId[-2]+'/'+vidId[-1]+'/'+vidId
             duration = video.duration.string
             thumb = video.thumb.string
-            addLink(name,'http://mlb.mlb.com/gen/multimedia/detail/'+url+'.xml',duration,2,thumb)
+            addLink(name,'http://wapc.mlb.com/gen/multimedia/detail/'+url+'.xml',duration,2,thumb)
     except:
         pass
 
 
-def getTeamVideo(url):
+def getTeamVideo(team_id):
+    ''' mode 5, adds and plays the playlist from the given team_id '''
     xbmc.executebuiltin("XBMC.Notification("+language(30035)+","+language(30036)+",5000,"+icon+")")
-    url='http://mlb.mlb.com/gen/'+url+'/components/multimedia/topvideos.xml'
+    url='http://mlb.mlb.com/gen/'+team_id+'/components/multimedia/topvideos.xml'
     soup = BeautifulStoneSoup(getRequest(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
     videos = soup('item')
     playlist = xbmc.PlayList(1)
@@ -223,7 +262,12 @@ def getTeamVideo(url):
     for video in videos:
         name = video('title')[0].string
         thumb = video('picture', attrs={'type' : "dam-raw-thumb"})[0]('url')[0].string
-        if video('url', attrs={'speed' : "1200"}):
+        if addon.getSetting('use_hls') == 'true':
+            if video('url', attrs={'speed' : "102"}):
+                url = video('url', attrs={'speed' : "102"})[0].string
+        elif video('url', attrs={'speed' : "1800"}):
+            url = video('url', attrs={'speed' : "1800"})[0].string
+        elif video('url', attrs={'speed' : "1200"}):
             url = video('url', attrs={'speed' : "1200"})[0].string
         elif video('url', attrs={'speed' : "1000"}):
             url = video('url', attrs={'speed' : "1000"})[0].string
@@ -237,46 +281,39 @@ def getTeamVideo(url):
 
 
 def playLatest(url):
+    ''' mode 12, adds and plays a playlist of the latest highlights '''
     xbmc.executebuiltin("XBMC.Notification("+language(30035)+","+language(30036)+",5000,"+icon+")")
-    headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0',
-               'Referer' : 'http://mlb.mlb.com/video/play.jsp?cid=mlb'}
-    soup = BeautifulSoup(getRequest(url,None,headers), convertEntities=BeautifulSoup.HTML_ENTITIES)
-    videos = soup.find('div', attrs={'id' : "playlistWrap"})('li')
+    data = cache.cacheFunction(cache_playlist_categories)
     playlist = xbmc.PlayList(1)
     playlist.clear()
-    for video in videos:
-        name = video('p')[0].string
-        try:
-            thumb = video('img')[0]['data-src']
-        except:
-            thumb = video('img')[0]['src']
-        content = video('a')[0]['rel']
-        url = content[-3]+'/'+content[-2]+'/'+content[-1]+'/'+content
-        url = getVideoURL('http://mlb.mlb.com/gen/multimedia/detail/'+url+'.xml')
-        info = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=thumb)
-        playlist.add(url, info)
+    for i in data['playlist']['main_topic']['videos']:
+        mm_url = getVideoURL('http://wapc.mlb.com/gen/multimedia/detail/%s/%s/%s/%s.xml' %(i[1][-3], i[1][-2], i[1][-1], i[1]))
+        info = xbmcgui.ListItem(i[0], iconImage="DefaultVideo.png", thumbnailImage=i[2])
+        playlist.add(mm_url, info)
     play = xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 
 def getVideos(url, page=False):
+    ''' mode 1, add videos listing'''
     if not page:
         xml_url = None
         search_url = None
-        if not url.startswith('http://'):
-            topic_url = 'http://www.mlb.com/gen/multimedia/topic/'+url+'.xml'
+        if 'MediaSearchService' in url:
+            search_url = url
+        elif not url.startswith('http://'):
+            topic_url = 'http://wapc.mlb.com/gen/multimedia/topic/'+url+'.xml'
             soup = BeautifulStoneSoup(getRequest(topic_url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+            try:
+                xml_url = soup.video_index['src']
+                if len(xml_url) < 10:
+                    xml_url = None
+            except:
+                pass
             try:
                 search_query = soup.search_query.string
                 search_url = 'http://www.mlb.com/ws/search/MediaSearchService?&'+search_query+'&hitsPerPage='+soup.topic['maxitems']+'&src=vpp'
             except:
-                pass
-            try:
-                xml_url = soup.video_index['src']
-            except:
-                pass
-
-        if 'MediaSearchService' in url:
-            search_url = url
+                search_url = None
 
         if search_url:
             data = json.loads(getRequest(search_url))
@@ -285,7 +322,7 @@ def getVideos(url, page=False):
                 total = data['end']
                 if total > 20:
                     cache.set('current_playlist', repr(data))
-                    items = get_playlist_page(0)
+                    items = get_next_playlist_page(0)
                 else:
                     items = (data['mediaContent'], False)
             elif xml_url:
@@ -296,7 +333,7 @@ def getVideos(url, page=False):
             addon_log('Did not find playlist source')
             return
     else:
-        items = get_playlist_page(page)
+        items = get_next_playlist_page(page)
 
     for i in items[0]:
         name = i['blurb']
@@ -311,7 +348,7 @@ def getVideos(url, page=False):
         addDir(language(30034), str(page+1), 21, next_icon)
 
 
-def get_playlist_page(page):
+def get_next_playlist_page(page):
     data = eval(cache.get('current_playlist'))
     if data['end'] > (page*20)+20:
         end = (page*20)+20
@@ -323,8 +360,9 @@ def get_playlist_page(page):
     return (items, more)
 
 
-def setVideoURL(link, podcasts=False):
-    if podcasts:
+def setVideoURL(link, direct=False):
+    ''' mode 2, set resolved url '''
+    if direct:
         url = link
     else:
         url = getVideoURL(link)
@@ -333,10 +371,13 @@ def setVideoURL(link, podcasts=False):
 
 
 def getVideoURL(url):
+    ''' parses the given xml url, returns the actual video url ''' 
     soup = BeautifulStoneSoup(getRequest(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
     if addon.getSetting('use_hls') == 'true':
         if soup.find('url', attrs={'playback_scenario' : "HTTP_CLOUD_TABLET"}):
             url = soup.find('url', attrs={'playback_scenario' : "HTTP_CLOUD_TABLET"}).string
+    elif soup.find('url', attrs={'playback_scenario' : "FLASH_1800K_960X540"}):
+        url = soup.find('url', attrs={'playback_scenario' : "FLASH_1800K_960X540"}).string
     elif soup.find('url', attrs={'playback_scenario' : "FLASH_1200K_640X360"}):
         url = soup.find('url', attrs={'playback_scenario' : "FLASH_1200K_640X360"}).string
     elif soup.find('url', attrs={'playback_scenario' : "FLASH_1000K_640X360"}):
@@ -351,6 +392,7 @@ def getVideoURL(url):
 
 
 def getCondensedGames(url):
+    ''' mode 14, adds a directory of condensed games from a specific date '''
     data = json.loads(getRequest(url))
     addon_log('CondensedGames Data: %s' %data)
     items = data['data']['games']['game']
@@ -373,6 +415,7 @@ def getCondensedGames(url):
 
 
 def gameHighlights():
+    ''' mode 17, adds a calandar directory for game specific highlights '''
     thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png'
     days = getDays(datetime.today())
     for i in days:
@@ -380,6 +423,7 @@ def gameHighlights():
 
 
 def getGameHighlights(dstr):
+    ''' mode 26, adds a directory of games for the given date '''
     base = 'http://www.mlb.com/gdcross/components/game/mlb/'
     thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/highlights.png'
     try:
@@ -467,7 +511,7 @@ def getFullCount():
             mode = '25'
             is_playable = True
         else:
-            mode = '24'
+            mode = '30'
             is_playable = False
             try:
                 dt = time.strptime(event_date[:-5], "%Y-%m-%dT%H:%M:%S")

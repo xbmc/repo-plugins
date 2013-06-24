@@ -33,6 +33,7 @@ LIBNAME = 'neterratv'
 class handles html get and post for neterratv website
 '''
 class neterra:
+        
     #static values
     CLASSNAME = 'neterra'
     PLUGINID = 'plugin.video.neterratv'
@@ -62,19 +63,18 @@ class neterra:
     USEROPTIONMUSICISSUES = 'type_view=music_issues&choice_view=1' #sets view to small icons
     USEROPTIONTIMESHIFT = 'type_view=timeshift&choice_view=1' #sets view to small icons
     DEFAULTPOSTSETTINGS = 'offset=0&category=&date=&text=' #default options
-    ISLOGGEDINSTR = '<form method="POST" action="http://www.neterra.tv/user/login_page" id="login_fail_form">' #string to check if user is logged in
-    
     #flashplayer settings
-    SWFBUFFERDEFAULT = 'buffer=3000'        
-    SWFPLAYERURL = 'swfUrl=http://www.neterra.tv/players/players/flowplayer/flowplayer.rtmp-3.2.10.swf' #url to flash player
-    
+    SWFPLAYERURL = 'swfurl=http://www.neterra.tv/players/flowplayer/flowplayer.commercial-3.2.16.swf' 
+    SWFBUFFERDEFAULT = 'buffer=3000'
+    SWFPAGEURL='pageurl=http://www.neterra.tv/content'
+    ISLOGGEDINSTR = '<form method="POST" action="http://www.neterra.tv/user/login_page" id="login_fail_form">' #string to check if user is logged in
     #globals variables
     __cj__ = None
     __cookiepath__ = None
     __isLoggedIn__ = None
     __username__ = None
     __password__ = None    
-    
+
     '''
 method for logging
 '''
@@ -649,31 +649,33 @@ returns true if login successful
     plays live stream
 '''
 def playLiveStream(tv_username, tv_password, url):
-    log('Start playLiveStream')
-    #get a neterra class
-    Neterra = neterra(tv_username, tv_password)    
-    html=Neterra.getTVStream(url)
-    log(html)
-    #parse html for flashplayer link
-    startpoint = html.find('rtmp')
-    endpoint = html.find('file_link')-3
-    #remove crap from string
-    rtmp = html[startpoint:endpoint]                
-    rtmp = rtmp.replace('\\','')    
-    startpoint = html.find('file_link')+len('file_link')+3
-    endpoint = html.find(',',startpoint)-1
-    playpath = html[startpoint:endpoint]
-    #log some details
-    log('playpath: ' + playpath)
-    log('rtmp: ' + rtmp)        
-    #url=rtmp+' '+ neterra.SWFPLAYERURL+' playpath='+playpath+' live=1 '+neterra.SWFBUFFERDEFAULT +' conn=O:1 conn=NN:capabilities:239 conn=O:1 conn=NN:audioCodecs:3575 conn=O:1 conn=NN:videoCodecs:252 conn=O:1 conn=NN:videoFunction:1 conn=O:1 conn=NN:objectEncoding:3 conn=O:1 conn=NS:flashVer:3:WIN 11,6,602,180' #conn=O:0'
-    url=rtmp+' '+ neterra.SWFPLAYERURL+' playpath='+playpath+' live=1 '+neterra.SWFBUFFERDEFAULT
-    #call player
-    xbmc.Player().play(url)
-    log('URL: ' + url)
-    log('Finished playLiveStream')
-    html=''
-    return html
+	log('Start playLiveStream')
+	#get a neterra class
+	Neterra = neterra(tv_username, tv_password)    
+	html=Neterra.getTVStream(url)
+	log(html)
+	#parse html for flashplayer link
+	startpoint = html.find('rtmp')
+	endpoint = html.find('file_link')-3
+	#remove crap from string
+	rtmp = html[startpoint:endpoint]                
+	rtmp = rtmp.replace('\\','')    
+	startpoint = rtmp.find('/rtplive')
+	endpoint = len(rtmp)
+	app = rtmp[startpoint+1:endpoint]
+	startpoint = html.find('file_link')+len('file_link')+3
+	endpoint = html.find(',',startpoint)-1
+	playpath = html[startpoint:endpoint]
+	#log some details
+	log('playpath: ' + playpath)
+	log('rtmp: ' + rtmp)        
+	url=rtmp+' '+ neterra.SWFPLAYERURL+' playpath='+playpath+' '+neterra.SWFPAGEURL+' live=1 '+neterra.SWFBUFFERDEFAULT
+	#call player
+	xbmc.Player().play(url)
+	log('URL: ' + url)
+	log('Finished playLiveStream')
+	html=''
+	return html
 
 '''
     play issue stream
@@ -704,7 +706,7 @@ def playIssueStream(tv_username, tv_password, url):
     log('app: ' +app)
     log('tcUrl: '+tcUrl)
     #ensure app name is given as there rtmplib has problems to parse information from rtmp string
-    url=rtmp+' app='+app+' tcUrl='+tcUrl+' '+neterra.SWFPLAYERURL+' playpath='+playpath+' live=0 ' + neterra.SWFBUFFERDEFAULT
+    url=rtmp+' app='+app+' tcUrl='+tcUrl+' '+neterra.SWFPLAYERURL+' playpath='+playpath+' '+neterra.SWFPAGEURL+' live=0 ' + neterra.SWFBUFFERDEFAULT
     #call player
     xbmc.Player().play(url)
     log('URL: ' + url)

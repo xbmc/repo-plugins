@@ -1,4 +1,9 @@
-2.0.1
+2.0.2 (24.06.2013)
+ added translations
+ changed default video quality to HQ
+ fixed potential plugin error
+
+2.0.1 (23.03.2013)
  Code rewrite (using dedicated API)
  New menu structure
  Platform filter in settings
@@ -9,26 +14,26 @@
  Added Possibility to search videos by game
  Context Menu Integration
 
-1.1.5
+1.1.5 (13.08.2012)
  Fixed Playback (website changes)
 
-1.1.4
+1.1.4 (30.07.2012)
  Fixed Categories
  Removed deprecated Categories
  Added provider email
  cosmetic changes
 
-1.1.3
+1.1.3 (14.12.2011)
  Fixed scraper (Website changes)
 
-1.1.2
+1.1.2 (08.12.2011)
  Fixed scraper (Website changes)
  Now using 160x90px thumbnails
  added sort methods (playlist, date and runtime)
  added is_update function (pagination is better now)
  
-1.1.1
+1.1.1 (07.11.2011)
  Fixed Video Playback
 
-1.1.0
+1.1.0 (26.09.2011)
  First Version for Eden-pre xbmc.org addon-repository

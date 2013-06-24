@@ -128,7 +128,7 @@ def play_video(url):
 
 
 def __format_videos(videos):
-    quality = plugin.get_setting('quality', choices=('normal', 'hq'))
+    quality = plugin.get_setting('quality2', choices=('normal', 'hq'))
     videos = [{
         'label': '%s: %s' % (video['game']['title'], video['video_title']),
         'thumbnail': video['thumb'],

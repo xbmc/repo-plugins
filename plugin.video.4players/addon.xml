@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.4players" name="4Players Videos" version="2.0.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
-  <requires>
-    <import addon="xbmc.python" version="2.1.0"/>
-    <import addon="script.module.xbmcswift2" version="2.4.0"/>
-  </requires>
-  <extension point="xbmc.python.pluginsource" library="addon.py">
-    <provides>video</provides>
-  </extension>
-  <extension point="xbmc.addon.metadata">
-    <platform>all</platform>
-    <language>de</language>
-    <summary lang="en">Game related videos from www.4players.de</summary>
-    <description lang="en">4Players is a german video-game magazine.[CR]With this add-on you can browse latest- or popular-videos, game reviews or browse videos by games you are interested in.[CR]You can also filter the videos by platforms in the add-on settings.</description>
-  </extension>
+<addon id="plugin.video.4players" name="4Players Videos" version="2.0.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <language>de</language>
+        <website>http://www.4players.de/</website>
+        <source>https://github.com/dersphere/plugin.video.4players</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=110689</forum>
+        <email>sphere@dersphere.de</email>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <summary lang="de">Videos über Computer-Spiele von www.4players.de</summary>
+        <summary lang="el">Βίντεο παιχνιδιών από το www.4players.de</summary>
+        <summary lang="en">Game related videos from www.4players.de</summary>
+        <summary lang="es">Videos de juegos de www.4players.de</summary>
+        <summary lang="fr">Vidéos de jeu de www.4players.de</summary>
+        <summary lang="gl">Vídeos de www.4players.de sobre Xogos</summary>
+        <summary lang="it">Filmati relativi al Gioco da www.4players.de</summary>
+        <summary lang="nl">Spel gerelateerde video's van www.4players.de</summary>
+        <summary lang="pl">Wideo o grach z www.4players.de</summary>
+        <summary lang="pt">Vídeos de jogos a partir de www.4players.de</summary>
+        <summary lang="pt_BR">Vídeos relacionados a Jogos de www.4players.de</summary>
+        <summary lang="sv">Spelrelaterade videor från www.4players.de</summary>
+        <summary lang="zh">www.4players.de上的游戏相关视频</summary>
+        <description lang="de">4Players ist ein deutesches Videospielmagazin.[CR]Mit diesem Addon können die neuesten oder populärsten Videos, Spiel-Reviews oder Videos von Spielen, an denen Du interessiert bist, durchsucht werden.[CR]Die Videos können auch nach Plattform gefiltert werden, siehe Addon-Einstellungen.</description>
+        <description lang="el">Το 4Players είναι ένα γερμανικό περιοδικό βιντεοπαιχνιδιών.[CR]Με αυτό το πρόσθετο να δείτε τα πιο πρόσφατα ή δημοφιλή βίντεο, κριτικές παιχνιδιών ή να βρείτε παιχνίδια τα οποία σας ενδιαφέρουν.[CR]Μπορείτε, επίσης, να φιλτράρετε τα βίντεο ανά παιχνιδομηχανή στις ρυθμίσεις του πρόσθετου.</description>
+        <description lang="en">4Players is a german video-game magazine.[CR]With this add-on you can browse latest- or popular-videos, game reviews or browse videos by games you are interested in.[CR]You can also filter the videos by platforms in the add-on settings.</description>
+        <description lang="es">4Players es una revista alemana de videojuegos.[CR]Con este complemento puede explorar los últimos o los más populares vídeos y críticas de juegos, o buscar los vídeos de los juegos en los que esté interesado.[CR]También puede filtrar los vídeos según la plataforma, en los ajustes del complemento.</description>
+        <description lang="fr">4Players et un magazine allemand de jeux vidéos.[CR]Avec cette extension vous pouvez naviguer entre les dernières  vidéos - ou populaires -, revues des jeux ou naviguer parmi les vidéos des jeux qui vous intéressent.[CR]Vous pouvez aussi filtrer les vidéos par plateformes dans les paramètres de l'extension.</description>
+        <description lang="gl">4Players é unha revista de videoxogos alemán.[CR]Grazas a este complemento, pode navegar polos vídeos máis recentes ou populares, análises de xogos ou buscar vídeos entre os xogos que lle interesan.[CR]Tamén pode filtrar os vídeos por plataforma na configuración do complemento.</description>
+        <description lang="it">4Player è un magazine tedesco sui video giochi.[CG]Con questo add-on puoi sfogliare gli ultimi o più popolari video, recensioni o sfogliare i video per giochi che ti interessano.[CR]Puoi anche filtrare i video per piattaforma nelle impostazioni dell'add-on.</description>
+        <description lang="pl">4Players jest niemieckim magazinem o grach.[CR]Ta wtyczka umożliwia przeglądanie najnowszych lub polularnych wideo, recenzji gier, lub przeglądanie wideo dotyczących gier, którymi się interesujesz.[CR]Można również użyć filtru.</description>
+        <description lang="pt">4Players é uma revista de vídeojogos alemã.[CR]Com este add-on, pode navegar por vídeos recentes ou populares, análises de jogos ou procurar vídeos dos jogos que quiser.[CR]Pode também filtrar os vídeos por plataforma, nas definições do add-on.</description>
+        <description lang="pt_BR">4Players é uma revista de jogos alemã.[CR]Com este addon você pode navegar nos vídeos mais populares, reviews de jogos ou procurar pelos vídeos de games que mais te interessam.[CR]Você também pode filtrar os vídeos por plataformas nos ajustes do addon.</description>
+        <description lang="sv">4Players är ett tyskt videospelsmagasin.[CR]Med detta tillägg kan du bläddra bland dom senaste eller populäraste videorna, spelrecensioner eller bläddra bland videor för spelen du är intresserad av.[CR]Du kan också filtrera videorna efter plattformar i tilläggsinställningarna.</description>
+        <description lang="zh">4Players是一个德国视频游戏杂志。[CR]通过此插件，你可以浏览最近或最热门视频、游戏评论，或按你感兴趣的游戏浏览视频。[CR]你还可以在插件设置中按平台筛选视频。</description>
+    </extension>
 </addon>

@@ -38,4 +38,7 @@ Todo: Need function to delete cookie file
 - fixed issue with TV station list (duplicate entries)
 - set final version for Eden to 1.0.0
 - set final version for Frodo to 2.0.0
+
+1.0.1 / 2.0.1
+- fixed issue live and timeshift streams not playing after website updates 
  

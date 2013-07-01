@@ -1,3 +1,6 @@
+1.0.1
+- Added Add-on optional tags and forum support thread.
+- Fix for default language settings on first run.
 1.0.0
 - First official Eden release for repository.
 0.0.9

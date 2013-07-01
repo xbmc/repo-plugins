@@ -8,11 +8,16 @@ import urlparse
 import os.path
 from xml.dom import Node;
 from xml.dom import minidom;
+try:
+   import StorageServer
+except:
+   import storageserverdummy as StorageServer
+cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.1.2"
+version = "0.1.3"
 plugin = "ORF-TVthek-" + version
 author = "sofaking"
-
+ 
 
 
 socket.setdefaulttimeout(30)
@@ -71,6 +76,15 @@ def createListItem(name,banner,summary,runtime,backdrop,videourl,playable,folder
                backdrop = defaultbackdrop
         if banner == '':
                banner = defaultbanner
+        if "/image1/" in banner:
+               if ".jpeg" in banner:
+                  banner = banner.replace("/image1/","/image/")
+                  newbanner = banner.split("/image/")
+                  filename = newbanner[1]
+              
+                  filename = filename.split(".jpeg")
+                  number = int(filename[0])-2
+                  banner = newbanner[0]+"/image/"+str(number)+".jpeg"
         liz=xbmcgui.ListItem(cleanText(name), iconImage=banner, thumbnailImage=banner)
         liz.setInfo( type="Video", infoLabels={ "Title": cleanText(name) } )
         liz.setInfo( type="Video", infoLabels={ "Plot": cleanText(summary) } )
@@ -222,7 +236,11 @@ def getLinks(url,quality):
     flashVars = flashVarReg.findall(html)
     for flashVar in flashVars:
         xml = xmlVarRef.search(flashVar).group()
-        image = "%s/%s" % (base_url,imgVarRef.search(html).group())
+        try:
+		    image = "%s/%s" % (base_url,imgVarRef.search(html).group())
+        except:
+            image = ""
+            pass
         flashDom = minidom.parseString(urllib.unquote(xml))
         asxurl = ""
         asxUrls = flashDom.getElementsByTagName("AsxUrl")
@@ -275,6 +293,7 @@ def getMainMenu():
     addDirectory("Neu",defaultbanner,defaultbackdrop,"","getNeu")
     addDirectory("Meist gesehen",defaultbanner,defaultbackdrop,"","getMostViewed")
     addDirectory("Sendung verpasst?",defaultbanner,defaultbackdrop,"","getArchiv")
+    addDirectory("Suchen",defaultbanner,defaultbackdrop,"","searchPhrase")
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceView:
@@ -710,7 +729,104 @@ def getCategories():
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceView:
         xbmc.executebuiltin(defaultViewMode)
+	
 
+
+def search():
+    addDirectory("Suchen ...",defaultbanner,defaultbackdrop,"","searchNew")
+    cache.table_name = "searchhistory"
+    some_dict = cache.get("searches").split("|")
+    for str in reversed(some_dict):
+        addDirectory(str,defaultbanner,defaultbackdrop,str.replace(" ","+"),"searchNew")
+    xbmcplugin.setContent(pluginhandle,'episodes')
+    xbmcplugin.endOfDirectory(pluginhandle)
+    if forceView:
+       xbmc.executebuiltin(defaultViewMode)
+    xbmcplugin.setPluginFanart(int(sys.argv[1]), defaultbackdrop, color2='0xFFFF3300')
+	
+def searchTV():
+    keyboard = xbmc.Keyboard('')
+    keyboard.doModal()
+    if (keyboard.isConfirmed()):
+      cache.table_name = "searchhistory"
+      keyboard_in = keyboard.getText()
+      some_dict = cache.get("searches") + "|"+keyboard_in
+      cache.set("searches",some_dict);
+      searchurl = "%s/search?q=%s"%(base_url,keyboard_in.replace(" ","+"))
+      getSearchedShows(searchurl)
+    else:
+      addDirectory("Keine Ergebnisse",defaultlogo,defaultbackdrop,"","")
+    xbmcplugin.setContent(pluginhandle,'episodes')
+    xbmcplugin.endOfDirectory(pluginhandle)
+    if forceView:
+        xbmc.executebuiltin(defaultViewMode)
+
+def searchTVHistory(link):
+    keyboard = xbmc.Keyboard(link)
+    keyboard.doModal()
+    if (keyboard.isConfirmed()):
+      cache.table_name = "searchhistory"
+      keyboard_in = keyboard.getText()
+      if keyboard_in != link:
+           some_dict = cache.get("searches") + "|"+keyboard_in
+           cache.set("searches",some_dict);
+      searchurl = "%s/search?q=%s"%(base_url,keyboard_in.replace(" ","+"))
+      getSearchedShows(searchurl)
+    else:
+      addDirectory("Keine Ergebnisse",defaultlogo,defaultbackdrop,"","")
+    xbmcplugin.setContent(pluginhandle,'episodes')
+    xbmcplugin.endOfDirectory(pluginhandle)
+    if forceView:
+        xbmc.executebuiltin(defaultViewMode)
+	
+def getSearchedShows(url):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create('Ladevorgang' )
+    progressbar.update(0)
+    print(url)
+    url = urllib.unquote(url)
+    html = opener.open(url)
+    html = html.read()
+    suppn = BeautifulSoup(html)
+    ul = suppn.find('ul',{'class':'search'});
+    try:
+       blocks = ul.findAll('li')
+       i = 1
+       feedcount = len(blocks)
+       for block in blocks:
+         if progressbar.iscanceled() :
+                   xbmcplugin.endOfDirectory(pluginhandle)
+                   progressbar.close()
+                   break
+         i = i+1
+         percent = i*100/feedcount
+         progressbar.update(percent)
+         try:
+          img = block.find('img')
+          anchor = block.find('a')
+          title = block.findAll('p')[0].text.encode('UTF-8')
+          image = img['src']
+          desc = block.findAll('p')[1].text.encode('UTF-8')
+		  
+          link = "%s%s" % (base_url,anchor['href'])
+          type = anchor.find('span')
+          if type != None:
+             type = type.text
+          else:
+             type = ""
+			 
+          parameters = {"link" : link,"title" : title,"banner" : image,"backdrop" : defaultbackdrop, "mode" : "openSeries"}
+          u = sys.argv[0] + '?' + urllib.urlencode(parameters)
+          createListItem(cleanText(title),image,cleanText(desc),cleanText(title),backdrop,u,'false',True)
+          #addDirectory(title.encode('UTF-8'),image,defaultbackdrop,link,'listEpisode')
+         except Exception as e:
+          print(e)
+          pass
+    except:
+       addDirectory("Keine Ergebnisse",defaultlogo,defaultbackdrop,"","")
+       blocks = 0
+    
+	
 #Getting Parameters
 params=parameters_string_to_dict(sys.argv[2])
 mode=params.get('mode')
@@ -751,5 +867,14 @@ elif mode == 'getArchiv':
     getArchiv(schedule_url)
 elif mode == 'openArchiv':
     openArchiv(link)
+elif mode == 'searchPhrase':
+    search()
+elif mode == 'searchNew':
+    if not link == None:
+        print "LINK:"+link
+        searchTVHistory(urllib.unquote(link));
+    else:
+        searchTV()
+	
 else:
     getMainMenu()

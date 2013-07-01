@@ -1,5 +1,5 @@
 """
-    Plugin for streaming Preview network 
+    Plugin for streaming Preview network
 """
 
 # main imports
@@ -21,7 +21,7 @@ __author__ = "nmazz64"
 __url__ = "http://code.google.com/p/previewnetworks-xbmc-plugin"
 __svn_url__ = "http://previewnetworks-xbmc-plugin.googlecode.com/svn/trunk/plugin.video.previewnetworks/"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
-__version__ = "2.3.2"
+__version__ = "2.3.3"
 __svn_revision__ = "$Revision: 0$"
 __XBMC_Revision__ = "31633"
 __Channel_ID__ = "391100379-1"
@@ -52,8 +52,9 @@ def categories(root):
     next_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'next.png')
     genre_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'genre.png')
     search_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'search.png')
-##   baseurl="http://%s.feed.previewnetworks.com/v3.1/%s/"
-    baseurl="http://%s.hdplus.previewnetworks.com/v3.1/%s/"
+    #baseurl="http://%s.feed.previewnetworks.com/v3.1/%s/"
+    #baseurl="http://%s.hdplus.previewnetworks.com/v3.1/%s/"
+    baseurl="http://%s.%s.previewnetworks.com/v3.1/%s/"
 
     if root:
         addDir(Addon.getLocalizedString(30301),baseurl+'now-%s/%s',1,now_icon)
@@ -62,35 +63,34 @@ def categories(root):
         addDir(Addon.getLocalizedString(30300),'genre:',0,genre_icon)
         addDir(Addon.getLocalizedString(30340),baseurl+'search-%s/%s/?search_field=product_title&search_query=%s',99,search_icon)
     else:
-        addDir(Addon.getLocalizedString(30304),baseurl+'CinemaAction/%s',10,icona)
-        addDir(Addon.getLocalizedString(30305),baseurl+'CinemaAdventure/%s',11,icona)
-        addDir(Addon.getLocalizedString(30306),baseurl+'CinemaAnimation/%s',12,icona)
-        addDir(Addon.getLocalizedString(30307),baseurl+'CinemaBiography/%s',13,icona)
-        addDir(Addon.getLocalizedString(30308),baseurl+'CinemaComedy/%s',14,icona)
-        addDir(Addon.getLocalizedString(30309),baseurl+'CinemaCrime/%s',15,icona)
-        addDir(Addon.getLocalizedString(30310),baseurl+'CinemaDocumentary/%s',16,icona)
-        addDir(Addon.getLocalizedString(30311),baseurl+'CinemaDrama/%s',17,icona)
-        addDir(Addon.getLocalizedString(30312),baseurl+'CinemaFamily/%s',18,icona)
-        addDir(Addon.getLocalizedString(30313),baseurl+'CinemaFantasy/%s',19,icona)
-        addDir(Addon.getLocalizedString(30314),baseurl+'CinemaFilmNoir/%s',20,icona)
-        addDir(Addon.getLocalizedString(30315),baseurl+'CinemaGameShow/%s',21,icona)
-        addDir(Addon.getLocalizedString(30316),baseurl+'CinemaHistory/%s',22,icona)
-        addDir(Addon.getLocalizedString(30317),baseurl+'CinemaHorror/%s',23,icona)
-        addDir(Addon.getLocalizedString(30318),baseurl+'CinemaMusic/%s',24,icona)
-        addDir(Addon.getLocalizedString(30319),baseurl+'CinemaMusical/%s',25,icona)
-        addDir(Addon.getLocalizedString(30320),baseurl+'CinemaMystery/%s',26,icona)
-        addDir(Addon.getLocalizedString(30321),baseurl+'CinemaNews/%s',27,icona)
-        addDir(Addon.getLocalizedString(30322),baseurl+'CinemaRealityTV/%s',28,icona)
-        addDir(Addon.getLocalizedString(30323),baseurl+'CinemaRomance/%s',29,icona)
-        addDir(Addon.getLocalizedString(30324),baseurl+'CinemaSciFi/%s',30,icona)
-        addDir(Addon.getLocalizedString(30325),baseurl+'CinemaShort/%s',31,icona)
-        addDir(Addon.getLocalizedString(30326),baseurl+'CinemaSport/%s',32,icona)
-        addDir(Addon.getLocalizedString(30327),baseurl+'CinemaTalkShow/%s',33,icona)
-        addDir(Addon.getLocalizedString(30328),baseurl+'CinemaThriller/%s',34,icona)
-        addDir(Addon.getLocalizedString(30329),baseurl+'CinemaWar/%s',35,icona)
-        addDir(Addon.getLocalizedString(30330),baseurl+'CinemaWestern/%s',36,icona)
-        addDir(Addon.getLocalizedString(30331),baseurl+'CinemaChildrenMovie/%s',37,icona)
-
+        addDir(Addon.getLocalizedString(30304),baseurl+'CinemaAction-%s/%s',10,icona)
+        addDir(Addon.getLocalizedString(30305),baseurl+'CinemaAdventure-%s/%s',11,icona)
+        addDir(Addon.getLocalizedString(30306),baseurl+'CinemaAnimation-%s/%s',12,icona)
+        addDir(Addon.getLocalizedString(30307),baseurl+'CinemaBiography-%s/%s',13,icona)
+        addDir(Addon.getLocalizedString(30308),baseurl+'CinemaComedy-%s/%s',14,icona)
+        addDir(Addon.getLocalizedString(30309),baseurl+'CinemaCrime-%s/%s',15,icona)
+        addDir(Addon.getLocalizedString(30310),baseurl+'CinemaDocumentary-%s/%s',16,icona)
+        addDir(Addon.getLocalizedString(30311),baseurl+'CinemaDrama-%s/%s',17,icona)
+        addDir(Addon.getLocalizedString(30312),baseurl+'CinemaFamily-%s/%s',18,icona)
+        addDir(Addon.getLocalizedString(30313),baseurl+'CinemaFantasy-%s/%s',19,icona)
+        addDir(Addon.getLocalizedString(30314),baseurl+'CinemaFilmNoir-%s/%s',20,icona)
+        addDir(Addon.getLocalizedString(30315),baseurl+'CinemaGameShow-%s/%s',21,icona)
+        addDir(Addon.getLocalizedString(30316),baseurl+'CinemaHistory-%s/%s',22,icona)
+        addDir(Addon.getLocalizedString(30317),baseurl+'CinemaHorror-%s/%s',23,icona)
+        addDir(Addon.getLocalizedString(30318),baseurl+'CinemaMusic-%s/%s',24,icona)
+        addDir(Addon.getLocalizedString(30319),baseurl+'CinemaMusical-%s/%s',25,icona)
+        addDir(Addon.getLocalizedString(30320),baseurl+'CinemaMystery-%s/%s',26,icona)
+        addDir(Addon.getLocalizedString(30321),baseurl+'CinemaNews-%s/%s',27,icona)
+        addDir(Addon.getLocalizedString(30322),baseurl+'CinemaRealityTV-%s/%s',28,icona)
+        addDir(Addon.getLocalizedString(30323),baseurl+'CinemaRomance-%s/%s',29,icona)
+        addDir(Addon.getLocalizedString(30324),baseurl+'CinemaSciFi-%s/%s',30,icona)
+        addDir(Addon.getLocalizedString(30325),baseurl+'CinemaShort-%s/%s',31,icona)
+        addDir(Addon.getLocalizedString(30326),baseurl+'CinemaSport-%s/%s',32,icona)
+        addDir(Addon.getLocalizedString(30327),baseurl+'CinemaTalkShow-%s/%s',33,icona)
+        addDir(Addon.getLocalizedString(30328),baseurl+'CinemaThriller-%s/%s',34,icona)
+        addDir(Addon.getLocalizedString(30329),baseurl+'CinemaWar-%s/%s',35,icona)
+        addDir(Addon.getLocalizedString(30330),baseurl+'CinemaWestern-%s/%s',36,icona)
+        addDir(Addon.getLocalizedString(30331),baseurl+'CinemaChildrenMovie-%s/%s',37,icona)
 
 def addDir(name,url,item,iconimage,parametri={},info={}):
     standardParams={'url':url,'item':item}

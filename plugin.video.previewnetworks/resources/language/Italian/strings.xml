@@ -33,11 +33,12 @@
     <string id="30042">- aggiungi -trailer</string>
     <string id="30043">- play file esistente</string>
     <string id="30050">Channel user ID</string>
-    <string id="30060">Seleziona prodotto</string>    
-    <string id="30061">Cinema</string>    
-    <string id="30062">DVD</string>    
-    <string id="30063">Bluray</string>    
-    <string id="30064">DVD & BluRay</string>  
+    <string id="30060">Seleziona prodotto</string>
+    <string id="30061">Cinema</string>
+    <string id="30062">DVD</string>
+    <string id="30063">Bluray</string>
+    <string id="30064">DVD & BluRay</string>
+    <string id="30065">HD Plus</string>
     <string id="30070">Nazione</string>
     <string id="30071">Inghilterra</string>
     <string id="30072">Francia</string>
@@ -50,7 +51,7 @@
     <string id="30079">Danimarca</string>
     <string id="30080">Svezia</string>
     <string id="30081">Finlandia</string>
-    
+
     <string id="30090">Immagine Fanart</string>
     <string id="30091">- Usa il titolo per salvare il file</string>
     <string id="30100">- Fanart colore 1 (AARRGGBB)</string>
@@ -60,9 +61,10 @@
     <string id="30150">Visualizza anche Clip extra</string>
     <string id="30151">Mostra qualità e formato del file sul titolo</string>
     <string id="30152">Visualizza titolo originale</string>
-    <string id="30153">Limita il numero di video da elencare a</string>
-		
-		
+    <string id="30153">Numero massimo di anteprime da elencare</string>
+    <string id="30154">Abilita dedug con registro su log</string>
+
+
     <!-- plugin buttons -->
     <string id="30201">Ricerca...</string>
     <string id="30202">Impostazioni</string>
@@ -91,17 +93,17 @@
     <string id="30802">320x180</string>
     <string id="30803">400x226</string>
     <string id="30804">640x360</string>
-    <string id="30805">848x448</string>    
+    <string id="30805">848x448</string>
     <string id="30806">1280x720</string>
     <string id="30807">1920x1080</string>
     <string id="30808">Non definita</string>
-    
+
     <!-- context menu labels -->
     <string id="30900">Theater Showtimes</string>
     <string id="30910">Download &amp; Play Trailer</string>
     <string id="30920">Avvia il filmato</string>
     <string id="30930">Informazioni sul filmato</string>
-    
+
     <!-- genre menu labels -->
     <string id="30300">Genere</string>
     <string id="30301">Adesso nei cinema</string>
@@ -136,8 +138,8 @@
     <string id="30330">Western</string>
     <string id="30331">Bambini</string>
 
-    <!-- search labels -->        
+    <!-- search labels -->
     <string id="30340">Ricerca</string>
-        
+
 </strings>
 

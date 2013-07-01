@@ -228,55 +228,37 @@ class _Parser:
 
     def _add_video( self, video, total ):
         try:
-            # get our media item
             dirItem = DirectoryItem()
-
-            # set total items
             dirItem.totalItems = total
             # set the default icon
             icon = os.path.join(self.Addon.getAddonInfo('path'),'resource','images','list.png')
             overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ video["quality"] == "HD 480p" or video["quality"] == "HD 720p" or video["quality"] == "HD 1080p"]
 
-            # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
             dirItem.listitem = xbmcgui.ListItem( video[ "title" ], iconImage=icon, thumbnailImage=video[ "poster" ])
-            # release date and year
             try:
-                # format the date
                 release_date = datetime.date( int( video[ "releasedate" ].split( "-" )[ 0 ] ), int( video[ "releasedate" ].split( "-" )[ 1 ] ), int( video[ "releasedate" ].split( "-" )[ 2 ] ) ).strftime( self.date_format )
-                # we need just year also
                 year = int( video[ "releasedate" ].split( "-" )[ 0 ] )
             except:
                 release_date = ""
                 year = 0
-            # set the key information
             # dirItem.listitem.setInfo( "video", { "Title": video[ "title" ], "Overlay": overlay, "Size": video[ "size" ], "Year": year, "Plot": video[ "plot" ], "PlotOutline": video[ "plot" ], "Genre": video[ "genre" ], "Studio": video[ "studio" ], "Director": video[ "director" ], "Duration": video[ "runtime" ], "Cast": video[ "cast" ], "Date": video[ "postdate" ] } )
             dirItem.listitem.setInfo( "video", { "Title": video[ "title" ], "Overlay": overlay, "Size": video[ "size" ], "Year": year, "Plot": video[ "plot" ], "PlotOutline": video[ "plot" ], "Genre": video[ "genre" ], "Studio": video[ "studio" ], "Director": video[ "director" ], "Duration": video[ "runtime" ][:2], "Cast": video[ "cast" ]} )
-            # set release date property
             dirItem.listitem.setProperty( "releasedate", release_date )
             dirItem.listitem.setProperty( "fanart_image", video[ "fanart" ] )
-            # get filepath and tmp_filepath
             tmp_path, filepath = get_legal_filepath( video[ "title" ], video[ "trailer" ], 2, self.settings[ "download_path" ], self.settings[ "use_title" ], self.settings[ "use_trailer" ] )
             # add the movie information item
             dirItem.addContextMenuItem( self.Addon.getLocalizedString(30930), "XBMC.Action(Info)" )
-            # set theater showtimes menu item
-            #..dirItem.addContextMenuItem( 30900, "XBMC.RunPlugin(%s?Fetch_Showtimes=True&title=%s)" % ( sys.argv[ 0 ], urllib.quote_plus( repr( video[ "title" ] ) ), ) )
-            # check if trailer already exists if user specified
             if ( self.settings[ "play_existing" ] and os.path.isfile( filepath.encode( "utf-8" ) ) ):
                 dirItem.url = filepath
-                # just add play trailer if trailer exists and user preference to always play existing
                 dirItem.addContextMenuItem( self.Addon.getLocalizedString(30920), "XBMC.PlayMedia(%s)" % ( dirItem.url, ) )
             elif ( self.settings[ "play_mode" ] == 0 ):
                 dirItem.url = video[ "trailer" ]
-                # we want both play and download if user preference is to stream
                 dirItem.addContextMenuItem( self.Addon.getLocalizedString(30910), "XBMC.RunPlugin(%s?Download_Trailer=True&trailer_url=%s)" % ( sys.argv[ 0 ], urllib.quote_plus( repr( video[ "trailer" ] ) ), ) )
                 dirItem.addContextMenuItem( self.Addon.getLocalizedString(30920), "XBMC.PlayMedia(%s)" % ( dirItem.url, ) )
             else:
                 dirItem.url = "%s?Download_Trailer=True&trailer_url=%s" % ( sys.argv[ 0 ], urllib.quote_plus( repr( video[ "trailer" ] ) ) )
-                # only add download if user prefernce is not stream
                 dirItem.addContextMenuItem( self.Addon.getLocalizedString( 30910), "XBMC.RunPlugin(%s?Download_Trailer=True&trailer_url=%s)" % ( sys.argv[ 0 ], urllib.quote_plus( repr( video[ "trailer" ] ) ), ) )
-            # add settings menu item
             dirItem.addContextMenuItem(  xbmc.getLocalizedString( 1045 ), "XBMC.RunPlugin(%s?OpenSettings)" % ( sys.argv[ 0 ], ) )
-            # add the item to the media list
             return self.MediaWindow.add( dirItem )
         except:
             print "PN2 ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
@@ -293,6 +275,7 @@ class Main:
     title_option = ""
     type_filter = ""
     quality_filter = ""
+    debug_on = False
 
     def __init__( self , url_source, item):
         # get users preference
@@ -340,6 +323,11 @@ class Main:
             self.settings[ "showtype" ] = True
         self.settings[ "country" ] = [ int( self.Addon.getSetting( "country" ) ) ]
         self.settings[ "region" ] = ( "uk", "fr", "de", "es", "it", "ch", "ch-fr", "nl", "dk", "se", "fi", )[ int( self.Addon.getSetting( "country" ) ) ]
+        if ( self.Addon.getSetting( "hdplus" ) == "true" ):
+            self.settings[ "hdplus" ] = "hdplus"
+        else:
+            self.settings[ "hdplus" ] = "feed"
+        self.settings[ "debug" ] = ( self.Addon.getSetting( "debug" ) == "true")
 
     def getKeyboard(self, default = '', heading = '', hidden = False):
         kboard = xbmc.Keyboard(default, heading, hidden)
@@ -360,24 +348,24 @@ class Main:
     def get_xml_source( self ):
         try:
             ok = True
+            debug_on = self.settings["debug"]
             # set proper source
             extension = self.settings[ "region" ]+self.settings[ "product" ]+self.ITEM_CURRENT_URL
             base_path = self.BASE_CURRENT_SOURCE_PATH % extension
-            #print "extension %s" % extension
-            #print "base_path %s" % base_path
-
+            if debug_on:
+                print "DEBUG: base_current_url= %s" % self.BASE_CURRENT_URL
             if self.ITEM_CURRENT_URL == '99':
                 curr_phrase = ''
                 search_phrase = self.getKeyboard(default = curr_phrase, heading = self.Addon.getLocalizedString(30102))
                 if search_phrase == '':
                     return -1
                 curr_phrase = search_phrase
-                base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "max_previews" ],self.settings[ "channel_id" ],search_phrase)
+                base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "hdplus" ],self.settings[ "product" ],self.settings[ "max_previews" ],self.settings[ "channel_id" ],search_phrase)
             else:
-                base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "max_previews" ],self.settings[ "channel_id" ])
+                base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "hdplus" ],self.settings[ "product" ],self.settings[ "max_previews" ],self.settings[ "channel_id" ])
             # print di url for get lists of video previews
-            print "DEBUG: base_url= %s" % base_url
-            #
+            if debug_on:
+                print "DEBUG: base_url= %s" % base_url
             # get the source files date if it exists
             try: date = os.path.getmtime( base_path )
             except: date = 0
@@ -385,24 +373,19 @@ class Main:
             if self.ITEM_CURRENT_URL == '99':
                 refresh = True
             else:
-                #refresh = ( ( time.time() - ( 24 * 60 * 60 ) ) >= date )
                 refresh = ( ( time.time() - ( 24 * 60 * 60 ) ) >= date )
             # only fetch source if it's been more than a day
-            print "DEBUG: open"
-            if ( refresh ):
+            if debug_on:
+                print "DEBUG: open  %s" % time.asctime ()
+            if ( refresh or debug_on):
                 # open url
-                # req = urllib2.Request( base_url )
-                # usock = urllib2.urlopen( req, timeout=60 )
-                # usock = urllib2.urlopen( base_url , timeout = 60)
-                # usock = urllib.urlopen( base_url )
-                
                 user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
                 headers = { 'User-Agent' : user_agent }
                 req = urllib2.Request(base_url, None, headers)
                 try:
                     usock = urllib2.urlopen( req , timeout = 60)
                 except urllib2.HTTPError, e:
-                    print "URLLIB2 HTTPError: code=%s msg=%s header=%s fp.read=%s" % (e.code , e.msg , e.headers , e.fp.read()) 
+                    print "URLLIB2 HTTPError: code=%s msg=%s header=%s fp.read=%s" % (e.code , e.msg , e.headers , e.fp.read())
                 # save file versione
                 # urllib.urlretrieve(base_url,base_path)
                 # usock = open( base_path, "r" )
@@ -410,22 +393,23 @@ class Main:
                 # open path
                 usock = open( base_path, "r" )
             # format xml source
-            print "DEBUG: start"
-            #xmlSource = usock.read()
+            if debug_on:
+                print "DEBUG: start %s" % time.asctime ()
             xmlSource = ''
             for line in usock.read().split( '\n' ):
                 xmlSource += line.lstrip().rstrip().replace( '\r', '' ).replace( '\t', '' ).replace( '\n', '' )
-            print "DEBUG: end"
-            #
-            # print "DEBUG: xmlSource= %s" % xmlSource
+            if debug_on:
+                print "DEBUG: end   %s" % time.asctime ()
+                print "DEBUG: xmlSource= %s" % xmlSource
             # close socket
             usock.close()
-            #print "DEBUG: close"
+            if debug_on:
+                print "DEBUG: close %s" % time.asctime ()
             # save the xmlSource for future parsing
             if ( refresh ):
             	ok = self.save_xml_source( xmlSource )
         except:
-            # oops print error message
+            # print error message
             print "PN3 ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             ok = False
         if ( ok ):
@@ -436,8 +420,7 @@ class Main:
     def save_xml_source( self, xmlSource ):
         try:
             # set proper source
-            # base_path = self.BASE_CURRENT_SOURCE_PATH
-            extension = self.settings[ "region" ]+self.settings[ "product" ]+self.ITEM_CURRENT_URL
+            extension = self.settings[ "region" ]+self.settings[ "hdplus" ]+self.settings[ "product" ]+self.ITEM_CURRENT_URL
             base_path = self.BASE_CURRENT_SOURCE_PATH % extension
             # if the path to the source file does not exist create it
             if ( not os.path.isdir( self.BASE_DATA_PATH ) ):
@@ -451,7 +434,7 @@ class Main:
             # return successful
             return True
         except:
-            # oops print error message
+            # print error message
             print "PN4 ERROR: %s::%s (%d) - %s" % ( self.__class__.__name__, sys.exc_info()[ 2 ].tb_frame.f_code.co_name, sys.exc_info()[ 2 ].tb_lineno, sys.exc_info()[ 1 ], )
             return False
 

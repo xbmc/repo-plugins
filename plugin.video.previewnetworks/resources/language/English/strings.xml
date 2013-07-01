@@ -33,11 +33,12 @@
     <string id="30042">- Add '-trailer' to saved trailers</string>
     <string id="30043">- play existing file</string>
     <string id="30050">Channel user ID</string>
-    <string id="30060">Product</string>    
-    <string id="30061">Cinema</string>    
-    <string id="30062">DVD</string>    
-    <string id="30063">Bluray</string>    
-    <string id="30064">DVD & BluRay</string>    
+    <string id="30060">Product</string>
+    <string id="30061">Cinema</string>
+    <string id="30062">DVD</string>
+    <string id="30063">Bluray</string>
+    <string id="30064">DVD & BluRay</string>
+    <string id="30065">HD Plus</string>
     <string id="30070">Country</string>
     <string id="30071">United Kingdom</string>
     <string id="30072">France</string>
@@ -50,7 +51,7 @@
     <string id="30079">Denmark</string>
     <string id="30080">Sweden</string>
     <string id="30081">Finland</string>
-    
+
     <string id="30090">Fanart image</string>
     <string id="30091">- Use movie title for saved filename</string>
     <string id="30100">- Fanart color one (AARRGGBB)</string>
@@ -60,14 +61,15 @@
     <string id="30150">Show Clip Extra</string>
 	<string id="30151">Show file quality and format on title</string>
 	<string id="30152">Show original title</string>
-	<string id="30153">Limit number of video list to</string>
-		
-		<string id="30030">Play mode</string>
+	<string id="30153">Max number of video previews into list</string>
+    <string id="30154">Debug</string>
+
+	<string id="30030">Play mode</string>
     <string id="30031">Stream</string>
     <string id="30032">Download</string>
     <string id="30033">Download &amp; Save</string>
     <string id="30040">- Save folder</string>
-    
+
     <!-- plugin buttons -->
     <string id="30201">Search...</string>
     <string id="30202">Settings</string>
@@ -97,18 +99,18 @@
     <string id="30802">320x180</string>
     <string id="30803">400x226</string>
     <string id="30804">640x360</string>
-    <string id="30805">848x448</string>    
+    <string id="30805">848x448</string>
     <string id="30806">1280x720</string>
     <string id="30807">1920x1080</string>
     <string id="30808">undefined</string>
-		
-		
+
+
     <!-- context menu labels -->
     <string id="30900">Theater Showtimes</string>
     <string id="30910">Download &amp; Play</string>
     <string id="30920">Play Trailer</string>
     <string id="30930">Movie Information</string>
-    
+
     <!-- genre menu labels -->
     <string id="30300">Genre</string>
     <string id="30301">Now</string>
@@ -142,8 +144,8 @@
     <string id="30329">War</string>
     <string id="30330">Western</string>
     <string id="30331">Children</string>
-    
+
     <!-- search labels -->
     <string id="30340">Search</string>
-    
+
 </strings>

@@ -38,7 +38,12 @@ language_list = ('system', 'es', 'en', 'fr', 'de')
 trans_language = {'Spanish' : 'es', 'English' : 'en', 'French' : 'fr', 'German' : 'de'}
 
 # Language gets the the proper value from language_list
-language = language_list[int(language_id)]
+try:
+    language = language_list[int(language_id)]
+except:
+    lutil.log("attactv.main Warning: language not defined. fixed to 0")
+    settings.setSetting("language", "0")
+    language = language_list[0]
 
 if language == 'system':
     # We need to get the system language used by the GUI.

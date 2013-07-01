@@ -39,9 +39,11 @@ def view_top():
 
 @plugin.route('/live')
 def live():
-  add("NRK 1", "http://nrk1-i.akamaihd.net/hls/live/213271/nrk1/master.m3u8", "application/vnd.apple.mpegurl", "nrk1.png")
-  add("NRK 2", "http://nrk2-i.akamaihd.net/hls/live/213272/nrk2/master.m3u8", "application/vnd.apple.mpegurl", "nrk2.png")
-  add("NRK 3", "http://nrk3-i.akamaihd.net/hls/live/213273/nrk3/master.m3u8", "application/vnd.apple.mpegurl", "nrk3.png")
+  import data
+  res = os.path.join(plugin.path, "resources/images")
+  for ch in [1,2,3]:
+    url, fanart = data.get_live_stream(ch)
+    add("NRK %s" % ch, url, "application/vnd.apple.mpegurl", os.path.join(res, "nrk%d.png" % ch), fanart)
   add("NRK P1", "http://lyd.nrk.no/nrk_radio_p1_ostlandssendingen_mp3_h", "audio/mpeg")
   add("NRK P2", "http://lyd.nrk.no/nrk_radio_p2_mp3_h", "audio/mpeg")
   add("NRK P3", "http://lyd.nrk.no/nrk_radio_p3_mp3_h", "audio/mpeg")
@@ -58,12 +60,10 @@ def live():
   add("Super", "http://lyd.nrk.no/nrk_radio_super_mp3_h", "audio/mpeg")
   endOfDirectory(plugin.handle)
 
-def add(title, url, mimetype, thumb=""):
-  if thumb:
-    img_path = os.path.join(plugin.path, "resources/images")
-    thumb = os.path.join(img_path, thumb)
+def add(title, url, mimetype, thumb="", fanart=""):
   li =  ListItem(title, thumbnailImage=thumb)
   li.setProperty('mimetype', mimetype)
+  li.setProperty('fanart_image', fanart)
   addDirectoryItem(plugin.handle, url, li, False)
 
 def view(titles, urls, thumbs=repeat(''), bgs=repeat(''), descr=repeat(''), update_listing=False):

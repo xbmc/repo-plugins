@@ -31,6 +31,7 @@ session.headers['User-Agent'] = 'xbmc.org'
 xhrsession = requests.session()
 xhrsession.headers['User-Agent'] = 'xbmc.org'
 xhrsession.headers['X-Requested-With'] = 'XMLHttpRequest'
+xhrsession.headers['Cookie'] = "NRK_PLAYER_SETTINGS_TV=devicetype=desktop&preferred-player-odm=hlslink&preferred-player-live=hlslink"
 
 
 def get_by_letter(arg):
@@ -60,6 +61,13 @@ def _parse_list(html):
   fanart = [ _fanart_url(url) for url in urls ]
   return titles, urls, thumbs, fanart
 
+
+def get_live_stream(ch):
+  url = "http://tv.nrk.no/direkte/nrk%s" % ch
+  html = xhrsession.get(url).text
+  url = parseDOM(html, 'div', {'id':'playerelement'}, ret='data-media')[0]
+  img = parseDOM(html, 'img', {'class':'poster'}, ret='src')[0]
+  return url, img
 
 def get_recommended():
   url = "http://tv.nrk.no/"

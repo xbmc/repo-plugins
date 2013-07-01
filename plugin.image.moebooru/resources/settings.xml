@@ -6,9 +6,11 @@
     <category label="30002">
 	    <setting id="order" type="enum" label="30121" lvalues="30801|30802|30803|30804|30805" default="0"/>
         <setting id="rating" type="enum" label="30122" lvalues="30821|30822|30823|30824|30825|30826" default="5"/>
+        <setting id="tagOrder" type="enum" label="30123" lvalues="30841|30842|30843|30844" default="0"/>
     </category>
     <category label="30003">
 	    <setting id="previewPools" type="bool" label="30141" default="false"/>
+	    <setting id="previewTags" type="bool" label="30143" default="true"/>
 	    <setting id="shistorySize" type="slider" label="30142" range="1,100" option="int" default="10"/>
     </category>
 </settings>

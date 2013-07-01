@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2013-05-20 19:31+0000\n"
+"POT-Creation-Date: 2013-06-20 14:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -50,7 +50,11 @@ msgctxt "#30122"
 msgid "Rating"
 msgstr ""
 
-#empty strings from id 30123 to 30140
+msgctxt "#30123"
+msgid "Sort tags by"
+msgstr ""
+
+#empty strings from id 30124 to 30140
 
 msgctxt "#30141"
 msgid "Load preview for pools"
@@ -62,7 +66,12 @@ msgstr ""
 
 #APPLICATION
 #Main menu
-#empty strings from id 30143 to 30800
+
+msgctxt "#30143"
+msgid "Load preview for tags"
+msgstr ""
+
+#empty strings from id 30144 to 30800
 
 msgctxt "#30801"
 msgid "Server default"
@@ -110,8 +119,26 @@ msgctxt "#30826"
 msgid "Questionable and Safe"
 msgstr ""
 
+#empty strings from id 30827 to 30840
+
+msgctxt "#30841"
+msgid "Server default"
+msgstr ""
+
+msgctxt "#30842"
+msgid "Date"
+msgstr ""
+
+msgctxt "#30843"
+msgid "Count"
+msgstr ""
+
+msgctxt "#30844"
+msgid "Name"
+msgstr ""
+
 #misc
-#empty strings from id 30827 to 31000
+#empty strings from id 30845 to 31000
 
 msgctxt "#31001"
 msgid "Latest"
@@ -133,15 +160,23 @@ msgctxt "#31005"
 msgid "Search history"
 msgstr ""
 
+msgctxt "#31006"
+msgid "Search tags"
+msgstr ""
+
 #Generic buttons
-#empty strings from id 31006 to 32001
+#empty strings from id 31007 to 32001
 
 msgctxt "#32002"
 msgid "More"
 msgstr ""
 
+msgctxt "#32003"
+msgid "Related tags"
+msgstr ""
+
 #history
-#empty strings from id 32003 to 33000
+#empty strings from id 32004 to 33000
 
 msgctxt "#33001"
 msgid "Remove from history"
@@ -154,15 +189,33 @@ msgctxt "#34001"
 msgid "Enter tag to search for:"
 msgstr ""
 
+msgctxt "#34002"
+msgid "Enter string to search for:"
+msgstr ""
+
 #Pools
-#empty strings from id 34002 to 35000
+#empty strings from id 34003 to 35000
 
 msgctxt "#35001"
 msgid "Search pool"
 msgstr ""
 
+#Image context menus
+#empty strings from id 35002 to 36000
+
+msgctxt "#36001"
+msgid "Image tags"
+msgstr ""
+
+#Notifications
+#empty strings from id 36002 to 37000
+
+msgctxt "#37001"
+msgid "No results were found!, Showing suggested tags instead."
+msgstr ""
+
 #ERRORS / DEBUG / CONSOLE
-#empty strings from id 35002 to 40000
+#empty strings from id 37002 to 40000
 
 msgctxt "#40001"
 msgid "ERROR: Pool not readable. Maybe because of japanese characters in it?"

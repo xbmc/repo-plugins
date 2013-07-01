@@ -14,7 +14,24 @@ language = __settings__.getLocalizedString
 
 IMAGE_PATH = os.path.join(xbmc.translatePath(__settings__.getAddonInfo('path')),'resources','images')
 SHISTORY_PATH = os.path.join(xbmc.translatePath(__settings__.getAddonInfo('profile')),'search_history')
-SHISTORY_DATASEP = '%preview_img%'
+SHISTORY_DATASEP = '#preview_img#'
+
+_MODE_LATEST = 1
+_MODE_SEARCH = 2
+_MODE_RANDOM = 3
+_MODE_POOLS = 4
+_MODE_POOL = 5
+_MODE_HISTORY = 6
+_MODE_ADVSEARCH = 7
+_MODE_TAGS = 8
+
+_MODE_IMAGE = 100
+
+_GETREL = "#gEtReL#" # Needs to be 8 characters and must not be a valid tag
+_GETUSR = "#gEtUsR#"
+
+_REF_HISTORY = 1
+_REF_TAGLIST = 2
 
 # Make profile dir on first startup
 if not os.path.exists(xbmc.translatePath(__settings__.getAddonInfo('profile'))):
@@ -25,6 +42,7 @@ class moebooruApi:
     def __init__(self):
         self.pRating = ["", "safe", "questionable", "explicit", "questionableplus", "questionableless"]
         self.pOrder = ["", "score", "fav", "wide", "nonwide"]
+        self.pTagOrder = ["", "date", "count", "name"]
         
     def getAdvSearch(self, search):
         advSettings = ""
@@ -36,9 +54,9 @@ class moebooruApi:
                 advSettings += " rating:" + self.pRating[int(__settings__.getSetting('rating'))]
         return advSettings
         
-    def getImages(self, search, page=1):
+    def getImages(self, search, page=1, epp=__settings__.getSetting('epp')):
         result = []
-        raw_result = urllib.urlopen(__settings__.getSetting('server') + "/post.json" + "?tags=" + urllib.quote_plus(str(search) + self.getAdvSearch(search)) + "&limit=" + str(__settings__.getSetting('epp')) + "&page=" + str(page))
+        raw_result = urllib.urlopen(__settings__.getSetting('server') + "/post.json" + "?tags=" + urllib.quote_plus(str(search) + self.getAdvSearch(search)) + "&limit=" + str(epp) + "&page=" + str(page))
         json = simplejson.loads(raw_result.read())
         return json
         
@@ -55,39 +73,59 @@ class moebooruApi:
         return result
         
     def getImageCount(self, search=""): # Since the JSON answer doesn't include the total post count we need to "parse" XML.
-        raw_result = urllib.urlopen(__settings__.getSetting('server') + "/post.xml" + "?limit=1&query=" + urllib.quote_plus(str(search) + self.getAdvSearch(search)))
+        raw_result = urllib.urlopen(__settings__.getSetting('server') + "/post.xml" + "?limit=1&tags=" + self.getAdvSearch(search))
         result = []
         result = raw_result.read().split("\"")
         return result[5]
 
+    def getRelatedTags(self, tags): # Queries the tags related to the given ones
+        json = []
+        raw_result = urllib.urlopen(__settings__.getSetting('server') + "/tag/related.json" + "?tags=" + urllib.quote_plus(str(tags)))
+        json = simplejson.loads(raw_result.read())
+        return json
+        
+    def searchTags(self, search):
+        json = []
+        advSettings = ""
+        if (int(__settings__.getSetting('tagOrder')) > 0):
+            advSettings += "&order=" + self.pTagOrder[int(__settings__.getSetting('tagOrder'))]
+        raw_result = urllib.urlopen(__settings__.getSetting('server') + "/tag.json" + "?name=" + urllib.quote_plus(str(search)) + advSettings)
+        json = simplejson.loads(raw_result.read())
+        return json
 
 class moebooruSession:
     def __init__(self):
         self.api = moebooruApi()
         self.max_history = int(float(__settings__.getSetting('shistorySize')))
-    def addDir(self,name,url,mode,iconimage,page=1,tot=0,sort=0, q="newsearch"):
-        #u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&page="+str(page)+"&name="+urllib.quote_plus(name)+"&q="+urllib.quote_plus(str(q))
+    def addDir(self,name,url,mode,iconimage,page=1,tot=0,sort=0, q="newsearch", ref=0):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&page="+str(page)+"&q="+urllib.quote_plus(str(q))
         liz=xbmcgui.ListItem(name, 'test',iconImage="DefaultFolder.png", thumbnailImage=iconimage)
         liz.setInfo( type="image", infoLabels={"Title": name,"Label":str(sort)} )
-        if mode == 2: # This also includes the search button itself... but who cares?
-            contextMenu = [(language(33001), xbmc.translatePath('XBMC.RunScript(special://home/addons/plugin.image.moebooru/default.py,rmFromHistory,'+q+')'))]
-            liz.addContextMenuItems(contextMenu)
+        contextMenu = []
+        if ref == _REF_HISTORY or ref == _REF_TAGLIST: # The related tags button
+            contextMenu.append ([language(32003), xbmc.translatePath('Container.Update(%s?mode=%s&url=tags&q=%s)' % (sys.argv[0], _MODE_TAGS, _GETREL + q))])
+        if ref == _REF_HISTORY:
+            contextMenu.append([language(33001), xbmc.translatePath('XBMC.RunScript(special://home/addons/plugin.image.moebooru/default.py,rmFromHistory,'+q+')')])
+        liz.addContextMenuItems(contextMenu)
         return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=tot)
 
-    def addImage(self, iId, url, mode, iconimage, tot=0):
+    def addImage(self, iId, url, mode, iconimage, tot=0, relatedTags=""):
         liz=xbmcgui.ListItem(iId, iconImage="DefaultImage.png", thumbnailImage=iconimage)
         liz.setInfo( type="image", infoLabels={ "Id": iId })
+        if (mode == _MODE_IMAGE) and (relatedTags != ""):
+            contextMenu = [(language(36001), xbmc.translatePath('Container.Update(%s?mode=%s&url=tags&q=%s)' % (sys.argv[0], _MODE_TAGS, relatedTags)))]
+            liz.addContextMenuItems(contextMenu)
         return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False,totalItems=tot)
 
     def CATEGORIES(self):
-        self.addDir(language(31001),'latest',1,os.path.join(IMAGE_PATH,'latest.png'),sort=0)
-        self.addDir(language(31002),'search',2,os.path.join(IMAGE_PATH,'search.png'),sort=0)
-        self.addDir(language(31003),'random',3,os.path.join(IMAGE_PATH,'random.png'),sort=0)
-        self.addDir(language(31004),'pools',4,os.path.join(IMAGE_PATH,'pools.png'),sort=0)
+        self.addDir(language(31001),'latest',_MODE_LATEST,os.path.join(IMAGE_PATH,'latest.png'),sort=0)
+        self.addDir(language(31002),'search',_MODE_SEARCH,os.path.join(IMAGE_PATH,'search.png'),sort=0)
+        self.addDir(language(31003),'random',_MODE_RANDOM,os.path.join(IMAGE_PATH,'random.png'),sort=0)
+        self.addDir(language(31004),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'pools.png'),sort=0)
         # 5 is used for pools
         # NYI: self.addDir('Advanced Search','advSearch',7,os.path.join(IMAGE_PATH,'search.png'),sort=0)
-        self.addDir(language(31005),'history',6,os.path.join(IMAGE_PATH,'search_history.png'),sort=0)
+        self.addDir(language(31006),'tags',_MODE_TAGS,os.path.join(IMAGE_PATH,'tags.png'),sort=0, q=_GETUSR)
+        self.addDir(language(31005),'history',_MODE_HISTORY,os.path.join(IMAGE_PATH,'search_history.png'),sort=0)
         return True
         
     def SEARCH(self, query="", page=1):
@@ -96,19 +134,22 @@ class moebooruSession:
             kbd.doModal()
             if (kbd.isConfirmed()):
                 query = kbd.getText()
-                xbmc.executebuiltin("Container.Refresh(%s?mode=2&url=search&q=%s)" % (sys.argv[0], query))
-                return False;
-            else:
-                return False
+                xbmc.executebuiltin("Container.Refresh(%s?mode=%s&url=search&q=%s)" % (sys.argv[0], _MODE_SEARCH, query))
+            return False
         else:
             images = self.api.getImages(query, page)
             
+            if len(images) == 0: # No results -> suggestions
+                xbmc.executebuiltin("Notification(" + language(37001) + ")")
+                self.TAGS(_GETUSR + query)
+            if page == 1 and query != "" and len(images) > 0: # Display the related tags button on the first page nly
+                self.addDir(language(32003),'tags',_MODE_TAGS,os.path.join(IMAGE_PATH,'tags.png'),sort=0, q=_GETREL + query)
             for img in images:
-                self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),100,img.get("preview_url",""), len(images))
+                self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),_MODE_IMAGE,img.get("preview_url",""), len(images), relatedTags = img.get("tags",""))
             if query!="" and page == 1 and kbd.isConfirmed() and len(images) > 0: # Only add newly entered things and only add these, if results were found
                  self.conf_appendList(SHISTORY_PATH, query + SHISTORY_DATASEP + img.get("preview_url",os.path.join(IMAGE_PATH,'search.png')))
             if float(len(images)) == float(__settings__.getSetting('epp')): # If we loaded the max. number of images that we can, we assume there are more
-                self.addDir(language(32002),'search',2,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
+                self.addDir(language(32002),'search',_MODE_SEARCH,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
             return True
     def ADVSEARCH(self, query="", page=1):
         print "NYI"
@@ -121,20 +162,18 @@ class moebooruSession:
             item = item.split(SHISTORY_DATASEP)
             imgUrl=item[1]
             query=item[0]
-            self.addDir(query,'search',2,imgUrl,sort=0, q=query)
+            self.addDir(query,'search',_MODE_SEARCH,imgUrl,sort=0, q=query, ref=_REF_HISTORY)
         return True
     def POOLS(self, query="", page=1):
         kbd = xbmc.Keyboard('',language(34001))
         if query=="":
-            self.addDir(language(35001),'pools',4,os.path.join(IMAGE_PATH,'search.png'),sort=0, q="newquery")
+            self.addDir(language(35001),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'search.png'),sort=0, q="newquery")
         if query=="newquery":
             kbd.doModal()
             if (kbd.isConfirmed()):
                 query = kbd.getText()
-                xbmc.executebuiltin("Container.Refresh(%s?mode=4&url=pools&q=%s)" % (sys.argv[0], query))
-                return False
-            else:
-                return False
+                xbmc.executebuiltin("Container.Refresh(%s?mode=%s&url=pools&q=%s)" % (sys.argv[0], _MODE_POOLS, query))
+            return False
         else:
             pools = self.api.getPools(query,page)
             for pool in pools:
@@ -142,35 +181,82 @@ class moebooruSession:
                 pId=pool.get("id","0")
                 try:
                     previewUrl = os.path.join(IMAGE_PATH,'pools.png')
-                    print str(__settings__.getSetting('previewPools'))
                     if str(__settings__.getSetting('previewPools')) == "true":
                         imgs = self.api.getImagesFromPool(str(pId))
                         previewUrl = imgs[0].get('preview_url')
-                    self.addDir(str(name).replace("_"," "),'pool',5,previewUrl,sort=0, q=str(pId), tot=len(pools))
+                    self.addDir(str(name).replace("_"," "),'pool',_MODE_POOL,previewUrl,sort=0, q=str(pId), tot=len(pools))
                 except:
                     print language(40001)
 
         if str(len(pools))=="20":
-            self.addDir(language(32002),'pools',4,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
+            self.addDir(language(32002),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
         return True
     def POOL(self, query="", page=1):
         images = self.api.getImagesFromPool(query, page)
         for img in images:
-            self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),100,img.get("preview_url",""), tot=len(images))
+            self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),_MODE_IMAGE,img.get("preview_url",""), tot=len(images), relatedTags = img.get("tags",""))
         return True
     def RANDOM(self):
         page=randint(1,int(self.api.getImageCount()) // int(float(__settings__.getSetting('epp'))))
-        print "RAND:" + str(page)
-        images = self.api.getImages(" rating:all", page) # "rating all" is required because we can currently not get the amount of images for a specific search.
+        images = self.api.getImages("", page)
         for img in images:
-            self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),100,img.get("preview_url",""), tot=len(images))
-        self.addDir(language(32002),'random',3,os.path.join(IMAGE_PATH,'more.png'),sort=0)
+            self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),_MODE_IMAGE,img.get("preview_url",""), tot=len(images), relatedTags = img.get("tags",""))
+        self.addDir(language(32002),'random',_MODE_RANDOM,os.path.join(IMAGE_PATH,'more.png'),sort=0)
         return True
+    def TAGS(self, query):
+        typ = 0 # 0=list
         
+        # Secton for related tags
+        if (query[:8] == _GETREL):
+            query = query[8:]
+            typ = 1 # 1=relTags
+            
+        # Section for user input
+        elif (query[:8] == _GETUSR):
+            query = query[8:]
+            typ = 2 #2=searchTag
+            if (query == ""):
+                kbd = xbmc.Keyboard('',language(34002))
+                kbd.doModal()
+                if (kbd.isConfirmed()):
+                    query = _GETUSR + kbd.getText()
+                    xbmc.executebuiltin("Container.Refresh(%s?mode=%s&url=tags&q=%s)" % (sys.argv[0], _MODE_TAGS, query))
+                return False
+            else:
+                tags = self.api.searchTags(query)
+                lst = []
+                for tag in tags:
+                    lst.append(tag.get("name"))
+                tags = lst
+        
+        # Parse the completed list / query the related things
+        if typ == 0 or typ == 1:
+            tags = query.split(" ")
+        if (typ == 1):
+            query = self.api.getRelatedTags(query)
+            lst = []
+            for tag in tags:
+                temp = query.get(tag)
+                for subtag in temp:
+                    lst.append(subtag[0])
+            tags = lst
+        
+        # General output
+        for tag in tags:
+            previewUrl = os.path.join(IMAGE_PATH,'search.png')
+            if str(__settings__.getSetting('previewTags')) == "true":
+                imgs = self.api.getImages(tag, epp=1)
+                if (len(imgs) > 0):
+                    previewUrl = imgs[0].get('preview_url')
+            self.addDir(tag,'search',_MODE_SEARCH,previewUrl,sort=0, q=tag, ref=_REF_TAGLIST, tot=len(tags))
+        return True
+    
     def conf_getList(self, config_file):
         if not os.path.exists(config_file): return []
         fobj = open(config_file,'r')
         history = fobj.read()
+        if ("%preview_img%" in history): # Required when updating from any version older than 0.8
+            history = history.replace("%preview_img%", SHISTORY_DATASEP)
         fobj.close()
         return history.splitlines()
     def conf_appendList(self, config_file, item):
@@ -213,7 +299,6 @@ def get_params():
 
 def main():
     # Get all parameters (current path etc.)
-    print "MOE: FULL PATH=" + sys.argv[2]
     params = get_params()
     url=None
     name=None
@@ -250,22 +335,24 @@ def main():
 
     if mode==None or url==None or len(url)<1:
         success = moe.CATEGORIES()
-    elif mode==1:
+    elif mode == _MODE_LATEST:
         success = moe.LATEST(page)
-    elif mode==2:
+    elif mode == _MODE_SEARCH:
         success = moe.SEARCH(query, page)
-    elif mode==3:
+    elif mode == _MODE_RANDOM:
         success = moe.RANDOM()
-    elif mode==4:
+    elif mode == _MODE_POOLS:
         if query=="newsearch":
             query=""
         success = moe.POOLS(query, page)
-    elif mode==5:
+    elif mode == _MODE_POOL:
         success = moe.POOL(query, page)
-    elif mode==6:
+    elif mode == _MODE_HISTORY:
         success = moe.HISTORY()
-    elif mode==7:
+    elif mode == _MODE_ADVSEARCH:
         success = moe.ADVSEARCH()
+    elif mode == _MODE_TAGS:
+        success = moe.TAGS(query)
         
     xbmcplugin.endOfDirectory(int(sys.argv[1]),succeeded=success,updateListing=update_dir,cacheToDisc=cache)
     xbmc.executebuiltin("Container.SetViewMode(500)") # I don't really like this but I did not find any way to set the default layout.

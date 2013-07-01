@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2013-05-20 19:31+0000\n"
+"POT-Creation-Date: 2013-06-20 14:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -41,6 +41,10 @@ msgctxt "#30122"
 msgid "Rating"
 msgstr "Einstufung"
 
+msgctxt "#30123"
+msgid "Sort tags by"
+msgstr "Tags sortieren nach"
+
 msgctxt "#30141"
 msgid "Load preview for pools"
 msgstr "Vorschau für Bilderpools laden"
@@ -48,6 +52,10 @@ msgstr "Vorschau für Bilderpools laden"
 msgctxt "#30142"
 msgid "Size of the search history"
 msgstr "Größe des Suchverlaufs"
+
+msgctxt "#30143"
+msgid "Load preview for tags"
+msgstr "Vorschau für Tags laden"
 
 msgctxt "#30801"
 msgid "Server default"
@@ -93,6 +101,22 @@ msgctxt "#30826"
 msgid "Questionable and Safe"
 msgstr "Fraglich und jugendfrei"
 
+msgctxt "#30841"
+msgid "Server default"
+msgstr "Servereinstellung"
+
+msgctxt "#30842"
+msgid "Date"
+msgstr "Datum"
+
+msgctxt "#30843"
+msgid "Count"
+msgstr "Anzahl"
+
+msgctxt "#30844"
+msgid "Name"
+msgstr "Name"
+
 msgctxt "#31001"
 msgid "Latest"
 msgstr "Neueste"
@@ -113,9 +137,17 @@ msgctxt "#31005"
 msgid "Search history"
 msgstr "Suchverlauf"
 
+msgctxt "#31006"
+msgid "Search tags"
+msgstr "Tags suchen"
+
 msgctxt "#32002"
 msgid "More"
 msgstr "Mehr"
+
+msgctxt "#32003"
+msgid "Related tags"
+msgstr "Verwandte Tags"
 
 msgctxt "#33001"
 msgid "Remove from history"
@@ -123,11 +155,23 @@ msgstr "Aus dem Verlauf löschen"
 
 msgctxt "#34001"
 msgid "Enter tag to search for:"
-msgstr "Geben sie die Tags ein:"
+msgstr "Geben Sie die Tags ein:"
+
+msgctxt "#34002"
+msgid "Enter string to search for:"
+msgstr "Geben Sie den Suchbegriff ein:"
 
 msgctxt "#35001"
 msgid "Search pool"
 msgstr "Bilderpool suchen"
+
+msgctxt "#36001"
+msgid "Image tags"
+msgstr "Bildtags"
+
+msgctxt "#37001"
+msgid "No results were found!, Showing suggested tags instead."
+msgstr "Keine Bilder gefunden!, Meinten Sie einen der angezeigten Tags?"
 
 msgctxt "#40001"
 msgid "ERROR: Pool not readable. Maybe because of japanese characters in it?"

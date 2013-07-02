@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30010">Siguiente Pagina</string>
+  <string id="30011">Tipo de video no soportado</string>
+  <string id="30012">No se ha podido localizar la url de video</string>
+  <string id="30101">Región/Idioma (de los vídeos)</string>
+  <string id="30102">Debug (activa los logs)</string>
+</strings>

@@ -130,7 +130,8 @@ def createWeekMenu(my_mls, values_string, final_only=True):
         # get the home/away images
         home = my_mls.getTeamAbbr(teams, game['homeTeamID'])
         vist = my_mls.getTeamAbbr(teams, game['visitorTeamID'])
-        game_img = GAME_IMAGE_PREFIX + vist + "_at_" + home + ".jpg";
+        if not ((home == None) or (vist == None)):
+            game_img = GAME_IMAGE_PREFIX + vist + "_at_" + home + ".jpg";
 
         li = xbmcgui.ListItem(game_str, iconImage=game_img)
 

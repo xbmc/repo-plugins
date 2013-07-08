@@ -1,3 +1,7 @@
+[B]Version 1.0.3[/B]
+
+- fix crash with invalid home or away team abbreviations
+
 [B]Version 1.0.2[/B]
 
 - improve live and replay match menu layout

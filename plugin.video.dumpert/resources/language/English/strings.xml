@@ -3,9 +3,9 @@
     <!--
      * Main
      -->
-	<string id="30000">Toppers</string>
-	<string id="30001">Filmpjes</string>
-	<string id="30002">Themas</string>
+	<string id="30000">Top</string>
+	<string id="30001">New</string>
+	<string id="30002">Themes</string>
 
     <!-- 
      * Settings labels 

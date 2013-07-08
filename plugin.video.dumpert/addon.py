@@ -18,8 +18,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.dumpert"
-__date__        = "10 may 2013"
-__version__     = "1.0.1"
+__date__        = "7 july 2013"
+__version__     = "1.0.2"
 
 #
 # Imports

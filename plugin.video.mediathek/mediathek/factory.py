@@ -33,10 +33,10 @@ class MediathekFactory(object):
        ZDFMediathek.name():ZDFMediathek,
        ARTEMediathek.name():ARTEMediathek,
        DreiSatMediathek.name():DreiSatMediathek,
-       BayerischesFSMediathek.name():BayerischesFSMediathek,
+       #BayerischesFSMediathek.name():BayerischesFSMediathek,
        ORFMediathek.name():ORFMediathek,
-       WDRMediathek.name():WDRMediathek,
-       BRAlphaMediathek.name():BRAlphaMediathek,
+       #WDRMediathek.name():WDRMediathek,
+       #BRAlphaMediathek.name():BRAlphaMediathek,
        NDRMediathek.name():NDRMediathek,
        KIKAPlus.name():KIKAPlus
       }

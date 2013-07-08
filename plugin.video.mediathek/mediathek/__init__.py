@@ -60,7 +60,7 @@ class Mediathek(object):
         req = urllib2.Request(safe_url, data)
       else:
         req = urllib2.Request(safe_url)
-      req.add_header('User-Agent', 'Mozilla/5.0')
+      req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:15.0) Gecko/20100101 Firefox/15.0.1')
       req.add_header('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
       req.add_header('Accept-Language', 'de-de,de;q=0.8,en-us;q=0.5,en;q=0.3')
       req.add_header('Accept-Charset', 'utf-8')

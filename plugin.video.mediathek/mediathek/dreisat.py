@@ -55,6 +55,8 @@ class DreiSatMediathek(Mediathek):
     else:
       self.baseType ="video/quicktime";
     
+    
+    self.webEmType = "video/webm";
     self.menuTree = (
       TreeNode("0","Bauerfeind","http://www.3sat.de/mediathek/rss/mediathek_bauerfeind.xml",True),
       TreeNode("1","Bookmark","http://www.3sat.de/mediathek/rss/mediathek_bookmark.xml",True),
@@ -170,7 +172,7 @@ class DreiSatMediathek(Mediathek):
     links = {};
     for contentNode in itemNode.getElementsByTagName("media:content"):
       mediaType = contentNode.getAttribute("type");
-      if(not self.baseType == mediaType):
+      if(not (self.baseType == mediaType or mediaType == self.webEmType)):
         continue;
       
       height = int(contentNode.getAttribute("height"));

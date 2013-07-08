@@ -1,3 +1,6 @@
+0.5.6 - CHG: Temporaily disable BR, BR Alpha
+           FIX: 3Sat offers webem, will used as fallback
+           REM: WDR Support - they moves to a creepy format and i'am unable to handle this in xbmc correctly
 0.5.6 - FIX: NDR Update by dethfeet
 0.5.5 - FIX: More NDR fixes
 0.5.4 - FIX: NDR Fixed by dethfeet

@@ -17,8 +17,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.teamhww"
-__date__        = "23 june 2013"
-__version__     = "1.0.0"
+__date__        = "7 july 2013"
+__version__     = "1.0.2"
 
 #
 # Imports

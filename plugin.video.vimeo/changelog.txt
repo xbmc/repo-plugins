@@ -3,6 +3,12 @@
 - [XBMC] has Excessive Memory use after running the plugin for prolonged periods of time
 - [Vimeo] Vimeo's implementation of Oauth 1 is time sensetive, meaning that an incorrectly set system clock will prevent the plugin from logging in
 
+[B]Version 2.5.2[/B]
+- Fixed: Site changes broke login
+
+[B]Version 2.5.1[/B]
+- Fixed: Login didn't use https everywhere
+
 [B]Version 2.5.0[/B]
 - Added album management, add / remove videos and delete / create albums
 - Added Play all option to albums, new subscription videos, watch later, and the liked videos feed, option will allow the user to queue and playback a up to 250 videos

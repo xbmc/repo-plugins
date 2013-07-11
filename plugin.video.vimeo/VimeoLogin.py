@@ -102,7 +102,7 @@ class VimeoLogin():
 
     def extractCrossSiteScriptingToken(self):
         self.common.log("")
-        result = self.common.fetchPage({"link": "http://vimeo.com/log_in"})
+        result = self.common.fetchPage({"link": "https://vimeo.com/log_in"})
 
         xsrft = self.common.parseDOM(result["content"], "input",
                                      attrs={"id": "xsrft", "name": "token"},
@@ -146,10 +146,8 @@ class VimeoLogin():
                    'password': self.settings.getSetting("user_password"),
                    'token': xsrft}
 
-        result = self.common.fetchPage({"link": "http://vimeo.com/log_in", "post_data": request,
-                                "refering": "http://www.vimeo.com/log_in"})
-
-        #result = self.common.fetchPage({"link": "http://vimeo.com/", "refering": "http://vimeo.com/log_in"})
+        result = self.common.fetchPage({"link": "https://vimeo.com/log_in", "post_data": request,
+                                "refering": "https://www.vimeo.com/log_in", "hide_post_data": True})
 
         self.common.log("Done")
         return result

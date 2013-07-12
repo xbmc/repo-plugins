@@ -36,49 +36,185 @@ msgctxt "#30004"
 msgid "Last.fm password"
 msgstr "Last.fm 비밀번호"
 
+msgctxt "#30005"
+msgid "Confirm Love/Ban submissions"
+msgstr "좋아함/싫어함 전송 확인"
+
 msgctxt "#32011"
 msgid "Last.fm"
 msgstr "Last.fm"
 
 msgctxt "#32012"
 msgid "Do you want to add the current track to your loved tracks?"
-msgstr "현재 트랙을 선호 트랙에 추가 하시겠습니까?"
+msgstr "현재 트랙을 좋아하는 트랙에 추가하겠습니까?"
 
 msgctxt "#32013"
 msgid "Do you want to ban the current track?"
-msgstr "현재 트랙을 제거 하시겠습니까?"
+msgstr "현재 트랙을 제거하겠습니까?"
 
 msgctxt "#32014"
 msgid "Added to your loved tracks: '%s'."
-msgstr "선호 트랙에 추가됨: '%s'."
+msgstr "좋아하는 트랙에 추가됨: '%s'."
 
 msgctxt "#32015"
 msgid "Could not add '%s' to your loved tracks."
-msgstr "'%s' 를 선호 트랙에 추가할 수 없습니다."
+msgstr "'%s' 을(를) 좋아하는 트랙에 추가할 수 없습니다."
 
 msgctxt "#32016"
 msgid "Banned: '%s'."
-msgstr "제거됨: '%s'."
+msgstr "싫어함: '%s'."
 
 msgctxt "#32017"
 msgid "Could not ban '%s'."
-msgstr "'%s' 을(를) 제거하지못함."
+msgstr "'%s' 을(를) 싫어함으로 설정하지 못함."
 
 msgctxt "#32018"
 msgid "Do you want to remove this track from your loved tracks?"
-msgstr "이 트랙을 선호 트랙에서 제거 하시겠습니까?"
+msgstr "이 트랙을 좋아하는 트랙에서 제거하겠습니까?"
 
 msgctxt "#32019"
 msgid "Do you want to un-ban this track?"
-msgstr "이 트랙의 제거를 취소 하시겠습니까?"
+msgstr "이 트랙의 싫어함을 취소하겠습니까?"
+
+msgctxt "#32020"
+msgid "Removed from your loved tracks: '%s'."
+msgstr "좋아하는 트랙에서 제거됨: '%s'."
+
+msgctxt "#32021"
+msgid "Could not remove '%s' from your loved tracks."
+msgstr "'%s' 을(를) 좋아하는 트랙에서 제거할 수 없습니다."
+
+msgctxt "#32022"
+msgid "Un-banned: '%s'."
+msgstr "싫어함 취소: '%s'."
+
+msgctxt "#32023"
+msgid "Could not un-ban '%s'."
+msgstr "'%s' 싫어함을 취소할 수 없습니다."
 
 msgctxt "#32024"
 msgid "Remove from loved tracks"
-msgstr "선호 트랙에서 제거"
+msgstr "좋아하는 트랙에서 제거"
 
 msgctxt "#32025"
 msgid "Un-ban"
-msgstr "제거 취소"
+msgstr "싫어함 취고"
+
+msgctxt "#32026"
+msgid "Connect to Last.fm failed"
+msgstr "Last.fm 연결 실패"
+
+msgctxt "#32027"
+msgid "No username or password provided"
+msgstr "사용자이름 또는 비밀번호를 입력하세요"
+
+msgctxt "#32028"
+msgid "Could not retrieve list from Last.fm"
+msgstr "Last.fm 에서 목록을 찾아올 수 없음"
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "사용자 %s 의 친구들"
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "사용자 %s 의 이웃"
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "사용자 %s 의 인기 앨범"
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "사용자 %s 의 인기 아티스트"
+
+msgctxt "#32055"
+msgid "Top tags for user %s"
+msgstr "사용자 %s 의 인기 태그"
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "사용자 %s 의 인기 트랙"
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "%s 가 최근 싫어한 트랙"
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "%s 가 최근 감상한 트랙"
+
+msgctxt "#32059"
+msgid "Tracks recently loved by %s"
+msgstr "%s 가 최근 좋아한 트랙"
+
+msgctxt "#32060"
+msgid "Weekly album chart for %s"
+msgstr "%s 의 주간 앨범 차트"
+
+msgctxt "#32061"
+msgid "Weekly artist chart for %s"
+msgstr "%s 의 주간 아티스트 차트"
+
+msgctxt "#32062"
+msgid "Weekly track chart for %s"
+msgstr "%s 의 주간 트랙 차트"
+
+msgctxt "#32064"
+msgid "Listen to %s's neighbours Last.fm radio"
+msgstr "%s 의 이웃 Last.fm 라디오 듣기"
+
+msgctxt "#32065"
+msgid "Listen to %s's personal Last.fm radio"
+msgstr "%s 의 개인 Last.fm 라디오 듣기"
+
+msgctxt "#32066"
+msgid "Listen to %s's recommendations Last.fm radio"
+msgstr "%s 의 추천 Last.fm 라디오 듣기"
+
+msgctxt "#32067"
+msgid "Biggest fans of %s"
+msgstr "%s 의 골수팬"
+
+msgctxt "#32068"
+msgid "Similar artists as %s"
+msgstr "%s 와 비슷한 아티스트"
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "%s 인기 앨범"
+
+msgctxt "#32070"
+msgid "Top %s tags"
+msgstr "%s 인기 태그"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "%s 인기 트랙"
+
+msgctxt "#32072"
+msgid "Listen to %s fans Last.fm radio"
+msgstr "%s 팬의 Last.fm 라디오 듣기"
+
+msgctxt "#32073"
+msgid "Listen to %s similar artists Last.fm radio"
+msgstr "%s 비슷한 아티스트의 Last.fm 라디오 듣기"
+
+msgctxt "#32074"
+msgid "Top albums for tag %s"
+msgstr "%s 태그에 대한 인기 앨범"
+
+msgctxt "#32075"
+msgid "Top artists for tag %s"
+msgstr "%s 태그에 대한 인기 아티스트"
+
+msgctxt "#32076"
+msgid "Top tracks for tag %s"
+msgstr "%s 태그에 대한 인기 트랙"
+
+msgctxt "#32077"
+msgid "Listen to tag %s Last.fm radio"
+msgstr "%s 태그의 Last.fm 라디오 듣기"
 
 msgctxt "#32078"
 msgid "Search"
@@ -87,3 +223,23 @@ msgstr "찾기"
 msgctxt "#32079"
 msgid "No results found"
 msgstr "결과 없음"
+
+msgctxt "#32080"
+msgid "Custom Last.fm radio stations"
+msgstr "사용자 지정 Last.fm 라디오 방송국"
+
+msgctxt "#32081"
+msgid "Listen to artist fans Last.fm radio"
+msgstr "아티스트 팬의 Last.fm 라디오 듣기"
+
+msgctxt "#32082"
+msgid "Listen to similar artists Last.fm radio"
+msgstr "비슷한 아티스트의 Last.fm 라디오 듣기"
+
+msgctxt "#32083"
+msgid "Listen to tag Last.fm radio"
+msgstr "태그의 Last.fm 라디오 듣기"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "태그"

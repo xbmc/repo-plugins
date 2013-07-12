@@ -19,8 +19,8 @@ SESSION = 'loveban'
 
 class LoveBan:
     def __init__( self, params ):
-        artist = params.get( 'artist' )
-        song   = params.get( 'song' )
+        artist = xbmc.getInfoLabel('MusicPlayer.Artist').decode("utf-8")
+        song   = xbmc.getInfoLabel('MusicPlayer.Title').decode("utf-8")
         action = params.get( 'action' )
         # check if the skin provided valid params
         if artist and song and (action == 'LastFM.Love' or action == 'LastFM.Ban' or action == 'LastFM.UnLove' or action == 'LastFM.UnBan'):
@@ -31,7 +31,7 @@ class LoveBan:
             if sesskey:
                 self._submit_loveban(action, artist, song, confirm, sesskey)
             else:
-                log('no SESSIONkey, artistname or songname provided', SESSION)
+                log('no sessionkey, artistname or songname provided', SESSION)
 
     def _submit_loveban( self, action, artist, song, confirm, sesskey ):
         # love a track
@@ -47,9 +47,9 @@ class LoveBan:
             result = self._post_data(action, artist, song, sesskey)
             # notify user on success / fail
             if result:
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32014) % song, 7000))
+                msg = 'Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32014) % song, 7000)
             else:
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32015) % song, 7000))
+                msg = 'Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32015) % song, 7000)
         # ban a track
         elif action == 'LastFM.Ban' and xbmcgui.Window( 10000 ).getProperty('LastFM.RadioPlaying') == 'true':
             action = 'track.ban'
@@ -63,9 +63,9 @@ class LoveBan:
             result = self._post_data(action, artist, song, sesskey)
             # notify user on success / fail
             if result:
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32016) % song, 7000))
+                msg = 'Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32016) % song, 7000)
             else:
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32017) % song, 7000))
+                msg = 'Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32017) % song, 7000)
             # if a song is banned, we skip to the next track
             xbmc.executebuiltin('playercontrol(next)')
         # unlove a track
@@ -81,9 +81,9 @@ class LoveBan:
             result = self._post_data(action, artist, song, sesskey)
             # notify user on success / fail
             if result:
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32020) % song, 7000))
+                msg = 'Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32020) % song, 7000)
             else:
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32021) % song, 7000))
+                msg = 'Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32021) % song, 7000)
         # unban a track
         elif action == 'LastFM.UnBan':
             action = 'track.unban'
@@ -97,9 +97,10 @@ class LoveBan:
             result = self._post_data(action, artist, song, sesskey)
             # notify user on success / fail
             if result:
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32022) % song, 7000))
+                msg = 'Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32022) % song, 7000)
             else:
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32023) % song, 7000))
+                msg = 'Notification(%s,%s,%i)' % (LANGUAGE(32011), LANGUAGE(32023) % song, 7000)
+        xbmc.executebuiltin(msg.encode("utf-8"))
 
     def _post_data( self, action, artist, song, sesskey ):
         # love, ban, unlove, unban

@@ -243,3 +243,7 @@ msgstr "Ascolta artisti simili sulla radio Last.fm"
 msgctxt "#32083"
 msgid "Listen to tag Last.fm radio"
 msgstr "Ascolta etichette sulla radio Last.fm"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "Etichetta"

@@ -1,3 +1,13 @@
+v1.0.6
+- fix unicode encode error
+
+v1.0.5
+- added overall top artists, tags and tracks
+- changed love and ban comments so they work with keymaps
+
+v1.0.4
+- fixed crash when last.fm connection fails
+
 v1.0.3
 - fixed user radio names
 

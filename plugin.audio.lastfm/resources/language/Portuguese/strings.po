@@ -148,6 +148,18 @@ msgctxt "#32071"
 msgid "Top %s tracks"
 msgstr "Top de faixas de %s"
 
+msgctxt "#32074"
+msgid "Top albums for tag %s"
+msgstr "Top de álbuns para a etiqueta %s"
+
+msgctxt "#32075"
+msgid "Top artists for tag %s"
+msgstr "Top de artistas para a etiqueta %s"
+
+msgctxt "#32076"
+msgid "Top tracks for tag %s"
+msgstr "Top de faixas para a etiqueta %s"
+
 msgctxt "#32078"
 msgid "Search"
 msgstr "Procurar"
@@ -155,3 +167,11 @@ msgstr "Procurar"
 msgctxt "#32079"
 msgid "No results found"
 msgstr "Sem resultados"
+
+msgctxt "#32080"
+msgid "Custom Last.fm radio stations"
+msgstr "Estações de rádio Last.fm personalizadas"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "Etiqueta"

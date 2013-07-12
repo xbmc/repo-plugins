@@ -24,6 +24,10 @@ msgctxt "#30001"
 msgid "Submit songs to Last.fm"
 msgstr "Skicka låtinfo till Last.fm"
 
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "Skicka in online radio till Last.fm"
+
 msgctxt "#30003"
 msgid "Last.fm username"
 msgstr "Last.fm-användarnamn"
@@ -31,6 +35,10 @@ msgstr "Last.fm-användarnamn"
 msgctxt "#30004"
 msgid "Last.fm password"
 msgstr "Last.fm-lösenord"
+
+msgctxt "#30005"
+msgid "Confirm Love/Ban submissions"
+msgstr "Bekräfta Älska/Hata inskickningar"
 
 msgctxt "#32011"
 msgid "Last.fm"
@@ -68,6 +76,22 @@ msgctxt "#32019"
 msgid "Do you want to un-ban this track?"
 msgstr "Vill du ta bort bannlysningen på detta spår?"
 
+msgctxt "#32020"
+msgid "Removed from your loved tracks: '%s'."
+msgstr "Borttaget från dina älsklingsspår: '%s'."
+
+msgctxt "#32021"
+msgid "Could not remove '%s' from your loved tracks."
+msgstr "Kunde inte ta bort '%s' från dina älsklinsspår."
+
+msgctxt "#32022"
+msgid "Un-banned: '%s'."
+msgstr "Hävde bannlysning: '%s'."
+
+msgctxt "#32023"
+msgid "Could not un-ban '%s'."
+msgstr "Kunde inte häva bannlysning '%s'."
+
 msgctxt "#32024"
 msgid "Remove from loved tracks"
 msgstr "Ta bort från älsklingsspår"
@@ -80,6 +104,122 @@ msgctxt "#32026"
 msgid "Connect to Last.fm failed"
 msgstr "Anslutning till Last.fm misslyckades"
 
+msgctxt "#32027"
+msgid "No username or password provided"
+msgstr "Inget användarnamn eller lösenord angivet"
+
+msgctxt "#32028"
+msgid "Could not retrieve list from Last.fm"
+msgstr "Kunde inte hämta lista från Last.fm"
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "Vän av användare %s"
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "Grannar till användare %s"
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "Toppalbum för användare %s"
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "Toppartister för användare %s"
+
+msgctxt "#32055"
+msgid "Top tags for user %s"
+msgstr "Topptaggar för användare %s"
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "Topplåtar för användare %s"
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "Spår nyligen bannlysta av %s"
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "Spår nyligen lyssnade av %s"
+
+msgctxt "#32059"
+msgid "Tracks recently loved by %s"
+msgstr "Spår nyligen älskade av %s"
+
+msgctxt "#32060"
+msgid "Weekly album chart for %s"
+msgstr "Vecko-låtlista för %s"
+
+msgctxt "#32061"
+msgid "Weekly artist chart for %s"
+msgstr "Vecko-artistlista för %s"
+
+msgctxt "#32062"
+msgid "Weekly track chart for %s"
+msgstr "Vecko-spårlista för %s"
+
+msgctxt "#32063"
+msgid "Listen to %s's mix Last.fm radio"
+msgstr "Lyssna på %s's mix Last.fm radio"
+
+msgctxt "#32064"
+msgid "Listen to %s's neighbours Last.fm radio"
+msgstr "Lyssna på %s's grannes Last.fm radio"
+
+msgctxt "#32065"
+msgid "Listen to %s's personal Last.fm radio"
+msgstr "Lyssna på %s's personliga Last.fm radio"
+
+msgctxt "#32066"
+msgid "Listen to %s's recommendations Last.fm radio"
+msgstr "Lyssna på %s's rekommenderade Last.fm radio"
+
+msgctxt "#32067"
+msgid "Biggest fans of %s"
+msgstr "Största fansen av %s"
+
+msgctxt "#32068"
+msgid "Similar artists as %s"
+msgstr "Liknande artister som %s"
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "Topp %s album"
+
+msgctxt "#32070"
+msgid "Top %s tags"
+msgstr "Topp %s taggar"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "Topp %s spår"
+
+msgctxt "#32072"
+msgid "Listen to %s fans Last.fm radio"
+msgstr "Lyssna på %s fans Last.fm radio"
+
+msgctxt "#32073"
+msgid "Listen to %s similar artists Last.fm radio"
+msgstr "Lyssna på %s liknande artister radio"
+
+msgctxt "#32074"
+msgid "Top albums for tag %s"
+msgstr "Toppalbum för tagg %s"
+
+msgctxt "#32075"
+msgid "Top artists for tag %s"
+msgstr "Toppartister för tagg %s"
+
+msgctxt "#32076"
+msgid "Top tracks for tag %s"
+msgstr "Toppspår för tagg %s"
+
+msgctxt "#32077"
+msgid "Listen to tag %s Last.fm radio"
+msgstr "Lyssna på tagg %s Last.fm radio"
+
 msgctxt "#32078"
 msgid "Search"
 msgstr "Sök"
@@ -87,3 +227,39 @@ msgstr "Sök"
 msgctxt "#32079"
 msgid "No results found"
 msgstr "Inga resultat hittades"
+
+msgctxt "#32080"
+msgid "Custom Last.fm radio stations"
+msgstr "Egna Last.fm radiostationer"
+
+msgctxt "#32081"
+msgid "Listen to artist fans Last.fm radio"
+msgstr "Lyssna på artistens fans Last.fm radio"
+
+msgctxt "#32082"
+msgid "Listen to similar artists Last.fm radio"
+msgstr "Lyssna på liknande artister Last.fm radio"
+
+msgctxt "#32083"
+msgid "Listen to tag Last.fm radio"
+msgstr "Lyssna på tagg Last.fm radio"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "Tagg"
+
+msgctxt "#32091"
+msgid "Listen to user library Last.fm radio"
+msgstr "Lyssna på användarbibliotek Last.fm radio"
+
+msgctxt "#32092"
+msgid "Listen to user mix Last.fm radio"
+msgstr "Lyssna på användarmixar Last.fm radio"
+
+msgctxt "#32093"
+msgid "Listen to user neighbours Last.fm radio"
+msgstr "Lyssna på användarens grannars Last.fm radio"
+
+msgctxt "#32094"
+msgid "Listen to user recommendations Last.fm radio"
+msgstr "Lyssna på användar-rekommenderade Last.fm radio"

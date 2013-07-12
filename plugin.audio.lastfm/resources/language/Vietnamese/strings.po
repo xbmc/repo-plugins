@@ -20,6 +20,22 @@ msgctxt "#30000"
 msgid "General"
 msgstr "Chung"
 
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "Đưa bài hát lên Last.fm"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "Tên tài khoản Last.fm"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "Mật khẩu Last.fm"
+
+msgctxt "#32011"
+msgid "Last.fm"
+msgstr "Last.fm"
+
 msgctxt "#32012"
 msgid "Do you want to add the current track to your loved tracks?"
 msgstr "Bạn có muốn thêm bài hiện tại vào danh sách các bài yêu thích?"
@@ -27,6 +43,38 @@ msgstr "Bạn có muốn thêm bài hiện tại vào danh sách các bài yêu 
 msgctxt "#32013"
 msgid "Do you want to ban the current track?"
 msgstr "Bạn có muốn cấm bài hiện tại?"
+
+msgctxt "#32014"
+msgid "Added to your loved tracks: '%s'."
+msgstr "Đã được thêm vào các track được yêu thích của bạn: '%s'."
+
+msgctxt "#32015"
+msgid "Could not add '%s' to your loved tracks."
+msgstr "Không thể thêm '%s' vào các track được bạn yêu thích."
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "Bị cấm: '%s'."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "Không thể cấm '%s'."
+
+msgctxt "#32018"
+msgid "Do you want to remove this track from your loved tracks?"
+msgstr "Bạn có muốn loại bỏ track này ra khỏi các track yêu thích của bạn?"
+
+msgctxt "#32019"
+msgid "Do you want to un-ban this track?"
+msgstr "Bạn có muốn không cấm track này nữa?"
+
+msgctxt "#32024"
+msgid "Remove from loved tracks"
+msgstr "Loại bỏ khỏi các track yêu thích"
+
+msgctxt "#32025"
+msgid "Un-ban"
+msgstr "Không cấm nữa"
 
 msgctxt "#32078"
 msgid "Search"

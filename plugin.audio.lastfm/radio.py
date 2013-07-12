@@ -318,6 +318,9 @@ class Main:
         self._add_listitem(LANGUAGE(32060) % user, '', '["user.getWeeklyAlbumChart", "%s", "user"]' % user, '', True, 'list', 'count')
         self._add_listitem(LANGUAGE(32061) % user, '', '["user.getWeeklyArtistChart", "%s", "user"]' % user, '', True, 'list', 'count')
         self._add_listitem(LANGUAGE(32062) % user, '', '["user.getWeeklyTrackChart", "%s", "user"]' % user, '', True, 'list', 'count')
+        self._add_listitem(LANGUAGE(32095),        '', '["chart.getTopArtists", "250", "limit"]', '', True, 'list', 'count')
+        self._add_listitem(LANGUAGE(32096),        '', '["chart.getTopTags", "250", "limit"]', '', True, 'list', 'count')
+        self._add_listitem(LANGUAGE(32097),        '', '["chart.getTopTracks", "250", "limit"]', '', True, 'list', 'count')
         self._add_listitem(LANGUAGE(32065) % user, '', 'lastfm://user/%s/library' % user, 'DefaultPlaylist.png', False, 'play', 'none')
         self._add_listitem(LANGUAGE(32063) % user, '', 'lastfm://user/%s/mix' % user, 'DefaultPlaylist.png', False, 'play', 'none')
         self._add_listitem(LANGUAGE(32064) % user, '', 'lastfm://user/%s/neighbours' % user, 'DefaultPlaylist.png', False, 'play', 'none')
@@ -417,6 +420,21 @@ class Main:
             getlabel = 'at-n'
             getlabel2 = 'p'
             nextmode = 'artists'
+        elif tag == 'chart.getTopArtists' and data.has_key('artists') and data['artists'].has_key('artist'):
+            items = data['artists']['artist']
+            getlabel = 'n'
+            getlabel2 = 'p'
+            nextmode = 'artists'
+        elif tag == 'chart.getTopTags' and data.has_key('tags') and data['tags'].has_key('tag'):
+            items = data['tags']['tag']
+            getlabel = 'n'
+            getlabel2 = 't'
+            nextmode = 'tags'
+        elif tag == 'chart.getTopTracks' and data.has_key('tracks') and data['tracks'].has_key('track'):
+            items = data['tracks']['track']
+            getlabel = 'an-n'
+            getlabel2 = 'p'
+            nextmode = 'artists'
         elif tag == 'artist.getTopFans' and data.has_key('topfans') and data['topfans'].has_key('user'):
             items = data['topfans']['user']
             getlabel = 'n'
@@ -506,6 +524,8 @@ class Main:
                 label2 = item['@attr']['rank']
             except:
                 label2 = ''
+        elif tag =='t':
+            label2 = item['taggings']
         return label2
 
     def _list_getimage( self, item ):

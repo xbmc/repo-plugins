@@ -244,22 +244,22 @@ msgctxt "#32083"
 msgid "Listen to tag Last.fm radio"
 msgstr "Escoitar a etiqueta na radio Last.fm"
 
-msgctxt "#32084"
-msgid "Listen to user mix Last.fm radio"
-msgstr "Escoitar a mestura do usuario na radio Last.fm"
-
-msgctxt "#32085"
-msgid "Listen to user neighbours Last.fm radio"
-msgstr "Escoitar ós veciños do usuario na radio Last.fm"
-
-msgctxt "#32086"
-msgid "Listen to user library Last.fm radio"
-msgstr "Escoitar a biblioteca do usuario na radio Last.fm"
-
-msgctxt "#32087"
-msgid "Listen to user recommendations Last.fm radio"
-msgstr "Escoitar as recomendacións do usuario na radio Last.fm"
-
 msgctxt "#32088"
 msgid "Tag"
 msgstr "Etiqueta"
+
+msgctxt "#32091"
+msgid "Listen to user library Last.fm radio"
+msgstr "Escoitar a biblioteca do usuario na radio Last.fm"
+
+msgctxt "#32092"
+msgid "Listen to user mix Last.fm radio"
+msgstr "Escoitar a mestura do usuario na radio Last.fm"
+
+msgctxt "#32093"
+msgid "Listen to user neighbours Last.fm radio"
+msgstr "Escoitar ós veciños do usuario na radio Last.fm"
+
+msgctxt "#32094"
+msgid "Listen to user recommendations Last.fm radio"
+msgstr "Escoitar as recomendacións do usuario na radio Last.fm"

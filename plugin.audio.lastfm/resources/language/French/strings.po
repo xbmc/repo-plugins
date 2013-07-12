@@ -244,18 +244,6 @@ msgctxt "#32083"
 msgid "Listen to tag Last.fm radio"
 msgstr "Ecouter l'etiquette sur Last.fm radio"
 
-msgctxt "#32085"
-msgid "Listen to user neighbours Last.fm radio"
-msgstr "Ecouter les radios associées Last.fm de l'utilisateur"
-
-msgctxt "#32086"
-msgid "Listen to user library Last.fm radio"
-msgstr "Ecouter la librairie des radios Last.fm de l'utilisateur"
-
-msgctxt "#32087"
-msgid "Listen to user recommendations Last.fm radio"
-msgstr "Ecouter les recommandations de la radio Last.fm de l'utilisateur"
-
 msgctxt "#32088"
 msgid "Tag"
 msgstr "Etiquette"

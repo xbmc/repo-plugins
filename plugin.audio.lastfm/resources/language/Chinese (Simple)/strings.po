@@ -227,3 +227,39 @@ msgstr "搜索"
 msgctxt "#32079"
 msgid "No results found"
 msgstr "无结果"
+
+msgctxt "#32080"
+msgid "Custom Last.fm radio stations"
+msgstr "自定义 Last.fm 电台站"
+
+msgctxt "#32081"
+msgid "Listen to artist fans Last.fm radio"
+msgstr "收听艺人歌迷的 Last.fm 电台"
+
+msgctxt "#32082"
+msgid "Listen to similar artists Last.fm radio"
+msgstr "收听同类艺人的 Last.fm 电台"
+
+msgctxt "#32083"
+msgid "Listen to tag Last.fm radio"
+msgstr "收听标签 Last.fm 电台"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "标签"
+
+msgctxt "#32091"
+msgid "Listen to user library Last.fm radio"
+msgstr "收听用户资料库 Last.fm 电台"
+
+msgctxt "#32092"
+msgid "Listen to user mix Last.fm radio"
+msgstr "收听用户的 mix Last.fm 电台"
+
+msgctxt "#32093"
+msgid "Listen to user neighbours Last.fm radio"
+msgstr "收听用户同好的 Last.fm 电台"
+
+msgctxt "#32094"
+msgid "Listen to user recommendations Last.fm radio"
+msgstr "收听用户推荐 Last.fm 电台"

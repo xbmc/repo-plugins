@@ -231,3 +231,31 @@ msgstr "No se encontraron resultados"
 msgctxt "#32080"
 msgid "Custom Last.fm radio stations"
 msgstr "Estaciones de radio Last.fm personalizadas"
+
+msgctxt "#32081"
+msgid "Listen to artist fans Last.fm radio"
+msgstr "Escuchar los fans del artista desde la radio Last.fm"
+
+msgctxt "#32082"
+msgid "Listen to similar artists Last.fm radio"
+msgstr "Escuchar artistas similares desde la radio Last.fm"
+
+msgctxt "#32083"
+msgid "Listen to tag Last.fm radio"
+msgstr "Escuchar el género desde la radio Last.fm"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "Etiquetas"
+
+msgctxt "#32091"
+msgid "Listen to user library Last.fm radio"
+msgstr "Escuchar la librería del usuario desde la radio Last.fm"
+
+msgctxt "#32092"
+msgid "Listen to user mix Last.fm radio"
+msgstr "Escuchar los mix del usuario desde la radio Last.fm"
+
+msgctxt "#32094"
+msgid "Listen to user recommendations Last.fm radio"
+msgstr "Escuchar las recomendaciones de usuario desde la radio Last.fm"

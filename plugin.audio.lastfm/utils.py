@@ -68,7 +68,9 @@ def read_settings(session, puser=False, ppwd=False):
         data['password'] = pwd
         data['method'] = 'auth.getMobileSession'
         response = lastfm.post(data, session, True)
-        if response.has_key('session'):
+        if not response:
+            sesskey = ''
+        elif response.has_key('session'):
             sesskey = response['session']['key']
             # set property for skins
             xbmcgui.Window( 10000 ).setProperty('LastFM.CanLove', 'true')

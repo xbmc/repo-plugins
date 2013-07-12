@@ -248,11 +248,13 @@ msgctxt "#32083"
 msgid "Listen to tag Last.fm radio"
 msgstr ""
 
-# emptied strings 32084 - 32087
+#empty strings from id 32084 to 32087
 
 msgctxt "#32088"
 msgid "Tag"
 msgstr ""
+
+#empty strings from id 32089 to 32090
 
 msgctxt "#32091"
 msgid "Listen to user library Last.fm radio"
@@ -268,4 +270,16 @@ msgstr ""
 
 msgctxt "#32094"
 msgid "Listen to user recommendations Last.fm radio"
+msgstr ""
+
+msgctxt "#32095"
+msgid "Overall top artists"
+msgstr ""
+
+msgctxt "#32096"
+msgid "Overall top tags"
+msgstr ""
+
+msgctxt "#32097"
+msgid "Overall top tracks"
 msgstr ""

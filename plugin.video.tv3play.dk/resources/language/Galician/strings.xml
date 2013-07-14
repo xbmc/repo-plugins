@@ -4,7 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="100">Publicidade</string>
     <string id="101">Xeral</string>
     <string id="102">Rexión</string>
     <string id="103">Clips</string>
+    <string id="150">Seleccionar rexión</string>
+    <string id="200">Produciuse un erro na comunicación con TV3 Play.</string>
+    <string id="201">A mensaxe do erro é:</string>
+    <string id="202">Non se puido atopar o URL de reprodución</string>
+    <string id="203">Sen tempadas dispoñíbeis</string>
+    <string id="204">Non se puido obter a listaxe de programas</string>
+    <string id="301">Últimos vídeos</string>
+    <string id="302">Os máis vistos</string>
+    <string id="303">Os máis ligados</string>
+    <string id="304">Clips Recentes</string>
 </strings>

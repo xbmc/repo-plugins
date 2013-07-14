@@ -4,7 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="100">Anuncio</string>
     <string id="101">General</string>
     <string id="102">Región</string>
     <string id="103">Clips</string>
+    <string id="150">Elegir región</string>
+    <string id="200">Ha ocurrido un error de comunicación con TV3 Play.</string>
+    <string id="201">El mensaje de error es:</string>
+    <string id="202">No se encuentra el URL para reproducir</string>
+    <string id="203">No hay temporadas disponibles</string>
+    <string id="204">No se puede obtener la lista de programas</string>
+    <string id="301">Últimos vídeos</string>
+    <string id="302">Más vistos</string>
+    <string id="303">Los que más gustan</string>
+    <string id="304">Últimos clips</string>
 </strings>

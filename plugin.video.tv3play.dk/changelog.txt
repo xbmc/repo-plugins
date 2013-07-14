@@ -1,3 +1,7 @@
+[B]Version 1.0.6 - 2013-07-14[/B]
+- Switched to same API as Frodo branch
+- Fixed playback
+
 [B]Version 1.0.5 - 2013-05-02[/B]
 - Fixed error when initial ad was missing
 

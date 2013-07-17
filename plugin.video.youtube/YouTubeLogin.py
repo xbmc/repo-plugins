@@ -97,15 +97,23 @@ class YouTubeLogin():
         url = self.urls[u"oauth_api_login"]
 
         logged_in = False
-        fetch_options = {"link": url, "no-language-cookie": "true"}
+        fetch_options = {"link": url}
         step = 0
-        self.common.log("Part A")
+        self.common.log("Go to the api login page")
         while not logged_in and fetch_options and step < 6:
             self.common.log("Step : " + str(step))
             step += 1
 
             ret = self.core._fetchPage(fetch_options)
             fetch_options = False
+
+            for accounts in self.common.parseDOM(ret["content"], "ol", attrs={"id": "account-list"}):
+                self.common.log("Detected google plus with page administrator.")
+                acurl = self.common.parseDOM(accounts, "a", ret="href")
+                acname = self.common.parseDOM(accounts, "span", attrs={"class": "account-name"})
+                if len(acurl):
+                    fetch_options = {"link": acurl[0].replace("&amp;", "&")}
+                    continue
 
             newurl = self.common.parseDOM(ret["content"], "form", attrs={"method": "POST"}, ret="action")
             state_wrapper = self.common.parseDOM(ret["content"], "input", attrs={"id": "state_wrapper"}, ret="value")
@@ -114,8 +122,8 @@ class YouTubeLogin():
                 url_data = {"state_wrapper": state_wrapper[0],
                             "submit_access": "true"}
 
-                fetch_options = {"link": newurl[0].replace("&amp;", "&"), "url_data": url_data, "no-language-cookie": "true"}
-                self.common.log("Part B")
+                fetch_options = {"link": newurl[0].replace("&amp;", "&"), "url_data": url_data}
+                self.common.log("Press 'Accept' button")
                 continue
 
             code = self.common.parseDOM(ret["content"], "input", attrs={"id": "code"}, ret="value")
@@ -127,22 +135,21 @@ class YouTubeLogin():
                             "redirect_uri": "urn:ietf:wg:oauth:2.0:oob",
                             "grant_type": "authorization_code"}
                 fetch_options = {"link": url, "url_data": url_data}
-                self.common.log("Part C")
+                self.common.log("Extract and use access code")
                 continue
 
             # use token
             if ret["content"].find("access_token") > -1:
-                self.common.log("Part D")
+                self.common.log("Saving access_token")
                 oauth = json.loads(ret["content"])
 
                 if len(oauth) > 0:
-                    self.common.log("Part D " + repr(oauth["expires_in"]))
                     self.settings.setSetting("oauth2_expires_at", str(int(oauth["expires_in"]) + time.time()))
                     self.settings.setSetting("oauth2_access_token", oauth["access_token"])
                     self.settings.setSetting("oauth2_refresh_token", oauth["refresh_token"])
 
                     logged_in = True
-                    self.common.log("Done:" + self.settings.getSetting("username"))
+                    self.common.log("Done: " + self.settings.getSetting("username"))
 
         if logged_in:
             return (self.language(30030), 200)
@@ -153,15 +160,12 @@ class YouTubeLogin():
     def _httpLogin(self, params={}):
         get = params.get
         self.common.log("")
-        status = 500
 
         if get("new", "false") == "true" or get("page", "false") != "false":
-            self.settings.setSetting("login_info", "")
-            self.settings.setSetting("SID", "")
-            self.settings.setSetting("login_cookies", "")
-        elif self.settings.getSetting("login_info") != "":
-            self.common.log("returning existing login info: " + self.settings.getSetting("login_info"))
-            return (self.settings.getSetting("login_info"), 200)
+            self.settings.setSetting("cookies_saved", "false")
+        elif self.settings.getSetting("cookies_saved") == "true":
+            self.common.log("Use saved cookies")
+            return (self.settings.getSetting("cookies_saved"), 200)
 
         fetch_options = {"link": get("link", "http://www.youtube.com/")}
 
@@ -195,8 +199,9 @@ class YouTubeLogin():
 
             if len(nick) > 0 and nick[0] != "Sign In":
                 self.common.log("Logged in. Parsing data: " + repr(nick))
-                status = self._getLoginInfo(nick)
-                return(ret, status)
+                sys.modules["__main__"].cookiejar.save()
+                self.settings.setSetting("cookies_saved", "true")
+                return(ret, 200)
 
             # Click login link on youtube.com
             newurl = self.common.parseDOM(ret["content"], "button", attrs={"href": ".*?ServiceLogin.*?"}, ret="href")
@@ -211,7 +216,7 @@ class YouTubeLogin():
             if len(newurl) > 0:
                 (galx, url_data) = self._fillLoginInfo(ret)
                 if len(galx) > 0 and len(url_data) > 0:
-                    fetch_options = {"link": newurl[0], "no-language-cookie": "true", "url_data": url_data, "hidden": "true", "referer": ret["location"]}
+                    fetch_options = {"link": newurl[0], "url_data": url_data, "hidden": "true", "referer": ret["location"]}
                     self.common.log("Part B")
                     self.common.log("fetch options: " + repr(fetch_options), 10)  # WARNING, SHOWS LOGIN INFO/PASSWORD
                     continue
@@ -220,7 +225,7 @@ class YouTubeLogin():
             if len(newurl) > 0:
                 newurl = newurl[0].replace("&amp;", "&")
                 newurl = newurl[newurl.find("&#39;") + 5:newurl.rfind("&#39;")]
-                fetch_options = {"link": newurl, "no-language-cookie": "true", "referer": ret["location"]}
+                fetch_options = {"link": newurl, "referer": ret["location"]}
                 self.common.log("Part C: "  + repr(fetch_options))
                 continue
 
@@ -231,7 +236,7 @@ class YouTubeLogin():
                     return (False, 500)
 
                 new_part = self.common.parseDOM(ret["content"], "form", attrs={"name": "verifyForm"}, ret="action")
-                fetch_options = {"link": new_part[0], "url_data": url_data, "no-language-cookie": "true", "referer": ret["location"]}
+                fetch_options = {"link": new_part[0].replace("&amp;", "&"), "url_data": url_data, "referer": ret["location"]}
 
                 self.common.log("Part D: " + repr(fetch_options))
                 continue
@@ -245,7 +250,7 @@ class YouTubeLogin():
                             "GALX": galx}
 
                 target_url = self.common.parseDOM(ret["content"], "form", attrs={"name": "hiddenpost"}, ret="action")
-                fetch_options = {"link": target_url[0], "url_data": url_data, "no-language-cookie": "true", "referer": ret["location"]}
+                fetch_options = {"link": target_url[0], "url_data": url_data, "referer": ret["location"]}
                 self.common.log("Part E: " + repr(fetch_options))
                 continue
 
@@ -254,107 +259,49 @@ class YouTubeLogin():
                 # Check for errors.
                 return (self.core._findErrors(ret), 303)
 
-        return (ret, status)
+        return (ret, 500)
 
     def _fillLoginInfo(self, ret):
+        self.common.log("")
         content = ret["content"]
-        rmShown = self.common.parseDOM(content, "input", attrs={"name": "rmShown"}, ret="value")
-        cont = self.common.parseDOM(content, "input", attrs={"name": "continue"}, ret="value")
-        uilel = self.common.parseDOM(content, "input", attrs={"name": "uilel"}, ret="value") # Deprecated?
-        if len(uilel) == 0: # Deprecated?
-            uilel = self.common.parseDOM(content, "input", attrs= {"id":"uilel"}, ret="value")
-        if len(uilel) == 0 and ret["new_url"].find("uilel=") > -1:
-            uilel = ret["new_url"][ret["new_url"].find("uilel=")+6]
-            if uilel.find("&") > -1:
-                uilel = uilel[:uilel.find("&")]
-            uilel = [uilel]
-        dsh = self.common.parseDOM(content, "input", attrs={"name": "dsh"}, ret="value")
-        if len(dsh) == 0:
-            dsh = self.common.parseDOM(content, "input", attrs={"id": "dsh"}, ret="value")
 
-        galx = self.common.parseDOM(content, "input", attrs={"name": "GALX"}, ret="value")
-        uname = self.pluginsettings.userName()
-        pword = self.pluginsettings.userPassword()
+        url_data = {}
 
-        if pword == "":
-            pword = self.common.getUserInput(self.language(30628), hidden=True)
+        for name in self.common.parseDOM(content, "input", ret="name"):
+            for val in self.common.parseDOM(content, "input", attrs={"name": name}, ret="value"):
+                url_data[name] = val
 
-        if len(galx) == 0 or len(cont) == 0 or len(uilel) == 0 or len(dsh) == 0 or len(rmShown) == 0 or uname == "" or pword == "":
-            self.common.log("_fillLoginInfo missing values for login form " + repr(galx) + repr(cont) + repr(uilel) + repr(dsh) + repr(rmShown) + repr(uname) + str(len(pword)))
-            return ("", {})
-        else:
-            galx = galx[0]
-            url_data = {"pstMsg": "0",
-                        "ltmpl": "sso",
-                        "dnConn": "",
-                        "continue": cont[0],
-                        "service": "youtube",
-                        "uilel": uilel[0],
-                        "dsh": dsh[0],
-                        "hl": "en_US",
-                        "timeStmp": "",
-                        "secTok": "",
-                        "GALX": galx,
-                        "Email": uname,
-                        "Passwd": pword,
-                        "PersistentCookie": "yes",
-                        "rmShown": rmShown[0],
-                        "signin": "Sign in",
-                        "asts": ""
-                        }
-        return (galx, url_data)
+        self.common.log("Extracted url_data: " + repr(url_data), 0)
+        url_data["Email"] = self.pluginsettings.userName()
+        url_data["Passwd"] = self.pluginsettings.userPassword()
+        if url_data["Passwd"] == "":
+            url_data["Passwd"] = self.common.getUserInput(self.language(30628), hidden=True)
+
+        self.common.log("Done")
+        return (url_data["GALX"], url_data)
 
     def _fillUserPin(self, content):
-        self.common.log(repr(content), 5)
-        smsToken = self.common.parseDOM(content, "input", attrs={"name": "smsToken"}, ret="value")
-        self.smsToken = smsToken
+        self.common.log("")
+        form = self.common.parseDOM(content, "form", attrs={"name": "verifyForm"}, ret=True)
+
+        url_data = {}
+        for name in self.common.parseDOM(form, "input", ret="name"):
+            for val in self.common.parseDOM(form, "input", attrs={"name": name}, ret="value"):
+                url_data[name] = val
+
+        self.common.log("url_data: " + repr(form), 0)
+
+        if "smsToken" in url_data:
+            self.smsToken = url_data["smsToken"]
+        if "continue" in url_data:
+            url_data["continue"] = url_data["continue"].replace("&amp;", "&")
         userpin = self.common.getUserInputNumbers(self.language(30627))
 
         if len(userpin) > 0:
-            url_data = {"smsToken": smsToken[0],
-                        "PersistentCookie": "yes",
-                        "smsUserPin": userpin,
-                        "smsVerifyPin": "Verify",
-                        "timeStmp": "",
-                        "secTok": ""}
+            url_data["smsUserPin"] = userpin
             self.common.log("Done: " + repr(url_data))
+            url_data["smsVerifyPin"] = "Verify" # Overwrite this variable since it might contain unicode.
             return url_data
         else:
-            self.common.log("Replace this with a message telling users that they didn't enter a pin")
+            self.common.log("Error")
             return {}
-
-    def _getLoginInfo(self, nick):
-        self.common.log(nick)
-        status = 303
-
-        # Save cookiefile in settings
-        cookies = self.common.getCookieInfoAsHTML()
-        login_info = self.common.parseDOM(cookies, "cookie", attrs={"name": "LOGIN_INFO"}, ret="value")
-        SID = self.common.parseDOM(cookies, "cookie", attrs={"name": "SID", "domain": ".youtube.com"}, ret="value")
-        scookies = {}
-        self.common.log("COOKIES:" + repr(cookies))
-        tnames = re.compile(" name='(.*?)' ").findall(cookies)
-        for key in tnames:
-            tval = self.common.parseDOM(cookies, "cookie", attrs={"name": key}, ret="value")
-            if len(tval) > 0:
-                scookies[key] = tval[0]
-        self.common.log("COOKIES:" + repr(scookies))
-
-        if len(login_info) == 1:
-            self.common.log("LOGIN_INFO: " + repr(login_info))
-            self.settings.setSetting("login_info", login_info[0])
-        else:
-            self.common.log("Failed to get LOGIN_INFO from youtube: " + repr(login_info))
-
-        if len(SID) == 1:
-            self.common.log("SID: " + repr(SID))
-            self.settings.setSetting("SID", SID[0])
-        else:
-            self.common.log("Failed to get SID from youtube: " + repr(SID))
-
-        if len(SID) == 1 and len(login_info) == 1:
-            status = 200
-            self.settings.setSetting("login_cookies", repr(scookies))
-
-        self.common.log("Done")
-        return status

@@ -64,8 +64,7 @@ class YouTubeNavigation():
             {'Title':self.language(30016)  ,'path':"/root/explore/feeds/rated"             , 'thumbnail':"top"               , 'login':"false" , 'feed':"feed_rated" },
             {'Title':self.language(30052)  ,'path':"/root/explore/music"                   , 'thumbnail':"music"             , 'login':"false" , 'store':"disco_searches", "folder":"true" },
             {'Title':self.language(30040)  ,'path':"/root/explore/music/new"               , 'thumbnail':"search"            , 'login':"false" , 'scraper':"search_disco"},
-            {'Title':self.language(30055)  ,'path':"/root/explore/music/top100"            , 'thumbnail':"music"             , 'login':"false" , 'scraper':'music_top100'},
-            {'Title':self.language(30032)  ,'path':"/root/explore/trailers"                , 'thumbnail':"trailers"          , 'login':"false" , 'scraper':'trailers'},
+            {'Title':self.language(30032)  ,'path':"/root/explore/trailers"                , 'thumbnail':"trailers"          , 'login':"false" , 'feed':'uploads', 'contact':"trailers", "external":"true"},
             {'Title':self.language(30051)  ,'path':"/root/explore/live"                    , 'thumbnail':"live"              , 'login':"false" , 'feed':"feed_live" },
             {'Title':self.language(30019)  ,'path':"/root/recommended"                     , 'thumbnail':"recommended"       , 'login':"true"  , 'user_feed':"recommended" },
             {'Title':self.language(30008)  ,'path':"/root/watch_later"                     , 'thumbnail':"watch_later"       , 'login':"true"  , 'user_feed':"watch_later" },
@@ -573,10 +572,6 @@ class YouTubeNavigation():
             cm.append((self.language(30522), "XBMC.RunPlugin(%s?path=%s&action=play_all&user_feed=playlist&shuffle=true&playlist=%s&)" % (sys.argv[0], item("path"), item("playlist"))))
             if not get("external"):
                 cm.append((self.language(30539), "XBMC.RunPlugin(%s?path=%s&action=delete_playlist&playlist=%s&)" % (sys.argv[0], item("path"), item("playlist"))))
-
-        if (item("scraper") == "music_top100"):
-            cm.append((self.language(30520), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=music_top100&)" % (sys.argv[0], item("path"))))
-            cm.append((self.language(30522), "XBMC.RunPlugin(%s?path=%s&action=play_all&shuffle=true&scraper=music_top100&)" % (sys.argv[0], item("path"))))
 
         if (item("scraper") == "search_disco"):
             cm.append((self.language(30520), "XBMC.RunPlugin(%s?path=%s&action=play_all&scraper=search_disco&search=%s&)" % (sys.argv[0], item("path"), item("search"))))

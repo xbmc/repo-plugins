@@ -16,20 +16,21 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+import os
 import sys
 import xbmc
-import xbmcplugin
-import xbmcaddon
 import xbmcgui
 import urllib2
+import xbmcaddon
 import cookielib
+import xbmcplugin
 try:
     import xbmcvfs
 except ImportError:
     import xbmcvfsdummy as xbmcvfs
 
 # plugin constants
-version = "3.4.4"
+version = "3.4.6"
 plugin = "YouTube-" + version
 author = "TheCollective"
 url = "www.xbmc.com"
@@ -51,7 +52,17 @@ login = ""
 player = ""
 cache = ""
 
-cookiejar = cookielib.LWPCookieJar()
+path = xbmc.translatePath(settings.getAddonInfo("profile"))
+path = os.path.join(path, 'yt-cookiejar.txt')
+print("Loading cookies from :" + repr(path))
+cookiejar = cookielib.LWPCookieJar(path)
+
+if xbmcvfs.exists(path):
+    try:
+        cookiejar.load()
+    except:
+        pass
+
 cookie_handler = urllib2.HTTPCookieProcessor(cookiejar)
 opener = urllib2.build_opener(cookie_handler)
 

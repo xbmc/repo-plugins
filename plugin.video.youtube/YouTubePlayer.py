@@ -93,6 +93,7 @@ class YouTubePlayer():
         self.xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
 
         if self.settings.getSetting("lang_code") != "0" or self.settings.getSetting("annotations") == "true":
+            self.common.log("BLAAAAAAAAAAAAAAAAAAAAAA: " + repr(self.settings.getSetting("lang_code")))
             self.subtitles.addSubtitles(video)
 
         if (get("watch_later") == "true" and get("playlist_entry_id")):
@@ -214,7 +215,7 @@ class YouTubePlayer():
             self.common.log(u"- construct_video_url failed, video_url not set")
             return video_url
 
-        if get("action") != "download":
+        if get("action") != "download" and video_url.find("rtmp") == -1:
             video_url += '|' + urllib.urlencode({'User-Agent':self.common.USERAGENT})
 
         self.common.log(u"Done")
@@ -254,15 +255,16 @@ class YouTubePlayer():
     def checkForErrors(self, video):
         status = 200
 
-        if video[u"video_url"] == u"":
+        if "video_url" not in video or video[u"video_url"] == u"":
             status = 303
-            vget = video.get
-            if vget(u"live_play"):
-                video[u'apierror'] = self.language(30612)
-            elif vget(u"stream_map"):
-                video[u'apierror'] = self.language(30620)
-            else:
-                video[u'apierror'] = self.language(30618)
+            if u"apierror" not in video:
+                vget = video.get
+                if vget(u"live_play"):
+                    video[u'apierror'] = self.language(30612)
+                elif vget(u"stream_map"):
+                    video[u'apierror'] = self.language(30620)
+                else:
+                    video[u'apierror'] = self.language(30618)
 
         return (video, status)
 
@@ -282,13 +284,25 @@ class YouTubePlayer():
 
         (links, video) = self.extractVideoLinksFromYoutube(video, params)
 
-        video[u"video_url"] = self.selectVideoQuality(params, links)
+        if len(links) != 0:
+            video[u"video_url"] = self.selectVideoQuality(params, links)
+        elif "hlsvp" in video:
+            #hls selects the quality based on available bitrate (adaptive quality), no need to select it here
+            video[u"video_url"] = video[u"hlsvp"]
+            self.common.log("Using hlsvp url %s" % video[u"video_url"])
 
         (video, status) = self.checkForErrors(video)
 
         self.common.log(u"Done")
 
         return (video, status)
+
+    def removeAdditionalEndingDelimiter(self, data):
+        pos = data.find("};")
+        if pos != -1:
+            self.common.log(u"found extra delimiter, removing")
+            data = data[:pos + 1]
+        return data
 
     def extractFlashVars(self, data):
         flashvars = {}
@@ -303,10 +317,12 @@ class YouTubePlayer():
                     continue
                 data = line[p1 + 1:p2]
                 break
+        data = self.removeAdditionalEndingDelimiter(data)
 
         if found:
             data = json.loads(data)
             flashvars = data["args"]
+        self.common.log("Step2: " + repr(data))
 
         self.common.log(u"flashvars: " + repr(flashvars), 2)
         return flashvars
@@ -321,6 +337,9 @@ class YouTubePlayer():
 
         if flashvars.has_key(u"ttsurl"):
             video[u"ttsurl"] = flashvars[u"ttsurl"]
+
+        if flashvars.has_key(u"hlsvp"):                               
+            video[u"hlsvp"] = flashvars[u"hlsvp"]    
 
         for url_desc in flashvars[u"url_encoded_fmt_stream_map"].split(u","):
             url_desc_map = cgi.parse_qs(url_desc)
@@ -342,10 +361,36 @@ class YouTubePlayer():
 
             if url_desc_map.has_key(u"sig"):
                 url = url + u"&signature=" + url_desc_map[u"sig"][0]
+            elif url_desc_map.has_key(u"s"):
+                sig = url_desc_map[u"s"][0]
+                url = url + u"&signature=" + self.decrypt_signature(sig)
 
             links[key] = url
 
         return links
+
+    def decrypt_signature(self, s):
+        ''' use decryption solution by Youtube-DL project '''
+        if len(s) == 88:
+            return s[48] + s[81:67:-1] + s[82] + s[66:62:-1] + s[85] + s[61:48:-1] + s[67] + s[47:12:-1] + s[3] + s[11:3:-1] + s[2] + s[12]
+        elif len(s) == 87:
+            return s[62] + s[82:62:-1] + s[83] + s[61:52:-1] + s[0] + s[51:2:-1]
+        elif len(s) == 86:
+            return s[2:63] + s[82] + s[64:82] + s[63]
+        elif len(s) == 85:
+            return s[76] + s[82:76:-1] + s[83] + s[75:60:-1] + s[0] + s[59:50:-1] + s[1] + s[49:2:-1]
+        elif len(s) == 84:
+            return s[83:36:-1] + s[2] + s[35:26:-1] + s[3] + s[25:3:-1] + s[26]
+        elif len(s) == 83:
+            return s[6] + s[3:6] + s[33] + s[7:24] + s[0] + s[25:33] + s[53] + s[34:53] + s[24] + s[54:]
+        elif len(s) == 82:
+            return s[36] + s[79:67:-1] + s[81] + s[66:40:-1] + s[33] + s[39:36:-1] + s[40] + s[35] + s[0] + s[67] + s[32:0:-1] + s[34]
+        elif len(s) == 81:
+            return s[6] + s[3:6] + s[33] + s[7:24] + s[0] + s[25:33] + s[2] + s[34:53] + s[24] + s[54:81]
+        elif len(s) == 92:
+            return s[25] + s[3:25] + s[0] + s[26:42] + s[79] + s[43:79] + s[91] + s[80:83];
+        else:
+            self.common.log(u'Unable to decrypt signature, key length %d not supported; retrying might work' % (len(s)))
 
     def getVideoPageFromYoutube(self, get):
         login = "false"
@@ -354,6 +399,7 @@ class YouTubePlayer():
             login = "true"
 
         page = self.core._fetchPage({u"link": self.urls[u"video_stream"] % get(u"videoid"), "login": login})
+        self.common.log("Step1: " + repr(page["content"].find("ytplayer")))
 
         if not page:
             page = {u"status":303}
@@ -376,7 +422,7 @@ class YouTubePlayer():
                 self.login._httpLogin({"new":"true"})
                 result = self.getVideoPageFromYoutube(get)
             else:
-                self.utils.showMessage(self.language(30600), self.language(30622))
+                video[u"apierror"] = self.language(30622)
 
         if result[u"status"] != 200:
             self.common.log(u"Couldn't get video page from YouTube")
@@ -384,7 +430,7 @@ class YouTubePlayer():
 
         links = self.scrapeWebPageForVideoLinks(result, video)
 
-        if len(links) == 0:
+        if len(links) == 0 and not( "hlsvp" in video ):
             self.common.log(u"Couldn't find video url- or stream-map.")
 
             if not u"apierror" in video:

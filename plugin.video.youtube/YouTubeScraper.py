@@ -64,25 +64,6 @@ class YouTubeScraper():
 
         return ([], 303)
 
-#================================= trailers ===========================================
-
-    def scraperTop100Trailers(self, params):
-        self.common.log("" + repr(params))
-        url = self.createUrl(params)
-
-        result = self.core._fetchPage({"link":url})
-
-        trailers_playlist = self.common.parseDOM(result["content"], "a", attrs={"class":"yt-playall-link .*?"}, ret="href")[0]
-
-        if trailers_playlist.find("list=") > 0:
-            trailers_playlist = trailers_playlist[trailers_playlist.find("list=") + len("list="):]
-            if (trailers_playlist.rfind("&") > 0):
-                trailers_playlist = trailers_playlist[:trailers_playlist.rfind("&")]
-
-            return self.feeds.listPlaylist({"user_feed": "playlist", "playlist" : trailers_playlist})
-
-        return ([], 303)
-
 #=================================== Music ============================================
 
     def searchDisco(self, params={}):
@@ -103,34 +84,6 @@ class YouTubeScraper():
 
         return ([], 303)
 
-    def scrapeYouTubeTop100(self, params={}):
-        self.common.log("")
-
-        url = self.createUrl(params)
-
-        result = self.core._fetchPage({"link": url})
-
-        if result["status"] == 200:
-            list_url = self.common.parseDOM(result["content"], "a", attrs={"id": 'popular-tracks'}, ret="href")[0]
-            return self.scrapeWeeklyTop100Playlist(list_url)
-
-        self.common.log("Done")
-        return ([], 303)
-
-    def scrapeWeeklyTop100Playlist(self, list_url):
-        self.common.log("")
-        url = self.urls["main"] + list_url
-
-        result = self.core._fetchPage({"link":url })
-
-        if result["status"] == 200:
-            playlist = self.common.parseDOM(result["content"], "ol", attrs={"id": 'watch7-playlist-tray'})
-            print repr(playlist)
-            videos = self.common.parseDOM(playlist, "li", attrs={"class": 'video-list-item.*?'}, ret="data-video-id")
-
-            return(videos, result["status"])
-
-        return ([], 303)
         #================================== Common ============================================
     def getNewResultsFunction(self, params={}):
         get = params.get
@@ -141,13 +94,6 @@ class YouTubeScraper():
 
         if (get("scraper") in ["liked_videos", "watched_history"]):
             function = self.scrapeUserLikedVideos
-
-        if (get("scraper") == "music_top100"):
-            params["batch"] = "true"
-            function = self.scrapeYouTubeTop100
-
-        if get("scraper") == "trailers":
-            function = self.scraperTop100Trailers
 
         if function:
             params["new_results_function"] = function
@@ -167,12 +113,6 @@ class YouTubeScraper():
                 url += "&p=" + page
             else:
                 url += "?p=" + page
-
-        if get("scraper") == "music_top100":
-            url = self.urls["disco_main"]
-
-        if get("scraper") == "trailers":
-            url = self.urls["trailers"]
 
         if (get("scraper") in "search_disco"):
             url = self.urls["disco_search"] % urllib.quote_plus(get("search"))
@@ -238,10 +178,6 @@ class YouTubeScraper():
         return (result, status)
 
     def scrape(self, params={}):
-        get = params.get
-        if get("scraper") == "trailers":
-            return self.scraperTop100Trailers(params)
-
         self.getNewResultsFunction(params)
 
         result = self.paginator(params)

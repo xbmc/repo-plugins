@@ -42,8 +42,6 @@ def getStreamsFromPlayList(playlist):
         	print("HTTP error trying to open playlist")
         	return None
         
-        # store the base URI from the playlist
-        prefix=playlist[0:string.rfind(playlist,'/') + 1]
         lines = string.split(resp.read(), '\n')
 
         # parse the playlist file
@@ -62,7 +60,7 @@ def getStreamsFromPlayList(playlist):
         		bandwidth = line[idx + 10:len(line)].strip()
         	elif len(line) > 0 and len(bandwidth) > 0:
         		# add the playlist
-        		streams[bandwidth] = (prefix + line).strip()
+        		streams[bandwidth] = line.strip()
 
 	return streams
 

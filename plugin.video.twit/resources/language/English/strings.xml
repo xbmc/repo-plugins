@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id='30000'>Latest Episodes</string>
+  <string id="30000">Latest Episodes</string>
   <string id="30001">TWiT Live</string>
   <string id="30002">Available Streams</string>
   <string id="30003">Bitgravity (hls 1 mbps)</string>
   <string id="30004">Bitgravity (hls 400 kbps)</string>
-  <string id='30005'>Bitgravity (http 1 mbps)</string>
+  <string id="30005">Bitgravity (http 1 mbps)</string>
   <string id="30006">Bitgravity (http 400 kbps)</string>
   <string id="30007">Ustream (rtmp 1.5 mbps)</string>
   <string id="30008">JustinTV (rtmp 1 mbps)</string>
   <string id="30009">Flosoft.biz (hls 1.5 mbps)</string>
-  <string id='30010'>Flosoft.biz (hls 1 mbps)</string>
-  <string id='30011'>Flosoft.biz (hls 600 kbps)</string>
+  <string id="30010">Flosoft.biz (hls 1 mbps)</string>
+  <string id="30011">Flosoft.biz (hls 600 kbps)</string>
   <string id="30012">Flosoft.biz (hls 400 kbps)</string>
   <string id="30013">Audio TWiT.am/listen</string>
   <string id="30014">Playback Type</string>

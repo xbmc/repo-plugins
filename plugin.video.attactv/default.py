@@ -93,7 +93,7 @@ def main_list(params):
     videolist = lutil.find_multiple(buffer_web,pattern_videos)
 
     for url, title, thumbnail in videolist:
-        title = title.replace('&quot;', '"').replace('&#039;', '´')  # Cleanup the title.
+        title = title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
         lutil.log('Videolist: URL: "%s" Title: "%s" Thumbnail: "%s"' % (url, title, thumbnail))
         
         plot = title # The description only appears when we load the link, so a this point we copy the description with the title content.
@@ -221,15 +221,14 @@ def get_playable_kontexttv_url(html):
 
 # This function try to get a Dailymotion playable URL from the weblink and returns it reay to play it directly.
 def get_playable_dailymotion_url(html):
-    pattern_dailymotion = ' src="http://www.dailymotion.com/embed/video/([^"]*?)"'
-    #pattern_daily_video = '"hd720URL":"(.+?)"'
-    pattern_daily_video = '"hqURL":"(.+?)"'
+    pattern_dailymotion = ' src="(http://www.dailymotion.com/embed/video/[^"]*?)"'
+    #pattern_daily_video = '"hqURL":"(.+?)"'
+    pattern_daily_video = '"stream_h264_hq_url":"(.+?)"'
 
-    video_id = lutil.find_first(html, pattern_dailymotion)
-    if video_id:
-        lutil.log("attactv.play: We have found a Dailymotion video with id: '%s'" % video_id)
-        daily_url = "http://www.dailymotion.com/sequence/%s" % video_id
-        buffer_link = lutil.carga_web_dailymotion(daily_url)
+    daily_url = lutil.find_first(html, pattern_dailymotion)
+    if daily_url:
+        lutil.log("attactv.play: We have found a Dailymotion video with URL: '%s'" % daily_url)
+        buffer_link = lutil.carga_web(daily_url)
         video_url = lutil.find_first(buffer_link, pattern_daily_video)
         if video_url:
             video_url = video_url.replace('\\','')

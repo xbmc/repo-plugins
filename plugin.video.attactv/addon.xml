@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.attactv" name="attac tv" version="1.0.1" provider-name="jamontes">
+<addon id="plugin.video.attactv" name="attac tv" version="1.0.2" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
-        <import addon="plugin.video.youtube" version="3.4.1"/>
-        <import addon="plugin.video.vimeo" version="2.5.1"/>
-        <import addon="plugin.video.bliptv" version="0.8.1"/>
+        <import addon="plugin.video.youtube" version="3.4.6"/>
+        <import addon="plugin.video.vimeo" version="2.5.2"/>
+        <import addon="plugin.video.bliptv" version="0.8.3"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>

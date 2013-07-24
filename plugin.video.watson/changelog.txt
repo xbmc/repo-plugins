@@ -1,3 +1,4 @@
+[B]1.1.1[/B] - Download function improved, will now download to single file, some minor updates. New icon.
 [B]1.1.0[/B] - Beta, programs can now be removed from recordings / favourites.
 [B]1.0.9[/B] - Beta, Context menu to save program to recordings / favourites added, tmp dirs now selectable from settings
 [B]1.0.8[/B] - Beta, Search for recordings added

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/python
 #
 #
@@ -6,6 +7,7 @@
 #       jvesiluoma@gmail.com
 #
 # Version history:
+#  [B]1.1.1[/B] - Download function improved, will now download to single file, some minor updates. New icon.
 #  [B]1.1.0[/B] - Beta, programs can now be removed from recordings / favourites.
 #  [B]1.0.9[/B] - Beta, Context menu to save program to recordings / favourites added, tmp dirs now selectable from settings
 #  [B]1.0.8[/B] - Beta, Search for recordings added
@@ -113,6 +115,8 @@
 
 
 
+
+
 # Global variables
 VERSION = "1.1.0"
 MYHEADERS = { 'User-Agent': "Watson-XBMC version "+VERSION+";" }
@@ -128,7 +132,7 @@ import urllib, urllib2, cookielib , re, os, sys, time, linecache, StringIO, time
 from xml.dom import minidom
 from urlparse import urlparse
 watson_addon = xbmcaddon.Addon("plugin.video.watson");
-
+channeldict={'1006':'Jim','1007':'Yle?','1008':'Nelonen','1010':'TV1','1011':'MTV3','1012':'TV2','1013':'SVT1','1014':'TV5','1015':'Sub','629149':'AVA','317994':'Fox'}
 url_archive='http://www.watson.fi/pctv/RSS?action=getfavoriterecordings'
 
 tmpfile=watson_addon.getSetting("tempdir")+"tmp_m3u8a"
@@ -138,7 +142,7 @@ tmpfile2=watson_addon.getSetting("tempdir")+"tmp_m3u8b"
 # Check settings
 def settings():
   # Is account setup properly? Well...at least something given?
-  print "checking 05"
+  
   if watson_addon.getSetting("username") != '' and watson_addon.getSetting("password") != '' and tmpfile != ""  and tmpfile2 != "":
     INDEX()
   else:
@@ -195,8 +199,6 @@ def searchproc(url):
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(auth_handler))
   request = urllib2.Request(url, headers=MYHEADERS)
   searchcontent = opener.open(request).read()
-  #dom = minidom.parseString(content)
-  #items = dom.getElementsByTagName('item')
 
   # Save everyhing we need to tuples...
   procsearchmatch=re.compile('<title>(.+?)</title>\n            <description>(.+?)</description>\n            <dc:date>(.+?)</dc:date>\n            <guid isPermaLink="false">(.+?)</guid>\n            <link>(.+?)</link>\n            <source url="(.+?)">(.+?)</source>\n            <media:content duration="(.+?)"/>\n').findall(searchcontent)
@@ -210,11 +212,13 @@ def searchproc(url):
     sendday=matchitem[2].split("T")[0]
     sendtime=matchitem[2][matchitem[2].find("T")+1:matchitem[2].find("+")]
     sendname=matchitem[0]+" - "+sendday+" "+sendtime
-
+    sendname=sendname.replace("&#228;","a")
+	
     senddesc=matchitem[1].replace("&#228;","a")
     senddesc=senddesc.replace("&#246;","o")
+    senddesc=senddesc.replace("&amp;","&")
     #Format: addDir(name,url,mode,thumbnail, description, permlink)    
-    addDir(sendname.replace("&#228;","a"),sendurl.replace("&amp;","&"),4,"",senddesc, "")    
+    addDir(sendname,sendurl.replace("&amp;","&"),4,"",senddesc, "")    
   
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
   
@@ -257,8 +261,6 @@ def searchrec(url):
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(auth_handler))
   request = urllib2.Request(url, headers=MYHEADERS)
   searchcontent = opener.open(request).read()
-  #dom = minidom.parseString(content)
-  #items = dom.getElementsByTagName('item')
 
   # Save everyhing we need to tuples...
   recsearchmatch=re.compile('<title\>(.+?)<\/title\>\n            <description\>(.+?)<\/description\>\n            <dc:date\>(.+?)<\/dc:date\>\n            <link\>(.+?)<\/link\>\n            <guid isPermaLink="(.+?)"\>(.+?)<\/guid\>\n            <source url="(.+?)"\>(.+?)<\/source\>\n                        <media:content url="(.+?)" medium="(.+?)" type="(.+?)" fileSize="(.+?)" expression="(.+?)" duration="(.+?)"\/\>\n            <media:status  state="(.+?)"  reason="(.+?)" \/\>\n            <media:community\><media:starRating average="(.+?)"  min=".+?" max=".+?"\/\><\/media:community\>\n            <media:thumbnail url="(.+?)" height="(.+?)" width="(.+?)"\/\>').findall(searchcontent)  
@@ -272,11 +274,14 @@ def searchrec(url):
     sendday=matchitem[2].split("T")[0]
     sendtime=matchitem[2][matchitem[2].find("T")+1:matchitem[2].find("+")]
     sendname=matchitem[0]+" - "+sendday+" "+sendtime
-
+    sendname=sendname.replace("&#228;","a")
+	
     senddesc=matchitem[1].replace("&#228;","a")
     senddesc=senddesc.replace("&#246;","o")
+    senddesc=senddesc.replace("&amp;","&")
+	
     #Format: addDir(name,url,mode,thumbnail, description, permlink)    
-    addDir(sendname.replace("&#228;","a"),sendurl.replace("&amp;","&"),4,matchitem[17],senddesc, matchitem[5])    
+    addDir(sendname,sendurl.replace("&amp;","&"),4,matchitem[17]+"?width=640&height=480",senddesc, matchitem[5])    
 
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
@@ -336,14 +341,21 @@ def programs(url):
   ie=0
   if LoginError==False:
     for e in match:
-      if e[0] not in checked:
-        checked.append(e[0])
+      if e[0].split("(")[0].rstrip() not in checked:
+        #print "e: "+e[0].split("(")[0]+", length: "+str(len(e[0].split("(")[0]))
+        checked.append(e[0].split("(")[0].rstrip())
   
   checked.sort()
   i=0
   for item in checked:
     #Format: addDir(name,url,mode,thumbnail, description, permlink)    
-    addDir(item.replace("&#228;","a"),"episodelisturl",3,"","","NoContext")
+    itemname=item.replace("&#228;","a")
+    itemname=itemname.replace("&#196;","A")
+    itemname=itemname.replace("&#246;","o")
+    itemname=itemname.replace("&apos;","'")
+    itemname=itemname.replace("&amp;","&")
+	   
+    addDir(itemname,item,3,"","","NoContext")  
     i+=1
     
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -352,23 +364,32 @@ def programs(url):
 # Get first selection list and display items from tuples
 def episodelist	(url,name):
   i=0
-    
+  name=url
   # Sort results by time 
   match.sort(key=operator.itemgetter(2), reverse=True)
+  #print "name: "+name.split("(")[0].rstrip()+", length: "+str(len(name.split("(")[0].rstrip()))
   
   for matchitem in match:
     
-    if matchitem[0]==name:
+    if matchitem[0].split("(")[0].rstrip()==name.split("(")[0].rstrip():
+      #print "matchitem: "+matchitem[0].split("(")[0]
       #adddir uniques
       sendurl=matchitem[8]
       sendday=matchitem[2].split("T")[0]
       sendtime=matchitem[2][matchitem[2].find("T")+1:matchitem[2].find("+")]
-      sendname=matchitem[0]+" - "+sendday+" "+sendtime
-
+      # sendchan=matchitem[7].split(" ")[0]
+      sendname=matchitem[0]+" - "+channeldict[matchitem[7].split(" ")[0]]+" - "+sendday+" "+sendtime
+      sendname=sendname.replace("&#228;","a")
+      sendname=sendname.replace("&#196;","A")
+      sendname=sendname.replace("&#246;","ö")
+      sendname=sendname.replace("&amp;","&")
+	  
       senddesc=matchitem[1].replace("&#228;","a")
       senddesc=senddesc.replace("&#246;","o")
-      #Format: addDir(name,url,mode,thumbnail, description, permlink)    
-      addDir(sendname.replace("&#228;","a"),sendurl.replace("&amp;","&"),4,matchitem[17],senddesc, matchitem[5])    
+      senddesc=senddesc.replace("&amp;","&")
+      #Format: addDir(name,url,mode,thumbnail, description, permlink)
+   
+      addDir(sendname,sendurl.replace("&amp;","&"),4,matchitem[17]+"?width=640&height=480",senddesc, matchitem[5])    
   
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
   
@@ -427,7 +448,7 @@ def playurl(url):
   # Play from playlist
   xbmc.Player().play( playlist)
   while xbmc.Player().isPlaying():
-    xbmc.sleep(250)
+    xbmc.sleep(250) 
   xbmc.Player().stop()
     
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -439,7 +460,7 @@ def getplaylisturl(urlin):
     
   # Compile and retrieve redirection and right npvr server
   try:
-    compiledurl='http://'+watson_addon.getSetting("username")+':'+watson_addon.getSetting("password")+'@'+url.split("//")[1]
+    compiledurl='http://'+watson_addon.getSetting("username")+':'+watson_addon.getSetting("password")+'@'+urlin.split("//")[1]
     urllib.urlretrieve(compiledurl, tmpfile)
   except:
     print "Error creating playlist download URL."
@@ -474,12 +495,11 @@ def downloadvideo(durl,dname):
   ddir=watson_addon.getSetting("savedir")+dname.replace(':','-')
   ddir=ddir.replace(' ','_')
   
-  
-  # Try to make download dir..
-  try:
-    os.makedirs(ddir)
-  except:
-    print "downloadvideo: download dir already exists or permission denied..."
+#  # Try to make download dir..
+#  try:
+#    os.makedirs(ddir)
+#  except:
+#    print "downloadvideo: download dir already exists or permission denied..."
     
   # Get download url (playlist)
   try:
@@ -490,37 +510,36 @@ def downloadvideo(durl,dname):
   except:
     xbmcgui.Dialog().ok("Status","Error getting download url!")    
   
-  # Fetch video files
+  # Fetch video files and create playlist from files.
+ 
+  savedir=watson_addon.getSetting("savedir")+dname.replace(':','-')
+  savedir=savedir.replace('(','')
+  savedir=savedir.replace(')','')
+  savedir=savedir.replace(' ','_')+".ts"
+  savedir=savedir.replace('&#228;','a')
+  savedir=savedir.replace("&#246;","o")
+  savedir=savedir.replace('&amp;','_')
+  
   try:  
     for line in linestring.split("\n"):
-      if "session=" in line:      
-        if (os.name == "nt"):
-          urllib.urlretrieve("http://"+downloadurl.split("/")[2]+"/recorder/resources/"+line, ddir+"\\"+line.split("?")[0])
-        elif (os.name == "posix"):
-          urllib.urlretrieve("http://"+downloadurl.split("/")[2]+"/recorder/resources/"+line, ddir+"/"+line.split("?")[0])
-          
-  except:
-    xbmcgui.Dialog().ok("Status","Error fetching video files!")
+      if "session=" in line:     
+
+        # Open remote file for reading...
+        wwwfile=urllib.urlopen("http://"+downloadurl.split("/")[2]+"/recorder/resources/"+line)
+        
+        # Open local file for writing (append)...
+        localfile=open(savedir, 'ab+')
+        
+        # Write remote file to local file...
+        localfile.write(wwwfile.read())
+        print "...downloading..."
+        localfile.close()
     
-  # Combine videofiles!
-  try:    
-    if (os.name == "nt"):
-      cmd='copy /b '+ddir+'\\*.ts '+watson_addon.getSetting("savedir")+dname.replace(':','-').replace(' ','_')+".ts"
-      os.system(cmd)      
-      cmd_del='rmdir /S /Q '+ddir
-      os.system(cmd_del)
-      
-    if (os.name == "posix"):
-      cmd='cat '+ddir+'/*.ts > '+watson_addon.getSetting("savedir")+dname.replace(':','-').replace(' ','_')+".ts"
-      print "downloadvideo: cmd = "+cmd
-      os.system(cmd)
-      cmd_del='rm -rf '+ddir
-      print "downloadvideo: cmd_del = "+cmd_del      
-      os.system(cmd_del)      
-    print "Program: "+line.split("-")[0]+" downloaded, title: "+dname.replace(':','-').replace(' ','_')
+	print "...downloading completed!"
+	#xbmcgui.Dialog().ok("Status","Download completed for %s !"%(savedir))    
   except:
-    xbmcgui.Dialog().ok("Status","Error downloading file!")    
-  
+    print "Status","Error fetching video files!"    
+ 
   # added 9.2
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
           
@@ -582,15 +601,18 @@ try:
 except:
   pass
   
+
 # Get 'name'
 try:
   name=urllib.unquote_plus(params["name"])
 except:
   pass
+  
 try:
   plink=urllib.unquote_plus(params["plink"])
 except:
   pass        
+  
 try:
   mode=int(params["mode"])
 except:

@@ -40,14 +40,14 @@ def build_episodes_directory():
   url = 'http://www.eevblog.com/episodes/'
   data = open_url(url)
   match = re.compile('<body>(.+?)</body>', re.DOTALL).findall(data)
-  youtube_url_name = re.compile(r'<a href ="(.+?)" title="(EEVblog #.+?)">', re.DOTALL).findall(match[0])
+  youtube_url_name = re.compile(r'<a href ="(.+?)" title="(EEVblog #.+?)">', re.DOTALL + re.IGNORECASE).findall(match[0])
   for ep_url, name in youtube_url_name:
     listitem = xbmcgui.ListItem(label = name, iconImage = "", thumbnailImage = "")
     #listitem.setInfo( type = "Video", infoLabels = { "Title": name, "Director": __plugin__, "Studio": __plugin__, "Genre": "Video Blog", "Plot": plot[0], "Episode": "" } )
-    #u = sys.argv[0] + "?mode=2&name=" + name + "&youtube_video_id="+ urllib.quote_plus(youtube_video_id[0]) + "&plot=" + urllib.quote_plus(clean(plot[0])) + "&genre=" + "VideoBlog" + "&episode=" + urllib.quote_plus("0")
-    u = sys.argv[0] + "?mode=2&url=" + ep_url + "&name=" + name
-    xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
-    xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
+    if ep_url:
+      u = sys.argv[0] + "?mode=2&url=" + ep_url + "&name=" + name
+      xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = False)
+      xbmcplugin.addSortMethod( handle = int(sys.argv[ 1 ]), sortMethod = xbmcplugin.SORT_METHOD_NONE )
     
 def clean(name):
   remove = [('&amp;','&'), ('&quot;','"'), ('&#039;','\''), ('\r\n',''), ('&apos;','\''), ('.','')]
@@ -62,11 +62,11 @@ def play_video(ep_url):
   youtube_video_id = re.compile('<param name="movie" value=".*?/v/(.+?)[&\?].').findall(ep_data)
     
   # Ugly hack for a change in the page src from videos 140 onwards. 
-  if len(youtube_video_id) == 0:
-    youtube_video_id = re.compile('src="http://www.youtube.com/embed/(.*?)"').findall(ep_data)
+  if not youtube_video_id:
+    youtube_video_id = re.compile('youtube.com/embed/(.*?)"').findall(ep_data)
   
   # Close the busy waiting dialog, if the youtube url wasn't parsed correctly.
-  if len(youtube_video_id) == 0:
+  if not youtube_video_id:
     xbmc.executebuiltin('Dialog.Close(busydialog)')
     return
 

@@ -1,6 +1,6 @@
-[B|Version 0.2.2[/B]
+[B|Version 0.2.3[/B]
 
-- fixes some videos not playing. Thanks to Jonathan Fabian 
+- another workaround for attempts at parsing html with regexp. thanks mw9
 
 [B]Version 0.2.1[/B]
 

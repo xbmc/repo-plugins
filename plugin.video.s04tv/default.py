@@ -168,7 +168,7 @@ def provideTestvideoDir():
 
 
 def addDir(name,url,mode,iconimage):
-    parameters = {'url' : url, 'mode' : str(mode), 'name' : __language__(30005)}
+    parameters = {'url' : url.encode('utf-8'), 'mode' : str(mode), 'name' : __language__(30005)}
     u = sys.argv[0] +'?' +urllib.urlencode(parameters)
     xbmc.log('addDir url = ' +str(u))
     ok = True

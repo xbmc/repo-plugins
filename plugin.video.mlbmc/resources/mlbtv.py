@@ -65,7 +65,10 @@ def mlb_login():
         addon_log( "Logged in successfully!" )
     except:
         addon_log("Login Failed!")
-        addon_log(login)
+        try:
+            soup = BeautifulSoup(login)
+            addon_log(str(soup.head.title))
+        except: pass
         xbmc.executebuiltin("XBMC.Notification("+language(30035)+","+language(30042)+",5000,"+icon+")")
 
     if cookies.has_key('ipid') and cookies.has_key('fprt'):
@@ -110,7 +113,7 @@ def mlbGame(event_id, full_count=False):
         if cookies.has_key('ftmu'):
             addon_log("cookies.has_key('ftmu')")
             session = urllib.unquote(cookies['ftmu'])
-
+        
         values = {
             'eventId': event_id,
             'sessionKey': session,
@@ -183,9 +186,9 @@ def mlbGame(event_id, full_count=False):
 
     event_id = soup.find('event-id').string
     items = soup.findAll('user-verified-content')
-    verified_content = []
-    name_list = []
+    verified_content = {'video': [], 'audio': []}
     for item in items:
+        audio = False
         if item.state.string == 'MEDIA_ARCHIVE':
             if int(event_id.split('-')[2]) < 2012:
                 scenario = addon.getSetting('archive_scenario')
@@ -225,6 +228,7 @@ def mlbGame(event_id, full_count=False):
                 name = coverage+' '+call_letters+' '+blackout
 
             if item.type.string == 'audio':
+                audio = True
                 name += ' Gameday Audio'
                 scenario = 'AUDIO_FMS_32K'
 
@@ -235,15 +239,25 @@ def mlbGame(event_id, full_count=False):
                 continue
 
             else:
-                verified_content.append((name,event_id,content_id,session,cookies['ipid'],cookies['fprt'],scenario,live))
-                name_list.append(name)
+                if audio:
+                    verified_content['audio'].append((name,event_id,content_id,session,cookies['ipid'],cookies['fprt'],scenario,live))
+                else:
+                    verified_content['video'].append((name,event_id,content_id,session,cookies['ipid'],cookies['fprt'],scenario,live))
+
+    index = 0
+    name_list = []
+    sorted_content = {}
+    for i in verified_content['video'] + verified_content['audio']:
+        sorted_content[index] = i
+        name_list.append(i[0])
+        index += 1
 
     dialog = xbmcgui.Dialog()
     ret = dialog.select(language(30033), name_list)
     if ret >= 0:
         addon_log('Selected: %s' %name_list[ret])
-        addon_log('content: %s' %verified_content[ret][0])
-        getGameURL(*verified_content[ret])
+        addon_log('content: %s' %sorted_content[ret][0])
+        getGameURL(*sorted_content[ret])
 
 
 def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
@@ -253,6 +267,7 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
     else:
         subject = 'LIVE_EVENT_COVERAGE'
         url = 'https://secure.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.1?'
+        
     values = {
         'subject': subject,
         'sessionKey': session,
@@ -260,7 +275,7 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
         'contentId': content,
         'playbackScenario': scenario,
         'eventId': event,
-        'fingerprint': cookieFp,
+        'fingerprint': urllib.unquote(cookieFp),
         'platform':'WEB_MEDIAPLAYER'
         }
 
@@ -390,9 +405,6 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
             addon_log( 'final url: '+final_url )
         item = xbmcgui.ListItem(path=final_url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
-
-
 
 
 def get_smil(url):

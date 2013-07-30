@@ -67,23 +67,7 @@ def get_playlist_page(url):
     mp_items = soup.h4.findNextSibling()('div', attrs={'class': 'item'})
     for i in mp_items:
         categories['playlist']['main_topic']['videos'].append((i.p.string, i['data-cid'], i.img['data-lazy-src'].split('_th_')[0] + '_th_13.jpg'))
-    for i in carousel_topics:
-        try:
-            thumb = re.findall('url\((.+?)\)', i.div.div['style'])[0]
-        except:
-            try:
-                thumb = i.img['src']
-            except:
-                addon_log('thumb exception')
-        href = i.a['href']
-        vid_list = []
-        topic_items = i('div', attrs={'class': "page topic item"})
-        for item in topic_items:
-            vids = item('li')
-            for x in vids:
-                content_id = x.a['href'].split('content_id=')[1].split('&')[0]
-                vid_list.append((x.find('span', attrs={'class': "headline"}).string, content_id, x.img['data-lazy-src'].split('_th_')[0] + '_th_13.jpg'))
-        categories['playlist'][i.h4.string] = {'thumb': thumb, 'href': href, 'videos': vid_list}
+
     return categories
 
 
@@ -104,9 +88,10 @@ def get_mlb_playlist(url, name=None):
     if url == 'http://wapc.mlb.com/play':
         data = cache.cacheFunction(cache_playlist_categories)
         main_page = 'True'
-        if name is None:
-            addDir(language(30010), 'get_playlist', 4, thumb)
-            addDir(language(30011), 'browse_categories', 28, thumb)
+        addDir(language(30013), 'main_topic', 24, thumb, main_page)
+        # add teams dir
+        addDir(language(30010), 'get_playlist', 4, thumb)
+        get_playlist_cats()
     else:
         data = cache_current_playlist(url)
         main_page = 'False'
@@ -117,10 +102,8 @@ def get_mlb_playlist(url, name=None):
                 team = None
             if team:
                 addDir(language(30012), team[1], 20, thumb)
-    addDir(language(30013), 'main_topic', 24, thumb, main_page)
-    for i in data['playlist'].keys():
-        if i != 'main_topic':
-            addDir(i, i, 24, data['playlist'][i]['thumb'], main_page)
+        addDir(language(30013), 'main_topic', 24, thumb, main_page)
+        get_playlist_cats(True, False)
 
 
 def get_topic_playlist(topic, main_page):
@@ -129,17 +112,27 @@ def get_topic_playlist(topic, main_page):
         data = cache.cacheFunction(cache_playlist_categories)
     else:
         data = eval(cache.get('current'))
-    for i in data['playlist'][topic]['videos']:
-        mm_url = 'http://wapc.mlb.com/gen/multimedia/detail/%s/%s/%s/%s.xml' %(i[1][-3], i[1][-2], i[1][-1], i[1])
-        addLink(i[0], mm_url, '', 2, i[2])
+
+    if len(data['playlist'][topic]['videos']) > 0:
+        for i in data['playlist'][topic]['videos']:
+            mm_url = 'http://wapc.mlb.com/gen/multimedia/detail/%s/%s/%s/%s.xml' %(i[1][-3], i[1][-2], i[1][-1], i[1])
+            addLink(i[0], mm_url, '', 2, i[2])
 
 
-def get_playlist_cats(subcat=False):
+def get_playlist_cats(current=False, subcat=False):
     ''' mode 28-29, add directories for browse all playlist '''
     thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/playlist.png'
-    data = cache.cacheFunction(cache_playlist_categories)
+    if current:
+        data = eval(cache.get('current'))
+    else:
+        data = cache.cacheFunction(cache_playlist_categories)
     if subcat:
-        items = data['sub_categories'][subcat]
+        try:
+            items = data['sub_categories'][subcat]
+        except KeyError:
+            addon_log('KeyError: %s' %subcat)
+            addon_log(data['sub_categories'].keys())
+            return
     else:
         items = data['topics']
     for title, item_id in items:
@@ -339,10 +332,10 @@ def getVideos(url, page=False):
         name = i['blurb']
         duration = i['duration']
         item_url = i['url']
-        try:
-            thumb = i['thumbnails'][2]['src']
-        except:
-            thumb = i['thumbnails'][1]['src']
+        if len(i['thumbnails']) > 0:
+            thumb = i['thumbnails'][-1]['src']
+        else:
+            thumb = ''
         addLink(name,item_url,duration,2,thumb)
     if items[1]:
         addDir(language(30034), str(page+1), 21, next_icon)
@@ -370,9 +363,10 @@ def setVideoURL(link, direct=False):
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 
-def getVideoURL(url):
-    ''' parses the given xml url, returns the actual video url ''' 
-    soup = BeautifulStoneSoup(getRequest(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
+def getVideoURL(xml_url):
+    ''' parses the given xml url, returns the actual video url '''
+    url = None
+    soup = BeautifulStoneSoup(getRequest(xml_url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
     if addon.getSetting('use_hls') == 'true':
         if soup.find('url', attrs={'playback_scenario' : "HTTP_CLOUD_TABLET"}):
             url = soup.find('url', attrs={'playback_scenario' : "HTTP_CLOUD_TABLET"}).string
@@ -388,7 +382,9 @@ def getVideoURL(url):
         url = soup.find('url', attrs={'playback_scenario' : "MLB_FLASH_1000K_PROGDNLD"}).string
     elif soup.find('url', attrs={'playback_scenario' : "MLB_FLASH_800K_PROGDNLD"}):
         url = soup.find('url', attrs={'playback_scenario' : "MLB_FLASH_800K_PROGDNLD"}).string
-    return url
+    if url:
+        addon_log('Playback URL: %s' %url)
+        return url
 
 
 def getCondensedGames(url):
@@ -398,15 +394,16 @@ def getCondensedGames(url):
     items = data['data']['games']['game']
     addon_log('item count: %s' %len(items))
     for i in items:
-        try:
-            if i['game_media']['newsroom']['media']['type'] == 'condensed_video':
-                content = i['game_media']['newsroom']['media']['id']
-            else:
-                raise KeyError
-        except KeyError:
-            continue
-        content_id = content[-3]+'/'+content[-2]+'/'+content[-1]+'/'+content
-        url = 'http://mlb.mlb.com/gen/multimedia/detail/'+content_id+'.xml'
+        content_id = None
+        media_items = i['game_media']['homebase']['media']
+        for t in media_items:
+            if t['type'] == "condensed_game":
+                content_id = t['id']
+                break
+        if content_id:        
+            url = ('http://mlb.mlb.com/gen/multimedia/detail/%s/%s/%s/%s.xml'
+                   %(content_id[-3], content_id[-2], content_id[-1], content_id))
+
         if show_scores == "true":
             name = TeamCodes[i['away_team_id']][0] + ' - ' + i['away_score'] + ' @ ' + TeamCodes[i['home_team_id']][0] + ' - ' + i['home_score']
         else:
@@ -569,7 +566,7 @@ def getGames(url):
                 event_id = game['game_media']['media']['calendar_event_id']
             except:
                 addon_log( name+'event_id exception' )
-                mode = '24'
+                mode = '30'
                 event_id = ''
 
         try:

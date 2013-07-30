@@ -1,3 +1,8 @@
+Version 1.1.6
+fix website changes, condensed games, MLB.com playlist
+fix 'identity error' after selecting a coverage type in MLB.TV
+added sorting of coverage types
+
 Version 1.1.5
 fix website changes
 

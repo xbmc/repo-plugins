@@ -6,3 +6,9 @@
 - Some other fixes
 1.0.2 / 2.0.2
 - Fixed video playback
+1.0.3 / 2.0.3
+- Now using new media library backend
+- Added "Add to queue" context menu
+- Added support for HD videos
+1.0.4 / 2.0.4
+- Added Arte Livestream

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30001">ARTE+7</string>
-  <string id="30002">All Videos</string>
-  <string id="30003">Shows A-Z</string>
-  <string id="30004">Events</string>
-  <string id="30005">Search</string>
-  <string id="30006">by Title</string>
-  <string id="30007">by Date</string>
-  <string id="30008">by Votes</string>
-  <string id="30009">by Hits</string>
+  <string id="30001">New</string>
+  <string id="30002">Selection</string>
+  <string id="30003">Most Viewed</string>
+  <string id="30004">Last Chance</string>
+  <string id="30005">Genres</string>
+  <string id="30006">Shows</string>
+  <string id="30007">By Date</string>
+  <string id="30008">Search</string>
+  <string id="30009">Live TV</string>
   <string id="30010">Next Page</string>
-  <string id="30011">Videos of the day</string>
-  <string id="30012">Live WEB (Concerts)</string>
+  <string id="30011">All</string>
+  <string id="30012">Concerts</string>
   <string id="30013">Pop, Rock, Electro</string>
   <string id="30014">Classic</string>
   <string id="30015">Jazz & Blues</string>
@@ -19,9 +19,10 @@
   <string id="30017">Theater & Dance</string>
   <string id="30018">Video is not available yet</string>
   <string id="30019">Video is no longer available</string>
+  <string id="30020">Add to queue</string>
   <string id="30101">Language (Videos)</string>
-  <string id="30102">Videos per Page</string>
-  <string id="30103">Timeout (sec)</string>
   <string id="30104">Force View</string>
   <string id="30105">ViewID</string>
+  <string id="30106">Maximum Video Quality</string>
+  <string id="30107">Use thumb as fanart</string>
 </strings>

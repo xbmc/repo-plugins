@@ -22,3 +22,8 @@
 1.0.9
 - Added show favorites
 - Fixed livestreaming
+1.1.0 / 2.1.0
+- Fixed livestreams
+- Added "Add to queue" context menu
+- Added show "heute 100sec"
+- Some other small improvements

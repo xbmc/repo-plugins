@@ -101,7 +101,7 @@ class Main:
 			video_page_url = video_page_url_in_td.a['href']
 			
 			# Make title
-			title = str(video_page_url_in_td.a['title'])
+			title = video_page_url_in_td.a['title']
 			# Convert from unicode to encoded text (don't use str() to do this)
 			title = title.encode('utf-8')
 						

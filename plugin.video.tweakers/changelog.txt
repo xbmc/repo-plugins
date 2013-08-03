@@ -4,3 +4,6 @@ v1.0.0 (Sunday, 23 June 2013) :
 v1.0.1 (Saturday, 7 July 2013) :
 - added beautiful soup as dependency
 - added dutch strings
+
+v1.0.2 (Saturday, 3 August 2013) :
+- fixed title bug

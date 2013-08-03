@@ -5,3 +5,5 @@
 - Added support for theonion videos
 1.0.2 / 2.0.2
 - Added search
+1.0.3 / 2.0.3
+- Fixed video playback

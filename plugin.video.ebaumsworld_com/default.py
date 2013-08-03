@@ -40,7 +40,7 @@ def listVideos(url):
         spl=content.split('<li class="mediaGridItem ">')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('<img alt="(.+?)"', re.DOTALL).findall(entry)
+            match=re.compile('<li class="title">.+?<span>(.+?)</span>', re.DOTALL).findall(entry)
             title=match[0]
             title=cleanTitle(title)
             match=re.compile('href="/video/watch/(.+?)/"', re.DOTALL).findall(entry)
@@ -61,7 +61,7 @@ def listVideos(url):
             match=re.compile('<li class="description">(.+?)</li>', re.DOTALL).findall(entry)
             desc=match[0]
             desc=date+" - "+views+" Views - "+comments+" Comments\nDescription: "+desc
-            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            match=re.compile('data-src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
             addLink(title,id,'playVideo',thumb,desc)
         if len(matchPage)>0:

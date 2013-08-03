@@ -70,14 +70,14 @@ def listVideos(urlFull):
         if currentPage == 1:
             match = re.compile('<a href=".+?">\n<img src="(.+?)" alt="" />\n</a>\n</div>\n<div style=".+?">\n<h2 class=".+?" style=".+?"><b>.+?</b> (.+?)</h2><br />\n<span style=".+?" class="purehtml fs11">\n.+?<a class="btn" href="(.+?)"', re.DOTALL).findall(content)
             for thumb, title, url in match:
-                addSmallThumbLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
+                addDir(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
         match = re.compile('<img src=\'(.+?)\' alt=".+?" title=".+?" />\n</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a href=\'(.+?)\' class="link">\n<span class=\'bold\'><b>.+?</b> (.+?)</span>', re.DOTALL).findall(content)
         for thumb, url, title in match:
-            addSmallThumbLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
+            addDir(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
     elif mode == "listVideosInterview":
         match = re.compile('<img src=\'(.+?)\'.+?</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a.+?href=\'(.+?)\'>\n<span class=\'bold\'>\n(.+?)\n</span>(.+?)\n</a>', re.DOTALL).findall(content)
         for thumb, url, title1, title2 in match:
-            addSmallThumbLink(title1+title2, baseUrl + url, "playVideo", get_better_thumb(thumb))
+            addDir(title1+title2, baseUrl + url, "playVideo", get_better_thumb(thumb))
     elif mode == "listVideosTV":
         spl = content.split('<div class="datablock vpadding10b">')
         for i in range(1, len(spl), 1):
@@ -92,7 +92,7 @@ def listVideos(urlFull):
             else:
                 match = re.compile("<a href='(.+?)'>\n(.+?)<br />", re.DOTALL).findall(entry)
                 title = match[0][1]
-            addSmallThumbLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
+            addDir(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
     if currentPage < maxPage:
         urlNew = ""
         if mode == "listVideosTrailer":
@@ -112,22 +112,20 @@ def listVideos(urlFull):
 
 def listTrailers(url, fanart):
     content = getUrl(url)
-    splMain = content.split('<div class="media_list_02')
-    for i in range(1, len(splMain), 1):
-        entryMain = splMain[i]
-        entryMain = entryMain[:entryMain.find('</div>')]
-        spl = entryMain.split("<li>")
-        for i in range(1, len(spl), 1):
-            entry = spl[i]
-            match = re.compile("src='(.+?)'", re.DOTALL).findall(entry)
+    content = content[:content.find('<div class="social">')]
+    spl = content.split('<figure class="media-meta-fig">')
+    for i in range(1, len(spl), 1):
+        entry = spl[i]
+        match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
+        if match:
+            url = baseUrl + match[0]
+            match = re.compile('"src":"(.+?)"', re.DOTALL).findall(entry)
             thumb = match[0]
-            match = re.compile("title='(.+?)'", re.DOTALL).findall(entry)
-            title = match[0].replace(" DF", " - "+str(translation(30009))).replace(" OV", " - "+str(translation(30010)))
+            match = re.compile('<span class="title fs14 ">.+?>(.+?)</span>', re.DOTALL).findall(entry)
+            title = match[0].replace("<b>","").replace("</b>"," -").replace("</a>","")
+            title = title.replace(" DF", " - "+str(translation(30009))).replace(" OV", " - "+str(translation(30010)))
             title = cleanTitle(title)
-            match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
-            if match:
-                url = baseUrl + match[0]
-                addSmallThumbLink(title, url, 'playVideo', get_better_thumb(thumb), fanart)
+            addSmallThumbLink(title, url, 'playVideo', get_better_thumb(thumb), fanart)
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -165,32 +163,21 @@ def search():
 
 def playVideo(url):
     content = getUrl(url)
-    match1 = re.compile('"cmedia" : (.+?),', re.DOTALL).findall(content)
-    match2 = re.compile("cmedia: '(.+?)'", re.DOTALL).findall(content)
-    if match1:
-        media = match1[0]
-    elif match2:
-        media = match2[0]
-    match1 = re.compile('"ref" : (.+?),', re.DOTALL).findall(content)
-    match2 = re.compile("ref: '(.+?)'", re.DOTALL).findall(content)
-    if match1:
-        ref = match1[0]
-    elif match2:
-        ref = match2[0]
-    match1 = re.compile('"typeRef" : "(.+?)"', re.DOTALL).findall(content)
-    match2 = re.compile("typeRef: '(.+?)'", re.DOTALL).findall(content)
-    if match1:
-        typeRef = match1[0]
-    elif match2:
-        typeRef = match2[0]
-    content = getUrl(baseUrl + '/ws/AcVisiondataV4.ashx?media='+media+'&ref='+ref+'&typeref='+typeRef)
-    finalUrl = ""
-    match1 = re.compile('/nmedia/youtube:(.+?)"', re.DOTALL).findall(content)
-    match2 = re.compile('hd_path="(.+?)"', re.DOTALL).findall(content)
-    if match1:
-        finalUrl = getYoutubeUrl(match1[0])
-    elif match2:
-        finalUrl = match2[0]
+    match = re.compile('"html5PathHD":"(.*?)"', re.DOTALL).findall(content)
+    finalUrl=""
+    if match[0]:
+        finalUrl=match[0]
+    else:
+        match = re.compile('"refmedia":(.+?),', re.DOTALL).findall(content)
+        media = match[0]
+        match = re.compile('"cMovie":(.+?),', re.DOTALL).findall(content)
+        ref = match[0]
+        match = re.compile('"entityType":"(.+?)"', re.DOTALL).findall(content)
+        typeRef = match[0]
+        content = getUrl(baseUrl + '/ws/AcVisiondataV4.ashx?media='+media+'&ref='+ref+'&typeref='+typeRef)
+        finalUrl = ""
+        match = re.compile('hd_path="(.+?)"', re.DOTALL).findall(content)
+        finalUrl = match[0]
     if finalUrl:
         listitem = xbmcgui.ListItem(path=finalUrl)
         xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -213,14 +200,17 @@ def getYoutubeUrl(id):
 def get_better_thumb(thumb_url):
     thumb_url = '/'.join([
         p for p in thumb_url.split('/')
-        if not p[0:2] in ('r_', 'c_', 'cx_', 'b_', 'o_')
+        if not p[0:2] in ('r_', 'c_', 'cx', 'b_', 'o_')
     ])
     if maxCoverResolution == "0":
         thumb_url = thumb_url.replace("/medias/", "/r_300_400/medias/")
+        thumb_url = thumb_url.replace("/videothumbnails", "")
     elif maxCoverResolution == "1":
         thumb_url = thumb_url.replace("/medias/", "/r_600_800/medias/")
+        thumb_url = thumb_url.replace("/videothumbnails", "")
     elif maxCoverResolution == "2":
         thumb_url = thumb_url.replace("/medias/", "/r_1200_1600/medias/")
+        thumb_url = thumb_url.replace("/videothumbnails", "")
     return thumb_url
 
 

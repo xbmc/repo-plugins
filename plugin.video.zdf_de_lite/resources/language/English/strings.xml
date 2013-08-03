@@ -11,9 +11,11 @@
   <string id="30009">Topics</string>
   <string id="30010">Shows: Favorites</string>
   <string id="30011">Next Page</string>
+  <string id="30012">Add to queue</string>
   <string id="30028">Add to addon favs</string>
   <string id="30029">Remove from addon favs</string>
   <string id="30101">Force View</string>
   <string id="30102">View</string>
   <string id="30103">Minimum length in min</string>
+  <string id="30104">Use thumb as fanart</string>
 </strings>

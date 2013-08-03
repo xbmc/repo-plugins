@@ -14,3 +14,5 @@
 - Fixed site changes for latest videos
 1.0.7
 - Fixed playback for some videos
+1.0.8 / 2.0.8
+- Fixed site changes

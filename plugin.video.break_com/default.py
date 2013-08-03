@@ -47,6 +47,9 @@ def listChannelVideos(url):
             entry=spl[i].replace("\\","")
             match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
             url=match[0]
+            id = url[url.rfind("-")+1:]
+            if "/" in id:
+                id = id[:id.find("/")]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
             match=re.compile('alt="\\[(.+?)\\]', re.DOTALL).findall(entry)
@@ -55,7 +58,7 @@ def listChannelVideos(url):
             match=re.compile('<p>(.+?)</p>', re.DOTALL).findall(entry)
             desc=match[0]
             desc=cleanTitle(desc)
-            addLink(title,url,'playVideo',thumb,desc)
+            addLink(title,id,'playVideo',thumb,desc)
         page=int(urlMain[urlMain.find("&pageNum=")+9:])
         baseUrl=urlMain[:urlMain.find("&pageNum=")+9]
         if (page*10)<max:
@@ -72,12 +75,15 @@ def listVideos(url):
             if entry.find('] Video"')>0:
               match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
               url=match[0]
+              id = url[url.rfind("-")+1:]
+              if "/" in id:
+                  id = id[:id.find("/")]
               match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
               thumb=match[0]
               match=re.compile('alt="\\[(.+?)\\]', re.DOTALL).findall(entry)
               title=match[0]
               title=cleanTitle(title)
-              addLink(title,url,'playVideo',thumb,"")
+              addLink(title,id,'playVideo',thumb,"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -93,6 +99,9 @@ def listSearchVideos(url):
             entry=spl[i]
             match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
             url=match[0]
+            id = url[url.rfind("-")+1:]
+            if "/" in id:
+                id = id[:id.find("/")]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=""
             if len(match)>0:
@@ -100,7 +109,7 @@ def listSearchVideos(url):
             match=re.compile('alt="(.+?)"', re.DOTALL).findall(entry)
             title=match[0]
             title=cleanTitle(title)
-            addLink(title,url,'playVideo',thumb,"")
+            addLink(title,id,'playVideo',thumb,"")
         urlNext=""
         for url, title1, title2 in matchPage:
           if title2=="Next":
@@ -111,40 +120,24 @@ def listSearchVideos(url):
         if forceViewMode=="true":
           xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
-def playVideo(url):
-          content = getUrl(url)
-          match1=re.compile("videoPath: '(.+?)'", re.DOTALL).findall(content)
-          match2=re.compile("icon: '(.+?)'", re.DOTALL).findall(content)
-          match3=re.compile("youtubeid=(.+?)&", re.DOTALL).findall(content)
-          match4=re.compile("callForInfo: '(.+?)',", re.DOTALL).findall(content)
-          match5=re.compile('src="http://www.theonion.com/video_embed/\\?id=(.+?)"', re.DOTALL).findall(content)
-          url=""
-          if len(match1)>0:
-            url=match1[0]+"?"+match2[0]
-            if match4[0]=="true":
-              req = urllib2.Request(url.replace("_1.flv","_3.mp4"))
-              try:
-                urllib2.urlopen(req)
-                url=url.replace("_1.flv","_3.mp4")
-              except:
-                req = urllib2.Request(url.replace("_1.flv","_2.mp4"))
-                try:
-                  urllib2.urlopen(req)
-                  url=url.replace("_1.flv","_2.mp4")
-                except:
-                  pass
-          elif len(match3)>0:
+def playVideo(id):
+          content = getUrl("http://www.break.com/embed/"+id)
+          matchAuth=re.compile('"AuthToken": "(.+?)"', re.DOTALL).findall(content)
+          matchURL=re.compile('"uri": "(.+?)".+?"height": (.+?),', re.DOTALL).findall(content)
+          matchYT=re.compile('"youtubeId": "(.*?)"', re.DOTALL).findall(content)
+          finalUrl=""
+          if matchYT and matchYT[0]!="":
             if xbox==True:
-              url = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + match3[0]
+              finalUrl = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + matchYT[0]
             else:
-              url = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + match3[0]
-          elif len(match5)>0:
-            content = getUrl("http://www.theonion.com/video_embed/?id="+match5[0])
-            match=re.compile('<source src="(.+?)" type="(.+?)">', re.DOTALL).findall(content)
-            for urlTemp, type in match:
-              if type=="video/mp4":
-                url=urlTemp
-          listitem = xbmcgui.ListItem(path=url)
+              finalUrl = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + matchYT[0]
+          else:
+              max=0
+              for url, vidHeight in matchURL:
+                  vidHeight=int(vidHeight)
+                  if vidHeight>max:
+                    finalUrl=url.replace(".wmv",".flv")+"?"+matchAuth[0]
+          listitem = xbmcgui.ListItem(path=finalUrl)
           return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def search():

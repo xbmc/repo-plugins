@@ -32,7 +32,7 @@ def index():
 def listVideos(url):
     content = getUrl(url)
     mainUrl = url[:url.find("?")]
-    spl = content.split('<article>')
+    spl = content.split('<article >')
     for i in range(1, len(spl), 1):
         entry = spl[i]
         match = re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)

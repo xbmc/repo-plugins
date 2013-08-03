@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+   <String id="30010">Επόμενη Σελίδα</string>
+   <String id="30011">Τύπος βίντεο δεν υποστηρίζεται</string>
+   <String id="30012">Δεν μπόρεσα να βρώ το URL του βίντεο</string>
+   <String id="30101">Γλώσσα (για βίντεο)</string>
+   <String id="30102">Debug (ενεργοποίηση logs)</string>
+   <String id="30103">Kριτήρια Ταξινόμηση</string>
+   <String id="30104">Αναζήτηση</string>
+   <String id="30105">Αναζήτηση κειμένου</string>
+   <String id="30106">Προηγούμενη Σελίδα</string>
+   <String id="30107">Όλα τα Βίντεο</string>
+</strings>

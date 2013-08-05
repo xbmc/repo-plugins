@@ -1,3 +1,9 @@
+3.0.0 (2013/08)
+- update due to website changes
+- list videos in categories
+- support of free and exclusive videos
+- new options (video quality etc.)
+
 2.0.1 (2013/07):
 - another encoding fix
 

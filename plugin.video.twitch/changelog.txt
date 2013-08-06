@@ -44,3 +44,7 @@
 - extracted twitch api
 - new search function
 - changed code style to match pep8 requirements
+1.0.1
+- fixed bug: streams with optional subscriptions
+1.0.2
+- fixed stream resolving

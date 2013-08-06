@@ -1,9 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from converter import JsonListItemConverter 
+from converter import JsonListItemConverter
 from functools import wraps
 from twitch import TwitchTV, TwitchVideoResolver, Keys, TwitchException
-from xbmcswift2 import Plugin #@UnresolvedImport
+from xbmcswift2 import Plugin  # @UnresolvedImport
 import sys
 
 ITEMS_PER_PAGE = 20
@@ -16,7 +16,7 @@ TWITCHTV = TwitchTV()
 
 def managedTwitchExceptions(func):
     @wraps(func)
-    def wrapper(*args,**kwargs):
+    def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except TwitchException as error:
@@ -28,7 +28,7 @@ def handleTwitchException(exception):
     codeTranslations = {TwitchException.NO_STREAM_URL   : 32004,
                         TwitchException.STREAM_OFFLINE  : 32002,
                         TwitchException.HTTP_ERROR      : 32001,
-                        TwitchException.JSON_ERROR      : 32008 }
+                        TwitchException.JSON_ERROR      : 32008}
     code = exception.code
     title = 31000
     msg = codeTranslations[code]
@@ -38,29 +38,23 @@ def handleTwitchException(exception):
 @PLUGIN.route('/')
 def createMainListing():
     items = [
-        {
-         'label': PLUGIN.get_string(30005),
-         'path': PLUGIN.url_for(endpoint = 'createListOfFeaturedStreams')
+        {'label': PLUGIN.get_string(30005),
+         'path': PLUGIN.url_for(endpoint='createListOfFeaturedStreams')
          },
-        {
-         'label': PLUGIN.get_string(30001),
-         'path': PLUGIN.url_for(endpoint = 'createListOfGames', index = '0')
+        {'label': PLUGIN.get_string(30001),
+         'path': PLUGIN.url_for(endpoint='createListOfGames', index='0')
          },
-        {
-         'label': PLUGIN.get_string(30002),
-         'path': PLUGIN.url_for(endpoint = 'createFollowingList')
+        {'label': PLUGIN.get_string(30002),
+         'path': PLUGIN.url_for(endpoint='createFollowingList')
          },
-        {
-         'label': PLUGIN.get_string(30006),
-         'path': PLUGIN.url_for(endpoint = 'createListOfTeams')
+        {'label': PLUGIN.get_string(30006),
+         'path': PLUGIN.url_for(endpoint='createListOfTeams')
          },
-        {
-         'label': PLUGIN.get_string(30003),
-         'path': PLUGIN.url_for(endpoint = 'search')
+        {'label': PLUGIN.get_string(30003),
+         'path': PLUGIN.url_for(endpoint='search')
          },
-        {
-         'label': PLUGIN.get_string(30004),
-         'path': PLUGIN.url_for(endpoint = 'showSettings')
+        {'label': PLUGIN.get_string(30004),
+         'path': PLUGIN.url_for(endpoint='showSettings')
          }
     ]
     return items
@@ -93,7 +87,7 @@ def createListForGame(gameName, index):
     items = [CONVERTER.convertChannelToListItem(item[Keys.CHANNEL])for item
              in TWITCHTV.getGameStreams(gameName, offset, limit)]
 
-    items.append(linkToNextPage('createListForGame', index, gameName = gameName))
+    items.append(linkToNextPage('createListForGame', index, gameName=gameName))
     return items
 
 
@@ -110,20 +104,20 @@ def createFollowingList():
 def search():
     query = PLUGIN.keyboard('', PLUGIN.get_string(30101))
     if query:
-        target = PLUGIN.url_for(endpoint = 'searchresults', query = query, index = '0')
+        target = PLUGIN.url_for(endpoint='searchresults', query=query, index='0')
     else:
-        target = PLUGIN.url_for(endpoint = 'createMainListing')
+        target = PLUGIN.url_for(endpoint='createMainListing')
     PLUGIN.redirect(target)
 
 
 @PLUGIN.route('/searchresults/<query>/<index>/')
 @managedTwitchExceptions
-def searchresults(query, index = '0'):
+def searchresults(query, index='0'):
     index, offset, limit = calculatePaginationValues(index)
     streams = TWITCHTV.searchStreams(query, offset, limit)
-    
+
     items = [CONVERTER.convertChannelToListItem(stream[Keys.CHANNEL]) for stream in streams]
-    items.append(linkToNextPage('searchresults', index, query = query))
+    items.append(linkToNextPage('searchresults', index, query=query))
     return items
 
 
@@ -152,7 +146,7 @@ def createListOfTeams():
 @PLUGIN.route('/createListOfTeamStreams/<team>/')
 @managedTwitchExceptions
 def createListOfTeamStreams(team):
-    return [CONVERTER.convertTeamChannelToListItem(channel[Keys.CHANNEL]) 
+    return [CONVERTER.convertTeamChannelToListItem(channel[Keys.CHANNEL])
             for channel in TWITCHTV.getTeamStreams(team)]
 
 
@@ -164,23 +158,22 @@ def calculatePaginationValues(index):
 
 
 def getUserName():
-    username = PLUGIN.get_setting('username').lower()
+    username = PLUGIN.get_setting('username', unicode).lower()
     if not username:
         PLUGIN.open_settings()
-        username = PLUGIN.get_setting('username').lower()
+        username = PLUGIN.get_setting('username', unicode).lower()
     return username
 
 
 def getVideoQuality():
-    chosenQuality = PLUGIN.get_setting('video')
-    qualities = {'0':sys.maxint, '1':720, '2':480, '3':360}
+    chosenQuality = PLUGIN.get_setting('video', unicode)
+    qualities = {'0': sys.maxint, '1': 720, '2': 480, '3': 360}
     return qualities.get(chosenQuality, sys.maxint)
 
 
 def linkToNextPage(target, currentIndex, **kwargs):
-    return {
-            'label': PLUGIN.get_string(31001),
-            'path': PLUGIN.url_for(target, index = str(currentIndex+1), **kwargs)
+    return {'label': PLUGIN.get_string(31001),
+            'path': PLUGIN.url_for(target, index=str(currentIndex + 1), **kwargs)
             }
 
 if __name__ == '__main__':

@@ -375,9 +375,9 @@ class NuAddon(object):
         if ADDON.getSetting('show.stream.selector') == 'true':
             json = self.api._call_api(video['videoResourceUrl'])
             options = []
-            links = sorted(json['links'], key=lambda link: link['bitrateKbps'], reverse=True)
+            links = sorted(json['links'], key=lambda link: link['bitrateKbps'] if 'bitrateKbps' in link else 0, reverse=True)
             for link in links:
-                options.append('%s (%s kbps)' % (link['linkType'], link['bitrateKbps']))
+                options.append('%s (%s kbps)' % (link['linkType'], link['bitrateKbps'] if 'bitrateKbps' in link else '?'))
 
             d = xbmcgui.Dialog()
             idx = d.select(video['title'], options)
@@ -389,11 +389,11 @@ class NuAddon(object):
         else:
             rtmpUrl = self.api._http_request(video['videoManifestUrl'])
 
-        if rtmpUrl[0:7] == '<script':
+        m = re.search('(rtmp://vod.dr.dk/cms)/([^\?]+)(\?.*)', rtmpUrl)
+        if rtmpUrl[0:7] == '<script' or m is None:
             d = xbmcgui.Dialog()
             d.ok(ADDON.getLocalizedString(30100), ADDON.getLocalizedString(30101), ADDON.getLocalizedString(30102))
         else:
-            m = re.search('(rtmp://vod.dr.dk/cms)/([^\?]+)(\?.*)', rtmpUrl)
             rtmpUrl = m.group(1) + m.group(3)
             rtmpUrl += ' playpath=' + m.group(2) + m.group(3)
             rtmpUrl += ' app=cms' + m.group(3)

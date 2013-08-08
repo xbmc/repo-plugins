@@ -27,8 +27,13 @@
 
     <!-- Advanced settings -->
     <category label="69510">
-    	<setting id="PROTFOL" option="hidden" visible="false" type="bool" label="69511" default="false"/>
-    	<setting id="NUMFOLD" option="hidden" visible="false" type="enum" label="69514" values="1|2|3|4|5|6|7|8|9" enable="eq(-1,true)" />
+        <setting id="DEBUG" type="bool" label="69512" default="false"/>
+        <setting id="DISABLE_RATING_IN_PLAYLIST" type="bool" label="69515" default="false"/>
+
+        <setting id="NON_DEBUG_LOGLEVEL" type="text" visible="false" default="10"/>
+
+        <setting id="PROTFOL" option="hidden" visible="false" type="bool" label="69511" default="false"/>
+        <setting id="NUMFOLD" option="hidden" visible="false" type="enum" label="69514" values="1|2|3|4|5|6|7|8|9" enable="eq(-1,true)" />
         <setting id="FOLDER1" option="hidden" visible="false" type="folder" label="69513" enable="eq(-2,true)" />
         <setting id="FOLDER2" option="hidden" type="folder" label="69513" visible="gt(-2,0)" enable="eq(-3,true)" />
         <setting id="FOLDER3" option="hidden" type="folder" label="69513" visible="gt(-3,1)" enable="eq(-4,true)" />
@@ -38,8 +43,8 @@
         <setting id="FOLDER7" option="hidden" type="folder" label="69513" visible="gt(-7,5)" enable="eq(-8,true)" />
         <setting id="FOLDER8" option="hidden" type="folder" label="69513" visible="gt(-8,6)" enable="eq(-9,true)" />
         <setting id="FOLDER9" option="hidden" type="folder" label="69513" visible="gt(-9,7)" enable="eq(-10,true)" />
-    	<setting id="sp" type="sep" visible="false" />
-        <setting id="DEBUG" type="bool" label="69512" default="false"/>
+        <setting id="sp" type="sep" visible="false" />
+
 
     </category>
 

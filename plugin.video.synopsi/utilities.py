@@ -300,7 +300,7 @@ def dialog_yesno(msg):
 
 
 def clear_setting_cache():
-	"Clear cached addon setting. Useful after update"
+	""" Clear cached addon setting. Useful after update """
 	settingsPath = os.path.join(__profile__, 'settings.xml')
 	if xbmcvfs.exists(settingsPath):
 		xbmcvfs.delete(settingsPath)
@@ -653,43 +653,9 @@ def home_screen_fill(apiClient, cache):
 		notification('Movie reccomendation service failed')
 		return
 
-
-def login_screen(apiClient):
-	if not __lockLoginScreen__.acquire(False):
-		log('login_screen not starting duplicate')
-		return False
-
-	username = __addon__.getSetting('USER')
-	password = __addon__.getSetting('PASS')
-
-	log('string type: ' + str(type(username)))
-	log('string type: ' + str(type(password)))
-
-	ui = XMLLoginDialog("LoginDialog.xml", __addonpath__, "Default", username=username, password=password)
-	ui.doModal()
-	# ui.show()
-
-	# dialog result is 'OK'
-	if ui.response==2:
-		log('dialog OK')
-		# check if data changed
-		d = ui.getData()
-		if username!=d['username'] or password!=d['password']:
-			# store in settings
-			__addon__.setSetting('USER', value=d['username'])
-			__addon__.setSetting('PASS', value=d['password'])
-			apiClient.setUserPass(d['username'], d['password'])
-
-		result=True
-	else:
-		log('dialog canceled')
-		result=False
-
-	del ui
-
-	__lockLoginScreen__.release()
-	log('login_screen result: %d' % result)
-	return result
+def cache_rebuild_hp_update():
+	top.stvList.rebuild()
+	home_screen_fill(top.apiClient, top.stvList)
 
 def get_rating():
 	"""

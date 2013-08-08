@@ -85,7 +85,7 @@ class ApiClient(loggable.Loggable):
 			__addon__.getSetting('USER'),
 			__addon__.getSetting('PASS'),
 			iuid,
-			debugLvl=logging.ERROR,
+			debugLvl=int(addon_getSetting('NON_DEBUG_LOGLEVEL')),
 			rel_api_url=const.REL_API_URL
 		)
 

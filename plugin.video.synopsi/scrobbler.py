@@ -176,7 +176,6 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 	def ended(self):
 		self.playerEvent('end', self.total_time)
 
-		# rate file
 		self.rate_file(self.last_played_file)
 
 		self.onAfterStop()
@@ -217,6 +216,14 @@ class SynopsiPlayerDecor(SynopsiPlayer):
 		# work only on files in library
 		if not self.cache.hasFilename(filename):
 			return False
+
+		if rate:
+			# if we are in playlist and disable rating, send checkin only
+			in_playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO).size() > 1
+			disable_rating_in_playlist = __addon__.getSetting('DISABLE_RATING_IN_PLAYLIST') == 'true'
+			if disable_rating_in_playlist and in_playlist:
+				rate = False
+				self.log('Rating in playlists disabled in user setting')
 
 		# get stv id
 		detail = self.cache.getByFilename(filename)

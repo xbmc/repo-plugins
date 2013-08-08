@@ -1,3 +1,7 @@
+[B]Version 1.0.8[/B]
+
++ Added: option to disable rating window when playing multiple files in playlist
+
 [B]Version 1.0.7[/B]
 
 + Added: sign-up from settings

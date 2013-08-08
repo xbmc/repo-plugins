@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.synopsi"
        name="SynopsiTV"
-       version="1.0.7"
+       version="1.0.8"
        provider-name="Synopsi.TV">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
@@ -20,8 +20,12 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<platform>all</platform>
-		<summary>SynopsiTV</summary>
+		<summary>SynopsiTV plugin</summary>
 		<description>SynopsiTV helps you discover movies and shows by generating personalized recommendations based on your unique and evolving viewing style. [CR][CR]To log in, sign up at www.synopsi.tv. [CR][CR]Report bugs at https://github.com/Synopsi/XBMC/issues</description>
 		<language></language>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum>https://github.com/Synopsi/XBMC/issues</forum>
+		<website>www.synopsi.tv</website>
+		<source>https://github.com/Synopsi/XBMC</source>
 	</extension>
 </addon>

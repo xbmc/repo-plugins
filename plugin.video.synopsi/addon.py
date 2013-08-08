@@ -224,7 +224,11 @@ try:
 		xbmc.executebuiltin('CleanLibrary(video)')
 		xbmc.executebuiltin('UpdateLibrary(video)')
 
+	# Ctrl + 1
 	elif p['mode']==971:
+
+
+
 		#~ addonclient.debug_1()
 
 		#~ winid = common.getUserInput("Title", "")
@@ -276,8 +280,9 @@ try:
 
 		dialog.open_list_dialog({ 'items': items }, close=False)
 	
-
+	# Ctrl + 2
 	elif p['mode']==972:
+		
 		#~ xbmc.executebuiltin('ActivateWindow(MyVideoNav,plugin://plugin.video.synopsi,return)')
 		
 		#~ addonclient.debug_2()
@@ -290,7 +295,7 @@ try:
 			#~ print i, item
 		pass
 
-
+	# Ctrl + 3
 	elif p['mode']==973:
 		#~ addonclient.show_video_dialog_byId(2406418)
 		addonclient.debug_3()

@@ -217,7 +217,7 @@ if mode==27:
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 if mode==28:
-    mlb.get_playlist_cats()
+    mlb.get_playlist_cats(False, url)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 if mode==29:

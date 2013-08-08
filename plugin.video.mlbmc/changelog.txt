@@ -1,3 +1,6 @@
+Version 1.1.7
+fix full count, mlb.com playlist
+
 Version 1.1.6
 fix website changes, condensed games, MLB.com playlist
 fix 'identity error' after selecting a coverage type in MLB.TV

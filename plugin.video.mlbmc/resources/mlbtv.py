@@ -267,7 +267,11 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
     else:
         subject = 'LIVE_EVENT_COVERAGE'
         url = 'https://secure.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.1?'
-        
+    
+    try:
+        cookieFp = urllib.unquote(cookieFp)
+    except AttributeError:
+        pass
     values = {
         'subject': subject,
         'sessionKey': session,
@@ -275,7 +279,7 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
         'contentId': content,
         'playbackScenario': scenario,
         'eventId': event,
-        'fingerprint': urllib.unquote(cookieFp),
+        'fingerprint': cookieFp,
         'platform':'WEB_MEDIAPLAYER'
         }
 
@@ -295,6 +299,7 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
             cookie_jar.load(cookie_file, ignore_discard=True, ignore_expires=True)
             cookie_jar.set_cookie(new_cookie)
             cookie_jar.save(cookie_file, ignore_discard=True, ignore_expires=True)
+            cookieFp = new_fprt
     except AttributeError:
         addon_log('No New Fingerprint')
         

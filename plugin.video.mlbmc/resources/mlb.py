@@ -16,7 +16,6 @@ from mlb_common import *
 
 addon = xbmcaddon.Addon(id='plugin.video.mlbmc')
 language = addon.getLocalizedString
-addon = xbmcaddon.Addon('plugin.video.mlbmc')
 profile = xbmc.translatePath(addon.getAddonInfo('profile'))
 home = xbmc.translatePath(addon.getAddonInfo('path'))
 icon = os.path.join(home, 'icon.png')
@@ -86,15 +85,13 @@ def get_mlb_playlist(url, name=None):
     ''' mode 18-19, adds a directory of playlist categories '''
     thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/playlist.png'
     if url == 'http://wapc.mlb.com/play':
-        data = cache.cacheFunction(cache_playlist_categories)
-        main_page = 'True'
-        addDir(language(30013), 'main_topic', 24, thumb, main_page)
+        # data = cache.cacheFunction(cache_playlist_categories)
+        addDir(language(30013), 'main_topic', 24, thumb, 'True')
         # add teams dir
         addDir(language(30010), 'get_playlist', 4, thumb)
         get_playlist_cats()
     else:
         data = cache_current_playlist(url)
-        main_page = 'False'
         if name:
             try:
                 team = [i for i in TeamCodes.values() if i[0] == name][0]
@@ -102,7 +99,7 @@ def get_mlb_playlist(url, name=None):
                 team = None
             if team:
                 addDir(language(30012), team[1], 20, thumb)
-        addDir(language(30013), 'main_topic', 24, thumb, main_page)
+        addDir(language(30013), 'main_topic', 24, thumb, 'False')
         get_playlist_cats(True, False)
 
 
@@ -124,8 +121,10 @@ def get_playlist_cats(current=False, subcat=False):
     thumb = 'http://mlbmc-xbmc.googlecode.com/svn/icons/playlist.png'
     if current:
         data = eval(cache.get('current'))
+        subcat_mode = 29
     else:
         data = cache.cacheFunction(cache_playlist_categories)
+        subcat_mode = 28
     if subcat:
         try:
             items = data['sub_categories'][subcat]
@@ -139,7 +138,7 @@ def get_playlist_cats(current=False, subcat=False):
         addDir(title, item_id, 1, thumb)
     if not subcat:
         for i in data['sub_categories'].keys():
-            addDir(i , i, 29, thumb)
+            addDir(i , i, subcat_mode, thumb)
 
 
 def get_players(team_ab):
@@ -640,7 +639,6 @@ def getGames(url):
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         liz.setProperty( "Fanart_Image", fanart1 )
         liz.setProperty('IsPlayable', 'true')
-        # xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
 
 

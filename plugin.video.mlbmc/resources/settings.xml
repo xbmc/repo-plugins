@@ -1,4 +1,4 @@
-﻿<settings>
+ <settings>
   <category label="General">
     <setting id="show_scores" type="bool" label="30061" default="false"/>
     <setting id="debug" type="bool" label="30059" default="false"/>

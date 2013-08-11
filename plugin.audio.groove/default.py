@@ -677,7 +677,7 @@ class Grooveshark:
                 else:
                     # Refresh to remove item from directory
                     xbmc.executebuiltin('XBMC.Notification(' + __language__(30008) + ',' + __language__(30066)+ ', 1000, ' + thumbDef + ')')
-                    xbmc.executebuiltin("Container.Update(" + playlistUrl + "&id="+str(playlistid) + "&name=" + playlistname + ")")
+                    xbmc.executebuiltin("Container.Update(" + playlistUrl + "&id="+str(playlistid) + "&name=" + str(playlistname) + ")")
             else:
                 dialog = xbmcgui.Dialog()
                 dialog.ok(__language__(30008), __language__(30034), __language__(30067))
@@ -755,7 +755,6 @@ class Grooveshark:
                 start = offset
                 end = min(start + self.songspagelimit,totalSongs)
         
-        id = 0
         n = start
         items = end - start
         while n < end:
@@ -784,14 +783,13 @@ class Grooveshark:
                     menuItems.append((__language__(30071), "XBMC.RunPlugin("+fav+")"))
                 menuItems.append((__language__(30072), "XBMC.RunPlugin("+unfav+")"))
                 if playlistid > 0:
-                    rmplaylstsong=sys.argv[0]+"?playlistid="+str(playlistid)+"&id="+str(songid)+"&mode="+str(MODE_REMOVE_PLAYLIST_SONG)+"&name="+playlistname
+                    rmplaylstsong=sys.argv[0]+"?playlistid="+str(playlistid)+"&id="+str(songid)+"&mode="+str(MODE_REMOVE_PLAYLIST_SONG)+"&name="+str(playlistname)
                     menuItems.append((__language__(30073), "XBMC.RunPlugin("+rmplaylstsong+")"))
                 else:
                     addplaylstsong=sys.argv[0]+"?id="+str(songid)+"&mode="+str(MODE_ADD_PLAYLIST_SONG)
                     menuItems.append((__language__(30074), "XBMC.RunPlugin("+addplaylstsong+")"))
                 item.addContextMenuItems(menuItems, replaceItems=False)
                 xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=item,isFolder=False, totalItems=items)
-                id = id + 1
             else:
                 end = min(end + 1,totalSongs)
                 if __debugging__ :
@@ -799,7 +797,7 @@ class Grooveshark:
             n = n + 1
 
         if totalSongs > end:
-            u=sys.argv[0]+"?mode="+str(MODE_SONG_PAGE)+"&id=playlistid"+"&offset="+str(end)+"&label="+str(trackLabelFormat)+"&name="+playlistname
+            u=sys.argv[0]+"?mode="+str(MODE_SONG_PAGE)+"&id=playlistid"+"&offset="+str(end)+"&label="+str(trackLabelFormat)+"&name="+str(playlistname)
             self._add_dir(__language__(30075) + '...', u, MODE_SONG_PAGE, self.songImg, 0, totalSongs - end)
 
         xbmcplugin.setContent(self._handle, 'songs')
@@ -860,36 +858,36 @@ class Grooveshark:
             playlist = playlists[i]
             playlistName = playlist[0]
             playlistID = playlist[1]
-            dir = self._add_dir(playlistName, '', MODE_PLAYLIST, self.playlistImg, playlistID, n)
+            self._add_dir(playlistName, '', MODE_PLAYLIST, self.playlistImg, playlistID, n)
             i = i + 1  
         xbmcplugin.setContent(self._handle, 'files')
         xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_LABEL)
         xbmcplugin.setPluginFanart(int(sys.argv[1]), self.fanImg)
       
     # Add whatever directory
-    def _add_dir(self, name, url, mode, iconimage, id, items=1):
+    def _add_dir(self, name, url, mode, iconimage, itemId, items=1):
 
         if url == '':
-            u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&id="+str(id)
+            u=sys.argv[0]+"?mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&id="+str(itemId)
         else:
             u = url
-        dir=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
-        dir.setInfo( type="Music", infoLabels={ "title": name } )
+        directory=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
+        directory.setInfo( type="Music", infoLabels={ "title": name } )
         
         # Custom menu items
         menuItems = []
         if mode == MODE_ALBUM:
-            mkplaylst=sys.argv[0]+"?mode="+str(MODE_MAKE_PLAYLIST)+"&name="+name+"&id="+str(id)
+            mkplaylst=sys.argv[0]+"?mode="+str(MODE_MAKE_PLAYLIST)+"&name="+name+"&id="+str(itemId)
             menuItems.append((__language__(30076), "XBMC.RunPlugin("+mkplaylst+")"))
         if mode == MODE_PLAYLIST:
-            rmplaylst=sys.argv[0]+"?mode="+str(MODE_REMOVE_PLAYLIST)+"&name="+urllib.quote_plus(name)+"&id="+str(id)
+            rmplaylst=sys.argv[0]+"?mode="+str(MODE_REMOVE_PLAYLIST)+"&name="+urllib.quote_plus(name)+"&id="+str(itemId)
             menuItems.append((__language__(30077), "XBMC.RunPlugin("+rmplaylst+")"))
-            mvplaylst=sys.argv[0]+"?mode="+str(MODE_RENAME_PLAYLIST)+"&name="+urllib.quote_plus(name)+"&id="+str(id)
+            mvplaylst=sys.argv[0]+"?mode="+str(MODE_RENAME_PLAYLIST)+"&name="+urllib.quote_plus(name)+"&id="+str(itemId)
             menuItems.append((__language__(30078), "XBMC.RunPlugin("+mvplaylst+")"))
 
-        dir.addContextMenuItems(menuItems, replaceItems=False)
+        directory.addContextMenuItems(menuItems, replaceItems=False)
         
-        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=dir,isFolder=True, totalItems=items)
+        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=directory,isFolder=True, totalItems=items)
     
     def _getSavedSongs(self):
         path = os.path.join(cacheDir, 'songs.dmp')
@@ -922,7 +920,7 @@ class Grooveshark:
         return int(usecs / 1000000)
     
     def _getSongStream(self, songid):
-        id = int(songid)
+        idSong = int(songid)
         stream = None
         streams = []
         path = os.path.join(cacheDir, 'streams.dmp')
@@ -930,14 +928,14 @@ class Grooveshark:
             f = open(path, 'rb')
             streams = pickle.load(f)
             for song in streams:
-                if song[0] == id:
+                if song[0] == idSong:
                     duration = song[1]
                     url = song[2]
                     key = song[3]
                     server = song[4]
-                    stream = [id, duration, url, key, server]
+                    stream = [idSong, duration, url, key, server]
                     if __debugging__ :
-                        xbmc.log("Found " + str(id) + " in stream cache")
+                        xbmc.log("Found " + str(idSong) + " in stream cache")
                     break;
             f.close()
         except:
@@ -951,7 +949,7 @@ class Grooveshark:
                 url = stream['url']
                 key = stream['StreamKey']
                 server = stream['StreamServerID']
-                stream = [id, duration, url, key, server]
+                stream = [idSong, duration, url, key, server]
                 self._addSongStream(stream)
 
         return stream
@@ -970,21 +968,21 @@ class Grooveshark:
             xbmc.log("An error occurred adding to stream")
     
     def _setSongStream(self, stream):
-        id = int(stream[0])
+        idStream = int(stream[0])
         stream[1] = self._setDuration(stream[1])
         streams = self._getStreams()
         path = os.path.join(cacheDir, 'streams.dmp')
         i = 0
 
         for song in streams:
-            if song[0] == id:
+            if song[0] == idStream:
                 streams[i] = stream
                 try:
                     f = open(path, 'wb')
                     pickle.dump(streams, f, protocol=pickle.HIGHEST_PROTOCOL)
                     f.close()
                     if __debugging__ :
-                        xbmc.log("Updated " + str(id) + " in stream cache")
+                        xbmc.log("Updated " + str(idStream) + " in stream cache")
                     break;
                 except:
                     xbmc.log("An error occurred setting stream")                    
@@ -1029,8 +1027,8 @@ params=get_params()
 mode=None
 try: mode=int(params["mode"])
 except: pass
-id=0
-try: id=int(params["id"])
+itemId=0
+try: itemId=int(params["id"])
 except: pass
 name = None
 try: name=urllib.unquote_plus(params["name"])
@@ -1072,7 +1070,7 @@ elif mode==MODE_SONG_PAGE:
     except: pass
     try: label=urllib.unquote_plus(params["label"])
     except: pass
-    grooveshark.songPage(offset, label, id, name)
+    grooveshark.songPage(offset, label, itemId, name)
 
 elif mode==MODE_SONG:
     try: album=urllib.unquote_plus(params["album"])
@@ -1081,46 +1079,46 @@ elif mode==MODE_SONG:
     except: pass
     try: coverart=urllib.unquote_plus(params["coverart"])
     except: pass
-    song = grooveshark.songItem(id, name, album, artist, coverart)
+    song = grooveshark.songItem(itemId, name, album, artist, coverart)
     grooveshark.playSong(song)
 
 elif mode==MODE_ARTIST:
-    grooveshark.artist(id)
+    grooveshark.artist(itemId)
     
 elif mode==MODE_ALBUM:
-    grooveshark.album(id)
+    grooveshark.album(itemId)
     
 elif mode==MODE_PLAYLIST:
-    grooveshark.playlist(id, name)
+    grooveshark.playlist(itemId, name)
     
 elif mode==MODE_FAVORITE:
-    grooveshark.favorite(id)
+    grooveshark.favorite(itemId)
     
 elif mode==MODE_UNFAVORITE:
     try: prevMode=int(urllib.unquote_plus(params["prevmode"]))
     except:
         prevMode = 0
-    grooveshark.unfavorite(id, prevMode)
+    grooveshark.unfavorite(itemId, prevMode)
 
 elif mode==MODE_SIMILAR_ARTISTS:
-    grooveshark.similarArtists(id)
+    grooveshark.similarArtists(itemId)
 
 elif mode==MODE_MAKE_PLAYLIST:
-    grooveshark.makePlaylist(id, name)
+    grooveshark.makePlaylist(itemId, name)
     
 elif mode==MODE_REMOVE_PLAYLIST:
-    grooveshark.removePlaylist(id, name)    
+    grooveshark.removePlaylist(itemId, name)    
 
 elif mode==MODE_RENAME_PLAYLIST:
-    grooveshark.renamePlaylist(id, name)    
+    grooveshark.renamePlaylist(itemId, name)    
 
 elif mode==MODE_REMOVE_PLAYLIST_SONG:
     try: playlistID=urllib.unquote_plus(params["playlistid"])
     except: pass
-    grooveshark.removePlaylistSong(playlistID, name, id)
+    grooveshark.removePlaylistSong(playlistID, name, itemId)
 
 elif mode==MODE_ADD_PLAYLIST_SONG:
-    grooveshark.addPlaylistSong(id)        
+    grooveshark.addPlaylistSong(itemId)        
     
 if mode < MODE_SONG:
     xbmcplugin.endOfDirectory(int(sys.argv[1]))

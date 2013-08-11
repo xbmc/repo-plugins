@@ -397,14 +397,14 @@ class GrooveAPI:
 		items = self._callRemote("getSimilarArtists", {"artistID": artistId, "limit": limit})
 		if 'result' in items:
 			i = 0
-			list = []
+			itemList = []
 			artists = items['result']['artists']
 			while(i < len(artists)):
 				s = artists[i]
-				list.append([s['artistName'].encode('ascii', 'ignore'),\
+				itemList.append([s['artistName'].encode('ascii', 'ignore'),\
 				s['artistID']])
 				i = i + 1
-			return list
+			return itemList
 		else:
 			return []		
 	
@@ -443,7 +443,7 @@ class GrooveAPI:
 	def _parseSongs(self, items, limit=0):
 		if 'result' in items:
 			i = 0
-			list = []
+			itemList = []
 			index = ''
 			l = -1
 			try:
@@ -488,15 +488,15 @@ class GrooveAPI:
 					name = s['Name']
 				else:
 					name = s['SongName']
-				list.append([name.encode('ascii', 'ignore'),\
+				itemList.append([name.encode('ascii', 'ignore'),\
 				s['SongID'],\
-				s['AlbumName'].encode('ascii', 'ignore'),\
+				name,\
 				s['AlbumID'],\
 				s['ArtistName'].encode('ascii', 'ignore'),\
 				s['ArtistID'],\
 				coverart])
 				i = i + 1
-			return list
+			return itemList
 		else:
 			return []
 
@@ -504,14 +504,14 @@ class GrooveAPI:
 	def _parseArtists(self, items):
 		if 'result' in items:
 			i = 0
-			list = []
+			itemList = []
 			artists = items['result']['artists']
 			while(i < len(artists)):
 				s = artists[i]
-				list.append([s['ArtistName'].encode('ascii', 'ignore'),\
+				itemList.append([s['ArtistName'].encode('ascii', 'ignore'),\
 				s['ArtistID']])
 				i = i + 1
-			return list
+			return itemList
 		else:
 			return []
 
@@ -519,7 +519,7 @@ class GrooveAPI:
 	def _parseAlbums(self, items, limit=0):
 		if 'result' in items:
 			i = 0
-			list = []
+			itemList = []
 			try:
 				albums = items['result']['albums']
 			except:
@@ -530,23 +530,27 @@ class GrooveAPI:
 				l = limit
 			while(i < l):
 				s = albums[i]
+				if 'Name' in s:
+					name = s['Name'].encode('ascii', 'ignore')
+				else:
+					name = s['AlbumName'].encode('ascii', 'ignore')
 				if 'CoverArtFilename' in s and s['CoverArtFilename'] != None:
 					coverart = THUMB_URL+s['CoverArtFilename'].encode('ascii', 'ignore')
 				else:
 					coverart = 'None'
-				list.append([s['ArtistName'].encode('ascii', 'ignore'),\
+				itemList.append([s['ArtistName'].encode('ascii', 'ignore'),\
 				s['ArtistID'],\
-				s['AlbumName'].encode('ascii', 'ignore'),\
+				name,\
 				s['AlbumID'],\
 				coverart])
 				i = i + 1
-			return list
+			return itemList
 		else:
 			return []
 
 	def _parsePlaylists(self, items):
 		i = 0
-		list = []
+		itemList = []
 		if 'result' in items:
 			playlists = items['result']['playlists']
 		elif len(items) > 0:
@@ -556,6 +560,6 @@ class GrooveAPI:
 
 		while (i < len(playlists)):
 			s = playlists[i]
-			list.append([unicode(s['PlaylistName']).encode('utf8', 'ignore'), s['PlaylistID']])
+			itemList.append([unicode(s['PlaylistName']).encode('utf8', 'ignore'), s['PlaylistID']])
 			i = i + 1
-		return list
+		return itemList

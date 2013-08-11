@@ -7,3 +7,6 @@
 - Added setting to force view mode
 1.0.3
 - Added live events
+1.0.4 / 2.0.4
+- Fixed event playback
+- Added autoplay mode for events

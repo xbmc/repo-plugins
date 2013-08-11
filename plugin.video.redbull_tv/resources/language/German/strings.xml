@@ -9,4 +9,5 @@
   <string id="30104">Veranstaltung nicht verfuegbar</string>
   <string id="30105">Veranstaltung startet</string>
   <string id="30106">Lokalzeit</string>
+  <string id="30107">Autoplay (events) nach ... Sekunden (0=OFF)</string>
 </strings>

@@ -7,4 +7,7 @@
     <!-- General entries -->
     <string id="30000">Página</string>
     <string id="30001">Buscar</string>
+
+    <!-- Settings -->
+    <string id="30010">Forzar Modo de Vista a Miniatura</string>
 </strings>

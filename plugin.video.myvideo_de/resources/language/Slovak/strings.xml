@@ -7,4 +7,16 @@
     <!-- General entries -->
     <string id="30000">Strana</string>
     <string id="30001">Hľadať</string>
+
+    <!-- Settings -->
+    <string id="30010">Vynútiť zobrazenie náhľadov</string>
+    <string id="30011">Aktualizovať kontajner pri zmene strany</string>
+    <string id="30012">Priečinok sťahovania</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Stiahni video</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Chýba Priečinok sťahovania!</string>
+    <string id="30031">Chcete teraz zadať cestu?</string>
 </strings>

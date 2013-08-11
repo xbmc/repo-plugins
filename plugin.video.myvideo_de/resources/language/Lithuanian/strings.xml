@@ -11,4 +11,12 @@
     <!-- Settings -->
     <string id="30010">Versti ViewMode į miniatiūrą</string>
     <string id="30011">Atnaujinti svetainėje jungiklio pakuotę</string>
+    <string id="30012">Atsisiųsti kelią</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Atsisiųsti video</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Nesiųsti kelio!</string>
+    <string id="30031">Ar norite dabar nustatyti kelią?</string>
 </strings>

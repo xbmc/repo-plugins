@@ -4,5 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- General entries -->
+    <string id="30000">पृष्ठ</string>
     <string id="30001">धुन्धना</string>
 </strings>

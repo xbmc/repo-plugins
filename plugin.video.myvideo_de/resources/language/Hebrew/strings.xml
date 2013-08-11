@@ -7,4 +7,7 @@
     <!-- General entries -->
     <string id="30000">עמוד</string>
     <string id="30001">חיפוש</string>
+
+    <!-- Settings -->
+    <string id="30010">הכרח מצב תצוגה של תמונה ממוזערת</string>
 </strings>

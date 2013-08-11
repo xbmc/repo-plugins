@@ -15,6 +15,12 @@
     <string id="30007">Bitte benutze das Kontext-Menu um</string>
     <string id="30008">Videos oder Ordner hinzuzufügen.</string>
 
+    <!-- Settings -->
+    <string id="30010">ViewMode auf Thumbnail setzen</string>
+    <string id="30011">Container updaten beim Seitenwechsel</string>
+    <string id="30012">Download Verzeichnis</string>
+    <string id="30013">TV-Serien Titel korrigieren (Zu: "Serie S1E1 - Titel")</string>
+
     <!-- Context Menu entries -->
     <string id="30020">Video herunterladen</string>
 
@@ -22,10 +28,4 @@
     <string id="30030">Kein Download Verzeichnis!</string>
     <string id="30031">Möchtest du es jetzt einstellen?</string>
     <string id="30032">HLS nicht unterstützt</string>
-
-    <!-- Settings -->
-    <string id="30010">ViewMode auf Thumbnail setzen</string>
-    <string id="30011">Container updaten beim Seitenwechsel</string>
-    <string id="30012">Download Verzeichnis</string>
-    <string id="30013">TV-Serien Titel korrigieren (Zu: "Serie S1E1 - Titel")</string>
 </strings>

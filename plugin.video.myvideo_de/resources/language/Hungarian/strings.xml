@@ -7,4 +7,16 @@
     <!-- General entries -->
     <string id="30000">Oldal</string>
     <string id="30001">Keresés</string>
+
+    <!-- Settings -->
+    <string id="30010">Kis képek nézet kényszerítése</string>
+    <string id="30011">Lapváltáskor a keret frissítése</string>
+    <string id="30012">Útvonal letöltése</string>
+
+    <!-- Context Menu entries -->
+    <string id="30020">Videó letöltése</string>
+
+    <!-- dialog entries -->
+    <string id="30030">Nincs letöltési útvonal!</string>
+    <string id="30031">Beállítja az útvonalat most?</string>
 </strings>

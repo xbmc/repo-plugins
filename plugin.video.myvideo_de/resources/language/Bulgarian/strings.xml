@@ -7,4 +7,7 @@
     <!-- General entries -->
     <string id="30000">Страница</string>
     <string id="30001">Търси</string>
+
+    <!-- Settings -->
+    <string id="30010">Налагане на вид "Миниатюри"</string>
 </strings>

@@ -9,4 +9,8 @@
     <string id="30301">Английски</string>
     <string id="30302">Немски</string>
     <string id="30303">Френски</string>
+    <string id="30310">Превключи Изглед на Thumbnail</string>
+
+    <!-- Error Message -->
+    <string id="30600">Мрежова грешка</string>
 </strings>

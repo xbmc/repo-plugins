@@ -6,4 +6,8 @@
 <strings>
     <!-- Settings -->
     <string id="30300">שפה</string>
+    <string id="30310">הכרח מצב תצוגה של תמונה ממוזערת</string>
+
+    <!-- Error Message -->
+    <string id="30600">שגיאת רשת</string>
 </strings>

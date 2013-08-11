@@ -12,4 +12,8 @@
     <string id="30301">영어</string>
     <string id="30302">독일어</string>
     <string id="30303">프랑스어</string>
+    <string id="30310">썸네일 보기</string>
+
+    <!-- Error Message -->
+    <string id="30600">네트워크 오류</string>
 </strings>

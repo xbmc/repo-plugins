@@ -9,4 +9,7 @@
     <string id="30301">Enska</string>
     <string id="30302">Þýska</string>
     <string id="30303">Franska</string>
+
+    <!-- Error Message -->
+    <string id="30600">Net Villa</string>
 </strings>

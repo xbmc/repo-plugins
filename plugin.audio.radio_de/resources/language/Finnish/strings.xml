@@ -12,4 +12,7 @@
     <string id="30301">Englanti</string>
     <string id="30302">Saksa</string>
     <string id="30303">Ranska</string>
+
+    <!-- Error Message -->
+    <string id="30600">Verkkovirhe</string>
 </strings>

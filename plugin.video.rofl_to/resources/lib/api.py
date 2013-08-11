@@ -1,7 +1,9 @@
-from urllib2 import urlopen, HTTPError, URLError
+from urllib2 import urlopen, Request, HTTPError, URLError
 import re
 
 from BeautifulSoup import BeautifulSoup
+
+USER_AGENT = 'XBMC Add-on Rofl.to'
 
 
 class NetworkError(Exception):
@@ -97,8 +99,10 @@ class RoflApi():
 
     def __get_tree(self, url):
         self.log('opening url: %s' % url)
+        request = Request(url)
+        request.add_header('User-Agent', USER_AGENT)
         try:
-            html = urlopen(url).read()
+            html = urlopen(request).read()
         except HTTPError, error:
             self.log('HTTPError: %s' % error)
             raise NetworkError('HTTPError: %s' % error)

@@ -1,3 +1,7 @@
+0.1.1 (11.08.2013)
+ - fix add-on by using authorized (Add-on related) User-Agent
+ - update translations
+
 0.1.0 (09.03.2013)
  - fixed duration
  - migrated to xbmcswift2 v2.4.0

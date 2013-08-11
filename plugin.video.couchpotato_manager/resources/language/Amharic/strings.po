@@ -20,6 +20,10 @@ msgctxt "#30150"
 msgid "Type"
 msgstr "አይነት"
 
+msgctxt "#30156"
+msgid "Description"
+msgstr "መግለጫ "
+
 msgctxt "#30300"
 msgid "Username"
 msgstr "የተጠቃሚ ስም "

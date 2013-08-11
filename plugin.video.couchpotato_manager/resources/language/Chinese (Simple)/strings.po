@@ -16,6 +16,10 @@ msgstr ""
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgctxt "#30000"
+msgid "All Movies"
+msgstr "所有电影"
+
 msgctxt "#30150"
 msgid "Type"
 msgstr "类型"

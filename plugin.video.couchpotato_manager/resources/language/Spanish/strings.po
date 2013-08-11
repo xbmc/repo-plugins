@@ -32,6 +32,10 @@ msgctxt "#30003"
 msgid "Done Movies"
 msgstr "Películas Terminadas"
 
+msgctxt "#30004"
+msgid "Status List"
+msgstr "Estado"
+
 msgctxt "#30100"
 msgid "Add-on Settings"
 msgstr "Ajustes del Complemento"
@@ -112,6 +116,10 @@ msgctxt "#30131"
 msgid "No Movie found"
 msgstr "Película no encontrada"
 
+msgctxt "#30132"
+msgid "Success"
+msgstr "Éxito"
+
 msgctxt "#30140"
 msgid "Please use context menu"
 msgstr "Por favor, usa el menú contextual"
@@ -139,6 +147,10 @@ msgstr "Proveeedor-Extra"
 msgctxt "#30153"
 msgid "Age"
 msgstr "Edad"
+
+msgctxt "#30154"
+msgid "Seeder/Leecher"
+msgstr "Seeder/Leecher"
 
 msgctxt "#30155"
 msgid "Size (MB)"
@@ -175,6 +187,10 @@ msgstr "Clave de API"
 msgctxt "#30306"
 msgid "Set default profile"
 msgstr "Establecer perfil por defecto"
+
+msgctxt "#30307"
+msgid "Url Base (for use with mod_proxy)"
+msgstr "URL para proxy"
 
 msgctxt "#30310"
 msgid "You only need username/password OR Api Key!"

@@ -1,3 +1,7 @@
+0.0.7 (11.08.2013)
+- fixed error when search result item has no year
+- updated translations
+
 0.0.6 (23.06.2013)
 - added "advanced"-cateogory to settings
 - added possibility to use HTTP-Basic-Auth

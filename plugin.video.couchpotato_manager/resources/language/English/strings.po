@@ -223,7 +223,7 @@ msgid "Advanced"
 msgstr ""
 
 msgctxt "#30310"
-msgid "API-Key"
+msgid "You only need username/password OR Api Key!"
 msgstr ""
 
 msgctxt "#30311"
@@ -232,10 +232,4 @@ msgstr ""
 
 msgctxt "#30312"
 msgid "Basic Auth Password"
-msgstr ""
-
-#empty strings from id 30310 to 30309
-
-msgctxt "#30310"
-msgid "You only need username/password OR Api Key!"
 msgstr ""

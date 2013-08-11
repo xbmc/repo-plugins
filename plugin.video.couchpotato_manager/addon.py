@@ -253,7 +253,8 @@ def add_new_wanted():
             plugin.notify(msg=_('no_movie_found'))
             return
         items = [
-            '%s (%s)' % (movie['titles'][0], movie['year'])
+            '%s %s' % (movie['titles'][0], 
+            	('(%s)' % movie['year']) if movie.get('year', False) else '')
             for movie in movies
         ]
         selected = xbmcgui.Dialog().select(

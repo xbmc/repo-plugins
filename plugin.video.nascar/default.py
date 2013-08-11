@@ -54,23 +54,16 @@ def get_video_items(url, featured=False):
                 items = soup.find('div', attrs={'class': "featuredVideos"})('article')
             else:
                 items = soup.find('div', attrs={'class': "articlesList"})('article')
+            addon_log('video_items: %s' %len(items))
             for i in items:
                 if featured:
-                    try:
-                        a_dict = eval(i.img['data-tracking-params'].replace('\r\n', ''))
-                        title = a_dict['eVar1']
-                    except:
-                        try:
-                            title = re.findall('"eVar1":"(.+?)\n",', str(i.img))[0].strip()
-                        except:
-                            print_exc
-                            pass
-                    item_id = i.img['data-ajax-post-data'].split('=')[1].split('&')[0]
+                    title = i('a')[1].string
+                    item_id = i.img['data-ajax-post-data'].split('&')[0].split('=')[1]
                     thumb = i.img['data-resp-url']
                 else:
                     title = i.img['alt']
-                    item_id = i.img['data-ajax-post-data'].split('=')[1]
-                    thumb = i.img['src']
+                    item_id = i.span['data-ajax-post-data'].split('=')[1]
+                    thumb = i.img['data-original']
                 u=sys.argv[0]+'?mode=resolve_url&url='+urllib.quote_plus(item_id)
                 liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage=thumb)
                 liz.setInfo(type="Video", infoLabels={"Title": title})

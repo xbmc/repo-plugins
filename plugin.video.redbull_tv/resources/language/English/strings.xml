@@ -12,4 +12,5 @@
   <string id="30104">Event not available</string>
   <string id="30105">Event starts</string>
   <string id="30106">Local Time</string>
+  <string id="30107">Autoplay (events) after ... seconds (0=OFF)</string>
 </strings>

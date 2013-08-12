@@ -1,3 +1,5 @@
+1.0.3
+- Added Other Categories menu entry.
 1.0.2
 - Added Science@ESA menu entry.
 1.0.1

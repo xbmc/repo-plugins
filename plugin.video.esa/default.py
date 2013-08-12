@@ -111,12 +111,37 @@ def create_index(params):
     lutil.log('esa.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
     lutil.addDir(action=action, title=title, url=url)
 
+    # Other Categories
+    action = 'other_categories'
+    url = ''
+    title = translation(30108)
+    lutil.log('esa.create_index action=["%s"] title=["Other Categories"] url=["%s"]' % (action, url))
+    lutil.addDir(action=action, title=title, url=url)
+
     # Search
     action = 'search'
     url   = ''
     title = translation(30104)
     lutil.log('esa.create_index action=["%s"] title=["Search"] url=["%s"]' % (action, url))
     lutil.addDir(action=action, title=title, url=url)
+
+    lutil.close_dir(pluginhandle, updateListing=False)
+
+# Other Categories menu
+def other_categories(params):
+    lutil.log("greenpeace.other_categories "+repr(params))
+
+    action = 'main_list'
+    page_url = 'http://spaceinvideos.esa.int/Videos'
+    buffer_web = lutil.carga_web(page_url)
+
+    category_pattern = '<a href="(/Directorates/[^"]*?)" title="[^"]*?">([^<]*?)</a>'
+
+    for category_link, title in lutil.find_multiple(buffer_web, category_pattern):
+        url = '%s%s/(sortBy)/%s' % (root_url, category_link, sort_method)
+        title = title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
+        lutil.log('esa.other_categories action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
+        lutil.addDir(action=action, title=title, url=url)
 
     lutil.close_dir(pluginhandle, updateListing=False)
 
@@ -135,7 +160,7 @@ def main_list(params):
     pattern_videos = '<div class="psr_image arrow">[^<]+<a href="([^"]*?)">[^<]+<img src="([^"]*?)".*?<li><a href="[^"]*?">([^<]+)</a></li>'
     pattern_released = '<li>Released: ([^<]+)</li>'
     pattern_nextpage = '<span class="next"><a href="([^"]*?)">'
-    pattern_next = '/content/search/\(offset\)/([0-9]+)'
+    pattern_next = '/\(offset\)/([0-9]+)'
     pattern_last = '<span class="other">\.\.\.</span><span class="other"><a href="[^"]*?">([^<]+)</a></span>'
     pattern_no_last = '<span class="other"><a href="[^"]*?">([^<]+)</a></span>'
     pattern_search_text = '\?SearchText=(.+)\&result_type='
@@ -145,7 +170,7 @@ def main_list(params):
     # We must setup the previous page entry from the second page onwards.
     if page_offset:
         if page_offset == '10':
-            prev_page_url = page_url.replace('/content/search/(offset)/10', '/content/search')
+            prev_page_url = page_url.replace('/(offset)/10', '')
         else:
             prev_page_url = page_url.replace(page_offset, "%s" % (int(page_offset) - 10))
 
@@ -154,10 +179,7 @@ def main_list(params):
         lutil.addDir(action="main_list", title="<< %s (%s)" % (translation(30106), (int(page_offset) / 10)), url=prev_page_url, reset_cache=reset_cache)
 
     # This is to force ".." option to go back to main index instead of previous page list.
-    if reset_cache == "yes":
-        updateListing = True
-    else:
-        updateListing = False
+    updateListing = reset_cache == "yes"
 
     videolist = lutil.find_multiple(buffer_web,pattern_videos)
 
@@ -200,7 +222,7 @@ def main_list(params):
 def search(params):
     search_string = lutil.get_keyboard_text(translation(30105))
     if search_string:
-        params['url'] = 'http://spaceinvideos.esa.int/content/search?SearchText=%s&SearchButton=Go' % lutil.get_url_encoded(search_string)
+        params['url'] = 'http://spaceinvideos.esa.int/content/search?SearchText=%s&SearchButton=Go&sortBy=%s' % (lutil.get_url_encoded(search_string), sort_method)
         lutil.log("esa.search Value of search url: %s" % params['url'])
         return main_list(params)
 

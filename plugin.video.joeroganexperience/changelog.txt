@@ -1,3 +1,7 @@
+2.0.1
+- Fixed dependancy bug causing plugin to be uninstallable
+- Fanart and icon now match specs
+
 2.0.0
 - Totally rewrote backend to utilise xbmcswift2
 - Fixed scraper to support new Joe Rogan Experience homepage

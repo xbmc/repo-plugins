@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Settings -->
+    <string id="30010">Force ViewMode to Thumbnail</string>
+    <!-- Messages -->
+    <string id="30020">Network Error</string>
+</strings>

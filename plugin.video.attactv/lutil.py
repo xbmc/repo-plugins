@@ -19,7 +19,7 @@
 
    Description:
    These funtions are called from the main plugin module, aimed to ease and simplify the plugin development process.
-   Release 0.1.3
+   Release 0.1.4
 '''
 
 # First of all We must import all the libraries used for plugin development.
@@ -70,10 +70,31 @@ def get_plugin_parms():
     _log("get_plugin_parms " + repr(options))
     return options
 
+
 # This function returns the URL decoded.
 def get_url_decoded(url):
     _log('get_url_decoded URL: "%s"' % url)
     return urllib.unquote_plus(url)
+
+
+# This function returns the URL encoded.
+def get_url_encoded(url):
+    _log('get_url_encoded URL: "%s"' % url)
+    return urllib.quote_plus(url)
+
+
+# This function gets an input text from the keyboard.
+def get_keyboard_text(prompt):
+    _log('get_keyboard_text prompt: "%s"' % prompt)
+
+    keyboard = xbmc.Keyboard('', prompt)
+    keyboard.doModal()
+    if keyboard.isConfirmed() and keyboard.getText():
+        _log("get_keyboard_text input text: '%s'" % keyboard.getText())
+        return keyboard.getText()
+    else:
+        return ""
+
 
 # This function loads the html code from a webserver and returns it into a string.
 def carga_web(url):
@@ -136,10 +157,10 @@ def find_first(text,pattern):
 
 
 # This function adds a directory entry into the XBMC GUI throught the API
-def addDir(action = "", title = "", url = "", thumbnail = ""):
-    _log("addDir action = [" + action + "] title = [" + title + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
+def addDir(action = "", title = "", url = "", thumbnail = "", reset_cache = "no"):
+    _log('addDir action = "%s" url = "%s" thumbnail = "%s" reset_cache = "%s"' % (action, url, thumbnail, reset_cache))
 
-    dir_url = '%s?action=%s&url=%s' % (sys.argv[0], action, urllib.quote_plus(url))
+    dir_url = '%s?action=%s&reset_cache=%s&url=%s' % (sys.argv[0], action, reset_cache, urllib.quote_plus(url))
     dir_item = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = thumbnail)
     dir_item.setInfo(type = "Video", infoLabels = {"Title": title})
     return xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = dir_url, listitem = dir_item, isFolder = True)
@@ -147,7 +168,7 @@ def addDir(action = "", title = "", url = "", thumbnail = ""):
 
 # This function adds a video link entry into the XBMC GUI throught the API
 def addLink(action = "", title = "", plot = "", url = "", thumbnail = ""):
-    _log("addDir action = [" + action + "] title = [" + title + "] plot = [" + plot + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
+    _log("addLink action = [" + action + "] title = [" + title + "] plot = [" + plot + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
 
     link_url = '%s?action=%s&url=%s' % (sys.argv[0], action, urllib.quote_plus(url))
     link_item = xbmcgui.ListItem(title, iconImage = "DefaultVideo.png", thumbnailImage = thumbnail)
@@ -157,9 +178,9 @@ def addLink(action = "", title = "", plot = "", url = "", thumbnail = ""):
 
 
 # This function closes the directory created with all the item list previously added.
-def close_dir(pluginhandle):
-    _log("close_dir pluginhadle: %s" % pluginhandle)
-    xbmcplugin.endOfDirectory(pluginhandle)
+def close_dir(pluginhandle, succeeded=True, updateListing=False, cacheToDisc=True):
+    _log("close_dir pluginhadle: %s updateListing: %s cacheToDisc: %s" % (pluginhandle, updateListing, cacheToDisc))
+    xbmcplugin.endOfDirectory(pluginhandle, succeeded=succeeded, updateListing=updateListing, cacheToDisc=cacheToDisc)
 
 
 # This funtion shows a popup window with a notices message through the XBMC GUI during 5 secs.

@@ -71,25 +71,91 @@ def run():
     params = lutil.get_plugin_parms()
     
     if params.get("action") is None:
-        main_list(params)
+        create_index(params)
     else:
         action = params.get("action")
         exec action+"(params)"
     
 
+# Main index menu
+def create_index(params):
+    lutil.log("attactv.create_index "+repr(params))
+
+    # All Videos entry
+    action = 'main_list'
+    url = entry_url[language]
+    title = translation(30014)
+    lutil.log('attactv.create_index action=["%s"] title=["All the Videos"] url=["%s"]' % (action, url))
+    lutil.addDir(action=action, title=title, url=url)
+
+    # Search
+    action = 'search'
+    url   = ''
+    title = translation(30015)
+    lutil.log('attactv.create_index action=["%s"] title=["Search"] url=["%s"]' % (action, url))
+    lutil.addDir(action=action, title=title, url=url)
+
+    lutil.close_dir(pluginhandle, updateListing=False)
+
+# This function performs a search through all the videos catalogue.
+def search(params):
+    search_string = lutil.get_keyboard_text(translation(30015))
+    if search_string:
+        if language == 'es':
+            params['url'] = 'http://www.attac.tv/?s=%s&lang=%s' % (lutil.get_url_encoded(search_string), language)
+        else:
+            params['url'] = 'http://www.attac.tv/%s/?s=%s&lang=%s' % (language, lutil.get_url_encoded(search_string), language)
+        lutil.log("attactv.search Value of search url: %s" % params['url'])
+        return main_list(params)
+    else:
+        return lutil.close_dir(pluginhandle)
+
+
 # Main menu
 def main_list(params):
     lutil.log("attactv.main_list "+repr(params))
 
-    # On the first page, pagination parameters are fixed per language with the "all the videos" list.
-    if params.get('url') is None:
-        params['url'] = entry_url[language] 
-
     # Loads the web page from attac.tv with the video list.
-    buffer_web = lutil.carga_web(params.get("url"))
-    
-    # Extract video items from the html content
+    page_url = params.get("url")
+    reset_cache = params.get("reset_cache")
+
+    buffer_web = lutil.carga_web(page_url)
+
     pattern_videos = '<a href="([^"]*?)" rel="bookmark" title="Permanent Link: ([^"]*?)"><img width="[^"]*?" height="[^"]*?" src="([^"]*?)" class="attachment-miniatura wp-post-image" alt="[^"]*?" title="[^"]*?" /></a>'
+    pattern_video_excerpt = '<div id="feature-video-excerpt">'
+    pattern_page_num = '/page/([0-9]+)'
+    pattern_prevpage = '<a class="prev page-numbers" href="([^"]*?)">'
+    pattern_nextpage = '<a class="next page-numbers" href="([^"]*?)">'
+    pattern_lastpage_num = "<a class='page-numbers' href='[^']*?'>([^<]*?)</a>"
+    pattern_featured = '<h1><a href="([^"]*?)" rel="bookmark">([^<]*?)</a></h1>'
+
+    # We check that there is no empty search result:
+    if lutil.find_first(buffer_web, pattern_video_excerpt):
+        lutil.log("attactv.main_list We have found an empty search result page page_url: %s" % page_url)
+        lutil.close_dir(pluginhandle)
+        return
+        
+    # We must setup the previous page entry from the second page onwards.
+    prev_page_url  = lutil.find_first(buffer_web, pattern_prevpage)
+    if prev_page_url:
+        prev_page_url = prev_page_url.replace('&#038;', '&') # Fixup prev_page on search.
+        prev_page_num = lutil.find_first(prev_page_url, pattern_page_num)
+        reset_cache = "yes"
+        lutil.log("attactv.main_list Value of prev_page_url: %s" % prev_page_url)
+        lutil.addDir(action="main_list", title="<< %s (%s)" % (translation(30013), prev_page_num), url=prev_page_url, reset_cache=reset_cache)
+
+    # This is to force ".." option to go back to main index instead of previous page list.
+    updateListing = reset_cache == "yes"
+
+    # Check for featured video in search result as first video in list.
+    for featured_video, featured_title in lutil.find_multiple(buffer_web, pattern_featured):
+        title = featured_title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
+        url = featured_video
+        lutil.log('Featured video in search result: URL: "%s" Title: "%s"' % (url, title))
+        lutil.addLink(action="play_video", title=title, url=url)
+
+
+    # Extract video items from the html content
     videolist = lutil.find_multiple(buffer_web,pattern_videos)
 
     for url, title, thumbnail in videolist:
@@ -101,13 +167,15 @@ def main_list(params):
         lutil.addLink(action="play_video", title=title, plot=plot, url=url,thumbnail=thumbnail)
  
     # Here we get the next page URL to add it at the end of the current video list page.
-    pattern_nextpage = '<a class="next page-numbers" href="([^"]*?)">'
     next_page_url = lutil.find_first(buffer_web, pattern_nextpage)
     if next_page_url:
-        lutil.log("Value of next_page_url: %s" % next_page_url)
-        lutil.addDir(action="main_list", title=">> %s" % translation(30010), url=next_page_url)
+        next_page_num = lutil.find_first(next_page_url, pattern_page_num)
+        last_page = lutil.find_multiple(buffer_web, pattern_lastpage_num)[-1]
+        next_page_url = next_page_url.replace('&#038;', '&') # Fixup next_page on search.
+        lutil.log('Value of next page: "(%s/%s)" next_page_url: "%s"' % (next_page_num, last_page, next_page_url))
+        lutil.addDir(action="main_list", title=">> %s (%s/%s)" % (translation(30010), next_page_num, last_page), url=next_page_url, reset_cache=reset_cache)
 
-    lutil.close_dir(pluginhandle)
+    lutil.close_dir(pluginhandle, updateListing=updateListing)
 
 
 # This funtion search into the URL link to get the video link from the different sources.

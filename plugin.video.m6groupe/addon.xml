@@ -15,5 +15,6 @@
     <summary lang="fr">Replay des chaînes du groupe M6</summary>
     <description lang="en">Watch videos from M6 group french channels (M6, W9 and 6ter)</description>
     <description lang="fr">Accéder aux vidéos des chaînes du groupe M6 (M6, W9 et 6ter)</description>
+    <broken>Broken due to DRM put in place by M6</broken>
   </extension>
 </addon>

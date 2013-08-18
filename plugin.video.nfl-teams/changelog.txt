@@ -1,0 +1,6 @@
+[B]Version 1.0.1 - 2013-08-18[/B]
+- Renamed addon from "NFL Videos" to "NFL Teams".
+- Added changelog.
+
+[B]Version 1.0.0 - 2013-07-31[/B]
+- Initial release.

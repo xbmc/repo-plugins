@@ -205,7 +205,8 @@ def get_current_addon():
 def addon_openSettings():
 	addon = get_current_addon()
 	addon.openSettings()
-	changed = top.apiClient.checkAccountChange()
+
+	changed = top.apiClient.checkAccountChange() if top.apiClient else True
 
 	return changed
 

@@ -130,7 +130,7 @@ def mlbGame(event_id, full_count=False):
             }
     url = 'https://mlb-ws.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3?'
     headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:19.0) Gecko/20100101 Firefox/19.0',
-               'Referer' : 'http://mlb.mlb.com/shared/flash/mediaplayer/v4.3/R1/MediaPlayer4.swf?v=14'}
+               'Referer' : 'http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R8/MediaPlayer4.swf?'}
     data = getRequest(url,urllib.urlencode(values),headers)
     if debug == "true":
         addon_log(data)
@@ -266,7 +266,7 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
         url = 'https://mlb-ws.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3?'
     else:
         subject = 'LIVE_EVENT_COVERAGE'
-        url = 'https://secure.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.1?'
+        url = 'https://secure.mlb.com/pubajaxws/bamrest/MediaService2_0/op-findUserVerifiedEvent/v-2.3?'
     
     try:
         cookieFp = urllib.unquote(cookieFp)
@@ -386,28 +386,29 @@ def getGameURL(name,event,content,session,cookieIp,cookieFp,scenario,live):
             smil = get_smil(game_url.split('?')[0])
             rtmp = smil[0]
             playpath = ' Playpath='+smil[1]+'?'+game_url.split('?')[1]
+            if 'ondemand' in rtmp:
+                rtmp += ' app=ondemand?_fcs_vhost=cp65670.edgefcs.net&akmfv=1.6'+game_url.split('?')[1]
 
-
+        addon_log('Playpath: %s' %playpath)
         if name == 'full_count':
-            pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R3/MP4.jsp?calendar_event_id=%s'
+            pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R8/MP4.jsp?calendar_event_id=%s'
                        '&content_id=&media_id=&view_key=&media_type=&source=FULLCOUNT&sponsor=FULLCOUNT&clickOrigin=&affiliateId='
                        % soup.find('event-id').string)
         elif 'mp3:' in game_url:
-            pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R1/MP4.jsp?calendar_event_id='
+            pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R8/MP4.jsp?calendar_event_id='
                        '%s&content_id=%s&media_id=&view_key=&media_type=audio&source=MLB&sponsor=MLB&'
                        'clickOrigin=Media+Grid&affiliateId=Media+Grid&feed_code=h&team=mlb'
                        %(soup.find('event-id').string, content))
         else:
-            pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R4/MP4.jsp?calendar_event_id=%s&content_id='
+            pageurl = (' pageUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R8/MP4.jsp?calendar_event_id=%s&content_id='
                        '&media_id=&view_key=&media_type=video&source=MLB&sponsor=MLB&clickOrigin=&affiliateId=&team=mlb'
                        % soup.find('event-id').string)
-        swfurl = ' swfUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R4/MediaPlayer4.swf swfVfy=1'
+        swfurl = ' swfUrl=http://mlb.mlb.com/shared/flash/mediaplayer/v4.4/R8/MediaPlayer4.swf swfVfy=1'
         if live:
             swfurl += ' live=1'
         final_url = rtmp+playpath+pageurl+swfurl
-        if debug == "true":
-            addon_log( 'Name: '+name )
-            addon_log( 'final url: '+final_url )
+        addon_log( 'Name: '+name )
+        addon_log( 'final url: '+final_url )
         item = xbmcgui.ListItem(path=final_url)
         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 

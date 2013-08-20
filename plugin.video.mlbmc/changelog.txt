@@ -1,3 +1,6 @@
+Version 1.1.8
+fix archived games
+
 Version 1.1.7
 fix full count, mlb.com playlist
 

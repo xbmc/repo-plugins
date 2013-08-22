@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.6" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.7" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="2.1.0"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
@@ -51,5 +51,9 @@
 	<description lang="zh">导入iPhoto照片库到事件、相册、肖像、地点、关键字和评分类别。[CR][CR]更多信息见 http://github.com/jingai/plugin.image.iphoto 说明文件</description>
 	<language></language>
 	<platform>all</platform>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+	<forum>http://forum.xbmc.org/showthread.php?tid=77612</forum>
+	<source>http://github.com/jingai/plugin.image.iphoto</source>
+	<email>jingai at floatingpenguins dot com</email>
     </extension>
 </addon>

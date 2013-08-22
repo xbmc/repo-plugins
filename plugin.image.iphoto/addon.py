@@ -393,7 +393,7 @@ class IPhotoGUI:
 	n = 0
 	ntotal = len(media)
 	for (caption, mediapath, thumbpath, originalpath, rating, mediadate, mediasize) in media:
-	    if (not mediapath):
+	    if ((self.dbSrc == "Aperture" and originalpath) or (not mediapath)):
 		mediapath = originalpath
 	    if (not thumbpath):
 		thumbpath = mediapath
@@ -522,7 +522,7 @@ class IPhotoGUI:
 	    if (not count and self.album_ign_empty == "true"):
 		continue
 
-            if (thumbpath != None):
+	    if (thumbpath != None):
 		item = gui.ListItem(name, iconImage=thumbpath, thumbnailImage=thumbpath)
 	    else:
 		item = gui.ListItem(name)
@@ -872,7 +872,7 @@ if (__name__ == "__main__"):
 	    try:
 		file = iphoto.params['file']
 	    except Exception, e:
-		print to_str(e)
+		print smart_utf8(e)
 		pass
 	    else:
 		textview(file)
@@ -889,7 +889,7 @@ if (__name__ == "__main__"):
 		action_result = addon.getLocalizedString(30330) % (keyword)
 		refresh = True
 	    except Exception, e:
-		print to_str(e)
+		print smart_utf8(e)
 		pass
 	else:
 	    # actions that do require a database connection
@@ -949,7 +949,7 @@ if (__name__ == "__main__"):
 	xbmc.executebuiltin("Container.Refresh")
 
     if (action_result):
-	xbmc.executebuiltin('XBMC.Notification(%s,%s,3000)' % (__plugin__, action_result))
-	print "iphoto.gui: " + action_result
+	print "iphoto.gui: " + smart_utf8(action_result)
+	xbmc.executebuiltin('XBMC.Notification(%s,%s,3000)' % (smart_utf8(__plugin__), smart_utf8(action_result)))
 
 # vim: tabstop=8 softtabstop=4 shiftwidth=4 noexpandtab:

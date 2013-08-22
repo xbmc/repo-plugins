@@ -25,38 +25,30 @@ except:
     from geo import *
 
 
-def to_unicode(text):
-    if (isinstance(text, unicode)):
-	return text
-
-    if (hasattr(text, '__unicode__')):
-	return text.__unicode__()
-
-    text = str(text)
-
+def smart_unicode(s):
+    """credit : sfaxman"""
+    if not s:
+	return ''
     try:
-	return unicode(text, 'utf-8')
-    except UnicodeError:
-	pass
+	if not isinstance(s, basestring):
+	    if hasattr(s, '__unicode__'):
+		s = unicode(s)
+	    else:
+		s = unicode(str(s), 'UTF-8')
+	elif not isinstance(s, unicode):
+	    s = unicode(s, 'UTF-8')
+    except:
+	if not isinstance(s, basestring):
+	    if hasattr(s, '__unicode__'):
+		s = unicode(s)
+	    else:
+		s = unicode(str(s), 'ISO-8859-1')
+	elif not isinstance(s, unicode):
+	    s = unicode(s, 'ISO-8859-1')
+    return s
 
-    try:
-	return unicode(text, locale.getpreferredencoding())
-    except UnicodeError:
-	pass
-
-    return unicode(text, 'latin1')
-
-def to_str(text):
-    if (isinstance(text, str)):
-	return text
-
-    if (hasattr(text, '__unicode__')):
-	text = text.__unicode__()
-
-    if (hasattr(text, '__str__')):
-	return text.__str__()
-
-    return text.encode('utf-8')
+def smart_utf8(s):
+    return smart_unicode(s).encode('utf-8')
 
 class IPhotoDB:
     def __init__(self, dbfile):
@@ -67,7 +59,7 @@ class IPhotoDB:
 	    self.dbPath = os.path.dirname(dbfile)
 	    self.dbconn = sqlite.connect(dbfile)
 	except Exception, e:
-	    print "iphoto.db: __init__: " + to_str(e)
+	    print "iphoto.db: __init__: " + smart_utf8(e)
 	    raise e
 
     def __del__(self):
@@ -95,7 +87,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: config"
@@ -122,7 +114,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: media"
@@ -137,7 +129,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: mediatypes"
@@ -155,7 +147,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: rolls"
@@ -170,7 +162,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: rollmedia"
@@ -188,7 +180,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: albums"
@@ -203,7 +195,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: albummedia"
@@ -223,7 +215,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: faces"
@@ -238,7 +230,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: facesmedia"
@@ -257,7 +249,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: places"
@@ -272,7 +264,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: placesmedia"
@@ -288,7 +280,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: keywords"
@@ -303,7 +295,7 @@ class IPhotoDB:
 	except sqlite.OperationalError, e:
 	    pass
 	except Exception, e:
-	    print "iphoto.db: InitDB: " + to_str(e)
+	    print "iphoto.db: InitDB: " + smart_utf8(e)
 	    raise e
 	else:
 	    print "iphoto.db: InitDB: Created table: keywordmedia"
@@ -318,14 +310,13 @@ class IPhotoDB:
 	    except sqlite.OperationalError:
 		pass
 	    except Exception, e:
-		print "iphoto.db: ResetDB: " + to_str(e)
+		print "iphoto.db: ResetDB: " + smart_utf8(e)
 		raise e
 	    else:
 		print "iphoto.db: ResetDB: Dropped table: " + table
 	self.Commit()
 
     def CloseDB(self):
-	print "iphoto.db: Closing database"
 	self.dbconn.commit()
 	self.dbconn.close()
 
@@ -333,7 +324,7 @@ class IPhotoDB:
 	try:
 	    self.dbconn.commit()
 	except Exception, e:
-	    print "iphoto.db: Commit: " + to_str(e)
+	    print "iphoto.db: Commit: " + smart_utf8(e)
 	    raise e
 
     def GetConfig(self, key):
@@ -392,7 +383,7 @@ class IPhotoDB:
 	    else:
 		rv = row[0] # existing id
 	except Exception, e:
-	    print "iphoto.db: GetTableId: " + to_str(e)
+	    print "iphoto.db: GetTableId: " + smart_utf8(e)
 	    raise e
 	cur.close()
 	return rv
@@ -409,13 +400,13 @@ class IPhotoDB:
 	    for tuple in cur:
 		albums.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetAlbums: " + to_str(e)
+	    print "iphoto.db: GetAlbums: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return albums
 
     def GetMediaInAlbum(self, albumid, sort_col="NULL"):
-	print "iphoto.db: Retrieving media from Album ID %s" % (to_str(albumid))
+	print "iphoto.db: Retrieving media from Album ID %s" % (smart_utf8(albumid))
 	media = []
 	cur = self.dbconn.cursor()
 	try:
@@ -427,7 +418,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetMediaInAlbum: " + to_str(e)
+	    print "iphoto.db: GetMediaInAlbum: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return media
@@ -442,13 +433,13 @@ class IPhotoDB:
 	    for tuple in cur:
 		rolls.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetRolls: " + to_str(e)
+	    print "iphoto.db: GetRolls: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return rolls
 
     def GetMediaInRoll(self, rollid, sort_col="NULL"):
-	print "iphoto.db: Retrieving media from Event ID %s" % (to_str(rollid))
+	print "iphoto.db: Retrieving media from Event ID %s" % (smart_utf8(rollid))
 	media = []
 	cur = self.dbconn.cursor()
 	try:
@@ -459,7 +450,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetMediaInRoll: " + to_str(e)
+	    print "iphoto.db: GetMediaInRoll: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return media
@@ -481,13 +472,13 @@ class IPhotoDB:
 	    for tuple in cur:
 		faces.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetFaces: " + to_str(e)
+	    print "iphoto.db: GetFaces: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return faces
 
     def GetMediaWithFace(self, faceid, sort_col="NULL"):
-	print "iphoto.db: Retrieving media with Face ID %s" % (to_str(faceid))
+	print "iphoto.db: Retrieving media with Face ID %s" % (smart_utf8(faceid))
 	media = []
 	cur = self.dbconn.cursor()
 	try:
@@ -499,7 +490,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetMediaWithFace: " + to_str(e)
+	    print "iphoto.db: GetMediaWithFace: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return media
@@ -513,13 +504,13 @@ class IPhotoDB:
 	    for tuple in cur:
 		places.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetPlaces: " + to_str(e)
+	    print "iphoto.db: GetPlaces: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return places
 
     def GetMediaWithPlace(self, placeid, sort_col="NULL"):
-	print "iphoto.db: Retrieving media with Place ID %s" % (to_str(placeid))
+	print "iphoto.db: Retrieving media with Place ID %s" % (smart_utf8(placeid))
 	media = []
 	cur = self.dbconn.cursor()
 	try:
@@ -531,7 +522,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetMediaWithPlace: " + to_str(e)
+	    print "iphoto.db: GetMediaWithPlace: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return media
@@ -545,13 +536,13 @@ class IPhotoDB:
 	    for tuple in cur:
 		keywords.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetKeywords: " + to_str(e)
+	    print "iphoto.db: GetKeywords: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return keywords
 
     def GetMediaWithKeyword(self, keywordid, sort_col="NULL"):
-	print "iphoto.db: Retrieving media with Keyword ID %s" % (to_str(keywordid))
+	print "iphoto.db: Retrieving media with Keyword ID %s" % (smart_utf8(keywordid))
 	media = []
 	cur = self.dbconn.cursor()
 	try:
@@ -563,13 +554,13 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetMediaWithKeyword: " + to_str(e)
+	    print "iphoto.db: GetMediaWithKeyword: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return media
 
     def GetMediaWithRating(self, rating, sort_col="NULL"):
-	print "iphoto.db: Retrieving media with Rating %s" % (to_str(rating))
+	print "iphoto.db: Retrieving media with Rating %s" % (smart_utf8(rating))
 	media = []
 	cur = self.dbconn.cursor()
 	try:
@@ -580,7 +571,7 @@ class IPhotoDB:
 	    for tuple in cur:
 		media.append(tuple)
 	except Exception, e:
-	    print "iphoto.db: GetMediaWithRating: " + to_str(e)
+	    print "iphoto.db: GetMediaWithRating: " + smart_utf8(e)
 	    pass
 	cur.close()
 	return media
@@ -822,8 +813,8 @@ class IPhotoDB:
 		    if (lat == 0.0 and lon == 0.0):
 			# force exception for ungeotagged photos
 			del lat, lon
-		    lat = to_str(lat)
-		    lon = to_str(lon)
+		    lat = smart_utf8(lat)
+		    lon = smart_utf8(lon)
 		    latlon = lat + "+" + lon
 		    try:
 			addr = None
@@ -849,7 +840,7 @@ class IPhotoDB:
 		    except ParseCanceled:
 			raise
 		    except Exception, e:
-			print "iphoto.db: AddMediaNew: geocode: " + to_str(e)
+			print "iphoto.db: AddMediaNew: geocode: " + smart_utf8(e)
 			raise e
 		except:
 		    #print "No location information for photo id %d" % (mediaid)
@@ -874,7 +865,7 @@ class IPhotoDB:
 				map.zoom("", 14)
 				thumbpath = map.fetch("map_", "_thumb")
 			    except Exception, e:
-				print "iphoto.db: AddMediaNew: map: " + to_str(e)
+				print "iphoto.db: AddMediaNew: map: " + smart_utf8(e)
 				updateProgress("Map Image: Error downloading")
 				pass
 			    else:
@@ -976,8 +967,8 @@ class IPhotoParser:
 	print "iphoto.parser: Reading '%s'" % (self.xmlfile)
 	if (self.mastersPath and self.mastersRealPath):
 	    try:
-		print "iphoto.parser: Rewriting referenced masters path '%s'" % (to_str(self.mastersPath))
-		print "iphoto.parser: as '%s'" % (to_str(self.mastersRealPath))
+		print "iphoto.parser: Rewriting referenced masters path '%s'" % (smart_utf8(self.mastersPath))
+		print "iphoto.parser: as '%s'" % (smart_utf8(self.mastersRealPath))
 	    except:
 		pass
 	self.imagePath = ""
@@ -1073,7 +1064,7 @@ class IPhotoParser:
 		if (self.libraryVersion != "0.0.0"):
 		    self.ConfigCallback('version', self.libraryVersion)
 		try:
-		    self.ConfigCallback('lastimport', to_str(time.time()))
+		    self.ConfigCallback('lastimport', smart_utf8(time.time()))
 		except:
 		    pass
 
@@ -1114,7 +1105,7 @@ class IPhotoParser:
 	except ParseCanceled:
 	    raise
 	except Exception, e:
-	    print "iphoto.parser: commitAll: " + to_str(e)
+	    print "iphoto.parser: commitAll: " + smart_utf8(e)
 	    raise e
 
     def Parse(self):
@@ -1128,14 +1119,14 @@ class IPhotoParser:
 	    self.parser.Parse(buf, True)
 	    f.close()
 	except Exception, e:
-	    print "iphoto.parser: Parse: " + to_str(e)
+	    print "iphoto.parser: Parse: " + smart_utf8(e)
 	    print "iphoto.parser: Parse failed"
 	    raise e
 
 	try:
 	    self.commitAll()
 	except Exception, e:
-	    print "iphoto.parser: Parse: " + to_str(e)
+	    print "iphoto.parser: Parse: " + smart_utf8(e)
 	    print "iphoto.parser: Parse failed"
 	    raise e
 
@@ -1168,11 +1159,11 @@ class IPhotoParser:
 
 	if (name == "key"):
 	    state.key = True
-	    #print "Got key type " + to_str(name)
+	    #print "Got key type " + smart_utf8(name)
 	else:
 	    if (state.key):
 		state.valueType = name
-		#print "Got value type " + to_str(name)
+		#print "Got value type " + smart_utf8(name)
 	    else:
 		state.valueType = ""
 		#print "Got empty value type"
@@ -1199,8 +1190,8 @@ class IPhotoParser:
 		state.archivepath = False
 		if (self.imagePath != self.libraryPath):
 		    try:
-			print "iphoto.parser: Rewriting archive path '%s'" % (to_str(self.imagePath))
-			print "iphoto.parser: as '%s'" % (to_str(self.libraryPath))
+			print "iphoto.parser: Rewriting archive path '%s'" % (smart_utf8(self.imagePath))
+			print "iphoto.parser: as '%s'" % (smart_utf8(self.libraryPath))
 		    except:
 			pass
 	    state.inarchivepath -= 1
@@ -1210,7 +1201,7 @@ class IPhotoParser:
 	    if (state.inalbum == 3 and self.currentAlbum.has_key('AlbumId')):
 		self.currentAlbum['medialist'].append(state.value)
 	    elif (state.inalbum == 2 and not state.key):
-		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
+		#print "Mapping %s => %s" % ( smart_utf8(state.keyValue), smart_utf8(state.value))
 		self.currentAlbum[state.keyValue] = state.value
 	    state.inalbum -= 1
 	    if (state.inalbum == 0 and self.currentAlbum.has_key('AlbumId')):
@@ -1223,7 +1214,7 @@ class IPhotoParser:
 	    if (state.inroll == 3 and (self.currentRoll.has_key('RollID') or self.currentRoll.has_key('AlbumId'))):
 		self.currentRoll['medialist'].append(state.value)
 	    elif (state.inroll == 2 and not state.key):
-		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
+		#print "Mapping %s => %s" % ( smart_utf8(state.keyValue), smart_utf8(state.value))
 		self.currentRoll[state.keyValue] = state.value
 	    state.inroll -= 1
 	    if (state.inroll == 0 and (self.currentRoll.has_key('RollID') or self.currentRoll.has_key('AlbumId'))):
@@ -1234,7 +1225,7 @@ class IPhotoParser:
 	# Faces
 	elif (state.faces):
 	    if (state.inface == 2 and not state.key):
-		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
+		#print "Mapping %s => %s" % ( smart_utf8(state.keyValue), smart_utf8(state.value))
 		self.currentFace[state.keyValue] = state.value
 	    state.inface -= 1
 	    if (state.inface == 0 and not state.key):
@@ -1245,7 +1236,7 @@ class IPhotoParser:
 	# Keywords
 	elif (state.keywords):
 	    if (state.inkeyword == 1 and not state.key):
-		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
+		#print "Mapping %s => %s" % ( smart_utf8(state.keyValue), smart_utf8(state.value))
 		self.currentKeyword[state.keyValue] = state.value
 	    state.inkeyword -= 1
 	    if (state.inkeyword == 0 and not state.key):
@@ -1264,7 +1255,7 @@ class IPhotoParser:
 	    elif (state.inmaster == 4 and not state.key and state.keyValue == "face key"):
 		self.currentPhoto['facelist'].append(state.value)
 	    elif (state.inmaster == 2 and not state.key):
-		#print "Mapping %s => %s" % ( to_str(state.keyValue), to_str(state.value))
+		#print "Mapping %s => %s" % ( smart_utf8(state.keyValue), smart_utf8(state.value))
 		self.currentPhoto[state.keyValue] = state.value
 	    state.inmaster -= 1
 	    if (state.inmaster == 0 and self.currentPhoto.has_key('ThumbPath') and self.currentPhoto['ThumbPath']):

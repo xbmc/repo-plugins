@@ -1,3 +1,7 @@
+2.1.7 - 20130821
+- Fix Notification dialogs for unicode strings.
+- Fix paths for movies in Aperture libraries.
+
 2.1.6 - 20130605
 - Ignore non-existent thumbnails in Events.
 - Update language files from Transifex.

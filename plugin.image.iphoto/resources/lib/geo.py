@@ -209,7 +209,7 @@ class staticmap:
 		pass
 	    urlretrieve(unquote(req_url + "?" + req_dat), imagefile)
 	except HTTPError, e:
-	    print to_str(e.geturl())
+	    print smart_utf8(e.geturl())
 	    raise e
 	except:
 	    urlcleanup()

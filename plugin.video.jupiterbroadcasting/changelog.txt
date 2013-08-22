@@ -1,3 +1,6 @@
+[B]Version 2.9.3: August 21st, 2013[/B]
+- New show: Linux Unplugged
+
 [B]Version 2.9.2: May 16th, 2013[/B]
 - New show: Plan B
 - Episodes per page is now a setting

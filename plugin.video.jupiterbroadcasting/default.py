@@ -171,6 +171,16 @@ def CATEGORIES():
         'genre': 'Technology'
     }
 
+    # Linux Unplugged
+    shows[__language__(30019)] = {
+        'feed': 'http://feeds.feedburner.com/linuxunvid?format=xml',
+        'feed-low': 'http://feeds.feedburner.com/linuxunogg?format=xml',
+        'feed-audio': 'http://feeds.feedburner.com/linuxunogg?format=xml',
+        'image': os.path.join(__settings__.getAddonInfo('path'), 'resources', 'media', 'linuxunplugged.jpg'),
+        'plot': __language__(30219),
+        'genre': 'Technology'
+    }
+
     # Jupiter Broadcasting Live via the HLS/RTMP stream
     liveUrl = 'http://videocdn-us.geocdn.scaleengine.net/jblive-iphone/live/jblive.stream/playlist.m3u8'
     if (quality == 1):

@@ -129,7 +129,10 @@ class Programs:
         for media in soup.findAll('div', {'class': 'contenu-descr-8 '}):
             tag = media.findPrevious('a')
             # Get link, title and thumb
-            media_link = URLASI + tag['href']
+            if tag['href'].startswith('http'):
+                media_link = tag['href']
+            else:
+                media_link = URLASI + tag['href']
             media_title = tag['title'].encode('utf-8')
             media_thumb = URLASI + tag.find('img', attrs={'src': re.compile('.+?\.[png|jpg]')})['src']
             yield {'url': media_link, 'title': media_title, 'thumb': media_thumb}
@@ -140,13 +143,10 @@ class Programs:
         filterContainer = SoupStrainer(attrs={'class': re.compile('rech-filtres-droite')})
         # There are two 'rech-filtres-droite' per page. Look only in the first one (contents[0])
         for tag in BeautifulSoup(self.html, parseOnlyThese=filterContainer).contents[0].findAll('a'):
-            if 'href' in tag:
-                if tag.string == '&gt;':
-                    nav_items['next'] = True
-                elif tag.string == '&lt;':
-                    nav_items['previous'] = True
-            else:
-                debug('No navigation items found')
+            if tag.string == '&gt;':
+                nav_items['next'] = True
+            elif tag.string == '&lt;':
+                nav_items['previous'] = True
         return nav_items
 
 
@@ -165,7 +165,7 @@ def get_main_video(url):
         img = soup.find('img', attrs={'src': 'http://www.arretsurimages.net/images/boutons/bouton-telecharger.png'})
         if img:
             download_page = img.findParent()['href']
-    if download_page.endswith('.avi'):
+    if download_page.endswith(('.avi', '.mp4')):
         title = download_page.split('/')[-1]
         soup = get_soup(download_page)
         click = soup.find(text=re.compile('cliquer ici'))

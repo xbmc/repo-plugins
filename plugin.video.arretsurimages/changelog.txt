@@ -1,3 +1,9 @@
+[B]Version 2.2.3[/B]
+
+- Fix navigation items
+- Fix mp4 video playback
+- Fix the media URL when not using the all programs page (thanks to mossroy)
+
 [B]Version 2.2.2[/B]
 
 - Fixed UnicodeEncodeError

@@ -1,3 +1,8 @@
+[B]Version 2.3.5[/B]
+
+- Fix mp4 video playback
+- Fix the media URL when not using the all programs page (thanks to mossroy)
+
 [B]Version 2.3.4[/B]
 
 - Fix navigation items

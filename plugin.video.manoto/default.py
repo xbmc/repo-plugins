@@ -42,7 +42,9 @@ def getStreamsFromPlayList(playlist):
         	print("HTTP error trying to open playlist")
         	return None
         
-        lines = string.split(resp.read(), '\n')
+        # store the base URI from the playlist
+        prefix=playlist[0:string.rfind(playlist,'/') + 1]        
+	lines = string.split(resp.read(), '\n')
 
         # parse the playlist file
         streams = {}
@@ -60,7 +62,7 @@ def getStreamsFromPlayList(playlist):
         		bandwidth = line[idx + 10:len(line)].strip()
         	elif len(line) > 0 and len(bandwidth) > 0:
         		# add the playlist
-        		streams[bandwidth] = line.strip()
+        		streams[bandwidth] = (("" if line.lower().startswith("http") else prefix) + line).strip()
 
 	return streams
 
@@ -77,9 +79,9 @@ def loginAndParse():
 			ck = cookielib.Cookie(version=0, name=parsedJS[0][0], value=parsedJS[0][1], port=None, port_specified=False, domain=domain, domain_specified=False, domain_initial_dot=False, path='/', path_specified=True, secure=False, expires=None, discard=True, comment=None, comment_url=None, rest={'HttpOnly': None}, rfc2109=False)		
 			cj.set_cookie(ck)
 	
-	params = 'UserName=%s&Password=%s&btnLogin=ture&bRememberMe=false' % (urllib.quote(__settings__.getSetting('username')), urllib.quote(__settings__.getSetting('password')))
+        params = 'UserName=%s&Password=%s&btnLogin=ture&bRememberMe=false' % (urllib.quote(__settings__.getSetting('username')), urllib.quote(__settings__.getSetting('password')))
 
-	resp = opener.open('https://www.manoto1.com/User/Home/Login', params) 	
+	resp = opener.open('https://www.manoto1.com/User/Home/Login', params) 
 
 	resp = opener.open(url)
 	html_data = resp.read()

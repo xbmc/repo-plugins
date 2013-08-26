@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.manoto"
        name="Manoto TV"
-       version="1.0.8"
+       version="1.0.9"
        provider-name="babak">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -16,5 +16,10 @@
     <description>Manoto TV Addon for XBMC</description>
     <platform>all</platform>
     <language>fa</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website></website>
+    <email>babak@habibis.net</email>
+    <source>https://xbmc-glwiz-addon.googlecode.com/svn/branches/frodo/plugin.video.manoto</source>
   </extension>
 </addon>

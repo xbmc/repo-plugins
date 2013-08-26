@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.thenewboston" version="1.0.3" name="TheNewBoston" provider-name="lextoumbourou">
+<addon id="plugin.video.thenewboston" version="1.0.4" name="TheNewBoston" provider-name="Lex Toumbourou (lexandstuff)">
     <requires>
-        <import addon="xbmc.python" version="2.0" />
-        <import addon="script.module.beautifulsoup" version="3.2" />
+        <import addon="xbmc.python" version="2.1.0" />
+        <import addon="script.module.beautifulsoup" version="3.2.0" />
         <import addon="plugin.video.youtube" version="3.1.0" />
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -13,5 +13,7 @@
         <platform>all</platform>
         <summary lang="en">Browse and watch videos from The New Boston</summary>
         <description lang="en">Free Educational Video Tutorials on Computer Programming, Adobe Software, Computer Science and More!</description>
+        <license>MIT</license>
+        <website>http://github.com/lextoumbourou/plugin.video.thenewboston</website>
     </extension>
 </addon>

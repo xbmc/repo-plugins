@@ -39,8 +39,9 @@ def get_topics(html, title):
     soup = BeautifulSoup(str(html))
     categories = soup.findAll('hgroup')
     for category in categories:
-        if category.h1.string == title:
+        if category.h1.string == urllib.unquote(title):
             topics = category.findNext('ul').findAll('li')
+            break
 
     for topic in topics:
         title_info = topic.a.string

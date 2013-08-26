@@ -312,7 +312,7 @@ class GrooveAPI:
 		if 'result' in result and 'SongID' in result['result']:
 			info = result['result']
 			if 'CoverArtFilename' in info and info['CoverArtFilename'] != None:
-				info['CoverArtFilename'] = THUMB_URL+info['CoverArtFilename'].encode('ascii', 'ignore')
+				info['CoverArtFilename'] = THUMB_URL+info['CoverArtFilename'].encode('utf8', 'ignore')
 			else:
 				info['CoverArtFilename'] = 'None'
 			return info
@@ -401,7 +401,7 @@ class GrooveAPI:
 			artists = items['result']['artists']
 			while(i < len(artists)):
 				s = artists[i]
-				itemList.append([s['artistName'].encode('ascii', 'ignore'),\
+				itemList.append([s['artistName'].encode('utf8', 'ignore'),\
 				s['artistID']])
 				i = i + 1
 			return itemList
@@ -481,18 +481,22 @@ class GrooveAPI:
 					info = self.getSongsInfo(s['SongID'])
 					coverart = info['CoverArtFilename']
 				elif s['CoverArtFilename'] != None:
-					coverart = THUMB_URL+s['CoverArtFilename'].encode('ascii', 'ignore')
+					coverart = THUMB_URL+s['CoverArtFilename'].encode('utf8', 'ignore')
 				else:
 					coverart = 'None'
 				if 'Name' in s:
 					name = s['Name']
 				else:
 					name = s['SongName']
-				itemList.append([name.encode('ascii', 'ignore'),\
+				if 'AlbumName' in s:
+					albumName = s['AlbumName']
+				else:
+					albumName = ""
+				itemList.append([name.encode('utf8', 'ignore'),\
 				s['SongID'],\
-				name,\
+				albumName.encode('utf8', 'ignore'),\
 				s['AlbumID'],\
-				s['ArtistName'].encode('ascii', 'ignore'),\
+				s['ArtistName'].encode('utf8', 'ignore'),\
 				s['ArtistID'],\
 				coverart])
 				i = i + 1
@@ -508,7 +512,7 @@ class GrooveAPI:
 			artists = items['result']['artists']
 			while(i < len(artists)):
 				s = artists[i]
-				itemList.append([s['ArtistName'].encode('ascii', 'ignore'),\
+				itemList.append([s['ArtistName'].encode('utf8', 'ignore'),\
 				s['ArtistID']])
 				i = i + 1
 			return itemList
@@ -531,14 +535,14 @@ class GrooveAPI:
 			while(i < l):
 				s = albums[i]
 				if 'Name' in s:
-					name = s['Name'].encode('ascii', 'ignore')
+					name = s['Name'].encode('utf8', 'ignore')
 				else:
-					name = s['AlbumName'].encode('ascii', 'ignore')
+					name = s['AlbumName'].encode('utf8', 'ignore')
 				if 'CoverArtFilename' in s and s['CoverArtFilename'] != None:
-					coverart = THUMB_URL+s['CoverArtFilename'].encode('ascii', 'ignore')
+					coverart = THUMB_URL+s['CoverArtFilename'].encode('utf8', 'ignore')
 				else:
 					coverart = 'None'
-				itemList.append([s['ArtistName'].encode('ascii', 'ignore'),\
+				itemList.append([s['ArtistName'].encode('utf8', 'ignore'),\
 				s['ArtistID'],\
 				name,\
 				s['AlbumID'],\

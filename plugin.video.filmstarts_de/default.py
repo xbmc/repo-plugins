@@ -9,12 +9,12 @@ import xbmcgui
 import re
 import sys
 
+addon = xbmcaddon.Addon()
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-xbox = xbmc.getCondVisibility("System.Platform.xbox")
-addonId = 'plugin.video.filmstarts_de'
-addon = xbmcaddon.Addon(id=addonId)
+addonId = addon.getAddonInfo('id')
 translation = addon.getLocalizedString
+xbox = xbmc.getCondVisibility("System.Platform.xbox")
 showAllTrailers = addon.getSetting("showAllTrailers") == "true"
 forceViewMode = addon.getSetting("forceViewMode") == "true"
 useCoverAsFanart = addon.getSetting("useCoverAsFanart") == "true"
@@ -70,14 +70,14 @@ def listVideos(urlFull):
         if currentPage == 1:
             match = re.compile('<a href=".+?">\n<img src="(.+?)" alt="" />\n</a>\n</div>\n<div style=".+?">\n<h2 class=".+?" style=".+?"><b>.+?</b> (.+?)</h2><br />\n<span style=".+?" class="purehtml fs11">\n.+?<a class="btn" href="(.+?)"', re.DOTALL).findall(content)
             for thumb, title, url in match:
-                addDir(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
+                addLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
         match = re.compile('<img src=\'(.+?)\' alt=".+?" title=".+?" />\n</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a href=\'(.+?)\' class="link">\n<span class=\'bold\'><b>.+?</b> (.+?)</span>', re.DOTALL).findall(content)
         for thumb, url, title in match:
-            addDir(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
+            addLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
     elif mode == "listVideosInterview":
         match = re.compile('<img src=\'(.+?)\'.+?</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a.+?href=\'(.+?)\'>\n<span class=\'bold\'>\n(.+?)\n</span>(.+?)\n</a>', re.DOTALL).findall(content)
         for thumb, url, title1, title2 in match:
-            addDir(title1+title2, baseUrl + url, "playVideo", get_better_thumb(thumb))
+            addLink(title1+title2, baseUrl + url, "playVideo", get_better_thumb(thumb))
     elif mode == "listVideosTV":
         spl = content.split('<div class="datablock vpadding10b">')
         for i in range(1, len(spl), 1):
@@ -92,7 +92,7 @@ def listVideos(urlFull):
             else:
                 match = re.compile("<a href='(.+?)'>\n(.+?)<br />", re.DOTALL).findall(entry)
                 title = match[0][1]
-            addDir(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
+            addLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
     if currentPage < maxPage:
         urlNew = ""
         if mode == "listVideosTrailer":
@@ -165,14 +165,14 @@ def playVideo(url):
     content = getUrl(url)
     match = re.compile('"html5PathHD":"(.*?)"', re.DOTALL).findall(content)
     finalUrl=""
-    if match[0]:
+    if match[0] and match[0].startswith("http://"):
         finalUrl=match[0]
     else:
         match = re.compile('"refmedia":(.+?),', re.DOTALL).findall(content)
         media = match[0]
-        match = re.compile('"cMovie":(.+?),', re.DOTALL).findall(content)
+        match = re.compile('"relatedEntityId":(.+?),', re.DOTALL).findall(content)
         ref = match[0]
-        match = re.compile('"entityType":"(.+?)"', re.DOTALL).findall(content)
+        match = re.compile('"relatedEntityType":"(.+?)"', re.DOTALL).findall(content)
         typeRef = match[0]
         content = getUrl(baseUrl + '/ws/AcVisiondataV4.ashx?media='+media+'&ref='+ref+'&typeref='+typeRef)
         finalUrl = ""

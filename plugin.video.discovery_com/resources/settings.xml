@@ -1,0 +1,9 @@
+<settings>
+   <setting id="itemsPerPage" type="enum" label="30106" values="25|50|75|100" default="1"/>
+   <setting id="bitrate" type="enum" label="30105" values="600k|800k|1500k|3500k" default="3"/>
+   <setting id="useThumbAsFanart" type="bool" label="30101" default="true"/>
+   <setting id="forceViewMode" type="bool" label="30102" default="true"/>
+   <setting id="viewModeNewsShows" type="number" label="30103" enable="eq(-1,true)" default="500"/>
+   <setting id="viewModeVideos" type="number" label="30107" enable="eq(-2,true)" default="504"/>
+   <setting id="autoPlay" type="number" label="30104" default="5"/>
+</settings>

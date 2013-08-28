@@ -6,3 +6,7 @@
 - Fixed site changes
 1.0.3 / 2.0.3
 - Fixed site changes
+1.0.4 / 2.0.4
+- Changed content/name to WochenWEBschau
+1.0.5 / 2.0.5
+- Fixed site changes

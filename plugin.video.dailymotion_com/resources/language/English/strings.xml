@@ -24,9 +24,9 @@
   <string id="30022">Video not available</string>
   <string id="30023">Added</string>
   <string id="30024">Favourites</string>
-  <string id="30028">Add user to favs</string>
-  <string id="30029">Remove from addon favs</string>
-  <string id="30030">Added user to favs</string>
+  <string id="30028">Add user to favourites</string>
+  <string id="30029">Remove from favourites</string>
+  <string id="30030">Added user to favourites</string>
   <string id="30031">Are you over 18 and would like to turn off the family filter?</string>
   <string id="30032">Turn the family filter on?</string>
   <string id="30033">Add user</string>
@@ -40,6 +40,7 @@
   <string id="30041">Videos</string>
   <string id="30042">Groups</string>
   <string id="30043">Add to queue</string>
+  <string id="30044">Download video</string>
   <string id="30101">Country</string>
   <string id="30102">Force View</string>
   <string id="30103">ViewID</string>
@@ -47,4 +48,7 @@
   <string id="30105">Maximum resolution</string>
   <string id="30106">Dailymotion Username</string>
   <string id="30107">Items per page</string>
+  <string id="30108">Download directory</string>
+  <string id="30109">File already exists</string>
+  <string id="30110">Choose download directory</string>
 </strings>

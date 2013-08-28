@@ -32,3 +32,8 @@
 1.1.1 / 2.1.1
 - Bugfix with context menu
 - Some other small improvements
+1.1.2 / 2.1.2
+- Changed default view
+- Fixed encoding problem
+- Added download function
+- Added user-playlist browsing

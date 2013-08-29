@@ -61,7 +61,10 @@ class Plugin(object):
 class UrlRule(object):
   def __init__(self, url_rule, view_func):
     self._view_func = view_func
-    p = url_rule.replace('<', '(?P<').replace('>', '>[^/]+?)')
+    p = re.sub('<([A-z]*)>', '<string:\\1>', url_rule)
+    
+    p = re.sub('<string:([A-z]+)>', '(?P<\\1>[^/]+?)', p)
+    p = re.sub('<path:([A-z]+)>', '(?P<\\1>.*)', p)
     self._regex = re.compile('^' + p + '$')
   
   def match(self, path):

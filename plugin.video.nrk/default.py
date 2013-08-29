@@ -142,7 +142,7 @@ def seasons(arg):
     return plugin.redirect(urls[0])
   view(titles, urls, thumbs=thumbs, bgs=bgs)
 
-@plugin.route('/program/Episodes/<series_id>/<season_id>')
+@plugin.route('/program/Episodes/<series_id>/<path:season_id>')
 def episodes(series_id, season_id):
   import data
   view(*data.get_episodes(series_id, season_id))

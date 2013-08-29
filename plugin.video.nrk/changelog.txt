@@ -1,3 +1,6 @@
+[B]4.4.9[/B]
+- Sideendringer
+
 [B]4.4.8[/B]
 - Fikset direktestrømmer. Siden de endres så ofte, blir de nå hentet på nytt hver gang i stedet
 

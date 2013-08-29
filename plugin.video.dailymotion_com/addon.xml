@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="1.1.1" provider-name="AddonScriptorDE">
+<addon id="plugin.video.dailymotion_com" name="DailyMotion.com" version="1.1.2" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
+        <import addon="script.module.simple.downloader" version="0.9.4"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>

@@ -1,3 +1,7 @@
+Version 3.3.3
+-------------
+- Fix broken listing due to site changes (khoda)
+
 Version 3.3.2
 -------------
 - Disable "Öppet Arkiv"

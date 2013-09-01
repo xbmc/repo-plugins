@@ -14,9 +14,9 @@ BANDWIDTH = [300,500,900,1600,2500,5000]
 URL_A_TO_O = "/program"
 URL_CATEGORIES = "/kategorier"
 URL_CHANNELS = "/kanaler"
-URL_TO_LATEST = "?tab=episodes&sida=1"
-URL_TO_LATEST_NEWS = "?tab=news&sida=1"
-URL_TO_RECOMMENDED = "?tab=recommended&sida=1"
+URL_TO_LATEST = "?tab=senasteprogram&sida=1"
+URL_TO_LATEST_NEWS = "?tab=senastenyhetsprogram&sida=1"
+URL_TO_RECOMMENDED = "?tab=rekommenderat&sida=1"
 URL_TO_SEARCH = "/sok?q="
 URL_TO_LIVE = "/ajax/live"
 URL_TO_OA = "/kategorier/oppetarkiv"
@@ -25,12 +25,16 @@ JSON_SUFFIX = "?output=json"
 CLASS_SHOW_MORE_BTN = "[^\"']*playShowMoreButton[^\"']*"
 DATA_NAME_SHOW_MORE_BTN = "sida"
 
-TAB_TITLES      = "titles"
-TAB_EPISODES    = "episodes"
-TAB_CLIPS       = "clips"
-TAB_NEWS        = "news"
-TAB_RECOMMENDED = "recommended"
+TAB_TITLES      = "titlar"
+TAB_EPISODES    = "program"
+TAB_LATEST      = "senasteprogram"
+TAB_CLIPS       = "klipp"
+TAB_NEWS        = "senastenyhetsprogram"
+TAB_RECOMMENDED = "rekommenderat"
 
+TAB_S_TITLES    = "titles"
+TAB_S_CLIPS     = "clips"
+TAB_S_EPISODES  = "episodes"
 
 def getChannels():
   """
@@ -125,7 +129,7 @@ def getCategories():
   for li in lis:
     category = {}
     category["url"] = common.parseDOM(li, "a", ret = "href")[0]
-    title = common.parseDOM(li, "h3")[0]
+    title = common.parseDOM(li, "span")[0]
     category["title"] = common.replaceHTMLCodes(title)
     categories.append(category)
 

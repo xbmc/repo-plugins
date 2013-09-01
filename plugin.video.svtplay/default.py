@@ -188,22 +188,30 @@ def createTabIndex(url):
   tTab = False
   eTab = False
   cTab = False
- 
-  # Search for the "titles" tab. If it exists; create link to result directory   
-  if helper.tabExists(html,svt.TAB_TITLES):
-    tTab = True
-    addDirectoryItem(localize(30104), { 
-                    "mode": MODE_VIEW_TITLES,
-                    "url": url,
-                    "page": 1,
-                    "index": 0 })
-  else:
-    # Do nothing
-    common.log("No titles found")
+  tab_tit = svt.TAB_TITLES
+  tab_eps = svt.TAB_EPISODES
+  tab_cli = svt.TAB_CLIPS
+
+  # Search for the "titles" tab if in search mode. If it exists; create link to result directory  
+  if mode == MODE_SEARCH:
+    tab_tit = svt.TAB_S_TITLES
+    tab_eps = svt.TAB_S_EPISODES
+    tab_cli = svt.TAB_S_CLIPS
+  
+    if helper.tabExists(html,tab_tit):
+      tTab = True
+      addDirectoryItem(localize(30104), { 
+                      "mode": MODE_VIEW_TITLES,
+                      "url": url,
+                      "page": 1,
+                      "index": 0 })
+    else:
+      # Do nothing
+      common.log("No titles found")
 
 
   # Search for the "episodes" tab. If it exists; create link to result directory   
-  if helper.tabExists(html,svt.TAB_EPISODES):
+  if helper.tabExists(html,tab_eps):
     eTab = True
     addDirectoryItem(localize(30105), { 
                     "mode": MODE_VIEW_EPISODES,
@@ -216,7 +224,7 @@ def createTabIndex(url):
 
 
   # Search for the "clips" tab. If it exists; create link to result directory   
-  if helper.tabExists(html,svt.TAB_CLIPS):
+  if helper.tabExists(html,tab_cli):
     cTab = True
     addDirectoryItem(localize(30106), { 
                     "mode": MODE_VIEW_CLIPS,
@@ -294,19 +302,28 @@ def createDirectory(url,page,index,callertype,dirtype):
   Creates a directory with list items from the supplied program
   page (url).
   """
-
   if not url.startswith("/"):
     url = "/" + url
-
-  tabname = svt.TAB_EPISODES
-  if MODE_RECOMMENDED == callertype:
-    tabname = svt.TAB_RECOMMENDED
-  elif MODE_LATEST_NEWS == callertype:
-    tabname = svt.TAB_NEWS
-  elif MODE_VIEW_CLIPS == callertype:
-    tabname = svt.TAB_CLIPS
-  elif MODE_CATEGORY == callertype or MODE_VIEW_TITLES == callertype:
-    tabname = svt.TAB_TITLES
+  tabname = ""
+  if svt.URL_TO_SEARCH in url:
+    if MODE_VIEW_EPISODES == callertype:
+      tabname = svt.TAB_S_EPISODES
+    elif MODE_VIEW_CLIPS == callertype:
+      tabname = svt.TAB_S_CLIPS
+    elif MODE_VIEW_TITLES == callertype:
+      tabname = svt.TAB_S_TITLES
+  else:
+    tabname = svt.TAB_EPISODES
+    if MODE_RECOMMENDED == callertype:
+      tabname = svt.TAB_RECOMMENDED
+    elif MODE_LATEST_NEWS == callertype:
+      tabname = svt.TAB_NEWS
+    elif MODE_LATEST == callertype:
+      tabname = svt.TAB_LATEST
+    elif MODE_VIEW_CLIPS == callertype:
+      tabname = svt.TAB_CLIPS
+    elif MODE_CATEGORY == callertype or MODE_VIEW_TITLES == callertype:
+      tabname = svt.TAB_TITLES
 
   html = svt.getPage(url)
 

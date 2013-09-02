@@ -32,6 +32,7 @@ def addon_log(string):
 
 
 def cache_shows_file():
+        ''' creates an initial cache from the shows file '''
         show_file = os.path.join(home, 'resources', 'shows')
         cache.set("shows", open(show_file, 'r').read())
 
@@ -55,13 +56,14 @@ def make_request(url):
 
 
 def shows_cache(shows):
+        ''' this function checks for new shows that haven't been cached '''
         url = 'http://twit.tv/shows'
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         show_items = soup.findAll('div', attrs={'class' : 'item-list'})[2]('li')
         for i in show_items:
             name = str(i('a')[-1].string)
             try:
-                show = shows[name]
+                show = shows['active'][name]
             except:
                 addon_log('Show not in cache: '+name)
                 show_url = ('http://twit.tv/show/'+name.replace("'",'').replace('.','').replace(' ','-').lower()
@@ -73,6 +75,7 @@ def shows_cache(shows):
 
 
 def cache_show(name, url):
+        ''' a helper function to cache new shows '''
         shows = eval(cache.get('shows'))
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         try:
@@ -87,24 +90,35 @@ def cache_show(name, url):
         except:
             addon_log('thumb exception: '+name)
             thumb = icon
-        shows[name] = {'show_url': url, 'thumb': thumb, 'description': desc}
+        shows['active'][name] = {'show_url': url, 'thumb': thumb, 'description': desc}
         cache.set("shows", repr(shows))
         return True
 
 
 def get_shows(shows):
-        addDir(__language__(30000),'latest_episodes',4,icon)
-        addLink(__language__(30001),'twit_live','','',3,live_icon)
+        ''' loads the main directory '''
+        addDir(__language__(30000), 'latest_episodes', 4, icon)
+        addLink(__language__(30001), 'twit_live', '', '', 3, live_icon)
         cache_shows = eval(cache.cacheFunction(shows_cache, shows))
         if not cache_shows:
             addon_log('shows_cache FAILED')
-        items = sorted(shows.keys(), key=str.lower)
+        items = sorted(shows['active'].keys(), key=str.lower)
         for i in items:
             if i == 'Radio Leo': continue
-            addDir(i, shows[i]['show_url'], 1, shows[i]['thumb'], shows[i]['description'])
+            addDir(i, shows['active'][i]['show_url'], 1, shows['active'][i]['thumb'], shows['active'][i]['description'])
+        addDir('Retired Shows', 'retired_shows', 6, icon)
 
 
-def index(url,iconimage):
+def get_retired_shows():
+        ''' mode 6, loads the retired shows directory '''
+        shows = eval(cache.get('shows'))
+        items = sorted(shows['retired'].keys(), key=str.lower)
+        for i in items:
+            if i == 'Radio Leo': continue
+            addDir(i, shows['retired'][i]['show_url'], 1, shows['retired'][i]['thumb'], shows['retired'][i]['description'])
+
+def index(url, iconimage):
+        ''' mode 1, loads episodes of a specific show '''
         soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
         items = soup.findAll('div', attrs={'id' : "primary"})[0]('div', attrs={'class' : 'field-content'})
         for i in items:
@@ -152,7 +166,7 @@ def cache_latest_episods():
                 continue
             name = '%s - %s' %(show, episode)
             try:
-                thumbnail = shows[show]['thumb']
+                thumbnail = shows['active'][show]['thumb']
             except:
                 addon_log('thumbnail exception: '+show)
                 thumbnail = thumb
@@ -200,7 +214,8 @@ def set_media_url(url):
         if not playback_url:
             dialog = xbmcgui.Dialog()
             ret = dialog.select(__language__(30002), media_urls.keys())
-            playback_url = media_urls.values()[ret]
+            if ret >= 0:
+                playback_url = media_urls.values()[ret]
 
         if playback_url:
             success = True
@@ -219,10 +234,10 @@ def twit_live():
             'http://bglive-a.bitgravity.com/twit/live/low?noprefix',
             'ustream',
             'justintv',
-            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStreamHi_1628/playlist.m3u8',
-            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_1128/playlist.m3u8',
-            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_696/playlist.m3u8',
-            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_496/playlist.m3u8',
+            'http://hls.cdn.flosoft.biz/flosoft/smil:twitStreamAll.smil/playlist.m3u8',
+            'http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_720/playlist.m3u8',
+            'http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_540/playlist.m3u8',
+            'http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_360/playlist.m3u8',
             'http://twit.am/listen'
             ]
         if content_type == 'audio':
@@ -310,7 +325,6 @@ def get_params():
 def addLink(name,url,description,date,mode,iconimage):
         u=(sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+
            "&iconimage="+urllib.quote_plus(iconimage)+"&content_type="+content_type)
-        ok=True
         episode = None
         try: episode = int(re.findall('#(.+?):', name)[0])
         except:
@@ -320,19 +334,40 @@ def addLink(name,url,description,date,mode,iconimage):
         liz.setInfo(type="Video", infoLabels={"Title": name, "Plot":description, "Aired": date, "episode": episode})
         liz.setProperty("Fanart_Image", fanart)
         liz.setProperty('IsPlayable', 'true')
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
-        return ok
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
 
 
 def addDir(name,url,mode,iconimage,description=None):
         u=(sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+
            "&iconimage="+urllib.quote_plus(iconimage)+"&content_type="+content_type)
-        ok=True
         liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
         liz.setInfo(type="Video", infoLabels={"Title": name, "Plot":description})
         liz.setProperty( "Fanart_Image", fanart )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
+        xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+
+
+def setViewMode():
+        if not addon.getSetting('view_mode') == "0":
+            try:
+                if addon.getSetting('view_mode') == "1": # List
+                    xbmc.executebuiltin('Container.SetViewMode(502)')
+                elif addon.getSetting('view_mode') == "2": # Big List
+                    xbmc.executebuiltin('Container.SetViewMode(51)')
+                elif addon.getSetting('view_mode') == "3": # Thumbnails
+                    xbmc.executebuiltin('Container.SetViewMode(500)')
+                elif addon.getSetting('view_mode') == "4": # Poster Wrap
+                    xbmc.executebuiltin('Container.SetViewMode(501)')
+                elif addon.getSetting('view_mode') == "5": # Fanart
+                    xbmc.executebuiltin('Container.SetViewMode(508)')
+                elif addon.getSetting('view_mode') == "6":  # Media info
+                    xbmc.executebuiltin('Container.SetViewMode(504)')
+                elif addon.getSetting('view_mode') == "7": # Media info 2
+                    xbmc.executebuiltin('Container.SetViewMode(503)')
+                elif addon.getSetting('view_mode') == "8": # Media info 3
+                    xbmc.executebuiltin('Container.SetViewMode(515)')
+            except:
+                addon_log("SetViewMode Failed: "+addon.getSetting('view_mode'))
+                addon_log("Skin: "+xbmc.getSkinDir())
 
 
 if debug == 'true':
@@ -397,6 +432,7 @@ if mode==None:
 elif mode==1:
     index(url,iconimage)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    setViewMode()
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode==2:
@@ -408,4 +444,12 @@ elif mode==3:
 elif mode==4:
     get_latest_episodes()
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode==5:
+    pass
+
+elif mode==6:
+    get_retired_shows()
+    xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))

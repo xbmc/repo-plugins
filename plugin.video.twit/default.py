@@ -234,10 +234,10 @@ def twit_live():
             'http://bglive-a.bitgravity.com/twit/live/low?noprefix',
             'ustream',
             'justintv',
-            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStreamHi_1628/playlist.m3u8',
-            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_1128/playlist.m3u8',
-            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_696/playlist.m3u8',
-            'http://hls.twit.tv:1935/flosoft/_definst_/mp4:twitStream_496/playlist.m3u8',
+            'http://hls.cdn.flosoft.biz/flosoft/smil:twitStreamAll.smil/playlist.m3u8',
+            'http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_720/playlist.m3u8',
+            'http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_540/playlist.m3u8',
+            'http://hls.cdn.flosoft.biz/flosoft/mp4:twitStream_360/playlist.m3u8',
             'http://twit.am/listen'
             ]
         if content_type == 'audio':

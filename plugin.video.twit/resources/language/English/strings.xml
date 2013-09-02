@@ -8,11 +8,11 @@
   <string id="30005">Bitgravity (http 1 mbps)</string>
   <string id="30006">Bitgravity (http 400 kbps)</string>
   <string id="30007">Ustream (rtmp 1.5 mbps)</string>
-  <string id="30008">JustinTV (rtmp 1 mbps)</string>
-  <string id="30009">Flosoft.biz (hls 1.5 mbps)</string>
-  <string id="30010">Flosoft.biz (hls 1 mbps)</string>
-  <string id="30011">Flosoft.biz (hls 600 kbps)</string>
-  <string id="30012">Flosoft.biz (hls 400 kbps)</string>
+  <string id="30008">JustinTV 720x1280(rtmp 2 mbps)</string>
+  <string id="30009">Flosoft.biz (hls auto select)</string>
+  <string id="30010">Flosoft.biz (hls 720x1280)</string>
+  <string id="30011">Flosoft.biz (hls 540x960)</string>
+  <string id="30012">Flosoft.biz (hls 360x640)</string>
   <string id="30013">Audio TWiT.am/listen</string>
   <string id="30014">Playback Type</string>
   <string id="30015">Video (HD) 1280x720 Bitrate 2500</string>

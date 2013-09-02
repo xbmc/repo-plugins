@@ -1,3 +1,6 @@
+Version 2.0.4
+fix TWiT Live urls changed
+
 Version 2.0.3
 added retired shows
 

@@ -21,5 +21,6 @@
     <website>https://github.com/nilzen/xbmc-svtplay</website>
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>http://forum.xbmc.org/showthread.php?tid=67110</forum>
+    <broken>XBMC does not support SVT's encrypted video streams</broken>
   </extension>
 </addon>

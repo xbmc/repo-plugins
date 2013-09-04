@@ -11,11 +11,11 @@
 	<string id="30108">Humor TV 24</string>
 	<string id="30109">Journaal 24</string>
 	<string id="30110">Politiek 24</string>
-	<string id="30113">Laatste Achtuurjournaal</string>
-	<string id="30114">Journaal 24 Alternatief</string>
-	<string id="30115">Politiek 24 Alternatief</string>
-	<string id="30116">Aanvullende Kanalen Journaal</string>
+	<string id="30111">Nederland 1</string>
+	<string id="30112">Nederland 2</string>
+	<string id="30113">Nederland 3</string>
+	<string id="30114">3FM Live Radio</string>
+	<string id="30116">Additionele Journaal Kanalen</string>
 	<!--Bandwidth-->
-	<string id="30201">Langzame internetverbinding (smalband)</string>
 	<string id="30202">Door GEOIP tot Nederland beperkte kanalen uitschakelen</string>
 </strings>

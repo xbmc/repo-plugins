@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nederland24" name="Nederland 24" version="3.0.0" provider-name="bosel">
+<addon id="plugin.video.nederland24" name="Nederland 24" version="4.0.0" provider-name="bosel">
   <requires>
       <import addon="xbmc.python" version="2.1.0"/>
   </requires>
@@ -13,7 +13,7 @@
       <description lang="nl">De publieke omroep biedt het Nederlandse publiek een aantal digitale themakanalen gebundeld in Nederland 24. Door middel van gespecialiseerde kanalen kan de publieke omroep specifieke doelgroepen 24 uur per dag van een thematische programmering voorzien. Het aanbod op deze kanalen vormt een verdieping, verbreding, aanvulling en/of versterking van reguliere uitzendingen en speelt in op het veranderende mediagedrag van het publiek. Het Nederlandse publiek kiest zelf wat het kijkt op Nederland 24.</description>
       <platform>all</platform>
       <language>nl</language>
-      <license>GPLv2</license>
-      <disclaimer lang="en">Copyright 2011-2012 bosel. This is free software, and you are welcome to redistribute it under certain conditions. It is licensed under the GNU GENERAL PUBLIC LICENSE Version 2. THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, TO THE EXTENT PERMITTED BY APPLICABLE LAW.</disclaimer>
+      <license>GPLv3</license>
+      <disclaimer lang="en">Copyright 2011-2013 bosel.This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</disclaimer>
   </extension>
 </addon>

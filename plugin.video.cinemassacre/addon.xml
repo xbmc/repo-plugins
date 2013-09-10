@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.cinemassacre" name="cinemassacre" version="1.0.4" provider-name="dethfeet, Kr0nZ">
+<addon id="plugin.video.cinemassacre" name="cinemassacre" version="1.0.5" provider-name="dethfeet, Kr0nZ">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="xbmc.gui" version="4.0.0"/>

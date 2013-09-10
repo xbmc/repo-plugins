@@ -130,7 +130,18 @@ def recentPage():
     pageData = "action=infinite_scroll&loop_file=loop"
     page = load_page(pageUrl,pageData)
     linkList = extractEpisodes(page)
-    addEpisodeListToDirectory(linkList)
+    newLinkList = []
+    pDialog = xbmcgui.DialogProgress(10101)
+    ret = pDialog.create('Cinemassacre', 'Loading Recent Videos', '', 'Retrieved 0 Videos')
+    curItm = 0
+    for chk in linkList:
+      curItm = curItm + 1
+      link = urllib.unquote(chk['url'])
+      page = load_page(link)
+      if showEpisode.showEpisode(page,False) == True:
+        newLinkList.append(chk)
+      pDialog.update((curItm * 100) / len(linkList),'Loading Recent Videos', '', 'Retrieved '+str(len(newLinkList))+' Videos')
+    addEpisodeListToDirectory(newLinkList)
     
 def extractMenu(page,row='[]'):
     navList = common2.parseDOM(page, "div", attrs={"id": "navArea"})

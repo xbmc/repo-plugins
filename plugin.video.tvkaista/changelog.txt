@@ -1,3 +1,5 @@
+[B]4.0.1[/B]
+- Bugfix
 [B]4.0.0[/B]
 - Add context menu item for searching similar named programs, add support for new 1M MPEG4 stream
 [B]3.0.4[/B]

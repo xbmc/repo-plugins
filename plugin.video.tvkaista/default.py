@@ -37,6 +37,7 @@
 #7.4.2013 Version 4.0.0. Add "search similar named" to context menu. 
 #         Add proper umlauts. Change code documentation to English.
 #8.4.2013 Add support for new tvkaista 1M mpeg4 stream
+#15.9.2013 Version 4.0.1, bugfix with username+password quoting
 
 #tvkaista api documentation is at https://code.google.com/p/tvkaista-api/
 
@@ -203,8 +204,8 @@ def listprograms(url):
 #  try:
   items = dom.getElementsByTagName('item')
   ret = []
-  myusername=urllib.quote(tvkaista_addon.getSetting("username"))
-  mypassword=urllib.quote(tvkaista_addon.getSetting("password"))
+  myusername=urllib.quote_plus(tvkaista_addon.getSetting("username"))
+  mypassword=urllib.quote_plus(tvkaista_addon.getSetting("password"))
   for i in items:
     ptit=i.getElementsByTagName('title')[0].childNodes[0].nodeValue
     #print "in "+ptit.encode("utf-8")

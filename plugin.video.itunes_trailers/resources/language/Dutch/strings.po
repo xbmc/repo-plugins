@@ -16,6 +16,14 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]GEDOWNLOAD[/B]"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]Bezig met downloaden[/B]"
+
 msgctxt "#30010"
 msgid "Source"
 msgstr "Bron"
@@ -31,3 +39,11 @@ msgstr "Meest Recente"
 msgctxt "#30100"
 msgid "Network Error"
 msgstr "Netwerk Fout"
+
+msgctxt "#30101"
+msgid "No download path"
+msgstr "Geen download pad"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "Wilt u het nu instellen?"

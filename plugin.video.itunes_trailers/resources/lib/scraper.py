@@ -17,13 +17,14 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from BeautifulSoup import BeautifulSoup
+from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
 from email.utils import parsedate_tz
 import json
 import urllib2
 import re
 
 BASE_URL = 'http://trailers.apple.com/trailers'
+COVER_BASE_URL = 'http://trailers.apple.com'
 USER_AGENT = 'iTunes'
 
 
@@ -34,7 +35,6 @@ class NetworkError(Exception):
 class MovieScraper(object):
 
     MOVIES_URL = BASE_URL + '/home/feeds/%s.json'
-    COVER_BASE_URL = 'http://trailers.apple.com'
 
     def get_all_movies(self, limit, filter_dict=None):
         return self._get_movies('studios', limit, filter_dict)
@@ -52,12 +52,12 @@ class MovieScraper(object):
 
         def __poster(url):
             if not url.startswith('http'):
-                url = self.COVER_BASE_URL + url
+                url = COVER_BASE_URL + url
             return url.replace('poster', 'poster-xlarge')
 
         def __background(url):
             if not url.startswith('http'):
-                url = self.COVER_BASE_URL + url
+                url = COVER_BASE_URL + url
             return url.replace('poster', 'background')
 
         def __date(date_str):
@@ -117,6 +117,12 @@ class TrailerScraper(object):
     OVERLAY_URL = BASE_URL + '/%s/includes/%s/extralarge.html'
 
     def get_trailers(self, location):
+
+        def __thumb(url):
+            if not url.startswith('http'):
+                url = COVER_BASE_URL + url
+            return url
+
         tree = self.__get_tree(self.TRAILERS_URL % location)
         trailer_re = re.compile('trailer')
         for li in tree.findAll('li', {'class': trailer_re}):
@@ -152,7 +158,7 @@ class TrailerScraper(object):
                 'title': li.find('h3').string,
                 'date': '%s.%s.20%s' % (d, m, y),
                 'duration': duration_str.split('Runtime:')[-1].strip(),
-                'thumb': li.find('img')['src'],
+                'thumb': __thumb(li.find('img')['src']),
                 'background': self.BACKGROUND_URL % location,
                 'urls': trailer_urls
             }
@@ -164,5 +170,28 @@ class TrailerScraper(object):
         print 'Opening URL: %s' % url
         try:
             return BeautifulSoup(urllib2.urlopen(req).read())
+        except urllib2.HTTPError, error:
+            raise NetworkError('HTTPError: %s' % error)
+
+
+class MoviePlotScraper(object):
+
+    MOVIES_URL = BASE_URL + '/home/xml/current.xml'
+
+    def get_movie_plots(self):
+        tree = self.__get_tree(self.MOVIES_URL)
+        movie_plots = {}
+        for movie in tree.findAll('movieinfo'):
+            title = movie.find('info').find('title').string
+            plot = movie.find('info').find('description').string
+            movie_plots[title] = plot
+        return movie_plots
+
+    def __get_tree(self, url):
+        headers = {'User-Agent': USER_AGENT}
+        req = urllib2.Request(url, None, headers)
+        print 'Opening URL: %s' % url
+        try:
+            return BeautifulStoneSoup(urllib2.urlopen(req).read())
         except urllib2.HTTPError, error:
             raise NetworkError('HTTPError: %s' % error)

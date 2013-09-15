@@ -16,9 +16,25 @@ msgstr ""
 "Language: be\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "Download Trailer"
+
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]DOWNLOADED[/B]"
+
 msgctxt "#30003"
 msgid "Add to CouchPotato"
 msgstr "Add to CouchPotato"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]download in progress[/B]"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "Add to Trakt.tv"
 
 msgctxt "#30010"
 msgid "Source"
@@ -26,11 +42,39 @@ msgstr "Source"
 
 msgctxt "#30011"
 msgid "All"
-msgstr "Усе"
+msgstr "All"
 
 msgctxt "#30012"
 msgid "Most Recent"
 msgstr "Most Recent"
+
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "Most Popular"
+
+msgctxt "#30014"
+msgid "Exclusive"
+msgstr "Exclusive"
+
+msgctxt "#30020"
+msgid "Movie Limit"
+msgstr "Movie Limit"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "No Limit"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "First 50"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "First 100"
+
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "Trailer quality (Stream)"
 
 msgctxt "#30031"
 msgid "HD480p"
@@ -44,9 +88,21 @@ msgctxt "#30033"
 msgid "HD1080p"
 msgstr "HD1080p"
 
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "Trailer quality (Download)"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "Same as Stream"
+
 msgctxt "#30050"
 msgid "Trailer download path"
 msgstr "Trailer download path"
+
+msgctxt "#30051"
+msgid "Force Trailers ViewMode to Thumbnail"
+msgstr "Force Trailers ViewMode to Thumbnail"
 
 msgctxt "#30100"
 msgid "Network Error"
@@ -55,3 +111,7 @@ msgstr "Network Error"
 msgctxt "#30101"
 msgid "No download path"
 msgstr "No download path"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "Do you want to you set it now?"

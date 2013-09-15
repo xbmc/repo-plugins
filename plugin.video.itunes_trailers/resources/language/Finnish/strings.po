@@ -16,9 +16,21 @@ msgstr ""
 "Language: fi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "Lataa traileri"
+
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]LADATTU[/B]"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]lataus meneillään[/B]"
+
 msgctxt "#30010"
 msgid "Source"
-msgstr "Alkuperäinen kuvan tuottaja"
+msgstr "Lähde"
 
 msgctxt "#30011"
 msgid "All"
@@ -27,3 +39,35 @@ msgstr "Kaikki"
 msgctxt "#30012"
 msgid "Most Recent"
 msgstr "Viimeisimmät"
+
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "Suosituimmat"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "Ei rajoitusta"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "Ensimmäiset 50"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "Ensimmäiset 100"
+
+msgctxt "#30031"
+msgid "HD480p"
+msgstr "HD480p"
+
+msgctxt "#30032"
+msgid "HD720p"
+msgstr "HD720p"
+
+msgctxt "#30033"
+msgid "HD1080p"
+msgstr "HD1080p"
+
+msgctxt "#30100"
+msgid "Network Error"
+msgstr "Verkkovirhe"

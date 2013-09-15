@@ -16,6 +16,14 @@ msgstr ""
 "Language: is\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30003"
+msgid "Add to CouchPotato"
+msgstr "Bæta við í CouchPotato"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "Bæta við í Trakt.tv"
+
 msgctxt "#30010"
 msgid "Source"
 msgstr "Uppruni"
@@ -23,3 +31,35 @@ msgstr "Uppruni"
 msgctxt "#30011"
 msgid "All"
 msgstr "Allir"
+
+msgctxt "#30012"
+msgid "Most Recent"
+msgstr "Nýjustu"
+
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "Vinsælustu"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "Fyrstu 50"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "Fyrstu 100"
+
+msgctxt "#30031"
+msgid "HD480p"
+msgstr "HD480p"
+
+msgctxt "#30032"
+msgid "HD720p"
+msgstr "HD720p"
+
+msgctxt "#30033"
+msgid "HD1080p"
+msgstr "HD1080p"
+
+msgctxt "#30100"
+msgid "Network Error"
+msgstr "Net Villa"

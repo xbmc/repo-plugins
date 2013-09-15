@@ -16,6 +16,10 @@ msgstr ""
 "Language: am\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgctxt "#30010"
+msgid "Source"
+msgstr "ምንጭ "
+
 msgctxt "#30011"
 msgid "All"
 msgstr "ሁሉንም"

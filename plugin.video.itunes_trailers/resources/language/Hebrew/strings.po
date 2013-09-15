@@ -16,6 +16,26 @@ msgstr ""
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "הורד קדימון"
+
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]הורד[/B]"
+
+msgctxt "#30003"
+msgid "Add to CouchPotato"
+msgstr "הוסף אל CouchPotato"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]בתהליך הורדה[/B]"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "הוסף אל Trakt.tv"
+
 msgctxt "#30010"
 msgid "Source"
 msgstr "מקור"
@@ -28,6 +48,70 @@ msgctxt "#30012"
 msgid "Most Recent"
 msgstr "המעודכנים ביותר"
 
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "הפופולריים ביותר"
+
+msgctxt "#30014"
+msgid "Exclusive"
+msgstr "יחודי"
+
+msgctxt "#30020"
+msgid "Movie Limit"
+msgstr "מגבלת סרט"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "ללא הגבלה"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "50 ראשונים"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "100 ראשונים"
+
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "איכות קדימון (הזרמה)"
+
+msgctxt "#30031"
+msgid "HD480p"
+msgstr "HD480p"
+
+msgctxt "#30032"
+msgid "HD720p"
+msgstr "HD720p"
+
+msgctxt "#30033"
+msgid "HD1080p"
+msgstr "HD1080p"
+
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "איכות קדימון (הורדה)"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "זהה להזרמה"
+
+msgctxt "#30050"
+msgid "Trailer download path"
+msgstr "נתיב הורדת קדימון"
+
+msgctxt "#30051"
+msgid "Force Trailers ViewMode to Thumbnail"
+msgstr "אלץ מצב תצוגת קדימון כתמונה ממוזערת"
+
 msgctxt "#30100"
 msgid "Network Error"
 msgstr "שגיאת רשת"
+
+msgctxt "#30101"
+msgid "No download path"
+msgstr "אין נתיב הורדה"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "האם ברצונך להגדיר זאת כעת?"

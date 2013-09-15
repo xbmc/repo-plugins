@@ -32,6 +32,10 @@ msgctxt "#30004"
 msgid "[B]download in progress[/B]"
 msgstr "[B]wird heruntergeladen[B]"
 
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "Zu Trakt.tv einfügen"
+
 msgctxt "#30010"
 msgid "Source"
 msgstr "Quelle"
@@ -68,6 +72,10 @@ msgctxt "#30023"
 msgid "First 100"
 msgstr "Erste 100"
 
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "Trailerqualität (Stream)"
+
 msgctxt "#30031"
 msgid "HD480p"
 msgstr "HD 480p"
@@ -79,6 +87,14 @@ msgstr "HD 720p"
 msgctxt "#30033"
 msgid "HD1080p"
 msgstr "HD 1080p"
+
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "Trailerqualität (Download)"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "Gleich wie der Stream"
 
 msgctxt "#30050"
 msgid "Trailer download path"

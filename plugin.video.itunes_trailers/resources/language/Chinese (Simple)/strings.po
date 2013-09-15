@@ -16,17 +16,25 @@ msgstr ""
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "下载预告片"
+
 msgctxt "#30002"
 msgid "[B]DOWNLOADED[/B]"
 msgstr "[B]已下载[/B]"
 
 msgctxt "#30003"
 msgid "Add to CouchPotato"
-msgstr "加入到电视迷"
+msgstr "加入到CouchPotato"
 
 msgctxt "#30004"
 msgid "[B]download in progress[/B]"
 msgstr "[B]正在下载[/B]"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "加入到Trakt.tv"
 
 msgctxt "#30010"
 msgid "Source"
@@ -40,6 +48,34 @@ msgctxt "#30012"
 msgid "Most Recent"
 msgstr "最新"
 
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "最热门"
+
+msgctxt "#30014"
+msgid "Exclusive"
+msgstr "独家"
+
+msgctxt "#30020"
+msgid "Movie Limit"
+msgstr "电影限制"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "无限制"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "前50"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "前100"
+
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "预告片画质（媒体流）"
+
 msgctxt "#30031"
 msgid "HD480p"
 msgstr "HD480p"
@@ -52,9 +88,21 @@ msgctxt "#30033"
 msgid "HD1080p"
 msgstr "HD1080p"
 
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "预告片画质（下载）"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "同媒体流"
+
 msgctxt "#30050"
 msgid "Trailer download path"
 msgstr "预告片下载目录"
+
+msgctxt "#30051"
+msgid "Force Trailers ViewMode to Thumbnail"
+msgstr "预告片视图模式强制为“缩略图”"
 
 msgctxt "#30100"
 msgid "Network Error"

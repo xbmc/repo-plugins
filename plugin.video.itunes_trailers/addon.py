@@ -21,7 +21,7 @@ from xbmcswift2 import Plugin, xbmcgui, xbmc
 import xbmcvfs  # FIXME: import from swift after fixed there
 
 from resources.lib.scraper import \
-    NetworkError, MovieScraper, TrailerScraper, USER_AGENT
+    NetworkError, MovieScraper, TrailerScraper, MoviePlotScraper, USER_AGENT
 
 STRINGS = {
     'download_trailer': 30001,
@@ -51,7 +51,7 @@ def show_movies():
         'limit',
         choices=(0, 50, 100)
     )
-    items = get_movies2(source, limit)
+    items = get_movies3(source, limit)
     finish_kwargs = {
         'sort_methods': ['date', 'title', 'playlist_order']
     }
@@ -117,7 +117,7 @@ def download_trailer(download_url, play_url):
 
 
 @plugin.cached()
-def get_movies2(source, limit):
+def get_movies3(source, limit):
     scraper = MovieScraper()
     if source == 'all':
         movies = scraper.get_all_movies(limit)
@@ -129,6 +129,8 @@ def get_movies2(source, limit):
         movies = scraper.get_exclusive_movies(limit)
     else:
         raise NotImplementedError
+
+    movie_plots = MoviePlotScraper().get_movie_plots()
 
     def __context(movie_title):
         return [
@@ -161,7 +163,10 @@ def get_movies2(source, limit):
             'credits': movie.get('moviesite', ''),
             'location': movie['location'],
             'types_count': movie['types_count'],
-            'plot': '[CR]'.join(movie.get('actors') or [])  # workaround
+            'plot': '[CR]'.join((
+                movie_plots.get(movie['title'], ''),
+                '[CR]'.join(movie.get('actors') or [])
+            ))
         },
         'properties': {
             'fanart_image': movie['background'],

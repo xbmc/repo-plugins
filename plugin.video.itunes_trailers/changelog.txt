@@ -1,3 +1,7 @@
+0.2.0 (15.09.2013)
+- added plots to (most) movies
+- updated translations
+
 0.1.2 (31.05.2013)
 - fixed new trailers
 

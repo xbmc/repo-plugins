@@ -32,6 +32,10 @@ msgctxt "#30004"
 msgid "[B]download in progress[/B]"
 msgstr "[B]λήψη σε εξέλιξη[/B]"
 
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "Προσθήκη στο Trakt.tv"
+
 msgctxt "#30010"
 msgid "Source"
 msgstr "Πηγή"
@@ -68,6 +72,10 @@ msgctxt "#30023"
 msgid "First 100"
 msgstr "Πρώτα 100"
 
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "Ποιότητα διαφημιστικού (Ροή)"
+
 msgctxt "#30031"
 msgid "HD480p"
 msgstr "HD480p"
@@ -79,6 +87,14 @@ msgstr "HD720p"
 msgctxt "#30033"
 msgid "HD1080p"
 msgstr "HD1080p"
+
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "Ποιότητα διαφημιστικού (Λήψη)"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "Ίδια με της Ροής"
 
 msgctxt "#30050"
 msgid "Trailer download path"

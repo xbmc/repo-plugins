@@ -1,3 +1,8 @@
+Version 0.0.3
+fix Top 100 Players
+fix/added support for Big Play Highlights
+moved the videos category to the root add-on directory 
+
 Version 0.0.2
 bug fixes
 

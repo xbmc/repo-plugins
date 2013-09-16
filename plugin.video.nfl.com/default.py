@@ -10,6 +10,7 @@ import simplejson as json
 from traceback import format_exc
 from urlparse import urlparse, parse_qs
 from BeautifulSoup import BeautifulSoup
+from resources.highlights import Navigation
 
 addon = xbmcaddon.Addon(id='plugin.video.nfl.com')
 addon_version = addon.getAddonInfo('version')
@@ -43,7 +44,7 @@ def make_request(url, data=None, headers=None):
         redirect_url = response.geturl()
         response.close()
         if redirect_url != url:
-                addon_log('Redirect URL: %s' %redirect_url)
+            addon_log('Redirect URL: %s' %redirect_url)
         return data
     except urllib2.URLError, e:
         addon_log('We failed to open "%s".' %url)
@@ -61,7 +62,9 @@ def categories():
     except:
         addon_log('categories is not cached')
         data = cache_cats()
+    get_cats('videos')
     for i in data.keys():
+        if i == 'videos': continue
         add_dir(i.title(), '', 2, icon)
     add_dir(language(30001),'search',6,os.path.join(addon_path, 'resources','icons','search.png'))
 
@@ -100,9 +103,18 @@ def get_cats(name):
     if name == 'teams':
         if len(items) == 0:
             items = cache_teams()
+    name_list = []
     for i in items:
-        if i[0] == 'The Season': continue  # need a new function for this channel
-        add_dir(i[0], i[1], 1, icon)
+        i_name = i[0]
+        mode = 1
+        if i_name in name_list: continue
+        if i_name == 'The Season': continue  # need a new function for this channel
+        if i_name == 'Top 100 Players of ...':
+            mode = 12
+        if i_name == 'Big Play Highlights':
+            mode = 10
+        add_dir(i_name, i[1], mode, icon)
+        name_list.append(i_name)
 
 
 def index(url, name):
@@ -194,6 +206,67 @@ def cache_featured_videos():
     return featured
 
 
+def get_top_players(url):
+    soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+    items = soup.findAll('div', attrs={'class': "top100-video-thumb"})[:100]
+    for i in items:
+        name = '%s - %s' %(i('span', attrs={'class': 'player-rank'})[0].string, i('span', attrs={'class': 'brand'})[0].string)
+        video_id = [x['data-ecmid'] for x in i('a', attrs={'class': 'play-button'})][0]
+        thumb = i.img['src']
+        print (name, video_id, thumb)
+        add_dir(name, video_id, 3, i.img['src'], duration=None, description=None, isfolder=False)
+
+    
+    
+def get_highlights(href=None, selected=None):
+    nav = Navigation()
+    if href is None:
+        page_url = 'http://www.nfl.com/big-play-highlights'
+    else:
+        page_url = 'http://www.nfl.com' + href
+    nav_dict = nav.get_navigation(make_request(page_url))
+    feed_url = nav.get_feed_url(href)
+    addon_log('feed_url: %s' %feed_url)
+    cache.set('navigation', repr(nav_dict))
+    dir_name = '[COLOR=orange]| '
+    for i in [nav.season, nav.season_type, nav.week, nav.team, nav.game]:
+        if i:
+            dir_name += '%s | ' %i
+    dir_name += '[/COLOR] %s' %language(30005)
+    add_dir(dir_name, 'display_nav', 9, icon)
+    get_highlight_videos(feed_url)
+
+
+def get_highlight_videos(url):
+    data = json.loads(make_request(url))
+    for i in data['videos']:
+        duration = get_duration_in_minutes(i['runTime'])
+        final_url = select_bitrate(i['videoBitRates'])
+        listitem = xbmcgui.ListItem(i['headline'], iconImage=i['mediumImageUrl'], thumbnailImage=i['mediumImageUrl'])
+        listitem.setInfo(type="Video", infoLabels={"Title": i['headline'], "Plot": i['caption'], "Duration": duration})
+        listitem.setProperty("Fanart_Image", fanart)
+        xbmcplugin.addDirectoryItem(int(sys.argv[1]), final_url, listitem, False)
+    if data['total'] > data['offset'] + 16:
+        page_url = url.split('offset=')[0] + 'offset=' + str(data['offset'] + 16)
+        add_dir(language(30003), page_url, 11, icon)
+
+
+def display_highlights_nav(selected=None):
+    dialog = xbmcgui.Dialog()
+    nav = eval(cache.get('navigation'))
+    if selected:
+        addon_log('Selected: %s' %selected)
+        ret = dialog.select(language(30005), [i['label'] for i in nav[selected]])
+        if ret > -1:
+            addon_log('Selected URL: %s' %nav[selected][ret]['href'])
+            get_highlights(nav[selected][ret]['href'], selected)
+    else:
+        ret = dialog.select(language(30005), [i.title() for i in nav.keys()])
+        if ret > -1:
+            addon_log('Selected: %s' %nav.keys()[ret])
+            display_highlights_nav(nav.keys()[ret])
+
+
 def get_featured_videos(play=False):
     data = cache.cacheFunction(cache_featured_videos)
     if play:
@@ -251,7 +324,6 @@ def get_video_url(url):
 
 
 def select_bitrate(bitrate_list):
-    addon_log('bitrate list: %s' %bitrate_list)
     bitrate = int(addon.getSetting('prefered_bitrate'))
     try: streams = [(i['rate'], i['path']) for i in bitrate_list]
     except: streams = [(i['bitrate'], i['videoPath']) for i in bitrate_list]
@@ -335,7 +407,6 @@ def get_params():
         p[i] = p[i][0]
     return p
 
-
 params = get_params()
 addon_log("params: %s" %params)
 
@@ -377,3 +448,19 @@ elif mode == 7:
 
 elif mode == 8:
     get_featured_videos(True)
+
+elif mode == 9:
+    display_highlights_nav()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode == 10:
+    get_highlights()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode == 11:
+    get_highlight_videos(params['url'])
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode == 12:
+    get_top_players(params['url'])
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))

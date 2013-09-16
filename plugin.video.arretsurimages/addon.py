@@ -31,7 +31,9 @@ URL = {'toutesLesEmissions': 'http://www.arretsurimages.net/emissions.php?',
        'ligneJaune': URLEMISSION % 2,
        'dansLeTexte': URLEMISSION % 3,
        'auxSources': URLEMISSION % 4,
-       'auProchainEpisode': URLEMISSION % 5}
+       'auProchainEpisode': URLEMISSION % 5,
+       '14h42': URLEMISSION % 6,
+      }
 SORTMETHOD = ['date_publication', 'nb_vues', 'nb_comments']
 BESTOF_SORTMETHOD = ['recent', 'visited', 'commented', 'rated']
 STREAMS = ['stream_h264_hq_url', 'stream_h264_url']
@@ -92,6 +94,10 @@ def emissions():
         {'label': '@u Prochain Episode',
          'url': plugin.url_for('show_programs', label='auProchainEpisode', page='1'),
          'info': {'Plot': plugin.get_string(30035)},
+         'is_folder': True},
+        {'label': '14:42',
+         'url': plugin.url_for('show_programs', label='14h42', page='1'),
+         'info': {'Plot': plugin.get_string(30036)},
          'is_folder': True},
         {'label': 'Ligne j@une',
          'url': plugin.url_for('show_programs', label='ligneJaune', page='1'),

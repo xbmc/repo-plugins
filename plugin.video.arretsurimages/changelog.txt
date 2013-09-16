@@ -1,3 +1,7 @@
+[B]Version 2.3.6[/B]
+
+- Add new program "14:42"
+
 [B]Version 2.3.5[/B]
 
 - Fix mp4 video playback

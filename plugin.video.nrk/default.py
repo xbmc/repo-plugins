@@ -31,9 +31,9 @@ SHOW_SUBS = int(plugin.get_setting('showsubtitles')) == 1
 def view_top():
   addDirectoryItem(plugin.handle, plugin.make_url("/live"), ListItem("Direkte"), True)
   addDirectoryItem(plugin.handle, plugin.make_url("/recommended"), ListItem("Aktuelt"), True)
-  addDirectoryItem(plugin.handle, plugin.make_url("/mostrecent"), ListItem("Siste"), True)
-  addDirectoryItem(plugin.handle, plugin.make_url("/categories"), ListItem("Kategorier"), True)
-  addDirectoryItem(plugin.handle, plugin.make_url("/letters"), ListItem("A-Å"), True)
+  addDirectoryItem(plugin.handle, plugin.make_url("/mostrecent"), ListItem("Nytt"), True)
+  addDirectoryItem(plugin.handle, plugin.make_url("/mostpopular"), ListItem("Populært"), True)
+  addDirectoryItem(plugin.handle, plugin.make_url("/browse"), ListItem("Bla"), True)
   addDirectoryItem(plugin.handle, plugin.make_url("/search"), ListItem("Søk"), True)
   endOfDirectory(plugin.handle)
 
@@ -93,23 +93,42 @@ def mostrecent():
   import data
   view(*data.get_most_recent())
 
-@plugin.route('/categories')
-def categories():
+@plugin.route('/mostpopular')
+def mostpolpular():
   import data
-  view(*data.get_categories())
+  view(*data.get_most_popular())
 
-@plugin.route('/kategori/<arg>')
-def category(arg):
+@plugin.route('/category/<id>')
+def category1(id):
+  view_letter_list("/category/%s" % id)
+
+@plugin.route('/category/<id>/<letter>')
+def category2(id, letter):
   import data
-  view(*data.get_by_category(arg))
+  view(*data.get_by_category(id, letter))
 
 @plugin.route('/letters')
 def letters():
+  view_letter_list('/letter')
+
+@plugin.route('/letter/<arg>')
+def letter(arg):
   import data
+  view(*data.get_by_letter(arg))
+
+@plugin.route('/browse')
+def browse():
+  import data
+  titles, ids = data.get_categories()
+  titles = ["Alle"] + titles
+  urls = ["/letters"] + [ "/category/%s" % i for i in ids ]
+  view(titles, urls)
+
+def view_letter_list(base_url):
   common = ['0-9'] + map(chr, range(97, 123))
   titles = common + [ u'æ', u'ø', u'å' ]
   titles = [ e.upper() for e in titles ]
-  urls = [ '/letters/%s' % l for l in (common + ['ae', 'oe', 'aa']) ]
+  urls = [ "%s/%s" % (base_url, l) for l in (common + ['ae', 'oe', 'aa']) ]
   view(titles, urls)
 
 @plugin.route('/search')
@@ -128,11 +147,6 @@ def search_results(query, page):
   for i in range(0, len(more_node)):
     results[i].append(more_node[i])
   view(*results, update_listing=int(page) > 1)
-
-@plugin.route('/letters/<arg>')
-def letter(arg):
-  import data
-  view(*data.get_by_letter(arg))
 
 @plugin.route('/serie/<arg>')
 def seasons(arg):

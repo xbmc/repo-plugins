@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -12,8 +13,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-
-import re
 import json
 import requests
 import HTMLParser
@@ -34,34 +33,6 @@ xhrsession.headers['X-Requested-With'] = 'XMLHttpRequest'
 xhrsession.headers['Cookie'] = "NRK_PLAYER_SETTINGS_TV=devicetype=desktop&preferred-player-odm=hlslink&preferred-player-live=hlslink"
 
 
-def get_by_letter(arg):
-  """ returns: </serie/newton> or </program/koif45000708> """
-  url = "http://tv.nrk.no/programmer/%s?filter=rettigheter&ajax=true" % arg
-  html = xhrsession.get(url).text
-  return _parse_list(html)
-
-def get_by_category(arg):
-  url = "http://tv.nrk.no/kategori/%s" % arg
-  html = xhrsession.get(url).text
-  html = parseDOM(html, 'div', {'id':'programList'})
-  return _parse_list(html)
-
-def get_categories():
-  url = "http://tv.nrk.no/kategori/"
-  html = xhrsession.get(url).text
-  html = parseDOM(html, 'ul', {'id':'categoryList'})
-  return _parse_list(html)
-
-def _parse_list(html):
-  titles = parseDOM(html, 'a')
-  titles = [ re.sub('<[^>]*>', '', t) for t in titles ]
-  titles = map(html_decode, titles)
-  urls = parseDOM(html, 'a', ret='href')
-  thumbs = [ _thumb_url(url) for url in urls ]
-  fanart = [ _fanart_url(url) for url in urls ]
-  return titles, urls, thumbs, fanart
-
-
 def get_live_stream(ch):
   url = "http://tv.nrk.no/direkte/nrk%s" % ch
   html = xhrsession.get(url).text
@@ -69,24 +40,49 @@ def get_live_stream(ch):
   img = parseDOM(html, 'img', {'class':'poster'}, ret='src')[0]
   return url, img
 
-def get_recommended():
-  url = "http://tv.nrk.no/"
-  html = xhrsession.get(url).text
-  html = parseDOM(html, 'ul', {'id':'introSlider'})[0]
-  
-  h1s = parseDOM(html, 'h2')
-  titles2 = parseDOM(h1s, 'a')
-  titles1 = parseDOM(html, 'strong')
-  titles = [ "%s - %s" % (t1, t2) for t1, t2 in zip(titles1, titles2) ]
-  
-  urls = parseDOM(h1s, 'a', ret='href')
-  thumbs = [ _thumb_url(url) for url in urls ]
+def get_categories():
+  titles = [ "Dokumentar og fakta", "Filmer og serier", "Helse, forbruker og livsstil",
+    "Kultur og underholdning", "Nyheter", "Samisk", "Sport", "Tegnspråk" ]
+  ids = [ "dokumentar-og-fakta", "filmer-og-serier", "helse-forbruker-og-livsstil",
+    "kultur-og-underholdning", "nyheter", "samisk", "sport", "tegnspraak" ]
+  return titles, ids
+
+def get_by_letter(l):
+  url = "http://tv.nrk.no/programmer/%s" % l
+  return _program_list(url)
+
+def get_by_category(category, l):
+  url = "http://tv.nrk.no/programmer/%s/%s" % (category, l)
+  return _program_list(url)
+
+def _program_list(url):
+  items = xhrsession.get(url).json()
+  items = [ i for i in items if i['hasOndemandRights'] ]
+  titles = [ i['Title'] for i in items ]
+  urls = [ i['Url'] for i in items ]
+  thumbs = [ i['ImageUrl'] for i in items ]
   fanart = [ _fanart_url(url) for url in urls ]
   return titles, urls, thumbs, fanart
 
+def get_recommended():
+  url = "http://tv.nrk.no/programmer"
+  html = xhrsession.get(url).text
+  html = parseDOM(html, 'div', {'class':'recommended-list'})[0]
+  titles = map(html_decode, parseDOM(html, 'h3'))
+  urls = parseDOM(html, 'a', ret='href')
+  thumbs = parseDOM(html, 'img', ret='src')
+  fanart = [ _fanart_url(url) for url in urls ]
+  return titles, urls, thumbs, fanart
 
 def get_most_recent():
-  url = "http://tv.nrk.no/listobjects/recentlysent.json/page/0"
+  url = "http://tv.nrk.no/listobjects/recentlysent.json/page/0/100"
+  return _json_list(url)
+
+def get_most_popular():
+  url = "http://tv.nrk.no/listobjects/mostpopular/Week.json/page/0/100"
+  return _json_list(url)
+
+def _json_list(url):
   elems = xhrsession.get(url).json()['Data']
   titles = [ e['Title'] for e in elems ]
   titles = map(html_decode, titles)

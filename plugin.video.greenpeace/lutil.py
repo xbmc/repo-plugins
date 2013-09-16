@@ -19,14 +19,16 @@
 
    Description:
    These funtions are called from the main plugin module, aimed to ease and simplify the plugin development process.
-   Release 0.1.4
+   Release 0.1.5
 '''
 
 # First of all We must import all the libraries used for plugin development.
-import sys, re, urllib, urllib2, json
+import sys, re, urllib, urllib2, os
 import xbmcplugin, xbmcaddon, xbmcgui, xbmcaddon, xbmc
 
 debug_enable = False # The debug logs are disabled by default.
+fanart_file = "" # Initialize the global var for the fanart file location.
+
 
 # This function returns the plugin settings object to main module.
 def get_plugin_settings(plugin_id=""):
@@ -41,8 +43,14 @@ def get_system_language():
 # This function sets the debug_enable var to log everything if debug option is true.
 def set_debug_mode(debug_flag=""):
     global debug_enable
-    if debug_flag == "true":
-        debug_enable = True
+    debug_enable = debug_flag == "true"
+
+
+# This function setup the file and global plugin fanart.
+def set_fanart_file(root_path=""):
+    global fanart_file
+    fanart_file = os.path.join(root_path, "fanart.jpg")
+    xbmcplugin.setPluginFanart(int(sys.argv[1]), fanart_file)
 
 
 # This function logs the messages into the main XBMC log file. Called from main plugin module.
@@ -70,10 +78,42 @@ def get_plugin_parms():
     _log("get_plugin_parms " + repr(options))
     return options
 
-# This function returns the URL decoded.
-def get_url_decoded(url):
-    _log('get_url_decoded URL: "%s"' % url)
-    return urllib.unquote_plus(url)
+
+# This function returns the URL encoded.
+def get_url_encoded(url):
+    _log('get_url_encoded URL: "%s"' % url)
+    return urllib.quote_plus(url)
+
+
+# This function sets the view mode into the video list.
+def set_view_mode(viewid):
+    _log("set_view_mode mode: " + viewid)
+    xbmc.executebuiltin('Container.SetViewMode('+viewid+')')
+
+
+# This function sets the video contents for the video list.
+def set_content_list(pluginhandle, contents="episodes"):
+    _log("set_content_list contents: " + contents)
+    xbmcplugin.setContent(pluginhandle, contents)
+
+
+# This function sets the plugin genre for the video list.
+def set_plugin_category(pluginhandle, genre=''):
+    xbmcplugin.setPluginCategory(pluginhandle, genre)
+
+
+# This function gets an input text from the keyboard.
+def get_keyboard_text(prompt):
+    _log('get_keyboard_text prompt: "%s"' % prompt)
+    
+    keyboard = xbmc.Keyboard('', prompt)
+    keyboard.doModal()
+    if keyboard.isConfirmed() and keyboard.getText():
+        _log("get_keyboard_text input text: '%s'" % keyboard.getText())
+        return keyboard.getText()
+    else:
+        return ""
+
 
 # This function loads the html code from a webserver and returns it into a string.
 def carga_web(url, headers=''):
@@ -89,6 +129,7 @@ def carga_web(url, headers=''):
     MiConex.close() # We close the HTTP connection as we have all the info required.
 
     return MiHTML
+
 
 def carga_web_cookies(url, headers=''):
     _log("carga_web_cookies " + url)
@@ -113,6 +154,7 @@ def carga_web_cookies(url, headers=''):
 
     _log("carga_web Cookie:%s" % my_cookies)
     return MiHTML, my_cookies
+
 
 def send_post_data(url, headers='', data=''):
     _log("send_post_data " + url)
@@ -171,30 +213,36 @@ def find_first(text,pattern):
 
 
 # This function adds a directory entry into the XBMC GUI throught the API
-def addDir(action = "", title = "", url = "", cookies = "", category = "", page = "", tab = ""):
-    _log("addDir action = [" + action + "] title = [" + title + "] url = [" + url + "] category = [" + category + "] page = [" + page + "] tab = [" + tab + "]")
+def addDir(action = "", title = "", url = "", cookies = "", category = "", genre = "", page = "", tab = "", reset_cache = "no"):
+    _log("addDir action = [" + action + "] title = [" + title + "] url = [" + url + "] category = [" + category + "] page = [" + page + "] tab = [" + tab + "] reset_cache = [" + reset_cache +"]")
 
-    dir_url = '%s?action=%s&url=%s&cookies=%s&category=%s&page=%s&tab=%s' % (sys.argv[0], action, urllib.quote_plus(url), urllib.quote_plus(cookies), category, page, tab)
+    dir_url = '%s?action=%s&url=%s&cookies=%s&category=%s&genre=%s&page=%s&tab=%s&reset_cache=%s' % (sys.argv[0], action, urllib.quote_plus(url), urllib.quote_plus(cookies), category, urllib.quote_plus(genre), page, tab, reset_cache)
     dir_item = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = '' )
-    dir_item.setInfo(type = "Video", infoLabels = {"Title": title})
+    dir_item.setInfo(type = "Video", infoLabels = {"Title": title, "Genre": genre})
+    dir_item.setProperty('Fanart_Image', fanart_file)
     return xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = dir_url, listitem = dir_item, isFolder = True)
 
 
 # This function adds a video link entry into the XBMC GUI throught the API
-def addLink(action = "", title = "", plot = "", url = "", thumbnail = ""):
-    _log("addDir action = [" + action + "] title = [" + title + "] plot = [" + plot + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
+def addLink(action = "", title = "", url = "", thumbnail = "", video_info = {}, show_fanart = False):
+    _log("addLink action = [" + action + "] title = [" + title + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
 
     link_url = '%s?action=%s&url=%s' % (sys.argv[0], action, urllib.quote_plus(url))
     link_item = xbmcgui.ListItem(title, iconImage = "DefaultVideo.png", thumbnailImage = thumbnail)
-    link_item.setInfo(type = "Video", infoLabels = {"Title": title, "Plot": plot})
+    video_info['Title'] = title
+    link_item.setInfo(type = "Video", infoLabels = video_info)
     link_item.setProperty('IsPlayable', 'true')
+    if show_fanart:
+        link_item.setProperty('Fanart_Image', thumbnail)
+    else:
+        link_item.setProperty('Fanart_Image', fanart_file)
     return xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = link_url, listitem = link_item, isFolder = False)
 
 
 # This function closes the directory created with all the item list previously added.
-def close_dir(pluginhandle):
-    _log("close_dir pluginhadle: %s" % pluginhandle)
-    xbmcplugin.endOfDirectory(pluginhandle)
+def close_dir(pluginhandle, succeeded=True, updateListing=False, cacheToDisc=True):
+    _log("close_dir pluginhadle: %s updateListing: %s cacheToDisc: %s" % (pluginhandle, updateListing, cacheToDisc))
+    xbmcplugin.endOfDirectory(pluginhandle, succeeded=succeeded, updateListing=updateListing, cacheToDisc=cacheToDisc)
 
 
 # This funtion shows a popup window with a notices message through the XBMC GUI during 6 secs.

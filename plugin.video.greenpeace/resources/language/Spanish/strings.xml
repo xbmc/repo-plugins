@@ -5,4 +5,5 @@
   <string id="30012">No se ha podido localizar la url de video</string>
   <string id="30101">Región/Idioma (de los vídeos)</string>
   <string id="30102">Debug (activa los logs)</string>
+  <string id="30103">Utilizar miniaturas para el fondo</string>
 </strings>

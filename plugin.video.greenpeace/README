@@ -1,4 +1,4 @@
-Greenpeace videos: XBMC video plugin to watch the Greenpeace videos from Greenpeace web site.
+Greenpeace videos: XBMC video add-on to watch the Greenpeace videos provided from their web sites.
 
    Copyright (C) 2013 Jose Antonio Montes (jamontes)
 
@@ -18,17 +18,19 @@ Greenpeace videos: XBMC video plugin to watch the Greenpeace videos from Greenpe
 
 Initial release 1.0.0
 
-This XBMC plugin allows to watch the videos online from the Greenpeace web site.
+This XBMC add-on allows to watch the videos online from the Greenpeace web sites.
+
+Greenpeace is an independent global campaigning organisation that acts since 1971 to change attitudes and behaviour, to protect and conserve the environment and to promote the peace in a non-violent manner. To maintain its independence, Greenpeace does not accept donations from governments or corporations but relies on contributions from individual supporters and foundation grants. (source: http://www.greenpeace.org/international/en/about/)
 
 Through the Add-on settings you must configure the location/language preferred to watch the videos created by Greenpeace for your country.
-The Grenpeace XBMC plugin currently supports more than 40 Greenpeace locations with its corresponding languages. Some sites supports two different local languages.
+The Greenpeace XBMC add-on currently supports more than 40 Greenpeace locations with its corresponding languages. Some sites supports two different local languages.
 This plugin depends on the Youtube and Vimeo XBMC video plugins from TheCollective, to play the Greenpeace videos hosted on those sites.
-If you don't have ony of those video plugins already installed, XBMC will automatically install them for you, so the only thing you should do maybe is to activate the subtitles with your prefered language on the Youtube video plugin, the first time it is executed. 
+If you don't have any of those video plugins already installed, XBMC will automatically install them for you, so the only thing you should do maybe is to activate the subtitles with your prefered language on the Youtube video plugin as well as setup the max video quality, the first time it is executed. 
 
 To install it simply download the zip file, and then proceed as with any other plugin from XBMC:
  System->Settings->Add-ons->Install from zip file.
 
-To install it from the XBMC repository just follow the standard Add-ons install method:
+To install it from the XBMC official repository just follow the standard Add-ons install method:
  System->Settings->Add-ons->Get Add-ons->XBMC.org Add-ons->Video Add-ons->Greenpeace videos.
 
 Any issues detected can be reported using this forum thread for official support: http://forum.xbmc.org/showthread.php?tid=167903

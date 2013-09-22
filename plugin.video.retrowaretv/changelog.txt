@@ -1,4 +1,7 @@
-[B]Version 1.1.8[/B]
+[B]Version 1.2.0[/B]
+- Fix YouTube playback
+
+[B]Version 1.1.9[/B]
 - Fix archive section
 - Fix to comply with official repo requirements
 

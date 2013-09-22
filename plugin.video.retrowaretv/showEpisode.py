@@ -15,7 +15,7 @@ def showEpisode(episode_page):
     
     providers = (
         {"function":showEpisodeBip, "regex":"(http://blip.tv/play/.*?)(.html|\")"},
-        {"function":showEpisodeYoutube, "regex":"http://www.youtube.com/(embed|v)/(.*?)(\"|\?|\ |&)"},
+        {"function":showEpisodeYoutube, "regex":"//www.youtube.com/(embed|v)/(.*?)(\"|\?|\ |&)"},
         {"function":showEpisodeDorkly, "regex":"http://www.dorkly.com/(e/|moogaloop/noobtube.swf\?clip_id=)([0-9]*)"},
         {"function":showEpisodeSpringboard, "regex":"\.springboardplatform\.com/mediaplayer/springboard/video/(.*?)/(.*?)/(.*?)/"},
         {"function":showEpisodeSpringboard, "regex":"\\$sb\\(\"(.*?)\",{\"sbFeed\":{\"partnerId\":(.*?),\"type\":\"video\",\"contentId\":(.*?),\"cname\":\"(.*?)\"},\"style\":{\"width\":.*?,\"height\":.*?}}\\);"},

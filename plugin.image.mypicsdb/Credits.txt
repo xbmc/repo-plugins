@@ -1,7 +1,0 @@
-Credits:
-
-Alexsolex - the original developer - for this really nice add-on. Without his work XBMC would miss a pictures DB.
-Mhdebokx for his help to improve MyPicsDB. Especially his reported bugs and suggestions helped to improve MyPicsDB.
-Fungify for his idea to automatically scan for new pictures and his suggestions for the Filter Wizard.
-MikeBZH44 for the skin amendmends to show the last shooted pictures.
-Herve502 for his Picasa album importer

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.circuitboard" name="Circuit Board TV" version="0.0.4" provider-name="dethfeet">
+<addon id="plugin.video.circuitboard" name="Circuit Board TV" version="0.0.5" provider-name="dethfeet">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="plugin.video.bliptv" version="1.8.3"/>
@@ -13,6 +13,7 @@
   		<language>de</language>
     	<summary>circuit-board.de</summary>
     	<description>Circuit Board TV: 15 Minutes of Game, Der Retro Brettspiel-Check, Floppy Fans, Kraut &amp; Rüben, Longplays, PIXELKITSCH, PixelSpieler, Retro Snippets, Sprites, Shapes &amp; Co</description>
+    	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     	<platform>all</platform>
     	<forum>http://www.xbmcnerds.com/index.php?page=Thread&amp;threadID=13544</forum>
 		<website>https://github.com/dethfeet/plugin.video.circuitboard</website>

@@ -1,8 +1,0 @@
-[B]Version 2.0.1 - 2013-02-25[/B]
-- Broken due to site changes
-
-[B]Version 2.0.0 - 2012-12-30[/B]
-- Initial release for Frodo
-
-[B]Version 1.0.0 - 2012-11-09[/B]
-- Initial release

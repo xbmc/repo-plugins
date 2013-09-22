@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">一般</string>
-    <string id="102">地域</string>
-    <string id="103">クリップ</string>
+    <string id="30101">一般</string>
+    <string id="30102">地域</string>
+    <string id="30103">クリップ</string>
 </strings>

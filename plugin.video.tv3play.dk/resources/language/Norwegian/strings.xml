@@ -4,18 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="100">Reklame</string>
-    <string id="101">Generelt</string>
-    <string id="102">Region</string>
-    <string id="103">Snutter</string>
-    <string id="150">Velg region</string>
-    <string id="200">En feil oppstod under kommunikasjon med TV3 Play.</string>
-    <string id="201">Feilbeskjeden er:</string>
-    <string id="202">Kunne ikke finne avspillings-URL'en</string>
-    <string id="203">Ingen sesonger funnet</string>
-    <string id="204">Kunne ikke lese programlisten</string>
-    <string id="301">Nyeste videoer</string>
-    <string id="302">Mest sette</string>
-    <string id="303">Mest likt</string>
-    <string id="304">Nyeste snutter</string>
+    <string id="30100">Reklame</string>
+    <string id="30101">Generelt</string>
+    <string id="30102">Region</string>
+    <string id="30103">Snutter</string>
+    <string id="30150">Velg region</string>
+    <string id="30200">En feil oppstod under kommunikasjon med TV3 Play.</string>
+    <string id="30201">Feilbeskjeden er:</string>
+    <string id="30202">Kunne ikke finne avspillings-URL-en</string>
+    <string id="30203">Ingen sesonger funnet</string>
+    <string id="30204">Kunne ikke lese programlisten</string>
+    <string id="30301">Nyeste videoer</string>
+    <string id="30302">Mest sette</string>
+    <string id="30303">Mest likt</string>
+    <string id="30304">Nyeste snutter</string>
 </strings>

@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Almennt</string>
-    <string id="102">Svæði</string>
-    <string id="103">Úrklippur</string>
+    <string id="30101">Almennt</string>
+    <string id="30102">Svæði</string>
+    <string id="30103">Úrklippur</string>
 </strings>

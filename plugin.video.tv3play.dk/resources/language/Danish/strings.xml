@@ -4,18 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="100">Reklame</string>
-    <string id="101">Generelt</string>
-    <string id="102">Region</string>
-    <string id="103">Klipliste</string>
-    <string id="150">Vælg region</string>
-    <string id="200">Der er sket en fejl i kommunikationen med TV3 Play.</string>
-    <string id="201">Fejlbeskeden er:</string>
-    <string id="202">Afspilnings-URL'en blev ikke fundet</string>
-    <string id="203">Ingen sæsoner fundet</string>
-    <string id="204">Programlisten kunne ikke indlæses</string>
-    <string id="301">Nyeste videoer</string>
-    <string id="302">Mest sete</string>
-    <string id="303">Flest like's</string>
-    <string id="304">Nyeste klip</string>
+    <string id="30100">Reklame</string>
+    <string id="30101">Generelt</string>
+    <string id="30102">Region</string>
+    <string id="30103">Klipliste</string>
+    <string id="30150">Vælg region</string>
+    <string id="30200">Der er sket en fejl i kommunikationen med TV3 Play.</string>
+    <string id="30201">Fejlbeskeden er:</string>
+    <string id="30202">Afspilnings-URL'en blev ikke fundet</string>
+    <string id="30203">Ingen sæsoner fundet</string>
+    <string id="30204">Programlisten kunne ikke indlæses</string>
+    <string id="30301">Nyeste videoer</string>
+    <string id="30302">Mest sete</string>
+    <string id="30303">Flest like's</string>
+    <string id="30304">Nyeste klip</string>
 </strings>

@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Algemeen</string>
-    <string id="102">Regio</string>
-    <string id="103">Clips</string>
+    <string id="30101">Algemeen</string>
+    <string id="30102">Regio</string>
+    <string id="30103">Clips</string>
 </strings>

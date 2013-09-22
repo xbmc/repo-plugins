@@ -4,18 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="100">Διαφήμιση</string>
-    <string id="101">Γενικά</string>
-    <string id="102">Περιοχή</string>
-    <string id="103">Κλιπ</string>
-    <string id="150">Επιλογή περιοχής</string>
-    <string id="200">Προέκυψε ένα σφάλμα κατά την επικοινωνία με το TV3 Play.</string>
-    <string id="201">Το μήνυμα σφάλματος είναι:</string>
-    <string id="202">Δεν ήταν δυνατή η εύρεση του URL αναπαραγωγής</string>
-    <string id="203">Κανένας διαθέσιμος κύκλος</string>
-    <string id="204">Αδυναμία ανάκτησης λίστας προγραμμάτων</string>
-    <string id="301">Πιο πρόσφατα βίντεο</string>
-    <string id="302">Πιο Προβεβλημένα</string>
-    <string id="303">Με τα περισσότερα 'Μου Αρέσουν'</string>
-    <string id="304">Πιο πρόσφατα κλιπ</string>
+    <string id="30100">Διαφήμιση</string>
+    <string id="30101">Γενικά</string>
+    <string id="30102">Περιοχή</string>
+    <string id="30103">Κλιπ</string>
+    <string id="30150">Επιλογή περιοχής</string>
+    <string id="30200">Προέκυψε ένα σφάλμα κατά την επικοινωνία με το TV3 Play.</string>
+    <string id="30201">Το μήνυμα σφάλματος είναι:</string>
+    <string id="30202">Δεν ήταν δυνατή η εύρεση του URL αναπαραγωγής</string>
+    <string id="30203">Κανένας διαθέσιμος κύκλος</string>
+    <string id="30204">Αδυναμία ανάκτησης λίστας προγραμμάτων</string>
+    <string id="30301">Πιο πρόσφατα βίντεο</string>
+    <string id="30302">Πιο Προβεβλημένα</string>
+    <string id="30303">Με τα περισσότερα 'Μου Αρέσουν'</string>
+    <string id="30304">Πιο πρόσφατα κλιπ</string>
 </strings>

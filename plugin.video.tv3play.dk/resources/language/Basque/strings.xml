@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Orokorra</string>
-    <string id="102">Eskualdea</string>
-    <string id="103">Klipak</string>
+    <string id="30101">Orokorra</string>
+    <string id="30102">Eskualdea</string>
+    <string id="30103">Klipak</string>
 </strings>

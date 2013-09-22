@@ -4,18 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="100">Comercial</string>
-    <string id="101">General</string>
-    <string id="102">Regió</string>
-    <string id="103">Clips</string>
-    <string id="150">Seleccioneu una regió</string>
-    <string id="200">S'ha produït un error en comunicar-se amb TV3 Play.</string>
-    <string id="201">El missatge d'error és:</string>
-    <string id="202">No s'ha pogut trobar l'URL de reproducció</string>
-    <string id="203">No hi ha temporades disponibles</string>
-    <string id="204">No es pot recuperar la llista de programes</string>
-    <string id="301">Últims vídeos</string>
-    <string id="302">Més vistos</string>
-    <string id="303">Més valorats</string>
-    <string id="304">Últims clips</string>
+    <string id="30100">Comercial</string>
+    <string id="30101">General</string>
+    <string id="30102">Regió</string>
+    <string id="30103">Clips</string>
+    <string id="30150">Seleccioneu una regió</string>
+    <string id="30200">S'ha produït un error en comunicar-se amb TV3 Play.</string>
+    <string id="30201">El missatge d'error és:</string>
+    <string id="30202">No s'ha pogut trobar l'URL de reproducció</string>
+    <string id="30203">No hi ha temporades disponibles</string>
+    <string id="30204">No es pot recuperar la llista de programes</string>
+    <string id="30301">Últims vídeos</string>
+    <string id="30302">Més vistos</string>
+    <string id="30303">Més valorats</string>
+    <string id="30304">Últims clips</string>
 </strings>

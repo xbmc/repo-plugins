@@ -17,14 +17,17 @@
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
-import simplejson
+try:
+    import json
+except:
+    import simplejson as json
 import urllib2
 import urllib
 
 IPAD_USERAGENT = 'TV3 Play/1.0.3 CFNetwork/548.0.4 Darwin/11.0.0'
 
-API_URL = ' http://www.%s/mobileapi/%s'
-IMAGE_URL = 'http://play.pdl.viaplay.com/%s'
+API_URL = ' http://%s/mobileapi/%s'
+IMAGE_URL = 'http://play.pdl.viaplay.com/imagecache/1280x720/%s'
 VIASTREAM_URL = 'http://viastream.viasat.tv/%s'
 
 
@@ -35,9 +38,9 @@ class TV3PlayMobileApi(object):
     def getAllFormats(self):
         formats = list()
 
-        format = self.format()
-        if format:
-            for section in format['sections']:
+        f = self.format()
+        if f:
+            for section in f['sections']:
                 formats.extend(section['formats'])
 
         return formats
@@ -79,7 +82,7 @@ class TV3PlayMobileApi(object):
 
         if content is not None and content != '':
             try:
-                return simplejson.loads(content)
+                return json.loads(content)
             except Exception, ex:
                 raise TV3PlayMobileApiException(ex)
         else:

@@ -4,7 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Općenito</string>
-    <string id="102">Regija</string>
-    <string id="103">Isječci</string>
+    <string id="30100">Komercijalno</string>
+    <string id="30101">Općenito</string>
+    <string id="30102">Regija</string>
+    <string id="30103">Inserti</string>
+    <string id="30150">Odaberite regiju</string>
+    <string id="30200">Dogodila se greška pri komunikaciji sa TV3 Play.</string>
+    <string id="30201">Poruka greške je:</string>
+    <string id="30202">Nemoguće je pronaći URL reprodukcije</string>
+    <string id="30203">Nema dostupnih sezona</string>
+    <string id="30204">Nemoguće primanje popisa programa</string>
+    <string id="30301">Najnovije video snimke</string>
+    <string id="30302">Najgledanije</string>
+    <string id="30303">Najomiljenije</string>
+    <string id="30304">Najnoviji inserti</string>
 </strings>

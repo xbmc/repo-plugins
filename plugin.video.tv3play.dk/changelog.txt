@@ -1,3 +1,14 @@
+[B]Version 2.0.5 - 2013-09-21[/B]
+- Added tv6play.se, tv8play.se, tv10play.se and play.novatv.bg
+- Corrected strings.xml id's
+
+[B]Version 2.0.4 - 2013-09-19[/B]
+- More site changes
+
+[B]Version 2.0.3 - 2013-09-17[/B]
+- Fixed errors due to site changes
+- Updated language files from Transifex
+
 [B]Version 2.0.2 - 2013-03-22[/B]
 - Readded tv3play.lt, .lv and .ee and handle missing Mobile API gracefully
 - Updated language files from Transifex

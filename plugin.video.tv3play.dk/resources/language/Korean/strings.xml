@@ -4,18 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="100">광고</string>
-    <string id="101">일반</string>
-    <string id="102">지역</string>
-    <string id="103">클립</string>
-    <string id="150">지역 선택</string>
-    <string id="200">TV3 Play 연결중 에러 발생</string>
-    <string id="201">오류 메시지:</string>
-    <string id="202">재생할 URL을 찾을 수 없음</string>
-    <string id="203">시즌 없음</string>
-    <string id="204">프로그램의 목록을 가져올 수 없음</string>
-    <string id="301">최근 비디오</string>
-    <string id="302">가장 많이 시청</string>
-    <string id="303">가장 좋아하는</string>
-    <string id="304">최신 클립</string>
+    <string id="30100">광고</string>
+    <string id="30101">일반</string>
+    <string id="30102">지역</string>
+    <string id="30103">클립</string>
+    <string id="30150">지역 선택</string>
+    <string id="30200">TV3 Play 연결중 에러 발생</string>
+    <string id="30201">오류 메시지:</string>
+    <string id="30202">재생할 URL을 찾을 수 없음</string>
+    <string id="30203">시즌 없음</string>
+    <string id="30204">프로그램의 목록을 가져올 수 없음</string>
+    <string id="30301">최근 비디오</string>
+    <string id="30302">가장 많이 시청</string>
+    <string id="30303">가장 좋아하는</string>
+    <string id="30304">최신 클립</string>
 </strings>

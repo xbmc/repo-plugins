@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Umum</string>
-    <string id="102">Wilayah</string>
-    <string id="103">Klip</string>
+    <string id="30101">Umum</string>
+    <string id="30102">Wilayah</string>
+    <string id="30103">Klip</string>
 </strings>

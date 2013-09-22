@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">General</string>
-    <string id="102">Regiune</string>
-    <string id="103">Clipuri</string>
+    <string id="30101">General</string>
+    <string id="30102">Regiune</string>
+    <string id="30103">Clipuri</string>
 </strings>

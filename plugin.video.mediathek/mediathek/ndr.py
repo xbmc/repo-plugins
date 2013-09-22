@@ -50,7 +50,8 @@ class NDRMediathek(Mediathek):
         
     self.searchLink = self.rootLink+"/mediathek/mediatheksuche101.html?pagenumber=1&search_video=true&"
     
-    self.regex_extractVideoLink = re.compile("rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/(.*\\.)(hi.mp4|lo.flv)");
+    # Ignoriere optional pfadelement wie "flashmedia/streams" in der URL
+    self.regex_extractVideoLink = re.compile("rtmpt://ndr.fcod.llnwd.net/a3715/d1/.*/?ndr/(.*\\.)(hi.mp4|lo.flv)");
     
     
     #self.rtmpBaseLink = "rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/";

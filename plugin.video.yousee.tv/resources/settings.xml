@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<settings>
-	<category label="30100">
-		<setting id="username" label="30101" type="text" />
-        <setting id="password" label="30102" type="text" />
-        <setting id="quality" label="30103" type="labelenum" default="1200" values="600|1200" />
-	</category>
-</settings>
-

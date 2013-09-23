@@ -201,8 +201,8 @@ def play_video(params):
 
 # This function try to get a Youtube playable URL from the weblink and returns it ready to call the Youtube plugin.
 def get_playable_youtube_url(html):
-    pattern_youtube1 = '<param name="movie" value="http://www.youtube.com/v/([0-9A-Za-z_-]{11})[^>]+>'
-    pattern_youtube2 = ' src="http://www.youtube.com/embed/([0-9A-Za-z_-]{11})"'
+    pattern_youtube1 = '<param name="movie" value="[htp:]*?//www.youtube.com/v/([0-9A-Za-z_-]{11})[^>]+>'
+    pattern_youtube2 = ' src="[htp:]*?//www.youtube.com/embed/([0-9A-Za-z_-]{11})"'
 
     video_id = lutil.find_first(html, pattern_youtube1)
     if video_id:

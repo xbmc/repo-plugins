@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.cnet.podcasts"
        name="cnet Podcasts"
-       version="0.0.9"
+       version="0.0.10"
        provider-name="divingmule">
   <requires>
     <import addon="xbmc.python" version="1.0"/>
@@ -15,5 +15,6 @@
     <summary>cnet videos</summary>
     <description>Podcast from cnet.</description>
     <platform>all</platform>
+    <broken>Addon is unmaintained and/or likely broken</broken>
   </extension>
 </addon>

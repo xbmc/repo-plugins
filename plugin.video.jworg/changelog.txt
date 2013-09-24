@@ -1,0 +1,17 @@
+0.1.0
+--------
+First public release
+
+Supported locale
++ Italian
++ English
++ You can easily switch from one locale to one other from Addon Setting context menu
+
+Audio Feature
++ Listen streaming of music and songs 
++ Listen streaming of reading of the bible
+
+Video Feature
++ Watch video, not only film, but also from news or from articles
++ Filter videos by categories
+

@@ -4,3 +4,5 @@
 
 1.1.1 (april 2013) minor changes in order to adhere to standard coding
 guidelines
+
+1.2.0 (september 2013) improved password check

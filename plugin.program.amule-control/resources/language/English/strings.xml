@@ -13,4 +13,7 @@
     <string id="30027">Stopping amule-daemon</string>
     <string id="30028">/etc/init.d/amule-daemon not found!</string>
     <string id="30029">Please install amule-daemon</string>
+    <string id="30030">Unable to get statistics</string>
+    <string id="30031">Did you configure the right password?</string>
+    <string id="30032">On system...settings...add-on...programs...amulecontrol...settinga</string>
 </strings>

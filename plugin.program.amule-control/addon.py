@@ -35,9 +35,14 @@ else:
     title="amulecmd -P \"******\" -c \"statistics\""
     cmd="amulecmd -P \"" + addon.getSetting("password") + "\" -c \"statistics\" | egrep \"(Uploaded|Downloaded) Data\" | cut -c7-"
     stream=os.popen(cmd)
+    line1=''
+    line2=''
     line1=stream.readline()
     line2=stream.readline()
-    dialog.ok(title,line1,line2)
+    if((line1=='') and (line2=='')):
+      dialog.ok(title,addon.getLocalizedString(id=30030),addon.getLocalizedString(id=30031),addon.getLocalizedString(id=30032))
+    else:
+      dialog.ok(title,line1,line2)
 if (tostart):
   output=os.popen("sudo /etc/init.d/amule-daemon start").read()
   dialog.ok(addon.getLocalizedString(id=30026 ),output)

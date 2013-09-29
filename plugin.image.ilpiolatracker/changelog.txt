@@ -1,0 +1,3 @@
+0.X.Y initial development versions
+1.0.1 buggy interim build
+1.0.1 first public release (september 2013)

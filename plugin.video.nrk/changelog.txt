@@ -1,3 +1,6 @@
+[B]4.4.11[/B]
+- Sideendringer
+
 [B]4.4.10[/B]
 - Oppdatert for endringer i kategorier på tv.nrk.no. Dette inkluderer fjerning av barnekategorien.
 

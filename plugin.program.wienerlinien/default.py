@@ -22,7 +22,7 @@ except:
 cache = StorageServer.StorageServer("plugin.program.wienerlinien", 999999)
 
 
-version = "0.1.0"
+version = "0.1.1"
 plugin = "WienerLinien-" + version
 author = "sofaking"
 
@@ -52,10 +52,10 @@ urllib.urlretrieve(positions_url, positionpath)
 
 
 def getMainMenu():
-    addDirectory(translation(30000),"","searchStation")
-    addDirectory(translation(30001),"","getFavorites")
-    addDirectory(translation(30002),"","getMonitor")
-    addDirectory(translation(30003),"","getFailures")
+    addDirectory((translation(30000)).encode("utf-8"),"","searchStation")
+    addDirectory((translation(30001)).encode("utf-8"),"","getFavorites")
+    addDirectory((translation(30002)).encode("utf-8"),"","getMonitor")
+    addDirectory((translation(30003)).encode("utf-8"),"","getFailures")
     xbmcplugin.setContent(pluginhandle,'episodes')
     xbmcplugin.endOfDirectory(pluginhandle)
 
@@ -118,7 +118,7 @@ def getStationPositions(haltestellen_id):
 def notFound():
     parameters = {"title" : translation(30004),"mode" : "notFound"}
     u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-    liz=xbmcgui.ListItem(translation(30004),iconImage=os.path.join(basepath,"icon.png"))
+    liz=xbmcgui.ListItem((translation(30004)).encode("utf-8"),iconImage=os.path.join(basepath,"icon.png"))
     liz.setProperty('IsPlayable', 'false')
     xbmcplugin.addDirectoryItem(handle=pluginhandle,url=u,listitem=liz,isFolder=True)
     xbmcplugin.setContent(pluginhandle,'episodes')
@@ -126,7 +126,7 @@ def notFound():
     xbmcplugin.endOfDirectory(pluginhandle)
 
 def searchStation():
-    addDirectory(translation(30005),"","searchStationResult")
+    addDirectory((translation(30005)).encode("utf-8"),"","searchStationResult")
     cache.table_name = "searchhistory"
     some_dict = cache.get("searches").split("|")
     for str in reversed(some_dict):
@@ -156,9 +156,9 @@ def findStationDuplicate(list,id):
 def getJsonMessage(url):
     url = urllib.unquote_plus(url)
     print "URL:%s" % url
-    parameters = {"title" : translation(30006),"mode" : "refreshStations" , "id" : url}
+    parameters = {"title" : (translation(30006)).encode("utf-8"),"mode" : "refreshStations" , "id" : url}
     u = sys.argv[0] + '?' + urllib.urlencode(parameters)
-    liz=xbmcgui.ListItem(label=translation(30006), label2="",iconImage=os.path.join(basepath,"icon.png"))
+    liz=xbmcgui.ListItem(label=(translation(30006)).encode("utf-8"), label2="",iconImage=os.path.join(basepath,"icon.png"))
     liz.setProperty('IsPlayable', 'false')
     xbmcplugin.addDirectoryItem(handle=pluginhandle,url=u,listitem=liz,isFolder=True)
     json_response = urllib2.urlopen(url).read()
@@ -172,7 +172,7 @@ def getJsonMessage(url):
             name = row['name']
             towards = row['towards']
             if row['trafficjam']:
-                jam_str = translation(30007)
+                jam_str = (translation(30007)).encode("utf-8")
             title = "%s | %s | %s | %s" % (name.encode('utf-8'),towards.encode('utf-8'),departure_str,jam_str)
             parameters = {"title" : title,"mode" : "refreshStations","id": url}
             u = sys.argv[0] + '?' + urllib.urlencode(parameters)
@@ -200,7 +200,7 @@ def getJsonFailureMessage():
             try:
                 desc += column["description"].encode('utf-8')
             except:
-                desc += translation(30008)
+                desc += (translation(30008)).encode("utf-8")
             try:
                 reason = column['attributes']["reason"].encode('utf-8')
                 desc += "| %s |" % reason
@@ -224,12 +224,12 @@ def getJsonFailureMessage():
                 station = ''
             try:
                 status = column['attributes']["status"].encode('utf-8')
-                desc += "| %s: %s |" % (translation(30009),status)
+                desc += "| %s: %s |" % ((translation(30009)).encode("utf-8"),status)
             except:
                  status = ''
             try:
                 duration = "%s bis &s" % (column['attributes']["ausVon"].encode('utf-8'),column['attributes']["ausBis"].encode('utf-8')) 
-                desc += "| %s: %s |" % (translation(30010),duration)
+                desc += "| %s: %s |" % ((translation(30010)).encode("utf-8"),duration)
             except:
                 duration = "" 
             title += desc.replace("\n"," | ")

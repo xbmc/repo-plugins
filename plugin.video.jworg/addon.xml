@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon 
     id="plugin.video.jworg" 
-    name="jw.org audio/video browser" 
-    version="0.1.0" 
+    name="Jw.org audio/video browser" 
+    version="0.2.0" 
     provider-name="Realtebo">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.common.plugin.cache" version="0.9.1"/> 
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
-        <provides>audio video</provides>
+        <provides>audio video executable</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
         <language />
         <platform>all</platform>
         <website>https://github.com/realtebo/plugin.video.jworg</website>
-        <license>GPL-2</license>
+        <source>https://github.com/realtebo/plugin.video.jworg</source>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <email></email>
+        <forum></forum>
         <summary lang="it">
             Un semplice browser per i contenuti di jw.org
         </summary>
@@ -22,10 +26,10 @@
             A simple browser for jw.org media content
         </summary>
         <description lang="it">
-            Scorri direttamente su xmbc i contenuti multimediali del sito jw.org.E' possibile configurare il plugin per accedere ai contenuti in una lingua diversa.Per ora sono supporati l'italiano e l'inglese[CR][CR]Bug? Idee? Vuoi che sia supportato un nuovo linguaggio? Apri una 'issue' a questo indirizzo:[CR]https://github.com/realtebo/plugin.video.jworg
+            Direttamente in streaming da www.jw.org, è possibile:[CR]- guardare edificanti video[CR]- ascoltare la lettura delle riviste, cantici e melodie del regno, la lettura della Bibbia, i drammi audio ed i brani biblici recitati[CR]- leggere la scrittura del giorno
         </description>
         <description lang="en">
-            Browser on xmbc the media files provided by jw.org webiste.You can configure this plugin to access to multimedia in a different language.Actually supported: italian and english[CR][CR]Bug? Ideas? New languages? Open an issue here:[CR]https://github.com/realtebo/plugin.video.jworg
+            Directly streaming from www.jw.org, you can:[CR]- watch videos[CR]- listen magazine readings, songs and kingdom melodies, bible reading, audio dramas and dramatic bible readings[CR]- Read the daily text
         </description>
     </extension>
 </addon>

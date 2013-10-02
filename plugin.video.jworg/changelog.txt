@@ -1,3 +1,34 @@
+0.2.0
+-----
+
+New audio Feature
++ Listen to magazine readings (even in simplified english !), with list filtering options as jw.org. Due to jw.org inconsistency, only magazine since January 2012 are supported
++ Listen to audio dramas
++ Listen to dramatic bible reading
+
+New program Features
++ Read daily text [Issue #2]
+
+New settings
++ You can choose different sorting options for audio (musics, dramas and dramatic readings) and video file (thanks to elfo78)
++ You can empty the cache, if you want, to force redownload of multimedia file indexes 
+
+Small enhancements:
++ Issue #1: Added icon to music and song list
++ Issue #3: Use thumbnail view as default for video index
++ Added thumbnail view even to musics and songs index
++ Issue #4: Add image to video listed when choosing format
++ Issue #5: Add title to bible reading file
++ Issue #6: Changed icon.png
+
+Code
++ Issue #7: Separated audio index function from audio bible functions
++ Packaged 
++ Issue #10: Added 24-hour cache for html/json request to jw.org; remember: you can empty cache to force redownload from Addon settings
+
+Plugin 
++ Added some required fields to addon.xml
+
 0.1.0
 --------
 First public release
@@ -7,11 +38,11 @@ Supported locale
 + English
 + You can easily switch from one locale to one other from Addon Setting context menu
 
-Audio Feature
+Audio Features
 + Listen streaming of music and songs 
 + Listen streaming of reading of the bible
 
-Video Feature
+Video Features
 + Watch video, not only film, but also from news or from articles
 + Filter videos by categories
 

@@ -5,67 +5,106 @@
 import xbmcplugin
 
 import jw_config
-import jw_video
-import jw_audio_bible
-import jw_audio_music
+
+from video import jw_video
+
+from audio import jw_audio
+from audio import jw_audio_bible
+from audio import jw_audio_music
+from audio import jw_audio_drama
+from audio import jw_audio_dramatic_reading
+from audio import jw_audio_magazine
+
+from program import jw_exec_index
+from program import jw_exec_daily_text
 
 """
 START
 """
-
-language     = xbmcplugin.getSetting(jw_config.pluginPid, "language")
-print "JWORG language: " + language
-if language == "":
-	language = jw_config.t(30009)
-	print "JWORG forced language: " + language
-
 # call arguments
 params 		 = jw_config.plugin_params
 
-content_type = "video"
-try:
-	content_type = params["content_type"][0]
-except:
-	pass
+content_type = params["content_type"][0]
 
 mode = None
-try:	
+try: 	
 	mode = params["mode"][0]
 except:
 	pass
 
-start = None
-try:
-	start = params["start"][0]        
-except:
-    pass
+
+"""
+Call router
+"""
+if content_type == "video" :
+	if mode is None :
+		jw_video.showVideoFilter()
+
+	if mode == "open_video_index":
+		start = params["start"][0]        
+		video_filter = params["video_filter"][0]	#Note: video_filter can be 'none', and it's a valid filter for jw.org !
+		jw_video.showVideoIndex(start, video_filter)
+
+	if mode == "open_json_video":
+		json_url 	= params["json_url"][0]
+		thumb 		= params["thumb"][0]
+		jw_video.showVideoJsonUrl(json_url, thumb)
 
 
-# Call router
-if content_type == "video" and mode is None :
-	jw_video.showVideoFilter(language)
+if content_type == "audio" :
+	if mode is None :
+		jw_audio.showAudioIndex()
 
-if content_type == "video" and mode == "open_video_page" and start is not None:
-	video_filter = params["video_filter"][0]	#Note: video_filter can be 'none', and it's a valid filter for jw.org !
-	jw_video.showVideoIndex(language, start, video_filter)
+	if mode == "open_bible_index" :
+		jw_audio_bible.showAudioBibleIndex()
 
-if content_type == "video" and mode == "open_json_video":
-	json_url = params["json_url"][0]
-	jw_video.showVideoJsonUrl(language, json_url)
+	if mode == "open_bible_book_index"  :
+		book_num = params["book_num"][0]
+		jw_audio_bible.showAudioBibleBookJson(book_num)
 
-if content_type == "audio" and mode is None :
-	jw_audio_bible.showAudioTypeIndex()
+	if mode == "open_music_index" :
+		start = params["start"][0]
+		jw_audio_music.showMusicIndex( start);
 
-if content_type == "audio" and mode == "open_bible_index" :
-	jw_audio_bible.showAudioBibleIndex(language)
+	if mode == "open_music_json" : 
+		json_url = params["json_url"][0]
+		jw_audio.showAudioJson(json_url);
 
-if content_type == "audio" and mode == "open_bible_book_index"  :
-	book_num = params["book_num"][0]
-	jw_audio_bible.showAudioBibleBookJson(language, book_num)
+	if mode == "open_drama_index" :
+		start = params["start"][0]
+		jw_audio_drama.showDramaIndex( start);
 
-if content_type == "audio" and mode == "open_music_index"  and start is not None: 
-	jw_audio_music.showMusicIndex(language, start);
+	if mode == "open_drama_json" : 
+		json_url = params["json_url"][0]
+		jw_audio.showAudioJson(json_url);
 
-if content_type == "audio" and mode == "open_music_json" : 
-	json_url = params["json_url"][0]
-	jw_audio_music.showMusicJsonUrl(language, json_url);
+	if mode == "open_dramatic_reading_index": 
+		start = params["start"][0]
+		jw_audio_dramatic_reading.showDramaticReadingIndex( start);
+
+	if mode == "open_dramatic_reading_json" : 
+		json_url = params["json_url"][0]
+		jw_audio.showAudioJson(json_url);
+
+	if mode == "open_magazine_index" :
+		try: pub_filter = params["pub_filter"][0]
+		except : pub_filter = None
+		try: year_filter = params["year_filter"][0]
+		except : year_filter = None
+
+		if year_filter is None :
+			jw_audio_magazine.showMagazineFilterIndex(pub_filter);
+		else :
+			jw_audio_magazine.showMagazineFilteredIndex(pub_filter, year_filter);
+
+	if mode == "open_magazine_json" :
+		json_url = params["json_url"][0]
+		jw_audio.showAudioJson(json_url);		
+
+if content_type == "executable" :
+	if mode is None : 
+		jw_exec_index.showExecIndex();
+
+	if mode == "open_daily_text" : 
+		date = params["date"][0]
+		jw_exec_daily_text.showDailyText(date);	

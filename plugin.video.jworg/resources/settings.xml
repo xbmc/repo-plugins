@@ -2,6 +2,16 @@
 <settings>
  
   <category label="30005">
+
     <setting id="language" type="labelenum" label="30002" lvalues="30003|30004"  />
+ 
+    <setting label="30019" type="lsep"/>
+   	<setting id="video_sorting" type="enum" label="30020" lvalues="30016|30017" default="0" />
+  	<setting id="audio_sorting" type="enum" label="30015" lvalues="30016|30017|30018" default="2" />
+
+  	<setting label="30021" type="lsep"/>
+  	<setting label="30022" type="action" action="RunScript($CWD/resources/lib/empty_cache.py)"/>
+
   </category>
+
 </settings>

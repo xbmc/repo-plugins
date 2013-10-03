@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.tele5" name="Tele 5" version="0.0.3" provider-name="dethfeet">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <language>de</language>
+    <summary lang="de">Tele 5</summary>
+    <summary lang="en">Tele 5 (German Television)</summary>
+  	<description lang="en">Tele zeigt ausgewählte Programme, direkt nach der TV-Ausstrahlung, sieben Tage rund um die Uhr und ohne Werbeunterbrechung</description>
+  	<description lang="de">Tele 5 (German Television)</description>
+  	<platform>all</platform>
+  	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+  	<forum>https://github.com/dethfeet/plugin.video.tele5/issues</forum>
+  	<website>https://github.com/dethfeet/plugin.video.tele5</website>
+  	<source>https://github.com/dethfeet/plugin.video.tele5</source>
+  	<email>dethfeet@qip.ru</email>
+  </extension>
+</addon>

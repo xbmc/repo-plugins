@@ -17,6 +17,8 @@ USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/
 
 addon         = xbmcaddon.Addon('plugin.video.mediacorp')
 __addonname__ = addon.getAddonInfo('name')
+__language__  = addon.getLocalizedString
+
 home          = addon.getAddonInfo('path').decode('utf-8')
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 fanart        = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
@@ -85,7 +87,6 @@ def getSources():
               addDir("Channel News Asia","http://video.xin.msn.com/browse/news/channel-newsasia?currentpage=",18,"http://img.video.msn.com/video/i/src/ensgcna~ensgcna_ppl.png",fanart,"Channel News Asia","TV",False)
 
 
-
 def play_playlist(name, list):
         playlist = xbmc.PlayList(1)
         playlist.clear()
@@ -115,6 +116,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
         liz.setProperty( "Fanart_Image", fanart )
         liz.setProperty('IsPlayable', 'true')
+        liz.setProperty('mimetype', 'video/x-msvideo')
         if not playlist is None:
             playlist_name = name.split(') ')[1]
             contextMenu_ = [('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=13&name=%s&playlist=%s)' %(sys.argv[0], urllib.quote_plus(playlist_name), urllib.quote_plus(str(playlist).replace(',','|'))))]
@@ -123,9 +125,9 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
         return ok
 
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
 except:
     pass
 try:
@@ -265,7 +267,7 @@ elif mode==19:
                  match = re.compile("{formatCode: 101, url:.+?'(.+?)'").findall(str(link))
               if not match:
                  dialog = xbmcgui.Dialog()
-                 dialog.ok("Mediacorp TV Singapore", '', 'No Playable Video Found')
+                 dialog.ok(__language__(30000), '',__language__(30001))
               else:
                for vidurl in match:
                 vidurl = vidurl.replace("\\x3a",":").replace("\\x2f","/")

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
 <settings>
-    <category label="69500">
+    <category label="30000">
         <!--Login-->
-        <setting label="69699" type="lsep" />
-        <setting label="69701" type="action" option="close" action="RunScript(plugin.video.synopsi, -1, addon.py?mode=920)"/>
+        <setting label="30199" type="lsep" />
+        <setting label="30201" type="action" option="close" action="RunScript(plugin.video.synopsi, -1, addon.py?mode=920)"/>
 
         <setting label="" type="lsep"/>
         <setting label="" type="lsep"/>
         <setting label="" type="lsep"/>
 
-        <setting label="69700" type="lsep" />    	        
-        <setting id="USER" label="69503" type="text" default=""/>
-    	<setting id="PASS" label="69502" option="hidden" type="text" enable="!eq(-1,)" default=""/>
+        <setting label="30200" type="lsep" />    	        
+        <setting id="USER" label="30003" type="text" default=""/>
+    	<setting id="PASS" label="30002" option="hidden" type="text" enable="!eq(-1,)" default=""/>
     	
     	    	
     	<!--TOKENS-->
@@ -26,23 +26,23 @@
     </category>
 
     <!-- Advanced settings -->
-    <category label="69510">
-        <setting id="DEBUG" type="bool" label="69512" default="false"/>
-        <setting id="DISABLE_RATING_IN_PLAYLIST" type="bool" label="69515" default="false"/>
+    <category label="30010">
+        <setting id="DEBUG" type="bool" label="30012" default="false"/>
+        <setting id="DISABLE_RATING_IN_PLAYLIST" type="bool" label="30015" default="false"/>
 
         <setting id="NON_DEBUG_LOGLEVEL" type="text" visible="false" default="10"/>
 
-        <setting id="PROTFOL" option="hidden" visible="false" type="bool" label="69511" default="false"/>
-        <setting id="NUMFOLD" option="hidden" visible="false" type="enum" label="69514" values="1|2|3|4|5|6|7|8|9" enable="eq(-1,true)" />
-        <setting id="FOLDER1" option="hidden" visible="false" type="folder" label="69513" enable="eq(-2,true)" />
-        <setting id="FOLDER2" option="hidden" type="folder" label="69513" visible="gt(-2,0)" enable="eq(-3,true)" />
-        <setting id="FOLDER3" option="hidden" type="folder" label="69513" visible="gt(-3,1)" enable="eq(-4,true)" />
-        <setting id="FOLDER4" option="hidden" type="folder" label="69513" visible="gt(-4,2)" enable="eq(-5,true)" />
-        <setting id="FOLDER5" option="hidden" type="folder" label="69513" visible="gt(-5,3)" enable="eq(-6,true)" />
-        <setting id="FOLDER6" option="hidden" type="folder" label="69513" visible="gt(-6,4)" enable="eq(-7,true)" />
-        <setting id="FOLDER7" option="hidden" type="folder" label="69513" visible="gt(-7,5)" enable="eq(-8,true)" />
-        <setting id="FOLDER8" option="hidden" type="folder" label="69513" visible="gt(-8,6)" enable="eq(-9,true)" />
-        <setting id="FOLDER9" option="hidden" type="folder" label="69513" visible="gt(-9,7)" enable="eq(-10,true)" />
+        <setting id="PROTFOL" option="hidden" visible="false" type="bool" label="30011" default="false"/>
+        <setting id="NUMFOLD" option="hidden" visible="false" type="enum" label="30014" values="1|2|3|4|5|6|7|8|9" enable="eq(-1,true)" />
+        <setting id="FOLDER1" option="hidden" visible="false" type="folder" label="30013" enable="eq(-2,true)" />
+        <setting id="FOLDER2" option="hidden" type="folder" label="30013" visible="gt(-2,0)" enable="eq(-3,true)" />
+        <setting id="FOLDER3" option="hidden" type="folder" label="30013" visible="gt(-3,1)" enable="eq(-4,true)" />
+        <setting id="FOLDER4" option="hidden" type="folder" label="30013" visible="gt(-4,2)" enable="eq(-5,true)" />
+        <setting id="FOLDER5" option="hidden" type="folder" label="30013" visible="gt(-5,3)" enable="eq(-6,true)" />
+        <setting id="FOLDER6" option="hidden" type="folder" label="30013" visible="gt(-6,4)" enable="eq(-7,true)" />
+        <setting id="FOLDER7" option="hidden" type="folder" label="30013" visible="gt(-7,5)" enable="eq(-8,true)" />
+        <setting id="FOLDER8" option="hidden" type="folder" label="30013" visible="gt(-8,6)" enable="eq(-9,true)" />
+        <setting id="FOLDER9" option="hidden" type="folder" label="30013" visible="gt(-9,7)" enable="eq(-10,true)" />
         <setting id="sp" type="sep" visible="false" />
 
 

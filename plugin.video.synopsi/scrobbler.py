@@ -59,7 +59,7 @@ class SynopsiPlayer(xbmc.Player):
 		}
 
 		if position:
-			event['position'] = position
+			event['position'] = int(position)
 		elif self.playing:
 			event['position'] = int(self.current_time)
 		else:

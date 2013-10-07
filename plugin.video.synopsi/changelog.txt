@@ -1,3 +1,13 @@
+[B]Version 1.1.1[/B]
+
+* Code cleanup & update
+* Fixed: use localized strings
+
+[B]Version 1.1.0[/B]
+
+* Fixed: use profile path for cache, improves profile support
+* Fixed: rating failed when movie total_time returned float
+
 [B]Version 1.0.9[/B]
 
 * Fixed: missing restart dialog after installation

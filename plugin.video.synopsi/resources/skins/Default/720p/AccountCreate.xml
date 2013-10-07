@@ -29,9 +29,7 @@
 			<width>530</width>
 			<height>30</height>
 			<font>font13_title</font>
-			<label>Sign Up - SynopsiTV</label>
-			<!-- <label>$LOCALIZE[SCRIPT69604]</label> -->
-			<!-- <label>$LOCALIZE[69604]</label> -->
+			<label>$ADDON[plugin.video.synopsi 30201] - SynopsiTV</label>
 			<align>center</align>
 			<aligny>center</aligny>
 			<textcolor>selected</textcolor>
@@ -62,10 +60,9 @@
 			<posy>60</posy>
 			<width>550</width>
 			<height>30</height>
-			<!--<align>left</align>-->
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>Enter joor kredentail</label>
+			<label>Enter your credentials</label>
 			<font>font13</font>
 			<visible>False</visible>
 		</control>
@@ -79,7 +76,7 @@
 			<!--<align>left</align>-->
 			<align>right</align>
 			<aligny>center</aligny>
-			<label>Real Name</label>
+			<label>$ADDON[plugin.video.synopsi 30202]</label>
 			<font>font13</font>
 			<textcolor>FF888888</textcolor>
 		</control>
@@ -111,7 +108,7 @@
 			<!--<align>left</align>-->
 			<align>right</align>
 			<aligny>center</aligny>
-			<label>Email</label>
+			<label>$ADDON[plugin.video.synopsi 30003]</label>
 			<font>font13</font>
 			<textcolor>FF888888</textcolor>
 		</control>
@@ -140,7 +137,7 @@
 			<posy>220</posy>
 			<width>150</width>
 			<height>40</height>
-			<label>Register</label>
+			<label>$ADDON[plugin.video.synopsi 30203]</label>
 			<font>font12_title</font>
 			<textcolor>white</textcolor>
 			<focusedcolor>white</focusedcolor>

@@ -29,9 +29,7 @@
 			<width>530</width>
 			<height>30</height>
 			<font>font13_title</font>
-			<label>SynopsiTV Rating</label>
-			<!-- <label>$LOCALIZE[SCRIPT69604]</label> -->
-			<!-- <label>$LOCALIZE[69604]</label> -->
+			<label>$ADDON[plugin.video.synopsi 30104]</label>
 			<align>center</align>
 			<aligny>center</aligny>
 			<textcolor>selected</textcolor>
@@ -63,7 +61,7 @@
 			<!--<align>left</align>-->
 			<align>center</align>
 			<aligny>center</aligny>
-			<label>So, how did you like this movie?</label>
+			<label>$ADDON[plugin.video.synopsi 30100]</label>
 			<font>font13</font>
 		</control>
 		<control id="15" type="button">
@@ -72,7 +70,7 @@
 			<posy>175</posy>
 			<width>150</width>
 			<height>40</height>
-			<label>Terrible</label>
+			<label>$ADDON[plugin.video.synopsi 30103]</label>
 			<font>font12_title</font>
 			<textcolor>white</textcolor>
 			<focusedcolor>white</focusedcolor>
@@ -88,7 +86,7 @@
 			<posy>175</posy>
 			<width>150</width>
 			<height>40</height>
-			<label>OK</label>
+			<label>$ADDON[plugin.video.synopsi 30102]</label>
 			<font>font12_title</font>
 			<textcolor>white</textcolor>
 			<focusedcolor>white</focusedcolor>
@@ -104,8 +102,7 @@
 			<posy>175</posy>
 			<width>150</width>
 			<height>40</height>
-			<label>Amazing</label>
-			<!-- <label>$LOCALIZE[SCRIPT69604]</label> -->
+			<label>$ADDON[plugin.video.synopsi 30101]</label>
 			<font>font12_title</font>
 			<textcolor>white</textcolor>
 			<focusedcolor>white</focusedcolor>

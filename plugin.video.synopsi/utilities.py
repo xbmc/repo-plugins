@@ -330,14 +330,6 @@ class XMLRatingDialog(xbmcgui.WindowXMLDialog):
 	def __init__(self, *args, **kwargs):
 		xbmcgui.WindowXMLDialog.__init__( self )
 
-	def onInit(self):
-		self.getString = __addon__.getLocalizedString
-		self.getControl(11).setLabel(self.getString(69601))
-		self.getControl(10).setLabel(self.getString(69602))
-		self.getControl(15).setLabel(self.getString(69603))
-		self.getControl(1 ).setLabel(self.getString(69604))
-		self.getControl(2 ).setLabel(self.getString(69600))
-
 	def onClick(self, controlId):
 		"""
 		For controlID see: <control id="11" type="button"> in Rating.xml
@@ -359,7 +351,7 @@ class XMLRatingDialog(xbmcgui.WindowXMLDialog):
 
 class XMLLoginDialog(xbmcgui.WindowXMLDialog):
 	"""
-	Dialog class that asks user about rating of movie.
+	Dialog class that asks user's login.
 	"""
 	response = 4
 	# 1 = Cancel, 2 = OK
@@ -370,9 +362,6 @@ class XMLLoginDialog(xbmcgui.WindowXMLDialog):
 		self.password = kwargs['password']
 
 	def onInit(self):
-		self.getString = __addon__.getLocalizedString
-		c = self.getControl(10)
-
 		self.getControl(10).setText(self.username)
 		self.getControl(11).setText(self.password)
 

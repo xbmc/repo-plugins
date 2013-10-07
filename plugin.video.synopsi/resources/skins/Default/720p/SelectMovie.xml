@@ -42,7 +42,7 @@
 				<font>font13_title</font>
 				<textcolor>white</textcolor>
 				<selectedcolor>white</selectedcolor>				
-				<label>Choose correct title for your file</label>
+				<label>$ADDON[plugin.video.synopsi 30204]</label>
 				<align>center</align>
 			</control>
 			<control id="59" type="list">
@@ -75,7 +75,7 @@
 						<posy>25</posy>
 						<width>100</width>
 						<height>30</height>
-						<label>Title:</label>
+						<label>$ADDON[plugin.video.synopsi 30205]:</label>
 						<font>font13</font>
 						<align>right</align>
 						<aligny>center</aligny>
@@ -100,7 +100,7 @@
 						<posy>55</posy>
 						<width>100</width>
 						<height>30</height>
-						<label>Director:</label>
+						<label>$ADDON[plugin.video.synopsi 30206]:</label>
 						<font>font13</font>
 						<align>right</align>
 						<aligny>center</aligny>
@@ -125,7 +125,7 @@
 						<posy>85</posy>
 						<width>100</width>
 						<height>30</height>
-						<label>Cast:</label>
+						<label>$ADDON[plugin.video.synopsi 30207]:</label>
 						<font>font13</font>
 						<align>right</align>
 						<aligny>center</aligny>
@@ -173,7 +173,7 @@
 						<posy>25</posy>
 						<width>100</width>
 						<height>30</height>
-						<label>Title:</label>
+						<label>$ADDON[plugin.video.synopsi 30205]:</label>
 						<font>font13</font>
 						<align>right</align>
 						<aligny>center</aligny>
@@ -198,7 +198,7 @@
 						<posy>55</posy>
 						<width>100</width>
 						<height>30</height>
-						<label>Director:</label>
+						<label>$ADDON[plugin.video.synopsi 30206]:</label>
 						<font>font13</font>
 						<align>right</align>
 						<aligny>center</aligny>
@@ -223,7 +223,7 @@
 						<posy>85</posy>
 						<width>100</width>
 						<height>30</height>
-						<label>Cast:</label>
+						<label>$ADDON[plugin.video.synopsi 30207]:</label>
 						<font>font13</font>
 						<align>right</align>
 						<aligny>center</aligny>

@@ -1,15 +1,14 @@
 ## What is [Synopsi.tv](http://www.synopsi.tv)?##
-A safe place where you can store your watching history and get the best personalized recommendations for TV Shows and Movies based on your unique and evolving watching stylYou can share what you like, get to know people with similar taste and find out what to watch next with your friends and family.
+A safe place where you can store your watching history and get the best personalized recommendations for TV Shows and Movies based on your unique and evolving watching style. You can share what you like, get to know people with similar taste and find out what to watch next with your friends and family.
 
 **Some interesting features of Synopsi.tv**
 
-
    * Highly personalized recommendations both for Movies and TV Shows
-   * Very comprehensive mobile version of the site
+   * Very comprehensive mobile version of the website
    * Mobile apps in works (iOS should be released in few weeks)
    * Watch later list, which helps you to always remember a movie you wanted to watch
-   * Possibility to create unlimited amount of your own lists or follow lists of other u
-sers
+   * Possibility to create unlimited amount of your own lists or follow list
+s of other users
    * Easily track your progress among TV shows and be notified of new episodes
    * Compare your taste with other users, including your friends and see your compatibility rating
    * Get recommendations what to watch with your friends, family or complete strangers
@@ -21,7 +20,7 @@ sers
    * Automatically scrobble all watched Movies and TV episodes
    * Show personalized recommendations directly in the XBMC
    * Synchronize your lists
-   * Availability to rate every movie and TV episode after finishing *(you have an option to skip rating to be not disturbed if you are watching something from a playlist)*
+   * Availability to rate every movie and TV episode after finishing *(you have an option to skip rating to not be disturbed if you are watching something from a playlist)*
    * Create a list of available content on your XBMC so you can share it with your friends and family
 
 **How the scrobbler works?**
@@ -42,4 +41,4 @@ We have identified the title mismatching as the biggest issue for users and we a
 
 **Contribution**
 
-We really appreciate any help possible. Our ultimate goal is to build the best and easy to use system for ours parents so they can enjoy the same benefits as if they would be geeks (and they will stop calling us every time when something doesn’t work). We hope we will find more enthusiasts who could help us to achieve this goal.
+We really appreciate any help possible. Our ultimate goal is to build the best and easy to use system for ours parents so they can enjoy the same benefits as if they would be geeks, and not call us every time every time something goes wrong. We hope we will find more enthusiasts who could help us to achieve this goal.

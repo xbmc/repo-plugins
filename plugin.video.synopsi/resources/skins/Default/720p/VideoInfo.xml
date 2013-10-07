@@ -382,22 +382,22 @@
 						</control> -->
 						<control id="5" type="button">
 							<include>ButtonInfoDialogsCommonValues</include>
-							<label>Play</label>
+							<label>$ADDON[plugin.video.synopsi 30210]</label>
 							<onclick>PlayMedia($ESCINFO[Window.Property(Movie.File)])</onclick>
 							<enable>false</enable>
 						</control>
 						<control id="10" type="button">
 							<include>ButtonInfoDialogsCommonValues</include>
-							<label>Trailer</label>
+							<label>$ADDON[plugin.video.synopsi 30211]</label>
 							<onclick>PlayMedia(plugin://plugin.video.youtube/?action=play_video&amp;videoid=$INFO[Window.Property(Movie.Trailer.Id)])</onclick>
 						</control>
 						<control id="11" type="button">
 							<include>ButtonInfoDialogsCommonValues</include>
-							<label>Watched</label>
+							<label>$ADDON[plugin.video.synopsi 30212]</label>
 						</control>
 						<control id="13" type="button">
 							<include>ButtonInfoDialogsCommonValues</include>
-							<label>Edit</label>
+							<label>$ADDON[plugin.video.synopsi 30213]</label>
 							<enable>false</enable>
 						</control>
 					</control>

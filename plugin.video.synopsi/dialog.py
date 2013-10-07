@@ -92,6 +92,7 @@ class MyDialog(xbmcgui.WindowXMLDialog):
 		self.parentWindow = open_dialogs[-1] if open_dialogs else None
 		open_dialogs.append(self)
 		self.result = None
+		self.getString = __addon__.getLocalizedString
 	
 	def close(self):
 		if open_dialogs:
@@ -643,7 +644,7 @@ class CreateAccountDialog(MyDialog):
 		elif action in ACTIONS_CLICK and (self.getFocusId() == self.ctl_create_account_id):
 			result = top.apiClient.profileCreate(self.real_name, self.email)
 			if result.get('status') == 'created':
-				dialog_ok('Thank You for Signing Up! Check your inbox for an email from us to complete the process. We are happy to have you.')
+				dialog_ok(self.getString(30016))
 				self.close()
 			elif result.get('status') == 'failed':
 				if result.get('message') is str:

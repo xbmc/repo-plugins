@@ -52,8 +52,8 @@ class OfflineStvList(object):
 	def getDefaultFilePath(cls):
 		addon  = get_current_addon()
 		addon_id = addon.getAddonInfo('id')
-		data_path = xbmc.translatePath('special://masterprofile/addon_data/')
-		return os.path.join(data_path, addon_id, 'cache.dat')
+		data_path = xbmc.translatePath(addon.getAddonInfo('profile')).decode('utf-8')				
+		return os.path.join(data_path, 'cache.dat')
 
 	@classmethod
 	def getDefaultList(cls, apiClient=None):

@@ -105,7 +105,7 @@ class TV3PlayAddon(object):
             if 'length' in video and video['length'] is not None:
                 infoLabels['duration'] = int(video['length']) / 60
 
-            if 'airdate' in video:
+            if 'airdate' in video and video['airdate'] is not None:
                 airdate = video['airdate']
                 infoLabels['date'] = '%s.%s.%s' % (airdate[8:10], airdate[5:7], airdate[0:4])
                 infoLabels['year'] = int(airdate[0:4])

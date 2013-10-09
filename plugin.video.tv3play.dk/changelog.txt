@@ -1,3 +1,6 @@
+[B]Version 2.0.6 - 2013-10-09[/B]
+- Fixed problem with missing air date in metadata
+
 [B]Version 2.0.5 - 2013-09-21[/B]
 - Added tv6play.se, tv8play.se, tv10play.se and play.novatv.bg
 - Corrected strings.xml id's

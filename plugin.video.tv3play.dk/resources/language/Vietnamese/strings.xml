@@ -4,5 +4,6 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Tổng Quan</string>
+    <string id="30101">Tổng Quan</string>
+    <string id="30102">Vùng</string>
 </strings>

@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">عام</string>
-    <string id="102">المنطقة</string>
-    <string id="103">المقاطع</string>
+    <string id="30101">عام</string>
+    <string id="30102">المنطقة</string>
+    <string id="30103">المقاطع</string>
 </strings>

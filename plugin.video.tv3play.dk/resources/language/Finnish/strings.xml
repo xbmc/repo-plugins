@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Yleiset</string>
-    <string id="102">Kielialue</string>
-    <string id="103">Näytteet</string>
+    <string id="30101">Yleiset</string>
+    <string id="30102">Kielialue</string>
+    <string id="30103">Näytteet</string>
 </strings>

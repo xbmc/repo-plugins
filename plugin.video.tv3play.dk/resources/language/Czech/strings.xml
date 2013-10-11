@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Obecné</string>
-    <string id="102">Oblast</string>
-    <string id="103">Klipy</string>
+    <string id="30101">Obecné</string>
+    <string id="30102">Oblast</string>
+    <string id="30103">Klipy</string>
 </strings>

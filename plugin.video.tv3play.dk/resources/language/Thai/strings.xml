@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">ทั่วไป</string>
-    <string id="102">ภูมิภาค</string>
-    <string id="103">คลิป</string>
+    <string id="30101">ทั่วไป</string>
+    <string id="30102">ภูมิภาค</string>
+    <string id="30103">คลิป</string>
 </strings>

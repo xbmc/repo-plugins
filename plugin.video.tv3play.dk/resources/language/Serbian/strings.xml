@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Opšte</string>
-    <string id="102">Regija</string>
-    <string id="103">Klipovi</string>
+    <string id="30101">Opšte</string>
+    <string id="30102">Regija</string>
+    <string id="30103">Klipovi</string>
 </strings>

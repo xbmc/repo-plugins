@@ -1,3 +1,6 @@
+[B]Version 1.0.7 - 2013-10-11[/B]
+- Merged fixes from Frodo
+
 [B]Version 1.0.6 - 2013-07-14[/B]
 - Switched to same API as Frodo branch
 - Fixed playback

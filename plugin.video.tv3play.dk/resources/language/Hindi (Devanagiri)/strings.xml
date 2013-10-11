@@ -4,6 +4,6 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">सामान्य</string>
-    <string id="102">क्षेत्र</string>
+    <string id="30101">सामान्य</string>
+    <string id="30102">क्षेत्र</string>
 </strings>

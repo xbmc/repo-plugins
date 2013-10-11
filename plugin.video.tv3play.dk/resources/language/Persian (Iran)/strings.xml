@@ -4,6 +4,6 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">عمومی</string>
-    <string id="102">ناحیه</string>
+    <string id="30101">عمومی</string>
+    <string id="30102">ناحیه</string>
 </strings>

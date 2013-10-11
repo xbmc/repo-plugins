@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Опште</string>
-    <string id="102">Регија</string>
-    <string id="103">Клипови</string>
+    <string id="30101">Опште</string>
+    <string id="30102">Регија</string>
+    <string id="30103">Клипови</string>
 </strings>

@@ -4,7 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Général</string>
-    <string id="102">Région</string>
-    <string id="103">Clips</string>
+    <string id="30100">Commercial</string>
+    <string id="30101">Général</string>
+    <string id="30102">Région</string>
+    <string id="30103">Clips</string>
+    <string id="30150">Choisir region</string>
+    <string id="30200">Une erreur est apparue pendant la communication avec TV3 Play.</string>
+    <string id="30201">Le message d'erreur est:</string>
+    <string id="30202">Impossible de trouver l'URL de lecture</string>
+    <string id="30203">Aucune saison disponible</string>
+    <string id="30204">Impossible de récupérer la liste des programmes</string>
+    <string id="30301">Dernières vidéos</string>
+    <string id="30302">Plus regardés</string>
+    <string id="30303">Plus aimés</string>
+    <string id="30304">Derniers clips</string>
 </strings>

@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="101">Загальні</string>
-    <string id="102">Регіон</string>
-    <string id="103">Кліпи</string>
+    <string id="30101">Загальні</string>
+    <string id="30102">Регіон</string>
+    <string id="30103">Кліпи</string>
 </strings>

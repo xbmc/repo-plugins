@@ -4,18 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="100">Spot</string>
-    <string id="101">Generale</string>
-    <string id="102">Regione</string>
-    <string id="103">Clip</string>
-    <string id="150">Scegli regione</string>
-    <string id="200">Errore nella comunicazione con TV3 Play.</string>
-    <string id="201">Il messaggio di errore è:</string>
-    <string id="202">Impossibile trovare l'URL per la riproduzione</string>
-    <string id="203">Nessuna stagione disponibile</string>
-    <string id="204">Impossibile recuperare la lista dei programmi</string>
-    <string id="301">Ultimi video</string>
-    <string id="302">I più riprodotti</string>
-    <string id="303">I più graditi</string>
-    <string id="304">Ultimi video</string>
+    <string id="30100">Spot</string>
+    <string id="30101">Generale</string>
+    <string id="30102">Regione</string>
+    <string id="30103">Clip</string>
+    <string id="30150">Scegli regione</string>
+    <string id="30200">Errore nella comunicazione con TV3 Play.</string>
+    <string id="30201">Il messaggio di errore è:</string>
+    <string id="30202">Impossibile trovare l'URL per la riproduzione</string>
+    <string id="30203">Nessuna stagione disponibile</string>
+    <string id="30204">Impossibile recuperare la lista dei programmi</string>
+    <string id="30301">Ultimi video</string>
+    <string id="30302">I più riprodotti</string>
+    <string id="30303">I più graditi</string>
+    <string id="30304">Ultimi video</string>
 </strings>

@@ -21,7 +21,6 @@ import os
 import sys
 import urlparse
 import re
-import urllib2
 import mobileapi
 
 import xbmc
@@ -31,8 +30,8 @@ import xbmcplugin
 
 import buggalo
 
-REGIONS = ['tv3play.dk', 'tv3play.se', 'tv3play.no', 'tv3play.lt', 'tv3play.lv', 'tv3play.ee', 'viasat4play.no']
-RSS = {301: 'recent', 302: 'mostviewed', 303: 'highestrated', 304: 'recent?type=clip'}
+REGIONS = ['tv3play.dk', 'tv3play.se', 'tv3play.no', 'tv3play.lt', 'tv3play.lv', 'tv3play.ee', 'tv6play.se',
+           'tv8play.se', 'tv10play.se', 'viasat4play.no', 'play.novatv.bg']
 
 
 class TV3PlayAddon(object):
@@ -53,20 +52,10 @@ class TV3PlayAddon(object):
     def listPrograms(self, region):
         items = list()
 
-        #        # Featured
-        #        item = xbmcgui.ListItem(ADDON.getLocalizedString(305), iconImage=ICON)
-        #        item.setProperty('Fanart_Image', FANART)
-        #        items.append((PATH + '?region=%s&special=featued' % region, item, True))
-        #
-        #        # Most viewed
-        #        item = xbmcgui.ListItem(ADDON.getLocalizedString(302), iconImage=ICON)
-        #        item.setProperty('Fanart_Image', FANART)
-        #        items.append((PATH + '?region=%s&special=mostviewed' % region, item, True))
-
         formats = self.api.getAllFormats()
         if not formats:
             xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
-            self.displayError('Mobile API not available for this region yet! Try later...')
+            self.displayError(ADDON.getLocalizedString(30205))
             return
 
         for series in formats:
@@ -109,16 +98,18 @@ class TV3PlayAddon(object):
             infoLabels = {
                 'title': video['title'],
                 'studio': ADDON.getAddonInfo('name'),
-                'plot': video['description'],
                 'plotoutline': video['summary'],
                 'tvshowtitle': video['formattitle']
             }
-            if 'airdate' in video:
+            if 'description' in video and video['description'] is not None:
+                infoLabels['plot'] = video['description']
+
+            if 'airdate' in video and video['airdate'] is not None:
                 airdate = video['airdate']
                 infoLabels['date'] = '%s.%s.%s' % (airdate[8:10], airdate[5:7], airdate[0:4])
                 infoLabels['year'] = int(airdate[0:4])
 
-            if 'episode' in video:
+            if 'episode' in video and video['episode'] is not None:
                 infoLabels['episode'] = int(video['episode'])
 
             item = xbmcgui.ListItem(video['title'], iconImage=fanart)
@@ -137,12 +128,8 @@ class TV3PlayAddon(object):
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
 
-        u = urllib2.urlopen('http://viastream.viasat.tv/extra/extraN.php?clipid=%s' % videoId)
-        xml = u.read()
-        u.close()
-        print xml
+        xml = self.api._http_request('http://viastream.viasat.tv/extra/extraN.php?clipid=%s' % videoId)
         if '<Url>' in xml:
-
             m = re.search('<Url>(.*)</Url>', xml)
             if m:
                 rtmp = m.group(1).replace('rtmp://tv3playee.data.lt/mtg/', 'rtmp://tv3playee.data.lt/mtg/mtg/')
@@ -155,8 +142,8 @@ class TV3PlayAddon(object):
 
     def displayError(self, message='n/a'):
         heading = buggalo.getRandomHeading()
-        line1 = ADDON.getLocalizedString(200)
-        line2 = ADDON.getLocalizedString(201)
+        line1 = ADDON.getLocalizedString(30200)
+        line2 = ADDON.getLocalizedString(30201)
         xbmcgui.Dialog().ok(heading, line1, line2, message)
 
 
@@ -182,10 +169,6 @@ if __name__ == '__main__':
             tv3PlayAddon.listVideos(PARAMS['region'][0], PARAMS['category'][0])
         elif 'format' in PARAMS:
             tv3PlayAddon.listCategories(PARAMS['region'][0], PARAMS['format'][0])
-        #        elif PARAMS.has_key('special') and PARAMS['special'] == 'featured':
-        #            tv3PlayAddon.listFeatured(PARAMS['region'][0])
-        #        elif PARAMS.has_key('special') and PARAMS['special'] == 'mostviewed':
-        #            tv3PlayAddon.listMostViewed(PARAMS['region'][0])
         elif 'region' in PARAMS:
             tv3PlayAddon.listPrograms(PARAMS['region'][0])
         else:

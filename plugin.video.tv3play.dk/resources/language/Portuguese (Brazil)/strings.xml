@@ -4,18 +4,18 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="100">Comercial</string>
-    <string id="101">Geral</string>
-    <string id="102">Região</string>
-    <string id="103">Clipes</string>
-    <string id="150">Escolha região</string>
-    <string id="200">Um erro ocorreu enquanto se comunicando com TV3 Play.</string>
-    <string id="201">A mensagem de erro é</string>
-    <string id="202">Incapaz de encontrar a URL de reprodução</string>
-    <string id="203">Não há estações disponíveis</string>
-    <string id="204">Não foi possível obter a lista de programas</string>
-    <string id="301">Vídeos recentes</string>
-    <string id="302">Mais assistidos</string>
-    <string id="303">Mais curtidos</string>
-    <string id="304">Clips recentes</string>
+    <string id="30100">Comercial</string>
+    <string id="30101">Geral</string>
+    <string id="30102">Região</string>
+    <string id="30103">Clipes</string>
+    <string id="30150">Escolha região</string>
+    <string id="30200">Um erro ocorreu enquanto se comunicando com TV3 Play.</string>
+    <string id="30201">A mensagem de erro é</string>
+    <string id="30202">Incapaz de encontrar a URL de reprodução</string>
+    <string id="30203">Não há estações disponíveis</string>
+    <string id="30204">Não foi possível obter a lista de programas</string>
+    <string id="30301">Vídeos recentes</string>
+    <string id="30302">Mais assistidos</string>
+    <string id="30303">Mais curtidos</string>
+    <string id="30304">Clips recentes</string>
 </strings>

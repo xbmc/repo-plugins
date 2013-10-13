@@ -1,3 +1,6 @@
+0.2.1 (13.10.2013)
+- fixed/rewrote TrailerScraper
+
 0.2.0 (15.09.2013)
 - added plots to (most) movies
 - updated translations

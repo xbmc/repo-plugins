@@ -72,7 +72,7 @@ def show_trailers(movie_title, location):
         movie_title, location, play_resolution, download_resolution
     )
     finish_kwargs = {
-        'sort_methods': ['date', 'playlist_order']
+        'sort_methods': ['playlist_order']
     }
     if plugin.get_setting('force_viewmode_trailers', bool):
         finish_kwargs['view_mode'] = 'thumbnail'
@@ -191,8 +191,8 @@ def get_trailers(movie_title, location, resolution_play, resolution_download):
     downloads = plugin.get_storage('downloads')
     items = []
     for i, trailer in enumerate(trailers):
-        title = '%s - %s (%s) ' % (
-            movie_title, trailer['title'], trailer['duration']
+        title = '%s - %s' % (
+            movie_title, trailer['title']
         )
         play_url = get_url(trailer['urls'], resolution_play)
         download_url = get_url(trailer['urls'], resolution_download)
@@ -205,10 +205,12 @@ def get_trailers(movie_title, location, resolution_play, resolution_download):
             'label': title,
             'info': {
                 'count': i,
-                'date': trailer['date'],
             },
             'properties': {
                 'fanart_image': trailer['background'],
+            },
+            'stream_info': {
+                'video': {'duration': trailer['duration']},
             },
             'context_menu': [
                 (_('download_trailer'), 'XBMC.RunPlugin(%s)' % plugin.url_for(

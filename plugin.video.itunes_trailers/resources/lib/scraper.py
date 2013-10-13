@@ -114,7 +114,11 @@ class TrailerScraper(object):
 
     TRAILERS_URL = BASE_URL + '/%s/includes/playlists/web.inc'
     BACKGROUND_URL = BASE_URL + '/%s/images/background.jpg'
-    OVERLAY_URL = BASE_URL + '/%s/includes/%s/extralarge.html'
+    PLAY_LIST_URL = BASE_URL + '/%s/itsxml/26-%s.xml'
+    RE_URL = '<key>URL</key><string>(.+?)</string>'
+    RE_DURATION = '<key>duration</key><integer>(.+?)</integer>'
+
+
 
     def get_trailers(self, location):
 
@@ -123,54 +127,37 @@ class TrailerScraper(object):
                 url = COVER_BASE_URL + url
             return url
 
+        def __trailer_urls(trailer_url):
+            return [trailer_url.replace('h720p', res)
+                    for res in ('h480p', 'h720p', 'h1080p')]
+
         tree = self.__get_tree(self.TRAILERS_URL % location)
-        trailer_re = re.compile('trailer')
-        for li in tree.findAll('li', {'class': trailer_re}):
-            p_list = li.find('p').contents
-            date_str, duration_str = p_list[0].strip(), p_list[-1].strip()
-            if li.find('a', {'class': 'target-quicktimeplayer'}):
-                section = li
-            else:
-                section = tree
-            trailer_url_section = section.findAll(
-                'a', {'class': 'target-quicktimeplayer'}
-            )
-            if trailer_url_section:
-                trailer_urls = [
-                    a['href'] for a in
-                    trailer_url_section
-                ]
-            else:
-                # This is hacky but also done by js on website...
-                tname = li.find('h3').string.replace(' ', '').replace('-', '')
-                trailer_tree = self.__get_tree(
-                    self.OVERLAY_URL % (location, tname.lower())
-                )
-                resolution_gen_url = trailer_tree.find(
-                    'a', {'class': 'movieLink'}
-                )['href'].split('?')[0]
-                trailer_urls = [
-                    resolution_gen_url.replace('720p', res)
-                    for res in ('h480p', 'h720p', 'h1080p')
-                ]
-            m, d, y = date_str.split()[1].split('/')
+        for li in tree.findAll('li', {'class': re.compile('trailer')}):
+            slug = li.find('h3').string.replace(' ', '').replace('-', '').lower()
+            playlist = self.__get_url(self.PLAY_LIST_URL % (location, slug))
+            trailer_url = re.search(self.RE_URL, playlist).group(1)
+            duration = int(re.search(self.RE_DURATION, playlist).group(1)) / 1000
             trailer = {
                 'title': li.find('h3').string,
-                'date': '%s.%s.20%s' % (d, m, y),
-                'duration': duration_str.split('Runtime:')[-1].strip(),
+                'date': '',
+                'duration': duration,
                 'thumb': __thumb(li.find('img')['src']),
                 'background': self.BACKGROUND_URL % location,
-                'urls': trailer_urls
+                'urls': __trailer_urls(trailer_url)
             }
             yield trailer
 
     def __get_tree(self, url):
+        return BeautifulSoup(self.__get_url(url))
+
+    def __get_url(self, url):
         headers = {'User-Agent': USER_AGENT}
         req = urllib2.Request(url, None, headers)
         print 'Opening URL: %s' % url
         try:
-            return BeautifulSoup(urllib2.urlopen(req).read())
+            return urllib2.urlopen(req).read()
         except urllib2.HTTPError, error:
+            print error
             raise NetworkError('HTTPError: %s' % error)
 
 

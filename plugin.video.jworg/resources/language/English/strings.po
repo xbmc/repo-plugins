@@ -1,0 +1,161 @@
+# XBMC Media Center language file
+# Addon Name: Jw.org audio/video browser
+# Addon id: plugin.video.jworg
+# Addon Provider: Realtebo
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr ""
+
+# Used as section title in addon setting window
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr ""
+
+#empty strings from id 30003 to 30004
+
+# Title of addon setting tab
+msgctxt "#30005"
+msgid "General"
+msgstr ""
+
+#empty strings from id 30006 to 30009
+
+# To find this string, click on "Publications -> Bible -> Readonline". 
+# This string is the title of the page
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr ""
+
+# To find this string, click on "Publications -> Music". 
+# This string is the last part of url ("/music-songs/"), in plural form 
+# and with an 'and' beetween words
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr ""
+
+# To find this string, click on "Publications -> Online Libray". 
+# This string is the third item in the menu, with "Bible" and "Publications", without extra capital letters
+msgctxt "#30012"
+msgid "Daily text"
+msgstr ""
+
+# To find this string, click on "Publications -> Dramas". 
+# This string is the bold header of the page, , without extra capital letters
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr ""
+
+# To find this string, click on "Publications -> Dramatic bible readings". 
+# This string is the bold header of the page, without extra capital letters
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr ""
+
+# A short concatenation of "Music and songs",  "Bible dramas" and  "Dramatic bible reading"
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr ""
+
+# Sorting settings
+msgctxt "#30016"
+msgid "Newest first"
+msgstr ""
+
+# Sorting settings
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr ""
+
+# Sorting settings
+msgctxt "#30018"
+msgid "By title"
+msgstr ""
+
+# Sorting settings
+msgctxt "#30019"
+msgid "Sorting"
+msgstr ""
+
+# This string should be translated as visible on the left menu after clicking on "Publications"
+msgctxt "#30020"
+msgid "Videos"
+msgstr ""
+
+# Probably should not be translated.
+# To see what's a cache read this http://en.wikipedia.org/wiki/Web_cache
+msgctxt "#30021"
+msgid "Cache"
+msgstr ""
+
+# To see what's a cache read this http://en.wikipedia.org/wiki/Web_cache
+# When user click on this item of addon settings, all cached contents are erased
+# so next time the addon need the index of some contents, it will be read from jw.org
+# instead of from cache
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr ""
+
+# Progressive form
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr ""
+
+# This string should be translated as visible on the left menu after clicking on "Publications"
+msgctxt "#30025"
+msgid "Magazines"
+msgstr ""
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr ""
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr ""
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr ""
+
+# Translate this string even if in your language there is NO a simplified edition
+# Could be used to show this kind of audio files when browsing content in diffent language
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Latest"
+msgstr ""
+
+# IMPORTANT ! This string *must be* identical to what you see in the main menu of jw.org
+# beetween "Publications" and "About us"
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr ""
+
+# Warning message in case jw.org is unreachable
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr ""

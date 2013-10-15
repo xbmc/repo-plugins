@@ -17,6 +17,7 @@ from audio import jw_audio_magazine
 
 from program import jw_exec_index
 from program import jw_exec_daily_text
+from program import jw_exec_news
 
 """
 START
@@ -101,6 +102,7 @@ if content_type == "audio" :
 		json_url = params["json_url"][0]
 		jw_audio.showAudioJson(json_url);		
 
+
 if content_type == "executable" :
 	if mode is None : 
 		jw_exec_index.showExecIndex();
@@ -108,3 +110,10 @@ if content_type == "executable" :
 	if mode == "open_daily_text" : 
 		date = params["date"][0]
 		jw_exec_daily_text.showDailyText(date);	
+
+	if mode == "open_news_index" :
+		jw_exec_news.showNewsIndex();
+
+	if mode == "open_news_page" :
+		url = params["url"][0]
+		jw_exec_news.showNewsPage(url);

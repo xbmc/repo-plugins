@@ -1,0 +1,125 @@
+# XBMC Media Center language file
+# Addon Name: Jw.org audio/video browser
+# Addon id: plugin.video.jworg
+# Addon Provider: Realtebo
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Dutch (http://www.transifex.com/projects/p/xbmc-addons/language/nl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Volgende pagina"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Taal van het multimediabestand"
+
+msgctxt "#30005"
+msgid "General"
+msgstr "Algemeen"
+
+msgctxt "#30007"
+msgid "Choose a video"
+msgstr "Selecteer een video"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Boeken van de bijbel"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Muziek en Liedjes"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "dagelijkse citaat"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Bijbeldrama`s"
+
+msgctxt "#30014"
+msgid "Dramatic bible reading"
+msgstr "Dramatische Bijbellezingen"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Liedjes, drama`s en dramatische lezingen"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Nieuwste eerst"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Oudste eerst"
+
+msgctxt "#30018"
+msgid "By title"
+msgstr "Op titel"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Sortering"
+
+msgctxt "#30020"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30021"
+msgid "Cache"
+msgstr "Buffer"
+
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Leeg geheugen (verplicht lijsten update)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "is geheugen aan het legen"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Succesvol gedaan"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Tijdschriften"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Alle tijdschriften"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Wakker worden!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "De wachttoren"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "De wachttoren (studie-uitgave)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "De wachttoren (vereenvoudigde uitgave)"
+
+msgctxt "#30031"
+msgid "Latest"
+msgstr "Nieuwste"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Kranten en tijdschriften afdeling"

@@ -31,4 +31,21 @@ def showExecIndex():
         isFolder    = True 
     )  
 
+    """
+    # 2. News
+    title           = jw_common.t(30032)  
+    listItem        = xbmcgui.ListItem( title )
+    params          = {
+        "content_type"  : "executable", 
+        "mode"          : "open_news_index",
+    } 
+    url = jw_config.plugin_name + '?' + urllib.urlencode(params)
+    xbmcplugin.addDirectoryItem(
+        handle      = jw_config.pluginPid, 
+        url         = url, 
+        listitem    = listItem, 
+        isFolder    = True
+    )  
+    """
+    
     xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)

@@ -1,0 +1,125 @@
+# XBMC Media Center language file
+# Addon Name: Jw.org audio/video browser
+# Addon id: plugin.video.jworg
+# Addon Provider: Realtebo
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Polish (http://www.transifex.com/projects/p/xbmc-addons/language/pl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Następna strona >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Język zawartości multimedialnej "
+
+msgctxt "#30005"
+msgid "General"
+msgstr "Ogólne"
+
+msgctxt "#30007"
+msgid "Choose a video"
+msgstr "Wybierz film"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Księgi Biblii "
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Muzyka i piosenki "
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Słowo na dziś"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Nauki Biblijne "
+
+msgctxt "#30014"
+msgid "Dramatic bible reading"
+msgstr "Adaptacje dźwiękowe Biblii"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Muzyka i słuchowiska "
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Najpierw najnowsze"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Najpierw najstarsze"
+
+msgctxt "#30018"
+msgid "By title"
+msgstr "Po tytułach"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Sortowanie"
+
+msgctxt "#30020"
+msgid "Videos"
+msgstr "Wideo"
+
+msgctxt "#30021"
+msgid "Cache"
+msgstr "Pamięć podręczna"
+
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Wyczyść pamięć podręczną (aktualizacja listy)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Czyszczenie pamięci podręcznej"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Zrobione"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Publikacje"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Wszystkie publikacje "
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Przebudźcie się! "
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "Strażnica "
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "Strażnica (wydanie do studium)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "Strażnica (wydanie uproszczone)"
+
+msgctxt "#30031"
+msgid "Latest"
+msgstr "Najnowsze"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Dla mediów"

@@ -3,7 +3,7 @@
  
   <category label="30005">
 
-    <setting id="language" type="labelenum" label="30002" lvalues="30003|30004"  />
+    <setting id="language" type="labelenum" label="30002" values="English|Deutsch|Italiano|Nederlands|Polski|Português|Español"  />
  
     <setting label="30019" type="lsep"/>
    	<setting id="video_sorting" type="enum" label="30020" lvalues="30016|30017" default="0" />

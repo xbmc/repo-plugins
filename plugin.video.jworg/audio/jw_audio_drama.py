@@ -33,8 +33,11 @@ def showDramaIndex(start):
 
 	drama_num = 0
 	for drama in drama_titles:
+
+		title = jw_common.cleanUpText(drama_titles[drama_num])
+
 		listItem = xbmcgui.ListItem(
-			label 			= drama_titles[drama_num],
+			label 			= title,
 			thumbnailImage  = drama_thumb[drama_num]
 		)	
 		params = {

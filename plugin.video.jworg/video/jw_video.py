@@ -63,6 +63,11 @@ def showVideoIndex(start, video_filter):
 	regexp_video_json = '.*[^"] data-jsonurl="([^"]+)".*'
 	video_json = re.findall(regexp_video_json, html)
 
+	if video_json is None or video_json == [] :
+		string = jw_common.t(30033) + " "
+		xbmcgui.Dialog().ok("jworg browser", string)
+		return
+
 	count = 0
 	# Output video list 
 	for title in videos:
@@ -100,8 +105,9 @@ def showVideoJsonUrl(json_url, thumb):
 	json_url 	= "http://www.jw.org" + json_url
 	json 		= jw_common.loadJsonFromUrl(json_url)
 
-	if json is None :
-		string = jw_common.t(30008) + " "
+	# json equals to [] when a cached json was empty
+	if json is None or json == [] :
+		string = jw_common.t(30033) + " "
 		xbmcgui.Dialog().ok("jworg browser", string)
 		return
 
@@ -127,12 +133,17 @@ def showVideoJsonUrl(json_url, thumb):
 			type 		= 'Video', 
 			infoLabels 	= {'Title': mp4_title_cleaned}
 		)
+		listItem.setProperty("IsPlayable","true")
+
 		xbmcplugin.addDirectoryItem(
 			handle		= jw_config.pluginPid, 
 			url			= url, 
 			listitem	= listItem, 
 			isFolder	= False 
 		)  
+		
+		
+		# xbmcplugin.setResolvedUrl( handle=jw_config.pluginPid, succeeded=True, listitem=listItem)
 
 	xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
 

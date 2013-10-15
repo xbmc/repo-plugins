@@ -1,12 +1,34 @@
+0.2.1
+-----
+
+Small enhancements:
++ Changed order in index, to reflect jw.org item order (magazines now is after bible)
+
+New language supported (not 100% translated in some cases):
++ Dutch ("Nederlands")
++ Polish ("Polski")
++ Spanish ("Español")
++ German ("Deutsch")
++ Portuguese ("Português")
+
+Code
++ Changed detection of simplified edition of watchtower study edition 
++ Removed unused strings to translate
++ Enforced resistence to json loading errors
++ Enforced UTF-8 support
++ Enforced resistence to magazine page when missing cover images
++ Enforced drama title scraping
++ Switched to .po for mainstream (English) language and italian
+
 0.2.0
 -----
 
-New audio Feature
+New audio feature
 + Listen to magazine readings (even in simplified english !), with list filtering options as jw.org. Due to jw.org inconsistency, only magazine since January 2012 are supported
 + Listen to audio dramas
 + Listen to dramatic bible reading
 
-New program Features
+New program features
 + Read daily text [Issue #2]
 
 New settings

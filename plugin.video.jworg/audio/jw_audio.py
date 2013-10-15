@@ -11,11 +11,10 @@ def showAudioIndex():
     
     items = [
         {"title" : jw_common.t(30010),  "mode"  : "open_bible_index",            "start" : None },
+        {"title" : jw_common.t(30025),  "mode"  : "open_magazine_index",         "start" : None },
         {"title" : jw_common.t(30011),  "mode"  : "open_music_index",            "start" : 0 },
         {"title" : jw_common.t(30013),  "mode"  : "open_drama_index",            "start" : 0 },
         {"title" : jw_common.t(30014),  "mode"  : "open_dramatic_reading_index", "start" : 0 },
-        {"title" : jw_common.t(30025),  "mode"  : "open_magazine_index",         "start" : None },
-
     ]
 
     for item in items:

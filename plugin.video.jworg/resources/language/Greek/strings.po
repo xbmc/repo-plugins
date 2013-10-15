@@ -1,0 +1,65 @@
+# XBMC Media Center language file
+# Addon Name: Jw.org audio/video browser
+# Addon id: plugin.video.jworg
+# Addon Provider: Realtebo
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Greek (http://www.transifex.com/projects/p/xbmc-addons/language/el/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: el\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Επόμενη σελίδα >>"
+
+msgctxt "#30005"
+msgid "General"
+msgstr "Γενικά"
+
+msgctxt "#30007"
+msgid "Choose a video"
+msgstr "Επιλογή βίντεο"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Παλαιά και Καινή Διαθήκη"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Μουσική και τραγούδια"
+
+msgctxt "#30018"
+msgid "By title"
+msgstr "Aνά τίτλο"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Ταξινόμηση"
+
+msgctxt "#30020"
+msgid "Videos"
+msgstr "Βίντεο"
+
+msgctxt "#30021"
+msgid "Cache"
+msgstr "Λανθάνουσα μνήμη"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Περιοδικά"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Όλα τα Περιοδικά"
+
+msgctxt "#30031"
+msgid "Latest"
+msgstr "Πρόσφατα"

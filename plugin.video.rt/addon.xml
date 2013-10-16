@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.rt"
        name="Russia Today News"
-       version="0.0.3"
+       version="1.7.1"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -16,5 +16,10 @@
     <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
     <platform>all</platform>
     <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://wiki.xbmc.org/index.php?title=Add-on:Russia_Today_News</forum>
+    <website></website>
+    <email></email>
+    <source>http://mirrors.xbmc.org/addons/frodo/plugin.video.rt/</source>
   </extension>
 </addon>

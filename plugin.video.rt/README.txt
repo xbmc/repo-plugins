@@ -15,3 +15,5 @@ version 1.2.0 added content-encoding == gzip support
 version 1.5.0 added support for Kaltura videoes (Larry King Live & Politicking)
 
 version 1.7.1 added program icons and multiple pages
+
+version 1.8.0 added rt live global, america, documentary, espanol, arabic

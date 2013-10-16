@@ -104,9 +104,9 @@ def getRequest(url):
 def getSources():
               log("RT -- RT Live main page")
               link1 = getRequest("http://rt.com/shows/")
-              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-global-live-HD","Live",icon,fanart,"Live HD Stream","News","",False)
-              link=str(link1).replace('\n','')     
+              addDir("RT Live","plugin://plugin.video.rt/",17,icon,fanart,"RT Live","News","",False)
 
+              link=str(link1).replace('\n','')     
               match=re.compile('<p class="shows-gallery_bottom_link"><a href="(.+?)".+?<img src="(.+?)".+?class="shows-gallery_bottom_text_header">(.+?)</span>(.+?)</p>').findall(str(link))
 
               for caturl,caticon,cattitle,catdesc in match:
@@ -216,7 +216,18 @@ elif mode==13:
     log("RT -- play_playlist")
     play_playlist(name, playlist)
 
+elif mode==17:
+              res_sel = ["HD","SD","SDh","SDq"]
+              res_names = ["720p","360p","240p","180p"]
+              i = int(addon.getSetting('rt_res'))
+              res = res_sel[i]
+              res_str = res_names[i]
 
+              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-global-live-"+str(res),"RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),"News","",False)
+              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-america-live-"+str(res),"RT America Live "+str(res_str),icon,fanart,"RT America Live "+str(res_str),"News","",False)
+              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-doc-live-"+str(res),"RT Documentary Live "+str(res_str),icon,fanart,"RT Documentary Live "+str(res_str),"News","",False)
+              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-enespanol-live-"+str(res),"RT Espanol Live "+str(res_str),icon,fanart,"RT Espanol Live "+str(res_str),"News","",False)
+              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-rusiyaalyaum-live-"+str(res),"RT Arabic Live "+str(res_str),icon,fanart,"RT Arabic Live "+str(res_str),"News","",False)
 
 elif mode==18:
               log("RT -- Processing RT sub category item")

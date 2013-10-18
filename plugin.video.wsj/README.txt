@@ -1,6 +1,19 @@
 plugin.video.wsj
 ================
 
+version 1.7.2 added language string support
+
+version 1.7.0 cleaned up how news articles are loaded, unicode issues
+
+version 1.2.0
+added gzip content-encoding support
+added select video and thumbnail resolution
+
+version 1.1.0
+fixed sort methods, added required fields in addon.xml
+
+
+
 version 1.0.1 changes:
 icon.png - icon size set to 64x64
 fanart.jpg - fanart size set to 1280*720

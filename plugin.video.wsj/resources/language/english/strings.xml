@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="30000">Settings</string>
+	<string id="30010">Video Stream Quality</string>
+	<string id="30011">Thumbnail Quality</string>
+
+	<string id="30020">720p</string>
+	<string id="30021">540p</string>
+	<string id="30022">360p</string>
+	<string id="30023">280p</string>
+
+	<string id="30025">High</string>
+	<string id="30026">Medium</string>
+	<string id="30027">Low</string>
+</strings>
+

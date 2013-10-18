@@ -12,6 +12,9 @@ import xbmcgui
 import xbmcaddon
 import xbmcvfs
 import cgi
+from StringIO import StringIO
+import gzip
+
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
@@ -23,11 +26,12 @@ fanart        = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
 
 
-
 def log(txt):
+   try:
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
-
+   except:
+    pass
 
 def _parse_argv():
 
@@ -61,8 +65,6 @@ def _parse_argv():
             mode = None
 
 
-
-
 def demunge(munge):
         try:
             munge = urllib.unquote_plus(munge).decode('utf-8')
@@ -70,27 +72,39 @@ def demunge(munge):
             pass
         return munge
 
-
-
-
-
+def getRequest(url):
+              log("WSJ - getRequest URL: "+str(url))
+              req = urllib2.Request(url.encode('utf-8'))
+              req.add_header('User-Agent', USER_AGENT)
+              req.add_header('Accept',"text/html")
+              req.add_header('Accept-Encoding', None )
+              req.add_header('Accept-Encoding', 'gzip,deflate,sdch')
+              req.add_header('Accept-Language', 'en-US,en;q=0.8')
+              req.add_header('Cookie','hide_ce=true')
+              log("RT -- request headers = "+str(req.header_items()))
+              try:
+                 response = urllib2.urlopen(req)
+                 if response.info().getheader('Content-Encoding') == 'gzip':
+                    log("WSj -- Content Encoding == 'gzip")
+                    buf = StringIO( response.read())
+                    f = gzip.GzipFile(fileobj=buf)
+                    link1 = f.read()
+                 else:
+                    link1=response.read()
+                 response.close()
+              except:
+                 link1 = ""
+              return(link1)
 
 
 def getSources():
 
               log("WSJ -- WSJ Live main page")
-              req = urllib2.Request("http://live.wsj.com")
-              req.add_header('User-Agent', USER_AGENT)
-              try:
-                 response = urllib2.urlopen(req)
-                 link1=response.read()
-                 response.close()
-              except:
-                 link1 = ""
-
+              link1 = getRequest("http://live.wsj.com")
               link=str(link1).replace('\n','')     
-              match=re.compile('<li id="vcrTab_(.+?)".+?data-vcrrss="(.+?)~(.+?)"').findall(str(link))
+              match=re.compile('<li id="vcrTab_(.+?)".+?data-query="(.+?)".+?~(.+?)"').findall(str(link))
               for category, caturl, cattext in match:
+                 caturl = "http://live.wsj.com/api-video/find_all_videos.asp?"+caturl
                  try:
                     if (category == "startup") or (category == "markets"):
                       addDir(cattext.encode('utf-8', 'ignore'),caturl.encode('utf-8'),18,icon,fanart,cattext,"News","",False)
@@ -138,22 +152,13 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
         return ok
 
+def strip_unicode(unistr):
+    return(unistr.replace('\\u2018',"'").replace('\\u2019',"'").replace('\\u201C','"').replace('\\u201D','"').replace('\\u2013','-').replace('\\u2014','-').replace('\\u2005',' ').replace('\\u00E9','e'))
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 try:
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
 except:
     pass
 
@@ -174,8 +179,10 @@ _parse_argv()
 
 
 log("WSJ -- Mode: "+str(mode))
+
 if not url is None:
-    print "WSJ -- URL: "+str(url.encode('utf-8'))
+      log("WSJ -- URL: "+str(url.encode('utf-8')))
+
 log("WSJ -- Name: "+str(name))
 
 if mode==None:
@@ -193,81 +200,42 @@ elif mode==13:
 
 elif mode==17:
               log("WSJ -- Processing WSJ category item")
-              req = urllib2.Request("http://live.wsj.com")
-              req.add_header('User-Agent', USER_AGENT)
-              try:
-                 response = urllib2.urlopen(req)
-                 link1=response.read()
-                 response.close()
-              except:
-                 link1 = ""
-
+              link1 = getRequest("http://live.wsj.com")
               link=str(link1).replace('\n','')
               log("WSJ -- url = "+str(url))
               match=re.compile('vcrDataPanel_'+str(url)+'(.+?)</ul>').findall(str(link))
               for subcat in match:
                 subcat = str(subcat).replace("&gt;",'>').replace("&lt;",'<')
-                submatch = re.compile('<h5 id=".+?data-vcrrss="(.+?)~(.+?)"').findall(str(subcat))
+                submatch = re.compile('<h5 id=".+?data-query="(.+?)".+?~(.+?)"').findall(str(subcat))
                 for caturl, cattext in submatch:
+                 caturl = "http://live.wsj.com/api-video/find_all_videos.asp?"+caturl
                  try:
                    addDir(str(cattext),caturl.encode('utf-8'),18,icon,fanart,str(cattext),"News","",False)
                  except:
                    log("WSJ -- problem adding Directory")
 
-
 elif mode==18:
               log("WSJ -- Processing WSJ sub category item")
-              catextend = False
-              if "/mw2/mediarss" in str(url):
-                catextend = True
-              if catextend:
-                log("WSJ -- Is an extended category xml")
-              req = urllib2.Request(url.encode('utf-8'))
-              print "WSJ -- req === "+str(req)
-              req.add_header('User-Agent', USER_AGENT)
-              try:
-                 response = urllib2.urlopen(req)
-                 link1=response.read()
-                 response.close()
-              except:
-                 link1 = ""
-              link=str(link1).replace('\n','')
 
-              if catextend==False:
-                match=re.compile('<item><title>(.+?)</title>.+?<description>(.+?)</description><pubDate>(.+?)</pubDate></item>').findall(str(link))
-                for cattitle, catdesc, catdate in match:
-                  cattitle = str(cattitle).replace("&gt;",'>').replace("&lt;",'<').replace("&amp;",'&')
-                  catdesc = str(catdesc).replace("&gt;",'>').replace("&lt;",'<').replace("&amp;",'&').replace("_167x94.",'')
-                  catmatch = re.compile('<img src=(.+?)jpg>(.+)').findall(str(catdesc))
-                  for caturl,cattext in catmatch:
-                    caturl = caturl.replace("wsj.vo.llnwd.net/o28","m.wsj.net")
-                    caticon = caturl+'_167x94.jpg'
-                    caturl += "_320k.mp4"
-                    try:
-                     addLink(caturl.encode('utf-8'),str(cattitle),caticon,fanart,catdate+'\n'+cattext,"News","")
-                    except:
-                     log("WSJ -- Problem adding directory")
-              else:
-                 if (("video-api.wsj.com/" in url) or ("copyflow.asp" in url)):
-                   match=re.compile('<item><title>(.+?)</title>.+?<description>(.+?)</description><pubDate>(.+?)</pubDate>.+?.+?height="360" lang="en" url="(.+?)".+?height="94" url="(.+?)".+?</item>').findall(str(link))
-                   for cattitle, catdesc, catdate, caturl, caticon in match:
-                    try:
-                     cattitle = str(cattitle).replace("&gt;",'>').replace("&lt;",'<').replace("&amp;",'&')
-                     catdesc = str(catdesc).replace("&gt;",'>').replace("&lt;",'<').replace("&amp;",'&')
-                     addLink(caturl.encode('utf-8'),str(cattitle),caticon,fanart,catdate+'\n'+catdesc,"News","")
-                    except:
-                     log("WSJ -- Problem adding directory")
+              res_thumbs = ["_640x360.jpg","_512x288.jpg","_167x94.jpg"]
+              res_videos = ["2564k.mp4","1864k.mp4","1264k.mp4","464k.mp4"]
+              i = int(addon.getSetting('vid_res'))
+              res_video = res_videos[i]
+              i = int(addon.getSetting('thumb_res'))
+              res_thumb = res_thumbs[i]
 
-                 else:
-                   match=re.compile('<item><title>(.+?)</title>.+?<pubDate>(.+?)</pubDate>.+?<description>(.+?)</description>.+?height="720" lang="en" url="(.+?)".+?height="94" url="(.+?)".+?</item>').findall(str(link))
-                   for cattitle, catdate, catdesc, caturl, caticon in match:
-                    try:
-                     cattitle = str(cattitle).replace("&gt;",'>').replace("&lt;",'<').replace("&amp;",'&')
-                     catdesc = str(catdesc).replace("&gt;",'>').replace("&lt;",'<').replace("&amp;",'&')
-                     addLink(caturl.encode('utf-8'),str(cattitle),caticon,fanart,catdate+'\n'+catdesc,"News","")
-                    except:
-                     log("WSJ -- Problem adding directory")
-
+              link1 = getRequest(url)
+              link=str(link1).replace('\n','').replace('\\/','/').replace('\\"',"'")
+              match = re.compile('"name": "(.+?)","description": "(.+?)".+?"thumbnailURL": "(.+?)_167x94.jpg.+?"videoURL": "http://hdsvod-f.akamaihd.net/z(.+?),.+?CreationDate": "(.+?)"').findall(link)
+              for cattitle, catdesc, caticon, caturl, catdate in match:
+                caturl = "http://m.wsj.net"+caturl+res_video
+                caticon += res_thumb
+                catdesc = strip_unicode(catdesc)
+                cattitle = strip_unicode(cattitle)
+                try:
+                   addLink(caturl.encode('utf-8'),cattitle,caticon,fanart,catdate+'\n'+catdesc,"News","")
+                except:
+                   log("WSJ -- Problem adding directory")
 
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

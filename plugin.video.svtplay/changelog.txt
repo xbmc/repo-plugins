@@ -1,3 +1,7 @@
+Version 3.3.4
+-------------
+- Hide live streams on the start page and re-enable addon in repository
+
 Version 3.3.3
 -------------
 - Fix broken listing due to site changes (khoda)

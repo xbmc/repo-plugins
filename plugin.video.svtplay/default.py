@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 import xbmcplugin
-import CommonFunctions
+import CommonFunctions as common
 import os
 import resources.lib.bestofsvt as bestof
 import resources.lib.helper as helper
@@ -35,53 +35,52 @@ CURR_DIR_ITEMS = 0
 
 pluginHandle = int(sys.argv[1])
 
-settings = xbmcaddon.Addon()
-localize = settings.getLocalizedString
+addon = xbmcaddon.Addon()
+localize = addon.getLocalizedString
 
-common = CommonFunctions
-common.plugin = "SVT Play 3"
+common.plugin = addon.getAddonInfo('name') + ' ' + addon.getAddonInfo('version')
 
 # Get and set settings
 common.dbg = False
-if settings.getSetting('debug') == "true":
+if addon.getSetting('debug') == "true":
   common.dbg = True
 
 HLS_STRIP = False
-if settings.getSetting("hlsstrip") == "true":
+if addon.getSetting("hlsstrip") == "true":
     HLS_STRIP = True
 
 FULL_PROGRAM_PARSE = False
-if settings.getSetting("fullparse") == "true":
+if addon.getSetting("fullparse") == "true":
   FULL_PROGRAM_PARSE = True
 
 HIDE_SIGN_LANGUAGE = False
-if settings.getSetting("hidesignlanguage") == "true":
+if addon.getSetting("hidesignlanguage") == "true":
   HIDE_SIGN_LANGUAGE = True 
 SHOW_SUBTITLES = False
-if settings.getSetting("showsubtitles") == "true":
+if addon.getSetting("showsubtitles") == "true":
   SHOW_SUBTITLES = True
 
 USE_ALPHA_CATEGORIES = False
-if settings.getSetting("alpha") == "true":
+if addon.getSetting("alpha") == "true":
   USE_ALPHA_CATEGORIES = True
 
-MAX_DIR_ITEMS = int(float(settings.getSetting("diritems")))
+MAX_DIR_ITEMS = int(float(addon.getSetting("diritems")))
 
 BW_SELECT = False
-if settings.getSetting("bwselect") == "true":
+if addon.getSetting("bwselect") == "true":
   BW_SELECT = True
 
-LOW_BANDWIDTH  = int(float(settings.getSetting("bandwidth")))
+LOW_BANDWIDTH  = int(float(addon.getSetting("bandwidth")))
 HIGH_BANDWIDTH = svt.getHighBw(LOW_BANDWIDTH)
 LOW_BANDWIDH   = LOW_BANDWIDTH
 
 def viewStart():
 
-  addDirectoryItem(localize(30008), { "mode": MODE_CHANNELS })
+  #addDirectoryItem(localize(30008), { "mode": MODE_CHANNELS })
   addDirectoryItem(localize(30000), { "mode": MODE_A_TO_O })
   addDirectoryItem(localize(30001), { "mode": MODE_CATEGORIES })
   addDirectoryItem(localize(30005), { "mode": MODE_RECOMMENDED, "page": 1 })
-  addDirectoryItem(localize(30002), { "mode": MODE_LIVE })
+  #addDirectoryItem(localize(30002), { "mode": MODE_LIVE })
   addDirectoryItem(localize(30003), { "mode": MODE_LATEST, "page": 1 })
   addDirectoryItem(localize(30004), { "mode": MODE_LATEST_NEWS, "page": 1 })
   addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
@@ -605,6 +604,7 @@ def getStream(url):
   f = urllib.urlopen(url)
   lines = f.readlines()
   
+  hlsurl = ''
   marker = "#EXT-X-STREAM-INF"
   found = False
 

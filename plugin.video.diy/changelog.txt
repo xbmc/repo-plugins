@@ -1,3 +1,8 @@
+Version 1.0.3
+added support for video clips where available
+fix resume/watched status
+bump python api version for gotham
+
 Version 1.0.2
 fix script error when selecting some shows
 

@@ -1,201 +1,253 @@
 import urllib
 import urllib2
 import re
-import os
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
 import StorageServer
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
+from urlparse import urlparse, parse_qs
+from traceback import format_exc
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.hgtv')
-__language__ = __settings__.getLocalizedString
-home = __settings__.getAddonInfo('path')
-icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-cache = StorageServer.StorageServer("hgtv", 24)
 
-def getRequest(url):
-        headers = {'User-agent' : '	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0) Gecko/20100101 Firefox/10.0',
-                   'Referer' : 'http://www.hgtv.com'}
-        req = urllib2.Request(url,None,headers)
+addon = xbmcaddon.Addon()
+addon_id = addon.getAddonInfo('id')
+addon_version = addon.getAddonInfo('version')
+cache = StorageServer.StorageServer("hgtv", 6)
+base_url = 'http://www.hgtv.com'
+
+
+def addon_log(string):
+    xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, string), level=xbmc.LOGNOTICE)
+
+
+def make_request(url):
+    addon_log('Request URL: %s' %url)
+    headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:17.0) Gecko/20100101 Firefox/17.0',
+               'Referer' : base_url}
+    try:
+        req = urllib2.Request(url, None, headers)
         response = urllib2.urlopen(req)
-        link=response.read()
+        data = response.read()
         response.close()
-        return link
-        
-        
-def shows_cache():
-        url = 'http://www.hgtv.com/full-episodes/package/index.html'
-        soup = BeautifulSoup(getRequest(url))
-        shows = soup.findAll('ol', attrs={'id' : "fe-list"})[1]('li')
-        Shows_list=[]
-        for i in shows:
-            name = i('img')[0]['alt']
-            if name.startswith(' '):
-                name = name[1:]
-            url = i('a')[1]['href']
-            thumbnail = i('img')[0]['src'].replace(' ','')
-            show = (name, url, thumbnail)
-            if not show in Shows_list:
-                Shows_list.append(show)
-        return(Shows_list, 200)
+        return data
+    except urllib2.URLError, e:
+        addon_log('We failed to open "%s".' %url)
+        if hasattr(e, 'reason'):
+            addon_log('We failed to reach a server.')
+            addon_log('Reason: %s' %e.reason)
+        if hasattr(e, 'code'):
+            addon_log('We failed with error code - %s.' %e.code)
 
 
-def getShows():
-        for i in cache.cacheFunction(shows_cache)[0]:
-            addDir(i[0], i[1], 1, i[2])
-        addDir(__language__(30027),'getMoreShows',2,icon)
+def get_soup(url):
+    if url.startswith('/'):
+        url = base_url + url
+    try:
+        soup = BeautifulSoup(make_request(url))
+        return soup
+    except:
+        addon_log('failed to parse the soup')
 
 
-def getMoreShows():
-        addDir(__language__(30000),'/hgtv-15-fresh-handmade-gift-ideas/videos/index.html',1,'http://img.hgtv.com/HGTV/2010/11/09/sp100_15-fresh-homemade-gift-ideas_s994x100.jpg') # 15 Fresh Handmade Gift Ideas
-        addDir(__language__(30001),'/hgtv-bang-for-your-buck/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2009/03/04/sp100-bang-for-the-buck.jpg') # Bang for Your Buck
-        addDir(__language__(30002),'/hgtv-battle-on-the-block/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2010/03/10/spShow_battle-on-the-block_s994x100.jpg') # Battle On the Block
-        addDir(__language__(30003),'/hgtv-behind-the-magic-disney-holidays/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2009/10/09/spShow_disney-holiday-special_s994x100.jpg') # Behind the Magic: Disney Holidays
-        addDir(__language__(30004),'/candice-tells-all-full-episodes/videos/index.html',1,'http://img.hgtv.com/HGTV/2010/12/14/spShow_candice-tells-all-v2_s994x100.jpg') # Candice Tells All
-        addDir(__language__(30005),'/hgtv258/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2009/10/13/spShow_ctw-american-heroes_s994x200.jpg') # Change the World: American Heroes
-        addDir(__language__(30006),'/hgtv-dinas-party/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/07/25/spShow_dinas-party_s994x100.jpg') # Dina's Party
-        addDir(__language__(30007),'/hgtv-first-time-design/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2009/12/10/spShow_first-time-design_s994x100.jpg') # First Time Design
-        addDir(__language__(30008),'/hgtv146/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2008/10/17/showheader_summerShowdown_v2.jpg') # HGTV Summer Showdown
-        addDir(__language__(30009),'/hgtv236/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2009/04/16/sp200-250k-challenge-4.jpg') # HGTV's $250,000 Challenge
-        addDir(__language__(30010),'/hgtv-hgtvs-great-rooms2/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/09/13/spShow_hgtv-great-rooms_s994x100.jpg') # HGTV's Great Rooms
-        addDir(__language__(30011),'/hgtv-home-for-the-holidays/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2008/10/31/sp100-home-for-the-holidays.jpg') # HGTV's Home for the Holidays
-        addDir(__language__(30012),'/hgtv-hgtv-the-making-of-our-magazine/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/08/12/spShow_making-of-our-magazine_s994x100.jpg') # HGTV: The Making of Our Magazine
-        addDir(__language__(30013),'/hgtv-holmes-inspection/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2010/02/18/sp200_holmes-inspection_s994x200.jpg') # Holmes Inspection
-        addDir(__language__(30014),'/hgtv-house-of-bryan/videos/index.html',1,'http://img.hgtv.com/HGTV/2010/08/30/spShow_house-of-bryan_s994x100.jpg') # House of Bryan
-        addDir(__language__(30015),'/hgtv-keys-to-the-castle/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2008/11/19/sp100-keys-to-the-castle-france.jpg') # Keys to the Castle, France
-        addDir(__language__(30016),'/hgtv32/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2008/10/17/showheader_myHouseIsWorthWhat_v2.jpg') # My House Is Worth What?
-        addDir(__language__(30017),'/hgtv-property-brothers/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/10/07/spShow_property-brothers_s994x100.jpg') # Property Brothers
-        addDir(__language__(30018),'/hgtv-rv-2010/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/12/07/spShow_rv_s994x100.jpg') # RV
-        addDir(__language__(30019),'/hgtv46/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2008/10/17/showheader_redHotandGreen_v2.jpg') # Red Hot & Green
-        addDir(__language__(30020),'/hgtv-room-crashers/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/05/10/spShow_room-crashers_s994x100.jpg') # Room Crashers
-        addDir(__language__(30021),'/hgtv-sandra-lee-celebrates/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2009/10/09/sp100_sandra-lee-celebrates-holiday-homecoming_s994x100.jpg') # Sandra Lee Celebrates: Holiday Homecoming
-        addDir(__language__(30022),'/hgtv-sarah-101/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/06/03/spShow_sarah-101_s994x100.jpg') # Sarah 101
-        addDir(__language__(30023),'/hgtv-sarahs-holiday-party/videos/index.html',1,'http://img.hgtv.com/HGTV/2010/10/20/spShow_sarahs-holiday-party_s994x100.jpg') # Sarah's Holiday Party
-        addDir(__language__(30024),'/hgtv-the-duchess/videos/index.html',1,'http://img.hgtv.com/HGTV/2009/10/07/spShow_the-duchess_s994x100.jpg') # The Duchess
-        addDir(__language__(30025),'/hgtv-the-outdoor-room/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2009/11/23/spShow_the-outdoor-room-with-jamie-durie_s994x200.jpg') # The Outdoor Room With Jamie Durie
-        addDir(__language__(30026),'/hgtv-white-house-christmas/videos/index.html',1,'http://hgtv.sndimg.com/HGTV/2011/11/23/spShow_white-house-xmas-2011_s994x100.jpg') # White House Christmas 2011
+def cache_shows():
+    soup = get_soup('/full-episodes/package/index.html')
+    shows = soup.findAll('ol', attrs={'id' : "fe-list"})[1]('li')
+    show_dict = {}
+    for i in shows:
+        name = i('img')[0]['alt'].lstrip()
+        if show_dict.has_key(name):
+            continue
+        show_dict[name] = {
+            'url': i('a', class_='button')[0]['href'],
+            'thumbnail': i('img')[0]['src'].strip(),
+            'description': i.p.string}
+    return show_dict
 
 
-def index(url, iconimage):
-        if url.startswith('/'):
-            url='http://www.hgtv.com'+url
-        soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
+def display_shows():
+    shows = cache.cacheFunction(cache_shows)
+    for i in shows.keys():
+        add_dir(i, shows[i]['url'], shows[i]['description'], shows[i]['thumbnail'], 1)
+
+
+def display_show(url, iconimage, videos=False):
+    soup = get_soup(url)
+    if not soup:
+        if '/show/' in url:
+            soup = get_soup(url.replace('/show/index', '/videos/index'))
+            if not soup:
+                return
+        else: return
+    cats = index(soup, iconimage)
+    current = None
+    if videos:
+        current = get_playlist(soup, 'videos')
+    else:
+        current = get_playlist(soup, True)
+
+    if current is None and not videos:
         try:
-            if soup.find('ul', attrs={'class' : "channel-list"}):
-                name = soup.find('ul', attrs={'class' : "channel-list"})('h4')[0]('em')[0].next
-                url = soup.find('ul', attrs={'class' : "channel-list"})('a')[0]['href']
-                addDir(name,url,1,iconimage)
-                try:
-                    seasons = soup.findAll('li', attrs={'class' : 'switch'})
-                    for season in seasons:
-                        name = season('h4')[0]('em')[0].next
-                        url = season('a')[0]['href']
-                        addDir(name,url,1,iconimage)
-                except:
-                    pass
+            show_href = soup.find('ul', class_='button-nav')('a', text='FULL EPISODES')[0]['href']
+            if show_href:
+                return display_show(show_href, iconimage)
+            else: raise
         except:
-                pass
-        showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\\'.+?\\',\\'(.+?)\\', \\'\\'\);").findall(str(soup))
-        if len(showID)<1:
-            showID=re.compile("var snap = new SNI.HGTV.Player.FullSize\(\'.+?','(.+?)', '.+?'\);").findall(str(soup))
-        if len(showID)<1:
-            try:
-                url = soup.find('ul', attrs={'class' : "button-nav"})('a')[1]['href']
-                index(url, iconimage)
-            except:
-                try:
-                    url = soup.find('li', attrs={'class' : "tab-past-season"}).a['href']
-                    index(url, iconimage)
-                except: print 'Houston we have a problem!'
+            addon_log('did not find current playlist')
+    elif current is None:
+        try:
+            show_href = soup.find('ul', class_='button-nav')('a', text='Videos')[0]['href']
+            if show_href:
+                return display_show(show_href, iconimage, True)
+            else: raise
+        except:
+            addon_log('did not find current playlist')
+
+    if len(cats['directories']) > 1:
+        if current:
+            add_dir(current, 'cache_current', '', iconimage, 3)
+        for i in cats['directories']:
+            add_dir(i[0], i[1], '', i[2], 4)
+        xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+        xbmc.executebuiltin('Container.SetViewMode(503)')
+    else:
+        if current:
+            if videos:
+                add_episodes(eval(cache.get('videos_base')))
+            else:
+                add_episodes(eval(cache.get('current_base')))
+    if not videos:
+        if cats['has_videos']:
+            add_dir('Videos', cats['has_videos'][0], '', cats['has_videos'][1], 5)
+
+
+def index(soup, iconimage):
+    items = []
+    try:
+        videos_soup = soup('div', class_= 'crsl-wrap')
+        if videos_soup:
+            for i in videos_soup:
+                name = i.find_previous('h4').contents[1].strip().replace('Full Episodes', '')
+                href = i.a['href']
+                items.append((name, href, iconimage))
+    except:
+        addon_log(format_exc())
+
+    try:
+        videos_href = soup.find('ul', class_='button-nav')('a', text='VIDEOS')[0]['href']
+        videos = (videos_href, iconimage)
+    except:
+        videos = None
+
+    return {'directories': items, 'has_videos': videos}
+
+
+def get_playlist(soup, base=False):
+    show_id = re.compile("var snap = new SNI.HGTV.Player.FullSize\(\'.+?','(.+?)', '.+?'\);").findall(str(soup))
+    if len(show_id) < 1:
+        addon_log('Houston we have a problem!')
+    else:
+        url = '%s/hgtv/channel/xml/0,,%s,00.xml' %(base_url, show_id[0])
+        videos_soup = BeautifulSoup(make_request(url))
+        parsed = [(i.clipname.string, i.videourl.string, i.abstract.string, i.thumbnailurl.string, i.length.string)
+                   for i in videos_soup('video')]
+        if base == 'videos':
+            cache.set('videos_base', repr(parsed))
+            return videos_soup.title.string
+        elif base:
+            cache.set('current_base', repr(parsed))
+            dir_title = videos_soup.title.string
+            if dir_title != 'Full Episodes':
+                dir_title = dir_title.replace('Full Episodes', '')
+            return dir_title
         else:
-            url='http://www.hgtv.com/hgtv/channel/xml/0,,'+showID[0]+',00.xml'
-            soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-            videos = soup('video')
-            for video in videos:
-                name = video('clipname')[0].string
-                length = video('length')[0].string
-                thumb = video('thumbnailurl')[0].string
-                description = video('abstract')[0].string
-                link = video('videourl')[0].string
-                playpath = link.replace('http://wms.scrippsnetworks.com','').replace('.wmv','')
-                url = 'rtmp://flash.scrippsnetworks.com:1935/ondemand?ovpfv=1.1 swfUrl="http://common.scrippsnetworks.com/common/snap/snap-3.0.3.swf" playpath='+playpath
-                addLink(name,url,description,length,thumb)
-            xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+            return parsed
+
+
+def add_episodes(items):
+    if not isinstance(items, list):
+        item_list = [items]
+        items = item_list
+    for i in items:
+        path = i[1].replace('http://wms.scrippsnetworks.com','').replace('.wmv','')
+        add_dir(i[0], path, i[2], i[3], 2, get_duration(i[4]), False)
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    xbmc.executebuiltin('Container.SetViewMode(503)')
+
+
+def get_duration(duration):
+    if duration is None:
+        return 1
+    d_split = duration.split(':')
+    if len(d_split) == 4:
+        del d_split[-1]
+    minutes = int(d_split[-2])
+    if int(d_split[-1]) >= 30:
+        minutes += 1
+    if len(d_split) >= 3:
+        minutes += (int(d_split[-3]) * 60)
+    if minutes < 1:
+        minutes = 1
+    return minutes
+
+
+def set_resolved_url(path):
+    video_url = ('rtmp://flash.scrippsnetworks.com:1935/ondemand?ovpfv=1.1 '
+                 'swfUrl=http://common.scrippsnetworks.com/common/snap/snap-3.0.3.swf playpath=%s' %path)
+    return video_url
 
 
 def get_params():
-        param=[]
-        paramstring=sys.argv[2]
-        if len(paramstring)>=2:
-            params=sys.argv[2]
-            cleanedparams=params.replace('?','')
-            if (params[len(params)-1]=='/'):
-                params=params[0:len(params)-2]
-            pairsofparams=cleanedparams.split('&')
-            param={}
-            for i in range(len(pairsofparams)):
-                splitparams={}
-                splitparams=pairsofparams[i].split('=')
-                if (len(splitparams))==2:
-                    param[splitparams[0]]=splitparams[1]
-
-        return param
+    p = parse_qs(sys.argv[2][1:])
+    for i in p.keys():
+        p[i] = p[i][0]
+    return p
 
 
-def addLink(name,url,description,length,iconimage):
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name , "Plot":description, "Duration":length } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-        return ok
+def add_dir(name, url, description, iconimage, mode, duration=None, isfolder=True):
+    params = {'name': name, 'url': url, 'mode': mode, 'iconimage': iconimage}
+    url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
+    listitem=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    info_labels = {"Title": name, "Plot":description, "Genre": 'Home and Garden'}
+    if not isfolder:
+        info_labels['Duration'] = duration
+        listitem.setProperty('isPlayable', 'true')
+    listitem.setInfo(type="Video", infoLabels=info_labels)
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
 
 
-def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+urllib.quote_plus(iconimage)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
-
-
-params=get_params()
-url=None
-name=None
-mode=None
+params = get_params()
 
 try:
-    url=urllib.unquote_plus(params["url"])
+    mode = int(params['mode'])
 except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    iconimage=urllib.unquote_plus(params["iconimage"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
+    mode = None
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+addon_log(params)
 
-if mode==None or url==None or len(url)<1:
-    print ""
-    getShows()
+if mode == None:
+    display_shows()
+    xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==1:
-    print ""
-    index(url, iconimage)
+elif mode == 1:
+    display_show(params['url'], params['iconimage'])
+    xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==2:
-    print ""
-    getMoreShows()
+elif mode == 2:
+    item = xbmcgui.ListItem(path=set_resolved_url(params['url']))
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+elif mode == 3:
+    add_episodes(eval(cache.get('current_base')))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode == 4:
+    soup = get_soup(params['url'])
+    add_episodes(get_playlist(soup))
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode == 5:
+    display_show(params['url'], params['iconimage'], True)
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))

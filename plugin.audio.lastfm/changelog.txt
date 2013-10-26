@@ -1,0 +1,40 @@
+v1.0.0
+- gotham release
+
+v0.1.7
+- update language files
+
+v0.1.6
+- fix unicode encode error
+
+v0.1.5
+- added overall top artists, tags and tracks
+- changed love and ban comments so they work with keymaps
+
+v0.1.4
+- fixed crash when last.fm connection fails
+
+v0.1.3
+- fixed user radio names
+
+v0.1.2
+- re-add lost strings
+
+v0.1.1
+- add custiom radio stations
+
+v0.1.0
+- release
+
+v0.0.4
+- fix crash due to empty infolabels
+
+v0.0.3
+- new way of handling the playlist
+- added search option
+
+v0.0.2
+- re-code to api v2
+
+v0.0.1
+- initial beta

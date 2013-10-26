@@ -1,0 +1,209 @@
+# XBMC Media Center language file
+# Addon Name: Last.fm
+# Addon id: plugin.audio.lastfm
+# Addon Provider: Team-XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Bulgarian (http://www.transifex.com/projects/p/xbmc-addons/language/bg/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: bg\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Основни"
+
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "Подаване на инф. за песните към Last.fm"
+
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "Подавай инф. от радиото към Last.fm"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "Last.fm потребител"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "Last.fm парола"
+
+msgctxt "#30005"
+msgid "Confirm Love/Ban submissions"
+msgstr "Потвърждаване подаването на инф. за любими/забранени"
+
+msgctxt "#32011"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32012"
+msgid "Do you want to add the current track to your loved tracks?"
+msgstr "Желаете ли текущата песен да бъде добавена към любимите?"
+
+msgctxt "#32013"
+msgid "Do you want to ban the current track?"
+msgstr "Желаете ли текущата песен да бъде забранена?"
+
+msgctxt "#32014"
+msgid "Added to your loved tracks: '%s'."
+msgstr "Добавена към любимите: \"%s\"."
+
+msgctxt "#32015"
+msgid "Could not add '%s' to your loved tracks."
+msgstr "\"%s\" не може да бъде добавена към любимите."
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "Забранена: \"%s\"."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "\"%s\" не може да бъде забранена."
+
+msgctxt "#32018"
+msgid "Do you want to remove this track from your loved tracks?"
+msgstr "Желаете ли песента да бъде премахната от любимите?"
+
+msgctxt "#32019"
+msgid "Do you want to un-ban this track?"
+msgstr "Желаете ли песента да бъде премахната от забранените?"
+
+msgctxt "#32024"
+msgid "Remove from loved tracks"
+msgstr "Премахни от любимите"
+
+msgctxt "#32025"
+msgid "Un-ban"
+msgstr "Премахни от забранените"
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "Приятели на потребителя \"%s\""
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "Съседи на потребителя \"%s\""
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "Топ албуми на потребителя \"%s\""
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "Топ артисти на потребителя \"%s\""
+
+msgctxt "#32055"
+msgid "Top tags for user %s"
+msgstr "Топ етикетите на потребителя \"%s\""
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "Топ песни на потребителя \"%s\""
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "Наскоро забранени песни от \"%s\""
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "Наскоро слушани песни от \"%s\""
+
+msgctxt "#32059"
+msgid "Tracks recently loved by %s"
+msgstr "Песни наскоро марк. като любими от \"%s\""
+
+msgctxt "#32060"
+msgid "Weekly album chart for %s"
+msgstr "Седмична диаграма за албумите на \"%s\""
+
+msgctxt "#32061"
+msgid "Weekly artist chart for %s"
+msgstr "Седмична диаграма на артист \"%s\""
+
+msgctxt "#32062"
+msgid "Weekly track chart for %s"
+msgstr "Седмична диаграма за песните на \"%s\""
+
+msgctxt "#32064"
+msgid "Listen to %s's neighbours Last.fm radio"
+msgstr "Слушай Last.fm Radio-то на съседите на \"%s\""
+
+msgctxt "#32065"
+msgid "Listen to %s's personal Last.fm radio"
+msgstr "Слушай личното Last.fm Radio на \"%s\""
+
+msgctxt "#32067"
+msgid "Biggest fans of %s"
+msgstr "Най-големите фенове на \"%s\""
+
+msgctxt "#32068"
+msgid "Similar artists as %s"
+msgstr "Артисти подобни на \"%s\""
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "Топ \"%s\" албуми"
+
+msgctxt "#32070"
+msgid "Top %s tags"
+msgstr "Топ \"%s\" етикети"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "Топ \"%s\" песни"
+
+msgctxt "#32072"
+msgid "Listen to %s fans Last.fm radio"
+msgstr "Слушай Last.fm Radio-то на феновете на \"%s\""
+
+msgctxt "#32073"
+msgid "Listen to %s similar artists Last.fm radio"
+msgstr "Слушай Last.fm Radio-то на артисти подобни на \"%s\""
+
+msgctxt "#32074"
+msgid "Top albums for tag %s"
+msgstr "Топ албуми за етикет \"%s\""
+
+msgctxt "#32075"
+msgid "Top artists for tag %s"
+msgstr "Топ артисти за етикет \"%s\""
+
+msgctxt "#32076"
+msgid "Top tracks for tag %s"
+msgstr "Топ песни за етикет \"%s\""
+
+msgctxt "#32077"
+msgid "Listen to tag %s Last.fm radio"
+msgstr "Слушай етикет \"%s\" от Last.fm Radio"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "Търси"
+
+msgctxt "#32079"
+msgid "No results found"
+msgstr "Не са открити елементи"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "Етикет"
+
+msgctxt "#32095"
+msgid "Overall top artists"
+msgstr "Топ артисти"
+
+msgctxt "#32096"
+msgid "Overall top tags"
+msgstr "Топ етикети"
+
+msgctxt "#32097"
+msgid "Overall top tracks"
+msgstr "Топ песни"

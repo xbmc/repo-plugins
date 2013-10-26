@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30000">
+		<setting id="lastfmsubmitsongs" type="bool" label="30001" default="false"/>
+		<setting id="lastfmsubmitradio" type="bool" label="30002" default="false"/>
+		<setting id="lastfmuser" type="text" label="30003" default=""/>
+		<setting id="lastfmpass" type="text" label="30004" default="" option="hidden"/>
+		<setting id="lastfmconfirm" type="bool" label="30005" default="true"/>
+	</category>
+</settings>

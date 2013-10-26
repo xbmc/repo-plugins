@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.lastfm" name="Last.fm" version="1.0.0" provider-name="Team-XBMC">
+	<requires>
+		<import addon="xbmc.python" version="2.12.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="radio.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.service" library="scrobbler.py" start="login"/>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="be">Last.fm radio and scrobbler</summary>
+		<summary lang="de">Last.fm Radio und Scrobbler</summary>
+		<summary lang="el">Ραδιόφωνο και υπηρεσία κοινοποίησης (scrobbler) του Last.fm</summary>
+		<summary lang="en">Last.fm radio and scrobbler</summary>
+		<summary lang="es">Radio y envío de canciones de last.fm</summary>
+		<summary lang="fr">Radio Last.fm et scrobbler</summary>
+		<summary lang="gl">Radio Last.fm e scrobbler</summary>
+		<summary lang="he">Last.fm רדיו וסקרובלר</summary>
+		<summary lang="hr">Last.fm radio i skrobler</summary>
+		<summary lang="it">Scrobbler e radio di Last.fm</summary>
+		<summary lang="ko">Last.fm 라디오와 스크로블러</summary>
+		<summary lang="pl">Scrobbler radia Last.fm</summary>
+		<summary lang="pt">Rádio e scrobbler Last.fm</summary>
+		<summary lang="pt_BR">Last.fm rádio e scrobbler</summary>
+		<summary lang="sv">Last.fm radio och inskickare</summary>
+		<summary lang="zh">Last.fm 电台和 scrobbler</summary>
+		<description lang="be">Listen to last.fm radio and/or scrobble your tracks to last.fm</description>
+		<description lang="de">Höre Last.fm Radio und/oder scrobble deine Tracks an last.fm</description>
+		<description lang="el">Ακούστε ραδιόφωνο από το last.fm ή/και κοινοποιήστε (scrobble) τα κομμάτια σας στο last.fm</description>
+		<description lang="en">Listen to last.fm radio and/or scrobble your tracks to last.fm</description>
+		<description lang="es">Escuche la radio last.fm y/o envíe sus canciones a last.fm</description>
+		<description lang="fr">Écoutez les radios last.fm et/ou scrobblez vos pistes last.fm</description>
+		<description lang="gl">Escoite a radio last.fm ou envíe as súas pistas a esta.</description>
+		<description lang="he">האזן לרדיו של last.fm ו/או שלח את רשימת השירים להם אתה מאזין כעת (סקרבל) אל last.fm.</description>
+		<description lang="hr">Slušajte last.fm radio i/ili skroblajte vaše pjesme na last.fm-u</description>
+		<description lang="it">Ascolta la radio di last.fm e/o fai lo scrobbling dei tuoi brani</description>
+		<description lang="ko">Last.fm 라디오 듣기, 노래를 last.fm에 스크로블</description>
+		<description lang="pl">Słuchaj radia last.fm i/lub scrobbluj swoje ścieżki do last.fm</description>
+		<description lang="pt">Ouça rádio de last.fm e/ou faça scrobbling das suas faixas para last.fm</description>
+		<description lang="pt_BR">Escute rádios Last.fm e/ou faça scrobble das suas músicas para o Last.fm</description>
+		<description lang="sv">Lyssna på last.fm radio och/eller skicka in dina låtar till last.fm</description>
+		<description lang="zh">收听 last.fm 电台和/或提交你的音乐到 last.fm</description>
+		<language></language>
+		<platform>all</platform>
+		<forum>http://forum.xbmc.org/showthread.php?tid=154230</forum>
+		<source>https://github.com/XBMC-Addons/plugin.audio.lastfm/</source>
+	</extension>
+</addon>

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2013-06-20 14:57+0000\n"
+"POT-Creation-Date: 2013-10-30 11:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -25,158 +25,158 @@ msgctxt "#30003"
 msgid "Miscellaneous"
 msgstr "Diverses"
 
-msgctxt "#30101"
+msgctxt "#30100"
 msgid "Server-address"
-msgstr "Serveradresse"
+msgstr "Server-address"
 
-msgctxt "#30102"
+msgctxt "#30110"
 msgid "Entries per page"
-msgstr "Einträge pro Seite"
+msgstr "Entries per page"
 
-msgctxt "#30121"
+msgctxt "#30200"
 msgid "Default order"
 msgstr "Standardsortierung"
 
-msgctxt "#30122"
-msgid "Rating"
-msgstr "Einstufung"
-
-msgctxt "#30123"
-msgid "Sort tags by"
-msgstr "Tags sortieren nach"
-
-msgctxt "#30141"
-msgid "Load preview for pools"
-msgstr "Vorschau für Bilderpools laden"
-
-msgctxt "#30142"
-msgid "Size of the search history"
-msgstr "Größe des Suchverlaufs"
-
-msgctxt "#30143"
-msgid "Load preview for tags"
-msgstr "Vorschau für Tags laden"
-
-msgctxt "#30801"
+msgctxt "#30201"
 msgid "Server default"
 msgstr "Servereinstellung"
 
-msgctxt "#30802"
+msgctxt "#30202"
 msgid "Score"
 msgstr "Bewertung"
 
-msgctxt "#30803"
+msgctxt "#30203"
 msgid "Favorited"
 msgstr "Favoriten"
 
-msgctxt "#30804"
+msgctxt "#30204"
 msgid "Widescreen first"
 msgstr "Widescreen zuerst"
 
-msgctxt "#30805"
+msgctxt "#30205"
 msgid "Widescreen last"
 msgstr "Widescreen zuletzt"
 
-msgctxt "#30821"
+msgctxt "#30210"
+msgid "Rating"
+msgstr "Einstufung"
+
+msgctxt "#30211"
 msgid "All"
 msgstr "Alle"
 
-msgctxt "#30822"
+msgctxt "#30212"
 msgid "Safe only"
 msgstr "Nur jugendfrei"
 
-msgctxt "#30823"
+msgctxt "#30213"
 msgid "Questionable only (Ecchi)"
 msgstr "Nur fraglich (Ecchi)"
 
-msgctxt "#30824"
+msgctxt "#30214"
 msgid "Explicit only (Hentai)"
 msgstr "Nur explizit (Hentai)"
 
-msgctxt "#30825"
+msgctxt "#30215"
 msgid "Questionable and Explicit"
 msgstr "Fraglich und explizit"
 
-msgctxt "#30826"
+msgctxt "#30216"
 msgid "Questionable and Safe"
 msgstr "Fraglich und jugendfrei"
 
-msgctxt "#30841"
+msgctxt "#30220"
+msgid "Sort tags by"
+msgstr "Tags sortieren nach"
+
+msgctxt "#30221"
 msgid "Server default"
 msgstr "Servereinstellung"
 
-msgctxt "#30842"
+msgctxt "#30222"
 msgid "Date"
 msgstr "Datum"
 
-msgctxt "#30843"
+msgctxt "#30223"
 msgid "Count"
 msgstr "Anzahl"
 
-msgctxt "#30844"
+msgctxt "#30224"
 msgid "Name"
 msgstr "Name"
 
-msgctxt "#31001"
+msgctxt "#30300"
+msgid "Load preview for pools"
+msgstr "Vorschau für Bilderpools laden"
+
+msgctxt "#30310"
+msgid "Load preview for tags"
+msgstr "Vorschau für Tags laden"
+
+msgctxt "#30320"
+msgid "Size of the search history"
+msgstr "Größe des Suchverlaufs"
+
+msgctxt "#30500"
 msgid "Latest"
 msgstr "Neueste"
 
-msgctxt "#31002"
+msgctxt "#30501"
 msgid "Search"
 msgstr "Suchen"
 
-msgctxt "#31003"
+msgctxt "#30502"
 msgid "Random"
 msgstr "Zufällig"
 
-msgctxt "#31004"
+msgctxt "#30503"
 msgid "Pools"
 msgstr "Bilderpools"
 
-msgctxt "#31005"
-msgid "Search history"
-msgstr "Suchverlauf"
-
-msgctxt "#31006"
+msgctxt "#30504"
 msgid "Search tags"
 msgstr "Tags suchen"
 
-msgctxt "#32002"
+msgctxt "#30505"
+msgid "Search history"
+msgstr "Suchverlauf"
+
+msgctxt "#30520"
 msgid "More"
 msgstr "Mehr"
 
-msgctxt "#32003"
+msgctxt "#30521"
 msgid "Related tags"
 msgstr "Verwandte Tags"
 
-msgctxt "#33001"
-msgid "Remove from history"
-msgstr "Aus dem Verlauf löschen"
-
-msgctxt "#34001"
-msgid "Enter tag to search for:"
-msgstr "Geben Sie die Tags ein:"
-
-msgctxt "#34002"
-msgid "Enter string to search for:"
-msgstr "Geben Sie den Suchbegriff ein:"
-
-msgctxt "#35001"
+msgctxt "#30530"
 msgid "Search pool"
 msgstr "Bilderpool suchen"
 
-msgctxt "#36001"
+msgctxt "#30600"
+msgid "Remove from history"
+msgstr "Aus dem Verlauf löschen"
+
+msgctxt "#30601"
 msgid "Image tags"
 msgstr "Bildtags"
 
-msgctxt "#37001"
+msgctxt "#30700"
+msgid "Enter tag(s) to search for:"
+msgstr "Geben Sie die Tags ein:"
+
+msgctxt "#30701"
+msgid "Enter string to search for:"
+msgstr "Geben Sie den Suchbegriff ein:"
+
+msgctxt "#30702"
 msgid "No results were found!, Showing suggested tags instead."
 msgstr "Keine Bilder gefunden!, Meinten Sie einen der angezeigten Tags?"
 
-msgctxt "#40001"
+msgctxt "#30900"
 msgid "ERROR: Pool not readable. Maybe because of japanese characters in it?"
 msgstr "FEHLER: Bilderpool kann nicht gelesen werden."
 
-msgctxt "#40201"
+msgctxt "#30901"
 msgid "MOE: Requesting"
 msgstr "MOE: Lade"

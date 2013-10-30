@@ -103,9 +103,9 @@ class moebooruSession:
         liz.setInfo( type="image", infoLabels={"Title": name,"Label":str(sort)} )
         contextMenu = []
         if ref == _REF_HISTORY or ref == _REF_TAGLIST: # The related tags button
-            contextMenu.append ([language(32003), xbmc.translatePath('Container.Update(%s?mode=%s&url=tags&q=%s)' % (sys.argv[0], _MODE_TAGS, _GETREL + q))])
+            contextMenu.append ([language(30521), xbmc.translatePath('Container.Update(%s?mode=%s&url=tags&q=%s)' % (sys.argv[0], _MODE_TAGS, _GETREL + q))])
         if ref == _REF_HISTORY:
-            contextMenu.append([language(33001), xbmc.translatePath('XBMC.RunScript(special://home/addons/plugin.image.moebooru/default.py,rmFromHistory,'+q+')')])
+            contextMenu.append([language(30600), xbmc.translatePath('XBMC.RunScript(special://home/addons/plugin.image.moebooru/default.py,rmFromHistory,'+q+')')])
         liz.addContextMenuItems(contextMenu)
         return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=tot)
 
@@ -113,23 +113,23 @@ class moebooruSession:
         liz=xbmcgui.ListItem(iId, iconImage="DefaultImage.png", thumbnailImage=iconimage)
         liz.setInfo( type="image", infoLabels={ "Id": iId })
         if (mode == _MODE_IMAGE) and (relatedTags != ""):
-            contextMenu = [(language(36001), xbmc.translatePath('Container.Update(%s?mode=%s&url=tags&q=%s)' % (sys.argv[0], _MODE_TAGS, relatedTags)))]
+            contextMenu = [(language(30601), xbmc.translatePath('Container.Update(%s?mode=%s&url=tags&q=%s)' % (sys.argv[0], _MODE_TAGS, relatedTags)))]
             liz.addContextMenuItems(contextMenu)
         return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False,totalItems=tot)
 
     def CATEGORIES(self):
-        self.addDir(language(31001),'latest',_MODE_LATEST,os.path.join(IMAGE_PATH,'latest.png'),sort=0)
-        self.addDir(language(31002),'search',_MODE_SEARCH,os.path.join(IMAGE_PATH,'search.png'),sort=0)
-        self.addDir(language(31003),'random',_MODE_RANDOM,os.path.join(IMAGE_PATH,'random.png'),sort=0)
-        self.addDir(language(31004),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'pools.png'),sort=0)
+        self.addDir(language(30500),'latest',_MODE_LATEST,os.path.join(IMAGE_PATH,'latest.png'),sort=0)
+        self.addDir(language(30501),'search',_MODE_SEARCH,os.path.join(IMAGE_PATH,'search.png'),sort=0)
+        self.addDir(language(30502),'random',_MODE_RANDOM,os.path.join(IMAGE_PATH,'random.png'),sort=0)
+        self.addDir(language(30503),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'pools.png'),sort=0)
         # 5 is used for pools
         # NYI: self.addDir('Advanced Search','advSearch',7,os.path.join(IMAGE_PATH,'search.png'),sort=0)
-        self.addDir(language(31006),'tags',_MODE_TAGS,os.path.join(IMAGE_PATH,'tags.png'),sort=0, q=_GETUSR)
-        self.addDir(language(31005),'history',_MODE_HISTORY,os.path.join(IMAGE_PATH,'search_history.png'),sort=0)
+        self.addDir(language(30504),'tags',_MODE_TAGS,os.path.join(IMAGE_PATH,'tags.png'),sort=0, q=(_GETUSR + "newquery"))
+        self.addDir(language(30505),'history',_MODE_HISTORY,os.path.join(IMAGE_PATH,'search_history.png'),sort=0)
         return True
         
     def SEARCH(self, query="", page=1):
-        kbd = xbmc.Keyboard('',language(34001))
+        kbd = xbmc.Keyboard('',language(30700))
         if query=="newsearch":
             kbd.doModal()
             if (kbd.isConfirmed()):
@@ -140,22 +140,22 @@ class moebooruSession:
             images = self.api.getImages(query, page)
             
             if len(images) == 0: # No results -> suggestions
-                xbmc.executebuiltin("Notification(" + language(37001) + ")")
+                xbmc.executebuiltin("Notification(" + language(30702) + ")")
                 self.TAGS(_GETUSR + query)
-            if page == 1 and query != "" and len(images) > 0: # Display the related tags button on the first page nly
-                self.addDir(language(32003),'tags',_MODE_TAGS,os.path.join(IMAGE_PATH,'tags.png'),sort=0, q=_GETREL + query)
+            if page == 1 and query[:query.find(" ")] != "" and len(images) > 0: # Display the related tags button only on the first page and if we are not viewing "latest".
+                self.addDir(language(30521),'tags',_MODE_TAGS,os.path.join(IMAGE_PATH,'tags.png'),sort=0, q=_GETREL + query)
             for img in images:
                 self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),_MODE_IMAGE,img.get("preview_url",""), len(images), relatedTags = img.get("tags",""))
-            if query!="" and page == 1 and kbd.isConfirmed() and len(images) > 0: # Only add newly entered things and only add these, if results were found
+            if query[:query.find(" ")] != "" and page == 1 and kbd.isConfirmed() and len(images) > 0: # Only add newly entered things and only add these, if results were found
                  self.conf_appendList(SHISTORY_PATH, query + SHISTORY_DATASEP + img.get("preview_url",os.path.join(IMAGE_PATH,'search.png')))
             if float(len(images)) == float(__settings__.getSetting('epp')): # If we loaded the max. number of images that we can, we assume there are more
-                self.addDir(language(32002),'search',_MODE_SEARCH,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
+                self.addDir(language(30520),'search',_MODE_SEARCH,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
             return True
     def ADVSEARCH(self, query="", page=1):
         print "NYI"
         return True
     def LATEST(self,page=1):
-        self.SEARCH("",page)
+        self.SEARCH(" order:latest",page)
         return True
     def HISTORY(self):
         for item in self.conf_getList(SHISTORY_PATH):
@@ -165,9 +165,9 @@ class moebooruSession:
             self.addDir(query,'search',_MODE_SEARCH,imgUrl,sort=0, q=query, ref=_REF_HISTORY)
         return True
     def POOLS(self, query="", page=1):
-        kbd = xbmc.Keyboard('',language(34001))
+        kbd = xbmc.Keyboard('',language(30700))
         if query=="":
-            self.addDir(language(35001),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'search.png'),sort=0, q="newquery")
+            self.addDir(language(30530),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'search.png'),sort=0, q="newquery")
         if query=="newquery":
             kbd.doModal()
             if (kbd.isConfirmed()):
@@ -186,10 +186,10 @@ class moebooruSession:
                         previewUrl = imgs[0].get('preview_url')
                     self.addDir(str(name).replace("_"," "),'pool',_MODE_POOL,previewUrl,sort=0, q=str(pId), tot=len(pools))
                 except:
-                    print language(40001)
+                    print language(30900)
 
         if str(len(pools))=="20":
-            self.addDir(language(32002),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
+            self.addDir(language(30520),'pools',_MODE_POOLS,os.path.join(IMAGE_PATH,'more.png'),page=int(page)+1,sort=0, q=query)
         return True
     def POOL(self, query="", page=1):
         images = self.api.getImagesFromPool(query, page)
@@ -201,7 +201,7 @@ class moebooruSession:
         images = self.api.getImages("", page)
         for img in images:
             self.addImage(str(img.get("id","")),img.get("jpeg_url", ""),_MODE_IMAGE,img.get("preview_url",""), tot=len(images), relatedTags = img.get("tags",""))
-        self.addDir(language(32002),'random',_MODE_RANDOM,os.path.join(IMAGE_PATH,'more.png'),sort=0)
+        self.addDir(language(30520),'random',_MODE_RANDOM,os.path.join(IMAGE_PATH,'more.png'),sort=0)
         return True
     def TAGS(self, query):
         typ = 0 # 0=list
@@ -215,8 +215,8 @@ class moebooruSession:
         elif (query[:8] == _GETUSR):
             query = query[8:]
             typ = 2 #2=searchTag
-            if (query == ""):
-                kbd = xbmc.Keyboard('',language(34002))
+            if (query == "newquery"):
+                kbd = xbmc.Keyboard('',language(30701))
                 kbd.doModal()
                 if (kbd.isConfirmed()):
                     query = _GETUSR + kbd.getText()
@@ -237,8 +237,9 @@ class moebooruSession:
             lst = []
             for tag in tags:
                 temp = query.get(tag)
-                for subtag in temp:
-                    lst.append(subtag[0])
+                if temp:
+                    for subtag in temp:
+                        lst.append(subtag[0])
             tags = lst
         
         # General output
@@ -327,7 +328,7 @@ def main():
     except:
             pass
 
-    print language(40201) + " " + str(url) + "?" + str(query) + " [" + str(name) + "] @ mode " + str(mode) + ", page " + str(page)
+    print language(30901) + " " + str(url) + "?" + str(query) + " [" + str(name) + "] @ mode " + str(mode) + ", page " + str(page)
 
     update_dir = False
     success = True

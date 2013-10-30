@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2013-06-20 14:57+0000\n"
+"POT-Creation-Date: 2013-10-30 11:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -13,6 +13,22 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
+#	Numbering scheme: 													
+#		 < 30500 = Settings window 										
+#		>= 30500 = python code 											
+#	Settings: 															
+#		3000x	Captions for the categories 							
+#		30xyz	Increment x for each category 							
+#				Increment y for each entry 								
+#				Increment z for each option/sub-element					
+#	Code:																
+#		30xyy	Increment x for each type (button, context menu, ...) 	
+#				Increment y for each element							
+#		Types:															
+#			Buttons	305xx												
+#			Context	306xx												
+#			Usermsg	307xx												
+#			Debug	309xx												
 #SETTINGS WINDOW
 #captions
 
@@ -28,201 +44,200 @@ msgctxt "#30003"
 msgid "Miscellaneous"
 msgstr ""
 
-#svrset
-#empty strings from id 30004 to 30100
+#server
+#empty strings from id 30004 to 30099
 
-msgctxt "#30101"
+msgctxt "#30100"
 msgid "Server-address"
 msgstr ""
 
-msgctxt "#30102"
+#empty strings from id 30101 to 30109
+
+msgctxt "#30110"
 msgid "Entries per page"
 msgstr ""
 
-#seaset
-#empty strings from id 30103 to 30120
+#search
+#empty strings from id 30111 to 30199
 
-msgctxt "#30121"
+msgctxt "#30200"
 msgid "Default order"
 msgstr ""
 
-msgctxt "#30122"
+msgctxt "#30201"
+msgid "Server default"
+msgstr ""
+
+msgctxt "#30202"
+msgid "Score"
+msgstr ""
+
+msgctxt "#30203"
+msgid "Favorited"
+msgstr ""
+
+msgctxt "#30204"
+msgid "Widescreen first"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Widescreen last"
+msgstr ""
+
+#empty strings from id 30206 to 30209
+
+msgctxt "#30210"
 msgid "Rating"
 msgstr ""
 
-msgctxt "#30123"
+msgctxt "#30211"
+msgid "All"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Safe only"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Questionable only (Ecchi)"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Explicit only (Hentai)"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Questionable and Explicit"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Questionable and Safe"
+msgstr ""
+
+#empty strings from id 30217 to 30219
+
+msgctxt "#30220"
 msgid "Sort tags by"
 msgstr ""
 
-#empty strings from id 30124 to 30140
+msgctxt "#30221"
+msgid "Server default"
+msgstr ""
 
-msgctxt "#30141"
+msgctxt "#30222"
+msgid "Date"
+msgstr ""
+
+msgctxt "#30223"
+msgid "Count"
+msgstr ""
+
+msgctxt "#30224"
+msgid "Name"
+msgstr ""
+
+#misc
+#empty strings from id 30225 to 30299
+
+msgctxt "#30300"
 msgid "Load preview for pools"
 msgstr ""
 
-msgctxt "#30142"
+#empty strings from id 30301 to 30309
+
+msgctxt "#30310"
+msgid "Load preview for tags"
+msgstr ""
+
+#empty strings from id 30311 to 30319
+
+msgctxt "#30320"
 msgid "Size of the search history"
 msgstr ""
 
 #APPLICATION
 #Main menu
+#empty strings from id 30321 to 30499
 
-msgctxt "#30143"
-msgid "Load preview for tags"
-msgstr ""
-
-#empty strings from id 30144 to 30800
-
-msgctxt "#30801"
-msgid "Server default"
-msgstr ""
-
-msgctxt "#30802"
-msgid "Score"
-msgstr ""
-
-msgctxt "#30803"
-msgid "Favorited"
-msgstr ""
-
-msgctxt "#30804"
-msgid "Widescreen first"
-msgstr ""
-
-msgctxt "#30805"
-msgid "Widescreen last"
-msgstr ""
-
-#empty strings from id 30806 to 30820
-
-msgctxt "#30821"
-msgid "All"
-msgstr ""
-
-msgctxt "#30822"
-msgid "Safe only"
-msgstr ""
-
-msgctxt "#30823"
-msgid "Questionable only (Ecchi)"
-msgstr ""
-
-msgctxt "#30824"
-msgid "Explicit only (Hentai)"
-msgstr ""
-
-msgctxt "#30825"
-msgid "Questionable and Explicit"
-msgstr ""
-
-msgctxt "#30826"
-msgid "Questionable and Safe"
-msgstr ""
-
-#empty strings from id 30827 to 30840
-
-msgctxt "#30841"
-msgid "Server default"
-msgstr ""
-
-msgctxt "#30842"
-msgid "Date"
-msgstr ""
-
-msgctxt "#30843"
-msgid "Count"
-msgstr ""
-
-msgctxt "#30844"
-msgid "Name"
-msgstr ""
-
-#misc
-#empty strings from id 30845 to 31000
-
-msgctxt "#31001"
+msgctxt "#30500"
 msgid "Latest"
 msgstr ""
 
-msgctxt "#31002"
+msgctxt "#30501"
 msgid "Search"
 msgstr ""
 
-msgctxt "#31003"
+msgctxt "#30502"
 msgid "Random"
 msgstr ""
 
-msgctxt "#31004"
+msgctxt "#30503"
 msgid "Pools"
 msgstr ""
 
-msgctxt "#31005"
-msgid "Search history"
-msgstr ""
-
-msgctxt "#31006"
+msgctxt "#30504"
 msgid "Search tags"
 msgstr ""
 
-#Generic buttons
-#empty strings from id 31007 to 32001
+msgctxt "#30505"
+msgid "Search history"
+msgstr ""
 
-msgctxt "#32002"
+#Generic buttons
+#empty strings from id 30506 to 30519
+
+msgctxt "#30520"
 msgid "More"
 msgstr ""
 
-msgctxt "#32003"
+msgctxt "#30521"
 msgid "Related tags"
 msgstr ""
 
-#history
-#empty strings from id 32004 to 33000
-
-msgctxt "#33001"
-msgid "Remove from history"
-msgstr ""
-
-#Search
-#empty strings from id 33002 to 34000
-
-msgctxt "#34001"
-msgid "Enter tag to search for:"
-msgstr ""
-
-msgctxt "#34002"
-msgid "Enter string to search for:"
-msgstr ""
-
 #Pools
-#empty strings from id 34003 to 35000
+#empty strings from id 30522 to 30529
 
-msgctxt "#35001"
+msgctxt "#30530"
 msgid "Search pool"
 msgstr ""
 
-#Image context menus
-#empty strings from id 35002 to 36000
+#history
+#empty strings from id 30531 to 30599
 
-msgctxt "#36001"
+msgctxt "#30600"
+msgid "Remove from history"
+msgstr ""
+
+#Image context menus
+
+msgctxt "#30601"
 msgid "Image tags"
 msgstr ""
 
-#Notifications
-#empty strings from id 36002 to 37000
+#Search
+#empty strings from id 30602 to 30699
 
-msgctxt "#37001"
+msgctxt "#30700"
+msgid "Enter tag(s) to search for:"
+msgstr ""
+
+msgctxt "#30701"
+msgid "Enter string to search for:"
+msgstr ""
+
+#Notifications
+
+msgctxt "#30702"
 msgid "No results were found!, Showing suggested tags instead."
 msgstr ""
 
 #ERRORS / DEBUG / CONSOLE
-#empty strings from id 37002 to 40000
+#empty strings from id 30703 to 30899
 
-msgctxt "#40001"
+msgctxt "#30900"
 msgid "ERROR: Pool not readable. Maybe because of japanese characters in it?"
 msgstr ""
 
-#empty strings from id 40002 to 40200
-
-msgctxt "#40201"
+msgctxt "#30901"
 msgid "MOE: Requesting"
 msgstr ""

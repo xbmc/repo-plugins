@@ -35,7 +35,7 @@ def get_subtitles(video_id):
       f.write(str(i))
       f.write('\n%s' % _timeToString(begin))
       f.write(' --> %s\n' % _timeToString(end))
-      f.write(re.sub('<br />\s*','\n',' '.join(contents.replace('<span style="italic">','<i>').replace('</span>','</i>').split())).encode('utf-8'))
+      f.write(re.sub('<br />\s*','\n',' '.join(contents.replace('<span style="italic">','<i>').replace('</span>','</i>').replace('&amp;','&').split())).encode('utf-8'))
       f.write('\n\n')
   return filename
 

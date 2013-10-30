@@ -1,3 +1,7 @@
+[B]4.4.12[/B]
+- Fikset &-tegn i undertekster
+- Barnekategorien er nå tilgjengelig igjen
+
 [B]4.4.11[/B]
 - Sideendringer
 

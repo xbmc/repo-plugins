@@ -1,3 +1,6 @@
+[B]1.0.8[/B]
+- Fixed crashing caused by protected, unplayable videos
+
 [B]1.0.7[/B]
 - Introduced search history functionality
 - Added durations for videos

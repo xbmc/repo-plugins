@@ -21,7 +21,6 @@ from resources.lib.api import VgtvApi
 from xbmcswift2 import ListItem
 from xbmcswift2 import Plugin
 from xbmcswift2 import xbmcgui
-from xbmcswift2 import actions
 
 STRINGS = {
     'plugin_name':         30000,
@@ -96,7 +95,7 @@ def show_search_history():
     # If we have no items in the search history, open input
     if (searches is None or len(searches) == 0):
         return input_search()
-    
+
     # Always start with the "new search"-option
     items = [{
         'label': _('search') + '...',
@@ -182,7 +181,7 @@ def remove_from_history(query):
     searches = history.get('items', [])
     searches.remove(query)
     history['items'] = searches
-    
+
     return show_search_history()
 
 

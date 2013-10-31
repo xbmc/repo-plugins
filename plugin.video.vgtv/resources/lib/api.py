@@ -108,7 +108,7 @@ class VgtvApi():
                     'originaltitle': unescape(meta.get('title') or '???'),
                     'tagline': unescape(meta.get('preamble') or ''),
                     'aired': self.get_date(meta.get('timePublished')),
-                    'duration': self.get_duration(meta.get('duration'))
+                    'duration': self.get_duration(meta.get('duration', 0))
                 },
                 'stream_info': {
                     'video': {
@@ -146,6 +146,9 @@ class VgtvApi():
         elif 'formats' not in video:
             self.plugin.log.warning('Formats not in video-response')
             return None, None, None, None
+        elif 'http' not in video['formats']:
+            # Can't find any http URL, probably protected
+            return None, None, None, None
 
         # MP4 or m3u8?
         if (allow_resolve):
@@ -166,15 +169,15 @@ class VgtvApi():
                 format = 'mp4'
 
         # Loop through the formats to find the best one
-        for format in video['formats']['http'][format]:
+        for currentformat in video['formats']['http'][format]:
             # Find the highest bitrate available
-            if format['bitrate'] > highest_bitrate:
-                highest_bitrate = format['bitrate']
-                best_format = format
+            if currentformat['bitrate'] > highest_bitrate:
+                highest_bitrate = currentformat['bitrate']
+                best_format = currentformat
 
             # Thumbs seem to be around ~300px in general
-            if format['width'] > 310 and format['width'] < best_thumb['width']:
-                best_thumb = format
+            if currentformat['width'] > 310 and currentformat['width'] < best_thumb['width']:
+                best_thumb = currentformat
 
         # Fall back if something failed
         if best_format is None:

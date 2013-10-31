@@ -21,7 +21,6 @@ from resources.lib.api import VgtvApi
 from xbmcswift2 import ListItem
 from xbmcswift2 import Plugin
 from xbmcswift2 import xbmcgui
-from xbmcswift2 import actions
 
 STRINGS = {
     'plugin_name':         30000,

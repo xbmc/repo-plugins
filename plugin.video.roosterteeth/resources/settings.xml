@@ -1,5 +1,5 @@
 <settings>
   <category label="General">
-    <setting id="quality" type="enum" label="30009" lvalues="30010|30011|30012" default="2"/>
+    <setting id="quality" type="enum" label="30009" lvalues="30010|30011|30012|30013" default="1"/>
   </category>
 </settings>

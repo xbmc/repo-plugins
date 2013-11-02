@@ -1,16 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <string id="30000">RoosterTeeth</string>
-  <string id="30001">HTTP Error: </string>
+  <string id="30001"></string>
   <string id="30002">Next Page</string>
   <string id="30003">Sorry Sponsor only videos are not supported.</string>
-  <string id="30004"></string>
-  <string id="30005"></string>
-  <string id="30006"></string>
-  <string id="30007"></string>
-  <string id="30008"></string>
-  <string id="30009">Video Quality</string>
+  <string id="30004">Only audio is avaliable</string>
+  <string id="30005">Podcasts</string>
+  <string id="30006">Choose a stream</string>
+  <string id="30007">Retired Shows</string>
+  <string id="30008">Latest Episodes</string>
+  <string id="30009">Preferred Video Quality</string>
   <string id="30010">High</string>
-  <string id="30011">Low</string>
-  <string id="30012">Default</string>
+  <string id="30011">Medium</string>
+  <string id="30012">Low</string>
+  <string id="30013">Ask</string>
 </strings>

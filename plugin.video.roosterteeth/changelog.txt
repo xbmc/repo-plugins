@@ -1,0 +1,6 @@
+Version 0.0.4
+bug fixes
+added podcasts
+added 'Latest' episodes directory
+added the option 'Ask' in the add-on settings, this lets the user choose from the available streams
+bump python api for gotham

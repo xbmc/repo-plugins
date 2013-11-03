@@ -144,7 +144,8 @@ class GroovesharkPlaylistSelect(xbmcgui.WindowDialog):
         self.imgBg = xbmcgui.ControlImage(x+gap, 5*gap+y, w-2*gap, h-5*gap, listBackground)
         self.addControl(self.imgBg)
 
-        self.playlistControl = xbmcgui.ControlList(2*gap+x, y+3*gap+30, w-4*gap, h-10*gap, textColor='0xFFFFFFFF', selectedColor='0xFFFF4242', itemTextYOffset=0, itemHeight=50, alignmentY = 0)
+        self.playlistControl = xbmcgui.ControlList(2*gap+x, y+3*gap+30, w-4*gap, h-10*gap, textColor='0xFFFFFFFF', selectedColor='0xFFFF4242')
+        self.playlistControl.setItemHeight(50)
         self.addControl(self.playlistControl)
 
         self.lastPos = 0

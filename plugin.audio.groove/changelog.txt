@@ -1,6 +1,10 @@
+2.0.5
+
+Fix add to playlist.
+
 2.0.4
 
-Fix character encodings.
+Fix character encodings and album name.
 
 2.0.3
 

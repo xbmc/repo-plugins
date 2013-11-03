@@ -16,7 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 import re, datetime, time, calendar
-import pprint
 from mediathek import *
 from xml.dom import minidom;
 
@@ -55,23 +54,22 @@ class NDRMediathek(Mediathek):
     
     
     #self.rtmpBaseLink = "rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/";
-    self.rtmpBaseLink = "rtmp://cp160844.edgefcs.net/ondemand/flashmedia/streams/ndr/";
+    self.rtmpBaseLink = "rtmp://cp160844.edgefcs.net/ondemand/ndr/";
     #self.mmsBaseLink = "mms://ndr.wmod.llnwd.net/a3715/d1/msmedia/";
-    self.mmsBaseLink = "mms://a874.v1608102.c160810.g.vm.akamaistream.net/7/874/160810/v0001/wm.origin.ndr.gl-systemhaus.de/msmedia/";
+    #self.mmsBaseLink = "mms://a874.v1608102.c160810.g.vm.akamaistream.net/7/874/160810/v0001/wm.origin.ndr.gl-systemhaus.de/msmedia/";
     self.httpBaseLink = "http://media.ndr.de/progressive/";
     
     
     #Hauptmenue
     tmp_menu = []
-    broadcastsLink = self.menuLink+"broadcasts.xml"
-    broadcastsLinkPage = self.loadConfigXml(broadcastsLink);
+    extractBroadcasts = re.compile("<a href=\"/mediathek/mediatheksuche103_broadcast-(.*?).html\">(.*?)</a>");
+    htmlPage = self.loadPage("http://www.ndr.de/mediathek/dropdown101-extapponly.html")
     
-    menuNodes = broadcastsLinkPage.getElementsByTagName("broadcast");
     displayObjects = [];
     x = 0
-    for menuNode in menuNodes:
-        menuId = menuNode.getAttribute('id')
-        menuItem = unicode(menuNode.firstChild.data)
+    for menuNode in extractBroadcasts.finditer(htmlPage):
+        menuId = menuNode.group(1)
+        menuItem = menuNode.group(2)
         menuLink = self.rootLink+"/mediatheksuche105_broadcast-"+menuId+"_format-video_page-1.html"
         tmp_menu.append(TreeNode("0."+str(x),menuItem,menuLink,True));
         x = x+1
@@ -259,10 +257,10 @@ class NDRMediathek(Mediathek):
         link[0] = self.httpBaseLink+videoInfo+"lo.mp4";
         link[1] = self.httpBaseLink+videoInfo+"hi.mp4";
         link[2] = self.httpBaseLink+videoInfo+"hq.mp4";
-    elif self.baseType == "mms":
-        link[0] = self.mmsBaseLink+videoInfo+"wm.lo.wmv";
-        link[1] = self.mmsBaseLink+videoInfo+"wm.hi.wmv";
-        link[2] = self.mmsBaseLink+videoInfo+"wm.hq.wmv";
+    #elif self.baseType == "mms":
+    #    link[0] = self.mmsBaseLink+videoInfo+"wm.lo.wmv";
+    #    link[1] = self.mmsBaseLink+videoInfo+"wm.hi.wmv";
+    #    link[2] = self.mmsBaseLink+videoInfo+"wm.hq.wmv";
     else:
         link[0] = self.rtmpBaseLink+videoInfo+"lo.mp4";
         link[1] = self.rtmpBaseLink+videoInfo+"hi.mp4";

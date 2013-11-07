@@ -1,3 +1,6 @@
+Version 1.0.7
+fix scrip error on some systems
+
 Version 1.0.6
 added support for video clips where available
 fix resume/watched status

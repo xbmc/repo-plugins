@@ -44,7 +44,7 @@ def get_soup(url):
     if url.startswith('/'):
         url = base_url + url
     try:
-        soup = BeautifulSoup(make_request(url))
+        soup = BeautifulSoup(make_request(url), "html.parser")
         return soup
     except:
         addon_log('failed to parse the soup')
@@ -151,7 +151,7 @@ def get_playlist(soup, base=False):
         addon_log('Houston we have a problem!')
     else:
         url = '%s/diy/channel/xml/0,,%s,00.xml' %(base_url, show_id[0])
-        videos_soup = BeautifulSoup(make_request(url))
+        videos_soup = get_soup(url)
         parsed = [(i.clipname.string, i.videourl.string, i.abstract.string, i.thumbnailurl.string, i.length.string)
                    for i in videos_soup('video')]
         if base == 'videos':

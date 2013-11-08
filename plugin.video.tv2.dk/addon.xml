@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
 	id="plugin.video.tv2.dk"
-	version="2.0.0"
+	version="2.0.1"
 	name="TV2 Video"
 	provider-name="twinther [tommy@winther.nu]">
 	<requires>

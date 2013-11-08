@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.lastfm" name="Last.fm" version="1.0.0" provider-name="Team-XBMC">
+<addon id="plugin.audio.lastfm" name="Last.fm" version="1.0.1" provider-name="Team-XBMC">
 	<requires>
 		<import addon="xbmc.python" version="2.12.0"/>
 	</requires>
@@ -19,6 +19,7 @@
 		<summary lang="hr">Last.fm radio i skrobler</summary>
 		<summary lang="it">Scrobbler e radio di Last.fm</summary>
 		<summary lang="ko">Last.fm 라디오와 스크로블러</summary>
+		<summary lang="nl">Last.fm radio en Scrobbler</summary>
 		<summary lang="pl">Scrobbler radia Last.fm</summary>
 		<summary lang="pt">Rádio e scrobbler Last.fm</summary>
 		<summary lang="pt_BR">Last.fm rádio e scrobbler</summary>
@@ -35,6 +36,7 @@
 		<description lang="hr">Slušajte last.fm radio i/ili skroblajte vaše pjesme na last.fm-u</description>
 		<description lang="it">Ascolta la radio di last.fm e/o fai lo scrobbling dei tuoi brani</description>
 		<description lang="ko">Last.fm 라디오 듣기, 노래를 last.fm에 스크로블</description>
+		<description lang="nl">Luister naar last.fm radio en/of scrobble jouw nummers naar last.fm</description>
 		<description lang="pl">Słuchaj radia last.fm i/lub scrobbluj swoje ścieżki do last.fm</description>
 		<description lang="pt">Ouça rádio de last.fm e/ou faça scrobbling das suas faixas para last.fm</description>
 		<description lang="pt_BR">Escute rádios Last.fm e/ou faça scrobble das suas músicas para o Last.fm</description>

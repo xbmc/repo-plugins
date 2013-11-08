@@ -1,3 +1,6 @@
+v1.0.1
+- update language
+
 v1.0.0
 - gotham release
 

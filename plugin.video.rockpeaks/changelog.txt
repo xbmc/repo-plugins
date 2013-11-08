@@ -1,0 +1,6 @@
+v0.2.2
+- implemented loading json for Python >= 2.7 and simplejson otherwise
+- added simplejson as add-on dependency
+- added required information to add-on metadata
+
+v0.2.1

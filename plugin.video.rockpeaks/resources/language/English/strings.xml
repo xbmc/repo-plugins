@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Plugin name -->
+  <string id="30000">RockPeaks</string>
+
+  <!-- Plugin settings strings -->
+  <string id="30200">General</string>
+  <string id="30201">Username</string>
+  <string id="30202">Password</string>
+
+  <!-- Menu strings -->
+  <string id="30500">Search...</string>
+  <string id="30501">Latest Videos</string>
+  <string id="30502">Latest Discs</string>
+  <string id="30503">Artists</string>
+  <string id="30504">Shows</string>
+  <string id="30505">Genres</string>
+  <string id="30506">Login...</string>
+  <string id="30507">My Tracked Artists...</string>
+  <string id="30508">Playlists...</string>
+  <string id="30509">Search</string>
+  <string id="30510">[Artist] %s</string>
+  <string id="30511">[Show] %s</string>
+  <string id="30512">[Video] %s</string>
+
+  <!-- Messages -->
+  <string id="30600">Error</string>
+  <string id="30601">Login failed! Please check your credentials and try again.</string>
+</strings>

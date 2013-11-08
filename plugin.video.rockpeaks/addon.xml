@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.rockpeaks" name="RockPeaks" version="0.2.2" provider-name="Artem Matsak (jamix)">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.simplejson" version="3.3.0"/>
+    <import addon="script.module.parsedom" version="2.5.1" />
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="plugin.video.youtube" version="4.4.6"/>
+    <import addon="plugin.video.vimeo" version="3.5.2"/>
+    <import addon="plugin.video.dailymotion_com" version="2.1.1"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language></language>
+    <summary lang="en">Plays live music videos from RockPeaks</summary>
+    <description lang="en">Choose from a huge selection of live music videos available at RockPeaks</description>
+    <disclaimer lang="en">You don't need a RockPeaks account to use this script. However, extra functionality such as user playlists will require a login. Go to http://www.rockpeaks.com to create an account.</disclaimer>
+  </extension>
+</addon>

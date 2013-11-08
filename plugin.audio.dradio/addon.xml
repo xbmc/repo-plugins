@@ -2,7 +2,7 @@
 <addon
 	id="plugin.audio.dradio"
 	name="dradio.de"
-	version="1.2.0"
+	version="1.2.1"
 	provider-name="escoand">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />

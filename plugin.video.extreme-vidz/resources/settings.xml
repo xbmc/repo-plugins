@@ -1,0 +1,5 @@
+<settings>
+   <setting id="VideoQuality" type="enum" label="30101" lvalues="30100|30104|30105" default="0"/>
+   <setting id="forceViewMode" type="bool" label="30102" default="false"/>
+   <setting id="viewMode" type="enum" label="30103" values="List|Thumbnail" default="0"/>
+</settings>

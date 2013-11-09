@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">BMX</string>
+  <string id="30002">MTB</string>
+  <string id="30003">Inline</string>
+  <string id="30004">Surf</string>
+  <string id="30005">Ski</string>
+  <string id="30006">Snowboard</string>
+  <string id="30007">Skateboard</string>
+  <string id="30008">Graffiti</string>
+  <string id="30009">Auto</string>
+  <string id="30010">Wakeboard</string>
+  <string id="30011">Climbing</string>
+  <string id="30012">MotoX</string>
+  <string id="30013">Free</string>
+  <string id="30014">DVD</string>
+  <string id="30015">All</string>
+  <string id="30016">Top 100</string>
+  <string id="30017">Play all</string>
+  <string id="30020">Search...</string>
+  <string id="30100">Ask</string>
+  <string id="30101">Video quality</string>
+  <string id="30102">Force view</string>
+  <string id="30103">ViewID</string>
+  <string id="30104">SD</string>
+  <string id="30105">HD</string>
+</strings>

@@ -14,8 +14,13 @@ import re
 def showDailyText(date):
 
     language    = jw_config.language
-    json_url    = jw_config.const[language]["daily_text_json"] + "/" + date
-    json        = jw_common.loadJsonFromUrl(json_url)
+
+    json_url    = jw_config.wol_url 
+    json_url    = json_url + "dt/" 
+    json_url    = json_url + jw_config.const[language]["wol"] + "/" + date
+
+    json        = jw_common.loadJsonFromUrl(url = json_url, ajax = True)
+
     text        = json["items"][0]["content"]
     text        = jw_common.cleanUpText(text)
 
@@ -92,7 +97,7 @@ class DailiyText(xbmcgui.WindowDialog):
             return ""
 
         scripture = scripture_list[0]
-        scripture = re.sub("<([^>]*)>", "", scripture)    
+        scripture = jw_common.removeHtml(scripture)    
 
         return scripture.encode("utf8") 
 
@@ -105,6 +110,6 @@ class DailiyText(xbmcgui.WindowDialog):
             return ""
 
         full_comment = full_comment_list[0]
-        full_comment = re.sub("<([^>]*)>", "", full_comment)
+        full_comment = jw_common.removeHtml(full_comment)
 
         return  full_comment.encode("utf8")

@@ -16,7 +16,11 @@ import xbmcplugin
 def showDramaIndex(start):
 	
 	language 		= jw_config.language
-	drama_index_url = jw_config.const[language]["dramas_index"] + "?start=" + start + "&sortBy=" + jw_config.audio_sorting
+
+	drama_index_url = jw_common.getUrl(language) 
+	drama_index_url = drama_index_url + jw_config.const[language]["dramas_index"] 
+	drama_index_url = drama_index_url + "?start=" + start + "&sortBy=" + jw_config.audio_sorting
+	
 	html 			= jw_common.loadUrl(drama_index_url) 
 	
 	# Grep drama titles
@@ -47,7 +51,7 @@ def showDramaIndex(start):
 		}
 		url = jw_config.plugin_name + '?' + urllib.urlencode(params)	
 		xbmcplugin.addDirectoryItem(
-			handle		= jw_config.pluginPid, 
+			handle		= jw_config.plugin_pid, 
 			url 		= url, 
 			listitem 	= listItem, 
 			isFolder	= True 
@@ -56,6 +60,6 @@ def showDramaIndex(start):
 
 	jw_common.setNextPageLink(html, "open_drama_index", "audio")
 
-	xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 	jw_common.setThumbnailView()
 

@@ -16,13 +16,53 @@ msgstr ""
 "Language: af\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Volgende bladsy >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Taal van multimedia lêer"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Algemeen"
 
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Boeke van die Bybel"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Musiek en liedjies"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Daaglikse text"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Bybel dramas"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Musiek, dramas, en dramatiese lesings"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "nuutste eerste"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "oudste eerste"
+
 msgctxt "#30018"
 msgid "By title"
 msgstr "Volgens titel"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Sorteering"
 
 msgctxt "#30020"
 msgid "Videos"
@@ -32,6 +72,69 @@ msgctxt "#30021"
 msgid "Cache"
 msgstr "Cache"
 
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Leë cache (forseer lyste om te opdateer)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "leegmaak van cache"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "suksesvol gedoen"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "tydskrifte"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Alle tydskrifte"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Wakker!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "Die Uitkyktoring"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "Die Uitkyktoring (Studie weergawe)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "Die Uitkyktoring (Vergemaklik te weergawe)"
+
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Nuutste"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Nuuskamer"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Kan nie eksterne inhoud aflaai nie"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Program van die week"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Teokratiese Bedieningskool"
+
+#empty string with id 30036
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Bedrywighede"
+
+#. Showed after the body text of a news
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Einde van die artikel"

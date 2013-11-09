@@ -20,96 +20,96 @@ msgctxt "#30001"
 msgid "Next page >>"
 msgstr ""
 
-# Used as section title in addon setting window
+#. Used as section title in addon setting window
 msgctxt "#30002"
 msgid "Language of multimedia file"
 msgstr ""
 
 #empty strings from id 30003 to 30004
 
-# Title of addon setting tab
+#. Title of addon setting tab
 msgctxt "#30005"
 msgid "General"
 msgstr ""
 
 #empty strings from id 30006 to 30009
 
-# To find this string, click on "Publications -> Bible -> Readonline". 
-# This string is the title of the page
+#. To find this string, click on "Publications -> Bible -> Readonline".
+#. This string is the title of the page
 msgctxt "#30010"
 msgid "Books of the Bible"
 msgstr ""
 
-# To find this string, click on "Publications -> Music". 
-# This string is the last part of url ("/music-songs/"), in plural form 
-# and with an 'and' beetween words
+#. To find this string, click on "Publications -> Music".
+#. This string is the last part of url ("/music-songs/"), in plural form
+#. and with an 'and' beetween words
 msgctxt "#30011"
 msgid "Music and songs"
 msgstr ""
 
-# To find this string, click on "Publications -> Online Libray". 
-# This string is the third item in the menu, with "Bible" and "Publications", without extra capital letters
+#. To find this string, click on "Publications -> Online Libray".
+#. This string is the third item in the menu, with "Bible" and "Publications", without extra capital letters
 msgctxt "#30012"
 msgid "Daily text"
 msgstr ""
 
-# To find this string, click on "Publications -> Dramas". 
-# This string is the bold header of the page, , without extra capital letters
+#. To find this string, click on "Publications -> Dramas".
+#. This string is the bold header of the page, , without extra capital letters
 msgctxt "#30013"
 msgid "Bible dramas"
 msgstr ""
 
-# To find this string, click on "Publications -> Dramatic bible readings". 
-# This string is the bold header of the page, without extra capital letters
+#. To find this string, click on "Publications -> Dramatic bible readings".
+#. This string is the bold header of the page, without extra capital letters
 msgctxt "#30014"
 msgid "Dramatic bible readings"
 msgstr ""
 
-# A short concatenation of "Music and songs",  "Bible dramas" and  "Dramatic bible reading"
+#. A short concatenation of "Music and songs",  "Bible dramas" and  "Dramatic bible reading"
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
 msgstr ""
 
-# Sorting settings
+#. Sorting settings
 msgctxt "#30016"
 msgid "Newest first"
 msgstr ""
 
-# Sorting settings
+#. Sorting settings
 msgctxt "#30017"
 msgid "Oldest first"
 msgstr ""
 
-# Sorting settings
+#. Sorting settings
 msgctxt "#30018"
 msgid "By title"
 msgstr ""
 
-# Sorting settings
+#. Sorting settings
 msgctxt "#30019"
 msgid "Sorting"
 msgstr ""
 
-# This string should be translated as visible on the left menu after clicking on "Publications"
+#. This string should be translated as visible on the left menu after clicking on "Publications"
 msgctxt "#30020"
 msgid "Videos"
 msgstr ""
 
-# Probably should not be translated.
-# To see what's a cache read this http://en.wikipedia.org/wiki/Web_cache
+#. Probably should not be translated.
+#. To see what's a cache read this http://en.wikipedia.org/wiki/Web_cache
 msgctxt "#30021"
 msgid "Cache"
 msgstr ""
 
-# To see what's a cache read this http://en.wikipedia.org/wiki/Web_cache
-# When user click on this item of addon settings, all cached contents are erased
-# so next time the addon need the index of some contents, it will be read from jw.org
-# instead of from cache
+#. To see what's a cache read this http://en.wikipedia.org/wiki/Web_cache
+#. When user click on this item of addon settings, all cached contents are erased
+#. so next time the addon need the index of some contents, it will be read from jw.org
+#. instead of from cache
 msgctxt "#30022"
 msgid "Empty cache (force lists update)"
 msgstr ""
 
-# Progressive form
+#. Progressive form
 msgctxt "#30023"
 msgid "Emptying cache"
 msgstr ""
@@ -118,7 +118,7 @@ msgctxt "#30024"
 msgid "Successfully done"
 msgstr ""
 
-# This string should be translated as visible on the left menu after clicking on "Publications"
+#. This string should be translated as visible on the left menu after clicking on "Publications"
 msgctxt "#30025"
 msgid "Magazines"
 msgstr ""
@@ -139,8 +139,8 @@ msgctxt "#30029"
 msgid "The Watchtower (Study Edition)"
 msgstr ""
 
-# Translate this string even if in your language there is NO a simplified edition
-# Could be used to show this kind of audio files when browsing content in diffent language
+#. Translate this string even if in your language there is NO a simplified edition
+#. Could be used to show this kind of audio files when browsing content in diffent language
 msgctxt "#30030"
 msgid "The Watchtower (Simplified Edition)"
 msgstr ""
@@ -149,13 +149,38 @@ msgctxt "#30031"
 msgid "Latest"
 msgstr ""
 
-# IMPORTANT ! This string *must be* identical to what you see in the main menu of jw.org
-# beetween "Publications" and "About us"
+#. IMPORTANT ! This string *must be* identical to what you see in the main menu of jw.org
+#. beetween "Publications" and "About us"
 msgctxt "#30032"
 msgid "Newsroom"
 msgstr ""
 
-# Warning message in case jw.org is unreachable
+#. Warning message in case jw.org is unreachable
 msgctxt "#30033"
 msgid "Unable to load remote content"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr ""
+
+#. To find this string, click on "Publications", then click on "Online Library"
+#. then click on Daily Text (top menu, third item)
+#. After the daily text you find the right string, please stop at "school"
+#. Camelize to your personal preference
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr ""
+
+#empty string with id 30036
+
+#. To find this string, from homepage click on "About us" (last main link)
+#. This string is the second link on the left bar
+msgctxt "#30037"
+msgid "Activities"
+msgstr ""
+
+#. Showed after the body text of a news
+msgctxt "#30038"
+msgid "End of the article"
 msgstr ""

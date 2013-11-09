@@ -25,12 +25,15 @@ def cleanUpText(text):
 	text = text.strip()
 	return text
 
+def removeHtml(text):
+	clean = re.sub("<([^>]*)>", "", text)
+	return clean
 
 """
 VISUAL HELPER
 """
 # Grep "NEXT" link and add to current directory
-# param_name and param_value is used to pass addition param when adding directory item
+# param_name and param_value is used to pass one additional param when adding directory item
 def setNextPageLink(html, mode, type, param_name = None, param_value = None):
 
 	regexp_video_next_page = '<a class="iconNext.*start=([0-9]+).*title="([^""]+)"'
@@ -54,7 +57,7 @@ def setNextPageLink(html, mode, type, param_name = None, param_value = None):
 	url = jw_config.plugin_name + '?' + urllib.urlencode(params)
 
 	xbmcplugin.addDirectoryItem(
-		handle		= jw_config.pluginPid, 
+		handle		= jw_config.plugin_pid, 
 		url			= url, 
 		listitem	= listItem, 
 		isFolder	= True 
@@ -80,16 +83,39 @@ def loadUrl (url):
 		pass 
 	return html	
 
-def loadNotCachedJsonFromUrl(url):
+def loadNotCachedJsonFromUrl(url, ajax):
 	data = ""
 	try:
-		response = urllib2.urlopen(url)
-		data = json.load(response)
-	except:
+		if ajax == True :
+			request = urllib2.Request(url, headers=
+			{
+				"Accept" 			: "application/json, text/javascript,",
+				"Host"				: "wol.jw.org",
+				"X-Requested-With"	: "XMLHttpRequest",
+			})
+		else :
+			request = urllib2.Request(url)
+
+		response = urllib2.urlopen(request).read()
+		data = json.loads(response)
+
+	except urllib2.HTTPError, e:
+		print "JWORG http error"
+		print e.code
+		print e.read()
 		pass
+
+	# other exception give exceptions
+
 	return data
 
-def loadJsonFromUrl (url):
-	data = jw_config.cache.cacheFunction(loadNotCachedJsonFromUrl, url)	
+def loadJsonFromUrl (url, ajax):
+	data = jw_config.cache.cacheFunction(loadNotCachedJsonFromUrl, url, ajax)	
 	return data
+
+"""
+URL HELPER
+"""
+def getUrl(language):
+	return jw_config.main_url + jw_config.const[language]["url_lang_code"]  + "/" 
 

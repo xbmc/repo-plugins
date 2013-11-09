@@ -16,7 +16,10 @@ import xbmcplugin
 def showNewsIndex():
 
 	language    = jw_config.language
-	url 		= jw_config.const[language]["news_index"] 
+
+	url 		= jw_common.getUrl(language)
+	url 		= url + jw_config.const[language]["news_index"] 
+	
 	html 		= jw_common.loadUrl(url)
 
 	regexp_title = '<h3><a href="([^"]+)"( title="[^"]+")?>([^<]+)</a></h3>'
@@ -41,14 +44,14 @@ def showNewsIndex():
 		} 
 		url = jw_config.plugin_name + '?' + urllib.urlencode(params)
 		xbmcplugin.addDirectoryItem(
-			handle		= jw_config.pluginPid, 
+			handle		= jw_config.plugin_pid, 
 			url			= url, 
 			listitem	= listItem, 
 			isFolder	= True 
 		)  
 		count = count + 1
 	
-	xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 
 
 def showNewsPage(url):
@@ -64,11 +67,13 @@ def showNewsPage(url):
 
 
 
-# Window showing daily text
+# Window showing news text
 
 #get actioncodes from https://github.com/xbmc/xbmc/blob/master/xbmc/guilib/Key.h
 ACTION_MOVE_UP 		= 3
 ACTION_MOVE_DOWN 	= 4
+ACTION_PAGE_UP 		= 5
+ACTION_PAGE_DOWN 	= 6
 
 class News(xbmcgui.WindowDialog):
 
@@ -128,14 +133,26 @@ class News(xbmcgui.WindowDialog):
 			self.ctrlText.setPosition(x,y)
 			return
 
+		if action == ACTION_PAGE_UP:
+			if y > 0:
+				return
+			y = y + 500;
+			self.ctrlText.setPosition(x,y)
+			return
+
+		if action == ACTION_PAGE_DOWN:
+			(x,y) =  self.ctrlText.getPosition()
+			y = y - 500;
+			self.ctrlText.setPosition(x,y)
+			return
+
 		self.close()
 
 	# Grep news title
 	def getTitle(self, text):
-
-		regexp_header = "<header><h1>(.*)</h1>"
+		regexp_header = "<header><h1([^>]*)>(.*)</h1>"
 		headers = re.findall(regexp_header, text)
-		return headers[0]
+		return headers[0][1]
 
 	def getText(self, text):
 		regexp_pars = '<p id="p[0-9]+" class="p[0-9]+">([^<]+)</p>'
@@ -143,4 +160,5 @@ class News(xbmcgui.WindowDialog):
 		out = ""
 		for par in pars:
 			out = out + "\n\n" + par
+		out = out + "\n\n[COLOR=FF0000FF][I]" + jw_common.t(30038).encode("utf8") + "[/I][/COLOR]"
 		return out

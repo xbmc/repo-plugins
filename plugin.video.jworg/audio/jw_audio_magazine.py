@@ -76,19 +76,23 @@ def showMagazineFilterIndex(pub_filter = None):
 
         url = jw_config.plugin_name + '?' + urllib.urlencode(params)
         xbmcplugin.addDirectoryItem(
-            handle      = jw_config.pluginPid, 
+            handle      = jw_config.plugin_pid, 
             url         = url, 
             listitem    = listItem, 
             isFolder    = True 
         )  
     
-    xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+    xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 
 
 def showMagazineFilteredIndex(pub_filter = None, year_filter = None):
 
     language        = jw_config.language
-    magazine_url    = jw_config.const[language]["magazine_index"] + "?pubFilter=" + pub_filter .strip() + "&yearFilter=" + year_filter.strip()
+
+    magazine_url    = jw_common.getUrl(language) 
+    magazine_url    = magazine_url + jw_config.const[language]["magazine_index"] 
+    magazine_url    = magazine_url + "?pubFilter=" + pub_filter .strip() + "&yearFilter=" + year_filter.strip()
+    
     html            = jw_common.loadUrl(magazine_url) 
 
     # Grep issue date and publication title
@@ -153,7 +157,7 @@ def showMagazineFilteredIndex(pub_filter = None, year_filter = None):
         url = jw_config.plugin_name + '?' + urllib.urlencode(params)
 
         xbmcplugin.addDirectoryItem(
-            handle      = jw_config.pluginPid, 
+            handle      = jw_config.plugin_pid, 
             url         = url, 
             listitem    = listItem, 
             isFolder    = True 
@@ -161,4 +165,4 @@ def showMagazineFilteredIndex(pub_filter = None, year_filter = None):
 
         count = count +1
     
-    xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+    xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)

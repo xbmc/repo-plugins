@@ -17,7 +17,8 @@ import jw_config
 def showVideoFilter():
 	
 	language 	= jw_config.language
-	url 		= jw_config.const[language]["video_path"] 
+	# jw_common.getUrl(language) ends with "/" it's something like "http://www.jw.org/it/"
+	url 		= jw_common.getUrl(language) + jw_config.const[language]["video_path"] 
 	html 		= jw_common.loadUrl(url)
 
 	regexp_video_filters = '<option data-priority.* value="([^"]+)">([^<]+)</option>'
@@ -35,20 +36,20 @@ def showVideoFilter():
 		} 
 		url = jw_config.plugin_name + '?' + urllib.urlencode(params)
 		xbmcplugin.addDirectoryItem(
-			handle		= jw_config.pluginPid, 
+			handle		= jw_config.plugin_pid, 
 			url			= url, 
 			listitem	= listItem, 
 			isFolder	= True 
 		)  
 	
-	xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 
 
 # show available video pages
 def showVideoIndex(start, video_filter):
 
 	language 	= jw_config.language
-	url 		= jw_config.const[language]["video_path"] + "/?start=" + str(start) + "&videoFilter=" + video_filter  + "&sortBy=" + jw_config.video_sorting
+	url 		= jw_common.getUrl(language) + jw_config.const[language]["video_path"] + "/?start=" + str(start) + "&videoFilter=" + video_filter  + "&sortBy=" + jw_config.video_sorting
 	html 		= jw_common.loadUrl (url)
 
 	# Grep video titles
@@ -85,7 +86,7 @@ def showVideoIndex(start, video_filter):
 		} 
 		url = jw_config.plugin_name + '?' + urllib.urlencode(params)
 		xbmcplugin.addDirectoryItem(
-			handle=jw_config.pluginPid, 
+			handle=jw_config.plugin_pid, 
 			url=url, 
 			listitem=listItem, 
 			isFolder=True 
@@ -94,7 +95,7 @@ def showVideoIndex(start, video_filter):
 
 	jw_common.setNextPageLink(html, "open_video_index", "video", "video_filter", video_filter)
 
-	xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 	jw_common.setThumbnailView()
 
 
@@ -103,7 +104,7 @@ def showVideoJsonUrl(json_url, thumb):
 
 	language 	= jw_config.language
 	json_url 	= "http://www.jw.org" + json_url
-	json 		= jw_common.loadJsonFromUrl(json_url)
+	json 		= jw_common.loadJsonFromUrl(url = json_url,  ajax = False)
 
 	# json equals to [] when a cached json was empty
 	if json is None or json == [] :
@@ -136,14 +137,14 @@ def showVideoJsonUrl(json_url, thumb):
 		listItem.setProperty("IsPlayable","true")
 
 		xbmcplugin.addDirectoryItem(
-			handle		= jw_config.pluginPid, 
+			handle		= jw_config.plugin_pid, 
 			url			= url, 
 			listitem	= listItem, 
 			isFolder	= False 
 		)  
 		
 		
-		# xbmcplugin.setResolvedUrl( handle=jw_config.pluginPid, succeeded=True, listitem=listItem)
+		# xbmcplugin.setResolvedUrl( handle=jw_config.plugin_pid, succeeded=True, listitem=listItem)
 
-	xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 

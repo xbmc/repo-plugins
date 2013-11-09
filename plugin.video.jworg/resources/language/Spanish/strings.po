@@ -28,10 +28,6 @@ msgctxt "#30005"
 msgid "General"
 msgstr "General"
 
-msgctxt "#30007"
-msgid "Choose a video"
-msgstr "Elegir un vdeo"
-
 msgctxt "#30010"
 msgid "Books of the Bible"
 msgstr "Libros de la Biblia"
@@ -47,10 +43,6 @@ msgstr "Texto diario"
 msgctxt "#30013"
 msgid "Bible dramas"
 msgstr "Representaciones dramáticas"
-
-msgctxt "#30014"
-msgid "Dramatic bible reading"
-msgstr "Lecturas bíblicas dramatizadas"
 
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
@@ -123,3 +115,25 @@ msgstr "Nuevo"
 msgctxt "#30032"
 msgid "Newsroom"
 msgstr "Sala de prensa"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "No se pudo cargar el contenido remoto"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Programa de la semana"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Escuela del Ministerio Teocrático"
+
+#empty string with id 30036
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Quiénes somos y qué hacemos"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Fin del artículo"

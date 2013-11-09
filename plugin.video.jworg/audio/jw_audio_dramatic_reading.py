@@ -15,7 +15,11 @@ import xbmcgui
 def showDramaticReadingIndex(start):
 	
 	language 			= jw_config.language
-	reading_index_url 	= jw_config.const[language]["dramatic_reading_index"] + "?start=" + start  + "&sortBy=" + jw_config.audio_sorting
+
+	reading_index_url   = jw_common.getUrl(language)
+	reading_index_url 	= reading_index_url + jw_config.const[language]["dramatic_reading_index"] 
+	reading_index_url 	= reading_index_url + "?start=" + start  + "&sortBy=" + jw_config.audio_sorting
+	
 	html 				= jw_common.loadUrl(reading_index_url) 
 	
 	# Grep reading titles
@@ -43,7 +47,7 @@ def showDramaticReadingIndex(start):
 		}
 		url = jw_config.plugin_name + '?' + urllib.urlencode(params)	
 		xbmcplugin.addDirectoryItem(
-			handle		= jw_config.pluginPid, 
+			handle		= jw_config.plugin_pid, 
 			url 		= url, 
 			listitem 	= listItem, 
 			isFolder	= True 
@@ -52,6 +56,6 @@ def showDramaticReadingIndex(start):
 
 	jw_common.setNextPageLink(html, "open_dramatic_reading_index", "audio")
 
-	xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 	jw_common.setThumbnailView()
 

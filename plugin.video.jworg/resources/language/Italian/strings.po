@@ -28,10 +28,6 @@ msgctxt "#30005"
 msgid "General"
 msgstr "Generale"
 
-msgctxt "#30007"
-msgid "Choose a video"
-msgstr "Scegli un video"
-
 msgctxt "#30010"
 msgid "Books of the Bible"
 msgstr "Libri della Bibbia"
@@ -49,7 +45,7 @@ msgid "Bible dramas"
 msgstr "Drammi biblici"
 
 msgctxt "#30014"
-msgid "Dramatic bible reading"
+msgid "Dramatic bible readings"
 msgstr "Brani biblici recitati"
 
 msgctxt "#30015"
@@ -127,3 +123,22 @@ msgstr "Sala stampa"
 msgctxt "#30033"
 msgid "Unable to load remote content"
 msgstr "Impossibile caricare i contenuti dal sito"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Programma della settimana"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Scuola di ministero teocratico"
+
+#empty string with id 30036
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Attività"
+
+#. Showed after the body text of a news
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Fine dell'articolo"

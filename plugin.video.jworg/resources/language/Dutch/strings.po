@@ -28,13 +28,9 @@ msgctxt "#30005"
 msgid "General"
 msgstr "Algemeen"
 
-msgctxt "#30007"
-msgid "Choose a video"
-msgstr "Selecteer een video"
-
 msgctxt "#30010"
 msgid "Books of the Bible"
-msgstr "Boeken van de bijbel"
+msgstr "Boeken over de bijbel"
 
 msgctxt "#30011"
 msgid "Music and songs"
@@ -47,10 +43,6 @@ msgstr "dagelijkse citaat"
 msgctxt "#30013"
 msgid "Bible dramas"
 msgstr "Bijbeldrama`s"
-
-msgctxt "#30014"
-msgid "Dramatic bible reading"
-msgstr "Dramatische Bijbellezingen"
 
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
@@ -102,11 +94,11 @@ msgstr "Alle tijdschriften"
 
 msgctxt "#30027"
 msgid "Awake!"
-msgstr "Wakker worden!"
+msgstr "Ontwaakt!"
 
 msgctxt "#30028"
 msgid "The Watchtower"
-msgstr "De wachttoren"
+msgstr "De Wachttoren"
 
 msgctxt "#30029"
 msgid "The Watchtower (Study Edition)"
@@ -114,7 +106,7 @@ msgstr "De wachttoren (studie-uitgave)"
 
 msgctxt "#30030"
 msgid "The Watchtower (Simplified Edition)"
-msgstr "De wachttoren (vereenvoudigde uitgave)"
+msgstr "De Wachttoren (vereenvoudigde uitgave)"
 
 msgctxt "#30031"
 msgid "Latest"
@@ -123,3 +115,32 @@ msgstr "Nieuwste"
 msgctxt "#30032"
 msgid "Newsroom"
 msgstr "Kranten en tijdschriften afdeling"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Niet in staat om externe inhoud te laden"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Week Programma"
+
+#. To find this string, click on "Publications", then click on "Online Library"
+#. then click on Daily Text (top menu, third item)
+#. After the daily text you find the right string, please stop at "school"
+#. Camelize to your personal preference
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Theocratische bedieningsschool"
+
+#empty string with id 30036
+
+#. To find this string, from homepage click on "About us" (last main link)
+#. This string is the second link on the left bar
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Activiteiten"
+
+#. Showed after the body text of a news
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Einde van het artikel"

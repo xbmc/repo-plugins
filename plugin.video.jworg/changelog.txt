@@ -1,10 +1,33 @@
+0.3.0
+-----
+
+New program features:
++ Read the news from the "Newsroom" of jw.org
++ Read the spiritual food program for actual week
++ Read the news from about us -> activities section of jw.org 
+
+New languages supported
++ Afrikaans ("Afrikaans") - This locale has no audio files for bible and for magazines
++ Greek ("Ελληνική") - This locale has no audio files for bible
++ Portuguese of Brasil ("Português (Brasil)") - Diffences in strings, but same remote contents than Portuguese
+
+Language Files:
++ Updated to lastest translations available from transifex
++ Added comments to .po english file for better translations (now are visible in transifex in all languages)
+
+Code:
++ Improved reusability
++ Added support for locales without some audio (like bible and magazine readings for Afrikaans)
++ Simplified configuration for jw.org language support
++ Changed json loading to handle ajax-like requests (Close Issue #15)
+
 0.2.1
 -----
 
 Small enhancements:
 + Changed order in index, to reflect jw.org item order (magazines now is after bible)
 
-New language supported (not 100% translated in some cases):
+New languages supported (not 100% translated in some cases):
 + Dutch ("Nederlands")
 + Polish ("Polski")
 + Spanish ("Español")
@@ -23,7 +46,7 @@ Code
 0.2.0
 -----
 
-New audio feature
+New audio features
 + Listen to magazine readings (even in simplified english !), with list filtering options as jw.org. Due to jw.org inconsistency, only magazine since January 2012 are supported
 + Listen to audio dramas
 + Listen to dramatic bible reading
@@ -60,11 +83,11 @@ Supported locale
 + English
 + You can easily switch from one locale to one other from Addon Setting context menu
 
-Audio Features
+Audio features
 + Listen streaming of music and songs 
 + Listen streaming of reading of the bible
 
-Video Features
+Video features
 + Watch video, not only film, but also from news or from articles
 + Filter videos by categories
 

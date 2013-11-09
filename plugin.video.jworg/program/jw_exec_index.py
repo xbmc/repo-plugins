@@ -25,14 +25,29 @@ def showExecIndex():
     } 
     url = jw_config.plugin_name + '?' + urllib.urlencode(params)
     xbmcplugin.addDirectoryItem(
-        handle      = jw_config.pluginPid, 
+        handle      = jw_config.plugin_pid, 
         url         = url, 
         listitem    = listItem, 
         isFolder    = True 
     )  
 
-    """
-    # 2. News
+    # 2. Week program
+    title           = jw_common.t(30034)  
+    listItem        = xbmcgui.ListItem( title )
+    params          = {
+        "content_type"  : "executable", 
+        "mode"          : "open_week_program",
+        "date"          : date_for_json
+    } 
+    url = jw_config.plugin_name + '?' + urllib.urlencode(params)
+    xbmcplugin.addDirectoryItem(
+        handle      = jw_config.plugin_pid, 
+        url         = url, 
+        listitem    = listItem, 
+        isFolder    = True
+    )   
+    
+    # 3. News
     title           = jw_common.t(30032)  
     listItem        = xbmcgui.ListItem( title )
     params          = {
@@ -41,11 +56,25 @@ def showExecIndex():
     } 
     url = jw_config.plugin_name + '?' + urllib.urlencode(params)
     xbmcplugin.addDirectoryItem(
-        handle      = jw_config.pluginPid, 
+        handle      = jw_config.plugin_pid, 
         url         = url, 
         listitem    = listItem, 
         isFolder    = True
     )  
-    """
-    
-    xbmcplugin.endOfDirectory(handle=jw_config.pluginPid)
+          
+    # 4. Activities
+    title           = jw_common.t(30037)  
+    listItem        = xbmcgui.ListItem( title )
+    params          = {
+        "content_type"  : "executable", 
+        "mode"          : "open_activity_index",
+    } 
+    url = jw_config.plugin_name + '?' + urllib.urlencode(params)
+    xbmcplugin.addDirectoryItem(
+        handle      = jw_config.plugin_pid, 
+        url         = url, 
+        listitem    = listItem, 
+        isFolder    = True
+    )      
+
+    xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)

@@ -18,6 +18,8 @@ from audio import jw_audio_magazine
 from program import jw_exec_index
 from program import jw_exec_daily_text
 from program import jw_exec_news
+from program import jw_exec_week_program
+from program import jw_exec_activity
 
 """
 START
@@ -117,3 +119,18 @@ if content_type == "executable" :
 	if mode == "open_news_page" :
 		url = params["url"][0]
 		jw_exec_news.showNewsPage(url);
+
+	if mode == "open_week_program" :
+		date = params["date"][0]
+		jw_exec_week_program.showWeekProgram(date);
+
+	if mode == "open_activity_index" :
+		jw_exec_activity.showActivityIndex();
+
+	if mode == "open_activity_section" :		
+		url = params["url"][0]
+		jw_exec_activity.showActivitySection(url);
+
+	if mode == "open_activity_article" :
+		url = params["url"][0]
+		jw_exec_activity.showArticle(url);

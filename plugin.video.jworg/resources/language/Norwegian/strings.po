@@ -16,13 +16,29 @@ msgstr ""
 "Language: no\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Neste side >>"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Generelt"
 
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Daglig tekst"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Nyeste først"
+
 msgctxt "#30018"
 msgid "By title"
 msgstr "Etter tittel"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Sortering"
 
 msgctxt "#30020"
 msgid "Videos"

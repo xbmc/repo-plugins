@@ -16,9 +16,41 @@ msgstr ""
 "Language: pt_BR\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Próxima Página -->"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Linguagem do arquivo multimídia"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Geral"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Livros da Biblia"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Músicas e canções"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Texto do dia"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Dramas da Biblia"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Mais novos primeiros"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Mais antigos primeiro"
 
 msgctxt "#30018"
 msgid "By title"
@@ -36,6 +68,48 @@ msgctxt "#30021"
 msgid "Cache"
 msgstr "Cache"
 
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Limpando Cache"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Efetuado com sucesso"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Revistas"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Todas as revistas"
+
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Recentes"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Imprensa"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Não consegui carregar o conteúdo remoto"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Programa Semanal"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Escola do Ministério Teocrático"
+
+#empty string with id 30036
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Atividades"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Fim do artigo"

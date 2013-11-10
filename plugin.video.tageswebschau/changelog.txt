@@ -10,3 +10,5 @@
 - Changed content/name to WochenWEBschau
 1.0.5 / 2.0.5
 - Fixed site changes
+2.0.7
+- Now using youtube addon because of too frequent site changes

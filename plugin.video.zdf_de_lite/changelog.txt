@@ -27,3 +27,7 @@
 - Added "Add to queue" context menu
 - Added show "heute 100sec"
 - Some other small improvements
+1.1.1 / 2.1.1
+- Added subtitles
+1.1.2 / 2.1.2
+- Fixed show listing for ZDFNeo

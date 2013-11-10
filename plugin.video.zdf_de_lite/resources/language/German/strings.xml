@@ -3,7 +3,7 @@
   <string id="30001">Sendungen: Alle</string>
   <string id="30002">Suchen</string>
   <string id="30003">Nachrichten</string>
-  <string id="30004">Alle Videos nach Thema</string>
+  <string id="30004">Videos nach Thema</string>
   <string id="30005">Tipps</string>
   <string id="30006">Neu</string>
   <string id="30007">Meistgesehen</string>
@@ -15,6 +15,7 @@
   <string id="30028">Zu Addon Favs hinzufügen</string>
   <string id="30029">Aus Addon Favs entfernen</string>
   <string id="30101">View erzwingen</string>
-  <string id="30103">Minimale Länge in min</string>
+  <string id="30103">Minimale Videolänge in Minuten</string>
   <string id="30104">Thumb als Fanart nutzen</string>
+  <string id="30105">Untertitel aktivieren (falls verfügbar)</string>
 </strings>

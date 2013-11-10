@@ -3,7 +3,7 @@
   <string id="30001">Shows: All</string>
   <string id="30002">Search</string>
   <string id="30003">News</string>
-  <string id="30004">All Videos by Topic</string>
+  <string id="30004">Videos by Topic</string>
   <string id="30005">Tips</string>
   <string id="30006">New</string>
   <string id="30007">Most Viewed</string>
@@ -15,7 +15,8 @@
   <string id="30028">Add to addon favs</string>
   <string id="30029">Remove from addon favs</string>
   <string id="30101">Force View</string>
-  <string id="30102">View</string>
-  <string id="30103">Minimum length in min</string>
+  <string id="30102">ViewID</string>
+  <string id="30103">Minimum video length in minutes</string>
   <string id="30104">Use thumb as fanart</string>
+  <string id="30105">Activate subtitles (if available)</string>
 </strings>

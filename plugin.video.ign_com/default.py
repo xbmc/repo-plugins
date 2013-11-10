@@ -25,7 +25,6 @@ def index():
         addDir(translation(30003),"http://www.ign.com/videos/all/filtergalleryajax?filter=games-review",'listVideos',"")
         addDir(translation(30004),"http://www.ign.com/videos/all/filtergalleryajax?filter=games-trailer",'listVideos',"")
         addDir(translation(30005),"http://www.ign.com/videos/all/filtergalleryajax?filter=movies-trailer",'listVideos',"")
-        #addDir(translation(30006),"http://www.ign.com/videos/all/filtergalleryajax?filter=series",'listVideos',"")
         addDir(translation(30007),"http://www.ign.com/videos/allseriesajax",'listSeries',"")
         addDir(translation(30008),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
@@ -50,7 +49,9 @@ def listVideos(url):
               match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
               url=match[0]
               match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-              thumb=match[0]
+              thumb = ""
+              if match:
+                  thumb=match[0].replace("_small.jpg", ".jpg")
               addLink(title,url,'playVideo',thumb,date+"\n"+desc,length)
         matchPage=re.compile('<a id="moreVideos" href="(.+?)"', re.DOTALL).findall(content)
         if len(matchPage)>0:
@@ -75,7 +76,7 @@ def listSeries(url):
             thumb=""
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             if len(match)>0:
-              thumb=match[0]
+              thumb=match[0].replace("_small.jpg", ".jpg")
             addDir(title,url,'listVideos',thumb,date)
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode==True:
@@ -95,7 +96,9 @@ def listSearchResults(url):
         for i in range(1,len(spl),1):
             entry=spl[i]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-            thumb=cleanUrl(match[0])
+            thumb=""
+            if match:
+                thumb=cleanUrl(match[0]).replace("_small.jpg", ".jpg")
             entry=entry[entry.find('<div class="search-item-title">'):]
             match=re.compile('<span class="duration">(.+?)<span>', re.DOTALL).findall(entry)
             length=""

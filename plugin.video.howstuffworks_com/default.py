@@ -12,15 +12,20 @@ import xbmcaddon
 addon = xbmcaddon.Addon()
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
+addonID = addon.getAddonInfo('id')
 translation = addon.getLocalizedString
 forceViewMode = addon.getSetting("forceViewMode") == "true"
 viewMode = str(addon.getSetting("viewMode"))
 autoPlay = int(addon.getSetting("autoPlay"))
 urlMain = "http://www.howstuffworks.com"
+defaultIcon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
 
 
 def index():
-    addDir(translation(30002), urlMain+"/videos", "listType", "")
+    addDir(translation(30002), urlMain+"/videos", "listType", defaultIcon)
+    addDir(translation(30005), "", "listCollections", defaultIcon)
+    addDir(translation(30006), "", "listCats", defaultIcon)
+    addDir(translation(30007), "", "search", defaultIcon)
     content = getUrl(urlMain+"/videos")
     content = content[content.find('<div class="module module-slider slider-paged pre shows"'):]
     content = content[:content.find('<div class="slider-ui">')]
@@ -35,16 +40,17 @@ def index():
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb = match[0]  # .replace("/w_160/w_640/","/h_720/")
         addDir(title, url, 'listType', thumb)
-    addDir(translation(30005), "", "listCollections", "")
-    addDir(translation(30006), "", "listCats", "")
-    addDir(translation(30007), "", "search", "")
     xbmcplugin.endOfDirectory(pluginhandle)
+    if forceViewMode:
+        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def listType(url):
-    addDir(translation(30003), url, "listLatest", "")
-    addDir(translation(30004), url, "listMostWatched", "")
+    addDir(translation(30003), url, "listLatest", defaultIcon)
+    addDir(translation(30004), url, "listMostWatched", defaultIcon)
     xbmcplugin.endOfDirectory(pluginhandle)
+    if forceViewMode:
+        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def listLatest(url):
@@ -58,7 +64,7 @@ def listLatest(url):
         match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
         url = match[0]
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-        thumb = match[0]  # .replace("/w_160/w_640/","/h_720/")
+        thumb = match[0] # .replace("/w_160/w_640/","/h_720/")
         addLink(title, url, 'playVideo', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:

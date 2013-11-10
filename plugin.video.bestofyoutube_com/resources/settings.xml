@@ -1,4 +1,7 @@
 <settings>
-   <setting id="forceViewMode" type="bool" label="30101" default="false"/>
-   <setting id="viewMode" type="number" label="30102" default="500"/>
+    <setting id="filter" type="bool" label="30103" default="false"/>
+    <setting id="filterRating" type="number" label="30104" enable="!eq(-1,false)" default="50"/>
+    <setting id="filterThreshold" type="number" label="30105" enable="!eq(-2,false)" default="10"/>
+    <setting id="forceViewMode" type="bool" label="30101" default="false"/>
+    <setting id="viewMode" type="number" label="30102" default="500"/>
 </settings>

@@ -15,6 +15,9 @@ pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
 translation = addon.getLocalizedString
 forceViewMode = addon.getSetting("forceViewMode") == "true"
+filter = addon.getSetting("filter") == "true"
+filterRating=int(addon.getSetting("filterRating"))
+filterThreshold=int(addon.getSetting("filterThreshold"))
 viewMode = str(addon.getSetting("viewMode"))
 urlMain = "http://www.bestofyoutube.com"
 
@@ -57,8 +60,10 @@ def listVideos(url):
     spl = content.split("<div class='main'>")
     for i in range(1, len(spl), 1):
         entry = spl[i]
-        match = re.compile('youtube.com/embed/(.+?)\?', re.DOTALL).findall(entry)
+        match = re.compile('youtube.com/embed/(.+?)"', re.DOTALL).findall(entry)
         id = match[0]
+        if "?" in id:
+            id = id[:id.find("?")]
         match = re.compile("name='up'>(.+?)<", re.DOTALL).findall(entry)
         up = float(match[0])
         match = re.compile("name='down'>(.+?)<", re.DOTALL).findall(entry)
@@ -71,8 +76,10 @@ def listVideos(url):
             percentage = int((up/(up+down))*100)
         else:
             percentage = 100
+        if filter and (up+down)>filterThreshold and percentage<filterRating:
+            continue
         title = title+" ("+str(percentage)+"%)"
-        addLink(title, id, "playVideo", thumb)
+        addLink(title, id, "playVideo", thumb, str(int(up+down))+" Votes")
     content = content[content.find('<div class="pagination">'):]
     content = content[:content.find('</div>')]
     spl = content.split("<a href=\"")
@@ -102,11 +109,11 @@ def cleanTitle(title):
     return title
 
 
-def addLink(name, url, mode, iconimage):
+def addLink(name, url, mode, iconimage, desc):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name})
+    liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
     liz.setProperty('IsPlayable', 'true')
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok

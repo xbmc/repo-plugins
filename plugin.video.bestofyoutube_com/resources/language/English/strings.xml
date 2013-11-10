@@ -11,4 +11,7 @@
   <string id="30009">Next Page</string>
   <string id="30101">Force View</string>
   <string id="30102">ViewID</string>
+  <string id="30103">Rating filter</string>
+  <string id="30104">Minimum rating in %</string>
+  <string id="30105">Minimum number of votes for filter</string>
 </strings>

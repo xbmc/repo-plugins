@@ -12,9 +12,9 @@ import xbmcgui
 import xbmcaddon
 from pyamf import remoting
 
+addon = xbmcaddon.Addon()
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-addon = xbmcaddon.Addon(id='plugin.video.redbull_tv')
 translation = addon.getLocalizedString
 autoPlay = int(addon.getSetting("autoPlay"))
 forceViewMode = addon.getSetting("forceViewMode") == "true"
@@ -29,7 +29,7 @@ def index():
     addDir(translation(30005), "live", 'listEvents', "")
     addDir(translation(30006), "latest", 'listEvents', "")
     addDir(translation(30002), mainUrl+"/Redbulltv", 'latestVideos', "")
-    addDir(translation(30003), mainUrl+"/cs/Satellite?_=1341624385783&pagename=RBWebTV%2FRBTV_P%2FRBWTVShowContainer&orderby=latest&p=%3C%25%3Dics.GetVar(%22p%22)%25%3E&start=1", 'listShows', "")
+    addDir(translation(30003), mainUrl+"/cs/Satellite?_=1341624385783&pagename=RBWebTV%2FRBTV_P%2FRBWTVShowContainer&orderby=name&p=%3C%25%3Dics.GetVar(%22p%22)%25%3E&start=1", 'listShows', "")
     addDir(translation(30004), "", 'search', "")
     xbmcplugin.endOfDirectory(pluginhandle)
 
@@ -133,15 +133,17 @@ def listShows(url):
         match = re.compile('<span class="episode-count">(.+?)</span>', re.DOTALL).findall(entry)
         subTitle = match[0]
         match = re.compile('<span class="title">(.+?)</span>', re.DOTALL).findall(entry)
-        title = match[0].strip()+" ("+subTitle.strip().replace("[", "").replace("]", "").replace(" episodes", "")+")"
+        title = match[0].strip()+" ("+subTitle.strip().replace("[", "").replace("]", "").replace(" episodes", "").replace(" episode", "")+")"
         title = cleanTitle(title)
         match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
         url = mainUrl+match[0]
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb = mainUrl+match[0].replace(" ", "%20")
         addDir(title, url, 'listVideos', thumb)
-    if urlMain == mainUrl+"/cs/Satellite?_=1341624385783&pagename=RBWebTV%2FRBTV_P%2FRBWTVShowContainer&orderby=latest&p=%3C%25%3Dics.GetVar(%22p%22)%25%3E&start=1":
-        addDir(translation(30001), mainUrl+"/cs/Satellite?_=1341624260257&pagename=RBWebTV%2FRBTV_P%2FRBWTVShowContainer&orderby=latest&p=%3C%25%3Dics.GetVar(%22p%22)%25%3E&start=17", 'listShows', "")
+    start = urlMain.split("=")[-1]
+    match = re.compile('class="next" onclick="javascript:loadShows\\(\'name\', (.+?)\\)', re.DOTALL).findall(content)
+    if match:
+        addDir(translation(30001), urlMain.replace("start="+start, "start="+match[0]), 'listShows', "")
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -198,7 +200,7 @@ def search():
 
 def playVideo(url):
     content = getUrl(url)
-    match = re.compile("episode_video_id = '(.+?)'", re.DOTALL).findall(content)
+    match = re.compile('name="@videoPlayer" value="(.+?)"', re.DOTALL).findall(content)
     playBrightCoveStream(match[0])
 
 

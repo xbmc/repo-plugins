@@ -11,3 +11,5 @@
 1.0.5 / 2.0.5
 - Fixed site changes
 - Added context menu "Add to queue"
+2.0.6
+- Fixed site changes

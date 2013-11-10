@@ -53,9 +53,9 @@ def listVideos(url):
         title = match[0]
         title = cleanTitle(title)
         thumb = ""
-        match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+        match = re.compile('data-original="(.+?)"', re.DOTALL).findall(entry)
         if match:
-            thumb = match[0]
+            thumb = match[0].replace("-300x190.jpg",".jpg")
         addLink(title, url, 'playVideo', thumb)
     if "/page/" in mainUrl:
         match = re.compile('/page/(.+?)/', re.DOTALL).findall(mainUrl)

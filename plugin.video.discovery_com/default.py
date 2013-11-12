@@ -32,16 +32,16 @@ iconPathNews = os.path.join(thumbsDir, "discovery_news.png")
 
 def index():
     addDir("Discovery News", "", 'listNewsMain', iconPathNews)
-    addDir("Discovery Channel", urlMain+"/videos", 'listShows', os.path.join(thumbsDir, "discovery_channel.png"))
-    addDir("Animal Planet", "http://animal.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "animal_planet.png"))
+    addDir("Discovery Channel", urlMain+"/videos", 'listShows', os.path.join(thumbsDir, "discovery_channel.png"), "", "", "Discovery")
+    addDir("Animal Planet", "http://animal.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "animal_planet.png"), "", "", "APL")
     addDir("Animal Planet Live", "", 'listAPL', os.path.join(thumbsDir, "animal_planet_live.png"))
-    addDir("TLC", "http://www.tlc.com/videos", 'listShows', os.path.join(thumbsDir, "tlc.png"))
-    addDir("Science Channel", "http://science.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "science_channel.png"))
-    addDir("Destination America", "http://america.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "destination_america.png"))
-    addDir("Investigation Discovery", "http://investigation.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "investigation_discovery.png"))
-    addDir("Military Channel", "http://military.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "military_channel.png"))
-    addDir("Velocity", "http://velocity.discovery.com/tv-shows", 'listShows', os.path.join(thumbsDir, "velocity.png"))
-    addDir("Discovery fit&health", "http://health.discovery.com/tv-shows", 'listShows', os.path.join(thumbsDir, "discovery_fit_health.png"))
+    addDir("TLC", "http://www.tlc.com/videos", 'listShows', os.path.join(thumbsDir, "tlc.png"), "", "", "TLC")
+    addDir("Science Channel", "http://science.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "science_channel.png"), "", "", "Science%2520Channel")
+    addDir("Destination America", "http://america.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "destination_america.png"), "", "", "DAM")
+    addDir("Investigation Discovery", "http://investigation.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "investigation_discovery.png"), "", "", "Investigation%2520Discovery")
+    addDir("Military Channel", "http://military.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "military_channel.png"), "", "", "Military%2520Channel")
+    addDir("Velocity", "http://velocity.discovery.com/videos", 'listShows', os.path.join(thumbsDir, "velocity.png"), "", "", "Velocity")
+    addDir("Discovery fit&health", "http://health.discovery.com/tv-shows", 'listShows', os.path.join(thumbsDir, "discovery_fit_health.png"), "", "", "Health")
     addPluginDir("HowStuffWorks", "plugin://plugin.video.howstuffworks_com", os.path.join(thumbsDir, "how_stuff_works.png"))
     if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewModeNewsShows+')')
@@ -111,40 +111,43 @@ def listNewsCollections(url):
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
-def listShows(url):
+def listShows(url, channelID, channelThumb):
     currentUrl = url
     content = getUrl(url)
-    spl = content.split('<div class="show-badge"')
+    #addDir(translation(30003), urlMain+"/services/taxonomy/"+channelID+"/?num="+itemsPerPage+"&page=0&filter=fullepisode&tpl=dds%2Fmodules%2Fvideo%2Fall_assets_list.html&order=desc&feedGroup=video", 'listVideos', channelThumb, "fullepisode")
+    content = content[content.find('<div class="module-all-shows-carousel shows-other">'):]
+    content = content[:content.find('<div class="navigation')]
+    spl = content.split('<a href="/tv-shows')
     for i in range(1, len(spl), 1):
         entry = spl[i]
-        match = re.compile('href="/tv-shows/(.+?)"', re.DOTALL).findall(entry)
+        match = re.compile('/(.+?)"', re.DOTALL).findall(entry)
+        id = match[0]
+        if "/" in id:
+            id = id[:id.find("/")]
+        if currentUrl.endswith("/videos"):
+            url = currentUrl[:currentUrl.find("/videos")]+"/tv-shows/"+id
+        elif currentUrl.endswith("/tv-shows"):
+            url = currentUrl[:currentUrl.find("/tv-shows")]+"/tv-shows/"+id
+        match = re.compile('title="(.+?)"', re.DOTALL).findall(entry)
         if match:
-            id = match[0]
-            if "/" in id:
-                id = id[:id.find("/")]
-            match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
-            if currentUrl.endswith("/videos"):
-                url = currentUrl[:currentUrl.find("/videos")]+match[0]
-            elif currentUrl.endswith("/tv-shows"):
-                url = currentUrl[:currentUrl.find("/tv-shows")]+match[0]
-            match = re.compile('title="(.+?)"', re.DOTALL).findall(entry)
-            if match:
-                title = cleanTitle(match[0]).replace(" Videos", "")
-            else:
-                title = id.replace("-", " ").title()
-            match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+            title = cleanTitle(match[0]).replace(" Videos", "")
+        else:
+            title = id.replace("-", " ").title()
+        match = re.compile('data-original="(.+?)"', re.DOTALL).findall(entry)
+        thumb = ""
+        if match:
             thumb = match[0].replace(" ", "%20")
-            addDir(title, url, 'listVideosMain', thumb)
+        addDir(title, url, 'listVideos', thumb)
     if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewModeNewsShows+')')
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
-def listVideosMain(url):
+def listVideosMain(url, channelThumb):
     content = getUrl(url)
     if '<div class="module-videos-carousel full-episode-assets">' in content:
-        addDir(translation(30003), url, 'listVideos', "", "fullepisode")
-        addDir(translation(30004), url, 'listVideos', "", "clip")
+        addDir(translation(30003), url, 'listVideos', channelThumb, "fullepisode")
+        addDir(translation(30004), url, 'listVideos', channelThumb, "clip")
         if forceViewMode:
             xbmc.executebuiltin('Container.SetViewMode('+viewModeNewsShows+')')
         xbmcplugin.endOfDirectory(pluginhandle)
@@ -155,7 +158,7 @@ def listVideosMain(url):
 def listVideos(url, type="clip"):
     content = getUrl(url)
     xbmcplugin.setContent(pluginhandle, "episodes")
-    if "/services/taxonomy/" in url or "data-service-uri=" in content:
+    if ("/services/taxonomy/" in url and '<div class="thumbnail still-small">' in content) or "data-service-uri=" in content:
         if "/services/taxonomy/" not in url:
             match = re.compile('data-service-uri="(.+?)"', re.DOTALL).findall(content)
             url = urlMain+match[0]+"?num="+itemsPerPage+"&page=0&filter="+type+"&tpl=dds%2Fmodules%2Fvideo%2Fall_assets_list.html&sort=date&order=desc&feedGroup=video"
@@ -166,8 +169,14 @@ def listVideos(url, type="clip"):
             entry = spl[i]
             match = re.compile('<h4>.+?>(.+?)<', re.DOTALL).findall(entry)
             title = cleanTitle(match[0])
+            match = re.compile('<h5>(.+?)</h5>', re.DOTALL).findall(entry)
+            title2 = cleanTitle(match[0])
+            if type=="fullepisode":
+                title = title2 + ": " + title
             match = re.compile('<p class="description">(.+?)</p>', re.DOTALL).findall(entry)
-            desc = cleanTitle(match[0])
+            desc = ""
+            if match:
+                desc = cleanTitle(match[0])
             match = re.compile('<div class="length">(.+?)</div>', re.DOTALL).findall(entry)
             length = match[0]
             splLength = length.split(":")
@@ -302,7 +311,7 @@ def addLink(name, url, mode, iconimage, desc, length="", date="", nr=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Aired": date, "Episode": nr})
+    liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc, "Aired": date, "Episode": "1"})
     if length:
         liz.addStreamInfo('video', {'duration': int(length)})
     liz.setProperty('IsPlayable', 'true')
@@ -312,8 +321,8 @@ def addLink(name, url, mode, iconimage, desc, length="", date="", nr=""):
     return ok
 
 
-def addDir(name, url, mode, iconimage, type="", desc=""):
-    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&type="+str(type)
+def addDir(name, url, mode, iconimage, type="", desc="", channelID=""):
+    u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&type="+str(type)+"&channelID="+str(channelID)+"&channelThumb="+urllib.quote_plus(iconimage)
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
@@ -332,11 +341,13 @@ params = parameters_string_to_dict(sys.argv[2])
 mode = urllib.unquote_plus(params.get('mode', ''))
 url = urllib.unquote_plus(params.get('url', ''))
 type = urllib.unquote_plus(params.get('type', ''))
+channelID = urllib.unquote_plus(params.get('channelID', ''))
+channelThumb = urllib.unquote_plus(params.get('channelThumb', ''))
 
 if mode == 'listVideos':
     listVideos(url, type)
 elif mode == 'listVideosMain':
-    listVideosMain(url)
+    listVideosMain(url, channelThumb)
 elif mode == 'listNewsMain':
     listNewsMain()
 elif mode == 'listNewsCollections':
@@ -344,7 +355,7 @@ elif mode == 'listNewsCollections':
 elif mode == 'listNews':
     listNews(url)
 elif mode == 'listShows':
-    listShows(url)
+    listShows(url, channelID, channelThumb)
 elif mode == 'playVideo':
     playVideo(url)
 elif mode == 'playVideoLive':

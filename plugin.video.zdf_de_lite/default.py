@@ -19,6 +19,7 @@ addon_work_folder = xbmc.translatePath("special://profile/addon_data/"+addonID)
 channelFavsFile = xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+addonID+".favorites")
 subFile = xbmc.translatePath("special://profile/addon_data/"+addonID+"/sub.srt")
 baseUrl = "http://www.zdf.de"
+defaultBackground = baseUrl+"/ZDFmediathek/img/fallback/946x532.jpg"
 
 if not os.path.isdir(addon_work_folder):
     os.mkdir(addon_work_folder)
@@ -39,16 +40,32 @@ def index():
     addDir("ZDFkultur", "zdfkultur", 'listChannel', baseUrl+"/ZDFmediathek/contentblob/1317640/tImg/5960283")
     addDir("ZDFinfo", "zdfinfo", 'listChannel', baseUrl+"/ZDFmediathek/contentblob/1209120/tImg/5880352")
     addDir("3sat", "dreisat", 'listChannel', baseUrl+"/ZDFmediathek/contentblob/1209116/tImg/5784929")
-    addDir("LIVE", baseUrl+"/ZDFmediathek/hauptnavigation/live/day0", 'listVideos', "")
+    addDir("Filme", baseUrl+"/ZDFmediathek/kanaluebersicht/aktuellste/1829656", 'listVideos', "")
+    addDir("Serien", baseUrl+"/ZDFmediathek/kanaluebersicht/aktuellste/1859968", 'listVideos', "")
+    addDir("Dokus", baseUrl+"/ZDFmediathek/kanaluebersicht/aktuellste/180", 'listVideos', "")
     addDir("HD", baseUrl+"/ZDFmediathek/suche?sucheText=hd", 'listVideos', "")
     addDir(translation(30005), baseUrl+"/ZDFmediathek/hauptnavigation/startseite/tipps", 'listVideos', "")
     addDir(translation(30007), baseUrl+"/ZDFmediathek/hauptnavigation/startseite/meist-gesehen", 'listVideos', "")
-    addDir(translation(30003), baseUrl+"/ZDFmediathek/hauptnavigation/nachrichten/ganze-sendungen", 'listShows', "")
     addDir(translation(30001), "", 'listAZ', "")
     addDir(translation(30010), "", 'listShowsFavs', "")
+    addDir(translation(30013), baseUrl+"/ZDFmediathek/hauptnavigation/sendung-verpasst", 'listVerpasst', "")
+    addDir(translation(30003), baseUrl+"/ZDFmediathek/hauptnavigation/nachrichten/ganze-sendungen", 'listShows', "")
     addDir(translation(30004), baseUrl+"/ZDFmediathek/hauptnavigation/themen", 'listThemen', "")
+    addDir("LiveTV", baseUrl+"/ZDFmediathek/hauptnavigation/live/day0", 'listVideos', "")
     addDir(translation(30002), "", 'search', "")
     xbmcplugin.endOfDirectory(pluginhandle)
+
+
+def listVerpasst(url):
+    content = getUrl(url)
+    content = content[content.find('<ul class="subNavi">'):]
+    content = content[:content.find('</ul>')]
+    match = re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(content)
+    for url, title in match:
+        addDir(title[2:], baseUrl+url, 'listVideos', "")
+    xbmcplugin.endOfDirectory(pluginhandle)
+    if forceViewMode:
+        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def listShowsFavs():
@@ -79,9 +96,9 @@ def listChannel(url):
         addDir(translation(30007), baseUrl+"/ZDFmediathek/senderstartseite/sst2/1209114", 'listVideos', "")
     elif url == "zdfneo":
         addDir(translation(30006), baseUrl+"/ZDFmediathek/kanaluebersicht/aktuellste/857392", 'listVideos', "")
-        addDir(translation(30007), baseUrl+"/ZDFmediathek/senderstartseite/sst2/1209122", 'listVideos', "")
         addDir(translation(30005), baseUrl+"/ZDFmediathek/senderstartseite/sst0/1209122", 'listVideos', "")
         addDir(translation(30008), baseUrl+"/ZDFmediathek/senderstartseite/sst1/1209122", 'listShows', "")
+        addDir(translation(30007), baseUrl+"/ZDFmediathek/senderstartseite/sst2/1209122", 'listVideos', "")
     elif url == "zdfkultur":
         addDir(translation(30006), baseUrl+"/ZDFmediathek/kanaluebersicht/aktuellste/1321386", 'listVideos', "")
         addDir(translation(30005), baseUrl+"/ZDFmediathek/senderstartseite/sst0/1317640", 'listVideos', "")
@@ -111,6 +128,8 @@ def listShows(url, bigThumb):
         thumb = match[0]
         if bigThumb == True:
             thumb = thumb.replace("/timg94x65blob", "/timg485x273blob")
+        else:
+            thumb = thumb.replace('timg94x65blob','timg173x120blob')
         match = re.compile('<p><b><a href="(.+?)">(.+?)<br />', re.DOTALL).findall(entry)
         title = match[0][1]
         title = cleanTitle(title)
@@ -134,7 +153,7 @@ def listVideos(url):
         if "?bc=" in url:
             url = url[:url.find("?bc=")]
         if "?sucheText=" not in url:
-            url = url+"?teaserListIndex=500"
+            url = url+"?teaserListIndex=975"
     content = getUrl(url)
     spl = content.split('<div class="image">')
     for i in range(1, len(spl), 1):
@@ -151,6 +170,7 @@ def listVideos(url):
             if match:
                 date = match[0][1]
             date = date.replace('<span class="orange">', '').replace('</span>', '')
+            date = cleanTitle(date)
             match = re.compile('>VIDEO, (.+?)<', re.DOTALL).findall(entry)
             length = ""
             if match:
@@ -163,9 +183,11 @@ def listVideos(url):
             match = re.compile('<p><b><a href="(.+?)">(.+?)<br />', re.DOTALL).findall(entry)
             title = match[0][1]
             title = cleanTitle(title)
-            date = cleanTitle(date)
-            if ".20" in date:
-                date = date[:date.find(".20")]
+            if "/hauptnavigation/sendung-verpasst/" in urlMain:
+                date = date[date.rfind(" "):]
+            else:
+                if ".20" in date:
+                    date = date[:date.find(".20")]
             title = date+" - "+title
             if "/live/day0" in urlMain and ">LIVE</a></p>" in entry and "Live TV" in entry:
                 addLink(title.replace("live-bis 00:00, ", ""), url, 'playVideo', thumb, length)
@@ -342,7 +364,6 @@ def getUrl(url):
 
 
 def parameters_string_to_dict(parameters):
-    ''' Convert parameters encoded in a URL to a dict. '''
     paramDict = {}
     if parameters:
         paramPairs = parameters[1:].split("&")
@@ -360,7 +381,11 @@ def addLink(name, url, mode, iconimage, duration=""):
     liz.setInfo(type="Video", infoLabels={"Title": name, "Duration": duration})
     liz.setProperty('IsPlayable', 'true')
     if useThumbAsFanart:
+        if not iconimage:
+            iconimage = defaultBackground
         liz.setProperty("fanart_image", iconimage)
+    else:
+        liz.setProperty("fanart_image", defaultBackground)
     liz.addContextMenuItems([(translation(30012), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
@@ -373,7 +398,11 @@ def addShowLink(name, url, mode, iconimage, duration=""):
     liz.setInfo(type="Video", infoLabels={"Title": name, "Duration": duration})
     liz.setProperty('IsPlayable', 'true')
     if useThumbAsFanart:
+        if not iconimage:
+            iconimage = defaultBackground
         liz.setProperty("fanart_image", iconimage)
+    else:
+        liz.setProperty("fanart_image", defaultBackground)
     playListInfos = "###MODE###=ADD###TITLE###="+name+"###URL###="+urllib.quote_plus(url)+"###THUMB###="+iconimage+"###END###"
     liz.addContextMenuItems([(translation(30028), 'RunPlugin(plugin://'+addonID+'/?mode=favs&url='+urllib.quote_plus(playListInfos)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
@@ -387,7 +416,11 @@ def addShowFavLink(name, url, mode, iconimage, duration=""):
     liz.setInfo(type="Video", infoLabels={"Title": name, "Duration": duration})
     liz.setProperty('IsPlayable', 'true')
     if useThumbAsFanart:
+        if not iconimage:
+            iconimage = defaultBackground
         liz.setProperty("fanart_image", iconimage)
+    else:
+        liz.setProperty("fanart_image", defaultBackground)
     playListInfos = "###MODE###=REMOVE###REFRESH###=TRUE###TITLE###="+name+"###URL###="+urllib.quote_plus(url)+"###THUMB###="+iconimage+"###END###"
     liz.addContextMenuItems([(translation(30029), 'RunPlugin(plugin://'+addonID+'/?mode=favs&url='+urllib.quote_plus(playListInfos)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
@@ -399,8 +432,7 @@ def addDir(name, url, mode, iconimage):
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
-    if useThumbAsFanart:
-        liz.setProperty("fanart_image", iconimage)
+    liz.setProperty("fanart_image", defaultBackground)
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
@@ -410,6 +442,7 @@ def addTopicDir(name, url, mode, iconimage):
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
+    liz.setProperty("fanart_image", defaultBackground)
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
@@ -420,7 +453,11 @@ def addShowDir(name, url, mode, iconimage):
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
     if useThumbAsFanart:
+        if not iconimage:
+            iconimage = defaultBackground
         liz.setProperty("fanart_image", iconimage)
+    else:
+        liz.setProperty("fanart_image", defaultBackground)
     playListInfos = "###MODE###=ADD###TITLE###="+name+"###URL###="+urllib.quote_plus(url)+"###THUMB###="+iconimage+"###END###"
     liz.addContextMenuItems([(translation(30028), 'RunPlugin(plugin://'+addonID+'/?mode=favs&url='+urllib.quote_plus(playListInfos)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
@@ -433,7 +470,11 @@ def addShowFavDir(name, url, mode, iconimage):
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
     if useThumbAsFanart:
+        if not iconimage:
+            iconimage = defaultBackground
         liz.setProperty("fanart_image", iconimage)
+    else:
+        liz.setProperty("fanart_image", defaultBackground)
     playListInfos = "###MODE###=REMOVE###REFRESH###=TRUE###TITLE###="+name+"###URL###="+urllib.quote_plus(url)+"###THUMB###="+iconimage+"###END###"
     liz.addContextMenuItems([(translation(30029), 'RunPlugin(plugin://'+addonID+'/?mode=favs&url='+urllib.quote_plus(playListInfos)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
@@ -452,6 +493,8 @@ elif mode == 'listShows':
     listShows(url, True)
 elif mode == 'listThemen':
     listShows(url, False)
+elif mode == 'listVerpasst':
+    listVerpasst(url)
 elif mode == 'playVideo':
     playVideo(url)
 elif mode == 'play100sec':

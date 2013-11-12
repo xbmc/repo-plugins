@@ -3,7 +3,7 @@
   <string id="30001">Sendungen: Alle</string>
   <string id="30002">Suchen</string>
   <string id="30003">Nachrichten</string>
-  <string id="30004">Videos nach Thema</string>
+  <string id="30004">Themen</string>
   <string id="30005">Tipps</string>
   <string id="30006">Neu</string>
   <string id="30007">Meistgesehen</string>
@@ -12,6 +12,7 @@
   <string id="30010">Sendungen: Favoriten</string>
   <string id="30011">Nächste Seite</string>
   <string id="30012">Zur Wiedergabeliste hinzufügen</string>
+  <string id="30013">Sendungen: Datum</string>
   <string id="30028">Zu Addon Favs hinzufügen</string>
   <string id="30029">Aus Addon Favs entfernen</string>
   <string id="30101">View erzwingen</string>

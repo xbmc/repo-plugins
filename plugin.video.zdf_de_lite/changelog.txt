@@ -31,3 +31,6 @@
 - Added subtitles
 1.1.2 / 2.1.2
 - Fixed show listing for ZDFNeo
+2.1.3
+- Added category: Shows by date
+- Added links: Filme/Serien/Dokus

@@ -118,8 +118,13 @@ def unquoteUni(text):
 # into a dict
 
 def getParams():
+        log( "getParams" + str(sys.argv))
         param=[]
-        paramstring=sys.argv[2]
+        # if we're running as a screensaver, there are no parameters supplied
+        try:
+          paramstring=sys.argv[2]
+        except:
+          return param
         if len(paramstring)>=2:
             params=sys.argv[2]
             cleanedparams=params.replace('?','')

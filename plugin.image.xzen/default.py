@@ -30,6 +30,7 @@ LIB_PATH        = xbmc.translatePath(os.path.join( RESOURCES_PATH, "lib" ))
 sys.path.append( LIB_PATH )
 
 from b808common import *
+from XZenScreensaver import *
 
 #uses zenapi by Scott Gorling (http://www.scottgorlin.com)
 from zenapi import ZenConnection
@@ -113,8 +114,13 @@ USERNAME=ADDON.getSetting('username')
 PASSWORD=ADDON.getSetting('password')
 GALLERYPASS=ADDON.getSetting('passwordOriginals')
 
-params=getParams()
-log("Parameters parsed: " + str(params))
+#there will be parameters if we're running as a plugin..
+if sys.argv[0]=='':
+    SCREENSAVER=True
+else:    
+    SCREENSAVER=False
+    params=getParams()
+    log("Parameters parsed: " + str(params))
 
 #try and get data from the paramters
 try:
@@ -511,88 +517,103 @@ def ShowRecentPhotos(offset=0):
 # global AUTHENTICATED holds a boolean of authentication state
 # global KEYRINGED holds a boolen of keyringed state
 
-zen = ConnectZen(mode)
-if zen is None:
-    notify(LANGUAGE(30016))
-    sys.exit()
+if __name__ == '__main__':
 
-################################################################################
-# Based on how the plugin was called (mdode) - do something
 
-try:
-    if mode==None or mode==MENU_ROOT:
-        log( "Display XZen Root Menu" )
-        BuildMenuRoot()
-
-    elif mode==MENU_USERGALLERIES:
-        log( "Display XZen User Gallery" )
-        BuildUserGallery(group)
-
-    elif mode==POPPHOTOS:
-        log( "Display XZen Popular Photos")
-        ShowPopularPhotos(offset)
-
-    elif mode==POPGALLERIES:
-        log( "Display XZen Popular Galleries")
-        BuildMenuPopSets("Gallery",offset)
-
-    elif mode==POPCOLLECTIONS:
-        log( "Display XZen Popular Collections")
-        BuildMenuPopSets("Collection", offset)
-
-    elif mode==RECENTPHOTOS:
-        log( "Display XZen Recent Photos")
-        ShowRecentPhotos(offset)
-
-    elif mode==RECENTGALLERIES:
-        log( "Display XZen Recent Galleries")
-        BuildMenuRecentSets("Gallery",offset)
-
-    elif mode==RECENTCOLLECTIONS:
-        log( "Display XZen Recent Collections")
-        BuildMenuRecentSets("Collection", offset)
-
-    elif mode==CATEGORIES:
-        log( "Display XZen Categories")
-        BuildMenuCategories(category)
-
-    elif mode==CATEGORY_OPTIONS:
-        log( "Display XZen Category Options (Photos/Galleries/Collections)")
-        BuildMenuCategoryOptions(categoryid)
-
-    elif mode==DISPLAY_CATEGORY:
-        log( "Display XZen Category id: " + str (categoryid) )
-        AddCategory(categoryid,choice,offset)
-
-    elif mode==DISPLAY_GALLERY:
-        log( "Display XZen Gallery id: " + str (galleryid) )
-        AddGallery(galleryid)
-
+    # Calles as a screensaver?  This will be blank
+    if SCREENSAVER:
+        log( "...therefore running as screensaver" )
+        screensaver_gui = XZenScreensaver('XZenScreensaver.xml' , CWD, 'Default')
+        screensaver_gui.doModal()
+        #when we drop back here we're out of the screensaver...
+        log ("Xzen Screensaver Exited")
+        del screensaver_gui
+        sys.modules.clear()
+    # we're running as an image plugin...
     else:
-        notify(LANGUAGE(30017))
-        sys.exit()
+        log( "Running as a Pictures addon" )
+        zen = ConnectZen(mode)
+        if zen is None:
+            notify(LANGUAGE(30016))
+            sys.exit()
+
+        ################################################################################
+        # Based on how the plugin was called (mdode) - do something
+
+        try:
+            if mode==None or mode==MENU_ROOT:
+                log( "Display XZen Root Menu" )
+                BuildMenuRoot()
+
+            elif mode==MENU_USERGALLERIES:
+                log( "Display XZen User Gallery" )
+                BuildUserGallery(group)
+
+            elif mode==POPPHOTOS:
+                log( "Display XZen Popular Photos")
+                ShowPopularPhotos(offset)
+
+            elif mode==POPGALLERIES:
+                log( "Display XZen Popular Galleries")
+                BuildMenuPopSets("Gallery",offset)
+
+            elif mode==POPCOLLECTIONS:
+                log( "Display XZen Popular Collections")
+                BuildMenuPopSets("Collection", offset)
+
+            elif mode==RECENTPHOTOS:
+                log( "Display XZen Recent Photos")
+                ShowRecentPhotos(offset)
+
+            elif mode==RECENTGALLERIES:
+                log( "Display XZen Recent Galleries")
+                BuildMenuRecentSets("Gallery",offset)
+
+            elif mode==RECENTCOLLECTIONS:
+                log( "Display XZen Recent Collections")
+                BuildMenuRecentSets("Collection", offset)
+
+            elif mode==CATEGORIES:
+                log( "Display XZen Categories")
+                BuildMenuCategories(category)
+
+            elif mode==CATEGORY_OPTIONS:
+                log( "Display XZen Category Options (Photos/Galleries/Collections)")
+                BuildMenuCategoryOptions(categoryid)
+
+            elif mode==DISPLAY_CATEGORY:
+                log( "Display XZen Category id: " + str (categoryid) )
+                AddCategory(categoryid,choice,offset)
+
+            elif mode==DISPLAY_GALLERY:
+                log( "Display XZen Gallery id: " + str (galleryid) )
+                AddGallery(galleryid)
+
+            else:
+                notify(LANGUAGE(30017))
+                sys.exit()
 
 
-except:
-    print_exc()
+        except:
+            print_exc()
 
 
-################################################################################
-# FINISH OFF - set display mode appropriately, tell XBMC we're done, exit.
+        ################################################################################
+        # FINISH OFF - set display mode appropriately, tell XBMC we're done, exit.
 
-#if we've just built a list of albums, force thumbnail mode
-if mode in galleryModes:
-  log("Playable Items -> Trying to set thumnbnail mode...")
-  xbmc.executebuiltin('Container.SetViewMode(500)')
-else:
-  log("List Items -> Trying to set list mode...")
-  xbmc.executebuiltin('Container.SetViewMode(50)')
+        #if we've just built a list of albums, force thumbnail mode
+        if mode in galleryModes:
+          log("Playable Items -> Trying to set thumnbnail mode...")
+          xbmc.executebuiltin('Container.SetViewMode(500)')
+        else:
+          log("List Items -> Trying to set list mode...")
+          xbmc.executebuiltin('Container.SetViewMode(50)')
 
-#and tell XBMC we're done...
-xbmcplugin.endOfDirectory(THIS_PLUGIN)
+        #and tell XBMC we're done...
+        xbmcplugin.endOfDirectory(THIS_PLUGIN)
 
-#and power this puppy down....
-footprints(startup=False)
+        #and power this puppy down....
+        footprints(startup=False)
 
 
 

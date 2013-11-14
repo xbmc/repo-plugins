@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.lachschon_de" name="LachSchon.de" version="1.0.6" provider-name="AddonScriptorDE">
+<addon id="plugin.video.lachschon_de" name="LachSchon.de" version="1.0.7" provider-name="AddonScriptorDE">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.video.youtube" version="3.0.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -14,6 +14,10 @@
         <language>de</language>
         <description lang="de">Nur die lustigsten Youtube Videos</description>
         <description lang="en">Only the funniest Youtube clips</description>
-    <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/AddonScriptorDE/plugin.video.lachschon_de</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
+        <email>AddonScriptorDE at yahoo dot de</email>
+        <website>http://www.lachschon.de</website>
     </extension>
 </addon>

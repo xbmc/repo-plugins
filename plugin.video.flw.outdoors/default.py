@@ -1,112 +1,170 @@
-import urllib,urllib2,re,os
-import xbmcplugin,xbmcgui,xbmcaddon
-try:
-    import json
-except:
-    import simplejson as json
+import urllib
+import urllib2
+import re
+import json
+from urlparse import urlparse, parse_qs
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.flw.outdoors')
-__language__ = __settings__.getLocalizedString
-__home__ = __settings__.getAddonInfo('path')
-icon = xbmc.translatePath( os.path.join( __home__, 'icon.png' ) )
+import StorageServer
+from BeautifulSoup import BeautifulSoup
 
+import xbmcplugin
+import xbmcgui
+import xbmcaddon
 
-def CATEGORIES():
-        addDir(__language__(30000),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwlatestvideos&method=getVideosInChannel',1,icon)
-        addDir(__language__(30001),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwtv&method=getVideosInChannel',1,icon)
-        addDir(__language__(30002),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=tipsfromthepros&method=getVideosInChannel',1,icon)
-        addDir(__language__(30003),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwtour&method=getVideosInChannel',1,icon)
-        addDir(__language__(30004),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=fantasyonflw&method=getVideosInChannel',1,icon)
-        addDir(__language__(30005),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=collegeonflw&method=getVideosInChannel',1,icon)
-        addDir(__language__(30006),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwpodcast&method=getVideosInChannel',1,icon)
-        addDir(__language__(30007),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=ReelCast&method=getVideosInChannel',1,icon)
-        addDir(__language__(30008),'http://www.flwoutdoors.com/flwMedia/ajax.cfm?callsign=flwmagpublic&method=getVideosInChannel',1,icon)
+cache = StorageServer.StorageServer("flwoutdoors", 6)
+addon = xbmcaddon.Addon()
+addon_version = addon.getAddonInfo('version')
+addon_id = addon.getAddonInfo('id')
+icon = addon.getAddonInfo('icon')
 
 
-def INDEX(url):
-        req = urllib2.Request(url)
-        req.addheaders = [('Referer', 'http://www.flwoutdoors.com/flwondemand.cfm?cs=flwtour'),
-                        ('Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)')]
+def addon_log(string):
+    try:
+        log_message = string.encode('utf-8', 'ignore')
+    except:
+        log_message = 'addonException: addon_log'
+    xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, log_message),level=xbmc.LOGNOTICE)
+
+
+def make_request(url, post_data=None):
+    addon_log('Request URL: %s' %url)
+    headers = {
+        'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
+        'Referer': 'http://www.flwoutdoors.com'
+        }
+    try:
+        req = urllib2.Request(url, post_data, headers)
         response = urllib2.urlopen(req)
-        link=response.read()
-        data=json.loads(link)
-        videos = data["CHANNEL"]["AFILE"]
-        for video in videos:
-            title = video["TITLE"]
-            if not video["PATH"]=='':
-                path = video["PATH"]
-            else:
-                path = 'http://www.jidocs.com'+str(video["STREAMING_PATH"])[4:]
-            thumbnail = video["THUMBNAIL"]
-            description = video["DESCRIPTION"]
-            addLink (title,path,description,thumbnail)
-        
+        response_url = urllib.unquote_plus(response.geturl())
+        data = response.read()
+        response.close()
+        return data
+    except urllib2.URLError, e:
+        addon_log('We failed to open "%s".' % url)
+        if hasattr(e, 'reason'):
+            addon_log('We failed to reach a server.')
+            addon_log('Reason: %s' %e.reason)
+        if hasattr(e, 'code'):
+            addon_log('We failed with error code - %s.' % e.code)
+
+
+def cache_categories():
+    url = 'http://www.flwoutdoors.com/flwondemand.cfm'
+    soup = BeautifulSoup(make_request(url))
+    items = soup.find('ul', attrs={'class': 'menu'})('a')
+    cats = []
+    for i in items:
+        cats.append({'callsign': i['id'].lstrip('divTab'),
+                     'title': i.string.encode('utf-8')})
+    return repr(cats)
+
+
+def display_categories():
+    cats = eval(cache.cacheFunction(cache_categories))
+    for i in cats:
+        add_dir(i['title'], i['callsign'], 'category', icon)
+
+
+def display_category(callsign):
+    url = 'http://www.flwoutdoors.com/flwMedia/ajax.cfm'
+    post_data = {'method': 'getVideosInChannel',
+                 'callsign': callsign}
+    data = json.loads(make_request(url, urllib.urlencode(post_data)))
+    items = data['CHANNEL']['AFILE']
+    for i in items:
+        youtube_embed = None
+        path = None
+        if i.has_key('YOUTUBEEMBED') and len(i['YOUTUBEEMBED']) > 0:
+            pattern = re.compile('src="(.+?)"')
+            youtube_embed = pattern.findall(i['YOUTUBEEMBED'])
+        if youtube_embed:
+            try:
+                youtube_id = youtube_embed[0].split('/embed/')[1]
+                path = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %youtube_id
+            except:
+                pass
+        if not path:
+            keys = ['PATH_ORIGINAL','STREAMING_PATH', 'PODCAST_PATH', 'MOBILE_PATH']
+            for x in keys:
+                if i.has_key(x) and len(i[x]) > 0:
+                    path = i[x]
+                    break
+            if path.startswith('mp4:') and i.has_key('FILENAME_HD') and len(i['FILENAME_HD']) > 0:
+                path = path.replace(i['FILENAME'], i['FILENAME_HD'])
+        duration = get_duration(i['DURATION'].split('.')[0])
+        meta = {'Duration': duration}
+        if i.has_key('DESCRIPTION') and len(i['DESCRIPTION']) > 0:
+            meta['Plot'] = i['DESCRIPTION']
+        add_dir(i['TITLE'].encode('utf-8'), path, 'resolve', i['THUMBNAIL'], meta, False)
+
+
+def add_dir(name, url, mode, iconimage, meta={}, isfolder=True):
+    params = {'name': name, 'url': url, 'mode': mode}
+    url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    meta["Title"] = name
+    if not isfolder:
+        listitem.setProperty('IsPlayable', 'true')
+    listitem.setInfo(type="Video", infoLabels=meta)
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
+
+
+def get_rtmp_url(path):
+    rtmp_url = (
+        '%s %s %s %s' %
+        ('rtmp://flwoutdoorsfs.fplive.net/flwoutdoors',
+        'swfUrl=http://www.flwoutdoors.com/FLWMedia/FLWVideoPlayer.swf',
+        'playpath=' + path,
+        'app=flwoutdoors')
+        )
+    return rtmp_url
+
+
+def get_duration(duration):
+    if duration is None:
+        return 1
+    d_split = duration.split(':')
+    if len(d_split) == 4:
+        del d_split[-1]
+    minutes = int(d_split[-2])
+    if int(d_split[-1]) >= 30:
+        minutes += 1
+    if len(d_split) >= 3:
+        minutes += (int(d_split[-3]) * 60)
+    if minutes < 1:
+        minutes = 1
+    return minutes
+
 
 def get_params():
-        param=[]
-        paramstring=sys.argv[2]
-        if len(paramstring)>=2:
-            params=sys.argv[2]
-            cleanedparams=params.replace('?','')
-            if (params[len(params)-1]=='/'):
-                params=params[0:len(params)-2]
-            pairsofparams=cleanedparams.split('&')
-            param={}
-            for i in range(len(pairsofparams)):
-                splitparams={}
-                splitparams=pairsofparams[i].split('=')
-                if (len(splitparams))==2:
-                    param[splitparams[0]]=splitparams[1]
-                                
-        return param
+    p = parse_qs(sys.argv[2][1:])
+    for i in p.keys():
+        p[i] = p[i][0]
+    return p
 
 
-def addLink(name,url,description,iconimage):
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-        return ok
-
-
-def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
-        
-              
-params=get_params()
-url=None
-name=None
-mode=None
+params = get_params()
 
 try:
-    url=urllib.unquote_plus(params["url"])
+    mode = params['mode']
 except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
+    mode = None
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+addon_log(repr(params))
 
-if mode==None:
-    print ""
-    CATEGORIES()
-       
-elif mode==1:
-    print ""+url
-    INDEX(url)
+if not mode:
+    display_categories()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-        
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+elif mode == 'category':
+    display_category(params['url'])
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    xbmc.executebuiltin('Container.SetViewMode(503)')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode == 'resolve':
+    path = params['url']
+    if path.startswith('mp4:'):
+        path = get_rtmp_url(path)
+    item = xbmcgui.ListItem(path=path)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)

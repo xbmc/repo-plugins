@@ -1,3 +1,6 @@
+Version 1.0.2
+updated for frodo/gotham
+
 Version 1.0.1
 fix for website changes
 

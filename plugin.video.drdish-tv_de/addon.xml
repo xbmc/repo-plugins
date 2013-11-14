@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.drdish-tv_de" name="DrDish-TV.de" version="1.0.3" provider-name="AddonScriptorDE">
+<addon id="plugin.video.drdish-tv_de" name="DrDish-TV.de" version="1.0.4" provider-name="AddonScriptorDE">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -13,6 +13,10 @@
         <language>de</language>
         <description lang="de">Der Multimedia-Kanal</description>
         <description lang="en">The Multimedia Channel</description>
-    <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/AddonScriptorDE/plugin.video.drdish-tv_de</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
+        <email>AddonScriptorDE at yahoo dot de</email>
+        <website>http://www.drdish-tv.de</website>
     </extension>
 </addon>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.gronkh_de" name="Gronkh.de" version="1.0.2" provider-name="AddonScriptorDE">
+<addon id="plugin.video.gronkh_de" name="Gronkh.de" version="1.0.3" provider-name="AddonScriptorDE">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.video.youtube" version="3.0.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -12,6 +12,10 @@
         <summary lang="en">"Let's play" Videos</summary>
         <language>de</language>
         <description lang="en">"Let's play" Videos</description>
-    <platform>all</platform>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+        <source>https://github.com/AddonScriptorDE/plugin.video.gronkh_de</source>
+        <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
+        <email>AddonScriptorDE at yahoo dot de</email>
+        <website>http://www.gronkh.de</website>
     </extension>
 </addon>

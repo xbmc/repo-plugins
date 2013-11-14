@@ -13,3 +13,14 @@
 - Fixed videoplayback for some streams
 - Added context menu "Add to queue"
 - Changed livestream url
+1.0.5 / 2.0.5
+- Added subtitles
+- Added category: EinsLike
+- Better thumbs (thx@membrane)
+- Some other small improvements
+1.0.6 / 2.0.6
+- Small thumb optimizations
+1.0.7 / 2.0.7
+- Small thumb optimizations
+2.0.8
+- Added default background

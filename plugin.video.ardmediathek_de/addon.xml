@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.ardmediathek_de" name="ARD Mediathek" version="2.0.4" provider-name="AddonScriptorDE">
+<addon id="plugin.video.ardmediathek_de" name="ARD Mediathek" version="2.0.8" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -14,9 +14,10 @@
         <description lang="de">Das Erste, Einsfestival, EinsPlus, Phoenix, WDR, SWR, HR, MDR, NDR, RBB, BR, ... Mediathek</description>
         <description lang="en">Das Erste, Einsfestival, EinsPlus, Phoenix, WDR, SWR, HR, MDR, NDR, RBB, BR, ... Media Library</description>
         <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
-        <website></website>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <source>https://github.com/AddonScriptorDE/plugin.video.ardmediathek_de</source>
         <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
         <email>AddonScriptorDE at yahoo dot de</email>
+        <website>http://www.ardmediathek.de</website>
     </extension>
 </addon>

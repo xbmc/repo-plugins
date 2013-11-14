@@ -12,9 +12,18 @@
   <string id="30010">Best Rated</string>
   <string id="30011">Favorites (Shows)</string>
   <string id="30012">Add to queue</string>
+  <string id="30013">Das Erste - Live</string>
+  <string id="30014">EinsLike</string>
+  <string id="30015">Music</string>
+  <string id="30016">Life</string>
+  <string id="30017">Net & Tech</string>
+  <string id="30018">Info</string>
+  <string id="30019">Fun & Fiction</string>
   <string id="30028">Add to addon favs</string>
   <string id="30029">Remove from addon favs</string>
   <string id="30030">Play alternative Stream-URL</string>
   <string id="30101">Force View</string>
-  <string id="30102">View</string>
+  <string id="30102">ViewID</string>
+  <string id="30103">Use thumb as fanart</string>
+  <string id="30104">Activate subtitles (if available)</string>
 </strings>

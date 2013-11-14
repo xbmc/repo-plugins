@@ -12,8 +12,17 @@
   <string id="30010">Bestbewertet</string>
   <string id="30011">Sendungen: Favoriten</string>
   <string id="30012">Zu Wiedergabeliste hinzufügen</string>
+  <string id="30013">Das Erste - Live</string>
+  <string id="30014">EinsLike</string>
+  <string id="30015">Musik</string>
+  <string id="30016">Leben</string>
+  <string id="30017">Netz & Tech</string>
+  <string id="30018">Info</string>
+  <string id="30019">Spaß & Fiktion</string>
   <string id="30028">Zu Addon Favs hinzufügen</string>
   <string id="30029">Aus Addon Favs entfernen</string>
   <string id="30030">Alternative Stream-Url abspielen</string>
   <string id="30101">View erzwingen</string>
+  <string id="30103">Thumb als Fanart nutzen</string>
+  <string id="30104">Untertitel aktivieren (falls verfügbar)</string>
 </strings>

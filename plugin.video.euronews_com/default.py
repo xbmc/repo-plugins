@@ -10,33 +10,29 @@ import xbmcplugin
 import xbmcaddon
 import xbmcgui
 
+addon = xbmcaddon.Addon()
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-addonID = 'plugin.video.euronews_com'
-addon = xbmcaddon.Addon(id=addonID)
+addonID = addon.getAddonInfo('id')
 translation = addon.getLocalizedString
 
 while (not os.path.exists(xbmc.translatePath("special://profile/addon_data/"+addonID+"/settings.xml"))):
     addon.openSettings()
 
-forceViewMode = addon.getSetting("forceViewMode")
+forceViewMode = addon.getSetting("forceViewMode") == "true"
 viewMode = str(addon.getSetting("viewMode"))
 language = addon.getSetting("language")
-languages = ["en", "gr", "fr", "de", "it",
-             "es", "pt", "pl", "ru", "ua", "tr", "ar", "pe"]
+languages = ["en", "gr", "fr", "de", "it", "es", "pt", "pl", "ru", "ua", "tr", "ar", "pe"]
 language = languages[int(language)]
-language2 = language.replace("en", "www").replace(
-    "pe", "persian").replace("ar", "arabic")
+language2 = language.replace("en", "www").replace("pe", "persian").replace("ar", "arabic")
 
 
 def index():
     addLink(translation(30001), "", 'playLive', "")
     addDir(translation(30002), "", 'newsMain', "")
     content = getUrl("http://"+language2+".euronews.com")
-    match = re.compile(
-        '<li class="menu-element-programs"><a title="(.+?)" href="(.+?)">', re.DOTALL).findall(content)
-    addDir(match[0][0], "http://"+language2+".euronews.com"+match[
-           0][1], 'listShows', "")
+    match = re.compile('<li class="menu-element-programs"><a title="(.+?)" href="(.+?)">', re.DOTALL).findall(content)
+    addDir(match[0][0], "http://"+language2+".euronews.com"+match[0][1], 'listShows', "")
     content = content[content.find('<ol id="categoryNav">'):]
     content = content[:content.find('</ol>')]
     spl = content.split('<a')
@@ -53,13 +49,12 @@ def index():
             addDir(title, url, 'listVideos', "")
     addDir(translation(30004), "", 'search', "")
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode == "true":
+    if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def newsMain():
-    addDir(translation(30003), "http://"+language2 +
-           ".euronews.com/news/", 'listVideos', "")
+    addDir(translation(30003), "http://"+language2+".euronews.com/news/", 'listVideos', "")
     content = getUrl("http://"+language2+".euronews.com")
     content = content[content.find('<ol class="lhsMenu">'):]
     content = content[:content.find('</ol>')]
@@ -73,7 +68,7 @@ def newsMain():
         title = cleanTitle(title)
         addDir(title, url, 'listVideos', "")
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode == "true":
+    if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
@@ -86,26 +81,26 @@ def listVideos(url):
         url = "http://"+language2+".euronews.com"+match[0]
         match = re.compile('src="(.+?)"', re.DOTALL).findall(content1)
         thumb = match[0]
+        match = re.compile('/articles/(.+?)/', re.DOTALL).findall(thumb)
+        if match:
+            thumb = "http://static.euronews.com/articles/"+match[0]+"/650x365_"+match[0]+".jpg"
         match = re.compile('<p>(.+?)</p>', re.DOTALL).findall(content1)
         desc = ""
-        if len(match) > 0:
-            desc = match[0]
-            desc = cleanTitle(desc)
+        if match:
+            desc = cleanTitle(match[0])
         match = re.compile('title="(.+?)"', re.DOTALL).findall(content1)
         match2 = re.compile('alt="(.+?)"', re.DOTALL).findall(content1)
-        if len(match) > 0:
+        if match:
             title = match[0]
-        elif len(match2) > 0:
+        elif match2:
             title = match2[0]
         title = cleanTitle(title)
-        match = re.compile(
-            '<p class="cet" style="(.+?)">(.+?) (.+?)</p>', re.DOTALL).findall(content1)
+        match = re.compile('<p class="cet" style="(.+?)">(.+?) (.+?)</p>', re.DOTALL).findall(content1)
         date = ""
-        if len(match) > 0:
+        if match:
             date = match[0][1]
             title = date+" - "+title
         addLink(title, url, 'playVideo', thumb, desc)
-
     content2 = content
     content = content[content.find('id="main-content">'):]
     if "</ul></div>" in content:
@@ -122,31 +117,31 @@ def listVideos(url):
             url = "http://"+language2+".euronews.com"+match[0]
             match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb = match[0]
+            match = re.compile('/articles/(.+?)/', re.DOTALL).findall(thumb)
+            if match:
+                thumb = "http://static.euronews.com/articles/"+match[0]+"/650x365_"+match[0]+".jpg"
             match1 = re.compile('> \\| (.+?) (.+?)<', re.DOTALL).findall(entry)
-            match2 = re.compile(
-                '<span class="artDate">(.+?) (.+?)</span>', re.DOTALL).findall(entry)
-            match3 = re.compile(
-                '<p class="cet">(.+?) - (.+?) (.+?)</p>', re.DOTALL).findall(entry)
+            match2 = re.compile('<span class="artDate">(.+?) (.+?)</span>', re.DOTALL).findall(entry)
+            match3 = re.compile('<p class="cet">(.+?) - (.+?) (.+?)</p>', re.DOTALL).findall(entry)
             date = ""
-            if len(match1) > 0:
+            if match1:
                 date = match1[0][0]
-            elif len(match2) > 0:
+            elif match2:
                 date = match2[0][0]
-            elif len(match3) > 0:
+            elif match3:
                 date = match3[0][1]
             match = re.compile('<p>(.+?)</p>', re.DOTALL).findall(entry)
             desc = ""
-            if len(match) > 0:
-                desc = match[0]
-                desc = cleanTitle(desc)
+            if match:
+                desc = cleanTitle(match[0])
             match = re.compile('title="(.+?)"', re.DOTALL).findall(entry)
             match2 = re.compile('alt="(.+?)"', re.DOTALL).findall(entry)
-            if len(match) > 0:
+            if match:
                 title = match[0]
-            elif len(match2) > 0:
+            elif match2:
                 title = match2[0]
             title = cleanTitle(title)
-            if date != "":
+            if date:
                 title = date+" - "+title
             addLink(title, url, 'playVideo', thumb, desc)
     spl = content2.split('<li')
@@ -154,8 +149,7 @@ def listVideos(url):
         entry = spl[i]
         match = re.compile('>(.+?) -', re.DOTALL).findall(entry)
         date = match[0]
-        match = re.compile(
-            '  <a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
+        match = re.compile('  <a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
         url = "http://"+language2+".euronews.com"+match[0][0]
         title = match[0][1]
         title = date+" - "+cleanTitle(title)
@@ -167,17 +161,13 @@ def listVideos(url):
 
 def listNoComment(url):
     content = getUrl(url)
-    match = re.compile(
-        '<p id="topStoryImg"><a href="(.+?)" title="(.+?)"><img src="(.+?)"', re.DOTALL).findall(content)
-    match2 = re.compile(
-        '<span class="cet">(.+?) (.+?)</span>', re.DOTALL).findall(content)
-    addLink(match2[0][0]+" - "+match[0][1], "http://"+language2 +
-            ".euronews.com"+match[0][0], 'playVideo', match[0][2], "")
+    match = re.compile('<p id="topStoryImg"><a href="(.+?)" title="(.+?)"><img src="(.+?)"', re.DOTALL).findall(content)
+    match2 = re.compile('<span class="cet">(.+?) (.+?)</span>', re.DOTALL).findall(content)
+    addLink(match2[0][0]+" - "+match[0][1], "http://"+language2 + ".euronews.com"+match[0][0], 'playVideo', match[0][2], "")
     spl = content.split('<div class="column span-8')
     for i in range(1, len(spl), 1):
         entry = spl[i]
-        match = re.compile(
-            '<em>nocomment \\| (.+?) (.+?)</em>', re.DOTALL).findall(entry)
+        match = re.compile('<em>nocomment \\| (.+?) (.+?)</em>', re.DOTALL).findall(entry)
         date = match[0][0]
         match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
         url = "http://"+language2+".euronews.com"+match[0]
@@ -204,8 +194,7 @@ def listShows(url):
         title = cleanTitle(title)
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb = match[0]
-        match = re.compile(
-            'class="artTitle">(.+?)</p>', re.DOTALL).findall(entry)
+        match = re.compile('class="artTitle">(.+?)</p>', re.DOTALL).findall(entry)
         desc = ""
         if len(match) > 0:
             desc = match[0]
@@ -224,8 +213,7 @@ def search():
     keyboard.doModal()
     if keyboard.isConfirmed() and keyboard.getText():
         search_string = keyboard.getText().replace(" ", "+")
-        content = getUrl(
-            "http://"+language2+".euronews.com/search/", data="q="+search_string)
+        content = getUrl("http://"+language2+".euronews.com/search/", data="q="+search_string)
         content = content[content.find('<ol class="searchRes">'):]
         content = content[:content.find('</ol>')]
         spl = content.split('<li')
@@ -234,8 +222,7 @@ def search():
             match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
             url = "http://"+language2+".euronews.com"+match[0]
             match = re.compile('<em>(.+?)</em>', re.DOTALL).findall(entry)
-            title = match[0].replace("<strong>", "").replace(
-                "</strong>", "").replace("<br />", "")
+            title = match[0].replace("<strong>", "").replace("</strong>", "").replace("<br />", "")
             title = cleanTitle(title)
             match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb = match[0]
@@ -247,11 +234,16 @@ def search():
 
 def playVideo(url):
     content = getUrl(url)
-    match = re.compile('videofile:"(.+?)"', re.DOTALL).findall(content)
-    if len(match) > 0:
-        listitem = xbmcgui.ListItem(
-            path="http://video.euronews.com/"+match[0]+".flv")
+    match = re.compile('file: "(.+?)"', re.DOTALL).findall(content)
+    if match:
+        listitem = xbmcgui.ListItem(path=match[0])
         xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+
+
+def queueVideo(url, name):
+    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+    listitem = xbmcgui.ListItem(name)
+    playlist.add(url, listitem)
 
 
 def playLive():
@@ -265,7 +257,7 @@ def playLive():
 
 
 def cleanTitle(title):
-    return title.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&#038;", "&").replace("&#39;", "'").replace("&#039;", "'").replace("&#8211;", "-").replace("&#8220;", "-").replace("&#8221;", "-").replace("&#8217;", "'").replace("&quot;", "\"").strip()
+    return title.replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&").replace("&#038;", "&").replace("&#39;", "'").replace("&#039;", "'").replace("&#8211;", "-").replace("&#8220;", "-").replace("&#8221;", "-").replace("&#8217;", "'").replace("&#8230;", "…").replace("&quot;", "\"").strip()
 
 
 def getUrl(url, data=None, cookie=None):
@@ -285,7 +277,6 @@ def getUrl(url, data=None, cookie=None):
 
 
 def parameters_string_to_dict(parameters):
-    ''' Convert parameters encoded in a URL to a dict. '''
     paramDict = {}
     if parameters:
         paramPairs = parameters[1:].split("&")
@@ -299,28 +290,27 @@ def parameters_string_to_dict(parameters):
 def addLink(name, url, mode, iconimage, desc=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(
-        name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
     liz.setProperty('IsPlayable', 'true')
-    ok = xbmcplugin.addDirectoryItem(handle=int(
-        sys.argv[1]), url=u, listitem=liz)
+    if mode=="playVideo":
+        liz.addContextMenuItems([(translation(30006), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',)])
+    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
 
 def addDir(name, url, mode, iconimage, desc=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
-    liz = xbmcgui.ListItem(
-        name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
-    ok = xbmcplugin.addDirectoryItem(handle=int(
-        sys.argv[1]), url=u, listitem=liz, isFolder=True)
+    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
 params = parameters_string_to_dict(sys.argv[2])
 mode = urllib.unquote_plus(params.get('mode', ''))
 url = urllib.unquote_plus(params.get('url', ''))
+name = urllib.unquote_plus(params.get('name', ''))
 
 if mode == 'listVideos':
     listVideos(url)
@@ -334,6 +324,8 @@ elif mode == 'playLive':
     playLive()
 elif mode == 'playVideo':
     playVideo(url)
+elif mode == 'queueVideo':
+    queueVideo(url, name)
 elif mode == 'search':
     search()
 else:

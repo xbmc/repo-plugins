@@ -40,14 +40,12 @@ def index():
 def playRandom():
         playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
         playlist.clear()
-        i=1
         for i in range(1,100,1):
           if xbox==True:
             url="plugin://video/SouthPark.de/?url=http://www.southpark.de/alle-episoden/random&mode=playVideo"
           else:
             url="plugin://plugin.video.southpark_de/?url=http://www.southpark.de/alle-episoden/random&mode=playVideo"
           listitem = xbmcgui.ListItem("South Park: "+translation(30003)+" "+str(i))
-          i=i+1
           playlist.add(url,listitem)
 
 def listVideos(url):
@@ -92,8 +90,6 @@ def playVideo(url):
               match=re.compile('<media:content type="text/xml" medium="video" duration="(.+?)" isDefault="true" url="(.+?)"', re.DOTALL).findall(entry)
               url=match[0][1].replace("&amp;","&")
               content = getUrl(url)
-              if 'currently undergoing maintenance' in content:
-                continue
               matchMp4=re.compile('width="(.+?)" height="(.+?)" type="video/mp4" bitrate="(.+?)">(.+?)<src>(.+?)</src>', re.DOTALL).findall(content)
               matchFlv=re.compile('width="(.+?)" height="(.+?)" type="video/x-flv" bitrate="(.+?)">(.+?)<src>(.+?)</src>', re.DOTALL).findall(content)
               urlNew=""
@@ -102,10 +98,10 @@ def playVideo(url):
                 match=matchMp4
               elif len(matchFlv)>0:
                 match=matchFlv
-              for temp1,temp2,br,temp3,url in match:
+              for temp1,temp2,br,temp3,urlTemp in match:
                 if int(br)>bitrate:
                   bitrate=int(br)
-                  urlNew=url
+                  urlNew=urlTemp
                   if urlNew.find("/mtvnorigin/")>=0:
                     urlNew="http://mtvni.rd.llnwd.net/44620"+urlNew[urlNew.find("/mtvnorigin/"):]
                   elif urlNew.find("/mtviestor/")>=0:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dtm_tv" name="DTM.tv" version="1.0.0" provider-name="AddonScriptorDE">
+<addon id="plugin.video.dtm_tv" name="DTM.tv" version="1.0.1" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.0"/>
     </requires>
@@ -8,11 +8,11 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
-        <summary lang="de">Deutsche Tourenwagen Masters - Videos</summary>
-        <summary lang="en">German Touring Car Masters - Videos</summary>
+        <summary lang="de">Deutsche Tourenwagen Masters (DE/EN)</summary>
+        <summary lang="en">German Touring Car Masters (DE/EN)</summary>
         <language>de en</language>
-        <description lang="de">Deutsche Tourenwagen Masters - Videos</description>
-        <description lang="en">German Touring Car Masters - Videos</description>
+        <description lang="de">Deutsche Tourenwagen Masters (DE/EN)</description>
+        <description lang="en">German Touring Car Masters (DE/EN)</description>
     <platform>all</platform>
     </extension>
 </addon>

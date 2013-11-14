@@ -5,3 +5,5 @@
 - Some other small improvements
 1.0.2 / 2.0.2
 - Small bugfix
+2.0.3
+- Fixed site changes (video title)

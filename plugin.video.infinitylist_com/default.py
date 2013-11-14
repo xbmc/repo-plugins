@@ -68,7 +68,7 @@ def listVideos(url):
                 length = str(int(match[0])/60)
                 if length == "0":
                     length = "1"
-        match = re.compile('<a href=".+?">(.+?)</a>', re.DOTALL).findall(entry)
+        match = re.compile('<span class="text">(.+?)</span>', re.DOTALL).findall(entry)
         title = cleanTitle(match[0])
         match = re.compile('data-thumbnail-image-u-r-l="(.+?)"', re.DOTALL).findall(entry)
         thumb = match[0]
@@ -127,7 +127,7 @@ def playRandom(url):
     spl = content.split('<div id="videoPost-')
     for i in range(1, len(spl), 1):
         entry = spl[i]
-        match = re.compile('<a href=".+?">(.+?)</a>', re.DOTALL).findall(entry)
+        match = re.compile('<span class="text">(.+?)</span>', re.DOTALL).findall(entry)
         title = cleanTitle(match[0])
         matchYoutube = re.compile('data-youtube-video-i-d="(.+?)"', re.DOTALL).findall(entry)
         matchVimeo = re.compile('data-vimeo-video-i-d="(.+?)"', re.DOTALL).findall(entry)

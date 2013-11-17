@@ -1,3 +1,4 @@
-<settings>
-   <setting id="playback" type="enum" lvalues="30021|30022|30023" label="30024" default="1"/>
+﻿<settings>
+    <setting id="playback_type" type="enum" lvalues="30001|30002|30003" label="30004" default="1"/>
+    <setting id="view_mode" type="enum" label="30005" lvalues="30006|30007|30008|30009|30010|30011|30012" default="4"/>
 </settings>

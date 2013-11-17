@@ -1,180 +1,185 @@
-import urllib
+﻿import urllib
 import urllib2
-import re
-import os
+import time
+from datetime import datetime
+from urlparse import urlparse, parse_qs
+
+import xmltodict
+import StorageServer
+from bs4 import BeautifulSoup
+
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
-from BeautifulSoup import BeautifulStoneSoup
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.cnet.podcasts')
-__language__ = __settings__.getLocalizedString
-home = __settings__.getAddonInfo('path')
-icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-
-
-def CATEGORIES():
-        addDir(__language__(30000), 'allcnetvideopodcasts', 'allhdpodcast', 'http://audiopodcasts.cnet.com/', 1, 'allCNETvideo_600x600.jpg')
-        addDir(__language__(30029), 'AlwaysOnsd', 'AlwaysOnhd', '', 1, 'http://i.d.com.com/i/tron/cnettv/podcast/AlwaysOn_600x600.jpg')
-        addDir(__language__(30004), 'applebyte', 'applebytehd', '', 1, 'podcastsHD_applebyte_600x600.jpg')
-        addDir(__language__(30003), 'cartechvideo', 'cartechvideohd', '', 1, 'podcastsHD_cartech_600x600.jpg')
-        addDir(__language__(30001), 'cnetoncarssd', 'cnetoncarshd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/08/27/onCars_600x600.jpg')
-        addDir(__language__(30005), 'conversations', 'conversationshd', '', 1, 'podcastsHD_conversations_600x600.jpg')
-        addDir(__language__(30030), 'CNETUpdateSD', 'CNETUpdateHD', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/04/25/CNET_update_iTunes_600x600_300x300.jpg')
-        addDir(__language__(30002), 'news', 'cnetnewshd', '', 1, 'podcastsHD_news_600x600.jpg')
-        addDir(__language__(30007), 'top5', 'top5hd', '', 1, 'podcastsHD_top5_600x600.jpg')
-        addDir(__language__(30006), 'crackingopensd', 'crackingopenhd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/07/26/crackingOpen_600x600.jpg')
-        addDir(__language__(30009), 'firstlook', 'firstlookhd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/07/24/firstLook_600x600_600x600.jpg')
-        addDir(__language__(30008), 'howto', 'howtohd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/07/24/howTo_600x600_600x600.jpg')
-        addDir(__language__(30010), 'InsideScoopsd', 'InsideScoophd', '', 1, 'http://i.i.com.com/cnwk.1d/i/tim/2012/09/19/insideScoop_600x600.jpg')
-        addDir(__language__(30013), 'prizefight', 'prizefighthd', '', 1, 'podcastsHD_prizefight_600x600.jpg')
-        addDir(__language__(30025), 'rumorhasitsd', 'rumorhasithq', '', 1, 'rumorHasIt_300x300.jpg')
-        addDir(__language__(30014), 'tapthatapp', 'tapthatapphd', '', 1, 'tapThatAppHD_600x600.jpg')
-        addDir(__language__(30016), 'the404video', 'the404hqvideo', 'The404', 1, 'the404_600x600.jpg')
+cache = StorageServer.StorageServer("cnetpodcasts", 6)
+addon = xbmcaddon.Addon()
+addon_version = addon.getAddonInfo('version')
+addon_id = addon.getAddonInfo('id')
+icon = addon.getAddonInfo('icon')
+language = addon.getLocalizedString
 
 
-def GetInHMS(seconds):
-    hours = seconds / 3600
-    seconds -= 3600*hours
-    minutes = seconds / 60
-    seconds -= 60*minutes
-    if hours == 0:
-        return "%02d:%02d" % (minutes, seconds)
-    return "%02d:%02d:%02d" % (hours, minutes, seconds)
+def addon_log(string):
+    try:
+        log_message = string.encode('utf-8', 'ignore')
+    except:
+        log_message = 'addonException: addon_log'
+    xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, log_message),level=xbmc.LOGDEBUG)
 
 
-def INDEX(url,hd_url,audio_url,iconimage):
-        playback = __settings__.getSetting('playback')
-        if playback == '0':
-            link = audio_url
-        elif playback == '1':
-            link = hd_url
-        else:
-            link = url
-        if link == '':
-            link = url
-        link = 'http://feeds.feedburner.com/cnet/'+link+'?format=xml'
-        replace_list = ['rumorhasit', 'crackingopen', 'alwayson', 'cnetupdate', 'cnetoncars']
-        for i in replace_list:
-            if i.lower() in link.lower():
-                link = link.replace('cnet/','')
-        print 'Feed Url: '+link
-        req = urllib2.Request(link)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+def make_request(url, post_data=None):
+    addon_log('Request URL: %s' %url)
+    headers = {
+        'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
+        'Referer': 'http://www.cnet.com'
+        }
+    try:
+        req = urllib2.Request(url, post_data, headers)
         response = urllib2.urlopen(req)
-        link=response.read()
+        response_url = urllib.unquote_plus(response.geturl())
+        data = response.read()
         response.close()
-        soup = BeautifulStoneSoup(link, convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-        for i in soup('item'):
-            name = i('title')[0].string
+        return data
+    except urllib2.URLError, e:
+        addon_log('We failed to open "%s".' % url)
+        if hasattr(e, 'reason'):
+            addon_log('We failed to reach a server.')
+            addon_log('Reason: %s' %e.reason)
+        if hasattr(e, 'code'):
+            addon_log('We failed with error code - %s.' % e.code)
+
+
+def cache_categories():
+    url = 'http://www.cnet.com/podcasts/'
+    soup = BeautifulSoup(make_request(url), 'html.parser')
+    items = soup.find_all('div', class_='podcast')
+    cats = [{'thumb': i.img['src'],
+             'name': i.h3('a')[-1].string,
+             'desc': i.find('div', class_='desc').get_text(),
+             'links': [{x.string: x['href']} for x in i.find('div', class_='rss')('a') if
+                           x.string]} for
+            i in items]
+    return cats
+
+
+def display_categories():
+    cats = cache.cacheFunction(cache_categories)
+    for i in cats:
+        if i['name'] == 'All Audio Podcasts': continue
+        add_dir(i['name'], i['links'], 'category', i['thumb'], {'Plot': i['desc']})
+
+
+def display_category(links_list):
+    links_list = eval(links_list)
+    settings = {'0': 'Audio', '1': 'HD', '2': 'Video'}
+    preferred_type = settings[addon.getSetting('playback_type')]
+    feed_url = None
+    for i in links_list:
+        if i.has_key(preferred_type):
+            feed_url = i[preferred_type]
+    if not feed_url:
+        dialog = xbmcgui.Dialog()
+        ret = dialog.select(language(30013)+':%s' %preferred_type,
+                            [i.keys()[0] for i in links_list])
+        if ret > -1:
+            feed_url = [i.values()[0] for i in links_list][ret]
+        else:
+            return
+    pod_dict = xmltodict.parse(make_request(feed_url+'?format=xml'))
+    iconimage = pod_dict['rss']['channel']['itunes:image']['@href']
+    items = pod_dict['rss']['channel']['item']
+    for i in items:
+        date_patterns = ['%a, %d %b %Y %H:%M:%S PST', '%a, %d %b %Y %H:%M:%S PDT']
+        for pattern in date_patterns:
             try:
-                media_url = i('media:content')[0]['url']
-                if media_url == None: raise
-            except:
-                print ' --- No media:content url for "%s" --- ' %name
-                continue
-            try:
-                desc = i('itunes:summary')[0].string
-                if desc == None: raise
-            except:
-                desc = ''
-            try:
-                date = i('pubdate')[0].string
-                if date == None: raise
-            except:
-                date = ''
-            try:
-                seconds = i('itunes:duration')[0].string
-                duration = str(GetInHMS(int(seconds)))
-            except:
-                duration = ''
-            description = desc+' \n\n'+date
-            u=sys.argv[0]+"?mode=2&url="+urllib.quote_plus(media_url)
-            liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
-            liz.setInfo( type="Video", infoLabels={ "Title": name,"Plot":description, "Duration":duration } )
-            liz.setProperty( "Fanart_Image", iconimage )
-            liz.setProperty('IsPlayable', 'true')
-            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
+                date_time = datetime(*(time.strptime(i['pubDate'], pattern)[0:6]))
+                item_date = date_time.strftime('%d.%m.%Y')
+                premiered = date_time.strftime('%d-%m-%Y')
+                break
+            except ValueError:
+                item_date = ''
+                premiered = ''
+        meta = {'Plot': i['itunes:summary'],
+                'Duration': int(i['itunes:duration']) / 60,
+                'Date': item_date,
+                'Premiered': premiered}
+        add_dir(i['title'], i['media:content']['@url'], 'resolve', iconimage, meta, False)
+
+
+def resolve_url(video_id):
+    params = {
+        'iod': 'images,videoMedia,relatedLink,breadcrumb,relatedAssets,broadcast,lowcache',
+        'partTag': 'cntv',
+        'players': 'Download,RTMP',
+        'showBroadcast': 'true',
+        'videoIds': video_id,
+        'videoMediaType': 'preferred'
+        }
+    data = make_request('http://api.cnet.com/restApi/v1.0/videoSearch?' + urllib.urlencode(params))
+    pod_dict = xmltodict.parse(data)
+    item = pod_dict['CNETResponse']['Videos']['Video']
+    thumb = [i['ImageURL'] for i in item['Images']['Image'] if i['@width'] == '360'][0]
+    media_items = item['VideoMedias']['VideoMedia']
+    stream_urls = [i['DeliveryUrl'] for i in media_items if i['Height'] == '720']
+    if stream_urls:
+        return stream_urls[0]
+
+
+def add_dir(name, url, mode, iconimage, meta={}, isfolder=True):
+    params = {'name': name, 'url': url, 'mode': mode}
+    url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    meta["Title"] = name
+    if not isfolder:
+        listitem.setProperty('IsPlayable', 'true')
+        listitem.setProperty('Fanart_Image', iconimage)
+    listitem.setInfo(type="Video", infoLabels=meta)
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
 
 
 def get_params():
-        param=[]
-        paramstring=sys.argv[2]
-        if len(paramstring)>=2:
-            params=sys.argv[2]
-            cleanedparams=params.replace('?','')
-            if (params[len(params)-1]=='/'):
-                params=params[0:len(params)-2]
-            pairsofparams=cleanedparams.split('&')
-            param={}
-            for i in range(len(pairsofparams)):
-                splitparams={}
-                splitparams=pairsofparams[i].split('=')
-                if (len(splitparams))==2:
-                    param[splitparams[0]]=splitparams[1]
-        return param
+    p = parse_qs(sys.argv[2][1:])
+    for i in p.keys():
+        p[i] = p[i][0]
+    return p
 
 
-def addDir(name,url,hd_url,audio_url,mode,iconimage):
-        if not iconimage.startswith('http'):
-            iconimage = 'http://www.cnet.com/i/pod/images/'+iconimage
-        if __settings__.getSetting('playback') == '0':
-            if not audio_url == '':
-                name = name + __language__(30028)
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&hd_url="+urllib.quote_plus(hd_url)+"&audio_url="+\
-        urllib.quote_plus(audio_url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&iconimage="+str(iconimage)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        liz.setProperty( "Fanart_Image", iconimage )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
+def set_view_mode():
+    view_modes = {
+        '0': '502',
+        '1': '51',
+        '2': '3',
+        '3': '504',
+        '4': '503',
+        '5': '515'
+        }
+    view_mode = addon.getSetting('view_mode')
+    if view_mode == '6':
+        return
+    xbmc.executebuiltin('Container.SetViewMode(%s)' %view_modes[view_mode])
 
 
-params=get_params()
-url=None
-name=None
-mode=None
-hd_url=None
-audio_url=None
+params = get_params()
 
 try:
-    url=urllib.unquote_plus(params["url"])
+    mode = params['mode']
 except:
-    pass
-try:
-    hd_url=urllib.unquote_plus(params["hd_url"])
-except:
-    pass
-try:
-    audio_url=urllib.unquote_plus(params["audio_url"])
-except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    iconimage=str(params["iconimage"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
+    mode = None
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+addon_log(repr(params))
 
-if mode==None:
-    CATEGORIES()
+if not mode:
+    display_categories()
+    xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==1:
-    INDEX(url,hd_url,audio_url,iconimage)
+elif mode == 'category':
+    display_category(params['url'])
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    set_view_mode()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==2:
-    item = xbmcgui.ListItem(path=url)
+elif mode == 'resolve':
+    item = xbmcgui.ListItem(path=params['url'])
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.foodnetwork"
        name="Food Network"
-       version="1.0.2"
+       version="1.1.0"
        provider-name="divingmule">
   <requires>
-    <import addon="xbmc.python" version="2.0"/>
-    <import addon="script.module.beautifulsoup" version="3.0.8"/>
-    <import addon="script.common.plugin.cache" version="1.3.0"/>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.beautifulsoup" version="3.2.1"/>
+    <import addon="script.common.plugin.cache" version="2.5.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>video</provides>
@@ -14,8 +14,11 @@
   <extension point="xbmc.addon.metadata">
     <summary>Food Network</summary>
     <description>Videos from foodnetwork.com.</description>
-    <disclaimer>Videos seem to be restricted to the US.</disclaimer>
+    <disclaimer>These videos seem to be restricted to the U.S. only.</disclaimer>
     <platform>all</platform>
     <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <source>https://code.google.com/p/food-xbmc/</source>
+    <forum>http://forum.xbmc.org/showthread.php?tid=97018</forum>
   </extension>
 </addon>

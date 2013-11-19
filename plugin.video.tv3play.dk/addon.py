@@ -35,9 +35,9 @@ REGIONS = ['tv3play.dk', 'tv3play.se', 'tv3play.no', 'tv3play.lt', 'tv3play.lv',
 
 
 class TV3PlayAddon(object):
-    def __init__(self):
-        if 'region' in PARAMS:
-            self.api = mobileapi.TV3PlayMobileApi(PARAMS['region'][0])
+    def __init__(self, region):
+        self.region = region
+        self.api = mobileapi.TV3PlayMobileApi(region)
 
     def listRegions(self):
         items = list()
@@ -49,7 +49,7 @@ class TV3PlayAddon(object):
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def listPrograms(self, region):
+    def listPrograms(self):
         items = list()
 
         formats = self.api.getAllFormats()
@@ -69,12 +69,12 @@ class TV3PlayAddon(object):
             item = xbmcgui.ListItem(series['title'], iconImage=fanart)
             item.setInfo('video', infoLabels)
             item.setProperty('Fanart_Image', fanart)
-            items.append((PATH + '?region=%s&format=%s' % (region, series['id']), item, True))
+            items.append((PATH + '?region=%s&format=%s' % (self.region, series['id']), item, True))
 
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def listCategories(self, region, formatId):
+    def listCategories(self, formatId):
         detailed = self.api.detailed(formatId)
 
         for category in detailed['formatcategories']:
@@ -83,12 +83,12 @@ class TV3PlayAddon(object):
             item = xbmcgui.ListItem(category['name'], iconImage=fanart)
             item.setProperty('Fanart_Image', fanart)
             xbmcplugin.addDirectoryItem(HANDLE,
-                                        PATH + '?region=%s&format=%s&category=%s' % (region, formatId, category['id']),
+                                        PATH + '?region=%s&format=%s&category=%s' % (self.region, formatId, category['id']),
                                         item, True)
 
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def listVideos(self, region, category):
+    def listVideos(self, category):
         items = list()
 
         videos = self.api.getVideos(category)
@@ -117,7 +117,7 @@ class TV3PlayAddon(object):
             item.setInfo('video', infoLabels)
             item.setProperty('IsPlayable', 'true')
             item.setProperty('Fanart_Image', fanart)
-            items.append((PATH + '?region=%s&playVideo=%s' % (region, video['id']), item))
+            items.append((PATH + '?region=%s&playVideo=%s' % (self.region, video['id']), item))
 
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_EPISODE)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
@@ -163,17 +163,23 @@ if __name__ == '__main__':
     if not os.path.exists(CACHE_PATH):
         os.makedirs(CACHE_PATH)
 
+    r = None
+    if 'region' in PARAMS:
+        r = PARAMS['region'][0]
+    elif ADDON.getSetting('region') in REGIONS:
+        r = ADDON.getSetting('region')
+
     buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
-    tv3PlayAddon = TV3PlayAddon()
+    tv3PlayAddon = TV3PlayAddon(r)
     try:
         if 'playVideo' in PARAMS:
             tv3PlayAddon.playVideo(PARAMS['playVideo'][0])
         elif 'format' in PARAMS and 'category' in PARAMS:
-            tv3PlayAddon.listVideos(PARAMS['region'][0], PARAMS['category'][0])
+            tv3PlayAddon.listVideos(PARAMS['category'][0])
         elif 'format' in PARAMS:
-            tv3PlayAddon.listCategories(PARAMS['region'][0], PARAMS['format'][0])
-        elif 'region' in PARAMS:
-            tv3PlayAddon.listPrograms(PARAMS['region'][0])
+            tv3PlayAddon.listCategories(PARAMS['format'][0])
+        elif r:
+            tv3PlayAddon.listPrograms()
         else:
             tv3PlayAddon.listRegions()
 

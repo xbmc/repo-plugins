@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.tv3play.dk" version="2.0.6" name="TV3 Play" provider-name="twinther">
+<addon id="plugin.video.tv3play.dk" version="2.0.7" name="TV3 Play" provider-name="twinther">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.buggalo" version="1.1.2"/>

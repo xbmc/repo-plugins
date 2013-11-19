@@ -4,6 +4,9 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30000">General</string>
+    <string id="30001">Start page</string>
+
     <string id="30100">Commercial</string>
     <string id="30200">An error occurred while communication with TV3 Play.</string>
     <string id="30201">The error message is:</string>

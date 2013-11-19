@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2012 Tommy Winther
+#      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -20,7 +20,6 @@
 import os
 import re
 import sys
-import simplejson
 import urlparse
 import urllib2
 from htmlentitydefs import name2codepoint
@@ -31,52 +30,66 @@ import xbmcgui
 import xbmcplugin
 import xbmcaddon
 
+try:
+    import json
+except:
+    import simplejson as json
+
 BASE_URL = 'http://www.dr.dk/Bonanza/'
 VIDEO_TYPES = ['VideoHigh', 'VideoMid', 'VideoLow', 'Audio']
+
 
 class BonanzaException(Exception):
     pass
 
+
 class Bonanza(object):
+    def __init__(self):
+        self.content_type = 'video'
+
     def search(self):
         keyboard = xbmc.Keyboard('', ADDON.getLocalizedString(30001))
         keyboard.doModal()
         if keyboard.isConfirmed():
-            html = self._downloadUrl('http://www.dr.dk/bonanza/search.htm?&type=video&limit=120&needle=' + keyboard.getText().replace(' ', '+'))
+            html = self._downloadUrl('http://www.dr.dk/bonanza/search.htm?&type=' + self.content_type
+                                     + '&limit=120&needle=' + keyboard.getText().replace(' ', '+'))
             self.addContent(html)
             xbmcplugin.endOfDirectory(HANDLE)
-
 
     def showCategories(self):
         items = list()
         html = self._downloadUrl(BASE_URL)
 
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30001), iconImage = ICON)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30001), iconImage=ICON)
         item.setProperty('Fanart_Image', FANART)
-        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?mode=search', item, True)
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30002), iconImage = ICON)
+        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?content_type=' + self.content_type + '&mode=search', item, True)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30002), iconImage=ICON)
         item.setProperty('Fanart_Image', FANART)
-        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?mode=recommend', item, True)
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30004), iconImage = ICON)
+        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?content_type=' + self.content_type + '&mode=recommend', item, True)
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30004), iconImage=ICON)
         item.setProperty('Fanart_Image', FANART)
-        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?mode=latest', item, True)
+        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?content_type=' + self.content_type + '&mode=latest', item, True)
 
-        for m in re.finditer('<a href="(/Bonanza/kategori/.*\.htm)">(.*)</a>', html):
+        if self.content_type == 'audio':
+            pattern = '<a href="(/Bonanza/Radio/Kategori/.*\.htm)">(.*)</a>'
+        else:
+            pattern = '<a href="(/Bonanza/kategori/.*\.htm)">(.*)</a>'
+
+        for m in re.finditer(pattern, html):
             path = m.group(1)
             title = m.group(2)
 
-            item = xbmcgui.ListItem(title, iconImage = ICON)
+            item = xbmcgui.ListItem(title, iconImage=ICON)
             item.setProperty('Fanart_Image', FANART)
-            item.setInfo(type = 'video', infoLabels = {
-                'title' : title
+            item.setInfo(self.content_type, infoLabels={
+                'title': title
             })
-            url = PATH + '?mode=subcat&url=http://www.dr.dk' + path
+            url = PATH + '?content_type=' + self.content_type + '&mode=subcat&url=http://www.dr.dk' + path
             items.append((url, item, True))
 
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
-
 
     def showRecommendations(self):
         html = self._downloadUrl(BASE_URL)
@@ -92,10 +105,9 @@ class Bonanza(object):
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
 
-
     def showSubCategories(self, url):
         html = self._downloadUrl(url.replace(' ', '+'))
-        tab = self._getTab(html, '') # will return first tab found
+        tab = self._getTab(html, '')  # will return first tab found
         self.addSubCategories(tab)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
@@ -107,46 +119,55 @@ class Bonanza(object):
         xbmcplugin.endOfDirectory(HANDLE)
 
     def addSubCategories(self, html):
-        for m in re.finditer('<a href="(http://www\.dr\.dk/bonanza/serie/[^\.]+\.htm)"[^>]+>..<img src="(http://downol\.dr\.dk/download/bonanza/collectionThumbs/[^"]+)"[^>]+>..<b>([^<]+)</b>..<span>([^<]+)</span>..</a>', html, re.DOTALL):
+
+        if self.content_type == 'audio':
+            pattern = '<a href="(http://www\.dr\.dk/bonanza/radio/serie/[^\.]+\.htm)"[^>]+>..' \
+                      '<img src="(http://downol\.dr\.dk/download/bonanza/collectionThumbs/[^"]+)"[^>]+>..' \
+                      '<b>([^<]+)</b>..<span>([^<]+)</span>..</a>'
+        else:
+            pattern = '<a href="(http://www\.dr\.dk/bonanza/serie/[^\.]+\.htm)"[^>]+>..' \
+                      '<img src="(http://downol\.dr\.dk/download/bonanza/collectionThumbs/[^"]+)"[^>]+>..' \
+                      '<b>([^<]+)</b>..<span>([^<]+)</span>..</a>'
+
+        for m in re.finditer(pattern, html, re.DOTALL):
             url = m.group(1)
             image = m.group(2)
             title = m.group(3)
             description = m.group(4)
 
-            item = xbmcgui.ListItem(title, iconImage = image)
+            item = xbmcgui.ListItem(title, iconImage=image)
             item.setProperty('Fanart_Image', FANART)
-            item.setInfo(type = 'video', infoLabels = {
-                'title' : title,
-                'plot' : description
+            item.setInfo(self.content_type, infoLabels={
+                'title': title,
+                'plot': description
             })
-            url = PATH + '?mode=content&url=' + url
+            url = PATH + '?content_type=' + self.content_type + '&mode=content&url=' + url
             xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
-
 
     def addContent(self, html):
         items = list()
         for m in re.finditer('newPlaylist\(([^"]+)"', html):
             raw = m.group(1)[:-2].replace('&quot;', '"')
-            json = simplejson.loads(raw)
+            content = json.loads(raw)
 
             infoLabels = {}
-            if json.has_key('Title') and json['Title'] is not None:
-                infoLabels['title'] = self._decodeHtmlEntities(json['Title'])
-            if json.has_key('Description') and json['Description'] is not None:
-                infoLabels['plot'] = self._decodeHtmlEntities(json['Description'])
-            if json.has_key('Colophon') and json['Colophon'] is not None:
-                infoLabels['writer'] = self._decodeHtmlEntities(json['Colophon'])
-            if json.has_key('Actors') and json['Actors'] is not None:
-                infoLabels['cast'] = self._decodeHtmlEntities(json['Actors'])
-            if json.has_key('Rating') and json['Rating'] is not None:
-                infoLabels['rating'] = json['Rating']
-            if json.has_key('FirstPublished') and json['FirstPublished'] is not None:
-                infoLabels['year'] = int(json['FirstPublished'][:4])
-            if json.has_key('Duration') and json['Duration'] is not None:
-                infoLabels['duration'] = self._secondsToDuration(int(json['Duration']) / 1000)
+            if 'Title' in content and content['Title'] is not None:
+                infoLabels['title'] = self._decodeHtmlEntities(content['Title'])
+            if 'Description' in content and content['Description'] is not None:
+                infoLabels['plot'] = self._decodeHtmlEntities(content['Description'])
+            if 'Colophon' in content and content['Colophon'] is not None:
+                infoLabels['writer'] = self._decodeHtmlEntities(content['Colophon'])
+            if 'Actors' in content and content['Actors'] is not None:
+                infoLabels['cast'] = self._decodeHtmlEntities(content['Actors'])
+            if 'Rating' in content and content['Rating'] is not None:
+                infoLabels['rating'] = content['Rating']
+            if 'FirstPublished' in content and content['FirstPublished'] is not None:
+                infoLabels['year'] = int(content['FirstPublished'][:4])
+            if 'Duration' in content and content['Duration'] is not None:
+                infoLabels['duration'] = int(content['Duration']) / 60000
             infoLabels['studio'] = ADDON.getAddonInfo('name')
 
-            thumb = self.findFileLocation(json, 'Thumb')
+            thumb = self.findFileLocation(content, 'Thumb')
             if thumb is None:
                 thumb = ICON
             item = xbmcgui.ListItem(infoLabels['title'], iconImage=thumb, thumbnailImage=thumb)
@@ -155,9 +176,9 @@ class Bonanza(object):
             item.setInfo('video', infoLabels)
 
             url = '?mode=play'
-            for file in json['Files']:
-                if file['Type'] in VIDEO_TYPES:
-                    url += '&' + file['Type'] + '=' + file['Location']
+            for elem in content['Files']:
+                if elem['Type'] in VIDEO_TYPES:
+                    url += '&' + elem['Type'] + '=' + elem['Location']
 
             items.append((PATH + url, item, False))
         xbmcplugin.addDirectoryItems(HANDLE, items)
@@ -167,10 +188,10 @@ class Bonanza(object):
         playlist.clear()
 
         firstItem = None
-        for type in VIDEO_TYPES:
-            if PARAMS.has_key(type.lower()):
-                url = self.fixRtmpUrl(PARAMS[type.lower()][0])
-                item = xbmcgui.ListItem(type, path = url)
+        for videoType in VIDEO_TYPES:
+            if videoType.lower() in PARAMS:
+                url = self.fixRtmpUrl(PARAMS[videoType.lower()][0])
+                item = xbmcgui.ListItem(videoType, path=url)
                 playlist.add(url, item)
 
                 if firstItem is None:
@@ -182,18 +203,23 @@ class Bonanza(object):
             xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
 
     def fixRtmpUrl(self, url):
-        if url[0:4] == 'rtmp':
-            # patch videoUrl to work with xbmc
-            m = re.match('(rtmp://.*?)/(.*)', url)
-            url = '%s/bonanza/%s' % (m.group(1), m.group(2))
+        if url[0:7] == 'rtmp://':
+            m = re.search('(rtmp://.*?/(.*?))/(.*)', url)
+            if m:
+                url = m.group(1) + ' playpath=' + m.group(3) + ' app=' + m.group(2)
+            try:
+                print url
+            except:
+                pass
+
         return url
 
-    def findFileLocation(self, json, type):
-        for file in json['Files']:
-            if file['Type'] == type:
-                return file['Location']
+    def findFileLocation(self, data, fileType):
+        for elem in data['Files']:
+            if elem['Type'] == fileType:
+                return elem['Location']
         return None
-    
+
     def _downloadUrl(self, url):
         try:
             u = urllib2.urlopen(url)
@@ -225,7 +251,7 @@ class Bonanza(object):
                     return unichr(int(ent))
             elif match.group(2) == 'x':
                 # number is in hex
-                return unichr(int('0x'+ent, 16))
+                return unichr(int('0x' + ent, 16))
             else:
                 # they were using a name
                 cp = name2codepoint.get(ent)
@@ -237,23 +263,13 @@ class Bonanza(object):
         entity_re = re.compile(r'&(#?)(x?)(\w+);')
         return entity_re.subn(substituteEntity, string)[0]
 
-    def _secondsToDuration(self, input):
-        """Formats the seconds to a duration string as used by XBMC.
-    
-        Keyword arguments:
-        input -- the duration in seconds
-    
-        """
-        hours = input / 3600
-        minutes = (input % 3600) / 60
-        seconds = (input % 3600) % 60 
-    
-        return "%02d:%02d:%02d" % (hours, minutes, seconds)
-
-
     def _getTab(self, html, tabLabel):
-        m = re.search('(<div id="tabWrapper" class="tabWrapper"><span class="tabTitle">' + tabLabel + '.*?</div>)', html, re.DOTALL + re.IGNORECASE)
-        return m.group(1)
+        m = re.search('(<div id="tabWrapper" class="tabWrapper"><span class="tabTitle">' + tabLabel + '.*?</div>)',
+                      html, re.DOTALL + re.IGNORECASE)
+        if m:
+            return m.group(1)
+        else:
+            return ''
 
     def showError(self, message):
         heading = buggalo.getRandomHeading()
@@ -261,8 +277,9 @@ class Bonanza(object):
         line2 = ADDON.getLocalizedString(30901)
         xbmcgui.Dialog().ok(heading, line1, line2, message)
 
+
 if __name__ == '__main__':
-    ADDON = xbmcaddon.Addon(id = 'plugin.video.dr.dk.bonanza')
+    ADDON = xbmcaddon.Addon()
     PATH = sys.argv[0]
     HANDLE = int(sys.argv[1])
     PARAMS = urlparse.parse_qs(sys.argv[2][1:])
@@ -273,18 +290,22 @@ if __name__ == '__main__':
     buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     b = Bonanza()
     try:
-        if PARAMS.has_key('mode') and PARAMS['mode'][0] == 'subcat':
-            b.showSubCategories(PARAMS['url'][0])
-        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'content':
-            b.showContent(PARAMS['url'][0])
-        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'search':
-            b.search()
-        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'recommend':
-            b.showRecommendations()
-        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'latest':
-            b.showLatest()
-        elif PARAMS.has_key('mode') and PARAMS['mode'][0] == 'play':
-            b.playContent()
+        if 'content_type' in PARAMS:
+            b.content_type = PARAMS['content_type'][0]
+
+        if 'mode' in PARAMS:
+            if PARAMS['mode'][0] == 'subcat':
+                b.showSubCategories(PARAMS['url'][0])
+            elif PARAMS['mode'][0] == 'content':
+                b.showContent(PARAMS['url'][0])
+            elif PARAMS['mode'][0] == 'search':
+                b.search()
+            elif PARAMS['mode'][0] == 'recommend':
+                b.showRecommendations()
+            elif PARAMS['mode'][0] == 'latest':
+                b.showLatest()
+            elif PARAMS['mode'][0] == 'play':
+                b.playContent()
         else:
             b.showCategories()
 
@@ -293,5 +314,3 @@ if __name__ == '__main__':
 
     except Exception:
         buggalo.onExceptionRaised()
-
-

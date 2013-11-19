@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.dr.dk.bonanza" version="2.1.4" name="DR.dk Bonanza" provider-name="twinther [tommy@winther.nu]">
+<addon id="plugin.video.dr.dk.bonanza" version="3.0.1" name="DR.dk Bonanza" provider-name="twinther">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
         <import addon="script.module.buggalo" version="1.1.2"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
-        <provides>video</provides>
+        <provides>audio video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="en">Best and worst from DR's archives</summary>
@@ -18,5 +18,8 @@
         <license>GPL 2.0</license>
         <platform>all</platform>
         <language>da</language>
+        <email>tommy@winther.nu</email>
+        <website>http://tommy.winther.nu</website>
+        <source>https://github.com/xbmc-danish-addons/plugin.video.dr.dk.bonanza</source>
     </extension>
 </addon>

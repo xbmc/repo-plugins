@@ -29,16 +29,22 @@ import xbmcplugin
 
 BASE_URL = 'http://www.gametest.dk/'
 PLAY_VIDEO_PATH = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s'
-PLAYLIST_PATH = 'plugin://plugin.video.youtube/?channel=gametestforever&path=%2froot%2fsubscriptions&user_feed=uploads'
+PLAYLIST_PATH = 'plugin://plugin.video.youtube/?channel=GametestDanmark&path=%2froot%2fsubscriptions&user_feed=uploads'
 
 
-class GameTest(object):
-    def showOverview(self):
+if __name__ == '__main__':
+    ADDON = xbmcaddon.Addon()
+    HANDLE = int(sys.argv[1])
+
+    ICON = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
+    FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
+
+    try:
         u = urllib2.urlopen(BASE_URL)
         html = u.read()
         u.close()
 
-        m = re.search('http://www.youtube.com/embed/([^"]+)"', html, re.DOTALL)
+        m = re.search('//www.youtube.com/embed/([^"]+)"', html, re.DOTALL)
         if m:
             videoId = m.group(1)
             item = xbmcgui.ListItem(ADDON.getLocalizedString(30000), iconImage=ICON)
@@ -51,17 +57,6 @@ class GameTest(object):
             xbmcplugin.addDirectoryItem(HANDLE, PLAYLIST_PATH, item, True)
 
         xbmcplugin.endOfDirectory(HANDLE)
-
-if __name__ == '__main__':
-    ADDON = xbmcaddon.Addon()
-    HANDLE = int(sys.argv[1])
-
-    ICON = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
-    FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
-
-    gt = GameTest()
-    try:
-        gt.showOverview()
     except:
         buggalo.onExceptionRaised()
 

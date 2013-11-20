@@ -1,3 +1,15 @@
+[B]Version 3.0.3 - 2013-11-18[/B]
+- Fixed playback of TV2 Regions channels, TV2/ØJ channel 24 hour channel,
+  and additional TV2/Fyn quality streams (all thanks to Rene H. Larsen / Fynske Medier)
+- Changed wording of [I]Raspberry Pi compatible[/I] to [I]Raspberry Pi/AppleTV compatible[/I]
+  as it also fixed problems with the Apple TV.
+
+[B]Version 3.0.2 - 2013-11-16[/B]
+- Added better support for Raspberry Pi
+  Change Quality to "Raspberry Pi compatible" in addon settings
+- Update stream URLs for some channels
+- Currently most TV2 Region channels doesn't work, I'm investigating...
+
 [B]Version 3.0.1 - 2013-03-22[/B]
 - Added DR Ultra
 - Removed DR Update

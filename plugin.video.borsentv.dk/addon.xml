@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.borsentv.dk" version="1.0.4" name="Børsen TV" provider-name="twinther [tommy@winther.nu]">
+<addon id="plugin.video.borsentv.dk" version="1.0.5" name="Børsen TV" provider-name="twinther">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
-        <import addon="script.module.buggalo" version="1.0.1"/>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.buggalo" version="1.1.5"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -15,5 +15,7 @@
         <license>GPL 2.0</license>
         <platform>all</platform>
         <language>da</language>
+        <email>tommy@winther.nu</email>
+        <source>https://github.com/xbmc-danish-addons/plugin.video.borsentv.dk</source>
     </extension>
 </addon>

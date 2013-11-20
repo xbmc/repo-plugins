@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30000">
+        <setting label="30001"  type="text"   id="IPServer" default=""/>
+        <setting label="30002"  type="number" id="WebPort" default=""/>
+        <setting label="30003"  type="number" id="StreamPort" default=""/>
+        <setting label="30004"  type="text"   id="Password" option="hidden" default=""/>
+        <setting label="30005"  type="enum"   id="VB" values="50 kbps|100 kbps|150 kbps|200 kbps|250 kbps|300 kbps|400 kbps|500 kbps|600 kbps|750 kbps|1000 kbps|1500 kbps|2000 kbps|2500 kbps|3000 kbps|5000 kbps|8000 kbps|10000 kbps" default="4"/>
+        <setting label="30006"  type="enum"   id="VS" values="0.10|0.25|0.50|0.75|1" default="4"/>
+        <setting label="30007"  type="enum"   id="AB" values="64 kbps|96 kbps|128 kbps|256 kbps" default="1"/>
+        <setting label="30008"  type="enum"   id="AC" values="Mono|Stereo" default="1"/>
+    </category>
+</settings>

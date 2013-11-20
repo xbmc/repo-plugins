@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Enigma-TV : Param&#232;tres</string>
+    <string id="30001">IP/DNS Serveur</string>
+    <string id="30002">Port Web</string>
+    <string id="30003">Port Stream</string>
+    <string id="30004">Mot De Passe</string>
+    <string id="30005">D&#233;bit Vid&#233;o</string>
+    <string id="30006">Echelle Vid&#233;o</string>
+    <string id="30007">D&#233;bit Audio</string>
+    <string id="30008">Canaux Audio</string>
+    <string id="30009">Erreur de connexion au serveur</string>
+    <string id="30010">V&#233;rifiez les param&#232;tres :</string>
+    <string id="30011">- Faites un clique-droit sur le nom du plugin</string>
+    <string id="30012">- Cliquez sur le menu param&#232;tre. Renseignez les infos n&#233;c&#233;ssaires</string>
+    <string id="30013">Erreur de lecture du flux dans XBMC</string>
+    <string id="30014">S&#233;lectionnez une autre cha&#238;ne ...</string>
+    <string id="30015">Erreur de connexion au flux</string>
+    <string id="30016">V&#233;rifiez les param&#232;tres (Port Stream)</string>
+    <string id="30017">Erreur de l'envoi de la commande SETTV au serveur</string>
+    <string id="30018">V&#233;rifiez les param&#232;tres ou la connexion a Internet ...</string>
+</strings>

@@ -92,15 +92,24 @@ def get_latest_episodes(url):
 def get_stream_info(page_url):
     "Get a page url and finds the url of the rtmp stream"
     html = fetch_page(page_url)
+    soup = BeautifulSoup(html)
 
-    access_point_hyperlink = re.search('"http://load.cache.is.*?"', html).group()[1:-1]
-    javascript = fetch_page(access_point_hyperlink)
-    access_point = re.search('"(.*?)"', javascript).group(1)
-    path = re.search('ruv(vod)?\?key=\d+', html).group()
-    rtmp_url = "rtmp://%s/%s" % (access_point, path)
-    playpath = re.findall("\'file\': \'(.*?)\'", html)[-1] #.group(1)
+    params = soup.findAll('param', limit=2 )
+    swfplayer = 'http://ruv.is%s' % params[0]['value']
+    details = params[1]['value']
 
-    return {'playpath': playpath, 'rtmp_url': rtmp_url}
+    playpath = re.search('streamer=(.*?)&(file=.*?)&stre', details).group(2)
+    rtmp_url = re.search('http.*?m3u8', html).group()
+
+    if 'tengipunktur' in rtmp_url:
+        access_point_hyperlink = re.search('"http://load.cache.is.*?"', html).group()[1:-1]
+        javascript = fetch_page(access_point_hyperlink)
+        access_point = re.search('"(.*?)"', javascript).group(1)
+        print access_point
+        rtmp_url = rtmp_url.replace("' + tengipunktur + '", access_point)
+
+    print rtmp_url
+    return {'playpath': playpath, 'rtmp_url': rtmp_url, 'swfplayer': swfplayer}
 
 def update_index():
     "Update the data file with the show list"

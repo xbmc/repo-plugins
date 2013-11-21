@@ -19,5 +19,6 @@
         <source>https://github.com/xbmc-danish-addons/plugin.video.news.tv2.dk</source>
         <email>tommy@winther.nu</email>
         <language>da</language>
+        <broken>The site has completely changed and the video streams are no longer available</broken>
     </extension>
 </addon>

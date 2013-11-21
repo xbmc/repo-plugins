@@ -1,0 +1,6 @@
+<settings>
+   <setting id="subtitleLanguage" type="enum" label="30104" values="-|ro|pt|pl|nl|it|es|ru|fr|de|en" default="0"/>
+   <setting id="useThumbAsFanart" type="bool" label="30101" default="true"/>
+   <setting id="forceView" type="bool" label="30102" default="true"/>
+   <setting id="viewID" type="number" label="30103" default="500"/>
+</settings>

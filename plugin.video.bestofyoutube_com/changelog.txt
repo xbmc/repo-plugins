@@ -1,5 +1,5 @@
 1.0.0
-- First Try
+- Initial release
 1.0.1
 - Changed addon.xml
 1.0.2
@@ -18,3 +18,6 @@
 - Fixed site changes
 2.0.9
 - Fixed site changes
+2.1.1
+- Added custom user-agent
+- Video listing now makes 2 requests (to show more videos)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.bestofyoutube_com" name="BestOfYoutube.com" version="2.1.0" provider-name="AddonScriptorDE">
+<addon id="plugin.video.bestofyoutube_com" name="BestOfYoutube.com" version="2.1.1" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.video.youtube" version="3.0.0"/>
@@ -14,9 +14,10 @@
         <language></language>
         <description lang="en">Only the best Youtube clips</description>
         <description lang="de">Nur die besten Youtube Videos</description>
-        <website>http://www.bestofyoutube.com</website>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <source>https://github.com/AddonScriptorDE/plugin.video.bestofyoutube_com</source>
         <forum>http://forum.xbmc.org/showthread.php?tid=132564</forum>
         <email>AddonScriptorDE at yahoo dot de</email>
+        <website>http://www.bestofyoutube.com</website>
     </extension>
 </addon>

@@ -12,21 +12,23 @@ import re
 addon = xbmcaddon.Addon()
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
+addonID = addon.getAddonInfo('id')
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
 translation = addon.getLocalizedString
 forceViewMode = addon.getSetting("forceViewMode") == "true"
 filter = addon.getSetting("filter") == "true"
 filterRating=int(addon.getSetting("filterRating"))
 filterThreshold=int(addon.getSetting("filterThreshold"))
+icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
 viewMode = str(addon.getSetting("viewMode"))
 urlMain = "http://www.bestofyoutube.com"
 
 
 def index():
-    addDir(translation(30001), urlMain, "listVideos", "")
-    addDir(translation(30008), "", "bestOf", "")
-    addDir(translation(30006), urlMain+"/index.php?show=random", "listVideos", "")
-    addDir(translation(30007), "", "search", "")
+    addDir(translation(30001), urlMain, "listVideos", icon)
+    addDir(translation(30008), "", "bestOf", icon)
+    addDir(translation(30006), urlMain+"/index.php?show=random", "listVideos", icon)
+    addDir(translation(30007), "", "search", icon)
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
@@ -83,11 +85,20 @@ def listVideos(url):
     content = content[content.find('<div class="pagination">'):]
     content = content[:content.find('</div>')]
     spl = content.split("<a href=\"")
+    nextUrl = ""
     for i in range(1, len(spl), 1):
         entry = spl[i][:spl[i].find('</a>')]
         url = urlMain+"/"+entry[:entry.find('"')]
         if entry.find('next &#187;') >= 0:
-            addDir(translation(30009), url, "listVideos", '')
+            nextUrl = url
+            nextPage = url[url.find("page=")+5:]
+            if "&" in nextPage:
+                nextPage = nextPage[:nextPage.find("&")]
+    if nextUrl:
+        if int(nextPage)%2==0:
+            listVideos(nextUrl)
+        else:
+            addDir(translation(30009), nextUrl, "listVideos", '')
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
@@ -95,7 +106,7 @@ def listVideos(url):
 
 def getUrl(url):
     req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:22.0) Gecko/20100101 Firefox/22.0')
+    req.add_header('User-Agent', 'BestOfYoutube XBMC Addon v2.1.1')
     response = urllib2.urlopen(req)
     content = response.read()
     response.close()

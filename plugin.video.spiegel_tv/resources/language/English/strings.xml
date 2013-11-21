@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Next Page</string>
+  <string id="30002">Latest videos</string>
+  <string id="30003">Channels</string>
+  <string id="30004">Topics</string>
+  <string id="30005">TV-Mode</string>
+  <string id="30006">Add to queue</string>
+  <string id="30007">Random videos</string>
+  <string id="30101">Use thumb as fanart</string>
+  <string id="30102">Force View</string>
+  <string id="30103">ViewID (Videos)</string>
+  <string id="30104">ViewID (Channels)</string>
+</strings>

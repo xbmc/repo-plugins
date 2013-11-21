@@ -1,0 +1,6 @@
+<settings>
+   <setting id="useThumbAsFanart" type="bool" label="30101" default="true"/>
+   <setting id="forceViewMode" type="bool" label="30102" default="true"/>
+   <setting id="viewModeVideos" type="number" label="30103" enable="eq(-1,true)" default="504"/>
+   <setting id="viewModeChannels" type="number" label="30104" enable="eq(-2,true)" default="503"/>
+</settings>

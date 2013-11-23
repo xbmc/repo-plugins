@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <string id="30000">RoosterTeeth</string>
-  <string id="30001"></string>
+  <string id="30001">Add-on Notification</string>
   <string id="30002">Next Page</string>
-  <string id="30003">Sorry Sponsor only videos are not supported.</string>
+  <string id="30003">Sorry, you must be a Sponsor to see this video.</string>
   <string id="30004">Only audio is avaliable</string>
   <string id="30005">Podcasts</string>
   <string id="30006">Choose a stream</string>
@@ -14,4 +14,20 @@
   <string id="30011">Medium</string>
   <string id="30012">Low</string>
   <string id="30013">Ask</string>
+  <string id="30014">Rooster Teeth Sponsor</string>
+  <string id="30015">User Name</string>
+  <string id="30016">Password</string>
+  <string id="30017">Default view mode for episodes</string>
+  <string id="30018">List</string>
+  <string id="30019">Big list</string>
+  <string id="30020">Thumbnail</string>
+  <string id="30021">Media info</string>
+  <string id="30022">Media info 2</string>
+  <string id="30023">Media info 3</string>
+  <string id="30024">Unknown Error</string>
+  <string id="30025">Login Failed</string>
+  <string id="30026">Comedy, Gaming</string>
+  <string id="30027"></string>
+  <string id="30028"></string>
+  <string id="30029"></string>
 </strings>

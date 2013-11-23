@@ -1,3 +1,13 @@
+Version 0.0.6
+release to xbmc.org repository
+
+Version 0.0.5
+beta/testing release
+added initial support for sponsor only videos
+added more media information where available
+set content to tv shows/episodes, enabling more view modes
+added setting 'Default view mode for episodes'
+
 Version 0.0.4
 bug fixes
 added podcasts

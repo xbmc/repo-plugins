@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.mms" name="Missing Movie Scanner" version="3.3.0" provider-name="null_pointer">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <forum>http://forum.xbmc.org/showthread.php?tid=118263</forum>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+    <platform>all</platform>
+    <language>en</language>
+    <website></website>
+    <email></email>
+    <source></source>  
+    <summary lang="en">Shows missing library items.</summary>
+    <description lang="en">Scans media source folders for files that are missing from your media library. View the settings for more options.</description>
+  </extension>
+</addon>

@@ -1,30 +1,25 @@
 # -*- coding: utf-8 -*-
+# Russia Today (RT) News
 
-import urllib
-import urllib2
-import cookielib
-import datetime
-import time
-import re
-import os
-import xbmcplugin
-import xbmcgui
-import xbmcaddon
-import xbmcvfs
-import cgi
+import urllib, urllib2, cookielib, datetime, time, re, os
+import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
+import cgi, gzip
 from StringIO import StringIO
-import gzip
+
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
+GENRE_NEWS      = "News"
+UTF8          = 'utf-8'
+RTBASE_URL    = 'http://rt.com'
+RTLIVE_BASE   = 'rtmp://rt.fms-04.visionip.tv/live/'
+
 addon         = xbmcaddon.Addon('plugin.video.rt')
 __addonname__ = addon.getAddonInfo('name')
 __language__  = addon.getLocalizedString
 
-home          = addon.getAddonInfo('path').decode('utf-8')
+home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 fanart        = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
-
-
 
 
 def log(txt):
@@ -63,61 +58,50 @@ def _parse_argv():
         except:
             mode = None
 
-
-
-
 def demunge(munge):
         try:
-            munge = urllib.unquote_plus(munge).decode('utf-8')
+            munge = urllib.unquote_plus(munge).decode(UTF8)
         except:
             pass
         return munge
 
 
-
 def getRequest(url):
-              log("RT - getRequest URL: "+str(url))
-              req = urllib2.Request(url.encode('utf-8'))
-              req.add_header('User-Agent', USER_AGENT)
-              req.add_header('Accept',"text/html")
-              req.add_header('Accept-Encoding', None )
-              req.add_header('Accept-Encoding', 'deflate,sdch')
-              req.add_header('Accept-Language', 'en-US,en;q=0.8')
-              req.add_header('Cookie','hide_ce=true')
-              log("RT -- request headers = "+str(req.header_items()))
+              log("getRequest URL:"+str(url))
+              headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8', 'Cookie':'hide_ce=true'} 
+              req = urllib2.Request(url.encode(UTF8), None, headers)
+
               try:
                  response = urllib2.urlopen(req)
                  if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("RT -- Content Encoding == 'gzip")
+                    log("Content Encoding == gzip")
                     buf = StringIO( response.read())
                     f = gzip.GzipFile(fileobj=buf)
                     link1 = f.read()
                  else:
                     link1=response.read()
-                 response.close()
               except:
                  link1 = ""
+
+              link1 = str(link1).replace('\n','')
               return(link1)
 
 
-
 def getSources():
-              log("RT -- RT Live main page")
-              link1 = getRequest("http://rt.com/shows/")
-              addDir("RT Live","plugin://plugin.video.rt/",17,icon,fanart,"RT Live","News","",False)
+              log("main page")
+              link = getRequest(RTBASE_URL+"/shows/")
+              addDir("RT Live","plugin://plugin.video.rt/",17,icon,fanart,"RT Live",GENRE_NEWS,"",False)
 
-              link=str(link1).replace('\n','')     
-              match=re.compile('<p class="shows-gallery_bottom_link"><a href="(.+?)".+?<img src="(.+?)".+?class="shows-gallery_bottom_text_header">(.+?)</span>(.+?)</p>').findall(str(link))
+              match=re.compile('<p class="shows-gallery_bottom_link"><a href="(.+?)".+?<img src="(.+?)".+?class="shows-gallery_bottom_text_header">(.+?)</span>(.+?)</p>').findall(link)
 
               for caturl,caticon,cattitle,catdesc in match:
-
                  catdesc = catdesc.replace('<P>','').replace('<p>','').replace('</P>','')
                  caticon = caticon.replace('.a.','.gp.')
-                 caticon = "http://rt.com"+caticon
+                 caticon = RTBASE_URL+caticon
                  try:
-                      addDir(cattitle.encode('utf-8', 'ignore'),caturl.encode('utf-8'),18,caticon,caticon,catdesc,"News","",False)
+                      addDir(cattitle.encode(UTF8, 'ignore'),caturl.encode(UTF8),18,caticon,caticon,catdesc,GENRE_NEWS,"",False)
                  except:
-                    log("RT -- Problem adding directory")
+                    log("Problem adding directory")
 
 
 def play_playlist(name, list):
@@ -131,31 +115,42 @@ def play_playlist(name, list):
         xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+        dir_playable = False
+
+        if mode != 12:
+            u += "&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+            dir_image = "DefaultFolder.png"
+            dir_folder = True
+        else:
+            dir_image = "DefaultVideo.png"
+            dir_folder = False
+            dir_playable = True
+
         ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
         liz.setProperty( "Fanart_Image", fanart )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
 
-
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=12"
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-        liz.setProperty('IsPlayable', 'true')
+        if dir_playable == True:
+           liz.setProperty('IsPlayable', 'true')
         if not playlist is None:
             playlist_name = name.split(') ')[1]
             contextMenu_ = [('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=13&name=%s&playlist=%s)' %(sys.argv[0], urllib.quote_plus(playlist_name), urllib.quote_plus(str(playlist).replace(',','|'))))]
             liz.addContextMenuItems(contextMenu_)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
+
+        if autoplay == True:
+            xbmc.PlayList(1).add(u, liz)
+        else:    
+            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
         return ok
 
+def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
+        return addDir(name,url,12,iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
+
+
+# MAIN EVENT PROCESSING STARTS HERE
 
 xbmcplugin.setContent(int(sys.argv[1]), 'movies')
 try:
@@ -176,122 +171,121 @@ except:
     pass
 
 
-url=None
-name=None
-iconimage=None
-mode=None
-playlist=None
-fchan=None
-fres=None
-fhost=None
-fname=None
-fepg=None
+url=name=iconimage=mode=playlist=fchan=fres=fhost=fname=fepg=None
 
 _parse_argv()
 
 
-
-log("RT -- Mode: "+str(mode))
+log("Mode: "+str(mode))
 if not url is None:
     try:
-      log("RT -- URL: "+str(url.encode('utf-8')))
+      log("URL: "+str(url.encode(UTF8)))
     except:
       pass
 
 try:
- log("RT -- Name: "+str(name))
+ log("Name: "+str(name))
 except:
  pass
 
+auto_play = False
+
 if mode==None:
-    log("RT -- getSources")
+    log("getSources")
     getSources()
+    if addon.getSetting('auto_play') == "true":
+      current_play=""
+      try:
+         current_play = xbmc.Player().getPlayingFile()
+      except:
+         auto_play = True
+         xbmc.PlayList(1).clear()
+
 
 elif mode==12:
-    log("RT -- setResolvedUrl")
+    log("setResolvedUrl")
     item = xbmcgui.ListItem(path=url)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 elif mode==13:
-    log("RT -- play_playlist")
+    log("play_playlist")
     play_playlist(name, playlist)
 
-elif mode==17:
+if (mode==17) or (auto_play == True):
+
               res_sel = ["HD","SD","SDh","SDq"]
               res_names = ["720p","360p","240p","180p"]
               i = int(addon.getSetting('rt_res'))
               res = res_sel[i]
               res_str = res_names[i]
 
-              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-global-live-"+str(res),"RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),"News","",False)
-              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-america-live-"+str(res),"RT America Live "+str(res_str),icon,fanart,"RT America Live "+str(res_str),"News","",False)
-              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-doc-live-"+str(res),"RT Documentary Live "+str(res_str),icon,fanart,"RT Documentary Live "+str(res_str),"News","",False)
-              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-enespanol-live-"+str(res),"RT Espanol Live "+str(res_str),icon,fanart,"RT Espanol Live "+str(res_str),"News","",False)
-              addLink("rtmp://rt.fms-04.visionip.tv/live/rt-rusiyaalyaum-live-"+str(res),"RT Arabic Live "+str(res_str),icon,fanart,"RT Arabic Live "+str(res_str),"News","",False)
+              if (auto_play != True):
+                addLink(RTLIVE_BASE+"rt-global-live-"+str(res),"RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"rt-america-live-"+str(res),"RT America Live "+str(res_str),icon,fanart,"RT America Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"rt-doc-live-"+str(res),"RT Documentary Live "+str(res_str),icon,fanart,"RT Documentary Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"rt-enespanol-live-"+str(res),"RT Espanol Live "+str(res_str),icon,fanart,"RT Espanol Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"rt-rusiyaalyaum-live-"+str(res),"RT Arabic Live "+str(res_str),icon,fanart,"RT Arabic Live "+str(res_str),GENRE_NEWS,"",False)
+
+              else:
+                if mode != 17:
+                  addLink(RTLIVE_BASE+"rt-global-live-"+str(res),"RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),GENRE_NEWS,"",False, autoplay=True)
+                  xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 elif mode==18:
-              log("RT -- Processing RT sub category item")
-              url = "http://rt.com"+url
-              link1 = getRequest(url)
-              link=str(link1).replace('\n','')
+              log("Processing subcategory item")
 
+              link = getRequest("http://rt.com"+url)
 
-              match = re.compile('<dt class="(.+?)"(.+?)</dl>').findall(str(link))
+              match = re.compile('<dt class="(.+?)"(.+?)</dl>').findall(link)
               for classtype, classdata in match:
                  if "programm" in classtype:
-                    match = re.compile('<a href="(.+?)".+?class="header">(.+?)<.+?<img src="(.+?)".+?<dd>(.+?)<span class="time">(.+?)<').findall(str(classdata))
-                    for pgurl,cattitle,imgurl,catdesc, cattime in match:
-                     caturl = "plugin://plugin.video.rt/?url=http://rt.com"+pgurl+"&name="+urllib.quote_plus(cattitle)+"&mode=19"
-                     caticon = "http://rt.com"+imgurl
-                     catdesc = catdesc.strip()
-                     try:
-                        addLink(caturl.encode('utf-8'),cattitle,caticon,fanArt,cattime+"\n"+catdesc,"News","")
-                     except:
-                        log("RT -- Problem adding directory")
+                    match_str = '<a href="(.+?)".+?class="header">(.+?)<.+?<img src="(.+?)".+?<dd>(.+?)<span class="time">(.+?)<'
                  else:
-                    match = re.compile('<a href="(.+?)".+?<img src="(.+?)".+class="header">(.+?)</a>.+?<p>(.+?)</p.+?class="time">(.+?)<').findall(str(classdata))
-                    for pgurl,imgurl, cattitle,catdesc, cattime in match:
-                     caturl = "plugin://plugin.video.rt/?url=http://rt.com"+pgurl+"&name="+urllib.quote_plus(cattitle)+"&mode=19"
-                     caticon = "http://rt.com"+imgurl
+                    match_str = '<a href="(.+?)".+?<img src="(.+?)".+class="header">(.+?)</a>.+?<p>(.+?)</p.+?class="time">(.+?)<'
+                 match = re.compile(match_str).findall(classdata)
+                 for pgurl,imgurl,cattitle,catdesc, cattime in match:
+                     if "programm" in classtype:
+                       imgurl,cattitle = cattitle,imgurl   # swap them
+                     caturl = "plugin://plugin.video.rt/?url="+RTBASE_URL+pgurl+"&name="+urllib.quote_plus(cattitle)+"&mode=19"
+                     caticon = RTBASE_URL+imgurl
                      catdesc = catdesc.strip()
                      try:
-                        addLink(caturl.encode('utf-8'),cattitle,caticon,fanArt,cattime+"\n"+catdesc,"News","")
+                        addLink(caturl.encode(UTF8),cattitle,caticon,fanArt,cattime+"\n"+catdesc,GENRE_NEWS,"")
                      except:
-                        log("RT -- Problem adding directory")
+                        log("Problem adding directory")
 
-              match = re.compile('<a class="pagerLink" href="(.+?)"').findall(str(link))
+              match = re.compile('<a class="pagerLink" href="(.+?)"').findall(link)
               for page in match:
-                  addDir("-> Next Page",page,18,fanArt,fanArt,"Next Page","News","",False)
-              addDir("<< Home Page","",None,fanArt,fanArt,"Home Page","News","",False)
+                  addDir("-> Next Page",page,18,fanArt,fanArt,"Next Page",GENRE_NEWS,"",False)
+              addDir("<< Home Page","",None,fanArt,fanArt,"Home Page",GENRE_NEWS,"",False)
 
 
  
 elif mode==19:
-              log("RT -- Processing RT play category item")
-              link1=getRequest(url)
-              link=str(link1).replace('\n','')
+              log("Processing play category item")
+              link=getRequest(url)
+              bad_match = False
 
               if not ("cdnapi.kaltura.com" in link):
-                match = re.compile('<span class="time">(.+?)<.+?<div class="video_block".+?"thumbnailUrl" content="(.+?)".+?"contentURL" content="(.+?)".+?<p>(.+?)</p>').findall(str(link))
+                match = re.compile('<span class="time">(.+?)<.+?<div class="video_block".+?"thumbnailUrl" content="(.+?)".+?"contentURL" content="(.+?)".+?<p>(.+?)</p>').findall(link)
                 if not match:
+                   bad_match = True
                    dialog = xbmcgui.Dialog()
                    dialog.ok(__language__(30000), '',__language__(30001))
                 else:
                  for viddate,icon,vidurl,viddesc in match:
                   if "comhttp:" in vidurl:
-                    vidurl = vidurl.replace("http://rt.com","")
-                  item = xbmcgui.ListItem(path=vidurl.encode('utf-8'), iconImage="DefaultVideo.png", thumbnailImage=icon)
-                  item.setInfo( type="Video", infoLabels={ "Title": name, "Plot": viddate+"\n"+viddesc } )
-                  item.setProperty("IsPlayable","true")
-                  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+                    vidurl = vidurl.replace(RTBASE_URL,"")
               else:
-                 match = re.compile('<meta name="description" content="(.+?)".+?<link rel="image_src" href="(.+?)".+?<span class="time">(.+?)<.+?<script src="(.+?)embedIframeJs/.+?"entry_id": "(.+?)"').findall(str(link))
+                 match = re.compile('<meta name="description" content="(.+?)".+?<link rel="image_src" href="(.+?)".+?<span class="time">(.+?)<.+?<script src="(.+?)embedIframeJs/.+?"entry_id": "(.+?)"').findall(link)
                  for viddesc,icon,viddate,vidurl,entry_id in match:
                   vidurl = vidurl+"playManifest/entryId/"+entry_id+"/flavorId/0_ib2gjoc9/format/url/protocol/http/a.mp4"
-                  item = xbmcgui.ListItem(path=vidurl.encode('utf-8'), iconImage="DefaultVideo.png", thumbnailImage=icon)
-                  item.setInfo( type="Video", infoLabels={ "Title": name, "Plot": viddate+"\n"+viddesc } )
-                  item.setProperty("IsPlayable","true")
-                  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+
+              if not bad_match:
+                 item = xbmcgui.ListItem(path=vidurl.encode(UTF8), iconImage="DefaultVideo.png", thumbnailImage=icon)
+                 item.setInfo( type="Video", infoLabels={ "Title": name, "Plot": viddate+"\n"+viddesc } )
+                 item.setProperty("IsPlayable","true")
+                 xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

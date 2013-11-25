@@ -192,6 +192,7 @@ elif mode==17:
               for catblock in match:
                 match=re.compile('href="(.+?)".+?title="(.+?)"').findall(str(catblock))
                 for caturl, cattext in match:
+                 caturl = caturl+'&currentpage='
                  cattext = cattext.strip()
                  cattext = cattext.replace('&quot;','"').replace("&#39;","'").replace("&amp;","&")
                  try:
@@ -207,11 +208,13 @@ elif mode==17:
                   currentpage = str(int(currentpage)+1)
                   cattitle = ">>> Next Page"
                   catdesc = cattitle
-                  caturl = url+currentpage
-                  try:
-                     addDir(cattitle,caturl,17,iconimage,fanart,catdesc,"TV","",False)
-                  except:
-                     log("Mediacorp -- Problem adding directory")
+                  match= re.compile('(.+?)&currentpage=').findall(str(url))
+                  for url in match:
+                     caturl = url+'&currentpage='+currentpage
+                     try:
+                        addDir(cattitle,caturl,17,iconimage,fanart,catdesc,"TV","",False)
+                     except:
+                        log("Mediacorp -- Problem adding directory")
 
 
 
@@ -245,6 +248,21 @@ elif mode==18:
                      except:
                         log("Mediacorp -- Problem adding directory")
 
+              match = re.compile('class="vxp_currentPage">(.+?)<.+?vxp_totalPages">(.+?)<').findall(str(link))
+              catdone=False
+              for currentpage, totalpages in match:
+                if (currentpage!=totalpages) and catdone==False:
+                  catdone = True
+                  currentpage = str(int(currentpage)+1)
+                  cattitle = ">>> Next Page"
+                  catdesc = cattitle
+                  match= re.compile('(.+?)&currentpage=').findall(str(url))
+                  for url in match:
+                     caturl = url+'&currentpage='+currentpage
+                     try:
+                        addDir(cattitle,caturl,18,iconimage,fanart,catdesc,"TV","",False)
+                     except:
+                        log("Mediacorp -- Problem adding directory")
 
 
  

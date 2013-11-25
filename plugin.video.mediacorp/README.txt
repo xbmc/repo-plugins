@@ -15,3 +15,6 @@ Set mimetype in addurl - supposed to speed things up
 
 v0.2.0
 version 0.2.0 added required fields in addon.xml, translatable strings separated
+
+v0.2.2
+minor change to addon.xml

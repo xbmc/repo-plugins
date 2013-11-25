@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.mediacorp"
        name="Mediacorp TV Singapore"
-       version="0.2.0"
+       version="0.2.2"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -17,9 +17,9 @@
     <platform>all</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://wiki.xbmc.org/index.php?title=Add-on:Mediacorp_TV_Singapore</forum>
+    <forum>http://forum.xbmc.org/showthread.php?tid=173754</forum>
     <website></website>
     <email></email>
-    <source>http://mirrors.xbmc.org/addons/frodo/plugin.video.mediacorp/</source>
+    <source>https://github.com/learningit/plugin.video.mediacorp</source>
   </extension>
 </addon>

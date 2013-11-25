@@ -1,3 +1,4 @@
 Version 0.1.0 inital release
 Version 0.1.1 cleaned up sort views, set mimetype in addurl - supposed to speed things up
 version 0.2.0 added required fields in addon.xml, translatable strings separated
+v0.2.2 minor change to addon.xml

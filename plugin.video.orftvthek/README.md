@@ -18,21 +18,19 @@ Current Features
 * Livestream
 * All Shows
 * Schedule Search
-* RTMP Stream H264 (Experimental)
-* MMS Stream WMV
-* Gets the Background-Images, Logos and Description from the TVthek Website
+* HTTP Stream H264 (Stable)
+* Search Function
 
 
 Missing Features
 ----------------
-* Search Function
 * Download Function
-* Stable RTMP Stream
+* Missed Shows
 
 
 Known Issues
 ------------
-* RTMP Streams crash XBMC from time to time. Seems to be an librtmp issue
+* you tell me
 
 
 Legal

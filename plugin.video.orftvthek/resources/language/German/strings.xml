@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30000">Neuste Sendungen</string>
+    <string id="30001">Aktuell</string>
+    <string id="30002">Sendungen</string>
+    <string id="30003">Themen</string>
+    <string id="30004">Live</string>
+    <string id="30005">ORF Tipps</string>
+    <string id="30006">Meist gesehen</string>
+	<string id="30007">Suchen</string>
+	<string id="30008">Keine Beschreibung verfügbar</string>
+    <string id="30009">Sendung vom</string>
+    <string id="30010">Ladevorgang</string>
+    <string id="30011">Laufzeit</string>
+    <string id="30012">Die Playlist ist leer</string>
+    <string id="30013">Bitte wiederholen Sie den Vorgang</string>
+    <string id="30014">Keine Ergebnisse</string>
+    <string id="30015">Alle Beiträge abspielen</string>
+    <string id="30016">Datum</string>
+    <string id="30017">Dauer</string>
+</strings>

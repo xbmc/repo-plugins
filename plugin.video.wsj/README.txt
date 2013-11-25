@@ -1,6 +1,12 @@
 plugin.video.wsj
 ================
 
+version 1.8.4 minor change to addon.xml
+
+version 1.8.2 cleaned up some non-playing items
+
+version 1.8.0 added autoplay option
+
 version 1.7.2 added language string support
 
 version 1.7.0 cleaned up how news articles are loaded, unicode issues

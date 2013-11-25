@@ -1,26 +1,23 @@
 # -*- coding: utf-8 -*-
+# Wall Street Journal Live
 
-import urllib
-import urllib2
-import cookielib
-import datetime
-import time
-import re
-import os
-import xbmcplugin
-import xbmcgui
-import xbmcaddon
-import xbmcvfs
-import cgi
+import urllib, urllib2, cookielib, datetime, time, re, os
+import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs
+import cgi, gzip
 from StringIO import StringIO
-import gzip
 
 
-USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
+USER_AGENT    = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
+WSJ_URL       = "http://live.wsj.com"
+WSJ_API_URL   = "/api-video/find_all_videos.asp?"
+GENRE_NEWS      = "News"
+MANIFEST      = '/manifest.f4m"'
+VID_BASE      = "http://m.wsj.net"
+UTF8          = 'utf-8'
 
 addon         = xbmcaddon.Addon('plugin.video.wsj')
 __addonname__ = addon.getAddonInfo('name')
-home          = addon.getAddonInfo('path').decode('utf-8')
+home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 fanart        = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
@@ -67,53 +64,47 @@ def _parse_argv():
 
 def demunge(munge):
         try:
-            munge = urllib.unquote_plus(munge).decode('utf-8')
+            munge = urllib.unquote_plus(munge).decode(UTF8)
         except:
             pass
         return munge
 
 def getRequest(url):
-              log("WSJ - getRequest URL: "+str(url))
-              req = urllib2.Request(url.encode('utf-8'))
-              req.add_header('User-Agent', USER_AGENT)
-              req.add_header('Accept',"text/html")
-              req.add_header('Accept-Encoding', None )
-              req.add_header('Accept-Encoding', 'gzip,deflate,sdch')
-              req.add_header('Accept-Language', 'en-US,en;q=0.8')
-              req.add_header('Cookie','hide_ce=true')
-              log("RT -- request headers = "+str(req.header_items()))
+              log("getRequest URL:"+str(url))
+              headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8', 'Cookie':'hide_ce=true'} 
+              req = urllib2.Request(url.encode(UTF8), None, headers)
+
               try:
                  response = urllib2.urlopen(req)
                  if response.info().getheader('Content-Encoding') == 'gzip':
-                    log("WSj -- Content Encoding == 'gzip")
+                    log("Content Encoding == gzip")
                     buf = StringIO( response.read())
                     f = gzip.GzipFile(fileobj=buf)
                     link1 = f.read()
                  else:
                     link1=response.read()
-                 response.close()
               except:
                  link1 = ""
+
+              link1 = str(link1).replace('\n','')
               return(link1)
 
 
 def getSources():
 
-              log("WSJ -- WSJ Live main page")
-              link1 = getRequest("http://live.wsj.com")
-              link=str(link1).replace('\n','')     
-              match=re.compile('<li id="vcrTab_(.+?)".+?data-query="(.+?)".+?~(.+?)"').findall(str(link))
+              match=re.compile('<li id="vcrTab_(.+?)".+?data-query="(.+?)".+?~(.+?)"').findall(getRequest(WSJ_URL))
               for category, caturl, cattext in match:
-                 caturl = "http://live.wsj.com/api-video/find_all_videos.asp?"+caturl
+                 catdesc = cattext
+                 caturl  = (WSJ_URL+WSJ_API_URL+caturl).encode(UTF8)
+                 cattext = cattext.encode(UTF8, 'ignore')
                  try:
                     if (category == "startup") or (category == "markets"):
-                      addDir(cattext.encode('utf-8', 'ignore'),caturl.encode('utf-8'),18,icon,fanart,cattext,"News","",False)
+                      addDir(cattext,caturl,18,icon,fanart,catdesc,GENRE_NEWS,"",False)
                     else:
-                      addDir(cattext.encode('utf-8', 'ignore'),category.encode('utf-8'),17,icon,fanart,cattext,"News","",False)
+                      addDir(cattext,category.encode(UTF8),17,icon,fanart,catdesc,GENRE_NEWS,"",False)
  
                  except:
-                    log("WSJ -- Problem adding directory")
-
+                    log("Problem adding directory")
 
 
 def play_playlist(name, list):
@@ -127,34 +118,46 @@ def play_playlist(name, list):
         xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+        dir_playable = False
+
+        if mode != 12:
+            u += "&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+            dir_image = "DefaultFolder.png"
+            dir_folder = True
+        else:
+            dir_image = "DefaultVideo.png"
+            dir_folder = False
+            dir_playable = True
+
         ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
         liz.setProperty( "Fanart_Image", fanart )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
 
-
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=12"
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-        liz.setProperty('IsPlayable', 'true')
+        if dir_playable == True:
+           liz.setProperty('IsPlayable', 'true')
         if not playlist is None:
             playlist_name = name.split(') ')[1]
             contextMenu_ = [('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=13&name=%s&playlist=%s)' %(sys.argv[0], urllib.quote_plus(playlist_name), urllib.quote_plus(str(playlist).replace(',','|'))))]
             liz.addContextMenuItems(contextMenu_)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
+
+        if autoplay == True:
+            xbmc.PlayList(1).add(u, liz)
+        else:    
+            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
         return ok
+
+def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
+        return addDir(name,url,12,iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
+
 
 def strip_unicode(unistr):
     return(unistr.replace('\\u2018',"'").replace('\\u2019',"'").replace('\\u201C','"').replace('\\u201D','"').replace('\\u2013','-').replace('\\u2014','-').replace('\\u2005',' ').replace('\\u00E9','e'))
 
+
+# MAIN EVENT PROCESSING STARTS HERE
 
 xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 try:
@@ -163,59 +166,62 @@ except:
     pass
 
 
-url=None
-name=None
-iconimage=None
-mode=None
-playlist=None
-fchan=None
-fres=None
-fhost=None
-fname=None
-fepg=None
+url=name=iconimage=mode=playlist=fchan=fres=fhost=fname=fepg=None
 
 _parse_argv()
 
+auto_play = False
 
 
-log("WSJ -- Mode: "+str(mode))
-
+log("Mode: "+str(mode)+" Name: "+str(name))
 if not url is None:
-      log("WSJ -- URL: "+str(url.encode('utf-8')))
-
-log("WSJ -- Name: "+str(name))
+      log("URL: "+str(url.encode(UTF8)))
 
 if mode==None:
-    log("WSJ -- getSources")
+    log("getSources")
     getSources()
+    url = "topnews"
+    if addon.getSetting('auto_play') == "true":
+       auto_play = True
+       xbmc.PlayList(1).clear()
 
-elif mode==12:
-    log("WSJ -- setResolvedUrl")
+
+if mode==12:
+    log("setResolvedUrl")
     item = xbmcgui.ListItem(path=url)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
 
-elif mode==13:
-    log("WSJ -- play_playlist")
+if mode==13:
+    log("play_playlist")
     play_playlist(name, playlist)
 
-elif mode==17:
-              log("WSJ -- Processing WSJ category item")
-              link1 = getRequest("http://live.wsj.com")
-              link=str(link1).replace('\n','')
-              log("WSJ -- url = "+str(url))
-              match=re.compile('vcrDataPanel_'+str(url)+'(.+?)</ul>').findall(str(link))
-              for subcat in match:
-                subcat = str(subcat).replace("&gt;",'>').replace("&lt;",'<')
-                submatch = re.compile('<h5 id=".+?data-query="(.+?)".+?~(.+?)"').findall(str(subcat))
-                for caturl, cattext in submatch:
-                 caturl = "http://live.wsj.com/api-video/find_all_videos.asp?"+caturl
-                 try:
-                   addDir(str(cattext),caturl.encode('utf-8'),18,icon,fanart,str(cattext),"News","",False)
-                 except:
-                   log("WSJ -- problem adding Directory")
+if (mode==17) or (auto_play == True):
 
-elif mode==18:
-              log("WSJ -- Processing WSJ sub category item")
+              log("Processing category")
+
+              if auto_play == True:
+                subcatname = "News"
+              else:
+                subcatname = ".+?"
+              match=re.compile('vcrDataPanel_'+str(url)+'(.+?)</ul>').findall(getRequest(WSJ_URL))
+              for subcat in match:
+                subcat = subcat.replace("&gt;",'>').replace("&lt;",'<')
+                submatch = re.compile('<h5 id=".+?data-query="(.+?)".+?~('+subcatname+')"').findall(subcat)
+                for caturl, cattext in submatch:
+                 caturl = (WSJ_URL+WSJ_API_URL+caturl).encode(UTF8)
+                 if auto_play != True:
+                  try:
+                    addDir(cattext,caturl,18,icon,fanart,cattext,GENRE_NEWS,"",False)
+                  except:
+                    log("problem adding Directory")
+                 else:
+                    url = caturl
+
+
+
+if mode==18 or (auto_play == True):
+
+              log("Processing subcategory")
 
               res_thumbs = ["_640x360.jpg","_512x288.jpg","_167x94.jpg"]
               res_videos = ["2564k.mp4","1864k.mp4","1264k.mp4","464k.mp4"]
@@ -224,18 +230,23 @@ elif mode==18:
               i = int(addon.getSetting('thumb_res'))
               res_thumb = res_thumbs[i]
 
-              link1 = getRequest(url)
-              link=str(link1).replace('\n','').replace('\\/','/').replace('\\"',"'")
+              link=getRequest(url).replace('\\/','/').replace('\\"',"'")
               match = re.compile('"name": "(.+?)","description": "(.+?)".+?"thumbnailURL": "(.+?)_167x94.jpg.+?"videoURL": "http://hdsvod-f.akamaihd.net/z(.+?),.+?CreationDate": "(.+?)"').findall(link)
               for cattitle, catdesc, caticon, caturl, catdate in match:
-                caturl = "http://m.wsj.net"+caturl+res_video
-                caticon += res_thumb
-                catdesc = strip_unicode(catdesc)
-                cattitle = strip_unicode(cattitle)
+                if not MANIFEST in caturl:
+                   caturl = VID_BASE+caturl+res_video
+                else:
+                   caturl = VID_BASE+caturl.replace(MANIFEST,"")
+                caturl   =  caturl.encode(UTF8)
+                caticon  += res_thumb
+                catdesc  =  strip_unicode(catdesc)
+                cattitle =  strip_unicode(cattitle)
                 try:
-                   addLink(caturl.encode('utf-8'),cattitle,caticon,fanart,catdate+'\n'+catdesc,"News","")
+                   addLink(caturl,cattitle,caticon,fanart,catdate+'\n'+catdesc,GENRE_NEWS,"",autoplay=auto_play)
                 except:
-                   log("WSJ -- Problem adding directory")
+                   log("Problem adding directory")
 
+              if auto_play == True:
+                   xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

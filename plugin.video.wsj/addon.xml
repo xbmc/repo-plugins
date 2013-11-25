@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.wsj"
        name="The Wall Street Journal Live"
-       version="1.7.2"
+       version="1.8.4"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -17,9 +17,9 @@
     <platform>all</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://wiki.xbmc.org/index.php?title=Add-on:The_Wall_Street_Journal_Live</forum>
+    <forum>http://forum.xbmc.org/showthread.php?tid=172865</forum>
     <website></website>
     <email></email>
-    <source>http://mirrors.xbmc.org/addons/frodo/plugin.video.wsj/</source>
+    <source>https://github.com/learningit/plugin.video.wsj</source>
   </extension>
 </addon>

@@ -3,6 +3,7 @@
 	<string id="30000">Settings</string>
 	<string id="30010">Video Stream Quality</string>
 	<string id="30011">Thumbnail Quality</string>
+     <string id="30012">Autoplay Top News</string>
 
 	<string id="30020">720p</string>
 	<string id="30021">540p</string>

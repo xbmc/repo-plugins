@@ -146,7 +146,7 @@ def walk_Path(path, walked_files, progress):
     
     count_text = language(30105).format(str(dirCount), str(fileCount))
     found_text = language(30107).format(str(filesFound))
-    hacked_path = language(30108).format(path)
+    hacked_path = language(30108).format(unicode(path, 'utf-8', errors='replace'))
     progress.update(0, count_text, found_text, hacked_path)
     #time.sleep(5)
     

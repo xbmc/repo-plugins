@@ -1,190 +1,213 @@
-import urllib,urllib2,re,os
-import xbmcplugin,xbmcgui,xbmcaddon
-from BeautifulSoup import BeautifulStoneSoup, BeautifulSoup
+﻿import urllib
+import urllib2
+import re
+import json
+from urlparse import urlparse, parse_qs
+from traceback import format_exc
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.engadget')
-__language__ = __settings__.getLocalizedString
-home = __settings__.getAddonInfo('path')
-icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-nexticon = xbmc.translatePath( os.path.join( home, 'resources/next.png' ) )
-videoq = __settings__.getSetting('video_quality')
+import StorageServer
+from bs4 import BeautifulSoup
 
-def make_request(url, headers=None):
+import xbmcplugin
+import xbmcgui
+import xbmcaddon
+
+addon = xbmcaddon.Addon()
+addon_profile = xbmc.translatePath(addon.getAddonInfo('profile'))
+addon_version = addon.getAddonInfo('version')
+addon_id = addon.getAddonInfo('id')
+cache = StorageServer.StorageServer("engadget", 24)
+icon = addon.getAddonInfo('icon')
+language = addon.getLocalizedString
+base_url = 'http://www.engadget.com'
+
+
+def addon_log(string):
+    try:
+        log_message = string.encode('utf-8', 'ignore')
+    except:
+        log_message = 'addonException: addon_log'
+    xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, log_message),level=xbmc.LOGDEBUG)
+
+
+def make_request(url):
+    addon_log('Request URL: %s' %url)
+    headers = {
+        'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
+        'Referer': base_url
+        }
+    try:
+        req = urllib2.Request(url,None,headers)
+        response = urllib2.urlopen(req)
+        data = response.read()
+        response.close()
+        return data
+    except urllib2.URLError, e:
+        addon_log( 'We failed to open "%s".' % url)
+        if hasattr(e, 'reason'):
+            addon_log('We failed to reach a server.')
+            addon_log('Reason: %s' %e.reason)
+        if hasattr(e, 'code'):
+            addon_log('We failed with error code - %s.' %e.code)
+
+
+def cache_categories():
+    soup = BeautifulSoup(make_request(base_url + '/videos'), 'html.parser')
+    cat_items = soup.find('ul', class_='tab-nav')('a')
+    cats = [{'name': i.string, 'href': i['href']} for i in cat_items]
+    return cats
+
+
+def display_categories():
+    cats = cache.cacheFunction(cache_categories)
+    for i in cats:
+        add_dir(i['name'], i['href'], icon, 'get_category')
+
+
+def display_category(url):
+    page_url = base_url + url
+    soup = BeautifulSoup(make_request(page_url), 'html.parser')
+    items = soup('div', class_='video-listing')[0]('a')
+    for i in items:
+        title = i.h3.string.encode('utf-8')
+        add_dir(title, i['href'], i.img['src'], 'resolve_url', False)
+    try:
+        next_page = soup.find('li', class_='older').a['href']
+        add_dir(language(30008), next_page, icon, 'get_category')
+    except:
+        pass
+    cache.set('page_url', page_url)
+
+
+def resolve_url(url):
+    settings = {
+        0: [16, 128],
+        1: [32, 2, 1],
+        2: [64, 4],
+        3: [8]
+        }
+    preferred = int(addon.getSetting('preferred'))
+    video_id = url.split('/')[-1]
+    item = None
+    try:
+        link_cache = eval(cache.get('link_cache'))
+        item = [(i[video_id]['url'], i[video_id]['ren']) for
+            i in link_cache if i.has_key(video_id)][0]
+        addon_log('return item from cache')
+    except:
+        addon_log('addonException: %s' %format_exc())
+        item = cache_playlist(video_id)
+    if item:
+        extension_format = '_%s.%s?cat=Tech&subcat=Web'
+        stream_url = urllib.unquote(item[0]).split('.mp4')[0]
+        addon_log('preferred setting: %s' %settings[preferred])
+        # for i in item[1]:
+            # addon_log('%s: %s' %(i['ID'], i['RenditionType']))
+        resolved_url = None
+        while (preferred >= 0) and not resolved_url:
+            try:
+                ren_id, ren_type = [
+                    (i['ID'], i['RenditionType']) for
+                        i in item[1] if i['ID'] in settings[preferred]][0]
+                resolved_url = stream_url + extension_format %(ren_id, ren_type)
+                addon_log('Resolved: %s' %resolved_url)
+            except:
+                addon_log('addonException: %s' %format_exc())
+                addon_log('Setting unavailabel: %s' %settings[preferred])
+                preferred -= 1
+        return resolved_url
+
+
+def cache_playlist(video_id):
+    url = 'http://syn.5min.com/handlers/SenseHandler.ashx?'
+    script_url = 'http://www.engadget.com/embed-5min/?playList=%s&autoStart=true' %video_id
+    script_soup = BeautifulSoup(make_request(script_url))
+    script = script_soup.script.get_text()
+    script_params = eval((script[5:].replace('\r\n', '').split('+')[0]+'}'))
+    params = {
+        'ExposureType': 'PlayerSeed',
+        'autoStart': script_params['autoStart'],
+        'cbCount': '3',
+        'cbCustomID': script_params['cbCustomID'],
+        'colorPallet': script_params['colorPallet'],
+        'counter': '0',
+        'filterString': '',
+        'func': 'GetResults',
+        'hasCompanion': script_params['hasCompanion'],
+        'isPlayerSeed': 'true',
+        'playlist': video_id,
+        'relatedMode': script_params['relatedMode'],
+        'sid': script_params['sid'],
+        'url': urllib.quote(cache.get('page_url')),
+        'videoCount': '50',
+        'videoGroupID': script_params['videoGroupID']
+        }
+    data = json.loads(make_request(url + urllib.urlencode(params)), 'utf-8')
+    items = data['binding']
+    pattern = re.compile('videoUrl=(.+?)&')
+    try:
+        link_cache = eval(cache.get('link_cache'))
+        if len(link_cache) > 300:
+            del link_cache[:100]
+    except:
+        addon_log('addonException: %s' %format_exc())
+        link_cache = []
+    for i in items:
+        match = pattern.findall(i['EmbededURL'])
         try:
-            if headers is None:
-                headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1',
-                           'Referer' : 'http://www.engadget.com/'}
-            req = urllib2.Request(url,None,headers)
-            response = urllib2.urlopen(req)
-            data = response.read()
-            response.close()
-            return data
-        except urllib2.URLError, e:
-            print 'We failed to open "%s".' % url
-            if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason: ', e.reason
-            if hasattr(e, 'code'):
-                print 'We failed with error code - %s.' % e.code
-                xbmc.executebuiltin("XBMC.Notification(Engadget,HTTP ERROR: "+str(e.code)+",5000,"+icon+")")
-                
-                
-def Categories():
-        addDir(__language__(30000),'http://www.engadget.com/engadgetshow.xml',1,'http://www.blogcdn.com/www.engadget.com/media/2011/07/engadget-show-logo-1310764107.jpg')
-        addDir(__language__(30001),'http://api.viddler.com/api/v2/viddler.videos.getByUser.xml?key=tg50w8nr11q8176liowh&user=engadget',2,icon)
+            item_dict = {str(i['ID']): {'url': match[0],
+                                        'ren': i['Renditions']}}
+            link_cache.append(item_dict)
+        except:
+            addon_log('addonException: %s' %format_exc())
+    cache.set('link_cache', repr(link_cache))
+    addon_log('link_cache items %s' %len(link_cache))
+    try:
+        return [(i[video_id]['url'], i[video_id]['ren']) for
+            i in link_cache if i.has_key(video_id)][0]
+    except:
+        addon_log('addonException: %s' %format_exc())
 
 
-def getEngadgetVideos(url):
-        soup = BeautifulStoneSoup(make_request(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-        videos = soup('video_list')[0]('video')
-        page = int(soup('list_result')[0]('page')[0].string)+1
-        for video in videos:
-            name = video('title')[0].string
-            link = video('html5_video_source')[0].string
-            # link += '&ec_rate=406&ec_prebuf=10'
-            link += '|User-Agent='
-            link += urllib.quote_plus('Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1')
-            thumb = video('thumbnail_url')[0].string
-            length = video('length')[0].string
-            addLink(name,link,length,thumb)
-        addDir(__language__(30006),'http://api.viddler.com/api/v2/viddler.videos.getByUser.xml?key=tg50w8nr11q8176liowh&user=engadget&page='+str(page),2,nexticon)
-
-
-def getEngadgetShow(url):
-        url = 'http://www.engadget.com/engadgetshow.xml'
-        soup = BeautifulStoneSoup(make_request(url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-        episodes = soup('item')
-        for episode in episodes:
-            try:
-                url = episode('enclosure')[0]['url']
-                title = episode('enclosure')[0]('itunes:subtitle')[0].string
-                duration = episode('enclosure')[0]('itunes:duration')[0].string
-                thumbnail = 'http://www.blogcdn.com/www.engadget.com/media/2011/07/engadget-show-logo-1310764107.jpg'
-                if videoq == '0':
-                        url=url.replace('900.mp4','500.mp4')
-                elif videoq == '2':
-                        url=url.replace('900.mp4','2500.mp4')
-                else:
-                        url=url
-                addLink(title,url,duration,thumbnail,True)
-            except:
-                try:
-                    Soup = BeautifulSoup(episode('description')[0].string, convertEntities=BeautifulSoup.HTML_ENTITIES)
-                    thumb = Soup.img['src']
-                    url = Soup('strong', text='Download the Show: ')[0].next['href']
-                    title = episode.title.string
-                    if videoq == '0':
-                            url=url.replace('2500.mp4','700.mp4')
-                    elif videoq == '1':
-                            url=url.replace('2500.mp4','1100.mp4')
-                    else:
-                            url=url
-                    addLink(title,url,'',thumb,True)
-                except:
-                    print "There was a problem adding the engadget show episode."
-
-
-def DownloadFiles(url,filename):
-        def download(url, dest):
-            dialog = xbmcgui.DialogProgress()
-            dialog.create(__language__(30001),__language__(30004), filename)
-            urllib.urlretrieve(url, dest, lambda nb, bs, fs, url = url: _pbhook(nb, bs, fs, url, dialog))
-        def _pbhook(numblocks, blocksize, filesize, url = None,dialog = None):
-            try:
-                percent = min((numblocks * blocksize * 100) / filesize, 100)
-                dialog.update(percent)
-            except:
-                percent = 100
-                dialog.update(percent)
-            if dialog.iscanceled():
-                dialog.close()
-        # check for a download location, if not open settings
-        if __settings__.getSetting('save_path') == '':
-            __settings__.openSettings('save_path')
-        filepath = xbmc.translatePath(os.path.join(__settings__.getSetting('save_path'),filename))
-        download(url, filepath)
-        if __settings__.getSetting('play') == "true":
-            play=xbmc.Player().play( xbmc.translatePath( os.path.join( __settings__.getSetting('save_path'), filename ) ))
+def add_dir(name, url, iconimage, mode, isfolder=True):
+    params = {'name': name, 'url': url, 'mode': mode}
+    url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    if not isfolder:
+        listitem.setProperty('IsPlayable', 'true')
+    listitem.setInfo(type="Video", infoLabels={'Title': name})
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
 
 
 def get_params():
-        param=[]
-        paramstring=sys.argv[2]
-        if len(paramstring)>=2:
-            params=sys.argv[2]
-            cleanedparams=params.replace('?','')
-            if (params[len(params)-1]=='/'):
-                params=params[0:len(params)-2]
-            pairsofparams=cleanedparams.split('&')
-            param={}
-            for i in range(len(pairsofparams)):
-                splitparams={}
-                splitparams=pairsofparams[i].split('=')
-                if (len(splitparams))==2:
-                    param[splitparams[0]]=splitparams[1]
-        return param
+    p = parse_qs(sys.argv[2][1:])
+    for i in p.keys():
+        p[i] = p[i][0]
+    return p
 
 
-def addLink(name,url,duration,iconimage,showcontext=True):
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Duration":duration } )
-        if showcontext:
-            try:
-                filename = name.replace(':','-').replace(' ','_')+'.mp4'
-            except:
-                pass
-            contextMenu = [(__language__(30004),'XBMC.Container.Update(%s?url=%s&mode=3&name=%s)' %(sys.argv[0],urllib.quote_plus(url),urllib.quote_plus(filename)))]
-            liz.addContextMenuItems(contextMenu)
-            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
-        return ok
-
-
-def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
-
-		
-params=get_params()
-url=None
-name=None
-mode=None
+params = get_params()
+addon_log(repr(params))
 
 try:
-    url=urllib.unquote_plus(params["url"])
+    mode = params['mode']
 except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
+    mode = None
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+if mode == None:
+    display_categories()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-if mode==None:
-    print ""
-    Categories()
+elif mode == 'get_category':
+    display_category(params['url'])
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-if mode==1:
-    print""
-    getEngadgetShow(url)
-
-if mode==2:
-    print""
-    getEngadgetVideos(url)
-
-if mode==3:
-    print""
-    DownloadFiles(url,name)
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+elif mode == 'resolve_url':
+    success = False
+    resolved_url = resolve_url(params['url'])
+    if resolved_url:
+        success = True
+    else:
+        resolved_url = ''
+    item = xbmcgui.ListItem(path=resolved_url)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), success, item)

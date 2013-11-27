@@ -1,173 +1,217 @@
 import urllib
 import urllib2
-import re
-import os
+from urlparse import urlparse, parse_qs
+from traceback import format_exc
+
+import StorageServer
+import xmltodict
+from bs4 import BeautifulSoup
+
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
-import StorageServer
-from BeautifulSoup import BeautifulSoup
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.zapiks')
-__language__ = __settings__.getLocalizedString
-sort = __settings__.getSetting('sort_method')
-home = __settings__.getAddonInfo('path')
+addon = xbmcaddon.Addon()
+addon_version = addon.getAddonInfo('version')
+addon_id = addon.getAddonInfo('id')
 cache = StorageServer.StorageServer("zapiks", 24)
-base = 'http://www.zapiks.com'
-icon_path = 'http://zapiks-xbmc.googlecode.com/svn/images/'
-fanart = icon_path+'fanart.jpg'
+icon = addon.getAddonInfo('icon')
+fanart = addon.getAddonInfo('fanart')
+language = addon.getLocalizedString
+base_url = 'http://www.zapiks.com'
 
 
-def getRequest(url):
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0.2) Gecko/20100101 Firefox/10.0.2',
-                   'Referer' : base}
-        req = urllib2.Request(url,None,headers)
+def addon_log(string):
+    try:
+        log_message = string.encode('utf-8', 'ignore')
+    except:
+        log_message = 'addonException: addon_log'
+    xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, log_message), level=xbmc.LOGDEBUG)
+
+
+def make_request(url, post_data=None):
+    addon_log('Request URL: %s' %url)
+    headers = {
+        'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
+        'Referer': base_url
+        }
+    try:
+        req = urllib2.Request(url, post_data, headers)
         response = urllib2.urlopen(req)
         data = response.read()
         response.close()
         return data
+    except urllib2.URLError, e:
+        addon_log( 'We failed to open "%s".' % url)
+        if hasattr(e, 'reason'):
+            addon_log('We failed to reach a server.')
+            addon_log('Reason: %s' %e.reason)
+        if hasattr(e, 'code'):
+            addon_log('We failed with error code - %s.' %e.code)
 
 
-def cache_base():
-        data = getRequest(base)
-        return(data, 200)
+def cache_categories():
+    soup = BeautifulSoup(make_request(base_url), 'html.parser')
+    items = soup('ul', attrs={'id' : "sports_navigation"})[0]('a')
+    cats = [{'name': i.string.encode('utf-8'), 'url': i['href']} for i in items]
+    return cats
+    
+    
+def cache_pro_categories():
+    label_list = ['marques', 'events', 'prods', 'riders', 'crews', 'media']
+    label_dict = {}
+    index = 30001
+    for i in range(len(label_list)):
+        index += 1
+        label_dict[label_list[i]] = language(index)
+    soup = BeautifulSoup(make_request('http://www.zapiks.com/pro/'), 'html.parser')
+    pro_list = [{'label': label_dict[i.h2['class'][1].split('-')[1]],
+                 'items': [{'title': x.a['title'].encode('utf-8'),
+                            'url': x.a['href'],
+                            'thumb': x.img['src']} for
+            x in i('div')]} for i in soup('div', class_='pro-type-bloc')]
+    return pro_list
+    
+    
+def display_pro_categories():
+    for i in range(30002, 30008):
+        add_dir(language(i), 'pro_cat', icon, 'get_pro_cat')
+        
+        
+def display_pro_category(cat_name):
+    cat_list = cache.cacheFunction(cache_pro_categories)
+    items = [i['items'] for i in cat_list if i['label'] == cat_name][0]
+    for i in items:
+        add_dir(i['title'], i['url'], i['thumb'], 'get_category')
 
 
-def categories():
-        soup = BeautifulSoup(cache.cacheFunction(cache_base)[0], convertEntities=BeautifulSoup.HTML_ENTITIES)
-        items = soup('ul', attrs={'id' : "sports_navigation"})[0]('a')
-        for i in items:
-            href = i['href']
-            if not href == '#':
-                href = i['href'][:-1]
-                if sort == '0':
-                    href = href+'1'
-                if sort == '1':
-                    href = href+'/popular_1.php'
-                if sort == '2':
-                    href = href+'/alltimebuzzed_1.php'
-                if sort == '3':
-                    href = '/_'+href[1:]+'/premium_1.php'
-                title = i.string
-                thumb = icon_path+i.string+'.png'
-                addDir(title, base+href, 1, thumb)
-        addDir(__language__(30000), 'getPartners', 3, icon_path+'partner.png')
+def display_categories():
+    add_dir(language(30000), None, icon, 'get_partners')
+    items = cache.cacheFunction(cache_categories)
+    for i in items:
+        if i['name'] == 'more sports': continue
+        add_dir(i['name'].title(), i['url'], icon, 'get_category')
 
 
-def getPartners():
-        soup = BeautifulSoup(cache.cacheFunction(cache_base)[0], convertEntities=BeautifulSoup.HTML_ENTITIES)
-        partners_items = soup('div', attrs={'id' : "partners"})[0]('a')
-        pro_items = soup('div', attrs={'id' : "pro_all"})[0]('a')
-        for i in pro_items:
-            items = partners_items.append(i)
-        for i in partners_items:
-            href = i['href']
-            title = i['title']
-            thumb = i.img['src']
-            addDir(title, base+href, 1, thumb)
+def display_category(url):
+    if url.endswith('_/'):
+        nav = get_navigation(base_url + url)
+        dir_name = 'Filters - '
+        for i in nav['filters']:
+            dir_name += '%s | ' %i['name']
+        add_dir(dir_name, 'filter', icon, 'select_filter')
+        soup = BeautifulSoup(make_request(base_url + nav['url']), 'html.parser')
+    else:
+        soup = BeautifulSoup(make_request(base_url + url), 'html.parser')
+    if '/pro/' in url:
+        items = soup.find('div', attrs={'id': 'content'})('div', class_='media_thumbnail')
+    else:
+        items = soup.find('div', class_='col wrapper')('div', class_='media_thumbnail')
+    for i in items:
+        title = i.a['title'].encode('utf-8')
+        add_dir(title, base_url + i.a['href'], i.img['src'], 'resolve_url')
+
+    try:
+        page_url = soup.find('h4', class_='page_navigator')('a', class_='next')[0]['href']
+        if page_url and page_url != url:
+            add_dir(language(30001), page_url, icon, 'get_category')
+    except:
+        pass
 
 
-def indexPage(url):
-        soup = BeautifulSoup(getRequest(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-        videos = soup.findAll('div', attrs={'class' : "media_thumbnail medium"})
-        for i in videos:
-            try:
-                url = i('a')[0]['href']
-                name = i('a')[0]['title']
-                thumb = i('img')[0]['src']
-                addLink(name, base+url, 2, thumb)
-            except:
-                continue
+def get_navigation(url):
+    soup = BeautifulSoup(make_request(url), 'html.parser')
+    nav_tags = soup.find('div', attrs={'id': 'content'})('div', class_='col')[:3]
+    page_url = soup.find('div', attrs={'id': 'central_block'}).a['href']
+    nav = {'url': page_url,
+           'filters': [{'name': i.a['title'].encode('utf-8').title(),
+                        'url': i.a['href']} for
+                            i in nav_tags]}
+    cache.set('navigation', repr(nav))
+    addon_log(repr(nav))
+    return nav
+
+
+def select_filter():
+    nav = eval(cache.get('navigation'))
+    dialog = xbmcgui.Dialog()
+    ret = dialog.select(language(30009), [i['name'] for i in nav['filters']])
+    if ret > -1:
+        return display_category(nav['filters'][ret]['url'])
+
+
+def resolve_url(url, thumb):
+    video_id = thumb.split('/')[-1].split('-')[0]
+    data_url = 'http://www.zapiks.fr/view/index.php'
+    params = {
+        'file': video_id,
+        'lang': 'en',
+        'referer': urllib.quote(url)
+        }
+    data = xmltodict.parse(make_request(data_url, urllib.urlencode(params)))
+    if addon.getSetting('enable_hd') == 'true':
         try:
-            nextPage = soup.find('span', attrs={'class' : "next"})('a')[1]['href']
-            addDir(__language__(30001), base+nextPage, 1, os.path.join(home, 'resources', 'images', 'next.png'))
+            return data['config']['hd.file']
         except:
+            addon_log('addonException: hd.file: %s' %format_exc())
             pass
+    return data['config']['file']
+    
 
-
-def videoLinks(url):
-        soup = BeautifulSoup(getRequest(url))
-        vid = soup.find('link', attrs={'rel' : "video_src"})['href']
-        new_soup = BeautifulSoup(getRequest('http://www.zapiks.com/view/index.php?file='+vid[-5:]+'&lang=fr'))
-        item = xbmcgui.ListItem(path = new_soup.file.string)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
+def add_dir(name, url, iconimage, mode):
+    params = {'name': name, 'url': url, 'mode': mode, 'thumb': iconimage}
+    url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    isfolder = True
+    if mode == 'resolve_url':
+        isfolder = False
+        listitem.setProperty('IsPlayable', 'true')
+    listitem.setProperty("Fanart_Image", fanart)
+    listitem.setInfo(type="Video", infoLabels={'Title': name})
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
 
 
 def get_params():
-        param=[]
-        paramstring=sys.argv[2]
-        if len(paramstring)>=2:
-            params=sys.argv[2]
-            cleanedparams=params.replace('?','')
-            if (params[len(params)-1]=='/'):
-                params=params[0:len(params)-2]
-            pairsofparams=cleanedparams.split('&')
-            param={}
-            for i in range(len(pairsofparams)):
-                splitparams={}
-                splitparams=pairsofparams[i].split('=')
-                if (len(splitparams))==2:
-                    param[splitparams[0]]=splitparams[1]
-        return param
+    p = parse_qs(sys.argv[2][1:])
+    for i in p.keys():
+        p[i] = p[i][0]
+    return p
 
 
-def addLink(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        liz.setProperty("IsPlayable","true")
-        liz.setProperty("Fanart_Image", fanart)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
-        return ok
-
-
-def addDir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        liz.setProperty("Fanart_Image", fanart)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
-
-
-params=get_params()
-url=None
-name=None
-mode=None
+params = get_params()
+addon_log(repr(params))
 
 try:
-    url=urllib.unquote_plus(params["url"])
+    mode = params['mode']
 except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
+    mode = None
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+if mode == None:
+    display_categories()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-if mode==None or url==None or len(url)<1:
-    print ""
-    categories()
+elif mode == 'get_category':
+    display_category(params['url'])
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==1:
-    print ""
-    indexPage(url)
+elif mode == 'resolve_url':
+    success = False
+    resolved_url = resolve_url(params['url'], params['thumb'])
+    if resolved_url:
+        success = True
+    else:
+        resolved_url = ''
+    item = xbmcgui.ListItem(path=resolved_url)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), success, item)
 
-elif mode==2:
-    print ""
-    videoLinks(url)
+elif mode == 'select_filter':
+    select_filter()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    
+elif mode == 'get_partners':
+    display_pro_categories()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==3:
-    print ""
-    getPartners()
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+elif mode == 'get_pro_cat':
+    display_pro_category(params['name'])
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))

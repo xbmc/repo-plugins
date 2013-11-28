@@ -1,0 +1,41 @@
+[B]Version 1.0.4 - 2013-11-28[/B]
+
+- Updated git url in addon.xml to be clonable rather than the website url
+
+- Updates the addon.xml to include <language> tag
+
+- MIT license is now consistently documented throughout
+
+
+[B]Version 1.0.3 - 2013-11-27[/B]
+
+- Removes deprecated demjson.py
+
+- Updates the README
+
+
+[B]Version 1.0.2 - 2013-11-27[/B]
+
+- Removes straggling unnecessary files related to BeautifulSoup
+
+- Removes mention of BeautifulSoup from License
+
+- Adds git repo url to addon.xml
+
+- Fixes icon.png size to 256x256 px
+
+
+[B]Version 1.0.1 - 2013-11-23[/B]
+
+- Adds this changelog :-)
+
+- Corrects python version in addon.xml to be 2.1.0
+
+- Renames default.py to addon.py to comply with dev guidelines
+
+- Removes the beautifulsoup from our addon and uses the one from repo
+http://mirrors.xbmc.org/addons/frodo/script.module.beautifulsoup/ and imports
+this in our addon.xml
+
+- Moves all GUI strings in the addon to resources/languages to comply with
+http://wiki.xbmc.org/index.php?title=Add-on_development#.2Fresources.2Flanguage.2F

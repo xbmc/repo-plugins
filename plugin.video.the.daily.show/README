@@ -1,0 +1,18 @@
+# Description
+This plugin provides access to full episodes of The Daily Show, as well as
+extended guest interviews.
+
+# Installation
+Download the zip file of the desired release from repository page (defined as
+<source> in the addon.xml file). Within XBMC, in the "Get Addons" page, select
+"install from ZIP" and specify the downloaded zip file.
+
+# Credits
+This project was originally forked from: https://github.com/VTWoods/xbmc-dailyshow
+The source of the second fork is: https://github.com/adamsb6/xbmc-dailyshow
+[BeautifulSoup](http://www.crummy.com/software/BeautifulSoup/) is used to scrape web content.
+
+# License
+This software is distributed under the MIT License.  See the included LICENSE
+file, or view the license at the
+[OSI](http://opensource.org/licenses/mit-license.php/).

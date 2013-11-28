@@ -1,3 +1,6 @@
+[B]0.0.4[/B]
+Fixed: Error if never configured
+
 [B]0.0.3[/B]
 Added: Fanart
 Added: Inform if no connection

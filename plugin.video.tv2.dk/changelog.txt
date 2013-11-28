@@ -1,3 +1,10 @@
+[B]Version 3.0.1 - 2013-11-27[/B]
+- Only list videos
+
+[B]Version 3.0.0 - 2013-11-21[/B]
+- Complete rewrite to use new feed
+- Updated for Frodo/Gotham
+
 [B]Version 2.0.0 - 2011-12-09[/B]
 - First version for XBMC Eden
 - Dropped use of script.module.danishaddons

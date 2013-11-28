@@ -1,145 +1,100 @@
-import re
+#
+#      Copyright (C) 2013 Tommy Winther
+#      http://tommy.winther.nu
+#
+#  This Program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This Program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this Program; see the file LICENSE.txt.  If not, write to
+#  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+#  http://www.gnu.org/copyleft/gpl.html
+#
 import sys
-import simplejson
 import os
+import re
 import urlparse
+import urllib
 import urllib2
-from htmlentitydefs import name2codepoint
+import xml.etree.ElementTree as ET
+import datetime
+import time
 
 import xbmcgui
 import xbmcplugin
 import xbmcaddon
 
-KEY_TO_TITLE = {
-    'beep' : 30001,
-    'sport' : 30002,
-    'station2' : 30003,
-    'zulu' : 30004,
-    'tour2009' : 30005,
-    'mogensen-kristiansen' : 30006,
-    'news-finans' : 30007,
-    'nyheder' : 30008,
-    'most-viewed' : 30009,
-    'go' : 30010,
-    'programmer' : 30011,
-    'finans' : 30012,
-    'musik' : 30013,
-    'latest' : 30014
-}
-
-BASE_URL = 'http://video.tv2.dk/js/video-list.js.php/index.js'
-class TV2VideoAddon(object):
-    def showOverview(self):
-        json = self._loadJson()
-
-        for key in json.keys():
-            if KEY_TO_TITLE.has_key(key):
-                title = ADDON.getLocalizedString(KEY_TO_TITLE[key])
-                item = xbmcgui.ListItem(title, iconImage=ICON, thumbnailImage=ICON)
-            else:
-                item = xbmcgui.ListItem(key, iconImage=ICON, thumbnailImage=ICON)
-            item.setProperty('Fanart_Image', FANART)
-            url = PATH + '?key=' + key
-            xbmcplugin.addDirectoryItem(HANDLE, url, item, True)
-
-        xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_LABEL)
-        xbmcplugin.endOfDirectory(HANDLE)
+import buggalo
 
 
-    def showCategory(self, key):
-        json = self._loadJson()
+def listFeed():
+    u = urllib2.urlopen('http://feed.theplatform.com/f/EHsYJC/Q_eFvtpVupQZ')
+    data = u.read()
+    u.close()
 
-        for e in json[key]:
-            infoLabels = dict()
-            if e['headline'] is not None:
-                infoLabels['title'] = self._decodeHtmlEntities(e['headline'])
-            if e['descr'] is not None:
-                infoLabels['plot'] = self._decodeHtmlEntities(e['descr'])
-            if e['date'] is not None:
-                infoLabels['year'] = int(e['date'][6:])
-                infoLabels['date'] = e['date'].replace('-', '.')
-            if e['duration'] is not None:
-                infoLabels['duration'] = e['duration'][1:9]
-            infoLabels['studio'] = ADDON.getAddonInfo('name')
+    # strip namespaces
+    data = re.sub('<[a-z]+:', '<', data)
+    data = re.sub('</[a-z]+:', '</', data)
 
-            item = xbmcgui.ListItem(infoLabels['title'], iconImage = e['img'], thumbnailImage=e['img'])
-            item.setInfo('video', infoLabels)
-            item.setProperty('Fanart_Image', FANART)
-            item.setProperty('IsPlayable', 'true')
-            url = PATH + '?id=' + str(e['id'])
+    items = list()
+    doc = ET.fromstring(data)
+    for rssItem in doc.findall('channel/item'):
+        if not 'video' in rssItem.find('content').get('type'):
+            continue
 
-            xbmcplugin.addDirectoryItem(HANDLE, url, item)
+        image = rssItem.findtext('defaultThumbnailUrl')
+        if not image:
+            image = ICON
+        date = parseDate(rssItem.findtext('pubDate'))
 
-        xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_DATE)
-        xbmcplugin.endOfDirectory(HANDLE)
+        infoLabels = {}
+        duration = rssItem.find('content').get('duration')
+        if duration:
+            infoLabels['duration'] = int(float(duration) / 60) + 1
+        infoLabels['date'] = date.strftime('%d.%m.%Y')
+        infoLabels['year'] = int(date.strftime('%Y'))
+
+        item = xbmcgui.ListItem(rssItem.findtext('title'), iconImage=image, thumbnailImage=image)
+        item.setInfo('video', infoLabels)
+        item.setProperty('Fanart_Image', FANART)
+        item.setProperty('IsPlayable', 'true')
+        items.append((PATH + '?' + urllib.urlencode({'url': rssItem.find('content').get('url')}), item, False))
+
+    xbmcplugin.addDirectoryItems(HANDLE, items)
+    xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.endOfDirectory(HANDLE)
 
 
-    def playVideo(self, id):
-        # retrieve masquarade playlist
-        u = urllib2.urlopen('http://common.tv2.dk/flashplayer/playlistSimple.xml.php/clip-' + id + '.xml')
-        playlist = u.read()
-        u.close()
-        m = re.search('video="([^"]+)" materialId="([^"]+)"', playlist)
+def playVideo(url):
+    print url
+    u = urllib2.urlopen(url)
+    smil = u.read()
+    u.close()
 
-        # retrive crossdomain to setup next request for geocheck
-        u = urllib2.urlopen('http://common-dyn.tv2.dk/crossdomain.xml')
-        u.read()
-        u.close()
+    # strip namespaces
+    smil = re.sub('xmlns=[^>]+', '', smil)
 
-        # retrieve real playlist
-        u = urllib2.urlopen('http://common-dyn.tv2.dk/flashplayer/geocheck.php?id=' + m.group(2) + '&file=' + m.group(1))
-        playlist = u.read()
-        u.close()
+    doc = ET.fromstring(smil)
+    src = doc.find('body/seq/switch/video').get('src')
+    item = xbmcgui.ListItem(path=src)
+    xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
-        item = xbmcgui.ListItem(path = playlist)
-        xbmcplugin.setResolvedUrl(HANDLE, True, item)
 
-    def _loadJson(self):
-        u = urllib2.urlopen(BASE_URL)
-        json = u.read()
-        u.close()
-
-        # get json part of js file
-        m = re.search('data = (\{.*)\}', json, re.DOTALL)
-        # fixup json parsing with simplejson, ie. replace ' with "
-        json = re.sub(r'\'([\w-]+)\':', r'"\1":', m.group(1))
-
-        return simplejson.loads(json)
-
-    def _decodeHtmlEntities(self, string):
-        """Decodes the HTML entities found in the string and returns the modified string.
-
-        Both decimal (&#000;) and hexadecimal (&x00;) are supported as well as HTML entities,
-        such as &aelig;
-
-        Keyword arguments:
-        string -- the string with HTML entities
-
-        """
-        def substituteEntity(match):
-            ent = match.group(3)
-            if match.group(1) == "#":
-                # decoding by number
-                if match.group(2) == '':
-                    # number is in decimal
-                    return unichr(int(ent))
-            elif match.group(2) == 'x':
-                # number is in hex
-                return unichr(int('0x'+ent, 16))
-            else:
-                # they were using a name
-                cp = name2codepoint.get(ent)
-                if cp:
-                    return unichr(cp)
-                else:
-                    return match.group()
-
-        entity_re = re.compile(r'&(#?)(x?)(\w+);')
-        return entity_re.subn(substituteEntity, string)[0]
-
+def parseDate(dateStr):
+    try:
+        return datetime.datetime.strptime(dateStr[0:-4], '%a, %d %b %Y %H:%M:%S')
+    except TypeError:
+        return datetime.datetime.fromtimestamp(time.mktime(time.strptime(dateStr[0:-4], '%a, %d %b %Y %H:%M:%S')))
 
 if __name__ == '__main__':
-    ADDON = xbmcaddon.Addon(id = 'plugin.video.tv2.dk')
+    ADDON = xbmcaddon.Addon()
     PATH = sys.argv[0]
     HANDLE = int(sys.argv[1])
     PARAMS = urlparse.parse_qs(sys.argv[2][1:])
@@ -147,11 +102,13 @@ if __name__ == '__main__':
     ICON = os.path.join(ADDON.getAddonInfo('path'), 'icon.png')
     FANART = os.path.join(ADDON.getAddonInfo('path'), 'fanart.jpg')
 
-    tv2 = TV2VideoAddon()
-    if PARAMS.has_key('key'):
-        tv2.showCategory(PARAMS['key'][0])
-    elif PARAMS.has_key('id'):
-        tv2.playVideo(PARAMS['id'][0])
-    else:
-        tv2.showOverview()
+    buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
+    try:
+        if 'url' in PARAMS:
+            playVideo(PARAMS['url'][0])
+        else:
+            listFeed()
+    except Exception:
+        buggalo.onExceptionRaised()
+
 

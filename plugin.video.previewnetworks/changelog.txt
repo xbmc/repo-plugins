@@ -1,3 +1,6 @@
+[B]2.3.4[/B]
+- upgrade to new function and little fix
+
 [B]2.3.3[/B]
 - same bug fix and other optimizations
 
@@ -7,7 +10,7 @@
 [B]2.3.1[/B]
 - compatibility changes for Frodo beta
 
-[B]2.3[/B]
+[B]2.3.0[/B]
 - compatibility changes for Frodo beta
 
 [B]2.2.1[/B]

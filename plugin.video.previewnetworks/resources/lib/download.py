@@ -95,7 +95,7 @@ class Main:
                                                           self.settings[ "use_title" ],
                                                           self.settings[ "use_trailer" ] )
         #
-            tmp_path = self.filepath  # usato per escludere l'uso di executehttpapi
+            tmp_path = self.filepath
         #
             # only download if the trailer doesn't exist
             if ( not os.path.isfile( self.filepath.encode( "utf-8" ) ) ):
@@ -138,8 +138,8 @@ class Main:
                 pDialog.update( -1, msg1, msg2 )
                 # necessary for dialog to update
                 xbmc.sleep( 50 )
-                # use httpapi for file copying
-                xbmc.executehttpapi( "FileCopy(%s,%s)" % ( tmp_path, self.filepath.encode( "utf-8" ), ) )
+                # use JSON RPC for file copying
+                xbmc.executeJSONRPC( "FileCopy(%s,%s)" % ( tmp_path, self.filepath.encode( "utf-8" ), ) )
                 # remove temporary cache file
                 os.remove( tmp_path )
                 # create conf file for better MPlayer playback only when trailer saved on xbox and not progressive
@@ -153,7 +153,7 @@ class Main:
                 pDialog.update( -1, msg1, msg2 )
                 # necessary for dialog to update
                 xbmc.sleep( 50 )
-                xbmc.executehttpapi( "FileCopy(%s,%s)" % ( g_thumbnail, thumbpath.encode( "utf-8" ), ) )
+                xbmc.executeJSONRPC( "FileCopy(%s,%s)" % ( g_thumbnail, thumbpath.encode( "utf-8" ), ) )
             # we succeeded
             return True
         except:
@@ -162,8 +162,6 @@ class Main:
 
     def _play_video( self ):
         if ( self.filepath ):
-            # set DVDPLAYER as the player for progressive videos
-            core_player = ( xbmc.PLAYER_CORE_MPLAYER, xbmc.PLAYER_CORE_DVDPLAYER, )[ self.args.trailer_url.endswith( "p.mov" ) ]
             # create our playlist
             playlist = xbmc.PlayList( xbmc.PLAYLIST_VIDEO )
             # clear any possible entries
@@ -181,4 +179,4 @@ class Main:
             # close dialog
             pDialog.close()
             # play item
-            xbmc.Player( core_player ).play( playlist )
+            xbmc.Player( ).play( playlist )

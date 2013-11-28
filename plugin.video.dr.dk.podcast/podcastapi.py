@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2012 Tommy Winther
+#      Copyright (C) 2013 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -17,9 +17,12 @@
 #  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 #  http://www.gnu.org/copyleft/gpl.html
 #
-import simplejson
 import urllib
 import urllib2
+try:
+    import json
+except:
+    import simplejson as json
 
 API_URL = 'http://www.dr.dk/podcast/api/%s'
 
@@ -35,6 +38,7 @@ API_URL = 'http://www.dr.dk/podcast/api/%s'
 TYPE_RADIO = 'radio'
 TYPE_TV = 'tv'
 
+
 class PodcastApi(object):
     def __init__(self, type):
         self.type = type
@@ -42,8 +46,8 @@ class PodcastApi(object):
     def getChannels(self):
         return self._call_api('getchannels')
 
-    def getByFirstLetter(self, letter, start = None, count = 1000, channel = None):
-        params = {'letter' : letter}
+    def getByFirstLetter(self, letter, start=None, count=1000, channel=None):
+        params = {'letter': letter}
         if count:
             params['take'] = count
         if start:
@@ -53,7 +57,7 @@ class PodcastApi(object):
 
         return self._call_api('GetByFirst', params)
 
-    def search(self, query = None, start = None, count = 1000, channel = None):
+    def search(self, query=None, start=None, count=1000, channel=None):
         params = dict()
         if query:
             params['query'] = query
@@ -66,11 +70,11 @@ class PodcastApi(object):
 
         return self._call_api('search', params)
 
-    def _call_api(self, method, params = None):
+    def _call_api(self, method, params=None):
         url = API_URL % method
 
         if params:
-            params.update({'type' : self.type})
+            params.update({'type': self.type})
             url += '?' + urllib.urlencode(params)
 
         print "Calling API: " + url
@@ -79,7 +83,7 @@ class PodcastApi(object):
 
         if content is not None:
             try:
-                return simplejson.loads(content)
+                return json.loads(content)
             except Exception, ex:
                 raise PodcastException(ex)
         else:
@@ -87,7 +91,7 @@ class PodcastApi(object):
 
     def _http_request(self, url):
         try:
-            u = urllib2.urlopen(url, timeout = 30)
+            u = urllib2.urlopen(url, timeout=30)
             content = u.read()
             u.close()
         except Exception as ex:
@@ -98,8 +102,9 @@ class PodcastApi(object):
 class PodcastException(Exception):
     pass
 
+
 if __name__ == '__main__':
     api = PodcastApi(TYPE_TV)
-    json =  api.getChannels()
-    s = simplejson.dumps(json, sort_keys=True, indent='    ')
-    print '\n'.join([l.rstrip() for l in  s.splitlines()])
+    c = api.getChannels()
+    s = json.dumps(c, sort_keys=True, indent='    ')
+    print '\n'.join([l.rstrip() for l in s.splitlines()])

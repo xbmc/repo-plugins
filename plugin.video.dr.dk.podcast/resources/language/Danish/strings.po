@@ -17,30 +17,30 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#100"
+msgctxt "#30100"
 msgid "All podcasts"
 msgstr "Alle podcasts"
 
-msgctxt "#101"
+msgctxt "#30101"
 msgid "Podcasts by channel"
 msgstr "Podcasts efter kanal"
 
-msgctxt "#102"
+msgctxt "#30102"
 msgid "Podcasts by letter"
 msgstr "Podcasts efter bogstav"
 
-msgctxt "#103"
+msgctxt "#30103"
 msgid "Search"
 msgstr "Søg"
 
-msgctxt "#200"
+msgctxt "#30200"
 msgid "Search for podcasts"
 msgstr "Søg efter podcasts"
 
-msgctxt "#900"
+msgctxt "#30900"
 msgid "There was an error while retrieving podcasts."
 msgstr "Det var ikke mulighed at hente podcasts."
 
-msgctxt "#901"
+msgctxt "#30901"
 msgid "Please try again later. Error message is:"
 msgstr "Prøv igen senere. Fejlbeskeden er:"

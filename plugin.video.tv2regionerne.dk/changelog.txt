@@ -1,3 +1,7 @@
+[B]Version 2.0.1 - 2013-11-21[/B]
+- Updated feeds
+- Updated for Frodo/Gotham
+
 [B]Version 2.0.0 - 2011-08-20[/B]
 - Same changes as version 1.2.0
 

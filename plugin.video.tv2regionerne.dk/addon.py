@@ -1,5 +1,24 @@
+#
+#      Copyright (C) 2013 Tommy Winther
+#      http://tommy.winther.nu
+#
+#  This Program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This Program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with XBMC; see the file COPYING.  If not, write to
+#  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+#  http://www.gnu.org/copyleft/gpl.html
+#
 import sys
-import cgi as urlparse
+import urlparse
 
 import xbmcgui
 import xbmcplugin
@@ -9,41 +28,38 @@ import xbmcaddon
 REGIONS = {
     30000: 'tv2fyn',
     30001: 'tv2lorry',
+    30005: 'tvmidtvest',
     30002: 'tv2nord',
     30003: 'tv2east',
     30004: 'tv2oj'
 }
 
 FEEDS = [
-        (30100, 'rss://www.tv2oj.dk/podcast/1930', 'tv2oj'),
-        (30101, 'rss://www.tv2oj.dk/podcast/2220', 'tv2oj'),
-        (30102, 'rss://www.tv2oj.dk/podcast/goaften', 'tv2oj'),
+    # http://www.tv2oj.dk/artikel/55248:Tjenester--Podcast
+    (30100, 'rss://www.tv2oj.dk/podcast/1930', 'tv2oj'),
+    (30101, 'rss://www.tv2oj.dk/podcast/2220', 'tv2oj'),
+    (30102, 'rss://www.tv2oj.dk/podcast/goaften', 'tv2oj'),
 
-        (30200, 'rss://www.tv2nord.dk/podcast/1210', 'tv2nord'),
-        (30201, 'rss://www.tv2nord.dk/podcast/1930', 'tv2nord'),
-        (30202, 'rss://www.tv2nord.dk/podcast/2220', 'tv2nord'),
-        (30203, 'rss://www.tv2nord.dk/podcast/plus', 'tv2nord'),
+    # http://www.tvmidtvest.dk/node/2407
+    (30700, 'rss://podcast.tvmidtvest.dk/feed/3799.aspx', 'tvmidtvest'),
 
-        (30300, 'rss://podcast.tv2east.dk/podcaster?channel=nyheder', 'tv2east'),
-        (30301, 'rss://podcast.tv2east.dk/podcaster?channel=nyheder&subchannel=1210', 'tv2east'),
-        (30302, 'rss://podcast.tv2east.dk/podcaster?channel=nyheder&subchannel=1610', 'tv2east'),
-        (30303, 'rss://podcast.tv2east.dk/podcaster?channel=nyheder&subchannel=1810', 'tv2east'),
-        (30304, 'rss://podcast.tv2east.dk/podcaster?channel=nyheder&subchannel=1930', 'tv2east'),
-        (30305, 'rss://podcast.tv2east.dk/podcaster?channel=nyheder&subchannel=2220', 'tv2east'),
+    # http://www.tv2nord.dk/kategori/86
+    (30201, 'rss://www.tv2nord.dk/podcast/1930', 'tv2nord'),
 
-        (30400, 'rss://www.tv2fyn.dk/podcast/1930', 'tv2fyn'),
-        (30401, 'rss://www.tv2fyn.dk/podcast/2220', 'tv2fyn'),
-        (30402, 'rss://www.tv2fyn.dk/podcast/plus', 'tv2fyn'),
+    # http://www.tv2fyn.dk/article/41815:TV-2-FYN-med-i-lommen
+    (30400, 'rss://www.tv2fyn.dk/podcast/1930', 'tv2fyn'),
+    (30401, 'rss://www.tv2fyn.dk/podcast/2220', 'tv2fyn'),
 
-        (30500, 'rss://www.tv2lorry.dk/podcast/1930', 'tv2lorry'),
-        (30501, 'rss://www.tv2lorry.dk/podcast/2220', 'tv2lorry'),
-        (30502, 'rss://www.tv2lorry.dk/podcast/lounge', 'tv2lorry'),
-        (30503, 'rss://www.tv2lorry.dk/podcast/dervarengang', 'tv2lorry')
+    # http://www.lorry.dk/article/43306
+    (30500, 'rss://www.tv2lorry.dk/podcast/1930', 'tv2lorry'),
+    (30501, 'rss://www.tv2lorry.dk/podcast/2220', 'tv2lorry'),
+    (30502, 'rss://www.tv2lorry.dk/podcast/lounge', 'tv2lorry'),
 ]
 
 SPECIAL = [
-        (30600, 'rss://www.tv2lorry.dk/podcast/dkr', 'danmarkrundt')
+    (30600, 'rss://www.tv2lorry.dk/podcast/dkr', 'danmarkrundt')
 ]
+
 
 class TV2Regionerne(object):
     def showRegions(self):
@@ -59,7 +75,6 @@ class TV2Regionerne(object):
             self._addFeeds(SPECIAL)
 
         xbmcplugin.endOfDirectory(HANDLE)
-
 
     def showFeeds(self, slug):
         self._addFeeds(FEEDS, slug)
@@ -79,9 +94,9 @@ class TV2Regionerne(object):
 
 
 if __name__ == '__main__':
-    ADDON = xbmcaddon.Addon(id='plugin.video.tv2regionerne.dk')
+    ADDON = xbmcaddon.Addon()
     PATH = sys.argv[0]
-    HANDLE= int(sys.argv[1])
+    HANDLE = int(sys.argv[1])
     PARAMS = urlparse.parse_qs(sys.argv[2][1:])
 
     regionSlug = None

@@ -2,11 +2,11 @@
 <addon
 	id="plugin.video.hockeystreams"
 	name="Hockeystreams"
-	version="2.0.0"
+	version="2.0.1"
 	provider-name="wotever"
 >
 	<requires>
-		<import addon="xbmc.python" version="2.0" />
+		<import addon="xbmc.python" version="2.1.0" />
 		<import addon="script.module.beautifulsoup" version="3.0.8" />
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
@@ -17,5 +17,6 @@
 		<summary>Hockeystreams video plugin</summary>
 		<description>Plugin that lets you browse and play videos from Hockeystreams website</description>
 		<disclaimer>Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+        <broken>Contact add-on author</broken>
 	</extension>
 </addon>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.pyvideo"
-    version="1.0.1"
+    version="1.0.2"
     name="PyVideo"
     provider-name="nevermore">
   <requires>
-    <import addon="xbmc.python" version="2.0"/>
+    <import addon="xbmc.python" version="2.1.0"/>
     <import addon="plugin.video.youtube" version="2.0.0"/>
     <import addon="script.module.beautifulsoup" version="3.2.0"/>
   </requires>
@@ -23,5 +23,6 @@
       Recordings of international conferences related to the Python
       programming language (as listed at pyvideo.org)
     </summary>
+    <broken>Contact add-on author</broken>
   </extension>
 </addon>

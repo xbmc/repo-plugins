@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<strings>
+	<!-- Required Settings Codes: 30000 - 30099 -->
+	<string id="30002">Preferred Video Quality</string>
+	<string id="30003">Download Path</string>
+	<string id="30004">Folder View Mode</string>
+	<string id="30005">Video View Mode</string>
+	<string id="30006">Default</string>
+	<string id="30007">Biglist</string>
+	<string id="30008">Thumbnail</string>
+	<string id="30009">Custom</string>
+	<string id="30010">- Custom ID</string>
+	
+	<!-- Extra Settings Codes: 30100 - 30199 -->
+	<string id="30100">Sort By</string>
+	<string id="30101">Date</string>
+	<string id="30102">Artist</string>
+	<string id="30103">Ratings</string>
+	<string id="30104">Views</string>
+	
+	<!-- Extra Addon Codes: 30600 - 30699 -->
+	<string id="30600">Please Select Top 50</string>
+</strings>
+

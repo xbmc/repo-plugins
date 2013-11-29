@@ -2,11 +2,11 @@
 <addon
 	id="plugin.video.fightcasts"
 	name="FightCasts"
-	version="0.0.3"
+	version="0.0.4"
 	provider-name="paddycarey"
     >
   <requires>
-    <import addon="xbmc.python" version="2.0"/>
+    <import addon="xbmc.python" version="2.1.0"/>
     <import addon="plugin.video.youtube" version="2.9.0"/>
     <import addon="plugin.video.vimeo"/>
     <import addon="plugin.video.mmafighting" version="0.0.2"/>

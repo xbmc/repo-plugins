@@ -2,11 +2,11 @@
 <addon
     id="plugin.video.mmafighting"
     name="MMAFighting.com"
-    version="0.0.2"
+    version="0.0.3"
     provider-name="paddycarey"
     >
   <requires>
-    <import addon="xbmc.python" version="2.0"/>
+    <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.beautifulsoup"/>
     <import addon="script.common.plugin.cache" version="0.9.1"/>
   </requires>
@@ -20,5 +20,6 @@
     </description>
     <disclaimer lang="en">All content is copyright MMAFighting.com.</disclaimer>
     <platform>all</platform>
+    <broken>Please contact add-on author</broken>
   </extension>
 </addon>

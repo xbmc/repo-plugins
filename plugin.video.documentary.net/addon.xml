@@ -1,6 +1,6 @@
-<addon id="plugin.video.documentary.net" name="Documentary.net" provider-name="Jonathan Beluch (jbel)" version="1.1">
+<addon id="plugin.video.documentary.net" name="Documentary.net" provider-name="Jonathan Beluch (jbel)" version="1.1.1">
   <requires>
-    <import addon="xbmc.python" version="2.0" />
+    <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.beautifulsoup" version="3.0.8" />
     <import addon="script.module.xbmcswift2" version="1.1.1" />
     <import addon="plugin.video.youtube" version="3.1.0" />

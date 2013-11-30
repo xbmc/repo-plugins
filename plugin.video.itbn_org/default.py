@@ -8,6 +8,8 @@ main_menu_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'm
 live_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'live.png' )
 movies_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'resources', 'media', 'movies.png' )
 
+##################################################################################################################################
+
 def MAIN():
         addDir('Recent','http://www.tbn.org/watch/mobile_app/v3/itbnapi.php?platform=android&request_path=%2Fapi%2Fv1.0%2Fvideos%2Flimit%2F250%2Fsortby%2Fairdate&device_name=GT-I9100&os_ver=2.3.4&screen_width=1600&screen_height=900&app_ver=3.0&UUID=1d5f5000-656a-4a16-847f-138937d4d0c4',6,'')
         addDir('Categories','http://www.itbn.org',3,'')
@@ -18,38 +20,37 @@ def MAIN():
 	addDir('Air Date','http://itbn.org/',9,search_thumb)
 	if 1==1:
                 xbmc.executebuiltin('Container.SetViewMode(50)')
+
+##################################################################################################################################
+
 def ADDLINKS(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        match=re.compile('						<a href=".+?/ec/(.+?)"><img src=".+?" alt=".+?" title=".+?"').findall(link)
-        title=re.compile('						<a href=".+?"><img src=".+?" alt=".+?" title="(.+?)"').findall(link)
-        function=' '*len(match)
-        leftparentheses='('*len(match)
-        date=re.compile('<span class="air_date">(.+?)</span>').findall(link)
-        description=re.compile('						<span class="description">(.+?)</span>').findall(link)
-        rightparentheses=')'*len(match)
-        name=zip((title),(function),(function),(leftparentheses),(date),(rightparentheses))
-        thumbnail=re.compile('						<a href=".+?"><img src="(.+?)" alt=".+?" title=".+?"').findall(link)
-        thumbnail = [w.replace('\\', '') for w in thumbnail]
-        prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
-        prefix=[prefixcode[0]]*prefixcode[1]
-        suffixcode='&requestbody=&parameters=',len(match)
-        suffix=[suffixcode[0]]*suffixcode[1]
-        nextpage=re.compile('<div class=\'btn_container\'><a href=\'(.+?)\' class=\'btn_next\'>').findall(link)
+	match=re.compile('						<a href=".+?/ec/(.+?)"><img src=".+?" alt=".+?" title=".+?"').findall(link)
+	name=re.compile('						<a href=".+?"><img src=".+?" alt=".+?" title="(.+?)"').findall(link)
+	date=re.compile('<span class="air_date">(.+?)</span>').findall(link)
+	description=re.compile('						<span class="description">(.+?)</span>').findall(link)
+	thumbnail=re.compile('						<a href=".+?"><img src="(.+?)" alt=".+?" title=".+?"').findall(link)
+	thumbnail = [w.replace('\\', '') for w in thumbnail]
+	prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
+	prefix=[prefixcode[0]]*prefixcode[1]
+	suffixcode='&requestbody=&parameters=',len(match)
+	suffix=[suffixcode[0]]*suffixcode[1]
+	nextpage=re.compile('<div class=\'btn_container\'><a href=\'(.+?)\' class=\'btn_next\'>').findall(link)
 	nextpagelabelurl=re.compile('<div class=\'btn_container\'><a href=\'.+?/page/(.+?.+?.+?)').findall(link)
-        airdatepage=re.compile('.+?airDate=(.+?.+?.+?.+?.+?.+?.+?.+?.+?.+?)').findall(url)
-        if nextpage:
-                nextpagelabel=nextpagelabelurl[0]
-                nextpagelabel=nextpagelabel.replace('%27','')
-                if airdatepage:
-                        nextpagelabel=nextpagelabel.replace(airdatepage[0],'')
-                nextpagelabel=[w.replace('/', '') for w in nextpagelabel]
-                nextpagelabel=" ".join(nextpagelabel)
-                nextpagelabel=[int(s) for s in nextpagelabel.split() if s.isdigit()]
-                nextpagelabel=''.join(str(e) for e in nextpagelabel)
+	airdatepage=re.compile('.+?airDate=(.+?.+?.+?.+?.+?.+?.+?.+?.+?.+?)').findall(url)
+	if nextpage:
+		nextpagelabel=nextpagelabelurl[0]
+		nextpagelabel=re.sub("\D", "", nextpagelabel)
+		if airdatepage:
+			nextpagelabel=nextpagelabel.replace(airdatepage[0],'')
+			nextpagelabel=[w.replace('/', '') for w in nextpagelabel]
+			nextpagelabel=" ".join(nextpagelabel)
+			nextpagelabel=[int(s) for s in nextpagelabel.split() if s.isdigit()]
+			nextpagelabel=''.join(str(e) for e in nextpagelabel)
         previouspage=re.compile('class=\'btn_first\'>&lt;&lt;</a></li><li><a href=\'(.+?)\' class=\'btn_prev\'>').findall(link)
 	previouspagelabelurl=re.compile('class=\'btn_first\'>&lt;&lt;</a></li><li><a href=\'.+?/page/(.+?.+?.+?)').findall(link)
         if previouspage:
@@ -61,24 +62,27 @@ def ADDLINKS(url):
                 previouspagelabel=" ".join(previouspagelabel)
                 previouspagelabel=[int(s) for s in previouspagelabel.split() if s.isdigit()]
                 previouspagelabel=''.join(str(e) for e in previouspagelabel)
-        source=zip((prefix),(match),(suffix))
-        mylist=zip((source),(name),(thumbnail),(description))
+	source=zip((prefix),(match),(suffix))
+	mylist=zip((source),(name),(thumbnail),(description),(date))
         addDir('Main Menu','',None,main_menu_thumb)
         if previouspage:
 		previousurl = sys.argv[0]+"?url="+urllib.quote_plus('http://www.itbn.org'+previouspage[0])+"&mode="+str(11)+"&name="+urllib.quote_plus('Page '+previouspagelabel)                
 		addLink('Page '+previouspagelabel,previousurl,previous_thumb)
-        for url,name,thumbnail,description in mylist:
-                description=description.replace("&quot;","\"")
-                description=description.replace("&#039;","\'")
-                description=description.replace("&hellip;","...")
-                description=description.replace("&amp;","&")
-                name=reduce(lambda rst, d: rst * 1 + d, (name))
-                name=name.replace("&quot;","\"")
-                name=name.replace("&#039;","\'")
-                name=name.replace("&hellip;","...")
-                name=name.replace("&amp;","&")
-                url=reduce(lambda rst, d: rst * 1 + d, (url))
-                addDir(name+' - '+description,url,2,thumbnail)
+	for url,name,thumbnail,description,date in mylist:
+		description=description.replace("&quot;","\"")
+		description=description.replace("&#039;","\'")
+		description=description.replace("&hellip;","...")
+		description=description.replace("&amp;","&")
+		description=description.split('\"', 1)[-1]
+		description=description.replace('\"','')
+		description=description.replace(',','')
+		name=reduce(lambda rst, d: rst * 1 + d, (name))
+		name=name.replace("&quot;","\"")
+		name=name.replace("&#039;","\'")
+		name=name.replace("&hellip;","...")
+		name=name.replace("&amp;","&")
+		url=reduce(lambda rst, d: rst * 1 + d, (url))
+                addDir(name+' - '+description +' ('+date+')',url,2,thumbnail)
         if nextpage:
                 addDir('Page '+nextpagelabel,'http://www.itbn.org'+nextpage[0],1,next_thumb)
         video_view = settings.getSetting("list_view") == "1"
@@ -88,6 +92,8 @@ def ADDLINKS(url):
 	if settings.getSetting("thumbnailviewmode") == 'false':
 		if 1==1:
 			xbmc.executebuiltin('Container.SetViewMode(50)')
+
+##################################################################################################################################
         
 def GETSOURCE(url,name):
         req = urllib2.Request(url)
@@ -105,7 +111,9 @@ def GETSOURCE(url,name):
 		while xbmc.Player().isPlaying():
     			xbmc.sleep(250)
 		xbmc.Player().stop()
-	sys.exit()        
+	sys.exit()   
+
+##################################################################################################################################     
 
 def CATEGORIES(url):
         addDir('Faith Issues','http://www.tbn.org/watch/mobile_app/v3/itbnapi.php',4,'')
@@ -122,6 +130,8 @@ def CATEGORIES(url):
         addDir('Reality','http://www.itbn.org/index/subview/lib/Programs/sublib/Holidays',1,'')
         if 1==1:
                 xbmc.executebuiltin('Container.SetViewMode(50)')
+
+##################################################################################################################################
 
 def FAITHISSUES(url):
         addDir('Angels','http://www.itbn.org/index/subview/lib/Faith+Issues/sublib/Angels',1,'')
@@ -144,6 +154,9 @@ def FAITHISSUES(url):
         addDir('Teen Issues','http://www.itbn.org/index/subview/lib/Faith+Issues/sublib/Teen+Issues',1,'')
         if 1==1:
                 xbmc.executebuiltin('Container.SetViewMode(50)')
+
+##################################################################################################################################
+
 def PROGRAMS(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -160,34 +173,40 @@ def PROGRAMS(url):
         if 1==1:
                 xbmc.executebuiltin('Container.SetViewMode(50)')
 
+##################################################################################################################################
+
 def RECENT(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        match=re.compile('"embedCode":"(.+?)"').findall(link)
-        title=re.compile('"displayTitle":"(.+?)"').findall(link)
-        function=' '*len(match)
-        leftparentheses='('*len(match)
-        date=re.compile('"airDate":"(.+?) 00:00:00"').findall(link)
-        description=re.compile('\"description\":\"(.+?)\","air').findall(link)
-        rightparentheses=')'*len(match)
-        name=zip((title),(function),(function),(leftparentheses),(date),(rightparentheses))
-        thumbnail=re.compile('"thumbnailUrl":"(.+?)"').findall(link)
-        thumbnail = [w.replace('\\', '') for w in thumbnail]
-        prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
-        prefix=[prefixcode[0]]*prefixcode[1]
-        suffixcode='&requestbody=&parameters=',len(match)
-        suffix=[suffixcode[0]]*suffixcode[1]
-        source=zip((prefix),(match),(suffix))
-        mylist=zip((source),(name),(thumbnail),(description))
-        for url,name,thumbnail,description in mylist:
-                description=description.replace("\\","")
-                description=description.replace("u2019","\'")
-                addDir(reduce(lambda rst, d: rst * 1 + d, (name)),reduce(lambda rst, d: rst * 1 + d, (url)),2,thumbnail)
+	match=re.compile('"embedCode":"(.+?)"').findall(link)
+	title=re.compile('"displayTitle":"(.+?)"').findall(link)
+	date=re.compile('"airDate":"(.+?) 00:00:00"').findall(link)
+	description=re.compile('\"description\":\"(.+?)\"air').findall(link)
+	name = title
+	thumbnail=re.compile('"thumbnailUrl":"(.+?)"').findall(link)
+	thumbnail = [w.replace('\\', '') for w in thumbnail]
+	prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
+	prefix=[prefixcode[0]]*prefixcode[1]
+	suffixcode='&requestbody=&parameters=',len(match)
+	suffix=[suffixcode[0]]*suffixcode[1]
+	source=zip((prefix),(match),(suffix))
+	mylist=zip((source),(name),(thumbnail),(description),(date))
+	for url,name,thumbnail,description,date in mylist:
+		description=description.replace("\\","")
+		description=description.replace("u2019","\'")
+		description=description.split('\"', 1)[-1]
+		description=description.replace('\"','')
+		description=description.replace(',','')
+		name = reduce(lambda rst, d: rst * 1 + d, (name))
+		url = reduce(lambda rst, d: rst * 1 + d, (url))
+                addDir(name +' - '+ description +' ('+date+')',url,2,thumbnail)
         if 1==1:
                 xbmc.executebuiltin('Container.SetViewMode(50)')
+
+##################################################################################################################################
                 
 def LIVE(url):
         req = urllib2.Request(url)
@@ -198,10 +217,10 @@ def LIVE(url):
 	if settings.getSetting("livequality") == '0':
 		match=re.compile('\"andsuperstreamurl\":\"(.+?)\"').findall(link)
 	if settings.getSetting("livequality") == '1':
-		match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_300@101613 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_300@101620 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_300@101615 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_300@101622 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_300@101618 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_300@101623 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129064.live.edgefcs.net/live/ playpath=healing_mbr_300@101624 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn/ playpath=juce_super.sdp  live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn_repeater/ playpath=tbnafrica.stream live=true'
+		match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_300@101613 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_300@101620 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_300@101615 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_300@101622 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_300@101618 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_300@101623 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp253352.live.edgefcs.net/live/ playpath=alhorreya_500@142129 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp253350.live.edgefcs.net/live playpath=juce@142128  live=true','rtmp://cp253351.live.edgefcs.net/live/ playpath=tbnafrica@144071 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp210356.live.edgefcs.net/live playpath=tcilive_150@30064 pageURL=http://www.tbn.org/watch-us  live=true'
 
 	if settings.getSetting("livequality") == '2':
-		match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_600@101613 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_600@101620 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_600@101615 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_600@101622 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_600@101618 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_600@101623 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129064.live.edgefcs.net/live/ playpath=healing_mbr_600@101624 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us swfUrl=http://players.edgesuite.net/flash/plugins/osmf/advanced-streaming-plugin/v2.11/osmf2.0/AkamaiAdvancedStreamingPlugin.swf swfVfy=true live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn/ playpath=juce_super.sdp  live=true','rtmp://mediaplatform2.trinetsolutions.com/tbn_repeater/ playpath=tbnafrica.stream live=true'
+		match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_600@101613 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_600@101620 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_600@101615 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_600@101622 live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_600@101618 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_600@101623 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp253352.live.edgefcs.net/live/ playpath=alhorreya_500@142129 pageURL=http://www.tbn.org/watch-us live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp253350.live.edgefcs.net/live playpath=juce@142128  live=true','rtmp://cp253351.live.edgefcs.net/live/ playpath=tbnafrica@144071 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp210356.live.edgefcs.net/live playpath=tcilive_150@30064 pageURL=http://www.tbn.org/watch-us  live=true'
         title=re.compile('\"name\":\"(.+?)\"').findall(link)
         thumbnail=re.compile('\"icon\":\"(.+?)\"').findall(link)
         mylist=zip((match),(title),(thumbnail))
@@ -209,6 +228,8 @@ def LIVE(url):
                 addLink(name,url,thumbnail)       
 	if 1==1:
                 xbmc.executebuiltin('Container.SetViewMode(500)')
+
+##################################################################################################################################
 
 def SEARCH(url):
         keyboard = xbmc.Keyboard('', '')
@@ -221,55 +242,46 @@ def SEARCH(url):
                 response = urllib2.urlopen(req)
                 link=response.read()
                 response.close()
-                match=re.compile('						<a href=".+?/ec/(.+?)"><img src=".+?" alt=".+?" title=".+?"').findall(link)
-                title=re.compile('						<a href=".+?"><img src=".+?" alt=".+?" title="(.+?)"').findall(link)
-                function=' '*len(match)
-                leftparentheses='('*len(match)
-                date=re.compile('<span class="air_date">(.+?)</span>').findall(link)
-                description=re.compile('						<span class="description">(.+?)</span>').findall(link)
-                rightparentheses=')'*len(match)
-                name=zip((title),(function),(function),(leftparentheses),(date),(rightparentheses))
-                thumbnail=re.compile('						<a href=".+?"><img src="(.+?)" alt=".+?" title=".+?"').findall(link)
-                thumbnail = [w.replace('\\', '') for w in thumbnail]
-                prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
-                prefix=[prefixcode[0]]*prefixcode[1]
-                suffixcode='&requestbody=&parameters=',len(match)
-                suffix=[suffixcode[0]]*suffixcode[1]
-                nextpage=re.compile('<div class=\'btn_container\'><a href=\'(.+?)\' class=\'btn_next\'>').findall(link)
+		match=re.compile('						<a href=".+?/ec/(.+?)"><img src=".+?" alt=".+?" title=".+?"').findall(link)
+		name=re.compile('						<a href=".+?"><img src=".+?" alt=".+?" title="(.+?)"').findall(link)
+		date=re.compile('<span class="air_date">(.+?)</span>').findall(link)
+		description=re.compile('						<span class="description">(.+?)</span>').findall(link)
+		thumbnail=re.compile('						<a href=".+?"><img src="(.+?)" alt=".+?" title=".+?"').findall(link)
+		thumbnail = [w.replace('\\', '') for w in thumbnail]
+		prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
+		prefix=[prefixcode[0]]*prefixcode[1]
+		suffixcode='&requestbody=&parameters=',len(match)
+		suffix=[suffixcode[0]]*suffixcode[1]
+		nextpage=re.compile('<div class=\'btn_container\'><a href=\'(.+?)\' class=\'btn_next\'>').findall(link)
 		nextpagelabelurl=re.compile('<div class=\'btn_container\'><a href=\'.+?/page/(.+?.+?.+?)').findall(link)
-                if nextpage:
-                        nextpagelabel=nextpagelabelurl[0]
-                        nextpagelabel=nextpagelabel.replace('%27','')
-                        nextpagelabel=[w.replace('/', '') for w in nextpagelabel]
-                        nextpagelabel=" ".join(nextpagelabel)
-                        nextpagelabel=[int(s) for s in nextpagelabel.split() if s.isdigit()]
-                        nextpagelabel=''.join(str(e) for e in nextpagelabel)
-                previouspage=re.compile('class=\'btn_first\'>&lt;&lt;</a></li><li><a href=\'(.+?)\' class=\'btn_prev\'>').findall(link)
+		if nextpage:
+			nextpagelabel=nextpagelabelurl[0]
+			nextpagelabel=re.sub("\D", "", nextpagelabel)
+		previouspage=re.compile('class=\'btn_first\'>&lt;&lt;</a></li><li><a href=\'(.+?)\' class=\'btn_prev\'>').findall(link)
 		previouspagelabelurl=re.compile('class=\'btn_first\'>&lt;&lt;</a></li><li><a href=\'.+?/page/(.+?)\' class=\'btn_prev\'>').findall(link)
                 if previouspage:
-                        previouspagelabel=previouspagelabelurl[0]
-                        previouspagelabel=previouspagelabel.replace('%27','')
-                        previouspagelabel=[w.replace('/', '') for w in previouspagelabel]
-                        previouspagelabel=" ".join(previouspagelabel)
-                        previouspagelabel=[int(s) for s in previouspagelabel.split() if s.isdigit()]
-                        previouspagelabel=''.join(str(e) for e in previouspagelabel)
-                source=zip((prefix),(match),(suffix))
-                mylist=zip((source),(name),(thumbnail),(description))
+			previouspagelabel=previouspagelabelurl[0]
+			previouspagelabel=re.sub("\D", "", previouspagelabel)
+		source=zip((prefix),(match),(suffix))
+		mylist=zip((source),(name),(thumbnail),(description),(date))
                 addDir('Main Menu','',None,main_menu_thumb)
                 if previouspage:
                         addDir('Page '+previouspagelabel,'http://www.itbn.org'+previouspage[0],1,next_thumb)
-                for url,name,thumbnail,description in mylist:
-                        description=description.replace("&quot;","\"")
-                        description=description.replace("&#039;","\'")
-                        description=description.replace("&hellip;","...")
-                        description=description.replace("&amp;","&")
-                        name=reduce(lambda rst, d: rst * 1 + d, (name))
-                        name=name.replace("&quot;","\"")
-                        name=name.replace("&#039;","\'")
-                        name=name.replace("&hellip;","...")
-                        name=name.replace("&amp;","&")
-                        url=reduce(lambda rst, d: rst * 1 + d, (url))
-                        addDir(name+' - '+description,url,2,thumbnail)
+		for url,name,thumbnail,description,date in mylist:
+			description=description.replace("&quot;","\"")
+			description=description.replace("&#039;","\'")
+			description=description.replace("&hellip;","...")
+			description=description.replace("&amp;","&")
+			description=description.split('\"', 1)[-1]
+			description=description.replace('\"','')
+			description=description.replace(',','')
+			name=reduce(lambda rst, d: rst * 1 + d, (name))
+			name=name.replace("&quot;","\"")
+			name=name.replace("&#039;","\'")
+			name=name.replace("&hellip;","...")
+			name=name.replace("&amp;","&")
+			url=reduce(lambda rst, d: rst * 1 + d, (url))
+                        addDir(name+' - '+description +' ('+date+')',url,2,thumbnail)
                 if nextpage:
                         addDir('Page '+nextpagelabel,'http://www.itbn.org'+nextpage[0],1,next_thumb)
 		if settings.getSetting("thumbnailviewmode") == 'true':        
@@ -280,6 +292,8 @@ def SEARCH(url):
 				xbmc.executebuiltin('Container.SetViewMode(50)')
         else:
                 MAIN()
+
+##################################################################################################################################
 
 def AIRDATE(url):
         keyboard = xbmc.Keyboard('yyyy-mm-dd', '')
@@ -292,56 +306,46 @@ def AIRDATE(url):
                 response = urllib2.urlopen(req)
                 link=response.read()
                 response.close()
-                match=re.compile('						<a href=".+?/ec/(.+?)"><img src=".+?" alt=".+?" title=".+?"').findall(link)
-                title=re.compile('						<a href=".+?"><img src=".+?" alt=".+?" title="(.+?)"').findall(link)
-                function=' '*len(match)
-                leftparentheses='('*len(match)
-                date=re.compile('<span class="air_date">(.+?)</span>').findall(link)
-                description=re.compile('						<span class="description">(.+?)</span>').findall(link)
-                rightparentheses=')'*len(match)
-                name=zip((title),(function),(function),(leftparentheses),(date),(rightparentheses))
-                thumbnail=re.compile('						<a href=".+?"><img src="(.+?)" alt=".+?" title=".+?"').findall(link)
-                thumbnail = [w.replace('\\', '') for w in thumbnail]
-                prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
-                prefix=[prefixcode[0]]*prefixcode[1]
-                suffixcode='&requestbody=&parameters=',len(match)
-                suffix=[suffixcode[0]]*suffixcode[1]
-                nextpage=re.compile('<div class=\'btn_container\'><a href=\'(.+?)\' class=\'btn_next\'>').findall(link)
-                airdatepage=re.compile('.+?airDate=(.+?.+?.+?.+?.+?.+?.+?.+?.+?.+?)').findall(content)
-                if nextpage:
-                        nextpagelabel=nextpage[0]
-                        nextpagelabel=nextpagelabel.replace('%27','')
-                        nextpagelabel=nextpagelabel.replace(airdatepage[0],'')
-                        nextpagelabel=[w.replace('/', '') for w in nextpagelabel]
-                        nextpagelabel=" ".join(nextpagelabel)
-                        nextpagelabel=[int(s) for s in nextpagelabel.split() if s.isdigit()]
-                        nextpagelabel=''.join(str(e) for e in nextpagelabel)
-                previouspage=re.compile('class=\'btn_first\'>&lt;&lt;</a></li><li><a href=\'(.+?)\' class=\'btn_prev\'>').findall(link)
+		match=re.compile('						<a href=".+?/ec/(.+?)"><img src=".+?" alt=".+?" title=".+?"').findall(link)
+		name=re.compile('						<a href=".+?"><img src=".+?" alt=".+?" title="(.+?)"').findall(link)
+		date=re.compile('<span class="air_date">(.+?)</span>').findall(link)
+		description=re.compile('						<span class="description">(.+?)</span>').findall(link)
+		thumbnail=re.compile('						<a href=".+?"><img src="(.+?)" alt=".+?" title=".+?"').findall(link)
+		thumbnail = [w.replace('\\', '') for w in thumbnail]
+		prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
+		prefix=[prefixcode[0]]*prefixcode[1]
+		suffixcode='&requestbody=&parameters=',len(match)
+		suffix=[suffixcode[0]]*suffixcode[1]
+		nextpage=re.compile('<div class=\'btn_container\'><a href=\'(.+?)\' class=\'btn_next\'>').findall(link)
+		nextpagelabelurl=re.compile('<div class=\'btn_container\'><a href=\'.+?/page/(.+?.+?.+?)').findall(link)
+		if nextpage:
+			nextpagelabel=nextpagelabelurl[0]
+			nextpagelabel=re.sub("\D", "", nextpagelabel)
+		previouspage=re.compile('class=\'btn_first\'>&lt;&lt;</a></li><li><a href=\'(.+?)\' class=\'btn_prev\'>').findall(link)
+		previouspagelabelurl=re.compile('class=\'btn_first\'>&lt;&lt;</a></li><li><a href=\'.+?/page/(.+?)\' class=\'btn_prev\'>').findall(link)
                 if previouspage:
-                        previouspagelabel=previouspage[0]
-                        previouspagelabel=previouspagelabel.replace('%27','')
-                        previouspagelabel=previouspagelabel.replace(airdatepage[0],'')
-                        previouspagelabel=[w.replace('/', '') for w in previouspagelabel]
-                        previouspagelabel=" ".join(previouspagelabel)
-                        previouspagelabel=[int(s) for s in previouspagelabel.split() if s.isdigit()]
-                        previouspagelabel=''.join(str(e) for e in previouspagelabel)
-                source=zip((prefix),(match),(suffix))
-                mylist=zip((source),(name),(thumbnail),(description))
+			previouspagelabel=previouspagelabelurl[0]
+			previouspagelabel=re.sub("\D", "", previouspagelabel)
+		source=zip((prefix),(match),(suffix))
+		mylist=zip((source),(name),(thumbnail),(description),(date))
                 addDir('Main Menu','',None,main_menu_thumb)
                 if previouspage:
                         addDir('Page '+previouspagelabel,'http://www.itbn.org'+previouspage[0],1,next_thumb)
-                for url,name,thumbnail,description in mylist:
-                        description=description.replace("&quot;","\"")
-                        description=description.replace("&#039;","\'")
-                        description=description.replace("&hellip;","...")
-                        description=description.replace("&amp;","&")
-                        name=reduce(lambda rst, d: rst * 1 + d, (name))
-                        name=name.replace("&quot;","\"")
-                        name=name.replace("&#039;","\'")
-                        name=name.replace("&hellip;","...")
-                        name=name.replace("&amp;","&")
-                        url=reduce(lambda rst, d: rst * 1 + d, (url))
-                        addDir(name+' - '+description,url,2,thumbnail)
+		for url,name,thumbnail,description,date in mylist:
+			description=description.replace("&quot;","\"")
+			description=description.replace("&#039;","\'")
+			description=description.replace("&hellip;","...")
+			description=description.replace("&amp;","&")
+			description=description.split('\"', 1)[-1]
+			description=description.replace('\"','')
+			description=description.replace(',','')
+			name=reduce(lambda rst, d: rst * 1 + d, (name))
+			name=name.replace("&quot;","\"")
+			name=name.replace("&#039;","\'")
+			name=name.replace("&hellip;","...")
+			name=name.replace("&amp;","&")
+			url=reduce(lambda rst, d: rst * 1 + d, (url))
+                        addDir(name+' - '+description +' ('+date+')',url,2,thumbnail)
                 if nextpage:
                         addDir('Page '+nextpagelabel,'http://www.itbn.org'+nextpage[0],1,next_thumb)
 		if settings.getSetting("thumbnailviewmode") == 'true':        
@@ -353,6 +357,9 @@ def AIRDATE(url):
         else:
                 MAIN()
 
+
+##################################################################################################################################
+
 def MOVIES(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -361,30 +368,27 @@ def MOVIES(url):
         response.close()
         match=re.compile('"embedCode":"(.+?)"').findall(link)
         title=re.compile('"displayTitle":"(.+?)"').findall(link)
-        function=' '*len(match)
-        leftparentheses='('*len(match)
         date=re.compile('"airDate":"(.+?) 00:00:00"').findall(link)
         description=re.compile('\"description\":\"(.+?)\","air').findall(link)
-        rightparentheses=')'*len(match)
-        name=zip((title),(function),(function),(leftparentheses),(date),(rightparentheses))
+        name=title
         thumbnail=re.compile('"thumbnailUrl":"(.+?)"').findall(link)
         thumbnail = [w.replace('\\', '') for w in thumbnail]
-        prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode=',len(match)
-        prefix=[prefixcode[0]]*prefixcode[1]
-        suffixcode='&requestbody=&parameters=',len(match)
-        suffix=[suffixcode[0]]*suffixcode[1]
-        source=zip((prefix),(match),(suffix))
-        mylist=zip((source),(name),(thumbnail),(description))
-        for url,name,thumbnail,description in mylist:
+        mylist=zip((match),(name),(thumbnail),(description),(date))
+        for url,name,thumbnail,description,date in mylist:
                 description=description.replace("\\","")
                 description=description.replace("u2019","\'")
-                addDir(reduce(lambda rst, d: rst * 1 + d, (name))+' - '+description,reduce(lambda rst, d: rst * 1 + d, (url)),2,thumbnail)
+                prefixcode='http://www.tbn.org/watch/mobile_app/v3/ooyala_strip_formats.php?method=GET&key=undefined&secret=undefined&expires=600&embedcode='
+                suffixcode='&requestbody=&parameters='
+                url=prefixcode+url+suffixcode
+                addDir(reduce(lambda rst, d: rst * 1 + d, (name))+' - '+description +' ('+date+')',reduce(lambda rst, d: rst * 1 + d, (url)),2,thumbnail)
 	if settings.getSetting("thumbnailviewmode") == 'true':        
 		if 1==1:
                 	xbmc.executebuiltin('Container.SetViewMode(500)')
 	if settings.getSetting("thumbnailviewmode") == 'false':
 		if 1==1:
 			xbmc.executebuiltin('Container.SetViewMode(50)')
+
+##################################################################################################################################
                
 def get_params():
         param=[]
@@ -404,8 +408,12 @@ def get_params():
                                 
         return param
 
+##################################################################################################################################
+
 def PREVIOUS():
 	xbmc.executebuiltin('Action(Back)')
+
+##################################################################################################################################
 	
 
 def addLink(name,url,iconimage):
@@ -415,6 +423,8 @@ def addLink(name,url,iconimage):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 
+##################################################################################################################################
+
 def addDir(name,url,mode,iconimage):
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
         ok=True
@@ -422,6 +432,8 @@ def addDir(name,url,mode,iconimage):
         liz.setInfo( type="Video", infoLabels={ "Title": name } )
         xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
         return ok
+
+##################################################################################################################################
         
               
 params=get_params()

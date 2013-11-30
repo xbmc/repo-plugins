@@ -9,14 +9,20 @@ Version 1.1.5
 Version 1.1.6
 -cleaned up some bits of code
 
-version 1.2.0
+Version 1.2.0
 -Removed the extra "Play Video" button before loading video.
 -All live streams now play in HD
 
-version 1.2.1
+Version 1.2.1
 -Fixed the previous page button (It now calls the Action(Back) function instead of adding another directory.)
 -Added optional tags.
 -Added settings for quality of live streams and a option to disable thumbnail view.
 
-version 1.2.2
+Version 1.2.2
 -Fixed a error with the settings not loading correctly after updating to frodo 12.2
+
+Version 1.2.3
+-Updated live video streams after changes on tbn's website
+
+Version 1.2.4
+-Changed the way the title of videos are formated.

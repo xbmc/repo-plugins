@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.gamereactor.dk" version="1.0.0" name="Gamereactor GRTV" provider-name="twinther [tommy@winther.nu]">
+<addon id="plugin.video.gamereactor.dk" version="1.0.1" name="Gamereactor GRTV" provider-name="twinther">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -13,5 +13,6 @@
         <description lang="da">Gamereactor er Nordens største gaming site, som bringer nyheder og anmeldelser af de nyeste spil.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
         <license>GPL 2.0</license>
         <platform>all</platform>
+        <email>tommy@winther.nu</email>
     </extension>
 </addon>

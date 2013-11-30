@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.spiegelonline" name="Spiegel Online" version="1.2.0" provider-name="cdwertmann (credits to peterpanzki and mad-max for previous versions">
+<addon id="plugin.video.spiegelonline" name="Spiegel Online" version="1.2.1" provider-name="cdwertmann (credits to peterpanzki and mad-max for previous versions">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>

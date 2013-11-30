@@ -1,3 +1,13 @@
+[B]Version 1.2.1[/B]
+
+- Detects when a HD stream is unavailable
+
+[B]Version 1.2[/B]
+
+- UTF-8 support
+- Faster navigation through parallel downloads
+- Clip duration now contains seconds
+
 [B]Version 1.1[/B]
 
 - updated python dependencies to make it Eden compatible

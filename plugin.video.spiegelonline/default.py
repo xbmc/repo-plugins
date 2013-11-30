@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 # Copyright 2010 by peterpanzki
+# Copyright 2013 cdwertmann
+
 import urllib,urllib2,re,time,xbmcplugin,xbmcgui,xbmcaddon,threading
 
 # plugin handle
 SITE = "http://www1.spiegel.de/active/playlist/fcgi/playlist.fcgi/asset=flashvideo/mode=list/displaycategory="
 VIDS = 20
 VIDS_PER_SITE = "/count=" + str(VIDS) + "/" 
+BASEURL="http://video.spiegel.de/flash/"
 handle = int(sys.argv[1])
 __addon__        = xbmcaddon.Addon()
 __language__     = __addon__.getLocalizedString
@@ -54,16 +57,24 @@ def show_cat_menu(cat, vnr):
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
     
 def getVideo(id):
-    content = getUrl("http://video.spiegel.de/flash/" + id + ".xml")
+    content = getUrl(BASEURL + id + ".xml")
     match = re.compile('<type(.+?)</type',re.DOTALL).findall(content)
-    hbitrate = 0
     filename = ""
+    streams = []
     for m in match:
         cat = re.compile('<filename>(.+?)</filename>.+?<totalbitrate>(.+?)</totalbitrate>',re.DOTALL).findall(m)
         for file,bitrate in cat:
-            if (".mp4" in file or ".flv" in file) and int(bitrate) > hbitrate:
-                hbitrate = int(bitrate)
-                filename = file
+            if (".mp4" in file or ".flv" in file):
+                streams.append((file,int(bitrate)))
+    #xbmc.log(str(streams), level=xbmc.LOGERROR)
+    # sort streams by highest bitrate first
+    streams.sort(key=lambda x: x[1], reverse=True)
+    #xbmc.log(str(streams), level=xbmc.LOGERROR)
+    for file,bitrate in streams:
+        # find the best quality stream available
+        if urllib.urlopen(BASEURL + file).getcode()==200:
+            filename = file
+            break
     return filename
 
 def parameters_string_to_dict(parameters):
@@ -86,7 +97,7 @@ def addLinkItem(url, li):
     return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=li, isFolder=False, totalItems=len(items))
 
 def setVideoURL(vid, index):
-    items[index]['url']="http://video.spiegel.de/flash/" + getVideo(vid)
+    items[index]['url']=BASEURL + getVideo(vid)
 
 def getUrl(url):
     req = urllib2.Request(url)

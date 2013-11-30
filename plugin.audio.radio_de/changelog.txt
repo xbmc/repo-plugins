@@ -1,3 +1,8 @@
+2.3.0 (29.11.2013)
+    - added playback for asx playlists (e.g. BBC)
+    - added blayback for xml playlists
+    - improved station search
+
 2.2.1 (11.08.2013)
     - updated translations
     - added new addon.xml tags

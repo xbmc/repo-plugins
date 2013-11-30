@@ -6,4 +6,7 @@
 <strings>
     <!-- Settings -->
     <string id="30300">Bahasa</string>
+    <string id="30301">Inggeris</string>
+    <string id="30302">Jerman</string>
+    <string id="30303">Perancis</string>
 </strings>

@@ -4,10 +4,20 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30102">Просмотр по стилю</string>
+    <string id="30108">Мои станции</string>
+
     <!-- Settings -->
     <string id="30300">Язык</string>
     <string id="30301">Английский</string>
     <string id="30302">Немецкий</string>
     <string id="30303">Французский</string>
     <string id="30310">Перевести режим просмотра к иконкам</string>
+
+    <!-- Context Menu -->
+    <string id="30400">Добавить в "Мои станции"</string>
+    <string id="30401">Убрать из "Моих станций"</string>
+
+    <!-- Error Message -->
+    <string id="30600">Ошибка сети</string>
 </strings>

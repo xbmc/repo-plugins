@@ -9,4 +9,8 @@
     <string id="30301">İngilizce</string>
     <string id="30302">Almanca</string>
     <string id="30303">Fransızca</string>
+    <string id="30310">Küçük Resim Görünüm Moduna Zorla</string>
+
+    <!-- Error Message -->
+    <string id="30600">Ağ Hatası</string>
 </strings>

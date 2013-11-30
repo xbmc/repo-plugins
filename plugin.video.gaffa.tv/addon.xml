@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.gaffa.tv" version="1.0.0" name="Gaffa.tv" provider-name="twinther [tommy@winther.nu]">
+<addon id="plugin.video.gaffa.tv" version="1.0.1" name="Gaffa.tv" provider-name="twinther">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>
@@ -13,5 +13,6 @@
         <description lang="da">Gaffa.tv er musik-tv, når du vil ha' det. På Gaffa.tv vil man blandt andet kunne se reportager og interviews lavet af GAFFAs journalister i ind- og udland blandet med portrætter, musikvideoer og underholdende indslag.[CR][CR]Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
         <license>GPL 2.0</license>
         <platform>all</platform>
+        <email>tommy@winther.nu</email>
     </extension>
 </addon>

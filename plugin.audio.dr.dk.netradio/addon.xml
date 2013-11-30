@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
         id="plugin.audio.dr.dk.netradio"
-        version="2.1.3"
+        version="2.1.4"
         name="Danish Netradio"
-        provider-name="stemann [jesper@sait.dk], twinther [tommy@winther.nu]">
+        provider-name="stemann, twinther">
     <requires>
-        <import addon="xbmc.python" version="2.0"/>
+        <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.simplejson" version="2.0.10"/>
         <import addon="script.module.buggalo" version="1.0.1"/>
     </requires>
@@ -22,5 +22,6 @@
         <license>GPL 2.0</license>
         <platform>all</platform>
         <language>da</language>
+        <email>jesper@sait.dk tommy@winther.nu</email>
     </extension>
 </addon>

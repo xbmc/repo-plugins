@@ -1,5 +1,5 @@
 <settings>
-   <setting id="maxBitRate" type="enum" label="30101" values="500kb|1000kb|1500kb|2000kb|3000kb" default="4"/>
-   <setting id="forceViewMode" type="bool" label="30102" default="false"/>
-   <setting id="viewMode" type="number" label="30103" default="500"/>
+   <setting id="forceView" type="bool" label="30101" default="true"/>
+   <setting id="viewIDVideos" type="number" label="30102" enable="eq(-1,true)" default="504"/>
+   <setting id="viewIDEpisodes" type="number" label="30103" enable="eq(-2,true)" default="503"/>
 </settings>

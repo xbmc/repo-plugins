@@ -2,7 +2,8 @@
 <strings>
   <string id="30001">Nächste Seite</string>
   <string id="30002">Suchen</string>
-  <string id="30003">Alle Videos</string>
-  <string id="30101">Maximale Bitrate</string>
-  <string id="30102">View erzwingen</string>
+  <string id="30003">Ganze Folgen</string>
+  <string id="30004">Alle Videos</string>
+  <string id="30005">Letzte Folge abspielen</string>
+  <string id="30101">View erzwingen</string>
 </strings>

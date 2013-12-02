@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.cherrymusic" name="CherryMusic" version="0.0.4" provider-name="Sets">
+<addon id="plugin.audio.cherrymusic" name="CherryMusic" version="0.0.5" provider-name="Sets">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>

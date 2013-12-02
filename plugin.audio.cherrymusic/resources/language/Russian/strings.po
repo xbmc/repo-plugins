@@ -29,6 +29,10 @@ msgctxt "#30003"
 msgid "Password"
 msgstr "Пароль"
 
+msgctxt "#30004"
+msgid "Note: Field 'Host and port' should be like this: http://HOST:PORT"
+msgstr "Важно: Поле 'Узел и порт' должно быть таким: http://Хост:Порт"
+
 msgctxt "#30010"
 msgid "Search by Title"
 msgstr "Искать по имени"

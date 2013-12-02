@@ -85,7 +85,7 @@ class UI(object):
         playlist.add(urllib.unquote(url), listitem)
         self.show_message("CherryMusic", translated(30015), 6000)
 
-    def create_playlist(self, data):
+    def create_playlist(self, host, data):
         """ Creates playlist out of data """
         playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
         playlist.clear()
@@ -119,7 +119,7 @@ class UI(object):
                 self.add_item(item['title'], str(item['plid']),3)
             self.end_of_directory()
 
-    def search_menu(self, data):
+    def search_menu(self, host, data):
         """ Load Playlist menu """
         if data is not None:
             for item in data['data']:
@@ -128,27 +128,20 @@ class UI(object):
                 self.add_item(item.get("label"), url, 1)
             self.end_of_directory()
 
-    def load_playlist_menu(url, data):
-        """ Load selected playlist """
-        playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
-        playlist.clear()
-        for item in data:
-            listitem = xbmcgui.ListItem('test')
-            listitem.setInfo(type='music', infoLabels={'title': item.get("label")})
-            url = urlparse.urljoin(host, "/serve/")
-            url = urlparse.urljoin(url, item['urlpath'])
-            playlist.add(url, listitem)
-        xbmc.Player().play(playlist)
-
 
 class Main(object):
 
     def __init__(self):
         self.session_id = None
-        self.host = host
+        self.host = self.fix_host(host)
         self.username = username
         self.password = password
 
+    def fix_host(self, host):
+        if host.lower().startswith("http://") or host.lower().startswith("https://"):
+            return host
+        else:
+            return "http://" + host
 
     def main(self):
 
@@ -170,15 +163,15 @@ class Main(object):
         elif mode == '1' and url is None:
             data = UI().get_data_from_keyboard()
             if data:
-                UI().search_menu(self.search(data))
+                UI().search_menu(self.host, self.search(data))
         elif mode == '1' and url:
            UI().add_to_current_playlist(name, url)
         elif mode == '2':
-            UI().create_playlist(self.get_random_list())
+            UI().create_playlist(self.host, self.get_random_list())
         elif mode == '3' and url is None:
             UI().show_playlists_menu(self.get_playlists())
         elif mode == '3' and url:
-            UI().create_playlist(self.get_playlist(url))
+            UI().create_playlist(self.host, self.get_playlist(url))
 
     def login(self, host, username, password):
         """ Login to CherryMusic using POST method """
@@ -197,7 +190,7 @@ class Main(object):
 
     def get_random_list(self):
         """ CherryMusic server generates random playlist, function returns deserialised data """
-        request = urllib2.Request(urlparse.urljoin(host, "api/generaterandomplaylist"))
+        request = urllib2.Request(urlparse.urljoin(self.host, "api/generaterandomplaylist"))
         request.add_header("Cookie", self.session_id)
         try:
             response = urllib2.urlopen(request)
@@ -214,7 +207,7 @@ class Main(object):
 
     def get_playlists(self):
         """ CherryMusic server returns available playlists, function returns deserialised data """
-        request = urllib2.Request(urlparse.urljoin(host, "api/showplaylists"))
+        request = urllib2.Request(urlparse.urljoin(self.host, "api/showplaylists"))
         request.add_header("Cookie", self.session_id)
         try:
             response = urllib2.urlopen(request)
@@ -232,7 +225,7 @@ class Main(object):
 
     def get_playlist(self, id):
         """ CherryMusic server returns playlists by id, function returns deserialised data """
-        request = urllib2.Request(urlparse.urljoin(host, "api/loadplaylist"))
+        request = urllib2.Request(urlparse.urljoin(self.host, "api/loadplaylist"))
         data = urllib.urlencode({"data": json.dumps({"playlistid": id})})
         request.add_header("Cookie", self.session_id)
         response = urllib2.urlopen(request, data=data)
@@ -242,7 +235,7 @@ class Main(object):
 
     def search(self, text):
         """ CherryMusic server returns found tracks by sting, function returns deserialised data """
-        request = urllib2.Request(urlparse.urljoin(host, "api/search"))
+        request = urllib2.Request(urlparse.urljoin(self.host, "api/search"))
         data = urllib.urlencode({"data": json.dumps({"searchstring": text})})
         request.add_header("Cookie", self.session_id)
         try:

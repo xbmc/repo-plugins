@@ -1,3 +1,7 @@
+[B]0.0.5[/B]
+Fixed: Add http:// to host if not entered
+Added: Note under host and port field in settings, to avoid implicit entry
+
 [B]0.0.4[/B]
 Fixed: Error if never configured
 

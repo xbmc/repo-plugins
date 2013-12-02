@@ -1,3 +1,7 @@
+2.0.6
+
+Replace md5 with hashlib.
+
 2.0.5
 
 Fix add to playlist.

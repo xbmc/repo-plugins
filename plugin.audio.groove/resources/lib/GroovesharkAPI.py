@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with xbmc-groove.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib2, pprint, md5, os, pickle, tempfile, time, re, simplejson, base64, sys, socket
+import urllib2, pprint, os, pickle, tempfile, time, re, simplejson, base64, sys, socket, hashlib
 from blowfish import Blowfish
 
 SESSION_EXPIRY = 1209600 # 2 weeks
@@ -38,7 +38,7 @@ class GrooveAPI:
 	_sessionID = ''
 	_userID = 0
 	_lastSessionTime = 0
-	_key = md5.new(os.path.basename("GroovesharkAPI.py")).hexdigest()
+	_key = hashlib.md5(os.path.basename("GroovesharkAPI.py")).hexdigest()
 	_debugging = False
 
 	# Constructor
@@ -188,7 +188,7 @@ class GrooveAPI:
 	
 	# Authenticates the user for current API session
 	def _authenticate(self, login, password):
-		md5pwd = md5.new(password).hexdigest()
+		md5pwd = hashlib.md5(password).hexdigest()
 		params = {'login': login, 'password': md5pwd}
 		
 		result = self._callRemote('authenticate', params)

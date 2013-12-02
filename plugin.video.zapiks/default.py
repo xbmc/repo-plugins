@@ -1,3 +1,4 @@
+import re
 import urllib
 import urllib2
 from urlparse import urlparse, parse_qs
@@ -53,10 +54,10 @@ def make_request(url, post_data=None):
 def cache_categories():
     soup = BeautifulSoup(make_request(base_url), 'html.parser')
     items = soup('ul', attrs={'id' : "sports_navigation"})[0]('a')
-    cats = [{'name': i.string.encode('utf-8'), 'url': i['href']} for i in items]
+    cats = [{'name': i.string.encode('utf-8'), 'url': i['href']} for i in items if i.string]
     return cats
-    
-    
+
+
 def cache_pro_categories():
     label_list = ['marques', 'events', 'prods', 'riders', 'crews', 'media']
     label_dict = {}
@@ -69,15 +70,15 @@ def cache_pro_categories():
                  'items': [{'title': x.a['title'].encode('utf-8'),
                             'url': x.a['href'],
                             'thumb': x.img['src']} for
-            x in i('div')]} for i in soup('div', class_='pro-type-bloc')]
+            x in i('div', class_='pro-preview')]} for i in soup('div', class_='pro-type-bloc')]
     return pro_list
-    
-    
+
+
 def display_pro_categories():
     for i in range(30002, 30008):
         add_dir(language(i), 'pro_cat', icon, 'get_pro_cat')
-        
-        
+
+
 def display_pro_category(cat_name):
     cat_list = cache.cacheFunction(cache_pro_categories)
     items = [i['items'] for i in cat_list if i['label'] == cat_name][0]
@@ -89,7 +90,6 @@ def display_categories():
     add_dir(language(30000), None, icon, 'get_partners')
     items = cache.cacheFunction(cache_categories)
     for i in items:
-        if i['name'] == 'more sports': continue
         add_dir(i['name'].title(), i['url'], icon, 'get_category')
 
 
@@ -104,12 +104,23 @@ def display_category(url):
     else:
         soup = BeautifulSoup(make_request(base_url + url), 'html.parser')
     if '/pro/' in url:
-        items = soup.find('div', attrs={'id': 'content'})('div', class_='media_thumbnail')
+        items = soup('div', class_='media_thumbnail')
     else:
-        items = soup.find('div', class_='col wrapper')('div', class_='media_thumbnail')
+        items = soup.find('div', attrs={'id': 'list-media'})('div', class_='media_thumbnail')
+    thumb_data = soup.find('style', attrs={'type': 'text/css'})
+    thumb_items = thumb_data.get_text().replace(' ', '').split('@media')
+    id_pattern = re.compile('thumbnail_container.(.+?){')
+    url_pattern = re.compile("background-image:url\('(.+?)'\);")
+    thumb_dict = {}
+    for i in thumb_items:
+        thumb_dict[id_pattern.findall(i)[0]] = url_pattern.findall(i)[0]
     for i in items:
-        title = i.a['title'].encode('utf-8')
-        add_dir(title, base_url + i.a['href'], i.img['src'], 'resolve_url')
+        try:
+            title = i.a['title'].encode('utf-8')
+            thumb_id = i.div['class'][1]
+            add_dir(title, base_url + i.a['href'], thumb_dict[thumb_id], 'resolve_url')
+        except:
+            addon_log('addonException display_category: %s' %format_exc())
 
     try:
         page_url = soup.find('h4', class_='page_navigator')('a', class_='next')[0]['href']
@@ -121,7 +132,7 @@ def display_category(url):
 
 def get_navigation(url):
     soup = BeautifulSoup(make_request(url), 'html.parser')
-    nav_tags = soup.find('div', attrs={'id': 'content'})('div', class_='col')[:3]
+    nav_tags = soup('div', class_='top-videos-block')
     page_url = soup.find('div', attrs={'id': 'central_block'}).a['href']
     nav = {'url': page_url,
            'filters': [{'name': i.a['title'].encode('utf-8').title(),
@@ -156,7 +167,7 @@ def resolve_url(url, thumb):
             addon_log('addonException: hd.file: %s' %format_exc())
             pass
     return data['config']['file']
-    
+
 
 def add_dir(name, url, iconimage, mode):
     params = {'name': name, 'url': url, 'mode': mode, 'thumb': iconimage}
@@ -207,7 +218,7 @@ elif mode == 'resolve_url':
 elif mode == 'select_filter':
     select_filter()
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
-    
+
 elif mode == 'get_partners':
     display_pro_categories()
     xbmcplugin.endOfDirectory(int(sys.argv[1]))

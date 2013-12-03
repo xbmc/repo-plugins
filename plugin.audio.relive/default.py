@@ -1,20 +1,19 @@
-import sys, os
+import sys, os, platform
 import urllib, cgi, struct, time
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 # plugin constants
-__plugin__     = "reLive"
-__author__     = 'BuZz [buzz@exotica.org.uk] / http://www.exotica.org.uk'
-__svn_url__    = "http://xbmc-addons.googlecode.com/svn/trunk/plugins/music/relive"
-__version__    = "0.8"
+__version__    = "0.10.1"
 
 __settings__ = xbmcaddon.Addon('plugin.audio.relive')
 __language__ = __settings__.getLocalizedString
 
 RELIVE_STATIONS = 'http://stations.re-live.se/getstations/'
 
+__user_agent__ = 'reLive/6 (' + platform.platform() + ') reLive XBMC/' + __version__
+
 class AppURLopener(urllib.FancyURLopener):
-    version = 'reLive/6 (' + os.name + ') reLive XBMC/' + __version__
+    version = __user_agent__
 
 urllib._urlopener = AppURLopener()
 
@@ -123,9 +122,10 @@ def get_struct_text(response):
   return name
 
 def play_stream(url, title, info):
+  url += '|User-Agent=' + __user_agent__ 
   listitem = xbmcgui.ListItem(title)
   listitem.setInfo ( 'music', info )
-  player = xbmc.Player(xbmc.PLAYER_CORE_MPLAYER)
+  player = xbmc.Player()
   player.play(url, listitem)
 
 params = get_params( { 'mode': 'stations', 'station': '' } )

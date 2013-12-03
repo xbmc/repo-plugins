@@ -6,7 +6,7 @@ __plugin__ =  'picasa'
 __author__ = 'ruuk'
 __url__ = 'http://code.google.com/p/picasaphotos-xbmc/'
 __date__ = '01-22-2012'
-__version__ = '0.8.8'
+__version__ = '1.0.0'
 
 #xbmc.executebuiltin("Container.SetViewMode(500)")
 
@@ -20,8 +20,9 @@ __version__ = '0.8.8'
 #print 'TES: ' + xbmc.getInfoLabel('Window(Pictures).Property(Viewmode)')
 
 class picasaPhotosSession(AddonHelper):
-	def __init__(self):
+	def __init__(self,show_image=False):
 		AddonHelper.__init__(self,'plugin.image.picasa')
+		if show_image: return self.showImage()
 		self._api = None
 		self.pfilter = None
 		self.privacy_levels = ['public','private','protected']
@@ -36,6 +37,8 @@ class picasaPhotosSession(AddonHelper):
 		
 		mpp = self.getSettingInt('max_per_page')
 		self.max_per_page = [10,20,30,40,50,75,100,200,500,1000][mpp]
+		self.isSlideshow = self.getParamString('plugin_slideshow_ss','false') == 'true'
+		print 'plugin.image.picasa: isSlideshow: %s' % self.isSlideshow
 		
 		update_dir = False
 		cache = True
@@ -86,7 +89,7 @@ class picasaPhotosSession(AddonHelper):
 				#show image, get response
 				response = self.doCaptcha(curl,ct+1)
 				if not response: break
-				print response,ctoken
+				#print response,ctoken
 				self.api().ProgrammaticLogin(ctoken,response)
 				break
 			except CaptchaRequired,e: #@UnusedVariable
@@ -128,7 +131,7 @@ class picasaPhotosSession(AddonHelper):
 		return ''
 				
 	def go(self,mode,url,name,user):
-		print mode,url,name,user
+		#print mode,url,name,user
 		#for x in range(1,20): self.login()
 		#return
 		success = False
@@ -140,6 +143,8 @@ class picasaPhotosSession(AddonHelper):
 			success = self.process(mode,url,name,user,terms)
 			#print 'NO_LOGIN ' + str(mode)
 		except: #TODO more discriminating except clause
+			import traceback
+			traceback.print_exc()
 			if self.user == 'default':
 				print 'PHOTOS: LOGIN ' + str(mode)
 				if not self.login(): return False #only login if we have to
@@ -148,6 +153,7 @@ class picasaPhotosSession(AddonHelper):
 				
 	def process(self,mode,url,name,user,terms):
 		if mode==None or url==None or len(url)<1:
+			print 'plugin.image.picasa - Version: ' + __version__ 
 			self.CATEGORIES()
 		elif mode==1:
 			self.ALBUMS(user=url)
@@ -167,6 +173,16 @@ class picasaPhotosSession(AddonHelper):
 			self.CONTACT(url,name)
 		return True
 	
+	def showImage(self):
+		url = sys.argv[2].split('=',1)[-1]
+		url = self.urllib().unquote(url)
+		print('plugin.image.picasa - Showing photo with URL: ' + url)
+		image_path = os.path.join(self.dataPath('cache'),'image.jpg')
+		open(image_path,'w').write(self.urllib2().urlopen(url).read())
+		listitem = self.xbmcgui().ListItem(label='PicasaWeb Photo', path=image_path)
+		listitem.setInfo(type='pictures',infoLabels={"Title": 'PicasaWeb Photo'})
+		self.xbmcplugin().setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)
+		
 	def filterAllows(self,privacy):
 		if privacy == 'only_you': privacy = 'protected'
 		if not self.pfilter: self.pfilter = self.getSettingInt('privacy_filter')
@@ -203,26 +219,35 @@ class picasaPhotosSession(AddonHelper):
 		##---------------------------------------#
 		
 		mparams = self.getMapParams()
-		
+		import time
 		for p in photos.entry:
 			if not self.filterAllows(p.extension_elements[0].text): continue
-			contextMenu = None
+			contextMenu = []
 			lat_lon = p.geo.Point.pos.text
 			if lat_lon:
 				lat_lon = ','.join(lat_lon.split())
 				contextMenu = [	(self.lang(30405),'XBMC.RunScript(special://home/addons/plugin.image.picasa/maps.py,plugin.image.picasa,%s,%s)' % (lat_lon,mparams)),
-								(self.lang(30406) % self.lang(30407),'XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,viewmode,viewmode_photos)')]
+								(self.lang(30406) % self.lang(30407),'XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,viewmode,viewmode_photos)'),
+								]
 			content = p.media.content[-1]
-			mtype = 'image'
+			mtype = 'pictures'
 			url = p.content.src
 			first,second = url.rsplit('/',1)
-			url = '/'.join([first,'s0',second])
-			#print url
+			url = '/'.join([first,'s0',second]) + '&t=' + str(time.time()) #without this, photos larger than 2048w XBMC says: "Texture manager unable to load file:" - Go Figure
+			#url = self.urllib().quote(url)
+			#url = 'plugin://plugin.image.picasa/?photo_url=' + url
+			#print url,p.media.description.text
+			title = p.media.description.text or p.title.text or p.media.title.text
+			title = title.replace('\n',' ')
 			if content.medium == 'video':
 				mtype = 'video'
 				url = content.url
-				
-			if not self.addLink(p.title.text,url,p.media.thumbnail[2].url,total=total,contextMenu=contextMenu,mtype=mtype): break
+			contextMenu.append(('Download','XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,download,%s)' % url))
+			if p.media.thumbnail and len(p.media.thumbnail) > 2:
+				thumb = p.media.thumbnail[2].url
+			else:
+				thumb = p.media.content[0].url
+			if not self.addLink(title,url,thumb,total=total,contextMenu=contextMenu,mtype=mtype): break
 			
 		## Next     Page ------------------------#
 		total = int(photos.total_results.text)
@@ -242,6 +267,16 @@ class picasaPhotosSession(AddonHelper):
 		self.addDir(next_+' ->',self.addonPath('resources/images/next.png'),url=url,mode=mode,start_index=next_index,**kwargs)
 		##---------------------------------------#
 		
+	def getCachedThumbnail(self,name,url):
+		tn = self.dataPath('cache/' + self.binascii().hexlify(name) + '.jpg')
+		if not os.path.exists(tn):
+			try:
+				return self.getFile(url,tn)
+			except:
+				return url
+		else:
+			return tn
+				
 	def setViewMode(self,setting):
 		mode = self.getSetting(setting)
 		if mode: self.xbmc().executebuiltin("Container.SetViewMode(%s)" % mode)
@@ -281,12 +316,7 @@ class picasaPhotosSession(AddonHelper):
 		tot = int(contacts.total_results.text)
 		cm = [(self.lang(30406) % self.lang(30102),'XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,viewmode,viewmode_favorites)')]
 		for c in contacts.entry:
-			tn = self.dataPath('cache/' + c.user.text + '.jpg')
-			if not os.path.exists(tn):
-				try:
-					tn = self.getFile(c.thumbnail.text,tn)
-				except:
-					tn = c.thumbnail.text
+			tn = self.getCachedThumbnail(c.user.text, c.thumbnail.text)
 			#tn = c.thumbnail.text
 			#tn = tn.replace('s64-c','s256-c').replace('?sz=64','?sz=256')
 			if not self.addDir(c.nickname.text,tn,tot,contextMenu=cm,url=c.user.text,mode=103,name=c.nickname.text): break
@@ -295,7 +325,7 @@ class picasaPhotosSession(AddonHelper):
 		if not terms: return False
 		start = self.getParamInt('start_index',1)
 		uri = '/data/feed/api/user/%s?kind=photo&q=%s' % (user, terms)
-		photos = self.api().GetFeed(uri,limit=self.max_per_page,start_index=start)
+		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
 		self.addPhotos(photos,mode=4,terms=terms)
 		return True
 			
@@ -303,7 +333,7 @@ class picasaPhotosSession(AddonHelper):
 		if not terms: return False
 		start = self.getParamInt('start_index',1)
 		uri = '/data/feed/api/all?q=%s' % (terms.lower())
-		photos = self.api().GetFeed(uri,limit=self.max_per_page,start_index=start)
+		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
 		self.addPhotos(photos,mode=5,terms=terms)
 		return True
 				
@@ -331,20 +361,23 @@ class picasaPhotosSession(AddonHelper):
 	def TAG(self,tag,user='default'):
 		start = self.getParamInt('start_index',1)
 		uri = '/data/feed/api/user/%s?kind=photo&tag=%s' % (user, tag.lower())
-		photos = self.api().GetFeed(uri,limit=self.max_per_page,start_index=start)
+		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
 		self.addPhotos(photos,mode=102,user=user)
 
 	def ALBUM(self,aid,user='default'):
 		start = self.getParamInt('start_index',1)
 		uri = '/data/feed/api/user/%s/albumid/%s?kind=photo' % (user,aid)
-		photos = self.api().GetFeed(uri,limit=self.max_per_page,start_index=start)
+		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
 		self.addPhotos(photos,mode=101,user=user)
 		
+	def maxPerPage(self):
+		if self.isSlideshow: return 1000
+		return self.max_per_page
+			
 def setViewDefault():
 	import xbmc #@UnresolvedImport
 	setting = sys.argv[2]
 	view_mode = ""
-	print "test"
 	for ID in range( 50, 59 ) + range(500,600):
 		try:
 			if xbmc.getCondVisibility( "Control.IsVisible(%i)" % ID ):
@@ -353,11 +386,20 @@ def setViewDefault():
 		except:
 			pass
 	if not view_mode: return
-	print "ViewMode: " + view_mode
+	#print "ViewMode: " + view_mode
 	AddonHelper('plugin.image.picasa').setSetting(setting,view_mode)
-
+	
+def downloadURL():
+	url = sys.argv[2]
+	import saveurl
+	saveurl.SaveURL('plugin.image.picasa',url,'cache')
+	
 if sys.argv[1] == 'viewmode':
 	setViewDefault()
+elif sys.argv[1] == 'download':
+	downloadURL()
+elif len(sys.argv) > 2 and sys.argv[2].startswith('?photo_url'):
+	picasaPhotosSession(show_image=True)
 else:
 	picasaPhotosSession()
 	

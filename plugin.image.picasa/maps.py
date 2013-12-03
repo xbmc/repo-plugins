@@ -25,7 +25,7 @@ class Maps:
 	def setMapType(self,mtype='hybrid'):
 		self.default_map_type = mtype
 		
-	def getMap(self,lat,lon,zoom,width=256,height=256,marker=False):
+	def getMap(self,lat,lon,zoom,width=256,height=256,scale=1,marker=False):
 		#640x36
 		source = self.map_source
 		lat = str(lat)
@@ -52,7 +52,7 @@ class Maps:
 			url = urllib.unquote_plus(url)
 			if 'error' in url: return ''
 		else:
-			url = "http://maps.google.com/maps/api/staticmap?center="+lat+","+lon+"&zoom="+zoom+"&size="+str(width)+"x"+str(height)+"&sensor=false&maptype="+self.default_map_type+"&format=jpg"
+			url = "http://maps.google.com/maps/api/staticmap?center="+lat+","+lon+"&zoom="+zoom+"&size="+str(width)+"x"+str(height)+"&sensor=false&maptype="+self.default_map_type+"&scale="+str(scale)+"&format=jpg"
 
 		fname,ignore  = urllib.urlretrieve(url + mark,ipath)
 		return fname
@@ -71,7 +71,7 @@ class Maps:
 		self.setMapSource(params.get('source','google'))
 		self.setMapType(params.get('type','hybrid'))
 		
-		image = self.getMap(sys.argv[2],sys.argv[3],params.get('zoom','photo'),width=640,height=360,marker=True)
+		image = self.getMap(sys.argv[2],sys.argv[3],params.get('zoom','photo'),width=640,height=360,scale=2,marker=True)
 		xbmc.executebuiltin('SlideShow('+CACHE_PATH+')')
 		
 	def getParams(self):

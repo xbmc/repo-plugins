@@ -12,8 +12,12 @@ from constants import *
 from utils.cryptomath import getRandomBytes
 from utils import hmac
 from FileObject import FileObject
-import sha
-import md5
+
+
+import hashlib
+sha = hashlib.sha1
+md5 = hashlib.md5
+
 import socket
 import errno
 import traceback

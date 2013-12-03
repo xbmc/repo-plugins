@@ -1,292 +1,278 @@
 ﻿import urllib
 import urllib2
-import os
 import re
+import json
+import time
+from datetime import datetime
+from urlparse import urlparse, parse_qs
+from traceback import format_exc
+
+from bs4 import BeautifulSoup
+
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
 import xbmcvfs
-import StorageServer
-from BeautifulSoup import BeautifulSoup
-try:
-    import json
-except:
-    import simplejson as json
 
-__settings__ = xbmcaddon.Addon(id='plugin.video.fox.news')
-__language__ = __settings__.getLocalizedString
-home = __settings__.getAddonInfo('path')
-icon = xbmc.translatePath( os.path.join( home, 'icon.png' ) )
-cache = StorageServer.StorageServer("foxnews", 24)
-quality = __settings__.getSetting('quality')
+addon = xbmcaddon.Addon()
+addon_version = addon.getAddonInfo('version')
+addon_id = addon.getAddonInfo('id')
+icon = addon.getAddonInfo('icon')
+news_domain = 'http://video.foxnews.com'
+business_domain = 'http://video.foxbusiness.com'
 
 
-def make_request(url, headers=None):
-        if headers is None:
-            headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0.1',
-                       'Referer' : 'http://video.foxnews.com'}
-        try:
-            req = urllib2.Request(url,None,headers)
-            response = urllib2.urlopen(req)
-            data = response.read()
-            response.close()
-            return data
-        except urllib2.URLError, e:
-            print 'We failed to open "%s".' % url
-            if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason: ', e.reason
-            if hasattr(e, 'code'):
-                print 'We failed with error code - %s.' % e.code
+def addon_log(string):
+    try:
+        log_message = string.encode('utf-8', 'ignore')
+    except:
+        log_message = 'addonException: addon_log'
+    xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, log_message),level=xbmc.LOGDEBUG)
 
 
-def get_categories():
-        # add_dir('Watch Live', '', 5, icon)
-        url = 'http://video.foxnews.com/playlist/latest-latest-news/'
-        data = make_request(url)
-        soup = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        add_dir(soup.body.h1.contents[0].strip(), '', 2, icon)
-        for i in soup.find('nav')('a'):
-            add_dir(i.string, i['href'], 1, icon)
-        cache.set("videos_dict", repr({ "videos": get_video_list(data) }))
+def make_request(url, data=None, headers=None):
+    addon_log('Request URL: %s' %url)
+    if headers is None:
+        headers = {
+            'User-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0',
+            'Referer': 'http://video.foxnews.com'
+            }
+    try:
+        req = urllib2.Request(url, data, headers)
+        response = urllib2.urlopen(req)
+        data = response.read()
+        addon_log(str(response.info()))
+        response.close()
+        return data
+    except urllib2.URLError, e:
+        addon_log('We failed to open "%s".' %url)
+        if hasattr(e, 'reason'):
+            addon_log('We failed to reach a server.')
+            addon_log('Reason: %s' %e.reason)
+        if hasattr(e, 'code'):
+            addon_log('We failed with error code - %s.' %e.code)
+
+
+def get_soup(url):
+    data = make_request(url)
+    if data:
+        return BeautifulSoup(data, 'html.parser')
+
+
+def get_categories(url=None):
+    if url is None:
+        # live streams are still WIP
+        # add_dir('Watch Live', news_domain + '/playlist/live-landing-page/', icon, 'get_playlist')
+        add_dir('FoxBusiness.com', business_domain, icon, 'get_categories')
+        url = news_domain
+    soup = get_soup(url)
+    for i in soup.find('nav')('a'):
+        add_dir(i.string.encode('utf-8'), url + i['href'], icon, 'get_sub_cat')
 
 
 def get_sub_categories(url):
-        if url.startswith('//video.foxnews'):
-            url = 'http:'+url
-        elif url.startswith('/'):
-            url = 'http://video.foxnews.com'+url
-        data = make_request(url)
-        soup = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        featured_name = soup.body.h1.contents[0].strip()
-        add_dir(featured_name, '', 2, icon)
-        items = soup('div', attrs={'id' : 'shows'})[0]('a')
-        for i in items:
-            name = i.string
-            if name != featured_name:
-                href = 'http:'+i['href']
-                add_dir(name, href, 3, icon)
-        cache.set("videos_dict", repr({ "videos": get_video_list(data) }))
+    soup = get_soup(url)
+    items_soup = soup('div', attrs={'id' : 'shows'})[0]('a')
+    current = False
+    items = []
+    for i in items_soup:
+        item_url = 'http:' + i['href']
+        if item_url == url:
+            current = (i.string.encode('utf-8'), item_url, icon, 'get_playlist')
+            continue
+        items.append((i.string.encode('utf-8'), item_url, icon, 'get_playlist'))
+    if not current:
+        current_name = soup.body.h1.contents[0].strip().encode('utf-8')
+        current = (current_name, url, icon, 'get_playlist')
+    items.insert(0, current)
+    for i in items:
+        add_dir(*i)
 
 
-def get_video_list(html, url=None):
-        if url is None:
-            soup = BeautifulSoup(html, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        else:
-            soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-        items = soup.find('div', attrs={'class' : 'pl'})('li')
-        video_list = []
-        for i in items:
-            href = i.a['href']
-            name = i.h2.a.string
-            thumb = i.img['src']
-            date = i.time.string
-            duration = i.strong.string
-            desc = i.span.string
-            if url is not None:
-                add_link(date, name, duration, href, thumb, desc)
-            else:
-                video_list.append((date, name, duration, href, thumb, desc))
-        if url is None:
-            return video_list
-
-
-def get_featured_videos():
-        for i in eval(cache.get("videos_dict"))['videos']:
-            add_link(i[0], i[1], i[2], i[3], i[4], i[5])
-
-
-def get_json_data(video_id):
-        url = 'http://video.foxnews.com/v/feed/video/%s.js?' %video_id
-        data = json.loads(make_request(url))
-        try:
-            video_url = data['channel']['item']['media-content']['@attributes']['url']
-            if video_url is None: raise
-            else: return video_url
-        except:
-            try:
-                video_url = data['channel']['item']['media-content']['mvn-fnc_mp4']
-                if video_url is None: raise
-                else: return video_url
-            except:
-                try:
-                    video_url = data['channel']['item']['media-content']['mvn-flv1200']
-                    if video_url is None: raise
-                    else: return video_url
-                except:
-                    print '-- No video_url --'
-                    return None
+def get_video(video_id):
+    url = news_domain + '/v/feed/video/%s.js?template=fox' %video_id
+    data = json.loads(make_request(url))
+    items = data['channel']['item']['media-group']['media-content']
+    m3u8_url = [i['@attributes']['url'] for i in items if
+            i['@attributes']['type'] == 'application/x-mpegURL']
+    if m3u8_url:
+        return m3u8_url[0]
 
 
 def get_smil(video_id):
-        smil_url = 'http://video.foxnews.com/v/feed/video/%s.smil' %video_id
-        headers = {'Referer' : 'http://video.foxnews.com/assets/akamai/FoxNewsPlayer.swf',
-                   'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:15.0) Gecko/20100101 Firefox/15.0.1'}
-        soup = BeautifulSoup(make_request(smil_url, headers))
-        try:
-            return soup.find('meta', attrs={'name' : "rtmpAuthBase"})['content'] + soup.find('video')['src']
-        except: return None
+    if video_id.startswith('http'):
+        smil_url = video_id
+    else:
+        smil_url = news_domain + '/v/feed/video/%s.smil' %video_id
+    soup = get_soup(smil_url)
+    try:
+        base = soup.find('meta', attrs={'name': "rtmpAuthBase"})['content']
+    except:
+        base = soup.find('meta', attrs={'name': "httpBase"})['content']
+    dict_list = [{'url': i['src'], 'bitrate': i['system-bitrate']} for i in soup('video')]
+    path = user_select(dict_list)
+    addon_log('Resolved from smil: %s' %base + path)
+    return base + path.replace(' ', '')
+
+
+
+def user_select(dict_list):
+    dialog = xbmcgui.Dialog()
+    ret = dialog.select('Choose a stream', ['Bitrate: %s' %i['bitrate'] for i in dict_list])
+    if ret > -1:
+        return dict_list[ret]['url']
 
 
 def resolve_url(url):
-        quality_types = {'0' : '_FNC_HIGH.',
-                         '1' : '_FNC_MED.',
-                         '2' : '_FNC_MED_LOW.',
-                         '3' : '_FNC_LOW.'}
-        quality_type = quality_types[quality]
-        video_id = url.split('/v/')[1].split('/')[0]
-        vidoe_url = None
-        try:
-            video_url = get_smil(video_id)
-            if vidoe_url is None: raise
-        except:
-            try:
-                video_url = get_json_data(video_id)
-                if vidoe_url is None: raise
-            except: pass
-        if video_url is None:
-            succeeded = False
-            playback_url = ''
-        else:
-            succeeded = True
-        if succeeded:
-            if not quality_type in video_url:
-                for i in quality_types.values():
-                    if i in video_url:
-                        playback_url = video_url.replace(i, quality_type)
-                        break
-            else: playback_url = video_url
-        item = xbmcgui.ListItem(path=playback_url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), succeeded, item)
-
-
-def get_live_streams():
-        playlist_id = None
-        items = None
-        data = make_request('http://video.foxnews.com/playlist/live-landing-page/')
-        pattern = 'pageVars.playlistId = "(.+?)";'
-        match = re.findall(pattern, data)
-        if len(match) > 0:
-            playlist_id = match[0]
-        if playlist_id:
-            json_url = 'http://video.foxnews.com/v/feed/playlist/%s.js?template=fox&callback=FOX_Header_Watch_Feed' %playlist_id
-            j_data = json.loads(make_request(json_url).strip('FOX_Header_Watch_Feed(')[:-1])
-            items = j_data['channel']['item']
-        if items:
-            for i in items:
-                title = i['title']
-                smil = i['enclosure']['@attributes']['url']
-                thumb = i['media-group']['media-thumbnail']['@attributes']['url']
-                print (title, smil, thumb)
-                u=sys.argv[0]+"?url="+urllib.quote_plus(smil)+"&mode=6"
-                liz=xbmcgui.ListItem(title, iconImage="DefaultVideo.png", thumbnailImage=thumb)
-                liz.setInfo(type="Video", infoLabels={"Title": title})
-                liz.setProperty('IsPlayable', 'true')
-                ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
-
-
-def resolve_live_url(url):
+    succeeded = False
+    resolved_url = None
+    if isinstance(url, list):
+        resolved_url = user_select(url)
+    elif url.endswith('smil'):
+        resolved_url = get_smil(url)
+    elif url.endswith('.mp4') or url.endswith('.m3u8'):
+        resolved_url = url
+    if resolved_url:
+        succeeded = True
+    else:
         resolved_url = ''
-        succeeded = False
-        soup = BeautifulSoup(make_request(url))
-        base = soup.find('meta', attrs={'name': "httpBase"})['content']
-        renditions = []
-        for i in soup('video'):
-            renditions.append({'bitrate': i['system-bitrate'], 'href': i['src']})
-        sorted_renditions = sorted(renditions, key=lambda k: int(k['bitrate']), reverse=True)
-        if len(sorted_renditions) == 4:
-            resolved_url = base + sorted_renditions[int(quality)]['href']
-        else:
-            resolved_url = base + sorted_renditions[0]['href']
-        if resolved_url != '':
-            succeeded = True
-        item = xbmcgui.ListItem(path=resolved_url)
-        xbmcplugin.setResolvedUrl(int(sys.argv[1]), succeeded, item)
+    item = xbmcgui.ListItem(path=resolved_url)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), succeeded, item)
 
 
+def get_playlist(url):
+    data = make_request(url)
+    pattern = 'pageVars.playlistId = "(.+?)";'
+    match = re.findall(pattern, data)
+    if not match:
+        addon_log('Did not find playlist id')
+        return
+    domain = news_domain
+    if business_domain in url:
+        domain = business_domain
+    json_url = domain + '/v/feed/playlist/%s.js?template=fox' %match[0]
+    json_data = json.loads(make_request(json_url), 'utf-8')
+    items = json_data['channel']['item']
+    for i in items:
+        item_url = None
+        state = i['media-status']['@attributes']['state']
+        title = i['title'].encode('utf-8')
+        if state != 'active':
+            addon_log('item state: %s: %s' %(title, state))
+            continue
+        try:
+            item_url = [x['@attributes']['url'] for
+                            x in i['media-group']['media-content'] if
+                                x['@attributes']['type'] == 'application/x-mpegURL'][0]
+        except:
+            addon_log('m3u8 url was not found: %s' %format_exc())
+        if not item_url:
+            try:
+                mp4_items = [{'url': x['@attributes']['url'],
+                              'bitrate':  x['@attributes']['bitrate']} for
+                                  x in i['media-group']['media-content'] if
+                                      x['@attributes']['type'] == 'video/mp4']
+                if not mp4_items or len(mp4_items) < 1:
+                    raise
+                if len(mp4_items) == 1:
+                    item_url = mp4_items[0]['url']
+                else:
+                    item_url = mp4_items
+            except:
+                addon_log('mp4 url was not found: %s' %format_exc())
+        if not item_url:
+            try:
+                item_url = [x['@attributes']['url'] for
+                                x in i['media-group']['media-content'] if
+                                    x['@attributes']['type'] == 'application/smil+xml'][0]
+            except:
+                addon_log('smil url was not found: %s' %format_exc())
+        if not item_url:
+            try:
+                enclosure_url = i['enclosure']['@attributes']['url']
+                if enclosure_url:
+                    item_url = enclosure_url
+                else:
+                    raise
+            except:
+                addon_log('addonException: get_playlist: unable to resolve url')
+        if not item_url:
+            continue
+        thumb = i['media-group']['media-thumbnail']['@attributes']['url']
+        date_time = datetime(*(time.strptime(i['pubDate'][:-6], '%a, %d %b %Y %H:%M:%S')[:6]))
+        info = {
+            'Title': title,
+            'Date': date_time.strftime('%d.%m.%Y'),
+            'Premiered': date_time.strftime('%d-%m-%Y'),
+            'Duration': get_duration(i['itunes-duration']),
+            'Plot': i['description'].encode('utf-8')
+            }
+        add_dir(title, item_url, thumb, 'resolve_url', info)
 
-def add_link(date, name, duration, href, thumb, desc):
-        description = date+'\n\n'+desc
-        u=sys.argv[0]+"?url="+urllib.quote_plus(href)+"&mode=4"
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=thumb)
-        liz.setInfo(type="Video", infoLabels={ "Title": name, "Plot": description, "Duration": duration})
-        liz.setProperty('IsPlayable', 'true')
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
 
-
-
-def add_dir(name,url,mode,iconimage):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
+def get_duration(duration):
+    if duration is None:
+        return 1
+    d_split = duration.split(':')
+    if len(d_split) == 4:
+        del d_split[-1]
+    minutes = int(d_split[-2])
+    if int(d_split[-1]) >= 30:
+        minutes += 1
+    if len(d_split) >= 3:
+        minutes += (int(d_split[-3]) * 60)
+    if minutes < 1:
+        minutes = 1
+    return minutes
 
 
 def get_params():
-        param=[]
-        paramstring=sys.argv[2]
-        if len(paramstring)>=2:
-            params=sys.argv[2]
-            cleanedparams=params.replace('?','')
-            if (params[len(params)-1]=='/'):
-                params=params[0:len(params)-2]
-            pairsofparams=cleanedparams.split('&')
-            param={}
-            for i in range(len(pairsofparams)):
-                splitparams={}
-                splitparams=pairsofparams[i].split('=')
-                if (len(splitparams))==2:
-                    param[splitparams[0]]=splitparams[1]
-
-        return param
+    p = parse_qs(sys.argv[2][1:])
+    for i in p.keys():
+        p[i] = p[i][0]
+    return p
 
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+def add_dir(name, url, iconimage, mode, info={}):
+    params = {'name': name, 'url': url, 'mode': mode}
+    url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
+    listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    isfolder = True
+    if mode == 'resolve_url':
+        isfolder = False
+        listitem.setProperty('IsPlayable', 'true')
+    listitem.setInfo(type="Video", infoLabels=info)
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
 
-params=get_params()
 
-url=None
-name=None
-mode=None
+
+params = get_params()
+
+addon_log(repr(params))
 
 try:
-    url=urllib.unquote_plus(params["url"])
+    mode = params['mode']
 except:
-    pass
-try:
-    name=urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode=int(params["mode"])
-except:
-    pass
+    mode = None
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
-
-if mode==None:
+if mode == None:
     get_categories()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==1:
-    get_sub_categories(url)
+elif mode == 'get_categories':
+    get_categories(params['url'])
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==2:
-    get_featured_videos()
+elif mode == 'get_sub_cat':
+    get_sub_categories(params['url'])
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==3:
-    get_video_list(None, url)
+elif mode == 'get_playlist':
+    get_playlist(params['url'])
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode==4:
-    resolve_url(url)
-
-elif mode==5:
-    get_live_streams()
-
-elif mode==6:
-    resolve_live_url(url)
-
-xbmcplugin.endOfDirectory(int(sys.argv[1]))
+elif mode == 'resolve_url':
+    resolve_url(params['url'])

@@ -1,0 +1,298 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2013-12-02 19:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30001"
+msgid "Flickr User Name"
+msgstr "Flickr gebruikersnaam"
+
+msgctxt "#30002"
+msgid "Default Thumb Size"
+msgstr "Standaard pictogram formaat"
+
+msgctxt "#30003"
+msgid "Default Display Size"
+msgstr "Standaard afbeelding formaat"
+
+msgctxt "#30004"
+msgid "Maximum Number Of Photos Per Page"
+msgstr "Aantal afbeeldingen per pagina"
+
+msgctxt "#30005"
+msgid "Default Map Source"
+msgstr "Kaart herkomst"
+
+msgctxt "#30006"
+msgid "Country Zoom"
+msgstr "Land schaal"
+
+msgctxt "#30007"
+msgid "Region Zoom"
+msgstr "Regio schaal"
+
+msgctxt "#30008"
+msgid "Locality Zoom"
+msgstr "Streek schaal"
+
+msgctxt "#30009"
+msgid "Neighborhood Zoom"
+msgstr "Wijk schaal"
+
+msgctxt "#30010"
+msgid "Photo Zoom"
+msgstr "Afbeelding schaal"
+
+msgctxt "#30011"
+msgid "Enable Maps Thumbnails"
+msgstr "Inschakelen kaart pictogram"
+
+msgctxt "#30012"
+msgid "Default Map Type"
+msgstr "Kaart type"
+
+msgctxt "#30013"
+msgid "Access as user (Requires Authentication)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Re-authorize"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Square"
+msgstr "Vierkant"
+
+msgctxt "#30101"
+msgid "Thumbnail"
+msgstr "Pictogram"
+
+msgctxt "#30102"
+msgid "Small"
+msgstr "Klein"
+
+msgctxt "#30103"
+msgid "Medium500"
+msgstr "Middel 500"
+
+msgctxt "#30104"
+msgid "Medium640"
+msgstr "Middel 640"
+
+msgctxt "#30105"
+msgid "Large"
+msgstr "Groot"
+
+msgctxt "#30106"
+msgid "Original"
+msgstr "Origineel"
+
+msgctxt "#30200"
+msgid "Main"
+msgstr "Basis"
+
+msgctxt "#30201"
+msgid "Maps"
+msgstr "Kaart"
+
+msgctxt "#30253"
+msgid "Images"
+msgstr "Images"
+
+msgctxt "#30254"
+msgid "Format"
+msgstr "Format"
+
+msgctxt "#30300"
+msgid "Photostream"
+msgstr "Photostream"
+
+msgctxt "#30301"
+msgid "Collections"
+msgstr "Collections"
+
+msgctxt "#30302"
+msgid "Sets"
+msgstr "Sets"
+
+msgctxt "#30303"
+msgid "Galleries"
+msgstr "Galleries"
+
+msgctxt "#30304"
+msgid "Tags"
+msgstr "Tags"
+
+msgctxt "#30305"
+msgid "Favorites"
+msgstr "Favorieten"
+
+msgctxt "#30306"
+msgid "Contacts"
+msgstr "Contacten"
+
+msgctxt "#30307"
+msgid "Places"
+msgstr "Plaatsen"
+
+msgctxt "#30308"
+msgid "Search Photostream"
+msgstr "Zoeken photostream"
+
+msgctxt "#30309"
+msgid "Search flickr"
+msgstr "Zoeken Flickr"
+
+msgctxt "#30310"
+msgid "Interesting Today"
+msgstr "Tip van de dag"
+
+msgctxt "#30311"
+msgid "Groups"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Search flickr Groups"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Save Path"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Saved"
+msgstr ""
+
+msgctxt "#30413"
+msgid "Saved as: @REPLACE@"
+msgstr ""
+
+msgctxt "#30414"
+msgid "In: @REPLACE@"
+msgstr ""
+
+msgctxt "#30415"
+msgid "Saving"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Saving..."
+msgstr ""
+
+msgctxt "#30417"
+msgid "Invalid Path"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Please set save path in settings"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Fail"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Failed to save image."
+msgstr ""
+
+msgctxt "#30500"
+msgid "Show All In @REPLACE@"
+msgstr "Toon alles in @REPLACE@"
+
+msgctxt "#30501"
+msgid "Enter search tags"
+msgstr "Zoek argumenten"
+
+msgctxt "#30502"
+msgid "HTTP Timeout"
+msgstr "HTTP Timeout"
+
+msgctxt "#30503"
+msgid "Connection Timeout"
+msgstr "Connection Timeout"
+
+msgctxt "#30504"
+msgid "Try again"
+msgstr "Probeer opnieuw"
+
+msgctxt "#30505"
+msgid "Authorization Complete"
+msgstr "Authorization Complete"
+
+msgctxt "#30506"
+msgid "Authorization Complete!"
+msgstr "Authorization Complete!"
+
+msgctxt "#30507"
+msgid "Authorization"
+msgstr ""
+
+msgctxt "#30508"
+msgid "Authorization needed,"
+msgstr ""
+
+msgctxt "#30509"
+msgid "click OK to continue"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Show Map"
+msgstr "Toon kaart"
+
+msgctxt "#30511"
+msgid "Previous @REPLACE@ photos"
+msgstr "Vorige @REPLACE@ afbeeldingen"
+
+msgctxt "#30512"
+msgid "Next @REPLACE@ photos"
+msgstr "Volgende @REPLACE@ afbeeldingen"
+
+msgctxt "#30513"
+msgid "Last @REPLACE@ photos"
+msgstr "Laatste @REPLACE@ afbeeldingen"
+
+msgctxt "#30514"
+msgid "@NAMEREPLACE@'s @REPLACE@"
+msgstr "@NAMEREPLACE@'s @REPLACE@"
+
+msgctxt "#30515"
+msgid "@NAMEREPLACE@'s @REPLACE@"
+msgstr "@NAMEREPLACE@'s @REPLACE@"
+
+msgctxt "#30516"
+msgid "Search @NAMEREPLACE@'s Photostream"
+msgstr "Zoek @NAMEREPLACE@'s Photostream"
+
+msgctxt "#30517"
+msgid "Save Photo"
+msgstr ""
+
+msgctxt "#30518"
+msgid "Recent Photos"
+msgstr ""
+
+msgctxt "#30520"
+msgid "Failed"
+msgstr ""
+
+msgctxt "#30521"
+msgid "Authorization Failed."
+msgstr ""
+
+msgctxt "#30522"
+msgid "Authorization Error"
+msgstr ""
+
+msgctxt "#30523"
+msgid "Error getting token."
+msgstr ""

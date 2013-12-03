@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.image.flickr"
        name="flickr"
-       version="0.9.92"
+       version="1.0.0"
        provider-name="Rick Phillips (ruuk)">
   <requires>
-    <import addon="xbmc.python" version="2.0"/>
+    <import addon="xbmc.python" version="2.1.0"/>
 	<import addon="script.module.elementtree" version="1.2.7"/>
    </requires>
 
@@ -22,5 +22,8 @@
     <description lang="es">flickrXBMC le permite: Busca en tu galería de fotos, colecciones, conjuntos, galerías, etiquetas, lugares, y favoritos. Busque sus contactos y su contenido. Buscar contactos que usted o su galería de fotos, o flickr de búsqueda.</description>
     <description lang="nl">flickrXBMC geeft u de mogelijkheid om te bladeren door uw photostreams, verzamelingen, sets, galerijen, tags, plaatsen en favorieten. Bekijk uw contacten en hun foto's. Zoek door uw eigen of van uw contacts de photostreams of door geheel Flickr.</description>
 	<platform>all</platform>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=81593</forum>
+    <source>http://github.com/ruuk/plugin.image.flickr</source>
   </extension>
 </addon>

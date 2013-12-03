@@ -1,0 +1,298 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2013-12-02 19:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+msgctxt "#30001"
+msgid "Flickr User Name"
+msgstr "Flickr 暱稱"
+
+msgctxt "#30002"
+msgid "Default Thumb Size"
+msgstr "預設縮圖大小"
+
+msgctxt "#30003"
+msgid "Default Display Size"
+msgstr "預設顯示大小"
+
+msgctxt "#30004"
+msgid "Maximum Number Of Photos Per Page"
+msgstr "每頁最多照片"
+
+msgctxt "#30005"
+msgid "Default Map Source"
+msgstr "預設地圖來源"
+
+msgctxt "#30006"
+msgid "Country Zoom"
+msgstr "國家縮放"
+
+msgctxt "#30007"
+msgid "Region Zoom"
+msgstr "區域縮放"
+
+msgctxt "#30008"
+msgid "Locality Zoom"
+msgstr "地區縮放"
+
+msgctxt "#30009"
+msgid "Neighborhood Zoom"
+msgstr "鄰里縮放"
+
+msgctxt "#30010"
+msgid "Photo Zoom"
+msgstr "照片縮放"
+
+msgctxt "#30011"
+msgid "Enable Maps Thumbnails"
+msgstr "啟用地圖縮圖"
+
+msgctxt "#30012"
+msgid "Default Map Type"
+msgstr "預設地圖類型"
+
+msgctxt "#30013"
+msgid "Access as user (Requires Authentication)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Re-authorize"
+msgstr ""
+
+msgctxt "#30100"
+msgid "Square"
+msgstr "正方形"
+
+msgctxt "#30101"
+msgid "Thumbnail"
+msgstr "縮圖"
+
+msgctxt "#30102"
+msgid "Small"
+msgstr "小圖"
+
+msgctxt "#30103"
+msgid "Medium500"
+msgstr "中型 500"
+
+msgctxt "#30104"
+msgid "Medium640"
+msgstr "中型 640"
+
+msgctxt "#30105"
+msgid "Large"
+msgstr "大"
+
+msgctxt "#30106"
+msgid "Original"
+msgstr "原本大小"
+
+msgctxt "#30200"
+msgid "Main"
+msgstr "主要"
+
+msgctxt "#30201"
+msgid "Maps"
+msgstr "地圖"
+
+msgctxt "#30253"
+msgid "Images"
+msgstr "圖片"
+
+msgctxt "#30254"
+msgid "Format"
+msgstr "格式"
+
+msgctxt "#30300"
+msgid "Photostream"
+msgstr "所有內容"
+
+msgctxt "#30301"
+msgid "Collections"
+msgstr "珍藏集"
+
+msgctxt "#30302"
+msgid "Sets"
+msgstr "相片集"
+
+msgctxt "#30303"
+msgid "Galleries"
+msgstr "博覽館"
+
+msgctxt "#30304"
+msgid "Tags"
+msgstr "標籤"
+
+msgctxt "#30305"
+msgid "Favorites"
+msgstr "最愛"
+
+msgctxt "#30306"
+msgid "Contacts"
+msgstr "自己人"
+
+msgctxt "#30307"
+msgid "Places"
+msgstr "地圖"
+
+msgctxt "#30308"
+msgid "Search Photostream"
+msgstr "搜尋所有內容"
+
+msgctxt "#30309"
+msgid "Search flickr"
+msgstr "搜尋 flickr"
+
+msgctxt "#30310"
+msgid "Interesting Today"
+msgstr "今日有趣照片"
+
+msgctxt "#30311"
+msgid "Groups"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Search flickr Groups"
+msgstr ""
+
+msgctxt "#30400"
+msgid "Save Path"
+msgstr ""
+
+msgctxt "#30412"
+msgid "Saved"
+msgstr ""
+
+msgctxt "#30413"
+msgid "Saved as: @REPLACE@"
+msgstr ""
+
+msgctxt "#30414"
+msgid "In: @REPLACE@"
+msgstr ""
+
+msgctxt "#30415"
+msgid "Saving"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Saving..."
+msgstr ""
+
+msgctxt "#30417"
+msgid "Invalid Path"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Please set save path in settings"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Fail"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Failed to save image."
+msgstr ""
+
+msgctxt "#30500"
+msgid "Show All In @REPLACE@"
+msgstr "顯示 @REPLACE@ 裡的所有內容"
+
+msgctxt "#30501"
+msgid "Enter search tags"
+msgstr "輸入搜尋標籤"
+
+msgctxt "#30502"
+msgid "HTTP Timeout"
+msgstr "HTTP 逾時"
+
+msgctxt "#30503"
+msgid "Connection Timeout"
+msgstr "連線逾時"
+
+msgctxt "#30504"
+msgid "Try again"
+msgstr "重試"
+
+msgctxt "#30505"
+msgid "Authorization Complete"
+msgstr "Authorization Complete"
+
+msgctxt "#30506"
+msgid "Authorization Complete!"
+msgstr "Authorization Complete!"
+
+msgctxt "#30507"
+msgid "Authorization"
+msgstr ""
+
+msgctxt "#30508"
+msgid "Authorization needed,"
+msgstr ""
+
+msgctxt "#30509"
+msgid "click OK to continue"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Show Map"
+msgstr "顯示地圖"
+
+msgctxt "#30511"
+msgid "Previous @REPLACE@ photos"
+msgstr "上 @REPLACE@ 張照片"
+
+msgctxt "#30512"
+msgid "Next @REPLACE@ photos"
+msgstr "下 @REPLACE@ 張照片"
+
+msgctxt "#30513"
+msgid "Last @REPLACE@ photos"
+msgstr "最後 @REPLACE@ 張照片"
+
+msgctxt "#30514"
+msgid "@NAMEREPLACE@'s @REPLACE@"
+msgstr "@NAMEREPLACE@ 的@REPLACE@"
+
+msgctxt "#30515"
+msgid "@NAMEREPLACE@'s @REPLACE@"
+msgstr "@NAMEREPLACE@ 的@REPLACE@"
+
+msgctxt "#30516"
+msgid "Search @NAMEREPLACE@'s Photostream"
+msgstr "搜尋 @NAMEREPLACE@ 的所有內容"
+
+msgctxt "#30517"
+msgid "Save Photo"
+msgstr ""
+
+msgctxt "#30518"
+msgid "Recent Photos"
+msgstr ""
+
+msgctxt "#30520"
+msgid "Failed"
+msgstr ""
+
+msgctxt "#30521"
+msgid "Authorization Failed."
+msgstr ""
+
+msgctxt "#30522"
+msgid "Authorization Error"
+msgstr ""
+
+msgctxt "#30523"
+msgid "Error getting token."
+msgstr ""

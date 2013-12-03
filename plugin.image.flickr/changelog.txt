@@ -1,6 +1,67 @@
 flickrXBMC Changelog
 
-Current Version : 0.9.92
+Current Version : 1.0.0
+
+** 1.0.0 ***
+
+Fix some authentication issues and remove WebViewer option (now has unreadable captchas)
+Update addon.xml for Gotham
+Converted strings.xml files to strings.po files
+
+** 0.9.104 ***
+
+Added 'Search flickr Groups'
+
+** 0.9.103 ***
+
+Fix images
+
+** 0.9.102 ***
+
+Added 'Groups' icon, set Contacts '[Recent Photos]' icon to 'Photostream' icon
+Made 'Re-authorize' settings option only enabled when 'Access As User' is set
+Fixed issue when authorizing via the 'Re-authorize' button
+
+** 0.9.101 ***
+
+Added 'Groups' which will list your groups. Selecting a group will show the group's photo pool
+Under 'Contacts' added '[Recent Photos]' which will show up to 50 photos (5 for each contact) from your contacts' photostreams.
+Added 'Re-authorize' option in settings to fix a broken auth (ie Bad Auth Token errors)
+
+** 0.9.100 ***
+
+Now when 'plugin_slideshow_ss=true' is passed to the plugin, plugin will show up to 500 photos per page. Added to work with the Plugin Slideshow Screensaver addon
+
+** 0.9.99 ***
+
+Added option to photo context menu: 'Save Photo'
+
+** 0.9.98 ***
+
+Added option in settings: 'Access as user (Requires Authentication)'
+Added the ability to browse flickr without authorization. If username is not set in settings, only 'Search flickr' and 'Interesting Today' will be available
+Now when asking for token entry after external browser authorization, clicking done on a blank entry will exit the dialog loop (ie for ATV2)
+
+** 0.9.97 ***
+
+Fixed a bug where initial authorization via external web browser fails, but succeeds on second attempt
+
+** 0.9.96 ***
+
+Fix for photos with no title set. Will now try title, then date taken, then date uploaded and finally photo id
+
+** 0.9.95 ***
+
+Added handling of of empty photostream when proividing feed
+
+** 0.9.94 ***
+
+Videos are now playable
+Videos playable from external source via plugin:// url
+
+** 0.9.93 ***
+
+Added feeds and sharing in the context menu for ShareSocial
 
 ** 0.9.92 ***
 

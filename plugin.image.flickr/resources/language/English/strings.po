@@ -1,0 +1,326 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2013-12-02 19:03+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30001"
+msgid "Flickr User Name"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Default Thumb Size"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Default Display Size"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Maximum Number Of Photos Per Page"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Default Map Source"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Country Zoom"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Region Zoom"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Locality Zoom"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Neighborhood Zoom"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Photo Zoom"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Enable Maps Thumbnails"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Default Map Type"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Access as user (Requires Authentication)"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Re-authorize"
+msgstr ""
+
+#Image Sizes
+#empty strings from id 30015 to 30099
+
+msgctxt "#30100"
+msgid "Square"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Thumbnail"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Small"
+msgstr ""
+
+msgctxt "#30103"
+msgid "Medium500"
+msgstr ""
+
+msgctxt "#30104"
+msgid "Medium640"
+msgstr ""
+
+msgctxt "#30105"
+msgid "Large"
+msgstr ""
+
+msgctxt "#30106"
+msgid "Original"
+msgstr ""
+
+#Settings Categories
+#empty strings from id 30107 to 30199
+
+msgctxt "#30200"
+msgid "Main"
+msgstr ""
+
+msgctxt "#30201"
+msgid "Maps"
+msgstr ""
+
+#empty strings from id 30202 to 30252
+
+msgctxt "#30253"
+msgid "Images"
+msgstr ""
+
+msgctxt "#30254"
+msgid "Format"
+msgstr ""
+
+#'Your' Categories
+#empty strings from id 30255 to 30299
+
+msgctxt "#30300"
+msgid "Photostream"
+msgstr ""
+
+msgctxt "#30301"
+msgid "Collections"
+msgstr ""
+
+msgctxt "#30302"
+msgid "Sets"
+msgstr ""
+
+msgctxt "#30303"
+msgid "Galleries"
+msgstr ""
+
+msgctxt "#30304"
+msgid "Tags"
+msgstr ""
+
+msgctxt "#30305"
+msgid "Favorites"
+msgstr ""
+
+msgctxt "#30306"
+msgid "Contacts"
+msgstr ""
+
+msgctxt "#30307"
+msgid "Places"
+msgstr ""
+
+msgctxt "#30308"
+msgid "Search Photostream"
+msgstr ""
+
+msgctxt "#30309"
+msgid "Search flickr"
+msgstr ""
+
+msgctxt "#30310"
+msgid "Interesting Today"
+msgstr ""
+
+msgctxt "#30311"
+msgid "Groups"
+msgstr ""
+
+msgctxt "#30312"
+msgid "Search flickr Groups"
+msgstr ""
+
+#Save Photo
+#empty strings from id 30313 to 30399
+
+msgctxt "#30400"
+msgid "Save Path"
+msgstr ""
+
+#empty strings from id 30401 to 30411
+
+msgctxt "#30412"
+msgid "Saved"
+msgstr ""
+
+msgctxt "#30413"
+msgid "Saved as: @REPLACE@"
+msgstr ""
+
+msgctxt "#30414"
+msgid "In: @REPLACE@"
+msgstr ""
+
+msgctxt "#30415"
+msgid "Saving"
+msgstr ""
+
+msgctxt "#30416"
+msgid "Saving..."
+msgstr ""
+
+msgctxt "#30417"
+msgid "Invalid Path"
+msgstr ""
+
+msgctxt "#30418"
+msgid "Please set save path in settings"
+msgstr ""
+
+msgctxt "#30419"
+msgid "Fail"
+msgstr ""
+
+msgctxt "#30420"
+msgid "Failed to save image."
+msgstr ""
+
+#General Strings
+#empty strings from id 30421 to 30499
+
+#. example: Show All In Canada
+msgctxt "#30500"
+msgid "Show All In @REPLACE@"
+msgstr ""
+
+msgctxt "#30501"
+msgid "Enter search tags"
+msgstr ""
+
+msgctxt "#30502"
+msgid "HTTP Timeout"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Connection Timeout"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Try again"
+msgstr ""
+
+msgctxt "#30505"
+msgid "Authorization Complete"
+msgstr ""
+
+msgctxt "#30506"
+msgid "Authorization Complete!"
+msgstr ""
+
+msgctxt "#30507"
+msgid "Authorization"
+msgstr ""
+
+msgctxt "#30508"
+msgid "Authorization needed,"
+msgstr ""
+
+msgctxt "#30509"
+msgid "click OK to continue"
+msgstr ""
+
+msgctxt "#30510"
+msgid "Show Map"
+msgstr ""
+
+#. example: Previous 50 photos
+msgctxt "#30511"
+msgid "Previous @REPLACE@ photos"
+msgstr ""
+
+#. example: Next 50 photos
+msgctxt "#30512"
+msgid "Next @REPLACE@ photos"
+msgstr ""
+
+#. example: Last 50 photos
+msgctxt "#30513"
+msgid "Last @REPLACE@ photos"
+msgstr ""
+
+#. (Singular possesive) example: John's Photostream
+msgctxt "#30514"
+msgid "@NAMEREPLACE@'s @REPLACE@"
+msgstr ""
+
+#. (Plural posessive) example: John's Sets
+msgctxt "#30515"
+msgid "@NAMEREPLACE@'s @REPLACE@"
+msgstr ""
+
+#. Search John's Photostream
+msgctxt "#30516"
+msgid "Search @NAMEREPLACE@'s Photostream"
+msgstr ""
+
+msgctxt "#30517"
+msgid "Save Photo"
+msgstr ""
+
+msgctxt "#30518"
+msgid "Recent Photos"
+msgstr ""
+
+#empty string with id 30519
+
+msgctxt "#30520"
+msgid "Failed"
+msgstr ""
+
+msgctxt "#30521"
+msgid "Authorization Failed."
+msgstr ""
+
+msgctxt "#30522"
+msgid "Authorization Error"
+msgstr ""
+
+msgctxt "#30523"
+msgid "Error getting token."
+msgstr ""

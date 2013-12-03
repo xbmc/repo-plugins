@@ -1,22 +1,20 @@
-import sys, os
+import sys, os, platform, time
 import urllib, cgi, re, htmlentitydefs, xml.dom.minidom
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
-# plugin constants (used for svn repo installer on xbmc4xbox)
-__plugin__     = "Modland"
-__author__     = "BuZz [buzz@exotica.org.uk] / http://www.exotica.org.uk"
-__svn_url__    = "http://xbmc-addons.googlecode.com/svn/trunk/plugins/music/modland"
-__version__    = "0.13.1"
-
-__settings__ = xbmcaddon.Addon('plugin.audio.modland')
-__language__ = __settings__.getLocalizedString
-
-MODLAND_URL = "http://www.exotica.org.uk/mediawiki/extensions/ExoticASearch/Modland_xbmc.php"
+# plugin constants
+__version__    = "0.15.0"
+__settings__   = xbmcaddon.Addon('plugin.audio.modland')
+__language__   = __settings__.getLocalizedString
+__modland__    = "http://www.exotica.org.uk/mediawiki/extensions/ExoticASearch/Modland_xbmc.php"
 
 try: __xbmc_version__ = xbmc.getInfoLabel('System.BuildVersion')
 except: __xbmc_version__ = 'Unknown'
+
+__user_agent__ = 'XBMC/' + __xbmc_version__ + ' (' + platform.platform() + ') Modland/' + __version__ 
+
 class AppURLopener(urllib.FancyURLopener):
-    version = 'XBMC/' + __xbmc_version__ + ' - Download and play (' + os.name + ')'
+    version = __user_agent__
 
 urllib._urlopener = AppURLopener()
 
@@ -60,7 +58,7 @@ def show_options():
     menu_items = [
       ( __language__(30006), "XBMC.RunPlugin(%s?mode=edit&search=%s)" % (sys.argv[0], search_q ) ),
       ( __language__(30001), "XBMC.RunPlugin(%s?mode=delete&search=%s)" % (sys.argv[0], search_q ) ),
-      ]
+    ]
     li.addContextMenuItems( menu_items )
     ok = xbmcplugin.addDirectoryItem(handle, url, listitem = li, isFolder = True)
 
@@ -84,7 +82,7 @@ def delete_search(search):
   
 def get_results(search):
 
-  url = MODLAND_URL + '?' + urllib.urlencode( { 'qs': search } )
+  url = __modland__ + '?' + urllib.urlencode( { 'qs': search } )
 
   response = urllib.urlopen(url)
   resultsxml = response.read()
@@ -103,6 +101,7 @@ def get_results(search):
       collect = item.getElementsByTagName('collect')[0].firstChild.data
     
     stream_url = item.getElementsByTagName('url')[0].firstChild.data
+    stream_url_ua = stream_url + '|User-Agent=' + __user_agent__ 
     
     label = title + ' - ' + artist + ' - ' + format
 
@@ -114,7 +113,7 @@ def get_results(search):
     cmd = "XBMC.RunPlugin(%s?mode=download&url=%s&file=%s)" % (sys.argv[0], urllib.quote_plus(stream_url), urllib.quote_plus(file.encode('utf-8')) )
     li.addContextMenuItems( [ (__language__(30003), cmd) ] )
 
-    ok = xbmcplugin.addDirectoryItem(handle, stream_url, listitem = li, isFolder = False, totalItems = count)
+    ok = xbmcplugin.addDirectoryItem(handle, stream_url_ua, listitem = li, isFolder = False, totalItems = count)
 
   xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
   xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_ARTIST)
@@ -132,11 +131,12 @@ def download_and_play(url, file):
       return
 
   filepath = os.path.join(path, file + '.ogg')
-  xbmc.executebuiltin('Notification(Modland - Downloading...,' + file + ', -1)')
+  xbmc.executebuiltin('Notification(Modland - ' + __language__(30007) + ',' + file + ', -1)')
   urllib.urlretrieve (url, filepath)
   urllib.urlcleanup()
-  xbmc.executebuiltin('Notification(Modland - Downloaded,' + file + ', 1)')
-  player = xbmc.Player(xbmc.PLAYER_CORE_PAPLAYER)
+  time.sleep(2)
+  xbmc.executebuiltin('Notification(Modland - ' + __language__(30008) + ',' + file + ', 1)')
+  player = xbmc.Player()
   player.play(filepath)
 
 def make_filename(name):

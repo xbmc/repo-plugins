@@ -1,5 +1,10 @@
 Changes
 
+0.15.0
+
+  * Cleanups
+  * XBMC / Python API compatibility changes
+
 0.13.1
 
   * use 3 part version number

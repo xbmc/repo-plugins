@@ -1,0 +1,19 @@
+created by celadoor.
+Version 0.0.8 -Cleaned up fanart
+
+Version 0.0.7 -Tidy up for repo.
+
+Version 0.0.6 -Added basic program guide, further additions for repo.
+
+Version 0.0.5 -Code tidy up and UI changes for repo.
+
+Version 0.0.4 -UI Cosmetic changes and further url changes.
+
+Version 0.0.3 -Fixed url changes.
+
+Version 0.0.2 -Fixed url changes.
+
+Version 0.0.1 -Initial Release. Plays  the People's Voice live Video
+stream.
+ Video Plugin is derived from Voinage's Plugin Tutorial
+

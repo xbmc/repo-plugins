@@ -3,8 +3,10 @@
  
   <category label="30005">
 
-    <setting id="language" type="labelenum" label="30002" values="Afrikaans|Deutsch|English||Español|Ελληνική|Italiano|Nederlands|Polski|Português"  />
+    <setting id="language" type="labelenum" label="30002" values="Afrikaans|Deutsch|English|Español|Français|Ελληνική|Italiano|Magyar|Nederlands|Polski|Português"  />
+ 	<setting id="max_resolution" type="labelenum" label="30039" values="0|240|360|480|720"  />
  
+
     <setting label="30019" type="lsep"/>
    	<setting id="video_sorting" type="enum" label="30020" lvalues="30016|30017" default="0" />
   	<setting id="audio_sorting" type="enum" label="30015" lvalues="30016|30017|30018" default="2" />

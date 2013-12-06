@@ -2,8 +2,6 @@
 
 # for utf-8 see http://www.python.org/dev/peps/pep-0263/
 
-import xbmcplugin
-
 import jw_config
 
 from video import jw_video
@@ -134,3 +132,4 @@ if content_type == "executable" :
 	if mode == "open_activity_article" :
 		url = params["url"][0]
 		jw_exec_activity.showArticle(url);
+

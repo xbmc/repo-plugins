@@ -30,7 +30,7 @@ msgstr "Allgemein"
 
 msgctxt "#30010"
 msgid "Books of the Bible"
-msgstr "Bücher der Bibel"
+msgstr "Bibelbücher"
 
 msgctxt "#30011"
 msgid "Music and songs"
@@ -38,11 +38,15 @@ msgstr "Musik und Lieder"
 
 msgctxt "#30012"
 msgid "Daily text"
-msgstr "Täglicher Text"
+msgstr "Tagestext"
 
 msgctxt "#30013"
 msgid "Bible dramas"
-msgstr "Bibeldramen"
+msgstr "Biblische Hörspiele/Dramen"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Dramatische Bibellesungen"
 
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
@@ -86,15 +90,15 @@ msgstr "Erfolgreich durchgeführt"
 
 msgctxt "#30025"
 msgid "Magazines"
-msgstr "Magazine"
+msgstr "Zeitschriften"
 
 msgctxt "#30026"
 msgid "All magazines"
-msgstr "Alle Magazine"
+msgstr "Alle Zeitschriften"
 
 msgctxt "#30027"
 msgid "Awake!"
-msgstr "Aufwachen!"
+msgstr "Erwachet!"
 
 msgctxt "#30028"
 msgid "The Watchtower"
@@ -102,7 +106,7 @@ msgstr "Der Wachturm"
 
 msgctxt "#30029"
 msgid "The Watchtower (Study Edition)"
-msgstr "Der Wachturm (Studentenfassung)"
+msgstr "Der Wachtturm (Studienausgabe)"
 
 msgctxt "#30030"
 msgid "The Watchtower (Simplified Edition)"
@@ -114,7 +118,7 @@ msgstr "Neuste"
 
 msgctxt "#30032"
 msgid "Newsroom"
-msgstr "Nachrichtenraum"
+msgstr "Presse"
 
 msgctxt "#30033"
 msgid "Unable to load remote content"
@@ -127,8 +131,6 @@ msgstr "Programm der Woche"
 msgctxt "#30035"
 msgid "Theocratic Ministry School"
 msgstr "Theokratische Predigtdienstschule"
-
-#empty string with id 30036
 
 msgctxt "#30037"
 msgid "Activities"

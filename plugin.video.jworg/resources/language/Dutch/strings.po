@@ -18,7 +18,7 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Next page >>"
-msgstr "Volgende pagina"
+msgstr "Volgende pagina >>"
 
 msgctxt "#30002"
 msgid "Language of multimedia file"
@@ -30,19 +30,23 @@ msgstr "Algemeen"
 
 msgctxt "#30010"
 msgid "Books of the Bible"
-msgstr "Boeken over de bijbel"
+msgstr "Bijbelboeken"
 
 msgctxt "#30011"
 msgid "Music and songs"
-msgstr "Muziek en Liedjes"
+msgstr "Muziek en liederen"
 
 msgctxt "#30012"
 msgid "Daily text"
-msgstr "dagelijkse citaat"
+msgstr "Dagtekst"
 
 msgctxt "#30013"
 msgid "Bible dramas"
-msgstr "Bijbeldrama`s"
+msgstr "Bijbelse drama’s"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Bijbelse hoorspelen"
 
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
@@ -66,7 +70,7 @@ msgstr "Sortering"
 
 msgctxt "#30020"
 msgid "Videos"
-msgstr "Videos"
+msgstr "Video's"
 
 msgctxt "#30021"
 msgid "Cache"
@@ -114,7 +118,7 @@ msgstr "Nieuwste"
 
 msgctxt "#30032"
 msgid "Newsroom"
-msgstr "Kranten en tijdschriften afdeling"
+msgstr "Nieuws"
 
 msgctxt "#30033"
 msgid "Unable to load remote content"
@@ -124,23 +128,14 @@ msgctxt "#30034"
 msgid "Week program"
 msgstr "Week Programma"
 
-#. To find this string, click on "Publications", then click on "Online Library"
-#. then click on Daily Text (top menu, third item)
-#. After the daily text you find the right string, please stop at "school"
-#. Camelize to your personal preference
 msgctxt "#30035"
 msgid "Theocratic Ministry School"
 msgstr "Theocratische bedieningsschool"
 
-#empty string with id 30036
-
-#. To find this string, from homepage click on "About us" (last main link)
-#. This string is the second link on the left bar
 msgctxt "#30037"
 msgid "Activities"
 msgstr "Activiteiten"
 
-#. Showed after the body text of a news
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Einde van het artikel"

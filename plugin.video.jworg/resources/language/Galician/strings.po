@@ -16,9 +16,49 @@ msgstr ""
 "Language: gl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Seguinte páxina >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Idioma do ficheiro multimedia"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Xeral"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Libros da Biblia"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Música e cancións"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Texto diario"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Dramatizacións da Biblia"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Lecturas Damatizadas da Biblia"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Música, drama, e lecturas dramatizadas"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Primeiro os novos"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Primeiro os vellos"
 
 msgctxt "#30018"
 msgid "By title"
@@ -36,6 +76,66 @@ msgctxt "#30021"
 msgid "Cache"
 msgstr "Caché"
 
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Baleirar a caché (forzar actualización das listaxes)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Baleirando a caché"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Realizado con éxito"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Revistas"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Todas as revistas"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Espertar!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "La Atalaya"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "La Atalaya (edición de estudio)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "La Atalaya (en lenguaje sencillo)"
+
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Máis Recentes"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Sala de prensa"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Non se puido cargar o contido remoto"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Programa da semana"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Escola do Ministerio Teocrático"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Actividades"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Fin do artigo"

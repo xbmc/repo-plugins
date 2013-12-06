@@ -16,13 +16,57 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Page suivante >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Langue des fichiers multimédias"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Général"
 
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Livres de la bible"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Musiques et cantiques"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Texte du jour"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Drame bibliques"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Lectures de la bible dramatiques"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Musiques, Drames, et lectures bibliques dramatiques "
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Plus récent en premier"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Plus ancien en premier"
+
 msgctxt "#30018"
 msgid "By title"
 msgstr "Par titre"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Trier"
 
 msgctxt "#30020"
 msgid "Videos"
@@ -32,6 +76,66 @@ msgctxt "#30021"
 msgid "Cache"
 msgstr "Cache"
 
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Vider la mémoire tampon (Force la mise à jour de la liste)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Vider la mémoire tampon"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Complété avec succès"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Revues"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Toutes les revues"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Réveillez-vous!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "La Tour de Garde"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "La Tour de Garde (Édition Étude)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "La Tour de Garde (Édition Simplifiée)"
+
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Dernier"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Salle des nouvelles"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Impossible de charger le contenu à distance"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Programme de la semaine"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "École du Ministère Théocratique"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Activitées"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Fin de l'article"

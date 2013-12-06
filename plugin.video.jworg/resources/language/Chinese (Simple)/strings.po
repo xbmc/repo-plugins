@@ -16,9 +16,21 @@ msgstr ""
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "下一页>>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "多媒体文件的语言"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "常用"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "音乐及歌曲"
 
 msgctxt "#30018"
 msgid "By title"

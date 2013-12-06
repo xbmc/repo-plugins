@@ -16,13 +16,57 @@ msgstr ""
 "Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Következő oldal >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Multimédia fájl nyelve"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Általános"
 
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "A Biblia Könyvei"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Zenék és dalok"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Napiszöveg"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Bibliai drámák"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Bibliai hangjátékok"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Zenék, drámák, és drámai olvasmányok"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Legfrissebb elöl"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Legrégebbi elöl"
+
 msgctxt "#30018"
 msgid "By title"
 msgstr "Cím szerint"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Rendezés"
 
 msgctxt "#30020"
 msgid "Videos"
@@ -32,6 +76,66 @@ msgctxt "#30021"
 msgid "Cache"
 msgstr "Gyorsítótár"
 
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Gyorsítótár törlése (kényszerített lista frissítés)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Gyorsítótár ürítése"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Sikeresen végrehajtva"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Folyóirat"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Minden folyóirat"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Ébredjetek!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "Az Őrtorony"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "Az Őrtorony (tanulmányozásra szánt kiadás)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "Az Őrtorony (Egyszerűsített változat)"
+
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Legújabb"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Sajtószoba "
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Távoli tartalom nem elérhető"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Heti program"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Teokratikus szolgálati iskola"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Tevékenysége"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Cikk vége"

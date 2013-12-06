@@ -54,7 +54,7 @@ msgid "Daily text"
 msgstr ""
 
 #. To find this string, click on "Publications -> Dramas".
-#. This string is the bold header of the page, , without extra capital letters
+#. This string is the bold header of the page, without extra capital letters
 msgctxt "#30013"
 msgid "Bible dramas"
 msgstr ""
@@ -183,4 +183,11 @@ msgstr ""
 #. Showed after the body text of a news
 msgctxt "#30038"
 msgid "End of the article"
+msgstr ""
+
+#. Add on settings.
+#. This is the max resolution automatically selected
+#. when playing video. Note: '0' it's the digit 'zero' not an uppercase letter 'o'
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
 msgstr ""

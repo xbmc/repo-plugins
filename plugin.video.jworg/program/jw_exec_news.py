@@ -22,7 +22,7 @@ def showNewsIndex():
 	
 	html 		= jw_common.loadUrl(url)
 
-	regexp_title = '<h3><a href="([^"]+)"( title="[^"]+")?>([^<]+)</a></h3>'
+	regexp_title = '<h3 class="tsrTtle"><a href="([^"]+)"( title="[^"]+")?>([^<]+)</a></h3>'
 	news_found = re.findall(regexp_title, html)
 
 	# This is to try to filter out cases of double image linked

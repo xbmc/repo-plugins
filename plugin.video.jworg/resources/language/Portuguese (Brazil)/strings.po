@@ -30,11 +30,11 @@ msgstr "Geral"
 
 msgctxt "#30010"
 msgid "Books of the Bible"
-msgstr "Livros da Biblia"
+msgstr "Livros da Bíblia"
 
 msgctxt "#30011"
 msgid "Music and songs"
-msgstr "Músicas e canções"
+msgstr "Músicas e canticos"
 
 msgctxt "#30012"
 msgid "Daily text"
@@ -42,7 +42,15 @@ msgstr "Texto do dia"
 
 msgctxt "#30013"
 msgid "Bible dramas"
-msgstr "Dramas da Biblia"
+msgstr "Dramas bíblicos"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Leituras bíblicas dramatizadas"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Cantigos, dramas e leituras dramatizadas"
 
 msgctxt "#30016"
 msgid "Newest first"
@@ -68,9 +76,13 @@ msgctxt "#30021"
 msgid "Cache"
 msgstr "Cache"
 
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Esvaziar cache (forçar atualização da lista)"
+
 msgctxt "#30023"
 msgid "Emptying cache"
-msgstr "Limpando Cache"
+msgstr "Esvaziando Cache"
 
 msgctxt "#30024"
 msgid "Successfully done"
@@ -83,6 +95,22 @@ msgstr "Revistas"
 msgctxt "#30026"
 msgid "All magazines"
 msgstr "Todas as revistas"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Despertai!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "A Sentinela"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "A Sentinela (Edição de Estudo)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "A Sentinela (Edição Fácil de Ler)"
 
 msgctxt "#30031"
 msgid "Latest"
@@ -98,13 +126,11 @@ msgstr "Não consegui carregar o conteúdo remoto"
 
 msgctxt "#30034"
 msgid "Week program"
-msgstr "Programa Semanal"
+msgstr "Programa semanal"
 
 msgctxt "#30035"
 msgid "Theocratic Ministry School"
 msgstr "Escola do Ministério Teocrático"
-
-#empty string with id 30036
 
 msgctxt "#30037"
 msgid "Activities"

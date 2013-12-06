@@ -16,9 +16,45 @@ msgstr ""
 "Language: hr\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Sljedeća stranica >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Jezik multimedijalne datoteke"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Općenito"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Knjige Biblije"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Glazba i pjesme"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Dnevni tekst"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Biblijske drame"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Glazba, drame i dramske čitanja"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Najnovije prvo"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Najstarije prvo"
 
 msgctxt "#30018"
 msgid "By title"
@@ -35,6 +71,26 @@ msgstr "Video snimke"
 msgctxt "#30021"
 msgid "Cache"
 msgstr "Predmemorija"
+
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Isprazni priručnu memoriju (prisilno ažuriranje popisa)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Pražnjenje priručne memorije"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Uspješno izvršeno"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Časopisi"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Svi časopisi"
 
 msgctxt "#30031"
 msgid "Latest"

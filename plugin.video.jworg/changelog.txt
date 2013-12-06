@@ -1,3 +1,23 @@
+0.3.1
+-----
+
+New setting:
++ Default resolution: it's used as "max resolution", so this resolution will be used if available, otherwise the max resolution available will be used (As asked in Issue #17)
+
+New languages supported:
++ French ("Français")
++ Hungarian ("Magyar")
+
+Bug fixes:
++ Modified "Newsroom" to react to changes in jw.org html code
+
+Small enhancements:
++ When opening audio indexes, if there is only one playable file, it will be started without the need to confirm it clicking on the file title in the track list; one step less for user happyness
+
+Code:
++ Improved resistance to net loading problem
+
+
 0.3.0
 -----
 
@@ -6,7 +26,7 @@ New program features:
 + Read the spiritual food program for actual week
 + Read the news from about us -> activities section of jw.org 
 
-New languages supported
+New languages supported:
 + Afrikaans ("Afrikaans") - This locale has no audio files for bible and for magazines
 + Greek ("Ελληνική") - This locale has no audio files for bible
 + Portuguese of Brasil ("Português (Brasil)") - Diffences in strings, but same remote contents than Portuguese

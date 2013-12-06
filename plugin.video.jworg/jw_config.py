@@ -23,6 +23,8 @@ locale_2_lang = {
 	"Portuguese (Brazil)"	: "Português",
 	"Afrikaans"				: "Afrikaans",
 	"Greek"					: "Ελληνική",
+	"French"				: "Français",
+	"Hungarian"				: "Magyar",
 }
 
 main_url = "http://www.jw.org/"
@@ -47,6 +49,42 @@ const = {
 		"date_format"				: "%d/%m/%Y",
 		"news_index"				: "news/",
 		"activity_index"			: "testimoni-di-geova/attivit%C3%A0/",
+ 	},
+ 	"Magyar" : {
+		"lang_code"					: "H",
+		"url_lang_code"				: "hu",
+		"video_path" 				: "videok",
+		
+		"bible_index_audio"			: "kiadvanyok/biblia/nwt/könyvek/",
+		"magazine_index"			: "kiadvanyok/folyoiratok/",
+		'has_simplified_edition'	: False,
+
+		"music_index"				: "kiadvanyok/zene-enekek/",
+		"dramas_index"				: False,
+		"dramatic_reading_index"	: "kiadvanyok/bibliai-hangjatekok/",
+		
+		'wol'						: "r17/lp-h",
+		"date_format"				: "%d/%m/%Y",
+		"news_index"				: "hirek/",
+		"activity_index"			: "jehova-tanui/tevekenysegek/",
+ 	},
+ 	"Français" : {
+		"lang_code"					: "F",
+		"url_lang_code"				: "fr",
+		"video_path" 				: "videos",
+		
+		"bible_index_audio"			: "publications/bible/nwt/livres/",
+		"magazine_index"			: "publications/revues/",
+		'has_simplified_edition'	: True,
+
+		"music_index"				: "publications/musique-cantiques/",
+		"dramas_index"				: "publications/representations-dramatiques/",
+		"dramatic_reading_index"	: "publications/lectures-bibliques-theatrales/",
+		
+		'wol'						: "r30/lp-f",
+		"date_format"				: "%d/%m/%Y",
+		"news_index"				: "actualites/",
+		"activity_index"			: "temoins-de-jehovah/activites/",
  	},
 	"English" 	: {
 		"lang_code"					: "E",
@@ -229,3 +267,9 @@ if language == "":
 		language = locale_2_lang[actual_locale]
 	else :
 		language = "English"
+
+	print "JWORG: Auto setting locale to: " + language
+	xbmcplugin.setSetting(plugin_pid, "language", language)
+
+
+

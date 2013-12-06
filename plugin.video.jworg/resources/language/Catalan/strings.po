@@ -16,22 +16,126 @@ msgstr ""
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Pàgina següent >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Idioma del fitxer multimedia"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "General"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Llibres sobre la Biblia"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Música i cançons"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Text del dia"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Representacions bíbliques"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Lectures bíbliques dramatitzades"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Música, drames, i lectures dramatiques"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Primer el més nou"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Primer el més vell"
 
 msgctxt "#30018"
 msgid "By title"
 msgstr "Per títol"
 
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Ordenant"
+
 msgctxt "#30020"
 msgid "Videos"
-msgstr "Videos"
+msgstr "Vídeos"
 
 msgctxt "#30021"
 msgid "Cache"
 msgstr "Memòria cau"
 
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Buida la memòria cau (força una actualització de la llista)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Buidant memòria cau"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "S'ha fet amb èxit"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Revistes"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Totes les revistes"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "¡Despertad!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "The Watchtower"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "La Torre de Guaita (Edició d'estudi)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "La Torre de Guaita (Simplified Edition)"
+
 msgctxt "#30031"
 msgid "Latest"
-msgstr "Nou"
+msgstr "Nou "
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Redacció"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "No es pot carregar el contingut remot"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Programa semanal"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Escola de predicació teocràtica"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Activitats"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Fi del article"

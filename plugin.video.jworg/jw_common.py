@@ -99,6 +99,12 @@ def loadNotCachedJsonFromUrl(url, ajax):
 		response = urllib2.urlopen(request).read()
 		data = json.loads(response)
 
+	except urllib2.URLError, e: 
+		print "JWORG http error"
+		print e.code
+		print e.read()
+		pass
+		
 	except urllib2.HTTPError, e:
 		print "JWORG http error"
 		print e.code

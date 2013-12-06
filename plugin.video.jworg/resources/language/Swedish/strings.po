@@ -16,6 +16,10 @@ msgstr ""
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Nästa sida >>"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Använd Media Overlays"

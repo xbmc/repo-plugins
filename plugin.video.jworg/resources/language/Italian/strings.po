@@ -132,13 +132,15 @@ msgctxt "#30035"
 msgid "Theocratic Ministry School"
 msgstr "Scuola di ministero teocratico"
 
-#empty string with id 30036
-
 msgctxt "#30037"
 msgid "Activities"
 msgstr "Attività"
 
-#. Showed after the body text of a news
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Fine dell'articolo"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Risoluzione video predefinita (0: chiedi sempre)"
+

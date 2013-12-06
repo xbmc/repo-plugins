@@ -1,3 +1,4 @@
+import xbmc
 import xbmcgui
 import xbmcplugin
 
@@ -92,5 +93,13 @@ def showAudioJson(json_url):
             listitem    = listItem, 
             isFolder    = False
         )  
+
+    # If there is only one audio item in the json, I start playing
+    # Otherwise the standard item list will be generated
+    if len(json["files"][language_code]["MP3"]) == 1 :
+
+        xbmc.Player().play(item=url, listitem=listItem)
+        return;
+
 
     xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)    

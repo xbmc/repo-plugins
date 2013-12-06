@@ -44,6 +44,10 @@ msgctxt "#30013"
 msgid "Bible dramas"
 msgstr "Dramatizações da bíblia"
 
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Leituras dramatizadas da bíblia"
+
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
 msgstr "Música, drama e leituras dramatizadas"
@@ -127,8 +131,6 @@ msgstr "Programa semanal"
 msgctxt "#30035"
 msgid "Theocratic Ministry School"
 msgstr "Escola do Ministério Teocrático"
-
-#empty string with id 30036
 
 msgctxt "#30037"
 msgid "Activities"

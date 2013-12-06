@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="General">
+    <setting id="view_mode" type="enum" label="30017" lvalues="30018|30019|30020|30021|30022|30023|30024" default="4"/>
+  </category>
+</settings>

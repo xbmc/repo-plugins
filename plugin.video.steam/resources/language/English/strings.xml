@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Newest Videos</string>
+  <string id="30002">By Genre</string>
+  <string id="30003">Most Watched (past 48 hours)</string>
+  <string id="30004">Search</string>
+  <string id="30005">Next Page</string>
+  <string id="30017">Default view mode for video directories</string>
+  <string id="30018">List</string>
+  <string id="30019">Big list</string>
+  <string id="30020">Thumbnail</string>
+  <string id="30021">Media info</string>
+  <string id="30022">Media info 2</string>
+  <string id="30023">Media info 3</string>
+  <string id="30024">None</string>
+</strings>

@@ -1,4 +1,7 @@
-created by celadoor.
+Plays  the People's Voice live video stream. created by celadoor.
+
+Version 0.0.9 -Fixed Channel Logo,video url and Program schedule url
+
 Version 0.0.8 -Cleaned up fanart
 
 Version 0.0.7 -Tidy up for repo.
@@ -15,5 +18,5 @@ Version 0.0.2 -Fixed url changes.
 
 Version 0.0.1 -Initial Release. Plays  the People's Voice live Video
 stream.
- Video Plugin is derived from Voinage's Plugin Tutorial
+
 

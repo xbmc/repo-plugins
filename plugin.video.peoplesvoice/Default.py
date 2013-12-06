@@ -9,32 +9,34 @@ __language__  = addon.getLocalizedString
 
 def CATEGORIES():
         
-        addDir(__language__(30010),'http://www.thepeoplesvoice.tv/watchnow',1,'http://thepeoplesvoice.tv/images/footer-logo.gif',__language__(30013))
-        addDir(__language__(30016),'http://www.thepeoplesvoice.tv/schedule',3,'http://thepeoplesvoice.tv/images/footer-logo.gif',__language__(30013))
+        addDir(__language__(30010),'http://www.thepeoplesvoice.tv/watchnow',1,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
+        addDir(__language__(30016),'http://www.thepeoplesvoice.tv/schedule',3,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
         
         
 def INDEX(url):
+
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         #Scrape video source
-        match=re.compile('"TPV" href="(.+?)"><span style="color: #ffffff;">(.+?)</span').findall(link)
+        match=re.compile('href="(.+?)" target="TPV"><span style="color: #ffffff;">(.+?)</span').findall(link)
         for url,name in match:
-                addDir(__language__(30010)+name,url,2,'http://thepeoplesvoice.tv/images/footer-logo.gif',__language__(30014)+__language__(30015)+__language__(30012))   
+                addDir(__language__(30010)+name,url,2,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30014)+__language__(30015)+__language__(30012))   
 
 def INDEX2(url):
+
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        #Scrape video source
-        match=re.compile('"date-display-start">(.+?)</span> to <span class="date-display-end">(.+?)</span></span><br /><span class="show-title">(.+?)</span><br /><span class="show-host">(.+?)</span>').findall(link)
-
-        for starttime,endtime,name,plot in match:
-                addDir(starttime+' - '+endtime+'   '+name,'',0,'http://thepeoplesvoice.tv/images/footer-logo.gif',plot)                         
+        #Scrape program schedule
+        match=re.compile('"date-display-single">(.+?)</span> GMT<br /><span class="show-title">(.+?)<').findall(link)
+        for starttime,name in match:
+                name = name.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&')  # Cleanup the title.
+                addDir(starttime+'   '+name,'',0,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',starttime+'   '+name)                    
 
 def VIDEOLINKS(url,name):
 
@@ -42,13 +44,11 @@ def VIDEOLINKS(url,name):
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1')
         response = urllib2.urlopen(req)
         link=response.read()
-        response.close()
-        
+        response.close()   
         #Scrape video source
-        match=re.compile('window.location.href = "(.+?)"').findall(link)
-        
+        match=re.compile('window.location.href = "(.+?)"').findall(link) 
         for url in match:
-                addLink(name+__language__(30011),url,'http://thepeoplesvoice.tv/images/footer-logo.gif',__language__(30013))
+                addLink(name+__language__(30011),url,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
 
               
 

@@ -16,9 +16,61 @@ msgstr ""
 "Language: ca\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "Camí cap a la Biblioteca de l'iPhoto o l'Aperture"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "Ignora els àlbums (MobileMe) publicats"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "Ignora els àlbums 'Remarcats'"
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "Actualitza la biblioteca automàticament"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "Amaga l'opció d'Actualitzar la Biblioteca de dins el menú principal "
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "Omet els àlbums buits"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "Omet les paraules clau"
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "Habilita el suport de Llocs"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "Mostra Llocs com a"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "Adreces"
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "Parells Lat/Lon"
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr "Mètode d'ordenar les fotos per defecte"
+
 msgctxt "#30021"
 msgid "None"
 msgstr "Cap"
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "Data de l'XML"
 
 msgctxt "#30023"
 msgid "Label"
@@ -27,6 +79,30 @@ msgstr "Etiqueta"
 msgctxt "#30024"
 msgid "Size"
 msgstr "Mida"
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr "Descarregar mapes de Google"
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "Mostra mapa com a fanart"
+
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr "Biblioteca Gestionada (els canvis requereixen tornar a examinar)"
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr "Drecera de l'arrel local cap a Mestres"
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr "Sobreescriu l'arrel local com a"
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr "Amaga l'opció de Veure la Documentació dins el menú principal"
 
 msgctxt "#30060"
 msgid "View mode in Confluence"
@@ -42,11 +118,27 @@ msgstr "Miniatures"
 
 msgctxt "#30063"
 msgid "Image Wrap"
-msgstr "Tapa d'imatge"
+msgstr "Envoltori de la Imatge"
+
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr "Mostra el mode en Metropolis"
 
 msgctxt "#30067"
 msgid "Default"
 msgstr "Per defecte"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "Matriu d'Imatges"
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "Fanart Galary"
+
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr "Ordenació de fotos per defecte"
 
 msgctxt "#30081"
 msgid "Ascending"
@@ -72,14 +164,174 @@ msgctxt "#30099"
 msgid "Advanced"
 msgstr "Avançat"
 
+msgctxt "#30100"
+msgid "Events"
+msgstr "Esdeveniments"
+
 msgctxt "#30101"
 msgid "Albums"
 msgstr "Àlbums"
+
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "Puntuacions"
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr "<< Actualitza la Biblioteca >>"
 
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "Paraules clau"
 
+msgctxt "#30105"
+msgid "Faces"
+msgstr "Cares"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "Llocs"
+
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr "<< Veure la Documentació>>"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "Projectes"
+
+msgctxt "#30200"
+msgid "%d star"
+msgstr "%d estrella/es"
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr "Important la Biblioteca"
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr "%d elements importats"
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "Escanejant la Biblioteca"
+
 msgctxt "#30213"
 msgid "Update library"
 msgstr "Actualitza la biblioteca"
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr "Ignora la Paraula Clau"
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr "Elimina els mapes en memòria cau"
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Restablir la base de dades d'add-ons"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Documentació d'add-ons"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Restablint la base de dades d'add-ons..."
+
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr "Habilitar la compatibilitat amb Llocs?"
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr "Llocs busca les adreces a través de Google."
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr "Això pot alentir una mica la importació de la biblioteca."
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr "Hauràs de tornar a importar la biblioteca."
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Eliminar la base de dades d'add-ons?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "La base de dades d'add-ons està malmesa."
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr "Eliminar-ho no afectarà la teva biblioteca de Fotos."
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr "Després d'això hauràs de tornar a examinar."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "No s'ha pogut inicialitzar la base de dades d'add-ons."
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr "Si us plau, torna a importar la teva Biblioteca."
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr "Eliminant mapes en memòria cau"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "Escanejant..."
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr "Importació de la Biblioteca en curs"
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr "No és possible restablir la base de dades."
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr "No soportat actualment"
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr "Aquesta funció no està suportada %s %s."
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr "Importació de la Biblioteca en curs"
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr "Biblioteca importada correctament"
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr "Error a l'importar la biblioteca"
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "Cap element"
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr "Restablir la base de dades"
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr "Error al restablir la base de dades"
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr "%d mapes en memòria cau eliminats"
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr "Paraula clau '%s' oculta"

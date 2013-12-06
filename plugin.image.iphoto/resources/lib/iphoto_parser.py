@@ -745,6 +745,10 @@ class IPhotoDB:
 	    if (mastersPath and mastersRealPath):
 		imagepath = media['ImagePath'].replace(mastersPath, mastersRealPath)
 		originalpath = media['OriginalPath'].replace(mastersPath, mastersRealPath)
+		# second substitition here because unedited images reference the master,
+		# but edited images reference the preview.
+		imagepath = imagepath.replace(archivePath, libraryPath)
+		originalpath = originalpath.replace(archivePath, libraryPath)
 	    else:
 		imagepath = media['ImagePath'].replace(archivePath, libraryPath)
 		originalpath = media['OriginalPath'].replace(archivePath, libraryPath)

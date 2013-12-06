@@ -228,6 +228,18 @@ msgctxt "#30215"
 msgid "Remove cached maps"
 msgstr "Pašalinti talpykloje saugomus žemėlapius"
 
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Atstatyti priedą duomenų bazėje"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Priedo dokumentacija"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Atstatyti priedo duomenų bazę"
+
 msgctxt "#30220"
 msgid "Enable Support for Places?"
 msgstr "Įgalinti vietų palaikymą?"
@@ -244,6 +256,14 @@ msgctxt "#30223"
 msgid "You will also need to reimport your library."
 msgstr "Jums taip pat reikės iš naujo importuoti savo biblioteką."
 
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Ištrinti priedo duomenų bazę?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "Priedo duomenų bazę sugadinta."
+
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
 msgstr "Juos ištrinant nepakenks jūsų Photo Library."
@@ -251,6 +271,10 @@ msgstr "Juos ištrinant nepakenks jūsų Photo Library."
 msgctxt "#30233"
 msgid "You will need to rescan after this."
 msgstr "Jums reikės nuskaityti dar po to."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Nepavyko inicijuoti priedo duomenų bazės."
 
 msgctxt "#30241"
 msgid "Please reimport your Library."

@@ -20,6 +20,10 @@ msgctxt "#30021"
 msgid "None"
 msgstr "Ekkert"
 
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "XML Dags"
+
 msgctxt "#30023"
 msgid "Label"
 msgstr "Útgefandi"
@@ -64,6 +68,10 @@ msgctxt "#30092"
 msgid "Skin"
 msgstr "Útlit"
 
+msgctxt "#30100"
+msgid "Events"
+msgstr "Viðburðir"
+
 msgctxt "#30101"
 msgid "Albums"
 msgstr "Hljómplötur"
@@ -71,6 +79,10 @@ msgstr "Hljómplötur"
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "Lykilorð"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "Staðir"
 
 msgctxt "#30213"
 msgid "Update library"

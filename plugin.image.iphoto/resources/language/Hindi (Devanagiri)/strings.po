@@ -16,6 +16,50 @@ msgstr ""
 "Language: hi\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "आईचित्र या आपर्चर लाइब्ररी के लिए रास्ता"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "प्रकाशित की गई(मोबाइलमी)आल्बम की उपेक्षा करे"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "'फ्लॅग्ड' की गई आल्बम की उपेक्षा करे"
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "एल्बम को ऑटो अपडेट करे"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "अपडेट लाइब्ररी आल्बम को मेन मेनू छुपाए रखे"
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "खाली एलबम की उपेक्षा करे"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "कीवॉर्ड्‍स की उपेक्षा करे"
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "प्लेसस सपोर्ट को कम मे लाए"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "प्लेसस को एसे दिखाए"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "पते"
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "लएट/ लोन पेर्स "
+
 msgctxt "#30021"
 msgid "None"
 msgstr "कोई नहीं"
@@ -47,6 +91,10 @@ msgstr "सामान्य"
 msgctxt "#30092"
 msgid "Skin"
 msgstr "विषय"
+
+msgctxt "#30099"
+msgid "Advanced"
+msgstr "उन्नत"
 
 msgctxt "#30101"
 msgid "Albums"

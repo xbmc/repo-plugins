@@ -16,13 +16,61 @@ msgstr ""
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "נתיב אל ספריית iPhoto או ספריית Aperture"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "התעלם מאלבומים שפורסמו (MobileMe)"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "התעלם מאלבום מסומן"
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "עדכון אוטומטי של ספריה"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "הסתר פריט \"עדכן ספריה\" מהתפריט הראשי"
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "התעלם מאלבומים ריקים"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "התעלם ממילות מפתח"
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "הפעל תמיכה במקומות"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "הצג מקומות כ-"
+
 msgctxt "#30017"
 msgid "Addresses"
 msgstr "כתובות"
 
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "צמד רוחב/אורך"
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr "ברירת מחדל לשיטת מיון תמונות"
+
 msgctxt "#30021"
 msgid "None"
 msgstr "ללא"
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "תאריך XML"
 
 msgctxt "#30023"
 msgid "Label"
@@ -31,6 +79,30 @@ msgstr "חברת הפקה"
 msgctxt "#30024"
 msgid "Size"
 msgstr "גודל"
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr "הורד מפות מגוגל"
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "הצג מפה כפאנארט"
+
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr "ספריה מנוהלת (שינוי דורש סריקה מחדש)"
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr "נתיב שורש אל Masters"
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr "שכתב נתיב שורש כ-"
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr "הסתר פריט \"הצג תיעוד\" מהתפריט הראשי"
 
 msgctxt "#30060"
 msgid "View mode in Confluence"
@@ -48,9 +120,25 @@ msgctxt "#30063"
 msgid "Image Wrap"
 msgstr "עטיפת תמונה"
 
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr "מצב תצוגה ב-Metropolis"
+
 msgctxt "#30067"
 msgid "Default"
 msgstr "ברירת מחדל"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "רשת תמונות"
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "גלריית פאנארט"
+
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr "ברירת מחדל לכיוון מיון תמונות"
 
 msgctxt "#30081"
 msgid "Ascending"
@@ -84,6 +172,14 @@ msgctxt "#30101"
 msgid "Albums"
 msgstr "אלבומים"
 
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "דירוג"
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr "<< עדכן ספריה >>"
+
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "מילות מפתח"
@@ -96,6 +192,146 @@ msgctxt "#30106"
 msgid "Places"
 msgstr "מקומות"
 
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr "<< הצג תיעוד >>"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "פרויקטים"
+
+msgctxt "#30200"
+msgid "%d star"
+msgstr "%d כוכבים"
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr "מיבא ספריה"
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr "%d פריטים יובאו"
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "סורק ספריה..."
+
 msgctxt "#30213"
 msgid "Update library"
 msgstr "עדכן ספריה"
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr "התעלם ממילת מפתח"
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr "הסר מפות מהמטמון"
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "אפס מסד נתוני הרחבה"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "תיעוד הרחבה"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "מאפס מסד נתוני הרחבה"
+
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr "הפעל תמיכה ב-Google מקומות?"
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr "מקומות מחפש כתובות בעזרת Google."
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr "זה יכול להאט מעט את תהליך יבוא הספריה."
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr "תצטרך גם ליבא מחדש את הספריה שלך."
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "למחוק מסד נתוני הרחבה?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "מסד נתוני הרחבה הינו פגום."
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr "המחיקה לא תפגע בספריית התמונות שלך."
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr "לאחר זאת תצטרך לסרוק מחדש."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "נכשל באתחול מסד נתוני ההרחבה."
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr "אנא יבא מחדש את הספריה שלך."
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr "מוחק תמונות מפה מהמטמון"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "סורק..."
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr "בתהליך יבוא ספריה"
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr "נכשל באיפוס מסד הנתונים."
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr "לא נתמך כרגע"
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr "אפשרות זו אינה נתמכת %s %s."
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr "בתהליך יבוא ספריה"
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr "יבוא ספריה הצליח"
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr "יבוא ספריה נכשל"
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "אין פריטים"
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr "איפוס מסד נתונים"
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr "נכשל באיפוס מסד הנתונים"
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr "נמחקו %d מפות מהמטמון"
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr "מילת המפתח '%s' מוסתרת"

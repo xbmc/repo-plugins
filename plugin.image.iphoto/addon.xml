@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.7" provider-name="jingai">
+<addon id="plugin.image.iphoto" name="iPhoto" version="2.1.8" provider-name="jingai">
     <requires>
 	<import addon="xbmc.python" version="2.1.0"/>
 	<import addon="script.module.simplejson" version="2.0.10"/>
@@ -8,6 +8,7 @@
 	<provides>image</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
+	<summary lang="af">Voer iPhoto biblioteek in</summary>
 	<summary lang="be">Imports iPhoto library into XBMC.</summary>
 	<summary lang="bg">Внася iPhoto библиотека в XBMC</summary>
 	<summary lang="da">Importerer iPhoto-bibliotek til XBMC</summary>
@@ -17,6 +18,9 @@
 	<summary lang="es">Importa biblioteca de iPhoto a XBMC.</summary>
 	<summary lang="fr">Importe une médiathèque iPhoto dans XBMC.</summary>
 	<summary lang="gl">Importar a biblioteca de iPhoto no XBMC.</summary>
+	<summary lang="he">יבא ספריית iPhoto אל XBMC.</summary>
+	<summary lang="hi">एक्सबीएमसी मे आईचीत्र क्रमादेस का आयात करता है.</summary>
+	<summary lang="hr">Uvoz iPhoto zbirke u XBMC.</summary>
 	<summary lang="hu">iPhoto könyvtár importálása az XBMC-be</summary>
 	<summary lang="it">Importa la libreria iPhoto in XBMC.</summary>
 	<summary lang="ja">iPhoto ライブラリを XBMC に読み込む</summary>
@@ -31,6 +35,7 @@
 	<summary lang="sk">Importuje iPhoto knižnicu do XBMC</summary>
 	<summary lang="sv">Importerar iPhoto-bibliotek till XBMC.</summary>
 	<summary lang="zh">导入iPhoto照片库到XBMC</summary>
+	<description lang="af">Voer iPhoto biblioteek in na Gebeurtenisse, Albums, Gesigte, Plekke, Sleutelwoorde en Graderings kategoriee.[CR][CR]Vir meer inligting, sien die Readme by http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="be">Imports iPhoto library into Events, Albums, Faces, Places, Keywords, and Ratings categories.[CR][CR]For more information, see the README at http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="bg">Внася iPhoto библиотека в следните категории: Събития, Албуми, Лица, Места, Ключови думи и Оценки.[CR][CR]За повече информация прочетете файла README на адрес http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="da">Importerer iPhoto-bibliotek til kategorierne Begivenheder, Albummer, Ansigter, Steder, Nøgleord og Ratings.[CR][CR]For mere information, se README-filen på http://github.com/jingai/plugin.image.iphoto</description>
@@ -39,6 +44,9 @@
 	<description lang="en">Imports iPhoto library into Events, Albums, Faces, Places, Keywords, and Ratings categories.[CR][CR]For more information, see the README at http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="es">Importe su biblioteca de iPhoto en Eventos, Álbumes, Caras, Lugares, Palabras Clave y Valoraciones.[CR][CR]Para más información, lea el README en http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="gl">Importe a súa biblioteca de iPhoto en Eventos, Álbums, Rostros, Lugares, Palabras Chave e Puntuacións.[CR][CR]Para máis información, lea o README en http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="he">מיבא ספריית iPhoto אל הקטגוריות אירועים, תמונות, פרצופים, מקומות, מילות מפתח ודירוג.[CR][CR]למידע נוסף, ראה README ב-http://github.com/jingai/plugin.image.iphoto</description>
+	<description lang="hi"> आईचीत्र क्रमादेस को  इवेंट्स, आलबम्स, फेसस, प्लेसस, कीवर्ड्स, और रेटिंग्स के विभगो मे का आयात करता है.[सीआर][सीआर]अधिक जानकारी के लिए  http://github.com/jingai/plugin.image.iphoto पर रेअदमी को देखे</description>
+	<description lang="hr">Uvoz iPhoto zbirke u događaje, albume, lica, mjesta, ključne riječi i kategorija ocjena.[CR][CR]Za više informacija, pogledajte README datoteku na http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="hu">iPhoto könyvtár importálása az Események, Albumok és Besorolás kategóriákba.</description>
 	<description lang="it">Importa la libreria iPhoto nelle categorie Eventi, Album, Volti, Luoghi, Parole chiave e Classifica. [CR][CR]Per maggiori informazioni, vedi il file README su http://github.com/jingai/plugin.image.iphoto</description>
 	<description lang="ko">iPhoro 라이브러리를 이벤트, 앨범, 얼굴, 장고, 키워드, 평점 카테고리로 가져오세요.[CR][CR]자세한 정보는 http://github.com/jingai/plugin.image.iphoto 에서 README 파일을 참고하세요.</description>

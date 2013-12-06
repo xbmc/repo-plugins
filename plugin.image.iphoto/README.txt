@@ -123,6 +123,10 @@ XBMC forums:
 
   http://forum.xbmc.org/showthread.php?t=77612
 
+Or the addon website at:
+
+  http://www.floatingpenguins.com/plugin.image.iphoto/
+
 When asking for help or reporting a potential bug, please be prepared to post
 your debug log from XBMC and, if you don't mind, your AlbumData.xml from your
 iPhoto library or ApertureData.xml from an Aperture library.  Remember to

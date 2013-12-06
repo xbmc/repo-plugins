@@ -1,3 +1,8 @@
+2.1.8 - 2013xxxx
+- Fix path substitution bug with referenced libraries.
+- Update language files from Transifex.
+- Update README.
+
 2.1.7 - 20130821
 - Fix Notification dialogs for unicode strings.
 - Fix paths for movies in Aperture libraries.

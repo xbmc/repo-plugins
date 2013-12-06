@@ -16,9 +16,61 @@ msgstr ""
 "Language: hr\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+msgctxt "#30000"
+msgid "Path to iPhoto or Aperture Library"
+msgstr "Putanja do iPhoto ili Aperture zbirke"
+
+msgctxt "#30001"
+msgid "Ignore published (MobileMe) albums"
+msgstr "Zanemari objavljene (MobileMe) albume"
+
+msgctxt "#30002"
+msgid "Ignore 'Flagged' album"
+msgstr "Zanemari 'Označene' albume"
+
+msgctxt "#30003"
+msgid "Auto update library"
+msgstr "Automatsko ažuriranje zbirke"
+
+msgctxt "#30004"
+msgid "Hide Update Library item in main menu"
+msgstr "Sakrij stavku 'Ažuriranje zbirke' u glavnom izborniku"
+
+msgctxt "#30005"
+msgid "Ignore empty albums"
+msgstr "Zanemari prazne albume"
+
+msgctxt "#30006"
+msgid "Ignore keywords"
+msgstr "Zanemari ključne riječi"
+
+msgctxt "#30015"
+msgid "Enable Places support"
+msgstr "Omogući podršku 'Mjesta'"
+
+msgctxt "#30016"
+msgid "Show Places as"
+msgstr "Prikaži 'Mjesta' kao"
+
+msgctxt "#30017"
+msgid "Addresses"
+msgstr "Adrese"
+
+msgctxt "#30018"
+msgid "Lat/Lon Pairs"
+msgstr "Lat/Lon parovi"
+
+msgctxt "#30020"
+msgid "Default photo sort method"
+msgstr "Zadani način razvrstavanja fotografija"
+
 msgctxt "#30021"
 msgid "None"
-msgstr "Ništa"
+msgstr "Nijedan"
+
+msgctxt "#30022"
+msgid "XML Date"
+msgstr "XML datum"
 
 msgctxt "#30023"
 msgid "Label"
@@ -26,7 +78,35 @@ msgstr "Oznaka"
 
 msgctxt "#30024"
 msgid "Size"
-msgstr "Veličini"
+msgstr "Veličina"
+
+msgctxt "#30025"
+msgid "Download maps from Google"
+msgstr "Preuzmi karte sa Googla"
+
+msgctxt "#30026"
+msgid "Show map as fanart"
+msgstr "Prikažu mapu kao sliku omota"
+
+msgctxt "#30027"
+msgid "Managed Library (change requires rescan)"
+msgstr "Upravljanje zbirkom (potrebno je ponovno pretraživanje)"
+
+msgctxt "#30028"
+msgid "Local root path to Masters"
+msgstr "Lokalna glavna 'root' putanja"
+
+msgctxt "#30029"
+msgid "Rewrite root path as"
+msgstr "Prepiši 'root' putanju kao"
+
+msgctxt "#30030"
+msgid "Hide View Documentation item in main menu"
+msgstr "Sakrij stavku 'Prikaži dokumentaciju' u glavnom izborniku"
+
+msgctxt "#30060"
+msgid "View mode in Confluence"
+msgstr "Način prikaza u Confluence"
 
 msgctxt "#30061"
 msgid "Default"
@@ -34,15 +114,31 @@ msgstr "Zadano"
 
 msgctxt "#30062"
 msgid "Pic Thumbs"
-msgstr "Slikovne Ikonice"
+msgstr "Minijature"
 
 msgctxt "#30063"
 msgid "Image Wrap"
 msgstr "Omot slike"
 
+msgctxt "#30066"
+msgid "View mode in Metropolis"
+msgstr "Način prikaza u Metropolisu"
+
 msgctxt "#30067"
 msgid "Default"
 msgstr "Zadano"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "Poravnanje slike"
+
+msgctxt "#30069"
+msgid "Galary Fanart"
+msgstr "Galerija slika omota"
+
+msgctxt "#30080"
+msgid "Default photo sort direction"
+msgstr "Zadan smjer razvrstavanja fotografija"
 
 msgctxt "#30081"
 msgid "Ascending"
@@ -50,7 +146,7 @@ msgstr "Ulazno"
 
 msgctxt "#30082"
 msgid "Descending"
-msgstr "Silazno"
+msgstr "Opadajući"
 
 msgctxt "#30090"
 msgid "General"
@@ -58,24 +154,184 @@ msgstr "Općenito"
 
 msgctxt "#30091"
 msgid "View"
-msgstr "Pogled"
+msgstr "Prikaz"
 
 msgctxt "#30092"
 msgid "Skin"
-msgstr "Izgled"
+msgstr "Presvlaka"
 
 msgctxt "#30099"
 msgid "Advanced"
 msgstr "Napredno"
 
+msgctxt "#30100"
+msgid "Events"
+msgstr "Događaji"
+
 msgctxt "#30101"
 msgid "Albums"
 msgstr "Albumi"
+
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "Ocjene"
+
+msgctxt "#30103"
+msgid "<< Update Library >>"
+msgstr "<< Ažuriraj zbirku >>"
 
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "Ključne riječi"
 
+msgctxt "#30105"
+msgid "Faces"
+msgstr "Lica"
+
+msgctxt "#30106"
+msgid "Places"
+msgstr "Mjesta"
+
+msgctxt "#30107"
+msgid "<< View Documentation >>"
+msgstr "<< Prikaz dokumentacije >>"
+
+msgctxt "#30108"
+msgid "Projects"
+msgstr "Projekti"
+
+msgctxt "#30200"
+msgid "%d star"
+msgstr "%d zvjezdica"
+
+msgctxt "#30210"
+msgid "Importing Library"
+msgstr "Uvažanje zbirke"
+
+msgctxt "#30211"
+msgid "Imported %d items"
+msgstr "Uveženo %d stavki"
+
+msgctxt "#30212"
+msgid "Scanning Library..."
+msgstr "Pretraživanje zbirke..."
+
 msgctxt "#30213"
 msgid "Update library"
-msgstr "Osvježi liste izvedbi"
+msgstr "Osvježi zbirku"
+
+msgctxt "#30214"
+msgid "Ignore Keyword"
+msgstr "Zanemari ključne riječi"
+
+msgctxt "#30215"
+msgid "Remove cached maps"
+msgstr "Ukloni predmemoriju karata"
+
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Vrati na početno bazu podataka dodataka"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Dokumentacija dodatka"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Vraćanje na početno baze podataka dodataka..."
+
+msgctxt "#30220"
+msgid "Enable Support for Places?"
+msgstr "Omogući podršku za 'Mjesta'"
+
+msgctxt "#30221"
+msgid "Places looks up addresses via Google."
+msgstr "Mjesta pretražuju adrese putem Google adresa."
+
+msgctxt "#30222"
+msgid "This can slow down the library import a bit."
+msgstr "Ovo može malo usporiti uvažanje zbirke."
+
+msgctxt "#30223"
+msgid "You will also need to reimport your library."
+msgstr "Trebati ćete ponovno uvesti vašu zbirku."
+
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Obriši bazu podataka dodatka?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "Baza podataka dodatka je oštećena."
+
+msgctxt "#30232"
+msgid "Deleting it will not harm your Photo Library."
+msgstr "Brisanje neće naštetiti vašoj zbirci fotografija."
+
+msgctxt "#30233"
+msgid "You will need to rescan after this."
+msgstr "Morati ćete ponovno pretražiti nakon ovoga."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Neuspjelo pokretanje baze podataka dadatka."
+
+msgctxt "#30241"
+msgid "Please reimport your Library."
+msgstr "Ponovno pretražite vašu zbirku."
+
+msgctxt "#30250"
+msgid "Deleting cached map images"
+msgstr "Brisanje predmemorije slika karate"
+
+msgctxt "#30252"
+msgid "Scanning..."
+msgstr "Pretraživanje..."
+
+msgctxt "#30260"
+msgid "Library import in progress"
+msgstr "Uvoz zbirke u tijeku"
+
+msgctxt "#30261"
+msgid "Unable to reset database."
+msgstr "Nemoguće vraćanje baze podataka na početno."
+
+msgctxt "#30262"
+msgid "Currently unsupported"
+msgstr "Trenutno nije podržano"
+
+msgctxt "#30263"
+msgid "This function is unsupported %s %s."
+msgstr "Ova funkcija nije podržana %s %s."
+
+msgctxt "#30300"
+msgid "Library import in progress"
+msgstr "Uvoz zbirke u tijeku"
+
+msgctxt "#30301"
+msgid "Library import successful"
+msgstr "Uvoz zbirke uspješan"
+
+msgctxt "#30302"
+msgid "Library import failed"
+msgstr "Uvoz zbirke neuspješan"
+
+msgctxt "#30310"
+msgid "No items"
+msgstr "Nema stavki"
+
+msgctxt "#30320"
+msgid "Database reset"
+msgstr "Vraćanje na početno baze podataka"
+
+msgctxt "#30321"
+msgid "Failed to reset database"
+msgstr "Neuspjelo vraćanje na početno baze podataka"
+
+msgctxt "#30322"
+msgid "Deleted %d cached maps"
+msgstr "Obrisana je %d predmemorija mapa"
+
+msgctxt "#30330"
+msgid "Keyword '%s' hidden"
+msgstr "Ključna riječ '%s' je sakrivena"

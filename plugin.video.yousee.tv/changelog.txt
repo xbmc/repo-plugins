@@ -1,3 +1,7 @@
+[B]Version 3.0.2 - 2013-12-07[/B]
+- Removed dependency on script.module.pil (seems to be removed in Gotham)
+- Removed Cinema navigation
+
 [B]Version 3.0.1 - 2013-04-16[/B]
 - Switched to use iPhone streams to get better quality
 

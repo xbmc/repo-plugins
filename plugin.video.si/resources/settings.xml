@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="30000">
+    <setting id="vid_res" type="enum" label="30002" values="720p|360p|240p|180p" default="0" />
+    <setting id="auto_play" type="bool" label="30003" default="false" />
+  </category>
+</settings>

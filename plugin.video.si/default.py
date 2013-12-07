@@ -217,21 +217,28 @@ def play_video(video_url):
 
 # use 'IOSRenditions' in place of 'renditions' in below for .m3u8 list, note case of 'r' in renditions, using 'renditions' gives you rtmp links
 
-	stored_size = 0
+	stored_size=stored_height = 0
 	for item in sorted(renditions['programmedContent']['videoPlayer']['mediaDTO']['renditions'], key = lambda item:item['frameHeight'], reverse = False):
 		stream_size = item['size']
+		stream_height = item['frameHeight']
 		if (int(stream_size) > stored_size):
 			finalurl = item['defaultURL']
 			stored_size = stream_size
+			stored_height = stream_height
 
 #this is a kludge because I can't get some rtmps to play, so use the IOS .m3u8 list if it exists (the ones with IOSRenditions don't play rtmp correctly)
 
-	stored_size = 0
-	for item in sorted(renditions['programmedContent']['videoPlayer']['mediaDTO']['IOSRenditions'], key = lambda item:item['frameHeight'], reverse = False):
-		stream_size = item['size']
-		if (int(stream_size) > stored_size):
-			finalurl = item['defaultURL']
-			stored_size = stream_size
+	if (stored_height == 720) and (addon.getSetting('vid_res') == "1") and ("&mp4:23/" in finalurl):
+		match = re.compile('&mp4:(.+?)\?').findall(finalurl)
+		for x in match:
+			finalurl = "http://brightcove04.brightcove.com/"+x
+	else:
+		stored_size = 0
+		for item in sorted(renditions['programmedContent']['videoPlayer']['mediaDTO']['IOSRenditions'], key = lambda item:item['frameHeight'], reverse = False):
+			stream_size = item['size']
+			if (int(stream_size) > stored_size):
+				finalurl = item['defaultURL']
+				stored_size = stream_size
 
 #	finalurl = finalurl.replace('.mp4?','.mp4&') # this needs work where the app, playpath, wierdqs split doesn't work right below
 
@@ -246,10 +253,6 @@ def play_video(video_url):
 		log("TCURL:%s" % (tcurl,))
 		finalurl = "%s tcUrl=%s app=%s playpath=%s%s swfUrl=%s conn=B:0 conn=S:%s&%s" % (tcurl,tcurl, app, playpath, qs, swf_url, playpath, wierdqs)
 		log("final rtmp: url =%s" % (finalurl,))
-
-	desc = renditions['programmedContent']['videoPlayer']['mediaDTO']['shortDescription']
-	thumbnail = renditions['programmedContent']['videoPlayer']['mediaDTO']['thumbnailURL']
-	title = renditions['programmedContent']['videoPlayer']['mediaDTO']['displayName']
 
 	xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
 

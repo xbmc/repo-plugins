@@ -7,3 +7,7 @@ XBMC Addon for Sports Illustrated
 version 1.1.0 initial release
 
 version 1.1.1 minor changes to addon.xml description
+
+version 1.2.1 added 720p support for most videos where available - defaults to SD, use addon config to set HD
+
+version 1.3.1 added missing script.module.pyamf in addon.xml

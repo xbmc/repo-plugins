@@ -1,3 +1,9 @@
+[B]Version 1.0.4[/B]
+
+- fix bug when there were no games played in a prior week
+- list weeks using the season bounds specified in the service configuration
+- improve speed of prior week menu (remove call to web request)
+
 [B]Version 1.0.3[/B]
 
 - fix crash with invalid home or away team abbreviations

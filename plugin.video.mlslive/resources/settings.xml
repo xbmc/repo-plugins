@@ -1,4 +1,4 @@
 <settings>
-   <setting id="username" type="text" label="User Name"/>
-   <setting id="password" type="text" label="Password" option="hidden"/>
+   <setting id="username" type="text" label="30013"/>
+   <setting id="password" type="text" label="30014" option="hidden"/>
 </settings>

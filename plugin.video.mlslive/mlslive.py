@@ -23,6 +23,7 @@ class MLSLive:
         """
         Initialize the MLSLive class.
         """
+        self.CED_CONFIG = 'http://e2.cdnl3.neulion.com/mls/ced/2013/ced_config.xml'
         self.PUBLISH_POINT = 'http://live.mlssoccer.com/mlsmdl/servlets/publishpoint'
         self.LOGIN_PAGE = 'https://live.mlssoccer.com/mlsmdl/secure/login'
         self.GAMES_PAGE_PREFIX = 'http://mobile.cdn.mlssoccer.com/iphone/v5/prod/games_for_week_'
@@ -75,42 +76,67 @@ class MLSLive:
         
         return False
 
-    def getMonday(self, week_offset):
+
+    def getCurrentWeekURI(self):
+        """
+        Get the URI for the current games for the current week.
+        
+        @return a string containing the uri or None on error
+        """
+
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
+        try:
+            resp = opener.open(self.CED_CONFIG)
+        except:
+            print "Unable to get configuration"
+            return None
+
         today = datetime.date.today()
-        monday = today + datetime.timedelta(days=-today.weekday(), weeks=week_offset)
-        return monday
+
+        week = today + datetime.timedelta(days=-today.weekday())
+        return  self.GAMES_PAGE_PREFIX + week.strftime("%Y-%m-%d") + self.GAMES_PAGE_SUFFIX
 
 
     def getWeeks(self):
-        week_offset = 0
-        week_found = True
         weeks = {}
 
-        # work backwards through the weeks as long as there are games
-        while week_found:
-            games = self.getGames(week_offset)
-            if len(games) > 0:
-                weeks[week_offset] = self.getMonday(week_offset).strftime("%B %d, %Y")
-                week_offset = week_offset - 1
-            else:
-                week_found = False
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
+        try:
+            resp = opener.open(self.CED_CONFIG)
+        except:
+            print "Unable to get configuration"
+            return False
+
+        resp_xml = resp.read()
+        dom = xml.dom.minidom.parseString(resp_xml)
+
+        result_node = dom.getElementsByTagName('result')[0]
+        first_day = result_node.getElementsByTagName('firstDayOfCurSeason')[0].firstChild.nodeValue.split('T')[0]
+        last_day = result_node.getElementsByTagName('lastDayOfCurSeason')[0].firstChild.nodeValue.split('T')[0]
+
+        # get first day of the season. use the time becasuse datetime.datetime
+        # doesn't work reliably without crashing
+        time_t = time.strptime(first_day, "%Y-%m-%d")
+        date_d = datetime.datetime.fromtimestamp(time.mktime(time_t))
+
+        # get the last day of the season
+        time_t = time.strptime(last_day, "%Y-%m-%d")
+        last_d = datetime.datetime.fromtimestamp(time.mktime(time_t))
+
+        while date_d < datetime.datetime.today() and date_d < last_d:
+            week_str = self.GAMES_PAGE_PREFIX + date_d.strftime("%Y-%m-%d") + self.GAMES_PAGE_SUFFIX
+            weeks[week_str] = date_d.strftime("%B %d, %Y")
+            date_d = date_d + datetime.timedelta(weeks=1)
 
         # return the weeks
         return weeks
 
 
-    def getGamesURI(self, week_offset): 
-        monday = self.getMonday(week_offset)
-        monday_str = monday.strftime("%Y-%m-%d")
-        return self.GAMES_PAGE_PREFIX + monday_str + self.GAMES_PAGE_SUFFIX
-
-
-    def getGames(self, week_offset):
+    def getGames(self, games_url):
         """
         Get the list of games.
         
-        @param week_offset the number of weeks to offset from the previous
-                           monday.
+        @param games_url the url of the weeks games
         @return json game data
 
         The list returned will contain dictionaries, each of which containing
@@ -128,7 +154,6 @@ class MLSLive:
         - gameStatus ("FINAL","UPCOMING", "LIVE - 50'"
         - visitorTeamName (pretty vistor team name)
         """
-        games_url = self.getGamesURI(week_offset)
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
         try:
             resp = opener.open(games_url)

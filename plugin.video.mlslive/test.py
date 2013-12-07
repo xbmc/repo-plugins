@@ -74,7 +74,7 @@ if options.game != None:
 
     sys.exit(0)
 
-games = my_mls.getGames(options.offset)
+games = my_mls.getGames(my_mls.getCurrentWeekURI())
 teams = my_mls.getTeams()
 
 for game in games:

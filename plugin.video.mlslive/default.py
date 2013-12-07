@@ -116,9 +116,8 @@ def createWeekMenu(my_mls, values_string, final_only=True):
 
     # get the teams
     teams = my_mls.getTeams()
-    offset = int(values['week'])
 
-    for game in my_mls.getGames(offset):
+    for game in my_mls.getGames(values['week']):
 
         # if final == (live or upcoming) then don't use it 
         if final_only == (my_mls.isGameLive(game) or my_mls.isGameUpcoming(game)):
@@ -231,7 +230,7 @@ if my_mls == None:
 elif (len(sys.argv[2]) == 0):
     createMainMenu(my_mls)
 elif sys.argv[2] == '?id=live':
-    createWeekMenu(my_mls, "week=0", False)
+    createWeekMenu(my_mls, "week=" + my_mls.getCurrentWeekURI(), False)
 elif sys.argv[2] == '?id=replay':
     createWeeksMenu(my_mls)
 elif sys.argv[2] == '?id=channels':

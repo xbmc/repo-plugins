@@ -25,8 +25,9 @@ viewModeChannels = str(addon.getSetting("viewModeChannels"))
 translation = addon.getLocalizedString
 icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
 addonUserDataFolder = xbmc.translatePath("special://profile/addon_data/"+addonID)
+versionFile = xbmc.translatePath("special://profile/addon_data/"+addonID+"/version")
 cacheFolder = xbmc.translatePath("special://profile/addon_data/"+addonID+"/cache")
-urlMain = "http://spiegeltv-ivms2-restapi.s3.amazonaws.com/20131117113352/restapi"
+urlMain = "http://spiegeltv-ivms2-restapi.s3.amazonaws.com"
 opener = urllib2.build_opener()
 opener.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:25.0) Gecko/20100101 Firefox/25.0')]
 
@@ -36,6 +37,11 @@ if not os.path.isdir(cacheFolder):
     os.mkdir(cacheFolder)
 
 def index():
+    content = getUrl(urlMain+"/version.json")
+    content = json.loads(content)
+    fh = open(versionFile, 'w')
+    fh.write(content["version_name"])
+    fh.close()
     addDir(translation(30003), "", 'listChannels', icon)
     addDir(translation(30004), "", 'listTopics', icon)
     addDir(translation(30002), "0", 'listVideos', icon)
@@ -47,10 +53,10 @@ def index():
 def listChannels(url):
     xbmcplugin.setContent(pluginhandle, "episodes")
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
-    content = getUrl(urlMain+"/channels.json")
+    content = getUrl(urlMain+"/"+getVersion()+"/restapi/channels.json")
     content = json.loads(content)
     for item in content:
-        channel = getUrl(urlMain+"/channels/"+str(item)+".json")
+        channel = getUrl(urlMain+"/"+getVersion()+"/restapi/channels/"+str(item)+".json")
         channel = json.loads(channel)
         ids = ""
         for id in channel["media"]:
@@ -74,10 +80,10 @@ def listChannels(url):
 def listTopics(url):
     xbmcplugin.setContent(pluginhandle, "episodes")
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
-    content = getUrl(urlMain+"/playlists.json")
+    content = getUrl(urlMain+"/"+getVersion()+"/restapi/playlists.json")
     content = json.loads(content)
     for item in content:
-        channel = getUrl(urlMain+"/playlists/"+str(item)+".json")
+        channel = getUrl(urlMain+"/"+getVersion()+"/restapi/playlists/"+str(item)+".json")
         channel = json.loads(channel)
         ids = ""
         for id in channel["media"]:
@@ -101,21 +107,21 @@ def listTopics(url):
 def listVideos(ids, index, rnd):
     xbmcplugin.setContent(pluginhandle, "episodes")
     if not ids:
-        content = getUrl(urlMain+"/media.json")
+        content = getUrl(urlMain+"/"+getVersion()+"/restapi/media.json")
         content = json.loads(content)
     else:
         content = ids.split(",")
     if rnd=="true":
         random.shuffle(content)
     for i in range(index, index+12, 1):
-        video = getUrl(urlMain+"/media/"+str(content[i])+".json")
+        video = getUrl(urlMain+"/"+getVersion()+"/restapi/media/"+str(content[i])+".json")
         video = json.loads(video)
         try:
-            date = video["airdate"]
+            date = video["web_airdate"]
         except:
             date = ""
         try:
-            subtitle = video["subtitle"]
+            subtitle = video["subtitle"].encode('utf-8')
         except:
             subtitle = ""
         try:
@@ -125,7 +131,7 @@ def listVideos(ids, index, rnd):
         if duration=="0":
             duration="1"
         try:
-            description = video["description"]
+            description = video["description"].encode('utf-8')
         except:
             description = ""
         try:
@@ -141,13 +147,13 @@ def listVideos(ids, index, rnd):
         else:
             aspect = "4x3"
         playpath = "mp4:"+uuid+"_spiegeltv_0500_"+aspect+".m4v"
-        desc = video["title"]+" - "+subtitle+"\n\n"+description
+        desc = video["title"].encode('utf-8')+" - "+subtitle+"\n\n"+description
         thumbUrl = ""
         for thumb in video["images"]:
             if thumb["spec_slug"]=="f3-film-embed":
                 thumbUrl = thumb["url"]
         if uuid:
-            addLink(video["title"], playpath, 'playVideo', thumbUrl, desc, duration, date)
+            addLink(video["title"].encode('utf-8'), playpath, 'playVideo', thumbUrl, desc, duration, date)
         if i==len(content)-1:
             break
     if rnd=="true":
@@ -162,7 +168,7 @@ def listVideos(ids, index, rnd):
 def playRandom():
     playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
     playlist.clear()
-    content = getUrl(urlMain+"/media.json")
+    content = getUrl(urlMain+"/"+getVersion()+"/restapi/media.json")
     content = json.loads(content)
     random.shuffle(content)
     count = 1
@@ -189,7 +195,7 @@ def queueVideo(url, name, thumb):
 
 
 def playVideoRandom(id):
-    video = getUrl(urlMain+"/media/"+id+".json")
+    video = getUrl(urlMain+"/"+getVersion()+"/restapi/media/"+id+".json")
     video = json.loads(video)
     thumbUrl = ""
     for thumb in video["images"]:
@@ -204,9 +210,9 @@ def playVideoRandom(id):
     else:
         aspect = "4x3"
     playpath = "mp4:"+video["uuid"]+"_spiegeltv_0500_"+aspect+".m4v"
-    title = video["title"]
+    title = video["title"].encode('utf-8')
     try:
-        subtitle = video["subtitle"]
+        subtitle = video["subtitle"].encode('utf-8')
     except:
         subtitle = ""
     if subtitle:
@@ -223,13 +229,20 @@ def cleanTitle(title):
     return title
 
 
+def getVersion():
+    fh = open(versionFile, 'r')
+    content = fh.read()
+    fh.close()
+    return content
+
+
 def getUrl(url):
     cacheFile = os.path.join(cacheFolder, url.split("/")[-1])
-    if os.path.exists(cacheFile) and ("/media.json" in url or "/channels/" in url) and (time.time()-os.path.getmtime(cacheFile) < 60*60*12):
+    if os.path.exists(cacheFile) and ("/media.json" in url or "/channels/" in url) and (time.time()-os.path.getmtime(cacheFile) < 60*60*6):
         fh = open(cacheFile, 'r')
         content = fh.read()
         fh.close()
-    elif os.path.exists(cacheFile) and ("/media.json" not in url and "/channels/" not in url):
+    elif os.path.exists(cacheFile) and ("/media.json" not in url and "/channels/" not in url and "/version.json" not in url):
         fh = open(cacheFile, 'r')
         content = fh.read()
         fh.close()
@@ -260,7 +273,7 @@ def addLink(name, url, mode, iconimage, desc, duration, date):
     liz.setProperty('IsPlayable', 'true')
     if useThumbAsFanart:
         liz.setProperty("fanart_image", iconimage)
-    liz.addContextMenuItems([(translation(30006), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name.encode('utf-8'))+'&thumb='+urllib.quote_plus(iconimage)+')',)])
+    liz.addContextMenuItems([(translation(30006), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+str(name)+'&thumb='+urllib.quote_plus(iconimage)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 

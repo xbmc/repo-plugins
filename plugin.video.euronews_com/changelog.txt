@@ -9,3 +9,6 @@
 - Added better thumbs
 1.0.4 / 2.0.4
 - Added context menu "Add to queue"
+2.0.5
+- Fixed video listing
+- Fixed polish site version

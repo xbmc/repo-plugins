@@ -15,6 +15,7 @@ socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 addonID = addon.getAddonInfo('id')
 translation = addon.getLocalizedString
+xbox = xbmc.getCondVisibility("System.Platform.xbox")
 
 while (not os.path.exists(xbmc.translatePath("special://profile/addon_data/"+addonID+"/settings.xml"))):
     addon.openSettings()
@@ -28,11 +29,13 @@ language2 = language.replace("en", "www").replace("pe", "persian").replace("ar",
 
 
 def index():
-    addLink(translation(30001), "", 'playLive', "")
+    if language!="pl":
+        addLink(translation(30001), "", 'playLive', "")
     addDir(translation(30002), "", 'newsMain', "")
     content = getUrl("http://"+language2+".euronews.com")
     match = re.compile('<li class="menu-element-programs"><a title="(.+?)" href="(.+?)">', re.DOTALL).findall(content)
-    addDir(match[0][0], "http://"+language2+".euronews.com"+match[0][1], 'listShows', "")
+    if match:
+        addDir(match[0][0], "http://"+language2+".euronews.com"+match[0][1], 'listShows', "")
     content = content[content.find('<ol id="categoryNav">'):]
     content = content[:content.find('</ol>')]
     spl = content.split('<a')
@@ -101,14 +104,6 @@ def listVideos(url):
             date = match[0][1]
             title = date+" - "+title
         addLink(title, url, 'playVideo', thumb, desc)
-    content2 = content
-    content = content[content.find('id="main-content">'):]
-    if "</ul></div>" in content:
-        content = content[:content.find("</ul></div>")]
-    elif 'id="headline-block">' in content:
-        content = content[:content.find('id="headline-block">')]
-    content2 = content2[content2.find('id="headline-block">'):]
-    content2 = content2[:content2.find('</div>')]
     spl = content.split('<a class="imgWrap"')
     for i in range(1, len(spl), 1):
         entry = spl[i]
@@ -144,7 +139,9 @@ def listVideos(url):
             if date:
                 title = date+" - "+title
             addLink(title, url, 'playVideo', thumb, desc)
-    spl = content2.split('<li')
+    content = content[content.find('id="headline-block">'):]
+    content = content[:content.find('</div>')]
+    spl = content.split('<li')
     for i in range(1, len(spl), 1):
         entry = spl[i]
         match = re.compile('>(.+?) -', re.DOTALL).findall(entry)
@@ -235,9 +232,16 @@ def search():
 def playVideo(url):
     content = getUrl(url)
     match = re.compile('file: "(.+?)"', re.DOTALL).findall(content)
+    matchYT = re.compile('youtube.com/embed/(.+?)"', re.DOTALL).findall(content)
     if match:
-        listitem = xbmcgui.ListItem(path=match[0])
-        xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+        fullUrl = match[0]
+    elif matchYT:
+        if xbox:
+            fullUrl = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + matchYT[0]
+        else:
+            fullUrl = "plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=" + matchYT[0] 
+    listitem = xbmcgui.ListItem(path=fullUrl)
+    xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 
 def queueVideo(url, name):

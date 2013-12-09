@@ -4,7 +4,64 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="21010">查找</string>
-    <string id="21016">删除</string>
-    <string id="21019">录音</string>
+    <!-- Addon Settings -->
+    <string id="30000">SageTV服务器地址</string>
+    <string id="30001">SageTV Web服务器端口</string>
+    <string id="30002">SageTV Web服务器用户名</string>
+    <string id="30003">SageTV Web服务器密码</string>
+    <string id="30004">SageTV录像目录</string>
+    <string id="30005">SageTV录像目录网络路径</string>
+    <string id="30006">SageTV服务器MAC地址（用于WOL）</string>
+    <string id="30007">流带宽（kbps）</string>
+
+    <!-- Settings -->
+    <string id="30100">SageTV服务器未找到</string>
+    <string id="30101">无法连接SageTV服务器</string>
+    <string id="30102">1）请确认它在运行。</string>
+    <string id="30103">2）确定本插件设置正确。</string>
+    <string id="30104">依赖项目未找到或已损坏</string>
+    <string id="30105">本插件需要sagex-api-services版本</string>
+    <string id="30106">未安装sagex-api-services插件</string>
+    <string id="30107">请安装sagex-api-services以启用本插件。</string>
+    <string id="30108">现有版本</string>
+    <string id="30109">请安装/升级sagex-api-services版本到</string>
+    <string id="30110">查找</string>
+    <string id="30111">SageTV插件</string>
+    <string id="30112">成功删除</string>
+    <string id="30113">定时录像</string>
+    <string id="30114">尝试播放直播电视</string>
+    <string id="30115">无法播放直播电视</string>
+    <string id="30116">删除</string>
+    <string id="30117">取消录制</string>
+    <string id="30118">删除收藏</string>
+    <string id="30119">记录</string>
+    <string id="30120">现在观看</string>
+    <string id="30121">播放失败，文件太小无法播放</string>
+    <string id="30122">设置已观看</string>
+    <string id="30123">清除已观看</string>
+    <string id="30124">设置存档</string>
+    <string id="30125">清除存档</string>
+    <string id="30126">删除&amp;设置已观看</string>
+    <string id="30127">删除&amp;清除已观看</string>
+    <string id="30128">删除&amp;设置不喜欢</string>
+    <string id="30129">删除/错误记录</string>
+    <string id="30130">加入收藏</string>
+    <string id="30131">已加入收藏</string>
+    <string id="30132">已删除收藏</string>
+    <string id="30133">设置已观看标志</string>
+    <string id="30134">清除已观看标志</string>
+    <string id="30135">设置存档标志</string>
+    <string id="30136">清除存档标志</string>
+    <string id="30137">观看（流）</string>
+    <string id="30138">本插件需要媒体流服务版本</string>
+    <string id="30139">未安装媒体流服务插件</string>
+    <string id="30140">请安装媒体流服务以启用本插件。</string>
+    <string id="30141">请安装/升级媒体流服务插件版本到</string>
+    <string id="30142">设置全部已观看</string>
+    <string id="30143">清除全部已观看</string>
+    <string id="30144">全部删除</string>
+    <string id="30145">你的xbmc.js文件未更新至最新版</string>
+    <string id="30146">请确认已拷贝最新xbmc.js文件</string>
+    <string id="30147">到你的SageTV\sagex\services目录</string>
+    <string id="30148">你的xbmc.js文件已损坏</string>
 </strings>

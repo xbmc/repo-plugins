@@ -1,8 +1,67 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
-<!-- English (US) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/en_US/ -->
+<!-- English language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/en/ -->
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="21019">Record</string>
+    <!-- Addon Settings -->
+    <string id="30000">SageTV Server Address</string>
+    <string id="30001">SageTV Webserver Port</string>
+    <string id="30002">SageTV Webserver Username</string>
+    <string id="30003">SageTV Webserver Password</string>
+    <string id="30004">SageTV Recording Folder</string>
+    <string id="30005">SageTV Recording Folder Network path</string>
+    <string id="30006">SageTV Server MAC Address (for WOL)</string>
+    <string id="30007">Streaming Bandwidth (kbps)</string>
+
+    <!-- Settings -->
+    <string id="30100">SageTV Server Not Found</string>
+    <string id="30101">Unable to connect to your SageTV server.</string>
+    <string id="30102">1) Please confirm it is running.</string>
+    <string id="30103">2) Confirm the settings of this addon are correct.</string>
+    <string id="30104">Dependency Missing or Corrupt</string>
+    <string id="30105">This addon requires sagex-api-services version</string>
+    <string id="30106">You do not have the sagex-api-services plugin installed</string>
+    <string id="30107">Please install sagex-api-services to enable this plugin.</string>
+    <string id="30108">You have version</string>
+    <string id="30109">Please install/upgrade your sagex-api-services version to</string>
+    <string id="30110">Search</string>
+    <string id="30111">SageTV addon</string>
+    <string id="30112">Delete successful</string>
+    <string id="30113">Scheduled recording</string>
+    <string id="30114">Attemping to playback live T</string>
+    <string id="30115">Unable to playback live TV</string>
+    <string id="30116">Delete</string>
+    <string id="30117">Cancel Recording</string>
+    <string id="30118">Remove Favorite</string>
+    <string id="30119">Record</string>
+    <string id="30120">Watch Now</string>
+    <string id="30121">Playback failed; filesize not big enough for playback</string>
+    <string id="30122">Set Watched</string>
+    <string id="30123">Clear Watched</string>
+    <string id="30124">Set Archived</string>
+    <string id="30125">Clear Archived</string>
+    <string id="30126">Delete &amp; Set Watched</string>
+    <string id="30127">Delete &amp; Clear Watched</string>
+    <string id="30128">Delete &amp; Set Don't Like</string>
+    <string id="30129">Delete / Wrong Recording</string>
+    <string id="30130">Add Favorite</string>
+    <string id="30131">Added favorite</string>
+    <string id="30132">Removed favorite</string>
+    <string id="30133">Set watched flag</string>
+    <string id="30134">Cleared watched flag</string>
+    <string id="30135">Set archived flag</string>
+    <string id="30136">Cleared archived flag</string>
+    <string id="30137">Watch (Streamed)</string>
+    <string id="30138">This addon requires media streaming services version</string>
+    <string id="30139">You do not have the media streaming services plugin installed</string>
+    <string id="30140">Please install media streaming services to enable watching streams.</string>
+    <string id="30141">Please install/upgrade your media streaming services plugin version to</string>
+    <string id="30142">Set All Watched</string>
+    <string id="30143">Clear All Watched</string>
+    <string id="30144">Delete All</string>
+    <string id="30145">Your xbmc.js file is not up-to-date</string>
+    <string id="30146">Please confirm that you copied the latest xbmc.js file</string>
+    <string id="30147">to your SageTV\sagex\services folder</string>
+    <string id="30148">Your xbmc.js file is corrupt</string>
 </strings>

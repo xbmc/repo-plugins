@@ -4,7 +4,19 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="21010">Søk</string>
-    <string id="21016">Slett</string>
-    <string id="21019">Opptak</string>
+    <!-- Addon Settings -->
+    <string id="30000">SageTV tjeneradresse</string>
+    <string id="30001">SageTV nettjenerport</string>
+    <string id="30002">SageTV nettjenerbrukernavn</string>
+    <string id="30003">SageTV nettjenerpassord</string>
+    <string id="30004">SageTV opptaksmappe</string>
+    <string id="30005">SageTV nettverkssti til opptaksmappe</string>
+    <string id="30006">SageTV MAC-adresse til tjener (for WOL)</string>
+    <string id="30007">Strømmingsbåndbredde (kbps)</string>
+
+    <!-- Settings -->
+    <string id="30100">SageTV</string>
+    <string id="30110">Søk</string>
+    <string id="30116">Slett</string>
+    <string id="30119">Opptak</string>
 </strings>

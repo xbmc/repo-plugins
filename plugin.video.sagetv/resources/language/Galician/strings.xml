@@ -4,7 +4,64 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="21010">Búsqueda</string>
-    <string id="21016">Eliminar</string>
-    <string id="21019">Gravar</string>
+    <!-- Addon Settings -->
+    <string id="30000">Enderezo do Servidor de SageTV</string>
+    <string id="30001">Porto do Servidor Web de SageTV</string>
+    <string id="30002">Nome de usuario do Servidor Web de SageTV</string>
+    <string id="30003">Contrasinal do Servidor Web de SageTV</string>
+    <string id="30004">Cartafol de Gravacións de SageTV</string>
+    <string id="30005">Camiño de rede do Cartafol de Gravacións de SageTV</string>
+    <string id="30006">Enderezo MAC (para WOL) do Servidor de SageTV</string>
+    <string id="30007">Largo de banda da Transmisión (kbps)</string>
+
+    <!-- Settings -->
+    <string id="30100">Non se atopou o Servidor de SageTV</string>
+    <string id="30101">Non foi posíbel conectar co seu servidor SageTV.</string>
+    <string id="30102">1) Por favor confirmar que está en execución.</string>
+    <string id="30103">2) Confirmar que os axustes do complemento son correctos.</string>
+    <string id="30104">Falta a dependencia ou está corrompida</string>
+    <string id="30105">Este complemento require se sagex-api-services na súa versión</string>
+    <string id="30106">Non ten instalado o engadido sagex-api-services</string>
+    <string id="30107">Por favor instale o engadido sagex-api-services para activalo.</string>
+    <string id="30108">Ten a versión</string>
+    <string id="30109">Por favor instale ou actualize sagex-api-services á versión</string>
+    <string id="30110">Búsqueda</string>
+    <string id="30111">complemento SageTV</string>
+    <string id="30112">Eliminación correcta</string>
+    <string id="30113">Gravación programada</string>
+    <string id="30114">Tentando reproducir a TV ao vivo</string>
+    <string id="30115">Non se puido reproducir a TV ao vivo</string>
+    <string id="30116">Eliminar</string>
+    <string id="30117">Cancelar a Gravación</string>
+    <string id="30118">Eliminar Favorito</string>
+    <string id="30119">Gravar</string>
+    <string id="30120">Ver Agora</string>
+    <string id="30121">Fallou a reprodución, o ficheiro non é suficientemente grande para reproducilo</string>
+    <string id="30122">Estabelecer como Visto</string>
+    <string id="30123">Quitar Visto</string>
+    <string id="30124">Estabelecer como Arquivado</string>
+    <string id="30125">Quitar Arquivado</string>
+    <string id="30126">Eliminar e Estabelecer como Visto</string>
+    <string id="30127">Eliminar e Quitar Visto</string>
+    <string id="30128">Eliminar e Estabelecer como Non me Gusta</string>
+    <string id="30129">Eliminar / Gravación incorrecta</string>
+    <string id="30130">Engadir Favorito</string>
+    <string id="30131">Favorito engadido</string>
+    <string id="30132">Favorito eliminado</string>
+    <string id="30133">Estabelecer etiqueta de visto</string>
+    <string id="30134">Quitada a etiqueta de visto</string>
+    <string id="30135">Estabelecer a etiqueta de arquivado</string>
+    <string id="30136">Quitada a etiqueta de arquivado</string>
+    <string id="30137">Ver (Transmitido)</string>
+    <string id="30138">Este complemento require dos servizos de transmisión de medios na súa versión </string>
+    <string id="30139">Non ten instalado o engadido do servizo de transmisión de medios</string>
+    <string id="30140">Por favor instale o servizo de transmisión de medios para activar o visionado de fluxos.</string>
+    <string id="30141">Por favor instale/actualice o engadido do servizo de transmisión de medios á versión</string>
+    <string id="30142">Estabelecer Todos como Vistos</string>
+    <string id="30143">Quitar Todos os Vistos</string>
+    <string id="30144">Eliminar Todo</string>
+    <string id="30145">O ficheiro xbmc.js non está actualizado</string>
+    <string id="30146">Por favor confirme a copia da última versión do ficheiro xbmc.js</string>
+    <string id="30147">ao seu cartafol SageTV\sagex\services</string>
+    <string id="30148">O ficheiro xbmc.js está corrompido</string>
 </strings>

@@ -4,7 +4,64 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="21010">Cerca</string>
-    <string id="21016">Elimina</string>
-    <string id="21019">Registra</string>
+    <!-- Addon Settings -->
+    <string id="30000">Sage TV indirizzo Server</string>
+    <string id="30001">Sage tv Porta Webserver</string>
+    <string id="30002">Sage TV Nome Utente Webserver</string>
+    <string id="30003">Sage TV Password Webserver</string>
+    <string id="30004">Sage TV Cartella di Registrazione</string>
+    <string id="30005">Sage TV Percorso di Rete per Cartella di Registrazione</string>
+    <string id="30006">Sage TV Server MAC Address (per WOL)</string>
+    <string id="30007">Banda per lo streaming (kbsp)</string>
+
+    <!-- Settings -->
+    <string id="30100">Sage TV Server non trovato</string>
+    <string id="30101">Impossibile connettersi al tuo server Sage TV.</string>
+    <string id="30102">1) Conferma che è attivo</string>
+    <string id="30103">2) Conferma che le impostazioni per questo addon sono corrette</string>
+    <string id="30104">Dipendenze inesistenti o corrotte</string>
+    <string id="30105">questo addon richiede sagex-api-services versione</string>
+    <string id="30106">Tu non hai il plugin sagex-api-services installato</string>
+    <string id="30107">Installa sagex-api-services per abilitare il plugin.</string>
+    <string id="30108">Hai la versione</string>
+    <string id="30109">Installa/Aggiorna la tua versione di sagex-api-services alla</string>
+    <string id="30110">Cerca</string>
+    <string id="30111">Addon Sage TV </string>
+    <string id="30112">Cancellato con successo</string>
+    <string id="30113">Registrazione schedulata</string>
+    <string id="30114">Tentativo di riprodurre la TV dal Vivo</string>
+    <string id="30115">Impossibile riprodurre la TV dal Vivo</string>
+    <string id="30116">Elimina</string>
+    <string id="30117">Cancella Registrazione</string>
+    <string id="30118">Preferiti Remoti</string>
+    <string id="30119">Registra</string>
+    <string id="30120">Guarda Ora</string>
+    <string id="30121">Riproduzione fallita, la dimensione del file non è abbastanza grande per la riproduzione</string>
+    <string id="30122">Imposta come Visto</string>
+    <string id="30123">Cancella Visti</string>
+    <string id="30124">Imposta come Archiviato</string>
+    <string id="30125">Cancella Archiviati</string>
+    <string id="30126">Elimina &amp; Imposta come Visto</string>
+    <string id="30127">Elimina &amp; Cancella Visti</string>
+    <string id="30128">Elimina &amp; imposta a non mi piace</string>
+    <string id="30129">Elimina Registrazioni Errate</string>
+    <string id="30130">Aggiungi ai Preferiti</string>
+    <string id="30131">Aggiunto ai Preferiti</string>
+    <string id="30132">Preferito Rimosso</string>
+    <string id="30133">Imposta la bandiera Visto</string>
+    <string id="30134">Cancella le bandiere Visto</string>
+    <string id="30135">Imposta la bandiera archiviato</string>
+    <string id="30136">Cancella le bandiere archiviate</string>
+    <string id="30137">Guarda (in streaming)</string>
+    <string id="30138">Questo addon richiede il servizio di media streaming versione</string>
+    <string id="30139">Non hai il plugin servizio di media streaming installato</string>
+    <string id="30140">Installa/Aggiorna il servizio di media streaming per essere abilitato a vedere i flussi</string>
+    <string id="30141">Installa/Aggiorna il servizio di media streaming alla versione </string>
+    <string id="30142">Imposta tutti come Visti</string>
+    <string id="30143">Elimina tutti i Visti</string>
+    <string id="30144">Cancella Tutto</string>
+    <string id="30145">Il tuo file xbmc.js non è aggiornato</string>
+    <string id="30146">Conferma di aver copiato l'ultima versione del file xbmc.js</string>
+    <string id="30147">nella tu cartella SageTV\sagex\services</string>
+    <string id="30148">Il tuo file xbmc.js è corrotto</string>
 </strings>

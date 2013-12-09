@@ -4,7 +4,64 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="21010">חיפוש</string>
-    <string id="21016">מחיקה</string>
-    <string id="21019">הקלטה</string>
+    <!-- Addon Settings -->
+    <string id="30000">כתובת שרת SageTV</string>
+    <string id="30001">פורט שרת SageTV</string>
+    <string id="30002">שם משתמש שרת SageTV</string>
+    <string id="30003">סיסמת שרת SageTV</string>
+    <string id="30004">תיקיית הקלטות SageTV</string>
+    <string id="30005">נתיב רשת של תיקיית הקלטות SageTV</string>
+    <string id="30006">כתובת MAC של שרת SageTV (עבור WOL)</string>
+    <string id="30007">רוחב פס הזרמה (kbps)</string>
+
+    <!-- Settings -->
+    <string id="30100">לא נמצא שרת SageTV</string>
+    <string id="30101">נכשל בהתחברות לשרת SageTV.</string>
+    <string id="30102">1) אנא ודא שהוא פועל.</string>
+    <string id="30103">2) ודא שהגדרות הרחבה זו נכונות.</string>
+    <string id="30104">תלות חסרה או פגומה</string>
+    <string id="30105">הרחבה זו דורשת גרסת sagex-api-services</string>
+    <string id="30106">לא מותקנת בשרת הרחבת sagex-api-services</string>
+    <string id="30107">אנא התקן את sagex-api-services להפעלת הרחבה זו.</string>
+    <string id="30108">הגרסה שברשותך היא</string>
+    <string id="30109">אנא התקן/שדרג לגרסת sagex-api-services</string>
+    <string id="30110">חיפוש</string>
+    <string id="30111">הרחבת SageTV</string>
+    <string id="30112">נמחק בהצלחה</string>
+    <string id="30113">הקלטה מתוזמנת</string>
+    <string id="30114">מנסה לנגן טלוויזיה חיה</string>
+    <string id="30115">נכשל בניגון טלוויזיה חיה</string>
+    <string id="30116">מחיקה</string>
+    <string id="30117">בטל הקלטה</string>
+    <string id="30118">הסר מועדף</string>
+    <string id="30119">הקלטה</string>
+    <string id="30120">צפה עכשיו</string>
+    <string id="30121">ניגון נכשל: גודל קובץ קטן מדי עבור ניגון</string>
+    <string id="30122">סמן כנצפה</string>
+    <string id="30123">הסר סימון נצפה</string>
+    <string id="30124">סמן ארכיון</string>
+    <string id="30125">הסר ארכיון</string>
+    <string id="30126">מחק וסמן כנצפה</string>
+    <string id="30127">מחק והסר סימון נצפה</string>
+    <string id="30128">מחק וסמן כלא אוהב</string>
+    <string id="30129">מחק / הקלטה שגויה</string>
+    <string id="30130">הוסף כמועדף</string>
+    <string id="30131">נוסף כמועדף</string>
+    <string id="30132">הוסר מועדף</string>
+    <string id="30133">הוסף דגל נצפה</string>
+    <string id="30134">הוסר דגל נצפה</string>
+    <string id="30135">הוסף דגל ארכיון</string>
+    <string id="30136">הוסר דגל ארכיון</string>
+    <string id="30137">צפה (הזרמה)</string>
+    <string id="30138">הרחבה זו דורשת גרסת שירותי הזרמת מדיה</string>
+    <string id="30139">לא מותקנת בשרת הרחבת שירותי הזרמת מדיה</string>
+    <string id="30140">אנא התקן שירותי הזרמת מדיה בשרת לשם אפשור צפיה בהזרמות.</string>
+    <string id="30141">אנא התקן/שדרג הרחבת שירותי הזרמת מדיה בשרת לגרסה</string>
+    <string id="30142">סמן הכל כנצפה</string>
+    <string id="30143">הסר סימון נצפה מהכל</string>
+    <string id="30144">מחק הכל</string>
+    <string id="30145">הקובץ xbmc.js שלך אינו מעודכן</string>
+    <string id="30146">אנא ודא שהעתקת את קובץ xbmc.js האחרון</string>
+    <string id="30147">אל תיקיית SageTV\sagex\services שלך</string>
+    <string id="30148">הקובץ xbmc.js שלך פגום</string>
 </strings>

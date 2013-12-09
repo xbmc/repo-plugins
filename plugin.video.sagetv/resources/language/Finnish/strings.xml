@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="21010">Etsi</string>
-    <string id="21016">Poista</string>
-    <string id="21019">Nauhoita</string>
+    <string id="30110">Etsi</string>
+    <string id="30116">Poista</string>
+    <string id="30119">Nauhoita</string>
 </strings>

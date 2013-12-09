@@ -2,7 +2,10 @@ import urllib,urllib2,re,string
 import xbmc,xbmcplugin,xbmcgui,xbmcaddon
 import time
 from time import sleep
-import simplejson as json
+if sys.version_info >=  (2, 7):
+    import json as _json
+else:
+    import simplejson as _json 
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.sagetv')
 __language__ = __settings__.getLocalizedString
@@ -30,7 +33,7 @@ def executeSagexAPIJSONCall(url, resultToGet):
       input = urllib.urlopen(url)
       
     fileData = input.read()
-    resp = unicodeToStr(json.JSONDecoder().decode(fileData))
+    resp = unicodeToStr(_json.JSONDecoder().decode(fileData))
 
     objKeys = resp.keys()
     numKeys = len(objKeys)
@@ -130,19 +133,19 @@ if(args[0] in ["cancelrecording","addfavorite","removefavorite","record","setwat
     sageApiUrl = args[1]
     urllib.urlopen(sageApiUrl)
     if(args[0] == "record"):
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21013) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30113) + ")")
     elif(args[0] == "addfavorite"):
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21031) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30131) + ")")
     elif(args[0] == "removefavorite"):
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21032) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30132) + ")")
     elif(args[0] == "setwatched"):
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21033) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30133) + ")")
     elif(args[0] == "clearwatched"):
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21034) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30134) + ")")
     elif(args[0] == "setarchived"):
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21035) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30135) + ")")
     elif(args[0] == "cleararchived"):
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21036) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30136) + ")")
     xbmc.executebuiltin("Container.Refresh")
 elif(args[0][0:6] == "delete" and args[0] != "deleteall"):
     firstApiCall = args[1]
@@ -156,7 +159,7 @@ elif(args[0][0:6] == "delete" and args[0] != "deleteall"):
         urllib.urlopen(firstApiCall)
 
     if(args[0] == "delete"):
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21012) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30112) + ")")
     xbmc.executebuiltin("Container.Refresh")
 elif(args[0] in ["setallwatched","clearallwatched","deleteall"]):
     strUrl = args[1]
@@ -192,22 +195,22 @@ elif(args[0] == "watchstream"):
 
     if(streamingServicesPluginVersion == None or len(streamingServicesPluginVersion) == 0):
         print "SageTV not detected, or required plugins not installed"
-        xbmcgui.Dialog().ok(__language__(21000),__language__(21001),__language__(21002),__language__(21003))
+        xbmcgui.Dialog().ok(__language__(30100),__language__(30101),__language__(30102),__language__(30103))
         validStreamingServicesPluginVersionFound = False
         
     print "***SageTV mediastreaming plugin version installed=" + streamingServicesPluginVersion
     if(streamingServicesPluginVersion == ""):
-        xbmcgui.Dialog().ok(__language__(21004),__language__(21038) + " " + MIN_VERSION_STREAMING_SERVICES_PLUGIN_REQUIRED, __language__(21039),__language__(21040))
+        xbmcgui.Dialog().ok(__language__(30104),__language__(30138) + " " + MIN_VERSION_STREAMING_SERVICES_PLUGIN_REQUIRED, __language__(30139),__language__(30140))
         validStreamingServicesPluginVersionFound = False
     if(comparePluginVersions(streamingServicesPluginVersion, MIN_VERSION_STREAMING_SERVICES_PLUGIN_REQUIRED) < 0):
-        xbmcgui.Dialog().ok(__language__(21004),__language__(21038) + " " + MIN_VERSION_STREAMING_SERVICES_PLUGIN_REQUIRED, __language__(21008) + " " + streamingServicesPluginVersion,__language__(21041) + " " + MIN_VERSION_STREAMING_SERVICES_PLUGIN_REQUIRED)
+        xbmcgui.Dialog().ok(__language__(30104),__language__(30138) + " " + MIN_VERSION_STREAMING_SERVICES_PLUGIN_REQUIRED, __language__(30108) + " " + streamingServicesPluginVersion,__language__(30141) + " " + MIN_VERSION_STREAMING_SERVICES_PLUGIN_REQUIRED)
         validStreamingServicesPluginVersionFound = False
 
     if(validStreamingServicesPluginVersionFound):
         print "**Attempting to playback stream of recording; streaming URL=" + streamingUrl
         xbmc.executebuiltin('PlayMedia("%s")' % streamingUrl)
 elif(args[0] == "watchnow"):
-    xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21014) + ")")
+    xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30114) + ")")
     strUrl = args[1]
     airingID = args[2]    
     sageApiUrl = strUrl + '/sagex/api?command=Record&1=airing:' + airingID
@@ -259,7 +262,7 @@ elif(args[0] == "watchnow"):
             tries = tries+1
         if(currentSize < minSizeNeededToStartPlaybackInBytes):
             # if the mediafile is not growing fast enough and we passed the max tries, playback has failed
-            xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21021) + ")")
+            xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30121) + ")")
         else:
             strFilepath = mf.get("SegmentFiles")[0]
             print "****GETTING READY TO PLAYBACK LIVE TV WITHIN THE SAGETV ADDON****"
@@ -270,7 +273,7 @@ elif(args[0] == "watchnow"):
             xbmc.sleep(5000)
             xbmc.executebuiltin('PlayMedia("%s")' % filemap(strFilepath))
     else:
-        xbmc.executebuiltin("Notification(" + __language__(21011) + "," + __language__(21015) + ")")
+        xbmc.executebuiltin("Notification(" + __language__(30111) + "," + __language__(30115) + ")")
         print "NOTHING IS RECORDING"
         #return None
 else:

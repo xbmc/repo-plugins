@@ -4,7 +4,7 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="21010">Пошук</string>
-    <string id="21016">Видалити</string>
-    <string id="21019">Запис</string>
+    <string id="30110">Пошук</string>
+    <string id="30116">Видалити</string>
+    <string id="30119">Запис</string>
 </strings>

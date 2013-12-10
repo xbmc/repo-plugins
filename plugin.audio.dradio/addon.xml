@@ -1,25 +1,23 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.groove" name="Grooveshark XBMC"
-	version="2.0.6" provider-name="Stephen Denham">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+	id="plugin.audio.dradio"
+	name="dradio.de"
+	version="1.3.0"
+	provider-name="escoand">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0" />
-		<import addon="script.module.simplejson"/>
 	</requires>
 	<extension point="xbmc.python.pluginsource" library="default.py">
-	<provides>audio</provides>
+		<provides>audio</provides>
 	</extension>
 	<extension point="xbmc.addon.metadata">
-		<language>en</language>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/escoand/plugin.audio.dradio</source>
 		<platform>all</platform>
-		<summary lang="en">Grooveshark addon for XBMC.</summary>
-		<description lang="en">
-			Grooveshark addon for XBMC. You must enter your Grooveshark Anywhere username and password in the addon settings.
-		</description>
-		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<email>stephen dot denham at gmail dot com</email>
-		<website>https://sourceforge.net/projects/xbmc-groove/</website>
-		<forum>http://forum.xbmc.org/showthread.php?tid=88235</forum>
-		<source>svn://svn.code.sf.net/p/xbmc-groove/code/</source>
+		<language>de</language>
+		<summary>dradio.de - Listening to the radio, whenever you want</summary>
+		<summary lang="de">dradio.de - Radio hören, wenn Sie Zeit haben</summary>
+		<description>German radio station</description>
+		<description lang="de">Deutscher Radio Sender</description>
 	</extension>
 </addon>
-

@@ -86,6 +86,18 @@ def viewAtoO():
     addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"], "page": 1 })
 
 
+def viewAlphaDirectories():
+  alphas = svt.getAlphas() 
+
+  for alpha in alphas:
+    addDirectoryItem(alpha["title"], { "mode": MODE_LETTER, "letter": alpha["char"] })
+
+
+def viewProgramsByLetter(letter):
+  programs = svt.getProgramsByLetter(letter)
+
+  for program in programs:
+    addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"], "page": 1 })
 
 
 def viewProgram(url,page,index):

@@ -1,3 +1,6 @@
+0.2.1
+- fixed video link parser
+
 0.2.0
 - adjusted the addon to the new orf tvthek website
 - mp4 streaming is now stable on all platforms!!!

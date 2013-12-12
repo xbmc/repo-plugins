@@ -12,3 +12,6 @@
 - Added support for HD videos
 1.0.4 / 2.0.4
 - Added Arte Livestream
+2.0.5
+- Changed streaming type
+- Changed default view

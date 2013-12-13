@@ -3,6 +3,7 @@
 # for utf-8 see http://www.python.org/dev/peps/pep-0263/
 
 import jw_config
+import jw_common
 
 from video import jw_video
 
@@ -65,27 +66,27 @@ if content_type == "audio" :
 
 	if mode == "open_music_index" :
 		start = params["start"][0]
-		jw_audio_music.showMusicIndex( start);
+		jw_audio_music.showMusicIndex( start)
 
 	if mode == "open_music_json" : 
 		json_url = params["json_url"][0]
-		jw_audio.showAudioJson(json_url);
+		jw_audio.showAudioJson(json_url)
 
 	if mode == "open_drama_index" :
 		start = params["start"][0]
-		jw_audio_drama.showDramaIndex( start);
+		jw_audio_drama.showDramaIndex( start)
 
 	if mode == "open_drama_json" : 
 		json_url = params["json_url"][0]
-		jw_audio.showAudioJson(json_url);
+		jw_audio.showAudioJson(json_url)
 
 	if mode == "open_dramatic_reading_index": 
 		start = params["start"][0]
-		jw_audio_dramatic_reading.showDramaticReadingIndex( start);
+		jw_audio_dramatic_reading.showDramaticReadingIndex( start)
 
 	if mode == "open_dramatic_reading_json" : 
 		json_url = params["json_url"][0]
-		jw_audio.showAudioJson(json_url);
+		jw_audio.showAudioJson(json_url)
 
 	if mode == "open_magazine_index" :
 		try: pub_filter = params["pub_filter"][0]
@@ -94,42 +95,46 @@ if content_type == "audio" :
 		except : year_filter = None
 
 		if year_filter is None :
-			jw_audio_magazine.showMagazineFilterIndex(pub_filter);
+			jw_audio_magazine.showMagazineFilterIndex(pub_filter)
 		else :
-			jw_audio_magazine.showMagazineFilteredIndex(pub_filter, year_filter);
+			jw_audio_magazine.showMagazineFilteredIndex(pub_filter, year_filter)
 
 	if mode == "open_magazine_json" :
 		json_url = params["json_url"][0]
-		jw_audio.showAudioJson(json_url);		
+		jw_audio.showAudioJson(json_url)
 
+	if mode == "play_mp3" :
+		url = params["file_url"][0]
+		jw_common.playMp3(url)
+		
 
 if content_type == "executable" :
 	if mode is None : 
-		jw_exec_index.showExecIndex();
+		jw_exec_index.showExecIndex()
 
 	if mode == "open_daily_text" : 
 		date = params["date"][0]
-		jw_exec_daily_text.showDailyText(date);	
+		jw_exec_daily_text.showDailyText(date)
 
 	if mode == "open_news_index" :
-		jw_exec_news.showNewsIndex();
+		jw_exec_news.showNewsIndex()
 
 	if mode == "open_news_page" :
 		url = params["url"][0]
-		jw_exec_news.showNewsPage(url);
+		jw_exec_news.showNewsPage(url)
 
 	if mode == "open_week_program" :
 		date = params["date"][0]
-		jw_exec_week_program.showWeekProgram(date);
+		jw_exec_week_program.showWeekProgram(date)
 
 	if mode == "open_activity_index" :
-		jw_exec_activity.showActivityIndex();
+		jw_exec_activity.showActivityIndex()
 
 	if mode == "open_activity_section" :		
 		url = params["url"][0]
-		jw_exec_activity.showActivitySection(url);
+		jw_exec_activity.showActivitySection(url)
 
 	if mode == "open_activity_article" :
 		url = params["url"][0]
-		jw_exec_activity.showArticle(url);
+		jw_exec_activity.showArticle(url)
 

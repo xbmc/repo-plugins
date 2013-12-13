@@ -142,9 +142,7 @@ def showVideoJsonUrl(json_url, thumb):
 
 	# Try do autodetect the video to play basaed on user setting of
 	# default video resolution
-	list_only = False;
-	
-	print "JWORG: max_resolution: '" + max_resolution + "'"
+	list_only = False
 
 	if (max_resolution != "0" and max_resolution != "") or max_resolution is None :
 	
@@ -173,10 +171,10 @@ def showVideoJsonUrl(json_url, thumb):
 
 			xbmc.Player().play(item=url_to_play, listitem=listItem)
 
-			return;
+			return
 		# This is an error condition, could not verify never ...
 		elif  len(right_resoluction_dict) == 0 :
-			print "JWORG: NO  one video at res " + max_resolution
+			xbmc.log("JWORG: NO  one video at res " + max_resolution, xbmc.LOGERROR)
 		# There are many video at the right res: enable listing of ONLY these
 		else :
 			list_only = max_resolution
@@ -194,7 +192,7 @@ def showVideoJsonUrl(json_url, thumb):
 			# if user has choosen a res, and there are more than one video on this res
 			# I skip every video of different resolution, but show a list
 			# of all available video of this resolution
-			continue;
+			continue
 
 		listItem = xbmcgui.ListItem(
 			label 			= title,

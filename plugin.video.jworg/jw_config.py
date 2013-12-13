@@ -2,7 +2,7 @@
 
 import xbmc
 import xbmcgui
-import xbmcplugin
+import xbmcaddon
 
 import sys
 import urlparse
@@ -11,21 +11,27 @@ import os
 import jw_common
 
 # key is english name, value is the name of the locale IN the locale
-# used for first run if no language setted; it takes XBMC language setting
+# used for first run if no language setted. It takes XBMC language setting
 # and convert into "our" locale settings
+
+# <setting id="language" type="labelenum" label="30002" 
+# values="Afrikaans|Deutsch|English|Español|Français|Ελληνική|Italiano|Magyar|Nederlands|Polski|Português"  />
+
+# *** IMPORTANT: keep it in the same order of the "language" setting values
 locale_2_lang = {
-	"Italian"				: "Italiano",
-	"Polish"				: "Polski",
-	"Dutch"					: "Nederlands",
-	"Spanish"				: "Español",
-	"German"				: "Deutsch",
-	"Portuguese" 			: "Português",
-	"Portuguese (Brazil)"	: "Português",
 	"Afrikaans"				: "Afrikaans",
-	"Greek"					: "Ελληνική",
+	"German"				: "Deutsch",
+	"English"				: "English",
+	"Spanish"				: "Español",
 	"French"				: "Français",
+	"Greek"					: "Ελληνική",
+	"Italian"				: "Italiano",
 	"Hungarian"				: "Magyar",
+	"Dutch"					: "Nederlands",
+	"Polish"				: "Polski",
+	"Portuguese" 			: "Português",
 }
+
 
 main_url = "http://www.jw.org/"
 app_url ="http://www.jw.org/apps/"
@@ -238,6 +244,7 @@ plugin_pid   	= int(sys.argv[1])
 plugin_params 	= urlparse.parse_qs((sys.argv[2])[1:])
 skin_used 		= xbmc.getSkinDir()
 dir_media		= os.path.dirname(__file__) + os.sep + "resources" + os.sep + "media" + os.sep
+addon 			= xbmcaddon.Addon("plugin.video.jworg")
 
 try: 
 	emulating = xbmcgui.Emulating
@@ -250,11 +257,11 @@ except:
 	from resources.lib import storageserverdummy as StorageServer
 	 
 cache 			= StorageServer.StorageServer(plugin_name, 24)  # 2 hour cache
-audio_sorting 	= str(int(xbmcplugin.getSetting(plugin_pid, "audio_sorting")) + 1)
-video_sorting 	= str(int(xbmcplugin.getSetting(plugin_pid, "video_sorting")) + 1)
+audio_sorting 	= str(int(addon.getSetting("audio_sorting")) + 1)
+video_sorting 	= str(int(addon.getSetting("video_sorting")) + 1)
 
 # if language is set, it used a localized language name, like "Italiano" or "Polski"
-language		= xbmcplugin.getSetting(plugin_pid, "language")
+language		= addon.getSetting("language")
 
 # AUTODETECT LANGUAGE IF MISSING
 # if not set, language will be read from system, where it uses english language name
@@ -265,11 +272,7 @@ if language == "":
 	actual_locale = xbmc.getLanguage()
 	if actual_locale in locale_2_lang :
 		language = locale_2_lang[actual_locale]
+		addon.setSetting("language", language)
 	else :
 		language = "English"
-
-	print "JWORG: Auto setting locale to: " + language
-	xbmcplugin.setSetting(plugin_pid, "language", language)
-
-
 

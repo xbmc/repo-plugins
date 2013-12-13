@@ -25,8 +25,8 @@ def showDailyText(date):
     text        = jw_common.cleanUpText(text)
 
     dialog = DailiyText()
-    dialog.customInit(text);
-    dialog.doModal();
+    dialog.customInit(text)
+    dialog.doModal()
     del dialog
     xbmc.executebuiltin('Action("back")')
 
@@ -39,7 +39,7 @@ class DailiyText(xbmcgui.WindowDialog):
 
     def customInit(self, text):
         
-        border = 50; # px relative to 1280/720 fixed grid resolution
+        border = 50 # px relative to 1280/720 fixed grid resolution
 
         # width is always 1280, height is always 720.
         # getWidth() and getHeight() instead read the REAL screen resolution
@@ -70,9 +70,9 @@ class DailiyText(xbmcgui.WindowDialog):
         self.addControl (self.ctrlScripture)
         self.addControl (self.ctrlComment)
 
-        self.ctrlDate.setText( self.getDateLine(text) );
-        self.ctrlScripture.setText( self.getScriptureLine(text) );
-        self.ctrlComment.setText( self.getComment(text) );
+        self.ctrlDate.setText( self.getDateLine(text) )
+        self.ctrlScripture.setText( self.getScriptureLine(text) )
+        self.ctrlComment.setText( self.getComment(text) )
 
     #get actioncodes from https://github.com/xbmc/xbmc/blob/master/xbmc/guilib/Key.h
     def onAction(self, action):

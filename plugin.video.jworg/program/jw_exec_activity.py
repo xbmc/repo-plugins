@@ -21,52 +21,23 @@ def showActivityIndex():
 
 	html 		= jw_common.loadUrl(url)
 
-	# see_all[n][0] = section index relative url
-	# see_all[n][1] = section title
-	# see_all[n][2] = "See all" localized
-	regexp_see_all = '<p class="seeAll"><a href="([^"]+)" title="([^"]+)">(.*)</a></p>'
-	see_all = re.findall(regexp_see_all, html)
+	# sections[n][0] = section link
+	# sections[n][1] = section title
 
-	# highlight[n][0] = lastest news relative link
-	# highlight[n][2] = option title attribute
-	# highlight[n][1] = lastest news title
-	regexp_highlight = '<h3><a href="([^"]+)"( title="[^"]+")*>(.*)</a></h3>'
-	highlight = re.findall (regexp_highlight, html)
+    # <p><a href="/it/testimoni-di-geova/attivit%C3%A0/ministero/" title="Ministero pubblico" class="btnLink">
+    # VEDI TUTTO</a></p>
 
+	regexp_section = '<p><a href="([^"]+)" title="([^"]+)" class="btnLink">[^<]+</a></p>'
+	sections = re.findall (regexp_section, html)
 
 	# iages[n][0] = full url of thumb
-	regexp_images = "data-img-size-md='([^']+)'"
-	images = re.findall (regexp_images, html)
+	regexp_images = "data-img-size-sm='([^']+)'"
+	images = re.findall (regexp_images, html)	
 
-	# separated highlight
-
-	count = 0
-	# Show  lastest news from this section, like on website
-	title = jw_common.cleanUpText( highlight[count][2] ) 
-	title = jw_common.removeHtml(title)
-	listItem = xbmcgui.ListItem( 
-		label  			= "[COLOR=FF00B7EB]" + title + "[/COLOR]",
-		thumbnailImage	= images[count],
-	)	
-	params = {
-		"content_type"  : "executable", 
-		"mode" 			: "open_activity_article", 
-		"url"			: highlight[count][0]
-	} 
-	url = jw_config.plugin_name + '?' + urllib.urlencode(params)
-	xbmcplugin.addDirectoryItem(
-		handle		= jw_config.plugin_pid, 
-		url			= url, 
-		listitem	= listItem, 
-		isFolder	= True 
-	) 
-
-	count = 1
-	for section in see_all :
-
-		title = jw_common.cleanUpText( section[1] + " (" + section[2] + ") ") 
+	for section  in sections :
+		title = jw_common.cleanUpText( section[1] ) 
 		listItem = xbmcgui.ListItem( 
-			label  			= "[B]" + title + "[/B]",
+			label  			= title,
 			# no thumbnail available from website, will be used standard folder icon
 		)	
 		params = {
@@ -81,31 +52,13 @@ def showActivityIndex():
 			listitem	= listItem, 
 			isFolder	= True 
 		) 
-
-		# Show lastest news from this section, like on website
-		title = jw_common.cleanUpText( "--> " + highlight[count][2] ) 
-		title = jw_common.removeHtml(title)
-		listItem = xbmcgui.ListItem( 
-			label  			= "[COLOR=FF00B7EB]" + title + "[/COLOR]",
-			thumbnailImage	= images[count],
-		)	
-		params = {
-			"content_type"  : "executable", 
-			"mode" 			: "open_activity_article", 
-			"url"			: highlight[count][0]
-		} 
-		url = jw_config.plugin_name + '?' + urllib.urlencode(params)
-		xbmcplugin.addDirectoryItem(
-			handle		= jw_config.plugin_pid, 
-			url			= url, 
-			listitem	= listItem, 
-			isFolder	= True 
-		) 
-
-		count = count +1
-
+		
+		count = 0
 
 	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
+
+	return;
+
 
 
 def showActivitySection(url):
@@ -160,8 +113,8 @@ def showArticle(url):
 	html 	= jw_common.loadUrl(url)
 
 	activity = Activity()
-	activity.customInit(html);
-	activity.doModal();
+	activity.customInit(html)
+	activity.doModal()
 	del activity
 	xbmc.executebuiltin('Action("back")')
 
@@ -183,7 +136,7 @@ class Activity(xbmcgui.WindowDialog):
 
 	def customInit(self, text):
 
-		border = 50; # px relative to 1280/720 fixed grid resolution
+		border = 50 # px relative to 1280/720 fixed grid resolution
 
 		# width is always 1280, height is always 720.
 		bg_image = jw_config.dir_media + "blank.png"
@@ -224,26 +177,26 @@ class Activity(xbmcgui.WindowDialog):
 		if action == ACTION_MOVE_UP:
 			if y > 0:
 				return
-			y = y + 50;
+			y = y + 50
 			self.ctrlText.setPosition(x,y)
 			return
 
 		if action == ACTION_MOVE_DOWN:
 			(x,y) =  self.ctrlText.getPosition()
-			y = y - 50;
+			y = y - 50
 			self.ctrlText.setPosition(x,y)
 			return
 
 		if action == ACTION_PAGE_UP:
 			if y > 0:
 				return
-			y = y + 500;
+			y = y + 500
 			self.ctrlText.setPosition(x,y)
 			return
 
 		if action == ACTION_PAGE_DOWN:
 			(x,y) =  self.ctrlText.getPosition()
-			y = y - 500;
+			y = y - 500
 			self.ctrlText.setPosition(x,y)
 			return
 

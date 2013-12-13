@@ -10,7 +10,7 @@ except:
  	import storageserverdummy as StorageServer
 
 cache = StorageServer.StorageServer("plugin://plugin.video.jworg/", 24) 
-cache.delete("%");
+cache.delete("%")
 
 dialog = xbmcgui.Dialog()
 

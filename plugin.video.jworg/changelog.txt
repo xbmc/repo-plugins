@@ -1,3 +1,18 @@
+0.3.2
+-----
+
+Bug fixes:
++ Modified "Newsroom" to react (again) to changes in jw.org html code
++ Modified "Activities" to react (again) to changes in jw.org html code
+
+Code:
++ Change audio list play mode; now addon is ultrafast in listing audio item ! 
++ Changed print into xbmc.log
++ Switched from xbmcplugin to xbmcaddon in the setting related code
+
+Small enhancements:
++ Auto save of language if detected a supported language; user can see the right language setted when opening for the first time th addon setting window
+
 0.3.1
 -----
 

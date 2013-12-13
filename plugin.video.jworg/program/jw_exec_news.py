@@ -21,7 +21,7 @@ def showNewsIndex():
 	url 		= url + jw_config.const[language]["news_index"] 
 	
 	html 		= jw_common.loadUrl(url)
-
+	
 	regexp_title = '<h3 class="tsrTtle"><a href="([^"]+)"( title="[^"]+")?>([^<]+)</a></h3>'
 	news_found = re.findall(regexp_title, html)
 
@@ -33,10 +33,16 @@ def showNewsIndex():
 	for news in news_found:
 
 		title = jw_common.cleanUpText( news[2] ) 
+
+		# Stop news parsing at the first lateral link (an head) found
+		if "/?v=" in news[0] :
+			break;
+
 		listItem = xbmcgui.ListItem( 
 			label  			= title,
 			thumbnailImage 	= images[count][2]
 		)	
+
 		params = {
 			"content_type"  : "executable", 
 			"mode" 			: "open_news_page", 
@@ -60,8 +66,8 @@ def showNewsPage(url):
 	html 	= jw_common.loadUrl(url)
 
 	new = News()
-	new.customInit(html);
-	new.doModal();
+	new.customInit(html)
+	new.doModal()
 	del new
 	xbmc.executebuiltin('Action("back")')
 
@@ -82,7 +88,7 @@ class News(xbmcgui.WindowDialog):
 
 	def customInit(self, text):
 
-		border = 50; # px relative to 1280/720 fixed grid resolution
+		border = 50 # px relative to 1280/720 fixed grid resolution
 
 		# width is always 1280, height is always 720.
 		bg_image = jw_config.dir_media + "blank.png"
@@ -123,26 +129,26 @@ class News(xbmcgui.WindowDialog):
 		if action == ACTION_MOVE_UP:
 			if y > 0:
 				return
-			y = y + 50;
+			y = y + 50
 			self.ctrlText.setPosition(x,y)
 			return
 
 		if action == ACTION_MOVE_DOWN:
 			(x,y) =  self.ctrlText.getPosition()
-			y = y - 50;
+			y = y - 50
 			self.ctrlText.setPosition(x,y)
 			return
 
 		if action == ACTION_PAGE_UP:
 			if y > 0:
 				return
-			y = y + 500;
+			y = y + 500
 			self.ctrlText.setPosition(x,y)
 			return
 
 		if action == ACTION_PAGE_DOWN:
 			(x,y) =  self.ctrlText.getPosition()
-			y = y - 500;
+			y = y - 500
 			self.ctrlText.setPosition(x,y)
 			return
 

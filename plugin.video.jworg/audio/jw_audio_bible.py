@@ -73,9 +73,17 @@ def showAudioBibleBookJson(book_num):
 
 		# Skip 'zip' files
 		if mp3["mimetype"] != "audio/mpeg":
-			continue;
+			continue
 
-		url = mp3["file"]["url"]
+		params = {
+			"content_type"  : "audio", 
+			"mode"          : "play_mp3", 
+			"file_url"      : mp3["file"]["url"]
+		}
+
+		#url = mp3["file"]["url"]
+		url = jw_config.plugin_name + '?' + urllib.urlencode(params)    
+
 		title = book_name + " - " + mp3["title"]
 
 		listItem = xbmcgui.ListItem(
@@ -87,6 +95,8 @@ def showAudioBibleBookJson(book_num):
 			type 		= 'Music', 
 			infoLabels 	= {'Title': title }
 		)
+
+		listItem.setProperty("IsPlayable","true")
 
 		xbmcplugin.addDirectoryItem(
 			handle		= jw_config.plugin_pid, 

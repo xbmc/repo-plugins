@@ -37,6 +37,17 @@ class AddonHelper:
 		self._xbmcaddon = xbmcaddon
 		return xbmcaddon
 		
+	def addon(self):
+		if self.__settings__: return self.__settings__
+		self.__settings__ = self.xbmcaddon().Addon(id=self._pluginID)
+		return self.__settings__
+	
+	def addonInfo(self,info):
+		return self.addon().getAddonInfo(info)
+	
+	def version(self):
+		return self.addonInfo('version')
+		
 	def urllib2(self):
 		if self._urllib2: return self._urllib2
 		import urllib2

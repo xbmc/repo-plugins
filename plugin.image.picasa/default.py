@@ -4,9 +4,6 @@ from addon import AddonHelper
 
 __plugin__ =  'picasa'
 __author__ = 'ruuk'
-__url__ = 'http://code.google.com/p/picasaphotos-xbmc/'
-__date__ = '01-22-2012'
-__version__ = '1.0.0'
 
 #xbmc.executebuiltin("Container.SetViewMode(500)")
 
@@ -153,7 +150,7 @@ class picasaPhotosSession(AddonHelper):
 				
 	def process(self,mode,url,name,user,terms):
 		if mode==None or url==None or len(url)<1:
-			print 'plugin.image.picasa - Version: ' + __version__ 
+			print 'plugin.image.picasa - Version: %s' % self.version() 
 			self.CATEGORIES()
 		elif mode==1:
 			self.ALBUMS(user=url)
@@ -231,18 +228,18 @@ class picasaPhotosSession(AddonHelper):
 								]
 			content = p.media.content[-1]
 			mtype = 'pictures'
-			url = p.content.src
-			first,second = url.rsplit('/',1)
-			url = '/'.join([first,'s0',second]) + '&t=' + str(time.time()) #without this, photos larger than 2048w XBMC says: "Texture manager unable to load file:" - Go Figure
-			#url = self.urllib().quote(url)
-			#url = 'plugin://plugin.image.picasa/?photo_url=' + url
-			#print url,p.media.description.text
+			img_url = p.content.src
+			first,second = img_url.rsplit('/',1)
+			img_url = '/'.join([first,'s0',second]) + '&t=' + str(time.time()) #without this, photos larger than 2048w XBMC says: "Texture manager unable to load file:" - Go Figure
+			#img_url = self.urllib().quote(img_url)
+			#img_url = 'plugin://plugin.image.picasa/?photo_url=' + img_url
+			#print img_url,p.media.description.text
 			title = p.media.description.text or p.title.text or p.media.title.text
 			title = title.replace('\n',' ')
 			if content.medium == 'video':
 				mtype = 'video'
-				url = content.url
-			contextMenu.append(('Download','XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,download,%s)' % url))
+				img_url = content.url
+			contextMenu.append(('Download','XBMC.RunScript(special://home/addons/plugin.image.picasa/default.py,download,%s)' % img_url))
 			if p.media.thumbnail and len(p.media.thumbnail) > 2:
 				thumb = p.media.thumbnail[2].url
 			else:
@@ -367,6 +364,7 @@ class picasaPhotosSession(AddonHelper):
 	def ALBUM(self,aid,user='default'):
 		start = self.getParamInt('start_index',1)
 		uri = '/data/feed/api/user/%s/albumid/%s?kind=photo' % (user,aid)
+		print uri
 		photos = self.api().GetFeed(uri,limit=self.maxPerPage(),start_index=start)
 		self.addPhotos(photos,mode=101,user=user)
 		

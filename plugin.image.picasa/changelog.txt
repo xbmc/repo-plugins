@@ -1,6 +1,10 @@
 picasaPhotos Changelog
 	
-Current Version : 1.0.0
+Current Version : 1.0.1
+
+*** 1.0.1 ***
+
+Fix for errors trying to view next page of images
 
 *** 1.0.0 ***
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.mms" name="Missing Movie Scanner" version="3.3.1" provider-name="null_pointer">
+<addon id="plugin.video.mms" name="Missing Movie Scanner" version="3.3.2" provider-name="null_pointer">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>

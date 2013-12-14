@@ -40,6 +40,11 @@ filesFound = 0
 def log(line):
     if DEBUG_LOGGING:
         print "MMS : " + line#repr(line)
+        
+    #xbmc.log(line, 2)
+    #xbmc.log("Test", 0) #Debug
+    #xbmc.log("text", 1) #Info
+    #xbmc.log("Test", 2) #Notive
 
 def clean_name(text):
     text = text.replace('%21', '!')
@@ -140,6 +145,9 @@ def file_contains_forbiden(filename):
 def walk_Path(path, walked_files, progress):
     log("walk_Path(" + path + ")")
     
+    if progress.iscanceled():
+        return    
+    
     global dirCount
     global fileCount
     global filesFound
@@ -187,6 +195,8 @@ def walk_Path(path, walked_files, progress):
     dirCount += 1
     
     for file in files:
+        if progress.iscanceled():
+            return
         if file['filetype'] == "directory":
             walk_Path(file["file"], walked_files, progress)
         elif file['filetype'] == "file":

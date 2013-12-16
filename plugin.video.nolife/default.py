@@ -147,13 +147,13 @@ def login():
     if re.compile('pas valide').findall(str(res)):
         xbmc.log(msg=pluginLogHeader + "Invalid username, aborting",level=xbmc.LOGFATAL)
         err = xbmcgui.Dialog()
-        err.ok(unicode(language(35002)), unicode(language(34001)), unicode(language(34002)))
+        err.ok(unicode(language(30023)), unicode(language(30017)), unicode(language(30018)))
         settings.setSetting('loginok', "")
         raise loginExpcetion()
     elif re.compile('votre quota').findall(str(res)):
         xbmc.log(msg=pluginLogHeader + "User account locked",level=xbmc.LOGSEVERE)
         err = xbmcgui.Dialog()
-        err.ok(unicode(language(35001)), unicode(language(34003)), unicode(language(34004)), unicode(language(34005)))
+        err.ok(unicode(language(30022)), unicode(language(30019)), unicode(language(30020)), unicode(language(30021)))
         settings.setSetting('loginok', "")
         raise loginExpcetion()
     else:
@@ -165,9 +165,9 @@ def initialIndex():
     
     Create the initial menu with the right identification values for the add-on to know which option have been selected
     """
-    add_dir(unicode(language(33016)), 'http://mobile.nolife-tv.com', MODE_LAST_SHOWS, '')
-    add_dir(unicode(language(33017)), 'http://mobile.nolife-tv.com', MODE_CATEGORIES, '')
-    add_dir(unicode(language(33018)), 'http://mobile.nolife-tv.com', MODE_SEARCH, '')
+    add_dir(unicode(language(30014)), 'http://mobile.nolife-tv.com', MODE_LAST_SHOWS, '')
+    add_dir(unicode(language(30015)), 'http://mobile.nolife-tv.com', MODE_CATEGORIES, '')
+    add_dir(unicode(language(30016)), 'http://mobile.nolife-tv.com', MODE_SEARCH, '')
 
 def getlastVideos():
     """Get last uploaded videos

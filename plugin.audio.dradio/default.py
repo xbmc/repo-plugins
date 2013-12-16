@@ -34,9 +34,9 @@ Addon = xbmcaddon.Addon("plugin.audio.dradio")
 
 icons = {
 	0: join(Addon.getAddonInfo('path'), 'icon.png'),
-	1: join(Addon.getAddonInfo('path'), 'resources', 'media', 'dlf.png'),
-	3: join(Addon.getAddonInfo('path'), 'resources', 'media', 'dkultur.png'),
-	4: join(Addon.getAddonInfo('path'), 'resources', 'media', 'dwissen.png'),
+	1: join(Addon.getAddonInfo('path'), 'resources', 'media', 'drw.png'),
+	3: join(Addon.getAddonInfo('path'), 'resources', 'media', 'drk.png'),
+	4: join(Addon.getAddonInfo('path'), 'resources', 'media', 'dlf.png'),
 }
 
 
@@ -61,9 +61,9 @@ def CONFIG():
 	playlist = (hosturl + baseurl + playlist).replace('//', '/').replace(':/', '://')
 	article = (hosturl + baseurl + article).replace('//', '/').replace(':/', '://')
 	streams = {
-		1: streams.getElementsByTagName('streamDLR')[0].getAttribute('value'),
-		3: streams.getElementsByTagName('streamDLF')[0].getAttribute('value'),
-		4: streams.getElementsByTagName('streamDLW')[0].getAttribute('value'),
+		1: streams.getElementsByTagName('streamDLW')[0].getAttribute('value'),
+		3: streams.getElementsByTagName('streamDLR')[0].getAttribute('value'),
+		4: streams.getElementsByTagName('streamDLF')[0].getAttribute('value'),
 	}
 
 
@@ -75,17 +75,17 @@ def INDEX():
 		'mode': 0,
 		'station': 0,
 	})
-	addDir(Addon.getLocalizedString(30002), icons[1], {
+	addDir(Addon.getLocalizedString(30002), icons[4], {
 		'mode': 0,
-		'station': 1,
+		'station': 4,
 	})
 	addDir(Addon.getLocalizedString(30003), icons[3], {
 		'mode': 0,
 		'station': 3,
 	})
-	addDir(Addon.getLocalizedString(30004), icons[4], {
+	addDir(Addon.getLocalizedString(30004), icons[1], {
 		'mode': 0,
-		'station': 4,
+		'station': 1,
 	})
 
 

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <strings>
     <!-- Parameters -->
-    <string id="32001">Authentication</string>
-    <string id="32010">Use a Nolife account</string>
-    <string id="32011">Username</string>
-    <string id="32012">Password</string>
-    <string id="32013">See previews</string>
+    <string id="30001">Authentication</string>
+    <string id="30010">Use a Nolife account</string>
+    <string id="30011">Username</string>
+    <string id="30012">Password</string>
+    <string id="30013">See previews</string>
     <string id="33001">Appearance</string>
     <string id="33011">Order by</string>
     <string id="33012">Show all videos</string>
     <string id="33013">Number of videos to show</string>
     <string id="33014">Quality</string>
     <string id="33015">Show already seen videos</string>
+    <string id="33020">Number of shows in last shows</string>
+    <string id="33021">Autorefresh directories</string>
     
     <!-- List of shows messages -->
     <string id="33016">Last shows</string>

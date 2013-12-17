@@ -244,7 +244,7 @@ class picasaPhotosSession(AddonHelper):
 				thumb = p.media.thumbnail[2].url
 			else:
 				thumb = p.media.content[0].url
-			if not self.addLink(title,url,thumb,total=total,contextMenu=contextMenu,mtype=mtype): break
+			if not self.addLink(title,img_url,thumb,total=total,contextMenu=contextMenu,mtype=mtype): break
 			
 		## Next     Page ------------------------#
 		total = int(photos.total_results.text)

@@ -1,0 +1,14 @@
+Richplanet Tv Video Plugin created by celadoor.
+
+Version 0.1.1 -Fixed add-on for repo.
+
+Version 0.1.0 -Added search option, added more video lists and settings
+
+Version 0.0.3 -Added extended description on video launch page,cleaned up add-on for repo.
+
+Version 0.0.2 -Added description of selected video, (must be enabled in skin).
+-Improved video quality to standard definition.
+
+Version 0.0.1 -Initial Release. Plays all the latest Richplanet videos.
+
+

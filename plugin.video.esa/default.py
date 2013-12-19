@@ -242,7 +242,7 @@ def play_video(params):
             lutil.log("esa.play: We have found this alt video URL for '%s' language: '%s'" % (language, lang_url))
             buffer_link = lutil.carga_web(lang_url)
 
-    pattern_video = '<a id="download_link" href="([^"]*?)"'
+    pattern_video = '<a href="([^"]*?)" id="download_link"'
     video_url = lutil.find_first(buffer_link, pattern_video)
     if video_url:
         try:

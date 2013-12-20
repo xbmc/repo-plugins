@@ -1,3 +1,9 @@
+[B]4.4.14[/B]
+- Diverse sideendringer
+- Fikset negativ starttid enkelte undertekster
+- Raskere lasting av episodelister (programinformasjon nå tilgjengelig på samme side)
+- Fjernet «kvalitet» fra innstillinger (blir bestemt av Innstillinger -> System -> Internettilgang -> Båndbreddebegrensning)
+
 [B]4.4.13[/B]
 - Sideendringer
 

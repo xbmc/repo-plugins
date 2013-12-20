@@ -24,7 +24,6 @@ from xbmcgui import ListItem
 import plugin
 plugin = plugin.Plugin()
 
-BITRATE = int(plugin.get_setting('bitrate')) + 1
 SHOW_SUBS = int(plugin.get_setting('showsubtitles')) == 1
 
 @plugin.route('/')
@@ -94,7 +93,7 @@ def mostrecent():
   view(*data.get_most_recent())
 
 @plugin.route('/mostpopular')
-def mostpolpular():
+def mostpopular():
   import data
   view(*data.get_most_popular())
 
@@ -166,7 +165,7 @@ def episodes(series_id, season_id):
 @plugin.route('/program/<video_id>/.*')
 def play(video_id, series_id=""):
   import data, subs
-  url = data.get_media_url(video_id, BITRATE)
+  url = data.get_media_url(video_id)
   xbmcplugin.setResolvedUrl(plugin.handle, True, ListItem(path=url))
   player = xbmc.Player()
   subtitle = subs.get_subtitles(video_id)

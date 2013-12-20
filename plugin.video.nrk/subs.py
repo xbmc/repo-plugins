@@ -19,7 +19,7 @@ import xbmc
 from data import xhrsession as requests
 
 def get_subtitles(video_id):
-  html = requests.get("http://tv.nrk.no/programsubtitles/%s" % video_id).text
+  html = requests.get("http://v7.psapi.nrk.no/programs/%s/subtitles/tt" % video_id).text
   if not html:
     return None
   
@@ -41,7 +41,11 @@ def get_subtitles(video_id):
 
 def _stringToTime(txt):
   p = txt.split(':')
-  return int(p[0])*3600+int(p[1])*60+float(p[2])
+  try:
+    ms = float(p[2])
+  except ValueError:
+    ms = 0
+  return int(p[0]) * 3600 + int(p[1]) * 60 + ms
 
 def _timeToString(time):
   return '%02d:%02d:%02d,%03d' % (time/3600,(time%3600)/60,time%60,(time%1)*1000)

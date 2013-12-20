@@ -17,11 +17,11 @@ import json
 import requests
 import HTMLParser
 import StorageServer
-import CommonFunctions
+import CommonFunctions as common
 from itertools import repeat
 
 html_decode = HTMLParser.HTMLParser().unescape
-parseDOM = CommonFunctions.parseDOM
+parseDOM = common.parseDOM
 cache = StorageServer.StorageServer('nrk.no', 336)
 
 session = requests.session()
@@ -107,42 +107,38 @@ def get_search_results(query, page=1):
 
 
 def get_seasons(arg):
-  """ returns: </program/Episodes/aktuelt-tv/11998> """
   url = "http://tv.nrk.no/serie/%s" % arg
   html = xhrsession.get(url).text
-  html = parseDOM(html, 'div', {'id':'seasons'})
-  html = parseDOM(html, 'noscript')
-  titles = parseDOM(html, 'a', {'class':'seasonLink'})
-  titles = [ "Sesong %s" % html_decode(t) for t in titles ]
-  ids = parseDOM(html, 'a', {'class':'seasonLink'}, ret='href')
+  items = parseDOM(html, 'li', {'class':'season-menu-item'})
+  titles = [ html_decode(parseDOM(li, 'a')[0]) for li in items ]
+  ids = [ parseDOM(li, 'a', ret='data-season')[0] for li in items ]
+  urls = [ "/program/Episodes/%s/%s/0" % (arg, i) for i in ids ]
   thumbs = repeat(_thumb_url(arg))
   fanart = repeat(_fanart_url(arg))
-  return titles, ids, thumbs, fanart
+  return titles, urls, thumbs, fanart
 
 
 def get_episodes(series_id, season_id):
-  """ returns: </serie/aktuelt-tv/nnfa50051612/16-05-2012..> """
   url = "http://tv.nrk.no/program/Episodes/%s/%s" % (series_id, season_id)
   html = xhrsession.get(url).text
-  trs = parseDOM(html, 'tr', {'class':'[^"\']*episode-row js-click *'})
-  titles = [ parseDOM(tr, 'a', {'class':'p-link'})[0] for tr in trs ]
-  titles = map(html_decode, titles)
-  ids = [ parseDOM(tr, 'a', {'class':'p-link'}, ret='href')[0] for tr in trs ]
-  ids = [ e.split('http://tv.nrk.no')[-1] for e in ids ]
-  descr = [lambda x=x: _get_descr(x) for x in ids ]
+  ul = parseDOM(html, 'ul', {'class':'episode-list'})
+  assert len(ul) == 1
+  cls = parseDOM(ul, 'li', ret='class')
+  items = parseDOM(ul, 'li')
+  items = [ items[i] for i in range(len(items)) if "no-rights" not in cls[i] ]
+  titles = [ parseDOM(i, 'h3')[0] for i in items ]
+  titles = [ html_decode(common.stripTags(_)) for _ in titles ]
+  urls = [ parseDOM(i, 'a', ret='href')[0] for i in items ]
+  descr = [ parseDOM(i, 'p')[0] for i in items ]
+  descr = [ html_decode(common.stripTags(_)) for _ in descr ]
   thumbs = repeat(_thumb_url(series_id))
   fanart = repeat(_fanart_url(series_id))
-  return titles, ids, thumbs, fanart, descr
+  return titles, urls, thumbs, fanart, descr
 
 
-def get_media_url(video_id, bitrate):
-  bitrate = 4 if bitrate > 4 else bitrate
+def get_media_url(video_id):
   url = "http://v7.psapi.nrk.no/mediaelement/%s" % video_id
-  url = _get_cached_json(url, 'mediaUrl')
-  url = url.replace('/z/', '/i/', 1)
-  url = url.rsplit('/', 1)[0]
-  url = url + '/index_%s_av.m3u8' % bitrate
-  return url
+  return xhrsession.get(url).json()['mediaUrl']
 
 
 def _get_cached_json(url, node):
@@ -164,7 +160,7 @@ def _fanart_url(id):
   return "http://nrk.eu01.aws.af.cm/f/%s" % id.strip('/')
 
 def _get_descr(url):
-  url = "http://nrk.no/serum/api/video/%s" % url.split('/')[3]
+  url = "http://v7.psapi.nrk.no/mediaelement/%s" % url.split('/')[3]
   try:
     return _get_cached_json(url, 'description')
   except:

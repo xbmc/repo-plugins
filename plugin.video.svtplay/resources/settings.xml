@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <category label="40001">
+  <category label="30601">
     <setting id="diritems" type="slider" label="30503" default="20" range="20,10,100" option="int" />
     <setting id="alpha" type="bool" label="30502" default="false" />
     <setting id="fullparse" type="bool" label="30506" default="false" />
@@ -8,7 +8,7 @@
     <setting id="showsubtitles" type="bool" label="30501" default="false" />
     <setting id="debug" type="bool" label="30500" default="false" />
   </category>
-  <category label="40002">
+  <category label="30602">
     <setting id="hlsstrip" type="bool" label="30505" default="false" />
     <setting id="bwselect" type="bool" label="30507" default="false" enable="eq(-1,false)" />
     <setting id="bandwidth" type="select" label="30508" default="2500" values="300|500|900|1600|2500" enable="eq(-1,true) + eq(-2,false)" />

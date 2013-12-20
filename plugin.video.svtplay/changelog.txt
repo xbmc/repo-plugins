@@ -1,3 +1,7 @@
+Version 3.3.5
+-------------
+- Fix issue #89 by hiding "Oppetarkiv" in the category listing
+
 Version 3.3.4
 -------------
 - Hide live streams on the start page and re-enable addon in repository

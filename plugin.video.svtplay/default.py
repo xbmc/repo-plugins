@@ -421,8 +421,8 @@ def createDirItem(article,mode):
 
 def startVideo(url):
   """
-  Starts the XBMC player if a valid video url is 
-  found for the given page url.
+  Starts the XBMC player if a valid video URL is 
+  found for the given page URL.
   """
   if not url.startswith("/"):
     url = "/" + url
@@ -435,9 +435,36 @@ def startVideo(url):
   jsonObj = json.loads(jsonString)
   common.log(jsonString)
 
-  subtitle = None
+  (videoUrl, errormsg) = getVideoUrl(jsonObj)
+  subtitle = getSubtitle(jsonObj)
   player = xbmc.Player()
   startTime = time.time()
+
+  if videoUrl:
+    xbmcplugin.setResolvedUrl(pluginHandle, True, xbmcgui.ListItem(path=videoUrl))
+
+    if subtitle:
+      while not player.isPlaying() and time.time() - startTime < 10:
+        time.sleep(1.)
+
+      player.setSubtitles(subtitle)
+
+      if not SHOW_SUBTITLES:
+        player.showSubtitles(False)
+  else:
+    # No video URL was found
+    dialog = xbmcgui.Dialog()
+    if not errormsg:
+      dialog.ok("SVT Play", localize(30100))
+    else:
+      dialog.ok("SVT Play", errormsg)
+
+
+def getVideoUrl(jsonObj):
+  """
+  Returns a video URL from a JSON object and
+  an error message, if available.
+  """
   videoUrl = None
   extension = "None"
   args = ""
@@ -450,6 +477,8 @@ def startVideo(url):
     """
     tmpurl = video["url"]
     argpos = tmpurl.rfind("?")
+    errormsg = ""
+
     if argpos > 0:
       args = tmpurl[argpos:]
       tmpurl = tmpurl[:argpos]
@@ -472,17 +501,10 @@ def startVideo(url):
       continue
     videoUrl = tmpurl
 
-  for sub in jsonObj["video"]["subtitleReferences"]:
-    if sub["url"].endswith(".wsrt"):
-      subtitle = sub["url"]
-    else:
-      if len(sub["url"]) > 0:
-        common.log("Skipping unknown subtitle: " + sub["url"])
-
   if extension == "HLS" and HLS_STRIP:
     videoUrl = hlsStrip(videoUrl)
   elif extension == "HLS" and BW_SELECT: 
-    videoUrl = getStream(videoUrl)
+    (videoUrl, errormsg) = getStreamForBW(videoUrl)
 
   if extension == "F4M":
     videoUrl = videoUrl.replace("/z/", "/i/").replace("manifest.f4m","master.m3u8")
@@ -493,36 +515,37 @@ def startVideo(url):
   if extension == "None" and videoUrl:
     # No supported video was found
     common.log("No supported video extension found for URL: " + videoUrl)
-    videoUrl = None
+    return None
 
-  if videoUrl:
-    
-    if args and not (HLS_STRIP or BW_SELECT):
-      common.log("Appending arguments: "+args)
-      videoUrl = videoUrl + args
+  if args and not (HLS_STRIP or BW_SELECT):
+    videoUrl = videoUrl + args
 
-    if extension == "MP4" and videoUrl.startswith("rtmp://"):
-      videoUrl = videoUrl + " swfUrl="+svt.SWF_URL+" swfVfy=1"
- 
-    xbmcplugin.setResolvedUrl(pluginHandle, True, xbmcgui.ListItem(path=videoUrl))
+  if extension == "MP4" and videoUrl.startswith("rtmp://"):
+    videoUrl = videoUrl + " swfUrl="+svt.SWF_URL+" swfVfy=1"
 
-    if subtitle:
+  return (videoUrl, errormsg)
 
-      while not player.isPlaying() and time.time() - startTime < 10:
-        time.sleep(1.)
 
-      player.setSubtitles(subtitle)
+def getSubtitle(jsonObj):
+  """
+  Returns a subtitle from a JSON object
+  """
+  subtitle = None
 
-      if not SHOW_SUBTITLES:
-        player.showSubtitles(False)
-  else:
-    # No video URL was found
-    dialog = xbmcgui.Dialog()
-    dialog.ok("SVT PLAY", localize(30100))
+  for sub in jsonObj["video"]["subtitleReferences"]:
+    if sub["url"].endswith(".wsrt"):
+      subtitle = sub["url"]
+    else:
+      if len(sub["url"]) > 0:
+        common.log("Skipping unknown subtitle: " + sub["url"])
+
+  return subtitle
 
 
 def mp4Handler(jsonObj):
   """
+  Returns a mp4 stream URL.
+
   If there are several mp4 streams in the JSON object:
   pick the one with the highest bandwidth.
 
@@ -552,7 +575,7 @@ def mp4Handler(jsonObj):
       bitrate = video["bitrate"]
       url = video["url"]          
 
-  common.log("mp4 handler info: bitrate="+str(bitrate)+" url="+url)
+  common.log("Info: bitrate="+str(bitrate)+" url="+url)
   return url
 
 
@@ -596,15 +619,16 @@ def hlsStrip(videoUrl):
     return hlsurl
 
 
-def getStream(url):
+def getStreamForBW(url):
   """
-  Returns a stream matching the set bandwidth
+  Returns a stream URL for the set bandwidth,
+  and an error message, if applicable.
   """
   
   f = urllib.urlopen(url)
   lines = f.readlines()
   
-  hlsurl = ''
+  hlsurl = ""
   marker = "#EXT-X-STREAM-INF"
   found = False
 
@@ -621,9 +645,15 @@ def getStream(url):
           found = True
   
   f.close()
-  hlsurl = hlsurl.rstrip()
-  common.log("Returned stream url: " + hlsurl)
-  return hlsurl
+
+  if found:
+    hlsurl = hlsurl.rstrip()
+    common.log("Returned stream url: " + hlsurl)
+    return (hlsurl, '')
+  else:
+    errormsg = "No stream found for bandwidth setting " + str(LOW_BANDWIDTH)
+    common.log(errormsg)
+    return (None, errormsg)
 
 
 def addDirectoryItem(title, params, thumbnail = None, folder = True, live = False, info = None):

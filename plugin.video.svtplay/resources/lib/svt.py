@@ -12,7 +12,7 @@ SWF_URL = "http://www.svtplay.se/public/swf/video/svtplayer-2013.05.swf"
 BANDWIDTH = [300,500,900,1600,2500,5000]
 
 URL_A_TO_O = "/program"
-URL_CATEGORIES = "/kategorier"
+URL_CATEGORIES = "/program"
 URL_CHANNELS = "/kanaler"
 URL_TO_LATEST = "?tab=senasteprogram&sida=1"
 URL_TO_LATEST_NEWS = "?tab=senastenyhetsprogram&sida=1"
@@ -130,6 +130,11 @@ def getCategories():
     category = {}
     category["url"] = common.parseDOM(li, "a", ret = "href")[0]
     title = common.parseDOM(li, "span")[0]
+
+    if category["url"].endswith("oppetarkiv"):
+      # Skip the "Oppetarkiv" category
+      continue
+
     category["title"] = common.replaceHTMLCodes(title)
     categories.append(category)
 

@@ -87,7 +87,7 @@ def _http_query_with_urlprefix(query,urlPrefix):
 				response = urllib2.urlopen(request)
 				break
 			except urllib2.URLError, error:
-				raise JDError('Failed to connect to server.')
+				raise JDError('Failed to connect to server (=JDownloader application).')
 			except httplib.BadStatusLine, error:
 				if (request_count > 1):
 					raise JDError('Failed to request %s "%s".' % (self.url, query))

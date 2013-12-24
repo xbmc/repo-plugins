@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon  id="plugin.video.xbmb3c" 
+        name="XBMB3C" 
+        version="0.6.5" 
+        provider-name="xnappo">
+  <requires>
+    <import addon="script.module.requests" version="1.1.0" />
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension    point="xbmc.python.pluginsource"
+                library="default.py">
+        <provides>executable video audio image</provides>
+  </extension>
+  <extension point="xbmc.service" library="service.py" start="startup">
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://mediabrowser3.com/community/index.php?/topic/2108-xbmb3c-media-browser-addon-for-xbmc/</forum>
+    <website>http://mediabrowser3.com/</website>
+    <source>https://github.com/xnappo/plugin.video.XBMB3C</source>
+    <summary lang="en">Browse and play local video, music and photo media files managed by MediaBrowser3.</summary>
+    <description lang="en">Browse and play local video, music and photo media files managed by MediaBrowser3.</description>
+    <disclaimer lang="en">Skin modifications may be needed for all features to work. Aeon MQ5 works best unmodified.  Aeon Nox mods provided in skin_mods directory</disclaimer>
+  </extension>
+</addon>

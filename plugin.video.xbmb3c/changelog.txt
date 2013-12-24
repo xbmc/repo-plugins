@@ -1,0 +1,53 @@
+0.6.5 - Added preliminary transcoding support
+      - Added preliminary music support (plays, no metadata yet)
+      - Fixed bug with non-ASCII characters in collection name
+      - Gracefully handle username not specified
+      - Fixed XML compliance issue for official repo submission
+
+0.6.0 - Added resume tracking
+      - Added playback from resume point (SMB only)
+      - Added support for multiple users
+      - Added password authentication
+      - Added SMB username/password option
+      - Added option to play from HTTP instead of SMB (note: resume does not work with this option)
+      - Added default sort modes
+      - Changed to not resolve real path until playback.  Pi speedup?
+      - Fixed boxsets containing only one movie
+      - Removed xml caching - not needed (switched from httplib2 to requests)       
+      - Cleaned up more for official repo submission requirements
+
+0.5.5 - Finished requirements for official repo submission
+      - Added localization
+      - Added 'Auto enter single folder items' option
+      - Added 'Play from here'
+      - Added Genre filter to context menu
+      - Added 'NextUp' menu entry 
+
+0.5.0 - Added Sorting support via Context Menu
+      - Added Sort order support via Context Menu
+      - Fixed bug with unaired shows appearing in TV
+      - Fixed bug with certain characters causing errors in playback path
+
+0.4.5 - Added Recently Added Movies, TV
+      - Added Favorites support (excuse the trophy icon instead of heart, best I could do)
+      - Added Upcoming TV
+      - Added option to mark watched on play (still not progress tracking)
+      - Preparing for official repository submission (dos2unix lfs)
+      - Made context menu smarter
+      - Use Show art for Episodes (for now - MB3 episode artwork doesn't play well will XBMC skins)
+      - Changed cache to default to 0 (off) - this was needed only because of a FlexRaid issue on my system
+      
+0.4.0 - Added section title
+      - Display correct list type for category
+      - Implemented context menus for delete/mark watched/mark unwatched. 
+      - Added episode numbers
+      - Added cast info
+      
+0.3.0 - Fixes boxsets
+      - Added meta-data
+
+0.2.0 - Added caching
+      - Removed more plex stuff
+      - XBMB3C-specific settings
+
+0.1.0 - Initial release

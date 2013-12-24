@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<strings>
+    <!-- Paramètres -->
+    <string id="30001">Général</string>
+    <string id="30002">Qualité</string>
+    
+    <!-- Messages dans la liste -->
+    <string id="30010">Dernières vidéos</string>
+    <string id="30011">Gaming Live</string>
+    <string id="30012">Gaming Live HD</string>
+    <string id="30013">Podcast</string>
+    <string id="30014">Podcast HD</string>
+    
+    <!-- LES DERNIERES VIDEOS de jeuxvideo.com -->
+    <string id="30015">Toutes Machines</string>
+    <string id="30016">PC</string>
+    <string id="30017">PlayStation 4</string>
+    <string id="30018">Xbox One</string>
+    <string id="30019">PlayStation 3</string>
+    <string id="30020">Xbox 360</string>
+    <string id="30021">Wii U</string>
+    <string id="30022">Wii</string>
+    <string id="30023">Nintendo 3DS</string>
+    <string id="30024">PlayStation Vita</string>
+    <string id="30025">Nintendo DS</string>
+    <string id="30026">PlayStation Portable</string>
+    <string id="30027">Iphone</string>
+    <string id="30028">Android</string>
+    <string id="30029">Web</string>
+
+    <!-- Podcast de jeuxvideo.com -->
+    <string id="30030">Reportages</string>
+    <string id="30031">Chroniques</string>
+    <string id="30032">3615 Usul</string>
+    <string id="30033">Crossed</string>
+    <string id="30034">Draw in Game</string>
+    <string id="30035">Expéditions inutiles</string>
+    <string id="30036">Le Fond De L'Affaire</string>
+    <string id="30037">Looking For Games</string>
+    <string id="30038">L'univers du jeu indépendant</string>
+    <string id="30039">Speed Game</string>
+
+</strings>

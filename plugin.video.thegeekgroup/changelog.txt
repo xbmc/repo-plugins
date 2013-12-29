@@ -1,5 +1,8 @@
 Changelog
 
+1.2.0 10-6-2013
+updated to new language system
+
 1.1.0 3-15-2013
 rewrote the plugin to play from justin.tv/thegeekgroup code snippets from twit.tv xbmc plugin 
 

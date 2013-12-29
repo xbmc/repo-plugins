@@ -1,0 +1,12 @@
+# unknown if we need an API key for youtube but if we do i have one tied to my personial youtube account --- KB3NZQ Michael Himmelstein
+# replace %s with the user name
+
+def GetAndPrintUserUploads(username):
+  yt_service = gdata.youtube.service.YouTubeService()
+  uri = 'http://gdata.youtube.com/feeds/api/users/thegeekgroup/uploads' % username
+  PrintVideoFeed(yt_service.GetYouTubeVideoFeed(uri))
+  
+  
+  
+# now to figure out how to get it into the rest of the plugin i found this code am still looking at other code for the rest of project
+# found some info here but i am having trouble figureing out how to prune it to work  github.com/HenrikDK/youtube-xbmc-plugin.git

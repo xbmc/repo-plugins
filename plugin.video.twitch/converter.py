@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 from twitch import Keys
-
+import json
 
 class JsonListItemConverter(object):
 
@@ -38,39 +39,61 @@ class JsonListItemConverter(object):
                 'path': self.plugin.url_for(endpoint='playLive', name=channelname),
                 'is_playable': True,
                 'icon': image}
-
-    def extractTitleValues(self, channel):
-        return {'streamer': channel.get(Keys.DISPLAY_NAME,
-                                        self.plugin.get_string(34000)),
-                'title': channel.get(Keys.STATUS,
-                                     self.plugin.get_string(34001)),
-                'viewers': channel.get(Keys.VIEWERS,
-                                       self.plugin.get_string(34002))
+                
+    def convertFollowersToListItem(self, follower):
+        videobanner = follower.get(Keys.LOGO, '')
+        return {'label': follower[Keys.DISPLAY_NAME],
+                'path': self.plugin.url_for(endpoint='channelVideos',
+                                            name=follower[Keys.NAME]),
+                'icon': videobanner
+                }
+                
+    def convertVideoListToListItem(self,video):
+        return {'label': video['title'],
+                'path': self.plugin.url_for(endpoint='playVideo',
+                                            id=video['_id']),
+                'is_playable': True,
+                'icon': video.get(Keys.PREVIEW, '')
                 }
 
-    def convertChannelToListItem(self, channel):
+    def convertStreamToListItem(self, stream):
+        channel = stream[Keys.CHANNEL]
         videobanner = channel.get(Keys.VIDEO_BANNER, '')
         logo = channel.get(Keys.LOGO, '')
-        return {'label': self.getTitleForChannel(channel),
+        return {'label': self.getTitleForStream(stream),
                 'path': self.plugin.url_for(endpoint='playLive',
                                             name=channel[Keys.NAME]),
                 'is_playable': True,
                 'icon': videobanner if videobanner else logo
-                }
+        }
 
-    def getTitleForChannel(self, channel):
-        titleValues = self.extractTitleValues(channel)
+    def getTitleForStream(self, stream):
+        titleValues = self.extractStreamTitleValues(stream)
         return self.titleBuilder.formatTitle(titleValues)
 
+    def extractStreamTitleValues(self, stream):
+        channel = stream[Keys.CHANNEL]
+        print json.dumps(channel, indent=4, sort_keys=True)
+
+        if Keys.VIEWERS in channel:
+            viewers = channel.get(Keys.VIEWERS);
+        else:
+            viewers = stream.get(Keys.VIEWERS, self.plugin.get_string(30062))
+
+        return {'streamer': channel.get(Keys.DISPLAY_NAME,
+                                        self.plugin.get_string(30060)),
+                'title': channel.get(Keys.STATUS,
+                                     self.plugin.get_string(30061)),
+                'viewers': viewers}
 
 class TitleBuilder(object):
 
     class Templates(object):
-        TITLE = "{title}"
-        STREAMER = "{streamer}"
-        STREAMER_TITLE = "{streamer} - {title}"
-        VIEWERS_STREAMER_TITLE = "{viewers} - {streamer} - {title}"
-        ELLIPSIS = '...'
+        TITLE = u"{title}"
+        STREAMER = u"{streamer}"
+        STREAMER_TITLE = u"{streamer} - {title}"
+        VIEWERS_STREAMER_TITLE = u"{viewers} - {streamer} - {title}"
+        ELLIPSIS = u'...'
 
     def __init__(self, PLUGIN, line_length):
         self.plugin = PLUGIN
@@ -95,7 +118,7 @@ class TitleBuilder(object):
 
     def cleanTitleValue(self, value):
         if isinstance(value, basestring):
-            return unicode(value).replace('\r\n', ' ').strip().encode('utf-8')
+            return unicode(value).replace('\r\n', ' ').strip()
         else:
             return value
 

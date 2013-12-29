@@ -9,40 +9,43 @@
   <string id="30006">Teams</string>
   
   <!-- search -->
-  <string id="30101">Suche nach Kanälen</string>
+  <string id="30007">Suche nach Kanälen</string>
   
    <!--general --> 
-  <string id="31000">TwitchTV</string>
-  <string id="31001">nächste Seite...</string>
+  <string id="30010">TwitchTV</string>
+  <string id="30011">nächste Seite...</string>
+  <string id="30012">-- Jetzt live --</string>
+  <string id="30013">-- Folgend --</string>
+
 
    <!--notifications --> 
-  <string id="32001">Http Fehler</string>
-  <string id="32002">Keine Live-Daten gefunden</string>
-  <string id="32003">Keine Archive gefunden für</string>
-  <string id="32004">User Token Fehler</string>
-  <string id="32005">Geaenderte Video Einstellung</string>
-  <string id="32006">Gewaehlte Qualitaet nicht verfuegbar...Eventuell Premium Content?</string>
-  <string id="32007">TwitchApi Fehler</string>
-  <string id="32008">JSON Fehler</string>
-  <string id="32009">Fehlerhaftes Datenformat</string>
-  <string id="32010">Bitte Internet-Verbindung pruefen</string>
+  <string id="30020">Http Fehler</string>
+  <string id="30021">Keine Live-Daten gefunden</string>
+  <string id="30022">Keine Archive gefunden für</string>
+  <string id="30023">User Token Fehler</string>
+  <string id="30024">Geaenderte Video Einstellung</string>
+  <string id="30025">Gewaehlte Qualitaet nicht verfuegbar...Eventuell Premium Content?</string>
+  <string id="30026">TwitchApi Fehler</string>
+  <string id="30027">JSON Fehler</string>
+  <string id="30028">Fehlerhaftes Datenformat</string>
+  <string id="30029">Bitte Internet-Verbindung pruefen</string>
   
     <!--settings -->
-  <string id="33000">Video Qualität</string>
-  <string id="33001">Beste</string>
-  <string id="33002">720p</string>
-  <string id="33003">480p</string>
-  <string id="33004">360p</string>
-  <string id="33010">Stream-Bezeichnung</string>
-  <string id="33011">Streamer - Status</string>
-  <string id="33012">Zuschauerzahl - Streamer - Status</string>
-  <string id="33013">Status</string>
-  <string id="33014">Streamer</string>
+  <string id="30040">Video Qualität</string>
+  <string id="30041">Beste</string>
+  <string id="30042">720p</string>
+  <string id="30043">480p</string>
+  <string id="30044">360p</string>
+  <string id="30045">Stream-Bezeichnung</string>
+  <string id="30046">Streamer - Status</string>
+  <string id="30047">Zuschauerzahl - Streamer - Status</string>
+  <string id="30048">Status</string>
+  <string id="30049">Streamer</string>
 
-  <string id="33100">Benutzername</string>
+  <string id="30050">Benutzername</string>
   
   <!--title-->
-  <string id="34000">Unbenannter Streamer</string>
-  <string id="34001">Unbenannter Stream</string>
-  <string id="34002">Unbekannte Zuschauerzahl</string>
+  <string id="30060">Unbenannter Streamer</string>
+  <string id="30061">Unbenannter Stream</string>
+  <string id="30062">Unbekannte Zuschauerzahl</string>
 </strings>

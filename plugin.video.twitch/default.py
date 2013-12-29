@@ -1,17 +1,16 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 from converter import JsonListItemConverter
 from functools import wraps
 from twitch import TwitchTV, TwitchVideoResolver, Keys, TwitchException
 from xbmcswift2 import Plugin  # @UnresolvedImport
-import sys
+import urllib2, json, sys
 
 ITEMS_PER_PAGE = 20
 LINE_LENGTH = 60
 
 PLUGIN = Plugin()
 CONVERTER = JsonListItemConverter(PLUGIN, LINE_LENGTH)
-TWITCHTV = TwitchTV()
+TWITCHTV = TwitchTV(PLUGIN.log)
 
 
 def managedTwitchExceptions(func):
@@ -25,12 +24,12 @@ def managedTwitchExceptions(func):
 
 
 def handleTwitchException(exception):
-    codeTranslations = {TwitchException.NO_STREAM_URL   : 32004,
-                        TwitchException.STREAM_OFFLINE  : 32002,
-                        TwitchException.HTTP_ERROR      : 32001,
-                        TwitchException.JSON_ERROR      : 32008}
+    codeTranslations = {TwitchException.NO_STREAM_URL   : 30023,
+                        TwitchException.STREAM_OFFLINE  : 30021,
+                        TwitchException.HTTP_ERROR      : 30020,
+                        TwitchException.JSON_ERROR      : 30027}
     code = exception.code
-    title = 31000
+    title = 30010
     msg = codeTranslations[code]
     PLUGIN.notify(PLUGIN.get_string(title), PLUGIN.get_string(msg))
 
@@ -48,7 +47,7 @@ def createMainListing():
          'path': PLUGIN.url_for(endpoint='createFollowingList')
          },
         {'label': PLUGIN.get_string(30006),
-         'path': PLUGIN.url_for(endpoint='createListOfTeams')
+         'path': PLUGIN.url_for(endpoint='createListOfTeams', index='0')
          },
         {'label': PLUGIN.get_string(30003),
          'path': PLUGIN.url_for(endpoint='search')
@@ -63,9 +62,9 @@ def createMainListing():
 @PLUGIN.route('/createListOfFeaturedStreams/')
 @managedTwitchExceptions
 def createListOfFeaturedStreams():
-    streams = TWITCHTV.getFeaturedStream()
-    return [CONVERTER.convertChannelToListItem(element[Keys.STREAM][Keys.CHANNEL])
-            for element in streams]
+    featuredStreams = TWITCHTV.getFeaturedStream()
+    return [CONVERTER.convertStreamToListItem(featuredStream[Keys.STREAM])
+            for featuredStream in featuredStreams]
 
 
 @PLUGIN.route('/createListOfGames/<index>/')
@@ -84,7 +83,7 @@ def createListOfGames(index):
 @managedTwitchExceptions
 def createListForGame(gameName, index):
     index, offset, limit = calculatePaginationValues(index)
-    items = [CONVERTER.convertChannelToListItem(item[Keys.CHANNEL])for item
+    items = [CONVERTER.convertStreamToListItem(stream) for stream
              in TWITCHTV.getGameStreams(gameName, offset, limit)]
 
     items.append(linkToNextPage('createListForGame', index, gameName=gameName))
@@ -96,13 +95,60 @@ def createListForGame(gameName, index):
 def createFollowingList():
     username = getUserName()
     streams = TWITCHTV.getFollowingStreams(username)
-    return [CONVERTER.convertChannelToListItem(stream[Keys.CHANNEL]) for stream in streams]
+    liveStreams = [CONVERTER.convertStreamToListItem(stream) for stream in streams['live']]
+    liveStreams.insert(0,{'path': PLUGIN.url_for(endpoint='createFollowingList'), 'icon': u'', 'is_playable': False, 'label': PLUGIN.get_string(30012)})
+    liveStreams.append({'path': PLUGIN.url_for(endpoint='createFollowingList'), 'icon': u'', 'is_playable': False, 'label': PLUGIN.get_string(30013)})
+    liveStreams.extend([CONVERTER.convertFollowersToListItem(follower) for follower in streams['others']])
+    return liveStreams
 
 
+@PLUGIN.route('/channelVideos/<name>/')
+@managedTwitchExceptions
+def channelVideos(name):
+    items = [
+        {'label': 'Past Broadcasts',
+         'path': PLUGIN.url_for(endpoint='channelVideosList', name=name, index=0, past='true')
+        },
+        {'label': 'Video Highlights',
+         'path': PLUGIN.url_for(endpoint='channelVideosList', name=name, index=0, past='false')
+        }
+    ]
+    return items
+    
+    
+@PLUGIN.route('/channelVideosList/<name>/<index>/<past>/')
+@managedTwitchExceptions
+def channelVideosList(name,index,past):
+    index = int(index)
+    offset = index * 8
+    videos = TWITCHTV.getFollowerVideos(name,offset,past)
+    items = [CONVERTER.convertVideoListToListItem(video) for video in videos[Keys.VIDEOS]]
+    if videos[Keys.TOTAL] > (offset + 8):
+        items.append(linkToNextPage('channelVideosList', index, name=name, past=past))
+    return items
+    
+    
+@PLUGIN.route('/playVideo/<id>/')
+@managedTwitchExceptions
+def playVideo(id):
+    
+    playList = TWITCHTV.getVideoChunksPlaylist(id)
+    
+    # Doesn't fullscreen video, might be because of xbmcswift
+    #xbmc.Player().play(playlist) 
+    
+    try:
+        # Gotta wrap this in a try/except, xbmcswift causes an error when passing a xbmc.PlayList()
+        # but still plays the playlist properly
+        PLUGIN.set_resolved_url(playlist)
+    except:
+        pass
+    
+    
 @PLUGIN.route('/search/')
 @managedTwitchExceptions
 def search():
-    query = PLUGIN.keyboard('', PLUGIN.get_string(30101))
+    query = PLUGIN.keyboard('', PLUGIN.get_string(30007))
     if query:
         target = PLUGIN.url_for(endpoint='searchresults', query=query, index='0')
     else:
@@ -116,7 +162,7 @@ def searchresults(query, index='0'):
     index, offset, limit = calculatePaginationValues(index)
     streams = TWITCHTV.searchStreams(query, offset, limit)
 
-    items = [CONVERTER.convertChannelToListItem(stream[Keys.CHANNEL]) for stream in streams]
+    items = [CONVERTER.convertStreamToListItem(stream) for stream in streams]
     items.append(linkToNextPage('searchresults', index, query=query))
     return items
 
@@ -125,21 +171,31 @@ def searchresults(query, index='0'):
 def showSettings():
     #there is probably a better way to do this
     PLUGIN.open_settings()
-
-
+    
+    
 @PLUGIN.route('/playLive/<name>/')
 @managedTwitchExceptions
 def playLive(name):
+    
+    #Get Required Quality From Settings
     videoQuality = getVideoQuality()
-    resolver = TwitchVideoResolver()
-    rtmpUrl = resolver.getRTMPUrl(name, videoQuality)
-    PLUGIN.set_resolved_url(rtmpUrl)
+    
+    plpath = xbmc.translatePath('special://temp') + 'hlsplaylist.m3u8'
+    resolver = TwitchVideoResolver(PLUGIN.log)
+    resolver.saveHLSToPlaylist(name,videoQuality,plpath)
+    #Play Custom Playlist
+    xbmc.Player().play(plpath)
+    PLUGIN.set_resolved_url(plpath)
 
 
-@PLUGIN.route('/createListOfTeams/')
+@PLUGIN.route('/createListOfTeams/<index>/')
 @managedTwitchExceptions
-def createListOfTeams():
-    items = [CONVERTER.convertTeamToListItem(item)for item in TWITCHTV.getTeams()]
+def createListOfTeams(index):
+    index = int(index)
+    teams = TWITCHTV.getTeams(index)
+    items = [CONVERTER.convertTeamToListItem(item)for item in teams]
+    if len(teams) == 25:
+        items.append(linkToNextPage('createListOfTeams', index))
     return items
 
 
@@ -167,12 +223,12 @@ def getUserName():
 
 def getVideoQuality():
     chosenQuality = PLUGIN.get_setting('video', unicode)
-    qualities = {'0': sys.maxint, '1': 720, '2': 480, '3': 360}
+    qualities = {'0': 0, '1': 1, '2': 2, '3': 3}
     return qualities.get(chosenQuality, sys.maxint)
 
 
 def linkToNextPage(target, currentIndex, **kwargs):
-    return {'label': PLUGIN.get_string(31001),
+    return {'label': PLUGIN.get_string(30011),
             'path': PLUGIN.url_for(target, index=str(currentIndex + 1), **kwargs)
             }
 

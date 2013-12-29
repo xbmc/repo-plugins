@@ -9,35 +9,37 @@
   <string id="30006">Drużyny</string>
   
   <!--search -->
-  <string id="30101">Szukaj kanałów</string>
+  <string id="30007">Szukaj kanałów</string>
   
   <!--general --> 
-  <string id="31000">TwitchTV</string>
-  <string id="31001">następne...</string>
+  <string id="30010">TwitchTV</string>
+  <string id="30011">następne...</string>
+  <string id="30012">-- Currently Live Streams --</string>
+  <string id="30013">-- Followed Channels --</string>
 
    <!--notifications --> 
-  <string id="32001">Błąd HTTP</string>
-  <string id="32002">Brak danych</string>
-  <string id="32003">Brak archiwum</string>
-  <string id="32004">Błąd tokena</string>
-  <string id="32005">Ustawienia video zmienione</string>
-  <string id="32006">Wybrane ustawienia video niedostępne</string>
-  <string id="32007">Błąd TwitchAPI</string>
-  <string id="32008">Błąd JSON</string>
-  <string id="32009">Nieudane parsowanie wyników</string>
-  <string id="32010">Sprawdź połączenie internetowe</string>
+  <string id="30020">Błąd HTTP</string>
+  <string id="30021">Brak danych</string>
+  <string id="30022">Brak archiwum</string>
+  <string id="30023">Błąd tokena</string>
+  <string id="30024">Ustawienia video zmienione</string>
+  <string id="30025">Wybrane ustawienia video niedostępne</string>
+  <string id="30026">Błąd TwitchAPI</string>
+  <string id="30027">Błąd JSON</string>
+  <string id="30028">Nieudane parsowanie wyników</string>
+  <string id="30029">Sprawdź połączenie internetowe</string>
   
   <!--settings -->
-  <string id="33000">Jakość video</string>
-  <string id="33001">Najlepsza możliwa</string>
-  <string id="33002">720p</string>
-  <string id="33003">480p</string>
-  <string id="33004">360p</string>
-  <string id="33010">Schemat wyświetlania tytułów</string>
-  <string id="33011">Kanał - Tytuł</string>
-  <string id="33012">Liczba oglądających - Kanał - Tytuł</string>
-  <string id="33013">Tytuł</string>
-  <string id="33014">Kanał</string>
+  <string id="30040">Jakość video</string>
+  <string id="30041">Najlepsza możliwa</string>
+  <string id="30042">720p</string>
+  <string id="30043">480p</string>
+  <string id="30044">360p</string>
+  <string id="30045">Schemat wyświetlania tytułów</string>
+  <string id="30046">Kanał - Tytuł</string>
+  <string id="30047">Liczba oglądających - Kanał - Tytuł</string>
+  <string id="30048">Tytuł</string>
+  <string id="30049">Kanał</string>
   
-  <string id="33100">Użytkownik</string>
+  <string id="30050">Użytkownik</string>
 </strings>

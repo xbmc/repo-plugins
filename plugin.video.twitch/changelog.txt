@@ -48,3 +48,11 @@
 - fixed bug: streams with optional subscriptions
 1.0.2
 - fixed stream resolving
+1.0.3
+- added support for HLS streams - thx to MrSprigster
+1.0.4
+- fixed bug: Viewer count could not be resolved
+1.0.5
+Added ability to play archived videos (past broadcasts) - thx to Kr0nZ
+1.0.6
+- rearranged string ids

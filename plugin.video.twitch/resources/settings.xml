@@ -2,10 +2,10 @@
 <settings>
 	<!-- General -->
 	<category label="General">
-		<setting id="username" type="text" label="33100" default="" />
+		<setting id="username" type="text" label="30050" default="" />
 		<!-- Video Quality -->
-		<setting id="video" type="enum" label="33000" lvalues="33001|33002|33003|33004" default="0" />
+		<setting id="video" type="enum" label="30040" lvalues="30041|30042|30043|30044" default="0" />
 		<!-- Title Display -->
-		<setting id="titledisplay" type="enum" label="33010" lvalues="33011|33012|33013|33014" default="0" />
+		<setting id="titledisplay" type="enum" label="30045" lvalues="30046|30047|30048|30049" default="0" />
 	</category>
 </settings>

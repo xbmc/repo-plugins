@@ -26,8 +26,7 @@
     <!-- Skin -->
     <category label="30092">
 	<setting id="default_sort_method" type="enum" label="30020" lvalues="30021|30022|30023|30024" default="0"/>
-	<!-- XXX: cannot currently force sort direction in XBMC -->
-	<!-- <setting id="default_sort_dir" type="enum" label="30080" lvalues="30021|30081|30082" default="0"/> -->
+	<setting id="default_sort_dir" type="enum" label="30080" lvalues="30021|30081|30082" default="0"/>
 	<setting id="confluence_view_default" type="enum" label="30060" lvalues="30061|30062|30063" default="0"/>
 	<setting id="confluence_view_events" type="text" visible="false"/>
 	<setting id="confluence_view_albums" type="text" visible="false"/>

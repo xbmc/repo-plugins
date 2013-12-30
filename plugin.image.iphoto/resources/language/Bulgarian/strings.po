@@ -76,6 +76,10 @@ msgctxt "#30101"
 msgid "Albums"
 msgstr "Албуми"
 
+msgctxt "#30102"
+msgid "Ratings"
+msgstr "Рейтинг"
+
 msgctxt "#30104"
 msgid "Keywords"
 msgstr "Ключови думи"

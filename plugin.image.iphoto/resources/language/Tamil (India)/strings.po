@@ -24,6 +24,10 @@ msgctxt "#30023"
 msgid "Label"
 msgstr "சிட்டை"
 
+msgctxt "#30061"
+msgid "Default"
+msgstr "இயல்புநிலை"
+
 msgctxt "#30062"
 msgid "Pic Thumbs"
 msgstr "படம் தேர்ந்தெடுக"
@@ -31,6 +35,10 @@ msgstr "படம் தேர்ந்தெடுக"
 msgctxt "#30063"
 msgid "Image Wrap"
 msgstr "படத்தை சுற்றமை"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "இயல்புநிலை"
 
 msgctxt "#30090"
 msgid "General"

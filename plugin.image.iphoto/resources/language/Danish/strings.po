@@ -228,6 +228,18 @@ msgctxt "#30215"
 msgid "Remove cached maps"
 msgstr "Fjern lagrede kort"
 
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Reset add-on database"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Add-on dokumentation"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Resetter add-on databasen..."
+
 msgctxt "#30220"
 msgid "Enable Support for Places?"
 msgstr "Aktivér understøttelse af Steder?"
@@ -244,6 +256,14 @@ msgctxt "#30223"
 msgid "You will also need to reimport your library."
 msgstr "Du skal også genimportere dit bibliotek"
 
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Slet add-on databasen?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "Add-on databasen er ødelagt."
+
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
 msgstr "Sletning vil ikke gå ud over dit Billede-bibliotek."
@@ -251,6 +271,10 @@ msgstr "Sletning vil ikke gå ud over dit Billede-bibliotek."
 msgctxt "#30233"
 msgid "You will need to rescan after this."
 msgstr "Du skal udføre en ny skanning efter dette."
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Initialisering af add-on databasen mislykket."
 
 msgctxt "#30241"
 msgid "Please reimport your Library."

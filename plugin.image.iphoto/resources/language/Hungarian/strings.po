@@ -228,6 +228,18 @@ msgctxt "#30215"
 msgid "Remove cached maps"
 msgstr "Tárolt térképek törlése"
 
+msgctxt "#30216"
+msgid "Reset add-on database"
+msgstr "Kiegészítők adatbázis nullázása"
+
+msgctxt "#30217"
+msgid "Add-on documentation"
+msgstr "Kiegészítő leírás"
+
+msgctxt "#30219"
+msgid "Resetting add-on database..."
+msgstr "Kiegészítő adatbázis nullázása..."
+
 msgctxt "#30220"
 msgid "Enable Support for Places?"
 msgstr "Engedélyezi a Helyek támogatást?"
@@ -244,6 +256,14 @@ msgctxt "#30223"
 msgid "You will also need to reimport your library."
 msgstr "Valamint újra kell importálnia a könyvtárát."
 
+msgctxt "#30230"
+msgid "Delete add-on database?"
+msgstr "Törli a kiegészítők adatbázist?"
+
+msgctxt "#30231"
+msgid "Add-on database is corrupt."
+msgstr "A kiegészítők adatbázis hibás."
+
 msgctxt "#30232"
 msgid "Deleting it will not harm your Photo Library."
 msgstr "A törlés nem veszélyezteti a fénykép könyvtárat"
@@ -251,6 +271,10 @@ msgstr "A törlés nem veszélyezteti a fénykép könyvtárat"
 msgctxt "#30233"
 msgid "You will need to rescan after this."
 msgstr "Ez után új átfésülést kell indítania"
+
+msgctxt "#30240"
+msgid "Failed to initialize add-on database."
+msgstr "Nem sikerült a kiegészítő adatbázis inicializálása"
 
 msgctxt "#30241"
 msgid "Please reimport your Library."

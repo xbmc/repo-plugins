@@ -1,4 +1,8 @@
-2.1.8 - 2013xxxx
+2.1.9 - 20131230
+- Re-enable Set Sort Direction option.
+- Update language files from Transifex.
+
+2.1.8 - 20131205
 - Fix path substitution bug with referenced libraries.
 - Update language files from Transifex.
 - Update README.

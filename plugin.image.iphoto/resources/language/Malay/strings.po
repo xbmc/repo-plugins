@@ -20,9 +20,17 @@ msgctxt "#30021"
 msgid "None"
 msgstr "Tiada"
 
+msgctxt "#30023"
+msgid "Label"
+msgstr "Label"
+
 msgctxt "#30060"
 msgid "View mode in Confluence"
 msgstr "Mod lihat dalam Pertemuan"
+
+msgctxt "#30061"
+msgid "Default"
+msgstr "Lalai"
 
 msgctxt "#30062"
 msgid "Pic Thumbs"
@@ -31,6 +39,14 @@ msgstr "Lakaran Kenit"
 msgctxt "#30063"
 msgid "Image Wrap"
 msgstr "Lilit Imej"
+
+msgctxt "#30067"
+msgid "Default"
+msgstr "Lalai"
+
+msgctxt "#30068"
+msgid "Picture Grid"
+msgstr "Grid Gambar"
 
 msgctxt "#30090"
 msgid "General"

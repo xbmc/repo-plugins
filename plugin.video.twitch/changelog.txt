@@ -56,3 +56,5 @@
 Added ability to play archived videos (past broadcasts) - thx to Kr0nZ
 1.0.6
 - rearranged string ids
+1.0.7
+- fixed bug in quality settings

@@ -1,0 +1,33 @@
+1.0.2
+- Corrected string ID range
+- Removed fake user-agent
+- Refactoring of Controls class
+
+1.0.1
+- Better description and summary
+- Better icon, plus it's now 256x256
+- Menus are translatable
+- Use getAddonInfo('path') instead of python std lib
+- dos2unix strings.xml
+- Removed loose print statements
+- Additional tags added to addon.xml
+- Better README
+
+1.0.0
+- First public release
+
+0.5.1
+- Radio button fixed on newer quizzes
+- Added fanart and icon
+
+0.4.1
+- Added tests
+- Basic refactor
+
+0.3.1
+- Display warning on Programming Quiz
+
+0.2.1
+- Send activity updates back to Udacity
+- Support saved states of some quizzes
+- Improved look of lessons

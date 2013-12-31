@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+
+    <string id="30010">Settings</string>
+    <string id="30011">Host</string>
+    <string id="30012">Port</string>
+	<string id="30013">GUID</string>
+    <string id="30014">Protocol</string>
+    
+    <string id="30110">Shows</string>
+    <string id="30111">Future</string>
+    <string id="30112">History</string>
+    
+</strings>
+

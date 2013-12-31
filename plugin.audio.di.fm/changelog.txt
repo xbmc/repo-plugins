@@ -2,6 +2,14 @@
 * Fixed/improved feature
 - Removed feature
 
+
+31 December 2013 v3.0.0
++ Rewrote whole plugin
++ Threading of playlists parsing to speed up first run and refreshing of playlists - 8 threads
+* Now fully support the new di.fm design
+- Check-in with stats are gone for now
+
+
 20 May 2013 v2.1.2
 * Fixed problems related to new Digitally Imported webpage
   Thanks to Vidar Waagbø for the regex patch

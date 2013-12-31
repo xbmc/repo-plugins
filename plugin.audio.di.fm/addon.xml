@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.audio.di.fm"
        name="Digitally Imported"
-       version="2.1.2"
+       version="3.0.0"
        provider-name="qualisoft.dk - Tim C. Steinmetz">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>

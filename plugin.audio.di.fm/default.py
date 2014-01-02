@@ -195,7 +195,7 @@ class musicAddonXbmc:
 
                 # if we could not reach di.fm at all
                 if not html:
-                    xbmc.log('di.fm could not be reached', xbmc.LOGWARNING)
+                    xbmc.log(u'di.fm could not be reached', xbmc.LOGWARNING)
                     xbmcgui.Dialog().ok(ADDON.getLocalizedString(30100),
                                         ADDON.getLocalizedString(30101),
                                         ADDON.getLocalizedString(30102),
@@ -228,12 +228,12 @@ class musicAddonXbmc:
 
             # Saves channels to cache and reset the "force update" flag
             if len(channels) > 0:
-                pickle.dump(self.channelsList, open("%s/%s" % (self.addonProfilePath, pluginConfig.get('cache', 'cacheChannels')), "w"), protocol=0)
+                pickle.dump(self.channelsList, open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cacheChannels')), "w"), protocol=0)
                 ADDON.setSetting(id="forceupdate", value="false")
 
         # else load channels from cache file
         else:
-            self.channelsList = pickle.load(open(("%s/%s" % (self.addonProfilePath, pluginConfig.get('cache', 'cacheChannels'))), "r"))
+            self.channelsList = pickle.load(open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cacheChannels')), "r"))
 
             for channel in self.channelsList:
                 self.addItem(channel['name'],
@@ -312,7 +312,7 @@ class musicAddonXbmc:
         # tart it up a bit if it's a new channel
         if isNewChannel:
             li = xbmcgui.ListItem(label="[COLOR FF007EFF]" + channelTitle + "[/COLOR]", thumbnailImage=icon)
-            xbmc.log("New channel found: " + channelTitle, xbmc.LOGERROR)
+            xbmc.log(u"New channel found: %s" % channelTitle.encode('ascii', 'xmlcharrefreplace'), xbmc.LOGERROR)
         else:
             li = xbmcgui.ListItem(label=channelTitle, thumbnailImage=icon)
 
@@ -384,10 +384,10 @@ class musicAddonXbmc:
         try:
             if ADDON.getSetting("forceupdate") == "true":
                 re_config = re.compile("NS\('AudioAddict.API'\).Config\s*=\s*([^;]+);", re.M | re.I)
-                pickle.dump(re_config.findall(html)[0], open("%s/%s" % (self.addonProfilePath, pluginConfig.get('cache', 'cachePremiumConfig')), "w"), protocol=0)
+                pickle.dump(re_config.findall(html)[0], open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cachePremiumConfig')), "w"), protocol=0)
                 premiumConfig = json.loads(re_config.findall(html)[0])
             else:
-                premiumConfig = json.loads(pickle.load(open(("%s/%s" % (self.addonProfilePath, pluginConfig.get('cache', 'cachePremiumConfig'))), "r")))
+                premiumConfig = json.loads(pickle.load(open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cachePremiumConfig')), "r")))
             return premiumConfig
         except Exception:
             sys.exc_clear() # Clears all exceptions so the script will continue to run
@@ -400,23 +400,23 @@ class musicAddonXbmc:
     def checkFileTime(self, filename, days):
         if not os.path.exists(self.addonProfilePath):
             os.makedirs(self.addonProfilePath)
-            return False
+            return True
 
         daysInSecs = int(days)*60*60*24
 
-        file = "%s%s" % (self.addonProfilePath, filename)
+        file = os.path.join(self.addonProfilePath, filename)
 
         # If file exists, check timestamp
         if os.path.exists(file):
             if os.path.getmtime(file) > (time.time() - daysInSecs):
-                xbmc.log('It has not been %s days since %s was last updated' % (days, file), xbmc.LOGNOTICE)
+                xbmc.log(u'It has not been %s days since %s was last updated' % (days, file), xbmc.LOGNOTICE)
                 return False
             else:
-                xbmc.log('The cache file %s + has expired' % file, xbmc.LOGNOTICE)
+                xbmc.log(u'The cache file %s + has expired' % file, xbmc.LOGNOTICE)
                 return True
         # If file does not exist, return true so the file will be created by scraping the page
         else:
-            xbmc.log('The cache file %s does not exist' % file, xbmc.LOGNOTICE)
+            xbmc.log(u'The cache file %s does not exist' % file, xbmc.LOGNOTICE)
             return True
 
 

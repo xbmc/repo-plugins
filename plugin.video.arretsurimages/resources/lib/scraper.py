@@ -20,7 +20,7 @@
 import re
 import pickle
 import requests
-from xbmcswift import xbmc
+from xbmcswift2 import xbmc
 from BeautifulSoup import SoupStrainer, BeautifulSoup
 import config
 

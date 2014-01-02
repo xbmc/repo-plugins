@@ -1,3 +1,8 @@
+[B]Version 2.3.7[/B]
+
+- Add new program "C'est p@s qu'un jeu"
+- Upgrade to xbmcswift2
+
 [B]Version 2.3.6[/B]
 
 - Add new program "14:42"

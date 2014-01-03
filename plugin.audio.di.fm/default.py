@@ -52,7 +52,7 @@ except ImportError:
 
 # Config parser
 pluginConfig = SafeConfigParser()
-pluginConfig.read(os.path.dirname(__file__) + "/config.ini")
+pluginConfig.read(os.path.join(os.path.dirname(__file__), "config.ini"))
 
 
 # Various constants used throughout the script

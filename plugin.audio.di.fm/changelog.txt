@@ -3,8 +3,8 @@
 - Removed feature
 
 
-1. January 2014 v3.0.1
-* Cache file pathing on OSes not using *UNIX syntax (Windows)
+3. January 2014 v3.0.2
+* Fixed file pathing for the config file as well - DOH!
 
 
 31. December 2013 v3.0.0

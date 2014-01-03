@@ -5,6 +5,6 @@
 *.tar
 *.xcf
 *.zip
-**/.git
-**/.gitattributes
-**/.gitignore
+*/.git
+*/.gitattributes
+*/.gitignore

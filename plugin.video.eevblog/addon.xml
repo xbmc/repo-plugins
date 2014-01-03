@@ -20,5 +20,7 @@
     <description lang="hu">Az EEVblog egy vágatlan videó-blog ami az elektrotechnika után érdeklődők számára szolgál érdekes információkkal. Iparági dolgozók, hobbisták, hackerek és gyártók találhatnak itt érdekes videókat, Dave egyedi és lelkes stílusában előadva!&#xA;&#xA;Mindenképp látogasd meg a www.eevblog.com-ot !</description>
     <platform>all</platform>
     <language>en</language>
+    <source>https://github.com/ClumsyXBMC/EEVBlog-Xbmc-Plugin</source>
+    <license>Public Domain</license>
   </extension>
 </addon>

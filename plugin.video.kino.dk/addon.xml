@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.kino.dk" version="1.0.1" name="Kino.dk TV" provider-name="twinther">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.buggalo" version="1.1.2"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <summary lang="en">Kino.dk TV</summary>
+        <description lang="en">Watch interviews, gallapremieres and the latest trailers from Kino TV. If you have comments or suggestions for this addon, please feel free to participate in the debate on my blog at http://tommy.winther.nu</description>
+        <summary lang="da">Kino.dk TV</summary>
+        <description lang="da">Se interview, gallapremiere og de nyeste trailere fra Kino TV. Har du kommentarer, ris eller ros til denne addon er du velkommen til at deltage i debatten på min blog på http://tommy.winther.nu</description>
+        <license>GPL 2.0</license>
+        <platform>all</platform>
+        <language>da</language>
+        <email>tommy@winther.nu</email>
+        <website>http://tommy.winther.nu</website>
+        <source>https://github.com/xbmc-danish-addons/plugin.video.kino.dk</source>
+    </extension>
+</addon>

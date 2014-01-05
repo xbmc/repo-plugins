@@ -1,0 +1,7 @@
+[B]Version 1.0.1 - 2013-10-10[/B]
+- Fixed playback
+- Updated logo
+- Improved date parsing
+
+[B]Version 1.0.0 - 2012-10-18[/B]
+- Initial release

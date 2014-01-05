@@ -12,11 +12,29 @@ def index():
     items = [
         {'label': plugin.get_string(30004),
          'path': plugin.url_for('course_catalog')},
-        {'label': plugin.get_string(30005),
-         'path': plugin.url_for('my_courses')},
-        {'label': plugin.get_string(30006),
-         'path': plugin.url_for('open_settings')}
     ]
+
+    auth_storage = plugin.get_storage('auth')
+    auth = UdacityAuth(auth_storage)
+    username = plugin.get_setting('username')
+    password = plugin.get_setting('user_password')
+
+    # Default settings string displays Login unless logged in
+    setting_string_id = 30012
+    if username and password:
+        if auth.authenticate(username, password):
+            items.append(
+                {'label': plugin.get_string(30005),
+                 'path': plugin.url_for('my_courses')})
+            setting_string_id = 30006
+        else:
+            plugin.notify(auth.error)
+            plugin.set_setting('user_password', '')
+
+    items.append(
+        {'label': plugin.get_string(setting_string_id),
+         'path': plugin.url_for('open_settings')}
+    )
 
     return items
 
@@ -54,11 +72,8 @@ def open_lesson(course_id, lesson_id):
     items = []
     auth_storage = plugin.get_storage('auth')
     auth = UdacityAuth(auth_storage)
-    auth.authenticate(
-        plugin.get_setting('username'),
-        plugin.get_setting('user_password')
-    )
     udacity = Udacity(auth)
+
     contents = udacity.get_lesson_contents(lesson_id)
     for content in contents:
         if content['model'] == 'Video':
@@ -107,7 +122,17 @@ def my_courses():
 
 @plugin.route('/open_settings/')
 def open_settings():
-    return plugin.open_settings()
+    old_username = plugin.get_setting('username')
+    old_password = plugin.get_setting('user_password')
+    plugin.open_settings()
+    # If the username or password was changed, flush any saved cookies/tokens
+    if (old_username != plugin.get_setting('username') or
+            old_password != plugin.get_setting('user_password')):
+        auth_storage = plugin.get_storage('auth')
+        auth_storage['cookies'] = None
+        auth_storage['xsrf-token'] = None
+        auth_storage.sync()
+    return plugin.redirect(plugin.url_for('index'))
 
 
 @plugin.route((
@@ -177,6 +202,7 @@ def play_video(course_id, lesson_id, asset_id, youtube_id):
     youtube_url = (
         "plugin://plugin.video.youtube/"
         "?action=play_video&videoid={0}").format(youtube_id)
+
     return plugin.set_resolved_url(youtube_url)
 
 if __name__ == '__main__':

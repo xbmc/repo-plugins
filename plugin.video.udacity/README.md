@@ -9,7 +9,7 @@ From http://udacity.com/how-it-works:
 
 ## Setup/Installation
 
-Coming soon
+Available via official repo. Installation info available [here](http://wiki.xbmc.org/index.php?title=Add-ons).
 
 ## XBMC Version
 
@@ -17,6 +17,7 @@ Frodo
 
 ## Tests
 
+    > pip install xbmcswift2
     > python resources/tests/test_addon.py
 
 ## License

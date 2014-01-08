@@ -1,3 +1,7 @@
+0.1.4 (08.01.2014)
+ - fix adding or deleting of movies with only tmdb_id or imdb_id
+ - fix urlencoding bug (e.g. on movies with colon in title
+
 0.1.3 (23.06.2013)
  - Added "Add to CouchPotato"-Feature
  - Fix Delete Movie from List

@@ -19,7 +19,7 @@
 
 from xbmcswift2 import Plugin, xbmc, xbmcgui
 from resources.lib.api import TraktListApi, AuthenticationError, \
-    LIST_PRIVACY_IDS
+    LIST_PRIVACY_IDS, NONE
 
 API_KEY = '2ce240ab6543ebd7d84abe5268a822d5'
 WATCHLIST_SLUG = 'WATCHLIST'  # hacky but reduces code amount...
@@ -156,8 +156,8 @@ def show_customlist(list_slug):
     for item in items:
         item['context_menu'] = context_menu(
             list_slug=list_slug,
-            imdb_id=item['info'].get('code', ''),
-            tmdb_id=item.get('tmdb_id', '')
+            imdb_id=item['info'].get('code', NONE),
+            tmdb_id=item.get('tmdb_id', NONE)
         )
     plugin.set_content('movies')
     items.append({
@@ -205,8 +205,8 @@ def show_watchlist():
     items = format_movies(api.get_watchlist())
     for item in items:
         item['context_menu'] = context_menu(
-            imdb_id=item['info'].get('code', ''),
-            tmdb_id=item.get('tmdb_id', '')
+            imdb_id=item['info'].get('code', NONE),
+            tmdb_id=item.get('tmdb_id', NONE)
         )
     items.append({
         'label': _('add_movie'),

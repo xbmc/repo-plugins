@@ -362,7 +362,7 @@ class musicAddonXbmc:
     """
     def getFavoriteChannels(self, html, allChannels):
         channels = []
-        re_favoriteData = re.compile("NS\('AudioAddict.API.Config.member'\).Favorites\s*=\s*([^;]+);", re.M | re.I)
+        re_favoriteData = re.compile("NS\('AudioAddict.API.Config.member'\).favorites\s*=\s*([^;]+);", re.M | re.I)
         m = re_favoriteData.findall(html)
 
         # if favorites list is empty, return empty list
@@ -371,12 +371,14 @@ class musicAddonXbmc:
         else:
             favorites = json.loads(re_favoriteData.findall(html)[0])
 
+        pprint(favorites)
+
         # sort favorites after user selected positions
-        favorites = sorted(favorites, key=lambda k: k['position'])
+        favorites = sorted(favorites, key=lambda k: k['channel']['favorite_position'])
 
         for fav in favorites:
             for channel in allChannels:
-                if fav['channel_id'] == channel['id']:
+                if fav['channel']['id'] == channel['id']:
                     channels.append(dict(channel))
 
         return channels

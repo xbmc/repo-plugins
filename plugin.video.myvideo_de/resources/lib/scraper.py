@@ -360,6 +360,9 @@ class ChannelScraper(BaseScraper):
         if tree.find(*MusicChannelScraper.subtree_props):
             self.log('Redirecting to scraper-class: MusicChannelScraper')
             return MusicChannelScraper().parse(tree)
+        if tree.find(*SpecialVideoChannelScraper.subtree_props):
+            self.log('Redirecting to scraper-class: SpecialVideoChannelScraper')
+            return SpecialVideoChannelScraper().parse(tree)
         clips_found = tree.find(*VideoChannelClipScraper.subtree_props)
         full_found = tree.find(*VideoChannelFullScraper.subtree_props)
         if clips_found or full_found:
@@ -382,12 +385,20 @@ class ChannelScraper(BaseScraper):
             elif self.extra_arg == 'FULL':
                 return VideoChannelFullScraper().parse(tree)
             elif self.extra_arg == 'CLIPS':
-                return VideoChannelClipScraper().parse(tree)  
+                return VideoChannelClipScraper().parse(tree)
         elif clips_found:
             return VideoChannelClipScraper().parse(tree)
         elif full_found:
             return VideoChannelFullScraper().parse(tree)
-                
+
+
+class SpecialVideoChannelScraper(BaseScraper):
+    a_prop_re = re.compile('is-video')
+    section_re = re.compile('videolist--item')
+    subtree_props = ('div', {'class': 'layout--module is-eyecatcher'})
+    section_props = ('div', {'class': section_re})
+    a_props = ('a', {'class': a_prop_re})
+    img_props = ('img', {'class': 'thumbnail--pic'})
 
 
 class VideoChannelClipScraper(BaseScraper):

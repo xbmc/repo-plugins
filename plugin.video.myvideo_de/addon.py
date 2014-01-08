@@ -129,7 +129,7 @@ def __add_items(entries, next_page=None, prev_page=None):
         return context_menu
 
     def format_episode_title(title):
-        if fix_show_title and ('Folge' in title or 'Staffel' in title):
+        if fix_show_title and '-' in title and ('Folge' in title or 'Staffel' in title):
             title, show = title.rsplit('-', 1)
             title = title.replace('Staffel ', 'S').replace(' Folge ', 'E')
             title = title.replace('Folge ', 'E').replace('Ganze Folge', '')

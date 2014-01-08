@@ -174,8 +174,11 @@ def getlastVideos():
         
     Get the videos in the "last videos" menu option
     """
-    showseen   = settings.getSetting( "showseen" )
-    showlast   = int(settings.getSetting( "showlast" ).split('.')[0])
+    showseen       = settings.getSetting( "showseen" )
+    showpromo      = settings.getSetting( "showpromo" )
+    showannounce   = settings.getSetting( "showannounce" )
+    agelimit       = settings.getSetting( "agelimit" )
+    showlast       = int(settings.getSetting( "showlast" ).split('.')[0])
     i = 0
     emissions = []
     finished = False
@@ -194,13 +197,26 @@ def getlastVideos():
             videoInfo = extractVideoInfo(element)
             if videoInfo != None:
                 if (showseen == "true" or (showseen == "false" and videoInfo.seen == False)):
-                    if isAvailableForUser(videoInfo.availability):
-                        emissions.append([videoInfo.id,
-                                            videoInfo.name,
-                                            videoInfo.desc,
-                                            videoInfo.duration,
-                                            videoInfo.seen,
-                                            videoInfo.thumb])
+                    if videoInfo.videocat == "Autopromo" and showpromo == "false":
+                        continue
+                    if videoInfo.videocat == "Annonce" and showannounce == "false":
+                        continue
+                    if ( videoInfo.agelimit == None or agelimit == "Aucun" ):
+                        if isAvailableForUser(videoInfo.availability):
+                            emissions.append([videoInfo.id,
+                                    videoInfo.name,
+                                    videoInfo.desc,
+                                    videoInfo.duration,
+                                    videoInfo.seen,
+                                    videoInfo.thumb])
+                    elif int(videoInfo.agelimit) < int(agelimit):
+                        if isAvailableForUser(videoInfo.availability):
+                            emissions.append([videoInfo.id,
+                                    videoInfo.name,
+                                    videoInfo.desc,
+                                    videoInfo.duration,
+                                    videoInfo.seen,
+                                    videoInfo.thumb])
                 i = i + 1
 
     for emission in emissions:
@@ -527,6 +543,13 @@ def extractVideoInfo(element):
         info.desc  = remove_html_tags(re.compile(reg_desc).findall(str(element))[0][30:])
 
         info.name  = remove_html_tags(re.compile('<h3.*').findall(str(element))[0])
+        
+        info.videocat = remove_html_tags(re.compile('<strong.*').findall(str(element))[0])
+
+        try:
+            info.agelimit = re.compile('<img.*').findall(str(element))[1][56:][:2]
+        except:
+            info.agelimit = None
 
     return info
 

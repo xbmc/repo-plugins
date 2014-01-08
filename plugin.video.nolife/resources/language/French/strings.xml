@@ -14,6 +14,9 @@
     <string id="30011">Afficher les émissions déjà vues</string>
     <string id="30012">Nombre d'émissions dans les récentes</string>
     <string id="30013">Rafraichir automatiquement les dossiers</string>
+    <string id="30024">Afficher les autopromos</string>
+    <string id="30025">Afficher les annonces</string>
+    <string id="30026">Cacher les videos interdites Ã  partir de</string>
     
     <!-- Messages dans la liste -->
     <string id="30014">Dernières émissions</string>

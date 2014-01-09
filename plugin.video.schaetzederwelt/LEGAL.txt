@@ -1,0 +1,10 @@
+Legal
+-----
+This addon enables access to the Schaetze der Welt website but is not endorsed, certified or otherwise approved in any way by Schaetze der Welt, www.schaetze-der-welt.de.
+
+The icon is taken from http://commons.wikimedia.org/wiki/File%3AWelterbe.svg
+By UNESCO; Designer: Michel Olyff.Blasewitzer at de.wikipedia.
+Later version(s) were uploaded by Hk kng at de.wikipedia.[see page for license], via Wikimedia Commons from Wikimedia Commons
+
+The fanart image is a cut of http://commons.wikimedia.org/wiki/File%3ARavenna_Mosaics.JPG
+By Aneta Ribarska (Own work) [CC-BY-SA-3.0 (http://creativecommons.org/licenses/by-sa/3.0)], via Wikimedia Commons from Wikimedia Commons

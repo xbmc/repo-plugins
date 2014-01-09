@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Plugin name -->
+  <string id="30000">Treasures of the World</string>
+  <string id="30001">Africa</string>
+  <string id="30002">America</string>
+  <string id="30003">Asia</string>
+  <string id="30004">Australia / Ozeania</string>
+  <string id="30005">Europe</string>
+  <string id="30006">Specials</string>
+  <string id="30007">A to Z Index</string>
+  <string id="30008">Video is not available.</string>
+  <string id="30009">Clear menu item cache</string>
+  <string id="30010">Cache cleared for item </string>
+</strings>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Plugin name -->
+  <string id="30000">Schätze der Welt</string>
+  <string id="30001">Afrika</string>
+  <string id="30002">Amerika</string>
+  <string id="30003">Asien</string>
+  <string id="30004">Australien / Ozeanien</string>
+  <string id="30005">Europa</string>
+  <string id="30006">Spezial</string>
+  <string id="30007">Index von A bis Z</string>
+  <string id="30008">Dieses Video ist zur Zeit nicht online.</string>
+  <string id="30009">Menucache bereinigen</string>
+  <string id="30010">Cache bereinigt für Menueintrag</string>  
+</strings>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.schaetzederwelt" name="Schaetze-der-Welt.de" version="1.0.0" provider-name="CHF">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <website>www.schaetze-der-welt.de</website>
+    <source>https://github.com/Chairon/plugin.video.schaetzederwelt</source>
+    <forum></forum>
+    <email>chrifri@gmx.de</email>
+    <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+    <language>de</language>
+    <summary lang="de">Das Archiv von Schätze der Welt / Erbe der Menschheit. Die Reihe entsteht in Zusammenarbeit mit der UNESCO.</summary>
+    <summary lang="en">Provides the archive Treasures of the World / Heritage of Mankind. The program is developed in collaboration with the UNESCO.</summary>
+    <description lang="de">Kulturdenkmäler und Naturparadiese auf dem Planeten Erde. Sie wurden von der UNESCO zum "Erbe der Menschheit" erklärt.</description>
+    <description lang="en">Cultural sites and natural landscapes on planet earth, that UNESCO has declared part of the "Heritage of Mankind".</description>
+    <disclaimer lang="de">Einige Teile dieses Addons könnten in deinem Land verboten sein - bitte stelle vor der installation sicher, dass du keine Gesetze verletzt.</disclaimer>
+    <disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
+  </extension>
+</addon>

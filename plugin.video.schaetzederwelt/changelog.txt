@@ -1,0 +1,10 @@
+v0.1
+- Initial version 
+
+Current Features
+----------------
+* Episodes ordered by continent
+* Episodes ordered alphabetically
+* Specials
+* Comfortable browsing experience based on cached menu navigation
+* Selective purge of navigation cache per context menu

@@ -3,14 +3,14 @@
   id="plugin.video.peoplesvoice"
   name="The People's Voice"
   provider-name="celadoor"
-  version="0.0.9">
+  version="0.1.3">
   <requires>
     <import  addon="xbmc.python"                      version="2.1.0" />
     <import  addon="script.common.plugin.cache"       version="1.5.1" />
     <import  addon="script.module.parsedom"           version="1.5.1" />
     <import  addon="script.module.simple.downloader"  version="0.9.4" />
   </requires>
-  <extension library="Default.py"                     point="xbmc.python.pluginsource">
+  <extension library="default.py"                     point="xbmc.python.pluginsource">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
@@ -20,7 +20,7 @@
 	<platform>all</platform>
 	<license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
 	<forum>http://forum.xbmc.org/showthread.php?tid=178078</forum>
-	<website></website>
+	<website>http://www.thepeoplesvoice.tv</website>
 	<email></email>
 	<source></source>
   </extension>

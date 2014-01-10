@@ -1,4 +1,7 @@
 Plays  the People's Voice live video stream. created by celadoor.
+Version 0.1.3 -Fixed urls added error checking
+
+Version 0.1.1 -Added instant live link to reduce chance of total addon breakage, added show listing.
 
 Version 0.0.9 -Fixed Channel Logo,video url and Program schedule url
 

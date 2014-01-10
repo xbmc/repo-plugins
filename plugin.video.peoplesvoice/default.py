@@ -9,9 +9,10 @@ __language__  = addon.getLocalizedString
 
 def CATEGORIES():
         
-        addDir(__language__(30010),'http://www.thepeoplesvoice.tv/watchnow',1,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
-        addDir(__language__(30016),'http://www.thepeoplesvoice.tv/schedule',3,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
-        
+        addDir(__language__(30010),'http://www.thepeoplesvoice.tv/watch-now/',1,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
+        addDir(__language__(30016),'http://www.thepeoplesvoice.tv/whatson/',3,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
+        addDir(__language__(30017),'http://www.thepeoplesvoice.tv/show/',4,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
+        addLink(__language__(30010)+__language__(30018),'http://cdn.rbm.tv:1935/rightbrainmedia-live-106/_definst_/ddstream_1/playlist.m3u8','http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013)+__language__(30012))
         
 def INDEX(url):
 
@@ -21,10 +22,13 @@ def INDEX(url):
         link=response.read()
         response.close()
         #Scrape video source
-        match=re.compile('href="(.+?)" target="TPV"><span style="color: #ffffff;">(.+?)</span').findall(link)
-        for url,name in match:
-                addDir(__language__(30010)+name,url,2,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30014)+__language__(30015)+__language__(30012))   
-
+        match=re.compile('href="(.+?)" target="TPV">(.+?)</a>').findall(link)
+        if len(match) > 0:        
+                for url,name in match:
+                       addDir(__language__(30010)+name,url,2,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30014)+__language__(30015)+__language__(30012))   
+        else:
+                xbmcgui.Dialog().ok(__language__(30010), __language__(30019))
+        
 def INDEX2(url):
 
         req = urllib2.Request(url)
@@ -33,10 +37,32 @@ def INDEX2(url):
         link=response.read()
         response.close()
         #Scrape program schedule
-        match=re.compile('"date-display-single">(.+?)</span> GMT<br /><span class="show-title">(.+?)<').findall(link)
-        for starttime,name in match:
-                name = name.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&')  # Cleanup the title.
-                addDir(starttime+'   '+name,'',0,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',starttime+'   '+name)                    
+        match=re.compile('src="(.+?)" width="200" height="150" align="left"/></td>\n<td><b>(.+?)</b>').findall(link)
+        if len(match) > 0:
+                for image,name in match:
+                        name = name.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&').replace('&#8217;', "'")  # Cleanup the title.
+                        addDir(name,'',0,image,name)      
+        else:
+                xbmcgui.Dialog().ok(__language__(30010), __language__(30020))
+
+
+def INDEX3(url):
+
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1')
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        #Scrape shows
+        match=re.compile('<b>(.+?)</b></br>(.+?)</p>\n</p>\n<p></a></br></p>\n<p><a href=".+?"><img src="(.+?)" width').findall(link)
+        if len(match) > 0:
+                for name,description,image in match:
+                        description = description.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&').replace('&#8217;', "'").replace('&#8211;', "-")  # Cleanup the description.
+                        name = name.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&').replace('&#8217;', "'")  # Cleanup the description.
+                        addDir(name,'',0,image,description)
+        else:
+                xbmcgui.Dialog().ok(__language__(30010), __language__(30019))
+                
 
 def VIDEOLINKS(url,name):
 
@@ -127,7 +153,11 @@ elif mode==2:
 
 elif mode==3:
         print ""+url
-        INDEX2(url)  
+        INDEX2(url)
 
+elif mode==4:
+        print ""+url
+        INDEX3(url)
+ 
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

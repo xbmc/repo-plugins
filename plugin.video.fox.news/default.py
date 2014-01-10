@@ -65,7 +65,10 @@ def get_categories(url=None):
         # add_dir('Watch Live', news_domain + '/playlist/live-landing-page/', icon, 'get_playlist')
         add_dir('FoxBusiness.com', business_domain, icon, 'get_categories')
         url = news_domain
-    soup = get_soup(url)
+        cat_url = url + '/playlist/featured-editors-picks/'
+    else:
+        cat_url = url + '/playlist/latest-video-latest-video/'
+    soup = get_soup(cat_url)
     for i in soup.find('nav')('a'):
         add_dir(i.string.encode('utf-8'), url + i['href'], icon, 'get_sub_cat')
 

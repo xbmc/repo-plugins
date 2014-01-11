@@ -214,13 +214,7 @@ def LIVE(url):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-	if settings.getSetting("livequality") == '0':
-		match=re.compile('\"andsuperstreamurl\":\"(.+?)\"').findall(link)
-	if settings.getSetting("livequality") == '1':
-		match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_300@101613 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_300@101620 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_300@101615 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_300@101622 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_300@101618 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_300@101623 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp253352.live.edgefcs.net/live/ playpath=alhorreya_500@142129 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp253350.live.edgefcs.net/live playpath=juce@142128  live=true','rtmp://cp253351.live.edgefcs.net/live/ playpath=tbnafrica@144071 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp210356.live.edgefcs.net/live playpath=tcilive_150@30064 pageURL=http://www.tbn.org/watch-us  live=true'
-
-	if settings.getSetting("livequality") == '2':
-		match='rtmp://cp114430.live.edgefcs.net/live/ playpath=tbn_mbr_600@101613 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114428.live.edgefcs.net/live/ playpath=churchch_mbr_600@101620 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114432.live.edgefcs.net/live/ playpath=jctv_mbr_600@101615 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114426.live.edgefcs.net/live/ playpath=soac_mbr_600@101622 live=true','rtmp://cp114434.live.edgefcs.net/live/ playpath=enlace_mbr_600@101618 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp114436.live.edgefcs.net/live/ playpath=enlacejuvenil_800@102106 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129063.live.edgefcs.net/live/ playpath=nejat_mbr_600@101623 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp253352.live.edgefcs.net/live/ playpath=alhorreya_500@142129 pageURL=http://www.tbn.org/watch-us live=true','rtmp://cp129065.live.edgefcs.net/live/ playpath=tbnrussia-high@58776 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp129066.live.edgefcs.net/live/ playpath=soacrussia-high@58777 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp253350.live.edgefcs.net/live playpath=juce@142128  live=true','rtmp://cp253351.live.edgefcs.net/live/ playpath=tbnafrica@144071 pageURL=http://www.tbn.org/watch-us  live=true','rtmp://cp210356.live.edgefcs.net/live playpath=tcilive_150@30064 pageURL=http://www.tbn.org/watch-us  live=true'
+	match='http://ooyalahd2-f.akamaihd.net/i/tbn01_delivery@120258/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn02_delivery@120259/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn03_delivery@120260/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn04_delivery@149649/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn07_delivery@149653/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn08_delivery@149654/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn05_delivery@149650/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn06_delivery@149652/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn09_delivery@149656/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn10_delivery@149657/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn11_delivery@149658/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn13_delivery@168536/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn12_delivery@149659/master.m3u8'
         title=re.compile('\"name\":\"(.+?)\"').findall(link)
         thumbnail=re.compile('\"icon\":\"(.+?)\"').findall(link)
         mylist=zip((match),(title),(thumbnail))
@@ -232,7 +226,7 @@ def LIVE(url):
 ##################################################################################################################################
 
 def SEARCH(url):
-        keyboard = xbmc.Keyboard('', '')
+        keyboard = xbmc.Keyboard('', 'Search By Title')
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
                 search_string = keyboard.getText().replace(" ","+")
@@ -291,15 +285,15 @@ def SEARCH(url):
 			if 1==1:
 				xbmc.executebuiltin('Container.SetViewMode(50)')
         else:
-                MAIN()
+                PREVIOUS()
 
 ##################################################################################################################################
 
 def AIRDATE(url):
-        keyboard = xbmc.Keyboard('yyyy-mm-dd', '')
-        keyboard.doModal()
-        if keyboard.isConfirmed() and keyboard.getText():
-                search_string = keyboard.getText().replace(" ","+")
+	dialog = xbmcgui.Dialog()
+        numpad = dialog.numeric(1, 'Search By Air Date')
+        if numpad:
+		search_string=numpad.replace(' ','')
                 content = 'http://www.itbn.org/search?airDate='+search_string
                 req = urllib2.Request(content)
                 req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -355,7 +349,7 @@ def AIRDATE(url):
 			if 1==1:
 				xbmc.executebuiltin('Container.SetViewMode(50)')
         else:
-                MAIN()
+                PREVIOUS()
 
 
 ##################################################################################################################################
@@ -454,55 +448,55 @@ try:
 except:
         pass
 
-print "Mode: "+str(mode)
-print "URL: "+str(url)
-print "Name: "+str(name)
+xbmc.log( "Mode: "+str(mode))
+xbmc.log( "URL: "+str(url))
+xbmc.log( "Name: "+str(name))
 
 if mode==None or url==None or len(url)<1:
-        print ""
+        xbmc.log( "")
         MAIN()
        
 elif mode==1:
-        print ""+url
+        xbmc.log( ""+url)
         ADDLINKS(url)
         
 elif mode==2:
-        print ""+url
+        xbmc.log( ""+url)
         GETSOURCE(url,name)
 
 elif mode==3:
-        print ""+url
+        xbmc.log( ""+url)
         CATEGORIES(url)
 
 elif mode==4:
-        print ""+url
+        xbmc.log( ""+url)
         FAITHISSUES(url)
 
 elif mode==5:
-        print ""+url
+        xbmc.log( ""+url)
         PROGRAMS(url)
 
 elif mode==6:
-        print ""+url
+        xbmc.log( ""+url)
         RECENT(url)
 
 elif mode==7:
-        print ""+url
+        xbmc.log( ""+url)
         LIVE(url)
 
 elif mode==8:
-        print ""+url
+        xbmc.log( ""+url)
         SEARCH(url)
 
 elif mode==9:
-        print ""+url
+        xbmc.log( ""+url)
         AIRDATE(url)
 
 elif mode==10:
-        print ""+url
+        xbmc.log( ""+url)
         MOVIES(url)
 elif mode==11:
-        print ""+url
+        xbmc.log( ""+url)
         PREVIOUS()
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

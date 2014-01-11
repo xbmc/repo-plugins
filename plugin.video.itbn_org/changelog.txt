@@ -26,3 +26,8 @@ Version 1.2.3
 
 Version 1.2.4
 -Changed the way the title of videos are formated.
+
+Version 1.2.5
+-Removed "Live" quality settings. Low quality streams have been discontinued.
+-Changed live streams to to new streams, .m3u8 playlists.
+-Changed the Air Date search to use the numpad prompt.

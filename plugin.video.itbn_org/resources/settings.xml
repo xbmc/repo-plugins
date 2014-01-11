@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 	<category label="General">
-	<setting id="livequality" type="enum" label="Live Stream Quality" values="Low|Med|High" default="2"/>
 	<setting id="thumbnailviewmode" type="bool" label="Thumbnail View" default="true" /></category>
 </settings>

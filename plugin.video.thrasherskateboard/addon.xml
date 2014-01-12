@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.thrasherskateboard" name="Thrasher Skateboard Magazine"
+    version="1.0.0" provider-name="boralyl">
+<requires>
+    <import addon="xbmc.python" version="2.1.0" />
+    <import addon="script.common.plugin.cache" version="2.5.2" />
+    <import addon="script.module.requests" version="1.1.0" />
+    <import addon="script.module.xbmcswift2" version="2.4.0" />
+    <import addon="script.module.beautifulsoup" version="3.0.8" />
+</requires>
+<extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+</extension>
+<extension point="xbmc.addon.metadata">
+    <summary lang="en">Thrasher Skateboard Magazine</summary>
+    <description lang="en">Thrasher is a monthly skateboarding magazine, founded in 1981 by Kevin Thatcher, Eric Swenson, and Fausto Vitello, published by the San Francisco, United States-based company, High Speed Productions.  The magazine also maintains a website that consists of numerous features, including segments, such as "Firing Line" and "Hall of Meat", and other video collections. </description>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2</license>
+    <forum></forum>
+    <website>https://bitbucket.org/boralyl/plugin.video.thrasherskateboard</website>
+    <source>https://bitbucket.org/boralyl/plugin.video.thrasherskateboard/src</source>
+    <email>aaronjg@gmail.com</email>
+</extension>
+</addon>
+

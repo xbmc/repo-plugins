@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<settings>
+    <category label="30001">
+        <setting label="30002" type="folder" id="download_location" default="" option="writeable" />
+    </category>
+</settings>

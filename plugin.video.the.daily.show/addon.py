@@ -146,7 +146,7 @@ def full_episodes():
     allData = get_url(full)
 
     episodeURLs = re.compile(
-        '<a href="(http://www.thedailyshow.com/full-episodes/....+?)"').findall(
+        '"(http://www.thedailyshow.com/full-episodes/....+?)"').findall(
         allData)
     episodeURLSet = set(episodeURLs)
 

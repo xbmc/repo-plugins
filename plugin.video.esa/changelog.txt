@@ -1,3 +1,8 @@
+1.0.6
+- Fixes made due to website internal changes.
+- Improved the scraper to add info tags to the videos.
+- Changed icon image.
+- Added "Show thumbnails as fanart" feature into settings menu. 
 1.0.5
 - Fixed some international string tags.
 - Added web tag to addon.xml file.

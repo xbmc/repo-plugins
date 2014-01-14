@@ -23,10 +23,12 @@
 '''
 
 # First of all We must import all the libraries used for plugin development.
-import sys, re, urllib, urllib2, json
+import sys, re, urllib, urllib2, json, os
 import xbmcplugin, xbmcaddon, xbmcgui, xbmcaddon, xbmc
 
 debug_enable = False # The debug logs are disabled by default.
+fanart_file = "" # Initialize the global var for the fanart file location.
+
 
 # This function returns the plugin settings object to main module.
 def get_plugin_settings(plugin_id=""):
@@ -43,6 +45,13 @@ def set_debug_mode(debug_flag=""):
     global debug_enable
     if debug_flag == "true":
         debug_enable = True
+
+
+# This function setup the file and global plugin fanart.
+def set_fanart_file(root_path=""):
+    global fanart_file
+    fanart_file = os.path.join(root_path, "fanart.jpg")
+    xbmcplugin.setPluginFanart(int(sys.argv[1]), fanart_file)
 
 
 # This function logs the messages into the main XBMC log file. Called from main plugin module.
@@ -81,6 +90,23 @@ def get_url_decoded(url):
 def get_url_encoded(url):
     _log('get_url_encoded URL: "%s"' % url)
     return urllib.quote_plus(url)
+
+
+# This function sets the view mode into the video list.
+def set_view_mode(viewid):
+    _log("set_view_mode mode: " + viewid)
+    xbmc.executebuiltin('Container.SetViewMode('+viewid+')')
+
+
+# This function sets the video contents for the video list.
+def set_content_list(pluginhandle, contents="episodes"):
+    _log("set_content_list contents: " + contents)
+    xbmcplugin.setContent(pluginhandle, contents)
+
+
+# This function sets the plugin genre for the video list.
+def set_plugin_category(pluginhandle, genre=''):
+    xbmcplugin.setPluginCategory(pluginhandle, genre)
 
 
 # This function gets an input text from the keyboard.
@@ -131,23 +157,29 @@ def find_first(text,pattern):
 
 
 # This function adds a directory entry into the XBMC GUI throught the API
-def addDir(action = "", title = "", url = "", thumbnail = "", reset_cache = "no"):
-    _log('addDir action = "%s" url = "%s" thumbnail = "%s" reset_cache = "%s"' % (action, url, thumbnail, reset_cache))
+def addDir(action = "", title = "", url = "", genre = "", reset_cache = "no"):
+    _log('addDir action = "%s" url = "%s" reset_cache = "%s"' % (action, url, reset_cache))
 
-    dir_url = '%s?action=%s&reset_cache=%s&url=%s' % (sys.argv[0], action, reset_cache, urllib.quote_plus(url))
-    dir_item = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = thumbnail)
-    dir_item.setInfo(type = "Video", infoLabels = {"Title": title})
+    dir_url = '%s?action=%s&reset_cache=%s&url=%s&genre=%s' % (sys.argv[0], action, reset_cache, urllib.quote_plus(url), urllib.quote_plus(genre))
+    dir_item = xbmcgui.ListItem(title, iconImage = "DefaultFolder.png", thumbnailImage = '')
+    dir_item.setInfo(type = "Video", infoLabels = {"Title": title, "Genre": genre})
+    dir_item.setProperty('Fanart_Image', fanart_file)
     return xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = dir_url, listitem = dir_item, isFolder = True)
 
 
 # This function adds a video link entry into the XBMC GUI throught the API
-def addLink(action = "", title = "", plot = "", url = "", thumbnail = ""):
-    _log("addLink action = [" + action + "] title = [" + title + "] plot = [" + plot + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
+def addLink(action = "", title = "", url = "", thumbnail = "", video_info = {}, show_fanart = False):
+    _log("addLink action = [" + action + "] title = [" + title + "] url = [" + url + "] thumbnail = [" + thumbnail + "]")
 
     link_url = '%s?action=%s&url=%s' % (sys.argv[0], action, urllib.quote_plus(url))
     link_item = xbmcgui.ListItem(title, iconImage = "DefaultVideo.png", thumbnailImage = thumbnail)
-    link_item.setInfo(type = "Video", infoLabels = {"Title": title, "Plot": plot})
+    video_info['Title'] = title
+    link_item.setInfo(type = "Video", infoLabels = video_info)
     link_item.setProperty('IsPlayable', 'true')
+    if show_fanart:
+        link_item.setProperty('Fanart_Image', thumbnail)
+    else:
+        link_item.setProperty('Fanart_Image', fanart_file)
     return xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = link_url, listitem = link_item, isFolder = False)
 
 

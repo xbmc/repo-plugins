@@ -1,0 +1,12 @@
+0.0.3
+- Added more channel logos
+- Added support for posters as channel logos (Closes #5)
+
+0.0.2
+- Fixed wrong repository structure (Closes #1)
+- Fixed invalid XML in settings.xml (Closes #2)
+- Added missing tags to addon.xml (Closes #3)
+- Improved addon path detection (Closes #4)
+
+0.0.1
+- Initial version

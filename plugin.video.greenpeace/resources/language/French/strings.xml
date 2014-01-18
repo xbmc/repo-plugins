@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<strings>
-  <string id="30010">Page Suivant</string>
-  <string id="30011">Type de video non supporte</string>
-  <string id="30012">Adresse video non trouvee</string>
-  <string id="30101">Endroit/Langue (pour le vidéos)</string>
-  <string id="30102">Debug (logs)</string>
-  <string id="30103">Afficher les vignettes comme fanart</string>
-</strings>

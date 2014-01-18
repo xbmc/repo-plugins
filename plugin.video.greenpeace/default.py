@@ -385,10 +385,10 @@ def play_video(params):
                 return lutil.play_resolved_url(pluginhandle = pluginhandle, url = video_url)
             except:
                 lutil.log('greenpeace.play ERROR: we cannot reproduce this video URL: "%s"' % video_url)
-            return lutil.showWarning(translation(30012))
+            return lutil.showWarning(translation(30012).encode('utf-8'))
     
     lutil.log('greenpeace.play ERROR: we cannot play the video from this source yet: "%s"' % params.get("url"))
-    return lutil.showWarning(translation(30011))
+    return lutil.showWarning(translation(30011).encode('utf-8'))
 
 
 # This funtion search into the URL link to get the video URL for Youtube.

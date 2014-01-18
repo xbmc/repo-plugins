@@ -1,3 +1,8 @@
+1.1.5
+- Updated language files from Transifex (thanks to alanwww1).
+- Fix enconding bug in show warning messages.
+- Added website tag to addon.xml file.
+- Removed old strings.xml files.
 1.1.4
 - Added info to videos with published date, summary, year, and genre.
 - Added Search option for videos.

@@ -1,0 +1,18 @@
+﻿﻿﻿﻿Version 1.0.5
+* little fixxen for official repo requirements
+
+Version 1.0.4
+* Description changed
+
+﻿﻿Version 1.0.3
+* icon changed
+
+Version 1.0.2
+* name plugin is now oke.
+
+Version 1.0.1
+* XBMC 13 support
+* changelog.txt was wrong
+
+Version 1.0
+* Initial version

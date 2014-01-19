@@ -1,3 +1,20 @@
+0.7.5 - Added simplejson/json switch
+      - Added simplejson as a requirement
+      - Changed to use 'Type' instead of 'DisplayMediaType' per Luke
+      - Added Confluence skin mods (null_pointer)
+      - Added recentmovie/recenttv list for use by skins (null_pointer)
+      - Bug fix in service to use data from settings
+      - Make using Series art for episodes an option 
+
+0.7.0 - Switched all data from XML to JSON
+        - NOTE: If you have added nodes to your main menu, you will need to redo them
+      - Removed local image copying - new image proxy service by Null_Pointer! 
+        - NOTE: You can delete the .png files in addon_data!
+      - Added local data cache (null_pointer)
+      - Changed 'Play All From Here' to start from current episode
+      - Fixed crash in latest episodes when a 'special' is present 
+      - Fixed DVD playback
+
 0.6.5 - Added preliminary transcoding support
       - Added preliminary music support (plays, no metadata yet)
       - Fixed bug with non-ASCII characters in collection name

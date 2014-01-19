@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.xbmb3c" 
         name="XBMB3C" 
-        version="0.6.5" 
+        version="0.7.5" 
         provider-name="xnappo">
   <requires>
     <import addon="script.module.requests" version="1.1.0" />
     <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.simplejson" version="2.0.10"/>
   </requires>
   <extension    point="xbmc.python.pluginsource"
                 library="default.py">

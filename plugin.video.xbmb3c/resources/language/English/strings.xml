@@ -9,18 +9,21 @@
     <string id="30007">Samba Username: </string>
     <string id="30008">Samba Password: </string>
     <string id="30009">Transcode: </string>
+    <string id="30010">Enable performance profiling</string>
 
     <string id="30014">MediaBrowser</string>
     <string id="30015">Network</string>    
 
-    <string id="30022">Debug:</string>
+    <string id="30022">Advanced</string>
     <string id="30024">Username:</string>
     <string id="30025">Password:</string>
-
+    <string id="30026">Use JSON instead of SIMPLEJSON (recommended for Pi)</string>
+    
     <string id="30030">Port Number:</string>
     <string id="30036">Number of recent movies to show:</string>    
     <string id="30037">Number of recent TV episodes to show:</string>    
     <string id="30038">Mark watched at start of playback:</string>    
+    <string id="30039">Use Series Art for Episodes</string>
 
     <string id="30040">Genre Filter ...</string>
     <string id="30041">Play All from Here</string>
@@ -29,6 +32,9 @@
     
     <string id="30044">Incorrect Username/Password</string>
     <string id="30045">Username not found</string>
+    
+    <string id="30052">Deleting</string>
+    <string id="30053">Waiting for server to delete</string>
     
     <string id="30060">Title</string>
     <string id="30061">Year</string>
@@ -74,5 +80,10 @@
     <string id="30097">Sort By ...</string>
     <string id="30098">Sort Order Descending</string>
     <string id="30099">Sort Order Ascending</string>
+    
+    <string id="30110">Media Data</string>
+    <string id="30111">Include Stream Info</string>
+    <string id="30112">Include People</string>
+    <string id="30113">Include Overview</string>
 
 </strings>

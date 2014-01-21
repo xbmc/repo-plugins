@@ -236,12 +236,24 @@ def get_sb_url():
     port = xbmcplugin.getSetting(handle, "port")
     sbUrl += ":" + port    
     
-    sbUrl += "/api/"
+    web_root = xbmcplugin.getSetting(handle, "web_root").strip()
+    if (len(web_root) > 0):
+        if(web_root[0:1] != "/"):
+            web_root = "/" + web_root
+        if(web_root[len(web_root)-1:] != "/"):
+             web_root = "/"
+        sbUrl += web_root
+    else:
+        web_root = "/"
+        sbUrl += web_root
+    
+    sbUrl += "api/"
     
     guid = xbmcplugin.getSetting(handle, "guid")
     
     sbUrl += guid + "/"
     
+    xbmc.log(sbUrl)
     return sbUrl
     
 def get_thumbnail_url(show_id):
@@ -260,7 +272,7 @@ def view_future():
     
     data = result.get('data')
     if(data == None):
-        data = []
+        data = {}
     
     # process the missed
     missed = data.get('missed')

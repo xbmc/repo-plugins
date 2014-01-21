@@ -5,5 +5,6 @@
     <setting id="host" type="text" label="30011" default="" />
     <setting id="port" type="number" label="30012" default="" />
     <setting id="guid" type="text" label="30013" default="" />
+    <setting id="web_root" type="text" label="30015" default="/" />
 </settings>
 

@@ -1,3 +1,14 @@
+Version 2.0.6
+fix the tech guy episodes
+release to xbmc.org repository
+
+Version 2.0.5
+testing/beta release
+code overhaul
+fix justin & ustream live streams, now using hls
+added higher res artwork
+added setting 'use show art as fanart' default is True 
+
 Version 2.0.4
 fix TWiT Live urls changed
 

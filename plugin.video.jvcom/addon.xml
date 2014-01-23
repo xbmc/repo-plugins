@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.jvcom"
        name="JeuxVideo.com"
-       version="1.0.0"
+       version="1.0.1"
        provider-name="gormux">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    <import addon="script.module.feedparser" version="5.1.3"/>
   </requires>
   <extension point="xbmc.python.pluginsource"
              library="default.py">
@@ -24,7 +25,7 @@
     <description lang="en">This plugin provides access to jeuxvideo.com videos. Any question ? Ask julien@gormotte.info, or see http://bugs.gormotte.info
     </description>
     <disclaimer lang="fr">Ce plugin n'est ni publié ni maintenu par Jeuxvideo.com, et donc non officiel.</disclaimer>
-    <disclaimer lang="en">This plugin is not official. Any questions are for me and not Jeuxvideo.com stafff.</disclaimer>
+    <disclaimer lang="en">This plugin is not official. Any questions are for me and not Jeuxvideo.com staff.</disclaimer>
   </extension>
 </addon>
 

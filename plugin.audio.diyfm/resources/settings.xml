@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="30000">
+        <setting label="30006" type="text" id="api_key" enable="false" default="15U1U29p42mG0914h7148376qdlV8n1j" option="hidden" visible="false" />
+        <setting label="30010" type="text" id="diyfm_username" default="" />
+        <setting label="30011" type="text" id="diyfm_pass" default="" option="hidden" />
+        <setting label="30013" type="text" id="access_token" enable="false" option="hidden" default="" visible="false" />
+        <setting label="30014" type="text" id="default_stream" enable="false" default="" />
+        <setting type="text" id="def_stream_id" enable="false" visible="false" />
+        <setting label="30015" type="text" id="news_stream" enable="false" />
+        <setting type="text" id="news_stream_id" enable="false" visible="false" />
+        <setting label="30016" type="bool" id="play_news" default="false" />
+    </category>
+</settings>

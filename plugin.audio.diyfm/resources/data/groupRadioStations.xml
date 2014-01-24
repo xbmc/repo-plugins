@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+  <radioStations>
+    <group name="SRF" title="Schweizer Radio und Fernsehen">
+      <station>
+          <id>34</id>
+          <name>Radio SRF 1</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/drs1/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/34.jpg</imgUrl>
+      </station>
+      <station>
+        <id>35</id>
+        <name>Radio SRF 2 Kultur</name>
+        <streamUrl>http://stream.srg-ssr.ch/m/drs2/mp3_128</streamUrl>
+        <imgUrl>http://diy.fm/images/media/thumb/35.jpg</imgUrl>
+      </station>
+      <station>
+        <id>7</id>
+        <name>Radio SRF 3</name>
+        <streamUrl>http://stream.srg-ssr.ch/m/drs3/mp3_128</streamUrl>
+        <imgUrl>http://diy.fm/images/media/thumb/7.jpg</imgUrl>
+      </station>
+      <station>
+        <id>36</id>
+        <name>Radio SRF 4 News</name>
+        <streamUrl>http://stream.srg-ssr.ch/m/drs4news/mp3_128</streamUrl>
+        <imgUrl>http://diy.fm/images/media/thumb/36.jpg</imgUrl>
+      </station>
+      <station>
+        <id>2</id>
+        <name>Radio SRF Virus</name>
+        <streamUrl>http://stream.srg-ssr.ch/m/drsvirus/mp3_128</streamUrl>
+        <imgUrl>http://diy.fm/images/media/thumb/2.jpg</imgUrl>
+      </station>
+      <station>
+        <id>37</id>
+        <name>Radio SRF Musikwelle</name>
+        <streamUrl>http://stream.srg-ssr.ch/m/drsmw/mp3_128</streamUrl>
+        <imgUrl>http://diy.fm/images/media/thumb/37.jpg</imgUrl>
+      </station>
+    </group>
+    <group name="RTS" title="Radio Television Suisse">
+        <station>
+          <id>38</id>
+          <name>La Première</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/la-1ere/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/38.jpg</imgUrl>
+        </station>
+        <station>
+          <id>39</id>
+          <name>Espace 2</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/espace-2/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/39.jpg</imgUrl>
+        </station>
+        <station>
+          <id>5</id>
+          <name>Couleur 3</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/couleur3/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/5.jpg</imgUrl>
+        </station>
+        <station>
+          <id>40</id>
+          <name>Option Musique</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/option-musique/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/40.jpg</imgUrl>
+        </station>
+    </group>
+    <group name="RSI" title="Radiotelevisione svizzera">
+        <station>
+          <id>41</id>
+          <name>Rete Uno</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/reteuno/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/41.jpg</imgUrl>
+        </station>
+        <station>
+          <id>42</id>
+          <name>Rete Due</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/retedue/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/42.jpg</imgUrl>
+        </station>
+        <station>
+          <id>6</id>
+          <name>Rete Tre</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/retetre/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/6.jpg</imgUrl>
+        </station>
+    </group>
+    <group name="RTR" title="Radiotelevisiun Svizra Rumantscha">
+        <station>
+          <id>8</id>
+          <name>Radio Svizra Rumantscha</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/rr/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/8.jpg</imgUrl>
+        </station>
+    </group>
+    <group name="satelite" title="Swiss Satellite Radio">
+        <station>
+          <id>47</id>
+          <name>Radio Swiss Pop</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/rsp/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/47.jpg</imgUrl>
+        </station>
+        <station>
+          <id>43</id>
+          <name>Radio Swiss Classic</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/rsc_de/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/43.jpg</imgUrl>
+        </station>
+        <station>
+          <id>46</id>
+          <name>Radio Swiss Jazz</name>
+          <streamUrl>http://stream.srg-ssr.ch/m/rsj/mp3_128</streamUrl>
+          <imgUrl>http://diy.fm/images/media/thumb/46.jpg</imgUrl>
+        </station>
+    </group>
+  </radioStations>

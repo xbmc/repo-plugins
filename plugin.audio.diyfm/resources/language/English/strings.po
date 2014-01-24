@@ -1,0 +1,25 @@
+# XBMC Media Center language file
+# Addon Name: diy.fm
+# Addon id: plugin.audio.diyfm
+msgid ""
+msgstr ""
+
+msgctxt "#30010"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Default radio stream"
+msgstr ""
+
+msgctxt "#30015"
+msgid "News stream"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Playback news at the start of an hour"
+msgstr ""

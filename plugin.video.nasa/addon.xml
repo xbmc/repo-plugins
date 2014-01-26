@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nasa" name="Nasa Videos, TV and Vodcasts" version="1.1.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.nasa" name="Nasa" version="2.0.0" provider-name="Tristan Fischer (sphere@dersphere.de)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
-    <import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
@@ -11,6 +10,11 @@
   <extension point="xbmc.addon.metadata">
     <language />
     <platform>all</platform>
+    <website>http://www.nasa.gov/</website>
+    <source>https://github.com/dersphere/plugin.video.nasa</source>
+    <forum>http://forum.xbmc.org/showthread.php?tid=123001</forum>
+    <email>sphere@dersphere.de</email>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <summary lang="ar">برنامج الفيديو المساعد للوصول لمحتوى من nasa.gov</summary>
     <summary lang="be">Video plugin to access content from nasa.gov</summary>
     <summary lang="bg">Видео добавка за достъп до съдържанието на nasa.gov</summary>

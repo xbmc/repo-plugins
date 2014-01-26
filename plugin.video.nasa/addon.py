@@ -17,11 +17,8 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from xbmcswift2 import Plugin
+from xbmcswift2 import Plugin, xbmc
 
-import resources.lib.videos_scraper as videos_scraper
-import resources.lib.streams_scraper as streams_scraper
-import resources.lib.vodcasts_scraper as vodcast_scraper
 
 STRINGS = {
     'page': 30001,
@@ -32,6 +29,59 @@ STRINGS = {
     'title': 30201
 }
 
+STATIC_STREAMS = (
+    {
+        'title': 'Nasa TV HD',
+        'logo': 'public.jpg',
+        'stream_url': ('http://public.infozen.cshls.lldns.net/infozen/public/'
+                       'public/public_1000.m3u8'),
+    }, {
+        'title': 'ISS Live Stream',
+        'logo': 'iss.jpg',
+        'stream_url': ('http://sjc-uhls-proxy.ustream.tv/watch/'
+                       'playlist.m3u8?cid=9408562'),
+    }, {
+        'title': 'Educational Channel HD',
+        'logo': 'edu.jpg',
+        'stream_url': ('http://edu.infozen.cshls.lldns.net/infozen/edu/'
+                       'edu/edu_1000.m3u8'),
+    }, {
+        'title': 'Media Channel HD',
+        'logo': 'media.jpg',
+        'stream_url': ('http://media.infozen.cshls.lldns.net/infozen/media/'
+                       'media/media_1000.m3u8'),
+    },
+)
+
+YOUTUBE_CHANNELS = (
+    {
+        'name': 'NASA Main',
+        'logo': 'nasa.jpg',
+        'user': 'NASAtelevision',
+    }, {
+        'name': 'NASA Goddard',
+        'logo': 'goddard.jpg',
+        'user': 'NASAexplorer',
+    }, {
+        'name': 'NASA Jet Propulsion Laboratory',
+        'logo': 'jpl.jpg',
+        'user': 'JPLnews',
+    }, {
+        'name': 'NASA Kennedy Space Center',
+        'logo': 'nasa.jpg',
+        'user': 'NASAKennedy',
+    }, {
+        'name': 'Hubble Space Telescope',
+        'logo': 'hubble.jpg',
+        'user': 'HubbleSiteChannel',
+    },
+)
+
+YOUTUBE_URL = (
+    'plugin://plugin.video.youtube/?'
+    'path=/root&feed=uploads&channel=%s'
+)
+
 plugin = Plugin()
 
 
@@ -41,9 +91,7 @@ def show_root_menu():
         {'label': _('streams'),
          'path': plugin.url_for('show_streams')},
         {'label': _('videos'),
-         'path': plugin.url_for('show_video_topics')},
-        {'label': _('vodcasts'),
-         'path': plugin.url_for('show_vodcasts')}
+         'path': plugin.url_for('show_channels')},
     ]
     return plugin.finish(items)
 
@@ -52,145 +100,25 @@ def show_root_menu():
 def show_streams():
     items = [{
         'label': stream['title'],
-        'path': plugin.url_for(
-            endpoint='play_stream',
-            id=stream['id']
-        ),
-        'icon': stream['thumbnail'],
-        'info': {
-            'originaltitle': stream['title'],
-            'plot': stream['description']
-        },
+        'thumbnail': get_logo(stream['logo']),
+        'path': stream['stream_url'],
         'is_playable': True,
-    } for stream in streams_scraper.get_streams()]
+    } for stream in STATIC_STREAMS]
     return plugin.finish(items)
 
 
-@plugin.route('/videos/')
-def show_video_topics():
-    scraper = videos_scraper.Scraper()
+@plugin.route('/channels/')
+def show_channels():
     items = [{
-        'label': topic['name'],
-        'path': plugin.url_for(
-            endpoint='show_videos_by_topic',
-            topic_id=topic['id'],
-            page='1'
-        ),
-    } for topic in scraper.get_video_topics()]
-    items.append({
-        'label': _('search'),
-        'path': plugin.url_for(
-            endpoint='search'
-        )
-    })
+        'label': channel['name'],
+        'thumbnail': get_logo(channel['logo']),
+        'path': YOUTUBE_URL % channel['user'],
+    } for channel in YOUTUBE_CHANNELS]
     return plugin.finish(items)
 
-
-@plugin.route('/vodcasts/')
-def show_vodcasts():
-    items = [{
-        'label': vodcast['title'],
-        'path': plugin.url_for(
-            endpoint='show_vodcast_videos',
-            rss_file=vodcast['rss_file']
-        ),
-    } for vodcast in vodcast_scraper.get_vodcasts()]
-    return plugin.finish(items)
-
-
-@plugin.route('/vodcasts/<rss_file>/')
-def show_vodcast_videos(rss_file):
-    videos = vodcast_scraper.show_vodcast_videos(rss_file)
-    items = [{
-        'label': video['title'],
-        'info': {
-            'plot': video['description']
-        },
-        'path': video['url'],
-        'thumbnail': video['thumbnail'],
-        'is_playable': True,
-    } for video in videos]
-    return plugin.finish(items)
-
-
-@plugin.route('/videos/<topic_id>/<page>/')
-def show_videos_by_topic(topic_id, page):
-    scraper = videos_scraper.Scraper()
-    limit = 30
-    page = int(page)
-    start = (page - 1) * limit
-    videos, count = scraper.get_videos_by_topic_id(topic_id, start, limit)
-    items = __format_videos(videos)
-    if count > page * limit:
-        next_page = str(page + 1)
-        items.insert(0, {
-            'label': '>> %s %s >>' % (_('page'), next_page),
-            'path': plugin.url_for(
-                endpoint='show_videos_by_topic',
-                topic_id=topic_id,
-                page=next_page,
-                update='true')
-        })
-    if page > 1:
-        previous_page = str(page - 1)
-        items.insert(0, {
-            'label': '<< %s %s <<' % (_('page'), previous_page),
-            'path': plugin.url_for(
-                endpoint='show_videos_by_topic',
-                topic_id=topic_id,
-                page=previous_page,
-                update='true')
-        })
-    finish_kwargs = {
-        'sort_methods': ('PLAYLIST_ORDER', 'DATE', 'SIZE', 'DURATION'),
-        'update_listing': 'update' in plugin.request.args
-    }
-    return plugin.finish(items, **finish_kwargs)
-
-
-@plugin.route('/video/<id>')
-def play_video(id):
-    video = videos_scraper.Scraper().get_video(id)
-    return plugin.set_resolved_url(video['url'])
-
-
-@plugin.route('/stream/<id>')
-def play_stream(id):
-    stream_url = streams_scraper.get_stream(id)
-    return plugin.set_resolved_url(stream_url)
-
-
-@plugin.route('/search/')
-def search():
-    query = plugin.keyboard(heading=_('title'))
-    if query and len(query) > 3:
-        log('search gots a string: "%s"' % query)
-        videos, count = videos_scraper.Scraper().search_videos(query)
-        items = __format_videos(videos)
-        return plugin.finish(items)
-
-
-def __format_videos(videos):
-    items = [{
-        'label': video['title'],
-        'thumbnail': video['thumbnail'],
-        'info': {
-            'count': i,
-            'studio': video['duration'],
-            'originaltitle': video['title'],
-            'plot': video['description'],
-            'date': video['date'],
-            'size': video['filesize'],
-            'credits': video['author'],
-            'genre': ' | '.join(video['genres'])
-        },
-        'is_playable': True,
-        'path': plugin.url_for(
-            endpoint='play_video',
-            id=video['id']
-        ),
-    } for i, video in enumerate(videos)]
-    return items
+def get_logo(logo):
+    addon_id = plugin._addon.getAddonInfo('id')
+    return 'special://home/addons/%s/resources/media/%s' % (addon_id, logo)
 
 
 def _(string_id):

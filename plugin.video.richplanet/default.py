@@ -19,6 +19,7 @@ def CATEGORIES():
         addDir(__language__(30015),'http://blip.tv/search?search=richplanet%202010',3,'http://2.i.blip.tv/g?src=Richplanet-poster_image478.png&w=220&h=325&fmt=jpg','')
         addDir(__language__(30016),'http://blip.tv/search?search=richplanet%20UFO',3,'http://2.i.blip.tv/g?src=Richplanet-poster_image478.png&w=220&h=325&fmt=jpg','')
         addDir(__language__(30021),'http://blip.tv/search?search=richplanet',4,'http://2.i.blip.tv/g?src=Richplanet-poster_image478.png&w=220&h=325&fmt=jpg','')
+
 def INDEX(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1')
@@ -38,9 +39,10 @@ def INDEX2(url):
         link=response.read()
         response.close()
         match=re.compile('Thumb"\n\t\tsrc="(.+?)"\n\t\talt="(.+?)" />\n\t<div class="MyBlipEpisodeCard">\n\t\t<a href="(.+?)" class').findall(link)
+        
         for thumbnail,name,url in match:
                 name = name.replace('&quot;', '"').replace('&#39;', '\'').replace('&amp;', '&')# Cleanup the title.
-                addDir(name,'http://www.blip.tv'+url,2,'thumbnail',name)
+                addDir(name,'http://www.blip.tv'+url,2,'http:'+thumbnail,name)
 
   
 
@@ -52,15 +54,33 @@ def VIDEOLINKS(url,name):
         link=response.read()
         response.close()
         longdescription1=re.compile('"DescContainer">\n\t\t\t\t<h3>.+?</h3>\n\t\t\t\t<p>(.+?)</p>').findall(link)#full description
-        longdescription = longdescription1[0]
+        if len(longdescription1) > 0:
+               longdescription = longdescription1[0]
+        else:
+               longdescription = __language__(30010)
 
-       
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         match=re.compile('iframe src=&quot;(.+?).x?p=1&quot;').findall(link)
+        #if len(match) < 1:
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        match=re.compile('swf#file=(.+?)&autostart').findall(link)
+        req = urllib2.Request(match[0])
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        match=re.compile('content url="(.+?)" blip').findall(link)
+        for url in match:
+                addLink(name,url,'http://a.i.blip.tv/g?src=Richplanet-website_banner610.png&w=220&h=150&fmt=jpg',longdescription)
+
         
         
         req = urllib2.Request(match[0])

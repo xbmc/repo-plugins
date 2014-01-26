@@ -64,7 +64,7 @@ def ADDLINKS(url):
                 previouspagelabel=''.join(str(e) for e in previouspagelabel)
 	source=zip((prefix),(match),(suffix))
 	mylist=zip((source),(name),(thumbnail),(description),(date))
-        addDir('Main Menu','',None,main_menu_thumb)
+        addDir('Main Menu','http://www.itbn.org',12,main_menu_thumb)
         if previouspage:
 		previousurl = sys.argv[0]+"?url="+urllib.quote_plus('http://www.itbn.org'+previouspage[0])+"&mode="+str(11)+"&name="+urllib.quote_plus('Page '+previouspagelabel)                
 		addLink('Page '+previouspagelabel,previousurl,previous_thumb)
@@ -73,6 +73,7 @@ def ADDLINKS(url):
 		description=description.replace("&#039;","\'")
 		description=description.replace("&hellip;","...")
 		description=description.replace("&amp;","&")
+		description=description.replace("&rsquo;","\'")
 		description=description.split('\"', 1)[-1]
 		description=description.replace('\"','')
 		description=description.replace(',','')
@@ -258,7 +259,7 @@ def SEARCH(url):
 			previouspagelabel=re.sub("\D", "", previouspagelabel)
 		source=zip((prefix),(match),(suffix))
 		mylist=zip((source),(name),(thumbnail),(description),(date))
-                addDir('Main Menu','',None,main_menu_thumb)
+        	addDir('Main Menu','http://www.itbn.org',12,main_menu_thumb)
                 if previouspage:
                         addDir('Page '+previouspagelabel,'http://www.itbn.org'+previouspage[0],1,next_thumb)
 		for url,name,thumbnail,description,date in mylist:
@@ -266,6 +267,7 @@ def SEARCH(url):
 			description=description.replace("&#039;","\'")
 			description=description.replace("&hellip;","...")
 			description=description.replace("&amp;","&")
+			description=description.replace("&rsquo;","\'")
 			description=description.split('\"', 1)[-1]
 			description=description.replace('\"','')
 			description=description.replace(',','')
@@ -322,7 +324,7 @@ def AIRDATE(url):
 			previouspagelabel=re.sub("\D", "", previouspagelabel)
 		source=zip((prefix),(match),(suffix))
 		mylist=zip((source),(name),(thumbnail),(description),(date))
-                addDir('Main Menu','',None,main_menu_thumb)
+        	addDir('Main Menu','http://www.itbn.org',12,main_menu_thumb)
                 if previouspage:
                         addDir('Page '+previouspagelabel,'http://www.itbn.org'+previouspage[0],1,next_thumb)
 		for url,name,thumbnail,description,date in mylist:
@@ -330,6 +332,7 @@ def AIRDATE(url):
 			description=description.replace("&#039;","\'")
 			description=description.replace("&hellip;","...")
 			description=description.replace("&amp;","&")
+			description=description.replace("&rsquo;","\'")
 			description=description.split('\"', 1)[-1]
 			description=description.replace('\"','')
 			description=description.replace(',','')
@@ -498,5 +501,7 @@ elif mode==10:
 elif mode==11:
         xbmc.log( ""+url)
         PREVIOUS()
+elif mode==12:
+	xbmc.executebuiltin("XBMC.Container.Update(plugin://plugin.video.itbn_org,replace)")
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

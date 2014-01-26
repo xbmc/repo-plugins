@@ -1,4 +1,6 @@
-import urllib,urllib2,re,xbmcplugin,xbmcgui,os,xbmcaddon,sys,xbmcvfs
+import urllib,urllib2,re,xbmcplugin,xbmcgui,os,xbmcaddon,sys,xbmcvfs,subprocess
+import artistdir
+import multiprocessing as mp
 dbg = False
 try:
 	import StorageServer
@@ -13,7 +15,17 @@ next_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'thumbnails', 'nextp
 browse_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'thumbnails', 'explore.png' )
 search_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'thumbnails', 'search.png' )
 timeout_thumb = os.path.join( settings.getAddonInfo( 'path' ), 'thumbnails', 'timeout.png' )
+plugin_dir = settings.getAddonInfo( 'path' )
 base_url='http://www.godtube.com'
+
+ADDONDATA = xbmc.translatePath('special://profile/addon_data/plugin.video.godtube_com/')
+if not os.path.exists(ADDONDATA):
+	os.makedirs(ADDONDATA)
+if not os.path.exists(ADDONDATA+'Artist_Directory.html'):
+	proc = mp.Process(target=artistdir.main, args=(ADDONDATA,))
+	proc.start()
+
+
 
 
 ##################################################################################################################################
@@ -21,6 +33,7 @@ base_url='http://www.godtube.com'
 def MAIN():
 	addDir(translation(30001),base_url,3, browse_thumb)
         addDir(translation(30002),base_url,2, search_thumb)
+	
 
 ##################################################################################################################################
         
@@ -136,14 +149,12 @@ def Categories(url):
 ##################################################################################################################################
 
 def ArtistDirectory(url):
+	proc = mp.Process(target=artistdir.main, args=(ADDONDATA,))
+	proc.start()
 	try:	
-		req = urllib2.Request(url)
-        	req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-		response = urllib2.urlopen(req)
-		link=response.read()
-		response.close()
-		match=re.compile('<a href="http://www.godtube.com/artist/(.+?)">').findall(link)
-		name=re.compile('<span class="ShowLink" >(.+?)</span>').findall(link)
+		Artist_Directory = ReadFile('Artist_Directory.html',ADDONDATA)
+		match=re.compile('<a href="http://www.godtube.com/artist/(.+?)">').findall(Artist_Directory)
+		name=re.compile('<span class="ShowLink" >(.+?)</span>').findall(Artist_Directory)
 		mylist=zip((match),(name))
 		for match,name in mylist:
 			addDir(name,base_url+'/artist/'+match,1,'http://www.godtube.com/resource/user/profile/'+match[:-1]+'.jpg')
@@ -152,6 +163,24 @@ def ArtistDirectory(url):
                             	(translation(30104), translation(30105),5000, timeout_thumb))
 		PREVIOUS()
 	
+
+
+def SaveFile(filename, data, dir):
+    path = os.path.join(dir, filename)
+    try:
+        file = open(path,'w')
+    except:
+	file = open(path,'w+')
+    file.write(data)
+    file.close()
+
+def ReadFile(filename, dir):
+    path = os.path.join(dir, filename)
+    try:
+    	file = open(path,'r')
+    except:
+	pass
+    return file.read()
 
 ##############################################################################################################
 
@@ -250,6 +279,7 @@ elif mode==4:
         print ""+url
         ArtistDirectory(url)
 if mode==1:
+	xbmc.sleep(100)
 	xbmc.executebuiltin("Container.SetViewMode(500)")
 if mode==None:
 	xbmc.executebuiltin("Container.SetViewMode(50)")

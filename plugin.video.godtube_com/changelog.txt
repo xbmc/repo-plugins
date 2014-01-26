@@ -7,3 +7,5 @@ Version 0.3.0
 -Added category browsing
 Version 1.0.0
 -Cleaned up code
+Version 1.0.1
+-Added a cached Artist Directory file since the website's loading of the file is intermitten

@@ -1,4 +1,5 @@
 Richplanet Tv Video Plugin created by celadoor.
+Version 0.1.3 -Restore missing setting file, remove redundant code
 
 Version 0.1.2 -Fixed thumbnail display and missing videos.
 

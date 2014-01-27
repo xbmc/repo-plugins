@@ -64,14 +64,15 @@ def VIDEOLINKS(url,name):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        match=re.compile('iframe src=&quot;(.+?).x?p=1&quot;').findall(link)
-        #if len(match) < 1:
+        match=re.compile('iframe src=&quot;(.+?).x?p=1&quot;').findall(link)#newer type videos
+
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        match=re.compile('swf#file=(.+?)&autostart').findall(link)
+        match=re.compile('swf#file=(.+?)&autostart').findall(link)#older type videos
+
         req = urllib2.Request(match[0])
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
@@ -81,25 +82,6 @@ def VIDEOLINKS(url,name):
         for url in match:
                 addLink(name,url,'http://a.i.blip.tv/g?src=Richplanet-website_banner610.png&w=220&h=150&fmt=jpg',longdescription)
 
-        
-        
-        req = urllib2.Request(match[0])
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        definition = 'sd'
-        #multi-quality stuff
-        quality = int(addon.getSetting("vquality"))
-        if(quality == 0):
-                definition = 'ld'
-        elif(quality == 1):
-                definition = 'sd'
-        elif(quality == 2):
-                definition = 'hd'
-        match=re.compile('blip'+definition+'="(.+?)"').findall(link)
-        for url in match:
-                addLink(name,url,'http://a.i.blip.tv/g?src=Richplanet-website_banner610.png&w=220&h=150&fmt=jpg',longdescription)
 
                 
 def get_params():

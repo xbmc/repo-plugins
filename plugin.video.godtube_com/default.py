@@ -1,7 +1,7 @@
 import urllib,urllib2,re,xbmcplugin,xbmcgui,os,xbmcaddon,sys,xbmcvfs,subprocess
 import artistdir
-import multiprocessing as mp
 dbg = False
+import threading
 try:
 	import StorageServer
 	cache = StorageServer.StorageServer("GodTube")
@@ -22,7 +22,7 @@ ADDONDATA = xbmc.translatePath('special://profile/addon_data/plugin.video.godtub
 if not os.path.exists(ADDONDATA):
 	os.makedirs(ADDONDATA)
 if not os.path.exists(ADDONDATA+'Artist_Directory.html'):
-	proc = mp.Process(target=artistdir.main, args=(ADDONDATA,))
+	proc = threading.Thread(target=artistdir.main, args=(ADDONDATA,))
 	proc.start()
 
 
@@ -149,7 +149,7 @@ def Categories(url):
 ##################################################################################################################################
 
 def ArtistDirectory(url):
-	proc = mp.Process(target=artistdir.main, args=(ADDONDATA,))
+	proc = threading.Thread(target=artistdir.main, args=(ADDONDATA,))
 	proc.start()
 	try:	
 		Artist_Directory = ReadFile('Artist_Directory.html',ADDONDATA)

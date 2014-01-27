@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30001">Error</string>
+    <string id="30002">Server unavailable</string>
+    <string id="30003">Courses are not available</string>
+    <string id="30004">Videos in this course are not available</string>
+</strings>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.codigofacilito.com" version="1.0.0" name="CodigoFacilito.com" provider-name="BuNKeR (@ezeescobar)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0" />
+        <import addon="plugin.video.youtube" version="3.1.0" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <language>es</language>
+        <platform>all</platform>
+        <summary lang="es">Navegá y mirá los videos de CodigoFacilito.com</summary>
+        <description lang="es">Te enseñamos a programar en JAVA, C++, Ruby, Python, Objective-C. ¿Web? Aprende HTML5, CSS, javascript y jQuery, PHP y más...</description>
+        <summary lang="en">Browse and view videos from CodigoFacilito.com</summary>
+        <description lang="en">We teach you to program in JAVA, C++, Ruby, Python, Objective-C. Web? Learn HTML5, CSS, JavaScript and jQuery, PHP and more (spanish content)...</description>
+        <source>http://github.com/ezeqescobar/plugin.video.codigofacilito.com</source>
+        <disclaimer>Reportar fallos a ezeqescobar@gmail.com</disclaimer>
+        <email>ezeqescobar@gmail.com</email>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <forum></forum>
+        <website>http://www.codigofacilito.com</website>
+    </extension>
+</addon>

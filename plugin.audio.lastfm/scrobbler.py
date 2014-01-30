@@ -189,7 +189,7 @@ class Main:
         # check if there's anything left in the queue to scrobble (if we started with more than 50 tracks)
         if self.queue:
             log('tracks left to scrobble', SESSION)
-            self_lastfm_scrobble( self, tstamp )
+            self._lastfm_scrobble( tstamp )
         # sync queue to disk
         log('save file to disk', SESSION)
         write_file(self.file, self.queue)
@@ -263,6 +263,9 @@ class MyPlayer(xbmc.Player):
         album    = self.getMusicInfoTag().getAlbum().decode("utf-8")
         title    = self.getMusicInfoTag().getTitle().decode("utf-8")
         duration = str(self.getMusicInfoTag().getDuration())
+        # get duration from xbmc.Player if the MusicInfoTag duration is invalid
+        if int(duration) <= 0:
+            duration = str(int(self.getTotalTime()))
         track    = str(self.getMusicInfoTag().getTrack())
         mbid     = '' # musicbrainz id is not yet available
         # get the track id if we're playing last fm radio

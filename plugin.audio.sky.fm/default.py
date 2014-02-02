@@ -207,7 +207,7 @@ class musicAddonXbmc:
 
                 channels = json.loads(self.curler.request(pluginConfig.get('streams', 'public'), 'get'))
 
-            re_channelData = re.compile("NS\('AudioAddict.API.Config'\).channels\s*=\s*([^;]+);", re.M | re.I)
+            re_channelData = re.compile("NS\('AudioAddict.API.Config'\).channels\s*=\s*([^\n]+);", re.M | re.I)
             channelMeta = json.loads(re_channelData.findall(html)[0])
 
             # put each playlist in a worker queue for threading

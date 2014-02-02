@@ -2,6 +2,9 @@
 * Fixed/improved feature
 - Removed feature
 
+2. February 2014 v3.0.4
+* Regex getting user config was too greedy
+
 
 8. January 2014 v3.0.3
 * Fixed parsing of Favorites playlist

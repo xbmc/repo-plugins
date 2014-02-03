@@ -33,23 +33,24 @@
 #     Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 #     Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 #
-
-
 from urllib2 import urlopen, Request
+import logging
 import re
+import socket
 
 MAIN_URL = "http://www.swr.de/schaetze-der-welt/"
+REQUEST_HEADERS = {"User-Agent" : "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)"}
+SOCKET_TIMEOUT = 30
+MAIN_PAGE_CACHE = None
+MAX_TIMEOUT_RETRIES = 20
+logger = logging.getLogger('plugin.video.schaetzederwelt')
 
-
-def scrape_topic_per_regex(topic, url_for, endpoint):
-    log("Scraping")
-    url = get_ActualURL_from_URL("http://www.swr.de/schaetze-der-welt/" + topic + "/.*.html", MAIN_URL)
-    r = urlopen(url)
-    log("URL opened...")
-    page = r.read()
+def scrape_topic_per_regex(topic, url_for, endpoint, localizer):
+    log_info("Scraping " + topic)
+    page = get_content_from_url(get_actual_from_baseurl("http://www.swr.de/schaetze-der-welt/" + topic + "/.*.html"))
            
     pattern = re.compile('teaser teaser-08 schaetze-der-welt\">(\n| )*<h2>(\n| )*<a href=\"(?P<url>.*)\">(\n| )*<img.*src=\"(?P<img>.*.jpg)\".*/>(\n| )*\t(\n| )*<span.*>(?P<titel1>(.*\n.*|.*)) *</span>(\n| )*<span.*>(?P<titel2>(.*\n.*|.*)) *</span>(\n| )*</a.*(\n| )*</h2.*(\n| )*<div.*(\n| )*<p>(?P<desc>.*)(\n| )*<a')    
-    log("RegEx processed, gathering videos...")
+    log_info("RegEx processed, gathering videos...")
             
     items = [{
              # Kurztext, Titel
@@ -62,26 +63,24 @@ def scrape_topic_per_regex(topic, url_for, endpoint):
              #'fanart_image' : './fanart.jpg',
              # Beschreibung
              'info' : { 'plot' : m.group('desc')},
+             # Add watch toggle button manually
+             'context_menu' : [(localizer('toggle_watched'), 'XBMC.Action(ToggleWatched)')],
              'is_playable' : True
             } for m in pattern.finditer(page)]
     
-    log(str(len(items)) + " Videos gathered.")
+    log_info(str(len(items)) + " Videos gathered.")
     items.sort(key=lambda video: video['label'])
     return items
 
 
-def scrape_a_to_z_per_regex(letter, url_for, endpoint):
-    log("Scraping")
-    url = get_ActualURL_from_URL("http://www.swr.de/schaetze-der-welt/denkmaeler/.*.html", MAIN_URL)    
-    r = urlopen(url)
-    log("URL opened...")
-    page = r.read()        
-
+def scrape_a_to_z_per_regex(letter, url_for, endpoint, localizer):
+    log_info("Scraping " + letter)
+    page = get_content_from_url(get_actual_from_baseurl("http://www.swr.de/schaetze-der-welt/denkmaeler/.*.html"))
     pattern = re.compile('<p><a name=\"' + letter + '\"></a>' + letter + '</p>\n *<ul>\n *(<li><a href=\".*\".*</a></li>\n *)*')
     erg = pattern.search(page)    
     pattern2 = re.compile('<li><a href=\"(?P<url>.*)\">(?P<text>.*)</a></li>')
-    log("RexEx processed, gathering monuments for letter " + letter)
-    #log(pattern2.findall(page, erg.start(), erg.end()))    
+    log_info("RexEx processed, gathering monuments for letter " + letter)
+    #log_info(pattern2.findall(page, erg.start(), erg.end()))    
     
     items = [{
              # Kurztext, Titel
@@ -93,25 +92,66 @@ def scrape_a_to_z_per_regex(letter, url_for, endpoint):
              'icon' : '', 
              # Beschreibung
              'info' : '',
+             'context_menu' : [(localizer('toggle_watched'), 'XBMC.Action(ToggleWatched)')],
              'is_playable' : True  
             } for m in pattern2.finditer(page, erg.start(), erg.end())]    
     
-    log(str(len(items)) + " Memorials gathered.")
+    log_info(str(len(items)) + " monuments gathered.")
     return items
-        
 
-def get_ActualURL_from_URL(regexp, url):
-    requ = urlopen(Request(url))
-    string = requ.read()
-    url_mp4=re.search(regexp, string)
-    if (url_mp4 != None):        
-        return url_mp4.group(0)
+
+def get_content_from_url(url):
+    request = Request(url, headers = REQUEST_HEADERS)
+    #log_info("Timeout: " + str(socket.getdefaulttimeout()))
+    sitereached = False
+    timeoutcounter = 0
+    while not sitereached and timeoutcounter < MAX_TIMEOUT_RETRIES:
+        try:
+            response = urlopen(request, timeout = SOCKET_TIMEOUT)
+            sitereached = True
+        except socket.timeout:
+           log_info("Timeout (" + str(SOCKET_TIMEOUT) + " sec) reached accessing " + url)
+           timeoutcounter+=1            
+        except Exception,e:
+            log_info("Exception " + str(e) + " accessing URL " + url)
+            raise e
+    if (timeoutcounter == MAX_TIMEOUT_RETRIES):
+        log_info("Limit for retries after timeout reached: " + str(MAX_TIMEOUT_RETRIES))
+        log_info("Site may be down?")
+        raise socket.timeout        
+                    
+    log_info("URL opened: " + url)
+    return response.read()
+
+
+def get_actual_from_baseurl(regexp):
+    global MAIN_PAGE_CACHE
+    
+    if (MAIN_PAGE_CACHE == None):
+        log_debug("Filling MAIN_PAGE_CACHE")                       
+        MAIN_PAGE_CACHE = get_content_from_url(MAIN_URL)
+    
+    log_debug("using MAIN_PAGE_CACHE")
+    actual_url=re.search(regexp, MAIN_PAGE_CACHE)
+    if (actual_url != None):
+        return actual_url.group(0)
     else:
         return None
 
-    
-def log(msg):
-    print('HtmlScraper: %s' % msg)
-    
+
+def get_video_from_url(regexp, url):                           
+    page = get_content_from_url(url)    
+    video_url=re.search(regexp, page)
+    if (video_url != None):        
+        return video_url.group(0)
+    else:
+        return None
+
+
+def log_info(msg):
+    logger.info('HtmlScraper: %s' % msg)
+
+def log_debug(msg):
+    logger.debug('HtmlScraper: %s' % msg)
     
     

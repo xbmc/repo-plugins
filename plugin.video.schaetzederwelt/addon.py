@@ -33,8 +33,6 @@
 #     Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
 #     Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 #
-
-
 from xbmcswift2 import Plugin, xbmcgui
 from resources.lib import htmlscraper
 import string
@@ -51,6 +49,9 @@ MAIN_MENU_TOPICS = [
 ]
 
 
+plugin = Plugin()
+
+
 I18NINDEX = { 
              'afrika' : 30001,
              'amerika' : 30002,
@@ -61,11 +62,13 @@ I18NINDEX = {
              'a_to_z_menu' : 30007,
              'video_not_online' : 30008,
              'clear_cache' : 30009,
-             'cache_cleared' : 30010
+             'cache_cleared' : 30010,
+             'toggle_watched' : 30011
              }
 
+def get_localized_string(label):
+    return plugin.get_string(I18NINDEX[label])
 
-plugin = Plugin()
 
 @plugin.route('/')
 def index():
@@ -74,18 +77,17 @@ def index():
     
     for item in items:
         item['context_menu'] = [(get_localized_string('clear_cache'), 'XBMC.RunPlugin(%s)' % plugin.url_for(endpoint = 'clear_cache', path = item['path']))]
-        #item.add_context_menu_items([{'label': get_localized_string('clear_cache'), 'path' : plugin.url_for('clear_cache', path = item['path'])}])
     return plugin.finish(items)
 
 @plugin.route('/topic/<path>')
-def topic(path):                
+def topic(path):
     if (len(plugin.get_storage(path).items()) == 0):
         plugin.log.info("Cache is empty for items in topic " + path)         
         # Cache items
         if (path in string.ascii_uppercase):
-            plugin.get_storage(path)['items'] = htmlscraper.scrape_a_to_z_per_regex(path, plugin.url_for, 'play_video')
+            plugin.get_storage(path)['items'] = htmlscraper.scrape_a_to_z_per_regex(path, plugin.url_for, 'play_video', get_localized_string)
         else:
-            plugin.get_storage(path)['items'] = htmlscraper.scrape_topic_per_regex(path, plugin.url_for, 'play_video')
+            plugin.get_storage(path)['items'] = htmlscraper.scrape_topic_per_regex(path, plugin.url_for, 'play_video', get_localized_string)
         #plugin.log.info(str(path) + " stored in cache")
     else:
         plugin.log.info(str(path) + " items retrieved from cache")
@@ -105,7 +107,7 @@ def a_to_z_menu():
 
 @plugin.route('/video/<url>')
 def play_video(url):
-    videolink = htmlscraper.get_ActualURL_from_URL("http.*l\.mp4", url)
+    videolink = htmlscraper.get_video_from_url("http.*l\.mp4", url)
     if (videolink != None):
         plugin.log.info("Playing url: %s" % videolink)
         plugin.set_resolved_url(videolink)
@@ -132,10 +134,6 @@ def clear_cache(path):
     message = get_localized_string("cache_cleared") + ' \'' + get_localized_string(menuitem) + '\'.'  
     xbmcgui.Dialog().ok(plugin.name, message)
     return plugin.redirect(plugin.url_for('index'))
-
-
-def get_localized_string(label):
-    return plugin.get_string(I18NINDEX[label])
 
 
 if __name__ == '__main__':

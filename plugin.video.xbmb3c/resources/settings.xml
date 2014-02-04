@@ -20,10 +20,14 @@
 
 	<category label="30110"> <!-- Media Data -->
         <setting id="includeStreamInfo" type="bool" label="30111" default="true" visible="true" enable="true"/>
-        <setting id="includePeople" type="bool" label="30112" default="false" visible="true" enable="true"/>
-        <setting id="includeOverview" type="bool" label="30113" default="false" visible="true" enable="true"/>    
+        <setting id="includePeople" type="bool" label="30112" default="true" visible="true" enable="true"/>
+        <setting id="includeOverview" type="bool" label="30113" default="true" visible="true" enable="true"/>    
         <setting id="numRecentMovies" type="number" label="30036" default="20" visible="true" enable="true"/>
         <setting id="numRecentTV" type="number" label="30037" default="20" visible="true" enable="true"/>
+        <setting id="resumeJumpBack" type="number" label="30114" default="10" visible="true" enable="true"/>
+        <setting id="markPlayedAt" type="number" label="30115" default="90" visible="true" enable="true"/>
+        <setting id="addCounts" type="bool" label="30116" default="true" visible="true" enable="true"/>
+        <setting id="backgroundRefresh" type="number" label="30117" default="30" visible="true" enable="true"/>
 	</category>
     
     <category label="30022" > <!-- Advanced -->

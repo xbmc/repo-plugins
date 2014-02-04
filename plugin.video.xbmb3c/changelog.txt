@@ -1,3 +1,21 @@
+0.8.0 - Improved cache accuracy (null_pointer)
+      - Added Confluence auto-menu creation 
+        (add movies, then TV, then others to favorites, relaunch) (null_pointer)
+      - Added hooks for xperience1080++ automation.  Gotham only! (im85288)  
+      - Added much more art (disc art, clear art banner art etc).  Gotham only! (im85288)
+      - Added total play time for boxsets (null_pointer)
+      - Provide skins boxset information (im85288)
+      - Added rotating background fanart (null_pointer/im85288)
+      - Use GZIP for JSON requests (null_pointer)
+      - Added configurable options for played and resume times/percentages (null_pointer)
+      - Added extra information for RecentMovies/Episodes (im85288)
+      - Added RecentAlbums, RandomMovies, RandomEpisodes, RandomAlbums, NextUpTV services (im85288)
+      - Provide runtime and other information in list view (xnappo)
+      - Added 'Studio' metadata (xnappo)
+      - Added 'poster' art (xnappo)
+      - Added BoxSet video node (xnappo)
+      - Added trailers count, fixed movie totals (im85288)
+
 0.7.5 - Added simplejson/json switch
       - Added simplejson as a requirement
       - Changed to use 'Type' instead of 'DisplayMediaType' per Luke

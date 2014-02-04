@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <window>
 	<defaultcontrol always="true">9000</defaultcontrol>
 	<allowoverlay>no</allowoverlay>	
@@ -886,19 +887,40 @@
 				</focusedlayout>
 				<content>
 					<item id="33001">
-						<label>MB3 Movies</label>
-						<onclick>ActivateWindow(10025,&quot;plugin://plugin.video.xbmb3c/?mode=0&amp;url=http%3a%2f%2flocalhost%3a8096%2fmediabrowser%2fUsers%2f0c81db129880f1050298757c7622e96f%2fitems%3fParentId%3ddf52a95d83c1e36bf9e5c446acd13bbf%26IsVirtualUnaired%3dfalse%26IsMissing%3dFalse%26Fields%3dPath%2cGenres%2cMediaStreams%2cPeople%2cOverview%26SortOrder%3dAscending%26SortBy%3dSortName%26Genres%3d%26format%3djson%2fall&quot;)</onclick>
+						<label>$INFO[Window.Property(xbmb3c_menuitem_name_0)]</label>
+						<onclick>ActivateWindow(video,&quot;$INFO[Window.Property(xbmb3c_menuitem_action_0)]&quot;, return)</onclick>
 						<icon>-</icon>
 						<thumb>-</thumb>
-						<visible>True</visible>
-					</item>   
-                    <item id="33002">
-						<label>MB3 TV</label>
-						<onclick>ActivateWindow(10025,&quot;plugin://plugin.video.xbmb3c/?mode=0&amp;url=http%3a%2f%2flocalhost%3a8096%2fmediabrowser%2fUsers%2f0c81db129880f1050298757c7622e96f%2fitems%3fParentId%3ddf52a95d83c1e36bf9e5c446acd13bbf%26IsVirtualUnaired%3dfalse%26IsMissing%3dFalse%26Fields%3dPath%2cGenres%2cMediaStreams%2cPeople%2cOverview%26SortOrder%3dAscending%26SortBy%3dSortName%26Genres%3d%26format%3djson%2fall&quot;)</onclick>
+						<visible>!IsEmpty(Window.Property(xbmb3c_menuitem_name_0))</visible>
+					</item>
+					<item id="33002">
+						<label>$INFO[Window.Property(xbmb3c_menuitem_name_1)]</label>
+						<onclick>ActivateWindow(video,&quot;$INFO[Window.Property(xbmb3c_menuitem_action_1)]&quot;, return)</onclick>
 						<icon>-</icon>
 						<thumb>-</thumb>
-						<visible>True</visible>
-					</item>  
+						<visible>!IsEmpty(Window.Property(xbmb3c_menuitem_name_1))</visible>
+					</item>           
+					<item id="33003">
+						<label>$INFO[Window.Property(xbmb3c_menuitem_name_2)]</label>
+						<onclick>ActivateWindow(video,&quot;$INFO[Window.Property(xbmb3c_menuitem_action_2)]&quot;, return)</onclick>
+						<icon>-</icon>
+						<thumb>-</thumb>
+						<visible>!IsEmpty(Window.Property(xbmb3c_menuitem_name_2))</visible>
+					</item>
+					<item id="33004">
+						<label>$INFO[Window.Property(xbmb3c_menuitem_name_3)]</label>
+						<onclick>ActivateWindow(video,&quot;$INFO[Window.Property(xbmb3c_menuitem_action_3)]&quot;, return)</onclick>
+						<icon>-</icon>
+						<thumb>-</thumb>
+						<visible>!IsEmpty(Window.Property(xbmb3c_menuitem_name_3))</visible>
+					</item>
+                    <item id="33005">
+						<label>$INFO[Window.Property(xbmb3c_menuitem_name_4)]</label>
+						<onclick>ActivateWindow(video,&quot;$INFO[Window.Property(xbmb3c_menuitem_action_4)]&quot;, return)</onclick>
+						<icon>-</icon>
+						<thumb>-</thumb>
+						<visible>!IsEmpty(Window.Property(xbmb3c_menuitem_name_4))</visible>
+					</item>
 					<item id="7">
 						<label>8</label>
 						<onclick>ActivateWindow(Weather)</onclick>

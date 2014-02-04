@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+   <setting id="sort" type="enum" lvalues="30001|30002|30003" label="30000" default="2"/>
+   <setting id="bitrate" type="enum" lvalues="30005|30011|30010|30009|30008|30007|30006" label="30004" default="0"/>
+</settings>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<string id="30000">Sort Order</string>
+	<string id="30001">Date</string>
+	<string id="30002">Views</string>
+	<string id="30003">Rating</string>
+
+	<string id="30004">Choosen Bitrate</string>
+	<string id="30005">Maximum</string>
+	<string id="30006">3500kbps</string>
+	<string id="30007">2200kbps</string>
+	<string id="30008">1700kbps</string>
+	<string id="30009">1200kbps</string>
+	<string id="30010">750kbps</string>
+	<string id="30011">400kbps</string>
+
+	<string id="30020">Enter a Date.</string>
+	<string id="30021">No results found for the given date.</string>
+	<string id="30022">No results found for the given search term(s).</string>
+
+	<string id="30030">Full Episodes</string>
+	<string id="30031">Guests</string>
+	<string id="30032">Search</string>
+	<string id="30033">Browse By Date</string>
+</strings>

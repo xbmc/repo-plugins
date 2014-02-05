@@ -17,8 +17,17 @@ Frodo
 
 ## Tests
 
+### Dependancies
+
     > pip install xbmcswift2
-    > python resources/tests/test_addon.py
+
+### Unit
+
+    > python resources/tests/unit.py
+
+### Integration
+
+    > python resources/tests/integration.py
 
 ## License
 

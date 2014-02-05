@@ -1,28 +1,9 @@
 import unittest
-import sys, os
+import sys
+import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
 from resources.lib.udacity import Udacity, UdacityAuth
-from resources.lib.utils import widgets_to_answer
-
-class MockWidget():
-    def getContent(self):
-        return True
-
-
-class UnitTests(unittest.TestCase):
-    def test_return_answer_data_from_list_of_widgets(self):
-        mock_1 = MockWidget()
-        mock_2 = MockWidget()
-        widgets = [
-            {'data': {'marker': True},
-             'obj': mock_1},
-            {'data': {'marker': True},
-             'obj': mock_2},
-        ]
-        result = widgets_to_answer(widgets)
-        self.assertTrue('submission' in result)
-        self.assertTrue(result['submission']['parts'][0]['content'])
 
 
 class OfflineTest(unittest.TestCase):
@@ -42,14 +23,8 @@ class ApiTests(unittest.TestCase):
 
     def test_get_courses(self):
         ud = Udacity(None)
-        courses = ud.get_courses(None)
+        courses = ud.get_courses()
         self.assertTrue(type(courses) == list)
-
-    def test_get_courses_filters_results(self):
-        level = 'Beginner'
-        ud = Udacity(None)
-        courses = ud.get_courses(level)
-        self.assertTrue(all([c[2] == level for c in courses]))
 
     def test_get_course_contents(self):
         ud = Udacity(None)

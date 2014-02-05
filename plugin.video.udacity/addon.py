@@ -42,7 +42,7 @@ def index():
 @plugin.route('/course_catalog/')
 def course_catalog():
     udacity = Udacity(None)
-    courses = udacity.get_courses(None)
+    courses = udacity.get_courses()
     items = [{
         'label': title,
         'path': plugin.url_for('open_course', course_id=course_id),
@@ -161,7 +161,7 @@ def play_exercise(
                 'load_quiz', course_id=course_id, lesson_id=lesson_id,
                 group_id=group_id, quiz=quiz),
         })
-    if answer_data:
+    if answer_data and answer_data['data']:
         items.append({
             'label': plugin.get_string(30009),
             'path': plugin.url_for(

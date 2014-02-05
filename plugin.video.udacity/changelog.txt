@@ -1,3 +1,11 @@
+1.0.5
+- Updated Course Catalog to use api instead of page scraping
+- Sort Course Catalog
+- Sort My Courses
+- Fixed bug causing plugin to fail when there's no answer video after quiz
+- Separate tests into Unit and Integration tests
+- Removed code supporting filtering courses by difficulty
+
 1.0.4
 - Use strings.xml for buttons in quizzes
 - Display Loading... after submitting quiz

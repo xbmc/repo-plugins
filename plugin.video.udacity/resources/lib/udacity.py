@@ -76,18 +76,23 @@ class Udacity(object):
                 title = courses[key]['title']
                 results.append((title, key))
 
-            return results
+            return sorted(results, key=lambda x: x[0])
         else:
             return None
 
     def get_lesson_contents(self, section):
-        results = []
         url = "{0}/api/nodes/{1}".format(UDACITY_URL, section)
         url += (
             "?depth=2&fresh=false&required_behavior=view&projection=classroom")
         r = requests.get(url)
         data = json.loads(r.text[5:])['references']['Node']
+
+        return self.process_lesson_contents(data, section)
+
+    def process_lesson_contents(self, data, section):
+        results = []
         steps = data[section]['steps_refs']
+
         for step in steps:
             try:
                 node = data[step['key']]
@@ -102,33 +107,50 @@ class Udacity(object):
                     node['lecture_ref']['data'] = data[lecture_key]
                 if node['quiz_ref']:
                     quiz_key = node['quiz_ref']['key']
-                    node['quiz_ref']['data'] = data[quiz_key]
+                    node['quiz_ref']['data'] = data.get(quiz_key)
                 if node['answer_ref']:
                     answer_key = node['answer_ref']['key']
-                    node['answer_ref']['data'] = data[answer_key]
+                    node['answer_ref']['data'] = data.get(answer_key)
 
             results.append(node)
 
         return results
 
-    def get_courses(self, level):
+
+    def get_courses(self):
         output = []
-        r = requests.get("{0}/courses".format(UDACITY_URL))
-        soup = BeautifulSoup(r.text)
-        courses = soup.find('ul', id='unfiltered-class-list').findAll('li')
-        for course in courses:
-            difficulty = course.find('span', 'level-widget')['title']
-            if level and level != difficulty:
-                continue
+        url = "{0}/api/nodes".format(UDACITY_URL)
+        url += (
+            "?depth=2&fresh=false&keys%5B%5D=course_catalog"
+            "&projection=catalog&required_behavior=find"
+        )
+        r = requests.get(url)
+        data = json.loads(r.text[5:])['references']['Node']
 
-            title = course.find('span', 'crs-li-title').text
-            thumbnail = course.find(
-                'span', 'crs-li-thumbnails').find('img')['src']
-            url = course.find('a')['href']
-            course_id = url.split('/')[-1]
-            output.append((title, course_id, difficulty, 'http:' + thumbnail))
+        return self.process_courses(data)
 
-        return output
+    def process_courses(self, data):
+        courses = []
+        for course_id in data:
+            if not data[course_id]['_available']: continue
+            if not data[course_id]['model'] == 'Lesson': continue
+
+            catalog_entry = data[course_id].get('catalog_entry')
+            thumbnail = difficulty = None
+            if catalog_entry:
+                if catalog_entry.get('_image'):
+                    thumbnail = "http:{0}".format(
+                        catalog_entry['_image']['serving_url'])
+                difficulty = catalog_entry['level']
+
+            title = data[course_id]['title']
+            courses.append(
+                (title, course_id, difficulty, thumbnail))
+
+        # Sort by title
+        courses = sorted(courses, key=lambda x: x[0])
+
+        return courses
 
     def get_course_contents(self, course_id):
         output = []

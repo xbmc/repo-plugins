@@ -221,9 +221,9 @@ def get_playable_youtube_url(html):
 
 # This function try to get a Vimeo playable URL from the weblink and returns it ready to call the Vimeo plugin.
 def get_playable_vimeo_url(html):
-    pattern_vimeo1 = ' value="http://vimeo.com/moogaloop.swf\?clip_id=([0-9]+)'
-    pattern_vimeo2 = '<a href="http://vimeo.com/([0-9]+)">'
-    pattern_vimeo3 = ' src="http://player.vimeo.com/video/([0-9]+)'
+    pattern_vimeo1 = ' value="[htp:]*?//vimeo.com/moogaloop.swf\?clip_id=([0-9]+)'
+    pattern_vimeo2 = '<a href="[htp:]*?//vimeo.com/([0-9]+)">'
+    pattern_vimeo3 = ' src="[htp:]*?//player.vimeo.com/video/([0-9]+)'
 
     video_id = lutil.find_first(html, pattern_vimeo1)
     if video_id:

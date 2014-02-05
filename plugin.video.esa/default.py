@@ -92,26 +92,26 @@ def create_index(params):
     action = 'main_list'
 
     # All Videos entry
-    url = 'http://spaceinvideos.esa.int/content/search?SearchText=&result_type=videos_online&sortBy=%s' % sort_method
+    url = 'http://www.esa.int/spaceinvideos/content/search?SearchText=&result_type=videos_online&sortBy=%s' % sort_method
     title = translation(30107)
     genre = 'All the Videos'
     lutil.log('esa.create_index action=["%s"] title=["All the Videos"] url=["%s"]' % (action, url))
     lutil.addDir(action=action, title=title, url=url, genre=genre)
 
     # Euronews
-    url   = 'http://spaceinvideos.esa.int/content/search?SearchText=&result_type=euronews&sortBy=published'
+    url   = 'http://www.esa.int/spaceinvideos/content/search?SearchText=&result_type=euronews&sortBy=published'
     title = 'Euronews'
     lutil.log('esa.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
     lutil.addDir(action=action, title=title, url=url, genre=title)
 
     # Earth from Space
-    url   = 'http://spaceinvideos.esa.int/content/search?SearchText=%22Earth+from+Space%3A%22&SearchButton=Go'
+    url   = 'http://www.esa.int/spaceinvideos/content/search?SearchText=%22Earth+from+Space%3A%22&SearchButton=Go'
     title = 'Earth from Space'
     lutil.log('esa.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
     lutil.addDir(action=action, title=title, url=url, genre=title)
 
     # Science@ESA
-    url   = 'http://spaceinvideos.esa.int/content/search?SearchText=%22Science@ESA%3A%22&SearchButton=Go'
+    url   = 'http://www.esa.int/spaceinvideos/content/search?SearchText=%22Science@ESA%3A%22&sortBy=published&SearchButton=Go'
     title = 'Science@ESA'
     lutil.log('esa.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
     lutil.addDir(action=action, title=title, url=url, genre=title)
@@ -165,36 +165,32 @@ def main_list(params):
     buffer_web = lutil.carga_web(page_url)
     
     # Extract video items from the html content
+    pattern_currentpage = '<span class="current">([^<]*?)</span>'
+    pattern_page_url    = '^%s([^\?]+)'
     pattern_nextpage    = '<span class="next"><a href="([^"]*?)">'
-    pattern_next        = '/\(offset\)/([0-9]+)'
-    pattern_last        = '<span class="other">\.\.\.</span><span class="other"><a href="[^"]*?">([^<]+)</a></span>'
-    pattern_no_last     = '<span class="other"><a href="[^"]*?">([^<]+)</a></span>'
-    pattern_search_text = '\?SearchText=(.+)\&result_type='
-    pattern_videos      = '<div class="psr_image arrow">(.*?)</div>[^<]+</div>[^<]+<div class="clear">'
-    pattern_videolink   = '<a href="([^"]*?)">'
+    pattern_prevpage    = '<span class="previous"><a href="([^"]*?)">'
+    pattern_last        = '<span class="other"><a href="[^"]*?">([^<]+)</a></span>'
+    pattern_videos      = '<div class="psr_item_grid">(.*?)</div>'
+    pattern_videolink   = '<a href="([^"]*?)"'
     pattern_thumbnail   = '<img src="([^"]*?)"'
-    pattern_title       = '<li><a href="[^"]*?">([^<]+)</a></li>'
-    pattern_date        = '<li>Released: ([^<]+)</li>'
-    pattern_duration    = '<li>Length: ([^<]+)</li>'
-    pattern_rating      = 'class="ezsr-star-rating-small" title="Currently ([0-9\.]+)'
-    pattern_votes       = '<li class="psr_rating_li">Votes: <b>([^<]*?)</b></li>'
-    pattern_views       = '<li class="psr_rating_li">Views: <b>[^0-9]*?([0-9]+)</b></li>'
+    pattern_title       = '<span class="line2hell">([^<]+)</span>'
+    pattern_date        = '<span class="date">([^<]*?)</span>'
+    pattern_year        = '([0-9]{4})'
 
     lutil.set_content_list(pluginhandle, 'tvshows')
     lutil.set_plugin_category(pluginhandle, genre)
 
-    page_offset = lutil.find_first(page_url, pattern_next)
+    page_current        = lutil.find_first(buffer_web, pattern_currentpage) or '1'
+    page_url_pref       = lutil.find_first(page_url, pattern_page_url % root_url)
 
     # We must setup the previous page entry from the second page onwards.
-    if page_offset:
-        if page_offset == '10':
-            prev_page_url = page_url.replace('/(offset)/10', '')
-        else:
-            prev_page_url = page_url.replace(page_offset, "%s" % (int(page_offset) - 10))
-
-        lutil.log("esa.main_list Value of prev_page_url: %s" % prev_page_url)
+    if page_current != '1':
+        prev_page_url = lutil.find_first(buffer_web, pattern_prevpage)
+        lutil.log('esa.main_list Value of current_page_url: "%s"' % page_url)
+        prev_page_pref = lutil.find_first(prev_page_url, pattern_page_url % '')
+        prev_page_url = page_url.replace(page_url_pref, prev_page_pref)
         reset_cache = "yes"
-        lutil.addDir(action="main_list", title="<< %s (%s)" % (translation(30106), (int(page_offset) / 10)), url=prev_page_url, reset_cache=reset_cache, genre=genre)
+        lutil.addDir(action="main_list", title="<< %s (%s)" % (translation(30106), (int(page_current) - 1)), url=prev_page_url, reset_cache=reset_cache, genre=genre)
 
     # This is to force ".." option to go back to main index instead of previous page list.
     updateListing = reset_cache == "yes"
@@ -202,36 +198,20 @@ def main_list(params):
     videolist = lutil.find_multiple(buffer_web, pattern_videos)
 
     for video_entry in videolist:
-        video_info     = {}
-        video_link     = lutil.find_first(video_entry, pattern_videolink)
-        thumbnail_link = lutil.find_first(video_entry, pattern_thumbnail)
-        title          = lutil.find_first(video_entry, pattern_title)
-        title          = title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
-        date           = lutil.find_first(video_entry, pattern_date)
-        duration       = lutil.find_first(video_entry, pattern_duration)
-        rating         = lutil.find_first(video_entry, pattern_rating)
-        votes          = lutil.find_first(video_entry, pattern_votes)
-        views          = lutil.find_first(video_entry, pattern_views)
-        url            = '%s%s' % (root_url, video_link)
-        thumbnail      = '%s%s' % (root_url, thumbnail_link)
-        lutil.log('esa.main_list Videolist: URL: "%s" Title: "%s" Thumbnail: "%s" Duration: "%s" Rating: "%s" Date: "%s"' % (url, title, thumbnail, duration, rating, date))
-        
+        video_info             = {}
+        video_link             = lutil.find_first(video_entry, pattern_videolink)
+        thumbnail_link         = lutil.find_first(video_entry, pattern_thumbnail)
+        title                  = lutil.find_first(video_entry, pattern_title)
+        title                  = title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
+        date                   = lutil.find_first(video_entry, pattern_date).strip().replace('&nbsp;', '')
         if date:
-            video_info['Aired']       = date
-            video_info['Dateadded']   = date
-            video_info['Premiered']   = date
-            video_info['Year']        = date.split('/')[-1]
-        if duration:
-            tduration = duration.split(':')
-            minutes   = str(int(tduration[-3]) * 60 + int(tduration[-2]))
-            if minutes == '0':
-                minutes = '1' # Round the minimun video duration up to 1 minute.
-            video_info['Duration']    = minutes
-        video_info['Rating']      = "%s" % rating
-        video_info['Votes']       = votes
-        video_info['Playcount']   = views
-        video_info['Genre']       = genre
-        video_info['Plot']        = 'Released: %s | Views: %s | Length: %s\n%s' % (date, views, duration, title) # The description only appears when we load the link.
+            video_info['Year'] = lutil.find_first(date, pattern_year)
+            title              = '%s (%s)' % (title, date)
+        url                    = '%s%s' % (root_url, video_link)
+        thumbnail              = '%s%s' % (root_url, thumbnail_link)
+        video_info['Genre']    = genre
+        video_info['Plot']     = title # The description only appears when we load the link.
+        lutil.log('esa.main_list Videolist: URL: "%s" Title: "%s" Thumbnail: "%s"' % (url, title, thumbnail))
 
         # Appends a new item to the xbmc item list
         lutil.addLink(action="play_video", title=title, url=url, thumbnail=thumbnail, video_info=video_info, show_fanart=show_fanart)
@@ -239,25 +219,12 @@ def main_list(params):
     # Here we get the next page URL to add it at the end of the current video list page.
     next_page_url = lutil.find_first(buffer_web, pattern_nextpage)
     if next_page_url:
-        next_page = lutil.find_first(next_page_url, pattern_next)
-        last_page = lutil.find_first(buffer_web, pattern_last)
-        if last_page == "": 
-            page_arr = []
-            page_arr = lutil.find_multiple(buffer_web, pattern_no_last)
-            last_page = page_arr[-1]
-            lutil.log("esa.main_list Value of last_page alt: %s" % last_page)
-
-        lutil.log("esa.main_list Value of next_page_url original: %s" % next_page_url)
-        next_page_url = "%s%s" % (root_url, next_page_url.replace('&amp;', '&').replace('&quot;', '"'))
-        search_text = lutil.find_first(next_page_url, pattern_search_text)
-        if search_text:
-            if page_offset:
-                next_page_url = page_url.replace(page_offset, "%s" % (int(page_offset) + 10))
-            else:
-                next_page_url = page_url.replace('content/search', 'content/search/(offset)/10')
-
-        lutil.log("esa.main_list Value of next_page_url: %s" % next_page_url)
-        lutil.addDir(action="main_list", title=">> %s (%s/%s)" % (translation(30010), int(next_page)/10 + 1, last_page), url=next_page_url, reset_cache=reset_cache, genre=genre)
+        next_page_pref = lutil.find_first(next_page_url, pattern_page_url % '')
+        last_page      = lutil.find_multiple(buffer_web, pattern_last)[-1] or ''
+        lutil.log("esa.main_list Value of last_page: %s" % last_page)
+        lutil.log('esa.main_list Value of current_page_url: "%s"' % page_url)
+        next_page_url = page_url.replace(page_url_pref, next_page_pref)
+        lutil.addDir(action="main_list", title=">> %s (%s/%s)" % (translation(30010), int(page_current) + 1, last_page), url=next_page_url, reset_cache=reset_cache, genre=genre)
 
     lutil.close_dir(pluginhandle, updateListing=updateListing)
 
@@ -266,7 +233,7 @@ def main_list(params):
 def search(params):
     search_string = lutil.get_keyboard_text(translation(30105))
     if search_string:
-        params['url'] = 'http://spaceinvideos.esa.int/content/search?SearchText=%s&SearchButton=Go&sortBy=%s' % (lutil.get_url_encoded(search_string), sort_method)
+        params['url'] = 'http://www.esa.int/spaceinvideos/content/search?SearchText=%s&SearchButton=Go&sortBy=%s' % (lutil.get_url_encoded(search_string), sort_method)
         lutil.log("esa.search Value of search url: %s" % params['url'])
         return main_list(params)
 

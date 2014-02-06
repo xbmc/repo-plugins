@@ -97,7 +97,8 @@ def getSources():
               for caturl,caticon,cattitle,catdesc in match:
                  catdesc = catdesc.replace('<P>','').replace('<p>','').replace('</P>','')
                  caticon = caticon.replace('.a.','.gp.')
-                 caticon = RTBASE_URL+caticon
+                 if "http:" not in caticon:
+                    caticon = RTBASE_URL+caticon
                  try:
                       addDir(cattitle.encode(UTF8, 'ignore'),caturl.encode(UTF8),18,caticon,caticon,catdesc,GENRE_NEWS,"",False)
                  except:
@@ -247,7 +248,9 @@ elif mode==18:
                      if "programm" in classtype:
                        imgurl,cattitle = cattitle,imgurl   # swap them
                      caturl = "plugin://plugin.video.rt/?url="+RTBASE_URL+pgurl+"&name="+urllib.quote_plus(cattitle)+"&mode=19"
-                     caticon = RTBASE_URL+imgurl
+                     caticon = imgurl
+                     if "http:" not in caticon:
+                        caticon = RTBASE_URL+caticon
                      catdesc = catdesc.strip()
                      try:
                         addLink(caturl.encode(UTF8),cattitle,caticon,fanArt,cattime+"\n"+catdesc,GENRE_NEWS,"")

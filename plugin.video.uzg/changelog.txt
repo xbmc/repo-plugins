@@ -1,4 +1,7 @@
-﻿﻿﻿﻿Version 1.0.5
+﻿﻿﻿﻿Version 1.0.6
+* New API NPO
+
+﻿﻿﻿Version 1.0.5
 * little fixxen for official repo requirements
 
 Version 1.0.4

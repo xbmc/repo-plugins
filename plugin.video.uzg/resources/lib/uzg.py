@@ -104,7 +104,8 @@ def get_url(playerid):
     data=get_data_from_url('http://ida.omroep.nl/npoplayer/i.js')
     token = re.compile('.token\s*=\s*"(.*?)"', re.DOTALL + re.IGNORECASE).search(str(data)).group(1)
     ##video lokatie aanvragen
-    data = get_data_from_url('http://ida.omroep.nl/odiplus/?prid='+playerid+'&puboptions=adaptive&adaptive=yes&part=1&token='+token)
+    data = get_data_from_url('http://ida.omroep.nl/odi/?prid='+playerid+'&puboptions=adaptive&adaptive=yes&part=1&token='+token)
+    ## old not working any more data = get_data_from_url('http://ida.omroep.nl/odiplus/?prid='+playerid+'&puboptions=adaptive&adaptive=yes&part=1&token='+token)
     json_data = json.loads(data)
     ##video file terug geven vanaf json antwoord
     streamdataurl = json_data['streams'][0]

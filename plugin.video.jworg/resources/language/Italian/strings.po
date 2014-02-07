@@ -144,3 +144,6 @@ msgctxt "#30039"
 msgid "Default video resolution (0: ask every time)"
 msgstr "Risoluzione video predefinita (0: chiedi sempre)"
 
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Video in lingua dei segni"

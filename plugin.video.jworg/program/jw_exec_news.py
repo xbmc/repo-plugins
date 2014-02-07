@@ -80,6 +80,8 @@ ACTION_MOVE_UP 		= 3
 ACTION_MOVE_DOWN 	= 4
 ACTION_PAGE_UP 		= 5
 ACTION_PAGE_DOWN 	= 6
+ACTION_SCROLL_UP	= 111
+ACTION_SCROLL_DOWN	= 112
 
 class News(xbmcgui.WindowDialog):
 
@@ -126,14 +128,14 @@ class News(xbmcgui.WindowDialog):
 	def onAction(self, action):
 		(x,y) =  self.ctrlText.getPosition()
 
-		if action == ACTION_MOVE_UP:
+		if action == ACTION_MOVE_UP or action == ACTION_SCROLL_UP :
 			if y > 0:
 				return
 			y = y + 50
 			self.ctrlText.setPosition(x,y)
 			return
 
-		if action == ACTION_MOVE_DOWN:
+		if action == ACTION_MOVE_DOWN or action == ACTION_SCROLL_DOWN :
 			(x,y) =  self.ctrlText.getPosition()
 			y = y - 50
 			self.ctrlText.setPosition(x,y)

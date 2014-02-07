@@ -2,11 +2,12 @@
 <addon 
     id="plugin.video.jworg" 
     name="Jw.org audio/video browser" 
-    version="0.3.2" 
+    version="0.4.0" 
     provider-name="Realtebo">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.common.plugin.cache" version="0.9.1"/> 
+        <import addon="script.module.beautifulsoup" version="3.0.8"/> 
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>audio video executable</provides>
@@ -45,7 +46,7 @@
         <website>http://realtebo.github.io/plugin.video.jworg/</website>
         <source>https://github.com/realtebo/plugin.video.jworg</source>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <email></email>
-        <forum></forum>
+        <email>mirkotebaldi@yahoo.it</email>
+        <forum>http://forum.xbmc.org/showthread.php?tid=180407</forum>
     </extension>
 </addon>

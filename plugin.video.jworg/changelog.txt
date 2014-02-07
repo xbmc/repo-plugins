@@ -1,3 +1,12 @@
+0.4.0
+-----
+
+New feature:
++ Video: now you can see videos in sign language (in all supported language)
+
+Code:
++ Introduced dependency from BeautifulSoup 3; using this, the plugin could be even more stable and resilient to website html changes
+
 0.3.2
 -----
 
@@ -11,7 +20,7 @@ Code:
 + Switched from xbmcplugin to xbmcaddon in the setting related code
 
 Small enhancements:
-+ Auto save of language if detected a supported language; user can see the right language setted when opening for the first time th addon setting window
++ Auto save of language if detected a supported language; user can see the right language setted when opening for the first time the addon setting window
 
 0.3.1
 -----

@@ -6,6 +6,7 @@ import jw_config
 import jw_common
 
 from video import jw_video
+from video import jw_sign
 
 from audio import jw_audio
 from audio import jw_audio_bible
@@ -52,6 +53,35 @@ if content_type == "video" :
 		thumb 		= params["thumb"][0]
 		jw_video.showVideoJsonUrl(json_url, thumb)
 
+	if mode == "open_sign_index":
+		jw_sign.showVideoFilter()
+
+	if mode == "open_sign_video_category":
+		url 	= params ["url"][0]
+		thumb 	= params ["thumb"][0]
+		jw_sign.showVideoCategory(url, thumb)
+
+	if mode == "open_sign_video_category_with_specific_issue":
+		url 			= params ["url"][0]
+		thumb 			= params ["thumb"][0]
+		pub_title_index = params ["pub_title_index"][0]
+		jw_sign.showVideoCategorySpecificIssue(url, thumb, pub_title_index)
+
+	if mode == "open_sign_video_category_specific_row":
+		url 		= params ["url"][0]
+		thumb 		= params ["thumb"][0]
+		row_index 	= params ["row_index"][0]		
+		jw_sign.showVideoCategorySpecificRow(url, thumb, row_index)
+
+	if mode == "open_sign_video_sel_year":
+		url 		= params ["url"][0]
+		thumb 		= params ["thumb"][0]
+		jw_sign.selYear(url, thumb)
+
+	if mode == "open_sign_video_sel_book":
+		url 		= params ["url"][0]
+		thumb 		= params ["thumb"][0]
+		jw_sign.selBook(url, thumb)		
 
 if content_type == "audio" :
 	if mode is None :
@@ -137,4 +167,5 @@ if content_type == "executable" :
 	if mode == "open_activity_article" :
 		url = params["url"][0]
 		jw_exec_activity.showArticle(url)
+
 

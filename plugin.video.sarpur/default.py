@@ -2,7 +2,7 @@
 
 import urllib, urllib2, re, xbmcplugin, xbmcgui, xbmc, math, random
 from datetime import datetime, timedelta
-from scraper import showtree, tabs, get_episodes, get_stream_info, get_latest_episodes, get_podcast_shows, get_podcast_recordings
+from scraper import showtree, tabs, get_episodes, get_stream_info, get_latest_episodes, get_podcast_shows, get_podcast_recordings, get_live_url
 
 user_agent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 action_key = None
@@ -73,12 +73,9 @@ def spila_hladvarp(url):
 
 def spila_live(stod):
     stream_info = {}
-    #if stod == 'ruv':
-    stream_info['rtmp_url'] = 'http://sip-live.hds.adaptive.level3.net/hls-live/ruv-ruv/_definst_/live/stream1.m3u8'
+    stream_info['rtmp_url'] = get_live_url()
     stream_info['playpath'] = 'beint-2' 
-    #stream_info['rtmp_url'] = 'rtmp://212.30.206.129/ruv?key=%d' % int(math.floor(random.random() * 9999))
     stream_info['page_url'] = 'http://ruv.is/ruv'
-
     item = xbmcgui.ListItem("RTL")
     item.setProperty("PlayPath", stream_info['playpath'])
     item.setProperty("SWFPlayer", "http://www.ruv.is/files/spilari/player.swf")

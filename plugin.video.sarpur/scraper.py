@@ -136,6 +136,14 @@ def get_podcast_shows():
         
     return shows
     
+def get_live_url(url="http://ruv.is/ruv"):
+    """Gets the url of ruv live"""
+    html = fetch_page(url)
+    soup = BeautifulSoup(html)
+    return soup.find("div", attrs={"id": "spilarinn"}).source['src']
+
+    
+
 def get_podcast_recordings(url):
     """Gets the dates and mp3 urls of all the Podcast recordings"""
     html = fetch_page(url)
@@ -172,6 +180,7 @@ except IOError:
 if __name__ == '__main__':
     #showtree = []; update_index()
     #print showtree[0]['categories']
+    print get_live_url()
 
     #get_tabs()
     #os.unlink(showtreefile_location)

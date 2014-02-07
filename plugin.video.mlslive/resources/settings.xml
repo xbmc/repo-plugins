@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings>
    <setting id="username" type="text" label="30013"/>
    <setting id="password" type="text" label="30014" option="hidden"/>

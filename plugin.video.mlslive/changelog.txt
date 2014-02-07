@@ -1,3 +1,7 @@
+[B]Version 1.0.5[/B]
+
+- include last week of the season in the list of completed games
+
 [B]Version 1.0.4[/B]
 
 - fix bug when there were no games played in a prior week

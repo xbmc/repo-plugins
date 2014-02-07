@@ -56,7 +56,7 @@ class MLSLive:
         # setup the login values        
         values = { 'username' : username,
                    'password' : password }
-        
+
         self.jar = cookielib.CookieJar()
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
         try:
@@ -123,7 +123,7 @@ class MLSLive:
         time_t = time.strptime(last_day, "%Y-%m-%d")
         last_d = datetime.datetime.fromtimestamp(time.mktime(time_t))
 
-        while date_d < datetime.datetime.today() and date_d < last_d:
+        while date_d < datetime.datetime.today() and date_d <= last_d:
             week_str = self.GAMES_PAGE_PREFIX + date_d.strftime("%Y-%m-%d") + self.GAMES_PAGE_SUFFIX
             weeks[week_str] = date_d.strftime("%B %d, %Y")
             date_d = date_d + datetime.timedelta(weeks=1)
@@ -385,7 +385,6 @@ class MLSLive:
         Get the list of videos for the channel
         """
         url = self.CHANNEL_PREFIX + channel_id + self.CHANNEL_SUFFIX
-        print url
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
         try:
             resp = opener.open(url)

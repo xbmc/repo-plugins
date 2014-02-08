@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
         id="plugin.audio.dr.dk.netradio"
-        version="2.1.4"
+        version="2.1.5"
         name="Danish Netradio"
         provider-name="stemann, twinther">
     <requires>
@@ -23,5 +23,8 @@
         <platform>all</platform>
         <language>da</language>
         <email>jesper@sait.dk tommy@winther.nu</email>
+        <website>http://tommy.winther.nu</website>
+        <source>https://github.com/xbmc-danish-addons/plugin.audio.dr.dk.netradio</source>
+        <forum></forum>
     </extension>
 </addon>

@@ -13,7 +13,9 @@
     
 '''
 from xbmcswift2 import Plugin, SortMethod
-from resources.lib.uzg import  get_overzicht, get_items_uitzending
+from resources.lib.uzg import  get_overzicht, get_items_uitzending, get_url , get_ondertitel
+import time
+import xbmcplugin
 
 PLUGIN_NAME = 'uzg'
 PLUGIN_ID = 'plugin.video.uzg'
@@ -34,10 +36,29 @@ def show_afleveringen(nebo_id):
     ##alleen afleveringen weergeven
     return show_items(get_items_uitzending(nebo_id))
 
+@plugin.route('/lectures/<url>/')
+def play_lecture(url):
+	plugin.set_resolved_url(get_url(url))	
+	waarde = plugin.get_setting( "subtitle",bool )
+	if (waarde):
+		add_subtitlesstream(get_ondertitel(url))
+
+def add_subtitlesstream(subtitles):
+	player = xbmc.Player()
+	for _ in xrange(30):
+		if player.isPlaying():
+			break
+		time.sleep(1)
+	else:
+		raise Exception('No video playing. Aborted after 30 seconds.')
+	player.setSubtitles(subtitles)
+	player.setSubtitleStream(1)
+
+	
 def show_items(opgehaaldeitemsclass):
     '''Lists playable videos for a given category url.'''
     items = [{
-        'path': item['video_url'],
+        'path': plugin.url_for('play_lecture', url=item['playerid']),
         'label': item['title'],
         'thumbnail': item['thumbnail'],
         'is_playable': True,

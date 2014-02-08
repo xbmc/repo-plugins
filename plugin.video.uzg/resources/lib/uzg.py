@@ -21,13 +21,13 @@ import json
 # Item class
 #
 class UzgItem:
-        def __init__(self, init_title, init_TimeStamp, init_thumbnail, init_movie, init_classname,init_serienaam) :
+        def __init__(self, init_title, init_TimeStamp, init_thumbnail, init_classname,init_serienaam, init_playerid) :
             self.title  = init_title 
             self.TimeStamp = init_TimeStamp
             self.thumbnail = init_thumbnail
-            self.movie = init_movie
             self.classname = init_classname
             self.serienaam = init_serienaam
+            self.playerid = init_playerid
 
 #
 # OverzichtItem class
@@ -79,13 +79,12 @@ class UzgItemData:
             json_data = json.loads(link)
             uzgitemlist = list()
             for aflevering in json_data['episodes']:
-                urlvideo = get_url(aflevering['whatson_id'])
                 urlcover = ''
                 if not aflevering['stills']:
                     urlcover = ''
                 else:
                     urlcover = aflevering['stills'][0]['url']
-                uzgitem = UzgItem(aflevering['name'],datetime.fromtimestamp(int(aflevering['broadcasted_at'])).strftime('%Y-%m-%dT%H:%M:%S'),urlcover,urlvideo,'uitzending',json_data['name'])
+                uzgitem = UzgItem(aflevering['name'],datetime.fromtimestamp(int(aflevering['broadcasted_at'])).strftime('%Y-%m-%dT%H:%M:%S'),urlcover,'uitzending',json_data['name'],aflevering['whatson_id'])
                 uzgitemlist.append(uzgitem)
             return uzgitemlist
 
@@ -98,7 +97,9 @@ def get_data_from_url(url):
     response.close()
     return data    
 
-
+def get_ondertitel(playerid):
+	return 'http://apps-api.uitzendinggemist.nl/webvtt/'+playerid+'.webvtt'
+	
 def get_url(playerid):
     ##token aanvragen
     data=get_data_from_url('http://ida.omroep.nl/npoplayer/i.js')
@@ -141,9 +142,9 @@ def _build_item(post,alles):
         'title': '(' + post.TimeStamp.split('T')[1] + ') - ' + titelnaam,
         'classname': post.classname,
         'date': stringnaardatumnaarstring(post.TimeStamp),
-        'video_url': post.movie,
         'thumbnail': post.thumbnail,
         'serienaam': post.serienaam,
+        'playerid': post.playerid,
     }
     return item       
 

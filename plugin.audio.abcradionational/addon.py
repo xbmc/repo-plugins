@@ -6,9 +6,11 @@ plugin = Plugin()
 @plugin.route('/')
 def main_menu():
     items = [
-        {'label': plugin.get_string(30000), 'path': plugin.url_for('just_in')},
-        {'label': plugin.get_string(30001), 'path': plugin.url_for('subject_list')},
-        {'label': plugin.get_string(30002), 'path': plugin.url_for('program_menu')},
+        {'label': plugin.get_string(30000), 'path': "http://www.abc.net.au/res/streaming/audio/aac/news_radio.pls",
+         'is_playable': True},
+        {'label': plugin.get_string(30001), 'path': plugin.url_for('just_in')},
+        {'label': plugin.get_string(30002), 'path': plugin.url_for('subject_list')},
+        {'label': plugin.get_string(30003), 'path': plugin.url_for('program_menu')},
     ]
 
     return items
@@ -63,9 +65,9 @@ def program_menu():
         'path': plugin.url_for('program_item',url=subject['url']),
     } for subject in subjects]
 
-    sorted_items = sorted(items, key=lambda item: item['label'])
+    #sorted_items = sorted(items, key=lambda item: item['label'])
 
-    return sorted_items
+    return items
 
 
 @plugin.route('/program_item/<url>/')

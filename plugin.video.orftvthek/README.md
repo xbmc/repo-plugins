@@ -20,12 +20,11 @@ Current Features
 * Schedule Search
 * HTTP Stream H264 (Stable)
 * Search Function
-
+* Missed Shows
 
 Missing Features
 ----------------
 * Download Function
-* Missed Shows
 
 
 Known Issues

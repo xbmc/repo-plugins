@@ -12,7 +12,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.2.1"
+version = "0.2.2"
 plugin = "ORF-TVthek-" + version
 author = "sofaking"
  
@@ -21,7 +21,7 @@ settings = xbmcaddon.Addon(id='plugin.video.orftvthek')
 pluginhandle = int(sys.argv[1])
 basepath = settings.getAddonInfo('path')
 
-
+translation = settings.getLocalizedString
 base_url="http://tvthek.orf.at"
 
 forceView = settings.getSetting("forceView") == "true"
@@ -56,7 +56,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
     if banner == '':
         banner = defaultbanner
     if description == '':
-        description = "Keine Beschreibung verfügbar"
+        description = (translation(30008)).encode("utf-8")
     liz=xbmcgui.ListItem(cleanText(title), iconImage=banner, thumbnailImage=banner)
     liz.setInfo( type="Video", infoLabels={ "Title": cleanText(title) } )
     liz.setInfo( type="Video", infoLabels={ "Tvshowtitle": cleanText(title) } )
@@ -69,6 +69,7 @@ def createListItem(title,banner,description,duration,date,channel,videourl,playa
     liz.setProperty('fanart_image',defaultbackdrop)
     liz.setProperty('IsPlayable', playable)
     xbmcplugin.addDirectoryItem(handle=pluginhandle, url=videourl, listitem=liz, isFolder=folder)
+    return liz
 
 
 def addFile(name,videourl,banner,summary,runtime,backdrop):
@@ -80,6 +81,7 @@ def addDirectory(title,banner,description,link,mode):
     createListItem(title,banner,description,'','','',u,'false',True)
 
 def getLinks(url,banner):
+    playlist.clear()
     url = urllib.unquote(url)
     banner = urllib.unquote(banner)
     arrayReg = re.compile("{.*?}")
@@ -89,11 +91,9 @@ def getLinks(url,banner):
     data = soup.find('div',{'class':'jsb_ jsb_VideoPlaylist'})
     videoUrls = []
     array = arrayReg.findall(str(data))
-	#get video links
+    #get video links
     for item in array:
         split = item.replace("{","").replace("}","").replace(",","").replace(":","").replace("\/","/").split('"')
-        if split[0] == "quality":
-            print "BOOM"
         if split[1] == "quality" and split[3] == "Q6A":
             if len(split) > 13 and split[21] == "protocol" and split[23] == "http":
                 if split[9] == "src":
@@ -108,11 +108,14 @@ def getLinks(url,banner):
         bcast_date = bcast.find('span',{'class':'meta meta_date'})
         bcast_time = bcast.find('span',{'class':'meta meta_time'})
         if bcast_time != None and bcast_date != None:
-            bcast_desc = "Sendung vom %s - %s\n" % (bcast_date.text.encode('UTF-8'),bcast_time.text.encode('UTF-8'))
+            bcast_desc = (translation(30009)).encode("utf-8")+" %s - %s\n" % (bcast_date.text.encode('UTF-8'),bcast_time.text.encode('UTF-8'))
     #check if there are more playlist items
     descbox = soup.find('div',{'class':'base_list_wrapper mod_playlist'})
     if descbox != None:
         videoDescs = []
+        parameters = {"mode" : "playList"}
+        u = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        createListItem("[ "+(translation(30015)).encode("utf-8")+" ]",banner,(translation(30015)).encode("utf-8"),"","","",u,'false',False)
         details = descbox.findAll('div',{'class':'details'})
         for detail in details:
             videoDescs.append(detail.text.encode('UTF-8'))
@@ -122,7 +125,8 @@ def getLinks(url,banner):
 	        videoTitles.append(title.text.encode('UTF-8'))
         i = 0
         for url in videoTitles:
-            createListItem(videoTitles[i],banner,"%s%s"%(bcast_desc,videoDescs[i]),'','','',videoUrls[i],'true',False)
+            liz = createListItem(videoTitles[i],banner,"%s%s"%(bcast_desc,videoDescs[i]),'','','',videoUrls[i],'true',False)
+            playlist.add(videoUrls[i],liz)
             i = i + 1
     #only one item one video page
     else:
@@ -139,20 +143,74 @@ def listCallback():
        xbmc.executebuiltin(defaultViewMode)
 
 def getMainMenu():
-    addDirectory("Neuste Sendungen",defaultbanner,'',"","getNewShows")
-    addDirectory("Aktuell",defaultbanner,'',"","getAktuelles")
-    addDirectory("Sendungen",defaultbanner,'',"","getSendungen")
-    addDirectory("Themen",defaultbanner,'',"","getThemen")
-    addDirectory("Live",defaultbanner,'',"","getLive")
-    addDirectory("ORF Tipps",defaultbanner,'',"","getTipps")
-    addDirectory("Meist gesehen",defaultbanner,'',"","getMostViewed")
-    #addDirectory("Sendung verpasst?",defaultbanner,"","getArchiv")
-    addDirectory("Suchen",defaultbanner,'',"","searchPhrase")
+    addDirectory((translation(30000)).encode("utf-8"),defaultbanner,'',"","getNewShows")
+    addDirectory((translation(30001)).encode("utf-8"),defaultbanner,'',"","getAktuelles")
+    addDirectory((translation(30002)).encode("utf-8"),defaultbanner,'',"","getSendungen")
+    addDirectory((translation(30003)).encode("utf-8"),defaultbanner,'',"","getThemen")
+    addDirectory((translation(30004)).encode("utf-8"),defaultbanner,'',"","getLive")
+    addDirectory((translation(30005)).encode("utf-8"),defaultbanner,'',"","getTipps")
+    addDirectory((translation(30006)).encode("utf-8"),defaultbanner,'',"","getMostViewed")
+    addDirectory((translation(30018)).encode("utf-8"),defaultbanner,"","","getArchiv")
+    addDirectory((translation(30007)).encode("utf-8"),defaultbanner,'',"","searchPhrase")
     listCallback()
 
+def getArchiv(url):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create((translation(30010)).encode("utf-8"))
+    progressbar.update(0)
+	
+    html = opener.open(url)
+    html = html.read()
+    suppn = BeautifulSoup(html)
+    links = suppn.findAll('a',{'class':'day_wrapper'})
+    i = 1
+    feedcount = len(links)
+    for link in links:
+        if progressbar.iscanceled() :
+            xbmcplugin.endOfDirectory(pluginhandle)
+            xbmc.executebuiltin("Container.SetViewMode(503)")
+            progressbar.close()
+            break
+        i = i+1
+        percent = i*100/feedcount
+        progressbar.update(percent)
+        day = link.find('strong').text.encode('UTF-8')
+        date = link.find('small').text.encode('UTF-8')
+        title = day + " - " + date
+        addDirectory(title,defaultbanner,date,link['href'],"openArchiv")
+    listCallback()
+	
+def openArchiv(url):
+    progressbar = xbmcgui.DialogProgress()
+    progressbar.create((translation(30000)).encode("utf-8"))
+    progressbar.update(0)
+    url =  urllib.unquote(url)
+    html = opener.open(url)
+    html = html.read()
+    suppn = BeautifulSoup(html)
+    teaserbox = suppn.findAll('a',{'class':'item_inner clearfix'})
+    feedcount = len(teaserbox)
+    i = 0
+    for teasers in teaserbox:
+        if progressbar.iscanceled() :
+            xbmcplugin.endOfDirectory(pluginhandle)
+            progressbar.close()
+            break
+        i = i+1
+        percent = i*100/feedcount
+        progressbar.update(percent)
+        title = teasers.find('h4',{'class':'item_title'}).text.encode('UTF-8')
+        link = teasers['href']
+        time = teasers.find('span',{'class':'meta meta_time'}).text.encode('UTF-8')
+        title = "["+time+"] "+title
+        desc = teasers.find('div',{'class':'item_description'}).text.encode('UTF-8').strip()
+        banner = teasers.find('figure',{'class':'item_image'}).find('img')['src'].replace("width=395","width=500").replace("height=209.07070707071","height=265").encode('UTF-8')
+        addDirectory(title,banner,desc,link,"openSeries")
+    listCallback()
+	
 def getCategoryList(category,banner):
     progressbar = xbmcgui.DialogProgress()
-    progressbar.create('Ladevorgang' )
+    progressbar.create((translation(30000)).encode("utf-8"))
     progressbar.update(0)
 
     url =  urllib.unquote(category)
@@ -161,16 +219,20 @@ def getCategoryList(category,banner):
     html = html.read()
     soup = BeautifulSoup(html)
 	
-	
-    showname = soup.find('h3',{'class':'video_headline'}).text.encode('UTF-8')
+    try:
+        showname = soup.find('h3',{'class':'video_headline'}).text.encode('UTF-8')
+    except:
+        showname = ""
     new = soup.find('header',{'class':'player_header'}).find('div',{'class':'broadcast_information'})
     new_duration = new.find('span',{'class':'meta meta_duration'}).text.encode('UTF-8')
     new_date = new.find('span',{'class':'meta meta_date'}).text.encode('UTF-8')
     new_time = new.find('span',{'class':'meta meta_time'}).text.encode('UTF-8')
     new_link = url
     new_title = "%s - %s" % (showname,new_date)
-    new_desc = 'Sendung vom %s - %s\nLaufzeit: %s' % (new_date,new_time,new_duration)
-
+    try:
+        new_desc = (translation(30009)).encode("utf-8")+' %s - %s\n'+(translation(30011)).encode("utf-8")+': %s' % (new_date,new_time,new_duration)
+    except:
+        new_desc = "";
     addDirectory(new_title,banner,new_desc,new_link,"openSeries")
 	
     progressbar.update(15)
@@ -189,7 +251,10 @@ def getCategoryList(category,banner):
         title = "%s - %s" % (showname,date)
         title = "%s - %s" % (showname,date)
         link = item.find('a')['href']
-        desc = "Sendung vom %s - %s\nLaufzeit: %s" % (date,time,duration)
+        try:
+            desc = (translation(30009)).encode("utf-8")+" %s - %s\n"+(translation(30011)).encode("utf-8")+": %s" % (date,time,duration)
+        except:
+            desc = "";
         addDirectory(title,banner,desc,link,"openSeries")
     listCallback()
 
@@ -279,17 +344,18 @@ def getThemenListe(url):
         if desc != None:
             desc = desc.text.encode('UTF-8')
         else:
-            desc = 'Keine Beschreibung verfügbar'
+            desc = (translation(30008)).encode("utf-8")
         date = topic.find('time').text.encode('UTF-8')
         time = topic.find('span',{'class':'meta meta_duration'}).text.encode('UTF-8')
-		
-        desc = "Datum: %s \nDauer: %s \n\n%s" % (date,time,desc)
-        
+        try:
+            desc = (translation(30016)).encode("utf-8")+": %s \n"+(translation(30017)).encode("utf-8")+": %s \n\n%s" % (date,time,desc)
+        except:
+            desc = ""
         addDirectory(title,image,desc,link,"openSeries")
     listCallback()
 
 def playFile():
-    player = xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER)
+    player = xbmc.Player()
     player.play(playlist)
     if not player.isPlayingVideo():
         d = xbmcgui.Dialog()
@@ -300,7 +366,7 @@ def playFile():
 
 def getThemen():
     progressbar = xbmcgui.DialogProgress()
-    progressbar.create('Ladevorgang' )
+    progressbar.create((translation(30010)).encode("utf-8"))
     progressbar.update(15)
 	
     url = "http://tvthek.orf.at/topics"
@@ -349,7 +415,7 @@ def programUrlTitle(url):
     return title[2].replace("-"," ")
 		
 def search():
-    addDirectory("Suchen ...",defaultbanner,defaultbackdrop,"","searchNew")
+    addDirectory((translation(30007)).encode("utf-8")+" ...",defaultbanner,defaultbackdrop,"","searchNew")
     cache.table_name = "searchhistory"
     some_dict = cache.get("searches").split("|")
     for str in reversed(some_dict):
@@ -367,13 +433,13 @@ def searchTV():
       searchurl = "%s/search?q=%s"%(base_url,keyboard_in.replace(" ","+"))
       getTableResults(searchurl)
     else:
-      addDirectory("Keine Ergebnisse",defaultlogo,"","","")
+      addDirectory((translation(30014)).encode("utf-8"),defaultlogo,"","","")
     listCallback()
 
 def getTableResults(url):
     url = urllib.unquote(url)
     progressbar = xbmcgui.DialogProgress()
-    progressbar.create('Ladevorgang' )
+    progressbar.create((translation(30010)).encode("utf-8"))
     progressbar.update(0)
 
     html = opener.open(url)
@@ -397,9 +463,9 @@ def getTableResults(url):
             date = tip.find('time',{'class':'meta meta_date'}).text.encode('UTF-8')
             time = tip.find('span',{'class':'meta meta_time'}).text.encode('UTF-8')
             #title = "%s | %s %s" % (title,date,time)
-            desc = 'Sendung vom %s - %s\n%s' % (date,time,desc)
+            desc = (translation(30009)).encode("utf-8")+' %s - %s\n%s' % (date,time,desc)
         else:
-            desc = "Keine Beschreibung"
+            desc = (translation(30008)).encode("utf-8")
             
         image = tip.find('img')['src'].replace("width=395","width=500").replace("height=209.07070707071","height=265").replace("height=77.753731343284","height=265").replace("width=138","width=500")
         link = tip.find('a')['href']
@@ -419,7 +485,7 @@ def searchTVHistory(link):
       searchurl = "%s/search?q=%s"%(base_url,keyboard_in.replace(" ","+"))
       getTableResults(searchurl)
     else:
-      addDirectory("Keine Ergebnisse",defaultlogo,defaultbackdrop,"","")
+      addDirectory((translation(30014)).encode("utf-8"),defaultlogo,defaultbackdrop,"","")
     listCallback()
     
 	
@@ -459,7 +525,7 @@ elif mode == 'playVideo':
 elif mode == 'playList':
     playFile()
 elif mode == 'getArchiv':
-    getArchiv(schedule_url)
+    getArchiv('http://tvthek.orf.at/schedule')
 elif mode == 'openArchiv':
     openArchiv(link)
 elif mode == 'searchPhrase':

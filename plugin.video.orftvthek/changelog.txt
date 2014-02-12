@@ -1,3 +1,7 @@
+0.2.2
+- fixed parser errors
+- "Sendung verpasst?"
+
 0.2.1
 - fixed video link parser
 

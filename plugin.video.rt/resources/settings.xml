@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings>
   <category label="Settings">
-    <setting id="rt_res" type="enum" label="Live Stream Quality" values="720p|360p|240p|180p" default="0" />
+    <setting id="rt_res" type="enum" label="Live Stream Quality" values="Auto|720p|480p|320p|240p" default="0" />
     <setting id="auto_play" type="bool" label="Auto Play RT Live" default="false" />
   </category>
 </settings>

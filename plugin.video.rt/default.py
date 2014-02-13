@@ -11,7 +11,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/
 GENRE_NEWS      = "News"
 UTF8          = 'utf-8'
 RTBASE_URL    = 'http://rt.com'
-RTLIVE_BASE   = 'rtmp://rt.fms-04.visionip.tv/live/'
+RTLIVE_BASE   = 'http://odna.octoshape.net/f3f5m2v4/cds/'
 
 addon         = xbmcaddon.Addon('plugin.video.rt')
 __addonname__ = addon.getAddonInfo('name')
@@ -214,22 +214,23 @@ elif mode==13:
 
 if (mode==17) or (auto_play == True):
 
-              res_sel = ["HD","SD","SDh","SDq"]
-              res_names = ["720p","360p","240p","180p"]
+              res_names = ["Auto","720p","480p","320p","240p"]
               i = int(addon.getSetting('rt_res'))
-              res = res_sel[i]
+              res = res_names[i]
+              if res == "Auto":
+                res = "auto.smil"
               res_str = res_names[i]
 
               if (auto_play != True):
-                addLink(RTLIVE_BASE+"rt-global-live-"+str(res),"RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),GENRE_NEWS,"",False)
-                addLink(RTLIVE_BASE+"rt-america-live-"+str(res),"RT America Live "+str(res_str),icon,fanart,"RT America Live "+str(res_str),GENRE_NEWS,"",False)
-                addLink(RTLIVE_BASE+"rt-doc-live-"+str(res),"RT Documentary Live "+str(res_str),icon,fanart,"RT Documentary Live "+str(res_str),GENRE_NEWS,"",False)
-                addLink(RTLIVE_BASE+"rt-enespanol-live-"+str(res),"RT Espanol Live "+str(res_str),icon,fanart,"RT Espanol Live "+str(res_str),GENRE_NEWS,"",False)
-                addLink(RTLIVE_BASE+"rt-rusiyaalyaum-live-"+str(res),"RT Arabic Live "+str(res_str),icon,fanart,"RT Arabic Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch1_"+str(res)+"/playlist.m3u8","RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch4_"+str(res)+"/playlist.m3u8","RT America Live "+str(res_str),icon,fanart,"RT America Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch5_"+str(res)+"/playlist.m3u8","RT Documentary Live "+str(res_str),icon,fanart,"RT Documentary Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch2_"+str(res)+"/playlist.m3u8","RT Espanol Live "+str(res_str),icon,fanart,"RT Espanol Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch3_"+str(res)+"/playlist.m3u8","RT Arabic Live "+str(res_str),icon,fanart,"RT Arabic Live "+str(res_str),GENRE_NEWS,"",False)
 
               else:
                 if mode != 17:
-                  addLink(RTLIVE_BASE+"rt-global-live-"+str(res),"RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),GENRE_NEWS,"",False, autoplay=True)
+                  addLink(RTLIVE_BASE+"ch1_"+str(res_str)+"/playlist.m3u8","RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),GENRE_NEWS,"",False, autoplay=True)
                   xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 elif mode==18:

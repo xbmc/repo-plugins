@@ -186,7 +186,7 @@ def getlastVideos():
         postrequest = urllib.urlencode({'emissions': i,
                                    'famille': 0,
                                    'a': 'ge'})
-    
+        
         page = requestHandler.open("http://mobile.nolife-tv.com/do.php", postrequest)
         liste = BeautifulSoup(page.read()).findAll('li')
         for element in liste:
@@ -217,7 +217,7 @@ def getlastVideos():
                                     videoInfo.duration,
                                     videoInfo.seen,
                                     videoInfo.thumb])
-                i = i + 1
+        i = i + 1
 
     for emission in emissions:
         if emission[2] == '':

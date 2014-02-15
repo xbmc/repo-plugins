@@ -22,14 +22,17 @@ def get_podcasts():
         if len(info.text) > 50:
             info_out.append(info.text)
     
-    thumb_sec = thumbs[1:36]
+    
+    thumb_sec = thumbs[1:37]
     thumb_out = []
     for thumb in thumb_sec:
         thumb_out.append(thumb['src'])
 
+
     title_out = []
     for title in titles:
         title_out.append(re.sub('&#039;', "'",title.text))
+    
 
     path = []
     for u in urls:
@@ -39,9 +42,10 @@ def get_podcasts():
     path_out = []
     for i in path:
         path_out.append(i[-11:])
+   
     
     output = []
-    for x in range(len(path_out)):
+    for x in range(len(title_out)):
         items = {
             'title': title_out[x],
             'thumb': thumb_out[x],
@@ -51,6 +55,4 @@ def get_podcasts():
         output.append(items)
 
     return output
-
-
 

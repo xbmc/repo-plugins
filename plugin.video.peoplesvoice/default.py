@@ -9,7 +9,7 @@ __language__  = addon.getLocalizedString
 
 def CATEGORIES():
         
-        addDir(__language__(30010),'http://www.thepeoplesvoice.tv/watch-now/',1,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
+        addDir(__language__(30010),'http://www.thepeoplesvoice.tv/watchnow/',1,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
         addDir(__language__(30016),'http://www.thepeoplesvoice.tv/whatson/',3,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
         addDir(__language__(30017),'http://www.thepeoplesvoice.tv/show/',4,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
         addLink(__language__(30010)+__language__(30018),'http://cdn.rbm.tv:1935/rightbrainmedia-live-106/_definst_/ddstream_1/playlist.m3u8','http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013)+__language__(30012))
@@ -22,11 +22,12 @@ def INDEX(url):
         link=response.read()
         response.close()
         #Scrape video source
-        match=re.compile('href="(.+?)" target="TPV">(.+?)</a>').findall(link)
+        match=re.compile('href="(.+?)"><span style="color: #ffffff;"><font size="3" color="black">(.+?)</span>').findall(link)
         if len(match) > 0:        
                 for url,name in match:
                        addDir(__language__(30010)+name,url,2,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30014)+__language__(30015)+__language__(30012))   
         else:
+                xbmc.log(__language__(30019), xbmc.LOGERROR )
                 xbmcgui.Dialog().ok(__language__(30010), __language__(30019))
         
 def INDEX2(url):
@@ -43,6 +44,7 @@ def INDEX2(url):
                         name = name.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&').replace('&#8217;', "'")  # Cleanup the title.
                         addDir(name,'',0,image,name)      
         else:
+                xbmc.log(__language__(30020), xbmc.LOGERROR )
                 xbmcgui.Dialog().ok(__language__(30010), __language__(30020))
 
 
@@ -61,6 +63,7 @@ def INDEX3(url):
                         name = name.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&').replace('&#8217;', "'")  # Cleanup the description.
                         addDir(name,'',0,image,description)
         else:
+                xbmc.log(__language__(30019), xbmc.LOGERROR )
                 xbmcgui.Dialog().ok(__language__(30010), __language__(30019))
                 
 

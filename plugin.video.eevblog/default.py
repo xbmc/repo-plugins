@@ -2,11 +2,12 @@ import xbmc, xbmcgui, xbmcplugin, urllib2, urllib, re, string, sys, os, tracebac
 
 __plugin__ =  'EEVblog'
 __author__ = 'Clumsy <clumsy@xbmc.org>'
-__date__ = '01-05-2012'
-__version__ = '0.2.0'
+__date__ = '20-02-2014'
+__version__ = '0.2.5'
 __settings__ = xbmcaddon.Addon(id='plugin.video.eevblog')
 
 # Thanks to some of the other plugin authors, where I borrowed some ideas from !
+EEV_URL='http://www.eevblog.com'
 
 REMOTE_DBG = False
 
@@ -37,7 +38,7 @@ def build_main_directory():
   xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = listitem, isFolder = True)
 
 def build_episodes_directory():
-  url = 'http://www.eevblog.com/episodes/'
+  url = EEV_URL + '/episodes/'
   data = open_url(url)
   match = re.compile('<body>(.+?)</body>', re.DOTALL).findall(data)
   youtube_url_name = re.compile(r'<a href.?="(.+?)" title="(EEVblog #.+?)">', re.DOTALL + re.IGNORECASE).findall(match[0])
@@ -59,7 +60,7 @@ def play_video(ep_url):
   xbmc.executebuiltin('ActivateWindow(busydialog)')
   try:
  
-    ep_data = open_url(ep_url)
+    ep_data = open_url(EEV_URL + ep_url)
     plot = re.compile('<div class="info">.+?<p>(.+?)</p>.', re.DOTALL).findall(ep_data)
     youtube_video_id = re.compile('<param name="movie" value=".*?/v/(.+?)[&\?].').findall(ep_data)
     

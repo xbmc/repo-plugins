@@ -1,3 +1,7 @@
+[B|Version 0.2.5[/B]
+
+- Fixes video playback. Thanks to Lupul for the fix.
+
 [B|Version 0.2.4[/B]
 
 - Dave changed the site a bit, breaking the episode listing. Fixed.

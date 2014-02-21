@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id="plugin.video.vimeo" name="Vimeo" provider-name="TheCollective" version="3.5.3">
+<addon id="plugin.video.vimeo" name="Vimeo" provider-name="TheCollective" version="3.5.4">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.common.plugin.cache" version="2.5.2" />
@@ -16,5 +16,6 @@
     <description lang="en">Plugin that allows you to browse and view videos from everybodys favorite alternative video site!</description>
     <summary lang="bg">Видео добавка за Vimeo</summary>
     <description lang="bg">Добавката ви позволява да разглеждате и гледате видео клипове от любимия на всички алтернативен видео сайт!</description>
+    <broken>Plugin broken due to website changes.</broken>
   </extension>
 </addon>

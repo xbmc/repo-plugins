@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.creationtoday_org" version="1.0.0" name="Creation Today" provider-name="Romans I XVI">
+<addon id="plugin.video.creationtoday_org" version="1.0.1" name="Creation Today" provider-name="Romans I XVI">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.urlresolver" version="2.1.2"/>
 	<import addon="script.module.t0mm0.common" version="2.1.0"/>
+	<import addon="script.module.beautifulsoup4" version="4.3.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>

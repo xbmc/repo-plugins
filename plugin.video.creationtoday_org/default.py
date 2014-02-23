@@ -5,11 +5,11 @@ import xbmcgui
 import xbmcaddon
 import os
 import re
-import string
 import sys
 from t0mm0.common.addon import Addon
 from t0mm0.common.net import Net
 import urlresolver
+from bs4 import BeautifulSoup
 
 
 addon = Addon('plugin.video.creationtoday_org', sys.argv)
@@ -17,7 +17,6 @@ net = Net()
 settings = xbmcaddon.Addon( id = 'plugin.video.creationtoday_org' )
 fanart = os.path.join( settings.getAddonInfo( 'path' ), 'fanart.jpg' )
 icon = os.path.join( settings.getAddonInfo( 'path' ), 'icon.png' )
-xbmc.log('blah'+fanart)
 play = addon.queries.get('play', None)
 
 
@@ -25,55 +24,94 @@ def MAIN():
 	addDir('Creation Today Show', 'http://www.creationtoday.org',1,'')	
 	addDir('Creation Minute', 'https://www.youtube.com/playlist?list=PLvFrrGonrTSOO8_ZtChPQrBxx4MSla9Qb',2,'')
 	addDir('Creation Bytes', 'https://www.youtube.com/playlist?list=PLA2805B73D20F70D3',2,'')
-	addDir('Creation Seminars', 'https://www.youtube.com/playlist?list=PL6-cVj-ZRivqKeqAklhYfFFmmAdvwcnCT',2,'')	
+	addDir('Creation Seminars', 'http://www.youtube.com/playlist?list=PLBAE82586B7EABD77',3,'')	
 	addDir('Debates', 'https://www.youtube.com/playlist?list=PL6-cVj-ZRivpHQhRLUXmLV3nxZ_kWtND-',2,'')	
+	addDir('Featured', 'https://www.youtube.com',4,'')	
 
 ##################################################################################################################################
 
 def ADDLINKS_Creation_Today(url):
 	url='https://www.youtube.com/playlist?list=PLvFrrGonrTSNru0E3AEhBTTAsOvPxK5Q8'
 	link = getUrl(url)
-	match=re.compile('<a href=.+?watch\?v=(.+?)&amp.+?class="yt-uix-sessionlink"').findall(link)
-	title=re.compile('<a href=.+?watch.+?title="(.+?)" class="yt-uix-sessionlink"').findall(link)
+	soup = BeautifulSoup(link)
+	title = soup.find_all("a", "pl-video-title-link")
+	match=re.compile('data-video-id="(.+?)"').findall(link)
 	mylist=zip((match),(title))
 	for match,title in reversed(mylist):
 		thumb = "http://img.youtube.com/vi/"+match+"/0.jpg"
-		title=title.replace("&#8211;","-")
-		title=title.replace("&#8217;","\'")
+		title = title.contents
+		title = str(title[0])
 		addon.add_video_item({'url': 'http://www.youtube.com/watch?v=' + match},{'title': title},img=thumb,fanart=fanart)
 	url='https://www.youtube.com/playlist?list=PLvFrrGonrTSORF70pT4NyrLNVDfWZE4hu'
 	link = getUrl(url)
-	match=re.compile('<a href=.+?watch\?v=(.+?)&amp.+?class="yt-uix-sessionlink"').findall(link)
-	title=re.compile('<a href=.+?watch.+?title="(.+?)" class="yt-uix-sessionlink"').findall(link)
+	soup = BeautifulSoup(link)
+	title = soup.find_all("a", "pl-video-title-link")
+	match=re.compile('data-video-id="(.+?)"').findall(link)
 	mylist=zip((match),(title))
 	for match,title in reversed(mylist):
 		thumb = "http://img.youtube.com/vi/"+match+"/0.jpg"
-		title=title.replace("&#8211;","-")
-		title=title.replace("&#8217;","\'")
+		title = title.contents
+		title = str(title[0])
 		addon.add_video_item({'url': 'http://www.youtube.com/watch?v=' + match},{'title': title},img=thumb,fanart=fanart)
 	url='https://www.youtube.com/playlist?list=PLA5F3E0C0A891053E'
 	link = getUrl(url)
-	match=re.compile('<a href=.+?watch\?v=(.+?)&amp.+?class="yt-uix-sessionlink"').findall(link)
-	title=re.compile('<a href=.+?watch.+?title="(.+?)" class="yt-uix-sessionlink"').findall(link)
+	soup = BeautifulSoup(link)
+	title = soup.find_all("a", "pl-video-title-link")
+	match=re.compile('data-video-id="(.+?)"').findall(link)
 	mylist=zip((match),(title))
 	for match,title in reversed(mylist):
 		thumb = "http://img.youtube.com/vi/"+match+"/0.jpg"
-		title=title.replace("&#8211;","-")
-		title=title.replace("&#8217;","\'")
+		title = title.contents
+		title = str(title[0])
 		addon.add_video_item({'url': 'http://www.youtube.com/watch?v=' + match},{'title': title},img=thumb,fanart=fanart)
 
 ##################################################################################################################################
 
 def ADDLINKS_Youtube_Playlist(url):
 	link = getUrl(url)
-	match=re.compile('<a href=.+?watch\?v=(.+?)&amp.+?class="yt-uix-sessionlink"').findall(link)
-	title=re.compile('<a href=.+?watch.+?title="(.+?)" class="yt-uix-sessionlink"').findall(link)
+	soup = BeautifulSoup(link)
+	title = soup.find_all("a", "pl-video-title-link")
+	match=re.compile('data-video-id="(.+?)"').findall(link)
 	mylist=zip((match),(title))
 	for match,title in mylist:
 		thumb = "http://img.youtube.com/vi/"+match+"/0.jpg"
-		title=title.replace("&#8211;","-")
-		title=title.replace("&#8217;","\'")
+		title = title.contents
+		title = str(title[0])
 		addon.add_video_item({'url': 'http://www.youtube.com/watch?v=' + match},{'title': title},img=thumb,fanart=fanart)
+
+##################################################################################################################################
+
+def ADDLINKS_Seminars(url):
+	link = getUrl(url)
+	soup = BeautifulSoup(link)
+	title = soup.find_all("a", "pl-video-title-link")
+	match=re.compile('data-video-id="(.+?)"').findall(link)
+	mylist=zip((match),(title))
+	for match,title in mylist:
+		thumb = "http://img.youtube.com/vi/"+match+"/0.jpg"
+		title = title.contents
+		title = str(title[0])
+		addon.add_video_item({'url': 'http://www.youtube.com/watch?v=' + match},{'title': title},img=thumb,fanart=fanart)
+	link = getUrl('https://www.youtube.com/playlist?list=PL6-cVj-ZRivqKeqAklhYfFFmmAdvwcnCT')
+	soup = BeautifulSoup(link)
+	title = soup.find_all("a", "pl-video-title-link")
+	match=re.compile('data-video-id="(.+?)"').findall(link)
+	mylist=zip((match),(title))
+	for match,title in mylist:
+		thumb = "http://img.youtube.com/vi/"+match+"/0.jpg"
+		title = title.contents
+		title = str(title[0])
+		addon.add_video_item({'url': 'http://www.youtube.com/watch?v=' + match},{'title': title},img=thumb,fanart=fanart)
+
+
+##################################################################################################################################
+
+def ADDLINKS_Featured():
+	addon.add_video_item({'url': 'http://www.youtube.com/watch?v=z6kgvhG3AkI'},{'title': 'Bill Nye Debates Ken Ham'},img='http://img.youtube.com/vi/z6kgvhG3AkI/0.jpg',fanart=fanart)
+	addon.add_video_item({'url': 'http://www.youtube.com/watch?v=V5EPymcWp-g'},{'title': 'Expelled: No Intelligence Allowed'},img='http://img.youtube.com/vi/V5EPymcWp-g/0.jpg',fanart=fanart)
+	addon.add_video_item({'url': 'http://www.youtube.com/watch?v=U0u3-2CGOMQ'},{'title': 'Evolution Vs. God'},img='http://img.youtube.com/vi/U0u3-2CGOMQ/0.jpg',fanart=fanart)
+	addon.add_video_item({'url': 'http://www.youtube.com/watch?v=7y2KsU_dhwI'},{'title': '180 Movie'},img='http://img.youtube.com/vi/7y2KsU_dhwI/0.jpg',fanart=fanart)
+
 
 
 
@@ -81,7 +119,6 @@ if play:
 	url = addon.queries.get('url', '')
 	host = addon.queries.get('host', '')
 	media_id = addon.queries.get('media_id', '')
-	#stream_url = urlresolver.resolve(play)
 	stream_url = urlresolver.HostedMediaFile(url=url, host=host, media_id=media_id).resolve()
 	addon.resolve_url(stream_url)
 
@@ -168,6 +205,12 @@ elif mode==1:
 elif mode==2:
         xbmc.log(""+url)
         ADDLINKS_Youtube_Playlist(url)
+elif mode==3:
+        xbmc.log(""+url)
+        ADDLINKS_Seminars(url)
+elif mode==4:
+        xbmc.log(""+url)
+        ADDLINKS_Featured()
 
 
 

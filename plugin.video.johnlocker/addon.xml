@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.johnlocker" name="JohnLocker" provider-name="willforde" version="1.0.0">
+<addon id="plugin.video.johnlocker" name="JohnLocker" provider-name="willforde" version="1.0.1">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
-		<import addon="script.module.xbmcutil" version="2.0.0"/>
+		<import addon="script.module.xbmcutil" version="2.0.2"/>
 	</requires>
 	<extension library="addon.py" point="xbmc.python.pluginsource">
 		<provides>video</provides>
@@ -11,6 +11,7 @@
 		<language>en</language>
 		<platform>all</platform>
 		<summary lang="en">JohnLocker, Anonymous online education.</summary>
+		<description lang="en">JohnLocker, Anonymous online education and documentaries.</description>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
 		<email>willforde+xbmc@gmail.com</email>
 		<forum>http://forum.xbmc.org/showthread.php?tid=178796</forum>

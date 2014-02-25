@@ -23,7 +23,7 @@ class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch List of Revision3 Shows
-		url = "http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc"
+		url = u"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc"
 		sourceCode = urlhandler.urlread(url, 2678400) # TTL = 1 Month
 		
 		# Set Content Properties
@@ -40,21 +40,18 @@ class Initialize(listitem.VirtualFS):
 		localListitem = listitem.ListItem
 		
 		# Add Extra Items
-		#self.add_item("-Channels", thumbnail=("channels.jpg",1), url={"action":"Channels", "url":"http://johnlocker.com/home/channel"})
-		self.add_item("-Most Recent", thumbnail=("latest.png",1), url={"action":"Videos", "url":"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc", "section":"latestvideos"})
-		self.add_item("-Most viewed", thumbnail=("viewed.jpg",1), url={"action":"Videos", "url":"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc", "section":"mostviewed"})
-		self.add_item("-Highest rated", thumbnail=("rated.jpg",1), url={"action":"Videos", "url":"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc", "section":"highestrated"})
-		self.add_item("-Featured", thumbnail=("featured.png",1), url={"action":"Videos", "url":"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc", "section":"featured"})
+		#self.add_item(u"-Channels", thumbnail=(u"channels.jpg",1), url={"action":"Channels", "url":"http://johnlocker.com/home/channel"})
+		self.add_item(u"-Most Recent", thumbnail=(u"latest.png",1), url={"action":"Videos", "url":"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc", "section":"latestvideos"})
+		self.add_item(u"-Most viewed", thumbnail=(u"viewed.jpg",1), url={"action":"Videos", "url":"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc", "section":"mostviewed"})
+		self.add_item(u"-Highest rated", thumbnail=(u"rated.jpg",1), url={"action":"Videos", "url":"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc", "section":"highestrated"})
+		self.add_item(u"-Featured", thumbnail=(u"featured.png",1), url={"action":"Videos", "url":"http://johnlocker.com/home/main?mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc", "section":"featured"})
 		
 		# Loop and display each Video
 		import CommonFunctions, re
 		searchUrlTitle = re.compile('<a href="(http://johnlocker.com/home/category/videos/\d+)" style="font-weight:bold;">\s+(.+?)\s+</a>')
 		searchImg = re.compile('<img class="listedvideolistthumbnailmc" src="(http://johnlocker.com/categories/\S+.jpg)"')
-		sectionCat = CommonFunctions.parseDOM(sourceCode, "div", {"id":"categories"})
-		for htmlSegment in CommonFunctions.parseDOM(sectionCat, "div", {"class":"listedvideolistvideomc"}):
-			# Convert String Encoding
-			htmlSegment = htmlSegment.encode("utf8")
-			
+		sectionCat = CommonFunctions.parseDOM(sourceCode, u"div", {u"id":u"categories"})
+		for htmlSegment in CommonFunctions.parseDOM(sectionCat, u"div", {u"class":u"listedvideolistvideomc"}):
 			# Fetch Url and Title
 			url, title = searchUrlTitle.findall(htmlSegment)[0]
 			
@@ -62,7 +59,7 @@ class Initialize(listitem.VirtualFS):
 			item = localListitem()
 			item.setLabel(title)
 			item.setThumbnailImage(searchImg.findall(htmlSegment)[0])
-			item.setParamDict(action="Videos", url="%s?cvld=oc" % url)
+			item.setParamDict(action="Videos", url=u"%s?cvld=oc" % url)
 			
 			# Store Listitem data
 			additem(item.getListitemTuple(isPlayable=False))
@@ -94,11 +91,8 @@ class Channels(listitem.VirtualFS):
 		import CommonFunctions, re
 		searchUrlTitle = re.compile('<div class="channelitemtitle"><a href="(http://johnlocker.com/home/channel/\d+)">(.+?)</a>')
 		searchImg = re.compile('<img class="channelitemimage" src="(http://johnlocker.com/\S+\.jpg)"')
-		for htmlSegment in CommonFunctions.parseDOM(sourceCode, "div", {"class":"channelitem"}):
-			# Convert String Encoding
-			htmlSegment = htmlSegment.encode("utf8")
-			
-			img = re.findall('<img class="channelitemimage" src="(http://johnlocker.com/\S+\.jpg)"', htmlSegment)
+		for htmlSegment in CommonFunctions.parseDOM(sourceCode, u"div", {u"class":u"channelitem"}):
+			img = searchImg.findall(htmlSegment)
 			if img: img = img[0]
 			else: continue
 			
@@ -124,7 +118,7 @@ class Videos(listitem.VirtualFS):
 		sourceCode = urlhandler.urlread(plugin["url"], 28800) # TTL = 8 Hours
 		
 		# Set Content Properties
-		if "section" in plugin and plugin["section"] == "mostviewed": self.set_sort_methods(self.sort_method_program_count, self.sort_method_date, self.sort_method_video_runtime, self.sort_method_title)
+		if "section" in plugin and plugin["section"] == u"mostviewed": self.set_sort_methods(self.sort_method_program_count, self.sort_method_date, self.sort_method_video_runtime, self.sort_method_title)
 		else: self.set_sort_methods(self.sort_method_date, self.sort_method_video_runtime, self.sort_method_program_count, self.sort_method_title)
 		self.set_content("episodes")
 		
@@ -140,9 +134,9 @@ class Videos(listitem.VirtualFS):
 		
 		# Restrict to Selected Section and Add Next Page
 		import CommonFunctions, re
-		if "section" in plugin: sourceCode = CommonFunctions.parseDOM(sourceCode, "div", {"id":plugin["section"]})[0]
+		if "section" in plugin: sourceCode = CommonFunctions.parseDOM(sourceCode, u"div", {u"id":plugin["section"]})[0]
 		nextUrl = re.findall('<a class="pagination" href="(\S+?)">Next</a>', sourceCode)
-		if nextUrl: self.add_next_page(url={"url":"http://johnlocker.com%s&mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc&cvld=oc" % nextUrl[0], "section":plugin.get("section","")})
+		if nextUrl: self.add_next_page(url={"url":u"http://johnlocker.com%s&mlvd=oc&mmvd=oc&mhrvd=oc&mfvd=oc&cvld=oc" % nextUrl[0], "section":plugin.get("section","")})
 		
 		# Loop and display each Video
 		searchUrl = re.compile('<a href="(http://johnlocker.com/home/video/\S+?)"')
@@ -152,10 +146,7 @@ class Videos(listitem.VirtualFS):
 		searchTime = re.compile('<div class="listedvideolistfootdivoc">\s+Added date: \d+-\d+-\d+\s+- Duration:(.+?)\s+</div>')
 		searchImg = re.compile('<img class="listedvideolistthumbnailoc" src="(http://\S+?)"')
 		searchViews = re.compile('<div class="clear"></div>\s+</div>\s+Views : (\d+)\s+</div>')
-		for htmlSegment in CommonFunctions.parseDOM(sourceCode, "div", {"class":"listedvideolistvideooc"}):
-			# Convert String Encoding
-			htmlSegment = htmlSegment.encode("utf8")
-			
+		for htmlSegment in CommonFunctions.parseDOM(sourceCode, u"div", {u"class":u"listedvideolistvideooc"}):
 			# Create listitem of Data
 			item = localListitem()
 			item.setLabel(searchTitle.findall(htmlSegment)[0])
@@ -177,7 +168,7 @@ class Videos(listitem.VirtualFS):
 			except: pass
 			
 			# Add Context item to link to related videos
-			item.addRelatedContext(url="%s?rvds=oc" % url)
+			item.addRelatedContext(url=u"%s?rvds=oc" % url)
 			
 			# Store Listitem data
 			additem(item.getListitemTuple(isPlayable=True))
@@ -213,10 +204,7 @@ class Related(listitem.VirtualFS):
 		searchTime = re.compile('<div class="watchpagelistdurationdivmc">\s*(\d+:\d+:\d+)\s+</div>')
 		searchImg = re.compile('<img class="videothumbscv" src="(http://\S+?)"')
 		searchViews = re.compile('<div\s+class="watchpagelistviewsdiv">\s+Views: (\d+)\s+</div>')
-		for htmlSegment in CommonFunctions.parseDOM(sourceCode, "div", {"class":"relatedvideoslistrow"}):
-			# Convert String Encoding
-			htmlSegment = htmlSegment.encode("utf8")
-			
+		for htmlSegment in CommonFunctions.parseDOM(sourceCode, u"div", {u"class":u"relatedvideoslistrow"}):
 			# Create listitem of Data
 			item = localListitem()
 			item.setLabel(searchTitle.findall(htmlSegment)[0])
@@ -236,7 +224,7 @@ class Related(listitem.VirtualFS):
 			except: pass
 			
 			# Add Context item to link to related videos
-			item.addRelatedContext(url="%s?rvds=oc" % url, updatelisting="true")
+			item.addRelatedContext(url=u"%s?rvds=oc" % url, updatelisting="true")
 			
 			# Store Listitem data
 			additem(item.getListitemTuple(isPlayable=True))

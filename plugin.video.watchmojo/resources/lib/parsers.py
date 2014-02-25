@@ -53,23 +53,23 @@ class CategorysParser(HTMLParser.HTMLParser):
 		
 		# Find Each Category Bock
 		if section == 0:
-			if tag == "li" and "class" in attrs and attrs["class"] == "off":
+			if tag == u"li" and u"class" in attrs and attrs[u"class"] == u"off":
 				self.section = 1
-			elif tag == "div" and "id" in attrs and attrs["id"] == "bar_main":
+			elif tag == u"div" and u"id" in attrs and attrs[u"id"] == u"bar_main":
 				raise plugin.ParserError
 		
 		# Find Each Part within Section Block
 		elif section >= 1:
-			if section == 1 and tag == "a" and "href" in attrs:
-				url = attrs["href"]
+			if section == 1 and tag == u"a" and u"href" in attrs:
+				url = attrs[u"href"]
 				self.item.urlParams["url"] = url
 				self.section = 101 # Title
 				url = url[:-2]
-				image = url[url.rfind("/")+1:].replace(" ","-") + ".png"
+				image = url[url.rfind(u"/")+1:].replace(u" ",u"-") + u".png"
 				self.item.setThumbnailImage(image, 1)
-			elif section == 2 and tag == "a" and "href" in attrs:
-				url = attrs["href"]
-				self.idList.append(url[url.find("/", 8)+1:][:-2])
+			elif section == 2 and tag == u"a" and u"href" in attrs:
+				url = attrs[u"href"]
+				self.idList.append(url[url.find(u"/", 8)+1:][:-2])
 	
 	def handle_data(self, data):
 		# Fetch Category Title when within Section 2
@@ -79,9 +79,9 @@ class CategorysParser(HTMLParser.HTMLParser):
 	
 	def handle_endtag(self, tag):
 		# Search for each end tag
-		if self.section >= 1 and tag == "ul":
+		if self.section >= 1 and tag == u"ul":
 			self.section = 0
-			self.item.urlParams["idlist"] = ",".join(self.idList)
+			self.item.urlParams["idlist"] = u",".join(self.idList)
 			self.results.append(self.item.getListitemTuple())
 			self.reset_lists()
 
@@ -116,20 +116,20 @@ class ThemesParser(HTMLParser.HTMLParser):
 		section = self.section
 		
 		# Find Each Category Bock
-		if section == 0 and tag == "div":
-			if "class" in attrs and attrs["class"] == "theme_box":
+		if section == 0 and tag == u"div":
+			if u"class" in attrs and attrs[u"class"] == u"theme_box":
 				self.section = 1
-			elif "id" in attrs and attrs["id"] == "grid_small":
+			elif u"id" in attrs and attrs[u"id"] == u"grid_small":
 				raise plugin.ParserError
 		
 		# Find Each Part within Section Block
 		elif section >= 1:
-			if tag == "img" and "src" in attrs:
-				self.item.setThumbnailImage(attrs["src"])
-			elif tag == "a" and "class" in attrs and attrs["class"] == "theme":
-				self.item.urlParams["url"] = attrs["href"]
+			if tag == u"img" and u"src" in attrs:
+				self.item.setThumbnailImage(attrs[u"src"])
+			elif tag == u"a" and u"class" in attrs and attrs[u"class"] == u"theme":
+				self.item.urlParams["url"] = attrs[u"href"]
 				self.section = 101 # Title
-			elif tag == "span":
+			elif tag == u"span":
 				self.section = 102 # Title with Video Count
 	
 	def handle_data(self, data):
@@ -138,7 +138,7 @@ class ThemesParser(HTMLParser.HTMLParser):
 			self.title = data
 			self.section = 1
 		elif self.section == 102: # Title with Video Count
-			self.item.setLabel("%s (%s)" % (self.title, data[:data.find(" ")]))
+			self.item.setLabel(u"%s (%s)" % (self.title, data[:data.find(u" ")]))
 			self.results.append(self.item.getListitemTuple())
 			self.reset_lists()
 			self.section = 0
@@ -156,7 +156,7 @@ class VideosParser(HTMLParser.HTMLParser):
 		# Proceed with parsing
 		self.reset_lists()
 		self.results = []
-		try: self.feed(html.replace('_blank"',''))
+		try: self.feed(html.replace(u'_blank"',u''))
 		except plugin.ParserError: pass
 		
 		# Return Results
@@ -176,27 +176,27 @@ class VideosParser(HTMLParser.HTMLParser):
 		
 		# Find Each Category Bock
 		if section == 0:
-			if tag == "a" and "href" in attrs and "class" in attrs and attrs["class"] == "grid_image":
-				self.item.urlParams["url"] = attrs["href"]
+			if tag == u"a" and u"href" in attrs and u"class" in attrs and attrs[u"class"] == u"grid_image":
+				self.item.urlParams["url"] = attrs[u"href"]
 				self.section = 1
-			elif tag == "div" and "id" in attrs and attrs["id"] == "next":
+			elif tag == u"div" and u"id" in attrs and attrs[u"id"] == u"next":
 				self.section = -1
 		
 		# Find Each Part within Section Block
 		elif section >= 1:
-			if tag == "img" and "src" in attrs:
-				self.item.setThumbnailImage(attrs["src"])
-			elif tag == "span" and "class" in attrs and attrs["class"] == "adate":
+			if tag == u"img" and u"src" in attrs:
+				self.item.setThumbnailImage(attrs[u"src"])
+			elif tag == u"span" and u"class" in attrs and attrs[u"class"] == u"adate":
 				self.section = 101 # Date
-			elif tag == "a" and "class" in attrs and attrs["class"] == "title":
+			elif tag == u"a" and u"class" in attrs and attrs[u"class"] == u"title":
 				self.section = 102 # Title
-			elif tag == "br":
+			elif tag == u"br":
 				self.section = 103 # Plot
 		
 		# Find Next Page
 		elif section == -1:
-			if tag == "a" and "href" in attrs and attrs["href"].startswith("/video/"):
-				self.results.append(self.item.add_next_page(url={"url":attrs["href"]}))
+			if tag == u"a" and u"href" in attrs and attrs[u"href"].startswith(u"/video/"):
+				self.results.append(self.item.add_next_page(url={"url":attrs[u"href"]}))
 				raise plugin.ParserError
 			else:
 				raise plugin.ParserError
@@ -211,14 +211,14 @@ class VideosParser(HTMLParser.HTMLParser):
 			self.item.setLabel(data)
 			self.section == 1
 		elif section == 103: # Plot
-			if data.startswith("hosted by"): self.section = 1
+			if data.startswith(u"hosted by"): self.section = 1
 			else: 
 				self.item.infoLabels["plot"] = data.strip()
 				self.section = 1
 	
 	def handle_endtag(self, tag):
 		# Search for each end tag
-		if self.section >= 1 and tag == "div":
+		if self.section >= 1 and tag == u"div":
 			self.section = 0
 			self.results.append(self.item.getListitemTuple(True))
 			self.reset_lists()

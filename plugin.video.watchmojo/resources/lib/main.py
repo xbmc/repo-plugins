@@ -20,21 +20,20 @@
 from xbmcutil import listitem, urlhandler, plugin
 import parsers
 
-BASEURL = "http://www.watchmojo.com"
+BASEURL = u"http://www.watchmojo.com"
 class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch Video Content
-		url = "%s/video/theme/" % BASEURL
-		sourceObj = urlhandler.urlopen(url, 2678400) # TTL = 1 Month
-		videoItems = parsers.CategorysParser().parse(sourceObj.read())
-		sourceObj.close()
+		url = u"%s/video/theme/" % BASEURL
+		sourceCode = urlhandler.urlread(url, 2678400) # TTL = 1 Month
+		videoItems = parsers.CategorysParser().parse(sourceCode)
 		
 		# Add Extra Items
 		icon = (plugin.getIcon(),0)
 		self.add_youtube_channel("watchmojo")
-		self.add_item("-Latest Videos", thumbnail=icon, url={"action":"Videos", "url":"/video/cat/home/1"})
-		self.add_item("-Video Themes", thumbnail=icon, url={"action":"Themes", "url":"/video/theme/"})
+		self.add_item(u"-Latest Videos", thumbnail=icon, url={"action":"Videos", "url":"/video/cat/home/1"})
+		self.add_item(u"-Video Themes", thumbnail=icon, url={"action":"Themes", "url":"/video/theme/"})
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_video_title)
@@ -48,9 +47,8 @@ class Themes(listitem.VirtualFS):
 	def scraper(self):
 		# Fetch Video Content
 		url = BASEURL + plugin["url"]
-		sourceObj = urlhandler.urlopen(url, 604800) # TTL = 1 Week
-		videoItems = parsers.ThemesParser().parse(sourceObj.read())
-		sourceObj.close()
+		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
+		videoItems = parsers.ThemesParser().parse(sourceCode)
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_video_title)
@@ -63,7 +61,7 @@ class SubCat(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch Video Content
-		url = "%s/video/theme/" % BASEURL
+		url = u"%s/video/theme/" % BASEURL
 		sourceCode = urlhandler.urlread(url, 2678400) # TTL = 1 Month
 		
 		# Set Content Properties
@@ -81,14 +79,14 @@ class SubCat(listitem.VirtualFS):
 		import re
 		
 		# Add Current Category
-		self.add_item(label="-%s" % plugin["title"], url={"action":"Videos", "url":plugin["url"]})
+		self.add_item(label=u"-%s" % plugin["title"], url={"action":"Videos", "url":plugin["url"]})
 		
-		for catID in plugin["idlist"].split(","):
+		for catID in plugin["idlist"].split(u","):
 			# Create listitem of Data
 			item = localListitem()
 			
 			# Fetch Title and Set url & action
-			url = "/video/id/%s/1" % catID
+			url = u"/video/id/%s/1" % catID
 			item.setLabel(re.findall('<a href="%s">(.+?)</a>' % url, sourceCode)[0])
 			item.setParamDict(action="Videos", url=url)
 			
@@ -102,10 +100,9 @@ class Videos(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch Video Content
-		url = BASEURL + plugin["url"].replace(" ","%20")
-		sourceObj = urlhandler.urlopen(url, 28800) # TTL = 8 Hours
-		videoItems = parsers.VideosParser().parse(sourceObj.read())
-		sourceObj.close()
+		url = BASEURL + plugin["url"].replace(u" ",u"%20")
+		sourceCode = urlhandler.urlread(url, 28800) # TTL = 8 Hours
+		videoItems = parsers.VideosParser().parse(sourceCode)
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_date, self.sort_method_video_title)
@@ -123,6 +120,7 @@ class PlayVideo(listitem.PlayMedia):
 		import re
 		
 		# Search sourceCode
-		values = plugin.get_params(re.findall("<param name=\"flashvars\" value='(.+?)'>", sourceCode)[0])
+		test = re.findall("<param name=\"flashvars\" value='(.+?)'>", sourceCode)[0]
+		values = plugin.get_params(test)
 		if values["type"] == "rtmp": return {"url":"%s/mp4:%s" % (values["streamer"], values["file"])}
 		else: return {"url":values["file"]}

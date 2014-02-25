@@ -1,2 +1,8 @@
-[B]Version 1.0[/B]
+[B]Version 1.0.1[/B]
+- Fixed artist needing to be a list of artists in Gotham
+- Changed Addon to show under Music Addons as well as Video Addons
+- Added Ability to save searches
+- Added full unicode support
+
+[B]Version 1.0.0[/B]
 - Initial Version

@@ -1,2 +1,5 @@
-[B]Version 1.0[/B]
+[B]Version 1.0.1[/B]
+- Added Full Unicode Support
+
+[B]Version 1.0.0[/B]
 - Initial Version

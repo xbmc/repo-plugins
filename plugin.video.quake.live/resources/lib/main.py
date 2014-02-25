@@ -23,12 +23,15 @@ class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch Video Content
-		url = "http://www.quake-live.tv/data/playlist_MySQL.php?vf=&t=all&v=&s=DESC"
+		url = u"http://www.quake-live.tv/data/playlist_MySQL.php?vf=&t=all&v=&s=DESC"
 		sourceObj = urlhandler.urlopen(url, 28800) # TTL = 8 Hours
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_date, self.sort_method_video_title)
 		self.set_content("episodes")
+		
+		# Add Youtube Channel
+		self.add_youtube_channel(u"TheQuakeLiveTV")
 		
 		# Fetch and Return VideoItems
 		return self.xml_scraper(sourceObj)
@@ -42,23 +45,23 @@ class Initialize(listitem.VirtualFS):
 		# Import XML Parser and Parse sourceObj
 		import xml.etree.ElementTree as ElementTree
 		tree = ElementTree.parse(sourceObj).getroot()
-		ns = "http://xspf.org/ns/0/"
+		ns = u"http://xspf.org/ns/0/"
 		sourceObj.close()
 		
 		# Loop thought earch Show element
-		for node in tree.getiterator("{%s}track" % ns):
+		for node in tree.getiterator(u"{%s}track" % ns):
 			# Create listitem of Data
 			item = localListitem()
 			item.setAudioInfo()
 			item.setQualityIcon(False)
-			item.setStreamDict("aspect", 1.78)
-			item.setLabel(node.findtext("{%s}title" % ns).replace("\n","").encode("utf-8"))
-			item.setThumbnailImage(node.findtext("{%s}image" % ns).encode("utf-8"))
-			item.setParamDict(url=node.findtext("{%s}location" % ns).encode("utf-8"), action="system.direct")
+			item.setStreamDict(u"aspect", 1.78)
+			item.setLabel(node.findtext(u"{%s}title" % ns).replace(u"\n",u""))
+			item.setThumbnailImage(node.findtext(u"{%s}image" % ns))
+			item.setParamDict(url=node.findtext(u"{%s}location" % ns), action="system.direct")
 			
 			# Add Date Info
-			date = node.findtext("{%s}creator" % ns).replace("\n"," ")
-			item.setDateInfo(date[date.rfind(" ")+1:], "%m/%d/%y")
+			date = node.findtext(u"{%s}creator" % ns).replace(u"\n",u" ")
+			item.setDateInfo(date[date.rfind(u" ")+1:], "%m/%d/%y")
 			
 			# Store Listitem data
 			additem(item.getListitemTuple(isPlayable=True))

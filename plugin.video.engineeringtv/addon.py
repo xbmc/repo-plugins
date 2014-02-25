@@ -19,7 +19,7 @@
 # Initiate Startup
 import xbmcutil
 action = xbmcutil.plugin.actions[0]
-if action == "system": xbmcutil.sysCheck()
+if action == u"system": xbmcutil.sysCheck()
 else:
 	# Call Function Based on Action Param
 	import main as plugin

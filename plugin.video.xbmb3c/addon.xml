@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.xbmb3c" 
         name="XBMB3C" 
-        version="0.8.0" 
+        version="0.8.5" 
         provider-name="xnappo null_pointer im85255">
   <requires>
     <import addon="script.module.requests" version="1.1.0" />
@@ -23,6 +23,6 @@
     <source>https://github.com/xnappo/plugin.video.XBMB3C</source>
     <summary lang="en">Browse and play local video, music and photo media files managed by MediaBrowser3.</summary>
     <description lang="en">Browse and play local video, music and photo media files managed by MediaBrowser3.</description>
-    <disclaimer lang="en">Skin modifications may be needed for all features to work. Aeon MQ5 works best unmodified.  Aeon Nox mods provided in skin_mods directory</disclaimer>
+    <disclaimer lang="en">Xperience1080++ is the only fully supported skin.  Skin modifications may be needed for all features to work. Other skin mods provided in skin_mods directory</disclaimer>
   </extension>
 </addon>

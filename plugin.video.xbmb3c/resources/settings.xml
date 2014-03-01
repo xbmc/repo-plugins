@@ -9,6 +9,7 @@
 		<setting id="password" type="text" option="hidden" label="30025" />
         <setting id="autoEnterSingle" type="bool" label="30001" default="true" visible="true" enable="true"/>
         <setting id="useSeriesArt" type="bool" label="30039" default="false" visible="true" enable="true"/>
+        <setting id="offerDelete" type="bool" label="30127" default="false" visible="true" enable="true"/>        
 	</category>
     
 	<category label="30015"> <!-- Network -->
@@ -16,6 +17,8 @@
         <setting id="smbpassword" type="text" label="30008" default="" option="hidden" visible="true" enable="true"/>        
         <setting id="playFromStream" type="bool" label="30002" default="false" visible="true" enable="true"/>
         <setting id="transcode" type="bool" label="30009" default="false" visible="true" enable="true"/>        
+        <setting id="deviceName" type="text" label="30016" default="XBMB3C" visible="true" enable="true"/>
+        <setting id="showLoadProgress" type="bool" label="30120" default="false" visible="true" enable="true"/>
 	</category>    
 
 	<category label="30110"> <!-- Media Data -->
@@ -27,6 +30,8 @@
         <setting id="resumeJumpBack" type="number" label="30114" default="10" visible="true" enable="true"/>
         <setting id="markPlayedAt" type="number" label="30115" default="90" visible="true" enable="true"/>
         <setting id="addCounts" type="bool" label="30116" default="true" visible="true" enable="true"/>
+        <setting id="addEpisodeNumber" type="bool" label="30119" default="true" visible="true" enable="true"/>
+        <setting id="addResumePercent" type="bool" label="30118" default="true" visible="true" enable="true"/>
         <setting id="backgroundRefresh" type="number" label="30117" default="30" visible="true" enable="true"/>
 	</category>
     

@@ -1,3 +1,17 @@
+0.8.5
+      - Added remote control from other clients (null_pointer)
+      - Added trailer support (im85288)
+      - Added Couch Potato trailer integration (im85288)
+      - Updated to support server security update (xnappo)
+      - Server path substitution support (im85288)
+      - Added premier date and airtime to Upcoming TV (im85288)
+      - Added in-progress Movie and Episode entry points (im85288)
+      - Added percent text to in-progress items (null_pointer)
+      - Aeon Nox widget mods (Recently Added Moves/Episodes, NextUp Episodes) (xnappo)
+      - Added offer delete on episode played option (xnappo)
+      - Added optional progress dialog for large collections (null_pointer)
+      - Various improvements to data presentation (all)
+
 0.8.0 - Improved cache accuracy (null_pointer)
       - Added Confluence auto-menu creation 
         (add movies, then TV, then others to favorites, relaunch) (null_pointer)

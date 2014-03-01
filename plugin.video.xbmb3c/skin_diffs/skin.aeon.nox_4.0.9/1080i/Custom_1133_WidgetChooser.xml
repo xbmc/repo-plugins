@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window type="dialog" id="1133">
+    <onload>ClearProperty(NoStyleSelect)</onload>
+    <defaultcontrol always="true">4</defaultcontrol>
+    <allowoverlay>no</allowoverlay>
+    <controls>
+        <control type="group">
+            <posy>30</posy>
+            <control type="image">
+                <posx>326</posx>
+                <posy>100</posy>
+                <width>1240</width>
+                <height>810</height>
+                <texture border="20">osd/osd_settings_back_glow.png</texture>
+                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+                <visible>!Skin.HasSetting(DisableGlowbar)</visible>
+                <include>PanelGlowFade</include>
+            </control>
+            <control type="image">
+                <posx>326</posx>
+                <posy>100</posy>
+                <width>1240</width>
+                <colordiffuse>$VAR[DialogColorVar]</colordiffuse>
+                <height>810</height>
+                <texture border="20">osd/osd_settings_back.png</texture>
+            </control>
+            <include>Animation_OpenCloseZoom</include>
+            <control type="group">
+                <posy>-100</posy>
+                <control type="panel" id="4">
+                    <posx>347</posx>
+                    <posy>240</posy>
+                    <width>1200</width>
+                    <height>720</height>
+                    <aligny>center</aligny>
+                    <scrolltime>0</scrolltime>
+                    <onup>4</onup>
+                    <ondown>4</ondown>
+                    <orientation>vertical</orientation>
+                    <itemlayout height="60" width="400">
+                        <control type="image">
+                            <width>400</width>
+                            <height>60</height>
+                            <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+                            <texture>button-nofocus.png</texture>
+                        </control>
+                        <control type="label">
+                            <width>400</width>
+                            <height>60</height>
+                            <textoffsetx>10</textoffsetx>
+                            <font>Font_Reg19</font>
+                            <textcolor>grey2</textcolor>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                    </itemlayout>
+                    <focusedlayout height="60" width="400">
+                        <control type="group">
+                            <visible>Control.HasFocus(4)</visible>
+                            <control type="image">
+                                <width>400</width>
+                                <height>60</height>
+                                <colordiffuse>$VAR[FocusTextureColorVar]</colordiffuse>
+                                <texture>views/tripanel/listselect_fo.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>400</width>
+                                <height>60</height>
+                                <textoffsetx>10</textoffsetx>
+                                <scroll>true</scroll>
+                                <font>Font_Reg19</font>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                        </control>
+                        <control type="group">
+                            <visible>!Control.HasFocus(4)</visible>
+                            <control type="image">
+                                <width>400</width>
+                                <height>60</height>
+                                <colordiffuse>$VAR[ColorDiffuseVar]</colordiffuse>
+                                <texture>button-nofocus.png</texture>
+                            </control>
+                            <control type="label">
+                                <width>400</width>
+                                <textoffsetx>10</textoffsetx>
+                                <font>Font_Reg19</font>
+                                <textcolor>grey2</textcolor>
+                                <label>$INFO[ListItem.Label]</label>
+                            </control>
+                        </control>
+                    </focusedlayout>
+                    <content>
+                        <item>
+                            <label>$LOCALIZE[231]</label>
+                            <onclick>Skin.Reset(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)])</onclick>
+                            <onclick>Skin.Reset(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31323]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,recentmovies,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31323])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31222]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,randommovies,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31222])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[42272]</label>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)],featuredmoviesdefault)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42272])</onclick>
+                            <visible>true</visible>
+                            <onclick>Dialog.Close(1133)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31335]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,watchlistmovies,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31335])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31093]</label>
+                            <onclick>RunScript(script.metadata.actors,borntoday,10,random)</onclick>
+                            <onclick>SetProperty(CustomYesNoDialog,actors,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31336])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>System.HasAddon(script.metadata.actors)</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31324]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,recenttv,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31324])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31220]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,randomtv,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31220])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31464]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,watchlisttv,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31464])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[42273]</label>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)],featuredtvdefault)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42273])</onclick>
+                            <visible>true</visible>
+                            <onclick>Dialog.Close(1133)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31359]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,recentalbums,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31359])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31068]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,randomalbums,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31068])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[42274]</label>
+                            <visible>true</visible>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)],featuredmusicdefault)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31068])</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31326]</label>
+                            <visible>true</visible>
+                            <onclick>SetProperty(CustomYesNoDialog,watchlistalbums,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31326])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31081]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,recentmusicvideos,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31081])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31091]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,randommusicvideos,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31091])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>42312</label>
+                            <onclick>SetProperty(CustomYesNoDialog,watchlistmusicvideos,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42312])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>1036</label>
+                            <onclick>RunScript(script.favourites)</onclick>
+                            <onclick>SetProperty(CustomYesNoDialog,favouriteIcon,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[1036])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31069] 1</label>
+                            <onclick>SetProperty(CustomYesNoDialog,Icon1,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,Icon Panel 1)</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31069] 2</label>
+                            <onclick>SetProperty(CustomYesNoDialog,Icon2,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,Icon Panel 2)</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31070]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,randomaddons,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31070])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31071]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,weather,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31071])</onclick>
+                            <onclick>ActivateWindow(1146)</onclick>
+                            <visible>!IsEmpty(Weather.Plugin)</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31642]</label>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)],weatherpda)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[31071])</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>System.HasAddon(weather.fanart.pda.style) + !IsEmpty(Weather.Plugin)</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[31072]</label>
+                            <onclick>SetProperty(CustomYesNoDialog,systemclassic,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[138])</onclick>
+                            <onclick>ActivateWindow(1146)</onclick>
+                        </item>
+                        <item>
+                            <label>42215</label>
+                            <onclick>RunScript(plugin.image.mypicsdb,0,?action='setproperties'&amp;method='Latest'&amp;sort='Added'&amp;limit=10)</onclick>
+                            <onclick>SetProperty(CustomYesNoDialog,recentpics,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42215])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>System.HasAddon(plugin.image.mypicsdb)</visible>
+                        </item>
+                        <item>
+                            <label>42216</label>
+                            <onclick>RunScript(plugin.image.mypicsdb,0,?action='setproperties'&amp;method='Random'&amp;sort='Added'&amp;limit=10)</onclick>
+                            <onclick>SetProperty(CustomYesNoDialog,randompics,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42216])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>System.HasAddon(plugin.image.mypicsdb)</visible>
+                        </item>
+                        <item>
+                            <label>42217</label>
+                            <onclick>SetProperty(CustomYesNoDialog,randomartists,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42217])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                        </item>
+                        <item>
+                            <label>42218</label>
+                            <onclick>RunScript(script.ExtraMusicInfo,info=NearEvents)</onclick>
+                            <onclick>SetProperty(CustomYesNoDialog,concertspanel,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42218])</onclick>
+                            <onclick>ActivateWindow(1146)</onclick>
+                            <visible>System.HasAddon(script.ExtraMusicInfo)</visible>
+                        </item>
+                        <item>
+                            <label>42219</label>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42219])</onclick>
+                            <onclick>SetProperty(CustomYesNoDialog,nextairedtv,1124)</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>true</visible>
+                        </item>
+                        <item>
+                            <label>42220</label>
+                            <onclick>SetProperty(CustomYesNoDialog,babespanelcoversquare,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$LOCALIZE[42220])</onclick>
+                            <onclick>ActivateWindow(1146)</onclick>
+                        </item>
+                        <item>
+                            <label>31183</label>
+                            <onclick>SetProperty(CustomYesNoDialog,wundergroundpanel,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,Weather Wunderground)</onclick>
+                            <onclick>ActivateWindow(1146)</onclick>
+                            <visible>SubString(Weather.Plugin,weather.wunderground)</visible>
+                        </item>
+                        <item>
+                            <label>$LOCALIZE[20304]</label>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <onclick>ActivateWindow(1162)</onclick>
+                            <visible>System.HasAddon(script.rssclient)</visible>
+                        </item>
+                        <item>
+                            <label>31327</label>
+                            <onclick>SetProperty(CustomYesNoDialog,mostplayedroms,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,Most Played ROMs)</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <visible>System.HasAddon(script.games.rom.collection.browser)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist1.Label)] ($INFO[Skin.String(SmartPlaylist1.Type)])</label>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist1.Label)])</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist1.Type),Movie)">SetProperty(CustomYesNoDialog,movies1custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist1.Type),Episode)">SetProperty(CustomYesNoDialog,tv1custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist1.Type),Music)">SetProperty(CustomYesNoDialog,albums1custom,1124)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist1.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget)</visible>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist2.Label)] ($INFO[Skin.String(SmartPlaylist2.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist2.Type),Movie)">SetProperty(CustomYesNoDialog,movies2custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist2.Type),Episode)">SetProperty(CustomYesNoDialog,tv2custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist2.Type),Music)">SetProperty(CustomYesNoDialog,albums2custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist2.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist2.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist3.Label)] ($INFO[Skin.String(SmartPlaylist3.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist3.Type),Movie)">SetProperty(CustomYesNoDialog,movies3custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist3.Type),Episode)">SetProperty(CustomYesNoDialog,tv3custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist3.Type),Music)">SetProperty(CustomYesNoDialog,albums3custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist3.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist3.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist4.Label)] ($INFO[Skin.String(SmartPlaylist4.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist4.Type),Movie)">SetProperty(CustomYesNoDialog,movies4custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist4.Type),Episode)">SetProperty(CustomYesNoDialog,tv4custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist4.Type),Music)">SetProperty(CustomYesNoDialog,albums4custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist4.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist4.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist5.Label)] ($INFO[Skin.String(SmartPlaylist5.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist5.Type),Movie)">SetProperty(CustomYesNoDialog,movies5custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist5.Type),Episode)">SetProperty(CustomYesNoDialog,tv5custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist5.Type),Music)">SetProperty(CustomYesNoDialog,albums5custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist5.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist5.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist6.Label)] ($INFO[Skin.String(SmartPlaylist6.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist6.Type),Movie)">SetProperty(CustomYesNoDialog,movies6custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist6.Type),Episode)">SetProperty(CustomYesNoDialog,tv6custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist6.Type),Music)">SetProperty(CustomYesNoDialog,albums6custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist6.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist6.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist7.Label)] ($INFO[Skin.String(SmartPlaylist7.Type)])</label>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist7.Label)])</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist7.Type),Movie)">SetProperty(CustomYesNoDialog,movies7custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist7.Type),Episode)">SetProperty(CustomYesNoDialog,tv7custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist7.Type),Music)">SetProperty(CustomYesNoDialog,albums7custom,1124)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist7.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget2)</visible>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist8.Label)] ($INFO[Skin.String(SmartPlaylist8.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist8.Type),Movie)">SetProperty(CustomYesNoDialog,movies8custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist8.Type),Episode)">SetProperty(CustomYesNoDialog,tv8custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist8.Type),Music)">SetProperty(CustomYesNoDialog,albums8custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist8.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist8.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget2)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist9.Label)] ($INFO[Skin.String(SmartPlaylist9.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist9.Type),Movie)">SetProperty(CustomYesNoDialog,movies9custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist9.Type),Episode)">SetProperty(CustomYesNoDialog,tv9custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist9.Type),Music)">SetProperty(CustomYesNoDialog,albums9custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist9.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist9.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget2)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist10.Label)] ($INFO[Skin.String(SmartPlaylist10.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist10.Type),Movie)">SetProperty(CustomYesNoDialog,movies10custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist10.Type),Episode)">SetProperty(CustomYesNoDialog,tv10custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist10.Type),Music)">SetProperty(CustomYesNoDialog,albums10custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist10.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist10.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget2)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist11.Label)] ($INFO[Skin.String(SmartPlaylist11.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist11.Type),Movie)">SetProperty(CustomYesNoDialog,movies11custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist11.Type),Episode)">SetProperty(CustomYesNoDialog,tv11custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist11.Type),Music)">SetProperty(CustomYesNoDialog,albums11custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist11.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist11.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget2)</visible>
+                        </item>
+                        <item>
+                            <label>$INFO[Skin.String(SmartPlaylist12.Label)] ($INFO[Skin.String(SmartPlaylist12.Type)])</label>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist12.Type),Movie)">SetProperty(CustomYesNoDialog,movies12custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist12.Type),Episode)">SetProperty(CustomYesNoDialog,tv12custom,1124)</onclick>
+                            <onclick condition="Substring(Skin.String(SmartPlaylist12.Type),Music)">SetProperty(CustomYesNoDialog,albums12custom,1124)</onclick>
+                            <onclick>Skin.SetString(ItemToEdit.$INFO[Window(1124).Property(WidgetSelection)]Title,$INFO[Skin.String(SmartPlaylist12.Label)])</onclick>
+                            <onclick>ActivateWindow(1137)</onclick>
+                            <onclick>Dialog.Close(1133)</onclick>
+                            <visible>!IsEmpty(Skin.String(SmartPlaylist12.Path))</visible>
+                            <visible>Stringcompare(Window(1124).Property(WidgetSelection),Widget2)</visible>
+                        </item>
+                    </content>
+                </control>
+                <control type="image">
+                    <description>left Arrow</description>
+                    <posx>567</posx>
+                    <posy>190</posy>
+                    <height>30</height>
+                    <width>786</width>
+                    <texture flipy="true">wall/wall_arrow_vertical.png</texture>
+                    <visible>Container(4).HasPrevious</visible>
+                    <include>Animation_DialogPopup</include>
+                </control>
+                <control type="image">
+                    <description>right Arrow</description>
+                    <posx>567</posx>
+                    <posy>990</posy>
+                    <height>30</height>
+                    <width>786</width>
+                    <texture>wall/wall_arrow_vertical.png</texture>
+                    <visible>Container(4).HasNext</visible>
+                    <include>Animation_DialogPopup</include>
+                </control>
+            </control>
+        </control>
+    </controls>
+</window>

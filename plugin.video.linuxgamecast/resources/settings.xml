@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <!-- General -->
-    <category label="30800">
-        <!-- Media Quality: HD (0) / SD (1) -->
-        <setting id="media_quality" type="enum" label="30801"
-            lvalues="30802|30803" default="0" />
-    </category>
-</settings>

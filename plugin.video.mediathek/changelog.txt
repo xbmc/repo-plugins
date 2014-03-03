@@ -1,3 +1,4 @@
+0.6.0 - FIX: Regexp for crawling the ARD-Mediathek
 0.5.9 - FIX: adopt NDR infrastructure change (by dethfee)
 0.5.8 - FIX: adopt NDR link change (by Toerless Eckert)
 0.5.7 - CHG: Temporaily disable BR, BR Alpha

@@ -165,7 +165,7 @@ class SimpleXbmcGui(object):
       listItem.setProperty("PlayPath", link);
       playlist.add(url=link, listitem=listItem);
     
-    player.play(playlist, playerItem);
+    player.play(playlist, playerItem, false);
       
   def errorOK(self,title="", msg=""):
     e = str( sys.exc_info()[ 1 ] )

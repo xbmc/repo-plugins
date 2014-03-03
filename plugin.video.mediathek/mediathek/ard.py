@@ -74,8 +74,9 @@ class ARDMediathek(Mediathek):
                         TreeNode("2.26","Z",self.rootLink+"/ard/servlet/ajax-cache/3474820/view=list/initial=Z/index.html",True),
                         )),
                       )
-      
-    videoDocument_link_Regex = "/.*?documentId=(\\d*)"
+    #http://www.ardmediathek.de/ard/servlet/scaled/80/78/44/40/8078444-bild-xs16x9"%20alt=""%20/></div><h3%20class="mt-title"><a%20href="/das-erste/lindenstrasse-vorschau-zum-mitnehmen?documentId=18548684
+    
+    videoDocument_link_Regex = "/[^\"]*?documentId=(\\d*)"
     metaInfo_link_Regex = "/ard/servlet/ajax-cache/\\d*/view=ajax(/clipFilter=fernsehen){0,1}(/isFromList=true){0,1}/index.html"
     ajaxDocumentLink = "/ard/servlet/ajax-cache/(\\d*)/view=(switch|ajax|list)(/clipFilter=fernsehen){0,1}(/content=fernsehen){0,1}(/documentId=\\d*){0,1}/index.html"
     self.findImage_regex = "<img.*?src=\".*?\".*?/>"; 
@@ -141,6 +142,8 @@ class ARDMediathek(Mediathek):
     
     if(isPlayable):
       displayObject.link = self.getVideoLink(self.rootLink+videoDocumentLink);
+      if(len(displayObject.link) == 0):
+        return;
     else:
       displayObject.link = self.rootLink+videoDocumentLink;
       displayObject.isPlayable = False;

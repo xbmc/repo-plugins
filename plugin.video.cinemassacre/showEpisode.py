@@ -43,33 +43,18 @@ def showEpisode(episode_page, play=True):
             
 def showEpisodeScreenwave(videoItem):
     tmpContent = showEpisodeLoadPage(videoItem.group(1))
-  
-    streamerVal = re.compile('streamer(?:[\'|\"]*):(?:[\s|\'|\"]*)([^\']*)', re.DOTALL).findall(tmpContent)
-    flashplayerVal = re.compile('flashplayer(?:[\'|\"]*):(?:[\s|\'|\"]*)([^\']*)', re.DOTALL).findall(tmpContent)
+
     filesVal = re.compile('file(?:[\'|\"]*):(?:[\s|\'|\"]*)([^\'|\"]*)', re.DOTALL).findall(tmpContent)
 
     for i in range(0,len(filesVal)):
-        if "high" in filesVal[i]:
-            files = filesVal[i]
+        if ("high" in filesVal[i]) and ("mp4" in filesVal[i]):
+            file = filesVal[i]
             break
 
-    if len(streamerVal)>0 and len(flashplayerVal)>0 and len(files)>0:
-        rtmpurl = streamerVal[0]
-        swfVfy = flashplayerVal[0]
-
-        fileExt = re.compile('\.([^.]+)$', re.DOTALL).findall(files)
-        if len(fileExt)>0:
-            files = fileExt[0] + ":" + files
-          
-        if rtmpurl[-1:] != "/":
-            rtmpurl = rtmpurl + "/"
-        rtmpurl = rtmpurl + files
-
-        segmentUrl = rtmpurl + " playpath=" + files + " pageurl=" + videoItem.group(1) + " swfVfy=" + swfVfy
-
-        listitem = xbmcgui.ListItem(path=segmentUrl)
+    if file:
+        listitem = xbmcgui.ListItem(path=file)
         return xbmcplugin.setResolvedUrl(thisPlugin, True, listitem)
-    
+
 def showEpisodeSpringboadAfterResolve(videoItem):
     _regex_extractVideoParameters = re.compile("http://cms\.springboard.*\.com/(.*?)/(.*?)/video/(.*?)/.*?/(.*?)")
     _regex_extractVideoParameters2 = re.compile("http\://cms\.springboardplatform\.com/xml_feeds_advanced/(.*?)/(.*?)/rss3/(.*?)/")

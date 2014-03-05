@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-import urllib, re, time;
+import urllib, re, time,traceback;
 from ui import *;
 
 class GamestarWeb(object):
@@ -36,7 +36,7 @@ class GamestarWeb(object):
     self._regEx_extractTargetLink = re.compile(self.linkRegex);
     self._regEx_extractVideoID = re.compile("\\d*.html");
     self._regEx_extractVideoLink = re.compile("http.*(mp4|flv)");
-    self._regEx_extractPictureLink = re.compile("http://.*.jpg");
+    self._regEx_extractPictureLink = re.compile("(http://|//).*.jpg");
     self._regEx_extractHeader = re.compile(self.headerRegex);
     self._regEx_extractSimpleLink = re.compile(self.simpleLinkRegex);
     self._regEx_extractTitle = re.compile(self.titleRegex);
@@ -83,7 +83,11 @@ class GamestarWeb(object):
         try:
           videoObjects.append(self.loadVideoPage(header, videoID));
         except:
-          pass;
+          self.gui.log("something goes wrong while processing "+videoID);
+          self.gui.log("Exception: ");
+          traceback.print_exc();
+          self.gui.log("Stacktrace: ");
+          traceback.print_stack();
     return videoObjects;
 
 
@@ -92,7 +96,10 @@ class GamestarWeb(object):
     configDoc = self.loadPage(self.rootLink+"/emb/getVideoData.cfm?vid="+videoID);
     videoLink = unicode(self._regEx_extractVideoLink.search(configDoc).group());
     videoLink = self.replaceXmlEntities(videoLink);
-    thumbnailLink =unicode(self._regEx_extractPictureLink.search(configDoc).group());
+    thumbnailLink = self._regEx_extractPictureLink.search(configDoc).group();
+    if(not thumbnailLink.startswith('http://')):
+      thumbnailLink = thumbnailLink.replace("//",'http://');
+    thumbnailLink = unicode(thumbnailLink);
     
     return VideoObject(title, videoLink, thumbnailLink, self.shortName);
   

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
    <setting id="gamestar"         type="bool" label="30100" option="writeable" default="true"/>
    <setting id="gamepro"          type="bool" label="30101" option="writeable" default="true"/>

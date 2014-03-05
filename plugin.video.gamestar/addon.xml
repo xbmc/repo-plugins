@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.gamestar"
-  version="0.1.4"
+  version="0.1.5"
   name="GamestarVideo"
-  provider-name="Raptor 2101 [raptor2101@gmx.de]">
+  provider-name="Raptor 2101">
   <requires>
-   <import addon="xbmc.python" version="2.0"/>
+   <import addon="xbmc.python" version="2.1.0"/>
   </requires>
   <extension 
     point="xbmc.python.pluginsource"
@@ -35,5 +35,10 @@
     </description>
     <platform>all</platform>
     <language>de</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <forum>https://github.com/raptor2101/Gamestar/issues</forum>
+    <website>https://github.com/raptor2101/Gamestar</website>
+    <source>https://github.com/raptor2101/Gamestar</source>
+    <email>raptor2101@gmx.de</email>
   </extension>
 </addon>

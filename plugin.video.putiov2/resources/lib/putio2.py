@@ -24,6 +24,7 @@ import json
 import logging
 from urllib import urlencode
 
+import xbmc
 import requests
 import iso8601
 
@@ -186,6 +187,23 @@ class _File(_BaseResource):
 
     def delete(self):
         return self.client.request('/files/%s/delete' % self.id)
+
+    @property
+    def subtitle(self):
+        response = self.client.request('/files/%s/subtitles' % self.id)
+
+        items = response['subtitles']
+        subtitles = []
+        for item in items:
+            r = self.client.request('/files/%s/subtitles/%s' % 
+                                    (self.id, item['key']), raw=True)
+            dest = xbmc.translatePath('special://temp/%s' % item['name'])
+            subtitles.append(dest)
+            with open(dest, 'wb') as file_:
+                for data in r.iter_content():
+                    file_.write(data)
+        
+        return subtitles
 
 
 class _Transfer(_BaseResource):

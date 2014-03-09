@@ -139,3 +139,11 @@ msgstr "Activiteiten"
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Einde van het artikel"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Standaard video resolutie (0: elke keer vragen)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Video in gebarentaal"

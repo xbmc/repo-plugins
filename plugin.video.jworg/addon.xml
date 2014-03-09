@@ -2,7 +2,7 @@
 <addon 
     id="plugin.video.jworg" 
     name="Jw.org audio/video browser" 
-    version="0.4.0" 
+    version="0.4.1" 
     provider-name="Realtebo">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
@@ -14,36 +14,44 @@
     </extension>
     <extension point="xbmc.addon.metadata">
         <summary lang="af">'N eenvoudige webleser vir jw.org media-inhoud</summary>
+        <summary lang="bg">Прост браузър за медийно съдържание от jw.org</summary>
         <summary lang="ca">Un navegador simple per el contingut multimèdia de jw.org</summary>
         <summary lang="de">Ein einfacher Browser für jw.org Medieninhalte</summary>
         <summary lang="el">Ένας απλός περιηγητής περιεχομένου για το jw.org</summary>
         <summary lang="en">A simple browser for jw.org media content</summary>
         <summary lang="es">Un navegador simple para jw.org contenido de medios</summary>
         <summary lang="fr">Un navigateur simple pour le contenu du site jw.org</summary>
+        <summary lang="fr_CA">Un navigateur simple pour le contenu des médias de jw.org</summary>
         <summary lang="gl">Navegador sinxelo do contido de jw.org</summary>
+        <summary lang="he">סייר תוכן מדיה פשוט עבור jw.org</summary>
         <summary lang="hu">Egyszerű böngésző a jw.org médiatartalmaihoz.</summary>
         <summary lang="it">Un semplice browser per i contenuti di jw.org</summary>
         <summary lang="nl">Een simpele browser voor JW.org media-inhoud</summary>
         <summary lang="pl">Prosta przeglądarka treści medialnych serwisu jw.org</summary>
         <summary lang="pt">Um navegador simples para o conteúdo de média em jw.org</summary>
         <summary lang="pt_BR">Um simples navegador para conteúdo de mídia da jw.org</summary>
+        <summary lang="sv">En simpel browser för innehåll på jw.org</summary>
         <description lang="af">Direkte uitsaaiing van www.jw.org, jy kan: [CR] - films kyk [CR] - luister tydskrif lesings, liedjies en koninkryk melodieë, Bybel lees, klank dramas en dramatiese Bybel lesings [CR] - Lees die daaglikse teks en nuus</description>
+        <description lang="bg">Дирекен стрийминг от www.jw.org, можете да:[CR]- да гледате видео[CR]- преглеждате списанията за четене, слушате песни и царствени мелодии, четете Библията, аудио драми и драматични библейски четения[CR]- Четете ежедневния текст и новините</description>
         <description lang="ca">Streaming directe des de www.jw.org, pots:[CR]- veure vídeos[CR]- escoltar lectures de  revistes, cançons i melodies 'Kingdom', lectures de la bíblia, drames, i lectures de la bíblia dramatiques[CR]- Llegir els textos i noticies diaris</description>
         <description lang="de">Mit direktes Streaming von www.jw.org, ist folgendes möglich:[CR]- Videos anschauen[CR]- Magazine, Lieder und Melodien aus dem Königreich, Bibellesungen, Audio Dramen und dramatische Bibellesungen[CR]- den Täglichen Text lesen </description>
         <description lang="el">Με άμεση ροή από το www.jw.org, μπορείτε να:[CR]- Παρακολουθήσετε βίντεο[CR]- Ακούσετε αναγνώσεις περιοδικών, τραγουδιών και βασιλικών μελωδιών, βιβλικές αναγνώσεις, ηχητικά δράματα και δραματοποιημένες βιβλικές αναγνώσεις[CR]- Διαβάσετε το Βιβλικό Στίχο και τα Νέα της Ημέρας</description>
         <description lang="en">Directly streaming from www.jw.org, you can:[CR]- watch videos[CR]- listen magazine readings, songs and kingdom melodies, bible reading, audio dramas and dramatic bible readings[CR]- Read the daily text and news</description>
         <description lang="es">Directamente fluye de www.jw.org, puede: [CR] - ver vídeos [CR] - escuchar lecturas de revistas, canciones y melodías reino, lectura de la Biblia, los dramas de audio y lecturas bíblicas dramáticas [CR] - Lee el texto diario y noticias</description>
         <description lang="fr">Lecture directement du site www.jw.org vous pouvez:[CR]-Regarder des vidéos[CR]- Écouter la lecture de revues, cantiques et mélodies du royaume, lecture de la bible, drames audio et lectures biblique dramatiques[CR]- Lire le texte du jour et nouvelles</description>
+        <description lang="fr_CA">Lecture en transit  direct de www.jw.org, vous pouvez :[CR]- Regarder des vidéos[CR]- écouter des lectures de magazines, des chansons et mélodies du royaume, lecture de la bible, théâtre audio et des lectures théâtralisée de la bible[CR]- Lire le texte et les nouvelles quotidiennes.</description>
         <description lang="gl">Directamente fluye de www.jw.org, puede: [CR] - ver vídeos [CR] - escuchar lecturas de revistas, canciones y melodías reino, lectura de la Biblia, los dramas de audio y lecturas bíblicas dramáticas [CR] - Lee el texto diario y noticias</description>
+        <description lang="he">הזרמה ישירה מ-www.jw.org, אתר מדיה נוצרי, אתה יכול:[CR]- לצפות בסרטונים[CR]- להאזין לקריאת מגזינים, שירים ונעימות מלכות, קריאת תנ"ך, דרמות אודיו, וקריאה תנ"כית דרמטית[CR]- לקרוא את הטקסט היומי וחדשות</description>
         <description lang="hu">Közvetlen megtekintéssel a www.jw.org oldaról lehetséges:[CR]- videók megtekintése[CR]- újságfelolvasások meghallgatása, dalok és isteni királyság zenék meghalgatása, biblia felolvasás, hangjátékok és bibliai történetek felolvasása[CR]- Napi hírek és üzenetek olvasása</description>
         <description lang="it">Direttamente in streaming da www.jw.org, è possibile: [CR]- guardare edificanti video[CR]- ascoltare la lettura delle riviste, cantici e melodie del regno, la lettura della Bibbia, i drammi audio ed i brani biblici recitati[CR]- leggere la scrittura del giorno e le news</description>
-        <description lang="nl">Directe streaming van www.jw.org, je kan:[CR]- Video`s bekijken[CR]- naar tijdschriftlezingen, Liedjes en volksliederen, Bijbellezingen, audio drama`s en dramatische Bijbellezingen luisteren[CR]- lees het dagelijkse citaat uit de bijbel en nieuws</description>
+        <description lang="nl">Directe streaming van www.jw.org, je kan:[CR]- Video`s bekijken[CR]- naar tijdschriftlezingen, Liedjes, volksliederen, Bijbellezingen, audio drama`s en dramatische Bijbellezingen luisteren[CR]- lees het dagelijkse citaat uit de bijbel en nieuws</description>
         <description lang="pl">Przeglądaj internetową bibliotekę multimedialną serwisu www.jw.org.[CR] - Oglądaj filmy[CR] - Słuchaj melodii, słuchowisk, adaptacji dźwiękowych Biblii, czytaj Biblie[CR] - Przeczytaj słowo na dziś i nowości</description>
         <description lang="pt">Transmissões de www.jw.org, você poderá:[CR]- ver vídeos[CR]- escutar leituras de magazine, músicas e canções, leituras da bíblia, dramatizações áudio e dramatizações de leituras da bíblia[CR]- Ler texto diário</description>
         <description lang="pt_BR">Fluxo direto de www.jw.org, você pode:[CR]- assistir vídeos[CR]- ouvir leitura de revistas, músicas e cantigos, leituras da bíblia, dramas em áudio e leituras bíblicas dramatizadas[CR]- Ler textos do dia e notícias</description>
-        <language>af de el en es it nl pl pt pt_BR</language>
+        <description lang="sv">Med direktström från www.jw.org kan du:[CR]- se filmer[CR]- lyssna på tidningsuppläsningar, sånger och andlig musik, bibelläsning, ljuddraman och dramatiska bibeluppläsningar[CR]- läsa den dagliga texten och nyheter</description>
+        <language>af de el en es it nl pl pt pt_BR sv</language>
         <platform />
-        <website>http://realtebo.github.io/plugin.video.jworg/</website>
+        <website>http://wiki.xbmc.org/index.php?title=Add-on:Jw.org_audio/video_browser</website>
         <source>https://github.com/realtebo/plugin.video.jworg</source>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <email>mirkotebaldi@yahoo.it</email>

@@ -30,7 +30,7 @@ locale_2_lang = {
 	"Dutch"					: "Nederlands",
 	"Polish"				: "Polski",
 	"Portuguese" 			: "Português",
-	
+	"Svedish"				: "Svenska",
 }
 
 
@@ -59,6 +59,26 @@ const = {
 
 		"sign_index"				: "apps/I_QrYQZRQVNFVTr?selLang=ISL",
  	},
+	"Svenska" 	: {
+		"lang_code"					: "Z",
+		"url_lang_code"				: "sv",
+		"video_path" 				: "filmer",
+		
+		"bible_index_audio"			: "publikationer/bibeln/nwt/böcker/",
+		"magazine_index"			: "publikationer/tidskrifter/",
+		'has_simplified_edition'	: False,
+
+		"music_index"				: "publikationer/musik-sånger/",
+		"dramas_index"				: "publikationer/bibliska-pjäser/",
+		"dramatic_reading_index"	: "publikationer/dramatiserad-bibeluppläsning/",
+		
+		'wol'						: "r14/lp-z",
+		"date_format"				: "%d/%m/%Y",
+		"news_index"				: "nyheter/",
+		"activity_index"			: "jehovas-vittnen/verksamhet/",
+
+		"sign_index"				: "apps/Z_QrYQZRQVNFVTr?selLang=SSL",
+ 	}, 	
  	"Magyar" : {
 		"lang_code"					: "H",
 		"url_lang_code"				: "hu",

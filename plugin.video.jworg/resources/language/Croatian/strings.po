@@ -44,6 +44,10 @@ msgctxt "#30013"
 msgid "Bible dramas"
 msgstr "Biblijske drame"
 
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Dramsko čitanje Biblije"
+
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
 msgstr "Glazba, drame i dramske čitanja"
@@ -92,6 +96,34 @@ msgctxt "#30026"
 msgid "All magazines"
 msgstr "Svi časopisi"
 
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Probudite se!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "Stražarska kula"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "Stražarska kula (izdanje za proučavanje)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "Stražarska kula (pojednostavljeno izdanje)"
+
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Najnovije"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Vijesti"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr " Teokratske škole propovijedanja"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Događanja i zanimljivosti"

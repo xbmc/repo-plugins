@@ -11,6 +11,8 @@ import xbmc
 import re
 import urllib
 
+from BeautifulSoup import BeautifulSoup 
+
 # List of available news
 def showActivityIndex():
 
@@ -65,33 +67,41 @@ def showActivitySection(url):
 
 	url 	= "http://www.jw.org" + url
 	html 	= jw_common.loadUrl(url)
+	soup 	= BeautifulSoup(html)
 
-	# titles[n][0] = lastest news relative link
-	# titles[n][2] = optional title attribute
-	# titles[n][2] = lastest news title
-	regexp_titles = '<h3><a href="([^"]+)"( title="[^"]+")*>(.*)</a></h3>'
-	titles = re.findall (regexp_titles, html)
+    # container of news, so we can leave out the sidebar
+	article = soup.findAll("div", {'id' : 'article'});
 
-	# iages[n][0] = full url of thumb
-	regexp_images = "data-img-size-sm='([^']+)'"
-	images = re.findall (regexp_images, html)
+	news 	= article[0].findAll('div', {'class' : re.compile(r'\bPublicationArticle')})
 
-	count = 0
-	# Number of images is relative to number of articles, so we
-	# automatically exclude texts and links from sidebar videos
-	for i in images :
+	for n in news : 
 
-		# Show lastest news from this section, like on website
-		title = jw_common.cleanUpText( titles[count][2] ) 
-		title = jw_common.removeHtml( title )
+		anchor = n.findAll("a")
+		link = anchor[1].get("href")
+
+		# Lookup news title
+
+		#detect first item
+		title = n.findAll('div', {'class' : "itemAdText"})
+		if len(title)>0 :
+			title = jw_common.cleanUpText(anchor[1].get("title").encode("utf-8"))
+		else :
+			content = anchor[1].findAll(text=True)
+			content_string = " ".join(content)
+			title = jw_common.cleanUpText(content_string.encode("utf-8"))
+
+		image = n.findAll("img")
+		image_src = image[0].get("src")
+
 		listItem = xbmcgui.ListItem( 
 			label  			= title,
-			thumbnailImage	= images[count],
+			thumbnailImage	= image_src,
 		)	
+
 		params = {
 			"content_type"  : "executable", 
 			"mode" 			: "open_activity_article", 
-			"url"			: titles[count][0]
+			"url"			: link
 		} 
 		url = jw_config.plugin_name + '?' + urllib.urlencode(params)
 		xbmcplugin.addDirectoryItem(
@@ -101,11 +111,9 @@ def showActivitySection(url):
 			isFolder	= True 
 		) 
 
-		count = count +1
-
-
 	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 
+	return
 
 def showArticle(url):
 
@@ -117,7 +125,7 @@ def showArticle(url):
 	activity.doModal()
 	del activity
 	xbmc.executebuiltin('Action("back")')
-
+	return
 
 
 

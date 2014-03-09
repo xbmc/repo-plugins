@@ -16,13 +16,57 @@ msgstr ""
 "Language: bg\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Следваща страница >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Езиков на мултимедиен файл"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Основни"
 
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Книги на Библията"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Музика и песни"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Ежедневен текст"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Библейски драми"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Драматични библейски четения"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Музикални, драми и драматични четения"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Най-новите първо"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Най-старите първо"
+
 msgctxt "#30018"
 msgid "By title"
 msgstr "По заглавие"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Сортиране"
 
 msgctxt "#30020"
 msgid "Videos"
@@ -32,6 +76,58 @@ msgctxt "#30021"
 msgid "Cache"
 msgstr "Кеш"
 
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Изчисти кеша (принудително обновяване на списъците)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Почистване на кеша"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Успешно извършено"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Списания"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Всички списания"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Събудете се!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "Стражевата кула"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "Стражевата кула (Проучвателско издание)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "Стражевата кула (Опростено издание)"
+
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Най-новите"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Нюзрум"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Неуспешно зареждане на отдалеченото съдържание"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Седмична програма"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Край на статията"

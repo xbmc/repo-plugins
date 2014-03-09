@@ -42,15 +42,15 @@ msgstr "Texte du jour"
 
 msgctxt "#30013"
 msgid "Bible dramas"
-msgstr "Drame bibliques"
+msgstr "Représentations théâtrales"
 
 msgctxt "#30014"
 msgid "Dramatic bible readings"
-msgstr "Lectures de la bible dramatiques"
+msgstr "Lectures bibliques théâtrales"
 
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
-msgstr "Musiques, Drames, et lectures bibliques dramatiques "
+msgstr "Musiques, représentations, et lectures bibliques dramatiques "
 
 msgctxt "#30016"
 msgid "Newest first"
@@ -110,7 +110,7 @@ msgstr "La Tour de Garde (Édition Étude)"
 
 msgctxt "#30030"
 msgid "The Watchtower (Simplified Edition)"
-msgstr "La Tour de Garde (Édition Simplifiée)"
+msgstr "La Tour de Garde (Édition Facile)"
 
 msgctxt "#30031"
 msgid "Latest"
@@ -118,7 +118,7 @@ msgstr "Dernier"
 
 msgctxt "#30032"
 msgid "Newsroom"
-msgstr "Salle des nouvelles"
+msgstr "Salle des presse"
 
 msgctxt "#30033"
 msgid "Unable to load remote content"

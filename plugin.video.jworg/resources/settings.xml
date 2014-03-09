@@ -3,7 +3,7 @@
  
   <category label="30005">
 
-    <setting id="language" type="labelenum" label="30002" values="Afrikaans|Deutsch|English|Español|Français|Ελληνική|Italiano|Magyar|Nederlands|Polski|Português"  />
+    <setting id="language" type="labelenum" label="30002" values="Afrikaans|Deutsch|English|Español|Français|Ελληνική|Italiano|Magyar|Nederlands|Polski|Português|Svenska"  />
  	<setting id="max_resolution" type="labelenum" label="30039" values="0|240|360|480|720"  />
  
 

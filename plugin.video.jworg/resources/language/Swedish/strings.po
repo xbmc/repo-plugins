@@ -20,9 +20,45 @@ msgctxt "#30001"
 msgid "Next page >>"
 msgstr "Nästa sida >>"
 
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Filens språk"
+
 msgctxt "#30005"
 msgid "General"
-msgstr "Använd Media Overlays"
+msgstr "Allmänt"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Bibelns böcker"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Musik och låtar"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Dagens text"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Bibeldrama"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Dramatiska bibeluppläsningar"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Musik, draman och dramatiska läsningar"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Senaste först"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Äldsta först"
 
 msgctxt "#30018"
 msgid "By title"
@@ -38,8 +74,76 @@ msgstr "VIDEO"
 
 msgctxt "#30021"
 msgid "Cache"
-msgstr "Buffert"
+msgstr "Cache"
+
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Töm cache (tvingar listuppdatering)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Tömmer cache"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Lyckades"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Tidningar"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Alla tidningar"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Vaken!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "Vakttornet"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "Vakttornet (studieutgåva)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "Vakttornet (enkel utgåva)"
 
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Senaste"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Nyheter"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Kan inte ladda fjärrinnehållet"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Veckoprogram"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Theocratic Ministry School"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Aktiviteter"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Artikelslut"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Standard videoupplösning (0: fråga alltid)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Video på teckenspråk"

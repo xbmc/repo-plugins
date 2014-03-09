@@ -139,3 +139,11 @@ msgstr "Aktivitäten"
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Ende des artikels"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Standard Videoauflösung (0: immer Fragen)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Video in Zeichensprache"

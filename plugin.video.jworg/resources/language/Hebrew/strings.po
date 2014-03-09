@@ -16,9 +16,49 @@ msgstr ""
 "Language: he\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "עמוד הבא >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "שפת קובץ המולטימדיה"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "כללי"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "ספרי התנ\"ך"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "מוזיקה ושירים"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "טקסט יומי"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "דרמות תנ\"כיות"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "קריאה תנ\"כית דרמטית"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "מוזיקה, דרמות וקריאה דרמטית"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "החדש ביותר ראשון"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "הישן ביותר ראשון"
 
 msgctxt "#30018"
 msgid "By title"
@@ -30,12 +70,76 @@ msgstr "מיון"
 
 msgctxt "#30020"
 msgid "Videos"
-msgstr "וידאו"
+msgstr "סרטונים"
 
 msgctxt "#30021"
 msgid "Cache"
-msgstr "זכרון מטמון"
+msgstr "מטמון"
+
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "נקה מטמון (אלץ עדכון רשימות)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "נקה מטמון"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "הסתיים בהצלחה"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "מגזינים"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "כל המגזינים"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "ער!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "מגדל השמירה"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "מגדל השמירה (גרסת המחקר)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "מגדל השמירה (גרסת הפשט)"
 
 msgctxt "#30031"
 msgid "Latest"
-msgstr "אחרון"
+msgstr "נוספו לאחרונה"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "חדר חדשות"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "נכשל בטעינת תוכן מרוחק"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "תכנית שבועית"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "מדרשת מיניסטריון תיאוקרטית"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "פעילויות"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "סוף המאמר"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "ברירת מחדל לאבחנת וידאו (0: שאל בכל פעם)"

@@ -139,3 +139,7 @@ msgstr "Activitats"
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Fi del article"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Resolució de vídeo per defecte (0: preguntar cada vegada)"

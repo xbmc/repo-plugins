@@ -139,3 +139,11 @@ msgstr "Δραστηριότητες"
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Τέλος του άρθρου"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Προεπιλεγμένη ανάλυση βίντεο (0: ερώτηση κάθε φορά)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Βίντεο στη νοηματική"

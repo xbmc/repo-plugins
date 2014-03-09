@@ -1,48 +1,23 @@
-'''
-    ISY Browser for XBMC
-    Copyright (C) 2012 Ryan M. Kraus
-
-    LICENSE:
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    DESCRIPTION:
-    This Python Module contains classes and functions useful in 
-    assembling the XBMC on-screen menus for the ISY Browser addon.
-    
-    WRITTEN:    11/2012
-'''
-
+import images
+import shared
+import urls
 import xbmcgui
 import xbmcplugin
 
-import shared
-import images
-import urls
 
 class main(object):
     '''
     main(handle, browsing, events_enabled, addr)
-    
+
     DESCRIPTION:
     This class represents the menus for the ISY
-    Browser XBMC addon. The inputs required are 
+    Browser XBMC addon. The inputs required are
     the handle for the addon run, the browsing
-    parameter to specify what the user is 
+    parameter to specify what the user is
     currently navigating (None, nodes, programs),
     a boolean value called events_enabled that
     specifies whether the ISY Events addon is
-    installed, and the address the user is 
+    installed, and the address the user is
     navigating.
     '''
     listing = []
@@ -56,69 +31,69 @@ class main(object):
         self.addr = addr
         self.handle = handle
         self.events_enabled = events_enabled
-    
-        if browsing == None:
+
+        if browsing is None:
             self._createRoot()
         elif browsing == 'nodes':
             self._createNodes()
         elif browsing == 'programs':
             self._createPrograms()
-            
+
     def _createRoot(self):
         '''
         _createRoot()
-        
+
         DESCRIPTION:
         Creates the root directory.
         '''
-        item = {'name': shared.translate(34001), 
-            'browsing': 'nodes',
-            'node_type': 'folder',
-            'context_menu': [],
-            'image_key': 'folder',
-            'node_addr': None,
-            'node_action': None, 
-            'node_parent': None}
+        item = {'name': shared.translate(30401),
+                'browsing': 'nodes',
+                'node_type': 'folder',
+                'context_menu': [],
+                'image_key': 'folder',
+                'node_addr': None,
+                'node_action': None,
+                'node_parent': None}
         self.listing.append(item)
-        item = {'name': shared.translate(34002), 
-            'browsing': 'programs',
-            'node_type': 'folder',
-            'context_menu': [],
-            'image_key': 'folder',
-            'node_addr': None,
-            'node_action': None,
-            'node_parent': None}
+        item = {'name': shared.translate(30402),
+                'browsing': 'programs',
+                'node_type': 'folder',
+                'context_menu': [],
+                'image_key': 'folder',
+                'node_addr': None,
+                'node_action': None,
+                'node_parent': None}
         self.listing.append(item)
 
         if self.events_enabled:
-            item = {'name': shared.translate(34003), 
-                'browsing': None,
-                'node_type': 'builtin',
-                'context_menu': [],
-                'image_key': 'folder',
-                'node_addr': 'service.script.isyevents',
-                'node_action': 'config',
-                'node_parent': None}
+            item = {'name': shared.translate(30403),
+                    'browsing': None,
+                    'node_type': 'builtin',
+                    'context_menu': [],
+                    'image_key': 'folder',
+                    'node_addr': 'service.script.isyevents',
+                    'node_action': 'config',
+                    'node_parent': None}
             self.listing.append(item)
-        
+
     def _createNodes(self):
         '''
         _createNodes()
-        
+
         DESCRIPTION:
-        Creates a menu displaying nodes and 
+        Creates a menu displaying nodes and
         folders of nodes.
         '''
         # get isy nodes
         nodes = shared.isy.BrowseNodes(self.addr)
-        
+
         # assemble listing
         for name in nodes.keys():
             # pull node basic data
             type = nodes[name][0]
             child = nodes[name][1]
             parent = self.addr
-            
+
             # compile the image key and action commands
             image = type
             action = None
@@ -142,59 +117,61 @@ class main(object):
                     image += '_100'
             elif type == 'group':
                 action = 'on'
-                
+
             # compile the context menu
-            context = createContext(type != 'folder', type == 'node', type =='node', False)
-            
-            self.listing.append({'name': name, 
-                'image_key': image, 
-                'node_addr': child, 
-                'node_type': type, 
-                'node_action': action, 
-                'node_parent': parent,
-                'context_menu': context,
-                'browsing': 'nodes'})
-        
+            context = createContext(type != 'folder', type == 'node',
+                                    type == 'node', False)
+
+            self.listing.append({'name': name,
+                                 'image_key': image,
+                                 'node_addr': child,
+                                 'node_type': type,
+                                 'node_action': action,
+                                 'node_parent': parent,
+                                 'context_menu': context,
+                                 'browsing': 'nodes'})
+
     def _createPrograms(self):
         '''
         _createPrograms()
-        
+
         DESCRIPTION:
         Creates a menu containing programs and
         folders containing programs.
         '''
         # get isy programs
         nodes = shared.isy.BrowsePrograms(self.addr)
-        
+
         # assemble listing
         for name in nodes.keys():
             # pull node basic data
             type = nodes[name][0]
             child = nodes[name][1]
             parent = self.addr
-            
+
             # compile the image key and action commands
             image = type
             action = None
-            if type=='program':
+            if type == 'program':
                 action = 'run'
-                
+
             # compile the context menu
-            context = createContext(False, False, False, type != 'folder', True)
-            
-            self.listing.append({'name': name, 
-                'image_key': image, 
-                'node_addr': child, 
-                'node_type': type, 
-                'node_action': action, 
-                'node_parent': parent,
-                'context_menu': context,
-                'browsing': 'programs'})
-        
+            context = createContext(False, False, False,
+                                    type != 'folder', True)
+
+            self.listing.append({'name': name,
+                                 'image_key': image,
+                                 'node_addr': child,
+                                 'node_type': type,
+                                 'node_action': action,
+                                 'node_parent': parent,
+                                 'context_menu': context,
+                                 'browsing': 'programs'})
+
     def sendToXbmc(self):
         '''
         sendToXbmc()
-        
+
         DESCRIPTION:
         Sends the menu to XBMC.
         '''
@@ -202,7 +179,7 @@ class main(object):
             # create item to add to menu
             icon = images.getImage(item['image_key'])
             listItem = xbmcgui.ListItem(item['name'], iconImage=icon)
-            
+
             # assemble link url
             params = shared.__params__
             params['addr'] = item['node_addr']
@@ -211,7 +188,7 @@ class main(object):
             params['parent'] = item['node_parent']
             params['browsing'] = item['browsing']
             url = urls.CreateUrl(shared.__path__, **params)
-                
+
             # create the item's context menu
             context = []
             for context_item in item['context_menu']:
@@ -219,32 +196,36 @@ class main(object):
                     shared.__path__,
                     addr=item['node_addr'],
                     type=item['node_type'],
-                    cmd=context_item[1], 
+                    cmd=context_item[1],
                     parent=item['node_parent'])
-                context.append((context_item[0], 'XBMC.RunPlugin(' + context_url + ')'))
-                
+                context.append((context_item[0], 'XBMC.RunPlugin('
+                                + context_url + ')'))
+
             listItem.addContextMenuItems(context, replaceItems=True)
-            
+
             # add item to menu
             xbmcplugin.addDirectoryItem(
-                handle=self.handle, 
-                url=url, 
-                listitem=listItem, 
-                isFolder=item['node_action']==None)
+                handle=self.handle,
+                url=url,
+                listitem=listItem,
+                isFolder=item['node_action'] is None)
 
     def show(self):
         '''
         show()
-        
+
         DESCRIPTION:
         Shows the menu on the screen.
         '''
-        xbmcplugin.endOfDirectory(handle=self.handle, updateListing=False, cacheToDisc=False)
-       
-def createContext(onoff=False, toggle=False, dim=False, run=False, program=False):
+        xbmcplugin.endOfDirectory(handle=self.handle, updateListing=False,
+                                  cacheToDisc=False)
+
+
+def createContext(onoff=False, toggle=False, dim=False, run=False,
+                  program=False):
     '''
     createContext(onoff, dim, run)
-    
+
     DESCRIPTION:
     Creates a context menu for a menu item.
     There are four sections to a context menu
@@ -255,44 +236,44 @@ def createContext(onoff=False, toggle=False, dim=False, run=False, program=False
     '''
     # max items = 10
     menu = []
-    
+
     if onoff:
         new_items = [
-            (shared.translate(32001), 'on'), 
-            (shared.translate(32002), 'off'),  
-            (shared.translate(32004), 'faston'), 
-            (shared.translate(32005), 'fastoff')]
+            (shared.translate(30201), 'on'),
+            (shared.translate(30202), 'off'),
+            (shared.translate(30204), 'faston'),
+            (shared.translate(30205), 'fastoff')]
         for item in new_items:
             menu.append(item)
-            
+
     if toggle:
         new_items = [
-            (shared.translate(32003), 'toggle')]
+            (shared.translate(30203), 'toggle')]
         for item in new_items:
             menu.append(item)
-            
+
     if dim:
         new_items = [
-            #(shared.translate(32006), 'bright'), 
-            #(shared.translate(32007), 'dim'),
-            (shared.translate(32008), 'on25'),
-            (shared.translate(32009), 'on50'),
-            (shared.translate(32010), 'on75'),
-            (shared.translate(32011), 'on100')]
+            #(shared.translate(30206), 'bright'),
+            #(shared.translate(30207), 'dim'),
+            (shared.translate(30208), 'on25'),
+            (shared.translate(30209), 'on50'),
+            (shared.translate(30210), 'on75'),
+            (shared.translate(30211), 'on100')]
         for item in new_items:
             menu.append(item)
-    
+
     if run:
         new_items = [
-            (shared.translate(32013), 'run'), 
-            (shared.translate(32014), 'then'), 
-            (shared.translate(32015), 'else')]
+            (shared.translate(30213), 'run'),
+            (shared.translate(30214), 'then'),
+            (shared.translate(30215), 'else')]
         for item in new_items:
             menu.append(item)
-    
+
     if program:
-        menu.append((shared.translate(32012), 'pinfo'))
+        menu.append((shared.translate(30212), 'pinfo'))
     else:
-        menu.append((shared.translate(32012), 'info'))
-	
+        menu.append((shared.translate(30212), 'info'))
+
     return menu

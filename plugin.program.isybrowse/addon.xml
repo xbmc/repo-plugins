@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.isybrowse" name="ISY Browser" version="0.2.1" provider-name="Humble Robot">
+<addon id="plugin.program.isybrowse" name="ISY Browser" version="1.0.0" provider-name="Automicus">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -14,14 +14,12 @@
         <summary lang="en">ISY-99 Node and Program Browser</summary>
         <description lang="en">Allows the user to browse and control the nodes and programs available on a local ISY Home Automation Controller. Using this addon, the user can directly control Insteon and X10 devices natively from the XBMC interface.
         
-        Instructions at: https://code.google.com/p/isy-events/</description>
+        Instructions at: http://automic.us/projects/isy-events/</description>
         <disclaimer lang="en">This addon requires an ISY-99 Series Controller available from Universal Devices Inc (www.universal-devices.com) and must be setup to connect to it.</disclaimer>
-    
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <forum>http://forum.xbmc.org/showthread.php?tid=146503</forum>
-        <website>https://code.google.com/p/isy-events/</website>
-        <source>https://code.google.com/p/isy-events/source/browse/</source>
-        <email>Humble.Robot.Development@gmail.com</email>
-        
+        <website>http://automic.us/projects/isy-events</website>
+        <source>https://github.com/automicus/XBMC-Addons</source>
+        <email>Automicus@gmail.com</email>
     </extension>
 </addon>

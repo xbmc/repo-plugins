@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import re
+import sys
 from time import mktime,strptime
 from datetime import timedelta
 from datetime import date
 from datetime import datetime
-import sys
 from urlparse import urljoin
 
 if hasattr(sys.modules["__main__"], "xbmc"):
@@ -32,19 +32,19 @@ from provider import Provider
 import HTMLParser
 
 from BeautifulSoup import BeautifulSoup
+from BeautifulSoup import BeautifulStoneSoup
 
 urlRoot = u"http://www.rte.ie"
 rootMenuUrl = u"http://www.rte.ie/player/ie/"
 showUrl = u"http://www.rte.ie/player/ie/show/%s/"
-feedUrl = u"http://feeds.rasset.ie/rteavgen/player/playlist/?type=iptv&format=json&showId="
 
 flashJS = u"http://static.rasset.ie/static/player/js/flash-player.js"
-configUrl = u"http://www.rte.ie/player/config/config.xml"
+configUrl = u"http://www.rte.ie/playerxl/config/config.xml"
 
 playerJSDefault = u"http://static.rasset.ie/static/player/js/player.js?v=5"
 searchUrlDefault = u"http://www.rte.ie/player/ie/search/?q="
-swfDefault = u"http://www.rte.ie/static/player/swf/osmf2_2012_10_19.swf"
-swfLiveDefault = u"http://www.rte.ie/static/player/swf/osmf2_541_2012_11_14.swf"
+swfDefault = u"http://www.rte.ie/player/assets/player_468.swf"
+swfLiveDefault = u"http://www.rte.ie/static/player/swf/osmf2_2013_06_25b.swf"
 defaultLiveTVPage = u"/player/ie/live/8/"
 
 class RTEProvider(Provider):
@@ -67,9 +67,9 @@ class RTEProvider(Provider):
     
             if html is None or html == '':
                 # Error getting %s Player "Home" page
-                logException = LoggingException(self.language(20000) % self.GetProviderId())
+                logException = LoggingException(self.language(30001) % self.GetProviderId())
                 # 'Cannot show RTE root menu', Error getting RTE Player "Home" page
-                logException.process(self.language(20010) % self.GetProviderId(), self.language(20000) % self.GetProviderId(), self.logLevel(xbmc.LOGERROR))
+                logException.process(self.language(30002) % self.GetProviderId(), self.language(30001) % self.GetProviderId(), self.logLevel(xbmc.LOGERROR))
                 return False
     
             soup = BeautifulSoup(html, selfClosingTags=['img'])
@@ -77,9 +77,9 @@ class RTEProvider(Provider):
     
             if categories == None:
                 # "Can't find dropdown-programmes"
-                logException = LoggingException(self.language(20020))
+                logException = LoggingException(self.language(30003))
                 # 'Cannot show RTE root menu', Error parsing web page
-                logException.process(self.language(20010)  % self.GetProviderId(), self.language(30780), self.logLevel(xbmc.LOGERROR))
+                logException.process(self.language(30002)  % self.GetProviderId(), self.language(30780), self.logLevel(xbmc.LOGERROR))
                 #raise logException
                 return False
             
@@ -104,8 +104,8 @@ class RTEProvider(Provider):
             url = self.GetURLStart() + u'&live=1'
             listItems.append( (url, newListItem, True) )
 
-            xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-            xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
             
             return True
         except (Exception) as exception:
@@ -192,6 +192,19 @@ class RTEProvider(Provider):
             return self.ListShows(html)
         
         if listAvailable <> u'':
+            
+            soup = BeautifulSoup(html)
+            availableLink = soup.find('a', 'button-more-episodes')
+            
+            if availableLink is None:
+                pattern= "/player/ie/show/(.+)/"
+                match=re.search(pattern, html, re.DOTALL)
+                
+                if match is not None:
+                    episodeId = match.group(1) 
+                    return self.PlayVideoWithDialog(self.PlayEpisode, (episodeId, None))
+
+                
             return self.ListAvailable(html)
 
         return self.ListSubMenu(html)
@@ -253,11 +266,14 @@ class RTEProvider(Provider):
 
                 newListItem = xbmcgui.ListItem( label=programme )
                 newListItem.setThumbnailImage(thumbnailPath)
+                newListItem.setProperty("Video", "true")
+                #newListItem.setProperty('IsPlayable', 'true')
+
                 url = self.GetURLStart() + u'&live=1' + u'&page=' + mycgi.URLEscape(page)
                 listItems.append( (url, newListItem, False) )
         
-            xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-            xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
             
             return True
         except (Exception) as exception:
@@ -269,7 +285,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error getting Live TV information
-            exception.addLogMessage(self.language(32080))
+            exception.addLogMessage(self.language(30047))
             exception.process(severity = self.logLevel(xbmc.LOGERROR))
             return False
 
@@ -292,7 +308,7 @@ class RTEProvider(Provider):
                 exception = LoggingException.fromException(exception)
 
             # Error creating Search item
-            exception.addLogMessage(self.language(32220))
+            exception.addLogMessage(self.language(30056))
             raise exception
 
     #==============================================================================
@@ -327,7 +343,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error adding links
-            exception.addLogMessage(self.language(32080))
+            exception.addLogMessage(self.language(30047))
             exception.process(severity = self.logLevel(xbmc.LOGERROR))
             return False
 
@@ -340,8 +356,8 @@ class RTEProvider(Provider):
         if False == self.AddAllLinks(listItems, atozTable, listshows = True):
             return False        
 
-        xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-        xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+        xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+        xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
 
         return True
         
@@ -375,8 +391,8 @@ class RTEProvider(Provider):
                 listItems.append( (url, newListItem, True) )
                 self.log(u"url: %s" % url, xbmc.LOGDEBUG)
             
-            xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-            xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
     
             return True
         except (Exception) as exception:
@@ -388,7 +404,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error listing submenu
-            exception.addLogMessage(self.language(32090))
+            exception.addLogMessage(self.language(30048))
             exception.process(severity = self.logLevel(xbmc.LOGERROR))
             return False
 
@@ -469,8 +485,8 @@ class RTEProvider(Provider):
             url = self.GetURLStart() + u'&page=' + mycgi.URLEscape(page) + u'&listshows=1'
             listItems.append( (url,newListItem,True) )
     
-        xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-        xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+        xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+        xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
         
         return True
     
@@ -479,43 +495,61 @@ class RTEProvider(Provider):
     
     def AddEpisodeToList(self, listItems, episode):
         self.log(u"", xbmc.LOGDEBUG)
-        htmlparser = HTMLParser.HTMLParser()
-
-        href = episode[u'href']
-        title = htmlparser.unescape( episode.find(u'span', u"thumbnail-title").contents[0] )
-        date = episode.find(u'span', u"thumbnail-date").contents[0]                    
-        #description = ...
-        thumbnail = episode.find('img', 'thumbnail')['src']
-    
-        newLabel = title + u", " + date
-                                        
-        newListItem = xbmcgui.ListItem( label=newLabel )
-        newListItem.setThumbnailImage(thumbnail)
         
-        if self.addon.getSetting( u'RTE_descriptions' ) == 'true':
-            infoLabels = self.GetEpisodeInfo(self.GetEpisodeIdFromURL(href))
-        else:
-            infoLabels = {u'Title': title, u'Plot': title}
+        try:
+            htmlparser = HTMLParser.HTMLParser()
+    
+            href = episode[u'href']
+            title = htmlparser.unescape( episode.find(u'span', u"thumbnail-title").contents[0] )
+            date = episode.find(u'span', u"thumbnail-date").contents[0]                    
+            #description = ...
+            thumbnail = episode.find('img', 'thumbnail')['src']
+        
+            newLabel = title + u", " + date
+                                            
+            newListItem = xbmcgui.ListItem( label=newLabel )
+            newListItem.setThumbnailImage(thumbnail)
             
-        newListItem.setInfo(u'video', infoLabels)
-    
-        self.log(u"label == " + newLabel, xbmc.LOGDEBUG)
-    
-        if u"episodes available" in date:
-            url = self.GetURLStart()  + u'&listavailable=1' + u'&page=' + mycgi.URLEscape(href)
-            folder = True
-        else:
-            folder = False
-            match = re.search( u"/player/[^/]+/show/([0-9]+)/", href )
-            if match is None:
-                self.log(u"No show id found in page href: '%s'" % href, xbmc.LOGWARNING)
-                return
+            if self.addon.getSetting( u'RTE_descriptions' ) == 'true':
+                infoLabels = self.GetEpisodeInfo(self.GetEpisodeIdFromURL(href))
+            else:
+                infoLabels = {u'Title': title, u'Plot': title}
+                
+            newListItem.setInfo(u'video', infoLabels)
+            newListItem.setProperty("Video", "true")
+            #newListItem.setProperty('IsPlayable', 'true')
         
-            episodeId = match.group(1)
-    
-            url = self.GetURLStart() + u'&episodeId=' +  mycgi.URLEscape(episodeId)
-    
-        listItems.append( (url, newListItem, folder) )
+            self.log(u"label == " + newLabel, xbmc.LOGDEBUG)
+        
+            if u"episodes available" in date:
+                url = self.GetURLStart()  + u'&listavailable=1' + u'&page=' + mycgi.URLEscape(href)
+                folder = True
+            else:
+                newListItem.setProperty("Video", "true")
+                #newListItem.setProperty('IsPlayable', 'true')
+
+                folder = False
+                match = re.search( u"/player/[^/]+/show/([0-9]+)/", href )
+                if match is None:
+                    self.log(u"No show id found in page href: '%s'" % href, xbmc.LOGWARNING)
+                    return
+            
+                episodeId = match.group(1)
+        
+                url = self.GetURLStart() + u'&episodeId=' +  mycgi.URLEscape(episodeId)
+        
+            listItems.append( (url, newListItem, folder) )
+        except (Exception) as exception:
+            if not isinstance(exception, LoggingException):
+                exception = LoggingException.fromException(exception)
+
+            msg = "episode:\n\n%s\n\n" % utils.drepr(episode)
+            exception.addLogMessage(msg)
+
+            # Error getting episode details
+            exception.addLogMessage(self.language(30099))
+            exception.process(self.logLevel(xbmc.LOGWARNING))
+                   
     
     
     #==============================================================================
@@ -530,9 +564,9 @@ class RTEProvider(Provider):
 
             for episode in episodes:
                 self.AddEpisodeToList(listItems, episode)
-    
-            xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-            xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
     
             return True
         except (Exception) as exception:
@@ -544,7 +578,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error getting list of shows
-            exception.addLogMessage(self.language(32100))
+            exception.addLogMessage(self.language(30049))
             # Error getting list of shows
             exception.process(severity = self.logLevel(xbmc.LOGERROR))
             return False
@@ -634,8 +668,8 @@ class RTEProvider(Provider):
                             exception.process(severity = self.logLevel(xbmc.LOGWARNING))
                 
         
-            xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-            xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
         
             return True
         except (Exception) as exception:
@@ -647,7 +681,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error getting list of shows
-            exception.addLogMessage(self.language(32100))
+            exception.addLogMessage(self.language(30049))
             exception.process(severity = self.logLevel(xbmc.LOGERROR))
             return False
 
@@ -666,8 +700,8 @@ class RTEProvider(Provider):
             for index in range ( 0, count ):
                 self.AddEpisodeToList(listItems, availableEpisodes[index])
     
-            xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-            xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
     
             return True
         except (Exception) as exception:
@@ -679,8 +713,8 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error getting count of available episodes
-            exception.addLogMessage(self.language(32030))
-            exception.process(self.language(32040), self.language(32030), self.logLevel(xbmc.LOGERROR))
+            exception.addLogMessage(self.language(30045))
+            exception.process(self.language(30046), self.language(30045), self.logLevel(xbmc.LOGERROR))
             return False
     
     #==============================================================================
@@ -689,8 +723,24 @@ class RTEProvider(Provider):
         self.log(u"", xbmc.LOGDEBUG)
         
         try:
-            swfPlayerGroups = self.GetStringFromURL(flashJS, u"\"(http://.+swf)", 50000)
-            swfPlayer = swfPlayerGroups[0]
+            xml = self.httpManager.GetWebPage(configUrl, 20000)
+            soup = BeautifulStoneSoup(xml)
+            
+            swfPlayer = soup.find("player")['url']
+
+            if swfPlayer.find('.swf') > 0:
+                swfPlayer=re.search("(.*\.swf)", swfPlayer).groups()[0]
+                
+            if swfPlayer.find('http') == 0:
+                # It's an absolute URL, do nothing.
+                pass
+            elif swfPlayer.find('/') == 0:
+                # If it's a root URL, append it to the base URL:
+                swfPlayer = urljoin(urlRoot, swfPlayer)
+            else:
+                # URL is relative to config.xml 
+                swfPlayer = urljoin(configUrl, swfPlayer)
+                
             return swfPlayer
         
         except (Exception) as exception:
@@ -702,37 +752,12 @@ class RTEProvider(Provider):
             exception.process(severity = self.logLevel(xbmc.LOGWARNING))
             return swfDefault
 
-    """
+    
     def GetLiveSWFPlayer(self):
         self.log(u"", xbmc.LOGDEBUG)
-        
-        try:
-            xml = self.httpManager.GetWebPage(configUrl, 20000)
-            soup = BeautifulStoneSoup(xml)
-            
-            playerUrl = soup.find("player")['url']
-
-            if playerUrl.find('http') == 0:
-                # It's an absolute URL, do nothing.
-                pass
-            elif playerUrl.find('/') == 0:
-                # If it's a root URL, append it to the base URL:
-                playerUrl = urljoin(urlRoot, playerUrl)
-            else:
-                # URL is relative to config.xml 
-                playerUrl = urljoin(configUrl, playerUrl)
-                
-        except (Exception) as exception:
-            if not isinstance(exception, LoggingException):
-                exception = LoggingException.fromException(exception)
     
-            # Error getting live swf player: Using default %s
-            exception.addLogMessage(self.language(32160) % swfLiveDefault)
-            exception.process(severity = self.logLevel(xbmc.LOGWARNING))
-            playerUrl = swfLiveDefault
+        return swfLiveDefault
 
-        return playerUrl
-    """   
     #==============================================================================
 
     def GetThumbnailFromEpisode(self, episodeId, soup = None):
@@ -806,14 +831,14 @@ class RTEProvider(Provider):
         self.log(u"%s" % episodeId, xbmc.LOGDEBUG)
         
         # "Getting SWF url"
-        self.dialog.update(5, self.language(32760))
+        self.dialog.update(5, self.language(30089))
         swfPlayer = self.GetSWFPlayer()
     
         try:
             if self.dialog.iscanceled():
                 return False
             # "Getting episode web page"
-            self.dialog.update(15, self.language(32770))
+            self.dialog.update(15, self.language(30090))
             feedProcessStatus = 0
             html = None
             html = self.httpManager.GetWebPage(showUrl % episodeId, 20000)
@@ -824,7 +849,7 @@ class RTEProvider(Provider):
             if self.dialog.iscanceled():
                 return False
             # "Getting episode info"
-            self.dialog.update(25, self.language(32710))
+            self.dialog.update(25, self.language(30084))
             infoLabels = self.GetEpisodeInfo(episodeId, soup)
             thumbnail = self.GetThumbnailFromEpisode(episodeId, soup)
     
@@ -834,7 +859,7 @@ class RTEProvider(Provider):
             if self.dialog.iscanceled():
                 return False
             # "Getting playpath data"
-            self.dialog.update(35, self.language(32780))
+            self.dialog.update(35, self.language(30091))
             urlGroups = self.GetStringFromURL(feedsPrefix + episodeId, u"\"url\": \"(/[0-9][0-9][0-9][0-9]/[0-9][0-9][0-9][0-9]/)([a-zA-Z0-9]+/)?(.+).f4m\"", 20000)
             feedProcessStatus = 2
             if urlGroups is None:
@@ -885,16 +910,16 @@ class RTEProvider(Provider):
                 except:
                     exception.addLogMessage("Execption getting " + feedUrl)
             # Error playing or downloading episode %s
-            exception.addLogMessage(self.language(32120) % episodeId)
+            exception.addLogMessage(self.language(30051) % episodeId)
             # Error playing or downloading episode %s
-            exception.process(self.language(32120) % ' ' , '', self.logLevel(xbmc.LOGERROR))
+            exception.process(self.language(30051) % ' ' , '', self.logLevel(xbmc.LOGERROR))
             return False
     
 
     def PlayLiveTV(self, html, dummy):
         self.log(u"", xbmc.LOGDEBUG)
         
-        swfPlayer = self.GetSWFPlayer()
+        swfPlayer = self.GetLiveSWFPlayer()
     
         liveChannels = {
                       u'RT\xc9 One' : u'rte1',
@@ -932,7 +957,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error playing live TV
-            exception.addLogMessage(self.language(32190))
+            exception.addLogMessage(self.language(30053))
             exception.process(severity = self.logLevel(xbmc.LOGERROR))
             return False
     
@@ -972,7 +997,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error getting player.js url: Using default %s
-            exception.addLogMessage(self.language(32210) % playerJSDefault)
+            exception.addLogMessage(self.language(30055) % playerJSDefault)
             exception.process(severity = self.logLevel(xbmc.LOGWARNING))
             playerJS = playerJSDefault
 
@@ -1005,7 +1030,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error getting search url: Using default %s
-            exception.addLogMessage(self.language(32200) + searchUrlDefault)
+            exception.addLogMessage(self.language(30054) + searchUrlDefault)
             exception.process(severity = self.logLevel(xbmc.LOGWARNING))
             searchURL = searchUrlDefault
 
@@ -1039,7 +1064,7 @@ class RTEProvider(Provider):
                 exception.addLogMessage(msg)
                 
             # Error performing query %s
-            exception.addLogMessage(self.language(32170) % query)
+            exception.addLogMessage(self.language(30052) % query)
             exception.process(severity = self.logLevel(xbmc.LOGERROR))
             return False
         

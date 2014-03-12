@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import re
+import sys
 from time import strftime,strptime
 import time, random
-import simplejson
-import httplib, urllib
+import urllib
 import pyamf
 from pyamf import remoting
 
 from datetime import timedelta
 from datetime import date
 from datetime import datetime
-import sys
 from urlparse import urljoin
 
 if hasattr(sys.modules["__main__"], "xbmc"):
@@ -146,15 +145,41 @@ class BrightCoveProvider(Provider):
        amfData = self.httpManager.PostBinary(c_brightcove.encode("utf8"), "/services/messagebroker/amf?playerKey=" + key.encode('ascii'), hub_data, {'content-type': 'application/x-amf'})
        response = remoting.decode(amfData).bodies[0][1].body
 
+       self.log("response: " + utils.drepr(response), xbmc.LOGDEBUG)
+
        return response
 
-    def GetAmfConst(self):
+    def FindRelatedVideos(self, key, playerId, pubId, episodeId, pageSize, pageNumber, getItemCount):
+       self.log("", xbmc.LOGDEBUG)
+       envelope = self.BuildAmfRequest_FindRelated(key, playerId, pubId, episodeId, pageSize, pageNumber, getItemCount)
+    
+       self.log("POST c.brightcove.com/services/messagebroker/amf?playerKey=%s pubId=%s" % (key, pubId), xbmc.LOGDEBUG)
+       self.log("Log key: %s" % repr(key), xbmc.LOGDEBUG)    
+
+       hub_data = remoting.encode(envelope).read()
+
+       #self.log("hub_data: %s" % utils.drepr(remoting.decode(amfData).bodies[0][1].body), xbmc.LOGDEBUG)    
+       #self.log("hub_data: %s" % repr(remoting.decode(hub_data).bodies[0][1].body), xbmc.LOGDEBUG)
+       amfData = self.httpManager.PostBinary(c_brightcove.encode("utf8"), "/services/messagebroker/amf?playerKey=" + key.encode('ascii'), hub_data, {'content-type': 'application/x-amf'})
+       response = remoting.decode(amfData).bodies[0][1].body
+
+       self.log("response: " + utils.drepr(response), xbmc.LOGDEBUG)
+
+       return response
+
+
+    def GetAmfClassHash(self, className):
         return None
     
     def BuildAmfRequest(self, key, url, exp_id, contentRefId = None, contentId = None):
        self.log('ContentRefId:' + str(contentRefId) + ', ExperienceId:' + str(exp_id) + ', URL:' + url)  
 
-       const = self.GetAmfConst()
+       method = "com.brightcove.experience.ExperienceRuntimeFacade.getDataForExperience"
+       className = method[0:method.rfind('.')]
+       hashValue = self.GetAmfClassHash(className)
+
+       self.log('hashValue:' + str(hashValue))
+ 
        pyamf.register_class(ViewerExperienceRequest, 'com.brightcove.experience.ViewerExperienceRequest')
        pyamf.register_class(ContentOverride, 'com.brightcove.experience.ContentOverride')
        content_override = ContentOverride(contentRefId = contentRefId, contentId = contentId)
@@ -168,8 +193,35 @@ class BrightCoveProvider(Provider):
           (
              "/1",
              remoting.Request(
-                target="com.brightcove.experience.ExperienceRuntimeFacade.getDataForExperience",
-                body=[const, viewer_exp_req],
+                target=method,
+                body=[hashValue, viewer_exp_req],
+                envelope=env
+             )
+          )
+       )
+       return env
+
+    def BuildAmfRequest_FindRelated(self, key, exp_id, pubId, videoPlayer, pageSize, pageNumber, getItemCount):
+       self.log('ExperienceId:' + str(exp_id))  
+
+       method = "com.brightcove.player.runtime.PlayerSearchFacade.findRelatedVideos"
+       className = method[0:method.rfind('.')]
+       hashValue = self.GetAmfClassHash(className)
+
+       self.log('hashValue:' + hashValue)
+ 
+       pageSize = 12
+       pageNumber = 0
+       getItemCount = False
+
+       env = remoting.Envelope(amfVersion=3)
+       env.bodies.append(
+          (
+             "/1",
+             remoting.Request(
+                target=method,
+                body=[hashValue, int(exp_id), pubId, videoPlayer, pageSize, pageNumber, getItemCount],
+#                body=[hashValue, "Nuacht", 1, 0, False, None, None, None, None, None],
                 envelope=env
              )
           )

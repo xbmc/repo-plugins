@@ -4,7 +4,7 @@
 
 # http://wiki.xbmc.org/index.php?title=How-to:Debug_Python_Scripts_with_Eclipse
 
-REMOTE_DBG = False
+REMOTE_DBG = False	
 
 # append pydev remote debugger
 if REMOTE_DBG:
@@ -27,6 +27,9 @@ import xbmcplugin
 import xbmcgui
 import xbmc
 import re
+import cookielib
+import urllib2
+import xbmcvfs
 
 from xbmcaddon import Addon
 from loggingexception import LoggingException
@@ -60,14 +63,31 @@ from provider import Provider
 #__downloader__ = SimpleDownloader.SimpleDownloader()
 xhausUrl = "http://www.xhaus.com/headers"
 
-httpManager = HttpManager()
-
-
 # Use masterprofile rather profile, because we are caching data that may be used by more than one user on the machine
 DATA_FOLDER	  = xbmc.translatePath( os.path.join( u"special://masterprofile", u"addon_data", pluginName ) )
 CACHE_FOLDER	 = os.path.join( DATA_FOLDER, u'cache' )
 RESOURCE_PATH = os.path.join( sys.modules[u"__main__"].addon.getAddonInfo( u"path" ), u"resources" )
 MEDIA_PATH = os.path.join( RESOURCE_PATH, u"media" )
+ADDON_DATA_FOLDER = xbmc.translatePath( os.path.join( u"special://profile", u"addon_data", pluginName) )
+COOKIE_PATH = os.path.join( ADDON_DATA_FOLDER, u"cookiejar.txt" )
+#player.Player.RESUME_FILE    = os.path.join( ADDON_DATA_FOLDER, u'player_resume.txt')
+#player.Player.RESUME_LOCK_FILE = os.path.join(ADDON_DATA_FOLDER, u'player_resume_lock.txt')
+
+log("Loading cookies from :" + repr(COOKIE_PATH))
+cookiejar = cookielib.LWPCookieJar(COOKIE_PATH)
+
+if xbmcvfs.exists(COOKIE_PATH):
+    try:
+        #cookiejar.load(COOKIE_PATH)
+        cookiejar.load()
+    except:
+        pass
+
+cookie_handler = urllib2.HTTPCookieProcessor(cookiejar)
+opener = urllib2.build_opener(cookie_handler)
+
+httpManager = HttpManager()
+
 
 #SUBTITLE_FILE	= os.path.join( DATA_FOLDER, 'subtitle.smi' )
 #NO_SUBTITLE_FILE = os.path.join( RESOURCE_PATH, 'nosubtitles.smi' )
@@ -142,12 +162,12 @@ def TestForwardedIP(forwardedIP):
 		
 		if xForwardedForString is None:
 			dialog = xbmcgui.Dialog()
-			dialog.ok(language(25000), language(25030))
+			dialog.ok(language(30028), language(30032))
 		else:
 			forwardedForIP = xForwardedForString.parent.findNextSibling('td').text
 			
 			dialog = xbmcgui.Dialog()
-			dialog.ok(language(25010), language(25040) + forwardedForIP)
+			dialog.ok(language(30029), language(30033) + forwardedForIP)
 			
 		return True
 		
@@ -156,7 +176,7 @@ def TestForwardedIP(forwardedIP):
 			exception = LoggingException.fromException(exception)
 
 		dialog = xbmcgui.Dialog()
-		dialog.ok(language(25020), language(25050))
+		dialog.ok(language(30031), language(30034))
 		
 		# Error getting web page
 		exception.addLogMessage(language(30050))
@@ -167,12 +187,14 @@ def TestForwardedIP(forwardedIP):
 	
 #==============================================================================
 def executeCommand():
+	pluginHandle = int(sys.argv[1])
 	success = False
+
 	if ( mycgi.EmptyQS() ):
 		success = ShowProviders()
 	else:
-		(providerName, clearCache, testForwardedIP) = mycgi.Params( u'provider', u'clearcache', u'testforwardedip' )
-		
+		(providerName, clearCache, testForwardedIP) = mycgi.Params( u'provider', u'clearcache', u'testforwardedip')
+
 		if clearCache != u'':
 			httpManager.ClearCache()
 			return True
@@ -201,7 +223,15 @@ def executeCommand():
 				provider.initialise(httpManager, sys.argv[0], pluginHandle)
 				success = provider.ExecuteCommand(mycgi)
 				log (u"executeCommand done", xbmc.LOGDEBUG)
-			
+
+				"""
+				print cookiejar
+				print 'These are the cookies we have received so far :'
+
+				for index, cookie in enumerate(cookiejar):
+					print index, '  :  ', cookie
+				cookiejar.save() 
+				"""
 
 	return success
 #		if ( search <> '' ):

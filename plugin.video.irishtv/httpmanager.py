@@ -37,7 +37,10 @@ class HttpManager:
         else:
             from utils import log
             self.log = log
+            
 
+    def SetOpener(self, opener):
+        urllib2.install_opener(opener)
         
     def EnableForwardedForIP(self):
         self.isForwardedForIP = True
@@ -225,17 +228,18 @@ class HttpManager:
     If the page was not in the cache then set cacheAttempt to False, indicating that the page was
     retrieved from the web
     """
-    def GetWebPage(self, url, maxAge, values = None, headers = None):
-        self.log(u"GetWebPage(%s)" % url, xbmc.LOGDEBUG)
+    def GetWebPage(self, url, maxAge, values = None, headers = None, logUrl = True):
+        if logUrl:
+            self.log(u"GetWebPage(%s)" % url, xbmc.LOGDEBUG)
         maxAge = self.ifCacheMaxAge(maxAge)
         self.gotFromCache = False
-        return self.GetURL( url, maxAge, values, headers )
+        return self.GetURL( url, maxAge, values, headers, logUrl )
 
     #==============================================================================
     
-    def GetWebPageDirect(self, url, values = None, headers = None):
+    def GetWebPageDirect(self, url, values = None, headers = None, logUrl = True):
         self.log(u"GetWebPageDirect(%s)" % url, xbmc.LOGDEBUG)
-        return self.GetWebPage(url, 0, values, headers)
+        return self.GetWebPage(url, 0, values, headers, logUrl)
 
     #==============================================================================
     
@@ -297,9 +301,9 @@ class HttpManager:
         return None
                 
     
-    def _GetURL_NoCache(self,  url, values, headers):
+    def _GetURL_NoCache(self,  url, values, headers, logUrl):
         url = url.replace("+", "%20")
-        response = self.GetHTTPResponse(url, values, headers)
+        response = self.GetHTTPResponse(url, values, headers, logUrl)
 
         charset = self.GetCharset(response)
         maxAge = self.GetMaxAge(response)
@@ -323,10 +327,11 @@ class HttpManager:
         return data.decode(charset), maxAge
         
     
-    def GetHTTPResponse(self,  url, values = None, headers = None):
+    def GetHTTPResponse(self,  url, values = None, headers = None, logUrl = True):
         global lastCode
     
-        self.log (u"url: " + url, xbmc.LOGDEBUG)    
+        if logUrl:
+            self.log (u"url: " + url, xbmc.LOGDEBUG)    
 
         try:    
             if self.proxyConfig is not None: 
@@ -352,7 +357,17 @@ class HttpManager:
                     
                     request = urllib2.Request(url, postData, headers)
                     response = urllib2.urlopen(request)
-    
+                    """
+                    print 'Here are the headers of the page :'
+                    print handle.info()
+                    cookiejar = sys.modules["__main__"].cookiejar
+                    print cookiejar
+                    print 'These are the cookies we have received so far :'
+
+                    for index, cookie in enumerate(cookiejar):
+                        print index, '  :  ', cookie
+                    cookiejar.save(COOKIE_PATH)
+                    """
                 except ( urllib2.HTTPError ) as err:
                     self.log ( u'HTTPError: ' + unicode(err), xbmc.LOGERROR)
                     lastCode = err.code
@@ -378,6 +393,19 @@ class HttpManager:
                         raise exception
         
                     firstTime = False
+                """
+                else:
+                    print 'Here are the headers of the page :'
+                    print response.info()
+                    print self.cookiejar
+                    print 'These are the cookies we have received so far :'
+
+                    for index, cookie in enumerate(self.cookiejar):
+                        print index, '  :  ', cookie
+                    #self.cookiejar.save(sys.modules["__main__"].COOKIE_PATH)
+                    self.cookiejar.save() 
+                """
+
         except ( Exception ) as exception:
             raise exception
         finally:
@@ -406,23 +434,24 @@ class HttpManager:
             
     #==============================================================================
     
-    def CachePage(self, url, data, values, expiryTime):
+    def CachePage(self, url, data, values, expiryTime, logUrl):
         global lastCode
     
         if lastCode <> 404 and data is not None and len(data) > 0:    # Don't cache "page not found" pages, or empty data
             self.log (u"Add page to cache", xbmc.LOGDEBUG)
 
-            self._Cache_Add( url, data, values, expiryTime )
+            self._Cache_Add( url, data, values, expiryTime, logUrl )
     
         
-    def GetURL(self,  url, maxAgeSeconds=0, values = None, headers = None):
+    def GetURL(self,  url, maxAgeSeconds=0, values = None, headers = None, logUrl = True):
         global lastCode
     
-        self.log (url, xbmc.LOGDEBUG)
+        if logUrl:
+            self.log (url, xbmc.LOGDEBUG)
         # If no cache dir has been specified then return the data without caching
         if self._CheckCacheDir() == False:
             self.log (u"Not caching HTTP", xbmc.LOGDEBUG)
-            data, responseMaxAge = self._GetURL_NoCache( url, values, headers)
+            data, responseMaxAge = self._GetURL_NoCache( url, values, headers, logUrl)
             return data
     
         currentTime = int(round(time.time()))
@@ -430,21 +459,21 @@ class HttpManager:
         if ( maxAgeSeconds > 0 ):
             self.log (u"maxAgeSeconds: " + unicode(maxAgeSeconds), xbmc.LOGDEBUG)
             # Is this URL in the cache?
-            expiryString = self.GetExpiryTimeForUrl(url, values)
+            expiryString = self.GetExpiryTimeForUrl(url, values, logUrl)
             if expiryString is not None:
                 self.log (u"expiryString: " + unicode(expiryString), xbmc.LOGDEBUG)
                 # We have file in cache,_GetURL_NoCache but is it too old?
                 if currentTime > int(expiryString):
                     self.log (u"Cached version is too old", xbmc.LOGDEBUG)
                     # Too old, so need to get it again
-                    data, responseMaxAge = self._GetURL_NoCache( url, values, headers)
+                    data, responseMaxAge = self._GetURL_NoCache( url, values, headers, logUrl)
     
                     if responseMaxAge is not None:
                         maxAgeSeconds = responseMaxAge
                         
                     if maxAgeSeconds <> 0:
                         # Cache it
-                        self.CachePage(url, data, values, currentTime + maxAgeSeconds)
+                        self.CachePage(url, data, values, currentTime + maxAgeSeconds, logUrl)
     
                     # Cache size maintenance
                     self._Cache_Trim(currentTime)
@@ -454,7 +483,7 @@ class HttpManager:
                 else:
                     self.log (u"Get page from cache", xbmc.LOGDEBUG)
                     # Get it from cache
-                    data = self._Cache_GetData( url, values, expiryString)
+                    data = self._Cache_GetData( url, values, expiryString, logUrl)
                     
                     if (data <> 0):
                         return data
@@ -462,13 +491,13 @@ class HttpManager:
                         self.log(u"Error retrieving page from cache. Zero length page. Retrieving from web.")
         
         # maxAge = 0 or URL not in cache, so get it
-        data, responseMaxAge = self._GetURL_NoCache( url, values, headers)
+        data, responseMaxAge = self._GetURL_NoCache( url, values, headers, logUrl)
 
         if responseMaxAge is not None:
             maxAgeSeconds = responseMaxAge
             
         if maxAgeSeconds > 0:
-            self.CachePage(url, data, values, currentTime + maxAgeSeconds)
+            self.CachePage(url, data, values, currentTime + maxAgeSeconds, logUrl)
     
         # Cache size maintenance
         self._Cache_Trim(currentTime)
@@ -477,8 +506,8 @@ class HttpManager:
     
     #==============================================================================
     
-    def GetExpiryTimeForUrl(self, url, values):
-        cacheKey = self._Cache_CreateKey( url, values )
+    def GetExpiryTimeForUrl(self, url, values, logUrl):
+        cacheKey = self._Cache_CreateKey( url, values, logUrl )
         
         return self.GetExpiryTimeStr(cacheKey)
             
@@ -494,10 +523,10 @@ class HttpManager:
         return None
             
         
-    def _Cache_GetData(self,  url, values, expiryString ):
+    def _Cache_GetData(self,  url, values, expiryString, logUrl):
         global lastCode
         lastCode = 200
-        cacheKey = self._Cache_CreateKey( url, values )
+        cacheKey = self._Cache_CreateKey( url, values, logUrl )
         filename = cacheKey + "_" + expiryString
         cacheFileFullPath = os.path.join( self.cacheDir, filename )
         self.log (u"Cache file: %s" % cacheFileFullPath, xbmc.LOGDEBUG)
@@ -513,8 +542,8 @@ class HttpManager:
     
     #==============================================================================
     
-    def _Cache_Add(self,  url, data, values, currentTime ):
-        cacheKey = self._Cache_CreateKey( url, values )
+    def _Cache_Add(self,  url, data, values, currentTime, logUrl  ):
+        cacheKey = self._Cache_CreateKey( url, values, logUrl )
         filename = cacheKey + "_" + str(currentTime)
         cacheFileFullPath = os.path.join( self.cacheDir, filename )
         self.log (u"Cache file: %s" % cacheFileFullPath, xbmc.LOGDEBUG)
@@ -524,17 +553,19 @@ class HttpManager:
     
     #==============================================================================
     
-    def _Cache_CreateKey(self,  url, values ):
+    def _Cache_CreateKey(self,  url, values, logUrl ):
         try:
             if values is not None:
                 url = url + "?" + urllib.urlencode(values)
 
-            self.log("url: " + url)
+            if logUrl:
+                self.log("url: " + url)
             from hashlib import md5
             return md5(url).hexdigest()
         except:
             import md5
-            self.log("url to be hashed: " + url)
+            if logUrl:
+                self.log("url to be hashed: " + url)
             return  md5.new(url).hexdigest()
     
     #==============================================================================

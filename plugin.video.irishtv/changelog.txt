@@ -1,3 +1,18 @@
+Version 1.0.13 [09 Mar 2014]
+- Minor internal changes, use internal json instead of simplejson
+
+Version 1.0.12 [05 Mar 2014]
+- RTE: Fix not working, change of swfurl
+- AerTV: Fix not working over SmartDNS
+- AerTV: Added "Show EPG" option. May speed up channel listing when turned off, On by default.
+
+Version 1.0.11 (05 Oct 2013)
+- RTE: Fix bug caused by website lying about the number of episodes available for a programme
+- RTE: Most Popular fails to load if a list show is no longer available
+- TG4: Remove duplicate news category
+- TG4: Correctly play multipart programmes
+- AerTV: Fix bugs caused by website changes and removal of RTE2 HD
+
 Version 1.0.10 (17 Apr 2013)
 - Fix root menu error in AerTV - due to changes in AerTV's API
 

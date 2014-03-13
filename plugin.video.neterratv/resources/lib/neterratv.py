@@ -50,7 +50,7 @@ class neterra:
     MOVIES = 'movies'
     GETSTREAM = 'get_stream'
     MAINURL = 'http://www.neterra.tv/' #main url
-    LOGINURL = 'http://www.neterra.tv/user/login_page' #login url
+    LOGINURL = 'http://www.neterra.tv/user/login' #login url
     TVLISTURL = 'http://www.neterra.tv/page/service/tv_channels' #url to get list of all TV stations
     CONTENTURL = 'http://www.neterra.tv/content/' #content url
     SMALLICONS = '&choice_view=1'
@@ -65,9 +65,11 @@ class neterra:
     DEFAULTPOSTSETTINGS = 'offset=0&category=&date=&text=' #default options
     #flashplayer settings
     SWFPLAYERURL = 'swfurl=http://www.neterra.tv/players/flowplayer/flowplayer.commercial-3.2.16.swf' 
+    SWfVfy = 'swfVfy=http://www.neterra.tv/players/flowplayer/flowplayer.commercial-3.2.16.swf'
     SWFBUFFERDEFAULT = 'buffer=3000'
     SWFPAGEURL='pageurl=http://www.neterra.tv/content'
-    ISLOGGEDINSTR = '<form method="POST" action="http://www.neterra.tv/user/login_page" id="login_fail_form">' #string to check if user is logged in
+    ISLOGGEDINSTR = 'var LOGGED = ''1'';'
+    TOKEN = 'qawsedr55'
     #globals variables
     __cj__ = None
     __cookiepath__ = None
@@ -96,6 +98,7 @@ called every time the script runs
         self.__password__ = password
         self.initCookie()
         #TODO may remove opening of default URL
+        self.logIn()
         self.openSite(self.MAINURL)        
         self.__log('finished __init__')
         
@@ -152,6 +155,7 @@ also checks if user is logged in
         startpoint = htmlstr.find(self.ISLOGGEDINSTR)
         #if not logged in
         if (startpoint != -1):            
+            #if (1==1):
             #login
             self.logIn()
             #open page again
@@ -170,7 +174,7 @@ opens url and returns html stream
         urlopen = urllib2.urlopen
         request = urllib2.Request
         theurl = url
-        txtdata = issue_id
+        txtdata = issue_id+'&quality=0&type=live'
         self.__log('txtdata:_ ' + txtdata)
         req = request(theurl, txtdata, self.USERAGENT)
         # create a request object
@@ -178,7 +182,8 @@ opens url and returns html stream
         htmlstr = handle.read()
         startpoint = htmlstr.find(self.ISLOGGEDINSTR)
         #if not logged in
-        if (startpoint != -1):            
+        if (startpoint != -1):
+            #if(1==1):
             #login
             self.logIn()
             #open page again
@@ -201,7 +206,7 @@ returns true if login successful
         request = urllib2.Request
         theurl = self.LOGINURL
         self.__log('----URL request started for: ' + theurl + ' ----- ')
-        txdata = 'login_username=' + self.__username__ + '&login_password=' + self.__password__ + '&login=1&login_type=1'
+        txdata = 'login_username=' + self.__username__ + '&login_password=' + self.__password__ + '&login_attempt=1'
         req = request(self.LOGINURL, txdata, self.USERAGENT)
         self.__log('----URL requested: ' + theurl + ' txdata: ' + txdata)
         # create a request object
@@ -649,33 +654,37 @@ returns true if login successful
     plays live stream
 '''
 def playLiveStream(tv_username, tv_password, url):
-	log('Start playLiveStream')
-	#get a neterra class
-	Neterra = neterra(tv_username, tv_password)    
-	html=Neterra.getTVStream(url)
-	log(html)
-	#parse html for flashplayer link
-	startpoint = html.find('rtmp')
-	endpoint = html.find('file_link')-3
-	#remove crap from string
-	rtmp = html[startpoint:endpoint]                
-	rtmp = rtmp.replace('\\','')    
-	startpoint = rtmp.find('/rtplive')
-	endpoint = len(rtmp)
-	app = rtmp[startpoint+1:endpoint]
-	startpoint = html.find('file_link')+len('file_link')+3
-	endpoint = html.find(',',startpoint)-1
-	playpath = html[startpoint:endpoint]
-	#log some details
-	log('playpath: ' + playpath)
-	log('rtmp: ' + rtmp)        
-	url=rtmp+' '+ neterra.SWFPLAYERURL+' playpath='+playpath+' '+neterra.SWFPAGEURL+' live=1 '+neterra.SWFBUFFERDEFAULT
-	#call player
-	xbmc.Player().play(url)
-	log('URL: ' + url)
-	log('Finished playLiveStream')
-	html=''
-	return html
+    log('Start playLiveStream')
+    #get a neterra class
+    Neterra = neterra(tv_username, tv_password)    
+    html=Neterra.getTVStream(url)
+    log(html)
+    #parse html for flashplayer link
+    startpoint = html.find('rtmp')
+    endpoint = html.find('file_link')-3
+    #remove crap from string
+    rtmp = html[startpoint:endpoint]                
+    rtmp = rtmp.replace('\\','')    
+    startpoint = rtmp.find('/rtplive')
+    endpoint = len(rtmp)
+    app = rtmp[startpoint+1:endpoint]
+    startpoint = html.find('file_link')+len('file_link')+3
+    endpoint = html.find(',',startpoint)-1
+    playpath = html[startpoint:endpoint]
+    tcUrl = rtmp
+    #log some details
+    log('playpath: ' + playpath)
+    log('rtmp: ' + rtmp)
+    log('app: ' +app)
+    log('tcUrl: '+tcUrl)          
+    url=rtmp+' tcUrl='+tcUrl+' '+neterra.SWFPLAYERURL+' playpath='+playpath+' '+neterra.SWFPAGEURL+' '+neterra.SWfVfy+' live=1 ' + neterra.SWFBUFFERDEFAULT+' token='+neterra.TOKEN
+    url=rtmp+' tcUrl='+tcUrl+' '+neterra.SWFPLAYERURL+' playpath='+playpath+' '+neterra.SWFPAGEURL+' live=1 ' + neterra.SWFBUFFERDEFAULT+' token='+neterra.TOKEN
+    #call player
+    xbmc.Player().play(url)
+    log('URL: ' + url)
+    log('Finished playLiveStream')
+    html=''
+    return html
 
 '''
     play issue stream
@@ -706,7 +715,8 @@ def playIssueStream(tv_username, tv_password, url):
     log('app: ' +app)
     log('tcUrl: '+tcUrl)
     #ensure app name is given as there rtmplib has problems to parse information from rtmp string
-    url=rtmp+' app='+app+' tcUrl='+tcUrl+' '+neterra.SWFPLAYERURL+' playpath='+playpath+' '+neterra.SWFPAGEURL+' live=0 ' + neterra.SWFBUFFERDEFAULT
+    #url=rtmp+' app='+app+' tcUrl='+tcUrl+' '+neterra.SWFPLAYERURL+' playpath='+playpath+' '+neterra.SWFPAGEURL+' '+neterra.SWfVfy+' live=0 ' + neterra.SWFBUFFERDEFAULT+' token='+neterra.TOKEN
+    url=rtmp+' app='+app+' tcUrl='+tcUrl+' '+neterra.SWFPLAYERURL+' playpath='+playpath+' '+neterra.SWFPAGEURL+' live=0 ' + neterra.SWFBUFFERDEFAULT+' token='+neterra.TOKEN
     #call player
     xbmc.Player().play(url)
     log('URL: ' + url)

@@ -6,6 +6,7 @@ so keep it for now.
 
 import urllib2
 import time
+import datetime
 from resources.lib.model import url_constants
 try:
     from elementtree.ElementTree import fromstring
@@ -39,6 +40,8 @@ class NewTalksRss:
         author = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}author').text
         pic = item.find('./{http://search.yahoo.com/mrss/}thumbnail').get('url')
         duration = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}duration').text
+        duration = time.strptime(duration, '%H:%M:%S')
+        duration_seconds = datetime.timedelta(hours=duration.tm_hour, minutes=duration.tm_min, seconds=duration.tm_sec).total_seconds()
         plot = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}summary').text
         link = item.find('./link').text
 
@@ -51,7 +54,7 @@ class NewTalksRss:
             date = time.localtime()
         date = time.strftime("%d.%m.%Y", date)
 
-        return {'title':title, 'author':author, 'thumb':pic, 'plot':plot, 'duration':duration, 'date':date, 'link':link}
+        return {'title':title, 'author':author, 'thumb':pic, 'plot':plot, 'duration':duration_seconds, 'date':date, 'link':link}
 
     def get_new_talks(self):
         """

@@ -1,8 +1,16 @@
 """
 Contains constants that we initialize to the correct values at runtime.
+Should be usable as a testing shim.
 """
 import model.language_mapping as language_mapping
+import pickle
+import os
 
+__plugin_id__ = 'plugin.video.ted.talks'
+__current_search__ = 'current_search'
+__current_search_results__ = 'current_search_results'
+
+profile_path = '~/.xbmc/userdata/addon_data/plugin.video.ted.talks'
 username = 'Ted'
 password = 'Ted'
 download_mode = True
@@ -14,8 +22,11 @@ subtitle_language = 'en'
 
 def init():
     import xbmc, xbmcaddon
-    addon = xbmcaddon.Addon(id='plugin.video.ted.talks')
-    global username, password, download_mode, download_path, video_quality, enable_subtitles, xbmc_language, subtitle_language
+    addon = xbmcaddon.Addon(id=__plugin_id__)
+    global profile_path, username, password, download_mode, download_path, video_quality, enable_subtitles, xbmc_language, subtitle_language
+    profile_path = xbmc.translatePath(addon.getAddonInfo('profile')).decode("utf-8")
+    if not os.path.exists(profile_path):
+        os.makedirs(profile_path)
     username = addon.getSetting('username')
     password = addon.getSetting('password')
     download_mode = addon.getSetting('downloadMode')
@@ -33,7 +44,22 @@ def get_subtitle_languages():
     if enable_subtitles == 'false':
         return None
     if not subtitle_language.strip():
-        return [language_mapping.get_language_code(xbmc_language)]
+        code = language_mapping.get_language_code(xbmc_language)
+        return [code] if code else None
     else:
         return [code.strip() for code in subtitle_language.split(',') if code.strip()]
+
+def __get_profile_path__(*segments):
+    return os.path.join(profile_path, *segments)
+
+def set_current_search(value):
+    with open(__get_profile_path__('current_search'), 'w') as f:
+        f.write(value)
+
+def get_current_search():
+    current_search_file = __get_profile_path__('current_search')
+    if not os.path.exists(current_search_file):
+        return ''
+    with open(current_search_file, 'r') as f:
+        return f.read()
 

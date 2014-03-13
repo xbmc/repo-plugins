@@ -2,7 +2,7 @@ import unittest
 import subtitles_scraper
 import urllib
 import tempfile
-from BeautifulSoup import MinimalSoup
+import talk_scraper
 
 
 class TestSubtitlesScraper(unittest.TestCase):
@@ -26,39 +26,25 @@ World
 
     def test_get_subtitles_bad_language(self):
         subs = subtitles_scraper.get_subtitles('1253', 'panda')
-        # Yes, it returns the English subtitles - so we have to parse flashVars to know whether they exist for a particular language
+        # It returns the English subtitles :(
         self.assertEqual('You all know the truth of what I\'m going to say.', subs[0]['content'])
 
-    def test_get_subtitles_for_url(self):
-        json_subs = '{"captions":[{"content":"What","startTime":0,"duration":3000,"startOfParagraph":false},{"content":"Began","startTime":3000,"duration":4000,"startOfParagraph":false}]}'
-        subs_file = tempfile.NamedTemporaryFile()
-        try:
-            subs_file.write(json_subs)
-            subs_file.flush()
-            subs = subtitles_scraper.get_subtitles_for_url(subs_file.name)
-        finally:
-            subs_file.close()
-        self.assertEqual([{'duration': 3000, 'start': 0, 'content': 'What'}, {'duration': 4000, 'start': 3000, 'content': 'Began'}], subs)
+    def test_get_languages(self):
+        talk_json = self.__get_talk_json__('http://www.ted.com/talks/richard_wilkinson.html')
+        expected = set(['sq', 'ar', 'hy', 'bg', 'ca', 'zh-cn', 'zh-tw', 'hr', 'cs', 'da', 'nl', 'en', 'fr', 'ka', 'de', 'el', 'he', 'hu', 'id', 'it', 'ja', 'ko', 'fa', 'mk', 'pl', 'pt', 'pt-br', 'ro', 'ru', 'sr', 'sk', 'es', 'th', 'tr', 'uk', 'vi', 'eu', 'sv', 'nb'])
+        self.assertEqual(expected, set(subtitles_scraper.__get_languages__(talk_json)), msg="New translations are likely to appear; please update the test if so :)")
 
-    def test_real_talk_page(self):
-        """Test methods that take the talk page HTML"""
+    def test_get_subtitles_for_talk(self):
+        talk_json = self.__get_talk_json__('http://www.ted.com/talks/richard_wilkinson.html')
 
-        html = urllib.urlopen('http://www.ted.com/talks/richard_wilkinson.html').read()
-        talk_id, intro_duration = subtitles_scraper.get_flashvars(html)
-
-        # TED intro, need to offset subtitles with this.
-        # Used to have this at ms granularity - now only s :(
-        self.assertEquals('15', intro_duration)
-
-        # Talk ID, need this to request subtitles.
-        self.assertEquals('1253', talk_id)
-
-        expected = set(['sq', 'ar', 'hy', 'bg', 'ca', 'zh-cn', 'zh-tw', 'hr', 'cs', 'da', 'nl', 'en', 'fr', 'ka', 'de', 'el', 'he', 'hu', 'id', 'it', 'ja', 'ko', 'fa', 'mk', 'pl', 'pt', 'pt-br', 'ro', 'ru', 'sr', 'sk', 'es', 'th', 'tr', 'uk', 'vi'])
-        self.assertEquals(expected, set(subtitles_scraper.get_languages(html)))
-
-        subs = subtitles_scraper.get_subtitles_for_talk(html, ['banana', 'fr', 'en'], None)
+        subs = subtitles_scraper.get_subtitles_for_talk(talk_json, ['banana', 'fr', 'en'], None)
         self.assertTrue(subs.startswith('''1
-00:00:15,000 --> 00:00:18,000
+00:00:11,820 --> 00:00:14,820
 Vous savez tous que ce que je vais dire est vrai.
 
 2'''))
+
+    def __get_talk_json__(self, url):
+        html = urllib.urlopen(url).read()
+        foo, fi, fo, fum, talk_json = talk_scraper.get(html)
+        return talk_json

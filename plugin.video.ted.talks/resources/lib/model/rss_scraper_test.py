@@ -12,7 +12,7 @@ minimal_item = """
   <itunes:author>Dovahkiin</itunes:author>
   <itunes:subtitle>fus ro dah</itunes:subtitle>
   <itunes:summary>Unrelenting Force</itunes:summary>
-  <itunes:duration>00:30</itunes:duration>
+  <itunes:duration>01:02:03</itunes:duration>
   <guid isPermaLink="false">eng.video.talk.ted.com:830</guid>
   <pubDate>Sat, 04 Feb 2012 08:14:00 +0000</pubDate>
   <media:thumbnail url="invalid://nowhere/nothing.jpg" width="42" height="42" />
@@ -33,7 +33,7 @@ class TestNewTalksRss(unittest.TestCase):
             'thumb':'invalid://nowhere/nothing.jpg',
             'title':'fus ro dah',
             'plot':'Unrelenting Force',
-            'duration':'00:30'
+            'duration':3723
         }
         self.assertEqual(expected_details, details)
 

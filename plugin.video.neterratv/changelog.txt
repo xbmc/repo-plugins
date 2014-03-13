@@ -41,4 +41,5 @@ Todo: Need function to delete cookie file
 
 1.0.1 / 2.0.1
 - fixed issue live and timeshift streams not playing after website updates 
- 
+ 1.0.2 / 2.0.2
+- updated login method

@@ -1,10 +1,13 @@
+[B]0.7.1:[/B]
+- Fixed synchronization crash when a syncing a file fails
+- Fixed not able to upload files 
+- Add (Dropbox addon) to the name (Make it come up in 'dropbox' searches)
+- Add Dbmc icon to the sync notifications
+
 [B]0.7.0:[/B]
 - Changes for getting addon into XBMC official repository
 - Fixed login (step 8)
 - Improved synchronization handling when no token (access code) present
-
-[B]0.6.4:[/B]
-- Add DBMC to official xbmc-addons repository
 
 [B]0.6.3:[/B]
 - Improve addon behavior with sync service
@@ -18,6 +21,14 @@
 
 [B]0.6.1:[/B]
 - Added one way (from dropbox to local system) synchronization option
+
+[B]0.5.4:[/B]
+- Added File/Folder download context menu item
+
+[B]0.5.3:[/B]
+- Fix showing unicoded-string directory
+- Fix creating new folder on file-item
+- Set Background cache dialog timeout to 7 secs
 
 [B]0.5.2:[/B]
 - Added option to stream music and video i.s.o. caching them. Note: picture 

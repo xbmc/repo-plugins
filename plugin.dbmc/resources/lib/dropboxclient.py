@@ -43,9 +43,9 @@ except:
 def command():
     """a decorator for handling authentication and exceptions"""
     def decorate(f):
-        def wrapper(self, *args):
+        def wrapper(self, *args, **keywords):
             try:
-                return f(self, *args)
+                return f(self, *args, **keywords)
             except TypeError, e:
                 log_error('TypeError: %s' %str(e))
             except rest.ErrorResponse, e:

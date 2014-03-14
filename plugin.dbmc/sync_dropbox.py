@@ -25,7 +25,7 @@ import xbmcvfs
 
 import time, datetime
 import threading
-import shutil, os
+import shutil, os, traceback
 from stat import *
 import pickle
 
@@ -157,7 +157,7 @@ class DropboxSynchronizer:
                 if self.root:
                     self.root.updateLocalRootPath(self._syncPath)
                 log('SyncPath updated')
-                xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE_STRING(30103), tempPath, 7000))
+                xbmc.executebuiltin('Notification(%s,%s,%d,%s)' % (LANGUAGE_STRING(30103), tempPath, 7000, ICON))
             else:
                 log_error('New sync location is not empty: %s'%(tempPath))
                 dialog = xbmcgui.Dialog()
@@ -369,14 +369,14 @@ class SynchronizeThread(threading.Thread):
         now = time.time()
         if (self._lastProgressUpdate + self.PROGRESS_TIMEOUT) < now:
             log('Synchronizing number of items: %s/%s' % (handled, total) )
-            xbmc.executebuiltin('Notification(%s,%s,%i)' % (LANGUAGE_STRING(30114), str(handled)+'/'+str(total), 7000))
+            xbmc.executebuiltin('Notification(%s,%s,%d,%s)' % (LANGUAGE_STRING(30114), str(handled)+'/'+str(total), 7000, ICON))
             self._lastProgressUpdate = now
             #Also store the new data (frequently)
             self._dropboxSyncer.storeSyncData()
 
     def updateProgressFinished(self, handled, total):
         log('Number of items synchronized: %s' % (handled) )
-        xbmc.executebuiltin('Notification(%s,%s%s,%i)' % (LANGUAGE_STRING(30106), LANGUAGE_STRING(30107), handled, 7000))
+        xbmc.executebuiltin('Notification(%s,%s%s,%d,%s)' % (LANGUAGE_STRING(30106), LANGUAGE_STRING(30107), handled, 10000, ICON))
             
 
 class SyncObject(object):
@@ -386,6 +386,7 @@ class SyncObject(object):
     OBJECT_2_REMOVE = 3
     OBJECT_ADD_CHILD = 4
     OBJECT_REMOVED = 5
+    OBJECT_SKIP = 6
     
     def __init__(self, path, client):
         #note: path is case-insensitive, meta['path'] is case-sensitive
@@ -399,6 +400,8 @@ class SyncObject(object):
         self._remoteClientModifiedTime = 0
         self._newRemoteTimeStamp = 0
         self._localTimeStamp = 0
+        self._failure = False
+        self._state = self.OBJECT_IN_SYNC
 
     def setItemInfo(self, meta):
         log_debug('Set stored metaData: %s'%self.path)
@@ -477,6 +480,9 @@ class SyncFile(SyncObject):
         super(SyncFile, self).__init__(path, client)
 
     def inSync(self):
+        if self._state == self.OBJECT_SKIP:
+            log_debug('Skipping file: %s'%self._localPath)
+            return self.OBJECT_IN_SYNC #fake object in sync...
         localPresent = False
         if self._localPath:
             localPresent = xbmcvfs.exists(self._localPath)
@@ -515,23 +521,34 @@ class SyncFile(SyncObject):
         return self.OBJECT_IN_SYNC
         
     def sync(self):
-        fileStatus = self.inSync()
-        if fileStatus == self.OBJECT_2_DOWNLOAD:
-            log_debug('Download file to: %s'%self._localPath)
-            self._client.saveFile(self.path, self._localPath)
-            self.updateTimeStamp()
-        elif fileStatus == self.OBJECT_2_UPLOAD:
-            log_debug('Upload file: %s'%self._localPath)
-            self._client.upload(self._localPath, self.path)
-            st = os.stat(self._localPath)
-            self._localTimeStamp = st[ST_MTIME] 
-        elif fileStatus == self.OBJECT_2_REMOVE:
-            log_debug('Removing file: %s'%self._localPath)
-            os.remove(self._localPath)
-        elif fileStatus == self.OBJECT_IN_SYNC or fileStatus == self.OBJECT_REMOVED:
-            pass
-        else:
-            log_error('Unknown file status(%s) for: %s!'%(fileStatus, self.path))
+        if self._state == self.OBJECT_SKIP:
+            return
+        try:
+            self._state = self.inSync()
+            if self._state == self.OBJECT_2_DOWNLOAD:
+                log_debug('Download file to: %s'%self._localPath)
+                self._client.saveFile(self.path, self._localPath)
+                self.updateTimeStamp()
+            elif self._state == self.OBJECT_2_UPLOAD:
+                log_debug('Upload file: %s'%self._localPath)
+                self._client.upload(self._localPath, self.path)
+                st = os.stat(self._localPath)
+                self._localTimeStamp = st[ST_MTIME] 
+            elif self._state == self.OBJECT_2_REMOVE:
+                log_debug('Removing file: %s'%self._localPath)
+                os.remove(self._localPath)
+            elif self._state == self.OBJECT_IN_SYNC or self._state == self.OBJECT_REMOVED:
+                pass
+            else:
+                log_error('Unknown file status(%s) for: %s!'%(self._state, self.path))
+        except Exception, e:
+            log_error('Exception occurred for file %s' % self._localPath)
+            log_error( traceback.format_exc() )
+            if(self._failure):
+                #failure happened before... So skip this item in all the next syncs!
+                self._state = self.OBJECT_SKIP
+                log_error('Skipping file in next syncs: %s'% self._localPath)
+            self._failure = True
     
     def setItemInfo(self, path, meta):
         if path == self.path:
@@ -613,6 +630,9 @@ class SyncFolder(SyncObject):
         return self._children[childPath]
 
     def inSync(self):
+        if self._state == self.OBJECT_SKIP:
+            log_debug('Skipping folder: %s'%self._localPath)
+            return self.OBJECT_IN_SYNC #fake object in sync...
         localPresent = False
         if self._localPath:
             localPresent = xbmcvfs.exists(self._localPath)
@@ -635,26 +655,37 @@ class SyncFolder(SyncObject):
         return self.OBJECT_IN_SYNC
         
     def sync(self):
-        folderStatus = self.inSync() 
-        if folderStatus == self.OBJECT_2_DOWNLOAD:
-            log_debug('Create folder: %s'%self._localPath)
-            xbmcvfs.mkdirs( self._localPath )
-            self.updateTimeStamp()
-        elif folderStatus == self.OBJECT_2_UPLOAD:
-            log_error('Can\'t upload folder: %s'%self._localPath)
-            #TODO Add files if new files found local
-            #TODO: modify timestamp of dir...
-        elif folderStatus == self.OBJECT_2_REMOVE:
-            log_debug('Remove folder: %s'%self._localPath)
-            shutil.rmtree(self._localPath)
-        elif folderStatus == self.OBJECT_ADD_CHILD:
-            #TODO
-            pass
-        elif folderStatus == self.OBJECT_IN_SYNC:
-            pass
-        else:
-            log_error('Unknown folder status(%s) for : %s!'%(folderStatus, self.path))
-            
+        if self._state == self.OBJECT_SKIP:
+            return
+        try:
+            self._state = self.inSync() 
+            if self._state == self.OBJECT_2_DOWNLOAD:
+                log_debug('Create folder: %s'%self._localPath)
+                xbmcvfs.mkdirs( self._localPath )
+                self.updateTimeStamp()
+            elif self._state == self.OBJECT_2_UPLOAD:
+                log_error('Can\'t upload folder: %s'%self._localPath)
+                #TODO Add files if new files found local
+                #TODO: modify timestamp of dir...
+            elif self._state == self.OBJECT_2_REMOVE:
+                log_debug('Remove folder: %s'%self._localPath)
+                shutil.rmtree(self._localPath)
+            elif self._state == self.OBJECT_ADD_CHILD:
+                #TODO
+                pass
+            elif self._state == self.OBJECT_IN_SYNC:
+                pass
+            else:
+                log_error('Unknown folder status(%s) for : %s!'%(self._state, self.path))
+        except Exception, e:
+            log_error('Exception occurred for folder %s' % self._localPath)
+            log_error( traceback.format_exc() )
+            if(self._failure):
+               #failure happened before... So skip this item in all the next syncs!
+                self._state = self.OBJECT_SKIP
+                log_error('Skipping folder in next syncs: %s'% self._localPath)
+            self._failure = True
+
     def getItems2Sync(self):
         dirs2Sync = []
         items2Sync = []

@@ -1,3 +1,6 @@
+1.1.1
+- Modified getstream url
+
 1.1.0
 - Added German localisation
 - Added compatibility to frodo python engine

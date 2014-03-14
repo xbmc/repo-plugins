@@ -3,7 +3,7 @@
 '''
 @author: jackyNIX
 
-Copyright (C) 2011 jackyNIX
+Copyright (C) 2011-2014 jackyNIX
 
 This file is part of XBMC MixCloud Plugin.
 
@@ -331,12 +331,17 @@ def get_stream(cloudcast_key):
     ck="http://www.mixcloud.com"+cloudcast_key
     if debugenabled:
         print('MIXCLOUD '+'resolving cloudcast stream for '+ck)
-    request = urllib2.Request('http://offliberty.com/off.php', 'track=%s&refext=' % ck)
-    request.add_header('Referer', 'http://offliberty.com/')
-    response = urllib2.urlopen(request)
-    data = response.read()
-    match = re.search('HREF="(.*)" class="download"', data)
-    return match.group(1)
+    for retry in range(1, 10):
+#        request = urllib2.Request('http://offliberty.com/off.php', 'track=%s&refext=' % ck)
+        request = urllib2.Request('http://offliberty.com/off54.php', 'track=%s&refext=' % ck)
+        request.add_header('Referer', 'http://offliberty.com/')
+        response = urllib2.urlopen(request)
+        data=response.read()
+        match=re.search('HREF="(.*)" class="download"', data)
+        if match:
+            return match.group(1)
+        elif debugenabled:
+            print('wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
  
 
 

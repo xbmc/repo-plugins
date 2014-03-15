@@ -1,6 +1,6 @@
 # CONSTANTS
 __author__ = 'Automicus'
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 __url__ = 'http://automic.us'
 __date__ = '2/2014'
 

@@ -6,4 +6,7 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Page</string>
+
+    <!-- Settings -->
+    <string id="30100">Forcer la vue "Vignette"</string>
 </strings>

@@ -6,4 +6,7 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Pàgina</string>
+
+    <!-- Settings -->
+    <string id="30100">Força el mode de vista "Thumbnail"</string>
 </strings>

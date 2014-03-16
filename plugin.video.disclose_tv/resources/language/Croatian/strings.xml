@@ -6,4 +6,7 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Stranica</string>
+
+    <!-- Settings -->
+    <string id="30100">Prisili način prikaza "Minijature"</string>
 </strings>

@@ -6,4 +6,7 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Страница</string>
+
+    <!-- Settings -->
+    <string id="30100">Наложи изгледа "Миниатюри", за преглеждане на списъка с трейлъри</string>
 </strings>

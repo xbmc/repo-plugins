@@ -17,82 +17,59 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import urllib2
-import re
+import sys
+
 from BeautifulSoup import BeautifulSoup
-from urllib import urlencode
+from urllib2 import urlopen
+
+if sys.version_info >= (2, 7):
+    import json
+else:
+    import simplejson as json
 
 
-MOBILE_URL = 'http://m.collegehumor.com/'
 MAIN_URL = 'http://www.collegehumor.com/'
-
-IPAD_USERAGENT = (
-    'Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) '
-    'AppleWebKit/531.21.10 (KHTML, like Gecko) '
-    'Version/4.0.4 Mobile/7B334b Safari/531.21.10'
-)
 
 
 def get_categories():
-    url = MOBILE_URL + 'videos/browse'
-    tree = __get_tree(url, mobile=True)
-    categories = []
-    for a in tree.find('ul', {'data-role': 'listview'}).findAll('a'):
-        if 'playlist' in a['href']:
-            continue
-        elif a['href'].startswith('/video'):
-            continue
-        categories.append({
-            'title': a.string,
-            'link': a['href'][1:]
-        })
+    url = MAIN_URL
+    tree = __get_tree(url)
+    parent = tree.find('a', {'href': '/originals'}).parent.parent.parent
+    categories = [{
+        'title': a.contents[2].strip(),
+        'link': a['href'][1:]
+    } for a in parent.findAll('a')]
     return categories
 
 
 def get_videos(category, page=1):
-    post = {'render_mode': 'ajax'}
-    url = MOBILE_URL + '%s/page:%s' % (category, page)
-    tree = __get_tree(url, post, mobile=True)
-    videos = []
-    elements = tree.find('ul', {'data-role': 'listview'}).findAll('a')
-    for a in elements:
-        if 'playlist' in a['href']:
-            continue
-        videos.append({
-            'title': a.h3.string,
-            'link': a['href'][1:],
-            'image': a.img['src']
-        })
-    has_next_page = len(elements) == 24
+    url = MAIN_URL + '%s/page:%s' % (category, page)
+    tree = __get_tree(url)
+    parent = tree.find('div', {'class': 'primary'})
+    videos = [{
+        'title': article.a.img['alt'],
+        'video_id': _get_video_id(article.a['href']),
+        'image': article.a.img['data-src-retina']
+    } for article in parent.findAll('article') if article.a]
+    has_next_page = tree.find('a', {'class': 'next'})
     return videos, has_next_page
 
 
-def get_video_file(link):
-    url = MAIN_URL + link
-    tree = __get_tree(url)
-
-    video_object = tree.find('video')
-    if video_object and video_object.get('src'):
-        return video_object['src']
-
-    re_flv = re.compile("flvSourceUrl: '([^']+)',")
-    js_code = tree.find('script', {'type': 'text/javascript'},
-                        text=re_flv)
-    if js_code:
-        flv_url = re.search(re_flv, js_code).group(1)
-        return flv_url
+def _get_video_id(link):
+    return link.split('/')[2]
 
 
-def __get_tree(url, data_dict=None, mobile=True):
-    if data_dict:
-        post_data = urlencode(data_dict)
-    else:
-        post_data = ' '
-    req = urllib2.Request(url, post_data)
-    if mobile:
-        req.add_header('Cookie', 'force_mobile=1')
-        req.add_header('User-Agent', IPAD_USERAGENT)
-    req.add_header('X-Requested-With', 'XMLHttpRequest')
-    response = urllib2.urlopen(req).read()
-    tree = BeautifulSoup(response, convertEntities=BeautifulSoup.HTML_ENTITIES)
-    return tree
+def get_video_file(video_id):
+    url = MAIN_URL + 'moogaloop/video/%s.json' % video_id
+    video = __get_json(url)['video']
+    return video['mp4'].get('high_quality') or video['mp4'].get('low_quality')
+
+
+def __get_tree(url):
+    response = urlopen(url).read()
+    return BeautifulSoup(response, convertEntities=BeautifulSoup.HTML_ENTITIES)
+
+
+def __get_json(url):
+    response = urlopen(url).read()
+    return json.loads(response)

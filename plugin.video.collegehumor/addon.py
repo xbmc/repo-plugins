@@ -48,7 +48,7 @@ def show_videos(category, page):
         },
         'path': plugin.url_for(
             endpoint='watch_video',
-            url=video['link']
+            video_id=video['video_id']
         ),
         'is_playable': True,
     } for video in videos]
@@ -81,9 +81,9 @@ def show_videos(category, page):
     return plugin.finish(items)
 
 
-@plugin.route('/watch/<url>/')
-def watch_video(url):
-    video_url = scraper.get_video_file(url)
+@plugin.route('/watch/<video_id>/')
+def watch_video(video_id):
+    video_url = scraper.get_video_file(video_id)
     return plugin.set_resolved_url(video_url)
 
 

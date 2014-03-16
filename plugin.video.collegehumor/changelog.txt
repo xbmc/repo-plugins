@@ -1,3 +1,7 @@
+2.3.0 (16.03.2014)
+ Fixed add-on (rewrote scraper)
+ Updated translations
+
 2.2.0 (01.04.2013)
  Added back "MusicVideos" Category
  Fixed all items where shown twice

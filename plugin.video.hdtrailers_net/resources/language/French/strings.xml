@@ -16,6 +16,7 @@
     <string id="30009">[B] TÉLÉCHARGÉ[/B]</string>
     <string id="30010">[B]téléchargement en cours[/B]</string>
     <string id="30011">Ajouter ce Film à CouchPotato</string>
+    <string id="30012">Ajouter ce Film à Trakt.tv</string>
 
     <!-- Settings -->
     <string id="30100">Forcer la vue "Vignette"</string>
@@ -26,6 +27,7 @@
     <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
+    <string id="30120">Type de contenu (lié à l'apparance)</string>
     <string id="30121">Vidéos</string>
     <string id="30122">Films</string>
     <string id="30123">Chemin de téléchargement</string>

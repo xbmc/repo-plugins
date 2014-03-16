@@ -6,12 +6,37 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">עמוד</string>
-    <string id="30002">אחרון</string>
+    <string id="30002">האחרונים ביותר</string>
+    <string id="30003">הנצפים ביותר</string>
+    <string id="30004">10 הגדולים</string>
+    <string id="30005">ספריה (לפי אות ראשונה)</string>
+    <string id="30006">בכורות השבוע</string>
+    <string id="30007">בקרוב בקולנוע</string>
+    <string id="30008">הורד קדימון זה</string>
+    <string id="30009">[B]הורד[/B]</string>
+    <string id="30010">[B]בתהליך הורדה[/B]</string>
+    <string id="30011">הוסף סרט זה ל-CouchPotato</string>
+    <string id="30012">הוסף סרט זה ל-Trakt.tv</string>
+
+    <!-- Settings -->
+    <string id="30100">אלץ תצוגת תמונה ממוזערת</string>
+    <string id="30101">הצג קדימון</string>
+    <string id="30102">הצג סרטונים</string>
+    <string id="30103">הצג מקור בכותרת הוידאו</string>
+    <string id="30110">אבחנת וידאו</string>
+    <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
+    <string id="30120">סוג תוכן (קשור למעטפת)</string>
     <string id="30121">וידאו</string>
     <string id="30122">סרטים</string>
+    <string id="30123">נתיב הורדה</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">אין נתיב הורדה</string>
+    <string id="30131">האם ברצונך להגדיר אותו כעת?</string>
 
     <!-- Notify -->
     <string id="30150">שגיאת רשת</string>
+    <string id="30151">הורדה לא אפשרית כעת</string>
 </strings>

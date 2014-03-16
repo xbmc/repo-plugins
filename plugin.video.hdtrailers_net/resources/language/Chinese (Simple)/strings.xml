@@ -15,6 +15,8 @@
     <string id="30008">下载此预告片</string>
     <string id="30009">[B]已下载[/B]</string>
     <string id="30010">[B]正在下载[/B]</string>
+    <string id="30011">将此电影加入到CouchPotato</string>
+    <string id="30012">将此电影加入到Trakt.tv</string>
 
     <!-- Settings -->
     <string id="30100">视图模式强制为“缩略图”</string>

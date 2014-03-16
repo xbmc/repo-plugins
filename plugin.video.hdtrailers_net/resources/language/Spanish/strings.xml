@@ -16,6 +16,7 @@
     <string id="30009">[B]DESCARGADO[/B]</string>
     <string id="30010">[B]descarga en curso[/B]</string>
     <string id="30011">Añadir esta película a CouchPotato</string>
+    <string id="30012">Añadir esta película a Trakt.tv</string>
 
     <!-- Settings -->
     <string id="30100">Forzar Modo de Vista "Miniaturas"</string>

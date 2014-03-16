@@ -9,16 +9,34 @@
     <string id="30002">Nieuwste</string>
     <string id="30003">Meest bekeken</string>
     <string id="30004">Top 10</string>
+    <string id="30005">Bibliotheek (Allemaal, op eerste letter)</string>
     <string id="30006">Deze week in premiere</string>
     <string id="30007">Binnenkort</string>
+    <string id="30008">Download deze Trailer</string>
+    <string id="30009">[B]GEDOWNLOAD[/B]</string>
+    <string id="30010">[B]Bezig met downloaden[/B]</string>
+    <string id="30011">Voeg deze Film toe aan CouchPotato</string>
+    <string id="30012">Voeg deze Film toe aan Trakt.tv</string>
+
+    <!-- Settings -->
+    <string id="30100">Forceer weergavestand "Thumbnail"</string>
+    <string id="30101">Toon Trailer</string>
+    <string id="30102">Toon Clips</string>
     <string id="30103">Laat Bron zien in video titel</string>
     <string id="30110">Video Resolutie</string>
     <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
+    <string id="30120">Content-Type (Skin gerelateerd)</string>
     <string id="30121">Videos</string>
     <string id="30122">Films</string>
+    <string id="30123">Download-Pad</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Geen download pad</string>
+    <string id="30131">Wilt u het nu instellen?</string>
 
     <!-- Notify -->
     <string id="30150">Netwerk Fout</string>
+    <string id="30151">Op dit moment is het downloaden niet mogelijk</string>
 </strings>

@@ -5,24 +5,38 @@
 
 <strings>
     <!-- Default strings -->
-    <string id="30001">عناصر</string>
+    <string id="30001">الصفحه</string>
     <string id="30002">أخير</string>
-    <string id="30003">الأكثر مشاهدة</string>
-    <string id="30004">أول 10</string>
+    <string id="30003">اﻷكثر مُشاهدتاً</string>
+    <string id="30004">افضل 10</string>
     <string id="30005">المكتبة (الكل من البداية)</string>
     <string id="30006">يفتح هذا الأسبوع</string>
-    <string id="30007">قريبا</string>
+    <string id="30007">قريباً</string>
+    <string id="30008">نَزِل هذا الفيلم التقديمى</string>
+    <string id="30009">[B]نُزِلَ بنجاح[/B]</string>
+    <string id="30010">[B]يُنَزِل[/B]</string>
+    <string id="30011">أضف هذا الفيلم الى كاوتش بوتيتو</string>
+    <string id="30012">أضف هذا الفيلم الى Trakt.tv</string>
 
     <!-- Settings -->
     <string id="30100">عرض وضع "ظفر" إجباري</string>
-    <string id="30101">عرض مقطع</string>
-    <string id="30102">عرض مقطع</string>
-    <string id="30103">عرض المصدر في عنوان الفيديو</string>
-    <string id="30110">دقة الفيديو</string>
-    <string id="30111">480p</string>
-    <string id="30112">720p</string>
-    <string id="30113">1080p</string>
+    <string id="30101">عرض الفيلم التقديمى</string>
+    <string id="30102">عرض المقاطع المرئيه</string>
+    <string id="30103">عرض المصدر بجانب عنوان المقطع المرئى</string>
+    <string id="30110">أبعاد المقاطع المرئيه</string>
+    <string id="30111">480</string>
+    <string id="30112">720</string>
+    <string id="30113">1080</string>
     <string id="30120">نوع-المحتوى (متعلق بالمظهر)</string>
-    <string id="30121">فيديو</string>
+    <string id="30121">مقاطع مرئيه</string>
     <string id="30122">أفلام</string>
+    <string id="30123">مسار-التنزيل</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">بلا</string>
+    <string id="30131">اترغب بضبطها اﻷن؟</string>
+
+    <!-- Notify -->
+    <string id="30150">خطأ  فى الشبكه</string>
+    <string id="30151">تعذر التَنِزِيل</string>
 </strings>

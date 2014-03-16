@@ -7,8 +7,20 @@
     <!-- Default strings -->
     <string id="30001">Sivu</string>
     <string id="30002">Viimeisimmät</string>
+    <string id="30003">Katsotuimmat</string>
+    <string id="30004">Top 10</string>
+    <string id="30007">Tulossa pian</string>
+    <string id="30008">Lataa tämä traileri</string>
+    <string id="30009">[B]LADATTU[/B]</string>
+    <string id="30010">[B]lataus meneillään[/B]</string>
+    <string id="30110">Videon tarkkuus</string>
+    <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
     <string id="30121">Videot</string>
     <string id="30122">Elokuvat</string>
+
+    <!-- Notify -->
+    <string id="30150">Verkkovirhe</string>
+    <string id="30151">Lataus ei ole mahdollista juuri nyt</string>
 </strings>

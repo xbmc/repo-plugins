@@ -6,8 +6,18 @@
 <strings>
     <!-- Default strings -->
     <string id="30001">Sayfa</string>
+    <string id="30002">Son</string>
+    <string id="30009">[B]İNDİRİLDİ[/B]</string>
+    <string id="30010">[B]indirme işlemi sürüyor[/B]</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
     <string id="30121">Videolar</string>
     <string id="30122">Filmler</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">İndirme yolu yok</string>
+    <string id="30131">Şimdi ayarlamak ister misiniz?</string>
+
+    <!-- Notify -->
+    <string id="30150">Ağ Hatası</string>
 </strings>

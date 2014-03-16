@@ -1,3 +1,6 @@
+1.2.2 (16.03.2014)
+- updated translations
+
 1.2.1 (15.04.2013)
 - Trakt.tv Integration via Trakt.tv List Manager
 - updated translations

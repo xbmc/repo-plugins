@@ -9,20 +9,34 @@
     <string id="30002">Nyeste</string>
     <string id="30003">Mest sette</string>
     <string id="30004">Topp 10</string>
-    <string id="30005">Bibliotek(Alle med initialer)</string>
+    <string id="30005">Bibliotek (Alle med initialer)</string>
     <string id="30006">Åpner denne uken</string>
     <string id="30007">Kommer snart</string>
+    <string id="30008">Last ned denne Traileren</string>
+    <string id="30009">[B]NEDLASTET[/B]</string>
+    <string id="30010">[B]nedlasting pågår[/B]</string>
+    <string id="30011">Legg denne filmen til CouchPotato</string>
+    <string id="30012">Legg denne filmen til trakt.tv</string>
 
     <!-- Settings -->
-    <string id="30100">Tving visningsmodus "Forhåndsvisning"</string>
-    <string id="30101">Vis Trailer</string>
-    <string id="30102">Vis Klipp</string>
-    <string id="30103">Vis kilde i video tittelen</string>
-    <string id="30110">Video oppløsning</string>
+    <string id="30100">Tving visningsmodus "Miniatyr"</string>
+    <string id="30101">Vis trailer</string>
+    <string id="30102">Vis snutt</string>
+    <string id="30103">Vis kilde i videotittelen</string>
+    <string id="30110">Video-oppløsning</string>
     <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
-    <string id="30120">Innholds-Type(Skin relatert)</string>
+    <string id="30120">Innholdstype (Skallrelatert)</string>
     <string id="30121">Videoer</string>
     <string id="30122">Filmer</string>
+    <string id="30123">Nedlastingssti</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Ingen nedlastingssti</string>
+    <string id="30131">Ønsker du å oppgi den nå?</string>
+
+    <!-- Notify -->
+    <string id="30150">Nettverksfeil</string>
+    <string id="30151">Nedlasting er for øyeblikket ikke mulig</string>
 </strings>

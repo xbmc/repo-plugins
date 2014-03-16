@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
+<!-- French (Canada) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fr_CA/ -->
+<!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
+
+<strings>
+    <!-- Default strings -->
+    <string id="30001">Page</string>
+    <string id="30002">Les plus récentes</string>
+    <string id="30003">Les plus vues</string>
+    <string id="30004">Les 10 meilleurs</string>
+    <string id="30005">Vidéothèque (tout par initiale)</string>
+    <string id="30006">Débute cette semaine</string>
+    <string id="30007">Bientôt à l'affiche</string>
+    <string id="30008">Télécharger cette bande-annonce</string>
+    <string id="30009">[B]TÉLÉCHARGÉ[/B]</string>
+    <string id="30010">[B]téléchargement en cours[/B]</string>
+    <string id="30011">Ajouter ce film à CouchPotato</string>
+    <string id="30012">Ajouter ce film à Trakt.tv</string>
+
+    <!-- Settings -->
+    <string id="30100">Forcer le mode de visualisation en imagette</string>
+    <string id="30101">Afficher la bande-annonce</string>
+    <string id="30102">Afficher les clips</string>
+    <string id="30103">Afficher la source dans le titre du vidéo</string>
+    <string id="30110">Résolution vidéo</string>
+    <string id="30111">480p</string>
+    <string id="30112">720p</string>
+    <string id="30113">1080p</string>
+    <string id="30120">Type de contenu (liée à l'habillage)</string>
+    <string id="30121">Vidéos</string>
+    <string id="30122">Films</string>
+    <string id="30123">Chemin de téléchargement</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Aucun chemin de téléchargement</string>
+    <string id="30131">Voulez-vous le définir maintenant?</string>
+
+    <!-- Notify -->
+    <string id="30150">Erreur de réseau</string>
+    <string id="30151">Le téléchargement n'est pas possible à ce moment</string>
+</strings>

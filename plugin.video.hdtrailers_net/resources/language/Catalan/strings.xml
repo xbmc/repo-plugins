@@ -7,8 +7,36 @@
     <!-- Default strings -->
     <string id="30001">Pàgina</string>
     <string id="30002">Últim</string>
+    <string id="30003">Més vistos</string>
+    <string id="30004">10 Millors</string>
+    <string id="30005">Biblioteca (Tots ordenats per inicial)</string>
+    <string id="30006">Estrenes d'aquesta setmana</string>
+    <string id="30007">Properament</string>
+    <string id="30008">Baixa aquest tràiler</string>
+    <string id="30009">[B]BAIXAT[/B]</string>
+    <string id="30010">[B]Baixada en curs[/B]</string>
+    <string id="30011">Afegir aquesta pel·lícula a CouchPotato</string>
+    <string id="30012">Afegir aquesta pel·lícula a Trakt.tv</string>
+
+    <!-- Settings -->
+    <string id="30100">Força el mode de vista "Thumbnail"</string>
+    <string id="30101">Mostra el tràiler</string>
+    <string id="30102">Mostra el fragments</string>
+    <string id="30103">Mostra la font en el títol del vídeo</string>
+    <string id="30110">Resolució del vídeo</string>
+    <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
-    <string id="30121">Videos</string>
+    <string id="30120">Tipus de contingut (Rel·lacionat amb la pell)</string>
+    <string id="30121">Vídeos</string>
     <string id="30122">Pel·lícules</string>
+    <string id="30123">Ruta de Descarrega</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">No esta definida la ruta de descarrega</string>
+    <string id="30131">Vols definir-la ara?</string>
+
+    <!-- Notify -->
+    <string id="30150">Error de xarxa</string>
+    <string id="30151">La descarrega no es possible ara mateix</string>
 </strings>

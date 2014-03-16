@@ -16,6 +16,7 @@
     <string id="30009">[B]NEDLADDADE[/B]</string>
     <string id="30010">[B]nedladdning pågår[/B]</string>
     <string id="30011">Lägg till denna film i CouchPotato</string>
+    <string id="30012">Lägg till denna film till Trakt.tv</string>
 
     <!-- Settings -->
     <string id="30100">Tvinga visningsläget "Tumnagel"</string>

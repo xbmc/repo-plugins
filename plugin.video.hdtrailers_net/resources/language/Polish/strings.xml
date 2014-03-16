@@ -16,6 +16,7 @@
     <string id="30009">[B]POBRANO[/B]</string>
     <string id="30010">[B]pobieranie w toku[/B]</string>
     <string id="30011">Dodaj ten film do CouchPotato</string>
+    <string id="30012">Dodaj ten film do Trakt.tv</string>
 
     <!-- Settings -->
     <string id="30100">Wymuś widok "Thumbnail"</string>

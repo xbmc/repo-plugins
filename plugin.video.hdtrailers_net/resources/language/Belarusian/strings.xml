@@ -7,14 +7,36 @@
     <!-- Default strings -->
     <string id="30001">Page</string>
     <string id="30002">Latest</string>
+    <string id="30003">Most Watched</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">Library (All by Initial)</string>
+    <string id="30006">Opening this week</string>
+    <string id="30007">Coming Soon</string>
+    <string id="30008">Download this Trailer</string>
+    <string id="30009">[B]DOWNLOADED[/B]</string>
+    <string id="30010">[B]download in progress[/B]</string>
+    <string id="30011">Add this Movie to CouchPotato</string>
+    <string id="30012">Add this Movie to Trakt.tv</string>
+
+    <!-- Settings -->
+    <string id="30100">Force ViewMode "Thumbnail"</string>
+    <string id="30101">Show Trailer</string>
+    <string id="30102">Show Clips</string>
+    <string id="30103">Show Source in video title</string>
+    <string id="30110">Video Resolution</string>
+    <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
-    <string id="30121">Відэа</string>
-    <string id="30122">Фільмы</string>
+    <string id="30120">Content-Type (Skin related)</string>
+    <string id="30121">Videos</string>
+    <string id="30122">Movies</string>
+    <string id="30123">Download-Path</string>
 
     <!-- OK Dialogs -->
     <string id="30130">No download path</string>
+    <string id="30131">Do you want to you set it now?</string>
 
     <!-- Notify -->
     <string id="30150">Network Error</string>
+    <string id="30151">Download not possible atm</string>
 </strings>

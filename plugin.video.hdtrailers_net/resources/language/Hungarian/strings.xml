@@ -12,6 +12,11 @@
     <string id="30005">Könyvtár (kezdőbetű szerint)</string>
     <string id="30006">Heti nyitás</string>
     <string id="30007">Hamarosan</string>
+    <string id="30008">Ajánló letöltése</string>
+    <string id="30009">[B]LETÖLTVE[/B]</string>
+    <string id="30010">[B]letöltés folyamatban[/B]</string>
+    <string id="30011">Film hozzáadása a CouchPotato-hoz</string>
+    <string id="30012">Film hozzáadása a Trakt.tv-hez</string>
 
     <!-- Settings -->
     <string id="30100">Kis képek nézet kényszerítése</string>
@@ -25,10 +30,13 @@
     <string id="30120">Tartalomtípus (felszínnel kapcsolatos)</string>
     <string id="30121">Videók</string>
     <string id="30122">Filmek</string>
+    <string id="30123">Letöltés-Útvonal</string>
 
     <!-- OK Dialogs -->
     <string id="30130">Nincs letöltés útvonal</string>
+    <string id="30131">Beállítja most?</string>
 
     <!-- Notify -->
     <string id="30150">Hálózati hiba</string>
+    <string id="30151">Letöltés jelenleg nem elérhető</string>
 </strings>

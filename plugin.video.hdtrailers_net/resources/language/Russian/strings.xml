@@ -7,8 +7,14 @@
     <!-- Default strings -->
     <string id="30001">Страница</string>
     <string id="30002">Последние</string>
+    <string id="30004">Топ 10</string>
+    <string id="30007">Скоро</string>
+    <string id="30110">Разрешение Видео</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
     <string id="30121">Видео</string>
     <string id="30122">Фильмы</string>
+
+    <!-- Notify -->
+    <string id="30150">Ошибка сети</string>
 </strings>

@@ -7,8 +7,36 @@
     <!-- Default strings -->
     <string id="30001">Stranica</string>
     <string id="30002">Najnovije</string>
+    <string id="30003">Najgledanije</string>
+    <string id="30004">Top 10</string>
+    <string id="30005">Videoteka (razvrstano prema inicijalima)</string>
+    <string id="30006">Otvarano ovog tjedna</string>
+    <string id="30007">Dolazi uskoro</string>
+    <string id="30008">Preuzmi ovu najavu</string>
+    <string id="30009">[B]PREUZETO[/B]</string>
+    <string id="30010">[B]preuzimanje u tijeku[/B]</string>
+    <string id="30011">Dodaj ovaj film na CouchPotato</string>
+    <string id="30012">Dodaj ovaj film na Trakt.tv</string>
+
+    <!-- Settings -->
+    <string id="30100">Prisili način prikaza "Minijature"</string>
+    <string id="30101">Prikaži najavu</string>
+    <string id="30102">Prikaži insert</string>
+    <string id="30103">Prikaži izvor u naslovu filma</string>
+    <string id="30110">Video razlučivost</string>
+    <string id="30111">480p</string>
     <string id="30112">720p</string>
     <string id="30113">1080p</string>
-    <string id="30121">Video</string>
+    <string id="30120">Vrsta sadržaja (srodna presvlaci)</string>
+    <string id="30121">Video snimke</string>
     <string id="30122">Filmovi</string>
+    <string id="30123">Putanja preuzimanja</string>
+
+    <!-- OK Dialogs -->
+    <string id="30130">Nema putanje preuzimanja</string>
+    <string id="30131">Želite li odmah postaviti?</string>
+
+    <!-- Notify -->
+    <string id="30150">Greška mreže</string>
+    <string id="30151">Preuzimanje nije moguće</string>
 </strings>

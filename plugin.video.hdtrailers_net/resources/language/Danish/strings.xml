@@ -12,6 +12,11 @@
     <string id="30005">Bibliotek (Alle efter initial)</string>
     <string id="30006">Åbner denne uge</string>
     <string id="30007">Kommer snart</string>
+    <string id="30008">Download denne Trailer</string>
+    <string id="30009">[B]DOWNLOADED[/B]</string>
+    <string id="30010">[B]download i gang[/B]</string>
+    <string id="30011">Tilføj denne Film til CouchPotato</string>
+    <string id="30012">Tilføj denne film til Trakt.tv</string>
 
     <!-- Settings -->
     <string id="30100">Tving visning "Miniaturebilleder"</string>
@@ -25,10 +30,13 @@
     <string id="30120">Indholdstype (Skinrelateret)</string>
     <string id="30121">Videoer</string>
     <string id="30122">Film</string>
+    <string id="30123">Download-Sti</string>
 
     <!-- OK Dialogs -->
     <string id="30130">Ingen valgt downloadmappe</string>
+    <string id="30131">Ønsker du at angive det nu?</string>
 
     <!-- Notify -->
     <string id="30150">Netværksfejl</string>
+    <string id="30151">Download er ikke mulig lige nu</string>
 </strings>

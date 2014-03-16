@@ -176,6 +176,7 @@ def __finish_paginate(endpoint, api_func, *args, **kwargs):
         p = str(int(page) - 1)
         items.insert(0, {
             'label': '<< Page %s <<' % p,
+            'info': {'count': 0},
             'path': plugin.url_for(
                 endpoint,
                 page=p,
@@ -186,6 +187,7 @@ def __finish_paginate(endpoint, api_func, *args, **kwargs):
         p = str(int(page) + 1)
         items.append({
             'label': '>> Page %s >>' % p,
+            'info': {'count': len(docus) + 2},
             'path': plugin.url_for(
                 endpoint,
                 page=p,
@@ -216,7 +218,7 @@ def __format_docus(docus, skip_playlists=True):
             'label': title,
             'icon': docu['thumb'],
             'info': {
-                'count': i,
+                'count': i + 1,
                 'studio': docu['username'] or '',
                 'genre': docu['tags'] or '',
                 'tagline': tagline,

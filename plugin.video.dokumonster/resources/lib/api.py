@@ -17,7 +17,12 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-import simplejson as json
+
+if sys.version_info >= (2, 7):
+    import json
+else:
+    import simplejson as json
+
 from urllib import urlencode
 from urllib2 import urlopen, Request, HTTPError, URLError
 

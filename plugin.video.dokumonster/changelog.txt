@@ -1,3 +1,7 @@
+0.1.1 (16.03.2014)
+- fixed order of pagination items
+- improve performance on slow machines unsing python >= 2.7
+
 0.1.0
 - fixed newlines in documentary plot
 - added browsing by tags

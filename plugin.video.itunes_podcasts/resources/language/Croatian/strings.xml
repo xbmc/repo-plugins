@@ -4,6 +4,27 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="30002">Pregled po žanru</string>
-    <string id="30004">Traži</string>
+    <!-- Root Menu -->
+    <string id="30000">Svi žanrovi</string>
+    <string id="30002">Pregledaj po žanru</string>
+    <string id="30003">Moji podcasti</string>
+    <string id="30004">Pretraži</string>
+    <string id="30005">Video podcasti</string>
+    <string id="30006">Zvučni podcasti</string>
+    <string id="30007">Nema pronađene Video/Glazbe!</string>
+
+    <!-- Context Menu -->
+    <string id="30010">Dodaj "Moji podcasti"</string>
+    <string id="30011">Ukloni iz "Moji podcasti"</string>
+
+    <!-- Settings -->
+    <string id="30100">Podcasti: Prisili način prikaza u "Minijature"</string>
+    <string id="30101">Podcast-stavke: Prisili način prikaza u "Minijature"</string>
+    <string id="30102">Itunes zemlja i jezik</string>
+    <string id="30103">Podcasti za prikaz u popisu (maks. 300)</string>
+    <string id="30104">Podcasti za prikaz u pretrazi (maks. 200)</string>
+    <string id="30105">Prikaži podkategorije</string>
+
+    <!-- Messages -->
+    <string id="30200">Greška mreže</string>
 </strings>

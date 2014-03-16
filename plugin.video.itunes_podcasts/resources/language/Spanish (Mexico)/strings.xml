@@ -4,7 +4,9 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30002">Navegar por genero</string>
     <string id="30004">Buscar</string>
+    <string id="30105">Mostrar Subgeneros</string>
 
     <!-- Messages -->
     <string id="30200">Error de red</string>

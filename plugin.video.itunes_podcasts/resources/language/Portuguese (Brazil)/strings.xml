@@ -8,23 +8,23 @@
     <string id="30000">Todos os gêneros</string>
     <string id="30002">Procurar por gênero</string>
     <string id="30003">Meus Podcasts</string>
-    <string id="30004">Procurar</string>
+    <string id="30004">Buscar</string>
     <string id="30005">Podcasts de Vídeo</string>
     <string id="30006">Podcasts de Áudio</string>
-    <string id="30007">Nenhum Vídeo/Música encontrada!!</string>
+    <string id="30007">Nenhum(a) Vídeo/Música encontrado(a)!</string>
 
     <!-- Context Menu -->
-    <string id="30010">Adicionar para "Meus Podcasts"</string>
+    <string id="30010">Adicionar a "Meus Podcasts"</string>
     <string id="30011">Remover de "Meus Podcasts"</string>
 
     <!-- Settings -->
     <string id="30100">Podcasts: Forçar Modo Visualização para Miniatura</string>
-    <string id="30101">Itens-Podcast: Forçar Modo Visualização para Miniatura</string>
-    <string id="30102">Países do Itunes e Linguagem</string>
-    <string id="30103">Podcasts para mostrar na lista (Max 300)</string>
-    <string id="30104">Podcasts para mostrar na procura (max 200)</string>
-    <string id="30105">Mostrar Subgêneros</string>
+    <string id="30101">Itens de Podcast: Forçar Modo Visualização para Miniatura</string>
+    <string id="30102">País e Idioma do iTunes</string>
+    <string id="30103">Número de podcasts na lista (máx. 300)</string>
+    <string id="30104">Número de podcasts na busca (máx. 200)</string>
+    <string id="30105">Mostrar subgêneros</string>
 
     <!-- Messages -->
-    <string id="30200">Erro na Rede</string>
+    <string id="30200">Erro na rede</string>
 </strings>

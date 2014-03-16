@@ -5,4 +5,7 @@
 
 <strings>
     <string id="30004">Søk</string>
+
+    <!-- Messages -->
+    <string id="30200">Nettverksfeil</string>
 </strings>

@@ -16,9 +16,17 @@ msgstr ""
 "Language: da\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]DOWNLOADED[/B]"
+
 msgctxt "#30003"
 msgid "Add to CouchPotato"
 msgstr "Tilføj til CouchPotato"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]download i gang[/B]"
 
 msgctxt "#30010"
 msgid "Source"
@@ -55,3 +63,7 @@ msgstr "Netværksfejl"
 msgctxt "#30101"
 msgid "No download path"
 msgstr "Ingen valgt downloadmappe"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "Ønsker du at angive det nu?"

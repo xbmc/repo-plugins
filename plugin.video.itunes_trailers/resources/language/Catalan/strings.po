@@ -18,7 +18,7 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Download Trailer"
-msgstr "Descarregar Trailer"
+msgstr "Descarregar Tràiler"
 
 msgctxt "#30002"
 msgid "[B]DOWNLOADED[/B]"
@@ -30,11 +30,11 @@ msgstr "Afegir a CouchPotato"
 
 msgctxt "#30004"
 msgid "[B]download in progress[/B]"
-msgstr "[B]Dscarrega en progres[/B]"
+msgstr "[B]Descarrega en curs[/B]"
 
 msgctxt "#30005"
 msgid "Add to Trakt.tv"
-msgstr "afegeix a Trakt.tv"
+msgstr "Afegeix a Trakt.tv"
 
 msgctxt "#30010"
 msgid "Source"
@@ -50,7 +50,7 @@ msgstr "Més recents"
 
 msgctxt "#30013"
 msgid "Most Popular"
-msgstr "Mes Populars"
+msgstr "Més Populars"
 
 msgctxt "#30014"
 msgid "Exclusive"
@@ -58,11 +58,11 @@ msgstr "Exclusiu"
 
 msgctxt "#30020"
 msgid "Movie Limit"
-msgstr "Limit de Pelicules"
+msgstr "Límit de Pel·lícules"
 
 msgctxt "#30021"
 msgid "No Limit"
-msgstr "Sense Limit"
+msgstr "Sense Límit"
 
 msgctxt "#30022"
 msgid "First 50"
@@ -74,11 +74,11 @@ msgstr "Primers 100"
 
 msgctxt "#30030"
 msgid "Trailer quality (Stream)"
-msgstr "Qualitat del trailer (stream)"
+msgstr "Qualitat del tràiler (Flux de dades)"
 
 msgctxt "#30031"
 msgid "HD480p"
-msgstr "HD 480p"
+msgstr "HD480p"
 
 msgctxt "#30032"
 msgid "HD720p"
@@ -90,19 +90,19 @@ msgstr "HD1080p"
 
 msgctxt "#30040"
 msgid "Trailer quality (Download)"
-msgstr "qualitat de trailer (descarrega)"
+msgstr "Qualitat del tràiler (Descarrega)"
 
 msgctxt "#30041"
 msgid "Same as Stream"
-msgstr "La mateixa que l'Sream"
+msgstr "La mateixa que el flux de dades"
 
 msgctxt "#30050"
 msgid "Trailer download path"
-msgstr "Ruta de Descarrega dels Trailers"
+msgstr "Ruta de Descarrega dels Tràilers"
 
 msgctxt "#30051"
 msgid "Force Trailers ViewMode to Thumbnail"
-msgstr "Força la vista en miniatures dels Trailers"
+msgstr "Força la vista en miniatures dels Tràilers"
 
 msgctxt "#30100"
 msgid "Network Error"

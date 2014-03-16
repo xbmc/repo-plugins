@@ -1,3 +1,6 @@
+0.2.2 (16.03.2014)
+- updated translations
+
 0.2.1 (13.10.2013)
 - fixed/rewrote TrailerScraper
 

@@ -16,9 +16,25 @@ msgstr ""
 "Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Download Trailer"
+msgstr "Ajánló letöltése"
+
+msgctxt "#30002"
+msgid "[B]DOWNLOADED[/B]"
+msgstr "[B]LETÖLTVE[/B]"
+
 msgctxt "#30003"
 msgid "Add to CouchPotato"
 msgstr "Hozzáadás a CouchPotato-hoz"
+
+msgctxt "#30004"
+msgid "[B]download in progress[/B]"
+msgstr "[B]letöltés folyamatban[/B]"
+
+msgctxt "#30005"
+msgid "Add to Trakt.tv"
+msgstr "Hozzáadás a Trakt.tv-hez"
 
 msgctxt "#30010"
 msgid "Source"
@@ -32,6 +48,34 @@ msgctxt "#30012"
 msgid "Most Recent"
 msgstr "Legfrissebb"
 
+msgctxt "#30013"
+msgid "Most Popular"
+msgstr "Legnépszerűbb"
+
+msgctxt "#30014"
+msgid "Exclusive"
+msgstr "Exkluzív"
+
+msgctxt "#30020"
+msgid "Movie Limit"
+msgstr "Film Limit"
+
+msgctxt "#30021"
+msgid "No Limit"
+msgstr "Nincs Limit"
+
+msgctxt "#30022"
+msgid "First 50"
+msgstr "Első 50"
+
+msgctxt "#30023"
+msgid "First 100"
+msgstr "Első 100"
+
+msgctxt "#30030"
+msgid "Trailer quality (Stream)"
+msgstr "Ajánló minőség (folyam)"
+
 msgctxt "#30031"
 msgid "HD480p"
 msgstr "HD480p"
@@ -44,9 +88,21 @@ msgctxt "#30033"
 msgid "HD1080p"
 msgstr "HD1080p"
 
+msgctxt "#30040"
+msgid "Trailer quality (Download)"
+msgstr "Ajánló minőség (letöltés)"
+
+msgctxt "#30041"
+msgid "Same as Stream"
+msgstr "Mit a Folyam"
+
 msgctxt "#30050"
 msgid "Trailer download path"
 msgstr "Ajánló letöltési útvonal"
+
+msgctxt "#30051"
+msgid "Force Trailers ViewMode to Thumbnail"
+msgstr "Kisméretű nézetmód kényszerítése Előzetesekhez"
 
 msgctxt "#30100"
 msgid "Network Error"
@@ -55,3 +111,7 @@ msgstr "Hálózati hiba"
 msgctxt "#30101"
 msgid "No download path"
 msgstr "Nincs letöltés útvonal"
+
+msgctxt "#30102"
+msgid "Do you want to you set it now?"
+msgstr "Beállítja most?"

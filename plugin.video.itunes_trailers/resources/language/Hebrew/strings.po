@@ -26,7 +26,7 @@ msgstr "[B]הורד[/B]"
 
 msgctxt "#30003"
 msgid "Add to CouchPotato"
-msgstr "הוסף אל CouchPotato"
+msgstr "הוסף ל-CouchPotato"
 
 msgctxt "#30004"
 msgid "[B]download in progress[/B]"
@@ -34,7 +34,7 @@ msgstr "[B]בתהליך הורדה[/B]"
 
 msgctxt "#30005"
 msgid "Add to Trakt.tv"
-msgstr "הוסף אל Trakt.tv"
+msgstr "הוסף ל-Trakt.tv"
 
 msgctxt "#30010"
 msgid "Source"
@@ -46,7 +46,7 @@ msgstr "הכל"
 
 msgctxt "#30012"
 msgid "Most Recent"
-msgstr "המעודכנים ביותר"
+msgstr "האחרונים ביותר"
 
 msgctxt "#30013"
 msgid "Most Popular"
@@ -54,7 +54,7 @@ msgstr "הפופולריים ביותר"
 
 msgctxt "#30014"
 msgid "Exclusive"
-msgstr "יחודי"
+msgstr "אקסלוסיבי"
 
 msgctxt "#30020"
 msgid "Movie Limit"
@@ -66,11 +66,11 @@ msgstr "ללא הגבלה"
 
 msgctxt "#30022"
 msgid "First 50"
-msgstr "50 ראשונים"
+msgstr "50 הראשונים"
 
 msgctxt "#30023"
 msgid "First 100"
-msgstr "100 ראשונים"
+msgstr "100 הראשונים"
 
 msgctxt "#30030"
 msgid "Trailer quality (Stream)"
@@ -102,7 +102,7 @@ msgstr "נתיב הורדת קדימון"
 
 msgctxt "#30051"
 msgid "Force Trailers ViewMode to Thumbnail"
-msgstr "אלץ מצב תצוגת קדימון כתמונה ממוזערת"
+msgstr "אלץ תצוגת קדימון כתמונה ממוזערת"
 
 msgctxt "#30100"
 msgid "Network Error"

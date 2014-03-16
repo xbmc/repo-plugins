@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.itunes_trailers" name="Apple iTunes Trailers" version="0.2.1" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.itunes_trailers" name="Apple iTunes Trailers" version="0.2.2" provider-name="Tristan Fischer (sphere@dersphere.de)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.xbmcswift2" version="2.4.0"/>
@@ -18,57 +18,73 @@
         <language></language>
         <platform>all</platform>
         <summary lang="be">Apple iTunes Trailer Browser</summary>
-        <summary lang="ca">Buscador de Trailers d'Apple iTunes</summary>
+        <summary lang="bg">Преглед на трейлъри от iTunes на Apple</summary>
+        <summary lang="ca">Buscador de Tràilers d'Apple iTunes</summary>
         <summary lang="de">Apple iTunes Trailer Browser</summary>
         <summary lang="el">Περιήγηση Διαφημιστικών Apple iTunes</summary>
         <summary lang="en">Apple iTunes Trailer Browser</summary>
         <summary lang="es">Explorador de Trailers de Apple iTunes</summary>
         <summary lang="fr">Navigateur de Bande-annonces Apple iTunes</summary>
+        <summary lang="fr_CA">Navigateur de bandes-annonces pour iTunes d'Apple</summary>
         <summary lang="gl">Buscardor de Avances de Apple iTunes</summary>
-        <summary lang="he">סייר קדימונים מחנות iTunes של אפל</summary>
+        <summary lang="he">סייר קדימונים מחנות iTunes של Apple</summary>
         <summary lang="hr">Apple iTunes preglednik najava filmova</summary>
+        <summary lang="hu">Apple iTunes Trailer Böngésző</summary>
         <summary lang="it">Sfoglia i Trailer da </summary>
         <summary lang="ko">Apple iTunes Trailer Browser</summary>
+        <summary lang="nl">Apple itunes Trailer Browser</summary>
         <summary lang="pl">Przeglądarka zwiastunów Apple iTunes</summary>
         <summary lang="pt">Navegador de Trailers do Apple iTunes</summary>
         <summary lang="pt_BR">Apple iTunes Trailer Browser</summary>
         <summary lang="sv">Apple iTunes Trailer utforskare</summary>
+        <summary lang="tr">Apple iTunes Fragman Tarayıcısı</summary>
         <summary lang="zh">苹果iTunes预告片浏览器</summary>
         <description lang="be">Apple iTunes Movie Trailers puts the newest and most exclusive movie previews in HD to your XBMC. Features:[CR]- Watch Trailers in 480p/720p/1080p[CR]- Download Trailers[CR]- Add Movies to Trakt.tv[CR]- Add Movies to CouchPotato</description>
-        <description lang="ca">Apple iTunes Movie Tràilers posa els tràilers en HD més nous i exclusius en el seu XBMC. Característiques:[CR] - Vegeu Tràilers en 480p/720p/1080p[CR]- Descàrrega de Tràilers [CR]- Afegeiu Pel·lícules a Trakt.tv[CR] - Afegiu Pel·lícules a CouchPotato</description>
+        <description lang="bg">Apple iTunes Movie Trailers Ви предоставя преглед на най-новите филми в HD формат. Характеристики:[CR]- Възпроизвежда трейлъри в 480p/720p/1080p резолюция[CR]- Сваля трейлъри[CR]- Добавя филми към акаунта Ви в www.Trakt.tv[CR]- Добавя филми в CouchPotato</description>
+        <description lang="ca">Apple iTunes Movie Tràilers posa els tràilers en HD més nous i exclusius en el seu XBMC. Característiques:[CR] - Vegeu Tràilers en 480p/720p/1080p[CR]- Descàrrega de Tràilers [CR]- Afegiu Pel·lícules a Trakt.tv[CR] - Afegiu Pel·lícules a CouchPotato</description>
         <description lang="de">Apple iTunes Movie Trailers bringt die neusten und exklusivsten Filmvorschauen in HD auf Dein XBMC. Features:[CR]- Trailer in 480p/720p/1080p[CR]- Trailer herunterladen[CR]- Filme zu CouchPotato hinzufügen</description>
         <description lang="el">Η Περιήγηση Διαφημιστικών Apple iTunes προσφέρει τα νεώτερα και σε αποκλειστικότητα διαφημιστικά σε ανάλυση HD στο XBMC σας. Χαρακτηριστικά:[CR]- Προβολή Διαφημιστικών σε 480p/720p/1080p[CR]- Λήψη Διαφημιστικών[CR]- Προσθήκη Ταινιών στο CouchPotato</description>
         <description lang="en">Apple iTunes Movie Trailers puts the newest and most exclusive movie previews in HD to your XBMC. Features:[CR]- Watch Trailers in 480p/720p/1080p[CR]- Download Trailers[CR]- Add Movies to Trakt.tv[CR]- Add Movies to CouchPotato</description>
         <description lang="es">Apple iTunes Movie Trailers pone los trailers en HD más novedosos y exclusivos en su XBMC. Características:[CR]- Vea Trailers en 480p/720p/1080p[CR]- Descarga de Trailers[CR]- Añada Películas a CouchPotato</description>
         <description lang="fr">Apple iTunes Bande-annonces de Films vous donne accès aux nouvelles et exclusives bande-annonces en HD pour XBMC. Fonctionnalités:[CR]- Regarder les bande-annonces en 480p/720p/1080p[CR]- Télécharger les Bande-annonces[CR]- Ajouter les films à CouchPotato</description>
+        <description lang="fr_CA">Les bandes-annonces de films de Itunes d'Apple amènent les avant-premières HD les plus récentes et les plus exclusives dans votre XBMC. Caractéristiques:[CR]- Regarder des bandes-annonces en 480p-720p-1080p[CR]- Télécharger des bandes-annonces[CR]- Ajouter des films à Trakt.tv[CR]- Ajouter des films à CouchPotato</description>
         <description lang="gl">Os Avances de Filmes de Apple iTunes leva os máis novos e exclusivos avances en Alta Definición ao teu XBMC. Características:[CR]- Ver Avances en 480p/720p/1080p[CR]- Descargar Avances[CR]- Engadir filmes a CouchPotato</description>
-        <description lang="he">הרחבת הוידאו של קדימוני סרטים מחנות iTunes של אפל מביאה את קדימוני הסרטים הכי חדשים וייחודיים באיכות HD הישר אל XBMC. כולל:[CR]- צפיה בקדימונים באיכות 480p/720p/1080p[CR]- הורד קדימונים[CR]- הוסף סרטים אל Trakt.tv[CR]- הוסף סרטים אל CouchPotato</description>
+        <description lang="he">הרחבת הוידאו של קדימוני סרטים מחנות iTunes של Apple מביאה את קדימוני הסרטים הכי חדשים ואקסלוסיביים באיכות HD הישר אל XBMC. כולל:[CR]- צפיה בקדימונים באיכות 480p/720p/1080p[CR]- הורד קדימונים[CR]- הוסף סרטים ל-Trakt.tv[CR]- הוסף סרטים ל-CouchPotato</description>
         <description lang="hr">Apple iTunes filmske najave prikazuju najnovije i najekskluzivnije HD filmske najave u vašem XBMC-u. Značajke:[CR]- Gledajte najave u 480p/720p/1080p[CR]- Preuzmite najave[CR]- Dodajte filmove na Trakt.tv[CR]- Dodajte filmove na CouchPotato</description>
+        <description lang="hu">Apple iTunes Filmelőzetesek eljuttatja a legfrissebb és exkluzív filmelőzeteseket HD-ban XBMC-be. Képességek:[CR]- Előzetesek megtekintése 480p/720p/1080p-ben[CR]- Előzetesek letöltése[CR]- Hozzáadás a Trakt.tv-hez[CR]- Hozzáadás a CouchPotato-hoz</description>
         <description lang="it">Apple iTunes Movie Trailers mette le più nuove ed esclusive anteprime dei film in HD nel tuo CBMC.&#10;Caratteristiche:[CR]- Guarda i Trailer a  480p/720p/1080p[CR]- Scarica i Trailer[CR]- Aggiungi i Filma </description>
         <description lang="ko">Apple iTunes Movie Trailers 는 HD 포맷의 수많은 최신 독점 영화 예고편을 XBMC로 가져옵니다. 기능:[CR]- 480p/720p/1080p 예고편 시청[CR]- 예고편 다운로드[CR]- Trakt.tv 에 영화 추가[CR]- CouchPotato 에 영화 추가</description>
+        <description lang="nl">Apple iTunes Movie Trailers voegt de nieuwste en meest exclusieve filmpreviews in HD toe aan jouw XBMC. Functies:[CR]- Bekijk trailers in 480p/720p/1080p[CR]- Download trailers[CR]- voeg films toe aan Trakt.tv[CR]- voeg films toe aan Couchpotato</description>
         <description lang="pl">Apple iTunes Movie Trailers udostępnia najnowsze i najbardziej wyjątkowe zwiastuny filmów w jakości HD w twoim XBMC. Możliwości:[CR]- Oglądanie zwiastunów w 480p/720p/1080p[CR]- Pobieranie zwiastunów[CR]- Dodawanie filmów do CouchPotato</description>
-        <description lang="pt">O navegador de Trailers do Apple iTunes coloca no seu XBMC as mais recentes e exclusivas apresentações de filmes em HD. Funcionalidades:[CR]- Ver Trailers em 480p/720p/1080p[CR]- Transferir Trailers[CR]- Adicionar Filmes ao CouchPotato</description>
+        <description lang="pt">O navegador de Trailers do Apple iTunes para XBMC dá-lhe acesso às mais recentes e exclusivas apresentações de filmes em HD. Funcionalidades:[CR]- Ver Trailers em 480p/720p/1080p[CR]- Transferir Trailers[CR]- Adicionar Filmes a Trakt.tv[CR]- Adicionar Filmes ao CouchPotato</description>
         <description lang="pt_BR">Apple iTunes Movie Trailers entrega os previews mais novos e exclusivos em HD para o XBMC. Recursos:[CR]-Assista trailers em 480p/720p/1080p[CR]-Download Trailers[CR]-Adicione filmes ao CouchPotato</description>
         <description lang="sv">Apple iTunes Movie Trailers ger dig dom senaste och exklusivaste filmförhandsgranskningarna i HD till ditt XBMC. Funktioner:[CR]- Se trailers i 480p/720p/1080p[CR]- Ladda ner trailers[CR]- Lägg till filmer i CouchPotato</description>
+        <description lang="tr">Apple iTunes Film Fragmanları en yeni ve seçkin film önizlemelerini HD kalitesinde XBMC'ye koyar. Özellikler:[CR]- Fragmanları 480p/720p/1080p kalitesinde İzle[CR]- Fragmanları İndir[CR]- Filmleri Trakt.tv'ye Ekle[CR]- Filmleri CouchPotato'ya Ekle</description>
         <description lang="zh">苹果iTunes电影预告片可在XBMC中观看最新和独家的高清电影预览。功能：[CR]- 观看480p/720p/1080p格式预告片[CR]- 下载预告片[CR]- 电影加入到Trakt.tv[CR]- 电影加入到CouchPotato</description>
         <disclaimer lang="be">NO iTunes required!</disclaimer>
+        <disclaimer lang="bg">НЕ изисква iTunes!</disclaimer>
         <disclaimer lang="ca">No requereix d'iTunes!</disclaimer>
+        <disclaimer lang="da">iTunes er ikke nødvendig!</disclaimer>
         <disclaimer lang="de">KEIN iTunes benötigt!</disclaimer>
         <disclaimer lang="el">Δεν απαιτείται ΚΑΝΕΝΑ iTunes!</disclaimer>
         <disclaimer lang="en">NO iTunes required!</disclaimer>
         <disclaimer lang="es">iTunes no es necesario</disclaimer>
         <disclaimer lang="fi">iTunesia EI vaadita!</disclaimer>
         <disclaimer lang="fr">AUCUN iTunes obligatoires!</disclaimer>
+        <disclaimer lang="fr_CA">iTunes n'est PAS nécessaire!</disclaimer>
         <disclaimer lang="gl">Non se require o iTunes!</disclaimer>
         <disclaimer lang="he">לא נדרש iTunes!</disclaimer>
         <disclaimer lang="hr">iTunes nije potreban!</disclaimer>
+        <disclaimer lang="hu">iTunes NEM szükséges!</disclaimer>
         <disclaimer lang="it">iTunes non è necessario!</disclaimer>
         <disclaimer lang="ko">iTunes 필요 없음!</disclaimer>
         <disclaimer lang="lt">NO iTunes reikia!</disclaimer>
+        <disclaimer lang="nl">GEEN iTunes vereist!</disclaimer>
         <disclaimer lang="pl">Nie wymaga iTunes!</disclaimer>
         <disclaimer lang="pt">Não é necessário iTunes!</disclaimer>
         <disclaimer lang="pt_BR">iTunes NÃO necessário!</disclaimer>
         <disclaimer lang="sv">INGEN iTunes krävs!</disclaimer>
+        <disclaimer lang="tr">iTunes gerekli değil!</disclaimer>
         <disclaimer lang="zh">不需要iTunes软件！</disclaimer>
     </extension>
 </addon>

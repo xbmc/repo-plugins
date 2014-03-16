@@ -16,6 +16,14 @@ msgstr ""
 "Language: ta_IN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30011"
+msgid "All"
+msgstr "அனைத்தும்"
+
+msgctxt "#30012"
+msgid "Most Recent"
+msgstr "மிகவும் சமீபத்தியது"
+
 msgctxt "#30100"
 msgid "Network Error"
 msgstr "பிணைய பிழை"

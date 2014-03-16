@@ -1,3 +1,6 @@
+2.0.3 (16.03.2013)
+ updated translations
+
 2.0.2 (24.06.2013)
  added translations
  changed default video quality to HQ

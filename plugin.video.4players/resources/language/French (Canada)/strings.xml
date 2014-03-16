@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <!-- Translated using Transifex web application. For support, or if you would like to to help out, please visit your language team! -->
-<!-- English language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/en/ -->
+<!-- French (Canada) language-Team URL: http://www.transifex.com/projects/p/xbmc-addons/language/fr_CA/ -->
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
-    <string id="30000">Latest Videos</string>
-    <string id="30001">Next Videos</string>
-    <string id="30002">Popular Videos</string>
-    <string id="30003">All videos for this game</string>
-    <string id="30004">Search Videos by Game</string>
-    <string id="30005">Enter Game title</string>
-    <string id="30006">Game Reviews</string>
-    <string id="30100">Force Viewmode to "Thumbnail"</string>
-    <string id="30101">Quality</string>
-    <string id="30102">Normal</string>
+    <string id="30000">Dernières vidéos</string>
+    <string id="30001">Prochaines vidéos</string>
+    <string id="30002">Vidéos populaires</string>
+    <string id="30003">Toutes les vidéos pour ce jeu</string>
+    <string id="30004">Chercher les vidéos par jeux</string>
+    <string id="30005">Saisir le titre du jeu</string>
+    <string id="30006">Critiques de jeu</string>
+    <string id="30100">Forcer le mode de visualisation en imagette</string>
+    <string id="30101">Qualité</string>
+    <string id="30102">Normale</string>
     <string id="30103">HQ</string>
-    <string id="30200">System Filter enabled</string>
+    <string id="30200">Filtre du système activé</string>
     <string id="30201">360</string>
     <string id="30202">PC-CDROM</string>
     <string id="30203">iPhone</string>
@@ -35,6 +35,6 @@
     <string id="30217">PlayStation2</string>
 
     <!-- Settings -->
-    <string id="30300">General</string>
-    <string id="30301">System Filter</string>
+    <string id="30300">Général</string>
+    <string id="30301">Filtre du système</string>
 </strings>

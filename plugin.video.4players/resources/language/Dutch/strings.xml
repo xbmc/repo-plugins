@@ -4,10 +4,14 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <string id="30000">Laatste Videos</string>
     <string id="30001">Volgende video's</string>
     <string id="30002">Populaire video's</string>
     <string id="30003">All video's voor dit spel</string>
+    <string id="30004">Zoek Videos bij Game</string>
     <string id="30005">Voer spel titel in</string>
+    <string id="30006">Game Reviews</string>
+    <string id="30100">Forceer weergavestand naar "Thumbnail"</string>
     <string id="30101">Kwaliteit</string>
     <string id="30102">Normaal</string>
     <string id="30103">HQ</string>
@@ -20,10 +24,14 @@
     <string id="30206">3DS</string>
     <string id="30207">NDS</string>
     <string id="30208">Wii U</string>
+    <string id="30209">PlayStation3</string>
     <string id="30210">PlayStation4</string>
+    <string id="30211">PSP</string>
     <string id="30212">PS Vita</string>
+    <string id="30213">Speelcultuur</string>
     <string id="30214">WindowsPhone7</string>
     <string id="30215">XBox</string>
+    <string id="30216">Wii</string>
     <string id="30217">PlayStation2</string>
 
     <!-- Settings -->

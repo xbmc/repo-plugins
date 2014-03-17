@@ -1,3 +1,9 @@
+0.4.2
+-----
+
+Fix:
++ Now preference set about resolution is followed even for video in sign languages
+
 0.4.1
 -----
 

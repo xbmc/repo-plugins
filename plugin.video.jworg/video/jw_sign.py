@@ -5,6 +5,7 @@ SIGN LANGUAGE VIDEO RELATED FUNCTIONS
 
 import xbmcplugin
 import xbmcgui
+import xbmc
 
 from BeautifulSoup import BeautifulSoup 
 import urllib
@@ -262,6 +263,8 @@ def showVideoCategorySpecificRow(category_url, thumb, row_index) :
 	if first_cell_class == "calign":
 		start_cell = 3
 
+	video_dict = {}
+
 	cell_index = -1
 	for cell in row_cells :
 		cell_index = cell_index + 1
@@ -276,6 +279,8 @@ def showVideoCategorySpecificRow(category_url, thumb, row_index) :
 
 			video_src 		= cell.find("a").get("href")
 			video_quality 	= cell.find("a").contents[0].encode("utf-8")
+
+			video_dict [ video_quality ] = video_src
 
 			listItem = xbmcgui.ListItem(
 				label 			= "[" + video_quality + "] - " + article_title,
@@ -295,6 +300,34 @@ def showVideoCategorySpecificRow(category_url, thumb, row_index) :
 				isFolder	= False 
 			) 
 
+	# looking for choosen resolution or first available resolution unde it
+	max_resolution	= xbmcplugin.getSetting(jw_config.plugin_pid, "max_resolution")
+
+	if max_resolution > 0 :
+
+		max_resolution_string = max_resolution + "p"
+
+	  	keys = sorted(list(video_dict.keys()), reverse=True)
+	  	for key in keys :
+	  		if (key <= max_resolution_string )  :
+	  			listItem = xbmcgui.ListItem(
+					label 			=  article_title
+				)
+				listItem.setInfo(
+					type 		= 'Video', 
+					infoLabels 	= {'Title': article_title}
+				)
+
+				url_to_play = video_dict[key]
+
+				xbmc.Player().play(item=url_to_play, listitem=listItem)
+
+				return;
+
+
+	# this will be executed only if no available res found
+	# this could happen if not preference setted, or if 
+	# for example, selected 240p and only 360p availabe.
 	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)		
 
 

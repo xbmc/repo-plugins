@@ -94,7 +94,8 @@ def getRequest(url):
 
 def getSources():
 
-              Choices = [["Most Recent","","SI"],
+              Choices = [
+                         ["Most Recent","","SI"],
                          ["NFL","nfl",""],
                          ["College Football","ncaaf_video",""],
                          ["MLB","mlb",""],
@@ -106,13 +107,14 @@ def getSources():
                          ["Soccer","soccer",""],
                          ["MMA & Boxing","boxing",""],
                          ["Tennis","tennis",""],
-                         ["More Sports","video",""],
+                         ["More Sports","si_video",""],
                          ["Swim Daily","swimdaily",""],
                          ["Game Room","gameroom",""],
                          ["Fantasy","fantasy",""],
                          ["High School","highschool",""],
                          [" SI Now","si_now_fullshow","SI"],
-                         [" Pro Football Now","profootballnow_fullshow","SI"]]
+                         [" Pro Football Now","profootballnow_fullshow","SI"]
+                        ]
 
               for pname, pcode, pchoice in Choices:
                  addDir(pname,pchoice+'#'+pcode,21,icon,fanart,pname,GENRE_SPORTS,"",False)
@@ -131,7 +133,7 @@ def getCategory(Category_url):
           log("main page")
           pchoice, pcode = Category_url.split('#')
           if pchoice == "SI":
-              Category_url = "http://sportsillustrated.cnn.com/.element/auto/4.1/video/page/si_"+pcode+"_video_page.json?format=jsonp&callback=siVideoPage.load"
+              Category_url = "http://sportsillustrated.cnn.com/.element/auto/4.1/video/page/si_"+pcode+"_video_page.json?format=jsonp&callback=siVideoPage.load&_="+str(int(round(time.time() * 1000)))
               link = getRequest(Category_url)
               match = re.compile('\{.+?"brightcoveId":"(.+?)".+?"createdDate":"(.+?)".+?"slug":"(.+?)".+?"headline":"(.+?)".+?"description":"(.+?)".+?"images":\["(.+?)".+?\}').findall(link)
               for pid, pdate, pslug, pname, pdesc, pimage in match:
@@ -217,32 +219,22 @@ def play_video(video_url):
 
 # use 'IOSRenditions' in place of 'renditions' in below for .m3u8 list, note case of 'r' in renditions, using 'renditions' gives you rtmp links
 
-	stored_size=stored_height = 0
-	for item in sorted(renditions['programmedContent']['videoPlayer']['mediaDTO']['renditions'], key = lambda item:item['frameHeight'], reverse = False):
+	if (addon.getSetting('vid_res') == "1"):
+	  stored_size=stored_height = 0
+	  for item in sorted(renditions['programmedContent']['videoPlayer']['mediaDTO']['renditions'], key = lambda item:item['frameHeight'], reverse = False):
 		stream_size = item['size']
 		stream_height = item['frameHeight']
-		if (int(stream_size) > stored_size):
+		if (int(stream_size) > stored_size) and (int(item['encodingRate']) < 4000000):
 			finalurl = item['defaultURL']
 			stored_size = stream_size
 			stored_height = stream_height
 
-#this is a kludge because I can't get some rtmps to play, so use the IOS .m3u8 list if it exists (the ones with IOSRenditions don't play rtmp correctly)
-
-	if (stored_height == 720) and (addon.getSetting('vid_res') == "1") and ("&mp4:23/" in finalurl):
-		match = re.compile('&mp4:(.+?)\?').findall(finalurl)
-		for x in match:
-			finalurl = "http://brightcove04.brightcove.com/"+x
+	if 'llnwd.net' not in finalurl: # using edgefcs then
+		(server,ppath)= finalurl.split('/&',1)
+		app = ppath.split('?',1)[1]
+		finalurl = server+'?'+app+' playpath='+ppath+' swfUrl='+swf_url+' timeout=30 pageUrl='+page_url
 	else:
-		stored_size = 0
-		for item in sorted(renditions['programmedContent']['videoPlayer']['mediaDTO']['IOSRenditions'], key = lambda item:item['frameHeight'], reverse = False):
-			stream_size = item['size']
-			if (int(stream_size) > stored_size):
-				finalurl = item['defaultURL']
-				stored_size = stream_size
-
-#	finalurl = finalurl.replace('.mp4?','.mp4&') # this needs work where the app, playpath, wierdqs split doesn't work right below
-
-	if "rtmp:" in finalurl:
+##	finalurl = finalurl.replace('.mp4?','.mp4&') # this needs work where the app, playpath, wierdqs split doesn't work right below
 		app, playpath, wierdqs = finalurl.split("&", 2)
 		qs = "?videoId=%s&lineUpId=&pubId=%s&playerId=%s&affiliateId=" % (video_content_id, publisher_id, video_player_id)
 		scheme,netloc = app.split("://")
@@ -252,8 +244,7 @@ def play_video(video_url):
 		tcurl = "%s://%s:1935/%s" % (scheme, netloc, app)
 		log("TCURL:%s" % (tcurl,))
 		finalurl = "%s tcUrl=%s app=%s playpath=%s%s swfUrl=%s conn=B:0 conn=S:%s&%s" % (tcurl,tcurl, app, playpath, qs, swf_url, playpath, wierdqs)
-		log("final rtmp: url =%s" % (finalurl,))
-
+	log("final rtmp: url =%s" % (finalurl,))
 	xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
 
 

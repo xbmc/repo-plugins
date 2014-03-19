@@ -1,3 +1,4 @@
+[B]2.1.2[/B] - Watson 2.1.2 release, plugin fixed to work with recent updates.
 [B]2.0.1[/B] - Watson 2.0 release, plugin fixed to work with new Watson.
 [B]1.1.1[/B] - Download function improved, will now download to single file, some minor updates. New icon.
 [B]1.1.0[/B] - Beta, programs can now be removed from recordings / favourites.

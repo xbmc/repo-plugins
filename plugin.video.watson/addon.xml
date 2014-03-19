@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.watson" name="Anvia Watson" version="2.0.0" provider-name="Jarkko Vesiluoma">
+<addon id="plugin.video.watson" name="Anvia Watson" version="2.0.2" provider-name="Jarkko Vesiluoma">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -9,7 +9,7 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en">Watch commercial Anvia Watson with XBMC</summary>                
-        <description lang="en">Unofficial Watson plugin. Watch commercial Watson service with XBMC. Requires a Watson user account. See http://www.watson.fi for more details about acquiring account.</description>
+        <description lang="en">UNOFFICIAL Watson plugin. Watch commercial Watson service with XBMC. Requires a Watson user account. See http://www.watson.fi for more details about acquiring account.</description>
         <disclaimer lang="en">Done for XBMC by JMV, www.jmv.fi</disclaimer>
 		<website>www.jmv.fi</website>
 		<email>jvesiluoma@gmail.com</email>

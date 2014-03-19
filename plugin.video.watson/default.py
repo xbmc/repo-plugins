@@ -7,6 +7,7 @@
 #       jvesiluoma@gmail.com
 #
 # Version history:
+#  [B]2.0.2[/B] - Watson 2.0.2 release, plugin fixed to work with recent updates.
 #  [B]2.0.1[/B] - Watson 2.0 release, plugin fixed to work with new Watson.
 #  [B]1.1.1[/B] - Download function improved, will now download to single file, some minor updates. New icon.
 #  [B]1.1.0[/B] - Beta, programs can now be removed from recordings / favourites.
@@ -119,7 +120,7 @@
 
 
 # Global variables
-VERSION = "2.1.0"
+VERSION = "2.0.2"
 MYHEADERS = { 'User-Agent': "Watson-XBMC version "+VERSION+";" }
 DEBUG=1
 # 1=low, 2=high, any other ==> low
@@ -148,13 +149,13 @@ def settings():
     INDEX()
   else:
     u=sys.argv[0]+"?url=Settings&mode=5"
-    listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(32005))
-    listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(32006)})
+    listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(30205))
+    listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(30206)})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
     
     u=sys.argv[0]+"?url=Settings&mode=5"
-    listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(32007))
-    listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(32007)})
+    listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(30207))
+    listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(30207)})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
     
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -165,27 +166,27 @@ def INDEX():
   
   # Live TV
   u=sys.argv[0]+"?url=LiveTV&mode=1"
-  listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(32001))
-  listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(32001)})
+  listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(30201))
+  listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(30201)})
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
   
   # Archive
   u=sys.argv[0]+"?url=Archive&mode=2"
-  listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(32002))
-  listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(32002)})    
+  listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(30202))
+  listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(30202)})    
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
   
   # Search recordings
   u=sys.argv[0]+"?url=SearchRec&mode=7"
-  listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(32003))
-  listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(32003)})
+  listfolder = xbmcgui.ListItem(watson_addon.getLocalizedString(30203))
+  listfolder.setInfo('video', {'Title': watson_addon.getLocalizedString(30203)})
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)    
    
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
      
 # Ask search string from user
 def search(url):
-  keyboard = xbmc.Keyboard('', watson_addon.getLocalizedString(32004))
+  keyboard = xbmc.Keyboard('', watson_addon.getLocalizedString(30204))
   keyboard.doModal()
   if keyboard.isConfirmed() and keyboard.getText():
     search_string = keyboard.getText().replace(" ","+")
@@ -202,9 +203,8 @@ def searchproc(url):
   searchcontent = opener.open(request).read()
 
   # Save everyhing we need to tuples...
-  procsearchmatch=re.compile('<title>(.+?)</title>\n            <description>(.+?)</description>\n            <dc:date>(.+?)</dc:date>\n            <guid isPermaLink="false">(.+?)</guid>\n            <link>(.+?)</link>\n            <source url="(.+?)">(.+?)</source>\n            <media:content duration="(.+?)"/>\n').findall(searchcontent)
-
-  
+#  procsearchmatch=re.compile('<title>(.+?)</title>\n            <description>(.+?)</description>\n            <dc:date>(.+?)</dc:date>\n            <guid isPermaLink="false">(.+?)</guid>\n            <link>(.+?)</link>\n            <source url="(.+?)">(.+?)</source>\n            <media:content duration="(.+?)"/>\n').findall(searchcontent)
+  procsearchmatch=re.compile('<title\>(.+?)<\/title\>\n            <description\>(.+?)<\/description\>\n                    <dc:date\>(.+?)<\/dc:date\>\n            <link\>(.+?)<\/link\>\n            <guid isPermaLink="(.+?)"\>(.+?)<\/guid\>\n            <source url="(.+?)"\>(.+?)<\/source\>\n                                        <media:content url="(.+?)" medium="(.+?)" type="(.+?)" fileSize="(.+?)" expression="(.+?)" duration="(.+?)"\/\>\n                    <media:status  state="active"  reason="Completed" \/\>\n            <media:community\><media:starRating average="0"  min="0" max="5"\/\><\/media:community\>\n                    <media:thumbnail url="https:\/\/www.watson.fi\/pctv\/resources\/recordings\/screengrabs\/2173711.jpg" height="72" width="96"\/\>').findall(searchcontent)
   procsearchmatch.sort(key=operator.itemgetter(0), reverse=True)
   
   # Add search results
@@ -264,8 +264,7 @@ def searchrec(url):
   searchcontent = opener.open(request).read()
 
   # Save everyhing we need to tuples...
-  recsearchmatch=re.compile('<title\>(.+?)<\/title\>\n            <description\>(.+?)<\/description\>\n            <dc:date\>(.+?)<\/dc:date\>\n            <link\>(.+?)<\/link\>\n            <guid isPermaLink="(.+?)"\>(.+?)<\/guid\>\n            <source url="(.+?)"\>(.+?)<\/source\>\n                        <media:content url="(.+?)" medium="(.+?)" type="(.+?)" fileSize="(.+?)" expression="(.+?)" duration="(.+?)"\/\>\n            <media:status  state="(.+?)"  reason="(.+?)" \/\>\n            <media:community\><media:starRating average="(.+?)"  min="(.+?)" max="(.+?)"\/\><\/media:community\>\n            <media:thumbnail url="(.+?)" height="(.+?)" width="(.+?)"\/\>').findall(searchcontent)
-  
+  recsearchmatch=re.compile('<title\>(.+?)<\/title\>\n            <description\>(.+?)<\/description\>\n                    <dc:date\>(.+?)<\/dc:date\>\n            <link\>(.+?)<\/link\>\n            <guid isPermaLink="(.+?)"\>(.+?)<\/guid\>\n            <source url="(.+?)"\>(.+?)<\/source\>\n                                        <media:content url="(.+?)" medium="(.+?)" type="(.+?)" fileSize="(.+?)" expression="(.+?)" duration="(.+?)"\/\>\n                    <media:status  state="(.+?)"  reason="(.+?)" \/\>\n            <media:community\><media:starRating average="(.+?)"  min="(.+?)" max="(.+?)"\/\><\/media:community\>\n                    <media:thumbnail url="(.+?)" height="(.+?)" width="(.+?)"\/\>').findall(searchcontent)
   recsearchmatch.sort(key=operator.itemgetter(2), reverse=True)
   
   # Add search results
@@ -278,7 +277,7 @@ def searchrec(url):
     senddesc=matchitem[1].replace("&#228;","a")
     senddesc=senddesc.replace("&#246;","o")
     senddesc=senddesc.replace("&amp;","&")
-	
+
     #Format: addDir(name,url,mode,thumbnail, description, permlink)    
     addDir(sendname,sendurl.replace("&amp;","&"),4,matchitem[17]+"?width=640&height=480",senddesc, matchitem[5])    
 
@@ -481,7 +480,7 @@ def playurl(url):
 def getplaylisturl(urlin):
   playurllow=""
   playurlhigh=""
-  
+
   # Compile and retrieve redirection and right npvr server
   compiledurl='https://'+watson_addon.getSetting("username")+':'+watson_addon.getSetting("password")+'@'+urlin.split("//")[1]
   try:
@@ -499,16 +498,17 @@ def getplaylisturl(urlin):
     e = sys.exc_info()[0]
     print "DEBUG: Exception: "+str(e)
     redirection=""
-
+  
   playurl={}
   if "H264" in urlin:
     linestring=open(tmpfile, 'r').read()
-    for line in linestring.split("\n"):   
+    for line in linestring.split("\n"):  
       if "01.m3u8" in line:
         playurl["Lo"]=line
       elif "02.m3u8" in line:
         playurl["Hi"]=line
 	
+
     tmpstring1=redirectionNEW.rpartition('/')
     try:
       finalplaylist=tmpstring1[0]+tmpstring1[1]+playurl["Hi"]+"?"+tmpstring1[2].split('?')[1]
@@ -524,7 +524,6 @@ def getplaylisturl(urlin):
       elif "02.m3u8?session" in line:
         playurlhigh=line
 
-	
     if watson_addon.getSetting("bitrate") == 1:
       finalplaylist="http://"+watson_addon.getSetting("username")+":"+watson_addon.getSetting("password")+"@"+redirection.netloc+"/recorder/resources/"+playurllow
     elif watson_addon.getSetting("bitrate") == 0:
@@ -544,11 +543,13 @@ def downloadvideo(durl,dname):
   ddir=watson_addon.getSetting("savedir")+dname.replace(':','-')
   ddir=ddir.replace(' ','_')
   
-#  # Try to make download dir..
-#  try:
-#    os.makedirs(ddir)
-#  except:
-#    print "downloadvideo: download dir already exists or permission denied..."
+  print "DEBUG: downloadurl: "+downloadurl
+  # Try to make download dir..
+  try:
+    os.makedirs(ddir)
+  except:
+    print "downloadvideo: download dir already exists or permission denied..."
+
   # Get download url (playlist)
   try:
     urllib.urlretrieve(downloadurl, tmpfile2)
@@ -557,7 +558,6 @@ def downloadvideo(durl,dname):
     xbmcgui.Dialog().ok("Status","Downloading %s in background, \n file is saved to %s."%(dname.replace(':','-'), ddir))    
   except:
     xbmcgui.Dialog().ok("Status","Error getting download url!")    
-  
   # Fetch video files and create playlist from files.
  
   savedir=watson_addon.getSetting("savedir")+dname.replace(':','-')
@@ -567,34 +567,42 @@ def downloadvideo(durl,dname):
   savedir=savedir.replace('&#228;','a')
   savedir=savedir.replace("&#246;","o")
   savedir=savedir.replace('&amp;','_')
-  
+
   playing=0
-  try:  
+#  try:  
+  if playing==0:
     for line in linestring.split("\n"):
       if "session=" in line:     
-        print "1"
         # Open remote file for reading...
-        wwwfile=urllib.urlopen("https://"+downloadurl.split("/")[2]+"/recorder/resources/"+line)
-        print "2"
-        # Open local file for writing (append)...
-        localfile=open(savedir, 'ab+')
-        print "3"
-        # Write remote file to local file...
-        localfile.write(wwwfile.read())
+        print "DEBUG: linestring.split: "+line
+        finaldurl="https://"+downloadurl.split("/")[2]+"/recorder/resources/"+line
+      elif "H264" in downloadurl:
+        tmpstring1=redirurl.rpartition('/')
+        try:
+          #Format: addDir(name,url,mode,thumbnail, description, permlink)    
+          finaldurl=tmpstring1[0]+tmpstring1[1]+playurl["Hi"]+"?"+tmpstring1[2].split('?')[1]
+          print "DEBUG: finaldurl: "+finaldurl
+        except:
+          print "DEBUG: ERROR; creating final playlist url."
         
-        print "...downloading..."
-        localfile.close()
-        print "ddir:"+ddir
-        print "savedir:"+savedir
-        print "4"
+		
+      wwwfile=urllib.urlopen(finaldurl)
+      # Open local file for writing (append)...
+      localfile=open(savedir, 'ab+')
+      # Write remote file to local file...
+      localfile.write(wwwfile.read())
         
-        playlocal(savedir)
-        playing=1
-        print "5"
-	print "...downloading completed!"
+      print "...downloading..."
+      localfile.close()
+      print "ddir:"+ddir
+      print "savedir:"+savedir
+        
+      playlocal(savedir)
+      playing=1
+  print "...downloading completed!"
 	#xbmcgui.Dialog().ok("Status","Download completed for %s !"%(savedir))    
-  except:
-    print "Status","Error fetching video files!"    
+ # except:
+ #   print "Status","Error fetching video files!"    
  
   # added 9.2
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -644,7 +652,8 @@ try:
   content = opener.open(request).read()
   
   # Save everyhing we need to tuples...
-  match=re.compile('<title\>(.+?)<\/title\>\n            <description\>(.+?)<\/description\>\n            <dc:date\>(.+?)<\/dc:date\>\n            <link\>(.+?)<\/link\>\n            <guid isPermaLink="(.+?)"\>(.+?)<\/guid\>\n            <source url="(.+?)"\>(.+?)<\/source\>\n                        <media:content url="(.+?)" medium="(.+?)" type="(.+?)" fileSize="(.+?)" expression="(.+?)" duration="(.+?)"\/\>\n            <media:status  state="(.+?)"  reason="(.+?)" \/\>\n            <media:community\><media:starRating average="(.+?)"  min="(.+?)" max="(.+?)"\/\><\/media:community\>\n            <media:thumbnail url="(.+?)" height="(.+?)" width="(.+?)"\/\>').findall(content)
+  match=re.compile('<title\>(.+?)<\/title\>\n            <description\>(.+?)<\/description\>\n                    <dc:date\>(.+?)<\/dc:date\>\n            <link\>(.+?)<\/link\>\n            <guid isPermaLink="(.+?)"\>(.+?)<\/guid\>\n            <source url="(.+?)"\>(.+?)<\/source\>\n                                        <media:content url="(.+?)" medium="(.+?)" type="(.+?)" fileSize="(.+?)" expression="(.+?)" duration="(.+?)"\/\>\n                    <media:status  state="(.+?)"  reason="(.+?)" \/\>\n            <media:community\><media:starRating average="(.+?)"  min="(.+?)" max="(.+?)"\/\><\/media:community\>\n                    <media:thumbnail url="(.+?)" height="(.+?)" width="(.+?)"\/\>').findall(content)
+
   LoginError=False
 except:
   print "Error opening XML"

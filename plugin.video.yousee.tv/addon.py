@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2013 Tommy Winther
+#      Copyright (C) 2014 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -47,6 +47,9 @@ class YouSeeTv(object):
             xbmc.log("Caught exception while generating channel icons!")
 
         for channel in channels:
+            if channel['encrypted']:
+                continue
+
             iconImage = os.path.join(CACHE_PATH, str(channel['id']) + '.png')
             if not os.path.exists(iconImage):
                 iconImage = channel['logos']['large']

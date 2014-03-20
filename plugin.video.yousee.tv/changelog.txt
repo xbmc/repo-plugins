@@ -1,3 +1,6 @@
+[B]Version 3.0.3 - 2014-03-07[/B]
+- Hide encrypted channels
+
 [B]Version 3.0.2 - 2013-12-07[/B]
 - Removed dependency on script.module.pil (seems to be removed in Gotham)
 - Removed Cinema navigation

@@ -23,7 +23,7 @@ def get_podcasts():
             info_out.append(info.text)
     print len(info_out)
     
-    thumb_sec = thumbs[1:38]
+    thumb_sec = thumbs[1:42]
     thumb_out = []
     for thumb in thumb_sec:
         thumb_out.append(thumb['src'])
@@ -45,7 +45,8 @@ def get_podcasts():
     print len(path_out)
     
     output = []
-    for x in range(len(title_out)):
+
+    for x in range(len(title_out)):  
         items = {
             'title': title_out[x],
             'thumb': thumb_out[x],

@@ -34,7 +34,7 @@ class TestThemesScraper(unittest.TestCase):
         self.assertLess(0, len(e_talks))
         self.assertLessEqual(120, len(e_talks))
         sample_talk = [t for t in e_talks if t[0] == "T. Boone Pickens: Let's transform energy -- with natural gas"][0]
-        self.assertEqual('http://www.ted.com/talks/t_boone_pickens_let_s_transform_energy_with_natural_gas.html', sample_talk[1])
+        self.assertEqual('http://www.ted.com/talks/t_boone_pickens_let_s_transform_energy_with_natural_gas', sample_talk[1])
         self.assertEqual('http://images.ted.com/images/ted/94552e20361ccd9b4b707563d62b5fec0e3d9813_113x85.jpg', sample_talk[2])
 
     def test_get_talks_performance(self):

@@ -24,17 +24,17 @@ class Fetcher:
         if data:
             headers = headers + [('Content-type', 'application/x-www-form-urlencoded')]
 
-        #create cookiejar
+        # create cookiejar
         cj = cookielib.LWPCookieJar()
         cookiefile = self.getTranslatedPath('special://temp/ted-cookies.lwp')
-        #load any existing cookies
+        # load any existing cookies
         if os.path.isfile(cookiefile):
             cj.load(cookiefile)
-            #log what cookies were loaded
+            # log what cookies were loaded
             for index, cookie in enumerate(cj):
                 self.logger('loaded cookie : %s from %s' % (cookie, cookiefile))
 
-        #build opener with automagic cookie handling abilities.
+        # build opener with automagic cookie handling abilities.
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         opener.addheaders = headers
         try:
@@ -46,5 +46,6 @@ class Fetcher:
         except urllib2.HTTPError, error:
             self.logger('%s error:\n%s\n%s\n%s' % (__name__, error.code, error.msg, error.geturl()))
         except Exception, error:
-            print Exception.__module__
-            print dir(error)
+            import xbmc
+            xbmc.log(Exception.__module__, level=xbmc.LOGERROR)
+            xbmc.log(Exception.__module__, level=xbmc.LOGERROR)

@@ -8,9 +8,4 @@
         <setting type="sep"/>
         <setting id="subtitle_language" type="text" default="" label="30113" enable="eq(-2,true)"/>        
     </category>
-    <!--Login-->
-    <category label="30075">
-        <setting id="username" type="text" label="30070" default="" />
-        <setting id="password" type="text" option="hidden" label="30071" default="" />
-    </category>
 </settings>

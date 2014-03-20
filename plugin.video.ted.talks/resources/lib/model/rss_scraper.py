@@ -6,8 +6,17 @@ so keep it for now.
 
 import urllib2
 import time
-import datetime
-from resources.lib.model import url_constants
+from datetime import timedelta
+try:
+    timedelta.total_seconds
+except AttributeError:
+    # People still using Python <2.7 201303 :(
+    # Cleverness from http://stackoverflow.com/questions/3318348/how-can-i-extend-pythons-datetime-datetime-with-my-own-methods/14214646#14214646
+    def total_seconds(td):
+        return float((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10 ** 6)) / 10 ** 6
+    d = _get_dict(timedelta)[0]
+    d['total_seconds'] = total_seconds
+
 try:
     from elementtree.ElementTree import fromstring
 except ImportError:
@@ -41,7 +50,7 @@ class NewTalksRss:
         pic = item.find('./{http://search.yahoo.com/mrss/}thumbnail').get('url')
         duration = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}duration').text
         duration = time.strptime(duration, '%H:%M:%S')
-        duration_seconds = datetime.timedelta(hours=duration.tm_hour, minutes=duration.tm_min, seconds=duration.tm_sec).total_seconds()
+        duration_seconds = timedelta(hours=duration.tm_hour, minutes=duration.tm_min, seconds=duration.tm_sec).total_seconds()
         plot = item.find('./{http://www.itunes.com/dtds/podcast-1.0.dtd}summary').text
         link = item.find('./link').text
 
@@ -61,7 +70,7 @@ class NewTalksRss:
         Returns talks as dicts {title:, author:, thumb:, date:, duration:, link:}.
         """
         talksByTitle = {}
-        rss = get_document(url_constants.URLRSS)
+        rss = get_document('http://feeds.feedburner.com/tedtalks_video')
         for item in fromstring(rss).findall('channel/item'):
             talk = self.get_talk_details(item)
             talksByTitle[talk['title']] = talk

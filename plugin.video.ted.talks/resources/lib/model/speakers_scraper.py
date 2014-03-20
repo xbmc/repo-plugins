@@ -50,7 +50,7 @@ class Speakers:
         Yields tuples of title, link, img.
         '''
         html = self.get_HTML(url)
-        for talk in xbmc_common.parseDOM(html, 'div', {'class':'col-lg-4 profile-talks__talk'}):
+        for talk in xbmc_common.parseDOM(html, 'div', {'class':'talk-link'}):
             link = xbmc_common.parseDOM(talk, 'a', ret='href')[0]
             img = xbmc_common.parseDOM(talk, 'img', ret='src')[0]
             div = xbmc_common.parseDOM(talk, 'div', {'class':'media__message'})[0]

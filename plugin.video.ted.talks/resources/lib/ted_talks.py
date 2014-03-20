@@ -3,11 +3,9 @@ import urllib
 import ted_talks_scraper
 import plugin
 import settings
-from talkDownloader import Download
 from model.fetcher import Fetcher
 from model.user import User
 from model.rss_scraper import NewTalksRss
-from model.favorites_scraper import Favorites
 from model.speakers_scraper import Speakers
 from model.themes_scraper import Themes
 from model.util import resizeImage
@@ -143,14 +141,6 @@ class UI:
             self.addItem(title, 'playVideo', link, img, isFolder=False)
         self.endofdirectory()
 
-    def favorites(self):
-        # attempt to login
-        userID, realname = login(self.user, settings.username, settings.password)
-        if userID:
-            for title, url, img in Favorites(plugin.report, self.get_HTML).getFavoriteTalks(userID):
-                self.addItem(title, 'playVideo', url=url, img=img, isFolder=False)
-            self.endofdirectory()
-
 
 class Action(object):
     '''
@@ -268,16 +258,6 @@ class ThemeVideosAction(Action):
         self.ui.themeVids(args['url'])
 
 
-class FavoritesAction(Action):
-
-    def __init__(self, ui, *args, **kwargs):
-        super(FavoritesAction, self).__init__('favorites', [], *args, **kwargs)
-        self.ui = ui
-
-    def run_internal(self, args):
-        self.ui.favorites()
-
-
 class SearchActionBase(Action):
 
     def __init__(self, ui, get_HTML, *args, **kwargs):
@@ -328,16 +308,6 @@ class SearchMoreAction(SearchActionBase):
         self.__add_items__(search_term, page + 1, [], False)
 
 
-class DownloadVideoAction(Action):
-
-    def __init__(self, logger, main):
-        super(DownloadVideoAction, self).__init__('downloadVideo', ['url'], logger)
-        self.main = main
-
-    def run_internal(self, args):
-        self.main.downloadVid(args['url'], False)
-
-
 class Main:
 
     def __init__(self, args_map):
@@ -345,15 +315,6 @@ class Main:
         self.get_HTML = Fetcher(plugin.report, xbmc.translatePath).getHTML
         self.user = User(self.get_HTML)
         self.ted_talks = ted_talks_scraper.TedTalks(self.get_HTML, plugin.report)
-
-    def downloadVid(self, url):
-        video = self.ted_talks.getVideoDetails(url)
-        if settings.download_mode == 'true':
-            downloadPath = xbmcgui.Dialog().browse(3, plugin.getLS(30096), 'files')
-        else:
-            downloadPath = settings.download_path
-        if downloadPath:
-            Download(plugin.getLS, video['Title'], video['url'], downloadPath)
 
     def run(self):
         ui = UI(self.get_HTML, self.ted_talks, self.user)
@@ -369,9 +330,7 @@ class Main:
                 SpeakerGroupAction(ui, self.get_HTML, logger=plugin.report),
                 SpeakerVideosAction(ui, logger=plugin.report),
                 ThemesAction(ui, logger=plugin.report),
-                ThemeVideosAction(ui, logger=plugin.report),
-                FavoritesAction(ui, logger=plugin.report),
-                # DownloadVideoAction(plugin.report, self),
+                ThemeVideosAction(ui, logger=plugin.report)
             ]
             modes = dict([(m.mode, m) for m in modes])
             mode = self.args_map['mode']

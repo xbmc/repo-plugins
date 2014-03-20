@@ -1,3 +1,7 @@
+[B]Version 4.2.1[/B]
+Fix speakers (issue#45)
+Fix newest talks for Python <2.7 (issue#41)
+
 [B]Version 4.2.0[/B]
 Updates to support new TED site (issue#45)
 Added support for talk search (issue#12)

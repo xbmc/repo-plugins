@@ -19,7 +19,8 @@ def init():
     __pluginLS__ = getLS(30000)
     __author__ = addon.getAddonInfo('author')
     __version__ = addon.getAddonInfo('version')
-    print "[PLUGIN] '%s: version %s' initialized!" % (__plugin__, __version__)
+    import xbmc
+    xbmc.log("[PLUGIN] '%s: version %s' initialized!" % (__plugin__, __version__), level=xbmc.LOGERROR)
 
 def report(gnarly_message, friendly_message=None):
     import xbmc

@@ -22,7 +22,7 @@ def INDEX(url):
         link=response.read()
         response.close()
         #Scrape video source
-        match=re.compile('href="(.+?)"><span style="color: #ffffff;"><font size="3" color="black">(.+?)</span>').findall(link)
+        match=re.compile('<a href="(.+?)" target="TPV"><span style="color: #ffffff;"><font size="3" color="black">(.+?)</span>').findall(link)
         if len(match) > 0:        
                 for url,name in match:
                        addDir(__language__(30010)+name,url,2,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30014)+__language__(30015)+__language__(30012))   
@@ -38,11 +38,20 @@ def INDEX2(url):
         link=response.read()
         response.close()
         #Scrape program schedule
-        match=re.compile('src="(.+?)" width="200" height="150" align="left"/></td>\n<td><b>(.+?)</b>').findall(link)
+        match=re.compile('src="(.+?)" width=".+?></td>\n<td><b>(.+?)<').findall(link)#schedule
+        week = [__language__(30021),__language__(30022),__language__(30023),__language__(30024),__language__(30025),__language__(30026),__language__(30027)]
+        day = 0
+        dayset = 0
         if len(match) > 0:
                 for image,name in match:
                         name = name.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&').replace('&#8217;', "'")  # Cleanup the title.
-                        addDir(name,'',0,image,name)      
+                        name = name.replace(' GMT', 'GMT').replace('T 0:', 'T 00:').replace('T 1:', 'T 01:').replace('T 2:', 'T 02:').replace('T 3:', 'T 03:').replace('T 4:', 'T 04:').replace('T 5:', 'T 05:').replace('T 6:', 'T 06:').replace('T 7:', 'T 07:').replace('T 8:', 'T 08:').replace('T 9:', 'T 09:')
+                        if name[4] < dayset and dayset == "2":
+                                day = day +1
+                        if day > 6:
+                                day = 0
+                        dayset = name[4]
+                        addDir(week[day]+name,'',0,image,week[day]+name)
         else:
                 xbmc.log(__language__(30020), xbmc.LOGERROR )
                 xbmcgui.Dialog().ok(__language__(30010), __language__(30020))

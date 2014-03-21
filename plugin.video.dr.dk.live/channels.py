@@ -19,10 +19,10 @@
 #
 import urllib2
 
-Q_BEST = 0          # 1700 kb/s
-Q_HIGH = 1          # 1000 kb/s
-Q_MEDIUM = 2        # 500 kb/s
-Q_LOW = 3           # 250 kb/s
+Q_BEST = 0  # 1700 kb/s
+Q_HIGH = 1  # 1000 kb/s
+Q_MEDIUM = 2  # 500 kb/s
+Q_LOW = 3  # 250 kb/s
 Q_RASPBERRY_PI = 4  # Raspberry Pi specific stream
 
 QUALITIES = [Q_BEST, Q_HIGH, Q_MEDIUM, Q_LOW, Q_RASPBERRY_PI]
@@ -41,11 +41,12 @@ class Channel(object):
         self.category = category
         self.config_key = config_key
         self.urls = dict()
+        self.fanart = None
 
         CHANNELS.append(self)
         CATEGORIES[category].append(self)
 
-    def add_urls(self, best=None, high=None, medium=None, low=None, raspberryPi=None):
+    def add_urls(self, best=None, high=None, medium=None, low=None, raspberryPi=None, fanart=None):
         if best:
             self.urls[Q_BEST] = best
         if high:
@@ -56,6 +57,7 @@ class Channel(object):
             self.urls[Q_LOW] = low
         if raspberryPi:
             self.urls[Q_RASPBERRY_PI] = raspberryPi
+        self.fanart = fanart
 
     def get_url(self, quality, idx=Q_BEST):
         if quality in self.urls:
@@ -79,6 +81,7 @@ class Channel(object):
                 return urls[0]
         else:
             return urls
+
 
 class TV2RChannel(Channel):
     def get_url(self, quality, idx=Q_BEST):
@@ -108,7 +111,8 @@ Channel(1, CATEGORY_DR, "dr1.stream").add_urls(
             'rtmp://livetv.gss.dr.dk/live/livedr01bstream2 live=1'],
     low=['rtmp://livetv.gss.dr.dk/live/livedr01astream1 live=1',
          'rtmp://livetv.gss.dr.dk/live/livedr01bstream1 live=1'],
-    raspberryPi='http://dr01-lh.akamaihd.net/i/dr01dr_0@147042/master.m3u8')
+    raspberryPi='http://dr01-lh.akamaihd.net/i/dr01_0@147054/master.m3u8?b=100-2000',
+    fanart='http://www.dr.dk/mu/Asset?Id=52d3f40f6187a2077cbac703')
 # DR2
 Channel(2, CATEGORY_DR, "dr2.stream").add_urls(
     high=['rtmp://livetv.gss.dr.dk/live/livedr02astream3 live=1',
@@ -117,7 +121,8 @@ Channel(2, CATEGORY_DR, "dr2.stream").add_urls(
             'rtmp://livetv.gss.dr.dk/live/livedr02bstream2 live=1'],
     low=['rtmp://livetv.gss.dr.dk/live/livedr02astream1 live=1',
          'rtmp://livetv.gss.dr.dk/live/livedr02bstream1 live=1'],
-    raspberryPi='http://dr02-lh.akamaihd.net/i/dr02dr_0@147043/master.m3u8')
+    raspberryPi='http://dr02-lh.akamaihd.net/i/dr02_0@147055/master.m3u8?b=100-2000',
+    fanart='http://www.dr.dk/mu/Asset?Id=52d3f5e66187a2077cbac70c')
 # DR 3
 Channel(6, CATEGORY_DR, "dr3.stream").add_urls(
     best=['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1',
@@ -126,7 +131,8 @@ Channel(6, CATEGORY_DR, "dr3.stream").add_urls(
           'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
     medium=['rtmp://livetv.gss.dr.dk/live/livedr06astream2 live=1',
             'rtmp://livetv.gss.dr.dk/live/livedr06bstream2 live=1'],
-    raspberryPi='http://lm.gss.dr.dk/V/V06H.stream/Playlist.m3u8')
+    raspberryPi='http://dr03-lh.akamaihd.net/i/dr03_0@147056/master.m3u8?b=100-1600',
+    fanart='http://www.dr.dk/mu/Asset?Id=52d3f60da11f9d0f50f56fd3')
 # DR Ultra
 Channel(3, CATEGORY_DR, "drultra.stream").add_urls(
     high=['rtmp://livetv.gss.dr.dk/live/livedr03astream3 live=1',
@@ -135,7 +141,8 @@ Channel(3, CATEGORY_DR, "drultra.stream").add_urls(
             'rtmp://livetv.gss.dr.dk/live/livedr03bstream2 live=1'],
     low=['rtmp://livetv.gss.dr.dk/live/livedr03astream1 live=1',
          'rtmp://livetv.gss.dr.dk/live/livedr03bstream1 live=1'],
-    raspberryPi='http://dr03-lh.akamaihd.net/i/dr03dr_0@147044/master.m3u8')
+    raspberryPi='http://dr06-lh.akamaihd.net/i/dr06_0@147059/master.m3u8?b=100-1600',
+    fanart='http://www.dr.dk/mu/bar/52d3f6c6a11f9d0f50f56fde')
 # DR K
 Channel(4, CATEGORY_DR, "drk.stream").add_urls(
     high=['rtmp://livetv.gss.dr.dk/live/livedr04astream3 live=1',
@@ -144,7 +151,8 @@ Channel(4, CATEGORY_DR, "drk.stream").add_urls(
             'rtmp://livetv.gss.dr.dk/live/livedr04bstream2 live=1'],
     low=['rtmp://livetv.gss.dr.dk/live/livedr04astream1 live=1',
          'rtmp://livetv.gss.dr.dk/live/livedr04bstream1 live=1'],
-    raspberryPi='http://lm.gss.dr.dk/V/V04H.stream/Playlist.m3u8')
+    raspberryPi='http://dr04-lh.akamaihd.net/i/dr04_0@147057/master.m3u8?b=100-1600',
+    fanart='http://www.dr.dk/mu/Asset?Id=52d3f685a11f9d0f50f56fd6')
 # DR Ramasjang
 Channel(5, CATEGORY_DR, "drramasjang.stream").add_urls(
     high=['rtmp://livetv.gss.dr.dk/live/livedr05astream3 live=1',
@@ -153,13 +161,14 @@ Channel(5, CATEGORY_DR, "drramasjang.stream").add_urls(
             'rtmp://livetv.gss.dr.dk/live/livedr05bstream2 live=1'],
     low=['rtmp://livetv.gss.dr.dk/live/livedr05astream1 live=1',
          'rtmp://livetv.gss.dr.dk/live/livedr05bstream1 live=1'],
-    raspberryPi='http://lm.gss.dr.dk/V/V05H.stream/Playlist.m3u8')
+    raspberryPi='http://dr05-lh.akamaihd.net/i/dr05_0@147058/master.m3u8?b=100-1600',
+    fanart='http://www.dr.dk/mu/bar/52d3f6aca11f9d0f50f56fdb')
 
 # TV2 Fyn
 TV2RChannel(100, CATEGORY_TV2_REG).add_urls(
-    best   = 'rtmp://<HOST>:1935/live/_definst_/tv2fyn_2000 live=1',
-    high   = 'rtmp://<HOST>:1935/live/_definst_/tv2fyn_1000 live=1',
-    medium = 'rtmp://<HOST>:1935/live/_definst_/tv2fyn_300 live=1'
+    best='rtmp://<HOST>:1935/live/_definst_/tv2fyn_2000 live=1',
+    high='rtmp://<HOST>:1935/live/_definst_/tv2fyn_1000 live=1',
+    medium='rtmp://<HOST>:1935/live/_definst_/tv2fyn_300 live=1'
 )
 # TV2 Lorry
 TV2RChannel(101, CATEGORY_TV2_REG).add_urls(
@@ -188,9 +197,9 @@ Channel(106, CATEGORY_TV2_REG).add_urls(
 )
 # TV2 OJ
 TV2RChannel(108, CATEGORY_TV2_REG).add_urls(
-    best   = 'rtmp://<HOST>:1935/live/_definst_/tv2oj-plus_2000 live=1',
-    high   = 'rtmp://<HOST>:1935/live/_definst_/tv2oj_plus_1000 live=1',
-    medium = 'rtmp://<HOST>:1935/live/_definst_/tv2oj_plus_300 live=1'
+    best='rtmp://<HOST>:1935/live/_definst_/tv2oj-plus_2000 live=1',
+    high='rtmp://<HOST>:1935/live/_definst_/tv2oj_plus_1000 live=1',
+    medium='rtmp://<HOST>:1935/live/_definst_/tv2oj_plus_300 live=1'
 )
 # TV2 Bornholm
 Channel(109, CATEGORY_TV2_REG).add_urls(

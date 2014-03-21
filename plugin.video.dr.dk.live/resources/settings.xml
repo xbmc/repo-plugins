@@ -7,12 +7,12 @@
     <category label="30103">
         <setting type="lsep" label="30104" />
         <setting type="lsep" label="30105" />
-        <setting id="dr1.stream" label="31001" type="enum" default="0" lvalues="30106|30107" />
-        <setting id="dr2.stream" label="31002" type="enum" default="0" lvalues="30106|30107" />
-        <setting id="dr3.stream" label="31006" type="enum" default="0" lvalues="30106|30107" />
-        <setting id="drultra.stream" label="31003" type="enum" default="0" lvalues="30106|30107" />
-        <setting id="drk.stream" label="31004" type="enum" default="0" lvalues="30106|30107" />
-        <setting id="drramasjang.stream" label="31005" type="enum" default="0" lvalues="30106|30107" />
+        <setting id="dr1.stream" label="30501" type="enum" default="0" lvalues="30106|30107" />
+        <setting id="dr2.stream" label="30502" type="enum" default="0" lvalues="30106|30107" />
+        <setting id="dr3.stream" label="30506" type="enum" default="0" lvalues="30106|30107" />
+        <setting id="drultra.stream" label="30503" type="enum" default="0" lvalues="30106|30107" />
+        <setting id="drk.stream" label="30504" type="enum" default="0" lvalues="30106|30107" />
+        <setting id="drramasjang.stream" label="30505" type="enum" default="0" lvalues="30106|30107" />
     </category>
     <category label="30108">
         <setting id="warn.if.not.in.denmark" label="30109" type="bool" default="true" />

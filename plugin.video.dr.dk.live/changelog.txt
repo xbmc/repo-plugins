@@ -1,3 +1,9 @@
+[B]Version 3.0.5 - 2014-03-10[/B]
+- Fixed missing text in settings
+
+[B]Version 3.0.4 - 2014-03-02[/B]
+- Updated Raspberry Pi to use new Akamai HD streams
+
 [B]Version 3.0.3 - 2013-11-18[/B]
 - Fixed playback of TV2 Regions channels, TV2/ØJ channel 24 hour channel,
   and additional TV2/Fyn quality streams (all thanks to Rene H. Larsen / Fynske Medier)

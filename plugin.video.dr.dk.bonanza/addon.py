@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2013 Tommy Winther
+#      Copyright (C) 2014 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -158,7 +158,7 @@ class Bonanza(object):
             if 'Colophon' in content and content['Colophon'] is not None:
                 infoLabels['writer'] = self._decodeHtmlEntities(content['Colophon'])
             if 'Actors' in content and content['Actors'] is not None:
-                infoLabels['cast'] = self._decodeHtmlEntities(content['Actors'])
+                infoLabels['cast'] = [self._decodeHtmlEntities(content['Actors'])]
             if 'Rating' in content and content['Rating'] is not None:
                 infoLabels['rating'] = content['Rating']
             if 'FirstPublished' in content and content['FirstPublished'] is not None:

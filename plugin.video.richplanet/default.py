@@ -30,7 +30,7 @@ def INDEX(url):
         for url,thumbnail,name,description in match:
                 name = name.replace('&quot;', '"').replace('&#39;', '\'').replace('&amp;', '&')# Cleanup the title.
                 description = description.replace('&quot;', '"').replace('&#39;', '\'').replace('&amp;', '&').replace('&#8217;', '´').replace('&#8221;', '"').replace('&#8220;', '"')  # Cleanup the plot.
-                addDir(name,url,2,thumbnail,description)
+                addDir(name,url,2,'http:'+thumbnail,description)
 
 def INDEX2(url):
         req = urllib2.Request(url)

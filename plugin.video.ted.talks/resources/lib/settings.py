@@ -11,8 +11,6 @@ __current_search__ = 'current_search'
 __current_search_results__ = 'current_search_results'
 
 profile_path = '~/.xbmc/userdata/addon_data/plugin.video.ted.talks'
-username = 'Ted'
-password = 'Ted'
 download_mode = True
 download_path = '/tmp/'
 video_quality = 3
@@ -23,12 +21,10 @@ subtitle_language = 'en'
 def init():
     import xbmc, xbmcaddon
     addon = xbmcaddon.Addon(id=__plugin_id__)
-    global profile_path, username, password, download_mode, download_path, video_quality, enable_subtitles, xbmc_language, subtitle_language
+    global profile_path, download_mode, download_path, video_quality, enable_subtitles, xbmc_language, subtitle_language
     profile_path = xbmc.translatePath(addon.getAddonInfo('profile')).decode("utf-8")
     if not os.path.exists(profile_path):
         os.makedirs(profile_path)
-    username = addon.getSetting('username')
-    password = addon.getSetting('password')
     download_mode = addon.getSetting('downloadMode')
     download_path = addon.getSetting('downloadPath')
     video_quality = addon.getSetting('video_quality')

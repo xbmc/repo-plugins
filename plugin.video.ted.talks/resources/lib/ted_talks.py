@@ -4,7 +4,6 @@ import ted_talks_scraper
 import plugin
 import settings
 from model.fetcher import Fetcher
-from model.user import User
 from model.rss_scraper import NewTalksRss
 from model.speakers_scraper import Speakers
 from model.themes_scraper import Themes
@@ -20,19 +19,11 @@ import xbmcaddon
 import itertools
 
 
-def login(user_scraper, username, password):
-    user_details = user_scraper.login(username, password)
-    if not user_scraper:
-        xbmcgui.Dialog().ok(plugin.getLS(30050), plugin.getLS(30051))
-    return user_details
-
-
 class UI:
 
-    def __init__(self, get_HTML, ted_talks, user):
+    def __init__(self, get_HTML, ted_talks):
         self.get_HTML = get_HTML
         self.ted_talks = ted_talks
-        self.user = user
         xbmcplugin.setContent(int(sys.argv[1]), 'movies')
 
     def endofdirectory(self, sortMethod='title', updateListing=False):
@@ -111,8 +102,6 @@ class UI:
         self.addItem(plugin.getLS(30002), 'speakers', video_info={'Plot':plugin.getLS(30032)})
         self.addItem(plugin.getLS(30003), 'themes', video_info={'Plot':plugin.getLS(30033)})
         self.addItem(plugin.getLS(30004) + "...", 'search', video_info={'Plot':plugin.getLS(30034)})
-#        if settings.username:
-#            self.addItem(plugin.getLS(30005), 'favorites', video_info={'Plot':plugin.getLS(30035)})
         self.endofdirectory()
 
     def newTalksRss(self):
@@ -313,11 +302,10 @@ class Main:
     def __init__(self, args_map):
         self.args_map = args_map
         self.get_HTML = Fetcher(plugin.report, xbmc.translatePath).getHTML
-        self.user = User(self.get_HTML)
         self.ted_talks = ted_talks_scraper.TedTalks(self.get_HTML, plugin.report)
 
     def run(self):
-        ui = UI(self.get_HTML, self.ted_talks, self.user)
+        ui = UI(self.get_HTML, self.ted_talks)
         if 'mode' not in self.args_map:
             ui.showCategories()
         else:

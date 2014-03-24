@@ -77,23 +77,50 @@ class MLSLive:
         return False
 
 
+    def getTimeOffset(self):
+        
+        req = urllib2.Request(self.CED_CONFIG)
+
+        try:
+            resp = urllib2.urlopen(req)
+        except:
+            return None
+
+        cfg_xml = resp.read()
+        
+        try:
+            dom = xml.dom.minidom.parseString(cfg_xml)
+        except:
+            return None
+
+        result_node = dom.getElementsByTagName('result')[0]
+        auth_node = result_node.getElementsByTagName('estOffset')[0]
+
+        return int(auth_node.firstChild.nodeValue)
+
+
     def getCurrentWeekURI(self):
         """
         Get the URI for the current games for the current week.
-        
+
         @return a string containing the uri or None on error
         """
 
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(self.jar))
-        try:
-            resp = opener.open(self.CED_CONFIG)
-        except:
-            print "Unable to get configuration"
-            return None
+        # first get UTC time
+        mls_dt = datetime.datetime.utcnow()
 
-        today = datetime.date.today()
+        # get the offset from UTC of the MLS listings. Default to zero if
+        # something goes wrong
+        hr_offset = -self.getTimeOffset() 
+        if hr_offset == None:
+            hr_offset = 0
 
-        week = today + datetime.timedelta(days=-today.weekday())
+        # add the listing offset to UTC time to get the current league time
+        td = datetime.timedelta(hours=hr_offset)
+        mls_dt += td
+
+        # move back to the start of the game week
+        week = mls_dt + datetime.timedelta(days=-mls_dt.weekday())
         return  self.GAMES_PAGE_PREFIX + week.strftime("%Y-%m-%d") + self.GAMES_PAGE_SUFFIX
 
 

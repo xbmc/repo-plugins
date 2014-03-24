@@ -151,3 +151,9 @@ def normalize(text):
             
     return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
 
+def getDictionaryValue(dictionary, key):
+    try:
+        return dictionary[key]
+    except:
+        return None
+        

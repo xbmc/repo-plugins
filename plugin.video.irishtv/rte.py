@@ -8,26 +8,17 @@ from datetime import date
 from datetime import datetime
 from urlparse import urljoin
 
-if hasattr(sys.modules["__main__"], "xbmc"):
-    xbmc = sys.modules["__main__"].xbmc
-else:
-    import xbmc
-    
-if hasattr(sys.modules["__main__"], "xbmcgui"):
-    xbmcgui = sys.modules["__main__"].xbmcgui
-else:
-    import xbmcgui
 
-if hasattr(sys.modules["__main__"], "xbmcplugin"):
-    xbmcplugin = sys.modules["__main__"].xbmcplugin
-else:
-    import xbmcplugin
+import xbmc
+import xbmcgui
+import xbmcplugin
 
 import mycgi
 import utils
 from loggingexception import LoggingException
 import rtmp
 
+from irishtvplayer import IrishTVPlayer
 from provider import Provider
 import HTMLParser
 
@@ -44,7 +35,11 @@ configUrl = u"http://www.rte.ie/playerxl/config/config.xml"
 playerJSDefault = u"http://static.rasset.ie/static/player/js/player.js?v=5"
 searchUrlDefault = u"http://www.rte.ie/player/ie/search/?q="
 swfDefault = u"http://www.rte.ie/player/assets/player_468.swf"
+"""
 swfLiveDefault = u"http://www.rte.ie/static/player/swf/osmf2_2013_06_25b.swf"
+swfLiveDefault = u"http://www.rte.ie/static/player/swf/osmf2_541_2012_11_14.swf"
+"""
+swfLiveDefault = u"http://www.rte.ie/player/assets/player_454.swf"
 defaultLiveTVPage = u"/player/ie/live/8/"
 
 class RTEProvider(Provider):
@@ -130,14 +125,18 @@ class RTEProvider(Provider):
     live: If '1' show live menu
     """
     def ParseCommand(self, mycgi):
-        (listshows, episodeId, listAvailable, search, page, live) = mycgi.Params( u'listshows', u'episodeId', u'listavailable', u'search', u'page', u'live' )
+        (listshows, episodeId, listAvailable, search, page, live, resume) = mycgi.Params( u'listshows', u'episodeId', u'listavailable', u'search', u'page', u'live', u'resume'  )
         self.log(u"", xbmc.LOGDEBUG)
-        self.log(u"listshows: %s, episodeId %s, listAvailable %s, search %s, page %s" % (str(listshows), episodeId, str(listAvailable), str(search), page), xbmc.LOGDEBUG)
+        self.log(u"listshows: %s, episodeId %s, listAvailable %s, search %s, page %s, resume: %s" % (str(listshows), episodeId, str(listAvailable), str(search), page, str(resume)), xbmc.LOGDEBUG)
 
        
         if episodeId <> '':
+            resumeFlag = False
+            if resume <> u'':
+                resumeFlag = True
+           
             #return self.PlayEpisode(episodeId)
-            return self.PlayVideoWithDialog(self.PlayEpisode, (episodeId, None))
+            return self.PlayVideoWithDialog(self.PlayEpisode, (episodeId, resumeFlag))
 
         if search <> '':
             if page == '':
@@ -202,7 +201,11 @@ class RTEProvider(Provider):
                 
                 if match is not None:
                     episodeId = match.group(1) 
-                    return self.PlayVideoWithDialog(self.PlayEpisode, (episodeId, None))
+                    resumeFlag = False
+                    if resume <> u'':
+                        resumeFlag = True
+
+                    return self.PlayVideoWithDialog(self.PlayEpisode, (episodeId, resumeFlag))
 
                 
             return self.ListAvailable(html)
@@ -264,6 +267,7 @@ class RTEProvider(Provider):
                     else:
                         programme = programme + ", " + info.text
 
+                programme = programme.replace('&#39;', "'")
                 newListItem = xbmcgui.ListItem( label=programme )
                 newListItem.setThumbnailImage(thumbnailPath)
                 newListItem.setProperty("Video", "true")
@@ -503,20 +507,20 @@ class RTEProvider(Provider):
             title = htmlparser.unescape( episode.find(u'span', u"thumbnail-title").contents[0] )
             date = episode.find(u'span', u"thumbnail-date").contents[0]                    
             #description = ...
-            thumbnail = episode.find('img', 'thumbnail')['src']
+            thumbnail = episode.find(u'img', u'thumbnail')[u'src']
         
             newLabel = title + u", " + date
                                             
             newListItem = xbmcgui.ListItem( label=newLabel )
             newListItem.setThumbnailImage(thumbnail)
             
-            if self.addon.getSetting( u'RTE_descriptions' ) == 'true':
+            if self.addon.getSetting( u'RTE_descriptions' ) == u'true':
                 infoLabels = self.GetEpisodeInfo(self.GetEpisodeIdFromURL(href))
             else:
                 infoLabels = {u'Title': title, u'Plot': title}
                 
             newListItem.setInfo(u'video', infoLabels)
-            newListItem.setProperty("Video", "true")
+            newListItem.setProperty(u"Video", u"true")
             #newListItem.setProperty('IsPlayable', 'true')
         
             self.log(u"label == " + newLabel, xbmc.LOGDEBUG)
@@ -538,12 +542,16 @@ class RTEProvider(Provider):
         
                 url = self.GetURLStart() + u'&episodeId=' +  mycgi.URLEscape(episodeId)
         
+                if self.resumeEnabled:
+                    resumeKey = episodeId
+                    self.ResumeListItem(url, newLabel, newListItem, resumeKey)
+                    
             listItems.append( (url, newListItem, folder) )
         except (Exception) as exception:
             if not isinstance(exception, LoggingException):
                 exception = LoggingException.fromException(exception)
 
-            msg = "episode:\n\n%s\n\n" % utils.drepr(episode)
+            msg = u"episode:\n\n%s\n\n" % utils.drepr(episode)
             exception.addLogMessage(msg)
 
             # Error getting episode details
@@ -636,6 +644,10 @@ class RTEProvider(Provider):
     
         url = self.GetURLStart() + u'&episodeId=' +  mycgi.URLEscape(episodeId)
     
+        if self.resumeEnabled:
+            resumeKey = episodeId
+            self.ResumeListItem(url, newLabel, newListItem, resumeKey)
+            
         listItems.append( (url, newListItem, True) )
         
     #==============================================================================
@@ -827,7 +839,7 @@ class RTEProvider(Provider):
     
     #==============================================================================
     
-    def PlayEpisode(self, episodeId, dummy):
+    def PlayEpisode(self, episodeId, resumeFlag):
         self.log(u"%s" % episodeId, xbmc.LOGDEBUG)
         
         # "Getting SWF url"
@@ -881,7 +893,7 @@ class RTEProvider(Provider):
     
             self.log(u"(%s) playUrl: %s" % (episodeId, playURL), xbmc.LOGDEBUG)
             
-            return self.PlayOrDownloadEpisode(infoLabels, thumbnail, rtmpVar, defaultFilename)
+            return self.PlayOrDownloadEpisode(infoLabels, thumbnail, rtmpVar, defaultFilename, url = None, subtitles = None, resumeKey = episodeId, resumeFlag = resumeFlag)
         except (Exception) as exception:
             if not isinstance(exception, LoggingException):
                 exception = LoggingException.fromException(exception)
@@ -917,6 +929,18 @@ class RTEProvider(Provider):
     
 
     def PlayLiveTV(self, html, dummy):
+        """
+          <li class="first-live-channel selected-channel">
+              <a href="/player/ie/live/8/" class="live-channel-container">
+              <span class="sprite live-logo-rte-one">RTÉ One</span>
+              
+                  <span class="sprite live-channel-now-playing">Playing</span>
+              
+              <span class="live-channel-info"><span class="live-time">Now:</span>The Works</span>
+              <span class="live-channel-info"><span class="live-time">Next:</span>RTÉ News: Nine O&#39;Clock and Weather (21:00)</span></a>
+          </li>
+          
+        """
         self.log(u"", xbmc.LOGDEBUG)
         
         swfPlayer = self.GetLiveSWFPlayer()
@@ -924,15 +948,17 @@ class RTEProvider(Provider):
         liveChannels = {
                       u'RT\xc9 One' : u'rte1',
                       u'RT\xc9 Two' : u'rte2',
+                      u'RT\xc9jr': u'rtejr',
                       u'RT\xc9 News Now' : u'newsnow'
                       }
         
         try:
             soup = BeautifulSoup(html, selfClosingTags=[u'img'])
-            liveTVInfo = soup.find('span', 'sprite live-channel-now-playing').parent
+            #liveTVInfo = soup.find('span', 'sprite live-channel-now-playing').parent
+            liveTVInfo = soup.find('li', 'selected-channel')
             channel = liveTVInfo.find('span').string
             programme = liveTVInfo.find('span', 'live-channel-info').next.nextSibling
-            programme = self.fullDecode(programme)
+            programme = self.fullDecode(programme).replace('&#39;', "'")
             
             infoLabels = {u'Title': channel + u": " + programme }
             thumbnailPath = self.GetThumbnailPath((channel.replace(u'RT\xc9 ', '')).replace(' ', ''))
@@ -1004,6 +1030,14 @@ class RTEProvider(Provider):
         return playerJS
         
         
+    def GetPlayer(self, pid, live):
+        if self.resumeEnabled:
+            player = IrishTVPlayer()
+            player.init(pid,live)
+            return player
+        
+        return super(RTEProvider, self).GetPlayer(pid, live)
+
     def GetSearchURL(self):
         try:
             rootMenuHtml = None

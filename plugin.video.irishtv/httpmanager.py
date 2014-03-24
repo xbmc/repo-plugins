@@ -110,17 +110,17 @@ class HttpManager:
                 
             repeat = True
             firstTime = True
-            addon = sys.modules["__main__"].addon
+            addon = sys.modules[u"__main__"].addon
     
             while repeat:
                 repeat = False
                 try:
-                    if site.startswith("http://"):
+                    if site.startswith(u"http://"):
                         site = site[7:]
                     
                     headers = self.PrepareHeaders(addon, headers)
     
-                    self.log("headers: " + repr(headers))
+                    self.log(u"headers: " + repr(headers))
                     
                     conn = httplib.HTTPConnection(site)
                     conn.request("POST", path, data, headers)
@@ -358,14 +358,14 @@ class HttpManager:
                     request = urllib2.Request(url, postData, headers)
                     response = urllib2.urlopen(request)
                     """
-                    print 'Here are the headers of the page :'
-                    print handle.info()
+                    self.log( 'Here are the headers of the page :', xbmc.LOGDEBUG )
+                    self.log( handle.info(), xbmc.LOGDEBUG )
                     cookiejar = sys.modules["__main__"].cookiejar
-                    print cookiejar
-                    print 'These are the cookies we have received so far :'
+                    self.log( cookiejar, xbmc.LOGDEBUG )
+                    self.log( 'These are the cookies we have received so far :', xbmc.LOGDEBUG )
 
                     for index, cookie in enumerate(cookiejar):
-                        print index, '  :  ', cookie
+                        self.log( index + '  :  ' + cookie, xbmc.LOGDEBUG )
                     cookiejar.save(COOKIE_PATH)
                     """
                 except ( urllib2.HTTPError ) as err:
@@ -427,8 +427,8 @@ class HttpManager:
             headers.update(newHeaders)
 
         if self.isForwardedForIP is True:
-            headers['X-Forwarded-For'] = self.forwardedForIP
-            self.log("Using header 'X-Forwarded-For': " + self.forwardedForIP)
+            headers[u'X-Forwarded-For'] = self.forwardedForIP
+            self.log(u"Using header 'X-Forwarded-For': " + self.forwardedForIP)
             
         return headers
             

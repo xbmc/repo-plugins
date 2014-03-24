@@ -1,3 +1,7 @@
+Version 2.0.14 [23 Mar 2014]
+- Added resume support
+- AerTV is going subscription only and so will only be available to AerTV Plus and Platinum subscribers. Specify your login details in the plugin settings.
+
 Version 2.0.13 [09 Mar 2014]
 - Minor internal changes, use internal json instead of simplejson
 

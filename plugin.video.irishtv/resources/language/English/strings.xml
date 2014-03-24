@@ -63,6 +63,8 @@
   <string id="30370">Forwarded IP</string>
   <string id="30400">Advanced</string>
   <string id="30420">Socket Timeout</string>
+  <string id="30450">Number of days to keep resume points</string>
+  <string id="30470">Default play action</string>
   <string id="30500">Search</string>
   <string id="30520">Unable to determine swfPlayer URL. Using default: %s</string>
   <string id="30530">Do you want to play or download?</string>
@@ -99,7 +101,6 @@
   <string id="30062">All Shows - By Date</string>
   <string id="30063">Error processing %s</string>
   <string id="30064">Error creating calendar list</string>
-  <string id="30065">Error getting rtmp url. Using default: %s</string>
   <string id="30066">Error getting rtmp url</string>
   <string id="30066">Error preparing or playing stream</string>
   <string id="30067">Error processing channel</string>

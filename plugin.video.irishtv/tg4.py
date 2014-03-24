@@ -14,20 +14,10 @@ from datetime import date
 from datetime import datetime
 from urlparse import urljoin
 
-if hasattr(sys.modules["__main__"], "xbmc"):
-    xbmc = sys.modules["__main__"].xbmc
-else:
-    import xbmc
-    
-if hasattr(sys.modules["__main__"], "xbmcgui"):
-    xbmcgui = sys.modules["__main__"].xbmcgui
-else:
-    import xbmcgui
 
-if hasattr(sys.modules["__main__"], "xbmcplugin"):
-    xbmcplugin = sys.modules["__main__"].xbmcplugin
-else:
-    import xbmcplugin
+import xbmc
+import xbmcgui
+import xbmcplugin
 
 import mycgi
 import utils
@@ -635,13 +625,16 @@ class TG4Provider(BrightCoveProvider):
                     self.log("Check candidate refence Id %s" % candidateId, xbmc.LOGDEBUG)
                     if match is not None:
                         partNumber = int(match.group(1))
-                        partsFound = partsFound + 1
                         
-                        parts[partNumber - 2] = mediaDTO
+                        index = partNumber - 2
                         
-                        self.log("Matching refence id, part %d" % partNumber, xbmc.LOGDEBUG)
-                        if partsFound > (partsMinus1 - 1):
-                            break
+                        if parts[index] is None:                        
+                            partsFound = partsFound + 1
+                            parts[index] = mediaDTO
+                        
+                            self.log("Matching refence id, part %d" % partNumber, xbmc.LOGDEBUG)
+                            if partsFound > (partsMinus1 - 1):
+                                break
                         
             except (Exception) as exception:
                 if not isinstance(exception, LoggingException):
@@ -664,11 +657,11 @@ class TG4Provider(BrightCoveProvider):
             pageNumber = pageNumber + 1
             
         try:
-            if len(parts) < partsMinus1:
+            if partsFound < partsMinus1:
                 if partsMinus1 == 1:
                     msg = self.language(30094) # "Part 2 of 2 is missing"
                 else: 
-                    missing = partsMinus1 - parts
+                    missing = partsMinus1 - partsFound
                     plural = ""
                     if missing > 2:
                         plural = "(s)"
@@ -679,13 +672,14 @@ class TG4Provider(BrightCoveProvider):
                 exception.process(self.language(30096) , '', self.logLevel(xbmc.LOGWARNING))
                  
             for mediaDTO in parts:
-                (infoLabels, logo, rtmpVar, defaultFilename) = self.GetPlayListDetailsFromAMF(mediaDTO, appNormal, self.episodeId, live = False)
-                        
-                listItem = self.CreateListItem(infoLabels, logo) 
-                url = rtmpVar.getPlayUrl()
-                
-                if self.GetPlayer().isPlaying():
-                    playList.add(url, listItem)
+                if mediaDTO:
+                    (infoLabels, logo, rtmpVar, defaultFilename) = self.GetPlayListDetailsFromAMF(mediaDTO, appNormal, self.episodeId, live = False)
+                            
+                    listItem = self.CreateListItem(infoLabels, logo) 
+                    url = rtmpVar.getPlayUrl()
+                    
+                    if self.GetPlayer(None, None).isPlaying():
+                        playList.add(url, listItem)
             
             plural = " has"
             if partsFound > 1:
@@ -763,9 +757,11 @@ class TG4Provider(BrightCoveProvider):
             return False
 
     def GetPlayListDetailsFromAMF(self, mediaDTO, appFormat, episodeId, live):
+
             # ondemand?videoId=2160442511001&lineUpId=&pubId=1290862567001&playerId=1364138050001&affiliateId=
             app = appFormat % (episodeId, self.publisherId, self.playerId)
             
+            # rtmp://cp156323.edgefcs.net/ondemand/&mp4:videos/1290862567001/1290862567001_2666234305001_WCL026718-2-4.mp4
             rtmpUrl = mediaDTO['FLVFullLengthURL']
             playPathIndex = rtmpUrl.index(u'&') + 1
             playPath = rtmpUrl[playPathIndex:]
@@ -854,6 +850,8 @@ class TG4Provider(BrightCoveProvider):
             
             for paramAppend in paramAppends:
                 paramAppend = paramAppend.replace(u'true', u'True')
+                paramAppend = paramAppend.replace(u'["', u'[u"')
+                paramAppend = paramAppend.replace(u'= "', u'= u"')
                 self.log(u"paramAppend: %s" % paramAppend, xbmc.LOGDEBUG)
                 exec(paramAppend)
             

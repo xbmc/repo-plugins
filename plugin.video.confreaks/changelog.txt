@@ -1,0 +1,2 @@
+0.3.0 (21.03.2014)
+ - compatibility with Frodo and Gotham Beta 2

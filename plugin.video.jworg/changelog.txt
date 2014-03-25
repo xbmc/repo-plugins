@@ -1,3 +1,15 @@
+0.4.3
+-----
+
+Fix:
++ Updated to react to jw.org website changes
+
+Code:
++ Switched to BeautifulSoup 3 another portion of code;
+
+Known Issues:
++ With Gotham (13), you must set default video resolution to zero, otherwise a useless alert box will appear when default resolution video is played automatically; I'm still working on this
+
 0.4.2
 -----
 

@@ -4,6 +4,7 @@ AUDIO BIBLE RELATED FUNCTION
 import xbmcgui
 import xbmcplugin
 
+from BeautifulSoup import BeautifulSoup 
 import urllib
 import re
 
@@ -18,21 +19,25 @@ def showAudioBibleIndex():
 	bible_index_url = jw_common.getUrl(language) + jw_config.const[language]["bible_index_audio"]
 	html 			= jw_common.loadUrl(bible_index_url) 
 	
-	# Grep book names
-	regexp_book_names = '<a>([^<]+)</a>'
-	book_names = re.findall(regexp_book_names, html)  	
+	soup 		= BeautifulSoup(html)
 
-	# Grep bible cover image
-	regexp_cover = "data-img-size-md='([^']+)'"
-	bible_cover = re.findall(regexp_cover, html)
-	cover_img_url = bible_cover[0]
+	cover_div 	= soup.findAll('div',{"class": re.compile(r'\bcvr\b')})
+	span 		= cover_div[0].findAll('span')
+	img_url     = span[0].get('data-img-size-md');
+
+	boxes 	= soup.findAll('li',{"class": re.compile(r'\bbookName\b')})
 
 	book_num = 0
-	for book in book_names:
-		book_num = book_num + 1
+	for box in boxes :
+		book_num = book_num +1
+		
+		anchors =box.findAll('a')
+
+		book_name = anchors[0].contents[0]
+
 		listItem 	= xbmcgui.ListItem(
-			label 			= book_names[book_num -1] ,
-			thumbnailImage  = cover_img_url
+			label 			= book_name,
+			thumbnailImage  = img_url
 		)	
 		params 		= {
 			"content_type" 	: "audio", 

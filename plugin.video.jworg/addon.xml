@@ -2,7 +2,7 @@
 <addon 
     id="plugin.video.jworg" 
     name="Jw.org audio/video browser" 
-    version="0.4.2" 
+    version="0.4.3" 
     provider-name="Realtebo">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>

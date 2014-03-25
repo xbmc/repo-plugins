@@ -1,5 +1,8 @@
+[B]Version 4.2.3[/B]
+Fix workaround for newest talks with Python <2.7 [issue#41]
+
 [B]Version 4.2.2[/B]
-Fix botched removal of User module (issue#47)
+Fix issue that stopped plugin loading (issue#47)
 
 [B]Version 4.2.1[/B]
 Fix speakers (issue#45)

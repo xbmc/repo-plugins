@@ -1,6 +1,8 @@
 """
 Contains constants that we initialize to the correct values at runtime.
 """
+import sys
+
 __plugin__ = "TED Talks Uninitialized Plugin"
 getLS = lambda x: x
 __pluginLS__ = __plugin__
@@ -20,7 +22,7 @@ def init():
     __author__ = addon.getAddonInfo('author')
     __version__ = addon.getAddonInfo('version')
     import xbmc
-    xbmc.log("[PLUGIN] '%s: version %s' initialized!" % (__plugin__, __version__), level=xbmc.LOGERROR)
+    xbmc.log("[PLUGIN] Initialized %s v%s using Python: %s'" % (__plugin__, __version__, sys.version), level=xbmc.LOGNOTICE)
 
 def report(gnarly_message, friendly_message=None):
     import xbmc

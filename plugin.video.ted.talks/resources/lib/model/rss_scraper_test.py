@@ -59,4 +59,3 @@ class TestNewTalksRss(unittest.TestCase):
         self.assertIsNotNone(talk['title'])
         self.assertIsNotNone(talk['plot'])
         self.assertIsNotNone(talk['duration'])
-

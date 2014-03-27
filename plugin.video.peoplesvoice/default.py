@@ -6,26 +6,27 @@ import xbmcaddon
 
 addon         = xbmcaddon.Addon('plugin.video.peoplesvoice')
 __language__  = addon.getLocalizedString
+__icon__ = addon.getAddonInfo('icon')
 
 def CATEGORIES():
         
-        addDir(__language__(30010),'http://www.thepeoplesvoice.tv/watchnow/',1,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
-        addDir(__language__(30016),'http://www.thepeoplesvoice.tv/whatson/',3,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
-        addDir(__language__(30017),'http://www.thepeoplesvoice.tv/show/',4,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
-        addLink(__language__(30010)+__language__(30018),'http://cdn.rbm.tv:1935/rightbrainmedia-live-106/_definst_/ddstream_1/playlist.m3u8','http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013)+__language__(30012))
+        addDir(__language__(30010)+__language__(30018),'http://www.thepeoplesvoice.tv/watchnow/',1,__icon__,__language__(30013))
+        addDir(__language__(30016),'http://www.thepeoplesvoice.tv/whatson/',3,__icon__,__language__(30013))
+        addDir(__language__(30017),'http://www.thepeoplesvoice.tv/show/',4,__icon__,__language__(30013))
+        addLink(__language__(30010)+__language__(30011),'http://cdn.rbm.tv:1935/rightbrainmedia-live-106/_definst_/ddstream_3/playlist.m3u8',__icon__,__language__(30013)+__language__(30012))
         
 def INDEX(url):
-
+        
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:16.0.1) Gecko/20121011 Firefox/16.0.1')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
         #Scrape video source
-        match=re.compile('<a href="(.+?)" target="TPV"><span style="color: #ffffff;"><font size="3" color="black">(.+?)</span>').findall(link)
+        match=re.compile('"TPV" src="(.+?)"').findall(link)
         if len(match) > 0:        
-                for url,name in match:
-                       addDir(__language__(30010)+name,url,2,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30014)+__language__(30015)+__language__(30012))   
+                for url in match:
+                       addDir(__language__(30010)+__language__(30018),url,2,__icon__,__language__(30014)+__language__(30015)+__language__(30012))   
         else:
                 xbmc.log(__language__(30019), xbmc.LOGERROR )
                 xbmcgui.Dialog().ok(__language__(30010), __language__(30019))
@@ -51,7 +52,7 @@ def INDEX2(url):
                         if day > 6:
                                 day = 0
                         dayset = name[4]
-                        addDir(week[day]+name,'',0,image,week[day]+name)
+                        addDir(week[day]+name,'http://rbm.myrbm.tv/player.php?pID=145',2,image,week[day]+name)
         else:
                 xbmc.log(__language__(30020), xbmc.LOGERROR )
                 xbmcgui.Dialog().ok(__language__(30010), __language__(30020))
@@ -84,9 +85,10 @@ def VIDEOLINKS(url,name):
         link=response.read()
         response.close()   
         #Scrape video source
-        match=re.compile('window.location.href = "(.+?)"').findall(link) 
-        for url in match:
-                addLink(name+__language__(30011),url,'http://www.thepeoplesvoice.tv/sites/all/themes/tpv/images/tpv-logo-footer.gif',__language__(30013))
+        match=re.compile('href="(.+?)">(.+?)<').findall(link)#video links 
+        for url,name in match:
+                name = name.replace('&quot;', '"').replace('&#039;', "'").replace('&amp;', '&').replace('&#8217;', "'")  # Cleanup the title.
+                addLink(name+__language__(30018),url,__icon__,__language__(30013))
 
               
 

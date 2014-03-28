@@ -1,4 +1,16 @@
-[B]1.1.0[/B]
+2.0.0
+- Full Addon Rewrite, all functions re-written or re-derived from source
+- Changed fanart.jpg to match GFQ Website Redesign
+- Changed icon.png to match new GFQ Logo
+- Changed shows to be pulled from OPML XML file at http://www.gfqnetwork.com/roku/config.opml instead of scraping website
+- Added Caching to Latest Episodes and GFQ Show Names
+- Added Podcast Stream Information for Episode Number, Aired Date, Runtime, Video Resolution, Video Codec, Video Aspect Ratio, Audio Codec, and Audio Channels
+- Added GFQ Live Stream Information for Video Resolution, Video Codec, Video Aspect Ratio, Audio Codec, and Audio Channels
+- Removed GFQ Live - Vaughn link
+- Added GFQ Live - Dailymotion
+- Fixed GFQ Live - Justin.tv not working. Now using HLS iPad/Mobile links
+- Fixed GFQ Live - Ustream not working. Now using HLS iPad/Mobile links
+1.1.0
 - Changed show series to be listed dynamically from http://www.guysfromqueens.com/feeds/
 - Added Latest Episodes for a recent listing of GFQ Network shows
 - Fixed a bug where due to a feedburner formatting issue the RSS Video feeds (Episodes) were not getting loaded properly
@@ -6,6 +18,5 @@
 - Added Vaughn live streaming service to GFQ Live menu
 - Added live streaming audio only to the GFQ Live menu
 - Changed GFQ Live titles to match the correct bitrate of the streams
-
-[B]1.0.0[/B]
+1.0.0
 - Initial release, derived from the TWiT addon made by divingmule and Adam B

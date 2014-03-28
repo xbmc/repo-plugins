@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <category label="General">
+    <setting id="first_run" type="text" visible="false" default="true" />
+  </category>
+</settings>

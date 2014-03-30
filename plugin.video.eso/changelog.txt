@@ -1,3 +1,5 @@
+1.0.1
+- Added support for Hubble's spacetelescope.org website.
 1.0.0
 - Force settings setup on first run.
 - First release ready for summit to official repo.

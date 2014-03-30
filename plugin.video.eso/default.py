@@ -35,7 +35,7 @@ root_dir = settings.getAddonInfo('path')
 lutil.set_fanart_file(root_dir)
 st_release = settings.getSetting('version')
 current_release = settings.getAddonInfo('version')
-update_settings = True
+update_settings = False
 
 # This is to make it sure that settings are correctly setup on every addon update or on first run.
 if not st_release:
@@ -57,7 +57,8 @@ except:
 
 lutil.log('eso quality setup to "%s"' % ('SD', 'HD')[quality])
 
-root_url = 'http://www.eso.org'
+eso_url  = 'http://www.eso.org'
+space_url = 'http://www.spacetelescope.org'
 
 # Entry point
 def run():
@@ -91,14 +92,21 @@ def create_index(params):
 
     # Category list
     for genre_url, genre_title in lutil.find_multiple(buffer_web, pattern_genre):
-        url = '%s%s' % (root_url, genre_url)
+        url = '%s%s' % (eso_url, genre_url)
         title = genre_title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
         lutil.log('eso.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
         lutil.addDir(action=action, title=title, url=url, genre=title)
 
+    # Spacetelescope web site
+    action = 'space_index'
+    url = 'http://www.spacetelescope.org/videos/'
+    title = 'Hubble Space Telescope'
+    lutil.log('eso.create_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
+    lutil.addDir(action=action, title=title, url=url, genre=title)
+
     # Search
     action = 'search'
-    url   = ''
+    url   = 'http://www.eso.org/public/videos/?search='
     title = translation(30104)
     genre = 'Search'
     lutil.log('eso.create_index action=["%s"] title=["Search"] url=["%s"]' % (action, url))
@@ -106,6 +114,39 @@ def create_index(params):
 
     lutil.close_dir(pluginhandle, updateListing=False)
 
+
+# This function creates the index for the spacetelescope web site.
+def space_index(params):
+    lutil.log("eso.space_index "+repr(params))
+
+    action = 'main_list'
+
+    # All Videos entry
+    url = 'http://www.spacetelescope.org/videos/'
+    title = translation(30107)
+    genre = 'All the Videos'
+    lutil.log('eso.space_index action=["%s"] title=["All the Videos"] url=["%s"]' % (action, url))
+    lutil.addDir(action=action, title=title, url=url, genre=genre)
+
+    buffer_web = lutil.carga_web(url)
+    pattern_genre='<a class="level_3 " href="([^"]+)" >([^<]+)</a>'
+
+    # Category list
+    for genre_url, genre_title in lutil.find_multiple(buffer_web, pattern_genre):
+        url = '%s%s' % (space_url, genre_url)
+        title = genre_title.replace('&quot;', '"').replace('&#039;', '´').replace('&amp;', '&')  # Cleanup the title.
+        lutil.log('eso.space_index action=["%s"] title=["%s"] url=["%s"]' % (action, title, url))
+        lutil.addDir(action=action, title=title, url=url, genre=title)
+
+    # Search
+    action = 'search'
+    url   = 'http://www.spacetelescope.org/videos/?search='
+    title = translation(30104)
+    genre = 'Search'
+    lutil.log('eso.space_index action=["%s"] title=["Search"] url=["%s"]' % (action, url))
+    lutil.addDir(action=action, title=title, url=url, genre=genre)
+
+    lutil.close_dir(pluginhandle, updateListing=False)
 
 # Main list menu
 def main_list(params):
@@ -126,6 +167,9 @@ def main_list(params):
 
     lutil.set_content_list(pluginhandle, 'tvshows')
     lutil.set_plugin_category(pluginhandle, genre)
+
+    # This adds the support for spacetelescope website.
+    root_url = eso_url if eso_url in page_url else space_url
 
     # We must setup the previous page entry from the second page onwards.
     prev_page_url = lutil.find_first(buffer_web, pattern_prevpage)
@@ -163,18 +207,19 @@ def main_list(params):
 def search(params):
     search_string = lutil.get_keyboard_text(translation(30105))
     if search_string:
-        params['url'] = 'http://www.eso.org/public/videos/?search=%s' % lutil.get_url_encoded(search_string)
+        params['url'] += lutil.get_url_encoded(search_string)
         lutil.log("eso.search Value of search url: %s" % params['url'])
         return main_list(params)
 
     return lutil.close_dir(pluginhandle)
 
 
-# This funtion search into the URL link to get the video link from the different sources.
+# This function search into the URL link to get the video link from the different sources.
 def play_video(params):
     lutil.log("eso.play "+repr(params))
 
-    buffer_link = lutil.carga_web(params.get("url"))
+    page_url = params.get("url")
+    buffer_link = lutil.carga_web(page_url)
     pattern_video_failover = '<span class="archive_dl_text"><a href="([^"]*?)"'
     pattern_video = 'var %s = fix_protocol\("([^"]*?)"\)' % ('mobilefile', 'hdfile')[quality]
     video_url = lutil.find_first(buffer_link, pattern_video)
@@ -188,6 +233,8 @@ def play_video(params):
     else:
         video_url = lutil.find_first(buffer_link, pattern_video_failover)
         if video_url:
+            # This adds the support for spacetelescope website.
+            root_url = eso_url if eso_url in page_url else space_url
             try:
                 video_url = "%s%s" % (root_url, video_url)
                 lutil.log("eso.play: We have found this video as failover option: '%s' and let's going to play it!" % video_url)

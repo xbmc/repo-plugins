@@ -1,4 +1,6 @@
+import json
 import os
+from datetime import datetime
 import re
 import sys
 import urllib
@@ -99,7 +101,7 @@ def get_url(url):
         log('The Daily Show --> get_url :: url = ' + url)
         txdata = None
         txheaders = {
-            'Referer': 'http://www.thedailyshow.com/videos/',
+            'Referer': 'http://thedailyshow.cc.com/',
             'X-Forwarded-For': '12.13.14.15',
             'User-Agent':
             'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US;rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3 ( .NET CLR 3.5.30729)',
@@ -115,9 +117,15 @@ def get_url(url):
         return link
 
 
+def make_in_app_url(**kwargs):
+    data = json.dumps(kwargs)
+    url = "{sysarg}?{data}".format(sysarg=sys.argv[0], data=data)
+    return url
+
+
 def add_directory_entry(name, identifier):
     """Adds a directory entry to the xbmc ListItem"""
-    url = "{sysarg}?mode={mode}".format(sysarg=sys.argv[0], mode=identifier)
+    url = make_in_app_url(mode=identifier)
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png")
     liz.setInfo(type="Video", infoLabels={"Title": name})
     liz.setProperty('fanart_image', image_fanart)
@@ -127,118 +135,57 @@ def add_directory_entry(name, identifier):
 # Root listing
 
 
-def root():
+def root(**ignored):
     msg = addon.getLocalizedString(30030)
     add_directory_entry(msg, 'full')
-    msg = addon.getLocalizedString(30031)
-    add_directory_entry(msg, 'guests')
-    msg = addon.getLocalizedString(30032)
-    add_directory_entry(msg, 'search')
-    msg = addon.getLocalizedString(30033)
-    add_directory_entry(msg, 'browse')
+    #msg = addon.getLocalizedString(30032)
+    #add_directory_entry(msg, 'search')
+    #msg = addon.getLocalizedString(30033)
+    #add_directory_entry(msg, 'browse')
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
-def full_episodes():
+
+def full_episodes(**ignored):
     xbmcplugin.setContent(pluginhandle, 'episodes')
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_NONE)
-    full = 'http://www.thedailyshow.com/full-episodes/'
-    allData = get_url(full)
+    url = 'http://thedailyshow.cc.com/full-episodes/'
+    # Due to unstructured daily show site, there is no canonical JSON url
+    # so we find the full episode json url presented on the latest full episode
+    jsonurl = re.compile(r'http[^"]+/f1010\\/[^"]+').findall(get(url).content)[0].replace("\\", "")
 
-    episodeURLs = re.compile(
-        '"(http://www.thedailyshow.com/full-episodes/....+?)"').findall(
-        allData)
-    episodeURLSet = set(episodeURLs)
-
-    listings = []
-    for episodeURL in episodeURLs:
-        if episodeURL in episodeURLSet:
-            episodeURLSet.remove(episodeURL)
-            episodeData = get_url(episodeURL)
-
-            title = re.compile(
-                '<meta property="og:title" content="(.+?)"').search(
-                episodeData)
-            thumbnail = re.compile(
-                '<meta property="og:image" content="(.+?)"').search(
-                episodeData)
-            description = re.compile(
-                '<meta property="og:description" content="(.+?)"').search(
-                episodeData)
-            airDate = re.compile(
-                '<meta itemprop="uploadDate" content="(.+?)"').search(
-                episodeData)
-            epNumber = re.compile('/season_\d+/(\d+)').search(episodeData)
-            link = re.compile(
-                '<link rel="canonical" href="(.+?)"').search(
-                episodeData)
-
-            listing = []
-            listing.append(title.group(1))
-            listing.append(link.group(1))
-            listing.append(thumbnail.group(1))
-            listing.append(description.group(1))
-            listing.append(airDate.group(1))
-            listing.append(epNumber.group(1))
-            listings.append(listing)
-
-    for name, link, thumbnail, plot, date, seasonepisode in listings:
-        mode = "play"
-        season = int(seasonepisode[:-3])
-        episode = int(seasonepisode[-3:])
-        u = sys.argv[
-            0] + "?url=" + urllib.quote_plus(
-            link) + "&mode=" + str(
-            mode) + "&name=" + urllib.quote_plus(
-            name)
-        u += "&season=" + urllib.quote_plus(str(season))
-        u += "&episode=" + urllib.quote_plus(str(episode))
-        u += "&premiered=" + urllib.quote_plus(date)
-        u += "&plot=" + urllib.quote_plus(plot)
-        u += "&thumbnail=" + urllib.quote_plus(thumbnail)
+    jsonresponse = json.loads(get(jsonurl).content)
+    episodes = jsonresponse.get('result').get('episodes')
+    for episode in episodes:
+        thumbnail = None
+        if len(episode.get('images', ())) >= 1:
+            thumbnail = episode.get('images')[0].get('url')
+        airdate = episode.get('airDate', '0')
+        airdate = datetime.fromtimestamp(int(airdate)).strftime('%Y-%m-%d')
         liz = xbmcgui.ListItem(
-            name,
+            episode.get('title'),
             iconImage="DefaultFolder.png",
             thumbnailImage=thumbnail)
         liz.setInfo(
-            type="Video", infoLabels={"Title": BS3(name, convertEntities=BS3.HTML_ENTITIES),
+            type="Video", infoLabels={"Title": episode.get('title'),
                                       "Plot":
-                                      BS3(plot,
-                                          convertEntities=BS3.HTML_ENTITIES),
-                                      "Season": season,
-                                      "Episode": episode,
-                                      "premiered": date,
+                                      episode.get('description'),
+                                      "Season": episode.get('season', {}).get('seasonNumber'),
+                                      "Episode": episode.get('season', {}).get('episodeNumber'),
+                                      "premiered": airdate,
                                       "TVShowTitle": TVShowTitle})
         liz.setProperty('IsPlayable', 'true')
         liz.setProperty('fanart_image', image_fanart)
-        xbmcplugin.addDirectoryItem(handle=pluginhandle, url=u, listitem=liz)
-
-    xbmcplugin.endOfDirectory(pluginhandle)
-
-
-def guests():
-    gurl = "http://www.thedailyshow.com/feeds/search?keywords=&tags=interviews&sortOrder=desc&sortBy=date&page=1"
-    data = get_url(gurl).replace('</pre>', '</div>')
-    soup = BS3(data)
-
-    guest_items = soup('div', {'class': 'entry'})
-    mode = "play"
-    for item in guest_items:
-        g = Guest(item)
-
-        liz = xbmcgui.ListItem(g.name(), iconImage='', thumbnailImage='')
-        liz.setInfo(type="Video", infoLabels={"Title": g.name(),
-                                              "TVShowTitle": 'The Daily Show'})
-        liz.setProperty('IsPlayable', 'true')
-        liz.setProperty('fanart_image', image_fanart)
-        u = sys.argv[
-            0] + "?url=" + g.url(
-        ) + "&mode=" + str(
-            mode) + "&name=" + g.name(
+        url = make_in_app_url(
+            mode="play_full_episode",
+            episode_id=episode.get('id'),
+            additional_data=episode,
         )
-        xbmcplugin.addDirectoryItem(handle=pluginhandle, url=u, listitem=liz)
+        xbmcplugin.addDirectoryItem(handle=pluginhandle, url=url, listitem=liz)
 
     xbmcplugin.endOfDirectory(pluginhandle)
+
+
 
 
 def extract_search_results_from_response(response):
@@ -312,7 +259,7 @@ def get_user_input(title, default="", hidden=False):
         return None
 
 
-def search():
+def search(**ignored):
     msg = addon.getLocalizedString(30032)
     query = get_user_input(msg)
     if not query:
@@ -331,7 +278,7 @@ def search():
                       line1=msg)
 
 
-def browse():
+def browse(**ignored):
     """Browse videos by Date"""
     mydialogue = xbmcgui.Dialog()
     msg = addon.getLocalizedString(30020)
@@ -359,43 +306,9 @@ def browse():
                       line1=msg)
 
 
-def play_random():
-    """Play a random videos"""
-    raise NotImplementedError
-    # Do something intelligent to select from all available videos while
-    # minimizng the wait time prior to play. We suggest selecting a random,
-    # valid date.
-
-
-# Play Video
-def play_video(name, url):
-    data = get_url(url)
-    uri = re.compile('"http://media.mtvnservices.com/(.+?)"/>').findall(
-        data)[0].replace('fb/', '').replace('.swf', '')
-
-    rtmp = grab_rtmp(uri)
-    item = xbmcgui.ListItem(
-        name,
-        iconImage="DefaultVideo.png",
-        thumbnailImage=thumbnail,
-        path=rtmp)
-    item.setInfo(type="Video", infoLabels={"Title": name,
-                                           "Plot": plot,
-                                           "premiered": premiered,
-                                           "Season": int(season),
-                 "Episode": int(episode),
-        "TVShowTitle": TVShowTitle})
-    item.setProperty('fanart_image', image_fanart)
-    xbmcplugin.setResolvedUrl(pluginhandle, True, item)
-
-# Play Full Episode
-
-
-def play_full_episode(name, url):
-    data = get_url(url)
-    uri = re.compile(
-        '(mgid:cms:episode:thedailyshow.com:\d{6}|mgid:cms:video:thedailyshow.com:\d{6})').findall(data)[0]
-    url = 'http://shadow.comedycentral.com/feeds/video_player/mrss/?uri=' + uri
+def play_full_episode(episode_id, additional_data, **ignored):
+    content_id = 'mgid:arc:episode:thedailyshow.com:%s' % episode_id
+    url = 'http://thedailyshow.cc.com/feeds/mrss?uri=' + content_id
     data = get_url(url)
     uris = re.compile('<guid isPermaLink="false">(.+?)</guid>').findall(data)
     stacked_url = 'stack://'
@@ -406,29 +319,14 @@ def play_full_episode(name, url):
 
     log('stacked_url --> %s' % stacked_url)
 
-    item = xbmcgui.ListItem(
-        name,
-        iconImage="DefaultVideo.png",
-        thumbnailImage=thumbnail,
-        path=stacked_url)
-
-    log('item --> %s' % item)
-
-    item.setInfo(type="Video", infoLabels={"Title": name,
-                                           "Plot": plot,
-                                           "premiered": premiered,
-                                           "Season": int(season),
-                 "Episode": int(episode),
-        "TVShowTitle": TVShowTitle})
-    item.setProperty('fanart_image', image_fanart)
+    item = xbmcgui.ListItem("ignored", path=stacked_url)
     xbmcplugin.setResolvedUrl(pluginhandle, True, item)
 
 # Grab rtmp
 
 
 def grab_rtmp(uri):
-    url = 'http://www.comedycentral.com/global/feeds/entertainment/media/mediaGenEntertainment.jhtml?uri=' + \
-        uri + '&showTicker=true'
+    url = 'http://thedailyshow.cc.com/feeds/mediagen/?uri=' + uri
     mp4_url = "http://mtvnmobile.vo.llnwd.net/kip0/_pxn=0+_pxK=18639+_pxE=/44620/mtvnorigin"
 
     data = get_url(url)
@@ -451,73 +349,19 @@ def grab_rtmp(uri):
     return furl
 
 
-# Since params are defined by us in this module, we could use JSON
-# representation here instead of parsing this by hand
-def get_params():
-    param = []
-    paramstring = sys.argv[2]
-    if len(paramstring) >= 2:
-        params = sys.argv[2]
-        cleanedparams = params.replace('?', '')
-        if (params[len(params) - 1] == '/'):
-            params = params[0:len(params) - 2]
-        pairsofparams = cleanedparams.split('&')
-        param = {}
-        for i in range(len(pairsofparams)):
-            splitparams = {}
-            splitparams = pairsofparams[i].split('=')
-            if (len(splitparams)) == 2:
-                param[splitparams[0]] = splitparams[1]
+mode_handlers = {
+    "browse": browse,
+    "full": full_episodes,
+    "play_full_episode": play_full_episode,
+    "search": search,
+    "root": root,
+}
+def main(data):
+    decoded = urllib2.unquote(data or "{}")
+    if len(decoded) >= 1 and decoded[0] == '?':
+        decoded = decoded[1:]
+    parsed_data = json.loads(decoded)
+    mode = parsed_data.get('mode') or 'root'
+    mode_handlers[mode](**parsed_data)
 
-    return param
-
-params = get_params()
-url = None
-name = None
-mode = None
-
-try:
-    url = urllib.unquote_plus(params["url"])
-except:
-    pass
-try:
-    name = urllib.unquote_plus(params["name"])
-except:
-    pass
-try:
-    mode = params["mode"]
-except:
-    pass
-try:
-    thumbnail = urllib.unquote_plus(params["thumbnail"])
-except:
-    thumbnail = ''
-try:
-    season = int(params["season"])
-except:
-    season = 0
-try:
-    episode = int(params["episode"])
-except:
-    episode = 0
-try:
-    premiered = urllib.unquote_plus(params["premiered"])
-except:
-    premiered = ''
-try:
-    plot = urllib.unquote_plus(params["plot"])
-except:
-    plot = ''
-
-#log("Mode: " + str(mode))
-#log("URL: " + str(url))
-#log("Name: " + str(name))
-
-mode_handlers = {"browse": browse,
-                 "full": full_episodes,
-                 "guests": guests,
-                 "play": lambda: play_full_episode(name, url),
-                 "search": search,
-                 }
-
-mode_handlers.get(mode, root)()
+main(sys.argv[2])

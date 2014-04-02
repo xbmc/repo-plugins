@@ -227,7 +227,7 @@ class VideoList(listitem.VirtualFS):
 		import CommonFunctions
 		
 		# Add Next Page if Exists   
-		nextUrl = re.findall('<a href="(\S+?)">next \xc2\xbb</a>', sourceCode)
+		nextUrl = re.findall('<a href="(\S+?)">next \xbb</a>', sourceCode)
 		if nextUrl: self.add_next_page(url={"url":u"http://www.metalvideo.com/%s" % nextUrl[0]})
 		
 		# Iterate the list of videos

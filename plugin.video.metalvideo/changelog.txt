@@ -1,3 +1,9 @@
+TODO: Create Unit Tests, Once I figure out how
+
+[B]Version 1.0.2[/B]
+- Fixed next page now showing bug. Unicode mistake
+- Small Change to prepare for Unit Tests
+
 [B]Version 1.0.1[/B]
 - Fixed artist needing to be a list of artists in Gotham
 - Changed Addon to show under Music Addons as well as Video Addons

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.metalvideo" name="Metalvideo" provider-name="willforde" version="1.0.1">
+<addon id="plugin.video.metalvideo" name="Metalvideo" provider-name="willforde" version="1.0.2">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.xbmcutil" version="2.0.2"/>

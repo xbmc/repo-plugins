@@ -1,0 +1,2 @@
+v0.0.1
+- Intial version of the scraper published 03/30/2014

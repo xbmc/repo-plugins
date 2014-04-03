@@ -139,9 +139,6 @@ class drundoo:
 					my_link.append('http://www.drundoo.com' + link.findAll(class_='button watch-now player_start cf')[0].get('href'))
 					#my_title.append(link.find('span',{'class':'title'}).renderContents().decode('unicode_escape').encode('utf-8'))	
 					my_title.append(link.findAll(class_='button watch-now player_start cf')[0].get('data-ga-label'))
-				else:
-					my_link.append('http://www.drundoo.com' + link.findAll(class_='button watch-now cf')[0].get('href'))
-					my_title.append('BG International')
 
 		return dict(zip(my_title,my_link))
 			

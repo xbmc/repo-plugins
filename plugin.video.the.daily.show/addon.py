@@ -119,7 +119,8 @@ def get_url(url):
 
 def make_in_app_url(**kwargs):
     data = json.dumps(kwargs)
-    url = "{sysarg}?{data}".format(sysarg=sys.argv[0], data=data)
+    quoted_data = urllib2.quote(data)
+    url = "{sysarg}?{data}".format(sysarg=sys.argv[0], data=quoted_data)
     return url
 
 
@@ -181,6 +182,7 @@ def full_episodes(**ignored):
             episode_id=episode.get('id'),
             additional_data=episode,
         )
+        log("make url: " + str(episode))
         xbmcplugin.addDirectoryItem(handle=pluginhandle, url=url, listitem=liz)
 
     xbmcplugin.endOfDirectory(pluginhandle)
@@ -356,10 +358,12 @@ mode_handlers = {
     "search": search,
     "root": root,
 }
+
 def main(data):
     decoded = urllib2.unquote(data or "{}")
     if len(decoded) >= 1 and decoded[0] == '?':
         decoded = decoded[1:]
+    log('The Daily Show --> main :: decoded = ' + str(decoded))
     parsed_data = json.loads(decoded)
     mode = parsed_data.get('mode') or 'root'
     mode_handlers[mode](**parsed_data)

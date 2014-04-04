@@ -1,9 +1,12 @@
+[B]Version 1.0.8 - 2014-04-03[/B]
+
+- Fixes a URL encoding bug that prevented some episodes from playing
+
 [B]Version 1.0.7 - 2014-03-31[/B]
 
 - Fix Full Episodes for complete page restructure.
 
 - Guests, Search and Browse are disabled for now, but should come back
-
 
 [B]Version 1.0.6 - 2014-01-12[/B]
 

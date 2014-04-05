@@ -1,3 +1,6 @@
+0.1.2 (03.04.2014)
+- fixed error with external python (e.g. on Linux)
+
 0.1.1 (16.03.2014)
 - fixed order of pagination items
 - improve performance on slow machines unsing python >= 2.7

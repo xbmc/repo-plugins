@@ -17,6 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+import sys
 
 if sys.version_info >= (2, 7):
     import json

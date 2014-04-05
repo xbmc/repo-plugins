@@ -7,4 +7,7 @@
     <!-- General entries -->
     <string id="30000">Sayfa</string>
     <string id="30001">Ara</string>
+
+    <!-- Settings -->
+    <string id="30010">Küçük Resim Görünüm Moduna Zorla</string>
 </strings>

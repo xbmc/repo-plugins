@@ -222,7 +222,7 @@ def __add_items(entries, next_page=None, prev_page=None):
     update_on_pageswitch = plugin.get_setting('update_on_pageswitch', bool)
     is_update = update_on_pageswitch and 'update' in plugin.request.args
     finish_kwargs = {
-        'sort_methods': ('playlist_order', ),
+        'sort_methods': ('playlist_order', 'label'),
         'update_listing': is_update
     }
     if has_icons and plugin.get_setting('force_viewmode', bool):

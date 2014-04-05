@@ -4,6 +4,8 @@
 <!-- Report language file syntax bugs at: alanwww1@xbmc.org -->
 
 <strings>
+    <!-- General entries -->
+    <string id="30000">பக்கம்</string>
     <string id="30001">தேடல்</string>
 
     <!-- Settings -->

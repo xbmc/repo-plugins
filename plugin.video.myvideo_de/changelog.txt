@@ -1,3 +1,8 @@
+0.9.6 (05.04.2014)
+ - fixed playback
+ - added possibility to sort items by label (but original sorting is still default)
+ - updated translations
+
 0.9.5 (08.01.2014)
  - added SpecialVideoChannelScraper (required for e.g. Spartacus, Millionaerswahl)
 

@@ -616,9 +616,7 @@ def get_video(video_id):
     print repr(dec_data)
     rtmpurl = re.search(r_rtmpurl, dec_data).group(1)
     video['rtmpurl'] = unquote(rtmpurl)
-    if 'myvideo2flash' in video['rtmpurl']:
-        log('get_video forcing RTMPT')
-        video['rtmpurl'] = video['rtmpurl'].replace('rtmpe://', 'rtmpt://')
+    video['rtmpurl'] = video['rtmpurl'].replace('rtmpe://', 'rtmp://')
     playpath = re.search(r_playpath, dec_data).group(1)
     video['file'] = unquote(playpath)
     m_filepath = re.search(r_path, dec_data)

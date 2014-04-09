@@ -1,7 +1,7 @@
-#xbmc tvkaista.fi plugin
+#xbmc tvkaista.com plugin
 # This Python file uses the following encoding: utf-8
 #
-#Copyright (C) 2009-2013  Viljo Viitanen <viljo.viitanen@iki.fi>
+#Copyright (C) 2009-2014  Viljo Viitanen <viljo.viitanen@iki.fi>
 #Copyright (C) 2010       stilester
 #Copyright (C) 2008-2009  J. Luukko
 #
@@ -37,6 +37,7 @@
 #7.4.2013 Version 3.0.5. Add "search similar named" to context menu. 
 #         Add proper umlauts. Change code documentation to English.
 #8.4.2013 Add support for new tvkaista 1M mpeg4 stream
+#4.4.2014 3.0.6. Change from .fi to tvkaista.com
 
 #tvkaista api documentation is at https://code.google.com/p/tvkaista-api/
 
@@ -82,22 +83,22 @@ def settings():
 
 # paavalikko
 def menu():
-  u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.fi/feed/channels/')+"&mode=1"
+  u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.com/feed/channels/')+"&mode=1"
   listfolder = xbmcgui.ListItem('Kanavat - tänään')
   listfolder.setInfo('video', {'Title': "Kanavat"})
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
 
-  u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.fi/feed/seasonpasses/')+"&mode=1"
+  u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.com/feed/seasonpasses/')+"&mode=1"
   listfolder = xbmcgui.ListItem('Sarjat')
   listfolder.setInfo('video', {'Title': "Sarjat"})
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
 
-  u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.fi/feed/playlist')+"&mode=2"
+  u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.com/feed/playlist')+"&mode=2"
   listfolder = xbmcgui.ListItem('Lista')
   listfolder.setInfo('video', {'Title': 'Lista'})
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
   
-  u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.fi/feed/search/title/elokuva')+"&mode=2"
+  u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.com/feed/search/title/elokuva')+"&mode=2"
   listfolder = xbmcgui.ListItem('Elokuvat')
   listfolder.setInfo('video', {'Title': 'Elokuvat'})
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
@@ -176,7 +177,7 @@ def isdst(tt):
 #list the programs in a feed
 def listprograms(url):
   passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-  passman.add_password(None, "http://www.tvkaista.fi", tvkaista_addon.getSetting("username"), \
+  passman.add_password(None, "http://www.tvkaista.com", tvkaista_addon.getSetting("username"), \
                          tvkaista_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman))
   #print "listprograms avataan: "+url+'/'+bitrate()+'.rss'
@@ -241,7 +242,7 @@ def listprograms(url):
     try:
       if pat[0] != "":
         pid=re.compile(r"/([0-9]+)[.].+$", re.IGNORECASE).findall(pat[0])
-        listitem.setThumbnailImage('http://%s:%s@www.tvkaista.fi/feed/thumbnails/%s.jpg' % (\
+        listitem.setThumbnailImage('http://%s:%s@www.tvkaista.com/feed/thumbnails/%s.jpg' % (\
             myusername, mypassword, pid[0]))
         if url.find('/feed/playlist') > 0:
           label='Poista Listalta'
@@ -267,7 +268,7 @@ def listprograms(url):
 	  search=ptit.split(':')[0].encode('utf-8')
 	  #double encoding cos it gets decoded twice.
           menuitems.append(('Etsi samannimisiä','XBMC.Container.Update(%s?mode=%d&url=%s)'%
-            (sys.argv[0],2,'http://www.tvkaista.fi/feed/search/title/'+urllib.quote_plus(urllib.quote_plus(search)) ),))
+            (sys.argv[0],2,'http://www.tvkaista.com/feed/search/title/'+urllib.quote_plus(urllib.quote_plus(search)) ),))
         listitem.addContextMenuItems(menuitems, True )
     except:
       pass
@@ -287,12 +288,12 @@ def listprograms(url):
 #note: the date parameter really is called url when specifying the plugin url parameters. See mode 5 in main.
 def listdates(date):
   passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-  passman.add_password(None, "http://www.tvkaista.fi", tvkaista_addon.getSetting("username"), \
+  passman.add_password(None, "http://www.tvkaista.com", tvkaista_addon.getSetting("username"), \
                          tvkaista_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman))
   #print "listdates avataan: "+date
   try:
-      request = urllib2.Request('http://www.tvkaista.fi/feed/channels/', headers=MYHEADERS)
+      request = urllib2.Request('http://www.tvkaista.com/feed/channels/', headers=MYHEADERS)
       content = opener.open(request).read()
   except urllib2.HTTPError,e:
     if e.code == 401:
@@ -329,7 +330,7 @@ def listdates(date):
 # list feeds contained in a feed
 def listfeeds(url):
   passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
-  passman.add_password(None, "http://www.tvkaista.fi", tvkaista_addon.getSetting("username"), \
+  passman.add_password(None, "http://www.tvkaista.com", tvkaista_addon.getSetting("username"), \
                          tvkaista_addon.getSetting("password"))
   opener = urllib2.build_opener(urllib2.HTTPBasicAuthHandler(passman))
   #print "listfeeds avataan: "+url
@@ -381,7 +382,7 @@ def search():
     if len(list)>20: list.pop()
     list.insert(0,keyboard.getText())
     tvkaista_addon.setSetting("searches","\n".join(list))
-    url = 'http://www.tvkaista.fi/feed/search/title/%s' % (urllib.quote_plus(keyboard.getText()))
+    url = 'http://www.tvkaista.com/feed/search/title/%s' % (urllib.quote_plus(keyboard.getText()))
     listprograms(url)
 
 #list searches that are stored in plugin settings
@@ -391,7 +392,7 @@ def listsearches():
   xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
 
   for i in tvkaista_addon.getSetting("searches").splitlines():
-    u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.fi/feed/search/title/'+urllib.quote_plus(i))+"&mode=2"
+    u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.com/feed/search/title/'+urllib.quote_plus(i))+"&mode=2"
     listfolder = xbmcgui.ListItem('Haku: '+i)
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
 
@@ -416,24 +417,24 @@ def addremove(action,id):
           'password': tvkaista_addon.getSetting("password"), 'rememberme':'on'}
   cj = cookielib.CookieJar()
   opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-  request = urllib2.Request('http://www.tvkaista.fi/login/', headers=MYHEADERS)
+  request = urllib2.Request('http://www.tvkaista.com/login/', headers=MYHEADERS)
   r = opener.open(request, urllib.urlencode(opts))
   dialog = xbmcgui.Dialog()
   try:
     if action==1:
-      request = urllib2.Request("http://www.tvkaista.fi/recordings/?action=addtoplaylist&id=%s"%id, headers=MYHEADERS)
+      request = urllib2.Request("http://www.tvkaista.com/recordings/?action=addtoplaylist&id=%s"%id, headers=MYHEADERS)
       r = opener.open(request)
       dialog.ok('Tvkaista', 'Ohjelma lisätty listalle.')
     elif action==2:
-      request = urllib2.Request("http://www.tvkaista.fi/recordings/?action=removefromplaylist&id=%s"%id, headers=MYHEADERS)
+      request = urllib2.Request("http://www.tvkaista.com/recordings/?action=removefromplaylist&id=%s"%id, headers=MYHEADERS)
       r = opener.open(request)
       dialog.ok('Tvkaista', 'Ohjelma poistettu listalta.')
     elif action==3:
-      request = urllib2.Request("http://www.tvkaista.fi/recordings/?action=addseasonpass&id=%s"%id, headers=MYHEADERS)
+      request = urllib2.Request("http://www.tvkaista.com/recordings/?action=addseasonpass&id=%s"%id, headers=MYHEADERS)
       r = opener.open(request)
       dialog.ok('Tvkaista', 'Ohjelma lisätty sarjoihin')
     elif action==4:
-      request = urllib2.Request("http://www.tvkaista.fi/recordings/?action=removeseasonpass&spid=%s"%id, headers=MYHEADERS)
+      request = urllib2.Request("http://www.tvkaista.com/recordings/?action=removeseasonpass&spid=%s"%id, headers=MYHEADERS)
       r = opener.open(request)
       dialog.ok('Tvkaista', 'Ohjelma poistettu sarjoista.')
     else:

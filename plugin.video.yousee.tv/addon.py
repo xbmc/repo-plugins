@@ -93,13 +93,22 @@ class YouSeeTv(object):
         for idx in range(0, len(lines)):
             pos = lines[idx].rfind('BANDWIDTH')
             if pos >= 0:
-                bitrate = int(lines[idx][pos + 10:])
+                bandwidth = lines[idx][pos + 10:]
+                pos = bandwidth.find(',')
+                if pos >= 0:
+                    bandwidth = bandwidth[:pos]
+                print bandwidth
+                bitrate = int(bandwidth)
                 if bitrate > bestBitrate:
                     bestBitrate = bitrate
-                    path = lines[idx+1]
+                    path = lines[idx + 1]
 
-        host = url[0:url.find('/', 8)]
-        return host + path
+        if path[0] == '/':  # absolute path
+            host = url[0:url.find('/', 8)]
+            playUrl = host + path
+        else:  # relative
+            playUrl = url[0:url.rfind('/') + 1] + path
+        return playUrl
 
     def _anyChannelIconsMissing(self, channels):
         for channel in channels:

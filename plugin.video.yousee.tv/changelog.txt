@@ -1,3 +1,6 @@
+[B]Version 3.0.4 - 2014-04-08[/B]
+- Fixed playback of YouBio
+
 [B]Version 3.0.3 - 2014-03-07[/B]
 - Hide encrypted channels
 

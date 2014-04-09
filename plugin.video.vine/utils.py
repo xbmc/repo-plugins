@@ -1,30 +1,24 @@
+import os
 import re
 import urllib2
+import sys
+import inspect
+import unicodedata
 
 from time import mktime,strptime
 
 import xbmc
-from xbmc import log
+from xbmcaddon import Addon
 
-# Only used if we fail to parse the URL from the website
-__SwfPlayerDefault__ = 'http://www.channel4.com/static/programmes/asset/flash/swf/4odplayer-11.34.1.swf'
-__Aug12__ = mktime(strptime("12 Aug 2012", "%d %b %Y"))
+from loggingexception import LoggingException
 
-# Return true if date is later than 12 Aug 2012
-def isRecentDate(dateString):
-	try:
-		dateCompare = mktime(strptime(dateString, "%d %b %Y"))
-
-		if dateCompare > __Aug12__:
-			return True
-
-	except ( Exception ) as e:
-		if dateString is None:
-			dateString = 'None'
-
-		xbmc.log ( 'Exception: ' + str(e) + ', dateString: ' + str(dateString), xbmc.LOGERROR )
-
-	return False
+def to_unicode(obj, encoding='utf-8'):
+    if isinstance(obj, basestring):
+         if not isinstance(obj, unicode):
+             obj = unicode(obj, encoding)
+    elif isinstance(obj, int) or isinstance(obj, long) or isinstance(obj, float)  or obj is None:
+             obj = unicode(obj)
+    return obj
 
 def log(msg, level = xbmc.LOGNOTICE, method = None):
     try:
@@ -38,44 +32,43 @@ def log(msg, level = xbmc.LOGNOTICE, method = None):
     except ( Exception ) as e:
         xbmc.log(u"FALLBACK %s : '%s'" % (method, repr(msg)), level)
 
+#def log(msg, level = xbmc.LOGNOTICE):
+#	if isinstance(msg, unicode):
+#		xbmc.log(msg.encode('utf8'), level)
+#	else:
+#		xbmc.log(to_unicode(msg).encode('utf8'), level)
+
+# Return true if date is later than 12 Aug 2012
+def isRecentDate(dateString):
+	try:
+		dateCompare = mktime(strptime(dateString, u"%d %b %Y"))
+
+		if dateCompare > __Aug12__:
+			return True
+
+	except ( Exception ) as e:
+		if dateString is None:
+			dateString = 'None'
+
+		xbmc.log ( u'Exception: ' + to_unicode(e) + ', dateString: ' + to_unicode(dateString), xbmc.LOGERROR )
+
+	return False
 
 def findString(method, pattern, string, flags = (re.DOTALL | re.IGNORECASE)):
-	match = ( pattern, string, flags )
-	#match = None ###
-	if match is not None:
-		return (match.group(1))
-
-	return None
+    try:
+        match = re.search( pattern, string, flags )
+    
+        if match is not None:
+    		return match.group(1)
+    except (Exception) as exception:
+        raise LoggingException.fromException(exception)
+            
 	# Limit logging of string to 1000 chars
-	limit = 1000
-	# Can't find pattern in string
-	messageLog = "\nPattern - \n%s\n\nString - \n%s\n\n" % (pattern, string[0:limit])
+    limit = 1000
+    messageLog = u"\nPattern - \n%s\n\nString - \n%s\n\n" % (pattern, string[0:limit])
+    logException = LoggingException(u"utils.findString", "Can't find pattern in string\n\n" + messageLog)
 
-	return (None, ErrorHandler(method, ErrorCodes.CANT_FIND_PATTERN_IN_STRING, messageLog))
-
-
-
-
-def GetSwfPlayer( html ):
-	log (u"html size:" + str(len(html)), xbmc.LOGDEBUG)
-
-	try:
-		swfRoot = re.search(u'var swfRoot = \'(.*?)\'', html, re.DOTALL | re.IGNORECASE).group(1)
-		fourodPlayerFile = re.search(u'var fourodPlayerFile = \'(.*?)\'', html, re.DOTALL | re.IGNORECASE).group(1)
-		#TODO Find out how to get the "asset/flash/swf/" part dynamically
-		swfPlayer = u"http://www.channel4.com" + swfRoot + u"asset/flash/swf/" + fourodPlayerFile
-
-		# Resolve redirect, if any
-		req = urllib2.Request(swfPlayer)
-		res = urllib2.urlopen(req)
-		swfPlayer = res.geturl()
-	except (Exception) as e:
-		log (u"Exception resolving swfPlayer URL: " + str(e), xbmc.LOGWARNING)
-		log (u"Unable to determine swfPlayer URL. Using default: " + __SwfPlayerDefault__, xbmc.LOGWARNING)  
-
-		swfPlayer = __SwfPlayerDefault__
-	
-	return swfPlayer
+    raise logException 
 
 
 def remove_leading_slash(data):
@@ -128,7 +121,6 @@ def extractJSON(text):
     return text[start:end]
 
 
-
 def drepr(x, sort = True, indent = 0):
     if isinstance(x, dict):
         r = '{\n'
@@ -146,3 +138,22 @@ def drepr(x, sort = True, indent = 0):
     else:
         r = repr(x)
     return r
+
+def normalize(text):
+    if isinstance(text, str):
+        try:
+            text = text.decode('utf8')
+        except:
+            try:
+                text = text.decode('latin1')
+            except:
+                text = text.decode('utf8', 'ignore')
+            
+    return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
+
+def getDictionaryValue(dictionary, key):
+    try:
+        return dictionary[key]
+    except:
+        return None
+        

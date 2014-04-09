@@ -6,32 +6,25 @@ import time
 import random
 import urllib
 
-import simplejson
-
-if hasattr(sys.modules[u"__main__"], u"xbmc"):
-    xbmc = sys.modules[u"__main__"].xbmc
+if sys.version_info >=  (2, 7):
+    import json as _json
 else:
-    import xbmc
+    import simplejson as _json 
     
-if hasattr(sys.modules[u"__main__"], u"xbmcgui"):
-    xbmcgui = sys.modules[u"__main__"].xbmcgui
-else:
-    import xbmcgui
 
-if hasattr(sys.modules[u"__main__"], u"xbmcplugin"):
-    xbmcplugin = sys.modules[u"__main__"].xbmcplugin
-else:
-    import xbmcplugin
+import xbmcplugin
+import xbmcgui
+import xbmc
 
 import mycgi
 import utils
 
 from loggingexception import LoggingException
 from provider import Provider
-from vineplayer import VinePlayer
-#from watched import WatchedPlayer
+from BeautifulSoup import BeautifulSoup
 
-apiUrl = u"http://vinetube-api.appspot.com/mostrecent"
+
+urlRoot = u"http://www.vineroulette.com"
 
 class VineProvider(Provider):
 
@@ -57,7 +50,7 @@ class VineProvider(Provider):
         if not os.path.exists(warningFilePath):
             dialog = xbmcgui.Dialog()
             # WARNING: These videos are not moderated. By using this plugin you are accepting sole responsibility for any and all consequences of said use.
-            action = dialog.yesno(self.GetProviderId(), self.language(60040), self.language(60041), self.language(60042), self.language(60060), self.language(60050) ) # 1=Continue; 0=Cancel
+            action = dialog.yesno(self.GetProviderId(), self.language(30240), self.language(30241), self.language(30242), self.language(30260), self.language(30250) ) # 1=Continue; 0=Cancel
     
             if action == 0:
                 return True
@@ -68,28 +61,35 @@ class VineProvider(Provider):
             
         try:
             listItems = []
-            # Latest Vines
-            label = self.language(60000)
-            thumbnailPath = self.GetThumbnailPath(label)
-
-            newListItem = xbmcgui.ListItem( label=label )
-            newListItem.setThumbnailImage(thumbnailPath)
-            url = self.GetURLStart()  + u'&hashtag='
-            
-            listItems.append((url, newListItem, False))
-            
             # Search by #tag
-            label = self.language(60010)
+            label = self.language(30210)
             thumbnailPath = self.GetThumbnailPath(label)
 
-            newListItem = xbmcgui.ListItem( label=self.language(60010) )
+            newListItem = xbmcgui.ListItem( label=self.language(30210) )
             newListItem.setThumbnailImage(thumbnailPath)
             url = self.GetURLStart() + u'&search=1'
             
-            listItems.append((url, newListItem, False))
+            listItems.append((url, newListItem, True))
+
+            # Popular hashtags            
+            thumbnailPath = self.GetThumbnailPath(label)
+
+            newListItem = xbmcgui.ListItem( label=self.language(30001) )
+            newListItem.setThumbnailImage(thumbnailPath)
+            url = self.GetURLStart() + u'&popular=1'
+            listItems.append((url, newListItem, True))
             
-            xbmcplugin.addDirectoryItems( handle=self.pluginhandle, items=listItems )
-            xbmcplugin.endOfDirectory( handle=self.pluginhandle, succeeded=True )
+            # Trending hashtags            
+            thumbnailPath = self.GetThumbnailPath(label)
+
+            newListItem = xbmcgui.ListItem( label=self.language(30002) )
+            newListItem.setThumbnailImage(thumbnailPath)
+            url = self.GetURLStart() + u'&trending=1'
+            
+            listItems.append((url, newListItem, True))
+
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
             
             return True
         except (Exception) as exception:
@@ -107,109 +107,69 @@ class VineProvider(Provider):
     def ParseCommand(self, mycgi):
         self.log(u"", xbmc.LOGDEBUG)
 
-        (search) = mycgi.Param( u'search')
+        (search, popular, trending, page, label) = mycgi.Params( u'search', u'popular', u'trending', u'page', u'label')
 
         if search <> '':
             return self.DoSearch()
 
-        return self.PlayVideoWithDialog(self.PlayVideos, ())
+        if popular <> '':
+            return self.ShowTagsOfType("Popular")
 
-    def GetPlayer(self):
-        if self.addon.getSetting( u'show_tweets' ) == u'true':
-            player = VinePlayer(xbmc.PLAYER_CORE_AUTO)
-            player.initialise(self.log)
-            return player
-        else:
-            return xbmc.Player(xbmc.PLAYER_CORE_AUTO)
+        if trending <> '':
+            return self.ShowTagsOfType("Trending")
 
-    def PlayVideos(self, hashTag = None, dummy = None):
-        queuedVideos = []
-        epochTimeMS = int(round(time.time() * 1000.0))
-        callback = "jQuery1900%s_%s" % ( random.randint(1000000000000000, 9999999999999999), epochTimeMS)
+        if page <> '':
+            return self.ShowVinesByTag(page, label)
 
-        self.log("callback: " + callback)
-        self.log("hashTag: " + repr(hashTag))
-        offset = 1
-        stop = False
+    def ShowVinesByTag(self, page, label):
+        self.log("page: " + repr(page))
+        url = urlRoot + page
         
-        playList=xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        playList.clear()
-        
-        listItems = self.GetListItems(callback, epochTimeMS, offset, hashTag)
-        if listItems is not None:
-            for item in listItems:
-                (url, listItem) = item
-                if url not in queuedVideos:
-                    queuedVideos.append(url)
-                    playList.add(url, listItem)
-
-        if playList.size() == 0:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(self.GetProviderId(), self.language(60070))
-            
-        if self.dialog.iscanceled():
-            return False
-
-        player = self.GetPlayer()
-        player.play(playList)
-
-        self.dialog.close()
-        
-        if isinstance(player, VinePlayer):
-            # Keep script alive so that player can process the onPlayBackStart event
-            while playList.getposition() != -1 and not player.isStopped():
-                xbmc.sleep(2000)
-                self.log("player.isStopped(): " + repr(player.isStopped()), xbmc.LOGDEBUG)
-
-        return True
-
-    def GetListItems(self, callback, epoch, offset, hashTag = None):
-        values = {
-                   'callback':callback,
-                   '_':epoch + 1 
-                }
-
-        if offset == 1:
-            values['count'] = 50
-
-        if hashTag is None:
-            values['a'] = 1
-        else:
-            values['tag'] = '#' + hashTag
-            
         try:
             jsonText = None
-            jsonText = self.httpManager.GetWebPageDirect(apiUrl + "?" + urllib.urlencode(values))
-    
-            jsonData = simplejson.loads(utils.extractJSON(jsonText))
-            
-            playList=xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-            playList.clear()
-            
             listItems = []
-            for vineData in jsonData:
-                """
-                title = ""
-                if len(vineData['name']) > 0:
-                    title = vineData['name'] + ": "
+            html = self.httpManager.GetWebPageDirect(url)
+
+            pattern = "<script.*>\s*var\s*vines\s*=\s*(\[.*\])\s*;\s*</script>"
+            match = re.search(pattern, html, re.MULTILINE | re.DOTALL)
+
+            jsonText = match.group(1)
+    
+            jsonData = _json.loads(jsonText)
+
+            soup = BeautifulSoup(html)
+            
+            previous = soup.find('li', 'previous')
+            next = soup.find('li', 'next')
+            
+            if previous:
+                listItem = xbmcgui.ListItem("<< " + previous.text)
+                url = self.GetURLStart() + u'&page=' + previous.a['href'] 
+                listItems.append((url, listItem, True))
+            else:
+                self.AddOrderLinks(soup, listItems)
                 
-                if len(vineData['message']) > 0:
-                        title = title + vineData['message']
-                """
-                url = vineData['video_url']
-                icon = vineData['avatar_73']
+            for vineData in jsonData:
+                url = vineData['vineVideoURL']
+                icon = vineData['vineImageURL']
               
-                infoLabels = {u'Title': vineData['name'], u'Plot': vineData['message']}
+                infoLabels = {u'Title': vineData['vineDescription'], u'Plot': vineData['vineDescription']}
                 
                 self.log("infoLabels: " + utils.drepr(infoLabels))
-                listItem = xbmcgui.ListItem(vineData['message'], iconImage = icon )
+                listItem = xbmcgui.ListItem(vineData['vineDescription'], iconImage = icon )
                 listItem.setInfo(u'video', infoLabels)
                 listItems.append((url, listItem))
             
-            listItems.reverse()
+            if next:
+                listItem = xbmcgui.ListItem(">> " + next.text)
+                url = self.GetURLStart() + u'&page=' + next.a['href']
+                listItems.append((url, listItem, True))
+                
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
+
             self.log( "listItems: " + repr(listItems)) 
 
-            return listItems
         except (Exception) as exception:
             exception = LoggingException.fromException(exception)
 
@@ -219,14 +179,58 @@ class VineProvider(Provider):
                 
             # Error processing web page
             exception.addLogMessage(self.language(30780))
-            exception.process(self.language(60080), self.language(30780), severity = self.logLevel( xbmc.LOGERROR ))
+            exception.process(self.language(30280), self.language(30780), severity = self.logLevel( xbmc.LOGERROR ))
     
-            return None
+            
+    def AddOrderLinks(self, soup, listItems):
+        orderP = soup.find('p', 'hidden-xs')
+        for orderAnchor in orderP.findAll('a', 'btn-default'):
+            text = '[ ' + orderAnchor.text + ' ]'
+            newListItem = xbmcgui.ListItem( label=text )
+            url = self.GetURLStart() + u'&page=' + mycgi.URLEscape(orderAnchor['href'])
+            listItems.append( (url,newListItem,True) )
+            
+        #thumbnailPath = self.GetThumbnailPath(thumbnail)
+        #newListItem.setThumbnailImage(thumbnailPath)
 
+        
+    def ShowTagsOfType(self, tagType):
+        try:
+            html = self.httpManager.GetWebPageDirect(urlRoot)
+            soup = BeautifulSoup(html)
+            
+            ul = soup.find('h2', text=tagType)
+            
+            listItems = []
+            for anchor in ul.parent.parent.findAll('a'):
+                if anchor.text.find('#') == -1:
+                    continue
+                tag = anchor.text.replace('#','')
+                newListItem = xbmcgui.ListItem( label='#' + tag )
+                url = self.GetURLStart() + u'&page=' + self.GetTagPage(tag)
+                
+                listItems.append((url, newListItem, True))
+                
+            xbmcplugin.addDirectoryItems( handle=self.pluginHandle, items=listItems )
+            xbmcplugin.endOfDirectory( handle=self.pluginHandle, succeeded=True )
+            
+            return True
+            
+        except (Exception) as exception:
+            raise exception
+        
+
+    def GetTagPage(self, tag, pageNumber = None):
+        if pageNumber:
+            return "/tag/%s/%s" % (tag, pageNumber)
+        else:
+            return "/tag/%s" % tag
+        
     def DoSearchQuery( self, query ):
         self.log("query: %s" % query, xbmc.LOGDEBUG)
         
         query = query.replace('#','')
         query = query.replace(' ','')
         
-        return self.PlayVideoWithDialog(self.PlayVideos, (query, None))
+        page = self.GetTagPage(query) 
+        return self.ShowVinesByTag(page, 'Search')

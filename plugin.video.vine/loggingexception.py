@@ -78,7 +78,7 @@ class LoggingException (Exception):
             dialog.ok(messageHeading, messageDetail, 'See log for details')
         elif severity == xbmc.LOGWARNING:
             # See log for details
-            xbmc.executebuiltin('XBMC.Notification(%s, %s)' % (unicodedata.normalize('NFKD', messageHeading).encode('ASCII', 'ignore'), 'See log for details'))
+            xbmc.executebuiltin('XBMC.Notification(%s, %s)' % (self.normalize(messageHeading), 'See log for details'))
 
     def process(self, messageHeading = '', messageDetail = '', severity = xbmc.LOGDEBUG):
         if messageHeading == '':
@@ -86,3 +86,16 @@ class LoggingException (Exception):
              
         self.printLogMessages(severity)
         self.showInfo(messageHeading, messageDetail, severity)
+
+    def normalize(self, text):
+        if isinstance(text, str):
+            try:
+                text = text.decode('utf8')
+            except:
+                try:
+                    text = text.decode('latin1')
+                except:
+                    text = text.decode('utf8', 'ignore')
+                
+        return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
+    

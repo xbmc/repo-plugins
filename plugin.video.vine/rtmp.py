@@ -40,7 +40,7 @@ class RTMP:
     def getDumpCommand(self):
         if self.rtmpdumpPath is None or self.rtmpdumpPath == '':
             # rtmpdump path is not set
-            exception = Exception(self.language(32000))
+            exception = Exception(self.language(30042))
             raise exception
 
         args = [ self.rtmpdumpPath ]
@@ -55,12 +55,12 @@ class RTMP:
     def getSimpleParameters(self):
         if self.downloadFolder is None or self.downloadFolder == '':
             # Download Folder is not set
-            exception = Exception(self.language(32010))
+            exception = Exception(self.language(30043))
             raise exception;
 
         if self.rtmp is None or self.rtmp == '':
             # rtmp url is not set
-            exception = Exception(self.language(32020))
+            exception = Exception(self.language(30044))
             raise exception;
 
         parameters = {}
@@ -101,12 +101,12 @@ class RTMP:
     def getParameters(self):
         if self.downloadFolder is None or self.downloadFolder == '':
             # Download Folder is not set
-            exception = Exception(self.language(32010))
+            exception = Exception(self.language(30043))
             raise exception;
 
         if self.rtmp is None or self.rtmp == '':
             # rtmp url is not set
-            exception = Exception(self.language(32020))
+            exception = Exception(self.language(30044))
             raise exception;
 
         args = [ u"--rtmp", u'"%s"' % self.rtmp, u"-o", u'"%s"' % self.downloadFolder ]
@@ -154,7 +154,7 @@ class RTMP:
     def getPlayUrl(self):
         if self.rtmp is None or self.rtmp == '':
             # rtmp url is not set
-            exception = Exception(self.language(32020))
+            exception = Exception(self.language(30044))
             raise exception;
 
         args = [u"%s" % self.rtmp]

@@ -7,27 +7,25 @@ import socks
 import proxyconfig
 import unicodedata
 
+from cookielib import Cookie
+
 from loggingexception import LoggingException
 from urlparse import urlunparse
 import HTMLParser
 
 from rtmp import RTMP
 
-if hasattr(sys.modules["__main__"], "xbmc"):
-    xbmc = sys.modules["__main__"].xbmc
-else:
-    import xbmc
-
-if hasattr(sys.modules["__main__"], "xbmcgui"):
-    xbmcgui = sys.modules["__main__"].xbmcgui
-else:
-    import xbmcgui
+import xbmc
+import xbmcgui
+import xbmcplugin
 
 from subprocess import Popen, PIPE, STDOUT
 import mycgi
 import utils
 
-countryInfoUrl = "http://api.hostip.info/country.php"
+#import player
+
+countryInfoUrl = u"http://api.hostip.info/country.php"
 
 class Provider(object):
 
@@ -41,12 +39,18 @@ class Provider(object):
             self.log = log
 
             self.log("")
-
-        self.player = xbmc.Player
+        
+        #self.player = xbmc.Player
 
     def SetPlayer(self, player):
         self.player = player
 
+    #def GetPlayer(self):
+    #    return BasePlayer() 
+    
+    #def GetPlayer(self, pid, live):
+    #    return BasePlayer() 
+    
     def CreateForwardedForIP(self, currentForwardedForIP):
         currentSegments = currentForwardedForIP.split('.')
         
@@ -67,7 +71,9 @@ class Provider(object):
     """
     def ExecuteCommand(self, mycgi):
         self.log(u"mycgi.ParamCount(): " + unicode(mycgi.ParamCount()), xbmc.LOGDEBUG)
-        forwardedIP = mycgi.Param( u'forwardedip' )
+        self.resumeEnabled = self.addon.getSetting(u'resume_enabled') == u'true'
+
+        (forwardedIP, episodeId) = mycgi.Params( u'forwardedip', u'episodeId')
         
         if self.httpManager.GetIsForwardedForIP():
              forwardedIP = self.CreateForwardedForIP(forwardedIP)
@@ -77,9 +83,7 @@ class Provider(object):
  
         if mycgi.ParamCount() > 1:
             return self.ParseCommand(mycgi)
-            ##return True
         else:
-            #self.ShowLocationInfo()
             return self.ShowRootMenu()
     
     def ShowLocationInfo(self):
@@ -92,18 +96,21 @@ class Provider(object):
             self.log(u"Exception getting country code: " + repr(exception))
             
             
-    def initialise(self, httpManager, baseurl, pluginhandle):
+    def initialise(self, httpManager, baseurl, pluginHandle):
         self.baseurl = baseurl
-        self.pluginhandle = pluginhandle
+        self.pluginHandle = pluginHandle
         self.addon = sys.modules[u"__main__"].addon
         self.language = sys.modules[u"__main__"].language
+        self.log("INIT self.pluginHandle: " + str(self.pluginHandle), xbmc.LOGDEBUG)
         
         self.METHOD_IP_FORWARD = self.language(30370) 
-        self.METHOD_PROXY = self.language(31010)
-        self.METHOD_PROXY_STREAMS = self.language(31020)
+        self.METHOD_PROXY = self.language(30040)
+        self.METHOD_PROXY_STREAMS = self.language(30041)
         
         
         self.InitialiseHTTP(httpManager)
+        
+        return True
         
     def GetProxyConfig(self):
 
@@ -113,18 +120,18 @@ class Provider(object):
         proxy_user = None
         proxy_pass = None
         try:
-            proxy_server = self.addon.getSetting(u'proxy_server')
-            proxy_type_id = self.addon.getSetting(u'proxy_type')
+            proxy_server = self.addon.getSetting(u'proxy_server').decode(u'utf8')
+            proxy_type_id = int(self.addon.getSetting(u'proxy_type'))
             proxy_port = int(self.addon.getSetting(u'proxy_port'))
-            proxy_user = self.addon.getSetting(u'proxy_user')
-            proxy_pass = self.addon.getSetting(u'proxy_pass')
+            proxy_user = self.addon.getSetting(u'proxy_user').decode(u'utf8')
+            proxy_pass = self.addon.getSetting(u'proxy_pass').decode(u'utf8')
         except ( Exception ) as exception:
             raise exception
     
-        if   proxy_type_id == u'0': proxy_type = socks.PROXY_TYPE_HTTP_NO_TUNNEL
-        elif proxy_type_id == u'1': proxy_type = socks.PROXY_TYPE_HTTP
-        elif proxy_type_id == u'2': proxy_type = socks.PROXY_TYPE_SOCKS4
-        elif proxy_type_id == u'3': proxy_type = socks.PROXY_TYPE_SOCKS5
+        if   proxy_type_id == 0: proxy_type = socks.PROXY_TYPE_HTTP_NO_TUNNEL
+        elif proxy_type_id == 1: proxy_type = socks.PROXY_TYPE_HTTP
+        elif proxy_type_id == 2: proxy_type = socks.PROXY_TYPE_SOCKS4
+        elif proxy_type_id == 3: proxy_type = socks.PROXY_TYPE_SOCKS5
     
         proxy_dns = True
     
@@ -144,7 +151,7 @@ class Provider(object):
         self.httpManager.SetDefaultHeaders( self.GetHeaders() )
 
         proxy_method = self.addon.getSetting(self.GetProviderId() + u'_proxy_method') 
-        self.log("proxy_method: %s" % proxy_method)
+        self.log(u"proxy_method: %s" % proxy_method)
         
         if proxy_method == self.METHOD_PROXY or proxy_method == self.METHOD_PROXY_STREAMS:
             proxyConfig = self.GetProxyConfig()
@@ -158,19 +165,19 @@ class Provider(object):
         
         bitRates = {
             u"":None,                            #Setting not set, so use default value
-            self.language(32400):None,           #Default
-            self.language(32410):-1,             #Lowest Available
-            self.language(32430):200 * 1024,     #Max 200kps
-            self.language(32440):350 * 1024,     #Max 350kps
-            self.language(32450):500 * 1024,     #Max 500kps
-            self.language(32460):750 * 1024,     #Max 750kps
-            self.language(32470):1000 * 1024,    #Max 1000kps
-            self.language(32480):1500 * 1024,    #Max 1500kps
-            self.language(32490):2000 * 1024,    #Max 2000kps
-            self.language(32420):20000 * 1024    #Highest Available
+            self.language(30070):None,           #Default
+            self.language(30071):-1,             #Lowest Available
+            self.language(30073):200 * 1024,     #Max 200kps
+            self.language(30074):350 * 1024,     #Max 350kps
+            self.language(30075):500 * 1024,     #Max 500kps
+            self.language(30076):750 * 1024,     #Max 750kps
+            self.language(30077):1000 * 1024,    #Max 1000kps
+            self.language(30078):1500 * 1024,    #Max 1500kps
+            self.language(30079):2000 * 1024,    #Max 2000kps
+            self.language(30072):20000 * 1024    #Highest Available
             }
 
-        bitrate_string = self.addon.getSetting(u'bitrate')
+        bitrate_string = unicode(self.addon.getSetting(u'bitrate'))
         
         return bitRates[bitrate_string]
 
@@ -197,6 +204,7 @@ class Provider(object):
     def ShowRootMenu(self):
         pass
     
+    
     def ParseCommand(self, mycgi):
         pass
 
@@ -204,7 +212,7 @@ class Provider(object):
         return None
 
     def GetAction(self, title):
-        actionSetting = self.addon.getSetting( u'select_action' ).decode('utf8')
+        actionSetting = self.addon.getSetting( u'select_action' ).decode(u'utf8')
         self.log (u"action: " + actionSetting, xbmc.LOGDEBUG)
     
         # Ask
@@ -223,14 +231,14 @@ class Provider(object):
     
     #==============================================================================
     def AddSocksToRTMP(self, rtmpVar):
-        stream_method = self.addon.getSetting(self.GetProviderId() + u'_proxy_method') 
+        stream_method = self.addon.getSetting(self.GetProviderId() + u'_proxy_method').decode(u'utf8')
         if stream_method == self.METHOD_PROXY_STREAMS:
             proxyConfig = self.GetProxyConfig()
             rtmpVar.setProxyString(proxyConfig.toString())
         
-    def PlayOrDownloadEpisode(self, infoLabels, thumbnail, rtmpVar = None, defaultFilename = '', url = None, subtitles = None):
+    def PlayOrDownloadEpisode(self, infoLabels, thumbnail, rtmpVar = None, defaultFilename = u'', url = None, subtitles = None, resumeKey = None, resumeFlag = False):
         try:
-            action = self.GetAction(infoLabels['Title'])
+            action = self.GetAction(infoLabels[u'Title'])
     
             if self.dialog.iscanceled():
                 return False
@@ -238,13 +246,13 @@ class Provider(object):
             if ( action == 1 ):
                 # Play
                 # "Preparing to play video"
-                self.dialog.update(50, self.language(32720))
-                self.Play(infoLabels, thumbnail, rtmpVar, url, subtitles)
+                self.dialog.update(50, self.language(30085))
+                self.Play(infoLabels, thumbnail, rtmpVar, url, subtitles, resumeKey, resumeFlag)
         
             elif ( action == 0 ):
                     # Download
                     # "Preparing to download video"
-                self.dialog.update(50, self.language(32730))
+                self.dialog.update(50, self.language(30086))
                 self.Download(rtmpVar, defaultFilename, subtitles)
     
             return True
@@ -253,13 +261,14 @@ class Provider(object):
                 exception = LoggingException.fromException(exception)
     
             # Error playing or downloading episode %s
-            exception.process(self.language(32120) % u'', u'', self.logLevel(xbmc.LOGERROR))
+            exception.process(self.language(30051) % u'', u'', self.logLevel(xbmc.LOGERROR))
             return False
     
-    def GetPlayer(self):
-        return xbmc.Player(xbmc.PLAYER_CORE_AUTO) 
-    
-    def Play(self, infoLabels, thumbnail, rtmpVar = None, url = None, subtitles = None):
+    # If the programme is in multiple parts, then second, etc. parts to the playList
+    def AddSegments(self, playList):
+        return
+
+    def CreateListItem(self, infoLabels, thumbnail):
         if infoLabels is None:
             self.log (u'Play titleId: Unknown Title')
             listItem = xbmcgui.ListItem(u'Unknown Title')
@@ -270,27 +279,47 @@ class Provider(object):
 
         if thumbnail is not None:
             listItem.setThumbnailImage(thumbnail)
-    
-        playList=xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-        playList.clear()
         
+        return listItem
+
+    def Play(self, infoLabels, thumbnail, rtmpVar = None, url = None, subtitles = None, resumeKey = None, resumeFlag = False):
         if url is None:
             url = rtmpVar.getPlayUrl()
             
-        playList.add(url, listItem)
-    
+        if thumbnail is not None:
+            listItem = xbmcgui.ListItem(label=infoLabels[u'Title'], iconImage=thumbnail, thumbnailImage=thumbnail, path=url)
+            infoLabels[u'thumbnail'] = thumbnail
+        else:
+            listItem = xbmcgui.ListItem(label=infoLabels[u'Title'], path=url)
+        
+        infoLabels[u'video_url'] = url
+        listItem.setInfo(type=u'Video', infoLabels=infoLabels)
+
         if self.dialog.iscanceled():
             return False
+
+        try:
+            player = self.GetPlayer()
+        except PlayerLockException:
+            exception_dialog = xbmcgui.Dialog()
+            exception_dialog.ok("Stream Already Playing", "Unable to open stream", " - To continue, stop all other streams (try pressing 'x')[CR] - If you are sure there are no other streams [CR]playing, remove the resume lock (check addon settings -> advanced)")
+            return
+    
+            
+        playList=xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+        playList.clear()
         
+        playList.add(url, listItem)
         player = self.GetPlayer()
         player.play(playList)
         
         self.dialog.close()
-        
+        #xbmcplugin.setResolvedUrl(handle=self.pluginHandle, succeeded=True, listitem=listItem)
         if subtitles is not None:
             try:
+                self.log (u"Subtitle processing", xbmc.LOGDEBUG)
                 subtitleFile = subtitles.GetSubtitleFile()
-                self.player().setSubtitles(subtitleFile)
+                player.setSubtitles(subtitleFile)
             except (Exception) as exception:
                 if not isinstance(exception, LoggingException):
                     exception = LoggingException.fromException(exception)
@@ -299,10 +328,25 @@ class Provider(object):
                 exception.addLogMessage(self.language(30970))
                 exception.process('', '', severity = xbmc.LOGWARNING)
 
+
+        #self.log (u"AddSegments(playList)", xbmc.LOGDEBUG)
+        #self.AddSegments(player.get_playlist())
+        #self.log (u"Post AddSegments(playList)", xbmc.LOGDEBUG)
+    
+        if os.environ.get( "OS" ) != "xbox":
+            while player.isPlaying() and not xbmc.abortRequested:
+                xbmc.sleep(500)
+    
+            self.log("Exiting playback loop... (isPlaying %s, abortRequested %s)" % (player.isPlaying(), xbmc.abortRequested), level=xbmc.LOGDEBUG)
+            #player.set_cancelled()
+    
+        """
         # Keep script alive so that player can process the onPlayBackStart event
         if player.isPlaying():
+            self.log (u"player.isPlaying()", xbmc.LOGDEBUG)
             xbmc.sleep(5000)
-
+        """
+        
     def Download(self, rtmpVar, defaultFilename, subtitles = None):
         (rtmpdumpPath, downloadFolder, filename) = self.GetDownloadSettings(defaultFilename)
     
@@ -325,10 +369,15 @@ class Provider(object):
                 exception.addLogMessage(self.language(30970))
                 exception.process('', '', severity = xbmc.LOGWARNING)
 
+        if self.dialog.iscanceled():
+            return False
+
+        self.dialog.close()
+
         # Starting downloads 
         self.log (u"Starting download: " + rtmpdumpPath + u" " + parameters)
     
-        xbmc.executebuiltin(('XBMC.Notification(%s, %s)' % ( self.language(30610), filename)).encode('utf8'))
+        xbmc.executebuiltin((u'XBMC.Notification(%s, %s)' % ( self.language(30610), filename)).encode(u'utf8'))
     
         self.log(u'"%s" %s' % (rtmpdumpPath, parameters))
         if sys.modules[u"__main__"].get_system_platform() == u'windows':
@@ -341,25 +390,27 @@ class Provider(object):
         (stdout, stderr) = p.communicate()
         self.log (u"rtmpdump has stopped executing", xbmc.LOGDEBUG)
     
+        stderr = utils.normalize(stderr) 
+
         if u'Download complete' in stderr:
             # Download Finished!
             self.log (u'stdout: ' + str(stdout), xbmc.LOGDEBUG)
             self.log (u'stderr: ' + str(stderr), xbmc.LOGDEBUG)
             self.log (u"Download Finished!")
-            xbmc.executebuiltin(('XBMC.Notification(%s,%s,2000)' % ( self.language(30620), filename)).encode('utf8'))
+            xbmc.executebuiltin((u'XBMC.Notification(%s,%s,2000)' % ( self.language(30620), filename)).encode(u'utf8'))
         else:
             # Download Failed!
             self.log (u'stdout: ' + str(stdout), xbmc.LOGERROR)
             self.log (u'stderr: ' + str(stderr), xbmc.LOGERROR)
             self.log (u"Download Failed!")
-            xbmc.executebuiltin(('XBMC.Notification(%s,%s,2000)' % ( u"Download Failed! See log for details", filename)).encode('utf8'))
+            xbmc.executebuiltin((u'XBMC.Notification(%s,%s,2000)' % ( u"Download Failed! See log for details", filename)).encode(u'utf8'))
 
     #==============================================================================
     
     def GetDownloadSettings(self, defaultFilename):
     
         # Ensure rtmpdump has been located
-        rtmpdumpPath = self.addon.getSetting(u'rtmpdump_path').decode('utf8')
+        rtmpdumpPath = self.addon.getSetting(u'rtmpdump_path').decode(u'utf8')
         if ( rtmpdumpPath is u'' ):
             dialog = xbmcgui.Dialog()
             # Download Error - You have not located your rtmpdump executable...
@@ -381,7 +432,7 @@ class Provider(object):
             
             downloadFolder = self.addon.getSetting(u'download_folder').decode('utf8')
 
-        if downloadFolder is '':
+        if downloadFolder is u'':
             return
         
         if ( self.addon.getSetting(u'ask_filename') == u'true' ):
@@ -389,7 +440,7 @@ class Provider(object):
             kb = xbmc.Keyboard( defaultFilename, self.language(30590))
             kb.doModal()
             if (kb.isConfirmed()):
-                filename = kb.getText().decode('utf8')
+                filename = kb.getText().decode(u'utf8')
             else:
                 return
         else:
@@ -423,16 +474,16 @@ class Provider(object):
     #==============================================================================
     # thumbnail must be unicode, not str
     def GetThumbnailPath(self, thumbnail):
-        thumbnail = unicodedata.normalize('NFKD', thumbnail).encode('ASCII', 'ignore')
+        thumbnail = unicodedata.normalize(u'NFKD', thumbnail).encode(u'ASCII', u'ignore')
         thumbnail = utils.replace_non_alphanum(thumbnail)
-        self.log("thumbnail: " + thumbnail, xbmc.LOGDEBUG)
-        path = os.path.join(sys.modules[u"__main__"].MEDIA_PATH, self.GetProviderId() + '_' + thumbnail + '.jpg')
+        self.log(u"thumbnail: " + thumbnail, xbmc.LOGDEBUG)
+        path = os.path.join(sys.modules[u"__main__"].MEDIA_PATH, self.GetProviderId() + u'_' + thumbnail + u'.jpg')
         
         if not os.path.exists(path):
-            path = os.path.join(sys.modules[u"__main__"].MEDIA_PATH, self.GetProviderId() + '.jpg') 
+            path = os.path.join(sys.modules[u"__main__"].MEDIA_PATH, self.GetProviderId() + u'.jpg') 
 
         if self.log is not None:
-            self.log("GetThumbnailPath: " + path, xbmc.LOGDEBUG)
+            self.log(u"GetThumbnailPath: " + path, xbmc.LOGDEBUG)
         return path
     #
     def fullDecode(self, text):
@@ -442,25 +493,25 @@ class Provider(object):
 
         mychr = chr
         myatoi = int
-        list = text.split('%')
+        list = text.split(u'%')
         res = [list[0]]
         myappend = res.append
         del list[0]
         for item in list:
             if item[1:2]:
                 try:
-                    myappend(unicode(chr(int(item[:2], 16)), 'latin1') + item[2:])
+                    myappend(unicode(chr(int(item[:2], 16)), u'latin1') + item[2:])
                 except:
-                    myappend('%' + item)
+                    myappend(u'%' + item)
             else:
-                myappend('%' + item)
+                myappend(u'%' + item)
         return u"".join(res)
                  
 #==============================================================================
     def DoSearch(self):
-        self.log("", xbmc.LOGDEBUG)
+        self.log(u"", xbmc.LOGDEBUG)
         # Search
-        kb = xbmc.Keyboard( "", self.language(30500) )
+        kb = xbmc.Keyboard( u"", self.language(30500) )
         kb.doModal()
         if ( kb.isConfirmed() == False ): return
         query = kb.getText()
@@ -484,23 +535,43 @@ class Provider(object):
                 exception = LoggingException.fromException(exception)
     
             if data is not None:
-                msg = "url: %s\n\n%s\n\n" % (url, data)
+                msg = u"url: %s\n\n%s\n\n" % (url, data)
                 exception.addLogMessage(msg)
                 
             # Error getting web page %s
-            exception.addLogMessage(self.language(30050) + ": " + url)
+            exception.addLogMessage(self.language(30050) + u": " + url)
             raise exception
     
     def PlayVideoWithDialog(self, method, parameters):
         try:
             self.dialog = xbmcgui.DialogProgress()
-            self.dialog.create(self.GetProviderId(), self.language(32640))
+            self.dialog.create(self.GetProviderId(), self.language(30080))
             
             return method(*parameters)
         finally:
             self.dialog.close()
 
-
+    def MakeCookie(self, name, value, domain, expires = None):
+        return Cookie(
+                      version=0, 
+                      name=name, 
+                      value=value,
+                      port=None, 
+                      port_specified=False,
+                      domain=domain, 
+                      domain_specified=(domain is not None), 
+                      domain_initial_dot=domain.startswith(u'.'),
+                      path=u"/", 
+                      path_specified=True,
+                      secure=False,
+                      expires=expires,
+                      discard=False,
+                      comment=None,
+                      comment_url=None,
+                      rest={}
+                      )
+ 
+        
 class Subtitle(object):
     
     def GetSubtitleFile(self, filename = None):

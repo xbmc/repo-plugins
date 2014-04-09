@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+import urllib
 
 gParamDict = {}
 gQSParsed = False
@@ -40,10 +41,16 @@ def _ParseQS():
 		if (len(nameValue)) == 2:
 			name = URLUnescape(nameValue[0])
 			value = URLUnescape(nameValue[1])
+##			name = urllib.unquote(nameValue[0])
+##			value = urllib.unquote(nameValue[1])
 			gParamDict[name] = value
 	gQSParsed = True
 
 def URLUnescape( s ):
+##	if isinstance(s, str):
+##		return urllib.unquote( s ).decode('latin1')
+##	
+##	return urllib.unquote( s )
 	# Unescape the pluses
 	if '+' in s:
 		s = ' '.join(s.split('+'))

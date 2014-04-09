@@ -1,5 +1,8 @@
+[B]Version 4.2.4[/B]
+Fix issue attempting to show subtitles when there aren't any (issue#50 issue#51)
+
 [B]Version 4.2.3[/B]
-Fix workaround for newest talks with Python <2.7 [issue#41]
+Fix workaround for newest talks with Python <2.7 (issue#41)
 
 [B]Version 4.2.2[/B]
 Fix issue that stopped plugin loading (issue#47)

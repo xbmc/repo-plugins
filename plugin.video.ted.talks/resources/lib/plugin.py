@@ -26,6 +26,6 @@ def init():
 
 def report(gnarly_message, friendly_message=None):
     import xbmc
-    print "[%s] %s" % (__plugin__, gnarly_message)
+    xbmc.log("[%s] %s" % (__plugin__, gnarly_message), level=xbmc.LOGNOTICE)
     if friendly_message:
         xbmc.executebuiltin('Notification("%s","%s",)' % (__pluginLS__, friendly_message))

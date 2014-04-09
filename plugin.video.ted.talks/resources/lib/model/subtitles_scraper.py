@@ -35,10 +35,9 @@ def __get_languages__(talk_json):
     '''
     return [l['languageCode'] for l in talk_json['languages']]
 
-def get_subtitles(talk_id, language):
+def get_subtitles(talk_id, language, logger):
     url = 'http://www.ted.com/talks/subtitles/id/%s/lang/%s' % (talk_id, language)
     subs = json.loads(urllib.urlopen(url).read())
-
     captions = []
     for caption in subs['captions']:
         captions += [{'start': caption['startTime'], 'duration': caption['duration'], 'content': caption['content']}]
@@ -53,19 +52,25 @@ def get_subtitles_for_talk(talk_json, accepted_languages, logger):
 
     try:
         languages = __get_languages__(talk_json)
+
+        if len(languages) == 0:
+            msg = 'No subtitles found'
+            logger(msg, msg)
+            return None
+
+        language_matches = [l for l in accepted_languages if l in languages]
+        if not language_matches:
+            msg = 'No subtitles in: %s' % (",".join(accepted_languages))
+            logger(msg, msg)
+            return None
+
+        raw_subtitles = get_subtitles(talk_id, language_matches[0], logger)
+        if not raw_subtitles:
+            return None
+
+        return format_subtitles(raw_subtitles, int(float(intro_duration) * 1000))
+
     except Exception, e:
+        # Must not fail!
         logger('Could not display subtitles: %s' % (e), __friendly_message__)
         return None
-    if len(languages) == 0:
-        msg = 'No subtitles found'
-        logger(msg, msg)
-        return None
-
-    language_matches = [l for l in accepted_languages if l in languages]
-    if not language_matches:
-        msg = 'No subtitles in: %s' % (",".join(accepted_languages))
-        logger(msg, msg)
-        return None
-
-    raw_subtitles = get_subtitles(talk_id, language_matches[0])
-    return format_subtitles(raw_subtitles, int(float(intro_duration) * 1000))

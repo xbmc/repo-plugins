@@ -54,7 +54,7 @@ def showDramaIndex(start):
 			handle		= jw_config.plugin_pid, 
 			url 		= url, 
 			listitem 	= listItem, 
-			isFolder	= True 
+			isFolder	= False 
 		)  
 		drama_num = drama_num + 1
 

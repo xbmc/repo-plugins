@@ -1,3 +1,20 @@
+0.5.0
+-----
+
+Changes:
++ Complete rewrite of video indexing
++ Video page shows directly the video list
++ The filter function is still available, but as link on very first video list page
++ Now every video json file info (in set of 10) will be parsed to autodetect if it's available the default resolution choose; if yes, a playable item is added to the list, if no a folder item is added to the list [these items are bold and blue, to easy identify a folder item and distinguish it from playable items]
++ Doubled the cache system for even faster item browsing: list of items is cached for 24h, but single item json file is cached for a whole month, because it's highly plausible it will not change anymore. 
++ Added a progress bar to help user to be patient when loading video index for first time (once per video page)
++ Enhanched fallback for video images detection; now you can play even the some old videos that was causing crashes before of today
+
+Fix:
++ I'm happy to tell that all of this work finally fixes issue (#23) related to "gotham" (xbmc v13). 
++ Also Issue #24 is closed, now you can start plugin from shortcut on confluence start screen. 
++ Forced default view for audio menu, because of some strange differences on gotham 13 on some android
+
 0.4.3
 -----
 

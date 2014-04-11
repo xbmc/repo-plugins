@@ -222,6 +222,15 @@ def showVideoCategorySpecificIssue(category_url, thumb, pub_title_index) :
 			except :
 				continue
 
+			res_found = searchResolution(category_url, row_index)
+
+			if res_found == False :
+				chapter_title 	= "[COLOR=blue][B]" + chapter_title + "[/B][/COLOR]"
+				is_folder 		= True
+			else :
+				chapter_title 	= chapter_title + " [" + res_found + "]"
+				is_folder 		= False
+
 			listItem = xbmcgui.ListItem(
 				label 			= chapter_title, 
 				thumbnailImage 	= thumb
@@ -236,21 +245,75 @@ def showVideoCategorySpecificIssue(category_url, thumb, pub_title_index) :
 			} 
 
 			url = jw_config.plugin_name + '?' + urllib.urlencode(params)
+			
 			xbmcplugin.addDirectoryItem(
-				handle	 = jw_config.plugin_pid, 
-				url 	 = url, 
-				listitem = listItem, 
-				isFolder = True 
-			)  
-
+				handle		= jw_config.plugin_pid, 
+				url			= url, 
+				listitem	= listItem, 
+				isFolder	= is_folder
+			) 
+		
 	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)	
+
+
+# very similar to showVideoCategorySpecificRow
+# return a boolean false or found resolution
+def searchResolution(category_url, row_index) :
+
+	# looking for choosen resolution or first available resolution unde it
+	max_resolution	= xbmcplugin.getSetting(jw_config.plugin_pid, "max_resolution")
+	if max_resolution == 0 :
+		return False;
+
+	row_index 	= int(row_index) #because it's a string actually !
+	html 		= jw_common.loadUrl(category_url)
+	soup 		= BeautifulSoup(html)
+
+	row = soup.findAll('tr')[row_index]
+
+	row_cells = row.findAll("td")
+
+	start_cell = 2 # zero-base indexing
+	first_cell_class = row.findAll("td")[0]["class"]
+	if first_cell_class == "calign":
+		start_cell = 3
+
+	video_dict = {}
+
+	cell_index = -1
+	for cell in row_cells :
+		cell_index = cell_index + 1
+		if cell_index == (start_cell -1): 
+			article_title = jw_common.cleanUpText(cell.contents[0].encode("utf-8"))
+
+		if cell_index >= start_cell :
+
+			# This is needed for resolution cell empty
+			if cell.find("a") is None :
+				continue
+
+			video_src 		= cell.find("a").get("href")
+			video_quality 	= cell.find("a").contents[0].encode("utf-8")
+
+			video_dict [ video_quality ] = video_src
+
+	# Look for choosen resolution
+	max_resolution_string = max_resolution + "p"
+
+  	keys = sorted(list(video_dict.keys()), reverse=True)
+  	for key in keys :
+  		if (key <= max_resolution_string )  :
+			return key;
+
+	# If am here, I surely have NOT the default resolution found
+	return False;
 
 
 # Get the list of playable item (a list of video resolution and title)
 # from a specific row of the page
 def showVideoCategorySpecificRow(category_url, thumb, row_index) :
 
-	row_index = int(row_index) #because it's a string actually !
+	row_index 	= int(row_index) #because it's a string actually !
 	html 		= jw_common.loadUrl(category_url)
 	soup 		= BeautifulSoup(html)
 

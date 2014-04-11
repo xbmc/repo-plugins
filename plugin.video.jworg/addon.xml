@@ -2,7 +2,7 @@
 <addon 
     id="plugin.video.jworg" 
     name="Jw.org audio/video browser" 
-    version="0.4.3" 
+    version="0.5.0" 
     provider-name="Realtebo">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
@@ -19,6 +19,7 @@
         <summary lang="de">Ein einfacher Browser für jw.org Medieninhalte</summary>
         <summary lang="el">Ένας απλός περιηγητής περιεχομένου για το jw.org</summary>
         <summary lang="en">A simple browser for jw.org media content</summary>
+        <summary lang="en_NZ">A simple browser for jw.org media content</summary>
         <summary lang="es">Un navegador simple para jw.org contenido de medios</summary>
         <summary lang="fr">Un navigateur simple pour le contenu du site jw.org</summary>
         <summary lang="fr_CA">Un navigateur simple pour le contenu des médias de jw.org</summary>
@@ -37,6 +38,7 @@
         <description lang="de">Mit direktes Streaming von www.jw.org, ist folgendes möglich:[CR]- Videos anschauen[CR]- Magazine, Lieder und Melodien aus dem Königreich, Bibellesungen, Audio Dramen und dramatische Bibellesungen[CR]- den Täglichen Text lesen </description>
         <description lang="el">Με άμεση ροή από το www.jw.org, μπορείτε να:[CR]- Παρακολουθήσετε βίντεο[CR]- Ακούσετε αναγνώσεις περιοδικών, τραγουδιών και βασιλικών μελωδιών, βιβλικές αναγνώσεις, ηχητικά δράματα και δραματοποιημένες βιβλικές αναγνώσεις[CR]- Διαβάσετε το Βιβλικό Στίχο και τα Νέα της Ημέρας</description>
         <description lang="en">Directly streaming from www.jw.org, you can:[CR]- watch videos[CR]- listen magazine readings, songs and kingdom melodies, bible reading, audio dramas and dramatic bible readings[CR]- Read the daily text and news</description>
+        <description lang="en_NZ">Directly streaming from www.jw.org, you can:[CR]- watch videos[CR]- listen magazine readings, songs and kingdom melodies, bible reading, audio dramas and dramatic bible readings[CR]- Read the daily text and news</description>
         <description lang="es">Directamente fluye de www.jw.org, puede: [CR] - ver vídeos [CR] - escuchar lecturas de revistas, canciones y melodías reino, lectura de la Biblia, los dramas de audio y lecturas bíblicas dramáticas [CR] - Lee el texto diario y noticias</description>
         <description lang="fr">Lecture directement du site www.jw.org vous pouvez:[CR]-Regarder des vidéos[CR]- Écouter la lecture de revues, cantiques et mélodies du royaume, lecture de la bible, drames audio et lectures biblique dramatiques[CR]- Lire le texte du jour et nouvelles</description>
         <description lang="fr_CA">Lecture en transit  direct de www.jw.org, vous pouvez :[CR]- Regarder des vidéos[CR]- écouter des lectures de magazines, des chansons et mélodies du royaume, lecture de la bible, théâtre audio et des lectures théâtralisée de la bible[CR]- Lire le texte et les nouvelles quotidiennes.</description>
@@ -50,11 +52,11 @@
         <description lang="pt_BR">Fluxo direto de www.jw.org, você pode:[CR]- assistir vídeos[CR]- ouvir leitura de revistas, músicas e cantigos, leituras da bíblia, dramas em áudio e leituras bíblicas dramatizadas[CR]- Ler textos do dia e notícias</description>
         <description lang="sv">Med direktström från www.jw.org kan du:[CR]- se filmer[CR]- lyssna på tidningsuppläsningar, sånger och andlig musik, bibelläsning, ljuddraman och dramatiska bibeluppläsningar[CR]- läsa den dagliga texten och nyheter</description>
         <language>af de el en es it nl pl pt pt_BR sv</language>
-        <platform />
-        <website>http://wiki.xbmc.org/index.php?title=Add-on:Jw.org_audio/video_browser</website>
-        <source>https://github.com/realtebo/plugin.video.jworg</source>
+        <platform></platform>
         <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-        <email>mirkotebaldi@yahoo.it</email>
         <forum>http://forum.xbmc.org/showthread.php?tid=180407</forum>
+        <website>http://wiki.xbmc.org/index.php?title=Add-on:Jw.org_audio/video_browser</website>
+        <email>mirkotebaldi@yahoo.it</email>
+        <source>https://github.com/realtebo/plugin.video.jworg</source>
     </extension>
 </addon>

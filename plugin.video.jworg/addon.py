@@ -21,13 +21,19 @@ from program import jw_exec_news
 from program import jw_exec_week_program
 from program import jw_exec_activity
 
+from generic import jw_menu
+
 """
 START
 """
 # call arguments
 params 		 = jw_config.plugin_params
 
-content_type = params["content_type"][0]
+try:
+	content_type = params["content_type"][0]
+except:
+	content_type = "menu" 
+	pass
 
 mode = None
 try: 	
@@ -39,8 +45,14 @@ except:
 """
 Call router
 """
+if content_type == "menu" :
+	jw_menu.showMenu()
+
 if content_type == "video" :
 	if mode is None :
+		jw_video.showVideoIndex(0, "none")
+
+	if mode == "open_video_filter":
 		jw_video.showVideoFilter()
 
 	if mode == "open_video_index":
@@ -82,6 +94,7 @@ if content_type == "video" :
 		url 		= params ["url"][0]
 		thumb 		= params ["thumb"][0]
 		jw_sign.selBook(url, thumb)		
+
 
 if content_type == "audio" :
 	if mode is None :

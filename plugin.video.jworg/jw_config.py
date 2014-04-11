@@ -300,7 +300,9 @@ try:
 except:
 	from resources.lib import storageserverdummy as StorageServer
 	 
-cache 			= StorageServer.StorageServer(plugin_name, 24)  # 2 hour cache
+cache 			= StorageServer.StorageServer(plugin_name, 24)  # 24 hour cache
+cache_month		= StorageServer.StorageServer(plugin_name + "month", 24*30)  # 30 days cache
+
 audio_sorting 	= str(int(addon.getSetting("audio_sorting")) + 1)
 video_sorting 	= str(int(addon.getSetting("video_sorting")) + 1)
 

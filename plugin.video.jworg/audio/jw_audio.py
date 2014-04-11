@@ -56,6 +56,7 @@ def showAudioIndex():
         )  
     
     xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
+    jw_common.setDefaultView()
 
 
 # Track list

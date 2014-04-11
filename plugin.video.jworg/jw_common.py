@@ -67,6 +67,9 @@ def setThumbnailView() :
 	if jw_config.skin_used == 'skin.confluence': 
 		xbmc.executebuiltin('Container.SetViewMode(500)') 
 
+def setDefaultView() :
+	xbmc.executebuiltin('Container.SetViewMode(50)') 
+
 """
 REMOTE CONTENT LOAD 
 """
@@ -82,6 +85,7 @@ def loadUrl (url):
 	except:
 		pass 
 	return html	
+
 
 def loadNotCachedJsonFromUrl(url, ajax):
 	data = ""
@@ -100,9 +104,9 @@ def loadNotCachedJsonFromUrl(url, ajax):
 		data = json.loads(response)
 
 	except urllib2.URLError, e: 
-		xbmc.log ("JWORG http error", xbmc.LOGERROR)
-		xbmc.log (e.code, xbmc.LOGERROR)
-		xbmc.log (e.read(), xbmc.LOGERROR)
+		xbmc.log ("JWORG url error", xbmc.LOGERROR)
+		for arg in e.args :
+			print arg
 		pass
 		
 	except urllib2.HTTPError, e:
@@ -115,9 +119,15 @@ def loadNotCachedJsonFromUrl(url, ajax):
 
 	return data
 
-def loadJsonFromUrl (url, ajax):
-	data = jw_config.cache.cacheFunction(loadNotCachedJsonFromUrl, url, ajax)	
+
+def loadJsonFromUrl (url, ajax, month_cache = False ):
+
+	if month_cache == True :
+		data = jw_config.cache_month.cacheFunction(loadNotCachedJsonFromUrl, url, ajax)	
+	else :
+		data = jw_config.cache.cacheFunction(loadNotCachedJsonFromUrl, url, ajax)	
 	return data
+
 
 """
 URL HELPER

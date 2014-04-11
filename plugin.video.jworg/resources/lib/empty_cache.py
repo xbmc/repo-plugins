@@ -11,6 +11,8 @@ except:
 
 cache = StorageServer.StorageServer("plugin://plugin.video.jworg/", 24) 
 cache.delete("%")
+cache_month = StorageServer.StorageServer("plugin://plugin.video.jworg/" + "month", 24 * 7) 
+cache_month.delete("%")
 
 dialog = xbmcgui.Dialog()
 

@@ -28,7 +28,7 @@ def showExecIndex():
         handle      = jw_config.plugin_pid, 
         url         = url, 
         listitem    = listItem, 
-        isFolder    = True 
+        isFolder    = False 
     )  
 
     # 2. Week program
@@ -44,7 +44,7 @@ def showExecIndex():
         handle      = jw_config.plugin_pid, 
         url         = url, 
         listitem    = listItem, 
-        isFolder    = True
+        isFolder    = False
     )   
     
     # 3. News

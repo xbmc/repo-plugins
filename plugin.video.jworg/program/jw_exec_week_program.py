@@ -32,8 +32,6 @@ def showWeekProgram(date):
     dialog.doModal()
     del dialog
 
-    xbmc.executebuiltin('Action("back")')
-
 
 # Window showing daily text
 class WeekProgram(xbmcgui.WindowDialog):

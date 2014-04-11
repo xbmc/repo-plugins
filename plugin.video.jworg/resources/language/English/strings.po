@@ -196,3 +196,43 @@ msgstr ""
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr ""
+
+#. Link to video filter page
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr ""
+
+#. Progress bar title
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr ""
+
+#. Progress bar row 1
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr ""
+
+#. Progress bar row 2
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr ""
+
+#. Progress bar row 3 - It's like "Video 9 out of 10"
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr ""
+
+# Use the same string used in main screen
+msgctxt "#30046"
+msgid "Videos"
+msgstr ""
+
+# Use the same string used in main screen
+msgctxt "#30047"
+msgid "Music"
+msgstr ""
+
+# Use the same string used in main screen
+msgctxt "#30048"
+msgid "Programs"
+msgstr ""

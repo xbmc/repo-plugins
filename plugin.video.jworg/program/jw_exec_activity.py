@@ -108,7 +108,7 @@ def showActivitySection(url):
 			handle		= jw_config.plugin_pid, 
 			url			= url, 
 			listitem	= listItem, 
-			isFolder	= True 
+			isFolder	= False 
 		) 
 
 	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)

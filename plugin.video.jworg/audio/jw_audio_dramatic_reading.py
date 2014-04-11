@@ -50,7 +50,7 @@ def showDramaticReadingIndex(start):
 			handle		= jw_config.plugin_pid, 
 			url 		= url, 
 			listitem 	= listItem, 
-			isFolder	= True 
+			isFolder	= False 
 		)  
 		reading_num = reading_num + 1
 

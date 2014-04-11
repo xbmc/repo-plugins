@@ -28,7 +28,7 @@ def showDailyText(date):
     dialog.customInit(text)
     dialog.doModal()
     del dialog
-    xbmc.executebuiltin('Action("back")')
+    
 
 
 # Window showing daily text

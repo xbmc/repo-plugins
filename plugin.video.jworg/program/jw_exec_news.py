@@ -53,7 +53,7 @@ def showNewsIndex():
 			handle		= jw_config.plugin_pid, 
 			url			= url, 
 			listitem	= listItem, 
-			isFolder	= True 
+			isFolder	= False 
 		)  
 		count = count + 1
 	
@@ -69,8 +69,6 @@ def showNewsPage(url):
 	new.customInit(html)
 	new.doModal()
 	del new
-	xbmc.executebuiltin('Action("back")')
-
 
 
 # Window showing news text

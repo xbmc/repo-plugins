@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2013-05-01 12:03+0000\n"
+"POT-Creation-Date: 2014-04-01 16:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE\n"
@@ -13,11 +13,93 @@ msgstr ""
 "Language: en\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
+msgctxt "#30039"
+msgid "None"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Proxy for HTTP"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Proxy for HTTP and RTMP"
+msgstr ""
+
+msgctxt "#30042"
+msgid "rtmpdump path is not set"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Download Folder is not set"
+msgstr ""
+
+msgctxt "#30044"
+msgid "rtmp url is not set"
+msgstr ""
+
+#empty strings from id 30045 to 30049
+
 msgctxt "#30050"
 msgid "Error getting web page"
 msgstr ""
 
-#empty strings from id 30051 to 30099
+msgctxt "#30051"
+msgid "Error playing or downloading episode %s"
+msgstr ""
+
+#empty strings from id 30052 to 30069
+
+msgctxt "#30070"
+msgid "Default"
+msgstr ""
+
+msgctxt "#30071"
+msgid "Lowest Available"
+msgstr ""
+
+msgctxt "#30072"
+msgid "Highest Available"
+msgstr ""
+
+msgctxt "#30073"
+msgid "Max 200kps"
+msgstr ""
+
+msgctxt "#30074"
+msgid "Max 350kps"
+msgstr ""
+
+msgctxt "#30075"
+msgid "Max 500kps"
+msgstr ""
+
+msgctxt "#30076"
+msgid "Max 750kps"
+msgstr ""
+
+msgctxt "#30077"
+msgid "Max 1000kps"
+msgstr ""
+
+msgctxt "#30078"
+msgid "Max 1500kps"
+msgstr ""
+
+msgctxt "#30079"
+msgid "Max 2000kps"
+msgstr ""
+
+#empty strings from id 30080 to 30084
+
+msgctxt "#30085"
+msgid "Preparing to play video"
+msgstr ""
+
+msgctxt "#30086"
+msgid "Preparing to download video"
+msgstr ""
+
+#empty strings from id 30087 to 30099
 
 msgctxt "#30100"
 msgid "General"
@@ -47,13 +129,7 @@ msgctxt "#30140"
 msgid "Download"
 msgstr ""
 
-#empty strings from id 30141 to 30149
-
-msgctxt "#30150"
-msgid "Use paging (list 50 programmes at a time)"
-msgstr ""
-
-#empty strings from id 30151 to 30159
+#empty strings from id 30141 to 30159
 
 msgctxt "#30160"
 msgid "Subtitles"
@@ -155,13 +231,47 @@ msgctxt "#30420"
 msgid "Socket Timeout"
 msgstr ""
 
-#empty strings from id 30421 to 30499
+#empty strings from id 30421 to 30449
+
+msgctxt "#30450"
+msgid "Number of days to keep resume points"
+msgstr ""
+
+#empty strings from id 30451 to 30469
+
+msgctxt "#30470"
+msgid "Default play action"
+msgstr ""
+
+#empty strings from id 30471 to 30489
+
+msgctxt "#30490"
+msgid "Enable resume"
+msgstr ""
+
+#empty strings from id 30491 to 30499
 
 msgctxt "#30500"
 msgid "Search"
 msgstr ""
 
-#empty strings from id 30501 to 30509
+msgctxt "#30501"
+msgid "Showed Watched"
+msgstr ""
+
+msgctxt "#30502"
+msgid "Auto-Watch Percentage"
+msgstr ""
+
+msgctxt "#30503"
+msgid "Use alternative RTMP port: 443"
+msgstr ""
+
+msgctxt "#30504"
+msgid "Error processing asset data"
+msgstr ""
+
+#empty strings from id 30505 to 30509
 
 msgctxt "#30510"
 msgid "Page"
@@ -221,7 +331,19 @@ msgctxt "#30620"
 msgid "Download Finished"
 msgstr ""
 
-#empty strings from id 30621 to 30734
+#empty strings from id 30621 to 30699
+
+msgctxt "#30700"
+msgid "Getting video stream url"
+msgstr ""
+
+#empty strings from id 30701 to 30709
+
+msgctxt "#30710"
+msgid "Getting episode information"
+msgstr ""
+
+#empty strings from id 30711 to 30734
 
 msgctxt "#30735"
 msgid "Error parsing html"
@@ -291,158 +413,4 @@ msgstr ""
 
 msgctxt "#30970"
 msgid "Error getting subtitles"
-msgstr ""
-
-#empty strings from id 30971 to 30999
-
-msgctxt "#31000"
-msgid "None"
-msgstr ""
-
-#empty strings from id 31001 to 31009
-
-msgctxt "#31010"
-msgid "Proxy for HTTP"
-msgstr ""
-
-#empty strings from id 31011 to 31019
-
-msgctxt "#31020"
-msgid "Proxy for HTTP and RTMP"
-msgstr ""
-
-#empty strings from id 31021 to 31029
-
-msgctxt "#31030"
-msgid "Error processing data for show"
-msgstr ""
-
-#empty strings from id 31031 to 31999
-
-msgctxt "#32000"
-msgid "rtmpdump path is not set"
-msgstr ""
-
-#empty strings from id 32001 to 32009
-
-msgctxt "#32010"
-msgid "Download Folder is not set"
-msgstr ""
-
-#empty strings from id 32011 to 32019
-
-msgctxt "#32020"
-msgid "rtmp url is not set"
-msgstr ""
-
-#empty strings from id 32021 to 32119
-
-msgctxt "#32120"
-msgid "Error playing or downloading episode %s"
-msgstr ""
-
-#empty strings from id 32121 to 32399
-
-msgctxt "#32400"
-msgid "Default"
-msgstr ""
-
-#empty strings from id 32401 to 32409
-
-msgctxt "#32410"
-msgid "Lowest Available"
-msgstr ""
-
-#empty strings from id 32411 to 32419
-
-msgctxt "#32420"
-msgid "Highest Available"
-msgstr ""
-
-#empty strings from id 32421 to 32429
-
-msgctxt "#32430"
-msgid "Max 200kps"
-msgstr ""
-
-#empty strings from id 32431 to 32439
-
-msgctxt "#32440"
-msgid "Max 350kps"
-msgstr ""
-
-#empty strings from id 32441 to 32449
-
-msgctxt "#32450"
-msgid "Max 500kps"
-msgstr ""
-
-#empty strings from id 32451 to 32459
-
-msgctxt "#32460"
-msgid "Max 750kps"
-msgstr ""
-
-#empty strings from id 32461 to 32469
-
-msgctxt "#32470"
-msgid "Max 1000kps"
-msgstr ""
-
-#empty strings from id 32471 to 32479
-
-msgctxt "#32480"
-msgid "Max 1500kps"
-msgstr ""
-
-#empty strings from id 32481 to 32489
-
-msgctxt "#32490"
-msgid "Max 2000kps"
-msgstr ""
-
-#empty strings from id 32491 to 32639
-
-msgctxt "#32640"
-msgid "Preparing to play video"
-msgstr ""
-
-#empty strings from id 32641 to 32699
-
-msgctxt "#32700"
-msgid "Getting video stream url"
-msgstr ""
-
-#empty strings from id 32701 to 32709
-
-msgctxt "#32710"
-msgid "Getting episode information"
-msgstr ""
-
-#empty strings from id 32711 to 32719
-
-msgctxt "#32720"
-msgid "Preparing to play video"
-msgstr ""
-
-#empty strings from id 32721 to 50499
-
-msgctxt "#50500"
-msgid "Showed Watched"
-msgstr ""
-
-msgctxt "#50501"
-msgid "Auto-Watch Percentage"
-msgstr ""
-
-#empty strings from id 50502 to 50509
-
-msgctxt "#50510"
-msgid "Use alternative RTMP port: 443"
-msgstr ""
-
-#empty strings from id 50511 to 51039
-
-msgctxt "#51040"
-msgid "Error processing asset data"
 msgstr ""

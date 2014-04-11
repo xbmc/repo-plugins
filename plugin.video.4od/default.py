@@ -1,7 +1,6 @@
 #/bin/python
 # -*- coding: utf-8 -*-
 
-
 # http://wiki.xbmc.org/index.php?title=How-to:Debug_Python_Scripts_with_Eclipse
 
 REMOTE_DBG = False
@@ -57,9 +56,9 @@ MEDIA_PATH = os.path.join( RESOURCE_PATH, "media" )
 # Use masterprofile rather profile, because we are caching data that may be used by more than one user on the machine
 DATA_FOLDER      = xbmc.translatePath( os.path.join( "special://masterprofile","addon_data", pluginName ) )
 CACHE_FOLDER     = os.path.join( DATA_FOLDER, 'cache' )
-WATCHED_FOLDER   = os.path.join( DATA_FOLDER, 'watched' )
 SUBTITLE_FILE    = os.path.join( DATA_FOLDER, 'subtitle.smi' )
 NO_SUBTITLE_FILE = os.path.join( RESOURCE_PATH, 'nosubtitles.smi' )
+PROFILE_DATA_FOLDER = xbmc.translatePath( os.path.join( u"special://profile", u"addon_data", pluginName) )
 
 
 
@@ -97,7 +96,9 @@ def executeCommand():
     success = False
 
     provider = FourODProvider()
-    provider.initialise(httpManager, sys.argv[0], pluginHandle)
+    provider.initialise(httpManager, sys.argv[0], pluginHandle, addon, language, PROFILE_DATA_FOLDER, RESOURCE_PATH)
+    provider.SetSubtitlePaths(SUBTITLE_FILE, NO_SUBTITLE_FILE)
+    
     success = provider.ExecuteCommand(mycgi)
     log (u"executeCommand done", xbmc.LOGDEBUG)
             

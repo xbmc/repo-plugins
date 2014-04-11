@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
   <string id="30050">Error getting web page</string>
   <string id="30100">General</string>
@@ -5,7 +6,6 @@
   <string id="30120">Ask</string>
   <string id="30130">Play</string>
   <string id="30140">Download</string>
-  <string id="30150">Use paging (list 50 programmes at a time)</string>
   <string id="30160">Subtitles</string>
   <string id="30170">Disable HTTP Cache</string>
   <string id="30200">Downloads</string>
@@ -20,10 +20,16 @@
   <string id="30340">Username</string>
   <string id="30350">Password</string>
   <string id="30360">Method</string>
-  <string id="30370">Forwarded IP</string>
   <string id="30400">Advanced</string>
   <string id="30420">Socket Timeout</string>
+  <string id="30450">Number of days to keep resume points</string>
+  <string id="30470">Default play action</string>
+  <string id="30490">Enable resume</string>
   <string id="30500">Search</string>
+  <string id="30501">Showed Watched</string>
+  <string id="30502">Auto-Watch Percentage</string>
+  <string id="30503">Use alternative RTMP port: 443</string>
+  <string id="30504">Error processing asset data</string>
   <string id="30510">Page</string>
   <string id="30520">Unable to determine swfPlayer URL. Using default: %s</string>
   <string id="30530">Do you want to play or download?</string>
@@ -34,6 +40,10 @@
   <string id="30600">Save to folder...</string>
   <string id="30610">Starting download</string>
   <string id="30620">Download Finished</string>
+  <string id="30700">Getting video stream url</string>
+  <string id="30710">Getting episode information</string>
+  <string id="30085">Preparing to play video</string>
+  <string id="30086">Preparing to download video</string>
   <string id="30735">Error parsing html</string>
   <string id="30740">Cannot list episodes</string>
   <string id="30765">Cannot show categories</string>
@@ -46,32 +56,18 @@
   <string id="30960">Error getting episode data "%s"</string>
   <string id="30965">Error getting RTMP url</string>
   <string id="30970">Error getting subtitles</string>
-  <string id="31000">None</string>
-  <string id="31010">Proxy for HTTP</string>
-  <string id="31020">Proxy for HTTP and RTMP</string>
-  <string id="31030">Error processing data for show</string>
-  <string id="32000">rtmpdump path is not set</string>
-  <string id="32010">Download Folder is not set</string>
-  <string id="32020">rtmp url is not set</string>
-  <string id="32120">Error playing or downloading episode %s</string>
-  <string id="32400">Default</string>
-  <string id="32410">Lowest Available</string>
-  <string id="32420">Highest Available</string>
-  <string id="32430">Max 200kps</string>
-  <string id="32440">Max 350kps</string>
-  <string id="32450">Max 500kps</string>
-  <string id="32460">Max 750kps</string>
-  <string id="32470">Max 1000kps</string>
-  <string id="32480">Max 1500kps</string>
-  <string id="32490">Max 2000kps</string>
-  <string id="32640">Preparing to play video</string>
-  <string id="32700">Getting video stream url</string>
-  <string id="32710">Getting episode information</string>
-  <string id="32720">Preparing to play video</string>
-  <string id="32730"></string>
-  
-  <string id="50500">Showed Watched</string>
-  <string id="50501">Auto-Watch Percentage</string>
-  <string id="50510">Use alternative RTMP port: 443</string>
-  <string id="51040">Error processing asset data</string>
+  <string id="30042">rtmpdump path is not set</string>
+  <string id="30043">Download Folder is not set</string>
+  <string id="30044">rtmp url is not set</string>
+  <string id="30051">Error playing or downloading episode %s</string>
+  <string id="30070">Default</string>
+  <string id="30071">Lowest Available</string>
+  <string id="30072">Highest Available</string>
+  <string id="30073">Max 200kps</string>
+  <string id="30074">Max 350kps</string>
+  <string id="30075">Max 500kps</string>
+  <string id="30076">Max 750kps</string>
+  <string id="30077">Max 1000kps</string>
+  <string id="30078">Max 1500kps</string>
+  <string id="30079">Max 2000kps</string>
 </strings>

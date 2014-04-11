@@ -1,39 +1,106 @@
 import sys
 import os
 import threading
+import time
 
+from resumeplayer import ResumePlayer 
 import xbmc
 
 class Watched():
     
-    def __init__(self):
-        self.folder = sys.modules["__main__"].WATCHED_FOLDER
+    # Static constants for watch db and lockfile paths, set by default.py on plugin startup
+    WATCHED_FILE = None
+    WATCHED_LOCK_FILE = None
+    ADDON = None
     
-    def isWatched(self, episodeId):
-        filePath = os.path.join(self.folder, episodeId)
+    watchedEpisodes = None
+    
+    def __init__(self, dataFolder):
+        self.folder = os.path.join( dataFolder, 'watched' )
 
-        if os.access(filePath, os.F_OK):
+    @staticmethod
+    def isWatched(episodeId):
+        watchedEpisodes = Watched.load_watched_file()
+        if episodeId in watchedEpisodes:
             return True
         
-        return False
-
-    def setWatched(self, episodeId):
-        if not os.path.isdir(self.folder):
-            os.makedirs(self.folder)
-            
-        filePath = os.path.join(self.folder, episodeId)
+        return False 
         
-        open(filePath, 'w').close()
+    @staticmethod
+    def setWatched(episodeId):
+        """
+        Updates the current date added for the currently playing episodeId, and commits the result to the watched db file
+        """
+        watchedEpisodes = Watched.load_watched_file()
+        watchedEpisodes[episodeId] = time.time()
+        xbmc.log(u"Saving watched entry (episodeId %s, dateAdded %d) to watched file" % (episodeId, watchedEpisodes[episodeId]), xbmc.LOGINFO)
+        Watched.save_watched_file(watchedEpisodes)
         
-    def clearWatched(self, episodeId):
-        filePath = os.path.join(self.folder, episodeId)
+    @staticmethod
+    def clearWatched(episodeId):
+        xbmc.log(u"WatchedPlayer: Deleting watched entry for episodeId %s" % episodeId, xbmc.LOGINFO)
+        watchedEpisodes = Watched.load_watched_file()
+        del watchedEpisodes[episodeId]
+        Watched.save_watched_file(watchedEpisodes)
 
-        if os.access(filePath, os.F_OK):
-            os.remove(filePath)
+    @staticmethod
+    def load_watched_file():
+        """
+        Loads and parses the watched file, and returns a dictionary mapping episodeId -> watched_point
+        Watched file format is two columns, separated by a single space, with platform dependent newlines
+        First column is episodeId (string), second  column is date added
+        If date added is more than thirty days ago, the episodeId entry will be ignored for cleanup
+        Will only actually load the file once, caching the result for future calls.
+        """
+        
+        if not Watched.watchedEpisodes:
+            # Load watched file
+            Watched.watchedEpisodes = {}
+            if os.path.isfile(Watched.WATCHED_FILE):
+                xbmc.log(u"Watched: Loading watched file: %s" % (Watched.WATCHED_FILE), xbmc.LOGINFO)
+                with open(Watched.WATCHED_FILE, 'rU') as watched_fh:
+                    watched_str = watched_fh.read()
+                tokens = watched_str.split()
+                # Three columns, episodeId, seekTime (which is a float) and date added (which is an integer, datetime in seconds), per line
+                episodeIds = tokens[0::2]
+                datesAdded = [int(dateAdded) for dateAdded in tokens[1::2]]
+                episodeId_to_date_added_map = []
+                # if row was added less than days_to_keep days ago, add it to valid_mappings
+                try: days_to_keep = int(Watched.ADDON.getSetting(u'watched_days_to_keep'))
+                except: days_to_keep = 40
+                limit_time = time.time() - 60*60*24*days_to_keep
+                for i in range(len(episodeIds)):
+                    if datesAdded[i] > limit_time:
+                        episodeId_to_date_added_map.append( (episodeIds[i], datesAdded[i]) )
+
+                Watched.watchedEpisodes = dict(episodeId_to_date_added_map)
+                xbmc.log(u"Watched: Found %d watched entries" % (len(Watched.watchedEpisodes.keys())), xbmc.LOGINFO)
+                
+        return Watched.watchedEpisodes
+
+    @staticmethod
+    def save_watched_file(watchedEpisodes):
+        """
+        Saves the current watched dictionary to disk. See load_watched_file for file format
+        """
+        
+        Watched.watchedEpisodes = watchedEpisodes
+        
+        string = u""
+        xbmc.log(u"Watched: Saving %d entries to %s" % (len(watchedEpisodes.keys()), Watched.WATCHED_FILE), xbmc.LOGINFO)
+        watched_fh = open(Watched.WATCHED_FILE, u'w')
+        try:
+            for episodeId in watchedEpisodes:
+                string += u"%s %d%s" % (episodeId, watchedEpisodes[episodeId], os.linesep)
+            watched_fh.write(string)
+        finally:
+             watched_fh.close()
+
 
 SLEEP_MILLIS = 2000
 
-class WatchedPlayer(xbmc.Player):
+class WatchedPlayer(ResumePlayer):
+    
     def __init__(self, *args, **kwargs):
         super(WatchedPlayer, self).__init__(*args, **kwargs)    
         #self._playbackCompletedLock = threading.Event()
@@ -42,7 +109,8 @@ class WatchedPlayer(xbmc.Player):
         self.currentTime = 0
 
 
-    def initialise(self, threshold, episodeId, log = None):
+    def initialise(self, live, playerName, threshold, episodeId, resumeEnabled, log = None):
+        super(WatchedPlayer, self).init(episodeId, live, playerName, resumeEnabled)
         self.threshold = threshold
         self.episodeId = episodeId
         
@@ -52,7 +120,7 @@ class WatchedPlayer(xbmc.Player):
             self.log = log
             
         self.log('Initialised WatchedPlayer, threshold: %s' % threshold) 
-
+        
         
     
 #    def play(self, url = None, listitem = None, windowed = False):
@@ -76,7 +144,7 @@ class WatchedPlayer(xbmc.Player):
         self.log( 'current time: ' + str(self.currentTime) + ' total time: ' + str(self.totalTime) + ' percent watched: ' + str(percentWatched))
         if percentWatched >= self.threshold:
             self.log( 'Auto-Watch - Setting %s to watched' % self.episodeId )
-            Watched().setWatched(self.episodeId)
+            Watched.setWatched(self.episodeId)
             xbmc.executebuiltin( "Container.Refresh" )
 
     def onPlayBackStarted(self):
@@ -94,7 +162,9 @@ class WatchedPlayer(xbmc.Player):
             
         self.currentTime = 0
         
-        if not Watched().isWatched(self.episodeId):
+        watchedEpisodes = Watched.load_watched_file()
+        if self.episodeId not in watchedEpisodes:
+            self.log(u"%s: episodeId %s not watched, waiting for playback completion" % (self, self.episodeId), xbmc.LOGINFO)
             self.waitForPlaybackCompleted()
             self.checkWatched()
         

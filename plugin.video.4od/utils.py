@@ -1,5 +1,7 @@
 import re
 import urllib2
+import random
+import inspect
 
 from time import mktime,strptime
 
@@ -28,6 +30,15 @@ def isRecentDate(dateString):
 
 	return False
 
+def to_unicode(obj, encoding='utf-8'):
+    if isinstance(obj, basestring):
+         if not isinstance(obj, unicode):
+             obj = unicode(obj, encoding)
+    elif isinstance(obj, int) or isinstance(obj, long) or isinstance(obj, float)  or obj is None:
+             obj = unicode(obj)
+    return obj
+
+
 def log(msg, level = xbmc.LOGNOTICE, method = None):
     try:
         if method is None:
@@ -38,7 +49,7 @@ def log(msg, level = xbmc.LOGNOTICE, method = None):
         else:
             xbmc.log(to_unicode((u"%s : '%s'" % (method, msg))).encode('utf8'), level)
     except ( Exception ) as e:
-        xbmc.log(u"FALLBACK %s : '%s'" % (method, repr(msg)), level)
+        xbmc.log(u"FALLBACK [%s] %s : '%s'" % (unicode(e), method, repr(msg)), level)
 
 
 def findString(method, pattern, string, flags = (re.DOTALL | re.IGNORECASE)):
@@ -160,3 +171,9 @@ def normalize(text):
 
     return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
 
+def randomLine(afile):
+    line = next(afile)
+    for num, aline in enumerate(afile):
+      if random.randrange(num + 2): continue
+      line = aline
+    return line

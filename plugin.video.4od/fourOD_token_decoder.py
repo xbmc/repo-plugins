@@ -1,5 +1,3 @@
-
-
 table_a2b_base64 = {
     'A': 0,
     'B': 1,
@@ -489,7 +487,8 @@ class MyBlowfish:
 def Decode4odToken( token ):
     encryptedBytes = Base64_decodeToByteArray( token )
     
-    key = "STINGMIMI"
+    #key = "STINGMIMI"
+    key = "wHcnqpHNN"
     keyBytes = StringToByteArray( key )
     bf = MyBlowfish( keyBytes )
     decryptedBytes = bf.decrypt( encryptedBytes )

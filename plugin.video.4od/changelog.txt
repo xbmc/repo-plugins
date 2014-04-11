@@ -1,3 +1,27 @@
+Version 4.0.5 [09 Apr 2014]
+- Fix: Location error for users in UK
+
+Version 4.0.4 [09 Apr 2014]
+- Fix: Programmes with no series or episode numbers not playing
+
+Version 4.0.3 [08 Apr 2014]
+- Fix proxy settings, again
+
+Version 4.0.2 [07 Apr 2014]
+- Fix episode data processing
+
+Version 4.0.1 [07 Apr 2014]
+- *NOTE* If you are using a proxy you need to reset the "Proxy Method" in the plugin settings
+- Fix proxy setting problem
+
+Version 4.0.0 [07 Apr 2014]
+- Resurrected
+- Added resume functionality
+
+
+Version 3.0.12 (12 May 2013)
+- Tidy up rtmp URL
+
 Version 3.0.11 (01 May 2013)
 - Fix 'Error getting category web page'
 

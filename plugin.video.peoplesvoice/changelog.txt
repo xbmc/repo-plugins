@@ -1,5 +1,7 @@
 Plays  the People's Voice live video stream. created by celadoor.
 
+Version 0.1.9 -Currently broken due to move to Youtube streaming.
+
 Version 0.1.8 -Fixed broken video urls
 
 Version 0.1.6 -Fixed schedule and added day of the week, fixed video quality options.

@@ -1,3 +1,7 @@
+[B]Version 3.0.2 - 2014-04-14[/B]
+- Fixed problem with listing and playing application/x-mpegURL streams
+- Blocked video/x-flv streams as they are not playable by XBMC
+
 [B]Version 3.0.1 - 2013-11-27[/B]
 - Only list videos
 

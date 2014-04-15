@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2013 Tommy Winther
+#      Copyright (C) 2014 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -46,7 +46,15 @@ def listFeed():
     items = list()
     doc = ET.fromstring(data)
     for rssItem in doc.findall('channel/item'):
-        if not 'video' in rssItem.find('content').get('type'):
+        if rssItem.findtext("approved") != 'true':
+            continue
+        content = rssItem.find('content')
+        if content is None:
+            for c in rssItem.findall('group/content'):
+                if ('video' in c.get('type') and c.get('type') != 'video/x-flv') or c.get('type') == 'application/x-mpegURL':
+                    content = c
+                    break
+        if content is None or (not 'video' in content.get('type') and content.get('type') != 'application/x-mpegURL') or content.get('type') == 'video/x-flv':
             continue
 
         image = rssItem.findtext('defaultThumbnailUrl')
@@ -55,7 +63,7 @@ def listFeed():
         date = parseDate(rssItem.findtext('pubDate'))
 
         infoLabels = {}
-        duration = rssItem.find('content').get('duration')
+        duration = content.get('duration')
         if duration:
             infoLabels['duration'] = int(float(duration) / 60) + 1
         infoLabels['date'] = date.strftime('%d.%m.%Y')
@@ -65,24 +73,27 @@ def listFeed():
         item.setInfo('video', infoLabels)
         item.setProperty('Fanart_Image', FANART)
         item.setProperty('IsPlayable', 'true')
-        items.append((PATH + '?' + urllib.urlencode({'url': rssItem.find('content').get('url')}), item, False))
+        items.append((PATH + '?' + urllib.urlencode({'url': content.get('url')}), item, False))
 
     xbmcplugin.addDirectoryItems(HANDLE, items)
-    xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.endOfDirectory(HANDLE)
 
 
 def playVideo(url):
     print url
     u = urllib2.urlopen(url)
-    smil = u.read()
+    response = u.read()
     u.close()
 
-    # strip namespaces
-    smil = re.sub('xmlns=[^>]+', '', smil)
+    if response[0:7] == '#EXTM3U':
+        src = url
+    else:
+        # strip namespaces
+        smil = re.sub('xmlns=[^>]+', '', response)
+        doc = ET.fromstring(smil)
+        src = doc.find('body/seq/switch/video').get('src')
 
-    doc = ET.fromstring(smil)
-    src = doc.find('body/seq/switch/video').get('src')
     item = xbmcgui.ListItem(path=src)
     xbmcplugin.setResolvedUrl(HANDLE, True, item)
 

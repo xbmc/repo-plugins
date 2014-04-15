@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
-	id="plugin.video.tv2.dk" version="3.0.1" name="TV2 Video" provider-name="twinther">
+	id="plugin.video.tv2.dk" version="3.0.2" name="TV2 Video" provider-name="twinther">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.buggalo" version="1.1.5"/>

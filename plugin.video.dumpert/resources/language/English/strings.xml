@@ -20,8 +20,9 @@
     <string id="30203">MPlayer</string>
 
     <string id="30300">Video quality</string>
-    <string id="30301">Standard</string>
-    <string id="30302">High Definition (if available)</string>
+    <string id="30301">Low</string>
+    <string id="30302">Medium</string>
+    <string id="30303">High (if available)</string>
     
 	<string id="30400">Debug</string>
 	

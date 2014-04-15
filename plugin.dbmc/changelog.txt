@@ -1,3 +1,6 @@
+[B]0.7.2:[/B]
+- Changed login (Authorization) procedure. The old one failed everytime Dropbox changed thier site.
+
 [B]0.7.1:[/B]
 - Fixed synchronization crash when a syncing a file fails
 - Fixed not able to upload files 

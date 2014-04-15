@@ -21,68 +21,109 @@
 
 import xbmcaddon
 import xbmcgui
-import re
+
+import uuid
+import urllib, urllib2
+import json
 
 from utils import *
 
 from dropbox import client, rest
 
 APP_KEY= 'QF9EBAwGS10NWBJFDRcCHxhfUR5bDhIcQhAeV0YTGBcACgg='
+SUCCES = 'Succes'
 
-def doTokenDialog():
+def getAccessToken():
+    tokenRecieved = False
+    #Get the session_id (uuid). Create one if there is none yet.
+    sessionId = ADDON.getSetting('session_id').decode("utf-8")
+    if sessionId == '':
+         sessionId = str(uuid.uuid1())
+         ADDON.setSetting('session_id', sessionId)
+    #Try to get a access_code
     key, secret = decode_key(APP_KEY).split('|')
-    try:
-        from webviewer import webviewer #@UnresolvedImport @UnusedImport
-        #start the flow process (getting the auth-code
-        flow = client.DropboxOAuth2FlowNoRedirect(key, secret)
-        authorize_url = flow.start()
-        html_resp = doNormalTokenDialog(authorize_url)
-        code = None
-        if html_resp:
-            #get the "auth-code"
-            code = re.search('(?s)(?<=class="auth-code">)[^<]+', html_resp)
-        if code:
-            code = code.group(0)
-            try:
-                log('Received auth-code')
-                access_token, user_id = flow.finish(code)
-                log('Received token')
-                #save the token in settings
-                ADDON.setSetting('access_token', access_token)
-            except rest.ErrorResponse, e:
-                dialog = xbmcgui.Dialog()
-                dialog.ok(ADDON_NAME, LANGUAGE_STRING(30200), '%s'%str(e))
-        else:
-            dialog = xbmcgui.Dialog()
-            dialog.ok(ADDON_NAME, LANGUAGE_STRING(30201), LANGUAGE_STRING(30202))
-    except:
+    flow = client.DropboxOAuth2FlowNoRedirect(key, secret)
+    authorize_url = flow.start()
+    oauth = DbmcOauth2()
+    result, accesscode, pin = oauth.getAccessCode(sessionId, authorize_url)
+    if result != SUCCES:
+        log_error('Failed to get the PIN/accesscode: %s'%result)
         dialog = xbmcgui.Dialog()
-        dialog.ok(ADDON_NAME, LANGUAGE_STRING(30203), LANGUAGE_STRING(30204))
-    
-def doNormalTokenDialog(authorize_url):
-    from webviewer import webviewer #@UnresolvedImport
-    html = None
-    #get user name
-    message = LANGUAGE_STRING(30001)
-    keyboard = xbmc.Keyboard('',message)
-    keyboard.doModal()
-    if not keyboard.isConfirmed(): return html
-    user = keyboard.getText()
-    #start webViewer
-    autoforms = [{  'url':'https://www.dropbox.com.',
-                    'action':'/login',
-                    'autofill': 'login_email=%s'%(user),
-                    'autosubmit': 'false'}, #if autosubmit=true autoforms variable will be deleted!
-                 {  'url':'https://www.dropbox.com/1/oauth2/authorize.',
-                    #'name':'login-form',
-                    'action':'1/oauth2/authorize'
-                  }]
-    autoClose = {   'url':'https://www.dropbox.com/1/oauth2/authorize.',
-                    'html':'(?s).+class="auth-code".+',
-                    'heading':LANGUAGE_STRING(30004),
-                    'message':LANGUAGE_STRING(30009)}
-    url,html = webviewer.getWebResult(authorize_url,autoForms=autoforms,autoClose=autoClose) #@UnusedVariable
-    return html
+        dialog.ok(ADDON_NAME, LANGUAGE_STRING(30200), '%s'%result)
+    elif accesscode == '':
+        #No accesscode yet, so direct to web=page with PIN
+        log('No accesscode, goto web-page with PIN: %s'%pin)
+        dialog = xbmcgui.Dialog()
+        dialog.ok(ADDON_NAME, LANGUAGE_STRING(30002), LANGUAGE_STRING(30003), LANGUAGE_STRING(30001) + pin )
+    else:
+        #Accesscode present, so try to get the access token now
+        log_debug('Accesscode recieved: %s. Getting access token...'%accesscode)
+        #start the flow process (getting the auth-code
+        try:
+            access_token, user_id = flow.finish(accesscode)
+            #save the token in settings
+            ADDON.setSetting('access_token', access_token)
+            log('Access token stored')
+            tokenRecieved = True
+        except rest.ErrorResponse, e:
+            log_error('Failed getting the access token: %s'%str(e))
+            dialog = xbmcgui.Dialog()
+            dialog.ok(ADDON_NAME, LANGUAGE_STRING(30201), str(e), LANGUAGE_STRING(30202))
+        finally:
+            #always remove the session (failed or not)
+            result = oauth.removeAccessCode(sessionId, tokenRecieved)
+            if result != SUCCES:
+                log_error('Failed removing the access code: %s'%result)
+    return tokenRecieved
 
-if ( __name__ == "__main__" ):
-    doTokenDialog()
+    
+class DbmcOauth2(object):
+    #HOST = 'http://localhost/xbmc-dropbox'
+    HOST = 'http://xbmc-dropbox.sourceforge.net'
+    PAGE = '/dbmc-accesscode/access-code.php'
+
+    def getAccessCode(self, sessionId, oauthUrl=None):
+        accesscode = ''
+        pin = ''
+        params = {'session': sessionId, 'action': 'get'}
+        if oauthUrl:
+            params['oauth_url'] = oauthUrl
+        result, data = self.getData(params)
+        if result == SUCCES:
+            try:
+                response = json.loads(data)
+                result = response['result']
+                accesscode = response['accesscode']
+                pin = response['PIN']
+            except Exception as e:
+                if not result:
+                    result = 'Failed to Decode response data: %s'%(repr(e))
+        return result, accesscode, pin
+ 
+    def removeAccessCode(self, sessionId, tokenRecieved):
+        params = {'session': sessionId, 'action': 'remove', 'auth_succes': tokenRecieved}
+        result, data = self.getData(params)
+        if result == SUCCES:
+            try:
+                response = json.loads(data)
+                result = response['result']
+            except Exception as e:
+                if not result:
+                    result = 'Failed to Decode response data: %s'%(repr(e))
+        return result
+
+    def getData(self, params):
+        paramsEnc = urllib.urlencode(params)
+        result = SUCCES
+        data = None
+        url = '%s%s'%(self.HOST, self.PAGE)
+        req = urllib2.Request(url, data=paramsEnc)
+        #f = urllib.urlopen('%s%s'%(self.HOST, self.PAGE), params )
+        #response = f.read()
+        try: 
+            response = urllib2.urlopen(req)
+            data = response.read()
+            log_debug('Received url data: %s'%repr(data))
+        except urllib2.URLError as e:
+            result = repr(e)
+        return result, data

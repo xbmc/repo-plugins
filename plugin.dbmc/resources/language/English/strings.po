@@ -9,7 +9,7 @@ msgid "General"
 msgstr ""
 
 msgctxt "#30001"
-msgid "Please enter your dropbox login name (email)"
+msgid "Follow the instructions and enter PIN: "
 msgstr ""
 
 msgctxt "#30002"
@@ -17,11 +17,11 @@ msgid "Dropbox authorization required."
 msgstr ""
 
 msgctxt "#30003"
-msgid "Please login and authorize (allow) this addon."
+msgid "Go to: http://xbmc-dropbox.sourceforge.net"
 msgstr ""
 
 msgctxt "#30004"
-msgid "Authorization finished"
+msgid "Authorization finished."
 msgstr ""
 
 msgctxt "#30005"
@@ -41,7 +41,7 @@ msgid "View relevant files only"
 msgstr ""
 
 msgctxt "#30009"
-msgid "Please close the Web Viewer."
+msgid "30009"
 msgstr ""
 
 msgctxt "#30010"
@@ -239,19 +239,19 @@ msgid "Problem getting the access code!"
 msgstr ""
 
 msgctxt "#30201"
-msgid "Authorization failed, no code received!"
+msgid "Authorization failed!"
 msgstr ""
 
 msgctxt "#30202"
-msgid "Did you authorize (allow)?"
+msgid "Did you copy the complete code?"
 msgstr ""
 
 msgctxt "#30203"
-msgid "Please install XMBC addon: Webviewer."
+msgid "30203"
 msgstr ""
 
 msgctxt "#30204"
-msgid "This is required for authorizing this addon."
+msgid "30204"
 msgstr ""
 
 msgctxt "#30205"

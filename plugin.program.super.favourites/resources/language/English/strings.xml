@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+    <string id="30000">Super Favourites</string>
+    <string id="30001">Super Favourite</string>
+    <string id="30004">New Super Folder</string>
+	<string id="30005">Add-on settings</string>
+	<string id="30006">Add to XBMC favourites</string>
+	<string id="30007">Copy favourite</string>
+	<string id="30008">Move favourite</string>
+	<string id="30009">Remove favourite</string>
+	<string id="30010">Rename favourite</string>
+	<string id="30011">Remove Super Folder</string>
+	<string id="30012">Rename Super Folder</string>
+	<string id="30013">Please enter a name for this Super Folder</string>
+	<string id="30014">The %s Super Folder already exists</string>
+	<string id="30015">Please enter a new name for the %s Super Folder</string>
+	<string id="30016">This will remove the %s Super Folder</string>
+	<string id="30017">along with all its contents</string>
+	<string id="30018">Are you sure?</string>
+	<string id="30019">Choose Super Folder to copy favourite to</string>
+	<string id="30020">Choose Super Folder to move favourite to</string>
+	<string id="30021">Please enter a new name for this favourite</string>	
+	<string id="30022">Configuration</string>	
+	<string id="30023">Show New Super Folder item</string>	
+	<string id="30024">Show XBMC Favourites item</string>			
+    <string id="30026">Hotkey</string>	
+	<string id="30027">None</string>	
+	<string id="30028">F1</string>
+	<string id="30029">F2</string>
+	<string id="30030">F3</string>
+	<string id="30031">F4</string>
+	<string id="30032">F5</string>
+	<string id="30033">F6</string>
+	<string id="30034">F7</string>
+	<string id="30035">F8</string>
+	<string id="30036">F9</string>
+	<string id="30037">F10</string>
+	<string id="30038">F11</string>
+	<string id="30039">F12</string>	
+	<string id="30040">XBMC Favourites</string>	
+</strings>

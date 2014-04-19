@@ -36,7 +36,7 @@ ADDONID = 'plugin.program.super.favourites'
 ADDON   =  xbmcaddon.Addon(ADDONID)
 HOME    =  ADDON.getAddonInfo('path')
 PROFILE =  os.path.join(ADDON.getAddonInfo('profile'), 'Super Favourites')
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 ICON    =  os.path.join(HOME, 'icon.png')
 FANART  =  os.path.join(HOME, 'fanart.jpg')
 BLANK   =  os.path.join(HOME, 'resources', 'media', 'blank.png')
@@ -72,7 +72,12 @@ def CheckVersion():
 
     ADDON.setSetting('VERSION', curr)
 
-    if prev == '0.0.0':
+    if prev == '0.0.0' or prev== '1.0.0':
+
+        folder  = xbmc.translatePath(PROFILE)
+        if not os.path.isdir(folder):
+            os.makedirs(folder) 
+
         VerifyKeymap()
         
 

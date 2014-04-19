@@ -3,7 +3,7 @@
 	<category label="30022">	
 		<setting id="SHOWNEW"  label="30023" type="bool"      default="true" />
 		<setting id="SHOWXBMC" label="30024" type="bool"      default="true" />
-        <setting id="HOTKEY"   label="30026" type="labelenum" default="F1" lvalues="30027|30028|30029|30030|30031|30032|30033|30034|30035|30036|30037|30038|30039"/>		
+        <setting id="HOTKEY"   label="30026" type="labelenum" lvalues="30027|30028|30029|30030|30031|30032|30033|30034|30035|30036|30037|30038|30039"/>		
 		
 		<setting id="VERSION" type="text" label="" default="0.0.0" visible="false"/>
 	</category>

@@ -60,6 +60,8 @@ _RENAMEFOLDER = 900
 _RENAMEFAVE   = 1000
 _MOVE         = 1100
 _COPY         = 1200
+_UP           = 1300
+_DOWN         = 1400
 
 SHOWNEW  = ADDON.getSetting('SHOWNEW')  == 'true'
 SHOWXBMC = ADDON.getSetting('SHOWXBMC') == 'true'
@@ -76,10 +78,6 @@ def main():
     profile = xbmc.translatePath(PROFILE)
 
     addNewFolderItem(profile)
-
-    if SHOWXBMC:        
-        addDir(GETTEXT(30040), _XBMC, thumbnail='DefaultFolder.png', isFolder=True)
-        addSeparatorItem()
 
     parseFolder(profile)
 
@@ -144,8 +142,13 @@ def showXBMCFolder():
     parseFile(file, True)
 
 
-def parseFile(file, isXBMC=False):
+def parseFile(file, isXBMC=False, reqSep=False):
     faves = favourite.getFavourites(file)
+
+    if reqSep and len(faves) > 0:
+        addSeparatorItem()
+        
+
     for fave in faves:
         label = fave[0]
         thumb = fave[1]
@@ -153,10 +156,16 @@ def parseFile(file, isXBMC=False):
 
         menu  = []
 
-        include = True #originally set to (not isXBMC)
+        include = True #originally set to (not isXBMC) to prevent altering XBMC favourites themselves
 
-        menu.append((GETTEXT(30007), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _COPY, urllib.quote_plus(file), urllib.quote_plus(cmd))))
+        #if include:
+            #menu.append((GETTEXT(30041), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _UP,         urllib.quote_plus(file), urllib.quote_plus(cmd))))
+            #menu.append((GETTEXT(30042), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _DOWN,       urllib.quote_plus(file), urllib.quote_plus(cmd))))
+
+        menu.append((GETTEXT(30007), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _COPY,       urllib.quote_plus(file), urllib.quote_plus(cmd))))
+
         if include:
+
             menu.append((GETTEXT(30008), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _MOVE,       urllib.quote_plus(file), urllib.quote_plus(cmd))))
             menu.append((GETTEXT(30009), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _REMOVEFAVE, urllib.quote_plus(file), urllib.quote_plus(cmd))))
             menu.append((GETTEXT(30010), 'XBMC.RunPlugin(%s?mode=%d&file=%s&cmd=%s)' % (sys.argv[0], _RENAMEFAVE, urllib.quote_plus(file), urllib.quote_plus(cmd))))
@@ -167,8 +176,20 @@ def parseFile(file, isXBMC=False):
 
 
 def parseFolder(folder):
+    if SHOWXBMC:        
+        addDir(GETTEXT(30040), _XBMC, thumbnail='DefaultFolder.png', isFolder=True)
+
     try:    current, dirs, files = os.walk(folder).next()
     except: return
+
+    nmrDirs = len(dirs)
+    reqSep  = nmrDirs > 0
+
+    if SHOWXBMC:
+        if reqSep:
+            addSeparatorItem()
+        else:
+            reqSep = True
 
     for dir in dirs:
         path = os.path.join(current, dir)
@@ -178,14 +199,8 @@ def parseFolder(folder):
 
         addDir(dir,  _FOLDER, path=path, thumbnail=ICON, isFolder=True, menu=menu)
 
-    file  = os.path.join(folder, FILENAME)
-
-    nmrDirs = len(dirs)
-
-    if nmrDirs > 0:
-        addSeparatorItem()
-
-    nmrFaves = parseFile(file)
+    file     = os.path.join(folder, FILENAME)
+    nmrFaves = parseFile(file, reqSep=reqSep)
 
     if nmrDirs == 0 and nmrFaves == 0 and not SHOWNEW:
         if not (SHOWXBMC and mode == -1):
@@ -229,7 +244,7 @@ def createNewFolder(current):
         utils.DialogOK('', GETTEXT(30014) % text)
         return
 
-    os.mkdir(folder)
+    os.mkdir(xbmc.translatePath(folder))
     refresh()
 
 
@@ -266,6 +281,10 @@ def findFave(file, cmd):
         if fave[2] == cmd:
             return fave
     return None
+
+
+def shiftFave(file, cmd, up):
+    return True
 
 
 def copyFave(file, cmd, move=False):
@@ -328,13 +347,13 @@ def playCommand(cmd):
         cmd = cmd.replace('&quot;', '')
         cmd = cmd.replace('&amp;', '&')
 
-        #if 'ActivateWindow' in cmd:
-        #    return activateWindowCommand(cmd)
+        if 'ActivateWindow' in cmd:
+            return activateWindowCommand(cmd)
 
         #workaraound bug in Frodo that can cause lock-up
         #when running a script favourite
-        #if not GOTHAM and 'RunScript' in cmd:
-        #    xbmc.executebuiltin('ActivateWindow(Home)')
+        if not GOTHAM and 'RunScript' in cmd:
+            xbmc.executebuiltin('ActivateWindow(Home)')
 
         xbmc.executebuiltin(cmd)
     except:
@@ -452,6 +471,17 @@ elif mode == _COPY:
     if copyFave(file, cmd):
         refresh()
 
+elif mode == _UP:
+    file = urllib.unquote_plus(params['file'])
+    cmd  = urllib.unquote_plus(params['cmd'])
+    if shiftFave(file, cmd, up=True):
+        refresh()
+
+elif mode == _DOWN:
+    file = urllib.unquote_plus(params['file'])
+    cmd  = urllib.unquote_plus(params['cmd'])
+    if shiftFave(file, cmd, up=False):
+        refresh()
 
 elif mode == _REMOVEFAVE:
     file = urllib.unquote_plus(params['file'])

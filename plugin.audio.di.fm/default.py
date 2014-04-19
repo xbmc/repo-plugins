@@ -164,7 +164,7 @@ class musicAddonXbmc:
 
                 channels = json.loads(self.curler.request(pluginConfig.get('streams', 'premium%sk' % self.dictBitrate[int(ADDON.getSetting('bitrate'))]), 'get'))
 
-                premiumConfig = self.getPremiumConfig(html)
+                premiumConfig = self.getPremiumConfig()
 
                 # if premiumConfig['listenKey'] is blank, we did not log in correctly
                 if premiumConfig['listenKey'] == '':
@@ -380,15 +380,31 @@ class musicAddonXbmc:
     """ Return a list containing a dictonary or false
      Returns the logged in users premium config
     """
-    def getPremiumConfig(self, html):
+    def getPremiumConfig(self):
         try:
             if ADDON.getSetting("forceupdate") == "true":
-                re_config = re.compile("NS\('AudioAddict.API'\).Config\s*=\s*([^;]+);", re.M | re.I)
-                pickle.dump(re_config.findall(html)[0], open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cachePremiumConfig')), "w"), protocol=0)
-                premiumConfig = json.loads(re_config.findall(html)[0])
+
+                # Login to api.audioaddict.com to retrieve useful data
+                # Documentation: http://tobiass.eu/api-doc.html#13
+
+                loginData = urllib.urlencode({'username': ADDON.getSetting('username'),
+                                              'password': ADDON.getSetting('password')})
+                # Download and save response
+                jsonResponse = self.curler.request(pluginConfig.get('urls', 'apiAuthenticate'), 'post', loginData)
+                jsonData = json.loads(jsonResponse)
+                pickle.dump(jsonData, open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cachePremiumConfig')), "w"), protocol=0)
+
+                # Load needed data into premiumConfig
+                premiumConfig = {'listenKey' : jsonData['listen_key']}
+
             else:
-                premiumConfig = json.loads(pickle.load(open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cachePremiumConfig')), "r")))
+                # Load data from local cache
+
+                jsonData = pickle.load(open(os.path.join(self.addonProfilePath, pluginConfig.get('cache', 'cachePremiumConfig')), "r"))
+                premiumConfig = {'listenKey' : jsonData['listen_key']}
+
             return premiumConfig
+
         except Exception:
             sys.exc_clear() # Clears all exceptions so the script will continue to run
             return False

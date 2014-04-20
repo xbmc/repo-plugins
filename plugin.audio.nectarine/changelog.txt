@@ -1,0 +1,10 @@
++ New feature
+* Fixed/improved feature
+- Removed feature
+
+
+2014-04-17 v1.0.0
+=================
+
++ Initial release
+

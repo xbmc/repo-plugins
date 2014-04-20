@@ -67,12 +67,16 @@ class VideoContent(object):
 
         if quality == 'L':
             videourl = self._videourls.get("h264l")
+            if not videourl:
+                videourl = self._videourls.get("http_tab_high")
         if quality == 'M' or not videourl:    
             videourl = self._videourls.get("h264m")
+            if not videourl:
+                videourl = self._videourls.get("http_tab_normal")
         if quality == 'S' or not videourl:    
             videourl = self._videourls.get("h264s")
-        if not videourl:
-            videourl = self._videourls.get("rtsp_high")
+            if not videourl:
+                videourl = self._videourls.get("http_tab_normal")
         return videourl
 
     def image_url(self):

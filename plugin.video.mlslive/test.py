@@ -53,13 +53,15 @@ if options.week != None:
         print week_url
         games = my_mls.getGames(week_url)
         for game in games:
-            print game
+            print game['gameID'] + " " + my_mls.getGameString(game, "vs")
     sys.exit()
 elif options.channel == None:
     print "Video Channels:"
+    """
     channels = my_mls.getVideoChannels()
     for channel in channels:
         print '\t' + channel['channelID'] + ') ' + channel['name']
+    """
 else:
     videos = my_mls.getChannelVideos(options.channel)
     for video in videos:
@@ -69,6 +71,9 @@ else:
 if options.game != None:
 
     # get the games again :( (in the plugin we don't actually do this)
+    print my_mls.getGameLiveStream(options.game)
+    sys.exit(0)
+    """
     games = my_mls.getGames(options.offset)
     game = None
     for g in games:
@@ -93,8 +98,9 @@ if options.game != None:
         print "Game is still upcoming"
 
     sys.exit(0)
-
-games = my_mls.getGames(my_mls.getCurrentWeekURI())
+    """
+week_uri = my_mls.getCurrentWeekURI()
+games = my_mls.getGames(week_uri)
 teams = my_mls.getTeams()
 
 for game in games:

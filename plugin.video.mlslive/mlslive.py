@@ -382,7 +382,7 @@ class MLSLive:
         path_node = result_node.getElementsByTagName('path')[0]
         stream_url = path_node.firstChild.nodeValue
 
-        return stream_url.split('?')[0]
+        return stream_url
 
 
     def getVideoChannels(self):

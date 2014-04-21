@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.0.3" provider-name="Tristan Fischer (sphere@dersphere.de)">
+<addon id="plugin.video.disclose_tv" name="Disclose.tv" version="0.0.4" provider-name="Tristan Fischer (sphere@dersphere.de)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="1.3.0"/>
@@ -24,6 +24,7 @@
     <summary lang="de">TRUTH REVEALED</summary>
     <summary lang="el">ΑΠΟΚΑΛΥΨΗ ΤΗΣ ΑΛΗΘΕΙΑΣ</summary>
     <summary lang="en">TRUTH REVEALED</summary>
+    <summary lang="en_NZ">TRUTH REVEALED</summary>
     <summary lang="es">LA VERDAD REVELADA</summary>
     <summary lang="es_AR">REVELACION</summary>
     <summary lang="fa_IR">حقیقت نشان داده</summary>
@@ -50,6 +51,7 @@
     <description lang="de">Größte Internet-Nachrichtenseite über UFO Videos, Verschwörungstheorien, Top Secrets, N.W.O. und mehr!</description>
     <description lang="el">Η μεγαλύτερη πηγή εναλλακτικών πληροφοριών σχετικά με βίντεο ΑΤΙΑ (UFO), Αρχαία Μυστήρια, Θεωρίες Συνωμοσίας, Απόρρητα Μυστικά, Νέα Τάξη Πραγμάτων + πολλά άλλα!</description>
     <description lang="en">Largest multimedia hub and alternative news website about UFO Videos, Ancient Mysteries, Conspiracy Theories, Top Secrets, N.W.O. + more!</description>
+    <description lang="en_NZ">Largest multimedia hub and alternative news website about UFO Videos, Ancient Mysteries, Conspiracy Theories, Top Secrets, N.W.O. + more!</description>
     <description lang="es">El mayor centro multimedia y sitio web de noticias alternativas sobre Videos de OVNIs, Misterios Antiguos, Teorías de la Conspiración, Altos Secretos, N.O.M. y más!</description>
     <description lang="es_AR">El mayor centro multimedia y de noticias alternativas con de videos de OVNIS, misterios antiguos, teorias conspirativas, secretos absolutos, Nuevo Orden Mundial y mas! </description>
     <description lang="fa_IR">بزرگترین مرکز چند رسانه ای و وب سایت خبری در مورد جایگزین UFO ویدئو ها، اسرار باستانی، تئوری های توطئه، اسرار بالا، NWO + بیشتر!</description>

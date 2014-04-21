@@ -1,3 +1,8 @@
+0.0.4 (21.04.2014)
+ - fixed playback
+ - updated translations
+ - small fixes
+
 0.0.3 (16.03.2014)
  - updated translations
 

@@ -16,8 +16,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+import sys
 
-import simplejson
+if sys.version_info >= (2, 7):
+    import json
+else:
+    import simplejson as json
+
 from BeautifulSoup import BeautifulSoup
 from urllib2 import urlopen
 
@@ -69,9 +74,9 @@ class Scraper:
         return videos
 
     def get_video_url(self, video_id):
-        url = MAIN_URL + '/videos/config/video/%s.js' % video_id
-        json = self.__get_json(url)
-        return json['clip']['url']
+        url = MAIN_URL + 'videos/config/xxx/%s.js' % video_id
+        data = self.__get_json(url)
+        return data['playlist'][1]['url']
 
     @staticmethod
     def __secs_from_duration(d):
@@ -85,8 +90,10 @@ class Scraper:
         return url.replace('135x76', '').split('?')[0]
 
     def __get_json(self, url):
-        html = self.__get_url(url)
-        return simplejson.loads(html)
+        response = self.__get_url(url)
+        if not '"' in response:
+            response = response.replace('\'', '"')
+        return json.loads(response)
 
     def __get_tree(self, url):
         html = self.__get_url(url)
@@ -94,13 +101,9 @@ class Scraper:
 
     def __get_url(self, url):
         log('__get_url opening url: %s' % url)
-        try:
-            html = urlopen(url).read()
-        except HTTPError, error:
-            log('__urlopen HTTPError: %s' % error)
-            raise NetworkError('HTTPError: %s' % error)
-        log('__get_url got %d bytes' % len(html))
-        return html
+        response = urlopen(url).read()
+        log('__get_url got %d bytes' % len(response))
+        return response
 
 
 def log(text):

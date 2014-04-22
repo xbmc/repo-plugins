@@ -1,6 +1,7 @@
 ﻿import urllib
 import urllib2
 import time
+import re
 from datetime import datetime
 from urlparse import urlparse, parse_qs
 
@@ -18,6 +19,7 @@ addon_version = addon.getAddonInfo('version')
 addon_id = addon.getAddonInfo('id')
 icon = addon.getAddonInfo('icon')
 language = addon.getLocalizedString
+latest_videos_href = 'http://feeds2.feedburner.com/cnet/allhdpodcast'
 
 
 def addon_log(string):
@@ -51,61 +53,104 @@ def make_request(url, post_data=None):
 
 
 def cache_categories():
-    url = 'http://www.cnet.com/podcasts/'
+    #url = 'http://www.cnet.com/podcasts/'
+    url = 'http://www.cnet.com/cnet-podcasts/'
     soup = BeautifulSoup(make_request(url), 'html.parser')
-    items = soup.find_all('div', class_='podcast')
-    cats = [{'thumb': i.img['src'],
-             'name': i.h3('a')[-1].string,
-             'desc': i.find('div', class_='desc').get_text(),
-             'links': [{x.string: x['href']} for x in i.find('div', class_='rss')('a') if
-                           x.string]} for
-            i in items]
+    items = soup.find_all('a', attrs={'href': re.compile("hd.xml$")} )
+    cats = [{'thumb': '',
+             'name': i['href'],
+             'desc': '',
+             'links': i['href']} for
+             i in items]
     return cats
 
 
 def display_categories():
     cats = cache.cacheFunction(cache_categories)
+    previous_name = ''
+    
+    #add a category
+    name = 'Latest Videos'
+    add_dir(name, latest_videos_href, 'category', '', {'Plot': ''})
+    
     for i in cats:
-        if i['name'] == 'All Audio Podcasts': continue
-        add_dir(i['name'], i['links'], 'category', i['thumb'], {'Plot': i['desc']})
+        name = str(i['name'])
+        name = name.replace("http://feed.cnet.com/feed/podcast/", "")
+        name = name.replace("-", " ")
+        name = name.replace("/", " ")
+        name = name.replace("hd.xml", "")
+        name = name.capitalize()
+        
+        #skip name if it is the same as the previous name
+        if name == previous_name: 
+            pass
+        else:
+            previous_name = name
+            add_dir(name, i['links'], 'category', i['thumb'], {'Plot': i['desc']})
 
 
 def display_category(links_list):
-    links_list = eval(links_list)
-    settings = {'0': 'Audio', '1': 'HD', '2': 'Video'}
-    preferred_type = settings[addon.getSetting('playback_type')]
-    feed_url = None
-    for i in links_list:
-        if i.has_key(preferred_type):
-            feed_url = i[preferred_type]
-    if not feed_url:
-        dialog = xbmcgui.Dialog()
-        ret = dialog.select(language(30013)+':%s' %preferred_type,
-                            [i.keys()[0] for i in links_list])
-        if ret > -1:
-            feed_url = [i.values()[0] for i in links_list][ret]
-        else:
-            return
-    pod_dict = xmltodict.parse(make_request(feed_url+'?format=xml'))
-    iconimage = pod_dict['rss']['channel']['itunes:image']['@href']
-    items = pod_dict['rss']['channel']['item']
-    for i in items:
-        date_patterns = ['%a, %d %b %Y %H:%M:%S PST', '%a, %d %b %Y %H:%M:%S PDT']
-        for pattern in date_patterns:
-            try:
-                date_time = datetime(*(time.strptime(i['pubDate'], pattern)[0:6]))
-                item_date = date_time.strftime('%d.%m.%Y')
-                premiered = date_time.strftime('%d-%m-%Y')
-                break
-            except ValueError:
-                item_date = ''
-                premiered = ''
-        meta = {'Plot': i['itunes:summary'],
-                'Duration': int(i['itunes:duration']) / 60,
-                'Date': item_date,
-                'Premiered': premiered}
-        add_dir(i['title'], i['media:content']['@url'], 'resolve', iconimage, meta, False)
+    url = links_list
 
+    soup = BeautifulSoup(make_request(url), 'html.parser')
+
+    #latest videos isn't a real category in CNET, therefore this hardcoded stuff was needed
+    if url == latest_videos_href:
+        urls = soup.find_all('a', attrs={'href': re.compile("^http://feedproxy.google.com/")})
+        #<a href="http://feedproxy.google.com/~r/cnet/allhdpodcast/~3/4RHUa95GiUM/14n041814_walkingpalua_740.mp4">A walk among hidden graves and WWII bombs</a>
+        for url in urls:
+            title = str(url)
+            title = title.replace('</a>','')
+            title = title.replace("&#039;","'")
+            pos_last_greater_than_sign = title.rfind('>')
+            title = title[pos_last_greater_than_sign + 1:]
+            
+            meta = {'Plot': title,
+                    'Duration': '',
+                    'Date': '',
+                    'Premiered': ''}
+             
+            add_dir(title, url['href'], 'resolve', 'Defaultvideo.png', meta, False)
+    else:
+        #     <item>
+        #           <title><![CDATA[Inside Scoop: Will acquiring Nokia devices give Microsoft an edge?]]></title>
+        #           <link>http://www.podtrac.com/pts/redirect.mp4/dw.cbsi.com/redir/13n0903_MicrosoftScoop_740.m4v?destUrl=http://download.cnettv.com.edgesuite.net/21923/2013/09/03/13n0903_MicrosoftScoop_740.m4v</link>
+        #           <author>feedback-cnettv@cnet.com (CNETTV)</author>
+        #           <description><![CDATA[Details of the Microsoft and Nokia deal are now finalized. CNET's Josh Lowensohn discusses the effects the merger could have on customers, Microsoft's sagging market share, and the selection of a new Microsoft CEO.]]></description>
+        #           <itunes:subtitle><![CDATA[Details of the Microsoft and Nokia deal are now finalized. CNET's Josh Lowensohn discusses the effects the merger could have on customers, Microsoft's sagging market share, and the selection of a new Microsoft CEO.]]></itunes:subtitle>
+        #           <itunes:summary><![CDATA[Details of the Microsoft and Nokia deal are now finalized. CNET's Josh Lowensohn discusses the effects the merger could have on customers, Microsoft's sagging market share, and the selection of a new Microsoft CEO.]]></itunes:summary>
+        #           <itunes:explicit>no</itunes:explicit>
+        #           <itunes:author>CNET.com</itunes:author>
+        #           <guid isPermaLink="false">35ffbba2-67e4-11e3-a665-14feb5ca9861</guid>
+        #           <itunes:duration></itunes:duration>
+        #           <itunes:keywords>
+        #               CNET
+        #                CNETTV
+        #             Tech Industry
+        #           </itunes:keywords>
+        #           <enclosure url="http://www.podtrac.com/pts/redirect.mp4/dw.cbsi.com/redir/13n0903_MicrosoftScoop_740.m4v?destUrl=http://download.cnettv.com.edgesuite.net/21923/2013/09/03/13n0903_MicrosoftScoop_740.m4v" length="0" type="video/mp4"/>
+        #           <category>Technology</category>
+        #           <pubDate>Fri, 21 Feb 2014 19:49:08 PST</pubDate>
+        #     </item>
+        urls = soup.find_all('enclosure', attrs={'url': re.compile("^http")} )
+     
+        #skip 2 titles
+        title_index = 2
+
+        for url in urls:
+            titles = soup.find_all('title')
+            title = str(titles[title_index])
+            title_index = title_index + 1
+            title = title.replace("<title><![CDATA[", "")
+            title = title.replace("]]></title>", "")
+            title = title.replace("&#039;","'")
+
+            meta = {'Plot': title,
+                    'Duration': '',
+                    'Date': '',
+                    'Premiered': ''}
+        
+            add_dir(title, url['url'], 'resolve', 'Defaultvideo.png', meta, False)
 
 def resolve_url(video_id):
     params = {
@@ -130,13 +175,11 @@ def add_dir(name, url, mode, iconimage, meta={}, isfolder=True):
     params = {'name': name, 'url': url, 'mode': mode}
     url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
     listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    meta["Title"] = name
     if not isfolder:
         listitem.setProperty('IsPlayable', 'true')
         listitem.setProperty('Fanart_Image', iconimage)
-    listitem.setInfo(type="Video", infoLabels=meta)
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
-
+   
 
 def get_params():
     p = parse_qs(sys.argv[2][1:])

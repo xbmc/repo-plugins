@@ -1,3 +1,6 @@
+1.0.2
+ - Fix GUID parsing issue for new interviews
+
 1.0.1
  - Fix minor convention issues causing rejection from XBMC add-on repository
 

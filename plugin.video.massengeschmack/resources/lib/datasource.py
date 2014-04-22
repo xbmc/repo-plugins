@@ -19,6 +19,7 @@
 import xbmcgui
 import urllib
 import datetime
+import re
 from globalvars import *
 import resources.lib
 from resources.lib.listing import *
@@ -404,10 +405,10 @@ class FKTVDataSource(DataSource):
         basePath1 = 'http://fernsehkritik.tv/images/magazin/'
         basePath2 = 'http://massengeschmack.tv/img/mag/'
         basePath3 = 'http://dl.massengeschmack.tv/img/mag/'
-        
+        print guid
         if 'fktv' == guid[:4]:
             # if new Postecke or new FKTV episode
-            if -1 != guid[4:].find('-') or 128 < int(guid[4:]):
+            if -1 != guid[4:].find('-') or re.match(r'^fktv(\d+)interview\d+', guid) or 128 < int(guid[4:]):
                 return basePath3 + guid + '.jpg'
             return basePath1 + 'folge' + guid[4:] + '@2x.jpg'
         elif 'postecke' == guid[:8]:

@@ -6,8 +6,10 @@ import urlparse
 
 import xbmcgui
 import xbmcplugin
+import xbmcaddon
 
-addon_path = os.getcwd()
+__addon__ = xbmcaddon.Addon()
+addon_path = __addon__.getAddonInfo('path')
 addon_url = sys.argv[0]
 addon_handle = int(sys.argv[1])
 addon_params = dict(urlparse.parse_qsl(sys.argv[2][1:]))
@@ -34,6 +36,13 @@ def add_dir(name, url):
 
 def add_image(image):
     item = xbmcgui.ListItem(image.name, thumbnailImage=image.thumb_url)
+    
+    if not 'ctxsearch' in addon_params:
+        label = "More from %s" % image.userfullname # i18n
+        url = encode_child_url('search', term=image.userid, ctxsearch=True)
+        action = "XBMC.Container.Update(%s)" % url
+        item.addContextMenuItems([(label, action,)])
+            
     xbmcplugin.addDirectoryItem(addon_handle, image.url, item)
 
 def end_of_directory():

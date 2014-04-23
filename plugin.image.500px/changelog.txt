@@ -1,3 +1,5 @@
+Version 0.2.2 - April 21, 2014
+- Fixes search when entering an empty string or when dismissing the search dialog.
 Version 0.2.1 - June 21, 2013
 - Rename module utils to resolve a confict. 
 Version 0.2.0 - June 19, 2013

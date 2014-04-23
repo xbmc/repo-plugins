@@ -3,8 +3,12 @@ import fivehundredpxutils
 import fivehundredpxutils.xbmc
 
 import xbmc
+import xbmcaddon
 import xbmcgui
 import xbmcplugin
+
+__addon__       = xbmcaddon.Addon()
+__addonname__   = __addon__.getAddonInfo('name')
 
 from fivehundredpx.client import FiveHundredPXAPI
 
@@ -15,9 +19,11 @@ API = FiveHundredPXAPI()
 
 class Image(object):
     def __init__(self, photo_json):
-        self.name= photo_json['name']
+        self.name = photo_json['name']
         self.thumb_url = photo_json['images'][0]['url']
         self.url = photo_json['images'][1]['url']
+        self.userid = photo_json['user']['username']
+        self.userfullname = photo_json['user']['fullname']
 
     def __repr__(self):
         return str(self.__dict__)
@@ -46,24 +52,35 @@ def search():
     def getTerm():
         kb = xbmc.Keyboard(heading='Search 500px')
         kb.doModal()
-        return kb.getText()
+        text = kb.getText()
+        return text if kb.isConfirmed() and text else None
 
     params = fivehundredpxutils.xbmc.addon_params
 
     if 'term' not in params:
         term = getTerm()
+        if term == None:
+            return
         page = 1
     else:
         term = params['term']
-        page = int(params['page'])
+        page = int(params.get('page', 1))
 
     resp = API.photos_search(term=term, rpp=_RPP, consumer_key=_CONSUMER_KEY, image_size=[2, 4], page=page)
+    
+    if (resp['total_items'] == 0):
+        xbmc.executebuiltin('Notification(%s, %s)' % (__addonname__, "Your search returned no matches."))
+        return
+    
     for image in map(Image, resp['photos']):
         fivehundredpxutils.xbmc.add_image(image)
 
     if resp['current_page'] != resp['total_pages']:
         next_page = page + 1
-        url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page)
+        if 'ctxsearch' in params:
+            url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page, ctxsearch=True)
+        else:
+            url = fivehundredpxutils.xbmc.encode_child_url('search', term=term, page=next_page)
         fivehundredpxutils.xbmc.add_dir('Next page', url)
 
     fivehundredpxutils.xbmc.end_of_directory()
@@ -75,7 +92,8 @@ def features():
         "popular",
         "upcoming",
         "fresh_today",
-        "fresh_yesterday"
+        "fresh_yesterday",
+        "fresh_week"
     )
 
     for feature in features:
@@ -95,7 +113,7 @@ def categories():
         'Animals': 11,
         'Black and White': 5,
         'Celebrities': 1,
-        'City': 9,
+        'City and Architecture': 9,
         'Commercial': 15,
         'Concert': 16,
         'Family': 20,
@@ -116,7 +134,7 @@ def categories():
         'Transportation': 26,
         'Travel': 13,
         'Underwater': 22,
-        'Urban': 27,
+        'Urban Exploration': 27,
         'Wedding': 25,
     }
 

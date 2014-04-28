@@ -142,7 +142,7 @@ def other_categories(params):
     page_url = 'http://www.esa.int/spaceinvideos/Videos'
     buffer_web = lutil.carga_web(page_url)
 
-    category_pattern = '<a href="(/spaceinvideos/Directorates/[^"]*?)" title="[^"]*?">([^<]*?)</a>'
+    category_pattern = '<a href="(/spaceinvideos/Directorates/[^"]*?)">([^<]*?)</a>'
 
     for category_link, title in lutil.find_multiple(buffer_web, category_pattern):
         url = '%s%s/(sortBy)/%s' % (root_url, category_link, sort_method)

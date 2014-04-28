@@ -1,3 +1,5 @@
+1.0.8
+- Quick fix for Other Categories due to website internal change.
 1.0.7
 - Fixes made due to website internal changes.
 - Removed some info tags as they are no longer available from website.

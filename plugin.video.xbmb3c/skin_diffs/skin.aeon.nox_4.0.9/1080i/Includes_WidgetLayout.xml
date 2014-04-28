@@ -1451,7 +1451,7 @@
             <include>Animation_Widgets</include>
             <visible>![IsEmpty(Window(Home).Property(NextAired.1.Thumb)) + Substring(Control.GetLabel(4321),nextairedtv)]</visible>
             <visible>![IsEmpty(Window(Home).Property(RecommendedMovie.1.Title)) + Substring(Control.GetLabel(4321),watchlistmovies)]</visible>
-            <visible>![IsEmpty(Window(Home).Property(RecommendedEpisode.1.Title)) + Substring(Control.GetLabel(4321),watchlisttv)]</visible>
+            <visible>![IsEmpty(Window(Home).Property(NextUpEpisodeMB3.1.EpisodeTitle)) + Substring(Control.GetLabel(4321),watchlisttv)]</visible>
             <animation effect="slide" end="0,-258" time="400" tween="cubic" easing="inout" condition="Skin.HasSetting(lowermainmenu)">Conditional</animation>
             <animation effect="slide" time="200" end="0,-38" condition="!Skin.HasSetting(lowermainmenu) + Skin.HasSetting(rsshomelow)">Conditional</animation>
             <!--Unfocused widget-->
@@ -2136,7 +2136,7 @@
             <visible>[Substring(Control.GetLabel(4321),featured) | Substring(Control.GetLabel(4321),panel)]</visible>
             <visible>![IsEmpty(Window(Home).Property(NextAired.1.Thumb)) + Substring(Control.GetLabel(4321),nextairedtv)]</visible>
             <visible>![IsEmpty(Window(Home).Property(RecommendedMovie.1.Title)) + Substring(Control.GetLabel(4321),watchlistmovies)]</visible>
-            <visible>![IsEmpty(Window(Home).Property(RecommendedEpisode.1.Title)) + Substring(Control.GetLabel(4321),watchlisttv)]</visible>
+            <visible>![IsEmpty(Window(Home).Property(NextUpEpisodeMB3.1.EpisodeTitle)) + Substring(Control.GetLabel(4321),watchlisttv)]</visible>
             <include>Animation_Widgets</include>
             <animation type="Conditional" condition="true">
                 <effect type="zoom" start="100" end="97" center="960,540" time="300" tween="cubic" />
@@ -3143,7 +3143,7 @@
             <animation effect="slide" end="0,25" time="400" tween="cubic" easing="inout" condition="[[Skin.HasSetting(totalshomehigh) + !Skin.HasSetting(DisableLibraryStats)] | [Skin.HasSetting(timehomehigh) + !Skin.HasSetting(DisableTimePanel)]]">Conditional</animation>
             <visible>![IsEmpty(Window(Home).Property(NextAired.1.Thumb)) + Substring(Control.GetLabel(4325),nextairedtv)]</visible>
             <visible>![IsEmpty(Window(Home).Property(RecommendedMovie.1.Title)) + Substring(Control.GetLabel(4325),watchlistmovies)]</visible>
-            <visible>![IsEmpty(Window(Home).Property(RecommendedEpisode.1.Title)) + Substring(Control.GetLabel(4325),watchlisttv)]</visible>
+            <visible>![IsEmpty(Window(Home).Property(NextUpEpisodeMB3.1.EpisodeTitle)) + Substring(Control.GetLabel(4325),watchlisttv)]</visible>
             <include>Animation_Widgets</include>
             <!--Unfocused widget-->
             <control type="group">

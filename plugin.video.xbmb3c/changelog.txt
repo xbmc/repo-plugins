@@ -1,3 +1,16 @@
+0.9.0
+      - Search capability
+      - Better skin integration
+      - Added Favorite Shows node
+      - Update NextUp widget on stop
+      - Check that service is running
+      - Error handling for non-UNC paths
+      - Photo widget support
+      - Better MB3->XBMC art mapping
+      - Meta-data for playback in-progress items
+      - More granular debug logs
+      - No meta-data cache for less than 25 items (helps with TV status updates)
+
 0.8.5
       - Added remote control from other clients (null_pointer)
       - Added trailer support (im85288)

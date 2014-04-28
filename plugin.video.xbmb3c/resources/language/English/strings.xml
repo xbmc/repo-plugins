@@ -3,7 +3,7 @@
     <string id="30000">Primary Server Address</string>
     <string id="30001">Auto enter single folder items:</string>
     <string id="30002">Play from Stream instead of SMB:</string>
-    <string id="30004">Enable debug output to log:</string>
+    <string id="30004">Log Level:</string>
     <string id="30005">Username: </string>
     <string id="30006">Password: </string>
     <string id="30007">Samba Username: </string>
@@ -23,6 +23,7 @@
     <string id="30030">Port Number:</string>
     <string id="30036">Number of recent movies to show:</string>    
     <string id="30037">Number of recent TV episodes to show:</string>    
+    <string id="30035">Number of recent Music Albums show:</string>    
     <string id="30038">Mark watched at start of playback:</string>    
     <string id="30039">Use Series Art for Episodes</string>
 
@@ -103,5 +104,14 @@
     <string id="30127">Offer delete for watched episodes</string>   
     <string id="30128">Play Error</string>
     <string id="30129">This item is not playable</string>    
+    <string id="30130">Local path detected</string>
+    <string id="30131">Your MB3 Server contains local paths.  Please change server paths to UNC or change XBMB3C setting 'Play from Stream' to true.  Path: </string>
+    <string id="30132">Warning</string>
+    <string id="30133">Debug logging enabled.</string>
+    <string id="30134">This will affect performance.</string>
+    <string id="30135">Error</string>
+    <string id="30136">XBMB3C Service has crashed</string>
+    <string id="30137">Please restart XBMC</string>
+    <string id="30138">Search</string>
 
 </strings>

@@ -16,7 +16,7 @@
 #    along with xbmc-groove.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import urllib, sys, os, shutil, re, pickle, time, tempfile, xbmcaddon, xbmcplugin, xbmcgui, xbmc
+import urllib, sys, os, shutil, re, pickle, time, traceback, xbmcaddon, xbmcplugin, xbmcgui, xbmc
 
 __addon__     = xbmcaddon.Addon('plugin.audio.groove')
 __addonname__ = __addon__.getAddonInfo('name')
@@ -76,6 +76,7 @@ resDir = xbmc.translatePath(os.path.join(baseDir, 'resources'))
 libDir = xbmc.translatePath(os.path.join(resDir,  'lib'))
 imgDir = xbmc.translatePath(os.path.join(resDir,  'img'))
 cacheDir = os.path.join(xbmc.translatePath('special://masterprofile/addon_data/'), os.path.basename(baseDir))
+tempDir = xbmc.translatePath('special://temp')
 thumbDirName = 'thumb'
 thumbDir = os.path.join(xbmc.translatePath('special://masterprofile/addon_data/'), os.path.basename(baseDir), thumbDirName)
 
@@ -99,10 +100,14 @@ else:
     __debugging__ = False
 
 try:
-    groovesharkApi = GrooveAPI(__debugging__)
+    groovesharkApi = GrooveAPI(__debugging__, tempDir)
     if groovesharkApi.pingService() != True:
         raise StandardError(__language__(30007))
 except:
+    print "Exception on initialisation"
+    print '-'*60
+    traceback.print_exc()
+    print '-'*60
     dialog = xbmcgui.Dialog(__language__(30008),__language__(30009),__language__(30010))
     dialog.ok(__language__(30008),__language__(30009))
     sys.exit(-1)
@@ -524,7 +529,7 @@ class Grooveshark:
     def songItem(self, songid, name, album, artist, coverart, trackLabelFormat=ARTIST_ALBUM_NAME_LABEL, tracknumber=1):
         
         stream = self._getSongStream(songid)
-        if stream != False:
+        if stream != None:
             duration = stream[1]
             url = stream[2]
             key = stream[3]
@@ -547,9 +552,10 @@ class Grooveshark:
             item.setProperty('duration', str(duration))
             item.setProperty('key', str(key))
             item.setProperty('server', str(server))
+            item.setProperty('fanart_image', self.fanImg)
             return item
         else:
-            xbmc.log("No song URL")
+            xbmc.log("No access to song URL")
             return None
     
     # Next page of songs
@@ -874,6 +880,7 @@ class Grooveshark:
             u = url
         directory=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
         directory.setInfo( type="Music", infoLabels={ "title": name } )
+        directory.setProperty('fanart_image', self.fanImg)
         
         # Custom menu items
         menuItems = []

@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with xbmc-groove.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib2, pprint, os, pickle, tempfile, time, re, simplejson, base64, sys, socket, hashlib
+import urllib2, pprint, os, pickle, tempfile, time, re, simplejson, base64, sys, socket, hashlib, getpass
 from blowfish import Blowfish
 
 SESSION_EXPIRY = 1209600 # 2 weeks
@@ -42,14 +42,14 @@ class GrooveAPI:
 	_debugging = False
 
 	# Constructor
-	def __init__(self, debug):
+	def __init__(self, debug, tempDir):
 		
 		self._debugging = debug
 		self.simplejson = simplejson
 		if "linux" in sys.platform.lower():
 			socket.setdefaulttimeout(30)
 			
-		self.cacheDir = os.path.join(tempfile.gettempdir(), 'groovesharkapi')
+		self.cacheDir = tempDir
 		if os.path.isdir(self.cacheDir) == False:
 			os.makedirs(self.cacheDir)
 			if self._debugging:
@@ -129,7 +129,7 @@ class GrooveAPI:
 			return ''
 	
 	def _getSavedSession(self):
-		path = os.path.join(self.cacheDir, 'session.dmp')
+		path = os.path.join(self.cacheDir, 'groovesharksession.dmp')
 		try:
 			f = open(path, 'rb')
 			session = pickle.load(f)
@@ -152,7 +152,7 @@ class GrooveAPI:
 			# Create the directory if it doesn't exist.
 			if not os.path.exists(self.cacheDir):
 				os.makedirs(self.cacheDir)
-			path = os.path.join(self.cacheDir, 'session.dmp')
+			path = os.path.join(self.cacheDir, 'groovesharksession.dmp')
 			f = open(path, 'wb')
 			session = { 'sessionID' : self._sessionID, 'lastSessionTime' : self._lastSessionTime, 'userID': self._userID, 'ip' : self._ip, 'country' : self._country } 
 			pickle.dump(session, f, protocol=pickle.HIGHEST_PROTOCOL)

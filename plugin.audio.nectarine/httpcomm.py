@@ -20,10 +20,8 @@ class HTTPComm:
         timeout = 10
         socket.setdefaulttimeout(timeout)
 
-        # Add useragent and tries to look like a real browser, as the site doesn't like to interact with scripts
         self.curlinstance.addheaders = [
-            ('User-Agent',
-             'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0'),
+            ('User-Agent', 'XBMC Nectarine Plugin (https://github.com/vidarw/xbmc.plugin.audio.nectarine)'),
             ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'),
             ('Accept-Language', 'en-gb,en;q=0.5'),
             ('Accept-Encoding', 'gzip,deflate'),

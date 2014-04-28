@@ -3,6 +3,11 @@
 - Removed feature
 
 
+2014-04-23 v1.0.1
+=================
+
+* Fixed user agent string as per request from service provider.
+
 2014-04-17 v1.0.0
 =================
 

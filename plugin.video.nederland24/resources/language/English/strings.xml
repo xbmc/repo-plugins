@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!--Category-->
+	<string id="30100">Enabled Channels</string>
+	<string id="30200">General</string>
+	<!--Channels-->
+	<string id="30101">101 TV</string>
+	<string id="30102">Best 24</string>	
+	<string id="30104">Cultura 24</string>
+	<string id="30105">Familie 24 / Z@ppelin</string>
+	<string id="30107">Holland Doc 24</string>
+	<string id="30108">Humor TV 24</string>
+	<string id="30109">Journaal 24</string>
+	<string id="30110">Politiek 24</string>
+	<string id="30111">Nederland 1</string>
+	<string id="30112">Nederland 2</string>
+	<string id="30113">Nederland 3</string>
+	<string id="30114">3FM Live Radio</string>
+    <string id="30151">Achtuurjournaal, number of previous episodes</string>
+    <string id="30152">Jeugdjournaal, number of previous episodes</string>
+	<!--Bandwidth-->
+	<string id="30202">Disable GEOIP restricted channels (for usage outside of the Netherlands)</string>
+</strings>

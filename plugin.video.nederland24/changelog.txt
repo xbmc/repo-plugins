@@ -1,3 +1,7 @@
+[B]4.1.0 - Gotham[/B]
+-Reworked additional channels
+
+
 [B]4.0.0 - Frodo[/B]
 -substantial changes due to website alterations
 -additional channels

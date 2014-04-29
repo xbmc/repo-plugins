@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!--Category-->
 	<string id="30100">Kanalenkiezer</string>
@@ -15,7 +16,8 @@
 	<string id="30112">Nederland 2</string>
 	<string id="30113">Nederland 3</string>
 	<string id="30114">3FM Live Radio</string>
-	<string id="30116">Additionele Journaal Kanalen</string>
+	<string id="30151">Achtuurjournaal, aantal afleveringen</string>
+    <string id="30152">Jeugdjournaal, aantal afleveringen</string>
 	<!--Bandwidth-->
 	<string id="30202">Door GEOIP tot Nederland beperkte kanalen uitschakelen</string>
 </strings>

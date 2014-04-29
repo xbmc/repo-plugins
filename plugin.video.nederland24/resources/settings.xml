@@ -14,7 +14,8 @@
         <setting id="Nederland 2" label="30112" type="bool" default="true" />
         <setting id="Nederland 3" label="30113" type="bool" default="true" />
         <setting id="3FM" label="30114" type="bool" default="false" />
-        <setting id="Additional Journaal Channels" label="30116" type="bool" default="false" />
+        <setting id="Depth_Acht" label="30151" type="slider"  default="1" range="0,1,10" option="int" />
+        <setting id="Depth_Jeugd" label="30152" type="slider"  default="1" range="0,1,10" option="int" />
     </category>
     <!--Bandwith-->
     <category label="30200">

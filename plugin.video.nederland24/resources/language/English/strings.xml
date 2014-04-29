@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
 	<!--Category-->
 	<string id="30100">Enabled Channels</string>
@@ -15,7 +16,8 @@
 	<string id="30112">Nederland 2</string>
 	<string id="30113">Nederland 3</string>
 	<string id="30114">3FM Live Radio</string>
-	<string id="30116">Additional Journaal Channels</string>
+    <string id="30151">Achtuurjournaal, number of previous episodes</string>
+    <string id="30152">Jeugdjournaal, number of previous episodes</string>
 	<!--Bandwidth-->
 	<string id="30202">Disable GEOIP restricted channels (for usage outside of the Netherlands)</string>
 </strings>

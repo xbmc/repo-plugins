@@ -1,5 +1,11 @@
 TODO: Create Unit Tests, Once I figure out how
 
+[B]Version 1.0.3[/B]
+- Changed the Video Context menu to not replace items
+- Fixed bug with non english language sometimes crashing the addon
+- Changed random play to continuously play the next random video (Party Mode)
+- General unicode fixes
+
 [B]Version 1.0.2[/B]
 - Fixed next page now showing bug. Unicode mistake
 - Small Change to prepare for Unit Tests

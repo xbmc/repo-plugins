@@ -262,15 +262,35 @@ class VideoList(listitem.VirtualFS):
 class PlayVideo(listitem.PlayMedia):
 	@plugin.error_handler
 	def resolve(self):
-		# Set TTL
-		if plugin["url"].endswith(u"randomizer.php"): TTL=0
-		else: TTL=604800 # TTL = 1 Week
+		# When in party mode continuously play random video
+		if "partymode" in plugin:
+			# Add Current path to playlist
+			playlist = plugin.xbmc.PlayList(1)
+			playlist.add(plugin.handleThree)
+			# Return video url untouched
+			return self.find_video(0) # TTL = 1 Week
 		
+		# When randomizer is selected start partymode
+		elif plugin["url"].endswith(u"randomizer.php"):
+			# Clear Playlist first
+			playlist = plugin.xbmc.PlayList(1)
+			playlist.clear()
+			# Return Video Player url Twice to start party mode playlist
+			return {"url":[self.find_video(0), plugin.handleThree+"partymode=true"]}
+		
+		# Play Selected Video
+		else:
+			# Return video url untouched
+			return self.find_video(604800) # TTL = 1 Week
+	
+	def find_video(self, TTL):
 		# Fetch Page Source
 		sourceCode = urlhandler.urlread(plugin["url"], TTL)
 		from xbmcutil import videoResolver
 		
 		# Look for Youtube Video First
-		videoId = [part for part in re.findall('src="(http://www.youtube.com/embed/\S+?)"|file:\s+\'(\S+?)\'', sourceCode)[0] if part][0]
-		if u"metalvideo.com" in videoId: return {"url":videoId}
-		elif u"youtube.com" in videoId: return videoResolver.youtube_com().decode(videoId)
+		try: videoId = [part for part in re.findall('src="(http://www.youtube.com/embed/\S+?)"|file:\s+\'(\S+?)\'', sourceCode)[0] if part][0]
+		except: return None
+		else:
+			if u"metalvideo.com" in videoId: return {"url":videoId}
+			elif u"youtube.com" in videoId: return videoResolver.youtube_com().decode(videoId)

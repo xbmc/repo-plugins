@@ -1,0 +1,13 @@
+[B]version 2.0.0[/B]
+
+- Rewritten using xbmcswift2
+- Switched to v2 API (v1 not available anymore)
+- Use some web scraping due to v2 API limitation
+
+[B]version 1.0.3[/B]
+
+- Bugfix: Corrected handling of YouTube Videos
+
+[B]version 1.0.0[/B]
+
+- initial release

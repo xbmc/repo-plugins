@@ -42,7 +42,8 @@ pluginConfig.read(os.path.join(os.path.dirname(__file__), "config.ini"))
 ARGS = urlparse.parse_qs(sys.argv[2][1:])
 BASE_URL = sys.argv[0]
 HANDLE = int(sys.argv[1])
-ADDON = xbmcaddon.Addon(id=pluginConfig.get('plugin', 'id'))
+ADDON_ID = pluginConfig.get('plugin', 'id')
+ADDON = xbmcaddon.Addon(ADDON_ID)
 
 
 class Main:
@@ -51,9 +52,10 @@ class Main:
         xbmcplugin.setContent(HANDLE, 'audio')
 
         self.curl = HTTPComm()
-
         self.name = ARGS.get('foldername', None)
         self.mode = ARGS.get('mode', None)
+        self.thumbnailImage = 'special://home/addons/%s/icon.png' % ADDON_ID
+
 
     def run(self):
 
@@ -74,7 +76,7 @@ class Main:
 
             streams = self.get_streams()
             for stream in streams:
-                li = xbmcgui.ListItem(stream['name'], iconImage='DefaultAudio.png')
+                li = xbmcgui.ListItem(stream['name'], iconImage='DefaultAudio.png', thumbnailImage=self.thumbnailImage)
                 li.setInfo(type="Music", infoLabels={"Size": stream['bitrate'] * 1024})
                 li.setProperty("IsPlayable", "true")
                 xbmcplugin.addDirectoryItem(handle=HANDLE, url=stream['url'], listitem=li, isFolder=False)
@@ -88,7 +90,7 @@ class Main:
             # Currently Playing
             self.add_heading(ADDON.getLocalizedString(30200))
             for item in history[0]:
-                li = xbmcgui.ListItem(item["artist"] + " - " + item["song"])
+                li = xbmcgui.ListItem(item["artist"] + " - " + item["song"], thumbnailImage=self.thumbnailImage)
                 li.setProperty("IsPlayable", "false")
                 xbmcplugin.addDirectoryItem(handle=HANDLE, url="nnn", listitem=li, isFolder=False)
 
@@ -96,7 +98,7 @@ class Main:
             # Queue
             self.add_heading(ADDON.getLocalizedString(30201), True)
             for item in history[1]:
-                li = xbmcgui.ListItem(item["artist"] + " - " + item["song"])
+                li = xbmcgui.ListItem(item["artist"] + " - " + item["song"], thumbnailImage=self.thumbnailImage)
                 li.setProperty("IsPlayable", "false")
                 xbmcplugin.addDirectoryItem(handle=HANDLE, url="nnn", listitem=li, isFolder=False)
 
@@ -104,7 +106,7 @@ class Main:
             # History
             self.add_heading(ADDON.getLocalizedString(30202), True)
             for item in history[2]:
-                li = xbmcgui.ListItem(item["artist"] + " - " + item["song"])
+                li = xbmcgui.ListItem(item["artist"] + " - " + item["song"], thumbnailImage=self.thumbnailImage)
                 li.setProperty("IsPlayable", "false")
                 xbmcplugin.addDirectoryItem(handle=HANDLE, url="nnn", listitem=li, isFolder=False)
 
@@ -178,11 +180,11 @@ class Main:
     def add_heading(self, title, linebreak=False):
         # Linebreak
         if linebreak:
-            li = xbmcgui.ListItem()
+            li = xbmcgui.ListItem(thumbnailImage=self.thumbnailImage)
             li.setProperty("IsPlayable", "false")
             xbmcplugin.addDirectoryItem(handle=HANDLE, url="nnn", listitem=li, isFolder=False)
 
-        li = xbmcgui.ListItem(label="[COLOR FF007EFF]" + title + "[/COLOR]")
+        li = xbmcgui.ListItem(label="[COLOR FF007EFF]" + title + "[/COLOR]", thumbnailImage=self.thumbnailImage)
         li.setProperty("IsPlayable", "false")
         xbmcplugin.addDirectoryItem(handle=HANDLE, url="nnn", listitem=li, isFolder=False)
 

@@ -79,6 +79,8 @@ def get_soup(data):
     if data:
         if data.startswith('http'):
             data = make_request(data)
+            #patch 0.0.7
+            data = re.sub(r'</scri["\']', '', data)
         return BeautifulSoup(data, 'html.parser')
 
 

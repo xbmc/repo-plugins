@@ -1,3 +1,7 @@
+Version 0.0.8
+Fixed so that there is no need to delete the cookie file when watching sponsored videos.
+Thanks to AikenDrum for the patch.
+
 Version 0.0.7
 Because divingmule seems off the grid for a bit, i've patched this version and put it in my repo. 
 I'll push it to the xbmc repo, so it will automaticly update for everybody. 

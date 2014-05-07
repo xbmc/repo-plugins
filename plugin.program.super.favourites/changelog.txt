@@ -1,5 +1,20 @@
+v1.0.3:
+  - Improved handling of non-ascii characters
+  - Add back to XBMC favourites for both folders and favourites
+
+
+v1.0.2:
+  - Beta release for testing / feedback
+  - Overide standard context menu, allows direct Adding to Super Favourites from any addon
+  - Added Move Up / Move Down
+  - Super Favourites now launch properly from within Super Favourites
+  - Choose Thumbnails for Super Favourites and Super Folders (including built in icons when using Confluence or ReTouched)
+  - Coloured text works correctly in favourite names
+
+
 v1.0.1:
-  - bug fixes
+  - Bug fixes
+
 
 v1.0.0:
-  - initial release
+  - Initial release

@@ -42,10 +42,16 @@ FANART  =  os.path.join(HOME, 'fanart.jpg')
 BLANK   =  os.path.join(HOME, 'resources', 'media', 'blank.png')
 GETTEXT =  ADDON.getLocalizedString
 TITLE   =  GETTEXT(30000)
-KEYMAP  = 'super_favourites.xml'
+
+KEYMAP_HOT  = 'super_favourites_hot.xml'
+KEYMAP_MENU = 'super_favourites_menu.xml'
 
 MAJOR, MINOR = GetXBMCVersion()
+FRODO        = (MAJOR == 12) and (MINOR < 9)
 GOTHAM       = (MAJOR == 13) or (MAJOR == 12 and MINOR == 9)
+
+FILENAME  = 'favourites.xml'
+FOLDERCFG = 'folder.cfg'
 
 
 def DialogOK(line1, line2='', line3=''):
@@ -53,14 +59,17 @@ def DialogOK(line1, line2='', line3=''):
     d.ok(TITLE + ' - ' + VERSION, line1, line2 , line3)
 
 
-def DialogYesNo(line1, line2='', line3=''):
+def DialogYesNo(line1, line2='', line3='', noLabel=None, yesLabel=None):
     d = xbmcgui.Dialog()
-    return d.yesno(TITLE + ' - ' + VERSION, line1, line2 , line3) == True
+    if noLabel == None or yesLabel == None:
+        return d.yesno(TITLE + ' - ' + VERSION, line1, line2 , line3) == True
+    else:
+        return d.yesno(TITLE + ' - ' + VERSION, line1, line2 , line3, noLabel, yesLabel) == True
 
 
 def Verify():
     CheckVersion()
-    VerifyKeymap()
+    VerifyKeymaps()
 
 
 def CheckVersion():
@@ -78,11 +87,17 @@ def CheckVersion():
         if not os.path.isdir(folder):
             os.makedirs(folder) 
 
-        VerifyKeymap()
-        
+        VerifyKeymaps()
 
-def DeleteKeymap():
-    path = os.path.join(xbmc.translatePath('special://userdata/keymaps'), KEYMAP)
+
+def UpdateKeymaps():
+    DeleteKeymap(KEYMAP_HOT)
+    DeleteKeymap(KEYMAP_MENU)
+    VerifyKeymaps()
+
+        
+def DeleteKeymap(map):
+    path = os.path.join(xbmc.translatePath('special://userdata/keymaps'), map)
 
     tries = 5
     while os.path.exists(path) and tries > 0:
@@ -94,22 +109,35 @@ def DeleteKeymap():
             xbmc.sleep(500)
 
 
-def VerifyKeymap():
-    dest = os.path.join(xbmc.translatePath('special://userdata/keymaps'), KEYMAP)
+def VerifyKeymaps():
+    reload = False
+
+    if VerifyKeymapHot():  reload = True
+    if VerifyKeymapMenu(): reload = True
+
+    if not reload:
+        return
+
+    xbmc.sleep(1000)
+    xbmc.executebuiltin('Action(reloadkeymaps)')  
+
+
+def VerifyKeymapHot():
+    dest = os.path.join(xbmc.translatePath('special://userdata/keymaps'), KEYMAP_HOT)
 
     if os.path.exists(dest):
-        return
+        return False
 
     key = ADDON.getSetting('HOTKEY').lower()
 
-    if key not in ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12']:
-        DeleteKeymap()
-        xbmc.sleep(1000)
-        xbmc.executebuiltin('Action(reloadkeymaps)')  
-        return
-    
-    cmd = '<keymap><Global><keyboard><%s>XBMC.RunAddon(plugin.program.super.favourites)</%s></keyboard></Global></keymap>'  % (key, key)
+    includeKey = key in ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12']
 
+    if not includeKey:
+        DeleteKeymap(KEYMAP_HOT)
+        return True
+
+    cmd = '<keymap><Global><keyboard><%s>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/hot.py)</%s></keyboard></Global></keymap>'  % (key, key)
+    
     f = open(dest, mode='w')
     f.write(cmd)
     f.close()
@@ -122,8 +150,44 @@ def VerifyKeymap():
         f.write(t)
         f.close()
         xbmc.sleep(1000)
-    
-    xbmc.executebuiltin('Action(reloadkeymaps)')  
+
+    return True
+
+
+def VerifyKeymapMenu():
+    dest = os.path.join(xbmc.translatePath('special://userdata/keymaps'), KEYMAP_MENU)
+
+    if os.path.exists(dest):
+        return False
+
+    context = ADDON.getSetting('CONTEXT')  == 'true'
+
+    if not context:
+        DeleteKeymap(KEYMAP_MENU)
+        return True
+
+    src = os.path.join(HOME, 'resources', 'keymaps', KEYMAP_MENU)
+    dst = os.path.join(xbmc.translatePath('special://userdata/keymaps'), KEYMAP_MENU)
+
+    import shutil
+    shutil.copy(src, dst)
+
+    return True
+
+
+
+def GetFolder(title):
+    default = ADDON.getAddonInfo('profile')
+    folder  = xbmc.translatePath(PROFILE)
+
+    if not os.path.isdir(folder):
+        os.makedirs(folder) 
+
+    folder = xbmcgui.Dialog().browse(3, title, 'files', '', False, False, default)
+    if folder == default:
+        return None
+
+    return xbmc.translatePath(folder)
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@
 <strings>
     <string id="30000">Super Favourites</string>
     <string id="30001">Super Favourite</string>
-    <string id="30004">New Super Folder</string>
+    <string id="30004">Create New Super Folder</string>
 	<string id="30005">Add-on settings</string>
 	<string id="30006">Add to XBMC favourites</string>
 	<string id="30007">Copy favourite</string>
@@ -37,7 +37,16 @@
 	<string id="30037">F10</string>
 	<string id="30038">F11</string>
 	<string id="30039">F12</string>	
-	<string id="30040">XBMC Favourites</string>	
+	<string id="30040">Explore XBMC favourites</string>	
 	<string id="30041">Move up</string>	
 	<string id="30042">Move down</string>	
+	<string id="30043">Choose thumbnail</string>	
+	<string id="30044">Browse for image</string>
+	<string id="30046">Would you like to browse the current skin's built-in icons?</string>
+	<string id="30047">Add to Super Favourites</string>
+	<string id="30048">Standard context menu</string>
+    <string id="30049">Super Favourites settings</string>
+    <string id="30050">Override context menu</string>
+    <string id="30051">Show separator</string>
+    <string id="30052">Change playback mode</string>
 </strings>

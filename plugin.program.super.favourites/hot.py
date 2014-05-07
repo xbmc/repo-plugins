@@ -18,36 +18,9 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-import utils
-utils.Verify()
-
 import xbmc
-import os
+import utils
 
-
-class MyMonitor(xbmc.Monitor):
-    def __init__(self):
-        xbmc.Monitor.__init__(self)
-        self.hotkey  = utils.ADDON.getSetting('HOTKEY')
-        self.context = utils.ADDON.getSetting('CONTEXT')  == 'true'
-
-
-    def onSettingsChanged(self):
-        hotkey  = utils.ADDON.getSetting('HOTKEY')
-        context = utils.ADDON.getSetting('CONTEXT')  == 'true'
-
-        if self.hotkey == hotkey and self.context == context:
-            return
-
-        self.hotkey  = hotkey
-        self.context = context
-
-        utils.UpdateKeymaps()
-
-
-monitor = MyMonitor()
-
-while (not xbmc.abortRequested):
-    xbmc.sleep(1000)
-
-del monitor
+#xbmc.executebuiltin('ActivateWindow(Programs)')
+#xbmc.executebuiltin('Container.Refresh')
+xbmc.executebuiltin('RunAddon(%s)' % utils.ADDONID)

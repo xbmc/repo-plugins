@@ -22,6 +22,43 @@ import os
 import xbmc
 import re
 
+import HTMLParser
+
+
+html_escape_table = {
+    "&": "&amp;",
+    '"': "&quot;",
+    "'": "&apos;",
+    ">": "&gt;",
+    "<": "&lt;",
+    }
+
+def escape(text):
+    return "".join(html_escape_table.get(c,c) for c in text)
+
+
+def unescape(text):
+    try:
+        return HTMLParser.HTMLParser().unescape(text)
+    except:
+        pass
+
+    newText    = ''
+    ignoreNext = False
+
+    for c in text:
+        if ord(c) < 127:
+            newText   += c
+            ignoreNext = False
+        elif ignoreNext:
+            ignoreNext = False
+        else:
+            newText   += ' '
+            ignoreNext = True
+
+    return unescape(newText)
+
+
 def getFavourites(file):
     xml  = '<favourites></favourites>'
     if os.path.exists(file):  
@@ -33,13 +70,25 @@ def getFavourites(file):
 
     faves = re.compile('<favourite(.+?)</favourite>').findall(xml)
     for fave in faves:
-        name  = re.compile('name="(.+?)"').findall(fave)[0]
+        fave = fave.replace('&quot;', '&_quot_;')
+        fave = fave.replace('\'', '"')
+        fave = unescape(fave)
+
+        try:    name = re.compile('name="(.+?)"').findall(fave)[0]
+        except: name = ''
 
         try:    thumb = re.compile('thumb="(.+?)"').findall(fave)[0]
         except: thumb = ''
 
-        cmd   = fave.rsplit('>', 1)[-1]
-        items.append([name, thumb, cmd])
+        try:    cmd   = fave.rsplit('>', 1)[-1]
+        except: cmd = ''
+
+        name  = name.replace( '&_quot_;', '"')
+        thumb = thumb.replace('&_quot_;', '"')
+        cmd   = cmd.replace(  '&_quot_;', '"')
+
+        if len(cmd) > 0:
+            items.append([name, thumb, cmd])
 
     return items
 
@@ -50,15 +99,18 @@ def writeFavourites(file, faves):
     f.write('<favourites>')
 
     for fave in faves:
-        name  = 'name="%s" ' % fave[0]
-        thumb = 'thumb="%s">' % fave[1]
-        cmd   = fave[2]
+        try:
+            name  = 'name="%s" '  % escape(fave[0])
+            thumb = 'thumb="%s">' % escape(fave[1])
+            cmd   = escape(fave[2])
 
-        f.write('\n\t<favourite ')
-        f.write(name)
-        f.write(thumb)
-        f.write(cmd)
-        f.write('</favourite>')
+            f.write('\n\t<favourite ')
+            f.write(name)
+            f.write(thumb)
+            f.write(cmd)
+            f.write('</favourite>')
+        except:
+            pass
 
     f.write('\n</favourites>')            
     f.close()

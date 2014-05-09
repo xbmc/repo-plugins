@@ -21,7 +21,6 @@ import sys
 import os
 import urlparse
 import urllib2
-import platform
 
 import xbmcaddon
 import xbmcgui
@@ -29,84 +28,63 @@ import xbmcplugin
 
 import buggalo
 
-from channels import CHANNELS, CATEGORIES, QUALITIES, Q_BEST, Q_RASPBERRY_PI
+from channels import CHANNELS, CATEGORIES
 
 TITLE_OFFSET = 30500
 
 
 def showChannels(category=None):
-    try:
-        quality = QUALITIES[int(ADDON.getSetting('quality'))]
-    except ValueError:
-        quality = QUALITIES[Q_BEST]  # fallback for old settings value
-
     if category is not None:
         channels = CATEGORIES[category]
     else:
         channels = CHANNELS
 
-    for channel in channels:
-        icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', '%d.png' % channel.category_id)
+    for c in channels:
+        channel = c
+        """:type : channels.Channel"""
+        icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', '%d.png' % channel.channel_id)
         if not os.path.exists(icon):
             icon = ICON
 
-        idx = None
-        if channel.config_key:
-            try:
-                idx = int(ADDON.getSetting(channel.config_key))
-            except ValueError:
-                idx = 0  # fallback for missing settings
-
-        if channel.get_url(quality, idx):
-            title = ADDON.getLocalizedString(TITLE_OFFSET + channel.category_id)
-            item = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
-            item.setInfo('video', infoLabels={
-                'title': title,
-                'studio': ADDON.getLocalizedString(channel.category)
-            })
-            if channel.fanart is not None:
-                item.setProperty('Fanart_Image', channel.fanart)
-            else:
-                item.setProperty('Fanart_Image', FANART)
-            item.setProperty('IsPlayable', 'true')
-            xbmcplugin.addDirectoryItem(HANDLE, PATH + '?playChannel=%d' % channel.category_id, item)
+        title = ADDON.getLocalizedString(TITLE_OFFSET + channel.channel_id)
+        item = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon)
+        item.setInfo('video', infoLabels={
+            'title': title,
+            'studio': ADDON.getLocalizedString(channel.category)
+        })
+        if channel.fanart is not None:
+            item.setProperty('Fanart_Image', channel.fanart)
+        else:
+            item.setProperty('Fanart_Image', FANART)
+        item.setProperty('IsPlayable', 'true')
+        xbmcplugin.addDirectoryItem(HANDLE, PATH + '?playChannel=%d' % channel.channel_id, item)
 
     xbmcplugin.endOfDirectory(HANDLE)
 
 
 def showCategories():
-    for id in CATEGORIES:
-        title = ADDON.getLocalizedString(id)
+    for category in CATEGORIES:
+        title = ADDON.getLocalizedString(category)
         item = xbmcgui.ListItem(title, iconImage=ICON, thumbnailImage=ICON)
         item.setProperty('Fanart_Image', FANART)
-        url = PATH + '?category=%d' % id
+        url = PATH + '?category=%d' % category
         xbmcplugin.addDirectoryItem(HANDLE, url, item, isFolder=True)
 
     xbmcplugin.endOfDirectory(HANDLE)
 
 
-def playChannel(id):
-    try:
-        quality = QUALITIES[int(ADDON.getSetting('quality'))]
-    except ValueError:
-        quality = QUALITIES[Q_BEST]  # fallback for old settings value
-
-    for channel in CHANNELS:
-        if str(channel.category_id) == id:
-            idx = None
-            if channel.config_key:
-                try:
-                    idx = int(ADDON.getSetting(channel.config_key))
-                except ValueError:
-                    idx = 0  # fallback for missing settings
-
-            url = channel.get_url(quality, idx)
+def playChannel(channel_id):
+    for c in CHANNELS:
+        channel = c
+        """:type : channels.Channel"""
+        if str(channel.channel_id) == channel_id:
+            url = channel.get_url()
             if url:
-                icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', '%d.png' % channel.category_id)
+                icon = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'logos', '%d.png' % channel.channel_id)
                 if not os.path.exists(icon):
                     icon = ICON
 
-                title = ADDON.getLocalizedString(TITLE_OFFSET + channel.category_id)
+                title = ADDON.getLocalizedString(TITLE_OFFSET + channel.channel_id)
                 item = xbmcgui.ListItem(title, iconImage=icon, thumbnailImage=icon, path=url)
                 item.setProperty('Fanart_Image', FANART)
                 item.setProperty('IsLive', 'true')
@@ -139,15 +117,6 @@ def imInDenmark():
             ADDON.setSetting('warn.if.not.in.denmark', 'false')
 
 
-def isRaspberryPi():
-    # inspired by plugin.image.xzen
-    try:
-        uname = platform.uname()
-    except:
-        uname = os.uname()
-
-    return 'raspbmc' in uname or 'armv6l' in uname
-
 if __name__ == '__main__':
     ADDON = xbmcaddon.Addon()
     PATH = sys.argv[0]
@@ -159,18 +128,11 @@ if __name__ == '__main__':
 
     buggalo.SUBMIT_URL = 'http://tommy.winther.nu/exception/submit.php'
     try:
-        if ADDON.getSetting('quality') == '':
-            # set default value based on what we are able to detect
-            if isRaspberryPi():
-                ADDON.setSetting('quality', str(Q_RASPBERRY_PI))
-            else:
-                ADDON.setSetting('quality', str(Q_BEST))
-
         if 'playChannel' in PARAMS:
             playChannel(PARAMS['playChannel'][0])
         elif 'category' in PARAMS:
             showChannels(int(PARAMS['category'][0]))
-        elif ADDON.getSetting('group.by.category') == 'true' and ADDON.getSetting('raspberry.pi.compatible.streams') == 'false':
+        elif ADDON.getSetting('group.by.category') == 'true':
             imInDenmark()
             showCategories()
         else:

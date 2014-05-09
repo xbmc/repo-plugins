@@ -1,3 +1,9 @@
+[B]Version 3.1.0 - 2014-05-03[/B]
+- Switched DR streams to Akamai HD
+  (and dropped old streams as they are not working anymore)
+- Removed quality and DR specific settings
+  Only best quality stream is available now
+
 [B]Version 3.0.5 - 2014-03-10[/B]
 - Fixed missing text in settings
 

@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <string id="30100">General</string>
-    <string id="30101">Quality</string>
     <string id="30102">Group channels</string>
-    <string id="30103">DRs channels</string>
-    <string id="30104">If you have problems with watching some of DRs channels,</string>
-    <string id="30105">then try switching to the secondary stream or vice-versa.</string>
-    <string id="30106">Primær stream</string>
-    <string id="30107">Sekundær stream</string>
     <string id="30108">Warnings</string>
     <string id="30109">Warn when not in Denmark</string>
-
-    <string id="30150">Best (up to 2 mbit/s)</string>
-    <string id="30151">High (1 mbit/s)</string>
-    <string id="30152">Medium (500 kbit/s)</string>
-    <string id="30153">Low (250 kibt/s)</string>
-    <string id="30154">AkamaiHD-stream (Raspberry Pi/AppleTV compatible)</string>
 
     <string id="30201">Danish Broadcasting Corporation</string>
     <string id="30202">TV2/Regions</string>
@@ -37,9 +25,7 @@
     <string id="30608">TV 2 | ØSTJYLLAND</string>
     <string id="30609">TV 2/Bornholm</string>
 
-    <string id="30700">24 Nordjyske</string>
     <string id="30701">Folketinget TV</string>
-    <string id="30702">danskespil.dk Lotto</string>
     <string id="30703">Kanal Sport</string>
 
     <string id="30970">Warning!</string>

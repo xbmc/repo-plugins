@@ -84,32 +84,89 @@ def get_soup(data):
         return BeautifulSoup(data, 'html.parser')
 
 
-def cache_shows():
+def cache_active_rt_shows():
 
     def filter_items(item_list):
-        parsed = []
-        for i in item_list:
-            try:
-                show = (i.b.string, i.a['href'], i.img['src'],
-                        i('a')[2].b.string.split()[0], i.span.string)
-                if not show in parsed:
-                    parsed.append(show)
-            except:
-                addon_log('addonException: %s' %format_exc())
-                continue
-        return parsed
+         parsed = []
+         for i in item_list:
+             try:
+                 show = (i.b.string, i.a['href'], i.img['src'],
+                         i('a')[2].b.string.split()[0], i.span.string)
+                 if not show in parsed:
+                     parsed.append(show)
+             except:
+                 addon_log('addonException: %s' %format_exc())
+                 continue
+         return parsed
 
     rt_url = 'http://roosterteeth.com/archive/series.php'
-    ah_url = 'http://ah.roosterteeth.com/archive/series.php'
     soup = get_soup(rt_url)
-    ah_soup = get_soup(ah_url)
     items = soup('table', class_="border boxBorder")[0].table('tr')
-    items += ah_soup('table', class_="border boxBorder")[0].table('tr')
+    return filter_items(items)
+
+
+def cache_active_ah_shows():
+
+    def filter_items(item_list):
+         parsed = []
+         for i in item_list:
+             try:
+                 show = (i.b.string, i.a['href'], i.img['src'],
+                         i('a')[2].b.string.split()[0], i.span.string)
+                 if not show in parsed:
+                     parsed.append(show)
+             except:
+                 addon_log('addonException: %s' %format_exc())
+                 continue
+         return parsed
+
+    ah_url = 'http://ah.roosterteeth.com/archive/series.php'
+    ah_soup = get_soup(ah_url)
+    items = ah_soup('table', class_="border boxBorder")[0].table('tr')
+    return filter_items(items)
+ 
+ 
+def cache_retired_rt_shows():
+
+    def filter_items(item_list):
+         parsed = []
+         for i in item_list:
+             try:
+                 show = (i.b.string, i.a['href'], i.img['src'],
+                         i('a')[2].b.string.split()[0], i.span.string)
+                 if not show in parsed:
+                     parsed.append(show)
+             except:
+                 addon_log('addonException: %s' %format_exc())
+                 continue
+         return parsed
+
+    rt_url = 'http://roosterteeth.com/archive/series.php'
+    soup = get_soup(rt_url)
     retired_items = soup('table', class_="border boxBorder")[1].table('tr')
-    retired_items += ah_soup('table', class_="border boxBorder")[1].table('tr')
-    return repr({'active': filter_items(items), 'retired': filter_items(retired_items)})
+    return filter_items(retired_items)
 
+    
+def cache_retired_ah_shows():
 
+    def filter_items(item_list):
+         parsed = []
+         for i in item_list:
+             try:
+                 show = (i.b.string, i.a['href'], i.img['src'],
+                         i('a')[2].b.string.split()[0], i.span.string)
+                 if not show in parsed:
+                     parsed.append(show)
+             except:
+                 addon_log('addonException: %s' %format_exc())
+                 continue
+         return parsed
+
+    ah_url = 'http://ah.roosterteeth.com/archive/series.php'
+    ah_soup = get_soup(ah_url)
+    retired_items = ah_soup('table', class_="border boxBorder")[1].table('tr')
+    return filter_items(retired_items)
+       
 def get_shows(shows):
     for i in shows:
         if 'v=trending' in i[1]:
@@ -478,10 +535,26 @@ addon_log(repr(params))
 
 if mode == None:
     # display main plugin dir
-    add_dir(language(30008), 'get_latest', 8, icon)
+    add_dir(language(30008), 'get_latest_rt', 8, icon)
+    add_dir(language(30027), 'get_latest_ah', 9, icon)
     add_dir(language(30005), 'get_podcasts', 4, icon)
-    shows = eval(cache.cacheFunction(cache_shows))
-    get_shows(shows['active'])
+        
+    act_rt_shows = cache_active_rt_shows()
+    act_ah_shows = cache_active_ah_shows()
+
+#   mix the shows     
+    act_shows = []
+    while True:
+        try:
+            act_shows.append(act_rt_shows.pop(0))
+            act_shows.append(act_ah_shows.pop(0))
+        except IndexError:
+            break
+
+#   add any remaining shows at the end  
+    act_shows = act_shows + act_rt_shows + act_ah_shows
+    
+    get_shows(act_shows)
     add_dir(language(30007), 'get_retired_shows', 7, icon)
     xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
@@ -529,15 +602,37 @@ elif mode == 6:
 
 elif mode == 7:
     # display retired shows
-    shows = eval(cache.cacheFunction(cache_shows))
-    get_shows(shows['retired'])
+    ret_rt_shows = cache_retired_rt_shows()
+    ret_ah_shows = cache_retired_ah_shows()
+
+#   mix the shows     
+    ret_shows = []
+    while True:
+        try:
+            ret_shows.append(ret_rt_shows.pop(0))
+            ret_shows.append(ret_ah_shows.pop(0))
+        except IndexError:
+            break
+        
+#   add any remaining shows at the end  
+    ret_shows = ret_shows + ret_rt_shows + ret_ah_shows
+ 
+    get_shows(ret_shows)
     xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 elif mode == 8:
-    # display latest episodes
-    soup = get_soup('http://roosterteeth.com/archive/?sid=rvb&v=newest')
+    # display latest RT episodes
+    soup = get_soup('http://roosterteeth.com/archive/?v=newest')
     index(soup, False)
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     set_view_mode()
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    
+elif mode == 9:
+    # display latest AH episodes
+    soup = get_soup('http://ah.roosterteeth.com/archive/?v=newest')
+    index(soup, False)
+    xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+    set_view_mode()
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))    

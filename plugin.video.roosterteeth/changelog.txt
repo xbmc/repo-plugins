@@ -1,3 +1,8 @@
+Version 0.0.9
+Mixed the current rt and ah shows
+Mixed the retired rt and ah shows
+Add dir for recent ah episodes
+
 Version 0.0.8
 Fixed so that there is no need to delete the cookie file when watching sponsored videos.
 Thanks to AikenDrum for the patch.

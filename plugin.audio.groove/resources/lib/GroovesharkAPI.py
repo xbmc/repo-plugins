@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with xbmc-groove.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib2, pprint, os, pickle, tempfile, time, re, simplejson, base64, sys, socket, hashlib, getpass
+import urllib2, pprint, os, pickle, time, re, simplejson, base64, sys, socket, hashlib
 from blowfish import Blowfish
 
 SESSION_EXPIRY = 1209600 # 2 weeks
@@ -66,6 +66,7 @@ class GrooveAPI:
 				self._ip = self._getIP()
 				self._country = self._getCountry()
 				self._setSavedSession()
+				self.logout()
 
 	# Call to API
 	def _callRemote(self, method, params):
@@ -228,7 +229,7 @@ class GrooveAPI:
 			self._setSavedSession()
 			return True
 		return False
-
+	
 	# Gets a stream key and host to get song content
 	def getSubscriberStreamKey(self, songID):
 		params = { "songID": songID, "country": self._country }

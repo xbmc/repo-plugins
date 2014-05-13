@@ -714,8 +714,7 @@ class Grooveshark:
             dialog.ok(__language__(30008), __language__(30069), __language__(30070), __language__(30082))
             return 0
         else:
-            if self.userid == 0:
-                uid = groovesharkApi.login(self.username, self.password)
+            uid = groovesharkApi.login(self.username, self.password)
             if (uid != 0):
                 return uid
             else:

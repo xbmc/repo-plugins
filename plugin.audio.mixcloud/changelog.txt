@@ -1,3 +1,9 @@
+1.1.3
+- Added local resolver (tnx to SilentException)
+
+1.1.2
+- Fixed playback of incorrect tracks (tnx to SilentException)
+
 1.1.1
 - Modified getstream url
 
@@ -9,8 +15,7 @@
 - Added French localisation
 
 1.0.0
-- Bochi joined the project
-- Fixed streaming
+- Fixed streaming (tnx to Bochi)
 - Added debug option (disabled by default)
 - Added localisation (English, Dutch)
 - Added to official dharma repository

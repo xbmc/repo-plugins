@@ -26,12 +26,16 @@ along with XBMC MixCloud Plugin.  If not, see <http://www.gnu.org/licenses/>.
 import sys,time
 import xbmc,xbmcgui,xbmcplugin,xbmcaddon
 import urllib,urllib2
+import base64
 import simplejson as json
 import re
 import sys
+from itertools import cycle, izip
+
 
 
 URL_PLUGIN=    'plugin://music/MixCloud/'
+URL_MIXCLOUD=  'http://www.mixcloud.com/'
 URL_API=       'http://api.mixcloud.com/'
 URL_CATEGORIES='http://api.mixcloud.com/categories/'
 URL_HOT=       'http://api.mixcloud.com/popular/hot/'
@@ -84,8 +88,17 @@ STR_TRACKNUMBER= u'tracknumber'
 STR_TYPE=        u'type'
 STR_USER=        u'user'
 STR_YEAR=        u'year'
+STR_IMAGE=       u'image'
+STR_THUMBNAIL=   u'thumbnail'
+STR_STREAMURL=   u'stream_url'
 
 STR_THUMB_SIZES= {0:u'small',1:u'thumbnail',2:u'medium',3:u'large',4:u'extra_large'}
+
+
+
+class Resolver:
+    local=0
+    offliberty=1
 
 
 
@@ -97,6 +110,7 @@ __addon__ =xbmcaddon.Addon('plugin.audio.mixcloud')
 debugenabled=(__addon__.getSetting('debug')=='true')
 limit=       (1+int(__addon__.getSetting('page_limit')))*10
 thumb_size=  STR_THUMB_SIZES[int(__addon__.getSetting('thumb_size'))]
+resolver=    int(__addon__.getSetting('resolver'))
 
 
 
@@ -248,8 +262,13 @@ def show_history_search_menu(offset):
 def play_cloudcast(key):
     url=get_stream(key)
     if url:
-        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=True,listitem=xbmcgui.ListItem(path=url))
+        infolabels=get_cloudcast(URL_API[:-1]+key,{},True)
+        listitem=xbmcgui.ListItem(label=infolabels[STR_TITLE],label2=infolabels[STR_ARTIST],iconImage=infolabels[STR_THUMBNAIL],thumbnailImage=infolabels[STR_THUMBNAIL],path=url)
+        listitem.setInfo(type='Music',infoLabels=infolabels)
+        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=True,listitem=listitem)
         add_to_settinglist('play_history_list',key,'play_history_max')
+        if debugenabled:
+            print('MIXCLOUD playing '+url)
     else:
         xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=False,listitem=xbmcgui.ListItem())
 
@@ -274,13 +293,14 @@ def get_cloudcasts(url,parameters):
             json_tracknumber=0
         for json_cloudcast in json_data:
             json_tracknumber=json_tracknumber+1
-            if add_cloudcast(json_tracknumber,json_cloudcast,total):
+            infolabels = add_cloudcast(json_tracknumber,json_cloudcast,total);
+            if len(infolabels)>0:
                 found=found+1
     return found
 
 
 
-def get_cloudcast(url,parameters,index=1,total=0):
+def get_cloudcast(url,parameters,index=1,total=0,forinfo=False):
     if len(parameters)>0:
         url=url+'?'+urllib.urlencode(parameters)
     if debugenabled:
@@ -288,10 +308,11 @@ def get_cloudcast(url,parameters,index=1,total=0):
     h=urllib2.urlopen(url)
     content=h.read()
     json_cloudcast=json.loads(content)
-    return add_cloudcast(index,json_cloudcast,total)
+    return add_cloudcast(index,json_cloudcast,total,forinfo)
 
 
-def add_cloudcast(index,json_cloudcast,total):
+
+def add_cloudcast(index,json_cloudcast,total,forinfo=False):
     if STR_NAME in json_cloudcast and json_cloudcast[STR_NAME]:
         json_name=json_cloudcast[STR_NAME]
         json_key=''
@@ -317,32 +338,82 @@ def add_cloudcast(index,json_cloudcast,total):
             json_pictures=json_cloudcast[STR_PICTURES]
             if thumb_size in json_pictures and json_pictures[thumb_size]:
                 json_image=json_pictures[thumb_size]
-        add_audio_item({STR_COUNT:index,STR_TRACKNUMBER:index,STR_TITLE:json_name,STR_ARTIST:json_username,STR_DURATION:json_length,STR_YEAR:json_year,STR_DATE:json_date},
-                      {STR_MODE:MODE_PLAY,STR_KEY:json_key},
-                      json_image,
-                      total)
-        return True
+        infolabels = {STR_COUNT:index,STR_TRACKNUMBER:index,STR_TITLE:json_name,STR_ARTIST:json_username,STR_DURATION:json_length,STR_YEAR:json_year,STR_DATE:json_date,STR_THUMBNAIL:json_image}
+        if not forinfo:
+            add_audio_item(infolabels,
+                           {STR_MODE:MODE_PLAY,STR_KEY:json_key},
+                           infolabels[STR_THUMBNAIL],
+                           total)
+
+        return infolabels
     else:
-        return False
-    
+        return {}
 
 
-def get_stream(cloudcast_key):
-    ck="http://www.mixcloud.com"+cloudcast_key
+
+def get_stream_offliberty(cloudcast_key):
+    ck=URL_MIXCLOUD[:-1]+cloudcast_key
     if debugenabled:
         print('MIXCLOUD '+'resolving cloudcast stream for '+ck)
     for retry in range(1, 10):
+        try:
 #        request = urllib2.Request('http://offliberty.com/off.php', 'track=%s&refext=' % ck)
-        request = urllib2.Request('http://offliberty.com/off54.php', 'track=%s&refext=' % ck)
-        request.add_header('Referer', 'http://offliberty.com/')
-        response = urllib2.urlopen(request)
-        data=response.read()
-        match=re.search('HREF="(.*)" class="download"', data)
-        if match:
-            return match.group(1)
+#        request = urllib2.Request('http://offliberty.com/off54.php', 'track=%s&refext=' % ck)
+#        request.add_header('Referer', 'http://offliberty.com/')
+            values={
+                    'track' : ck,
+                    'refext' : ''
+                   }
+            headers={
+                     'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+                     'Referer' : 'http://offliberty.com/'
+                    }
+            postdata = urllib.urlencode(values)
+            request = urllib2.Request('http://offliberty.com/off54.php', postdata, headers, 'http://offliberty.com/')
+            response = urllib2.urlopen(request)
+            data=response.read()
+            match=re.search('HREF="(.*)" class="download"', data)
+            if match:
+                return match.group(1)
+            elif debugenabled:
+                print('wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
+        except:
+            if debugenabled:
+                print('unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
+
+
+
+def get_stream_local(cloudcast_key):
+    ck=URL_MIXCLOUD[:-1]+cloudcast_key
+    if debugenabled:
+        print('MIXCLOUD '+'locally resolving cloudcast stream for '+ck)
+    headers={
+             'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.27 Safari/537.36',
+             'Referer' : URL_MIXCLOUD
+            }
+    request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
+    response = urllib2.urlopen(request)
+    data=response.read()
+    match=re.search('m-p-ref="x_cloudcast_page" m-play-info="(.*)" m-preview', data)
+    if match:
+        playInfo=base64.b64decode(match.group(1))
+        magicString=base64.b64decode('cGxlYXNlZG9udGRvd25sb2Fkb3VybXVzaWN0aGVhcnRpc3Rzd29udGdldHBhaWQ=')
+        playInfoJSON=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(playInfo,cycle(magicString)))
+        json_content=json.loads(playInfoJSON)
+        if STR_STREAMURL in json_content and json_content[STR_STREAMURL]:
+            return json_content[STR_STREAMURL]
         elif debugenabled:
-            print('wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
- 
+            print('unable to resolve')
+    elif debugenabled:
+        print('unable to resolve')
+
+
+
+def get_stream(cloudcast_key):
+    resolvers={Resolver.local : get_stream_local,
+               Resolver.offliberty : get_stream_offliberty}
+    return resolvers[resolver](cloudcast_key)
+
 
 
 def get_categories(url):

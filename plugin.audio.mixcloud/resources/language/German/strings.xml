@@ -19,7 +19,8 @@
 	<string id="30201">Maximale Cloudcasts pro Seite</string>
 	<string id="30202">Größe der Vorschaubilder</string>
 	<string id="30203">Debug Modus</string>
-	<!-- history settings -->
+	<string id="30211">Resolver</string>
+<!-- history settings -->
 	<string id="30220">Verlauf</string>
 	<string id="30221">Maximale Gespielte Cloudcasts</string>
 	<string id="30222">Maximale Suchanfragen</string>

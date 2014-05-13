@@ -19,6 +19,7 @@
 	<string id="30201">Nombre maximal de cloudcasts par page</string>
 	<string id="30202">Dimensions des icônes téléchargés</string>
 	<string id="30203">Mode debug</string>
+	<string id="30211">Resolver</string>
 	<!-- history settings -->
 	<string id="30220">Histoire</string>
 	<string id="30221">Nombre maximal de cloudcasts écoutés</string>

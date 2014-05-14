@@ -1,11 +1,3 @@
-Version 1.1.0
-updated for frodo/gotham
 
-Version 1.0.2
-major update, same content
+Version 2.0.2 Initial release
 
-Version 1.0.1
-fix for show clips
-
-Version 1.0.0
-initial

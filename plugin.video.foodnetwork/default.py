@@ -1,316 +1,167 @@
-﻿import urllib
-import urllib2
-import re
-import os
-from urlparse import urlparse, parse_qs
+# -*- coding: utf-8 -*-
+# Food Network XBMC Addon
 
-import StorageServer
-from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup
+import sys
+import httplib
 
-import xbmcplugin
-import xbmcgui
-import xbmcaddon
-
-base_url = 'http://www.foodnetwork.com'
-addon = xbmcaddon.Addon()
-addon_version = addon.getAddonInfo('version')
-addon_id = addon.getAddonInfo('id')
-cache = StorageServer.StorageServer("foodnetwork", 6)
-home = xbmc.translatePath(addon.getAddonInfo('path'))
-icon = addon.getAddonInfo('icon')
-language = addon.getLocalizedString
-debug = addon.getSetting('debug')
+import urllib, urllib2, cookielib, datetime, time, re, os, string
+import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
+import cgi, gzip
+from StringIO import StringIO
 
 
-def addon_log(string):
-    try:
-        log_message = string.encode('utf-8', 'ignore')
-    except:
-        log_message = 'addonException: addon_log'
-    xbmc.log("[%s-%s]: %s" %(addon_id, addon_version, log_message),level=xbmc.LOGDEBUG)
-    
-    
-def make_request(url):
-    addon_log('Request URL: ' + url)
-    try:
-        headers = {'User-agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Firefox/24.0',
-                   'Referer' : base_url}
-        req = urllib2.Request(url,None,headers)
-        response = urllib2.urlopen(req)
-        data = response.read()
-        addon_log('ResponseInfo: %s' %response.info())
-        response.close()
-        return data
-    except urllib2.URLError, e:
-        addon_log('We failed to open "%s".' %url)
-        if hasattr(e, 'reason'):
-            addon_log('We failed to reach a server.')
-            addon_log('Reason: %s' %e.reason)
-        if hasattr(e, 'code'):
-            addon_log('We failed with error code - %s.' %e.code)
+USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
+GENRE_TV  = "TV"
+UTF8          = 'utf-8'
+MAX_PER_PAGE  = 25
+FNTVBASE = 'http://www.foodnetwork.com%s'
+XMLBASE  = 'http://www.foodnetwork.com/%s.xml'
+
+addon         = xbmcaddon.Addon('plugin.video.foodnetwork')
+__addonname__ = addon.getAddonInfo('name')
+__language__  = addon.getLocalizedString
 
 
-def cache_shows():
-    cat = {
-        'videos': {'url': base_url+'/food-network-top-food-videos/videos/index.html'},
-        'episodes': {'url': base_url+'/food-network-full-episodes/videos/index.html'}
-        }
-    for i in cat.keys():
-        soup = BeautifulSoup(make_request(cat[i]['url']), convertEntities=BeautifulSoup.HTML_ENTITIES)
-        play_lists = []
-        playlists = soup.find('ul', attrs={'class': 'playlists'})('li')
-        for p in playlists:
-            play_lists.append((p.a.string, p['data-channel'], p.a['href']))
-        cat[i]['playlists'] = play_lists
-        if not cat.has_key('most_popular'):
-            most_popular = soup.find('h4', text='Videos').findNext('ul', attrs={'class': 'media'})('a')
-            video_list = []
-            for m in most_popular:
-                video_list.append((m.string, m['href']))
-            cat['most_popular'] = video_list
-    return cat
+home          = addon.getAddonInfo('path').decode(UTF8)
+icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
+addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
 
-def get_categories():
-    add_dir(language(30000), 'episodes', 1, icon)
-    add_dir(language(30001), 'videos', 1, icon)
-    add_dir(language(30002), 'most_popular', 1, icon)
-    add_dir(language(30003), 'all_shows', 5, icon)
+def log(txt):
+    message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
+    xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
+def cleanfilename(name):    
+    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+    return ''.join(c for c in name if c in valid_chars)
 
-def get_cat(url):
-    if url == 'most_popular':
-        items = cache.cacheFunction(cache_shows)[url]
-        for i in items:
-            add_dir(i[0], i[1], 3, icon, {}, False)
-    else:
-        items = cache.cacheFunction(cache_shows)[url]['playlists']
-        for i in items:
-            title = i[0]
-            if title.endswith('Full Episodes'):
-                title = title.replace('Full Episodes','').replace(' - ','')
-            add_dir(title, i[2], 2, icon)
-
-
-def get_all_shows():
-    show_file = os.path.join(home, 'resources', 'show_list')
-    show_list = eval(open(show_file, 'r').read())
-    for i in show_list:
-        if i.has_key('video_href'):
-            if i.has_key('thumb'): thumb = i['thumb']
-            else: thumb = icon
-            add_dir(i['name'], i['video_href'], 6, thumb)
-
-
-def get_video_xml(url, show=False):
-    video_id = None
-    try:
-        if int(eval(url)):
-            video_id = eval(url)
-    except: pass
-    if not video_id:
-        if url.startswith('/'):
-            url = base_url+url
-        data = make_request(url)
-        if show:
-            playlists = None
-            soup = BeautifulSoup(data, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-            try:
-                playlists = soup.find('ul', attrs={'class': "playlists"})('li')
-            except: pass
-            if playlists:
-                for i in playlists:
-                    add_dir(i.a.string, i.a['href'], 2, icon)
-                xbmcplugin.endOfDirectory(int(sys.argv[1]))
-                return
+def demunge(munge):
         try:
-            video_id = re.findall('var snap = new SNI.Food.Player.VideoAsset\(.+?, (.+?)\);', data)[0]
+            munge = urllib.unquote_plus(munge).decode(UTF8)
         except:
-            try:
-                video_id = re.findall('var snap = new SNI.Food.Player.FullSize\(.+?, (.+?)\);', data)[0]
-            except:
-                try:
-                    video_id = re.findall('var snap = new SNI.Food.Player.FullSizeNoPlaylist\(.+?, (.+?)\);', data)[0]
-                except:
-                    addon_log('Unable to find video_id')
-    if video_id:
-        xml_url = 'http://www.foodnetwork.com/food/channel/xml/0,,%s,00.xml' %video_id
-        soup = BeautifulStoneSoup(make_request(xml_url), convertEntities=BeautifulStoneSoup.XML_ENTITIES)
-        if show:
-            for i in soup('video'):
-                add_dir(i.clipname.string, i.videourl.string, 4, i.thumbnailurl.string,
-                        {'Plot': i.abstract.string, 'Duration': get_length_in_minutes(i.length.string)}, False)
-            xbmcplugin.endOfDirectory(int(sys.argv[1]))
-        else:
-            resolve_url(soup.video.videourl.string)
+            pass
+        return munge
+
+def getRequest(url):
+              log("getRequest URL:"+str(url))
+              headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
+              req = urllib2.Request(url.encode(UTF8), None, headers)
+
+              try:
+                 response = urllib2.urlopen(req)
+                 if response.info().getheader('Content-Encoding') == 'gzip':
+                    log("Content Encoding == gzip")
+                    buf = StringIO( response.read())
+                    f = gzip.GzipFile(fileobj=buf)
+                    link1 = f.read()
+                 else:
+                    link1=response.read()
+              except:
+                 link1 = ""
+
+              link1 = str(link1).replace('\n','')
+              return(link1)
 
 
-def get_playlist(url, name):
-    if not name == language(30005):
-        playlist_url = url.rsplit(',', 1)[0].rsplit('/', 1)[1]
-    else: playlist_url = url
-    json_url = '%s/food/feeds/channel-video/%s_RA,00.json' %(base_url, playlist_url)
-    items = eval(make_request(json_url).split('var snapTravelingLib = ')[1])[0]
-    for i in items['videos']:
-        add_dir(i['label'], i['videoURL'], 4, i['thumbnailURL'],
-                {'Plot': i['description'], 'Duration': get_length_in_minutes(i['length'])}, False)
-    if items['last'] < items['total']:
-        page_items = playlist_url.rsplit('_', 2)
-        page_url = '%s_%s_%s' %(page_items[0], (int(page_items[1])+1), page_items[2])
-        add_dir(language(30005), page_url, 2, icon)
+def getSources(fanart):
+              urlbase   = FNTVBASE % ('/videos/players/food-network-full-episodes.html')
+              pg = getRequest(urlbase)
+              caturl = re.compile("SNI\.Food\.Player\.FullSize.+?, '(.+?)'").findall(pg)[0]
+              caturl  = XMLBASE % (caturl)
+              pg2 = getRequest(caturl)
+              catname = re.compile('<title>.+?CDATA\[(.+?)\]').findall(pg2)[0]
+              addDir(catname,caturl,'GC',icon,addonfanart,catname,GENRE_TV,'',False)
+              cats = re.compile('<section class="video-promo">.+?<h5>(.+?)<.+?<a href="(.+?)"').findall(pg)
+              for catname, caturl in cats:
+                  catno = re.compile('/.+?\..+?\.(.+?)\.').findall(caturl)[0]
+                  caturl = caturl.replace('.%s.' %(catno),'.XXXXXXXX.')
+                  catname = catname.strip()
+                  addDir(catname,caturl,'GC',icon,addonfanart,catname,GENRE_TV,'',False)
 
-
-def resolve_url(url):
-    playpath = url.replace('http://wms.scrippsnetworks.com','').replace('.wmv','')
-    final_url = (
-        'rtmp://flash.scrippsnetworks.com:1935/ondemand?ovpfv=1.1 '
-        'swfUrl=http://common.scrippsnetworks.com/common/snap/snap-3.2.17.swf '
-        'playpath=' + playpath
-        )
-    item = xbmcgui.ListItem(path=final_url)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
-
-def cache_all_shows():
-    url = 'http://www.foodnetwork.com/shows/index.html'
-    soup = BeautifulSoup(make_request(url), convertEntities=BeautifulSoup.HTML_ENTITIES)
-    items = soup.find('div', attrs={'class': "list-wrap"})('li')
-    show_list = []
-    for i in items:
-        show = {}
-        show['name'] = i.a.string
-        show['page_href'] = i.a['href']
-        show_list.append(show)
-
-    dialog = xbmcgui.Dialog()
-    ok = dialog.yesno(
-        language(30011),
-        language(30009),
-        language(30010)
-        )
-    if ok:
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
-        for i in show_list:
-            data = make_request(base_url+i['page_href'])
-            if data:
-                s_soup = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-                item = s_soup.find('span', attrs={'class': "lgbtn-text"}, text='videos')
-                if not item:
-                    item = s_soup.find('span', attrs={'class': "lgbtn-text"}, text='VIDEOS')
-                if item:
-                    i['video_href'] = item.findPrevious('a')['href']
-                else:
-                    try:
-                        item = re.findall('var snap = new SNI.Food.Player.VideoAsset\(.+?, (.+?)\);', data)[0]
-                    except:
-                        try:
-                            item = re.findall('var snap = new SNI.Food.Player.FullSize\(.+?, (.+?)\);', data)[0]
-                        except:
-                            try:
-                                item = re.findall('var snap = new SNI.Food.Player.FullSizeNoPlaylist\(.+?, (.+?)\);', data)[0]
-                            except:
-                                addon_log('Unable to find video_id')
-                                item = None
-                    if item:
-                        i['video_href'] = item
-                try:
-                    ok = i['video_href']
-                    addon_log('Videos: True: %s' %i['name'])
-                except:
-                    addon_log('Videos: False: %s' %i['name'])
-                    addon_log('Removing %s From Show List'  %i['name'])
-                    for index in range(len(show_list)):
-                        if show_list[index]['name'] == i['name']:
-                                del show_list[index]
-                                break
-                    continue
-                thumb = None
-                try: thumb = re.findall('background: url\((.+?)\)', data)[0]
-                except:
-                    try: thumb = s_soup.find('div', attrs={'id': "main-bd"}).img['src']
-                    except: pass
-                if thumb:
-                    i['thumb'] = thumb
+def getCats(cat_url):
+            if '.xml' in cat_url:
+              pg = getRequest(cat_url)
+              shows = re.compile('<videoId>(.+?)<.+?<thumbnailUrl>.+?CDATA\[(.+?)\].+?<abstract>.+?CDATA\[(.+?)\]').findall(pg)
             else:
-                addon_log('No Data')
-            xbmc.sleep(500)
-        show_file = os.path.join(home, 'resources', 'show_list')
-        w = open(show_file, 'w')
-        w.write(repr(show_list))
-        w.close()
-        addon_log('%s Shows with videos in Show List' %len(show_list))
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
+              urlbase   = FNTVBASE % ('/videos/players/food-network-full-episodes.html')
+              pg = getRequest(urlbase)
+              cat_url = cat_url.replace('XXXXXXXX','(.+?)')
+              catsearch = '<a href="%s".+?<div class=.+?>(.+?)<.+?<h6>(.+?)</h6>' % (cat_url)
+              shows = re.compile(catsearch).findall(pg)
+            for showpath,  showimg, showname in shows:
+                 showurl = 'rtmp://flash.scrippsnetworks.com:1935/ondemand/library?ovpfv=2.1.6 swfUrl=http://www.foodnetwork.com/etc/designs/food/clientlib/snap/snap-4.1.2.swf playpath=Food_Network/%s app=ondemand/library?ovpfv=2.1.6  pageUrl=http://www.foodnetwork.com/videos/players/food-network-full-episodes.html' % showpath
+                 addLink(showurl.encode(UTF8),showname,showimg,addonfanart,showname,GENRE_TV,'')
 
 
-def get_length_in_minutes(length):
-    if not isinstance(length, str):
-        if ':' in str(length):
-            length = str(length)
-        elif isinstance(length, int):
-            return length
-    if ':' in length:
-        l_split = length.split(':')
-        minutes = int(l_split[-2])
-        if int(l_split[-1]) >= 30:
-            minutes += 1
-        if len(l_split) == 3:
-            minutes += (int(l_split[0]) * 60)
-        if minutes < 1:
-            minutes = 1
-        return minutes
+
+def play_playlist(name, list):
+        playlist = xbmc.PlayList(1)
+        playlist.clear()
+        item = 0
+        for i in list:
+            item += 1
+            info = xbmcgui.ListItem('%s) %s' %(str(item),name))
+            playlist.add(i, info)
+        xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 
-def get_params():
-    p = parse_qs(sys.argv[2][1:])
-    for i in p.keys():
-        p[i] = p[i][0]
-    return p
+def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
+        dir_playable = False
+        cm = []
+
+        if mode != 'SR':
+            u += "&name="+urllib.quote_plus(name)
+            if (fanart is None) or fanart == '': fanart = addonfanart
+            u += "&fanart="+urllib.quote_plus(fanart)
+            dir_image = "DefaultFolder.png"
+            dir_folder = True
+        else:
+            dir_image = "DefaultVideo.png"
+            dir_folder = False
+            dir_playable = True
+
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
+        liz.setProperty( "Fanart_Image", fanart )
+
+        if dir_playable == True:
+         liz.setProperty('IsPlayable', 'true')
+        if not playlist is None:
+            playlist_name = name.split(') ')[1]
+            cm.append(('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], playlist_name, urllib.quote_plus(str(playlist).replace(',','|')))))
+        liz.addContextMenuItems(cm)
+        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
+
+def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
+        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
 
 
-def add_dir(name, url, mode, iconimage, infolabels={}, isfolder=True):
-    params = {'name': name, 'url': url, 'mode': mode}
-    infolabels['Title'] = name
-    url = '%s?%s' %(sys.argv[0], urllib.urlencode(params))
-    listitem = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-    if not isfolder:
-        listitem.setProperty('IsPlayable', 'true')
-    listitem.setInfo(type="Video", infoLabels=infolabels)
-    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, isfolder)
 
+# MAIN EVENT PROCESSING STARTS HERE
 
-params = get_params()
+xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+
+parms = {}
+try:
+    parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
+    for key in parms:
+       parms[key] = demunge(parms[key])
+except:
+    parms = {}
+
+p = parms.get
 
 try:
-    mode = int(params['mode'])
+    mode = p('mode')
 except:
     mode = None
 
-addon_log(repr(params))
+if mode==  None:  getSources(p('fanart'))
+elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
+elif mode=='PP':  play_playlist(p('name'), p('playlist'))
+elif mode=='GC':  getCats(p('url'))
 
-if mode == None:
-    get_categories()
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
-elif mode == 1:
-    get_cat(params['url'])
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-elif mode == 2:
-    get_playlist(params['url'], params['name'])
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-elif mode == 3:
-    get_video_xml(params['url'])
-
-elif mode == 4:
-    resolve_url(params['url'])
-
-elif mode == 5:
-    get_all_shows()
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
-
-elif mode == 6:
-    get_video_xml(params['url'], True)
-
-elif mode == 7:
-    cache_all_shows()

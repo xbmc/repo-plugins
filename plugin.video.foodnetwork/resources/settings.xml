@@ -1,8 +1,3 @@
-﻿<settings>
-  <category label="General">
-    <setting id="debug" type="bool" label="30012" default="false"/>
-  </category>
-  <category label="All Shows">
-    <setting type="action" option="close" label="30011" action="RunPlugin(plugin://plugin.video.foodnetwork/?mode=7)" />
-  </category>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
 </settings>

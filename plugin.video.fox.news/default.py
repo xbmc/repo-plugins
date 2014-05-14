@@ -1,4 +1,4 @@
-﻿import urllib
+import urllib
 import urllib2
 import re
 import json
@@ -15,6 +15,8 @@ import xbmcaddon
 import xbmcvfs
 
 addon = xbmcaddon.Addon()
+__addonname__ = addon.getAddonInfo('name')
+__language__  = addon.getLocalizedString
 addon_version = addon.getAddonInfo('version')
 addon_id = addon.getAddonInfo('id')
 icon = addon.getAddonInfo('icon')
@@ -60,37 +62,53 @@ def get_soup(url):
 
 
 def get_categories(url=None):
-    if url is None:
-        # live streams are still WIP
-        # add_dir('Watch Live', news_domain + '/playlist/live-landing-page/', icon, 'get_playlist')
-        add_dir('FoxBusiness.com', business_domain, icon, 'get_categories')
-        url = news_domain
-        cat_url = url + '/playlist/featured-editors-picks/'
-    else:
-        cat_url = url + '/playlist/latest-video-latest-video/'
-    soup = get_soup(cat_url)
-    for i in soup.find('nav')('a'):
-        add_dir(i.string.encode('utf-8'), url + i['href'], icon, 'get_sub_cat')
+        add_dir('%s - %s' % (__language__(30000),__language__(30002)), 'http://video.foxnews.com/#show-clips', icon, 'get_sub_cat')
+        add_dir('%s - %s' % (__language__(30000),__language__(30003)),  'http://video.foxnews.com/#news-clips', icon, 'get_sub_cat')
+        add_dir('%s - %s' % (__language__(30001),__language__(30002)), 'http://video.foxbusiness.com/#show-clips', icon, 'get_sub_cat')
+        add_dir('%s - %s' % (__language__(30001),__language__(30003)), 'http://video.foxbusiness.com/#news-clips', icon, 'get_sub_cat')
+
+#    if url is None:
+#        # live streams are still WIP
+#        # add_dir('Watch Live', news_domain + '/playlist/live-landing-page/', icon, 'get_playlist')
+#        add_dir('FoxBusiness.com', business_domain, icon, 'get_categories')
+#        url = news_domain
+#        cat_url = url
+#        cat_url = url + '/playlist/featured-editors-picks/'
+#    else:
+#        cat_url = url + '/playlist/latest-video-latest-video/'
+#    soup = get_soup(cat_url)
+#    for i in soup.find('nav')('a'):
+#        add_dir(i.string.encode('utf-8'), url + i['href'], icon, 'get_sub_cat')
 
 
 def get_sub_categories(url):
-    soup = get_soup(url)
-    items_soup = soup('div', attrs={'id' : 'shows'})[0]('a')
-    current = False
-    items = []
-    for i in items_soup:
-        item_url = 'http:' + i['href']
-        if item_url == url:
-            current = (i.string.encode('utf-8'), item_url, icon, 'get_playlist')
-            continue
-        items.append((i.string.encode('utf-8'), item_url, icon, 'get_playlist'))
-    if not current:
-        current_name = soup.body.h1.contents[0].strip().encode('utf-8')
-        current = (current_name, url, icon, 'get_playlist')
-    items.insert(0, current)
-    for i in items:
-        add_dir(*i)
-
+    urlbase, utype = url.split('#')
+#    print "url = "+str(url)
+    data = make_request(url)
+#    print "data = "+str(data)
+    sub_cats = re.compile('<div class="column footer-%s">(.+?)</div>' % (utype),re.DOTALL).findall(data)
+    sub_cats = re.compile('href="(.+?)">(.+?)<',re.DOTALL).findall(sub_cats[0])
+    for url,name in sub_cats:
+      add_dir(name.replace('&amp;','&').encode('utf-8'), urlbase+url, icon, 'get_playlist')
+#start of added code
+#      soup = get_soup(urlbase+url)
+#      items_soup = soup('div', attrs={'id' : 'shows'})[0]('a')
+#      items_soup = soup.find('div')('box box-4 sidebar')[0]('a')
+#      current = False
+#      items = []
+#      for i in items_soup:
+#          item_url = 'http:' + i['href']
+#          if item_url == url:
+#              current = (i.string.encode('utf-8'), item_url, icon, 'get_playlist')
+#              continue
+#          items.append((i.string.encode('utf-8'), item_url, icon, 'get_playlist'))
+#      if not current:
+#          current_name = soup.body.h1.contents[0].strip().encode('utf-8')
+#          current = (current_name, url, icon, 'get_playlist')
+#      items.insert(0, current)
+#      for i in items:
+#          add_dir(*i)
+#end of added code
 
 def get_video(video_id):
     url = news_domain + '/v/feed/video/%s.js?template=fox' %video_id
@@ -142,10 +160,28 @@ def resolve_url(url):
     item = xbmcgui.ListItem(path=resolved_url)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), succeeded, item)
 
-
 def get_playlist(url):
+    urlbase = url.replace('http://','')
+    urlbase = 'http://%s' % (urlbase.split('/',1)[0])
     data = make_request(url)
-    pattern = 'pageVars.playlistId = "(.+?)";'
+    try:
+      match   = re.compile('<div class="box box-4 sidebar">(.+?)</div>', re.DOTALL).findall(data)
+      subsubs = re.compile('"(.+?)">(.+?)<', re.DOTALL ).findall(match[0])
+      sscount = 0
+      for suburl, subname in subsubs:
+         if not 'on-air' in suburl:
+            sscount = 1
+      if sscount != 0:
+        for suburl, subname in subsubs:
+           add_dir(subname.replace('&amp;','&').encode('utf-8'), urlbase+suburl, icon, 'get_videolist')
+      else:
+        get_videolist(url)    
+    except:
+      get_videolist(url)
+
+def get_videolist(url):
+    data = make_request(url)
+    pattern = 'playlistId: "(.+?)"'
     match = re.findall(pattern, data)
     if not match:
         addon_log('Did not find playlist id')
@@ -154,12 +190,13 @@ def get_playlist(url):
     if business_domain in url:
         domain = business_domain
     json_url = domain + '/v/feed/playlist/%s.js?template=fox' %match[0]
+#    print "json_url = "+str(json_url)
     json_data = json.loads(make_request(json_url), 'utf-8')
     items = json_data['channel']['item']
     for i in items:
         item_url = None
         state = i['media-status']['@attributes']['state']
-        title = i['title'].encode('utf-8')
+        title = i['title'].replace('&amp;','&').encode('utf-8')
         if state != 'active':
             addon_log('item state: %s: %s' %(title, state))
             continue
@@ -208,7 +245,7 @@ def get_playlist(url):
             'Date': date_time.strftime('%d.%m.%Y'),
             'Premiered': date_time.strftime('%d-%m-%Y'),
             'Duration': get_duration(i['itunes-duration']),
-            'Plot': i['description'].encode('utf-8')
+            'Plot': i['description'].replace('&amp;','&').encode('utf-8')
             }
         add_dir(title, item_url, thumb, 'resolve_url', info)
 
@@ -272,6 +309,10 @@ elif mode == 'get_sub_cat':
 
 elif mode == 'get_playlist':
     get_playlist(params['url'])
+    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+
+elif mode == 'get_videolist':
+    get_videolist(params['url'])
     xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)

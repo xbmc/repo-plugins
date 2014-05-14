@@ -1,26 +1,3 @@
-Version 1.0.7
-fix scrip error on some systems
 
-Version 1.0.6
-added support for video clips where available
-fix resume/watched status
-bump python api version for gotham
+Version 2.0.2 Initial release
 
-Version 1.0.5
-minor fixes, code improvements
-
-Version 1.0.4
-we now scrape http://www.hgtv.com/full-episodes/package/index.html for the show list and hard-code other shows in the 'More' directory
-
-Version 1.0.3
-added some new shows
-
-Version 1.0.2
-fix for extra seasons
-
-Version 1.0.1
-fix for website changes
-added extra seasons where available
-
-Version 1.0.0
-initial for eden-pre

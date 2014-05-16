@@ -1,4 +1,4 @@
-<addon id="plugin.video.newyorktimes" name="New York Times" provider-name="Jonathan Beluch (jbel)" version="1.2.1">
+<addon id="plugin.video.newyorktimes" name="New York Times" provider-name="Jonathan Beluch (jbel), idleloop" version="1.4.1">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.beautifulsoup" version="3.2.0" />
@@ -14,5 +14,9 @@
     <platform>all</platform>
     <summary>Watch video from the New York Times.</summary>
     <description>News and opinion video from The NYTimes including breaking news, investigative reporting, national and international coverage. Style and celebrity video.</description>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <source>https://github.com/idleloop-github/xbmc-newyorktimes</source>
+    <email>idleloop at yahoo dot com</email>
+    <disclaimer>Provided "as is". Original author: web at jonathanbeluch dot com</disclaimer>
   </extension>
 </addon>

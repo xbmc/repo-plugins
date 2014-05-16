@@ -10,6 +10,7 @@
 '''
 import urlparse
 import requests
+import re
 from BeautifulSoup import BeautifulSoup as BS
 from brightcove.api import Brightcove
 
@@ -26,9 +27,11 @@ def _url(path):
 def get_topics():
     '''Returns a list of (topic_name, url) of available topics'''
     html = BS(requests.get(BASE_URL).text)
-    menu = html.find('div', {'class': 'navigation clearfix'})
-    links = menu.findAll('a', href=lambda h: h.startswith('/video/landing/'))
-    return [(a.text, _url(a['href'])) for a in links]
+    menu = html.find('div', {'class': 'header-container'})
+    links = menu.findAll('a', href=lambda h: h.startswith('/video/'))
+    topics = [(a.text, _url(a['href'])) for a in links]
+    topics.insert( 0, ('Latest Videos', _url('/video/latest-video/')) )
+    return topics
 
 
 def get_sub_topics(topic_url):
@@ -37,13 +40,14 @@ def get_sub_topics(topic_url):
     will be returned.
     '''
     html = BS(requests.get(topic_url).text)
-    menu = html.find('div', {'class': 'subCategories clearfix'})
+    menu = html.find('div', {'class': 'main wrapper clearfix'})
+    menu2 = menu.findAll('li', itemtype='http://schema.org/SiteNavigationElement')
+    links = [menu3.find('a', href=lambda h: h.startswith('/video/')) for menu3 in menu2]
 
-    if menu.find('li', {'class': 'firstItem selected'}):
+    if menu.find('li', {'class': 'active'}):
         # Viewing a sub-topic page, don't return sub topics again
         return []
-
-    links = menu.findAll('a')
+    
     return [(a.text, _url(a['href'])) for a in links]
 
 
@@ -51,7 +55,9 @@ def get_videos(url):
     '''For a given topic url, returns a list of associated videos from the
     Brightcove API.
     '''
-    ref_id = url.split('/')[-2]
+    html = BS(requests.get(url).text)
+    menu = html.find('a', {'class': 'thumb-holder'})
+    ref_id = (menu['href']).split('=')[-1]
     brightcove = Brightcove(TOKEN)
     playlist = brightcove.find_playlist_by_reference_id(ref_id)
     return playlist.videos

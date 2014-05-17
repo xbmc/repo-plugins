@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.oodnurdtv" name="drundootv" version="0.0.2" provider-name="pesheto">
+<addon id="plugin.video.oodnurdtv" name="drundootv" version="0.0.3" provider-name="pesheto">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
+    <import addon="script.module.requests2" version="2.2.1"/>
+    <import addon="script.module.beautifulsoup4" version="4.3.2"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>

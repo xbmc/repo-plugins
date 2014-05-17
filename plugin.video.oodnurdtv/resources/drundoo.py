@@ -1,7 +1,7 @@
 #drundoo class for handling web site
 
-from requests import session
-import bs4, requests
+from requests2 import session
+import bs4
 
 URL = 'http://www.drundoo.com/users/login/'
 

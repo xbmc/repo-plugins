@@ -1,3 +1,5 @@
+v0.0.3
+- Fixed dependencies on python packages requests2 and beautifulsoup4 - updated addon.xml and drundoo.py 04/06/2014
 v0.0.2
 - Fixed bugs after initial submission. Fixed live link bug 04/02/2014
 v0.0.1

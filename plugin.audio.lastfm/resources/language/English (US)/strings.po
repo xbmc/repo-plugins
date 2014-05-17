@@ -19,3 +19,7 @@ msgstr ""
 msgctxt "#30000"
 msgid "General"
 msgstr "General"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "Search"

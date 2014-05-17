@@ -24,6 +24,10 @@ msgctxt "#30001"
 msgid "Submit songs to Last.fm"
 msgstr "Envia les cançons a Last.fm"
 
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "Envia la ràdio per Internet a Last.fm"
+
 msgctxt "#30003"
 msgid "Last.fm username"
 msgstr "Nom d'usuari de Last.fm"
@@ -31,6 +35,10 @@ msgstr "Nom d'usuari de Last.fm"
 msgctxt "#30004"
 msgid "Last.fm password"
 msgstr "Contrasenya de Last.fm"
+
+msgctxt "#30005"
+msgid "Confirm Love/Ban submissions"
+msgstr "Confirma enviament de Preferits/Vetats"
 
 msgctxt "#32011"
 msgid "Last.fm"
@@ -42,15 +50,15 @@ msgstr "Voleu afegir la pista actual a la llista de cançons preferides?"
 
 msgctxt "#32013"
 msgid "Do you want to ban the current track?"
-msgstr "Voleu prohibir la pista actual?"
+msgstr "Voleu vetar la pista actual?"
 
 msgctxt "#32014"
 msgid "Added to your loved tracks: '%s'."
-msgstr "Added to your loved tracks: '%s'."
+msgstr "Afegit a la llista de cançons preferides: '%s'."
 
 msgctxt "#32015"
 msgid "Could not add '%s' to your loved tracks."
-msgstr "Could not add '%s' to your loved tracks."
+msgstr "No s'ha pogut afegir '%s' a la llista cançons preferides."
 
 msgctxt "#32016"
 msgid "Banned: '%s'."
@@ -58,23 +66,159 @@ msgstr "Vetada: '%s'."
 
 msgctxt "#32017"
 msgid "Could not ban '%s'."
-msgstr "Could not ban '%s'."
+msgstr "No s'ha pogut vetar '%s'."
 
 msgctxt "#32018"
 msgid "Do you want to remove this track from your loved tracks?"
-msgstr "Do you want to remove this track from your loved tracks?"
+msgstr "Vols eliminar aquesta pista de la llista de cançons preferides?"
 
 msgctxt "#32019"
 msgid "Do you want to un-ban this track?"
-msgstr "Do you want to un-ban this track?"
+msgstr "Vols treure el veto d'aquesta pista?"
+
+msgctxt "#32020"
+msgid "Removed from your loved tracks: '%s'."
+msgstr "Eliminada de la llista de cançons preferides: '%s'."
+
+msgctxt "#32021"
+msgid "Could not remove '%s' from your loved tracks."
+msgstr "No s'ha pogut eliminar '%s' de la teva llista de cançons preferides."
+
+msgctxt "#32022"
+msgid "Un-banned: '%s'."
+msgstr "Tret el veto: '%s'."
+
+msgctxt "#32023"
+msgid "Could not un-ban '%s'."
+msgstr "No s'ha pogut treure el veto de '%s'."
 
 msgctxt "#32024"
 msgid "Remove from loved tracks"
-msgstr "Elimina de la llista de preferides"
+msgstr "Elimina de la llista de preferits"
 
 msgctxt "#32025"
 msgid "Un-ban"
-msgstr "Desbloca"
+msgstr "Treure el veto"
+
+msgctxt "#32026"
+msgid "Connect to Last.fm failed"
+msgstr "Error en la connexió a Last.fm"
+
+msgctxt "#32027"
+msgid "No username or password provided"
+msgstr "No s'ha proporcionat nom d'usuari o contrasenya"
+
+msgctxt "#32028"
+msgid "Could not retrieve list from Last.fm"
+msgstr "No s'ha pogut obtenir la llista desde Last.fm..."
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "Amics de l'usuari %s"
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "Veïns de l'usuari %s"
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "Àlbums preferits de l'usuari %s"
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "Artistes preferits de l'usuari %s"
+
+msgctxt "#32055"
+msgid "Top tags for user %s"
+msgstr "Etiquetes preferides per l'usuari %s"
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "Pistes preferides de l'usuari %s"
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "Pistes recentment vetades per %s"
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "Pistes recentment escoltades per %s"
+
+msgctxt "#32059"
+msgid "Tracks recently loved by %s"
+msgstr "Pistes recentment preferides per %s"
+
+msgctxt "#32060"
+msgid "Weekly album chart for %s"
+msgstr "Taula d'àlbums setmanals per %s"
+
+msgctxt "#32061"
+msgid "Weekly artist chart for %s"
+msgstr "Taula d'artistes setmanals per %s"
+
+msgctxt "#32062"
+msgid "Weekly track chart for %s"
+msgstr "Taula de pistes setmanals per %s"
+
+msgctxt "#32063"
+msgid "Listen to %s's mix Last.fm radio"
+msgstr "Escolta la radio del mix de %s"
+
+msgctxt "#32064"
+msgid "Listen to %s's neighbours Last.fm radio"
+msgstr "Escolta la radio dels veïns de %s"
+
+msgctxt "#32065"
+msgid "Listen to %s's personal Last.fm radio"
+msgstr "Escolta la radio personal de %s"
+
+msgctxt "#32066"
+msgid "Listen to %s's recommendations Last.fm radio"
+msgstr "Escolta la radio de recomanacions de %s"
+
+msgctxt "#32067"
+msgid "Biggest fans of %s"
+msgstr "Majors fans de %s"
+
+msgctxt "#32068"
+msgid "Similar artists as %s"
+msgstr "Artistes semblants a %s"
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "Els millors àlbums de %s"
+
+msgctxt "#32070"
+msgid "Top %s tags"
+msgstr "Les millors etiquetes de %s"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "Les millors pistes de %s"
+
+msgctxt "#32072"
+msgid "Listen to %s fans Last.fm radio"
+msgstr "Escolta la radio dels fans de %s"
+
+msgctxt "#32073"
+msgid "Listen to %s similar artists Last.fm radio"
+msgstr "Escolta la radio dels artistes semblants a %s"
+
+msgctxt "#32074"
+msgid "Top albums for tag %s"
+msgstr "Els millors àlbums per la etiqueta %s"
+
+msgctxt "#32075"
+msgid "Top artists for tag %s"
+msgstr "Els millors artistes per la etiqueta %s"
+
+msgctxt "#32076"
+msgid "Top tracks for tag %s"
+msgstr "Les millors pistes per la etiqueta %s"
+
+msgctxt "#32077"
+msgid "Listen to tag %s Last.fm radio"
+msgstr "Escolta la radio de la etiqueta %s"
 
 msgctxt "#32078"
 msgid "Search"
@@ -84,6 +228,50 @@ msgctxt "#32079"
 msgid "No results found"
 msgstr "No hi ha resultats"
 
+msgctxt "#32080"
+msgid "Custom Last.fm radio stations"
+msgstr "Estacions de ràdios personalitzades de Last.fm"
+
+msgctxt "#32081"
+msgid "Listen to artist fans Last.fm radio"
+msgstr "Escolta la radio dels fans del artista"
+
+msgctxt "#32082"
+msgid "Listen to similar artists Last.fm radio"
+msgstr "Escolta la radio dels artistes semblant"
+
+msgctxt "#32083"
+msgid "Listen to tag Last.fm radio"
+msgstr "Escolta la radio de la etiqueta"
+
+msgctxt "#32088"
+msgid "Tag"
+msgstr "Etiqueta"
+
+msgctxt "#32091"
+msgid "Listen to user library Last.fm radio"
+msgstr "Escolta la radio del usuari"
+
+msgctxt "#32092"
+msgid "Listen to user mix Last.fm radio"
+msgstr "Escolta la radio del mix del usuari"
+
+msgctxt "#32093"
+msgid "Listen to user neighbours Last.fm radio"
+msgstr "Escolta la radio dels veïns del usuari"
+
+msgctxt "#32094"
+msgid "Listen to user recommendations Last.fm radio"
+msgstr "Escolta la radio de recomanacions del usuari"
+
+msgctxt "#32095"
+msgid "Overall top artists"
+msgstr "Millors artistes globals"
+
 msgctxt "#32096"
 msgid "Overall top tags"
-msgstr "Etiquetes globals"
+msgstr "Millors etiquetes globals"
+
+msgctxt "#32097"
+msgid "Overall top tracks"
+msgstr "Millors pistes globals"

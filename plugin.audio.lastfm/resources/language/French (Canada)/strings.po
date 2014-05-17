@@ -1,0 +1,141 @@
+# XBMC Media Center language file
+# Addon Name: Last.fm
+# Addon id: plugin.audio.lastfm
+# Addon Provider: Team-XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: French (Canada) (http://www.transifex.com/projects/p/xbmc-addons/language/fr_CA/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_CA\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgctxt "#30000"
+msgid "General"
+msgstr "Général"
+
+msgctxt "#30001"
+msgid "Submit songs to Last.fm"
+msgstr "Envoyer des chansons à Last.fm"
+
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "Envoyer la radio en ligne à Last.fm"
+
+msgctxt "#30003"
+msgid "Last.fm username"
+msgstr "Nom d'utilisateur Last.fm"
+
+msgctxt "#30004"
+msgid "Last.fm password"
+msgstr "Mot de passe Last.fm"
+
+msgctxt "#32011"
+msgid "Last.fm"
+msgstr "Last.fm"
+
+msgctxt "#32016"
+msgid "Banned: '%s'."
+msgstr "Banni : « %s »."
+
+msgctxt "#32017"
+msgid "Could not ban '%s'."
+msgstr "Impossible de bannir « %s »."
+
+msgctxt "#32026"
+msgid "Connect to Last.fm failed"
+msgstr "La connexion à Last.fm a échoué"
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "Amis de l'utilisateur %s"
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "Voisins de l'utilisateur %s"
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "Les meilleurs albums d'après l'utilisateur %s"
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "Les meilleurs artistes d'après l'utilisateur %s"
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "Les meilleures pistes d'après l'utilisateur %s"
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "Morceaux bannies récemment par %s"
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "Morceaux écoutées récemment par %s"
+
+msgctxt "#32060"
+msgid "Weekly album chart for %s"
+msgstr "Classement hebdomadaire des albums de %s"
+
+msgctxt "#32061"
+msgid "Weekly artist chart for %s"
+msgstr "Classement hebdomadaire des artistes de %s"
+
+msgctxt "#32062"
+msgid "Weekly track chart for %s"
+msgstr "Classement hebdomadaire des morceaux de %s"
+
+msgctxt "#32063"
+msgid "Listen to %s's mix Last.fm radio"
+msgstr "Écouter le mix de %s sur la radio Last.fm"
+
+msgctxt "#32064"
+msgid "Listen to %s's neighbours Last.fm radio"
+msgstr "Écouter les voisins de %s sur la radio Last.fm"
+
+msgctxt "#32065"
+msgid "Listen to %s's personal Last.fm radio"
+msgstr "Écouter la radio personnelle de %s sur la radio Last.fm"
+
+msgctxt "#32066"
+msgid "Listen to %s's recommendations Last.fm radio"
+msgstr "Écouter les recommandations de %s sur la radio Last.fm"
+
+msgctxt "#32067"
+msgid "Biggest fans of %s"
+msgstr "Les plus grands fans de %s"
+
+msgctxt "#32068"
+msgid "Similar artists as %s"
+msgstr "Artistes semblables à %s"
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "Les meilleurs %s albums"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "Les meilleures %s pistes"
+
+msgctxt "#32073"
+msgid "Listen to %s similar artists Last.fm radio"
+msgstr "Écouter %s artistes semblables sur la radio Last.fm"
+
+msgctxt "#32078"
+msgid "Search"
+msgstr "Rechercher"
+
+msgctxt "#32079"
+msgid "No results found"
+msgstr "Aucun résultat trouvé"
+
+msgctxt "#32082"
+msgid "Listen to similar artists Last.fm radio"
+msgstr "Écouter des artistes semblables sur la radio Last.fm"

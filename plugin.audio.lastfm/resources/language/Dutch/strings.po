@@ -18,11 +18,11 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "General"
-msgstr "Gebruik Media Overlays"
+msgstr "Algemeen"
 
 msgctxt "#30001"
 msgid "Submit songs to Last.fm"
-msgstr "Afgespeelde nummers op Last.FM bijhouden"
+msgstr "Nummers op Last.FM toevoegen"
 
 msgctxt "#30002"
 msgid "Submit online radio to Last.fm"
@@ -50,7 +50,7 @@ msgstr "Wilt u dit nummer toevoegen aan uw favoriete nummers?"
 
 msgctxt "#32013"
 msgid "Do you want to ban the current track?"
-msgstr "Wilt u huidig nummer verbannen?"
+msgstr "Wilt u het huidige nummer verbannen?"
 
 msgctxt "#32014"
 msgid "Added to your loved tracks: '%s'."
@@ -86,7 +86,7 @@ msgstr "kan het niet verwijderen '%s' van jou geliefde nummers."
 
 msgctxt "#32022"
 msgid "Un-banned: '%s'."
-msgstr "herwaarderen: '%s'."
+msgstr "Ban opgeheven: '%s'."
 
 msgctxt "#32023"
 msgid "Could not un-ban '%s'."

@@ -264,6 +264,14 @@ msgctxt "#32094"
 msgid "Listen to user recommendations Last.fm radio"
 msgstr "Lyssna på användar-rekommenderade Last.fm radio"
 
+msgctxt "#32095"
+msgid "Overall top artists"
+msgstr "Övergripande topp-artister"
+
 msgctxt "#32096"
 msgid "Overall top tags"
 msgstr "Överlag topp-taggar"
+
+msgctxt "#32097"
+msgid "Overall top tracks"
+msgstr "Övergripande topp-spår"

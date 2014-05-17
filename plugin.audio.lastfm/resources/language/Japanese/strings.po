@@ -24,6 +24,10 @@ msgctxt "#30001"
 msgid "Submit songs to Last.fm"
 msgstr "Last.fm に曲を送信する"
 
+msgctxt "#30002"
+msgid "Submit online radio to Last.fm"
+msgstr "Last.fm にオンラインラジオを送信する"
+
 msgctxt "#30003"
 msgid "Last.fm username"
 msgstr "Last.fm ユーザ名"
@@ -31,6 +35,10 @@ msgstr "Last.fm ユーザ名"
 msgctxt "#30004"
 msgid "Last.fm password"
 msgstr "Last.fm パスワード"
+
+msgctxt "#30005"
+msgid "Confirm Love/Ban submissions"
+msgstr "Love 送信時や削除時には確認する"
 
 msgctxt "#32011"
 msgid "Last.fm"
@@ -68,6 +76,22 @@ msgctxt "#32019"
 msgid "Do you want to un-ban this track?"
 msgstr "このトラックをライブラリに戻しますか?"
 
+msgctxt "#32020"
+msgid "Removed from your loved tracks: '%s'."
+msgstr "Love トラックから削除しました: '%s'。"
+
+msgctxt "#32021"
+msgid "Could not remove '%s' from your loved tracks."
+msgstr "Love トラックから '%s' を削除出来ませんでした。"
+
+msgctxt "#32022"
+msgid "Un-banned: '%s'."
+msgstr "ライブラリに戻しました: '%s'。"
+
+msgctxt "#32023"
+msgid "Could not un-ban '%s'."
+msgstr "'%s' をライブラリに戻せませんでした。"
+
 msgctxt "#32024"
 msgid "Remove from loved tracks"
 msgstr "Love トラックから削除"
@@ -75,6 +99,110 @@ msgstr "Love トラックから削除"
 msgctxt "#32025"
 msgid "Un-ban"
 msgstr "ライブラリに戻す"
+
+msgctxt "#32026"
+msgid "Connect to Last.fm failed"
+msgstr "Last.fm への接続に失敗しました"
+
+msgctxt "#32027"
+msgid "No username or password provided"
+msgstr "ユーザー名とパスワードがありません"
+
+msgctxt "#32028"
+msgid "Could not retrieve list from Last.fm"
+msgstr "Last.fm からのリスト取得に失敗しました"
+
+msgctxt "#32051"
+msgid "Friends of user %s"
+msgstr "ユーザー %s の友達"
+
+msgctxt "#32052"
+msgid "Neighbours of user %s"
+msgstr "ユーザー %s のご近所さん"
+
+msgctxt "#32053"
+msgid "Top albums for user %s"
+msgstr "ユーザー %s のトップアルバム"
+
+msgctxt "#32054"
+msgid "Top artists for user %s"
+msgstr "ユーザー %s のトップアーティスト"
+
+msgctxt "#32055"
+msgid "Top tags for user %s"
+msgstr "ユーザー %s のトップタグ"
+
+msgctxt "#32056"
+msgid "Top tracks for user %s"
+msgstr "ユーザー %s のトップトラック"
+
+msgctxt "#32057"
+msgid "Tracks recently banned by %s"
+msgstr "%s が最近削除したトラック"
+
+msgctxt "#32058"
+msgid "Tracks recently listened by %s"
+msgstr "%s が最近聴いたトラック"
+
+msgctxt "#32059"
+msgid "Tracks recently loved by %s"
+msgstr "%s が最近 Love したトラック"
+
+msgctxt "#32060"
+msgid "Weekly album chart for %s"
+msgstr "%s の週間アルバムチャート"
+
+msgctxt "#32061"
+msgid "Weekly artist chart for %s"
+msgstr "%s の週間アーティストチャート"
+
+msgctxt "#32062"
+msgid "Weekly track chart for %s"
+msgstr "%s の週間トラックチャート"
+
+msgctxt "#32063"
+msgid "Listen to %s's mix Last.fm radio"
+msgstr "%s の Last.fm ミックスラジオを試聴"
+
+msgctxt "#32064"
+msgid "Listen to %s's neighbours Last.fm radio"
+msgstr "%s のご近所さんの Last.fm ミックスラジオを試聴"
+
+msgctxt "#32065"
+msgid "Listen to %s's personal Last.fm radio"
+msgstr "%s のパーソナル Last.fm ミックスラジオを試聴"
+
+msgctxt "#32066"
+msgid "Listen to %s's recommendations Last.fm radio"
+msgstr "%s のおすすめ Last.fm ミックスラジオを試聴"
+
+msgctxt "#32069"
+msgid "Top %s albums"
+msgstr "トップ %s アルバム"
+
+msgctxt "#32070"
+msgid "Top %s tags"
+msgstr "トップ %s タグ"
+
+msgctxt "#32071"
+msgid "Top %s tracks"
+msgstr "トップ %s トラック"
+
+msgctxt "#32074"
+msgid "Top albums for tag %s"
+msgstr "タグ %s のトップアルバム"
+
+msgctxt "#32075"
+msgid "Top artists for tag %s"
+msgstr "タグ %s の"
+
+msgctxt "#32076"
+msgid "Top tracks for tag %s"
+msgstr "タグ %s のトップトラック"
+
+msgctxt "#32077"
+msgid "Listen to tag %s Last.fm radio"
+msgstr "タグ %s の Last.fm ラジオを聴く"
 
 msgctxt "#32078"
 msgid "Search"
@@ -84,6 +212,18 @@ msgctxt "#32079"
 msgid "No results found"
 msgstr "見つかりませんでした"
 
+msgctxt "#32088"
+msgid "Tag"
+msgstr "タグ"
+
+msgctxt "#32095"
+msgid "Overall top artists"
+msgstr "人気のアーティスト"
+
 msgctxt "#32096"
 msgid "Overall top tags"
 msgstr "人気のタグ"
+
+msgctxt "#32097"
+msgid "Overall top tracks"
+msgstr "人気のトラック"

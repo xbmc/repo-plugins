@@ -1,3 +1,9 @@
+v1.0.4
+- last.fm stopped providing radio streams (http://www.last.fm/announcements/subscriptions2014)
+
+v1.0.3
+- update language
+
 v1.0.2
 - get duration from xbmc.Player if the MusicInfoTag duration is invalid
 - fix potential crash due to invalid code 

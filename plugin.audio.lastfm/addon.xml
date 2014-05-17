@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.audio.lastfm" name="Last.fm" version="0.1.6" provider-name="Team-XBMC">
+<addon id="plugin.audio.lastfm" name="Last.fm" version="0.1.7" provider-name="Team-XBMC">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>
@@ -36,5 +36,6 @@
 		<platform>all</platform>
 		<forum>http://forum.xbmc.org/showthread.php?tid=154230</forum>
 		<source>https://code.google.com/p/ronie/source/</source>
+		<broken>last.fm no longer provides radio streams</broken>
 	</extension>
 </addon>

@@ -1,3 +1,6 @@
+v1.0.7
+- last.fm no longer provides radio streams (http://www.last.fm/announcements/subscriptions2014)
+
 v1.0.6
 - fix unicode encode error
 

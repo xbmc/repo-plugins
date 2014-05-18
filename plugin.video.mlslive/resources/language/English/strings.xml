@@ -16,4 +16,6 @@
   <string id="30012">Video Channels</string>
   <string id="30013">User Name</string>
   <string id="30014">Password</string>
+  <string id="30015">Playback failure</string>
+  <string id="30016">Unable to get stream address</string>
 </strings>

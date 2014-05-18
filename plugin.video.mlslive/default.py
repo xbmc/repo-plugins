@@ -14,7 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 '''
-import xbmcplugin, xbmcgui, xbmcaddon, urllib, urlparse, mlslive
+import xbmc, xbmcplugin, xbmcgui, xbmcaddon, urllib, urlparse, mlslive
 
 __settings__ = xbmcaddon.Addon(id='plugin.video.mlslive')
 __language__ = __settings__.getLocalizedString
@@ -139,18 +139,11 @@ def createWeekMenu(my_mls, values_string, final_only=True):
         else:
             li = xbmcgui.ListItem(game_str)
 
-        if my_mls.isGameLive(game):
-            stream = my_mls.getGameLiveStream(game['gameID'])
-
+        if my_mls.isGameLive(game) or my_mls.isGameUpcoming(game):
             li.setInfo( type="Video", infoLabels={"Title" : game_str})
             xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                        url=stream,
-                                        listitem=li,
-                                        isFolder=False)
-        elif my_mls.isGameUpcoming(game):
-            li.setInfo( type="Video", infoLabels={"Title" : game_str})
-            xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),
-                                        url="",
+                                        url=sys.argv[0] + "?" + urllib.urlencode({'game' : game['gameID'],
+                                                                                  'title' : game_str }),
                                         listitem=li,
                                         isFolder=False)
         else:
@@ -246,4 +239,16 @@ elif sys.argv[2][:3] == '?id':
     createFinalMenu(my_mls, sys.argv[2][1:])
 elif sys.argv[2][:5] == '?week':
     createWeekMenu(my_mls, sys.argv[2][1:])
-
+elif sys.argv[2][:5] == "?game":
+    values = urlparse.parse_qs(sys.argv[2][1:])
+    game = values['game'][0]
+    title = values['title'][0]
+    stream = my_mls.getGameLiveStream(game)
+    if stream == '':
+        dialog = xbmcgui.Dialog()
+        dialog.ok(__language__(30015), __language__(30016))
+    else:
+        li = xbmcgui.ListItem(title)
+        li.setInfo( type="Video", infoLabels={"Title" : title})
+        p = xbmc.Player()
+        p.play(stream, li)

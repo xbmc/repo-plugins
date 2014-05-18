@@ -1,3 +1,9 @@
+[B]Version 1.0.9[/B]
+
+- don't preload live or upcoming match URIs (should be faster)
+- add error when no stream can be found for live or preloaded matches
+- add state for half-time in the game title
+
 [B]Version 1.0.8[/B]
 
 - don't simplify m3u8 URL because it causes problems with authentication

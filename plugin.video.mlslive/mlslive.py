@@ -289,7 +289,8 @@ class MLSLive:
         game_str = game['visitorTeamName'] + " " + separator + " " + \
                    game['homeTeamName']
 
-        if game['gameStatus'] == 'FINAL' or game['gameStatus'][:4] == 'LIVE':
+        if game['gameStatus'] == 'FINAL' or game['gameStatus'][:4] == 'LIVE' or \
+           game['gameStatus'] == 'HALF':
             game_str += ' (' + game['gameStatus'].title() + ')'
         else:
             game_str += ' (' + self.getGameDateTimeStr(game['gameDateTime']) + ')'

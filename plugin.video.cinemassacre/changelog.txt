@@ -1,3 +1,4 @@
+1.0.9 - Removed UrlResolver dependency, added Error Reporting
 1.0.7 - Major refactor for Gotham release
 1.0.6 - Fix screenwave video playback again
 1.0.5 - Fix screenwave videos to support new player page

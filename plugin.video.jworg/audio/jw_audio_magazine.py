@@ -1,6 +1,7 @@
 import jw_common
 import jw_config
 
+from BeautifulSoup import BeautifulSoup 
 import urllib
 import sys
 import re
@@ -65,7 +66,8 @@ def showMagazineFilterIndex(pub_filter = None):
         if item["title"] == "-" :
             continue
 
-        listItem    = xbmcgui.ListItem( item["title"] )     
+        title_text  = jw_common.cleanUpText( item["title"] )
+        listItem    = xbmcgui.ListItem( title_text )     
 
         params      = {
             "content_type"  : "audio", 
@@ -95,64 +97,47 @@ def showMagazineFilteredIndex(pub_filter = None, year_filter = None):
     
     html            = jw_common.loadUrl(magazine_url) 
 
-    # Grep issue date and publication title
-    regexp_issue = "<span class='issueDate'>([^<]+)</span> (<span class='cvrTtl'>([^<]+)</span>)?"
-    issues = re.findall(regexp_issue, html)      
+    soup            = BeautifulSoup(html)
+    publications    = soup.findAll("div", { "class" : re.compile(r'\bPublicationIssue\b') })
 
-    # The following regexp use two 'generic spaces' \s to filter out unwanted items
-    regexp_json = '\s\sdata-jsonurl="([^"]+)"'
-    json = re.findall(regexp_json, html)
+    for publication in publications :
 
-    # Cover
-    regexp_cover = "data-img-size-md='(http://assets.jw.org/assets/[^.]+md\.jpg)'"
-    cover = re.findall(regexp_cover, html)
+        cover_title = publication.find("span", { "class" : re.compile(r'\bperiodicalTitleBlock\b') })
 
-    # publication dates where
-    # pub_dates[0] = publication (w,wp, ws, g)
-    # pub_dates[1] = issue date (201301, 2013015, etc.. different by publication type)
-    regexp_pub_date = '"toc-([wgps]+)([0-9]+)"'
-    pub_dates = re.findall(regexp_pub_date, html)
-
-    cover_available = {}
-
-    # I create a dict of "pub_date : cover_url"
-    # So i can test if a pub_date really has a cover_url
-    for cover_url in cover:
-        regexp_cover_date = "([wsgp]+)_[A-Z]+_([0-9]+).md.jpg"
-        dates = re.findall(regexp_cover_date, cover_url)
-        the_key = dates[0][0] + "-" + dates[0][1]
-        cover_available[the_key] = cover_url
-
-    count = 0
-    for issue in issues:
-
-        title = issue[0]
-        if issue[2].strip() != "":
-            title = title + " - " + issue[2]
-
-        # somethings like "wp-20131201" or "g-201401"
-        pub_date = pub_dates[count][0] + "-" + pub_dates[count][1]
-        # placeholder to use if the cover is missing
-        cover_url = "http://assets.jw.org/themes/content-theme/images/thumbProduct_placeholder.jpg"
+        issue_date = cover_title.find("span", { "class" : re.compile(r'\bissueDate\b') }).contents[0].encode("utf-8")
+        issue_date = jw_common.cleanUpText(issue_date)
         try :
-            cover_url = cover_available[pub_date]
-        except:
-            # this exception happens when there is no cover, but only placeholder
+            # wp and g
+            issue_title = cover_title.find("span", { "class" : re.compile(r'\bcvrTtl\b') }).contents[0].encode("utf-8")
+        except :
+            # w (study edtion)
+            issue_title = cover_title.find("span", { "class" : re.compile(r'\bpubName\b') }).contents[0].encode("utf-8")
+
+        issue_title = jw_common.cleanUpText(issue_title)
+
+        json_url = None
+        try :
+            json_url = publication.find("a", { "class" : re.compile(r'\bstream\b') }).get('data-jsonurl')
+        except :
             pass
 
+        # placeholder if cover is missing
+        cover_url = "http://assets.jw.org/themes/content-theme/images/thumbProduct_placeholder.jpg"
+        try :
+            cover_url = publication.findAll("img")[1].get('src')
+        except :
+            pass 
+
         listItem    = xbmcgui.ListItem( 
-            label           = title,
+            label           = issue_date + ": " + issue_title,
             thumbnailImage  = cover_url
-        )     
+        ) 
 
         params      = {
             "content_type"  : "audio", 
             "mode"          : "open_magazine_json",
+            "json_url"      : json_url,
         } 
-        try:
-            params["json_url"] = json[count]
-        except:
-            params["json_url"] = None
 
         url = jw_config.plugin_name + '?' + urllib.urlencode(params)
 
@@ -161,8 +146,6 @@ def showMagazineFilteredIndex(pub_filter = None, year_filter = None):
             url         = url, 
             listitem    = listItem, 
             isFolder    = True 
-        )  
+        )
 
-        count = count +1
-    
     xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)

@@ -17,13 +17,12 @@ def showAudioBibleIndex():
 	
 	language 		= jw_config.language
 	bible_index_url = jw_common.getUrl(language) + jw_config.const[language]["bible_index_audio"]
-	html 			= jw_common.loadUrl(bible_index_url) 
+	html 			= jw_common.loadUrl(url = bible_index_url, month_cache = True) 
 	
 	soup 		= BeautifulSoup(html)
-
 	cover_div 	= soup.findAll('div',{"class": re.compile(r'\bcvr\b')})
 	span 		= cover_div[0].findAll('span')
-	img_url     = span[0].get('data-img-size-md');
+	img_url     = span[0].get('data-img-size-md')
 
 	boxes 	= soup.findAll('li',{"class": re.compile(r'\bbookName\b')})
 
@@ -69,7 +68,7 @@ def showAudioBibleBookJson(book_num):
 	json_url 	= json_url + "&booknum=" 
 	json_url 	= json_url + book_num
 
-	json 		= jw_common.loadJsonFromUrl(url = json_url, ajax = False)
+	json 		= jw_common.loadJsonFromUrl(url = json_url, ajax = False, month_cache = True)
 	lang_code 	= lang_code
 	book_name 	= json["pubName"]
 	cover_url   = json["pubImage"]["url"]

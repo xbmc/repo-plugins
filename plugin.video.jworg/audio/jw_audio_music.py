@@ -4,6 +4,7 @@ AUDIO BIBLE RELATED FUNCTIONSS
 import xbmcgui
 import xbmcplugin
 
+from BeautifulSoup import BeautifulSoup 
 import urllib
 import re
 
@@ -19,30 +20,37 @@ def showMusicIndex(start):
 	music_index_url = music_index_url + jw_config.const[language]["music_index"]
 	music_index_url = music_index_url + "?start=" + start + "&sortBy=" + jw_config.audio_sorting
 	
-	html 			= jw_common.loadUrl(music_index_url) 
+	html 			= jw_common.loadUrl(url = music_index_url, month_cache = True) 
 	
-	# Grep compilation titles
-	regexp_music_title = '"pubAdTitleBlock">([^<]+)<'
-	music_title = re.findall(regexp_music_title, html)  	
+	soup 			= BeautifulSoup(html)
+	publications    = soup.findAll("div", { "class" : re.compile(r'\bPublication\b') })
 
-	# Grep music json
-	regexp_music_json = 'class="jsDownload" data-jsonurl="([^"]+MP3[^"]+)".*'
-	music_json = re.findall(regexp_music_json, html)
+	for publication in publications :
+		title = publication.find('h3').contents[0].encode("utf-8");
+		title = jw_common.cleanUpText(title);
 
-	# Grep compilation image - [A-Z]+ discards ".prd_md" duplicated images
-	regexp_music_thumb = 'data-img-size-md=["\']([^"\']+[A-Z]+_md\.jpg)["\']'
-	music_thumb = re.findall(regexp_music_thumb, html)
+		json_url = None
+		try :
+			json_url = publication.find("a", { "class" : "jsDownload" }).get('data-jsonurl')
+		except :
+			pass
 
-	album_num = 0
-	for album in music_title:
+		# placeholder if cover is missing
+		cover_url = "http://assets.jw.org/themes/content-theme/images/thumbProduct_placeholder.jpg"
+		try :
+			cover_url = publication.findAll("img")[1].get('src')
+		except :
+			pass 
+
 		listItem = xbmcgui.ListItem(
-			label 			= music_title[album_num], 
-			thumbnailImage  = music_thumb[album_num]
+			label 			= title,
+			thumbnailImage  = cover_url
 		)	
+
 		params = {
 			"content_type"  : "audio", 
 			"mode" 			: "open_music_json", 
-			"json_url" 		: music_json[album_num] 
+			"json_url" 		: json_url
 		}
 		url = jw_config.plugin_name + '?' + urllib.urlencode(params)	
 		xbmcplugin.addDirectoryItem(
@@ -50,8 +58,7 @@ def showMusicIndex(start):
 			url 		= url, 
 			listitem 	= listItem, 
 			isFolder	= True 
-		)  
-		album_num = album_num + 1
+		)
 
 	jw_common.setNextPageLink(html, "open_music_index", "audio")
 

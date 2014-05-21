@@ -5,6 +5,7 @@ AUDIO DRAMAS RELATED FUNCTIONS
 import jw_config
 import jw_common
 
+from BeautifulSoup import BeautifulSoup 
 import re
 import urllib
 
@@ -21,33 +22,37 @@ def showDramaIndex(start):
 	drama_index_url = drama_index_url + jw_config.const[language]["dramas_index"] 
 	drama_index_url = drama_index_url + "?start=" + start + "&sortBy=" + jw_config.audio_sorting
 	
-	html 			= jw_common.loadUrl(drama_index_url) 
-	
-	# Grep drama titles
-	regexp_dramas_titles = '"pubAdTitleBlock">([^<]+)<'
-	drama_titles = re.findall(regexp_dramas_titles, html)  	
-	
-	# Grep drama json
-	regexp_drama_json = 'class="jsDownload" data-jsonurl="([^"]+MP3[^"]+)".*'
-	drama_json = re.findall(regexp_drama_json, html)
+	html 			= jw_common.loadUrl(url = drama_index_url, month_cache = True) 
 
-	# Grep drama  image - [^\'.]+ discards ".prd_md" duplicated images
-	regexp_drama_thumb = 'data-img-size-md=\'(http://assets.jw.org/assets/[^\'.]+_md\.jpg)\''
-	drama_thumb = re.findall(regexp_drama_thumb, html)
+	soup 			= BeautifulSoup(html)
+	publications    = soup.findAll("div", { "class" : re.compile(r'\bPublication\b') })
 
-	drama_num = 0
-	for drama in drama_titles:
+	for publication in publications :
+		title = publication.find('h3').contents[0].encode("utf-8");
+		title = jw_common.cleanUpText(title);
 
-		title = jw_common.cleanUpText(drama_titles[drama_num])
+		json_url = None
+		try :
+			json_url = publication.find("a", { "class" : "jsDownload" }).get('data-jsonurl')
+		except :
+			pass
+
+		# placeholder if cover is missing
+		cover_url = "http://assets.jw.org/themes/content-theme/images/thumbProduct_placeholder.jpg"
+		try :
+			cover_url = publication.findAll("img")[1].get('src')
+		except :
+			pass 
 
 		listItem = xbmcgui.ListItem(
 			label 			= title,
-			thumbnailImage  = drama_thumb[drama_num]
+			thumbnailImage  = cover_url
 		)	
+
 		params = {
 			"content_type"  : "audio", 
-			"mode" 			: "open_drama_json",
-			"json_url" 		: drama_json[drama_num] 
+			"mode" 			: "open_music_json", 
+			"json_url" 		: json_url
 		}
 		url = jw_config.plugin_name + '?' + urllib.urlencode(params)	
 		xbmcplugin.addDirectoryItem(
@@ -55,8 +60,7 @@ def showDramaIndex(start):
 			url 		= url, 
 			listitem 	= listItem, 
 			isFolder	= False 
-		)  
-		drama_num = drama_num + 1
+		)
 
 	jw_common.setNextPageLink(html, "open_drama_index", "audio")
 

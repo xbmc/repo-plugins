@@ -78,10 +78,13 @@ def loadNotCachedUrl(url):
 	html = response.read()
 	return html		
 
-def loadUrl (url):
+def loadUrl (url, month_cache = False ):
 	html = ""
 	try :
-		html = jw_config.cache.cacheFunction(loadNotCachedUrl, url)
+		if month_cache == True :
+			html = jw_config.cache_month.cacheFunction(loadNotCachedUrl, url)	
+		else :
+			html = jw_config.cache.cacheFunction(loadNotCachedUrl, url)	
 	except:
 		pass 
 	return html	

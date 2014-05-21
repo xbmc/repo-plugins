@@ -103,7 +103,7 @@ def showVideoIndex(start, video_filter):
 	for title in videos:
 		if posters[count] is None :
 			count = count + 1
-			continue;
+			continue
 
 		json_url = video_json[count]
 
@@ -188,11 +188,18 @@ def setVideoUrl(main_video_title, json_url, thumb) :
 	try :
 		temp = json["files"][language_code]
 	except :
-		language_code = "univ"
-		pass
+		try:
+			temp = json["files"]["univ"]
+		except:
+			# e.g. http://www.jw.org/apps/TRGCHlZRQVNYVrXF?docid=802014548&output=json&fileformat=mp4&alllangs=1&track=1&langwritten=I&txtCMSLang=I
+			temp = json["files"]["E"] 
+			pass
 
 	video_dict = {}
-	for mp4 in json["files"][language_code]["MP4"]:
+
+	xbmc.log ("JWORG: json_url " + json_url.encode("utf-8"), xbmc.LOGERROR)
+
+	for mp4 in temp["MP4"]:
 		res 				= mp4["label"]		
 		url_to_play			= mp4["file"]["url"]
 		mp4_title_cleaned 	= jw_common.cleanUpText (mp4["title"])
@@ -300,6 +307,17 @@ def showVideoJsonUrl(json_url, thumb):
 	if len(json["languages"]) == 0:
 		language_code = ""
  	
+ 	try :
+		temp = json["files"][language_code]
+	except :
+		try:
+			temp = json["files"]["univ"]
+			language_code = "univ"
+		except:
+			# e.g. http://www.jw.org/apps/TRGCHlZRQVNYVrXF?docid=802014548&output=json&fileformat=mp4&alllangs=1&track=1&langwritten=I&txtCMSLang=I
+			temp = json["files"]["E"] 
+			language_code = "E"
+			pass
 
 	# Create in memory dict of dict with all available videos
 	video_dict = {}

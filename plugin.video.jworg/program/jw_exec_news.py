@@ -5,6 +5,7 @@ NEWS RELATED FUNCTIONS
 import jw_config
 import jw_common
 
+from BeautifulSoup import BeautifulSoup 
 import re
 import urllib
 
@@ -36,7 +37,7 @@ def showNewsIndex():
 
 		# Stop news parsing at the first lateral link (an head) found
 		if "/?v=" in news[0] :
-			break;
+			break
 
 		listItem = xbmcgui.ListItem( 
 			label  			= title,
@@ -109,7 +110,7 @@ class News(xbmcgui.WindowDialog):
 			'font35_title', "0xFF0000FF"
 		)
 		self.ctrlText= xbmcgui.ControlTextBox(
-            border, 20, 
+            border, 120, 
             1280 - border *2, 3000, 
             'font30', "0xFF000000"
         )
@@ -118,16 +119,17 @@ class News(xbmcgui.WindowDialog):
 		self.addControl (self.ctrlText)
 		self.addControl (self.ctrlBackgound2)
 		self.addControl (self.ctrlTitle)
-		
-		self.ctrlTitle.setText( self.getTitle(text) )
-		self.ctrlText.setText( self.getText(text) )
+			
+		soup = BeautifulSoup(text)
+		self.ctrlTitle.setText( self.getTitle(soup) )
+		self.ctrlText.setText( self.getText(soup) )
 		
 
 	def onAction(self, action):
 		(x,y) =  self.ctrlText.getPosition()
 
 		if action == ACTION_MOVE_UP or action == ACTION_SCROLL_UP :
-			if y > 0:
+			if y > 120:
 				return
 			y = y + 50
 			self.ctrlText.setPosition(x,y)
@@ -140,7 +142,7 @@ class News(xbmcgui.WindowDialog):
 			return
 
 		if action == ACTION_PAGE_UP:
-			if y > 0:
+			if y > 120:
 				return
 			y = y + 500
 			self.ctrlText.setPosition(x,y)
@@ -155,16 +157,20 @@ class News(xbmcgui.WindowDialog):
 		self.close()
 
 	# Grep news title
-	def getTitle(self, text):
-		regexp_header = "<header><h1([^>]*)>(.*)</h1>"
-		headers = re.findall(regexp_header, text)
-		return headers[0][1]
+	def getTitle(self, soup):
+		header = soup.find("h1").contents[0].encode("utf-8")
+		return header
 
-	def getText(self, text):
-		regexp_pars = '<p id="p[0-9]+" class="p[0-9]+">([^<]+)</p>'
-		pars = re.findall(regexp_pars, text)
-		out = ""
-		for par in pars:
-			out = out + "\n\n" + par
+	def getText(self, soup):
+		paragraphs = soup.findAll("p", { "class" : re.compile(r'\bp\d+\b') })
+
+		out =  ""
+		for p in paragraphs :
+			text = "".join(p.findAll(text = True))
+			text =  re.sub("<strong>", "[B]", text)
+			text =  re.sub("</strong>", "[/B]", text)
+			
+			out = out + text + "\n\n";
+
 		out = out + "\n\n[COLOR=FF0000FF][I]" + jw_common.t(30038).encode("utf8") + "[/I][/COLOR]"
 		return out

@@ -263,7 +263,7 @@ def searchResolution(category_url, row_index) :
 	# looking for choosen resolution or first available resolution unde it
 	max_resolution	= xbmcplugin.getSetting(jw_config.plugin_pid, "max_resolution")
 	if max_resolution == 0 :
-		return False;
+		return False
 
 	row_index 	= int(row_index) #because it's a string actually !
 	html 		= jw_common.loadUrl(category_url)
@@ -303,10 +303,10 @@ def searchResolution(category_url, row_index) :
   	keys = sorted(list(video_dict.keys()), reverse=True)
   	for key in keys :
   		if (key <= max_resolution_string )  :
-			return key;
+			return key
 
 	# If am here, I surely have NOT the default resolution found
-	return False;
+	return False
 
 
 # Get the list of playable item (a list of video resolution and title)
@@ -385,7 +385,7 @@ def showVideoCategorySpecificRow(category_url, thumb, row_index) :
 
 				xbmc.Player().play(item=url_to_play, listitem=listItem)
 
-				return;
+				return
 
 
 	# this will be executed only if no available res found

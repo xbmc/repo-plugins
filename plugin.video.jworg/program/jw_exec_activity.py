@@ -59,7 +59,7 @@ def showActivityIndex():
 
 	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 
-	return;
+	return
 
 
 
@@ -70,7 +70,7 @@ def showActivitySection(url):
 	soup 	= BeautifulSoup(html)
 
     # container of news, so we can leave out the sidebar
-	article = soup.findAll("div", {'id' : 'article'});
+	article = soup.findAll("div", {'id' : 'article'})
 
 	news 	= article[0].findAll('div', {'class' : re.compile(r'\bPublicationArticle')})
 

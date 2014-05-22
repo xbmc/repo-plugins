@@ -1,3 +1,5 @@
+1.0.6 (2014.05.21)
+- Modified pattern for embedded Dailymotion and KontextTV videos.
 1.0.5 (2014.02.05)
 - Modified pattern for embedded Vimeo videos.
 - Added website tag.

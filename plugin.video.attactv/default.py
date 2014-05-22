@@ -277,24 +277,27 @@ def get_playable_bliptv_url(html):
 
 # This function try to get a KontextTV playable URL from the weblink and returns it ready to play it directly.
 def get_playable_kontexttv_url(html):
-    pattern_kontexttv = '(http://www.kontext-tv.de/sites/default/files/.*?flv)'
+    pattern_kontexttv = '[htp:]*?(//www.kontext-tv.de/sites/default/files/.*?flv)'
 
     video_url = lutil.find_first(html, pattern_kontexttv)
     if video_url:
-        lutil.log("attactv.play: We have found this KontextTV video: %s and let's going to play it!" % video_url)
-        return video_url
+        lutil.log("attactv.play: We have found this KontextTV video: http:%s and let's going to play it!" % video_url)
+        # This is a hack to fix the lack of the "http:" sometimes into the video URL on the HTML code.
+        return "http:" + video_url
 
     return ""
 
 
 # This function try to get a Dailymotion playable URL from the weblink and returns it reay to play it directly.
 def get_playable_dailymotion_url(html):
-    pattern_dailymotion = ' src="(http://www.dailymotion.com/embed/video/[^"]*?)"'
+    pattern_dailymotion = ' src="[htp:]*?(//www.dailymotion.com/embed/video/[^"]*?)"'
     #pattern_daily_video = '"hqURL":"(.+?)"'
     pattern_daily_video = '"stream_h264_hq_url":"(.+?)"'
 
     daily_url = lutil.find_first(html, pattern_dailymotion)
     if daily_url:
+        # This is a hack to fix the lack of the "http:" sometimes into the video URL on the HTML code.
+        daily_url = "http:" + daily_url
         lutil.log("attactv.play: We have found a Dailymotion video with URL: '%s'" % daily_url)
         buffer_link = lutil.carga_web(daily_url)
         video_url = lutil.find_first(buffer_link, pattern_daily_video)

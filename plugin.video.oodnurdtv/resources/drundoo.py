@@ -69,28 +69,11 @@ class drundoo:
 			links = bs4.BeautifulSoup(temp).findAll(class_='button watch-now player_start cf')
 		
 	
-		time_list = []
-		
-		for link in links:
-			time_list.append((link.get('data-ga-label'),'http://www.drundoo.com' + link.get('href')))
-
 		play_list = []
-                play_title = []
-                for title,link in time_list:
-                        #build the .m3u8 link for the live content
-                        startposition = self.open_site(link).find('playlistUrl') + 15
-                        endposition = self.open_site(link).find('",\n')
-                        temp_link = 'http://www.drundoo.com'+ self.open_site(link)[startposition:endposition]
-
-                        temp2 = self.open_site(temp_link)
-                        startposition = temp2.find('http')
-                        endposition = temp2.find('","title')
-                        play_link = temp2[startposition:endposition]
-                        play_link = play_link.replace('\\','').replace('manifest.f4m','master.m3u8')
-                        play_list.append(play_link)
-
-                        #get the title of the live station associated with the play link above
-			play_title.append(title)
+		play_title = []
+		for link in links:
+			play_title.append(link.get('data-ga-label'))
+                        play_list.append('http://www.drundoo.com' + link.get('href'))
 
                 return play_list,play_title    
 

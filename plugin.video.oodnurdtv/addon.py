@@ -119,8 +119,12 @@ def playlist_stations(playlist):
 
     items = []
     for my_title,my_link in zip(play_title,play_link):
-        items.append({'label': my_title,'path': my_link, 'is_playable':True})
+        items.append({'label': my_title,'path':plugin.url_for('playlist_final',url=my_link), 'is_playable':True})
     return items
+
+@plugin.route('/playlist_final/<url>')
+def playlist_final(url):
+    plugin.set_resolved_url(my_drundoo.play_url(url))
 
 #####################################
 #End of playlist section
@@ -156,8 +160,12 @@ def oshte_stations(oshte):
 
     items = []
     for my_title,my_link in zip(play_title,play_link):
-        items.append({'label': my_title,'path': my_link, 'is_playable':True})
+        items.append({'label': my_title,'path': plugin.url_for('oshte_final',url=my_link), 'is_playable':True})
     return items
+
+@plugin.route('/oshte_final/<url>')
+def oshte_final(url):
+    plugin.set_resolved_url(my_drundoo.play_url(url))
 
 #####################################
 #End of zapis section

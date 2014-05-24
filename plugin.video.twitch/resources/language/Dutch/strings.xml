@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- main menu -->
+  <string id="30001">Games</string>
+  <string id="30002">Volgers</string>
+  <string id="30003">Zoeken</string>
+  <string id="30004">Instellingen</string>
+  <string id="30005">Streams</string>
+  <string id="30006">Teams</string>
+  
+  <!--search -->
+  <string id="30007">Zoeken naar kanalen</string>
+  
+  <!--general --> 
+  <string id="30010">TwitchTV</string>
+  <string id="30011">volgende pagina...</string>
+  <string id="30012">-- Huidige Live Streams --</string>
+  <string id="30013">-- Gevolgde Kanalen --</string>
+
+   <!--notifications --> 
+  <string id="30020">HTTP-fout</string>
+  <string id="30021">Geen live data gevonden</string>
+  <string id="30022">Geen archieven gevonden voor</string>
+  <string id="30023">User Token Error</string>
+  <string id="30024">Video-instellingen gewijzigd</string>
+  <string id="30025">De geselecteerde video-instellingen zijn niet beschikbaar</string>
+  <string id="30026">TwitchApi error</string>
+  <string id="30027">JSON error</string>
+  <string id="30028">Kon de resultaten niet inlezen</string>
+  <string id="30029">Gelieve je internetverbinding na te kijken</string>
+  
+  <!--settings -->
+  <string id="30040">Beeldkwaliteit</string>
+  <string id="30041">Beste mogelijk</string>
+  <string id="30042">720p</string>
+  <string id="30043">480p</string>
+  <string id="30044">360p</string>
+  <string id="30045">Titels weergeven</string>
+  <string id="30046">Streamer - Stream Titel</string>
+  <string id="30047">Kijkers - Streamer - Stream Titel</string>
+  <string id="30048">Stream Titel</string>
+  <string id="30049">Streamer</string>
+
+  <string id="30050">Gebruikersnaam</string>
+  
+  <!--title-->
+  <string id="30060">Naamloze Streamer</string>
+  <string id="30061">Naamloze Stream</string>
+  <string id="30062">Onbekend Aantal Kijkers</string>
+
+</strings>

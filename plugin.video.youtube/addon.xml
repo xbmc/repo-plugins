@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
-<addon id="plugin.video.youtube" name="YouTube" provider-name="TheCollective" version="4.4.6">
+﻿<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+<addon id="plugin.video.youtube" name="YouTube" provider-name="TheCollective, Skipmode A1" version="4.4.7">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
     <import addon="script.module.simplejson" version="2.0.10" />
@@ -117,7 +117,12 @@ Raadpleeg de lokale wetgeving voordat u deze plugin installeert.</disclaimer>
     <disclaimer lang="sv">Någon del av detta tillägg kanske är olagligt i ditt land - kontrollera dina lokala lagar innan installation.</disclaimer>
     <disclaimer lang="th">บางส่วนจากส่วนขยายนี้อาจไม่ถูกต้องตามกฏหมายในประเทศของคุณ กรุณาตรวจสอบกฏหมายในประเทศของคุณก่อนทำการติดตั้ง</disclaimer>
     <disclaimer lang="zh">这个插件的某些内容可能不符合你所在国家的法律规定 - 请在在安装前确认符合当地法律。</disclaimer>
+    <language></language>
     <platform>all</platform>
-    <language />
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=79487</forum>
+    <website>http://www.youtube.com</website>
+    <email></email>
+    <source>git://github.com/skipmodea1/plugin.video.youtube.git</source>
   </extension>
 </addon>

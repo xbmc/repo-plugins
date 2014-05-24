@@ -167,7 +167,7 @@ class YouTubeLogin():
             self.common.log("Use saved cookies")
             return (self.settings.getSetting("cookies_saved"), 200)
 
-        fetch_options = {"link": get("link", "http://www.youtube.com/")}
+        fetch_options = {"link": get("link", "http://www.youtube.com/"), "no-language-cookie": "true"}
 
         step = 0
         galx = ""
@@ -188,7 +188,7 @@ class YouTubeLogin():
             fetch_options = False
 
             # Check if we are logged in.
-            nick = self.common.parseDOM(ret["content"], "p", attrs={"class": "masthead-expanded-acct-sw-id2"})
+            nick = self.common.parseDOM(ret["content"], "span", attrs={"id": "yt-masthead-user-displayname"})
 
             # Check if there are any errors to report
             errors = self.core._findErrors(ret, silent=True)
@@ -224,40 +224,41 @@ class YouTubeLogin():
             newurl = self.common.parseDOM(ret["content"], "meta", attrs={"http-equiv": "refresh"}, ret="content")
             if len(newurl) > 0:
                 newurl = newurl[0].replace("&amp;", "&")
-                newurl = newurl[newurl.find("&#39;") + 5:newurl.rfind("&#39;")]
+                newurl = newurl.replace("0; url=&#39;", "")
                 fetch_options = {"link": newurl, "referer": ret["location"]}
                 self.common.log("Part C: "  + repr(fetch_options))
                 continue
 
             ## 2-factor login start
-            if ret["content"].find("smsUserPin") > -1:
-                url_data = self._fillUserPin(ret["content"])
-                if len(url_data) == 0:
-                    return (False, 500)
+            #if ret["content"].find("smsUserPin") > -1:
+            #    url_data = self._fillUserPin(ret["content"])
+            #    if len(url_data) == 0:
+            #        return (False, 500)
 
-                new_part = self.common.parseDOM(ret["content"], "form", attrs={"name": "verifyForm"}, ret="action")
-                fetch_options = {"link": new_part[0].replace("&amp;", "&"), "url_data": url_data, "referer": ret["location"]}
+            #    self.common.log("RETURNED CONTENT" + ret["content"])
+            #    new_part = self.common.parseDOM(ret["content"], "input", attrs={"name": "continue"}, ret="value")
+            #    fetch_options = {"link": new_part[0].replace("&amp;", "&"), "url_data": url_data, "referer": ret["location"]}
 
-                self.common.log("Part D: " + repr(fetch_options))
-                continue
+            #    self.common.log("Part D: " + repr(fetch_options))
+            #    continue
 
-            smsToken = self.common.parseDOM(ret["content"].replace("\n", ""), "input", attrs={"name": "smsToken"}, ret="value")
+            #smsToken = self.common.parseDOM(ret["content"].replace("\n", ""), "input", attrs={"name": "smsToken"}, ret="value")
 
-            if len(smsToken) > 0 and galx != "":
-                url_data = {"smsToken": smsToken[0],
-                            "PersistentCookie": "yes",
-                            "service": "youtube",
-                            "GALX": galx}
+            #if len(smsToken) > 0 and galx != "":
+            #    url_data = {"smsToken": smsToken[0],
+            #                "PersistentCookie": "yes",
+            #                "service": "youtube",
+            #                "GALX": galx}
 
-                target_url = self.common.parseDOM(ret["content"], "form", attrs={"name": "hiddenpost"}, ret="action")
-                fetch_options = {"link": target_url[0], "url_data": url_data, "referer": ret["location"]}
-                self.common.log("Part E: " + repr(fetch_options))
-                continue
+            #    target_url = self.common.parseDOM(ret["content"], "form", attrs={"name": "hiddenpost"}, ret="action")
+            #    fetch_options = {"link": target_url[0], "url_data": url_data, "referer": ret["location"]}
+            #    self.common.log("Part E: " + repr(fetch_options))
+            #    continue
 
             ## 2-factor login finish
-            if not fetch_options:
+            #if not fetch_options:
                 # Check for errors.
-                return (self.core._findErrors(ret), 303)
+            #    return (self.core._findErrors(ret), 303)
 
         return (ret, 500)
 
@@ -282,7 +283,7 @@ class YouTubeLogin():
 
     def _fillUserPin(self, content):
         self.common.log("")
-        form = self.common.parseDOM(content, "form", attrs={"name": "verifyForm"}, ret=True)
+        form = self.common.parseDOM(content, "form", attrs={"id": "gaia_secondfactorform"}, ret=True)
 
         url_data = {}
         for name in self.common.parseDOM(form, "input", ret="name"):

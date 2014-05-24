@@ -139,7 +139,7 @@ class YouTubeCore():
     def del_playlist(self, params={}):
         self.common.log("")
         get = params.get
-        url = "http://gdata.youtube.com/feeds/api/users/default/playlists/%s" % (get("playlist"))
+        url = u"http://gdata.youtube.com/feeds/api/users/default/playlists/{0}".format(get("playlist"))
         result = self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "method": "DELETE"})
         return (result["content"], result["status"])
 
@@ -220,7 +220,7 @@ class YouTubeCore():
             if title.find(": ") > 0:
                 title = title[title.find(": ") + 2:]
                 title = self.common.replaceHTMLCodes(title)
-                
+
             folder['Title'] = title
             for tmp in self.common.parseDOM(node, "published"):
                 folder['published'] = tmp
@@ -397,7 +397,13 @@ class YouTubeCore():
             return ret_obj
 
         if get("url_data"):
-            request = urllib2.Request(link, urllib.urlencode(get("url_data")))
+            urldata = get("url_data")
+            url_data = {}
+
+            for key in urldata:
+                url_data[key.encode('UTF-8')] = urldata[key].encode('UTF-8')
+
+            request = urllib2.Request(link, urllib.urlencode(url_data))
             request.add_header('Content-Type', 'application/x-www-form-urlencoded')
         elif get("request", "false") == "false":
             if get("proxy"):
@@ -429,7 +435,7 @@ class YouTubeCore():
         else:
             request.add_header('User-Agent', self.common.USERAGENT)
 
-            if get("no-language-cookie", "false") == "false" and False:
+            if get("no-language-cookie", "false") == "true":
                 cookie += "PREF=f1=50000000&hl=en; "
 
         if get("login", "false") == "true":
@@ -455,6 +461,7 @@ class YouTubeCore():
 
             if cookie:
                 self.common.log("Setting cookie: " + cookie)
+                request.add_header('Cookie', cookie)
 
             con = urllib2.urlopen(request)
 

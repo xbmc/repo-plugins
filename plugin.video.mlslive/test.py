@@ -105,5 +105,5 @@ teams = my_mls.getTeams()
 
 for game in games:
 
-    print game['gameID'] + ": " + my_mls.getGameString(game, "at") 
+    print game['gameID'] + ": " + my_mls.getGameString(game, "at").decode('utf-8')
 

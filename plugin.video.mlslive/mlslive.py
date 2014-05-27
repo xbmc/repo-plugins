@@ -230,16 +230,18 @@ class MLSLive:
         @return a string containing the local game date and time.
         """
 
-        # We know the GMT offset is 0, so just get rid of the trailing offset
-        time_parts = game_date_time.split('+')
-        game_t = time.strptime(time_parts[0], "%Y%m%dT%H%M%S")
+        game_t = time.strptime(game_date_time[:15], "%Y%m%dT%H%M%S")
         game_dt = datetime.datetime.fromtimestamp(time.mktime(game_t))
 
         # get the different between now and utc
         td = datetime.datetime.utcnow() - datetime.datetime.now()
 
+        # get the offset the game time is listed in
+        game_offset = datetime.timedelta(hours = int(game_date_time[16:18]),
+                                         minutes = int(game_date_time[18:20]))
+
         # subtract that difference from the game time (to put it into local gime)
-        game_dt = game_dt - td
+        game_dt = game_dt - td - game_offset
 
         # return a nice string
         return game_dt.strftime("%m/%d %H:%M")
@@ -295,7 +297,7 @@ class MLSLive:
         else:
             game_str += ' (' + self.getGameDateTimeStr(game['gameDateTime']) + ')'
 
-        return game_str
+        return game_str.encode('utf-8').strip()
 
 
     def getGameXML(self, game_id):

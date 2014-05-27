@@ -1,3 +1,8 @@
+[B]Version 1.0.10[/B]
+
+- fix game start times
+- fix game encoding glitch that prevents certain nations from displaying properly in the list of games
+
 [B]Version 1.0.9[/B]
 
 - don't preload live or upcoming match URIs (should be faster)

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<strings>
+    <!-- Paramètres -->
+    <string id="30001">Authentification</string>
+    <string id="30002">Utiliser un compte noco</string>
+    <string id="30003">Nom d'utilisateur</string>
+    <string id="30004">Mot de passe</string>
+    <string id="30005">Voir les extraits des émissions</string>
+    <string id="30006">Apparence</string>
+    <string id="30007">Classement</string>
+    <string id="30008">Afficher toutes les émissions</string>
+    <string id="30009">Nombre d'émissions à afficher</string>
+    <string id="30010">Qualité vidéo</string>
+    <string id="30011">Afficher les émissions déjà vues</string>
+    <string id="30012">Nombre d'émissions dans les récentes</string>
+    <string id="30013">Rafraichir automatiquement les dossiers</string>
+    <string id="30024">Afficher les autopromos</string>
+    <string id="30025">Afficher les annonces</string>
+    <string id="30026">Cacher les videos interdites Ã  partir de</string>
+</strings>

@@ -9,6 +9,7 @@
     <!-- Affichage -->
     <category label="30006">
         <setting id="show_n" subsetting="true" type="slider" label="30009" default="100" range="10,10,1000" option="int"/>
+        <setting id="show_last" subsetting="true" type="slider" label="30012" default="30" range="10,10,100" option="int"/>
         <!-- <setting id="showseen" type="bool" label="30011" default="true"/> -->
         <setting id="quality" type="labelenum" label="30010" values="LQ|HQ|TV|HD_720|HD_1080" default="HD_720"/>
     </category>

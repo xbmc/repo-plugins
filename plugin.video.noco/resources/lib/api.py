@@ -74,6 +74,23 @@ class nocoApi():
             if not any(d['theme_key'] == element['theme_key'] for d in data):
                 data.append({'theme_key': element['theme_key'], 'theme_name': element['theme_name'], 'icon': element['icon_1024x576']})
         return data
+    def search(self, partner, query, token):
+        data = []
+        request = {'access_token': token, 'partner_key': partner, 'query': query}
+        json_data = json.loads(requests.get(mainURL+'search/', params=request).text)
+        for element in json_data:
+            if element['type'] == 'show':
+                request = {'access_token': token, 'partner_key': partner, 'id_show': str(element['id'])}
+                data.append(json.loads(requests.get(mainURL+'/shows/by_id/'+str(element['id']), params=request).text))
+        return data
+    def get_last(self, partner, token, num_video):
+        request = {'access_token': token, 'partner_key': partner, 'elements_per_page': num_video}
+        data = json.loads(requests.get(mainURL+'shows/', params=request).text)
+        return data
+    def get_popular(self, partner, token, num_video):
+        request = {'access_token': token, 'partner_key': partner, 'elements_per_page': num_video}
+        data = json.loads(requests.get(mainURL+'shows/most_popular', params=request).text)
+        return data
     def get_families(self, partner, theme, token):
         request = {'access_token': token, 'partner_key': partner, 'theme_key': theme}
         data = json.loads(requests.get(mainURL+'families', params=request).text)

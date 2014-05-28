@@ -17,4 +17,15 @@
     <string id="30024">Afficher les autopromos</string>
     <string id="30025">Afficher les annonces</string>
     <string id="30026">Cacher les videos interdites Ã  partir de</string>
+
+    <!-- Messages -->
+    <string id="30050">Vous DEVEZ fournir un utilisateur et un mot de passe !</string>
+
+    <!-- Categories names -->
+    <string id="30060">Dernières vidéos</string>
+    <string id="30061">Thèmes</string>
+    <string id="30062">Les plus populaires</string>
+    <string id="30063">Recherche</string>
+    <string id="30064">Entrez votre recherche</string>
+    
 </strings>

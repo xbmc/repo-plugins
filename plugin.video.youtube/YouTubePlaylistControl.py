@@ -83,7 +83,7 @@ class YouTubePlaylistControl():
         playlist = self.xbmc.PlayList(self.xbmc.PLAYLIST_VIDEO)
         playlist.clear()
 
-        video_url = "%s?path=/root&action=play_video&videoid=%s"
+        video_url = "%s?path=/root/video&action=play_video&videoid=%s"
         # queue all entries
         for entry in result:
             video = entry.get

@@ -139,10 +139,14 @@ class YouTubeSubtitleControl():
         w = self.storage.openFile(path, "w")
         try:
             w.write(result.encode("utf-8")) # WTF, didn't have to do this before, did i?
-        except:
-            w.write(result)
-            self.common.log(u"NOT utf-8 WRITE!!!: " + path + " - " + repr(result))
-            time.sleep(20)
+        except Exception as e:
+            self.common.log("Exception: " + repr(e))
+            try:
+                w.write(result)
+                self.common.log(u"NOT utf-8 WRITE!!!: " + path + " - " + repr(result))
+            except Exception as de:
+                self.common.log("Exception2: " + repr(de))
+            time.sleep(5)
 
         w.close()
 

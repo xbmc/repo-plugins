@@ -167,7 +167,7 @@ class YouTubeNavigation():
         results = []
         if (get("feed") == "search" or get("scraper") == "search_disco"):
             if not get("search"):
-                query = self.common.getUserInput(self.language(30006), '')
+                query = self.common.getUserInput(self.language(30006), '').strip()
                 if not query:
                     return False
                 params["search"] = query
@@ -442,6 +442,7 @@ class YouTubeNavigation():
 
         listitem.setProperty("Video", "true")
         listitem.setProperty("IsPlayable", "true")
+        listitem.addStreamInfo('video', {'duration': item('Duration')})
         listitem.setInfo(type='Video', infoLabels=item_params)
         self.xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=listitem, isFolder=False, totalItems=listSize + 1)
         self.common.log("Done", 5)

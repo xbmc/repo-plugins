@@ -30,9 +30,9 @@ except ImportError:
     import xbmcvfsdummy as xbmcvfs
 
 # plugin constants
-version = "4.4.7"
+version = "4.4.8"
 plugin = "YouTube-" + version
-author = "TheCollective, Skipmode A1"
+author = "TheCollective"
 url = "www.xbmc.com"
 
 # xbmc hooks

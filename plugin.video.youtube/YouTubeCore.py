@@ -139,7 +139,7 @@ class YouTubeCore():
     def del_playlist(self, params={}):
         self.common.log("")
         get = params.get
-        url = u"http://gdata.youtube.com/feeds/api/users/default/playlists/{0}".format(get("playlist"))
+        url = "http://gdata.youtube.com/feeds/api/users/default/playlists/%s" % (get("playlist"))
         result = self._fetchPage({"link": url, "api": "true", "login": "true", "auth": "true", "method": "DELETE"})
         return (result["content"], result["status"])
 
@@ -180,9 +180,10 @@ class YouTubeCore():
         folders = []
         for node in entries:
             folder = {}
-
-            if len(self.common.parseDOM(node, "yt:deprecated")):
+            print repr(node)
+            if 'yt:deprecated' in node:
                 continue
+
             title = self.common.parseDOM(node, "atom:category", ret="label")[0]
 
             if title:
@@ -220,7 +221,7 @@ class YouTubeCore():
             if title.find(": ") > 0:
                 title = title[title.find(": ") + 2:]
                 title = self.common.replaceHTMLCodes(title)
-
+                
             folder['Title'] = title
             for tmp in self.common.parseDOM(node, "published"):
                 folder['published'] = tmp
@@ -397,13 +398,12 @@ class YouTubeCore():
             return ret_obj
 
         if get("url_data"):
-            urldata = get("url_data")
-            url_data = {}
+            url_data = get("url_data")
+            url_data_encoded = {}
+            for k, v in url_data.iteritems():
+                url_data_encoded[k] = unicode(v).encode('utf-8')
 
-            for key in urldata:
-                url_data[key.encode('UTF-8')] = urldata[key].encode('UTF-8')
-
-            request = urllib2.Request(link, urllib.urlencode(url_data))
+            request = urllib2.Request(link, urllib.urlencode(url_data_encoded))
             request.add_header('Content-Type', 'application/x-www-form-urlencoded')
         elif get("request", "false") == "false":
             if get("proxy"):
@@ -462,7 +462,6 @@ class YouTubeCore():
             if cookie:
                 self.common.log("Setting cookie: " + cookie)
                 request.add_header('Cookie', cookie)
-
             con = urllib2.urlopen(request)
 
             inputdata = con.read()
@@ -544,6 +543,25 @@ class YouTubeCore():
         if len(error) == 0:
             self.common.log("4")
             error = self.common.parseDOM(ret['content'], "div", attrs={"id": "watch7-player-age-gate-content"})
+
+        if len(error) == 0:
+            self.common.log("5")
+            if len(self.common.parseDOM(ret['content'], "input", attrs={"id": "send-code-button"})):
+                error = [self.language(30630)]
+
+        if len(error) == 0:
+            self.common.log("6")
+            if len(self.common.parseDOM(ret['content'], "h1", attrs={"id": "login-challenge-heading"})):
+                error = [self.language(30630)]
+
+        if len(error) == 0:
+            self.common.log("7")
+            if len(self.common.parseDOM(ret['content'], "h2", attrs={"class": "smsauth-interstitial-heading"})):
+                error = [self.language(30630)]
+
+        if len(error) == 0:
+            self.common.log("8")
+            error = self.common.parseDOM(ret['content'], "span", attrs={"class": "error-msg"})
 
         if len(error) > 0:
             self.common.log("Found error: " + repr(error))
@@ -761,7 +779,6 @@ class YouTubeCore():
         result = 1
 
         for tmp in self.common.parseDOM(node, "yt:duration", ret="seconds"):
-            tmp = int(tmp) / 60
             if tmp:
                 result = tmp
 

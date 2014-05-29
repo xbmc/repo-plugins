@@ -220,4 +220,5 @@
     <string id="30627">Please provide 2-factor authentication PIN</string>
     <string id="30628">Please provide your password</string>
     <string id="30629">SSL protocol not supported.</string>
+    <string id="30630">Please re-login in your browser and retry</string>
 </strings>

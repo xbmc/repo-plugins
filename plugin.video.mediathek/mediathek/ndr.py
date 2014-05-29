@@ -30,42 +30,18 @@ class NDRMediathek(Mediathek):
   
   def __init__(self, simpleXbmcGui):
     self.gui = simpleXbmcGui;
-    
-    if(self.gui.preferedStreamTyp == 0): #http
-      self.baseType = "http";
-    elif (self.gui.preferedStreamTyp == 1):  #rtmp
-      self.baseType = "rtmp"
-    elif (self.gui.preferedStreamTyp == 2): #mms
-      self.baseType ="mms";
-#    elif (self.gui.preferedStreamTyp == 3): #mov
-#      self.baseType ="mov";
-    else:
-      self.baseType ="rtmp";
-
-    self.pageSize = "30";
+   
      
     self.rootLink = "http://www.ndr.de"
-    self.menuLink = self.rootLink+"/mediathek/mediathek100-mediathek_medium-tv_searchtype-"
         
     self.searchLink = self.rootLink+"/mediathek/mediatheksuche101.html?pagenumber=1&search_video=true&"
-    
-    # Ignoriere optional pfadelement wie "flashmedia/streams" in der URL
-    self.regex_extractVideoLink = re.compile("rtmpt://ndr.fcod.llnwd.net/a3715/d1/.*/?ndr/(.*\\.)(hi.mp4|lo.flv)");
-    
-    
-    #self.rtmpBaseLink = "rtmpt://ndr.fcod.llnwd.net/a3715/d1/flashmedia/streams/ndr/";
-    self.rtmpBaseLink = "rtmp://cp160844.edgefcs.net/ondemand/ndr/";
-    #self.mmsBaseLink = "mms://ndr.wmod.llnwd.net/a3715/d1/msmedia/";
-    #self.mmsBaseLink = "mms://a874.v1608102.c160810.g.vm.akamaistream.net/7/874/160810/v0001/wm.origin.ndr.gl-systemhaus.de/msmedia/";
-    self.httpBaseLink = "http://media.ndr.de/progressive/";
     
     
     #Hauptmenue
     tmp_menu = []
-    extractBroadcasts = re.compile("<a href=\"/mediathek/mediatheksuche103_broadcast-(.*?).html\">(.*?)</a>");
-    htmlPage = self.loadPage("http://www.ndr.de/mediathek/dropdown101-extapponly.html")
+    extractBroadcasts = re.compile("<a href=\"/mediathek/mediatheksuche105_broadcast-(.*?).html\" class=\"link_arrow\">(.*?)</a>");
+    htmlPage = self.loadPage("http://www.ndr.de/mediathek/sendungen_a-z/index.html")
     
-    displayObjects = [];
     x = 0
     for menuNode in extractBroadcasts.finditer(htmlPage):
         menuId = menuNode.group(1)
@@ -77,7 +53,7 @@ class NDRMediathek(Mediathek):
     self.menuTree = [
       TreeNode("0","Sendungen von A-Z","",False,tmp_menu),
       TreeNode("1","Sendung verpasst?","sendungverpasst",True),
-      TreeNode("2","Live","livestream",True),
+      #TreeNode("2","Live","livestream",True),#Livestream ruckelt zu stark :-(
       ];
     
   def buildPageMenuSendungVerpasst(self,action):
@@ -160,29 +136,25 @@ class NDRMediathek(Mediathek):
         #Hamburg
         nodeCount = nodeCount+1
         links = {};
-        links[0] = SimpleLink("rtmpt://cp160545.live.edgefcs.net/live/ndr_fs_hh_hi_flv@19433", 0);
-        links[1] = SimpleLink("rtmpt://cp160545.live.edgefcs.net/live/ndr_fs_hh_hq_flv@19434", 0);
+        links[0] = SimpleLink("http://ndr_fs-lh.akamaihd.net/i/ndrfs_hh@119223/master.m3u8", 0);
         self.gui.buildVideoLink(DisplayObject("Hamburg","","","",links,True),self,nodeCount);
         
         #Mecklenburg-Vorpommern
         nodeCount = nodeCount+1
         links = {};
-        links[0] = SimpleLink("rtmpt://cp160544.live.edgefcs.net/live/ndr_fs_mv_hi_flv@19430", 0);
-        links[1] = SimpleLink("rtmpt://cp160544.live.edgefcs.net/live/ndr_fs_mv_hq_flv@19431", 0);
+        links[0] = SimpleLink("http://ndr_fs-lh.akamaihd.net/i/ndrfs_mv@119226/master.m3u8", 0);
         self.gui.buildVideoLink(DisplayObject("Mecklenburg-Vorpommern","","","",links,True),self,nodeCount);
         
         #Niedersachsen
         nodeCount = nodeCount+1
         links = {};
-        links[0] = SimpleLink("rtmpt://cp160542.live.edgefcs.net/live/ndr_fs_nds_hi_flv@19435", 0);
-        links[1] = SimpleLink("rtmpt://cp160542.live.edgefcs.net/live/ndr_fs_nds_hq_flv@19436", 0);
+        links[0] = SimpleLink("http://ndr_fs-lh.akamaihd.net/i/ndrfs_nds@119224/master.m3u8", 0);
         self.gui.buildVideoLink(DisplayObject("Niedersachsen","","","",links,True),self,nodeCount);
         
         #Schleswig-Holstein
         nodeCount = nodeCount+1
         links = {};
-        links[0] = SimpleLink("rtmpt://cp160543.live.edgefcs.net/live/ndr_fs_sh_hi_flv@19425", 0);
-        links[1] = SimpleLink("rtmpt://cp160543.live.edgefcs.net/live/ndr_fs_sh_hq_flv@19426", 0);
+        links[0] = SimpleLink("http://ndr_fs-lh.akamaihd.net/i/ndrfs_sh@119225/master.m3u8", 0);
         self.gui.buildVideoLink(DisplayObject("Schleswig-Holstein","","","",links,True),self,nodeCount);
 
   def buildPageMenuVideoList(self, link, initCount):
@@ -190,21 +162,22 @@ class NDRMediathek(Mediathek):
 
     htmlPage = self.loadPage(link);
 
-    regex_extractVideoItems = re.compile("<div class=\"m_teaser\">(.*?)(</p>\n</div>\n</div>|\n</div>\n</div>\n</li>)",re.DOTALL);
-    regex_extractVideoItemHref = re.compile("<a href=\".*?/([^/]*?)\.html\" title=\".*?\" .*?>");
-    regex_extractVideoItemDate = re.compile("<div class=\"subline\">.*?(\\d{2}\.\\d{2}\.\\d{4} \\d{2}:\\d{2})</div>");
+    regex_extractVideoItems = re.compile("<div class=\"teaserpadding\">(.*?)(</p>\n</div>\n</div>|\n</div>\n</div>\n</li>)",re.DOTALL);
+    regex_extractVideoItemHref = re.compile("<a href=\"(.*?/[^/]*?\.html)\" title=\".*?\" .*?>");
+    regex_extractVideoItemDate = re.compile("<div class=\"subline\" style=\"cursor: pointer;\">.*?(\\d{2}\.\\d{2}\.\\d{4} \\d{2}:\\d{2})</div>");
 
     videoItems = regex_extractVideoItems.findall(htmlPage)
     nodeCount = initCount + len(videoItems)
 
     for videoItem in videoItems:
-        videoID = regex_extractVideoItemHref.search(videoItem[0]).group(1)
+        videoLink = regex_extractVideoItemHref.search(videoItem[0]).group(1)
         try:
             dateString = regex_extractVideoItemDate.search(videoItem[0]).group(1)
             dateTime = time.strptime(dateString,"%d.%m.%Y %H:%M");
         except:
             dateTime = None;
-        self.extractVideoInformation(videoID,dateTime,nodeCount)
+        self.extractVideoInformation(videoLink,dateTime,nodeCount)
+
 
     #Pagination (weiter)
     regex_extractNextPage = re.compile("<a href=\"(.*?)\" class=\"button_next\"  title=\"(.*?)\".*?>")
@@ -227,71 +200,60 @@ class NDRMediathek(Mediathek):
     searchText = searchText.encode("UTF-8")
     searchText = urllib.urlencode({"query" : searchText})
     self.buildPageMenu(self.searchLink+searchText,0);   
-        
-  def readText(self,node,textNode):
-    try:
-      node = node.getElementsByTagName(textNode)[0].firstChild;
-      return unicode(node.data);
-    except:
-      return "";
-  
-  def loadConfigXml(self, link):
-    self.gui.log("load:"+link)
-    xmlPage = self.loadPage(link);
-    xmlPage = xmlPage.replace(" & "," &amp; ")
-    
-    try:
-        xmlDom = minidom.parseString(xmlPage);
-    except:
-        xmlDom = False
-    return xmlDom;
-  
-  def loadVideoLinks(self, videoNode):
-    videoSources = videoNode.getElementsByTagName("sources")[0]
-    videoSource = self.readText(videoSources, "source")
-        
-    videoInfo = self.regex_extractVideoLink.match(videoSource).group(1)
-    
-    link = {}
-    if self.baseType == "http":
-        link[0] = self.httpBaseLink+videoInfo+"lo.mp4";
-        link[1] = self.httpBaseLink+videoInfo+"hi.mp4";
-        link[2] = self.httpBaseLink+videoInfo+"hq.mp4";
-    #elif self.baseType == "mms":
-    #    link[0] = self.mmsBaseLink+videoInfo+"wm.lo.wmv";
-    #    link[1] = self.mmsBaseLink+videoInfo+"wm.hi.wmv";
-    #    link[2] = self.mmsBaseLink+videoInfo+"wm.hq.wmv";
-    else:
-        link[0] = self.rtmpBaseLink+videoInfo+"lo.mp4";
-        link[1] = self.rtmpBaseLink+videoInfo+"hi.mp4";
-        link[2] = self.rtmpBaseLink+videoInfo+"hq.mp4"; 
-    
-    links = {};
-    links[0] = SimpleLink(link[0], 0);
-    links[1] = SimpleLink(link[1], 0);
-    links[2] = SimpleLink(link[2], 0);
-    
-    return links;
-    
-  def extractVideoInformation(self, videoId, pubDate, nodeCount):
-    videoPage = self.rootLink+"/fernsehen/sendungen/media/"+videoId+"-avmeta.xml"
-    videoNode = self.loadConfigXml(videoPage)
 
-    if videoNode:
-        videoNode = videoNode.getElementsByTagName("video")[0]
-        title = self.readText(videoNode,"headline");
-        description = self.readText(videoNode,"teaser");
-        duration = self.readText(videoNode,"duration")[:2];
-        
-        imageNode = videoNode.getElementsByTagName("images")[0].getElementsByTagName("image")
-        if len(imageNode):
-            imageNode = imageNode[0]
-            imageNode = imageNode.getElementsByTagName("urls")[0]
-            picture = self.readText(imageNode, "url")
-        else:
-            picture = None
     
-        links = self.loadVideoLinks(videoNode)
+  def extractVideoInformation(self, videoInfo, pubDate, nodeCount):
+    #Basis-Infos extrahieren
+    _regex_videoInfo = re.compile("<a href=\"(.*?)\".*?>.*?<img.*?src=\"(.*?)\".*?/>.*?<span class=\"runtime\" title=\"Spieldauer\">(.*?)</span>.*?<h4><a href=\".*?\".*?>(.*?)</a>",re.DOTALL)
+    videoInfoRE = _regex_videoInfo.search(videoInfo)
+    
+    if videoInfoRE is not None:
+        videoLink = self.rootLink+videoInfoRE.group(1);
+        title = videoInfoRE.group(4).decode('utf-8');
+        duration = videoInfoRE.group(3);
+        picture = self.rootLink+videoInfoRE.group(2);
+        description = ""
+        
+        #Bei der Suche ist bei den links ein http://www.ndr.de vorangestellt
+        if videoLink[0:18] == "http://www.ndr.deh":
+            videoLink = videoLink[17:]
+        
+        #Titel Bereinigen bei Suchergebnissen
+        title = title.replace('<span class="result">','').replace('</span>','')
+        
+        videoPage = self.loadPage(videoLink);
+        
+        #Bei "Sendung verpasst" wird keine (Kurz)Beschreibung ausgegeben, deswegen wird sie von der Detailseite geladen
+        _regex_videoInfo2 = re.compile("<div class=\"mplayer_textcontent\">.*?<p>(.*?)</p>",re.DOTALL)
+        videoInfoRE2 = _regex_videoInfo2.search(videoPage)
+        
+        if videoInfoRE2 is not None:
+            description = videoInfoRE2.group(1).decode('utf-8');
+    
+        #Video Link extrahieren
+        _regex_extractVideoLink = re.compile("{src:'(.*?)', type:\"video/mp4\"},");
+    
 
-        self.gui.buildVideoLink(DisplayObject(title,"",picture,description,links,True,pubDate,duration),self,nodeCount);
-   
+  def extractVideoInformation(self, videoLink, pubDate, nodeCount):
+    
+    regexFindVideoLink = re.compile("http://.*(hi.mp4|lo.flv)");
+    regexFindImageLink = re.compile("/.*v-ardgalerie.jpg");
+    regexFindMediaData = re.compile("<div class=\"padding group\">\n<div class=\"textinfo\">\n<h2>(.*?)</h2>\n<div class=\"subline\">.*?</div>\n<p>(.*?)</p>",re.DOTALL);
+    videoLink = self.rootLink+videoLink
+    videoPage = self.loadPage(videoLink);
+    
+    videoLink = {}
+    videoLink[0] = SimpleLink(regexFindVideoLink.search(videoPage).group(0),0)
+
+    try:
+      pictureLink = self.rootLink+regexFindImageLink.search(videoPage).group(0)
+    except:
+      pictureLink = None
+    searchResult = regexFindMediaData.search(videoPage);
+    title = searchResult.group(1).decode('utf-8')
+    description = searchResult.group(2).decode('utf-8')
+    
+
+    self.gui.buildVideoLink(DisplayObject(title,"",pictureLink,description,videoLink,True,pubDate,0),self,nodeCount);
+    
+

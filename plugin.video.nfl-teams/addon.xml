@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.nfl-teams" version="1.0.1" name="NFL Teams" provider-name="Tenzer">
+<addon id="plugin.video.nfl-teams" version="1.1.2" name="NFL Teams" provider-name="Tenzer">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="xbmc.addon" version="12.0.0"/>
-        <import addon="xbmc.gui" version="4.0.0"/>
-        <import addon="script.module.beautifulsoup" version="3.2.0"/>
-        <import addon="script.module.simplejson" version="2.0.10"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="addon.py">
         <provides>video</provides>

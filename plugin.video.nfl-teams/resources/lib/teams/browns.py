@@ -5,6 +5,7 @@ class Team(resources.lib.nflcs.NFLCS):
     _short = "browns"
     _cdaweb_url = "http://www.clevelandbrowns.com/cda-web/"
     _categories = [
+        "Video - 2 Minute Drill",
         "Video - Draft",
         "Video - Features",
         "Video - Game Highlights",
@@ -13,7 +14,6 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - NFL Network",
         "Video - Off the Field",
         "Video - Press Conferences",
-        "Video - Training Camp",
     ]
 
     def __init__(self, parameters):

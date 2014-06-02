@@ -13,12 +13,15 @@ class Team(resources.lib.nflcs.NFLCS):
         "Friday Facebook Mailbag",
         "Gameday",
         "HCC",
-        "Inside the Game",
         "NFL Network/NFL Films",
+        "On The Road: Driven By Hyundai",
         "Press Conferences",
         "Season Highlights",
         "Special Segments",
         "Texans Huddle",
+        "Texans 'On the Clock'",
+        "Texans TV",
+        "TORO",
     ]
 
     def __init__(self, parameters):

@@ -11,7 +11,6 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - Game Highlights",
         "Video - Game Week",
         "Video - Gameday",
-        "Video - Inside The Branch",
         "Video - NFL Draft",
         "Video - NFL Network",
         "Video - Offseason",

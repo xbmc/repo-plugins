@@ -5,7 +5,6 @@ class Team(resources.lib.nflcs.NFLCS):
     _short = "chiefs"
     _cdaweb_url = "http://www.kcchiefs.com/cda-web/"
     _categories = [
-        "Video - ArrowVision",
         "Video - Cheerleaders",
         "Video - Chiefs Kingdom",
         "Video - Chiefs Live",
@@ -17,7 +16,6 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - Hy-Vee Chiefs Insider",
         "Video - Press Conferences",
         "Video - Red and Gold",
-        "Video - Training Camp",
     ]
 
     def __init__(self, parameters):

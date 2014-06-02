@@ -6,13 +6,12 @@ class Team(resources.lib.nflcs.NFLCS):
     _cdaweb_url = "http://www.buccaneers.com/cda-web/"
     _categories = [
         "@1Buc",
-        "Behind the Bench",
         "Buccaneers Insider",
+        "Bucs Rewind",
         "Cheerleaders",
         "Community",
         "Draft",
         "Events",
-        "Game Bites",
         "GameDay",
         "Gameday Preview",
         "Open Locker Room",

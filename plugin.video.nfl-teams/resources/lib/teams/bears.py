@@ -7,18 +7,19 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Bear Down of the Week",
         "Bear Trax",
-        "Draft",
+        "Bears Buzz",
+        "Draft Central 2014",
         "Features",
-        "Final Horn",
         "Game Preview",
-        "Healthy with the Bears",
         "Highlights",
+        "Inside The Bears",
         "Keys to the Game",
         "NFL Network",
         "Offseason",
         "Press Conferences",
         "Sounds of the Game",
-        "Tradition",
+        "Thayer's Playbook",
+        "Training Camp",
     ]
 
     def __init__(self, parameters):

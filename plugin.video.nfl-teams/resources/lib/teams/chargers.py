@@ -11,7 +11,6 @@ class Team(resources.lib.nflcs.NFLCS):
         "Features",
         "Game Highlights",
         "Game Time",
-        "Gameday Show",
         "NFL Network",
         "USA Football",
         "Xs and Os",

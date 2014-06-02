@@ -16,7 +16,6 @@ class Team(resources.lib.nflcs.NFLCS):
         "NFL Network",
         "Press Conference",
         "Prospect Primer",
-        "Sights & Sounds",
         "Tailgate Tour",
         "The McCarren Report",
         "Training Camp",

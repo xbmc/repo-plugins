@@ -10,8 +10,10 @@ class Team(resources.lib.nflcs.NFLCS):
         "Community",
         "Events",
         "Locker Room",
+        "Mic'd Up",
         "NFL Network",
         "Press Conferences",
+        "Pandora Unforgettable Moments",
     ]
 
     def __init__(self, parameters):

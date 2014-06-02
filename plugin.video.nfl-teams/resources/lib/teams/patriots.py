@@ -12,12 +12,11 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - Draft",
         "Video - Interviews",
         "Video - NFL",
-        "Video - PFW TV",
         "Video - Patriots This Week",
         "Video - Patriots Today",
         "Video - Patriots Today: Locker Room Uncut",
+        "Video - PFW TV",
         "Video - Press Conference",
-        "Video - Sights and Sounds",
         "Video - Super Bowl",
         "Video - Totally Patriots",
     ]

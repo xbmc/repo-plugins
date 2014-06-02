@@ -9,6 +9,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Archive",
         "Coach's View",
         "Game Highlights",
+        "Herman One-on-One",
         "Media Sessions",
         "Monday Presser",
         "Postgame Video",

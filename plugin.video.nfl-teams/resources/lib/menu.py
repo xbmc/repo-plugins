@@ -1,5 +1,7 @@
 import os
 import sys
+from datetime import datetime
+import time
 import xbmcaddon
 import xbmcgui
 import xbmcplugin
@@ -23,7 +25,7 @@ class Menu(object):
         elif sort_method == "date":
             xbmcplugin.addSortMethod(self._handle, xbmcplugin.SORT_METHOD_DATE)
 
-    def add_item(self, url_params, name, folder=False, thumbnail=None, date=None, fanart=None):
+    def add_item(self, url_params, name, folder=False, thumbnail=None, fanart=None, raw_metadata={}):
         params = ["?"]
         for key, value in url_params.iteritems():
             params.append("%s=%s&" % (str(key), str(value)))
@@ -42,26 +44,31 @@ class Menu(object):
             item.setThumbnailImage(thumbnail)
         if fanart:
             item.setProperty("fanart_image", fanart)
-        if date:
-            item.setInfo("video", {"date": date, "title": name})
-        else:
-            item.setInfo("video", {"title": name})
+
+        info = {"title": name}
+
+        if raw_metadata:
+            info["plot"] = raw_metadata["description"]
+            date = self.parse_video_date(raw_metadata["date"])
+            if date:
+                info["date"] = date.strftime("%d.%m.%Y")
+                info["plot"] = "Added on {0}.\n{1}".format(date.strftime("%c"), info["plot"])
+
+        item.setInfo("video", info)
 
         if folder:
             xbmcplugin.addDirectoryItem(self._handle, url, item, isFolder=folder)
         else:
             xbmcplugin.addDirectoryItem(self._handle, url, item)
 
+    def parse_video_date(self, date_string):
+        if date_string:
+            try:
+                return datetime.strptime(date_string, "%m/%d/%Y %H:%M:%S")
+            except TypeError:
+                return datetime.fromtimestamp(time.mktime(time.strptime(date_string, "%m/%d/%Y %H:%M:%S")))
+        else:
+            return None
+
     def end_directory(self):
         xbmcplugin.endOfDirectory(self._handle)
-
-    def dialog_ok(self, header, line1, line2=None, line3=None):
-        dialog = xbmcgui.Dialog()
-        if not line2 and not line3:
-            return dialog.ok(header, line1)
-        elif line2 and not line3:
-            return dialog.ok(header, line1, line2)
-        elif not line2 and line3:
-            return dialog.ok(header, line1, line3)
-        elif line2 and line3:
-            return dialog.ok(header, line1, line2, line3)

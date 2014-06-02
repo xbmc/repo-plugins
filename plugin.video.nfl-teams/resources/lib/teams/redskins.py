@@ -12,6 +12,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "NFL Films",
         "Press Conferences",
         "Redskins News",
+        "Redskins Pride",
         "TV Shows",
     ]
 

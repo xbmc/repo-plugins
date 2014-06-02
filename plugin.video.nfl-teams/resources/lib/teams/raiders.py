@@ -13,6 +13,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Raiderettes",
         "Raiders Report",
         "Silver and Black",
+        "Viva",
     ]
 
     def __init__(self, parameters):

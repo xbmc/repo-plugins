@@ -8,6 +8,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - Celebrities",
         "Video - Cheerleaders",
         "Video - Combine",
+        "Video - Commercials",
         "Video - Community",
         "Video - Features",
         "Video - Fisher Up Front",
@@ -16,7 +17,6 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - Inside the Game",
         "Video - Interviews",
         "Video - Kids Club",
-        "Video - Live Video",
         "Video - NFL Draft",
         "Video - NFL Network",
         "Video - Play 60",
@@ -26,6 +26,7 @@ class Team(resources.lib.nflcs.NFLCS):
         "Video - That's My Dog",
         "Video - Training Camp",
         "Video - Under the Lights",
+        "Video - What 2 Watch",
         "Video - Wired",
         "Video - Youth Football",
     ]

@@ -5,8 +5,9 @@ class Team(resources.lib.nflcs.NFLCS):
     _short = "steelers"
     _cdaweb_url = "http://www.steelers.com/cda-web/"
     _categories = [
-        "1st and 10",
+        "Agree to Disagree",
         "Chalk Talk",
+        "Combine",
         "Community",
         "Draft",
         "Espanol",
@@ -15,10 +16,15 @@ class Team(resources.lib.nflcs.NFLCS):
         "Interviews",
         "Kid Zone",
         "News Conferences",
+        "NFL Network",
         "Off the Field",
+        "Steelers By Position",
+        "Steelers.com LIVE",
+        "Steelers.com Update",
         "SteelersTV",
         "Super Bowl",
         "Training Camp",
+        "What It Is",
         "Youth Football",
     ]
 

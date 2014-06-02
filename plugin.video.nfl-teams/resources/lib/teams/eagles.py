@@ -7,15 +7,12 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Cheerleaders",
         "Draft Central",
-        "Eagles Nightly",
-        "Eagles TV",
-        "EYP",
-        "Features",
+        "Football News",
         "Gameday Coverage",
         "NFL Network",
-        "Off The Field",
         "Press Conferences",
         "Training Camp",
+        "Weekly Cartoon",
     ]
 
     def __init__(self, parameters):

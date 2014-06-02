@@ -5,10 +5,16 @@ class Team(resources.lib.nflcs.NFLCS):
     _short = "saints"
     _cdaweb_url = "http://www.neworleanssaints.com/cda-web/"
     _categories = [
+        "Afternoon Wrap",
+        "Coach Executive",
+        "Game Highlights",
         "Gameday",
+        "Morning Report",
         "NFL Draft",
         "NFL Network",
+        "Player",
         "Plays of the Game",
+        "Practice",
         "Press Conferences",
         "Saintsations",
         "Training Camp",

@@ -1,0 +1,33 @@
+# XBMC Media Center language file
+# Addon Name: NFL Teams
+# Addon id: plugin.video.nfl-teams
+# Addon Provider: Tenzer
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: xbmc@tenzer.dk\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "Addon Summary"
+msgid "NFL teams videos"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "Videos from the NFL teams' homepages. Highlights, interviews, analytics and cheerleaders."
+msgstr ""
+
+msgctxt "#30000"
+msgid "General"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Maximum bitrate in Mbits per second"
+msgstr ""

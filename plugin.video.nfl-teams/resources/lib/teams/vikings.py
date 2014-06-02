@@ -8,7 +8,6 @@ class Team(resources.lib.nflcs.NFLCS):
         "Beyond The Gridiron",
         "Cheerleaders",
         "Community",
-        "Draft 2011", # TODO: Make a way to rename to "Draft", as that's what it's called on Vikings.com
         "Game Day",
         "NFL Network",
         "Press Conferences",

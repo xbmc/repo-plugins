@@ -53,11 +53,20 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
 
     def setHeading(self, heading):
         self._heading = heading
+        self._thumbView = False
         
     def onInit(self):
         #super(DropboxFileBrowser, self).onInit()
-        self.getControl(self.FLIP_IMAGE_HOR).setEnabled(False)
-        self.getControl(self.THUMB_LIST).setVisible(False) #bugy! check/change FileBrowser.xml file!?
+        #Some skins don't have the following items in the FileBrowser!
+        try:
+            self.getControl(self.FLIP_IMAGE_HOR).setEnabled(False)
+        except Exception as e:
+            log_debug("DropboxFileBrowser Exception: %s" %(repr(e)) )
+        try:
+            self.getControl(self.THUMB_LIST).setVisible(False) #bugy! check/change FileBrowser.xml file!?
+            self._thumbView = True
+        except Exception as e:
+            log_debug("DropboxFileBrowser Exception: %s" %(repr(e)) )
         self.getControl(self.HEADING_LABEL).setLabel(self._heading)
         self.showFolders(DROPBOX_SEP)
 
@@ -65,9 +74,11 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
         log_debug('Selecting path: %s'%path)
         self.getControl(self.PATH_LABEL).setLabel(path)
         listView = self.getControl(self.DIRECTORY_LIST)
-        thumbView = self.getControl(self.THUMB_LIST)
+        if self._thumbView:
+            thumbView = self.getControl(self.THUMB_LIST)
         listView.reset()
-        thumbView.reset()
+        if self._thumbView:
+            thumbView.reset()
         self._currentPath = path
         items = self.client.getFolderContents(path)
         listItems = []
@@ -80,7 +91,8 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
                 listItem = xbmcgui.ListItem(label=os.path.basename(string_path(item['path'])), label2=string_path(item['path']), iconImage="DefaultFolder.png", thumbnailImage='DefaultFolder.png')
                 listItems.append(listItem)
         listView.addItems(listItems)
-        thumbView.addItems(listItems) #bugy! check/change FileBrowser.xml file!?
+        if self._thumbView:
+            thumbView.addItems(listItems) #bugy! check/change FileBrowser.xml file!?
         self.setFocusId(self.DIRECTORY_LIST)
         
     def onClick(self, controlId):

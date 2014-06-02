@@ -126,7 +126,7 @@ class DropboxViewer(object):
                     #force the thread to stop
                     self._loader.stop()
                     #Wait for the thread
-                    self._loader.join()
+                    self._loader.join(4) #after 5 secs it will be killed any way by XBMC
                     break
                 xbmc.sleep(100)
  
@@ -377,11 +377,11 @@ class FileLoader(threading.Thread):
             time.sleep(0.100)
         if self._itemsTotal > 0:
             self._progress.update(self._itemsHandled, self._itemsTotal)
+            self._progress.close()
         if self._stop:
             log_debug("FileLoader stopped (as requested) for: %s"%self._module)
         else:
             log_debug("FileLoader finished for: %s"%self._module)
-        self._progress.close()
         del self._progress
         
     def stop(self):

@@ -1,3 +1,7 @@
+[B]0.7.3:[/B]
+- Fixed crash in FileBrowser dialog for browsing in dropbox folders (XBMC skins related)
+- Possible fix for XBMC lock up, when navigating 'back' too fast
+
 [B]0.7.2:[/B]
 - Changed login (Authorization) procedure. The old one failed everytime Dropbox changed thier site.
 

@@ -6,4 +6,4 @@ class ClientInformation():
         return "%012X"%get_mac()
         
     def getVersion(self):
-        return "0.8.6"
+        return "0.9.5"

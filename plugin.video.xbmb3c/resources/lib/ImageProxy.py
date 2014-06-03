@@ -53,27 +53,43 @@ class MyHandler(BaseHTTPRequestHandler):
         params = parse_qs(self.path[2:])
         self.logMsg("Params : " + str(params))
         
-        if(params.get("id") == None):
+        if(params.get("id") == None and params.get("name") == None):
             return
-        
-        itemId = params.get("id")[0]
+            
+        if(params.get("id") != None):
+            itemId = params.get("id")[0]
+        else:
+            itemId = None
+            
         imageType = params.get("type")[0]
         indexParam = params.get("index")
+        maxheight = params.get("maxheight")
             
         if (indexParam != None):
           self.logMsg("Params with Index: " + str(params), level=2)  
           index = indexParam[0]
         else:
           index = None
-
-        if (index == None):  
-          remoteUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Items/" + itemId + "/Images/" + imageType  + "?Format=png"
+          
+        if(params.get("name") != None):
+            name = params.get("name")[0]
         else:
-          remoteUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Items/" + itemId + "/Images/" + imageType +  "/" + index  + "?Format=png"
+            name = None;
+          
+        # TODO: add option to return PNG or JPG
+        if (name != None):
+            remoteUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Persons/" + name + "/Images/" + imageType  + "?Format=original"
+        elif (index == None):  
+            remoteUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Items/" + itemId + "/Images/" + imageType  + "?Format=original"
+        else:
+            remoteUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Items/" + itemId + "/Images/" + imageType +  "/" + index  + "?Format=original"
+          
+        if(maxheight != None):
+            remoteUrl = remoteUrl + "&maxheight=" + maxheight[0]
                   
         self.logMsg("MB3 Host : " + mb3Host, level=2)
         self.logMsg("MB3 Port : " + mb3Port, level=2)
-        self.logMsg("Item ID : " + itemId, level=2)
+        self.logMsg("Item ID : " + str(itemId), level=2)
         self.logMsg("Image Type : " + imageType, level=2)
         self.logMsg("Remote URL : " + remoteUrl, level=2)
         

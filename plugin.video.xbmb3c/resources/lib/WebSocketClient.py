@@ -180,7 +180,11 @@ class WebSocketThread(threading.Thread):
             self.logMsg("WebSocketThread getWebSocketPort urlopen : " + str(e) + " (" + userUrl + ")", level=0)
             return -1
 
-        result = json.loads(jsonData)     
+        try:
+            result = json.loads(jsonData)
+        except Exception, e:
+            self.logMsg("WebSocketThread getWebSocketPort jsonload : " + str(e) + " (" + jsonData + ")", level=2)
+            return -1
 
         wsPort = result.get("WebSocketPortNumber")
         if(wsPort != None):

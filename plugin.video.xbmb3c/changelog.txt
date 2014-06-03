@@ -1,3 +1,18 @@
+0.9.5
+      - Auto server discovery
+      - Cast Images
+      - Actor cross-referencing
+      - Additional artwork and metadata during playback
+      - Rotating backdrops for individual items
+      - Default views settings (must be supported by the skin)
+      - TV Theme music support
+      - Option to disable background services
+      - Proper artwork support at the Series/Season/Episode levels
+      - New method for skin widget support
+      - Proper sorting for Series and BoxSets
+      - Present episode counts and watch/unwatched counts
+      - Removed skin_diffs folder - use XBMB3C skin repo instead
+      
 0.9.0
       - Search capability
       - Better skin integration

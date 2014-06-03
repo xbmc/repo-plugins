@@ -66,11 +66,18 @@ class InfoUpdaterThread(threading.Thread):
             jsonData = requesthandle.read()
             requesthandle.close()        
         except Exception, e:
-            self.logMsg("updateInfo urlopen : " + str(e) + " (" + userUrl + ")", level=0)
+            self.logMsg("urlopen : " + str(e) + " (" + userUrl + ")", level=0)
             return          
         
+        result = []
+        
+        try:
+            result = json.loads(jsonData)
+        except Exception, e:
+            self.logMsg("jsonload : " + str(e) + " (" + jsonData + ")", level=2)
+            return              
+        
         userid = ""
-        result = json.loads(jsonData)
         for user in result:
             if(user.get("Name") == userName):
                 userid = user.get("Id")    

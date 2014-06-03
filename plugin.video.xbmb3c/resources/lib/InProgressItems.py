@@ -73,11 +73,18 @@ class InProgressUpdaterThread(threading.Thread):
             jsonData = requesthandle.read()
             requesthandle.close()              
         except Exception, e:
-            self.logMsg("updateRecent urlopen : " + str(e) + " (" + userUrl + ")", level=0)
+            self.logMsg("urlopen : " + str(e) + " (" + userUrl + ")", level=0)
             return
 
+        result = []
+        
+        try:
+            result = json.loads(jsonData)
+        except Exception, e:
+            self.logMsg("jsonload : " + str(e) + " (" + jsonData + ")", level=2)
+            return              
+        
         userid = ""
-        result = json.loads(jsonData)
         for user in result:
             if(user.get("Name") == userName):
                 userid = user.get("Id")
@@ -173,6 +180,8 @@ class InProgressUpdaterThread(threading.Thread):
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Plot", plot)
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Year", str(year))
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Runtime", str(runtime))
+            
+            WINDOW.setProperty("InProgressMovieMB3.Enabled", "true")
             
             item_count = item_count + 1
         
@@ -300,6 +309,8 @@ class InProgressUpdaterThread(threading.Thread):
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Art(tvshow.banner)", banner)
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Art(tvshow.poster)", poster)
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Plot", plot)
+            
+            WINDOW.setProperty("InProgresstEpisodeMB3.Enabled", "true")
             
             item_count = item_count + 1
             

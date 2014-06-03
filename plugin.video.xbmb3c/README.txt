@@ -1,25 +1,25 @@
-Basic Movie and TV functionality is working now.
+XBMB3C is a full-featured XBMC client for MediaBrowser
 
-To Install:
-1. Download the GIT zip file(look to the right of this), placing it where is can be found by XBMC.
-2. Install using "Install from zip file", which can be found in 
-   Settings -right arrow-> Addons
-or
-   Settings -click-> Addons -> Install from Zip
-   
-3. Browse for the plugin zip file, select and install
-4. Go into the plugin settings and turn auto discover off, specify your MB3 ip and port.
-5. In order for all features to work, you MUST be using Aeon Nox as your skin, and you need
-   to replace the files in:
-        skin.aeon.nox\1080i 
-   with those in: 
-        plugin.video.xbmb3c\skin_diffs\skin.aeon.nox\1080i
-   Make a backup of the originals!
-   
-If all goes well, you will be able to browse your library and play TV and movies. 
+Bringing all of your media together into one place has never been easier! Media Browser unites your movies, music, television and more in one dazzling interface. 
+At home or on the road, pause and resume across all your devices. You are never more than a few taps from what you want to listen to or watch with Media Browser.
 
-NOTE: When first going into your library it will take a long time as it needs to cache all images locally right now.  Only an issue on first entry.
+Get the free, open source Media Browser Server at http://mediabrowser.tv (required as part of your Media Browser install).
 
-* Please check the issues and add as needed. *
+- Enhance your media with the best movie, TV, and artist posters and backdrops the internet has to offer.
+- Share your collection with family and friends and give everyone their own custom view.
+- Responsive developers and community -- got a problem or feature request? Just ask.
+- Ratings-based parental controls to monitor and limit what your children watch.
+- Support for Android, Chromecast, DLNA Devices (like Smart TV's), iOS, XBMC, Roku, Windows Phone, and Windows 7/8/RT.
 
-THANK YOU to HippoJay for the PleXBMC plugin on which this code is based
+Energize your collection with Media Browser and take your media to the next level.
+
+To Install the XBMB3C client
+1. Install XBMC
+2. Download and install the XBMB3C AddOn
+    - Stable version in the XBMC repo: http://addons.xbmc.org/show/plugin.video.xbmb3c/
+    - Beta versions in the XBMB3C repo: http://im85288.no-ip.org/xbmc/addons/xbmb3c-repo/repository.xbmb3c-1.0.0.zip
+    - Alpha versions in the Git: https://github.com/MediaBrowser/MediaBrowser.XBMC
+3. Install a supporting skin from the XBMB3C repo: http://im85288.no-ip.org/xbmc/addons/xbmb3c-repo/repository.xbmb3c-1.0.0.zip
+
+Join us here for support and suggestions:
+http://mediabrowser.tv/community/index.php?/forum/99-xbmb3c/

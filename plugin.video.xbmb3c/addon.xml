@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon  id="plugin.video.xbmb3c" 
         name="XBMB3C" 
-        version="0.9.0" 
+        version="0.9.5" 
         provider-name="xnappo, null_pointer, im85288">
   <requires>
     <import addon="script.module.requests" version="1.1.0" />
@@ -18,11 +18,10 @@
     <platform>all</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://mediabrowser3.com/community/index.php?/topic/2108-xbmb3c-media-browser-addon-for-xbmc/</forum>
+    <forum>http://mediabrowser.tv/community/index.php?/forum/99-xbmb3c/</forum>
     <website>http://mediabrowser3.com/</website>
     <source>https://github.com/xnappo/plugin.video.XBMB3C</source>
     <summary lang="en">Browse and play local video, music and photo media files managed by MediaBrowser3.</summary>
     <description lang="en">Browse and play local video, music and photo media files managed by MediaBrowser3.</description>
-    <disclaimer lang="en">Xperience1080++ is the only fully supported skin.  Skin modifications may be needed for all features to work. Other skin mods provided in skin_mods directory</disclaimer>
   </extension>
 </addon>

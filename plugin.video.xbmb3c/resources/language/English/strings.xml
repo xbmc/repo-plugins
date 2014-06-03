@@ -21,11 +21,11 @@
     <string id="30026">Use JSON instead of SIMPLEJSON (recommended for Pi)</string>
     
     <string id="30030">Port Number:</string>
-    <string id="30036">Number of recent movies to show:</string>    
+    <string id="30036">Number of recent Movies to show:</string>    
     <string id="30037">Number of recent TV episodes to show:</string>    
-    <string id="30035">Number of recent Music Albums show:</string>    
+    <string id="30035">Number of recent Music Albums to show:</string>    
     <string id="30038">Mark watched at start of playback:</string>    
-    <string id="30039">Use Series Art for Episodes</string>
+    <string id="30039">Set Season poster for episodes</string>
 
     <string id="30040">Genre Filter ...</string>
     <string id="30041">Play All from Here</string>
@@ -39,6 +39,7 @@
     <string id="30052">Deleting</string>
     <string id="30053">Waiting for server to delete</string>
     
+    <string id="30059">Server Default</string>
     <string id="30060">Title</string>
     <string id="30061">Year</string>
     <string id="30062">Premiere Date</string>
@@ -84,14 +85,14 @@
     <string id="30098">Sort Order Descending</string>
     <string id="30099">Sort Order Ascending</string>
     
-    <string id="30110">Media Data</string>
+    <string id="30110">Addon</string>
     <string id="30111">Include Stream Info</string>
     <string id="30112">Include People</string>
     <string id="30113">Include Overview</string>
     <string id="30114">On Resume Jump Back Seconds</string>
     <string id="30115">Mark Played When Stopping Above %</string>
     <string id="30116">Add Item and Played Counts</string>
-    <string id="30117">Background Art Refresh Rate (seconds)</string>
+    <string id="30117"> - Background Art Refresh Rate (seconds)</string>
     <string id="30118">Add Resume Percent</string>
     <string id="30119">Add Episode Number</string>
     <string id="30120">Show Load Progress</string>
@@ -113,5 +114,19 @@
     <string id="30136">XBMB3C Service has crashed</string>
     <string id="30137">Please restart XBMC</string>
     <string id="30138">Search</string>
+    
+    <string id="30139">Enable Theme Music (Requires Restart)</string>
+    <string id="30140"> - Loop Theme Music</string>
+    <string id="30141">Enable Background Image (Requires Restart)</string>
+    <string id="30142">Services</string>
+    <string id="30143">Enable Info Loader (Requires Restart)</string>
+    <string id="30144">Enable Menu Loader (Requires Restart)</string>
+    <string id="30145">Enable WebSocket Remote (Requires Restart)</string>   
+    <string id="30146">Enable In Progress Loader (Requires Restart)</string>
+    <string id="30147">Enable Recent Info Loader (Requires Restart)</string>
+    <string id="30148">Enable Random Loader (Requires Restart)</string>
+    <string id="30149">Enable Next Up Loader (Requires Restart)</string>
+    
+    <string id="30150">Skin does not support setting views</string>
 
 </strings>

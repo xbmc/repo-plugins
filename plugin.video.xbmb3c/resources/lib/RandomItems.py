@@ -65,17 +65,27 @@ class RandomInfoUpdaterThread(threading.Thread):
         userName = addonSettings.getSetting('username')     
         
         userUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users?format=json"
+        self.logMsg("userUrl : " + userUrl, level=2)
         
         try:
             requesthandle = urllib.urlopen(userUrl, proxies={})
             jsonData = requesthandle.read()
             requesthandle.close()      
         except Exception, e:
-            self.logMsg("updateRandom urlopen : " + str(e) + " (" + userUrl + ")", level=0)
+            self.logMsg("urlopen : " + str(e) + " (" + userUrl + ")", level=1)
             return           
         
+        self.logMsg("jsonData : " + jsonData, level=2)
+        
+        result = []
+        
+        try:
+            result = json.loads(jsonData)
+        except Exception, e:
+            self.logMsg("jsonload : " + str(e) + " (" + jsonData + ")", level=2)
+            return              
+        
         userid = ""
-        result = json.loads(jsonData)
         for user in result:
             if(user.get("Name") == userName):
                 userid = user.get("Id")    
@@ -160,6 +170,8 @@ class RandomInfoUpdaterThread(threading.Thread):
             WINDOW.setProperty("RandomMovieMB3." + str(item_count) + ".Plot", plot)
             WINDOW.setProperty("RandomMovieMB3." + str(item_count) + ".Year", str(year))
             WINDOW.setProperty("RandomMovieMB3." + str(item_count) + ".Runtime", str(runtime))
+            
+            WINDOW.setProperty("RandomMovieMB3.Enabled", "true")
             
             item_count = item_count + 1
         
@@ -255,6 +267,7 @@ class RandomInfoUpdaterThread(threading.Thread):
             WINDOW.setProperty("RandomEpisodeMB3." + str(item_count) + ".Art(tvshow.poster)", poster)
             WINDOW.setProperty("RandomEpisodeMB3." + str(item_count) + ".Plot", plot)
             
+            WINDOW.setProperty("RandomEpisodeMB3.Enabled", "true")
             
             item_count = item_count + 1
             
@@ -333,6 +346,8 @@ class RandomInfoUpdaterThread(threading.Thread):
             WINDOW.setProperty("RandomAlbumMB3." + str(item_count) + ".Art(banner)", banner)
             WINDOW.setProperty("RandomAlbumMB3." + str(item_count) + ".Art(poster)", thumbnail)
             WINDOW.setProperty("RandomAlbumMB3." + str(item_count) + ".Plot", plot)
+            
+            WINDOW.setProperty("RandomAlbumMB3.Enabled", "true")
             
             item_count = item_count + 1
         

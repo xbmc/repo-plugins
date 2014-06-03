@@ -83,8 +83,15 @@ class RecentInfoUpdaterThread(threading.Thread):
             self.logMsg("updateRecent urlopen : " + str(e) + " (" + userUrl + ")", level=0)
             return
 
+        result = []
+        
+        try:
+            result = json.loads(jsonData)
+        except Exception, e:
+            self.logMsg("jsonload : " + str(e) + " (" + jsonData + ")", level=2)
+            return              
+        
         userid = ""
-        result = json.loads(jsonData)
         for user in result:
             if(user.get("Name") == userName):
                 userid = user.get("Id")    
@@ -170,6 +177,8 @@ class RecentInfoUpdaterThread(threading.Thread):
             WINDOW.setProperty("LatestMovieMB3." + str(item_count) + ".Plot", plot)
             WINDOW.setProperty("LatestMovieMB3." + str(item_count) + ".Year", str(year))
             WINDOW.setProperty("LatestMovieMB3." + str(item_count) + ".Runtime", str(runtime))
+            
+            WINDOW.setProperty("LatestMovieMB3.Enabled", "true")
             
             item_count = item_count + 1
         
@@ -265,6 +274,8 @@ class RecentInfoUpdaterThread(threading.Thread):
             WINDOW.setProperty("LatestEpisodeMB3." + str(item_count) + ".Art(tvshow.poster)", poster)
             WINDOW.setProperty("LatestEpisodeMB3." + str(item_count) + ".Plot", plot)
             
+            WINDOW.setProperty("LatestEpisodeMB3.Enabled", "true")
+            
             item_count = item_count + 1
             
         #Updating Recent MusicList
@@ -343,6 +354,8 @@ class RecentInfoUpdaterThread(threading.Thread):
             WINDOW.setProperty("LatestAlbumMB3." + str(item_count) + ".Art(poster)", thumbnail)
             WINDOW.setProperty("LatestAlbumMB3." + str(item_count) + ".Plot", plot)
             
+            WINDOW.setProperty("LatestAlbumMB3.Enabled", "true")
+            
             item_count = item_count + 1
 
         #Updating Recent Photo
@@ -406,6 +419,8 @@ class RecentInfoUpdaterThread(threading.Thread):
             WINDOW.setProperty("LatestPhotoMB3." + str(item_count) + ".Art(banner)", banner)
             WINDOW.setProperty("LatestPhotoMB3." + str(item_count) + ".Art(poster)", thumbnail)
             WINDOW.setProperty("LatestPhotoMB3." + str(item_count) + ".Plot", plot)
+            
+            WINDOW.setProperty("LatestPhotoMB3.Enabled", "true")
             
             item_count = item_count + 1
             

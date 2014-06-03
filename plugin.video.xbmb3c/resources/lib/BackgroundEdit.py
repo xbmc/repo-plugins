@@ -13,7 +13,7 @@ class BackgroundEdit():
 
     def isBlackListed(self, blackList, bgInfo):
         for blocked in blackList:
-            if(bgInfo["parent"] == blocked["parent"]):
+            if(bgInfo["id"] == blocked["id"]):
                 xbmc.log("Block List Parents Match On : " + str(bgInfo) + " : " + str(blocked))
                 if(blocked["index"] == -1 or bgInfo["index"] == blocked["index"]):
                     xbmc.log("Item Blocked")
@@ -65,15 +65,15 @@ class BackgroundEdit():
 
             action = params.get("action")
             index = int(params.get("index"))
-            parent = params.get("parent")
+            id = params.get("id")
             
             if(action == "remove"):
                 newBlackList = []
                 
                 for blItem in black_list:
-                    if(blItem["parent"] == parent and index == -1):
+                    if(blItem["id"] == id and index == -1):
                         xbmc.log("Removing BL Item : " + str(blItem))
-                    elif(blItem["parent"] == parent and blItem["index"] == index):
+                    elif(blItem["id"] == id and blItem["index"] == index):
                         xbmc.log("Removing BL Item : " + str(blItem))
                     else:
                         newBlackList.append(blItem)
@@ -82,15 +82,15 @@ class BackgroundEdit():
                 
             else:
                 newBlItem = {}
-                newBlItem["parent"] = parent
+                newBlItem["id"] = id
                 newBlItem["index"] = index
                 
                 found = False
                 for blItem in black_list:
-                    if(blItem["parent"] == newBlItem["parent"] and blItem["index"] == newBlItem["index"]):
+                    if(blItem["id"] == newBlItem["id"] and blItem["index"] == newBlItem["index"]):
                         found = True
                         continue
-                    elif(blItem["parent"] == newBlItem["parent"] and blItem["index"] == -1):
+                    elif(blItem["id"] == newBlItem["id"] and blItem["index"] == -1):
                         found = True
                         continue
                         
@@ -98,7 +98,7 @@ class BackgroundEdit():
                 if(newBlItem["index"] == -1):
                     newBlackList = []
                     for blItem in black_list:
-                        if(blItem["parent"] != newBlItem["parent"]):
+                        if(blItem["id"] != newBlItem["id"]):
                             newBlackList.append(blItem)
                     black_list = newBlackList
             
@@ -127,7 +127,7 @@ class BackgroundEdit():
         
             url = bg["url"]
             name = bg["name"]
-            parent = bg["parent"]
+            id = bg["id"]
             index = bg["index"]
             list = None
             
@@ -137,13 +137,13 @@ class BackgroundEdit():
             if(blackListed):
                 if(filterType == "0" or filterType == "2"):
                     list = xbmcgui.ListItem("OFF:" + name, iconImage=url, thumbnailImage=url)
-                    commands.append(("UnBlock this item", "Container.Update(plugin://plugin.video.xbmb3c/?mode=" + str(_MODE_BG_EDIT) + "&block=true&action=remove&parent=" + parent +"&index=" + str(index) + ")", ))
-                    commands.append(("UnBlock parent item", "Container.Update(plugin://plugin.video.xbmb3c/?mode=" + str(_MODE_BG_EDIT) + "&block=true&action=remove&parent=" + parent +"&index=-1)", ))
+                    commands.append(("UnBlock this item", "Container.Update(plugin://plugin.video.xbmb3c/?mode=" + str(_MODE_BG_EDIT) + "&block=true&action=remove&id=" + id +"&index=" + str(index) + ")", ))
+                    commands.append(("UnBlock parent item", "Container.Update(plugin://plugin.video.xbmb3c/?mode=" + str(_MODE_BG_EDIT) + "&block=true&action=remove&id=" + id +"&index=-1)", ))
             else:
                 if(filterType == "0" or filterType == "1"):
                     list = xbmcgui.ListItem("ON:" + name, iconImage=url, thumbnailImage=url)
-                    commands.append(("Block this item", "Container.Update(plugin://plugin.video.xbmb3c/?mode=" + str(_MODE_BG_EDIT) + "&block=true&action=add&parent=" + parent +"&index=" + str(index) + ")", ))
-                    commands.append(("Block parent item", "Container.Update(plugin://plugin.video.xbmb3c/?mode=" + str(_MODE_BG_EDIT) + "&block=true&action=add&parent=" + parent +"&index=-1)", ))
+                    commands.append(("Block this item", "Container.Update(plugin://plugin.video.xbmb3c/?mode=" + str(_MODE_BG_EDIT) + "&block=true&action=add&id=" + id +"&index=" + str(index) + ")", ))
+                    commands.append(("Block parent item", "Container.Update(plugin://plugin.video.xbmb3c/?mode=" + str(_MODE_BG_EDIT) + "&block=true&action=add&id=" + id +"&index=-1)", ))
             
             if(list != None):
             

@@ -1,3 +1,7 @@
+1.0.6 (2014-06-03)
+Added autoplay function
+Minor fixes
+
 1.0.5 (2014-05-28)
 Using only BeautifulSoup, getting rid of regexp
 Using common plugin cache to cache thumbnail url (much better times from the second access)

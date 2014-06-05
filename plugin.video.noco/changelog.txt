@@ -1,2 +1,23 @@
 v1.0.0
  - Initial commit
+
+v1.0.1
+ - Bug corrections
+
+v1.0.2
+ - Added submenu to list by video type
+
+v1.0.3
+ - Added submenu to list all shows in one menu
+
+v1.0.4
+ - Added option to hide already seen videos
+
+v1.0.5
+ - Added submenu to access playlists
+
+v1.0.6
+ - Added search menu
+
+v1.0.7
+ - Added an option to show a random element in shows directories

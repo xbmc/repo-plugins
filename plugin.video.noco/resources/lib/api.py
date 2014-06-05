@@ -26,10 +26,14 @@ from base64 import b64encode
 from urllib import urlencode
 from urllib2 import urlopen, Request, HTTPError, URLError, build_opener
 from urlparse import urlparse,parse_qs
+from random import randint
+from xbmcswift2 import Plugin
 
 mainURL = 'https://api.noco.tv/1.1/'
 client_id = 'xbmc_gormux'
 client_secret = '5a613e170e1613e512e8434dddcdb413'
+
+plugin = Plugin()
 
 class nocoApi():
     def get_token(self, user, password):
@@ -68,20 +72,36 @@ class nocoApi():
         return partners
     def get_themes(self, partner, token):
         data = []
-        request = {'access_token': token, 'partner_key': partner}
+        request = {'access_token': token, 'partner_key': partner, 'elements_per_page': '4000'}
         json_data = json.loads(requests.get(mainURL+'families', params=request).text)
         for element in json_data:
             if not any(d['theme_key'] == element['theme_key'] for d in data):
                 data.append({'theme_key': element['theme_key'], 'theme_name': element['theme_name'], 'icon': element['icon_1024x576']})
         return data
-    def search(self, partner, query, token):
+    def get_types(self, partner, token):
         data = []
-        request = {'access_token': token, 'partner_key': partner, 'query': query}
+        request = {'access_token': token, 'partner_key': partner, 'elements_per_page': '4000'}
+        json_data = json.loads(requests.get(mainURL+'families', params=request).text)
+        for element in json_data:
+            if not any(d['type_key'] == element['type_key'] for d in data):
+                data.append({'type_key': element['type_key'], 'type_name': element['type_name'], 'icon': element['icon_1024x576']})
+        return data
+    def get_all(self, partner, token):
+        data = []
+        request = {'access_token': token, 'partner_key': partner, 'elements_per_page': '4000'}
+        data = json.loads(requests.get(mainURL+'families', params=request).text)
+        return data
+    def search(self, query, token):
+        data = []
+        request = {'access_token': token, 'query': query}
         json_data = json.loads(requests.get(mainURL+'search/', params=request).text)
+        shows = []
         for element in json_data:
             if element['type'] == 'show':
-                request = {'access_token': token, 'partner_key': partner, 'id_show': str(element['id'])}
-                data.append(json.loads(requests.get(mainURL+'/shows/by_id/'+str(element['id']), params=request).text))
+                shows.append(str(element['id']))
+        search = '%2C'.join(shows)
+        request = {'access_token': token, 'id_show': search}
+        data = json.loads(requests.get(mainURL+'shows/by_id/'+search, params=request).text)
         return data
     def get_last(self, partner, token, num_video):
         request = {'access_token': token, 'partner_key': partner, 'elements_per_page': num_video}
@@ -91,18 +111,61 @@ class nocoApi():
         request = {'access_token': token, 'partner_key': partner, 'elements_per_page': num_video}
         data = json.loads(requests.get(mainURL+'shows/most_popular', params=request).text)
         return data
-    def get_families(self, partner, theme, token):
-        request = {'access_token': token, 'partner_key': partner, 'theme_key': theme}
+    def get_fambytype(self, partner, typename, token):
+        request = {'access_token': token, 'partner_key': partner, 'type_key': typename, 'elements_per_page': '4000'}
         data = json.loads(requests.get(mainURL+'families', params=request).text)
         return data
+    def get_families(self, partner, theme, token):
+        request = {'access_token': token, 'partner_key': partner, 'theme_key': theme, 'elements_per_page': '4000'}
+        data = json.loads(requests.get(mainURL+'families', params=request).text)
+        return data
+    def get_playlists(self, token):
+        request = {'access_token': token}
+        playlists = []
+        data = json.loads(requests.get(mainURL+'users/queue_list', params=request).text)
+        for playlist in data:
+            playlists.append(playlist)
+        return playlists
+    def get_videodata(self, token, vid):
+        request = {'access_token': token, 'id_show': vid}
+        data = json.loads(requests.get(mainURL+'shows/by_id/'+vid, params=request).text)
+        return data[0]
     def get_videos(self, partner, family, token, num_video):
         request = {'access_token': token, 'partner_key': partner, 'family_key': family, 'elements_per_page': num_video}
         data = json.loads(requests.get(mainURL+'shows', params=request).text)
-        return data
+        if plugin.get_setting('showseen') == 'true':
+            return data
+        else:
+            d = []
+            for e in data:
+                if e['mark_read'] == None:
+                    d.append(e)
+            return d
+    def get_random(self, partner, family, token, quality):
+        request = {'access_token': token, 'partner_key': partner, 'family_key': family, 'elements_per_page': '4000'}
+        data = json.loads(requests.get(mainURL+'shows', params=request).text)
+        notseen = []
+        for e in data:
+            if e['mark_read'] == None:
+                notseen.append(e)
+        if len(notseen) > 0:
+            r = randint(0, len(notseen))
+            return str(notseen[r]['id_show'])
     def get_video(self, show, token, quality):
-        #data = self.__get_json(url=mainURL+'shows/'+show+'/qualities', items={'id_show': show, 'access_token': token})
-        request = {'access_token': token}
-        data = json.loads(requests.get(mainURL+'shows/'+show+'/video/'+quality+'/fr', params=request).text)
+        show_lang = ''
+        subs = None
+        request = {'access_token': token, 'id_show': show}
+        langs = json.loads(requests.get(mainURL+'shows/'+show+'/languages', params=request).text)
+        for lang in langs:
+            if plugin.get_setting('lang') == lang['audio_lang']:
+                show_lang = lang['audio_lang']
+                if lang['sub_lang'] != None:
+                    subs = lang['sub_lang']
+        if show_lang == '':
+            show_lang = langs[0]['audio_lang']
+            subs = langs[0]['sub_lang']
+        request = {'access_token': token, 'sub_lang': subs}
+        data = json.loads(requests.get(mainURL+'shows/'+show+'/video/'+quality+'/'+show_lang, params=request).text)
         return data['file']
     def __get_json(self, url, items=None):
         if items:

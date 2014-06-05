@@ -37,6 +37,8 @@ def index():
             'icon': partner['icon_1024x576'],
             'path': plugin.url_for('indexMenu', partner=partner['partner_key'])
             } for partner in api.get_partners(token['token'])]
+        partners.append({'label': plugin.get_string('30067'), 'path': plugin.url_for('indexPlaylists')})
+        partners.append({'label': plugin.get_string('30063'), 'path': plugin.url_for('search')})
         return plugin.finish(partners)
 
 
@@ -45,8 +47,12 @@ def indexMenu(partner):
     index = [
         {'label': plugin.get_string('30060'),
         'path': plugin.url_for('indexLast', partner=partner)},
+        {'label': plugin.get_string('30066'),
+        'path': plugin.url_for('indexAll', partner=partner)},
         {'label': plugin.get_string('30061'), 
         'path': plugin.url_for('indexPartner', partner=partner)},
+        {'label': plugin.get_string('30065'), 
+        'path': plugin.url_for('indexTypes', partner=partner)},
         {'label': plugin.get_string('30062'),
         'path': plugin.url_for('indexPopular', partner=partner)},
         ]
@@ -58,7 +64,7 @@ def indexLast(partner):
     videos = []
     num_last = str(plugin.get_setting('show_last'))
     for video in api.get_last(partner, token['token'], num_last):
-        videos.append(getVideoInfos(video, partner, video['family_TT'].encode('utf-8')))
+        videos.append(getVideoInfos(video))
     return plugin.finish(videos)
 
 @plugin.route('/partners/<partner>/popular')
@@ -67,8 +73,19 @@ def indexPopular(partner):
     videos = []
     num_last = str(plugin.get_setting('show_last'))
     for video in api.get_popular(partner, token['token'], num_last):
-        videos.append(getVideoInfos(video, partner, video['family_TT'].encode('utf-8')))
+        videos.append(getVideoInfos(video))
     return plugin.finish(videos)
+
+@plugin.route('/partners/<partner>/all')
+def indexAll(partner):
+    token = getToken()
+    res = []
+    shows = [{
+        'icon': fam['icon_1024x576'],
+        'label': fam['family_TT'],
+        'path': plugin.url_for('indexFamily', partner=partner, theme=fam['theme_key'], family=fam['family_key'])
+        } for fam in api.get_all(partner, token['token'])]
+    return plugin.finish(shows)
 
 @plugin.route('/partners/<partner>/themes')
 def indexPartner(partner):
@@ -81,13 +98,47 @@ def indexPartner(partner):
         } for theme in api.get_themes(partner, token['token'])]
     return plugin.finish(themes)
 
-@plugin.route('/partners/<partner>/search')
-def search(partner):
+@plugin.route('/partners/<partner>/types')
+def indexTypes(partner):
+    token = getToken()
+    res = []
+    alltypes = [{
+        'icon': ty['icon'],
+        'label': ty['type_name'],
+        'path': plugin.url_for('indexByType', partner=partner, typename=ty['type_key'])
+        } for ty in api.get_types(partner, token['token'])]
+    return plugin.finish(alltypes)
+
+@plugin.route('/search')
+def search():
     token = getToken()
     videos = []
     query = plugin.keyboard(heading=plugin.get_string('30064'))
-    for video in api.search(partner, query, token['token']):
-        videos.append(getVideoInfos(video, partner, video['family_TT'].encode('utf-8')))
+    try:
+        for video in api.search(query, token['token']):
+            videos.append(getVideoInfos(video))
+        return plugin.finish(videos)
+    except:
+        error=plugin.get_string('30051').encode('utf-8')
+        plugin.notify(msg=error, delay=5000)
+
+
+@plugin.route('/playlists')
+def indexPlaylists():
+    token = getToken()
+    playlists = [{
+        'label': playlist['playlist_title'],
+        'path': plugin.url_for('indexPlaylist', playlist=playlist['playlist'])
+        } for playlist in api.get_playlists(token['token'])]
+    return plugin.finish(playlists)
+
+@plugin.route('/playlists/<playlist>')
+def indexPlaylist(playlist):
+    token = getToken()
+    videos = []
+    for video in playlist.split(','):
+        v = api.get_videodata(token['token'], video)
+        videos.append(getVideoInfos(v))
     return plugin.finish(videos)
 
 @plugin.route('/partners/<partner>/themes/<theme>')
@@ -100,13 +151,38 @@ def indexThemes(partner, theme):
         } for family in api.get_families(partner, theme, token['token'])]
     return plugin.finish(families)
 
+@plugin.route('/partners/<partner>/types/<typename>')
+def indexByType(partner, typename):
+    token = getToken()
+    families = [{
+        'icon': family['icon_1024x576'],
+        'label': family['family_OT'],
+        'path': plugin.url_for('indexFamType', partner=partner, typename=typename, family=family['family_key'])
+        } for family in api.get_fambytype(partner, typename, token['token'])]
+    return plugin.finish(families)
+
 @plugin.route('/partners/<partner>/themes/<theme>/families/<family>')
 def indexFamily(partner, theme, family):
     token = getToken()
     videos = []
     num_video = str(plugin.get_setting('show_n'))
     for video in api.get_videos(partner, family, token['token'], num_video):
-        videos.append(getVideoInfos(video, partner, family))
+        videos.append(getVideoInfos(video))
+    if plugin.get_setting('random') == "true":
+        rand = { 'label': plugin.get_string('30040'), 'path': plugin.url_for('playVideo', partner=partner, family=family, video='RANDOM'), 'is_playable': True}
+        videos.insert(0, rand)
+    return plugin.finish(videos)
+
+@plugin.route('/partners/<partner>/types/<typename>/families/<family>')
+def indexFamType(partner, typename, family):
+    token = getToken()
+    videos = []
+    num_video = str(plugin.get_setting('show_n'))
+    for video in api.get_videos(partner, family, token['token'], num_video):
+        videos.append(getVideoInfos(video))
+    if plugin.get_setting('random') == "true":
+        rand = { 'label': plugin.get_string('30040'), 'path': plugin.url_for('playVideo', partner=partner, family=family, video='RANDOM'), 'is_playable': True}
+        videos.insert(0, rand)
     return plugin.finish(videos)
 
 @plugin.route('/partners/<partner>/families/<family>/<video>')
@@ -123,9 +199,16 @@ def playVideo(partner, family, video):
         quality = 'HD_720' 
     if quality == "4": 
         quality = 'HD_1080' 
-    plugin.set_resolved_url(api.get_video(video, token['token'], quality))
+    if video == 'RANDOM':
+        video = api.get_random(partner, family, token['token'], quality)
+        if video == None:
+            plugin.notify(msg=plugin.get_string('30052').encode('utf-8'), delay=10000)
+        else:
+            plugin.set_resolved_url(api.get_video(video, token['token'], quality))
+    else: 
+        plugin.set_resolved_url(api.get_video(video, token['token'], quality))
 
-def getVideoInfos(video, partner, family):
+def getVideoInfos(video):
     if video['show_TT'] == None:
         label = video['family_TT'].encode('utf-8')+' - '+str(video['episode_number'])
     else:
@@ -174,7 +257,7 @@ def getVideoInfos(video, partner, family):
         'info': infos,
         'properties': properties,
         'stream_info': stream_infos,
-        'path': plugin.url_for('playVideo', partner=partner, family=family, video=video['id_show']),
+        'path': plugin.url_for('playVideo', partner=video['partner_key'], family=video['family_TT'].encode('utf-8'), video=video['id_show']),
         'is_playable': True
         }
     return v

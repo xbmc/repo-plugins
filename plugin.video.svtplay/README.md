@@ -1,0 +1,29 @@
+# XBMC SVT Play Addon
+
+With this addon you can stream content from SVT Play (svtplay.se).
+The plugin fetches the video URL from the SVT Play website and feeds it to the XBMC video player. HLS (m3u8) is the preferred video format by the plugin.
+
+It requires XBMC 13.0 (Gotham) to function.
+
+## Using the Playlist
+The plugin includes a feature for adding videos to XBMC's playlist.
+
+### Add to Playlist
+Open the context menu (keyboard key "c") and click on "Add to playlist".
+
+### Remove from Playlist
+Open the playlist from the plugin's top menu. Highlight a video and then press on the context menu key ("c").
+
+### Start Playing the Playlist
+Open the playlist from the plugin's top menu. Click on "Play".
+
+## Explaination of Settings
+
+* (General) Show subtitles
+  * Force programs to start with subtitles enabled. Subtitles can till be toggled on/off by using XBMC's controller shortcuts.
+* (Advanced) Don't use avc1.77.30 streams
+  * Forces the addon to choose the stream that supports the highest bandwidth but does not use the avc1.77.30 profile.
+* (Advanced) Set bandwidth manually
+  * Forces the addon to choose stream according to the set bandwidth. This option can be used to force lower resolution streams on devices with lower bandwidth capacity (i.e mobile devices). This option can only be used if "Don't use avc1.77.30 streams" is disabled.
+
+## Known Issues

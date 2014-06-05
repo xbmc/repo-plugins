@@ -1,0 +1,119 @@
+Version 4.0.0
+-------------
+- Rewrite script to support the new SVT Play site
+
+Version 3.3.5
+-------------
+- Fix issue #89 by hiding "Oppetarkiv" in the category listing
+
+Version 3.3.4
+-------------
+- Hide live streams on the start page and re-enable addon in repository
+
+Version 3.3.3
+-------------
+- Fix broken listing due to site changes (khoda)
+
+Version 3.3.2
+-------------
+- Disable "Öppet Arkiv"
+
+Version 3.3.1
+-------------
+- Fix broken listing due to site changes (khoda)
+
+Version 3.3.0
+-------------
+- Add possibility to set a fixed bandwidth for the plugin (linqcan)
+
+Version 3.2.2
+-------------
+- Fix broken category listing due to site change (linqcan)
+- Add program information for BestOfSvt.se (linqcan)
+
+Version 3.2.1
+-------------
+- Fixed issue when hide sign language is enabled
+
+Version 3.2.0
+-------------
+- Fix broken program listing due to site change (linqcan)
+- First release on refactored code base
+
+Version 3.1.6
+-------------
+- Fix broken listing of BestOfSvt.se due to site change (linqcan)
+
+-Version 3.1.5
+-------------
+- Add new feature "Kanaler" from site (linqcan)
+- Restore broken A-Z listing (linqcan)
+
+Version 3.1.4
+-------------
+- Fixed playback for live programs (linqcan)
+- Integrated BestOfSvt.se (linqcan)
+- Added new option to group clips and episodes for a program (linqcan)
+
+Version 3.1.3
+-------------
+- Added handling of programs with multiple MP4 streams (linqcan)
+
+Version 3.1.2
+-------------
+- Restored playback on Apple TV 2 (by linqcan)
+
+Version 3.1.1
+-------------
+- Fixed broken parsing of alphabetical program listing (by linqcan)
+- Added metadata about programs for skins to use when presenting list items (by linqcan)
+
+Version 3.1.0
+-------------
+- Added search, fixed urls etc (by linqcan)
+
+Version 3.0.0
+-------------
+- Rewrite for Frodo
+
+Version 2.0.4
+-------------
+- Updated SWF-player URL (by dahlSTROM)
+
+Version 2.0.3
+-------------
+- Better exception handling and removed unplausible todo (by arvidericsson)
+
+Version 2.0.2
+-------------
+- Updated SWF-player URL (by arvidericsson)
+
+Version 2.0.1
+-------------
+- Added swf verification
+- Fixed unicode encoding
+
+Version 2.0.0
+-------------
+- Bumped versions for Eden
+
+Version 1.0.4
+-------------
+- Improved handling of subtitles (by kokangit, thx to elupus)
+
+Version 1.0.3
+-------------
+- Fixed settings boolean (by kokangit & nilzen)
+
+Version 1.0.2
+-------------
+- Added subtitle support (by kokangit)
+- Added video descriptions (by kokangit)
+
+Version 1.0.1
+-------------
+- Added debug menu (by TsUPeR)
+
+Version 1.0.0
+-------------
+- Initial release

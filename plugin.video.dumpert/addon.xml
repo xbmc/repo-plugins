@@ -2,7 +2,7 @@
 <addon 
 	id="plugin.video.dumpert" 
 	name="Dumpert" 
-	version="1.0.3" 
+	version="1.0.4" 
 	provider-name="Skipmode A1">
   <requires>
     <import addon="xbmc.python"                 version="2.1.0"/>
@@ -13,7 +13,6 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-	<platform>all</platform>
 	<summary lang="en">Watch funny videos from Dumpert.nl (dutch)</summary>
 	<description lang="en">Watch funny videos from Dumpert.nl (dutch)</description>
 	<disclaimer lang="en">For bugs, requests or general questions visit the Dumpert.nl thread on the XBMC forum.</disclaimer>

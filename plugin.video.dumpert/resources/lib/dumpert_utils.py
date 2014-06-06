@@ -41,14 +41,15 @@ class HTTPCommunicator :
     # GET
     #
     def get( self, url ):
-        h = urllib2.HTTPHandler(debuglevel=0)
+        user_agent = 'Mozilla/5.0 (Windows NT 6.1; rv:29.0) Gecko/20100101 Firefox/29.0'
+        values = {}
+        headers = { 'User-Agent'      : user_agent , 
+                    'Accept-Encoding' : 'gzip'     }
+        data = urllib.urlencode(values)
+        req = urllib2.Request(url, data, headers)
+        f = urllib2.urlopen(req)
         
-        request = urllib2.Request( url )
-        request.add_header( "Accept-Encoding", "gzip" ) 
-        opener = urllib2.build_opener(h)
-        f = opener.open(request)
-
-        # Compressed (gzip) response...
+        # Compressed (gzip) response
         if f.headers.get( "content-encoding" ) == "gzip" :
             htmlGzippedData = f.read()
             stringIO        = StringIO.StringIO( htmlGzippedData )
@@ -59,7 +60,7 @@ class HTTPCommunicator :
             # print "[HTTP Communicator] GET %s" % url
             # print "[HTTP Communicator] Result size : compressed [%u], decompressed [%u]" % ( len( htmlGzippedData ), len ( htmlData ) )
             
-        # Plain text response...
+        # Plain text response
         else :
             htmlData = f.read()
         

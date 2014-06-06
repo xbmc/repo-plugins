@@ -1,0 +1,143 @@
+# XBMC Media Center language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2013-07-17 09:48+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+
+msgctxt "#30001"
+msgid "Username"
+msgstr "Usuário"
+
+msgctxt "#30002"
+msgid "Password"
+msgstr "Senha"
+
+msgctxt "#30003"
+msgid "Video quality:"
+msgstr "Qualidade de Vídeo:"
+
+msgctxt "#30004"
+msgid "360p (SD)"
+msgstr "360p (SD)"
+
+msgctxt "#30005"
+msgid "480p"
+msgstr "480p"
+
+msgctxt "#30006"
+msgid "720p (HD)"
+msgstr "720p (HD)"
+
+msgctxt "#30008"
+msgid "1080p (HD)"
+msgstr "1080p (HD)"
+
+msgctxt "#30100"
+msgid "Anime"
+msgstr "Animes"
+
+msgctxt "#30102"
+msgid "Updated"
+msgstr "Atualizados Recentemente"
+
+msgctxt "#30103"
+msgid "Popular"
+msgstr "Populares"
+
+msgctxt "#30104"
+msgid "Drama"
+msgstr "Dramas"
+
+msgctxt "#30105"
+msgid "Queue"
+msgstr "Minha Fila"
+
+msgctxt "#30106"
+msgid "Simulcasts"
+msgstr "Simulcasts"
+
+msgctxt "#30107"
+msgid "Genres"
+msgstr "Gêneros"
+
+
+msgctxt "#30110"
+msgid "Seasons"
+msgstr "Temporadas"
+
+msgctxt "#30200"
+msgid "Notice"
+msgstr "Aviso"
+
+
+msgctxt "#30203"
+msgid "No user account found"
+msgstr "Conta de usuário não encontrada"
+
+
+
+
+msgctxt "#30206"
+msgid "Login Failed: Please check Username and Password"
+msgstr "Falha ao entrar: Verifique seu nome de usuário e senha"
+
+msgctxt "#30207"
+msgid "Internal Plugin Error: Please Report This Bug!"
+msgstr "Erro Interno no Plugin: Por favor, reporte este erro!"
+
+msgctxt "#30212"
+msgid "Video restricted"
+msgstr "Vídeo restrito"
+
+msgctxt "#30211"
+msgid "Force Language Change"
+msgstr "Forçar Alteração do Idioma"
+
+msgctxt "#30300"
+msgid "Disabled"
+msgstr "Desativado"
+
+msgctxt "#30301"
+msgid "English (US)"
+msgstr "English (US)"
+
+msgctxt "#30302"
+msgid "English (UK)"
+msgstr "English (UK)"
+
+msgctxt "#30303"
+msgid "Nihongo"
+msgstr "Nihongo"
+
+msgctxt "#30304"
+msgid "Francais (France)"
+msgstr "Français (France)"
+
+msgctxt "#30305"
+msgid "Deutsch"
+msgstr "Deutsch"
+
+msgctxt "#30306"
+msgid "Portugues (Brasil)"
+msgstr "Português (Brasil)"
+
+msgctxt "#30307"
+msgid "Portugues (Portugal)"
+msgstr "Português (Portugal)"
+
+msgctxt "#30308"
+msgid "Espanol (LATAM)"
+msgstr "Español (LATAM)"
+
+msgctxt "#30309"
+msgid "Español (España)"
+msgstr ""

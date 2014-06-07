@@ -1,0 +1,5 @@
+1.0.1 (2014-06-03)
+Added autoplay function
+
+1.0.0 (2014-05-31)
+Initial release

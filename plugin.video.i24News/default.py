@@ -32,37 +32,12 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-
-def _parse_argv():
-
-        global url,name,iconimage, mode, playlist,fchan,fres,fhost,fname,fepg,fanArt
-
-        params = {}
-        try:
-            params = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
-        except:
-            params = {}
-
-        url =       demunge(params.get("url",None))
-        name =      demunge(params.get("name",""))
-        iconimage = demunge(params.get("iconimage",""))
-        fanArt =    demunge(params.get("fanart",""))
-        playlist =  demunge(params.get("playlist",""))
-        fchan =     demunge(params.get("fchan",""))
-        fres =      demunge(params.get("fres",""))
-        fhost =     demunge(params.get("fhost",""))
-        fname =     demunge(params.get("fname",""))
-        fepg =      demunge(params.get("fepg",None))
-
-        try:
-            playlist=eval(playlist.replace('|',','))
-        except:
-            pass
-
-        try:
-            mode = int(params.get( "mode", None ))
-        except:
-            mode = None
+def deuni(a):
+    a = a.replace('&amp;#039;',"'")
+    a = a.replace('&amp','&')
+    a = a.replace('&#039;',"'")
+    a = a.replace('&quot;','"')
+    return a
 
 def demunge(munge):
         try:
@@ -96,34 +71,34 @@ def getRequest(url):
 def getSources(replay_url):
 
           if replay_url == '/ar/tv-ar/revoir-ar':
-             addLink("plugin://plugin.video.i24News/?url=#2552000981001&mode=20",__language__(30000)+" "+__language__(30003),icon,fanart,__language__(30000)+" "+__language__(30003),GENRE_NEWS,"")
-             getCategory(replay_url)
+             addLink("plugin://plugin.video.i24News/?url=#2552000981001&mode=PV",__language__(30000)+" "+__language__(30003),icon,fanart,__language__(30000)+" "+__language__(30003),GENRE_NEWS,"")
+             getCats(replay_url)
           else:
             if replay_url == '/en/tv/replay':
-               addDir(__language__(30002),'/fr/tv/revoir',25,icon,fanart,__language__(30002),GENRE_NEWS,"",False)
-               addDir(__language__(30003),'/ar/tv-ar/revoir-ar',25,icon,fanart,__language__(30003),GENRE_NEWS,"",False)
-               addLink("plugin://plugin.video.i24News/?url=#2552000984001&mode=20",__language__(30000)+" "+__language__(30001),icon,fanart,__language__(30000)+" "+__language__(30001),GENRE_NEWS,"")
+               addDir(__language__(30002),'/fr/tv/revoir','GX',icon,fanart,__language__(30002),GENRE_NEWS,"",False)
+               addDir(__language__(30003),'/ar/tv-ar/revoir-ar','GX',icon,fanart,__language__(30003),GENRE_NEWS,"",False)
+               addLink("plugin://plugin.video.i24News/?url=#2552000984001&mode=PV",__language__(30000)+" "+__language__(30001),icon,fanart,__language__(30000)+" "+__language__(30001),GENRE_NEWS,"")
             else:
-               addLink("plugin://plugin.video.i24News/?url=#2552024981001&mode=20",__language__(30000)+" "+__language__(30002),icon,fanart,__language__(30000)+" "+__language__(30002),GENRE_NEWS,"")
+               addLink("plugin://plugin.video.i24News/?url=#2552024981001&mode=PV",__language__(30000)+" "+__language__(30002),icon,fanart,__language__(30000)+" "+__language__(30002),GENRE_NEWS,"")
             link=getRequest(BASE_URL+replay_url)
-            match = re.compile('<li class="" id=.+?<a href="(.+?)">(.+?)</a>').findall(link)
+            match = re.compile('<li id=.+?<a href="(.+?)">(.+?)</a>').findall(link)
             for pchoice, pname in match:
-                addDir(pname,pchoice,21,icon,fanart,pname,GENRE_NEWS,"",False)
+                addDir(deuni(pname),pchoice,'GC',icon,fanart,deuni(pname),GENRE_NEWS,"",False)
 
 
-def getCategory(Category_url):
+def getCats(Category_url):
 
               log("main page")
               link = getRequest(BASE_URL+Category_url)
-              match = re.compile('<li class="results-item">.+?href="(.+?)".+?<img src="(.+?)".+?<a.+?>(.+?)</a>.+?<p class="entry-date"><span>(.+?)<.+?<p>(.+?)</p>.+?</li>').findall(link)
+              match = re.compile('<li class="results-item">.+?href="(.+?)".+?<img src="(.+?)".+?video">(.+?)<.+?<span>(.+?)<.+?description">(.+?)<.+?</li>').findall(link)
               for pid, pimage, pname, pdate, pdesc in match:
                      pname = pname.strip()
                      pdesc  = pdate.strip()+'\n'+pdesc.strip()
                      pid = pid.replace(Category_url,'')
                      pid = re.findall('\d+',pid)[0]
-                     caturl = "plugin://plugin.video.i24News/?url=#"+str(pid)+"&mode=20"
+                     caturl = "plugin://plugin.video.i24News/?url=#"+str(pid)+"&mode=PV"
                      try:
-                        addLink(caturl.encode(UTF8),pname,pimage,fanart,pdesc,GENRE_NEWS,"")
+                        addLink(caturl.encode(UTF8),deuni(pname),pimage,fanart,deuni(pdesc),GENRE_NEWS,"")
                      except:
                         log("Problem adding directory")
 
@@ -140,11 +115,14 @@ def play_playlist(name, list):
 
 
 def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
         dir_playable = False
+        cm = []
 
-        if mode != 12:
-            u += "&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
+        if mode != 'SR':
+            u += "&name="+urllib.quote_plus(name)
+            if (fanart is None) or fanart == '': fanart = addonfanart
+            u += "&fanart="+urllib.quote_plus(fanart)
             dir_image = "DefaultFolder.png"
             dir_folder = True
         else:
@@ -158,22 +136,18 @@ def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=Tru
         liz.setProperty( "Fanart_Image", fanart )
 
         if dir_playable == True:
-           liz.setProperty('IsPlayable', 'true')
+         liz.setProperty('IsPlayable', 'true')
         if not playlist is None:
             playlist_name = name.split(') ')[1]
-            contextMenu_ = [('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=13&name=%s&playlist=%s)' %(sys.argv[0], urllib.quote_plus(playlist_name), urllib.quote_plus(str(playlist).replace(',','|'))))]
-            liz.addContextMenuItems(contextMenu_)
-
-        if autoplay == True:
-            xbmc.PlayList(1).add(u, liz)
-        else:    
-            ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
-        return ok
+            cm.append(('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], playlist_name, urllib.quote_plus(str(playlist).replace(',','|')))))
+        liz.addContextMenuItems(cm)
+        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
 
 def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
-        return addDir(name,url,12,iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
+        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
 
-def play_video(video_url):
+
+def playVideo(video_url):
 	video_player_key = "AQ~~,AAACL1AyZ1k~,hYvoCrzvEtv6DS-0RQ1DkpOvkcvXlQ-g"
 	page_url = "http://www.i24news.tv/en/tv/replay/culture/3121368590001"
 	video_player_id = "2430996734001"
@@ -319,67 +293,30 @@ def get_swf_url(flash_experience_id, player_id, publisher_id, video_id):
         location = base.replace("BrightcoveBootloader.swf", "federatedVideo/BrightcovePlayer.swf")
         return location
 
+
 # MAIN EVENT PROCESSING STARTS HERE
 
 xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+
+parms = {}
 try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+    parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
+    for key in parms:
+       parms[key] = demunge(parms[key])
 except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
-except:
-    pass
+    parms = {}
 
+p = parms.get
 
-url=name=iconimage=mode=playlist=fchan=fres=fhost=fname=fepg=None
+mode = p('mode',None)
 
-_parse_argv()
+if mode==  None:  getSources('/en/tv/replay')
+elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
+elif mode=='PP':  play_playlist(p('name'), p('playlist'))
+elif mode=='GC':  getCats(p('url'))
+elif mode=='PV':  playVideo(p('url'))
+elif mode=='GX':  getSources(p('url'))
 
-
-log("Mode: "+str(mode))
-if not url is None:
-    try:
-      log("URL: "+str(url.encode(UTF8)))
-    except:
-      pass
-
-try:
- log("Name: "+str(name))
-except:
- pass
-
-auto_play = False
-
-if mode==None:
-    log("getSources")
-    getSources('/en/tv/replay')
-
-elif mode==12:
-    log("setResolvedUrl")
-    item = xbmcgui.ListItem(path=url)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
-elif mode==13:
-    log("play_playlist")
-    play_playlist(name, playlist)
-
-elif mode==20:
-              play_video(url)
-
-elif mode==21:
-              getCategory(url)
-
-elif mode==25:
-              getSources(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

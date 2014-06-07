@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.i24News"
        name="i24 News"
-       version="1.0.1"
+       version="1.0.2"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -18,8 +18,8 @@
     <platform>all</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum></forum>
-    <website></website>
+    <forum>http://forum.xbmc.org/showthread.php?tid=187224</forum>
+    <website>http://www.i24news.tv/en/</website>
     <email></email>
     <source>https://github.com/learningit/plugin.video.i24News</source>
   </extension>

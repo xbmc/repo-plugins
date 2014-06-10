@@ -65,7 +65,7 @@ class nocoApi():
     def get_partners(self, token):
         partners = []
         request = {'access_token': token, 'partner_key': ''}
-        data = json.loads(requests.get(mainURL+'partners', params=request).text)
+        data = json.loads(requests.get(mainURL+'partners/subscribed', params=request).text)
         for element in data:
             if not element['nb_shows'] == None:
                partners.append(element) 
@@ -106,10 +106,27 @@ class nocoApi():
     def get_last(self, partner, token, num_video):
         request = {'access_token': token, 'partner_key': partner, 'elements_per_page': num_video}
         data = json.loads(requests.get(mainURL+'shows/', params=request).text)
+
+        if plugin.get_setting('showseen') == 'true':
+            return data
+        else:
+            d = []
+            for e in data:
+                if e['mark_read'] == None:
+                    d.append(e)
+            return d
         return data
     def get_popular(self, partner, token, num_video):
         request = {'access_token': token, 'partner_key': partner, 'elements_per_page': num_video}
         data = json.loads(requests.get(mainURL+'shows/most_popular', params=request).text)
+        if plugin.get_setting('showseen') == 'true':
+            return data
+        else:
+            d = []
+            for e in data:
+                if e['mark_read'] == None:
+                    d.append(e)
+            return d
         return data
     def get_fambytype(self, partner, typename, token):
         request = {'access_token': token, 'partner_key': partner, 'type_key': typename, 'elements_per_page': '4000'}
@@ -123,8 +140,8 @@ class nocoApi():
         request = {'access_token': token}
         playlists = []
         data = json.loads(requests.get(mainURL+'users/queue_list', params=request).text)
-        for playlist in data:
-            playlists.append(playlist)
+        for p in data:
+            playlists.append(p)
         return playlists
     def get_videodata(self, token, vid):
         request = {'access_token': token, 'id_show': vid}

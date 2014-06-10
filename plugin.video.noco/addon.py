@@ -139,7 +139,14 @@ def indexPlaylist(playlist):
     for video in playlist.split(','):
         v = api.get_videodata(token['token'], video)
         videos.append(getVideoInfos(v))
-    return plugin.finish(videos)
+    if plugin.get_setting('showseen') == 'true':
+        return plugin.finish(videos)
+    else:
+        vid = []
+        for v in videos:
+            if v['info']['playcount'] == "0":
+                vid.append(v)
+        return vid
 
 @plugin.route('/partners/<partner>/themes/<theme>')
 def indexThemes(partner, theme):
@@ -209,10 +216,16 @@ def playVideo(partner, family, video):
         plugin.set_resolved_url(api.get_video(video, token['token'], quality))
 
 def getVideoInfos(video):
-    if video['show_TT'] == None:
-        label = video['family_TT'].encode('utf-8')+' - '+str(video['episode_number'])
+    if str(video['episode_number']) == '0':
+        if video['show_TT'] == None:
+            label = video['family_TT'].encode('utf-8')
+        else:
+            label = video['family_TT'].encode('utf-8')+' - '+unicode(video['show_TT']).encode('utf-8')
     else:
-        label = video['family_TT'].encode('utf-8')+' - '+str(video['episode_number']).encode('utf-8')+' - '+unicode(video['show_TT']).encode('utf-8')
+        if video['show_TT'] == None:
+            label = video['family_TT'].encode('utf-8')+' - '+str(video['episode_number'])
+        else:
+            label = video['family_TT'].encode('utf-8')+' - '+str(video['episode_number']).encode('utf-8')+' - '+unicode(video['show_TT']).encode('utf-8')
     if video['show_resume'] == None and video['family_resume'] == None:
         resume = ''
     elif video['show_resume'] == None and video['family_resume'] != None:

@@ -1,3 +1,5 @@
+[B]3.0.1:[/B]
+- indentation fix by lgelo (station list was not being downloaded at all)
 [B]3.0.0:[/B]
 - version bump for gotham
 [B]2.0.1:[/B]

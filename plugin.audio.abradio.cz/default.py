@@ -110,9 +110,9 @@ def get_data():
         # update local station file when it becomes 1day old
         if (time.time() - os.path.getctime(local)) > (3600*24):
             download_stationfile(local)
-        else:
-            download_stationfile(local)
-        return ET.parse(local)
+    else:
+        download_stationfile(local)
+    return ET.parse(local)
 
 def list_categories():
     tree = get_data()

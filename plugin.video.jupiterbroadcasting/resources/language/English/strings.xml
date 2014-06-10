@@ -58,6 +58,12 @@
   <string id="30020">BSD Now!</string>
   <string id="30220">All things BSD</string>
 
+  <string id="30021">HowTo Linux</string>
+  <string id="30221">HowTo Linux will guide you through the amazing world of Linux. From switching to Linux, to building the ultimate home theater, firewall, office file server, and just about anything else.</string>
+
+  <string id="30022">Tech Talk Today</string>
+  <string id="30222">Daily coverage of the latest technology-related headlines.</string>
+
   <!-- Settings -->
   <string id="30100">General</string>
   <string id="30101">Quality</string>

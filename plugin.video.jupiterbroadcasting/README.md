@@ -15,6 +15,8 @@ Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) netw
 * [Plan B](http://www.jupiterbroadcasting.com/show/planb/)
 * [SciByte](http://www.jupiterbroadcasting.com/show/scibyte/)
 * [Unfilter](http://www.jupiterbroadcasting.com/show/unfilter/)
+* [Tech Talk Today](http://www.jupiterbroadcasting.com/show/today/)
+* [HowTo Linux](http://www.jupiterbroadcasting.com/show/h2l/)
 
 ## Archive
 
@@ -37,10 +39,17 @@ Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) netw
 
 ## Development
 
+### Environment
+
 ```bash
 $ cd ~/.xbmc/addons/
 $ git clone git@github.com:RobLoach/plugin.video.jupiterbroadcasting.git
 ```
+
+### Tools
+
+* [Google Python Style Guide](http://google-styleguide.googlecode.com/svn/trunk/pyguide.html) for consistent styles
+* [Pylint](http://pylint.org)
 
 
 ## About

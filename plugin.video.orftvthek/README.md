@@ -5,7 +5,7 @@ ORF TVthek is an addon that gives you access to the ORF TVthek Video Platform.
 
 Requirements
 ------------
-Tested on XBMC Eden/Frodo
+Tested on XBMC Eden/Frodo/Gotham
 
 
 Supported platforms

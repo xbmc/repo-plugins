@@ -1,3 +1,7 @@
+0.2.3
+- added sort methods
+- fixed error on "themen" items
+
 0.2.2
 - fixed parser errors
 - "Sendung verpasst?"

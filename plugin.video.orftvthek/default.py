@@ -12,7 +12,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.2.2"
+version = "0.2.3"
 plugin = "ORF-TVthek-" + version
 author = "sofaking"
  
@@ -83,7 +83,8 @@ def addDirectory(title,banner,description,link,mode):
 def getLinks(url,banner):
     playlist.clear()
     url = urllib.unquote(url)
-    banner = urllib.unquote(banner)
+    if banner != None:
+        banner = urllib.unquote(banner)
     arrayReg = re.compile("{.*?}")
     html = opener.open(url)
     html = html.read()
@@ -134,13 +135,18 @@ def getLinks(url,banner):
         desc = soup.find('div',{'class':'details_description'}).text.encode('UTF-8')
         link = videoUrls[0]
         createListItem(title,banner,"%s%s"%(bcast_desc,desc),'','','',link,'true',False)
-    listCallback()
+    listCallback(False)
 	
-def listCallback():
+def listCallback(sort):
     xbmcplugin.setContent(pluginhandle,'episodes')
+    if sort:
+        print "SORT"
+        xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_VIDEO_TITLE)
     xbmcplugin.endOfDirectory(pluginhandle)
+    
+
     if forceView:
-       xbmc.executebuiltin(defaultViewMode)
+        xbmc.executebuiltin(defaultViewMode)
 
 def getMainMenu():
     addDirectory((translation(30000)).encode("utf-8"),defaultbanner,'',"","getNewShows")
@@ -152,7 +158,7 @@ def getMainMenu():
     addDirectory((translation(30006)).encode("utf-8"),defaultbanner,'',"","getMostViewed")
     addDirectory((translation(30018)).encode("utf-8"),defaultbanner,"","","getArchiv")
     addDirectory((translation(30007)).encode("utf-8"),defaultbanner,'',"","searchPhrase")
-    listCallback()
+    listCallback(False)
 
 def getArchiv(url):
     progressbar = xbmcgui.DialogProgress()
@@ -178,7 +184,7 @@ def getArchiv(url):
         date = link.find('small').text.encode('UTF-8')
         title = day + " - " + date
         addDirectory(title,defaultbanner,date,link['href'],"openArchiv")
-    listCallback()
+    listCallback(False)
 	
 def openArchiv(url):
     progressbar = xbmcgui.DialogProgress()
@@ -206,7 +212,8 @@ def openArchiv(url):
         desc = teasers.find('div',{'class':'item_description'}).text.encode('UTF-8').strip()
         banner = teasers.find('figure',{'class':'item_image'}).find('img')['src'].replace("width=395","width=500").replace("height=209.07070707071","height=265").encode('UTF-8')
         addDirectory(title,banner,desc,link,"openSeries")
-    listCallback()
+    listCallback(True)
+    
 	
 def getCategoryList(category,banner):
     progressbar = xbmcgui.DialogProgress()
@@ -256,7 +263,7 @@ def getCategoryList(category,banner):
         except:
             desc = "";
         addDirectory(title,banner,desc,link,"openSeries")
-    listCallback()
+    listCallback(False)
 
 
 def getLiveStreams():
@@ -282,7 +289,7 @@ def getLiveStreams():
         
         title = "[%s] %s (%s)" % (program,title,time)
         createListItem(title,banner,'djsjsj',time,'jsdjjs',program,link,'true',False)
-    listCallback()
+    listCallback(False)
 
 def getRecentlyAdded():
     progressbar = xbmcgui.DialogProgress()
@@ -307,7 +314,7 @@ def getRecentlyAdded():
         image = teasers.find('img')['src']
         link = teasers['href'] 
         addDirectory(title,image,desc,link,"openSeries")
-    listCallback()
+    listCallback(False)
 
 
 def getThemenListe(url):
@@ -352,7 +359,7 @@ def getThemenListe(url):
         except:
             desc = ""
         addDirectory(title,image,desc,link,"openSeries")
-    listCallback()
+    listCallback(True)
 
 def playFile():
     player = xbmc.Player()
@@ -393,7 +400,7 @@ def getThemen():
         image = topic.find('img')['src'].replace("width=395","width=500").replace("height=209.07070707071","height=265").encode('UTF-8')
         desc = ""
         addDirectory(title,image,desc,link,"openTopicPosts")
-    listCallback()
+    listCallback(True)
 
 def getCategories():
     html = opener.open(base_url)
@@ -408,7 +415,7 @@ def getCategories():
         image = cat.find('img')['src'].replace("height=56.34328358209","height=280").replace("width=100","width=500")
         desc = ''
         addDirectory(title,image,desc,link,"openCategoryList")
-    listCallback()
+    listCallback(Tru)
 
 def programUrlTitle(url):
     title = url.replace(base_url,"").split("/")
@@ -420,7 +427,7 @@ def search():
     some_dict = cache.get("searches").split("|")
     for str in reversed(some_dict):
         addDirectory(str.encode('UTF-8'),defaultbanner,"",str.replace(" ","+"),"searchNew")
-    listCallback()
+    listCallback(False)
 	
 def searchTV():
     keyboard = xbmc.Keyboard('')
@@ -434,7 +441,7 @@ def searchTV():
       getTableResults(searchurl)
     else:
       addDirectory((translation(30014)).encode("utf-8"),defaultlogo,"","","")
-    listCallback()
+    listCallback(False)
 
 def getTableResults(url):
     url = urllib.unquote(url)
@@ -470,7 +477,7 @@ def getTableResults(url):
         image = tip.find('img')['src'].replace("width=395","width=500").replace("height=209.07070707071","height=265").replace("height=77.753731343284","height=265").replace("width=138","width=500")
         link = tip.find('a')['href']
         addDirectory(title,image,desc,link,"openSeries")
-    listCallback()
+    listCallback(False)
 		
 		
 def searchTVHistory(link):
@@ -486,7 +493,7 @@ def searchTVHistory(link):
       getTableResults(searchurl)
     else:
       addDirectory((translation(30014)).encode("utf-8"),defaultlogo,defaultbackdrop,"","")
-    listCallback()
+    listCallback(False)
     
 	
 #Getting Parameters

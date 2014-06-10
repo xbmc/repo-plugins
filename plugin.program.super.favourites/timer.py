@@ -18,36 +18,18 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-import utils
-utils.CheckVersion()
+print __name__
 
-import xbmc
-import os
-
-
-class MyMonitor(xbmc.Monitor):
-    def __init__(self):
-        xbmc.Monitor.__init__(self)
-        self.hotkey  = utils.ADDON.getSetting('HOTKEY')
-        self.context = utils.ADDON.getSetting('CONTEXT')  == 'true'
-
-
-    def onSettingsChanged(self):
-        hotkey  = utils.ADDON.getSetting('HOTKEY')
-        context = utils.ADDON.getSetting('CONTEXT')  == 'true'
-
-        if self.hotkey == hotkey and self.context == context:
-            return
-
-        self.hotkey  = hotkey
-        self.context = context
-
-        utils.UpdateKeymaps()
-
-
-monitor = MyMonitor()
-
-while (not xbmc.abortRequested):
-    xbmc.sleep(1000)
-
-del monitor
+if __name__ == '__main__':
+    try:
+        print "HERE"
+        nParam = len(sys.argv)
+        print nParam
+        if nParam > 1:
+            property = sys.argv[1]
+            print "REMOVING PROPERTY"
+            print property
+            import cache
+            cache.clearProperty(property)
+    except Exception, e:
+        print str(e)

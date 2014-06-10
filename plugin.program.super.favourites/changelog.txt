@@ -1,3 +1,34 @@
+v1.0.8:
+   - version bump for submission to org
+
+v1.0.7:
+   - Changed editing of items to use Select Dialog due to context menu item being full (restricted to 10 items by XBMC)
+   - Choose Thumbnail for 'Explore XBMC Favourites' item
+   - Password protect Super Folders - including configurable caching of passwords
+   - Automatically play m3u playlists - context menu or configurable via settings
+
+
+v1.0.6:
+  - Added XBMC profiles support (importing of profiles into Super Favourites not yet supported)
+  - Added Globalsearch to Super Search - uses a special launcher to bypass GlobalSearch keyboard entry
+  - Changed handling of non-ascii characters
+  - Super Search now callable from anywhere in XBMC
+   - xbmc.executebuiltin('ActivateWindow(10025,"plugin://plugin.program.super.favourites/?mode=25")')
+   - xbmc.executebuiltin('ActivateWindow(10025,"plugin://plugin.program.super.favourites/?mode=0&keyword=%s")' % urllib.quote_plus(program.title))
+  - Bug fixes
+
+
+v1.0.5:
+  - Super Search - configurable multi-addon search functionality
+  - Configurable root folder
+  - Pseudo TV Live compatibility
+
+
+v1.0.4:
+  - Fixed context menu override when addon is disabled
+  - Better identification of filetype when using Files.GetDirectory json request
+
+
 v1.0.3:
   - Improved handling of non-ascii characters
   - Add back to XBMC favourites for both folders and favourites

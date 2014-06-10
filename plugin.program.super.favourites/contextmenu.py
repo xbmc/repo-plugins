@@ -46,6 +46,16 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
 
         
     def onInit(self):
+    
+        for i in range(4):
+            self.getControl(5001+i).setVisible(False)
+            
+        nItem = len(self.menu)  
+        if nItem > 4:
+            nItem = 4      
+        id = 5000 + nItem
+        self.getControl(id).setVisible(True)
+            
         self.list      = self.getControl(3000)
         self.params    = None
         self.paramList = []
@@ -59,11 +69,10 @@ class ContextMenu(xbmcgui.WindowXMLDialog):
         self.setFocus(self.list)
 
            
-    def onAction(self, action):
+    def onAction(self, action):        
         actionId = action.getId()
 
-
-        if actionId in [ACTION_CONTEXT_MENU, ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, ACTION_BACK, ACTION_CONTEXT_MENU]:
+        if actionId in [ACTION_CONTEXT_MENU, ACTION_PARENT_DIR, ACTION_PREVIOUS_MENU, ACTION_BACK]:
             return self.close()
 
 

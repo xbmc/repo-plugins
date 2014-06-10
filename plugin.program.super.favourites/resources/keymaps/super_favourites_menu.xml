@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <keymap>
+
+	<fullscreenvideo>
+		<keyboard>
+			<c>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</c>
+			<menu>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</menu>
+		</keyboard>
+	</fullscreenvideo>
+	
 	<Global>
+	
+		<touch>
+			<tap pointers="2">XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</tap>
+			<longpress>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</longpress>
+		</touch>
+		
 		<keyboard>
 			<c>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</c>
 			<menu>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</menu>
@@ -15,6 +29,13 @@
 		</remote>
 		
 		<joystick name="AppleRemote">
+			<button id="1">Up</button>
+			<button id="2">Down</button>
+			<button id="3">Left</button>
+			<button id="4">Right</button>
+			<button id="5">Select</button>
+			<button id="6">Back</button>
+			<button id="7">Fullscreen</button>
 			<button id="8">XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</button>
 	    </joystick>
 		

@@ -35,13 +35,15 @@ def GetXBMCVersion():
 ADDONID = 'plugin.program.super.favourites'
 ADDON   =  xbmcaddon.Addon(ADDONID)
 HOME    =  ADDON.getAddonInfo('path')
-PROFILE =  os.path.join(ADDON.getAddonInfo('profile'), 'Super Favourites')
-VERSION = '1.0.1'
+ROOT    =  ADDON.getSetting('FOLDER')
+PROFILE =  os.path.join(ROOT, 'Super Favourites')
+VERSION = '1.0.8'
 ICON    =  os.path.join(HOME, 'icon.png')
 FANART  =  os.path.join(HOME, 'fanart.jpg')
-BLANK   =  os.path.join(HOME, 'resources', 'media', 'blank.png')
+SEARCH  =  os.path.join(HOME, 'resources', 'media', 'search.png')
 GETTEXT =  ADDON.getLocalizedString
 TITLE   =  GETTEXT(30000)
+
 
 KEYMAP_HOT  = 'super_favourites_hot.xml'
 KEYMAP_MENU = 'super_favourites_menu.xml'
@@ -50,8 +52,8 @@ MAJOR, MINOR = GetXBMCVersion()
 FRODO        = (MAJOR == 12) and (MINOR < 9)
 GOTHAM       = (MAJOR == 13) or (MAJOR == 12 and MINOR == 9)
 
-FILENAME  = 'favourites.xml'
-FOLDERCFG = 'folder.cfg'
+FILENAME     = 'favourites.xml'
+FOLDERCFG    = 'folder.cfg'
 
 
 def DialogOK(line1, line2='', line3=''):
@@ -67,27 +69,67 @@ def DialogYesNo(line1, line2='', line3='', noLabel=None, yesLabel=None):
         return d.yesno(TITLE + ' - ' + VERSION, line1, line2 , line3, noLabel, yesLabel) == True
 
 
-def Verify():
-    CheckVersion()
-    VerifyKeymaps()
+def generateMD5(text):
+    if not text:
+        return ''
+
+    try:
+        import hashlib        
+        return hashlib.md5(text).hexdigest()
+    except:
+        pass
+
+    try:
+        import md5
+        return md5.new(text).hexdigest()
+    except:
+        pass
+        
+    return '0'
+
+
+#def Verify():
+#    CheckVersion()
+#    VerifyKeymaps()
 
 
 def CheckVersion():
     prev = ADDON.getSetting('VERSION')
     curr = VERSION
 
-    if prev == curr:
+    VerifyKeymaps()
+
+    if prev == curr:        
         return
 
     ADDON.setSetting('VERSION', curr)
 
-    if prev == '0.0.0' or prev== '1.0.0':
+    verifySuperSearch(replace=False)
 
+    if prev == '0.0.0' or prev== '1.0.0':
         folder  = xbmc.translatePath(PROFILE)
         if not os.path.isdir(folder):
             os.makedirs(folder) 
 
-        VerifyKeymaps()
+
+def verifySuperSearch(replace=False):
+    dst = os.path.join(xbmc.translatePath(ROOT), 'Search', FILENAME)
+
+    if (not replace) and os.path.exists(dst):
+        return
+
+    src = os.path.join(HOME, 'resources', 'Search', FILENAME)
+
+    try:    os.mkdir(os.path.join(xbmc.translatePath(ROOT), 'Search'))
+    except: pass
+
+    f = open(src, mode='r')
+    t = f.read()
+    f.close()
+
+    f = open(dst, mode='w')
+    f.write(t)
+    f.close()
 
 
 def UpdateKeymaps():
@@ -97,7 +139,7 @@ def UpdateKeymaps():
 
         
 def DeleteKeymap(map):
-    path = os.path.join(xbmc.translatePath('special://userdata/keymaps'), map)
+    path = os.path.join(xbmc.translatePath('special://profile/keymaps'), map)
 
     tries = 5
     while os.path.exists(path) and tries > 0:
@@ -123,14 +165,14 @@ def VerifyKeymaps():
 
 
 def VerifyKeymapHot():
-    dest = os.path.join(xbmc.translatePath('special://userdata/keymaps'), KEYMAP_HOT)
+    dest = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_HOT)
 
     if os.path.exists(dest):
         return False
 
     key = ADDON.getSetting('HOTKEY').lower()
 
-    includeKey = key in ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12']
+    includeKey = key in ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'g']
 
     if not includeKey:
         DeleteKeymap(KEYMAP_HOT)
@@ -155,7 +197,7 @@ def VerifyKeymapHot():
 
 
 def VerifyKeymapMenu():
-    dest = os.path.join(xbmc.translatePath('special://userdata/keymaps'), KEYMAP_MENU)
+    dest = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_MENU)
 
     if os.path.exists(dest):
         return False
@@ -167,7 +209,7 @@ def VerifyKeymapMenu():
         return True
 
     src = os.path.join(HOME, 'resources', 'keymaps', KEYMAP_MENU)
-    dst = os.path.join(xbmc.translatePath('special://userdata/keymaps'), KEYMAP_MENU)
+    dst = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_MENU)
 
     import shutil
     shutil.copy(src, dst)
@@ -177,7 +219,7 @@ def VerifyKeymapMenu():
 
 
 def GetFolder(title):
-    default = ADDON.getAddonInfo('profile')
+    default = ROOT #ADDON.getAddonInfo('profile')
     folder  = xbmc.translatePath(PROFILE)
 
     if not os.path.isdir(folder):

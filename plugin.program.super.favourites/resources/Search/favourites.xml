@@ -1,0 +1,5 @@
+<favourites>
+	<favourite name="Global Search" thumb="special://home\addons\script.globalsearch\icon.png">RunScript(&quot;script.globalsearch&quot;,searchstring:[%SF%])</favourite>
+	<favourite name="YouTube" thumb="special://home\addons\plugin.video.youtube\icon.png">ActivateWindow(10025,&quot;plugin://plugin.video.youtube/?feed=search&amp;path=%2froot%2fsearch&amp;search=[%SF%]&quot;)</favourite>
+	<favourite name="iPlayer" thumb="special://home\addons\plugin.video.iplayer\resources\media\search.png">ActivateWindow(10025,&quot;plugin://plugin.video.iplayer/?label=[%SF%]&amp;listing=search&amp;tvradio=tv&quot;)</favourite>
+</favourites>

@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<category label="30022">	
-		<setting id="SHOWNEW"  label="30023" type="bool"      default="true" />
-		<setting id="SHOWXBMC" label="30024" type="bool"      default="true" />
-		<setting id="SHOWSEP"  label="30051" type="bool"      default="true" />
+    <category label="30070">	
+		<setting id="FOLDER"   label="30056" type="folder"    default="special://profile/addon_data/plugin.program.super.favourites/" />
+		
 		<setting id="CONTEXT"  label="30050" type="bool"      default="false" />
-        <setting id="HOTKEY"   label="30026" type="labelenum" lvalues="30027|30028|30029|30030|30031|30032|30033|30034|30035|30036|30037|30038|30039"/>		
+        <setting id="HOTKEY"   label="30026" type="labelenum" lvalues="30027|30028|30029|30030|30031|30032|30033|30034|30035|30036|30037|30038|30039|30058"/>		
+		
+		<setting id="CACHE"    label="30071" type="enum" lvalues="30072|30073|30074|30075"/>		
 		
 		<setting id="VERSION" type="text" label="" default="0.0.0" visible="false"/>
 	</category>
+	
+	<category label="30022">	
+		<setting id="SHOWNEW"  label="30023" type="bool"      default="true" />
+		<setting id="SHOWXBMC" label="30024" type="bool"      default="true" />
+		
+		<setting id="SHOWXBMCROOT" label="30065" type="bool"  default="false" enable="eq(-1,true)"/>
+
+		<setting id="SHOWSEP"  label="30051" type="bool"      default="true" />	
+	</category>
+	
+	<category label="30054">	
+		<setting id="SHOWSS"         label="30055" type="bool"                        default="true" />
+		<setting id="SHOWRECOMMEND"  label="30063" type="bool"  enable="eq(-9,true)"  default="true" />
+		<setting id="SHOWSS_FANART"  label="30064" type="bool"  enable="eq(-2,true)"  default="true" />
+	</category>
+	
+	<category label="30082">	
+		<setting id="PLAY_PLAYLISTS" label="30083" type="bool"                        default="true" />
+	</category>
+
 </settings> 

@@ -3,7 +3,7 @@
   id="plugin.video.corbettreport" 
   name="CorbettReport.com Video Podcasts" 
   provider-name="celadoor" 
-  version="0.0.4">
+  version="0.0.5">
   <requires>
     <import  addon="xbmc.python"                      version="2.1.0" />
     <import  addon="script.common.plugin.cache"       version="1.5.1" />

@@ -38,4 +38,4 @@ msgstr "Dziennik błędów (logi)"
 
 msgctxt "#30103"
 msgid "Show thumbnails as fanart"
-msgstr "Pokaż miniatury jako fanart"
+msgstr "Pokazuj miniatury jako tapetę"

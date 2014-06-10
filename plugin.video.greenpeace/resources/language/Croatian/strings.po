@@ -16,6 +16,26 @@ msgstr ""
 "Language: hr\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+msgctxt "#30010"
+msgid "Next Page"
+msgstr "Slijedeća stranica"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Vrsta videa nije podržana"
+
 msgctxt "#30012"
 msgid "Couldn't locate video url"
 msgstr "Nemoguće lociranje URL-a videa"
+
+msgctxt "#30101"
+msgid "Location/Language (for videos)"
+msgstr "Lokacija/Jezik (za video snimke)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "Otklanjanje grešaka (omogući zapisivanje)"
+
+msgctxt "#30103"
+msgid "Show thumbnails as fanart"
+msgstr "Prikaži minijature kao slike omote "

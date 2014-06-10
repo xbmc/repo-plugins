@@ -16,6 +16,26 @@ msgstr ""
 "Language: zh\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgctxt "#30010"
+msgid "Next Page"
+msgstr "下一页"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "视频格式不被支持"
+
 msgctxt "#30012"
 msgid "Couldn't locate video url"
 msgstr "无法定位视频地址"
+
+msgctxt "#30101"
+msgid "Location/Language (for videos)"
+msgstr "位置/语言 (对于视频)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "纠错(启用日志)"
+
+msgctxt "#30103"
+msgid "Show thumbnails as fanart"
+msgstr "显示同人画的缩略图"

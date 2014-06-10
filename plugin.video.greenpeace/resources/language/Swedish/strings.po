@@ -16,6 +16,26 @@ msgstr ""
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30010"
+msgid "Next Page"
+msgstr "Nästa sida"
+
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Videoformatet stöds ej"
+
 msgctxt "#30012"
 msgid "Couldn't locate video url"
 msgstr "Kunde inte lokalisera videoURL"
+
+msgctxt "#30101"
+msgid "Location/Language (for videos)"
+msgstr "Plats/Språk (för video)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "Debug (aktivera loggar)"
+
+msgctxt "#30103"
+msgid "Show thumbnails as fanart"
+msgstr "Visa miniatyrer som fanart"

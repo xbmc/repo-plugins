@@ -1,3 +1,5 @@
+1.1.6
+- Updated language files from Transifex.
 1.1.5
 - Updated language files from Transifex (thanks to alanwww1).
 - Fix enconding bug in show warning messages.

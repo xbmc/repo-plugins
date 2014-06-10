@@ -20,9 +20,21 @@ msgctxt "#30010"
 msgid "Next Page"
 msgstr "Επόμενη Σελίδα"
 
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "Ο τύπος βίντεο δεν υποστηρίζεται"
+
 msgctxt "#30012"
 msgid "Couldn't locate video url"
 msgstr "Δεν εντοπίστηκε η διεύθυνση url του βίντεο"
+
+msgctxt "#30101"
+msgid "Location/Language (for videos)"
+msgstr "Τοποθεσία/Γλώσσα (για βίντεο)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "Εντοπισμός σφαλμάτων (ενεργοποίηση αρχείων καταγραφής)"
 
 msgctxt "#30103"
 msgid "Show thumbnails as fanart"

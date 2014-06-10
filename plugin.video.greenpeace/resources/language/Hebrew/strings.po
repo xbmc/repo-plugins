@@ -20,6 +20,22 @@ msgctxt "#30010"
 msgid "Next Page"
 msgstr "עמוד הבא"
 
+msgctxt "#30011"
+msgid "Video type not supported"
+msgstr "פורמט הוידאו לא נתמך"
+
 msgctxt "#30012"
 msgid "Couldn't locate video url"
-msgstr "לא מצליח למצוא כתובת וידאו"
+msgstr "איתור כתובת וידאו נכשל"
+
+msgctxt "#30101"
+msgid "Location/Language (for videos)"
+msgstr "מיקום/שפה (עבור סרטונים)"
+
+msgctxt "#30102"
+msgid "Debug (enable logs)"
+msgstr "ניפוי שגיאות (הפעל יומן רישום)"
+
+msgctxt "#30103"
+msgid "Show thumbnails as fanart"
+msgstr "הצג תמונות ממוזערות כפאנארט"

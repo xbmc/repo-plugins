@@ -125,11 +125,18 @@ def TOPLEVELCATEGORIES():
     print "*****sage_rec5=" + sage_rec5 + ";sage_unc5=" + sage_unc5 + "*****"
     print "*****sage_mac=" + sage_mac + "*****"
 
-    addTopLevelDir('1. Watch Recordings', strUrl + '/sagex/api?c=xbmc:GetTVMediaFilesGroupedByTitle&size=500&encoder=json',1,IMAGE_POSTER,'Browse previously recorded and currently recording shows')
-    addTopLevelDir('2. View Upcoming Recordings', strUrl + '/sagex/api?command=GetScheduledRecordings&encoder=json',2,IMAGE_POSTER,'View and manage your upcoming recording schedule')
-    addTopLevelDir('3. Browse Channel Listings', strUrl + '/sagex/api?command=EvaluateExpression&1=FilterByBoolMethod(GetAllChannels(), "IsChannelViewable", true)&size=1000&encoder=json',3,IMAGE_POSTER,'Browse channels and manage recordings')
-    addTopLevelDir('4. Search for Recordings', strUrl + '/',4,IMAGE_POSTER,'Search for Recordings')
-    addTopLevelDir('5. Search for Airings', strUrl + '/',5,IMAGE_POSTER,'Search for Upcoming Airings')
+    #Watch Recordings
+    addTopLevelDir(__language__(30030), strUrl + '/sagex/api?c=xbmc:GetTVMediaFilesGroupedByTitle&size=500&encoder=json',1,IMAGE_POSTER,__language__(30036))
+    #View Upcoming Recordings
+    addTopLevelDir(__language__(30031), strUrl + '/sagex/api?command=GetScheduledRecordings&encoder=json',2,IMAGE_POSTER,__language__(30037))
+    #Browse Airings (by time)
+    addTopLevelDir(__language__(30032), strUrl + '/sagex/api?command=EvaluateExpression&1=FilterByBoolMethod(GetAllChannels(), "IsChannelViewable", true)&size=1000&encoder=json',3,IMAGE_POSTER,__language__(30038))
+    #Browse Airings (by channel)
+    addTopLevelDir(__language__(30033), strUrl + '/sagex/api?command=EvaluateExpression&1=FilterByBoolMethod(GetAllChannels(), "IsChannelViewable", true)&size=1000&encoder=json',4,IMAGE_POSTER,__language__(30039))
+    #Search for Recordings
+    addTopLevelDir(__language__(30034), strUrl + '/',5,IMAGE_POSTER,__language__(30040))
+    #Search for Airings
+    addTopLevelDir(__language__(30035), strUrl + '/',6,IMAGE_POSTER,__language__(30041))
 
     xbmc.executebuiltin("Container.SetViewMode(535)")
     
@@ -288,12 +295,95 @@ def VIEWUPCOMINGRECORDINGS(url,name):
                         strDescription = strGenre
             else:
                 strDisplayText = strTitleEncoded + ' - ' + strEpisode
-        strDisplayText = strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime + ": " + strDisplayText
+        strDisplayText = strftime('%m-%d', time.localtime(startTime)) + " @ " + airTime + ": " + strDisplayText
         addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitleEncoded,strAiringID,seasonNum,episodeNum,studio,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
 
     xbmc.executebuiltin("Container.SetViewMode(504)")
 
+def VIEWTIMESLOTLISTING(url,name):
+    #Show time slots as far out as 7 days from now
+    rangeSizeHours = 7 * 24
+    rangeSizeSeconds = 1 * 60 * 60
+    tempStartTime = time.time()
+    #Take the start time and round the minutes down ... e.g. if it's 9:07AM, round it down so that the start range is 9:00AM
+    tempStartTimeLocalTime = time.localtime(tempStartTime)
+    l = list(tempStartTimeLocalTime)
+    l[4] = 0
+    tempStartTimeLocalTime = time.struct_time(l)
+    tempStartTime = time.mktime(tempStartTimeLocalTime)
+    tempEndTime = tempStartTime + rangeSizeSeconds-60
+    tempHours = 1
+    while(tempHours <= rangeSizeHours):
+        startRange = str(long(tempStartTime * 1000))
+        endRange = str(long(tempEndTime * 1000))
+
+        # USE GetAiringsOnViewableChannelsAtTime
+        urlToAiringsInTimeslot = strUrl + '/sagex/api?command=EvaluateExpression&1=GetAiringsOnViewableChannelsAtTime("' + startRange + '","' + endRange + '",false)&encoder=json'
+        tempStartTimeLocalTime = time.localtime(tempStartTime)
+        tempEndTimeLocalTime = time.localtime(tempEndTime)
+        airStartTime = strftime('%H:%M', tempStartTimeLocalTime)
+        airEndTime = strftime('%H:%M', tempEndTimeLocalTime)
+        strDisplayText = strftime('%m-%d', tempStartTimeLocalTime) + " @ " + airStartTime + "-" + airEndTime
+        tempHours = tempHours + 1
+        tempStartTime = tempStartTime + rangeSizeSeconds
+        tempEndTime = tempStartTime + rangeSizeSeconds-60
+        addTimeslotDir(strDisplayText, urlToAiringsInTimeslot,31)
+
+    xbmc.executebuiltin("Container.SetViewMode(535)")
+
+def VIEWAIRINGSONTIMESLOT(url,name):
+    airings = executeSagexAPIJSONCall(url, "Result")
+    for airing in airings:
+        show = airing.get("Show")
+        strTitle = airing.get("AiringTitle")
+        strTitleEncoded = strTitle.encode("utf8")
+        strEpisode = show.get("ShowEpisode")
+        if(strEpisode == None):
+            strEpisode = ""        
+        strDescription = show.get("ShowDescription")
+        if(strDescription == None):
+            strDescription = ""        
+        strGenre = show.get("ShowCategoriesString")
+        strAiringID = str(airing.get("AiringID"))
+        seasonNum = int(show.get("ShowSeasonNumber"))
+        episodeNum = int(show.get("ShowEpisodeNumber"))
+        channelName = airing.get("AiringChannelName")        
+        channelNumber = airing.get("AiringChannelNumber")        
+        isFavorite = airing.get("IsFavorite")
+        
+        startTime = float(airing.get("AiringStartTime") // 1000)
+        strAiringdateObject = date.fromtimestamp(startTime)
+        airTime = strftime('%H:%M', time.localtime(startTime))
+        strAiringdate = "%02d.%02d.%s" % (strAiringdateObject.day, strAiringdateObject.month, strAiringdateObject.year)
+        strOriginalAirdate = strAiringdate
+        if(airing.get("OriginalAiringDate")):
+            startTime = float(airing.get("OriginalAiringDate") // 1000)
+            strOriginalAirdateObject = date.fromtimestamp(startTime)
+            strOriginalAirdate = "%02d.%02d.%s" % (strOriginalAirdateObject.day, strOriginalAirdateObject.month, strOriginalAirdateObject.year)
+
+        # if there is no episode name use the description in the title
+        strDisplayText = strTitleEncoded
+        if(strGenre.find("Movie")<0 and strGenre.find("Movies")<0 and strGenre.find("Film")<0 and strGenre.find("Shopping")<0 and strGenre.find("Consumer")<0):
+            if(strEpisode == ""):
+                if(strDescription != ""):
+                    strDisplayText = strTitleEncoded + ' - ' + strDescription
+                else:
+                    if(strGenre.find("News")>=0):
+                        strDisplayText = channelName + " News - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
+                        strDescription = strGenre
+                    elif(strGenre.find("Sports")>=0):
+                        strDisplayText = strTitleEncoded + " - " + strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime
+                        strDescription = strGenre
+            else:
+                strDisplayText = strTitleEncoded + ' - ' + strEpisode
+        
+        strDisplayText = channelNumber + "-" + channelName + " @ " + strftime('%H:%M', time.localtime(startTime)) + ": " + strDisplayText
+        addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitleEncoded,strAiringID,seasonNum,episodeNum,channelName,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
+
+    xbmc.executebuiltin("Container.SetViewMode(504)")
+
 def VIEWCHANNELLISTING(url,name):
+    print "************url=" + str(url)
     channels = executeSagexAPIJSONCall(url, "Result")
     for channel in channels:
         channelNumber = channel.get("ChannelNumber")
@@ -310,7 +400,7 @@ def VIEWCHANNELLISTING(url,name):
         urlToAiringsOnChannel = strUrl + '/sagex/api?command=EvaluateExpression&1=GetAiringsOnChannelAtTime(GetChannelForStationID("' + str(channelStationID) + '"),"' + startRange + '","' + endRange + '",false)&encoder=json'
         logoUrl = strUrl + "/sagex/media/logo/" + str(channelStationID)
         strDisplayText = channelNumber + "-" + channelName
-        addChannelDir(strDisplayText, urlToAiringsOnChannel,31,logoUrl,channelDescription)
+        addChannelDir(strDisplayText, urlToAiringsOnChannel,41,logoUrl,channelDescription)
 
     xbmc.executebuiltin("Container.SetViewMode(535)")
 
@@ -358,7 +448,7 @@ def VIEWAIRINGSONCHANNEL(url,name):
                         strDescription = strGenre
             else:
                 strDisplayText = strTitleEncoded + ' - ' + strEpisode
-        strDisplayText = strftime('%a %b %d', time.localtime(startTime)) + " @ " + airTime + ": " + strDisplayText
+        strDisplayText = strftime('%m-%d', time.localtime(startTime)) + " @ " + airTime + ": " + strDisplayText
         addAiringLink(strDisplayText,'',strDescription,IMAGE_THUMB,strGenre,strOriginalAirdate,strAiringdate,strTitleEncoded,strAiringID,seasonNum,episodeNum,studio,isFavorite, airing.get("AiringStartTime"), airing.get("AiringEndTime"))
 
     xbmc.executebuiltin("Container.SetViewMode(504)")
@@ -735,6 +825,15 @@ def addDir(name,url,mode,iconimage,thumbimage,showexternalid,airingdate,fanartim
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True,totalItems=totalepisodesforshow)
     return ok
 
+def addTimeslotDir(name,url,mode):
+    u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
+    ok=True
+    liz=xbmcgui.ListItem(name)
+
+    liz.setInfo(type="video", infoLabels={ "Title": name } )
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
+    return ok
+
 def addChannelDir(name,url,mode,iconimage,channeldescription):
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)
     ok=True
@@ -838,14 +937,28 @@ elif mode==2:
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_EPISODE)
 
-#View channel listing
+#View airings by time (view list of time slots)
 elif mode==3:
+    print ""+url
+    VIEWTIMESLOTLISTING(url,name)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
+
+#View airings for a specific time slot
+elif mode==31:
+    print ""+url
+    VIEWAIRINGSONTIMESLOT(url,name)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_EPISODE)
+
+#View airings by channel (view list of channels)
+elif mode==4:
     print ""+url
     VIEWCHANNELLISTING(url,name)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
 
 #View airings on channel
-elif mode==31:
+elif mode==41:
     print ""+url
     VIEWAIRINGSONCHANNEL(url,name)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
@@ -853,7 +966,7 @@ elif mode==31:
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_EPISODE)
 
 #Search for recordings
-elif mode==4:
+elif mode==5:
     print ""+url
     SEARCHFORRECORDINGS(url,name)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
@@ -861,7 +974,7 @@ elif mode==4:
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_EPISODE)
 
 #Search for airings
-elif mode==5:
+elif mode==6:
     print ""+url
     SEARCHFORAIRINGS(url,name)
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)

@@ -14,7 +14,21 @@
     <string id="30006">SageTV Server MAC Address (for WOL)</string>
     <string id="30007">Streaming Bandwidth (kbps)</string>
 
-    <!-- Settings -->
+    <!-- Menu Options -->
+    <string id="30030">1. Watch Recordings</string>
+    <string id="30031">2. View Upcoming Recordings</string>
+    <string id="30032">3. Browse Airings (by time)</string>
+    <string id="30033">4. Browse Airings (by channel)</string>
+    <string id="30034">5. Search for Recordings</string>
+    <string id="30035">6. Search for Airings</string>
+    <string id="30036">Browse previously recorded and currently recording shows</string>
+    <string id="30037">View and manage your upcoming recording schedule</string>
+    <string id="30038">Browse specific time slots and manage recordings</string>
+    <string id="30039">Browse within a channel and manage recordings</string>
+    <string id="30040">Search for Recordings</string>
+    <string id="30041">Search for Upcoming Airings</string>
+
+    <!-- Other Strings -->
     <string id="30100">SageTV Server Not Found</string>
     <string id="30101">Unable to connect to your SageTV server.</string>
     <string id="30102">1) Please confirm it is running.</string>

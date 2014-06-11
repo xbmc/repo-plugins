@@ -1,3 +1,6 @@
+[B]Version 1.6.0 (June 11, 2014)[/B]
+- Updated main menu to have two options; "Browse Airings (by time)" and "Browse Airings (by channel)"
+
 [B]Version 1.5.0 (Dec 8, 2013)[/B]
 - Updated reference to json lib to use the fastest lib possible (per this thread: http://forum.xbmc.org/showthread.php?tid=173887)
 - Updated addon.xml with additional attributes to support new addon repository (forum link, URL, etc)

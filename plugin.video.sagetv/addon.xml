@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.sagetv"
        name="SageTV"
-       version="1.5.0"
+       version="1.6.0"
        provider-name="kricker,lehighbri,aaronb">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>

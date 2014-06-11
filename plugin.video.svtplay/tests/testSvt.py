@@ -43,16 +43,15 @@ class TestSvtModule(unittest.TestCase):
 
   def test_programs_for_category(self):
 
-    # Use the "Barn" category since is changes a lot
-    url = "/barn"
+    categories = svt.getCategories()
+    for category in categories:
+      programs = svt.getProgramsForCategory(category["url"])
 
-    programs = svt.getProgramsForCategory(url)
+      self.assertHasContent(programs)
 
-    self.assertHasContent(programs)
-
-    for program in programs:
-      for key in program.keys():
-        self.assertIsNotNone(program[key])
+      for program in programs:
+        for key in program.keys():
+          self.assertIsNotNone(program[key])
 
   def test_get_alphas(self):
 

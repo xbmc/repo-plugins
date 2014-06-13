@@ -53,12 +53,22 @@ class ARDMediathek(Mediathek):
                         TreeNode("1.25","Y",self.rootLink+"/tv/sendungen-a-z?buchstabe=Y",True),
                         TreeNode("1.26","Z",self.rootLink+"/tv/sendungen-a-z?buchstabe=Z",True),
                         )),
+		      TreeNode("2","Reportagen und Dokus",self.rootLink+"/tv/Reportage-Doku/mehr?documentId=21301806",True),
+		      TreeNode("3","Film-Highlights",self.rootLink+"/tv/Film-Highlights/mehr?documentId=21301808",True),
+		      TreeNode("4","Channels","",False,(
+			  TreeNode("4.0","Kinder",self.rootLink+"/tv/Kinder-Familie/mehr?documentId=21282542",True),
+			  TreeNode("4.1","Satire & Unterhaltung",self.rootLink+"/tv/Satire-Unterhaltung/mehr?documentId=21282544",True),
+			  TreeNode("4.2","Kultur",self.rootLink+"/tv/Kultur/mehr?documentId=21282546",True),
+			  TreeNode("4.3","Serien & Soaps",self.rootLink+"/tv/Serien-Soaps/mehr?documentId=21282548",True),
+			  TreeNode("4.4","Wissen",self.rootLink+"/tv/Wissen/mehr?documentId=21282530",True),
+			))
                       )
     self.configLink = self.rootLink+"/play/media/%s?devicetype=pc&feature=flash"
     
     self.regex_VideoPageLink = re.compile("<a href=\".*Video\?documentId=(\d+)&amp;bcastId=\d+\" class=\"textLink\">\s+?<p class=\"dachzeile\">(.*?)</p>\s+?<h4 class=\"headline\">(.*?)</h4>")
     self.regex_CategoryPageLink = re.compile("<a href=\"(.*Sendung\?documentId=\d+&amp;bcastId=\d+)\" class=\"textLink\">\s+?<p class=\"dachzeile\">.*?</p>\s+?<h4 class=\"headline\">(.*?)</h4>\s+?<p class=\"subtitle\">(.*?)</p>")
-    
+    self.pageSelectString = "&mcontent%s=page.%s"
+    self.regex_DetermineSelectedPage = re.compile("&mcontents{0,1}=page.(\d+)");
     
     self.regex_videoLinks = re.compile("\"_quality\":(\d).*?\"_stream\":\"(.*?)\"");
     self.regex_pictureLink = re.compile("_previewImage\":\"(.*?)\"");
@@ -83,8 +93,26 @@ class ARDMediathek(Mediathek):
     
     elementCount = self.extractElements(mainPage);
     
+    
+    self.generateNextPageElement(link, elementCount);
     return elementCount;
-  
+  def generateNextPageElement(self, link, elementCount):
+    marker = "";
+    if("Sendung?documentId" in link):
+      marker = "s";
+      
+    numberElement = self.regex_DetermineSelectedPage.search(link);  
+    if(numberElement is not None):
+      oldNumber = int(numberElement.group(1));
+      newNumber = oldNumber + 1;
+      link = link.replace(self.pageSelectString%(marker,oldNumber),self.pageSelectString%(marker,newNumber));
+      
+      self.gui.buildVideoLink(DisplayObject("Weiter","","","",link,False),self,elementCount);
+    else:
+      link += self.pageSelectString%(marker,2)
+      
+      self.gui.buildVideoLink(DisplayObject("Weiter","","","",link,False),self,elementCount);
+      
   def extractElements(self,mainPage):
     videoElements = list(self.regex_VideoPageLink.finditer(mainPage));
     linkElements = list(self.regex_CategoryPageLink.finditer(mainPage));
@@ -100,6 +128,9 @@ class ARDMediathek(Mediathek):
       title = element.group(2).decode('utf-8');
       subTitle = element.group(3).decode('utf-8');
       self.decodeVideoInformation(videoId, title, subTitle, counter);
+    
+    
+    
     return counter;
     
   def decodeVideoInformation(self, videoId, title, subTitle, nodeCount):

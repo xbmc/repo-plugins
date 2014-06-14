@@ -19,7 +19,7 @@ MODE_CHANNELS = "kanaler"
 MODE_A_TO_O = "a-o"
 MODE_PROGRAM = "pr"
 MODE_CLIPS = "clips"
-MODE_LIVE_CHANNELS = "live-channels"
+MODE_LIVE_PROGRAMS = "live-channels"
 MODE_LATEST = "ep"
 MODE_LATEST_NEWS = "en"
 MODE_POPULAR = "popular"
@@ -57,7 +57,7 @@ def viewStart():
   addDirectoryItem(localize(30009), { "mode": MODE_POPULAR })
   addDirectoryItem(localize(30003), { "mode": MODE_LATEST })
   addDirectoryItem(localize(30010), { "mode": MODE_LAST_CHANCE })
-  addDirectoryItem(localize(30002), { "mode": MODE_LIVE_CHANNELS })
+  addDirectoryItem(localize(30002), { "mode": MODE_LIVE_PROGRAMS })
   addDirectoryItem(localize(30008), { "mode": MODE_CHANNELS })
   addDirectoryItem(localize(30000), { "mode": MODE_A_TO_O })
   addDirectoryItem(localize(30001), { "mode": MODE_CATEGORIES })
@@ -120,8 +120,8 @@ def viewLastChance():
   for article in articles:
     createDirItem(article, MODE_VIDEO)
 
-def viewLiveChannels():
-  articles = svt.getLiveChannels()
+def viewLivePrograms():
+  articles = svt.getLivePrograms()
   if not articles:
     return
   for article in articles:
@@ -343,8 +343,8 @@ elif ARG_MODE == MODE_POPULAR:
   viewPopular()
 elif ARG_MODE == MODE_LAST_CHANCE:
   viewLastChance()
-elif ARG_MODE == MODE_LIVE_CHANNELS:
-  viewLiveChannels()
+elif ARG_MODE == MODE_LIVE_PROGRAMS:
+  viewLivePrograms()
 elif ARG_MODE == MODE_CHANNELS:
   viewChannels()
 elif ARG_MODE == MODE_LETTER:

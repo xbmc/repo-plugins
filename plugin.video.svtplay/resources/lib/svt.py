@@ -18,7 +18,7 @@ SECTION_LATEST_VIDEOS = "latest-videos"
 SECTION_LAST_CHANCE = "last-chance-videos"
 SECTION_LATEST_CLIPS = "playJs-more-clips"
 SECTION_EPISODES = "playJs-more-episodes"
-SECTION_LIVE_CHANNELS = "live-channels"
+SECTION_LIVE_PROGRAMS = "live-channels"
 
 SEARCH_LIST_TITLES = "[^\"']*playJs-search-titles[^\"']*"
 SEARCH_LIST_EPISODES = "[^\"']*playJs-search-episodes[^\"']*"
@@ -110,7 +110,7 @@ def getAlphas():
   Returns a list of all letters in the alphabet that has programs.
   """
   html = getPage(URL_A_TO_O)
-  container = common.parseDOM(html, "div", attrs = { "class" : "[^\"']*play_alphabetic-list-titles[^\"']*" })
+  container = common.parseDOM(html, "ul", attrs = { "class" : "[^\"']*play_alphabetic-list-titles[^\"']*" })
 
   if not container:
     common.log("No container found!")
@@ -141,7 +141,11 @@ def getProgramsByLetter(letter):
 
   html = getPage(URL_A_TO_O)
 
-  letterboxes = common.parseDOM(html, "div", attrs = { "class": "[^\"']*play_alphabetic-letter[^\"']*" })
+  letterboxes = common.parseDOM(html, "li", attrs = { "class": "[^\"']*play_alphabetic-letter[^\"']*" })
+  if not letterboxes:
+    common.log("No containers found for letter '%s'" % letter)
+    return None
+
   letterbox = None
 
   for letterbox in letterboxes:
@@ -265,11 +269,11 @@ def getLastChance():
   """
   return getArticles(SECTION_LAST_CHANCE)
 
-def getLiveChannels():
+def getLivePrograms():
   """
   Returns the 'live' channels (differs from 'channels')
   """
-  return getArticles(SECTION_LIVE_CHANNELS)
+  return getArticles(SECTION_LIVE_PROGRAMS)
 
 def getEpisodes(url):
   """
@@ -330,8 +334,8 @@ def getArticles(section_name, url=None):
                                 attrs = { "class": "[^\"']*play_videolist__thumbnail[^\"']*" },
                                 ret = "src")[0]
     new_article["thumbnail"] = helper.prepareThumb(thumbnail, baseUrl=BASE_URL)
-    if section_name == SECTION_LIVE_CHANNELS:
-      notlive = common.parseDOM(article, "span", attrs = {"class": "[^\"']*play_icon-live[^\"']*is-inactive[^\"']*"})
+    if section_name == SECTION_LIVE_PROGRAMS:
+      notlive = common.parseDOM(article, "span", attrs = {"class": "[^\"']*play_graphics-live[^\"']*is-inactive[^\"']*"})
       if notlive:
         new_article["live"] = False
       else:

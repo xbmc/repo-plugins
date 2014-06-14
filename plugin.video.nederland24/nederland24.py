@@ -39,6 +39,7 @@ IMG_DIR = os.path.join(settings.getAddonInfo("path"),"resources", "media")
 API_URL = 'http://ida.omroep.nl/aapi/?stream='
 BASE_URL = 'http://livestreams.omroep.nl/live/npo/'
 USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53'
+REF_URL = 'http://www.npo.nl'
 
 CHANNELS = [
   
@@ -144,6 +145,7 @@ def playVideo(url):
         URL=API_URL+BASE_URL+media
         req = urllib2.Request(URL)
         req.add_header('User-Agent', USER_AGENT)
+        req.add_header('Referer', REF_URL)
         response = urllib2.urlopen(req)
         page = response.read()
         response.close()

@@ -9,7 +9,9 @@ SITE = "http://www1.spiegel.de/active/playlist/fcgi/playlist.fcgi/asset=flashvid
 VIDS = 20
 VIDS_PER_SITE = "/count=" + str(VIDS) + "/" 
 BASEURL="http://video.spiegel.de/flash/"
+PLUGIN_NAME="plugin.video.spiegelonline"
 handle = int(sys.argv[1])
+
 __addon__        = xbmcaddon.Addon()
 __language__     = __addon__.getLocalizedString
 items = []
@@ -27,6 +29,7 @@ def show_root_menu():
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_cat_menu(cat, vnr):
+    xbmcplugin.setContent(handle, "episodes")
     content = getUrl(SITE + (urllib.unquote_plus(cat)) + VIDS_PER_SITE + "start=" + vnr)
     match = re.compile('<listitem>(.+?)</listitem>',re.DOTALL).findall(content)
     for m in match:
@@ -35,8 +38,8 @@ def show_cat_menu(cat, vnr):
             name=convert_to_UTF8(name)
             headline=convert_to_UTF8(headline)
             teaser=convert_to_UTF8(teaser)
-            liStyle=xbmcgui.ListItem((name + " - " + headline), iconImage="default.png", thumbnailImage=pic)
-            liStyle.setInfo( type="Video", infoLabels={ "Title": name, "plotoutline": headline, "plot": teaser, "date": date})
+            liStyle=xbmcgui.ListItem(label=(name + " - " + headline), iconImage="default.png", thumbnailImage=pic)
+            liStyle.setInfo( type="Video", infoLabels={ "Title": name, "plotoutline": headline, "plot": teaser, "aired": date})
             liStyle.addStreamInfo('video', {'duration': getSeconds(playtime)})
             items.append({'vid': vid, "li" :liStyle})
     threads = []
@@ -48,16 +51,25 @@ def show_cat_menu(cat, vnr):
     for t in threads:
       t.join()
     for i in items:
-      addLinkItem(i['url'],i['li'])
+      if i['url'] != BASEURL:
+        addLinkItem(i['url'],i['li'])
+    #xbmc.log(str(SITE + cat + VIDS_PER_SITE + "start=" + str(int(vnr) + VIDS)), level=xbmc.LOGERROR)
     content = getUrl(SITE + cat + VIDS_PER_SITE + "start=" + str(int(vnr) + VIDS))
     match = re.compile('<listitem>(.+?)</listitem>',re.DOTALL).findall(content)
     if len(match) > 0:
         addDirectoryItem(__addon__.getLocalizedString(30001), {"cat": cat, "site": str(int(vnr) + VIDS)})
     addDirectoryItem(__addon__.getLocalizedString(30002),{"cat": "main"})        
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
+    xbmc.executebuiltin('Container.SetViewMode(504)')
     
 def getVideo(id):
-    content = getUrl(BASEURL + id + ".xml")
+    content = None
+    url = BASEURL + id + ".xml"
+    try:
+        content = getUrl(url)
+    except Exception:
+        xbmc.log(PLUGIN_NAME + ": Video not found: "+ str(url), level=xbmc.LOGNOTICE)
+        return ""
     match = re.compile('<type(.+?)</type',re.DOTALL).findall(content)
     filename = ""
     streams = []

@@ -24,12 +24,14 @@ import xbmcgui
 import urllib2
 import re
 import sys
+import json
 
-link_re = re.compile(r'<a.*?</a>', re.S)
-video_re = re.compile(r'http://.*\.mp4')
+link_re = re.compile(r'<a href="video.*?</a>', re.S)
+video_re = re.compile(r'nos\.nl/embed/\?id=b2:([0-9]+)')
 title_re = re.compile(r'<h3>(.*?)</h3>')
-meta_re = re.compile(r'<p class="video-meta">(.*?)</p>')
+meta_re = re.compile(r'<p class="video-meta">(?:<span.*?</span>)?(.*?)</p>')
 img_re = re.compile(r'<img src="(.*?)"')
+playlist_format = 'http://nos.nl/playlist/uitzending/mp4-web03/{0:d}.json'
 
 def addLink(title, url, thumb):
   liz=xbmcgui.ListItem(title, thumbnailImage=thumb)
@@ -44,6 +46,9 @@ def scan(params):
     meta = ', '.join([meta_part.strip() for meta_part in re.sub(r'\s+', ' ', meta_re.search(a).group(1)).split('<br />')])
     img = URL + '/browser/' + img_re.search(a).group(1).strip()
     title = title + ' - ' + meta
+    playlist_url = playlist_format.format(int(video_url))
+    playlist = json.loads(urllib2.urlopen(playlist_url).read())
+    video_url = playlist['videofile']
     addLink(title, video_url, img)
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

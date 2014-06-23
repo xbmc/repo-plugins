@@ -7,3 +7,7 @@ Version bump for Eden
 [B]2.1.0:[/B]
 Fix laatste journaals
 Disable broken rss feeds
+
+[B]2.2.0:[/B]
+Fix laatste journaals
+Add WK 2014

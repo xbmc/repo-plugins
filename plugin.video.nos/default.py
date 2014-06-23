@@ -53,6 +53,7 @@ if 'module' in params: # Module chosen, load and execute module
   current_module = sys.modules[module]
   current_module.run(params)
 else: # No module chosen, list modules
+  addDir('WK 2014', 'wk_2014')
   addDir('Laatste Journaals', 'laatste_journaals')
   #addDir('Journaal Video\'s', 'journaal_videos') #Disabled for now, broken
   addDir('Jeugdjournaal', 'jeugdjournaal')

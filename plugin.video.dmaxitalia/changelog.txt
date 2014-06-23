@@ -1,3 +1,6 @@
+1.0.7 (2014-06-19)
+Added settings suitable for low-end devices
+
 1.0.6 (2014-06-03)
 Added autoplay function
 Minor fixes

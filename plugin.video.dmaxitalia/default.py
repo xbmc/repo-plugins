@@ -8,8 +8,7 @@ from BeautifulSoup import BeautifulSoup
 
 from pyamf import remoting
 
-addon = xbmcaddon.Addon()
-addonID = addon.getAddonInfo('id')
+addon = xbmcaddon.Addon(id='plugin.video.dmaxitalia')
 thisPlugin = int(sys.argv[1])
 baseUrl = "http://www.dmax.it"
 urlShows = "http://www.dmax.it/video/programmi/"
@@ -20,7 +19,8 @@ const_str = "ef59d16acbb13614346264dfe58844284718fb7b"
 const_playerID = 1752666798001;
 const_publisherID = 1265527910001;
 const_playerKey = "AQ~~,AAABJqdXbnE~,swSdm6mQzrEWC8U2s8_PyL570J6HePbQ"
-maxBitRate = 5120000
+maxBitRate = addon.getSetting('max_bitrate')
+isThumbnailScanEnabled = addon.getSetting('thumbnail_scan')
 
 thumbnailsCache = StorageServer.StorageServer("plugin.video.dmaxitalia", 24*7)
 
@@ -65,7 +65,10 @@ def getShows():
 			link = show.find('a')
 			show_title = link.string
 			show_link = link['href'] + "altri-video/"
-			show_thumbnail = thumbnailsCache.cacheFunction(getShowThumbnail, urlShows + link['href'])
+			if isThumbnailScanEnabled == "true":
+				show_thumbnail = thumbnailsCache.cacheFunction(getShowThumbnail, urlShows + link['href'])
+			else:
+				show_thumbnail = ""
 			addDirectoryItem(show_title, show_link, "show", show_thumbnail)
 	xbmcplugin.addSortMethod(thisPlugin, xbmcplugin.SORT_METHOD_LABEL)
 	xbmcplugin.endOfDirectory(thisPlugin)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.dmaxitalia" name="DMAX Italia" version="1.0.6" provider-name="Goph">
+<addon id="plugin.video.dmaxitalia" name="DMAX Italia" version="1.0.7" provider-name="Goph">
   <requires>
 	<import addon="xbmc.python" version="2.1.0"/>
 	<import addon="xbmc.addon" version="12.0.0"/>
@@ -21,7 +21,7 @@
 	<forum>http://forum.xbmc.org/showthread.php?tid=196136</forum>
     <website>https://github.com/xbmc-goph/plugin.video.dmaxitalia</website>
     <email></email>
-    <source></source>
+    <source>https://github.com/xbmc-goph/plugin.video.dmaxitalia</source>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
   </extension>
 </addon>

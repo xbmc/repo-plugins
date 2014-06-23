@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2013 Tommy Winther
+#      Copyright (C) 2014 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -32,12 +32,10 @@ import xbmcplugin
 import tvapi
 import buggalo
 
-LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '\xC3\x86', '\xC3\x98', '\xC3\x85']
-
 
 class DrDkTvAddon(object):
     def __init__(self):
-        self.api = tvapi.TvApi()
+        self.api = tvapi.Api(CACHE_PATH)
         self.favorites = list()
         self.recentlyWatched = list()
 
@@ -66,6 +64,11 @@ class DrDkTvAddon(object):
 
     def showMainMenu(self):
         items = list()
+        # Live TV
+        item = xbmcgui.ListItem(ADDON.getLocalizedString(30027), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'livetv.png'))
+        item.setProperty('Fanart_Image', FANART_IMAGE)
+        items.append((PATH + '?show=liveTV', item, True))
+
         # A-Z Program Series
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30000), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'all.png'))
         item.setProperty('Fanart_Image', FANART_IMAGE)
@@ -84,12 +87,7 @@ class DrDkTvAddon(object):
         # Spotlight
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30002), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'star.png'))
         item.setProperty('Fanart_Image', FANART_IMAGE)
-        items.append((PATH + '?listVideos=%s' % tvapi.SLUG_SPOTS, item, True))
-
-        # Highlights
-        item = xbmcgui.ListItem(ADDON.getLocalizedString(30021), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'star.png'))
-        item.setProperty('Fanart_Image', FANART_IMAGE)
-        items.append((PATH + '?listVideos=%s' % tvapi.SLUG_HIGHLIGHTS, item, True))
+        items.append((PATH + '?show=highlights', item, True))
 
         # Search videos
         item = xbmcgui.ListItem(ADDON.getLocalizedString(30003), iconImage=os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'search.png'))
@@ -109,65 +107,84 @@ class DrDkTvAddon(object):
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def showProgramSeriesVideos(self, slug):
-        self.listVideos(self.api.programCardRelations(slug))
-
-    def showMostViewedVideos(self):
-        self.listVideos(self.api.getMostViewedProgramCards())
-
     def showFavorites(self):
         self._load()
         if not self.favorites:
             xbmcgui.Dialog().ok(ADDON.getAddonInfo('name'), ADDON.getLocalizedString(30013))
             xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
         else:
-            self.listBundles(self.api.bundle(slugs=self.favorites), addToFavorites=False)
+            series = []
+            for slug in self.favorites:
+                series.extend(self.api.searchSeries(slug))
+            self.listSeries(series, addToFavorites=False)
 
     def showRecentlyWatched(self):
         self._load()
         videos = list()
-        for programCardUrn in self.recentlyWatched:
-            video = self.api.programCard(programCardUrn)
-            if video is None or not 'Data' in video or len(video['Data']) == 0:
-                self.recentlyWatched.remove(programCardUrn)
+        for slug in self.recentlyWatched:
+            item = self.api.getEpisode(slug)
+            if item is None:
+                self.recentlyWatched.remove(slug)
             else:
-                videos.append(video['Data'][0])
+                videos.append(item)
 
         self._save()
         if not videos:
             xbmcgui.Dialog().ok(ADDON.getAddonInfo('name'), ADDON.getLocalizedString(30013), ADDON.getLocalizedString(30020))
             xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
         else:
-            self.listVideos(videos)
+            self.listEpisodes(videos)
 
-    def showProgramSeries(self, letter=None):
-        self.listBundles(self.api.bundlesWithPublicAsset(letter))
+    def showLiveTV(self):
+        items = list()
+        for channel in self.api.getLiveTV():
+            if channel['WebChannel']:
+                continue
+
+            server = None
+            for streamingServer in channel['StreamingServers']:
+                if streamingServer['LinkType'] == 'HLS':
+                    server = streamingServer
+                    break
+
+            if server is None:
+                continue
+
+            item = xbmcgui.ListItem(channel['Title'], iconImage=channel['PrimaryImageUri'])
+            item.setProperty('Fanart_Image', channel['PrimaryImageUri'])
+
+            url = server['Server'] + '/' + server['Qualities'][0]['Streams'][0]['Stream']
+            items.append((url, item, False))
+
+        items = sorted(items, lambda mine, yours: cmp(mine[1].getLabel().replace(' ', ''), yours[1].getLabel().replace(' ', '')))
+
+        xbmcplugin.addDirectoryItems(HANDLE, items)
+        xbmcplugin.endOfDirectory(HANDLE)
 
     def showAZ(self):
-        items = list()
-
         # All Program Series
         iconImage = os.path.join(ADDON.getAddonInfo('path'), 'resources', 'icons', 'all.png')
 
-        for letter in LETTERS:
-            item = xbmcgui.ListItem(letter, iconImage=iconImage)
+        items = list()
+        for programIndex in self.api.getProgramIndexes():
+            item = xbmcgui.ListItem(programIndex['Title'], iconImage=iconImage)
             item.setProperty('Fanart_Image', FANART_IMAGE)
 
-            url = PATH + '?listProgramSeriesByLetter=' + letter
+            url = PATH + '?listProgramSeriesByLetter=' + programIndex['_Param']
             items.append((url, item, True))
 
         xbmcplugin.addDirectoryItems(HANDLE, items)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def searchVideos(self):
+    def searchSeries(self):
         keyboard = xbmc.Keyboard('', ADDON.getLocalizedString(30003))
         keyboard.doModal()
         if keyboard.isConfirmed():
             keyword = keyboard.getText()
-            self.listVideos(self.api.searchProgramCard(keyword))
+            self.listSeries(self.api.getSeries(keyword))
 
-    def listBundles(self, bundles, addToFavorites=True):
-        if not bundles:
+    def listSeries(self, items, addToFavorites=True):
+        if not items:
             xbmcplugin.endOfDirectory(HANDLE, succeeded=False)
             if not addToFavorites:
                 xbmcgui.Dialog().ok(ADDON.getAddonInfo('name'), ADDON.getLocalizedString(30013),
@@ -175,146 +192,73 @@ class DrDkTvAddon(object):
             else:
                 xbmcgui.Dialog().ok(ADDON.getAddonInfo('name'), ADDON.getLocalizedString(30013))
         else:
-            items = list()
-            for bundle in bundles['Data']:
-                if 'ProgramCard' in bundle and bundle['ProgramCard']['PrimaryAssetKind'] != 'VideoResource':
-                    continue
-
-                infoLabels = {}
-                if bundle['CreatedTime'] is not None:
-                    publishTime = self.parseDate(bundle['CreatedTime'])
-                    if publishTime:
-                        infoLabels['plotoutline'] = ADDON.getLocalizedString(30004) % publishTime.strftime('%d. %b %Y kl. %H:%M')
-                        infoLabels['date'] = publishTime.strftime('%d.%m.%Y')
-                        infoLabels['year'] = int(publishTime.strftime('%Y'))
-                        infoLabels['aired'] = publishTime.strftime('%Y-%m-%d')
-                infoLabels['title'] = bundle['Title']
-
+            directoryItems = list()
+            for item in items:
                 menuItems = list()
-                if self.favorites.count(bundle['Slug']) > 0:
-                    runScript = "XBMC.RunPlugin(plugin://plugin.video.drnu/?delfavorite=%s)" % bundle['Slug']
+                if self.favorites.count(item['SeriesTitle']) > 0:
+                    runScript = "XBMC.RunPlugin(plugin://plugin.video.drnu/?delfavorite=%s)" % item['SeriesTitle'].replace('&', '%26')
                     menuItems.append((ADDON.getLocalizedString(30201), runScript))
                 else:
-                    runScript = "XBMC.RunPlugin(plugin://plugin.video.drnu/?addfavorite=%s)" % bundle['Slug']
+                    runScript = "XBMC.RunPlugin(plugin://plugin.video.drnu/?addfavorite=%s)" % item['SeriesTitle'].replace('&', '%26')
                     menuItems.append((ADDON.getLocalizedString(30200), runScript))
 
-                if 'ProgramCard' in bundle:
-                    programCard = bundle['ProgramCard']
-                else:
-                    programCard = bundle
 
-                imageAsset = self.api.getAsset('Image', programCard)
-                if imageAsset:
-                    iconImage = imageAsset['Uri']
-                else:
-                    iconImage = ''
-                item = xbmcgui.ListItem(infoLabels['title'], iconImage=iconImage)
-                item.setInfo('video', infoLabels)
-                item.setProperty('Fanart_Image', iconImage)
-                item.addContextMenuItems(menuItems, False)
+                iconImage = item['PrimaryImageUri']
+                listItem = xbmcgui.ListItem(item['SeriesTitle'], iconImage=iconImage)
+                listItem.setProperty('Fanart_Image', iconImage)
+                listItem.addContextMenuItems(menuItems, False)
 
-                url = PATH + '?listVideos=' + bundle['Slug']
-                items.append((url, item, True))
+                url = PATH + '?listVideos=' + item['SeriesSlug']
+                directoryItems.append((url, listItem, True))
 
-            xbmcplugin.addDirectoryItems(HANDLE, items)
+            xbmcplugin.addDirectoryItems(HANDLE, directoryItems)
             xbmcplugin.endOfDirectory(HANDLE)
 
-    def listVideos(self, programCards):
-        items = list()
-        if 'Data' in programCards:
-            programCards = programCards['Data']
-
-        for programCard in programCards:
-            if 'ProgramCard' in programCard:
-                programCard = programCard['ProgramCard']
-            if not 'PrimaryAssetUri' in programCard:
+    def listEpisodes(self, items):
+        directoryItems = list()
+        for item in items:
+            if 'PrimaryAsset' not in item or 'Uri' not in item['PrimaryAsset'] or not item['PrimaryAsset']['Uri']:
                 continue
 
-            infoLabels = self.createInfoLabels(programCard)
+            infoLabels = {
+                'title': item['Title']
+            }
+            if 'PrimaryBroadcastStartTime' in item and item['PrimaryBroadcastStartTime'] is not None:
+                broadcastTime = self.parseDate(item['PrimaryBroadcastStartTime'])
+                if broadcastTime:
+                    infoLabels['date'] = broadcastTime.strftime('%d.%m.%Y')
+                    infoLabels['aired'] = broadcastTime.strftime('%Y-%m-%d')
+                    infoLabels['year'] = int(broadcastTime.strftime('%Y'))
 
-            imageAsset = self.api.getAsset('Image', programCard)
-            if imageAsset:
-                iconImage = imageAsset['Uri']
-            else:
-                iconImage = ''
-            item = xbmcgui.ListItem(infoLabels['title'], iconImage=iconImage)
-            item.setInfo('video', infoLabels)
-            item.setProperty('Fanart_Image', iconImage)
-            url = PATH + '?videoasset=' + programCard['PrimaryAssetUri'] + '&urn=' + programCard['Urn']
-            item.setProperty('IsPlayable', 'true')
-            items.append((url, item))
+            iconImage = item['PrimaryImageUri']
+            listItem = xbmcgui.ListItem(item['Title'], iconImage=iconImage)
+            listItem.setInfo('video', infoLabels)
+            listItem.setProperty('Fanart_Image', iconImage)
+            url = PATH + '?playVideo=' + item['Slug']
+            listItem.setProperty('IsPlayable', 'true')
+            directoryItems.append((url, listItem))
 
-        xbmcplugin.addDirectoryItems(HANDLE, items)
+        xbmcplugin.addDirectoryItems(HANDLE, directoryItems)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_DATE)
         xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
         xbmcplugin.endOfDirectory(HANDLE)
 
-    def playVideo(self, assetUri, programCardUrn):
-        self.updateRecentlyWatched(programCardUrn)
-        asset = self.api._http_request(assetUri)
-        if not asset:
-            raise tvapi.TvNuException('Video with ID %s not found!' % assetUri)
+    def playVideo(self, slug):
+        self.updateRecentlyWatched(slug)
+        item = self.api.getEpisode(slug)
+        video = self.api.getVideoUrl(item['PrimaryAsset']['Uri'])
 
-        if ADDON.getSetting('show.stream.selector') == 'true':
-            options = []
-            for link in asset['Links']:
-                options.append('%s (%s kbps)' % (link['Target'], link['Bitrate'] if 'Bitrate' in link else '?'))
-            options.append('vodfiles.dr.dk')
+        item = xbmcgui.ListItem(path=video['Uri'])
+        xbmcplugin.setResolvedUrl(HANDLE, video['Uri'] is not None, item)
 
-            d = xbmcgui.Dialog()
-            idx = d.select('Stream', options)
-            if idx == -1:
-                xbmcplugin.setResolvedUrl(HANDLE, False, xbmcgui.ListItem())
-                return
-            elif idx == len(options) - 1:
-                videoUrl = self.api.getLink(asset, 'Android')
-                videoUrl = videoUrl.replace('rtsp://om.gss.dr.dk/mediacache/_definst_/mp4:content/', 'http://vodfiles.dr.dk/')
-            else:
-                videoUrl = asset['Links'][idx]['Uri']
-
-        else:
-            if ADDON.getSetting('prefer.stream.target') == 'vodfiles.dr.dk':
-                videoUrl = self.api.getLink(asset, 'Android')
-                videoUrl = videoUrl.replace('rtsp://om.gss.dr.dk/mediacache/_definst_/mp4:content/', 'http://vodfiles.dr.dk/')
-            elif ADDON.getSetting('prefer.stream.target') == 'Android':
-                videoUrl = self.api.getLink(asset, 'Android')
-            elif ADDON.getSetting('prefer.stream.target') == 'Streaming':
-                videoUrl = self.api.getLink(asset, 'Streaming')
-            else:
-                videoUrl = self.api.getLink(asset, 'Ios')
-
-        if videoUrl is None:
-            videoUrl = self.api.getLink(asset)
-            if videoUrl is None:
-                raise Exception('No stream found')
-
-        if videoUrl[0:7] == 'rtmp://':
-            m = re.search('(rtmp://vod.dr.dk/cms)/([^\?]+)(\?.*)', videoUrl)
-            if m:
-                videoUrl = m.group(1) + m.group(3)
-                videoUrl += ' playpath=' + m.group(2) + m.group(3)
-                videoUrl += ' app=cms' + m.group(3)
-
-        try:
-            print videoUrl
-        except:
-            pass
-
-        item = xbmcgui.ListItem(path=videoUrl)
-        xbmcplugin.setResolvedUrl(HANDLE, videoUrl is not None, item)
-
-        if ADDON.getSetting('enable.subtitles') == 'true' and 'SubtitlesList' in asset and asset['SubtitlesList']:
-            path = None
-            if len(asset['SubtitlesList']) > 0:
-                path = asset['SubtitlesList'][0]['Uri']
-
-            if path:
+        if ADDON.getSetting('enable.subtitles') == 'true':
+            if video['SubtitlesUri']:
                 player = xbmc.Player()
                 for retry in range(0, 20):
                     if player.isPlaying():
                         break
                     xbmc.sleep(250)
-                xbmc.Player().setSubtitles(path)
+                xbmc.Player().setSubtitles(video['SubtitlesUri'])
 
     def parseDate(self, dateString):
         if dateString is not None:
@@ -332,42 +276,18 @@ class DrDkTvAddon(object):
         else:
             return None
 
-    def createInfoLabels(self, programCard):
-        infoLabels = dict()
-
-        if programCard['Title'] is not None:
-            infoLabels['title'] = programCard['Title']
-        else:
-            infoLabels['title'] = ADDON.getLocalizedString(30006)
-
-        if 'Description' in programCard and programCard['Description'] is not None:
-            infoLabels['plot'] = programCard['Description']
-        if 'PrimaryBroadcastStartTime' in programCard and programCard['PrimaryBroadcastStartTime'] is not None and programCard['PrimaryBroadcastStartTime'][0:4] != '0001':
-            broadcastTime = self.parseDate(programCard['PrimaryBroadcastStartTime'])
-            if broadcastTime:
-                infoLabels['plotoutline'] = ADDON.getLocalizedString(30015) % broadcastTime.strftime('%d. %b %Y kl. %H:%M')
-                infoLabels['date'] = broadcastTime.strftime('%d.%m.%Y')
-                infoLabels['aired'] = broadcastTime.strftime('%Y-%m-%d')
-                infoLabels['year'] = int(broadcastTime.strftime('%Y'))
-        if 'EndPublish' in programCard and programCard['EndPublish'] is not None and programCard['EndPublish'][0:4] != '9999':
-            expireTime = self.parseDate(programCard['EndPublish'])
-            if expireTime:
-                infoLabels['plot'] += '[CR][CR]' + ADDON.getLocalizedString(30016) % expireTime.strftime('%d. %b %Y kl. %H:%M')
-
-        return infoLabels
-
-    def addFavorite(self, slug):
+    def addFavorite(self, title):
         self._load()
-        if not self.favorites.count(slug):
-            self.favorites.append(slug)
+        if not self.favorites.count(title):
+            self.favorites.append(title)
         self._save()
 
         xbmcgui.Dialog().ok(ADDON.getLocalizedString(30008), ADDON.getLocalizedString(30009))
 
-    def delFavorite(self, slug):
+    def delFavorite(self, title):
         self._load()
-        if self.favorites.count(slug):
-            self.favorites.remove(slug)
+        if self.favorites.count(title):
+            self.favorites.remove(title)
         self._save()
         xbmcgui.Dialog().ok(ADDON.getLocalizedString(30008), ADDON.getLocalizedString(30010))
 
@@ -410,27 +330,29 @@ if __name__ == '__main__':
     drDkTvAddon = DrDkTvAddon()
     try:
         if 'show' in PARAMS:
-            if PARAMS['show'][0] == 'allProgramSeries':
-                drDkTvAddon.showProgramSeries()
+            if PARAMS['show'][0] == 'liveTV':
+                drDkTvAddon.showLiveTV()
             elif PARAMS['show'][0] == 'listAZ':
                 drDkTvAddon.showAZ()
             elif PARAMS['show'][0] == 'mostViewed':
-                drDkTvAddon.showMostViewedVideos()
+                drDkTvAddon.listEpisodes(drDkTvAddon.api.getMostViewed())
+            elif PARAMS['show'][0] == 'highlights':
+                drDkTvAddon.listEpisodes(drDkTvAddon.api.getSelectedList())
             elif PARAMS['show'][0] == 'search':
-                drDkTvAddon.searchVideos()
+                drDkTvAddon.searchSeries()
             elif PARAMS['show'][0] == 'favorites':
                 drDkTvAddon.showFavorites()
             elif PARAMS['show'][0] == 'recentlyWatched':
                 drDkTvAddon.showRecentlyWatched()
 
         elif 'listProgramSeriesByLetter' in PARAMS:
-            drDkTvAddon.showProgramSeries(letter=PARAMS['listProgramSeriesByLetter'][0])
+            drDkTvAddon.listSeries(drDkTvAddon.api.getSeries(PARAMS['listProgramSeriesByLetter'][0]))
 
         elif 'listVideos' in PARAMS:
-            drDkTvAddon.showProgramSeriesVideos(PARAMS['listVideos'][0])
+            drDkTvAddon.listEpisodes(drDkTvAddon.api.getEpisodes(PARAMS['listVideos'][0]))
 
-        elif 'videoasset' in PARAMS:
-            drDkTvAddon.playVideo(PARAMS['videoasset'][0], PARAMS['urn'][0])
+        elif 'playVideo' in PARAMS:
+            drDkTvAddon.playVideo(PARAMS['playVideo'][0])
 
         elif 'addfavorite' in PARAMS:
             drDkTvAddon.addFavorite(PARAMS['addfavorite'][0])
@@ -441,7 +363,7 @@ if __name__ == '__main__':
         else:
             drDkTvAddon.showMainMenu()
 
-    except tvapi.TvNuException, ex:
+    except tvapi.ApiException, ex:
         drDkTvAddon.displayError(str(ex))
 
     except IOError, ex:

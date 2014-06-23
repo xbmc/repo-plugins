@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2013 Tommy Winther
+#      Copyright (C) 2014 Tommy Winther
 #      http://tommy.winther.nu
 #
 #  This Program is free software; you can redistribute it and/or modify
@@ -24,107 +24,123 @@ except:
     import simplejson as json
 import urllib
 import urllib2
-
-SLUG_HIGHLIGHTS='hoejdepunkter'
-SLUG_SPOTS='test-spotliste'
+import hashlib
+import os
+import datetime
 SLUG_PREMIERES='forpremierer'
 
-class TvApi(object):
 
-    def bundle(self, title=None, bundleType='Series', limit=500, channelType='TV', slugs=None):
-        params = {
-            'BundleType': '$eq("%s")' % bundleType,
-            'ChannelType': '$eq("%s")' % channelType,
-            'limit': '$eq(%d)' % limit
-        }
-        if title:
-            params['Title'] = ['$orderby("asc")', '$like("%s")' % title]
-        if slugs:
-            params['Slug'] = '$in("%s")' % '","'.join(slugs)
-        return self._http_request('http://www.dr.dk/mu/bundle', params)
+class Api(object):
+    API_URL = 'http://www.dr.dk/mu-online/api/1.0'
 
-    def bundlesWithPublicAsset(self, title=None, bundleType='Series', limit=5000, channelType='TV'):
-        params = {
-            'BundleType': '$eq("%s")' % bundleType,
-            'Title': ['$orderby("asc")'],
-            'ChannelType': '$eq("%s")' % channelType,
-            'limit': '$eq(%d)' % limit
-        }
-        if title:
-            params['Title'].append('$like("%s")' % title)
-        return self._http_request('http://www.dr.dk/mu/view/bundles-with-public-asset', params)
+    def __init__(self, cachePath):
+        self.cachePath = cachePath
 
-    def searchBundle(self, text):
-        params = {
-            'Title': '$like("%s*")' % text
-        }
-        return self._http_request('http://www.dr.dk/mu/search/bundle', params)
+    def getLiveTV(self):
+        return self._http_request('/channel/all-active-dr-tv-channels')
 
-    def getMostViewedProgramCards(self, days=7, count=100, channelType='TV'):
-        params = {
-            'count': count,
-            'days': days,
-            'ChannelType': channelType
-        }
-        return self._http_request('http://www.dr.dk/mu/View/programviews', params)
+    def getProgramIndexes(self):
+        result = self._http_request('/page/tv/programs')
+        if 'Indexes' in result:
+            indexes = result['Indexes']
+            for programIndex in indexes:
+                programIndex['_Param'] = programIndex['Source'][programIndex['Source'].rindex('/') + 1:]
+            return indexes
 
-    def programCard(self, slug):
-        try:
-            return self._http_request('http://www.dr.dk/mu/programcard/expanded/' + slug)
-        except IOError:
-            return None
+        return []
 
-    def programCardRelations(self, relationsSlug, limit=500):
-        params = {
-            'Relations.Slug': '$eq("%s")' % relationsSlug,
-            'limit': '$eq(%d)' % limit
-        }
-        return self._http_request('http://www.dr.dk/mu/programcard', params)
+    def getSeries(self, query):
+        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title-starts-with/%s' % query,
+                                    {'limit': 75})
+        return self._handle_paging(result)
 
-    def searchProgramCard(self, text):
-        params = {
-            'Title': '$like("%s*")' % text
-        }
-        return self._http_request('http://www.dr.dk/mu/search/programcard', params)
+    def searchSeries(self, query):
+        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title/%s' % query)
+        return self._handle_paging(result)
 
-    def getAsset(self, kind, programCard):
-        if 'ProgramCard' in programCard:
-            programCard = programCard['ProgramCard']
-        if 'Assets' in programCard:
-            for asset in programCard['Assets']:
-                if asset['Kind'] == kind:
-                    return asset
-        return None
+    def getEpisodes(self, slug):
+        result = self._http_request('/list/%s' % slug,
+                                    {'limit': 48})
+        return self._handle_paging(result)
 
-    def getLink(self, asset, target = None):
-        bitRate = 0
+    def getEpisode(self, slug):
+        return self._http_request('/programcard/%s' % slug)
+
+    def getMostViewed(self):
+        result = self._http_request('/list/view/mostviewed',
+                                    {'limit': 48})
+        return result['Items']
+
+    def getSelectedList(self):
+        result = self._http_request('/list/view/selectedlist',
+                                    {'limit': 60})
+        return result['Items']
+
+    def getVideoUrl(self, assetUri):
+        result = self._http_request(assetUri)
+
         uri = None
-        if 'Links' in asset:
-            for link in asset['Links']:
-                if (target is None or link['Target'] == target) and ('Bitrate' in link and link['Bitrate'] > bitRate):
-                    uri = link['Uri']
-                    bitRate = link['Bitrate']
-                elif not 'Bitrate' in link and uri is None:
-                    uri = link['Uri']
-        return uri
+        for link in result['Links']:
+            if link['Target'] == 'HLS':
+                uri = link['Uri']
+                break
+
+        subtitlesUri = None
+        if 'SubtitlesList' in result and len(result['SubtitlesList']) > 0:
+            subtitlesUri = result['SubtitlesList'][0]['Uri']
+
+        return {
+            'Uri': uri,
+            'SubtitlesUri': subtitlesUri
+        }
+
+    def _handle_paging(self, result):
+        items = result['Items']
+        while 'Next' in result['Paging']:
+            result = self._http_request(result['Paging']['Next'])
+            items.extend(result['Items'])
+        return items
 
     def _http_request(self, url, params=None):
         try:
+            if not url.startswith('http://'):
+                url = self.API_URL + url
+
             if params:
                 url = url + '?' + urllib.urlencode(params, doseq=True)
 
-            u = urllib2.urlopen(url, timeout=30)
-            content = u.read()
-            u.close()
+            try:
+                print url
+            except:
+                pass
+
+            urlCachePath = os.path.join(self.cachePath, hashlib.md5(url).hexdigest() + '.cache')
+
+            oneDayAgo = datetime.datetime.now() - datetime.timedelta(days=1)
+            if not os.path.exists(urlCachePath) or datetime.datetime.fromtimestamp(os.path.getmtime(urlCachePath)) < oneDayAgo:
+                u = urllib2.urlopen(url, timeout=30)
+                content = u.read()
+                u.close()
+
+                try:
+                    f = open(urlCachePath, 'w')
+                    f.write(content)
+                    f.close()
+                except:
+                    pass # ignore, cache has no effect
+            else:
+                f = open(urlCachePath)
+                content = f.read()
+                f.close()
 
             return json.loads(content)
         except Exception as ex:
-            raise TvNuException(ex)
+            raise ApiException(ex)
 
 
-class TvNuException(Exception):
+class ApiException(Exception):
     pass
 
 if __name__ == '__main__':
-    api = TvApi()
+    api = Api()
     print api.programCardRelations('so-ein-ding', limit=50)

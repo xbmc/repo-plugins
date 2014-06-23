@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Search</string>
+  <string id="30001">Library</string>
+  <string id="30002">Highlights</string>
+  <string id="30003">Watch Later</string>
+  <string id="30004">Last Seen</string>
+  <string id="30005">Favorites</string>
+  <string id="30006">Current</string>
+  <string id="30007">Archive</string>
+  <string id="30008">Entire Episodes</string>
+  <string id="30009">Backstage</string>
+  <string id="30010">Popular Shows</string>
+  <string id="30011">Current Entire Episodes</string>
+  <string id="30012">Latest Videos</string>
+  <string id="30013">Live TV</string>
+  <string id="30014">Add to 7TV favorites</string>
+  <string id="30015">Remove from favorites of 7TV</string>
+  
+  <string id="30500">Show fanart</string>
+  <string id="30501">Show publication date in title</string>
+  
+  <string id="30998">Channel %s was not found</string>
+  <string id="30999">No channels were found</string>
+</strings>

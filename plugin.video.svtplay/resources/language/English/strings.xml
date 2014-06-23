@@ -3,7 +3,7 @@
   <string id="30000">Programs A-Ö</string>
   <string id="30001">Categories</string>
   <string id="30002">Live broadcasts</string>
-  <string id="30003">Latest programs</string>  
+  <string id="30003">Latest programs</string>
   <string id="30004">Latest news broadcast</string>
   <string id="30005">Recommended</string>
   <string id="30006">Search</string>
@@ -35,6 +35,7 @@
   <string id="30506">Show both clips and episodes for programs</string>
   <string id="30507">Set bandwidth manually</string>
   <string id="30508">Bandwidth</string>
+  <string id="30509">Display icon as fanart</string>
   <string id="30601">General</string>
   <string id="30602">Advanced</string>
 </strings>

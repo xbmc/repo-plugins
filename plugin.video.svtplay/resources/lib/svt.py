@@ -347,6 +347,7 @@ def getArticles(section_name, url=None):
     info["plot"] = plot
     info["aired"] = helper.convertDate(aired)
     info["duration"] = helper.convertDuration(duration)
+    info["fanart"] = helper.prepareFanart(thumbnail, baseUrl=BASE_URL)
     new_article["info"] = info
     new_articles.append(new_article)
 

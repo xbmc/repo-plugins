@@ -159,6 +159,15 @@ def prepareThumb(thumbnail, baseUrl):
   thumbnail = re.sub(r"/small|medium|large|extralarge/", ""+THUMB_SIZE+"", thumbnail)
   return thumbnail
 
+def prepareFanart(url, baseUrl):
+  """
+  Returns a fanart image URL.
+  """
+  if not url.startswith("http://") and baseUrl:
+    url = baseUrl + url
+  new_url = re.sub(r"/small|medium|large|extralarge/", "extralarge_imax", url)
+  return new_url
+
 
 def mp4Handler(jsonObj):
   """

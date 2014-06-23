@@ -21,6 +21,8 @@ Open the playlist from the plugin's top menu. Click on "Play".
 
 * (General) Show subtitles
   * Force programs to start with subtitles enabled. Subtitles can till be toggled on/off by using XBMC's controller shortcuts.
+* (Advanced) Display icon as fanart
+  * Uses the thumbnail as the fanart as well. The fanart is used by XBMC skins in different ways. However, the most common way is to have the fanart as some kind of background.
 * (Advanced) Don't use avc1.77.30 streams
   * Forces the addon to choose the stream that supports the highest bandwidth but does not use the avc1.77.30 profile.
 * (Advanced) Set bandwidth manually

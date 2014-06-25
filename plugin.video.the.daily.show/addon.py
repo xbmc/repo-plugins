@@ -146,6 +146,12 @@ def root(**ignored):
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
+def show_message(title, message):
+    dialog = xbmcgui.Dialog()
+    dialog.ok(' %s ' % title, '%s ' % message)
+
+def show_error(message):
+	show_message('Error', message)
 
 def full_episodes(**ignored):
     xbmcplugin.setContent(pluginhandle, 'episodes')
@@ -153,10 +159,28 @@ def full_episodes(**ignored):
     url = 'http://thedailyshow.cc.com/full-episodes/'
     # Due to unstructured daily show site, there is no canonical JSON url
     # so we find the full episode json url presented on the latest full episode
-    jsonurl = re.compile(r'http[^"]+/f1010\\/[^"]+').findall(get(url).content)[0].replace("\\", "")
-
+    soup = BS3(get(url).text)
+    j = soup.head.script.text.strip().strip(';').split('=',1)[1]
+    jj = json.loads(j)
+    jsonurl = None
+    for zone, attribs in jj.get('manifest').get('zones').items():
+        feed = attribs.get('feed')
+        urls = re.compile(r'http[^"]+/f1010/[^"]+').findall(feed)
+        if urls:
+            jsonurl = urls[0]
+            break
+    if not jsonurl:
+        #  give user feedback on problem here
+        errormsg = addon.getLocalizedString(30025)
+        show_error(errormsg)
+        return None
     jsonresponse = json.loads(get(jsonurl).content)
-    episodes = jsonresponse.get('result').get('episodes')
+    episodes = jsonresponse.get('result').get('episodes') or []
+    if not episodes:
+        # give user feedback on problem here
+        errormsg = addon.getLocalizedString(30026)
+        show_error(errormsg)
+        return None
     for episode in episodes:
         thumbnail = None
         if len(episode.get('images', ())) >= 1:

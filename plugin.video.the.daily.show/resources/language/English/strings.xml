@@ -18,6 +18,13 @@
 	<string id="30021">No results found for the given date.</string>
 	<string id="30022">No results found for the given search term(s).</string>
 
+	<string id="30025">Could not find any episodes url on the site.
+	The content urls may have recently changed, breaking our plugin.
+	Please file a bug [fritzl-inc@gmx.de] including this message.</string>
+	<string id="30026">Could not find any episodes in the json feed.
+	The content urls may have recently changed, breaking our plugin.
+	Please file a bug [fritzl-inc@gmx.de] including this message.</string>
+
 	<string id="30030">Full Episodes</string>
 	<string id="30031">Guests</string>
 	<string id="30032">Search</string>

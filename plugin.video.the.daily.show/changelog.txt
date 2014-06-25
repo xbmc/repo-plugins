@@ -1,3 +1,7 @@
+[B]Version 1.0.9 - 2014-06-24[/B]
+
+- Returns a descriptive error message when no episodes are found
+
 [B]Version 1.0.8 - 2014-04-03[/B]
 
 - Fixes a URL encoding bug that prevented some episodes from playing

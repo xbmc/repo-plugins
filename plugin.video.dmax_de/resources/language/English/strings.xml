@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Library</string>
+  <string id="30001">Highlights</string>
+  <string id="30002">Add to addon favs</string>
+  <string id="30003">Remove from addon favs</string>
+  <string id="30004">Favourites</string>
+  
+  <string id="30500">Show fanart</string>
+  
+  <string id="30999">Could not find video stream</string>
+</strings>

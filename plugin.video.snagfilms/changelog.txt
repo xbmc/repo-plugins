@@ -1,0 +1,5 @@
+Version 1.0.4 added gzip processing for all url requests
+Version 1.0.3 minor bugs
+
+Version 1.0.2 Initial release
+

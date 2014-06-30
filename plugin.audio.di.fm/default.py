@@ -167,7 +167,7 @@ class musicAddonXbmc:
                 premiumConfig = self.getPremiumConfig()
 
                 # if premiumConfig['listenKey'] is blank, we did not log in correctly
-                if premiumConfig['listenKey'] == '':
+                if premiumConfig is False or premiumConfig['listenKey'] == '':
                     xbmc.log('Login did not succeed', xbmc.LOGWARNING)
                     xbmcgui.Dialog().ok(ADDON.getLocalizedString(30170),
                                         ADDON.getLocalizedString(30171),
@@ -238,7 +238,7 @@ class musicAddonXbmc:
             for channel in self.channelsList:
                 self.addItem(channel['name'],
                              channel['streamUrl'],
-                             channel['description'],
+                             channel['name'],
                              channel['bitrate'],
                              channel['asset'],
                              channel['isNew'],
@@ -290,7 +290,7 @@ class musicAddonXbmc:
         # stores channel in list to be cached later
         co = {'name': channel['name'],
               'streamUrl': streamUrl,
-              'description': channel['description'],
+              'description': channel['name'],
               'bitrate': bitrate,
               'asset': self.addonProfilePath + str(channel['id']) + '.png',
               'isNew': isNew}
@@ -298,7 +298,7 @@ class musicAddonXbmc:
 
         self.addItem(channel['name'],
                      streamUrl,
-                     channel['description'],
+                     channel['name'],
                      bitrate,
                      self.addonProfilePath + str(channel['id']) + '.png',
                      isNew,

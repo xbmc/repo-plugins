@@ -2,6 +2,11 @@
 * Fixed/improved feature
 - Removed feature
 
+
+29. June 2014 v3.0.4
+* Channel description no longer available, using name instead
+
+
 16. April 2014 v3.0.3
 * Rewrote premium login to use api.audioaddict.com - Fixes recent premium login issues
   Thanks to Vidar Waagbø for this fix

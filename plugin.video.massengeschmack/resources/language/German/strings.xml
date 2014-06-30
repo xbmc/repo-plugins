@@ -53,8 +53,18 @@
     
     <string id="30260">Asynchron</string>
     <string id="30261">Filme, Serien</string>
-    <string id="30262">Germany</string>
+    <string id="30262">Deutschland</string>
     <string id="30263">Asynchron beschäftigt sich mit der Synchronisation von Serien und Filmen. Wie gut sind die Sprecher? Wie nah am Original sind die Dialoge?</string>
+
+    <string id="30264">Tonangeber</string>
+    <string id="30265">Musik</string>
+    <string id="30266">Deutschland</string>
+    <string id="30267">In Tonangeber rezensiert Nils Releases neuer Musik-Alben und Live-Konzert-DVDs. Außerdem lädt er Musiker als Gäste ins Studio ein und spricht mit ihnen über ihre Musik und Konzerte. Featuring Klaus Kauker.</string>
+
+    <string id="30400">Hoaxilla-TV</string>
+    <string id="30401">Information, Education, Scepticism Conspiracy Theories, Urban Legends</string>
+    <string id="30402">Deutschland</string>
+    <string id="30403">Hoaxilla-TV ist ein Videoformat der Moderatoren von Hoaxilla, einem skeptischen Podcast über Mythen, urbane Legenden, Verschwörungstheorien, Kultur und Wissenschaft.</string>
     
     <string id="30270">LIVE</string>
     <string id="30271">Deutschland</string>

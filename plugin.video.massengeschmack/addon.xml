@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<addon id="plugin.video.massengeschmack" name="Massengeschmack" version="1.0.2" provider-name="Manko10">
+<addon id="plugin.video.massengeschmack" name="Massengeschmack" version="1.1.0" provider-name="Manko10">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -13,6 +13,8 @@
         
         <website>https://github.com/Manko10/massengeschmack-xbmc/</website>
         <forum>http://forum.fernsehkritik.tv/showthread.php?13175-Massengeschmack-tv-XBMC-Add-On/</forum>
+        <source>https://github.com/Manko10/massengeschmack-xbmc/</source>
+        <email></email>
         
         <summary lang="en">Massengeschmack video portal</summary>
         <summary lang="de">Massengeschmack-Video-Portal</summary>

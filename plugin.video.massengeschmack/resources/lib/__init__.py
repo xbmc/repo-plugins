@@ -22,6 +22,7 @@ import urllib2
 import email.utils
 import json
 import time
+import re
 from datetime import datetime, tzinfo, timedelta
 from xml.dom import minidom
 from HTMLParser import HTMLParser
@@ -271,12 +272,29 @@ def parseRSSFeed(feed, fetch=False):
         h, m, s  = map(int, duration.split(':'))
         duration = timedelta(hours=h, minutes=m, seconds=s).seconds
         
+        description = parser.unescape(node.getElementsByTagName('description')[0].firstChild.nodeValue).encode('utf-8')
+        
+        # get thumbnail URL
+        thumbUrl = ''
+        thumbUrlMatch = re.search('^<img src="([^"]+)" /><br>', description)
+        if None != thumbUrlMatch:
+            thumbUrl = thumbUrlMatch.group(1)
+            if None == re.match('^https?://', thumbUrl):
+                thumbUrl = HTTP_BASE_URI + re.sub('^/', '', thumbUrl)
+
+        # strip HTML tags
+        description = re.sub('<[^>]*>', '', description).strip()
+
+        # combine whitespace
+        description = re.sub(' {2,}', ' ', description)
+        
         data.append({
             'title'       : parser.unescape(node.getElementsByTagName('title')[0].firstChild.nodeValue).encode('utf-8'),
             'subtitle'    : parser.unescape(node.getElementsByTagName('itunes:subtitle')[0].firstChild.nodeValue).encode('utf-8'),
             'pubdate'     : parser.unescape(node.getElementsByTagName('pubDate')[0].firstChild.nodeValue).encode('utf-8'),
-            'description' : parser.unescape(node.getElementsByTagName('description')[0].firstChild.nodeValue).encode('utf-8'),
+            'description' : description,
             'link'        : parser.unescape(node.getElementsByTagName('link')[0].firstChild.nodeValue).encode('utf-8'),
+            'thumbUrl'    : thumbUrl,
             'guid'        : parser.unescape(node.getElementsByTagName('guid')[0].firstChild.nodeValue).encode('utf-8'),
             'url'         : parser.unescape(node.getElementsByTagName('enclosure')[0].getAttribute('url')).encode('utf-8'),
             'duration'    : duration

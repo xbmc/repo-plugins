@@ -127,7 +127,7 @@ class CouchPotatoApi():
         params = {
             'id': release_id
         }
-        return self._api_call('release.download', params).get('success')
+        return self._api_call('release.manual_download', params).get('success')
 
     def ignore_release(self, release_id):
         params = {
@@ -162,8 +162,9 @@ class CouchPotatoApi():
         if params:
             url += '?%s' % urlencode(params)
         # self.log('_api_call using url: %s' % url)
+        raw = urlopen(self._request(url)).read()
         try:
-            json_data = json.loads(urlopen(self._request(url)).read())
+            json_data = json.loads(raw)
         except HTTPError, error:
             self.log('__urlopen HTTPError: %s' % error)
             if error.fp.read() == 'Wrong API key used':

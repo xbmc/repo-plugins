@@ -1,3 +1,7 @@
+0.0.8 (29.08.2014)
+- fixed addon (adopt recent CP API changes)
+- simplify addon
+
 0.0.7 (11.08.2013)
 - fixed error when search result item has no year
 - updated translations

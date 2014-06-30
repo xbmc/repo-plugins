@@ -17,7 +17,7 @@
 #    along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
-from xbmcswift2 import Plugin, xbmc, xbmcgui
+from xbmcswift2 import Plugin, xbmcgui
 from resources.lib.api import \
     CouchPotatoApi, AuthenticationError, ConnectionError
 
@@ -27,7 +27,6 @@ STRINGS = {
     'add_new_wanted': 30001,
     'wanted_movies': 30002,
     'done_movies': 30003,
-    'status_list': 30004,
     # Context menu
     'addon_settings': 30100,
     'refresh_releases': 30101,
@@ -77,87 +76,10 @@ YT_TRAILER_URL = (
 plugin = Plugin()
 
 
-@plugin.cached()
-def get_status_list():
-    return api.get_status_list()
-
-
 @plugin.route('/')
-def show_root_menu():
-    def context_menu():
-        return [
-            (
-                _('addon_settings'),
-                'XBMC.RunPlugin(%s)' % plugin.url_for(
-                    endpoint='open_settings'
-                )
-            ),
-        ]
+def show_movies():
 
-    def context_menu_wanted():
-        return [
-            (
-                _('full_refresh'),
-                'XBMC.RunPlugin(%s)' % plugin.url_for(
-                    endpoint='do_full_refresh'
-                )
-            ),
-        ]
-
-    items = [
-        {'label': _('add_new_wanted'),
-         'replace_context_menu': True,
-         'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='add_new_wanted')},
-        {'label': _('all_movies'),
-         'replace_context_menu': True,
-         'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='show_all_movies')},
-        {'label': _('wanted_movies'),
-         'replace_context_menu': True,
-         'context_menu': context_menu_wanted(),
-         'path': plugin.url_for(endpoint='show_movies', status='active')},
-        {'label': _('done_movies'),
-         'replace_context_menu': True,
-         'context_menu': context_menu(),
-         'path': plugin.url_for(endpoint='show_movies', status='done')},
-        # {'label': _('status_list'),
-        #  'replace_context_menu': True,
-        #  'context_menu': context_menu(),
-        #  'path': plugin.url_for(endpoint='show_status_list')},
-    ]
-    return plugin.finish(items)
-
-
-@plugin.route('/status_list/')
-def show_status_list():
-    def context_menu():
-        return [
-            (
-                _('addon_settings'),
-                'XBMC.RunPlugin(%s)' % plugin.url_for(
-                    endpoint='open_settings'
-                )
-            ),
-        ]
-    items = []
-    for status in get_status_list():
-        items.append({
-            'label': status['label'],
-            'replace_context_menu': True,
-            'context_menu': context_menu(),
-            'path': plugin.url_for(
-                endpoint='show_movies',
-                status=status['identifier']
-            )
-        })
-    return plugin.finish(items)
-
-
-@plugin.route('/movies/', name='show_all_movies', options={'status': None})
-@plugin.route('/movies/status/<status>/')
-def show_movies(status):
-    def context_menu(movie_id, movie_title):
+    def context_menu_movie(movie_id, movie_title):
         return [
             (
                 _('refresh_releases'),
@@ -178,6 +100,12 @@ def show_movies(status):
                 'XBMC.Container.Update(%s)' % YT_TRAILER_URL % movie_title
             ),
             (
+                _('full_refresh'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='do_full_refresh'
+                )
+            ),
+            (
                 _('addon_settings'),
                 'XBMC.RunPlugin(%s)' % plugin.url_for(
                     endpoint='open_settings'
@@ -185,24 +113,34 @@ def show_movies(status):
             ),
         ]
 
-    def get_status(status_id):
-        return [s for s in status_list if s['id'] == status_id]
+    def context_menu_empty():
+        return [
+            (
+                _('addon_settings'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='open_settings'
+                )
+            ),
+            (
+                _('full_refresh'),
+                'XBMC.RunPlugin(%s)' % plugin.url_for(
+                    endpoint='do_full_refresh'
+                )
+            )
+        ]
+
 
     releases = plugin.get_storage('releases')
     releases.clear()
-    status_list = get_status_list()
     items = []
     plugin.set_content('movies')
-    if not status:
-        movies = api.get_movies()
-    else:
-        movies = api.get_movies(status=status)
+    movies = api.get_movies()
     i = 0
     for i, movie in enumerate(movies):
-        info = movie['library']['info']
-        movie_id = str(movie['library_id'])
+        info = movie['info']
+        movie_id = str(movie['_id'])
         label = info['titles'][0]
-        status_label = get_status(movie['status_id'])[0]['label']
+        status_label = movie['status']
         label = u'[%s] %s' % (status_label, label)
         releases[movie_id] = movie['releases']
         items.append({
@@ -223,7 +161,7 @@ def show_movies(status):
                 'votes': info.get('rating', {}).get('imdb', [0, 0])[1]
             },
             'replace_context_menu': True,
-            'context_menu': context_menu(movie_id, info['titles'][0]),
+            'context_menu': context_menu_movie(movie_id, info['titles'][0]),
             'properties': {
                 'fanart_image': (info['images'].get('backdrop') or [''])[0],
             },
@@ -234,6 +172,12 @@ def show_movies(status):
         })
     releases.sync()
     sort_methods = ['playlist_order', 'video_rating', 'video_year']
+    items.append({
+        'label': _('add_new_wanted'),
+        'replace_context_menu': True,
+        'context_menu': context_menu_empty(),
+        'path': plugin.url_for(endpoint='add_new_wanted')
+    })
     return plugin.finish(items, sort_methods=sort_methods)
 
 
@@ -294,9 +238,9 @@ def ask_profile():
         if selected == -1:
             return
         selected_profile = profiles[selected]
-        profile_id = selected_profile['id']
+        profile_id = selected_profile['_id']
     else:
-        profile_id = plugin.get_setting('default_profile', int)
+        profile_id = plugin.get_setting('default_profile', str)
     return profile_id
 
 
@@ -359,10 +303,10 @@ def show_releases(library_id):
                 )),
             },
             'replace_context_menu': True,
-            'context_menu': context_menu(release['id']),
+            'context_menu': context_menu(release['_id']),
             'path': plugin.url_for(
                 endpoint='show_release_help',
-                foo=release['id']  # to have items with different URLs
+                foo=release['_id']  # to have items with different URLs
             ),
         })
     return plugin.finish(items)
@@ -429,12 +373,12 @@ def show_release_help():
 def set_default_profile():
     profiles = api.get_profiles()
     items = [profile['label'] for profile in profiles]
-    selected = xbmcgui.Dialog().select(
+    selected = xbmcgui.Dialog().select( 
         _('select_default_profile'), items
     )
     if selected >= 0:
         selected_profile = profiles[selected]
-        plugin.set_setting('default_profile', str(selected_profile['id']))
+        plugin.set_setting('default_profile', str(selected_profile['_id']))
     elif selected == -1:
         plugin.set_setting('default_profile', '')
 

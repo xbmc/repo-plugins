@@ -2,7 +2,7 @@
 import sys,os
 from feedreader.opml import OpmlFile
 from feedreader.archivefile import ArchiveFile
-
+#!This script is called by batch - not by xbmc!#
 
 
 DIR_HOME = sys.argv[1];

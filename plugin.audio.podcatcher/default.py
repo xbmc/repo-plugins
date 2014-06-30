@@ -34,7 +34,6 @@ def get_params():
   """ extract params from argv[2] to make a dict (key=value) """
   paramDict = {}
   try:
-    print "get_params() argv=", sys.argv
     if sys.argv[2]:
       paramPairs=sys.argv[2][1:].split( "&" )
       for paramsPair in paramPairs:
@@ -74,7 +73,7 @@ PATH_FILE_OPML = __settings__.getSetting("opmlFile")
 if (PATH_FILE_OPML == ""):
   PATH_FILE_OPML = os.path.join(DIR_HOME,"opml.xml");
 if not os.path.exists(PATH_FILE_OPML):
-  gui.errorOK(__language__(1040),__language__(1041));
+  gui.errorOK(__language__(30040),__language__(30041));
 else:
   gui.log(PATH_FILE_OPML)
   

@@ -46,7 +46,7 @@ class SimpleXbmcGui(object):
       title = "(*) %s"%(title);
     else:
       title = "%s"%(title);
-    
+    self.log(element.picture)
     if(element.picture is not ""):
       liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=element.picture)
     else :
@@ -73,7 +73,7 @@ class SimpleXbmcGui(object):
       liz = self.buildMediaItem(menuElement,True);
       
       
-      liz.addContextMenuItems([(translation(1020),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path))],True)
+      liz.addContextMenuItems([(translation(4020),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path))],True)
       u = "%s?path=%s&action=play&guid=%s" % (sys.argv[0],path,menuElement.guid)
       xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
       
@@ -82,16 +82,16 @@ class SimpleXbmcGui(object):
         title = "(*) %s"%(menuElement.title);
       else:
         title = "%s"%(menuElement.title);
-        
+      self.log(menuElement.picture)
       if(menuElement.picture is not ""):
         liz=xbmcgui.ListItem(title, iconImage="DefaultFolder.png", thumbnailImage=menuElement.picture)
       else :
         liz=xbmcgui.ListItem(title, "")
         
       contextMenuEntries = [
-        (translation(1010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
-        (translation(1011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
-        (translation(1030),"XBMC.RunPlugin(%s?path=%s&action=reload)"%(sys.argv[0],path))
+        (translation(30010),"XBMC.RunPlugin(%s?path=%s&action=markRead)"%(sys.argv[0],path)),
+        (translation(30011),"XBMC.RunPlugin(%s?path=%s&action=play)"%(sys.argv[0],path)),
+        (translation(30030),"XBMC.RunPlugin(%s?path=%s&action=reload)"%(sys.argv[0],path))
         ]
       liz.addContextMenuItems(contextMenuEntries,True)
       u = "%s?path=%s&action=browse" % (sys.argv[0],path)

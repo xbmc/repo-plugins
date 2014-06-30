@@ -28,9 +28,12 @@ class FeedState(object):
     self.maxArticleNumber = feed.maxArticleNumber
     self.feedVersion = feed.feedVersion
     
+    self.picture = feed.picture
+    
 class OpmlFolderState(object):
   def __init__(self, opmlFolder):
     self.title = opmlFolder.title;
+    self.picture = opmlFolder.picture;
     self.elements = [];
     for subFolder in opmlFolder.elements:
       if(type(subFolder).__name__ == "OpmlFolder"):

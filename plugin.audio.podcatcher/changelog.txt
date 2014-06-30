@@ -1,3 +1,5 @@
+version 0.1.9 - Add: New xml schema ...
+version 0.1.8 - Add: Define images for Folders
 version 0.1.7 - FIX: Error while parsing datetime
 version 0.1.6 - FIX: Minor Bugfixes 
 version 0.1.5 - FIX: Minor Bugfixes 

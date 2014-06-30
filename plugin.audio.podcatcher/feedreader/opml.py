@@ -28,7 +28,10 @@ class OpmlFolder(object):
     self.gui = gui;
     self.elements = [];
     self.title = transformHtmlCodes(rootNode.getAttribute('text'));
-    self.picture = "";
+    try:
+      self.picture = rootNode.getAttribute("image");
+    except:
+      self.picture = "";
     
     for node in rootNode.childNodes:
       try:
@@ -45,8 +48,12 @@ class OpmlFolder(object):
     self.gui = gui;
     self.elements = [];
     self.title = stateObject.title;
-    self.picture = "";
     
+    try:
+      self.picture = stateObject.picture;
+    except:
+      self.picture = "";
+      
     for stateElement in stateObject.elements:
       try:
         if(type(stateElement).__name__ == "OpmlFolderState"):

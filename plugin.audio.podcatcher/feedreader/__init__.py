@@ -73,14 +73,17 @@ class Feed(object):
     if(self.objectId == ""):
       self.objectId = regex_replaceUnusableChar.sub("_",self.feedUrl);
     self.archiveFile=ArchiveFile(self.objectId);
-    self.picture = "";
+    
     self.feedItems = self.archiveFile.feedItems;
     self.lastLoad = self.archiveFile.lastLoad;
     
     
     
     self.title = opmlNode.getAttribute("text");
-    
+    try:
+      self.picture = opmlNode.getAttribute("image");
+    except:
+      self.picture = "";
     try:
       self.fetchInterval = self.parseFetchInterval(opmlNode.getAttribute("fetchInterval"));
     except:
@@ -104,12 +107,13 @@ class Feed(object):
     
     self.feedItems = self.archiveFile.feedItems;
     self.lastLoad = self.archiveFile.lastLoad;
+    self.title = stateObject.title
+    
     try:
-      self.picture = self.archiveFile.picture;
+      self.picture = stateObject.picture;
     except:
       self.picture = "";
     
-    self.title = stateObject.title
     self.fetchInterval = stateObject.fetchInterval
     self.maxArticleAge = stateObject.maxArticleAge
     self.maxArticleNumber = stateObject.maxArticleNumber

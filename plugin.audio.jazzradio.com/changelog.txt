@@ -3,6 +3,19 @@
 - Removed feature
 
 
+29. June 2014 v3.0.0
++ Rebased on same code as the DI.fm and Sky.fm plugins - thus the severe version bump
++ Threading of playlists parsing to speed up first run and refreshing of playlists - 8 threads
+* Now fully support the new jazzradio.com design
+* Change it so expiration of cache is calculate in days not minutes - default is 7 days
+- Check-in with stats are gone for now
+
+
+22 December 2012 v1.1.1
+* Made 256k quality selectable from config (duh!)
+* 256k is now default quality for Premium members
+
+
 8 December 2012 v1.1.0
 + Added a 4th stream quality option for Premium members: 256k/sec MP3
 + Now using the config.ini file to hopefully streamline the process of updating the di.fm/sky.fm/jazzradio.com plugins

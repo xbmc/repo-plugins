@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<addon id="plugin.video.putio"
+    name="put.io"
+    version="1.2.1"
+    provider-name="Alper Kanat (tunix@raptiye.org)">
+    <requires>
+        <import addon="xbmc.python" version="2.14.0" />
+        <import addon="script.module.simplejson" version="3.3.0" />
+        <import addon="script.module.requests" version="1.1.0" />
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">put.io for XBMC</summary>
+        <description lang="en">Put.io is a service that combines cloud storage and bittorrent. You need an account to use this plug-in. Get one from https://put.io</description>
+        <language></language>
+        <license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
+        <website>http://put.io</website>
+        <source>https://github.com/tunix/plugin.video.putio</source>
+        <email></email>
+    </extension>
+</addon>

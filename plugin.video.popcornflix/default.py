@@ -65,7 +65,7 @@ def getSources(fanart):
     cats = re.compile('<a href="(.+?)">(.+?)</a>').findall(blob)
     for url,name in cats:
        name = '[COLOR blue]'+name+'[/COLOR]'
-       addDir(name.encode(UTF8), url, 'GC', icon, addonfanart, name.encode(UTF8), '', '')
+       addDir(name, url, 'GC', icon, addonfanart, name, '', '')
     
 
 def getCats(c_url):
@@ -74,15 +74,23 @@ def getCats(c_url):
     shows=re.compile('<figure>.+?href="(.+?)".+?src="(.+?)".+?title">(.+?)<.+?genre">(.+?)<.+?desc">(.+?)<.+?</li>').findall(html) 
     for sid,simg,sname,sgenre,sdesc in shows:
       if not sid.startswith('/series'):
-       sid  = sid.split('/')
-       sid  = str(sid[len(sid)-1])
-       surl = 'http://movies.device.screenmedia.net/?s=/stitched/mp4/76719dee-f2f6-49aa-9b7d-56c9b32f4b92/a6fbf9b8-b350-4b2a-b10e-d6088c323e9f/8c913e59-c00a-4d37-925b-27b6ed698fcc/%s/content.mp4' % (sid)
-       addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc,sgenre,'',False)
+        surl = "%s?url=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(sid))
+        addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc,sgenre,'',False)
       else:
-       sname = '[COLOR blue]'+sname+'[/COLOR]'
-       addDir(sname.encode(UTF8), sid, 'GC', simg, addonfanart, sdesc, sgenre, '')
+        sname = '[COLOR blue]'+sname+'[/COLOR]'
+        addDir(sname, sid, 'GC', simg, addonfanart, sdesc, sgenre, '')
        
 
+def getShow(sid):
+      html = getRequest('http://www.popcornflix.com%s' % (sid))
+      url  = re.compile('data-videodata="(.+?)"').findall(html)[0]
+      html = getRequest(url)
+      url  = re.compile('Player":"(.+?)"').findall(html)[0]
+      url  = urllib.unquote_plus(url.replace('\\',''))
+      html = getRequest(url)
+      url  = re.compile('RESOLUTION=864x480(.+?)#').findall(html)[0]
+      url  = url.strip()
+      xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url)) 
 
 
 def play_playlist(name, list):
@@ -150,6 +158,7 @@ if mode==  None:  getSources(p('fanart'))
 elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
 elif mode=='PP':  play_playlist(p('name'), p('playlist'))
 elif mode=='GC':  getCats(p('url'))
+elif mode=='GS':  getShow(p('url'))
 
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -1,3 +1,7 @@
+1.0.8 (2014-06-28)
+Added cache duration setting for thumbnails
+Added autostart time setting for video (suitable for mobile/low bandwidth connections)
+
 1.0.7 (2014-06-19)
 Added settings suitable for low-end devices
 

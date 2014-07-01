@@ -19,10 +19,12 @@ const_str = "ef59d16acbb13614346264dfe58844284718fb7b"
 const_playerID = 1752666798001;
 const_publisherID = 1265527910001;
 const_playerKey = "AQ~~,AAABJqdXbnE~,swSdm6mQzrEWC8U2s8_PyL570J6HePbQ"
-maxBitRate = addon.getSetting('max_bitrate')
-isThumbnailScanEnabled = addon.getSetting('thumbnail_scan')
+isThumbnailsScanEnabled = addon.getSetting('thumbnails_scan')
+thumbnailsCacheDays = addon.getSetting('thumbnails_cache_time')
+videoMaxBitrate = addon.getSetting('video_max_bitrate')
+autostartVideoInSeconds = addon.getSetting('video_autostart_time')
 
-thumbnailsCache = StorageServer.StorageServer("plugin.video.dmaxitalia", 24*7)
+thumbnailsCache = StorageServer.StorageServer("plugin.video.dmaxitalia", 24*int(thumbnailsCacheDays))
 
 def loadPage(url):
 	print "Load: " + url
@@ -65,7 +67,7 @@ def getShows():
 			link = show.find('a')
 			show_title = link.string
 			show_link = link['href'] + "altri-video/"
-			if isThumbnailScanEnabled == "true":
+			if isThumbnailsScanEnabled == "true":
 				show_thumbnail = thumbnailsCache.cacheFunction(getShowThumbnail, urlShows + link['href'])
 			else:
 				show_thumbnail = ""
@@ -111,7 +113,7 @@ def watchEpisode(link):
 	soup = BeautifulSoup(page)
 	videoID = soup.find('param', {'name': '@videoPlayer'})['value']
 	playBrightCoveStream(videoID)
-	xbmc.sleep(4000)
+	xbmc.sleep(int(autostartVideoInSeconds)*1000)
 	xbmc.executebuiltin('XBMC.PlayerControl(Play)')
 
 def playBrightCoveStream(videoID):
@@ -127,7 +129,7 @@ def playBrightCoveStream(videoID):
 	streamUrl = ""
 	for item in sorted(response['renditions'], key=lambda item: item['encodingRate'], reverse=False):
 		encRate = item['encodingRate']
-		if encRate < maxBitRate:
+		if encRate < videoMaxBitrate:
 			streamUrl = item['defaultURL']
 	if streamUrl.find("http://") == 0:
 		listItem = xbmcgui.ListItem(path=streamUrl+"?videoId="+videoID+"&lineUpId=&pubId="+str(publisherID)+"&playerId="+str(playerID)+"&affiliateId=&v=&fp=&r=&g=")

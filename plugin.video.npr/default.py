@@ -73,22 +73,32 @@ def getSources(fanart):
               pg = getRequest(urlbase)
               catname = __language__(30000)
               addDir(catname,urlbase.encode(UTF8),'GC',icon,addonfanart,catname,GENRE,'',False)
-              cats = re.compile('<p class="more"><a href="/templates/story/story\.php\?storyId=(.+?)">(.+?)<').findall(pg)
+              blob = re.compile('<div class="subtopics">(.+?)</ul>').findall(pg)[0]
+              cats = re.compile('<a href="(.+?)">(.+?)<').findall(blob)
               for caturl, catname in cats:
-                  caturl = 'http://www.npr.org/templates/archives/archive.php?thingId=%s' % (caturl)
+                  caturl = NPRBASE % (caturl)
+#                  caturl = 'http://www.npr.org/templates/archives/archive.php?thingId=%s' % (caturl)
                   addDir(catname,caturl.encode(UTF8),'GC',icon,addonfanart,catname,GENRE,'',False)
 
 def getCats(cat_url):
            pg = getRequest(cat_url)
            if cat_url == NPRBASE % ('/sections/music-videos/'):
-              blob = re.compile('<div id="genreselector">(.+?)</div>').findall(pg)[0]
+              blob = re.compile('data-metrics-action="Click Music Genres"(.+?)</ul>').findall(pg)[0]
               cats = re.compile('href="(.+?)">(.+?)<').findall(blob)
               for caturl, catname in cats:
                   caturl = NPRBASE % (caturl)
+                  catname = deuni(catname)
                   addDir(catname,caturl.encode(UTF8),'GC',icon,addonfanart,catname,GENRE,'',False)
            else:
-              shows = re.compile('<div class="bucket clearfix">.+?<a href="(.+?)".+?src="(.+?)".+?<h4>.+?">(.+?)<.+?<p>(.+?)</p>').findall(pg)
-              for showurl, showimg, showname, showdesc in shows:
+             if not ('thingId' in cat_url):
+               sid = re.compile('"storyId":"(.+?)"').findall(pg)[0]
+               cat_url = 'http://www.npr.org/templates/archives/archive.php?thingId=%s' % (sid)
+               pg = getRequest(cat_url)
+             blobs = re.compile('<div class="bucket clearfix">(.+?)END CLASS="BUCKET CLEARFIX"').findall(pg)
+             for blob in blobs:
+               print "blob = "+str(blob)
+               shows = re.compile('<a href="(.+?)".+?src="(.+?)".+?<p class="watch">.+?<h4>.+?">(.+?)<.+?<p>(.+?)</p>').findall(blob)
+               for showurl, showimg, showname, showdesc in shows:
                  try:
                     (showdate, showdesc) = showdesc.split('</span>',1)
                     showdate = re.compile('.+?>(.+?)&').findall(showdate)[0]
@@ -97,12 +107,12 @@ def getCats(cat_url):
                     pass
                  showurl = "%s?url=%s&name=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(showurl), urllib.quote_plus(showname))
                  addLink(showurl.encode(UTF8),deuni(showname),showimg,addonfanart,deuni(showdesc),GENRE,'')
-              try:
-                 nextlink = re.compile('<a class="prev" href="(.+?)"').findall(pg)[0]
+             try:
+                 nextlink = re.compile('<a class="next" href="(.+?)"').findall(pg)[0]
                  caturl  = NPRBASE % (nextlink)
                  catname = '[COLOR red]%s[/COLOR]' % (__language__(30001))
                  addDir(catname,caturl.encode(UTF8),'GC','',addonfanart,catname,GENRE,'',False)
-              except:
+             except:
                  pass
 
 

@@ -83,6 +83,7 @@ def getSources(replay_url):
             link=getRequest(BASE_URL+replay_url)
             match = re.compile('<li id=.+?<a href="(.+?)">(.+?)</a>').findall(link)
             for pchoice, pname in match:
+               if not ('</a>' in pname):
                 addDir(deuni(pname),pchoice,'GC',icon,fanart,deuni(pname),GENRE_NEWS,"",False)
 
 
@@ -90,7 +91,7 @@ def getCats(Category_url):
 
               log("main page")
               link = getRequest(BASE_URL+Category_url)
-              match = re.compile('<li class="results-item">.+?href="(.+?)".+?<img src="(.+?)".+?video">(.+?)<.+?<span>(.+?)<.+?description">(.+?)<.+?</li>').findall(link)
+              match = re.compile('<li class="results-item">.+?href="(.+?)".+?<img src="(.+?)".+?mosaic-view">(.+?)<.+?<span>(.+?)<.+?description">(.+?)<.+?</p>').findall(link)
               for pid, pimage, pname, pdate, pdesc in match:
                      pname = pname.strip()
                      pdesc  = pdate.strip()+'\n'+pdesc.strip()
@@ -101,6 +102,11 @@ def getCats(Category_url):
                         addLink(caturl.encode(UTF8),deuni(pname),pimage,fanart,deuni(pdesc),GENRE_NEWS,"")
                      except:
                         log("Problem adding directory")
+              try:
+                     url = re.compile('title="next page" href="(.+?)"').findall(link)[0]
+                     addDir('[COLOR blue]%s[/COLOR]' % (__language__(30004)), url, 'GC', icon, fanart,(__language__(30004)), GENRE_NEWS,"",False)
+              except:
+                     return
 
 
 def play_playlist(name, list):

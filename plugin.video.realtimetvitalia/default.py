@@ -12,7 +12,6 @@ addon = xbmcaddon.Addon()
 addonID = addon.getAddonInfo('id')
 thisPlugin = int(sys.argv[1])
 urlSearchParameters = "http://www.realtimetv.it/video/"
-urlThumbnails = "http://www.realtimetv.it/web/"
 baseUrl = "http://www.realtimetv.it"
 
 height = 1080;#268|356|360|400|572|576
@@ -21,8 +20,6 @@ const_playerID = 1464964207001;
 const_publisherID = 1265527910001;
 const_playerKey = "AQ~~,AAABJqdXbnE~,swSdm6mQzrHdUAncp0a9cwAjGy8zF2fs"
 maxBitRate = 5120000
-
-thumbnailsCache = StorageServer.StorageServer("plugin.video.realtimetvitalia", 24*7)
 
 def loadPage(url):
 	print "Load: " + url
@@ -70,7 +67,6 @@ def	getShows(link):
 		for item in search_list:
 			item_title = item.find('a').string
 			item_link = item.find('a')['href']
-			#item_thumbnail = thumbnailsCache.cacheFunction(getShowThumbnail, item_link.rsplit('/',2)[1])
 			addDirectoryItem(item_title, item_link, "category", "")
 	xbmcplugin.addSortMethod(thisPlugin, xbmcplugin.SORT_METHOD_LABEL)
 	xbmcplugin.endOfDirectory(thisPlugin)
@@ -80,19 +76,6 @@ def getCategories(link):
 	addDirectoryItem("Video", link + "altri-video/", "show", "")
 	xbmcplugin.addSortMethod(thisPlugin, xbmcplugin.SORT_METHOD_LABEL)
 	xbmcplugin.endOfDirectory(thisPlugin)
-
-def getShowThumbnail(link):
-	try:
-		page = loadPage(urlThumbnails + link)
-		soup = BeautifulSoup(page)
-	except:
-		show_thumbnail = "None"
-	try:
-		show_banner = soup.find('img', {'class': 'article-banner'})['src']
-		show_thumbnail = baseUrl + show_banner
-	except:
-		show_thumbnail = "None"
-	return show_thumbnail
 
 def getEpisodes(link):
 	global thisPlugin
@@ -107,8 +90,11 @@ def getEpisodes(link):
 	episodes_containers_list = soup.findAll('dl', {'class': re.compile(' item item-')})
 	for episode_container in episodes_containers_list:
 		episode_title = episode_container.find('dd',{'class': 'thumbnail'}).find('a')['title']
+		xbmc.log(msg=episode_title)
 		try:
 			episode_number = episode_container.find('dd',{'class': 'description'}).string
+			if episode_number is None:
+				episode_number = ""
 		except:
 			episode_number = ""
 		try:
@@ -118,7 +104,7 @@ def getEpisodes(link):
 		episode_link = episode_container.find('dd',{'class': 'thumbnail'}).find('a')['href']
 		episode_thumbnail = episode_container.find('dd',{'class': 'thumbnail'}).find('a').find('img')['src']
 		try:
-			episode_description = episode_container.find('dd',{'class': 'extended-info'}).find('dl').find('dd',{'class': 'summary'}).string
+			episode_description = episode_container.find('dd',{'class': 'extended-info'}).find('dl').find('dd',{'class': 'summary'}).string.encode('utf-8')
 		except:
 			episode_description = "None"
 		try:

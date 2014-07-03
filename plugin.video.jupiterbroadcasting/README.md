@@ -5,7 +5,7 @@ Watch shows from the [Jupiter Broadcasting](http://jupiterbroadcasting.com) netw
 
 ## Shows
 
-* [Live Show](http://jblive.tv)
+* [JBLive.TV](http://jblive.tv)
 * [Linux Action Show](http://www.jupiterbroadcasting.com/show/linuxactionshow/)
 * [BSD Now](http://www.jupiterbroadcasting.com/show/bsdnow/)
 * [Coder Radio](http://www.jupiterbroadcasting.com/show/coderradio/)

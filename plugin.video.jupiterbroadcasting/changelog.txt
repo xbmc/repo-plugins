@@ -1,3 +1,11 @@
+[B]Version 3.1.1 June 24th, 2014[/B]
+- Updated artwork for active shows: Linux Action Show and Linux Unplugged
+- Updated artwork work archived shows: Torked and In Depth Look 
+- Updated artwork for addon main icon with new color logo
+- Improved the assets filename structure
+- Renamed Live Show item JBLive.TV
+- Added new artwork for JBLive.TV and Most Recent items
+
 [B]Version 3.1.0 June 5th, 2014[/B]
 - New Show: Tech Talk Today
 - New Show: HowTo Linux

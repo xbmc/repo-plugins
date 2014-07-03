@@ -23,7 +23,7 @@ def get_shows():
         'feed': feedburner + 'AllJupiterVideos?format=xml',
         'feed-low': feedburner + 'AllJupiterVideos?format=xml',
         'feed-audio': feedburner + '/AllJupiterBroadcastingShowsOgg?format=xml',
-        'image': 'jupiterbroadcasting.jpg',
+        'image': 'most-recent.jpg',
         'plot': __language__(30206),
         'genre': 'Technology',
         'count': 0
@@ -34,7 +34,7 @@ def get_shows():
         'feed': feedburner + 'linuxashd?format=xml',
         'feed-low': feedburner + 'linuxactionshowipodvid?format=xml',
         'feed-audio': feedburner + 'TheLinuxActionShowOGG?format=xml',
-        'image': 'LAS_Colored.jpg',
+        'image': 'linux-action-show.jpg',
         'plot': __language__(30200),
         'genre': 'Technology'
     }
@@ -74,7 +74,7 @@ def get_shows():
         'feed': jupiter + 'feeds/indepthlookihd.xml',
         'feed-low': jupiter + 'feeds/indepthlookmob.xml',
         'feed-audio': jupiter + 'feeds/indepthlookmp3.xml?format=xml',
-        'image': 'indepthlook.jpg',
+        'image': 'in-depth-look.jpg',
         'plot': __language__(30214),
         'genre': 'Technology'
     }
@@ -94,7 +94,7 @@ def get_shows():
         'feed': jupiter + 'feeds/FauxShowHD.xml',
         'feed-low': jupiter + 'feeds/FauxShowMobile.xml',
         'feed-audio': jupiter + 'feeds/FauxShowMP3.xml',
-        'image': 'fauxshow.jpg',
+        'image': 'faux-show.jpg',
         'plot': __language__(30211),
         'genre': 'Comedy'
     }
@@ -104,7 +104,7 @@ def get_shows():
         'feed': feedburner + 'jupiternitehd?format=xml',
         'feed-low': feedburner + 'jupiternitelargevid?format=xml',
         'feed-audio': feedburner + 'jupiternitemp3?format=xml',
-        'image': 'jupiteratnite.jpg',
+        'image': 'jupiter-at-nite.jpg',
         'plot': __language__(30204),
         'genre': 'Technology'
     }
@@ -134,7 +134,7 @@ def get_shows():
         'feed': feedburner + 'jupiterbeeristasty-hd?format=xml',
         'feed-low': feedburner + 'BeerIsTasty?format=xml',
         'feed-audio': feedburner + 'BeerIsTasty?format=xml',
-        'image': 'beeristasty.png',
+        'image': 'beer-is-tasty.png',
         'plot': __language__(30201),
         'genre': 'Technology'
     }
@@ -144,7 +144,7 @@ def get_shows():
         'feed': feedburner + 'ldf-video?format=xml',
         'feed-low': feedburner + 'ldf-video?format=xml',
         'feed-audio': feedburner + 'ldf-mp3?format=xml',
-        'image': 'jupiterfiles.jpg',
+        'image': 'jupiter-files.jpg',
         'plot': __language__(30205),
         'genre': 'Technology'
     }
@@ -164,7 +164,7 @@ def get_shows():
         'feed': feedburner + 'coderradiovideo?format=xml',
         'feed-low': jupiter + 'feeds/coderradioogg.xml?format=xml',
         'feed-audio': jupiter + 'feeds/coderradioogg.xml',
-        'image': 'coderradio.jpg',
+        'image': 'coder-radio.jpg',
         'plot': __language__(30217),
         'genre': 'Technology'
     }
@@ -184,7 +184,7 @@ def get_shows():
         'feed': feedburner + 'linuxunvid?format=xml',
         'feed-low': feedburner + 'linuxunogg?format=xml',
         'feed-audio': feedburner + 'linuxunogg?format=xml',
-        'image': 'Linux_Unplugged.jpg',
+        'image': 'linux-unplugged.jpg',
         'plot': __language__(30219),
         'genre': 'Technology'
     }
@@ -194,7 +194,7 @@ def get_shows():
         'feed': feedburner + 'BsdNowHd?format=xml',
         'feed-low': feedburner + 'BsdNowMobile?format=xml',
         'feed-audio': feedburner + 'BsdNowOgg?format=xml',
-        'image': 'bsdnow.jpg',
+        'image': 'bsd-now.jpg',
         'plot': __language__(30220),
         'genre': 'Technology'
     }
@@ -203,7 +203,7 @@ def get_shows():
         'feed': feedburner + 'HowtoLinuxHd?format=xml',
         'feed-low': feedburner + 'HowtoLinuxMobile?format=xml',
         'feed-audio': feedburner + 'HowtoLinuxOgg?format=xml',
-        'image': 'howtolinux.jpg',
+        'image': 'howto-linux.jpg',
         'plot': __language__(30221),
         'genre': 'Technology'
     }
@@ -213,7 +213,7 @@ def get_shows():
         'feed': 'http://feedpress.me/t3mob',
         'feed-low': 'http://feedpress.me/t3ogg',
         'feed-audio': 'http://feedpress.me/t3ogg',
-        'image': 'techtalktoday.png',
+        'image': 'tech-talk-today.png',
         'plot': __language__(30222),
         'genre': 'Technology'
     }
@@ -244,7 +244,7 @@ def categories():
             __settings__.getAddonInfo('path'),
             'resources',
             'media',
-            'jupiterbroadcasting.jpg'),
+            'jblive-tv.jpg'),
         info={
             'title': __language__(30010),
             'plot': __language__(30210),

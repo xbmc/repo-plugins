@@ -8,3 +8,7 @@ version 0.1.1:
  
  version 0.1.2:
  * fixed errors after changes on tagesschau.de
+
+
+ version 0.1.3:
+ * fixed errors after changes on tagesschau.de

@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 -->
-<addon id="plugin.video.tagesschauvideoblog" name="Tagesschau Videoblog" version="0.1.2" provider-name="Fiona Schmidtke, Niclas Hoyer">
+<addon id="plugin.video.tagesschauvideoblog" name="Tagesschau Videoblog" version="0.1.3" provider-name="Fiona Schmidtke, Niclas Hoyer">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>

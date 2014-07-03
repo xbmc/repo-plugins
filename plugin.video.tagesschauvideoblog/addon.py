@@ -31,7 +31,7 @@ videoregexp = re.compile(re.escape(tagesschauURL)+'ausland\/videoblog\/[^"]+')
 blogsregexp      = re.compile('Startseite Videoblog(.*)subressort', re.MULTILINE|re.DOTALL)
 blogurlregexp    = re.compile('a href="(\/videoblog\/[^"]+)"')
 blogtitleregexp  = re.compile('">([^<]+)<\/a><\/li>')
-entriesregexp    = re.compile('<h4[^>]*><a[^>]+href="\/([^"]*)"[^>]*>([^<]+)<\/a>')
+entriesregexp    = re.compile('a\thref="(\/videoblog\/[^"]+)">\n[^\n]*\n<h4 class="headline">([^<]*)<\/h4>', re.MULTILINE|re.DOTALL)
 teaserregexp     = re.compile('img[^>]+src="(\/multimedia\/bilder\/[^"]+teaser+[^"]+)')
 
 def removeNonAscii(s):

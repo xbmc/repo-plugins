@@ -1,3 +1,9 @@
+[B]Version 3.1.1[/B]
+- Added missing required library
+
+[B]Version 3.1.0[/B]
+- Complete rewrite. Plenty of bugfixes and better performance
+
 [B]Version 3.0.3[/B]
 - Live URL is now fetched instead of being hard coded
 

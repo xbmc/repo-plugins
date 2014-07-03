@@ -6,7 +6,6 @@ import html5lib
 import re
 
 def get_document(url):
-    print "Slód: '{0}'".format(url)
     r = requests.get(url)
     source = r.content
     doc = html5lib.parse(source, treebuilder='lxml', namespaceHTMLElements=False)
@@ -50,11 +49,6 @@ def get_showtree():
     for i, channel in enumerate(doc.xpath("//div[@style]")):
         channel_name = channel.find("h1").text
         showtree.append({"name": channel_name, "categories": []})
-
-        try:
-            print channel_name.encode('utf-8')
-        except AttributeError:
-            print "nochan"
 
         for group in channel.find("div").iterchildren():
             if group.tag == 'h2':
@@ -152,7 +146,3 @@ def get_live_url(channel='ruv'):
     doc = get_document(page_urls.get(channel))
     return doc.xpath("//div[@id='spilarinn']/video/source")[0].attrib['src']
 
-
-if __name__ == '__main__':
-    None
-    #print get_episodes('')

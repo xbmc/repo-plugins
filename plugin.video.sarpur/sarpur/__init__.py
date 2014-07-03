@@ -5,6 +5,7 @@ import sys
 import xbmcaddon
 
 ALWAYS_REFRESH = False
+LOGGING_ENABLED = True
 
 BASE_URL = sys.argv[0]
 ADDON_HANDLE = int(sys.argv[1])

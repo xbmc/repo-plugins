@@ -5,7 +5,7 @@
 import sarpur
 import urlparse
 import xbmcplugin
-from sarpur import actions
+from sarpur import actions, logger
 
 xbmcplugin.setContent(sarpur.ADDON_HANDLE, 'episodes')
 
@@ -40,7 +40,7 @@ try:
         actions.play_live_stream(action_value)
     else:
 
-        print "Action: {0}, Value: {1}, Name: {2}".format(action_key, action_value, name)
+        logger.log("Action: {0}, Value: {1}, Name: {2}".format(action_key, action_value, name))
 
 finally:
     xbmcplugin.endOfDirectory(sarpur.ADDON_HANDLE)

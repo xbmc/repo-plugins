@@ -67,7 +67,7 @@ def play_live_stream(name):
 
 def tab_index(url):
     pageurl = 'http://www.ruv.is{0}'.format(url)
-    print pageurl
+
     episodes = scraper.get_tab_items(pageurl)
     if not episodes:
         gui.infobox("Engar upptökur", "Engin upptaka fannst")

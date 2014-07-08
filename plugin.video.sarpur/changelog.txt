@@ -1,3 +1,6 @@
+[B]Version 3.1.2[/B]
+- Switched from lxml to plain etree
+
 [B]Version 3.1.1[/B]
 - Added missing required library
 

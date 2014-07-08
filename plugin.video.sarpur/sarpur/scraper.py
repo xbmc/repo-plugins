@@ -1,14 +1,19 @@
 #!/usr/bin/env python
 # encoding: UTF-8
 
-import requests
-import html5lib
-import re
+import requests, re
+from html5lib import treebuilders
+from xml.etree import cElementTree
+
 
 def get_document(url):
     r = requests.get(url)
     source = r.content
-    doc = html5lib.parse(source, treebuilder='lxml', namespaceHTMLElements=False)
+
+    tb = treebuilders.getTreeBuilder("etree", cElementTree)
+    doc = html5lib.parse(source,
+                         treebuilder=tb,
+                         namespaceHTMLElements=False)
 
     return doc
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.sarpur"
        name="Sarpur"
-       version="3.1.1"
+       version="3.1.2"
        provider-name="Dagur Páll Ammendrup">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -13,8 +13,8 @@
         <provides>audio video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Play videos and radio recordings from the Icelandic Public Radio's website</summary>
-    <description lang="en">An Iceland IP-Address is required to use this because of geoblocking</description>
+    <summary lang="en">Play media off the Icelandic Public Radio's website</summary>
+    <description lang="en">An Icelandic IP-Address is required to use this because of geoblocking</description>
     <platform>all</platform>
     <language>is</language>
     <license>MIT</license>

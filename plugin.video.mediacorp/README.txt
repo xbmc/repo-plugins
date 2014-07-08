@@ -18,3 +18,7 @@ version 0.2.0 added required fields in addon.xml, translatable strings separated
 
 v0.2.2
 minor change to addon.xml
+
+Version 1.0.2 rewrite for web site changes
+
+Version 1.0.3 cleanup of folder name and settings xml

@@ -12,8 +12,13 @@ import xbmcgui
 import xbmcaddon
 import xbmcvfs
 import cgi
+from operator import itemgetter
+
 
 USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
+GENRE_TV  = "TV"
+UTF8          = 'utf-8'
+MAX_PER_PAGE  = 25
 
 addon         = xbmcaddon.Addon('plugin.video.mediacorp')
 __addonname__ = addon.getAddonInfo('name')
@@ -21,7 +26,7 @@ __language__  = addon.getLocalizedString
 
 home          = addon.getAddonInfo('path').decode('utf-8')
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
-fanart        = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
+addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
 
 
@@ -30,61 +35,100 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-
-def _parse_argv():
-
-        global url,name,iconimage, mode, playlist,fchan,fres,fhost,fname,fepg
-
-        params = {}
-        try:
-            params = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
-        except:
-            params = {}
-
-        url =       demunge(params.get("url",None))
-        name =      demunge(params.get("name",""))
-        iconimage = demunge(params.get("iconimage",""))
-#        fanart =    demunge(params.get("fanart",""))
-        playlist =  demunge(params.get("playlist",""))
-        fchan =     demunge(params.get("fchan",""))
-        fres =      demunge(params.get("fres",""))
-        fhost =     demunge(params.get("fhost",""))
-        fname =     demunge(params.get("fname",""))
-        fepg =      demunge(params.get("fepg",None))
-
-        try:
-            playlist=eval(playlist.replace('|',','))
-        except:
-            pass
-
-        try:
-            mode = int(params.get( "mode", None ))
-        except:
-            mode = None
-
-
-
+def cleanfilename(name):    
+    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+    return ''.join(c for c in name if c in valid_chars)
 
 def demunge(munge):
         try:
-            munge = urllib.unquote_plus(munge).decode('utf-8')
+            munge = urllib.unquote_plus(munge).decode(UTF8)
         except:
             pass
         return munge
 
+def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT}):
+              log("getRequest URL:"+str(url))
+              req = urllib2.Request(url.encode(UTF8), user_data, headers)
 
+              try:
+                 response = urllib2.urlopen(req)
+                 if response.info().getheader('Content-Encoding') == 'gzip':
+                    log("Content Encoding == gzip")
+                    buf = StringIO( response.read())
+                    f = gzip.GzipFile(fileobj=buf)
+                    link1 = f.read()
+                 else:
+                    link1=response.read()
+              except:
+                 link1 = ""
 
-
-
+              link1 = str(link1).replace('\n','')
+              return(link1)
 
 
 def getSources():
 
-              log("Mediacorp -- Mediacorp main page")
-              addDir("Channel 5","http://video.xin.msn.com/browse/tv/network?tag=channel+5&currentpage=",17,"http://img.video.msn.com/video/i/network/ensg_channel-5_nl.png",fanart,"Channel 5","TV",False)
-              addDir("Channel 8","http://video.xin.msn.com/browse/tv/network?tag=channel+8&currentpage=",17,"http://img.video.msn.com/video/i/network/ensg_channel-8_nl.png",fanart,"Channel 8","TV",False)
-              addDir("Channel U","http://video.xin.msn.com/browse/tv/network?tag=channel+u&currentpage=",17,"http://img.video.msn.com/video/i/network/ensg_channel-u_nl.png",fanart,"Channel U","TV",False)
-              addDir("Channel News Asia","http://video.xin.msn.com/browse/news/channel-newsasia?currentpage=",18,"http://img.video.msn.com/video/i/src/ensgcna~ensgcna_ppl.png",fanart,"Channel News Asia","TV",False)
+              addDir(__language__(30002),"http://video.xin.msn.com/browse/tv/network?tag=channel+5&currentpage=",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-5_nl.png",addonfanart,__language__(30002),"TV",False)
+              addDir(__language__(30003),"http://video.xin.msn.com/browse/tv/network?tag=channel+8&currentpage=",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-8_nl.png",addonfanart,__language__(30003),"TV",False)
+              addDir(__language__(30004),"http://video.xin.msn.com/browse/tv/network?tag=channel+u&currentpage=",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-u_nl.png",addonfanart,__language__(30004),"TV",False)
+              addDir(__language__(30005),"http://video.xin.msn.com/browse/news/channel-newsasia?currentpage=",'GS',"http://img.video.msn.com/video/i/src/ensgcna~ensgcna_ppl.png",addonfanart,__language__(30005),"TV",False)
+
+def getnextPage(html, url, mode):
+  try:
+    (currentpage, totalpages) = re.compile('class="vxp_currentPage">(.+?)<.+?vxp_totalPages">(.+?)<').findall(html)[0]
+    if (currentpage!=totalpages):
+       currentpage = str(int(currentpage)+1)
+       cattitle = "[COLOR blue]>>> %s[/COLOR]" % (__language__(30006))
+       url = re.compile('(.+?)&currentpage=').findall(url)[0]
+       caturl = url+'&currentpage=%s' % (currentpage)
+       addDir(cattitle, caturl, mode, icon, addonfanart, "", "TV", "", False)
+  except:
+    return
+
+def getChannel(url):
+     html     = getRequest(url)
+     blobs = re.compile('<ul class="vxp_tagList_column"(.+?)</ul>').findall(html)
+     for catblock in blobs:
+       match=re.compile('href="(.+?)".+?title="(.+?)"').findall(catblock)
+       for caturl, cattext in match:
+         caturl = caturl+'&currentpage='
+         cattext = cattext.strip()
+         cattext = cattext.replace('&quot;','"').replace("&#39;","'").replace("&amp;","&")
+         addDir(cattext,caturl.encode('utf-8'),'GS',icon,addonfanart,cattext,"TV","",False)
+     getnextPage(html,url, 'GC')
+
+
+def getShows(url):
+  html = getRequest(url)
+  html = html.replace("&amp;","&").replace("&#39;","'").replace('&quot;','"')
+  match = re.compile('vxp_gallery_thumb">.+?title="(.+?)".+?src="(.+?)".+?vxp_thumbClickTarget" href="(.+?)".+?vxp_gallery_date vxp_tb1">(.+?)<.+?vxp_videoType vxp_tb1">(.+?)<.+?data-title="(.+?)".+?vxp_rating">').findall(html)
+  match = sorted(match, key=itemgetter(5))
+  for catdesc, caticon, caturl, cattime, cattype, cattitle in match:
+     cattype = cattype.strip()
+     cattime = cattime.strip()
+     cattitle= cattitle.strip()
+     catdesc = catdesc.strip()
+     caturl = "plugin://plugin.video.mediacorp/?url="+urllib.quote_plus(caturl)+"&name="+urllib.quote_plus(cattitle)+"&iconimage="+urllib.quote_plus(caticon)+"&mode=GV"
+     addLink(caturl, cattitle, caticon, addonfanart, cattype+" "+cattime+"\n"+catdesc, "TV", "")
+
+  getnextPage(html, url, 'GS')
+
+
+def getVideo(url):
+    html = getRequest(url)  
+    html=html.replace('\r','').replace("&#39;","'")
+    try:
+        if "{formatCode: 103, url:" in html:
+            vidurl = re.compile("{formatCode: 103, url:.+?'(.+?)'").findall(html)[0]
+        else:
+            vidurl = re.compile("{formatCode: 101, url:.+?'(.+?)'").findall(html)[0]
+    except:
+        dialog = xbmcgui.Dialog()
+        dialog.ok(__language__(30000), '',__language__(30001))
+
+    vidurl = vidurl.replace("\\x3a",":").replace("\\x2f","/")
+    vidurl = vidurl.encode(UTF8)
+    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=vidurl))
 
 
 def play_playlist(name, list):
@@ -98,202 +142,61 @@ def play_playlist(name, list):
         xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 
-def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)+"&iconimage="+urllib.quote_plus(iconimage)
+def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=True,playlist=None,autoplay=False):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+mode
+        dir_playable = False
+        cm = []
+
+        if mode != 'SR':
+            u += "&name="+urllib.quote_plus(name)
+            if (fanart is None) or fanart == '': fanart = addonfanart
+            u += "&fanart="+urllib.quote_plus(fanart)
+            dir_image = "DefaultFolder.png"
+            dir_folder = True
+        else:
+            dir_image = "DefaultVideo.png"
+            dir_folder = False
+            dir_playable = True
+
         ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz=xbmcgui.ListItem(name, iconImage=dir_image, thumbnailImage=iconimage)
         liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
         liz.setProperty( "Fanart_Image", fanart )
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)
-        return ok
 
-
-
-def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode=12"
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": description, "Genre": genre, "Year": date } )
-        liz.setProperty( "Fanart_Image", fanart )
-        liz.setProperty('IsPlayable', 'true')
-        liz.setProperty('mimetype', 'video/x-msvideo')
+        if dir_playable == True:
+         liz.setProperty('IsPlayable', 'true')
         if not playlist is None:
             playlist_name = name.split(') ')[1]
-            contextMenu_ = [('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=13&name=%s&playlist=%s)' %(sys.argv[0], urllib.quote_plus(playlist_name), urllib.quote_plus(str(playlist).replace(',','|'))))]
-            liz.addContextMenuItems(contextMenu_)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
-        return ok
+            cm.append(('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], playlist_name, urllib.quote_plus(str(playlist).replace(',','|')))))
+        liz.addContextMenuItems(cm)
+        return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=dir_folder)
+
+def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
+        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
 
 
-xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+# MAIN EVENT PROCESSING STARTS HERE
+
+xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+
+parms = {}
 try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_TITLE)
+    parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
+    for key in parms:
+       parms[key] = demunge(parms[key])
 except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
-except:
-    pass
+    parms = {}
 
+p = parms.get
 
-url=None
-name=None
-iconimage=None
-mode=None
-playlist=None
-fchan=None
-fres=None
-fhost=None
-fname=None
-fepg=None
+mode = p('mode', None)
 
-_parse_argv()
-
-
-
-log("Mediacorp -- Mode: "+str(mode))
-if not url is None:
-    print "Mediacorp -- URL: "+str(url.encode('utf-8'))
-#log("Mediacorp -- Name: "+str(name))
-
-if mode==None:
-    log("Mediacorp -- getSources")
-    getSources()
-
-elif mode==12:
-    log("Mediacorp -- setResolvedUrl")
-    item = xbmcgui.ListItem(path=url)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
-elif mode==13:
-    log("Mediacorp -- play_playlist")
-    play_playlist(name, playlist)
-
-elif mode==17:
-              req = urllib2.Request(url.encode('utf-8'))
-              req.add_header('User-Agent', USER_AGENT)
-              try:
-                 response = urllib2.urlopen(req)
-                 link1=response.read()
-                 response.close()
-              except:
-                 link1 = ""
-
-              link=str(link1).replace('\n','')     
-              match=re.compile('<ul class="vxp_tagList_column"(.+?)</ul>').findall(str(link))
-              for catblock in match:
-                match=re.compile('href="(.+?)".+?title="(.+?)"').findall(str(catblock))
-                for caturl, cattext in match:
-                 caturl = caturl+'&currentpage='
-                 cattext = cattext.strip()
-                 cattext = cattext.replace('&quot;','"').replace("&#39;","'").replace("&amp;","&")
-                 try:
-                    addDir(cattext,caturl.encode('utf-8'),18,iconimage,fanart,cattext,"TV","",False)
-                 except:
-                    log("Mediacorp -- Problem adding directory")
-
-              match = re.compile('class="vxp_currentPage">(.+?)<.+?vxp_totalPages">(.+?)<').findall(str(link))
-              catdone=False
-              for currentpage, totalpages in match:
-                if (currentpage!=totalpages) and catdone==False:
-                  catdone = True
-                  currentpage = str(int(currentpage)+1)
-                  cattitle = ">>> Next Page"
-                  catdesc = cattitle
-                  match= re.compile('(.+?)&currentpage=').findall(str(url))
-                  for url in match:
-                     caturl = url+'&currentpage='+currentpage
-                     try:
-                        addDir(cattitle,caturl,17,iconimage,fanart,catdesc,"TV","",False)
-                     except:
-                        log("Mediacorp -- Problem adding directory")
-
-
-
-
-elif mode==18:
-              log("Mediacorp -- Processing Mediacorp sub category item")
-              req = urllib2.Request(url.encode('utf-8'))
-              log("Mediacorp -- req === "+str(req))
-              req.add_header('User-Agent', USER_AGENT)
-              try:
-                 response = urllib2.urlopen(req)
-                 link1=response.read()
-                 response.close()
-              except:
-                 link1 = ""
-              link=str(link1).replace('\n','').replace('\r','')
-
-              match = re.compile('<div class="vxp_gallery_thumb">(.+?)class="vxp_rating">').findall(str(link))
-              for classdata in match:
-                    classdata=classdata.replace("&amp;","&").replace("&#39;","'").replace('&quot;','"')
-                    match = re.compile('title="(.+?)".+?src="(.+?)".+?vxp_thumbClickTarget" href="(.+?)".+?class="vxp_gallery_date vxp_tb1">(.+?)<.+?vxp_videoType vxp_tb1">(.+?)<.+?data-title="(.+?)"').findall(str(classdata))
-                    cattype=""
-                    for catdesc,caticon, caturl, cattime, cattype, cattitle in match:
-                     cattype = cattype.strip()
-                     cattime = cattime.strip()
-                     cattitle= cattitle.strip()
-                     catdesc = catdesc.strip()
-                     caturl = "plugin://plugin.video.mediacorp/?url="+urllib.quote_plus(caturl)+"&name="+urllib.quote_plus(cattitle)+"&iconimage="+urllib.quote_plus(caticon)+"&mode=19"
-                     try:
-                      addLink(caturl,cattitle,caticon,fanart,cattype+" "+cattime+"\n"+catdesc,"TV","")
-                     except:
-                        log("Mediacorp -- Problem adding directory")
-
-              match = re.compile('class="vxp_currentPage">(.+?)<.+?vxp_totalPages">(.+?)<').findall(str(link))
-              catdone=False
-              for currentpage, totalpages in match:
-                if (currentpage!=totalpages) and catdone==False:
-                  catdone = True
-                  currentpage = str(int(currentpage)+1)
-                  cattitle = ">>> Next Page"
-                  catdesc = cattitle
-                  match= re.compile('(.+?)&currentpage=').findall(str(url))
-                  for url in match:
-                     caturl = url+'&currentpage='+currentpage
-                     try:
-                        addDir(cattitle,caturl,18,iconimage,fanart,catdesc,"TV","",False)
-                     except:
-                        log("Mediacorp -- Problem adding directory")
-
-
- 
-elif mode==19:
-              log("Mediacorp -- Processing Mediacorp play category item")
-              req = urllib2.Request(url.encode('utf-8'))
-              log("Mediacorp -- req === "+str(req))
-              req.add_header('User-Agent', USER_AGENT)
-              try:
-                 response = urllib2.urlopen(req)
-                 link1=response.read()
-                 response.close()
-              except:
-                 link1 = ""
-              link=str(link1).replace('\n','').replace('\r','').replace("&#39;","'")
-
-              if "{formatCode: 103, url:" in link:
-                 match = re.compile("{formatCode: 103, url:.+?'(.+?)'").findall(str(link))
-              else:
-                 match = re.compile("{formatCode: 101, url:.+?'(.+?)'").findall(str(link))
-              if not match:
-                 dialog = xbmcgui.Dialog()
-                 dialog.ok(__language__(30000), '',__language__(30001))
-              else:
-               for vidurl in match:
-                vidurl = vidurl.replace("\\x3a",":").replace("\\x2f","/")
-                vidurl = vidurl.encode('utf-8')
-                item = xbmcgui.ListItem(path=vidurl, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-                item.setInfo( type="Video", infoLabels={ "Title": name} )
-                item.setProperty("IsPlayable","true")
-                xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-              
+if mode==  None:  getSources()
+elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
+elif mode=='PP':  play_playlist(p('name'), p('playlist'))
+elif mode=='GV':  getVideo(p('url'))
+elif mode=='GS':  getShows(p('url'))
+elif mode=='GC':  getChannel(p('url'))
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
+

@@ -42,13 +42,13 @@ class CrunchyJSON:
                 self.loadShelf()
 
         def loadShelf(self):
-                self.base_path = xbmc.translatePath(__settings__.getAddonInfo('profile')).decode('utf-8')
-		self.base_cache_path = os.path.join(self.base_path, "cache")
-		if not os.path.exists(self.base_cache_path):
-			os.makedirs(self.base_cache_path)
-                shelf_path = os.path.join(self.base_path, "cruchyXBMC")
-                #Load Persistan Vars
                 try:
+                        self.base_path = xbmc.translatePath(__settings__.getAddonInfo('profile')).decode('utf-8')
+                        self.base_cache_path = os.path.join(self.base_path, "cache")
+                        if not os.path.exists(self.base_cache_path):
+                                os.makedirs(self.base_cache_path)
+                        shelf_path = os.path.join(self.base_path, "cruchyXBMC")
+                        #Load Persistan Vars
                         userData = shelve.open(shelf_path,writeback=True)
                         local_string = __settings__.getLocalizedString
                         notice_msg = local_string(30200).encode("utf8")
@@ -100,7 +100,7 @@ class CrunchyJSON:
                         userData['session_expires'] = current_datetime - dateutil.relativedelta.relativedelta( hours = +24 )
                         self.userData = userData
                         userData.close()
-                        print "Crunchyroll Catch"
+                        print "Crunchyroll -> Unable to Load shelve"
                         return False
 
                 if current_datetime > userData['lastreported']:
@@ -351,8 +351,8 @@ class CrunchyJSON:
         def list_media(self, collection_id, series_name, count, complete, season, fanart):
                 #print art
                 sort = 'asc' if complete is '1' else 'desc'
-                fields = "media.episode_number,media.name,media.description,media.media_type,media.series_name,media.available,media.available_time,media.free_available,media.free_available_time,media.duration,media.url,media.screenshot_image,image.fwide_url,image.fwidestar_url,series.landscape_image,image.full_url"
-                options = {'collection_id':collection_id, 'fields':fields, 'sort':sort, 'limit':'64'}
+                fields = "media.episode_number,media.name,media.description,media.media_type,media.series_name,media.available,media.available_time,media.free_available,media.free_available_time,media.playhead,media.duration,media.url,media.screenshot_image,image.fwide_url,image.fwidestar_url,series.landscape_image,image.full_url"
+                options = {'collection_id':collection_id, 'fields':fields, 'sort':sort, 'limit':'256'}
                 request = self.makeAPIRequest('list_media', options)
                 if request['error'] is False:	
                         return self.list_media_items(request['data'], series_name, season, 'normal', fanart)
@@ -397,20 +397,20 @@ class CrunchyJSON:
                         thumb = "http://static.ak.crunchyroll.com/i/coming_soon_beta_fwide.jpg" if media['available'] is False else thumb #Sets the thumbnail to coming soon if the episode isn't available yet.
                         description = '' if media['description'] is None else media['description'].encode('utf-8') #Adding sinopses
                         description = "This episode will be available in "+str(available_in) if media['available'] is False else description #Set the description for upcoming episodes.
-                        duration = int(0) if media['available'] is False else int((float(media['duration']) * 1000))
-                        playhead = "0" if media['available'] is False else str(media['duration']) #total video time to mark as watched
+                        duration = "0" if media['available'] is False else str(media['duration'])
+                        playhead = "0" if media['available'] is False else str(media['playhead']) #current playback point
                         year = 'None' if media['available_time'] is None else media['available_time'][:10] #Adding published date instead
                         url = media['url']
                         media_id = url.split('-')[-1]
-                        crunchy_main.UI().addItem({'Title':name.encode("utf8"),'mode':'videoplay', 'id':media_id.encode("utf8"), 'Thumb':thumb.encode("utf8"), 'url':url.encode("utf8"), 'Fanart_Image':fanart, 'plot':description, 'year':year}, False)
+                        crunchy_main.UI().addItem({'Title':name.encode("utf8"),'mode':'videoplay', 'id':media_id.encode("utf8"), 'Thumb':thumb.encode("utf8"), 'url':url.encode("utf8"), 'Fanart_Image':fanart, 'plot':description, 'year':year, 'playhead':playhead, 'duration':duration}, False)
                 crunchy_main.UI().endofdirectory('none')
 
 
 #---------------------------------------------------------
 
         def History(self):
-                fields = "media.episode_number,media.name,media.description,media.media_type,media.series_name,media.available,media.available_time,media.free_available,media.free_available_time,media.duration,media.url,media.screenshot_image,image.fwide_url,image.fwidestar_url"
-                options = {'media_types':"anime|drama", 'fields':fields, 'limit':'64'}
+                fields = "media.episode_number,media.name,media.description,media.media_type,media.series_name,media.available,media.available_time,media.free_available,media.free_available_time,media.duration,media.playhead,media.url,media.screenshot_image,image.fwide_url,image.fwidestar_url"
+                options = {'media_types':"anime|drama", 'fields':fields, 'limit':'256'}
                 request = self.makeAPIRequest('recently_watched', options)
                 if request['error'] is False:	
                         return self.list_media_items(request['data'], 'Recently Watched', '1', 'history', 'fanart')
@@ -420,7 +420,7 @@ class CrunchyJSON:
         def Queue(self):
             queue_type = __settings__.getSetting("queue_type")
             if queue_type == '0':
-                    fields = "media.episode_number,media.name,media.description,media.media_type,media.series_name,media.available,media.available_time,media.free_available,media.free_available_time,media.duration,media.url,media.screenshot_image,image.fwide_url,image.fwidestar_url,series.landscape_image,image.full_url"
+                    fields = "media.episode_number,media.name,media.description,media.media_type,media.series_name,media.available,media.available_time,media.free_available,media.free_available_time,media.duration,media.playhead,media.url,media.screenshot_image,image.fwide_url,image.fwidestar_url,series.landscape_image,image.full_url"
                     options = {'media_types':"anime|drama", 'fields':fields}
                     request = self.makeAPIRequest('queue', options)
                     if request['error'] is False:	
@@ -447,12 +447,21 @@ class CrunchyJSON:
                         
  #-------------------------------------------------------------------------                       
 
-        def startPlayback(self, Title, url, media_id, Thumb):
+        def startPlayback(self, Title, url, media_id, playhead, duration, Thumb):
 
                 #Split the URL to get the session_id & quality
                 session_id = self.userData['session_id']
                 res_quality = ['low','mid','high','ultra']
                 quality = res_quality[int(__settings__.getSetting("video_quality"))]
+                if __settings__.getSetting("playback_resume") == 'true':
+                        playback_resume = True
+                else:
+                        playback_resume = False
+                if playback_resume is not True:
+                        resumetime = "0"
+                else:
+                        resumetime = playhead
+                totaltime = duration
                 local_string = __settings__.getLocalizedString
                 notice_msg = local_string(30200).encode("utf8")
                 setup_msg = local_string(30212).encode("utf8")
@@ -471,9 +480,15 @@ class CrunchyJSON:
                 req.close()
                 request = json.loads(json_data)
                 #print request
+                if int(resumetime) > 0:
+                        playcount=0
+                else:
+                        playcount=1                      
                 item = xbmcgui.ListItem(Title)
-                item.setInfo( type="Video", infoLabels={ "Title": Title })
+                item.setInfo( type="Video", infoLabels={ "Title": Title, "playcount":playcount})
                 item.setThumbnailImage(Thumb)
+                item.setProperty('TotalTime', totaltime)
+                item.setProperty('ResumeTime', resumetime)                        
                 count=0
                 allurl = {}
                 playlist = xbmc.PlayList(1)
@@ -491,12 +506,12 @@ class CrunchyJSON:
                                 else:
                                         url = allurl['low']
                                 playlist.add(url, item)
-                                player = xbmc.Player()
-                                player.play(playlist)
-                                timeplayed = 10
-                                temptimeplayed = 10
-                                time.sleep(10)
-                                14
+                                xbmc.Player().play(playlist)
+                                timeplayed = 1 + int(resumetime)
+                                temptimeplayed = timeplayed
+                                time.sleep(1)
+                                if playback_resume is True:
+                                        xbmc.Player().seekTime(float(resumetime))
                                 x = 0
                                 try:
                                         while player.isPlaying:

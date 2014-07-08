@@ -162,3 +162,7 @@ msgstr ""
 msgctxt "#30310"
 msgid "Done. Force language change is now disabled."
 msgstr ""
+
+msgctxt "#30311"
+msgid "Resume Video Playback"
+msgstr ""

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.crunchyroll-takeout"  name="Crunchyroll;xbmc" provider-name="Yoshi of the Wire" version="2.0.3">
+<addon id="plugin.video.crunchyroll-takeout"  name="Crunchyroll;xbmc" provider-name="Yoshi of the Wire" version="2.0.5">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>

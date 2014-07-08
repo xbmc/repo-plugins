@@ -12,7 +12,7 @@ import xbmcaddon
 
 #plugin constants
 __plugin__ = "Crunchyrollxbmc"
-__version__ = "2.0.3"
+__version__ = "2.0.5"
 __XBMCBUILD__ = xbmc.getInfoLabel( "System.BuildVersion" )
 __settings__ = xbmcaddon.Addon(id='plugin.video.crunchyroll-takeout')
 __language__ = __settings__.getLocalizedString

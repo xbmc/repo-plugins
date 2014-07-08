@@ -70,6 +70,8 @@ class UI:
 		info.setdefault('showtype','None')
 		info.setdefault('Title','None')
 		info.setdefault('year','0')
+		info.setdefault('playhead','0')
+		info.setdefault('duration','0')
 		info.setdefault('plot','No description available.')
 		#print info
 		#create params for xbmcplugin module
@@ -88,6 +90,8 @@ class UI:
 			'&season='+urllib.quote_plus(info['season'])+\
 			'&showtype='+urllib.quote_plus(info['showtype'])+\
 			'&year='+urllib.quote_plus(info['year'])+\
+			'&playhead='+urllib.quote_plus(info['playhead'])+\
+			'&duration='+urllib.quote_plus(info['duration'])+\
 			'&plot='+urllib.quote_plus(info['plot'])
 		#create list item
 		#print u
@@ -161,7 +165,7 @@ class UI:
                 crunchy_json.CrunchyJSON().Queue()
 		
 	def startVideo(self):
-		crunchy_json.CrunchyJSON().startPlayback(self.main.args.name, self.main.args.url, self.main.args.id, self.main.args.icon)
+		crunchy_json.CrunchyJSON().startPlayback(self.main.args.name, self.main.args.url, self.main.args.id, self.main.args.playhead, self.main.args.duration, self.main.args.icon)
 
 	def Fail(self):
                 local_string = __settings__.getLocalizedString

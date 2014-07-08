@@ -5,6 +5,7 @@
     <setting type="sep" />
     <setting id="queue_type" type="enum" lvalues="30009|30010" label="30011" default="0" />
     <setting id="video_quality" type="enum" lvalues="30004|30005|30006|30008" label="30003" default="0" />
+	<setting id="playback_resume" type="bool" label="30311" default="true" />
 	<setting type="sep" />
 	<setting id="change_language" type="enum" lvalues="30300|30301|30302|30303|30304|30305|30306|30307|30308|30309" label="30211" default="0" />
 </settings>

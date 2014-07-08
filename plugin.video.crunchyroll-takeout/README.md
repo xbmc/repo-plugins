@@ -5,12 +5,11 @@ Crunchyroll;xbmc
 A XBMC plugin for Cruchyroll. 
 This plugin a an amalgamation of some of my own code and other's patches.
 
-Full source history at https://code.google.com/p/urlxl-repo/
+Legacy Builds at https://code.google.com/p/urlxl-repo/
 
 Forum Posting: http://forum.xbmc.org/showthread.php?tid=129709
 
 Disclaimer:
-You will need the dependancy from https://github.com/Yoshiofthewire/script.module.datetime
 You will need a Crunchyroll account!
 (No you don't have to pay for it. But it's cheap.)
 

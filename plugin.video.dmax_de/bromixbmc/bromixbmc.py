@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
+Version 1.0.2 (2014.06.25)
+- added 'getFavorites', 'addFavorite' and 'removeFavorite'
+- set the encoding for the favorite routines to utf-8
+- removed 'duration' and 'plot' from addVideoLink -> therefore use 'additionalInfoLabels'
+
 Version 1.0.1 (2014.06.24)
 - added support for helping with favorites
 - initial release
@@ -35,29 +40,46 @@ class Addon:
     def localize(self, id):
         return self._Instance.getLocalizedString(id)
     
-    def loadFavs(self):
+    def _loadFavs(self):
         favs = {'favs': {}}
         if self._FavsFile!=None:
             if os.path.exists(self._FavsFile):
                 try:
                     file = open(self._FavsFile, 'r')
-                    favs = json.loads(file.read())
+                    favs = json.loads(file.read(), encoding='utf-8')
                 except:
-                    # do nothing
                     pass
                 
         return favs
     
-    def storeFavs(self, favs):
+    def getFavorites(self):
+        favs = self._loadFavs()
+        return favs.get('favs', {}).items()
+    
+    def addFavorite(self, id, newFav):
+        favs = self._loadFavs()
+        
+        favs['favs'][id] = newFav
+        self._storeFavs(favs)
+        
+    def removeFavorite(self, id):
+        favs = self._loadFavs()
+        fav = favs.get('favs', {}).get(id, None)
+        if fav!=None:
+            del favs['favs'][id]
+            self._storeFavs(favs)
+            
+        return self.getFavorites()
+    
+    def _storeFavs(self, favs):
         if self._FavsFile!=None and favs!=None:
             with open(self._FavsFile, 'w') as outfile:
-                json.dump(favs, outfile, sort_keys = True, indent = 4, ensure_ascii=False)
+                json.dump(favs, outfile, sort_keys = True, indent = 4, encoding='utf-8')
 
 class Bromixbmc:
     def __init__(self, addon_id, argv):
         self.Addon = Addon(addon_id, argv)
         
-        self.LocalizeMapping = {}
         self.BaseUrl = argv[0]
         
         # create a dictionary of the parameters
@@ -71,8 +93,12 @@ class Bromixbmc:
             return self.Params[name]
         return default
     
-    def createUrl(self, params_dict):
-        return self.BaseUrl + '?' + urllib.urlencode(params_dict)
+    def createUrl(self, params_dict=None):
+        if params_dict!=None:
+            return self.BaseUrl + '?' + urllib.urlencode(params_dict)
+        
+        # default
+        return self.BaseUrl
     
     def showNotification(self, text):
         xbmc.executebuiltin('Notification(%s, %s, %d, %s)'%(self.AddonName,text, 5000, self.AddonIcon))
@@ -89,17 +115,14 @@ class Bromixbmc:
             
         return xbmcplugin.addDirectoryItem(handle=self.Addon.Handle,url=url,listitem=item,isFolder=True)
     
-    def addVideoLink(self, name, params={}, thumbnailImage="", duration=None, fanart=None, plot=""):
+    def addVideoLink(self, name, params={}, thumbnailImage="", fanart=None, additionalInfoLabels={}):
         url = self.createUrl(params)
         
         item = xbmcgui.ListItem(unicode(name), iconImage="DefaultVideo.png", thumbnailImage=thumbnailImage)
         
         # prepare infoLabels
-        infoLabels = {'title': name,
-                      'plot': plot
-                      }
-        if duration!=None:
-            infoLabels['duration'] = duration
+        infoLabels = {'title': name}
+        infoLabels.update(additionalInfoLabels)
             
         item.setInfo(type="video", infoLabels=infoLabels)
         item.setProperty('IsPlayable', 'true')

@@ -13,6 +13,7 @@ import resources.lib.bestofsvt as bestof
 import resources.lib.helper as helper
 import resources.lib.svt as svt
 import resources.lib.PlaylistManager as PlaylistManager
+import resources.lib.FavoritesManager as FavoritesManager
 from resources.lib.PlaylistDialog import PlaylistDialog
 
 MODE_CHANNELS = "kanaler"
@@ -36,6 +37,7 @@ MODE_VIEW_TITLES = "view_titles"
 MODE_VIEW_EPISODES = "view_episodes"
 MODE_VIEW_CLIPS = "view_clips"
 MODE_PLAYLIST_MANAGER = "playlist-manager"
+MODE_FAVORITES = "favorites"
 
 S_DEBUG = "debug"
 S_HIDE_SIGN_LANGUAGE = "hidesignlanguage"
@@ -63,7 +65,27 @@ def viewStart():
   addDirectoryItem(localize(30001), { "mode": MODE_CATEGORIES })
   addDirectoryItem(localize(30007), { "mode": MODE_BESTOF_CATEGORIES })
   addDirectoryItem(localize(30006), { "mode": MODE_SEARCH })
+  addDirectoryItem(localize(30405), { "mode": MODE_FAVORITES })
   addDirectoryItem(localize(30400), { "mode": MODE_PLAYLIST_MANAGER }, folder=False)
+
+def viewFavorites():
+  favorites = FavoritesManager.get_all()
+
+  for item in favorites:
+    list_item = xbmcgui.ListItem(item["title"])
+    fm_script = "special://home/addons/plugin.video.svtplay/resources/lib/FavoritesManager.py"
+    fm_action = "remove"
+    list_item.addContextMenuItems(
+      [
+        (
+          localize(30407),
+          "XBMC.RunScript("+fm_script+", "+fm_action+", "+item["id"]+")"
+         )
+      ], replaceItems=True)
+    params = {}
+    params["url"] = item["url"]
+    params["mode"] = MODE_PROGRAM
+    xbmcplugin.addDirectoryItem(PLUGIN_HANDLE, sys.argv[0] + '?' + urllib.urlencode(params), list_item, True)
 
 
 def viewManagePlaylist():
@@ -77,13 +99,11 @@ def viewAtoO():
   for program in programs:
     addDirectoryItem(program["title"], { "mode": MODE_PROGRAM, "url": program["url"] })
 
-
 def viewCategories():
   categories = svt.getCategories()
 
   for category in categories:
     addDirectoryItem(category["title"], { "mode": MODE_CATEGORY, "url": category["url"] }, thumbnail=category["thumbnail"])
-
 
 def viewAlphaDirectories():
   alphas = svt.getAlphas()
@@ -91,7 +111,6 @@ def viewAlphaDirectories():
     return
   for alpha in alphas:
     addDirectoryItem(alpha["title"], { "mode": MODE_LETTER, "letter": alpha["char"] })
-
 
 def viewProgramsByLetter(letter):
   programs = svt.getProgramsByLetter(letter)
@@ -300,14 +319,25 @@ def addDirectoryItem(title, params, thumbnail = None, folder = True, live = Fals
       plm_script = "special://home/addons/plugin.video.svtplay/resources/lib/PlaylistManager.py"
       plm_action = "add"
       if not thumbnail:
-        thumnail= ""
+        thumbnail= ""
       li.addContextMenuItems(
         [
           (
             localize(30404),
             "XBMC.RunScript("+plm_script+", "+plm_action+", "+params["url"]+", "+title+", "+thumbnail+")"
            )
-        ])
+        ], replaceItems=True)
+  if params["mode"] == MODE_PROGRAM:
+    # Add context menu item for adding programs as favorites
+    fm_script = "special://home/addons/plugin.video.svtplay/resources/lib/FavoritesManager.py"
+    fm_action = "add"
+    li.addContextMenuItems(
+      [
+        (
+          localize(30406),
+          "XBMC.RunScript("+fm_script+", "+fm_action+", "+title+", "+params["url"]+")"
+         )
+      ], replaceItems=True)
 
   if info:
     li.setInfo("Video", info)
@@ -359,5 +389,7 @@ elif ARG_MODE == MODE_BESTOF_CATEGORY:
   viewBestOfCategory(ARG_URL)
 elif ARG_MODE == MODE_PLAYLIST_MANAGER:
   viewManagePlaylist()
+elif ARG_MODE == MODE_FAVORITES:
+  viewFavorites()
 
 xbmcplugin.endOfDirectory(PLUGIN_HANDLE)

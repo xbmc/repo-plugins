@@ -10,11 +10,13 @@ def log(msg, level=None):
   print(msg)
 
 def translatePath(path):
+  if path.startswith("special://profile/addon_data/"):
+    return "favorites.json"
   return "./"
 
 
 class Player:
-  
+
   def play(item=None, listitem=None, windowed=None, startpos=None):
     if item:
       log("Player is playing "+str(item))

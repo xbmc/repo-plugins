@@ -80,8 +80,6 @@ def getProgramsForCategory(url):
   html = getPage(url)
 
   container = common.parseDOM(html, "div", attrs = { "id" : "[^\"']*playJs-alphabetic-list[^\"']*" })
-  if url == "/nyheter":
-    container = common.parseDOM(html, "div", attrs = { "id" : "[^\"']*playJs-title-pages[^\"']*" })
 
   if not container:
     common.log("Could not find container for URL "+url)

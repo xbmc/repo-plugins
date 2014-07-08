@@ -12,69 +12,33 @@ class SevenTv:
         self._opener.addheaders = [('User-Agent', 'stagefright/1.2 (Linux;Android 4.4.2)')]
         self._favsFile = favsFile
         
-    def _loadFavs(self):
-        favs = {'favs': {}}
-        if self._favsFile!=None:
-            if os.path.exists(self._favsFile):
-                try:
-                    file = open(self._favsFile, 'r')
-                    favs = json.loads(file.read())
-                except:
-                    # do nothing
-                    pass
-                
-        return favs
-    
-    def _storeFavs(self, favs):
-        if self._favsFile!=None and favs!=None:
-            with open(self._favsFile, 'w') as outfile:
-                json.dump(favs, outfile, sort_keys = True, indent = 4, ensure_ascii=False)
-        
-    def addShowToFavs(self, channel, show):
-        favs = self._loadFavs()
-        favs['favs'][show] = {}
-        favs['favs'][show]['channel']=channel
-        favs['favs'][show]['show']=show
-        self._storeFavs(favs)
-        
-    def removeShowFromFavs(self, channel, show):
-        favs = self._loadFavs()
-        
-        fav = favs['favs'].get(show, None)
-        if fav!=None:
-            del favs['favs'][show]
-        
-        self._storeFavs(favs)
-            
-    def getFavoriteShows(self):
+    def getFavoriteShows(self, ids=[]):
         result = {}
         
-        favs = self._loadFavs()['favs']
-        ids=''
-        for fav in favs:
-            ids+=favs[fav].get('show', '')+','
+        idString=''
+        for id in ids:
+            idString+=id+','
             
-        if len(ids)>0:
-            ids = ids[:-1] # remove ','
-            ids = '['+ids+']'            
-            content = self._opener.open("http://contentapi.sim-technik.de/mega-app/v1/tablet/format?ids="+ids)
+        if len(idString)>0:
+            idString = idString[:-1] # remove ','
+            idString = '['+idString+']'            
+            content = self._opener.open("http://contentapi.sim-technik.de/mega-app/v1/tablet/format?ids="+idString)
             data = json.load(content)
             result = self.getSortedScreenObjects(data, False)
         
         return result
     
-    def getNewVideos(self):
+    def getNewVideos(self, ids=[]):
         result = {}
         
-        favs = self._loadFavs()['favs']
-        ids=''
-        for fav in favs:
-            ids+=favs[fav].get('show', '')+','
+        idString=''
+        for id in ids:
+            idString+=id+','
             
-        if len(ids)>0:
-            ids = ids[:-1] # remove ','
-            ids = '['+ids+']'            
-            content = self._opener.open("http://contentapi.sim-technik.de/mega-app/v1/tablet/videos/favourites?ids="+ids)
+        if len(idString)>0:
+            idString = idString[:-1] # remove ','
+            idString = '['+idString+']'            
+            content = self._opener.open("http://contentapi.sim-technik.de/mega-app/v1/tablet/videos/favourites?ids="+idString)
             data = json.load(content)
             result = self.getSortedScreenObjects(data, True)
         

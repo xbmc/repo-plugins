@@ -32,7 +32,7 @@ import urllib2
 import json
 import datetime
 
-from Bromixbmc import Bromixbmc
+from bromixbmc import Bromixbmc
 from SevenTv import SevenTv
 
 #import pydevd
@@ -78,9 +78,12 @@ def play(channel_id, episode_id):
         xbmcplugin.setResolvedUrl(bromixbmc.Addon.Handle, True, listitem)
 
 def search():
+    result = False
     keyboard = xbmc.Keyboard('', bromixbmc.Addon.localize(30000))
     keyboard.doModal()
     if keyboard.isConfirmed() and keyboard.getText():
+        result = True
+        
         search_string = keyboard.getText().replace(" ", "+")
         screen_objects = sevenTv.search(search_string)
         
@@ -109,7 +112,7 @@ def search():
                         channel = parts[0]
                         addScreenObject(channel, screen_object2)
                     
-    xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle)
+    xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle, succeeded=result)
     return True
 
 def showIndex():
@@ -129,8 +132,8 @@ def showIndex():
                 bromixbmc.addDir(channel_display_name, params=params, thumbnailImage=channel_logo)
                 
         # try to load favorites
-        favoriteShows = sevenTv.getFavoriteShows()
-        if len(favoriteShows)>0:
+        favs = bromixbmc.Addon.getFavorites()
+        if len(favs)>0:
             params = {'action': ACTION_SHOW_FAVORITE_SHOWS}
             bromixbmc.addDir("[B]"+bromixbmc.Addon.localize(30005)+"[/B]", params=params, thumbnailImage=image_dict.get('favorites', ""))
             
@@ -205,14 +208,14 @@ def addScreenObject(channel, screen_object, fanart=None, addToFavs=True, showFor
                              'action': ACTION_ADD_SHOW_TO_FAVS}
                 
                 contextRun = 'RunPlugin('+bromixbmc.createUrl(urlParams)+')'
-                contextMenu = [(bromixbmc.Addon.localize(30014), contextRun)]
+                contextMenu = [("[B]"+bromixbmc.Addon.localize(30014)+"[/B]", contextRun)]
             else:
                 urlParams = {'channel': channel,
                              'show': show,
                              'action': ACTION_REMOVE_SHOW_FROM_FAVS}
                 
                 contextRun = 'RunPlugin('+bromixbmc.createUrl(urlParams)+')'
-                contextMenu = [(bromixbmc.Addon.localize(30015), contextRun)]
+                contextMenu = [("[B]"+bromixbmc.Addon.localize(30015)+"[/B]", contextRun)]
             
             bromixbmc.addDir(title, params=params, thumbnailImage=thumbnailImage, contextMenu=contextMenu)
     elif type=='video_item_date_no_label' or type=='video_item_format' or type=='video_item_format_no_label' or type=='video_item_date':
@@ -231,6 +234,7 @@ def addScreenObject(channel, screen_object, fanart=None, addToFavs=True, showFor
         id= screen_object.get('id', '')
         
         aired = ""
+        year = ""
         if SETTING_SHOW_PUCLICATION_DATE:
             match = re.compile('(\d*)\.(\d*)\.(\d*)', re.DOTALL).findall(screen_object['publishing_date'])
             if match!=None and len(match[0])>=3:
@@ -239,6 +243,7 @@ def addScreenObject(channel, screen_object, fanart=None, addToFavs=True, showFor
                 date_format = date_format.replace('%d', match[0][0])
                 date_format = date_format.replace('%m', match[0][1])
                 date_format = date_format.replace('%Y', match[0][2])
+                year = match[0][2]
                 
                 aired = date_format+" - "
         
@@ -251,7 +256,9 @@ def addScreenObject(channel, screen_object, fanart=None, addToFavs=True, showFor
                   'episode': id,
                   'action': ACTION_PLAY
                   }
-        bromixbmc.addVideoLink(name, params=params, thumbnailImage=thumbnailIamge, duration=duration, fanart=fanart)
+        additionalInfoLabels = {'year': year,
+                                'duration': duration}
+        bromixbmc.addVideoLink(name, params=params, thumbnailImage=thumbnailIamge, fanart=fanart, additionalInfoLabels=additionalInfoLabels)
         pass
 
 def showChannelLibrary(channel, formatFilter):
@@ -266,6 +273,8 @@ def showChannelLibrary(channel, formatFilter):
     return True
 
 def showShowContent(channel, show, category=''):
+    xbmcplugin.setContent(bromixbmc.Addon.Handle, 'episodes')
+    
     # default: show full episodes
     if category=='':
         category='Ganze Folgen'
@@ -327,18 +336,30 @@ def showChannelHighlights(channel, category=''):
     return True
 
 def showFavoriteShows():
-    favoritesShows = sevenTv.getFavoriteShows()
-    for show in favoritesShows:
-        id = show.get('id', '')
+    favs = bromixbmc.Addon.getFavorites()
+    ids = []
+    for fav in favs:
+        ids.append(fav[0])
+    
+    favs = sevenTv.getFavoriteShows(ids)
+    for fav in favs:
+        id = fav.get('id', '')
         parts = id.split(':')
         if len(parts)>=2:
             channel = parts[0]
-            addScreenObject(channel, show, addToFavs=False)
+            addScreenObject(channel, fav, addToFavs=False)
     xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle)
     return True
 
 def showNewVideos():
-    newVideos = sevenTv.getNewVideos()
+    xbmcplugin.setContent(bromixbmc.Addon.Handle, 'episodes')
+    
+    favs = bromixbmc.Addon.getFavorites()
+    ids = []
+    for fav in favs:
+        ids.append(fav[0])
+        
+    newVideos = sevenTv.getNewVideos(ids)
     
     for newVideo in newVideos:
         id = newVideo.get('format_id', '')
@@ -350,10 +371,12 @@ def showNewVideos():
     return True
 
 def addShowToFav(channel, show):
-    sevenTv.addShowToFavs(channel, show)
+    newFav = {'channel': channel,
+              'show': show}
+    bromixbmc.Addon.addFavorite(show, newFav)
     
 def removeShowFromFav(channel, show):
-    sevenTv.removeShowFromFavs(channel, show)
+    bromixbmc.Addon.removeFavorite(show)
     xbmc.executebuiltin("Container.Refresh")
 
 action = bromixbmc.getParam('action')

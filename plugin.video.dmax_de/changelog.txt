@@ -1,3 +1,6 @@
+1.0.3
+- FIX: stream does not start immediately (HD 720p)
+
 1.0.2
 - added implementation of Fusion of discovery channel
 - added support for HD (720p) and SD via settings

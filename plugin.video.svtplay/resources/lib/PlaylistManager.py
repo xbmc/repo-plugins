@@ -3,8 +3,12 @@ import sys
 import xbmc
 import xbmcgui
 
+import CommonFunctions as common
+
 import svt
 import helper
+
+log = common.log
 
 __playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
 
@@ -64,9 +68,9 @@ def __get_video_url(url):
 
 # To support XBMC.RunScript
 if __name__ == "__main__":
-  print("PLM called as script!")
+  log("PLM called as script!")
   if len(sys.argv) < 2:
-    print "No argument given!"
+    log("No argument given!")
   else:
     if sys.argv[1] == "add" and len(sys.argv) > 4:
       add(sys.argv[2], sys.argv[3], sys.argv[4])

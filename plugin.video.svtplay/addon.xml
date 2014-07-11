@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.svtplay"
        name="SVT Play"
-       version="4.0.4"
+       version="4.0.5"
        provider-name="nilzen">
   <requires>
     <import addon="script.module.parsedom" version="1.2.0"/>
@@ -18,6 +18,7 @@
     <description lang="sv">Med denna addon kan du strömma innehåll från SVT Play (svtplay.se).</description>
     <disclaimer>This is an unofficial addon and it is not supported or maintained by SVT. Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
     <platform>all</platform>
+    <license> GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
     <website>https://github.com/nilzen/xbmc-svtplay</website>
     <source>https://github.com/nilzen/xbmc-svtplay</source>
     <forum>http://forum.xbmc.org/showthread.php?tid=67110</forum>

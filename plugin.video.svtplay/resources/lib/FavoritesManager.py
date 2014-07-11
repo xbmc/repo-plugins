@@ -72,22 +72,16 @@ def get_all():
 
 def __load_from_disk():
   global FAVORITES
-  try:
-    file_handle = open(FILE_PATH, "r")
-    try:
-      FAVORITES = json.load(file_handle)
-    except IOError:
-      FAVORITES = {}
-    file_handle.close()
-  except IOError:
-    FAVORITES = {}
+  FAVORITES = {}
+  if os.path.exists(FILE_PATH) and os.stat(FILE_PATH).st_size != 0:
+    with open(FILE_PATH, "r") as file_handle:
+        FAVORITES = json.load(file_handle)
   log("Load from disk: "+str(FAVORITES))
 
 def __save_to_disk():
   log("Save to disk: "+str(FAVORITES))
-  file_handle = open(FILE_PATH, "w+")
-  file_handle.write(json.dumps(FAVORITES))
-  file_handle.close()
+  with open(FILE_PATH, "w") as file_handle:
+    file_handle.write(json.dumps(FAVORITES))
 
 # To support XBMC.RunScript
 if __name__ == "__main__":

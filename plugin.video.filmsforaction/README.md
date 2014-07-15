@@ -18,6 +18,8 @@ Films For Action Videos: XBMC video add-on to watch the Films For Action videos 
 
 Initial release 1.0.0
 
+[![Build Status](https://secure.travis-ci.org/jamontes/plugin.video.filmsforaction.png)](http://travis-ci.org/jamontes/plugin.video.filmsforaction)
+
 This XBMC plugin allows to watch the videos from the Films For Action web site (more than 2500 videos available).
 
 << Films For Action is a community-powered learning library and alternative news center for people who want to change the world.

@@ -1,3 +1,8 @@
+1.0.2
+- Added Travis-CI integration support for scraper API testing.
+- Added support for Disclose TV videos.
+- Modified video list parser due to website changes.
+- Improved Search option for retrieve all kind of videos.
 1.0.1
 - Added mail tag into addon.xml file.
 - Added settings.xml encoding line.

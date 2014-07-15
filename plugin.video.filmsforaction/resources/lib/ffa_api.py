@@ -20,7 +20,7 @@
    Description:
    These funtions are called from the main plugin module, aimed to ease
    and simplify the add-on development process.
-   Release 0.1.5
+   Release 0.1.6
 '''
 
 import lutil as l
@@ -50,11 +50,11 @@ def get_categories():
 
 def get_videolist(url, localized=lambda x: x):
     """This function gets the video list from the FFA website and returns them in a pretty data format."""
-    video_entry_sep        = '<div class="content-view view-horizontal clearfix">'
+    video_entry_sep        = '<div class="content-view view-horizontal clearfix ">'
     video_urls_pattern     = '<div class="content-image-wrapper">[^<]*?<a href=\'([^"]*?)\'><img class="[^"]*?" data-original="([^"]*?)"'
     video_title_pattern    = '<div class="content-name">[^<]*?<a href="[^"]*?">([^<]*?)</a>'
     video_plot_pattern     = '<div class="content-text">([^<]*?)</div>'
-    video_info_pattern     = '<div class="content-info"><a href="[^"]*?">([^<]*?)</a>([^<]*?)<a href="[^"]*?">([^<]*?)</a></div>'
+    video_info_pattern     = '<div class="content-info"><a href="[^>]*?>([^<]*?)</a>([^<]*?)<a href="[^>]*?>([^<]*?)</a></div>'
     video_duration_pattern = ' ([0-9]*?) min '
     video_rating_pattern   = ' ([0-9.]*?) stars '
     page_count_pattern     = '<span id="C_SR_LabelResultsCount[^"]*?">([0-9]*?)-([0-9]*?) of ([0-9]*?) [^<]*?</span>'
@@ -83,6 +83,7 @@ def get_videolist(url, localized=lambda x: x):
         title = l.find_first(video_section, video_title_pattern)
         plot  = l.find_first(video_section, video_plot_pattern)
         category, info, author = l.find_first(video_section, video_info_pattern) or ('', '', '')
+        l.log('Video info. url: "%s" thumb: "%s" title: "%s" category: "%s"' % (url, thumb, title, category))
         if category in ('Video', 'Short Film', 'Trailer', 'Documentary', 'Presentation'): # This is to avoid blog posts yielded from Search.
             duration = l.find_first(info, video_duration_pattern)
             rating = l.find_first(info, video_rating_pattern)
@@ -109,7 +110,7 @@ def get_videolist(url, localized=lambda x: x):
 
 def get_search_url(search_string):
     """This function returns the search encoded URL to find the videos from the input search string"""
-    return 'http://www.filmsforaction.org/search/?t=4937&s=' + l.get_url_encoded(search_string)
+    return 'http://www.filmsforaction.org/search/?s=' + l.get_url_encoded(search_string)
 
 
 def get_playable_url(url):
@@ -126,6 +127,7 @@ def get_playable_url(url):
             ('snagfilms1', ' src="http://embed.snagfilms.com/embed/player\?filmId=([^"]*?)"', 'snagfilms'),
             ('kickstarter1', ' src="(https://www.kickstarter.com/[^"]*?)"', 'kickstarter'),
             ('tagtele1', ' src="(http://www.tagtele.com/embed/[^"]*?)"', 'tagtele'),
+            ('disclosetv1', ' src="(http://www.disclose.tv/embed/[^"]*?)"', 'disclosetv'),
             )
     
     buffer_url = l.carga_web(url)
@@ -197,3 +199,15 @@ def get_playable_tagtele_url(tagtele_url):
     buffer_link = l.carga_web(tagtele_url)
     return l.find_first(buffer_link, pattern_tagtele_video)
 
+
+def get_playable_disclosetv_url(disclose_url):
+    """This function returns the playable URL for the Disclose TV  embedded video from the video link retrieved."""
+    pattern_disclose_location = 'location.href="(.+?)"'
+    pattern_disclose_video = '{ url: "(.+?)"'
+
+    buffer_link = l.carga_web(disclose_url)
+    location_link = l.find_first(buffer_link, pattern_disclose_location)
+    if location_link:
+        location_url = 'http://www.disclose.tv%s1280&height=720&flash=11&url=' % location_link
+        buffer_link = l.carga_web(location_url)
+        return l.find_first(buffer_link, pattern_disclose_video)

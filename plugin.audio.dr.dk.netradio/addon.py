@@ -31,7 +31,7 @@ import xbmcvfs
 import channels
 import buggalo
 
-CHANNELS_URL = 'http://www.dr.dk/radio/external/channels?mediaType=radio'
+CHANNELS_URL = 'http://www.dr.dk/mu-online/api/1.0/channel/all-active-dr-radio-channels'
 
 
 def showOverview():
@@ -55,25 +55,28 @@ def showDRChannels():
         showError(str(ex))
         return
 
-    for channel in channelList['Data']:
+    for channel in channelList:
+        title = channel['Title']
+        if title[0:3] == 'DR ':
+            title = title[3:]
         sourceUrl = channel['SourceUrl']
         logoImage = os.path.join(LOGO_PATH, sourceUrl[sourceUrl.rindex('/') + 1:] + '.png')
         if xbmcvfs.exists(logoImage):
-            item = xbmcgui.ListItem(channel['Title'], iconImage=logoImage)
+            item = xbmcgui.ListItem(title, iconImage=logoImage)
         else:
-            item = xbmcgui.ListItem(channel['Title'], iconImage=ICON)
+            item = xbmcgui.ListItem(title, iconImage=ICON)
 
         item.setProperty('IsPlayable', 'true')
         item.setProperty('Fanart_Image', FANART)
         item.setInfo(type='music', infoLabels={
-            'title': channel['Title']
+            'title': title
         })
 
         url = None
 
         if 'StreamingServers' in channel:
             for server in channel['StreamingServers']:
-                if 'LinkType' in server and server['LinkType'] == 'Streaming' and 'Qualities' in server:
+                if 'LinkType' in server and server['LinkType'] == 'ICY' and 'Qualities' in server:
                     try:
                         url = server['Server'] + '/' + server['Qualities'][0]['Streams'][0]['Stream']
                         break
@@ -81,7 +84,7 @@ def showDRChannels():
                         pass
 
         if url:
-            xbmcplugin.addDirectoryItem(HANDLE, url + ' live=1', item)
+            xbmcplugin.addDirectoryItem(HANDLE, url, item)
 
     xbmcplugin.addSortMethod(HANDLE, xbmcplugin.SORT_METHOD_TITLE)
     xbmcplugin.endOfDirectory(HANDLE)

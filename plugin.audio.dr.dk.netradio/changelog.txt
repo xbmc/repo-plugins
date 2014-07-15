@@ -1,4 +1,11 @@
-[B]Version 2.1.5 - 2013-02-02[/B]
+[B]Version 2.1.7 - 2014-07-13[/B]
+- Added myRock
+- Fixed DR channels
+
+[B]Version 2.1.6 - 2014-03-20[/B]
+- Switched DR channels to icecast streams to receive metadata about songs played
+
+[B]Version 2.1.5 - 2014-02-02[/B]
 - Fixed DR channels
 - Added Globus Guld
 

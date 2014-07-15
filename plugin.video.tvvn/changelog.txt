@@ -1,3 +1,12 @@
+version 0.9.3 (11/07/2014):
+ * Futher changes to comply with Gotham
+
+version 0.9.2 (10/07/2014):
+ * Futher changes to comply with Gotham
+ * Error proof channel-list update
+ * This is the last version for Frodo (v12) future updates will be Gotham (v13)
+   only
+
 version 0.9.1 (05/06/2013):
  * Changes to comply with Frodo API. Frodo-only going forward.
 

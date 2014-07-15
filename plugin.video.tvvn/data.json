@@ -1,19 +1,26 @@
 {
-    "timestamp":"1370385663",
+    "timestamp":"0404119952",
     "sources": {
+        "fpt": {
+            "url": "http://hlscache.fptplay.net.vn/live/",
+            "swfurl": "",
+            "pageurl": "",
+            "token": "",
+            "app": ""
+        },
         "vtc": {
-            "url": "rtmp://111.91.233.197/live",
+            "url": "rtmp://38.107.180.195:1935/live",
             "swfurl": "http://vtc.com.vn/player_6_10_2011.swf",
             "pageurl": "http://vtc.com.vn/live",
             "token": "",
             "app": ""
         },
         "tv24": {
-            "url": "rtmpe://112.197.2.11:1935/live",
+            "url": "rtmpe://112.197.2.154:1935/live/",
             "swfurl": "http://tv24.vn/getflash.ashx",
-            "pageurl": "http://tv24.vn",
-            "token": "!3zxcvbnm4@",
-            "app": ""
+            "pageurl": "http://tv24.vn/LiveTV",
+            "token": "1b#K8!3zc65ends!",
+            "app": "live"
         },
         "xunghe": {
             "url": "rtmp://118.69.176.149/live",
@@ -23,18 +30,331 @@
             "app": ""
         }
     },
+    "directories": {
+        "root": {
+            "title": "root",
+            "logo":  "",
+            "desc": "root menu",
+            "content": [
+            {"type":"_chn","id":"fpt_vtv1"},
+            {"type":"_chn","id":"fpt_vtv2"},
+            {"type":"_chn","id":"fpt_vtv3hd"},
+            {"type":"_chn","id":"fpt_vtv4"},
+            {"type":"_chn","id":"fpt_vtv6"},
+            {"type":"_chn","id":"fpt_vtv9"},
+            {"type":"_chn","id":"fpt_qpvn"},
+            {"type":"_chn","id":"fpt_antv"},
+            {"type":"_chn","id":"fpt_htvchd"},
+            {"type":"_chn","id":"fpt_thuanviethd"},
+            {"type":"_chn","id":"fpt_vtc1"},
+            {"type":"_chn","id":"fpt_vtc2"},
+            {"type":"_chn","id":"fpt_vtc3hd"},
+            {"type":"_chn","id":"fpt_vtc5"},
+            {"type":"_chn","id":"fpt_vtc6"},
+            {"type":"_chn","id":"fpt_vtc7"},
+            {"type":"_chn","id":"fpt_vtc10"},
+            {"type":"_chn","id":"fpt_vtc14"},
+            {"type":"_chn","id":"fpt_vtc16"},
+            {"type":"_chn","id":"fpt_onetv"},
+            {"type":"chn","id":"vtc_vtv1"},
+            {"type":"chn","id":"vtc_vtv2"},
+            {"type":"chn","id":"vtc_vtv3"},
+            {"type":"chn","id":"vtc_vtv4"},
+            {"type":"_chn","id":"tv24_vtv6"},
+            {"type":"_chn","id":"tv24_vtv9"},
+            {"type":"chn","id":"tv24_antv"},
+            {"type":"chn","id":"vtc_vtc1"},
+            {"type":"chn","id":"vtc_vtc2"},
+            {"type":"chn","id":"vtc_vtc10"},
+            {"type":"dir","id":"sctv"},
+            {"type":"dir","id":"vov"},
+            {"type":"dir","id":"local"}
+            ]
+        },
+        "sctv": {
+            "title": "SCTV Channels",
+            "logo":  "sctv.png",
+            "desc": "SCTV hợp tác và sản xuất",
+            "content": [
+            {"type":"chn","id":"tv24_sctv1"},
+            {"type":"chn","id":"tv24_sctv2"},
+            {"type":"chn","id":"tv24_sctv3"},
+            {"type":"chn","id":"tv24_sctv4"},
+            {"type":"chn","id":"tv24_sctv5"},
+            {"type":"chn","id":"tv24_sctv6"},
+            {"type":"chn","id":"tv24_sctv7"},
+            {"type":"chn","id":"tv24_sctv8"},
+            {"type":"chn","id":"tv24_sctv9"},
+            {"type":"chn","id":"tv24_sctv10"},
+            {"type":"chn","id":"tv24_sctv11"},
+            {"type":"chn","id":"tv24_sctv12"},
+            {"type":"chn","id":"tv24_sctv13"},
+            {"type":"chn","id":"tv24_sctv14"},
+            {"type":"chn","id":"tv24_sctv15"},
+            {"type":"chn","id":"tv24_sctv16"},
+            {"type":"chn","id":"tv24_sctv17"},
+            {"type":"chn","id":"tv24_sctv18"}
+            ]
+        },
+        "vov": {
+            "title": "VOV Radio",
+            "logo":  "vov.png",
+            "desc": "Đài Tiếng nói Việt Nam",
+            "content": [
+            {"type":"chn","id":"vtc_vov1"},
+            {"type":"chn","id":"vtc_vov2"},
+            {"type":"chn","id":"vtc_vov3"},
+            {"type":"chn","id":"vtc_vov5"}
+            ]
+        },
+        "local": {
+            "title": "Local Stations",
+            "logo":  "",
+            "desc": "Truyền hình Địa phương",
+            "content": [
+            {"type":"chn","id":"vtc_htv7"},
+            {"type":"chn","id":"vtc_htv9"},
+            {"type":"chn","id":"vtc_hn1"},
+            {"type":"chn","id":"trt1"}
+            ]
+        },
+        "oversea": {
+            "title": "Oversea Stations",
+            "logo":  "",
+            "desc": "Truyền hình Hải ngoại",
+            "content": [
+            {"type":"chn","id":"vtv1"},
+            {"type":"chn","id":"vtv2"}
+            ]
+        }
+    },
     "channels": {
-        "vtv1": {
+        "fpt_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtv1_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtv2_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtv3hd": {
+            "title": "VTV3 HD",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"fpt",
+                "playpath": "vtv3HD_1000.stream/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtv4": {
+            "title": "VTV4",
+            "logo": "vtv4.png",
+            "desc": "Kênh cho người Việt Nam ở nước ngoài",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtv4_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtv6": {
+            "title": "VTV6",
+            "logo": "vtv6.png",
+            "desc": "Kênh cho Thanh, thiếu niên",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtv6_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtv9": {
+            "title": "VTV9",
+            "logo": "vtv9.png",
+            "desc": "Kênh cho Khán giả miền Nam",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtv9_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_qpvn": {
+            "title": "QPVN",
+            "logo": "default.png",
+            "desc": "Kênh Truyền hình Quốc phòng Việt Nam",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:quocphongHD_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_antv": {
+            "title": "ANTV",
+            "logo": "antv.png",
+            "desc": "Kênh An ninh Nhân dân",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:antv_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_thuanviethd": {
+            "title": "ThuanViet HD",
+            "logo": "default.png",
+            "desc": "Kênh văn hóa giải trí Việt Nam",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:htvcthuanvietHD_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_htvchd": {
+            "title": "HTVC+ HD",
+            "logo": "default.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:htvcplusHD_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_onetv": {
+            "title": "OneTV",
+            "logo": "default.png",
+            "desc": "Kênh giới thiệu riêng của OneTV",
+            "src": {
+                "id":"fpt",
+                "playpath": "onetv_2500.stream/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc1": {
+            "title": "VTC1",
+            "logo": "vtc1.png",
+            "desc": "Thời sự tổng hợp",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc1_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc2": {
+            "title": "VTC2",
+            "logo": "vtc2.png",
+            "desc": "Khoa học, Công nghệ",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc2_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc3hd": {
+            "title": "VTC3 HD",
+            "logo": "default.png",
+            "desc": "Kênh thể thao",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc3HD_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc5": {
+            "title": "VTC5",
+            "logo": "default.png",
+            "desc": "Kênh Phim truyện",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc5_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc6": {
+            "title": "VTC6",
+            "logo": "default.png",
+            "desc": "Kênh giải trí tổng hợp Saigon Channel",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc6_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc7": {
+            "title": "VTC7",
+            "logo": "default.png",
+            "desc": "Kênh tổng hợp TodayTV",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc7_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc10": {
+            "title": "VTC10",
+            "logo": "default.png",
+            "desc": "Kênh truyền hình chuyên biệt về Văn hóa Việt",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc10_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc14": {
+            "title": "VTC14",
+            "logo": "default.png",
+            "desc": "Kênh truyền hình chuyên biệt về môi trường",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc14_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+        "fpt_vtc16": {
+            "title": "VTC16",
+            "logo": "default.png",
+            "desc": "Kênh truyền hình Nông nghiệp và Nông thôn",
+            "src": {
+                "id":"fpt",
+                "playpath": "smil:vtc16_hls.smil/playlist.m3u8",
+                "referer": ""
+            }
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        "vtc_vtv1": {
             "title": "VTV1",
             "logo": "vtv1.png",
             "desc": "Thông tin tổng hợp",
             "src": {
                 "id":"vtc",
-                "playpath": "vtv11",
+                "playpath": "vtv11_h",
                 "referer": "VTV1/15"
             }
         },
-        "vtv2": {
+        "vtc_vtv2": {
             "title": "VTV2",
             "logo": "vtv2.png",
             "desc": "Khoa học, Giáo dục",
@@ -44,87 +364,87 @@
                 "referer": "VTV2/23"
             }
         },
-        "vtv3": {
+        "vtc_vtv3": {
             "title": "VTV3",
             "logo": "vtv3.png",
             "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
             "src": {
                 "id":"vtc",
-                "playpath": "vtv31",
+                "playpath": "vtv31_h",
                 "referer": "VTV3/3"
             }
         },
-        "vtv4": {
+        "vtc_vtv4": {
             "title": "VTV4",
             "logo": "vtv4.png",
             "desc": "Kênh cho người Việt Nam ở nước ngoài",
             "src": {
                 "id":"vtc",
-                "playpath": "vtv4",
+                "playpath": "vtv4_h",
                 "referer": "VTV4/2"
             }
         },
-        "vtc1": {
+        "vtc_vtc1": {
             "title": "VTC1",
             "logo": "vtc1.png",
             "desc": "Thời sự tổng hợp",
             "src": {
                 "id":"vtc",
-                "playpath": "vtc11",
+                "playpath": "vtc11_h",
                 "referer": "VTC1/10"
             }
         },
-        "vtc2": {
+        "vtc_vtc2": {
             "title": "VTC2",
             "logo": "vtc2.png",
             "desc": "Khoa học, Công nghệ",
             "src": {
                 "id":"vtc",
-                "playpath": "vtc21",
+                "playpath": "vtc21_h",
                 "referer": "VTC2/11"
             }
         },
-        "vtc10": {
+        "vtc_vtc10": {
             "title": "VTC10",
             "logo": "vtc10.png",
             "desc": "Kênh Văn hóa Việt",
             "src": {
                 "id":"vtc",
-                "playpath": "vtc101",
+                "playpath": "vtc101_h",
                 "referer": "VTC10/22"
             }
         },
-        "htv7": {
+        "vtc_htv7": {
             "title": "HTV7",
             "logo": "htv7.png",
             "desc": "Thông tin, Giải trí, Thể thao",
             "src": {
                 "id":"vtc",
-                "playpath": "htv7",
+                "playpath": "htv7_h",
                 "referer": ""
             }
         },
-        "htv9": {
+        "vtc_htv9": {
             "title": "HTV9",
             "logo": "htv9.png",
             "desc": "Chính trị, Xã hội, Văn hóa",
             "src": {
                 "id":"vtc",
-                "playpath": "htv91",
+                "playpath": "htv91_h",
                 "referer": ""
             }
         },
-        "hn1": {
+        "vtc_hn1": {
             "title": "HN1",
             "logo": "",
             "desc": "Hà Nội 1",
             "src": {
                 "id":"vtc",
-                "playpath": "hanoi11",
+                "playpath": "hanoi11_h",
                 "referer": ""
             }
         },
-        "vov1": {
+        "vtc_vov1": {
             "title": "VOV1",
             "logo": "vov1.png",
             "desc": "Thời sự, Chính trị, Tổng hợp",
@@ -134,7 +454,7 @@
                 "referer": "VOV1/29"
             }
         },
-        "vov2": {
+        "vtc_vov2": {
             "title": "VOV2",
             "logo": "vov2.png",
             "desc": "Văn hóa, Đời sống, Khoa giáo",
@@ -144,7 +464,7 @@
                 "referer": "VOV2/28"
             }
         },
-        "vov3": {
+        "vtc_vov3": {
             "title": "VOV3",
             "logo": "vov3.png",
             "desc": "Âm nhạc, Giải trí",
@@ -154,7 +474,7 @@
                 "referer": "VOV3/27"
             }
         },
-        "vov5": {
+        "vtc_vov5": {
             "title": "VOV5",
             "logo": "vov5.png",
             "desc": "Phát thanh đối ngoại",
@@ -168,206 +488,260 @@
 
 
 
-        "vtv6": {
+        "tv24_vtv1": {
+            "title": "VTV1",
+            "logo": "vtv1.png",
+            "desc": "Thông tin tổng hợp",
+            "src": {
+                "id":"tv24",
+                "playpath": "vtv1_3",
+                "referer": ""
+            }
+        },
+        "tv24_vtv2": {
+            "title": "VTV2",
+            "logo": "vtv2.png",
+            "desc": "Khoa học, Giáo dục",
+            "src": {
+                "id":"tv24",
+                "playpath": "vtv2_3",
+                "referer": ""
+            }
+        },
+        "tv24_vtv3": {
+            "title": "VTV3",
+            "logo": "vtv3.png",
+            "desc": "Thể thao, Giải trí, Thông tin Kinh tế",
+            "src": {
+                "id":"tv24",
+                "playpath": "vtv3_3",
+                "referer": ""
+            }
+        },
+        "tv24_vtv4": {
+            "title": "VTV4",
+            "logo": "vtv4.png",
+            "desc": "Kênh cho người Việt Nam ở nước ngoài",
+            "src": {
+                "id":"tv24",
+                "playpath": "vtv4_3",
+                "referer": ""
+            }
+        },
+        "tv24_vtv6": {
             "title": "VTV6",
             "logo": "vtv6.png",
             "desc": "Kênh cho Thanh, thiếu niên",
             "src": {
                 "id":"tv24",
-                "playpath": "vtv6.stream",
+                "playpath": "vtv6_3",
                 "referer": ""
             }
         },
-        "vtv9": {
+        "tv24_vtv9": {
             "title": "VTV9",
             "logo": "vtv9.png",
             "desc": "Kênh cho Khán giả miền Nam",
             "src": {
                 "id":"tv24",
-                "playpath": "vtv9.stream",
+                "playpath": "vtv9_3",
                 "referer": ""
             }
         },
-        "sctv1": {
+        "tv24_antv": {
+            "title": "ANTV",
+            "logo": "antv.png",
+            "desc": "Kênh An ninh Nhân dân",
+            "src": {
+                "id":"tv24",
+                "playpath": "antv_2",
+                "referer": ""
+            }
+        },
+        "tv24_sctv1": {
             "title": "SCTV1",
             "logo": "sctv.png",
             "desc": "Hài",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv1.stream",
+                "playpath": "sctv1_2",
                 "referer": ""
             }
         },
-        "sctv2": {
+        "tv24_sctv2": {
             "title": "SCTV2",
             "logo": "sctv.png",
             "desc": "Yan TV: Âm nhạc quốc tế",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv2.stream",
+                "playpath": "sctv2_2",
                 "referer": ""
             }
         },
-        "sctv3": {
+        "tv24_sctv3": {
             "title": "SCTV3",
             "logo": "sctv.png",
             "desc": "Sao TV: Thiếu nhi",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv3.stream",
+                "playpath": "sctv3_2",
                 "referer": ""
             }
         },
-        "sctv4": {
+        "tv24_sctv4": {
             "title": "SCTV4",
             "logo": "sctv.png",
             "desc": "Giải trí tổng hợp",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv4.stream",
+                "playpath": "sctv4_2",
                 "referer": ""
             }
         },
-        "sctv5": {
+        "tv24_sctv5": {
             "title": "SCTV5",
             "logo": "sctv.png",
             "desc": "Shopping TV: Mua sắm SCJ",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv5.stream",
+                "playpath": "sctv5_2",
                 "referer": ""
             }
         },
-        "sctv6": {
+        "tv24_sctv6": {
             "title": "SCTV6",
             "logo": "sctv.png",
             "desc": "Sóng nhạc",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv6.stream",
+                "playpath": "sctv6_2",
                 "referer": ""
             }
         },
-        "sctv7": {
+        "tv24_sctv7": {
             "title": "SCTV7",
             "logo": "sctv.png",
             "desc": "Sân khấu, Văn nghệ tổng hợp",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv7.stream",
+                "playpath": "sctv7_2",
                 "referer": ""
             }
         },
-        "sctv8": {
+        "tv24_sctv8": {
             "title": "SCTV8",
             "logo": "sctv.png",
             "desc": "Thông tin Kinh tế, Thị trường",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv8.stream",
+                "playpath": "sctv8_2",
                 "referer": ""
             }
         },
-        "sctv9": {
+        "tv24_sctv9": {
             "title": "SCTV9",
             "logo": "sctv.png",
             "desc": "Phim châu Á",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv9.stream",
+                "playpath": "sctv9_2",
                 "referer": ""
             }
         },
-        "sctv10": {
+        "tv24_sctv10": {
             "title": "SCTV10",
             "logo": "sctv.png",
             "desc": "Home Shopping Network: Mua sắm",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv10.stream",
+                "playpath": "sctv10_2",
                 "referer": ""
             }
         },
-        "sctv11": {
+        "tv24_sctv11": {
             "title": "SCTV11",
             "logo": "sctv.png",
             "desc": "Hát trên truyền hình",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv11.stream",
+                "playpath": "sctv11_2",
                 "referer": ""
             }
         },
-        "sctv12": {
+        "tv24_sctv12": {
             "title": "SCTV12",
             "logo": "sctv.png",
             "desc": "Du lịch, Khám phá",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv12.stream",
+                "playpath": "sctv12_2",
                 "referer": ""
             }
         },
-        "sctv13": {
+        "tv24_sctv13": {
             "title": "SCTV13",
             "logo": "sctv.png",
             "desc": "Phụ nữ và Gia đình",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv13.stream",
+                "playpath": "sctv13_2",
                 "referer": ""
             }
         },
-        "sctv14": {
+        "tv24_sctv14": {
             "title": "SCTV14",
             "logo": "sctv.png",
             "desc": "Phim Việt",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv14.stream",
+                "playpath": "sctv14_2",
                 "referer": ""
             }
         },
-        "sctv15": {
+        "tv24_sctv15": {
             "title": "SCTV15",
             "logo": "sctv.png",
             "desc": "Thể thao",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv15.stream",
+                "playpath": "sctv15_2",
                 "referer": ""
             }
         },
-        "sctv16": {
+        "tv24_sctv16": {
             "title": "SCTV16",
             "logo": "sctv.png",
             "desc": "Phim truyện nước ngoài",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv16.stream",
+                "playpath": "sctv16_2",
                 "referer": ""
             }
         },
-        "sctv17": {
+        "tv24_sctv17": {
             "title": "SCTV17",
             "logo": "sctv.png",
             "desc": "Phim tổng hợp",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv17.stream",
+                "playpath": "sctv17_2",
                 "referer": ""
             }
         },
-        "sctv18": {
+        "tv24_sctv18": {
             "title": "SCTV18",
             "logo": "sctv.png",
             "desc": "Thể thao",
             "src": {
                 "id":"tv24",
-                "playpath": "SDsctv18.stream",
+                "playpath": "sctvhdthethao_2",
                 "referer": ""
             }
         },
+
+
+
+
 
 
 
@@ -381,83 +755,6 @@
                 "playpath": "trt",
                 "referer": ""
             }
-        }
-    },
-    "directories": {
-        "root": {
-            "title": "root",
-            "logo":  "",
-            "desc": "root menu",
-            "content": [
-            {"type":"chn","id":"vtv1"},
-            {"type":"chn","id":"vtv2"},
-            {"type":"chn","id":"vtv3"},
-            {"type":"chn","id":"vtv4"},
-            {"type":"chn","id":"vtv6"},
-            {"type":"chn","id":"vtv9"},
-            {"type":"chn","id":"vtc1"},
-            {"type":"chn","id":"vtc2"},
-            {"type":"chn","id":"vtc10"},
-            {"type":"dir","id":"sctv"},
-            {"type":"dir","id":"vov"},
-            {"type":"dir","id":"local"}
-            ]
-        },
-        "sctv": {
-            "title": "SCTV Channels",
-            "logo":  "sctv.png",
-            "desc": "SCTV hợp tác và sản xuất",
-            "content": [
-            {"type":"chn","id":"sctv1"},
-            {"type":"chn","id":"sctv2"},
-            {"type":"chn","id":"sctv3"},
-            {"type":"chn","id":"sctv4"},
-            {"type":"chn","id":"sctv5"},
-            {"type":"chn","id":"sctv6"},
-            {"type":"chn","id":"sctv7"},
-            {"type":"chn","id":"sctv8"},
-            {"type":"chn","id":"sctv9"},
-            {"type":"chn","id":"sctv10"},
-            {"type":"chn","id":"sctv11"},
-            {"type":"chn","id":"sctv12"},
-            {"type":"chn","id":"sctv13"},
-            {"type":"chn","id":"sctv14"},
-            {"type":"chn","id":"sctv15"},
-            {"type":"chn","id":"sctv16"},
-            {"type":"chn","id":"sctv17"},
-            {"type":"chn","id":"sctv18"}
-            ]
-        },
-        "vov": {
-            "title": "VOV Radio",
-            "logo":  "vov.png",
-            "desc": "Đài Tiếng nói Việt Nam",
-            "content": [
-            {"type":"chn","id":"vov1"},
-            {"type":"chn","id":"vov2"},
-            {"type":"chn","id":"vov3"},
-            {"type":"chn","id":"vov5"}
-            ]
-        },
-        "local": {
-            "title": "Local Stations",
-            "logo":  "",
-            "desc": "Truyền hình Địa phương",
-            "content": [
-            {"type":"chn","id":"htv7"},
-            {"type":"chn","id":"htv9"},
-            {"type":"chn","id":"hn1"},
-            {"type":"chn","id":"trt1"}
-            ]
-        },
-        "oversea": {
-            "title": "Oversea Stations",
-            "logo":  "",
-            "desc": "Truyền hình Hải ngoại",
-            "content": [
-            {"type":"chn","id":"vtv1"},
-            {"type":"chn","id":"vtv2"}
-            ]
         }
     }
 }

@@ -1,8 +1,8 @@
 # -*- coding: UTF-8 -*-
 #---------------------------------------------------------------------
 # File: tvvn.py
-# By:   Binh Nguyen <binh@vnoss.org>
-# Date: 2013-06-05
+# By:   Binh Nguyen <b@zecoj.com>
+# Date: Fri Jul 11 19:33:48 AEST 2014
 #---------------------------------------------------------------------
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #---------------------------------------------------------------------
 
-import os, re, sys, gzip, urllib, urllib2, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
+import os, re, sys, gzip, urllib, urllib2, string, xbmcaddon, xbmcplugin, xbmcgui, xbmcvfs
 from StringIO import StringIO
 
 try:
@@ -142,29 +142,38 @@ def update_chn_list():
 			dialog = xbmcgui.Dialog()
 			ack = dialog.yesno(addon.getLocalizedString(30005), addon.getLocalizedString(30006)+" "+day_diff+" day(s) old",addon.getLocalizedString(30007))
 			if ack:
+                                d_progress = xbmcgui.DialogProgress()
+                                d_progress.create(addon.getLocalizedString(30008), addon.getLocalizedString(30009))
 				d = open(datafile, 'r+')
 				d.seek(0)
 				d.write(ff)
 				d.close()
+				construct_menu("root")
+                                d_progress.close()
+                                d_ok = xbmcgui.Dialog().ok(addon.getLocalizedString(30008),addon.getLocalizedString(30010))
 
 def play_link(chn, src):
 	item = xbmcgui.ListItem(chn)
 
-	playpath = data['channels'][chn]['src']['playpath']
 	videoUrl = data['sources'][src]['url']
+	playpath = data['channels'][chn]['src']['playpath']
 	if (playpath != ''):
 		videoUrl = videoUrl+"/"+playpath
-	swfUrl = data['sources'][src]['swfurl']
-	pageUrl = data['sources'][src]['pageurl']
-	if (data['channels'][chn]['src']['referer'] != ''):
-		pageUrl = pageUrl+"/"+data['channels'][chn]['src']['referer']
-	flashVer = 'LNX_11,2,202,233'
-	token = data['sources'][src]['token']
-	app = data['sources'][src]['app']
 
-	full_url = videoUrl+' swfVfy=1 live=1 token='+token+' playpath='+playpath+' flashVer='+flashVer+' pageUrl='+pageUrl+' tcUrl='+videoUrl+' swfUrl='+swfUrl
+	url_protocol = videoUrl.split(':')[0]
+	if (url_protocol == "http"):
+		full_url = videoUrl
+	elif (url_protocol in ["rtmp", "rtmpe"]):
+		swfUrl = data['sources'][src]['swfurl']
+		pageUrl = data['sources'][src]['pageurl']
+		if (data['channels'][chn]['src']['referer'] != ''):
+			pageUrl = pageUrl+"/"+data['channels'][chn]['src']['referer']
+		flashVer = 'LNX_11,2,202,233'
+		token = data['sources'][src]['token']
+		app = data['sources'][src]['app']
 
-	xbmc.Player(xbmc.PLAYER_CORE_DVDPLAYER).play(full_url, item)
+		full_url = videoUrl+' swfVfy=1 live=1 token='+token+' playpath='+playpath+' flashVer='+flashVer+' pageUrl='+pageUrl+' tcUrl='+videoUrl+' swfUrl='+swfUrl
+	xbmc.Player().play(full_url, item)
 	return
 
 def Init():

@@ -54,7 +54,7 @@ def live():
 @plugin.route('/live2/<live_var>')
 def live2(live_var):
     url = live_var
-    plugin.set_resolved_url(my_drundoo.play_url(url))
+    plugin.set_resolved_url(my_drundoo.play_live_url(url))
 
 ######################################
 #End of live section 

@@ -51,7 +51,25 @@ class drundoo:
                 play_list.append(play_link)
 
                 return play_list[0]    
-			
+
+        def play_live_url(self,url):
+                link = url
+                play_list = []
+                temp = self.open_site(link)
+
+                start1 = temp.find('getJSON("') + 'getJSON("'.__len__()
+                end1 = temp.find('", function (data)')
+
+                link = 'http://www.drundoo.com' + temp[start1:end1]
+
+                temp = self.open_site(link)
+                start1 = temp.find('smil_url":"') + 'smil_url":"'.__len__()
+                end1 = temp.find('.f4m')
+                play_link = temp[start1:end1].replace('\\','').replace('manifest','master.m3u8')
+                play_list.append(play_link)
+
+                return play_list[0]
+
 	def make_shows(self,url,my_mode):
 
 		#timeshift_url = 'http://www.drundoo.com/channels/97/btv_hd/'

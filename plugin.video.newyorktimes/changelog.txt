@@ -1,4 +1,4 @@
-Version 1.4 to 1.4.1
+Version 1.4 to 1.4.2
 * Update addon to reflect website changes
 
 Version 1.3 (forked by idleloop)

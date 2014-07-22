@@ -1,5 +1,0 @@
-Version 0.1
-initial
-
-Version 0.2
-added addon settings for video quality

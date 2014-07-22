@@ -1,3 +1,0 @@
-<settings>
-   <setting id="video_quality" type="select" lvalues="30015|30016|30017" values="HIGH|MED|LOW" label="30018" default="HIGH"/>
-</settings>

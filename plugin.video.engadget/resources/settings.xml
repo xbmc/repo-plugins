@@ -1,3 +1,0 @@
-<settings>
-   <setting id="video_quality" type="enum" lvalues="30008|30009|30010" label="30007" default="2"/>
-</settings>

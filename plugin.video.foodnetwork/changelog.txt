@@ -1,5 +1,0 @@
-Version 0.0.2
-fix for show clips
-
-Version 0.0.1
-initial

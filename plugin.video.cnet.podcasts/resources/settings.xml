@@ -1,3 +1,0 @@
-<settings>
-   <setting id="playback" type="enum" lvalues="30021|30022|30023" label="30024" default="1"/>
-</settings>

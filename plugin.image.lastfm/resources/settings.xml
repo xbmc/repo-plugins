@@ -1,3 +1,0 @@
-<settings>
-   <setting id="save_path" type="folder"  source="files" label="30019"  option="writeable" default=""/>
-</settings>

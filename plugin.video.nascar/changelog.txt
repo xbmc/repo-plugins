@@ -1,3 +1,0 @@
-Version 1.2
-fix - video url's changed
-removed the directorys as they were not needed

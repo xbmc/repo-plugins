@@ -1,8 +1,0 @@
-[B]Version 1.0.2[/B]
-- Marked Addon ad broken sinse site is no longer available, and is unlikely to come back
-
-[B]Version 1.0.1[/B]
-- Added Full Unicode Support
-
-[B]Version 1.0.0[/B]
-- Initial Version

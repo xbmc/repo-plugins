@@ -1,7 +1,0 @@
-[B]0.0.2[/B]
-- Added common cache module
-- Massive speed improvements
-- Split videos into pages
-
-[B]0.0.1[/B]
-- Initial release

@@ -73,7 +73,7 @@ def getCats(c_url):
     html    = getRequest(cat_url)
     shows=re.compile('<figure>.+?href="(.+?)".+?src="(.+?)".+?title">(.+?)<.+?genre">(.+?)<.+?desc">(.+?)<.+?</li>').findall(html) 
     for sid,simg,sname,sgenre,sdesc in shows:
-      if not sid.startswith('/series'):
+      if (not sid.startswith('/series')) and (not sid.startswith('/tv-shows')):
         surl = "%s?url=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(sid))
         addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc,sgenre,'',False)
       else:

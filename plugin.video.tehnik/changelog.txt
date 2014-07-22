@@ -1,0 +1,29 @@
+v1.0.1
+- Initial version featuring only the mobile branch.
+
+v1.0.2
+- Adding IT&C Information.
+
+v1.0.2
+- Adding Photo&Video Information.
+
+v1.0.3
+- Adding Videotutoriale Information.
+
+v1.0.4
+- Adding Branduri Information.
+
+v2.0.0
+- Migration to xbmcswift2
+
+v2.0.1
+- Using the language atribute in addon.xml
+- Fixing a parse error in
+plugin.video.tehnik/resources/language/English/strings.xml: not
+well-formed (invalid token): line 5, column 27
+- Fixing a parse error in
+plugin.video.tehnik/resources/language/Romanian/strings.xml: not
+well-formed (invalid token): line 5, column 27
+
+v2.0.2
+- Removed en from the language tag from <language>en ro</language> to <language>ro</language> 

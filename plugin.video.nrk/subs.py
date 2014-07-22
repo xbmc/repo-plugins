@@ -16,36 +16,56 @@
 import os
 import re
 import xbmc
-from data import xhrsession as requests
+from io import BytesIO
+from nrktv import session as requests
+
 
 def get_subtitles(video_id):
-  html = requests.get("http://v7.psapi.nrk.no/programs/%s/subtitles/tt" % video_id).text
-  if not html:
-    return None
-  
-  filename = os.path.join(xbmc.translatePath("special://temp"),'nrk.srt')
-  with open(filename, 'w') as f:
-    parts = re.compile(r'<p begin="(.*?)" dur="(.*?)".*?>(.*?)</p>',re.DOTALL).findall(html)
-    i = 0
-    for begint, dur, contents in parts:
-      begin = _stringToTime(begint)
-      dur = _stringToTime(dur)
-      end = begin+dur
-      i += 1
-      f.write(str(i))
-      f.write('\n%s' % _timeToString(begin))
-      f.write(' --> %s\n' % _timeToString(end))
-      f.write(re.sub('<br />\s*','\n',' '.join(contents.replace('<span style="italic">','<i>').replace('</span>','</i>').replace('&amp;','&').split())).encode('utf-8'))
-      f.write('\n\n')
-  return filename
+    html = requests.get("http://v7.psapi.nrk.no/programs/%s/subtitles/tt" % video_id).text
+    if not html:
+        return None
 
-def _stringToTime(txt):
-  p = txt.split(':')
-  try:
-    ms = float(p[2])
-  except ValueError:
-    ms = 0
-  return int(p[0]) * 3600 + int(p[1]) * 60 + ms
+    content = _ttml_to_srt(html)
+    filename = os.path.join(xbmc.translatePath("special://temp"), 'nrk.srt')
+    with open(filename, 'w') as f:
+        f.write(content)
+    return filename
 
-def _timeToString(time):
-  return '%02d:%02d:%02d,%03d' % (time/3600,(time%3600)/60,time%60,(time%1)*1000)
+
+def _ttml_to_srt(ttml):
+    output = BytesIO()
+    subtitles = re.compile(r'<p begin="(.*?)" dur="(.*?)".*?>(.*?)</p>',
+                           re.DOTALL).findall(ttml)
+    for i, (start, duration, text) in enumerate(subtitles):
+        start = _str_to_time(start)
+        duration = _str_to_time(duration)
+        end = start + duration
+
+        text = text.replace('<span style="italic">', '<i>') \
+            .replace('</span>', '</i>') \
+            .replace('&amp;', '&') \
+            .split()
+        text = ' '.join(text)
+        text = re.sub('<br />\s*', '\n', text)
+        text = text.encode('utf-8')
+
+        output.write(str(i + 1))
+        output.write('\n%s' % _time_to_str(start))
+        output.write(' --> %s\n' % _time_to_str(end))
+        output.write(text)
+        output.write('\n\n')
+
+    return output.getvalue()
+
+
+def _str_to_time(txt):
+    p = txt.split(':')
+    try:
+        ms = float(p[2])
+    except ValueError:
+        ms = 0
+    return int(p[0]) * 3600 + int(p[1]) * 60 + ms
+
+
+def _time_to_str(time):
+    return '%02d:%02d:%02d,%03d' % (time / 3600, (time % 3600) / 60, time % 60, (time % 1) * 1000)

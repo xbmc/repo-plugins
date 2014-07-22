@@ -1,3 +1,7 @@
+[B]4.4.15[/B]
+- Lagt til "Populært siste måned"
+- Fikset søk
+
 [B]4.4.14[/B]
 - Diverse sideendringer
 - Fikset negativ starttid enkelte undertekster

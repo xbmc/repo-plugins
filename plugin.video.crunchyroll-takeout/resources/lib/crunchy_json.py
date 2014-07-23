@@ -53,6 +53,7 @@ class CrunchyJSON:
                         local_string = __settings__.getLocalizedString
                         notice_msg = local_string(30200).encode("utf8")
                         setup_msg = local_string(30203).encode("utf8")
+                        acc_type_error = local_string(30312).encode("utf8")
                         change_language = __settings__.getSetting("change_language")
                         if change_language == "0":
                                 userData.setdefault('API_LOCALE',"enUS")
@@ -80,7 +81,7 @@ class CrunchyJSON:
                                 char_set = string.ascii_letters + string.digits
                                 device_id = ''.join(random.sample(char_set,32))
                                 userData["device_id"] = device_id
-                                print "Crunchyroll;xbmc ----> New device_id created. New device_id is: "+ str(device_id)
+                                xbmc.log("Crunchyroll;xbmc ----> New device_id created. New device_id is: "+ str(device_id))
                         userData['API_URL'] = "https://api.crunchyroll.com"
                         userData['API_HEADERS'] = [('User-Agent',"Mozilla/5.0 (PLAYSTATION 3; 4.46)"), ('Host',"api.crunchyroll.com"), ('Accept-Encoding',"gzip, deflate"), ('Accept',"*/*"), ('Content-Type',"application/x-www-form-urlencoded")]
                         userData['API_VERSION'] = "1.0.1"
@@ -91,61 +92,52 @@ class CrunchyJSON:
                         userData.setdefault('lastreported', (current_datetime - dateutil.relativedelta.relativedelta( hours = +24 )))
                         self.userData = userData
                 except:
-                        print "Unexpected error:", sys.exc_info()
+                        xbmc.log( "Unexpected error:", sys.exc_info())
                         userData['session_id'] = ''
                         userData['auth_expires'] = current_datetime - dateutil.relativedelta.relativedelta( hours = +24 )
                         userData['lastreported'] = current_datetime - dateutil.relativedelta.relativedelta( hours = +24 )
-                        userData['premium_type'] = 'unknown'
+                        userData['premium_type'] = 'UNKNOWN'
                         userData['auth_token'] = ''
                         userData['session_expires'] = current_datetime - dateutil.relativedelta.relativedelta( hours = +24 )
                         self.userData = userData
                         userData.close()
-                        print "Crunchyroll -> Unable to Load shelve"
+                        xbmc.log( "Crunchyroll -> Unable to Load shelve")
                         return False
-
-                if current_datetime > userData['lastreported']:
-                        userData['lastreported'] = (current_datetime + dateutil.relativedelta.relativedelta( hours = +24 ))
-                        self.userData = userData
-                        self.usage_reporting() #Call for Usage Reporting
 
                 #Check to see if a session_id doesn't exist or if the current auth token is invalid and if so start a new session and log it in.                   
                 if (not userData.has_key('session_id')) or (not userData.has_key('auth_expires')) or current_datetime > userData['auth_expires']:
                         #Start new session
-                        print "Crunchyroll;xbmc ----> Starting new session"
+                        xbmc.log( "Crunchyroll;xbmc ----> Starting new session")
                         opener = urllib2.build_opener()
                         opener.addheaders = userData['API_HEADERS']
                         options = urllib.urlencode({'device_id':userData["device_id"], 'device_type':userData['API_DEVICE_TYPE'], 'access_token':userData['API_ACCESS_TOKEN'], 'version':userData['API_VERSION'], 'locale': userData['API_LOCALE']})
-                        #print options
                         urllib2.install_opener(opener)
                         url = userData['API_URL']+"/start_session.0.json"
-                        #print url
                         req = opener.open(url, options)
                         json_data = req.read()
                         if req.headers.get('content-encoding', None) == 'gzip':
 				json_data = gzip.GzipFile(fileobj=StringIO.StringIO(json_data)).read().decode('utf-8','ignore')
 			req.close()
-			#print json_data
                         request = json.loads(json_data)  
-                        #print request
                         if request['error'] is False:
                                 userData['session_id'] = request['data']['session_id'] 
                                 userData['session_expires'] = (current_datetime + dateutil.relativedelta.relativedelta( hours = +4 ))
                                 userData['test_session'] = current_datetime 
-                                print "Crunchyroll.bundle ----> New session created! Session ID is: "+ str(userData['session_id'])
+                                xbmc.log( "Crunchyroll.bundle ----> New session created! Session ID is: "+ str(userData['session_id']))
                         elif request['error'] is True:
-                                print "Crunchyroll.bundle ----> Error starting new session. Error message is: "+ str(request['message'])
+                                xbmc.log( "Crunchyroll.bundle ----> Error starting new session. Error message is: "+ str(request['message']))
                                 return False
                         #Login the session we just started.
                         if not userData['username'] or not userData['password']:
-                                print"Crunchyroll.bundle ----> No Username or Password set"
+                                xbmc.log("Crunchyroll.bundle ----> No Username or Password set")
                                 self.userData = userData
                                 userData.close()
                                 ex = 'XBMC.Notification("'+notice_msg+':","'+setup_msg+'.", 3000)'
                                 xbmc.executebuiltin(ex)
-                                print "crunchyroll-takeout -> NO CRUNCHYROLL ACCOUNT FOUND!"
+                                xbmc.log( "crunchyroll-takeout -> NO CRUNCHYROLL ACCOUNT FOUND!")
                                 return False
                         else: 
-                                print"Crunchyroll.bundle ----> Logging in the new session we just created."
+                                xbmc.log("Crunchyroll.bundle ----> Logging in the new session we just created.")
                                 opener = urllib2.build_opener()
                                 opener.addheaders = userData['API_HEADERS']
                                 options = urllib.urlencode({'session_id':userData['session_id'], 'password':userData['password'], 'account':userData['username'], 'version':userData['API_VERSION'], 'locale': userData['API_LOCALE']})
@@ -156,47 +148,51 @@ class CrunchyJSON:
                                         json_data = gzip.GzipFile(fileobj=StringIO.StringIO(json_data)).read().decode('utf-8','ignore')
                                 req.close()
                                 request = json.loads(json_data) 
-                                #print request
                                 if request['error'] is False:
                                         userData['auth_token'] = request['data']['auth'] 
                                         userData['auth_expires'] = dateutil.parser.parse(request['data']['expires'])
                                         userData['premium_type'] = 'free' if request['data']['user']['premium'] == '' else request['data']['user']['premium']
-                                        print"Crunchyroll.bundle ----> Login successful."
+                                        xbmc.log("Crunchyroll.bundle ----> Login successful.")
                                 elif request['error'] is True:
-                                        print"Crunchyroll.bundle ----> Error logging in new session. Error message was: "+ str(request['message'])
+                                        xbmc.log("Crunchyroll.bundle ----> Error logging in new session. Error message was: "+ str(request['message']))
                                         self.userData = userData
                                         userData.close()
                                         return False
+                        #Call for Usage Reporting
+                        if current_datetime > userData['lastreported']:
+                                userData['lastreported'] = (current_datetime + dateutil.relativedelta.relativedelta( hours = +24 ))
+                                self.userData = userData
+                                self.usage_reporting() 
                         #Verify user is premium
                         if userData['premium_type'] in 'anime|drama|manga':
-                                print"Crunchyroll.bundle ----> User is a premium "+str(userData['premium_type'])+" member."
+                                xbmc.log("Crunchyroll.bundle ----> User is a premium "+str(userData['premium_type'])+" member.")
                                 self.userData = userData
                                 userData.close()
                                 return True
                         else:
-                                print"Crunchyroll.bundle ----> User is not premium. "
-                                self.userData = userData
+                                xbmc.log("Crunchyroll.bundle ----> User is not premium. ")
+                                xbmc.executebuiltin('Notification('+notice_msg+','+acc_type_error+',5000)')
+                                self.userData = userData = None
                                 userData.close()
-                                return True
+                                crunchy_main.UI().addItem({'Title':acc_type_error, 'mode':'Fail'})
+                                crunchy_main.UI().endofdirectory('none')
+                                return False
 
                 #Check to see if a valid session and auth token exist and if so reinitialize a new session using the auth token. 
                 elif userData.has_key("session_id") and userData.has_key("auth_expires") and current_datetime < userData['auth_expires'] and current_datetime > userData['session_expires']:
 
                         #Re-start new session
-                        print "Crunchyroll.bundle ----> Valid auth token was detected. Restarting session."
+                        xbmc.log( "Crunchyroll.bundle ----> Valid auth token was detected. Restarting session.")
                         opener = urllib2.build_opener()
                         options = urllib.urlencode({'device_id':userData["device_id"], 'device_type':userData['API_DEVICE_TYPE'], 'access_token':userData['API_ACCESS_TOKEN'], 'version':userData['API_VERSION'], 'locale': userData['API_LOCALE'], 'auth':userData['auth_token']})
                         urllib2.install_opener(opener)
                         url = userData['API_URL']+"/start_session.0.json"
-                        #print url
                         req = opener.open(url, options)
                         json_data = req.read()
                         if req.headers.get('content-encoding', None) == 'gzip':
 				json_data = gzip.GzipFile(fileobj=StringIO.StringIO(json_data)).read().decode('utf-8','ignore')
 			req.close()
-			#print json_data
                         request = json.loads(json_data)  
-                        #print request
                         try:
                                 if request['error'] is False:
                                         userData['session_id'] = request['data']['session_id'] 
@@ -205,19 +201,27 @@ class CrunchyJSON:
                                         userData['auth_token'] = request['data']['auth'] 
                                         userData['session_expires'] = (current_datetime + dateutil.relativedelta.relativedelta( hours = +4 )) #4 hours is a guess. Might be +/- 4.
                                         userData['test_session'] = current_datetime 
-                                        print"Crunchyroll.bundle ----> Session restart successful. New session_id is: "+ str(userData['session_id'])
-                                                        
+                                        xbmc.log("Crunchyroll.bundle ----> Session restart successful. New session_id is: "+ str(userData['session_id']))
+                                        #Call for Usage Reporting
+                                        if current_datetime > userData['lastreported']:
+                                                userData['lastreported'] = (current_datetime + dateutil.relativedelta.relativedelta( hours = +24 ))
+                                                self.userData = userData
+                                                self.usage_reporting() 
+                                                
                                         #Verify user is premium
                                         if userData['premium_type'] in 'anime|drama|manga':
-                                                print"Crunchyroll.bundle ----> User is a premium "+str(userData['premium_type'])+" member."
+                                                xbmc.log("Crunchyroll.bundle ----> User is a premium "+str(userData['premium_type'])+" member.")
                                                 self.userData = userData
                                                 userData.close()
                                                 return True
                                         else:
-                                                print"Crunchyroll.bundle ----> User is not premium."
-                                                self.userData = userData
+                                                xbmc.log("Crunchyroll.bundle ----> User is not premium.")
+                                                xbmc.executebuiltin('Notification('+notice_msg+','+acc_type_error+',5000)')
+                                                self.userData = userData = None
                                                 userData.close()
-                                                return True
+                                                crunchy_main.UI().addItem({'Title':acc_type_error, 'mode':'Fail'})
+                                                crunchy_main.UI().endofdirectory('none')
+                                                return False
 
                                 elif request['error'] is True:
                                         #Remove userData so we start a new session next time around. 
@@ -226,7 +230,7 @@ class CrunchyJSON:
                                         del userData['premium_type']
                                         del userData['auth_token']
                                         del userData['session_expires']
-                                        print"Crunchyroll.bundle ----> Error restarting session. Error message was: "+ str(request['message'])
+                                        xbmc.log("Crunchyroll.bundle ----> Error restarting session. Error message was: "+ str(request['message']))
                                         self.userData = userData
                                         userData.Save()
                                         return False
@@ -236,7 +240,7 @@ class CrunchyJSON:
                                 userData['premium_type'] = 'unknown'
                                 userData['auth_token'] = ''
                                 userData['session_expires'] = current_datetime - dateutil.relativedelta.relativedelta( hours = +24 )
-                                print"Crunchyroll.bundle ----> Error restarting session. Error message was: "+ str(request['message'])
+                                xbmc.log("Crunchyroll.bundle ----> Error restarting session. Error message was: "+ str(request['message']))
                                 self.userData = userData
                                 userData.Save()
                                 return False
@@ -253,20 +257,28 @@ class CrunchyJSON:
                                 options = {'media_types':"anime|drama", 'fields':fields}
                                 request = self.makeAPIRequest('queue', options)
                                 if request['error'] is False:	
-                                        print"Crunchyroll.bundle ----> A valid session was detected. Using existing session_id of: "+ str(userData['session_id'])
+                                        xbmc.log("Crunchyroll.bundle ----> A valid session was detected. Using existing session_id of: "+ str(userData['session_id']))
+                                        #Call for Usage Reporting
+                                        if current_datetime > userData['lastreported']:
+                                                userData['lastreported'] = (current_datetime + dateutil.relativedelta.relativedelta( hours = +24 ))
+                                                self.userData = userData
+                                                self.usage_reporting() 
                                         #Verify user is premium
                                         if userData['premium_type'] in 'anime|drama|manga':
-                                                print"Crunchyroll.bundle ----> User is a premium "+str(userData['premium_type'])+" member."
+                                                xbmc.log("Crunchyroll.bundle ----> User is a premium "+str(userData['premium_type'])+" member.")
                                                 self.userData = userData
                                                 userData.close()
                                                 return True
                                         else:
-                                                print"Crunchyroll.bundle ----> User is not premium."
-                                                self.userData = userData
+                                                xbmc.log("Crunchyroll.bundle ----> User is not premium.")
+                                                xbmc.executebuiltin('Notification('+notice_msg+','+acc_type_error+',5000)')
+                                                self.userData = userData = None
                                                 userData.close()
-                                                return True					
+                                                crunchy_main.UI().addItem({'Title':acc_type_error, 'mode':'Fail'})
+                                                crunchy_main.UI().endofdirectory('none')
+                                                return False					
                                 elif request['error'] is True:
-                                        print"Crunchyroll.bundle ----> Something in the login process went wrong."
+                                        xbmc.log("Crunchyroll.bundle ----> Something in the login process went wrong.")
                                         del userData['session_id']
                                         del userData['auth_expires']
                                         del userData['premium_type']
@@ -285,7 +297,7 @@ class CrunchyJSON:
                         del userData['premium_type']
                         del userData['auth_token']
                         del userData['session_expires']
-                        print"Crunchyroll.bundle ----> Something in the login process went wrong."
+                        xbmc.log("Crunchyroll.bundle ----> Something in the login process went wrong.")
                         self.userData = userData
                         userData.close()	
                         return False
@@ -317,7 +329,6 @@ class CrunchyJSON:
         def list_categories(self, title, media_type, filterx): 
             options = {'media_type':media_type.lower()}
             request = self.makeAPIRequest('categories', options)
-            #print request
             if request['error'] is False:
                     if filterx == 'genre':
                             if 'genre' in request['data']:
@@ -344,12 +355,11 @@ class CrunchyJSON:
                         else:
                                 for collection in request['data']:
                                         complete = '1' if collection['complete'] else '0'
-                                        crunchy_main.UI().addItem({'Title':collection['name'].encode("utf8"),'filterx':series_name.encode("utf8"),'mode':'list_media','count':str(count),'id':collection['collection_id'],'plot':collection['description'].encode("utf8"),'complete':complete,'season':str(collection['season']) , 'series_id':series_id,'Thumb':thumb, 'Fanart_Image':fanart}, True)
+                                        crunchy_main.UI().addItem({'Title':collection['name'].encode("utf8"),'filterx':series_name,'mode':'list_media','count':str(count),'id':collection['collection_id'],'plot':collection['description'].encode("utf8"),'complete':complete,'season':str(collection['season']) , 'series_id':series_id,'Thumb':thumb, 'Fanart_Image':fanart}, True)
                 crunchy_main.UI().endofdirectory('none')		
 
 ####################################################################################################
         def list_media(self, collection_id, series_name, count, complete, season, fanart):
-                #print art
                 sort = 'asc' if complete is '1' else 'desc'
                 fields = "media.episode_number,media.name,media.description,media.media_type,media.series_name,media.available,media.available_time,media.free_available,media.free_available_time,media.playhead,media.duration,media.url,media.screenshot_image,image.fwide_url,image.fwidestar_url,series.landscape_image,image.full_url"
                 options = {'collection_id':collection_id, 'fields':fields, 'sort':sort, 'limit':'256'}
@@ -359,11 +369,7 @@ class CrunchyJSON:
             
 ####################################################################################################
         def list_media_items(self, request, series_name, season, mode, fanart):
-                #print request
                 for media in request:
-                        
-                        #print media
-                        #print art
                         #The following are items to help display Recently Watched and Queue items correctly
                         season = media['collection']['season'] if mode == "history" else season 
                         series_name = media['series']['name'] if mode == "history" else series_name
@@ -438,7 +444,6 @@ class CrunchyJSON:
                                     
                                     thumb = '' if (series['portrait_image'] is None or series['portrait_image']['large_url'] is None or 'portrait_image' not in series or 'large_url' not in series['portrait_image']) else series['portrait_image']['full_url'] #Becuase not all series have a thumbnail. 
                                     art = '' if (series['landscape_image'] is None or series['landscape_image']['full_url'] is None or 'landscape_image' not in series or 'full_url' not in series['landscape_image']) else series['landscape_image']['full_url'] #Becuase not all series have art. 
-                                    #print art
                                     rating = '0' if (series['rating'] == '' or 'rating' not in series) else series['rating'] #Because Crunchyroll seems to like passing series without ratings
                                     if ('media_count' in series and 'series_id' in series and 'name' in series and series['media_count'] > 0): #Because Crunchyroll seems to like passing series without these things
                                             crunchy_main.UI().addItem({'Title':series['name'].encode("utf8"),'mode':'list_coll', 'series_id':series['series_id'], 'Thumb':thumb, 'Fanart_Image':art, 'plot':description, 'year':year}, True)
@@ -479,7 +484,6 @@ class CrunchyJSON:
                     json_data = gzip.GzipFile(fileobj=StringIO.StringIO(json_data)).read().decode('utf-8','ignore')
                 req.close()
                 request = json.loads(json_data)
-                #print request
                 if int(resumetime) > 0:
                         playcount=0
                 else:
@@ -506,10 +510,14 @@ class CrunchyJSON:
                                 else:
                                         url = allurl['low']
                                 playlist.add(url, item)
-                                xbmc.Player().play(playlist)
+                                player = xbmc.Player()
+                                player.play(playlist)
+                                #xbmc.Player().play(playlist)
                                 timeplayed = 1 + int(resumetime)
                                 temptimeplayed = timeplayed
                                 time.sleep(1)
+                                if timeplayed < 60:
+                                        playback_resume = False
                                 if playback_resume is True:
                                         xbmc.Player().seekTime(float(resumetime))
                                 x = 0
@@ -522,36 +530,34 @@ class CrunchyJSON:
                                                         strTimePlayed = str(int(round(timeplayed)))
                                                         values = {'session_id':session_id, 'event':'playback_status', 'locale':self.userData['API_LOCALE'], 'media_id':media_id, 'version':'221', 'playhead':strTimePlayed}
                                                         request = self.makeAPIRequest('log', values)
-                                                        #print request
                                                 else:
                                                         x = x + 1
                                                 time.sleep(1)
                                 except:
-                                        print "XBMC stopped playing"
+                                        xbmc.log( "XBMC stopped playing")
                                 strTimePlayed = str(int(round(timeplayed)))
                                 values = {'session_id':session_id, 'event':'playback_status', 'locale':self.userData['API_LOCALE'], 'media_id':media_id, 'version':'221', 'playhead':strTimePlayed}
                                 request = self.makeAPIRequest('log', values)
-                                #print request
-
 
         def makeAPIRequest(self, method, options):
-                print "Crunchyroll.bundle ----> get JSON"
-                values = {'session_id':self.userData['session_id'], 'version':self.userData['API_VERSION'], 'locale':self.userData['API_LOCALE']} 
-                values.update(options)	
-                opener = urllib2.build_opener()
-                opener.addheaders = self.userData['API_HEADERS']
-                options = urllib.urlencode(values)
-                #print options
-                urllib2.install_opener(opener)
-                url = self.userData['API_URL']+"/"+method+".0.json"
-                #print url
-                req = opener.open(url, options)
-                json_data = req.read()
-                if req.headers.get('content-encoding', None) == 'gzip':
-                    json_data = gzip.GzipFile(fileobj=StringIO.StringIO(json_data)).read().decode('utf-8','ignore')
-                req.close()
-                #print json_data
-                return json.loads(json_data)
+                if self.userData['premium_type'] in 'anime|drama|manga':
+                        xbmc.log( "Crunchyroll.bundle ----> get JSON")
+                        values = {'session_id':self.userData['session_id'], 'version':self.userData['API_VERSION'], 'locale':self.userData['API_LOCALE']} 
+                        values.update(options)	
+                        opener = urllib2.build_opener()
+                        opener.addheaders = self.userData['API_HEADERS']
+                        options = urllib.urlencode(values)
+                        urllib2.install_opener(opener)
+                        url = self.userData['API_URL']+"/"+method+".0.json"
+                        req = opener.open(url, options)
+                        json_data = req.read()
+                        if req.headers.get('content-encoding', None) == 'gzip':
+                            json_data = gzip.GzipFile(fileobj=StringIO.StringIO(json_data)).read().decode('utf-8','ignore')
+                        req.close()
+                        return json.loads(json_data)
+                else:
+                        return False
+
          
 ###############################################################################​#####################
 
@@ -566,20 +572,18 @@ class CrunchyJSON:
                 notice_done = local_string(30310).encode("utf8")
                 icon = xbmc.translatePath( __settings__.getAddonInfo('icon'))
                 if (self.userData['username'] != '' and self.userData['password'] != ''):
-                    print "Crunchyroll.language: --> Attempting to log-in with your user account..."
+                    xbmc.log( "Crunchyroll.language: --> Attempting to log-in with your user account...")
                     xbmc.executebuiltin('Notification('+notice+','+notice_msg+',5000,'+icon+')')
                     url = 'https://www.crunchyroll.com/?a=formhandler'
                     data = urllib.urlencode({'formname':'RpcApiUser_Login', 'next_url':'','fail_url':'/login','name':self.userData['username'],'password':self.userData['password']})
                     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
                     opener.addheaders = [('Referer', 'https://www.crunchyroll.com'),('User-Agent','Mozilla/5.0 (X11; Linux i686; rv:5.0) Gecko/20100101 Firefox/5.0')]
-                    # print "Crunchyroll.language: --> Saving new Cookie."
                     urllib2.install_opener(opener)
                     req = opener.open(url, data)
                     req.close()
                 else:                    
                     xbmc.executebuiltin('Notification('+notice+','+notice_err+',5000,'+icon+')')
-                    print "Crunchyroll.language: --> NO CRUNCHYROLL ACCOUNT FOUND!"
-                # print "Crunchyroll.language: --> logged in"
+                    xbmc.log( "Crunchyroll.language: --> NO CRUNCHYROLL ACCOUNT FOUND!")
                 url = 'https://www.crunchyroll.com/?a=formhandler'
                 data = urllib.urlencode({'next_url':'','language':self.userData['API_LOCALE'],'formname':'RpcApiUser_UpdateDefaultSoftSubLanguage'})
                 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
@@ -591,18 +595,16 @@ class CrunchyJSON:
                 #Now do the actual language change.
                 req = self.opener.open(url, data)
                 req.close()
-                print 'Crunchyroll.language: --> Now using '+self.userData['API_LOCALE']
+                xbmc.log( 'Crunchyroll.language: --> Now using '+self.userData['API_LOCALE'])
                 xbmc.executebuiltin('Notification('+notice+','+notice_done+',5000,'+icon+')')
-                print "Crunchyroll.language: --> Disabling the force change language setting."
+                xbmc.log( "Crunchyroll.language: --> Disabling the force change language setting.")
                 __settings__.setSetting(id="change_language", value="0")
 
         def usage_reporting(self):
                 import cookielib
                 cj = cookielib.LWPCookieJar()
-                print "Crunchyroll.usage: --> Attempting to report usage"
+                xbmc.log( "Crunchyroll.usage: --> Attempting to report usage")
                 url = 'https://docs.google.com/forms/d/1_qB4UznRfx69JrGCYmKbbeQcFc_t2-9fuNvXGGvl8mk/formResponse'
-                
-                #print 'entry_1580743010' + self.userData['device_id'] + 'entry_623948459' + self.userData['premium_type'] + 'entry_1130326797' + __version__ + 'entry.590894822' + str(__XBMCBUILD__)
                 data = urllib.urlencode({'entry_1580743010':self.userData['device_id'],'entry_623948459':self.userData['premium_type'],'entry_1130326797':__version__,'entry.590894822':__XBMCBUILD__})
                 opener = urllib2.build_opener()
                 opener.addheaders = [('User-Agent','Mozilla/5.0 (X11; Linux i686; rv:5.0) Gecko/20100101 Firefox/5.0')]

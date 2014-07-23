@@ -166,3 +166,7 @@ msgstr ""
 msgctxt "#30311"
 msgid "Resume Video Playback"
 msgstr ""
+
+msgctxt "#30312"
+msgid "You MUST be a Premium Member to use this plugin."
+msgstr ""

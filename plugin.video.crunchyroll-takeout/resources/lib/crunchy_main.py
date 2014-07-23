@@ -72,8 +72,7 @@ class UI:
 		info.setdefault('year','0')
 		info.setdefault('playhead','0')
 		info.setdefault('duration','0')
-		info.setdefault('plot','No description available.')
-		#print info
+		info.setdefault('plot','None')
 		#create params for xbmcplugin module
 		u = sys.argv[0]+\
 			'?url='+urllib.quote_plus(info['url'])+\
@@ -92,9 +91,8 @@ class UI:
 			'&year='+urllib.quote_plus(info['year'])+\
 			'&playhead='+urllib.quote_plus(info['playhead'])+\
 			'&duration='+urllib.quote_plus(info['duration'])+\
-			'&plot='+urllib.quote_plus(info['plot'])
+			'&plot='+urllib.quote_plus(info['plot']+'%20')
 		#create list item
-		#print u
 		li=xbmcgui.ListItem(label = info['Title'], thumbnailImage = info['Thumb'])
 		li.setInfo( type="Video", infoLabels={ "Title":info['Title'], "Plot":info['plot'], "Year":info['year']})
 		li.setProperty( "Fanart_Image", info['Fanart_Image'])
@@ -128,6 +126,7 @@ class UI:
                         self.addItem({'Title':Anime, 'mode':'Channels','showtype':'Anime'})
                         self.addItem({'Title':Drama, 'mode':'Channels','showtype':'Drama'})
                         self.endofdirectory()
+                        
 
 	def channels(self):
                 local_string = __settings__.getLocalizedString
@@ -170,19 +169,19 @@ class UI:
 	def Fail(self):
                 local_string = __settings__.getLocalizedString
                 badstuff = local_string(30207).encode("utf8")
-		self.addItem({'Title':badstuff,'mode':'none'})
-		print "Crunchyroll takeout --> crunchy_main.py checkMode fall through"
+		self.addItem({'Title':badstuff,'mode':'Fail'})
+		xbmc.log( "Crunchyroll takeout --> crunchy_main.py checkMode fall through")
 		self.endofdirectory()
 
 class Main:
 
 	def __init__(self, checkMode = True):
                 crunchy_json.CrunchyJSON().loadShelf()
-		self.parseArgs()
-		if checkMode:
-			self.checkMode()
-                   
-                                
+                self.parseArgs()
+                if checkMode:
+                        self.checkMode()
+
+    
 	def parseArgs(self):
 		# call updateArgs() with our formatted argv to create the self.args object
 		if (sys.argv[2]):

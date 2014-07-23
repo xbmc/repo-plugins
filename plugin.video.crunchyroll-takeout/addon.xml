@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.crunchyroll-takeout"  name="Crunchyroll;xbmc" provider-name="Yoshi of the Wire" version="2.0.5">
+<addon id="plugin.video.crunchyroll-takeout"  name="Crunchyroll;xbmc" provider-name="Yoshi of the Wire" version="2.1.0">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>
@@ -13,7 +13,7 @@
 		<summary lang="no">Se på videoer fra crunchyroll.com!</summary>
 		<description lang="en">Crunchyroll is an online video service and community that offers full-length episodes and movies of the very best in Japanese anime and Asian entertainment.</description>
 		<description lang="no">Crunchyroll er en online video tjeneste og fellesskap som tilbyr full-lengde episoder og filmer av det aller beste i japansk anime og asiatiske tv serier.</description>
-		<disclaimer lang="en">WARNING: You MUST login to use this Plugin</disclaimer>
+		<disclaimer lang="en">WARNING: You MUST be a PREMIUM member to use this Plugin</disclaimer>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 		<forum>http://forum.xbmc.org/showthread.php?tid=129709</forum>
 		<website>http://www.crunchyroll.com/</website>

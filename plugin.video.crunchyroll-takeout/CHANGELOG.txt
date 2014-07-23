@@ -1,3 +1,5 @@
+[B]2.1.0[/B]
+You MUST be a Premium Member to use this plug-in
 [B]2.0.5[/B]
 Added Auto-Resume of watched Videos
 Increased Area to try to catch issues with loading save data on Android

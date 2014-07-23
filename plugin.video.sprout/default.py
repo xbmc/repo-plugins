@@ -109,6 +109,7 @@ def getShow(show_url, show_name):
             showurl = re.compile('type="video/mp4".+?url="(.+?)"').findall(pg)[0]
             pg = getRequest(showurl)
             finalurl = re.compile('<video src="(.+?)"').findall(pg)[0]
+            finalurl = finalurl.replace('http://sproutonline-vh.akamaihd.net/z','http://sproutonline-pmd.edgesuite.net')
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
 
 

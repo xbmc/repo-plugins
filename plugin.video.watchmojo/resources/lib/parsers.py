@@ -24,16 +24,22 @@ class CategorysParser(HTMLParser.HTMLParser):
 	"""
 	Parses channel categorys, i.e http://www.watchmojo.com/
 	"""
-	def parse(self, html):
+	def parse(self, urlobject, encoding="utf8"):
+		return self.fromstring(urlobject.read(), encoding)
+	
+	def fromstring(self, html, encoding="utf8"):
 		""" Parses SourceCode and Scrape Categorys """
 		
 		# Class Vars
 		self.section = 0
 		
 		# Proceed with parsing
+		self.extracat = plugin.getSettingBool("extracat")
 		self.reset_lists()
 		self.results = []
-		try: self.feed(html)
+		try:
+			if encoding: self.feed(html.decode(encoding))
+			else: self.feed(html)
 		except plugin.ParserError: pass
 		
 		# Return Results
@@ -42,7 +48,9 @@ class CategorysParser(HTMLParser.HTMLParser):
 	def reset_lists(self):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
-		self.item.urlParams["action"] = "SubCat"
+		print self.extracat
+		if self.extracat: self.item.urlParams["action"] = "SubCat"
+		else: self.item.urlParams["action"] = "Videos"
 		self.idList = []
 	
 	def handle_starttag(self, tag, attrs):
@@ -74,7 +82,9 @@ class CategorysParser(HTMLParser.HTMLParser):
 	def handle_data(self, data):
 		# Fetch Category Title when within Section 2
 		if self.section == 101: # Title
-			self.item.setLabel(data)
+			title = data.strip()
+			self.item.setLabel(title)
+			self.item.urlParams["title"] = title
 			self.section = 2
 	
 	def handle_endtag(self, tag):
@@ -89,16 +99,21 @@ class ThemesParser(HTMLParser.HTMLParser):
 	"""
 	Parses channel categorys, i.e http://www.watchmojo.com/video/theme/
 	"""
-	def parse(self, html):
+	def parse(self, urlobject, encoding="utf8"):
+		return self.fromstring(urlobject.read(), encoding)
+	
+	def fromstring(self, html, encoding="utf8"):
 		""" Parses SourceCode and Scrape Categorys """
-
+		
 		# Class Vars
 		self.section = 0
 		
 		# Proceed with parsing
 		self.reset_lists()
 		self.results = []
-		try: self.feed(html)
+		try:
+			if encoding: self.feed(html.decode(encoding))
+			else: self.feed(html)
 		except plugin.ParserError: pass
 		
 		# Return Results
@@ -147,16 +162,21 @@ class VideosParser(HTMLParser.HTMLParser):
 	"""
 	Parses channel categorys, i.e http://www.watchmojo.com/video/id/11529/
 	"""
-	def parse(self, html):
+	def parse(self, urlobject, encoding="utf8"):
+		return self.fromstring(urlobject.read(), encoding)
+	
+	def fromstring(self, html, encoding="utf8"):
 		""" Parses SourceCode and Scrape Categorys """
-
+		
 		# Class Vars
 		self.section = 0
 		
 		# Proceed with parsing
 		self.reset_lists()
 		self.results = []
-		try: self.feed(html.replace(u'_blank"',u''))
+		try:
+			if encoding: self.feed(html.decode(encoding).replace(u'_blank"',u''))
+			else: self.feed(html.replace(u'_blank"',u''))
 		except plugin.ParserError: pass
 		
 		# Return Results

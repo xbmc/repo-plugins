@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.filmsforaction" name="Films For Action" version="1.0.2" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.video.filmsforaction" name="Films For Action" version="1.0.3" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.video.youtube" version="4.4.8"/>
         <import addon="plugin.video.snagfilms" version="1.0.4"/>
+        <import addon="plugin.video.disclose_tv" version="0.0.4"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>

@@ -21,7 +21,9 @@ class ITTests(unittest.TestCase):
         url='http://www.filmsforaction.org/films/'
         video_items = api.get_videolist(url)
         self.assertTrue(len(video_items['video_list']) > 50)
-        self.assertTrue(len(video_items['video_list'][0]['url']) > 0)
+        self.assertTrue(len(video_items['video_list'][0]['url']) > 30)
+        self.assertTrue(len(video_items['video_list'][0]['thumbnail']) > 30)
+        self.assertTrue(len(video_items['video_list'][0]['title']) > 1)
 
     def test_list_category(self):
         url='http://www.filmsforaction.org/watch_activism_videos/?p=2'
@@ -46,10 +48,6 @@ class ITTests(unittest.TestCase):
 
     def test_tagtele_scraper(self):
         url='http://www.filmsforaction.org/watch/shop-til-you-drop-the-crisis-of-consumerism-2010/'
-        self.assertTrue(len(api.get_playable_url(url)) > 10)
-
-    def test_disclosetv_scraper(self):
-        url='http://www.filmsforaction.org/watch/blackfish-2013/'
         self.assertTrue(len(api.get_playable_url(url)) > 10)
 
 

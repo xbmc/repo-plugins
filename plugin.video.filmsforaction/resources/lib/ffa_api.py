@@ -50,13 +50,16 @@ def get_categories():
 
 def get_videolist(url, localized=lambda x: x):
     """This function gets the video list from the FFA website and returns them in a pretty data format."""
-    video_entry_sep        = '<div class="content-view view-horizontal clearfix ">'
-    video_urls_pattern     = '<div class="content-image-wrapper">[^<]*?<a href=\'([^"]*?)\'><img class="[^"]*?" data-original="([^"]*?)"'
-    video_title_pattern    = '<div class="content-name">[^<]*?<a href="[^"]*?">([^<]*?)</a>'
+    video_entry_sep        = 'view-horizontal'
+    video_url_pattern      = '["\'](/watch/[^/]*?/)'
+    video_thumb_pattern    = '["\'](/img/[^"\']*?)["\']'
+    video_title_pattern    = '<a href=["\']/watch/[^/]*?/["\'][ ]*?>([^<]+?)</a>'
     video_plot_pattern     = '<div class="content-text">([^<]*?)</div>'
-    video_info_pattern     = '<div class="content-info"><a href="[^>]*?>([^<]*?)</a>([^<]*?)<a href="[^>]*?>([^<]*?)</a></div>'
-    video_duration_pattern = ' ([0-9]*?) min '
-    video_rating_pattern   = ' ([0-9.]*?) stars '
+    video_cat_pattern      = '>(Video|Short Film|Trailer|Documentary|Presentation)<'
+    video_duration_pattern = '([0-9]+?[ ]+?[Mm]in)'
+    video_rating_pattern   = '([0-9.]+?[ ]+?[Ss]tars)'
+    video_views_pattern    = '([0-9,]+?[ ]+?[Vv]iews)'
+    video_author_pattern   = '([Aa]dded by).*?<a href=["\']/[^/]*?/["\'][ ]*?>([^<]*?)</a>'
     page_count_pattern     = '<span id="C_SR_LabelResultsCount[^"]*?">([0-9]*?)-([0-9]*?) of ([0-9]*?) [^<]*?</span>'
     prev_page_pattern      = '<div style="float:left">[^<]*?<a href="([^"]*?)"><img id="C_SR_IPrevious"'
     next_page_pattern      = '<div style="float:right">[^<]*?<a href="([^"]*?)"><img id="C_SR_INext"'
@@ -78,27 +81,32 @@ def get_videolist(url, localized=lambda x: x):
         video_list.append(video_entry)
         reset_cache = True
 
-    for video_section in buffer_url.split(video_entry_sep):
-        url, thumb = l.find_first(video_section, video_urls_pattern) or ('', '')
-        title = l.find_first(video_section, video_title_pattern)
-        plot  = l.find_first(video_section, video_plot_pattern)
-        category, info, author = l.find_first(video_section, video_info_pattern) or ('', '', '')
-        l.log('Video info. url: "%s" thumb: "%s" title: "%s" category: "%s"' % (url, thumb, title, category))
-        if category in ('Video', 'Short Film', 'Trailer', 'Documentary', 'Presentation'): # This is to avoid blog posts yielded from Search.
-            duration = l.find_first(info, video_duration_pattern)
-            rating = l.find_first(info, video_rating_pattern)
-            video_entry = { 
+    for video_index, video_section in enumerate(buffer_url.split(video_entry_sep)):
+        if video_index:
+            category = l.find_first(video_section, video_cat_pattern)
+            if category:
+                url           = l.find_first(video_section, video_url_pattern)
+                thumb         = l.find_first(video_section, video_thumb_pattern)
+                title         = l.find_first(video_section, video_title_pattern)
+                plot          = l.find_first(video_section, video_plot_pattern)
+                duration      = l.find_first(video_section, video_duration_pattern)
+                rating        = l.find_first(video_section, video_rating_pattern)
+                views         = l.find_first(video_section, video_views_pattern)
+                label, author = l.find_first(video_section, video_author_pattern) or ('', '')
+                l.log('Video info. url: "%s" thumb: "%s" title: "%s" category: "%s"' % (url, thumb, title, category))
+                l.log('Video tags. duration: "%s" rating: "%s" views: "%s" author: "%s %s"' % (duration, rating, views, label, author))
+                video_entry = { 
                     'url': root_url + url,
-                    'title': title.strip(),
+                    'title': title.strip() or '.',
                     'thumbnail': root_url + thumb,
-                    'plot': "%s\n%s%s%s" % (plot.strip(), category, info.replace('&middot;', '-'), author),
-                    'duration': int(duration) if duration else 0,
-                    'rating': rating,
+                    'plot': "%s\n%s - %s - %s - %s\n%s %s" % (plot.strip(), category, duration, views, rating, label, author),
+                    'duration': int(duration.split()[0]) if duration else 0,
+                    'rating': rating.split()[0] if rating else '',
                     'genre': category,
                     'credits': author,
                     'IsPlayable': True
                     }
-            video_list.append(video_entry)
+                video_list.append(video_entry)
 
     if next_page_num:
         next_page_url = l.find_first(buffer_url, next_page_pattern)
@@ -127,7 +135,7 @@ def get_playable_url(url):
             ('snagfilms1', ' src="http://embed.snagfilms.com/embed/player\?filmId=([^"]*?)"', 'snagfilms'),
             ('kickstarter1', ' src="(https://www.kickstarter.com/[^"]*?)"', 'kickstarter'),
             ('tagtele1', ' src="(http://www.tagtele.com/embed/[^"]*?)"', 'tagtele'),
-            ('disclosetv1', ' src="(http://www.disclose.tv/embed/[^"]*?)"', 'disclosetv'),
+            ('disclosetv1', ' src="http://www.disclose.tv/embed/([^"]*?)"', 'disclosetv'),
             )
     
     buffer_url = l.carga_web(url)
@@ -200,14 +208,7 @@ def get_playable_tagtele_url(tagtele_url):
     return l.find_first(buffer_link, pattern_tagtele_video)
 
 
-def get_playable_disclosetv_url(disclose_url):
-    """This function returns the playable URL for the Disclose TV  embedded video from the video link retrieved."""
-    pattern_disclose_location = 'location.href="(.+?)"'
-    pattern_disclose_video = '{ url: "(.+?)"'
+def get_playable_disclosetv_url(video_id):
+    """This function returns the URL path to call the Disclose TV add-on with the video_id retrieved."""
+    return 'plugin://plugin.video.disclose_tv/video/' + video_id
 
-    buffer_link = l.carga_web(disclose_url)
-    location_link = l.find_first(buffer_link, pattern_disclose_location)
-    if location_link:
-        location_url = 'http://www.disclose.tv%s1280&height=720&flash=11&url=' % location_link
-        buffer_link = l.carga_web(location_url)
-        return l.find_first(buffer_link, pattern_disclose_video)

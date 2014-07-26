@@ -62,7 +62,7 @@ def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept'
 def getSources(fanart):
       addDir(__language__(30002), __language__(30002), 'GM', icon, addonfanart, __language__(30002), '', '')
       addDir(__language__(30003), __language__(30003), 'GS', icon, addonfanart, __language__(30003), '', '')
-
+      addDir('[COLOR red]'+__language__(30015)+'[/COLOR]','ABC','GH', icon, addonfanart, '[COLOR red]'+__language__(30015)+'[/COLOR]','','') 
 
 
 def getShows(fanart):
@@ -84,10 +84,60 @@ def getMovies(fanart):
       url = re.compile('href="(.+?)"').findall(blob)[0]
       img = re.compile('url\((.+?)\)').findall(blob)[0]
       name = re.compile('genre-centered">(.+?)<').findall(blob)[0]
-      addDir(name, url, 'GC', img, addonfanart, name, '', '')
+      url = url+'#'+img
+      addDir(name, url, 'GT', img, addonfanart, name, '', '')
+
+def getMovieType(url, name):
+       (url,img) = url.split('#',1)
+       addDir((name+' - '+(__language__(30016))).encode(UTF8), url, 'GC', img , addonfanart, (name+' - '+(__language__(30016))).encode(UTF8), '', '')
+       addDir((name+' - '+(__language__(30017))).encode(UTF8), url, 'GR', img , addonfanart, (name+' - '+(__language__(30017))).encode(UTF8), '', '')
+
+def getMovieRecent(url):
+       getCats(url,sort_type='justadded')
 
 
-def getCats(c_url):
+def getSearch(sid):
+    keyb = xbmc.Keyboard('', __language__(30000))
+    keyb.doModal()
+    if (keyb.isConfirmed()):
+         search = urllib.quote_plus(keyb.getText())
+         x_url = '/search/?q=%s' % (search)
+
+         url2 = 'http://www.snagfilms.com/'
+         user_data = urllib.urlencode({'url': x_url})
+         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0', 'Accept' : '*/*', 'Referer' : 'http://www.snagfilms.com%s' % (x_url),'X-Requested-With' : 'XMLHttpRequest', 'Origin': 'http://www.snagfilms.com'}
+
+         cj = cookielib.CookieJar()
+         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+         urllib2.install_opener(opener)
+
+         html = getRequest(url2, user_data, headers)
+
+         url2 = 'http://www.snagfilms.com/apis/user/incrementPageView'
+         user_data = urllib.urlencode({'url': x_url})
+         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:11.0) Gecko/20100101 Firefox/11.0', 'Accept' : '*/*', 'Referer' : 'http://www.snagfilms.com%s' % (x_url),'X-Requested-With' : 'XMLHttpRequest', 'Origin': 'http://www.snagfilms.com'}
+         html = getRequest(url2, user_data, headers)
+
+
+         s_url = 'http://www.snagfilms.com/apis/search.json?searchTerm=%s&type=film&limit=50' % (search)
+         html = getRequest(s_url, None, headers)
+         shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"imageUrl":"(.+?)"').findall(html)
+         for sid, sname, simg in shows:
+             surl = sys.argv[0]+"?url="+urllib.quote_plus(sid)+"&mode=GV"
+             simg = urllib.unquote_plus(simg)
+             simg = simg.split('url=',1)[1]
+             addLink(surl.encode(UTF8),sname,simg,addonfanart,sname,'','',False)
+
+         s_url = 'http://www.snagfilms.com/apis/search.json?searchTerm=%s&type=show&limit=50' % (search)
+         html = getRequest(s_url, None, headers)
+         shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"permaLink":"(.+?)".+?"imageUrl":"(.+?)"').findall(html)
+         for sid, sname, surl, simg in shows:
+             simg = urllib.unquote_plus(simg)
+             simg = simg.split('url=',1)[1]
+             addDir(sname, surl.encode(UTF8), 'GC', simg, addonfanart, sname,'','')
+
+
+def getCats(c_url, sort_type='popular'):
     cat_url = 'http://www.snagfilms.com%s' % (c_url)
     cj = cookielib.CookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
@@ -113,7 +163,7 @@ def getCats(c_url):
         category = 'sci-fi'
       else:
         category  = types[2].replace('_','%20')
-      url3 = 'http://www.snagfilms.com/apis/movies?limit=200&offset=0&sort_type=popular&film_type=%s&category=%s' % (file_type, category)
+      url3 = 'http://www.snagfilms.com/apis/movies?limit=200&offset=0&sort_type=%s&film_type=%s&category=%s' % (sort_type,file_type, category)
     else:
       url3 = 'http://www.snagfilms.com/apis/show/%s' % (showid)
 
@@ -121,12 +171,19 @@ def getCats(c_url):
 ,'X-Requested-With' : 'XMLHttpRequest', 'Origin': 'http://www.snagfilms.com'}
 
     html = getRequest(url3, None , headers)
-
     shows = re.compile('{"id":"(.+?)".+?"title":"(.+?)".+?"logline":"(.+?)".+?"primaryCategory".+?"title":"(.+?)".+?{"height".+?"src":"(.+?)"').findall(html)
     for sid, sname, sdesc, sgenre, simg in shows:
-      if not ('huluim.com' in simg):
+      if ('url=' in simg):
+        simg = urllib.unquote_plus(simg)
+        simg = simg.split('url=',1)[1]
+      if not ('ytimg' in simg):
        surl = sys.argv[0]+"?url="+urllib.quote_plus(sid)+"&mode=GV"
        addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc,sgenre,'',False)
+      else:
+       ytid = simg.split('/')[4]
+       surl = 'plugin://plugin.video.youtube/?path=/root/video&action=play_video&videoid=%s' % (ytid)
+       addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc,sgenre,'',False)
+
 
 
 def getVideo(sid):
@@ -222,6 +279,9 @@ elif mode=='GV':  getVideo(p('url'))
 elif mode=='GM':  getMovies(p('url'))
 elif mode=='GS':  getShows(p('url'))
 elif mode=='GC':  getCats(p('url'))
+elif mode=='GH':  getSearch(p('url'))
+elif mode=='GT':  getMovieType(p('url'),p('name'))
+elif mode=='GR':  getMovieRecent(p('url'))
 
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

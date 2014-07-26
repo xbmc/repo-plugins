@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.fox.news"
        name="Fox News"
-       version="4.0.1"
-       provider-name="divingmule, t1m">
+       version="4.0.3"
+       provider-name="t1m,divingmule">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.beautifulsoup4" version="4.3.1"/>

@@ -88,7 +88,7 @@ def time_stations(url):
 @plugin.route('/time_url/<url>')
 def time_url(url):
     url = url
-    plugin.set_resolved_url(my_drundoo.play_url(url))
+    plugin.set_resolved_url(my_drundoo.play_live_url(url))
 
 #####################################
 #End of timeshift section
@@ -124,7 +124,7 @@ def playlist_stations(playlist):
 
 @plugin.route('/playlist_final/<url>')
 def playlist_final(url):
-    plugin.set_resolved_url(my_drundoo.play_url(url))
+    plugin.set_resolved_url(my_drundoo.play_live_url(url))
 
 #####################################
 #End of playlist section
@@ -165,7 +165,7 @@ def oshte_stations(oshte):
 
 @plugin.route('/oshte_final/<url>')
 def oshte_final(url):
-    plugin.set_resolved_url(my_drundoo.play_url(url))
+    plugin.set_resolved_url(my_drundoo.play_live_url(url))
 
 #####################################
 #End of zapis section

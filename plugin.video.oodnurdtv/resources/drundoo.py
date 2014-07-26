@@ -57,8 +57,8 @@ class drundoo:
                 play_list = []
                 temp = self.open_site(link)
 
-                start1 = temp.find('getJSON("') + 'getJSON("'.__len__()
-                end1 = temp.find('", function (data)')
+                start1 = temp.find('url: "') + 'url: "'.__len__()
+                end1 = temp.find('",\n\t\t\tdataType:')
 
                 link = 'http://www.drundoo.com' + temp[start1:end1]
 

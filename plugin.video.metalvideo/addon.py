@@ -16,7 +16,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-def selector():
+def execute():
 	action = xbmcutil.plugin.actions[0]
 	if action == u"system": xbmcutil.sysCheck()
 	else:
@@ -26,4 +26,6 @@ def selector():
 
 # Initiate Startup
 import xbmcutil
-if __name__ == "__main__": selector()
+if __name__ == "__main__":
+	try: execute()
+	finally: xbmcutil.cleanup()

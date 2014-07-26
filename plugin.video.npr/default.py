@@ -44,6 +44,8 @@ def demunge(munge):
 def deuni(a):
     a = a.replace('&amp;#039;',"'")
     a = a.replace('&amp','&')
+    a = a.replace('&;','&')
+    a = a.replace('&quot;',"'")
     a = a.replace('&#039;',"'")
     return a
 
@@ -72,48 +74,35 @@ def getSources(fanart):
               urlbase   = NPRBASE % ('/sections/music-videos/')
               pg = getRequest(urlbase)
               catname = __language__(30000)
+              urlbase = NPRBASE % ('/series/15667984/favorite-sessions')
               addDir(catname,urlbase.encode(UTF8),'GC',icon,addonfanart,catname,GENRE,'',False)
               blob = re.compile('<div class="subtopics">(.+?)</ul>').findall(pg)[0]
               cats = re.compile('<a href="(.+?)">(.+?)<').findall(blob)
               for caturl, catname in cats:
                   caturl = NPRBASE % (caturl)
-#                  caturl = 'http://www.npr.org/templates/archives/archive.php?thingId=%s' % (caturl)
                   addDir(catname,caturl.encode(UTF8),'GC',icon,addonfanart,catname,GENRE,'',False)
 
 def getCats(cat_url):
-           pg = getRequest(cat_url)
-           if cat_url == NPRBASE % ('/sections/music-videos/'):
-              blob = re.compile('data-metrics-action="Click Music Genres"(.+?)</ul>').findall(pg)[0]
-              cats = re.compile('href="(.+?)">(.+?)<').findall(blob)
-              for caturl, catname in cats:
-                  caturl = NPRBASE % (caturl)
-                  catname = deuni(catname)
-                  addDir(catname,caturl.encode(UTF8),'GC',icon,addonfanart,catname,GENRE,'',False)
-           else:
-             if not ('thingId' in cat_url):
-               sid = re.compile('"storyId":"(.+?)"').findall(pg)[0]
-               cat_url = 'http://www.npr.org/templates/archives/archive.php?thingId=%s' % (sid)
-               pg = getRequest(cat_url)
-             blobs = re.compile('<div class="bucket clearfix">(.+?)END CLASS="BUCKET CLEARFIX"').findall(pg)
+             pg = getRequest(cat_url)
+             blobs = re.compile('<article class(.+?)</article>').findall(pg)
+             curlink  = 0
+             nextlink = 1
              for blob in blobs:
-               print "blob = "+str(blob)
-               shows = re.compile('<a href="(.+?)".+?src="(.+?)".+?<p class="watch">.+?<h4>.+?">(.+?)<.+?<p>(.+?)</p>').findall(blob)
-               for showurl, showimg, showname, showdesc in shows:
-                 try:
-                    (showdate, showdesc) = showdesc.split('</span>',1)
-                    showdate = re.compile('.+?>(.+?)&').findall(showdate)[0]
-                    showdesc = '%s\n%s' % (showdate, showdesc.strip())
-                 except:
-                    pass
+               nextlink = nextlink+1
+               if ('article-video' in blob) or ('type-video' in blob):
+                 (showurl, showimg, showname) = re.compile('<a href="(.+?)".+?src="(.+?)".+?title="(.+?)"').findall(blob)[0]
                  showurl = "%s?url=%s&name=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(showurl), urllib.quote_plus(showname))
-                 addLink(showurl.encode(UTF8),deuni(showname),showimg,addonfanart,deuni(showdesc),GENRE,'')
-             try:
-                 nextlink = re.compile('<a class="next" href="(.+?)"').findall(pg)[0]
-                 caturl  = NPRBASE % (nextlink)
-                 catname = '[COLOR red]%s[/COLOR]' % (__language__(30001))
-                 addDir(catname,caturl.encode(UTF8),'GC','',addonfanart,catname,GENRE,'',False)
-             except:
-                 pass
+                 addLink(showurl.encode(UTF8),deuni(showname),showimg,addonfanart,deuni(showname),GENRE,'')
+
+             nextstr = '/archive?start='
+             nexturl = cat_url
+             if (nextstr in cat_url):
+                (nexturl,curlink) = nexturl.split(nextstr,1)
+                curlink = int(curlink)
+             nextlink = str(nextlink+curlink+1)
+             nexturl = nexturl+nextstr+nextlink
+             catname = '[COLOR red]%s[/COLOR]' % (__language__(30001))
+             addDir(catname,nexturl.encode(UTF8),'GC','',addonfanart,catname,GENRE,'',False)
 
 
 def getShow(show_url, show_name):

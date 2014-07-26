@@ -24,17 +24,18 @@ class Initialize(listitem.VirtualFS):
 	def scraper(self):
 		# Fetch SourceCode of Site
 		url = u"http://www.engineeringtv.com/pages/about.us"
-		sourceCode = urlhandler.urlread(url, 2678400) # TTL = 1 Week
+		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
 		
 		# Add Search Page
 		self.add_search("Videos", u"/search/?search=%s")
+		self.add_item(u"-%s" % plugin.getuni(32941), thumbnail=(plugin.getIcon(), 0), url={"action":"Recent", "url":"http://www.engineeringtv.com/feed/recent.rss"})
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_unsorted)
 		self.set_content("files")
 		
 		# Fetch and Return VideoItems
-		self.add_youtube_channel(u"engineeringtv")
+		self.add_youtube_channel(u"engineeringtv", hasHD=False)
 		return self.regex_scraper(sourceCode) 
 	
 	def regex_scraper(self, sourceCode):
@@ -53,7 +54,59 @@ class Initialize(listitem.VirtualFS):
 			item.setParamDict(action="Videos", subaction="subcat", url=url)
 			
 			# Store Listitem data
-			additem(item.getListitemTuple(isPlayable=False))
+			additem(item.getListitemTuple(False))
+		
+		# Return list of listitems
+		return results
+
+class Recent(listitem.VirtualFS):
+	@plugin.error_handler
+	def scraper(self):
+		# Fetch Video Content
+		sourceObj = urlhandler.urlopen(plugin["url"], 14400) # TTL = 4 Hours
+		
+		# Set Content Properties
+		self.set_sort_methods(self.sort_method_date, self.sort_method_video_title)
+		self.set_content("episodes")
+		
+		# Fetch and Return VideoItems
+		return self.xml_scraper(sourceObj)
+	
+	def xml_scraper(self, sourceObj):
+		# Create Speed vars
+		results = []
+		additem = results.append
+		localListitem = listitem.ListItem
+		
+		# Import XML Parser and Parse sourceObj
+		import xml.etree.ElementTree as ElementTree
+		tree = ElementTree.parse(sourceObj)
+		sourceObj.close()
+		
+		# Loop thought earch Show element
+		for node in tree.getiterator("item"):
+			# Create listitem of Data
+			item = localListitem()
+			item.setAudioInfo()
+			item.setQualityIcon(False)
+			item.setLabel(node.findtext("title"))
+			item.setThumbnailImage(node.find("enclosure").get("url"))
+			item.setInfoDict(plot=node.findtext("description"), credits=node.findtext("author"))
+			
+			# Fetch url
+			url = node.findtext("link")
+			url = url[url.rfind("/video/"):]
+			item.setParamDict(url=url, action="PlayVideo")
+			
+			# Add Date Info
+			date = node.findtext("pubDate")
+			item.setDateInfo(date[:date.rfind("-")-1], "%a, %d %b %Y %H:%M:%S")
+			
+			# Add Context item to link to related videos
+			item.addRelatedContext(url=url)
+			
+			# Store Listitem data
+			additem(item.getListitemTuple(True))
 		
 		# Return list of listitems
 		return results
@@ -68,7 +121,7 @@ class Videos(listitem.VirtualFS):
 	def subCategories(self, catID):
 		# Fetch SourceCode
 		url = u"http://www.engineeringtv.com/pages/%s" % catID
-		sourceCode = urlhandler.urlread(url, 2678400) # TTL = 1 Week
+		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
 		
 		# Fetch List of Sub Categories
 		import CommonFunctions, re
@@ -93,7 +146,7 @@ class Videos(listitem.VirtualFS):
 				item.setParamDict(action="Videos", url=u"/watch/playlist/%s" % searchID.findall(htmlSegment)[0])
 				
 				# Store Listitem data
-				additem(item.getListitemTuple(isPlayable=False))
+				additem(item.getListitemTuple(False))
 			
 			# Return list of listitems
 			return results
@@ -102,7 +155,22 @@ class Videos(listitem.VirtualFS):
 		# Fetch SourceCode
 		if playlistID.startswith(u"?search="): url = u"http://www.engineeringtv.com/search/%s" % playlistID
 		else: url = u"http://www.engineeringtv.com%s" % playlistID
-		sourceCode = urlhandler.urlread(url, 28800) # TTL = 8 Hours
+		
+		# Fetch redirected Url from database and load webpage
+		from xbmcutil import storageDB
+		urlDB = storageDB.Metadata()
+		sourceObj = urlhandler.urlopen(urlDB.get(url, url), 14400, stripEntity=True) # TTL = 4 Hours
+		
+		# If Redirect is not found in Database then add it
+		if url in urlDB: urlDB.close()
+		else:
+			# Save DB
+			urlDB[url] = sourceObj.geturl()
+			urlDB.sync()
+			urlDB.close()
+		
+		# Read in data from cache and decode into unicode
+		sourceCode = sourceObj.read().decode("utf-8")
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_unsorted)
@@ -137,7 +205,7 @@ class Videos(listitem.VirtualFS):
 			item.addRelatedContext(url=url)
 			
 			# Store Listitem data
-			additem(item.getListitemTuple(isPlayable=True))
+			additem(item.getListitemTuple(True))
 			
 		# Return list of listitems
 		return results
@@ -147,7 +215,7 @@ class Related(listitem.VirtualFS):
 	def scraper(self):
 		# Fetch SourceCode of Site
 		url = u"http://www.engineeringtv.com%(url)s" % plugin
-		sourceCode = urlhandler.urlread(url, 28800) # TTL = 8 Hours
+		sourceCode = urlhandler.urlread(url, 14400) # TTL = 4 Hours
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_unsorted)
@@ -184,7 +252,7 @@ class Related(listitem.VirtualFS):
 			item.addRelatedContext(url=url, updatelisting="true")
 			
 			# Store Listitem data
-			additem(item.getListitemTuple(isPlayable=True))
+			additem(item.getListitemTuple(True))
 			
 		# Return list of listitems
 		return results
@@ -198,12 +266,12 @@ class PlayVideo(listitem.PlayMedia):
 		try:
 			# Fetch SourceCode of Site
 			url = u"http://www.engineeringtv.com%(url)s/player" % plugin
-			sourceCode = urlhandler.urlread(url, 1800) # TTL = 30 Mins
+			sourceCode = urlhandler.urlread(url, 1800, stripEntity=False) # TTL = 30 Mins
 			
 			# Fetch Query String with video id
 			queryString = re.findall("queryString\s*=\s*'(\S+?)'", sourceCode)[0]
 			url = u"http://www.engineeringtv.com/embed/player/container/300/300/?%s" % queryString
-			sourceCode = urlhandler.urlread(url, 1800) # TTL = 30 Mins
+			sourceCode = urlhandler.urlread(url, 1800, stripEntity=False) # TTL = 30 Mins
 			
 			# Fetch Video Url
 			videoUrl = re.findall('"pipeline_xid"\s*:\s*"(http://videos\.\S+?)"', sourceCode)[0]
@@ -212,7 +280,7 @@ class PlayVideo(listitem.PlayMedia):
 		except:
 			# Fetch SourceCode of Site
 			url = u"http://www.engineeringtv.com%(url)s" % plugin
-			sourceCode = urlhandler.urlread(url, 86400) # TTL = 24 Hours
+			sourceCode = urlhandler.urlread(url, 1800, stripEntity=False) # TTL = 30 Mins
 			
 			# Fetch Video Url
 			try: url = re.findall('src=\\\\"(http://videos\.cache\.magnify\.net/\S+?)\\\\" autoplay controls poster', sourceCode)[0]

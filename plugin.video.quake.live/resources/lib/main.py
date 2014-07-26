@@ -24,14 +24,14 @@ class Initialize(listitem.VirtualFS):
 	def scraper(self):
 		# Fetch Video Content
 		url = u"http://www.quake-live.tv/data/playlist_MySQL.php?vf=&t=all&v=&s=DESC"
-		sourceObj = urlhandler.urlopen(url, 28800) # TTL = 8 Hours
+		sourceObj = urlhandler.urlopen(url, 14400) # TTL = 4 Hours
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_date, self.sort_method_video_title)
 		self.set_content("episodes")
 		
 		# Add Youtube Channel
-		self.add_youtube_channel(u"TheQuakeLiveTV")
+		self.add_youtube_channel(u"TheQuakeLiveTV", hasHD=False)
 		
 		# Fetch and Return VideoItems
 		return self.xml_scraper(sourceObj)
@@ -64,7 +64,7 @@ class Initialize(listitem.VirtualFS):
 			item.setDateInfo(date[date.rfind(u" ")+1:], "%m/%d/%y")
 			
 			# Store Listitem data
-			additem(item.getListitemTuple(isPlayable=True))
+			additem(item.getListitemTuple(True))
 		
 		# Return list of listitems
 		return results

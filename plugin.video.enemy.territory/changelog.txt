@@ -1,0 +1,14 @@
+[B]Version 1.0.3[/B] 2014-06-30
+- Update Strings to strings.po
+- Added UnitTests
+- Marked Addon as NOT Broken as site is back online
+- And a lot more small improvements
+
+[B]Version 1.0.2[/B]
+- Marked Addon as broken sinse site is no longer available
+
+[B]Version 1.0.1[/B]
+- Added Full Unicode Support
+
+[B]Version 1.0.0[/B]
+- Initial Version

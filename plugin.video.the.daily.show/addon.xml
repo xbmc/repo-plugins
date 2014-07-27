@@ -20,5 +20,6 @@
         <forum></forum>
         <email>fritzl-inc@gmx.de</email>
 		<source>http://repo.or.cz/r/xbmc-dailyshow.git</source>
+		<broken>A change in CDN provider and back-end streaming media technology has broken this plugin. We are working on a fix.</broken>
     </extension>
 </addon>

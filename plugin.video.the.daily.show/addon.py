@@ -160,7 +160,7 @@ def full_episodes(**ignored):
     # Due to unstructured daily show site, there is no canonical JSON url
     # so we find the full episode json url presented on the latest full episode
     soup = BS3(get(url).text)
-    j = soup.head.script.text.strip().strip(';').split('=',1)[1]
+    j = soup.head.script.text.strip().strip(';').split('=', 1)[1]
     jj = json.loads(j)
     jsonurl = None
     for zone, attribs in jj.get('manifest').get('zones').items():
@@ -168,6 +168,10 @@ def full_episodes(**ignored):
         urls = re.compile(r'http[^"]+/f1010/[^"]+').findall(feed)
         if urls:
             jsonurl = urls[0]
+            break
+        fallback_urls = re.compile(r'http[^"]+/f1013/[^"]+').findall(feed)
+        if fallback_urls:
+            jsonurl = fallback_urls[0]
             break
     if not jsonurl:
         #  give user feedback on problem here

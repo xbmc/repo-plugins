@@ -10,6 +10,9 @@
 - [RTMPDUMP] Doesn't support handshake type 10 which is required by youtube.
 - [YOUTUBE] Requesting suggestions/recommendations from youtube sometimes stalls.
 
+[B]Version 4.4.9[/B]
+- Fixed login issues for all five login methods.
+
 [B]Version 3.4.8[/B]
 - Fixed login issues for all five login methods.
 - Refactored VEVO video playback code.

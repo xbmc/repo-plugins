@@ -445,6 +445,7 @@ class YouTubePlayer():
 
             # get main function name
             match = re.search("signature=(\w+?)\([^)]\)", playerData)
+            #match = re.search("signature=([$a-zA-Z]+)", playerData)
             if match:
                 mainFunName = match.group(1)
                 self.common.log('Main signature function name = "%s"' % mainFunName)

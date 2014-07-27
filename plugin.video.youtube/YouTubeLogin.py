@@ -188,9 +188,13 @@ class YouTubeLogin():
             fetch_options = False
 
             # Check if we are logged in.
-#            nick = self.common.parseDOM(ret["content"], "p", attrs={"class": "masthead-expanded-acct-sw-id2"})
-            nick = self.common.parseDOM(ret["content"], "span", attrs={"id": "yt-masthead-user-displayname"})
+            nick = self.common.parseDOM(ret["content"], "div", attrs={"class": "yt-masthead-picker-name"})
 
+            if len(nick) > 0 and nick[0] != "Sign In":
+                self.common.log("Logged in. Parsing data: " + repr(nick))
+                sys.modules["__main__"].cookiejar.save()
+                self.settings.setSetting("cookies_saved", "true")
+                return(ret, 200)
 
             # Check if there are any errors to report
             errors = self.core._findErrors(ret, silent=True)
@@ -198,12 +202,6 @@ class YouTubeLogin():
                 if errors.find("cookie-clear-message-1") == -1 and (errors.find("The code you entered didn") == -1 or (errors.find("The code you entered didn") > -1 and step > 12)):
                     self.common.log("Returning error: " + repr(errors))
                     return (errors, 303)
-
-            if len(nick) > 0 and nick[0] != "Sign In":
-                self.common.log("Logged in. Parsing data: " + repr(nick))
-                sys.modules["__main__"].cookiejar.save()
-                self.settings.setSetting("cookies_saved", "true")
-                return(ret, 200)
 
             # Click login link on youtube.com
             newurl = self.common.parseDOM(ret["content"], "button", attrs={"href": ".*?ServiceLogin.*?"}, ret="href")

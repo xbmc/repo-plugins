@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- Global strings -->
+	<string id="30000">Next Page</string>
+	
+	<!-- Settings -->
+	<string id="30500">Show Fanart</string>
+	<string id="30501">Support Animated GIFs</string>
+</strings>

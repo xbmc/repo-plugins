@@ -1,0 +1,10 @@
+1.0.0
+- set the info labels for images
+- updated bromixbmc
+- removed the beta status
+
+1.0.0~beta
+- beta for public tests
+
+1.0.0~alpha
+- development and testing

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<strings>
+    <!-- Setting Categories -->
+    <string id="30000">Configuration de Cessfull</string>
+    
+    <!-- Settings -->
+    <string id="30001">E-mail</string>
+    <string id="30002">Mot de passe</string>
+
+    <!-- Messages -->
+    <string id="30010">Echec Authentication</string>
+    <string id="30011">Please insert your e-mail and password in settings!</string>
+
+
+</strings>

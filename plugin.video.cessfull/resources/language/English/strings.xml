@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+
+<strings>
+    <!-- Setting Categories -->
+    <string id="30000">Cessfull settings</string>
+    
+    <!-- Settings -->
+    <string id="30001">E-Mail</string>
+    <string id="30002">Password</string>
+
+    <!-- Messages -->
+    <string id="30010">Authentication Failure</string>
+    <string id="30011">Please insert your e-mail and password in settings!</string>
+</strings>

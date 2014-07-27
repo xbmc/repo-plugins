@@ -1,0 +1,22 @@
+About Cessfull
+---------------------------------------
+
+Cessfull is a seedbox service that allows you to download all your torrents files so completely anonymous and secure. Our service is cloud-based, all your data is available where you want, when you want !
+
+For any questions thank you to report on cessfull.zendesk.com
+
+About XBMC
+---------------------------------------
+
+XBMC is an open source media center software which runs on most major platforms
+and is able to play nearly all media formats. It can stream from various sources
+by itself or through third party addons (written in Python) which can be
+downloaded from its repositories.
+
+Installation
+---------------------------------------
+
+Just zip this directory and install it via XBMC's related menu.
+
+You'll need to enter it in settings dialog of the application.
+

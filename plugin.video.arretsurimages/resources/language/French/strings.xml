@@ -6,6 +6,7 @@
     <string id="30010">Emissions (abonnés)</string>
     <string id="30011">BestOf</string>
     <string id="30012">Paramètres</string>
+    <string id="30013">Les cinq dernières émissions</string>
 
     <!--NavItems-->
     <string id="30020"> Suivant</string>
@@ -54,7 +55,7 @@
     <string id="30102">haute</string>
     <string id="30103">normale</string>
     <string id="30105">Afficher les actes</string>
-    <string id="30106">Accès direct à toutes les émissions</string>
+    <string id="30106">Accès direct aux cinq dernières émissions</string>
 
     <!--Context Menu-->
     <string id="30180">Télécharger la vidéo</string>

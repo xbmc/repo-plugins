@@ -26,7 +26,7 @@ import resources.lib.scraper as scraper
 from config import plugin
 
 URLEMISSION = 'http://www.arretsurimages.net/toutes-les-emissions.php?id=%d&'
-URL = {'toutesLesEmissions': 'http://www.arretsurimages.net/emissions.php?',
+URL = {'fiveLast': 'http://www.arretsurimages.net/emissions.php?',
        'arretSurImages': URLEMISSION % 1,
        'ligneJaune': URLEMISSION % 2,
        'dansLeTexte': URLEMISSION % 3,
@@ -61,9 +61,9 @@ def index():
     """Default view"""
     quick_access = plugin.get_setting('quickAccess', bool)
     if quick_access:
-        # Jump directly to 'toutesLesEmissions'
+        # Jump directly to 'fiveLast'
         login()
-        return show_programs('toutesLesEmissions', '1')
+        return show_programs('fiveLast', '1')
     items = [
         {'label': plugin.get_string(30010), 'path': plugin.url_for('emissions')},
         {'label': plugin.get_string(30011), 'path': plugin.url_for('bestof', page='1')},
@@ -77,8 +77,8 @@ def emissions():
     """Display the available programs categories"""
     login()
     items = [
-        {'label': 'Toutes les émissions',
-         'path': plugin.url_for('show_programs', label='toutesLesEmissions', page='1'),
+        {'label': plugin.get_string(30013),
+         'path': plugin.url_for('show_programs', label='fiveLast', page='1'),
         },
         {'label': '@rrêt sur images',
          'path': plugin.url_for('show_programs', label='arretSurImages', page='1'),

@@ -142,11 +142,15 @@ class Programs:
         nav_items = {'next': None, 'previous': None}
         filterContainer = SoupStrainer(attrs={'class': re.compile('rech-filtres-droite')})
         # There are two 'rech-filtres-droite' per page. Look only in the first one (contents[0])
-        for tag in BeautifulSoup(self.html, parseOnlyThese=filterContainer).contents[0].findAll('a'):
-            if tag.string == '&gt;':
-                nav_items['next'] = True
-            elif tag.string == '&lt;':
-                nav_items['previous'] = True
+        try:
+            for tag in BeautifulSoup(self.html, parseOnlyThese=filterContainer).contents[0].findAll('a'):
+                if tag.string == '&gt;':
+                    nav_items['next'] = True
+                elif tag.string == '&lt;':
+                    nav_items['previous'] = True
+        except IndexError:
+            # No rech-filtres-droite in the page (Nos cinq dernières émissions)
+            pass
         return nav_items
 
 

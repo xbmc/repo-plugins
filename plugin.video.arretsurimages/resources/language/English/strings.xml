@@ -6,6 +6,7 @@
     <string id="30010">Programs (subscribers)</string>
     <string id="30011">BestOf</string>
     <string id="30012">Settings</string>
+    <string id="30013">The five last programs</string>
 
     <!--NavItems-->
     <string id="30020"> Next</string>
@@ -54,7 +55,7 @@
     <string id="30102">high</string>
     <string id="30103">normal</string>
     <string id="30105">Display all parts</string>
-    <string id="30106">Jump to all programs</string>
+    <string id="30106">Jump to five last programs</string>
 
     <!--Context Menu-->
     <string id="30180">Download Video</string>

@@ -1,3 +1,9 @@
+[B]Version 2.3.8[/B]
+
+- Fix after website change (responsive design)
+- List of all programs replaced with five last
+  (full list not available anymore)
+
 [B]Version 2.3.7[/B]
 
 - Add new program "C'est p@s qu'un jeu"

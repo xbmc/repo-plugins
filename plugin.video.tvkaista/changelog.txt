@@ -1,3 +1,5 @@
+[B]4.1.0[/B]
+- Search from both title and description (previously only title), internal fixes. Thanks grinsted and sampov2!
 [B]4.0.2[/B]
 - Change to tvkaista.com
 [B]4.0.1[/B]

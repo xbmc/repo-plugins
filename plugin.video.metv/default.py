@@ -41,10 +41,9 @@ def demunge(munge):
             pass
         return munge
 
-def getRequest(url):
+def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'}  ):
               log("getRequest URL:"+str(url))
-              headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'} 
-              req = urllib2.Request(url.encode(UTF8), None, headers)
+              req = urllib2.Request(url.encode(UTF8), user_data, headers)
 
               try:
                  response = urllib2.urlopen(req)
@@ -97,14 +96,31 @@ def getCats(cat_url):
                  addLink(showurl.encode(UTF8),showname,showimg,showart,showdesc,GENRE_TV,'')
 
 
-def getShow(show_url, show_name):
-            if show_url.startswith('BADASS'):
-              show_url = METVBASE % (show_url.replace('BADASS',''))
+def getShow(mediaID, show_name):
+            if mediaID.startswith('BADASS'):
+              mediaID = METVBASE+mediaID.replace('BADASS','')
               pg = getRequest(show_url)
-              show_url = re.compile('mediaId=(.+?)&').findall(pg)[0]
-            show_url = 'http://production-ps.lvp.llnw.net/r/PlaylistService/media/%s/getMobilePlaylistByMediaId?platform=MobileH264' % (show_url)
-            pg = getRequest(show_url)
-            finalurl = re.compile('"mobileUrl":"(.+?)"').findall(pg)[0]
+              mediaID = re.compile('mediaId=(.+?)&').findall(pg)[0]
+            in0 = '<tns:in0>%s</tns:in0>' % mediaID
+            in1 = '<tns:in1 xsi:nil="true" />'
+            SoapMessage = """<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><tns:getPlaylistByMediaId xmlns:tns="http://service.data.media.pluggd.com">"""+in0+in1+"""</tns:getPlaylistByMediaId></SOAP-ENV:Body></SOAP-ENV:Envelope>"""
+            html = getRequest("http://ps2.delvenetworks.com/PlaylistService", 
+                               user_data = SoapMessage, 
+                               headers={ "Host": "ps2.delvenetworks.com", 
+                               "User-Agent":"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.10) Gecko/20100914 Firefox/3.6.10",
+                               "Content-type": "text/xml; charset=\"UTF-8\"", "Content-length": "%d" % len(SoapMessage), 
+                               "Referer": "http://static.delvenetworks.com/deployments/player/player-3.27.1.0.swf?playerForm=Chromeless", 
+                               "X-Page-URL": "http://metvnetwork.com/video/", "SOAPAction": "\"\""})
+            streams = re.compile('<Stream>(.+?)</Stream>').findall(html)
+            show_url=''
+            highbitrate = float(0)
+            for stream in streams:
+               (url, bitrate) = re.compile('<url>(.+?)</u.+?<videoBitRate>(.+?)</v').findall(stream)[0]
+               if (float(bitrate)) > highbitrate:
+                  show_url = url
+                  highbitrate = float(bitrate)
+            show_url  = show_url.split('mp4:',1)[1]
+            finalurl  = 'http://s2.cpl.delvenetworks.com/%s' % show_url
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
 
 

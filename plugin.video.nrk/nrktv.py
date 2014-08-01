@@ -15,16 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json
 import requests
 import HTMLParser
-import StorageServer
 import CommonFunctions as common
 from itertools import repeat
 
 html_decode = HTMLParser.HTMLParser().unescape
 parseDOM = common.parseDOM
-cache = StorageServer.StorageServer('nrk.no', 336)
 
 session = requests.Session()
 session.headers['User-Agent'] = 'xbmc.org'
@@ -177,30 +174,9 @@ def get_media_url(video_id):
     return session.get(url).json()['mediaUrl']
 
 
-def _get_cached_json(url, node):
-    data = cache.get(url)
-    if data:
-        try:
-            return json.loads(data)[node]
-        except:  # cache might be broken
-            pass
-    data = session.get(url).text
-    cache.delete(url)
-    cache.set(url, data)
-    return json.loads(data)[node]
-
-
 def _thumb_url(id):
     return "http://nrk.eu01.aws.af.cm/t/%s" % id.strip('/')
 
 
 def _fanart_url(id):
     return "http://nrk.eu01.aws.af.cm/f/%s" % id.strip('/')
-
-
-def _get_descr(url):
-    url = "http://v7.psapi.nrk.no/mediaelement/%s" % url.split('/')[3]
-    try:
-        return _get_cached_json(url, 'description')
-    except:
-        return ""

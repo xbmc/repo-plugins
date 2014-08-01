@@ -112,7 +112,7 @@ class UrlRule(object):
         if args and kwargs:
             raise ValueError("can't use both args and kwargs")
         if args:
-            return re.sub(r'{[A-z]+}', r'{}', self._url_format).format(*args)
+            return re.sub(r'{[A-z]+}', r'%s', self._url_format) % args
 
         url_args = dict(((k, v) for k, v in kwargs.items() if k in self._keywords))
         qs_args = dict(((k, v) for k, v in kwargs.items() if k not in self._keywords))

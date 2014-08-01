@@ -190,6 +190,7 @@ def episodes(series_id, season_id):
     view(nrktv.get_episodes(series_id, season_id))
 
 
+@plugin.route('/serie/<series_id>/<video_id>')
 @plugin.route('/serie/<series_id>/<video_id>/.*')
 @plugin.route('/program/<video_id>')
 @plugin.route('/program/<video_id>/.*')

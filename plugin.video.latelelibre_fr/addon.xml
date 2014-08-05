@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.latelelibre_fr" name="LaTeleLibre.fr" version="1.0.0" provider-name="Jose Antonio Montes (jamontes)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="plugin.video.youtube" version="4.4.9"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">LaTeleLibre.fr. Independient, citizen-involved, and participative media.</summary>
+        <description lang="en">LaTéléLibre.fr is a french independient, citizen-involved, and participative media. It has as objective to promote and support the freedom of expression, creation, communication of thoughts and opinions, as the information itself. It aims to deliver the open information access and its democratization to the citizens.[CR]This add-on allows you to watch the videos, reportages, documentals, and programs from LaTéléLibre.fr website. More than 2,500 videos are available.</description>
+        <summary lang="es">LaTeleLibre.fr. Medio ciudadano, independiente y participativo.</summary>
+        <description lang="es">LaTéléLibre.fr es una cadena francesa de información independiente, ciudadana, y participativa.[CR]LaTéléLibre tiene por objetivo promover y sostener la libertad de expresión, libertad de creación, de pensamiento y de opinión, facilitando el libre acceso a la información, y su democratización por parte de los ciudadanos.[CR]Este add-on permite ver los vídeos, programas, y reportajes de LaTeleLibre.fr. Más de 2.500 vídeos son disponibles.</description>
+        <summary lang="fr">LaTéléLibre.fr médiathèque. Média Citoyen, Indépendant et Participatif!</summary>
+        <description lang="fr">Née le 24 janvier 2007, LaTéléLibre est le premier média numérique (pureplayer) citoyen, indépendant et participatif. LaTéléLibre a pour objet de promouvoir, de soutenir la libre expression, la libre création, la libre communication des pensées et des opinions, comme de l’information. Elle s’attache à la diffusion desdites informations, pensées et opinions au plus large public au moyen d’articles, d’informations brutes, de reportages, d’investigations.[CR]Cette plugin permetre de regarder LaTéléLibre.fr médiathèque qui se trouve sur leur site web.[CR]Plus de 2500 reportages, documentaires et émissions sont disponibles.</description>
+        <language>fr</language>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+        <forum>http://forum.xbmc.org/showthread.php?tid=200933</forum>
+        <source>https://github.com/jamontes/plugin.video.latelelibre_fr</source>
+        <website>http://latelelibre.fr/</website>
+        <mail></mail>
+    </extension>
+</addon>

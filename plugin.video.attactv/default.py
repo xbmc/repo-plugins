@@ -184,7 +184,7 @@ def play_video(params):
     lutil.log("attactv.play "+repr(params))
 
     # Here we define the list of video sources supported.
-    video_sources = ('youtube', 'vimeo', 'bliptv', 'kontexttv', 'dailymotion')
+    video_sources = ('dailymotion', 'youtube', 'vimeo', 'kontexttv', 'bliptv')
     buffer_link = lutil.carga_web(params.get("url"))
     for  source in video_sources:
         video_url = eval("get_playable_%s_url(buffer_link)" % source)
@@ -219,31 +219,24 @@ def get_playable_youtube_url(html):
     return ""
 
 
-# This function try to get a Vimeo playable URL from the weblink and returns it ready to call the Vimeo plugin.
+# This function try to get a Vimeo playable URL from the weblink and returns it ready to play it.
 def get_playable_vimeo_url(html):
-    pattern_vimeo1 = ' value="[htp:]*?//vimeo.com/moogaloop.swf\?clip_id=([0-9]+)'
-    pattern_vimeo2 = '<a href="[htp:]*?//vimeo.com/([0-9]+)">'
-    pattern_vimeo3 = ' src="[htp:]*?//player.vimeo.com/video/([0-9]+)'
+    video_pattern_sd     = '"sd":{.*?,"url":"([^"]*?)"'
+    vimeo_video_patterns = (
+        (' value="[htp:]*?//vimeo.com/moogaloop.swf\?clip_id=([0-9]+)', 'vimeo1'),
+        ('<a href="[htp:]*?//vimeo.com/([0-9]+)">',                     'vimeo2'),
+        (' src="[htps:]*?//player.vimeo.com/video/([0-9]+)',            'vimeo3'),
+        )
 
-    video_id = lutil.find_first(html, pattern_vimeo1)
-    if video_id:
-        lutil.log("attactv.play: We have found this Vimeo video with pattern1: %s and let's going to play it!" % video_id)
-        video_url = "plugin://plugin.video.vimeo/?path=/root/video&action=play_video&videoid=" + video_id
-        return video_url
-
-    video_id = lutil.find_first(html, pattern_vimeo2)
-    if video_id:
-        lutil.log("attactv.play: We have found this Vimeo video with pattern2: %s and let's going to play it!" % video_id)
-        video_url = "plugin://plugin.video.vimeo/?path=/root/video&action=play_video&videoid=" + video_id
-        return video_url
-
-    video_id = lutil.find_first(html, pattern_vimeo3)
-    if video_id:
-        lutil.log("attactv.play: We have found this Vimeo video with pattern3: %s and let's going to play it!" % video_id)
-        video_url = "plugin://plugin.video.vimeo/?path=/root/video&action=play_video&videoid=" + video_id
-        return video_url
-
-    return ""
+    for video_pattern, pattern_name in vimeo_video_patterns:
+        video_id = lutil.find_first(html, video_pattern)
+        if video_id:
+            lutil.log("attactv.play: We have found this Vimeo video with pattern %s: %s and let's going to play it!" % (pattern_name, video_id))
+            video_info_url = 'https://player.vimeo.com/video/' + video_id
+            buffer_link    = lutil.carga_web(video_info_url)
+            return lutil.find_first(buffer_link, video_pattern_sd)
+    else:
+        return ""
 
 
 # This function try to get a BlipTV playable URL from the weblink and returns it ready to call the BlipTV plugin.
@@ -288,11 +281,14 @@ def get_playable_kontexttv_url(html):
     return ""
 
 
-# This function try to get a Dailymotion playable URL from the weblink and returns it reay to play it directly.
+# This function try to get a Dailymotion playable URL from the weblink and returns it ready to play it directly.
 def get_playable_dailymotion_url(html):
     pattern_dailymotion = ' src="[htp:]*?(//www.dailymotion.com/embed/video/[^"]*?)"'
-    #pattern_daily_video = '"hqURL":"(.+?)"'
-    pattern_daily_video = '"stream_h264_hq_url":"(.+?)"'
+    daily_video_patterns = (
+            '"stream_h264_hq_url":"(.+?)"',
+            '"stream_h264_url":"(.+?)"',
+            '"stream_h264_ld_url":"(.+?)"',
+            )
 
     daily_url = lutil.find_first(html, pattern_dailymotion)
     if daily_url:
@@ -300,11 +296,12 @@ def get_playable_dailymotion_url(html):
         daily_url = "http:" + daily_url
         lutil.log("attactv.play: We have found a Dailymotion video with URL: '%s'" % daily_url)
         buffer_link = lutil.carga_web(daily_url)
-        video_url = lutil.find_first(buffer_link, pattern_daily_video)
-        if video_url:
-            video_url = video_url.replace('\\','')
-            lutil.log("attactv.play: We have found this Dailymotion video: '%s' and let's going to play it!" % video_url)
-            return video_url
+        for pattern_daily_video in daily_video_patterns:
+            video_url = lutil.find_first(buffer_link, pattern_daily_video)
+            if video_url:
+                video_url = video_url.replace('\\','')
+                lutil.log("attactv.play: We have found this Dailymotion video: '%s' and let's going to play it!" % video_url)
+                return video_url
 
     return ""
         

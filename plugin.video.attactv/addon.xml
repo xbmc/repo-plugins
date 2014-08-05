@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.attactv" name="attac tv" version="1.1.6" provider-name="Jose Antonio Montes (jamontes)">
+<addon id="plugin.video.attactv" name="attac tv" version="1.1.7" provider-name="Jose Antonio Montes (jamontes)">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="plugin.video.youtube" version="4.4.1"/>
-        <import addon="plugin.video.vimeo" version="3.5.1"/>
         <import addon="plugin.video.bliptv" version="1.8.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource" library="default.py">
@@ -24,5 +23,6 @@
         <forum>http://forum.xbmc.org/showthread.php?tid=155306</forum>
         <source>https://github.com/jamontes/plugin.video.attactv</source>
         <website>http://www.attac.tv/</website>
+        <mail></mail>
     </extension>
 </addon>

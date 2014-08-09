@@ -1,3 +1,8 @@
+[B]1.0.8[/B]
+- Updated page parsing because of upstream HTML changes.
+- Show title and thumbnail during play using video metadata.
+- Minor fixes.
+
 [B]1.0.7[/B]
 - added English description and summary in addon.xml
 

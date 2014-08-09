@@ -37,33 +37,12 @@ from xbmcswift2 import Plugin, xbmcgui
 from resources.lib import htmlscraper
 import string
 
-
-MAIN_MENU_TOPICS = [
-     {'label': 'afrika', 'endpoint' : 'topic', 'path' : 'afrika'},
-     {'label': 'amerika', 'endpoint' : 'topic', 'path' : 'amerika'},
-     {'label': 'asien', 'endpoint' : 'topic', 'path' : 'asien'},
-     {'label': 'australien-ozeanien', 'endpoint' : 'topic', 'path' : 'australien-ozeanien'},
-     {'label': 'europa', 'endpoint' : 'topic', 'path' : 'europa'},
-     {'label': 'spezial', 'endpoint' : 'topic', 'path' : 'spezial'},
-     {'label': 'a_to_z_menu', 'endpoint' : 'a_to_z_menu', 'path' : ''}
-]
-
-
 plugin = Plugin()
 
 
 I18NINDEX = { 
-             'afrika' : 30001,
-             'amerika' : 30002,
-             'asien' : 30003,
-             'australien-ozeanien' : 30004,
-             'europa' : 30005,
-             'spezial' : 30006,
-             'a_to_z_menu' : 30007,
              'video_not_online' : 30008,
-             'clear_cache' : 30009,
-             'cache_cleared' : 30010,
-             'toggle_watched' : 30011
+             'toggle_watched' : 30011,
              }
 
 def get_localized_string(label):
@@ -72,68 +51,18 @@ def get_localized_string(label):
 
 @plugin.route('/')
 def index():
-    items = [{'label' : get_localized_string(item['label']), 
-              'path' : plugin.url_for(endpoint = item['endpoint'], path = item['path'])} for item in MAIN_MENU_TOPICS]
-    
-    for item in items:
-        item['context_menu'] = [(get_localized_string('clear_cache'), 'XBMC.RunPlugin(%s)' % plugin.url_for(endpoint = 'clear_cache', path = item['path']))]
-    return plugin.finish(items)
+    return (htmlscraper.build_menuitems(plugin.url_for, 'play_video', get_localized_string))
 
-@plugin.route('/topic/<path>')
-def topic(path):
-    if (len(plugin.get_storage(path).items()) == 0):
-        plugin.log.info("Cache is empty for items in topic " + path)         
-        # Cache items
-        if (path in string.ascii_uppercase):
-            plugin.get_storage(path)['items'] = htmlscraper.scrape_a_to_z_per_regex(path, plugin.url_for, 'play_video', get_localized_string)
-        else:
-            plugin.get_storage(path)['items'] = htmlscraper.scrape_topic_per_regex(path, plugin.url_for, 'play_video', get_localized_string)
-        #plugin.log.info(str(path) + " stored in cache")
+@plugin.route('/video/<ekey>')
+def play_video(ekey):
+    item = htmlscraper.get_json_for_ekey(ekey)
+    if (item['url'] != None):
+        plugin.log.info("Playing url: %s" % item['url'])
+        plugin.set_resolved_url(item['url'])
     else:
-        plugin.log.info(str(path) + " items retrieved from cache")
-         
-    items =  plugin.get_storage(path)['items']
-    return plugin.finish(items)
-
-
-@plugin.route('/atozmenu/')  
-def a_to_z_menu():
-    items = [{'label': le, 
-              'path': plugin.url_for('topic', path=le)
-            } for le in string.ascii_uppercase ]
-    #items.append({'label': '0-9', 'path': plugin.url_for('a_to_z', letter='0-9')})    
-    return plugin.finish(items)
-
-
-@plugin.route('/video/<url>')
-def play_video(url):
-    videolink = htmlscraper.get_video_from_url("http.*l\.mp4", url)
-    if (videolink != None):
-        plugin.log.info("Playing url: %s" % videolink)
-        plugin.set_resolved_url(videolink)
-    else:
-        plugin.log.info("videolink is None")
+        plugin.log.info("url is None")
         xbmcgui.Dialog().ok(plugin.name, get_localized_string("video_not_online"))
         return plugin.finish()
-
-
-@plugin.route('/clear_cache/<path>')  
-def clear_cache(path):
-    token = path.split('/')
-    
-    if (token[-1] == "?path="):
-        # path is empty for Index item
-        for path in string.ascii_uppercase:
-            plugin.get_storage(path).clear()
-        menuitem = 'a_to_z_menu'
-    else:
-        plugin.get_storage(token[-1]).clear()
-        menuitem = token[-1]
-            
-    plugin.log.info("Cache cleared for: %s" % menuitem)
-    message = get_localized_string("cache_cleared") + ' \'' + get_localized_string(menuitem) + '\'.'  
-    xbmcgui.Dialog().ok(plugin.name, message)
-    return plugin.redirect(plugin.url_for('index'))
 
 
 if __name__ == '__main__':

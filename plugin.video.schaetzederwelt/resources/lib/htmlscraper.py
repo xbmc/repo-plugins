@@ -37,68 +37,106 @@ from urllib2 import urlopen, Request
 import logging
 import re
 import socket
+import json
 
-MAIN_URL = "http://www.swr.de/schaetze-der-welt/"
+BASE_URL = 'http://swrmediathek.de'
+MAIN_URL = "http://swrmediathek.de/tvshow.htm?show=945f9950-cc74-11df-9bbb-0026b975f2e6"
+EKEY_URL = "http://swrmediathek.de/AjaxEntry?ekey="
 REQUEST_HEADERS = {"User-Agent" : "Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)"}
 SOCKET_TIMEOUT = 30
 MAIN_PAGE_CACHE = None
 MAX_TIMEOUT_RETRIES = 20
 logger = logging.getLogger('plugin.video.schaetzederwelt')
-
-def scrape_topic_per_regex(topic, url_for, endpoint, localizer):
-    log_info("Scraping " + topic)
-    page = get_content_from_url(get_actual_from_baseurl("http://www.swr.de/schaetze-der-welt/" + topic + "/.*.html"))
-           
-    pattern = re.compile('teaser teaser-08 schaetze-der-welt\">(\n| )*<h2>(\n| )*<a href=\"(?P<url>.*)\">(\n| )*<img.*src=\"(?P<img>.*.jpg)\".*/>(\n| )*\t(\n| )*<span.*>(?P<titel1>(.*\n.*|.*)) *</span>(\n| )*<span.*>(?P<titel2>(.*\n.*|.*)) *</span>(\n| )*</a.*(\n| )*</h2.*(\n| )*<div.*(\n| )*<p>(?P<desc>.*)(\n| )*<a')    
-    log_info("RegEx processed, gathering videos...")
-            
-    items = [{
-             # Kurztext, Titel
-             'label': m.group('titel1').decode('utf-8', 'ignore') + ', ' + m.group('titel2').decode('utf-8', 'ignore'),
-             # URL fuer die Videoseite
-             'path' : url_for(endpoint, url=m.group('url')),
-             # Bild
-             'thumbnail' : m.group('img'),
-             'icon' : m.group('img'),
-             #'fanart_image' : './fanart.jpg',
-             # Beschreibung
-             'info' : { 'plot' : m.group('desc')},
-             # Add watch toggle button manually
-             'context_menu' : [(localizer('toggle_watched'), 'XBMC.Action(ToggleWatched)')],
-             'is_playable' : True
-            } for m in pattern.finditer(page)]
+kontinente_und_anderes = ['Europa', 'Afrika', 'Amerika', 'Australien', 'Asien', 'Pazifik']
+ 
+     
+def build_menuitems(url_for, endpoint, localizer):
     
-    log_info(str(len(items)) + " Videos gathered.")
+    #log_info("Oeffne Showseite ...")
+    page = get_content_from_url(MAIN_URL)
+    
+    #log_info("Hole alle Ids der einzelnen Sendungen ...")
+    pattern = regex_pattern_for_items()
+    
+    items = []
+    for match in pattern.finditer(page):
+        item = {'label' : enrich_title(match.group('title').decode('utf-8')).strip(),
+                'thumbnail' : BASE_URL + match.group('img'),
+                'icon' : BASE_URL + match.group('img'),
+                'path' : url_for(endpoint, ekey=match.group('ekey')),
+                'context_menu' : [(localizer('toggle_watched'), 'XBMC.Action(ToggleWatched)')],
+                'is_playable' : True
+                }
+        items.append(item)
+    
     items.sort(key=lambda video: video['label'])
+    log_info("Anzahl Videos: " + str(len(items)))
+    #log_info("Videos: " + str(items))
     return items
 
 
-def scrape_a_to_z_per_regex(letter, url_for, endpoint, localizer):
-    log_info("Scraping " + letter)
-    page = get_content_from_url(get_actual_from_baseurl("http://www.swr.de/schaetze-der-welt/denkmaeler/.*.html"))
-    pattern = re.compile('<p><a name=\"' + letter + '\"></a>' + letter + '</p>\n *<ul>\n *(<li><a href=\".*\".*</a></li>\n *)*')
-    erg = pattern.search(page)    
-    pattern2 = re.compile('<li><a href=\"(?P<url>.*)\">(?P<text>.*)</a></li>')
-    log_info("RexEx processed, gathering monuments for letter " + letter)
-    #log_info(pattern2.findall(page, erg.start(), erg.end()))    
-    
-    items = [{
-             # Kurztext, Titel
-             'label': m.group(2).decode('utf-8', 'ignore'),
-             # URL fuer die Videoseite
-             'path' : url_for(endpoint, url=m.group(1)),
-             # Bild
-             'thumbnail' : '',
-             'icon' : '', 
-             # Beschreibung
-             'info' : '',
-             'context_menu' : [(localizer('toggle_watched'), 'XBMC.Action(ToggleWatched)')],
-             'is_playable' : True  
-            } for m in pattern2.finditer(page, erg.start(), erg.end())]    
-    
-    log_info(str(len(items)) + " monuments gathered.")
-    return items
+def regex_pattern_for_items():
+    return re.compile('<a href=\"/player.htm\?show=(?P<ekey>[a-z0-9-]*)\">[\n\t]*<img src=\"(?P<img>.*)\"[\n\t ]*alt=\".*\"[\n\t ]*title=\"(?P<title>.*)\"[\n\t ]*/>')
 
+
+def enrich_title(title):
+    match = re.match('.*, (?P<land>.*), Folge', title)
+    if (match is not None):
+        land = match.group('land')
+        #log_info("Land: " + land)
+    else:
+        land = 'ungeordnet'
+    #return '{0}: {1}'.format(land, title).encode('utf-8')
+    return land + ' - ' + title
+    
+    
+def get_json_for_ekey(ekey):
+    # TODO: auf get_content_from_url umstellen, aber: return response.read() umstellen auf return response
+    log_info("Lese ekey JSON: " + ekey)
+    request = Request(EKEY_URL + ekey, headers = REQUEST_HEADERS)
+    response = urlopen(request, timeout = SOCKET_TIMEOUT)
+    json_object = json.load(response)
+    log_info("Title: " + str(json_object['attr']['entry_title'].encode('utf-8')))
+    # desc: Regex: 'entry_descl'
+    #log_info("descr: " + json_object['attr']['entry_descl'])
+    # image: entry_image_16_9
+    #log_info("img: " + json_object['attr']['entry_image_16_9'])    
+    # url: {"val0":"h264","val1":"3" - hochauflösend bzw. regex: 'rmtp ... l.mp4'
+    #url = re.match('.*(?P<url>rtmp.*\.l\.mp4)', str(json_object['sub']))
+    #log_info("url: " + url.group('url'))
+    
+    # Listen durchsuchen: s.a. http://stackoverflow.com/questions/9542738/python-find-in-list
+    # Kontinent:
+    # Suche nach Europa, Amerika, Asien, Australien, Ozeanien, Afrika
+    # Liste traversieren: Wenn Atrtribut name == entry_keywd
+    kontinent = None
+    for item in json_object['sub']:
+        if(item['name'] == 'entry_keywd' and kontinent is None):
+            #log_info("item['attr']['val']" + item['attr']['val'])
+            if (item['attr']['val'] in kontinente_und_anderes):
+                kontinent = item['attr']['val']
+        elif(item['name'] == 'entry_media'):            
+            if (item['attr']['val0'] == 'h264' and item['attr']['val1'] == '3'):
+               url =  item['attr']['val2']
+            
+
+    if (kontinent is None):
+        kontinent = ''
+    log_info("Kontinent: " + kontinent)
+    log_info("url: " + url)
+    
+    # Land:
+    # Suche in Titel nach 'Folge', davor kommt das Land, wenn nicht, dann leer lassen
+    match = re.match('.* (?P<land>.*), Folge', str(json_object['attr']['entry_title'].encode('utf-8')))
+    if (match is not None):
+        land = match.group('land')
+        log_info("Land: " + land)
+    else:
+        land = ''
+    
+    return {'ekey':ekey, 'label':json_object['attr']['entry_title'], 'url':url, 'land':land, 'kontinent':kontinent, 'img':json_object['attr']['entry_image_16_9']}
+
+  
 
 def get_content_from_url(url):
     request = Request(url, headers = REQUEST_HEADERS)
@@ -122,30 +160,6 @@ def get_content_from_url(url):
                     
     log_info("URL opened: " + url)
     return response.read()
-
-
-def get_actual_from_baseurl(regexp):
-    global MAIN_PAGE_CACHE
-    
-    if (MAIN_PAGE_CACHE == None):
-        log_debug("Filling MAIN_PAGE_CACHE")                       
-        MAIN_PAGE_CACHE = get_content_from_url(MAIN_URL)
-    
-    log_debug("using MAIN_PAGE_CACHE")
-    actual_url=re.search(regexp, MAIN_PAGE_CACHE)
-    if (actual_url != None):
-        return actual_url.group(0)
-    else:
-        return None
-
-
-def get_video_from_url(regexp, url):                           
-    page = get_content_from_url(url)    
-    video_url=re.search(regexp, page)
-    if (video_url != None):        
-        return video_url.group(0)
-    else:
-        return None
 
 
 def log_info(msg):

@@ -5,16 +5,12 @@ Schaetze der Welt / Treasures of the World is an XBMC addon that gives you acces
 
 Supported platforms
 -------------------
-XBMC Frodo (Linux, Windows, raspBMC 12.2013)
+XBMC (Linux, Windows, raspBMC, ...)
 
 
 Current Features
 ----------------
-* Episodes ordered by continent
-* Episodes ordered alphabetically
-* Specials
-* Comfortable browsing experience based on cached menu navigation
-* Selective purge of navigation cache per context menu
+* All episodes ordered by country
 
 
 Further information

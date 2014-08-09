@@ -1,3 +1,7 @@
+v2.0.0
+* Complete redesign (Menu, Parsing, ...)
+* No need for caching anymore
+
 v1.0.1
 * Improvements to get rid of timeout-problems opening URLs: catch timeout and retry urlopen() several times  
 * Caching Main Page to reduce redundant requests to get the topic URLs. 
@@ -8,15 +12,9 @@ v1.0.1
 * Videos Context menu: Toggle button watched / unwatched
 * unified logging instead of print()
 
-
-Current Features
-----------------
+v1.0.0
 * Episodes ordered by continent
 * Episodes ordered alphabetically
 * Specials
 * Comfortable browsing experience based on cached menu navigation
-* Selective purge of navigation cache per context menu
-
-
-v1.0.0
-- Initial version 
+* Selective purge of navigation cache per context menu 

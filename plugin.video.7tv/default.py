@@ -59,20 +59,32 @@ sevenTv = SevenTv(os.path.join(__addon_data_path__, 'favs.dat'))
 SETTING_SHOW_FANART = bromixbmc.Addon.getSetting('showFanart')=="true"
 SETTING_SHOW_PUCLICATION_DATE = bromixbmc.Addon.getSetting('showPublicationDate')=="true"
 
-image_dict = {'pro7': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_pro7.png"),
-                     'sat1': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_sat1.png"),
-                     'kabel1': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_kabel1.png"),
-                     'sixx': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_sixx.png"),
-                     'pro7maxx': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_pro7maxx.png"),
-                     'sat1gold': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_sat1gold.png"),
-                     
-                     'search': os.path.join(bromixbmc.Addon.Path, "resources/media/search.png"),
-                     'new_videos': os.path.join(bromixbmc.Addon.Path, "resources/media/highlight.png"),
-                     'favorites': os.path.join(bromixbmc.Addon.Path, "resources/media/pin.png")
-                     }
+__CHANNELS__ = {'pro7': {'name': 'ProSieben',
+                         'logo': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_pro7.png")
+                         },
+                'sat1': {'name': 'SAT.1',
+                         'logo': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_sat1.png")
+                         },
+                'kabel1': {'name': 'kabel eins',
+                           'logo': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_kabel1.png")
+                           },
+                'sixx': {'name': 'sixx',
+                         'logo': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_sixx.png")
+                         },
+                'prosiebenmaxx': {'name': 'ProSieben MAXX',
+                                  'logo': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_pro7maxx.png")
+                                  },
+                'sat1gold': {'name': 'SAT.1 Gold',
+                             'logo': os.path.join(bromixbmc.Addon.Path, "resources/media/logo_sat1gold.png")
+                             }
+                }
 
-def play(channel_id, episode_id):
-    videoUrl = sevenTv.getVideoUrl(episode_id)
+__ICON_SEARCH__ = os.path.join(bromixbmc.Addon.Path, "resources/media/search.png")
+__ICON_HIGHLIGHTS__ = os.path.join(bromixbmc.Addon.Path, "resources/media/highlight.png")
+__ICON_FAVORITES__ = os.path.join(bromixbmc.Addon.Path, "resources/media/pin.png")
+
+def play(channelId, episodeId):
+    videoUrl = sevenTv.getVideoUrl(episodeId)
     if videoUrl!=None:
         listitem = xbmcgui.ListItem(path=videoUrl)
         xbmcplugin.setResolvedUrl(bromixbmc.Addon.Handle, True, listitem)
@@ -116,37 +128,31 @@ def search():
     return True
 
 def showIndex():
-    channels = sevenTv.getChannels()
-    
-    if len(channels)==0:
-        bromixbmc.showNotification(bromixbmc.Addon.localize(30999))
-    else:
-        for channel in channels:
-            channel_name = channel.get('channel_name', None)
-            channel_display_name = channel.get('channel_display_name', None)
-            
-            if channel_name!=None and channel_display_name!=None:
-                channel_logo = image_dict.get(channel_name, None)
-                params = {'channel': channel_name,
-                          'action': ACTION_SHOW_CHANNEL_CONTENT}
-                bromixbmc.addDir(channel_display_name, params=params, thumbnailImage=channel_logo)
-                
-        # try to load favorites
-        favs = bromixbmc.Addon.getFavorites()
-        if len(favs)>0:
-            params = {'action': ACTION_SHOW_FAVORITE_SHOWS}
-            bromixbmc.addDir("[B]"+bromixbmc.Addon.localize(30005)+"[/B]", params=params, thumbnailImage=image_dict.get('favorites', ""))
-            
-            params = {'action': ACTION_SHOW_NEW_VIDEOS}
-            bromixbmc.addDir("[B]"+bromixbmc.Addon.localize(30012)+"[/B]", params=params, thumbnailImage=image_dict.get('new_videos', ""))
+    # try to load favorites
+    favs = bromixbmc.Addon.getFavorites()
+    if len(favs)>0:
+        params = {'action': ACTION_SHOW_FAVORITE_SHOWS}
+        bromixbmc.addDir("[B]"+bromixbmc.Addon.localize(30005)+"[/B]", params=params, thumbnailImage=__ICON_FAVORITES__)
         
-        # only show the search if we also have channels
-        if len(channels)>0:
-            params = {'action': ACTION_SEARCH}
-            bromixbmc.addDir(bromixbmc.Addon.localize(30000), params=params, thumbnailImage=image_dict.get('search', ""))
+        params = {'action': ACTION_SHOW_NEW_VIDEOS}
+        bromixbmc.addDir("[B]"+bromixbmc.Addon.localize(30012)+"[/B]", params=params, thumbnailImage=__ICON_HIGHLIGHTS__)
+        pass
+    
+    for key in __CHANNELS__:
+        channel = __CHANNELS__[key]
+        name = channel.get('name', None)
+        thumbnailIamge = channel.get('logo', None)
+        if name!=None and thumbnailIamge!=None:
+            params = {'channel': key,
+                      'action': ACTION_SHOW_CHANNEL_CONTENT}
+            bromixbmc.addDir(name, params=params, thumbnailImage=thumbnailIamge)
+            pass
+        pass
+    
+    params = {'action': ACTION_SEARCH}
+    bromixbmc.addDir('[B]'+bromixbmc.Addon.localize(30000)+'[/B]', params=params, thumbnailImage=__ICON_SEARCH__)
     
     xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle)
-    return True
 
 def localizeString(text):
     if text=='Aktuell':
@@ -163,31 +169,33 @@ def localizeString(text):
         return bromixbmc.Addon.localize(30012)
     return text
 
-def showChannelContent(channel):
-    channel_logo = image_dict.get(channel, "")
-    
-    # first try to show the highlights
-    highlights = sevenTv.getChannelHighlights(channel)
-    if len(highlights)>0:
-        params = {'channel': channel,
-                  'action': ACTION_SHOW_CHANNEL_HIGHLIGHTS}
+def showChannelContent(channelId):
+    channel = __CHANNELS__.get(channelId, None)
+    if channel!=None:
+        thumbnailImage = channel.get('logo', '')
         
-        bromixbmc.addDir(bromixbmc.Addon.localize(30002), params=params, thumbnailImage=channel_logo)
-    
-    # show the library
-    library = sevenTv.getChannelLibrary(channel)
-    for lib in library:
-        title = lib.get('title', '')
-        # ignore favs.
-        if title!='Favoriten':
-            params = {'channel': channel,
-                      'action': ACTION_SHOW_CHANNEL_CONTENT,
-                      'category': title}
+        # first try to show the highlights
+        highlights = sevenTv.getChannelHighlights(channelId)
+        if len(highlights)>0:
+            params = {'channel': channelId,
+                      'action': ACTION_SHOW_CHANNEL_HIGHLIGHTS}
             
-            bromixbmc.addDir(localizeString(title), params=params, thumbnailImage=channel_logo)
+            bromixbmc.addDir(bromixbmc.Addon.localize(30002), params=params, thumbnailImage=thumbnailImage)
+        
+        # show the library
+        library = sevenTv.getChannelLibrary(channelId)
+        for lib in library:
+            title = lib.get('title', '')
+            # ignore favs.
+            if title!='Favoriten':
+                params = {'channel': channelId,
+                          'action': ACTION_SHOW_CHANNEL_CONTENT,
+                          'category': title}
+                
+                bromixbmc.addDir(localizeString(title), params=params, thumbnailImage=thumbnailImage)
+        pass
     
     xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle)
-    return True
 
 def addScreenObject(channel, screen_object, fanart=None, addToFavs=True, showFormatTitle=False):
     type = screen_object.get('type', '')
@@ -261,79 +269,82 @@ def addScreenObject(channel, screen_object, fanart=None, addToFavs=True, showFor
         bromixbmc.addVideoLink(name, params=params, thumbnailImage=thumbnailIamge, fanart=fanart, additionalInfoLabels=additionalInfoLabels)
         pass
 
-def showChannelLibrary(channel, formatFilter):
-    formats = sevenTv.getChannelLibrary(channel)
+def showChannelLibrary(channelId, formatFilter):
+    formats = sevenTv.getChannelLibrary(channelId)
     for format in formats:
         if format.get('title','')==formatFilter:
             screen_objects = sevenTv.getShowsFromScreenObject(format)
             for screen_object in screen_objects:
-                addScreenObject(channel, screen_object)
+                addScreenObject(channelId, screen_object)
                 
     xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle)
-    return True
 
-def showShowContent(channel, show, category=''):
+def showShowContent(channelId, show, category=''):
     xbmcplugin.setContent(bromixbmc.Addon.Handle, 'episodes')
     
     # default: show full episodes
     if category=='':
         category='Ganze Folgen'
     
-    screen_objects = sevenTv.getShowContent(channel, show)
+    screen_objects = sevenTv.getShowContent(channelId, show)
     
     fanart = sevenTv.getFanartFromShowContent(screen_objects)
     
-    channel_logo = image_dict.get(channel, "")
+    channel = __CHANNELS__.get(channelId, None)
+    if channel!=None:
+        thumbnailImage = channel.get('logo', '')
         
-    videoList = None
-    # list all objects except 'Ganze Folgen' = full episodes
-    for screen_object in screen_objects:
-        title = screen_object.get('title', '')
-        if title==category:
-            videoList = screen_object
-            
-        if title!='Ganze Folgen' and category=='Ganze Folgen' and title!='Favoriten':
-            if len(screen_object.get('screen_objects', {}))>0:
-                params = {'channel': channel,
-                          'show': show,
-                          'action': ACTION_SHOW_SHOW_CONTENT,
-                          'category': title.encode('utf-8')}
-                bromixbmc.addDir("[B]"+localizeString(title)+"[/B]", params=params, thumbnailImage=channel_logo, fanart=fanart)
-                
-    if videoList!=None:
-        sorted_videos = sevenTv.getSortedScreenObjects(videoList)
-        for screen_object in sorted_videos: 
-            addScreenObject(channel, screen_object, fanart)
-    
-    xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle)
-    return True
-
-def showChannelHighlights(channel, category=''):
-    highlights = sevenTv.getChannelHighlights(channel)
-    
-    channel_logo = image_dict.get(channel, "")
-    
-    showHighlight = None
-    for highlight in highlights:
-        title = highlight.get('title', '')
-        if category!='' and title==category:
-            showHighlight = highlight
-            break
-        
-        if category=='' and title!='' and title!='Favoriten' and title!='Live TV' and title!='Deine gemerkten Videos' and title!='Empfehlungen':
-            params = {'channel': channel,
-                      'action': ACTION_SHOW_CHANNEL_HIGHLIGHTS,
-                      'category': title.encode('utf-8')}
-            bromixbmc.addDir(localizeString(title), params=params, thumbnailImage=channel_logo)
-            pass
-        
-    if showHighlight!=None:
-        screen_objects = sevenTv.getSortedScreenObjects(showHighlight)
+        videoList = None
+        # list all objects except 'Ganze Folgen' = full episodes
         for screen_object in screen_objects:
-            addScreenObject(channel, screen_object)
+            title = screen_object.get('title', '')
+            if title==category:
+                videoList = screen_object
+                
+            if title!='Ganze Folgen' and category=='Ganze Folgen' and title!='Favoriten':
+                if len(screen_object.get('screen_objects', {}))>0:
+                    params = {'channel': channelId,
+                              'show': show,
+                              'action': ACTION_SHOW_SHOW_CONTENT,
+                              'category': title.encode('utf-8')}
+                    bromixbmc.addDir("[B]"+localizeString(title)+"[/B]", params=params, thumbnailImage=thumbnailImage, fanart=fanart)
+                    
+        if videoList!=None:
+            sorted_videos = sevenTv.getSortedScreenObjects(videoList)
+            for screen_object in sorted_videos: 
+                addScreenObject(channelId, screen_object, fanart)
+        pass
     
     xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle)
-    return True
+
+def showChannelHighlights(channelId, category=''):
+    highlights = sevenTv.getChannelHighlights(channelId)
+    
+    channel = __CHANNELS__.get(channelId, None)
+    if channel!=None:
+        thumbnailImage = channel.get('logo', '')
+    
+        showHighlight = None
+        for highlight in highlights:
+            title = highlight.get('title', '')
+            if category!='' and title==category:
+                showHighlight = highlight
+                break
+            
+            if category=='' and title!='' and title!='Favoriten' and title!='Live TV' and title!='Deine gemerkten Videos' and title!='Empfehlungen':
+                params = {'channel': channelId,
+                          'action': ACTION_SHOW_CHANNEL_HIGHLIGHTS,
+                          'category': title.encode('utf-8')}
+                bromixbmc.addDir(localizeString(title), params=params, thumbnailImage=thumbnailImage)
+                pass
+            
+        if showHighlight!=None:
+            screen_objects = sevenTv.getSortedScreenObjects(showHighlight)
+            for screen_object in screen_objects:
+                addScreenObject(channelId, screen_object)
+        pass
+    
+    xbmcplugin.endOfDirectory(bromixbmc.Addon.Handle)
 
 def showFavoriteShows():
     favs = bromixbmc.Addon.getFavorites()

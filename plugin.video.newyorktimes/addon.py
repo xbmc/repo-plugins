@@ -20,6 +20,8 @@ settings = xbmcaddon.Addon(id='plugin.video.newyorktimes')
 #
 ###
 
+import re
+
 plugin = Plugin()
 
 
@@ -57,8 +59,11 @@ def update_url_for_rtmp(url, XXL4HIRES):
     For brightcove urls, the playpath is after the '&'.
 
     '''
-    if XXL4HIRES == 'true': url=url.replace('_xl_','_xxl_')
-    ###print "XXL4HIRES = " + XXL4HIRES + " url = " + url
+    # 201408: new renditions (video resolutions) have been added... and FLVURL is anchored to 3g resolution (?)
+    #         maybe in the future renditions[] should be parsed and resolution selected by "encodingRate".
+    url = re.sub(r'^(.+_wg_16x9)_.+_.+_.+\.mp4$', r'\1_xl_bb_mm.mp4', url)
+    if XXL4HIRES == 'true': 
+        url=url.replace('_xl_bb_mm.mp4','_xxxl_hb_mm.mp4') 
     if url.startswith('rtmp'):
         return '%s playpath=%s' % (url, url.split('&', 1)[1])
     return url

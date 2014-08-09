@@ -1,5 +1,5 @@
+import urllib
 import urllib2
-import re
 
 class Relinker:
     # Rai.tv android app
@@ -27,7 +27,12 @@ class Relinker:
         # A stream will be returned depending on the UA (and pl parameter?)
         url = url + "&output=20"
         print "Relinker URL: %s" % url
+        
         response = urllib2.urlopen(url)
         mediaUrl = response.read().strip()
+        
+        # Workaround to normalize URL if the relinker doesn't
+        mediaUrl = urllib.quote(mediaUrl, safe="%/:=&?~#+!$,;'@()*[]")
+        
         return mediaUrl
         

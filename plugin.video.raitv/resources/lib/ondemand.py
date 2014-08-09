@@ -1,8 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
-import sys
-import urllib
 import urllib2
-import re
 import json
 from operator import itemgetter
 from xml.dom import minidom

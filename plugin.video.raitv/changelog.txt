@@ -1,3 +1,11 @@
+[B]1.0.10[/B]
+- Force replay availability for Rai Gulp and Rai YoYo.
+- Better stream selection in RAI Replay. Plot is now shown too.
+- Show RAI Replay dates starting from yesterday.
+- Use bigger logo thumbnails in Dirette TV and RAI Replay.
+- Normalize relinker URLs if not properly encoded. Now "Sereno Variabile" works.
+- Minor fixes.
+
 [B]1.0.9[/B]
 - fixed RAI relinker (closes #7).
 

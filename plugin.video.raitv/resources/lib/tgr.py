@@ -1,7 +1,4 @@
-import sys
-import urllib
 import urllib2
-import httplib
 from xml.dom import minidom
 
 class TGR:

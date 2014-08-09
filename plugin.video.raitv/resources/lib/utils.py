@@ -7,4 +7,4 @@ def sortedDictKeys(adict):
 
 def daterange(start_date, end_date):
     for n in range((end_date - start_date).days + 1):
-        yield start_date + datetime.timedelta(n)
+        yield end_date - datetime.timedelta(n)

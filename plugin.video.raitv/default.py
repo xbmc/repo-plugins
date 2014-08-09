@@ -8,6 +8,7 @@ import xbmcaddon
 import urllib
 import urlparse
 import datetime
+import StorageServer
 from resources.lib.tgr import TGR
 from resources.lib.search import Search
 from resources.lib.onair import onAir
@@ -26,6 +27,11 @@ Addon = xbmcaddon.Addon(id=__plugin__)
 
 # plugin handle
 handle = int(sys.argv[1])
+
+# Cache channels for 1 hour
+cache = StorageServer.StorageServer("plugin.video.raitv", 0) # (Your plugin name, Cache time in hours)
+tv_stations = cache.cacheFunction(stations.get_tv_stations)
+radio_stations = cache.cacheFunction(stations.get_radio_station)
 
 # utility functions
 def parameters_string_to_dict(parameters):
@@ -142,16 +148,16 @@ def play(title, url, thumbailUrl="", uniquename="", mediatype="RaiTv Media Video
     xbmc.Player().play(url, item)
 
 def show_tv_channels():
-    for station in stations.tv_stations:
+    for station in tv_stations:
         if station["diretta"] == "YES":
-            liStyle = xbmcgui.ListItem(station["name"])
+            liStyle = xbmcgui.ListItem(station["name"], thumbnailImage=station["icon"])
             addLinkItem({"mode": "play",
                 "title": station["name"],
                 "url": station["direttaLink"]}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_radio_stations():
-    for station in stations.radio_stations:
+    for station in radio_stations:
         liStyle = xbmcgui.ListItem(station["nome"], thumbnailImage=station["logo_menu"])
         addLinkItem({"mode": "play",
             "title": station["nome"],
@@ -159,9 +165,9 @@ def show_radio_stations():
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_replay_channels():
-    for station in stations.tv_stations:
+    for station in tv_stations:
         if station["hasReplay"] == "YES":
-            liStyle = liStyle = xbmcgui.ListItem(station["name"], thumbnailImage=station["icon"].replace(".png", "-big.png"))
+            liStyle = xbmcgui.ListItem(station["name"], thumbnailImage=station["icon"])
             addDirectoryItem({"mode": "replay",
                 "channel_id": station["id"]}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
@@ -184,10 +190,10 @@ def show_replay_dates(channelId):
 def show_replay_epg(channelId, date):
     replay = Replay()
     
-    channelName = ""
-    for station in stations.tv_stations:
+    for station in tv_stations:
         if station["id"] == channelId:
             channelTag = station["tag"]
+            break
     
     programmes = replay.getProgrammes(channelId, channelTag, date)
     
@@ -195,22 +201,47 @@ def show_replay_epg(channelId, date):
     timetable = utils.sortedDictKeys(programmes)
 
     for entry in timetable:
-        if programmes[entry]["h264"] == "":
-            # program is not available
-            title = entry + " " + programmes[entry]["t"]
-            liStyle = xbmcgui.ListItem(title,
-                thumbnailImage=programmes[entry]["image"])
-            addLinkItem({"mode": "nop",
-                "title": programmes[entry]["t"].encode('utf8'),
-                "thumbnail": programmes[entry]["image"]}, liStyle)
+        recording = programmes[entry]
+                
+        title = recording["t"]
+        
+        if recording["d"] != "":
+            plot = recording["d"]
         else:
-            title = "[COLOR blue]" + entry + " " + programmes[entry]["t"] + "[/COLOR]"
-            liStyle = xbmcgui.ListItem(title,
-                thumbnailImage=programmes[entry]["image"])
+            plot = None
+        
+        if recording["image"] != "":
+            thumbnail = recording["image"]
+        else:
+            thumbnail = None
+    
+        if recording["urlTablet"] != "":
+            videoUrl = recording["urlTablet"]
+        elif recording["h264"] != "":
+            videoUrl = recording["h264"]
+        else:
+            videoUrl = None
+        
+        if videoUrl is None:
+            # programme is not available
+            liStyle = xbmcgui.ListItem(entry + " " + title,
+                thumbnailImage=thumbnail)
+            liStyle.setInfo(type="Video", infoLabels={"Title" : title,
+                "Label": title,
+                "Plot": plot})
+            addLinkItem({"mode": "nop",
+                "title": title.encode('utf8'),
+                "thumbnail": thumbnail}, liStyle)
+        else:
+            liStyle = xbmcgui.ListItem("[COLOR blue]" + entry + " " + title + "[/COLOR]",
+                thumbnailImage=thumbnail)
+            liStyle.setInfo(type="Video", infoLabels={"Title" : title,
+                "Label": title,
+                "Plot": plot})
             addLinkItem({"mode": "play",
-                "title": programmes[entry]["t"].encode('utf8'),        
-                "url": programmes[entry]["h264"],
-                "thumbnail": programmes[entry]["image"]}, liStyle)
+                "title": title.encode('utf8'),
+                "url": videoUrl,
+                "thumbnail": thumbnail}, liStyle)
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
 def show_ondemand_root():

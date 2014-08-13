@@ -2,7 +2,6 @@
 <settings>
   <category label="General">
     <setting id="playback" type="enum" lvalues="30015|30016|30017|30018" label="30014" default="1" />
-    <setting id="debug" type="bool" label="30019" default="false" />
     <setting id="view_mode" type="enum" label="30025" lvalues="30026|30027|30028|30029|30030|30031|30032|30033|30034" default="8" />
     <setting id="show_art" type="bool" label="30035" default="true" />
     <setting id="first_run" type="text" visible="false" default="true" />

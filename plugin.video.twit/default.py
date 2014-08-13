@@ -59,7 +59,8 @@ def make_request(url, locate=False):
 
 
 def shows_cache():
-    ''' this function checks for shows that haven't been cached '''
+    ''' this function updates the shows cache '''
+    shows = eval(cache.get('shows'))
     url = base_url + '/shows'
     soup = BeautifulSoup(make_request(url), 'html.parser')
     active_list = soup.findAll('div', class_='item-list')[2]('li')
@@ -82,7 +83,27 @@ def shows_cache():
                 thumb = addon_icon
                 try:
                     location = make_request(base_url + i('a')[-1]['href'], True)
-                    show_url = location.rsplit('/', 1)[0]
+                    # the location url points to an episode, we want the full list
+                    show_url = None
+                    episode == location.rsplit('/', 1)[1]
+                    # sometimes the episode is seperated with a dash instead of a slash
+                    if '-' in episode:
+                        episode == location.rsplit('-', 1)[1]
+                        try:
+                            int(episode)
+                            show_url = location.rsplit('-', 1)[0]
+                        except ValueError:
+                            pass
+                    else:
+                        try:
+                            int(episode)
+                            show_url = location.rsplit('/', 1)[0]
+                        except ValueError:
+                            pass
+                    # if there is not an episode we will skip caching
+                    if show_url is None:
+                        addon_log('Not caching new show: %s' %name)
+                        return "True"
                     addon_log('Show URL: %s' %show_url)
                     soup = BeautifulSoup(make_request(show_url), 'html.parser')
                     desc_tag = soup.find('div', class_='field-content')
@@ -94,20 +115,23 @@ def shows_cache():
                     if thumb_tag and thumb_tag.find('img'):
                         thumb = thumb_tag.img['src']
                     shows[show_type][name] = {'show_url': url, 'thumb': thumb, 'description': desc}
-                    cache.set('shows', repr(shows))
                     addon_log('Cached new show: %s' %name)
                 except:
                     addon_log('addonException cache new show: %s' %format_exc)
+            if shows['active'].has_key(name) and show_type == 'retired':
+                del shows['active'][name]
+    cache.set('shows', repr(shows))
     return "True"
 
 
 def display_shows():
     ''' display the main directory '''
-    # check for new shows at the set cacheFunction interval
+    # update the show cache at the set cacheFunction interval
     cache_shows = eval(cache.cacheFunction(shows_cache))
     live_icon = 'http://twit-xbmc.googlecode.com/svn/images/live_icon.png'
     add_dir(language(30000), 'latest_episodes', addon_icon, 'latest_episodes')
     add_dir(language(30001), 'twit_live', live_icon, 'twit_live')
+    shows = eval(cache.get('shows'))
     items = sorted(shows['active'].keys(), key=str.lower)
     for i in items:
         item = shows['active'][i]

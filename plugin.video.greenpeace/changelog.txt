@@ -1,3 +1,7 @@
+1.1.7 (2014.08.11)
+- Removed the Vimeo add-on dependency due to a problem found running on Gotham.
+- Added custom Vimeo scraper to support the Vimeo videos again.
+- Added mail tag to addon.xml
 1.1.6
 - Updated language files from Transifex.
 1.1.5

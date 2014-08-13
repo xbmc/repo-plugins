@@ -408,14 +408,17 @@ def get_playable_youtube_url(html):
 # This funtion search into the URL link to get the video URL for Vimeo.
 def get_playable_vimeo_url(html):
 
-    pattern_vimeo = '<input type="text" id="linkvideo" value="http://vimeo.com/([0-9]+)'
-    video_id = lutil.find_first(html, pattern_vimeo)
+    video_pattern_sd = '"sd":{.*?,"url":"([^"]*?)"'
+    pattern_vimeo    = '<input type="text" id="linkvideo" value="http://vimeo.com/([0-9]+)'
+    video_id         = lutil.find_first(html, pattern_vimeo)
 
     if video_id:
         lutil.log("greenpeace.play: We have found this Vimeo video with video_id: %s and let's going to play it!" % video_id)
-        video_url = "plugin://plugin.video.vimeo/?path=/root/video&action=play_video&videoid=" + video_id
-        return video_url
+        video_info_url = 'https://player.vimeo.com/video/' + video_id
+        buffer_link    = lutil.carga_web(video_info_url)
+        return lutil.find_first(buffer_link, video_pattern_sd)
 
     return ""
+
 
 run()

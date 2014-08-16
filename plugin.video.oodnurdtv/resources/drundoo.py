@@ -1,6 +1,13 @@
 #drundoo class for handling web site
 
-from requests2 import session
+try:
+    import requests2 as requests
+except ImportError:
+    import requests
+session = requests.session
+
+#from requests2 import session
+
 import bs4
 
 URL = 'http://www.drundoo.com/users/login/'
@@ -57,15 +64,20 @@ class drundoo:
                 play_list = []
                 temp = self.open_site(link)
 
-                start1 = temp.find('url: "') + 'url: "'.__len__()
-                end1 = temp.find('",\n\t\t\tdataType:')
+                if temp.find('"playlistUrl": "') > -1:
+                    start1 = temp.find('"playlistUrl": "') + '"playlistUrl": "'.__len__()
+                    end1 = temp.find('","showVideoInfoOverlayOnStartUp":')
 
+                else:
+                    start1 = temp.find('url: "') + 'url: "'.__len__()
+                    end1 = temp.find('",\n\t\t\tdataType:')
+                
                 link = 'http://www.drundoo.com' + temp[start1:end1]
 
                 temp = self.open_site(link)
                 start1 = temp.find('smil_url":"') + 'smil_url":"'.__len__()
-                end1 = temp.find('.f4m')
-                play_link = temp[start1:end1].replace('\\','').replace('manifest','master.m3u8')
+                end1 = temp.find('","title"')
+                play_link = temp[start1:end1].replace('\\','').replace('manifest.f4m','master.m3u8')
                 play_list.append(play_link)
 
                 return play_list[0]

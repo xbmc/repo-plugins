@@ -11,9 +11,4 @@
 <string id="30019">Please support the video content provider![CR][CR]</string>
 <string id="30020">[B]http://www.richplanet.net/sponsor.php[/B]</string>
 <string id="30021">Search..</string>
-<!-- Settings start at 30500 -->
-<string id="30501">Video quality</string>
-<string id="30502">Low definition</string>
-<string id="30503">Standard definition</string>
-<string id="30504">High definition</string>
 </strings>

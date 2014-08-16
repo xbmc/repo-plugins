@@ -1,3 +1,7 @@
+3.0.1 (2014/08)
+- update due to website changes
+- paging support
+
 3.0.0 (2013/08)
 - update due to website changes
 - list videos in categories

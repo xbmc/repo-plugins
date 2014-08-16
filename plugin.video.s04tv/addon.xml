@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.s04tv" name="S04tv" version="3.0.0" provider-name="malte">
+<addon id="plugin.video.s04tv" name="S04tv" version="3.0.1" provider-name="malte">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.mechanize" version="0.2.5"/>

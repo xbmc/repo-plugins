@@ -1,8 +1,0 @@
-[B]2.0.1:[/B]
-- fixes for eden
-[B]1.0.1:[/B]
-- fixed: playing m3u/mp3 stations
-- fixed: plugin error when stations having no logo 
-- fixed: parsing ASX playlists
-[B]1.0.0:[/B]
-Initial version

@@ -43,7 +43,7 @@ class ITTests(unittest.TestCase):
         self.assertTrue(len(api.get_playable_url(url)) > 10)
 
     def test_dailymotion_scraper(self):
-        url='http://www.filmsforaction.org/watch/plastic-paradise-the-great-pacific-garbage-patch-2013/'
+        url='http://www.filmsforaction.org/watch/pbs_frontline_is_walmart_good_for_america_2005/'
         self.assertTrue(len(api.get_playable_url(url)) > 10)
 
     def test_tagtele_scraper(self):

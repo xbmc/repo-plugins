@@ -1,3 +1,6 @@
+1.0.4
+- Fixed Next/Previous Page entries due to website changes.
+- Updated Dailymotion scraper to support more video formats.
 1.0.3
 - Rewriten video list parser to make it more tolerant to website changes.
 - Replaced builtin Disclose TV parser on behalf of Disclose TV add-on (credits: sphere)

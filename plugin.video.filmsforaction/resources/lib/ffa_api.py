@@ -60,57 +60,63 @@ def get_videolist(url, localized=lambda x: x):
     video_rating_pattern   = '([0-9.]+?[ ]+?[Ss]tars)'
     video_views_pattern    = '([0-9,]+?[ ]+?[Vv]iews)'
     video_author_pattern   = '([Aa]dded by).*?<a href=["\']/[^/]*?/["\'][ ]*?>([^<]*?)</a>'
-    page_count_pattern     = '<span id="C_SR_LabelResultsCount[^"]*?">([0-9]*?)-([0-9]*?) of ([0-9]*?) [^<]*?</span>'
-    prev_page_pattern      = '<div style="float:left">[^<]*?<a href="([^"]*?)"><img id="C_SR_IPrevious"'
-    next_page_pattern      = '<div style="float:right">[^<]*?<a href="([^"]*?)"><img id="C_SR_INext"'
+    page_num_pattern       = 'href=["\']http[^"\']*?p=([0-9]+?)'
+    page_num_url_pattern   = 'href=["\'](http[^"\']*?p=%d[^"\']*?)["\']'
+    page_num_cur_pattern   = 'p=([0-9]+?)'
 
     buffer_url = l.carga_web(url)
 
     video_list = []
 
-    first_video, last_video, total_videos = l.find_first(buffer_url, page_count_pattern) or ('0', '0', '0')
-    current_page = (int(first_video) / 50) + 1
-    last_page = (int(total_videos) / 50) + 1
-    next_page_num = current_page + 1 if current_page < last_page else 0
-    prev_page_num = current_page - 1
     reset_cache = False
+    current_page_num = int(l.find_first(url, page_num_cur_pattern) or '1')
+    last_page_num = int(max(l.find_multiple(buffer_url, page_num_pattern) or ('1',), key=int))
 
-    if prev_page_num:
-        previous_page_url = l.find_first(buffer_url, prev_page_pattern)
+    if current_page_num != 1:
+        prev_page_num = current_page_num - 1
+        previous_page_url = l.find_first(buffer_url, page_num_url_pattern % prev_page_num)
         video_entry = { 'url': previous_page_url, 'title': '<< %s (%d)' % (localized('Previous page'), prev_page_num), 'IsPlayable': False }
         video_list.append(video_entry)
         reset_cache = True
 
-    for video_index, video_section in enumerate(buffer_url.split(video_entry_sep)):
-        if video_index:
-            category = l.find_first(video_section, video_cat_pattern)
-            if category:
-                url           = l.find_first(video_section, video_url_pattern)
-                thumb         = l.find_first(video_section, video_thumb_pattern)
-                title         = l.find_first(video_section, video_title_pattern)
-                plot          = l.find_first(video_section, video_plot_pattern)
-                duration      = l.find_first(video_section, video_duration_pattern)
-                rating        = l.find_first(video_section, video_rating_pattern)
-                views         = l.find_first(video_section, video_views_pattern)
-                label, author = l.find_first(video_section, video_author_pattern) or ('', '')
-                l.log('Video info. url: "%s" thumb: "%s" title: "%s" category: "%s"' % (url, thumb, title, category))
-                l.log('Video tags. duration: "%s" rating: "%s" views: "%s" author: "%s %s"' % (duration, rating, views, label, author))
-                video_entry = { 
-                    'url': root_url + url,
-                    'title': title.strip() or '.',
-                    'thumbnail': root_url + thumb,
-                    'plot': "%s\n%s - %s - %s - %s\n%s %s" % (plot.strip(), category, duration, views, rating, label, author),
-                    'duration': int(duration.split()[0]) if duration else 0,
-                    'rating': rating.split()[0] if rating else '',
-                    'genre': category,
-                    'credits': author,
-                    'IsPlayable': True
-                    }
-                video_list.append(video_entry)
+    for video_section in buffer_url.split(video_entry_sep)[1:]:
+        category = l.find_first(video_section, video_cat_pattern)
+        if category:
+            url           = l.find_first(video_section, video_url_pattern)
+            thumb         = l.find_first(video_section, video_thumb_pattern)
+            title         = l.find_first(video_section, video_title_pattern)
+            plot          = l.find_first(video_section, video_plot_pattern)
+            duration      = l.find_first(video_section, video_duration_pattern)
+            rating        = l.find_first(video_section, video_rating_pattern)
+            views         = l.find_first(video_section, video_views_pattern)
+            label, author = l.find_first(video_section, video_author_pattern) or ('', '')
+            l.log('Video info. url: "%s" thumb: "%s" title: "%s" category: "%s"' % (url, thumb, title, category))
+            l.log('Video tags. duration: "%s" rating: "%s" views: "%s" author: "%s %s"' % (duration, rating, views, label, author))
+            video_entry = {
+                'url'        : root_url + url,
+                'title'      : title.strip() or '.',
+                'thumbnail'  : root_url + thumb,
+                'plot'       : "%s\n%s - %s - %s - %s\n%s %s" % (
+                                plot.strip(),
+                                category,
+                                duration,
+                                views,
+                                rating,
+                                label,
+                                author,
+                                ),
+                'duration'   : int(duration.split()[0]) if duration else 0,
+                'rating'     : rating.split()[0] if rating else '',
+                'genre'      : category,
+                'credits'    : author,
+                'IsPlayable' : True
+                }
+            video_list.append(video_entry)
 
-    if next_page_num:
-        next_page_url = l.find_first(buffer_url, next_page_pattern)
-        video_entry = { 'url': next_page_url, 'title': '>> %s (%d/%d)' % (localized('Next page'), next_page_num, last_page), 'IsPlayable': False }
+    if current_page_num < last_page_num:
+        next_page_num = current_page_num + 1
+        next_page_url = l.find_first(buffer_url, page_num_url_pattern % next_page_num)
+        video_entry = { 'url': next_page_url, 'title': '>> %s (%d/%d)' % (localized('Next page'), next_page_num, last_page_num), 'IsPlayable': False }
         video_list.append(video_entry)
 
     return { 'video_list': video_list, 'reset_cache': reset_cache }
@@ -170,13 +176,18 @@ def get_playable_youtube_url(video_id):
 
 def get_playable_dailymotion_url(video_id):
     """This function returns the playable URL for the Dalymotion embedded video from the video_id retrieved."""
-    pattern_daily_video = '"stream_h264_hq_url":"(.+?)"'
+    daily_video_patterns = (
+        '"stream_h264_hq_url":"(.+?)"',
+        '"stream_h264_url":"(.+?)"',
+        '"stream_h264_ld_url":"(.+?)"',
+        )
 
     daily_url = 'http://www.dailymotion.com/embed/video/' + video_id
     buffer_link = l.carga_web(daily_url)
-    video_url = l.find_first(buffer_link, pattern_daily_video)
-    if video_url:
-        return video_url.replace('\\','')
+    for pattern_daily_video in daily_video_patterns:
+        video_url = l.find_first(buffer_link, pattern_daily_video)
+        if video_url:
+            return video_url.replace('\\', '')
 
 
 def get_playable_archiveorg_url(archive_url):

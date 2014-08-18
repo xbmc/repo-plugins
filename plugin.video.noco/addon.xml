@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.noco" name="noco" version="1.0.8" provider-name="Julien Gormotte (gormux)">
+<addon id="plugin.video.noco" name="noco" version="1.0.10" provider-name="Julien Gormotte (gormux)">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
-    <import addon="script.module.requests2" version="2.2.1"/>
+    <import addon="script.module.requests" version="2.3.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>

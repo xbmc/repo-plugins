@@ -39,7 +39,7 @@
     <string id="30230">Massengeschmack-TV</string>
     <string id="30231">Comedy, Scripted Reality</string>
     <string id="30232">Germany</string>
-    <string id="30233">Massengeschmack-TV is the satirical answer to all the scripted reality shows on the major TV networks. Obviously inspired by “The Office” and “Stromberg”, the series depicts the daily routine at the Alsterfilm studio.[CR][CR]Additionally to the comedy series, certain videos and uncategorized extras about the Massengeschmack network are published under the label “Massengeschmack-TV“, too.</string>
+    <string id="30233">In this category you find all extra content regarding Massengeschmack such as „Massengeschmack Direkt“ or the satirical weekly show „Das Studio“.</string>
     
     <string id="30240">Pasch-TV</string>
     <string id="30241">Let's Play, Board Game</string>
@@ -87,17 +87,21 @@
     <string id="30350">All Fernsehkritik-TV episodes and extras, including Postecke, uncut interview and other specials.</string>
     <string id="30351">Regular Fernsehkritik-TV episodes.</string>
     <string id="30352">Postecke</string>
-    <string id="30353">Postecke is a video podcast where Holger reads and answers letters from Fernsehkritik-TV viewers.</string>
+    <string id="30353">Postecke is a video podcast where Holger reads and answers letters from Fernsehkritik-TV viewers (now replaced by Massengeschmack Direkt).</string>
     <string id="30354">Uncut interviews.</string>
     <string id="30355">Various extras.</string>
     <string id="30356">Sendeschluss</string>
     <string id="30357">Sendeschluss is a weekly retro TV magazine in which Holger deals with either very iconic or very bizarre TV shows from back in the day.</string>
     
     <string id="30360">Das Studio</string>
-    <string id="30361">All Massengeschmack-TV episodes, including “Das Studio” and any extras.</string>
-    <string id="30362">“Das Studio” is the Massengeschmack-TV reality TV show. It is guaranteed to be fake and scripted!</string>
+    <string id="30361">All Massengeschmack-TV content, including “Massengeschmack Direkt“, “Das Studio” and any extras.</string>
+    <string id="30362">“Das Studio” is the Massengeschmack reality show. It is guaranteed to be fake and scripted!</string>
     <string id="30363">Massengeschmack Internal</string>
     <string id="30364">Massengeschmack announcements and uncategorized extras.</string>
+    <string id="30365">Massengeschmack Direkt</string>
+    <string id="30366">Fan mail and live talk for subscribers.</string>
+    <string id="30367">-> Massengeschmack Direkt</string>
+    <string id="30368">Postecke has been replaced by “Massengeschmack Direkt”. Click on this link to go to the new “Massengeschmack Direkt” category. You can also find it in the main category „Massengeschmack-TV“</string>
     
     <!-- General runtime error messages -->
     <string id="30901">Invalid internal command![CR]This is probably a bug. You should report it if it happens more often.</string>

@@ -388,6 +388,22 @@ class FKTVDataSource(DataSource):
         data      = resources.lib.parseRSSFeed(self.__urls[quality][submodule], True)
         listItems = []
         
+        # in old Postecke category show link to Massengeschmack Direkt
+        if 'postecke' == submodule:
+            listItems.append(
+                ListItem(
+                    MGTVDataSource.id,
+                    ADDON.getLocalizedString(30367),
+                    resources.lib.assembleListURL(MGTVDataSource.module, 'direkt'),
+                    ADDON_BASE_PATH + '/resources/media/banner-' + MGTVDataSource.module + 'direkt.png',
+                    ADDON_BASE_PATH + '/resources/media/fanart-' + MGTVDataSource.module + '.jpg',
+                    {
+                        'Title' : ADDON.getLocalizedString(30367),
+                        'Plot'  : ADDON.getLocalizedString(30368)
+                    }
+                )
+            )
+        
         for i in data:
             iconimage = i["thumbUrl"]
             date      = resources.lib.parseUTCDateString(i['pubdate']).strftime('%d.%m.%Y')
@@ -721,19 +737,22 @@ class MGTVDataSource(DataSource):
     def __init__(self):
         self.__urls = {
             'hd' : {
-                'all'      : DataSource._buildFeedURL(self, [1, 2], 'hd'),
+                'all'      : DataSource._buildFeedURL(self, [1, 2, 3], 'hd'),
                 'internal' : DataSource._buildFeedURL(self, [1], 'hd'),
-                'studio'   : DataSource._buildFeedURL(self, [2], 'hd')
+                'studio'   : DataSource._buildFeedURL(self, [2], 'hd'),
+                'direkt'   : DataSource._buildFeedURL(self, [3], 'hd')
             },
             'mobile' : {
-                'all'      : DataSource._buildFeedURL(self, [1, 2], 'mobile'),
+                'all'      : DataSource._buildFeedURL(self, [1, 2, 3], 'mobile'),
                 'internal' : DataSource._buildFeedURL(self, [1], 'mobile'),
-                'studio'   : DataSource._buildFeedURL(self, [2], 'mobile')
+                'studio'   : DataSource._buildFeedURL(self, [2], 'mobile'),
+                'direkt'   : DataSource._buildFeedURL(self, [3], 'mobile')
             },
             'audio' : {
-                'all'      : DataSource._buildFeedURL(self, [1, 2], 'audio'),
+                'all'      : DataSource._buildFeedURL(self, [1, 2, 3], 'audio'),
                 'internal' : DataSource._buildFeedURL(self, [1], 'audio'),
-                'studio'   : DataSource._buildFeedURL(self, [2], 'audio')
+                'studio'   : DataSource._buildFeedURL(self, [2], 'audio'),
+                'direkt'   : DataSource._buildFeedURL(self, [3], 'audio')
             }
         }
     
@@ -810,7 +829,7 @@ class MGTVDataSource(DataSource):
                 self.id,
                 ADDON.getLocalizedString(30300),
                 resources.lib.assembleListURL(self.module, 'all'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
+                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '_20140818.png',
                 ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
                 {
                     'Title': ADDON.getLocalizedString(30300),
@@ -822,11 +841,23 @@ class MGTVDataSource(DataSource):
                 self.id,
                 ADDON.getLocalizedString(30360),
                 resources.lib.assembleListURL(self.module, 'studio'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
+                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + 'studio.png',
                 ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
                 {
                     'Title': ADDON.getLocalizedString(30360),
                     'Plot': ADDON.getLocalizedString(30362)
+                }
+            ),
+            # Massengeschmack Direkt
+            ListItem(
+                self.id,
+                ADDON.getLocalizedString(30365),
+                resources.lib.assembleListURL(self.module, 'direkt'),
+                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + 'direkt.png',
+                ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
+                {
+                    'Title': ADDON.getLocalizedString(30365),
+                    'Plot': ADDON.getLocalizedString(30366)
                 }
             ),
             # Massengeschmack Internal
@@ -834,7 +865,7 @@ class MGTVDataSource(DataSource):
                 self.id,
                 ADDON.getLocalizedString(30363),
                 resources.lib.assembleListURL(self.module, 'internal'),
-                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '.png',
+                ADDON_BASE_PATH + '/resources/media/banner-' + self.module + '_20140818.png',
                 ADDON_BASE_PATH + '/resources/media/fanart-' + self.module + '.jpg',
                 {
                     'Title': ADDON.getLocalizedString(30363),

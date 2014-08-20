@@ -43,6 +43,7 @@
 #31.3.2014 Version 4.0.2, change from tvkaista.fi to tvkaista.com
 #26.6.2014 Changed search to searching both title and description all the time.
 #27.6.2014 Version 4.1.0, Changed hardcoded strings to translated ones
+#19.8.2014 Version 4.1.1, fix unicode bug with search
 
 #tvkaista api documentation is at https://code.google.com/p/tvkaista-api/
 
@@ -410,7 +411,7 @@ def listsearches():
 
   for i in tvkaista_addon.getSetting("searches").splitlines():
     u=sys.argv[0]+"?url="+urllib.quote_plus('http://www.tvkaista.com/feed/search/either/'+urllib.quote_plus(i))+"&mode=2"
-    listfolder = xbmcgui.ListItem(language(30106)+': '+i) #haku
+    listfolder = xbmcgui.ListItem(language(30106)+': '+i.decode('utf-8')) #haku
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), u, listfolder, isFolder=1)
 
   if(tvkaista_addon.getSetting("searches") != ""):

@@ -33,7 +33,7 @@ class Navigation:
             elif 'data-value="All Teams"' in i.contents[0]:
                 nav['teams'] = parse_soup(BeautifulSoup(i.contents[0], convertEntities=BeautifulSoup.HTML_ENTITIES))
                 self.team = set_selected(nav['teams'])
-            elif 'data-value="REG"' in i.contents[0]:
+            elif 'data-value="REG"' in i.contents[0] or 'data-value="PRE"' in i.contents[0] or 'data-value="POST"' in i.contents[0]:
                 nav['seasontypes'] = parse_soup(BeautifulSoup(i.contents[0], convertEntities=BeautifulSoup.HTML_ENTITIES))
                 self.season_type = set_selected(nav['seasontypes'])
             elif 'data-value="1"' in i.contents[0]:
@@ -46,7 +46,7 @@ class Navigation:
                         self.game = set_selected(nav['games'])
                 except:
                     pass
-                    
+
         self.nav = nav
         return nav
 
@@ -63,7 +63,7 @@ class Navigation:
         season_types = ['PRE','REG', 'POST']
 
         if href is None:
-            filter = '/byWeek/2013/REG/' + self.nav['weeks'][-1]['value']
+            filter = '/bySeasonType/%s/%s' %(self.nav['seasons'][-1]['value'], self.nav['seasontypes'][-1]['value'])
         else:
             items = href.split('/')
             try:

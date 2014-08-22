@@ -1,0 +1,16 @@
+Version 2.0.0 (11/08/2014)
+-Addon re-coded
+-Added archive section
+-Added view system
+-Removed GA crap
+-Added plot/icon for show/episode
+-Proper episode video part grabbing
+-Quicker navigation
+-Settings and translation strings (for general content)
+
+Version 1.2.0
+* Bump gotham
+
+Version 1.0.1
+* First addon release
+

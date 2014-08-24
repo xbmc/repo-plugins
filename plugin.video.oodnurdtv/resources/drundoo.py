@@ -1,9 +1,6 @@
 #drundoo class for handling web site
 
-try:
-    import requests2 as requests
-except ImportError:
-    import requests
+import requests
 session = requests.session
 
 #from requests2 import session

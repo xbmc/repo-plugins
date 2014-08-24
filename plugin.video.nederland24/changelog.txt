@@ -1,3 +1,6 @@
+[B]4.2.2 - Gotham[/B]
+-fix missing dep beautifulsoup
+
 [B]4.2.1 - Gotham[/B]
 -fix livestream referrer
 

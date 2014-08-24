@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nederland24" name="Nederland 24" version="4.2.1" provider-name="bosel">
+<addon id="plugin.video.nederland24" name="Nederland 24" version="4.2.2" provider-name="bosel">
   <requires>
       <import addon="xbmc.python" version="2.14.0"/>
+      <import addon="script.module.beautifulsoup" version="3.0.8"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="nederland24.py">
       <provides>video</provides>

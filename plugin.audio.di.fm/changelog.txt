@@ -3,6 +3,10 @@
 - Removed feature
 
 
+24. August 2014 v3.0.5
+* Fixed url for channel asset/graphics
+
+
 29. June 2014 v3.0.4
 * Channel description no longer available, using name instead
 

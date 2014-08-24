@@ -270,7 +270,7 @@ class musicAddonXbmc:
         if not os.path.exists(self.addonProfilePath + str(channel['id']) + '.png'):
             isNew = 1
             self.newChannels += 1
-            self.getChannelAsset(str(channel['id']), channelMeta[str(channel['id'])]['asset_url'])
+            self.getChannelAsset(str(channel['id']), "http:" + channelMeta[str(channel['id'])]['asset_url'])
 
         if ADDON.getSetting('randomstream') == "true":
             playlist = self.curler.request(channel['playlist'] + self.listenKey, 'get')

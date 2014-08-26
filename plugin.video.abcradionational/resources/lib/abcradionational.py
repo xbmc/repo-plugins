@@ -2,59 +2,39 @@ import requests
 from BeautifulSoup import BeautifulSoup
 import re
 
-ABC_URL= "http://abc.net.au/radionational/rntv"
+ABC_URL = "http://abc.net.au/radionational/rntv"
 
-def get_podcasts():
-    """
-    returns videos from radionational - RNTV website
-    """
+
+def get_videos():
+    """Return videos from Radio National's RNTV website"""
     url = ABC_URL
     page = requests.get(url)
     soup = BeautifulSoup(page.text)
-    
-    urls = soup.findAll('a' , 'external')
-    titles = soup.findAll('h3', 'title')
-    thumbs = soup.findAll('img')
-    infos = soup.findAll('p')
-    
-    info_out = []
-    for info in infos:
-        if len(info.text) > 50:
-            info_out.append(info.text)
-    print len(info_out)
-    
-    thumb_sec = thumbs[1:42]
-    thumb_out = []
-    for thumb in thumb_sec:
-        thumb_out.append(thumb['src'])
-    print len(thumb_out)
-
-    title_out = []
-    for title in titles:
-        title_out.append(re.sub('&#039;', "'",title.text))
-    print len(title_out)
-
-    path = []
-    for u in urls:
-        if 'youtube' in str(u):
-            path.append(u['href'])
-
-    path_out = []
-    for i in path:
-        path_out.append(i[-11:])
-    print len(path_out)
-    
     output = []
 
-    for x in range(len(title_out)):  
-        items = {
-            'title': title_out[x],
-            'thumb': thumb_out[x],
-            'url': path_out[x],
-            'description': info_out[x],
-        } 
-        output.append(items)
+    content = soup.find('div', {'id': 'content'})
+    section_items = content.find('div', 'section').findAll('li')
+
+    for i in section_items:
+        try:
+            title = i.find('h3', 'title').a.text
+        except AttributeError:
+            continue
+
+        title = re.sub('&#039;', "'", title)
+
+        thumbnail = i.find('div', 'figure').find('img')['src']
+        url = i.find('div', 'summary').find('a')['href']
+        youtube_id = url.split('/')[-1]
+        description = i.find('div', 'summary').findAll('p')[1].text
+
+        item = {
+            'title': title,
+            'thumbnail': thumbnail,
+            'youtube_id': youtube_id,
+            'description': description
+        }
+
+        output.append(item)
 
     return output
-
-get_podcasts()

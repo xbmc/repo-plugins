@@ -27,3 +27,15 @@ msgstr "Filmati"
 msgctxt "#30021"
 msgid "Cache"
 msgstr "Cache"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Filmati"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Mużika"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programmi"

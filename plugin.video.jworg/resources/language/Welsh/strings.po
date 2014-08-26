@@ -27,3 +27,7 @@ msgstr "Fideo"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Diweddaraf"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Fideo"

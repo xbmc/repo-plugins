@@ -35,3 +35,15 @@ msgstr "Cache"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Últimos"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Música"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programas"

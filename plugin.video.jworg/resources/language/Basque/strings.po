@@ -35,3 +35,15 @@ msgstr "Katxea"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Azken"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Bideoak"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musika"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programak"

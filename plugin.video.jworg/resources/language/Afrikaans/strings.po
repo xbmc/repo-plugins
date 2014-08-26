@@ -139,3 +139,15 @@ msgstr "Bedrywighede"
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Einde van die artikel"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Video’s"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musiek"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programme"

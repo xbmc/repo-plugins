@@ -35,3 +35,15 @@ msgstr "Önbellek"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Son"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videolar"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Müzik"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programlar"

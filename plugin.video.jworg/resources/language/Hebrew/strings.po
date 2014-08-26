@@ -143,3 +143,15 @@ msgstr "סוף המאמר"
 msgctxt "#30039"
 msgid "Default video resolution (0: ask every time)"
 msgstr "ברירת מחדל לאבחנת וידאו (0: שאל בכל פעם)"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "סרטונים"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "מוסיקה"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "תוכנות"

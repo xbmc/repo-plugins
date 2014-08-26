@@ -51,3 +51,15 @@ msgstr "Mellomlagring"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Siste"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videoer"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musikk"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programmer"

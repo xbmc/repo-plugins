@@ -18,15 +18,15 @@ msgstr ""
 
 msgctxt "#30001"
 msgid "Next page >>"
-msgstr "Próxima Página -->"
+msgstr "Próxima página >>"
 
 msgctxt "#30002"
 msgid "Language of multimedia file"
-msgstr "Linguagem do arquivo multimídia"
+msgstr "Idioma do arquivo multimédia"
 
 msgctxt "#30005"
 msgid "General"
-msgstr "Geral"
+msgstr "Menus"
 
 msgctxt "#30010"
 msgid "Books of the Bible"
@@ -34,39 +34,39 @@ msgstr "Livros da Bíblia"
 
 msgctxt "#30011"
 msgid "Music and songs"
-msgstr "Músicas e canticos"
+msgstr "Música e canções"
 
 msgctxt "#30012"
 msgid "Daily text"
-msgstr "Texto do dia"
+msgstr "Texto diário"
 
 msgctxt "#30013"
 msgid "Bible dramas"
-msgstr "Dramas bíblicos"
+msgstr "Dramatizações da bíblia"
 
 msgctxt "#30014"
 msgid "Dramatic bible readings"
-msgstr "Leituras bíblicas dramatizadas"
+msgstr "Leituras dramatizadas da bíblia"
 
 msgctxt "#30015"
 msgid "Musics, dramas, and dramatic readings"
-msgstr "Cantigos, dramas e leituras dramatizadas"
+msgstr "Música, drama e leituras dramatizadas"
 
 msgctxt "#30016"
 msgid "Newest first"
-msgstr "Mais novos primeiros"
+msgstr "Novos primeiro"
 
 msgctxt "#30017"
 msgid "Oldest first"
-msgstr "Mais antigos primeiro"
+msgstr "Mais velhos primeiro"
 
 msgctxt "#30018"
 msgid "By title"
-msgstr "Por Título"
+msgstr "Por título"
 
 msgctxt "#30019"
 msgid "Sorting"
-msgstr "Ordenando"
+msgstr "Ordenar"
 
 msgctxt "#30020"
 msgid "Videos"
@@ -78,15 +78,15 @@ msgstr "Cache"
 
 msgctxt "#30022"
 msgid "Empty cache (force lists update)"
-msgstr "Esvaziar cache (forçar atualização da lista)"
+msgstr "Esvaziar cache (forçar atualização das listas)"
 
 msgctxt "#30023"
 msgid "Emptying cache"
-msgstr "Esvaziando Cache"
+msgstr "Esvaziando cache"
 
 msgctxt "#30024"
 msgid "Successfully done"
-msgstr "Efetuado com sucesso"
+msgstr "Concluído com sucesso"
 
 msgctxt "#30025"
 msgid "Magazines"
@@ -94,35 +94,35 @@ msgstr "Revistas"
 
 msgctxt "#30026"
 msgid "All magazines"
-msgstr "Todas as revistas"
+msgstr "Todas as magazines"
 
 msgctxt "#30027"
 msgid "Awake!"
-msgstr "Despertai!"
+msgstr "Acordar!"
 
 msgctxt "#30028"
 msgid "The Watchtower"
-msgstr "A Sentinela"
+msgstr "The Watchtower"
 
 msgctxt "#30029"
 msgid "The Watchtower (Study Edition)"
-msgstr "A Sentinela (Edição de Estudo)"
+msgstr "The Watchtower (Versão para Estudo)"
 
 msgctxt "#30030"
 msgid "The Watchtower (Simplified Edition)"
-msgstr "A Sentinela (Edição Fácil de Ler)"
+msgstr "The Watchtower (Versão Simplificada)"
 
 msgctxt "#30031"
 msgid "Latest"
-msgstr "Recentes"
+msgstr "Últimos"
 
 msgctxt "#30032"
 msgid "Newsroom"
-msgstr "Imprensa"
+msgstr "Estúdio de Notícias"
 
 msgctxt "#30033"
 msgid "Unable to load remote content"
-msgstr "Não consegui carregar o conteúdo remoto"
+msgstr "Não foi possível carregar o conteúdo remoto"
 
 msgctxt "#30034"
 msgid "Week program"
@@ -142,4 +142,40 @@ msgstr "Fim do artigo"
 
 msgctxt "#30039"
 msgid "Default video resolution (0: ask every time)"
-msgstr "Resolução padrão para vídeo (0:Pergunta toda vez)"
+msgstr "Resolução vídeo padrão (0: perguntar sempre)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Vídeo em língua gestual"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filtrar pelo tópico"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Carregando lista de vídeos"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Lendo infos de vídeo, por favor, aguarde."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Isso ajuda a navegar na lista de vídeos."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Vídeo {0} de {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Vídeos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Música"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programas"

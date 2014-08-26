@@ -143,3 +143,39 @@ msgstr "Fin del artículo"
 msgctxt "#30039"
 msgid "Default video resolution (0: ask every time)"
 msgstr "Resolución de vídeo por defecto (0: pregunta cada vez)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Vídeo en lengua de signos"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filtrar por tema"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Cargando lista de vídeos"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Leyendo información de vídeo, por favor espere."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Esto ayuda a la lista de videos de navegación."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Vídeo {0} fuera de {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Música"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programas"

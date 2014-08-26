@@ -27,3 +27,15 @@ msgstr "ویدیوها"
 msgctxt "#30021"
 msgid "Cache"
 msgstr "حافظه ی نهان"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "ویدیوها"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "موسیقی"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "برنامه‌ها"

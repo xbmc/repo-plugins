@@ -147,3 +147,35 @@ msgstr "Alapértelmezett videófelbontás (0: mindig rákérdez)"
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Videó a megjelölt nyelven"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Szűrés téma alapján"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Videó lista betöltése"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Videó infók olvasása, kérem várjon."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Segíti a videó lista böngészését."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Videó {0}, összes: {1} "
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videók"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Zene"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programok"

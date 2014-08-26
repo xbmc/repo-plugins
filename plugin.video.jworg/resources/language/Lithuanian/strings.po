@@ -16,22 +16,166 @@ msgstr ""
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Kitas puslapis >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Multimedijos failų kalba"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "Pagrindinis"
 
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Biblijos knygos"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Muzika ir dainos"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Kasdienis tekstas"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Biblijos dramos"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Dramatiški biblijos skaitymai"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Muzika, dramos ir dramatiniai skaitiniai"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Naujausi pirma"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Seniausi pirma"
+
 msgctxt "#30018"
 msgid "By title"
-msgstr "Pagal vardą"
+msgstr "Pagal pavadinimą"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Rūšiavimas"
 
 msgctxt "#30020"
 msgid "Videos"
-msgstr "Video"
+msgstr "Vaizdo įrašai"
 
 msgctxt "#30021"
 msgid "Cache"
-msgstr "Buferizacija"
+msgstr "Talpykla"
+
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Tuščia talpykla (priverstinis sąrašų atnaujinimas)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Išvaloma talpykla"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Atlikta sėkmingai"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Žurnalai"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "Visi žurnalai"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Pabusti!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "The Watchtower"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "The Watchtower (Studijos leidimas)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "The Watchtower (Supaprastintas leidimas)"
 
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Naujausias"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Naujienų kambarys"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Neįmanoma įkelti nuotolinio turinio"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Savaitės programa"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Teokratinės ministerijos mokykla"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Veikla"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Straipsnio pabaiga"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Numatytoji vaizdo raiška (0: klausti kaskart)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Vaizdo įrašas ženklų kalba"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filtruoti pagal temą"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Įkeliamas vaizdo įrašų sąrašas"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Nuskaitoma vaizdo įrašų informacija, prašome palaukti."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Tai palengvina vaizdo įrašų sąrašo naršymą."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Vaizdo įrašas{0} iš {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Vaizdo įrašai"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Muzika"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programos"

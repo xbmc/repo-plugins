@@ -147,3 +147,35 @@ msgstr "Résolution par défaut de la vidéo (0: demander à chaque fois)"
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Vidéo en langue des signes"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filtrer par sujet"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Chargement de la liste des vidéos"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Lecture des infos sur les vidéos, veuillez attendre."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Ceci aide à parcourir la liste des vidéos."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Vidéo {0} sur {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Vidéos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musique"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programmes"

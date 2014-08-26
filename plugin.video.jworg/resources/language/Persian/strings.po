@@ -27,3 +27,15 @@ msgstr "ویدئوها"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "آخرین"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "ویدئوها"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "موسیقی"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "برنامه‌ها"

@@ -225,7 +225,7 @@ class Activity(xbmcgui.WindowDialog):
 		text =  re.sub("</strong>", "[/B]", text)
 		text =  re.sub("<a[^>]+>", "", text)
 
-		regexp_pars = '<p id="p[0-9]+" class="p[0-9]+">(.+)</p>|<h3 class="inline">(.+)</h3>'
+		regexp_pars = '<p id="p[0-9]+" data-pid="[0-9]+" class="p[0-9]+">(.+)</p>|<h3 class="inline">(.+)</h3>'
 		pars = re.findall(regexp_pars, text)
 
 
@@ -233,6 +233,8 @@ class Activity(xbmcgui.WindowDialog):
 		for par in pars:
 			text = par[0] + "[B]"+par[1]+"[/B]"
 			out = out + "\n\n" + jw_common.removeHtml(text)
+		
+		# add 'end of article'
 		out = out + "\n\n[COLOR=FF0000FF][I]" + jw_common.t(30038).encode("utf8") + "[/I][/COLOR]"
 
 		return out

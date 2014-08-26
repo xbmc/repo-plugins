@@ -16,6 +16,166 @@ msgstr ""
 "Language: en_US\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30001"
+msgid "Next page >>"
+msgstr "Next page >>"
+
+msgctxt "#30002"
+msgid "Language of multimedia file"
+msgstr "Language of multimedia file"
+
 msgctxt "#30005"
 msgid "General"
 msgstr "General"
+
+msgctxt "#30010"
+msgid "Books of the Bible"
+msgstr "Books of the Bible"
+
+msgctxt "#30011"
+msgid "Music and songs"
+msgstr "Music and songs"
+
+msgctxt "#30012"
+msgid "Daily text"
+msgstr "Daily text"
+
+msgctxt "#30013"
+msgid "Bible dramas"
+msgstr "Bible dramas"
+
+msgctxt "#30014"
+msgid "Dramatic bible readings"
+msgstr "Dramatic bible readings"
+
+msgctxt "#30015"
+msgid "Musics, dramas, and dramatic readings"
+msgstr "Musics, dramas, and dramatic readings"
+
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "Newest first"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "Oldest first"
+
+msgctxt "#30018"
+msgid "By title"
+msgstr "By title"
+
+msgctxt "#30019"
+msgid "Sorting"
+msgstr "Sorting"
+
+msgctxt "#30020"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30021"
+msgid "Cache"
+msgstr "Cache"
+
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "Empty cache (force lists update)"
+
+msgctxt "#30023"
+msgid "Emptying cache"
+msgstr "Emptying cache"
+
+msgctxt "#30024"
+msgid "Successfully done"
+msgstr "Successfully done"
+
+msgctxt "#30025"
+msgid "Magazines"
+msgstr "Magazines"
+
+msgctxt "#30026"
+msgid "All magazines"
+msgstr "All magazines"
+
+msgctxt "#30027"
+msgid "Awake!"
+msgstr "Awake!"
+
+msgctxt "#30028"
+msgid "The Watchtower"
+msgstr "The Watchtower"
+
+msgctxt "#30029"
+msgid "The Watchtower (Study Edition)"
+msgstr "The Watchtower (Study Edition)"
+
+msgctxt "#30030"
+msgid "The Watchtower (Simplified Edition)"
+msgstr "The Watchtower (Simplified Edition)"
+
+msgctxt "#30031"
+msgid "Latest"
+msgstr "Latest"
+
+msgctxt "#30032"
+msgid "Newsroom"
+msgstr "Newsroom"
+
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Unable to load remote content"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Week program"
+
+msgctxt "#30035"
+msgid "Theocratic Ministry School"
+msgstr "Theocratic Ministry School"
+
+msgctxt "#30037"
+msgid "Activities"
+msgstr "Activities"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "End of the article"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Default video resolution (0: ask every time)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Video in sign language"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filter by topic"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Loading video list"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Reading video infos, please wait."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "This helps video list browsing."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Video {0} out of {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Music"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programs"

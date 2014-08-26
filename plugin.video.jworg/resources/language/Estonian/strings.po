@@ -35,3 +35,15 @@ msgstr "Vahemälu"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Viimased"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videod"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Muusika"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programmid"

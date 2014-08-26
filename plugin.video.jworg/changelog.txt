@@ -1,3 +1,15 @@
+0.6.1
+----
+
+Fix
++ In music, removed link to the pdf of the song book
++ Fixed pressroom, its index was no working after recent html changes
++ Fixed activities: index was working, but text was not showed
++ Removed useless logs
+
+Languages
++ Merged lastest version of all translations
+
 0.6.0
 -----
 

@@ -143,3 +143,15 @@ msgstr "Fi del article"
 msgctxt "#30039"
 msgid "Default video resolution (0: ask every time)"
 msgstr "Resolució de vídeo per defecte (0: preguntar cada vegada)"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Vídeos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Música"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programes"

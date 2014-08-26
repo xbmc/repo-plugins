@@ -31,3 +31,15 @@ msgstr "Filmovi"
 msgctxt "#30021"
 msgid "Cache"
 msgstr "Keš"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Filmovi"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Музика"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programi"

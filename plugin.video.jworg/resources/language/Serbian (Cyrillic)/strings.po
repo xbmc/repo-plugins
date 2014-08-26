@@ -31,3 +31,15 @@ msgstr "Филмови"
 msgctxt "#30021"
 msgid "Cache"
 msgstr "Кеш"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Филмови"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Музика"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Програми"

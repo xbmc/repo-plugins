@@ -35,3 +35,15 @@ msgstr "Začasni pomnilnik"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Najnovejši"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Posnetki"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Glasba"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programi"

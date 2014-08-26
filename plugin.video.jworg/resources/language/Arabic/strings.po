@@ -35,3 +35,15 @@ msgstr "ذاكرة تخزين مؤقته"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "أخير"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "مقاطع مرئيه"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "موسيقى"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "برامج"

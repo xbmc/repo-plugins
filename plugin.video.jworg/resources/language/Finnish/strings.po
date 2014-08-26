@@ -35,3 +35,15 @@ msgstr "Välimuistit"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Viimeisimmät"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videot"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musiikki"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Ohjelmat"

@@ -78,11 +78,11 @@ msgstr "Cache"
 
 msgctxt "#30022"
 msgid "Empty cache (force lists update)"
-msgstr "Svuota cache (forza aggiornamento elenchi)"
+msgstr "Svuota la cache (forza aggiornamento elenchi)"
 
 msgctxt "#30023"
 msgid "Emptying cache"
-msgstr "Svuotamento cache"
+msgstr "Cancellazione cache"
 
 msgctxt "#30024"
 msgid "Successfully done"
@@ -94,23 +94,23 @@ msgstr "Riviste"
 
 msgctxt "#30026"
 msgid "All magazines"
-msgstr "Tutte le riviste!"
+msgstr "Tutte le riviste"
 
 msgctxt "#30027"
 msgid "Awake!"
-msgstr "Svegliatevi"
+msgstr "Svegliatevi!"
 
 msgctxt "#30028"
 msgid "The Watchtower"
-msgstr "La torre di guardia"
+msgstr "La Torre di Guardia"
 
 msgctxt "#30029"
 msgid "The Watchtower (Study Edition)"
-msgstr "La torre di guardia (ed. per lo studio)"
+msgstr "La Torre di Guardia (ed. per lo studio)"
 
 msgctxt "#30030"
 msgid "The Watchtower (Simplified Edition)"
-msgstr "La torre di guardia (ed. semplificata)"
+msgstr "La Torre di Guardia (ed. semplificata)"
 
 msgctxt "#30031"
 msgid "Latest"
@@ -147,3 +147,35 @@ msgstr "Risoluzione video predefinita (0: chiedi sempre)"
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Video in lingua dei segni"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filtra per argomento"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Caricamento lista video in corso"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Sto leggendo le info sui video, per favore attendi..."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Questo rende più veloce la navigazione tra le pagine dei video."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Video {0} di {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Video"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musica"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programmi"

@@ -147,3 +147,15 @@ msgstr "Resolução vídeo padrão (0: perguntar sempre)"
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Vídeo em língua gestual"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Vídeos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Música"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programas"

@@ -147,3 +147,31 @@ msgstr "Domyślna rozdzielczość wideo (0: pytaj za każdym razem)"
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Film w języku migowym "
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filtrowanie według tematu"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Ładowanie listy filmów"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Wczytywanie informacji o wideo, proszę czekać."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Wideo {0} z {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Wideo"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Muzyka"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programy"

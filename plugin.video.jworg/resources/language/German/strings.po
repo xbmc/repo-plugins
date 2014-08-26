@@ -147,3 +147,35 @@ msgstr "Standard Videoauflösung (0: immer Fragen)"
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Video in Zeichensprache"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "nach Thema filtern"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Videoliste wird geladen"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Videoinformationen werden gelesen, bitte warten."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Hilft die Videoliste zu durchsuchen."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Video {0} von {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musik"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programme"

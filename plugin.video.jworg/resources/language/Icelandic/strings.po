@@ -35,3 +35,15 @@ msgstr "Biðminni"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Nýjast"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Myndefni"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "TÓNLIST"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "FORRIT"

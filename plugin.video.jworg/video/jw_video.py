@@ -197,8 +197,6 @@ def setVideoUrl(main_video_title, json_url, thumb) :
 
 	video_dict = {}
 
-	xbmc.log ("JWORG: json_url " + json_url.encode("utf-8"), xbmc.LOGERROR)
-
 	for mp4 in temp["MP4"]:
 		res 				= mp4["label"]		
 		url_to_play			= mp4["file"]["url"]

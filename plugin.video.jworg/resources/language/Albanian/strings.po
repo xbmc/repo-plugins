@@ -31,3 +31,15 @@ msgstr "Video"
 msgctxt "#30021"
 msgid "Cache"
 msgstr "Cache"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Video"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Muzikë"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programe"

@@ -62,7 +62,7 @@ msgstr "Najstarije prvo"
 
 msgctxt "#30018"
 msgid "By title"
-msgstr "Po nazivu"
+msgstr "Prema nazivu"
 
 msgctxt "#30019"
 msgid "Sorting"
@@ -98,7 +98,7 @@ msgstr "Svi časopisi"
 
 msgctxt "#30027"
 msgid "Awake!"
-msgstr "Probudite se!"
+msgstr "Buđenje!"
 
 msgctxt "#30028"
 msgid "The Watchtower"
@@ -120,6 +120,14 @@ msgctxt "#30032"
 msgid "Newsroom"
 msgstr "Vijesti"
 
+msgctxt "#30033"
+msgid "Unable to load remote content"
+msgstr "Nemoguće učitavanje udaljenjog sadržaja"
+
+msgctxt "#30034"
+msgid "Week program"
+msgstr "Tjedni program"
+
 msgctxt "#30035"
 msgid "Theocratic Ministry School"
 msgstr " Teokratske škole propovijedanja"
@@ -127,3 +135,47 @@ msgstr " Teokratske škole propovijedanja"
 msgctxt "#30037"
 msgid "Activities"
 msgstr "Događanja i zanimljivosti"
+
+msgctxt "#30038"
+msgid "End of the article"
+msgstr "Kraj članka"
+
+msgctxt "#30039"
+msgid "Default video resolution (0: ask every time)"
+msgstr "Zadana razlučivost videa (0: pitaj svaki put)"
+
+msgctxt "#30040"
+msgid "Video in sign language"
+msgstr "Jezik video prijave"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filter prema temi"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Učitavanje popisa videa"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Čitanje informacija videa. molim pričekajte."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Ovo pomaže pregledu popisa video snimaka."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Video {0} od{1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Video snimke"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Glazba"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programi"

@@ -23,3 +23,15 @@ msgstr "ယေဘုယျ"
 msgctxt "#30020"
 msgid "Videos"
 msgstr "ရုပ်ရှင်များ"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "ရုပ်ရှင်များ"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "ဂီတ"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "ပရိုဂရမ်များ"

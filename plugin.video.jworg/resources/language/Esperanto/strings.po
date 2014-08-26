@@ -27,3 +27,15 @@ msgstr "Videoj"
 msgctxt "#30021"
 msgid "Cache"
 msgstr "Cache"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videoj"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Muziko"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Applications"

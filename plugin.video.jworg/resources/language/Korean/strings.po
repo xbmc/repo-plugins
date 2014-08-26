@@ -35,3 +35,15 @@ msgstr "캐시"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "최근 추가"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "비디오"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "음악"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "프로그램"

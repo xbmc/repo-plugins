@@ -27,3 +27,15 @@ msgstr "Video"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Terkini"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Video"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musik"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Program"

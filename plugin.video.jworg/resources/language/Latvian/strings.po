@@ -23,3 +23,15 @@ msgstr "Vispārīgi"
 msgctxt "#30020"
 msgid "Videos"
 msgstr "Video"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Video"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Mūzika"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programmas"

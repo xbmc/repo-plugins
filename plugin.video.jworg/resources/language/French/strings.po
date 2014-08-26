@@ -139,3 +139,15 @@ msgstr "Activitées"
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Fin de l'article"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Vidéos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musique"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programmes"

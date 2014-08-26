@@ -27,3 +27,15 @@ msgstr "Videos"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Latest"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Music"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programs"

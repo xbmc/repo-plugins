@@ -35,3 +35,15 @@ msgstr "தேக்கு"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "அண்மை"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "நிகழ்படம்"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "இசை"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "நிரல்கள்"

@@ -23,3 +23,7 @@ msgstr "Vanligt"
 msgctxt "#30020"
 msgid "Videos"
 msgstr "Video"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Video"

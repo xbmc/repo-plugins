@@ -131,3 +131,15 @@ msgstr "Седмична програма"
 msgctxt "#30038"
 msgid "End of the article"
 msgstr "Край на статията"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Видеа"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Музика"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Програми"

@@ -32,6 +32,14 @@ msgctxt "#30011"
 msgid "Music and songs"
 msgstr "音乐及歌曲"
 
+msgctxt "#30016"
+msgid "Newest first"
+msgstr "最新的靠前"
+
+msgctxt "#30017"
+msgid "Oldest first"
+msgstr "最老的靠前"
+
 msgctxt "#30018"
 msgid "By title"
 msgstr "标题"
@@ -48,6 +56,22 @@ msgctxt "#30021"
 msgid "Cache"
 msgstr "缓存"
 
+msgctxt "#30022"
+msgid "Empty cache (force lists update)"
+msgstr "清空缓存 (强制列表更新)"
+
 msgctxt "#30031"
 msgid "Latest"
 msgstr "最新"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "视频"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "音乐"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "程序"

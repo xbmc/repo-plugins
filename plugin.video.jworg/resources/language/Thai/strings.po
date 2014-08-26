@@ -35,3 +35,15 @@ msgstr "แคช"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "ล่าสุด"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "วิดีโอ"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "เพลง"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "โปรแกรม"

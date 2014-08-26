@@ -147,3 +147,35 @@ msgstr "Default video resolution (0: ask every time)"
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Video in sign language"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filter by topic"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Loading video list"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Reading video infos, please wait."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "This helps video list browsing."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Video {0} out of {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videos"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Music"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programs"

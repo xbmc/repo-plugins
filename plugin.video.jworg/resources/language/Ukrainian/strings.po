@@ -35,3 +35,15 @@ msgstr "Буферизація"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Останнє"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Відео"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Музика"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Програми"

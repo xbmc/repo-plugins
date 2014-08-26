@@ -1,6 +1,7 @@
 """
 AUDIO BIBLE RELATED FUNCTIONSS
 """
+import xbmc #for logs
 import xbmcgui
 import xbmcplugin
 
@@ -26,8 +27,16 @@ def showMusicIndex(start):
 	publications    = soup.findAll("div", { "class" : re.compile(r'\bPublication\b') })
 
 	for publication in publications :
-		title = publication.find('h3').contents[0].encode("utf-8");
-		title = jw_common.cleanUpText(title);
+
+		# Read publication format to exclude pdf from songs (in some locales there is the sound book
+		# in the same list of mp3 albums)
+
+		audio_format = publication.find("div", { "class" : re.compile(r'\bjsAudioFormat\b') } )
+		if "disabled" in audio_format["class"] :
+			continue
+
+		title = publication.find('h3').contents[0].encode("utf-8")
+		title = jw_common.cleanUpText(title)
 
 		json_url = None
 		try :
@@ -35,6 +44,7 @@ def showMusicIndex(start):
 		except :
 			pass
 
+		
 		# placeholder if cover is missing
 		cover_url = "http://assets.jw.org/themes/content-theme/images/thumbProduct_placeholder.jpg"
 		try :

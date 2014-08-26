@@ -147,3 +147,35 @@ msgstr "Προεπιλεγμένη ανάλυση βίντεο (0: ερώτησ�
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Βίντεο στη νοηματική"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Φιλτράρισμα ανά θέμα"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Φόρτωση λίστας βίντεο"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Ανάγνωση πληροφοριών βίντεο, αναμείνατε."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Βοηθά στην περιήγηση της λίστας βίντεο."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Βίντεο {0} από {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Βίντεο"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Μουσική"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Εφαρμογές"

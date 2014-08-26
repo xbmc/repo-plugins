@@ -19,3 +19,7 @@ msgstr ""
 msgctxt "#30020"
 msgid "Videos"
 msgstr "Videolar"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videolar"

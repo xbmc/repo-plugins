@@ -35,3 +35,15 @@ msgstr "キャッシュ"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "最新"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "ビデオ"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "ミュージック"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "プログラム"

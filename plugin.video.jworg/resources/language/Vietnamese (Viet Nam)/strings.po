@@ -23,3 +23,11 @@ msgstr "Chung"
 msgctxt "#30020"
 msgid "Videos"
 msgstr "Video"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Video"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Chương trình"

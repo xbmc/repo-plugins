@@ -147,3 +147,35 @@ msgstr "Standard videoupplösning (0: fråga alltid)"
 msgctxt "#30040"
 msgid "Video in sign language"
 msgstr "Video på teckenspråk"
+
+msgctxt "#30041"
+msgid "Filter by topic"
+msgstr "Filtrera efter ämne"
+
+msgctxt "#30042"
+msgid "Loading video list"
+msgstr "Laddar videolista"
+
+msgctxt "#30043"
+msgid "Reading video infos, please wait."
+msgstr "Läser videoinfo, var god vänta."
+
+msgctxt "#30044"
+msgid "This helps video list browsing."
+msgstr "Detta hjälper bläddring av videolista."
+
+msgctxt "#30045"
+msgid "Video {0} out of {1}"
+msgstr "Video {0} av {1}"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videor"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Musik"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Program"

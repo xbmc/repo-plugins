@@ -35,3 +35,15 @@ msgstr "Medzi-pamäť"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "Najnovšie"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "Videá"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "Hudba"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "Programy"

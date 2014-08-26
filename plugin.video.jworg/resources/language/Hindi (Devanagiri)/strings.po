@@ -27,3 +27,15 @@ msgstr "विडियो"
 msgctxt "#30021"
 msgid "Cache"
 msgstr "कैश"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "विडियो"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "संगीत"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "करिअक्रम"

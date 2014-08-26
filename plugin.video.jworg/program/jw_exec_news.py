@@ -22,6 +22,48 @@ def showNewsIndex():
 	url 		= url + jw_config.const[language]["news_index"] 
 	
 	html 		= jw_common.loadUrl(url)
+	soup 		= BeautifulSoup(html)
+
+	news       = soup.findAll("div", { "class" : re.compile(r'synopsis\b') })
+
+	for new in news :
+		# Find titke
+		links = new.findAll('a')
+		title = jw_common.cleanUpText(links[1].contents[0].encode("utf-8"))
+
+
+		images = new.findAll("div", { "class" : re.compile(r'jsVideoPoster\b') })
+
+		if len(images) > 0 :
+			image = images[0]
+			src = image["data-src"]
+		else  :
+			image = new.find('img')
+			src = image["src"]
+			
+		href = jw_common.cleanUpText(links[1]["href"])
+
+		listItem = xbmcgui.ListItem( 
+			label  			= title,
+			thumbnailImage 	= src
+		)	
+
+		params = {
+			"content_type"  : "executable", 
+			"mode" 			: "open_news_page", 
+			"url"			: href
+		} 
+
+		url = jw_config.plugin_name + '?' + urllib.urlencode(params)
+		xbmcplugin.addDirectoryItem(
+			handle		= jw_config.plugin_pid, 
+			url			= url, 
+			listitem	= listItem, 
+			isFolder	= False 
+		)  
+
+
+	"""
 	
 	regexp_title = '<h3 class="tsrTtle"><a href="([^"]+)"( title="[^"]+")?>([^<]+)</a></h3>'
 	news_found = re.findall(regexp_title, html)
@@ -58,6 +100,8 @@ def showNewsIndex():
 		)  
 		count = count + 1
 	
+	"""
+
 	xbmcplugin.endOfDirectory(handle=jw_config.plugin_pid)
 
 
@@ -170,7 +214,7 @@ class News(xbmcgui.WindowDialog):
 			text =  re.sub("<strong>", "[B]", text)
 			text =  re.sub("</strong>", "[/B]", text)
 			
-			out = out + text + "\n\n";
+			out = out + text + "\n\n"
 
 		out = out + "\n\n[COLOR=FF0000FF][I]" + jw_common.t(30038).encode("utf8") + "[/I][/COLOR]"
 		return out

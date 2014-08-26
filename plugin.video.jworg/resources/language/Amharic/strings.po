@@ -31,3 +31,15 @@ msgstr "ቪዲዮ"
 msgctxt "#30031"
 msgid "Latest"
 msgstr "ዘመናዊ"
+
+msgctxt "#30046"
+msgid "Videos"
+msgstr "ቪዲዮ"
+
+msgctxt "#30047"
+msgid "Music"
+msgstr "ሙዚቃ"
+
+msgctxt "#30048"
+msgid "Programs"
+msgstr "ፕሮግራሞች "

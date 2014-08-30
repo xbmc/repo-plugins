@@ -17,7 +17,7 @@ addonID = addon.getAddonInfo('id')
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
 useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
 forceViewMode = addon.getSetting("forceView") == "true"
-viewMode = str(addon.getSetting("viewID"))
+viewMode = str(addon.getSetting("viewIDVideos"))
 translation = addon.getLocalizedString
 urlMain = "http://www.vice.com"
 icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
@@ -38,6 +38,8 @@ def index():
     addDir(translation(30003), "", 'listShows', icon)
     addDir(translation(30004), "", 'listShowsFavs', icon)
     xbmcplugin.endOfDirectory(pluginhandle)
+    if forceViewMode:
+        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def listLatest():
@@ -72,11 +74,11 @@ def listShows():
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb = match[0]
         match = re.compile('<p>(.+?)</p>', re.DOTALL).findall(entry)
-        desc = match[0]
+        desc = ""
+        if match:
+            desc = match[0]
         addShowDir(title, url, 'listVideos', thumb, desc)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def listShowsFavs():
@@ -94,8 +96,6 @@ def listShowsFavs():
             addShowFavDir(title, urllib.unquote_plus(url), "listVideos", thumb)
         fh.close()
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def listVideos(url):
@@ -156,6 +156,16 @@ def playVideo(url):
             xbmc.sleep(3000)
             playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
             listitem = xbmcgui.ListItem(name+" - Part 2")
+            playlist.add("plugin://plugin.video.vice_com/?url="+urllib.quote_plus(urlNext)+"&mode=playVideo", listitem)
+        except:
+            pass
+        urlNext = url.replace("part-1","part-3")
+        req = urllib2.Request(urlNext)
+        try:
+            urllib2.urlopen(req)
+            xbmc.sleep(3000)
+            playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+            listitem = xbmcgui.ListItem(name+" - Part 3")
             playlist.add("plugin://plugin.video.vice_com/?url="+urllib.quote_plus(urlNext)+"&mode=playVideo", listitem)
         except:
             pass

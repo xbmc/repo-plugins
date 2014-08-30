@@ -4,3 +4,7 @@
 - Fixed video playback for some videos
 1.0.2
 - Fixed multi-part playback
+1.0.4
+- Fixed show listing
+1.0.5
+- Changed default view

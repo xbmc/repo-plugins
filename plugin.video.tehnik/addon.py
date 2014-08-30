@@ -4,7 +4,7 @@
 # plugin.video.tehnik: 
 # By: deltha@gmail.com
 #------------------------------------------------------------
-# TehniK - 2.0.2
+# TehniK - 2.0.3
 #------------------------------------------------------------
 
 from xbmcswift2 import Plugin, xbmc
@@ -16,6 +16,7 @@ STRINGS = {
     'photovideo': 30102,
     'tutorials': 30103,
     'companies': 30104,
+    'games': 30105,
     'search': 30200,
     'title': 30201
 }
@@ -46,10 +47,6 @@ YOUTUBE_ITNC = (
         'logo': 'go4it.png',
         'user': 'go4itro',
     }, {
-        'name': 'Lab 501',
-        'logo': 'lab501.jpg',
-        'user': 'lab501ro',
-    }, {
         'name': 'Magazinele Flanco',
         'logo': 'flanco.png',
         'user': 'MagazineleFlanco',
@@ -57,10 +54,6 @@ YOUTUBE_ITNC = (
         'name': 'Media DOT Ro',
         'logo': 'mediadot.png',
         'user': 'MediaDOTRO',
-    }, {
-        'name': 'Now Tech Ro',
-        'logo': 'nowtech.png',
-        'user': 'MrTmd747',
     }, {
         'name': 'PC Garage',
         'logo': 'pc-garage-srl1.jpg',
@@ -70,6 +63,10 @@ YOUTUBE_ITNC = (
         'logo': 'prostore.png',
         'user': 'PROstoreRomania',
     }, {
+        'name': 'Unboxarena',
+        'logo': 'unboxarena.png',
+        'user': 'Unboxarena',
+    }, {
         'name': 'Z@na IT',
         'logo': 'zonait.png',
         'user': 'ArealIT',
@@ -78,12 +75,16 @@ YOUTUBE_ITNC = (
 
 YOUTUBE_MOBILES = (
 {
-        'name': 'Arena It Net',
+        'name': 'Arena IT',
         'logo': 'arenait.png',
         'user': 'arenaitnet',
     }, {
+        'name': 'Gadget.Ro',
+        'logo': 'gadgetro.png',
+        'user': 'GadgetRoVideo',
+    }, {
         'name': 'Gadget On',
-        'logo': '1511180_236233696563369_1953329472_n.png',
+        'logo': 'gadgeton.png',
         'user': 'DaniJurma',
     }, {
         'name': 'Gadget-Talk',
@@ -94,6 +95,10 @@ YOUTUBE_MOBILES = (
         'logo': 'gsmland.png',
         'user': 'GSMLandRo',
     }, {
+        'name': 'Lab 501',
+        'logo': 'lab501.jpg',
+        'user': 'lab501ro',
+    }, {
         'name': 'Market Online',
         'logo': 'marketonline.png',
         'user': 'MarketOnlineRO',
@@ -101,6 +106,10 @@ YOUTUBE_MOBILES = (
         'name': 'Mobilissimo',
         'logo': 'mobilissimo.png',
         'user': 'mobilissimo',
+    }, {
+        'name': 'Voievozii',
+        'logo': 'voievozii.png',
+        'user': 'voievoziitehnici',
     }, {
         'name': 'Telefonul Tau',
         'logo': 'telefonultau.png',
@@ -146,6 +155,14 @@ YOUTUBE_COMPANIES = (
         'logo': 'allview.png',
         'user': 'allviewmobile',
     }, {
+        'name': 'Asus',
+        'logo': 'asus.png',
+        'user': 'UCLJ3bI_qlphy9iHNYzGkbzg',
+    }, {
+        'name': 'Bit Defender',
+        'logo': 'bitdefender.png',
+        'user': 'BitDefenderWorld',
+    }, {
         'name': 'Canon Romania',
         'logo': 'canonromania.png',
         'user': 'CanonRomania',
@@ -154,9 +171,17 @@ YOUTUBE_COMPANIES = (
         'logo': 'evolio.png',
         'user': 'EvolioRomania',
     }, {
+        'name': 'HP Romania',
+        'logo': 'hp.png',
+        'user': 'HPRomania',
+    }, {
         'name': 'Lenovo Romania',
         'logo': 'lenovo.png',
         'user': 'LenovoRomania',
+    }, {
+        'name': 'Nokia Romania',
+        'logo': 'nokia.png',
+        'user': 'NokiaRomania',
     }, {
         'name': 'Panasonic Romania',
         'logo': 'panasonic.png',
@@ -166,9 +191,49 @@ YOUTUBE_COMPANIES = (
         'logo': 'pni.png',
         'user': 'PNIelectronics',
     }, {
-        'name': 'Samsung Romania',
+        'name': 'Samsung',
         'logo': 'samsung.png',
         'user': 'SamsungTubeRomania',
+    }, {
+        'name': 'Schrack Technik',
+        'logo': 'schrack.png',
+        'user': 'SchrackTechnikRO',
+    }, {
+        'name': 'Sony',
+        'logo': 'sony.png',
+        'user': 'UC-CnlDAXt6MqB6ozXOSZp4w',
+    },
+)
+
+YOUTUBE_GAMES = (
+{
+        'name': 'CreativeMonkeyzArmy',
+        'logo': 'creativemonkeyz.png',
+        'user': 'CreativeMonkeyzArmy',
+    }, {
+        'name': 'GamaGanda',
+        'logo': 'gamaganda.png',
+        'user': 'GamaGanda',
+    }, {
+        'name': 'Gamextv',
+        'logo': 'gamextv.png',
+        'user': 'gamextvro',
+    }, {
+        'name': 'Gaming HD',
+        'logo': 'gaminghd.png',
+        'user': 'HDGamingHD',
+    }, {
+        'name': 'PGLtv',
+        'logo': 'pgl.png',
+        'user': 'PGLeSport',
+    }, {
+        'name': 'Tiranianu Gaming',
+        'logo': 'tira.png',
+        'user': 'tiranianu009',
+    }, {
+        'name': 'War Arena Gaming',
+        'logo': 'wararenagaming.png',
+        'user': 'wararenagamingro',
     },
 )
 
@@ -192,6 +257,8 @@ def show_root_menu():
          'path': plugin.url_for('show_tutorials')},
         {'label': _('companies'),
          'path': plugin.url_for('show_companies')},
+        {'label': _('games'),
+         'path': plugin.url_for('show_games')},
     ]
     return plugin.finish(items)
 
@@ -238,6 +305,15 @@ def show_companies():
         'thumbnail': get_logo(channel['logo']),
         'path': YOUTUBE_URL % channel['user'],
     } for channel in YOUTUBE_COMPANIES]
+    return plugin.finish(items)
+
+@plugin.route('/games/')
+def show_games():
+    items = [{
+        'label': channel['name'],
+        'thumbnail': get_logo(channel['logo']),
+        'path': YOUTUBE_URL % channel['user'],
+    } for channel in YOUTUBE_GAMES]
     return plugin.finish(items)
 
 def get_logo(logo):

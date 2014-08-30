@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.filmstarts_de" name="FilmStarts.de" version="2.1.1" provider-name="AddonScriptorDE">
+<addon id="plugin.video.filmstarts_de" name="FilmStarts.de" version="2.1.4" provider-name="AddonScriptorDE">
     <requires>
         <import addon="xbmc.python" version="2.1.0"/>
     </requires>
@@ -13,9 +13,10 @@
         <language>de</language>
         <description lang="de">Deutsche Trailer, Filmnews und Interviews</description>
         <description lang="en">German trailers, movie-news and interviews</description>
-        <website>http://www.filmstarts.de</website>
+        <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
         <source>https://github.com/AddonScriptorDE/plugin.video.filmstarts_de</source>
         <forum>http://forum.xbmc.org/showthread.php?tid=132563</forum>
         <email>AddonScriptorDE at yahoo dot de</email>
+        <website>http://www.filmstarts.de</website>
     </extension>
 </addon>

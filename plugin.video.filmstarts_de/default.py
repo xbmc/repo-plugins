@@ -6,19 +6,25 @@ import socket
 import xbmcplugin
 import xbmcaddon
 import xbmcgui
+import os
 import re
 import sys
 
-addon = xbmcaddon.Addon()
+#addon = xbmcaddon.Addon()
+#addonID = addon.getAddonInfo('id')
+addonID = 'plugin.video.filmstarts_de'
+addon = xbmcaddon.Addon(id=addonID)
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-addonId = addon.getAddonInfo('id')
 translation = addon.getLocalizedString
+addonDir = xbmc.translatePath(addon.getAddonInfo('path'))
+defaultFanart = os.path.join(addonDir ,'fanart.png')
+icon = os.path.join(addonDir ,'icon.png')
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
 showAllTrailers = addon.getSetting("showAllTrailers") == "true"
-forceViewMode = addon.getSetting("forceViewMode") == "true"
+forceView = addon.getSetting("forceView") == "true"
 useCoverAsFanart = addon.getSetting("useCoverAsFanart") == "true"
-viewMode = str(addon.getSetting("viewMode"))
+viewID = str(addon.getSetting("viewID"))
 maxCoverResolution = addon.getSetting("maxCoverResolution")
 baseUrl = "http://www.filmstarts.de"
 
@@ -27,23 +33,24 @@ def index():
     addDir('Trailer: '+translation(30008), '', "search", '')
     addDir('Trailer: '+translation(30001), baseUrl + '/trailer/aktuell_im_kino.html?version=1', "showSortDirection", '')
     addDir('Trailer: '+translation(30002), baseUrl + '/trailer/bald_im_kino.html?version=1', "showSortDirection", '')
-    addDir('Filmstarts: Interviews', baseUrl + '/trailer/interviews/', "listVideosInterview", '')
-    addDir('Filmstarts: Fünf Sterne', baseUrl + '/videos/shows/funf-sterne', "listVideosMagazin", '')
-    addDir('Filmstarts: Fehlerteufel', baseUrl + '/videos/shows/filmstarts-fehlerteufel', "listVideosMagazin", '')
-    addDir('Meine Lieblings-Filmszene', baseUrl + '/videos/shows/meine-lieblings-filmszene', "listVideosMagazin", '')
-    addDir('Serien-Trailer', baseUrl + '/trailer/serien/', "listVideosTV", '')
+    addDir('Filmstarts: Fünf Sterne', baseUrl + '/videos/shows/funf-sterne', "listVideos", '')
+    addDir('Filmstarts: Interviews', baseUrl + '/trailer/interviews/', "listVideos", '')
+    addDir('Filmstarts: Fehlerteufel', baseUrl + '/videos/shows/filmstarts-fehlerteufel', "listVideos", '')
+    addDir('Meine Lieblings-Filmszene', baseUrl + '/videos/shows/meine-lieblings-filmszene', "listVideos", '')
+    #addDir('Serien-Trailer', baseUrl + '/serien/videos/neueste/', "listVideos", '')
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
 def showSortDirection(url):
-    addDir(translation(30006), url.replace("?version=1", "?sort_order=2&version=1"), "listVideosTrailer", '')
-    addDir(translation(30003), url.replace("?version=1", "?sort_order=0&version=1"), "listVideosTrailer", '')
-    addDir(translation(30004), url.replace("?version=1", "?sort_order=1&version=1"), "listVideosTrailer", '')
-    addDir(translation(30005), url.replace("?version=1", "?sort_order=3&version=1"), "listVideosTrailer", '')
+    addDir(translation(30006), url.replace("?version=1", "?sort_order=2&version=1"), "listVideos", '')
+    addDir(translation(30003), url.replace("?version=1", "?sort_order=0&version=1"), "listVideos", '')
+    addDir(translation(30004), url.replace("?version=1", "?sort_order=1&version=1"), "listVideos", '')
+    addDir(translation(30005), url.replace("?version=1", "?sort_order=3&version=1"), "listVideos", '')
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
 def listVideos(urlFull):
+    xbmcplugin.setContent(pluginhandle, "movies")
     content = getUrl(urlFull)
     currentPage = -1
     maxPage = -1
@@ -58,56 +65,38 @@ def listVideos(urlFull):
             maxPage = int(match[0][2])
         except:
             pass
-    if mode == "listVideosTrailer":
-        match = re.compile('<img src=\'(.+?)\' alt=".+?" title=".+?" />\n</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a class="link" href="(.+?)">\n<span class=\'bold\'>(.+?)</span>', re.DOTALL).findall(content)
-        for thumb, url, title in match:
-            if showAllTrailers:
-                url = url[:url.find("/trailer/")]+"/trailers/"
-                addDir(title, baseUrl + url, "listTrailers", get_better_thumb(thumb))
-            else:
-                addLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
-    elif mode == "listVideosMagazin":
-        if currentPage == 1:
-            match = re.compile('<a href=".+?">\n<img src="(.+?)" alt="" />\n</a>\n</div>\n<div style=".+?">\n<h2 class=".+?" style=".+?"><b>.+?</b> (.+?)</h2><br />\n<span style=".+?" class="purehtml fs11">\n.+?<a class="btn" href="(.+?)"', re.DOTALL).findall(content)
-            for thumb, title, url in match:
-                addLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
-        match = re.compile('<img src=\'(.+?)\' alt=".+?" title=".+?" />\n</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a href=\'(.+?)\' class="link">\n<span class=\'bold\'><b>.+?</b> (.+?)</span>', re.DOTALL).findall(content)
-        for thumb, url, title in match:
-            addLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
-    elif mode == "listVideosInterview":
-        match = re.compile('<img src=\'(.+?)\'.+?</span>\n</div>\n<div class="contenzone">\n<div class="titlebar">\n<a.+?href=\'(.+?)\'>\n<span class=\'bold\'>\n(.+?)\n</span>(.+?)\n</a>', re.DOTALL).findall(content)
-        for thumb, url, title1, title2 in match:
-            addLink(title1+title2, baseUrl + url, "playVideo", get_better_thumb(thumb))
-    elif mode == "listVideosTV":
-        spl = content.split('<div class="datablock vpadding10b">')
-        for i in range(1, len(spl), 1):
-            entry = spl[i]
-            match = re.compile("<a href='(.+?)'>", re.DOTALL).findall(entry)
-            url = match[0]
-            match = re.compile("<img src='(.+?)'", re.DOTALL).findall(entry)
-            thumb = match[0]
-            if "<span class='bold'>" in entry:
-                match = re.compile("<span class='bold'>(.+?)</span>(.+?)<br />", re.DOTALL).findall(entry)
-                title = match[0][0]+' '+match[0][1]
-            else:
-                match = re.compile("<a href='(.+?)'>\n(.+?)<br />", re.DOTALL).findall(entry)
-                title = match[0][1]
+    spl = content.split('class="datablock')
+    for i in range(1, len(spl), 1):
+        entry = spl[i]
+        match = re.compile("src='(.+?)'", re.DOTALL).findall(entry)
+        thumb = match[0]
+        match1 = re.compile("href='(.+?)'.*?>(.+?)</a>", re.DOTALL).findall(entry)
+        match2 = re.compile('href="(.+?)".*?>(.+?)</a>', re.DOTALL).findall(entry)
+        match = ""
+        if match1:
+            match=match1
+        elif match2:
+            match=match2
+        url = match[0][0]
+        title = match[0][1].replace("<strong>","").replace("</strong>","").replace("<span class='bold'>","").replace("</span>","").replace("\n","")
+        if "Trailer" in title:
+            title = title[:title.find("Trailer")]
+        if "Teaser" in title:
+            title = title[:title.find("Teaser")]
+        title = cleanTitle(title)
+        if showAllTrailers and "/trailer/" in url:
+            url = url[:url.find("/trailer/")]+"/trailers/"
+            addDir(title, baseUrl + url, "listTrailers", get_better_thumb(thumb))
+        else:
             addLink(title, baseUrl + url, "playVideo", get_better_thumb(thumb))
     if currentPage < maxPage:
-        urlNew = ""
-        if mode == "listVideosTrailer":
-            sortNr = urlFull[urlFull.find('sort_order=')+11:]
-            sortNr = sortNr[:sortNr.find('&')]
-            urlNew = urlFull[:urlFull.find('?')]+"?page="+str(currentPage+1)+"&sort_order="+sortNr+"&version=1"
-        elif '?page=' in urlFull and mode in ["listVideosMagazin", "listVideosInterview", "listVideosTV"]:
-            match = re.compile('http://www.filmstarts.de/(.+?)?page=(.+?)', re.DOTALL).findall(urlFull)
-            urlNew = baseUrl + '/'+match[0][0]+'page='+str(currentPage+1)
-        elif not '?page=' in urlFull and mode in ["listVideosMagazin", "listVideosInterview", "listVideosTV"]:
-            urlNew = urlFull + "?page="+str(currentPage+1)
-        addDir(translation(30007)+" ("+str(currentPage+1)+")", urlNew, mode, '')
+        sortNr = urlFull[urlFull.find('sort_order=')+11:]
+        sortNr = sortNr[:sortNr.find('&')]
+        urlNew = urlFull[:urlFull.find('?')]+"?page="+str(currentPage+1)+"&sort_order="+sortNr+"&version=1"
+        addDir(translation(30007)+" ("+str(currentPage+1)+")", urlNew, "listVideos", '')
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+    if forceView and ".html" in urlFull:
+        xbmc.executebuiltin('Container.SetViewMode('+viewID+')')
 
 
 def listTrailers(url, fanart):
@@ -122,13 +111,11 @@ def listTrailers(url, fanart):
             match = re.compile('"src":"(.+?)"', re.DOTALL).findall(entry)
             thumb = match[0]
             match = re.compile('<span class="title fs14 ">.+?>(.+?)</span>', re.DOTALL).findall(entry)
-            title = match[0].replace("<b>","").replace("</b>"," -").replace("</a>","")
+            title = match[0].replace("<b>","").replace("</b>"," -").replace("</a>","").replace("<strong>","").replace("</strong>","")
             title = title.replace(" DF", " - "+str(translation(30009))).replace(" OV", " - "+str(translation(30010)))
             title = cleanTitle(title)
             addSmallThumbLink(title, url, 'playVideo', get_better_thumb(thumb), fanart)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def cleanTitle(title):
@@ -140,6 +127,7 @@ def cleanTitle(title):
 
 
 def search():
+    xbmcplugin.setContent(pluginhandle, "movies")
     keyboard = xbmc.Keyboard('', str(translation(30008)))
     keyboard.doModal()
     if keyboard.isConfirmed() and keyboard.getText():
@@ -157,8 +145,8 @@ def search():
             url = baseUrl + match[0].replace(".html", "/trailers/")
             addDir(title, url, 'listTrailers', get_better_thumb(thumb))
         xbmcplugin.endOfDirectory(pluginhandle)
-        if forceViewMode:
-            xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
+        if forceView:
+            xbmc.executebuiltin('Container.SetViewMode('+viewID+')')
 
 
 def playVideo(url):
@@ -178,6 +166,8 @@ def playVideo(url):
         finalUrl = ""
         match = re.compile('hd_path="(.+?)"', re.DOTALL).findall(content)
         finalUrl = match[0]
+        if finalUrl.startswith("youtube:"):
+            finalUrl = getYoutubeUrl(finalUrl.split(":")[1])
     if finalUrl:
         listitem = xbmcgui.ListItem(path=finalUrl)
         xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -241,8 +231,10 @@ def addLink(name, url, mode, iconimage):
     liz.setInfo(type="Video", infoLabels={"Title": name})
     if useCoverAsFanart:
         liz.setProperty("fanart_image", iconimage)
+    else:
+        liz.setProperty("fanart_image", defaultFanart)
     liz.setProperty('IsPlayable', 'true')
-    liz.addContextMenuItems([(translation(30011), 'RunPlugin(plugin://'+addonId+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',)])
+    liz.addContextMenuItems([(translation(30011), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
@@ -255,7 +247,9 @@ def addSmallThumbLink(name, url, mode, iconimage, fanart=""):
     liz.setProperty('IsPlayable', 'true')
     if useCoverAsFanart:
         liz.setProperty("fanart_image", fanart)
-    liz.addContextMenuItems([(translation(30011), 'RunPlugin(plugin://'+addonId+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',)])
+    else:
+        liz.setProperty("fanart_image", defaultFanart)
+    liz.addContextMenuItems([(translation(30011), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 
@@ -263,10 +257,12 @@ def addSmallThumbLink(name, url, mode, iconimage, fanart=""):
 def addDir(name, url, mode, iconimage):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+urllib.quote_plus(mode)+"&fanart="+urllib.quote_plus(iconimage)
     ok = True
-    liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    liz = xbmcgui.ListItem(name, iconImage=icon, thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
-    if useCoverAsFanart:
+    if useCoverAsFanart and iconimage:
         liz.setProperty("fanart_image", iconimage)
+    else:
+        liz.setProperty("fanart_image", defaultFanart)
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok
 
@@ -284,7 +280,7 @@ elif mode == "showSortDirection":
     showSortDirection(url)
 elif mode == "listTrailers":
     listTrailers(url, fanart)
-elif mode in ["listVideosMagazin", "listVideosInterview", "listVideosTV", "listVideosTrailer"]:
+elif mode == "listVideos":
     listVideos(url)
 elif mode == "search":
     search()

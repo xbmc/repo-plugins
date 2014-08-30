@@ -9,24 +9,27 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 
-addon = xbmcaddon.Addon()
+#addon = xbmcaddon.Addon()
+#addonID = addon.getAddonInfo('id')
+addonID = 'plugin.video.welt_der_wunder'
+addon = xbmcaddon.Addon(id=addonID)
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-forceViewMode = addon.getSetting("forceViewMode") == "true"
-viewMode = str(addon.getSetting("viewMode"))
+forceViewMode = addon.getSetting("forceView") == "true"
+icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
+viewMode = str(addon.getSetting("viewID"))
 translation = addon.getLocalizedString
 urlMain = "http://www.wissensthek.de"
 
 
 def index():
-    addDir("LiveTV", "", 'listLive', "")
-    addDir("Mediathek", "", 'videosMain', "")
+    addDir("LiveTV", "", 'listLive', icon)
+    addDir("Mediathek", "", 'videosMain', icon)
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
 def videosMain():
-    #addDir("Aktuell", urlMain+"/aktuell.html", 'listVideos', "")
-    addDir("TV-Sendung", urlMain+"/tv-sendung.html", 'listVideos', "")
+    #addDir("Aktuelles", urlMain+"/aktuelles.html", 'listVideos', "")
     addDir("Mensch & Natur", urlMain+"/mensch-natur.html", 'listVideos', "")
     addDir("Technik & Weltraum", urlMain+"/technik-weltraum.html", 'listVideos', "")
     addDir("Fragen & Antworten", urlMain+"/fragen-antworten.html", 'listVideos', "")
@@ -46,32 +49,39 @@ def listLive():
         match = re.compile('<i><span class=".+?">.+?</span>.+?-(.+?)</i>', re.DOTALL).findall(entry)
         time = match[0].strip()[:5]
         title = time+" - "+title
-        match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-        thumb = match[0]
+        #match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+        #thumb = match[0]
+        thumb = icon
         addLink(title, "", 'playLive', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
-    if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def listVideos(url):
+    xbmcplugin.setContent(pluginhandle, "episodes")
     content = getUrl(url)
     spl = content.split('<div class="description-box">')
     for i in range(1, len(spl), 1):
         entry = spl[i]
         match = re.compile('class="test">(.+?)<', re.DOTALL).findall(entry)
         title = cleanTitle(match[0])
-        match = re.compile('clipid%5D=(.+?)&', re.DOTALL).findall(entry)
+        match = re.compile('/entry_id/(.+?)/', re.DOTALL).findall(entry)
         id = match[0]
         match = re.compile('<div class="text-desc">.+?<p>(.+?)</p>', re.DOTALL).findall(entry)
-        desc = match[0]
+        desc = ""
+        if match:
+            desc = match[0]
         match = re.compile('<span>(.+?)</span>', re.DOTALL).findall(entry)
         date = match[0]
+        splDate = date.split(".")
+        date = splDate[2]+"-"+splDate[1]+"-"+splDate[0]
         match = re.compile('<span class="time-video">(.+?)</span>', re.DOTALL).findall(entry)
         length = match[0]
+        if length.startswith("00:"):
+            length = 1
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb = match[0].replace("/width/200/height/131/","/width/600/height/393/")
-        addLink(title, id, 'playVideo', thumb, length, date+"\n"+desc)
+        thumb = thumb[:thumb.rfind("/")]
+        addLink(title, id, 'playVideo', thumb, length, desc, date)
     content = content[content.find('<div class="pager">'):]
     content = content[:content.find('</div>')]
     content = content[content.rfind("target='_self'"):]
@@ -127,11 +137,11 @@ def parameters_string_to_dict(parameters):
     return paramDict
 
 
-def addLink(name, url, mode, iconimage, length="", desc=""):
+def addLink(name, url, mode, iconimage, length="", desc="", date=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name, "Duration": length, "Plot": desc})
+    liz.setInfo(type="Video", infoLabels={"Title": name, "Duration": length, "Plot": desc, "Aired": date, "Episode": 1})
     liz.setProperty('IsPlayable', 'true')
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok

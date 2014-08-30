@@ -1,6 +1,8 @@
 <settings>
    <setting id="showSubtitles" type="bool" label="30104" default="false"/>
+   <setting id="showDateInTitle" type="bool" label="30105" default="true"/>
    <setting id="useThumbAsFanart" type="bool" label="30103" default="true"/>
    <setting id="forceViewMode" type="bool" label="30101" default="true"/>
-   <setting id="viewMode" type="number" label="30102" default="500"/>
+   <setting id="viewIDShows" type="number" label="30106" default="500"/>
+   <setting id="viewIDVideos" type="number" label="30102" default="51"/>
 </settings>

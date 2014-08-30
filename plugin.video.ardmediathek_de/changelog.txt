@@ -1,26 +1,7 @@
-1.0.0
-- First Try
-1.0.1
-- Fixed bug while browsing tv shows (missing videos)
-1.0.2
-- Some small fixes
-- Added show favourites
-1.0.3 / 2.0.3
-- Fixed FSK videos
-- Added live stream
-- Added context menu for playing alternative stream
-1.0.4 / 2.0.4
-- Fixed videoplayback for some streams
-- Added context menu "Add to queue"
-- Changed livestream url
-1.0.5 / 2.0.5
-- Added subtitles
-- Added category: EinsLike
-- Better thumbs (thx@membrane)
-- Some other small improvements
-1.0.6 / 2.0.6
-- Small thumb optimizations
-1.0.7 / 2.0.7
-- Small thumb optimizations
-2.0.8
-- Added default background
+3.0.0
+- Initial release for new website layout
+3.0.1
+- Fixed stream/quality selection for some videos
+3.0.2
+- Fixed search
+- Fixed "Das Erste" live stream

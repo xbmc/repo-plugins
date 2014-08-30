@@ -13,10 +13,12 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 
-addon = xbmcaddon.Addon()
+#addon = xbmcaddon.Addon()
+#addonID = addon.getAddonInfo('id')
+addonID = 'plugin.video.spiegel_tv'
+addon = xbmcaddon.Addon(id=addonID)
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-addonID = addon.getAddonInfo('id')
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
 forceViewMode = addon.getSetting("forceViewMode") == "true"
 useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
@@ -42,15 +44,15 @@ def index():
     fh = open(versionFile, 'w')
     fh.write(content["version_name"])
     fh.close()
-    addDir(translation(30003), "", 'listChannels', icon)
-    addDir(translation(30004), "", 'listTopics', icon)
     addDir(translation(30002), "0", 'listVideos', icon)
     addDir(translation(30007), "0", 'listVideos', icon, "", "", "true")
+    addDir(translation(30003), "", 'listChannels', icon)
+    addDir(translation(30004), "", 'listTopics', icon)
     addDir(translation(30005), "", 'playRandom', icon)
     xbmcplugin.endOfDirectory(pluginhandle)
 
 
-def listChannels(url):
+def listChannels():
     xbmcplugin.setContent(pluginhandle, "episodes")
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
     content = getUrl(urlMain+"/"+getVersion()+"/restapi/channels.json")
@@ -77,28 +79,31 @@ def listChannels(url):
         xbmc.executebuiltin('Container.SetViewMode('+viewModeChannels+')')
 
 
-def listTopics(url):
+def listTopics():
     xbmcplugin.setContent(pluginhandle, "episodes")
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
     content = getUrl(urlMain+"/"+getVersion()+"/restapi/playlists.json")
     content = json.loads(content)
     for item in content:
-        channel = getUrl(urlMain+"/"+getVersion()+"/restapi/playlists/"+str(item)+".json")
-        channel = json.loads(channel)
-        ids = ""
-        for id in channel["media"]:
-            ids += str(id)+","
-        if ids:
-            ids = ids[:-1]
-        date = ""
-        if channel["updated"]:
-            date = channel["updated"]
-            date = date[:date.find("T")]
-        thumbUrl = ""
-        for thumb in channel["images"]:
-            if thumb["spec_slug"]=="t2-thema-moodbox":
-                thumbUrl = thumb["url"]
-        addDir(channel["title"], "0", 'listVideos', thumbUrl, ids, date)
+        try:
+            channel = getUrl(urlMain+"/"+getVersion()+"/restapi/playlists/"+str(item)+".json")
+            channel = json.loads(channel)
+            ids = ""
+            for id in channel["media"]:
+                ids += str(id)+","
+            if ids:
+                ids = ids[:-1]
+            date = ""
+            if channel["updated"]:
+                date = channel["updated"]
+                date = date[:date.find("T")]
+            thumbUrl = ""
+            for thumb in channel["images"]:
+                if thumb["spec_slug"]=="t2-thema-moodbox":
+                    thumbUrl = thumb["url"]
+            addDir(channel["title"], "0", 'listVideos', thumbUrl, ids, date)
+        except:
+            pass
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
         xbmc.executebuiltin('Container.SetViewMode('+viewModeChannels+')')
@@ -184,7 +189,7 @@ def playRandom():
 
 
 def playVideo(playpath):
-    listitem = xbmcgui.ListItem(path="rtmpe://fms.edge.newmedia.nacamar.net/schnee_vod/flashmedia/ playpath="+playpath)
+    listitem = xbmcgui.ListItem(path="rtmpe://fms.edge.newmedia.nacamar.net/schnee_vod/flashmedia/ swfVfy=1 swfUrl=http://prod-static.spiegel.tv/embedplayer.swf playpath="+playpath)
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 
@@ -217,7 +222,7 @@ def playVideoRandom(id):
         subtitle = ""
     if subtitle:
         title += ": "+subtitle
-    listitem = xbmcgui.ListItem(title, path="rtmpe://fms.edge.newmedia.nacamar.net/schnee_vod/flashmedia/ playpath="+playpath, thumbnailImage=thumbUrl)
+    listitem = xbmcgui.ListItem(title, path="rtmpe://fms.edge.newmedia.nacamar.net/schnee_vod/flashmedia/ swfVfy=1 swfUrl=http://prod-static.spiegel.tv/embedplayer.swf playpath="+playpath, thumbnailImage=thumbUrl)
     listitem.setInfo(type="Video", infoLabels={"Title": title})
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
@@ -242,7 +247,7 @@ def getUrl(url):
         fh = open(cacheFile, 'r')
         content = fh.read()
         fh.close()
-    elif os.path.exists(cacheFile) and ("/media.json" not in url and "/channels/" not in url and "/version.json" not in url):
+    elif os.path.exists(cacheFile) and ("/media.json" not in url and "/channels/" not in url and "/version.json" not in url and "/channels.json" not in url and "/playlists.json" not in url):
         fh = open(cacheFile, 'r')
         content = fh.read()
         fh.close()
@@ -295,9 +300,9 @@ thumb = urllib.unquote_plus(params.get('thumb', ''))
 rnd = urllib.unquote_plus(params.get('rnd', ''))
 
 if mode == 'listChannels':
-    listChannels(url)
+    listChannels()
 elif mode == 'listTopics':
-    listTopics(url)
+    listTopics()
 elif mode == 'listVideos':
     listVideos(ids, int(url), rnd)
 elif mode == 'playVideo':

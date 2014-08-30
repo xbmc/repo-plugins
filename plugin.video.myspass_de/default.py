@@ -9,7 +9,10 @@ import sys
 import xbmcaddon
 import socket
 
-addon = xbmcaddon.Addon()
+#addon = xbmcaddon.Addon()
+#addonID = addon.getAddonInfo('id')
+addonID = 'plugin.video.myspass_de'
+addon = xbmcaddon.Addon(id=addonID)
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 forceViewMode = addon.getSetting("forceViewMode") == "true"
@@ -18,7 +21,7 @@ urlMain = "http://www.myspass.de"
 
 
 def index():
-    addDir(translation(30007), urlMain+"/myspass/includes/php/ajax.php?v=2&ajax=true&action=getVideoList&sortBy=newest&category=clips&ajax=true&timeSpan=all&pageNumber=0", 'listVideos', "")
+    addDir(translation(30007), urlMain+"/myspass/includes/php/ajax.php?v=2&ajax=true&action=getVideoList&sortBy=newest&category=clips&ajax=true&timeSpan=month&pageNumber=0", 'listVideos', "")
     addDir(translation(30006), urlMain+"/myspass/includes/php/ajax.php?v=2&ajax=true&action=getVideoList&sortBy=newest&category=full_episodes&ajax=true&timeSpan=all&pageNumber=0", 'listVideos', "")
     addDir(translation(30002), "tvshows", 'listShows', "")
     addDir(translation(30003), "webshows", 'listShows', "")

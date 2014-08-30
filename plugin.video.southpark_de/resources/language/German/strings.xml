@@ -3,8 +3,11 @@
   <string id="30001">Staffel</string>
   <string id="30002">Folge</string>
   <string id="30003">Per Zufall</string>
-  <string id="30004">Folge ist nicht verfuegbar</string>
-  <string id="30101">Sprache</string>
-  <string id="30102">View erzwingen</string>
-  <string id="30104">Intro abspielen</string>
+  <string id="30004">Folge ist nicht verfügbar!</string>
+  <string id="30005">South Park ist in deinem Land nicht verfügbar!</string>
+  <string id="30101">Land</string>
+  <string id="30102">Sprache</string>
+  <string id="30103">View erzwingen</string>
+  <string id="30105">Thumb als Fanart nutzen</string>
+  <string id="30106">Untertitel anzeigen</string>
 </strings>

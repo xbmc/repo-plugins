@@ -3,9 +3,12 @@
   <string id="30001">Season</string>
   <string id="30002">Episode</string>
   <string id="30003">Random</string>
-  <string id="30004">Episode is not available</string>
-  <string id="30101">Language</string>
-  <string id="30102">Force View</string>
-  <string id="30103">ViewID</string>
-  <string id="30104">Play Intro</string>
+  <string id="30004">Episode is not available!</string>
+  <string id="30005">South Park is not available in your country!</string>
+  <string id="30101">Country</string>
+  <string id="30102">Language</string>
+  <string id="30103">Force View</string>
+  <string id="30104">ViewID</string>
+  <string id="30105">Use thumb as fanart</string>
+  <string id="30106">Show subtitles</string>
 </strings>

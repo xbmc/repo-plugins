@@ -19,39 +19,36 @@ baseUrl = "http://www.chefkoch.de"
 
 
 def index():
-    addDir(translation(30002), baseUrl+"/magazin/6,143,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30003), baseUrl+"/magazin/6,148,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30004), baseUrl+"/magazin/6,149,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30005), baseUrl+"/magazin/6,150,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30006), baseUrl+"/magazin/6,144,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30007), baseUrl+"/magazin/6,151,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30008), baseUrl+"/magazin/6,152,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30009), baseUrl+"/magazin/6,153,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30011), baseUrl+"/magazin/6,147,0/Chefkoch/", 'listVideos', "")
-    addDir(translation(30010), baseUrl+"/magazin/6,146,0/Chefkoch/", 'listVideos', "")
+    content = getUrl(baseUrl+"/video/")
+    spl = content.split('class="magazin-teaser category-teaser"')
+    for i in range(1, len(spl), 1):
+        entry = spl[i]
+        match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
+        url = match[0]
+        match = re.compile('title="(.+?)"', re.DOTALL).findall(entry)
+        title = cleanTitle(match[0])
+        match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
+        thumb = match[0]
+        addDir(title, baseUrl+url, 'listVideos', thumb)
     xbmcplugin.endOfDirectory(pluginhandle)
+    if forceViewMode:
+        xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 
 def listVideos(url):
     content = getUrl(url)
-    if ",0/" in url:
-        splStart = 1
-    else:
-        splStart = 2
-    spl = content.split('	<a href="http://www.chefkoch.de/magazin/rt/')
-    for i in range(splStart, len(spl), 1):
+    spl = content.split('class="magazin-teaser teaser-small teaser-tv"')
+    for i in range(1, len(spl), 1):
         entry = spl[i]
-        match = re.compile('<a href="(.+?)" name="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
-        url = match[0][0]
-        title = match[0][2]
-        title = cleanTitle(title)
+        match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
+        url = match[0]
+        match = re.compile('alt="(.+?)"', re.DOTALL).findall(entry)
+        title = cleanTitle(match[0])
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb = match[0]
-        match = re.compile('<strong>ca. (.+?) Min.</strong>', re.DOTALL).findall(entry)
-        length = ""
-        if match:
-            length = match[0]
-        addLink(title, url, 'playVideo', thumb, length)
+        match = re.compile('class="magazin-teaser-subtitle">(.+?)<', re.DOTALL).findall(entry)
+        desc = cleanTitle(match[0])
+        addLink(title, baseUrl+url, 'playVideo', thumb, desc)
     matchPage = re.compile('<span class="magazin-pagination-next">.+?<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(content)
     if matchPage:
         for url, title in matchPage:
@@ -65,7 +62,7 @@ def listVideos(url):
 
 def playVideo(url):
     content = getUrl(url)
-    match = re.compile("file  : '(.+?)'", re.DOTALL).findall(content)
+    match = re.compile('<meta itemprop="contentUrl" content="(.+?)"', re.DOTALL).findall(content)
     url = match[0]
     listitem = xbmcgui.ListItem(path=url)
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -99,11 +96,11 @@ def parameters_string_to_dict(parameters):
     return paramDict
 
 
-def addLink(name, url, mode, iconimage, duration):
+def addLink(name, url, mode, iconimage, desc=""):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-    liz.setInfo(type="Video", infoLabels={"Title": name, "Duration": duration})
+    liz.setInfo(type="Video", infoLabels={"Title": name, "Plot": desc})
     liz.setProperty('IsPlayable', 'true')
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok

@@ -10,14 +10,16 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 
-addon = xbmcaddon.Addon()
+addonID = 'plugin.video.cbsnews_com'
+addon = xbmcaddon.Addon(id=addonID)
+#addon = xbmcaddon.Addon()
+#addonID = addon.getAddonInfo('id')
 socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
-addonID = addon.getAddonInfo('id')
 icon = xbmc.translatePath('special://home/addons/'+addonID+'/icon.png')
+useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
 forceViewMode = addon.getSetting("forceView") == "true"
-viewIDVideos = str(addon.getSetting("viewIDVideos"))
-viewIDEpisodes = str(addon.getSetting("viewIDEpisodes"))
+viewID = str(addon.getSetting("viewIDNew"))
 urlMain = "http://www.cbsnews.com"
 
 
@@ -25,8 +27,8 @@ def index():
     xbmcplugin.addSortMethod(pluginhandle, xbmcplugin.SORT_METHOD_LABEL)
     addDir("- "+translation(30002), "", "search", icon)
     content = getUrl(urlMain+"/videos")
-    match = re.compile('<a href="/videos/topics/(.+?)/">(.+?)</a>', re.DOTALL).findall(content)
-    for id, title in match:
+    match = re.compile('<a href="/videos/topics/([^\/]+)/"([^>]+)?>([^<]+)</a>', re.DOTALL).findall(content)
+    for id, ignored_grouping, title in match:
         if id=="48-hours":
             addDir(title, urlMain+"/latest/"+id+"/full-episodes/1", 'listEpisodes', icon)
         elif id=="60-minutes":
@@ -45,7 +47,7 @@ def listVideos(type, value, offset):
     for item in content:
         video = content[item]
         url = urlMain+"/videos/"+video["slug"]+"/"
-        #Does not work randomly: GetImageHash - unable to stat url ...
+        #GetImageHash - unable to stat url (randomly)
         #thumb = video["image"]["full"]
         thumb = video["image"]["path"]
         if "?" in thumb:
@@ -54,7 +56,7 @@ def listVideos(type, value, offset):
     addDir2(translation(30001), 'listVideos', "", type, value, str(int(offset)+30))
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewIDVideos+')')
+        xbmc.executebuiltin('Container.SetViewMode('+viewID+')')
 
 
 def listEpisodes(url):
@@ -62,7 +64,7 @@ def listEpisodes(url):
     content = getUrl(url)
     content = content[content.find('<div class="media-list'):]
     content = content[:content.find('</ul>')]
-    spl=content.split('<li>')
+    spl=content.split('<li')
     for i in range(1,len(spl),1):
         entry=spl[i]
         match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
@@ -73,6 +75,10 @@ def listEpisodes(url):
         desc=cleanTitle(match[0])
         match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
         thumb=match[0]
+        #GetImageHash - unable to stat url (randomly)
+        #thumb=match[0].replace("/140x90/","/640x360/")
+        if "?" in thumb:
+            thumb = thumb[:thumb.find("?")]
         match=re.compile('<span class="date">(.+?)</span>', re.DOTALL).findall(entry)
         date=match[0]
         addLink(title, urlEpisode, 'playVideo', thumb, date+"\n"+desc)
@@ -81,7 +87,7 @@ def listEpisodes(url):
     addDir(translation(30001), url.replace("/full-episodes/"+currentPage, "/full-episodes/"+nextPage), 'listEpisodes', "")
     xbmcplugin.endOfDirectory(pluginhandle)
     if forceViewMode:
-        xbmc.executebuiltin('Container.SetViewMode('+viewIDEpisodes+')')
+        xbmc.executebuiltin('Container.SetViewMode('+viewID+')')
 
 
 def list60MinutesMain(id):
@@ -101,7 +107,7 @@ def playEveningNewsLatest():
     content = getUrl(urlMain+"/latest/evening-news/full-episodes/1")
     content = content[content.find('<div class="media-list'):]
     content = content[:content.find('<ul>')]
-    spl=content.split('<li>')
+    spl=content.split('<li')
     entry=spl[1]
     match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
     url=urlMain+match[0]
@@ -109,13 +115,18 @@ def playEveningNewsLatest():
     title=cleanTitle(match[0])
     match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
     thumb=match[0]
+    thumb = thumb[:thumb.find("?")]
     playVideo(url, title, thumb)
 
 
 def playVideo(url, title="", thumb="DefaultVideo.png"):
     content = getUrl(url)
     match=re.compile('"mediaHlsURI":"(.+?)"', re.DOTALL).findall(content)
-    listitem = xbmcgui.ListItem(path=match[0].replace("\\",""), thumbnailImage=thumb)
+    streamUrl = match[0].replace("\\","")
+    if thumb!="DefaultVideo.png":
+        listitem = xbmcgui.ListItem(path=streamUrl, thumbnailImage=thumb)
+    else:
+        listitem = xbmcgui.ListItem(path=streamUrl)
     if title:
         listitem.setInfo( type="Video", infoLabels={ "Title": title } )
     xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
@@ -150,7 +161,6 @@ def translation(id):
 
 
 def parameters_string_to_dict(parameters):
-    ''' Convert parameters encoded in a URL to a dict. '''
     paramDict = {}
     if parameters:
         paramPairs = parameters[1:].split("&")
@@ -169,6 +179,8 @@ def addLink(name, url, mode, iconimage, desc="", date="", duration="", season=""
     liz.setProperty('IsPlayable', 'true')
     if duration:
         liz.addStreamInfo('video', {'duration': int(duration)})
+    if useThumbAsFanart:
+        liz.setProperty("fanart_image", iconimage)
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
 

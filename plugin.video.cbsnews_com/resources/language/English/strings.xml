@@ -6,6 +6,6 @@
   <string id="30004">All videos</string>
   <string id="30005">Play latest episode</string>
   <string id="30101">Force View</string>
-  <string id="30102">ViewID (Videos)</string>
-  <string id="30103">ViewID (Episodes)</string>
+  <string id="30102">ViewID</string>
+  <string id="30103">Use thumb as fanart</string>
 </strings>

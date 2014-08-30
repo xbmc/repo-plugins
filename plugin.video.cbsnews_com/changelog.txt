@@ -17,3 +17,10 @@
 - Fixed search
 2.0.8
 - Rewrote addon because of new video site layout
+2.0.9
+- Fixed thumbnail on infoview while playback
+2.1.0
+- Fixed site changes
+2.1.1
+- Fixed thumbnails
+- Fixed category listing (thx@nkanand4)

@@ -12,6 +12,9 @@ blacklistFile=xbmc.translatePath("special://profile/addon_data/"+addonID+"/"+add
 addon = xbmcaddon.Addon(id=addonID)
 translation = addon.getLocalizedString
 filterVids=addon.getSetting("filterVids")
+forceViewMode = addon.getSetting("forceViewMode") == "true"
+useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
+viewMode = str(addon.getSetting("viewMode"))
 
 def index():
         artistsFavsCount=0
@@ -33,10 +36,9 @@ def index():
           fh.close()
         addDir("TV-Shows","http://www.mtv.de/shows/alle",'listShows',"")
         addDir(translation(30007),"http://www.mtv.de/musikvideos",'listVideosLatest',"")
-        addDir(translation(30001),"http://www.mtv.de/charts/5-hitlist-germany-top-100",'listCharts',"")
-        #addDir(translation(30002),"http://www.mtv.de/charts/7-deutsche-black-charts",'listCharts',"")
-        #addDir(translation(30003),"http://www.mtv.de/charts/6-dance-charts",'listCharts',"")
-        addDir(translation(30004),"http://www.mtv.de/musikvideos/11-mtv-de-videocharts/playlist",'listCharts',"")
+        addDir(translation(30001),"http://www.mtv.de/charts/5-hitlist-germany-top-100",'listVideos',"")
+        addDir(translation(30004),"http://www.mtv.de/charts/8-mtv-de-videocharts",'listVideos',"")
+        addDir(translation(30003),"http://www.mtv.de/charts/199-top-100-single-jahrescharts-2013",'listVideos',"")
         addDir(str(translation(30009))+" ("+str(artistsFavsCount)+")","ARTISTSFAVS",'artistsFavs',"")
         addTCDir(str(translation(30010))+" ("+str(titlesCount)+")","ARTISTS",'titles',"")
         addDir(translation(30008),"ARTISTS_AZ",'artists',"")
@@ -46,7 +48,7 @@ def index():
         xbmcplugin.endOfDirectory(pluginhandle)
 
 def cleanTitle(title):
-        return title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#039;","\\").replace("&quot;","\"").strip()
+        return title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#x27;","'").replace("&#039;","\\").replace("&quot;","\"").strip()
 
 def playlistMain():
         playlists=[]
@@ -176,58 +178,33 @@ def playVideoFromPlaylist(url):
 
 def listShows(url):
         content = getUrl(url)
-        content = content[content.find("<div class='teaser_collection'>"):]
-        content = content[:content.find("</section>")]
-        spl=content.split("<li class='teaser_franchise'")
+        spl=content.split("class='franchise teaser")
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('<a href="(.+?)" title="(.+?)">', re.DOTALL).findall(entry)
-            url="http://www.mtv.de"+match[0][0]
-            title=match[0][1]
+            match=re.compile('<a href="(.+?)"', re.DOTALL).findall(entry)
+            url="http://www.mtv.de"+match[0]
+            match=re.compile('<h3>(.+?)</h3>', re.DOTALL).findall(entry)
+            title=match[0]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
-            addDir(title,url,'listShow',thumb)
+            addDir(title,url,'listVideos',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
 
 def listShow(url):
         content = getUrl(url)
-        if content.find("<ul class='related_seasons'>")>=0:
-          content = content[content.find("<ul class='related_seasons'>"):]
-          content = content[:content.find("</ul>")]
+        if content.find("<div class='season-info'>")>=0:
+          content = content[content.find("<div class='season-info'>"):]
+          content = content[:content.find("</ol>")]
           spl=content.split("<li")
           for i in range(1,len(spl),1):
               entry=spl[i]
-              match=re.compile('<a href="(.+?)">(.+?)</a>', re.DOTALL).findall(entry)
+              match=re.compile('href="(.+?)" class=".*?">(.+?)<', re.DOTALL).findall(entry)
               url="http://www.mtv.de"+match[0][0]
-              title=match[0][1]
-              addDir(title,url,'listEpisodes',"")
+              title="Season "+match[0][1]
+              addDir(title,url,'listVideos',"")
           xbmcplugin.endOfDirectory(pluginhandle)
-        elif content.find("<div class='related_episodes'>")>=0:
-          listEpisodesMain(content)
         else:
-          xbmcplugin.endOfDirectory(pluginhandle)
-
-def listEpisodes(url):
-        content = getUrl(url)
-        listEpisodesMain(content)
-
-def listEpisodesMain(content):
-        content = content[content.find("<div class='related_episodes'>"):]
-        content = content[:content.find("</div>")]
-        spl=content.split("<li")
-        for i in range(1,len(spl),1):
-            entry=spl[i]
-            match=re.compile("data-playlist-id='(.+?)'", re.DOTALL).findall(entry)
-            id=match[0]
-            match=re.compile('title="(.+?)"><span class=\'episode_number\'>(.+?)</span>', re.DOTALL).findall(entry)
-            title=match[0][0]
-            nr=match[0][1]
-            if nr=="+":
-              nr="Special"
-            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-            thumb=match[0]
-            addShowLink(nr+" - "+title,id,'playShow',thumb)
-        xbmcplugin.endOfDirectory(pluginhandle)
+          listVideos(url)
 
 def listVideos(url):
         contentTitles=""
@@ -242,57 +219,28 @@ def listVideos(url):
           fh.close()
         content = getUrl(url)
         newTitles=""
-        content = content[content.find("<div class='current_season'>"):]
-        content = content[:content.find("</ul>")]
-        spl=content.split('<li')
+        #content = content[content.find("<div class='current_season'>"):]
+        #content = content[:content.find("</ul>")]
+        spl=content.split('marquee-slide video')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            if entry.find("class='no_video'")==-1 and entry.find("class='active no_video'")==-1:
-              match=re.compile("data-uma-token='(.+?)'", re.DOTALL).findall(entry)
+            match=re.compile('"token":"(.+?)"', re.DOTALL).findall(entry)
+            if match:
               url=match[0]
               match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
               thumb=match[0]
-              match=re.compile('title="(.+?)"', re.DOTALL).findall(entry)
+              match=re.compile("class='info-title'>(.+?)<", re.DOTALL).findall(entry)
               title=match[0]
-              title=cleanTitle(title)
-              titleInfos="###URL###="+url+"###TITLE###="+title+"!!!END!!!"
-              titleRaw=title
-              if contentTitles.find(titleInfos)==-1 and newTitles.find(titleInfos)==-1:
-                newTitles = newTitles + titleInfos
-              if contentBlacklist.find(titleRaw)==-1:
-                if filterVids=="true":
-                  if title.lower().find("all eyes on")==-1 and title.lower().find("interview")==-1:
-                    addLink(title,url,'playVideo',thumb)
-                else:
-                  addLink(title,url,'playVideo',thumb)
-        xbmcplugin.endOfDirectory(pluginhandle)
-        xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/titles.py,'+urllib.quote_plus(newTitles)+')')
-
-def listCharts(url):
-        contentTitles=""
-        if os.path.exists(titlesListFile):
-          fh = open(titlesListFile, 'r')
-          contentTitles=fh.read()
-          fh.close()
-        contentBlacklist=""
-        if os.path.exists(blacklistFile):
-          fh = open(blacklistFile, 'r')
-          contentBlacklist=fh.read()
-          fh.close()
-        content = getUrl(url)
-        newTitles=""
-        content = content[content.find("<div class='current_season'>"):]
-        content = content[:content.find("</ul>")]
-        spl=content.split('<li')
-        for i in range(1,len(spl),1):
-            entry=spl[i]
-            if entry.find("class='no_video'")==-1 and entry.find("class='active no_video'")==-1:
-              match=re.compile("data-uma-token='(.+?)'", re.DOTALL).findall(entry)
-              url=match[0]
-              match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-              thumb=match[0]
-              match=re.compile('title="(.+?)"', re.DOTALL).findall(entry)
-              title=match[0]
+              if ">" in title:
+                title = title[title.find(">")+1:]
+              match=re.compile("class='info-subtitle'>(.+?)<", re.DOTALL).findall(entry)
+              title2=match[0]
+              if ">" in title2:
+                title2 = title2[title2.find(">")+1:].strip()
+              match=re.compile("<span>(.+?)</span>", re.DOTALL).findall(entry)
+              if match:
+                title2=match[0]
+              title=title+" - "+title2
               title=cleanTitle(title)
               titleInfos="###URL###="+url+"###TITLE###="+title+"!!!END!!!"
               match=re.compile("<span class='chart_position'>(.+?)</span>", re.DOTALL).findall(entry)
@@ -309,6 +257,8 @@ def listCharts(url):
                   addLink(title,url,'playVideo',thumb)
         xbmcplugin.endOfDirectory(pluginhandle)
         xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/titles.py,'+urllib.quote_plus(newTitles)+')')
+        if forceViewMode:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def listVideosLatest(url):
         urlMain=url
@@ -324,13 +274,13 @@ def listVideosLatest(url):
           contentTitles=fh.read()
           fh.close()
         content = getUrl(url)
-        spl=content.split("<li class='teaser_music_video'>")
+        spl=content.split(" teaser'>")
         for i in range(1,len(spl),1):
           entry=spl[i]
-          match=re.compile('<a href="/musikvideos/(.+?)"', re.DOTALL).findall(entry)
-          url="http://www.mtv.de/musikvideos/"+match[0]
+          match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
+          url="http://www.mtv.de/"+match[0]
           match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-          thumb=match[0]
+          thumb=match[0].replace("/306x172","/960x540!")
           match=re.compile('title="(.+?)"', re.DOTALL).findall(entry)
           titleNew=match[0]
           titleNew=cleanTitle(titleNew)
@@ -346,6 +296,8 @@ def listVideosLatest(url):
         addDir(translation(30012)+" ("+nextPage+")","http://www.mtv.de/musikvideos?page="+nextPage,'listVideosLatest',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         xbmc.executebuiltin('XBMC.RunScript(special://home/addons/'+addonID+'/titles.py,'+urllib.quote_plus(newTitles)+')')
+        if forceViewMode:
+          xbmc.executebuiltin('Container.SetViewMode('+viewMode+')')
 
 def playShow(id):
         content = getUrl("http://api.mtvnn.com/v2/mrss.xml?uri=mgid:sensei:video:mtvnn.com:local_playlist-"+id+"-DE")
@@ -473,6 +425,8 @@ def addLink(name,url,mode,iconimage,rndPos=""):
         nameNew=name
         if name.find(". ")==2:
           nameNew=name[4:]
+        if useThumbAsFanart:
+          liz.setProperty("fanart_image", iconimage)
         playListInfos="###MODE###=ADD###URL###="+u+"###TITLE###="+nameNew+"###THUMB###="+iconimage+"###END###"
         liz.addContextMenuItems([(translation(30202), 'XBMC.RunScript(special://home/addons/'+addonID+'/playlist.py,'+urllib.quote_plus(playListInfos)+')',),(translation(30204), 'XBMC.RunScript(special://home/addons/'+addonID+'/blacklist.py,'+urllib.quote_plus(playListInfos)+')',)])
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz)
@@ -542,8 +496,6 @@ if type(url)==type(str()):
 
 if mode == 'listVideos':
     listVideos(url)
-elif mode == 'listCharts':
-    listCharts(url)
 elif mode == 'listVideosLatest':
     listVideosLatest(url)
 elif mode == 'listVideosFromFavs':

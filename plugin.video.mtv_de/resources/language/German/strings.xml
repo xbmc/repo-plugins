@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
-  <string id="30001">Deutsche Single Charts TOP100</string>
-  <string id="30002">Deutsche Black Charts TOP20</string>
-  <string id="30003">Deutsche Dance Charts TOP20</string>
-  <string id="30004">MTV.de Video Charts TOP20</string>
+  <string id="30001">Hitlist Germany TOP 100</string>
+  <string id="30003">Single Jahrescharts 2013 TOP100</string>
+  <string id="30004">MTV.de Video Charts TOP100</string>
   <string id="30005">Suche: Interpret</string>
   <string id="30006">Suche: Titel</string>
   <string id="30007">Neue Musikvideos</string>
@@ -22,6 +21,8 @@
   <string id="30107">Playlist 08</string>
   <string id="30108">Playlist 09</string>
   <string id="30109">Playlist 10</string>
+  <string id="30110">View erzwingen</string>
+  <string id="30112">Thumb als Fanart nutzen</string>
   <string id="30201">Filter "All Eyes On" und "Interviews"</string>
   <string id="30202">Zu Playlist hinzufügen</string>
   <string id="30203">Aus Playlist entfernen</string>

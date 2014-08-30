@@ -13,19 +13,20 @@ viewMode=str(addon.getSetting("viewMode"))
 def index():
         addDir(translation(30001),"http://www.break.com/content/GetContentTimeStreamByChannelIdAndFilterBy?channelId=1&filterBy=videos&pageNum=1",'listChannelVideos',"")
         addDir(translation(30002),"http://www.break.com/content/GetContentByPageModuleAndPageTypeAndFilterBy?pageModuleTypeId=5&pageTypeId=4&filterBy=Daily&channelId=0&categoryId=0&numberOfContent=12",'listVideos',"")
-        content = getUrl("http://www.break.com")
-        spl=content.split('<a class="tip"')
+        content = getUrl("http://www.break.com/channels/")
+        content = content[content.find('class="channel-menu"'):]
+        content = content[:content.find('</ul>'):]
+        spl=content.split('<li class')
         for i in range(1,len(spl),1):
             entry=spl[i]
             match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
             url=match[0]
-            match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-            thumb=match[0]
-            match=re.compile("<h1><span>(.+?)</span></h1>", re.DOTALL).findall(entry)
-            title=match[0]
+            match=re.compile('src="(.+?)">(.+?)<', re.DOTALL).findall(entry)
+            #thumb=match[0][0]
+            title=match[0][1].strip()
             title=cleanTitle(title)
             if url!="http://www.break.com/action-unleashed/":
-              addDir(title,url,'listChannel',thumb)
+              addDir(title,url,'listChannel',"")
         addDir(translation(30004),"",'search',"")
         xbmcplugin.endOfDirectory(pluginhandle)
         if forceViewMode=="true":
@@ -52,7 +53,7 @@ def listChannelVideos(url):
                 id = id[:id.find("/")]
             match=re.compile('src="(.+?)"', re.DOTALL).findall(entry)
             thumb=match[0]
-            match=re.compile('alt="\\[(.+?)\\]', re.DOTALL).findall(entry)
+            match=re.compile('alt="(.+?)"', re.DOTALL).findall(entry)
             title=match[0]
             title=cleanTitle(title)
             match=re.compile('<p>(.+?)</p>', re.DOTALL).findall(entry)
@@ -97,8 +98,9 @@ def listSearchVideos(url):
         spl=content.split('<article class=')
         for i in range(1,len(spl),1):
             entry=spl[i]
-            match=re.compile('href="(.+?)"', re.DOTALL).findall(entry)
-            url=match[0]
+            match=re.compile('href="(.+?)">(.+?)<', re.DOTALL).findall(entry)
+            url=match[0][0]
+            title=cleanTitle(match[0][1])
             id = url[url.rfind("-")+1:]
             if "/" in id:
                 id = id[:id.find("/")]
@@ -107,8 +109,6 @@ def listSearchVideos(url):
             if len(match)>0:
               thumb=match[0]
             match=re.compile('alt="(.+?)"', re.DOTALL).findall(entry)
-            title=match[0]
-            title=cleanTitle(title)
             addLink(title,id,'playVideo',thumb,"")
         urlNext=""
         for url, title1, title2 in matchPage:
@@ -126,7 +126,7 @@ def playVideo(id):
           matchURL=re.compile('"uri": "(.+?)".+?"height": (.+?),', re.DOTALL).findall(content)
           matchYT=re.compile('"youtubeId": "(.*?)"', re.DOTALL).findall(content)
           finalUrl=""
-          if matchYT and matchYT[0]!="":
+          if matchYT and matchYT[0]:
             if xbox==True:
               finalUrl = "plugin://video/YouTube/?path=/root/video&action=play_video&videoid=" + matchYT[0]
             else:
@@ -137,22 +137,23 @@ def playVideo(id):
                   vidHeight=int(vidHeight)
                   if vidHeight>max:
                     finalUrl=url.replace(".wmv",".flv")+"?"+matchAuth[0]
+                    max=vidHeight
           listitem = xbmcgui.ListItem(path=finalUrl)
-          return xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
+          xbmcplugin.setResolvedUrl(pluginhandle, True, listitem)
 
 def search():
         keyboard = xbmc.Keyboard('', translation(30004))
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
           search_string = keyboard.getText().replace(" ","-")
-          listSearchVideos('http://www.break.com/surfacevideo/'+search_string+'/relevance/1/')
+          listSearchVideos('http://www.break.com/search/?q='+search_string)
 
 def cleanTitle(title):
         return title.replace("&lt;","<").replace("&gt;",">").replace("&amp;","&").replace("&#038;","&").replace("&#39;","'").replace("&#039;","'").replace("&#8211;","-").replace("&#8220;","-").replace("&#8221;","-").replace("&#8217;","'").replace("&quot;","\"").strip()
 
 def getUrl(url):
         req = urllib2.Request(url)
-        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:19.0) Gecko/20100101 Firefox/19.0')
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:23.0) Gecko/20100101 Firefox/23.0')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()

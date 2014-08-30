@@ -4,6 +4,7 @@
   <string id="30002">Next Page</string>
   <string id="30003">Add to queue</string>
   <string id="30101">Maximum video quality</string>
-  <string id="30102">Force ViewMode</string>
-  <string id="30103">ViewMode</string>
+  <string id="30102">Force View</string>
+  <string id="30103">ViewID</string>
+  <string id="30104">Use thumb as fanart</string>
 </strings>

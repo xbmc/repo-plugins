@@ -4,5 +4,6 @@
   <string id="30002">Nächste Seite</string>
   <string id="30003">Zu Wiedergabeliste hinzufügen</string>
   <string id="30101">Maximale Videoqualität</string>
-  <string id="30102">ViewMode erzwingen</string>
+  <string id="30102">View erzwingen</string>
+  <string id="30104">Thumb als Fanart nutzen</string>
 </strings>

@@ -5,25 +5,32 @@ import urllib2
 import socket
 import sys
 import re
+import os
 import xbmcplugin
 import xbmcaddon
 import xbmcgui
 
-socket.setdefaulttimeout(30)
+#addon = xbmcaddon.Addon()
+#addonID = addon.getAddonInfo('id')
 addonID = 'plugin.video.giga_de'
+addon = xbmcaddon.Addon(id=addonID)
+socket.setdefaulttimeout(30)
 pluginhandle = int(sys.argv[1])
 xbox = xbmc.getCondVisibility("System.Platform.xbox")
+addonDir = xbmc.translatePath(addon.getAddonInfo('path'))
+icon = os.path.join(addonDir, 'icon.png')
 settings = xbmcaddon.Addon(id=addonID)
 translation = settings.getLocalizedString
-forceViewMode = settings.getSetting("forceViewMode") == "true"
-viewMode = str(settings.getSetting("viewMode"))
+useThumbAsFanart = addon.getSetting("useThumbAsFanart") == "true"
+forceViewMode = settings.getSetting("forceView") == "true"
+viewMode = str(settings.getSetting("viewID"))
 maxVideoQuality = settings.getSetting("maxVideoQuality")
 qual = ["360p", "720p"]
 maxVideoQuality = qual[int(maxVideoQuality)]
 
 
 def index():
-    addDir(translation(30001), "http://www.giga.de/tv/alle-videos/", 'listVideos', "")
+    addDir(translation(30001), "http://www.giga.de/tv/alle-videos/", 'listVideos', icon)
     content = getUrl("http://www.giga.de/games/videos/")
     content = content[content.find('<section class="channels">'):]
     content = content[:content.find('</section>')]
@@ -33,7 +40,7 @@ def index():
         match = re.compile('href="(.+?)"', re.DOTALL).findall(entry)
         url = match[0]
         match = re.compile('src="(.+?)"', re.DOTALL).findall(entry)
-        thumb = match[0]
+        thumb = match[0].replace("-150x95.jpg",".jpg")
         match = re.compile('<h3>(.+?)</h3>', re.DOTALL).findall(entry)
         title = match[0]
         addDir(title, url, 'listVideos', thumb)
@@ -73,20 +80,20 @@ def listVideos(url):
 
 def playVideo(url):
     content = getUrl(url)
-    match = re.compile('"VIDEO_ID":"(.+?)"', re.DOTALL).findall(content)
+    match = re.compile('/api/video/#v=(.+?)&', re.DOTALL).findall(content)
     matchYT0 = re.compile('data-youtube-id="(.+?)"', re.DOTALL).findall(content)
-    matchYT1 = re.compile('value="http://www.youtube.com/v/(.+?)\\?', re.DOTALL).findall(content)
-    matchYT2 = re.compile('href="https://www.youtube.com/watch\\?v=(.+?)"', re.DOTALL).findall(content)
-    matchYT3 = re.compile('src="http://www.youtube.com/embed/(.+?)"', re.DOTALL).findall(content)
+    matchYT1 = re.compile('youtube.com/v/(.+?)\\?', re.DOTALL).findall(content)
+    matchYT2 = re.compile('youtube.com/watch\\?v=(.+?)"', re.DOTALL).findall(content)
+    matchYT3 = re.compile('youtube.com/embed/(.+?)"', re.DOTALL).findall(content)
     url = ""
     if match:
         content = getUrl("http://video.giga.de/xml/"+match[0]+".xml")
-        match1 = re.compile('<high width="1280" height="720">(.+?)<filename>(.+?)</filename>', re.DOTALL).findall(content)
-        match2 = re.compile('<medium width="640" height="360">(.+?)<filename>(.+?)</filename>', re.DOTALL).findall(content)
+        match1 = re.compile('<high.+?<filename>(.+?)</filename>', re.DOTALL).findall(content)
+        match2 = re.compile('<medium.+?<filename>(.+?)</filename>', re.DOTALL).findall(content)
         if match1 and maxVideoQuality == "720p":
-            url = "http://video.giga.de/data/"+match1[0][1]
+            url = "http://video.giga.de/data/"+match1[0]
         elif match2:
-            url = "http://video.giga.de/data/"+match2[0][1]
+            url = "http://video.giga.de/data/"+match2[0]
     elif matchYT0:
         url = getYoutubeUrl(matchYT0[0])
     elif matchYT1:
@@ -120,7 +127,7 @@ def cleanTitle(title):
 
 def getUrl(url):
     req = urllib2.Request(url)
-    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:19.0) Gecko/20100101 Firefox/19.0')
+    req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; rv:24.0) Gecko/20100101 Firefox/24.0')
     response = urllib2.urlopen(req)
     link = response.read()
     response.close()
@@ -144,6 +151,8 @@ def addLink(name, url, mode, iconimage):
     liz = xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
     liz.setProperty('IsPlayable', 'true')
+    if useThumbAsFanart and iconimage!=icon:
+        liz.setProperty("fanart_image", iconimage)
     liz.addContextMenuItems([(translation(30003), 'RunPlugin(plugin://'+addonID+'/?mode=queueVideo&url='+urllib.quote_plus(u)+'&name='+urllib.quote_plus(name)+')',)])
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz)
     return ok
@@ -153,6 +162,8 @@ def addDir(name, url, mode, iconimage):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
     ok = True
     liz = xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+    if useThumbAsFanart and iconimage!=icon:
+        liz.setProperty("fanart_image", iconimage)
     liz.setInfo(type="Video", infoLabels={"Title": name})
     ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u, listitem=liz, isFolder=True)
     return ok

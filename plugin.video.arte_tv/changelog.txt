@@ -14,4 +14,15 @@
 - Added Arte Livestream
 2.0.5
 - Changed streaming type
+2.0.6
 - Changed default view
+2.0.7
+- Added setting to choose streaming protocol
+2.0.8
+- Fixed site changes (concerts)
+2.0.9
+- Fixed geoblocking filter
+2.1.0
+- Fixed concert livestreams
+2.1.1
+- Added support for concert collections

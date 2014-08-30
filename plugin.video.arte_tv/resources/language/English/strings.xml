@@ -10,7 +10,7 @@
   <string id="30008">Search</string>
   <string id="30009">Live TV</string>
   <string id="30010">Next Page</string>
-  <string id="30011">All</string>
+  <string id="30011">All Genres</string>
   <string id="30012">Concerts</string>
   <string id="30013">Pop, Rock, Electro</string>
   <string id="30014">Classic</string>
@@ -25,4 +25,5 @@
   <string id="30105">ViewID</string>
   <string id="30106">Maximum Video Quality</string>
   <string id="30107">Use thumb as fanart</string>
+  <string id="30108">Streaming Protocol</string>
 </strings>

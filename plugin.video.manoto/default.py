@@ -56,10 +56,10 @@ def getStreamsFromPlayList(playlist):
         		continue
             
         	# is this a description or a playlist
-        	idx = string.find(line, "BANDWIDTH=")
-        	if idx > -1:
+        	m = re.search("BANDWIDTH=(\d+)", line)
+		if m:
         		# handle the description
-        		bandwidth = line[idx + 10:len(line)].strip()
+        		bandwidth = m.group(1)
         	elif len(line) > 0 and len(bandwidth) > 0:
         		# add the playlist
         		streams[bandwidth] = (("" if line.lower().startswith("http") else prefix) + line).strip()

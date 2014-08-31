@@ -21,5 +21,6 @@
     <website></website>
     <email>babak@habibis.net</email>
     <source>http://xbmc-glwiz-addon.googlecode.com/svn/trunk/plugin.video.manoto</source>
+		<broken>This plugin is no longer supported for this XBMC version.</broken>
   </extension>
 </addon>

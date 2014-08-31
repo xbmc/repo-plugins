@@ -1,0 +1,8 @@
+v1.0:
+Première version stable.
+v0.3:
+Amélioration de la vitesse. Traveaux en cours.
+v0.2:
+Adaptation aux nouveaux podcasts.
+v0.1:
+Première version du logiciel.

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!-- Image Quality -->
+    <category label="32001" id="section_general">
+        <setting id="32002" type="enum" label="Quality" values="SD" default="SD"/>
+    </category>
+</settings>

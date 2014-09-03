@@ -1,0 +1,2 @@
+Version 1.0.0
+* Initial version : browse all shows, and use default M3U8 player

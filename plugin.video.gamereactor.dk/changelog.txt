@@ -1,2 +1,6 @@
+[B]Version 2.0.0 - 2013-08-06[/B]
+- Fixed and upgraded for Frodo
+- Introduced usage of script.module.buggalo
+
 [B]Version 1.0.0 - 2011-11-26[/B]
 - Initial release

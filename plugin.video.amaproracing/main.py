@@ -9,6 +9,7 @@ from supercross import supercross
 from motocross import motocross  
 from endurocross import endurocross 
 from roadracing import roadracing
+from flattrack import flattrack
 
 #import librtmp
 
@@ -27,6 +28,7 @@ def CATEGORIES():
     addDir('Motocross','/Motocross',109,ROOTDIR+'/images/icon_motocross.png',ROOTDIR+'/images/fanart_motocross.jpg')
     addDir('Supercross','/SUPERCROSS',200,ROOTDIR+'/images/icon_supercross.png',ROOTDIR+'/images/fanart_supercross.jpg')    
     addDir('Road Racing','/ROADRACING',400,ROOTDIR+'/images/icon_roadracing.png',ROOTDIR+'/images/fanart_roadracing.jpg')    
+    addDir('Flat Track','/FLATTRACK',500,ROOTDIR+'/images/icon_flattrack.png',ROOTDIR+'/images/fanart_flattrack.jpg')    
     #addDir('DirtRider.com Videos','http://www.dirtrider.com/videos/',2,'')    
 
 
@@ -328,4 +330,8 @@ elif mode==301:
 elif mode==400:
     roadracing = roadracing()
     roadracing.ARCHIVE()
+
+elif mode==500:
+    flattrack = flattrack()
+    flattrack.ARCHIVE()
 xbmcplugin.endOfDirectory(addon_handle)

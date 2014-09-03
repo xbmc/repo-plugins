@@ -6,40 +6,44 @@ import json
 import HTMLParser
 
 ROOTDIR = xbmcaddon.Addon(id='plugin.video.amaproracing').getAddonInfo('path')
-FANART = ROOTDIR+'/images/fanart_roadracing.jpg'
-ICON = ROOTDIR+'/images/icon_roadracing.png'
-ROOT_URL = 'http://www.amaprolive.com/rr/dvr/'
+FANART = ROOTDIR+'/images/fanart_flattrack.jpg'
+ICON = ROOTDIR+'/images/icon_flattrack.png'
+ROOT_URL = 'http://www.amaprolive.com/ft/dvr/'
 
-class roadracing():
+class flattrack():
 
-    def ARCHIVE(self):    
-        url = self.GET_PLAYLIST_URL()
+
+    def ARCHIVE(self):
+        url = self.GET_PLAYLIST_URL()        
         req = urllib2.Request(url)
         req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)                  
         source=response.read()  
         response.close()            
-        
+       
         match = re.compile("<media:player url='(.+?)v=(.+?)'/><media:thumbnail url='(.+?)' height='360'(.+?)<media:title type='plain'>(.+?)</media:title>").findall(source)
-        
+       
         for junk,embed_code, thumbnail, junk2, title in match:
-            embed_code = embed_code[0:11]            
+            embed_code = embed_code[0:11]
             youtube_link = 'plugin://plugin.video.youtube?path=/root/video&action=play_video&videoid='+embed_code
-            self.addLink(title,youtube_link,title,thumbnail,FANART)         
+            self.addLink(title,youtube_link,title,thumbnail,FANART) 
 
-    def GET_PLAYLIST_URL(self):
+    def GET_PLAYLIST_URL(self):        
         req = urllib2.Request(ROOT_URL)
         req.add_header('User-Agent', ' Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)                  
         source=response.read()  
-        response.close() 
-        
+        response.close()
+
         start = source.find('gdata.youtube.com/feeds/api/playlists/')
         end = source.find('?v=',start)                
         playlist_link = source[start:end]    
+        print "SUBSTRING==="+str(start)+" "+str(end)
         playlist_link = "http://"+playlist_link
+        print playlist_link
         return playlist_link
-   
+        
+
     def addLink(self,name,url,title,iconimage,fanart):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage,)
@@ -49,6 +53,7 @@ class roadracing():
         liz.setInfo( type="Video", infoLabels={ "Title": title } )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
+
 
     def addDir(self,name,url,mode,iconimage,fanart=None,page=1): 
         params = self.get_params()      

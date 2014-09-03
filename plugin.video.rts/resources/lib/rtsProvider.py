@@ -2,6 +2,8 @@
 
 # import os
 import urllib
+import httplib
+from urlparse import urlparse
 from xml.dom.minidom import parse
 from bs4 import BeautifulSoup
 import re
@@ -73,3 +75,20 @@ def get_tv_shows():
 
 def get_tv_show_from_podast_url(url):
     return tvShow(podcastUrl=url)
+
+def get_HD_video_url_from(urlStr):
+    """
+    Get the url to the HD version of a video.
+    If the HD version don't exist, it return the
+    url given in input.
+    """
+    urlStrHD = urlStr.replace('1201k', '2201k')
+    url = urlparse(urlStrHD)
+    conn = httplib.HTTPConnection(url.netloc)
+    conn.request('HEAD', url.path)
+    result = conn.getresponse()
+    if result.status == 200:
+        return urlStrHD
+    else:
+        return urlStr
+        

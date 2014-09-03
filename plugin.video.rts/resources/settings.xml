@@ -2,6 +2,6 @@
 <settings>
     <!-- Image Quality -->
     <category label="32001" id="section_general">
-        <setting id="32002" type="enum" label="Quality" values="SD" default="SD"/>
+        <setting id="32002" type="bool" label="Play videos in HD" default="true"/>
     </category>
 </settings>

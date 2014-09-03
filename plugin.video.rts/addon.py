@@ -41,6 +41,12 @@ def addTvShow(name, url, mode, iconimage, description=''):
 
 def addEpisode(name, url, iconimage, description, date):
     """Add one "episode" item to the UI"""
+    #Process the link
+    url = '%s?url=%s&mode=%d&name=%s' % (
+        sys.argv[0],
+        urllib.quote_plus(url),
+        2,
+        urllib.quote_plus(name))
     if not iconimage:
         iconimage = 'DefaultVideo.png'
     listOfItems = xbmcgui.ListItem(
@@ -73,21 +79,11 @@ def listTvShows():
 
 def listTvEpisodes(urlOfPodcast=''):
     """Display the list of episodes of a TV show"""
-    qualityValuesAvailable = ["SD", "HD"]
     tvShow = rtsProvider.get_tv_show_from_podast_url(
         urlOfPodcast.decode("utf-8"))
     tvShow.getEpisodes()
-    settings = xbmcaddon.Addon(
-        id='plugin.video.rts-video')
-    qualitySetting = settings.getSetting('quality')
-
-    try:
-        quality = qualityValuesAvailable[int(qualitySetting)]
-    except:
-        quality = qualityValuesAvailable[0]
 
     for episode in tvShow.listOfEpisodes:
-        print "Quality = " + quality
         print "URL = " + episode.videoUrl
         addEpisode(
             name = episode.title.encode("utf-8"), 
@@ -95,6 +91,20 @@ def listTvEpisodes(urlOfPodcast=''):
             iconimage = episode.image.encode("utf-8"), 
             description = episode.info.encode("utf-8"), 
             date = episode.pubDate.encode("utf-8"))
+
+def playVideo(videoUrl):
+    """Play the video. In HD if user want."""
+    #Know if user want to watch the HD video
+    addon = xbmcaddon.Addon('plugin.video.rts')
+    playHD = addon.getSetting('32002')
+    #If yes, get the url to the HD video
+    if playHD == 'true':
+        videoUrl = rtsProvider.get_HD_video_url_from(videoUrl)
+    #Creat a playlist with the video and play it
+    playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
+    playlist.clear()
+    playlist.add(videoUrl)
+    xbmc.Player().play(playlist)
 
 def get_params():
     """Clean the parameters"""
@@ -143,5 +153,7 @@ if mode==None or url==None or len(url)<1:
     listTvShows()
 elif mode==1:
     listTvEpisodes(str(url))
+elif mode==2:
+    playVideo(str(url))
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

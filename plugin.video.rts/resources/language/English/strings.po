@@ -21,5 +21,5 @@ msgid "General"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Quality"
+msgid "Play videos in HD"
 msgstr ""

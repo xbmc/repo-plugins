@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.audio.relive"
-  version="0.10.1"
+  version="0.11.0"
   name="reLive"
   provider-name="BuZz">
   <requires>
@@ -18,7 +18,7 @@
     </description>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
     <email>buzz at exotica org uk</email>
-    <website>https://github.com/exobuzz/plugin.audio.relive</website>
-    <source>https://github.com/exobuzz/plugin.audio.relive</source>
+    <website>https://github.com/joolswills/plugin.audio.relive</website>
+    <source>https://github.com/joolswills/plugin.audio.relive</source>
   </extension>
 </addon>

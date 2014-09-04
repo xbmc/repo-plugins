@@ -3,10 +3,10 @@ import urllib, cgi, struct, time
 import xbmc, xbmcgui, xbmcplugin, xbmcaddon
 
 # plugin constants
-__version__    = "0.10.1"
 
-__settings__ = xbmcaddon.Addon('plugin.audio.relive')
-__language__ = __settings__.getLocalizedString
+__addon__ = xbmcaddon.Addon('plugin.audio.relive')
+__version__ = __addon__.getAddonInfo('version')
+__language__ = __addon__.getLocalizedString
 
 RELIVE_STATIONS = 'http://stations.re-live.se/getstations/'
 
@@ -27,7 +27,7 @@ def get_params(defaults):
   return new_params
 
 def show_stations():
-  livestreams = os.path.join(__settings__.getAddonInfo('path'), 'livestreams')
+  livestreams = os.path.join(__addon__.getAddonInfo('path'), 'livestreams')
 
   li = xbmcgui.ListItem( __language__(30000) )
   ok = xbmcplugin.addDirectoryItem(handle, livestreams, listitem = li, isFolder = True)

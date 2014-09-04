@@ -1,9 +1,5 @@
 #EXTM3U
-#EXTINF:-1,SceneSat Radio Main relay - salyut [48kbps aac+]
-http://r1.scenesat.com:8000/scenesatlo
-#EXTINF:-1,SceneSat Radio Secondary relay - bigbird [48kbps aac+]
-http://r2.scenesat.com:8000/scenesatlo
-#EXTINF:-1,SceneSat Radio Third relay - ikonos [48kbps aac+]
-http://r3.scenesat.com:8000/scenesatlo
-#EXTINF:-1,SceneSat Radio Fourth relay - oscar [48kbps aac+]
-http://r4.scenesat.com:8000/scenesatlo
+#EXTINF:-1,SceneSat Radio Ikonos - ikonos [48kbps aac+]
+http://ikonos.scenesat.com:8000/scenesatmed
+#EXTINF:-1,SceneSat Radio Oscar - oscar [48kbps aac+]
+http://oscar.scenesat.com:8000/scenesatmed

@@ -24,6 +24,8 @@ from config import plugin
 strings = {'Categories': plugin.get_string(30001),
            'Latest videos': plugin.get_string(30002),
            'Search': plugin.get_string(30003),
+           'Previous': plugin.get_string(30010),
+           'Next': plugin.get_string(30011),
            }
 
 
@@ -44,15 +46,27 @@ def index():
 def show_categories():
     categories = pyvideo.get_categories()
     items = [{'label': category['title'],
-              'path': plugin.url_for('show_category', url=category['url']),
+              'path': plugin.url_for('show_category', slug=category['slug'], page='1'),
               } for category in categories]
     return items
 
 
-@plugin.route('/category/<url>')
-def show_category(url):
-    videos = pyvideo.get_category_videos(url)
-    return list_videos(videos)
+@plugin.route('/category/<slug>/<page>')
+def show_category(slug, page='1'):
+    videos, next_page = pyvideo.get_category_videos(slug, page)
+    items = list_videos(videos)
+    page = int(page)
+    if next_page:
+        items.insert(0, {
+            'label': strings['Next'],
+            'path': plugin.url_for('show_category', slug=slug, page=str(page + 1))
+            })
+    if page > 1:
+        items.insert(0, {
+            'label': strings['Previous'],
+            'path': plugin.url_for('show_category', slug=slug, page=str(page - 1))
+            })
+    return plugin.finish(items, update_listing=True)
 
 
 @plugin.route('/latest')
@@ -78,6 +92,9 @@ def list_videos(videos):
         {'label': item['title'],
          'path': plugin.url_for('play_video', video_id=item['id']),
          'thumbnail': item.get('thumbnail'),
+         'info': {
+             'plot':  item.get('summary', '') or item.get('description', ''),
+         },
          'is_playable': True,
          } for item in videos]
     return items

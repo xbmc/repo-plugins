@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.pyvideo"
-    version="2.0.0"
+    version="2.1.0"
     name="PyVideo"
     provider-name="nevermore, beenje">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
     <import addon="script.module.xbmcswift2" version="2.4.0"/>
-    <import addon="script.module.requests2" version="2.2.1"/>
+    <import addon="script.module.requests" version="2.3.0"/>
     <import addon="script.module.beautifulsoup4" version="4.3.2"/>
     <import addon="plugin.video.youtube" version="4.4.6" optional="true"/>
     <import addon="plugin.video.vimeo" version="3.5.3" optional="true"/>

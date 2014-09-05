@@ -18,12 +18,7 @@
 
 import bs4
 import re
-try:
-    # We want to import script.module.requests2
-    import requests2 as requests
-except ImportError:
-    # Allows to run the script in cli
-    import requests
+import requests
 import urlparse
 from config import plugin
 
@@ -33,6 +28,7 @@ CATEGORY_URL = ROOT_URL + '/category'
 SEARCH_URL = ROOT_URL + '/search'
 API_URL = ROOT_URL + '/api/v2/'
 API_VIDEO_URL = API_URL + 'video/'
+API_CATEGORY_URL = API_URL + 'category/'
 VIDEO_ID_RE = re.compile('/video/(\d+)/')
 FORMATS = ['ogv', 'webm', 'mp4', 'flv']
 ADDONS = {
@@ -83,39 +79,32 @@ def get_videos_from_page(soup):
 
 def get_categories():
     """Return the list of categories"""
-    soup = get_soup(CATEGORY_URL)
-    rows = soup.find_all('tr')
-    categories = []
-    conf = ''
-    # We look at the first column of the table
-    # If there is no link, it's the conference title.
-    # The following rows are the years.
-    for row in rows:
-        link = row.td.a
-        if link is None:
-            conf = row.td.text
-        else:
-            title = link.text
-            if title.isdigit():
-                title = ' '.join([conf, title])
-            categories.append(
-                    {'title': title,
-                     'url': link.get('href')})
+    results = get_json(API_CATEGORY_URL).get('results', [])
+    categories = [{'title': result['title'],
+                   'slug': result['slug']} for result in results]
     return categories
 
 
-def get_category_videos(url):
-    """Return the list of videos found for the given category url"""
-    soup = get_soup(ROOT_URL + url)
-    return get_videos_from_page(soup)
+def get_videos_from_json(items):
+    """Return the videos from the json response"""
+    return [{'title': result['title'],
+             'id': result['id'],
+             'thumbnail': result.get('thumbnail_url'),
+             'description': result.get('description', ''),
+             'summary': result.get('summary', '')} for result in items.get('results', [])]
+
+
+def get_category_videos(slug, page):
+    """Return the list of videos found for the given category slug"""
+    items = get_json(API_VIDEO_URL + '/?category=' + slug + '&page=' + page)
+    videos = get_videos_from_json(items)
+    return (videos, items['next'])
 
 
 def get_latest():
-    """Return the latest videos displayed on the front page"""
-    soup = get_soup(ROOT_URL)
-    return [{'title': link.text,
-             'id': get_video_id(link.get('href')),
-             } for link in soup.select('ul a[href^=/video]')]
+    """Return the latest videos"""
+    items = get_json(API_VIDEO_URL + '/?ordering=-added')
+    return get_videos_from_json(items)
 
 
 def search(text):
@@ -149,6 +138,17 @@ def get_vimeo_id(url):
     return None
 
 
+def exists(url):
+    """Send a HEAD request to check if the url exists"""
+    try:
+        r = requests.head(url)
+    except:
+        return False
+    plugin.log.debug('HEAD request status: {0}'.format(
+        r.status_code))
+    return r.status_code in (200, 301, 302, 307)
+
+
 def resolve_url(video):
     """Return a playbable url from the video json metadata"""
     # We first check if there is a file available
@@ -158,7 +158,11 @@ def resolve_url(video):
         if video[attribute]:
             plugin.log.debug('found {0} format {1}'.format(
                 fmt, video[attribute]))
-            return video[attribute]
+            if exists(video[attribute]):
+                return video[attribute]
+            else:
+                plugin.log.debug("{0} doesn't seem to exist".format(
+                    video[attribute]))
     # We fallback to the source url.
     src_url = video['source_url']
     for service, addon in ADDONS.items():

@@ -17,5 +17,6 @@
         <disclaimer lang="da">Nogle dele af denne addon er muligvis ikke lovlig i dit land - kontroller venligst dine lokale love.</disclaimer>
         <platform>all</platform>
         <language>da</language>
+		<broken>Broken due to website changes.</broken>
     </extension>
 </addon>

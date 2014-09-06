@@ -20,5 +20,6 @@
         <email>tommy@winther.nu</email>
         <website>http://tommy.winther.nu</website>
         <source>https://github.com/xbmc-danish-addons/plugin.video.stofa.dk</source>
+		<broken>Broken due to website changes.</broken>
     </extension>
 </addon>

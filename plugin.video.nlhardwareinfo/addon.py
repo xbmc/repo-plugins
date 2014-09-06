@@ -19,8 +19,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.nlhardwareinfo"
-__date__        = "3 july 2013"
-__version__     = "1.0.2"
+__date__        = "06 september 2014"
+__version__     = "1.0.3"
 
 #
 # Imports

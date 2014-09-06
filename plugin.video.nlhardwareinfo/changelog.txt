@@ -1,10 +1,8 @@
-v1.0.0 (Wednesday, 10 April 2013) :
-- initial version
+v1.0.3 (Wednesday, 3 september 2014):
+- fixed GNU licence
+- added youtube as dependency
 
-v1.0.1 (Friday, 10 May 2013) :
-- added optional fields addon.xml
-
-v1.0.2 (Wednesday, 3 July 2013) :
+v1.0.2 (Wednesday, 3 July 2013):
 - using different page to get the video items
 - removed the 'losse items' category 
 - the plugin now starts by displaying the available video's
@@ -13,3 +11,9 @@ v1.0.2 (Wednesday, 3 July 2013) :
 - using different icon
 - added beautiful soup as dependency
 - added dutch strings
+
+v1.0.1 (Friday, 10 May 2013):
+- added optional fields addon.xml
+
+v1.0.0 (Wednesday, 10 April 2013):
+- initial version

@@ -129,7 +129,7 @@ class Main:
 			#http://youtube.com/watch?v=GCnXAEdPDSo
 			youtubeID = enclosure_url_4[len("http://youtube.com/watch?v="):]
 			youtube_url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % youtubeID
-						
+		 				
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "youtube_url", str(youtube_url) ), xbmc.LOGNOTICE )
 

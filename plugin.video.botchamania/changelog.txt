@@ -1,2 +1,6 @@
-v1.0.0 (Wednesday, 13 august 2014) :
+v1.0.1 (Saturday, 6 september 2014):
+- fixed GNU licence
+- added forum link
+
+v1.0.0 (Wednesday, 13 august 2014):
 - initial version

@@ -48,7 +48,7 @@ def get_categories():
     return category_list
 
 
-def get_videolist(url, localized=lambda x: x):
+def get_videolist(url, cat_menu=""):
     """This function gets the video list from the FFA website and returns them in a pretty data format."""
     video_entry_sep        = 'view-horizontal'
     video_url_pattern      = '["\'](/watch/[^/]*?/)'
@@ -56,13 +56,13 @@ def get_videolist(url, localized=lambda x: x):
     video_title_pattern    = '<a href=["\']/watch/[^/]*?/["\'][ ]*?>([^<]+?)</a>'
     video_plot_pattern     = '<div class="content-text">([^<]*?)</div>'
     video_cat_pattern      = '>(Video|Short Film|Trailer|Documentary|Presentation)<'
-    video_duration_pattern = '([0-9]+?[ ]+?[Mm]in)'
-    video_rating_pattern   = '([0-9.]+?[ ]+?[Ss]tars)'
-    video_views_pattern    = '([0-9,]+?[ ]+?[Vv]iews)'
+    video_duration_pattern = '([0-9]+[ ]+[Mm]in)'
+    video_rating_pattern   = '([0-9.]+[ ]+[Ss]tars)'
+    video_views_pattern    = '([0-9,]+[ ]+[Vv]iews)'
     video_author_pattern   = '([Aa]dded by).*?<a href=["\']/[^/]*?/["\'][ ]*?>([^<]*?)</a>'
-    page_num_pattern       = 'href=["\']http[^"\']*?p=([0-9]+?)'
+    page_num_pattern       = 'href=["\']http[^"\']*?p=([0-9]+)'
     page_num_url_pattern   = 'href=["\'](http[^"\']*?p=%d[^"\']*?)["\']'
-    page_num_cur_pattern   = 'p=([0-9]+?)'
+    page_num_cur_pattern   = 'p=([0-9]+)'
 
     buffer_url = l.carga_web(url)
 
@@ -75,7 +75,7 @@ def get_videolist(url, localized=lambda x: x):
     if current_page_num != 1:
         prev_page_num = current_page_num - 1
         previous_page_url = l.find_first(buffer_url, page_num_url_pattern % prev_page_num)
-        video_entry = { 'url': previous_page_url, 'title': '<< %s (%d)' % (localized('Previous page'), prev_page_num), 'IsPlayable': False }
+        video_entry = { 'url': previous_page_url, 'title': '<< %s (%d)' % (cat_menu, prev_page_num), 'IsPlayable': False }
         video_list.append(video_entry)
         reset_cache = True
 
@@ -116,7 +116,7 @@ def get_videolist(url, localized=lambda x: x):
     if current_page_num < last_page_num:
         next_page_num = current_page_num + 1
         next_page_url = l.find_first(buffer_url, page_num_url_pattern % next_page_num)
-        video_entry = { 'url': next_page_url, 'title': '>> %s (%d/%d)' % (localized('Next page'), next_page_num, last_page_num), 'IsPlayable': False }
+        video_entry = { 'url': next_page_url, 'title': '>> %s (%d/%d)' % (cat_menu, next_page_num, last_page_num), 'IsPlayable': False }
         video_list.append(video_entry)
 
     return { 'video_list': video_list, 'reset_cache': reset_cache }

@@ -1,3 +1,7 @@
+1.0.5
+- Added filter to show All/Best videos from add-on setings menu.
+- Included category menu into the Next/Previous Page title entries.
+- Fixed last page regexp for Next Page entry to allow explore beyond nine.
 1.0.4
 - Fixed Next/Previous Page entries due to website changes.
 - Updated Dailymotion scraper to support more video formats.

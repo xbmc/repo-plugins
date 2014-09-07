@@ -47,6 +47,12 @@ debug_flag = settings.getSetting("debug") == "true"
 p.set_debug_mode(debug_flag)
 api.set_debug(debug_flag)
 
+# By default, both, the website and the add-on are setup to show only the best videos.
+all_filter = '?c=all' if settings.getSetting("show_best") == "false" else ''
+
+if all_filter:
+    p.log("ffa.main: 'all videos' filter is explicit setup.")
+
 def get_located_string(string_name):
     return translation(localized_strings.get(string_name)).encode('utf-8') or string_name if string_name in localized_strings else string_name
             
@@ -73,23 +79,25 @@ def create_index(params):
 
     category_list = api.get_categories()
 
+    menu_entry = get_located_string('All videos')
     all_videos_item = {
             'thumbnail': '',
             'info': {
-                'title': get_located_string('All videos'),
-                'genre': get_located_string('All videos'),
+                'title': menu_entry,
+                'genre': menu_entry,
             },
-            'path': p.get_plugin_path(url = 'http://www.filmsforaction.org/films/', action = action),
+            'path': p.get_plugin_path(url = 'http://www.filmsforaction.org/films/' + all_filter, action = action, category = menu_entry),
             'IsPlayable' : False
             }
 
+    menu_entry = get_located_string('Search')
     search_videos_item = {
             'thumbnail': '',
             'info': {
-                'title': get_located_string('Search'),
-                'genre': get_located_string('Search'),
+                'title': menu_entry,
+                'genre': menu_entry,
             },
-            'path': p.get_plugin_path(action = 'search_videos'),
+            'path': p.get_plugin_path(action = 'search_videos', category = menu_entry),
             'IsPlayable' : False
             }
 
@@ -99,7 +107,7 @@ def create_index(params):
             'title': category_title,
             'genre': category_title
         },
-        'path': p.get_plugin_path(url = category_url, action = action),
+        'path': p.get_plugin_path(url = category_url + all_filter, action = action, category = category_title),
         'IsPlayable' : False
         } for category_url, category_title in category_list]
 
@@ -111,21 +119,30 @@ def create_index(params):
 def main_list(params):
     p.log("ffa.main_list "+repr(params))
 
-    videos = api.get_videolist(params.get("url"), get_located_string)
+    category    = params.get("category", "")
+    videos      = api.get_videolist(params.get("url"), category)
     reset_cache = 'yes' if params.get('reset_cache') == 'yes' or videos['reset_cache'] else 'no'
 
     video_list = [ {
-        'thumbnail': video_entry.get('thumbnail') or '',
+        'thumbnail'   : video_entry.get('thumbnail') or '',
         'info': {
-            'title': video_entry.get('title'),
-            'plot': video_entry.get('plot') or '',
-            'studio': video_entry.get('credits') or '',
-            'genre': video_entry.get('genre') or '',
-            'rating': video_entry.get('rating') or '',
-            'duration': video_entry.get('duration') or 1
+            'title'   : video_entry.get('title'),
+            'plot'    : video_entry.get('plot')      or '',
+            'studio'  : video_entry.get('credits')   or '',
+            'genre'   : video_entry.get('genre')     or '',
+            'rating'  : video_entry.get('rating')    or '',
+            'duration': video_entry.get('duration')  or 1,
         },
-        'path': p.get_plugin_path(url = video_entry['url'], action = 'play_video') if video_entry['IsPlayable'] else p.get_plugin_path(url = video_entry['url'], action = 'main_list', reset_cache = reset_cache),
-        'IsPlayable': video_entry['IsPlayable']
+        'path'        : p.get_plugin_path(
+                            url         = video_entry['url'],
+                            action      = 'play_video',
+                        ) if video_entry['IsPlayable'] else p.get_plugin_path(
+                            url         = video_entry['url'],
+                            action      = 'main_list',
+                            reset_cache = reset_cache,
+                            category    = category,
+                        ),
+        'IsPlayable'  : video_entry['IsPlayable']
          }  for video_entry in videos['video_list']]
 
     p.add_items(video_list, reset_cache == 'yes')
@@ -136,7 +153,7 @@ def search_videos(params):
 
     search_string = p.get_keyboard_text(get_located_string('Search'))
     if search_string:
-         params['url'] = api.get_search_url(search_string)
+         params['url'] = api.get_search_url(search_string) + all_filter.replace('?', '&')
          p.log("ffa.search Value of search url: %s" % params['url'])
          return main_list(params)
 

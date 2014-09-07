@@ -324,3 +324,23 @@ msgstr ""
 msgctxt "#30523"
 msgid "Error getting token."
 msgstr ""
+
+msgctxt "#30524"
+msgid "Preferred Video Quality"
+msgstr ""
+
+msgctxt "#30525"
+msgid "Mobile MP4 (Lowest)"
+msgstr ""
+
+msgctxt "#30526"
+msgid "Site MP4 (Normal)"
+msgstr ""
+
+msgctxt "#30527"
+msgid "HD MP4 (Better)"
+msgstr ""
+
+msgctxt "#30528"
+msgid "Video Original (Best)"
+msgstr ""

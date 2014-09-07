@@ -39,7 +39,78 @@ def ERROR(message,caption=''):
 
 if not os.path.exists(CACHE_PATH): os.makedirs(CACHE_PATH)
 
+class NetworkTokenCache(flickrapi.tokencache.TokenCache):
+	def __init__(self, api_key, username=None):
+		flickrapi.tokencache.TokenCache.__init__(self,api_key, username)
+		self.path = __settings__.getSetting('network_token_path')
+		self.localBackup = flickrapi.tokencache.TokenCache(api_key,username)
+
+	def get_cached_token_path(self,filename=''):
+		if os.path.exists(self.path): return os.path.join(self.path, self.api_key, filename)
+		path = self.path.rstrip('/') + '/' + self.api_key
+		if filename: path += '/' + filename
+		return path
+
+	def get_cached_token_filename(self):
+		if self.username:
+			filename = 'auth-%s.token' % self.username
+		else:
+			filename = 'auth.token'
+
+		return self.get_cached_token_path(filename)
+								
+	def set_cached_token(self, token):
+		self.localBackup.set_cached_token(token)
+		self.memory[self.username] = token
+		if not token: return
+		import xbmcvfs
+		path = self.get_cached_token_path()
+		if not xbmcvfs.exists(path):
+			xbmcvfs.mkdirs(path)
+
+		f = xbmcvfs.File(self.get_cached_token_filename(), "w")
+		f.write(str(token))
+		f.close()
+	
+	def get_cached_token(self):
+		backup = self.localBackup.get_cached_token()
+		if self.username in self.memory: return self.memory[self.username]
+		import xbmcvfs
+		filename = self.get_cached_token_filename()
+		if xbmcvfs.exists(filename):
+			try:
+				f = xbmcvfs.File(filename)
+				token = f.read()
+				f.close()
+				return token.strip()
+			except:
+				pass
+		return backup
+			
+	def forget(self):
+		self.localBackup.forget()
+		if self.username in self.memory:
+			del self.memory[self.username]
+								
+		import xbmcvfs
+		filename = self.get_cached_token_filename()
+		if xbmcvfs.exists(filename):
+			xbmcvfs.delete(filename)
+			
+	@staticmethod
+	def isValid():
+		import xbmcvfs
+		path = __settings__.getSetting('network_token_path')
+		return path and xbmcvfs.exists(path)
+		
+	token = property(get_cached_token, set_cached_token, forget, "The cached token")
+												
 class flickrPLUS(flickrapi.FlickrAPI):
+	def __init__(self, api_key, secret=None, username=None, token=None, format='etree', store_token=True, cache=False):
+		flickrapi.FlickrAPI.__init__(self, api_key, secret, username, token, format, store_token, cache)
+		if NetworkTokenCache.isValid():
+			self.token_cache = NetworkTokenCache(api_key, username)
+			
 	def walk_photos_by_page(self, method, **params):
 			rsp = method(**params) 
 
@@ -219,20 +290,20 @@ class FlickrSession:
 			return self.API_KEY,self.API_SECRET
 		
 	def doTokenDialog(self,frob,perms):
-		if False:
-			try:
-				from webviewer import webviewer #@UnresolvedImport @UnusedImport
-				yes = xbmcgui.Dialog().yesno('Authenticate','Press \'Yes\' to authenticate in any browser','Press \'No\' to use Web Viewer (If Installed)')
-				if not yes:
-					self.isMobile(False)
-					self.doNormalTokenDialog(frob, perms)
-					return
-			except ImportError:
-				LOG("Web Viewer Not Installed - Using Mobile Method")
-				pass
-			except:
-				ERROR('')
-				return
+#		if False:
+#			try:
+#				from webviewer import webviewer #@UnresolvedImport @UnusedImport
+#				yes = xbmcgui.Dialog().yesno('Authenticate','Press \'Yes\' to authenticate in any browser','Press \'No\' to use Web Viewer (If Installed)')
+#				if not yes:
+#					self.isMobile(False)
+#					self.doNormalTokenDialog(frob, perms)
+#					return
+#			except ImportError:
+#				LOG("Web Viewer Not Installed - Using Mobile Method")
+#				pass
+#			except:
+#				ERROR('')
+#				return
 			
 		self.isMobile(True)
 		self.doMiniTokenDialog(frob, perms)
@@ -274,7 +345,7 @@ class FlickrSession:
 			if not keyboard.isConfirmed(): return
 			mini_token = keyboard.getText().replace('-','')
 			if not mini_token: return
-		token = self.flickr.get_full_token(mini_token) #@UnusedVariable
+		self.flickr.get_full_token(mini_token) #@UnusedVariable
 		
 	def authenticate(self,force=False):
 		key,secret = self.getKeys()
@@ -313,15 +384,19 @@ class FlickrSession:
 		
 	def finishAuthenticate(self,token):
 		self.flickr.token_cache.token = token
-		if self.username:
-			user = self.flickr.people_findByUsername(username=self.username)
-			self.user_id = user.findall('*')[0].get('id')
-		else:
-			rsp = self.flickr.auth_checkToken(auth_token=token,format='xmlnode')
-			user = rsp.auth[0].user[0]
-			self.user_id = user.attrib.get('nsid')
-			self.username = user.attrib.get('username')
-			if self.username: __settings__.setSetting('flickr_username',self.username)
+#		if self.username:
+#			try:
+#				user = self.flickr.people_findByUsername(username=self.username)
+#				self.user_id = user.findall('*')[0].get('id')
+#				return True
+#			except:
+#				ERROR('Failed to authenticate with username in settings')
+			
+		rsp = self.flickr.auth_checkToken(auth_token=token,format='xmlnode')
+		user = rsp.auth[0].user[0]
+		self.user_id = user.attrib.get('nsid')
+		self.username = user.attrib.get('username')
+		if self.username: __settings__.setSetting('flickr_username',self.username)
 		return True
 			
 	def getCollectionsInfoList(self,userid=None,cid='0'):
@@ -441,7 +516,7 @@ class FlickrSession:
 	def addPhotos(self,method,mode,url='BLANK',page='1',mapOption=True,with_username=False,**kwargs):
 		global ShareSocial
 		try:
-			import ShareSocial #@UnresolvedImport
+			import ShareSocial #analysis:ignore
 		except:
 			pass
 		
@@ -458,18 +533,19 @@ class FlickrSession:
 		if mapOption: extras += ',geo'
 		
 		#Walk photos
-		ct=1
+		ct=0
 		mpp = self.max_per_page
 		if self.isSlideshow: mpp = 500
 		for photo in self.flickr.walk_photos_by_page(method,page=page,per_page=mpp,extras=extras,**kwargs):
-			ct+=1
 			ok = self.addPhoto(photo, mapOption=mapOption,with_username=with_username)
 			if not ok: break
+			ct+=1
 			
 		#Add Next Footer if necessary
-		#print "PAGES: " + str(page) + " " + str(self.flickr.TOTAL_PAGES) + " " + self.flickr.TOTAL_ON_LAST_PAGE
-		if ct >= self.max_per_page:
-			nextp = '('+str(page*self.max_per_page)+'/'+str(self.flickr.TOTAL)+') '
+		#print "PAGES: " + str(page) + " " + str(self.flickr.TOTAL_PAGES) + " " + str(self.flickr.TOTAL_ON_LAST_PAGE)
+		if ct >= self.max_per_page or page < self.flickr.TOTAL_PAGES:
+			sofar = (max(0,page - 1) * self.max_per_page) + ct
+			nextp = '({0}/{1}) '.format(sofar,self.flickr.TOTAL)
 			replace = ''
 			if page + 1 == self.flickr.TOTAL_PAGES:
 				nextp += __language__(30513)
@@ -511,7 +587,7 @@ class FlickrSession:
 		sizes = {}
 		if ptype == 'video':
 			sizes = self.getImageUrl(pid,'all')
-			display = sizes.get('Site MP4',photo.get('Video Original',''))
+			display = selectVideoURL(sizes)
 			#display = 'plugin://plugin.image.flickr/?play_video&' + pid
 		contextMenu = []
 		if mapOption:
@@ -892,6 +968,16 @@ def doPlugin():
 		
 	if mode != 9999: xbmcplugin.endOfDirectory(int(sys.argv[1]),succeeded=success,updateListing=update_dir,cacheToDisc=cache)
 
+def selectVideoURL(sizes):
+	sizeIDX = int(__settings__.getSetting('video_display_size') or '1')
+	sizeNames = ('Mobile MP4','Site MP4','HD MP4','Video Original')
+	size = sizeNames[sizeIDX]
+	if size in sizes: return sizes[size]
+	for size in sizeNames[:sizeIDX]:
+		if size in sizes: return sizes[size]
+	return ''
+		
+	
 def playVideo():
 		fsession = FlickrSession()
 		if not fsession.authenticate():
@@ -899,7 +985,7 @@ def playVideo():
 		vid = sys.argv[2].split('=')[-1]
 		LOG('Playing video with ID: ' + vid)
 		sizes = fsession.getImageUrl(vid, 'all')
-		url = sizes.get('Site MP4',sizes.get('Video Original',''))
+		url = selectVideoURL(sizes)
 		listitem = xbmcgui.ListItem(label='flickr Video', path=url)
 		listitem.setInfo(type='Video',infoLabels={"Title": 'flickr Video'})
 		xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=True, listitem=listitem)

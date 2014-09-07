@@ -19,7 +19,7 @@ msgstr "Flickr User Name"
 
 msgctxt "#30002"
 msgid "Default Thumb Size"
-msgstr "DStandard Thumbgröße"
+msgstr "Standard Thumbgröße"
 
 msgctxt "#30003"
 msgid "Default Display Size"
@@ -151,7 +151,7 @@ msgstr "Suche Fotostream"
 
 msgctxt "#30309"
 msgid "Search flickr"
-msgstr "Dursuche flickr"
+msgstr "Durchsuche flickr"
 
 msgctxt "#30310"
 msgid "Interesting Today"
@@ -159,19 +159,19 @@ msgstr "Intressantes von heute"
 
 msgctxt "#30311"
 msgid "Groups"
-msgstr ""
+msgstr "Gruppen"
 
 msgctxt "#30312"
 msgid "Search flickr Groups"
-msgstr ""
+msgstr "flickr Gruppen durchsuchen"
 
 msgctxt "#30400"
 msgid "Save Path"
-msgstr ""
+msgstr "Speichern-Pfad"
 
 msgctxt "#30412"
 msgid "Saved"
-msgstr ""
+msgstr "Gespeichert"
 
 msgctxt "#30413"
 msgid "Saved as: @REPLACE@"
@@ -183,19 +183,19 @@ msgstr ""
 
 msgctxt "#30415"
 msgid "Saving"
-msgstr ""
+msgstr "Speichern"
 
 msgctxt "#30416"
 msgid "Saving..."
-msgstr ""
+msgstr "Speichern..."
 
 msgctxt "#30417"
 msgid "Invalid Path"
-msgstr ""
+msgstr "Ungültiger Pfad"
 
 msgctxt "#30418"
 msgid "Please set save path in settings"
-msgstr ""
+msgstr "Bitte einen Speichern-Pfad in den Einstellungen angeben"
 
 msgctxt "#30419"
 msgid "Fail"
@@ -203,7 +203,7 @@ msgstr ""
 
 msgctxt "#30420"
 msgid "Failed to save image."
-msgstr ""
+msgstr "Bild speichern fehlgeschlagen"
 
 msgctxt "#30500"
 msgid "Show All In @REPLACE@"
@@ -275,7 +275,7 @@ msgstr "Suche @NAMEREPLACE@'s Fotostream"
 
 msgctxt "#30517"
 msgid "Save Photo"
-msgstr ""
+msgstr "Bild speichern"
 
 msgctxt "#30518"
 msgid "Recent Photos"
@@ -287,11 +287,11 @@ msgstr ""
 
 msgctxt "#30521"
 msgid "Authorization Failed."
-msgstr ""
+msgstr "Login fehlgeschlagen"
 
 msgctxt "#30522"
 msgid "Authorization Error"
-msgstr ""
+msgstr "Anmeldefehler"
 
 msgctxt "#30523"
 msgid "Error getting token."

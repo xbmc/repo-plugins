@@ -52,18 +52,13 @@ def show_topic(url):
     return subtopics + items
 
 
-def update_url_for_rtmp(url, XXL4HIRES):
+def update_url_for_rtmp(url):
     '''Appends playpath option for an RTMP url. Other url types are
     returned unchanged.
 
     For brightcove urls, the playpath is after the '&'.
 
     '''
-    # 201408: new renditions (video resolutions) have been added... and FLVURL is anchored to 3g resolution (?)
-    #         maybe in the future renditions[] should be parsed and resolution selected by "encodingRate".
-    url = re.sub(r'^(.+_wg_16x9)_.+_.+_.+\.mp4$', r'\1_xl_bb_mm.mp4', url)
-    if XXL4HIRES == 'true': 
-        url=url.replace('_xl_bb_mm.mp4','_xxxl_hb_mm.mp4') 
     if url.startswith('rtmp'):
         return '%s playpath=%s' % (url, url.split('&', 1)[1])
     return url
@@ -74,9 +69,34 @@ def item_from_video(video, XXL4HIRES):
     brightcove api Video.
 
     '''
+    # extract the best possible resolution from renditions[] given the XXL4HIRES option:
+    url=url_best=''
+    signal=signal_best=0
+    for p in video.renditions: 
+        url=''
+        signal=0
+        for q in p: 
+            if q[0] == 'url':
+                url=q[1]
+                if XXL4HIRES == 'false' and signal == 1: break
+            if q[0] == 'frameHeight':
+                if XXL4HIRES == 'false':
+                    if q[1]>400 and q[1]<500:
+                        signal=1
+                        if url != '': break
+                else:
+                    if q[1]>signal:
+                        signal=q[1]
+        if XXL4HIRES == 'false' and signal == 1: 
+            url_best=url
+            break
+        if XXL4HIRES == 'true' and signal > signal_best:
+            signal_best=signal
+            url_best=url
+
     item = {
         'label': video.name,
-        'path': update_url_for_rtmp(video.FLVURL, XXL4HIRES),
+        'path': update_url_for_rtmp(url_best),
         'info': info_from_video(video),
         'is_playable': True,
     }

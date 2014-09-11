@@ -1,4 +1,7 @@
-Version 1.4.3
+Version 1.5
+* video urls are now always correctly extracted, given the resolution chosen
+
+Version 1.4.3 to 1.4.4
 * changed video urls as per website changes
 
 Version 1.4 to 1.4.2

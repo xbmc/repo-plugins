@@ -202,19 +202,11 @@ def show_replay_epg(channelId, date):
 
     for entry in timetable:
         recording = programmes[entry]
-                
+        
         title = recording["t"]
+        plot = recording["d"]
+        thumbnail = recording["image"]
         
-        if recording["d"] != "":
-            plot = recording["d"]
-        else:
-            plot = None
-        
-        if recording["image"] != "":
-            thumbnail = recording["image"]
-        else:
-            thumbnail = None
-    
         if recording["urlTablet"] != "":
             videoUrl = recording["urlTablet"]
         elif recording["h264"] != "":

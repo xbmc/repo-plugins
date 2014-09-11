@@ -1,3 +1,6 @@
+[B]1.0.11[/B]
+- Fixed #8. Now missing thumbnail in RAI Replay is handled better.
+
 [B]1.0.10[/B]
 - Force replay availability for Rai Gulp and Rai YoYo.
 - Better stream selection in RAI Replay. Plot is now shown too.

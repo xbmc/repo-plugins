@@ -1,6 +1,9 @@
+[B]1.0.2[/B]
+- updated HTML parsing due to upstream changes.
+- youtube video are now supported through external addon.
+
 [B]1.0.1[/B]
 - updated required python API version to 2.1.0. This addon should now work with both XBMC 12 (Frodo) and XBMC 13 (Gotham).
 
 [B]1.0.0[/B]
 - first release
-

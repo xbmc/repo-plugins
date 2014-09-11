@@ -2,7 +2,6 @@ import urllib2
 from xml.dom import minidom
 import time
 import datetime
-import re
 from email.utils import parsedate_tz
 from email.utils import mktime_tz
 from BeautifulSoup import BeautifulSoup
@@ -30,6 +29,9 @@ class GuardianTV:
         for link in links:
             channel = {}
             channel["title"] = link.text
+            # Katine RSS is missing
+            if channel["title"] == "Katine":
+                continue
             channel["url"] = link["href"]
             channel["url"] = channel["url"] + "/rss"
             channels.append(channel)
@@ -60,30 +62,48 @@ class GuardianTV:
         videos = []
         for videoNode in dom.getElementsByTagName('item'):
             video = {}
+            
             video["title"] = videoNode.getElementsByTagName('title')[0].firstChild.data.strip()
             
             try:
                 video["description"] = videoNode.getElementsByTagName('description')[0].firstChild.data
             except:
                 video["description"] = ""
+            
             dt = videoNode.getElementsByTagName('pubDate')[0].firstChild.data
             video["date"] = time.gmtime((mktime_tz(parsedate_tz(dt))))
             
+            video["thumb"] = ""
             for mediaContent in videoNode.getElementsByTagName('media:content'):
                 mimeType = mediaContent.attributes["type"].value
-                if mimeType == "video/mp4" or mimeType == "video/mpeg4":
-                    video["url"] = mediaContent.attributes["url"].value
                 if mimeType == "image/jpeg":
                     video["thumb"] = mediaContent.attributes["url"].value
-
-            if "url" not in video:
-                # Parse the HTML page to get the Video URL
-                pageUrl = videoNode.getElementsByTagName('link')[0].firstChild.data.strip()
-                htmlData = urllib2.urlopen(pageUrl).read()
-                match = re.compile("file\s+: '(.+?)'").findall(htmlData)
-                if match:
-                    video["url"] = match[0]
-
+                    break
+                    
+            video["pageUrl"] = videoNode.getElementsByTagName('link')[0].firstChild.data.strip()
+            
             videos.append(video)
             
         return videos
+
+    def getVideoMetadata(self, pageUrl):
+        # Parse the HTML page to get the Video Metadata
+        data = urllib2.urlopen(pageUrl).read()
+        tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
+        
+        video = {}
+        video["title"] = tree.find("meta", {"property": "og:title"})["content"]
+        video["thumb"] = tree.find("meta", {"property": "og:image"})["content"]
+        video["url"] = None
+        
+        videoNode = tree.find("video")
+        if videoNode is not None:
+            video["url"]  = videoNode.find("source", {"type": "video/mp4"})["src"]
+        else:
+            # Youtube
+            iframe = tree.find("iframe")
+            if iframe is not None:
+                videoId = iframe["id"].replace("ytplayer-","")
+                video["url"] = "plugin://plugin.video.youtube/?action=play_video&videoid=%s" % videoId
+        
+        return video

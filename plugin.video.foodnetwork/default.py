@@ -8,6 +8,7 @@ import urllib, urllib2, cookielib, datetime, time, re, os, string
 import xbmcplugin, xbmcgui, xbmcaddon, xbmcvfs, xbmc
 import cgi, gzip
 from StringIO import StringIO
+import json
 
 
 USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
@@ -66,32 +67,31 @@ def getRequest(url):
 def getSources(fanart):
               urlbase   = FNTVBASE % ('/videos/players/food-network-full-episodes.html')
               pg = getRequest(urlbase)
-              caturl = re.compile("SNI\.Food\.Player\.FullSize.+?, '(.+?)'").findall(pg)[0]
-              caturl  = XMLBASE % (caturl)
-              pg2 = getRequest(caturl)
-              catname = re.compile('<title>.+?CDATA\[(.+?)\]').findall(pg2)[0]
-              addDir(catname,caturl,'GC',icon,addonfanart,catname,GENRE_TV,'',False)
-              cats = re.compile('<section class="video-promo">.+?<h5>(.+?)<.+?<a href="(.+?)"').findall(pg)
-              for catname, caturl in cats:
-                  catno = re.compile('/.+?\..+?\.(.+?)\.').findall(caturl)[0]
-                  caturl = caturl.replace('.%s.' %(catno),'.XXXXXXXX.')
+              cats = re.compile('<h6 class="channel-heading">.+?data-max="85">(.+?)<.+?href="(.+?)".+?src="(.+?)".+?</cite></a></h6>').findall(pg) 
+              for catname, caturl, catimg in cats:
                   catname = catname.strip()
-                  addDir(catname,caturl,'GC',icon,addonfanart,catname,GENRE_TV,'',False)
+                  addDir(catname,caturl,'GC',catimg,addonfanart,catname,GENRE_TV,'',False)
 
 def getCats(cat_url):
-            if '.xml' in cat_url:
-              pg = getRequest(cat_url)
-              shows = re.compile('<videoId>(.+?)<.+?<thumbnailUrl>.+?CDATA\[(.+?)\].+?<abstract>.+?CDATA\[(.+?)\]').findall(pg)
-            else:
-              urlbase   = FNTVBASE % ('/videos/players/food-network-full-episodes.html')
-              pg = getRequest(urlbase)
-              cat_url = cat_url.replace('XXXXXXXX','(.+?)')
-              catsearch = '<a href="%s".+?<div class=.+?>(.+?)<.+?<h6>(.+?)</h6>' % (cat_url)
-              shows = re.compile(catsearch).findall(pg)
-            for showpath,  showimg, showname in shows:
-                 showurl = 'rtmp://flash.scrippsnetworks.com:1935/ondemand/library?ovpfv=2.1.6 swfUrl=http://www.foodnetwork.com/etc/designs/food/clientlib/snap/snap-4.1.2.swf playpath=Food_Network/%s app=ondemand/library?ovpfv=2.1.6  pageUrl=http://www.foodnetwork.com/videos/players/food-network-full-episodes.html' % showpath
-                 addLink(showurl.encode(UTF8),showname,showimg,addonfanart,showname,GENRE_TV,'')
+             pg = getRequest(FNTVBASE % cat_url)
+             jblob = re.compile('"player-player" }},(.+?){"extras":').search(pg).group(1).rstrip(' ,')
+             a = json.loads(jblob)
+             a = a['channels'][0]['videos']
+             for vid in a:
+                showurl = "%s?url=%s&name=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(vid['releaseUrl']), urllib.quote_plus(vid['title']))
+                addLink(showurl.encode(UTF8),vid['title'],vid['thumbnailUrl'],addonfanart,vid['description'],GENRE_TV,'')
 
+
+def getShow(show_url, show_name):
+            pg = getRequest(show_url)
+            i = int(addon.getSetting('vid_res'))
+            i = i+1
+            try:
+              url = re.compile('<video src="(.+?)_6.mp4"').search(pg).group(1)
+              url = url+'_%s.mp4' % str(i)
+            except:
+              url = 'http://link.theplatform.com/s/errorFiles/Unavailable.mp4'
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))
 
 
 def play_playlist(name, list):
@@ -162,6 +162,8 @@ if mode==  None:  getSources(p('fanart'))
 elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
 elif mode=='PP':  play_playlist(p('name'), p('playlist'))
 elif mode=='GC':  getCats(p('url'))
+elif mode=='GS':  getShow(p('url'), p('name'))
+
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.gameone" name="Gameone" version="2.0.3" provider-name="liquex, membrane">
+<addon id="plugin.video.gameone" name="Gameone" version="2.0.6" provider-name="liquex, membrane">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>

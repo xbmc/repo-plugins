@@ -31,8 +31,7 @@ url_base		= 'http://www.gameone.de'
 url_year		= url_base + '/tv/year/'
 url_podcast		= url_base + '/feed/podcast.xml'
 url_episode		= 'http://www.gameone.de/api/mrss/mgid%3Agameone%3Avideo%3Amtvnn.com%3Atv_show-'
-#url_swf			= 'https://playermtvnn-a.akamaihd.net/g2/g2player_2.1.7.swf'		# For some reason the new player doesn't appear to work on Windows (https?)
-url_swf			= 'http://media.mtvnservices.com/player/prime/mediaplayerprime.1.9.0.swf'
+url_swf			= 'http://www.gameone.de/flash/g2player_2.1.9.beta3.swf'
 
 
 def log(message, lvl=xbmc.LOGNOTICE):
@@ -96,14 +95,15 @@ def parse_content(string, pattern=False, dotall=False):
 		content = string	
 	
 	if (pattern != False):
+		log('Expression: ' + str(pattern), xbmc.LOGDEBUG)
 		if (dotall == True):
 			match = re.compile(pattern, re.DOTALL).findall(content)
 		else:
 			match = re.compile(pattern).findall(content)
-		log('Parsing finished - ' + str(len(match)) + ' Elements', xbmc.LOGDEBUG)
+		log(str(len(match)) + ' matches', xbmc.LOGDEBUG)
 		return match
 	else:
-		log('No pattern found, returning whole content.', xbmc.LOGDEBUG)
+		log('No expression found, returning whole content.', xbmc.LOGDEBUG)
 		return content
 
 
@@ -141,7 +141,6 @@ class plugin_structure():
 	def show_menu_root(self):
 		add_menu_item('ITEMTYPE_DIRECTORY', translation(30101), url_base + '/tv',		'show_menu_tv')
 		add_menu_item('ITEMTYPE_DIRECTORY', translation(30102), url_base + '/blog',		'show_menu_blog')
-		add_menu_item('ITEMTYPE_DIRECTORY', translation(30103), url_base + '/playtube',	'show_menu_playtube')
 		add_menu_item('ITEMTYPE_DIRECTORY', translation(30104), url_podcast,			'show_menu_podcasts')
 		
 		if addon.getSetting(id='showsettings') == 'true':
@@ -168,7 +167,7 @@ class plugin_structure():
 	def show_menu_tv_episodes(self):
 		log('Indexing TV episodes: ' + url, xbmc.LOGDEBUG)
 		
-		match_episodes = parse_content(url, '<a href="/tv/([0-9]+)" class="image_link"><img alt=".+?" src="(.+?)" /></a>\n<h5>\n<a href=\'.+?\' title=\'(.+?)\'', True)
+		match_episodes = parse_content(url, '<a href="/tv/([0-9]+)" class="image_link"><img.+?/><noscript><img src="(.+?)".+?/></noscript></a>\n<h5>\n<a href=\'.+?\' title=\'(.+?)\'', True)
 		for episode,thumbnail,title in match_episodes:
 			title = translation(30002) + ' ' + episode + ' - ' + title
 			add_menu_item('ITEMTYPE_VIDEO', title, url_episode + episode, 'play_tv_episode', thumbnail)
@@ -197,7 +196,6 @@ class plugin_structure():
 			video_url = video_file + ' swfurl=' + url_swf + ' swfvfy=true' + ' pageUrl=www.gameone.de app=ondemand?ovpfv=2.1.4'
 			
 			item = xbmcgui.ListItem(path=video_url)
-			item.setProperty('mimetype', 'video/x-flv')
 			return xbmcplugin.setResolvedUrl(pluginhandle, True, item)
 
 		xbmcplugin.endOfDirectory(handle=pluginhandle)
@@ -214,7 +212,7 @@ class plugin_structure():
 		for teaser in match_teasers:
 			match_categories = parse_content(teaser, '<a title="(.+?)" href="(.+?)">.+?<img.+?src="(.+?)"', True)
 			for category,url_category,thumbnail in match_categories:
-				add_menu_item('ITEMTYPE_DIRECTORY', category, url_base + url_category, 'show_menu_blog_entries', url_base + thumbnail)
+				add_menu_item('ITEMTYPE_DIRECTORY', category, url_base + url_category, 'show_menu_blog_entries', thumbnail)
 		
 		xbmcplugin.endOfDirectory(handle=pluginhandle)
 	
@@ -253,12 +251,16 @@ class plugin_structure():
 		match_content 	= parse_content(url)
 		match_video		= parse_content(match_content, 'video_meta-(.+?)"')
 		match_thumb		= parse_content(match_content, '"image", "(.+?)"', True)
-		match_title		= parse_content(match_content, '<p><strong>(.+?):</strong>', True)
+		match_title		= parse_content(match_content, '<p><strong>(.+?)</strong>', True)
 		match_next		= parse_content(match_content, '<a class="forwards" href="(.+?)">')
 		
 		i = 0
 		for video_id in match_video:
-			add_menu_item('ITEMTYPE_VIDEO', match_title[i], video_id, 'play_blog_video', match_thumb[i])
+			try: title = match_title[i]
+			except: title = translation(30003)
+			if title[-1:] == ':':
+				title = title[:-1]
+			add_menu_item('ITEMTYPE_VIDEO', title, video_id, 'play_blog_video', match_thumb[i])
 			i = i + 1
 		
 		for url_next in match_next:
@@ -272,50 +274,10 @@ class plugin_structure():
 		
 		url_video = self.get_video(url)
 		item = xbmcgui.ListItem(path=url_video)
-		item.setProperty('mimetype', 'video/x-flv')
+		#item.setProperty('mimetype', 'video/x-flv')
 		xbmcplugin.setResolvedUrl(pluginhandle, True, item)
 		
 		xbmcplugin.endOfDirectory(handle=pluginhandle)
-
-
-
-	#CATEGORY: PLAYTUBE
-	def show_menu_playtube(self):
-		log('Indexing Playtube categories', xbmc.LOGDEBUG)
-		
-		match_container	= parse_content(url, "<ul class='channels'>(.+?)</ul>", True)[0]
-		match_channels	= parse_content(match_container, "<a class='name' href='(.+?)' title='(.+?)'>", True)
-		
-		for url_channel,title in match_channels:
-			if not title == 'GameTrailers':
-				add_menu_item('ITEMTYPE_DIRECTORY', title, url_channel, 'show_menu_playtube_videos')
-		
-		xbmcplugin.endOfDirectory(handle=pluginhandle)
-
-
-	def show_menu_playtube_videos(self):
-		log('Indexing Playtube videos', xbmc.LOGDEBUG)
-		
-		match_content	= parse_content(url)
-		match_video		= parse_content(match_content, '<h3><a href="(.+?)">(.+?)</a></h3>\n<p><a href=".+?">.+?</a></p>\n</div>\n<a href=".+?" class="img_link"><img alt=".+?" src="(.+?)" /></a>', True)
-		match_next		= parse_content(match_content, '<a class="next_page" rel="next" href="(.+?)"')
-		
-		for url_video,title,thumbnail in match_video:
-			add_menu_item('ITEMTYPE_VIDEO', title, url_video, 'play_playtube_video', thumbnail)
-			
-		for url_next in match_next:
-			add_menu_item('ITEMTYPE_DIRECTORY', translation(30001), url_base + url_next, 'show_menu_playtube_videos')
-
-		xbmcplugin.endOfDirectory(handle=pluginhandle)
-		
-	
-	def play_playtube_video(self):
-		log('Playing Playtube video: ' + url, xbmc.LOGDEBUG)
-		
-		match_video = parse_content(url, 'video_meta-(.+?)"')[0]
-		url_video = self.get_video(match_video)
-
-		self.play_media(url_video)
 		
 		
 	

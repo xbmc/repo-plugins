@@ -3,12 +3,12 @@
 	<!-- general -->
 	<string id="30001">Nächste Seite</string>
 	<string id="30002">Folge</string>
+	<string id="30003">Ohne Titel</string>
 	
 	<!-- main menu -->
 	<string id="30100">Einstellungen</string>
 	<string id="30101">TV</string>
 	<string id="30102">Blog</string>
-	<string id="30103">Playtube</string>
 	<string id="30104">Podcast</string>
 	
 	<!-- blog menu -->

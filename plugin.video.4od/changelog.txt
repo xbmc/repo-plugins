@@ -1,3 +1,6 @@
+Version 4.0.6 [27 Apr 2014]
+- Debug logging for episode list
+
 Version 4.0.5 [09 Apr 2014]
 - Fix: Location error for users in UK
 

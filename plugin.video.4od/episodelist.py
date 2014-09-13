@@ -80,6 +80,7 @@ class EpisodeList:
 
             self.html = self.cache.GetWebPage( url, 600 ) # 10 minutes
             
+            self.log (u"page: %s\n\n%s\n\n" % ( url, self.html ), xbmc.LOGDEBUG)
             self.showId = showId
             self.showTitle = showTitle
             self.currentSeason = season
@@ -162,6 +163,8 @@ class EpisodeList:
         soup = BeautifulSoup(self.html)
         
         articles = soup.find("section", id="episodeList").findAll('article')
+
+        self.log (u"articles: %s" % articles, xbmc.LOGDEBUG)
         
         for entry in articles:
             episodeDetail = EpisodeDetail(entry, self.log)

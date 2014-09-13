@@ -17,5 +17,6 @@
         <source>https://github.com/AddonScriptorDE/plugin.video.redbull_tv</source>
         <forum>http://forum.xbmc.org/showthread.php?tid=135532</forum>
         <email>AddonScriptorDE at yahoo dot de</email>
+		<broken>Plug-in is broken due to website changes</broken>
     </extension>
 </addon>

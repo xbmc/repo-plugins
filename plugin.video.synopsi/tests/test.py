@@ -5,12 +5,13 @@ from PIL import Image, ImageDraw, ImageOps
 
 jsfile = [ 
 
-         {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-960.jpg',
-          'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-267.jpg',
-          'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-223.jpg',
-          'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-134.jpg',
-          'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-075.jpg',
-          
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-960.jpg',
+              'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-267.jpg',
+              'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-223.jpg',
+              'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-134.jpg',
+              'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-075.jpg'},
+              
           'genres': ['Sci-Fi', 'Adventure', 'Action'],
           'id': 136558,
           'image': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-075.jpg',
@@ -24,12 +25,13 @@ jsfile = [
           'type': u'movie',
           'url': '/movies/136558/the-time-machine-2002/',
           'year': 2002},
- {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-960.jpg',
-          'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-267.jpg',
-          'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-223.jpg',
-          'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-134.jpg',
-          'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-075.jpg',
-          
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-960.jpg',
+              'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-267.jpg',
+              'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-223.jpg',
+              'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-134.jpg',
+              'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-075.jpg'},
+              
           'genres': ['Action', 'Adventure', 'Fantasy', 'Sci-Fi'],
           'id': 230206,
           'image': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-075.jpg',
@@ -43,12 +45,13 @@ jsfile = [
           'type': u'movie',
           'url': '/movies/230206/star-wars-episode-vi-return-of-the-jedi-1983/',
           'year': 1983},
-  {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-960.jpg',
-          'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-267.jpg',
-          'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-223.jpg',
-          'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-134.jpg',
-          'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-075.jpg',
-          
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-960.jpg',
+              'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-267.jpg',
+              'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-223.jpg',
+              'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-134.jpg',
+              'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-075.jpg'},
+              
           'genres': ['Action', 'Adventure', 'Crime', 'Mystery', 'Thriller'],
           'id': 654591,
           'image': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-075.jpg',
@@ -62,12 +65,13 @@ jsfile = [
           'type': u'movie',
           'url': '/movies/654591/sherlock-holmes-a-game-of-shadows-2011/',
           'year': 2011},
-  {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-960.jpg',
-           'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-267.jpg',
-           'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-223.jpg',
-           'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-134.jpg',
-           'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-075.jpg',
-           
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-960.jpg',
+               'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-267.jpg',
+               'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-223.jpg',
+               'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-134.jpg',
+               'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-075.jpg'},
+               
            'genres': ['Action', 'Drama', 'Thriller'],
            'id': 2382712,
            'image': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-075.jpg',
@@ -81,12 +85,13 @@ jsfile = [
            'type': u'movie',
            'url': '/movies/2382712/clear-and-present-danger-1994/',
            'year': 1994},
-  {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-960.jpg',
-           'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-267.jpg',
-           'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-223.jpg',
-           'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-134.jpg',
-           'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-075.jpg',
-           
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-960.jpg',
+               'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-267.jpg',
+               'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-223.jpg',
+               'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-134.jpg',
+               'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-075.jpg'},
+               
            'genres': ['Comedy', 'Drama', 'Fantasy', 'Sci-Fi', 'Thriller'],
            'id': 2455949,
            'image': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-075.jpg',
@@ -100,12 +105,13 @@ jsfile = [
            'type': u'movie',
            'url': '/movies/2455949/southland-tales-2006/',
            'year': 2006},
-  {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-960.jpg',
-           'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-267.jpg',
-           'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-223.jpg',
-           'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-134.jpg',
-           'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-075.jpg',
-           
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-960.jpg',
+               'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-267.jpg',
+               'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-223.jpg',
+               'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-134.jpg',
+               'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-075.jpg'},
+               
            'genres': ['Action', 'Sci-Fi', 'Thriller'],
            'id': 3094553,
            'image': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-075.jpg',
@@ -119,12 +125,13 @@ jsfile = [
            'type': u'movie',
            'url': '/movies/3094553/terminator-2-judgment-day-1991/',
            'year': 1991},
-{'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-960.jpg',
-          'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-267.jpg',
-          'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-223.jpg',
-          'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-134.jpg',
-          'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-075.jpg',
-          
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-960.jpg',
+              'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-267.jpg',
+              'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-223.jpg',
+              'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-134.jpg',
+              'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-075.jpg'},
+              
           'genres': ['Sci-Fi', 'Adventure', 'Action'],
           'id': 136558,
           'image': u'https://s3.amazonaws.com/titles.synopsi.tv/00136558-075.jpg',
@@ -138,12 +145,13 @@ jsfile = [
           'type': u'movie',
           'url': '/movies/136558/the-time-machine-2002/',
           'year': 2002},
- {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-960.jpg',
-          'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-267.jpg',
-          'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-223.jpg',
-          'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-134.jpg',
-          'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-075.jpg',
-          
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-960.jpg',
+              'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-267.jpg',
+              'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-223.jpg',
+              'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-134.jpg',
+              'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-075.jpg'},
+              
           'genres': ['Action', 'Adventure', 'Fantasy', 'Sci-Fi'],
           'id': 230206,
           'image': u'https://s3.amazonaws.com/titles.synopsi.tv/00230206-075.jpg',
@@ -157,12 +165,13 @@ jsfile = [
           'type': u'movie',
           'url': '/movies/230206/star-wars-episode-vi-return-of-the-jedi-1983/',
           'year': 1983},
-  {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-960.jpg',
-          'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-267.jpg',
-          'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-223.jpg',
-          'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-134.jpg',
-          'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-075.jpg',
-          
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-960.jpg',
+              'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-267.jpg',
+              'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-223.jpg',
+              'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-134.jpg',
+              'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-075.jpg'},
+              
           'genres': ['Action', 'Adventure', 'Crime', 'Mystery', 'Thriller'],
           'id': 654591,
           'image': u'https://s3.amazonaws.com/titles.synopsi.tv/00654591-075.jpg',
@@ -176,12 +185,13 @@ jsfile = [
           'type': u'movie',
           'url': '/movies/654591/sherlock-holmes-a-game-of-shadows-2011/',
           'year': 2011},
-  {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-960.jpg',
-           'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-267.jpg',
-           'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-223.jpg',
-           'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-134.jpg',
-           'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-075.jpg',
-           
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-960.jpg',
+               'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-267.jpg',
+               'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-223.jpg',
+               'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-134.jpg',
+               'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-075.jpg'},
+               
            'genres': ['Action', 'Drama', 'Thriller'],
            'id': 2382712,
            'image': u'https://s3.amazonaws.com/titles.synopsi.tv/02382712-075.jpg',
@@ -195,12 +205,13 @@ jsfile = [
            'type': u'movie',
            'url': '/movies/2382712/clear-and-present-danger-1994/',
            'year': 1994},
-  {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-960.jpg',
-           'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-267.jpg',
-           'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-223.jpg',
-           'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-134.jpg',
-           'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-075.jpg',
-           
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-960.jpg',
+               'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-267.jpg',
+               'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-223.jpg',
+               'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-134.jpg',
+               'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-075.jpg'},
+               
            'genres': ['Comedy', 'Drama', 'Fantasy', 'Sci-Fi', 'Thriller'],
            'id': 2455949,
            'image': u'https://s3.amazonaws.com/titles.synopsi.tv/02455949-075.jpg',
@@ -214,12 +225,13 @@ jsfile = [
            'type': u'movie',
            'url': '/movies/2455949/southland-tales-2006/',
            'year': 2006},
-  {'cover_full': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-960.jpg',
-           'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-267.jpg',
-           'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-223.jpg',
-           'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-134.jpg',
-           'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-075.jpg',
-           
+          {'covers':
+              {'full': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-960.jpg',
+               'cover_large': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-267.jpg',
+               'cover_medium': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-223.jpg',
+               'cover_small': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-134.jpg',
+               'cover_thumbnail': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-075.jpg'},
+               
            'genres': ['Action', 'Sci-Fi', 'Thriller'],
            'id': 3094553,
            'image': u'https://s3.amazonaws.com/titles.synopsi.tv/2371b5d0b29c0ab4d0c7e65b5fc0cd91-075.jpg',

@@ -46,8 +46,8 @@ SEARCH_RESULT_LIMIT = 15
 
 
 # api request title properties
-reccoDefaultProps = ['id', 'cover_medium', 'name', 'type', 'watched', 'year']
-defaultDetailProps = ['id', 'cover_full', 'cover_large', 'cover_medium', 'cover_small', 'cover_thumbnail', 'date', 'genres', 'url', 'name', 'plot', 'released', 'trailer', 'type', 'year', 'directors', 'writers', 'runtime', 'cast']
+reccoDefaultProps = ['id', 'covers', 'name', 'type', 'watched', 'year']
+defaultDetailProps = ['id', 'covers', 'date', 'genres', 'url', 'name', 'plot', 'released', 'trailer', 'type', 'year', 'directors', 'writers', 'runtime', 'cast']
 tvshowdefaultDetailProps = defaultDetailProps + ['seasons']
 defaultCastProps = ['name']
 
@@ -57,7 +57,7 @@ type2listinglabel = { 'movie': 'Similar movies', 'tvshow': 'Seasons'}
 
 list_filter = reccoDefaultProps + ['type', 'id', 'stvId', 'xbmc_id', 'name', 'file']
 
-item_show_all_movies_hack = { 'id': HACK_SHOW_ALL_LOCAL_MOVIES, 'cover_medium': BTN_SHOW_ALL_MOVIES, 'name': '', 'type': 'HACK'}
+item_show_all_movies_hack = { 'id': HACK_SHOW_ALL_LOCAL_MOVIES, 'covers': {'medium': BTN_SHOW_ALL_MOVIES}, 'name': '', 'type': 'HACK'}
 
 #	enums
 class OverlayCode:
@@ -623,7 +623,7 @@ def home_screen_fill(apiClient, cache):
 				WINDOW.setProperty("LatestMovie.{0}.Title".format(i+1), m['name'])
 				if lib_item:
 					WINDOW.setProperty("LatestMovie.{0}.Path".format(i+1), lib_item['file'])
-				WINDOW.setProperty("LatestMovie.{0}.Thumb".format(i+1), m['cover_large'])
+				WINDOW.setProperty("LatestMovie.{0}.Thumb".format(i+1), m['covers']['large'])
 
 			# recco could return less than 5 items
 			if i < len(episode_recco):
@@ -635,7 +635,7 @@ def home_screen_fill(apiClient, cache):
 				WINDOW.setProperty("LatestEpisode.{0}.ShowTitle".format(i+1), e['name'])						# episode name
 				WINDOW.setProperty("LatestEpisode.{0}.EpisodeNo".format(i+1), get_episode_identifier(e))		# episode id string
 				WINDOW.setProperty("LatestEpisode.{0}.Path".format(i+1), c_episode['file'] if c_episode else '')
-				WINDOW.setProperty("LatestEpisode.{0}.Thumb".format(i+1), e['cover_large'])
+				WINDOW.setProperty("LatestEpisode.{0}.Thumb".format(i+1), e['covers']['large'])
 
 
 	except Exception as e:

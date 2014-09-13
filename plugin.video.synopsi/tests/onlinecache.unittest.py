@@ -9,7 +9,7 @@ import random
 import time
 
 # test helper
-from common import connection
+from settings import connection
 
 # application
 sys.path.insert(0, os.path.abspath('..'))
@@ -87,7 +87,7 @@ class OnlineCacheTest(TestCase):
 			"stv_title_hash": CORRECTION_FILE_HASH,
 			"os_title_hash": "486d1f7112f9749d",
 			"imdb_id": "0102536",
-			'title_property[]': ','.join(['name', 'cover_medium']),
+			'title_property[]': ','.join(['name', 'covers']),
 			'type': 'movie'
 		}
 
@@ -162,7 +162,7 @@ class OnlineCacheTest(TestCase):
 			"stv_title_hash": CORRECTION_FILE_HASH,
 			"os_title_hash": "486d1f7112f9749d",
 			"imdb_id": "0102536",
-			'title_property[]': ','.join(['name', 'cover_medium']),
+			'title_property[]': ','.join(['name', 'covers']),
 			'type': 'movie'
 		}
 

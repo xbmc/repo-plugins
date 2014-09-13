@@ -38,7 +38,7 @@ __author__  = __addon__.getAddonInfo('author')
 __version__   = __addon__.getAddonInfo('version')
 __profile__      = __addon__.getAddonInfo('profile')
 
-itemFolderBack = {'name': '...', 'cover_medium': 'DefaultFolderBack.png', 'id': HACK_GO_BACK, 'type': 'HACK'}
+itemFolderBack = {'name': '...', 'covers': {'medium': 'DefaultFolderBack.png'}, 'id': HACK_GO_BACK, 'type': 'HACK'}
 
 open_dialogs = []
 closed_dialogs = []
@@ -188,7 +188,7 @@ class ListDialog(MyDialog):
 			itemName = '%s - %s' % (episident, itemName)
 		
 		# create listitem with basic properties	
-		li = xbmcgui.ListItem(itemName, iconImage=item['cover_medium'])
+		li = xbmcgui.ListItem(itemName, iconImage=item['covers']['medium'])
 		li.setProperty('id', str(item['id']))
 		li.setProperty('type', str(item['type']))
 
@@ -298,7 +298,7 @@ class VideoDialog(MyDialog):
 		elif stv_details['type'] == 'tvshow' and stv_details.has_key('seasons'):
 			seasons = top.stvList.get_tvshow_local_seasons(stv_details['id'])
 			log('seasons on disk:' + str(seasons))		
-			stv_details['similars'] = [ {'id': i['id'], 'name': 'Season %d' % i['season_number'], 'cover_medium': i['cover_medium'], 'watched': i['episodes_count'] == i['watched_count'], 'file': i['season_number'] in seasons} for i in stv_details['seasons'] ]
+			stv_details['similars'] = [ {'id': i['id'], 'name': 'Season %d' % i['season_number'], 'covers': i['covers'], 'watched': i['episodes_count'] == i['watched_count'], 'file': i['season_number'] in seasons} for i in stv_details['seasons'] ]
 
 		# similar overlays
 		if stv_details.has_key('similars'):
@@ -332,7 +332,7 @@ class VideoDialog(MyDialog):
 			
 		win.setProperty("Movie.Title", str_title)
 		win.setProperty("Movie.Plot", self.data["plot"])
-		win.setProperty("Movie.Cover", self.data["cover_full"])
+		win.setProperty("Movie.Cover", self.data["covers"]["full"])
 
 		for i in range(5):
 			win.setProperty("Movie.Similar.{0}.Cover".format(i + 1), "default.png")
@@ -363,7 +363,7 @@ class VideoDialog(MyDialog):
 
 		if self.data.has_key('similars'):
 			for item in self.data['similars']:
-				li = xbmcgui.ListItem(item['name'], iconImage=item['cover_medium'])
+				li = xbmcgui.ListItem(item['name'], iconImage=item['covers']['medium'])
 				if item.get('overlay'):
 					li.setProperty('Overlay', item['overlay'])
 
@@ -480,7 +480,7 @@ class SelectMovieDialog(MyDialog):
 				if item.get('type') == 'episode':
 					text = 'S%sE%s - ' % (item.get('season_number', '??'), item.get('episode_number', '??')) + text
 
-				li = xbmcgui.ListItem(text, iconImage=item['cover_medium'])
+				li = xbmcgui.ListItem(text, iconImage=item['covers']['medium'])
 				li.setProperty('id', str(item['id']))
 				li.setProperty('director', ', '.join(item.get('directors')) if item.has_key('directors') else t_unavail)
 				cast = ', '.join([i['name'] for i in item['cast']]) if item.has_key('cast') else t_unavail			

@@ -1,3 +1,7 @@
+[B]Version 1.2[/B]
+
+* use api version 1.1
+
 [B]Version 1.1.1[/B]
 
 * Code cleanup & update

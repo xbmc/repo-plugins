@@ -24,14 +24,14 @@ RATING_CODE = {
 }
 
 # api request title properties
-commonTitleProps = ['id', 'cover_full', 'cover_large', 'cover_medium', 'cover_small', 'cover_thumbnail', 'date', 'genres', 'name', 'plot', 'released', 'trailer', 'type', 'year', 'url', 'directors', 'writers', 'runtime']
+commonTitleProps = ['id', 'covers', 'date', 'genres', 'name', 'plot', 'released', 'trailer', 'type', 'year', 'url', 'directors', 'writers', 'runtime']
 defaultIdentifyProps = commonTitleProps + ['tvshow_id']
 watchableTitleProps = commonTitleProps + ['watched']
 defaultTVShowProps = commonTitleProps + ['seasons']
-smallListProps = ['id', 'cover_medium', 'name', 'watched', 'type']
-defaultEpisodeProps = smallListProps + ['season_number', 'episode_number', 'cover_large', 'tvshow_id', 'tvshow_name']
-allSeasonProps = ['id', 'cover_full', 'cover_large', 'cover_medium', 'cover_small', 'cover_thumbnail', 'season_number', 'episodes_count', 'watched_count']
-defaultSeasonProps = ['id', 'cover_medium', 'season_number', 'episodes_count', 'watched_count']
+smallListProps = ['id', 'covers', 'name', 'watched', 'type']
+defaultEpisodeProps = smallListProps + ['season_number', 'episode_number', 'tvshow_id', 'tvshow_name']
+allSeasonProps = ['id', 'covers', 'season_number', 'episodes_count', 'watched_count']
+defaultSeasonProps = ['id', 'covers', 'season_number', 'episodes_count', 'watched_count']
 defaultSeasonProps2 = ['id', 'episodes']
 defaultSearchProps = defaultEpisodeProps + ['year', 'directors', 'cast']
 
@@ -39,6 +39,9 @@ class NotConnectedException(Exception):
 	pass
 
 class AuthenticationError(Exception):
+	pass
+
+class ValidationError(Exception):
 	pass
 
 class ApiCallError(Exception):
@@ -131,6 +134,9 @@ class ApiClient(loggable.Loggable):
 			return response_json
 
 	def getAccessToken(self):
+		if not self.username:
+			raise ValidationError('Your username/email is missing.')
+
 		data = {
 			'grant_type': 'password',
 			'client_id': self.key,
@@ -141,8 +147,8 @@ class ApiClient(loggable.Loggable):
 
 		authHeaders = {'AUTHORIZATION': 'BASIC %s' % b64encode("%s:%s" % (self.key, self.secret))}
 
-		#~ self._log.debug('apiclient getaccesstoken u:%s p:%s' % (self.username, self.password))
-		#~ self._log.debug('apiclient getaccesstoken %s' % str(data))
+		# self._log.debug('apiclient getaccesstoken u:%s p:%s' % (self.username, self.password))
+		# self._log.debug('apiclient getaccesstoken %s' % str(data))
 
 		# get token
 		try:
@@ -288,7 +294,7 @@ class ApiClient(loggable.Loggable):
 				response_json = json.loads(response_json_str)
 			except:
 				response_json = response_json_str
-				
+			
 			self._log.error('APICLIENT HTTP %s :\nURL:%s\nERROR STRING: %s\nSERVER RESPONSE: "%s"' % (e.code, url, unicode(e), response_json))
 
 		except URLError as e:
@@ -415,9 +421,8 @@ class ApiClient(loggable.Loggable):
 
 		if title_property:
 			req['data']['title_property[]'] = ','.join(title_property)
-
+		
 		return self.execute(req)
-
 
 	def title(self, titleId, props=watchableTitleProps, cast_props=None, cast_limit=None):
 		" Get title from library "

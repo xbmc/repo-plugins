@@ -246,32 +246,32 @@ try:
 		# fill in custom listing dialog/window
 		items = [
         {
-            "cover_medium": "https://s3.amazonaws.com/titles.synopsi.tv/00136558-223.jpg",
+            "covers": {"medium": "https://s3.amazonaws.com/titles.synopsi.tv/00136558-223.jpg"},
             "id": 136558,
             "name": "The Time Machine",
             'file': 'volaco'
         },
         {
-            "cover_medium": "https://s3.amazonaws.com/titles.synopsi.tv/02514500-223.jpg",
+            "covers": {"medium": "https://s3.amazonaws.com/titles.synopsi.tv/02514500-223.jpg"},
             "id": 2514500,
             "name": "Inglourious Basterds",
             'watched': 'yes'
         },
         {
-            "cover_medium": "https://s3.amazonaws.com/titles.synopsi.tv/00072215-223.jpg",
+            "covers": {"medium": "https://s3.amazonaws.com/titles.synopsi.tv/00072215-223.jpg"},
             "id": 72215,
             "name": "I, Robot",
             'watched': 'yes',
             'file': 'volaco'
         },
         {
-            "cover_medium": "https://s3.amazonaws.com/titles.synopsi.tv/00072215-223.jpg",
+            "covers": {"medium": "https://s3.amazonaws.com/titles.synopsi.tv/00072215-223.jpg"},
             "id": 72215,
             "name": "I, Robot 2",
             'custom_overlay': 'ondisk-AND-already-watched-stack.png'
         },
         {
-            "cover_medium": "https://s3.amazonaws.com/titles.synopsi.tv/00072215-223.jpg",
+            "covers": {"medium": "https://s3.amazonaws.com/titles.synopsi.tv/00072215-223.jpg"},
             "id": 72215,
             "name": "I, Robot 3",
             'custom_overlay': 'already-watched-stack.png'

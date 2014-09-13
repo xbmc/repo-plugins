@@ -5,7 +5,7 @@ import logging
 import json
 
 # test helper
-from common import connection
+from settings import connection
 
 # application
 sys.path.insert(0, os.path.abspath('..'))

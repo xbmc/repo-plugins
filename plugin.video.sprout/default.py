@@ -101,14 +101,15 @@ def getCats(cat_url):
 
 def getShow(show_url, show_name):
             pg = getRequest(show_url)
-            show_url = re.compile('id="player" src="(.+?)"').findall(pg)[0]
-            show_url = show_url.split('#')[0]
+            show_url = re.compile('id="player" src="(.+?)"').search(pg).group(1)
+            show_url = show_url.split('%3D')[1]
+            show_url = 'https://feed.theplatform.com/f/O6OKIC/H72hsdMX9k98?form=rss&byGuid=%s' % show_url
             pg = getRequest(show_url)
-            showurl = re.compile('<link rel="alternate" href="(.+?)"').findall(pg)[0]
+#            showurl = re.compile('<link rel="alternate" href="(.+?)"').search(pg).group(1)
+#            pg = getRequest(showurl)
+            showurl = re.compile('type="video/mp4".+?url="(.+?)"').search(pg).group(1)
             pg = getRequest(showurl)
-            showurl = re.compile('type="video/mp4".+?url="(.+?)"').findall(pg)[0]
-            pg = getRequest(showurl)
-            finalurl = re.compile('<video src="(.+?)"').findall(pg)[0]
+            finalurl = re.compile('<video src="(.+?)"').search(pg).group(1)
             finalurl = finalurl.replace('http://sproutonline-vh.akamaihd.net/z','http://sproutonline-pmd.edgesuite.net')
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
 

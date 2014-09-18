@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="0.0.1" provider-name="eracknaphobia">
+  <requires>
+   <import addon="xbmc.python" version="2.1.0"/>   
+   <import addon="script.module.simplejson" version="3.3.0"/>    
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="nbcsn.py">
+        <provides>video</provides>
+  </extension>  
+  <extension point="xbmc.addon.metadata">    
+    <platform>all</platform>
+    <summary lang="en">Watch NBCSN Live Extra</summary>
+    <description lang="en">NBC Sports is the sports division of the NBC television network. It broadcasts a diverse array of programs, including the Olympic Games, the NFL, the NHL, Notre Dame football, the PGA Tour, the Premier League, and the Triple Crown, among others. Other programming from outside producers – such as coverage of the Ironman Triathlon – is also presented on the network through NBC Sports. With Comcast's acquisition of NBCUniversal, its own cable sports networks were aligned with NBC Sports into a part of the division known as the NBC Sports Group.</description>
+    <disclaimer lang="en"></disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website></website>
+    <email></email>
+    <source></source>
+  </extension>
+</addon>

@@ -82,13 +82,13 @@ def getProgramsForCategory(url):
   container = common.parseDOM(html, "div", attrs = { "id" : "[^\"']*playJs-alphabetic-list[^\"']*" })
 
   if not container:
-    common.log("Could not find container for URL "+url)
+    helper.errorMsg("Could not find container for URL "+url)
     return None
 
   articles = common.parseDOM(container, "article", attrs = { "class" : "[^\"']*play_videolist-element[^\"']*" })
 
   if not articles:
-    common.log("Could not find program links for URL "+url)
+    helper.errorMsg("Could not find program links for URL "+url)
     return None
 
   programs = []
@@ -108,16 +108,16 @@ def getAlphas():
   Returns a list of all letters in the alphabet that has programs.
   """
   html = getPage(URL_A_TO_O)
-  container = common.parseDOM(html, "ul", attrs = { "class" : "[^\"']*play_alphabetic-list-titles[^\"']*" })
+  container = common.parseDOM(html, "ul", attrs = { "class" : "[^\"']*play_alphabetic-list[^\"']*" })
 
   if not container:
-    common.log("No container found!")
+    helper.errorMsg("No container found!")
     return None
 
-  letters = common.parseDOM(container[0], "h3", attrs = { "class" : "[^\"']*play_alphabetic-letter--title[^\"']*" })
+  letters = common.parseDOM(container[0], "h3", attrs = { "class" : "[^\"']*play_alphabetic-list__letter[^\"']*" })
 
   if not letters:
-    common.log("Could not find any letters!")
+    helper.errorMsg("Could not find any letters!")
     return None
 
   alphas = []
@@ -139,9 +139,9 @@ def getProgramsByLetter(letter):
 
   html = getPage(URL_A_TO_O)
 
-  letterboxes = common.parseDOM(html, "li", attrs = { "class": "[^\"']*play_alphabetic-letter[^\"']*" })
+  letterboxes = common.parseDOM(html, "li", attrs = { "class": "[^\"']*play_alphabetic-list[^\"']*" })
   if not letterboxes:
-    common.log("No containers found for letter '%s'" % letter)
+    helper.errorMsg("No containers found for letter '%s'" % letter)
     return None
 
   letterbox = None
@@ -155,7 +155,7 @@ def getProgramsByLetter(letter):
 
   lis = common.parseDOM(letterbox, "li", attrs = { "class": "[^\"']*play_js-filterable-item[^\"']*" })
   if not lis:
-    common.log("No items found for letter '"+letter+"'")
+    helper.errorMsg("No items found for letter '"+letter+"'")
     return None
 
   programs = []
@@ -182,7 +182,7 @@ def getSearchResults(url):
   for list_id in [SEARCH_LIST_TITLES, SEARCH_LIST_EPISODES, SEARCH_LIST_CLIPS]:
     items = getSearchResultsForList(html, list_id)
     if not items:
-      common.log("No items in list '"+list_id+"'")
+      helper.errorMsg("No items in list '"+list_id+"'")
       continue
     results.extend(items)
 
@@ -197,12 +197,12 @@ def getSearchResultsForList(html, list_id):
   """
   container = common.parseDOM(html, "div", attrs = { "id" : list_id })
   if not container:
-    common.log("No container found for list ID '"+list_id+"'")
+    helper.errorMsg("No container found for list ID '"+list_id+"'")
     return None
 
   articles = common.parseDOM(container, "article")
   if not articles:
-    common.log("No articles found for list ID '"+list_id+"'")
+    helper.errorMsg("No articles found for list ID '"+list_id+"'")
     return None
 
   titles = common.parseDOM(container, "article", ret = "data-title")
@@ -230,7 +230,7 @@ def getChannels():
 
   container = common.parseDOM(html, "ul", attrs = { "data-tabarea" : "ta-schedule"})
   if not container:
-    common.log("No container found for channels")
+    helper.errorMsg("No container found for channels")
     return None
 
   channels = []
@@ -299,7 +299,7 @@ def getArticles(section_name, url=None):
 
   container = common.parseDOM(html, "div", attrs = { "class" : video_list_class, "id" : section_name })
   if not container:
-    common.log("No container found for section "+section_name+"!")
+    helper.errorMsg("No container found for section "+section_name+"!")
     return None
   container = container[0]
 
@@ -314,7 +314,7 @@ def getArticles(section_name, url=None):
   new_articles = []
 
   if not articles:
-    common.log("No articles found for section '"+section_name+"' !")
+    helper.errorMsg("No articles found for section '"+section_name+"' !")
     return None
 
   for index, article in enumerate(articles):

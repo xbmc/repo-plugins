@@ -22,14 +22,12 @@ MODE_PROGRAM = "pr"
 MODE_CLIPS = "clips"
 MODE_LIVE_PROGRAMS = "live-channels"
 MODE_LATEST = "ep"
-MODE_LATEST_NEWS = "en"
 MODE_POPULAR = "popular"
 MODE_LAST_CHANCE = "last-chance"
 MODE_VIDEO = "video"
 MODE_CATEGORIES = "categories"
 MODE_CATEGORY = "ti"
 MODE_LETTER = "letter"
-MODE_RECOMMENDED = "rp"
 MODE_SEARCH = "search"
 MODE_BESTOF_CATEGORIES = "bestofcategories"
 MODE_BESTOF_CATEGORY = "bestofcategory"
@@ -173,7 +171,7 @@ def viewEpisodes(url):
   """
   episodes = svt.getEpisodes(url)
   if not episodes:
-    common.log("No episodes found!")
+    helper.errorMsg("No episodes found!")
     return
 
   for episode in episodes:
@@ -194,7 +192,7 @@ def viewClips(url):
   """
   clips = svt.getClips(url)
   if not clips:
-    common.log("No clips found!")
+    helper.errorMsg("No clips found!")
     return
 
   for clip in clips:
@@ -206,7 +204,7 @@ def viewSearch():
     viewStart()
     return
   keyword = urllib.quote(keyword)
-  common.log("Search string: " + keyword)
+  helper.infoMsg("Search string: " + keyword)
 
   keyword = re.sub(r" ", "+", keyword)
 
@@ -319,7 +317,7 @@ def addDirectoryItem(title, params, thumbnail = None, folder = True, live = Fals
       plm_script = "special://home/addons/plugin.video.svtplay/resources/lib/PlaylistManager.py"
       plm_action = "add"
       if not thumbnail:
-        thumbnail= ""
+        thumbnail = ""
       li.addContextMenuItems(
         [
           (

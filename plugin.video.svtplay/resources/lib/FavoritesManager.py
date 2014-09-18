@@ -12,8 +12,6 @@ FILE_PATH = xbmc.translatePath("special://profile/addon_data/%s/favorites.json" 
 
 FAVORITES = {}
 
-log = common.log
-
 def add(title, url):
   global FAVORITES
   __load_from_disk()
@@ -76,18 +74,18 @@ def __load_from_disk():
   if os.path.exists(FILE_PATH) and os.stat(FILE_PATH).st_size != 0:
     with open(FILE_PATH, "r") as file_handle:
         FAVORITES = json.load(file_handle)
-  log("Load from disk: "+str(FAVORITES))
+  helper.infoMsg("Load from disk: "+str(FAVORITES))
 
 def __save_to_disk():
-  log("Save to disk: "+str(FAVORITES))
+  helper.infoMsg("Save to disk: "+str(FAVORITES))
   with open(FILE_PATH, "w") as file_handle:
     file_handle.write(json.dumps(FAVORITES))
 
 # To support XBMC.RunScript
 if __name__ == "__main__":
-  log("FM called as script!")
+  helper.infoMsg("FM called as script!")
   if len(sys.argv) < 2:
-    log("No argument given!")
+    helper.errorMsg("No argument given!")
   else:
     if sys.argv[1] == "add" and len(sys.argv) > 3:
       add(sys.argv[2], sys.argv[3])

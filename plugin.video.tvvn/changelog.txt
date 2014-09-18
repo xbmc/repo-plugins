@@ -1,3 +1,6 @@
+version 0.9.4 (14/09/2014):
+ * Fix a big with data.json operation
+
 version 0.9.3 (11/07/2014):
  * Futher changes to comply with Gotham
 

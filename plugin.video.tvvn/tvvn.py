@@ -144,7 +144,7 @@ def update_chn_list():
 			if ack:
                                 d_progress = xbmcgui.DialogProgress()
                                 d_progress.create(addon.getLocalizedString(30008), addon.getLocalizedString(30009))
-				d = open(datafile, 'r+')
+				d = open(datafile, 'w')
 				d.seek(0)
 				d.write(ff)
 				d.close()

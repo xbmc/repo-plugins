@@ -1,8 +1,3 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <category label="30000">
-    <setting id="vid_res" type="enum" label="30010" lvalues="30020|30021|30022|30023" default="0" />
-    <setting id="thumb_res" type="enum" label="30011" lvalues="30025|30026|30027" default="0" />
-    <setting id="auto_play" type="bool" label="30012" default="false" />
-  </category>
 </settings>

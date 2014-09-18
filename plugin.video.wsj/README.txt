@@ -1,6 +1,8 @@
 plugin.video.wsj
 ================
 
+version 1.9.4 major website change
+
 version 1.8.4 minor change to addon.xml
 
 version 1.8.2 cleaned up some non-playing items

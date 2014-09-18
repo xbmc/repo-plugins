@@ -10,10 +10,10 @@ import cgi, gzip
 from StringIO import StringIO
 
 
+
 USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
 GENRE_TV  = "TV"
 UTF8          = 'utf-8'
-MAX_PER_PAGE  = 25
 METVBASE = 'http://metvnetwork.com%s'
 
 addon         = xbmcaddon.Addon('plugin.video.metv')
@@ -57,50 +57,51 @@ def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept'
               except:
                  link1 = ""
 
-              link1 = str(link1).replace('\n','')
+              if not (str(url).endswith('.zip')):
+                 link1 = str(link1).replace('\n','')
               return(link1)
 
 
 def getSources(fanart):
               urlbase   = METVBASE % ('/videos/')
               pg = getRequest(urlbase)
-              blob = re.compile('<div class="video-library-list clearfix">(.+?)video-library-list -->').findall(pg)
-              cats = re.compile('href="(.+?)".+?src="(.+?)".+?<h2>(.+?)<').findall(blob[0])
+              blob = re.search('<div class="video-library-list clearfix">(.+?)video-library-list -->',pg).group(1)
+              cats = re.findall('href="(.+?)".+?src="(.+?)".+?<h2>(.+?)<', blob)
               for caturl, catimage, catname in cats:
                   pg = getRequest(METVBASE % (caturl))
                   try:
-                     (cathead,catsyn)=re.compile('<span class="new-episodes">(.+?)<.+?"video-landing-main-desc-wrap clearfix".+?-->(.+?)<').findall(pg)[0]
+                     (cathead,catsyn)=re.search('<span class="new-episodes">(.+?)<.+?"video-landing-main-desc-wrap clearfix".+?-->(.+?)<',pg).groups()
                      catdesc = '%s \n %s' % (cathead.strip(), catsyn.strip())
                   except:
-                     catdesc = re.compile('"video-landing-main-desc-wrap clearfix".+?-->(.+?)<').findall(pg)[0].strip()
+                     catdesc = re.search('"video-landing-main-desc-wrap clearfix".+?-->(.+?)<',pg).group(1).strip()
                   addDir(catname,caturl,'GC',catimage,fanart,catdesc,GENRE_TV,'',False)
 
 def getCats(cat_url):
               urlbase   = METVBASE % (cat_url)
               pg = getRequest(urlbase)
               try:
-                series = re.compile('class="new-episodes">.+?<h2>(.+?)</h2>').findall(pg)[0]
+                series = re.search('class="new-episodes">.+?<h2>(.+?)</h2>',pg).group(1)
               except:
                 series = 'MeTV'
-              showart = re.compile('<img class="video-landing-billboard" src="(.+?)"').findall(pg)[0]
-              blob = re.compile('<div class="video-landing-episodes-wrap clearfix">(.+?)video-landing-episodes-wrap -->').findall(pg)
-              shows = re.compile('episode-title"><a href="(.+?)">(.+?)<.+?thumb-img" src="(.+?)".+?episode-desc">(.+?)<').findall(blob[0])
+              showart = METVBASE % (re.search('<img class="video-landing-billboard" src="(.+?)"',pg).group(1))
+              blob = re.search('<div class="video-landing-episodes-wrap clearfix">(.+?)video-landing-episodes-wrap -->',pg).group(1)
+              shows = re.findall('episode-title"><a href="(.+?)">(.+?)<.+?thumb-img" src="(.+?)".+?episode-desc">(.+?)<',blob)
               for showpage,showname, showimg, showdesc in shows:
                  showname = '%s - %s' % (series, showname)
                  showdesc = showdesc.replace('</span>','')
                  try:
-                   showurl = re.compile('/media/(.+?)/').findall(showimg)[0]
+                   showurl = re.search('/media/(.+?)/',showimg).group(1)
                  except:
                    showurl = 'BADASS'+showpage
                  showurl = "%s?url=%s&name=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(showurl), urllib.quote_plus(showname))
                  addLink(showurl.encode(UTF8),showname,showimg,showart,showdesc,GENRE_TV,'')
 
 
-def getShow(mediaID, show_name):
+def getUrl(mediaID):
             if mediaID.startswith('BADASS'):
-              mediaID = METVBASE+mediaID.replace('BADASS','')
-              pg = getRequest(show_url)
-              mediaID = re.compile('mediaId=(.+?)&').findall(pg)[0]
+              mediaID = METVBASE % mediaID.replace('BADASS','')
+              pg = getRequest(mediaID)
+              mediaID = re.search('mediaId=(.+?)&',pg).group(1)
             in0 = '<tns:in0>%s</tns:in0>' % mediaID
             in1 = '<tns:in1 xsi:nil="true" />'
             SoapMessage = """<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><tns:getPlaylistByMediaId xmlns:tns="http://service.data.media.pluggd.com">"""+in0+in1+"""</tns:getPlaylistByMediaId></SOAP-ENV:Body></SOAP-ENV:Envelope>"""
@@ -111,17 +112,20 @@ def getShow(mediaID, show_name):
                                "Content-type": "text/xml; charset=\"UTF-8\"", "Content-length": "%d" % len(SoapMessage), 
                                "Referer": "http://static.delvenetworks.com/deployments/player/player-3.27.1.0.swf?playerForm=Chromeless", 
                                "X-Page-URL": "http://metvnetwork.com/video/", "SOAPAction": "\"\""})
-            streams = re.compile('<Stream>(.+?)</Stream>').findall(html)
+            streams = re.findall('<Stream>(.+?)</Stream>',html)
             show_url=''
             highbitrate = float(0)
             for stream in streams:
-               (url, bitrate) = re.compile('<url>(.+?)</u.+?<videoBitRate>(.+?)</v').findall(stream)[0]
+               (url, bitrate) = re.search('<url>(.+?)</u.+?<videoBitRate>(.+?)</v',stream).groups()
                if (float(bitrate)) > highbitrate:
                   show_url = url
                   highbitrate = float(bitrate)
             show_url  = show_url.split('mp4:',1)[1]
             finalurl  = 'http://s2.cpl.delvenetworks.com/%s' % show_url
-            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
+            return finalurl
+
+def getShow(mediaID, show_name):
+            xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = getUrl(mediaID)))
 
 
 def play_playlist(name, list):
@@ -168,10 +172,9 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
         return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
 
 
-
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:
@@ -183,11 +186,7 @@ except:
 
 p = parms.get
 
-try:
-    mode = p('mode')
-except:
-    mode = None
-
+mode = p('mode',None)
 if mode==  None:  getSources(p('fanart'))
 elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
 elif mode=='PP':  play_playlist(p('name'), p('playlist'))

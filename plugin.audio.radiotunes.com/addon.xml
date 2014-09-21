@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.radiotunes.com"
+       name="RadioTunes"
+       version="3.0.0"
+       provider-name="qualisoft.dk - Tim C. Steinmetz">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<platform>all</platform>
+		<language>en</language>
+		<license>GPL 2.0</license>
+   		<summary lang="en">RadioTunes</summary>
+		<description lang="en">
+			RadioTunes.com features a wide variety of high quality free streaming radio channels. Find your favorites among the best of each class - be it New Age, 80s, Smooth Jazz, New Age, Top40, Hip Hop, Oldies, 70s, Reggae, Lounge or many others inside.
+		</description>
+		<language/>
+	</extension>
+</addon>

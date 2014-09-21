@@ -1,0 +1,11 @@
++ New feature
+* Fixed/improved feature
+- Removed feature
+
+This is an adapted version of the Sky.fm plugin, as the site change it's name to RadioTunes.com in ~September 2014
+Starting the plugin at v3.x.x, because of the codebase is the same as DI.fm, Jazzradio.com and of course Sky.fm which are all v3.x.x
+
+21. September 2014 v3.0.0
+* Repurposed deprecated Sky.fm plugin v3.0.7 to Radiotunes.com - close to no changes had to made to suit it :)
++ Support for Premium streams
++ Support for Premium Favorites playlist

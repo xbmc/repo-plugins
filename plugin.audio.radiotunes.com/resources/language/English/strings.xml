@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+	<!-- The strings 30000 to 30999 is reserved for plug-in parameters -->
+	<!--GENERAL STRINGS -->
+
+	<string id="30014">General</string>
+	<string id="30011">Sort A-Z (also affects 'My Favorites')</string>
+	<string id="30030">Use first stream for each channel (starts playing faster)</string>
+	<string id="30012">Stream cache expiration in days (0 = never)</string>
+	<string id="30010">Force cache refresh (use when changing settings)</string>
+    <string id="30031">Download random stream from each channel (faster after caching)</string>
+
+	<string id="30001">Stream source</string>
+
+	<string id="30002">Premium</string>
+	<string id="30003">E-mail/username</string>
+	<string id="30004">Password</string>
+	<string id="30005">Use 'My favorites' playlist</string>
+	<string id="30013">Stream bitrate</string>
+
+	<string id="30006">About</string>
+	<string id="30007">Version</string>
+	<string id="30008">Author</string>
+	<string id="30009">Homepage</string>
+
+	<string id="30015">Get HQ 256kb/sec streams with RadioTunes Premium at http://www.radiotunes.com</string>
+	<string id="30016">Version:  3.0.0</string>
+	<string id="30017">Author:  Tim C. 'Bitcrusher' Steinmetz</string>
+	<string id="30018">Homepage:  http://qualisoft.dk</string>
+	<string id="30019">E-mail:  timcst@gmail.com</string>
+
+	<string id="30020">Stats</string>
+	<string id="30021">Allow submitting of stats</string>
+	<string id="30022">I thought It'd be interesting to see how many active</string>
+	<string id="30023">installations are out there. The plan is to make some</string>
+	<string id="30024">visual statistics and display it at http://stats.qualisoft.dk</string>
+	<string id="30025">It will only try to submit stats every 24 hour.</string>
+	<string id="30026">What is submitted:</string>
+	<string id="30027">Accounttype (public/premium), plugin version, country.</string>
+	<string id="30028">I know it's a bit of a cheap trick, having it on by default ;)</string>
+	<string id="30029">-Tim</string>
+
+	<string id="30100">Connection error</string>
+	<string id="30101">Could not connect to sky.fm</string>
+	<string id="30102">Check your internet connection</string>
+    <string id="30103">and the website in your browser</string>
+
+	<string id="30110">No streams found</string>
+	<string id="30111">Maybe your RadioTunes Premium membership expired?</string>
+	<string id="30112">or the plugin has broken (the HTML layout changed)</string>
+
+	<string id="30120">Connection timed out</string>
+	<string id="30121">Could not get the playlist from this url:</string>
+
+	<string id="30130">New channels found</string>
+	<string id="30131">There was found </string>
+	<string id="30132"> new piece(s) of channelart</string>
+	<string id="30133">meaning there could be new channels.</string>
+	<string id="30134">New channels are highlighted in blue</string>
+
+	<string id="30140">Cachefiles are missing</string>
+	<string id="30141">At least one of the cachefiles is missing</string>
+	<string id="30142">please go to the addon settings and</string>
+	<string id="30143">select "Force cache refresh"</string>
+
+	<string id="30150">Channelart missing</string>
+	<string id="30151">There is </string>
+	<string id="30152"> piece(s) of channelart missing</string>
+	<string id="30153">You should refresh your cache</string>
+	<string id="30154">Disable using 'My Favorites' to get new channelart</string>
+	
+	<string id="30160">Problem downloading channelart</string>
+	<string id="30161">There was a problem downloading channelart for: </string>
+	<string id="30162">From URL: </string>
+
+    <string id="30170">Login failed</string>
+    <string id="30171">Invalid Username or Password</string>
+    <string id="30172">Has your account perhaps expired?</string>
+
+    <string id="30180">No favorites found</string>
+    <string id="30181">Login to radiotunes.com in your browser and go to 'Manage favorites'</string>
+    <string id="30182">or uncheck 'Use my favorites' from this plugins settings</string>
+
+
+</strings>

@@ -1,17 +1,24 @@
 import sys
 import xbmcplugin, xbmcgui, xbmcaddon
 import re, os, time
-import urllib, urllib2, httplib2
+import urllib, urllib2
 import json
 import HTMLParser
 import datetime
 
 addon_handle = int(sys.argv[1])
-
 ROOTDIR = xbmcaddon.Addon(id='plugin.video.nbcsnliveextra').getAddonInfo('path')
+
+#Settings
+settings = xbmcaddon.Addon(id='plugin.video.nbcsnliveextra')
+
 FANART = ROOTDIR+"/fanart.jpg"
 ICON = ROOTDIR+"/icon.png"
 ROOT_URL = 'http://stream.nbcsports.com/data/mobile/'
+
+
+#Main settings
+QUALITY = int(settings.getSetting(id="quality"))
 
 def CATEGORIES():                
     addDir('Live & Upcoming','/live',1,ICON,FANART)
@@ -53,8 +60,9 @@ def SCRAPE_VIDEOS(url,scrape_type=None):
     response.close()            
 
     if scrape_type == None:
+        #LIVE
         try:       
-            for item in json_source:         
+            for item in json_source:                         
                 BUILD_VIDEO_LINK(item)
         except:
             pass
@@ -78,53 +86,87 @@ def SCRAPE_VIDEOS(url,scrape_type=None):
 
     else:
         try:
-            for item in json_source[scrape_type]:        
-                BUILD_VIDEO_LINK(item)
+            if scrape_type == 'replay':
+                for item in reversed(json_source[scrape_type]):        
+                    BUILD_VIDEO_LINK(item)    
+            else:
+                for item in json_source[scrape_type]:        
+                    BUILD_VIDEO_LINK(item)
         except:
             pass
 
 
-def BUILD_VIDEO_LINK(item):
-    url = item['iosStreamUrl']    
+def BUILD_VIDEO_LINK(item):    
+    url = item['iosStreamUrl']  
+    ##################################################################
+    # Inject login cookie - NOT USED CURRENTLY
+    ##################################################################
     header = { 'Referer' : 'http://stream.golfchannel.com/?pid=15607',
                'Accept-Encoding' : 'gzip,deflate,sdch',
                'Accept-Language' : 'en-US,en;q=0.8',
                'Cookie' : 'hdntl=exp=1410035727~acl=%2f*~hmac=b3d9c10715e1c34dda7d12ab97b4258388369f094093ef21098a82ba47c92e56'}
-    header_encoded = urllib.urlencode(header)
+    #header_encoded = urllib.urlencode(header)
     #url =  urllib.quote_plus(url+'|')       
     #full_url = url + '|' + header_encoded 
+    ##################################################################
 
     
-    url = url.replace('manifest(format=m3u8-aapl-v3)','QualityLevels(3450000)/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0)')       
-    url = url.replace('manifest(format=m3u8-aapl,filtername=vodcut)','QualityLevels(3450000)/Manifest(video,format=m3u8-aapl,filtername=vodcut)')
-    url = url.replace('manifest(format=m3u8-aapl-v3,filtername=vodcut)','QualityLevels(3450000)/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0,filtername=vodcut)')                       
-    #url = url.replace('manifest(format=m3u8-aapl,filtername=vodcut','QualityLevels(3450000)/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0)')
-    #http://olystreameast.nbcolympics.com/vod/4e1c7148-6803-46fc-99a4-53f18fe5be22/nbc-sports-live-extra0529140933.ism/manifest(format=m3u8-aapl,filtername=vodcut)
-    #/Manifest(video,format=m3u8-aapl,filtername=vodcut)
-
-
-    #http://link.theplatform.com/s/BxmELC/9oOC_waY8QXZ/file.mp4?mbr=true&manifest=m3u&feed=Mobile_Feed&format=redirect&metafile=false  
-    #http://hdliveextra-vh.akamaihd.net/i/HD/video_sports/NBCU_Sports_Group_-_nbcsports/522/694/2014-06-25T00-58-33.933Z--51.934,.,__636916.,__274520.,__117733.,__382099.,mp4.csmil/index_1_av.m3u8?null=
+    #Set quality level based on user settings
+    if QUALITY == 0:
+        q_lvl = "200000"
+        q_lvl_golf = "296k"
+    elif QUALITY == 1:
+        q_lvl = "400000"
+        q_lvl_golf = "496k"
+    elif QUALITY == 2:
+        q_lvl = "600000"
+        q_lvl_golf = "796k"
+    elif QUALITY == 3:
+        q_lvl = "900000"
+        q_lvl_golf = "1296k"
+    elif QUALITY == 4:
+        q_lvl = "1400000"
+        q_lvl_golf = "1896k"
+    elif QUALITY == 5:
+        q_lvl = "2200000"
+        q_lvl_golf = "2596k"
+    else:
+        q_lvl = "3450000"
+        q_lvl_golf = "4296k"
+    
+    url = url.replace('manifest(format=m3u8-aapl-v3)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0)')       
+    url = url.replace('manifest(format=m3u8-aapl,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl,filtername=vodcut)')
+    url = url.replace('manifest(format=m3u8-aapl-v3,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0,filtername=vodcut)')                       
+    url = url.replace('golfx/master.m3u8','golfx/'+q_lvl_golf+'/prog.m3u8')       
+    
     name = item['title']            
     menu_name = name        
     info = item['info'] 
-    if info <> "":
-        menu_name = menu_name + " - " + info
+    if info <> "":         
+        menu_name = menu_name + " - " + info 
     
+    ##################################################################
+    # Date Color codeing - NOT USED CURRENTLY
+    ##################################################################
     #ex. 20140906-1600
     #datetime.datetime.utcnow().strftime('%Y%m%d-%H%M')
-    
     #current_date =  datetime.datetime.utcnow().strftime('%Y%m%d-%H%M')
     #video_time = item['start']
+    #date = datetime.fromtimestamp(time.mktime(time.strptime(video_time,"%Y%m%d-%H%M"))).strftime(xbmc.getRegion('dateshort'))
+
     #print str(datetime.datetime.strptime(item['start','%Y%m%d-%H%M'))
     #print item['start']
     #print current_time
     #print video_time
     #print video_time < current_time
+    #menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'    
+    ##################################################################
 
-    #menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'
+    # Highlight active streams
+    if item['id'] <> 'nbcs_':
+        menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'    
 
-    imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/"+item['image']+"_m50.jpg"
+    imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/"+item['image']+"_m50.jpg"    
     addLink(menu_name,url,name,imgurl,FANART) 
 
 def LOGIN():
@@ -198,7 +240,7 @@ except:
     pass
 
 print "Mode: "+str(mode)
-#print "URL: "+str(url)
+print "URL: "+str(url)
 print "Name: "+str(name)
 print "scrape_type:"+str(scrape_type)
 

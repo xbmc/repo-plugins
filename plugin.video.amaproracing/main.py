@@ -1,7 +1,7 @@
 import sys
 import xbmcplugin, xbmcgui, xbmcaddon
 import re, os, time
-import urllib, urllib2, httplib2
+import urllib, urllib2
 import json
 from xml.dom.minidom import Document, parse, parseString
 from datetime import datetime, date, timedelta, tzinfo

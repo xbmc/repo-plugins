@@ -43,7 +43,7 @@ def CATEGORIES():
     days = (curdate+timedelta(days=upcoming)).strftime("%Y%m%d")
     addDir(translation(30029), 'http://espn.go.com/watchespn/feeds/startup?action=live'+channels, 1, defaultlive)
     addDir(translation(30030), 'http://espn.go.com/watchespn/feeds/startup?action=upcoming'+channels+'&endDate='+days+'&startDate='+curdate.strftime("%Y%m%d"), 2,defaultupcoming)
-    enddate = '&endDate='+ curdate.strftime("%Y%m%d")
+    enddate = '&endDate='+ (curdate+timedelta(days=1)).strftime("%Y%m%d")
     replays1 = [5,10,15,20,25]
     replays1 = replays1[int(selfAddon.getSetting('replays1'))]
     start1 = (curdate-timedelta(days=replays1)).strftime("%Y%m%d")
@@ -56,11 +56,12 @@ def CATEGORIES():
     replays4 = [60,90,120,240]
     replays4 = replays4[int(selfAddon.getSetting('replays4'))]
     start4 = (curdate-timedelta(days=replays4)).strftime("%Y%m%d")
+    startAll = (curdate-timedelta(days=730)).strftime("%Y%m%d")
     addDir(translation(30031)+str(replays1)+' Days', 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels+enddate+'&startDate='+start1, 2, defaultreplay)
     addDir(translation(30031)+str(replays2)+' Days', 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels+enddate+'&startDate='+start2, 2, defaultreplay)
     addDir(translation(30031)+str(replays3)+' Days', 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels+enddate+'&startDate='+start3, 2, defaultreplay)
     addDir(translation(30031)+str(replays3)+'-'+str(replays4)+' Days', 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels+'&endDate='+start3+'&startDate='+start4, 2, defaultreplay)
-    addDir(translation(30032), 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels, 2, defaultreplay)
+    addDir(translation(30032), 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels+enddate+'&startDate='+startAll, 2, defaultreplay)
     xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def LISTNETWORKS(url,name):

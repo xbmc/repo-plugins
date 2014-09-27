@@ -15,7 +15,7 @@ def MAIN():
         addDir('Categories','http://www.itbn.org',3,'')
         addDir('Programs','http://www.itbn.org/programs',5,'')
         addDir('Movies','http://www.tbn.org/watch/mobile_app/v3/itbnapi.php?platform=android&request_path=%2Fapi%2Fv1.0%2Fvideos%2Flimit%2F250%2Fsortby%2Fairdate%2Fcategory%2F1723&device_name=GT-I9100&os_ver=2.3.4&screen_width=1600&screen_height=900&app_ver=3.0&UUID=1d5f5000-656a-4a16-847f-138937d4d0c4',10,movies_thumb)
-        addDir('Live','http://www.tbn.org/watch/mobile_app/v3/getlivestreams.php?device_name=GT-I9100&os_ver=2.3.4&screen_width=1600&screen_height=900&app_ver=3.0&UUID=1d5f5000-656a-4a16-847f-138937d4d0c4',7,live_thumb)
+        addDir('Live','http://www.tbn.org/watch/mobile_app/v3/getlivestreams.php',7,live_thumb)
         addDir('Search','http://itbn.org/',8,search_thumb)
 	addDir('Air Date','http://itbn.org/',9,search_thumb)
 	if 1==1:
@@ -215,11 +215,13 @@ def LIVE(url):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-	match='http://ooyalahd2-f.akamaihd.net/i/tbn01_delivery@120258/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn02_delivery@120259/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn03_delivery@120260/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn04_delivery@149649/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn07_delivery@149653/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn08_delivery@149654/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn05_delivery@149650/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn06_delivery@149652/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn09_delivery@149656/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn10_delivery@149657/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn11_delivery@149658/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn13_delivery@168536/master.m3u8','http://ooyalahd2-f.akamaihd.net/i/tbn12_delivery@149659/master.m3u8'
+	match=re.compile('\"streamurl\":\"(.+?)\"').findall(link)
         title=re.compile('\"name\":\"(.+?)\"').findall(link)
         thumbnail=re.compile('\"icon\":\"(.+?)\"').findall(link)
         mylist=zip((match),(title),(thumbnail))
         for url,name,thumbnail in mylist:
+		if url=='http://acaooyalahd2-lh.akamaihd.net/i/TBN11_delivery@186249/master.m3u8':
+			name='JUCE TV Russia'
                 addLink(name,url,thumbnail)       
 	if 1==1:
                 xbmc.executebuiltin('Container.SetViewMode(500)')

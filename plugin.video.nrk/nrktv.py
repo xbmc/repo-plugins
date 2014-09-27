@@ -19,6 +19,7 @@ import requests
 import HTMLParser
 import CommonFunctions as common
 from itertools import repeat
+from nrktv_mobile import Program
 
 html_decode = HTMLParser.HTMLParser().unescape
 parseDOM = common.parseDOM
@@ -29,23 +30,12 @@ session.headers['X-Requested-With'] = 'XMLHttpRequest'
 session.headers['Cookie'] = "NRK_PLAYER_SETTINGS_TV=devicetype=desktop&preferred-player-odm=hlslink&preferred-player-live=hlslink"
 
 
-class Program(object):
-    title = None
-    description = None
-    url = None
-    thumb = None
-    fanart = None
-
-    def __init__(self, **kwargs):
-        self.__dict__.update(kwargs)
-
-    @staticmethod
-    def from_lists(titles, urls, thumbs, fanart, descr=repeat(None)):
-        programs = []
-        for t, u, th, f, d in zip(titles, urls, thumbs, fanart, descr):
-            p = Program(title=t, url=u, thumb=th, fanart=f, description=d)
-            programs.append(p)
-        return programs
+def _programs_from_lists(titles, urls, thumbs, fanart, descr=repeat(None)):
+    programs = []
+    for t, u, th, f, d in zip(titles, urls, thumbs, fanart, descr):
+        p = Program(title=t, url=u, thumb=th, fanart=f, description=d)
+        programs.append(p)
+    return programs
 
 
 def get_live_stream(ch):
@@ -81,7 +71,7 @@ def _program_list(url):
     urls = [i['Url'] for i in items]
     thumbs = [i['ImageUrl'] for i in items]
     fanart = [_fanart_url(url) for url in urls]
-    return Program.from_lists(titles, urls, thumbs, fanart)
+    return _programs_from_lists(titles, urls, thumbs, fanart)
 
 
 def get_recommended():
@@ -92,7 +82,7 @@ def get_recommended():
     urls = parseDOM(html, 'a', ret='href')
     thumbs = parseDOM(html, 'img', ret='src')
     fanart = [_fanart_url(url) for url in urls]
-    return Program.from_lists(titles, urls, thumbs, fanart)
+    return _programs_from_lists(titles, urls, thumbs, fanart)
 
 
 def get_most_recent():
@@ -117,7 +107,7 @@ def _json_list(url):
     urls = [e['Url'] for e in elems]
     thumbs = [e['Images'][0]['ImageUrl'] for e in elems]
     fanart = [_fanart_url(url) for url in urls]
-    return Program.from_lists(titles, urls, thumbs, fanart)
+    return _programs_from_lists(titles, urls, thumbs, fanart)
 
 
 def get_search_results(query, page=0):
@@ -136,7 +126,7 @@ def get_search_results(query, page=0):
 
     thumbs = [parseDOM(li, 'img', ret='src')[0] for li in lis]
     fanart = [_fanart_url(url) for url in urls]
-    return Program.from_lists(titles, urls, thumbs, fanart, descr)
+    return _programs_from_lists(titles, urls, thumbs, fanart, descr)
 
 
 def get_seasons(arg):
@@ -148,7 +138,7 @@ def get_seasons(arg):
     urls = ["/program/Episodes/%s/%s/0" % (arg, i) for i in ids]
     thumbs = repeat(_thumb_url(arg))
     fanart = repeat(_fanart_url(arg))
-    return Program.from_lists(titles, urls, thumbs, fanart)
+    return _programs_from_lists(titles, urls, thumbs, fanart)
 
 
 def get_episodes(series_id, season_id):
@@ -166,7 +156,7 @@ def get_episodes(series_id, season_id):
     descr = [html_decode(common.stripTags(_)) for _ in descr]
     thumbs = repeat(_thumb_url(series_id))
     fanart = repeat(_fanart_url(series_id))
-    return Program.from_lists(titles, urls, thumbs, fanart, descr)
+    return _programs_from_lists(titles, urls, thumbs, fanart, descr)
 
 
 def get_media_url(video_id):

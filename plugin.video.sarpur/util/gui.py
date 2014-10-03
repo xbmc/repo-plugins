@@ -19,20 +19,32 @@ class GUI(object):
 
         url = "{base_url}?action_key={key}&action_value={value}&name={name}".format(**formatparams)
 
-        listitem = xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage='')
-        listitem.setInfo(type="Video", infoLabels={ "Title": name } )
+        listitem = xbmcgui.ListItem(name,
+                                    iconImage=iconimage,
+                                    thumbnailImage='')
+        listitem.setInfo(type="Video", infoLabels={"Title": name})
 
         xbmcplugin.addDirectoryItem(
-            handle = self.addon_handle,
-            url = url,
-            listitem = listitem,
-            isFolder = is_folder)
+            handle=self.addon_handle,
+            url=url,
+            listitem=listitem,
+            isFolder=is_folder)
 
-    def addDir(self, name, action_key, action_value, iconimage='DefaultFolder.png'):
-        self._addDir(name, action_key, action_value, iconimage, is_folder=True)
+    def addDir(self, name, action_key, action_value,
+               iconimage='DefaultFolder.png'):
+        self._addDir(name,
+                     action_key,
+                     action_value,
+                     iconimage,
+                     is_folder=True)
 
-    def addItem(self, name, action_key, action_value, iconimage='DefaultMovies.png'):
-        self._addDir(name, action_key, action_value, iconimage, is_folder=False)
+    def addItem(self, name, action_key, action_value,
+                iconimage='DefaultMovies.png'):
+        self._addDir(name,
+                     action_key,
+                     action_value,
+                     iconimage,
+                     is_folder=False)
 
     def infobox(self, title, message):
         xbmcgui.Dialog().ok(title, message)

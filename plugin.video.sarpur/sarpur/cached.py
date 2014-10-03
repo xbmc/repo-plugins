@@ -4,15 +4,15 @@
 import os
 import json
 import sarpur
-import scraper
+import sarpur.scraper as scraper
 from datetime import datetime
 
 
-DATA_PATH = os.path.join(sarpur.ADDON.getAddonInfo('path'), 'resources','data')
-SHOWTREEFILE_LOCATION = os.path.join(DATA_PATH,'showtree.dat')
-TABFILE_LOCATION = os.path.join(DATA_PATH,'tabs.dat')
+DATA_PATH = os.path.join(sarpur.ADDON.getAddonInfo('path'), 'resources', 'data')
+SHOWTREEFILE_LOCATION = os.path.join(DATA_PATH, 'showtree.dat')
+TABFILE_LOCATION = os.path.join(DATA_PATH, 'tabs.dat')
 
-class Categories():
+class Categories(object):
     def __init__(self):
 
         try:
@@ -23,8 +23,8 @@ class Categories():
                 showtree = self.update_showtree()
                 tabs = self.update_tabs()
             else:
-                tabs = json.load(file(TABFILE_LOCATION,'rb'))
-                showtree = json.load(file(SHOWTREEFILE_LOCATION,'rb'))
+                tabs = json.load(file(TABFILE_LOCATION, 'rb'))
+                showtree = json.load(file(SHOWTREEFILE_LOCATION, 'rb'))
 
         except OSError:
             if not os.path.exists(DATA_PATH):
@@ -48,8 +48,8 @@ class Categories():
 
         tabs = scraper.get_tabs()
 
-        json.dump(tabs, file(TABFILE_LOCATION,'wb'))
-        return tabs
+        json.dump(tabs, file(TABFILE_LOCATION, 'wb'))
+        self.tabs = tabs
 
 
     def update_showtree(self):
@@ -80,5 +80,5 @@ class Categories():
         """
 
         showtree = scraper.get_showtree()
-        json.dump(showtree, file(SHOWTREEFILE_LOCATION,'wb'))
-        return showtree
+        json.dump(showtree, file(SHOWTREEFILE_LOCATION, 'wb'))
+        self.showtree = showtree

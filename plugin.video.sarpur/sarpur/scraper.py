@@ -3,16 +3,16 @@
 
 import requests, re
 from html5lib import treebuilders
-from xml.etree import cElementTree
+from xml.etree import ElementTree
 
 
 def get_document(url):
-    r = requests.get(url)
-    source = r.content
+    req = requests.get(url)
+    source = req.content
 
-    tb = treebuilders.getTreeBuilder("etree", cElementTree)
+    builder = treebuilders.getTreeBuilder("etree", ElementTree)
     doc = html5lib.parse(source,
-                         treebuilder=tb,
+                         treebuilder=builder,
                          namespaceHTMLElements=False)
 
     return doc
@@ -23,16 +23,16 @@ def get_episodes(url):
     doc = get_document(url)
 
     #Generic look
-    for ep in doc.xpath("//a[contains(@title, 'Spila')]"):
-        episodes.append((ep.text, ep.get('href')))
+    for episode in doc.xpath("//a[contains(@title, 'Spila')]"):
+        episodes.append((episode.text, episode.get('href')))
 
     if episodes:
         return episodes
 
     #"Special" page
-    for ep in doc.xpath("//div[contains(@class,'mm-mynd')]"):
-        episode_date = ep.getparent().find('span').text
-        url = u'http://www.ruv.is{0}'.format(ep.find('a').attrib.get('href'))
+    for episode in doc.xpath("//div[contains(@class,'mm-mynd')]"):
+        episode_date = episode.getparent().find('span').text
+        url = u'http://www.ruv.is{0}'.format(episode.find('a').attrib.get('href'))
         episodes.append((episode_date, url))
 
     return episodes
@@ -42,8 +42,8 @@ def get_tabs():
     xpathstring = "//div[@class='menu-block-ctools-menu-sarpsmynd-1 menu-name-menu-sarpsmynd parent-mlid-_active:0 menu-level-2']/ul/li/a"
     tabs = []
 
-    for a in doc.xpath(xpathstring):
-        tabs.append((a.text, a.get('href')))
+    for hyperlink in doc.xpath(xpathstring):
+        tabs.append((hyperlink.text, hyperlink.get('href')))
 
     return tabs
 
@@ -57,7 +57,8 @@ def get_showtree():
 
         for group in channel.find("div").iterchildren():
             if group.tag == 'h2':
-                showtree[i]["categories"].append({"name":group.text, "shows":[]})
+                showtree[i]["categories"].append(
+                    {"name":group.text, "shows":[]})
             elif group.tag == 'div':
                 for show in group.findall("div"):
                     hyperlink = show.find("a")
@@ -82,12 +83,12 @@ def get_stream_info(page_url):
     else: #RÁS 1 & 2
         # The ip address of the stream server is returned in another page
         cache_url = doc.xpath("//script[contains(@src, 'load.cache.is')]")[0].get('src')
-        cache_content = res = requests.get(cache_url)
+        res = requests.get(cache_url)
         cache_ip = re.search('"([^"]+)"', res.content).group(1)
 
         # Now that we have the ip address we can insert it into the URL
         source_js = doc.xpath("//script[contains(., 'tengipunktur')]")[0].text
-        source_url = re.search("'file': '(http://' \+ tengipunktur \+ '[^']+)", source_js).group(1)
+        source_url = re.search(r"'file': '(http://' \+ tengipunktur \+ '[^']+)", source_js).group(1)
 
         rtmp_url = source_url.replace("' + tengipunktur + '", cache_ip)
 
@@ -133,13 +134,13 @@ def get_podcast_episodes(url):
 
     for item in doc.findall("//guid"):
         url = item.text
-        for el in item.itersiblings():
-            if el.tag == 'pubdate':
-                date = el.text
+        for element in item.itersiblings():
+            if element.tag == 'pubdate':
+                date = element.text
 
         #date = item.xpath('pubdate')[0].text
         #url = item.xpath('guid')[0].text
-        episodes.append((date,url))
+        episodes.append((date, url))
 
     return episodes
 

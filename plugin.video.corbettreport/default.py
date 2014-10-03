@@ -21,7 +21,7 @@ def CATEGORIES():
         addDir(__language__(30013),'http://www.corbettreport.com/category/videos/page/3/',1,__icon__,__language__(30018))
         addDir(__language__(30014),'http://www.corbettreport.com/category/videos/page/4/',1,__icon__,__language__(30018))
         addDir(__language__(30015),'http://www.corbettreport.com/category/videos/page/5/',1,__icon__,__language__(30018))
-        addDir(__language__(30016),'http://www.corbettreport.com/category/episodes/',3,'',__language__(30018))
+        addDir(__language__(30016),'http://www.corbettreport.com/category/podcasts/',3,'',__language__(30018))
         addDir(__language__(30017),'http://www.corbettreport.com/category/interviews/',3,'',__language__(30018))
      
                        
@@ -48,11 +48,13 @@ def INDEX2(url):
         link=response.read()
         response.close()
         #interviews and podcasts
-        match=re.compile('post-title"><a href="(.+?)" rel="bookmark" title="Permanent Link to (.+?)">(.+?)</a></h2>\r\n\r\n\t\t\t\t\t\t<div class="meta">\r\n\r\n\t<span class="meta-author"><a href="http://www.corbettreport.com/author/admin/" title="Posts by Corbett" rel="author">Corbett</a></span> &bull; <span class="meta-date">(.+?)</span> \r\n\r\n</div>\r\n\t\t\t\t\t\t\t\t\t\t\t\t\t<p><a href=(.+?)<img class="alignright" src="(.+?)" alt').findall(link)#corbett
+        
+        #match=re.compile('<option value="(.+?)">Interview (.+?)</option').findall(link)
+        match=re.compile('<option value="(.+?)">(.+?)</option').findall(link)
         if len(match) > 0:
-               for url,name,name2,date,name3,image in match:
+               for url,name in match:
                       name = name.replace('&quot;', '"').replace('&#8217;', ' ').replace('&amp;', '&').replace('&#8211;', "'")  # Cleanup the title.
-                      addDir(name,url,2,image,date+" "+name+__language__(30019)+__language__(30020))
+                      addDir(name,url,2,__icon__,name+" "+name+__language__(30019)+__language__(30020))
         else:
                 xbmc.log(__language__(30021), xbmc.LOGERROR )
                 xbmcgui.Dialog().ok(__language__(30022), __language__(30021))

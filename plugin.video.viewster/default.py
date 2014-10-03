@@ -110,10 +110,12 @@ def getCats(url):
         addDir(sname, '%s#%s' % (sid,sname), 'GS', img, addonfanart, xname, '', '')
        
 
-def getShow(osid, start='0', end=str(MAX_PER_PAGE-1), order='1', lang='1', query='undefined'):
+def getShow(osid, start='0', end=str(MAX_PER_PAGE-1), order='1', lang=str(int(addon.getSetting('lang'))), query='undefined'):
       (sid, sxname) = osid.split('#',1)
       if '#' in sxname:
           (sxname,start,end,order,lang,query) = sxname.split('#',5)
+      if 'Trailers' in sid:
+          lang = '1' # force to English for trailers - until f4m available
       qurl = 'http://api.live.viewster.com/api/v1%s?from=%s&to=%s&q=%s&order=%s&lang=%s' % (sid, start, end, query, order, lang)
       html = getRequest(qurl, headers = {'Accept': 'application/json, text/javascript, */*; q=0.01', 'Origin': 'http://www.viewster.com', 
                       'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.125 Safari/537.36',
@@ -198,20 +200,31 @@ def getVideo(sid, name):
                       'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/34.0.1847.18 #Mobile/11B554a Safari/9537.53',
                       'Referer' : 'http://www.viewster.com/movie/%s/%s' % (sid, name), 'Accept-Encoding': 'gzip,deflate,sdch', 
                       'Accept-Language' : 'en-US,en;q=0.8'})
-
       a = json.loads(html)
-      url = 'http://production-ps.lvp.llnw.net/r/PlaylistService/media/%s/getMobilePlaylistByMediaId?platform=MobileH264&' % (a['media_id'])
-      html = getRequest('%s' % (url), 
-            headers = {'Accept': '*/*', 'Origin': 'http://www.viewster.com', 
-                      'User-Agent': 'Mozilla/5.0 (iPad; CPU OS 7_0_4 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) CriOS/34.0.1847.18 #Mobile/11B554a Safari/9537.53',
-                      'Referer' : 'http://www.viewster.com/movie/%s/%s' % (sid, name), 'Accept-Encoding': 'gzip,deflate,sdch', 
-                      'Accept-Language' : 'en-US,en;q=0.8'})
+      in0 = '<tns:in0>%s</tns:in0>' % a['media_id']
+      in1 = '<tns:in1 xsi:nil="true" />'
+      SoapMessage = """<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><SOAP-ENV:Body><tns:getPlaylistByMediaId xmlns:tns="http://service.data.media.pluggd.com">"""+in0+in1+"""</tns:getPlaylistByMediaId></SOAP-ENV:Body></SOAP-ENV:Envelope>"""
+      html = getRequest("http://ps2.delvenetworks.com/PlaylistService", 
+                               user_data = SoapMessage, 
+                               headers={ "Host": "ps2.delvenetworks.com", 
+                               "User-Agent":"Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.10) Gecko/20100914 Firefox/3.6.10",
+                               "Content-type": "text/xml; charset=\"UTF-8\"", "Content-length": "%d" % len(SoapMessage), 
+                               "Referer": "http://static.delvenetworks.com/deployments/player/player-3.27.1.0.swf?playerForm=Chromeless", 
+                               "X-Page-URL": "http://www.viewster.com/movie/", "SOAPAction": "\"\""})
+      streams = re.compile('<Stream>(.+?)</Stream>').findall(html)
+      show_url=''
+      highbitrate = float(0)
+      for stream in streams:
+         (url, bitrate) = re.compile('<url>(.+?)</u.+?<videoBitRate>(.+?)</v').findall(stream)[0]
+         if (float(bitrate)) > highbitrate:
+             show_url = url
+             highbitrate = float(bitrate)
+      if not ('divaag-webmobile' in show_url):
+         finalurl  = '%s swfUrl=http://video.limelight.com/player/loader.swf pageUrl=http://www.viewster.com/movie/' % show_url
+      else:
+         finalurl = show_url.replace('rtmp://divaag-webmobile.csl.delvenetworks.com/a5112/l2/mp4:','http://divaag-webmobile.cpl.delvenetworks.com/')
+      xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = finalurl))
 
-      a = json.loads(html)
-      url = a['mediaList'][0]['mobileUrls'][0]['mobileUrl']
-      xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url)) 
-
-           
 def play_playlist(name, list):
         playlist = xbmc.PlayList(1)
         playlist.clear()

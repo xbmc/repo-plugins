@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <settings>
-  <category label="Settings">
+  <category label="30008">
+    <setting id="lang" type="enum" label="30007" lvalues="30009|30003|30004|30005|30006" default="0" />
   </category>
 </settings>

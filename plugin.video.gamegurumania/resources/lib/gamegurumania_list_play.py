@@ -25,6 +25,7 @@ class Main:
 		self.DEBUG     = __settings__.getSetting('debug')
 		
 		if (self.DEBUG) == 'true':
+			print 'Python Version: ' + sys.version
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "File", str(__file__) ), xbmc.LOGNOTICE )
 
 		# Parse parameters...
@@ -67,8 +68,10 @@ class Main:
 		#
 		video_page_url_napdis = ''
 		video_page_url_iframe = '' 
+		video_page_url_youtube = '' 
 		nadpis_found = False
 		iframe_found = False
+		youtube_found = False
 		thumbnail_url = ''
 		
 		# 
@@ -83,23 +86,31 @@ class Main:
 		#Find Title
 		#<a class="nadpis" name="shadowrun-returns-alpha-gameplay-video-34776" href="http://www.ggmania.com/?smsid=shadowrun-returns-alpha-gameplay-video-34776">Shadowrun Returns - Alpha Gameplay Video</a>
 		#Find youtubeID
-		#<iframe width="560" height="315" src="http://www.youtube.com/embed/9MiMjQwd2VE" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-		video_page_urls = soup.findAll ( ["a", "iframe"] )
+		#<iframe width="560" height="315" src="http://www.youtube.com/embed/9MiMjQwd2VE" frameborder="0" allowfullscreen="allowfullscreen"></iframe>		
+		#<div class="youtube" id="fDZF-jIhhbk" style="width: 640px; height: 360px;">
+		
+		video_page_urls = soup.findAll ( ["a", "iframe", "div"] )
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_page_urls)", str(len(video_page_urls)) ), xbmc.LOGNOTICE )
 		
 		for video_page_url in video_page_urls:
+			
+			if (self.DEBUG) == 'true':
+				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_page_url", str(video_page_url) ), xbmc.LOGNOTICE )
 
 			video_page_url_str = str(video_page_url)
 			if video_page_url_str.startswith('<a class="nadpis"'):
 				nadpis_found = True
-				iframe_found = False
+				youtube_found = False
 				video_page_url_napdis = video_page_url
 			if video_page_url_str.startswith('<iframe'):
 				iframe_found = True
-				video_page_url_iframe = video_page_url
-			if nadpis_found == True and iframe_found == True:
+				video_page_url_iframe = video_page_url				
+			if video_page_url_str.startswith('<div class="youtube"'):
+				youtube_found = True
+				video_page_url_youtube = video_page_url
+			if (nadpis_found == True and iframe_found == True) or (nadpis_found == True and youtube_found == True):
 				#Find Title
 				#<a class="nadpis" name="shadowrun-returns-alpha-gameplay-video-34776" href="http://www.ggmania.com/?smsid=shadowrun-returns-alpha-gameplay-video-34776">Shadowrun Returns - Alpha Gameplay Video</a>
 					
@@ -147,9 +158,14 @@ class Main:
 					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "title", str(title) ), xbmc.LOGNOTICE )
 				
 				#Find youtubeID
-				#<iframe width="560" height="315" src="//www.youtube.com/embed/9MiMjQwd2VE" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
-				youtubeID = str(video_page_url_iframe['src'])
-				youtubeID = youtubeID.replace("//www.youtube.com/embed/", '')
+				#<iframe width="560" height="315" src="http://www.youtube.com/embed/9MiMjQwd2VE" frameborder="0" allowfullscreen="allowfullscreen"></iframe>				
+				#<div class="youtube" id="fDZF-jIhhbk" style="width: 640px; height: 360px;">
+				if iframe_found == True:
+					youtubeID = str(video_page_url_iframe['src'])
+					youtubeID = youtubeID.replace("//www.youtube.com/embed/", '')
+				if youtube_found == True:
+					youtubeID = str(video_page_url_youtube['id'])
+				
 				youtube_url = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % youtubeID
 						
 				if (self.DEBUG) == 'true':
@@ -165,6 +181,7 @@ class Main:
 				
 				nadpis_found = False
 				iframe_found = False
+				youtube_found = False
 			
 		#Next page entry...
 		if self.next_page_possible == 'True':

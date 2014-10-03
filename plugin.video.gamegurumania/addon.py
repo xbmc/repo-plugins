@@ -21,8 +21,8 @@ __addon__       = "plugin.video.gamegurumania"
 __plugin__      = "GameGuruMania"
 __author__      = "Skipmode A1"
 __url__         = ""
-__date__        = "06 september 2014"
-__version__     = "1.0.1"
+__date__        = "02 oktober 2014"
+__version__     = "1.0.2"
 #
 # Imports
 #

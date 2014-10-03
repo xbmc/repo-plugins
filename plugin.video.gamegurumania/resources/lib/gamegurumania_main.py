@@ -21,7 +21,7 @@ class Main:
     def __init__( self ):
         
         #
-        # All Vidoes
+        # All Videos
         #
         parameters = {"action" : "list-play", "plugin_category" : __language__(30000), "url" : "http://www.ggmania.com/more.php3?next=000", "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)

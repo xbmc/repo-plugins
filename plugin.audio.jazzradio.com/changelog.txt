@@ -3,6 +3,10 @@
 - Removed feature
 
 
+24. August 2014 v3.0.1
+* Fixed url for channel asset/graphics
+
+
 29. June 2014 v3.0.0
 + Rebased on same code as the DI.fm and Sky.fm plugins - thus the severe version bump
 + Threading of playlists parsing to speed up first run and refreshing of playlists - 8 threads

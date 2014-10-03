@@ -272,7 +272,7 @@ class musicAddonXbmc:
             self.newChannels += 1
             for c in channelMeta:
                 if c['channel']['type'] == 'channel' and c['channel']['id'] == channel['id']:
-                    asset = c['channel']['asset_url']
+                    asset = "http:" + c['channel']['asset_url']
             self.getChannelAsset(str(channel['id']), asset)
 
         if ADDON.getSetting('randomstream') == "true":

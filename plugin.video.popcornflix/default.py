@@ -75,22 +75,39 @@ def getCats(c_url):
     for sid,simg,sname,sgenre,sdesc in shows:
       if (not sid.startswith('/series')) and (not sid.startswith('/tv-shows')):
         surl = "%s?url=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(sid))
-        addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc,sgenre,'',False)
+        addLink(surl.encode(UTF8),sname,simg.encode(UTF8),addonfanart,sdesc.strip(),sgenre,'',False)
       else:
         sname = '[COLOR blue]'+sname+'[/COLOR]'
-        addDir(sname, sid, 'GC', simg, addonfanart, sdesc, sgenre, '')
+        addDir(sname, sid, 'GC', simg, addonfanart, sdesc.strip(), sgenre, '')
        
 
 def getShow(sid):
       html = getRequest('http://www.popcornflix.com%s' % (sid))
-      url  = re.compile('data-videodata="(.+?)"').findall(html)[0]
+      url  = re.compile('data-videodata="(.+?)"').search(html).group(1)
       html = getRequest(url)
-      url  = re.compile('Player":"(.+?)"').findall(html)[0]
+      url  = re.compile('Player":"(.+?)"').search(html).group(1)
       url  = urllib.unquote_plus(url.replace('\\',''))
       html = getRequest(url)
-      url  = re.compile('RESOLUTION=864x480(.+?)#').findall(html)[0]
-      url  = url.strip()
-      xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url)) 
+      playlist = re.compile('BANDWIDTH=(.+?),.+?http:(.+?)protocolversion=3').findall(html)
+      try:
+         bitrates = [150000, 240000, 340000, 440000, 552000, 640000, 840000, 1240000]
+         try:
+           urate    = bitrates[int(addon.getSetting('bitrate'))]
+         except:
+           urate = 150000
+         current  = 0
+         for bitrate,pp in playlist:
+          if (int(bitrate) <= int(urate)) and (current < int(bitrate)):
+            current = int(bitrate)
+            playpath = pp
+         if current == 0: (current, playpath) = playlist[0]
+         url = 'http:'+playpath+'protocolversion=3'
+         url  = url.strip()
+         xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=url))
+      except:
+       dialog = xbmcgui.Dialog()
+       dialog.ok(__language__(30000), '',__language__(30001))
+ 
 
 
 def play_playlist(name, list):
@@ -140,7 +157,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:

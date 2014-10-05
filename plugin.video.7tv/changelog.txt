@@ -1,3 +1,10 @@
+2.0.0 (2014-10-05)
+ADD: Search History (max. 50 entries)
+ADD: 'Watch Later' for episodes
+ADD/FIX: pagination (e.g. 'Germany's next Topmodel')
+ADD: Caching (kodimon) for better performance
+UPD: moved to kodimon (framework)
+
 1.0.3 (2014-08-09)
 - moved 'Favorites' and 'Latest Videos' to the top
 - display 'Search' bold

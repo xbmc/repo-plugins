@@ -3,54 +3,64 @@
         <system>1</system>
         <posx>470</posx>
         <posy>255</posy>
-        </coordinates>
+     </coordinates>
+	<animation effect="fade" time="250">WindowOpen</animation>
+    <animation effect="fade" time="250">WindowClose</animation>
     <controls>
         <control type="image" id="5001">
-	    <description>1 item background image</description>
-	    <posx>0</posx>
-	    <posy>0</posy>
-	    <width>342</width>
-        <height>96</height>
-	    <texture border="20">DialogBack.png</texture>       
-	</control>
+			<description>1 item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			<height>96</height>
+			<texture border="20">DialogBack.png</texture>       
+		</control>
         <control type="image" id="5002">
-	    <description>2 item background image</description>
-	    <posx>0</posx>
-	    <posy>0</posy>
-	    <width>342</width>
-        <height>134</height>
-	    <texture border="20">DialogBack.png</texture>
-	</control>
+			<description>2 item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			<height>134</height>
+			<texture border="20">DialogBack.png</texture>
+		</control>
         <control type="image" id="5003">
-	    <description>3 item background image</description>
-	    <posx>0</posx>
-	    <posy>0</posy>
-	    <width>342</width>
-        <height>172</height>
-	    <texture border="20">DialogBack.png</texture>
-	</control>
+			<description>3 item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			<height>172</height>
+			<texture border="20">DialogBack.png</texture>
+		</control>
         <control type="image" id="5004">
-	    <description>4+ item background image</description>
-	    <posx>0</posx>
-	    <posy>0</posy>
-	    <width>342</width>
-         <height>210</height>
-	    <texture border="20">DialogBack.png</texture>
-	</control>
-        
-    <control type="list" id="3000">
+			<description>4 item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			 <height>210</height>
+			<texture border="20">DialogBack.png</texture>
+		</control>
+        <control type="image" id="5005">
+			<description>5+ item background image</description>
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>342</width>
+			 <height>248</height>
+			<texture border="20">DialogBack.png</texture>
+		</control>
+		
+	    <control type="list" id="3000">
         <description>List to hold 'buttons'</description>
 	    <posx>20</posx>
 	    <posy>30</posy>
 	    <width>300</width>
-	    <height>152</height>	    
+	    <height>190</height>	    
         <itemwidth>300</itemwidth>
         <itemheight>38</itemheight> 
         <pagecontrol>4000</pagecontrol>  
         <scrolltime>200</scrolltime>
         <onright>4000</onright>
         <onleft>4000</onleft>  
-
+		
         <itemlayout width="300" height="38">                
             <control type="image">
                 <posx>0</posx>
@@ -65,7 +75,7 @@
     		    <width>300</width>
 	    	    <height>38</height>
 		        <font>fontContextMenu</font>
-                <textcolor>grey2</textcolor>
+                <textcolor>FF999999</textcolor>
 		        <aligny>center</aligny>		    
 		        <align>center</align>
 		        <info>ListItem.Label</info>
@@ -86,7 +96,7 @@
 		        <width>300</width>
 		        <height>38</height>
 		        <font>fontContextMenu</font>
-                <textcolor>grey2</textcolor>
+                <textcolor>FF999999</textcolor>
 		        <aligny>center</aligny>		    
 		        <align>center</align>
 		        <info>ListItem.Label</info>
@@ -118,7 +128,7 @@
                 <posx>315</posx>
                 <posy>30</posy>
                 <width>25</width>
-                <height>152</height>
+                <height>190</height>
                 <texturesliderbackground border="0,14,0,14">ScrollBarV.png</texturesliderbackground>
                 <texturesliderbar border="0,14,0,14">ScrollBarV_bar.png</texturesliderbar>
                 <texturesliderbarfocus border="0,14,0,14">ScrollBarV_bar_focus.png</texturesliderbarfocus>

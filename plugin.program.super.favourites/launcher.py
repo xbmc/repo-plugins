@@ -18,12 +18,7 @@
 #  http://www.gnu.org/copyleft/gpl.html
 #
 
-if __name__ == '__main__':
-    try:
-        nParam = len(sys.argv)
-        if nParam > 1:
-            property = sys.argv[1]
-            import cache
-            cache.clearProperty(property)
-    except Exception, e:
-        print str(e)
+import xbmc
+
+xbmc.executebuiltin('RunAddon(plugin.program.super.favourites)')
+xbmc.executebuiltin('Dialog.Close(all, true)')

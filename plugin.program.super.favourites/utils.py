@@ -23,6 +23,8 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import os
+import re
+
 
 def GetXBMCVersion():
     #xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Application.GetProperties", "params": {"properties": ["version", "name"]}, "id": 1 }')
@@ -32,17 +34,28 @@ def GetXBMCVersion():
     return int(version[0]), int(version[1]) #major, minor
 
 
+def GETTEXT(id):
+    text = ADDON.getLocalizedString(id)
+    name = ADDON.getLocalizedString(30121)
+
+    if name == DISPLAY:
+        return text
+    text = text.replace(name, DISPLAY)
+    return text
+
+
 ADDONID = 'plugin.program.super.favourites'
 ADDON   =  xbmcaddon.Addon(ADDONID)
 HOME    =  ADDON.getAddonInfo('path')
 ROOT    =  ADDON.getSetting('FOLDER')
 PROFILE =  os.path.join(ROOT, 'Super Favourites')
-VERSION = '1.0.8'
+VERSION =  ADDON.getAddonInfo('version')
 ICON    =  os.path.join(HOME, 'icon.png')
 FANART  =  os.path.join(HOME, 'fanart.jpg')
 SEARCH  =  os.path.join(HOME, 'resources', 'media', 'search.png')
-GETTEXT =  ADDON.getLocalizedString
+DISPLAY = ADDON.getSetting('DISPLAYNAME')
 TITLE   =  GETTEXT(30000)
+
 
 
 KEYMAP_HOT  = 'super_favourites_hot.xml'
@@ -56,6 +69,15 @@ FILENAME     = 'favourites.xml'
 FOLDERCFG    = 'folder.cfg'
 
 
+def log(text):
+    try:
+        output = '%s V%s : %s' % (TITLE, VERSION, str(text))
+        #print output
+        xbmc.log(output, xbmc.LOGDEBUG)
+    except:
+        pass
+
+
 def DialogOK(line1, line2='', line3=''):
     d = xbmcgui.Dialog()
     d.ok(TITLE + ' - ' + VERSION, line1, line2 , line3)
@@ -67,6 +89,13 @@ def DialogYesNo(line1, line2='', line3='', noLabel=None, yesLabel=None):
         return d.yesno(TITLE + ' - ' + VERSION, line1, line2 , line3) == True
     else:
         return d.yesno(TITLE + ' - ' + VERSION, line1, line2 , line3, noLabel, yesLabel) == True
+
+
+def Progress(title, line1 = '', line2 = '', line3 = ''):
+    dp = xbmcgui.DialogProgress()
+    dp.create(title, line1, line2, line3)
+    dp.update(0)
+    return dp
 
 
 def generateMD5(text):
@@ -88,59 +117,81 @@ def generateMD5(text):
     return '0'
 
 
-#def Verify():
-#    CheckVersion()
-#    VerifyKeymaps()
-
-
 def CheckVersion():
-    prev = ADDON.getSetting('VERSION')
-    curr = VERSION
+    try:
+        prev = ADDON.getSetting('VERSION')
+        curr = VERSION
 
-    VerifyKeymaps()
+        if xbmcgui.Window(10000).getProperty('OTT_RUNNING') != 'True':
+            VerifyKeymaps()
 
-    if prev == curr:        
-        return
+        if prev == curr:        
+            return
 
-    ADDON.setSetting('VERSION', curr)
+        verifySuperSearch()
 
-    verifySuperSearch(replace=False)
+        ADDON.setSetting('VERSION', curr)
 
-    if prev == '0.0.0' or prev== '1.0.0':
-        folder  = xbmc.translatePath(PROFILE)
-        if not os.path.isdir(folder):
-            os.makedirs(folder) 
+        if prev == '0.0.0' or prev== '1.0.0':
+            folder  = xbmc.translatePath(PROFILE)
+            if not os.path.isdir(folder):
+                try:    os.makedirs(folder) 
+                except: pass
+
+        #call showChangeLog like this to workaround bug in openElec
+        script = os.path.join(HOME, 'showChangelog.py')
+        cmd    = 'AlarmClock(%s,RunScript(%s),%d,True)' % ('changelog', script, 0)
+        xbmc.executebuiltin(cmd)
+    except Exception, e:
+        pass
 
 
-def verifySuperSearch(replace=False):
-    dst = os.path.join(xbmc.translatePath(ROOT), 'Search', FILENAME)
-
-    if (not replace) and os.path.exists(dst):
-        return
-
+def verifySuperSearch():
+    dst = os.path.join(xbmc.translatePath(ROOT), 'Search')
     src = os.path.join(HOME, 'resources', 'Search', FILENAME)
 
-    try:    os.mkdir(os.path.join(xbmc.translatePath(ROOT), 'Search'))
+    try:    os.makedirs(dst)
     except: pass
 
-    f = open(src, mode='r')
-    t = f.read()
-    f.close()
+    dst = os.path.join(dst, FILENAME)
 
-    f = open(dst, mode='w')
-    f.write(t)
-    f.close()
+    if not os.path.exists(dst):
+        try:
+            import shutil
+            shutil.copyfile(src, dst)
+        except:
+            pass
+        return
+
+
+    import favourite
+
+    new   = favourite.getFavourites(src, validate=False)
+    line1 = GETTEXT(30123)
+    line2 = GETTEXT(30124)
+
+    for item in new:
+        fave, index, nFaves = favourite.findFave(dst, item[2])
+        if index < 0:
+            line = line1 % item[0]
+            if DialogYesNo(line1=line, line2=line2):
+                favourite.addFave(dst, item)
 
 
 def UpdateKeymaps():
-    DeleteKeymap(KEYMAP_HOT)
+    if ADDON.getSetting('HOTKEY') != GETTEXT(30111): #i.e. not programmable
+        DeleteKeymap(KEYMAP_HOT)
+
     DeleteKeymap(KEYMAP_MENU)
     VerifyKeymaps()
 
         
 def DeleteKeymap(map):
     path = os.path.join(xbmc.translatePath('special://profile/keymaps'), map)
+    DeleteFile(path)
 
+
+def DeleteFile(path):
     tries = 5
     while os.path.exists(path) and tries > 0:
         tries -= 1 
@@ -165,20 +216,37 @@ def VerifyKeymaps():
 
 
 def VerifyKeymapHot():
+    if ADDON.getSetting('HOTKEY') == GETTEXT(30111): #i.e. programmable
+        return False    
+
     dest = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_HOT)
 
     if os.path.exists(dest):
         return False
 
-    key = ADDON.getSetting('HOTKEY').lower()
+    key = ADDON.getSetting('HOTKEY')
 
-    includeKey = key in ['f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'g']
+    valid = []
+    for i in range(30028, 30040):
+        valid.append(GETTEXT(i))
+    valid.append(GETTEXT(30058))
+
+    includeKey = key in valid
 
     if not includeKey:
         DeleteKeymap(KEYMAP_HOT)
         return True
 
-    cmd = '<keymap><Global><keyboard><%s>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/hot.py)</%s></keyboard></Global></keymap>'  % (key, key)
+    if isATV():
+        DialogOK(GETTEXT(30118), GETTEXT(30119))
+        return False
+
+    return WriteKeymap(key.lower(), key.lower())
+
+
+def WriteKeymap(start, end):
+    dest = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_HOT)
+    cmd  = '<keymap><Global><keyboard><%s>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/hot.py)</%s></keyboard></Global></keymap>'  % (start, end)
     
     f = open(dest, mode='w')
     f.write(cmd)
@@ -196,30 +264,68 @@ def VerifyKeymapHot():
     return True
 
 
-def VerifyKeymapMenu():
-    dest = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_MENU)
-
-    if os.path.exists(dest):
-        return False
-
+def VerifyKeymapMenu(): 
     context = ADDON.getSetting('CONTEXT')  == 'true'
 
-    if not context:
-        DeleteKeymap(KEYMAP_MENU)
+    DeleteKeymap(KEYMAP_MENU)
+
+    if not context:        
         return True
 
-    src = os.path.join(HOME, 'resources', 'keymaps', KEYMAP_MENU)
-    dst = os.path.join(xbmc.translatePath('special://profile/keymaps'), KEYMAP_MENU)
+    keymap = xbmc.translatePath('special://profile/keymaps')
+    src    = os.path.join(HOME, 'resources', 'keymaps', KEYMAP_MENU)
+    dst    = os.path.join(keymap, KEYMAP_MENU)
 
-    import shutil
-    shutil.copy(src, dst)
+    try:
+        if not os.path.isdir(keymap):
+            os.makedirs(keymap)
+    except:
+        pass
+
+    try:
+        import shutil
+        shutil.copy(src, dst)
+    except:
+        pass
 
     return True
 
 
+def verifyPlayMedia(cmd):
+    return True
+
+
+def verifyPlugin(cmd):
+    try:
+        plugin = re.compile('plugin://(.+?)/').search(cmd).group(1)
+
+        return xbmc.getCondVisibility('System.HasAddon(%s)' % plugin) == 1
+
+    except:
+        pass
+
+    return True
+
+
+def verifyScript(cmd):
+    try:
+        script = cmd.split('(', 1)[1].split(',', 1)[0].replace(')', '').replace('"', '')
+        script = script.split('/', 1)[0]
+
+        return xbmc.getCondVisibility('System.HasAddon(%s)' % script) == 1
+
+    except:
+        pass
+
+    return True
+
+
+def isATV():
+    return xbmc.getCondVisibility('System.Platform.ATV2') == 1
+
 
 def GetFolder(title):
-    default = ROOT #ADDON.getAddonInfo('profile')
+    default = ROOT
     folder  = xbmc.translatePath(PROFILE)
 
     if not os.path.isdir(folder):
@@ -231,6 +337,57 @@ def GetFolder(title):
 
     return xbmc.translatePath(folder)
 
+
+def showBusy():
+    busy = None
+    try:
+        import xbmcgui
+        busy = xbmcgui.WindowXMLDialog('DialogBusy.xml', '')
+        busy.show()
+
+        try:    busy.getControl(10).setVisible(False)
+        except: pass
+    except:
+        busy = None
+
+    return busy
+
+
+def showText(heading, text):
+    id = 10147
+
+    xbmc.executebuiltin('ActivateWindow(%d)' % id)
+    xbmc.sleep(100)
+
+    win = xbmcgui.Window(id)
+
+    retry = 50
+    while (retry > 0):
+        try:
+            xbmc.sleep(10)
+            retry -= 1
+            win.getControl(1).setLabel(heading)
+            win.getControl(5).setText(text)
+            return
+        except:
+            pass
+
+
+def showChangelog(addonID=None):
+    try:
+        if addonID:
+            ADDON = xbmcaddon.Addon(addonID)
+        else: 
+            ADDON = xbmcaddon.Addon(ADDONID)
+
+        f     = open(ADDON.getAddonInfo('changelog'))
+        text  = f.read()
+        title = '%s - %s' % (xbmc.getLocalizedString(24054), ADDON.getAddonInfo('name'))
+
+        showText(title, text)
+
+    except:
+        pass
 
 if __name__ == '__main__':
     pass

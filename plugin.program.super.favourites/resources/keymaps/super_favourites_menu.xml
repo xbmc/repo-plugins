@@ -18,6 +18,7 @@
 		<keyboard>
 			<c>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</c>
 			<menu>XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</menu>
+                        <key id="61584">XBMC.RunScript(special://home/addons/plugin.program.super.favourites/capture.py)</key>
 		</keyboard>
 		
 		<mouse>

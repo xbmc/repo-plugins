@@ -95,3 +95,16 @@ def showMenu(addonID, menu):
     params = menu.params
     del menu
     return params
+
+
+def selectMenu(title, menu):
+    options = []
+    for option in menu:
+        options.append(option[0])
+
+    option = xbmcgui.Dialog().select(title, options)
+
+    if option < 0:
+        return -1
+
+    return menu[option][1]

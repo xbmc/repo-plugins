@@ -19,10 +19,11 @@
 #
 
 import utils
-utils.CheckVersion()
-
 import xbmc
 import os
+
+
+utils.VerifyKeymaps()
 
 
 class MyMonitor(xbmc.Monitor):
@@ -49,5 +50,16 @@ monitor = MyMonitor()
 
 while (not xbmc.abortRequested):
     xbmc.sleep(1000)
+    if xbmc.getCondVisibility('System.HasAddon(%s)' % utils.ADDONID) == 0:
+        utils.DeleteKeymap(utils.KEYMAP_HOT)
+        utils.DeleteKeymap(utils.KEYMAP_MENU)
+        xbmc.sleep(1000)
+        xbmc.executebuiltin('Action(reloadkeymaps)')  
+
+
+if xbmc.getCondVisibility('System.HasAddon(%s)' % utils.ADDONID) == 0:
+    utils.DeleteKeymap(utils.KEYMAP_HOT)
+    utils.DeleteKeymap(utils.KEYMAP_MENU)
+
 
 del monitor

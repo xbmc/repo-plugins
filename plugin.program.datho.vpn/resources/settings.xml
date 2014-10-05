@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="Configuration">
+	    <setting id="USER"      type="text"      label="VPN Username"                                       default=""/>
+	    <setting id="PASS"      type="text"      label="VPN Password"                                       default=""                 option="hidden"/>
+	    <setting id="VPNTYPE"        type="labelenum" label="VPN Type"    values = "Datho|Custom"                 default="Datho"/>
+	    <setting id="SERVER_ADDRESS"    type="text" label="Server Address" default=""/>
+	    <setting id="OS"        type="labelenum" label="Operating System"    values = "Windows|Linux|Android|OpenElec|RaspBMC"                 default="OpenElec"/>
+	    <setting id="SUDO"      type="bool"      label="Use Sudo"                      default="false" enable="!eq(-1,0)"     option="hidden"/>
+	    <setting id="SUDOPASS"  type="text"      label="Sudo Password (if required)"   default=""      enable="eq(-1,true)"   option="hidden"/>
+				
+		<setting id="PORT"      type="labelenum" label="Port"                values = "1194|443"        default="1194"/>
+		<setting id="TIMEOUT"   type="labelenum" label="Connection Timeout"  values = "15|30|45|60|Off" default="30"/>
+		<setting id="CONTEXT"   type="bool"      label="Override context menu"                          default="false"                visible="true"/>
+				
+		<setting id="VERSION"   type="text"      label="Current Version"                                default="0.0.0"                visible="false"/>
+	</category>
+</settings>

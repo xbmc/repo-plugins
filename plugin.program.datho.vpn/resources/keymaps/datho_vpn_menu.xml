@@ -1,0 +1,78 @@
+<keymap>
+	<Global>
+		<keyboard>
+			<c>XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</c>
+			<menu>XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</menu>
+		</keyboard>
+		
+		<mouse>
+			<rightclick>XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</rightclick>
+		</mouse>
+		
+		<remote>
+		      <title>XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</title>
+		</remote>
+		
+		<joystick name="AppleRemote">
+			<button id="8">XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</button>
+	    </joystick>
+		
+		<gamepad>
+			<white>XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</white>
+		</gamepad>
+		
+		<joystick name="Harmony">
+			<button id="6">XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</button>
+	    </joystick>
+		
+		<joystick name="Controller (XBOX 360 For Windows)">
+			<altname>Afterglow Gamepad for Xbox 360 (Controller)</altname>
+			<altname>Controller (Gamepad F310)</altname>
+			<altname>Controller (Gamepad for Xbox 360)</altname>
+			<altname>Controller (Rumble Gamepad F510)</altname>
+			<altname>Controller (Wireless Gamepad F710)</altname>
+			<altname>Controller (Xbox 360 Wireless Receiver for Windows)</altname>
+			<altname>Controller (Xbox wireless receiver for windows)</altname>
+			<altname>Controller (XBOX360 GAMEPAD)</altname>
+			<altname>Wireless Gamepad F710 (Controller)</altname>
+			<altname>XBOX 360 For Windows</altname>
+			<altname>XBOX 360 For Windows (Controller)</altname>
+			<altname>Xbox 360 Wireless Controller</altname>
+			<altname>Xbox Receiver for Windows (Wireless Controller)</altname>
+			<altname>Xbox wireless receiver for windows (Controller)</altname>
+			<altname>Gamepad F310 (Controller)</altname>
+			<button id="3">XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</button>
+		</joystick>
+		
+		<joystick name="Microsoft X-Box 360 pad">
+			<altname>BigBen Interactive XBOX 360 Controller</altname>
+			<altname>Generic X-Box pad</altname>
+			<altname>Logitech Chillstream Controller</altname>
+			<altname>Mad Catz Wired Xbox 360 Controller</altname>
+			<altname>Mad Catz Wired Xbox 360 Controller (SFIV)</altname>
+			<altname>Pelican 'TSZ' Wired Xbox 360 Controller</altname>
+			<altname>Pelican PL-3601 'TSZ' Wired Xbox 360 Controller</altname>
+			<altname>Xbox 360 Wireless Receiver</altname>
+			<button id="3">XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</button>
+		</joystick>
+		
+		<joystick name="Microsoft Xbox Controller S">
+			<altname>Mad Catz MicroCON</altname>
+			<altname>Logitech Xbox Cordless Controller</altname>
+			<altname>Microsoft X-Box pad (Japan)</altname>
+			<button id="6">XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</button>
+		</joystick>
+				
+		<joystick name="PLAYSTATION(R)3 Remote Keyboard">
+			<altname>PS3 Remote Keyboard</altname>
+			<altname>MoSart PS3 Remote Keyboard</altname>
+			<button id="4">XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</button>
+		</joystick>
+		
+		<joystick name="WiiRemote">
+			<button id="10">XBMC.RunScript(special://home/addons/plugin.program.datho.vpn/menu.py)</button>
+		</joystick>
+		
+	</Global>
+</keymap>
+

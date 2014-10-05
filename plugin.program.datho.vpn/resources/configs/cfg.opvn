@@ -1,0 +1,17 @@
+client
+dev tun
+proto udp
+remote #SERVER# #PORT#
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+persist-remote-ip
+ca #CERTIFICATE#
+tls-client
+remote-cert-tls server
+auth-user-pass #AUTHENTICATION#
+comp-lzo
+verb 3
+auth SHA256
+cipher AES-256-CBC

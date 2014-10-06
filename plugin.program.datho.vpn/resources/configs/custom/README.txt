@@ -1,1 +1,0 @@
-In this directory you can add the certificate and OpenVPN configuration file of your own VPN Provider

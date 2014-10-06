@@ -22,3 +22,5 @@ minor change to addon.xml
 Version 1.0.2 rewrite for web site changes
 
 Version 1.0.3 cleanup of folder name and settings xml
+
+Version 1.1.4 significant website change

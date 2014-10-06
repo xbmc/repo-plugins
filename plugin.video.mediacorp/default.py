@@ -15,7 +15,7 @@ import cgi
 from operator import itemgetter
 
 
-USER_AGENT = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36'
 GENRE_TV  = "TV"
 UTF8          = 'utf-8'
 MAX_PER_PAGE  = 25
@@ -68,65 +68,53 @@ def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT}):
 
 def getSources():
 
-              addDir(__language__(30002),"http://video.xin.msn.com/browse/tv/network?tag=channel+5&currentpage=",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-5_nl.png",addonfanart,__language__(30002),"TV",False)
-              addDir(__language__(30003),"http://video.xin.msn.com/browse/tv/network?tag=channel+8&currentpage=",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-8_nl.png",addonfanart,__language__(30003),"TV",False)
-              addDir(__language__(30004),"http://video.xin.msn.com/browse/tv/network?tag=channel+u&currentpage=",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-u_nl.png",addonfanart,__language__(30004),"TV",False)
-              addDir(__language__(30005),"http://video.xin.msn.com/browse/news/channel-newsasia?currentpage=",'GS',"http://img.video.msn.com/video/i/src/ensgcna~ensgcna_ppl.png",addonfanart,__language__(30005),"TV",False)
+              addDir(__language__(30002),"channel5",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-5_nl.png",addonfanart,__language__(30002),"TV",False)
+              addDir(__language__(30003),"channel8",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-8_nl.png",addonfanart,__language__(30003),"TV",False)
+              addDir(__language__(30004),"channelu",'GC',"http://img.video.msn.com/video/i/network/ensg_channel-u_nl.png",addonfanart,__language__(30004),"TV",False)
+              addDir(__language__(30007),"okto",'GC',"",addonfanart,__language__(30007),"TV",False)
+              addDir(__language__(30008),"suria",'GC',"",addonfanart,__language__(30008),"TV",False)
+              addDir(__language__(30009),"vasantham",'GC',"",addonfanart,__language__(30009),"TV",False)
 
-def getnextPage(html, url, mode):
-  try:
-    (currentpage, totalpages) = re.compile('class="vxp_currentPage">(.+?)<.+?vxp_totalPages">(.+?)<').findall(html)[0]
-    if (currentpage!=totalpages):
-       currentpage = str(int(currentpage)+1)
-       cattitle = "[COLOR blue]>>> %s[/COLOR]" % (__language__(30006))
-       url = re.compile('(.+?)&currentpage=').findall(url)[0]
-       caturl = url+'&currentpage=%s' % (currentpage)
-       addDir(cattitle, caturl, mode, icon, addonfanart, "", "TV", "", False)
-  except:
-    return
 
 def getChannel(url):
-     html     = getRequest(url)
-     blobs = re.compile('<ul class="vxp_tagList_column"(.+?)</ul>').findall(html)
-     for catblock in blobs:
-       match=re.compile('href="(.+?)".+?title="(.+?)"').findall(catblock)
-       for caturl, cattext in match:
-         caturl = caturl+'&currentpage='
+     html  = getRequest('http://xin.msn.com/en-sg/video/catchup/')
+     blob  = re.compile('class="section tabsection horizontal".+?data-section-id="%s"(.+?)</ul>' % (url)).search(html).group(1)
+     blobs = re.compile('<li tabindex="0" data-tabid="(.+?)".+?>(.+?)</li>').findall(blob)
+     for caturl, cattext in blobs:
+         caturl = '%s#%s' % (url, caturl)
+         cattext = cattext.replace('&#39;',"'").replace('&amp;','&')
          cattext = cattext.strip()
-         cattext = cattext.replace('&quot;','"').replace("&#39;","'").replace("&amp;","&")
          addDir(cattext,caturl.encode('utf-8'),'GS',icon,addonfanart,cattext,"TV","",False)
-     getnextPage(html,url, 'GC')
 
 
 def getShows(url):
-  html = getRequest(url)
-  html = html.replace("&amp;","&").replace("&#39;","'").replace('&quot;','"')
-  match = re.compile('vxp_gallery_thumb">.+?title="(.+?)".+?src="(.+?)".+?vxp_thumbClickTarget" href="(.+?)".+?vxp_gallery_date vxp_tb1">(.+?)<.+?vxp_videoType vxp_tb1">(.+?)<.+?data-title="(.+?)".+?vxp_rating">').findall(html)
-  match = sorted(match, key=itemgetter(5))
-  for catdesc, caticon, caturl, cattime, cattype, cattitle in match:
-     cattype = cattype.strip()
+  url, caturl = url.split('#')
+  html = getRequest('http://xin.msn.com/en-sg/video/catchup/')
+  blob  = re.compile('class="section tabsection horizontal".+?data-section-id="%s".+?<div data-tabkey="%s"(.+?)</ul>' % (url, caturl)).search(html).group(1)
+  blobs = re.compile('<li.+?href="(.+?)".+?:&quot;(.+?)&quot.+?<h4>(.+?)</h4>.+?"duration">(.+?)<.+?</li>').findall(blob)
+  for caturl, caticon, cattitle, cattime in blobs:
+     caturl = 'http://xin.msn.com'+caturl
      cattime = cattime.strip()
+     cattitle = cattitle.replace('&#39;',"'").replace('&amp;','&')
      cattitle= cattitle.strip()
-     catdesc = catdesc.strip()
+     caticon = 'http:'+caticon.replace('&amp;','&')
      caturl = "plugin://plugin.video.mediacorp/?url="+urllib.quote_plus(caturl)+"&name="+urllib.quote_plus(cattitle)+"&iconimage="+urllib.quote_plus(caticon)+"&mode=GV"
-     addLink(caturl, cattitle, caticon, addonfanart, cattype+" "+cattime+"\n"+catdesc, "TV", "")
+     addLink(caturl, cattitle, caticon, addonfanart, cattime+"\n"+cattitle, "TV", "")
 
-  getnextPage(html, url, 'GS')
 
 
 def getVideo(url):
     html = getRequest(url)  
-    html=html.replace('\r','').replace("&#39;","'")
+    html=html.replace('\r','').replace("&#39;","'").replace('&quot;','"')
     try:
-        if "{formatCode: 103, url:" in html:
-            vidurl = re.compile("{formatCode: 103, url:.+?'(.+?)'").findall(html)[0]
+        if '{"formatCode":"103","url":"' in html:
+            vidurl = re.compile('"formatCode":"103","url":"(.+?)"').search(html).group(1)
         else:
-            vidurl = re.compile("{formatCode: 101, url:.+?'(.+?)'").findall(html)[0]
+            vidurl = re.compile('"formatCode":"101","url":"(.+?)"').search(html).group(1)
     except:
         dialog = xbmcgui.Dialog()
         dialog.ok(__language__(30000), '',__language__(30001))
 
-    vidurl = vidurl.replace("\\x3a",":").replace("\\x2f","/")
     vidurl = vidurl.encode(UTF8)
     xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=vidurl))
 
@@ -177,7 +165,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:

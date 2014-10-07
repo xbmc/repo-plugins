@@ -31,13 +31,25 @@ SLUG_PREMIERES='forpremierer'
 
 
 class Api(object):
-    API_URL = 'http://www.dr.dk/mu-online/api/1.0'
+    API_URL = 'http://www.dr.dk/mu-online/api/1.1'
 
     def __init__(self, cachePath):
         self.cachePath = cachePath
 
     def getLiveTV(self):
         return self._http_request('/channel/all-active-dr-tv-channels')
+
+    def getChildrenFrontItems(self, channel):
+        childrenFront = self._http_request('/page/tv/children/front/%s' % channel)
+        return self._handle_paging(childrenFront['Programs'])
+
+    def getLatestPrograms(self):
+        result = self._http_request('/page/tv/programs', {
+            'index': '*',
+            'orderBy': 'LastPrimaryBroadcastWithPublicAsset',
+            'orderDescending': 'true'
+        }, cacheMinutes=5)
+        return result['Programs']['Items']
 
     def getProgramIndexes(self):
         result = self._http_request('/page/tv/programs')
@@ -55,7 +67,8 @@ class Api(object):
         return self._handle_paging(result)
 
     def searchSeries(self, query):
-        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title/%s' % query)
+        # Remove & as it makes the API puke
+        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title/%s' % query.replace('&', ''))
         return self._handle_paging(result)
 
     def getEpisodes(self, slug):
@@ -101,10 +114,10 @@ class Api(object):
             items.extend(result['Items'])
         return items
 
-    def _http_request(self, url, params=None):
+    def _http_request(self, url, params=None, cacheMinutes = 720):
         try:
             if not url.startswith('http://'):
-                url = self.API_URL + url
+                url = self.API_URL + urllib.quote(url, '/')
 
             if params:
                 url = url + '?' + urllib.urlencode(params, doseq=True)
@@ -116,8 +129,8 @@ class Api(object):
 
             urlCachePath = os.path.join(self.cachePath, hashlib.md5(url).hexdigest() + '.cache')
 
-            oneDayAgo = datetime.datetime.now() - datetime.timedelta(days=1)
-            if not os.path.exists(urlCachePath) or datetime.datetime.fromtimestamp(os.path.getmtime(urlCachePath)) < oneDayAgo:
+            cacheUntil = datetime.datetime.now() - datetime.timedelta(minutes=cacheMinutes)
+            if not os.path.exists(urlCachePath) or datetime.datetime.fromtimestamp(os.path.getmtime(urlCachePath)) < cacheUntil:
                 u = urllib2.urlopen(url, timeout=30)
                 content = u.read()
                 u.close()

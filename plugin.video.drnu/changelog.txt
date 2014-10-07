@@ -1,3 +1,22 @@
+[B]Version 5.0.6 - 2014-10-05[/B]
+- Gracefully handle error when videoclip is no longer available for playback
+
+[B]Version 5.0.5 - 2014-10-02[/B]
+- Changed cache period of latest programs to five minutes (instead of a full day)
+
+[B]Version 5.0.4 - 2014-09-16[/B]
+- Fixed favorite program series
+- Added "Clear favorite program series" in the settings to fix broken favorites list
+- Re-added latest programs
+
+[B]Version 5.0.3 - 2014-09-02[/B]
+- Added 'Show area chooser' to context menu
+- Fixed problem with recently watched when the slug no longer exists on the server
+
+[B]Version 5.0.2 - 2014-07-29[/B]
+- Added optional area chooser
+  Set default area in addon settings
+
 [B]Version 5.0.1 - 2014-06-02[/B]
 - Fixed problem parsing certain dates
 

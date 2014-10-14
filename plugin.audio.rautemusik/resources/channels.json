@@ -1,0 +1,198 @@
+{
+	"genres" : {
+		"popncharts" : {
+			"nameid" : 30210,
+			"descriptionid" : 30310
+		},
+		"electronic" : {
+			"nameid" : 30220,
+			"descriptionid" : 30320
+		},
+		"rocknmetal" : {
+			"nameid" : 30230,
+			"descriptionid" : 30330
+		},
+		"black" : {
+			"nameid" : 30240,
+			"descriptionid" : 30340
+		},
+		"oldies" : {
+			"nameid" : 30250,
+			"descriptionid" : 30350
+		},
+		"world" : {
+			"nameid" : 30260,
+			"descriptionid" : 30360
+		},
+		"special" : {
+			"nameid" : 30270,
+			"descriptionid" : 30370
+		}
+	},
+	"channels" : {
+		"main" : {
+			"nameid" : 30301,
+			"descriptionid" : 30401,
+			"url" : "http://main-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/main/",
+			"popncharts" : 1
+		},
+		"club" : {
+			"nameid" : 30302,
+			"descriptionid" : 30402,
+			"url" : "http://club-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/club/",
+			"electronic" : 1
+		},
+		"charthits" : {
+			"nameid" : 30303,
+			"descriptionid" : 30403,
+			"url" : "http://charthits-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/charthits/",
+			"popncharts" : 1,
+			"electronic" : 1,
+			"black" : 1
+		},
+		"rock" : {
+			"nameid" : 30304,
+			"descriptionid" : 30404,
+			"url" : "http://rock-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/rock/",
+			"rocknmetal" : 1
+		},
+		"house" : {
+			"nameid" : 30305,
+			"descriptionid" : 30405,
+			"url" : "http://house-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/house/",
+			"electronic" : 1
+		},
+		"wackenradio" : {
+			"nameid" : 30306,
+			"descriptionid" : 30406,
+			"url" : "http://wackenradio-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/wackenradio/",
+			"rocknmetal" : 1,
+			"special" : 1
+		},
+		"12punks" : {
+			"nameid" : 30307,
+			"descriptionid" : 30407,
+			"url" : "http://12punks-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/12punks/",
+			"rocknmetal" : 1
+		},
+		"jam" : {
+			"nameid" : 30308,
+			"descriptionid" : 30408,
+			"url" : "http://jam-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/jam/",
+			"black" : 1
+		},
+		"deutschrap" : {
+			"nameid" : 30309,
+			"descriptionid" : 30409,
+			"url" : "http://deutschrap-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/deutschrap/",
+			"black" : 1
+		},
+		"techhouse" : {
+			"nameid" : 30310,
+			"descriptionid" : 30410,
+			"url" : "http://techhouse-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/techhouse/",
+			"electronic" : 1
+		},
+		"goldies" : {
+			"nameid" : 30311,
+			"descriptionid" : 30411,
+			"url" : "http://goldies-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/goldies/",
+			"oldies" : 1
+		},
+		"schlager" : {
+			"nameid" : 30312,
+			"descriptionid" : 30412,
+			"url" : "http://schlager-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/schlager/",
+			"popncharts" : 1
+		},
+		"country" : {
+			"nameid" : 30313,
+			"descriptionid" : 30413,
+			"url" : "http://country-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/country/",
+			"popncharts" : 1,
+			"oldies" : 1,
+			"world" : 1,
+			"special" : 1
+		},
+		"lovehits" : {
+			"nameid" : 30314,
+			"descriptionid" : 30414,
+			"url" : "http://lovehits-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/lovehits/",
+			"popncharts" : 1,
+			"special" : 1
+		},
+		"partyhits" : {
+			"nameid" : 30315,
+			"descriptionid" : 30415,
+			"url" : "http://partyhits-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/partyhits/",
+			"popncharts" : 1,
+			"world" : 1,
+			"special" : 1
+		},
+		"happyhardcore" : {
+			"nameid" : 30316,
+			"descriptionid" : 30416,
+			"url" : "http://happyhardcore-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/happyhardcore/",
+			"electronic" : 1
+		},
+		"trance" : {
+			"nameid" : 30317,
+			"descriptionid" : 30417,
+			"url" : "http://trance-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/trance/",
+			"electronic" : 1
+		},
+		"harder" : {
+			"nameid" : 30318,
+			"descriptionid" : 30418,
+			"url" : "http://harder-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/harder/",
+			"electronic" : 1
+		},
+		"bigcitybeats" : {
+			"nameid" : 30319,
+			"descriptionid" : 30419,
+			"url" : "http://bigcitybeats-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/bigcitybeats/",
+			"electronic" : 1,
+			"special" : 1
+		},
+		"lounge" : {
+			"nameid" : 30320,
+			"descriptionid" : 30420,
+			"url" : "http://lounge-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/lounge/",
+			"special" : 1
+		},
+		"drumstep" : {
+			"nameid" : 30321,
+			"descriptionid" : 30421,
+			"url" : "http://drumstep-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/drumstep/",
+			"electronic" : 1
+		},
+		"oriental" : {
+			"nameid" : 30322,
+			"descriptionid" : 30422,
+			"url" : "http://oriental-high.rautemusik.fm/listen.pls",
+			"web" : "http://www.rautemusik.fm/oriental/",
+			"world" : 1
+		}
+	}
+}

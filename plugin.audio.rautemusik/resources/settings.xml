@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+	<category label="30001">
+		<setting id="hiermenu"			type="bool"	label="30110"	default="true" />
+		<setting						type="sep" />
+		<setting id="popncharts"		type="bool"	label="30210"	default="true" />
+		<setting id="electronic"		type="bool"	label="30220"	default="true" />
+		<setting id="rocknmetal"		type="bool"	label="30230"	default="true" />
+		<setting id="black"				type="bool"	label="30240"	default="true" />
+		<setting id="oldies"			type="bool"	label="30250"	default="true" />
+		<setting id="world"				type="bool"	label="30260"	default="true" />
+		<setting id="special"			type="bool"	label="30270"	default="true" />
+	</category>
+</settings>

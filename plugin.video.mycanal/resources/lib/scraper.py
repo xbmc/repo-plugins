@@ -15,7 +15,7 @@ import pprint
 import json
 
 
-authenticateUrl = "http://service.mycanal.fr/authenticate.json/iphone/1.0?highResolution=1&paired=0&pdsDevice=%5B1%5D"
+authenticateUrl = "http://service.mycanal.fr/authenticate.json/iphone/1.1?highResolution=1&paired=0&pdsDevice=%5B1%5D"
 my_canal_ua = 'myCANAL/1.0.2 CFNetwork/609.1.4 Darwin/13.0.0'
 default_emission_type = u'Divertissement \x26 Info'
 

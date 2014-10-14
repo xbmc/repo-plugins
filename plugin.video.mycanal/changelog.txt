@@ -1,2 +1,5 @@
+Version 1.0.2
+* Fixed mycanal authenticate.json version call change that broke the plugin
+
 Version 1.0.0
 * Initial version : browse all shows, and use default M3U8 player

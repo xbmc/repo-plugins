@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.somafm"
+       name="SomaFM"
+       version="1.0.0"
+       provider-name="Oderik">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+        <import addon="script.module.beautifulsoup" version="3.0.8"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Listener supported radio</summary>
+        <summary lang="de">Hörergetragenes Radio</summary>
+        <description lang="en"><![CDATA[
+Over 20 unique channels of listener-supported, commercial-free, underground/alternative radio broadcasting from San Francisco. All music hand-picked by SomaFM's award-winning DJs and music directors.
+
+Please consider donating at http://somafm.com to keep this service alive!
+        ]]></description>
+        <description lang="de"><![CDATA[
+Über 20 einzigartige Sender vom hörergetragenen, werbefreien, underground / alternative Radio aus San Francisco. Die gesamte Musik ist handerlesen von SomaFMs ausgezeichneten DJs und Musikprogrammleitern.
+
+Bitte denk über eine Spende auf http://somafm.com nach, um diesen Dienst am Leben zu halten!
+        ]]></description>
+        <website>http://somafm.com</website>
+        <source>https://github.com/Oderik/xbmc-somafm</source>
+    </extension>
+</addon>

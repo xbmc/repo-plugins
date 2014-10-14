@@ -19,17 +19,10 @@ name = params.get("name")
 try:
     if action_key is None:
         actions.index()
-    elif action_key == 'view_channel_index':
-        actions.channel_index(int(action_value))
-    elif action_key == 'view_channel_category':
-        channel, category = action_value.split(';')
-        actions.channel_category(int(channel), int(category))
-    elif action_key == 'view_channel_category_show':
-        actions.channel_category_show(action_value, name)
+    elif action_key == 'view_group':
+        actions.view_group(action_value)
     elif action_key == 'play':
         actions.play_video(action_value, name)
-    elif action_key == 'view_tab':
-        actions.tab_index(action_value)
     elif action_key == 'view_podcast_index':
         actions.podcast_index()
     elif action_key == 'view_podcast_show':

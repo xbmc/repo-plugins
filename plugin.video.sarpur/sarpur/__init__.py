@@ -4,7 +4,7 @@
 import sys
 import xbmcaddon
 
-ALWAYS_REFRESH = False
+ALWAYS_REFRESH = False #True
 LOGGING_ENABLED = True
 
 BASE_URL = sys.argv[0]
@@ -18,3 +18,4 @@ LIVE_URLS = {
     'rondo': 'http://sip-live.hds.adaptive.level3.net/hls-live/ruv-ras3/_definst_/live.m3u8'
 }
 
+PODCAST_URL = 'http://www.ruv.is/hladvarp'

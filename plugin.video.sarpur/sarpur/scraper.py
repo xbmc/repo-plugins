@@ -1,154 +1,125 @@
 #!/usr/bin/env python
 # encoding: UTF-8
 
-import requests, re
-from html5lib import treebuilders
-from xml.etree import ElementTree
+import re
+import requests
+from bs4 import BeautifulSoup
 
 
 def get_document(url):
+    """
+    .. py:function:: get_document(url)
+
+    Downloads url and returns a BeautifulSoup object
+
+    :param url: An url
+    :return BeautifulSoup "document"
+    """
     req = requests.get(url)
-    source = req.content
-
-    builder = treebuilders.getTreeBuilder("etree", ElementTree)
-    doc = html5lib.parse(source,
-                         treebuilder=builder,
-                         namespaceHTMLElements=False)
-
+    doc = BeautifulSoup(req.content, "html.parser")
     return doc
 
-def get_episodes(url):
-    "Find playable files on a shows page"
-    episodes = []
-    doc = get_document(url)
-
-    #Generic look
-    for episode in doc.xpath("//a[contains(@title, 'Spila')]"):
-        episodes.append((episode.text, episode.get('href')))
-
-    if episodes:
-        return episodes
-
-    #"Special" page
-    for episode in doc.xpath("//div[contains(@class,'mm-mynd')]"):
-        episode_date = episode.getparent().find('span').text
-        url = u'http://www.ruv.is{0}'.format(episode.find('a').attrib.get('href'))
-        episodes.append((episode_date, url))
-
-    return episodes
-
-def get_tabs():
-    doc = get_document("http://www.ruv.is/sarpurinn")
-    xpathstring = "//div[@class='menu-block-ctools-menu-sarpsmynd-1 menu-name-menu-sarpsmynd parent-mlid-_active:0 menu-level-2']/ul/li/a"
-    tabs = []
-
-    for hyperlink in doc.xpath(xpathstring):
-        tabs.append((hyperlink.text, hyperlink.get('href')))
-
-    return tabs
-
-def get_showtree():
-    doc = get_document('http://dagskra.ruv.is/thaettir/')
-    showtree = []
-
-    for i, channel in enumerate(doc.xpath("//div[@style]")):
-        channel_name = channel.find("h1").text
-        showtree.append({"name": channel_name, "categories": []})
-
-        for group in channel.find("div").iterchildren():
-            if group.tag == 'h2':
-                showtree[i]["categories"].append(
-                    {"name":group.text, "shows":[]})
-            elif group.tag == 'div':
-                for show in group.findall("div"):
-                    hyperlink = show.find("a")
-                    show_info = (hyperlink.text, hyperlink.get('href'))
-                    showtree[i]["categories"][-1]['shows'].append(show_info)
-    return showtree
-
 def get_stream_info(page_url):
-    "Get a page url and finds the url of the rtmp stream"
+    """
+    .. py:function:: get_stream_info(page_url)
+
+    Get a page url and finds the url of the rtmp stream
+
+    :param page_url: An url to a page with a media player
+    :return a 3-tuple of paths useful for playing videos
+    """
     doc = get_document(page_url)
 
     #Get urls for the swf player and playpath
-    params = doc.xpath('//param')
+    params = doc.find_all('param')
     swfplayer = 'http://ruv.is{0}'.format(params[0].get('value'))
     details = params[1].get('value')
     playpath = re.search('streamer=(.*?)&(file=.*?)&stre', details).group(2)
 
     # Get the url of the actual rtmp stream
-    source_tags = doc.xpath('//source')
-    if source_tags and source_tags[0].attrib.get('src'): #RÚV
+    source_tags = doc.find_all('source')
+    if source_tags and source_tags[0].get('src'): #RÚV
         rtmp_url = source_tags[0].get('src')
     else: #RÁS 1 & 2
         # The ip address of the stream server is returned in another page
-        cache_url = doc.xpath("//script[contains(@src, 'load.cache.is')]")[0].get('src')
+        cache_url = doc.select('script[src*="load.cache.is"]')[0].get('src')
         res = requests.get(cache_url)
         cache_ip = re.search('"([^"]+)"', res.content).group(1)
 
         # Now that we have the ip address we can insert it into the URL
-        source_js = doc.xpath("//script[contains(., 'tengipunktur')]")[0].text
+        source_js = doc.find('script', text=re.compile(r'tengipunktur')).text
         source_url = re.search(r"'file': '(http://' \+ tengipunktur \+ '[^']+)", source_js).group(1)
 
         rtmp_url = source_url.replace("' + tengipunktur + '", cache_ip)
 
     return (playpath, rtmp_url, swfplayer)
 
-def get_tab_items(url):
-    "Find playable items on the 'recent' pages"
+def get_videos(url):
+    """
+    .. py:function:: get_videos(url)
+
+    Find playable items in a group (like fréttir or barnaefni)
+
+    :param url: The url to the group
+    :return A list of of 2-tuples with item name and page url
+    """
     doc = get_document(url)
     episodes = []
 
     #Every tab has a player with the newest/featured item. Get the name of it.
-    featured_item = doc.xpath("//div[@class='kubbur sarpefst']/div/h1")
+    featured_item = doc.select('.sarpefst div h1')
     if featured_item:
         featured_name = featured_item[0].text
-        episodes.append((featured_name, url))
+        featured_date = doc.select('.sarpur-date')[0].text.split(' | ')[0]
+        title = u"{0} - {1}".format(featured_name, featured_date)
+        episodes.append((title, url))
 
     #Get the listed items
-    for item in doc.xpath("//ul[@class='sarplisti']/li"):
-        item_link = item.xpath("a")[0].attrib
-        item_date = item.xpath("em")[0].text
+    for item in doc.select('.sarplisti li'):
+        item_link = item.find_all("a")[0]
+        item_date = item.find_all("em")[0].text
         page_url = u"http://www.ruv.is{0}".format(item_link['href'])
         title = u"{0} - {1}".format(item_link.get('title'), item_date)
         episodes.append((title, page_url))
 
     return episodes
 
-def get_podcast_shows():
-    """Gets the names and rss urls of all the Podcasts"""
-    doc = get_document("http://www.ruv.is/podcast")
+def get_podcast_shows(url):
+    """
+    .. py:function:: get_podcast_shows(url)
+
+    Gets the names and rss urls of all the podcasts (shows)
+
+    :param url: The url to the podcast index
+    :return A list of 2-tuples with show name and rss url
+
+    """
+    doc = get_document(url)
     shows = []
 
-    for show in doc.xpath("//ul[@class='hladvarp-info']"):
-        title = show.xpath('li/h4')[0].text
-        url = show.xpath("li/a[contains(@href,'http')]")[0].attrib.get('href')
-        shows.append((title, url))
+    for show in doc.select("ul .hladvarp-info"):
+        title = show.select('li h4')[0].text
+        show_url = show.select("li a[href*=http]")[0].get('href')
+        shows.append((title, show_url))
 
     return shows
 
 def get_podcast_episodes(url):
-    """Gets the items from the rss feed"""
+    """
+    .. py:function:: get_podcast_episodes(url)
+
+    Gets the items from the rss feed
+
+    :param url: Get all the playable items in podcast rss
+    :return a list of 2-tuples with airdate and media url
+
+    """
     doc = get_document(url)
     episodes = []
 
-    for item in doc.findall("//guid"):
+    for item in doc.find_all("guid"):
         url = item.text
-        for element in item.itersiblings():
-            if element.tag == 'pubdate':
-                date = element.text
-
-        #date = item.xpath('pubdate')[0].text
-        #url = item.xpath('guid')[0].text
+        date = item.select('~ pubdate')[0].text
         episodes.append((date, url))
 
     return episodes
-
-def get_live_url(channel='ruv'):
-    page_urls = {
-        'ruv': "http://ruv.is/ruv"
-        }
-
-    doc = get_document(page_urls.get(channel))
-    return doc.xpath("//div[@id='spilarinn']/video/source")[0].attrib['src']
-

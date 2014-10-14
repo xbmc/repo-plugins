@@ -1,3 +1,8 @@
+[B]Version 3.2.0[/B]
+- Better cross platform support (switched to BeautifulSoup 4 from html5lib from lxml)
+- Removed the show index (since RÚV removed the recordings). (Added groups instead)
+- Last Frodo release. Added Gotham support.
+
 [B]Version 3.1.3[/B]
 - Added requests to imports
 

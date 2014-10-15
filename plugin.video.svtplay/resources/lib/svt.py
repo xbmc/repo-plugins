@@ -60,7 +60,7 @@ def getCategories():
   for index, article in enumerate(articles):
     category = {}
     category["url"] = common.parseDOM(article, "a", ret = "href")[0]
-    title = common.parseDOM(article, "h2")[0]
+    title = common.parseDOM(article, "a", ret="title")[0]
 
     if category["url"].endswith("oppetarkiv"):
       # Skip the "Oppetarkiv" category
@@ -94,7 +94,7 @@ def getProgramsForCategory(url):
   programs = []
   for index, article in enumerate(articles):
     url = common.parseDOM(article, "a", ret="href")[0]
-    title = common.parseDOM(article, "span", attrs= { "class" : "play-link-sub" })[0]
+    title = common.parseDOM(article, "span", attrs= { "class" : "play_link__sub" })[0]
     title = common.replaceHTMLCodes(title)
     thumbnail = common.parseDOM(article, "img", ret="src")[0]
     program = { "title": title, "url": url, "thumbnail": thumbnail}

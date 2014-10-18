@@ -11,7 +11,7 @@ Contributors:
 
 ============================================
 
-Current version: 1.1.3 frodo
+Current version: 1.1.5 gotham - frodo
 
 ============================================
 
@@ -25,6 +25,8 @@ Features:
     - Cloudcasts
     - Users
   - Play cloudcasts
+    - Local resolver
+	- Offliberty resolver
   - Thumbnails
   - History
     - Played cloudcasts
@@ -34,10 +36,6 @@ Features:
     - Dutch
     - French
     - German
+  - jackyNIX's own cloudcasts :p
 
 ============================================
-
-Todo:
-  - Foolproof error handling
-
-============================================  

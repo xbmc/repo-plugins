@@ -3,6 +3,7 @@
 	<!-- common -->
 	<string id="30000">Mixcloud</string>
 	<string id="30001">Meer...</string>
+	<string id="30002">Resolven url mislukt. Gebruik andere resolver?</string>
 	<!-- main menu -->
 	<string id="30100">Hot</string>
 	<string id="30101">Nieuw</string>
@@ -10,6 +11,7 @@
 	<string id="30103">Categorieën</string>
 	<string id="30104">Zoeken</string>
 	<string id="30105">Geschiedenis</string>
+	<string id="30106">jackyNIX's cloudcasts (schaamteloze plug :p)</string>
 	<!-- search menu -->
 	<string id="30110">Cloudcasts...</string>
 	<string id="30111">Gebruikers...</string>

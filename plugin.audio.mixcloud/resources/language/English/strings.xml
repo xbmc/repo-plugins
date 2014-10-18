@@ -3,6 +3,7 @@
 	<!-- common -->
 	<string id="30000">Mixcloud</string>
 	<string id="30001">More...</string>
+	<string id="30002">Failed resolving url. Use different resolver?</string>
 	<!-- main menu -->
 	<string id="30100">Hot</string>
 	<string id="30101">New</string>
@@ -10,6 +11,7 @@
 	<string id="30103">Categories</string>
 	<string id="30104">Search</string>
 	<string id="30105">History</string>
+	<string id="30106">jackyNIX's cloudcasts (shameless plug :p)</string>
 	<!-- search menu -->
 	<string id="30110">Cloudcasts...</string>
 	<string id="30111">Users...</string>

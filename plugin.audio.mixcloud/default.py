@@ -42,6 +42,7 @@ URL_HOT=       'http://api.mixcloud.com/popular/hot/'
 URL_NEW=       'http://api.mixcloud.com/new/'
 URL_POPULAR=   'http://api.mixcloud.com/popular/'
 URL_SEARCH=    'http://api.mixcloud.com/search/'
+URL_JACKYNIX=  'http://api.mixcloud.com/jackyNIX/'
 URL_STREAM=    'http://www.mixcloud.com/api/1/cloudcast/{0}.json?embed_type=cloudcast'
 
 
@@ -51,6 +52,7 @@ MODE_HOT=       10
 MODE_NEW=       11
 MODE_POPULAR=   12
 MODE_HISTORY=   13
+MODE_JACKYNIX=  14
 MODE_CATEGORIES=20
 MODE_USERS=     21
 MODE_SEARCH=    30
@@ -110,17 +112,19 @@ __addon__ =xbmcaddon.Addon('plugin.audio.mixcloud')
 debugenabled=(__addon__.getSetting('debug')=='true')
 limit=       (1+int(__addon__.getSetting('page_limit')))*10
 thumb_size=  STR_THUMB_SIZES[int(__addon__.getSetting('thumb_size'))]
-resolver=    int(__addon__.getSetting('resolver'))
+resolverid=  int(__addon__.getSetting('resolver'))
 
 
 
 STRLOC_COMMON_MORE=          __addon__.getLocalizedString(30001)
+STRLOC_COMMON_RESOLVER_ERROR=__addon__.getLocalizedString(30002)
 STRLOC_MAINMENU_HOT=         __addon__.getLocalizedString(30100)
 STRLOC_MAINMENU_NEW=         __addon__.getLocalizedString(30101)
 STRLOC_MAINMENU_POPULAR=     __addon__.getLocalizedString(30102)
 STRLOC_MAINMENU_CATEGORIES=  __addon__.getLocalizedString(30103)
 STRLOC_MAINMENU_SEARCH=      __addon__.getLocalizedString(30104)
 STRLOC_MAINMENU_HISTORY=     __addon__.getLocalizedString(30105)
+STRLOC_MAINMENU_JACKYNIX=    __addon__.getLocalizedString(30106)
 STRLOC_SEARCHMENU_CLOUDCASTS=__addon__.getLocalizedString(30110)
 STRLOC_SEARCHMENU_USERS=     __addon__.getLocalizedString(30111)
 STRLOC_SEARCHMENU_HISTORY=   __addon__.getLocalizedString(30112)
@@ -153,6 +157,7 @@ def show_home_menu():
     add_folder_item(name=STRLOC_MAINMENU_CATEGORIES,parameters={STR_MODE:MODE_CATEGORIES,STR_OFFSET:0})
     add_folder_item(name=STRLOC_MAINMENU_SEARCH,parameters={STR_MODE:MODE_SEARCH})
     add_folder_item(name=STRLOC_MAINMENU_HISTORY,parameters={STR_MODE:MODE_HISTORY})
+    add_folder_item(name=STRLOC_MAINMENU_JACKYNIX,parameters={STR_MODE:MODE_JACKYNIX})
     xbmcplugin.endOfDirectory(handle=plugin_handle,succeeded=True)
 
 
@@ -243,6 +248,11 @@ def show_history_menu(offset):
 
 
 
+def show_jackynix_menu(offset):
+    show_users_menu('/jackyNIX/',0)
+
+
+
 def show_history_search_menu(offset):
     searchhistmax=(1+int(__addon__.getSetting('search_history_max')))*10
     if __addon__.getSetting('search_history_list'):
@@ -270,7 +280,10 @@ def play_cloudcast(key):
         if debugenabled:
             print('MIXCLOUD playing '+url)
     else:
-        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=False,listitem=xbmcgui.ListItem())
+        if debugenabled:
+            print('MIXCLOUD '+'stop player')
+        xbmc.Player().stop()
+#        xbmcplugin.setResolvedUrl(handle=plugin_handle,succeeded=False,listitem=xbmcgui.ListItem())
 
 
 
@@ -354,7 +367,7 @@ def add_cloudcast(index,json_cloudcast,total,forinfo=False):
 def get_stream_offliberty(cloudcast_key):
     ck=URL_MIXCLOUD[:-1]+cloudcast_key
     if debugenabled:
-        print('MIXCLOUD '+'resolving cloudcast stream for '+ck)
+        print('MIXCLOUD '+'resolving offliberty cloudcast stream for '+ck)
     for retry in range(1, 10):
         try:
 #        request = urllib2.Request('http://offliberty.com/off.php', 'track=%s&refext=' % ck)
@@ -376,10 +389,10 @@ def get_stream_offliberty(cloudcast_key):
             if match:
                 return match.group(1)
             elif debugenabled:
-                print('wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
+                print('MIXCLOUD '+'wrong response try=%s code=%s len=%s, trying again...' % (retry, response.getcode(), len(data)))
         except:
             if debugenabled:
-                print('unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
+                print('MIXCLOUD '+'unexpected error try=%s error=%s, trying again...' % (retry, sys.exc_info()[0]))
 
 
 
@@ -394,25 +407,56 @@ def get_stream_local(cloudcast_key):
     request = urllib2.Request(ck, headers=headers, origin_req_host=URL_MIXCLOUD)
     response = urllib2.urlopen(request)
     data=response.read()
-    match=re.search('m-p-ref="x_cloudcast_page" m-play-info="(.*)" m-preview', data)
+    match=re.search('m-p-ref="cloudcast_page" m-play-info="(.*)" m-preview=', data)
     if match:
-        playInfo=base64.b64decode(match.group(1))
-        magicString=base64.b64decode('cGxlYXNlZG9udGRvd25sb2Fkb3VybXVzaWN0aGVhcnRpc3Rzd29udGdldHBhaWQ=')
-        playInfoJSON=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(playInfo,cycle(magicString)))
-        json_content=json.loads(playInfoJSON)
-        if STR_STREAMURL in json_content and json_content[STR_STREAMURL]:
-            return json_content[STR_STREAMURL]
-        elif debugenabled:
-            print('unable to resolve')
+        try:
+            if debugenabled:
+                print('MIXCLOUD '+'decoding '+match.group(1))
+            playInfo=base64.b64decode(match.group(1))
+            magicString=base64.b64decode('cGxlYXNlZG9udGRvd25sb2Fkb3VybXVzaWN0aGVhcnRpc3Rzd29udGdldHBhaWQ=')
+            playInfoJSON=''.join(chr(ord(a) ^ ord(b)) for a,b in zip(playInfo,cycle(magicString)))
+            json_content=json.loads(playInfoJSON)
+            if STR_STREAMURL in json_content and json_content[STR_STREAMURL]:
+                return json_content[STR_STREAMURL]
+            elif debugenabled:
+                print('MIXCLOUD '+'unable to resolve (content)')
+        except:
+            if debugenabled:
+                print('MIXCLOUD '+'unexpected error resolving local error=%s' % (sys.exc_info()[0]))
     elif debugenabled:
-        print('unable to resolve')
+        print('MIXCLOUD '+'unable to resolve (match)')
 
 
 
 def get_stream(cloudcast_key):
+    global resolverid
+    if debugenabled:
+        print('MIXCLOUD '+'resolverid=%s' % (resolverid))
+    resolverid_orig=resolverid
+
     resolvers={Resolver.local : get_stream_local,
                Resolver.offliberty : get_stream_offliberty}
-    return resolvers[resolver](cloudcast_key)
+    strm=resolvers[resolverid](cloudcast_key)
+
+    if not strm:
+        if debugenabled:
+            print('MIXCLOUD '+'cannot solve using preferred resolver')
+        dialog=xbmcgui.Dialog()
+
+        while (not strm) and dialog.yesno('MixCloud',STRLOC_COMMON_RESOLVER_ERROR):
+            if debugenabled:
+                print('MIXCLOUD '+'changing resolver')
+		    
+            resolverid=resolverid+1
+            if resolverid>Resolver.offliberty:
+                resolverid=Resolver.local
+            if resolverid==resolverid_orig:
+                break
+            strm=resolvers[resolverid](cloudcast_key)
+            if strm:
+                __addon__.setSetting('resolver',str(resolverid))
+
+    return strm
 
 
 
@@ -533,5 +577,7 @@ elif mode==MODE_SEARCH:
     ok=show_search_menu(key,query,offset)
 elif mode==MODE_HISTORY:
     ok=show_history_menu(offset)
+elif mode==MODE_JACKYNIX:
+    ok=show_jackynix_menu(offset)
 elif mode==MODE_PLAY:
     ok=play_cloudcast(key)

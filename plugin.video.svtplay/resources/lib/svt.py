@@ -325,7 +325,7 @@ def getArticles(section_name, url=None):
     duration = durations[index]
     title = titles[index]
     new_article["url"] = common.parseDOM(article, "a",
-                            attrs = { "class": "[^\"']*play_videolist-element__link[^\"']*" },
+                            attrs = { "class": "[^\"']*play_videolist-element-link[^\"']*" },
                             ret = "href")[0]
     thumbnail = common.parseDOM(article,
                                 "img",

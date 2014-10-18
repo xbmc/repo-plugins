@@ -1,3 +1,7 @@
+Version 4.0.8
+-------------
+- Fix broken listing due to site change
+
 Version 4.0.7
 -------------
 - Fix broken category listing due to site change

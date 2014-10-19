@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<addon id="plugin.video.gameone" name="Gameone" version="2.0.6" provider-name="liquex, membrane">
+<addon id="plugin.video.gameone" name="Gameone" version="2.0.7" provider-name="liquex, membrane">
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 	</requires>
@@ -13,8 +13,8 @@
 		<forum>http://forum.xbmc.org/showthread.php?tid=186309</forum>
 		<license>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</license>
 		<summary lang="de">Gameone</summary>
-		<description lang="de">Inhalte von gameone.de ansehen: TV Folgen, Blog, Playtube, Podcasts</description>
+		<description lang="de">Inhalte von gameone.de ansehen: TV Folgen, Blog, Podcasts</description>
 		<summary lang="en">Gameone</summary>
-		<description lang="en">Watch german contents from gameone.de: TV Episodes, Blog, Playtube, Podcasts</description>
+		<description lang="en">Watch german contents from gameone.de: TV Episodes, Blog, Podcasts</description>
 	</extension>
 </addon>

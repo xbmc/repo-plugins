@@ -1,3 +1,6 @@
+2.0.7 (12.10.2014)
+- Fixed some episodes not being scraped porperly
+
 2.0.6 (22.08.2014)
 - Fixed crashes caused by the last update
 

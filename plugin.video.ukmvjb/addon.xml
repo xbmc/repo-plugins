@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.ukmvjb" name="UK Music Video Jukebox" version="1.0.0" provider-name="Gary Hall">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="plugin.video.youtube" version="4.4.10"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">UK Music Video Jukebox</summary>
+    <description lang="en">A sensational collection of pop videos from the biggest Top 40 hits in the UK charts, from the 1970's to the present day. Travel back in time to relive those happy memories from days gone by or keep up to date with todays top hits, from all of your favourite artists.</description>
+    <disclaimer lang="en"></disclaimer>
+    <language>en</language>
+    <platform>all</platform>
+    <email>gh@874.org.uk</email>
+  </extension>
+</addon>

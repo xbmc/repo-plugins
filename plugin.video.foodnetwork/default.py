@@ -32,10 +32,6 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-def cleanfilename(name):    
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    return ''.join(c for c in name if c in valid_chars)
-
 def demunge(munge):
         try:
             munge = urllib.unquote_plus(munge).decode(UTF8)
@@ -67,10 +63,10 @@ def getRequest(url):
 def getSources(fanart):
               urlbase   = FNTVBASE % ('/videos/players/food-network-full-episodes.html')
               pg = getRequest(urlbase)
-              cats = re.compile('<h6 class="channel-heading">.+?data-max="85">(.+?)<.+?href="(.+?)".+?src="(.+?)".+?</cite></a></h6>').findall(pg) 
-              for catname, caturl, catimg in cats:
+              cats = re.compile('<option.+?value="(.+?)">(.+?)<').findall(pg) 
+              for caturl, catname in cats:
                   catname = catname.strip()
-                  addDir(catname,caturl,'GC',catimg,addonfanart,catname,GENRE_TV,'',False)
+                  addDir(catname,caturl,'GC',icon ,addonfanart,catname,GENRE_TV,'',False)
 
 def getCats(cat_url):
              pg = getRequest(FNTVBASE % cat_url)
@@ -141,7 +137,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:
@@ -153,10 +149,7 @@ except:
 
 p = parms.get
 
-try:
-    mode = p('mode')
-except:
-    mode = None
+mode = p('mode', None)
 
 if mode==  None:  getSources(p('fanart'))
 elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))

@@ -5,7 +5,7 @@
 import urllib,urllib2,re,time,xbmcplugin,xbmcgui,xbmcaddon,threading
 
 # plugin handle
-SITE = "http://www1.spiegel.de/active/playlist/fcgi/playlist.fcgi/asset=flashvideo/mode=list/displaycategory="
+SITE = "http://www.spiegel.de/active/playlist/fcgi/playlist.fcgi/asset=flashvideo/mode=list/displaycategory="
 VIDS = 20
 VIDS_PER_SITE = "/count=" + str(VIDS) + "/" 
 BASEURL="http://video.spiegel.de/flash/"
@@ -17,14 +17,12 @@ __language__     = __addon__.getLocalizedString
 items = []
 
 def show_root_menu():
-    addDirectoryItem(__addon__.getLocalizedString(30003), {"cat": "newsmitfragmenten", "site": 1})  
     addDirectoryItem(__addon__.getLocalizedString(30004), {"cat": "politikundwirtschaft", "site": 1})
     addDirectoryItem(__addon__.getLocalizedString(30005), {"cat": "panorama2", "site": 1})
     addDirectoryItem(__addon__.getLocalizedString(30006), {"cat": "kino", "site": 1})
     addDirectoryItem(__addon__.getLocalizedString(30007), {"cat": "kultur", "site": 1})
     addDirectoryItem(__addon__.getLocalizedString(30008), {"cat": "sport2", "site": 1})
     addDirectoryItem(__addon__.getLocalizedString(30009), {"cat": "wissenundtechnik", "site": 1})
-    addDirectoryItem(__addon__.getLocalizedString(30010), {"cat": "blogs", "site": 1})
     addDirectoryItem(__addon__.getLocalizedString(30011), {"cat": "spiegel%20tv%20magazin", "site": 1})      
     xbmcplugin.endOfDirectory(handle=handle, succeeded=True)
 
@@ -64,7 +62,8 @@ def show_cat_menu(cat, vnr):
     
 def getVideo(id):
     content = None
-    url = BASEURL + id + ".xml"
+    path = id[-1:] + id[-2:-1] + "/" + id[-3:-2] + id[-4:-3] +  "/"
+    url = BASEURL + path + id + ".xml"
     try:
         content = getUrl(url)
     except Exception:
@@ -84,8 +83,8 @@ def getVideo(id):
     #xbmc.log(str(streams), level=xbmc.LOGERROR)
     for file,bitrate in streams:
         # find the best quality stream available
-        if urllib.urlopen(BASEURL + file).getcode()==200:
-            filename = file
+        if urllib.urlopen(BASEURL + path + file).getcode()==200:
+            filename = path + file
             break
     return filename
 

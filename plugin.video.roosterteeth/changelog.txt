@@ -1,3 +1,8 @@
+Version 0.0.91
+Try and fix the parsing in case of a html parsing error by the python parser. This error
+mainly occurs with the html python parser <= 2.7.2 (windows xmbc 12 and older, OS all versions, 
+linux all versions)
+
 Version 0.0.9
 Mixed the current rt and ah shows
 Mixed the retired rt and ah shows

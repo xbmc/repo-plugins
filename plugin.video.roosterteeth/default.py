@@ -79,9 +79,33 @@ def get_soup(data):
     if data:
         if data.startswith('http'):
             data = make_request(data)
-            #patch 0.0.7
-            data = re.sub(r'</scri["\']', '', data)
-        return BeautifulSoup(data, 'html.parser')
+            
+        try:
+            bs = BeautifulSoup(data, 'html.parser')
+        except:
+#           Mangle the html source so hopefully the python parser can parse it 
+            data = mangle_html(data)
+
+#           Let's try again            
+            try:
+                bs = BeautifulSoup(data, 'html.parser')
+#          :( giving up!
+            except:
+                bs = "Parse Error" 
+        return bs
+
+    
+#The html parser of python <= 2.7.2 kinda sucks :(
+#Patch for python <= 2.7.2 (windows: xbmc 12 and older, OS: current xbmc (xbmc 14) and older))
+def mangle_html(data):
+    print 'Python Version: ' + sys.version
+#    print "DEBUG info, str(data) before mangling it:" + str(data)
+    data = re.sub(r'</scri["\']', '', data)
+    data = re.sub(r"<scrip'", "", data)
+    data = re.sub(r"</scrip'", "", data)
+    data = re.sub(r"<!", "<script><!", data)
+#    print "DEBUG info, str(data) after mangling it:" + str(data)    
+    return data
 
 
 def cache_active_rt_shows():
@@ -392,8 +416,14 @@ def get_podcasts_episodes(url, iconimage):
 
 def resolve_podcast_url(episode_url, retry=False):
     soup = get_soup(episode_url)
-    is_video = soup('embed')
-    if is_video:
+    if soup == "Parse Error":
+        is_video = False
+    else:     
+        is_video = soup('embed')
+        
+    if soup == "Parse Error":
+        pass
+    elif is_video:
         try:
             if 'swf#' in soup.embed['src']:
                 blip_id = soup.embed['src'].split('swf#')[1]
@@ -417,19 +447,27 @@ def resolve_podcast_url(episode_url, retry=False):
             sorry = check_sorry(soup)
     else:
         sorry = check_sorry(soup)
-    if sorry:
+    
+    if soup == "Parse Error":
+        pass
+    elif sorry:
         xbmc.sleep(5000)
 
-    downloads = []
-    items = soup.find('div', class_="titleLine", text="DOWNLOAD").findNext('div')('a')
-    for i in items:
-        downloads.append((i.b.contents[0], i['href']))
-    if len(downloads) > 0:
-        dialog = xbmcgui.Dialog()
-        ret = dialog.select(language(30004), [i[0] for i in downloads])
-        if ret > -1:
-            return downloads[ret][1]
-
+    if soup == "Parse Error":
+        pass
+    else:
+        try:
+            downloads = []
+            items = soup.find('div', class_="titleLine", text="DOWNLOAD").findNext('div')('a')
+            for i in items:
+                downloads.append((i.b.contents[0], i['href']))
+            if len(downloads) > 0:
+                dialog = xbmcgui.Dialog()
+                ret = dialog.select(language(30004), [i[0] for i in downloads])
+                if ret > -1:
+                    return downloads[ret][1]
+        except:
+            downloads = []
 
 def set_resolved_url(resolved_url):
     success = False
@@ -498,11 +536,17 @@ def login():
                   'user': username,
                   'return': '/sponsor/'}
     data = make_request(url, urllib.urlencode(login_data))
-    soup = BeautifulSoup(data, 'html.parser')
-    logged_in_tag = soup.find('span', attrs={'id': 'signedInName'})
-    if logged_in_tag and username in str(logged_in_tag):
-        addon_log('Logged in successfully')
-        return True
+    soup = get_soup(data)
+    if soup == "Parse Error":
+# let's guess that the user is logged in, so the user doesn't get a confusing not-logged-in-error-message
+       return True
+    else:
+        logged_in_tag = soup.find('span', attrs={'id': 'signedInName'})
+        if logged_in_tag and username in str(logged_in_tag):
+            addon_log('Logged in successfully')
+            return True
+        else:
+            return False
 
 
 def set_view_mode():
@@ -535,6 +579,7 @@ addon_log(repr(params))
 
 if mode == None:
     # display main plugin dir
+    print 'Python Version: ' + sys.version
     add_dir(language(30008), 'get_latest_rt', 8, icon)
     add_dir(language(30027), 'get_latest_ah', 9, icon)
     add_dir(language(30005), 'get_podcasts', 4, icon)

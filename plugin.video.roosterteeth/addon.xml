@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.roosterteeth"
        name="Rooster Teeth"
-       version="0.0.9"
+       version="0.0.91"
        provider-name="Divingmule, Skipmode A1">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -19,7 +19,7 @@
     </description>
     <platform>all</platform>
     <language>en</language>
-    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 3, June 2007</license>
     <source>git://github.com/skipmodea1/plugin.video.roosterteeth</source>
     <forum>http://forum.xbmc.org/showthread.php?tid=134588</forum>
     <website>http://roosterteeth.com</website>

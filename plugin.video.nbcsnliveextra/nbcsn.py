@@ -1,7 +1,7 @@
 import sys
 import xbmcplugin, xbmcgui, xbmcaddon
 import re, os, time
-import urllib, urllib2
+import urllib, urllib2, httplib2
 import json
 import HTMLParser
 import datetime
@@ -145,29 +145,21 @@ def BUILD_VIDEO_LINK(item):
     if info <> "":         
         menu_name = menu_name + " - " + info 
     
-    ##################################################################
-    # Date Color codeing - NOT USED CURRENTLY
-    ##################################################################
-    #ex. 20140906-1600
-    #datetime.datetime.utcnow().strftime('%Y%m%d-%H%M')
-    #current_date =  datetime.datetime.utcnow().strftime('%Y%m%d-%H%M')
-    #video_time = item['start']
-    #date = datetime.fromtimestamp(time.mktime(time.strptime(video_time,"%Y%m%d-%H%M"))).strftime(xbmc.getRegion('dateshort'))
-
-    #print str(datetime.datetime.strptime(item['start','%Y%m%d-%H%M'))
-    #print item['start']
-    #print current_time
-    #print video_time
-    #print video_time < current_time
-    #menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'    
-    ##################################################################
-
     # Highlight active streams
-    if item['id'] <> 'nbcs_':
-        menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'    
+    current_time =  datetime.datetime.utcnow().strftime('%Y%m%d-%H%M')    
+    start_time = item['start']
+    length = int(item['length'])
+    my_time = int(current_time[0:8]+current_time[9:])
+    event_start = int(start_time[0:8]+start_time[9:]) 
+    event_end = int(current_time[0:8]+current_time[9:])+length
+
+    if my_time >= event_start and my_time <= event_end:
+        menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'
+    
 
     imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/"+item['image']+"_m50.jpg"    
     addLink(menu_name,url,name,imgurl,FANART) 
+
 
 def LOGIN():
     req = urllib2.Request(url)
@@ -183,6 +175,7 @@ def addLink(name,url,title,iconimage,fanart):
     liz.setProperty('fanart_image',fanart)
     liz.setProperty("IsPlayable", "true")
     liz.setInfo( type="Video", infoLabels={ "Title": title } )
+    liz.setInfo( type="Video", infoLabels={ "plotoutline": "TEST 123" } )
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
     return ok
 
@@ -256,4 +249,5 @@ elif mode==3:
         GET_ALL_SPORTS()
 elif mode==4:
         SCRAPE_VIDEOS(url,scrape_type)
+
 xbmcplugin.endOfDirectory(addon_handle)

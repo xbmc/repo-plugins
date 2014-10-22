@@ -4,9 +4,7 @@ plugin.video.mediacorp
 v0.1.0
 XBMC Addon for Mediacorp TV Singapore
 
-Plays Tv catch-up for channels 5, 8 and U.
-Also plays videos for Channel News Asia.
-To display chinese titles correctly, choose Arial Font under Settings/Appearance/Skin/Font
+Plays Tv catch-up for channels 5,8,Channel U, Suria, Okto and Vasantham. To display chinese titles correctly, choose Arial Font under Settings/Appearance/Skin/Font
 
 v0.1.1
 
@@ -24,3 +22,5 @@ Version 1.0.2 rewrite for web site changes
 Version 1.0.3 cleanup of folder name and settings xml
 
 Version 1.1.4 significant website change
+
+Version 1.1.5 Added Brightcove support

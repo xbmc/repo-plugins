@@ -1,3 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
+  <category label="30010">
+    <setting id="vid_res" type="enum" label="30011" values="SD | HD" default="1" />
+  </category>
 </settings>

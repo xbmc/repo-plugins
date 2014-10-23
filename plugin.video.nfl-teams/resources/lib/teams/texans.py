@@ -8,7 +8,7 @@ class Team(resources.lib.nflcs.NFLCS):
     _categories = [
         "Cheerleaders",
         "Community",
-        #"Español", # TODO: Does currently not return any videos. Most likely an encoding issue
+        # "Español", # TODO: Does currently not return any videos. Most likely an encoding issue
         "Football",
         "Friday Facebook Mailbag",
         "Gameday",

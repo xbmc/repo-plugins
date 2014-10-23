@@ -1,5 +1,6 @@
 import resources.lib.nflcs
 
+
 class Team(resources.lib.nflcs.NFLCS):
     _short = "redskins"
     _cdaweb_url = "http://www.redskins.com/cda-web/"

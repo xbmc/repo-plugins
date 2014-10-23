@@ -1,3 +1,5 @@
+v0.0.5
+-Fixed addon.xml
 v0.0.4
 - Improved accuracy of highlighting active streams
 v0.0.3

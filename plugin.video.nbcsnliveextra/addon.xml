@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="0.0.4" provider-name="eracknaphobia">
+<addon id="plugin.video.nbcsnliveextra" name="NBC Sports Live Extra" version="0.0.5" provider-name="eracknaphobia">
   <requires>
    <import addon="xbmc.python" version="2.1.0"/>   
    <import addon="script.module.simplejson" version="3.3.0"/>    
+   <import addon="script.module.httplib2" version="0.8.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="nbcsn.py">
         <provides>video</provides>

@@ -271,33 +271,18 @@ try:
 
     def getVidLink(self,vidPage):
       link = []
-      player = common2.parseDOM(vidPage, "div", attrs={"class": "videoarea"})
-      if player:
-        playerLink = common2.parseDOM(player, "iframe", ret='src')
-        if len(playerLink) > 0:
-          if type(playerLink) == type(''):
-            link.append(playerLink)
-          elif type(playerLink) == type([]):
-            for a in playerLink:
-              link.append(a)
-          else:
-            xbmc.log("##ERROR## Found div videoarea, but no valid link")
-        else:
-          xbmc.log("##ERROR## Found div videoarea, but no iframe")
-      else:
-        player = common2.parseDOM(vidPage, "div", attrs={"class": "entry-content"})
-        if player:
-          if type(player) == type([]):
-            player = player[0]
-          playerLink = re.compile('\=[\'\"]([^\'\"]*?gametrailers.com/video/[^\'\"]*)').findall(player)
-          for a in playerLink:
-            link.append(a)
-          playerLink = re.compile('\=[\'\"]([^\'\"]*?blip.tv/play/[^\'\"]*)').findall(player)
-          for a in playerLink:
-            link.append(a)
-          playerLink = re.compile('\=[\'\"]([^\'\"]*?youtube.com/watch[^\'\"]*)').findall(player)
-          for a in playerLink:
-            link.append(a)
+      playerLink = re.compile('\=[\'\"]([^\'\"]*?player.screenwavemedia.com/play[^\'\"]*)').findall(player)
+      for a in playerLink:
+        link.append(a)
+      playerLink = re.compile('\=[\'\"]([^\'\"]*?gametrailers.com/video/[^\'\"]*)').findall(player)
+      for a in playerLink:
+        link.append(a)
+      playerLink = re.compile('\=[\'\"]([^\'\"]*?blip.tv/play/[^\'\"]*)').findall(player)
+      for a in playerLink:
+        link.append(a)
+      playerLink = re.compile('\=[\'\"]([^\'\"]*?youtube.com/watch[^\'\"]*)').findall(player)
+      for a in playerLink:
+        link.append(a)
       return link
 
     def remove_html_special_chars(self, inputStr):
@@ -415,6 +400,13 @@ try:
       for i in range(0,len(filesVal)):
           if ("high" in filesVal[i]) and ("mp4" in filesVal[i]):
               return filesVal[i]
+
+      vidserver = re.compile('\'videoserver\': [\"\'](.*?)[\'\"],', re.DOTALL).findall(tmpContent)
+      vidid = re.compile('\'vidid\': [\"\'](.*?)[\'\"],', re.DOTALL).findall(tmpContent)
+      if vidid and vidserver:
+        filesval = 'http://' + vidserver[0] + ':80/vod/smil:' + vidid[0] + '.smil/manifest.m3u8'
+        return filesval
+
 
     def main(self):
       params = self.getParams()

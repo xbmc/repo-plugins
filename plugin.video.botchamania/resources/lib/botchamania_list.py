@@ -81,14 +81,10 @@ class Main:
 		#  </a>
 		#</div>
 		titles_thumbnail_videopage_urls = soup.findAll('div', attrs={'class': re.compile("item-header")} )
-		
-		#dirty remove of last 3 found item-headers (Popular Posts)
-		if len(titles_thumbnail_videopage_urls) >= 3:
-			titles_thumbnail_videopage_urls = titles_thumbnail_videopage_urls[0:len(titles_thumbnail_videopage_urls)-3]
-
+	
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(titles_thumbnail_videopage_urls)", str(len(titles_thumbnail_videopage_urls)) ), xbmc.LOGNOTICE )
-
+			
 		for titles_thumbnail_videopage_url in titles_thumbnail_videopage_urls :
 			video_page_url = titles_thumbnail_videopage_url.a['href']
 			

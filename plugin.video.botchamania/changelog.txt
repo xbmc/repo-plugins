@@ -1,3 +1,7 @@
+v1.1.0 (Saturday, 25 oktober 2014):
+- changes due to website changes
+- removed All Videos category
+
 v1.0.1 (Saturday, 6 september 2014):
 - fixed GNU licence
 - added forum link

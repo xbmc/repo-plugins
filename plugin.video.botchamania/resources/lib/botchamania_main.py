@@ -19,14 +19,14 @@ import xbmcplugin
 #
 class Main:
     def __init__( self ):
-        #
-        # All Videos
-        #
-        parameters = {"action" : "list", "plugin_category" : __language__(30000), "url" : "http://botchamania.com/page/1/", "next_page_possible": "True"}
-        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
-        listitem = xbmcgui.ListItem( __language__(30000), iconImage="DefaultFolder.png" )
-        folder = True
-        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+#         #
+#         # All Videos
+#         #
+#         parameters = {"action" : "list", "plugin_category" : __language__(30000), "url" : "http://botchamania.com/page/1/", "next_page_possible": "True"}
+#         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+#         listitem = xbmcgui.ListItem( __language__(30000), iconImage="DefaultFolder.png" )
+#         folder = True
+#         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
          
         #
         # Botchamania
@@ -124,6 +124,15 @@ class Main:
         parameters = {"action" : "list-archive", "plugin_category" : __language__(30011), "url" : "http://botchamaniaarchive.com/", "next_page_possible": "False"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30011), iconImage="DefaultFolder.png" )
+        folder = True
+        xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+        
+        #
+        # Botchamania Archive Specials
+        #
+        parameters = {"action" : "list-archive-specials", "plugin_category" : __language__(30012), "url" : "http://www.botchamaniaarchive.com/category/specials/page/1/", "next_page_possible": "False"}
+        url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+        listitem = xbmcgui.ListItem( __language__(30012), iconImage="DefaultFolder.png" )
         folder = True
         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
 

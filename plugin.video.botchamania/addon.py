@@ -17,8 +17,8 @@
 #
 #also in ..._const
 __addon__       = "plugin.video.botchamania"
-__date__        = "06 september 2014"
-__version__     = "1.0.1"
+__date__        = "25 oktober 2014"
+__version__     = "1.1.0"
 
 #
 # Imports
@@ -54,6 +54,11 @@ else:
     #
     if action == 'list-archive':
         import botchamania_list_archive as plugin
+    #
+    # archive specials
+    #
+    if action == 'list-archive-specials':
+        import botchamania_list_archive_specials as plugin    
     #
     # List
     #

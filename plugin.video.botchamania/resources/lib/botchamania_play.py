@@ -71,7 +71,8 @@ class Main:
 		dialogWait.create( __language__(30504), title )
 		
 		#We still need to find out the video-url
-		if str(self.video_page_url).startswith("http://botchamania.com/"):
+		if str(self.video_page_url).startswith("http://botchamania.com/") or str(self.video_page_url).startswith("http://www.botchamaniaarchive.com/"):
+
 			httpCommunicator = HTTPCommunicator()
 			
 			try:

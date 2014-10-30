@@ -42,32 +42,6 @@ def log(text, log_level=2):
     raise NotImplementedError()
 
 
-def create_content_path(*args):
-    """
-    This will return a clean path by the given string or list of strings ['path1', 'path2']
-    :param path_list:
-    :return:
-    """
-
-    quoted_list = []
-    for arg in args:
-        if isinstance(arg, basestring):
-            u_str = unicode(arg)
-            quoted_list.append(urllib.quote(u_str.strip('/')))
-        elif isinstance(arg, list):
-            for item in arg:
-                u_str = unicode(item)
-                quoted_list.append(urllib.quote(u_str.strip('/')))
-                pass
-            pass
-        pass
-
-    result = "/".join(quoted_list)
-    result = result.replace('//', '/')
-    result = "/" + result + "/"
-    return result
-
-
 def json_to_item(json_data):
     """
     Creates a instance of the given json dump or dict.
@@ -76,11 +50,10 @@ def json_to_item(json_data):
     """
 
     def _from_json(_json_data):
-        from . import VideoItem, DirectoryItem, SearchItem
+        from . import VideoItem, DirectoryItem
 
         mapping = {'VideoItem': lambda: VideoItem(u'', u''),
-                   'DirectoryItem': lambda: DirectoryItem(u'', u''),
-                   'SearchItem': lambda: SearchItem(u'')}
+                   'DirectoryItem': lambda: DirectoryItem(u'', u'')}
 
         item = None
         item_type = _json_data.get('type', None)
@@ -115,14 +88,13 @@ def item_to_json(base_item):
     """
 
     def _to_json(obj):
-        from . import VideoItem, DirectoryItem, SearchItem
+        from . import VideoItem, DirectoryItem
 
         if isinstance(obj, dict):
             return obj.__dict__
 
         mapping = {VideoItem: 'VideoItem',
-                   DirectoryItem: 'DirectoryItem',
-                   SearchItem: 'SearchItem'}
+                   DirectoryItem: 'DirectoryItem'}
 
         for key in mapping:
             if isinstance(obj, key):
@@ -169,6 +141,7 @@ def sort_items_by_info_label(content_items, info_type, reverse=False):
 def parse_iso_8601(iso_8601_string):
     def _parse_date(_date):
         _result = {}
+
         _split_date = _date.split('-')
         if len(_split_date) > 0:
             _result['year'] = int(_split_date[0])
@@ -194,7 +167,8 @@ def parse_iso_8601(iso_8601_string):
             _result['minute'] = int(_time2[1])
             pass
         if len(_time2) >= 2:
-            _result['second'] = int(_time2[2])
+            _seconds = _time2[2].split('.')[0]
+            _result['second'] = int(_seconds)
             pass
 
         if len(_split_time) > 1:
@@ -203,11 +177,45 @@ def parse_iso_8601(iso_8601_string):
             if _time.find('-') != -1:
                 _result['offset_hour'] *= -1
             pass
+
+        if _time.endswith('Z'):
+            _result['offset_hour'] = 0
+            pass
+
+        return _result
+
+    def _parse_period(_iso_8601_string):
+        _result = {}
+
+        re_match = re.match('P((?P<years>\d+)Y)?((?P<months>\d+)M)?((?P<days>\d+)D)?(T((?P<hours>\d+)H)?((?P<minutes>\d+)M)?((?P<seconds>\d+)S)?)?', _iso_8601_string)
+        if re_match:
+            _result['years'] = re_match.group('years')
+            _result['months'] = re_match.group('months')
+            _result['days'] = re_match.group('days')
+            _result['hours'] = re_match.group('hours')
+            _result['minutes'] = re_match.group('minutes')
+            _result['seconds'] = re_match.group('seconds')
+
+            for key in _result:
+                value = _result[key]
+                if value is None:
+                    _result[key] = 0
+                elif isinstance(value, basestring):
+                    _result[key] = int(value)
+                    pass
+                pass
+            pass
+
         return _result
 
     result = {}
 
-    _data = iso_8601_string.split('T')
+    _data = re.split('T| ', iso_8601_string)
+
+    # period
+    if _data[0] == 'P':
+        return _parse_period(iso_8601_string)
+
     result.update(_parse_date(_data[0]))
     if len(_data) > 1:
         result.update(_parse_time(_data[1]))
@@ -216,35 +224,88 @@ def parse_iso_8601(iso_8601_string):
     return result
 
 
-def create_plugin_url(plugin, path='', params=None):
-    """
-    Creates a url for the given plugin
-    :param plugin: current plugin
-    :param path: current path
-    :param params: optional params
-    :return:
-    """
-    if not params:
-        params = {}
+def create_uri_path(*args):
+    def _process_list(comps):
+        _path = []
+        for comp in comps:
+            if comp:
+                _path.append(comp.strip('/').encode('utf-8'))
+                pass
+            pass
+        return _path
 
-    url = ""
-    if path is not None and len(path) > 0:
-        url = "%s://%s/%s/" % ('plugin', plugin.get_id(), path.strip('/'))
-    else:
-        url = "%s://%s/" % ('plugin', plugin.get_id())
+    def _process_string(str):
+        str = str.replace('\\', '/')
+        return _process_list(str.split('/'))
 
-    if params is not None and len(params) > 0:
-        url = url + '?' + urllib.urlencode(params)
+    path = []
+    for arg in args:
+        if isinstance(arg, basestring):
+            path.extend(_process_string(arg))
+        elif isinstance(arg, list):
+            path.extend(_process_list(arg))
         pass
 
-    return url
+    path = '/'.join(path)
+    if path:
+        path = path.replace('//', '/')
+        return urllib.quote('/%s/' % path)
+
+    return ''
 
 
-def create_url_from_item(plugin, base_item):
+def create_plugin_uri(plugin, path=None, params=None):
+    if not path:
+        path = ''
+        pass
+
+    if not params:
+        params = {}
+        pass
+
+    _path = create_uri_path(path)
+
+    uri = ""
+    if _path:
+        uri = "%s://%s%s" % ('plugin', plugin.get_id().encode('utf-8'), _path)
+    else:
+        uri = "%s://%s/" % ('plugin', plugin.get_id().encode('utf-8'))
+
+    if len(params) > 0:
+        # make a copy of the map
+        _params = {}
+        _params.update(params)
+
+        # encode in utf-8
+        for param in _params:
+            _params[param]=params[param].encode('utf-8')
+            pass
+        uri = uri + '?' + urllib.urlencode(_params)
+        pass
+
+    return uri
+
+
+def strip_html_from_text(text):
     """
-    Creates a url based on the given plugin and BaseItem
-    :param plugin:
-    :param base_item:
+    Returns a html free text
+    :param text: text with html tags
     :return:
     """
-    return create_plugin_url(plugin, base_item.get_path(), base_item.get_params())
+    return re.sub('<[^<]+?>', '', text)
+
+
+def print_items(items):
+    """
+    Prints the given items. Basically for tests
+    :param items: list of instances of base_item
+    :return:
+    """
+    if not items:
+        items = []
+        pass
+
+    for item in items:
+        print item
+        pass
+    pass

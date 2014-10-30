@@ -63,3 +63,5 @@ SORT_METHOD_VIDEO_YEAR = 17
 SETTING_SHOW_FANART = 'kodimon.fanart.show' #(bool)
 SETTING_ITEMS_PER_PAGE = 'kodimon.content.max_per_page' #(int)
 SETTING_SEARCH_SIZE = 'kodimon.search.size' #(int)
+SETTING_CACHE_SIZE = 'kodimon.cache.size' #(int)
+SETTING_VIDEO_QUALITY = 'kodimon.video.quality' #(int)

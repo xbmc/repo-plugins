@@ -1,18 +1,18 @@
 from ... import constants
+import urlparse
 
 
 def run(provider):
     from ... import KodimonException, VideoItem
 
     plugin = provider.get_plugin()
-    path = plugin.get_path()
-    params = plugin.get_params()
-
     results = None
     try:
-        results = provider.navigate(path, params)
+        results = provider.navigate(plugin.get_path(), plugin.get_params())
     except KodimonException, ex:
-        log(ex[0], constants.LOG_ERROR)
+        if provider.handle_exception(ex):
+            provider.log(ex.message, constants.LOG_ERROR)
+            pass
         return
 
     result = results[0]
@@ -31,6 +31,8 @@ def run(provider):
     else:
         # handle exception
         pass
+
+    provider.shut_down()
     pass
 
 

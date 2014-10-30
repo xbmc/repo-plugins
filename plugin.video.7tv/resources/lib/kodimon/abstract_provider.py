@@ -1,5 +1,7 @@
+import hashlib
 import os
 import re
+import time
 
 
 class AbstractProvider(object):
@@ -21,6 +23,7 @@ class AbstractProvider(object):
     LOCAL_ARCHIVE = 'kodimon.archive'
     LOCAL_NEXT_PAGE = 'kodimon.next_page'
     LOCAL_WATCH_LATER = 'kodimon.watch_later'
+    LOCAL_WATCH_LATER_ADD = 'kodimon.watch_later.add'
     LOCAL_WATCH_LATER_REMOVE = 'kodimon.watch_later.remove'
     LOCAL_LATEST_VIDEOS = 'kodimon.latest_videos'
 
@@ -45,15 +48,19 @@ class AbstractProvider(object):
 
         # initialize class for caching results of functions
         from helper import FunctionCache, SearchHistory, FavoriteList, WatchLaterList
-
-        cache_path = os.path.join(self._plugin.get_data_path(), u'kodimon')
-        self._cache = FunctionCache(os.path.join(cache_path, u'cache.db'))
-
         import constants
-        max_search_history_items = self._plugin.get_settings().get_int(constants.SETTING_SEARCH_SIZE, 50, lambda x: x * 10)
-        self._search = SearchHistory(os.path.join(cache_path, u'search.db'), max_search_history_items)
-        self._favorites = FavoriteList(os.path.join(cache_path, u'favorites.db'))
-        self._watch_later = WatchLaterList(os.path.join(cache_path, u'watch_later.db'))
+
+        # initialize cache
+        cache_path = os.path.join(self.get_plugin().get_data_path(), u'kodimon')
+        max_cache_size_mb = self.get_plugin().get_settings().get_int(constants.SETTING_CACHE_SIZE, 5)
+        self._cache = FunctionCache(os.path.join(cache_path, u'cache'), max_file_size_kb=max_cache_size_mb * 1024)
+
+        # initialize search history
+        max_search_history_items = self.get_plugin().get_settings().get_int(constants.SETTING_SEARCH_SIZE, 50,
+                                                                            lambda x: x * 10)
+        self._search = SearchHistory(os.path.join(cache_path, u'search'), max_search_history_items)
+        self._favorites = FavoriteList(os.path.join(cache_path, u'favorites'))
+        self._watch_later = WatchLaterList(os.path.join(cache_path, u'watch_later'))
 
         # map for regular expression (path) to method (names)
         self._dict_path = {}
@@ -92,8 +99,15 @@ class AbstractProvider(object):
                                self.LOCAL_ARCHIVE: 30105,
                                self.LOCAL_NEXT_PAGE: 30106,
                                self.LOCAL_WATCH_LATER: 30107,
+                               self.LOCAL_WATCH_LATER_ADD: 30107,
                                self.LOCAL_WATCH_LATER_REMOVE: 30108,
                                self.LOCAL_LATEST_VIDEOS: 30109})
+        pass
+
+    def shut_down(self):
+        self._search = None
+        self._cache = None
+        self._watch_later = None
         pass
 
     def get_search_history(self):
@@ -104,6 +118,9 @@ class AbstractProvider(object):
 
     def get_watch_later_list(self):
         return self._watch_later
+
+    def get_function_cache(self):
+        return self._cache
 
     def set_localization(self, *args):
         """
@@ -121,6 +138,9 @@ class AbstractProvider(object):
             pass
         pass
 
+    def get_settings(self):
+        return self._plugin.get_settings()
+
     def localize(self, text_id, default_text=None):
         """
         Returns the localized version of the given id. If no localization exists
@@ -137,7 +157,38 @@ class AbstractProvider(object):
                 return default_text
             return unicode(text_id)
 
-        return self._plugin.localize(mapped_id, default_text)
+        return self.get_plugin().localize(mapped_id, default_text)
+
+    def create_next_page_item(self, current_page_index, path, params=None):
+        """
+        Creates a default next page item based on the current path.
+        :param current_page_index: current page index (int)
+        :param path: current path
+        :param params:
+        :return:
+        """
+        if not params:
+            params = {}
+            pass
+
+        new_params = {}
+        new_params.update(params)
+        new_params['page'] = unicode(current_page_index + 1)
+        name = self.localize(self.LOCAL_NEXT_PAGE, 'Next Page')
+        if name.find('%d') != -1:
+            name %= current_page_index + 1
+            pass
+
+        from . import DirectoryItem
+
+        return DirectoryItem(name, self.create_uri(path, new_params))
+
+    def get_fanart(self):
+        """
+        Returns the fanart of the plugin
+        :return:
+        """
+        return self.get_plugin().get_fanart()
 
     def get_plugin(self):
         """
@@ -163,7 +214,7 @@ class AbstractProvider(object):
         :param content_type:
         :return:
         """
-        self._plugin.set_content_type(content_type)
+        self.get_plugin().set_content_type(content_type)
         pass
 
     def add_sort_method(self, *sort_methods):
@@ -173,7 +224,7 @@ class AbstractProvider(object):
         :return:
         """
         for sort_method in sort_methods:
-            self._plugin.add_sort_method(sort_method)
+            self.get_plugin().add_sort_method(sort_method)
             pass
         pass
 
@@ -274,9 +325,7 @@ class AbstractProvider(object):
 
             fav_item = json_to_item(params['item'])
             self._favorites.remove(fav_item)
-            from . import refresh_container
-
-            refresh_container()
+            self.refresh_container()
             pass
         elif command == 'list':
             import contextmenu
@@ -285,7 +334,7 @@ class AbstractProvider(object):
 
             for directory_item in directory_items:
                 context_menu = []
-                remove_item = contextmenu.create_remove_from_favs(self._plugin,
+                remove_item = contextmenu.create_remove_from_favs(self.get_plugin(),
                                                                   self.localize(self.LOCAL_FAVORITES_REMOVE),
                                                                   directory_item)
                 context_menu.append(remove_item)
@@ -319,9 +368,7 @@ class AbstractProvider(object):
 
             item = json_to_item(params['item'])
             self._watch_later.remove(item)
-            from . import refresh_container
-
-            refresh_container()
+            self.refresh_container()
             pass
         elif command == 'list':
             video_items = self._watch_later.list()
@@ -330,7 +377,7 @@ class AbstractProvider(object):
 
             for video_item in video_items:
                 context_menu = []
-                remove_item = contextmenu.create_remove_from_watch_later(self._plugin,
+                remove_item = contextmenu.create_remove_from_watch_later(self.get_plugin(),
                                                                          self.localize(self.LOCAL_WATCH_LATER_REMOVE),
                                                                          video_item)
                 context_menu.append(remove_item)
@@ -351,7 +398,7 @@ class AbstractProvider(object):
         :param re_match:
         :return:
         """
-        from . import create_content_path, json_to_item, DirectoryItem, SearchItem
+        from . import json_to_item, DirectoryItem
 
         command = re_match.group('command')
         if command == 'new' or (command == 'list' and self._search.is_empty()):
@@ -359,47 +406,59 @@ class AbstractProvider(object):
 
             result, text = input.on_keyboard_input(self.localize(self.LOCAL_SEARCH_TITLE))
             if result:
-                search_item = SearchItem(text,
-                                         image=self.get_plugin().create_resource_path('media/search.png'))
-                search_item.set_fanart(self.get_plugin().get_fanart())
-                self._search.update(search_item)
-                return self.on_search(text, path, params, re_match)
+                self._search.update(text)
+
+                # we adjust the path and params as would it be a normal query
+                new_path = self.PATH_SEARCH+'/query/'
+                new_params = {}
+                new_params.update(params)
+                new_params['q'] = text
+                return self.on_search(text, new_path, new_params, re_match)
             pass
         elif command == 'remove':
-            search_item = json_to_item(params['item'])
-            self._search.remove(search_item)
+            query = params['q']
+            self._search.remove(query)
             self.refresh_container()
             return True
         elif command == 'query':
-            search_item = json_to_item(params['item'])
-            self._search.update(search_item)
-            return self.on_search(search_item.get_name(), path, params, re_match)
+            query = params['q']
+            self._search.update(query)
+            return self.on_search(query, path, params, re_match)
         else:
             result = []
 
             # 'New Search...'
             search_item = DirectoryItem('[B]' + self.localize(self.LOCAL_SEARCH_NEW) + '[/B]',
-                                        create_content_path(self.PATH_SEARCH, 'new'),
-                                        image=self.get_plugin().create_resource_path('media/search.png'))
-            search_item.set_fanart(self.get_plugin().get_fanart())
+                                        self.create_uri([self.PATH_SEARCH, 'new']),
+                                        image=self.create_resource_path('media/search.png'))
+            search_item.set_fanart(self.get_fanart())
             result.append(search_item)
 
             from . import contextmenu
 
-            for search_item in self._search.list():
+            for search in self._search.list():
+                # little fallback for old history entries
+                if isinstance(search, DirectoryItem):
+                    search = search.get_name()
+                    pass
+
                 # we create a new instance of the SearchItem
-                new_search_item = SearchItem(search_item.get_name(),
-                                             image=self.get_plugin().create_resource_path('media/search.png'),
-                                             search_type='query')
-                context_menu = [contextmenu.create_remove_from_search_history(self._plugin,
+                search_item = DirectoryItem(search,
+                                            self.create_uri([self.PATH_SEARCH, 'query'], {'q': search}),
+                                            image=self.create_resource_path('media/search.png'))
+                search_item.set_fanart(self.get_fanart())
+                context_menu = [contextmenu.create_remove_from_search_history(self.get_plugin(),
                                                                               self.localize(self.LOCAL_SEARCH_REMOVE),
                                                                               search_item)]
-                new_search_item.set_context_menu(context_menu)
-                result.append(new_search_item)
+                search_item.set_context_menu(context_menu)
+                result.append(search_item)
                 pass
             return result, {self.RESULT_CACHE_TO_DISC: False}
 
         return False
+
+    def handle_exception(self, exception_to_handle):
+        return True
 
     def refresh_container(self):
         """
@@ -409,7 +468,29 @@ class AbstractProvider(object):
         """
         raise NotImplementedError()
 
-    def update_container(self, path=None, params=None):
+    def show_notification(self, message, header='', image_uri='', time_milliseconds=5000):
         raise NotImplementedError()
+
+    def log(self, text, log_level=2):
+        from . import log
+        log_line = '[%s] %s' % (self.get_plugin().get_id(), text)
+        log(log_line, log_level)
+        pass
+
+    def create_resource_path(self, *args):
+        return self._plugin.create_resource_path(*args)
+
+    def create_uri(self, path=None, params=None):
+        from . import create_plugin_uri
+
+        return create_plugin_uri(self._plugin, path, params)
+
+    def get_access_manager(self):
+        """
+        Returns an AccessManager to help with credentials and access_tokens
+        :return: AccessManager
+        """
+        from helper import AccessManager
+        return AccessManager(self._plugin.get_settings())
 
     pass

@@ -1,3 +1,28 @@
+2.1.0 (2014-10-29)
+FIX: compatible for OpenELEC
+FIX: compatible for Amazon FireTV
+UPD: try parsing season/episode of a show
+UPD: prosiebensat1 APIv2
+UPD: Kodimon
+
+2.0.1~beta5 (2014-10-23)
+UPD: testing sqlite for caching, favs, watch later and search
+
+2.0.1~beta4 (2014-10-20)
+ADD: missing source file (audio_item)
+
+2.0.1~beta3 (2014-10-19)
+FIX: possible crash while accessing non existing folders
+
+2.0.1~beta2 (2014-10-12)
+FIX: show fanarts when ever possible (only cached)
+UPD: updated to api v2 of ProSieben Media GmbH (7TV)
+ADD: Set caching size via settings
+UPD: merged 'Archive' to 'Library' (like the app)
+FIX: crash in 'Highlights' of a channel
+FIX: crash while removing show from 'Favorites' list
+FIX: crash while removing video from 'Watch Later' list
+
 2.0.0 (2014-10-05)
 ADD: Search History (max. 50 entries)
 ADD: 'Watch Later' for episodes

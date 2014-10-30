@@ -15,4 +15,9 @@ class MockSettings(AbstractSettings):
         self._settings[settings_id] = value
         pass
 
+    def open_settings(self):
+        from ... import log
+        log("called 'open_settings'")
+        pass
+
     pass

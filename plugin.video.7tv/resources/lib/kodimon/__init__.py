@@ -34,5 +34,5 @@ class RegisterPath(object):
 
 from base_item import BaseItem
 from video_item import VideoItem
+from audio_item import AudioItem
 from directory_item import DirectoryItem
-from search_item import SearchItem

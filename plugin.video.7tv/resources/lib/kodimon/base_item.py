@@ -2,24 +2,30 @@ import hashlib
 
 
 class BaseItem(object):
+    VERSION = 2
     INFO_DATE = ('data', unicode)
     INFO_DATEADDED = ('dateadded', unicode)
 
-    def __init__(self, name, path, params=None, image=u''):
-        if not params:
-            params = {}
-            pass
-
+    def __init__(self, name, uri, image=u''):
+        self._version = BaseItem.VERSION
         self._name = unicode(name)
-        self._path = unicode(path)
+        self._uri = unicode(uri)
         self._image = ""
-        self._url = ""
-        self._params = params
         self._fanart = ""
         self._context_menu = None
         self.set_image(image)
         self._info_labels = {}
         pass
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+    def __unicode__(self):
+        name = self._name
+        uri = self._uri
+        obj_str = "------------------------------\n'%s'\nURI: %s\nImage: %s\n------------------------------" % (
+            name, uri, self._image)
+        return obj_str
 
     def set_info(self, info_type, info_value):
         def _check_instance(_info_type):
@@ -81,11 +87,7 @@ class BaseItem(object):
         """
         m = hashlib.md5()
         m.update(self._name.encode('utf-8'))
-        m.update(self._path.encode('utf-8'))
-        for key in self._params:
-            m.update(key.encode('utf-8'))
-            m.update(self._params.get(key, '').encode('utf-8'))
-            pass
+        m.update(self._uri.encode('utf-8'))
         return m.hexdigest()
 
     def get_name(self):
@@ -95,30 +97,12 @@ class BaseItem(object):
         """
         return self._name
 
-    def get_path(self):
+    def get_uri(self):
         """
         Returns the path of the item.
         :return: path of the item.
         """
-        return self._path
-
-    def set_url(self, url):
-        """
-        Sets the url of the item
-        :param url:
-        :return:
-        """
-        if url:
-            self._url = unicode(url)
-        else:
-            self._url = ""
-        pass
-
-    def get_url(self):
-        return self._url
-
-    def get_params(self):
-        return self._params
+        return self._uri
 
     def set_image(self, image):
         if image:

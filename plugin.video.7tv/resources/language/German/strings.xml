@@ -14,6 +14,7 @@
     <string id="30021">Fanart anzeigen</string>
     <string id="30022">Einträge pro Seite</string>
     <string id="30023">Größe der Suchhistorie</string>
+    <string id="30024">Cache-Größe (MB)</string>
 
     <!-- Kodimon Common -->
     <string id="30100">Favoriten</string>
@@ -33,4 +34,5 @@
     <string id="30501">Aktuelle ganze Folgen</string>
     <string id="30502">Neueste Clips</string>
     <string id="30503">Clips</string>
+    <string id="30504">Backstage</string>
 </strings>

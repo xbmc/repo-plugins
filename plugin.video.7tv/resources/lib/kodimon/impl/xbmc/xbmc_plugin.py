@@ -1,11 +1,11 @@
 import sys
+import urllib
 import urlparse
 
 import xbmc
 import xbmcaddon
 import xbmcplugin
 import xbmcvfs
-
 from ...abstract_plugin import AbstractPlugin
 from xbmc_plugin_settings import XbmcPluginSettings
 
@@ -19,20 +19,36 @@ class XbmcPlugin(AbstractPlugin):
         else:
             self._addon = xbmcaddon.Addon()
 
-        self._addon_uri = sys.argv[0]
+
+        """
+        I don't know what xbmc/kodi is doing with a simple uri, but we have to extract the information from the
+        sys parameters and re-build our clean uri.
+        Also we extract the path and parameters - man, that would be so simple with the normal url-parsing routines.
+        """
+        # first the path of the uri
+        self._uri = sys.argv[0]
+        comps = urlparse.urlparse(self._uri)
+        self._path = urllib.unquote(comps[2]).decode('utf-8')
+
+        # after that try to get the params
+        params = sys.argv[2][1:]
+        if len(params)>0:
+            self._uri = self._uri+'?'+params
+
+            self._params = {}
+            params = dict(urlparse.parse_qsl(params))
+            for _param in params:
+                item = params[_param]
+                self._params[_param] = item.decode('utf-8')
+                pass
+            pass
+
         self._plugin_handle = int(sys.argv[1])
         self._plugin_id = plugin_id or self._addon.getAddonInfo('id')
         self._plugin_name = plugin_name or self._addon.getAddonInfo('name')
         self._navtive_path = xbmc.translatePath(self._addon.getAddonInfo('path'))
 
         self._settings = XbmcPluginSettings(self._addon)
-
-        """
-        Collect the current path and parameter
-        """
-        url_components = urlparse.urlparse(self._addon_uri)
-        self._path = url_components[2]
-        self._params = dict(urlparse.parse_qsl(sys.argv[2][1:]))
 
         """
         Set the data path for this addon and create the folder
@@ -52,11 +68,8 @@ class XbmcPlugin(AbstractPlugin):
     def get_native_path(self):
         return self._navtive_path
 
-    def get_path(self):
-        return self._path
-
-    def get_params(self):
-        return self._params
+    def get_uri(self):
+        return self._uri
 
     def get_settings(self):
         return self._settings

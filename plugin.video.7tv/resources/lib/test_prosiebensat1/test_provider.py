@@ -1,51 +1,151 @@
 import unittest
+from resources.lib.kodimon import DirectoryItem
 
-from resources.lib import kodimon
-from resources.lib import prosiebensat1
+from resources.lib.prosiebensat1 import Provider
+
+
+def print_items(items):
+    for item in items:
+        print item
+        pass
+    pass
 
 
 class TestProvider(unittest.TestCase):
     def setUp(self):
-        unittest.TestCase.setUp(self)
-
-        self._provider = prosiebensat1.Provider()
-        self._plugin = self._provider.get_plugin()
         pass
 
-    def test_format_next_page(self):
-        self._plugin.set_path('/pro7/library/505/')
-        kodimon.run(self._provider)
+    def test_search(self):
+        provider = Provider()
+
+        path = '/%s/query/' % provider.PATH_SEARCH
+        result = provider.navigate(path, {'q': 'halligalli'})
         pass
-    
+
+    def test_latest_videos(self):
+        provider = Provider()
+        format_item = DirectoryItem(u'Test',
+                                    provider.create_uri(['pro7', 'library', '277']))
+        provider.get_favorite_list().add(format_item)
+
+        result = provider.navigate('/favs/latest/')
+        items = result[0]
+        pass
+
+    def test_channel_highlights(self):
+        provider = Provider()
+
+        # test root of highlights
+        result = provider.navigate('/pro7/highlights/')
+        items = result[0]
+
+        self.assertEqual(3, len(items))
+        print_items(items)
+
+        # test 'Beliebte Sendungen' of highlights
+        result = provider.navigate('/pro7/highlights/Beliebte Sendungen/')
+        items = result[0]
+        self.assertGreater(len(items), 0)
+        print_items(items)
+
+        # test 'Aktuelle ganze Folgen' of highlights
+        result = provider.navigate('/pro7/highlights/Aktuelle ganze Folgen/')
+        items = result[0]
+        self.assertGreater(len(items), 0)
+        print_items(items)
+
+        # test 'Neueste Clips' of highlights
+        result = provider.navigate('/pro7/highlights/Neueste Clips/')
+        items = result[0]
+        self.assertGreater(len(items), 0)
+        print_items(items)
+        pass
+
+    def test_format_content(self):
+        provider = Provider()
+
+        # test full
+        result = provider.navigate('/pro7/library/789/')
+        items = result[0]
+        self.assertGreater(len(items), 2)
+
+        options = result[1]
+        self.assertTrue(not provider.RESULT_CACHE_TO_DISC in options)
+        print_items(items)
+
+        # test clips
+        result = provider.navigate('/pro7/library/789/', {'clip_type': 'short'})
+        items = result[0]
+        self.assertGreater(len(items), 0)
+        options = result[1]
+        self.assertTrue(not provider.RESULT_CACHE_TO_DISC in options)
+        print_items(items)
+
+        # test backstage
+        result = provider.navigate('/pro7/library/789/', {'clip_type': 'webexclusive'})
+        items = result[0]
+        self.assertGreater(len(items), 0)
+        options = result[1]
+        self.assertTrue(not provider.RESULT_CACHE_TO_DISC in options)
+        print_items(items)
+        pass
+
+    def test_channel_formats(self):
+        provider = Provider()
+        #provider.get_function_cache().disable()
+        result = provider.navigate('/pro7/library/')
+
+        items = result[0]
+        self.assertGreater(len(items), 0)
+
+        options = result[1]
+        self.assertTrue(not provider.RESULT_CACHE_TO_DISC in options)
+
+        print_items(items)
+        pass
+
+    def test_channel_content(self):
+        provider = Provider()
+
+        result = provider.navigate('/pro7/')
+        items = result[0]
+
+        # 'Highlights' and 'Library'
+        self.assertEqual(len(items), 2)
+
+        options = result[1]
+        self.assertTrue(not provider.RESULT_CACHE_TO_DISC in options)
+
+        print_items(items)
+        pass
+
     def test_root(self):
-        result = self._provider.navigate('/')
+        provider = Provider()
+
+        # clear all
+        provider.get_favorite_list().clear()
+        provider.get_watch_later_list().clear()
+
+        # navigate to the root
+        result = provider.navigate('/')
         items = result[0]
         self.assertEqual(len(items), 7)
 
+        # caching should be false, so the additional directories 'Favorties' and 'Watch Later'
+        # will show correctly.
         options = result[1]
-        self.assertEqual(False, options[self._provider.RESULT_CACHE_TO_DISC])
-        pass
-    
-    def test_channel_content(self):
-        channel_items = self._provider.navigate('/pro7/')[0]
-        self.assertEqual(len(channel_items), 3)
+        self.assertEqual(False, options[provider.RESULT_CACHE_TO_DISC])
+
+        print_items(items)
         pass
 
-    def test_channel_content_by_category(self):
-        self._plugin.set_path('/pro7/library/')
-        kodimon.run(self._provider)
-        pass
-    
-    def test_format_content(self):
-        self._plugin.set_path('/pro7/library/277/')
-        kodimon.run(self._provider)
-        pass
-    
-    def test_publishing_date(self):
-        aired = prosiebensat1.convert_to_aired('2014-09-02T14:45:00+02:00')
-        self.assertEqual(aired, '2014-09-02')
+    def test_format_next_page(self):
+        provider = Provider()
+        result = provider.navigate('/pro7/library/505/')
+
+        items = result[0]
+        item = items[len(items)-1]
+        self.assertEqual('Next Page', item.get_name())
         pass
 
-if __name__ == "__main__":
-    unittest.main()
     pass

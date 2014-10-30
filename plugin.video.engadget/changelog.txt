@@ -1,0 +1,28 @@
+Version 1.0.7
+Changed author, divingmule did not respond to pull requests
+
+Version 1.0.6
+Now using different scraping backend, should cope with engadget's bad html
+
+Version 1.0.5
+fix for changed engadget website (scraping rules are working again)
+
+Version 1.0.4
+update for frodo/gotham
+content is now scraped from the website, http://www.engadget.com/videos/
+new preferred playback setting
+
+Version 1.0.3
+fix for engadget videos
+
+Version 1.0.2
+fix for changes in the rss feed
+
+Version 1.0.1
+added download to the context menu
+
+Version 0.0.2
+new icon, thanks freezy!
+
+Version 0.0.1
+initial

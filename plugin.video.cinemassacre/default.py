@@ -271,6 +271,7 @@ try:
 
     def getVidLink(self,vidPage):
       link = []
+      player = vidLink
       playerLink = re.compile('\=[\'\"]([^\'\"]*?player.screenwavemedia.com/play[^\'\"]*)').findall(player)
       for a in playerLink:
         link.append(a)

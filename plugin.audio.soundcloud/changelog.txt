@@ -1,30 +1,37 @@
-0.2.6
-- Translations 
-- Own Tracks MenuItem
+1.0.0 (2014-10-29)
+UPD: removed beta status
+UPD: changed addon to from 'plugin.audio.bromix.soundcloud' to 'plugin.audio.soundcloud'
 
-0.2.5
-- remove parseDOM lib (create new branch for parseDOM tests)
-- revert to httplib2 for all network actions
+1.0.0~beta4 (2014-10-29)
+FIX: client was always requesting a new token
+UPD: using AccessManager of Kodimon
 
-0.2.4
-- use of parseDOM lib
-- Better Fallback mode
-- Cleanup
+1.0.0~beta3 (2014-10-20)
+UPD: removed 'requests' in favor of 'script.module.requests'
 
-0.2.3
-- Remove unused depends
-- Cleanup
+1.0.0~alpha8 (2014-10-19)
+FIX: possible crash while accessing non existing folders
 
-0.2.2
-- Fixed pagination in dashboard
-- added private tracks
+1.0.0~alpha7 (2014-10-18)
+ADD: pagination for stream, playlists, likes, etc.
+FIX: playlist, likes, follower and following are working again
 
-0.2.1
-- Update to xbmc eden
-- Login possible
-- Dashboard added
+1.0.0~alpha6 (2014-10-17)
+UPD: moved user profile to root
+ADD: 'follow' and 'unfollow'
+ADD: 'like' and 'unlike'
+FIX: requesting a new access token after password or username have changed
 
+1.0.0~alpha5 (2014-10-17)
+UPD: code cleaning
+ADD: support for playlists, likes, follower, following
 
-0.1.4
+1.0.0~alpha4 (2014-10-14)
+ADD: login for stream (testing)
+ADD: 'explore' for trending and genres (finished)
+ADD: playback of track items
+ADD: support for track items
+ADD: search for tests
 
-- Fixed bug where tracks wouldn't play because of a 401 authentication error.
+1.0.0~alpha (2014-10-11)
+- initial version for tests

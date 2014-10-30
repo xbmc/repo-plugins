@@ -6,7 +6,7 @@ from BeautifulSoup import BeautifulStoneSoup
 
 
 class PopcornTV:
-    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:18.0) Gecko/20100101 Firefox/18.0"
+    __USERAGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:32.0) Gecko/20100101 Firefox/32.0"
 
     def __init__(self):
         opener = urllib2.build_opener()
@@ -18,16 +18,12 @@ class PopcornTV:
         pageUrl = "http://home.popcorntv.it/"
         data = urllib2.urlopen(pageUrl).read()
         tree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-        
-        links = tree.find("div", "nav1").findAll('a')
         categories = []
-        # There are no video in these in these categories
-        avoid_categories = ["Home", "Videostrillo", "News"]
-        for link in links:
+        list = tree.findAll("div", "container-mega")
+        for item in list:
+            link = item.parent.find("a")
             category = {}
             category["title"] = link.text.strip()
-            if category["title"] in avoid_categories:
-                continue
             category["url"] = link["href"]
             categories.append(category)
        
@@ -40,86 +36,66 @@ class PopcornTV:
         urlSite = urlParsed.scheme + "://" + urlParsed.netloc
 
         subcategories = []
-        
-        # add SIMULCAST in ANIME MANGA
-        if pageUrl == "http://animemanga.popcorntv.it/":
-            links = htmlTree.find("div", "nav3").findAll("a")
-            for link in links:
-                subcategory = {}
-                subcategory["url"] = link["href"]
-                if not subcategory["url"].startswith("http"):
-                    subcategory["url"] = urlSite + subcategory["url"]
-                subcategory["title"] = "[COLOR yellow]" + link.contents[0].strip() + "[/COLOR]"
-                subcategories.append(subcategory)
-        
-        links = htmlTree.find("div", "nav2").findAll("a")
-        # There are no video in these subcategories
-        avoid_subcategories = ["News"]
-        for link in links:
+        list = htmlTree.findAll("div", "lista-serie")
+        for item in list:
+            link = item.find("a")
             subcategory = {}
             subcategory["title"] = link.text.strip()
-            if subcategory["title"] in avoid_subcategories:
-                continue
             subcategory["url"] = link["href"]
             if not subcategory["url"].startswith("http"):
                 subcategory["url"] = urlSite + subcategory["url"]
-            subcategories.append(subcategory)
+            # Don't insert duplicate items
+            if subcategory not in subcategories:
+                subcategories.append(subcategory)
             
         return subcategories
         
     def getVideoBySubCategories(self, pageUrl):
         data = urllib2.urlopen(pageUrl).read()
         htmlTree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-    
-        tags = htmlTree.find("div", "tags")
-        if tags is None:
-            videos = self.getVideoByPage(htmlTree)
+        
+        videoList = []
+        
+        if pageUrl.startswith("http://ladychannel.popcorntv.it/"):
+            # LadyChannel: show video only in "Tutti gli episodi"
+            items = htmlTree.findAll("div", "serie-gridview")[1].findAll("a")
         else:
-            videos = []
-            pages = tags.findAll("a")
-            for page in pages:
-                data = urllib2.urlopen(page["href"]).read()
-                htmlTree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
-                videos = videos + self.getVideoByPage(htmlTree)
-        return videos
-    
-    def getVideoByPage(self, htmlTree):
-        videos = []
+            items = htmlTree.find("h1", "headings-episodi").parent.findAll("a")
         
-        item = htmlTree.find("div", "evidenza-image")
-        if item is not None:
+        for item in items:
             video = {}
-            image_tag = item.find("img")
-            video["url"] = item.find("a")["href"]
-            try:
-                video["thumb"] = image_tag["data-src"]
-            except KeyError:
-                video["thumb"] = image_tag["src"]
-            video["title"] = image_tag["alt"]
-            videos.append(video)
-        
-        items = htmlTree.find("div", "delta-section-content trailers140")
-        if items is not None:
-            items = items.findAll("div",  "trailers140")
+            video["title"] = item["title"].strip()
+            video["url"] = item["href"]
+            video["thumb"] = item.find("img")["src"]
+            videoList.append(video)
+            
+        # Get pagination URLs
+        nextPageUrl = None
+        firstPageUrl = None
+        lastPageUrl = None
+        prevPageUrl = None
 
-            for item in items:
-                video = {}
-                image = item.find("div", "trailers-image")
-                image_tag = image.find("img")
-                video["url"] = image.find("a")["href"]
-                try:
-                    video["thumb"] = image_tag["data-src"]
-                except KeyError:
-                    video["thumb"] = image_tag["src"]
-                video["title"] = image_tag["alt"]
-                vietato = item.find("div", "overlay_vietato")
-                if vietato != None:
-                    video["title"] = video["title"] + " [" + vietato.text.strip() + "]"
-                # don't insert duplicate items
-                if video not in videos:
-                    videos.append(video)
-        
-        return videos
+        pagination = htmlTree.find("ul", "pagination")
+        if pagination is not None:
+            prevPage = pagination.find("a", {"rel": "prev"})
+            if prevPage is not None:
+                prevPageUrl = prevPage["href"]
+                firstPage = prevPage.parent.findNextSibling("li").find("a")
+                firstPageUrl = firstPage["href"]
+                
+            nextPage = pagination.find("a", {"rel": "next"})
+            if nextPage is not None:
+                nextPageUrl = nextPage["href"]
+                lastPage = nextPage.parent.findPreviousSibling("li").find("a")
+                lastPageUrl = lastPage["href"]
+            
+        page = {}
+        page["videoList"] = videoList
+        page["prevPageUrl"] = prevPageUrl
+        page["firstPageUrl"] = firstPageUrl
+        page["lastPageUrl"] = lastPageUrl
+        page["nextPageUrl"] = nextPageUrl
+        return page
 
     def getVideoMetadata(self, pageUrl):
         metadata = {}
@@ -127,34 +103,33 @@ class PopcornTV:
         data = urllib2.urlopen(pageUrl).read()
         htmlTree = BeautifulSoup(data, convertEntities=BeautifulSoup.HTML_ENTITIES)
         
-        metadata["title"] = htmlTree.find('meta', {"property": "og:title"})['content']
-        metadata["thumb"] = htmlTree.find('meta', {"property": "og:image"})['content']
-        metadata["plot"] = htmlTree.find('meta', {"property": "og:description"})['content']
-        try:
-            # Not all the pages have the following metadata yet!
-            metadata["smilUrl"] = htmlTree.find('meta', {"property": "og:video"})['content']
-        except TypeError:
-            match=re.compile('\("vplayer","768","432","(.+?)"').findall(data)
-            metadata["smilUrl"] = match[0]
+        metadata["title"] = htmlTree.find("header","video-heading").text.strip()
+        metadata["thumb"] = htmlTree.find("meta", {"property": "og:image"})['content']
+        
+        match=re.compile('\("vplayerPopcorn","1020","550","(.+?)"').findall(data)
+        metadata["smilUrl"] = match[0]
         # Remove spaces from smil URL
         metadata["smilUrl"] = metadata["smilUrl"].replace(" ","")
         
         return metadata
         
-    def getVideoURL(self, smilUrl):
+    def getVideoURL(self, smilUrl, quality=1200):
         data = urllib2.urlopen(smilUrl).read()
         htmlTree=BeautifulStoneSoup(data, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
         
         base = htmlTree.find('meta')['base']
-        filepath = htmlTree.find('video')['src']
-        url = base + " playpath=" + filepath
-        
-        return url
 
-    def getAndroidVideoURL(self, smilUrl):
-        params = dict(urlparse.parse_qsl(smilUrl))
-        file = params['file']
-        url = "http://www.popcorntv.it/android/m3u8.php?file=" + file
-        
+        # Get the best available bitrate
+        hbitrate = -1
+        sbitrate = int(quality) * 1024
+        for item in htmlTree.findAll('video'):
+            try:
+                bitrate = int(item['system-bitrate'])
+            except KeyError:
+                bitrate = 0
+            if bitrate > hbitrate and bitrate <= sbitrate:
+                hbitrate = bitrate
+                filepath = item['src']
+
+        url = base + " playpath=" + filepath
         return url
-    

@@ -1,8 +1,11 @@
+[B]4.2.3 - Gotham[/B]
+-Fix token requirement following site change
+
 [B]4.2.2 - Gotham[/B]
--fix missing dep beautifulsoup
+-Fix missing dep beautifulsoup
 
 [B]4.2.1 - Gotham[/B]
--fix livestream referrer
+-Fix livestream referrer
 
 [B]4.1.0 - Gotham[/B]
 -Reworked additional channels

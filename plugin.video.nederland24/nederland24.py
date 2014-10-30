@@ -38,8 +38,10 @@ IMG_DIR = os.path.join(settings.getAddonInfo("path"),"resources", "media")
 ###
 API_URL = 'http://ida.omroep.nl/aapi/?stream='
 BASE_URL = 'http://livestreams.omroep.nl/live/npo/'
-USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53'
+#USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/600.1.25 (KHTML, like Gecko) Version/8.0 Safari/600.1.25'
 REF_URL = 'http://www.npo.nl'
+TOKEN_URL = 'http://ida.omroep.nl/npoplayer/i.js'
 
 CHANNELS = [
   
@@ -106,6 +108,15 @@ def extract_url(chan):
     video = resolve_http_redirect(prostream, 3)
     return video
 
+def collect_token():
+    req = urllib2.Request(TOKEN_URL)
+    req.add_header('User-Agent', USER_AGENT)
+    response = urllib2.urlopen(req)
+    page = response.read()
+    response.close()
+    token = re.search(r'npoplayer.token = "(.*?)"',page).group(1)
+    return token
+
 def addLink(name, url, mode, iconimage, description):
     u = sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+urllib.quote_plus(mode)
     ok = True
@@ -142,7 +153,7 @@ def playVideo(url):
     if media and media.startswith("http://"):
         finalUrl=media
     else:
-        URL=API_URL+BASE_URL+media
+        URL=API_URL+BASE_URL+media+"&token=%s" % collect_token()
         req = urllib2.Request(URL)
         req.add_header('User-Agent', USER_AGENT)
         req.add_header('Referer', REF_URL)

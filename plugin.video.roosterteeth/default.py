@@ -79,13 +79,11 @@ def get_soup(data):
     if data:
         if data.startswith('http'):
             data = make_request(data)
-            
         try:
             bs = BeautifulSoup(data, 'html.parser')
         except:
 #           Mangle the html source so hopefully the python parser can parse it 
             data = mangle_html(data)
-
 #           Let's try again            
             try:
                 bs = BeautifulSoup(data, 'html.parser')
@@ -191,6 +189,7 @@ def cache_retired_ah_shows():
     retired_items = ah_soup('table', class_="border boxBorder")[1].table('tr')
     return filter_items(retired_items)
        
+       
 def get_shows(shows):
     for i in shows:
         if 'v=trending' in i[1]:
@@ -259,41 +258,6 @@ def index(soup, season=True):
     except:
         addon_log("Didn't find next page!")
 
-
-def resolve_url(item_id, retry=False):
-    url = 'http://roosterteeth.com/archive/new/_loadEpisode.php?id=%s&v=morev' %item_id
-    data = json.loads(make_request(url))
-    soup = get_soup(data['embed']['html'])
-    try:
-        filetype = soup.div['data-filetype']
-        if filetype == 'youtube':
-            youtube_id = soup.iframe['src'].split('/')[-1].split('?')[0]
-            addon_log('youtube id:' + youtube_id)
-            path = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %youtube_id
-        elif filetype == 'blip':
-            blip_url = soup.iframe['src']
-            addon_log('blip_url: ' + blip_url)
-            path = get_blip_location(blip_url)
-            addon_log('path: %s' %path)
-        return path
-    except:
-        if retry:
-            addon_log('retryException: %s' %format_exc())
-            sorry = check_sorry(soup)
-        elif addon.getSetting('is_sponsor') == 'true':
-            logged_in = check_login()
-            if not logged_in:
-                logged_in = login()
-                if logged_in:
-                    return resolve_url(item_id, True)
-                notify(language(30025))
-                xbmc.sleep(5000)
-            sorry = check_sorry(soup)
-        else:
-            sorry = check_sorry(soup)
-        if not sorry:
-            notify(language(30024))
-            addon_log('addonException: resolve_url')
 
 
 def check_sorry(soup):
@@ -414,6 +378,121 @@ def get_podcasts_episodes(url, iconimage):
                 i['link'], 6, iconimage, meta, False, False)
 
 
+def resolve_url(item_id, retry=False):
+    url = 'http://roosterteeth.com/archive/new/_loadEpisode.php?id=%s&v=morev' %item_id
+    data = json.loads(make_request(url))
+ 
+    if len(data) <= 10:
+#      trying a different resolve method
+       path = resolve_url_2014(item_id, retry=False)
+       return path
+    else:
+        soup = get_soup(data['embed']['html'])
+        try:
+            filetype = soup.div['data-filetype']
+            if filetype == 'youtube':
+                youtube_id = soup.iframe['src'].split('/')[-1].split('?')[0]
+                addon_log('youtube id:' + youtube_id)
+                path = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %youtube_id
+            elif filetype == 'blip':
+                blip_url = soup.iframe['src']
+                addon_log('blip_url: ' + blip_url)
+                path = get_blip_location(blip_url)
+                addon_log('path: %s' %path)
+            return path
+        except:
+            if retry:
+                addon_log('retryException: %s' %format_exc())
+                sorry = check_sorry(soup)
+            elif addon.getSetting('is_sponsor') == 'true':
+                logged_in = check_login()
+                if not logged_in:
+                    logged_in = login()
+                    if logged_in:
+                        return resolve_url(item_id, True)
+                    notify(language(30025))
+                    xbmc.sleep(5000)
+                sorry = check_sorry(soup)
+            else:
+                sorry = check_sorry(soup)
+            if not sorry:
+                notify(language(30024))
+                addon_log('addonException: resolve_url')
+
+
+def resolve_url_2014(item_id, retry=False):
+#     <script type='text/javascript'>
+#                     jwplayer('video-9902').setup({
+#                         image: "http://s3.amazonaws.com/s3.roosterteeth.com/assets/epart/ep9902.jpg",
+#                         sources: [
+#                             {file: "http://d1gi7itbhq9gjf.cloudfront.net/encoded/9902/RT_54526b494490c6.67517070-480p.mp4", label: "480p SD","default": "true"},
+#                             {file: "http://d1gi7itbhq9gjf.cloudfront.net/encoded/9902/RT_54526b494490c6.67517070-720p.mp4", label: "720p HD"},
+#                             {file: "http://d1gi7itbhq9gjf.cloudfront.net/encoded/9902/RT_54526b494490c6.67517070-1080p.mp4", label: "1080p HD"},
+#                         ],
+#                         title: 'RWBY Volume 2, Chapter 12',
+#                         width: '590',
+#                         height: '405',
+#                         aspectratio: '16:9',
+#                         sharing: '{}',
+#                           advertising: {
+#                             client: 'googima',
+#                             tag: 'http://googleads.g.doubleclick.net/pagead/ads?ad_type=video&client=ca-video-pub-0196071646901426&description_url=http%3A%2F%2Froosterteeth.com&videoad_start_delay=0&hl=en&max_ad_duration=30000'
+#                           }
+#                     });
+#                 </script>
+
+    url = 'http://roosterteeth.com/archive/?id=%s' %item_id
+    data = make_request(url)
+     
+    data = str(data)    
+    start_pos_sources = data.find("sources")   
+    print start_pos_sources
+    start_pos_480p = data.find("{",start_pos_sources)
+    print start_pos_480p
+    end_pos_480p = data.find("}",start_pos_480p + 1)
+    print end_pos_480p
+    string_480p = data[start_pos_480p:end_pos_480p + 1]
+    print string_480p
+    start_pos_480p_file = string_480p.find("http")
+    end_pos_480p_file = string_480p.find('"',start_pos_480p_file + 1)
+    string_480p_file = string_480p[start_pos_480p_file:end_pos_480p_file]
+    print string_480p_file
+    
+    start_pos_720p = data.find("{",end_pos_480p + 1)
+    print start_pos_720p
+    end_pos_720p = data.find("}",start_pos_720p + 1)
+    print end_pos_720p
+    string_720p = data[start_pos_720p:end_pos_720p + 1]
+    print string_720p
+    start_pos_720p_file = string_720p.find("http")
+    end_pos_720p_file = string_720p.find('"',start_pos_720p_file + 1)
+    string_720p_file = string_720p[start_pos_720p_file:end_pos_720p_file]
+    print string_720p_file
+ 
+    start_pos_1080p = data.find("{",end_pos_720p + 1)
+    print start_pos_1080p
+    end_pos_1080p = data.find("}",start_pos_1080p + 1)
+    print end_pos_1080p
+    string_1080p = data[start_pos_1080p:end_pos_1080p + 1]
+    print string_1080p
+    start_pos_1080p_file = string_1080p.find("http")
+    end_pos_1080p_file = string_1080p.find('"',start_pos_1080p_file + 1)
+    string_1080p_file = string_1080p[start_pos_1080p_file:end_pos_1080p_file]
+    print string_1080p_file
+   
+    preferred_quality = addon.getSetting('quality')
+#   high video quality  
+    if preferred_quality == '0':
+        path = string_1080p_file
+#   medium video quality  
+    elif preferred_quality == '1':
+        path = string_720p_file
+#   low video quality          
+    else: 
+        path = string_480p_file   
+    return path
+
+                
 def resolve_podcast_url(episode_url, retry=False):
     soup = get_soup(episode_url)
     if soup == "Parse Error":

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.roosterteeth"
        name="Rooster Teeth"
-       version="0.0.91"
+       version="0.1.0"
        provider-name="Divingmule, Skipmode A1">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>

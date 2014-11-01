@@ -1,11 +1,17 @@
+import urllib2
+import re
+
 from xml.dom.minidom import parseString
 from datetime import datetime
+from dateutil import tz
 import time
 import pickle
+import os
+import json
+import httplib2
 
-from dateutil import tz
+from resources.lib.globals import *
 from resources.lib.common import *
-
 
 def getLiveGames(live):
 
@@ -14,14 +20,19 @@ def getLiveGames(live):
     for i in range(1, 2):
         cj = cookielib.LWPCookieJar()
         cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
-        url = "http://gamecenter.nhl.com/nhlgc/servlets/games"
+        url = "http://gamecenter.nhl.com/nhlgc/servlets/games"                
+        #1#url = 'http://live.nhl.com/GameData/SeasonSchedule-20142015.json'                
+        #2#http://smb.cdnak.neulion.com/fs/nhl/mobile/feed_new/data/streams/2014/ipad/02_0047.json
+        #3#http://nlds150.cdnak.neulion.com/nlds_vod/nhl/vod/2014/10/15/47/2_47_bos_det_1415_a_whole_1_ipad.mp4.m3u8
+        #4#http://nlds150.cdnak.neulion.com/nlds_vod/nhl/vod/2014/10/15/47/2_47_bos_det_1415_a_whole_1_5000_ipad.mp4.m3u8
+
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         if live:
             response = opener.open(url, urllib.urlencode({'format':'xml','app':'true'}))
         else:
             response = opener.open(url, urllib.urlencode({'format':'xml'}))
         downloadedXML = response.read()
-        print downloadedXML
+        #print downloadedXML
         
         #Try to login again if File not accessible
         if "<code>noaccess</code>" in downloadedXML:
@@ -52,6 +63,7 @@ def getLiveGames(live):
     
     #List of live games
     gameList = []
+   
 
     for game in games:
         #Setup variables
@@ -62,7 +74,63 @@ def getLiveGames(live):
         awayTeam = game.getElementsByTagName('awayTeam')[0].childNodes[0].nodeValue
         homeTeam = game.getElementsByTagName('homeTeam')[0].childNodes[0].nodeValue
         date = game.getElementsByTagName('date')[0].childNodes[0].nodeValue
+        #startTime = time.strptime(date,"%Y-%m-%d %H:%M:%S.0")
         startTime = time.strptime(date,"%Y-%m-%dT%H:%M:%S.000")
+
+
+        homeTeamScore = ''
+        awayTeamScore = ''
+        if SHOWSCORE == 'true':            
+            """    
+            #Add games directories
+            for game in jsonObj['games']:
+                gameID = str(jsonValue(game, 'id'))
+                homeTeam = jsonValue(game, 'hta')
+                homeTeamScore = jsonValue(game, 'hts')
+                awayTeam = jsonValue(game, 'ata')
+                awayTeamScore = jsonValue(game, 'ats')
+                canTV = jsonValue(game, 'canationalbroadcasts')
+                gameEnded = jsonValue(game, 'rl')
+                gameStatus = jsonValue(game, 'bs')
+            """
+           
+            try:                
+                ht = homeTeam
+                at = awayTeam
+                json_scoreboard = getScoreBoard(date[0:10])               
+                #Display Date
+               
+                for sb_game in json_scoreboard['games']:                                
+                    #print homeTeam + " == " + str(sb_game['hta']) + " && " +  awayTeam + " == " + str(sb_game['ata'])
+                    if ht == "MON":
+                        ht = "MTL"
+                    elif at == "MON":
+                        at = "MTL"
+                    elif ht == "CMB":
+                        ht = "CBJ"
+                    elif at == "CMB":
+                        at = "CBJ"
+                    elif ht == "SAN":
+                        ht = "SJS"
+                    elif at == "SAN":
+                        at = "SJS"
+                    elif ht == "TAM":
+                        ht = "TBL"
+                    elif at == "TAM":
+                        at = "TBL"
+                    elif ht == "LOS":
+                        ht = "LAK"
+                    elif at == "LOS":
+                        at = "LAK"
+
+                    if ht == str(sb_game['hta']) and at == str(sb_game['ata']):
+                        #print "WE FOUND A MATCH"
+                        homeTeamScore = '[COLOR=FF00B7EB]' + str(sb_game['hts']) +'[/COLOR]'
+                        awayTeamScore = '[COLOR=FF00B7EB]' + str(sb_game['ats']) +'[/COLOR]'
+                        gameTime = str(sb_game['bs'])                    
+            except:
+                pass
+
         
         #Game title
         title = ''
@@ -86,22 +154,24 @@ def getLiveGames(live):
             versus = 31401
         
         if gameStarted and live:
+            if gameTime == '':
+                gameTime = "Live"
             #Displayed titlestring
-            if awayTeam in teams and homeTeam in teams:
-                title = "LIVE - " + teams[awayTeam][TEAMNAME] + " " + LOCAL_STRING(versus) + " " + teams[homeTeam][TEAMNAME]
+            if awayTeam in teams and homeTeam in teams:                
+                title = gameTime + " - " + teams[awayTeam][TEAMNAME] + " " + awayTeamScore + " " + LOCAL_STRING(versus) + " " + teams[homeTeam][TEAMNAME] + " " + homeTeamScore
             else:
-                title = "LIVE - " + awayTeam + " " + LOCAL_STRING(versus) + " " + homeTeam
+                title = gameTime + " - " + awayTeam + " " + awayTeamScore + " " + LOCAL_STRING(versus) + " " + homeTeam + " " + homeTeamScore
         else:
             #Convert the time to the local timezone
             date = datetime.fromtimestamp(time.mktime(startTime))
-            date = date.replace(tzinfo=tz.gettz('America/New_York'))
-            datelocal = date.astimezone(tz.tzlocal()).strftime(xbmc.getRegion('dateshort')+' '+xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))
+            date = date.replace(tzinfo=tz.gettz('America/New_York'))            
+            datelocal = date.astimezone(tz.tzlocal()).strftime(xbmc.getRegion('dateshort')+' '+xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))           
 
             #Displayed titlestring
             if awayTeam in teams and homeTeam in teams:
-                title = datelocal + ': ' + teams[awayTeam][TEAMNAME] + " " + LOCAL_STRING(versus) + " " + teams[homeTeam][TEAMNAME]
+                title = datelocal + ': ' + teams[awayTeam][TEAMNAME] + " " + awayTeamScore + " " + LOCAL_STRING(versus) + " " + teams[homeTeam][TEAMNAME] + " " + homeTeamScore                
             else:
-                title = datelocal + ': ' + awayTeam + " " + LOCAL_STRING(versus) + " " + homeTeam
+                title = datelocal + ': ' + awayTeam + " " + awayTeamScore + " " + LOCAL_STRING(versus) + " " + homeTeam + " " + homeTeamScore
         
         #Add to the list of live games
         gameList.append([gid, season, Type, Id, gameStarted, title, homeTeam, awayTeam])
@@ -111,10 +181,9 @@ def getLiveGames(live):
     pickle.dump(gameList, open(os.path.join(ADDON_PATH_PROFILE, 'live'),"wb"))
     
     return gameList
+  
     
-    
-def getLiveGameLinks(url):
-    
+def getLiveGameLinks(url):      
     #Load the list of games
     gameList = pickle.load(open(os.path.join(ADDON_PATH_PROFILE, 'live'),"rb"))
     
@@ -142,9 +211,14 @@ def getLiveGameLinks(url):
                 #Quality settings
                 if QUALITY == 4 or 'bestquality' in url:
                     if "live" in url:#fix needed to download the key below 
+                        m3u8URL = m3u8URL.replace('_ced.', '_5000_ced.')   
+                    elif "highlights" in url:
+                        m3u8URL = m3u8URL.replace('_ced.', '_3000_ced.')   
+                elif QUALITY == 3 or '5000K' in url:                    
+                    if "highlights" in url:
+                        m3u8URL = m3u8URL.replace('_ced.', '_3000_ced.')
+                    else:
                         m3u8URL = m3u8URL.replace('_ced.', '_5000_ced.')
-                elif QUALITY == 3 or '5000K' in url:
-                    m3u8URL = m3u8URL.replace('_ced.', '_5000_ced.')
                 elif QUALITY == 2 or '3000K' in url:
                     m3u8URL = m3u8URL.replace('_ced.', '_3000_ced.')
                 elif QUALITY == 1 or '1600K' in url:
@@ -197,17 +271,40 @@ def getLiveGameLinks(url):
             
                     header = {'Cookie' : cookies, 'User-Agent' : 'Safari/537.36 Mozilla/5.0 AppleWebKit/537.36 Chrome/31.0.1650.57', 'Accept-Encoding' : 'gzip,deflate', 'Connection' : 'Keep-Alive'}
             
+                #Get teamnames
+                teams = getTeams()
                 #Home/Awaay url
                 if feed == 2:
-                    linkList.append([LOCAL_STRING(31320), m3u8URL + "|" + urllib.urlencode(header)])
+                    #linkList.append([LOCAL_STRING(31320), m3u8URL + "|" + urllib.urlencode(header)])
+                    linkList.append(['[B]'+LOCAL_STRING(31320)+"[/B] ("+teams[homeTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)])
                 else:
-                    linkList.append([LOCAL_STRING(31330), m3u8URL + "|" + urllib.urlencode(header)])
+                    #linkList.append([LOCAL_STRING(31330), m3u8URL + "|" + urllib.urlencode(header)])
+                    linkList.append(['[B]'+LOCAL_STRING(31330)+"[/B] ("+teams[awayTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)])
             
-            #Away url (Reliabile?)
-            #linkList.append([LOCAL_STRING(31330),  m3u8URL.replace('_h_', '_a_') + "|" + urllib.urlencode(header)])
+
+                                  
+            """
+            if m3u8URL.find('_h_') > -1:               
+                #Away url
+                linkList.append(['[B]'+LOCAL_STRING(31330)+"[/B] ("+teams[awayTeam][TEAMNAME]+" feed)",  m3u8URL.replace('_h_', '_a_') + "|" + urllib.urlencode(header)])
+                #Home url
+                linkList.append(['[B]'+LOCAL_STRING(31320)+"[/B] ("+teams[homeTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)])                                 
+                #French url                 
+                #m3u8URL = m3u8URL.replace('/nlds_vod/nhl/', '/nlds_vod/nhlfr/')
+                #linkList.append(['French',  m3u8URL.replace('_h_', '_fr_') + "|" + urllib.urlencode(header)])
+            else:                                                
+                #Away url
+                linkList.append(['[B]'+LOCAL_STRING(31330)+"[/B] ("+teams[awayTeam][TEAMNAME]+" feed)", m3u8URL + "|" + urllib.urlencode(header)]) 
+                #Home url
+                linkList.append(['[B]'+LOCAL_STRING(31320)+"[/B] ("+teams[homeTeam][TEAMNAME]+" feed)",  m3u8URL.replace('_a_', '_h_') + "|" + urllib.urlencode(header)])                                
+                #French url
+                #m3u8URL = m3u8URL.replace('/nlds_vod/nhl/', '/nlds_vod/nhlfr/')
+                #linkList.append(['French',  m3u8URL.replace('_a_', '_fr_') + "|" + urllib.urlencode(header)])                
+            """
             
+                        
             #French streams (experimental)
-            """"
+            """
             if game[4] != '' and (homeTeam == 'MON' or homeTeam == 'OTT'):
                 home_url = home_url.replace('/nhl/', '/nhlfr/')
                 home_url = home_url.replace('nlds138', 'nlds60')
@@ -229,3 +326,19 @@ def getLiveGameLinks(url):
             break
     
     return linkList
+
+
+def getScoreBoard(date):
+    url = "http://live.nhle.com/GameData/GCScoreboard/"+date+".jsonp"
+    http = httplib2.Http()
+    http.disable_ssl_certificate_validation = True
+    
+    response, content = http.request(url, 'GET')
+    jsonData = content.strip()
+
+    jsonData = jsonData.replace('loadScoreboard(', '')
+    jsonData = jsonData.rstrip(')')
+
+    json_source = json.loads(jsonData)
+
+    return json_source

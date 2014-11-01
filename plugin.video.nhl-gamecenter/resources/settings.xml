@@ -9,6 +9,7 @@
     <setting id="quality" type="enum" label="30130" values="SD (800 kbit/s)|SD (1600 kbit/s)|HD (3000 kbit/s)|HD (5000 kbit/s)|Best|Always Ask" default="4" />
 	<setting id="quality_classic" type="enum" label="30140" values="SD (800 kbit/s)|SD (1600 kbit/s)" default="1" visible="false"/>
     <setting id="useragent" type="text" label="30150" default="PS3Application libhttp/4.5.5-000 (CellOS)" visible="false"/>
+	<setting id="show_score" type="bool" label="30170" default="false"/>
   </category>
   
   <!-- Visual -->
@@ -23,7 +24,7 @@
     <setting id="background_osd" type="enum" label="30280" values="Black|Ice|Transparent" default="0" />
     <setting id="generate_thumbnails" type="bool" label="30290" default="false"/>
     <setting id="delete_thumbnails" type="bool" label="30300" default="false"/>
-    <setting id="alternativevs" type="bool" label="30330" default="false"/>
+    <setting id="alternativevs" type="bool" label="30330" default="false"/>	
   </category>
 
 </settings>

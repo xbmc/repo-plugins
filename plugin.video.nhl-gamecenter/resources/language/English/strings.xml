@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!-- Main settings -->
@@ -9,6 +8,7 @@
 	<string id="30140">Video Quality (Classic Games)</string>
     <string id="30150">User-Agent String</string>
 	<string id="30160">Rogers Login</string>
+	<string id="30170">Show Score</string>
 	
     <!-- Visual settings -->
     <string id="30200">Visual Settings</string>
@@ -24,7 +24,7 @@
     <string id="30300">Delete Thumbnails on next start</string>
     <string id="30310">Show Home/Away Dialog (Archived/Condensed Games)</string>
     <string id="30320">Show Home/Away Dialog (Live Games)</string>
-    <string id="30330">Use "@" instead of "vs."</string>
+    <string id="30330">Use "@" instead of "vs."</string>	
 
     <!-- Interface -->
     <string id="31100">Live Games</string>
@@ -71,5 +71,15 @@
     <string id="31500">Highlights (~5min)</string>
 	<string id="31501">Condensed (~10min)</string>
     <string id="31502">Full game (~2h)</string>
+
+    <string id="32000">French</string>
+    <string id="32001">Archived Games - Scores Off</string>
+    <string id="32002">Archived Games - Scores On</string>
+    <string id="32003">Full</string>
+    <string id="32004">Condensed</string>
+    <string id="32005">Highlights</string>
+    <string id="32006">kbps</string>
+    <string id="32007">LIVE</string>
+    <string id="32008">[ ENDED ]</string>
 	
 </strings>

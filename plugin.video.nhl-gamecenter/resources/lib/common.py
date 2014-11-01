@@ -5,7 +5,10 @@ import xbmcgui
 from resources.lib.globals import *
 from resources.lib.thumbnailgenerator import *
 
-def login():  
+def login(): 
+     #Create Profile Folder if necessary
+    if not os.path.exists(ADDON_PATH_PROFILE):
+        os.makedirs(ADDON_PATH_PROFILE)
     #Login
     cj = cookielib.LWPCookieJar(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))

@@ -54,7 +54,7 @@ def getCategories():
 
   container = common.parseDOM(html, "div", attrs = { "id": "[^\"']*playJs-categories[^\"']*" })
   articles = common.parseDOM(container, "article")
-  thumbs = common.parseDOM(container, "img", attrs = { "class": "[^\"']*play_videolist__thumbnail[^\"']*" }, ret = "src")
+  thumbs = common.parseDOM(container, "img", attrs = { "class": "[^\"']*play_js-video-list-thumbnail[^\"']*" }, ret = "src")
   categories = []
 
   for index, article in enumerate(articles):
@@ -94,7 +94,7 @@ def getProgramsForCategory(url):
   programs = []
   for index, article in enumerate(articles):
     url = common.parseDOM(article, "a", ret="href")[0]
-    title = common.parseDOM(article, "span", attrs= { "class" : "play_link__sub" })[0]
+    title = common.parseDOM(article, "span", attrs= { "class" : "play_videolist-element__title-text" })[0]
     title = common.replaceHTMLCodes(title)
     thumbnail = common.parseDOM(article, "img", ret="src")[0]
     program = { "title": title, "url": url, "thumbnail": thumbnail}
@@ -209,7 +209,7 @@ def getSearchResultsForList(html, list_id):
 
   results = []
   for index, article in enumerate(articles):
-    thumbnail = common.parseDOM(article, "img", attrs = { "class" : "[^\"']*play_videolist__thumbnail[^\"']*" }, ret = "src")[0]
+    thumbnail = common.parseDOM(article, "img", attrs = { "class" : "[^\"']*play_videolist-element__thumbnail-image[^\"']*" }, ret = "src")[0]
     url = common.parseDOM(article, "a", ret = "href")[0]
     title = common.replaceHTMLCodes(titles[index])
     thumbnail = helper.prepareThumb(thumbnail, baseUrl=BASE_URL)
@@ -225,7 +225,7 @@ def getChannels():
   """
   Returns the live channels from the page "Kanaler".
   """
-  anchor_class = "[^\"']*play_zapper__menu__item-link[^\"']*"
+  anchor_class = "[^\"']*play_zapper__menu-item-link[^\"']*"
   html = getPage(URL_TO_CHANNELS)
 
   container = common.parseDOM(html, "ul", attrs = { "data-tabarea" : "ta-schedule"})
@@ -238,8 +238,8 @@ def getChannels():
   for box in ch_boxes:
     title = common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "title")[0]
     url = common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "href")[0]
-    plot = common.parseDOM(box, "span", attrs = {"class" : "[^\"']*play_zapper__menu__item-title[^\"']*"})[0]
-    thumbnail = BASE_URL + common.parseDOM(box, "img", attrs = {"class" : "[^\"']*play_hide--gte-m[^\"']*"}, ret = "src")[0]
+    plot = common.parseDOM(box, "span", attrs = {"class" : "[^\"']*play_zapper__menu-item-title[^\"']*"})[0]
+    thumbnail = BASE_URL + common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-thumbnail")[0]
     channels.append({
       "title" : title,
       "url" : url,
@@ -325,11 +325,11 @@ def getArticles(section_name, url=None):
     duration = durations[index]
     title = titles[index]
     new_article["url"] = common.parseDOM(article, "a",
-                            attrs = { "class": "[^\"']*play_videolist-element-link[^\"']*" },
+                            attrs = { "class": "[^\"']*play_videolist-element__link[^\"']*" },
                             ret = "href")[0]
     thumbnail = common.parseDOM(article,
                                 "img",
-                                attrs = { "class": "[^\"']*play_videolist__thumbnail[^\"']*" },
+                                attrs = { "class": "[^\"']*play_videolist-element__thumbnail-image[^\"']*" },
                                 ret = "src")[0]
     new_article["thumbnail"] = helper.prepareThumb(thumbnail, baseUrl=BASE_URL)
     if section_name == SECTION_LIVE_PROGRAMS:

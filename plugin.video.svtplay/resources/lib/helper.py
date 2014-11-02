@@ -156,7 +156,7 @@ def prepareThumb(thumbnail, baseUrl):
   """
   if not thumbnail.startswith("http://") and baseUrl:
     thumbnail = baseUrl + thumbnail
-  thumbnail = re.sub(r"/small|medium|large|extralarge/", ""+THUMB_SIZE+"", thumbnail)
+  thumbnail = re.sub(r"small|medium|large|extralarge", THUMB_SIZE, thumbnail)
   return thumbnail
 
 def prepareFanart(url, baseUrl):
@@ -165,7 +165,7 @@ def prepareFanart(url, baseUrl):
   """
   if not url.startswith("http://") and baseUrl:
     url = baseUrl + url
-  new_url = re.sub(r"/small|medium|large|extralarge/", "extralarge_imax", url)
+  new_url = re.sub(r"small|medium|large|extralarge", "extralarge_imax", url)
   return new_url
 
 
@@ -311,25 +311,6 @@ def getVideoURL(json_obj):
 
   return video_url
 
-def resolveShowURL(show_url):
-  """
-  Returns an object containing the video and subtitle URL for a show URL.
-  Takes all settings into account.
-  """
-  json_obj = getJSONObj(show_url)
-  video_url = getVideoURL(json_obj)
-  subtitle_url = getSubtitleUrl(json_obj)
-  extension = getVideoExtension(video_url)
-  errormsg = None
-
-  if extension == "HLS":
-    if getSetting("hlsstrip"):
-      video_url = hlsStrip(video_url)
-    elif getSetting("bwselect"):
-      (video_url, errormsg) = getStreamForBW(video_url)
-
-  return {"videoUrl": video_url, "subtitleUrl": subtitle_url}
-
 def getSubtitleUrl(json_obj):
   """
   Returns a subtitleURL from a SVT JSON object.
@@ -345,6 +326,28 @@ def getSubtitleUrl(json_obj):
 
   return url
 
+def resolveShowURL(show_url):
+  """
+  Returns an object containing the video and subtitle URL for a show URL.
+  Takes all settings into account.
+  """
+  video_url = None
+  subtitle_url = None
+
+  json_obj = getJSONObj(show_url)
+  video_url = getVideoURL(json_obj)
+  if video_url:
+    subtitle_url = getSubtitleUrl(json_obj)
+    extension = getVideoExtension(video_url)
+    errormsg = None
+
+    if extension == "HLS":
+      if getSetting("hlsstrip"):
+        video_url = hlsStrip(video_url)
+      elif getSetting("bwselect"):
+        (video_url, errormsg) = getStreamForBW(video_url)
+
+  return {"videoUrl": video_url, "subtitleUrl": subtitle_url}
 
 def getVideoExtension(video_url):
   """

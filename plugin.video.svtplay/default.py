@@ -294,10 +294,7 @@ def startVideo(url):
   else:
     # No video URL was found
     dialog = xbmcgui.Dialog()
-    if not errormsg:
-      dialog.ok("SVT Play", localize(30100))
-    else:
-      dialog.ok("SVT Play", errormsg)
+    dialog.ok("SVT Play", localize(30100))
 
 
 def addDirectoryItem(title, params, thumbnail = None, folder = True, live = False, info = None):

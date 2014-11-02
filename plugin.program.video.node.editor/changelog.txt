@@ -1,3 +1,7 @@
+1.0.1
+
+- Fixes issue setting 'type' property when adding content property
+
 1.0.0
 
 - First release

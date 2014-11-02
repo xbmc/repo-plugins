@@ -65,7 +65,7 @@ class ViewAttribFunctions():
         if selectedContent == -1:
             return
         
-        self.writeUpdatedRule( actionPath, "content", selectValue[ selectedContent ] )
+        self.writeUpdatedRule( actionPath, "content", selectValue[ selectedContent ], addFilter = True )
         
         
      
@@ -171,12 +171,16 @@ class ViewAttribFunctions():
         
         
         
-    def writeUpdatedRule( self, actionPath, attrib, value ):
+    def writeUpdatedRule( self, actionPath, attrib, value, addFilter = False ):
         # This function writes an updated match, operator or value to a rule
         try:
             # Load the xml file
             tree = xmltree.parse( actionPath )
             root = tree.getroot()
+            
+            # Add type="filter" if requested
+            if addFilter:
+                root.set( "type", "filter" )
             
             # Find the attribute and update it
             elem = root.find( attrib )

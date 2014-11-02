@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.program.video.node.editor" name="Video Node Editor" version="1.0.0" provider-name="Unfledged">
+<addon id="plugin.program.video.node.editor" name="Video Node Editor" version="1.0.1" provider-name="Unfledged">
     <requires>
 		<import addon="xbmc.python" version="2.14.0"/>
 		<import addon="script.module.simplejson" version="3.3.0"/>

@@ -1,4 +1,7 @@
-﻿[B]1.1.2 (2014.7.23)[/B]
+﻿[B]1.1.3 (2014.11.2)[/B]
+compatible utorrent 2.2.1 which don't support stream
+
+[B]1.1.2 (2014.7.23)[/B]
 change python version to 2.1.0 for gotham
 
 [B]1.1.1 (2012.12.9)[/B]

@@ -64,7 +64,6 @@ def updateList():
         hashnum = torrent[0].encode('utf-8')
         status = torrent[1]
         torname = torrent[2].encode('utf-8')
-        sid = torrent[22]
         complete = torrent[4] / 10.0
         size = torrent[3] / (1024*1024)
         if (size >= 1024.00):
@@ -80,6 +79,11 @@ def updateList():
             remain_str = __language__(30008).encode('utf8')
         else:
             remain_str = str(remain) + __language__(30007).encode('utf8')
+        try:
+            sid = torrent[22]
+        except:
+            # old utorrent version, don't support stream
+            sid = -1
         tup = (hashnum, status, torname, complete, size_str, up_rate, down_rate, remain_str, sid)
         torrentList.append(tup)
     return torrentList
@@ -123,7 +127,11 @@ def getFiles(hash):
 
 def performAction(selection,sid):
     dialog = xbmcgui.Dialog()
-    sel = dialog.select(__language__(32001),[__language__(32002),__language__(32003),__language__(32004),__language__(32005),__language__(32006),__language__(32007),__language__(32008),__language__(32201)])
+    if sid == '-1':
+        # don't support stream
+        sel = dialog.select(__language__(32001),[__language__(32002),__language__(32003),__language__(32004),__language__(32005),__language__(32006),__language__(32007),__language__(32008)])
+    else:
+        sel = dialog.select(__language__(32001),[__language__(32002),__language__(32003),__language__(32004),__language__(32005),__language__(32006),__language__(32007),__language__(32008),__language__(32201)])
     token = getToken()
     if sel == 0:
         myClient.HttpCmd(baseurl+token+'&action=pause&hash='+selection)

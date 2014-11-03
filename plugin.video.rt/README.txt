@@ -27,3 +27,6 @@ version 1.9.0 minor change to fix icons images
 version 1.9.1 added xml header to settings.xml and changed language sub-dir to "English"
 
 version 1.9.2 updated live stream urls, added auto speed
+
+version 1.9.4 added RT UK feed and cleaned up language strings
+

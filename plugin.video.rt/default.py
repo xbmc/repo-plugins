@@ -153,24 +153,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
-except:
-    pass
-
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 url=name=iconimage=mode=playlist=fchan=fres=fhost=fname=fepg=None
 
@@ -222,15 +205,16 @@ if (mode==17) or (auto_play == True):
               res_str = res_names[i]
 
               if (auto_play != True):
-                addLink(RTLIVE_BASE+"ch1_"+str(res)+"/playlist.m3u8","RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),GENRE_NEWS,"",False)
-                addLink(RTLIVE_BASE+"ch4_"+str(res)+"/playlist.m3u8","RT America Live "+str(res_str),icon,fanart,"RT America Live "+str(res_str),GENRE_NEWS,"",False)
-                addLink(RTLIVE_BASE+"ch5_"+str(res)+"/playlist.m3u8","RT Documentary Live "+str(res_str),icon,fanart,"RT Documentary Live "+str(res_str),GENRE_NEWS,"",False)
-                addLink(RTLIVE_BASE+"ch2_"+str(res)+"/playlist.m3u8","RT Espanol Live "+str(res_str),icon,fanart,"RT Espanol Live "+str(res_str),GENRE_NEWS,"",False)
-                addLink(RTLIVE_BASE+"ch3_"+str(res)+"/playlist.m3u8","RT Arabic Live "+str(res_str),icon,fanart,"RT Arabic Live "+str(res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch1_"+str(res)+"/playlist.m3u8",'%s%s' %(__language__(30005),res_str),icon,fanart,'%s%s' %(__language__(30005),res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch4_"+str(res)+"/playlist.m3u8",'%s%s' %(__language__(30006),res_str),icon,fanart,'%s%s' %(__language__(30006),res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch5_"+str(res)+"/playlist.m3u8",'%s%s' %(__language__(30007),res_str),icon,fanart,'%s%s' %(__language__(30007),res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch6_"+str(res)+"/playlist.m3u8",'%s%s' %(__language__(30008),res_str),icon,fanart,'%s%s' %(__language__(30008),res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch2_"+str(res)+"/playlist.m3u8",'%s%s' %(__language__(30009),res_str),icon,fanart,'%s%s' %(__language__(30009),res_str),GENRE_NEWS,"",False)
+                addLink(RTLIVE_BASE+"ch3_"+str(res)+"/playlist.m3u8",'%s%s' %(__language__(30010),res_str),icon,fanart,'%s%s' %(__language__(30010),res_str),GENRE_NEWS,"",False)
 
               else:
                 if mode != 17:
-                  addLink(RTLIVE_BASE+"ch1_"+str(res_str)+"/playlist.m3u8","RT Global Live "+str(res_str),icon,fanart,"RT Global Live "+str(res_str),GENRE_NEWS,"",False, autoplay=True)
+                  addLink(RTLIVE_BASE+"ch1_"+str(res_str)+"/playlist.m3u8",'%s%s' %(__language__(30005),res_str),icon,fanart,'%s%s' %(__language__(30005),res_str),GENRE_NEWS,"",False, autoplay=True)
                   xbmc.executebuiltin('playlist.playoffset(video,0)')
 
 elif mode==18:

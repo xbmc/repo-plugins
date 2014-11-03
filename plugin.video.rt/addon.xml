@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.rt"
        name="Russia Today News"
-       version="1.9.2"
+       version="1.9.4"
        provider-name="t1m">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -17,8 +17,8 @@
     <platform>all</platform>
     <language>en</language>
     <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-    <forum>http://forum.xbmc.org/showthread.php?tid=173448</forum>
-    <website></website>
+    <forum>http://forum.kodi.tv/showthread.php?tid=173448</forum>
+    <website>http:www.rt.com</website>
     <email></email>
     <source>https://github.com/learningit/plugin.video.rt</source>
   </extension>

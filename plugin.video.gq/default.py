@@ -86,21 +86,31 @@ def getCategories(url):
 def getCats(cat_url):
               urlbase   = GQBASE+cat_url
               pg = getRequest(urlbase).replace('\\"','"').replace('\\/','/').replace('\\n','').replace("\\'","'")
-              shows = re.compile('<div class="cne-thumb cne-episode-block ".+?data-videoid="(.+?)".+?<img alt="(.+?)".+?src="(.+?)".+?"cne-rollover-description">(.+?)<').findall(pg)
+              shows = re.compile('<div class="cne-thumb cne-episode-block ".+?data-videoid=.+?href="(.+?)".+?<img alt="(.+?)".+?src="(.+?)".+?"cne-rollover-description">(.+?)<').findall(pg)
               for showvideo,showname, showimg, showdesc in shows:
                  showname = dexml(showname)
                  showdesc = dexml(showdesc)
-                 if addon.getSetting('high_res') == "true":
-                    res = 'high'
-                 else:
-                    res = 'low'
-                 showurl = 'http://dp8hsntg6do36.cloudfront.net/%s/%s.mp4' % (showvideo, res)
+                 showurl = "%s?url=%s&name=%s&mode=GS" %(sys.argv[0], urllib.quote_plus(showvideo), urllib.quote_plus(showname))
                  addLink(showurl.encode(UTF8),showname,showimg,addonfanart,showdesc,GENRE_TV,'')
               try:
                  nextpg = re.compile("'ajaxurl'.+?'(.+?)'").findall(pg)[0]
                  addDir('[COLOR red]%s[/COLOR]' % (__language__(30004)),nextpg.encode(UTF8),'GC','',addonfanart,__language__(30001),GENRE_TV,'',False)
               except:
                  pass
+
+def getShow(vidurl, vidname):
+              urlbase   = GQBASE+vidurl
+              pg = getRequest(urlbase).replace('\\"','"').replace('\\/','/').replace('\\n','').replace("\\'","'")
+              showurl = re.compile('"contentURL" href="(.+?)"').search(pg).group(1)
+              if addon.getSetting('high_res') == "true":
+                    res = 'high.mp4'
+              else:
+                    res = 'low.mp4'
+              showurl = showurl.replace('low.mp4', res)
+              xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = showurl))
+
+
+
 
 
 def play_playlist(name, list):
@@ -150,7 +160,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:
@@ -168,6 +178,8 @@ elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.List
 elif mode=='PP':  play_playlist(p('name'), p('playlist'))
 elif mode=='GA':  getCategories(p('url'))
 elif mode=='GC':  getCats(p('url'))
+elif mode=='GS':  getShow(p('url'), p('name'))
+
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

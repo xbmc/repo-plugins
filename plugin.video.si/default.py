@@ -11,6 +11,7 @@ from StringIO import StringIO
 
 import pyamf
 from pyamf import remoting
+import json
 
 CONST = '84c401e577ddd24ca827eab0184302b8281e8b51'
 
@@ -31,37 +32,6 @@ def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-
-def _parse_argv():
-
-        global url,name,iconimage, mode, playlist,fchan,fres,fhost,fname,fepg,fanArt
-
-        params = {}
-        try:
-            params = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
-        except:
-            params = {}
-
-        url =       demunge(params.get("url",None))
-        name =      demunge(params.get("name",""))
-        iconimage = demunge(params.get("iconimage",""))
-        fanArt =    demunge(params.get("fanart",""))
-        playlist =  demunge(params.get("playlist",""))
-        fchan =     demunge(params.get("fchan",""))
-        fres =      demunge(params.get("fres",""))
-        fhost =     demunge(params.get("fhost",""))
-        fname =     demunge(params.get("fname",""))
-        fepg =      demunge(params.get("fepg",None))
-
-        try:
-            playlist=eval(playlist.replace('|',','))
-        except:
-            pass
-
-        try:
-            mode = int(params.get( "mode", None ))
-        except:
-            mode = None
 
 def demunge(munge):
         try:
@@ -94,67 +64,39 @@ def getRequest(url):
 
 def getSources():
 
-              Choices = [
-                         ["Most Recent","","SI"],
-                         ["NFL","nfl",""],
-                         ["College Football","ncaaf_video",""],
-                         ["MLB","mlb",""],
-                         ["NBA","nba",""],
-                         ["College Basketball","ncaab_video",""],
-                         ["Golf","golf",""],
-                         ["NHL","nhl",""],
-                         ["NASCAR","nascar",""],
-                         ["Soccer","soccer",""],
-                         ["MMA & Boxing","boxing",""],
-                         ["Tennis","tennis",""],
-                         ["More Sports","si_video",""],
-                         ["Swim Daily","swimdaily",""],
-                         ["Game Room","gameroom",""],
-                         ["Fantasy","fantasy",""],
-                         ["High School","highschool",""],
-                         [" SI Now","si_now_fullshow","SI"],
-                         [" Pro Football Now","profootballnow_fullshow","SI"]
-                        ]
-
-              for pname, pcode, pchoice in Choices:
-                 addDir(pname,pchoice+'#'+pcode,21,icon,fanart,pname,GENRE_SPORTS,"",False)
+              html = getRequest('http://www.si.com/videos?json=1')
+              a = json.loads(html)
+              x = json.dumps(a)
+              x = x.replace('\\"','"')
+              cats = re.compile('<div class="radio-group">.+?<a(.+?)/a>').findall(x)
+              for cat in cats:
+               (caturl,catname) = re.compile('href="(.+?)".+?>(.+?)<').search(cat).groups(1)
+               if '/videos/' in caturl:
+                caturl = caturl.replace('/videos/','')
+                if caturl == 'more-sports':
+                   break
+                else:
+                   addDir(catname,caturl,'GS',icon,fanart,catname,GENRE_SPORTS,"",False)
+              catname = 'Swim Daily'
+              caturl  = 'swimdaily'
+              addDir(catname,caturl,'GS',icon,fanart,catname,GENRE_SPORTS,"",False)
 
 
+def getShow(pcode):
 
-'''
-                         [" Moments of Glory","moments_of_glory","SI"],
-                         [" Fresh Takes","ncaab.video_all_fresh_takes","SI"],
-                         [" The Press","this_week_in_sports","SI"]]
-
-'''
-
-def getCategory(Category_url):
-
-          log("main page")
-          pchoice, pcode = Category_url.split('#')
-          if pchoice == "SI":
-              Category_url = "http://sportsillustrated.cnn.com/.element/auto/4.1/video/page/si_"+pcode+"_video_page.json?format=jsonp&callback=siVideoPage.load&_="+str(int(round(time.time() * 1000)))
-              link = getRequest(Category_url)
-              match = re.compile('\{.+?"brightcoveId":"(.+?)".+?"createdDate":"(.+?)".+?"slug":"(.+?)".+?"headline":"(.+?)".+?"description":"(.+?)".+?"images":\["(.+?)".+?\}').findall(link)
-              for pid, pdate, pslug, pname, pdesc, pimage in match:
-                 if (not ('-clip' in pslug)):
-                     ts = int(pdate)
-                     pdesc  = datetime.datetime.fromtimestamp(ts).strftime('%a %b %d, %Y %H:%M')+'\n'+pdesc
-                     caturl = "plugin://plugin.video.si/?url=#"+str(pid)+"&mode=20"
-                     try:
-                        addLink(caturl.encode(UTF8),pname,pimage,fanart,pdesc,GENRE_SPORTS,"")
-                     except:
-                        log("Problem adding directory")
-          else:
-              Category_url = "http://api.brightcove.com/services/library?callback=jQuery17209430150024127215_"+str(int(round(time.time() * 1000)))+"&command=search_videos&any=primarycategory%3A"+pcode+"&page_size=100&video_fields=id%2CshortDescription%2CcreationDate%2CthumbnailURL%2Clength%2Cname&custom_fields=primarycategory%2Csubcategory&sort_by=PUBLISH_DATE%3ADESC&get_item_count=true&token=HYk6klcc_dX8GkFqbW1C2tZHLqgLDxGWBMlica9EroqvNv-skogPlw..&format=json"
-              link = getRequest(Category_url)
-              match = re.compile('\{"id":(.+?),"name":"(.+?)".+?"shortDescription":"(.+?)".+?"creationDate":"(.+?)".+?"thumbnailURL":"(.+?)"').findall(link)
-              for pid, pname, pdesc, pdate, pimage in match:
-
+              Category_url = "http://api.brightcove.com/services/library?callback=&command=search_videos&any=primarycategory%3A"+pcode+"&page_size=100&video_fields=id%2CshortDescription%2CcreationDate%2CthumbnailURL%2Clength%2Cname&custom_fields=primarycategory%2Csubcategory&sort_by=PUBLISH_DATE%3ADESC&get_item_count=true&token=HYk6klcc_dX8GkFqbW1C2tZHLqgLDxGWBMlica9EroqvNv-skogPlw..&format=json"
+              pg = getRequest(Category_url)
+              a = json.loads(pg)
+              for item in a['items']:
+                     pid    = item['id']
+                     pname  = item['name']
+                     pdesc  = item['shortDescription']
+                     pdate  = item['creationDate']
+                     pimage = item['thumbnailURL']
                      ts = int(int(str(int(pdate)))/1000)
                      pdesc  = datetime.datetime.fromtimestamp(ts).strftime('%a %b %d, %Y %H:%M')+'\n'+pdesc
                      pimage = pimage.replace('\\','')
-                     caturl = "plugin://plugin.video.si/?url=#"+str(pid)+"&mode=20"
+                     caturl = "plugin://plugin.video.si/?url="+str(pid)+"&mode=GV"
                      try:
                         addLink(caturl.encode(UTF8),pname,pimage,fanart,pdesc,GENRE_SPORTS,"")
                      except:
@@ -176,7 +118,7 @@ def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=Tru
         u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
         dir_playable = False
 
-        if mode != 12:
+        if mode != 'SR':
             u += "&name="+urllib.quote_plus(name)+"&fanart="+urllib.quote_plus(fanart)
             dir_image = "DefaultFolder.png"
             dir_folder = True
@@ -194,7 +136,7 @@ def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=Tru
            liz.setProperty('IsPlayable', 'true')
         if not playlist is None:
             playlist_name = name.split(') ')[1]
-            contextMenu_ = [('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=13&name=%s&playlist=%s)' %(sys.argv[0], urllib.quote_plus(playlist_name), urllib.quote_plus(str(playlist).replace(',','|'))))]
+            contextMenu_ = [('Play '+playlist_name+' PlayList','XBMC.RunPlugin(%s?mode=PP&name=%s&playlist=%s)' %(sys.argv[0], urllib.quote_plus(playlist_name), urllib.quote_plus(str(playlist).replace(',','|'))))]
             liz.addContextMenuItems(contextMenu_)
 
         if autoplay == True:
@@ -204,15 +146,14 @@ def addDir(name,url,mode,iconimage,fanart,description,genre,date,showcontext=Tru
         return ok
 
 def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,playlist=None, autoplay=False):
-        return addDir(name,url,12,iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
+        return addDir(name,url,'SR',iconimage,fanart,description,genre,date,showcontext,playlist,autoplay)
 
-def play_video(video_url):
+def getVideo(video_content_id):
 	video_player_key = "AQ~~,AAAB9mw57HE~,xU4DCdZtHhuasNZF5WPK5LWKKRK4p1HG"
 	page_url = "http://sportsillustrated.cnn.com/video/"
 	video_player_id = "2546892348001"
 	publisher_id = "2157889318001"
 
-	video_url, video_content_id = video_url.split('#')
 	swf_url = get_swf_url("myExperience",video_player_id,publisher_id,str(video_content_id))
 	renditions = get_episode_info(video_player_key,str(video_content_id),page_url,video_player_id)
 	finalurl = renditions['programmedContent']['videoPlayer']['mediaDTO']['FLVFullLengthURL']
@@ -341,62 +282,26 @@ def get_swf_url(flash_experience_id, player_id, publisher_id, video_id):
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+
+parms = {}
 try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_UNSORTED)
+    parms = dict( arg.split( "=" ) for arg in ((sys.argv[2][1:]).split( "&" )) )
+    for key in parms:
+       parms[key] = demunge(parms[key])
 except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_LABEL)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_DATE)
-except:
-    pass
-try:
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_GENRE)
-except:
-    pass
+    parms = {}
 
+p = parms.get
 
-url=name=iconimage=mode=playlist=fchan=fres=fhost=fname=fepg=None
+mode = p('mode',None)
+if mode==  None:  getSources()
+elif mode=='SR':  xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path=p('url')))
+elif mode=='PP':  play_playlist(p('name'), p('playlist'))
+elif mode=='GC':  getCats(p('url'))
+elif mode=='GS':  getShow(p('url'))
+elif mode=='GV':  getVideo(p('url'))
 
-_parse_argv()
-
-
-log("Mode: "+str(mode))
-if not url is None:
-    try:
-      log("URL: "+str(url.encode(UTF8)))
-    except:
-      pass
-
-try:
- log("Name: "+str(name))
-except:
- pass
-
-auto_play = False
-
-if mode==None:
-    log("getSources")
-    getSources()
-
-elif mode==12:
-    log("setResolvedUrl")
-    item = xbmcgui.ListItem(path=url)
-    xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, item)
-
-elif mode==13:
-    log("play_playlist")
-    play_playlist(name, playlist)
-
-elif mode==20:
-              play_video(url)
-
-elif mode==21:
-              getCategory(url)
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))
 

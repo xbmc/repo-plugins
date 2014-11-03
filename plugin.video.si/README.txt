@@ -13,3 +13,5 @@ version 1.2.1 added 720p support for most videos where available - defaults to S
 version 1.3.1 added missing script.module.pyamf in addon.xml
 
 version 1.4.0 fixed 720/540 rtmp streaming replacing http: .m3u8
+
+version 1.4.1 fixed website changes

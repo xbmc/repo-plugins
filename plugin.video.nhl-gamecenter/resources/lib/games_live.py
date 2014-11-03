@@ -80,23 +80,12 @@ def getLiveGames(live):
 
         homeTeamScore = ''
         awayTeamScore = ''
-        if SHOWSCORE == 'true':            
-            """    
-            #Add games directories
-            for game in jsonObj['games']:
-                gameID = str(jsonValue(game, 'id'))
-                homeTeam = jsonValue(game, 'hta')
-                homeTeamScore = jsonValue(game, 'hts')
-                awayTeam = jsonValue(game, 'ata')
-                awayTeamScore = jsonValue(game, 'ats')
-                canTV = jsonValue(game, 'canationalbroadcasts')
-                gameEnded = jsonValue(game, 'rl')
-                gameStatus = jsonValue(game, 'bs')
-            """
+        gameTime = ''
+        if SHOWSCORE == 'true':
            
             try:                
                 ht = homeTeam
-                at = awayTeam
+                at = awayTeam                
                 json_scoreboard = getScoreBoard(date[0:10])               
                 #Display Date
                
@@ -210,15 +199,17 @@ def getLiveGameLinks(url):
             
                 #Quality settings
                 if QUALITY == 4 or 'bestquality' in url:
-                    if "live" in url:#fix needed to download the key below 
+                    if "highlights" not in url:#fix needed to download the key below 
                         m3u8URL = m3u8URL.replace('_ced.', '_5000_ced.')   
-                    elif "highlights" in url:
-                        m3u8URL = m3u8URL.replace('_ced.', '_3000_ced.')   
-                elif QUALITY == 3 or '5000K' in url:                    
-                    if "highlights" in url:
-                        m3u8URL = m3u8URL.replace('_ced.', '_3000_ced.')
                     else:
+                        m3u8URL = m3u8URL.replace('_ced.', '_3000_ced.')   
+
+                elif QUALITY == 3 or '5000K' in url:                    
+                    if "highlights" not in url:
                         m3u8URL = m3u8URL.replace('_ced.', '_5000_ced.')
+                    else:
+                        m3u8URL = m3u8URL.replace('_ced.', '_3000_ced.')
+
                 elif QUALITY == 2 or '3000K' in url:
                     m3u8URL = m3u8URL.replace('_ced.', '_3000_ced.')
                 elif QUALITY == 1 or '1600K' in url:

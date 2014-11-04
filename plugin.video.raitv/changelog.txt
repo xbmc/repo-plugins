@@ -1,3 +1,8 @@
+[B]1.0.12[/B]
+- Used the new ondemand progamme list available on rai.tv web site.
+- Updated "tematiche" and "editori".
+- Minor fixes.
+
 [B]1.0.11[/B]
 - Fixed #8. Now missing thumbnail in RAI Replay is handled better.
 

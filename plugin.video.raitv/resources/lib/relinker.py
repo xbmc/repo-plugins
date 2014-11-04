@@ -23,6 +23,7 @@ class Relinker:
         # output=23 HTTP 302 redirect
         # output=25 url and other parameters in body, space separated
         # output=44 XML (not well formatted) in body
+        # output=47 json in body
         # pl=native,flash,silverlight
         # A stream will be returned depending on the UA (and pl parameter?)
         url = url + "&output=20"

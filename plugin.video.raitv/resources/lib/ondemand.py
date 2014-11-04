@@ -10,18 +10,21 @@ class OnDemand:
 
     editori = {"Rai1": "RaiUno", "Rai2": "RaiDue", "Rai3": "RaiTre",
                "Rai4": "Rai4", "Rai5": "Rai5", "Rai Gulp": "RaiGulp",
-               "Rai Yoyo": "RaiYoYo", "Rai Movie": "RaiMovie",
+               "Rai Yoyo": "RaiYoyo", "Rai Movie": "RaiMovie",
                "Rai Fiction": "RaiFiction", "Rai Edu": "RaiEducational",
                "Rai Sport": "RaiSport", "Rai Internazionale": "RaiInternational",
                "Radio1": "Radio1", "Radio2": "Radio2", "Radio3": "Radio3",
-               "Wr6": "WebRadio 6", "Wr7": "WebRadio 7", "Wr8": "WebRadio 8"}
+               "WebRadio 6": "WebRadio6", "WebRadio 7": "WebRadio7", "WebRadio 8": "WebRadio8"}
 
-    tematiche = ["Attualità", "Bianco e Nero", "Cinema", "Comici", "Cronaca", "Cucina", "Cultura", "Cultura e Spettacoli", "Economia", "Fiction",
-        "Hi tech", "Inchieste", "Incontra", "Interviste", "Istituzioni", "Junior", "Moda", "Musica", "News", "Politica", "Promo", "Reality",
-        "Salute", "Satira", "Scienza", "Società", "Spettacolo", "Sport", "Storia", "Telefilm", "Tempo libero", "Viaggi"]
+    tematiche = ["Arte", "Bianco e Nero", "Cartoni", "Cinema", "Comici", "Cronaca", "Cucina", 
+        "Cultura", "Economia", "Fiction", "Hi tech", "Inchieste", "Incontra", "Interviste",
+        "Intrattenimento", "Istituzioni", "Junior", "Moda", "Musica", "News", "Politica", "Promo", 
+        "Radio 2 Cult", "Reality", "Religione", "Salute", "Satira", "Scienza", "Sociale", u"Società", 
+        "Speciali Radio3", "Spettacolo", "Sport", "Storia", "Teatro", "Telefilm", "Tempo libero", 
+        "Viaggi"]
     
     def getProgrammeList(self):
-        url = "http://www.rai.tv/dl/RaiTV/programmi/ricerca/ContentSet-6445de64-d321-476c-a890-ae4ed32c729e-darivedere.html"
+        url = "http://www.rai.tv/dl/ricerca_programmi/rai_tv-ricerca-programmi.json"
         response = json.load(urllib2.urlopen(url))
         return response
 
@@ -58,7 +61,8 @@ class OnDemand:
         return result
 
     def searchNewProgrammes(self):
-        programmes = self.getProgrammeList()
+        url = "http://www.rai.tv/dl/RaiTV/programmi/ricerca/ContentSet-6445de64-d321-476c-a890-ae4ed32c729e-darivedere.html"
+        programmes = json.load(urllib2.urlopen(url))
         programmes = sorted(programmes, key = itemgetter("date"), reverse = True)
         result = []
         for programme in programmes:

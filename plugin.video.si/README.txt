@@ -15,3 +15,5 @@ version 1.3.1 added missing script.module.pyamf in addon.xml
 version 1.4.0 fixed 720/540 rtmp streaming replacing http: .m3u8
 
 version 1.4.1 fixed website changes
+
+version 1.4.2 more website changes for items without data

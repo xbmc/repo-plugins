@@ -94,8 +94,14 @@ def getShow(pcode):
                      pdate  = item['creationDate']
                      pimage = item['thumbnailURL']
                      ts = int(int(str(int(pdate)))/1000)
-                     pdesc  = datetime.datetime.fromtimestamp(ts).strftime('%a %b %d, %Y %H:%M')+'\n'+pdesc
-                     pimage = pimage.replace('\\','')
+                     try:
+                       pdesc  = datetime.datetime.fromtimestamp(ts).strftime('%a %b %d, %Y %H:%M')+'\n'+pdesc
+                     except:
+                       pdesc = ''
+                     try:
+                       pimage = pimage.replace('\\','')
+                     except:
+                       pass
                      caturl = "plugin://plugin.video.si/?url="+str(pid)+"&mode=GV"
                      try:
                         addLink(caturl.encode(UTF8),pname,pimage,fanart,pdesc,GENRE_SPORTS,"")

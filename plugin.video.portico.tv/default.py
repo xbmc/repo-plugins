@@ -14,7 +14,6 @@ from StringIO import StringIO
 USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25'
 GENRE_TV  = "TV"
 UTF8          = 'utf-8'
-MAX_PER_PAGE  = 25
 URL_BASE      = 'http://www.portico.tv%s'
 
 addon         = xbmcaddon.Addon('plugin.video.portico.tv')
@@ -26,15 +25,11 @@ home          = addon.getAddonInfo('path').decode(UTF8)
 icon          = xbmc.translatePath(os.path.join(home, 'icon.png'))
 addonfanart   = xbmc.translatePath(os.path.join(home, 'fanart.jpg'))
 
-#play = False
 
 def log(txt):
     message = '%s: %s' % (__addonname__, txt.encode('ascii', 'ignore'))
     xbmc.log(msg=message, level=xbmc.LOGDEBUG)
 
-def cleanfilename(name):    
-    valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    return ''.join(c for c in name if c in valid_chars)
 
 def demunge(munge):
         try:
@@ -70,54 +65,36 @@ def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept'
 
 
 def getSources(fanart):
-    html = getRequest('http://www.portico.tv/menu/home')
+    html = getRequest('http://pepto.portico.net2.tv/v3/menu/home')
     a = json.loads(html)
-    x = a['items']
+    x = a['items']['categories']
     for y in x:
-          b=y['menuItemRef']
-          name = b['name']
-          title = y['text']
-          addDir(title, name , 'GC', icon, fanart, '', '', '')
+        if y['type'] == "Category":
+          title = y['title']
+          desc  = y['description']
+          url = urllib.quote_plus(json.dumps(y['shows']))
+          addDir(title, url , 'GC', icon, fanart, desc, '', '')
 
 
 def getCats(url):
-    if '#' in url:
-      (url,mname) = url.split('#',1)
-    else:
-      mname = 'home'
-    html = getRequest('http://www.portico.tv/menu/%s' % mname)
+    html = getRequest('http://pepto.portico.net2.tv/v3/menu/home/')
     a = json.loads(html)
-    x = a['items']
-    for y in x:
-          b=y['menuItemRef']['name']
-          if b == url:
-           if b != 'categories':
-            z = y['menuItemRef']['thumbnails']
-            for c in z:
-              c = c['channelItemRef']
-              url    = "%s/%s" % (urllib.quote_plus(c['provider']), urllib.quote_plus(c['channelName']))
-              desc   = c['description']
-              fanart = URL_BASE % c['background']
-              img    = URL_BASE % c['icon']
-              title  = c['title']
-              addDir(title, url , 'GS', img, fanart, desc, '', '')
-           else:
-            z = y['menuItemRef']['thumbnails']
-            for c in z:
-              name = c['categoryName']
-              fanart = URL_BASE % c['menubg']
-              c = c['categoryInfo']
-              url    = "%s-shows#%s" % (urllib.quote_plus(name),urllib.quote_plus(name))
-              desc   = c['description']
-              img    = URL_BASE % c['icon']
-              title  = c['title']
-              addDir(title, url , 'GC', img, fanart, desc, '', '')
-            
+    shows = json.loads(urllib.unquote_plus(url))
+    x = a['items']['shows']
+    for i in shows:
+       title = x[i]['title']
+       url ='%s/%s' % (x[i]['provider'], x[i]['channelName'])
+       icon = x[i]['icon']
+       fanart = addonfanart
+       desc = x[i]['description']
+       addDir(title, url , 'GS', icon, fanart, desc, '', '')
+
 
 def getShow(url,fanart,poster):
-      url  = ('http://www.portico.tv/playlist/%s?clientid=&_=%s') %(urllib.unquote_plus(url).replace(' ','%20'), getEpoch())
+      url  = ('http://pepto.portico.net2.tv/v3/playlist/%s') %(urllib.unquote_plus(url).replace(' ','%20'))
       html = getRequest(url)
       a = json.loads(html)
+      fanart = a['background']
       x = a["episodes"]
       for a in x:
         try:
@@ -126,6 +103,7 @@ def getShow(url,fanart,poster):
            duration = ''
         title  = a['title']+ duration
         desc   = a['description']
+        poster = a['poster']
         x = a["content"]
         xlist = ''
         for a in x:
@@ -190,7 +168,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:

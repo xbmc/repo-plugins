@@ -10,8 +10,12 @@ import json
 import threading
 from datetime import datetime
 import urllib
+from DownloadUtils import DownloadUtils
 
 _MODE_BASICPLAY=12
+
+#define our global download utils
+downloadUtils = DownloadUtils()
 
 class InProgressUpdaterThread(threading.Thread):
 
@@ -31,13 +35,7 @@ class InProgressUpdaterThread(threading.Thread):
     def logMsg(self, msg, level = 1):
         if(self.logLevel >= level):
             xbmc.log("XBMB3C InProgressUpdaterThread -> " + msg)
-    
-    def getImageLink(self, item, type, item_id):
-        imageTag = "none"
-        if(item.get("ImageTags") != None and item.get("ImageTags").get(type) != None):
-            imageTag = item.get("ImageTags").get(type)            
-        return "http://localhost:15001/?id=" + str(item_id) + "&type=" + type + "&tag=" + imageTag        
-    
+        
     def run(self):
         self.logMsg("Started")
         
@@ -66,44 +64,14 @@ class InProgressUpdaterThread(threading.Thread):
         mb3Port = addonSettings.getSetting('port')    
         userName = addonSettings.getSetting('username')     
         
-        userUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users?format=json"
-        
-        try:
-            requesthandle = urllib.urlopen(userUrl, proxies={})
-            jsonData = requesthandle.read()
-            requesthandle.close()              
-        except Exception, e:
-            self.logMsg("urlopen : " + str(e) + " (" + userUrl + ")", level=0)
-            return
-
-        result = []
-        
-        try:
-            result = json.loads(jsonData)
-        except Exception, e:
-            self.logMsg("jsonload : " + str(e) + " (" + jsonData + ")", level=2)
-            return              
-        
-        userid = ""
-        for user in result:
-            if(user.get("Name") == userName):
-                userid = user.get("Id")
-                break
-        
+        userid = downloadUtils.getUserId()
         self.logMsg("InProgress UserName : " + userName + " UserID : " + userid)
         
         self.logMsg("Updating In Progress Movie List")
         
-        recentUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items?Limit=10&Recursive=true&SortBy=DatePlayed&SortOrder=Descending&Fields=Path,Genres,MediaStreams,Overview,CriticRatingSummary&Filters=IsResumable&IncludeItemTypes=Movie&format=json"
-
-        try:
-            requesthandle = urllib.urlopen(recentUrl, proxies={})
-            jsonData = requesthandle.read()
-            requesthandle.close()              
-        except Exception, e:
-            self.logMsg("updateRecent urlopen : " + str(e) + " (" + recentUrl + ")", level=0)
-            return    
-
+        recentUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items?Limit=30&Recursive=true&SortBy=DatePlayed&SortOrder=Descending&Fields=Path,Genres,MediaStreams,Overview,ShortOverview,CriticRatingSummary&Filters=IsResumable&IncludeItemTypes=Movie&format=json"
+   
+        jsonData = downloadUtils.downloadUrl(recentUrl, suppress=False, popup=1 )
         result = json.loads(jsonData)
         result = result.get("Items")
         if(result == None):
@@ -119,6 +87,7 @@ class InProgressUpdaterThread(threading.Thread):
             
             rating = item.get("CommunityRating")
             criticrating = item.get("CriticRating")
+            officialrating = item.get("OfficialRating")
             criticratingsummary = ""
             if(item.get("CriticRatingSummary") != None):
                 criticratingsummary = item.get("CriticRatingSummary").encode('utf-8')
@@ -126,6 +95,10 @@ class InProgressUpdaterThread(threading.Thread):
             if plot == None:
                 plot=''
             plot=plot.encode('utf-8')
+            shortplot = item.get("ShortOverview")
+            if shortplot == None:
+                shortplot = ''
+            shortplot = shortplot.encode('utf-8')
             year = item.get("ProductionYear")
             if(item.get("RunTimeTicks") != None):
                 runtime = str(int(item.get("RunTimeTicks"))/(10000000*60))
@@ -146,10 +119,14 @@ class InProgressUpdaterThread(threading.Thread):
                 title = str(perasint) + "% " + title        
                 
             item_id = item.get("Id")
-            thumbnail = self.getImageLink(item, "Primary", str(item_id))
-            logo = self.getImageLink(item, "Logo", str(item_id))
-            fanart = self.getImageLink(item, "Backdrop", str(item_id))
-            
+            poster = downloadUtils.getArtwork(item, "Primary3")
+            thumbnail = downloadUtils.getArtwork(item, "Primary")
+            logo = downloadUtils.getArtwork(item, "Logo")
+            fanart = downloadUtils.getArtwork(item, "Backdrop")
+            landscape = downloadUtils.getArtwork(item, "Thumb3")
+            discart = downloadUtils.getArtwork(item, "Disc")
+            medium_fanart = downloadUtils.getArtwork(item, "Backdrop3")
+			          
             url =  mb3Host + ":" + mb3Port + ',;' + item_id
             playUrl = "plugin://plugin.video.xbmb3c/?url=" + url + '&mode=' + str(_MODE_BASICPLAY)
             playUrl = playUrl.replace("\\\\","smb://")
@@ -159,8 +136,9 @@ class InProgressUpdaterThread(threading.Thread):
             self.logMsg("InProgressMovieMB3." + str(item_count) + ".Thumb = " + thumbnail, level=2)
             self.logMsg("InProgressMovieMB3." + str(item_count) + ".Path  = " + playUrl, level=2)
             self.logMsg("InProgressMovieMB3." + str(item_count) + ".Art(fanart)  = " + fanart, level=2)
+            self.logMsg("InProgressMovieMB3." + str(item_count) + ".Art(discart)  = " + discart, level=2)
             self.logMsg("InProgressMovieMB3." + str(item_count) + ".Art(clearlogo)  = " + logo, level=2)
-            self.logMsg("InProgressMovieMB3." + str(item_count) + ".Art(poster)  = " + thumbnail, level=2)
+            self.logMsg("InProgressMovieMB3." + str(item_count) + ".Art(poster)  = " + poster, level=2)
             self.logMsg("InProgressMovieMB3." + str(item_count) + ".Rating  = " + str(rating), level=2)
             self.logMsg("InProgressMovieMB3." + str(item_count) + ".CriticRating  = " + str(criticrating), level=2)
             self.logMsg("InProgressMovieMB3." + str(item_count) + ".CriticRatingSummary  = " + criticratingsummary, level=2)
@@ -172,12 +150,18 @@ class InProgressUpdaterThread(threading.Thread):
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Thumb", thumbnail)
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Path", playUrl)
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Art(fanart)", fanart)
+            WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Art(landscape)", landscape)
+            WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Art(discart)", discart)
+            WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Art(medium_fanart)", medium_fanart)
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Art(clearlogo)", logo)
-            WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Art(poster)", thumbnail)
+            WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Art(poster)", poster)
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Rating", str(rating))
+            WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Mpaa", str(officialrating))
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".CriticRating", str(criticrating))
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".CriticRatingSummary", criticratingsummary)
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Plot", plot)
+            WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".ShortPlot", shortplot)
+            
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Year", str(year))
             WINDOW.setProperty("InProgressMovieMB3." + str(item_count) + ".Runtime", str(runtime))
             
@@ -191,6 +175,7 @@ class InProgressUpdaterThread(threading.Thread):
             WINDOW.setProperty("InProgressMovieMB3." + str(x) + ".Thumb", "")
             WINDOW.setProperty("InProgressMovieMB3." + str(x) + ".Path", "")
             WINDOW.setProperty("InProgressMovieMB3." + str(x) + ".Art(fanart)", "")
+            WINDOW.setProperty("InProgressMovieMB3." + str(x) + ".Art(discart)", "")
             WINDOW.setProperty("InProgressMovieMB3." + str(x) + ".Art(clearlogo)", "")
             WINDOW.setProperty("InProgressMovieMB3." + str(x) + ".Art(poster)", "")
             WINDOW.setProperty("InProgressMovieMB3." + str(x) + ".Rating", "")
@@ -204,16 +189,9 @@ class InProgressUpdaterThread(threading.Thread):
         #Updating Recent TV Show List
         self.logMsg("Updating In Progress Episode List")
         
-        recentUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items?Limit=10&Recursive=true&SortBy=DatePlayed&SortOrder=Descending&Fields=Path,Genres,MediaStreams,Overview,CriticRatingSummary&Filters=IsResumable&IncludeItemTypes=Episode&format=json"
+        recentUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items?Limit=30&Recursive=true&SortBy=DatePlayed&SortOrder=Descending&Fields=Path,Genres,MediaStreams,Overview,CriticRatingSummary&Filters=IsResumable&IncludeItemTypes=Episode&format=json"
         
-        try:
-            requesthandle = urllib.urlopen(recentUrl, proxies={})
-            jsonData = requesthandle.read()
-            requesthandle.close()               
-        except Exception, e:
-            self.logMsg("updateRecent urlopen : " + str(e) + " (" + recentUrl + ")", level=0)
-            return
-
+        jsonData = downloadUtils.downloadUrl(recentUrl, suppress=False, popup=1 )
         result = json.loads(jsonData)
         
         result = result.get("Items")
@@ -270,15 +248,21 @@ class InProgressUpdaterThread(threading.Thread):
 
             item_id = item.get("Id")
            
-            if item.get("Type") == "Episode" or item.get("Type") == "Season":
-               series_id = item.get("SeriesId")
+            seriesId = item.get("SeriesId")          
+            seriesJsonData = downloadUtils.downloadUrl("http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items/" + seriesId + "?format=json", suppress=False, popup=1 )
+            seriesResult = json.loads(seriesJsonData) 
+            poster = downloadUtils.getArtwork(seriesResult, "Primary3")
+            thumbnail = downloadUtils.getArtwork(item, "Primary")       
+            logo = downloadUtils.getArtwork(item, "Logo")       
+            fanart = downloadUtils.getArtwork(item, "Backdrop")
+            medium_fanart = downloadUtils.getArtwork(seriesResult, "Backdrop3")
             
-            poster = self.getImageLink(item, "Primary", str(series_id))
-            thumbnail = self.getImageLink(item, "Primary", str(item_id))         
-            logo = self.getImageLink(item, "Logo", str(series_id))             
-            fanart = self.getImageLink(item, "Backdrop", str(series_id))
-            banner = self.getImageLink(item, "Banner", str(series_id))
-            
+            banner = downloadUtils.getArtwork(item, "Banner")
+            if item.get("SeriesThumbImageTag") != None:
+              seriesthumbnail = downloadUtils.getArtwork(item, "Thumb3")
+            else:
+              seriesthumbnail = fanart
+              
             url =  mb3Host + ":" + mb3Port + ',;' + item_id
             playUrl = "plugin://plugin.video.xbmb3c/?url=" + url + '&mode=' + str(_MODE_BASICPLAY)
             playUrl = playUrl.replace("\\\\","smb://")
@@ -302,9 +286,12 @@ class InProgressUpdaterThread(threading.Thread):
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".EpisodeNo", tempEpisodeNumber)
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".SeasonNo", tempSeasonNumber)
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Thumb", thumbnail)
+            WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".SeriesThumb", seriesthumbnail)
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Path", playUrl)            
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Rating", rating)
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Art(tvshow.fanart)", fanart)
+            WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Art(tvshow.medium_fanart)", medium_fanart)
+            
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Art(tvshow.clearlogo)", logo)
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Art(tvshow.banner)", banner)
             WINDOW.setProperty("InProgresstEpisodeMB3." + str(item_count) + ".Art(tvshow.poster)", poster)

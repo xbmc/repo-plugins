@@ -70,6 +70,11 @@ class MyHandler(BaseHTTPRequestHandler):
           index = indexParam[0]
         else:
           index = None
+        
+        if(params.get("user") != None):
+            user = params.get("user")[0]
+        else:
+            user = None;
           
         if(params.get("name") != None):
             name = params.get("name")[0]
@@ -79,6 +84,8 @@ class MyHandler(BaseHTTPRequestHandler):
         # TODO: add option to return PNG or JPG
         if (name != None):
             remoteUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Persons/" + name + "/Images/" + imageType  + "?Format=original"
+        elif (user != None):  
+            remoteUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + itemId + "/Images/" + imageType  + "?Format=original"
         elif (index == None):  
             remoteUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Items/" + itemId + "/Images/" + imageType  + "?Format=original"
         else:

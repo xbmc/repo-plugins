@@ -847,7 +847,7 @@ class WebSocketApp(object):
 
         try:
             self.sock = WebSocket(self.get_mask_key, sockopt=sockopt, sslopt=sslopt)
-            self.sock.settimeout(default_timeout)
+            self.sock.settimeout(2)#default_timeout)
             self.sock.connect(self.url, header=self.header)
             self._callback(self.on_open)
 
@@ -857,10 +857,19 @@ class WebSocketApp(object):
                 thread.start()
 
             while self.keep_running:
-                data = self.sock.recv()
-                if data is None or self.keep_running == False:
-                    break
-                self._callback(self.on_message, data)
+            
+                try:
+                    data = self.sock.recv()
+                    
+                    if data is None or self.keep_running == False:
+                        break
+                    self._callback(self.on_message, data)                    
+                    
+                except Exception, e:
+                    #print str(e.args[0])
+                    if "timed out" not in e.args[0]:
+                        raise e
+
         except Exception, e:
             self._callback(self.on_error, e)
         finally:

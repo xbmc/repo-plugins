@@ -15,6 +15,10 @@ import urllib2
 import random
 
 from Utils import PlayUtils
+from DownloadUtils import DownloadUtils
+
+#define our global download utils
+downloadUtils = DownloadUtils()
 
 class ThemeMusicThread(threading.Thread):
 
@@ -81,13 +85,7 @@ class ThemeMusicThread(threading.Thread):
             themeUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Items/" + id + "/ThemeSongs?format=json"
             self.logMsg("updateThemeMusic themeUrl : " + themeUrl)
             if themeUrl not in self.themeMap:
-                try:
-                    requesthandle = urllib2.urlopen(themeUrl, timeout=60)
-                    jsonData = requesthandle.read()
-                    requesthandle.close()   
-                except Exception, e:
-                    self.logMsg("updateThemeMusic urlopen : " + str(e) + " (" + themeUrl + ")", level=0)
-                    return
+                jsonData = downloadUtils.downloadUrl(themeUrl, suppress=False, popup=1 )
                 theme = json.loads(jsonData)     
                
                 if(theme == None):
@@ -100,7 +98,7 @@ class ThemeMusicThread(threading.Thread):
             
             themeItems = theme.get("Items")
             if themeItems != []:
-                themePlayUrl = PlayUtils.getPlayUrl(mb3Host + ":" + mb3Port,themeItems[0].get("Id"),themeItems[0])
+                themePlayUrl = PlayUtils().getPlayUrl(mb3Host + ":" + mb3Port,themeItems[0].get("Id"),themeItems[0])
                 self.logMsg("updateThemeMusic themeMusicPath : " + str(themePlayUrl))
                 self.playingTheme = True
                 self.setVolume(60)
@@ -113,8 +111,8 @@ class ThemeMusicThread(threading.Thread):
             # stop
             if  xbmc.Player().isPlayingAudio():
                 self.stop()
-    
-    
+            self.setVolume(self.volume)    
+                
     def stop(self, forceStop = False):
         # Only stop if playing audio
         if xbmc.Player().isPlayingAudio() or forceStop == True:

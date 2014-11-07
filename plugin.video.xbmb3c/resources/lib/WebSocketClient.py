@@ -9,10 +9,16 @@ import xbmcaddon
 import json
 import threading
 import urllib
+import socket
 import websocket
 from ClientInformation import ClientInformation
+from DownloadUtils import DownloadUtils
+
 
 _MODE_BASICPLAY=12
+
+downloadUtils = DownloadUtils()
+
 
 class WebSocketThread(threading.Thread):
 
@@ -29,7 +35,7 @@ class WebSocketThread(threading.Thread):
     
         xbmc.log("XBMB3C WebSocketThread -> Log Level:" +  str(self.logLevel))
         
-        threading.Thread.__init__(self, *args)    
+        threading.Thread.__init__(self, *args)
     
     def logMsg(self, msg, level = 1):
         if(self.logLevel >= level):
@@ -84,17 +90,29 @@ class WebSocketThread(threading.Thread):
         # more message by requesting one SessionsStart message, this causes the 
         # client to receive the message and then exit
         if(self.client != None):
+            self.logMsg("Stopping Client")
+            self.keepRunning = False
+            self.client.keep_running = False            
+            self.logMsg("Stopping Client : KeepRunning set to False")
+            '''
             try:
-                self.logMsg("Stopping Client")
                 self.keepRunning = False
                 self.client.keep_running = False
-                messageData = {}
-                messageData["MessageType"] = "SessionsStart"
-                messageData["Data"] = "300,0"
-                messageString = json.dumps(messageData)
-                self.client.send(messageString)
+                self.logMsg("Stopping Client")
+                self.logMsg("Calling Ping")
+                self.client.sock.ping()
+                
+                self.logMsg("Calling Socket Shutdown()")
+                self.client.sock.sock.shutdown(socket.SHUT_RDWR)
+                self.logMsg("Calling Socket Close()")
+                self.client.sock.sock.close()
+                self.logMsg("Stopping Client Done")
+                self.logMsg("Calling Ping")
+                self.client.sock.ping()     
+                               
             except Exception, e:
-                self.logMsg("Exception : " + str(e), level=0)              
+                self.logMsg("Exception : " + str(e), level=0)      
+            '''
         else:
             self.logMsg("Stopping Client NO Object ERROR")
             
@@ -171,21 +189,10 @@ class WebSocketThread(threading.Thread):
     def getWebSocketPort(self, host, port):
         
         userUrl = "http://" + host + ":" + port + "/mediabrowser/System/Info?format=json"
+         
+        jsonData = downloadUtils.downloadUrl(userUrl, suppress=False, popup=1 )
+        result = json.loads(jsonData)
         
-        try:
-            requesthandle = urllib.urlopen(userUrl, proxies={})
-            jsonData = requesthandle.read()
-            requesthandle.close()              
-        except Exception, e:
-            self.logMsg("WebSocketThread getWebSocketPort urlopen : " + str(e) + " (" + userUrl + ")", level=0)
-            return -1
-
-        try:
-            result = json.loads(jsonData)
-        except Exception, e:
-            self.logMsg("WebSocketThread getWebSocketPort jsonload : " + str(e) + " (" + jsonData + ")", level=2)
-            return -1
-
         wsPort = result.get("WebSocketPortNumber")
         if(wsPort != None):
             return wsPort

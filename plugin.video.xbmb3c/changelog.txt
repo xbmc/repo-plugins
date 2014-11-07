@@ -1,3 +1,36 @@
+0.9.6
+  Features:
+      - Added MB3 Channels
+      - Added custom Item Info dialog
+      - Added a lot of new variables for use by skinners
+      - Changed behaviour of 'auto enter single season' - faster performance
+      - Added cache for 'All Movies' node.
+      - Added new 'search' dialog
+      - Added option to use 'poster' indicators for watched/in progress etc.
+      - Added option to sort 'Next Up' by show name.
+      - Option to disable CoverArt
+      - Various performance enhancements
+      - Added transcoding functionality
+      - Dutch language support
+      - Added unwatches movies/episodes nodes
+      - Added Genres, Studio, Actor nodes
+      - Added SuggestedItems nodes
+      - Partial implementation of new MB3 security
+      - Added flatten seasons option
+      - Support MusicVideos/HomeVideos in Recently Added
+      - Backdrops for user defines collections
+      - Support for 'media stubs' (physical media etc).
+  Bug fixes:
+      - Fix long XBMC close times  
+      - Fixed incorrectly setting 'watched' under certain conditions
+      - Fixed rotating art for episodes
+      - Fixed percentage complete calculation
+      - More ArtWork fixes
+      - Multiple 'NoneType' fixes
+      - Don't offer 'Play from here' on folders
+      - Fix 'ItemInfo' 'Play' button (requires skin mod)
+      - Consider 'SortName' for collections
+      
 0.9.5
       - Auto server discovery
       - Cast Images

@@ -10,8 +10,12 @@ import json
 import threading
 from datetime import datetime
 import urllib
+from DownloadUtils import DownloadUtils
 
 _MODE_BASICPLAY=12
+
+#define our global download utils
+downloadUtils = DownloadUtils()
 
 class InfoUpdaterThread(threading.Thread):
 
@@ -59,44 +63,14 @@ class InfoUpdaterThread(threading.Thread):
         mb3Port = addonSettings.getSetting('port')    
         userName = addonSettings.getSetting('username')        
         
-        userUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users?format=json"
-        
-        try:
-            requesthandle = urllib.urlopen(userUrl, proxies={})
-            jsonData = requesthandle.read()
-            requesthandle.close()        
-        except Exception, e:
-            self.logMsg("urlopen : " + str(e) + " (" + userUrl + ")", level=0)
-            return          
-        
-        result = []
-        
-        try:
-            result = json.loads(jsonData)
-        except Exception, e:
-            self.logMsg("jsonload : " + str(e) + " (" + jsonData + ")", level=2)
-            return              
-        
-        userid = ""
-        for user in result:
-            if(user.get("Name") == userName):
-                userid = user.get("Id")    
-                break
-        
+        userid = downloadUtils.getUserId()
         self.logMsg("updateInfo UserID : " + userid)
         
         self.logMsg("Updating info List")
         
         infoUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items?Fields=CollectionType&format=json"
         
-        try:
-            requesthandle = urllib.urlopen(infoUrl, proxies={})
-            jsonData = requesthandle.read()
-            requesthandle.close()      
-        except Exception, e:
-            self.logMsg("updateInfo urlopen : " + str(e) + " (" + infoUrl + ")", level=0)
-            return  
-        
+        jsonData = downloadUtils.downloadUrl(infoUrl, suppress=False, popup=1 )
         result = json.loads(jsonData)
         
         result = result.get("Items")
@@ -119,35 +93,37 @@ class InfoUpdaterThread(threading.Thread):
         trailers_count = 0
         trailers_unwatched_count = 0
         photos_count = 0
+        channels_count = 0
         for item in result:
             collectionType = item.get("CollectionType")
             if collectionType==None:
                 collectionType="unknown"
-            self.logMsg("collectionType "  + collectionType)    
+            self.logMsg("collectionType "  + collectionType) 
+            userData = item.get("UserData")   
             if(collectionType == "movies"):
                 movie_count = movie_count + item.get("RecursiveItemCount")
-                movie_unwatched_count = movie_unwatched_count + item.get("RecursiveUnplayedItemCount")
+                movie_unwatched_count = movie_unwatched_count + userData.get("UnplayedItemCount")
                 
             if(collectionType == "musicvideos"):
                 musicvideos_count = musicvideos_count + item.get("RecursiveItemCount")
-                musicvideos_unwatched_count = musicvideos_unwatched_count + item.get("RecursiveUnplayedItemCount")
+                musicvideos_unwatched_count = musicvideos_unwatched_count + userData.get("UnplayedItemCount")
             
             if(collectionType == "tvshows"):
                 tv_count = tv_count + item.get("ChildCount")
                 episode_count = episode_count + item.get("RecursiveItemCount")
-                episode_unwatched_count = episode_unwatched_count + item.get("RecursiveUnplayedItemCount")
+                episode_unwatched_count = episode_unwatched_count + userData.get("UnplayedItemCount")
             
             if(collectionType == "music"):
                 music_count = music_count + item.get("ChildCount")
                 music_songs_count = music_songs_count + item.get("RecursiveItemCount")
-                music_songs_unplayed_count = music_songs_unplayed_count + item.get("RecursiveUnplayedItemCount")
+                music_songs_unplayed_count = music_songs_unplayed_count + userData.get("UnplayedItemCount")
              
             if(collectionType == "photos"):
                 photos_count = photos_count + item.get("RecursiveItemCount")
                      
             if(item.get("Name") == "Trailers"):
                 trailers_count = trailers_count + item.get("RecursiveItemCount")
-                trailers_unwatched_count = trailers_unwatched_count + item.get("RecursiveUnplayedItemCount")
+                trailers_unwatched_count = trailers_unwatched_count + userData.get("UnplayedItemCount")
                
         self.logMsg("MoviesCount "  + str(movie_count), level=2)
         self.logMsg("MoviesUnWatchedCount "  + str(movie_unwatched_count), level=2)
@@ -188,19 +164,21 @@ class InfoUpdaterThread(threading.Thread):
         WINDOW.setProperty("MB3TotalUnWatchedTrailers", str(trailers_unwatched_count))
         WINDOW.setProperty("MB3TotalWatchedTrailers", str(trailers_watched_count))
         WINDOW.setProperty("MB3TotalPhotos", str(photos_count))
-
+        
+        userUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "?format=json"
+        jsonData = downloadUtils.downloadUrl(userUrl, suppress=False, popup=1 )
+        
+        result = json.loads(jsonData)
+        userImage = downloadUtils.getUserArtwork(result, "Primary")
+        WINDOW.setProperty("MB3UserImage", userImage)
+        if(result.get("Name") != None):
+            userName = result.get("Name").encode('utf-8')
+            WINDOW.setProperty("MB3UserName", userName)
+            
         self.logMsg("InfoTV start")
         infoTVUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items?&IncludeItemTypes=Series&Recursive=true&SeriesStatus=Continuing&format=json"
         
-        try:
-            requesthandle = urllib.urlopen(infoTVUrl, proxies={})
-            self.logMsg("InfoTV start open")
-            jsonData = requesthandle.read()
-            requesthandle.close()  
-        except Exception, e:
-            self.logMsg("updateInfo urlopen : " + str(e) + " (" + infoTVUrl + ")", level=0)
-            return  
-        
+        jsonData = downloadUtils.downloadUrl(infoTVUrl, suppress=False, popup=1 )
         result = json.loads(jsonData)
         self.logMsg("InfoTV Json Data : " + str(result), level=2)
         
@@ -210,15 +188,8 @@ class InfoUpdaterThread(threading.Thread):
         
         self.logMsg("InfoNextAired start")
         InfoNextAiredUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items?IsUnaired=true&SortBy=PremiereDate%2CAirTime%2CSortName&SortOrder=Ascending&IncludeItemTypes=Episode&Limit=1&Recursive=true&Fields=SeriesInfo%2CUserData&format=json"
-        
-        try:
-            requesthandle = urllib.urlopen(InfoNextAiredUrl, proxies={})
-            jsonData = requesthandle.read()
-            requesthandle.close()   
-        except Exception, e:
-            self.logMsg("updateInfo urlopen : " + str(e) + " (" + InfoNextAiredUrl + ")", level=0)
-            return  
-        
+         
+        jsonData = downloadUtils.downloadUrl(InfoNextAiredUrl, suppress=False, popup=1 )
         result = json.loads(jsonData)
         self.logMsg("InfoNextAired Json Data : " + str(result), level=2)
         
@@ -261,14 +232,7 @@ class InfoUpdaterThread(threading.Thread):
         dateformat = today.strftime("%Y-%m-%d") 
         nextAiredUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Users/" + userid + "/Items?IsUnaired=true&SortBy=PremiereDate%2CAirTime%2CSortName&SortOrder=Ascending&IncludeItemTypes=Episode&Recursive=true&Fields=SeriesInfo%2CUserData&MinPremiereDate="  + str(dateformat) + "&MaxPremiereDate=" + str(dateformat) + "&format=json"
         
-        try:
-            requesthandle = urllib.urlopen(nextAiredUrl, proxies={})
-            jsonData = requesthandle.read()
-            requesthandle.close()   
-        except Exception, e:
-            self.logMsg("updateInfo total urlopen : " + str(e) + " (" + nextAiredUrl + ")", level=0)
-            return  
-        
+        jsonData = downloadUtils.downloadUrl(nextAiredUrl, suppress=False, popup=1 )
         result = json.loads(jsonData)
         self.logMsg("InfoNextAired total url: " + nextAiredUrl)
         self.logMsg("InfoNextAired total Json Data : " + str(result), level=2)
@@ -277,3 +241,13 @@ class InfoUpdaterThread(threading.Thread):
         self.logMsg("MB3NextAiredTotalToday "  + str(totalToday))
         WINDOW.setProperty("MB3NextAiredTotalToday", str(totalToday))  
         
+        self.logMsg("Channels start")
+        channelsUrl = "http://" + mb3Host + ":" + mb3Port + "/mediabrowser/Channels/?format=json"
+        
+        jsonData = downloadUtils.downloadUrl(channelsUrl, suppress=False, popup=1 )
+        result = json.loads(jsonData)
+        self.logMsg("Channels Json Data : " + str(result), level=2)
+        
+        totalChannels = result.get("TotalRecordCount")
+        self.logMsg("TotalChannels "  + str(totalRunning))
+        WINDOW.setProperty("MB3TotalChannels", str(totalChannels))

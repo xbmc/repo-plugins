@@ -5,7 +5,7 @@ import urllib
 import httplib
 import os
 import time
-import requests
+import socket
 
 import threading
 import json
@@ -30,8 +30,9 @@ base_window = xbmcgui.Window( 10000 )
 
 from InfoUpdater import InfoUpdaterThread
 from NextUpItems import NextUpUpdaterThread
+from SuggestedItems import SuggestedUpdaterThread
 from RandomItems import RandomInfoUpdaterThread
-from BackgroundLoader import BackgroundRotationThread
+from ArtworkLoader import ArtworkRotationThread
 from ThemeMusic import ThemeMusicThread
 from RecentItems import RecentInfoUpdaterThread
 from InProgressItems import InProgressUpdaterThread
@@ -40,22 +41,20 @@ from ClientInformation import ClientInformation
 from MenuLoad import LoadMenuOptionsThread
 from ImageProxy import MyHandler
 from ImageProxy import ThreadingHTTPServer
+from PlaylistItems import PlaylistItemUpdaterThread
+from DownloadUtils import DownloadUtils
+from Utils import PlayUtils
+
 
 _MODE_BASICPLAY=12
 
-def getAuthHeader():
-    addonSettings = xbmcaddon.Addon(id='plugin.video.xbmb3c')
-    deviceName = addonSettings.getSetting('deviceName')
-    deviceName = deviceName.replace("\"", "_") # might need to url encode this as it is getting added to the header and is user entered data
-    clientInfo = ClientInformation()
-    txt_mac = clientInfo.getMachineId()
-    version = clientInfo.getVersion()  
-    userid = xbmcgui.Window( 10000 ).getProperty("userid")
-    authString = "MediaBrowser UserId=\"" + userid + "\",Client=\"XBMC\",Device=\"" + deviceName + "\",DeviceId=\"" + txt_mac + "\",Version=\"" + version + "\""
-    headers = {'Accept-encoding': 'gzip', 'Authorization' : authString}
-    xbmc.log("XBMB3C Authentication Header : " + str(headers))
-    return headers 
+downloadUtils = DownloadUtils()
 
+# auth the service
+try:
+    downloadUtils.authenticate()
+except Exception, e:
+    pass 
 
 # start some worker threads
 
@@ -85,7 +84,14 @@ if __addon__.getSetting('useNextUp') == "true":
     newNextUpThread = NextUpUpdaterThread()
     newNextUpThread.start()
 else:
-    xbmc.log("XBMB3C Service NextUp Disabled")     
+    xbmc.log("XBMB3C Service NextUp Disabled")    
+    
+newSuggestedThread = None
+if __addon__.getSetting('useSuggested') == "true":
+    newSuggestedThread = SuggestedUpdaterThread()
+    newSuggestedThread.start()
+else:
+    xbmc.log("XBMB3C Service Suggested Disabled")   
 
 newWebSocketThread = None
 if __addon__.getSetting('useWebSocketRemote') == "true":
@@ -101,10 +107,10 @@ if __addon__.getSetting('useMenuLoader') == "true":
 else:
     xbmc.log("XBMB3C Service MenuLoader Disabled")
 
-backgroundUpdaterThread = None    
+artworkRotationThread = None    
 if __addon__.getSetting('useBackgroundLoader') == "true":
-    backgroundUpdaterThread = BackgroundRotationThread()
-    backgroundUpdaterThread.start()
+    artworkRotationThread = ArtworkRotationThread()
+    artworkRotationThread.start()
 else:
     xbmc.log("XBMB3C Service BackgroundLoader Disabled")
     
@@ -122,6 +128,13 @@ if __addon__.getSetting('useInfoLoader') == "true":
 else:
     xbmc.log("XBMB3C Service InfoLoader Disabled")
     
+newPlaylistsThread = None
+if __addon__.getSetting('usePlaylistsUpdater') == "true":
+    newPlaylistsThread = PlaylistItemUpdaterThread()
+    newPlaylistsThread.start()
+else:
+    xbmc.log("XBMB3C Service PlaylistsUpdater Disabled")
+    
 ###############################################
 # start the image proxy server
 ###############################################
@@ -138,16 +151,14 @@ def startImageProxyServer():
     xbmc.log("XBMB3 -> HTTP Image Proxy Server EXITING")
     
 Thread(target=startImageProxyServer).start()
-
-#################################################################################################
-
+    
 def deleteItem (url):
     return_value = xbmcgui.Dialog().yesno(__language__(30091),__language__(30092))
     if return_value:
         xbmc.log('Deleting via URL: ' + url)
         progress = xbmcgui.DialogProgress()
         progress.create(__language__(30052), __language__(30053))
-        resp = requests.delete(url, data='', headers=getAuthHeader())
+        downloadUtils.downloadUrl(url, type="DELETE")
         deleteSleep=0
         while deleteSleep<10:
             xbmc.sleep(1000)
@@ -161,18 +172,17 @@ def deleteItem (url):
         
 def markWatched(url):
     xbmc.log('XBMB3C Service -> Marking watched via: ' + url)
-    resp = requests.post(url, data='', headers=getAuthHeader())
-    
+    downloadUtils.downloadUrl(url, type="DELETE")
+    downloadUtils.downloadUrl(url, postBody="", type="POST")
+       
 def markUnWatched(url):
     xbmc.log('XBMB3C Service -> Marking watched via: ' + url)
-    resp = requests.delete(url, data='', headers=getAuthHeader())    
+    downloadUtils.downloadUrl(url, type="DELETE")
 
-def setPosition (url, method):
-    xbmc.log('XBMB3C Service -> Setting position via: ' + url)
-    if method == 'POST':
-        resp = requests.post(url, data='', headers=getAuthHeader())
-    elif method == 'DELETE':
-        resp = requests.delete(url, data='', headers=getAuthHeader())
+def stopTranscoding(url):
+    xbmc.log('XBMB3C Service -> Stopping transcoding: ' + url)
+    downloadUtils.downloadUrl(url, type="DELETE")
+
         
 def hasData(data):
     if(data == None or len(data) == 0 or data == "None"):
@@ -200,7 +210,8 @@ def stopAll(played_information):
             runtime = data.get("runtime")
             currentPossition = data.get("currentPossition")
             item_id = data.get("item_id")
-            
+            currentFile = data.get("currentfile")
+          
             if(currentPossition != None and hasData(runtime) and hasData(positionurl) and hasData(watchedurl)):
                 runtimeTicks = int(runtime)
                 xbmc.log ("XBMB3C Service -> runtimeticks:" + str(runtimeTicks))
@@ -208,32 +219,96 @@ def stopAll(played_information):
                 markPlayedAt = float(addonSettings.getSetting("markPlayedAt")) / 100    
 
                 xbmc.log ("XBMB3C Service -> Percent Complete:" + str(percentComplete) + " Mark Played At:" + str(markPlayedAt))
+                stopPlayback(currentFile,str(int(currentPossition * 10000000)))
                 if (percentComplete > markPlayedAt):
-                
                     gotDeleted = 0
                     if(deleteurl != None and deleteurl != ""):
                         xbmc.log ("XBMB3C Service -> Offering Delete:" + str(deleteurl))
                         gotDeleted = deleteItem(deleteurl)
                         
-                    if(gotDeleted == 0):
-                        setPosition(positionurl + '/Progress?PositionTicks=0', 'POST')
-                        if(newWebSocketThread != None):
-                            newWebSocketThread.playbackStopped(item_id, str(0))
-                        markWatched(watchedurl)
-                else:
-                    markUnWatched(watchedurl)
-                    if(newWebSocketThread != None):
-                        newWebSocketThread.playbackStopped(item_id, str(int(currentPossition * 10000000)))
-                    setPosition(positionurl + '?PositionTicks=' + str(int(currentPossition * 10000000)), 'DELETE')
+                    #if(gotDeleted == 0):
+                        #setPosition(positionurl + '/Progress?PositionTicks=0', 'POST')
+                        #reportPlayback("0000000")
+                        #if(newWebSocketThread != None):
+                            #newWebSocketThread.playbackStopped(item_id, str(0))
+                     #   stopPlayback(currentFile, "0000000")
+                        #markWatched(watchedurl)
+                #else:
+                    #markUnWatched(watchedurl) # this resets the LastPlayedDate and that causes issues with sortby PlayedDate so I removed it for now
+                    #if(newWebSocketThread != None):
+                        #newWebSocketThread.playbackStopped(item_id, str(int(currentPossition * 10000000)))
+                    #stopPlayback(currentFile,str(int(currentPossition * 10000000)))
+                    #setPosition(positionurl + '?PositionTicks=' + str(int(currentPossition * 10000000)), 'DELETE')
+                    #reportPlayback(str(int(currentPossition * 10000000)))
                     
     if(newNextUpThread != None):
         newNextUpThread.updateNextUp()
         
-    if(backgroundUpdaterThread != None):
-        backgroundUpdaterThread.updateActionUrls()
+    if(artworkRotationThread != None):
+        artworkRotationThread.updateActionUrls()
         
     played_information.clear()
 
+    # stop transcoding - todo check we are actually transcoding?
+    clientInfo = ClientInformation()
+    txt_mac = clientInfo.getMachineId()
+    url = ("http://%s:%s/mediabrowser/Videos/ActiveEncodings" % (addonSettings.getSetting('ipaddress'), addonSettings.getSetting('port')))  
+    url = url + '?DeviceId=' + txt_mac
+    stopTranscoding(url)
+    
+def stopPlayback(currentFile,positionTicks):
+    addonSettings = xbmcaddon.Addon(id='plugin.video.xbmb3c')
+        
+    WINDOW = xbmcgui.Window( 10000 )
+    item_id = WINDOW.getProperty(currentFile+"item_id")
+    audioindex = WINDOW.getProperty(currentFile+"AudioStreamIndex")
+    subtitleindex = WINDOW.getProperty(currentFile+"SubtitleStreamIndex")
+    playMethod = WINDOW.getProperty(currentFile+"playmethod")
+    
+    url = ("http://%s:%s/mediabrowser/Sessions/Playing/Stopped" % (addonSettings.getSetting('ipaddress'), addonSettings.getSetting('port')))  
+        
+    url = url + "?itemId=" + item_id
+
+    url = url + "&canSeek=true"
+    url = url + "&PlayMethod=" + playMethod
+    url = url + "&QueueableMediaTypes=Video"
+    url = url + "&MediaSourceId=" + item_id
+    url = url + "&PositionTicks=" + positionTicks   
+    if(audioindex != None and audioindex!=""):
+      url = url + "&AudioStreamIndex=" + audioindex
+        
+    if(subtitleindex != None and subtitleindex!=""):
+      url = url + "&SubtitleStreamIndex=" + subtitleindex
+        
+    downloadUtils.downloadUrl(url, postBody="", type="POST")
+    
+def reportPlayback(positionTicks):
+    addonSettings = xbmcaddon.Addon(id='plugin.video.xbmb3c')
+    currentFile = xbmc.Player().getPlayingFile()
+        
+    WINDOW = xbmcgui.Window( 10000 )
+    item_id = WINDOW.getProperty(currentFile+"item_id")
+    audioindex = WINDOW.getProperty(currentFile+"AudioStreamIndex")
+    subtitleindex = WINDOW.getProperty(currentFile+"SubtitleStreamIndex")
+    playMethod = WINDOW.getProperty(currentFile+"playmethod")
+    
+    url = ("http://%s:%s/mediabrowser/Sessions/Playing/Progress" % (addonSettings.getSetting('ipaddress'), addonSettings.getSetting('port')))  
+        
+    url = url + "?itemId=" + item_id
+
+    url = url + "&canSeek=true"
+    url = url + "&PlayMethod=" + playMethod
+    url = url + "&QueueableMediaTypes=Video"
+    url = url + "&MediaSourceId=" + item_id
+    url = url + "&PositionTicks=" + positionTicks   
+    if(audioindex != None and audioindex!=""):
+      url = url + "&AudioStreamIndex=" + audioindex
+        
+    if(subtitleindex != None and subtitleindex!=""):
+      url = url + "&SubtitleStreamIndex=" + subtitleindex
+        
+    downloadUtils.downloadUrl(url, postBody="", type="POST")
+    
 class Service( xbmc.Player ):
 
     played_information = {}
@@ -242,23 +317,54 @@ class Service( xbmc.Player ):
         xbmc.log("XBMB3C Service -> starting monitor service")
         self.played_information = {}
         pass
-
+    
     def onPlayBackStarted( self ):
         # Will be called when xbmc starts playing a file
-        
         stopAll(self.played_information)
-        
+        addonSettings = xbmcaddon.Addon(id='plugin.video.xbmb3c')
         currentFile = xbmc.Player().getPlayingFile()
+        xbmc.log("XBMB3C Service -> onPlayBackStarted" + currentFile)
         
         WINDOW = xbmcgui.Window( 10000 )
-        watchedurl = WINDOW.getProperty("watchedurl")
-        deleteurl = WINDOW.getProperty("deleteurl")
-        positionurl = WINDOW.getProperty("positionurl")
-        runtime = WINDOW.getProperty("runtimeticks")
-        item_id = WINDOW.getProperty("item_id")
+        watchedurl = WINDOW.getProperty(currentFile+"watchedurl")
+        deleteurl = WINDOW.getProperty(currentFile+"deleteurl")
+        positionurl = WINDOW.getProperty(currentFile+"positionurl")
+        runtime = WINDOW.getProperty(currentFile+"runtimeticks")
+        item_id = WINDOW.getProperty(currentFile+"item_id")
+        audioindex = WINDOW.getProperty(currentFile+"AudioStreamIndex")
+        subtitleindex = WINDOW.getProperty(currentFile+"SubtitleStreamIndex")
+        playMethod = WINDOW.getProperty(currentFile+"playmethod")
         
-        if(newWebSocketThread != None):
-            newWebSocketThread.playbackStarted(item_id)
+        # reset all these so they dont get used is xbmc plays a none 
+        # xbmb3c MB item
+        # WINDOW.setProperty(currentFile+"watchedurl", "")
+        # WINDOW.setProperty(currentFile+"deleteurl", "")
+        # WINDOW.setProperty(currentFile+"positionurl", "")
+        # WINDOW.setProperty(currentFile+"runtimeticks", "")
+        # WINDOW.setProperty(currentFile+"item_id", "")
+        
+        if(item_id == None or len(item_id) == 0):
+            return
+        
+        
+        url = ("http://%s:%s/mediabrowser/Sessions/Playing" % (addonSettings.getSetting('ipaddress'), addonSettings.getSetting('port')))  
+        
+        url = url + "?itemId=" + item_id
+
+        url = url + "&canSeek=true"
+        url = url + "&PlayMethod=" + playMethod
+        url = url + "&QueueableMediaTypes=Video"
+        url = url + "&MediaSourceId=" + item_id
+        
+        if(audioindex != None and audioindex!=""):
+          url = url + "&AudioStreamIndex=" + audioindex
+        
+        if(subtitleindex != None and subtitleindex!=""):
+          url = url + "&SubtitleStreamIndex=" + subtitleindex
+        
+        downloadUtils.downloadUrl(url, postBody="", type="POST")
+        # if(newWebSocketThread != None):
+          #   newWebSocketThread.playbackStarted(item_id)
         
         if (watchedurl != "" and positionurl != ""):
         
@@ -268,13 +374,15 @@ class Service( xbmc.Player ):
             data["positionurl"] = positionurl
             data["runtime"] = runtime
             data["item_id"] = item_id
+            data['currentfile'] = currentFile
             self.played_information[currentFile] = data
             
             xbmc.log("XBMB3C Service -> ADDING_FILE : " + currentFile)
             xbmc.log("XBMB3C Service -> ADDING_FILE : " + str(self.played_information))
 
             # reset in progress possition
-            setPosition(positionurl + '/Progress?PositionTicks=0', 'POST')
+            #setPosition(positionurl + '/Progress?PositionTicks=0', 'POST')
+            reportPlayback("0000000")
 
     def onPlayBackEnded( self ):
         # Will be called when xbmc stops playing a file
@@ -285,9 +393,14 @@ class Service( xbmc.Player ):
         # Will be called when user stops xbmc playing a file
         xbmc.log("XBMB3C Service -> onPlayBackStopped")
         stopAll(self.played_information)
-
+    
 monitor = Service()
 lastProgressUpdate = datetime.today()
+
+addonSettings = xbmcaddon.Addon(id='plugin.video.xbmb3c')
+if socket.gethostname() != None and socket.gethostname() != '' and addonSettings.getSetting("deviceName") == 'XBMB3C':
+    addonSettings.setSetting("deviceName", socket.gethostname())
+
 while not xbmc.abortRequested:
     if xbmc.Player().isPlaying():
         try:
@@ -304,8 +417,9 @@ while not xbmc.abortRequested:
             if(secDiff > 10):
                 if(monitor.played_information.get(currentFile) != None and monitor.played_information.get(currentFile).get("item_id") != None):
                     item_id =  monitor.played_information.get(currentFile).get("item_id")
-                    if(newWebSocketThread != None):
-                        newWebSocketThread.sendProgressUpdate(item_id, str(int(playTime * 10000000)))
+                    #if(newWebSocketThread != None):
+                        #newWebSocketThread.sendProgressUpdate(item_id, str(int(playTime * 10000000)))
+                    reportPlayback(str(int(playTime * 10000000)))
                 lastProgressUpdate = datetime.today()
             
         except Exception, e:
@@ -314,6 +428,7 @@ while not xbmc.abortRequested:
 
     xbmc.sleep(1000)
     xbmcgui.Window(10000).setProperty("XBMB3C_Service_Timestamp", str(int(time.time())))
+    
 # stop the WebSocket client
 if(newWebSocketThread != None):
     newWebSocketThread.stopClient()

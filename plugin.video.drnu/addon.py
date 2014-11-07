@@ -238,10 +238,10 @@ class DrDkTvAddon(object):
                 menuItems = list(self.menuItems)
 
                 if self.favorites.count(item['SeriesTitle']) > 0:
-                    runScript = "XBMC.RunPlugin(plugin://plugin.video.drnu/?delfavorite=%s)" % item['SeriesTitle'].replace('&', '%26')
+                    runScript = "XBMC.RunPlugin(plugin://plugin.video.drnu/?delfavorite=%s)" % item['SeriesTitle'].replace('&', '%26').replace(',', '%2C')
                     menuItems.append((ADDON.getLocalizedString(30201), runScript))
                 else:
-                    runScript = "XBMC.RunPlugin(plugin://plugin.video.drnu/?addfavorite=%s)" % item['SeriesTitle'].replace('&', '%26')
+                    runScript = "XBMC.RunPlugin(plugin://plugin.video.drnu/?addfavorite=%s)" % item['SeriesTitle'].replace('&', '%26').replace(',', '%2C')
                     menuItems.append((ADDON.getLocalizedString(30200), runScript))
 
 
@@ -265,6 +265,8 @@ class DrDkTvAddon(object):
             infoLabels = {
                 'title': item['Title']
             }
+            if 'Description' in item:
+                infoLabels['plot'] = item['Description']
             if 'PrimaryBroadcastStartTime' in item and item['PrimaryBroadcastStartTime'] is not None:
                 broadcastTime = self.parseDate(item['PrimaryBroadcastStartTime'])
                 if broadcastTime:
@@ -296,7 +298,7 @@ class DrDkTvAddon(object):
             return
 
         video = self.api.getVideoUrl(item['PrimaryAsset']['Uri'])
-        item = xbmcgui.ListItem(path=video['Uri'])
+        item = xbmcgui.ListItem(path=video['Uri'], thumbnailImage=item['PrimaryImageUri'])
         xbmcplugin.setResolvedUrl(HANDLE, video['Uri'] is not None, item)
 
         if ADDON.getSetting('enable.subtitles') == 'true':

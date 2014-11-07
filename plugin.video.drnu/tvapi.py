@@ -27,6 +27,7 @@ import urllib2
 import hashlib
 import os
 import datetime
+import re
 SLUG_PREMIERES='forpremierer'
 
 
@@ -67,13 +68,14 @@ class Api(object):
         return self._handle_paging(result)
 
     def searchSeries(self, query):
-        # Remove & as it makes the API puke
-        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title/%s' % query.replace('&', ''))
+        # Remove various characters that makes the API puke
+        result = self._http_request('/search/tv/programcards-latest-episode-with-asset/series-title/%s' % re.sub('[&()"\'\.!]', '', query))
         return self._handle_paging(result)
 
     def getEpisodes(self, slug):
         result = self._http_request('/list/%s' % slug,
-                                    {'limit': 48})
+                                    {'limit': 48,
+                                     'expanded': True})
         return self._handle_paging(result)
 
     def getEpisode(self, slug):

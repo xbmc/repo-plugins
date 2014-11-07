@@ -1,5 +1,9 @@
+[B]Version 5.0.7 - 2014-10-29[/B]
+- Added description to video clips
+- Fixed problem when searching for text with special characters
+
 [B]Version 5.0.6 - 2014-10-05[/B]
-- Gracefully handle error when videoclip is no longer available for playback
+- Gracefully handle error when video clip is no longer available for playback
 
 [B]Version 5.0.5 - 2014-10-02[/B]
 - Changed cache period of latest programs to five minutes (instead of a full day)

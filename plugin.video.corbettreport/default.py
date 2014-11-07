@@ -17,12 +17,9 @@ __fanart__ = addon.getAddonInfo('fanart')
 
 def CATEGORIES():
         addDir(__language__(30011),'http://www.corbettreport.com/category/videos/',1,__icon__,__language__(30018))
-        addDir(__language__(30012),'http://www.corbettreport.com/category/videos/page/2/',1,__icon__,__language__(30018))
-        addDir(__language__(30013),'http://www.corbettreport.com/category/videos/page/3/',1,__icon__,__language__(30018))
-        addDir(__language__(30014),'http://www.corbettreport.com/category/videos/page/4/',1,__icon__,__language__(30018))
-        addDir(__language__(30015),'http://www.corbettreport.com/category/videos/page/5/',1,__icon__,__language__(30018))
         addDir(__language__(30016),'http://www.corbettreport.com/category/podcasts/',3,'',__language__(30018))
         addDir(__language__(30017),'http://www.corbettreport.com/category/interviews/',3,'',__language__(30018))
+        addDir(__language__(30023),'http://www.corbettreport.com/category/videos/',4,__icon__,__language__(30018))
      
                        
 def INDEX(url):
@@ -35,7 +32,7 @@ def INDEX(url):
         match=re.compile('post-title"><a href="(.+?)" rel="bookmark" title="Permanent Link to (.+?)"').findall(link)
         if len(match) > 0:
                for url,name in match:
-                      name = name.replace('&#8211;', '"').replace('&#8217;', ' ').replace('&amp;', '&').replace('&#8210;', "'")  # Cleanup the title.
+                      name = name.replace('&#8211;', '"').replace('&#8217;', ' ').replace('&amp;', '&').replace('&#8210;', "'").replace('&#8220;', "'").replace('&#8221;', "'")  # Cleanup the title.
                       addDir(name,url,2,__icon__,name+__language__(30019)+__language__(30020))
         else:
                 xbmc.log(__language__(30021), xbmc.LOGERROR )
@@ -48,13 +45,29 @@ def INDEX2(url):
         link=response.read()
         response.close()
         #interviews and podcasts
-        
-        #match=re.compile('<option value="(.+?)">Interview (.+?)</option').findall(link)
         match=re.compile('<option value="(.+?)">(.+?)</option').findall(link)
         if len(match) > 0:
                for url,name in match:
-                      name = name.replace('&quot;', '"').replace('&#8217;', ' ').replace('&amp;', '&').replace('&#8211;', "'")  # Cleanup the title.
+                      name = name.replace('&quot;', '"').replace('&#8217;', ' ').replace('&amp;', '&').replace('&#8211;', "'").replace('&#8220;', "'").replace('&#8221;', "'")  # Cleanup the title.
                       addDir(name,url,2,__icon__,name+" "+name+__language__(30019)+__language__(30020))
+        else:
+                xbmc.log(__language__(30021), xbmc.LOGERROR )
+                xbmcgui.Dialog().ok(__language__(30022), __language__(30021))
+
+        
+
+def INDEX3(url):
+        req = urllib2.Request(url)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        #the rest
+        match=re.compile('<option value="(.+?)">(.+?)</option>').findall(link)#ALL Videos
+        if len(match) > 0:
+               for url,name in match:
+                      name = name.replace('&#8211;', '"').replace('&#8217;', ' ').replace('&amp;', '&').replace('&#8210;', "'").replace('&#8220;', "'").replace('&#8221;', "'")  # Cleanup the title.
+                      addDir(name,url,2,__icon__,name+__language__(30019)+__language__(30020))
         else:
                 xbmc.log(__language__(30021), xbmc.LOGERROR )
                 xbmcgui.Dialog().ok(__language__(30022), __language__(30021))
@@ -146,6 +159,10 @@ elif mode==2:
 elif mode==3:
         print ""+url
         INDEX2(url)
+
+elif mode==4:
+        print ""+url
+        INDEX3(url)
 
 
 

@@ -1,4 +1,5 @@
 created by celadoor.
+Version 0.0.9 -Added All Videos option, made main menu more compact, tidied up titles..
 
 Version 0.0.6 -re-enabled some of the audio options, updated icon.
 

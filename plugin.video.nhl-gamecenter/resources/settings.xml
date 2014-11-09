@@ -10,6 +10,7 @@
 	<setting id="quality_classic" type="enum" label="30140" values="SD (800 kbit/s)|SD (1600 kbit/s)" default="1" visible="false"/>
     <setting id="useragent" type="text" label="30150" default="PS3Application libhttp/4.5.5-000 (CellOS)" visible="false"/>
 	<setting id="show_score" type="bool" label="30170" default="false"/>
+  <setting id="score_updates" type="bool" label="30180" default="true"/>
   </category>
   
   <!-- Visual -->

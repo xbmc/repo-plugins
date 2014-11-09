@@ -1,4 +1,10 @@
 Changelog:
+0.8.0
+- Show Score Notifications
+- Stale cookie fix
+
+Notes: The Show Score Notifications feature alerts the user of any scoring changes of live games. It also checks what you are watching within XBMC and if it is a live game it will make sure not to show score updates or "spoilers" for that game. Once this feature is started it will continue to run until you a) Choose "Turn off Notifications" or b) you close XBMC. So you don't even have to be watching hockey to get score updates :-)
+
 0.7.6
 - Bug fix
 - Best quality fix for latest games (5k for all but highlights)

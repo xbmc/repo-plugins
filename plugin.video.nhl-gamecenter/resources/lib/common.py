@@ -1,5 +1,7 @@
 import cookielib
 import urllib2
+import time
+import calendar
 
 import xbmcgui
 from resources.lib.globals import *
@@ -21,6 +23,27 @@ def login():
 
     #Save the cookie
     cj.save(ignore_discard=True);
+
+
+def checkLogin():    
+    try:
+        #Get the last time the file was modified
+        file_modified = time.gmtime(os.path.getmtime(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')))
+        print "Cookies file was last modified " + str(time.strftime('%m/%d/%Y %H:%M', file_modified)) 
+        now = time.time()
+        exp_cut_off = now - 60*60*12 # Number of seconds in twelve hours
+
+        if calendar.timegm(file_modified) < exp_cut_off:
+            print "Cookies are more than 12hrs old"
+            login()
+        else:
+            print "Still Good"
+    except:
+        #Cookie file / folder not found. Call login to create them
+        login()
+
+    
+
 
 
 def downloadFile(url,values):

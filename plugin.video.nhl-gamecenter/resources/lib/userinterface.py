@@ -2,6 +2,7 @@ import sys
 import urllib
 import urllib2
 
+
 import xbmc
 import xbmcplugin
 import xbmcgui
@@ -10,6 +11,7 @@ import xbmcaddon
 from resources.lib.games_live import *
 from resources.lib.games_archive import *
 from resources.lib.common import *
+
 
 def get_params():
     param=[]
@@ -43,6 +45,7 @@ def addDir(name,url,mode,iconimage,isfolder):
     if iconimage == '':
         iconimage = ICON
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)
+    print u
     liz=xbmcgui.ListItem(name, iconImage=iconimage, thumbnailImage=iconimage)
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
     liz.setProperty('fanart_image',FANART)
@@ -50,20 +53,12 @@ def addDir(name,url,mode,iconimage,isfolder):
     
 
 def CATEGORIES():
-    
     #Delete or generate the thumbnails
     if (DELETETHUMBNAILS == 'true') or (GENERATETHUMBNAILS == 'true'):
         updateThumbs()
     
-    #Login if cookies aren't set    
-    try:
-        os.remove(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
-       #open(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
-    #except IOError:
-    except:
-       pass
-
-    login()
+    #Check if cookies are up to date
+    checkLogin()
     
     if (USERNAME in open(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp')).read()) and USERNAME != '':
         #Show categories
@@ -73,6 +68,11 @@ def CATEGORIES():
         addDir(LOCAL_STRING(31140),'/highlights',4,'',True)
         addDir(LOCAL_STRING(31110),'/condensed',4,'',True)
         addDir(LOCAL_STRING(31120),'/archive',4,'',True)
+
+        #Space between Score Notifications
+        addDir('','Do Nothing',-1,'',False)
+        addDir('Turn On Score Notifications','Notifications ON',100,'',False)
+        addDir('Turn Off Score Notifications','Notifications OFF',101,'',False)
         #addDir(LOCAL_STRING(31130),'/classic',10,'',True)
     else:
         os.remove(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'))
@@ -86,7 +86,9 @@ def CATEGORIES():
 
 
 def LIVE(url):   
-
+    #Check if cookies are up to date
+    checkLogin()
+    
     #Get live games
     games = getLiveGames(True)
     
@@ -139,6 +141,8 @@ def LIVELINKS(url):
 
 
 def ARCHIVE(url):
+    #Check if cookies are up to date
+    checkLogin()
     #Get all available Seasons
     seasonList = getSeasons()
     
@@ -268,6 +272,8 @@ def LASTNIGHTTYPE(url):
 """    
 
 def LATESTGAMES(url):
+    #Check if cookies are up to date
+    checkLogin()
     #Get live games
     games = getLiveGames(False)
     

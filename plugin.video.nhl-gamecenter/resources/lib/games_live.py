@@ -65,6 +65,8 @@ def getLiveGames(live):
     gameList = []
    
 
+    json_scoreboard = getScoreBoard(datetime.now().strftime("%Y-%m-%d"))     
+
     for game in games:
         #Setup variables
         gid = game.getElementsByTagName('gid')[0].childNodes[0].nodeValue
@@ -85,8 +87,8 @@ def getLiveGames(live):
            
             try:                
                 ht = homeTeam
-                at = awayTeam                
-                json_scoreboard = getScoreBoard(date[0:10])               
+                at = awayTeam      
+                json_scoreboard = getScoreBoard(date[0:10])                                       
                 #Display Date
                
                 for sb_game in json_scoreboard['games']:                                
@@ -177,18 +179,19 @@ def getLiveGameLinks(url):
     gameList = pickle.load(open(os.path.join(ADDON_PATH_PROFILE, 'live'),"rb"))
     
     #Get the url of the game
-    for game in gameList:
+    for game in gameList:        
         if game[0] in url:
             #Add teamnames to the list
             homeTeam = game[6]
             awayTeam = game[7]
-            linkList = [[homeTeam, awayTeam]]
+            linkList = [[homeTeam, awayTeam]]            
             
             for feed in [2,4]:
                 #Get the m3u8 URL
                 cj = cookielib.LWPCookieJar()
                 cj.load(os.path.join(ADDON_PATH_PROFILE, 'cookies.lwp'),ignore_discard=True)
                 publishPointURL = "http://gamecenter.nhl.com/nhlgc/servlets/publishpoint?type=game&id=" + game[1] + game[2].zfill(2) + game[3].zfill(4) + "&gs=live&ft=" + str(feed) + "&nt=1"
+                print publishPointURL
                 opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
                 opener.addheaders = [('User-Agent', USERAGENT)]
                 response = opener.open(publishPointURL, urllib.urlencode({'app':'true'}))
@@ -245,7 +248,12 @@ def getLiveGameLinks(url):
                     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
                     values = {}
                     login_data = urllib.urlencode(values)
-                    response = opener.open(url2, login_data)
+                    #This line was causing errors for buf/edm game 11/7/2014
+                    #Seemed to run fine without a proper response...
+                    try:
+                        response = opener.open(url2, login_data)
+                    except:
+                        pass
 
                     #Remove unneeded cookies
                     remove = []
@@ -321,6 +329,7 @@ def getLiveGameLinks(url):
 
 def getScoreBoard(date):
     url = "http://live.nhle.com/GameData/GCScoreboard/"+date+".jsonp"
+    print url
     http = httplib2.Http()
     http.disable_ssl_certificate_validation = True
     

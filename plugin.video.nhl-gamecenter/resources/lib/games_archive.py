@@ -160,8 +160,9 @@ def getGameLinks(url):
             elif '5000K' in url:
                 quality = '_5000'
             elif QUALITY == 3 or '4500K' in url:
-                quality = '_4500'
-                if int(year) >= 2012:
+                if int(year) >= 2014:
+                    quality = '_5000'
+                elif int(year) >= 2012:
                     quality = '_4500'
                 else:
                     quality = '_3000'

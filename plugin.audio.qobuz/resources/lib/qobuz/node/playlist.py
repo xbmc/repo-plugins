@@ -16,7 +16,7 @@
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
 import xbmcgui
 import qobuz
-
+import os
 from inode import INode
 from node import getNode, Flag
 from api import api
@@ -28,6 +28,7 @@ from gui.util import notifyH, color, lang, getImage, runPlugin, \
     containerRefresh, containerUpdate, executeBuiltin, getSetting
 from gui.contextmenu import contextMenu
 from constants import Mode
+from sys import platform as _platform
 
 dialogHeading = 'Qobuz playlist'
 
@@ -75,10 +76,52 @@ class Node_playlist(INode):
         return True
     
     def populate(self, Dir, lvl, whiteFlag, blackFlag):
+    	theUrls = ''
+    	launchApp = False
         for track in self.data['tracks']['items']:
             node = getNode(Flag.TRACK)
             node.data = track
+            track_id = track.get('id')
+            format_id = 6 if getSetting('streamtype') == 'flac' else 5
+            data = api.get('/track/getFileUrl', format_id=format_id,
+            	track_id=track_id, user_id=api.user_id)
+            if not data:
+            	theUrls += "Cannot get stream type for track (network problem?)"
+            else:
+            	if (not 'sample' in (data['url'])):
+            		theUrls += str(data['url'])
+            		theUrls += '\n'
+            		if getSetting('audiophile') == 'true':
+    					launchApp = True
             self.add_child(node)
+        if launchApp:
+            qobuzPlaylist = str(os.path.expanduser('~'))
+            qobuzPlaylist += '/Music/QobuzNow.m3u8'
+            completeName = os.path.abspath(qobuzPlaylist)
+            file1 = open(completeName,"w")
+            toFile = theUrls
+            file1.write(toFile)
+            file1.close
+            if _platform == "darwin":
+        		try:           
+        			cmd = """osascript -e 'tell app "HQPlayerDesktop" to quit'"""
+        			os.system(cmd)
+        			os.system("/Applications/HQPlayerDesktop.app/Contents/MacOS/HQPlayerDesktop "+completeName+"&")
+        			cmd = """osascript<<END
+						tell application "System Events"
+							set frontmost of process "HQPlayerDesktop" to true
+							delay 5
+							repeat 10 times
+								tell process "HQPlayerDesktop" to keystroke tab
+							end repeat
+						end tell
+					END"""
+        			os.system(cmd)
+        		except:
+        			os.system("open "+completeName)
+            elif _platform == "win32":
+                os.system('TASKKILL /F /IM HQPlayer-desktop.exe')
+                os.startfile(completeName, 'open')
         return True
         
     def get_name(self):

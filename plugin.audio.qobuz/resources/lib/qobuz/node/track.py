@@ -14,6 +14,7 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
+import os
 from constants import Mode
 from node import Flag, ErrorNoData
 from inode import INode
@@ -132,6 +133,7 @@ class Node_track(INode):
         return ''
 
     def get_streaming_url(self):
+    	theUrls = ''
         data = self.__getFileUrl()
         if not data:
             return False
@@ -142,6 +144,23 @@ class Node_track(INode):
             warn(self, "streaming_url, no url returned\n"  
                 "API Error: %s" % (api.error)) 
             return None
+        if not data:
+            	theUrls += "Cannot get stream type for track (network problem?)"
+        else:
+            if (not 'sample' in (data['url'])):
+            	theUrls = str(data['url'])
+            	theUrls += '\n'
+        qobuzPlaylist = str(os.path.expanduser('~'))
+        qobuzPlaylist += '/Music/QobuzMix.m3u8'
+        completeName = os.path.abspath(qobuzPlaylist)
+        #completeName = os.path.abspath("/Users/geofstro/Music/Playlists/Qobuz.m3u8")
+        file1 = open(completeName,"r")
+        theLines=file1.read()
+        file1.close
+        if not (data['url'] in theLines):
+        	file1 = open(completeName,"a")
+        	file1.write(theUrls)
+        	file1.close
         return data['url']
 
     def get_artist(self):

@@ -1,3 +1,7 @@
+1.1.0
+-----
+* Added Audiophile option - creates playlist opened by external player
+
 1.0.0
 -----
 * clean up

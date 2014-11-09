@@ -143,12 +143,15 @@
     <!-- URL Resolver -->
     <string id="33000">Resolver enable</string>
 
-    <!-- Color -->
-    <string id="33101">Colors</string>
-    <string id="33102">Context menu items color</string>
-    <string id="33103">Context menu items warning color</string>
-    <string id="33104">Playlist items color</string>
-    <string id="33105">Context menu section format</string>
+    <!-- Audiophile -->
+    <string id="33101">Audiophile</string>
+    <string id="33102">Audiophile option</string>
+    <string id="33103">Uses external player instead of XBMC</string>
+    <string id="33104">A playlist named qobuzNow.m3u8 will be written to your Music folder</string>
+    <string id="33105">This will automatically be opened using your preferred external player</string>
+    <string id="33106">Recommended players include:</string>
+    <string id="33107">foobar2000, HQPlayerDesktop & J River Media Center</string>
+    <string id="33108">First designate this player as the default for .m3u8 files</string>
 
     <!-- Qobuz Player -->
     <string id="34000">Qobuz Player</string>
@@ -164,7 +167,7 @@
     <!-- Notification -->
     <string id="36000">Qobuz</string>
     <string id="36001">Empty directory</string>
-    <string id="36002">Notification</string>
+    <string id="36002">Audiophile</string>
     <string id="36003">Notify when starting song</string>
     <string id="36004">Nothing to add</string>
     <string id="36005">Add albums to favorites?</string>

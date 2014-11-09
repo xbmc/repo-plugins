@@ -33,22 +33,23 @@
 		<setting id="image_default_size" type="labelenum" 
 		    label="Image default size"
             default="large" values="thumbnail|small|large|" />
-
 	</category>
-	<!-- Notification -->
-	<!-- <category label="36002"> </category> -->
-
-	<!-- Display -->
-	<!-- <category label="33101">
-		<setting id="color_item_caution" label="33103" type="text"
-			default="FFFF0000" />
-		<setting id="item_section_color" label="33104"
-			type="text" default="FF59A0FF" />
-		<setting id="item_section_format" label="33105"
-			type="text" default=".o[ %s ]o." />
-		<setting id="view_navigation" label="View navigation"
-            type="text" default="bigicon" /> 
-	</category> -->
+	
+	
+	<!-- Audiophile -->
+	<category label="33101">
+		<setting type="lsep" label="33103" />
+		<setting type="sep" />
+		<setting type="text" label="33104" />
+		<setting type="text" label="33105" />
+		<setting type="text" label="33106" />
+		<setting type="text" label="33107" />
+		<setting type="text" label="33108" />
+		<setting type="sep" />
+		<setting id="audiophile" label="33102" type="bool" default="false" />
+	</category>
+	
+	
 	
 	<!-- Other -->
 	<category label="38003">

@@ -1,3 +1,7 @@
+2.0.0 (2014-11-09)
+UPD: new break API
+UPD: kodimon
+
 1.0.0
 - set the info labels for images
 - updated bromixbmc

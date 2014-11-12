@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<setting id="showFanart" type="bool" label="30500" default="true"/>
-	<setting id="supportAnimatedGifs" type="bool" label="30501" default="false"/>
+    <!-- Kodimon General -->
+    <category label="30000">
+
+        <setting id="kodimon.fanart.show" type="bool" label="30021" default="true"/>
+        <setting id="kodimon.cache.size" type="slider" label="30024" values="1|2|20|30|40|50" default="5" range="1,25" option="int"/>
+    </category>
 </settings>

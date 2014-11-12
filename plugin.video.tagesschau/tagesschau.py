@@ -15,11 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, urllib, urlparse
+import sys, os, urllib, urlparse, logging
 
 import xbmc, xbmcplugin, xbmcgui, xbmcaddon
 
 from tagesschau_json_api import VideoContentProvider, JsonSource, LazyVideoContent
+from subtitles import download_subtitles
 
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.tagesschau'
@@ -32,17 +33,25 @@ URL_PARAM = 'url'
 DEFAULT_IMAGE_URL = 'http://miss.tagesschau.de/image/sendung/ard_portal_vorspann_ts.jpg'
 
 # -- Settings -----------------------------------------------
-settings = xbmcaddon.Addon(id=ADDON_ID)
-quality_id = settings.getSetting("quality")
-quality = ['M', 'L'][int(quality_id)]
+logger = logging.getLogger("plugin.video.tagesschau.api")
+
+# -- Settings -----------------------------------------------
+addon = xbmcaddon.Addon(id=ADDON_ID)
+quality_id = addon.getSetting('quality')
+quality = ['M', 'L', 'X'][int(quality_id)]
 
 # -- I18n ---------------------------------------------------
-language = xbmcaddon.Addon(id='plugin.video.tagesschau').getLocalizedString
+language = addon.getLocalizedString
 strings = { 'latest_videos': language(30100),
             'latest_broadcasts': language(30101),
             'dossiers': language(30102),
             'archived_broadcasts': language(30103)
 }
+
+#-- Subtitles ------------------------------------------------
+
+profile_dir = xbmc.translatePath(addon.getAddonInfo('profile'))
+subtitles_dir  = os.path.join(profile_dir, 'Subtitles') 
 
 # ------------------------------------------------------------
 
@@ -108,6 +117,7 @@ params = get_params()
 provider = VideoContentProvider(JsonSource())
 
 if params.get(ACTION_PARAM) == 'play_video':
+    subtitles_file = None
     # expecting either url or feed and id param
     url = params.get(URL_PARAM)
     if url:
@@ -119,8 +129,18 @@ if params.get(ACTION_PARAM) == 'play_video':
         # find video with matching tsid
         for video in videos:
             if video.tsid == tsid:
-                url = video.video_url(quality)    
+                url = video.video_url(quality)
+                # try to download and and convert subtitles to local SRT file
+                # as of October 2014, only subtiles for complete "tagesschau" broadcasts are available
+                # subtitles_url = 'http://www.tagesschau.de/multimedia/video/video-29351~subtitle.html'
+                subtitles_url = 'http://www.tagesschau.de/multimedia/video/' + str(video.video_id()) + '~subtitle.html'        
+                subtitles_file = download_subtitles(subtitles_url, subtitles_dir)
+                
     listitem = xbmcgui.ListItem(path=url)
+    if(subtitles_file != None):
+        # the following only works in Gotham, see
+        # http://forum.xbmc.org/showthread.php?tid=154805&page=7&highlight=subtitle
+        listitem.setProperty('upnp:subtitle:1', subtitles_file)             
     xbmcplugin.setResolvedUrl(handle=int(sys.argv[1]), succeeded=(url != None), listitem=listitem)
 
 elif params.get(ACTION_PARAM) == 'list_feed':

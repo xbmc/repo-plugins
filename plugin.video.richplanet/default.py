@@ -66,21 +66,14 @@ def VIDEOLINKS(url,name):
         response.close()
         match=re.compile('iframe src=&quot;(.+?).x?p=1&quot;').findall(link)#newer type videos
 
-        #req = urllib2.Request(url)
-        #req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
-        #response = urllib2.urlopen(req)
-        #link=response.read()
-        #response.close()
-        #match=re.compile('swf#file=(.+?)&autostart').findall(link)#older type videos
-
         req = urllib2.Request(match[0])
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        match=re.compile('blipsd="(.+?)"').findall(link)
-        for url in match:
-                addLink(name,url,'http://a.i.blip.tv/g?src=Richplanet-website_banner610.png&w=220&h=150&fmt=jpg',longdescription)
+        match=re.compile('mediaUrl":"(.+?)","duration":"(.+?)"').findall(link)
+        for url,duration in match:
+                addLink(name,url,'http://a.i.blip.tv/g?src=Richplanet-website_banner610.png&w=220&h=150&fmt=jpg',longdescription,duration)
 
 
                 
@@ -105,10 +98,11 @@ def get_params():
 
 
 
-def addLink(name,url,iconimage,longdescription):
+def addLink(name,url,iconimage,longdescription,duration):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": longdescription  } )
+        times=int(duration)/60
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": longdescription, "Duration": times  } )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
         return ok
 

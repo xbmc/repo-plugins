@@ -3,7 +3,7 @@
   <string id="30000">RoosterTeeth</string>
   <string id="30001">Add-on Notification</string>
   <string id="30002">Next Page</string>
-  <string id="30003">Sorry, you must be a Sponsor to see this video.</string>
+  <string id="30003">Sorry. You must be a Sponsor to see this video</string>
   <string id="30004">Only audio is avaliable</string>
   <string id="30005">Podcasts</string>
   <string id="30006">Choose a stream</string>
@@ -26,8 +26,8 @@
   <string id="30023">Media info 3</string>
   <string id="30024">Unknown Error</string>
   <string id="30025">Login Failed</string>
-  <string id="30026">Comedy, Gaming</string>
+  <string id="30026">Comedy and Gaming</string>
   <string id="30027">Latest Achievement Hunter Episodes</string>
-  <string id="30028"></string>
+  <string id="30028">Debug</string>
   <string id="30029"></string>
 </strings>

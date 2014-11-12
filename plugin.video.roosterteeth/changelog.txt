@@ -1,3 +1,6 @@
+Version 0.1.1
+Changes due to website changes
+
 Version 0.1.0
 Changes due to website changes
 Video Quality is 480p/720p/1080p now

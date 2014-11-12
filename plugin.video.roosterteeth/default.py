@@ -30,7 +30,14 @@ language = addon.getLocalizedString
 cookie_file = os.path.join(addon_profile, 'cookie_file')
 cookie_jar = cookielib.LWPCookieJar(cookie_file)
 base = 'http://roosterteeth.com'
+debug = addon.getSetting('debug')
 
+__addon__       = "plugin.video.roosterteeth"
+__settings__    = xbmcaddon.Addon(id=__addon__ )
+__language__    = __settings__.getLocalizedString
+__images_path__ = os.path.join( xbmcaddon.Addon(id=__addon__ ).getAddonInfo('path'), 'resources', 'images' )
+__date__        = "11 November 2014"
+__version__     = "0.1.1"
 
 def addon_log(string):
     try:
@@ -97,6 +104,8 @@ def get_soup(data):
 #Patch for python <= 2.7.2 (windows: xbmc 12 and older, OS: current xbmc (xbmc 14) and older))
 def mangle_html(data):
     print 'Python Version: ' + sys.version
+    if (debug) == 'true':
+        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s " % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "mangling html!" ), xbmc.LOGNOTICE )
 #    print "DEBUG info, str(data) before mangling it:" + str(data)
     data = re.sub(r'</scri["\']', '', data)
     data = re.sub(r"<scrip'", "", data)
@@ -124,6 +133,10 @@ def cache_active_rt_shows():
     rt_url = 'http://roosterteeth.com/archive/series.php'
     soup = get_soup(rt_url)
     items = soup('table', class_="border boxBorder")[0].table('tr')
+    
+    if (debug) == 'true':
+        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "len(items)", str(len(items)) ), xbmc.LOGNOTICE )
+    
     return filter_items(items)
 
 
@@ -384,8 +397,35 @@ def resolve_url(item_id, retry=False):
  
     if len(data) <= 10:
 #      trying a different resolve method
-       path = resolve_url_2014(item_id, retry=False)
-       return path
+       path = resolve_url_youtube_bliptv(item_id)
+       if path == "":
+#      trying yet another resolve method
+            path = resolve_url_cloudfront(item_id)
+            if path == "":
+                if retry:
+                    addon_log('retryException: %s' %format_exc())
+                    notify(language(30024))
+                    xbmc.sleep(3000)
+                else:
+                    if addon.getSetting('is_sponsor') == 'true':
+                        logged_in = check_login()
+                        if not logged_in:
+                            logged_in = login()
+                            if logged_in:
+                                return resolve_url(item_id, True)
+                            else:
+                                notify(language(30025))
+                                xbmc.sleep(3000)
+                        else:
+                            notify(language(30003))
+                            xbmc.sleep(3000)        
+                    else:
+                        notify(language(30003))
+                        xbmc.sleep(3000)
+            else:
+                return path    
+       else:            
+            return path
     else:
         soup = get_soup(data['embed']['html'])
         try:
@@ -420,7 +460,41 @@ def resolve_url(item_id, retry=False):
                 addon_log('addonException: resolve_url')
 
 
-def resolve_url_2014(item_id, retry=False):
+def resolve_url_youtube_bliptv(item_id):
+    url = 'http://roosterteeth.com/archive/?id=%s' %item_id
+    
+    if (debug) == 'true':
+        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "url1", str(url) ), xbmc.LOGNOTICE )
+    
+    data = make_request(url)
+    data = str(data)    
+
+#search for embedded youtube vid    
+#<div id="nowPlayingEmbed" data-filetype="youtube"><iframe id="ytIframe" width="720" height="405" src="http://www.youtube.com/embed/qad_VTlD9PE?enablejsapi=1&rel=0&modestbranding=1&showsearch=0&autohide=1&iv_load_policy=1&wmode=transparent" frameborder="0" allowfullscreen></iframe></div>
+    start_pos_youtubeid = data.find("http://www.youtube.com/embed/")
+    if start_pos_youtubeid == -1:
+#search for blip.tv vid    
+#<iframe src="http://blip.tv/play/hO4bg7G0TAA.html?p=1&autostart=true" width="720" height="435" frameborder="0" allowfullscreen>
+        start_pos_blipid_url = data.find("http://blip.tv/play/")
+        if start_pos_blipid_url == -1:
+            path = ""
+        else:
+            end_pos_blipid_url = data.find("?",start_pos_blipid_url + 1)
+            blipid_url = str(data[start_pos_blipid_url:end_pos_blipid_url]) + ".html"
+            path = get_blip_location(blipid_url)
+    else:
+        start_pos_youtubeid = start_pos_youtubeid + len ("http://www.youtube.com/embed/")
+        end_pos_youtubeid = data.find("?",start_pos_youtubeid + 1)
+        youtubeid = str(data[start_pos_youtubeid:end_pos_youtubeid])
+        path = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %youtubeid
+   
+    if (debug) == 'true':
+        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "path1", str(path) ), xbmc.LOGNOTICE )
+        
+    return path
+
+
+def resolve_url_cloudfront(item_id):
 #     <script type='text/javascript'>
 #                     jwplayer('video-9902').setup({
 #                         image: "http://s3.amazonaws.com/s3.roosterteeth.com/assets/epart/ep9902.jpg",
@@ -442,54 +516,52 @@ def resolve_url_2014(item_id, retry=False):
 #                 </script>
 
     url = 'http://roosterteeth.com/archive/?id=%s' %item_id
+    
+    if (debug) == 'true':
+        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "url2", str(url) ), xbmc.LOGNOTICE )
+    
     data = make_request(url)
      
     data = str(data)    
     start_pos_sources = data.find("sources")   
-    print start_pos_sources
-    start_pos_480p = data.find("{",start_pos_sources)
-    print start_pos_480p
-    end_pos_480p = data.find("}",start_pos_480p + 1)
-    print end_pos_480p
-    string_480p = data[start_pos_480p:end_pos_480p + 1]
-    print string_480p
-    start_pos_480p_file = string_480p.find("http")
-    end_pos_480p_file = string_480p.find('"',start_pos_480p_file + 1)
-    string_480p_file = string_480p[start_pos_480p_file:end_pos_480p_file]
-    print string_480p_file
-    
-    start_pos_720p = data.find("{",end_pos_480p + 1)
-    print start_pos_720p
-    end_pos_720p = data.find("}",start_pos_720p + 1)
-    print end_pos_720p
-    string_720p = data[start_pos_720p:end_pos_720p + 1]
-    print string_720p
-    start_pos_720p_file = string_720p.find("http")
-    end_pos_720p_file = string_720p.find('"',start_pos_720p_file + 1)
-    string_720p_file = string_720p[start_pos_720p_file:end_pos_720p_file]
-    print string_720p_file
- 
-    start_pos_1080p = data.find("{",end_pos_720p + 1)
-    print start_pos_1080p
-    end_pos_1080p = data.find("}",start_pos_1080p + 1)
-    print end_pos_1080p
-    string_1080p = data[start_pos_1080p:end_pos_1080p + 1]
-    print string_1080p
-    start_pos_1080p_file = string_1080p.find("http")
-    end_pos_1080p_file = string_1080p.find('"',start_pos_1080p_file + 1)
-    string_1080p_file = string_1080p[start_pos_1080p_file:end_pos_1080p_file]
-    print string_1080p_file
-   
-    preferred_quality = addon.getSetting('quality')
-#   high video quality  
-    if preferred_quality == '0':
-        path = string_1080p_file
-#   medium video quality  
-    elif preferred_quality == '1':
-        path = string_720p_file
-#   low video quality          
-    else: 
-        path = string_480p_file   
+    if start_pos_sources == -1: 
+        path = ""
+    else:
+        start_pos_480p = data.find("{",start_pos_sources)
+        end_pos_480p = data.find("}",start_pos_480p + 1)
+        string_480p = data[start_pos_480p:end_pos_480p + 1]
+        start_pos_480p_file = string_480p.find("http")
+        end_pos_480p_file = string_480p.find('"',start_pos_480p_file + 1)
+        string_480p_file = string_480p[start_pos_480p_file:end_pos_480p_file]
+        
+        start_pos_720p = data.find("{",end_pos_480p + 1)
+        end_pos_720p = data.find("}",start_pos_720p + 1)
+        string_720p = data[start_pos_720p:end_pos_720p + 1]
+        start_pos_720p_file = string_720p.find("http")
+        end_pos_720p_file = string_720p.find('"',start_pos_720p_file + 1)
+        string_720p_file = string_720p[start_pos_720p_file:end_pos_720p_file]
+     
+        start_pos_1080p = data.find("{",end_pos_720p + 1)
+        end_pos_1080p = data.find("}",start_pos_1080p + 1)
+        string_1080p = data[start_pos_1080p:end_pos_1080p + 1]
+        start_pos_1080p_file = string_1080p.find("http")
+        end_pos_1080p_file = string_1080p.find('"',start_pos_1080p_file + 1)
+        string_1080p_file = string_1080p[start_pos_1080p_file:end_pos_1080p_file]
+       
+        preferred_quality = addon.getSetting('quality')
+#       high video quality  
+        if preferred_quality == '0':
+            path = string_1080p_file
+#       medium video quality  
+        elif preferred_quality == '1':
+            path = string_720p_file
+#       low video quality          
+        else: 
+            path = string_480p_file
+        
+    if (debug) == 'true':
+        xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "path2", str(path) ), xbmc.LOGNOTICE )
+        
     return path
 
                 
@@ -654,6 +726,10 @@ try:
 except:
     mode = None
 
+if (debug) == 'true':
+    xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "mode!", str(mode) ), xbmc.LOGNOTICE )
+    
+
 addon_log(repr(params))
 
 if mode == None:
@@ -706,7 +782,7 @@ elif mode == 2:
 elif mode == 3:
     # resolve show episode
     set_resolved_url(resolve_url(params['url']))
-
+    
 elif mode == 4:
     # display podcast dir
     get_podcasts()

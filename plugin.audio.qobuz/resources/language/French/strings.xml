@@ -137,15 +137,18 @@
     <!-- URL Resolver -->
     <string id="33000">Resolver activé</string>
 
-    <!-- Audiophile -->
-    <string id="33101">Audiophile</string>
-    <string id="33102">Option Audiophile</string>
-    <string id="33103">Utilisez un logiciel externe pour jouer Qobuz</string>
-    <string id="33104">La fiche qobuzNow.m3u8 sera crée dans votre dossier Musique</string>
-    <string id="33105">Il sera lancer automatiquement par la logiciel externe</string>
-    <string id="33106">Les logiciels recommandée s'inclus:</string>
-    <string id="33107">foobar2000, HQPlayerDesktop & J River Media Center</string>
-    <string id="33108">D'abord configurez le logiciel comme le defaut pour fiches .m3u8</string>
+
+    
+     <!-- Audiophile -->
+    <string id="33111">Audiophile</string>
+    <string id="33112">Option Audiophile</string>
+    <string id="33113">Utilisez un logiciel externe pour jouer Qobuz</string>
+    <string id="33114">La fiche qobuzNow.m3u8 sera crée dans votre dossier Musique</string>
+    <string id="33115">La musique sera jouer automatiquement par la logiciel externe</string>
+    <string id="33116">Avec 'gapless' les albums/playlists ne peut pas jouer à la fin</string>
+    <string id="33117">Audiophile</string>
+    <string id="33118">Gapless</string>
+    <string id="33119">Secondes entre pists pour non-gapless</string>
 
     <!-- Qobuz Player -->
     <string id="34000">Qobuz Player</string>

@@ -15,6 +15,7 @@
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
 import xbmcgui
+import time
 import qobuz
 import os
 from inode import INode
@@ -78,10 +79,12 @@ class Node_playlist(INode):
     def populate(self, Dir, lvl, whiteFlag, blackFlag):
     	theUrls = ''
     	launchApp = False
+    	interlude = 0
         for track in self.data['tracks']['items']:
             node = getNode(Flag.TRACK)
             node.data = track
             track_id = track.get('id')
+            track_duration = track.get('duration')
             format_id = 6 if getSetting('streamtype') == 'flac' else 5
             data = api.get('/track/getFileUrl', format_id=format_id,
             	track_id=track_id, user_id=api.user_id)
@@ -93,35 +96,33 @@ class Node_playlist(INode):
             		theUrls += '\n'
             		if getSetting('audiophile') == 'true':
     					launchApp = True
-            self.add_child(node)
-        if launchApp:
-            qobuzPlaylist = str(os.path.expanduser('~'))
-            qobuzPlaylist += '/Music/QobuzNow.m3u8'
-            completeName = os.path.abspath(qobuzPlaylist)
-            file1 = open(completeName,"w")
-            toFile = theUrls
-            file1.write(toFile)
-            file1.close
-            if _platform == "darwin":
+            		if getSetting('gapless') == 'false' and launchApp:
+            			node.get_streaming_url()
+            			interlude = int(getSetting('interlude'))
+            			time.sleep(int(track_duration)+interlude)
+        if getSetting('gapless') == 'true' and launchApp:
+        	qobuzPlaylist = str(os.path.expanduser('~'))
+        	qobuzPlaylist += '/Music/QobuzNow.m3u8'
+        	completeName = os.path.abspath(qobuzPlaylist)
+        	file1 = open(completeName,"w")
+        	toFile = theUrls
+        	file1.write(toFile)
+        	file1.close
+        	if _platform == "darwin":
         		try:           
         			cmd = """osascript -e 'tell app "HQPlayerDesktop" to quit'"""
         			os.system(cmd)
         			os.system("/Applications/HQPlayerDesktop.app/Contents/MacOS/HQPlayerDesktop "+completeName+"&")
-        			cmd = """osascript<<END
-						tell application "System Events"
-							set frontmost of process "HQPlayerDesktop" to true
-							delay 5
-							repeat 10 times
-								tell process "HQPlayerDesktop" to keystroke tab
-							end repeat
-						end tell
-					END"""
+        			#cmd = """osascript<<END
+        				#launch application "System Events"
+        					#end tell
+        			#END"""
         			os.system(cmd)
         		except:
         			os.system("open "+completeName)
-            elif _platform == "win32":
-                os.system('TASKKILL /F /IM HQPlayer-desktop.exe')
-                os.startfile(completeName, 'open')
+        	elif _platform == "win32":
+        		os.system('TASKKILL /F /IM HQPlayer-desktop.exe')
+        		os.startfile(completeName, 'open')
         return True
         
     def get_name(self):

@@ -1,19 +1,6 @@
-1.1.2
+1.2.0
 -----
-* Added choice within Audiophile settings between Gapless and non-Gapless
-* Gapless doesn't guarantee long albums/playlists will play to the end
-* When Gapless is turned off a slider may be used to adjust the gap in seconds between tracks
-
-
-
-1.1.1
------
-* Extended Audiophile Option to play individual tracks
-* Bugfix to remove invalid import in album.py
-
-1.1.0
------
-* Added Audiophile option - creates playlist opened by external player
+* revert to original plugin version 1.0.0
 
 1.0.0
 -----

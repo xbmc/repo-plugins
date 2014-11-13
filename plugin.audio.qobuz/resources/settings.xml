@@ -33,26 +33,22 @@
 		<setting id="image_default_size" type="labelenum" 
 		    label="Image default size"
             default="large" values="thumbnail|small|large|" />
+
 	</category>
-	
-	
-	<!-- Audiophile -->
-	<category label="33111">
-		<setting type="lsep" label="33112" />
-		<setting type="sep" />
-		<setting type="text" label="33113" />
-		<setting type="text" label="33114" />
-		<setting type="text" label="33115" />
-		<setting type="text" label="33116" />
-		<setting type="sep" />
-		<setting id="audiophile" label="33117" type="bool" default="false" />
-		<setting type="sep" />
-		<setting id="gapless" label="33118" type="bool" default="false" />
-		<setting type="sep" />
-		<setting label="33119" type="slider" id="interlude" default="8" range="2,20" option="int" />
-	</category>
-	
-	
+	<!-- Notification -->
+	<!-- <category label="36002"> </category> -->
+
+	<!-- Display -->
+	<!-- <category label="33101">
+		<setting id="color_item_caution" label="33103" type="text"
+			default="FFFF0000" />
+		<setting id="item_section_color" label="33104"
+			type="text" default="FF59A0FF" />
+		<setting id="item_section_format" label="33105"
+			type="text" default=".o[ %s ]o." />
+		<setting id="view_navigation" label="View navigation"
+            type="text" default="bigicon" /> 
+	</category> -->
 	
 	<!-- Other -->
 	<category label="38003">

@@ -5,29 +5,12 @@
     :copyright: (c) 2012 by Joachim Basmaison, Cyril Leclerc
     :license: GPLv3, see LICENSE for more details.
 '''
-import os
 from inode import INode
 from debug import warn
 from gui.util import getImage, getSetting, htm2xbmc
 from gui.contextmenu import contextMenu
 from api import api
 from node import getNode, Flag
-from sys import platform as _platform
-import simplejson as json
-import urllib, urllib2
-import xbmc
-import time
-try:
-	import commands
-except:
-	pass
-try:
-	import win32com.client
-except:
-	pass
-from sys import platform as _platform
-
-
 
 SPECIAL_PURCHASES = ['0000020110926', '0000201011300', '0000020120220',
                      '0000020120221']
@@ -72,70 +55,15 @@ class Node_album(INode):
         return True
 
     def populate(self, Dir, lvl, whiteFlag, blackFlag):
-    	theUrls = ''
-    	launchApp = False
-    	interlude = 0
         for track in self.data['tracks']['items']:
             node = getNode(Flag.TRACK)
             if not 'image' in track:
                 track['image'] = self.get_image()
             node.data = track
-            track_id = track.get('id')
-            track_duration = track.get('duration')
-            format_id = 6 if getSetting('streamtype') == 'flac' else 5
-            data = api.get('/track/getFileUrl', format_id=format_id,
-            	track_id=track_id, user_id=api.user_id)
-            if not data:
-            	theUrls += "Cannot get stream type for track (network problem?)"
-            else:
-            	if (not 'sample' in (data['url'])):
-            		theUrls += str(data['url'])
-            		theUrls += '\n'
-            		if getSetting('audiophile') == 'true':
-    					launchApp = True
+            
             self.add_child(node)
-            if getSetting('gapless') == 'false' and launchApp:
-            	node.get_streaming_url()
-            	interlude = int(getSetting('interlude'))
-            	time.sleep(int(track_duration)+interlude)
-        if getSetting('gapless') == 'true' and launchApp:
-        	qobuzPlaylist = str(os.path.expanduser('~'))
-        	qobuzPlaylist += '/Music/QobuzNow.m3u8'
-        	completeName = os.path.abspath(qobuzPlaylist)
-        	file1 = open(completeName,"w")
-        	toFile = theUrls
-        	file1.write(toFile)
-        	file1.close
-        	if _platform == "darwin":
-        		#if __name__ == '__main__':
-        			#theUrls += str(earth_coords())
-        			#theUrls += '\n'
-        		try:          
-        			cmd = """osascript -e 'tell app "HQPlayerDesktop" to quit'"""
-        			os.system(cmd)
-        			os.system("/Applications/HQPlayerDesktop.app/Contents/MacOS/HQPlayerDesktop "+completeName+"&")
-        			#cmd = """osascript<<END
-        				#launch application "System Events"
-        					#tell application "System Events"
-        						#set frontmost of process "HQPlayerDesktop3" to true
-        					#end tell
-        			#END"""
-        			os.system(cmd)
-        		except:
-        			os.system("open "+completeName)
-        	elif _platform == "win32":
-        		os.system('TASKKILL /F /IM HQPlayer-desktop.exe')
-        		os.startfile(completeName, 'open')
         return len(self.data['tracks']['items'])
-	
-	#def earth_coords():
-		#cmd = """arch -i386 osascript -e 'tell application "Google Earth"
-				#set viewInf to GetViewInfo
-            	#set coords to {latitude of viewInf, longitude of viewInf}
-            #end tell
-            #return coords'"""
-    	#return [float(c) for c in commands.getoutput(cmd).split(", ")]
-	
+
     def make_url(self, **ka):
         if 'asLocalURL' in ka and ka['asLocalURL']:
             from constants import Mode

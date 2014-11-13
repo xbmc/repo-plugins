@@ -137,16 +137,11 @@
     <!-- URL Resolver -->
     <string id="33000">Povoliť prekladač</string>
 
-    <!-- Audiophile -->
-    <string id="33111">Audiophile</string>
-    <string id="33112">Audiophile option</string>
-    <string id="33113">Use external player instead of XBMC</string>
-    <string id="33114">A playlist named qobuzNow.m3u8 will be written to your Music folder</string>
-    <string id="33115">Music will be played by the player you've selected for opening m3u files</string>
-    <string id="33116">With Gapless option longer albums/playlists may not play to the end</string>
-    <string id="33117">Audiophile</string>
-    <string id="33118">Gapless</string>
-    <string id="33119">Seconds between tracks for non-gapless playback</string>
+    <!-- Color -->
+    <string id="33101">Farby</string>
+    <string id="33102">Farby položiek kontextového menu</string>
+    <string id="33103">Varovné farby položiek kontextového menu</string>
+    <string id="33104">Farby položiek playlist-u</string>
 
     <!-- Qobuz Player -->
     <string id="34000">Qobuz Player</string>

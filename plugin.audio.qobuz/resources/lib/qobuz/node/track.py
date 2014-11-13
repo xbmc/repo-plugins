@@ -14,8 +14,6 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with xbmc-qobuz.   If not, see <http://www.gnu.org/licenses/>.
-import os
-import xbmc
 from constants import Mode
 from node import Flag, ErrorNoData
 from inode import INode
@@ -23,11 +21,6 @@ from debug import warn
 from gui.util import lang, getImage, runPlugin, getSetting
 from gui.contextmenu import contextMenu
 from api import api
-try:
-	import win32com.client
-except:
-	pass
-from sys import platform as _platform
 
 class Node_track(INode):
     '''
@@ -139,8 +132,6 @@ class Node_track(INode):
         return ''
 
     def get_streaming_url(self):
-    	theUrls = ''
-    	launchApp = False
         data = self.__getFileUrl()
         if not data:
             return False
@@ -151,57 +142,7 @@ class Node_track(INode):
             warn(self, "streaming_url, no url returned\n"  
                 "API Error: %s" % (api.error)) 
             return None
-        if not data:
-            	theUrls += "Cannot get stream type for track (network problem?)"
-            	launchApp = False
-        else:
-            if (not 'sample' in (data['url'])):
-            	theUrls = str(data['url'])
-            	theUrls += '\n'
-            	if getSetting('audiophile') == 'true':
-    					launchApp = True
-    	if launchApp:
-        	#qobuzPlaylist = str(os.path.expanduser('~'))
-        	#qobuzPlaylist += '/Music/QobuzMix.m3u8'
-        	#completeName = os.path.abspath(qobuzPlaylist)
-        	#file1 = open(completeName,"r")
-        	#theLines=file1.read()
-        	#file1.close
-        	#if not (data['url'] in theLines):
-        	#file1 = open(completeName,"a")
-        	#file1.write(theUrls)
-        	#file1.close
-        	qobuzPlaylist = str(os.path.expanduser('~'))
-        	qobuzPlaylist += '/Music/QobuzNow.m3u8'
-        	completeName = os.path.abspath(qobuzPlaylist)
-        	file1 = open(completeName,"w")
-        	file1.write(theUrls)
-        	file1.close
-        	if _platform == "darwin":
-        		try:
-        			#cmd = """osascript<<END
-						#tell application "Finder"
-							#set frontmost of process "HQPlayerDesktop3" to true
-						#end tell
-					#END"""           
-        			cmd = """osascript -e 'tell app "HQPlayerDesktop" to quit'"""
-        			os.system(cmd)
-        			os.system("/Applications/HQPlayerDesktop.app/Contents/MacOS/HQPlayerDesktop "+completeName+"&")
-        			#cmd = """osascript<<END
-        				#launch application "System Events"
-						#tell application "System Events"
-							#set frontmost of process "HQPlayerDesktop3" to true
-						#end tell
-					#END"""
-        			#os.system(cmd)
-        		except:
-        			os.system("open "+completeName)
-        	elif _platform == "win32":
-        		os.system('TASKKILL /F /IM HQPlayer-desktop.exe')
-        		os.startfile(completeName, 'open')
-        	return False
-        else:
-        	return data['url']
+        return data['url']
 
     def get_artist(self):
         return self.get_property(['artist/name',

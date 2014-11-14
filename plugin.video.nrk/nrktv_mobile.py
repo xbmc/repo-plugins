@@ -17,6 +17,7 @@
 
 from __future__ import unicode_literals
 
+import datetime
 from requests import Session
 
 session = Session()
@@ -43,25 +44,48 @@ class Category(Model):
 
 class Program(Model):
     description = None
+    episode = None
+    """Episode number, name or date as string."""
+
+    aired = None
+    """Date and time aired as :class:`datetime.datetime`"""
+
+    duration = None
+    """In seconds"""
+
+    category = None
+    """:class:`Category`"""
+
     legal_age = None
     image_id = None
-    media_url = None
+    media_urls = None
     _image_url = "http://m.nrk.no/m/img?kaleidoId=%s&width=%d"
 
     @staticmethod
     def from_response(r):
         category = Category.from_response(r['category'])
+
+        media_urls = []
+        if 'parts' in r:
+            parts = sorted(r['parts'], key=lambda x: x['part'])
+            media_urls = [part['mediaUrl'] for part in parts]
+        elif 'mediaUrl' in r:
+            media_urls = [r['mediaUrl']]
+
         return Program(
             id=r['programId'],
-            title=r['title'],
+            title=r['title'].strip(),
             category=category,
             description=r.get('description'),
-            duration=r['duration'],
+            duration=int(r['duration']/1000),
             image_id=r['imageId'],
             legal_age=r.get('legalAge') or r.get('aldersgrense'),
-            media_url=r['mediaUrl'],
+            media_urls=media_urls,
             thumb=Program._image_url % (r['imageId'], 250),
             fanart=Program._image_url % (r['imageId'], 1920),
+            episode=r.get('episodeNumberOrDate'),
+            aired=datetime.datetime.fromtimestamp(
+                int(r['usageRights']['availableFrom']/1000)),
         )
 
 
@@ -84,3 +108,8 @@ def popular_programs(category_id='all-programs'):
 def recent_programs(category_id='all-programs'):
     return [Program.from_response(item) for item in
             _get('/categories/%s/recentlysentprograms' % category_id)]
+
+
+def episodes(series_id):
+    return [Program.from_response(item) for item in
+            _get('/series/%s' % series_id)['programs']]

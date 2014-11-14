@@ -69,8 +69,11 @@ def _program_list(url):
     items = [i for i in items if i['hasOndemandRights']]
     titles = [i['Title'] for i in items]
     urls = [i['Url'] for i in items]
-    thumbs = [i['ImageUrl'] for i in items]
-    fanart = [_fanart_url(url) for url in urls]
+
+    image_url = "http://m.nrk.no/m/img?kaleidoId=%s&width=%d"
+    img_ids = [i['ImageUrl'].split('/')[-1] for i in items]
+    thumbs = [image_url % (id, 300) for id in img_ids]
+    fanart = [image_url % (id, 1920) for id in img_ids]
     return _programs_from_lists(titles, urls, thumbs, fanart)
 
 

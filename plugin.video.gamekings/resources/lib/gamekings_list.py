@@ -89,7 +89,11 @@ class Main:
 		# Get the titles and video page urls
 		#<a href="http://www.gamekings.tv/videos/lars-gustavsson-over-battlefield-4/" title="Lars Gustavsson over Battlefield 4">
 		#skip this: <a href='http://www.gamekings.tv/videos/lars-gustavsson-over-battlefield-4/#disqus_thread'>
-		video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/videos/")})
+		if self.plugin_category == __language__(30002):
+		#this is Gamekings Extra	
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/nieuws/")})
+		else:
+			video_page_urls_and_titles = soup.findAll('a', attrs={'href': re.compile("^http://www.gamekings.tv/videos/")})
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_page_urls_and_titles)", str(len(video_page_urls_and_titles)) ), xbmc.LOGNOTICE )
@@ -111,6 +115,8 @@ class Main:
 			elif video_page_url.find('aflevering') >= 0:
 				if (self.DEBUG) == 'true':
 					xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "skipped video_page_url aflevering in non-afleveringen category", str(video_page_url) ), xbmc.LOGNOTICE )
+			#skip the thumbnail too			
+				thumbnail_urls_index = thumbnail_urls_index + 1
 				continue
 			
 			# Make title
@@ -125,6 +131,7 @@ class Main:
 				#convert from unicode to encoded text (don't use str() to do this)
 				title = title.encode('utf-8')
 			
+			title = title.replace('Gamekings Extra: ','')
 			title = title.replace('-',' ')
 			title = title.replace('/',' ')
 			title = title.replace(' i ',' I ')
@@ -178,7 +185,7 @@ class Main:
 					continue
 
 			# Add to list
-			parameters = {"action" : "play", "video_page_url" : video_page_url}
+			parameters = {"action" : "play", "video_page_url" : video_page_url, "plugin_category" : self.plugin_category}
 			url = sys.argv[0] + '?' + urllib.urlencode(parameters)
 			listitem = xbmcgui.ListItem( title, iconImage="DefaultVideo.png", thumbnailImage=thumbnail_url )
 			listitem.setInfo( "video", { "Title" : title, "Studio" : "Gamekings" } )

@@ -7,6 +7,7 @@ from gamekings_utils import HTTPCommunicator
 import os
 import re
 import sys
+import base64
 import urllib, urllib2
 import urlparse
 import xbmc
@@ -29,6 +30,7 @@ class Main:
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s, %s = %s" % ( __addon__, __version__, __date__, "ARGV", repr(sys.argv), "File", str(__file__) ), xbmc.LOGNOTICE )
 		
 		# Parse parameters
+		self.plugin_category = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['plugin_category'][0]
 		self.video_page_url = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)['video_page_url'][0]
 		
 		if (self.DEBUG) == 'true':
@@ -82,11 +84,20 @@ class Main:
 		soup = BeautifulSoup(html_data)
 		
 		# Get the video url
+		#This is for Gamekings Extra
+		#<script type="text/javascript">
+		#   gogoVideo(92091,"MjAxNDExMTNfRXh0cmEubXA0LGh0dHA6Ly93d3cuZ2FtZWtpbmdzLnR2L3dwLWNvbnRlbnQvdXBsb2Fkcy8yMDE0MTExNF9FeHRyYV9zcGxhc2gtMTAyNHg1NzYuanBnLEdhbWVraW5ncyBFeHRyYTogV2Vsa2UgZ2FtZXMgc3BlbGVuIHdpaiBkaXQgbmFqYWFyPw==");
+		#</script>
+		#the base86 encode string looks like this decoded:
+		#20141113_Extra.mp4,http://www.gamekings.tv/wp-content/uploads/20141114_Extra_splash-1024x576.jpg,Gamekings Extra: Welke games spelen wij dit najaar?
+		if self.plugin_category == __language__(30002):
+			video_urls = re.findall(r'"(.*?)"', str(soup.findAll('script', text=re.compile("gogoVideo"), limit=1)))
+		else:
 		#<meta property="og:video" content="http://stream.gamekings.tv/20130306_SpecialForces.mp4"/>
 		#sometimes the content is not (!!) correct and the real link will be "http://stream.gamekings.tv/large/20130529_E3Journaal.mp4" :(
-		#May 2014: video are vimeo files now
-		#f.e. video_url = "http://player.vimeo.com/external/94656619.hd.mp4?s=3c3766957145e206740087997ede755a"
-		video_urls = soup.findAll('meta', attrs={'content': re.compile("^http://stream.gamekings.tv/")}, limit=1)
+		#May 2014: videos are vimeo files now:
+		#<meta property="og:video" content="http://stream.gamekings.tv/http://player.vimeo.com/external/111637217.hd.mp4?s=10e5d0efd4d10756b535b115140ebe13"/>
+			video_urls = soup.findAll('meta', attrs={'content': re.compile("^http://stream.gamekings.tv/")}, limit=1)
 		
 		if (self.DEBUG) == 'true':
 			xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "len(video_urls)", str(len(video_urls)) ), xbmc.LOGNOTICE )
@@ -94,7 +105,12 @@ class Main:
 		if len(video_urls) == 0:
 			no_url_found = True
 		else:
-			video_url = str(video_urls[0]['content'])
+			if self.plugin_category == __language__(30002):
+				video_urls_dec = str(base64.b64decode(video_urls[0]))
+				video_urls_dict = video_urls_dec.split(',')
+				video_url = "http://stream.gamekings.tv/large/" + str(video_urls_dict[0])
+			else:
+				video_url = str(video_urls[0]['content'])
 			if (self.DEBUG) == 'true':
 				xbmc.log( "[ADDON] %s v%s (%s) debug mode, %s = %s" % ( __addon__, __version__, __date__, "video_url", str(video_url) ), xbmc.LOGNOTICE )
 

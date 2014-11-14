@@ -36,15 +36,25 @@ class Main:
         listitem = xbmcgui.ListItem( __language__(30001), iconImage="DefaultFolder.png" )
         folder = True
         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
-        
+
         #
-        # Pc
+        # Gamekings Extra
         #
-        parameters = {"action" : "list", "plugin_category" : __language__(30002), "url" : "http://www.gamekings.tv/pcgamersunite/", "next_page_possible": "False"}
+        parameters = {"action" : "list", "plugin_category" : __language__(30002), "url" : "http://www.gamekings.tv/tag/Gamekings-Extra/page/001/", "next_page_possible": "True"}
         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
         listitem = xbmcgui.ListItem( __language__(30002), iconImage="DefaultFolder.png" )
         folder = True
         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
+
+#Retired for now (14/11/2014)
+#         #
+#         # Pc
+#         #
+#         parameters = {"action" : "list", "plugin_category" : __language__(30003), "url" : "http://www.gamekings.tv/pcgamersunite/", "next_page_possible": "False"}
+#         url = sys.argv[0] + '?' + urllib.urlencode(parameters)
+#         listitem = xbmcgui.ListItem( __language__(30003), iconImage="DefaultFolder.png" )
+#         folder = True
+#         xbmcplugin.addDirectoryItem( handle = int(sys.argv[ 1 ] ), url = url, listitem=listitem, isFolder=folder)
         
         # Disable sorting
         xbmcplugin.addSortMethod( handle=int( sys.argv[ 1 ] ), sortMethod=xbmcplugin.SORT_METHOD_NONE )

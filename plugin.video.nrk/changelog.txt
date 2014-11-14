@@ -1,3 +1,7 @@
+[B]4.4.18[/B]
+- Lagt til ekstra inforormasjon om videoer og serier
+- Høyoppløselige bilder
+
 [B]4.4.17[/B]
 - Sideendringer
 

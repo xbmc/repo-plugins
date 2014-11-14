@@ -39,8 +39,7 @@ def view_top():
     addDirectoryItem(plugin.handle, plugin.url_for(live), ListItem("Direkte"), True)
     addDirectoryItem(plugin.handle, plugin.url_for(recommended), ListItem("Aktuelt"), True)
     addDirectoryItem(plugin.handle, plugin.url_for(mostrecent), ListItem("Nytt"), True)
-    addDirectoryItem(plugin.handle, plugin.url_for(mostpopularweek), ListItem("Populært siste uke"), True)
-    addDirectoryItem(plugin.handle, plugin.url_for(mostpopularmonth), ListItem("Populært siste måned"), True)
+    addDirectoryItem(plugin.handle, plugin.url_for(popular), ListItem("Populært"), True)
     addDirectoryItem(plugin.handle, plugin.url_for(browse), ListItem("Bla"), True)
     addDirectoryItem(plugin.handle, plugin.url_for(search), ListItem("Søk"), True)
     endOfDirectory(plugin.handle)
@@ -84,19 +83,26 @@ def view(items, update_listing=False, urls=None):
         urls = [plugin.url_for_path(item.url) for item in items]
     total = len(items)
     for item, url in zip(items, urls):
-        li = ListItem(item.title, thumbnailImage=getattr(item, 'thumb', ''))
+        title = item.title
+        if getattr(item, 'episode', None):
+            title += " " + item.episode
+        li = ListItem(title, thumbnailImage=getattr(item, 'thumb', ''))
         playable = plugin.route_for(url) == play
         li.setProperty('isplayable', str(playable))
         if hasattr(item, 'fanart'):
             li.setProperty('fanart_image', item.fanart)
         if playable:
-            li.setInfo('video', {
-                'title': item.title,
-                'genre': item.category.title if hasattr(item, 'category') else '',
-                'mpaa': getattr(item, 'legal_age', ''),
-                'plot': getattr(item, 'description', '')
-            })
-            li.addStreamInfo('video', {'codec': 'h264', 'width': 1280, 'height': 720})
+            info = {
+                'title': title,
+                'plot': item.description,
+                'mpaa': item.legal_age,
+            }
+            if item.category:
+                info['genre'] = item.category.title
+            if item.aired:
+                info['aired'] = item.aired.strftime('%Y-%m-%d')
+            li.setInfo('video', info)
+            li.addStreamInfo('video', {'codec': 'h264', 'width': 1280, 'height': 720, 'duration': item.duration})
             li.addStreamInfo('audio', {'codec': 'aac', 'channels': 2})
         addDirectoryItem(plugin.handle, url, li, not playable, total)
     endOfDirectory(plugin.handle, updateListing=update_listing)
@@ -120,10 +126,12 @@ def mostrecent():
     view(programs, urls=urls)
 
 
-@plugin.route('/mostpopularweek')
-def mostpopularweek():
-    import nrktv
-    view(nrktv.get_most_popular_week())
+@plugin.route('/popular')
+def popular():
+    import nrktv_mobile as nrktv
+    xbmcplugin.setContent(plugin.handle, 'episodes')
+    programs = nrktv.popular_programs()
+    view(programs, urls=[plugin.url_for(play, item.id) for item in programs])
 
 
 @plugin.route('/mostpopularmonth')
@@ -189,12 +197,12 @@ def search_results(query, page):
 
 
 @plugin.route('/serie/<arg>')
-def seasons(arg):
-    import nrktv
-    items = nrktv.get_seasons(arg)
-    if len(items) == 1:
-        return plugin.redirect(items[0].url)
-    view(items)
+def series_view(arg):
+    import nrktv_mobile as nrktv
+    xbmcplugin.setContent(plugin.handle, 'episodes')
+    programs = nrktv.episodes(arg)
+    urls = [plugin.url_for(play, item.id) for item in programs]
+    view(programs, urls=urls)
 
 
 @plugin.route('/program/Episodes/<series_id>/<path:season_id>')

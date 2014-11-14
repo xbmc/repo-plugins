@@ -19,7 +19,7 @@ import re
 import sys
 import xbmc
 import xbmcaddon
-from urlparse import parse_qs
+from urlparse import parse_qs, urlsplit
 from urllib import urlencode
 
 
@@ -103,6 +103,7 @@ class UrlRule(object):
         self._regex = re.compile('^' + p + '$')
 
     def match(self, path):
+        path = urlsplit(path).path
         m = self._regex.search(path)
         if not m:
             return False, None

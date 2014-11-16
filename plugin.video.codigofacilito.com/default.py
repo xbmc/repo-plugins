@@ -4,7 +4,7 @@ import xbmcaddon
 from urllib import unquote
 from resources.lib import scraper, utils
 
-server = 'http://www.ezequiel-escobar.com.ar/servicios/codigofacilito/'
+server = 'http://www.ezequielescobar.com/servicios/codigofacilito/'
 logo = server + 'logo.png'
 
 T_ERROR_TITLE = 30001
@@ -26,11 +26,11 @@ def main(params):
                     curso['nombre'] = curso['nombre'].encode('utf8')
                     curso['url'] = curso['url'].encode('utf8')
                     utils.add_directory_link(curso['nombre'],
-                                             logo, 
-                                             'list_videos', 
-                                             curso['url'], 
-                                             is_folder=True, 
-                                             is_playable=False, 
+                                             logo,
+                                             'list_videos',
+                                             curso['url'],
+                                             is_folder=True,
+                                             is_playable=False,
                                              total_items=int(cursosCount))
         else:
             utils.alert(utils.get_localized_string(T_ERROR_TITLE), utils.get_localized_string(T_ERROR_SERVER))
@@ -48,11 +48,11 @@ def main(params):
                 for video in videos:
                     video['nombre'] = video['nombre'].encode('utf8')
                     video['url'] = video['url'].encode('utf8')
-                    utils.add_directory_link(unquote(video['nombre']), 
-                                             logo, 
-                                             'play_video', 
-                                             video['url'], 
-                                             is_folder=False, 
+                    utils.add_directory_link(unquote(video['nombre']),
+                                             logo,
+                                             'play_video',
+                                             video['url'],
+                                             is_folder=False,
                                              is_playable=True,
                                              total_items=int(videosCount))
         else:

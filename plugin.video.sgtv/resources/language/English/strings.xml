@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+    <string id="30000">Newest</string>
+    <string id="30001">Channel 5</string>
+    <string id="30002">Channel 8</string>
+    <string id="30003">Channel U</string>
+    <string id="30004">Channel News Asia</string>
+    <string id="30005">Okto</string>
+    <string id="30006">Suria</string>
+    <string id="30007">Vasantham</string>
+    <string id="30008">Viddsee</string>
+    <string id="30009">WahBanana</string>
+    <string id="31000">Next Page</string>
+    <string id="31001">Previous Page</string>
+	<string id="31002">Finding Link</string>
+	<string id="31003">Processing</string>
+	<string id="31004">Ready to Play</string>
+	<string id="32000">Sorry the server seems to be down</string>
+</strings>

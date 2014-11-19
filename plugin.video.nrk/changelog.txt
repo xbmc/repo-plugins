@@ -1,3 +1,7 @@
+[B]4.4.19[/B]
+- Lagt til P1+, P13  og P1 lokalradio
+- Sideendringer
+
 [B]4.4.18[/B]
 - Lagt til ekstra inforormasjon om videoer og serier
 - Høyoppløselige bilder

@@ -63,7 +63,8 @@ class Program(Model):
 
     @staticmethod
     def from_response(r):
-        category = Category.from_response(r['category'])
+        category = Category.from_response(r['category']) if 'category' in r \
+            else None
 
         media_urls = []
         if 'parts' in r:
@@ -77,7 +78,7 @@ class Program(Model):
             title=r['title'].strip(),
             category=category,
             description=r.get('description'),
-            duration=int(r['duration']/1000),
+            duration=int(r.get('duration', 0)/1000),
             image_id=r['imageId'],
             legal_age=r.get('legalAge') or r.get('aldersgrense'),
             media_urls=media_urls,
@@ -85,7 +86,7 @@ class Program(Model):
             fanart=Program._image_url % (r['imageId'], 1920),
             episode=r.get('episodeNumberOrDate'),
             aired=datetime.datetime.fromtimestamp(
-                int(r['usageRights']['availableFrom']/1000)),
+                int(r.get('usageRights', {}).get('availableFrom', 0)/1000)),
         )
 
 

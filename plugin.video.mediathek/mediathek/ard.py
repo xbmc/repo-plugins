@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #-------------LicenseHeader--------------
-# plugin.video.Mediathek - Gives acces to the most video-platforms from german public service broadcaster
+# plugin.video.Mediathek - Gives access to most video-platforms from German public service broadcasters
 # Copyright (C) 2010  Raptor 2101 [raptor2101@gmx.de]
 #
 # This program is free software: you can redistribute it and/or modify

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="plugin.video.mediathek"
-  version="0.6.3"
+  version="0.6.4"
   name="Mediathek"
   provider-name="Raptor 2101">
   <requires>
@@ -13,13 +13,13 @@
    <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="de">Ermöglicht den zugriff auf alle deutschen Mediatheken der öffentlich Rechtlichen</summary>
-    <summary lang="en">Gives acces to the most video-platforms from german public service broadcaster</summary>
-    <description lang="de">Ermöglicht den zugriff auf alle deutschen Mediatheken der öffentlich Rechtlichen.
+    <summary lang="de">Ermöglicht den Zugriff auf alle deutschen Mediatheken der öffentlich Rechtlichen</summary>
+    <summary lang="en">Gives access to most video-platforms from German public service broadcasters</summary>
+    <description lang="de">Ermöglicht den Zugriff auf alle deutschen Mediatheken der öffentlich Rechtlichen.
 Aktuell implementiert sind:
   3Sat, ARD, ZDF, ARTE, ORF, NDR, KiKa (ohne Kikaninchen)
 </description>
-    <description lang="en">Gives acces to the most video-platforms from german public service broadcaster.
+    <description lang="en">Gives access to most video-platforms from German public service broadcasters.
 Currently implemented:
   3Sat, ARD, ZDF, ARTE, ORF, NDR, KiKa (without Kikaninchen)
 </description>

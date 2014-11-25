@@ -23,11 +23,12 @@ import urllib
 
 from resources.lib.utils import *
 from resources.lib.dropboxviewer import *
+import resources.lib.login as login
 
 class FolderBrowser(DropboxViewer):
         
-    def __init__( self, params ):
-        super(FolderBrowser, self).__init__(params)
+    def __init__( self, params, account_settings ):
+        super(FolderBrowser, self).__init__(params, account_settings)
 
     def buildList(self):
         resp = self.getMetaData(self._current_path, directory=True)
@@ -45,6 +46,11 @@ class FolderBrowser(DropboxViewer):
         return url
     
 def run(params): # This is the entrypoint
-    browser = FolderBrowser(params)
-    browser.buildList()
-    browser.show()
+    account_name = urllib.unquote( params.get('account', '') )
+    account_settings = login.get_account(account_name) 
+    if account_settings:
+        browser = FolderBrowser(params, account_settings)
+        browser.buildList()
+        browser.show()
+    else:
+        xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=False)

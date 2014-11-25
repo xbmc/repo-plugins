@@ -28,13 +28,63 @@ import json
 
 from utils import *
 
+from resources.lib.accountsettings import AccountSettings
 from dropbox import client, rest
 
 APP_KEY= 'QF9EBAwGS10NWBJFDRcCHxhfUR5bDhIcQhAeV0YTGBcACgg='
 SUCCES = 'Succes'
 
+def unlock(account_settings):
+    unlocked = True
+    win = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+    if (account_settings.passcode != ''):
+        #create windows property name
+        win_prop_name = urllib.quote(account_settings.account_name + 'Unlocked')
+        unlockTimeout = account_settings.passcodetimeout * 60 # to minutes
+        #get last unlocked time
+        try:
+            unlockedTime = float( win.getProperty(win_prop_name) )
+        except ValueError:
+            unlockedTime = 0.0
+        #unlocked = True when timeout not expired
+        unlocked = (time.time() < (unlockedTime + unlockTimeout) )
+        if not unlocked:
+            log('Unlock with passcode required...')
+            keyboard = xbmc.Keyboard('', LANGUAGE_STRING(30013))
+            keyboard.setHiddenInput(True)
+            keyboard.doModal()
+            if keyboard.isConfirmed() and keyboard.getText() == account_settings.passcode:
+                unlocked = True
+            else:
+                #Wrong passcode
+                dialog = xbmcgui.Dialog()
+                dialog.ok(ADDON_NAME, LANGUAGE_STRING(30014) )
+        if unlocked:
+            #update the unlock time
+            win.setProperty(win_prop_name, '%s'%time.time() )
+    return unlocked
+
+def clear_unlock(account_settings):
+    win_prop_name = urllib.quote(account_settings.account_name + 'Unlocked')
+    win = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+    win.clearProperty(win_prop_name)
+
+def get_account(account_name):
+    if account_name == '':
+        return None
+    #get the account
+    account_settings = AccountSettings(account_name)
+    #check if a access token is present
+    if account_settings.access_token == '':
+        return None
+    #check if the account is unlocked
+    if unlock(account_settings):
+        return account_settings
+    else:
+        return None
+
 def getAccessToken():
-    tokenRecieved = False
+    access_token = None
     #Get the session_id (uuid). Create one if there is none yet.
     sessionId = ADDON.getSetting('session_id').decode("utf-8")
     if sessionId == '':
@@ -61,20 +111,20 @@ def getAccessToken():
         #start the flow process (getting the auth-code
         try:
             access_token, user_id = flow.finish(accesscode)
-            #save the token in settings
-            ADDON.setSetting('access_token', access_token)
-            log('Access token stored')
-            tokenRecieved = True
+            log('Access token received')
         except rest.ErrorResponse, e:
             log_error('Failed getting the access token: %s'%str(e))
             dialog = xbmcgui.Dialog()
             dialog.ok(ADDON_NAME, LANGUAGE_STRING(30201), str(e), LANGUAGE_STRING(30202))
         finally:
             #always remove the session (failed or not)
+            tokenRecieved = (access_token != None)
             result = oauth.removeAccessCode(sessionId, tokenRecieved)
             if result != SUCCES:
                 log_error('Failed removing the access code: %s'%result)
-    return tokenRecieved
+            #also clear the sessionId
+            ADDON.setSetting('session_id', '')
+    return access_token
 
     
 class DbmcOauth2(object):

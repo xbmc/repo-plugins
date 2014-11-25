@@ -21,6 +21,7 @@
 
 import socket
 import threading, Queue
+import json
 
 from resources.lib.utils import *
 
@@ -28,7 +29,18 @@ HOST = '127.0.0.1' #use 127.0.0.1 needed for windows
 PORT = 0 #Let OS get a free port
 SOCKET_BUFFER_SIZE = 1024
 
+NOTIFY_SYNC_PATH = 'sync_path'
+NOTIFY_CHANGED_ACCOUNT = 'account_settings_changed'
+NOTIFY_ADDED_REMOVED_ACCOUNT = 'account_added_removed'
+
 class NotifySyncServer(threading.Thread):
+    '''
+    The NotifySyncServer listens to a TCP port to check if a NotifySyncClient
+    reported a change event. A change event can be send by a client (DMBC plugin)
+    when something changes on the synced folder.
+    This NotifySyncServer is started by the DropboxSynchronizer. And DropboxSynchronizer
+    will check the NotifySyncServer to see if it should perform a sync.
+    ''' 
     
     def __init__(self):
         super(NotifySyncServer, self).__init__()
@@ -67,10 +79,19 @@ class NotifySyncServer(threading.Thread):
         self.join()
         
     def getNotification(self):
-        data = []
-        while not self._notifyList.empty():
-            data.append( self._notifyList.get() )
-        return data
+        '''
+        returns one notification per call
+        '''
+        account_name = None
+        notification = None
+        if not self._notifyList.empty():
+            try:
+                data = json.loads( self._notifyList.get() )
+                account_name = data[0]
+                notification = data[1]
+            except Exception as e:
+                log_error('NotifySyncServer: failed to parse recieved data!')
+        return account_name, notification
 
     def run(self):
         self.setupServer()
@@ -98,21 +119,40 @@ class NotifySyncServer(threading.Thread):
         log_debug('NotifySyncServer stopped')
 
 class NotifySyncClient(object):
-    
-    def notify(self, path):
+    '''
+    NotifySyncClient is the client of NotifySyncServer and reports an event to
+    NotifySyncServer by sending data over the TCP socket.
+    '''
+    def send_notification(self, account_name, notification, data=None):
         s = None
         usedPort = int( ADDON.getSetting('notify_server_port') )
-        syncEnabled = ('true' == ADDON.getSetting('synchronisation').lower())
-        if syncEnabled and usedPort > 0:
+        if usedPort > 0:
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect((HOST, usedPort))
-                s.sendall(path)
-                log_debug('NotifySyncClient send: %s' %(repr(path)))
+                send_data = json.dumps([account_name, notification, data])
+                s.sendall(send_data)
+                log_debug('NotifySyncClient send: %s' %(repr(send_data)))
             except socket.error as e:
                 log_error("NotifySyncClient EXCEPTION : %s" %(repr(e)) )
             finally:
                 if s:
                     s.close()
         else:
-            log_debug('NotifySyncClient Sync not enabled or no port defined')
+            log_error('NotifySyncClient no port defined')
+    
+    def sync_path(self, account, path):
+        # check if synchronization n enabled and check if the path is somewhere
+        # in the remote path
+        if account.synchronisation and (account.remotepath in path):
+            #ignore the path for now! Otherwise need to change receiving number of
+            # SOCKET_BUFFER_SIZE according to the path string size!
+            self.send_notification(account.account_name, NOTIFY_SYNC_PATH)
+        else:
+            log_debug('NotifySyncClient Sync not enabled or path not part of remote sync path')
+
+    def account_settings_changed(self, account):
+        self.send_notification(account.account_name, NOTIFY_CHANGED_ACCOUNT)
+
+    def account_added_removed(self):
+        self.send_notification(None, NOTIFY_ADDED_REMOVED_ACCOUNT)

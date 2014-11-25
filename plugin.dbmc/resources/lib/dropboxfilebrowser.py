@@ -49,10 +49,15 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         super(DropboxFileBrowser, self).__init__(*args, **kwargs)
-        self.client = XBMCDropBoxClient()
+        self._start_path = DROPBOX_SEP
 
-    def setHeading(self, heading):
+    def setDBClient(self, client):
+        self.client = client
+        
+    def setHeading(self, heading, path=None):
         self._heading = heading
+        if path:
+            self._start_path = path
         self._thumbView = False
         
     def onInit(self):
@@ -68,7 +73,7 @@ class DropboxFileBrowser(xbmcgui.WindowXMLDialog):
         except Exception as e:
             log_debug("DropboxFileBrowser Exception: %s" %(repr(e)) )
         self.getControl(self.HEADING_LABEL).setLabel(self._heading)
-        self.showFolders(DROPBOX_SEP)
+        self.showFolders(self._start_path)
 
     def showFolders(self, path):
         log_debug('Selecting path: %s'%path)

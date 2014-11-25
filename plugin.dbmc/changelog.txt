@@ -1,3 +1,11 @@
+[B]0.7.5:[/B]
+- Fix bugs in converting old to new account
+- Fix refreshing the account view when account added/removed
+
+[B]0.7.4:[/B]
+- This is a test version for multiple account support
+- Added multiple account support (for both browsing and synchronizing)
+
 [B]0.7.3:[/B]
 - Fixed crash in FileBrowser dialog for browsing in dropbox folders (XBMC skins related)
 - Possible fix for XBMC lock up, when navigating 'back' too fast
@@ -45,6 +53,7 @@
 
 [B]0.5.1:[/B]
 - Removed fanart image. Contained dropbox logo which is not allowed
+- Changed Dbmc icon (created by Sjoerd Verschure, many thanks!)
 
 [B]0.5.0:[/B]
 - Changed plugin name from plugin.dropbox to plugin.dbmc

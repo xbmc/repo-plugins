@@ -26,11 +26,12 @@ import urllib
 
 from resources.lib.utils import *
 from resources.lib.dropboxviewer import *
+import resources.lib.login as login
 
 class DropboxSearch(DropboxViewer):
         
-    def __init__( self, params):
-        super(DropboxSearch, self).__init__(params)
+    def __init__( self, params, account_settings ):
+        super(DropboxSearch, self).__init__(params, account_settings)
         self._searchText = params.get('search_text', '')
 
     def buildList(self):
@@ -54,25 +55,31 @@ class DropboxSearch(DropboxViewer):
         
     
 def run(params): # This is the entrypoint
-    searchText = params.get('search_text', '')
-    #check if a search text is already defined
-    if searchText == '':
-        #No search text defined, ask for it.
-        keyboard = xbmc.Keyboard('', LANGUAGE_STRING(30018))
-        keyboard.doModal()
-        if keyboard.isConfirmed():
-            searchText = keyboard.getText()
-            params['search_text'] = searchText
-            params['path'] = params.get('path', DROPBOX_SEP)
-    if len(searchText) < 3:
-        #Search text has to be atleast 3 chars
-        dialog = xbmcgui.Dialog()
-        dialog.ok(ADDON_NAME, LANGUAGE_STRING(30019) )
-        xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=False)
+    account_name = urllib.unquote( params.get('account', '') )
+    account_settings = login.get_account(account_name) 
+    if account_settings:
+        searchText = params.get('search_text', '')
+        #check if a search text is already defined
+        if searchText == '':
+            #No search text defined, ask for it.
+            keyboard = xbmc.Keyboard('', LANGUAGE_STRING(30018))
+            keyboard.doModal()
+            if keyboard.isConfirmed():
+                searchText = keyboard.getText()
+                params['search_text'] = searchText
+                params['path'] = params.get('path', DROPBOX_SEP)
+        if len(searchText) < 3:
+            #Search text has to be atleast 3 chars
+            dialog = xbmcgui.Dialog()
+            dialog.ok(ADDON_NAME, LANGUAGE_STRING(30019) )
+            xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=False)
+        else:
+            search = DropboxSearch(params, account_settings)
+            dialog = xbmcgui.DialogProgress()
+            dialog.create(ADDON_NAME, LANGUAGE_STRING(30020), searchText)
+            search.buildList()
+            dialog.close()
+            search.show()
     else:
-        search = DropboxSearch(params)
-        dialog = xbmcgui.DialogProgress()
-        dialog.create(ADDON_NAME, LANGUAGE_STRING(30020), searchText)
-        search.buildList()
-        dialog.close()
-        search.show()
+        xbmcplugin.endOfDirectory(int(sys.argv[1]), succeeded=False)
+

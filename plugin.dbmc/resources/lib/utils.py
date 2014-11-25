@@ -45,6 +45,14 @@ def parse_argv():
         params = dict( arg.split( "=" ) for arg in sys.argv[ 1 ].split( "&" ) )
         return True, params
 
+def get_cache_path(account_name):
+    datapath = ADDON.getSetting('cachepath').decode("utf-8")
+    #Use user defined location?
+    if datapath == '' or os.path.normpath(datapath) == '':
+        #get the default path 
+        datapath = xbmc.translatePath( ADDON.getAddonInfo('profile') )
+    return os.path.normpath(datapath + '/' + account_name)
+
 def replaceFileExtension(path, extension):
     extension = '.' + extension
     if extension in path[-len(extension):]:

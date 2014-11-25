@@ -4,7 +4,11 @@ import re, os, time
 import urllib, urllib2, httplib2
 import json
 import HTMLParser
-import datetime
+import calendar
+from datetime import datetime, timedelta
+import time
+
+
 
 addon_handle = int(sys.argv[1])
 ROOTDIR = xbmcaddon.Addon(id='plugin.video.nbcsnliveextra').getAddonInfo('path')
@@ -20,19 +24,35 @@ ROOT_URL = 'http://stream.nbcsports.com/data/mobile/'
 #Main settings
 QUALITY = int(settings.getSetting(id="quality"))
 
+
 def CATEGORIES():                
     addDir('Live & Upcoming','/live',1,ICON,FANART)
-    addDir('Featured',ROOT_URL+'featured-2013.json',2,ICON,FANART)
-    addDir('On NBC Sports','/replays',3,ICON,FANART)
+    addDir('Featured',ROOT_URL+'mcms/prod/nbc-featured.json',2,ICON,FANART)
+    #addDir('On NBC Sports','/replays',3,ICON,FANART)
 
-def LIVE():                
+def LIVE():      
+    #REFRESH
+    #addDir('Refresh List','',0,ICON,FANART,None,False)   
+    #Add Refresh List Link
+
     #LIVE    
-    SCRAPE_VIDEOS(ROOT_URL+'live.json')
+    #SCRAPE_VIDEOS(ROOT_URL+'live.json')
+    SCRAPE_VIDEOS(ROOT_URL+'mcms/prod/nbc-live.json')
     #UPCOMING
-    SCRAPE_VIDEOS(ROOT_URL+'upcoming.json')
+    #SCRAPE_VIDEOS(ROOT_URL+'upcoming.json')
+    #http://stream.nbcsports.com/data/mobile/mcms/prod/nbc-upcoming.json
+    SCRAPE_VIDEOS(ROOT_URL+'mcms/prod/nbc-upcoming.json')
+
 
 def GET_ALL_SPORTS():
-    req = urllib2.Request(ROOT_URL+'configuration-2013.json')
+    # This process has changed drastically
+    #Need This 
+    #http://link.theplatform.com/s/BxmELC/JYis41t0VJTO?mbr=true&manifest=m3u&feed=Mobile%20App%20-%20NBC%20Sports%20Live%20Extra
+    #To get This
+    #http://allisports-vh.akamaihd.net/i/HD/video_sports/NBCU_Sports_Group_-_AlliSports/118/775/DT_BK_Skate_Streetstyle_Recap_YT_1411364680363_,140,345,220,90,60,40,20,0k.mp4.csmil/index_1_av.m3u8?null=
+
+    #req = urllib2.Request(ROOT_URL+'configuration-2013.json')
+    req = urllib2.Request(ROOT_URL+'configuration-2014-RSN-Sections.json')
     req.add_header('User-Agent', 'NBCSports/742 CFNetwork/672.0.8 Darwin/14.0.0')
     response = urllib2.urlopen(req)   
     json_source = json.load(response)                       
@@ -42,30 +62,34 @@ def GET_ALL_SPORTS():
         for item in json_source['sports']:        
             code = item['code']
             name = item['name']                  
-            addDir(name,ROOT_URL+code+'.json',4,ICON,FANART,'ALL')
+            addDir(name,ROOT_URL+'mcms/prod/'+code+'.json',4,ICON,FANART,'ALL')
     except:
         pass
 
-def FEATURED():
-    addDir('Full Replays',ROOT_URL+'featured-2013.json',4,ICON,FANART,"replay")
-    addDir('Showcase',ROOT_URL+'featured-2013.json',4,ICON,FANART,"showCase")
-    addDir('Spotlight',ROOT_URL+'featured-2013.json',4,ICON,FANART,"spotlight") 
+
+def FEATURED(url):
+    addDir('Full Replays',url,4,ICON,FANART,"replay")
+    addDir('Showcase',url,4,ICON,FANART,"showCase")
+    addDir('Spotlight',url,4,ICON,FANART,"spotlight") 
 
 
 def SCRAPE_VIDEOS(url,scrape_type=None):            
     req = urllib2.Request(url)
     req.add_header('User-Agent', 'NBCSports/742 CFNetwork/672.0.8 Darwin/14.0.0')
     response = urllib2.urlopen(req)   
-    json_source = json.load(response)                       
-    response.close()            
+    json_source = json.load(response)                           
+    response.close()                
 
     if scrape_type == None:
         #LIVE
-        try:       
-            for item in json_source:                         
-                BUILD_VIDEO_LINK(item)
-        except:
-            pass
+        #try:       
+            #Sort By Start Time
+            json_source = sorted(json_source,key=lambda x:x['start'])
+            for item in json_source:        
+                if not item['title'].startswith('CSN'):
+                    BUILD_VIDEO_LINK(item)
+        #except:
+            #pass
 
     elif scrape_type == "ALL":
         try:
@@ -96,8 +120,13 @@ def SCRAPE_VIDEOS(url,scrape_type=None):
             pass
 
 
-def BUILD_VIDEO_LINK(item):    
-    url = item['iosStreamUrl']  
+def BUILD_VIDEO_LINK(item):
+    url = ''
+    try:
+        url = item['iosStreamUrl']  
+    except:
+        pass
+    
     ##################################################################
     # Inject login cookie - NOT USED CURRENTLY
     ##################################################################
@@ -132,34 +161,59 @@ def BUILD_VIDEO_LINK(item):
         q_lvl_golf = "2596k"
     else:
         q_lvl = "3450000"
+        #q_lvl = "4296000"
         q_lvl_golf = "4296k"
     
+    #http://tvenbcsn-i.Akamaihd.net/hls/live/218235/nbcsnx/master.m3u8
+    #http://tvenbcsn-i.Akamaihd.net/hls/live/218235/nbcsnx/4296k/prog.m3u8
+    url = url.replace('master.m3u8',q_lvl_golf+'/prog.m3u8')       
     url = url.replace('manifest(format=m3u8-aapl-v3)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0)')       
     url = url.replace('manifest(format=m3u8-aapl,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl,filtername=vodcut)')
     url = url.replace('manifest(format=m3u8-aapl-v3,filtername=vodcut)','QualityLevels('+q_lvl+')/Manifest(video,format=m3u8-aapl-v3,audiotrack=audio_en_0,filtername=vodcut)')                       
-    url = url.replace('golfx/master.m3u8','golfx/'+q_lvl_golf+'/prog.m3u8')       
+    #url = url.replace('golfx/master.m3u8','golfx/'+q_lvl_golf+'/prog.m3u8')       
+
     
-    name = item['title']            
-    menu_name = name        
-    info = item['info'] 
-    if info <> "":         
-        menu_name = menu_name + " - " + info 
-    
-    # Highlight active streams
-    current_time =  datetime.datetime.utcnow().strftime('%Y%m%d-%H%M')    
+    menu_name = item['title']
+    name = menu_name                
+    info = item['info']     
+    # Highlight active streams   
     start_time = item['start']
-    length = int(item['length'])
+    #utc_dt = datetime.strptime(utc_dt, "%Y%m%d-%H%M")
+   
+
+    current_time =  datetime.utcnow().strftime('%Y%m%d-%H%M')   
+
+    length = 0
+    try:     
+        length = int(item['length'])
+    except:
+        pass
+
     my_time = int(current_time[0:8]+current_time[9:])
     event_start = int(start_time[0:8]+start_time[9:]) 
     event_end = int(current_time[0:8]+current_time[9:])+length
-
-    if my_time >= event_start and my_time <= event_end:
-        menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'
     
-
     imgurl = "http://hdliveextra-pmd.edgesuite.net/HD/image_sports/mobile/"+item['image']+"_m50.jpg"    
-    addLink(menu_name,url,name,imgurl,FANART) 
+   
+    if url != '' and my_time >= event_start and my_time <= event_end:
+        menu_name = '[COLOR=FF00B7EB]'+menu_name+'[/COLOR]'
+        addLink(menu_name,url,name,imgurl,FANART) 
+    else:
+        try:
+            start_date = datetime.strptime(start_time, "%Y%m%d-%H%M")
+        except TypeError:
+            start_date = datetime.fromtimestamp(time.mktime(time.strptime(start_time, "%Y%m%d-%H%M")))
+        
+        start_date = datetime.strftime(utc_to_local(start_date),xbmc.getRegion('dateshort')+' '+xbmc.getRegion('time').replace('%H%H','%H').replace(':%S',''))       
+        addDir('[COLOR=FFFFB266]'+menu_name + '[/COLOR] ' + start_date,'/disabled',999,imgurl,FANART,None,False)
 
+
+def utc_to_local(utc_dt):
+    # get integer timestamp to avoid precision lost
+    timestamp = calendar.timegm(utc_dt.timetuple())
+    local_dt = datetime.fromtimestamp(timestamp)
+    assert utc_dt.resolution >= timedelta(microseconds=1)
+    return local_dt.replace(microsecond=utc_dt.microsecond)
 
 def LOGIN():
     req = urllib2.Request(url)
@@ -179,14 +233,14 @@ def addLink(name,url,title,iconimage,fanart):
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
     return ok
 
-def addDir(name,url,mode,iconimage,fanart=None,scrape_type=None): 
+def addDir(name,url,mode,iconimage,fanart=None,scrape_type=None,isFolder=True): 
     params = get_params()      
     ok=True
     u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&scrape_type="+urllib.quote_plus(str(scrape_type))
     liz=xbmcgui.ListItem(name, iconImage=ICON, thumbnailImage=iconimage)
     liz.setInfo( type="Video", infoLabels={ "Title": name } )
     liz.setProperty('fanart_image', fanart)
-    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=True)    
+    ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=isFolder)    
     return ok
 
 
@@ -241,10 +295,10 @@ print "scrape_type:"+str(scrape_type)
 if mode==None or url==None or len(url)<1:
         #print ""                
         CATEGORIES()        
-elif mode==1:
+elif mode==1:        
         LIVE()
 elif mode==2:        
-        FEATURED()
+        FEATURED(url)
 elif mode==3:        
         GET_ALL_SPORTS()
 elif mode==4:

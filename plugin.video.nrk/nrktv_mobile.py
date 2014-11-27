@@ -66,6 +66,13 @@ class Program(Model):
         category = Category.from_response(r['category']) if 'category' in r \
             else None
 
+        aired = None
+        try:
+            aired = datetime.datetime.fromtimestamp(
+                int(r.get('usageRights', {}).get('availableFrom', 0)/1000))
+        except (ValueError, OverflowError, OSError):
+            pass
+
         media_urls = []
         if 'parts' in r:
             parts = sorted(r['parts'], key=lambda x: x['part'])
@@ -85,8 +92,7 @@ class Program(Model):
             thumb=Program._image_url % (r['imageId'], 250),
             fanart=Program._image_url % (r['imageId'], 1920),
             episode=r.get('episodeNumberOrDate'),
-            aired=datetime.datetime.fromtimestamp(
-                int(r.get('usageRights', {}).get('availableFrom', 0)/1000)),
+            aired=aired,
         )
 
 

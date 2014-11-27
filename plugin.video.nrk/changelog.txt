@@ -1,3 +1,6 @@
+[B]4.4.20[/B]
+- Fikset problemer med datokonvertering på enkelte plattformer
+
 [B]4.4.19[/B]
 - Lagt til P1+, P13  og P1 lokalradio
 - Sideendringer

@@ -142,8 +142,7 @@ def watchEpisode(link):
 		videoID = soup.find('param', {'name': '@videoPlayer'})['value']
 		url = getBrightCoveLink(videoID)
 		log("Found single url: " + url)
-		playlist.add(vidurl, listitem)
-	log("Playing: " + url)
+	log("Playing: " + url, True)
 	listItem = xbmcgui.ListItem(path=url)
 	xbmcplugin.setResolvedUrl(thisPlugin, True, listItem)
 	xbmc.sleep(4000)

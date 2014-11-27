@@ -1,3 +1,6 @@
+1.0.4 (2014-11-27)
+Fixed critical error when playing single episodes
+
 1.0.3 (2014-11-25)
 Thanks to phate89 for this commit https://github.com/phate89
 

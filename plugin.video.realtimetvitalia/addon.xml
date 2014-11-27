@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.realtimetvitalia" name="Real Time TV Italia" version="1.0.3" provider-name="Goph">
+<addon id="plugin.video.realtimetvitalia" name="Real Time TV Italia" version="1.0.4" provider-name="Goph">
   <requires>
 	<import addon="xbmc.python" version="2.1.0"/>
 	<import addon="xbmc.addon" version="12.0.0"/>

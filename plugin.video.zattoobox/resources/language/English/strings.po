@@ -1,0 +1,43 @@
+# XBMC Media Center language file
+# Addon Provider: Pascal Nançoz
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: nancpasc@gmail.com\n"
+"POT-Creation-Date: 2014-11-27T19:45:27+01:00\n"
+"PO-Revision-Date: 2014-11-27T19:45:27+01:00\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Account settings"
+msgstr ""
+
+msgctxt "#30001"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30101"
+msgid "Live TV"
+msgstr ""
+
+msgctxt "#30102"
+msgid "Recordings"
+msgstr ""
+
+msgctxt "#30901"
+msgid "Content not accessible"
+msgstr ""
+
+msgctxt "#30902"
+msgid "Unable to start a session. Check your account settings!"
+msgstr ""

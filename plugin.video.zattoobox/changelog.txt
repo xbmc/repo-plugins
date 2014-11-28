@@ -1,0 +1,9 @@
+[B]0.2.2[/B]
+- Fixed bug in session management
+- Fixed addon.xml
+- Fixed localization string ID's
+- Added fanart
+- Aded strings.po localization file format
+
+[B]0.2.1[/B]
+- first release

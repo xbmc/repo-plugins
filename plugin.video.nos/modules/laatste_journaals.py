@@ -25,31 +25,50 @@ import urllib2
 import re
 import sys
 import json
+from StringIO import StringIO
+import gzip
 
-link_re = re.compile(r'<a href="video.*?</a>', re.S)
-video_re = re.compile(r'nos\.nl/embed/\?id=b2:([0-9]+)')
-title_re = re.compile(r'<h3>(.*?)</h3>')
-meta_re = re.compile(r'<p class="video-meta">(?:<span.*?</span>)?(.*?)</p>')
-img_re = re.compile(r'<img src="(.*?)"')
-playlist_format = 'http://nos.nl/playlist/uitzending/mp4-web03/{0:d}.json'
+nos_url = 'http://content.nos.nl/apps/feeds/journaal-app/page/1'
+playlist_format = 'http://content.nos.nl/apps/broadcast/{}/format/mp4-web03'
+headers = (
+    ('X-NOS-App', 'LGE/hammerhead;Android/4.4.3;nl.nos.app/3.1'),
+    ('X-NOS-Salt', '1417002425'),
+    ('X-NOS-Key', 'a9e3c0bdfc9b4d8eedddfa6df1d01ed2'),
+    ('Accept-Encoding', 'gzip'),
+    ('Host', 'content.nos.nl'),
+    ('User-Agent', 'Apache-HttpClient/UNAVAILABLE (java 1.4)'),
+    ('Connection', 'close'),
+)
 
 def addLink(title, url, thumb):
   liz=xbmcgui.ListItem(title, thumbnailImage=thumb)
   xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=url, listitem=liz, isFolder=False)
 
 def scan(params):
-  URL='http://tv.nos.nl'
-  html=urllib2.urlopen(URL).read()
-  for (a, video_url) in zip(link_re.findall(html), video_re.findall(html)):
-    a = a.replace('\n', '')
-    title = title_re.search(a).group(1).strip()
-    meta = ', '.join([meta_part.strip() for meta_part in re.sub(r'\s+', ' ', meta_re.search(a).group(1)).split('<br />')])
-    img = URL + '/browser/' + img_re.search(a).group(1).strip()
-    title = title + ' - ' + meta
-    playlist_url = playlist_format.format(int(video_url))
-    playlist = json.loads(urllib2.urlopen(playlist_url).read())
-    video_url = playlist['videofile']
-    addLink(title, video_url, img)
+  request = urllib2.Request(nos_url)
+  for header in headers:
+    request.add_header(*header)
+  response = urllib2.urlopen(request)
+  if response.info().get('Content-Encoding') == 'gzip':
+    buf = StringIO( response.read())
+    f = gzip.GzipFile(fileobj=buf)
+    data = f.read()
+    stuff = json.loads(data)
+    for item in sorted(stuff['broadcasts'], key=lambda item: item['pub_date'], reverse=True):
+      playlist_url = playlist_format.format(item['id'])
+      playlist_request = urllib2.Request(playlist_url)
+      for header in headers:
+        playlist_request.add_header(*header)
+      playlist_response = urllib2.urlopen(playlist_request)
+      if playlist_response.info().get('Content-Encoding') == 'gzip':
+        playlist_buf = StringIO(playlist_response.read())
+        playlist_f = gzip.GzipFile(fileobj=playlist_buf)
+        playlist_data = playlist_f.read()
+        playlist_stuff = json.loads(playlist_data)
+        title = playlist_stuff['title']
+        video_url = playlist_stuff['url']
+        img = None
+        addLink(title, video_url, img)
   xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
 def run(params): # This is the entrypoint

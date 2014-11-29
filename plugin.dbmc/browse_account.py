@@ -111,6 +111,7 @@ class AccountBrowser(object):
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 
     def add_account(self, name):
+        iconImage = 'DefaultFile.png'
         if self._content_type == 'audio':
             iconImage = 'DefaultAddonMusic.png'
         elif self._content_type == 'video':

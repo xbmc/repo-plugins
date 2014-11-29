@@ -1,3 +1,6 @@
+[B]0.7.6:[/B]
+- Fix bug when starting the addon from the Programs menu
+
 [B]0.7.5:[/B]
 - Fix bugs in converting old to new account
 - Fix refreshing the account view when account added/removed

@@ -1,5 +1,6 @@
 import urllib
 import urllib2
+import urlparse
 
 class Relinker:
     # Rai.tv android app
@@ -19,6 +20,9 @@ class Relinker:
         urllib2.install_opener(opener)
 
     def getURL(self, url):
+        scheme, netloc, path, params, query, fragment = urlparse.urlparse(url)
+        qs = urlparse.parse_qs(query)
+    
         # output=20 url in body
         # output=23 HTTP 302 redirect
         # output=25 url and other parameters in body, space separated
@@ -26,7 +30,14 @@ class Relinker:
         # output=47 json in body
         # pl=native,flash,silverlight
         # A stream will be returned depending on the UA (and pl parameter?)
-        url = url + "&output=20"
+        
+        if "output" in qs:
+            del(qs['output'])
+        qs['output'] = "20"
+        
+        query = urllib.urlencode(qs, True)
+        url = urlparse.urlunparse((scheme, netloc, path, params, query, fragment))
+        
         print "Relinker URL: %s" % url
         
         response = urllib2.urlopen(url)

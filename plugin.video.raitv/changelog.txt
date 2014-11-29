@@ -1,3 +1,7 @@
+[B]1.0.13[/B]
+- Fix relinker. Now all live streams are playable again - including RAI1.
+- Some clean up.
+
 [B]1.0.12[/B]
 - Used the new ondemand progamme list available on rai.tv web site.
 - Updated "tematiche" and "editori".

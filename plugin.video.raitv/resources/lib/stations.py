@@ -9,13 +9,9 @@ def get_tv_stations():
     for channel in channels:
         channel["icon"] = channel["icon"].replace(".png", "-big.png")
         
-        # Force replay availability for Rai Gulp and Rai YoYo
-        if channel["name"] in ("Rai Gulp", "Rai Yoyo"):
+        # Force replay availability for Rai YoYo
+        if channel["name"] == "Rai Yoyo":
             channel["hasReplay"] = "YES"
-            
-        # Fix tag for Rai Gulp
-        if channel["name"] == "Rai Gulp":
-            channel["tag"] = "RaiGulp"
     
     return channels
     

@@ -11,6 +11,16 @@ class Client(object):
         self._device = 'tablet'  # 'phone'
         self._opener = urllib2.build_opener()
         self._opener.addheaders = [('User-Agent', 'stagefright/1.2 (Linux;Android 4.4.2)')]
+
+        self._video_method = 6
+        pass
+
+    def set_video_method(self, method):
+        """
+        :param method: default is '6', '4' should also work. But only since Helix
+        :return:
+        """
+        self._video_method = method
         pass
 
     def get_homepage(self, version, channel_id):
@@ -32,7 +42,8 @@ class Client(object):
         result = {}
 
         try:
-            url = "http://vas.sim-technik.de/video/video.json?clipid=%s&app=megapp&method=6" % video_id
+            url = "http://vas.sim-technik.de/video/video.json?clipid=%s&app=megapp&method=%s" % (
+                video_id, str(self._video_method))
             content = self._opener.open(url)
             data = json.load(content)
             return data

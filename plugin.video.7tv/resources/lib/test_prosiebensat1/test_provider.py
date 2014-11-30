@@ -1,6 +1,8 @@
 import unittest
-from resources.lib.kodimon import DirectoryItem
 
+
+from resources.lib import kodion
+from resources.lib.kodion.items import DirectoryItem
 from resources.lib.prosiebensat1 import Provider
 
 
@@ -18,17 +20,20 @@ class TestProvider(unittest.TestCase):
     def test_search(self):
         provider = Provider()
 
-        path = '/%s/query/' % provider.PATH_SEARCH
-        result = provider.navigate(path, {'q': 'halligalli'})
+        path = '/%s/query/' % kodion.constants.paths.SEARCH
+        context = kodion.Context(path=path, params={'q': 'halligalli'})
+        result = provider.navigate(context)
         pass
 
     def test_latest_videos(self):
         provider = Provider()
-        format_item = DirectoryItem(u'Test',
-                                    provider.create_uri(['pro7', 'library', '277']))
-        provider.get_favorite_list().add(format_item)
 
-        result = provider.navigate('/favs/latest/')
+        context = kodion.Context(path='/favs/latest/')
+        format_item = DirectoryItem(u'Test',
+                                    context.create_uri(['pro7', 'library', '277']))
+
+        context.get_favorite_list().add(format_item)
+        result = provider.navigate(context)
         items = result[0]
         pass
 
@@ -36,26 +41,30 @@ class TestProvider(unittest.TestCase):
         provider = Provider()
 
         # test root of highlights
-        result = provider.navigate('/pro7/highlights/')
+        context = kodion.Context(path='/pro7/highlights/')
+        result = provider.navigate(context)
         items = result[0]
 
         self.assertEqual(3, len(items))
         print_items(items)
 
         # test 'Beliebte Sendungen' of highlights
-        result = provider.navigate('/pro7/highlights/Beliebte Sendungen/')
+        context = kodion.Context(path='/pro7/highlights/Beliebte Sendungen/')
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         print_items(items)
 
         # test 'Aktuelle ganze Folgen' of highlights
-        result = provider.navigate('/pro7/highlights/Aktuelle ganze Folgen/')
+        context = kodion.Context(path='/pro7/highlights/Aktuelle ganze Folgen/')
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         print_items(items)
 
         # test 'Neueste Clips' of highlights
-        result = provider.navigate('/pro7/highlights/Neueste Clips/')
+        context = kodion.Context(path='/pro7/highlights/Neueste Clips/')
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         print_items(items)
@@ -65,7 +74,9 @@ class TestProvider(unittest.TestCase):
         provider = Provider()
 
         # test full
-        result = provider.navigate('/pro7/library/789/')
+        context = kodion.Context(path='/pro7/library/789/')
+        context.get_function_cache()._clear()
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 2)
 
@@ -74,7 +85,8 @@ class TestProvider(unittest.TestCase):
         print_items(items)
 
         # test clips
-        result = provider.navigate('/pro7/library/789/', {'clip_type': 'short'})
+        context = kodion.Context(path='/pro7/library/789/', params={'clip_type': 'short'})
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         options = result[1]
@@ -82,7 +94,8 @@ class TestProvider(unittest.TestCase):
         print_items(items)
 
         # test backstage
-        result = provider.navigate('/pro7/library/789/', {'clip_type': 'webexclusive'})
+        context = kodion.Context(path='/pro7/library/789/', params={'clip_type': 'webexclusive'})
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         options = result[1]
@@ -92,8 +105,10 @@ class TestProvider(unittest.TestCase):
 
     def test_channel_formats(self):
         provider = Provider()
-        #provider.get_function_cache().disable()
-        result = provider.navigate('/pro7/library/')
+
+        context = kodion.Context(path='/pro7/library/')
+        #context.get_function_cache().disable()
+        result = provider.navigate(context)
 
         items = result[0]
         self.assertGreater(len(items), 0)
@@ -107,7 +122,8 @@ class TestProvider(unittest.TestCase):
     def test_channel_content(self):
         provider = Provider()
 
-        result = provider.navigate('/pro7/')
+        context = kodion.Context(path='/pro7/')
+        result = provider.navigate(context)
         items = result[0]
 
         # 'Highlights' and 'Library'
@@ -123,11 +139,12 @@ class TestProvider(unittest.TestCase):
         provider = Provider()
 
         # clear all
-        provider.get_favorite_list().clear()
-        provider.get_watch_later_list().clear()
+        context = kodion.Context('/')
+        context.get_favorite_list().clear()
+        context.get_watch_later_list().clear()
 
         # navigate to the root
-        result = provider.navigate('/')
+        result = provider.navigate(context)
         items = result[0]
         self.assertEqual(len(items), 7)
 
@@ -141,7 +158,9 @@ class TestProvider(unittest.TestCase):
 
     def test_format_next_page(self):
         provider = Provider()
-        result = provider.navigate('/pro7/library/505/')
+
+        context = kodion.Context(path='/pro7/library/505/')
+        result = provider.navigate(context)
 
         items = result[0]
         item = items[len(items)-1]

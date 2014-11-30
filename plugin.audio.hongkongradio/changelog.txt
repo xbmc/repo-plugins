@@ -1,0 +1,5 @@
+v0.2.0
+- Includes stations from RTHK & Commercial Radio
+
+v0.1.0
+- Initial version

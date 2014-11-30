@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.audio.hongkongradio" name="Hong Kong Radio" version="0.2.0" provider-name="QuincyCheng">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.pluginsource" library="default.py">
+        <provides>audio</provides>
+    </extension>
+    <extension point="xbmc.addon.metadata">
+        <platform>all</platform>
+        <summary lang="en">Hong Kong Radio</summary>
+		<summary lang="zh">香港收音機</summary>
+        <language>en zh</language>
+        <description lang="en">Hong Kong Radio, including channels from RTHK and Commercial Radio</description>
+		<description lang="zh">香港收音機, 包括來自香港電台及商業電台頻道</description>
+    <platform>all</platform>
+    </extension>
+</addon>

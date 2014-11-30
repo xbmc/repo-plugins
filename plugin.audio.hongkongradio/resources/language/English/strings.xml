@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Commercial Radio - CR1</string>
+  <string id="30002">Commercial Radio - CR2</string>
+  <string id="30003">Commercial Radio - AM864</string>
+  <string id="30011">RTHK - Radio 1</string>
+  <string id="30012">RTHK - Radio 2</string>
+  <string id="30013">RTHK - Radio 3</string>
+  <string id="30014">RTHK - Radio 4</string>
+  <string id="30015">RTHK - Radio 5</string>
+  <string id="30016">RTHK - Putonghua</string>
+  <string id="30017">RTHK - DAB 31</string>
+  <string id="30018">RTHK - DAB 33</string>
+  <string id="30019">RTHK - DAB 35</string>
+</strings>

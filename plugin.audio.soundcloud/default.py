@@ -1,5 +1,5 @@
-from resources.lib import kodimon
+from resources.lib.kodion import runner
 from resources.lib import soundcloud
 
 __provider__ = soundcloud.Provider()
-kodimon.run(__provider__)
+runner.run(__provider__)

@@ -1,8 +1,6 @@
-from resources.lib.kodimon.abstract_settings import AbstractSettings
-from resources.lib.kodimon import Plugin
-
 __author__ = 'bromix'
 
+from resources.lib import kodion
 from resources.lib.soundcloud.provider import Provider
 import unittest
 
@@ -17,58 +15,73 @@ def print_items(items):
 class TestProvider(unittest.TestCase):
     TOKEN = u'1-21686-118589874-2e78a9be01d463'
 
-    def setUp(self):
-        # with login
-        plugin = Plugin()
-        settings = plugin.get_settings()
-        settings.set_string(AbstractSettings.LOGIN_USERNAME, 'b194139@trbvm.com')
-        settings.set_string(AbstractSettings.LOGIN_PASSWORD, '1234567890')
-        settings.set_string(AbstractSettings.ACCESS_TOKEN, self.TOKEN)
-        self._provider = Provider(plugin)
-        pass
+    def _create_context(self, path):
+        context = kodion.Context(path=path)
+        settings = context.get_settings()
+        settings.set_string(kodion.constants.setting.LOGIN_USERNAME, 'b194139@trbvm.com')
+        settings.set_string(kodion.constants.setting.LOGIN_PASSWORD, '1234567890')
+        settings.set_string(kodion.constants.setting.ACCESS_TOKEN, self.TOKEN)
+        return context
 
     def test_get_favorites(self):
-        result = self._provider.navigate('/user/favorites/me/')
+        provider = Provider()
+        context = self._create_context('/user/favorites/me/')
+        result = provider.navigate(context)
         items = result[0]
         print_items(items)
         pass
 
     def test_get_follower(self):
-        result = self._provider.navigate('/user/follower/me/')
+        provider = Provider()
+
+        context = self._create_context('/user/follower/me/')
+        result = provider.navigate(context)
         items = result[0]
         print_items(items)
         pass
 
     def test_get_following(self):
-        result = self._provider.navigate('/user/following/me/')
+        provider = Provider()
+
+        context = self._create_context('/user/following/me/')
+        result = provider.navigate(context)
         items = result[0]
         print_items(items)
         pass
 
     def test_get_playlist(self):
-        result = self._provider.navigate('/playlist/54934787/')
+        provider = Provider()
+
+        context = self._create_context('/playlist/54934787/')
+        result = provider.navigate(context)
         items = result[0]
         print_items(items)
         pass
 
     def test_get_user_playlists(self):
-        result = self._provider.navigate('/user/playlists/me/')
+        provider = Provider()
+
+        context = self._create_context('/user/playlists/me/')
+        result = provider.navigate(context)
         items = result[0]
         print_items(items)
         pass
 
     def test_explore_trending(self):
         provider = Provider()
-        provider.get_function_cache().disable()
 
         # music
-        result = provider.navigate('/explore/trending/music/')
+        context = self._create_context('/explore/trending/music/')
+        context.get_function_cache().disable()
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         print_items(items)
 
         # audio
-        result = provider.navigate('/explore/trending/audio/')
+        context = self._create_context('/explore/trending/audio/')
+        context.get_function_cache().disable()
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         print_items(items)
@@ -77,16 +90,19 @@ class TestProvider(unittest.TestCase):
     def test_search(self):
         provider = Provider()
 
-        path = '/%s/query/' % provider.PATH_SEARCH
-        result = provider.navigate(path, {'q': 'angerfist'})
+        path = '/%s/query/' % kodion.constants.paths.SEARCH
+        context = kodion.Context(path=path, params={'q': 'angerfist'})
+        result = provider.navigate(context)
         pass
 
     def test_explore_genres_drum_bass(self):
         provider = Provider()
-        provider.get_function_cache().disable()
+
+        context = self._create_context('/explore/genre/music/Drum & Bass/')
+        context.get_function_cache().disable()
 
         # music
-        result = provider.navigate('/explore/genre/music/Drum & Bass/')
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         print_items(items)
@@ -94,16 +110,19 @@ class TestProvider(unittest.TestCase):
 
     def test_explore_genres(self):
         provider = Provider()
-        provider.get_function_cache().disable()
 
         # music
-        result = provider.navigate('/explore/genre/music/')
+        context = self._create_context('/explore/genre/music/')
+        context.get_function_cache().disable()
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         print_items(items)
 
         # audio
-        result = provider.navigate('/explore/genre/audio/')
+        context = self._create_context('/explore/genre/audio/')
+        context.get_function_cache().disable()
+        result = provider.navigate(context)
         items = result[0]
         self.assertGreater(len(items), 0)
         print_items(items)
@@ -112,7 +131,8 @@ class TestProvider(unittest.TestCase):
     def test_explore(self):
         provider = Provider()
 
-        result = provider.navigate('/explore/')
+        context = kodion.Context(path='/explore/')
+        result = provider.navigate(context)
         items = result[0]
 
         self.assertEqual(4, len(items))
@@ -121,23 +141,23 @@ class TestProvider(unittest.TestCase):
 
     def test_root(self):
         provider = Provider()
-        plugin = provider.get_plugin()
-        settings = plugin.get_settings()
-        settings.set_string(AbstractSettings.LOGIN_USERNAME, '')
+        context = kodion.Context('/')
+        settings = context.get_settings()
+        settings.set_string(kodion.constants.setting.LOGIN_USERNAME, '')
 
         # without login
-        result = provider.navigate('/')
+        result = provider.navigate(context)
         items = result[0]
         self.assertEqual(2, len(items))
         print_items(items)
 
         # with login
-        plugin = Plugin()
-        settings = plugin.get_settings()
-        settings.set_string(AbstractSettings.LOGIN_USERNAME, 'b194139@trbvm.com')
-        settings.set_string(AbstractSettings.LOGIN_PASSWORD, '1234567890')
-        provider = Provider(plugin)
-        result = provider.navigate('/')
+        context = kodion.Context('/')
+        settings = context.get_settings()
+        settings.set_string(kodion.constants.setting.LOGIN_USERNAME, 'b194139@trbvm.com')
+        settings.set_string(kodion.constants.setting.LOGIN_PASSWORD, '1234567890')
+
+        result = provider.navigate(context)
         items = result[0]
         self.assertEqual(4, len(items))
 

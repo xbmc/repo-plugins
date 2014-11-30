@@ -1,11 +1,20 @@
-from resources.lib.kodimon import KodimonException
+from resources.lib import kodion
 
 __author__ = 'bromix'
 
 import requests
 
+# Verify is disabled and to avoid warnings we disable the warnings. Behind a proxy request isn't working correctly all
+# the time and if so can't validate the hosts correctly resulting in a exception and the addon won't work properly.
+try:
+    from requests.packages import urllib3
+    urllib3.disable_warnings()
+except:
+    # do nothing
+    pass
 
-class ClientException(KodimonException):
+
+class ClientException(kodion.KodimonException):
     def __init__(self, status_code, *args, **kwargs):
         Exception.__init__(self, *args, **kwargs)
         self._status_code = status_code
@@ -22,8 +31,6 @@ class Client(object):
     CLIENT_SECRET = '26a5240f7ee0ee2d4fa9956ed80616c2'
 
     def __init__(self, username='', password='', access_token='', client_id='', client_secret=''):
-        # requests.packages.urllib3.disable_warnings()
-
         self._username = username
         self._password = password
         self._access_token = access_token

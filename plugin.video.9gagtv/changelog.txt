@@ -1,3 +1,12 @@
+1.0.1 (2014-11-27)
+FIX: skins call '/extrafanart/'
+
+1.0.1~beta2 (2014-11-21)
+UPD: improved performance
+
+1.0.1~beta (2014-11-15)
+UPD: kodion tests
+
 1.0.0 (2014-10-29)
 ADD: additional debug log in debug-mode
 DEL: unused settings

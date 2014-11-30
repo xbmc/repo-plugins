@@ -1,4 +1,4 @@
-from resources.lib import kodimon
+from resources.lib import kodion
 from resources.lib.nine_gag import Provider
 
 __author__ = 'bromix'
@@ -12,19 +12,20 @@ class TestProvider(unittest.TestCase):
 
     def test_on_category(self):
         provider = Provider()
-
-        result = provider.navigate('/category/LJEGX/')
+        context = kodion.Context(path='/category/LJEGX/')
+        result = provider.navigate(context)
         items = result[0]
 
-        kodimon.print_items(items)
+        kodion.utils.print_items(items)
         pass
 
     def test_on_root(self):
         provider = Provider()
 
-        result = provider.navigate('/')
+        context = kodion.Context(path='/')
+        result = provider.navigate(context)
         items = result[0]
 
-        kodimon.print_items(items)
+        kodion.utils.print_items(items)
         pass
     pass

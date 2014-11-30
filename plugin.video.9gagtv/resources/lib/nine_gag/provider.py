@@ -1,34 +1,41 @@
+__author__ = 'bromix'
+
 import datetime
 from functools import partial
 import json
-from resources.lib.kodimon import DirectoryItem, VideoItem, KodimonException
-from resources.lib.kodimon.helper import FunctionCache
 
-__author__ = 'bromix'
+from resources.lib.kodion.items import DirectoryItem, VideoItem
+from resources.lib.kodion.utils import FunctionCache
+from resources.lib import kodion
+from .client import Client
 
-from resources.lib import kodimon
 
+class Provider(kodion.AbstractProvider):
+    def __init__(self):
+        kodion.AbstractProvider.__init__(self)
 
-class Provider(kodimon.AbstractProvider):
-    def __init__(self, plugin=None):
-        kodimon.AbstractProvider.__init__(self, plugin)
-
-        from . import Client
-        access_manager = self.get_access_manager()
-
-        if access_manager.is_access_token_expired():
-            access_token, expires = self._client = Client().authenticate()
-            access_manager.update_access_token(access_token, expires)
-            self._client = Client(access_token)
-        else:
-            access_token = access_manager.get_access_token()
-            self._client = Client(access_token)
-            pass
-
+        self._client = None
         pass
 
-    @kodimon.RegisterPath('^/category/(?P<category_id>.+?)/$')
-    def _on_category(self, path, params, re_match):
+    def _get_client(self, context):
+        if not self._client:
+            access_manager = context.get_access_manager()
+            if access_manager.is_access_token_expired():
+                access_token, expires = self._client = Client().authenticate()
+                access_manager.update_access_token(access_token, expires)
+                self._client = Client(access_token)
+            else:
+                access_token = access_manager.get_access_token()
+                self._client = Client(access_token)
+                pass
+            pass
+        return self._client
+
+    @kodion.RegisterProviderPath('^/category/(?P<category_id>.+?)/$')
+    def _on_category(self, context, re_match):
+        path = context.get_path()
+        params = context.get_params()
+
         def _get_image(thumbnails):
             # qualities = ['thumbnail_840w', 'thumbnail_480w', 'thumbnail_360w', 'thumbnail_240', 'thumbnail_120w']
             qualities = ['thumbnail_480w', 'thumbnail_360w', 'thumbnail_240', 'thumbnail_120w']
@@ -39,16 +46,16 @@ class Provider(kodimon.AbstractProvider):
 
             return ''
 
-        self.set_content_type(kodimon.constants.CONTENT_TYPE_EPISODES)
+        context.set_content_type(kodion.constants.content_type.EPISODES)
 
         result = []
 
         category_id = re_match.group('category_id')
         next_reference_key = params.get('next_reference_key', '')
-        json_data = self._client.get_posts(category_id, next_reference_key)
+        json_data = self._get_client(context).get_posts(category_id, next_reference_key)
 
-        self.log('client.get_posts(%s, %s)' % (category_id, next_reference_key), kodimon.constants.LOG_DEBUG)
-        self.log(json.dumps(json_data), kodimon.constants.LOG_DEBUG)
+        context.log_debug('client.get_posts(%s, %s)' % (category_id, next_reference_key))
+        context.log_debug(json.dumps(json_data))
 
         data = json_data['data'][0]
         posts = data['posts']
@@ -63,12 +70,12 @@ class Provider(kodimon.AbstractProvider):
                 video_url = 'plugin://plugin.video.youtube/?action=play_video&videoid=' + video_id
                 pass
             else:
-                raise KodimonException("Unknown video type '%s'" % video_item)
+                raise kodion.KodimonException("Unknown video type '%s'" % video_item)
 
             video_item = VideoItem(title,
                                    video_url,
                                    image=image)
-            video_item.set_fanart(self.get_fanart())
+            video_item.set_fanart(self.get_fanart(context))
 
             # plot
             video_item.set_plot(post.get('og_description', ''))
@@ -80,7 +87,7 @@ class Provider(kodimon.AbstractProvider):
             # duration
             video = post['video']
             duration = int(video['duration'])
-            video_item.set_duration_in_seconds(duration)
+            video_item.set_duration_from_seconds(duration)
 
             result.append(video_item)
             pass
@@ -92,39 +99,38 @@ class Provider(kodimon.AbstractProvider):
             new_params.update(params)
             new_params['next_reference_key'] = next_reference_key
             page = int(params.get('page', 1))
-            next_page_item = self.create_next_page_item(page,
-                                                        path,
-                                                        new_params)
+            next_page_item = kodion.items.create_next_page_item(context, page)
+            next_page_item.set_fanart(self.get_fanart(context))
             result.append(next_page_item)
             pass
 
         return result
 
-    def on_root(self, path, params, re_match):
+    def on_root(self, context, re_match):
         result = []
 
-        json_data = self.call_function_cached(partial(self._client.get_available), seconds=FunctionCache.ONE_HOUR)
+        json_data = context.get_function_cache().get(FunctionCache.ONE_HOUR, self._get_client(context).get_available)
 
-        self.log('client.get_available()', kodimon.constants.LOG_DEBUG)
-        self.log(json.dumps(json_data), kodimon.constants.LOG_DEBUG)
+        context.log_debug('client.get_available()')
+        context.log_debug(json.dumps(json_data))
 
         categories = json_data.get('data', {}).get('lists', [])
         for category in categories:
             title = category['name']
             category_id = category['list_key']
             category_item = DirectoryItem(title,
-                                          self.create_uri(['category', category_id]))
-            category_item.set_fanart(self.get_fanart())
+                                          context.create_uri(['category', category_id]))
+            category_item.set_fanart(self.get_fanart(context))
             result.append(category_item)
             pass
 
         return result
 
-    def get_fanart(self):
+    def get_fanart(self, context):
         """
             This will return a darker and (with blur) fanart
             :return:
             """
-        return self.create_resource_path('media', 'fanart.jpg')
+        return context.create_resource_path('media', 'fanart.jpg')
 
     pass

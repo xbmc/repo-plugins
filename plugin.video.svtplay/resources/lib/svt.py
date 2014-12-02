@@ -52,9 +52,19 @@ def getCategories():
   """
   html = getPage("/")
 
+
   container = common.parseDOM(html, "div", attrs = { "id": "[^\"']*playJs-categories[^\"']*" })
+  if not container:
+    helper.errorMsg("Could not find container")
+    return None
   articles = common.parseDOM(container, "article")
-  thumbs = common.parseDOM(container, "img", attrs = { "class": "[^\"']*play_js-video-list-thumbnail[^\"']*" }, ret = "src")
+  if not articles:
+    helper.errorMsg("Could not find articles")
+    return None
+  thumbs = common.parseDOM(container, "img", attrs = { "class": "[^\"']*play_categorylist-element__thumbnail-image[^\"']*" }, ret = "src")
+  if not thumbs:
+    helper.errorMsg("Could not find thumbnails")
+    return None
   categories = []
 
   for index, article in enumerate(articles):

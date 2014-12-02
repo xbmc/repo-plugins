@@ -17,9 +17,7 @@ class SuperTennis:
         pageUrl = "http://www.federtennis.it/supertennis/"
         htmlData = urllib2.urlopen(pageUrl).read()
         
-        match=re.compile('file: "sttvroma\?(.+?)"').findall(htmlData)
-        uniqueId = match[0]
-
-        url = "rtmp://fml.6F9F.edgecastcdn.net/206F9F/sttv app=206F9F/sttv playpath=sttvroma?%s subscribe=sttvroma?%s tcUrl=rtmp://fml.6F9F.edgecastcdn.net/206F9F/sttv swfUrl=http://www.federtennis.it/supertennis/jwplayer-5.10/player.swf pageUrl=http://www.federtennis.it/supertennis/ live=true timeout=20" % (uniqueId, uniqueId)
+        match=re.compile('//file: "(.+?)"').findall(htmlData)
+        url = match[0]
        
         return url

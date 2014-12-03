@@ -41,7 +41,11 @@ def demunge(munge):
         return munge
 
 def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept':"text/html", 'Accept-Encoding':'gzip,deflate,sdch', 'Accept-Language':'en-US,en;q=0.8'}  ):
-              log("getRequest URL:"+str(url))
+
+
+      retries = 0
+      while retries < 2:
+           try:
               req = urllib2.Request(url.encode(UTF8), user_data, headers)
 
               try:
@@ -58,6 +62,19 @@ def getRequest(url, user_data=None, headers = {'User-Agent':USER_AGENT, 'Accept'
 
               link1 = str(link1).replace('\n','')
               return(link1)
+
+           except urllib2.HTTPError,e:
+              if e.code == 500:
+                     dialog = xbmcgui.Dialog()
+                     ok = dialog.ok(__addonname__, __language__(31000))
+                     break
+              retries += 1
+              xbmc.sleep(2)
+              continue
+           else:
+              break
+
+
 
 def getSources(fanart):
       addDir(__language__(30002), __language__(30002), 'GM', icon, addonfanart, __language__(30002), '', '')
@@ -144,9 +161,11 @@ def getCats(c_url, sort_type='popular'):
     urllib2.install_opener(opener)
 
     html = getRequest(cat_url)
-    x_url = re.compile('rel="canonical" href="http://www.snagfilms.com(.+?)"').findall(html)[0]
+    x_url = re.compile('rel="canonical" href="(.+?)"').search(html).group(1)
     try:
-      showid = re.compile('data-show-id="(.+?)"').findall(html)[0]
+#      showid = re.compile('data-show-id="(.+?)"').search(html).group(1)
+      showid = re.compile('data-content-id="(.+?)"').search(html).group(1)
+
     except:
       showid = ''
 
@@ -258,7 +277,7 @@ def addLink(url,name,iconimage,fanart,description,genre,date,showcontext=True,pl
 
 # MAIN EVENT PROCESSING STARTS HERE
 
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
 
 parms = {}
 try:

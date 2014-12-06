@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.audio.sgradio"
+       name="sg!Radio"
+       version="1.0.0"
+       provider-name="Sean, GadgetReactor.com">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+  <extension point="xbmc.addon.metadata">  
+  <summary lang="en">Singapore Radio</summary>
+    <description lang="en">Listen Online to Singapore Radio Channels. Class 95, Kiss 92, FM 987, Yes 933, Warna, Ria, and more.
+	</description>
+    <platform>all</platform>
+	<language>en</language>
+	<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+    <website>http://www.gadgetreactor.com/portfolio/sgradio/</website>
+    <email></email>
+    <source>http://github.com/gadgetreactor/plugin.video.sgtv</source>
+	</extension>
+</addon>

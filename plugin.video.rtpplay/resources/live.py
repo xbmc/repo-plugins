@@ -24,6 +24,7 @@ from directory import *
 
 channel_db = {"rtp1": ["RTP 1","http://img0.rtp.pt/play/images/logo_rtp1.jpg"],"rtp2": ["RTP 2","http://img0.rtp.pt/play/images/logo_rtp2.jpg"], "rtpinformacao": ["RTP Informação","http://img0.rtp.pt/play/images/logo_rtpinformacao.jpg"],"rtpinternacional": ["RTP Internacional","http://img0.rtp.pt/play/images/logo_rtpinternacional.jpg"],"rtpmemoria": ["RTP Memória","http://img0.rtp.pt/play/images/logo_rtpmemoria.jpg"],"rtpmadeira": ["RTP Madeira","http://img0.rtp.pt/play/images/logo_rtpmadeira.jpg"],"rtpacores": ["RTP Açores","http://img0.rtp.pt/play/images/logo_rtpacores.jpg"],"rtpafrica": ["RTP África","http://img0.rtp.pt/play/images/logo_rtpafrica.jpg"]}
 
+
 def radiotv_channels(url):
 	try:
 		page_source = abrir_url(url)
@@ -31,22 +32,14 @@ def radiotv_channels(url):
 		page_source = ''
 		msgok(translate(30001),translate(30018))
 	if page_source:
-		#Tv channels
-		match=re.compile('<a  id=".+?" title="(.+?)" href="(.+?)"><img src="(.+?)"').findall(page_source)
+		match=re.compile('<a title="(.+?)" href="(.+?)" class="mask-live"><img alt="(.+?)" src=".+?src=(.+?)&.+?" c').findall(page_source)
 		totaltv = len(match)
-		for titulo,url2,img in match:
+		for titulo,url2,prog,img_old in match:
 			titulo = title_clean_up(titulo)
 			stream_url = grab_live_stream_url(base_url + url2)
-			addLink('[B][COLOR blue]' + titulo.replace('Direto - ','') + '[/B][/COLOR]',stream_url,img,totaltv)
-		#Radio channels
-		match=re.compile('<a id=".+?" title="(.+?)" href="(.+?)"><img src="(.+?)"').findall(page_source)
-		totalradio = len(match)
-		for titulo,url2,img in match:
-			titulo = title_clean_up(titulo)
-			stream_url = grab_live_stream_url(base_url + url2)
-			addLink('[B][COLOR blue]' + titulo.replace('Direto - ','') + '[/B][/COLOR]',stream_url,img,totalradio)
-		
-		xbmc.executebuiltin("Container.SetViewMode(500)") #Verificar
+			img = img_base_url + img_old
+			addLink('[B][COLOR blue]' + titulo + '[/COLOR]' +' - ' + title_clean_up(prog)+ '[/B]',stream_url,img,totaltv)
+		xbmc.executebuiltin("Container.SetViewMode(500)")
 	else:
 		sys.exit(0)
 
@@ -72,19 +65,22 @@ def grab_live_stream_url(url):
 				elif xbmc.getCondVisibility('system.platform.IOS'): versao = 'm3u8'
 				elif xbmc.getCondVisibility('system.platform.ATV2'): versao = 'm3u8'		
 				elif xbmc.getCondVisibility('system.platform.Windows'): versao = 'rtmp'
+				elif xbmc.getCondVisibility('system.platform.Android'): versao = 'm3u8'
 				elif xbmc.getCondVisibility('system.platform.linux'):
-					if 'armv6' in os.uname()[4]: versao = 'rtmp'
-					else: versao = 'm3u8'
+					if 'armv6' in os.uname()[4]: versao = 'm3u8'
+					else: versao = 'rtmp'
 			elif type_stream == '1': versao = 'rtmp'
 			elif type_stream == '2': versao = 'm3u8'
 			#Scrape the page source for each type of stream	
 			if versao == 'rtmp':
-				match=re.compile('\"file\": \"(.+?)\",\"application\": \"(.+?)\",\"streamer\": \"(.+?)\"').findall(page_source)
+				match=re.compile('"file": "(.+?)",.+?\n.+?"application": "(.+?)",.+?\n.+?"streamer": "(.+?)",').findall(page_source)
         			url2 = 'rtmp://' + match[0][2] +'/' + match[0][1] + '/' + match[0][0] + ' swfUrl=' + player + linkpart
         			return url2
         		else:
-				match=re.compile('\"smil\":\"(.+?)\"').findall(page_source)
-        			url2 = match[0]
+				match=re.compile('\"smil\":(.+?)\"').findall(page_source)
+				if not match:
+					match=re.compile('\"d\":(.+?)\"').findall(page_source)
+        			url2 = match[0].replace('"','')
         			return url2
 	else:
 		return None

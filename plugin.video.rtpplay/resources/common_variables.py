@@ -19,10 +19,9 @@
 """
 import xbmc,xbmcgui,xbmcaddon,os
 
-
 base_url = 'http://www.rtp.pt'
 img_base_url = 'http://img0.rtp.pt'
-player = base_url + '/play/player.swf'
+player = 'http://programas.rtp.pt/play/player.swf?v3'
 linkpart = ' live=true timeout=15'
 addon_id = 'plugin.video.rtpplay'
 

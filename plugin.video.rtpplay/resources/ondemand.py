@@ -34,7 +34,7 @@ def list_tv_shows(name,url):
 		page_source = ''
 		msgok(translate(30001),translate(30018))
 	if page_source:
-		match=re.compile('href="(.+?)" title=".+?"><h3>(.+?)</h3>').findall(page_source)
+		match=re.compile('<a class="text-white" href="(.+?)" title=".+?">(.+?)</a>').findall(page_source)
 		totalit= len(match)
 		for urlsbase,titulo in match:
 			titulo = title_clean_up(titulo)
@@ -43,9 +43,9 @@ def list_tv_shows(name,url):
 					html_source = abrir_url(base_url + urlsbase)
 				except: html_source = ''
 				if html_source:
-					try: thumbnail=img_base_url + re.compile('src=(.+?)&amp').findall(html_source)[0]
+					try: thumbnail=re.compile('<img class="pull-left" src="(.+?)"').findall(html_source)[0]
 					except: thumbnail=''
-					sinopse=re.compile('<p class="Sinopse">(.+?)</span></p>').findall(html_source)
+					sinopse= re.findall('id="promo">.+?\n.+?<p>(.*?)</p>', html_source, re.DOTALL)
 					if sinopse: information = { "Title": name,"plot": clean_html(title_clean_up(sinopse[0])) }
 					else: information = { "Title": name,"plot":translate(30026) }
 				addprograma(titulo,base_url + urlsbase,16,thumbnail,totalit,information)
@@ -58,79 +58,77 @@ def list_tv_shows(name,url):
 	else:
 		sys.exit(0)
 		
-def list_episodes(url,plot):
+def list_episodes(name,url,plot):
+	program_name = name.split('|')
+	if len(program_name) > 1: titulo = program_name[1].replace('[/COLOR]','').replace('[/B]','')
+	else: titulo = name
 	prog_id=re.compile('http://www.rtp.pt/play/p(.+?)/').findall(url)
-	if not prog_id: prog_id=re.compile('http://www.rtp.pt/play/browseprog/(.+?)/.+?/true').findall(url)
-	page_num = re.compile('.+?/(\d+)/true').findall(url)
+	if not prog_id: prog_id=re.compile('listProgram=(\d+)&').findall(url)
+	page_num = re.compile('&page=(\d+)&').findall(url)
 	if not page_num: current_page = '1'
 	else: current_page = page_num[0]
-	if ('recent.php' not in url) and ('type=popular' not in url) and ('procura?' not in url): url='http://www.rtp.pt/play/browseprog/' + prog_id[0] + '/' + current_page + '/true'
-	else: pass
+	if ('recent' not in url) and ('popular' not in url) and ('procura?' not in url):
+		url='http://www.rtp.pt/play/bg_l_ep/?listDate=&listQuery=&listProgram='+prog_id[0]+'&listcategory=&listchannel=&listtype=recent&page='+current_page+'&type=all'
+	else:pass
+	print url
 	try:
 		source = abrir_url(url)
 	except: source=''; msgok(translate(30001),translate(30018))
 	if source:
-		match=re.compile('href="(.+?)"><img alt="(.+?)" src="(.+?)".+?<i class="date"><b>(.+?)</b>').findall(source)
-		totalit = len(match)
-		for urlsbase,titulo,thumbtmp,data in match:
-			try:thumbnail=img_base_url + re.compile('src=(.+?)&amp').findall(thumbtmp)[0]
-			except: thumbnail=''
-			if not plot: plot = translate(30026)
-			information = { "Title": title_clean_up(titulo),"plot":plot,"aired":format_data(data) }
-			addepisode('[B]' + title_clean_up(titulo) + '[COLOR blue] (' + data +')' + '[/B][/COLOR]',base_url + urlsbase,17,thumbnail,totalit,information)
-		pag_num_total=re.compile('.*page:(.+?)}\)\">Fim &raquo').findall(source)
-		if pag_num_total:
-			try:
-				if int(current_page) == int(pag_num_total[0]): pass
-				else: 
-					url_next='http://www.rtp.pt/play/browseprog/' + prog_id[0] + '/' + str(int(current_page)+1) + '/true'
-					addDir('[B][COLOR blue]'+translate(30027)+' ('+current_page+'/'+pag_num_total[0]+')[/B][/COLOR] | ' + translate(30028),url_next,16,os.path.join(artfolder,'next.png'),1,pasta=True)
-			except: pass
+		match_geral = re.findall('<div class="lazy(.*?)</i></span>',source,re.DOTALL)
+		if match_geral:
+			totalit = len(match_geral)
+			for match in match_geral:
+				data = re.compile('<span class="small clearfix text-light">(.+?)</span>').findall(match)
+				lnk = re.compile('href="(.+?)" ').findall(match)
+				titulo_array = re.compile('title="(.+?)" ').findall(match)
+				if titulo_array: 
+					if 'itemprop' not in titulo_array[0]:
+						titulo = title_clean_up(titulo_array[0])
+				img_tmp = re.compile('itemprop="image" src=".+?src=(.+?)&.+?"').findall(match)
+				if img_tmp: img = img_base_url + img_tmp[0]
+				else: img = ''
+				if data and lnk:
+					information = { "Title": titulo,"plot":plot,"aired":format_data(data[0]) }
+					addepisode('[B]' + titulo + '[COLOR blue] (' + title_clean_up(data[0]) +')' + '[/B][/COLOR]',base_url + lnk[0],17,img,totalit,information)
+		try:
+			next_url = 'http://www.rtp.pt/play/bg_l_ep/?listDate=&listQuery=&listProgram='+prog_id[0]+'&listcategory=&listchannel=&listtype=recent&page='+str(int(current_page)+1)+'&type=all'
+			try: source_next = abrir_url(next_url)
+			except: source_next = ''
+			if source_next:
+				if re.findall('itemscope itemtype="http://schema.org/TVSeries"',source_next):
+					addDir('[B][COLOR blue]'+translate(30028)+'|[/B][/COLOR]'+titulo,next_url,16,os.path.join(artfolder,'next.png'),1,pasta=True,informacion=information)
+		except: pass
 	xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
 	setview('episodes-view')
 	
 def list_emissoes(urltmp):
-	#Block of code to detect current page number
-	page_num = re.compile('&page=(\d+)').findall(urltmp)
-	if not page_num: page_num = str(1)
-	else: page_num=page_num[0]
-	url= urltmp + '&page=' + page_num
 	try:
-		page_source = abrir_url(url)
+		page_source = abrir_url(urltmp)
 	except:
 		page_source = ''	
 		msgok(translate(30001),translate(30018))
 	if page_source:
-		pag_num_total=re.compile('.*page=(.+?)">Fim &raquo').findall(page_source)
-		html_source_trunk = re.findall('<div class="item">(.*?)<p class=', page_source, re.DOTALL)
-		if html_source_trunk:
-			for trunk in html_source_trunk:
-				match=re.compile('<a href="(.+?)" title="(.+?), Ep.+? de (.+?)">\s*<img alt=".+?" src="(.+?)"').findall(trunk)
+		program_list=re.findall('<section>(.+?)</section>',page_source,re.DOTALL)
+		if program_list:
+			match = re.findall('href="(.+?)".*?itemprop="name">(.+?)</b',program_list[1],re.DOTALL)
+			if match:
 				totalit = len(match)
- 				for urlsbase,titulo,data,thumbtmp in match:
- 					try:
-						thumbtmp2=re.compile('src=(.+?)&amp').findall(thumbtmp)
-						thumbnail=img_base_url + thumbtmp2[0]
-						titulo = title_clean_up(titulo)
-						plot = re.compile('<p>(.+?)</p').findall(trunk)
-						if plot: plot = title_clean_up(plot[0])
-						else: plot = translate(30026)
-						data = format_data(data)
-						information = { "Title": titulo,"Plot":plot,"aired":data }
-						addepisode('[B]' + titulo + '[COLOR blue] (' + data +')' + '[/B][/COLOR]',base_url + urlsbase,17,thumbnail,totalit,information)
-					except: pass
-			if pag_num_total:
-				page_next = int(page_num)+1
-				match = re.compile('&page=(\d+)').findall(urltmp)
-				if match: urltmp = urltmp.replace('&page='+match[0],'')
-				url=urltmp + '&page=' + str(page_next)
-				addDir('[B]'+translate(30027)+ page_num + '/' + pag_num_total[0] + '[/B][B][COLOR blue] | '+translate(30029)+'[/B][/COLOR]',url,14,os.path.join(artfolder,'next.png'),1)
-			else: pass
-			xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
-			setview('episodes-view')
-		else: msgok(translate(30001),translate(30030));sys.exit(0)
-	else:
-		sys.exit(0)
+				for urlsbase,titulo in match:
+					if selfAddon.getSetting('icon_plot') == 'true':
+						try:
+							source = abrir_url(base_url + urlsbase)
+							sinopse=re.findall('id="promo">.+?\n.+?<p>(.*?)</p>', source, re.DOTALL)
+							if sinopse: plot = clean_html(title_clean_up(sinopse[0]))
+							information={ "Title": title_clean_up(titulo),"plot":plot }
+							try: thumbnail=img_base_url + re.compile('src=(.+?)&amp').findall(source)[0]
+							except: thumbnail=''
+						except: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
+					else: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
+					addepisode(title_clean_up(titulo),base_url + urlsbase,17,thumbnail,totalit,information)
+				xbmcplugin.setContent(int(sys.argv[1]), 'episodes')
+				setview('episodes-view')
+		else: msgok(translate(30001),translate(30032));sys.exit(0)
 		
 def pesquisa_emissoes():
 	if not xbmcvfs.exists(os.path.join(datapath,'searchemiss.txt')):
@@ -139,7 +137,7 @@ def pesquisa_emissoes():
 		if (keyb.isConfirmed()):
 			search = keyb.getText()
 			encode=urllib.quote(search)
-			urltmp = base_url + '/play/procura?p_az=&p_c=&p_t=&p_d=&p_n=' + encode + '&pesquisar=OK'
+			urltmp = base_url + '/play/pesquisa?c_t=&q=' + encode
 			save(os.path.join(datapath,'searchemiss.txt'),urltmp)
 			list_emissoes(urltmp)
 	else:
@@ -153,7 +151,7 @@ def pesquisa_programas():
 		if (keyb.isConfirmed()):
 			search = keyb.getText()
 			encode=urllib.quote(search)
-			urltmp = base_url + '/play/procura?p_az=&p_c=&p_t=&p_d=&p_n=' + encode + '&pesquisar=OK'
+			urltmp = base_url + '/play/pesquisa?c_t=&q=' + encode
 			save(os.path.join(datapath,'searchprog.txt'),urltmp)
 			list_show_search(urltmp)
 	else:
@@ -167,23 +165,25 @@ def list_show_search(url):
 		page_source = ''	
 		msgok(translate(30001),translate(30018))
 	if page_source:
-		match = re.compile('<a href="(.+?)" title=".+?"><h3>(.+?)</h3>').findall(page_source)
-		if match:
-			totalit = len(match)
-			for urlsbase,titulo in match:
-				if selfAddon.getSetting('icon_plot') == 'true':
-					try:
-						source = abrir_url(base_url + urlsbase)
-						sinopse=re.compile('<p class="Sinopse">(.+?)</span></p>').findall(source)
-						if sinopse: plot = clean_html(title_clean_up(sinopse[0]))
-						information={ "Title": title_clean_up(titulo),"plot":plot }
-						try: thumbnail=img_base_url + re.compile('src=(.+?)&amp').findall(source)[0]
-						except: thumbnail=''
-					except: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
-				else: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
-				addprograma(title_clean_up(titulo),base_url + urlsbase,16,thumbnail,totalit,information)
-			xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
-			setview('show-view')
+		program_list=re.findall('<section>(.+?)</section>',page_source,re.DOTALL)
+		if program_list:
+			match = re.findall('href="(.+?)".*?itemprop="name">(.+?)</b',program_list[0],re.DOTALL)
+			if match:
+				totalit = len(match)
+				for urlsbase,titulo in match:
+					if selfAddon.getSetting('icon_plot') == 'true':
+						try:
+							source = abrir_url(base_url + urlsbase)
+							sinopse=re.findall('id="promo">.+?\n.+?<p>(.*?)</p>', source, re.DOTALL)
+							if sinopse: plot = clean_html(title_clean_up(sinopse[0]))
+							information={ "Title": title_clean_up(titulo),"plot":plot }
+							try: thumbnail=img_base_url + re.compile('src=(.+?)&amp').findall(source)[0]
+							except: thumbnail=''
+						except: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
+					else: information={ "Title": title_clean_up(titulo),"plot":translate(30026) };thumbnail=''
+					addprograma(title_clean_up(titulo),base_url + urlsbase,16,thumbnail,totalit,information)
+				xbmcplugin.setContent(int(sys.argv[1]), 'tvshows')
+				setview('show-view')
 		else: msgok(translate(30001),translate(30032));sys.exit(0)
 		
 def get_show_episode_parts(name,url,iconimage):
@@ -193,11 +193,12 @@ def get_show_episode_parts(name,url,iconimage):
 	if source:
 		url_video_list = []
 		video_list = []
-		
-		match = re.compile("<a.+?href='(.+?)'><b>Parte</b>(.+?)</a>").findall(source)
+		match = re.compile('href="(.+?)" title="Parte.+?" rel="nofollow"').findall(source)
+		print match
+		#match = re.compile("<a.+?href='(.+?)'><b>Parte</b>(.+?)</a>").findall(source)
 		if not match: url_video_list.append(url)
 		else:
-			for urlsbase,parte in match:
+			for urlsbase in match:
 				url_video_list.append(base_url + urlsbase)			
 		number_of_parts = len(url_video_list)
 		dp = xbmcgui.DialogProgress()

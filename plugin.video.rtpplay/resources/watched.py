@@ -23,8 +23,9 @@ from iofile import *
 from common_variables import *
 
 def mark_as_watched(url):
-	if not xbmcvfs.exists(watched_folder): xbmcvfs.mkdir(watched_folder)
-	if not xbmcvfs.exists(watched_database): save(watched_database,'{}')
+	if not os.path.exists(datapath): xbmcvfs.mkdir(datapath)
+	if not os.path.exists(watched_folder): xbmcvfs.mkdir(watched_folder)
+	if not os.path.exists(watched_database): save(watched_database,'{}')
 	database_text = readfile(watched_database)
 	database = eval(database_text)
 	database[url]=True

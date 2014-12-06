@@ -27,7 +27,8 @@ from iofile import *
 
 
 def list_favourites():
-	if not xbmcvfs.exists(programafav): xbmcvfs.mkdir(programafav)
+	if not os.path.exists(datapath): xbmcvfs.mkdir(datapath)
+	if not os.path.exists(programafav): xbmcvfs.mkdir(programafav)
 	dirs,files = xbmcvfs.listdir(programafav)
 	if files:
 		totalit = len(files)
@@ -46,7 +47,8 @@ def list_favourites():
 			
 	
 def add_favourite(name,url,iconimage,plot):
-	if not xbmcvfs.exists(programafav): xbmcvfs.mkdir(programafav)
+	if not os.path.exists(datapath): xbmcvfs.mkdir(datapath)
+	if not os.path.exists(programafav): xbmcvfs.mkdir(programafav)
 	text = name + '|' + url + '|' + iconimage + '|' + plot
 	favfile=os.path.join(programafav,removeNonAscii(name.lower())+'.txt')
 	save(favfile,text)

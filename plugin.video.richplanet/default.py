@@ -71,9 +71,9 @@ def VIDEOLINKS(url,name):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        match=re.compile('mediaUrl":"(.+?)","duration":"(.+?)"').findall(link)
-        for url,duration in match:
-                addLink(name,url,'http://a.i.blip.tv/g?src=Richplanet-website_banner610.png&w=220&h=150&fmt=jpg',longdescription,duration)
+        match=re.compile('mediaUrl":"(.+?)"').findall(link)
+        for url in match:
+                addLink(name,url,'http://a.i.blip.tv/g?src=Richplanet-website_banner610.png&w=220&h=150&fmt=jpg',longdescription)
 
 
                 
@@ -98,11 +98,10 @@ def get_params():
 
 
 
-def addLink(name,url,iconimage,longdescription,duration):
+def addLink(name,url,iconimage,longdescription):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        times=int(duration)/60
-        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": longdescription, "Duration": times  } )
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "Plot": longdescription  } )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=False)
         return ok
 

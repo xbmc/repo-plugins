@@ -31,7 +31,7 @@ def getAtoO():
   """
   html = getPage(URL_A_TO_O)
 
-  link_class = "[^\"']*play_alphabetic-link[^\"']*"
+  link_class = "[^\"']*play_alphabetic-list__video-link[^\"']*"
   texts = common.parseDOM(html, "a" , attrs = { "class": link_class })
   hrefs = common.parseDOM(html, "a" , attrs = { "class": link_class }, ret = "href")
 
@@ -238,7 +238,7 @@ def getChannels():
   anchor_class = "[^\"']*play_zapper__menu-item-link[^\"']*"
   html = getPage(URL_TO_CHANNELS)
 
-  container = common.parseDOM(html, "ul", attrs = { "data-tabarea" : "ta-schedule"})
+  container = common.parseDOM(html, "ul", attrs = { "data-play_tabarea" : "ta-schedule"})
   if not container:
     helper.errorMsg("No container found for channels")
     return None
@@ -246,7 +246,7 @@ def getChannels():
   channels = []
   ch_boxes = common.parseDOM(container, "li")
   for box in ch_boxes:
-    title = common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "title")[0]
+    title = common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-channel")[0]
     url = common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "href")[0]
     plot = common.parseDOM(box, "span", attrs = {"class" : "[^\"']*play_zapper__menu-item-title[^\"']*"})[0]
     thumbnail = BASE_URL + common.parseDOM(box, "a", attrs = {"class" : anchor_class}, ret = "data-thumbnail")[0]

@@ -1,3 +1,7 @@
+Version 4.0.11
+-------------
+- Fix broken listing due to site change
+
 Version 4.0.10
 -------------
 - Fix broken thumbnails for category listing

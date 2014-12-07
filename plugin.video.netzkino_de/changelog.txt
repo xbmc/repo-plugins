@@ -1,41 +1,26 @@
+2.0.3 (2014-12-07)
+UPD: switched to requests
+
+2.0.2 (2014-11-27)
+FIX: skins call '/extrafanart/'
+UPD: improved performance thanks to kodion
+UPD: kodion tests
+
 2.0.1 (2014-11-12)
 FIX: import xbmc.python 2.1.0
 
 2.0.0 (2014-11-09)
 DEL: stable
-
-2.0.0~beta4 (2014-11-09)
 UPD: changed ID and moved to stable
-
-2.0.0~beta4 (2014-11-08)
 UPD: kodimon
-
-2.0.0~beta3 (2014-10-23)
 UPD: testing sqlite for caching, watch later and search
-
-2.0.0~beta2 (2014-10-20)
 ADD: missing second fanart
 FIX: added missing source file
-
-2.0.0~alpha4 (2014-10-20)
 UPD: kodimon framework
-
-2.0.0~alpha3 (2014-10-11)
 ADD: setting for caching size (1-25 MB / default 5 MB)
 FIX: crash while using dumdb for caching under android
 UPD: internal testing
-
-2.0.0~alpha
 UPD: moved to kodimon (framework)
-
-1.0.2~beta2
-- FIX: corrected some namespaces
-
-1.0.2~beta
-- ADD: sort methods for movies
-
-1.0.1
-- initial version for repository tests
 
 1.0.0
 - initial version for tests

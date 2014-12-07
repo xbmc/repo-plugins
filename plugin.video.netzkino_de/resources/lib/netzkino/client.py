@@ -1,50 +1,68 @@
+# import json
 import json
-import urllib
 import urllib2
+
+import requests
+# Verify is disabled and to avoid warnings we disable the warnings. Behind a proxy request isn't working correctly all
+# the time and if so can't validate the hosts correctly resulting in a exception and the addon won't work properly.
+try:
+    from requests.packages import urllib3
+
+    urllib3.disable_warnings()
+except:
+    # do nothing
+    pass
 
 __author__ = 'bromix'
 
 
 class Client(object):
     def __init__(self):
-        self._opener = urllib2.build_opener()
-        self._opener.addheaders = [('User-Agent', 'Dalvik/1.6.0 (Linux; U; Android 4.4.4; GT-I9100 Build/KTU84Q)'),
-                                   ('Host', 'api.netzkino.de.simplecache.net'),
-                                   ('Connection', 'Keep-Alive')]
         pass
 
-    def _execute(self, path, params=None):
-        """
-        [HOME]
-        http://api.netzkino.de.simplecache.net/capi-2.0a/index.json?d=android-phone&l=de-DE&g=DE
-
-        [CATEGORY]
-        http://api.netzkino.de.simplecache.net/capi-2.0a/categories/5?d=android-phone&l=de-DE&g=DE
-        :param params:
-        :return:
-        """
-
-        # prepare the params
+    def _perform_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
+                         allow_redirects=True):
+        # params
         if not params:
             params = {}
             pass
-        params['d'] = 'android-tablet'
-        params['l'] = 'de-DE'
-        params['g'] = 'DE'
+        if path != 'search':
+            _params = {'d': 'android-tablet', 'l': 'de-DE', 'g': 'DE'}
+            pass
+        else:
+            _params = {'d': 'android-phone'}
+            pass
+        _params.update(params)
 
-        base_url = 'http://api.netzkino.de.simplecache.net/capi-2.0a/'
-        url = base_url + path.strip('/')
-        url = url + '?' + urllib.urlencode(params)
+        # headers
+        if not headers:
+            headers = {}
+            pass
+        _headers = {'Host': 'api.netzkino.de.simplecache.net',
+                    'User-Agent': 'Dalvik/1.6.0 (Linux; U; Android 4.4.4; GT-I9100 Build/KTU84Q)',
+                    'Connection': 'Keep-Alive',
+                    'Accept-Encoding': 'gzip'}
+        _headers.update(headers)
 
-        content = self._opener.open(url)
-        return json.load(content, encoding='utf-8')
+        # url
+        _url = 'http://api.netzkino.de.simplecache.net/capi-2.0a/%s' % path.strip('/')
+
+        result = None
+        if method == 'GET':
+            result = requests.get(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
+            pass
+
+        if result is None:
+            return {}
+
+        return result.json()
 
     def get_home(self):
         """
         Main entry point to get data of netzkino.de
         :return:
         """
-        return self._execute('index.json')
+        return self._perform_request(path='index.json')
 
     def get_categories(self):
         """
@@ -60,7 +78,7 @@ class Client(object):
         :param category_id:
         :return:
         """
-        return self._execute('categories/%s' % str(category_id))
+        return self._perform_request(path='categories/%s' % str(category_id))
         pass
 
     def search(self, text):
@@ -69,7 +87,7 @@ class Client(object):
         :param text:
         :return:
         """
-        return self._execute('search', params={'q': text})
+        return self._perform_request(path='search', params={'q': text})
 
     def get_video_url(self, stream_id):
         """
@@ -80,6 +98,7 @@ class Client(object):
         content = urllib2.urlopen('http://www.netzkino.de/adconf/android-new.php')
         json_data = json.load(content)
         streamer_url = json_data.get('streamer', 'http://netzkino_and-vh.akamaihd.net/i/')
-        return streamer_url+stream_id+'.mp4/master.m3u8'
+        return streamer_url + stream_id + '.mp4/master.m3u8'
+
 
     pass

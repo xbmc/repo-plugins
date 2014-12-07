@@ -1,5 +1,5 @@
-from resources.lib import kodimon
+from resources.lib.kodion import runner
 from resources.lib import netzkino
 
 __provider__ = netzkino.Provider()
-kodimon.run(__provider__)
+runner.run(__provider__)

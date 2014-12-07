@@ -3,15 +3,16 @@ from resources.lib.netzkino import Provider
 __author__ = 'bromix'
 
 import unittest
-
+from resources.lib import kodion
 
 class TestProvider(unittest.TestCase):
     def setUp(self):
         pass
 
     def test_category(self):
+        context = kodion.Context(path='/category/5/')
         provider = Provider()
-        result = provider.navigate('/category/5/')
+        result = provider.navigate(context)
 
         items = result[0]
         self.assertGreater(len(items), 1)
@@ -25,7 +26,8 @@ class TestProvider(unittest.TestCase):
 
     def test_root(self):
         provider = Provider()
-        result = provider.navigate('/')
+        context = kodion.Context(path='/')
+        result = provider.navigate(context)
 
         items = result[0]
         self.assertGreater(len(items), 1)

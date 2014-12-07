@@ -1,9 +1,14 @@
+[B]0.5.0[/B]
+- Fixed cache storage path
+- Added zappylib integration
+- Added LiveTV access (favorites + all channels)
+
 [B]0.2.2[/B]
 - Fixed bug in session management
 - Fixed addon.xml
 - Fixed localization string ID's
 - Added fanart
-- Aded strings.po localization file format
+- Added strings.po localization file format
 
 [B]0.2.1[/B]
 - first release

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.zattoobox"
-       version="0.2.2"
+       version="0.5.0"
        name="Zattoo Box"
        provider-name="Pascal Nançoz">
   <requires>
@@ -12,13 +12,17 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">ZattooBox</summary>
-    <description lang="en">Play recorded movies and TV shows from a Zattoo account.</description>
+    <summary lang="en">Play Live TV and recorded programs from a Zattoo account.</summary>
+    <description lang="en">Play Live TV and recorded programs from a Zattoo account.
+- Watch live TV from any available channel
+- Favorites filter for convenient access
+- Recordings available for instant watching
+- Quick setup</description>
     <platform>all</platform>
     <language></language>
     <license>BSD 2-Clause</license>
-    <forum></forum>
-    <website>https://github.com/nancpasc/ZattooBox</website>
+    <forum>https://github.com/nancpasc/ZattooBox/wiki/ZattooBox-Wiki</forum>
+    <website>https://github.com/nancpasc/ZattooBox/wiki/ZattooBox-Wiki</website>
     <source>https://github.com/nancpasc/ZattooBox.git</source>
     <email>nancpasc@gmail.com</email>
     <disclaimer lang="en">Check http://www.zattoo.com for availability in your country.</disclaimer>

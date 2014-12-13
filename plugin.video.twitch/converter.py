@@ -91,6 +91,8 @@ class JsonListItemConverter(object):
                                         self.plugin.get_string(30060)),
                 'title': channel.get(Keys.STATUS,
                                      self.plugin.get_string(30061)),
+                'game': channel.get(Keys.GAME,
+                                     self.plugin.get_string(30064)),
                 'viewers': viewers}
 
 class TitleBuilder(object):
@@ -100,6 +102,7 @@ class TitleBuilder(object):
         STREAMER = u"{streamer}"
         STREAMER_TITLE = u"{streamer} - {title}"
         VIEWERS_STREAMER_TITLE = u"{viewers} - {streamer} - {title}"
+        STREAMER_GAME_TITLE = u"{streamer} - {game} - {title}"
         ELLIPSIS = u'...'
 
     def __init__(self, PLUGIN, line_length):
@@ -120,7 +123,8 @@ class TitleBuilder(object):
         options = {0: TitleBuilder.Templates.STREAMER_TITLE,
                    1: TitleBuilder.Templates.VIEWERS_STREAMER_TITLE,
                    2: TitleBuilder.Templates.TITLE,
-                   3: TitleBuilder.Templates.STREAMER}
+                   3: TitleBuilder.Templates.STREAMER,
+                   4: TitleBuilder.Templates.STREAMER_GAME_TITLE}
         return options.get(titleSetting, TitleBuilder.Templates.STREAMER)
 
     def cleanTitleValue(self, value):
@@ -129,7 +133,13 @@ class TitleBuilder(object):
         else:
             return value
 
-    def truncateTitle(self, title):
-        shortTitle = title[:self.line_length]
-        ending = (title[self.line_length:] and TitleBuilder.Templates.ELLIPSIS)
-        return shortTitle + ending
+    def truncateTitle(self, title):        
+        truncateSetting = self.plugin.get_setting('titletruncate', unicode)
+
+        if truncateSetting == "true":
+            shortTitle = title[:self.line_length]
+            ending = (title[self.line_length:] and TitleBuilder.Templates.ELLIPSIS)
+            return shortTitle + ending
+        else:
+            return title
+        return title

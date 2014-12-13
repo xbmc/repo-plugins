@@ -43,6 +43,9 @@ def createMainListing():
         {'label': PLUGIN.get_string(30001),
          'path': PLUGIN.url_for(endpoint='createListOfGames', index='0')
          },
+        {'label': PLUGIN.get_string(30008),
+         'path': PLUGIN.url_for(endpoint='createListOfChannels', index='0')
+         },
         {'label': PLUGIN.get_string(30002),
          'path': PLUGIN.url_for(endpoint='createFollowingList')
          },
@@ -76,6 +79,17 @@ def createListOfGames(index):
     items = [CONVERTER.convertGameToListItem(element[Keys.GAME]) for element in games]
 
     items.append(linkToNextPage('createListOfGames', index))
+    return items
+
+
+@PLUGIN.route('/createListOfChannels/<index>/')
+@managedTwitchExceptions
+def createListOfChannels(index):
+    index, offset, limit = calculatePaginationValues(index)
+    items = [CONVERTER.convertStreamToListItem(stream) for stream
+             in TWITCHTV.getChannels(offset, limit)]
+
+    items.append(linkToNextPage('createListOfChannels', index))
     return items
 
 
@@ -131,8 +145,9 @@ def channelVideosList(name,index,past):
 @PLUGIN.route('/playVideo/<id>/')
 @managedTwitchExceptions
 def playVideo(id):
-    
-    playList = TWITCHTV.getVideoChunksPlaylist(id)
+    #Get Required Quality From Settings
+    videoQuality = getVideoQuality()
+    playlist = TWITCHTV.getVideoChunksPlaylist(id,videoQuality)
     
     # Doesn't fullscreen video, might be because of xbmcswift
     #xbmc.Player().play(playlist) 
@@ -140,6 +155,7 @@ def playVideo(id):
     try:
         # Gotta wrap this in a try/except, xbmcswift causes an error when passing a xbmc.PlayList()
         # but still plays the playlist properly
+        xbmc.Player().play(playlist)
         PLUGIN.set_resolved_url(playlist)
     except:
         pass
@@ -223,7 +239,7 @@ def getUserName():
 
 def getVideoQuality():
     chosenQuality = PLUGIN.get_setting('video', unicode)
-    qualities = {'0': 0, '1': 1, '2': 2, '3': 3}
+    qualities = {'0': 0, '1': 1, '2': 2, '3': 3, '4' : 4}
     return qualities.get(chosenQuality, sys.maxint)
 
 

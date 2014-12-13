@@ -7,6 +7,7 @@
   <string id="30004">Settings</string>
   <string id="30005">Featured Streams</string>
   <string id="30006">Teams</string>
+  <string id="30008">Channels</string>
   
   <!--search -->
   <string id="30007">Search for channels</string>
@@ -35,11 +36,13 @@
   <string id="30042">720p</string>
   <string id="30043">480p</string>
   <string id="30044">360p</string>
+  <string id="30063">226p (Mobile)</string>
   <string id="30045">Display titles</string>
   <string id="30046">Streamer - Stream Title</string>
   <string id="30047">Viewers - Streamer - Stream Title</string>
   <string id="30048">Stream Title</string>
   <string id="30049">Streamer</string>
+  <string id="30051">Streamer - Game Title - Stream Title</string>
 
   <string id="30050">Username</string>
   
@@ -47,5 +50,8 @@
   <string id="30060">Unnamed Streamer</string>
   <string id="30061">Untitled Stream</string>
   <string id="30062">Unknown Number of Viewers</string>
+  <string id="30064">Unknown Game</string>
+
+  <string id="30065">Truncate displayed titles</string>
 
 </strings>

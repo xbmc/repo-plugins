@@ -7,6 +7,7 @@
   <string id="30004">Instellingen</string>
   <string id="30005">Streams</string>
   <string id="30006">Teams</string>
+  <string id="30008">Kanalen</string>
   
   <!--search -->
   <string id="30007">Zoeken naar kanalen</string>
@@ -35,11 +36,13 @@
   <string id="30042">720p</string>
   <string id="30043">480p</string>
   <string id="30044">360p</string>
+  <string id="30063">226p (Mobile)</string>
   <string id="30045">Titels weergeven</string>
   <string id="30046">Streamer - Stream Titel</string>
   <string id="30047">Kijkers - Streamer - Stream Titel</string>
   <string id="30048">Stream Titel</string>
   <string id="30049">Streamer</string>
+  <string id="30051">Streamer - Game Title - Stream Title</string>
 
   <string id="30050">Gebruikersnaam</string>
   
@@ -47,5 +50,8 @@
   <string id="30060">Naamloze Streamer</string>
   <string id="30061">Naamloze Stream</string>
   <string id="30062">Onbekend Aantal Kijkers</string>
+  <string id="30064">Onbekend Spel</string>
+
+  <string id="30065">Afkappen weergegeven titels</string>
 
 </strings>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- main menu -->
+  <string id="30001">Hry</string>
+  <string id="30002">Sledované</string>
+  <string id="30003">Hledat</string>
+  <string id="30004">Nastavení</string>
+  <string id="30005">Nejlepší streamy</string>
+  <string id="30006">Týmy</string>
+  <string id="30008">Kanály</string>
+  
+  <!--search -->
+  <string id="30007">Hledat kanál</string>
+  
+  <!--general --> 
+  <string id="30010">TwitchTV</string>
+  <string id="30011">další stránka...</string>
+  <string id="30012">-- Živé streamy --</string>
+  <string id="30013">-- Sledované kanály --</string>
+
+   <!--notifications --> 
+  <string id="30020">Http chyba</string>
+  <string id="30021">Živé data nenalezeny</string>
+  <string id="30022">Archivy nenalezeny</string>
+  <string id="30023">Chyba v uživatelském tokenu</string>
+  <string id="30024">Nastavení videa bylo změněno</string>
+  <string id="30025">Zvolené nastavení videa není dostupné</string>
+  <string id="30026">TwitchApi chyba</string>
+  <string id="30027">JSON chyba</string>
+  <string id="30028">Nepodařilo se naparsovat výsledky</string>
+  <string id="30029">Zkontrolujte prosím internetové připojení</string>
+  
+  <!--settings -->
+  <string id="30040">Video kvalita</string>
+  <string id="30041">Nejlepší</string>
+  <string id="30042">720p</string>
+  <string id="30043">480p</string>
+  <string id="30044">360p</string>
+  <string id="30063">226p (mobilní)</string>
+  <string id="30045">Zobrazení titulku</string>
+  <string id="30046">Streamer - Název streamu</string>
+  <string id="30047">Sledující - Streamer - Název streamu</string>
+  <string id="30048">Název streamu</string>
+  <string id="30049">Streamer</string>
+  <string id="30051">Streamer - Název hry - Název streamu</string>
+
+  <string id="30050">Uživatelské jméno</string>
+  
+  <!--title-->
+  <string id="30060">Bezejmenný Streamer</string>
+  <string id="30061">Stream bez názvu</string>
+  <string id="30062">Neznámý počet sledujících</string>
+  <string id="30064">Neznámá hra</string>
+
+  <string id="30065">Zkrátit zobrazené tituly</string>
+
+</strings>

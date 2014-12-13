@@ -7,6 +7,7 @@
   <string id="30004">Ustawienia</string>
   <string id="30005">Popularne kanały</string>
   <string id="30006">Drużyny</string>
+  <string id="30008">Kanały</string>
   
   <!--search -->
   <string id="30007">Szukaj kanałów</string>
@@ -14,8 +15,8 @@
   <!--general --> 
   <string id="30010">TwitchTV</string>
   <string id="30011">następne...</string>
-  <string id="30012">-- Currently Live Streams --</string>
-  <string id="30013">-- Followed Channels --</string>
+  <string id="30012">-- Kanały na żywo --</string>
+  <string id="30013">-- Obserwowane kanały --</string>
 
    <!--notifications --> 
   <string id="30020">Błąd HTTP</string>
@@ -35,11 +36,21 @@
   <string id="30042">720p</string>
   <string id="30043">480p</string>
   <string id="30044">360p</string>
+  <string id="30063">226p (Mobile)</string>
   <string id="30045">Schemat wyświetlania tytułów</string>
   <string id="30046">Kanał - Tytuł</string>
   <string id="30047">Liczba oglądających - Kanał - Tytuł</string>
   <string id="30048">Tytuł</string>
   <string id="30049">Kanał</string>
+  <string id="30051">Kanał - Gra - Tytuł</string>
   
   <string id="30050">Użytkownik</string>
+
+  <string id="30060">Kanał bez nazwy</string>
+  <string id="30061">Kanał bez tytułu</string>
+  <string id="30062">Nieznana liczba oglądających</string>
+  <string id="30064">Nieznana gra</string>
+
+  <string id="30065">Skracaj zbyt długie tytuły</string>
+
 </strings>

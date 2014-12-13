@@ -1,3 +1,5 @@
+Version 0.2.3 - December 8, 2014
+- Append resources/lib to system path. 
 Version 0.2.2 - April 21, 2014
 - Fixes search when entering an empty string or when dismissing the search dialog.
 Version 0.2.1 - June 21, 2013

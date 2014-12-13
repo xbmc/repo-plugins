@@ -1,6 +1,4 @@
-
-import fivehundredpxutils
-import fivehundredpxutils.xbmc
+import os
 
 import xbmc
 import xbmcaddon
@@ -9,7 +7,12 @@ import xbmcplugin
 
 __addon__       = xbmcaddon.Addon()
 __addonname__   = __addon__.getAddonInfo('name')
+__cwd__        = __addon__.getAddonInfo('path').decode("utf-8")
+__resource__   = xbmc.translatePath( os.path.join( __cwd__, 'resources', 'lib' ).encode("utf-8") ).decode("utf-8")
+sys.path.append(__resource__)
 
+import fivehundredpxutils
+import fivehundredpxutils.xbmc
 from fivehundredpx.client import FiveHundredPXAPI
 
 _CONSUMER_KEY = 'LvUFQHMQgSlaWe3aRQot6Ct5ZC2pdTMyTLS0GMfF'

@@ -1,4 +1,10 @@
-﻿﻿﻿﻿﻿Version 1.0.9
+﻿Version 1.1.0
+Refactor the code.
+
+﻿﻿﻿﻿﻿﻿﻿﻿Version 1.0.11
+* mp4 lower resolution (for slow connection) option
+
+Version 1.0.9
 * little fixxen for official repo requirements
 
 Version 1.0.8

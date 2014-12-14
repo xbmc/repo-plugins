@@ -18,9 +18,9 @@ selfAddon = xbmcaddon.Addon(id='plugin.video.espn_3')
 translation = selfAddon.getLocalizedString
 defaultimage = 'special://home/addons/plugin.video.espn_3/icon.png'
 defaultfanart = 'special://home/addons/plugin.video.espn_3/fanart.jpg'
-defaultlive = 'special://home/addons/plugin.video.espn_3/resources/media/live.png'
-defaultreplay = 'special://home/addons/plugin.video.espn_3/resources/media/replay.png'
-defaultupcoming = 'special://home/addons/plugin.video.espn_3/resources/media/upcoming.png'
+defaultlive = 'special://home/addons/plugin.video.espn_3/resources/media/new_live.png'
+defaultreplay = 'special://home/addons/plugin.video.espn_3/resources/media/new_replay.png'
+defaultupcoming = 'special://home/addons/plugin.video.espn_3/resources/media/new_upcoming.png'
 
 pluginpath = selfAddon.getAddonInfo('path')
 pluginhandle = int(sys.argv[1])
@@ -56,7 +56,7 @@ def CATEGORIES():
     replays4 = [60,90,120,240]
     replays4 = replays4[int(selfAddon.getSetting('replays4'))]
     start4 = (curdate-timedelta(days=replays4)).strftime("%Y%m%d")
-    startAll = (curdate-timedelta(days=730)).strftime("%Y%m%d")
+    startAll = (curdate-timedelta(days=365)).strftime("%Y%m%d")
     addDir(translation(30031)+str(replays1)+' Days', 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels+enddate+'&startDate='+start1, 2, defaultreplay)
     addDir(translation(30031)+str(replays2)+' Days', 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels+enddate+'&startDate='+start2, 2, defaultreplay)
     addDir(translation(30031)+str(replays3)+' Days', 'http://espn.go.com/watchespn/feeds/startup?action=replay'+channels+enddate+'&startDate='+start3, 2, defaultreplay)
@@ -119,14 +119,24 @@ def INDEX(url,name,bysport=False):
                 network = networkmap[networkid]
             thumb = event.find('thumbnail').findtext('large')
             starttime = int(event.findtext('startTimeGmtMs'))/1000
+	    eventedt = int(event.findtext('startTime'))
+            etime = time.strftime("%I:%M %p",time.localtime(starttime))
             endtime = int(event.findtext('endTimeGmtMs'))/1000
             start = time.strftime("%m/%d/%Y %I:%M %p",time.localtime(starttime))
             date = time.strftime("%m/%d/%Y",time.localtime(starttime))
-            ename += ' - '+date
-            if 'action=live' in url:
+            udate = time.strftime("%m/%d",time.localtime(starttime))
+            now = datetime.now().strftime('%H%M')
+            etime24 = time.strftime("%H%M",time.localtime(starttime)) 
+
+            if 'action=live' in url and now > etime24:
                 length = str(int(round((endtime - time.time())/60)))
+                ename = '[COLOR='+str(selfAddon.getSetting('color'))+']'+" - ".join((etime, ename))+'[/COLOR]'
+            elif 'action=live' in url:
+                length = str(int(round((endtime - time.time())/60)))
+                ename = " - ".join((etime, ename))
             else:
                 length = str(int(round((endtime - starttime)/60)))
+                ename = " - ".join((udate, etime, ename))
             
             
             end = event.findtext('summary')
@@ -134,8 +144,6 @@ def INDEX(url,name,bysport=False):
                 end = event.findtext('caption')
 
             plot = ''
-            if network and ('action=live' in url or 'action=upcoming' in url):
-                plot += 'Network: '+network+' - '
             if sport <> '' and sport <> ' ':
                 plot += 'Sport: '+sport+'\n'
             if league <> '' and league <> ' ':
@@ -144,8 +152,10 @@ def INDEX(url,name,bysport=False):
                 plot += 'Location: '+location+'\n'
             if start <> '' and start <> ' ':
                 plot += 'Air Date: '+start+'\n'
-            if length <> '' and length <> ' ':
-                plot += 'Length: '+length+' minutes'+'\n'
+            if length <> '' and length <> ' ' and 'action=live' in url:
+                plot += 'Duration: Approximately '+length+' minutes remaining'+'\n'
+	    elif length <> '' and length <> ' ' and ('action=replay' in url or 'action=upcoming' in url):
+		plot += 'Duration: '+length+' minutes'+'\n'
             plot += end
             infoLabels = {'title':ename,
                           'tvshowtitle':sport,

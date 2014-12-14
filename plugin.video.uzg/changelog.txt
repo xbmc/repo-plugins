@@ -1,4 +1,7 @@
-﻿﻿﻿﻿Version 1.1.0
+﻿﻿﻿﻿﻿﻿﻿Version 1.2.0
+* Refactor code.
+
+Version 1.1.0
 * Subtitle added
 
 ﻿﻿﻿Version 1.0.6

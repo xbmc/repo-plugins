@@ -20,6 +20,11 @@ class AccessManager(object):
         password = self._settings.get_string(constants.setting.LOGIN_PASSWORD, '')
         return username != '' and password != ''
 
+    def remove_login_credentials(self):
+        self._settings.set_string(constants.setting.LOGIN_USERNAME, '')
+        self._settings.set_string(constants.setting.LOGIN_PASSWORD, '')
+        pass
+
     def get_login_credentials(self):
         """
         Returns the username and password (Tuple)
@@ -56,6 +61,16 @@ class AccessManager(object):
         """
         return self._settings.get_string(constants.setting.ACCESS_TOKEN, '')
 
+    def get_refresh_token(self):
+        """
+        Returns the refresh token
+        :return: refresh token
+        """
+        return self._settings.get_string(constants.setting.REFRESH_TOKEN, '')
+
+    def has_refresh_token(self):
+        return self.get_refresh_token() != ''
+
     def is_access_token_expired(self):
         """
         Returns True if the access_token is expired otherwise False.
@@ -76,7 +91,7 @@ class AccessManager(object):
         now = int(time.time())
         return expires <= now
 
-    def update_access_token(self, access_token, unix_timestamp=None):
+    def update_access_token(self, access_token, unix_timestamp=None, refresh_token=None):
         """
         Updates the old access token with the new one.
         :param access_token:
@@ -86,6 +101,9 @@ class AccessManager(object):
         if unix_timestamp is not None:
             self._settings.set_int(constants.setting.ACCESS_TOKEN_EXPIRES, int(unix_timestamp))
             pass
+
+        if refresh_token is not None:
+            self._settings.set_string(constants.setting.REFRESH_TOKEN, refresh_token)
         pass
 
     pass

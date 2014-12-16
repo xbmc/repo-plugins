@@ -66,6 +66,19 @@ class XbmcContext(AbstractContext):
             pass
         pass
 
+    def get_language(self):
+        if self.get_system_version().get_name() == 'Frodo':
+            return 'en-US'
+
+        try:
+            language = xbmc.getLanguage(0, region=True)
+            language = language.split('-')
+            language = '%s-%s' % (language[0].lower(), language[1].upper())
+            return language
+        except Exception, ex:
+            self.log_error('Failed to get system language (%s)', ex.__str__())
+            return 'en-US'
+
     def get_system_version(self):
         return self._system_version
 
@@ -122,5 +135,13 @@ class XbmcContext(AbstractContext):
         new_context._access_manager = self._access_manager
 
         return new_context
+
+    def execute(self, command):
+        xbmc.executebuiltin(command)
+        pass
+
+    def sleep(self, milli_seconds):
+        xbmc.sleep(milli_seconds)
+        pass
 
     pass

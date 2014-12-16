@@ -30,6 +30,9 @@ class AbstractContext(object):
         self._uri = self.create_uri(self._path, self._params)
         pass
 
+    def get_language(self):
+        raise NotImplementedError()
+
     def _get_cache_path(self):
         if not self._cache_path:
             self._cache_path = os.path.join(self.get_data_path(), u'kodion')
@@ -187,4 +190,10 @@ class AbstractContext(object):
         pass
 
     def clone(self, new_path=None, new_params=None):
+        raise NotImplementedError()
+
+    def execute(self, command):
+        raise NotImplementedError()
+
+    def sleep(self, milli_seconds):
         raise NotImplementedError()

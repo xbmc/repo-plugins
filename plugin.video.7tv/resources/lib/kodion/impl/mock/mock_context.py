@@ -1,3 +1,5 @@
+import time
+
 __author__ = 'bromix'
 
 import tempfile
@@ -20,7 +22,15 @@ class MockContext(AbstractContext):
 
         self._ui = None
         self._system_version = MockSystemVersion(0, 0, 'Kodion Test System')
+        self._language = 'en-US'
         pass
+
+    def set_language(self, language):
+        self._language = language
+        pass
+
+    def get_language(self):
+        return self._language
 
     def get_system_version(self):
         return self._system_version
@@ -75,5 +85,13 @@ class MockContext(AbstractContext):
         new_context._access_manager = self._access_manager
 
         return new_context
+
+    def execute(self, command):
+        log("execute '%s'" % command)
+        pass
+
+    def sleep(self, milli_seconds):
+        time.sleep(milli_seconds/1000.0)
+        pass
 
     pass

@@ -1,6 +1,0 @@
-1.0.0
-- First Try
-1.0.1
-- Added TV Mode
-1.0.2
-- Fixed important bug

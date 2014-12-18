@@ -45,18 +45,18 @@ TOKEN_URL = 'http://ida.omroep.nl/npoplayer/i.js'
 
 CHANNELS = [
   
-  ["101 TV", "101tv.png", "thematv/101tv/101tv.isml/101tv.m3u8", "Weg met suffe en saaie tv! Het is tijd voor 101 TV, het 24-uurs jongerenkanaal van BNN en de Publieke Omroep. Met rauwe en brutale programma's, van en voor jongeren. Boordevol hilarische fragmenten, spannende livegames, bizarre experimenten en nieuws over festivals en gratis concertkaartjes. Kijken dus!"],
-  ["Best 24", "best24.png", "thematv/best24/best24.isml/best24.m3u8", "Best 24 brengt hoogtepunten uit zestig jaar televisiehistorie. Het is een feelgoodkanaal met 24 uur per dag de leukste, grappigste en meest spraakmakende programma's uit de Hilversumse schatkamer. Best 24: de schatkamer van de publieke omroep."],
-  ["Cultura 24", "cultura24.png", "thematv/cultura24/cultura24.isml/cultura24.m3u8", "Dit is het 'cultuurkanaal van de Publieke Omroep' met de beste recente en oudere 'kunst en expressie' over verschillende onderwerpen. Klassieke muziek, dans, literatuur, theater, beeldende kunst, film 'Waar cultuur is, is Cultura 24'."],
-  ["Z@ppelin/ Zapp", "familie24.png", "thematv/zappelin24/zappelin24.isml/zappelin24.m3u8", "Z@ppelin24 zendt dagelijks uit van half drie 's nachts tot half negen 's avonds. Familie24 is er op de tussenliggende tijd. Z@ppelin 24 biedt ruimte aan (oude) bekende peuterprogramma's en je kunt er kijken naar nieuwe kleuterseries. Op Familie24 zijn bekende programma's te zien en nieuwe programma's en documentaires die speciaal voor Familie24 zijn gemaakt of aangekocht."],
-  ["Holland Doc 24", "hollanddoc24.png", "thematv/hollanddoc24/hollanddoc24.isml/hollanddoc24.m3u8", "Holland Doc 24 brengt op verschillende manieren en niveaus documentaires en reportages onder de aandacht. De programmering op Holland Doc 24 is gecentreerd rond wekelijkse thema's, die gerelateerd zijn aan de actualiteit, de programmering van documentairerubrieken, van culturele instellingen en festivals."],
-  ["Humor TV 24", "humortv24.png", "thematv/humor24/humor24.isml/humor24.m3u8", "Humor TV 24 is een uitgesproken comedykanaal: een frisse, Nederlandse humorzender met hoogwaardige, grappige, scherpe, jonge, nieuwe, satirische, humoristische programma's."],
-  ["Journaal 24", "journaal24.png", "thematv/journaal24/journaal24.isml/journaal24.m3u8", "Via het themakanaal 'Journaal 24' kunnen de live televisieuitzendingen van het NOS Journaal worden gevolgd. De laatste Journaaluitzending wordt herhaald tot de volgende uitzending van het NOS Journaal."],
-  ["Politiek 24", "politiek24.png", "thematv/politiek24/politiek24.isml/politiek24.m3u8", "Politiek 24 is het digitale kanaal over de Nederlandse politiek in de breedste zin van het woord."],
-  ["Nederland 1", "nederland1.png", "tvlive/ned1/ned1.isml/ned1.m3u8", "Nederland 1 Live"],
-  ["Nederland 2", "nederland2.png", "tvlive/ned2/ned2.isml/ned2.m3u8", "Nederland 2 Live"],
-  ["Nederland 3", "nederland3.png", "tvlive/ned3/ned3.isml/ned3.m3u8", "Nederland 3 Live"],
-  ["3FM", "3fm.png", "visualradio/3fm/3fm.isml/3fm.m3u8", "3FM Live Radio"],
+  ["NPO 101","npo_101.png","thematv/101tv/101tv.isml/101tv.m3u8","Weg met suffe en saaie tv! Het is tijd voor NPO 101, het 24-uurs jongerenkanaal van BNN en de Publieke Omroep. Met rauwe en brutale programma's, van en voor jongeren. Boordevol hilarische fragmenten, spannende livegames, bizarre experimenten en nieuws over festivals en gratis concertkaartjes. Kijken dus!"],
+  ["NPO Best","npo_best.png","thematv/best24/best24.isml/best24.m3u8","NPO Best brengt hoogtepunten uit ruim zestig jaar Nederlandse televisiehistorie. Het is een feelgoodzender waarop u 24 uur per dag de mooiste programma's uit de schatkamer van de Publieke Omroep kunt zien."],
+  ["NPO Cultura","npo_cultura.png","thematv/cultura24/cultura24.isml/cultura24.m3u8","NPO Cultura is het digitale themakanaal van de Publieke Omroep voor verdieping in kunst en cultuur. 24 uur per dag programma's uit genres als klassiek, literatuur, dans, theater, pop, jazz, film, drama en beeldende kunst."],
+  ["NPO Zapp Xtra","npo_zapp.png","thematv/zappelin24/zappelin24.isml/zappelin24.m3u8","Zappelin Xtra en Zapp Xtra zendt dagelijks, 24 uur per dag en reclamevrij, de beste kinderprogramma's van de publieke omroep uit. Aansluitend op Nederland 3 zendt het themakanaal programma's uit van Zappelin of Zapp. Is op Nederland 3 iets voor kleuters te zien dan richt het themakanaal zich op oudere kinderen, en andersom."],
+  ["NPO Doc","npo_doc.png","thematv/hollanddoc24/hollanddoc24.isml/hollanddoc24.m3u8","NPO Doc is het documentaireplatform van de NPO en verrast je continu met de beste documentaires uit binnen- en buitenland en exclusieve interviews met regisseurs en topwetenschappers."],
+  ["NPO Humor TV","npo_humor_tv.png","thematv/humor24/humor24.isml/humor24.m3u8","NPO Humor TV is een uitgesproken comedykanaal: een frisse, Nederlandse humorzender met hoogwaardige, grappige, scherpe, jonge, nieuwe, satirische, humoristische programma's."],
+  ["NPO Nieuws","npo_nieuws.png","thematv/journaal24/journaal24.isml/journaal24.m3u8","Via het themakanaal 'NPO Nieuws' kunnen de live televisieuitzendingen van het NOS Journaal worden gevolgd. De laatste Journaaluitzending wordt herhaald tot de volgende uitzending van het NOS Journaal."],
+  ["NPO Politiek","npo_politiek.png","thematv/politiek24/politiek24.isml/politiek24.m3u8","NPO Politiek is het digitale kanaal over de Nederlandse politiek in de breedste zin van het woord."],
+  ["NPO 1","npo_1.png","tvlive/ned1/ned1.isml/ned1.m3u8","Televisiekijken begint op NPO 1. Van nieuws en actualiteiten tot consumentenprogramma's en kwaliteitsdrama. Programma's die over jou en jouw wereld gaan. Met verhalen die je herkent over mensen die zomaar in je straat kunnen wonen. Ook als er iets belangrijks gebeurt, in Nederland of in de wereld, kijk je NPO 1."],
+  ["NPO 2","npo_2.png","tvlive/ned2/ned2.isml/ned2.m3u8","NPO 2 zet je aan het denken. Met programma's die verdiepen en inspireren. Als je wilt weten wat het verhaal achter de actualiteit is. Of als je het eens van een andere kant wilt bekijken. NPO 2 biedt het mooiste van Nederlandse en internationale kunst en cultuur, literatuur, documentaires, art-house films en kwaliteitsdrama."],
+  ["NPO 3","npo_3.png","tvlive/ned3/ned3.isml/ned3.m3u8","Op NPO 3 vind je programma's waar jong Nederland zich in herkent en die je uitdagen een eigen mening te vormen. Met veel aandacht voor nieuwe media en experimentele vernieuwing brengt NPO 3 een gevarieerd aanbod van de dagelijkse actualiteit tot muziek, reizen, human interest, talkshows en documentaires."],
+  ["NPO 3FM","npo_3fm.png","visualradio/3fm/3fm.isml/3fm.m3u8","Op NPO 3FM staat de liefde voor muziek centraal. Samen met de luisteraar vindt NPO 3FM nieuwe muziek, nieuw Nederlands poptalent en jong radiotalent. Je komt onze dj's vaak tegen op festivals en concerten."],
 ]
 
 ###
@@ -141,7 +141,7 @@ def additionalChannels(url, depth):
     for tag in BeautifulStoneSoup(urllib2.urlopen(URL).read(), parseOnlyThese=items):
         title = tag.title.contents[0]
         url = tag.guid.contents[0]
-        img = os.path.join(IMG_DIR, "placeholder24.png")
+        img = os.path.join(IMG_DIR, "npo_placeholder.png")
         addLink(title, url, "playVideo", img, '')
         i += 1
         if i == int(depth):

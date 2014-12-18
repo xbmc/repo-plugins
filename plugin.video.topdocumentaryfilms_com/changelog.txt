@@ -1,9 +1,0 @@
-1.0.0
-- First Try
-1.0.1 / 2.0.1
-- Added support for bliptv videos
-1.0.2 / 2.0.2
-- Added support for dailymotion videos
-1.0.3 / 2.0.3
-- Added support for dailymotion playlists
-- Added autoplay modus for playlists

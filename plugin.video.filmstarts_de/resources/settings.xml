@@ -1,7 +1,0 @@
-<settings>
-   <setting id="showAllTrailers" type="bool" label="30103" default="true"/>
-   <setting id="useCoverAsFanart" type="bool" label="30104" default="true"/>
-   <setting id="maxCoverResolution" type="enum" label="30105" values="300x400|600x800|1200x1600|Max" default="3"/>
-   <setting id="forceView" type="bool" label="30101" default="true"/>
-   <setting id="viewID" type="number" label="30102" default="501"/>
-</settings>

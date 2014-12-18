@@ -1,6 +1,0 @@
-<settings>
-   <setting id="quality" type="enum" label="30101" values="SD|1080p" default="1"/>
-   <setting id="useThumbAsFanart" type="bool" label="30104" default="true"/>
-   <setting id="forceViewMode" type="bool" label="30102" default="true"/>
-   <setting id="viewMode" type="number" label="30103" default="500"/>
-</settings>

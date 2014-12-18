@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<settings>
-    <category label="91000">
-        <setting type="sep" />
-        <setting label="91001" type="enum" id="prefered_quality" values="720x1280|360x640"/>
-    </category>
-</settings>

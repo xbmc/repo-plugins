@@ -1,9 +1,0 @@
-[B]Version 1.0.1 - 2014-03-31[/B]
-
-- Fixes Full Episodes for complete page restructure.
-
-- Guests, Search and Browse are disabled for now, but should come back
-
-[B]Version 1.0 - 2014-02-04[/B]
-
-- Initial release

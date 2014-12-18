@@ -1,5 +1,0 @@
-# Netscape HTTP Cookie File
-# http://www.netscape.com/newsref/std/cookie_spec.html
-# This is a generated file!  Do not edit.
-
-www.nzonscreen.com	TRUE	/	FALSE	1577836800	nzos_html5	true

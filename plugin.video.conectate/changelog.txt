@@ -1,8 +1,0 @@
-1.0.0 (20.08.2013)
-  initial release
-+ Conectate.gob.ar support for all channels: Encuentro, PakaPaka, Ronda, Conectar Igualdad
-+ Section support for "Pelicula" , "Especial", "Serie", "Micro"
-+ Page support 
-+ HD/SD format selected by add-on setting (fallback to SD if HD not available)
-+ Subtitles support
-

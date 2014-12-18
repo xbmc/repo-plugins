@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <setting id="show_count" type="bool" label="30200" default="true"/>
-    <setting id="show_lang" type="bool" label="30201" default="true"/>
-    <setting id="override_view_mode" type="bool" label="30202" default="true"/>
-</settings>

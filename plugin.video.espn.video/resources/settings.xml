@@ -1,6 +1,0 @@
-<settings>
-	<setting id="history" type="bool" label="30007" default="true"/>
-    <setting id="presets_search" value="" />
-	<setting id="quality" type="select" label="30015" values="272p30_448k|324p30_948k|360p30_1464k|432p30_2096k|720p30_2896k" default="720p30_2896k"/>
-	<setting id="view" type="bool" label="30055" default="true"/>
-</settings>

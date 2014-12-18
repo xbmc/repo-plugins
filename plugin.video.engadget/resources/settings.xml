@@ -1,3 +1,0 @@
-﻿<settings>
-  <setting id="preferred" type="enum" label="30009" lvalues="30010|30011|30012|30013" default="2"/>
-</settings>

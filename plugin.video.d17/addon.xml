@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.d17"
+       name="D17"
+       version="1.0.2"
+       provider-name="JUL1EN094">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <description lang="fr">Extension donnant accès aux vidéos de la chaîne française D17</description>
+    <description lang="en">Addon to watch videos from french tv channel D17</description>
+    <disclaimer></disclaimer>
+    <email>JUJUL1EN094@gmail.com</email>
+    <forum></forum>
+    <language>fr</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <platform>all</platform>
+    <source>http://github.com/JUL1EN094/plugin.video.d17</source>
+    <summary>D17</summary>
+    <website></website>
+  </extension>
+</addon>

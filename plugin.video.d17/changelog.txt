@@ -1,0 +1,9 @@
+v1.0.2 (12-19-2014) by JUL1EN094
+- Change addon id -> lowercase
+
+v1.0.1 (12-15-2014) by JUL1EN094
+- Changelog in english language
+- Fix addon.xml
+
+v1.0.0 (12-11-2014) by JUL1EN094
+- Addon created

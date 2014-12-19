@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!-- GENERAL -->
+
+
+    <!-- ADVANCED -->
+  	<category label="30010">
+	    <setting label="30011" type="bool" id="debug" default="false" />
+	    <setting label="30012" type="labelenum" id="videotype" values="BAS_DEBIT|HAUT_DEBIT|HD|MOBILE|SMOOTH_STREAMING|IPHONE|IPAD|HDS|HLS|" default="HLS" />
+    </category>
+    
+    <!-- DOWNLOAD -->
+
+    
+</settings>

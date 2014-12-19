@@ -1,0 +1,38 @@
+﻿2.0.2 (12-19-2014) by JUL1EN094
+- Change plugin id -> lowercase
+
+2.0.1 (12-15-2014) by JUL1EN094
+- Fix addon.xml
+- Fix url
+- Modify changelog language --> english
+
+2.0.0 (12-11-2014) par JUL1EN094
+- Add 'video type' setting
+- Code cleanup
+- Remove parsing --> using now Canal+ API
+
+1.0.6 (10-10-2014) par JUL1EN094
+- Parsing optimization
+
+1.0.5 (04-14-2014) par JUL1EN04
+- Change video type : HD -> HLS
+
+1.0.4 (01-05-2014) par JUL1EN094  
+- Parsing optimization
+
+1.0.3 (12-25-2013) par JUL1EN094  
+- Change parsing
+
+1.0.2 (10-23-2013) par JUL1EN094  
+- Change parsing
+
+1.0.1 (03-15-2013) par JUL1EN04
+- Change 'live' video type : IPAD
+
+1.0.0 (11-11-2012) par JUL1EN094
+- = D8Replay 2.0.2 + live added
+- Change addon name (cause live added)
+- Change parsing (thanks to spixun) 
+
+
+

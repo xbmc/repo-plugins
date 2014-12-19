@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <!-- Les strings de 30000 à 30999 sont réservées aux paramètres plug-in -->
+  <!--GENERAL STRINGS -->
+  <string id="30000">D8</string>
+  <string id="30001">Direct</string>
+
+  <!--SETTINGS STRINGS -->
+  <string id="30010">Avancé</string>
+  <string id="30011">Activer le débogage</string>
+  <string id="30012">Format des vidéos</string>
+</strings>

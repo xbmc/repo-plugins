@@ -70,7 +70,7 @@ def getSources(fanart):
 
 def getCats(cat_url):
              pg = getRequest(FNTVBASE % cat_url)
-             jblob = re.compile('"player-player" }},(.+?){"extras":').search(pg).group(1).rstrip(' ,')
+             jblob = re.compile('frameId: "nextEndframe-player-player" } },(.+?){"extras":').search(pg).group(1).rstrip(' ,')
              a = json.loads(jblob)
              a = a['channels'][0]['videos']
              for vid in a:

@@ -5,6 +5,9 @@ class AbstractContextUI(object):
     def on_keyboard_input(self, title, default='', hidden=False):
         raise NotImplementedError()
 
+    def on_select(self, title, items=[]):
+        raise NotImplementedError()
+
     def open_settings(self):
         raise NotImplementedError()
 

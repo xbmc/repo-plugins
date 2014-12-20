@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-
-    <!-- Authentication -->
-    <category label="30001">
-        <setting id="quality" type="enum" label="30002" values="LQ|HQ|720p" default="720p"/>
-    </category>
-
-</settings>

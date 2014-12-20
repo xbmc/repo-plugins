@@ -35,7 +35,7 @@ ADDONID  = 'plugin.audio.ramfm'
 ADDON    = xbmcaddon.Addon(ADDONID)
 HOME     = ADDON.getAddonInfo('path')
 TITLE    = 'RAM FM Eighties Hits'
-VERSION  = '1.0.16'
+VERSION  =  ADDON.getAddonInfo('version')
 URL      = 'http://ramfm.org/ram.pls'
 PODCASTS = 'http://www.spreaker.com/show/816525/episodes/feed'
 ICON     =  os.path.join(HOME, 'icon.png')
@@ -48,13 +48,16 @@ _REQUEST     = 200
 _LETTER      = 300
 _TRACK       = 400
 _RECORD      = 500
-_TALKSHOW    = 600
+_SLIDESHOW   = 600
 _PODCASTS    = 700
 _PLAYPODCAST = 800
 _NOWPLAYING  = 900
 
-_UNAVAILABLE_TRACK  = 2000
-_UNAVAILABLE_ARTIST = 3000
+MODE_FREE   = 1000
+MODE_SONG   = 1100
+MODE_ARTIST = 1200
+MODE_IGNORE = 1300
+
 
 
 def CheckVersion():
@@ -66,9 +69,9 @@ def CheckVersion():
 
     ADDON.setSetting('VERSION', curr)
 
-    if prev == '0.0.0':
-        d = xbmcgui.Dialog()
-        d.ok(TITLE + ' - ' + VERSION, GETTEXT(30017), GETTEXT(30018) , GETTEXT(30019)+' :-)')
+    #if prev == '0.0.0':
+    d = xbmcgui.Dialog()
+    d.ok(TITLE + ' - ' + VERSION, GETTEXT(30017), GETTEXT(30018) , GETTEXT(30019)+' :-)')
 
 
 def DownloaderClass(url, dest, dp): 
@@ -158,11 +161,9 @@ def StartNowPlaying():
         del app
 
 
-def StartTalkShow():
-    #path = os.path.join(ADDON.getAddonInfo('path'), 'talkshow.py')
-    #xbmc.executebuiltin('XBMC.RunScript(%s)' % path)
-    import talkshow
-    talkshow.Start()
+def StartSlideShow():
+    import slideshow
+    slideshow.Start()
 
 
 def Play():
@@ -181,10 +182,13 @@ def Play():
 
     if slideshow:
         xbmc.sleep(1000)
-        StartTalkShow()
+        StartSlideShow()
+
 
 
 def PlayPodcast(name, link):
+    link = link.split('"')[0]
+
     thumbnail = ICON#'DefaultPlaylist.png'
         
     liz = xbmcgui.ListItem(name, iconImage = thumbnail, thumbnailImage = thumbnail)
@@ -262,74 +266,48 @@ def RequestLetter(letter):
         return
 
     if letter == '0-9':
-        url = 'http://ramfm.org/requests/playlist0.php'
+        url = 'http://ramfm.org/momentum/cyan/playlist0.php'
     else:
-        url = 'http://ramfm.org/requests/playlist%s.php' % letter
+        url = 'http://ramfm.org/momentum/cyan/playlist%s.php' % letter
 
     response = common.GetHTML(url)
 
-    recent   = GetRecent(response.split('Recently Requested...')[0])
-    response = response.split('Search Artist by Last Name')[1]
-    hide     = ADDON.getSetting('HIDE')=='true'
+    hide = ADDON.getSetting('HIDE').lower() == 'true'
 
-    response = response.split('<img src="http://ramfm.org/artistpic/')
+    items = response.split('<!-- start')[1:]
+    for item in items:
+        mode = MODE_FREE
+        if '<i>song recently played</i>' in item:
+            mode = MODE_IGNORE if hide else MODE_SONG
+        if '<i>artist recently played</i>' in item:
+            mode = MODE_IGNORE if hide else MODE_ARTIST
 
-    for item in response:
-        if 'javascript' in item:
-            addAvailable(item, recent)            
-        elif not hide:
-            addUnavailable(item)
+        if mode == MODE_FREE:
+            match = re.compile('<a href="javascript:request\((.+?)\)" title="(.+?)">.+?<img src="http://ramfm.org/artistpic/(.+?)".+?alt="(.+?)">').findall(item)[0]
+            request = match[0]
+            title   = match[1]
+            image   = match[2]
+            artist  = match[3]
+            addAvailable(title, artist, image, request)
 
-
-def addUnavailable(item):
-    match = re.compile('(.+?)" width.+?&nbsp;&nbsp;(.+?)&nbsp;-&nbsp;(.+?)&nbsp;\(<i>(.+?)</i>\)<br').findall(item)
-
-    for item in match:
-        image  = 'http://ramfm.org/artistpic/%s' % item[0]
-        image  = image.replace(' ', '%20')   
-        artist = item[1]
-        title  = item[2]
-        reason = item[3]
-
-        mode = _UNAVAILABLE_TRACK
-        if 'artist' in reason:
-            mode = _UNAVAILABLE_ARTIST       
-
-        name   = artist + ' - ' + title + '[I] (%s)[/I]' % reason
-        name   = '[COLOR=FFFF0000]' + name + '[/COLOR]'  
-        
-        u    = sys.argv[0] 
-        u   += '?mode=' + str(mode)
-        liz  = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
-
-        xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = liz, isFolder = False)
-        
-
-def addAvailable(item, recent):
-    match = re.compile('(.+?)" width.+?&nbsp;&nbsp;(.+?)&nbsp;-&nbsp;(.+?)<br.+?javascript:request\((.+?)\)"').findall(item)
-
-    for item in match:
-        artist   = item[1]
-        isRecent = artist in recent        
-        if isRecent and hide:
-            continue
-        addRequest(item, isRecent)   
+        if mode == MODE_ARTIST or mode == MODE_SONG:
+            item   = item.replace('&nbsp;', ' ')
+            match  = re.compile('title="(.+?)".+?<p><img src="http://ramfm.org/artistpic/(.+?)".+?alt="(.+?)">(.+?)\(').findall(item)[0]
+            reason = match[0]
+            title  = match[3].split('  ')[2]
+            image  = match[1]
+            artist = match[2]
+            addUnavailable(title, artist, image, reason)
 
 
-def addRequest(request, isRecent):
-    image   = 'http://ramfm.org/artistpic/%s' % request[0]
-    image   = image.replace(' ', '%20')   
-    artist  = request[1]
-    title   = request[2]
-    details = request[3]
 
-    name = artist + ' - ' + title
-    if isRecent:
-        name = '[COLOR=FFFF0000]' + name + '[/COLOR]'  
-
-    id   = details.split(',')[0]
-    ip   = details.split('\'')[1]
-    port = details.split('\'')[3]
+def addAvailable(title, artist, image, request):
+    image = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')   
+    name  = title.replace('Request ', '')
+    
+    id   = request.split(',')[0]
+    ip   = request.split('\'')[1]
+    port = request.split('\'')[3]
 
     u    = sys.argv[0] 
     u   += '?url='  + urllib.quote_plus('http://www.ramfm.org/req/request.php?songid=%s&samport=%s&samhost=%s' %  (id, port, ip))
@@ -337,6 +315,18 @@ def addRequest(request, isRecent):
     liz  = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
 
     xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = liz, isFolder = False)
+
+
+def addUnavailable(title, artist, image, reason):
+    image  = 'http://ramfm.org/artistpic/%s' % image.replace(' ', '%20')
+    name   = artist + ' - ' + title + '[I] (%s)[/I]' % reason
+    name   = '[COLOR=FFFF0000]' + name + '[/COLOR]'  
+        
+    u    = sys.argv[0] 
+    u   += '?mode=' + str(mode)
+    liz  = xbmcgui.ListItem(name, iconImage=image, thumbnailImage=image)
+
+    xbmcplugin.addDirectoryItem(handle = int(sys.argv[1]), url = u, listitem = liz, isFolder = False) 
 
 
 
@@ -366,8 +356,8 @@ def Main():
     addDir(GETTEXT(30036), _PLAYNOW,     False)
     addDir(GETTEXT(30037), _RECORD,      False)
     addDir(GETTEXT(30031), _REQUEST,     True)
-    addDir(GETTEXT(30038), _NOWPLAYING,  False)
-    addDir(GETTEXT(30039), _TALKSHOW,    False)
+    #addDir(GETTEXT(30038), _NOWPLAYING,  False)
+    addDir(GETTEXT(30039), _SLIDESHOW,   False)
     addDir(GETTEXT(30040), _PODCASTS,    True)
 
     play = ADDON.getSetting('PLAY')=='true'
@@ -424,7 +414,6 @@ try:
 except:
     pass
 
-
 if mode == None:
     Main()
 
@@ -445,9 +434,9 @@ elif mode == _LETTER:
     except:
         pass
 
-elif mode == _TALKSHOW:
-    #if IsPlaying(GETTEXT(30041)):
-    StartTalkShow()
+elif mode == _SLIDESHOW:
+    if IsPlaying(GETTEXT(30041)):
+        StartSlideShow()
 
 
 elif mode == _TRACK:    
@@ -470,11 +459,11 @@ elif mode == _PLAYPODCAST:
         pass
 
 
-elif mode == _UNAVAILABLE_TRACK:
+elif mode == MODE_SONG:
     ShowError(GETTEXT(30043))
 
 
-elif mode == _UNAVAILABLE_ARTIST:
+elif mode == MODE_ARTIST:
     ShowError(GETTEXT(30044))
 
 

@@ -1,5 +1,5 @@
 #
-#      Copyright (C) 2013 Sean Poyser
+#      Copyright (C) 2013-2014 Sean Poyser
 #
 #  This Program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -37,10 +37,10 @@ def GetImages(artist):
     try:        
         url = GetURL(artist)
 
-        #print NAME + ' 2nd URL requested: %s' % url
+        print NAME + ' 2nd URL requested: %s' % url
 
         if url != '':
-            link = common.GetHTML(url)
+            link = common.GetHTML(url, referer=ROOT)
             link = link.replace('\n', '')
 
             #image1 = re.compile('<meta name="image" content="(.+?).jpg').search(link).group(1)
@@ -59,6 +59,7 @@ def GetImages(artist):
                     images.append(img+'.jpg')
 
     except Exception, e:
+        print str(e)
         pass
 
     #print NAME + ' Found - %d images' % len(images)
@@ -77,10 +78,11 @@ def GetURL(artist):
 
         url = 'http://www.allmusic.com/search/artists/' + artist
    
-        #print NAME + ' 1st URL requested: %s' % url           
-        link = common.GetHTML(url)
+        print NAME + ' 1st URL requested: %s' % url           
+        link = common.GetHTML(url, referer=ROOT)
 
-        match = re.compile(ROOT+'(.+?)" data-tooltip.+?}">(.+?)</a>').findall(link)
+        match = re.compile('<a href="/artist/(.+?)" data-tooltip.+?alt="(.+?)">').findall(link)
+
         for url, artist in match:
             artist = artist.replace(' ', '').upper()
             if (forward in artist) or (reverse in artist):
@@ -90,6 +92,7 @@ def GetURL(artist):
         return ROOT + match[0][0]
 
     except Exception, e:
+        print str(e)
         pass
 
     return ''

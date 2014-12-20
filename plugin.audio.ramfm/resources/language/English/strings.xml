@@ -11,10 +11,9 @@
     <string id="30014">requested :</string>
     <string id="30015">average rotation :</string>
     <string id="30016">Searching...</string>
-    <string id="30017">RAM FM Eighties Hit Radio - All The Best From The Eighties - RAM FM Bringing Back The 80's On Your Radio</string>
-    <string id="30018">RAM FM is a non-profit organisation run by volunteers</string>
+    <string id="30017">RAM FM is a non-profit organisation run by volunteers</string>
     <string id="30018">Please show your support by visiting www.ramfm.org</string>
-    <string id="30019">and clicking the [COLOR FFFF00FF]purple donate[/COLOR] button</string>
+    <string id="30019">and clicking the [COLOR ffffa500]orange donate[/COLOR] button</string>
     <string id="30020">Now Recording Stream to</string>
     <string id="30021">Click Cancel to Stop Recording</string>  
     <string id="30022">Record to folder...</string>
@@ -38,11 +37,12 @@
     <string id="30040">Podcasts</string>
     <string id="30041">You can only view the 'RAM FM Slideshow'</string>
     <string id="30042">You can only view 'Now Playing'</string>
-    <string id="30043">Track recently played</string>
+    <string id="30043">Song recently played</string>
     <string id="30044">Artist recently played</string>
     <string id="30100">General</string>
     <string id="30101">Play stream automatically</string>
     <string id="30102">Hide recently requested artists</string>
+    <string id="30103">RAM FM Eighties Hit Radio - All The Best From The Eighties - RAM FM Bringing Back The 80's On Your Radio</string>
 
     <string id="30103">Recordings</string>
     <string id="30104">Default recordings folder</string>

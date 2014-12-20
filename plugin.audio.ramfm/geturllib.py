@@ -39,15 +39,19 @@ def CheckCacheDir():
         raise Exception('CacheDir not defined')
 
 
-def GetURLNoCache(url):
-    resp = None
+def GetURLNoCache(url, referer=None):
+    response = None
     html = ''
 
     try:
-        req      = urllib2.Request(url)
-        response = urllib2.urlopen(req, timeout=2)#10)
+        req = urllib2.Request(url)
+
+        if referer:
+            req.add_header('Referer', referer)
+
+        response = urllib2.urlopen(req, timeout=10)
         html     = response.read()
-    except:
+    except Exception, e:
         pass
 
     if response:
@@ -56,7 +60,7 @@ def GetURLNoCache(url):
     return html
 
 
-def GetURL(url, maxSecs = 0):        
+def GetURL(url, maxSecs = 0, referer=None):        
     if url == None:
         return None
 
@@ -68,7 +72,7 @@ def GetURL(url, maxSecs = 0):
 	    if (time.time() - cachedURLTimestamp) <= maxSecs:
 		return CacheGetData(url)
 
-    data = GetURLNoCache(url)
+    data = GetURLNoCache(url, referer)
     CacheAdd(url, data)    
     return data
 

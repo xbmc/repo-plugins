@@ -1,3 +1,14 @@
+v2.0.0:
+  - Updated for new website
+  - Temporarily removed Now Playing feature
+
+v1.0.18:
+  - Fixed Podcast playback
+
+v1.0.17:
+  - Fixed due to small change to requestor pages on website
+  - Fixed AllMusic image scraper
+
 v1.0.16:
   - Changes in preparation for submission to official XBMC repository
   - Improved exiting of slideshow

@@ -28,11 +28,11 @@ ADDONID = 'plugin.audio.ramfm'
 geturllib.SetCacheDir(os.path.join(xbmc.translatePath(xbmcaddon.Addon(ADDONID).getAddonInfo('profile')).decode('utf-8'), 'cache'))
 
 
-def GetHTML(url, useCache = True):
+def GetHTML(url, useCache = True, referer=None):
     if useCache:
-        html = geturllib.GetURL(url, 1800)
+        html = geturllib.GetURL(url, 1800, referer=referer)
     else:
-        html = geturllib.GetURLNoCache(url)
+        html = geturllib.GetURLNoCache(url, referer=referer)
 
     html  = html.replace('\n', '')
     return html

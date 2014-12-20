@@ -1,3 +1,6 @@
+2.0.4 (2014-12-15)
+FIX: correct url quoting/escaping
+
 2.0.3 (2014-12-07)
 UPD: switched to requests
 

@@ -1,5 +1,6 @@
 # import json
 import json
+import urllib
 import urllib2
 
 import requests
@@ -98,7 +99,7 @@ class Client(object):
         content = urllib2.urlopen('http://www.netzkino.de/adconf/android-new.php')
         json_data = json.load(content)
         streamer_url = json_data.get('streamer', 'http://netzkino_and-vh.akamaihd.net/i/')
-        return streamer_url + stream_id + '.mp4/master.m3u8'
+        return streamer_url + urllib.quote(stream_id.encode('utf-8')) + '.mp4/master.m3u8'
 
 
     pass

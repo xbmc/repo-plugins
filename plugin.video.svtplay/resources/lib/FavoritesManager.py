@@ -79,6 +79,9 @@ def __load_from_disk():
 
 def __save_to_disk():
   helper.infoMsg("Save to disk: "+str(FAVORITES))
+  directory = os.path.dirname(FILE_PATH)
+  if not os.path.exists(directory):
+    os.makedirs(directory)
   with open(FILE_PATH, "w") as file_handle:
     file_handle.write(json.dumps(FAVORITES))
 

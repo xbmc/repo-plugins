@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Kodion Settings -->
+    <string id="30000">Géneral</string>
+    <string id="30001">Login</string>
+    <string id="30002">Mot de passe</string>
+
+    <string id="30010">Qualitié de vidéo</string>
+    <string id="30011">SD</string>
+	<string id="30012">HD</string>
+	<string id="30013">Full HD</string>
+    <string id="30014">Ultra HD</string>
+    <string id="30020">Activer la 3D</string>
+    <string id="30021">Afficher les Fanarts</string>
+    <string id="30022">Nombre d'items par page</string>
+    <string id="30023">Taille de l'historique de recherche</string>
+    <string id="30024">Taille du cache (Mo)</string>
+
+    <!-- Kodion Common -->
+    <string id="30100">Favoris</string>
+    <string id="30101">Ajouter au plugins favoris</string>
+    <string id="30102">Rechercher</string>
+    <string id="30103">Bibliothèque</string>
+    <string id="30104">Highlights</string>
+    <string id="30105">Historique</string>
+    <string id="30106">Page suivante (%d)</string>
+    <string id="30107">À regarder plus tard</string>
+    <string id="30108">Supprimer</string>
+    <string id="30109">Dernières vidéos</string>
+    <string id="30110">Nouvelle rercherche</string>
+
+    <!-- YouTube -->
+    <string id="30500">Chaînes</string>
+    <string id="30501">Playlists</string>
+    <string id="30502">Aller à %s</string>
+    <string id="30503">Afficher le fanart de la chaîne</string>
+    <string id="30504">Mes abonnements</string>
+    <string id="30505">Se désabonner</string>
+    <string id="30506">S'abonner</string>
+    <string id="30507">Ma chaîne</string>
+    <string id="30508">Vidéos favorites</string>
+    <string id="30509">History</string>
+    <string id="30510">Mes abonnements</string>
+    <string id="30511">j'aime</string>
+    <string id="30512">Parcourir les chaines</string>
+    <string id="30513">Suggestions de vidéos</string>
+    <string id="30514">Vidéos similaires</string>
+    <string id="30515">Auto suppresion de 'À regarder plus tard'</string>
+    <string id="30516">Folders</string>
+    <string id="30517">Subscribe to %s</string>
+</strings>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.youtube" name="YouTube (beta)" version="5.0.0~beta1" provider-name="bromix">
+	<requires>
+		<import addon="xbmc.python" version="2.18.0"/>
+        <import addon="script.module.requests" version="2.3.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>video</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch videos on YouTube</summary>
+		<summary lang="de">Schaue Dir Videos auf YouTube an</summary>
+		<description lang="en">YouTube is a one of the biggest video-sharing websites of the world.</description>
+		<description lang="de">YouTube ist ein eines der größten Video-Sharing-Websites der Welt.</description>
+		<disclaimer lang="en"></disclaimer>
+		<language>de</language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum></forum>
+		<website>http://www.youtube.com/</website>
+		<email>bromix at gmx dot net</email>
+		<source>https://github.com/bromix/plugin.video.bromix.youtube</source>
+	</extension>
+</addon>

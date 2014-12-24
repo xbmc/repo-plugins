@@ -42,8 +42,6 @@
     <string id="30100">General</string>
     <string id="30101">Play stream automatically</string>
     <string id="30102">Hide recently requested artists</string>
-    <string id="30103">RAM FM Eighties Hit Radio - All The Best From The Eighties - RAM FM Bringing Back The 80's On Your Radio</string>
-
     <string id="30103">Recordings</string>
     <string id="30104">Default recordings folder</string>
     <string id="30105">Ask for folder</string>
@@ -51,4 +49,5 @@
     <string id="30107">Slideshow</string>
     <string id="30108">Start slideshow automatically</string>
     <string id="30109">Image source</string>
+    <string id="30110">RAM FM Eighties Hit Radio - All The Best From The Eighties - RAM FM Bringing Back The 80's On Your Radio</string>
 </strings>

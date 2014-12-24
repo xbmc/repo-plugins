@@ -1,0 +1,141 @@
+5.0.0~beta1 (2014-12-23)
+ADD: rename your playlists
+ADD: setup default view modes (default and videos)
+ADD: setup correct language and region for YouTube
+ADD: support for old YouTube url calls (plugin://plugin.video.youtube/?action=play_video&videoid=[ID])
+UPD: new icons
+UPD: reorganized context menu
+FIX: show fanarts in 'Watch Later' and 'Liked Videos'
+
+1.0.0~alpha29 (2014-12-14)
+UPD: new login mechanism (removed the old one)
+ADD: translation fr-FR (thanks to roondar)
+ADD: manage playlists - create, remove and add videos to a selected playlists
+FIX: support cyrillic letters
+
+1.0.0~alpha28 (2014-12-07)
+ADD: subscribe to channel (from videos and playlist)
+UPD: rework of handling context menu
+FIX: remove next page for related videos (because APIv3 is broken)
+
+1.0.0~alpha27 (2014-12-01)
+UPD: performance improved for auto-removing videos from 'Watch Later' list
+FIX: error while navigating to the next page
+
+1.0.0~alpha26 (2014-11-30)
+ADD: hide all entries (except search) via settings in the root menu
+ADD: missing pagination for 'My Subscriptions'
+FIX: next page is working again (Watch Later)
+UPD: disabled language (for now) Kodi isn't providing reliable language IDs
+
+1.0.0~alpha25 (2014-11-29)
+UPD: requests with language/region
+UPD: new icons
+ADD: Auto-Remove from 'Watch Later' list
+ADD: 'Related Videos'
+UPD: show channel name in the description
+FIX: disable verification warnings
+
+1.0.0~alpha24 (2014-11-27)
+ADD: 'Browse Channels'
+FIX: support for skins calling '.*/extrafanart/'
+
+1.0.0~alpha23 (2014-11-26)
+ADD: 'What to watch'
+FIX: 'My subscriptions' switched to version APIv2.1 (Google) DAMN YOU!!!
+
+1.0.0~alpha22 (2014-11-25)
+ADD: sorting
+FIX: crash when calling 'My subscriptions'
+FIX: signature calculation
+
+1.0.0~alpha21 (2014-11-24)
+CHG: method for playing a video changed to a more query like uri
+FIX: crash under android systems. Regular Expressions work a little different :)
+
+1.0.0~alpha20 (2014-11-23)
+FIX: Git merge with master
+
+1.0.0~alpha19 (2014-11-23)
+UPD: complete rewrite
+UPD: switch to kodion
+
+1.0.0~alpha18 (2014-08-31)
+- ADD: Support for ETag - could improve performance
+- ADD: remove item of search history
+- FIX: #22 calculation of duration
+- FIX: #28 display 'general' instead of 'like' in settings
+
+1.0.0~alpha17 (2014-08-10)
+- ADD: 'Go to CHANNEL' of a selected video
+- ADD: Support for 'Subscribe' and 'Unsubscribe' of channels
+- ADD: Full support for 'Like'
+- ADD: Remove own playlist via context menu
+- ADD: Show/Hide 'Browse Channels' via settings
+- FIX: Using only thumbnails from API v3 - 'My Subscriptions' is using v2 and returning different thumbnails
+- FIX: Displaying false channel in video description
+- FIX: Don't update search history before showing the search result
+
+1.0.0~alpha16 (2014-08-08)
+- FIX: provide 'Next Page' under 'My Subscriptions' if there are more results
+- ADD: Hide and show menu items via settings 
+- ADD: Search history (set the size via settings from 0-50 items)
+
+1.0.0~alpha15 (2014-08-04)
+- FIX: moved (only) for the subscribtions to V2 to see new uploaded videos
+
+1.0.0~alpha14 (2014-08-03)
+- ADD: 'Remove' via context menu for playlists
+- ADD: 'Watch Later' via context menu to add a video to the 'Watch Later' playlist
+- ADD: Automatic remove from the 'Watch Later' playlists (optional via settings - default = true)
+- ADD: Support for history - after playback the video should be added to the history. Not working correct.
+- ADD: Fanart for channels. Only if you select a channel directly.
+- optimized some of the addon code
+
+1.0.0~alpha13 (2014-08-02)
+- FIX: improved token and login validation
+
+1.0.0~alpha12 (2014-08-01)
+- ADD: Show 'Published on' and 'Channel' in the description of a video (can be disabled via setting)
+- ADD: support for 3D videos (can be disabled via setting)
+- Accelerated resolving of video URLs (almost 2x as fast) 
+
+1.0.0~alpha11 (2014-07-30)
+- FIX: added a fallback for videos that require a login (works very fast?!?!)
+- FIX: if username or password is missing reset the whole token logic 
+
+1.0.0~alpha10 (2014-07-29)
+- FIX: improved performance on decoding signatures for some videos 
+- ADD: support for custom-created playlists
+- FIX: sort own subscriptions
+- ADD: enable/disable video, channel and/or playlist search
+
+1.0.0~alpha9 (2014-07-28)
+- FIX: removed debug
+
+1.0.0~alpha8 (2014-07-28)
+- ADD: login tests
+
+1.0.0~alpha7 (2014-07-27)
+- FIX: added support from freemake.com to decode signatures of some videos
+
+1.0.0~alpha6 (2014-07-27)
+- added support of playlists of a channel (first page only)
+- optimized some major routines for easier support of all youtube's content 
+
+1.0.0~alpha5 (2014-07-27)
+- version bump for tests
+
+1.0.0~alpha4 (2014-07-26)
+- added runtime for each video (crazy hack)
+- disabled debug
+
+1.0.0~alpha3 (2014-07-26)
+- little fixes regarding youtube channels
+
+1.0.0~alpha2 (2014-07-26)
+- added youtube channels and search
+- added playback
+
+1.0.0~alpha (2014-07-26)
+- initial version for tests

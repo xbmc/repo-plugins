@@ -1,4 +1,4 @@
-from resources.lib import kodimon
+from resources.lib import kodion
 from resources.lib.break_api import Provider
 
 __author__ = 'bromix'
@@ -10,18 +10,20 @@ class TestProvider(unittest.TestCase):
     def test_feed(self):
         provider = Provider()
 
-        result = provider.navigate('/feed/40/')
+        context = kodion.Context(path='/show/2786742/')
+        result = provider.navigate(context)
         items = result[0]
 
-        kodimon.print_items(items)
+        kodion.utils.print_items(items)
         pass
 
     def test_on_root(self):
         provider = Provider()
 
-        result = provider.navigate('/')
+        context = kodion.Context(path='/')
+        result = provider.navigate(context)
         items = result[0]
 
-        kodimon.print_items(items)
+        kodion.utils.print_items(items)
         pass
     pass

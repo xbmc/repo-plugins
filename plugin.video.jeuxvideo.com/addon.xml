@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.jeuxvideo.com" name="JeuxVideo.com" version="1.0.0" provider-name="mille337">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.xbmcswift2" version="2.4.0"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <platform>all</platform>
+    <language>fr</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <source>http://github.com/jdesgats/plugin.video.jeuxvideo.com</source>
+    <email></email>
+    <summary lang="en">JeuxVideo.com streaming videos</summary>
+    <description lang="en">This extension can play streaming videos from the French website JeuxVideo.com.</description>
+    <disclaimer lang="en">This extension is not published nor endorsed by JeuxVideo.com.</disclaimer>
+    <summary lang="fr">Accès aux vidéos de JeuxVideo.com</summary>
+    <description lang="fr">Cette extension permet de lire en streaming les vidéos de JeuxVideo.com (Gaming Live, chroniques, ...).</description>
+    <disclaimer lang="fr">Cette extension n'est ni publiée ni soutenue par JeuxVideo.com.</disclaimer>
+  </extension>
+</addon>

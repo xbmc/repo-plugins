@@ -1,5 +1,0 @@
-<settings>
-   <setting id="language" type="enum" label="30101" values="en|de|fr|it|es|ru|il|pt|ar|tr|jp|ko"/>
-   <setting id="nick" type="text" label="30102" default="" />
-   <setting id="age" type="text" label="30103" default="" />
-</settings>

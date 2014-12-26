@@ -1,0 +1,5 @@
+v0.1.0
+- Release to public
+
+v0.0.1
+- Initial US only version with support for Movies and TV only

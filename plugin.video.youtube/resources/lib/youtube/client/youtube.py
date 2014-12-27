@@ -82,6 +82,25 @@ class YouTube(LoginClient):
                      'status': {'privacyStatus': privacy_status}}
         return self._perform_v3_request(method='POST', path='playlists', params=params, post_data=post_data)
 
+    def get_video_rating(self, video_id):
+        if isinstance(video_id, list):
+            video_id = ','.join(video_id)
+            pass
+
+        params = {'id': video_id}
+        return self._perform_v3_request(method='GET', path='videos/getRating', params=params)
+
+    def rate_video(self, video_id, rating='like'):
+        """
+        Rate a video
+        :param video_id: if of the video
+        :param rating: [like|dislike|none]
+        :return:
+        """
+        params = {'id': video_id,
+                  'rating': rating}
+        return self._perform_v3_request(method='POST', path='videos/rate', params=params)
+
     def add_video_to_playlist(self, playlist_id, video_id):
         params = {'part': 'snippet',
                   'mine': 'true'}

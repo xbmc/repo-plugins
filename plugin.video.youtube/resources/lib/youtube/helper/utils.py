@@ -93,8 +93,17 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                 channel_id_dict[channel_id] = []
             channel_id_dict[channel_id].append(video_item)
             pass
+
+        context_menu = []
+
+        if provider.is_logged_in():
+            # add 'Watch Later' only if we are not in my 'Watch Later' list
+            watch_later_playlist_id = my_playlists.get('watchLater', '')
+            yt_context_menu.append_watch_later(context_menu, provider, context, watch_later_playlist_id, video_id)
+            pass
+
+        # got to [CHANNEL]
         if channel_id and channel_name:
-            context_menu = []
             # only if we are not directly in the channel provide a jump to the channel
             if kodion.utils.create_path('channel', channel_id) != context.get_path():
                 yt_context_menu.append_go_to_channel(context_menu, provider, context, channel_id, channel_name)
@@ -105,13 +114,9 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         yt_context_menu.append_related_videos(context_menu, provider, context, video_id)
 
         if provider.is_logged_in():
-            # add 'Watch Later' only if we are not in my 'Watch Later' list
-            watch_later_playlist_id = my_playlists.get('watchLater', '')
-            yt_context_menu.append_watch_later(context_menu, provider, context, watch_later_playlist_id, video_id)
-
             # add 'Like Video' only if we are not in my 'Liked Videos' list
-            liked_videos_playlist = my_playlists.get('likes', '')
-            yt_context_menu.append_like_video(context_menu, provider, context, liked_videos_playlist, video_id)
+            refresh_container = context.get_path().startswith('/channel/mine/playlist/LL')
+            yt_context_menu.append_rate_video(context_menu, provider, context, video_id, refresh_container)
 
             # add video to a selected playlist
             yt_context_menu.append_add_video_to_playlist(context_menu, provider, context, video_id)
@@ -125,7 +130,8 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                     context_menu.append((context.localize(provider.LOCAL_MAP['youtube.remove']),
                                          'RunPlugin(%s)' % context.create_uri(
                                              ['playlist', 'remove', 'video'],
-                                             {'playlist_id': playlist_id, 'video_id': playlist_item_id})))
+                                             {'playlist_id': playlist_id, 'video_id': playlist_item_id,
+                                              'video_name': video_item.get_name()})))
                     pass
                 pass
 

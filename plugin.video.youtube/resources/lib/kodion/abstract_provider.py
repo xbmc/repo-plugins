@@ -3,6 +3,7 @@ import re
 from .exceptions import KodimonException
 from . import items
 from . import constants
+from . import utils
 
 
 class AbstractProvider(object):
@@ -46,16 +47,50 @@ class AbstractProvider(object):
         :return:
         """
         self._dict_path[re_path] = method_name
+        pass
+
+    def _process_wizard(self, context):
+        def _setup_views(_context):
+            view_manager = utils.ViewManager(_context)
+            if not view_manager.update_view_mode(_context.localize(constants.localize.SETUP_VIEW_DEFAULT), 'default'):
+                return
+
+            if not view_manager.update_view_mode(_context.localize(constants.localize.SETUP_VIEW_VIDEOS), 'videos'):
+                return
+
+            _context.get_settings().set_bool(constants.setting.VIEW_OVERRIDE, True)
+            pass
+
+        # start the setup wizard
+        wizard_steps = []
+        if context.get_settings().is_setup_wizard_enabled():
+            context.get_settings().set_bool(constants.setting.SETUP_WIZARD, False)
+
+            if utils.ViewManager(context).has_supported_views():
+                wizard_steps.append((_setup_views, [context]))
+                pass
+            else:
+                skin_id = context.get_ui().get_skin_id()
+                context.log("ViewManager: Unknown skin id '%s'" % skin_id)
+                pass
+
+            wizard_steps.extend(self.get_wizard_steps(context))
+            pass
+
+        if wizard_steps and context.get_ui().on_yes_no_input(context.get_name(),
+                                                             context.localize(constants.localize.SETUP_WIZARD_EXECUTE)):
+            for wizard_step in wizard_steps:
+                wizard_step[0](*wizard_step[1])
+                pass
+            pass
+        pass
+
+    def get_wizard_steps(self, context):
+        # can be overridden by the derived class
+        return []
 
     def navigate(self, context):
-        # start the setup wizard
-        if context.get_settings().is_setup_wizard_enabled():
-            if context.get_ui().on_yes_no_input(context.localize(constants.localize.SETUP_WIZARD_EXECUTE),
-                                                context.localize(constants.localize.SETUP_WIZARD_LABEL)):
-                self.on_setup_wizard(context)
-                pass
-            context.get_settings().set_bool(constants.setting.SETUP_WIZARD, False)
-            pass
+        self._process_wizard(context)
 
         path = context.get_path()
 
@@ -99,24 +134,6 @@ class AbstractProvider(object):
         :return:
         """
         raise NotImplementedError()
-
-    def on_setup_wizard(self, context):
-        _settings = context.get_settings()
-
-        def _setup_views():
-            import utils
-            view_manager = utils.ViewManager(context)
-            if not view_manager.update_view_mode(context.localize(constants.localize.SETUP_VIEW_DEFAULT), 'default'):
-                return
-
-            if not view_manager.update_view_mode(context.localize(constants.localize.SETUP_VIEW_VIDEOS), 'videos'):
-                return
-
-            _settings.set_bool(constants.setting.VIEW_OVERRIDE, True)
-            pass
-
-        _setup_views()
-        pass
 
     def on_root(self, context, re_match):
         """

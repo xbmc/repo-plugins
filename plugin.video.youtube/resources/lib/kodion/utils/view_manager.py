@@ -29,6 +29,13 @@ class ViewManager(object):
         self._context = context
         pass
 
+    def has_supported_views(self):
+        """
+        Returns True if the View of the current skin are supported
+        :return: True if the View of the current skin are supported
+        """
+        return self._context.get_ui().get_skin_id() in self.SKIN_DATA
+
     def update_view_mode(self, title, view='default'):
         view_id = -1
         settings = self._context.get_settings()

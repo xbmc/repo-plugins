@@ -1,3 +1,16 @@
+5.0.0 (2014-12-27)
+DEL: removed beta
+
+5.0.0~beta3 (2014-12-27)
+UPD: some minor tests
+
+5.0.0~beta2 (2014-12-26)
+ADD: new rating system - like/dislike/remove
+ADD: show confirmation before remove a video or deleting a playlist
+UPD: moved 'Watch Later' up in context menu
+FIX: rename playlist
+FIX: show newest videos first (uploads of channel)
+
 5.0.0~beta1 (2014-12-23)
 ADD: rename your playlists
 ADD: setup default view modes (default and videos)

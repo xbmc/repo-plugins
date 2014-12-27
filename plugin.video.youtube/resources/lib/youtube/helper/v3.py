@@ -117,7 +117,7 @@ def _process_list_response(provider, context, json_data):
                     pass
                 else:
                     # remove my playlist
-                    yt_context_menu.append_remove_playlist(context_menu, provider, context, playlist_id)
+                    yt_context_menu.append_delete_playlist(context_menu, provider, context, playlist_id, title)
 
                     # rename playlist
                     yt_context_menu.append_rename_playlist(context_menu, provider, context, playlist_id, title)
@@ -239,7 +239,7 @@ def _process_list_response(provider, context, json_data):
     return result
 
 
-def response_to_items(provider, context, json_data):
+def response_to_items(provider, context, json_data, sort=None, reverse_sort=False):
     result = []
 
     kind = json_data.get('kind', '')
@@ -251,6 +251,10 @@ def response_to_items(provider, context, json_data):
         pass
     else:
         raise kodion.KodimonException("Unknown kind '%s'" % kind)
+
+    if sort is not None:
+        result = sorted(result, key=sort, reverse=reverse_sort)
+        pass
 
     # next page
     yt_next_page_token = json_data.get('nextPageToken', '')

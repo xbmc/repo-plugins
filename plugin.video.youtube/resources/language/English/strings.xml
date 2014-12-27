@@ -10,6 +10,7 @@
 	<string id="30012">HD</string>
 	<string id="30013">Full HD</string>
     <string id="30014">Ultra HD</string>
+
     <string id="30020">Allow 3D</string>
     <string id="30021">Show Fanart</string>
     <string id="30022">Items per page</string>
@@ -19,8 +20,8 @@
     <string id="30026">Override View</string>
     <string id="30027">View: Default</string>
     <string id="30028">View: Videos</string>
-    <string id="30029">Execute</string>
-    <string id="30030">Setup-wizard</string>
+
+    <string id="30030">Execute setup-wizard?</string>
     <string id="30031">Advanced</string>
 
     <!-- Kodion Common -->
@@ -37,6 +38,12 @@
     <string id="30110">New Search</string>
     <string id="30111">Sign In</string>
     <string id="30112">Sign Out</string>
+    <string id="30113">Rename</string>
+    <string id="30114">Confirm delete</string>
+    <string id="30115">Confirm remove</string>
+    <string id="30116">Delete "%s"?</string>
+    <string id="30117">Remove "%s"?</string>
+    <string id="30118">Delete</string>
 
     <!-- YouTube -->
     <string id="30500">Channels</string>
@@ -50,7 +57,7 @@
     <string id="30508">Liked Videos</string>
     <string id="30509">History</string>
     <string id="30510">My Subscriptions</string>
-    <string id="30511">Like Video</string>
+
     <string id="30512">Browse Channels</string>
     <string id="30513">What to watch</string>
     <string id="30514">Related Videos</string>
@@ -67,4 +74,7 @@
     <string id="30525">Select region</string>
     <string id="30526">Adjust</string>
     <string id="30527">Language and region?</string>
+    <string id="30528">Rate...</string>
+    <string id="30529">I like this</string>
+    <string id="30530">I dislike this</string>
 </strings>

@@ -17,11 +17,10 @@ class XbmcContextUI(AbstractContextUI):
         pass
 
     def set_view_mode(self, view_mode):
-        print "################################# set view %s" % view_mode
         if isinstance(view_mode, basestring):
             view_mode = self._context.get_settings().get_int(constants.setting.VIEW_X % view_mode, 50)
-            print "################################# new view %d" % view_mode
             pass
+
         self._view_mode = view_mode
         pass
 
@@ -61,6 +60,14 @@ class XbmcContextUI(AbstractContextUI):
     def on_yes_no_input(self, title, text):
         dialog = xbmcgui.Dialog()
         return dialog.yesno(title, text)
+
+    def on_remove_content(self, content_name):
+        text = self._context.localize(constants.localize.REMOVE_CONTENT) % content_name
+        return self.on_yes_no_input(self._context.localize(constants.localize.CONFIRM_REMOVE), text)
+
+    def on_delete_content(self, content_name):
+        text = self._context.localize(constants.localize.DELETE_CONTENT) % content_name
+        return self.on_yes_no_input(self._context.localize(constants.localize.CONFIRM_DELETE), text)
 
     def on_select(self, title, items=[]):
         _dict = {}

@@ -5,7 +5,7 @@ from resources.lib import kodion
 from resources.lib.kodion.utils import FunctionCache
 from resources.lib.kodion.items import *
 from resources.lib.youtube.client import YouTube
-from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard
+from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video
 from .youtube_exceptions import YouTubeException, LoginException
 
 
@@ -21,8 +21,8 @@ class Provider(kodion.AbstractProvider):
                  'youtube.liked.videos': 30508,
                  'youtube.history': 30509,
                  'youtube.my_subscriptions': 30510,
-                 'youtube.like': 30511,
                  'youtube.remove': 30108,
+                 'youtube.delete': 30118,
                  'youtube.browse_channels': 30512,
                  'youtube.what_to_watch': 30513,
                  'youtube.related_videos': 30514,
@@ -39,7 +39,11 @@ class Provider(kodion.AbstractProvider):
                  'youtube.setup_wizard.select_language': 30524,
                  'youtube.setup_wizard.select_region': 30525,
                  'youtube.setup_wizard.adjust': 30526,
-                 'youtube.setup_wizard.adjust.language_and_region': 30527}
+                 'youtube.setup_wizard.adjust.language_and_region': 30527,
+                 'youtube.video.rate': 30528,
+                 'youtube.video.rate.like': 30529,
+                 'youtube.video.rate.dislike': 30530,
+                 'youtube.video.rate.none': 30108}
 
     def __init__(self):
         kodion.AbstractProvider.__init__(self)
@@ -49,10 +53,8 @@ class Provider(kodion.AbstractProvider):
         self._is_logged_in = False
         pass
 
-    def on_setup_wizard(self, context):
-        super(Provider, self).on_setup_wizard(context)
-        yt_setup_wizard.process(self, context)
-        pass
+    def get_wizard_steps(self, context):
+        return [(yt_setup_wizard.process, [self, context])]
 
     def is_logged_in(self):
         return self._is_logged_in
@@ -207,7 +209,9 @@ class Provider(kodion.AbstractProvider):
                                                          page_token=page_token)
             if not v3.handle_error(self, context, json_data):
                 return False
-            result.extend(v3.response_to_items(self, context, json_data))
+
+            result.extend(
+                v3.response_to_items(self, context, json_data, sort=lambda x: x.get_aired(), reverse_sort=True))
             pass
 
         return result
@@ -251,8 +255,13 @@ class Provider(kodion.AbstractProvider):
 
         return False
 
+    @kodion.RegisterProviderPath('^/video/(?P<method>.*)/$')
+    def _on_video_x(self, context, re_match):
+        method = re_match.group('method')
+        return yt_video.process(method, self, context, re_match)
+
     @kodion.RegisterProviderPath('^/playlist/(?P<method>.*)/(?P<category>.*)/$')
-    def _on_playlist(self, context, re_match):
+    def _on_playlist_x(self, context, re_match):
         method = re_match.group('method')
         category = re_match.group('category')
         return yt_playlist.process(method, category, self, context, re_match)

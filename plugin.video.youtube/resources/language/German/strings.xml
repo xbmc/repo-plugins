@@ -10,6 +10,7 @@
 	<string id="30012">HD</string>
 	<string id="30013">Full HD</string>
     <string id="30014">Ultra HD</string>
+
     <string id="30020">Allow 3D</string>
     <string id="30021">Fanart anzeigen</string>
     <string id="30022">Einträge pro Seite</string>
@@ -19,8 +20,8 @@
     <string id="30026">Ansicht überschreiben</string>
     <string id="30027">Ansicht: Default</string>
     <string id="30028">Ansicht: Videos</string>
-    <string id="30029">Ausführen</string>
-    <string id="30030">Setup-Assistenten</string>
+
+    <string id="30030">Setup-Assistenten ausführen?</string>
     <string id="30031">Fortgeschritten</string>
 
     <!-- Kodion Common -->
@@ -37,6 +38,12 @@
     <string id="30110">Neue Suche</string>
     <string id="30111">Anmelden</string>
     <string id="30112">Abmelden</string>
+    <string id="30113">Umbenennen</string>
+    <string id="30114">Löschung bestätigen</string>
+    <string id="30115">Entfernung bestätigen</string>
+    <string id="30116">Soll "%s" gelöscht werden?</string>
+    <string id="30117">Soll "%s" entfernt werden?</string>
+    <string id="30118">Löschen</string>
 
     <!-- YouTube -->
     <string id="30500">Kanäle</string>
@@ -50,7 +57,7 @@
     <string id="30508">Liked Videos</string>
     <string id="30509">Verlauf</string>
     <string id="30510">Meine Abos</string>
-    <string id="30511">Video gefällt mir</string>
+
     <string id="30512">Kanäle finden</string>
     <string id="30513">Empfohlene Videos</string>
     <string id="30514">Ähnliche Videos</string>
@@ -67,4 +74,7 @@
     <string id="30525">Region auswählen</string>
     <string id="30526">Anpassen</string>
     <string id="30527">Sprache und Region?</string>
+    <string id="30528">Bewerten...</string>
+    <string id="30529">Mag ich</string>
+    <string id="30530">Mag ich nicht</string>
 </strings>

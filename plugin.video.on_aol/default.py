@@ -228,7 +228,7 @@ def resolve_url(url):
             '2': ['_64.webm', '_4.mp4'],
             '3': [ '_8.mp4']
             }
-        playlist_id = url.split('-')[-1]
+        playlist_id = re.split('-|=', url)[-1]
         json_url = (
             'http://syn.5min.com/handlers/SenseHandler.ashx?func=GetResults&sid=577&isPlayerSeed=true&playlist='+playlist_id+
             '&videoCount=1&autoStart=true&cbCustomID=fiveMinCB_videos_companion&relatedMode=0&videoControlDisplayColor=3355443'
@@ -291,7 +291,7 @@ def search(search_url):
             search_query = keyboard.getText()
             if len(search_query) == 0:
                 return
-            search_url = ('http://on.aol.com/ajax/GetSearchPageResults/%s/%s/1/relevance/'
+            search_url = ('http://on.aol.com/ajax/search/GetSearchPageResults/%s/%s/1/relevance/'
                           %(urllib.quote(search_query), search_url))
             if save_search:
                 add_search(search_query, search_url)
@@ -299,7 +299,7 @@ def search(search_url):
         data = json.loads(make_request(search_url))
         partner = False
         if 'Partners' in search_url:
-            key = 'Studios'
+            key = 'Partners'
             partner = True
         else: key = 'Videos'
         total = data[key]['Total']

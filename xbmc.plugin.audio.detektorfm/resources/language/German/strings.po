@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: detektor.fm
 # Addon id: plugin.audio.detektorfm
-# Addon Version: 1.0.0
+# Addon Version: 1.0.1
 # Addon Provider: sorax
 msgid ""
 msgstr ""
@@ -17,45 +17,9 @@ msgstr ""
 "Language: de\n"
 
 msgctxt "#30001"
-msgid "All channels"
-msgstr "Alle Sender"
-
-msgctxt "#30002"
 msgid "Wort-Stream"
 msgstr "Wort-Stream"
 
-msgctxt "#30003"
+msgctxt "#30002"
 msgid "Musik-Stream"
 msgstr "Musik-Stream"
-
-msgctxt "#30101"
-msgid "Search"
-msgstr "Suche"
-
-msgctxt "#30102"
-msgid "By date"
-msgstr "Tagesansicht"
-
-msgctxt "#30103"
-msgid "Broadcasts"
-msgstr "Sendungen"
-
-msgctxt "#30104"
-msgid "Topics"
-msgstr "Themen"
-
-msgctxt "#30105"
-msgid "Live stream"
-msgstr "Live-Stream"
-
-msgctxt "#30201"
-msgid "Select date"
-msgstr "Datum wählen"
-
-msgctxt "#30301"
-msgid "back ..."
-msgstr "zurück ..."
-
-msgctxt "#30302"
-msgid "next ..."
-msgstr "weiter ..."

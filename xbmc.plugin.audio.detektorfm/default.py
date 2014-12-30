@@ -36,33 +36,14 @@ icons = {
 	0: join(Addon.getAddonInfo('path'), 'icon.png'),
 	1: join(Addon.getAddonInfo('path'), 'resources', 'media', 'wort.png'),
 	2: join(Addon.getAddonInfo('path'), 'resources', 'media', 'musik.png'),
+	3: join(Addon.getAddonInfo('path'), 'resources', 'media', 'stream.png'),
 }
 
 
 def CONFIG():
-	global article, playlist, sendungen, streams, themen
-
-	# parse content
-	dom = parseString(urlopen('http://www.dradio.de/aodflash/xml/config.xml').read())
-	config = dom.getElementsByTagName('config')[0]
-	hosturl = config.getElementsByTagName('hostUrl')[0].getAttribute('value')
-	baseurl = config.getElementsByTagName('baseUrl')[0].getAttribute('value')
-	services = config.getElementsByTagName('services')[0]
-	sendungen = services.getElementsByTagName('urlListSendungen')[0].getAttribute('value')
-	themen = services.getElementsByTagName('urlListThemen')[0].getAttribute('value')
-	streams = config.getElementsByTagName('streamingUrls')[0]
-	playlist = services.getElementsByTagName('urlPlaylist')[0].getAttribute('value')
-	article = services.getElementsByTagName('urlArticleData')[0].getAttribute('value')
+	global streams
 
 	# urls
-	sendungen = (hosturl + baseurl + sendungen).replace('//', '/').replace(':/', '://')
-	themen = (hosturl + baseurl + themen).replace('//', '/').replace(':/', '://')
-	playlist = (hosturl + baseurl + playlist).replace('//', '/').replace(':/', '://')
-	article = (hosturl + baseurl + article).replace('//', '/').replace(':/', '://')
-	#streams = {
-	#	1: streams.getElementsByTagName('streamDLW')[0].getAttribute('value'),
-	#	2: streams.getElementsByTagName('streamDLR')[0].getAttribute('value'),
-	#}
 	streams = {
 		1: 'http://detektor.fm/stream/mp3/wort/',
 		2: 'http://detektor.fm/stream/mp3/musik/',
@@ -70,213 +51,15 @@ def CONFIG():
 
 
 def INDEX():
-	global icons
+	global icons, streams
 
 	# add items
-	#addDir(Addon.getLocalizedString(30001), icons[0], {
-	#	'mode': 0,
-	#	'station': 0,
-	#})
-	#addDir(Addon.getLocalizedString(30002), icons[1], {
-	#	'mode': 0,
-	#	'station': 1,
-	#})
-	#addDir(Addon.getLocalizedString(30003), icons[2], {
-	#	'mode': 0,
-	#	'station': 2,
-	#})
-	addLink(Addon.getLocalizedString(30002), streams[1], icons[1], {
+	addLink(Addon.getLocalizedString(30001), streams[1], icons[1], {
+		'title': Addon.getLocalizedString(30001),
+	})
+	addLink(Addon.getLocalizedString(30002), streams[2], icons[2], {
 		'title': Addon.getLocalizedString(30002),
 	})
-	addLink(Addon.getLocalizedString(30003), streams[2], icons[2], {
-		'title': Addon.getLocalizedString(30003),
-	})
-
-
-def STATION():
-	global mode, name, station, streams
-
-	# add items
-	#addDir(Addon.getLocalizedString(30101), params = {
-	#	'mode': 10,
-	#	'station': station,
-	#})
-	addDir(Addon.getLocalizedString(30102), params = {
-		'mode': 20,
-		'station': station,
-	})
-	addDir(Addon.getLocalizedString(30103), params = {
-		'mode': 30,
-		'station': station,
-	})
-	#addDir(Addon.getLocalizedString(30104), params = {
-	#	'mode': 40,
-	#	'station': station,
-	#})
-	if station > 0:
-		addLink(Addon.getLocalizedString(30105), streams[station], icons[station], {
-			'title': Addon.getLocalizedString(30105),
-		})
-
-
-def SEARCH():
-	pass
-
-
-def DAILYVIEW():
-	global date, mode
-
-	try:
-		date = Dialog().numeric(1, Addon.getLocalizedString(30201)).replace(' ', '')
-		date = strftime('%d.%m.%Y', strptime(date, '%d/%m/%Y'))
-		mode = 90
-
-		PLAYLIST()
-
-	except:
-		pass
-
-
-def PROGRAM():
-	global playlist, sendungen, station
-
-	# parse content
-	dom = parseString(urlopen(sendungen + '?drbm:station_id=' + str(station)).read())
-	listing = dom.getElementsByTagName('broadcastings')[0]
-	items = listing.getElementsByTagName('item')
-
-	# add items
-	for item in items:
-		name = item.firstChild.data
-		broadcast = item.getAttribute('id')
-		addDir(name, params = {
-			'mode': 90,
-			'station': station,
-			'broadcast': broadcast,
-		})
-
-
-def TOPICS():
-	global playlist, station, themen
-
-	# parse content
-	dom = parseString(urlopen(themen + '?drbm:station_id=' + str(station)).read())
-	listing = dom.getElementsByTagName('themen')[0]
-	items = listing.getElementsByTagName('item')
-
-	# add items
-	for item in items:
-		name = item.firstChild.data
-		theme = item.getAttribute('id')
-		addDir(name, params = {
-			'mode': 90,
-			'station': station,
-			'theme': theme,
-		})
-
-
-def PLAYLIST():
-	global article, broadcast, date, page, playlist, station, theme
-
-	# generate url
-	url = playlist + '?drau:station_id=' + str(station) + '&drau:page=' + str(page)
-	if date != None:
-		url = url + '&drau:from=' + str(date) + '&drau:to=' + str(date)
-	if broadcast != None:
-		url = url + '&drau:broadcast_id=' + str(broadcast)
-	if theme != None:
-		url = url + '&theme=' + str(theme)
-	#print url
-
-	# parse content
-	dom = parseString(urlopen(url).read())
-	listing = dom.getElementsByTagName('entries')[0]
-	items = listing.getElementsByTagName('item')
-
-	totalItems = items.length
-
-	# add items
-	for item in items:
-		url = item.getAttribute('url')
-		id = item.getElementsByTagName('article')[0].getAttribute('id')
-		name = item.getElementsByTagName('title')[0].firstChild.data
-		timestamp = item.getAttribute('timestamp')
-		name = strftime('%d.%m. %H:%M', gmtime(int(timestamp))) + ' - ' + name
-
-		# get optional data
-		try:
-			album = item.getElementsByTagName('sendung')[0].firstChild.data
-		except:
-			album = None
-		try:
-			artist = item.getElementsByTagName('author')[0].firstChild.data
-		except:
-			artist = None
-		try:
-			duration = item.getAttribute('duration')
-		except:
-			duration = None
-		try:
-			if id != None:
-				image = parseString(urlopen(article + '?dram:article_id=' + id).read()) \
-					.getElementsByTagName('article')[0].getElementsByTagName('image')[0] \
-					.firstChild.data #.replace('_max_100x75_', '_max_440x330_')
-			else:
-				image = ''
-		except:
-			image = ''
-
-		addLink(name, url, image, {
-			'album': album,
-			'artist': artist,
-			'date': date,
-			'duration': duration,
-			'title': name,
-		}, totalItems)
-
-	# previous page
-	if listing.getAttribute('page') and int(listing.getAttribute('page')) > 0:
-		addDir(Addon.getLocalizedString(30301), params = {
-			'mode': mode,
-			'station': station,
-			'page': int(page) - 1,
-			'date': date,
-			'broadcast': broadcast,
-			'theme': theme,
-		})
-
-	# next page
-	if page + 1 < int(listing.getAttribute('pages')):
-		addDir(Addon.getLocalizedString(30302), params = {
-			'mode': mode,
-			'station': station,
-			'page': int(page) + 1,
-			'date': date,
-			'broadcast': broadcast,
-			'theme': theme,
-		})
-
-
-def getParam(name):
-	global argv
-
-	# parse parameters
-	if len(argv) >= 3:
-		params = parse_qs(urlparse(argv[2]).query)
-		if params.has_key(name):
-			return params[name][0]
-
-	return None
-
-
-def addDir(name, image = '', params = {}, totalItems = 0):
-	name = name.encode('utf-8')
-	url = argv[0] + '?'
-	for key in params.keys():
-		if params[key] != None:
-			url = url + str(key) + '=' + str(params[key]) + '&'
-	item = ListItem(name, iconImage = image, thumbnailImage = image)
-	return addDirectoryItem(int(sys.argv[1]), url, item, True, totalItems)
 
 
 def addLink(name, url, image = '', info = {}, totalItems = 0):
@@ -287,47 +70,12 @@ def addLink(name, url, image = '', info = {}, totalItems = 0):
 	return addDirectoryItem(int(argv[1]), url, item, False, totalItems)
 
 
-# get parameters
-mode = getParam('mode')
-if mode != None:
-	mode = int(mode)
-name = getParam('name')
-station = getParam('station')
-if station != None:
-	station = int(station)
-page = getParam('page')
-if page != None:
-	page = int(page)
-else:
-	page = 0
-date = getParam('date')
-if date != None:
-	date = int(date)
-broadcast = getParam('broadcast')
-theme = getParam('theme')
-
-#print mode, station, page, date, broadcast, theme
-
-
 # get config
 CONFIG()
 
 
-# do handling
-if mode == None:
-	INDEX()
-elif mode == 0:
-	STATION()
-elif mode == 10:
-	SEARCH()
-elif mode == 20:
-	DAILYVIEW()
-elif mode == 30:
-	PROGRAM()
-elif mode == 40:
-	TOPICS()
-elif mode == 90:
-	PLAYLIST()
+# show index
+INDEX()
 
 
 # end menu

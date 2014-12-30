@@ -1,2 +1,8 @@
 0.3.0 (21.03.2014)
  - compatibility with Frodo and Gotham Beta 2
+
+0.4.0 (16.12.2014)
+ - Use new Confreaks icon
+ - Add conference dates in event index
+ - Add conference images to events
+ - Add presenters to conferences

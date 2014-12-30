@@ -19,23 +19,24 @@ def full_url(path):
 @plugin.route('/')
 def index():
   html = htmlify(full_url('events'))
-  events = [event.findAll('a')[0] for event in html.findAll('li', { 'class': 'event-box' })]
+  events = [event.findAll('a') for event in html.findAll('li', { 'class': 'event-box' })]
 
   return [{
-    'label': event.string.strip(),
-    'path': plugin.url_for('show_presentations', conference=event['href'][event['href'].rfind('/')+1:]),
-  } for event in events]
+    'label': event_links[0].string.strip() + '  [COLOR mediumslateblue]' + event_links[2].string.strip() + '[/COLOR]',
+    'path': plugin.url_for('show_presentations', conference=event_links[0]['href'][event_links[0]['href'].rfind('/')+1:]),
+    'icon': event_links[1].findAll('img')[0]['src'],
+  } for event_links in events]
 
 
 @plugin.route('/conferences/<conference>/')
 def show_presentations(conference):
   html = htmlify(full_url('events/' + conference))
-  events = [event.findAll('a')[1] for event in html.findAll('div', { 'class': 'video' })]
+  events = [event.findAll('a') for event in html.findAll('div', { 'class': 'video' })]
 
   return [{
-    'label': event.string.strip(),
-    'path': plugin.url_for('show_videos', presentation=event['href'][event['href'].rfind('/')+1:]),
-  } for event in events]
+    'label': event_links[1].string.strip() + '  [COLOR mediumslateblue]' + (event_links[2].string.strip() if len(event_links) > 2 else '') + '[/COLOR]',
+    'path': plugin.url_for('show_videos', presentation=event_links[1]['href'][event_links[1]['href'].rfind('/')+1:])
+  } for event_links in events]
 
 
 @plugin.route('/presentations/<presentation>/')

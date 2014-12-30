@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon id="plugin.video.srf_podcast_ch" name="SRF Podcast Plugin" version="1.0.0" provider-name="Christian Rueedi">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+	<import addon="script.module.elementtree"   version="1.2.7"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="addon.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">SRF Podcast Plugin extracts all podcasts from swiss national tv SRF and list them in the xbmc menu under video addons. Episode lists are shown best in the media info view.</summary>
+    <description lang="en">SRF Podcast Plugin extracts all podcasts from swiss national tv SRF and list them in the xbmc menu under video addons. Episode lists are shown best in the media info view.</description>
+    <disclaimer lang="en"></disclaimer>
+    <language>de fr</language>
+    <platform>all</platform>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum></forum>
+    <website></website>
+    <email>christian.rueedi at gmail</email>
+    <source>https://github.com/ambermoon/xbmc_plugin_video_srf_podcast_ch</source>
+  </extension>
+</addon>

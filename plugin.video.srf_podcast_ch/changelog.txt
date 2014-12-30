@@ -1,0 +1,6 @@
+v1.0.0
+- Clean up for first release
+v0.9.2
+- Improved media info for episodes
+v0.9.1
+- Initial version

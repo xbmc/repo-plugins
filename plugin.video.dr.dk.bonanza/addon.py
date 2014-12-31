@@ -178,7 +178,7 @@ class Bonanza(object):
             url = '?mode=play'
             for elem in content['Files']:
                 if elem['Type'] in VIDEO_TYPES:
-                    url += '&' + elem['Type'] + '=' + elem['Location']
+                    url += '&' + elem['Type'].lower() + '=' + elem['Location']
 
             items.append((PATH + url, item, False))
         xbmcplugin.addDirectoryItems(HANDLE, items)

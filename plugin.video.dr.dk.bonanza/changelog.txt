@@ -1,3 +1,6 @@
+[B]Version 3.0.3 - 2014-12-23[/B]
+- Fix video playback on Kodi Helix
+
 [B]Version 3.0.2 - 2014-02-07[/B]
 - Fixed problem with setting 'cast' info
 

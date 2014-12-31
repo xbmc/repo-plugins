@@ -2,7 +2,6 @@ __all__ = ['SearchHistory', 'FavoriteList', 'WatchLaterList', 'FunctionCache', '
            'strip_html_from_text', 'create_path', 'create_uri_path', 'find_best_fit']
 
 from .methods import *
-
 from .search_history import SearchHistory
 from .favorite_list import FavoriteList
 from .watch_later_list import WatchLaterList

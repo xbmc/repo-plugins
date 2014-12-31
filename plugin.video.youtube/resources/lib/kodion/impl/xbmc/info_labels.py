@@ -123,6 +123,15 @@ def create_from_item(base_item):
 
     # Video
     if isinstance(base_item, VideoItem):
+        # play count
+        _process_int_value(info_labels, 'playcount', base_item.get_play_count())
+
+        # studio
+        _process_string_value(info_labels, 'studio', base_item.get_studio())
+
+        # 'artist' = [] (list)
+        _process_list_value(info_labels, 'artist', base_item.get_artist())
+
         # 'dateadded' = '2014-08-11 13:08:56' (string) will be taken from 'date'
         _process_video_dateadded(info_labels, base_item.get_date())
 

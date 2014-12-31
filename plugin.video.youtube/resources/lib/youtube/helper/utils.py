@@ -30,6 +30,9 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
 
         snippet = yt_item['snippet']  # crash if not conform
 
+        # set the title
+        video_item.set_title(snippet['title'])
+
         """
         This is experimental. We try to get the most information out of the title of a video.
         This is not based on any language. In some cases this won't work at all.
@@ -62,6 +65,9 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         description = kodion.utils.strip_html_from_text(snippet['description'])
         if channel_name:
             description = '[UPPERCASE][B]%s[/B][/UPPERCASE][CR][CR]%s' % (channel_name, description)
+            video_item.set_studio(channel_name)
+            #video_item.add_cast(channel_name)
+            video_item.add_artist(channel_name)
             pass
         video_item.set_plot(description)
 
@@ -95,6 +101,13 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             pass
 
         context_menu = []
+
+        # play all videos of the playlist
+        some_playlist_match = re.match('^/channel/(.+)/playlist/(?P<playlist_id>.*)/$', context.get_path())
+        if some_playlist_match:
+            playlist_id = some_playlist_match.group('playlist_id')
+            yt_context_menu.append_add_play_all(context_menu, provider, context, playlist_id)
+            pass
 
         if provider.is_logged_in():
             # add 'Watch Later' only if we are not in my 'Watch Later' list
@@ -140,7 +153,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             pass
 
         if len(context_menu) > 0:
-            video_item.set_context_menu(context_menu)
+            video_item.set_context_menu(context_menu, replace=False)
             pass
         pass
 

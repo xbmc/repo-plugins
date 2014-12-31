@@ -13,6 +13,7 @@ class BaseItem(object):
         self._image = image
         self._fanart = fanart
         self._context_menu = None
+        self._replace_context_menu = False
         self._date = None
         pass
 
@@ -64,12 +65,16 @@ class BaseItem(object):
     def get_fanart(self):
         return self._fanart
 
-    def set_context_menu(self, context_menu):
+    def set_context_menu(self, context_menu, replace=False):
         self._context_menu = context_menu
+        self._replace_context_menu = replace
         pass
 
     def get_context_menu(self):
         return self._context_menu
+
+    def replace_context_menu(self):
+        return self._replace_context_menu
 
     def set_date(self, year, month, day, hour=0, minute=0, second=0):
         date = datetime.datetime(year, month, day, hour, minute, second)

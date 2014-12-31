@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?> <strings>
+    <!-- Kodion Settings -->
+    <string id="30000">Общие</string>
+    <string id="30001">Имя пользователя</string>
+    <string id="30002">Пароль</string>
+
+    <string id="30010">Качество видео</string>
+    <string id="30011">SD</string>
+    <string id="30012">HD</string>
+    <string id="30013">Full HD</string>
+    <string id="30014">Ultra HD</string>
+
+    <string id="30020">Разрешить 3D</string>
+    <string id="30021">Показывать фанарт</string>
+    <string id="30022">Количество элементов на странице</string>
+    <string id="30023">Кол-во сохраненных поисковых запросов</string>
+    <string id="30024">Размер кэша (Мб)</string>
+    <string id="30025">Запустить мастер настройки</string>
+    <string id="30026">Пользовательские настройки вида</string>
+    <string id="30027">Основной вид</string>
+    <string id="30028">Вид отображения видео</string>
+
+    <string id="30030">Запустить мастер настройки?</string>
+    <string id="30031">Расширенные</string>
+
+    <!-- Kodion Common -->
+    <string id="30100">Избранное</string>
+    <string id="30101">Добавить в избранное дополнения</string>
+    <string id="30102">Поиск</string>
+    <string id="30103">Библиотека</string>
+    <string id="30104">Рекомендуемое</string>
+    <string id="30105">Архив</string>
+    <string id="30106">Следующая страница (%d)</string>
+    <string id="30107">Отложенный просмотр</string>
+    <string id="30108">Удалить</string>
+    <string id="30109">Новейшее видео</string>
+    <string id="30110">Новый поиск</string>
+    <string id="30111">Авторизация</string>
+    <string id="30112">Выйти</string>
+    <string id="30113">Переименовать</string>
+    <string id="30114">Подтвердить удаление</string>
+    <string id="30115">Подтвердить удаление</string>
+    <string id="30116">Удалить "%s"?</string>
+    <string id="30117">Удалить "%s"?</string>
+    <string id="30118">Удаление</string>
+
+    <!-- YouTube -->
+    <string id="30500">Каналы</string>
+    <string id="30501">Плейлисты</string>
+    <string id="30502">Перейти к %s</string>
+    <string id="30503">Показывать фанарты каналов</string>
+    <string id="30504">Подписки</string>
+    <string id="30505">Отменить подписку</string>
+    <string id="30506">Подписаться</string>
+    <string id="30507">Мои каналы</string>
+    <string id="30508">Понравившееся видео</string>
+    <string id="30509">История</string>
+    <string id="30510">Мои подписки</string>
+    
+    <string id="30512">Просмотр каналов</string>
+    <string id="30513">Сейчас просматривают</string>
+    <string id="30514">Похожее видео</string>
+    <string id="30515">Автоматическое удаление из "Отложенного просмотра"</string>
+    <string id="30516">Элементы меню</string>
+    <string id="30517">Подписаться %s</string>
+    <string id="30518">Перейдите по ссылке '%s'</string>
+    <string id="30519">и введите следующий код:</string>
+    <string id="30520">Добавить в...</string>
+    <string id="30521">Выбрать плейлист</string>
+    <string id="30522">Новый плейлист...</string>
+    <string id="30523">Язык</string>
+    <string id="30524">Выберите язык</string>
+    <string id="30525">Выберите регион</string>
+    <string id="30526">Региональные настройки</string>
+    <string id="30527">Запустить настройку языка и региона?</string>
+    <string id="30528">Оценить...</string>
+    <string id="30529">Мне понравилось</string>
+    <string id="30530">Мне не понравилось</string>
+</strings>

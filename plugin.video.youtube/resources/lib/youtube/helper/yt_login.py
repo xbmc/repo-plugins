@@ -24,18 +24,16 @@ def process(mode, provider, context, re_match):
         device_code = json_data['device_code']
         user_code = json_data['user_code']
 
-        import xbmcgui
+        text = context.localize(provider.LOCAL_MAP['youtube.sign.go_to']) % '[B]youtube.com/activate[/B]'
+        text += '[CR]' + context.localize(provider.LOCAL_MAP['youtube.sign.enter_code'])
+        text += '[CR]' + '[B]%s[/B]' % user_code
+        dialog = context.get_ui().create_progress_dialog(
+            heading=context.localize(provider.LOCAL_MAP['youtube.sign.in']), text=text, background=False)
 
-        dialog = xbmcgui.DialogProgress()
-        dialog.create(context.localize(provider.LOCAL_MAP['youtube.sign.in']),
-                      context.localize(provider.LOCAL_MAP['youtube.sign.go_to']) % '[B]youtube.com/activate[/B]',
-                      context.localize(provider.LOCAL_MAP['youtube.sign.enter_code']),
-                      '[B]%s[/B]' % user_code)
-
-        expires_in = 10 * 60 * 1000  # 10 Minutes
-        steps = expires_in / interval
+        steps = (10 * 60 * 1000) / interval  # 10 Minutes
+        dialog.set_total(steps)
         for i in range(steps):
-            dialog.update(i)
+            dialog.update()
             json_data = client.get_device_token(device_code)
             if not 'error' in json_data:
                 access_token = json_data.get('access_token', '')
@@ -48,10 +46,11 @@ def process(mode, provider, context, re_match):
                     break
                 pass
 
-            if dialog.iscanceled():
+            if dialog.is_aborted():
                 break
 
             context.sleep(interval)
             pass
+        dialog.close()
         pass
     pass

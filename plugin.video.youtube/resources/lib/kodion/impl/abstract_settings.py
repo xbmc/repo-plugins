@@ -8,6 +8,9 @@ class AbstractSettings(object):
         object.__init__(self)
         pass
 
+    def __del__(self):
+        pass
+
     def get_string(self, setting_id, default_value=None):
         raise NotImplementedError()
 

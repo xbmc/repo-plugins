@@ -11,6 +11,10 @@ class XbmcLogger(AbstractLogger):
         AbstractLogger.__init__(self)
         pass
 
+    def __del__(self):
+        AbstractLogger.__del__(self)
+        pass
+
     def log(self, text, log_level=constants.log.NOTICE):
         xbmc.log(msg=text, level=log_level)
         pass

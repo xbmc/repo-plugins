@@ -21,10 +21,38 @@ class VideoItem(BaseItem):
         self._cast = None
         self._rating = None
         self._track_number = None
+        self._studio = None
+        self._artist = None
+        self._play_count = None
         pass
+
+    def set_play_count(self, play_count):
+        self._play_count = int(play_count)
+        pass
+
+    def get_play_count(self):
+        return self._play_count
+
+    def add_artist(self, artist):
+        if self._artist is None:
+            self._artist = []
+            pass
+        self._artist.append(unicode(artist))
+        pass
+
+    def get_artist(self):
+        return self._artist
+
+    def set_studio(self, studio):
+        self._studio = unicode(studio)
+        pass
+
+    def get_studio(self):
+        return self._studio
 
     def set_title(self, title):
         self._title = unicode(title)
+        self._name = self._title
         pass
 
     def get_title(self):

@@ -3,6 +3,13 @@ __author__ = 'bromix'
 from resources.lib import kodion
 
 
+def append_add_play_all(context_menu, provider, context, playlist_id):
+    context_menu.append((context.localize(provider.LOCAL_MAP['youtube.playlist.play.all']),
+                         'RunPlugin(%s)' % context.create_uri(['playlist', 'play', 'playlist'],
+                                                              {'playlist_id': playlist_id})))
+    pass
+
+
 def append_add_video_to_playlist(context_menu, provider, context, video_id):
     context_menu.append((context.localize(provider.LOCAL_MAP['youtube.video.add_to_playlist']),
                          'RunPlugin(%s)' % context.create_uri(['playlist', 'select', 'playlist'],

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Kodimon Settings -->
+    <string id="30000">Geral</string>
+    <string id="30001">Usuário</string>
+    <string id="30002">Senha</string>
+
+    <string id="30010">Qualidade do Vídeo</string>
+    <string id="30011">SD</string>
+	<string id="30012">HD</string>
+	<string id="30013">Full HD</string>
+    <string id="30014">Ultra HD</string>
+    <string id="30020">Permitir 3D</string>
+    <string id="30021">Mostrar Fanart</string>
+    <string id="30022">Itens por página</string>
+    <string id="30023">Procurar no Histórico pelo Tamanho</string>
+    <string id="30024">Tamanho do Cache(MB)</string>
+	<string id="30025">Ativar assistente de configuração</string>
+    <string id="30026">Editar tipo de Vista</string>
+    <string id="30027">Vista: Padrão</string>
+    <string id="30028">Vista: Videos</string>
+	<string id="30030">Executar assistente de configuração</string>
+    <string id="30031">Avançado</string>
+
+    <!-- Kodimon Common -->
+    <string id="30100">Favoritos</string>
+    <string id="30101">Adicionar para favs via addon</string>
+    <string id="30102">Procurar</string>
+    <string id="30103">Coleção</string>
+    <string id="30104">Em Destaque</string>
+    <string id="30105">Arquivo</string>
+    <string id="30106">Próxima Página (%d)</string>
+    <string id="30107">Assistir Depois</string>
+    <string id="30108">Remover</string>
+    <string id="30109">Vídeos mais Recentes</string>
+    <string id="30110">Nova Procura</string>
+    <string id="30111">Logar</string>
+    <string id="30112">Deslogar</string>
+    <string id="30113">Renomear</string>
+    <string id="30114">Confirmar remoção completa</string>
+    <string id="30115">Confirmar remoção</string>
+    <string id="30116">Apagar "%s"?</string>
+    <string id="30117">Remover "%s"?</string>
+    <string id="30118">Apagar</string>
+
+    <!-- YouTube -->
+    <string id="30500">Canais</string>
+    <string id="30501">Playlists</string>
+    <string id="30502">Ir para %s</string>
+    <string id="30503">Apresentar fanart do canal</string>
+    <string id="30504">Subscrições</string>
+    <string id="30505">Remover Subscrição</string>
+    <string id="30506">Subscrever</string>
+    <string id="30507">Meu Canal</string>
+    <string id="30508">Vídeos Curtidos</string>
+    <string id="30509">Histórico</string>
+    <string id="30510">Minhas Subscrições</string>
+    <string id="30511">Curtir Vídeo</string>
+    <string id="30512">Navegar nos Canais</string>
+    <string id="30513">O que assistir</string>
+    <string id="30514">Vídeos Relacionados</string>
+    <string id="30515">Autoremover de 'Assistir Depois'</string>
+    <string id="30516">Diretórios</string>
+    <string id="30517">Subscrever para %s</string>
+    <string id="30518">Vá para '%s'</string>
+    <string id="30519">e entre com o seguinte código:</string>
+    <string id="30520">Adicionar para...</string>
+    <string id="30521">Selecionar playlist</string>
+    <string id="30522">Nova playlist...</string>
+	<string id="30523">Língua</string>
+    <string id="30524">Selecionar língua</string>
+    <string id="30525">Selecionar região</string>
+    <string id="30526">Ajustar</string>
+    <string id="30527">Língua e região?</string>
+    <string id="30528">Classificar...</string>
+    <string id="30529">Gosto</string>
+    <string id="30530">Não gosto</string>
+</strings>

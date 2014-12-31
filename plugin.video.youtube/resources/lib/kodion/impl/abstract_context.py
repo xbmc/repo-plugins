@@ -31,6 +31,20 @@ class AbstractContext(object):
         self._uri = self.create_uri(self._path, self._params)
         pass
 
+    def __del__(self):
+        def _release(obj):
+            if obj is not None:
+                del obj
+                pass
+            return None
+
+        self._function_cache = _release(self._function_cache)
+        self._search_history = _release(self._search_history)
+        self._favorite_list = _release(self._favorite_list)
+        self._watch_later_list = _release(self._watch_later_list)
+        self._access_manager = _release(self._access_manager)
+        pass
+
     def get_language(self):
         raise NotImplementedError()
 
@@ -74,6 +88,12 @@ class AbstractContext(object):
             self._access_manager = AccessManager(self.get_settings())
             pass
         return self._access_manager
+
+    def get_video_playlist(self):
+        raise NotImplementedError()
+
+    def get_video_player(self):
+        raise NotImplementedError()
 
     def get_ui(self):
         raise NotImplementedError()

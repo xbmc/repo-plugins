@@ -7,6 +7,9 @@ class AbstractLogger(object):
     def __init__(self):
         pass
 
+    def __del__(self):
+        pass
+
     def log(self, text, log_level=constants.log.NOTICE):
         """
         Needs to be implemented by a mock for testing or the real deal.

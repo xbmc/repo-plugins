@@ -1,23 +1,33 @@
+5.0.1 (2014-12-31)
+ADD: 'Play all' (default, reverse, shuffle)
+ADD: Italian (thx 2 peppe_sr)
+ADD: Portuguese (Brazil) (thx 2 ASH_Macedo)
+ADD: Hungarian (thx 2 gyeben)
+ADD: Portuguese (thx 2 enen92)
+ADD: Polish (thx 2 D.K.)
+ADD: Russian (thx 2 BytEvil)
+ADD: Spanish (thx 2 PatOso)
+ADD: French (thx 2 roondar)
+UPD: support for '1080XF' and 'Xperience1080'
+FIX: some live streams should work
+FIX: update meta data for video played via ext. url
+FIX: remove video from 'Watch Later' playlist
+REV: reverted to requests
+
 5.0.0 (2014-12-27)
 DEL: removed beta
-
-5.0.0~beta3 (2014-12-27)
-UPD: some minor tests
-
-5.0.0~beta2 (2014-12-26)
 ADD: new rating system - like/dislike/remove
 ADD: show confirmation before remove a video or deleting a playlist
-UPD: moved 'Watch Later' up in context menu
-FIX: rename playlist
-FIX: show newest videos first (uploads of channel)
-
-5.0.0~beta1 (2014-12-23)
 ADD: rename your playlists
 ADD: setup default view modes (default and videos)
 ADD: setup correct language and region for YouTube
 ADD: support for old YouTube url calls (plugin://plugin.video.youtube/?action=play_video&videoid=[ID])
 UPD: new icons
 UPD: reorganized context menu
+UPD: some minor tests
+UPD: moved 'Watch Later' up in context menu
+FIX: rename playlist
+FIX: show newest videos first (uploads of channel)
 FIX: show fanarts in 'Watch Later' and 'Liked Videos'
 
 1.0.0~alpha29 (2014-12-14)

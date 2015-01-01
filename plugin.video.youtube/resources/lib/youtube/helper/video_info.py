@@ -171,6 +171,31 @@ class VideoInfo(object):
 
         return stream_list
 
+    def _load_manifest(self, url, video_id):
+        headers = {'Host': 'manifest.googlevideo.com',
+                   'Connection': 'keep-alive',
+                   'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
+                   'Accept': '*/*',
+                   'DNT': '1',
+                   'Referer': 'https://www.youtube.com/watch?v=%s' % video_id,
+                   'Accept-Encoding': 'gzip, deflate',
+                   'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
+        result = requests.get(url, headers=headers, verify=False, allow_redirects=True)
+        lines = result.text.splitlines()
+        streams = []
+        for i in range(len(lines)):
+            re_match = re.search(r'RESOLUTION=(?P<width>\d+)x(?P<height>\d+)', lines[i])
+            if re_match:
+                line = lines[i+1]
+                width = int(re_match.group('width'))
+                height = int(re_match.group('height'))
+                video_stream = {'url': line,
+                                'format': {'width': width, 'height': height}}
+                streams.append(video_stream)
+                pass
+            pass
+        return streams
+
     def _method_get_video_info(self, video_id):
         headers = {'Host': 'www.youtube.com',
                    'Connection': 'keep-alive',
@@ -197,6 +222,12 @@ class VideoInfo(object):
 
         if params.get('status', '') == 'fail':
             return self._method_watch(video_id, reason=params.get('reason', 'UNKNOWN'))
+
+        if params.get('live_playback', '0') == '1':
+            url = params.get('hlsvp', '')
+            if url:
+                return self._load_manifest(url, video_id)
+            pass
 
         itag_map = {}
         itag_map.update(self.DEFAULT_ITAG_MAP)
@@ -249,6 +280,10 @@ class VideoInfo(object):
                 stream_list.append(video_stream)
                 pass
             pass
+
+        # last fallback
+        if not stream_list:
+            return self._method_watch(video_id)
 
         return stream_list
 

@@ -239,24 +239,34 @@ class YouTube(LoginClient):
 
         return self._perform_v3_request(method='GET', path='playlists', params=params)
 
-    def get_playlist_item_id_of_video_id(self, playlist_id, video_id):
-        json_data = self.get_playlist_items(playlist_id=playlist_id, video_id=video_id)
+    def get_playlist_item_id_of_video_id(self, playlist_id, video_id, page_token=''):
+        old_max_results = self._max_results
+        self._max_results = 50
+        json_data = self.get_playlist_items(playlist_id=playlist_id, page_token=page_token)
+        self._max_results = old_max_results
+
         items = json_data.get('items', [])
-        if len(items) > 0:
-            return items[0]['id']
+        for item in items:
+            playlist_item_id = item['id']
+            playlist_video_id = item.get('snippet', {}).get('resourceId', {}).get('videoId', '')
+            if playlist_video_id and playlist_video_id == video_id:
+                return playlist_item_id
+            pass
+
+        next_page_token = json_data.get('nextPageToken', '')
+        if next_page_token:
+            return self.get_playlist_item_id_of_video_id(playlist_id=playlist_id, video_id=video_id,
+                                                         page_token=next_page_token)
 
         return None
 
-    def get_playlist_items(self, playlist_id, video_id='', page_token=''):
+    def get_playlist_items(self, playlist_id, page_token=''):
         # prepare params
         params = {'part': 'snippet',
                   'maxResults': str(self._max_results),
                   'playlistId': playlist_id}
         if page_token:
             params['pageToken'] = page_token
-            pass
-        if video_id:
-            params['videoId'] = video_id
             pass
 
         return self._perform_v3_request(method='GET', path='playlistItems', params=params)

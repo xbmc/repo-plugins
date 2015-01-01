@@ -36,6 +36,9 @@ class AbstractProvider(object):
 
         pass
 
+    def __del__(self):
+        pass
+
     def get_alternative_fanart(self, context):
         return context.get_fanart()
 

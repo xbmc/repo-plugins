@@ -44,6 +44,7 @@
     <string id="30116">Soll "%s" gelöscht werden?</string>
     <string id="30117">Soll "%s" entfernt werden?</string>
     <string id="30118">Löschen</string>
+    <string id="30119">Bitte warten...</string>
 
     <!-- YouTube -->
     <string id="30500">Kanäle</string>
@@ -77,4 +78,10 @@
     <string id="30528">Bewerten...</string>
     <string id="30529">Mag ich</string>
     <string id="30530">Mag ich nicht</string>
+    <string id="30531">Alle ansehen</string>
+    <string id="30532">Default</string>
+    <string id="30533">Rückwärts</string>
+    <string id="30534">Zufall</string>
+    <string id="30535">Wählen Sie die Reihenfolge der Playliste</string>
+    <string id="30536">Aktualisiere Playliste...</string>
 </strings>

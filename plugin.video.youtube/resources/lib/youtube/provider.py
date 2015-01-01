@@ -1,3 +1,5 @@
+import weakref
+
 __author__ = 'bromix'
 
 from resources.lib.youtube.helper import yt_subscriptions
@@ -5,7 +7,8 @@ from resources.lib import kodion
 from resources.lib.kodion.utils import FunctionCache
 from resources.lib.kodion.items import *
 from resources.lib.youtube.client import YouTube
-from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video
+from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video, \
+    yt_context_menu, yt_play
 from .youtube_exceptions import YouTubeException, LoginException
 
 
@@ -34,6 +37,12 @@ class Provider(kodion.AbstractProvider):
                  'youtube.sign.enter_code': 30519,
                  'youtube.video.add_to_playlist': 30520,
                  'youtube.playlist.select': 30521,
+                 'youtube.playlist.play.all': 30531,
+                 'youtube.playlist.play.default': 30532,
+                 'youtube.playlist.play.reverse': 30533,
+                 'youtube.playlist.play.shuffle': 30534,
+                 'youtube.playlist.play.select': 30535,
+                 'youtube.playlist.progress.updating': 30536,
                  'youtube.rename': 30113,
                  'youtube.playlist.create': 30522,
                  'youtube.setup_wizard.select_language': 30524,
@@ -49,7 +58,6 @@ class Provider(kodion.AbstractProvider):
         kodion.AbstractProvider.__init__(self)
 
         self._client = None
-        self._resource_manager = None
         self._is_logged_in = False
         pass
 
@@ -114,10 +122,7 @@ class Provider(kodion.AbstractProvider):
         return self._client
 
     def get_resource_manager(self, context):
-        if not self._resource_manager:
-            self._resource_manager = ResourceManager(context, self.get_client(context))
-            pass
-        return self._resource_manager
+        return ResourceManager(weakref.proxy(context), weakref.proxy(self.get_client(context)))
 
     def get_alternative_fanart(self, context):
         return self.get_fanart(context)
@@ -226,32 +231,16 @@ class Provider(kodion.AbstractProvider):
 
     @kodion.RegisterProviderPath('^/play/$')
     def _on_play(self, context, re_match):
-        vq = context.get_settings().get_video_quality()
-
-        def _compare(item):
-            return vq - item['format']['height']
-
-        video_id = context.get_param('video_id')
-
-        try:
-            client = self.get_client(context)
-            video_streams = client.get_video_streams(context, video_id)
-            video_stream = kodion.utils.find_best_fit(video_streams, _compare)
-            video_item = VideoItem(video_id, video_stream['url'])
-
-            # Auto-Remove video from 'Watch Later' playlist - this should run asynchronous
-            if self.is_logged_in() and context.get_settings().get_bool('youtube.playlist.watchlater.autoremove', True):
-                command = 'RunPlugin(%s)' % context.create_uri(['internal', 'auto_remove_watch_later'],
-                                                               {'video_id': video_id})
-                context.execute(command)
-                pass
-
-            return video_item
-        except YouTubeException, ex:
-            message = ex.get_message()
-            message = kodion.utils.strip_html_from_text(message)
-            context.get_ui().show_notification(message, time_milliseconds=30000)
+        def _play_playlist():
+            playlist_id = context.get_param('playlist_id')
+            order = context.get_param('order', 'default')
             pass
+
+        params = context.get_params()
+        if 'video_id' in params:
+            return yt_play.play_video(self, context, re_match)
+        elif 'playlist_id' in params:
+            return yt_play.play_playlist(self, context, re_match)
 
         return False
 
@@ -420,6 +409,9 @@ class Provider(kodion.AbstractProvider):
                                                      ['channel', 'mine', 'playlist', playlists['watchLater']]),
                                                  context.create_resource_path('media', 'watch_later.png'))
                 watch_later_item.set_fanart(self.get_fanart(context))
+                context_menu = []
+                yt_context_menu.append_add_play_all(context_menu, self, context, playlists['watchLater'])
+                watch_later_item.set_context_menu(context_menu)
                 result.append(watch_later_item)
                 pass
 
@@ -430,6 +422,9 @@ class Provider(kodion.AbstractProvider):
                                                       ['channel', 'mine', 'playlist', playlists['likes']]),
                                                   context.create_resource_path('media', 'likes.png'))
                 liked_videos_item.set_fanart(self.get_fanart(context))
+                context_menu = []
+                yt_context_menu.append_add_play_all(context_menu, self, context, playlists['likes'])
+                liked_videos_item.set_context_menu(context_menu)
                 result.append(liked_videos_item)
                 pass
 

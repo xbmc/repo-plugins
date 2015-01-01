@@ -1,9 +1,7 @@
-import re
-
 __author__ = 'bromix'
 
 import xbmc
-
+import re
 from ..abstract_system_version import AbstractSystemVersion
 
 
@@ -40,6 +38,10 @@ class XbmcSystemVersion(AbstractSystemVersion):
             pass
 
         AbstractSystemVersion.__init__(self, major, minor, name)
+        pass
+
+    def __del__(self):
+        AbstractSystemVersion.__del__(self)
         pass
 
     pass

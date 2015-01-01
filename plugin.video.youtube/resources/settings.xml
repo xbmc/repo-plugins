@@ -4,7 +4,7 @@
     <category label="30000">
 
         <!-- kodion Visual -->
-        <setting id="kodion.video.quality" type="enum" label="30010" lvalues="30011|30012" default="1" />
+        <setting id="kodion.video.quality" type="enum" label="30010" lvalues="30011|30012|30013" default="1" />
         <setting id="youtube.playlist.watchlater.autoremove" type="bool" label="30515" default="true" />
         <setting type="sep" />
         <setting id="kodion.fanart.show" type="bool" label="30021" default="true"/>

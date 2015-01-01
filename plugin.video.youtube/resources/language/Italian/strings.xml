@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- Kodion Settings -->
+    <string id="30000">Generale</string>
+    <string id="30001">Nome Utente</string>
+    <string id="30002">Password</string>
+
+    <string id="30010">Qualita' Video</string>
+    <string id="30011">SD</string>
+	<string id="30012">HD</string>
+	<string id="30013">Full HD</string>
+    <string id="30014">Ultra HD</string>
+
+    <string id="30020">Permetti 3D</string>
+    <string id="30021">Mostra Fanart</string>
+    <string id="30022">Elementi per pagina</string>
+    <string id="30023">Dimenzione Cronologia Ricerca</string>
+    <string id="30024">Dimensione Cache(MB)</string>
+    <string id="30025">Abilita il setup-wizard</string>
+    <string id="30026">Sovrascrivi le visualizzazioni</string>
+    <string id="30027">Visualizzazione: Predefinita</string>
+    <string id="30028">Visualizzazione: Video</string>
+
+    <string id="30030">Eseguo il setup-wizard?</string>
+    <string id="30031">Avanzate</string>
+
+    <!-- Kodion Common -->
+    <string id="30100">Preferiti</string>
+    <string id="30101">Agiungi ai Preferiti dell'Addon</string>
+    <string id="30102">Ricerca</string>
+    <string id="30103">Libreria</string>
+    <string id="30104">In Evidenza</string>
+    <string id="30105">Archivio</string>
+    <string id="30106">Pagina Successiva (%d)</string>
+    <string id="30107">Guarda Dopo</string>
+    <string id="30108">Rimuovi</string>
+    <string id="30109">Ultimi Video</string>
+    <string id="30110">Nuova Ricerca</string>
+    <string id="30111">Collegati</string>
+    <string id="30112">Scollegati</string>
+    <string id="30113">Rinomina</string>
+    <string id="30114">Conferma Cancellazione</string>
+    <string id="30115">Conferma Rimozione</string>
+    <string id="30116">Cancella "%s"?</string>
+    <string id="30117">Rimuovi "%s"?</string>
+    <string id="30118">Cancella</string>
+
+    <!-- YouTube -->
+    <string id="30500">Canali</string>
+    <string id="30501">Playlist</string>
+    <string id="30502">Vai a %s</string>
+    <string id="30503">Mostra le fanart dei Canali</string>
+    <string id="30504">Sottoscrizioni</string>
+    <string id="30505">Canclella sottoscrizione</string>
+    <string id="30506">Sottoscrivi</string>
+    <string id="30507">Il Mio Canale</string>
+    <string id="30508">Video Piaciuti</string>
+    <string id="30509">Storia</string>
+    <string id="30510">Le Mie Sottoscrizioni</string>
+
+    <string id="30512">Sfoglia i Canali</string>
+    <string id="30513">Guarda da Guardare</string>
+    <string id="30514">Video Correlati</string>
+    <string id="30515">Auto Rimuovi da 'Guarda Dopo'</string>
+    <string id="30516">Cartelle</string>
+    <string id="30517">Sottoscrivi a %s</string>
+    <string id="30518">Vai a '%s'</string>
+    <string id="30519">ed inserisci il codice seguente:</string>
+    <string id="30520">Aggiungi a...</string>
+    <string id="30521">Seleziona playlist</string>
+    <string id="30522">Nuova playlist...</string>
+    <string id="30523">Lingua</string>
+    <string id="30524">Seleziona lingua</string>
+    <string id="30525">Seleziona regione</string>
+    <string id="30526">Aggiusta</string>
+    <string id="30527">Lingua e regione?</string>
+    <string id="30528">Vota...</string>
+    <string id="30529">Mi Piace</string>
+    <string id="30530">Non Mi Piace</string>
+</strings>

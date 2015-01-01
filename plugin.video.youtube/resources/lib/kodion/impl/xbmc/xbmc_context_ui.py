@@ -4,7 +4,10 @@ import xbmc
 import xbmcgui
 
 from ..abstract_context_ui import AbstractContextUI
+from .xbmc_progress_dialog import XbmcProgressDialog
+from .xbmc_progress_dialog_bg import XbmcProgressDialogBG
 from ... import constants
+
 
 class XbmcContextUI(AbstractContextUI):
     def __init__(self, xbmc_addon, context):
@@ -15,6 +18,16 @@ class XbmcContextUI(AbstractContextUI):
         self._context = context
         self._view_mode = None
         pass
+
+    def __del__(self):
+        AbstractContextUI.__del__(self)
+        pass
+
+    def create_progress_dialog(self, heading, text=None, background=False):
+        if background:
+            return XbmcProgressDialogBG(heading, text)
+
+        return XbmcProgressDialog(heading, text)
 
     def set_view_mode(self, view_mode):
         if isinstance(view_mode, basestring):

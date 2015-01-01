@@ -21,7 +21,25 @@ class ViewManager(object):
             {'name': 'Posters', 'id': 56},
             {'name': 'ShowCase', 'id': 53},
             {'name': 'Landscape', 'id': 52},
-            {'name': 'InfoWall', 'id': 51},
+            {'name': 'InfoWall', 'id': 51}
+        ],
+        'skin.1080xf': [
+            {'name': 'List', 'id': 50},
+            {'name': 'Info list', 'id': 52},
+            {'name': 'Panel', 'id': 53},
+            {'name': 'Landscape', 'id': 54},
+            {'name': 'Poster', 'id': 55},
+            {'name': 'Thumbnail', 'id': 500},
+            {'name': 'Banner', 'id': 60}
+        ],
+        'skin.xperience1080': [
+            {'name': 'List', 'id': 50},
+            {'name': 'Info list', 'id': 52},
+            {'name': 'Panel', 'id': 53},
+            {'name': 'Landscape', 'id': 54},
+            {'name': 'Poster', 'id': 55},
+            {'name': 'Thumbnail', 'id': 500},
+            {'name': 'Banner', 'id': 60}
         ]
     }
 

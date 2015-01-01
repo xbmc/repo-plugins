@@ -8,6 +8,9 @@ class AbstractSystemVersion(object):
         self._name = name
         pass
 
+    def __del__(self):
+        pass
+
     def get_name(self):
         return self._name
 

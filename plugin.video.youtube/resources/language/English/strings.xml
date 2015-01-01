@@ -44,6 +44,7 @@
     <string id="30116">Delete "%s"?</string>
     <string id="30117">Remove "%s"?</string>
     <string id="30118">Delete</string>
+    <string id="30119">Please wait...</string>
 
     <!-- YouTube -->
     <string id="30500">Channels</string>
@@ -77,4 +78,10 @@
     <string id="30528">Rate...</string>
     <string id="30529">I like this</string>
     <string id="30530">I dislike this</string>
+    <string id="30531">Play all</string>
+    <string id="30532">Default</string>
+    <string id="30533">Reverse</string>
+    <string id="30534">Shuffle</string>
+    <string id="30535">Select the order of the playlist</string>
+    <string id="30536">Updating Playlist...</string>
 </strings>

@@ -1,4 +1,7 @@
-﻿2.0.2 (12-19-2014) by JUL1EN094
+﻿2.0.3 (01-03-2015) by JUL1EN094
+- Add simplejson in required
+
+2.0.2 (12-19-2014) by JUL1EN094
 - Change plugin id -> lowercase
 
 2.0.1 (12-15-2014) by JUL1EN094

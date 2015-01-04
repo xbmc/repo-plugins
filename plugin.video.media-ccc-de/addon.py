@@ -5,11 +5,15 @@ import requests
 
 from xbmcswift2 import Plugin
 
+from resources.lib.helpers import recording_list
+
 BASE_URL = 'http://api.media.ccc.de/public/'
 #BASE_URL = 'http://127.0.0.1:3000/public/'
 
 plugin = Plugin()
 
+QUALITY = ["sd", "hd"]
+FORMATS = ["mp4", "webm"]
 
 @plugin.route('/', name='index')
 @plugin.route('/dir/<subdir>')
@@ -59,18 +63,23 @@ def show_conference(conf):
                 'plot': event['description'],
                 'tagline': event['subtitle']
                 },
-                'path': plugin.url_for('resolve_event', event = event['url'].rsplit('/', 1)[1]),
+                'path': plugin.url_for('resolve_event_default', event = event['url'].rsplit('/', 1)[1]),
             'is_playable': True
             })
     return sorted(items, key=operator.itemgetter('label'))
 
-@plugin.route('/event/<event>')
-def resolve_event(event):
+@plugin.route('/event/<event>', name = 'resolve_event_default')
+@plugin.route('/event/<event>/<quality>/<format>')
+def resolve_event(event, quality = None, format = None):
+    if quality not in QUALITY:
+        quality = QUALITY[plugin.get_setting('quality', int)]
+    if format not in FORMATS:
+        format = FORMATS[plugin.get_setting('format', int)]
+
     req = requests.get(BASE_URL + 'events/' + event)
-    recs = req.json()['recordings']
-    want = sorted(filter(is_video, recs), key=format_priority)
+    want = recording_list(req.json()['recordings'], quality, format)
     if len(want) > 0:
-        plugin.set_resolved_url(want[0]['recording_url'])
+        plugin.set_resolved_url(want[0].url)
 
 @plugin.cached()
 def get_index_data():
@@ -92,18 +101,6 @@ def build_path(top, down):
         return down
     else:
         return '/'.join((top, down))
-
-def is_video(entry):
-    return entry['mime_type'].startswith('video/')
-
-def format_priority(entry):
-    enc = entry['mime_type'].split('/')[1]
-    if enc == 'mp4':
-        return 1 # Can be hardware-accelerated
-    elif enc == 'webm':
-        return 2
-    else:
-        return 99
 
 def str_length(length):
     mins, secs = divmod(length, 60)

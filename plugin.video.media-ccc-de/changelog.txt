@@ -1,2 +1,5 @@
+v0.0.2
+- Preferences for HD/SD and MP4/WEBM
+
 v0.0.1
 - Initial version

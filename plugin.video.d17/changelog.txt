@@ -1,3 +1,6 @@
+1.0.3 (01-03-2015) by JUL1EN094
+- Add simplejson in required
+
 v1.0.2 (12-19-2014) by JUL1EN094
 - Change addon id -> lowercase
 

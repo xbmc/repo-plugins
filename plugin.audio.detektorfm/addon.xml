@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon
+	id="plugin.audio.detektorfm"
+	name="detektor.fm"
+	version="1.0.2"
+	provider-name="sorax">
+	<requires>
+		<import addon="xbmc.python" version="2.1.0" />
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>audio</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<license>GNU GENERAL PUBLIC LICENSE. Version 3, 29 June 2007</license>
+		<source>https://github.com/sorax/plugin.audio.detektorfm</source>
+		<platform>all</platform>
+		<language>de</language>
+		<summary>detektor.fm | Internet radio with journalism and alternative pop music</summary>
+		<summary lang="de">detektor.fm | Internetradio mit Journalismus und alternativer Popmusik</summary>
+		<description>German internet radio</description>
+		<description lang="de">Deutsches Internetradio</description>
+	</extension>
+</addon>

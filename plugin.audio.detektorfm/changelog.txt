@@ -1,0 +1,10 @@
+[B]1.0.2[/B]
+Renamed the repo
+(changed from "xbmc.plugin.detektorfm" to "plugin.audio.detektorfm")
+
+[B]1.0.1[/B]
+Minor optimisations
+Basically cleaned up a bit
+
+[B]1.0.0[/B]
+Initial Release

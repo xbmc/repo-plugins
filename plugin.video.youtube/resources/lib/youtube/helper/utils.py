@@ -66,7 +66,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
         if channel_name:
             description = '[UPPERCASE][B]%s[/B][/UPPERCASE][CR][CR]%s' % (channel_name, description)
             video_item.set_studio(channel_name)
-            #video_item.add_cast(channel_name)
+            # video_item.add_cast(channel_name)
             video_item.add_artist(channel_name)
             pass
         video_item.set_plot(description)
@@ -101,12 +101,19 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             pass
 
         context_menu = []
+        replace_context_menu = False
+
+        # Queue Video
+        yt_context_menu.append_queue_video(context_menu, provider, context)
 
         # play all videos of the playlist
         some_playlist_match = re.match('^/channel/(.+)/playlist/(?P<playlist_id>.*)/$', context.get_path())
         if some_playlist_match:
+            replace_context_menu = True
             playlist_id = some_playlist_match.group('playlist_id')
-            yt_context_menu.append_add_play_all(context_menu, provider, context, playlist_id)
+
+            yt_context_menu.append_play_all_from_playlist(context_menu, provider, context, playlist_id, video_id)
+            yt_context_menu.append_play_all_from_playlist(context_menu, provider, context, playlist_id)
             pass
 
         if provider.is_logged_in():
@@ -128,7 +135,8 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
 
         if provider.is_logged_in():
             # add 'Like Video' only if we are not in my 'Liked Videos' list
-            refresh_container = context.get_path().startswith('/channel/mine/playlist/LL')
+            refresh_container = context.get_path().startswith(
+                '/channel/mine/playlist/LL') or context.get_path() == '/special/disliked_videos/'
             yt_context_menu.append_rate_video(context_menu, provider, context, video_id, refresh_container)
 
             # add video to a selected playlist
@@ -153,7 +161,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             pass
 
         if len(context_menu) > 0:
-            video_item.set_context_menu(context_menu, replace=False)
+            video_item.set_context_menu(context_menu, replace=replace_context_menu)
             pass
         pass
 

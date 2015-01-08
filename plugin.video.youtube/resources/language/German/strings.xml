@@ -6,10 +6,13 @@
     <string id="30002">Passwort</string>
 
     <string id="30010">Video Qualität</string>
-    <string id="30011">SD</string>
-	<string id="30012">HD</string>
-	<string id="30013">Full HD</string>
-    <string id="30014">Ultra HD</string>
+    <string id="30011">480p</string>
+	<string id="30012">720p (HD)</string>
+	<string id="30013">1080p (HD)</string>
+    <string id="30014">2160p (4k)</string>
+    <string id="30015">4320p (8k)</string>
+    <string id="30016">240p</string>
+    <string id="30017">360p</string>
 
     <string id="30020">Allow 3D</string>
     <string id="30021">Fanart anzeigen</string>
@@ -51,14 +54,14 @@
     <string id="30501">Playlisten</string>
     <string id="30502">Zu %s</string>
     <string id="30503">Kanal-Fanart anzeigen</string>
-    <string id="30504">ABOS</string>
+    <string id="30504">Abos</string>
     <string id="30505">Abmelden</string>
-    <string id="30506">Abonieren</string>
+    <string id="30506">Abonnieren</string>
     <string id="30507">Mein Kanal</string>
     <string id="30508">Liked Videos</string>
     <string id="30509">Verlauf</string>
     <string id="30510">Meine Abos</string>
-
+    <string id="30511">Queue Video</string>
     <string id="30512">Kanäle finden</string>
     <string id="30513">Empfohlene Videos</string>
     <string id="30514">Ähnliche Videos</string>
@@ -66,7 +69,7 @@
     <string id="30516">Verzeichnisse</string>
     <string id="30517">%s abonieren</string>
     <string id="30518">Gehen Sie auf '%s'</string>
-    <string id="30519">und geben Sie dort den folgenden code ein:</string>
+    <string id="30519">und geben Sie folgenden code ein:</string>
     <string id="30520">Hinzufügen zu...</string>
     <string id="30521">Wählen Sie die Playliste</string>
     <string id="30522">Neue Playliste...</string>
@@ -84,4 +87,6 @@
     <string id="30534">Zufall</string>
     <string id="30535">Wählen Sie die Reihenfolge der Playliste</string>
     <string id="30536">Aktualisiere Playliste...</string>
+    <string id="30537">Ab hier abspielen</string>
+    <string id="30538">Disliked Videos</string>
 </strings>

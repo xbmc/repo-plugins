@@ -19,10 +19,6 @@ class XbmcContextUI(AbstractContextUI):
         self._view_mode = None
         pass
 
-    def __del__(self):
-        AbstractContextUI.__del__(self)
-        pass
-
     def create_progress_dialog(self, heading, text=None, background=False):
         if background:
             return XbmcProgressDialogBG(heading, text)

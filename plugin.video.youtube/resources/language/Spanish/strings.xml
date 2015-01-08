@@ -6,10 +6,13 @@
     <string id="30002">Contraseña</string>
 
     <string id="30010">Calidad del video</string>
-    <string id="30011">SD</string>
-	<string id="30012">HD</string>
-	<string id="30013">Full HD</string>
-    <string id="30014">Ultra HD</string>
+    <string id="30011">480p</string>
+	<string id="30012">720p (HD)</string>
+	<string id="30013">1080p (HD)</string>
+    <string id="30014">2160p (4k)</string>
+    <string id="30015">4320p (8k)</string>
+    <string id="30016">240p</string>
+    <string id="30017">360p</string>
 
     <string id="30020">Permitir 3D</string>
     <string id="30021">Mostrar fanart</string>
@@ -32,7 +35,7 @@
     <string id="30104">Destacados</string>
     <string id="30105">Archivos</string>
     <string id="30106">Siguiente página (%d)</string>
-    <string id="30107">Mirar después</string>
+    <string id="30107">Ver más tarde</string>
     <string id="30108">Quitar</string>
     <string id="30109">Últimos Videos</string>
     <string id="30110">Nueva Busqueda</string>
@@ -44,6 +47,7 @@
     <string id="30116">Borrar "%s"?</string>
     <string id="30117">Quitar "%s"?</string>
     <string id="30118">Borrar</string>
+	<string id="30119">Por favor espere...</string>
 
     <!-- YouTube -->
     <string id="30500">Canales</string>
@@ -54,10 +58,10 @@
     <string id="30505">Darse de baja</string>
     <string id="30506">Suscribir</string>
     <string id="30507">Mi canal</string>
-    <string id="30508">Me gusto el videos</string>
-    <string id="30509">Historia</string>
+    <string id="30508">Me gustó el video</string>
+    <string id="30509">Historial</string>
     <string id="30510">Mis suscripciones</string>
-
+    <string id="30511">Cola</string>
     <string id="30512">Explorar canales</string>
     <string id="30513">Lo que hay que ver</string>
     <string id="30514">Videos relacionados</string>
@@ -77,4 +81,12 @@
     <string id="30528">Valorar...</string>
     <string id="30529">Me gusta</string>
     <string id="30530">No me gusta</string>
+	<string id="30531">Reproducir todo</string>
+    <string id="30532">Por defecto</string>
+    <string id="30533">Inverso</string>
+    <string id="30534">Shuffle</string>
+    <string id="30535">Seleccione el orden de la lista de reproducción</string>
+    <string id="30536">Actualizando lista de reproducción...</string>
+    <string id="30537">Reproducir desde aquí</string>
+    <string id="30538">No me gustó el video</string>
 </strings>

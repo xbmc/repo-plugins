@@ -12,10 +12,6 @@ class XbmcPlayer(AbstractPlayer):
         self._context = context
         pass
 
-    def __del__(self):
-        AbstractPlayer.__del__(self)
-        pass
-
     def play(self, playlist_index=-1):
         """
         We call the player in this way, because 'Player.play(...)' will call the addon again while the instance is

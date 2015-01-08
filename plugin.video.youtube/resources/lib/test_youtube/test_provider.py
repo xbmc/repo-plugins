@@ -12,6 +12,7 @@ class TestProvider(unittest.TestCase):
 
         path = kodion.utils.create_path('play')
         context = kodion.Context(path=path, params={'video_id': 'puMYeBRTsHs'})
+        context.set_localization(30502, 'Go to %s')
         result = provider.navigate(context)
         items = result[0]
         pass

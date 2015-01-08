@@ -111,7 +111,7 @@ def _process_list_response(provider, context, json_data):
                 context_menu = []
 
                 # play all videos of the playlist
-                yt_context_menu.append_add_play_all(context_menu, provider, context, playlist_id)
+                yt_context_menu.append_play_all_from_playlist(context_menu, provider, context, playlist_id)
 
                 if channel_id != 'mine':
                     # subscribe to the channel via the playlist item
@@ -191,7 +191,7 @@ def _process_list_response(provider, context, json_data):
                 context_menu = []
 
                 # play all videos of the playlist
-                yt_context_menu.append_add_play_all(context_menu, provider, context, playlist_id)
+                yt_context_menu.append_play_all_from_playlist(context_menu, provider, context, playlist_id)
 
                 if provider.is_logged_in():
                     # subscribe to the channel of the playlist

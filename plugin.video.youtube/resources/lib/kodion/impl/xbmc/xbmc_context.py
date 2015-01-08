@@ -57,6 +57,7 @@ class XbmcContext(AbstractContext):
         self._plugin_handle = int(sys.argv[1])
         self._plugin_id = plugin_id or self._addon.getAddonInfo('id')
         self._plugin_name = plugin_name or self._addon.getAddonInfo('name')
+        self._version = self._addon.getAddonInfo('version')
         self._native_path = xbmc.translatePath(self._addon.getAddonInfo('path'))
         self._settings = XbmcPluginSettings(self._addon)
 
@@ -67,10 +68,6 @@ class XbmcContext(AbstractContext):
         if not xbmcvfs.exists(self._data_path):
             xbmcvfs.mkdir(self._data_path)
             pass
-        pass
-
-    def __del__(self):
-        AbstractContext.__del__(self)
         pass
 
     def get_language(self):

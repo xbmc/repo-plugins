@@ -7,9 +7,6 @@ class AbstractProgressDialog(object):
         self._position = 0
         pass
 
-    def __del__(self):
-        pass
-
     def get_total(self):
         return self._total
 

@@ -8,7 +8,7 @@ from resources.lib.kodion.utils import FunctionCache
 from resources.lib.kodion.items import *
 from resources.lib.youtube.client import YouTube
 from .helper import v3, ResourceManager, yt_specials, yt_playlist, yt_login, yt_setup_wizard, yt_video, \
-    yt_context_menu, yt_play
+    yt_context_menu, yt_play, yt_old_actions
 from .youtube_exceptions import YouTubeException, LoginException
 
 
@@ -21,7 +21,6 @@ class Provider(kodion.AbstractProvider):
                  'youtube.subscribe': 30506,
                  'youtube.my_channel': 30507,
                  'youtube.watch_later': 30107,
-                 'youtube.liked.videos': 30508,
                  'youtube.history': 30509,
                  'youtube.my_subscriptions': 30510,
                  'youtube.remove': 30108,
@@ -35,13 +34,13 @@ class Provider(kodion.AbstractProvider):
                  'youtube.sign.out': 30112,
                  'youtube.sign.go_to': 30518,
                  'youtube.sign.enter_code': 30519,
-                 'youtube.video.add_to_playlist': 30520,
                  'youtube.playlist.select': 30521,
                  'youtube.playlist.play.all': 30531,
                  'youtube.playlist.play.default': 30532,
                  'youtube.playlist.play.reverse': 30533,
                  'youtube.playlist.play.shuffle': 30534,
                  'youtube.playlist.play.select': 30535,
+                 'youtube.playlist.play.from_here': 30537,
                  'youtube.playlist.progress.updating': 30536,
                  'youtube.rename': 30113,
                  'youtube.playlist.create': 30522,
@@ -49,6 +48,10 @@ class Provider(kodion.AbstractProvider):
                  'youtube.setup_wizard.select_region': 30525,
                  'youtube.setup_wizard.adjust': 30526,
                  'youtube.setup_wizard.adjust.language_and_region': 30527,
+                 'youtube.video.add_to_playlist': 30520,
+                 'youtube.video.liked': 30508,
+                 'youtube.video.disliked': 30538,
+                 'youtube.video.queue': 30511,
                  'youtube.video.rate': 30528,
                  'youtube.video.rate.like': 30529,
                  'youtube.video.rate.dislike': 30530,
@@ -230,14 +233,9 @@ class Provider(kodion.AbstractProvider):
     """
 
     @kodion.RegisterProviderPath('^/play/$')
-    def _on_play(self, context, re_match):
-        def _play_playlist():
-            playlist_id = context.get_param('playlist_id')
-            order = context.get_param('order', 'default')
-            pass
-
+    def on_play(self, context, re_match):
         params = context.get_params()
-        if 'video_id' in params:
+        if 'video_id' in params and not 'playlist_id' in params:
             return yt_play.play_video(self, context, re_match)
         elif 'playlist_id' in params:
             return yt_play.play_playlist(self, context, re_match)
@@ -335,18 +333,11 @@ class Provider(kodion.AbstractProvider):
 
     def on_root(self, context, re_match):
         """
-        Support old YouTube url call, but also log a deprecation warning.
-        plugin://plugin.video.youtube/?action=play_video&videoid=[ID]
+        Support old YouTube url calls, but also log a deprecation warnings.
         """
         old_action = context.get_param('action', '')
-        old_video_id = context.get_param('videoid', '')
-        if old_action and old_video_id:
-            context.log_warning('DEPRECATED "%s"' % context.get_uri())
-            context.log_warning('USE INSTEAD "plugin://%s/play/?video_id=%s"' % (context.get_id(), old_video_id))
-            new_params = {'video_id': old_video_id}
-            new_path = '/play/'
-            new_context = context.clone(new_path=new_path, new_params=new_params)
-            return self._on_play(new_context, re_match)
+        if old_action:
+            return yt_old_actions.process_old_action(self, context, re_match)
 
         self.get_client(context)
         resource_manager = self.get_resource_manager(context)
@@ -410,22 +401,31 @@ class Provider(kodion.AbstractProvider):
                                                  context.create_resource_path('media', 'watch_later.png'))
                 watch_later_item.set_fanart(self.get_fanart(context))
                 context_menu = []
-                yt_context_menu.append_add_play_all(context_menu, self, context, playlists['watchLater'])
+                yt_context_menu.append_play_all_from_playlist(context_menu, self, context, playlists['watchLater'])
                 watch_later_item.set_context_menu(context_menu)
                 result.append(watch_later_item)
                 pass
 
             # liked videos
             if 'likes' in playlists and settings.get_bool('youtube.folder.liked_videos.show', True):
-                liked_videos_item = DirectoryItem(context.localize(self.LOCAL_MAP['youtube.liked.videos']),
+                liked_videos_item = DirectoryItem(context.localize(self.LOCAL_MAP['youtube.video.liked']),
                                                   context.create_uri(
                                                       ['channel', 'mine', 'playlist', playlists['likes']]),
                                                   context.create_resource_path('media', 'likes.png'))
                 liked_videos_item.set_fanart(self.get_fanart(context))
                 context_menu = []
-                yt_context_menu.append_add_play_all(context_menu, self, context, playlists['likes'])
+                yt_context_menu.append_play_all_from_playlist(context_menu, self, context, playlists['likes'])
                 liked_videos_item.set_context_menu(context_menu)
                 result.append(liked_videos_item)
+                pass
+
+            # disliked videos
+            if settings.get_bool('youtube.folder.disliked_videos.show', True):
+                disliked_videos_item = DirectoryItem(context.localize(self.LOCAL_MAP['youtube.video.disliked']),
+                                                     context.create_uri(['special', 'disliked_videos']),
+                                                     context.create_resource_path('media', 'dislikes.png'))
+                disliked_videos_item.set_fanart(self.get_fanart(context))
+                result.append(disliked_videos_item)
                 pass
 
             # history

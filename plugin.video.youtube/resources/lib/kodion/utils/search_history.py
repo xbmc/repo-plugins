@@ -7,10 +7,6 @@ class SearchHistory(Storage):
         Storage.__init__(self, filename, max_item_count=max_items)
         pass
 
-    def __del__(self):
-        Storage.__del__(self)
-        pass
-
     def is_empty(self):
         return self._is_empty()
 

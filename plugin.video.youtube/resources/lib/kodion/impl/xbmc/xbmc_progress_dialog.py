@@ -15,11 +15,6 @@ class XbmcProgressDialog(AbstractProgressDialog):
         self.update(steps=-1)
         pass
 
-    def __del__(self):
-        self.close()
-        AbstractProgressDialog.__del__(self)
-        pass
-
     def close(self):
         if self._dialog:
             self._dialog.close()

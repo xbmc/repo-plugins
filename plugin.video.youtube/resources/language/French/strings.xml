@@ -6,10 +6,14 @@
     <string id="30002">Mot de passe</string>
 
     <string id="30010">Qualitié de vidéo</string>
-    <string id="30011">SD</string>
-	<string id="30012">HD</string>
-	<string id="30013">Full HD</string>
-    <string id="30014">Ultra HD</string>
+    <string id="30011">480p</string>
+	<string id="30012">720p (HD)</string>
+	<string id="30013">1080p (HD)</string>
+    <string id="30014">2160p (4k)</string>
+    <string id="30015">4320p (8k)</string>
+    <string id="30016">240p</string>
+    <string id="30017">360p</string>
+
     <string id="30020">Activer la 3D</string>
     <string id="30021">Afficher les Fanarts</string>
     <string id="30022">Nombre d'items par page</string>

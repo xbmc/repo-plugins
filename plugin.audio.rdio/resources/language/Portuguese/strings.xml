@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30000">Rdio</string>
+
+  <string id="30100">Usuário do Rdio</string>
+  <string id="30101">Senha do Rdio</string>
+  <string id="30102">Rdio API Key</string>
+  <string id="30103">Rdio API Secret</string>
+
+  <string id="30200">Listas de Reprodução</string>
+  <string id="30201">Colaborativo</string>
+  <string id="30202">Assinado</string>
+  <string id="30203">Artistas</string>
+  <string id="30204">Álbuns</string>
+  <string id="30205">Configurações...</string>
+  <string id="30206">Entrar</string>
+  <string id="30207">Reautenticar</string>
+  <string id="30208">Sua rede</string>
+  <string id="30209">Buscar Album/Artista...</string>
+  <string id="30210">Buscar</string>
+  <string id="30211">Álbuns mais ouvidos</string>
+  <string id="30212">Músicas mais ouvidas</string>
+  <string id="30213">Artistas Relacionados</string>
+  <string id="30214">Mais...</string>
+  <string id="30215">Lançamentos</string>
+  <string id="30216">Mais tocadas</string>
+  <string id="30217">Mais desse artista...</string>
+  <string id="30218">Buscar listas de reprodução</string>
+  <string id="30219">Adicionar à coleção</string>
+  <string id="30220">Remover da coleção</string>
+  <string id="30221">Todos os Álbuns</string>
+  <string id="30222">Todos os Álbuns desse artista...</string>
+  <string id="30223">Top Ranking</string>
+  <string id="30224">Álbuns mais ouvidos</string>
+  <string id="30225">Artistas mais ouvidos</string>
+  <string id="30226">Playlists mais ouvidas</string>
+  <string id="30227">Músicas mais ouvidas</string>
+  <string id="30228">Assinar lista de reprodução</string>
+  <string id="30229">Cancelar assinatura</string>
+  <string id="30230">Adicionar à lista de reprodução</string>
+  <string id="30231">Remover da lista de reprodução </string>
+  <string id="30232">Tocar estação desse artista</string>
+
+  <string id="30900">Você deve fornecer seu usuário/senha do Rdio</string>
+  <string id="30901">e credenciais da Rdio API nas configuração do plugin.</string>
+  <string id="30902">Visite http://bit.ly/rdioxbmc para obter ajuda.</string>
+  <string id="30903">Falha ao autenticar com Rdio</string>
+</strings>

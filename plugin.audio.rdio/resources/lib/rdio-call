@@ -1,0 +1,119 @@
+#!/usr/bin/env python
+
+'''A command-line tool for accessing the Rdio web service API with OAuth
+
+Copyright (c) 2010-2011 Rdio Inc
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+'''
+
+
+import sys, os, json
+sys.path.append(os.path.join(os.path.dirname(__file__), 'python-oauth2'))
+from optparse import OptionParser, OptionGroup
+from rdioapi import Rdio
+
+parser = OptionParser(usage='%prog [options] method arg1=value1 arg2=value2...', version='%prog 0.1')
+parser.add_option('--consumer-key', dest='consumer_key', help='the consumer key to use for this and future requests', metavar='KEY')
+parser.add_option('--consumer-secret', dest='consumer_secret', help='the consumer secret to use for this and future requests', metavar='SECRET')
+parser.add_option('--authenticate', dest='authenticate', help='authenticate against Rdio before making the request', action='store_true', default=False)
+parser.add_option('--forget-auth', dest='forget_auth', help='discard previous authentication information', action='store_true', default=False)
+parser.add_option('-v', '--verbose', dest='verbose', help='verbose output', action='store_true', default=False)
+parser.add_option('-i', '--indent', dest='indent', help='indent the response', action='store_true', default=False)
+
+advanced = OptionGroup(parser, 'Advanced Options', 'Probably only useful in development.')
+advanced.add_option('--endpoint', dest='endpoint', help='API endpoint', metavar='URL')
+advanced.add_option('--request-token', dest='request_token', help='Request token endpoint', metavar='URL')
+advanced.add_option('--access-token', dest='access_token', help='Access token endpoint', metavar='URL')
+parser.add_option_group(advanced)
+
+# parse the arguments
+(options, args) = parser.parse_args()
+
+if len(args) < 1:
+  parser.print_help()
+  sys.exit(1)
+
+method = args.pop(0)
+try:
+  args = dict([a.split('=',1) for a in args])
+except ValueError:
+  parser.print_help()
+  sys.exit(1)
+
+# load the persistent state
+config_path = os.path.expanduser('~/.rdio-tool.json')
+if os.path.exists(config_path):
+  config = json.load(file(config_path))
+else:
+  config = {'auth_state': {}}
+
+# set up the keys
+if options.consumer_key is not None:
+  config['consumer_key'] = options.consumer_key
+if options.consumer_secret is not None:
+  config['consumer_secret'] = options.consumer_secret
+
+if not config.has_key('consumer_key') or not config.has_key('consumer_secret'):
+  sys.stderr.write('Both the consumer key and consumer secret must be specified')
+  sys.exit(1)
+
+# forget auth state, if we're logging in or logging out
+if options.forget_auth or options.authenticate:
+  config['auth_state'] = {}
+
+# collect extra Rdio constructor arguments
+extra_constructor_arguments = {}
+if options.endpoint is not None:
+  extra_constructor_arguments['endpoint'] = options.endpoint
+if options.request_token is not None:
+  extra_constructor_arguments['request_token'] = options.request_token
+if options.access_token is not None:
+  extra_constructor_arguments['access_token'] = options.access_token
+
+# create the Rdio client object
+rdio = Rdio(config['consumer_key'], config['consumer_secret'], config['auth_state'], **extra_constructor_arguments)
+
+# authenticate, if requested
+if options.authenticate:
+  import webbrowser
+  webbrowser.open(rdio.begin_authentication('oob'))
+  verifier = raw_input('Enter the PIN from the Rdio site: ').strip()
+  rdio.complete_authentication(verifier)
+
+# save state
+with file(config_path, 'w') as f:
+  json.dump(config, f, indent=True)
+  f.write('\n')
+
+# process the response
+response, content = rdio.call_raw(method, **args)
+if response['status'] == '200':
+  if options.indent:
+    json.dump(json.loads(content), sys.stdout, indent=True)
+    sys.stdout.write('\n')
+  else:
+    print content
+else:
+  if options.verbose:
+    if response.has_key('www-authenticate'):
+      print 'Authentication required, pass --authenticate'
+    else:
+      print content
+  sys.exit(int(response['status']))

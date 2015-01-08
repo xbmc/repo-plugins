@@ -5,10 +5,13 @@
     <string id="30002">Пароль</string>
 
     <string id="30010">Качество видео</string>
-    <string id="30011">SD</string>
-    <string id="30012">HD</string>
-    <string id="30013">Full HD</string>
-    <string id="30014">Ultra HD</string>
+    <string id="30011">480p</string>
+	<string id="30012">720p (HD)</string>
+	<string id="30013">1080p (HD)</string>
+    <string id="30014">2160p (4k)</string>
+    <string id="30015">4320p (8k)</string>
+    <string id="30016">240p</string>
+    <string id="30017">360p</string>
 
     <string id="30020">Разрешить 3D</string>
     <string id="30021">Показывать фанарт</string>
@@ -76,4 +79,12 @@
     <string id="30528">Оценить...</string>
     <string id="30529">Мне понравилось</string>
     <string id="30530">Мне не понравилось</string>
+    <string id="30531">Проиграть все</string>
+    <string id="30532">в обычном порядке</string>
+    <string id="30533">в обратном порядке</string>
+    <string id="30534">в случайном порядке</string>
+    <string id="30535">Порядок воспроизведения</string>
+    <string id="30536">Обновление плейлиста...</string>
+    <string id="30537">Проиграть с этого места</string>
+    <string id="30538">Видео, которое не нравится</string>
 </strings>

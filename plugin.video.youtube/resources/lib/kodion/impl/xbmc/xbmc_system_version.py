@@ -40,8 +40,4 @@ class XbmcSystemVersion(AbstractSystemVersion):
         AbstractSystemVersion.__init__(self, major, minor, name)
         pass
 
-    def __del__(self):
-        AbstractSystemVersion.__del__(self)
-        pass
-
     pass

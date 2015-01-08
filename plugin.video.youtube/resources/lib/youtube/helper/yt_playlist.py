@@ -139,25 +139,6 @@ def _process_rename_playlist(provider, context, re_match):
     pass
 
 
-def _process_play_playlist(provider, context, re_match):
-    playlist_id = context.get_param('playlist_id', '')
-    if not playlist_id:
-        raise kodion.KodimonException('playlist/play: missing playlist_id')
-
-    order_list = ['default', 'reverse', 'shuffle']
-    items = []
-    for order in order_list:
-        items.append((context.localize(provider.LOCAL_MAP['youtube.playlist.play.%s' % order]), order))
-        pass
-
-    result = context.get_ui().on_select(context.localize(provider.LOCAL_MAP['youtube.playlist.play.select']), items)
-    if result in order_list:
-        command = 'RunPlugin(%s)' % context.create_uri(['play'], {'playlist_id': playlist_id, 'order': result})
-        context.execute(command)
-        pass
-    pass
-
-
 def process(method, category, provider, context, re_match):
     if method == 'add' and category == 'video':
         return _process_add_video(provider, context, re_match)
@@ -169,8 +150,6 @@ def process(method, category, provider, context, re_match):
         return _process_select_playlist(provider, context, re_match)
     elif method == 'rename' and category == 'playlist':
         return _process_rename_playlist(provider, context, re_match)
-    elif method == 'play' and category == 'playlist':
-        return _process_play_playlist(provider, context, re_match)
     else:
         raise kodion.KodimonException("Unknown category '%s' or method '%s'" % (category, method))
 

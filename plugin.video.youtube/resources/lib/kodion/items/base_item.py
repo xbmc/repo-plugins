@@ -10,7 +10,10 @@ class BaseItem(object):
         self._version = BaseItem.VERSION
         self._name = unicode(name)
         self._uri = unicode(uri)
-        self._image = image
+
+        self._image = u''
+        self.set_image(image)
+
         self._fanart = fanart
         self._context_menu = None
         self._replace_context_menu = False
@@ -52,7 +55,12 @@ class BaseItem(object):
         return self._uri
 
     def set_image(self, image):
-        self._image = image
+        if image is None:
+            self._image = ''
+            pass
+        else:
+            self._image = image
+            pass
         pass
 
     def get_image(self):

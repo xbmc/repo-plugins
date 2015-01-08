@@ -4,7 +4,7 @@
     <category label="30000">
 
         <!-- kodion Visual -->
-        <setting id="kodion.video.quality" type="enum" label="30010" lvalues="30011|30012|30013" default="1" />
+        <setting id="kodion.video.quality" type="enum" label="30010" lvalues="30016|30017|30011|30012|30013" default="3" />
         <setting id="youtube.playlist.watchlater.autoremove" type="bool" label="30515" default="true" />
         <setting type="sep" />
         <setting id="kodion.fanart.show" type="bool" label="30021" default="true"/>
@@ -20,6 +20,7 @@
         <setting id="youtube.folder.my_channel.show" type="bool" label="30507" default="true"/>
         <setting id="youtube.folder.watch_later.show" type="bool" label="30107" default="true"/>
         <setting id="youtube.folder.liked_videos.show" type="bool" label="30508" default="true"/>
+        <setting id="youtube.folder.disliked_videos.show" type="bool" label="30538" default="true"/>
         <setting id="youtube.folder.history.show" type="bool" label="30509" default="false"/>
         <setting id="youtube.folder.playlists.show" type="bool" label="30501" default="true"/>
         <setting id="youtube.folder.subscriptions.show" type="bool" label="30504" default="true"/>

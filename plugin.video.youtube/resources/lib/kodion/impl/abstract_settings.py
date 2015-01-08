@@ -8,9 +8,6 @@ class AbstractSettings(object):
         object.__init__(self)
         pass
 
-    def __del__(self):
-        pass
-
     def get_string(self, setting_id, default_value=None):
         raise NotImplementedError()
 
@@ -63,10 +60,13 @@ class AbstractSettings(object):
         return self.get_int(constants.setting.ITEMS_PER_PAGE, 50, lambda x: (x + 1) * 5)
 
     def get_video_quality(self):
-        vq_dict = {0: 480,  # 576 seems not to work well
-                   1: 720,
-                   2: 1080,
-                   3: 2160}
+        vq_dict = {0: 240,
+                   1: 360,
+                   2: 480,  # 576 seems not to work well
+                   3: 720,
+                   4: 1080,
+                   5: 2160,
+                   6: 4320}
         vq = self.get_int(constants.setting.VIDEO_QUALITY, 1)
         return vq_dict[vq]
 

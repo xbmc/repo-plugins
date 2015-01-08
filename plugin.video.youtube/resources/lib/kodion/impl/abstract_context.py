@@ -21,6 +21,7 @@ class AbstractContext(object):
         self._access_manager = None
 
         self._plugin_name = unicode(plugin_name)
+        self._version = 'UNKNOWN'
         self._plugin_id = plugin_id
         self._path = create_path(path)
         self._params = params
@@ -29,20 +30,6 @@ class AbstractContext(object):
 
         # create valid uri
         self._uri = self.create_uri(self._path, self._params)
-        pass
-
-    def __del__(self):
-        def _release(obj):
-            if obj is not None:
-                del obj
-                pass
-            return None
-
-        self._function_cache = _release(self._function_cache)
-        self._search_history = _release(self._search_history)
-        self._favorite_list = _release(self._favorite_list)
-        self._watch_later_list = _release(self._watch_later_list)
-        self._access_manager = _release(self._access_manager)
         pass
 
     def get_language(self):
@@ -165,6 +152,9 @@ class AbstractContext(object):
 
     def get_name(self):
         return self._plugin_name
+
+    def get_version(self):
+        return self._version
 
     def get_id(self):
         return self._plugin_id

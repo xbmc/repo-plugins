@@ -290,6 +290,22 @@ class YouTube(LoginClient):
             pass
         return self._perform_v3_request(method='GET', path='channels', params=params)
 
+    def get_disliked_videos(self, page_token=''):
+        # prepare page token
+        if not page_token:
+            page_token = ''
+            pass
+
+        # prepare params
+        params = {'part': 'snippet,contentDetails',
+                  'myRating': 'dislike',
+                  'maxResults': str(self._max_results)}
+        if page_token:
+            params['pageToken'] = page_token
+            pass
+
+        return self._perform_v3_request(method='GET', path='videos', params=params)
+
     def get_videos(self, video_id):
         """
         Returns a list of videos that match the API request parameters

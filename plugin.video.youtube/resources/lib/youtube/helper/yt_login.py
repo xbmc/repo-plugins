@@ -25,8 +25,7 @@ def process(mode, provider, context, re_match):
         user_code = json_data['user_code']
 
         text = context.localize(provider.LOCAL_MAP['youtube.sign.go_to']) % '[B]youtube.com/activate[/B]'
-        text += '[CR]' + context.localize(provider.LOCAL_MAP['youtube.sign.enter_code'])
-        text += '[CR]' + '[B]%s[/B]' % user_code
+        text += '[CR]%s [B]%s[/B]' % (context.localize(provider.LOCAL_MAP['youtube.sign.enter_code']), user_code)
         dialog = context.get_ui().create_progress_dialog(
             heading=context.localize(provider.LOCAL_MAP['youtube.sign.in']), text=text, background=False)
 

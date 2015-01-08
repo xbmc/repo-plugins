@@ -18,10 +18,6 @@ class FunctionCache(Storage):
         self._enabled = True
         pass
 
-    def __del__(self):
-        Storage.__del__(self)
-        pass
-
     def clear(self):
         self._clear()
         pass

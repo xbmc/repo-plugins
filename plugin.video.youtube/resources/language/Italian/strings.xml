@@ -6,10 +6,13 @@
     <string id="30002">Password</string>
 
     <string id="30010">Qualita' Video</string>
-    <string id="30011">SD</string>
-	<string id="30012">HD</string>
-	<string id="30013">Full HD</string>
-    <string id="30014">Ultra HD</string>
+    <string id="30011">480p</string>
+	<string id="30012">720p (HD)</string>
+	<string id="30013">1080p (HD)</string>
+    <string id="30014">2160p (4k)</string>
+    <string id="30015">4320p (8k)</string>
+    <string id="30016">240p</string>
+    <string id="30017">360p</string>
 
     <string id="30020">Permetti 3D</string>
     <string id="30021">Mostra Fanart</string>
@@ -77,4 +80,12 @@
     <string id="30528">Vota...</string>
     <string id="30529">Mi Piace</string>
     <string id="30530">Non Mi Piace</string>
+    <string id="30531">Play all</string>
+    <string id="30532">Default</string>
+    <string id="30533">Reverse</string>
+    <string id="30534">Shuffle</string>
+    <string id="30535">Select the order of the playlist</string>
+    <string id="30536">Updating Playlist...</string>
+    <string id="30537">Play from here</string>
+    <string id="30538">Disliked Videos</string>
 </strings>

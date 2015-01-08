@@ -23,6 +23,7 @@ class MockContext(AbstractContext):
         self._ui = None
         self._system_version = MockSystemVersion(0, 0, 'Kodion Test System')
         self._language = 'en-US'
+        self._version = '1.9'
         pass
 
     def set_localization(self, text_id, value):

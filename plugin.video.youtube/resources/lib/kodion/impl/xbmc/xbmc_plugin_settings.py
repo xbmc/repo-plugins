@@ -10,10 +10,6 @@ class XbmcPluginSettings(AbstractSettings):
         self._xbmc_addon = xbmc_addon
         pass
 
-    def __del__(self):
-        AbstractSettings.__del__(self)
-        pass
-        
     def get_string(self, setting_id, default_value=None):
         return self._xbmc_addon.getSetting(setting_id)
     

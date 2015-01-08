@@ -1,3 +1,20 @@
+5.0.3 (2015-01-08)
+ADD: 'Disliked Videos'
+ADD: 240p, 360p and 480p
+UPD: adjustment in KODION classes (maybe causing problems on MAC OS X 10.10.X + Python 2.6)
+UPD: Russian (thx 2 BytEvil)
+UPD: Spanish (thx 2 PatOso)
+UPD: Polish (thx 2 D.K.)
+FIX: German translation
+FIX: some Frodo updates
+
+5.0.2 (2015-01-01)
+ADD: Support for shared playlists via Yatse
+ADD: 'Play from here' for playlists
+ADD: 'Queue Video'
+FIX: German translation
+FIX: Portuguese (Brazil) (thx 2 ASH_Macedo)
+
 5.0.1 (2014-12-31)
 ADD: 'Play all' (default, reverse, shuffle)
 ADD: Italian (thx 2 peppe_sr)

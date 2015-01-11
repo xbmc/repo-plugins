@@ -24,6 +24,8 @@ session = Session()
 session.headers['User-Agent'] = 'xbmc.org'
 session.headers['app-version-android'] = '51'
 
+_image_url = "http://m.nrk.no/m/img?kaleidoId=%s&width=%d"
+
 
 class Model(object):
     id = None
@@ -39,6 +41,20 @@ class Category(Model):
         return Category(
             title=r['displayValue'],
             id=r['categoryId'],
+        )
+
+
+class Channel(Model):
+    media_url = None
+
+    @staticmethod
+    def from_response(r):
+        return Channel(
+            title=r['title'],
+            id=r['channelId'],
+            media_url=r['mediaUrl'],
+            thumb=_image_url % (r['imageId'], 250),
+            fanart=_image_url % (r['imageId'], 1920),
         )
 
 
@@ -59,7 +75,6 @@ class Program(Model):
     legal_age = None
     image_id = None
     media_urls = None
-    _image_url = "http://m.nrk.no/m/img?kaleidoId=%s&width=%d"
 
     @staticmethod
     def from_response(r):
@@ -89,8 +104,8 @@ class Program(Model):
             image_id=r['imageId'],
             legal_age=r.get('legalAge') or r.get('aldersgrense'),
             media_urls=media_urls,
-            thumb=Program._image_url % (r['imageId'], 250),
-            fanart=Program._image_url % (r['imageId'], 1920),
+            thumb=_image_url % (r['imageId'], 250),
+            fanart=_image_url % (r['imageId'], 1920),
             episode=r.get('episodeNumberOrDate'),
             aired=aired,
         )
@@ -120,3 +135,12 @@ def recent_programs(category_id='all-programs'):
 def episodes(series_id):
     return [Program.from_response(item) for item in
             _get('/series/%s' % series_id)['programs']]
+
+
+def program(program_id):
+    return Program.from_response(_get('/programs/%s' % program_id))
+
+
+def channels():
+    return [Channel.from_response(item) for item in _get('/channels')]
+

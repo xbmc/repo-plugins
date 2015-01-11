@@ -26,7 +26,7 @@ def get_subtitles(video_id):
         return None
 
     content = _ttml_to_srt(html)
-    filename = os.path.join(xbmc.translatePath("special://temp"), 'nrk.srt')
+    filename = os.path.join(xbmc.translatePath("special://temp"), 'nor.srt')
     with open(filename, 'w') as f:
         f.write(content)
     return filename

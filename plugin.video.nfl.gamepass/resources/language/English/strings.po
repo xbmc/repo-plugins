@@ -1,0 +1,182 @@
+# Kodi NFL Game Pass language file
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-GamePass\n"
+"Report-Msgid-Bugs-To: https://github.com/Alexqw/xbmc-gamepass\n"
+"POT-Creation-Date: 2013-11-18 16:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "#30001"
+msgid "E-Mail Address"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Preferred Stream Quality"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Always Use Highest Bitrate"
+msgstr ""
+
+msgctxt "#30005"
+msgid "1280x720 Bitrate 4.5 Mbps"
+msgstr ""
+
+msgctxt "#30006"
+msgid "1280x720 Bitrate 3.0 Mbps"
+msgstr ""
+
+msgctxt "#30007"
+msgid "960x540 Bitrate 2.4 Mbps"
+msgstr ""
+
+msgctxt "#30008"
+msgid "960x540 Bitrate 1.6 Mbps"
+msgstr ""
+
+msgctxt "#30009"
+msgid "640x360 Bitrate 1.2 Mbps"
+msgstr ""
+
+msgctxt "#30010"
+msgid "640x360 Bitrate 800 Kbps"
+msgstr ""
+
+msgctxt "#30011"
+msgid "400x224 Bitrate 400 Kbps"
+msgstr ""
+
+msgctxt "#30012"
+msgid "Ask"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Preferred Game Version"
+msgstr ""
+
+msgctxt "#30014"
+msgid "Full"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Condensed"
+msgstr ""
+
+msgctxt "#30016"
+msgid "Choose a game version"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Game Pass"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Game Rewind"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Choose Subscription"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Localize Game Date/Time"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Error"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Due to broadcast restrictions, NFL Game Rewind is currently unavailable. Please try again later."
+msgstr ""
+
+msgctxt "#30023"
+msgid "Logging into NFL Game Pass/Rewind failed. Make sure that your account information is correct and your subscription is valid."
+msgstr ""
+
+msgctxt "#30024"
+msgid "Some bad jujumagumbo just went down. Please enable debuging, and submit a bug report."
+msgstr ""
+
+msgctxt "#30025"
+msgid "Hide game length"
+msgstr ""
+
+msgctxt "#30026"
+msgid "No"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Yes, with 12-hour clock (AM/PM)"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Yes, with 24-hour clock"
+msgstr ""
+
+msgctxt "#30029"
+msgid "General"
+msgstr ""
+
+msgctxt "#30030"
+msgid "Display/Video"
+msgstr ""
+
+msgctxt "#30031"
+msgid "Advanced"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Coaches Film"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Proxy Settings"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Use an HTTP proxy to access Game Pass/Game Rewind"
+msgstr ""
+
+msgctxt "#30035"
+msgid "Type"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Server"
+msgstr ""
+
+msgctxt "#30037"
+msgid "Port"
+msgstr ""
+
+msgctxt "#30038"
+msgid "Username"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Password"
+msgstr ""
+
+msgctxt "#30040"
+msgid "http"
+msgstr ""
+
+msgctxt "#30041"
+msgid "https"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Only the following authentication schemes are supported: None and Basic"
+msgstr ""

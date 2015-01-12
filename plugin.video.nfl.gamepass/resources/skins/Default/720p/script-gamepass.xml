@@ -1,0 +1,724 @@
+<window type="window" id="9506">
+    <allowoverlay>yes</allowoverlay>
+    <defaultcontrol always="true">100</defaultcontrol>
+    <controls>
+        <control type="image">
+            <description>Normal Default Background Image</description>
+            <width>1280</width>
+            <height>720</height>
+            <aspectratio>scale</aspectratio>
+            <texture>../../../../fanart.jpg</texture>
+        </control>
+        <control type="image">
+            <description>Menubar background</description>
+            <width>1280</width>
+            <height>56</height>
+            <aspectratio>stretch</aspectratio>
+            <texture>GamePass/menubar.png</texture>
+        </control>
+        <control type="image">
+            <description>SubMenubar background</description>
+            <top>56</top>
+            <width>1280</width>
+            <height>36</height>
+            <aspectratio>stretch</aspectratio>
+            <texture>GamePass/submenubar.png</texture>
+        </control>
+        <control type="group" id="100">
+              <description>Top row button group</description>
+              <left>140</left>
+              <width>1000</width>
+              <height>30</height>
+              <defaultcontrol condition="IsEmpty(Window.Property(gamepass))">120</defaultcontrol>
+              <defaultcontrol>110</defaultcontrol>
+              <control type="button" id="110">
+                  <description>Gamepass button</description>
+                  <left>0</left>
+                  <width>375</width>
+                  <height>56</height>
+                  <ondown>210</ondown>
+                  <onleft>90</onleft>
+                  <onright>120</onright>
+                  <texturefocus>GamePass/gamepass_focus.png</texturefocus>
+                  <texturenofocus>GamePass/gamepass_bg.png</texturenofocus>
+                  <visible>!IsEmpty(Window.Property(gamepass))</visible>
+            </control>
+            <control type="button" id="120">
+                  <description>Rewind button</description>
+                  <width>375</width>
+                  <height>56</height>
+                  <ondown>210</ondown>
+                  <onleft>110</onleft>
+                  <onright>130</onright>
+                  <texturefocus>GamePass/rewind_focus.png</texturefocus>
+                  <texturenofocus>GamePass/rewind_bg.png</texturenofocus>
+                  <visible>IsEmpty(Window.Property(gamepass))</visible>
+            </control>
+            <control type="button" id="130">
+                  <description>Network button</description>
+                  <left>600</left>
+                  <width>375</width>
+                  <height>56</height>
+                  <ondown>240</ondown>
+                  <onleft>120</onleft>
+                  <onright>90</onright>
+                  <texturefocus>GamePass/network_focus.png</texturefocus>
+                  <texturenofocus>GamePass/network_bg.png</texturenofocus>
+            </control>
+        </control>
+
+        <control type="image">
+            <description>Gamepass active overlay</description>
+            <left>140</left>
+            <width>375</width>
+            <height>56</height>
+            <aspectratio>stretch</aspectratio>
+            <texture>GamePass/gamepass_focus2.png</texture>
+            <visible>!Control.HasFocus(110) + SubString(Window.Property(GP_clicked),true) + Control.IsVisible(110)</visible>
+        </control>
+        <control type="image">
+            <description>GameRewind active overlay</description>
+            <left>140</left>
+            <width>375</width>
+            <height>56</height>
+            <aspectratio>stretch</aspectratio>
+            <texture>GamePass/rewind_focus2.png</texture>
+            <visible>!Control.HasFocus(120) + SubString(Window.Property(GP_clicked),true) + Control.IsVisible(120)</visible>
+        </control>
+        <control type="image">
+            <description>NFL Network active overlay</description>
+            <left>740</left>
+            <width>375</width>
+            <height>56</height>
+            <aspectratio>stretch</aspectratio>
+            <texture>GamePass/network_focus2.png</texture>
+            <visible>!Control.HasFocus(130) + SubString(Window.Property(NW_clicked),true)</visible>
+        </control>
+
+        <control type="button" id="90">
+            <description>Addon Settings button</description>
+            <left>1210</left>
+            <width>56</width>
+            <height>56</height>
+            <ondown>210</ondown>
+            <onleft>130</onleft>
+            <onright condition="IsEmpty(Window.Property(gamepass))">120</onright>
+            <onright>110</onright>
+            <texturefocus>GamePass/settings_focus.png</texturefocus>
+            <texturenofocus>GamePass/settings.png</texturenofocus>
+            <onclick>XBMC.Addon.OpenSettings(plugin.video.nfl.gamepass)</onclick>
+        </control>
+
+        <control type="list" id="210">
+            <description>Season list container</description>
+            <left>10</left>
+            <top>56</top>
+            <width>500</width>
+            <height>50</height>
+            <onup>100</onup>
+            <ondown>220</ondown>
+            <onright>240</onright>
+            <viewtype label="list">list</viewtype>
+            <orientation>horizontal</orientation>
+            <itemlayout width="110" height="36">
+                <control type="image">
+                    <width>110</width>
+                    <height>36</height>
+                    <aspectratio>stretch</aspectratio>
+                    <texture>GamePass/submenubar_focus2.png</texture>
+                    <visible>ListItem.Property(clicked)</visible>
+                </control>
+                <control type="label">
+                    <description>Season text</description>
+                    <left>10</left>
+                    <top>3</top>
+                    <width>90</width>
+                    <height>30</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FF333333</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+            </itemlayout>
+            <focusedlayout width="110" height="36">
+                <control type="image">
+                        <width>110</width>
+                        <height>36</height>
+                        <aspectratio>stretch</aspectratio>
+                        <texture>GamePass/submenubar_focus2.png</texture>
+                        <visible>ListItem.Property(clicked)</visible>
+                </control>
+                <control type="image">
+                        <width>110</width>
+                        <height>36</height>
+                        <aspectratio>stretch</aspectratio>
+                        <texture>GamePass/submenubar_focus.png</texture>
+                        <visible>Control.HasFocus(210)</visible>
+                </control>
+                <control type="label">
+                    <description>Season text</description>
+                    <left>10</left>
+                    <top>3</top>
+                    <width>90</width>
+                    <height>30</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FF222222</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                    <visible>!Control.HasFocus(210)</visible>
+                </control>
+                <control type="label">
+                    <description>Season text</description>
+                    <left>10</left>
+                    <top>3</top>
+                    <width>90</width>
+                    <height>30</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                    <visible>Control.HasFocus(210)</visible>
+                </control>
+            </focusedlayout>
+        </control>
+
+        <control type="list" id="240">
+            <description>Live list container</description>
+            <left>870</left>
+            <top>56</top>
+            <width>450</width>
+            <height>50</height>
+            <onup>100</onup>
+            <ondown>220</ondown>
+            <onleft>210</onleft>
+            <viewtype label="list">list</viewtype>
+            <orientation>horizontal</orientation>
+            <autoscroll>false</autoscroll>
+            <itemlayout width="200" height="36">
+                <control type="image">
+                    <width>200</width>
+                    <height>36</height>
+                    <aspectratio>stretch</aspectratio>
+                    <texture>GamePass/submenuwide_focus2.png</texture>
+                    <visible>ListItem.Property(clicked)</visible>
+                </control>
+                <control type="label">
+                    <description>Live item text</description>
+                    <left>5</left>
+                    <top>3</top>
+                    <width>190</width>
+                    <height>30</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FF333333</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+            </itemlayout>
+            <focusedlayout width="200" height="36">
+                <control type="image">
+                        <width>200</width>
+                        <height>36</height>
+                        <aspectratio>stretch</aspectratio>
+                        <texture>GamePass/submenuwide_focus2.png</texture>
+                        <visible>ListItem.Property(clicked)</visible>
+                </control>
+                <control type="image">
+                        <width>200</width>
+                        <height>36</height>
+                        <aspectratio>stretch</aspectratio>
+                        <texture>GamePass/submenuwide_focus.png</texture>
+                        <visible>Control.HasFocus(240)</visible>
+                </control>
+                <control type="label">
+                    <description>Live item text</description>
+                    <left>5</left>
+                    <top>3</top>
+                    <width>190</width>
+                    <height>30</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FF222222</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                    <visible>!Control.HasFocus(240)</visible>
+                </control>
+                <control type="label">
+                    <description>Live item text</description>
+                    <left>5</left>
+                    <top>3</top>
+                    <width>190</width>
+                    <height>30</height>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                    <visible>Control.HasFocus(240)</visible>
+                </control>
+            </focusedlayout>
+        </control>
+
+        <control type="list" id="220">
+            <description>Week/Show list container</description>
+            <left>20</left>
+            <top>110</top>
+            <width>290</width>
+            <height>560</height>
+            <onup>210</onup>
+            <onleft>60</onleft>
+            <onright>230</onright>
+            <viewtype label="list">list</viewtype>
+            <orientation>vertical</orientation>
+            <autoscroll>false</autoscroll>
+            <pagecontrol>60</pagecontrol>
+            <itemlayout width="280" height="40">
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_bg.png</texture>
+                        <visible>!ListItem.Property(clicked) + !ListItem.Property(future)</visible>
+                </control>
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_bg.png</texture>
+                        <colordiffuse>99CCCCCC</colordiffuse>
+                        <visible>!ListItem.Property(clicked) + ListItem.Property(future)</visible>
+                </control>
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_focus2.png</texture>
+                        <visible>ListItem.Property(clicked) + !ListItem.Property(future)</visible>
+                </control>
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_focus2.png</texture>
+                        <colordiffuse>AAAAAAAA</colordiffuse>
+                        <visible>ListItem.Property(clicked) + ListItem.Property(future)</visible>
+                </control>
+                <control type="label">
+                    <description>Week/Show Text</description>
+                    <left>5</left>
+                    <top>0</top>
+                    <width>270</width>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FF111111</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+            </itemlayout>
+            <focusedlayout width="280" height="40">
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_bg.png</texture>
+                        <visible>!Control.HasFocus(220) + !ListItem.Property(clicked) + !ListItem.Property(future)</visible>
+                </control>
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_bg.png</texture>
+                        <colordiffuse>99CCCCCC</colordiffuse>
+                        <visible>!Control.HasFocus(220) + !ListItem.Property(clicked) + ListItem.Property(future)</visible>
+                </control>
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_focus2.png</texture>
+                        <visible>!Control.HasFocus(220) + ListItem.Property(clicked) + !ListItem.Property(future)</visible>
+                </control>
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_focus2.png</texture>
+                        <colordiffuse>AAAAAAAA</colordiffuse>
+                        <visible>!Control.HasFocus(220) + ListItem.Property(clicked) + ListItem.Property(future)</visible>
+                </control>
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_focus.png</texture>
+                        <visible>Control.HasFocus(220) + !ListItem.Property(future)</visible>
+                </control>
+                <control type="image">
+                        <width>280</width>
+                        <height>40</height>
+                        <texture>GamePass/week_focus.png</texture>
+                        <colordiffuse>BBFFFFFF</colordiffuse>
+                        <visible>Control.HasFocus(220) + ListItem.Property(future)</visible>
+                </control>
+                <control type="label">
+                    <description>Week/Show text</description>
+                    <left>5</left>
+                    <width>270</width>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FFFFFFFF</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                    <visible>Control.HasFocus(220)</visible>
+                </control>
+                <control type="label">
+                    <description>Week/Show text</description>
+                    <left>5</left>
+                    <width>270</width>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FF111111</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                    <visible>!Control.HasFocus(220)</visible>
+                </control>
+            </focusedlayout>
+        </control>
+        <control type="panel" id="230">
+            <description>Game/Episode panel container</description>
+            <left>330</left>
+            <top>110</top>
+            <width>920</width>
+            <height>560</height>
+            <onup>210</onup>
+            <onleft>220</onleft>
+            <onright>61</onright>
+            <viewtype label="list">wide</viewtype>
+            <orientation>vertical</orientation>
+            <autoscroll>false</autoscroll>
+            <pagecontrol>61</pagecontrol>
+            <itemlayout width="460" height="80">
+                <control type="image">
+                        <left>10</left>
+                        <width>440</width>
+                        <height>80</height>
+                        <texture>GamePass/game_bg.png</texture>
+                        <visible>ListItem.Property(isPlayable)</visible>
+                </control>
+                <control type="image">
+                        <left>10</left>
+                        <width>440</width>
+                        <height>80</height>
+                        <texture>GamePass/game_bg.png</texture>
+                        <colordiffuse>AAFFFFFF</colordiffuse>
+                        <visible>!ListItem.Property(isPlayable)</visible>
+                </control>
+                <control type="image">
+                        <left>22</left>
+                        <top>12</top>
+                        <width>80</width>
+                        <height>53</height>
+                        <info>ListItem.Property(away_thumb)</info>
+                        <visible>ListItem.Property(isPlayable)</visible>
+                </control>
+                <control type="image">
+                        <left>22</left>
+                        <top>12</top>
+                        <width>80</width>
+                        <height>53</height>
+                        <info>ListItem.Property(away_thumb)</info>
+                        <colordiffuse>66FFFFFF</colordiffuse>
+                        <visible>!ListItem.Property(isPlayable)</visible>
+                </control>
+                <control type="label">
+                    <description>Game competitors text</description>
+                    <left>110</left>
+                    <top>8</top>
+                    <width>240</width>
+                    <visible>ListItem.Property(is_game)</visible>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font13</font>
+                    <textcolor>FF333333</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix></scrollsuffix>
+                </control>
+                <control type="label">
+                    <description>Game description text</description>
+                    <left>110</left>
+                    <top>35</top>
+                    <width>240</width>
+                    <visible>ListItem.Property(is_game)</visible>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <scroll>true</scroll>
+                    <info>ListItem.Property(game_info)</info>
+                    <font>font10</font>
+                    <textcolor>FF333333</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>25</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+                <control type="label">
+                    <description>Upcoming game</description>
+                    <left>110</left>
+                    <top>55</top>
+                    <width>240</width>
+                    <visible>!ListItem.Property(isPlayable) + ListItem.Property(is_game)</visible>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <scroll>true</scroll>
+                    <label>[B]Upcoming game[/B]</label>
+                    <font>font10</font>
+                    <textcolor>FF000000</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>25</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+                <control type="label">
+                    <description>Show Name</description>
+                    <left>110</left>
+                    <top>8</top>
+                    <width>320</width>
+                    <visible>ListItem.Property(is_show)</visible>
+                    <align>left</align>
+                    <aligny>top</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font12</font>
+                    <textcolor>FF333333</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix></scrollsuffix>
+                </control>
+                <control type="label">
+                    <description>Show description text</description>
+                    <left>110</left>
+                    <top>30</top>
+                    <width>320</width>
+                    <visible>ListItem.Property(is_show)</visible>
+                    <align>left</align>
+                    <aligny>top</aligny>
+                    <scroll>false</scroll>
+                    <info>ListItem.Property(game_info)</info>
+                    <font>font10</font>
+                    <textcolor>FF333333</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>0</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+                <control type="image">
+                        <left>360</left>
+                        <top>13</top>
+                        <width>80</width>
+                        <height>53</height>
+                        <info>ListItem.Property(home_thumb)</info>
+                        <visible>ListItem.Property(isPlayable) + ListItem.Property(is_game)</visible>
+                </control>
+                <control type="image">
+                        <left>360</left>
+                        <top>13</top>
+                        <width>80</width>
+                        <height>53</height>
+                        <info>ListItem.Property(home_thumb)</info>
+                        <colordiffuse>66FFFFFF</colordiffuse>
+                        <visible>!ListItem.Property(isPlayable) + ListItem.Property(is_game)</visible>
+                </control>
+            </itemlayout>
+            <focusedlayout width="450" height="80">
+                <control type="image">
+                        <left>10</left>
+                        <width>440</width>
+                        <height>80</height>
+                        <texture>GamePass/game_focus.png</texture>
+                        <visible>ListItem.Property(isPlayable)</visible>
+                </control>
+                <control type="image">
+                        <left>10</left>
+                        <width>440</width>
+                        <height>80</height>
+                        <texture>GamePass/game_focus.png</texture>
+                        <colordiffuse>CCFFFFFF</colordiffuse>
+                        <visible>!ListItem.Property(isPlayable)</visible>
+                </control>
+                <control type="image">
+                        <left>22</left>
+                        <top>12</top>
+                        <width>80</width>
+                        <height>53</height>
+                        <info>ListItem.Property(away_thumb)</info>
+                        <visible>ListItem.Property(isPlayable)</visible>
+                </control>
+                <control type="image">
+                        <left>22</left>
+                        <top>12</top>
+                        <width>80</width>
+                        <height>53</height>
+                        <info>ListItem.Property(away_thumb)</info>
+                        <colordiffuse>99FFFFFF</colordiffuse>
+                        <visible>!ListItem.Property(isPlayable)</visible>
+                </control>
+                <control type="label">
+                    <description>Game competitors text</description>
+                    <left>110</left>
+                    <top>8</top>
+                    <width>240</width>
+                    <visible>ListItem.Property(is_game)</visible>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <scroll>true</scroll>
+                    <info>ListItem.Label2</info>
+                    <font>font13</font>
+                    <textcolor>FF222222</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+                <control type="label">
+                    <description>Game description text</description>
+                    <left>110</left>
+                    <top>35</top>
+                    <width>240</width>
+                    <visible>ListItem.Property(is_game)</visible>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <scroll>true</scroll>
+                    <info>ListItem.Property(game_info)</info>
+                    <font>font10</font>
+                    <textcolor>FF333333</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>25</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+                <control type="label">
+                    <description>Upcoming game</description>
+                    <left>110</left>
+                    <top>55</top>
+                    <width>240</width>
+                    <visible>!ListItem.Property(isPlayable) + ListItem.Property(is_game)</visible>
+                    <align>center</align>
+                    <aligny>top</aligny>
+                    <scroll>true</scroll>
+                    <label>[B]Upcoming game[/B]</label>
+                    <font>font10</font>
+                    <textcolor>FF000000</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>25</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+                <control type="label">
+                    <description>Show Name</description>
+                    <left>110</left>
+                    <top>8</top>
+                    <width>320</width>
+                    <visible>ListItem.Property(is_show)</visible>
+                    <align>left</align>
+                    <aligny>top</aligny>
+                    <scroll>true</scroll>
+                    <info>ListItem.Label</info>
+                    <font>font12</font>
+                    <textcolor>FF222222</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>50</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+                <control type="label">
+                    <description>Show description text</description>
+                    <left>110</left>
+                    <top>30</top>
+                    <width>320</width>
+                    <visible>ListItem.Property(is_show)</visible>
+                    <align>left</align>
+                    <aligny>top</aligny>
+                    <scroll>true</scroll>
+                    <info>ListItem.Property(game_info)</info>
+                    <font>font10</font>
+                    <textcolor>FF333333</textcolor>
+                    <wrapmultiline>false</wrapmultiline>
+                    <scrollspeed>25</scrollspeed>
+                    <scrollsuffix> - </scrollsuffix>
+                </control>
+                <control type="image">
+                        <left>360</left>
+                        <top>13</top>
+                        <width>80</width>
+                        <height>53</height>
+                        <info>ListItem.Property(home_thumb)</info>
+                        <visible>ListItem.Property(isPlayable) + ListItem.Property(is_game)</visible>
+                </control>
+                <control type="image">
+                        <left>360</left>
+                        <top>13</top>
+                        <width>80</width>
+                        <height>53</height>
+                        <info>ListItem.Property(home_thumb)</info>
+                        <colordiffuse>99FFFFFF</colordiffuse>
+                        <visible>!ListItem.Property(isPlayable) + ListItem.Property(is_game)</visible>
+                </control>
+            </focusedlayout>
+        </control>
+        <control type="scrollbar" id="60">
+            <left>9</left>
+            <top>110</top>
+            <width>10</width>
+            <height>560</height>
+            <onup>60</onup>
+            <ondown>60</ondown>
+            <onleft>220</onleft>
+            <onright>220</onright>
+            <texturesliderbackground>-</texturesliderbackground>
+            <texturesliderbar border="1">GamePass/texturesliderbar.png</texturesliderbar>
+            <texturesliderbarfocus border="1">GamePass/texturesliderbar2.png</texturesliderbarfocus>
+            <showonepage>false</showonepage>
+            <orientation>vertical</orientation>
+        </control>
+        <control type="scrollbar" id="61">
+            <left>1241</left>
+            <top>110</top>
+            <width>10</width>
+            <height>560</height>
+            <onup>61</onup>
+            <ondown>61</ondown>
+            <onleft>230</onleft>
+            <onright>220</onright>
+            <texturesliderbackground>-</texturesliderbackground>
+            <texturesliderbar border="1" flipx="true">GamePass/texturesliderbar.png</texturesliderbar>
+            <texturesliderbarfocus border="1" flipx="true">GamePass/texturesliderbar2.png</texturesliderbarfocus>
+            <showonepage>false</showonepage>
+            <orientation>vertical</orientation>
+        </control>
+    </controls>
+</window>

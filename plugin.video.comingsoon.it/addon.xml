@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.comingsoon.it" name="Comingsoon Trailer" version="1.0.1" provider-name="phate89">
+  <requires>
+	<import addon="xbmc.python" version="2.1.0"/>
+	<import addon="xbmc.addon" version="12.0.0"/>
+	<import addon="script.module.beautifulsoup4" version="4.3.1"/> 
+  </requires>
+  <extension point="xbmc.python.pluginsource" library="default.py">
+    <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+	<platform>all</platform>
+  	<language>it</language>
+    <summary lang="it">Guarda i traiiler dei film da www.comingsoon.it</summary>
+	<summary lang="en">Watch trailers from www.comingsoon.it</summary>
+    <description lang="it">Visualizza i trailer dei film in sala e in arrivo dal sito www.comingsoon.it</description>
+	<description lang="en">Watch the shows and the complete episodes from the website www.comingsoon.it</description>
+	<forum>http://forum.kodi.tv/showthread.php?tid=214378</forum>
+    <website>https://github.com/phate89/plugin.video.comingsoon.it</website>
+    <email></email>
+    <source>https://github.com/phate89/plugin.video.comingsoon.it</source>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+  </extension>
+</addon>

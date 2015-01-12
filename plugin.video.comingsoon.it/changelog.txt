@@ -1,0 +1,8 @@
+1.0.1
+Added localized strings
+Improved checks
+Added option to select image quality (default: High)
+Added option to chose to prefer hd videos if available
+
+1.0.0
+Initial release

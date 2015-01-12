@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- English language-Team URL: http://forum.xbmc.org/showthread.php?tid=188074 -->
+<!-- Report language file syntax bugs at: http://forum.xbmc.org/showthread.php?tid=188074 -->
+
+<strings>
+    <string id="32001">Previous page</string>
+    <string id="32002">Next page</string>
+    <string id="32003">Previous week</string>
+    <string id="32004">Next week</string>
+    <string id="32005">Movies in theaters</string>
+    <string id="32006">Movies coming soon</string>
+    <string id="32007">In theaters from</string>
+    <string id="32008">Image quality</string>
+    <string id="32009">High</string>
+    <string id="32010">Medium</string>
+    <string id="32011">Low</string>
+    <string id="32012">Prefer hd videos if available</string>
+</strings>

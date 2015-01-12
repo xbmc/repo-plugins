@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+		<setting id="Quality" type="enum" label="32008" lvalues="32009|32010|32011" default="0"/>
+		<setting id="PreferHD" type="bool" label="32012" default="true"/>
+</settings>

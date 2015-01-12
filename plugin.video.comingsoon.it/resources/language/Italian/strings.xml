@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!-- English language-Team URL: http://forum.xbmc.org/showthread.php?tid=188074 -->
+<!-- Report language file syntax bugs at: http://forum.xbmc.org/showthread.php?tid=188074 -->
+
+<strings>
+    <string id="32001">Pagina precendente</string>
+    <string id="32002">Pagina successiva</string>
+    <string id="32003">Settimana precedente</string>
+    <string id="32004">Settimana successiva</string>
+    <string id="32005">Film in sala</string>
+    <string id="32006">Film in uscita prossimamente</string>
+    <string id="32007">In uscita il</string>
+    <string id="32008">Qualità immagini</string>
+    <string id="32009">Alta</string>
+    <string id="32010">Media</string>
+    <string id="32011">Bassa</string>
+    <string id="32012">Preferisci filmati hd se disponibili</string>
+</strings>

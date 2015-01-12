@@ -179,12 +179,12 @@ def main_list(params):
 
 
 # This funtion search into the URL link to get the video link from the different sources.
-# Right now it can play the videos from the following sources: Youtube, Vimeo, BlipTV, and KontextTV
+# Right now it can play the videos from the following sources: Youtube, Vimeo, Dailymotion, and KontextTV
 def play_video(params):
     lutil.log("attactv.play "+repr(params))
 
     # Here we define the list of video sources supported.
-    video_sources = ('dailymotion', 'youtube', 'vimeo', 'kontexttv', 'bliptv')
+    video_sources = ('dailymotion', 'youtube', 'vimeo', 'kontexttv')
     buffer_link = lutil.carga_web(params.get("url"))
     for  source in video_sources:
         video_url = eval("get_playable_%s_url(buffer_link)" % source)
@@ -238,35 +238,6 @@ def get_playable_vimeo_url(html):
     else:
         return ""
 
-
-# This function try to get a BlipTV playable URL from the weblink and returns it ready to call the BlipTV plugin.
-def get_playable_bliptv_url(html):
-    pattern_bliptv1 = '<iframe src="(http://blip.tv/play/[0-9A-Za-z_-]+.html)'
-    pattern_bliptv2 = '<embed src="(http://blip.tv/play/[^"]*?)"'
-    pattern_blipid  = 'file=http%3A%2F%2Fblip.tv%2Frss%2Fflash%2F([0-9]+)'
-
-    iframe_url = lutil.find_first(html, pattern_bliptv1)
-    if iframe_url:
-        lutil.log("attactv.play: found BlipTV video with pattern1 URL: %s" % iframe_url)
-        buffer_redirect = lutil.get_redirect(iframe_url)
-        video_id = lutil.find_first(buffer_redirect, pattern_blipid)
-        if video_id:
-            lutil.log("attactv.play: We have found this BlipTV video: %s and let's going to play it!" % video_id)
-            video_url = "plugin://plugin.video.bliptv/?path=/root/video&action=play_video&videoid=" + video_id
-            return video_url
-    
-    embed_url = lutil.find_first(html, pattern_bliptv2)
-    if embed_url:
-        lutil.log("attactv.play: found BlipTV video with pattern2 URL: %s" % embed_url)
-        buffer_redirect = lutil.get_redirect(embed_url)
-        video_id = lutil.find_first(buffer_redirect, pattern_blipid)
-        if video_id:
-            lutil.log("attactv.play: We have found this BlipTV video: %s and let's going to play it!" % video_id)
-            video_url = "plugin://plugin.video.bliptv/?path=/root/video&action=play_video&videoid=" + video_id
-            return video_url
-    
-    return ""
-        
 
 # This function try to get a KontextTV playable URL from the weblink and returns it ready to play it directly.
 def get_playable_kontexttv_url(html):

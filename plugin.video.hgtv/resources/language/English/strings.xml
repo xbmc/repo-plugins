@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+       <string id="30000">Video Resolution</string>
+       <string id="30001">224x400</string>
+       <string id="30002">270x480</string>
+       <string id="30003">320x568</string>
+       <string id="30004">480x854</string>
+       <string id="30005">540x960</string>
+       <string id="30006">720x1280</string>
+       <string id="30010">HGTV</string>
+       <string id="30011">No Videos Found</string>
+</strings>
+

@@ -1,6 +1,6 @@
 import re
 
-from .exceptions import KodimonException
+from .exceptions import KodionException
 from . import items
 from . import constants
 from . import utils
@@ -10,6 +10,16 @@ class AbstractProvider(object):
     RESULT_CACHE_TO_DISC = 'cache_to_disc'  # (bool)
 
     def __init__(self):
+        self._local_map = {
+            'kodion.wizard.view.default': 30027,
+            'kodion.wizard.view.episodes': 30028,
+            'kodion.wizard.view.movies': 30029,
+            'kodion.wizard.view.tvshows': 30032,
+            'kodion.wizard.view.songs': 30033,
+            'kodion.wizard.view.artists': 30034,
+            'kodion.wizard.view.albums': 30035
+        }
+
         # map for regular expression (path) to method (names)
         self._dict_path = {}
 
@@ -50,12 +60,10 @@ class AbstractProvider(object):
         pass
 
     def _process_wizard(self, context):
-        def _setup_views(_context):
+        def _setup_views(_context, view):
             view_manager = utils.ViewManager(_context)
-            if not view_manager.update_view_mode(_context.localize(constants.localize.SETUP_VIEW_DEFAULT), 'default'):
-                return
-
-            if not view_manager.update_view_mode(_context.localize(constants.localize.SETUP_VIEW_VIDEOS), 'videos'):
+            if not view_manager.update_view_mode(_context.localize(self._local_map['kodion.wizard.view.%s' % view]),
+                                                 view):
                 return
 
             _context.get_settings().set_bool(constants.setting.VIEW_OVERRIDE, True)
@@ -67,7 +75,15 @@ class AbstractProvider(object):
             context.get_settings().set_bool(constants.setting.SETUP_WIZARD, False)
 
             if utils.ViewManager(context).has_supported_views():
-                wizard_steps.append((_setup_views, [context]))
+                views = self.get_wizard_supported_views()
+                for view in views:
+                    if view in utils.ViewManager.SUPPORTED_VIEWS:
+                        wizard_steps.append((_setup_views, [context, view]))
+                        pass
+                    else:
+                        context.log_warning('[Setup-Wizard] Unsupported view "%s"' % view)
+                        pass
+                    pass
                 pass
             else:
                 skin_id = context.get_ui().get_skin_id()
@@ -84,6 +100,9 @@ class AbstractProvider(object):
                 pass
             pass
         pass
+
+    def get_wizard_supported_views(self):
+        return ['default']
 
     def get_wizard_steps(self, context):
         # can be overridden by the derived class
@@ -108,7 +127,7 @@ class AbstractProvider(object):
                 pass
             pass
 
-        raise KodimonException("Mapping for path '%s' not found" % path)
+        raise KodionException("Mapping for path '%s' not found" % path)
 
     def on_extra_fanart(self, context, re_match):
         """

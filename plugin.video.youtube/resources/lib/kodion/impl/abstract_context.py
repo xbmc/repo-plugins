@@ -79,7 +79,13 @@ class AbstractContext(object):
     def get_video_playlist(self):
         raise NotImplementedError()
 
+    def get_audio_playlist(self):
+        raise NotImplementedError()
+
     def get_video_player(self):
+        raise NotImplementedError()
+
+    def get_audio_player(self):
         raise NotImplementedError()
 
     def get_ui(self):

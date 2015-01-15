@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?> <strings>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
     <!-- Kodion Settings -->
     <string id="30000">Общие</string>
     <string id="30001">Имя пользователя</string>
@@ -6,8 +7,8 @@
 
     <string id="30010">Качество видео</string>
     <string id="30011">480p</string>
-	<string id="30012">720p (HD)</string>
-	<string id="30013">1080p (HD)</string>
+    <string id="30012">720p (HD)</string>
+    <string id="30013">1080p (HD)</string>
     <string id="30014">2160p (4k)</string>
     <string id="30015">4320p (8k)</string>
     <string id="30016">240p</string>
@@ -20,11 +21,15 @@
     <string id="30024">Размер кэша (Мб)</string>
     <string id="30025">Запустить мастер настройки</string>
     <string id="30026">Пользовательские настройки вида</string>
-    <string id="30027">Основной вид</string>
-    <string id="30028">Вид отображения видео</string>
-
+    <string id="30027">Вид: Обычный</string>
+    <string id="30028">Вид: Серии</string>
+    <string id="30029">Вид: Фильмы</string>
     <string id="30030">Запустить мастер настройки?</string>
     <string id="30031">Расширенные</string>
+    <string id="30032">Вид: Сериалы</string>
+    <string id="30033">Вид: Композиции</string>
+    <string id="30034">Вид: Исполнители</string>
+    <string id="30035">Вид: Альбомы</string>
 
     <!-- Kodion Common -->
     <string id="30100">Избранное</string>
@@ -46,6 +51,7 @@
     <string id="30116">Удалить "%s"?</string>
     <string id="30117">Удалить "%s"?</string>
     <string id="30118">Удаление</string>
+    <string id="30119">Пожалуйста, подождите...</string>
 
     <!-- YouTube -->
     <string id="30500">Каналы</string>
@@ -59,7 +65,7 @@
     <string id="30508">Понравившееся видео</string>
     <string id="30509">История</string>
     <string id="30510">Мои подписки</string>
-    
+    <string id="30511">Добавить в очередь</string>
     <string id="30512">Просмотр каналов</string>
     <string id="30513">Сейчас просматривают</string>
     <string id="30514">Похожее видео</string>

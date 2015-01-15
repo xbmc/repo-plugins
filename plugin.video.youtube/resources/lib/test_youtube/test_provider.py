@@ -7,6 +7,16 @@ import unittest
 
 
 class TestProvider(unittest.TestCase):
+    def test_channel_by_name(self):
+        provider = Provider()
+
+        path = kodion.utils.create_path('user', 'Gronkh')
+        context = kodion.Context(path=path)
+        context.set_localization(30502, 'Go to %s')
+        result = provider.navigate(context)
+        items = result[0]
+        pass
+
     def test_play(self):
         provider = Provider()
 

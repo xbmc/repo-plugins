@@ -3,7 +3,7 @@ __author__ = 'bromix'
 from datetime import date, datetime, timedelta, tzinfo, time
 import re
 
-from .exceptions import KodimonException
+from .exceptions import KodionException
 
 
 def parse(datetime_string):
@@ -47,4 +47,4 @@ def parse(datetime_string):
                          minutes=_to_int(period_match.group('minutes')),
                          seconds=_to_int(period_match.group('seconds')))
 
-    raise KodimonException("Could not parse iso 8601 timestamp '%s'" % datetime_string)
+    raise KodionException("Could not parse iso 8601 timestamp '%s'" % datetime_string)

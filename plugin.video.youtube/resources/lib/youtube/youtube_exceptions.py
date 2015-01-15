@@ -3,9 +3,9 @@ from resources.lib import kodion
 __author__ = 'bromix'
 
 
-class LoginException(kodion.KodimonException):
+class LoginException(kodion.KodionException):
     pass
 
 
-class YouTubeException(kodion.KodimonException):
+class YouTubeException(kodion.KodionException):
     pass

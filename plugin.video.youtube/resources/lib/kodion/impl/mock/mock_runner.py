@@ -4,7 +4,7 @@ from ..abstract_provider_runner import AbstractProviderRunner
 from ... import constants
 from ...items import *
 from ...logging import *
-from ...exceptions import KodimonException
+from ...exceptions import KodionException
 
 
 class MockRunner(AbstractProviderRunner):
@@ -16,7 +16,7 @@ class MockRunner(AbstractProviderRunner):
         results = None
         try:
             results = provider.navigate(context)
-        except KodimonException, ex:
+        except KodionException, ex:
             if provider.handle_exception(context, ex):
                 provider.log(ex.message, constants.log.ERROR)
                 pass

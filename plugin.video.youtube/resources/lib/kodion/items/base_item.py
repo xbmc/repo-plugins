@@ -9,7 +9,7 @@ class BaseItem(object):
     def __init__(self, name, uri, image=u'', fanart=u''):
         self._version = BaseItem.VERSION
         self._name = unicode(name)
-        self._uri = unicode(uri)
+        self._uri = str(uri)
 
         self._image = u''
         self.set_image(image)
@@ -46,6 +46,15 @@ class BaseItem(object):
         :return: name of the item.
         """
         return self._name
+
+    def set_uri(self, uri):
+        if isinstance(uri, str):
+            self._uri = uri
+            pass
+        else:
+            self._uri = ''
+            pass
+        pass
 
     def get_uri(self):
         """

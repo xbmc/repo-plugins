@@ -10,6 +10,25 @@ class TestClient(unittest.TestCase):
     USERNAME = ''
     PASSWORD = ''
 
+    def test_get_live_events(self):
+        client = YouTube()
+
+        json_data = client.get_live_events(event_type='active')
+        pass
+
+    def test_get_channel_by_username(self):
+        client = YouTube()
+
+        json_data = client.get_channel_by_username(username='ScreenCrush')
+        pass
+
+    def test_get_channels(self):
+        client = YouTube()
+
+        #json_data = client.get_channels('mine')
+        json_data = client.get_channels(['UCDbAn9LEzqONk__uXA6a9jQ', 'UC8i4HhaJSZhm-fu84Bl72TA'])
+        pass
+
     def test_playlist_item_id_of_video_id(self):
         client = YouTube(language='de-DE')
 
@@ -109,16 +128,6 @@ class TestClient(unittest.TestCase):
 
         json_data = client.get_playlist_items(u'WL', video_id='-Zotg42zEEA')
         pass
-
-    def test_get_channels(self):
-        client = YouTube()
-
-        token, expires = client.authenticate(self.USERNAME, self.PASSWORD)
-        client = YouTube(access_token=token)
-
-        json_data = client.get_channels('mine')
-        #json_data = client.get_channels(['UCDbAn9LEzqONk__uXA6a9jQ', 'UC8i4HhaJSZhm-fu84Bl72TA'])
-        pass
     """
 
     def test_get_video_streams(self):
@@ -127,6 +136,7 @@ class TestClient(unittest.TestCase):
         context = kodion.Context()
 
         #Live
+        streams = client.get_video_streams(context, 'y1knc30OqKQ')
         #streams = client.get_video_streams(context, '7UFbGKo21lc')
         #streams = client.get_video_streams(context, 'RqbyYOCAFJU')
         #streams = client.get_video_streams(context, 'pvEWZY3Eqsg')

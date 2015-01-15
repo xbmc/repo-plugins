@@ -1,7 +1,8 @@
 __author__ = 'bromix'
 
-import json
+from resources.lib import kodion
 
+import json
 import requests
 
 
@@ -271,6 +272,17 @@ class YouTube(LoginClient):
 
         return self._perform_v3_request(method='GET', path='playlistItems', params=params)
 
+    def get_channel_by_username(self, username):
+        """
+        Returns a collection of zero or more channel resources that match the request criteria.
+        :param channel_id: list or comma-separated list of the YouTube channel ID(s)
+        :return:
+        """
+        params = {'part': 'id',
+                  'forUsername': username}
+
+        return self._perform_v3_request(method='GET', path='channels', params=params)
+
     def get_channels(self, channel_id):
         """
         Returns a collection of zero or more channel resources that match the request criteria.
@@ -320,6 +332,33 @@ class YouTube(LoginClient):
                   'id': video_id}
         return self._perform_v3_request(method='GET', path='videos', params=params)
 
+    def get_live_events(self, event_type='live', order='relevance', page_token=''):
+        """
+
+        :param event_type: one of: 'live', 'completed', 'upcoming'
+        :param order: one of: 'date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount'
+        :param page_token:
+        :return:
+        """
+        # prepare page token
+        if not page_token:
+            page_token = ''
+            pass
+
+        # prepare params
+        params = {'part': 'snippet',
+                  'type': 'video',
+                  'order': order,
+                  'eventType': event_type,
+                  'regionCode': self._country,
+                  'hl': self._language,
+                  'maxResults': str(self._max_results)}
+        if page_token:
+            params['pageToken'] = page_token
+            pass
+
+        return self._perform_v3_request(method='GET', path='search', params=params)
+
     def get_related_videos(self, video_id, page_token=''):
         # prepare page token
         if not page_token:
@@ -339,13 +378,14 @@ class YouTube(LoginClient):
 
         return self._perform_v3_request(method='GET', path='search', params=params)
 
-    def search(self, q, search_type=['video', 'channel', 'playlist'], page_token=''):
+    def search(self, q, search_type=['video', 'channel', 'playlist'], event_type='', page_token=''):
         """
         Returns a collection of search results that match the query parameters specified in the API request. By default,
         a search result set identifies matching video, channel, and playlist resources, but you can also configure
         queries to only retrieve a specific type of resource.
         :param q:
         :param search_type: acceptable values are: 'video' | 'channel' | 'playlist'
+        :param event_type: 'live', 'completed', 'upcoming'
         :param page_token: can be ''
         :return:
         """
@@ -369,6 +409,9 @@ class YouTube(LoginClient):
                   'regionCode': self._country,
                   'hl': self._language,
                   'maxResults': str(self._max_results)}
+        if event_type and event_type in ['live', 'upcoming', 'completed']:
+            params['eventType'] = event_type
+            pass
         if search_type:
             params['type'] = search_type
             pass
@@ -403,30 +446,34 @@ class YouTube(LoginClient):
         _url = 'https://www.googleapis.com/youtube/v3/%s' % path.strip('/')
 
         result = None
-        if method == 'GET':
-            result = requests.get(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
-            pass
-        elif method == 'POST':
-            _headers['content-type'] = 'application/json'
-            result = requests.post(_url, data=json.dumps(post_data), params=_params, headers=_headers, verify=False,
-                                   allow_redirects=allow_redirects)
-            pass
-        elif method == 'PUT':
-            _headers['content-type'] = 'application/json'
-            result = requests.put(_url, data=json.dumps(post_data), params=_params, headers=_headers, verify=False,
-                                  allow_redirects=allow_redirects)
-            pass
-        elif method == 'DELETE':
-            result = requests.delete(_url, params=_params, headers=_headers, verify=False,
-                                     allow_redirects=allow_redirects)
-            pass
 
-        if result is None:
-            return {}
+        try:
+            if method == 'GET':
+                result = requests.get(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
+                pass
+            elif method == 'POST':
+                _headers['content-type'] = 'application/json'
+                result = requests.post(_url, data=json.dumps(post_data), params=_params, headers=_headers, verify=False,
+                                       allow_redirects=allow_redirects)
+                pass
+            elif method == 'PUT':
+                _headers['content-type'] = 'application/json'
+                result = requests.put(_url, data=json.dumps(post_data), params=_params, headers=_headers, verify=False,
+                                      allow_redirects=allow_redirects)
+                pass
+            elif method == 'DELETE':
+                result = requests.delete(_url, params=_params, headers=_headers, verify=False,
+                                         allow_redirects=allow_redirects)
+                pass
 
-        if result.headers.get('content-type', '').startswith('application/json'):
-            return result.json()
+            if result is None:
+                return {}
 
+            if result.headers.get('content-type', '').startswith('application/json'):
+                return result.json()
+        except Exception, ex:
+            self._log_error(str(ex))
+            raise kodion.KodionException("Client request failed please see log for information")
         pass
 
     def _perform_v2_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
@@ -455,15 +502,19 @@ class YouTube(LoginClient):
         url = 'https://gdata.youtube.com/%s/' % path.strip('/')
 
         result = None
-        if method == 'GET':
-            result = requests.get(url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
-            pass
+        try:
+            if method == 'GET':
+                result = requests.get(url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
+                pass
 
-        if result is None:
-            return {}
+            if result is None:
+                return {}
 
-        if method != 'DELETE' and result.text:
-            return result.json()
+            if method != 'DELETE' and result.text:
+                return result.json()
+        except Exception, ex:
+            self._log_error(str(ex))
+            raise kodion.KodionException("Client request failed please see log for information")
         pass
 
     pass

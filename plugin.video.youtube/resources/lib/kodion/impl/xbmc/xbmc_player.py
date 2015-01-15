@@ -9,6 +9,10 @@ class XbmcPlayer(AbstractPlayer):
         AbstractPlayer.__init__(self)
 
         self._player_type = player_type
+        if player_type == 'audio':
+            self._player_type = 'music'
+            pass
+
         self._context = context
         pass
 

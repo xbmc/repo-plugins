@@ -7,7 +7,7 @@ from resources.lib.youtube.helper import v3
 def _process_rate_video(provider, context, re_match):
     video_id = context.get_param('video_id', '')
     if not video_id:
-        raise kodion.KodimonException('video/rate: missing video_id')
+        raise kodion.KodionException('video/rate: missing video_id')
 
     client = provider.get_client(context)
     json_data = client.get_video_rating(video_id)
@@ -41,6 +41,6 @@ def process(method, provider, context, re_match):
     if method == 'rate':
         return _process_rate_video(provider, context, re_match)
     else:
-        raise kodion.KodimonException("Unknown method '%s'" % method)
+        raise kodion.KodionException("Unknown method '%s'" % method)
 
     return True

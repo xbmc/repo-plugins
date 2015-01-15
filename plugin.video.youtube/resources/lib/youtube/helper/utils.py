@@ -101,7 +101,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             pass
 
         context_menu = []
-        replace_context_menu = False
+        replace_context_menu = True
 
         # Queue Video
         yt_context_menu.append_queue_video(context_menu, provider, context)
@@ -114,6 +114,11 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
 
             yt_context_menu.append_play_all_from_playlist(context_menu, provider, context, playlist_id, video_id)
             yt_context_menu.append_play_all_from_playlist(context_menu, provider, context, playlist_id)
+            pass
+
+        # 'play with...' (external player)
+        if context.get_settings().is_support_alternative_player_enabled():
+            yt_context_menu.append_play_with(context_menu, provider, context)
             pass
 
         if provider.is_logged_in():

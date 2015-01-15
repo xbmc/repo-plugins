@@ -235,10 +235,10 @@ def _process_list_response(provider, context, json_data):
                 channel_id_dict[channel_id].append(channel_item)
                 pass
             else:
-                raise kodion.KodimonException("Unknown kind '%s'" % yt_kind)
+                raise kodion.KodionException("Unknown kind '%s'" % yt_kind)
             pass
         else:
-            raise kodion.KodimonException("Unknown kind '%s'" % yt_kind)
+            raise kodion.KodionException("Unknown kind '%s'" % yt_kind)
         pass
 
     # this will also update the channel_id_dict with the correct channel id for each video.
@@ -258,7 +258,7 @@ def response_to_items(provider, context, json_data, sort=None, reverse_sort=Fals
         result.extend(_process_list_response(provider, context, json_data))
         pass
     else:
-        raise kodion.KodimonException("Unknown kind '%s'" % kind)
+        raise kodion.KodionException("Unknown kind '%s'" % kind)
 
     if sort is not None:
         result = sorted(result, key=sort, reverse=reverse_sort)

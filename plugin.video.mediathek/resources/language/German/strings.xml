@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <string id="30001">Qualität</string>
+    <string id="30002">Niedrig</string>
+    <string id="30003">Normal</string>
+    <string id="30004">Hoch</string>
+    <string id="30005">HD</string>
+    
+    <string id="30010">Zugriffsmethode</string>
+    <string id="30011">Online</string>
+    <string id="30012">Lokaler Cache</string>
+    
+    <string id="30020">Bevorzugter Streamtyp</string>
+    <string id="30021">HTTP</string>
+    <string id="30022">RTMP</string>
+    <string id="30023">MMS</string>
+    <string id="30024">MOV</string>
+    
+    <string id="30100">Suchen</string>
+</strings>

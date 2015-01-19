@@ -1,3 +1,9 @@
+[B]Version 1.0.1 - 2015-01-01[/B]
+
+- Fix playback on Android client
+
+
+
 [B]Version 1.0.0 - 2014-10-09[/B]
 
 - Use localized strings, supporting English and German for now

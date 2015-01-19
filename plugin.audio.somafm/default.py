@@ -20,7 +20,7 @@ CHANNELS_FILE_NAME = "channels.xml"
 
 __addon__ = "SomaFM"
 __addonid__ = "plugin.audio.somafm"
-__version__ = "0.0.2"
+__version__ = "1.0.1"
 
 __ms_per_day__ = 24 * 60 * 60 * 1000
 
@@ -142,8 +142,15 @@ def cache_ttl_in_ms():
 def play(item_to_play):
     channel_data = fetch_channel_data(fetch_local_channel_data, fetch_remote_channel_data)
     xml_data = ET.fromstring(channel_data)
-    channel_data = xml_data.find(".//channel[@id='" + item_to_play + "']")
-    channel = Channel(handle, tempdir, channel_data, quality_priority(), format_priority(), firewall_mode())
+    try:
+        channel_data = xml_data.find(".//channel[@id='" + item_to_play + "']")
+        channel = Channel(handle, tempdir, channel_data, quality_priority(), format_priority(), firewall_mode())
+    except:
+        for element in xml_data.findall(".//channel"):
+            channel = Channel(handle, tempdir, element, quality_priority(), format_priority(), firewall_mode())
+            if channel.getid() == item_to_play:
+                break
+
     list_item = ListItem(channel.get_simple_element('title'),
                          channel.get_simple_element('description'),
                          channel.geticon(),

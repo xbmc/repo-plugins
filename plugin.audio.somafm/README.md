@@ -17,20 +17,20 @@ the [XBMC Wiki article on `userdata`](http://wiki.xbmc.org/?title=Userdata) to f
 On Linux and possibly Mac OSX
 
     cd ~/xbmc/addons/
-    git clone https://github.com/nils-werner/xbmc-somafm.git plugin.audio.somafm
+    git clone https://github.com/Oderik/xbmc-somafm.git plugin.audio.somafm
 
 ### ZIP
 
 Unfortunately, installing from a ZIP-file is not a lot easier
 
- 1. [Download the ZIP Archive from GitHub](https://github.com/nils-werner/xbmc-somafm/archive/master.zip)
+ 1. [Download the ZIP Archive from GitHub](https://github.com/Oderik/xbmc-somafm/archive/master.zip)
  2. Extract the contents
  3. Rename the resulting folder `xbmc-somafm-master` to `plugin.audio.somafm`
  4. Move the folder to your `addons` folder
 
 Again on Linux and possibly Mac OSX
 
-    wget --content-disposition https://github.com/nils-werner/xbmc-somafm/archive/master.zip
+    wget --content-disposition https://github.com/Oderik/xbmc-somafm/archive/master.zip
     unzip xbmc-somafm-master.zip 
     mv xbmc-somafm-master/ plugin.audio.somafm
     mv plugin.audio.somafm/ ~/xbmc/addons/

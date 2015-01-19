@@ -63,7 +63,7 @@ def getRequest(url):
 def getSources(fanart):
               urlbase   = FNTVBASE % ('/videos/players/food-network-full-episodes.html')
               pg = getRequest(urlbase)
-              cats = re.compile('<div class="group".+?href="(.+?)".+?data-max="85">(.+?)<.+?src="(.+?)".+?</div>').findall(pg) 
+              cats = re.compile('<h6 class="channel-heading">.+?href="(.+?)".+?data-max="85">(.+?)<.+?src="(.+?)".+?</div>').findall(pg) 
               for caturl, catname, catimg in cats:
                   catname = catname.strip()
                   addDir(catname,caturl,'GC',catimg ,addonfanart,catname,GENRE_TV,'',False)
@@ -86,7 +86,10 @@ def getShow(show_url, show_name):
               url = re.compile('<video src="(.+?)_6.mp4"').search(pg).group(1)
               url = url+'_%s.mp4' % str(i)
             except:
-              url = 'http://link.theplatform.com/s/errorFiles/Unavailable.mp4'
+              try:
+                url = re.compile('<video src="(.+?)"').search(pg).group(1)
+              except:
+                url = 'http://link.theplatform.com/s/errorFiles/Unavailable.mp4'
             xbmcplugin.setResolvedUrl(int(sys.argv[1]), True, xbmcgui.ListItem(path = url))
 
 

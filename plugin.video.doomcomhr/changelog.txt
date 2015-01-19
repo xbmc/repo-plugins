@@ -1,0 +1,4 @@
+v0.1.0
+- Initial version
+v0.2.1
+- Updated plugintools to v1.0.8

@@ -1,4 +1,0 @@
-<settings>
-   <setting id="username" type="text"  label="30011" default=""/>
-   <setting id="password" type="text"  label="30012" default=""/>
-</settings>

@@ -1,6 +1,0 @@
-<settings>
-   <setting id="paid_account" type="bool" label="30010" default="false"/>
-   <setting id="username" type="text"  label="30011" default="" enable="eq(-1,true)"/>
-   <setting id="password" type="text"  label="30012" default="" enable="eq(-2,true)"/>
-   <setting id="show_thumbnail" type="bool" label="30013" default="true"/>   
-</settings>

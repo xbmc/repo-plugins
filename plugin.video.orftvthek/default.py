@@ -12,7 +12,7 @@ except:
 socket.setdefaulttimeout(30) 
 cache = StorageServer.StorageServer("plugin.video.orftvthek", 999999)
 
-version = "0.3.0"
+version = "0.3.1"
 plugin = "ORF-TVthek-" + version
 author = "sofaking"
 
@@ -23,7 +23,10 @@ pluginhandle = int(sys.argv[1])
 basepath = settings.getAddonInfo('path')
 translation = settings.getLocalizedString
 
-if xbmc.getSkinDir() == 'skin.confluence':
+current_skin = xbmc.getSkinDir();
+
+print current_skin
+if 'confluence' in current_skin:
    defaultViewMode = 'Container.SetViewMode(503)'
 else:
    defaultViewMode = 'Container.SetViewMode(518)'
@@ -37,12 +40,15 @@ opener.addheaders = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/53
  
 #hardcoded
 base_url="http://tvthek.orf.at" 
+resource_path = os.path.join( basepath, "resources" )
+media_path = os.path.join( resource_path, "media" )
+
 videoProtocol = "http"
 videoDelivery = "progressive"
 video_quality_list = ["q1a", "q4a", "q6a"]
-defaultbanner = "http://goo.gl/FG03G"
-defaultlogo = "http://goo.gl/FRLJK"
-defaultbackdrop = os.path.join(basepath,"fanart.jpg")
+defaultbanner =  os.path.join(media_path,"default_banner.jpg")
+defaultbackdrop = os.path.join(media_path,"fanart_top.png")
+
 schedule_url = 'http://tvthek.orf.at/schedule'
 recent_url = 'http://tvthek.orf.at/newest'
 live_url = "http://tvthek.orf.at/live"
@@ -285,7 +291,7 @@ def getCategoryList(category,banner):
             current_desc = "";
         addDirectory(current_title,banner,current_desc,current_link,"openSeries")
     except:
-        addDirectory((translation(30014)).encode("utf-8"),defaultlogo,"","","")
+        addDirectory((translation(30014)).encode("utf-8"),defaultbanner,"","","")
 	
     itemwrapper = common.parseDOM(html.get("content"),name='div',attrs={'class': 'base_list_wrapper.mod_latest_episodes'})
     if len(itemwrapper) > 0:
@@ -501,7 +507,7 @@ def searchTV():
       searchurl = searchurl
       getTableResults(searchurl)
     else:
-      addDirectory((translation(30014)).encode("utf-8"),defaultlogo,"","","")
+      addDirectory((translation(30014)).encode("utf-8"),defaultbanner,"","","")
     listCallback(False)
 
 def getTableResults(url):
@@ -548,7 +554,7 @@ def searchTVHistory(link):
       searchurl = "%s?q=%s"%(search_base_url,keyboard_in.replace(" ","+"))
       getTableResults(searchurl)
     else:
-      addDirectory((translation(30014)).encode("utf-8"),defaultlogo,defaultbackdrop,"","")
+      addDirectory((translation(30014)).encode("utf-8"),defaultbanner,defaultbackdrop,"","")
     listCallback(False)
     	
 #parameters

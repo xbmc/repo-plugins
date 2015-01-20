@@ -1,3 +1,7 @@
+0.3.1
+- fixed 404 on list icon
+- changed fanart 
+
 0.3.0
 - using parsedom now
 - optimized UI/Views

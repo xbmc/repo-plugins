@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings>
+       <string id="30000">Video Resolution</string>
+       <string id="30001">480x268</string>
+       <string id="30002">640x360</string>
+       <string id="30003">960x540</string>
+       <string id="30004">1280x720</string>
+       <string id="30005">1920x1080</string>
+       <string id="30010">Smithsonian Channel</string>
+       <string id="30011">No Videos Found</string>
+</strings>
+

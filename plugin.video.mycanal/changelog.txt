@@ -1,3 +1,6 @@
+Version 1.0.3
+* Fixed mycanal format change in JSON output
+
 Version 1.0.2
 * Fixed mycanal authenticate.json version call change that broke the plugin
 

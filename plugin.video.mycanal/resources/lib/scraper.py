@@ -93,20 +93,33 @@ class Video(object):
         output_json = json.loads(content)
         videos=[]
 
-        for strate in output_json['strates']:
-            if strate['type'] == 'contentRow' or strate['type'] == 'contentGrid':
-                for item in strate['contents']:
-		    if item['type'] != 'landing':
-		        name = ''
-		        if 'title' in item:
-		            name = item['title']
-		            if 'subtitle' in item:
-			        name = name + ' - ' + item['subtitle']
-		        else:
-			    name = item['subtitle']
-                        videos.append( { 'name': name.strip(),
-                            'url': item['onClick']['URLMedias'].replace('{FORMAT}','hls'),
-                            'icon': item['URLImage']})
+
+	if 'strates' in output_json:
+            for strate in output_json['strates']:
+                if strate['type'] == 'contentRow' or strate['type'] == 'contentGrid':
+        	    for item in strate['contents']:
+		        videos = Video.fill_videos_from_content(item, videos)
+	else:
+            for item in output_json['contents']:
+	        videos = Video.fill_videos_from_content(item, videos)
+	    
+
+        return videos
+
+    @staticmethod
+    def fill_videos_from_content(content, videos):
+
+	if content['type'] != 'landing' and content['type'] != 'contentGrid':
+	    name = ''
+	    if 'title' in content:
+	        name = content['title']
+	        if 'subtitle' in content:
+	            name = name + ' - ' + content['subtitle']
+	    else:
+	        name = content['subtitle']
+            videos.append( { 'name': name.strip(),
+                    'url': content['onClick']['URLMedias'].replace('{FORMAT}','hls'),
+                    'icon': content['URLImage']})
         #pprint.pprint(videos)
         return videos
 

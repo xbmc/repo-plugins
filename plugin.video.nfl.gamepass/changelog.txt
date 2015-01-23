@@ -1,3 +1,6 @@
+2015.01.23 v0.7.1 -- Brian Urlacher Edition
++ Bug fix: Support Pro Bowl (kaileu)
+
 2015.01.09 v0.7.0 -- Kurt Warner Edition
 + Support for HTTP proxies (timewasted)
 +   Direct support in lib/pigskin

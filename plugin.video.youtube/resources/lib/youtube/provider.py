@@ -55,7 +55,9 @@ class Provider(kodion.AbstractProvider):
                  'youtube.video.rate': 30528,
                  'youtube.video.rate.like': 30529,
                  'youtube.video.rate.dislike': 30530,
-                 'youtube.video.rate.none': 30108}
+                 'youtube.video.rate.none': 30108,
+                 'youtube.video.play_with': 30540,
+                 'youtube.live': 30539}
 
     def __init__(self):
         kodion.AbstractProvider.__init__(self)
@@ -63,6 +65,9 @@ class Provider(kodion.AbstractProvider):
         self._client = None
         self._is_logged_in = False
         pass
+
+    def get_wizard_supported_views(self):
+        return ['default', 'episodes']
 
     def get_wizard_steps(self, context):
         return [(yt_setup_wizard.process, [self, context])]
@@ -117,8 +122,10 @@ class Provider(kodion.AbstractProvider):
                 self._is_logged_in = access_token != ''
                 self._client = YouTube(items_per_page=items_per_page, access_token=access_token,
                                        language=language)
+                self._client.set_log_error(context.log_error)
             else:
                 self._client = YouTube(items_per_page=items_per_page, language=language)
+                self._client.set_log_error(context.log_error)
                 pass
             pass
 
@@ -142,7 +149,6 @@ class Provider(kodion.AbstractProvider):
 
     @kodion.RegisterProviderPath('^/channel/(?P<channel_id>.*)/playlist/(?P<playlist_id>.*)/$')
     def _on_channel_playlist(self, context, re_match):
-        context.get_ui().set_view_mode('videos')
         self.set_content_type(context, kodion.constants.content_type.EPISODES)
 
         result = []
@@ -183,20 +189,44 @@ class Provider(kodion.AbstractProvider):
 
     """
     Lists a playlist folder and all uploaded videos of a channel.
-    path      :'/channel/(?P<channel_id>.*)/'
+    path      :'/channel|user/(?P<channel_id|username>.*)/'
     channel_id: <CHANNEL_ID>
     """
 
-    @kodion.RegisterProviderPath('^/channel/(?P<channel_id>.*)/$')
+    @kodion.RegisterProviderPath('^/(?P<method>(channel|user))/(?P<channel_id>.*)/$')
     def _on_channel(self, context, re_match):
-        context.get_ui().set_view_mode('videos')
         self.set_content_type(context, kodion.constants.content_type.EPISODES)
 
         resource_manager = ResourceManager(context, self.get_client(context))
 
         result = []
 
+        method = re_match.group('method')
         channel_id = re_match.group('channel_id')
+
+        """
+        This is a helper routine if we only have the username of a channel. This will retrieve the correct channel id
+        based on the username.
+        """
+        if method == 'user':
+            context.log_debug('Trying to get channel id for user "%s"' % channel_id)
+
+            # the data should be valid for at least a week
+            json_data = context.get_function_cache().get(FunctionCache.ONE_WEEK,
+                                                         self.get_client(context).get_channel_by_username, channel_id)
+            if not v3.handle_error(self, context, json_data):
+                return False
+
+            # we correct the channel id based on the username
+            items = json_data.get('items', [])
+            if len(items) > 0:
+                channel_id = items[0]['id']
+                pass
+            else:
+                context.log_warning('Could not find channel ID for user "%s"' % channel_id)
+                return False
+            pass
+
         channel_fanarts = resource_manager.get_fanarts([channel_id])
         page = int(context.get_param('page', 1))
         page_token = context.get_param('page_token', '')
@@ -292,19 +322,18 @@ class Provider(kodion.AbstractProvider):
         return True
 
     def on_search(self, search_text, context, re_match):
-        self.set_content_type(context, kodion.constants.content_type.EPISODES)
-
         result = []
 
         page_token = context.get_param('page_token', '')
         search_type = context.get_param('search_type', 'video')
+        event_type = context.get_param('event_type', '')
         page = int(context.get_param('page', 1))
 
         if search_type == 'video':
-            context.get_ui().set_view_mode('videos')
+            self.set_content_type(context, kodion.constants.content_type.EPISODES)
             pass
 
-        if page == 1 and search_type == 'video':
+        if page == 1 and search_type == 'video' and not event_type:
             channel_params = {}
             channel_params.update(context.get_params())
             channel_params['search_type'] = 'channel'
@@ -322,10 +351,21 @@ class Provider(kodion.AbstractProvider):
                                           image=context.create_resource_path('media', 'playlist.png'))
             playlist_item.set_fanart(self.get_fanart(context))
             result.append(playlist_item)
+
+            # live
+            live_params = {}
+            live_params.update(context.get_params())
+            live_params['search_type'] = 'video'
+            live_params['event_type'] = 'live'
+            live_item = DirectoryItem('[B]%s[/B]' % context.localize(self.LOCAL_MAP['youtube.live']),
+                                      context.create_uri([context.get_path()], live_params),
+                                      image=context.create_resource_path('media', 'live.png'))
+            result.append(live_item)
             pass
 
         json_data = context.get_function_cache().get(FunctionCache.ONE_MINUTE * 10, self.get_client(context).search,
-                                                     q=search_text, search_type=search_type, page_token=page_token)
+                                                     q=search_text, search_type=search_type, event_type=event_type,
+                                                     page_token=page_token)
         if not v3.handle_error(self, context, json_data):
             return False
         result.extend(v3.response_to_items(self, context, json_data))
@@ -457,12 +497,22 @@ class Provider(kodion.AbstractProvider):
                 pass
             pass
 
+        # browse channels
         if settings.get_bool('youtube.folder.browse_channels.show', True):
             browse_channels_item = DirectoryItem(context.localize(self.LOCAL_MAP['youtube.browse_channels']),
                                                  context.create_uri(['special', 'browse_channels']),
                                                  image=context.create_resource_path('media', 'browse_channels.png'))
             browse_channels_item.set_fanart(self.get_fanart(context))
             result.append(browse_channels_item)
+            pass
+
+        # live events
+        if settings.get_bool('youtube.folder.live.show', True):
+            live_events_item = DirectoryItem(context.localize(self.LOCAL_MAP['youtube.live']),
+                                             context.create_uri(['special', 'live']),
+                                             image=context.create_resource_path('media', 'live.png'))
+            live_events_item.set_fanart(self.get_fanart(context))
+            result.append(live_events_item)
             pass
 
         # sign out

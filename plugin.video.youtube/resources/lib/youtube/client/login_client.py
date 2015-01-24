@@ -34,6 +34,20 @@ class LoginClient(object):
         self._language = language.replace('-', '_')
         self._country = language.split('-')[1]
         self._access_token = access_token
+        self._log_error_callback = None
+        pass
+
+    def set_log_error(self, callback):
+        self._log_error_callback = callback
+        pass
+
+    def log_error(self, text):
+        if self._log_error_callback:
+            self._log_error_callback(text)
+            pass
+        else:
+            print text
+            pass
         pass
 
     def revoke(self, refresh_token):

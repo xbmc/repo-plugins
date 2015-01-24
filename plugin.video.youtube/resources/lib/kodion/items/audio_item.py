@@ -12,7 +12,7 @@ class AudioItem(BaseItem):
         self._genre = None
         self._album = None
         self._artist = None
-        self._title = None
+        self._title = name
         self._rating = None
         pass
 

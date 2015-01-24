@@ -4,43 +4,89 @@ from .. import constants
 
 
 class ViewManager(object):
+    SUPPORTED_VIEWS = ['default', 'movies', 'episodes', 'musicvideos', 'songs', 'albums', 'artists']
     SKIN_DATA = {
-        'skin.confluence': [
-            {'name': 'List', 'id': 50},
-            {'name': 'Big List', 'id': 51},
-            {'name': 'Thumbnail', 'id': 500},
-            {'name': 'Media info', 'id': 504},
-            {'name': 'Media info 2', 'id': 503}
-        ],
-        'skin.aeon.nox.5': [
-            {'name': 'List', 'id': 50},
-            {'name': 'Episodes', 'id': 502},
-            {'name': 'LowList', 'id': 501},
-            {'name': 'BannerWall', 'id': 58},
-            {'name': 'Shift', 'id': 57},
-            {'name': 'Posters', 'id': 56},
-            {'name': 'ShowCase', 'id': 53},
-            {'name': 'Landscape', 'id': 52},
-            {'name': 'InfoWall', 'id': 51}
-        ],
-        'skin.1080xf': [
-            {'name': 'List', 'id': 50},
-            {'name': 'Info list', 'id': 52},
-            {'name': 'Panel', 'id': 53},
-            {'name': 'Landscape', 'id': 54},
-            {'name': 'Poster', 'id': 55},
-            {'name': 'Thumbnail', 'id': 500},
-            {'name': 'Banner', 'id': 60}
-        ],
-        'skin.xperience1080': [
-            {'name': 'List', 'id': 50},
-            {'name': 'Info list', 'id': 52},
-            {'name': 'Panel', 'id': 53},
-            {'name': 'Landscape', 'id': 54},
-            {'name': 'Poster', 'id': 55},
-            {'name': 'Thumbnail', 'id': 500},
-            {'name': 'Banner', 'id': 60}
-        ]
+        'skin.confluence': {
+            'default': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Big List', 'id': 51},
+                {'name': 'Thumbnail', 'id': 500}
+            ],
+            'movies': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Big List', 'id': 51},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Media info', 'id': 504},
+                {'name': 'Media info 2', 'id': 503}
+            ],
+            'episodes': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Big List', 'id': 51},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Media info', 'id': 504},
+                {'name': 'Media info 2', 'id': 503}
+            ],
+            'musicvideos': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Big List', 'id': 51},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Media info', 'id': 504},
+                {'name': 'Media info 2', 'id': 503}
+            ],
+            'songs': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Big List', 'id': 51},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Media info', 'id': 506}
+            ],
+            'albums': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Big List', 'id': 51},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Media info', 'id': 506}
+            ],
+            'artists': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Big List', 'id': 51},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Media info', 'id': 506}
+            ]
+        },
+        'skin.aeon.nox.5': {
+            'default': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Episodes', 'id': 502},
+                {'name': 'LowList', 'id': 501},
+                {'name': 'BannerWall', 'id': 58},
+                {'name': 'Shift', 'id': 57},
+                {'name': 'Posters', 'id': 56},
+                {'name': 'ShowCase', 'id': 53},
+                {'name': 'Landscape', 'id': 52},
+                {'name': 'InfoWall', 'id': 51}
+            ]
+        },
+        'skin.1080xf': {
+            'default': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Info list', 'id': 52},
+                {'name': 'Panel', 'id': 53},
+                {'name': 'Landscape', 'id': 54},
+                {'name': 'Poster', 'id': 55},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Banner', 'id': 60}
+            ]
+        },
+        'skin.xperience1080': {
+            'default': [
+                {'name': 'List', 'id': 50},
+                {'name': 'Info list', 'id': 52},
+                {'name': 'Panel', 'id': 53},
+                {'name': 'Landscape', 'id': 54},
+                {'name': 'Poster', 'id': 55},
+                {'name': 'Thumbnail', 'id': 500},
+                {'name': 'Banner', 'id': 60}
+            ]
+        }
     }
 
     def __init__(self, context):
@@ -59,7 +105,7 @@ class ViewManager(object):
         settings = self._context.get_settings()
 
         skin_id = self._context.get_ui().get_skin_id()
-        skin_data = self.SKIN_DATA.get(skin_id, [])
+        skin_data = self.SKIN_DATA.get(skin_id, {}).get(view, [])
         if skin_data:
             items = []
             for view_data in skin_data:
@@ -68,7 +114,7 @@ class ViewManager(object):
             view_id = self._context.get_ui().on_select(title, items)
             pass
         else:
-            self._context.log("ViewManager: Unknown skin id '%s'" % skin_id)
+            self._context.log_notice("ViewManager: Unknown skin id '%s'" % skin_id)
             pass
 
         if view_id == -1:

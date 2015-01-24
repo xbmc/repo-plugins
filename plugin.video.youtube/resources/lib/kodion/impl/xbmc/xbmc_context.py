@@ -53,7 +53,9 @@ class XbmcContext(AbstractContext):
 
         self._ui = None
         self._video_playlist = None
+        self._audio_playlist = None
         self._video_player = None
+        self._audio_player = None
         self._plugin_handle = int(sys.argv[1])
         self._plugin_id = plugin_id or self._addon.getAddonInfo('id')
         self._plugin_name = plugin_name or self._addon.getAddonInfo('name')
@@ -92,11 +94,23 @@ class XbmcContext(AbstractContext):
             pass
         return self._video_playlist
 
+    def get_audio_playlist(self):
+        if not self._audio_playlist:
+            self._audio_playlist = XbmcPlaylist('audio', weakref.proxy(self))
+            pass
+        return self._audio_playlist
+
     def get_video_player(self):
         if not self._video_player:
             self._video_player = XbmcPlayer('video', weakref.proxy(self))
             pass
         return self._video_player
+
+    def get_audio_player(self):
+        if not self._audio_player:
+            self._audio_player = XbmcPlayer('audio', weakref.proxy(self))
+            pass
+        return self._audio_player
 
     def get_ui(self):
         if not self._ui:
@@ -138,6 +152,7 @@ class XbmcContext(AbstractContext):
 
     def set_content_type(self, content_type):
         xbmcplugin.setContent(self._plugin_handle, content_type)
+        self.get_ui().set_view_mode(content_type)
         pass
 
     def add_sort_method(self, *sort_methods):

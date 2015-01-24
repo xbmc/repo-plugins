@@ -13,7 +13,7 @@ class XbmcPlaylist(AbstractPlaylist):
         if playlist_type == 'video':
             self._playlist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
             pass
-        elif playlist_type =='music':
+        elif playlist_type =='audio':
             self._playlist = xbmc.PlayList(xbmc.PLAYLIST_MUSIC)
             pass
         pass

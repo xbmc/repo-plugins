@@ -5,7 +5,7 @@ import xbmcgui
 import xbmcplugin
 
 from ..abstract_provider_runner import AbstractProviderRunner
-from ...exceptions import KodimonException
+from ...exceptions import KodionException
 from ...items import *
 from ... import constants, AbstractProvider
 from . import info_labels
@@ -21,7 +21,7 @@ class XbmcRunner(AbstractProviderRunner):
         results = None
         try:
             results = provider.navigate(context)
-        except KodimonException, ex:
+        except KodionException, ex:
             if provider.handle_exception(context, ex):
                 context.log_error(ex.__str__())
                 xbmcgui.Dialog().ok("Exception in ContentProvider", ex.__str__())
@@ -68,9 +68,9 @@ class XbmcRunner(AbstractProviderRunner):
             pass
         pass
 
-    def _set_resolved_url(self, context, video_item, succeeded=True):
-        item = xbmc_items.to_video_item(context, video_item)
-        item.setPath(video_item.get_uri())
+    def _set_resolved_url(self, context, base_item, succeeded=True):
+        item = xbmc_items.to_item(context, base_item)
+        item.setPath(base_item.get_uri())
         xbmcplugin.setResolvedUrl(context.get_handle(), succeeded=succeeded, listitem=item)
 
         """
@@ -139,22 +139,7 @@ class XbmcRunner(AbstractProviderRunner):
         pass
 
     def _add_audio(self, context, audio_item, item_count):
-        item = xbmcgui.ListItem(label=audio_item.get_name(),
-                                iconImage=u'DefaultAudio.png',
-                                thumbnailImage=audio_item.get_image())
-
-        # only set fanart is enabled
-        settings = context.get_settings()
-        if audio_item.get_fanart() and settings.show_fanart():
-            item.setProperty(u'fanart_image', audio_item.get_fanart())
-            pass
-        if audio_item.get_context_menu() is not None:
-            item.addContextMenuItems(audio_item.get_context_menu(), replaceItems=audio_item.replace_context_menu())
-            pass
-
-        item.setProperty(u'IsPlayable', u'true')
-
-        item.setInfo(type=u'music', infoLabels=info_labels.create_from_item(audio_item))
+        item = xbmc_items.to_audio_item(context, audio_item)
 
         xbmcplugin.addDirectoryItem(handle=context.get_handle(),
                                     url=audio_item.get_uri(),

@@ -2,7 +2,7 @@ __author__ = 'bromix'
 
 import xbmcgui
 
-from ...items import VideoItem
+from ...items import VideoItem, AudioItem
 from . import info_labels
 
 
@@ -25,8 +25,32 @@ def to_video_item(context, video_item):
     item.setInfo(type=u'video', infoLabels=info_labels.create_from_item(video_item))
     return item
 
+
+def to_audio_item(context, audio_item):
+    item = xbmcgui.ListItem(label=audio_item.get_name(),
+                                iconImage=u'DefaultAudio.png',
+                                thumbnailImage=audio_item.get_image())
+
+    # only set fanart is enabled
+    settings = context.get_settings()
+    if audio_item.get_fanart() and settings.show_fanart():
+        item.setProperty(u'fanart_image', audio_item.get_fanart())
+        pass
+    if audio_item.get_context_menu() is not None:
+        item.addContextMenuItems(audio_item.get_context_menu(), replaceItems=audio_item.replace_context_menu())
+        pass
+
+    item.setProperty(u'IsPlayable', u'true')
+
+    item.setInfo(type=u'music', infoLabels=info_labels.create_from_item(audio_item))
+    return item
+
+
 def to_item(context, base_item):
     if isinstance(base_item, VideoItem):
         return to_video_item(context, base_item)
+
+    if isinstance(base_item, AudioItem):
+        return to_audio_item(context, base_item)
 
     return None

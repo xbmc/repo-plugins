@@ -22,10 +22,15 @@
     <string id="30025">Enable setup-wizard</string>
     <string id="30026">Override View</string>
     <string id="30027">View: Default</string>
-    <string id="30028">View: Videos</string>
-
+    <string id="30028">View: Episodes</string>
+    <string id="30029">View: Movies</string>
     <string id="30030">Execute setup-wizard?</string>
     <string id="30031">Advanced</string>
+    <string id="30032">View: TV Shows</string>
+    <string id="30033">View: Songs</string>
+    <string id="30034">View: Artists</string>
+    <string id="30035">View: Albums</string>
+    <string id="30036">Support alternative player</string>
 
     <!-- Kodion Common -->
     <string id="30100">Favorites</string>
@@ -89,4 +94,6 @@
     <string id="30536">Updating Playlist...</string>
     <string id="30537">Play from here</string>
     <string id="30538">Disliked Videos</string>
+    <string id="30539">Live</string>
+    <string id="30540">Play with...</string>
 </strings>

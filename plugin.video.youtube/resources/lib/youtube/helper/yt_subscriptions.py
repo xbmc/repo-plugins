@@ -47,6 +47,6 @@ def process(method, provider, context, re_match):
     elif method == 'remove':
         return _process_remove(provider, context, re_match)
     else:
-        raise kodion.KodimonException("Unknown subscriptions method '%s'" % method)
+        raise kodion.KodionException("Unknown subscriptions method '%s'" % method)
 
     return result

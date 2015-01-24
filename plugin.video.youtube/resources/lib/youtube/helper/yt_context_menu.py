@@ -3,6 +3,11 @@ __author__ = 'bromix'
 from resources.lib import kodion
 
 
+def append_play_with(context_menu, provider, context):
+    context_menu.append((context.localize(provider.LOCAL_MAP['youtube.video.play_with']), 'Action(SwitchPlayer)'))
+    pass
+
+
 def append_queue_video(context_menu, provider, context):
     context_menu.append((context.localize(provider.LOCAL_MAP['youtube.video.queue']), 'Action(Queue)'))
     pass

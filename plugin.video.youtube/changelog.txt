@@ -1,3 +1,15 @@
+5.0.4 (2015-01-15)
+ADD: 'Live' in search
+ADD: 'Play with...' for supporting external/alternative player
+ADD: live events (needed some tests and feedback)
+ADD: support for user names instead of channel ids
+UPD: set XBMC/KODI to at least Gotham 13.2
+UPD: Setup-Wizard views based on content type (KODION update)
+FIX: Playlist should work again
+FIX: Pagination in APIv2
+FIX: settings for hiding 'Live' menu
+DEL: support for Frodo
+
 5.0.3 (2015-01-08)
 ADD: 'Disliked Videos'
 ADD: 240p, 360p and 480p

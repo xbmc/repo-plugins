@@ -9,10 +9,10 @@ from resources.lib.youtube.helper import v3
 def _process_add_video(provider, context, re_match):
     playlist_id = context.get_param('playlist_id', '')
     if not playlist_id:
-        raise kodion.KodimonException('Playlist/Remove: missing playlist_id')
+        raise kodion.KodionException('Playlist/Remove: missing playlist_id')
     video_id = context.get_param('video_id', '')
     if not video_id:
-        raise kodion.KodimonException('Playlist/Remove: missing video_id')
+        raise kodion.KodionException('Playlist/Remove: missing video_id')
 
     json_data = provider.get_client(context).add_video_to_playlist(playlist_id=playlist_id, video_id=video_id)
     if not v3.handle_error(provider, context, json_data):
@@ -24,15 +24,15 @@ def _process_add_video(provider, context, re_match):
 def _process_remove_video(provider, context, re_match):
     playlist_id = context.get_param('playlist_id', '')
     if not playlist_id:
-        raise kodion.KodimonException('Playlist/Remove: missing playlist_id')
+        raise kodion.KodionException('Playlist/Remove: missing playlist_id')
 
     video_id = context.get_param('video_id', '')
     if not video_id:
-        raise kodion.KodimonException('Playlist/Remove: missing video_id')
+        raise kodion.KodionException('Playlist/Remove: missing video_id')
 
     video_name = context.get_param('video_name', '')
     if not video_name:
-        raise kodion.KodimonException('Playlist/Remove: missing video_name')
+        raise kodion.KodionException('Playlist/Remove: missing video_name')
 
     if context.get_ui().on_remove_content(video_name):
         json_data = provider.get_client(context).remove_video_from_playlist(playlist_id=playlist_id,
@@ -48,11 +48,11 @@ def _process_remove_video(provider, context, re_match):
 def _process_remove_playlist(provider, context, re_match):
     playlist_id = context.get_param('playlist_id', '')
     if not playlist_id:
-        raise kodion.KodimonException('Playlist/Remove: missing playlist_id')
+        raise kodion.KodionException('Playlist/Remove: missing playlist_id')
 
     playlist_name = context.get_param('playlist_name', '')
     if not playlist_name:
-        raise kodion.KodimonException('Playlist/Remove: missing playlist_name')
+        raise kodion.KodionException('Playlist/Remove: missing playlist_name')
 
     if context.get_ui().on_delete_content(playlist_name):
         json_data = provider.get_client(context).remove_playlist(playlist_id=playlist_id)
@@ -124,7 +124,7 @@ def _process_select_playlist(provider, context, re_match):
 def _process_rename_playlist(provider, context, re_match):
     playlist_id = context.get_param('playlist_id', '')
     if not playlist_id:
-        raise kodion.KodimonException('playlist/rename: missing playlist_id')
+        raise kodion.KodionException('playlist/rename: missing playlist_id')
 
     current_playlist_name = context.get_param('playlist_name', '')
     result, text = context.get_ui().on_keyboard_input(context.localize(provider.LOCAL_MAP['youtube.rename']),
@@ -151,6 +151,6 @@ def process(method, category, provider, context, re_match):
     elif method == 'rename' and category == 'playlist':
         return _process_rename_playlist(provider, context, re_match)
     else:
-        raise kodion.KodimonException("Unknown category '%s' or method '%s'" % (category, method))
+        raise kodion.KodionException("Unknown category '%s' or method '%s'" % (category, method))
 
     return True

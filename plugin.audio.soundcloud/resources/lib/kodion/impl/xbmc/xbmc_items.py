@@ -2,11 +2,12 @@ __author__ = 'bromix'
 
 import xbmcgui
 
-from ...items import VideoItem, AudioItem
+from ...items import VideoItem, AudioItem, UriItem
 from . import info_labels
 
 
 def to_video_item(context, video_item):
+    context.log_debug('Converting VideoItem')
     item = xbmcgui.ListItem(label=video_item.get_name(),
                             iconImage=u'DefaultVideo.png',
                             thumbnailImage=video_item.get_image())
@@ -27,9 +28,10 @@ def to_video_item(context, video_item):
 
 
 def to_audio_item(context, audio_item):
+    context.log_debug('Converting AudioItem')
     item = xbmcgui.ListItem(label=audio_item.get_name(),
-                                iconImage=u'DefaultAudio.png',
-                                thumbnailImage=audio_item.get_image())
+                            iconImage=u'DefaultAudio.png',
+                            thumbnailImage=audio_item.get_image())
 
     # only set fanart is enabled
     settings = context.get_settings()
@@ -46,7 +48,17 @@ def to_audio_item(context, audio_item):
     return item
 
 
+def to_uri_item(context, base_item):
+    context.log_debug('Converting UriItem')
+    item = xbmcgui.ListItem(path=base_item.get_uri())
+    item.setProperty(u'IsPlayable', u'true')
+    return item
+
+
 def to_item(context, base_item):
+    if isinstance(base_item, UriItem):
+        return to_uri_item(context, base_item)
+    
     if isinstance(base_item, VideoItem):
         return to_video_item(context, base_item)
 

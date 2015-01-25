@@ -122,12 +122,12 @@ class Provider(kodion.AbstractProvider):
             result = self._do_item(context, json_data, path, process_playlist=True)
             pass
         else:
-            raise kodion.KodimonException("Audio ID or URL missing")
+            raise kodion.KodionException("Audio ID or URL missing")
 
         json_data = client.get_track_url(audio_id)
         location = json_data.get('location')
         if not location:
-            raise kodion.KodimonException("Could not get url for track '%s'" % audio_id)
+            raise kodion.KodionException("Could not get url for track '%s'" % audio_id)
 
         result.set_uri(location.encode('utf-8'))
         if update_playlist:
@@ -385,7 +385,7 @@ class Provider(kodion.AbstractProvider):
         elif category == 'playlist':
             json_data = self.get_client(context).like_playlist(content_id, like)
         else:
-            raise kodion.KodimonException("Unknown category '%s' in 'on_like'" % category)
+            raise kodion.KodionException("Unknown category '%s' in 'on_like'" % category)
 
         if not like:
             context.get_ui().refresh_container()
@@ -690,6 +690,6 @@ class Provider(kodion.AbstractProvider):
             """
             return None
 
-        raise kodion.KodimonException("Unknown kind of item '%s'" % kind)
+        raise kodion.KodionException("Unknown kind of item '%s'" % kind)
 
     pass

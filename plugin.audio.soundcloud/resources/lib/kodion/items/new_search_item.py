@@ -1,6 +1,6 @@
 __author__ = 'bromix'
 
-from . import DirectoryItem
+from .directory_item import DirectoryItem
 from .. import constants
 
 

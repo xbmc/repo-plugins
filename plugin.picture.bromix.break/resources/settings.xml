@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <!-- kodion General -->
+    <category label="30000">
+
+        <setting id="kodion.fanart.show" type="bool" label="30021" default="true"/>
+        <setting id="kodion.view.override" type="bool" label="30026" default="false"/>
+        <setting id="kodion.view.default" type="number" label="30027" enable="eq(-1,true)" default="50"/>
+        <setting type="sep" />
+        <setting id="kodion.cache.size" type="slider" label="30024" default="5" range="1,1,20" option="int"/>
+        <setting id="kodion.setup_wizard" type="bool" label="30025" default="true"/>
+    </category>
+</settings>

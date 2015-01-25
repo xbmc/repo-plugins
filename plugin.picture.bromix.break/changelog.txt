@@ -1,0 +1,27 @@
+2.0.3 (2015-01-25)
+UPD: dropped dependency of 'requests'-module because of performance issues
+
+2.0.2 (2014-11-27)
+FIX: skins call '/extrafanart/'
+
+2.0.2~beta (2014-11-21)
+UPD: improved performance
+
+2.0.1 (2014-11-14)
+FIX: show fanart for next page items
+UPD: kodion tests
+
+2.0.0 (2014-11-09)
+UPD: new break API
+UPD: kodimon
+
+1.0.0
+- set the info labels for images
+- updated bromixbmc
+- removed the beta status
+
+1.0.0~beta
+- beta for public tests
+
+1.0.0~alpha
+- development and testing

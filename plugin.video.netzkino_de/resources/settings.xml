@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <!-- Kodimon General -->
-    <category label="30000">
-        <setting id="kodimon.fanart.show" type="bool" label="30021" default="true"/>
-        <setting id="kodimon.search.size" type="enum" label="30023" values="0|10|20|30|40|50" default="5" />
-        <setting id="kodimon.cache.size" type="slider" label="30024" values="1|2|20|30|40|50" default="5" range="1,25" option="int"/>
-    </category>
-</settings>

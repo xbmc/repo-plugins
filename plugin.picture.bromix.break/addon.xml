@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.picture.bromix.break" name="Break Pictures" version="2.0.3" provider-name="bromix">
+	<requires>
+		<import addon="xbmc.python" version="2.14.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="default.py">
+		<provides>image</provides>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en">Watch funny pictures from break.com</summary>
+		<summary lang="de">Schaue lustige Bilder von break.com</summary>
+		<description lang="en">Break is the #1 source for funny pictures. Get the hilarious pictures today that will be viral tomorrow. Get the most awesome pictures on Earth today, because being bored sucks.</description>
+		<description lang="de">Break ist die Nr. 1 Quelle für lustige Bilder. Schaue die lustigen Bilder, die morgen schon viral gehen. Hole dir die eindrucksvollsten Bilder der Erde heute, denn Langeweile ist blöd.</description>
+		<disclaimer lang="en"></disclaimer>
+		<language>de</language>
+		<platform>all</platform>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum></forum>
+		<website>http://www.break.com/</website>
+		<email>bromix at gmx dot net</email>
+		<source>https://github.com/bromix/plugin.picture.bromix.break</source>
+	</extension>
+</addon>

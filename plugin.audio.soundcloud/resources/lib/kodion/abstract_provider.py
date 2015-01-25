@@ -1,6 +1,6 @@
 import re
 
-from .exceptions import KodimonException
+from .exceptions import KodionException
 from . import items
 from . import constants
 from . import utils
@@ -127,7 +127,7 @@ class AbstractProvider(object):
                 pass
             pass
 
-        raise KodimonException("Mapping for path '%s' not found" % path)
+        raise KodionException("Mapping for path '%s' not found" % path)
 
     def on_extra_fanart(self, context, re_match):
         """

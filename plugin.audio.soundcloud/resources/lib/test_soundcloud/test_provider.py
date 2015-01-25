@@ -26,6 +26,7 @@ class TestProvider(unittest.TestCase):
     def test_get_favorites(self):
         provider = Provider()
         context = self._create_context('/user/favorites/me/')
+        context.set_localization(30516, 'TEST %s')
         result = provider.navigate(context)
         items = result[0]
         print_items(items)
@@ -53,6 +54,7 @@ class TestProvider(unittest.TestCase):
         provider = Provider()
 
         context = self._create_context('/playlist/54934787/')
+        context.set_localization(30516, 'TEST %s')
         result = provider.navigate(context)
         items = result[0]
         print_items(items)
@@ -72,6 +74,7 @@ class TestProvider(unittest.TestCase):
 
         # music
         context = self._create_context('/explore/trending/music/')
+        context.set_localization(30516, 'TEST %s')
         context.get_function_cache().disable()
         result = provider.navigate(context)
         items = result[0]
@@ -80,6 +83,7 @@ class TestProvider(unittest.TestCase):
 
         # audio
         context = self._create_context('/explore/trending/audio/')
+        context.set_localization(30516, 'TEST %s')
         context.get_function_cache().disable()
         result = provider.navigate(context)
         items = result[0]
@@ -92,6 +96,7 @@ class TestProvider(unittest.TestCase):
 
         path = '/%s/query/' % kodion.constants.paths.SEARCH
         context = kodion.Context(path=path, params={'q': 'angerfist'})
+        context.set_localization(30516, 'TEST %s')
         result = provider.navigate(context)
         pass
 
@@ -99,6 +104,7 @@ class TestProvider(unittest.TestCase):
         provider = Provider()
 
         context = self._create_context('/explore/genre/music/Drum & Bass/')
+        context.set_localization(30516, 'TEST %s')
         context.get_function_cache().disable()
 
         # music

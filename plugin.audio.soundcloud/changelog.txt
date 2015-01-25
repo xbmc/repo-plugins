@@ -1,3 +1,6 @@
+1.1.1 (2015-01-25)
+UPD: dropped dependency of 'requests'-module because of performance issues
+
 1.1.0 (2015-01-14)
 ADD: Setup-Wizard
 ADD: 'Go to [ARTIST]' via context menu

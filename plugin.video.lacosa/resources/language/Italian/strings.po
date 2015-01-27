@@ -1,0 +1,33 @@
+# XBMC Media Center language file
+# Addon Name: La Cosa
+# Addon id: plugin.video.lacosa
+# Addon Provider: NeverWise
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: <email>\n"
+"POT-Creation-Date: 2014-07-27\n"
+"PO-Revision-Date: 2014-07-27\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Italian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Live"
+msgstr "Diretta"
+
+msgctxt "#30001"
+msgid "Unable to retrieve the live stream."
+msgstr "Impossibile recuperare lo stream della diretta."
+
+msgctxt "#30002"
+msgid "Unable to retrieve the list of shows."
+msgstr "Impossibile recuperare la lista dei programmi."
+
+msgctxt "#30003"
+msgid "Unable to show the list of videos for this show."
+msgstr "Impossibile visualizzare la lista dei video di questo programma."

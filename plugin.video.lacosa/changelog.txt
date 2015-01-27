@@ -1,0 +1,22 @@
+[B]Version 1.0.5[/B]
+- Small bugfix/improvements.
+
+[B]Version 1.0.4[/B]
+- Small improvements.
+- Adapted to the xbmc repository guidelines.
+
+[B]Version 1.0.3[/B]
+- Updated to the new neverwise library.
+- Small bugfix/improvements.
+
+[B]Version 1.0.2[/B]
+- Updated new live url.
+- Small improvements.
+
+[B]Version 1.0.1[/B]
+- Updated the url of live.
+- Added the shows.
+- New icon.
+
+[B]Version 1.0.0[/B]
+- Initial version.

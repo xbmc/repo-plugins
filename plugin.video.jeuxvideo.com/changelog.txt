@@ -1,2 +1,8 @@
+v1.1.0 (27/01/2015)
+- Ajout: option pour vider le cache
+- Fixé: lecture des vidéos en 400p et plus (changement de l'API jv.com (merci à Celedhrim)
+- Fixé: certaines résolutions affichées dans le nenu contextuel n'étaient pas dispo
+- Changé: Réduction de la durée du cache
+
 v1.0.0 (13/12/2014)
 - Première release

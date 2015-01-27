@@ -10,4 +10,7 @@
   <!-- 301xx: settings -->
   <string id="30100">Paramètres vidéo</string>
   <string id="30101">Resolution par défaut</string>
+  <string id="30102">Divers</string>
+  <string id="30103">Vider le cache</string>
+  <string id="30104">Le cache a été vidé.</string>
 </strings>

@@ -10,4 +10,7 @@
   <!-- 301xx: settings -->
   <string id="30100">Video settings</string>
   <string id="30101">Default resolution</string>
+  <string id="30102">Miscellaneous settings</string>
+  <string id="30103">Clear cache</string>
+  <string id="30104">The cache is now empty.</string>
 </strings>

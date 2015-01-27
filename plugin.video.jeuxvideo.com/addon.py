@@ -5,7 +5,7 @@ import operator
 import time
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from xbmcswift2 import Plugin
+from xbmcswift2 import Plugin, xbmcgui
 
 plugin = Plugin()
 
@@ -55,7 +55,7 @@ def get_machines():
     machines = call_ws(WS_MACHINES).findall('./machine')
     return [ Machine(m.find('id').text, m.find('nom').text, safe_find(m, 'url_icone')) for m in machines ]
 
-@plugin.cached(30)
+@plugin.cached(5)
 def get_videos(category):
     videos = call_ws(WS_CATEGORIES[category]).findall('./video')
 
@@ -69,9 +69,9 @@ def get_videos(category):
         thumbnail = safe_find(v, 'url_image'),
         urls      = [
             safe_find(v, 'url_expanded'),
-            safe_find(v, 'url_expanded400'),
-            safe_find(v, 'url_expanded720'),
-            safe_find(v, 'url_expanded1080'),
+            safe_find(v, 'url_expanded_400'),
+            safe_find(v, 'url_expanded_720'),
+            safe_find(v, 'url_expanded_1080'),
         ]
     ) for v in videos ]
 
@@ -136,9 +136,15 @@ def video_list(category, machine):
             'plot': v.desc,
         },
         'path': select_url(v.urls),
-        'context_menu': [ ( plugin.get_string(30005) % res, 'PlayMedia(%s)' % v.urls[i] ) for i, res in enumerate(RESOLUTIONS) ],
+        'context_menu': [ ( plugin.get_string(30005) % res, 'PlayMedia(%s)' % v.urls[i] )
+                          for i, res in enumerate(RESOLUTIONS) if v.urls[i] ],
         'is_playable': True
     } for v in videos ]
+
+@plugin.route('/clear_cache')
+def clear_cache():
+    plugin.clear_function_cache()
+    xbmcgui.Dialog().ok(plugin.get_string(30000), plugin.get_string(30104))
 
 if __name__ == '__main__':
     plugin.run()

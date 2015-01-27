@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
   <category label="30100">
-   <setting id="video_resolution" label="30101" type="enum" values="270p|400p|720p|1080p" default="1" />
+    <setting id="video_resolution" label="30101" type="enum" values="270p|400p|720p|1080p" default="1" />
+  </category>
+  <category label="30102">
+    <setting id="clear_cache" label="30103" type="action" action="RunPlugin(plugin://plugin.video.jeuxvideo.com/clear_cache)" />
   </category>
 </settings>

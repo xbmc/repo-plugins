@@ -1,0 +1,53 @@
+# XBMC Media Center language file
+# Addon Name: MTV.it on demand
+# Addon id: plugin.video.mtv.it
+# Addon Provider: NeverWise
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Addons\n"
+"Report-Msgid-Bugs-To: <email>\n"
+"POT-Creation-Date: 2014-07-27\n"
+"PO-Revision-Date: 2014-07-27\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "Too late![CR]The rights of this video has expired."
+msgstr ""
+
+msgctxt "#30001"
+msgid "Very high quality"
+msgstr ""
+
+msgctxt "#30002"
+msgid "High quality"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Good quality"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Reasonable quality"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Sufficient quality"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Mediocre quality"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Low quality"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Very low quality"
+msgstr ""

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.i24News"
+       name="i24 News"
+       version="1.0.4"
+       provider-name="t1m">
+  <requires>
+    <import addon="xbmc.python" version="2.1.0"/>
+    <import addon="script.module.pyamf" version="0.6.2"/>
+  </requires>
+  <extension point="xbmc.python.pluginsource"
+            library="default.py">
+        <provides>video</provides>
+  </extension>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">i24News XBMC Addon</summary>
+    <description lang="en">i24News is an international 24-hour news and current affairs television channel based in Jaffa Port, Tel Aviv, Israel. It broadcasts in English, French and Arabic.</description>
+    <disclaimer lang="en">Feel free to use this script. For information visit the wiki.</disclaimer>
+    <platform>all</platform>
+    <language>en</language>
+    <license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+    <forum>http://forum.xbmc.org/showthread.php?tid=187224</forum>
+    <website>http://www.i24news.tv/en/</website>
+    <email></email>
+    <source>https://github.com/learningit/plugin.video.i24News</source>
+  </extension>
+</addon>

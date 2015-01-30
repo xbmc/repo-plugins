@@ -1,0 +1,5 @@
+Version 1.0.1 Initial release
+Version 1.0.2 Added Search and A-Z Program listings
+Version 1.0.3 Language strings cleanup
+
+

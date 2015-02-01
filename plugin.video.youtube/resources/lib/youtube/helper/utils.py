@@ -101,7 +101,7 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
             pass
 
         context_menu = []
-        replace_context_menu = True
+        replace_context_menu = False
 
         # Queue Video
         yt_context_menu.append_queue_video(context_menu, provider, context)
@@ -152,12 +152,15 @@ def update_video_infos(provider, context, video_id_dict, playlist_item_id_dict=N
                 playlist_match = re.match('^/channel/mine/playlist/(?P<playlist_id>.*)/$', context.get_path())
                 if playlist_match:
                     playlist_id = playlist_match.group('playlist_id')
-                    playlist_item_id = playlist_item_id_dict[video_id]
-                    context_menu.append((context.localize(provider.LOCAL_MAP['youtube.remove']),
-                                         'RunPlugin(%s)' % context.create_uri(
-                                             ['playlist', 'remove', 'video'],
-                                             {'playlist_id': playlist_id, 'video_id': playlist_item_id,
-                                              'video_name': video_item.get_name()})))
+                    # we support all playlist except 'Watch History'
+                    if not playlist_id.startswith('HL'):
+                        playlist_item_id = playlist_item_id_dict[video_id]
+                        context_menu.append((context.localize(provider.LOCAL_MAP['youtube.remove']),
+                                             'RunPlugin(%s)' % context.create_uri(
+                                                 ['playlist', 'remove', 'video'],
+                                                 {'playlist_id': playlist_id, 'video_id': playlist_item_id,
+                                                  'video_name': video_item.get_name()})))
+                        pass
                     pass
                 pass
 

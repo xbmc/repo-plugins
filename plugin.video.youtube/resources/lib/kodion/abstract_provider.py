@@ -28,7 +28,8 @@ class AbstractProvider(object):
         self.register_path('^/' + constants.paths.WATCH_LATER + '/(?P<command>add|remove|list)/?$',
                            '_internal_watch_later')
         self.register_path('^/' + constants.paths.FAVORITES + '/(?P<command>add|remove|list)/?$', '_internal_favorite')
-        self.register_path('^/' + constants.paths.SEARCH + '/(?P<command>new|query|list|remove)/?$', '_internal_search')
+        self.register_path('^/' + constants.paths.SEARCH + '/(?P<command>input|query|list|remove|clear)/?$',
+                           '_internal_search')
         self.register_path('(?P<path>.*\/)extrafanart\/([\?#].+)?$', '_internal_on_extra_fanart')
 
         """
@@ -272,23 +273,22 @@ class AbstractProvider(object):
 
         command = re_match.group('command')
         search_history = context.get_search_history()
-        if command == 'new' or (command == 'list' and search_history.is_empty()):
-            result, text = context.get_ui().on_keyboard_input(context.localize(constants.localize.SEARCH_TITLE))
-            if result:
-                search_history.update(text)
-
-                # we adjust the path and params as would it be a normal query
-                new_path = constants.paths.SEARCH + '/query/'
-                new_params = {}
-                new_params.update(params)
-                new_params['q'] = text
-                new_context = context.clone(new_path=new_path, new_params=new_params)
-                return self.on_search(text, new_context, re_match)
-            pass
-        elif command == 'remove':
+        if command == 'remove':
             query = params['q']
             search_history.remove(query)
             context.get_ui().refresh_container()
+            return True
+        elif command == 'clear':
+            search_history.clear()
+            context.get_ui().refresh_container()
+            return True
+        elif command == 'input':
+            result, query = context.get_ui().on_keyboard_input(context.localize(constants.localize.SEARCH_TITLE))
+            if result:
+                context.execute(
+                    'Container.Update(%s)' % context.create_uri([constants.paths.SEARCH, 'query'], {'q': query}))
+                return True
+
             return True
         elif command == 'query':
             query = params['q']
@@ -312,6 +312,11 @@ class AbstractProvider(object):
                                                               fanart=self.get_alternative_fanart(context))
                 result.append(search_history_item)
                 pass
+
+            if search_history.is_empty():
+                context.execute('RunPlugin(%s)' % context.create_uri([constants.paths.SEARCH, 'input']))
+                pass
+
             return result, {self.RESULT_CACHE_TO_DISC: False}
 
         return False

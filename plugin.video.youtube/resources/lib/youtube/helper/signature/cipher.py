@@ -1,13 +1,12 @@
+__author__ = 'bromix'
+
 import json
 import os
 import re
 
-import requests
-
+from resources.lib.kodion import simple_requests as requests
 from resources.lib.kodion.utils import FunctionCache
 from .json_script_engine import JsonScriptEngine
-
-__author__ = 'bromix'
 
 
 class Cipher(object):
@@ -88,7 +87,7 @@ class Cipher(object):
                 pass
 
             # real object functions
-            cipher_match = re.match('(?P<object_name>[a-zA-Z0-9]+)\.(?P<function_name>[a-zA-Z0-9]+)\((?P<parameter>[^)]+)\)',
+            cipher_match = re.match(r'(?P<object_name>[\$a-zA-Z0-9]+)\.(?P<function_name>[\$a-zA-Z0-9]+)\((?P<parameter>[^)]+)\)',
                                     line)
             if cipher_match:
                 object_name = cipher_match.group('object_name')
@@ -152,7 +151,9 @@ class Cipher(object):
         return ''
 
     def _find_function_body(self, function_name, java_script):
-        match = re.search('function\s+%s\((?P<parameter>[^)]+)\)\s?\{\s?(?P<body>[^}]+)\s?\}' % function_name,
+        # normalize function name
+        function_name = function_name.replace('$', '\$')
+        match = re.search(r'function\s+%s\((?P<parameter>[^)]+)\)\s?\{\s?(?P<body>[^}]+)\s?\}' % function_name,
                           java_script)
         if match:
             return match.group('parameter'), match.group('body')
@@ -160,7 +161,8 @@ class Cipher(object):
         return '', ''
 
     def _find_object_body(self, object_name, java_script):
-        match = re.search('var %s={(?P<object_body>.*?})};' % object_name, java_script)
+        object_name = object_name.replace('$', '\$')
+        match = re.search(r'var %s={(?P<object_body>.*?})};' % object_name, java_script)
         if match:
             return match.group('object_body')
         return ''

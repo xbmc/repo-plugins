@@ -1,3 +1,12 @@
+5.0.5 (2015-02-01)
+ADD: clear search history items
+UPD: replace context menu not everywhere
+UPD: dropped dependency of 'requests'-module because of performance issues
+FIX: Add playing video to the 'Watch History'
+FIX: maybe a fix for a problem (again!) on unix systems while using python 2.7.9 + certificate verification
+FIX: removed pagination for "Related Videos" - the fix before produced some nasty side-effects
+FIX: Vevo signature
+
 5.0.4 (2015-01-15)
 ADD: 'Live' in search
 ADD: 'Play with...' for supporting external/alternative player

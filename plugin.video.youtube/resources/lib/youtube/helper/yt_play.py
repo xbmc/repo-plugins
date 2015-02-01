@@ -25,11 +25,9 @@ def play_video(provider, context, re_match):
         video_id_dict = {video_id: video_item}
         utils.update_video_infos(provider, context, video_id_dict)
 
-        # Auto-Remove video from 'Watch Later' playlist - this should run asynchronous
-        if provider.is_logged_in() and context.get_settings().get_bool('youtube.playlist.watchlater.autoremove',
-                                                                       True):
-            command = 'RunPlugin(%s)' % context.create_uri(['internal', 'auto_remove_watch_later'],
-                                                           {'video_id': video_id})
+        # Trigger post play events
+        if provider.is_logged_in():
+            command = 'RunPlugin(%s)' % context.create_uri(['events', 'post_play'], {'video_id': video_id})
             context.execute(command)
             pass
 
@@ -101,6 +99,10 @@ def play_playlist(provider, context, re_match):
     if order == 'reverse':
         videos = videos[::-1]
         pass
+    elif order == 'shuffle':
+        # we have to shuffle the playlist by our self. The implementation of XBMC/KODI is quite weak :(
+        random.shuffle(videos)
+        pass
 
     playlist_position = 0
     # check if we have a video as starting point for the playlist
@@ -118,15 +120,22 @@ def play_playlist(provider, context, re_match):
     playlist = context.get_video_playlist()
     playlist.clear()
 
+    # select unshuffle
+    if order == 'shuffle':
+        playlist.unshuffle()
+        pass
+
     # add videos to playlist
     for video in videos:
         playlist.add(video)
         pass
 
     # we use the shuffle implementation of the playlist
+    """
     if order == 'shuffle':
         playlist.shuffle()
         pass
+    """
 
     if context.get_param('play', '') == '1':
         player.play(playlist_index=playlist_position)

@@ -4,16 +4,7 @@ import urllib
 import urlparse
 import re
 
-import requests
-# Verify is disabled and to avoid warnings we disable the warnings. Behind a proxy request isn't working correctly all
-# the time and if so can't validate the hosts correctly resulting in a exception and the addon won't work properly.
-try:
-    from requests.packages import urllib3
-    urllib3.disable_warnings()
-except:
-    # do nothing
-    pass
-
+from resources.lib.kodion import simple_requests as requests
 from ..youtube_exceptions import YouTubeException
 from .signature.cipher import Cipher
 
@@ -77,7 +68,7 @@ class VideoInfo(object):
                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
                    'Accept': '*/*',
                    'DNT': '1',
-                   'Referer': 'https://www._old_youtube.com',
+                   'Referer': 'https://www.youtube.com',
                    'Accept-Encoding': 'gzip, deflate',
                    'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
 
@@ -123,7 +114,7 @@ class VideoInfo(object):
                 pass
             pass
 
-        re_match = re.match('.+\"js\": \"(?P<js>.+?)\".+', html)
+        re_match = re.search(r'\"js\"[^:]*:[^"]*\"(?P<js>.+?)\"', html)
         js = ''
         cipher = None
         if re_match:
@@ -131,7 +122,7 @@ class VideoInfo(object):
             cipher = Cipher(self._context, java_script_url=js)
             pass
 
-        re_match = re.match('.+\"url_encoded_fmt_stream_map\": \"(?P<url_encoded_fmt_stream_map>.+?)\".+', html)
+        re_match = re.search(r'\"url_encoded_fmt_stream_map\"[^:]*:[^"]*\"(?P<url_encoded_fmt_stream_map>[^"]*\")', html)
         if re_match:
             url_encoded_fmt_stream_map = re_match.group('url_encoded_fmt_stream_map')
             url_encoded_fmt_stream_map = url_encoded_fmt_stream_map.split(',')
@@ -202,7 +193,7 @@ class VideoInfo(object):
                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
                    'Accept': '*/*',
                    'DNT': '1',
-                   'Referer': 'https://www._old_youtube.com/tv',
+                   'Referer': 'https://www.youtube.com/tv',
                    'Accept-Encoding': 'gzip, deflate',
                    'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
         params = {'video_id': video_id,

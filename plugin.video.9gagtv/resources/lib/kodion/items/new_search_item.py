@@ -15,7 +15,7 @@ class NewSearchItem(DirectoryItem):
             image = context.create_resource_path('media/new_search.png')
             pass
 
-        DirectoryItem.__init__(self, name, context.create_uri([constants.paths.SEARCH, 'new']), image=image)
+        DirectoryItem.__init__(self, name, context.create_uri([constants.paths.SEARCH, 'input']), image=image)
         if fanart:
             self.set_fanart(fanart)
             pass

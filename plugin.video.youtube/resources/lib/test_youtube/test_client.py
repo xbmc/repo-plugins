@@ -13,7 +13,7 @@ class TestClient(unittest.TestCase):
     def test_get_live_events(self):
         client = YouTube()
 
-        json_data = client.get_live_events(event_type='active')
+        json_data = client.get_live_events(event_type='live')
         pass
 
     def test_get_channel_by_username(self):
@@ -130,19 +130,41 @@ class TestClient(unittest.TestCase):
         pass
     """
 
-    def test_get_video_streams(self):
+    def test_get_video_streams_vevo(self):
+        client = YouTube()
+
+        context = kodion.Context()
+
+        # VEVO
+        streams = client.get_video_streams(context, 'nfWlot6h_JM')
+
+        # VEVO (Restricted)
+        #streams = client.get_video_streams(context, 'O-zpOMYRi0w')
+        #streams = client.get_video_streams(context, 'NmugSMBh_iI')
+
+        # VEVO Gema
+        #streams = client.get_video_streams(context, 'XbiH6pQI7pU')
+        pass
+
+    def test_get_streams_live_streams(self):
         client = YouTube()
 
         context = kodion.Context()
 
         #Live
-        streams = client.get_video_streams(context, 'y1knc30OqKQ')
+        #streams = client.get_video_streams(context, 'y1knc30OqKQ')
         #streams = client.get_video_streams(context, '7UFbGKo21lc')
         #streams = client.get_video_streams(context, 'RqbyYOCAFJU')
         #streams = client.get_video_streams(context, 'pvEWZY3Eqsg')
+        pass
 
-        # VEVO
-        #streams = client.get_video_streams(context, 'nfWlot6h_JM')
+    def test_get_video_streams_mixed(self):
+        client = YouTube()
+
+        context = kodion.Context()
+        # some videos
+        #streams = client.get_video_streams(context, 'vUMv3cRacrI')
+        #streams = client.get_video_streams(context, 'niBvN80Jqkg')
 
         # 60fps
         # streams = client.get_video_streams(context, '_zPm3SSj6W8')
@@ -152,13 +174,6 @@ class TestClient(unittest.TestCase):
 
         # Restricted?
         #streams = client.get_video_streams(context, 'U4DbJWA9JEw')
-
-        # VEVO (Restricted)
-        #streams = client.get_video_streams(context, 'O-zpOMYRi0w')
-        #streams = client.get_video_streams(context, 'NmugSMBh_iI')
-
-        # VEVO Gema
-        #streams = client.get_video_streams(context, 'XbiH6pQI7pU')
         pass
 
     def test_get_playlists(self):

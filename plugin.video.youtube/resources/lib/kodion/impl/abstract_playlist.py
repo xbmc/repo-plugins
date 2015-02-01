@@ -14,4 +14,7 @@ class AbstractPlaylist(object):
     def shuffle(self):
         raise NotImplementedError()
 
+    def unshuffle(self):
+        raise NotImplementedError()
+
     pass

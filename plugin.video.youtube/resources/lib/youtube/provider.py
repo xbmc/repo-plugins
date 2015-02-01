@@ -296,22 +296,28 @@ class Provider(kodion.AbstractProvider):
         result.extend(yt_specials.process(category, self, context, re_match))
         return result
 
-    """
-
-    """
-
-    @kodion.RegisterProviderPath('^/internal/auto_remove_watch_later/$')
-    def _on_auto_remove_watch_later(self, context, re_match):
-
+    @kodion.RegisterProviderPath('^/events/post_play/$')
+    def _on_post_play(self, context, re_match):
         video_id = context.get_param('video_id', '')
         if video_id:
             client = self.get_client(context)
-            playlist_item_id = client.get_playlist_item_id_of_video_id(playlist_id='WL', video_id=video_id)
-            if playlist_item_id:
-                json_data = client.remove_video_from_playlist('WL', playlist_item_id)
-                if not v3.handle_error(self, context, json_data):
-                    return False
+            if self.is_logged_in():
+                # first: update history
+                client.update_watch_history(video_id)
+
+                # second: remove video from 'Watch Later' playlist
+                if context.get_settings().get_bool('youtube.playlist.watchlater.autoremove', True):
+                    playlist_item_id = client.get_playlist_item_id_of_video_id(playlist_id='WL', video_id=video_id)
+                    if playlist_item_id:
+                        json_data = client.remove_video_from_playlist('WL', playlist_item_id)
+                        if not v3.handle_error(self, context, json_data):
+                            return False
+                        pass
+                    pass
                 pass
+            pass
+        else:
+            context.log_warning('Missing video ID for post play event')
             pass
         return True
 

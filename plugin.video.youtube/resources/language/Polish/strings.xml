@@ -7,15 +7,15 @@
 
     <string id="30010">Jakość wideo</string>
     <string id="30011">480p</string>
-	<string id="30012">720p (HD)</string>
-	<string id="30013">1080p (HD)</string>
+    <string id="30012">720p (HD)</string>
+    <string id="30013">1080p (HD)</string>
     <string id="30014">2160p (4k)</string>
     <string id="30015">4320p (8k)</string>
     <string id="30016">240p</string>
     <string id="30017">360p</string>
 
-    <string id="30020">Zezwól 3D</string>
-    <string id="30021">Pokazuj Fanart</string>
+    <string id="30020">Zezwalaj 3D</string>
+    <string id="30021">Pokaż Fanart</string>
     <string id="30022">Elementy na stronę</string>
     <string id="30023">Ilość elementów wyszukiwanych</string>
     <string id="30024">Pamięć podręczna (MB)</string>
@@ -26,6 +26,11 @@
 
     <string id="30030">Uruchomić przewodnik instalacji?</string>
     <string id="30031">Zaawansowane</string>
+    <string id="30032">Widok: Seriale</string>
+    <string id="30033">Widok: Utwory</string>
+    <string id="30034">Widok: Artyści</string>
+    <string id="30035">Widok: Albumy</string>
+    <string id="30036">Wspieraj alternatywny odtwarzacz</string>
 
     <!-- Kodion Common -->
     <string id="30100">Ulubione</string>
@@ -88,4 +93,7 @@
     <string id="30535">Wybierz kolejność</string>
     <string id="30536">Aktualizacja playlisty...</string>
     <string id="30537">Odtwórz z tego miejsca</string>
+    <string id="30538">Nielubiane wideo</string>
+    <string id="30539">Na żywo</string>
+    <string id="30540">Odtwarzaj z...</string>
 </strings>

@@ -12,5 +12,5 @@ from .abstract_provider import AbstractProvider
 # import specialized implementation into the kodion namespace
 from .impl import Context
 
-# import client
-from .client import api as client
+# import simple_requests
+from .simple_requests import api as client

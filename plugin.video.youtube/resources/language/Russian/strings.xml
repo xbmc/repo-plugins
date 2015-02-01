@@ -30,6 +30,7 @@
     <string id="30033">Вид: Композиции</string>
     <string id="30034">Вид: Исполнители</string>
     <string id="30035">Вид: Альбомы</string>
+    <string id="30036">Поддержка внешнего проигрывателя</string>
 
     <!-- Kodion Common -->
     <string id="30100">Избранное</string>
@@ -93,4 +94,6 @@
     <string id="30536">Обновление плейлиста...</string>
     <string id="30537">Проиграть с этого места</string>
     <string id="30538">Видео, которое не нравится</string>
+    <string id="30539">Прямой эфир</string>
+    <string id="30540">Воспроизвести с помощью...</string>
 </strings>

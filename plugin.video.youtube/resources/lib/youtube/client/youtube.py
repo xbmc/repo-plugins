@@ -1,21 +1,9 @@
 __author__ = 'bromix'
 
-from resources.lib import kodion
-
 import json
-import requests
 
-
-# Verify is disabled and to avoid warnings we disable the warnings. Behind a proxy request isn't working correctly all
-# the time and if so can't validate the hosts correctly resulting in a exception and the addon won't work properly.
-try:
-    from requests.packages import urllib3
-
-    urllib3.disable_warnings()
-except:
-    # do nothing
-    pass
-
+from resources.lib import kodion
+from resources.lib.kodion import simple_requests as requests
 from .login_client import LoginClient
 from ..helper.video_info import VideoInfo
 
@@ -27,8 +15,38 @@ class YouTube(LoginClient):
         self._max_results = items_per_page
         pass
 
+    def get_max_results(self):
+        return self._max_results
+
     def get_language(self):
         return self._language
+
+    def update_watch_history(self, video_id):
+        headers = {'Host': 'www.youtube.com',
+                   'Connection': 'keep-alive',
+                   'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.36 Safari/537.36',
+                   'Accept': 'image/webp,*/*;q=0.8',
+                   'DNT': '1',
+                   'Referer': 'https://www.youtube.com/tv',
+                   'Accept-Encoding': 'gzip, deflate',
+                   'Accept-Language': 'en-US,en;q=0.8,de;q=0.6'}
+        params = {'noflv': '1',
+                  'html5': '1',
+                  'video_id': video_id,
+                  'referrer': '',
+                  'eurl': 'https://www.youtube.com/tv#/watch?v=%s' % video_id,
+                  'skl': 'false',
+                  'ns': 'yt',
+                  'el': 'leanback',
+                  'ps': 'leanback'}
+        if self._access_token:
+            params['access_token'] = self._access_token
+            pass
+
+        url = 'https://www.youtube.com/user_watch'
+
+        result = requests.get(url, params=params, headers=headers, verify=False, allow_redirects=True)
+        pass
 
     def get_video_streams(self, context, video_id):
         video_info = VideoInfo(context, access_token=self._access_token, language=self._language)
@@ -447,33 +465,29 @@ class YouTube(LoginClient):
 
         result = None
 
-        try:
-            if method == 'GET':
-                result = requests.get(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
-                pass
-            elif method == 'POST':
-                _headers['content-type'] = 'application/json'
-                result = requests.post(_url, data=json.dumps(post_data), params=_params, headers=_headers, verify=False,
-                                       allow_redirects=allow_redirects)
-                pass
-            elif method == 'PUT':
-                _headers['content-type'] = 'application/json'
-                result = requests.put(_url, data=json.dumps(post_data), params=_params, headers=_headers, verify=False,
-                                      allow_redirects=allow_redirects)
-                pass
-            elif method == 'DELETE':
-                result = requests.delete(_url, params=_params, headers=_headers, verify=False,
-                                         allow_redirects=allow_redirects)
-                pass
+        if method == 'GET':
+            result = requests.get(_url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
+            pass
+        elif method == 'POST':
+            _headers['content-type'] = 'application/json'
+            result = requests.post(_url, json=post_data, params=_params, headers=_headers, verify=False,
+                                   allow_redirects=allow_redirects)
+            pass
+        elif method == 'PUT':
+            _headers['content-type'] = 'application/json'
+            result = requests.put(_url, json=post_data, params=_params, headers=_headers, verify=False,
+                                  allow_redirects=allow_redirects)
+            pass
+        elif method == 'DELETE':
+            result = requests.delete(_url, params=_params, headers=_headers, verify=False,
+                                     allow_redirects=allow_redirects)
+            pass
 
-            if result is None:
-                return {}
+        if result is None:
+            return {}
 
-            if result.headers.get('content-type', '').startswith('application/json'):
-                return result.json()
-        except Exception, ex:
-            self._log_error(str(ex))
-            raise kodion.KodionException("Client request failed please see log for information")
+        if result.headers.get('content-type', '').startswith('application/json'):
+            return result.json()
         pass
 
     def _perform_v2_request(self, method='GET', headers=None, path=None, post_data=None, params=None,
@@ -502,19 +516,15 @@ class YouTube(LoginClient):
         url = 'https://gdata.youtube.com/%s/' % path.strip('/')
 
         result = None
-        try:
-            if method == 'GET':
-                result = requests.get(url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
-                pass
+        if method == 'GET':
+            result = requests.get(url, params=_params, headers=_headers, verify=False, allow_redirects=allow_redirects)
+            pass
 
-            if result is None:
-                return {}
+        if result is None:
+            return {}
 
-            if method != 'DELETE' and result.text:
-                return result.json()
-        except Exception, ex:
-            self._log_error(str(ex))
-            raise kodion.KodionException("Client request failed please see log for information")
+        if method != 'DELETE' and result.text:
+            return result.json()
         pass
 
     pass

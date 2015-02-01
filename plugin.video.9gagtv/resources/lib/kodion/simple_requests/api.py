@@ -8,6 +8,14 @@ from StringIO import StringIO
 import gzip
 
 
+class ErrorHandler(urllib2.HTTPDefaultErrorHandler):
+    def http_error_default(self, req, fp, code, msg, hdrs):
+        infourl = urllib.addinfourl(fp, hdrs, req.get_full_url())
+        infourl.status = code
+        infourl.code = code
+        return infourl
+
+
 class NoRedirectHandler(urllib2.HTTPRedirectHandler):
     def http_error_302(self, req, fp, code, msg, headers):
         infourl = urllib.addinfourl(fp, headers, req.get_full_url())
@@ -58,7 +66,20 @@ def _request(method, url,
         pass
 
     handlers = []
-    handlers.append(urllib2.HTTPCookieProcessor())
+
+    import sys
+    # starting with python 2.7.9 urllib verifies every https request
+    if False == verify and sys.version_info >= (2, 7, 9):
+        import ssl
+
+        ssl_context = ssl.create_default_context()
+        ssl_context.check_hostname = False
+        ssl_context.verify_mode = ssl.CERT_NONE
+        handlers.append(urllib2.HTTPSHandler(context=ssl_context))
+        pass
+
+    # handlers.append(urllib2.HTTPCookieProcessor())
+    # handlers.append(ErrorHandler)
     if not allow_redirects:
         handlers.append(NoRedirectHandler)
         pass
@@ -80,7 +101,7 @@ def _request(method, url,
             request.add_header(key, str(unicode(headers[key]).encode('utf-8')))
             pass
         pass
-    if data:
+    if data or json:
         if headers.get('Content-Type', '').startswith('application/x-www-form-urlencoded') or data:
             # transform a string into a map of values
             if isinstance(data, basestring):
@@ -100,8 +121,11 @@ def _request(method, url,
             # urlencode
             request.data = urllib.urlencode(data)
             pass
-        elif headers.get('Content-Type', '').startswith('application/json') or json:
+        elif headers.get('Content-Type', '').startswith('application/json') and data:
             request.data = real_json.dumps(data).encode('utf-8')
+            pass
+        elif json:
+            request.data = real_json.dumps(json).encode('utf-8')
             pass
         else:
             if not isinstance(data, basestring):
@@ -114,19 +138,24 @@ def _request(method, url,
             request.data = data
             pass
         pass
+    elif method.upper() in ['POST', 'PUT']:
+        request.data = "null"
+        pass
     request.get_method = lambda: method
     result = Response()
     response = None
     try:
         response = opener.open(request)
-        result.headers.update(response.headers)
-        result.status_code = response.getcode()
     except urllib2.HTTPError, e:
-        from .. import logging
-
-        logging.log_error(e.__str__())
+        # HTTPError implements addinfourl, so we can use the exception to construct a response
+        if isinstance(e, urllib2.addinfourl):
+            response = e
+            pass
         pass
 
+    # process response
+    result.headers.update(response.headers)
+    result.status_code = response.getcode()
     if response.headers.get('Content-Encoding', '').startswith('gzip'):
         buf = StringIO(response.read())
         f = gzip.GzipFile(fileobj=buf)

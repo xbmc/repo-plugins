@@ -3,7 +3,7 @@ __author__ = 'bromix'
 
 class RegisterProviderPath(object):
     def __init__(self, re_path):
-        self._kodimon_re_path = re_path
+        self._kodion_re_path = re_path
         pass
 
     def __call__(self, func):
@@ -11,7 +11,7 @@ class RegisterProviderPath(object):
             # only use a wrapper if you need extra code to be run here
             return func(*args, **kwargs)
 
-        wrapper.kodimon_re_path = self._kodimon_re_path
+        wrapper.kodion_re_path = self._kodion_re_path
         return wrapper
 
     pass

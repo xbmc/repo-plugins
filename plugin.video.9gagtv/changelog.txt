@@ -1,3 +1,6 @@
+1.0.4 (2015-02-01)
+FIX: skipping vimeo videos (for now till a valid addon is available)
+
 1.0.3 (2015-01-25)
 UPD: dropped dependency of 'requests'-module because of performance issues
 

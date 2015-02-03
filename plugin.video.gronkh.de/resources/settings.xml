@@ -1,0 +1,3 @@
+<settings>
+	<setting label="30010" type="action" action="RunScript(plugin.video.gronkh.de, clearcache)"/>
+</settings>

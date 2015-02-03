@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+  <string id="30001">Let's Plays</string>
+  <string id="30002">Let's Tests</string>
+  <string id="30003">Authors</string>
+  <string id="30004">Cache cleared</string>
+
+  <string id="30010">Clear cache</string>
+</strings>

@@ -149,7 +149,7 @@ def getProgramsByLetter(letter):
 
   html = getPage(URL_A_TO_O)
 
-  letterboxes = common.parseDOM(html, "li", attrs = { "class": "[^\"']*play_alphabetic-list[^\"']*" })
+  letterboxes = common.parseDOM(html, "li", attrs = { "class": "[^\"']*play_alphabetic-list__letter-container[^\"']*" })
   if not letterboxes:
     helper.errorMsg("No containers found for letter '%s'" % letter)
     return None

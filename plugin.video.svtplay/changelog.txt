@@ -1,3 +1,7 @@
+Version 4.0.13
+-------------
+- Fix broken listing due to site change (issue #121)
+
 Version 4.0.12
 -------------
 - Fix crash when adding favorites.

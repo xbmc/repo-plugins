@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+<!-- main menu -->
+<string id="30001">Juegos</string>
+<string id="30002">Siguiendo</string>
+<string id="30003">Búsqueda</string>
+<string id="30004">Configuración</string>
+<string id="30005">Streams destacados</string>
+<string id="30006">Equipos</string>
+<string id="30008">Canales</string>
+<!--search -->
+<string id="30007">Búsqueda por canales</string>
+<!--general -->
+<string id="30010">TwitchTV</string>
+<string id="30011">nueva página...</string>
+<string id="30012">-- Streams en directo --</string>
+<string id="30013">-- Canales seguidos --</string>
+<!--notifications -->
+<string id="30020">Http error</string>
+<string id="30021">No hay datos en vivo encontrados</string>
+<string id="30022">No se encontraron archivos</string>
+<string id="30023">User Token Error</string>
+<string id="30024">Cambiar configuración de vídeo</string>
+<string id="30025">Selección de calidad de vídeo no disponible</string>
+<string id="30026">TwitchApi error</string>
+<string id="30027">JSON error</string>
+<string id="30028">Error al analizar el conjunto de resultados</string>
+<string id="30029">Por favor, comprueba tu conexión a Internet</string>
+<!--settings -->
+<string id="30040">Calidad de vídeo</string>
+<string id="30041">La mejor posible</string>
+<string id="30042">720p</string>
+<string id="30043">480p</string>
+<string id="30044">360p</string>
+<string id="30063">226p (Móvil)</string>
+<string id="30045">Mostrar títulos</string>
+<string id="30046">Streamer - Título del Stream </string>
+<string id="30047">Espectadores - Streamer - Título del Stream</string>
+<string id="30048">Título del Stream</string>
+<string id="30049">Streamer</string>
+<string id="30051">Streamer - Game Title - Stream Title</string>
+<string id="30050">Nombre de usuario</string>
+<!--title-->
+<string id="30060">Streamer sin nombre</string>
+<string id="30061">Stream sin título</string>
+<string id="30062">Número desconocido de espectadores</string>
+<string id="30064">Juego desconocido</string>
+
+<string id="30065">Truncar títulos exhibidos</string>
+</strings>
